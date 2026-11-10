@@ -38,6 +38,8 @@ before(async () => {
       '--dry-run',
       '--outdir',
       outdir,
+      '--assets',
+      path.join(root, 'test/site'),
     ],
     { cwd: root, stdio: 'pipe' },
   )
