@@ -52,7 +52,7 @@ before(async () => {
     compatibilityDate: '2026-08-01',
     bindings: { NATIVE_HOSTS: 'explorer.dashhq.org' },
     assets: {
-      directory: path.join(root, 'test/dist'),
+      directory: path.join(root, 'test/site'),
       binding: 'ASSETS',
       routerConfig,
     },
