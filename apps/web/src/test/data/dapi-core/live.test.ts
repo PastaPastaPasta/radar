@@ -39,7 +39,10 @@ const chainLockMessage = (height: number) => {
   )
 }
 
-interface Script { messages: Uint8Array[]; then: 'hold' | 'end' | Error }
+interface Script {
+  messages: Uint8Array[]
+  then: 'hold' | 'end' | Error
+}
 
 function scriptedTransport(scripts: Script[]) {
   const opened: { fromHeight: number; avoidNode?: string; signal?: AbortSignal; node: string }[] =
