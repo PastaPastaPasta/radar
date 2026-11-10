@@ -13,7 +13,7 @@ export interface QueryViewProps<T> {
 
 export function QueryView<T>({ query, skeleton, isEmpty, empty, children }: QueryViewProps<T>) {
   if (query.isPending) return <>{skeleton ?? <Skeleton shape="block" />}</>
-  if (query.isError) {
+  if (query.isError && query.data === undefined) {
     return (
       <ErrorState
         error={query.error}

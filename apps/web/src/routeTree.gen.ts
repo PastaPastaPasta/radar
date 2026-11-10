@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as _kitRouteImport } from './routes/[_][_]kit'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ApiRouteImport } from './routes/api'
 import { Route as BlocksRouteImport } from './routes/blocks'
@@ -75,6 +76,11 @@ import { Route as DocumentContractTypeIdRouteImport } from './routes/document.$c
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const _kitRoute = _kitRouteImport.update({
+  id: '/__kit',
+  path: '/__kit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -385,6 +391,7 @@ const DocumentContractTypeIdRoute = DocumentContractTypeIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/__kit': typeof _kitRoute
   '/about': typeof AboutRoute
   '/api': typeof ApiRoute
   '/blocks': typeof BlocksRoute
@@ -449,6 +456,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/__kit': typeof _kitRoute
   '/about': typeof AboutRoute
   '/api': typeof ApiRoute
   '/blocks': typeof BlocksRoute
@@ -514,6 +522,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/__kit': typeof _kitRoute
   '/about': typeof AboutRoute
   '/api': typeof ApiRoute
   '/blocks': typeof BlocksRoute
@@ -580,6 +589,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/__kit'
     | '/about'
     | '/api'
     | '/blocks'
@@ -644,6 +654,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/__kit'
     | '/about'
     | '/api'
     | '/blocks'
@@ -708,6 +719,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/__kit'
     | '/about'
     | '/api'
     | '/blocks'
@@ -773,6 +785,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  _kitRoute: typeof _kitRoute
   AboutRoute: typeof AboutRoute
   ApiRoute: typeof ApiRoute
   BlocksRoute: typeof BlocksRoute
@@ -843,6 +856,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/__kit': {
+      id: '/__kit'
+      path: '/__kit'
+      fullPath: '/__kit'
+      preLoaderRoute: typeof _kitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1277,6 +1297,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  _kitRoute: _kitRoute,
   AboutRoute: AboutRoute,
   ApiRoute: ApiRoute,
   BlocksRoute: BlocksRoute,
