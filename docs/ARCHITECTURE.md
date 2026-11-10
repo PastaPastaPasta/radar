@@ -1043,6 +1043,11 @@ Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the h
 | **Works but larger** | Same, plus split exports: a base build (block and tx with payloads) and a separate `mnlist` build loaded only on masternode views. The budget check is then per build |
 | **Fails, or misses payloads** | `@dashevo/dashcore-lib` behind the same `CoreDecoder` for structure (inputs, outputs, scripts, addresses, cbTx). Payloads it can't parse come from Hyphen `/tx/{txid}` `payload`, stamped `source: 'hyphen'` ("Indexed by Hyphen"); with Hyphen stale, the raw payload hex shows with a note. Masternode list diff decoding moves to a small TS parser in `lib/core/mnlistdiff.ts`; if that is too much for M2, rule 6 degrades to RAD as in (a) |
 
+**Outcome (2026-11-10, `docs/spikes/core-decode.md`): works; no dashcore-lib fallback.** `packages/core-decode` decodes blocks, transactions and every special payload on the list, checked against Insight's JSON for real mainnet transactions of eight of the nine special types. It is 320 KB gzipped, and a 900 KB block decodes in 15–18 ms. Decisions:
+- **`dist/` is committed**, so the app and the main CI job build without Rust. `build:wasm` and `test:rust` rebuild and test it natively; they need a native `wasm-opt` and a clang that targets wasm32 (libsecp256k1 is C). Package E adds a separate CI job that rebuilds the wasm and fails if `dist/` differs.
+- **Pinned to rust-dashcore `dev` at 568d5866**, because that is where the special-transaction types live.
+- **Gaps:** MNHF has no real mainnet vector (none in the last 30 days), and ProDissolveTx, ProUpShareTx and ProUpSharedRegTx are mapped but untested (they exist only on rust-dashcore `dev`). The UI renders an unknown or failed payload as raw hex with its type number; it never hides the transaction.
+
 ### (c) The Evo SDK in a web worker (T-011)
 
 What it measures: wasm init and trusted-context prefetch inside a module worker, cold-start time on a mid-range phone, whether `*WithProofInfo` results map cleanly to DTOs, whether the transfer of proof bytes works, and how plain calls behave with `trusted: true`.
