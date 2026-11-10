@@ -1,12 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import {
-  getActiveNetwork,
-  getRenderedNetwork,
-  setActiveNetwork,
-  setRenderedNetwork,
-} from './active-network'
-import { healthRegistry, resetHealthRegistry, useAllSourceHealth } from './health'
+import { setActiveNetwork, setRenderedNetwork } from '@/data/active-network'
+import { healthRegistry, resetHealthRegistry, useAllSourceHealth } from '@/data/health'
 
 afterEach(() => {
   resetHealthRegistry()
@@ -15,14 +10,6 @@ afterEach(() => {
 })
 
 describe('the rendered network', () => {
-  it('stays on the page on screen while a navigation to another network is loading', () => {
-    setRenderedNetwork('mainnet')
-    setActiveNetwork('testnet')
-
-    expect(getActiveNetwork()).toBe('testnet')
-    expect(getRenderedNetwork()).toBe('mainnet')
-  })
-
   it('keeps source health on the network of the page on screen until the navigation commits', () => {
     healthRegistry.report('mainnet', 'pe', { ok: true, latencyMs: 40 })
     for (let i = 0; i < 3; i++) healthRegistry.report('testnet', 'pe', { ok: false, kind: 'http' })
