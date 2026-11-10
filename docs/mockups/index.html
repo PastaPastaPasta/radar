@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar mockups</title>
+<script src="assets/dashhq-shell.js"></script>
+<link rel="stylesheet" href="assets/archivo-inline.css">
+<link rel="stylesheet" href="assets/dashhq-tokens.css">
+<link rel="stylesheet" href="assets/dashhq-shell.css">
+<link rel="stylesheet" href="assets/dashhq-components.css">
+<link rel="stylesheet" href="assets/radar.css">
+<script src="assets/map-data.js" defer></script>
+<script src="assets/radar-mock.js" defer></script>
+</head>
+<body class="dh-fill">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol><symbol id="i-block" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></symbol><symbol id="i-tx" viewBox="0 0 24 24"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></symbol><symbol id="i-addr" viewBox="0 0 24 24"><path d="M4 7.5h14a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6.5A2.5 2.5 0 0 1 6.5 4H16"/><path d="M15.5 13.3h.01"/></symbol><symbol id="i-node" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01M12 7.5h4M12 16.5h4"/></symbol><symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r=".6"/></symbol><symbol id="i-plat" viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><path d="M12 8.2l3.4 2v3.6L12 15.8l-3.4-2v-3.6z"/></symbol><symbol id="i-id" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></symbol><symbol id="i-contract" viewBox="0 0 24 24"><path d="M8.5 4H8a2 2 0 0 0-2 2v3.5L4 12l2 2.5V18a2 2 0 0 0 2 2h.5M15.5 4h.5a2 2 0 0 1 2 2v3.5l2 2.5-2 2.5V18a2 2 0 0 1-2 2h-.5"/></symbol><symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3h7.5l4 4v14h-11.5z"/><path d="M13.5 3v4.5H18M9.5 12.5h5M9.5 16.5h5"/></symbol><symbol id="i-token" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol><symbol id="i-name" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M15.5 12v1.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.4 6.8"/></symbol><symbol id="i-epoch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></symbol><symbol id="i-cl" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol><symbol id="i-is" viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol><symbol id="i-proof" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/><path d="M8.6 12l2.4 2.4 4.4-4.6"/></symbol><symbol id="i-dapi" viewBox="0 0 24 24"><path d="M4.5 13a7.5 7.5 0 0 1 15 0M8 13a4 4 0 0 1 8 0"/><path d="M12 13v8"/></symbol><symbol id="i-index" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6M5 12v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8v-6"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol><symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.4-6-11a6 6 0 0 1 12 0c0 5.6-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5l10.5 6.5L8 18.5z"/></symbol><symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4 2v-8.5z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol><symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l3 3M13.5 9.5l2 2"/></symbol><symbol id="i-vote" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 12.2l2.8 2.8L16 9.5"/></symbol><symbol id="i-bridge" viewBox="0 0 24 24"><path d="M3 17.5h18M5.5 17.5v-6M18.5 17.5v-6M3 11.5c3.5-4.5 14.5-4.5 18 0M9.5 17.5v-5M14.5 17.5v-5"/></symbol><symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3.4 3 13.6 0 17M12 3.5c-3 3.4-3 13.6 0 17"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol><symbol id="i-swap" viewBox="0 0 24 24"><path d="M5 8h13l-3.5-3.5M19 16H6l3.5 3.5"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.2 5.8.9-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.9z"/></symbol><symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14M10.5 4l-2 16M15.5 4l-2 16"/></symbol><symbol id="i-mempool" viewBox="0 0 24 24"><path d="M7 3.5h10M7 20.5h10M8 3.5c0 5 8 5.6 8 8.5s-8 3.5-8 8.5M16 3.5c0 5-8 5.6-8 8.5s8 3.5 8 8.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/></symbol><symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V8M7 13l5-5 5 5M5 4h14"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></symbol><symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol><symbol id="i-cube2" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3.5 6v14L9 18l6 2 5.5-2V4L15 6z"/><path d="M9 4v14M15 6v14"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16l4.2-5"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2a3.2 3.2 0 1 0 0 5.6"/></symbol></svg>
+<dashhq-bar product="radar" network="mainnet" networks="mainnet testnet" sticky phone-nav="tabs">
+  <img slot="logo" src="assets/radar-icon.png" alt="" width="22" height="22">
+  <nav slot="nav" aria-label="Radar">
+    <a href="home.html" data-dh-phone><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-radar"/></svg>Home</a>
+    <a href="tx.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-block"/></svg>Core</a>
+    <a href="masternodes.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-globe"/></svg>Network</a>
+    <a href="identity.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plat"/></svg>Platform</a>
+    <a href="index.html" data-dh-desktop>Tools</a>
+    <a href="search.html" data-dh-phone><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>Search</a>
+  </nav>
+  <div slot="actions"><a class="rx-kbtn" href="search.html" data-palette><svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg><span>Search Radar</span><kbd>/</kbd></a></div>
+</dashhq-bar>
+<main id="main">
+<section class="rx-plate rx-band" data-layer="network" aria-labelledby="h-page">
+  <div class="dh-container">
+    <p class="rx-rec__kicker" style="margin:0">Design mockups · static HTML · data captured from live APIs on 10 Nov 2026</p>
+    <h1 class="rx-rec__title" id="h-page" style="margin-top:8px">Radar</h1>
+    <p class="rx-scope__lede" style="max-width:62ch">One read-only explorer for the whole Dash network: Core blocks and transactions, the masternode network, and Dash Platform. These pages show the look described in <code>docs/RADAR-DESIGN.md</code>. Hover chips for cards, press <kbd>/</kbd> for search, <kbd>j</kbd>/<kbd>k</kbd> to move through tables.</p>
+  </div>
+</section>
+<div class="dh-container" style="padding-block:32px 64px">
+  <ul class="rx-mocks">
+    <li><a href="home.html"><img src="shots/home--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="network"><svg class="rx-ico" aria-hidden="true"><use href="#i-radar"/></svg>/</span><b>Home</b><span>The scope: live map, pulse tiles and the two-lane chain</span></a></li>
+    <li><a href="masternodes.html"><img src="shots/masternodes--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="network"><svg class="rx-ico" aria-hidden="true"><use href="#i-node"/></svg>/masternodes</span><b>Masternode list</b><span>Census band, filters, scannable rows, phone cards</span></a></li>
+    <li><a href="mn.html"><img src="shots/mn--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="network"><svg class="rx-ico" aria-hidden="true"><use href="#i-node"/></svg>/mn/&lt;protx&gt;</span><b>Masternode page</b><span>Uptime, rewards by epoch, quorum readiness</span></a></li>
+    <li><a href="identity.html"><img src="shots/identity--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-id"/></svg>/identity/&lt;id&gt;</span><b>Identity</b><span>Proof-checked balance, names, keys, activity calendar</span></a></li>
+    <li><a href="tx.html"><img src="shots/tx--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="core"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg>/tx/&lt;txid&gt;</span><b>Core transaction</b><span>Value flow, settlement steps, inputs and outputs</span></a></li>
+    <li><a href="search.html"><img src="shots/search--desk-light.png" alt="" loading="lazy"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg>⌘K</span><b>Search palette</b><span>Classified query, grouped results, live preview</span></a></li>
+  </ul>
+  <section class="rx-sec" style="margin-top:48px" aria-labelledby="h-states">
+    <div class="rx-sec__head"><h2 class="rx-sec__title" id="h-states">States</h2><p class="rx-sec__desc">How a card looks while loading, when empty, when its source fails, and how a source mark ages.</p></div>
+    <div class="rx-grid">
+      <div class="rx-card rx-c4" data-layer="core" aria-busy="true">
+        <div class="rx-card__head"><h3 class="rx-card__title"><span class="rx-tile" style="--s:26px"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span>Core blocks</h3><div class="rx-card__aside"><span class="rx-dim rx-sm">Loading</span></div></div>
+        <div class="rx-card__body dh-stack" style="gap:14px">
+          <span class="rx-skel" style="width:70%"></span><span class="rx-skel" style="width:90%"></span><span class="rx-skel" style="width:55%"></span><span class="rx-skel" style="width:80%"></span><span class="rx-skel" style="width:62%"></span>
+        </div>
+      </div>
+      <div class="rx-card rx-c4" data-layer="platform">
+        <div class="rx-card__head"><h3 class="rx-card__title">Latest transitions</h3></div>
+        <div class="rx-empty">
+          <span class="rx-empty__tile"><svg class="rx-ico" aria-hidden="true"><use href="#i-doc"/></svg></span>
+          <p class="rx-empty__t">No transitions yet</p>
+          <p class="rx-empty__b">This identity was created but hasn't signed anything since.</p>
+        </div>
+      </div>
+      <div class="rx-card rx-c4" data-layer="platform">
+        <div class="rx-card__head"><h3 class="rx-card__title">Identities</h3></div>
+        <div class="rx-empty rx-empty--error">
+          <span class="rx-empty__tile"><svg class="rx-ico" aria-hidden="true"><use href="#i-x"/></svg></span>
+          <p class="rx-empty__t">Platform Explorer isn't answering</p>
+          <p class="rx-empty__b">Balances and names still load from DAPI. Lists need the index.</p>
+          <button class="dh-btn dh-btn--sm" type="button">Retry</button>
+        </div>
+      </div>
+      <div class="rx-card rx-c6 rx-down" data-layer="network">
+        <div class="rx-card__head"><h3 class="rx-card__title">Where they are</h3><div class="rx-card__aside"><span class="rx-src rx-src--down"><svg class="rx-ico" aria-hidden="true"><use href="#i-radar"/></svg>Crawled by Radar · isn't answering<time>last good 4 min ago</time></span></div></div>
+        <p class="rx-down__msg" role="status"><svg class="rx-ico" aria-hidden="true"><use href="#i-x"/></svg>Radar's crawler isn't answering · showing data from 4 min ago<button class="dh-btn dh-btn--sm" type="button">Retry</button></p>
+        <div class="rx-card__body"><ol class="rx-rank" data-layer="network"><li><span class="rx-cc">DE</span><button type="button">Germany</button><span class="n">971</span><span class="bar"><i style="width:100%"></i></span></li><li><span class="rx-cc">SG</span><button type="button">Singapore</button><span class="n">284</span><span class="bar"><i style="width:29%"></i></span></li><li><span class="rx-cc">FI</span><button type="button">Finland</button><span class="n">202</span><span class="bar"><i style="width:21%"></i></span></li><li><span class="rx-cc">US</span><button type="button">United States</button><span class="n">188</span><span class="bar"><i style="width:19%"></i></span></li><li><span class="rx-cc">NL</span><button type="button">Netherlands</button><span class="n">170</span><span class="bar"><i style="width:18%"></i></span></li></ol></div>
+      </div>
+      <div class="rx-card rx-c6">
+        <div class="rx-card__head"><h3 class="rx-card__title">Source marks</h3></div>
+        <div class="rx-card__body dh-stack" style="gap:12px">
+          <div class="rx-row"><button class="rx-src rx-src--proof" type="button"><svg class="rx-ico" aria-hidden="true"><use href="#i-proof"/></svg>Proof-checked</button><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-dapi"/></svg>Served by DAPI · not proved</span></div>
+          <div class="rx-row"><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by Platform Explorer<time>12 s ago</time></span><span class="rx-src rx-src--stale"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by Hyphen<time>6 min ago</time></span></div>
+          <div class="rx-row"><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by Hyphen · DAPI busy</span><span class="rx-src rx-src--down"><svg class="rx-ico" aria-hidden="true"><use href="#i-dapi"/></svg>DAPI isn't answering<time>last good 2 min ago</time></span></div>
+          <div class="rx-row"><span class="rx-live"><span class="rx-fresh" aria-hidden="true"></span><span class="rx-live__word">Live</span><button type="button" aria-label="Pause live updates"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-pause"/></svg></button></span><span class="rx-live is-paused"><span class="rx-fresh" aria-hidden="true"></span><span class="rx-live__word">Paused · 4 new</span><button type="button" aria-label="Resume live updates"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-play"/></svg></button></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <p class="rx-note" style="margin-top:24px">Variants: add <code>?testnet</code> to any page for the testnet frame (<a href="home.html?testnet">home on Testnet</a>), <code>?static</code> to freeze motion. Switch theme with the moon button in the bar. Screenshots for every page live in <code>shots/</code>.</p>
+</div>
+</main>
+<dashhq-footer product="radar" source="https://github.com/PastaPastaPasta/radar">
+  <a href="#">Data sources</a> <a href="#">Status</a> <a href="#">Radar API</a> <a href="#">About</a>
+</dashhq-footer>
+</body>
+</html>

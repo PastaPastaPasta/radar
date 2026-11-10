@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transaction cb4c0d…cdf0 · Radar</title>
+<script src="assets/dashhq-shell.js"></script>
+<link rel="stylesheet" href="assets/archivo-inline.css">
+<link rel="stylesheet" href="assets/dashhq-tokens.css">
+<link rel="stylesheet" href="assets/dashhq-shell.css">
+<link rel="stylesheet" href="assets/dashhq-components.css">
+<link rel="stylesheet" href="assets/radar.css">
+<script src="assets/map-data.js" defer></script>
+<script src="assets/radar-mock.js" defer></script>
+</head>
+<body class="dh-fill">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol><symbol id="i-block" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></symbol><symbol id="i-tx" viewBox="0 0 24 24"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></symbol><symbol id="i-addr" viewBox="0 0 24 24"><path d="M4 7.5h14a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6.5A2.5 2.5 0 0 1 6.5 4H16"/><path d="M15.5 13.3h.01"/></symbol><symbol id="i-node" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01M12 7.5h4M12 16.5h4"/></symbol><symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r=".6"/></symbol><symbol id="i-plat" viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><path d="M12 8.2l3.4 2v3.6L12 15.8l-3.4-2v-3.6z"/></symbol><symbol id="i-id" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></symbol><symbol id="i-contract" viewBox="0 0 24 24"><path d="M8.5 4H8a2 2 0 0 0-2 2v3.5L4 12l2 2.5V18a2 2 0 0 0 2 2h.5M15.5 4h.5a2 2 0 0 1 2 2v3.5l2 2.5-2 2.5V18a2 2 0 0 1-2 2h-.5"/></symbol><symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3h7.5l4 4v14h-11.5z"/><path d="M13.5 3v4.5H18M9.5 12.5h5M9.5 16.5h5"/></symbol><symbol id="i-token" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol><symbol id="i-name" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M15.5 12v1.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.4 6.8"/></symbol><symbol id="i-epoch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></symbol><symbol id="i-cl" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol><symbol id="i-is" viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol><symbol id="i-proof" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/><path d="M8.6 12l2.4 2.4 4.4-4.6"/></symbol><symbol id="i-dapi" viewBox="0 0 24 24"><path d="M4.5 13a7.5 7.5 0 0 1 15 0M8 13a4 4 0 0 1 8 0"/><path d="M12 13v8"/></symbol><symbol id="i-index" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6M5 12v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8v-6"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol><symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.4-6-11a6 6 0 0 1 12 0c0 5.6-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5l10.5 6.5L8 18.5z"/></symbol><symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4 2v-8.5z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol><symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l3 3M13.5 9.5l2 2"/></symbol><symbol id="i-vote" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 12.2l2.8 2.8L16 9.5"/></symbol><symbol id="i-bridge" viewBox="0 0 24 24"><path d="M3 17.5h18M5.5 17.5v-6M18.5 17.5v-6M3 11.5c3.5-4.5 14.5-4.5 18 0M9.5 17.5v-5M14.5 17.5v-5"/></symbol><symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3.4 3 13.6 0 17M12 3.5c-3 3.4-3 13.6 0 17"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol><symbol id="i-swap" viewBox="0 0 24 24"><path d="M5 8h13l-3.5-3.5M19 16H6l3.5 3.5"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.2 5.8.9-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.9z"/></symbol><symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14M10.5 4l-2 16M15.5 4l-2 16"/></symbol><symbol id="i-mempool" viewBox="0 0 24 24"><path d="M7 3.5h10M7 20.5h10M8 3.5c0 5 8 5.6 8 8.5s-8 3.5-8 8.5M16 3.5c0 5-8 5.6-8 8.5s8 3.5 8 8.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/></symbol><symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V8M7 13l5-5 5 5M5 4h14"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></symbol><symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol><symbol id="i-cube2" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3.5 6v14L9 18l6 2 5.5-2V4L15 6z"/><path d="M9 4v14M15 6v14"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16l4.2-5"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2a3.2 3.2 0 1 0 0 5.6"/></symbol></svg>
+<dashhq-bar product="radar" network="mainnet" networks="mainnet testnet" sticky phone-nav="tabs">
+  <img slot="logo" src="assets/radar-icon.png" alt="" width="22" height="22">
+  <nav slot="nav" aria-label="Radar">
+    <a href="home.html" data-dh-phone><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-radar"/></svg>Home</a>
+    <a href="tx.html" aria-current="page"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-block"/></svg>Core</a>
+    <a href="masternodes.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-globe"/></svg>Network</a>
+    <a href="identity.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plat"/></svg>Platform</a>
+    <a href="index.html" data-dh-desktop>Tools</a>
+    <a href="search.html" data-dh-phone><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>Search</a>
+  </nav>
+  <div slot="actions"><a class="rx-kbtn" href="search.html" data-palette><svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg><span>Search Radar</span><kbd>/</kbd></a></div>
+</dashhq-bar>
+<p id="rx-announce" class="dh-sr" aria-live="polite"></p>
+<main id="main">
+<section class="rx-band" data-layer="core" aria-labelledby="h-page">
+  <div class="dh-container">
+    <nav class="rx-band__nav" aria-label="Core">
+      <a href="#">Blocks</a><a href="#">Mempool</a><a href="#">Rich list</a><a href="#">Charts</a><a href="#">Governance</a><a href="#">Status</a>
+    </nav>
+    <ol class="rx-crumbs" aria-label="Where this is"><li><a href="#">Core</a></li><li><a href="#">Block 2,569,992</a></li><li aria-current="page">Transaction 84 of 85</li></ol>
+    <div class="rx-rec">
+      <span class="rx-rec__glyph"><span class="rx-tile" data-layer="core" style="--s:60px"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span></span>
+      <p class="rx-rec__kicker"><span class="rx-type" data-layer="core"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg>Payment</span><span>Version 2 · 4 inputs, 2 outputs</span></p>
+      <h1 class="rx-rec__title" id="h-page">Transaction <span class="rx-mono" style="font-size:.86em">cb4c0d…cdf0</span></h1>
+      <div class="rx-rec__actions">
+        <button class="dh-btn" type="button"><svg class="rx-ico" aria-hidden="true"><use href="#i-hash"/></svg>Raw data</button>
+        <button class="dh-btn dh-btn--icon" type="button" aria-label="Copy link to this transaction"><svg class="rx-ico" aria-hidden="true"><use href="#i-link"/></svg></button>
+      </div>
+      <div class="rx-rec__meta">
+        <span class="rx-dim">Txid</span><span class="rx-hash-full"><b>cb4c0d65</b>5f15ba97aa1a8e71f746db6fd15530df83d6d355396620705f5b<b>cdf0</b></span>
+        <button class="rx-copy" type="button" aria-label="Copy transaction ID" data-copy="cb4c0d655f15ba97aa1a8e71f746db6fd15530df83d6d355396620705f5bcdf0"><svg class="rx-ico" aria-hidden="true"><use href="#i-copy"/></svg></button>
+      </div>
+      <div class="rx-rec__meta">
+        <span class="dh-badge dh-badge--good"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-is"/></svg>InstantSend locked</span><span class="dh-badge dh-badge--good"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg>ChainLocked</span><span>1 confirmation</span>
+        <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-dapi"/></svg>Served by DAPI<time>2 s ago</time></span><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Spent state indexed by Hyphen<time>8 s ago</time></span>
+      </div>
+    </div>
+    <div class="rx-kpis">
+      <div class="rx-stat rx-stat--big" data-layer="core"><span class="rx-stat__label">Moved</span><span class="rx-stat__value">50.0061<small>DASH</small></span><span class="rx-stat__note">≈ $2,310 · 50.0000 to someone else</span></div>
+      <div class="rx-stat"><span class="rx-stat__label">Fee</span><span class="rx-stat__value">666<small>duffs</small></span><span class="rx-stat__note">1 duff a byte · 0.00000666 DASH</span></div>
+      <div class="rx-stat"><span class="rx-stat__label">Size</span><span class="rx-stat__value">666<small>bytes</small></span><span class="rx-stat__note">P2PKH, all inputs one address</span></div>
+      <div class="rx-stat"><span class="rx-stat__label">Mined</span><span class="rx-stat__value">14:28<small>UTC</small></span><span class="rx-stat__note">10 Nov 2026 · <span data-t="1794320900">2 min</span> ago</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="dh-container" style="padding-block:28px 64px">
+  <section class="rx-sec" data-layer="core" aria-labelledby="h-flow">
+    <div class="rx-sec__head"><h2 class="rx-sec__title" id="h-flow">Where the value went</h2><p class="rx-sec__desc">Ribbon width is the amount; tiny amounts get a minimum width. Grey is change back to the sender, orange is the fee.</p>
+      <div class="rx-sec__actions"><button class="dh-btn dh-btn--link" type="button">Show as a table</button></div></div>
+    <div class="rx-card"><div class="rx-card__body" style="padding-top:18px">
+      <div class="rx-hide-sm"><svg class="rx-flow" viewBox="0 0 1060 270" role="img" aria-label="Value flow: 4 inputs totalling 50.00608165 DASH into 2 outputs and a fee of 666 duffs"><path class="rib " d="M300 20.0C530.0 20.0 530.0 20.0 760 20.0L760 198.0C530.0 198.0 530.0 172.0 300 172.0Z"/><path class="rib rib--change" d="M300 182.0C530.0 182.0 530.0 208.0 760 208.0L760 224.0C530.0 224.0 530.0 198.0 300 198.0Z"/><path class="rib rib--change" d="M300 208.0C530.0 208.0 530.0 224.0 760 224.0L760 224.0C530.0 224.0 530.0 224.0 300 224.0Z"/><path class="rib rib--change" d="M300 234.0C530.0 234.0 530.0 224.0 760 224.0L760 224.0C530.0 224.0 530.0 239.3 300 239.3Z"/><path class="rib rib--fee" d="M300 239.3C530.0 239.3 530.0 234.0 760 234.0L760 250.0C530.0 250.0 530.0 250.0 300 250.0Z"/><rect class="node" x="292" y="20.0" width="8" height="152.0" rx="2"/><text class="v" x="282" y="100.0" text-anchor="end">50.00000000</text><text class="m" x="160" y="100.0" text-anchor="end">#0 XtNfac…GXck</text><rect class="node" x="292" y="182.0" width="8" height="16.0" rx="2"/><text class="v" x="282" y="194.0" text-anchor="end">0.00606165</text><text class="m" x="160" y="194.0" text-anchor="end">#1 XtNfac…GXck</text><rect class="node" x="292" y="208.0" width="8" height="16.0" rx="2"/><text class="v" x="282" y="220.0" text-anchor="end">0.00001000</text><text class="m" x="160" y="220.0" text-anchor="end">#2 XtNfac…GXck</text><rect class="node" x="292" y="234.0" width="8" height="16.0" rx="2"/><text class="v" x="282" y="246.0" text-anchor="end">0.00001000</text><text class="m" x="160" y="246.0" text-anchor="end">#3 XtNfac…GXck</text><rect class="node " x="760" y="20.0" width="8" height="178.0" rx="2"/><text class="v" x="778" y="113.0">50.00000000</text><text class="m" x="900" y="113.0">#0 XocAqA…G2zz</text><rect class="node node--change" x="760" y="208.0" width="8" height="16.0" rx="2"/><text class="v" x="778" y="220.0">0.00607499</text><text class="m" x="900" y="220.0">#1 XtNfac…GXck</text><text class="c" x="1018" y="220.0">· change</text><rect class="node node--fee" x="760" y="234.0" width="8" height="16.0" rx="2"/><text class="v" x="778" y="246.0">666 duffs</text><text x="872" y="246.0">Fee · 1 duff per byte</text></svg></div>
+      <div class="rx-only-sm rx-flowsm">
+        <p class="rx-flowsm__h"><span>4 inputs from <a class="rx-mono" href="#">XtNfac…GXck</a></span><b>50.00607499</b></p>
+        <div class="rx-stack" style="height:22px" role="img" aria-label="50 DASH to XocAqA…G2zz, 0.00607499 back as change, 666 duffs fee">
+          <i style="flex:50;background:var(--rx-core)"></i><i style="flex:1.2;background:var(--dh-line-2);min-width:6px"></i><i style="flex:.2;background:var(--dh-warn);min-width:4px"></i>
+        </div>
+        <ul class="rx-flowsm__l">
+          <li><span class="rx-sw" style="--c:var(--rx-core)"></span><a class="rx-mono" href="#">XocAqA…G2zz</a><b>50.00000000</b></li>
+          <li><span class="rx-sw" style="--c:var(--dh-line-2)"></span><span>Change to sender</span><b>0.00607499</b></li>
+          <li><span class="rx-sw" style="--c:var(--dh-warn)"></span><span>Fee</span><b>666 duffs</b></li>
+        </ul>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="rx-sec" data-layer="core" aria-labelledby="h-life">
+    <div class="rx-sec__head"><h2 class="rx-sec__title" id="h-life">How it settled</h2><p class="rx-sec__desc">Final 0.9 s after it was first seen; mined 21 s later.</p></div>
+    <div class="rx-card"><div class="rx-card__body" style="padding-top:20px">
+      <ol class="rx-life">
+        <li><b>Seen</b><span>14:27:58 UTC · in the mempool</span></li>
+        <li><b><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-is"/></svg>InstantSend locked</b><span>14:27:59 · +0.9 s · final from here</span></li>
+        <li><b><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-block"/></svg>Mined</b><span>14:28:20 · <a href="#">block 2,569,992</a>, position 84</span></li>
+        <li><b><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg>ChainLocked</b><span>14:28:41 · the block can't be reorganised</span></li>
+      </ol>
+    </div></div>
+  </section>
+
+  <section class="rx-sec" data-layer="core" aria-labelledby="h-io">
+    <div class="rx-sec__head"><h2 class="rx-sec__title" id="h-io">Inputs and outputs</h2><p class="rx-sec__desc">Link to one with <span class="rx-mono">#in-2</span> or <span class="rx-mono">#out-1</span>.</p></div>
+    <div class="rx-io">
+      <div class="rx-card"><div class="rx-card__head"><h3 class="rx-card__title">4 inputs</h3><div class="rx-card__aside"><span class="rx-amt rx-num"><b>50.00607499</b><span class="rx-u">DASH</span></span></div></div>
+        <table class="rx-table rx-table--cards"><thead><tr><th>#</th><th>From</th><th class="r">Amount</th><th>Spends</th></tr></thead><tbody><tr id="in-0"><td class="rx-dim rx-num u">#0</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XtNfacxA<span class="rx-ell">…</span>GXck</span></a></td><td class="r e"><span class="rx-amt">50.0000<span class="rx-d2">0000</span><span class="rx-u">DASH</span></span></td><td class="s"><a class="rx-sub" href="#" title="Output this input spends">c29c<span class="rx-ell">…</span>34d2:0</a></td></tr><tr id="in-1"><td class="rx-dim rx-num u">#1</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XtNfacxA<span class="rx-ell">…</span>GXck</span></a></td><td class="r e"><span class="rx-amt">0.0060<span class="rx-d2">6165</span><span class="rx-u">DASH</span></span></td><td class="s"><a class="rx-sub" href="#" title="Output this input spends">6e92<span class="rx-ell">…</span>86d8:1</a></td></tr><tr id="in-2"><td class="rx-dim rx-num u">#2</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XtNfacxA<span class="rx-ell">…</span>GXck</span></a></td><td class="r e"><span class="rx-amt">0.0000<span class="rx-d2">1000</span><span class="rx-u">DASH</span></span></td><td class="s"><a class="rx-sub" href="#" title="Output this input spends">30eb<span class="rx-ell">…</span>30d9:0</a></td></tr><tr id="in-3"><td class="rx-dim rx-num u">#3</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XtNfacxA<span class="rx-ell">…</span>GXck</span></a></td><td class="r e"><span class="rx-amt">0.0000<span class="rx-d2">1000</span><span class="rx-u">DASH</span></span></td><td class="s"><a class="rx-sub" href="#" title="Output this input spends">14b3<span class="rx-ell">…</span>6b50:0</a></td></tr></tbody></table></div>
+      <div class="rx-io__arrow"><svg class="rx-ico rx-ico--lg" aria-hidden="true"><use href="#i-arrow"/></svg></div>
+      <div class="rx-card"><div class="rx-card__head"><h3 class="rx-card__title">2 outputs</h3><div class="rx-card__aside"><span class="rx-amt rx-num"><b>50.00606833</b><span class="rx-u">DASH</span></span></div></div>
+        <table class="rx-table rx-table--cards"><thead><tr><th>#</th><th>To</th><th class="r">Amount</th><th>State</th></tr></thead><tbody><tr id="out-0"><td class="rx-dim rx-num u">#0</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XocAqAKx<span class="rx-ell">…</span>G2zz</span></a></td><td class="r e"><span class="rx-amt">50.0000<span class="rx-d2">0000</span><span class="rx-u">DASH</span></span></td><td class="s"><span class="rx-st rx-st--good rx-sm">Unspent</span></td></tr><tr id="out-1"><td class="rx-dim rx-num u">#1</td><td class="t"><a class="rx-chip" href="#" data-hc="addr" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-addr"/></svg></span><span class="rx-chip__text">XtNfacxA<span class="rx-ell">…</span>GXck</span></a> <span class="rx-tag">Change</span></td><td class="r e"><span class="rx-amt">0.0060<span class="rx-d2">7499</span><span class="rx-u">DASH</span></span></td><td class="s"><span class="rx-st rx-st--good rx-sm">Unspent</span></td></tr></tbody></table></div>
+    </div>
+  </section>
+
+  <details class="rx-card dh-disclosure" style="padding:14px 20px">
+    <summary style="cursor:pointer;font-weight:600">Raw data</summary>
+    <p class="rx-note">Hex, decoded JSON and the DAPI response, with copy buttons.</p>
+  </details>
+</div>
+</main>
+<dashhq-footer product="radar" source="https://github.com/PastaPastaPasta/radar">
+  <a href="#">Data sources</a> <a href="#">Status</a> <a href="#">Radar API</a> <a href="#">About</a>
+</dashhq-footer>
+</body>
+</html>

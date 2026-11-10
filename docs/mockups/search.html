@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search · Radar</title>
+<script src="assets/dashhq-shell.js"></script>
+<link rel="stylesheet" href="assets/archivo-inline.css">
+<link rel="stylesheet" href="assets/dashhq-tokens.css">
+<link rel="stylesheet" href="assets/dashhq-shell.css">
+<link rel="stylesheet" href="assets/dashhq-components.css">
+<link rel="stylesheet" href="assets/radar.css">
+<script src="assets/map-data.js" defer></script>
+<script src="assets/radar-mock.js" defer></script>
+</head>
+<body class="dh-fill rx-palopen">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol><symbol id="i-block" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></symbol><symbol id="i-tx" viewBox="0 0 24 24"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></symbol><symbol id="i-addr" viewBox="0 0 24 24"><path d="M4 7.5h14a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6.5A2.5 2.5 0 0 1 6.5 4H16"/><path d="M15.5 13.3h.01"/></symbol><symbol id="i-node" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01M12 7.5h4M12 16.5h4"/></symbol><symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r=".6"/></symbol><symbol id="i-plat" viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><path d="M12 8.2l3.4 2v3.6L12 15.8l-3.4-2v-3.6z"/></symbol><symbol id="i-id" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></symbol><symbol id="i-contract" viewBox="0 0 24 24"><path d="M8.5 4H8a2 2 0 0 0-2 2v3.5L4 12l2 2.5V18a2 2 0 0 0 2 2h.5M15.5 4h.5a2 2 0 0 1 2 2v3.5l2 2.5-2 2.5V18a2 2 0 0 1-2 2h-.5"/></symbol><symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3h7.5l4 4v14h-11.5z"/><path d="M13.5 3v4.5H18M9.5 12.5h5M9.5 16.5h5"/></symbol><symbol id="i-token" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol><symbol id="i-name" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M15.5 12v1.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.4 6.8"/></symbol><symbol id="i-epoch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></symbol><symbol id="i-cl" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol><symbol id="i-is" viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol><symbol id="i-proof" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/><path d="M8.6 12l2.4 2.4 4.4-4.6"/></symbol><symbol id="i-dapi" viewBox="0 0 24 24"><path d="M4.5 13a7.5 7.5 0 0 1 15 0M8 13a4 4 0 0 1 8 0"/><path d="M12 13v8"/></symbol><symbol id="i-index" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6M5 12v6c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8v-6"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol><symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.4-6-11a6 6 0 0 1 12 0c0 5.6-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5l10.5 6.5L8 18.5z"/></symbol><symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4 2v-8.5z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol><symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l3 3M13.5 9.5l2 2"/></symbol><symbol id="i-vote" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 12.2l2.8 2.8L16 9.5"/></symbol><symbol id="i-bridge" viewBox="0 0 24 24"><path d="M3 17.5h18M5.5 17.5v-6M18.5 17.5v-6M3 11.5c3.5-4.5 14.5-4.5 18 0M9.5 17.5v-5M14.5 17.5v-5"/></symbol><symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3.4 3 13.6 0 17M12 3.5c-3 3.4-3 13.6 0 17"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol><symbol id="i-swap" viewBox="0 0 24 24"><path d="M5 8h13l-3.5-3.5M19 16H6l3.5 3.5"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.2 5.8.9-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.9z"/></symbol><symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14M10.5 4l-2 16M15.5 4l-2 16"/></symbol><symbol id="i-mempool" viewBox="0 0 24 24"><path d="M7 3.5h10M7 20.5h10M8 3.5c0 5 8 5.6 8 8.5s-8 3.5-8 8.5M16 3.5c0 5-8 5.6-8 8.5s8 3.5 8 8.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6z"/></symbol><symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V8M7 13l5-5 5 5M5 4h14"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></symbol><symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol><symbol id="i-cube2" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3.5 6v14L9 18l6 2 5.5-2V4L15 6z"/><path d="M9 4v14M15 6v14"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0"/><path d="M12 16l4.2-5"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2a3.2 3.2 0 1 0 0 5.6"/></symbol></svg>
+<dashhq-bar product="radar" network="mainnet" networks="mainnet testnet" sticky phone-nav="tabs">
+  <img slot="logo" src="assets/radar-icon.png" alt="" width="22" height="22">
+  <nav slot="nav" aria-label="Radar">
+    <a href="home.html" data-dh-phone aria-current="page"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-radar"/></svg>Home</a>
+    <a href="tx.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-block"/></svg>Core</a>
+    <a href="masternodes.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-globe"/></svg>Network</a>
+    <a href="identity.html"><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plat"/></svg>Platform</a>
+    <a href="index.html" data-dh-desktop>Tools</a>
+    <a href="search.html" data-dh-phone><svg class="dh-nav-icon rx-navico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>Search</a>
+  </nav>
+  <div slot="actions"><a class="rx-kbtn" href="search.html" data-palette><svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg><span>Search Radar</span><kbd>/</kbd></a></div>
+</dashhq-bar>
+<p id="rx-announce" class="dh-sr" aria-live="polite"></p>
+<main id="main">
+
+<!-- ============ The scope: Radar's signature. The plate, the node map, three pulses and the two-lane chain. -->
+<section class="rx-plate rx-scope" aria-labelledby="h-scope">
+  <div class="dh-container">
+    <div class="rx-scope__grid">
+      <div class="rx-scope__left">
+        <p class="rx-scope__kicker"><span class="rx-fresh is-pulse" aria-hidden="true"></span><b>Live</b><span><span data-net>Mainnet</span> · Core, Platform and the masternode network</span></p>
+        <h1 id="h-scope">The Dash network, now</h1>
+        <p class="rx-scope__lede">Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is.</p>
+        <a class="rx-omni" href="search.html" data-palette aria-label="Search Radar (press /)"><svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg><span>Search blocks, txs, masternodes, names</span><kbd>/</kbd></a>
+        <p class="rx-try"><span>Try</span><a href="#">2569992</a><a href="#">pshenmic.dash</a><a href="#">75.119.128.71</a></p>
+
+        <div class="rx-row" style="gap:10px 16px"><a class="dh-btn dh-btn--primary" href="#"><svg class="rx-ico" aria-hidden="true"><use href="#i-map"/></svg>Open the map</a><a class="rx-go" href="#">Network census</a></div>
+      </div>
+
+      <div class="rx-scope__map">
+        <svg class="rx-map" data-rx-map="world" data-crop="150 0 800 390" role="img" aria-labelledby="map-desc"
+             data-pings='[{"lat":1.29,"lon":103.85,"kind":"core"},{"lat":40.71,"lon":-74.0,"kind":"plat"}]'></svg>
+        <p id="map-desc" class="dh-sr">Map of 2,207 enabled masternodes in 40 countries; the largest clusters are in Germany, Singapore and Finland. The latest Core block paid a masternode in Singapore; the latest Platform block was proposed by an evonode in New York.</p>
+        <div class="rx-callout" id="callout-core" data-layer="core" style="left:79.81%;top:58.17%;transform:translate(-104%,-128%)"><b>Block 2,569,992</b><span>Paid a masternode in Singapore</span></div>
+        <div class="rx-callout" data-layer="platform" style="left:21.08%;top:22.11%;transform:translate(-104%,30%)"><b>Platform 468,952</b><span>Proposed by an evonode in New York</span></div>
+        <div class="rx-maplegend">
+          <span><i class="d"></i>Masternodes</span><span><i class="d evo"></i>Evonodes</span>
+          <span><i class="r"></i>Core block paid</span><span><i class="r plat"></i>Platform block proposed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rx-pulse">
+          <a class="rx-pulse__row" href="#" data-layer="core">
+            <span class="rx-tile"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span>
+            <span class="rx-pulse__label">Core block height <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-dapi"/></svg>Served by DAPI</span></span>
+            <span class="rx-pulse__value"><span class="rx-tick" data-tip="core">2,569,992</span></span>
+            <span class="rx-pulse__meta"><span class="rx-ok"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg>ChainLocked</span><span><span data-t="1794320900">2 min</span> ago</span></span>
+          </a>
+          <a class="rx-pulse__row" href="#" data-layer="platform">
+            <span class="rx-tile"><svg class="rx-ico" aria-hidden="true"><use href="#i-plat"/></svg></span>
+            <span class="rx-pulse__label">Platform block height <span class="rx-src rx-src--proof"><svg class="rx-ico" aria-hidden="true"><use href="#i-proof"/></svg>Proof-checked</span></span>
+            <span class="rx-pulse__value"><span class="rx-tick" data-tip="plat">468,952</span></span>
+            <span class="rx-pulse__meta"><span>Epoch 88 · 18% through</span><span class="rx-meter" data-layer="platform"><i style="width:18%"></i></span></span>
+          </a>
+          <a class="rx-pulse__row" href="masternodes.html" data-layer="network">
+            <span class="rx-tile"><svg class="rx-ico" aria-hidden="true"><use href="#i-radar"/></svg></span>
+            <span class="rx-pulse__label">Masternodes answering <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-radar"/></svg>Crawled by Radar</span></span>
+            <span class="rx-pulse__value" style="color:var(--dh-good)">99.1%</span>
+            <span class="rx-pulse__meta"><span>2,187 of 2,207</span><span>crawled 13 min ago</span></span>
+          </a>
+    </div>
+
+    <div class="rx-lanes" aria-labelledby="h-lanes">
+      <div class="rx-lanes__head">
+        <h2 id="h-lanes">Latest blocks</h2>
+        <span>Each Platform block is locked to a Core block; the lines show which.</span>
+        <span class="rx-live"><span class="rx-fresh" aria-hidden="true"></span><span class="rx-live__word">Live</span><button type="button" aria-label="Pause live updates"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-pause"/></svg></button></span>
+      </div>
+      <div class="rx-lanes__body">
+        <div class="rx-lane__label" data-layer="core"><span class="rx-layer-dot"></span>Core</div><div class="rx-lane" id="lane-core" aria-label="Latest Core blocks, oldest first"><a class="rx-blk" href="#" data-layer="core" data-h="2569985" data-hc="block"><b>2,569,985</b><span>34 tx · <span data-t="1794318893">35 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569986" data-hc="block"><b>2,569,986</b><span>31 tx · <span data-t="1794319051">32 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569987" data-hc="block"><b>2,569,987</b><span>1 tx · <span data-t="1794319066">32 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569988" data-hc="block"><b>2,569,988</b><span>123 tx · <span data-t="1794319755">21 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569989" data-hc="block"><b>2,569,989</b><span>76 tx · <span data-t="1794320032">16 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569990" data-hc="block"><b>2,569,990</b><span>5 tx · <span data-t="1794320055">16 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk" href="#" data-layer="core" data-h="2569991" data-hc="block"><b>2,569,991</b><span>90 tx · <span data-t="1794320513">8 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a><a class="rx-blk is-tip" href="#" data-layer="core" data-h="2569992" data-hc="block"><b>2,569,992</b><span>85 tx · <span data-t="1794320900">2 min</span></span><svg class="rx-ico rx-lock" aria-hidden="true"><use href="#i-cl"/></svg></a></div><div class="rx-lane__label" data-layer="platform"><span class="rx-layer-dot"></span>Platform</div><div class="rx-lane" id="lane-plat" aria-label="Latest Platform blocks, oldest first"><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569988"><b>468,943</b><span>0 tx · <span data-t="1794320017">16 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569990"><b>468,944</b><span>0 tx · <span data-t="1794320200">13 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569990"><b>468,945</b><span>0 tx · <span data-t="1794320383">10 min</span></span></a><a class="rx-blk" href="#" data-layer="platform" data-locked="2569990"><b>468,946</b><span>1 tx · <span data-t="1794320385">10 min</span></span></a><a class="rx-blk" href="#" data-layer="platform" data-locked="2569990"><b>468,947</b><span>1 tx · <span data-t="1794320453">9 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569990"><b>468,948</b><span>0 tx · <span data-t="1794320456">9 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569990"><b>468,949</b><span>0 tx · <span data-t="1794320461">9 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569991"><b>468,950</b><span>0 tx · <span data-t="1794320644">6 min</span></span></a><a class="rx-blk rx-blk--empty" href="#" data-layer="platform" data-locked="2569991"><b>468,951</b><span>0 tx · <span data-t="1794320826">3 min</span></span></a><a class="rx-blk is-tip rx-blk--empty" href="#" data-layer="platform" data-locked="2569992"><b>468,952</b><span>0 tx · <span data-t="1794321009">21 s</span></span></a></div>
+        <svg class="rx-ties" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dh-container" style="padding-top:40px">
+
+  <!-- ============ Latest activity -->
+  <section class="rx-sec" aria-labelledby="h-latest">
+    <div class="rx-sec__head">
+      <h2 class="rx-sec__title" id="h-latest">Latest activity</h2>
+      <p class="rx-sec__desc">New rows slide in at the top; hovering a list holds it still.</p>
+    </div>
+    <div class="rx-grid">
+      <div class="rx-card rx-c6" data-layer="core">
+        <div class="rx-card__head">
+          <h3 class="rx-card__title"><span class="rx-tile" style="--s:26px"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span>Core blocks</h3>
+          <div class="rx-card__aside"><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-dapi"/></svg>Served by DAPI<time>2 s ago</time></span></div>
+        </div>
+        <table class="rx-table rx-table--feed rx-table--cards">
+          <thead><tr><th>Block</th><th>Age</th><th class="r">Txs</th><th class="r">Size</th><th>Paid to</th></tr></thead>
+          <tbody id="feed-core"><tr class=rx-just><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,992</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794320900">2 min</td><td class="r s" data-u="tx">85</td><td class="r rx-dim h">68.9 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="45.32.107.227:9999" data-kind="Masternode · Vultr (Constant), Singapore SG" data-protx="73d8f3bf3b74f4d1e74a7be769c6d8f36b37a45a4d9bdd830550f59e8b236c5c" data-ver="24.0.0" data-paid="Block 2,569,982" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="off" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="off" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="on" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="off" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="off" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="off" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="off" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.9"/></svg></span><span class="rx-chip__text">45.32.107.227</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,991</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794320513">8 min</td><td class="r s" data-u="tx">90</td><td class="r rx-dim h">59.7 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="46.4.162.113:9999" data-kind="Masternode · Hetzner, Falkenstein DE" data-protx="61686948244f19b81bb199ccd09e7023240663345146a81613a881519bbb5fbd" data-ver="24.0.0" data-paid="Block 2,569,558" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="on" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="off" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="on" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="on" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="off" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="on" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="off" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="off" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.9"/></svg></span><span class="rx-chip__text">46.4.162.113</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,990</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794320055">16 min</td><td class="r s" data-u="tx">5</td><td class="r rx-dim h">1.6 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="188.40.163.5:9999" data-kind="Masternode · Hetzner, Falkenstein DE" data-protx="481a668a5b44f0e6a2434b93f6d70140939056c4b98673514c5f3d705d981ffc" data-ver="24.0.0" data-paid="Block 2,569,990" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="off" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="on" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="off" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="on" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="off" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="on" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="on" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.9"/></svg></span><span class="rx-chip__text">188.40.163.5</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,989</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794320032">16 min</td><td class="r s" data-u="tx">76</td><td class="r rx-dim h">47.2 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="49.13.154.121:9999" data-kind="Evonode · Hetzner, Nuremberg DE" data-protx="62472f43d140786abf3ea0a02f5d9879604ffe7f9552529015bff335c3382159" data-ver="23.1.8" data-paid="Block 2,569,989" data-up="100%" data-ok="1"><span class="rx-np rx-np--evo" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="off" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="on" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="on" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="off" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="on" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="off" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="on" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.9"/></svg></span><span class="rx-chip__text">49.13.154.121</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,988</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794319755">21 min</td><td class="r s" data-u="tx">123</td><td class="r rx-dim h">96.0 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="188.40.163.0:9999" data-kind="Masternode · Hetzner, Falkenstein DE" data-protx="9ca6b0a82b687929e97ecb074be77eb22f106f60adc55cee8485ab6a88a980b2" data-ver="24.0.0" data-paid="Block 2,569,988" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="off" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="on" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="off" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="on" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="on" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="off" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="on" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.9"/></svg></span><span class="rx-chip__text">188.40.163.0</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,987</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794319066">32 min</td><td class="r s" data-u="tx">1</td><td class="r rx-dim h">0.4 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="46.4.162.104:9999" data-kind="Masternode · Hetzner, Falkenstein DE" data-protx="462aa6ffd298b36d06f8fe5d600fce321c78792a7af67da08797ef2687945262" data-ver="24.0.0" data-paid="Block 2,569,987" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="off" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="off" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="off" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="off" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="on" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="on" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.2"/></svg></span><span class="rx-chip__text">46.4.162.104</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,986</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794319051">32 min</td><td class="r s" data-u="tx">31</td><td class="r rx-dim h">27.6 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="188.40.180.131:9999" data-kind="Masternode · Hetzner, Falkenstein DE" data-protx="2b1605c628323a4738c5eef5d640bde09eae6ac73d338d14ebf245a1d94b0ce2" data-ver="24.0.0" data-paid="Block 2,569,986" data-up="100%" data-ok="1"><span class="rx-np rx-np--mn" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="on" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="off" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="on" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="on" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="on" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="off" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="3.6"/></svg></span><span class="rx-chip__text">188.40.180.131</span></a></td></tr><tr><td class="t"><a class="rx-chip" href="#" data-hc="block" data-layer="core"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-block"/></svg></span><span class="rx-chip__name rx-num">2,569,985</span></a> <span class="rx-lockic" title="ChainLocked"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-cl"/></svg><span class="dh-sr">ChainLocked</span></span></td><td class="rx-dim e" data-t="1794318893">35 min</td><td class="r s" data-u="tx">34</td><td class="r rx-dim h">22.8 kB</td><td class="u"><a class="rx-chip" href="mn.html" data-hc="mn" data-layer="network" data-title="161.97.106.14:9999" data-kind="Evonode · Contabo, London GB" data-protx="daac597031deebf4586da025de5902ee5781cc79139c91b4e6d86a4d9d187772" data-ver="24.0.0" data-paid="Block 2,569,985" data-up="100%" data-ok="1"><span class="rx-np rx-np--evo" style="--s:18px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="off" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="off" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="on" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="off" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="off" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="on" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="off" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.2"/></svg></span><span class="rx-chip__text">161.97.106.14</span></a></td></tr></tbody>
+        </table>
+        <div class="rx-card__foot"><span>Mempool: <b class="rx-num" style="color:var(--dh-ink)">8</b> transactions · 6.1 kB</span><a class="rx-go" href="#">All blocks</a></div>
+      </div>
+      <div class="rx-card rx-c6" data-layer="platform">
+        <div class="rx-card__head">
+          <h3 class="rx-card__title"><span class="rx-tile" style="--s:26px"><svg class="rx-ico" aria-hidden="true"><use href="#i-plat"/></svg></span>Platform transitions</h3>
+          <div class="rx-card__aside"><span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by Platform Explorer<time>12 s ago</time></span></div>
+        </div>
+        <table class="rx-table rx-table--feed rx-table--cards" data-layer="platform">
+          <thead><tr><th>Type</th><th>Transition</th><th>Owner</th><th>Age</th></tr></thead>
+          <tbody><tr class=rx-just><td class="t"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-shield"/></svg>Shielded withdrawal</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">2e5a07<span class="rx-ell">…</span>6e81</span></a></td><td class="s"><span class="rx-dim rx-sm">Shielded</span></td><td class="rx-dim e" data-t="1794320453">9 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-doc"/></svg>Document replace</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">bb82cb<span class="rx-ell">…</span>c706</span></a></td><td class="s"><a class="rx-chip" href="identity.html" data-hc="id" data-layer="platform"><span class="rx-idc i2" style="--s:18px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="0" y="0" width="1" height="1"/><rect class="c" x="4" y="0" width="1" height="1"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="0" y="3" width="1" height="1"/><rect class="c" x="4" y="3" width="1" height="1"/><rect class="c" x="1" y="3" width="1" height="1"/><rect class="c" x="3" y="3" width="1" height="1"/><rect class="c" x="0" y="4" width="1" height="1"/><rect class="c" x="4" y="4" width="1" height="1"/></svg></span><span class="rx-chip__text">7P3ZsJ<span class="rx-ell">…</span>Tn9J</span></a></td><td class="rx-dim e" data-t="1794320385">10 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="core"><svg class="rx-ico" aria-hidden="true"><use href="#i-shield"/></svg>Shield from asset lock</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">c489b7<span class="rx-ell">…</span>5d67</span></a></td><td class="s"><span class="rx-dim rx-sm">Shielded</span></td><td class="rx-dim e" data-t="1794319831">19 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-shield"/></svg>Shielded withdrawal</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">0efa3e<span class="rx-ell">…</span>0578</span></a></td><td class="s"><span class="rx-dim rx-sm">Shielded</span></td><td class="rx-dim e" data-t="1794319568">24 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-doc"/></svg>Document replace</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">42e9a2<span class="rx-ell">…</span>0eb4</span></a></td><td class="s"><a class="rx-chip" href="identity.html" data-hc="id" data-layer="platform"><span class="rx-idc i2" style="--s:18px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="0" y="0" width="1" height="1"/><rect class="c" x="4" y="0" width="1" height="1"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="0" y="3" width="1" height="1"/><rect class="c" x="4" y="3" width="1" height="1"/><rect class="c" x="1" y="3" width="1" height="1"/><rect class="c" x="3" y="3" width="1" height="1"/><rect class="c" x="0" y="4" width="1" height="1"/><rect class="c" x="4" y="4" width="1" height="1"/></svg></span><span class="rx-chip__text">7P3ZsJ<span class="rx-ell">…</span>Tn9J</span></a></td><td class="rx-dim e" data-t="1794319404">27 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="core"><svg class="rx-ico" aria-hidden="true"><use href="#i-shield"/></svg>Shield from asset lock</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">c79774<span class="rx-ell">…</span>8847</span></a></td><td class="s"><span class="rx-dim rx-sm">Shielded</span></td><td class="rx-dim e" data-t="1794318056">49 min</td></tr><tr><td class="t"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-doc"/></svg>Document replace</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">7bedd0<span class="rx-ell">…</span>7ec5</span></a></td><td class="s"><a class="rx-chip" href="identity.html" data-hc="id" data-layer="platform"><span class="rx-idc i2" style="--s:18px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="0" y="0" width="1" height="1"/><rect class="c" x="4" y="0" width="1" height="1"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="0" y="3" width="1" height="1"/><rect class="c" x="4" y="3" width="1" height="1"/><rect class="c" x="1" y="3" width="1" height="1"/><rect class="c" x="3" y="3" width="1" height="1"/><rect class="c" x="0" y="4" width="1" height="1"/><rect class="c" x="4" y="4" width="1" height="1"/></svg></span><span class="rx-chip__text">7P3ZsJ<span class="rx-ell">…</span>Tn9J</span></a></td><td class="rx-dim e" data-t="1794315746">1 h</td></tr><tr><td class="t"><span class="rx-type" data-layer="core"><svg class="rx-ico" aria-hidden="true"><use href="#i-shield"/></svg>Shield from asset lock</span></td><td class="u"><a class="rx-chip" href="#" data-hc="ptx" data-layer="platform"><span class="rx-glyph"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span><span class="rx-chip__text">6b7a30<span class="rx-ell">…</span>d13e</span></a></td><td class="s"><span class="rx-dim rx-sm">Shielded</span></td><td class="rx-dim e" data-t="1794314857">1 h</td></tr></tbody>
+        </table>
+        <div class="rx-card__foot"><span>79,248 transitions since genesis</span><a class="rx-go" href="#">All transitions</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ Network zone -->
+<section class="rx-zone" data-layer="network" aria-labelledby="h-net">
+  <div class="dh-container">
+    <div class="rx-sec">
+      <div class="rx-sec__head">
+        <h2 class="rx-sec__title" id="h-net">Masternode network</h2>
+        <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-radar"/></svg>Crawled by Radar<time>13 min ago</time></span>
+        <div class="rx-sec__actions"><a class="rx-go" href="masternodes.html">All 2,997 masternodes</a><a class="rx-go" href="#">Network census</a></div>
+      </div>
+      <div class="rx-stats" style="margin-bottom:16px">
+        <a class="rx-stat rx-stat--good" href="masternodes.html"><span class="rx-stat__label">Answering our crawl</span><span class="rx-stat__value">99.1%</span><span class="rx-stat__note">2,187 of 2,207 enabled</span></a>
+        <a class="rx-stat" data-layer="network" href="masternodes.html"><span class="rx-stat__label">Enabled masternodes</span><span class="rx-stat__value">2,207</span><span class="rx-stat__note">363 are evonodes · −34 since yesterday</span></a>
+        <a class="rx-stat rx-stat--warn" href="masternodes.html"><span class="rx-stat__label">Ready for Core 24 quorums</span><span class="rx-stat__value">82.0%</span><span class="rx-stat__note">398 fail a readiness check</span></a>
+        <a class="rx-stat" href="masternodes.html"><span class="rx-stat__label">PoSe-banned</span><span class="rx-stat__value">790</span><span class="rx-stat__note">registered, not enabled</span></a>
+        <div class="rx-stat"><span class="rx-stat__label">Median yield, a year</span><span class="rx-stat__value">7.2<small>%</small></span><span class="rx-stat__note">evonodes 8.5% with Platform</span></div>
+      </div>
+      <div class="rx-grid">
+        <div class="rx-card rx-c6"><div class="rx-card__head"><h3 class="rx-card__title">What they run</h3><div class="rx-card__aside"><a class="rx-go rx-sm" href="#">Every version</a></div></div>
+          <div class="rx-card__body"><div class="rx-row" style="align-items:baseline;gap:4px 10px;margin-bottom:12px"><span class="rx-stat__value" style="font-size:34px">77.8%</span><span class="rx-dim">run Dash Core 24, the latest release</span></div>
+<div class="rx-stack" role="img" aria-label="Dash Core versions across 2,578 nodes"><i style="flex:32;background:var(--dh-ramp-1)" title="24.0.1: 32"></i><i style="flex:1973;background:var(--dh-ramp-2)" title="24.0.0: 1,973"></i><i style="flex:186;background:var(--dh-ramp-3)" title="23.1.10: 186"></i><i style="flex:111;background:var(--dh-ramp-4)" title="23.1.8: 111"></i><i style="flex:136;background:var(--dh-ramp-5)" title="23.1.0: 136"></i><i style="flex:140;background:var(--dh-line-2)" title="Other: 140"></i></div><ul class="rx-legend"><li><span class="rx-sw" style="--c:var(--dh-ramp-1)"></span><span class="rx-mono">24.0.1</span><b>1.2%</b></li><li><span class="rx-sw" style="--c:var(--dh-ramp-2)"></span><span class="rx-mono">24.0.0</span><b>76.5%</b></li><li><span class="rx-sw" style="--c:var(--dh-ramp-3)"></span><span class="rx-mono">23.1.10</span><b>7.2%</b></li><li><span class="rx-sw" style="--c:var(--dh-ramp-4)"></span><span class="rx-mono">23.1.8</span><b>4.3%</b></li><li><span class="rx-sw" style="--c:var(--dh-ramp-5)"></span><span class="rx-mono">23.1.0</span><b>5.3%</b></li><li><span class="rx-sw" style="--c:var(--dh-line-2)"></span>Other<b>5.4%</b></li></ul></div></div>
+        <div class="rx-card rx-c3"><div class="rx-card__head"><h3 class="rx-card__title">Where they are</h3></div>
+          <div class="rx-card__body"><ol class="rx-rank" data-layer="network"><li><span class="rx-cc">DE</span><button type="button">Germany</button><span class="n">971</span><span class="bar"><i style="width:100%"></i></span></li><li><span class="rx-cc">SG</span><button type="button">Singapore</button><span class="n">284</span><span class="bar"><i style="width:29%"></i></span></li><li><span class="rx-cc">FI</span><button type="button">Finland</button><span class="n">202</span><span class="bar"><i style="width:21%"></i></span></li><li><span class="rx-cc">US</span><button type="button">United States</button><span class="n">188</span><span class="bar"><i style="width:19%"></i></span></li><li><span class="rx-cc">NL</span><button type="button">Netherlands</button><span class="n">170</span><span class="bar"><i style="width:18%"></i></span></li></ol><p class="rx-note" style="margin:8px 0 0"><a class="rx-go rx-sm" href="#">All 40 countries</a></p></div></div>
+        <div class="rx-card rx-c3"><div class="rx-card__head"><h3 class="rx-card__title">Who hosts them</h3></div>
+          <div class="rx-card__body"><ol class="rx-rank" data-layer="network"><li><span class="rx-cc">1</span><button type="button">Hetzner</button><span class="n">759</span><span class="bar"><i style="width:100%"></i></span></li><li><span class="rx-cc">2</span><button type="button">Vultr (Constant)</button><span class="n">264</span><span class="bar"><i style="width:35%"></i></span></li><li><span class="rx-cc">3</span><button type="button">OVH</button><span class="n">234</span><span class="bar"><i style="width:31%"></i></span></li><li><span class="rx-cc">4</span><button type="button">Contabo</button><span class="n">171</span><span class="bar"><i style="width:23%"></i></span></li><li><span class="rx-cc">5</span><button type="button">Alibaba Cloud</button><span class="n">135</span><span class="bar"><i style="width:18%"></i></span></li></ol><p class="rx-note" style="margin:8px 0 0"><a class="rx-go rx-sm" href="#">All 91 providers</a></p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Platform zone -->
+<section class="rx-zone" data-layer="platform" aria-labelledby="h-plat">
+  <div class="dh-container">
+    <div class="rx-sec">
+      <div class="rx-sec__head">
+        <h2 class="rx-sec__title" id="h-plat">Dash Platform</h2>
+        <span class="rx-src rx-src--proof"><svg class="rx-ico" aria-hidden="true"><use href="#i-proof"/></svg>Proof-checked<time>just now</time></span>
+        <div class="rx-sec__actions"><a class="rx-go" href="#">Platform home</a><a class="rx-go" href="#">Epochs</a></div>
+      </div>
+      <div class="rx-card" data-layer="platform" style="margin-bottom:16px">
+        <div class="rx-clock">
+          <div class="rx-clock__n"><span class="rx-dim rx-sm">Epoch</span><b>88</b></div>
+          <div class="rx-clock__mid">
+            <div class="rx-clock__track" role="meter" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100" aria-label="Epoch 88 progress"><i style="width:18.5%"></i><s style="left:11%"></s><s style="left:22%"></s><s style="left:33%"></s><s style="left:44%"></s><s style="left:55%"></s><s style="left:66%"></s><s style="left:77%"></s><s style="left:88%"></s></div>
+            <div class="rx-clock__axis"><span>Started 8 Nov, 21:53 UTC · block 467,862</span><span>18% through · 1,091 blocks so far</span></div>
+          </div>
+          <div class="rx-clock__end"><span>Ends in about</span><b>7.4 days</b><span>18 Nov, 00:53 UTC</span></div>
+        </div>
+      </div>
+      <div class="rx-grid">
+        <div class="rx-c8"><div class="rx-stats">
+          <div class="rx-stat" data-layer="platform"><span class="rx-stat__label">Credits on Platform</span><span class="rx-stat__value">36,921<small>DASH</small></span><span class="rx-stat__note">≈ $1.71 million</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Identities <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by PE</span></span><span class="rx-stat__value">5,023</span><span class="rx-stat__note">+14 this week</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Data contracts</span><span class="rx-stat__value">88</span><span class="rx-stat__note">22,546 documents</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Protocol version</span><span class="rx-stat__value">14</span><span class="rx-stat__note">no upgrade vote open</span></div>
+        </div></div>
+        <div class="rx-card rx-c4" data-layer="platform"><div class="rx-card__head"><h3 class="rx-card__title">Transitions a day</h3><div class="rx-card__aside"><span class="rx-dim rx-sm">30 days</span></div></div>
+          <div class="rx-card__body"><div class="rx-bars" role="img" aria-label="Transitions per day over 30 days, between 40 and 180"><i style="height:44%"></i><i style="height:92%"></i><i style="height:32%"></i><i style="height:35%"></i><i style="height:60%"></i><i style="height:57%"></i><i style="height:86%"></i><i style="height:35%"></i><i style="height:77%"></i><i style="height:49%"></i><i style="height:37%"></i><i style="height:60%"></i><i style="height:37%"></i><i style="height:58%"></i><i style="height:85%"></i><i style="height:27%"></i><i style="height:62%"></i><i style="height:32%"></i><i style="height:23%"></i><i style="height:53%"></i><i style="height:43%"></i><i style="height:77%"></i><i style="height:51%"></i><i style="height:69%"></i><i style="height:66%"></i><i style="height:24%"></i><i style="height:65%"></i><i style="height:83%"></i><i style="height:35%"></i><i style="height:77%"></i></div>
+          <div class="rx-axis"><span>11 Oct</span><span>10 Nov</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Core zone -->
+<section class="rx-zone" data-layer="core" aria-labelledby="h-core">
+  <div class="dh-container">
+    <div class="rx-sec">
+      <div class="rx-sec__head">
+        <h2 class="rx-sec__title" id="h-core">Dash Core</h2>
+        <span class="rx-src"><svg class="rx-ico" aria-hidden="true"><use href="#i-index"/></svg>Indexed by Hyphen<time>8 s ago</time></span>
+        <div class="rx-sec__actions"><a class="rx-go" href="#">Charts</a><a class="rx-go" href="#">Mempool</a><a class="rx-go" href="#">Rich list</a></div>
+      </div>
+      <div class="rx-grid">
+        <div class="rx-c8"><div class="rx-stats">
+          <div class="rx-stat" data-layer="core"><span class="rx-stat__label">Circulating supply</span><span class="rx-stat__value">12.66<small>M DASH</small></span><span class="rx-stat__note">≈ $585 million</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Hash rate</span><span class="rx-stat__value">2.31<small>PH/s</small></span><span class="rx-stat__note">difficulty 151.6 M</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Transactions, 24 h</span><span class="rx-stat__value">27,940</span><span class="rx-stat__note">98% InstantSend locked</span></div>
+          <div class="rx-stat"><span class="rx-stat__label">Mempool</span><span class="rx-stat__value">8</span><span class="rx-stat__note">6.1 kB · clears next block</span></div>
+        </div></div>
+        <div class="rx-card rx-c4" data-layer="core"><div class="rx-card__head"><h3 class="rx-card__title">Transactions a block</h3><div class="rx-card__aside"><span class="rx-dim rx-sm">24 h</span></div></div>
+          <div class="rx-card__body"><div class="rx-bars" role="img" aria-label="Transactions per block over 24 hours"><i style="height:49%"></i><i style="height:42%"></i><i style="height:61%"></i><i style="height:49%"></i><i style="height:85%"></i><i style="height:30%"></i><i style="height:62%"></i><i style="height:84%"></i><i style="height:77%"></i><i style="height:96%"></i><i style="height:92%"></i><i style="height:48%"></i><i style="height:43%"></i><i style="height:81%"></i><i style="height:89%"></i><i style="height:22%"></i><i style="height:75%"></i><i style="height:98%"></i><i style="height:84%"></i><i style="height:60%"></i><i style="height:46%"></i><i style="height:78%"></i><i style="height:89%"></i><i style="height:79%"></i><i style="height:58%"></i><i style="height:23%"></i><i style="height:91%"></i><i style="height:94%"></i><i style="height:79%"></i><i style="height:70%"></i><i style="height:71%"></i><i style="height:72%"></i><i style="height:45%"></i><i style="height:20%"></i><i style="height:47%"></i><i style="height:99%"></i><i style="height:89%"></i><i style="height:44%"></i><i style="height:76%"></i><i style="height:88%"></i><i style="height:81%"></i><i style="height:92%"></i><i style="height:78%"></i><i style="height:34%"></i><i style="height:75%"></i><i style="height:95%"></i><i style="height:93%"></i><i style="height:44%"></i></div>
+          <div class="rx-axis"><span>Yesterday 14:30</span><span>now</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dh-container" style="padding-block:40px 64px">
+  <section class="rx-sec" style="margin:0" aria-labelledby="h-act">
+    <div class="rx-sec__head"><h2 class="rx-sec__title" id="h-act">Act on what you see</h2><p class="rx-sec__desc">Radar only reads. It never asks for a key, a recovery phrase or a signature.</p></div>
+    <div class="rx-grid">
+      <a class="rx-out__card rx-c6" href="#"><span class="rx-tile rx-tile--gov"><svg class="rx-ico" aria-hidden="true"><use href="#i-vote"/></svg></span><span class="rx-out__t">Vote in Governance</span><span class="rx-out__d">Treasury proposals, masternode votes and name contests, at gov.dashhq.org</span><svg class="rx-ico rx-ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+      <a class="rx-out__card rx-c6" href="#"><span class="rx-tile rx-tile--bridge"><svg class="rx-ico" aria-hidden="true"><use href="#i-bridge"/></svg></span><span class="rx-out__t">Manage in Bridge</span><span class="rx-out__d">Identities, usernames, tokens and contracts, with your own keys</span><svg class="rx-ico rx-ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+    </div>
+  </section>
+</div>
+</main>
+<dashhq-footer product="radar" source="https://github.com/PastaPastaPasta/radar">
+  <a href="#">Data sources</a> <a href="#">Status</a> <a href="#">Radar API</a> <a href="#">About</a>
+</dashhq-footer>
+<div class="rx-scrim" aria-hidden="true"></div>
+<div class="rx-pal" role="dialog" aria-modal="true" aria-label="Search Radar">
+  <div class="rx-pal__input">
+    <svg class="rx-ico" aria-hidden="true"><use href="#i-search"/></svg>
+    <input type="text" value="pshen" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-activedescendant="opt-1" aria-label="Search blocks, transactions, addresses, masternodes, identities and names" autocomplete="off" spellcheck="false">
+    <kbd class="rx-hide-sm">Esc</kbd>
+    <a class="dh-btn dh-btn--link rx-only-sm" href="home.html">Cancel</a>
+  </div>
+  <div class="rx-pal__class">
+    <span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-name"/></svg>Name prefix</span>
+    <span>Looks like the start of a username. Searching Mainnet names, identities and saved items.</span>
+  </div>
+  <div class="rx-pal__body">
+    <div class="rx-pal__list" id="pal-list" role="listbox" aria-label="Results">
+      <p class="rx-pal__group" role="presentation"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-name"/></svg>Usernames <span class="n">2</span></p>
+      <a class="rx-opt" id="opt-1" role="option" aria-selected="true" href="identity.html">
+        <span class="rx-idc i4" style="--s:28px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="0" y="0" width="1" height="1"/><rect class="c" x="4" y="0" width="1" height="1"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="2" y="0" width="1" height="1"/><rect class="c" x="0" y="1" width="1" height="1"/><rect class="c" x="4" y="1" width="1" height="1"/><rect class="c" x="1" y="2" width="1" height="1"/><rect class="c" x="3" y="2" width="1" height="1"/><rect class="c" x="1" y="3" width="1" height="1"/><rect class="c" x="3" y="3" width="1" height="1"/><rect class="c" x="2" y="3" width="1" height="1"/><rect class="c" x="0" y="4" width="1" height="1"/><rect class="c" x="4" y="4" width="1" height="1"/><rect class="c" x="1" y="4" width="1" height="1"/><rect class="c" x="3" y="4" width="1" height="1"/></svg></span>
+        <span class="rx-opt__t"><mark>pshen</mark>mic<span class="rx-dim">.dash</span></span>
+        <span class="rx-opt__s">Identity Bjix…iYqp · 10.1333 DASH · 22 transitions</span>
+        <span class="rx-opt__e"><kbd>↵</kbd></span>
+      </a>
+      <a class="rx-opt" id="opt-2" role="option" aria-selected="false" href="#">
+        <span class="rx-idc i6" style="--s:28px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="2" y="0" width="1" height="1"/><rect class="c" x="0" y="1" width="1" height="1"/><rect class="c" x="4" y="1" width="1" height="1"/><rect class="c" x="1" y="1" width="1" height="1"/><rect class="c" x="3" y="1" width="1" height="1"/><rect class="c" x="2" y="1" width="1" height="1"/><rect class="c" x="0" y="2" width="1" height="1"/><rect class="c" x="4" y="2" width="1" height="1"/><rect class="c" x="2" y="2" width="1" height="1"/><rect class="c" x="2" y="3" width="1" height="1"/><rect class="c" x="1" y="4" width="1" height="1"/><rect class="c" x="3" y="4" width="1" height="1"/><rect class="c" x="2" y="4" width="1" height="1"/></svg></span>
+        <span class="rx-opt__t"><mark>pshen</mark>mic-dfo<span class="rx-dim">.dash</span></span>
+        <span class="rx-opt__s">Identity 6uuE…QyHw · 0.0073 DASH · 5 transitions</span>
+        <span class="rx-opt__e"></span>
+      </a>
+
+      <p class="rx-pal__group" role="presentation"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-doc"/></svg>Documents</p>
+      <a class="rx-opt" id="opt-3" role="option" aria-selected="false" href="#">
+        <span class="rx-tile" data-layer="platform" style="--s:28px"><svg class="rx-ico" aria-hidden="true"><use href="#i-doc"/></svg></span>
+        <span class="rx-opt__t">Find “pshen” in document text</span>
+        <span class="rx-opt__s">Profiles, posts and other indexed documents · Platform Explorer</span>
+        <span class="rx-opt__e"></span>
+      </a>
+
+      <p class="rx-pal__group" role="presentation"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-arrow"/></svg>Go to</p>
+      <a class="rx-opt" id="opt-4" role="option" aria-selected="false" href="#">
+        <span class="rx-tile" data-layer="platform" style="--s:28px"><svg class="rx-ico" aria-hidden="true"><use href="#i-name"/></svg></span>
+        <span class="rx-opt__t">All names starting with “pshen”</span>
+        <span class="rx-opt__s">Platform › Names</span>
+        <span class="rx-opt__e"></span>
+      </a>
+
+      <p class="rx-pal__group" role="presentation"><svg class="rx-ico rx-ico--sm" aria-hidden="true"><use href="#i-star"/></svg>Recent <span class="n">· on this device</span></p>
+      <a class="rx-opt" id="opt-5" role="option" aria-selected="false" href="mn.html">
+        <span class="rx-np rx-np--evo" style="--s:28px" aria-hidden="true"><svg viewBox="-12 -12 24 24"><path class="on" d="M0.49 -9.39A9.4 9.4 0 0 1 4.27 -8.38"/><path class="on" d="M5.12 -7.88A9.4 9.4 0 0 1 7.88 -5.12"/><path class="on" d="M8.38 -4.27A9.4 9.4 0 0 1 9.39 -0.49"/><path class="on" d="M9.39 0.49A9.4 9.4 0 0 1 8.38 4.27"/><path class="off" d="M7.88 5.12A9.4 9.4 0 0 1 5.12 7.88"/><path class="on" d="M4.27 8.38A9.4 9.4 0 0 1 0.49 9.39"/><path class="on" d="M-0.49 9.39A9.4 9.4 0 0 1 -4.27 8.38"/><path class="on" d="M-5.12 7.88A9.4 9.4 0 0 1 -7.88 5.12"/><path class="off" d="M-8.38 4.27A9.4 9.4 0 0 1 -9.39 0.49"/><path class="on" d="M-9.39 -0.49A9.4 9.4 0 0 1 -8.38 -4.27"/><path class="on" d="M-7.88 -5.12A9.4 9.4 0 0 1 -5.12 -7.88"/><path class="on" d="M-4.27 -8.38A9.4 9.4 0 0 1 -0.49 -9.39"/><circle class="core" r="2.2"/></svg></span>
+        <span class="rx-opt__t">75.119.128.71:9999</span>
+        <span class="rx-opt__s">Evonode · London · answering</span>
+        <span class="rx-opt__e">1 h ago</span>
+      </a>
+      <a class="rx-opt" id="opt-6" role="option" aria-selected="false" href="tx.html">
+        <span class="rx-tile" data-layer="core" style="--s:28px"><svg class="rx-ico" aria-hidden="true"><use href="#i-tx"/></svg></span>
+        <span class="rx-opt__t" style="font-family:var(--dh-mono);font-size:13.5px">cb4c0d…cdf0</span>
+        <span class="rx-opt__s">Transaction · 50.0061 DASH · ChainLocked</span>
+        <span class="rx-opt__e">yesterday</span>
+      </a>
+    </div>
+
+    <div class="rx-pal__prev" aria-label="Preview of pshenmic.dash">
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="rx-idc i4" style="--s:48px" aria-hidden="true"><svg viewBox="-.75 -.75 6.5 6.5" shape-rendering="crispEdges"><rect class="bg" x="-.75" y="-.75" width="6.5" height="6.5"/><rect class="c" x="0" y="0" width="1" height="1"/><rect class="c" x="4" y="0" width="1" height="1"/><rect class="c" x="1" y="0" width="1" height="1"/><rect class="c" x="3" y="0" width="1" height="1"/><rect class="c" x="2" y="0" width="1" height="1"/><rect class="c" x="0" y="1" width="1" height="1"/><rect class="c" x="4" y="1" width="1" height="1"/><rect class="c" x="1" y="2" width="1" height="1"/><rect class="c" x="3" y="2" width="1" height="1"/><rect class="c" x="1" y="3" width="1" height="1"/><rect class="c" x="3" y="3" width="1" height="1"/><rect class="c" x="2" y="3" width="1" height="1"/><rect class="c" x="0" y="4" width="1" height="1"/><rect class="c" x="4" y="4" width="1" height="1"/><rect class="c" x="1" y="4" width="1" height="1"/><rect class="c" x="3" y="4" width="1" height="1"/></svg></span>
+        <div style="min-width:0">
+          <p style="margin:0;font:var(--dh-w-strong) 20px/1.15 var(--dh-font)">pshenmic<span class="rx-dim">.dash</span></p>
+          <p style="margin:4px 0 0"><span class="rx-type" data-layer="platform"><svg class="rx-ico" aria-hidden="true"><use href="#i-id"/></svg>Identity</span></p>
+        </div>
+      </div>
+      <p class="rx-hash-full" style="margin:14px 0 0;font-size:11.5px;word-break:break-all"><b>Bjix</b>EUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiY<b>qp</b></p>
+      <dl class="dh-kv dh-kv--ruled" style="margin-top:12px">
+        <dt>Balance</dt><dd><b>10.1333</b> <span class="rx-dim">DASH</span></dd>
+        <dt>Also</dt><dd>cryptofan<span class="rx-dim">.dash</span></dd>
+        <dt>Keys</dt><dd>6 · 1 master</dd>
+        <dt>Activity</dt><dd>22 transitions · last 4 Nov</dd>
+        <dt>Since</dt><dd>6 Oct 2024</dd>
+      </dl>
+      <p style="margin:12px 0 0"><span class="rx-src rx-src--proof"><svg class="rx-ico" aria-hidden="true"><use href="#i-proof"/></svg>Proof-checked<time>just now</time></span></p>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+        <a class="dh-btn dh-btn--sm" href="identity.html">Open identity <kbd>↵</kbd></a>
+        <button class="dh-btn dh-btn--sm" type="button"><svg class="rx-ico" aria-hidden="true"><use href="#i-copy"/></svg>Copy ID</button>
+      </div>
+    </div>
+  </div>
+  <div class="rx-pal__foot">
+    <span class="k"><kbd>↑</kbd><kbd>↓</kbd> move</span>
+    <span class="k"><kbd>↵</kbd> open</span>
+    <span class="k"><kbd>⇧</kbd><kbd>↵</kbd> open in new tab</span>
+    <span class="k"><kbd>Esc</kbd> close</span>
+    <span class="rx-net"><span class="dh-badge" style="background:var(--rx-testnet-soft, #FFF4CC);color:#5C4600">Testnet</span> 1 match on Testnet · <a href="#">Show</a></span>
+  </div>
+</div>
+</body>
+</html>

@@ -711,7 +711,7 @@ export type LoadState = 'loading' | 'ready' | 'empty' | 'error'
 ```ts
 // Layout
 Card: { title?: ReactNode; subtitle?: ReactNode; actions?: ReactNode; layer?: Layer
-        source?: SourceStamp | SourceStamp[]   // renders SourceLine in the card foot; health greys the body
+        source?: SourceStamp | SourceStamp[]   // renders SourceLine at the right of the card head; health greys the body
         state?: LoadState; error?: unknown; onRetry?: () => void
         id?: string                            // section anchor (copy-link icon)
         padding?: 'normal' | 'flush'; className?: string; children: ReactNode }
@@ -727,7 +727,8 @@ QueryView<T>: { query: UseQueryResult<Sourced<T>>; skeleton?: ReactNode
 Stat: { label: ReactNode; value: ReactNode; unit?: ReactNode
         delta?: { value: number; period: ReactNode; goodWhen?: 'up' | 'down' | 'neither' }
         spark?: number[]; meter?: { value: number; max: number }
-        href?: string; source?: SourceStamp; loading?: boolean; size?: 'md' | 'lg'; layer?: Layer }
+        href?: string; source?: SourceStamp; loading?: boolean; size?: 'md' | 'lg'; layer?: Layer
+        tone?: 'neutral' | 'good' | 'warn' | 'bad' }   // status figures colour keyline and value; default neutral
 Amount: { value: bigint
           kind: 'duffs' | 'credits' | { token: { decimals: number; symbol?: string } }
           unit?: AmountUnit                     // override the user preference (Core and credits)
@@ -805,7 +806,7 @@ type LinkOutTarget =
 | `rate` | Price from {provider} via Platform Explorer | — |
 | `local` | Computed in your browser | — |
 
-Age is hidden when `immutable`. The age turns amber past the data class's staleTime × 4, and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
+Age is hidden when `immutable`. The age turns warning orange (`--dh-warn`; amber is reserved for the primary action) past the data class's staleTime × 4, and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
 
 ### 7.4 Entities and hover cards
 
@@ -987,6 +988,12 @@ Spikes T-009, T-010 and T-011 are already running, and they write only `docs/spi
 **Merge order:** E → H → F → G. E first because F and G switch from fixtures to the real client once it lands; H before the pages so their units and hover cards are in place.
 
 M2 onwards (network, Platform state, Platform history, tools) follows the same split: one data package if a new client is needed, then page packages by feature folder, at most four in parallel.
+
+---
+
+### 11.4 Design departures accepted (2026-11-10)
+
+The departures listed in `docs/RADAR-DESIGN.md` §15 are accepted for Radar: phone tabs, the navy plate in light mode, layer-hue tokens local to Radar, the card's source mark in the head, Proof-checked as a button that opens the proof inspector, 3 px layer-coloured tab underlines, `Stat.tone`, and warning orange (never amber) for stale ages. The contract lines above are updated to match; package A adds `tone` to the `Stat` stub.
 
 ---
 
