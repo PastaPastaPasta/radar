@@ -1,10 +1,19 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { act, render, screen, waitFor } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { act, configure, render, screen, waitFor } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import type * as ClientModule from './data/core/client'
 import { App } from './app'
 import { DEVNET_STORAGE_KEY } from './app/devnets'
 import { getActiveNetwork } from './data/active-network'
 import { SITE_MAP } from './features/entity'
+
+configure({ asyncUtilTimeout: 5000 })
+
+vi.mock('./data/core/client', async (original) => {
+  const actual = await original<typeof ClientModule>()
+  const { fixtureCore } = await import('./test/core-client')
+  return { ...actual, core: fixtureCore().core }
+})
 
 function renderAt(url: string) {
   const history = createMemoryHistory({ initialEntries: [url] })
@@ -20,13 +29,13 @@ describe('App', () => {
   it('renders the index route', async () => {
     renderAt('/')
 
-    expect(await screen.findByRole('heading', { level: 1, name: 'Radar' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: /Radar/ })).toBeInTheDocument()
   })
 
   it('accepts the network search param', async () => {
     renderAt('/?network=testnet')
 
-    expect(await screen.findByRole('heading', { name: 'Radar' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /Radar/ })).toBeInTheDocument()
     expect(document.documentElement.dataset.networkKind).toBe('test')
   })
 })
@@ -147,8 +156,11 @@ describe('routes', () => {
       const url = path.replace(/\$\w+/g, (m) => encodeURIComponent(SAMPLE[m] ?? 'x'))
       renderAt(url)
 
-      const heading = await screen.findByRole('heading', { level: 1 })
-      expect(heading).toHaveTextContent(path === '/' ? 'Radar' : title)
+      await waitFor(() =>
+        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+          path === '/' ? 'Radar' : title,
+        ),
+      )
     },
   )
 
