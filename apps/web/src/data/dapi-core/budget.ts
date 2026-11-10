@@ -1,4 +1,5 @@
 import type { NetworkId } from '@/lib/network'
+import { getDapiTransport } from './client'
 
 export type BudgetPressure = 'ok' | 'tight' | 'exhausted'
 export interface BudgetSnapshot {
@@ -14,14 +15,9 @@ export interface Budget {
   canAfford(net: NetworkId, n: number): boolean
   subscribe(cb: () => void): () => void
 }
+/** The budget of whichever transport is installed (production pool, or the fixture transport in tests and fixture builds). */
 export const budget: Budget = {
-  snapshot() {
-    throw new Error('not implemented')
-  },
-  canAfford() {
-    throw new Error('not implemented')
-  },
-  subscribe() {
-    throw new Error('not implemented')
-  },
+  snapshot: (net) => getDapiTransport().budget.snapshot(net),
+  canAfford: (net, n) => getDapiTransport().budget.canAfford(net, n),
+  subscribe: (cb) => getDapiTransport().budget.subscribe(cb),
 }

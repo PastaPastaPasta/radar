@@ -21,6 +21,8 @@ export interface DapiCallOptions {
   priority?: DapiPriority
   /** Ask this node ("https://ip:port") instead of choosing one. For `getMasternodeStatus` only. */
   nodeUrl?: string
+  /** "ip:port" of a node not to use, for a stream reopened after that node failed. */
+  avoidNode?: string
 }
 
 export interface DapiUnaryReply {

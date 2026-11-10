@@ -14,6 +14,8 @@ import {
   GetMasternodeStatusResponseSchema,
   GetTransactionRequestSchema,
   GetTransactionResponseSchema,
+  MasternodeListRequestSchema,
+  MasternodeListResponseSchema,
   TransactionsWithProofsRequestSchema,
   TransactionsWithProofsResponseSchema,
   type BlockHeadersWithChainLocksResponse,
@@ -23,6 +25,7 @@ import {
   type GetBlockchainStatusResponse,
   type GetMasternodeStatusResponse,
   type GetTransactionResponse,
+  type MasternodeListResponse,
 } from './gen/core/v0/core_pb'
 import type { DapiCallOptions, DapiTransport } from './transport'
 
@@ -49,6 +52,11 @@ export type TransactionStreamEvent =
   | { kind: 'transactions'; transactions: Uint8Array[] }
   | { kind: 'instantSendLocks'; messages: Uint8Array[] }
   | { kind: 'merkleBlock'; block: Uint8Array }
+
+export interface MasternodeListEvent {
+  /** A serialized masternode list diff (the first is the full list). */
+  diff: Uint8Array
+}
 
 export type HeaderStreamEvent =
   { kind: 'headers'; headers: Uint8Array[] } | { kind: 'chainLock'; chainLock: Uint8Array }
@@ -167,6 +175,26 @@ export function createDapiRpc(transport: DapiTransport) {
           } else if (m.responses.case === 'chainLock') {
             yield { kind: 'chainLock', chainLock: m.responses.value }
           }
+        }
+      }
+      return { node: handle.node, events: events() }
+    },
+
+    /** The masternode list: a full diff first, then one per change. Open until aborted. */
+    masternodeListStream(
+      net: NetworkId,
+      opts?: DapiCallOptions,
+    ): { node?: string; events: AsyncIterable<MasternodeListEvent> } {
+      const handle = transport.stream(
+        net,
+        'subscribeToMasternodeList',
+        toBinary(MasternodeListRequestSchema, create(MasternodeListRequestSchema)),
+        opts,
+      )
+      async function* events(): AsyncGenerator<MasternodeListEvent> {
+        for await (const bytes of handle.messages) {
+          const m = decode<MasternodeListResponse>(MasternodeListResponseSchema, bytes, handle.node)
+          yield { diff: m.masternodeListDiff }
         }
       }
       return { node: handle.node, events: events() }

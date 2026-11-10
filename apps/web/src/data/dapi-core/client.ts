@@ -1,5 +1,6 @@
 import type { Budget } from './budget'
 import { SourceError } from '../errors'
+import type { CoreCache } from './cache'
 import type { DapiTransport } from './transport'
 
 function unavailable(): never {
@@ -39,4 +40,15 @@ export function getDapiTransport(): DapiTransport {
 
 export function setDapiTransport(transport: DapiTransport): void {
   current = transport
+}
+
+let cacheLoader: (() => Promise<CoreCache>) | undefined
+
+/** Production builds register the IndexedDB cache here; fixture builds and unit tests leave it unset and read nothing from disk. */
+export function setCoreCacheLoader(loader: (() => Promise<CoreCache>) | undefined): void {
+  cacheLoader = loader
+}
+
+export function loadCoreCache(): Promise<CoreCache | undefined> {
+  return cacheLoader ? cacheLoader().catch(() => undefined) : Promise.resolve(undefined)
 }
