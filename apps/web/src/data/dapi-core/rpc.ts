@@ -177,7 +177,12 @@ export function createDapiRpc(transport: DapiTransport) {
           }
         }
       }
-      return { node: handle.node, events: events() }
+      return {
+        get node() {
+          return handle.node
+        },
+        events: events(),
+      }
     },
 
     /** The masternode list: a full diff first, then one per change. Open until aborted. */
@@ -197,7 +202,12 @@ export function createDapiRpc(transport: DapiTransport) {
           yield { diff: m.masternodeListDiff }
         }
       }
-      return { node: handle.node, events: events() }
+      return {
+        get node() {
+          return handle.node
+        },
+        events: events(),
+      }
     },
 
     /** Every transaction, InstantSend lock and merkle block from `fromHeight` on: a match-all bloom filter, open until aborted. */
@@ -234,7 +244,12 @@ export function createDapiRpc(transport: DapiTransport) {
           }
         }
       }
-      return { node: handle.node, events: events() }
+      return {
+        get node() {
+          return handle.node
+        },
+        events: events(),
+      }
     },
   }
 }
