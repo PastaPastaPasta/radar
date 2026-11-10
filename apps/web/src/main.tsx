@@ -4,7 +4,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './app'
 import { loadDevnets } from './app/devnets'
-import { installProductionDapiTransport } from './data/dapi-core/production'
 import { setSdkDevnets } from './data/sdk/devnets'
 import './styles.css'
 
@@ -17,6 +16,7 @@ async function start(container: HTMLElement) {
     const { startFixtureWorker } = await import('./test/msw/browser')
     await startFixtureWorker()
   } else {
+    const { installProductionDapiTransport } = await import('./data/dapi-core/production')
     installProductionDapiTransport({ devnets: loadDevnets })
   }
   createRoot(container).render(
