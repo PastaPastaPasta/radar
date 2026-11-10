@@ -8,6 +8,7 @@ import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 import { dashhqAssets } from './build/dashhq-assets'
 import { fixtureWorker } from './build/fixture-worker'
+import { sdkSplit } from './build/sdk-split'
 import { securityHeaders } from './build/security-headers'
 import { hyphenProxy } from './src/data/hyphen/dev-proxy'
 
@@ -33,6 +34,7 @@ export default defineConfig(({ mode }) => {
       dashhqAssets(),
       securityHeaders(),
       fixtureWorker(fixtures),
+      sdkSplit(),
     ],
     resolve: {
       alias: [
