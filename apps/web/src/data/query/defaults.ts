@@ -1,5 +1,6 @@
 import type { QueryClientConfig } from '@tanstack/react-query'
 import { isSourceError } from '../errors'
+import { withDataClass } from './persister'
 import { REFETCH_ON_FOCUS, type DataClass } from './stale'
 
 const MAX_RETRIES = 2
@@ -31,6 +32,7 @@ export const queryDefaults: NonNullable<QueryClientConfig['defaultOptions']> = {
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
     gcTime: 10 * 60 * 1000,
+    persister: withDataClass(),
   },
 }
 

@@ -19,7 +19,7 @@ export interface SourceView {
 
 const MIN = 60_000
 
-/** Past this age the mark turns warning orange (the data class's staleTime × 4). */
+/** Past this age the mark turns warning orange, for a stamp that doesn't say its own (`staleAfterMs`, the data class's staleTime × 4). */
 export const STALE_AGE_MS: Record<SourceId, number> = {
   radar: 20 * MIN,
   pe: 2 * MIN,
@@ -115,7 +115,7 @@ export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number
     (stamp.fallback === 'dapi-down' ||
       health.state === 'stale' ||
       health.state === 'degraded' ||
-      ageMs > STALE_AGE_MS[stamp.source])
+      ageMs > (stamp.staleAfterMs ?? STALE_AGE_MS[stamp.source]))
 
   const proof = stamp.source === 'sdk' && stamp.proved && !stamp.fallback
   const title = [

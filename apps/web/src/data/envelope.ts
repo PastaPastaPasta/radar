@@ -37,6 +37,8 @@ export interface SourceStamp {
   /** Chain height the answer refers to (Core for dapi/hyphen, Platform for sdk/pe). */
   height?: number
   fallback?: FallbackReason
+  /** Age in ms past which SourceLine turns orange: the query's data class staleTime × 4, set by the query client. */
+  staleAfterMs?: number
 }
 
 export interface Sourced<T> extends SourceStamp {

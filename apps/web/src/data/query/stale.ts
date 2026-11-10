@@ -5,7 +5,8 @@ export type DataClass =
 export interface ClassOptions {
   staleTime: number
   gcTime: number
-  meta?: { persist: true }
+  /** `persist` marks the classes the IndexedDB persister keeps; `dataClass` lets the query client stamp the class onto answers. */
+  meta: { persist?: true; dataClass: DataClass }
   refetchInterval?: number
   refetchOnWindowFocus?: boolean
 }
@@ -14,11 +15,9 @@ const SECOND = 1000
 const MINUTE = 60 * SECOND
 const HOUR = 60 * MINUTE
 
-const persist = { persist: true } as const
-
-const CLASSES: Record<DataClass, ClassOptions> = {
-  immutable: { staleTime: Infinity, gcTime: 24 * HOUR, meta: persist },
-  structural: { staleTime: 5 * MINUTE, gcTime: HOUR, meta: persist },
+const CLASSES: Record<DataClass, Omit<ClassOptions, 'meta'>> = {
+  immutable: { staleTime: Infinity, gcTime: 24 * HOUR },
+  structural: { staleTime: 5 * MINUTE, gcTime: HOUR },
   live: { staleTime: 30 * SECOND, gcTime: 10 * MINUTE, refetchOnWindowFocus: true },
   tip: { staleTime: Infinity, gcTime: 10 * MINUTE },
   crawl: { staleTime: 5 * MINUTE, gcTime: 30 * MINUTE },
@@ -32,9 +31,24 @@ export const REFETCH_ON_FOCUS: ReadonlySet<DataClass> = new Set(
   (Object.keys(CLASSES) as DataClass[]).filter((c) => CLASSES[c].refetchOnWindowFocus),
 )
 
+const PERSISTED: ReadonlySet<DataClass> = new Set(['immutable', 'structural'])
+
 export function dataClass(c: DataClass): ClassOptions {
-  const o = CLASSES[c]
-  return { ...o, meta: o.meta && { ...o.meta } }
+  return {
+    ...CLASSES[c],
+    meta: { ...(PERSISTED.has(c) && { persist: true as const }), dataClass: c },
+  }
+}
+
+export const STALE_AGE_FACTOR = 4
+
+/** Tip data is pushed, so its staleTime is infinite; the age that matters is the header-stream silence in §2.5. */
+const TIP_STALE_AGE_MS = 20 * MINUTE
+
+/** The age at which a figure of this class is shown as stale: staleTime × 4 (§7.3). */
+export function staleAfterMs(c: DataClass): number {
+  if (c === 'tip') return TIP_STALE_AGE_MS
+  return CLASSES[c].staleTime * STALE_AGE_FACTOR
 }
 
 /** Polling interval for the classes that poll only some of their queries (§5.2). */

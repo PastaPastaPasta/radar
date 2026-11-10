@@ -59,3 +59,19 @@ describe('sourceView invariant', () => {
     expect(log).not.toHaveBeenCalled()
   })
 })
+
+describe('sourceView stale age', () => {
+  const pe = (extra: Partial<SourceStamp>) => stamp({ source: 'pe', ...extra })
+  const peHealth: SourceHealth = { source: 'pe', net: 'mainnet', state: 'ok' }
+
+  it("uses the stamp's own limit instead of the source's", () => {
+    const old = NOW - 10 * 60_000
+    expect(sourceView(pe({ asOf: old }), peHealth, NOW).variant).toBe('stale')
+    expect(sourceView(pe({ asOf: old, staleAfterMs: 20 * 60_000 }), peHealth, NOW).variant).toBe(
+      'ok',
+    )
+    expect(
+      sourceView(pe({ asOf: NOW - 50_000, staleAfterMs: 40_000 }), peHealth, NOW).variant,
+    ).toBe('stale')
+  })
+})

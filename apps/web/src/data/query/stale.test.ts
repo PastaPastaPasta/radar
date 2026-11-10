@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dataClass, REFETCH_ON_FOCUS, type DataClass } from './stale'
+import { dataClass, REFETCH_ON_FOCUS, staleAfterMs, type DataClass } from './stale'
 
 const MIN = 60_000
 const HOUR = 60 * MIN
@@ -45,5 +45,26 @@ describe('dataClass', () => {
 
   it('refetches on focus for live and index only', () => {
     expect([...REFETCH_ON_FOCUS].sort()).toEqual(['index', 'live'])
+  })
+})
+
+describe('staleAfterMs', () => {
+  it.each<[DataClass, number]>([
+    ['structural', 20 * MIN],
+    ['crawl', 20 * MIN],
+    ['live', 2 * MIN],
+    ['index', 2 * MIN],
+    ['latest', 40_000],
+    ['rate', 4 * MIN],
+    ['tip', 20 * MIN],
+    ['immutable', Infinity],
+  ])('%s turns stale at %d ms', (cls, ms) => {
+    expect(staleAfterMs(cls)).toBe(ms)
+  })
+
+  it('tags every class on the query meta', () => {
+    expect(dataClass('crawl').meta.dataClass).toBe('crawl')
+    expect(dataClass('immutable').meta).toEqual({ persist: true, dataClass: 'immutable' })
+    expect(dataClass('live').meta).toEqual({ dataClass: 'live' })
   })
 })

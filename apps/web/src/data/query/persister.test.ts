@@ -1,8 +1,9 @@
 import 'fake-indexeddb/auto'
 import { QueryClient } from '@tanstack/react-query'
 import { createStore, type UseStore } from 'idb-keyval'
-import { describe, expect, it } from 'vitest'
-import { createPersister, shouldPersist, SCHEMA_VERSION } from './persister'
+import { describe, expect, it, vi } from 'vitest'
+import { dataClass } from './stale'
+import { createPersister, shouldPersist, SCHEMA_VERSION, withDataClass } from './persister'
 
 let n = 0
 const freshStore = () => createStore(`test-${n++}`, 'q')
@@ -139,5 +140,67 @@ describe('persister', () => {
       staleTime: Infinity,
     })
     expect(calls).toBe(1)
+  })
+})
+
+describe('withDataClass', () => {
+  const stamp = { source: 'pe' as const, asOf: 1, fetchedAt: 2, proved: false, data: 7 }
+
+  function run(options: ReturnType<typeof dataClass>, value: unknown) {
+    const qc = new QueryClient({
+      defaultOptions: { queries: { persister: withDataClass(), retry: false } },
+    })
+    return qc.fetchQuery({ queryKey: ['mainnet', 'pe', 'x'], queryFn: () => value, ...options })
+  }
+
+  it('stamps the class stale age onto a sourced answer', async () => {
+    expect(await run(dataClass('structural'), stamp)).toMatchObject({
+      data: 7,
+      staleAfterMs: 20 * 60_000,
+    })
+    expect(await run(dataClass('latest'), stamp)).toMatchObject({ staleAfterMs: 40_000 })
+  })
+
+  it('leaves a query without a class, and a value without a stamp, alone', async () => {
+    expect(await run({} as ReturnType<typeof dataClass>, stamp)).toBe(stamp)
+    const plain = { rows: [1] }
+    expect(await run(dataClass('index'), plain)).toBe(plain)
+  })
+
+  it('stamps restored answers too', async () => {
+    const store = freshStore()
+    const key = ['mainnet', 'pe', 'y'] as const
+    const first = client(createPersister({ appVersion: '1', store, gc: false }))
+    await first.fetchQuery({ queryKey: key, queryFn: () => stamp, ...dataClass('structural') })
+    await settle()
+    const second = client(createPersister({ appVersion: '1', store, gc: false }))
+    const restored = await second.fetchQuery({
+      queryKey: key,
+      queryFn: () => {
+        throw new Error('should have been restored')
+      },
+      ...dataClass('structural'),
+    })
+    expect(restored).toMatchObject({ staleAfterMs: 20 * 60_000 })
+  })
+})
+
+describe('persister GC', () => {
+  it('sweeps expired entries once the browser is idle', async () => {
+    const store = freshStore()
+    const old = client(createPersister({ appVersion: '1', store, maxAge: 1, gc: false }))
+    const key = ['mainnet', 'sdk', 'old'] as const
+    await old.fetchQuery({ queryKey: key, queryFn: () => 1, ...dataClass('immutable') })
+    await settle()
+    await new Promise((r) => setTimeout(r, 10))
+    const idle: (() => void)[] = []
+    vi.stubGlobal('requestIdleCallback', (cb: () => void) => idle.push(cb))
+    createPersister({ appVersion: '1', store, maxAge: 1 })
+    expect(idle).toHaveLength(1)
+    idle[0]!()
+    await settle()
+    const { entries } = await import('idb-keyval')
+    expect(await entries(store)).toHaveLength(0)
+    vi.unstubAllGlobals()
   })
 })
