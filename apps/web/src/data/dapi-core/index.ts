@@ -1,11 +1,5 @@
 export * from './budget'
 export * from './transport'
 export * from './rpc'
-export {
-  getDapiTransport,
-  loadCoreCache,
-  setCoreCacheLoader,
-  setDapiTransport,
-  unavailableDapiTransport,
-} from './client'
+export { getDapiTransport, loadCoreCache, setCoreCacheLoader, setDapiTransport } from './client'
 export { installProductionDapiTransport } from './production'

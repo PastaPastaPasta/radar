@@ -156,7 +156,7 @@ describe('benching', () => {
     const { pool } = setup(2, 2)
     pool.benchUnreachable(pool.pick()!)
     pool.benchUnreachable(pool.pick()!)
-    expect(pool.exhausted).toBe(true)
+    expect(pool.hasUsableNode()).toBe(false)
     expect(pool.pick()).toBeUndefined()
   })
 

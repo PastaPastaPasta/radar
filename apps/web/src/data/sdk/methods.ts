@@ -61,26 +61,30 @@ export interface SdkNetworkConfig {
   addresses?: string[]
 }
 
+export interface WireMeta {
+  height: number
+  coreChainLockedHeight: number
+  epoch: number
+  timeMs: number
+  protocolVersion: number
+  chainId: string
+}
+
+export interface WireProof {
+  grovedbProof: Uint8Array
+  quorumHash: Uint8Array
+  signature: Uint8Array
+  round: number
+  blockIdHash: Uint8Array
+  quorumType: number
+}
+
 export interface WireResult<R> {
   ok: true
   data: R
   proved: boolean
-  meta?: {
-    height: number
-    coreChainLockedHeight: number
-    epoch: number
-    timeMs: number
-    protocolVersion: number
-    chainId: string
-  }
-  proof?: {
-    grovedbProof: Uint8Array
-    quorumHash: Uint8Array
-    signature: Uint8Array
-    round: number
-    blockIdHash: Uint8Array
-    quorumType: number
-  }
+  meta?: WireMeta
+  proof?: WireProof
   node?: string
   tookMs: number
 }

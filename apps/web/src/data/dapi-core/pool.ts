@@ -93,6 +93,10 @@ function failureKind(e: unknown): SourceErrorKind {
   return isSourceError(e) ? e.kind : 'network'
 }
 
+function failureReport(e: unknown): { ok: false; kind: SourceErrorKind; message?: string } {
+  return { ok: false, kind: failureKind(e), message: e instanceof Error ? e.message : undefined }
+}
+
 function isAnswer(e: unknown): boolean {
   return isSourceError(e) && e.kind === 'http' && e.status !== undefined && isAnswerStatus(e.status)
 }
@@ -173,11 +177,7 @@ export class PoolDapiTransport implements DapiTransport {
       },
       (e: unknown) => {
         state.pool = undefined
-        this.deps.health.report(net, 'dapi', {
-          ok: false,
-          kind: failureKind(e),
-          message: e instanceof Error ? e.message : undefined,
-        })
+        this.deps.health.report(net, 'dapi', failureReport(e))
         throw e
       },
     )
@@ -343,11 +343,7 @@ export class PoolDapiTransport implements DapiTransport {
       pool.benchRateLimited(slot, reset === undefined ? {} : { resetS: reset / 1000 })
     } else if (kind === 'network') pool.benchUnreachable(slot)
     else pool.benchFailing(slot)
-    this.deps.health.report(net, 'dapi', {
-      ok: false,
-      kind,
-      message: e instanceof Error ? e.message : undefined,
-    })
+    this.deps.health.report(net, 'dapi', failureReport(e))
   }
 
   /** The slot is already counted (`begin`); this sends, then settles the node's books. */
@@ -400,7 +396,6 @@ export class PoolDapiTransport implements DapiTransport {
     request: Uint8Array,
     heightSensitive: boolean,
     signal: AbortSignal | undefined,
-    mayHedge: boolean,
   ): Promise<DapiUnaryReply> {
     return new Promise<DapiUnaryReply>((resolve, rejectWith) => {
       const reject = rejectWith as (reason: unknown) => void
@@ -439,18 +434,16 @@ export class PoolDapiTransport implements DapiTransport {
         )
       }
       launch(first)
-      if (mayHedge) {
-        hedgeTimer = setTimeout(() => {
-          hedgeTimer = undefined
-          if (settled || pool.snapshot().pressure !== 'ok') return
-          const second = pool.pick({ exclude: tried, heightSensitive })
-          if (!second) return
-          tried.add(second.url)
-          pool.begin(second)
-          launch(second)
-        }, HEDGE_AFTER_MS)
-        ;(hedgeTimer as { unref?: () => void }).unref?.()
-      }
+      hedgeTimer = setTimeout(() => {
+        hedgeTimer = undefined
+        if (settled || pool.snapshot().pressure !== 'ok') return
+        const second = pool.pick({ exclude: tried, heightSensitive })
+        if (!second) return
+        tried.add(second.url)
+        pool.begin(second)
+        launch(second)
+      }, HEDGE_AFTER_MS)
+      ;(hedgeTimer as { unref?: () => void }).unref?.()
     })
   }
 
@@ -491,7 +484,6 @@ export class PoolDapiTransport implements DapiTransport {
           request,
           heightSensitive,
           opts.signal,
-          true,
         )
       } catch (e) {
         if (isAnswer(e) || failureKind(e) === 'aborted' || opts.signal?.aborted) throw e
@@ -629,11 +621,7 @@ export class PoolDapiTransport implements DapiTransport {
       const lived = this.deps.now() - openedAt
       if (lived < EXPECTED_STREAM_LIFETIME_MS && failureKind(e) !== 'aborted') {
         pool.benchFailing(slot)
-        this.deps.health.report(net, 'dapi', {
-          ok: false,
-          kind: failureKind(e),
-          message: e instanceof Error ? e.message : undefined,
-        })
+        this.deps.health.report(net, 'dapi', failureReport(e))
       }
       throw e
     } finally {

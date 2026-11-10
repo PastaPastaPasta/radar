@@ -1,3 +1,4 @@
+import { bytesToHex } from '@/lib/hex'
 import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
 import { SourceError } from '../errors'
 import { healthRegistry } from '../health'
@@ -50,8 +51,6 @@ const idle = (fn: () => void): void => {
   if (ric) ric(fn)
   else setTimeout(fn, 1)
 }
-
-const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('')
 
 function toSourceError(error: WireError['error']): SourceError {
   return new SourceError({
@@ -188,7 +187,7 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
           protocolVersion: meta.protocolVersion,
           chainId: meta.chainId,
           quorumType: wire.proof.quorumType,
-          quorumHash: hex(wire.proof.quorumHash),
+          quorumHash: bytesToHex(wire.proof.quorumHash),
           round: wire.proof.round,
           proofBytes: wire.proof.grovedbProof.length,
         }

@@ -25,7 +25,7 @@ const noBudget: Budget = {
 }
 
 /** Stand-in for the production transport (node discovery, budget, racing, caching). Every call throws `unavailable`. */
-export const unavailableDapiTransport: DapiTransport = {
+const unavailableDapiTransport: DapiTransport = {
   budget: noBudget,
   unary: () => Promise.resolve().then(unavailable),
   stream: unavailable,

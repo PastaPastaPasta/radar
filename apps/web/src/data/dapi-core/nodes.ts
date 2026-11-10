@@ -94,10 +94,6 @@ export class NodePool {
     this.fill()
   }
 
-  get size(): number {
-    return this.slots.size
-  }
-
   /** A node asked for by URL (a node's own /mn/ page), added without joining the active set. */
   slotFor(url: string): NodeSlot | undefined {
     return this.slots.get(url)
@@ -192,14 +188,13 @@ export class NodePool {
   }
 
   /** The soonest instant a full active node frees a slot or a resting one returns; undefined when nothing will. */
-  nextChangeAt(exclude?: ReadonlySet<string>): number | undefined {
+  nextChangeAt(): number | undefined {
     const now = this.now()
     let soonest: number | undefined
     const consider = (at: number) => {
       if (at > now && Number.isFinite(at) && (soonest === undefined || at < soonest)) soonest = at
     }
     for (const slot of [...this.slots.values()]) {
-      if (exclude?.has(slot.url)) continue
       if (this.isBenched(slot, now)) {
         consider(slot.benchedUntil)
         continue
@@ -265,10 +260,6 @@ export class NodePool {
     slot.behindUntil = height < this.bestTip - BEHIND_BLOCKS ? this.now() + BEHIND_HOLD_MS : 0
   }
 
-  get bestTipSeen(): number {
-    return this.bestTip
-  }
-
   snapshot(): BudgetSnapshot {
     const now = this.now()
     this.fill()
@@ -294,11 +285,6 @@ export class NodePool {
   canAfford(n: number): boolean {
     const s = this.snapshot()
     return s.pressure === 'ok' && s.headroom - n >= OK_SHARE * s.capacity
-  }
-
-  /** True when every node that could carry traffic has failed and none is left to try. */
-  get exhausted(): boolean {
-    return !this.hasUsableNode()
   }
 }
 

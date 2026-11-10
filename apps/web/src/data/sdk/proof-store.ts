@@ -1,5 +1,5 @@
 import type { NetworkId } from '@/lib/network'
-import type { WireResult } from './methods'
+import type { WireMeta, WireProof } from './methods'
 
 export const PROOF_STORE_SIZE = 300
 
@@ -9,8 +9,8 @@ export interface ProofRecord {
   method: string
   args: unknown
   recordedAt: number
-  meta: NonNullable<WireResult<unknown>['meta']>
-  proof: NonNullable<WireResult<unknown>['proof']>
+  meta: WireMeta
+  proof: WireProof
 }
 
 /** The last 300 full proofs, in memory, for the proof inspector and evidence export (NX-61). */

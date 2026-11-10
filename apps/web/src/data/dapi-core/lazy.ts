@@ -1,12 +1,5 @@
 import type { Budget } from './budget'
-import type {
-  DapiCallOptions,
-  DapiStreamHandle,
-  DapiStreamMethod,
-  DapiTransport,
-  DapiUnaryMethod,
-  DapiUnaryReply,
-} from './transport'
+import type { DapiStreamHandle, DapiTransport } from './transport'
 import type { NetworkId } from '@/lib/network'
 
 /** What the budget says before the pool exists: nothing has been spent, so lists may try DAPI. */
@@ -56,15 +49,10 @@ export function createLazyDapiTransport(load: () => Promise<DapiTransport>): Dap
 
   return {
     budget,
-    async unary(
-      net: NetworkId,
-      method: DapiUnaryMethod,
-      request: Uint8Array,
-      opts?: DapiCallOptions,
-    ): Promise<DapiUnaryReply> {
+    async unary(net, method, request, opts) {
       return (await transport()).unary(net, method, request, opts)
     },
-    stream(net, method: DapiStreamMethod, request, opts): DapiStreamHandle {
+    stream(net, method, request, opts): DapiStreamHandle {
       let inner: DapiStreamHandle | undefined
       return {
         get node() {

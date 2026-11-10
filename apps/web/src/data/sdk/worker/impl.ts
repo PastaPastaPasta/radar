@@ -1,4 +1,4 @@
-import type { SdkMethodName, SdkMethods } from '../methods'
+import type { SdkMethodName, SdkMethods, WireMeta, WireProof } from '../methods'
 import {
   contractDto,
   epochDto,
@@ -21,14 +21,7 @@ export interface ProvedResponse<T> extends Freeable {
     protocolVersion: number
     chainId: Uint8Array
   }
-  proof: {
-    grovedbProof: Uint8Array
-    quorumHash: Uint8Array
-    signature: Uint8Array
-    round: number
-    blockIdHash: Uint8Array
-    quorumType: number
-  }
+  proof: WireProof
 }
 
 interface Freeable {
@@ -56,14 +49,7 @@ export interface ImplOutput<R> {
   data: R
   response?: ProvedResponse<unknown>
   /** Metadata for an answer that has no proof (`system.status`). */
-  unprovedMeta?: {
-    height: number
-    coreChainLockedHeight: number
-    epoch: number
-    timeMs: number
-    protocolVersion: number
-    chainId: string
-  }
+  unprovedMeta?: WireMeta
 }
 
 type Impl<M extends SdkMethodName> = (

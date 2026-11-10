@@ -68,13 +68,12 @@ const defaultDeps: CoreDeps = {
 
 const reversed = (bytes: Uint8Array) => bytesToHex(Uint8Array.from(bytes).reverse())
 
-function isNotFound(e: unknown, extra: number[] = []): boolean {
+function isNotFound(e: unknown): boolean {
   return (
     isSourceError(e) &&
     e.source === 'dapi' &&
     e.kind === 'http' &&
-    e.status !== undefined &&
-    (e.status === GRPC_NOT_FOUND || extra.includes(e.status))
+    (e.status === GRPC_NOT_FOUND || e.status === GRPC_INVALID_ARGUMENT)
   )
 }
 
@@ -302,7 +301,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
     try {
       answered = await rpc().transaction(net, txid, { signal })
     } catch (e) {
-      if (isNotFound(e, [GRPC_INVALID_ARGUMENT])) return null
+      if (isNotFound(e)) return null
       throw e
     }
     const m = answered.message
@@ -435,7 +434,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
           { signal },
         )
       } catch (e) {
-        if (isNotFound(e, [GRPC_INVALID_ARGUMENT])) return dapi(null)
+        if (isNotFound(e)) return dapi(null)
         throw e
       }
       const block = await decoder.block(answered.message.block, net)

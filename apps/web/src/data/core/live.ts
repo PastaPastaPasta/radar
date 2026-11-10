@@ -1,6 +1,6 @@
 import type { QueryClient } from '@tanstack/query-core'
 import { createDapiRpc, getDapiTransport, type DapiTransport } from '../dapi-core'
-import { sleep, SharedStream, type StreamState } from '../dapi-core/streams'
+import { DEGRADE_AFTER_FAILURES, sleep, SharedStream, type StreamState } from '../dapi-core/streams'
 import type { Sourced } from '../envelope'
 import { healthRegistry } from '../health'
 import { dapiKeys, viewKeys } from '../query'
@@ -64,6 +64,18 @@ const defaultDeps: CoreLiveDeps = {
   health: healthRegistry,
 }
 
+function stamp<T extends { height: number }>(data: T, now: number, node?: string): Sourced<T> {
+  return {
+    source: 'dapi',
+    asOf: now,
+    fetchedAt: now,
+    proved: false,
+    height: data.height,
+    ...(node ? { node } : {}),
+    data,
+  }
+}
+
 interface TipFollower {
   stream: SharedStream
   status: LiveStatus
@@ -120,15 +132,7 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
     f.lastHeight = Math.max(f.lastHeight ?? -1, tip.height)
     f.lastHeaderAt = now
     deps.health.setLag(net, 'dapi', undefined)
-    const stamped: Sourced<typeof tip> = {
-      source: 'dapi',
-      asOf: now,
-      fetchedAt: now,
-      proved: false,
-      height: tip.height,
-      ...(node ? { node } : {}),
-      data: tip,
-    }
+    const stamped = stamp(tip, now, node)
     for (const qc of f.clients) {
       qc.setQueryData(dapiKeys(net, 'tip'), stamped)
       void qc.invalidateQueries({ queryKey: viewKeys(net, 'latest-blocks') })
@@ -143,15 +147,7 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
     node?: string,
   ): void {
     const now = deps.now()
-    const stamped: Sourced<typeof lock> = {
-      source: 'dapi',
-      asOf: now,
-      fetchedAt: now,
-      proved: false,
-      height: lock.height,
-      ...(node ? { node } : {}),
-      data: lock,
-    }
+    const stamped = stamp(lock, now, node)
     for (const qc of f.clients) qc.setQueryData(dapiKeys(net, 'chainlock'), stamped)
     setStatus(f, { lastEventAt: now })
   }
@@ -259,7 +255,11 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
         if (state === 'live') setTxStatus(created, { state: 'live' })
         else if (state === 'idle') setTxStatus(created, { state: 'idle', fallbackHint: false })
         else if (state === 'connecting') setTxStatus(created, { state: 'connecting' })
-        else setTxStatus(created, { state: 'reconnecting', fallbackHint: detail.failures >= 3 })
+        else
+          setTxStatus(created, {
+            state: 'reconnecting',
+            fallbackHint: detail.failures >= DEGRADE_AFTER_FAILURES,
+          })
       },
       async session({ signal, avoidNode, markLive }) {
         const tip = await deps.tip(net, signal)
@@ -374,7 +374,3 @@ const IDLE: LiveStatus = { state: 'idle', since: 0 }
 const IDLE_TX: LiveTxStatus = { state: 'idle', fallbackHint: false }
 
 export const coreLive = createCoreLive()
-
-export function isLiveStopped(status: LiveStatus): boolean {
-  return status.state === 'stopped'
-}
