@@ -74,17 +74,16 @@ describe('radar client', () => {
     server.use(
       http.get(`${BASE}/mainnet/history`, ({ request }) => {
         seen.push(new URL(request.url).search)
-        return HttpResponse.json({
-          t: [1, 2],
-          resolution: 'day',
-          series: [{ key: 'a', values: [1, null] }],
-        })
+        return HttpResponse.json(
+          { t: [1, 2], resolution: 'day', series: [{ key: 'a', values: [1, null] }] },
+          { headers: { 'last-modified': 'Tue, 10 Nov 2026 12:00:00 GMT' } },
+        )
       }),
     )
     const out = await radar.history('mainnet', { dim: 'version', top: 8 })
     expect(seen).toEqual(['?dim=version&scope=all&days=30&top=8'])
     expect(out.data.t).toEqual([1000, 2000])
-    expect(out.asOf).toBe(2000)
+    expect(out.asOf).toBe(Date.parse('Tue, 10 Nov 2026 12:00:00 GMT'))
   })
 
   it('history serves the recorded series', async () => {
