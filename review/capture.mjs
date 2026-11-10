@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* global document */
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseArgs } from 'node:util'
 import { chromium } from './lib/playwright.mjs'
@@ -17,9 +17,15 @@ const VIEWPORTS = {
 }
 const PER_HOST_GAP_MS = 400
 const PER_HOST_CONCURRENCY = 2
+const BUSY_SELECTOR = [
+  '[aria-busy="true"]',
+  '[role="progressbar"]',
+  '[class*="skeleton" i]',
+  '[class*="spinner" i]',
+  '[class*="loading" i]',
+].join(',')
 const NAV_TIMEOUT_MS = 30_000
 const IDLE_TIMEOUT_MS = 12_000
-const SETTLE_MS = 1_200
 
 const { values: opts } = parseArgs({
   options: {
@@ -34,6 +40,8 @@ const { values: opts } = parseArgs({
     out: { type: 'string' },
     'full-page': { type: 'boolean', default: false },
     resume: { type: 'boolean', default: false },
+    'settle-ms': { type: 'string', default: '1200' },
+    'ready-timeout-ms': { type: 'string', default: '25000' },
     'dry-run': { type: 'boolean', default: false },
   },
 })
@@ -152,7 +160,7 @@ async function themedContext(browser, job) {
   return { context, guard }
 }
 
-async function capture(browser, limiter, job, fullPage) {
+async function capture(browser, limiter, job, fullPage, previous) {
   const result = {
     key: job.key,
     site: job.site,
@@ -162,7 +170,8 @@ async function capture(browser, limiter, job, fullPage) {
     file: job.rel,
     status: 'ok',
   }
-  if (existsSync(job.file) && opts.resume) return { ...result, status: 'cached' }
+  if (existsSync(job.file) && opts.resume)
+    return previous.get(job.key) ?? { ...result, status: 'cached' }
   const started = Date.now()
   const { context, guard } = await themedContext(browser, job)
   const consoleErrors = []
@@ -185,7 +194,18 @@ async function capture(browser, limiter, job, fullPage) {
     await page.waitForLoadState('networkidle', { timeout: IDLE_TIMEOUT_MS }).catch(() => {
       result.idleTimeout = true
     })
-    await sleep(SETTLE_MS)
+    const stillBusy = () =>
+      page
+        .evaluate(
+          (sel) => [...document.querySelectorAll(sel)].some((el) => el.getClientRects().length > 0),
+          BUSY_SELECTOR,
+        )
+        .catch(() => false)
+    const deadline = Date.now() + Number(opts['ready-timeout-ms'])
+    while ((await stillBusy()) && Date.now() < deadline) await sleep(500)
+    result.settled = !(await stillBusy())
+    if (!result.settled) result.busy = true
+    await sleep(Number(opts['settle-ms']))
     result.httpStatus = response?.status() ?? null
     const textLength = await page
       .evaluate(() => document.body?.innerText?.trim().length ?? 0)
@@ -193,6 +213,7 @@ async function capture(browser, limiter, job, fullPage) {
     result.textLength = textLength
     if (result.httpStatus >= 400) result.status = 'http-error'
     else if (textLength < 20) result.status = 'blank'
+    else if (result.busy) result.status = 'busy'
     mkdirSync(path.dirname(job.file), { recursive: true })
     await page.screenshot({ path: job.file, fullPage, animations: 'disabled', caret: 'hide' })
   } catch (e) {
@@ -246,11 +267,17 @@ async function main() {
   const browser = await chromium.launch()
   const limiter = new HostLimiter()
   const results = []
+  const previous = new Map()
+  const manifestPath = path.join(outDir, 'manifest.json')
+  if (opts.resume && existsSync(manifestPath)) {
+    for (const s of JSON.parse(readFileSync(manifestPath, 'utf8')).shots ?? [])
+      previous.set(s.key, s)
+  }
   const queue = [...plan.jobs]
   const startedAt = new Date().toISOString()
   const worker = async () => {
     for (let job = queue.shift(); job; job = queue.shift()) {
-      const r = await capture(browser, limiter, job, opts['full-page'])
+      const r = await capture(browser, limiter, job, opts['full-page'], previous)
       results.push(r)
       const mark = r.status === 'ok' || r.status === 'cached' ? '.' : 'x'
       process.stdout.write(mark)

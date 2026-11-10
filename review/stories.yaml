@@ -1319,7 +1319,7 @@ stories:
     acceptance: ChainLock tag, cbTx fields (credit pool balance, best ChainLock height and signature, merkle roots), and transactions (100 per page)
     radar_start: /block/{block_special}
     prod:
-      - https://hy.kw.vg/block/{block_special}
+      - https://hy.kw.vg/block?hash={block_special}
     phone: true
   - id: HY-06
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
@@ -1328,7 +1328,7 @@ stories:
     acceptance: Mempool summary (count, size, usage) and pending transactions with type, size, value and first seen, paged
     radar_start: /mempool
     prod:
-      - https://hy.kw.vg/transactions
+      - https://hy.kw.vg/pending
     phone: false
   - id: HY-07
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
@@ -1337,7 +1337,7 @@ stories:
     acceptance: Fee rate, received and mined time, and readable renderers for ProRegTx, ProUpServTx, ProUpRegTx, ProUpRevTx, quorum commitment, asset lock, asset unlock, MNHF and coinbase payloads; IS lock tag
     radar_start: /tx/{tx_proreg}
     prod:
-      - https://hy.kw.vg/transaction/{tx_proreg}
+      - https://hy.kw.vg/transaction?hash={tx_proreg}
     phone: false
   - id: HY-08
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
@@ -1346,7 +1346,7 @@ stories:
     acceptance: First and last seen, and history rows with direction and net value
     radar_start: /address/{address_history}
     prod:
-      - https://hy.kw.vg/address/{address_history}
+      - https://hy.kw.vg/address?id={address_history}
     phone: true
   - id: HY-09
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
@@ -1373,7 +1373,7 @@ stories:
     acceptance: 'On its masternode page: every ProReg/ProUp* transaction with block and a link'
     radar_start: /mn/{mn_regular}?tab=history
     prod:
-      - https://hy.kw.vg/validator/{mn_regular}
+      - https://hy.kw.vg/validator?hash={mn_regular}
     phone: false
   - id: HY-12
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
@@ -1467,7 +1467,7 @@ stories:
     radar_start: /tx/{tx_assetlock}
     prod:
       - https://pe.dashhq.org/identity/{identity}
-      - https://hy.kw.vg/transaction/{tx_assetlock}
+      - https://hy.kw.vg/transaction?hash={tx_assetlock}
     phone: false
   - id: X-03
     group: 'Unification (X): compare with the best of the five for each task'
@@ -1505,7 +1505,7 @@ stories:
     acceptance: Hovering or long-pressing any hash or ID shows a preview card (type, key facts)
     radar_start: /block/{block_recent}
     prod:
-      - https://hy.kw.vg/block/{block_recent}
+      - https://hy.kw.vg/block?hash={block_recent}
       - https://pe.dashhq.org/
     phone: false
   - id: X-07
