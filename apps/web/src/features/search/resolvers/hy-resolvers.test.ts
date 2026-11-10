@@ -99,6 +99,12 @@ describe('hy-search', () => {
     expect(search).not.toHaveBeenCalled()
   })
 
+  it('leaves dates to the date resolver @HY-14', async () => {
+    const search = vi.spyOn(hyLookups, 'search')
+    expect(await hySearch.resolve(classify('2026-10-01', 'mainnet'), ctx())).toEqual([])
+    expect(search).not.toHaveBeenCalled()
+  })
+
   it('does not search a devnet @HY-19', async () => {
     const search = vi.spyOn(hyLookups, 'search')
     const c = classify(TXID, 'mainnet')

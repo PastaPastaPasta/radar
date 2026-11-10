@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/testnet/search?q=00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c"
+  },
+  "recordedAt": "2026-11-10T20:01:02.145Z",
+  "status": 200,
+  "headers": { "content-type": "application/json", "cache-control": "no-store" },
+  "body": {
+    "value": [
+      {
+        "type": "block",
+        "blockHash": "00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c",
+        "status": "canonical",
+        "blockTags": { "orphan": false }
+      }
+    ]
+  }
+}

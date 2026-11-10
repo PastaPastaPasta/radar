@@ -96,7 +96,7 @@ export const hySearch: Resolver = {
   cost: 'index',
   async resolve(c, { net, signal }) {
     if (c.warning || isDevnet(net)) return []
-    if (c.classes[0] === 'int') return []
+    if (c.classes[0] === 'int' || c.classes.includes('date')) return []
     const q = c.normalized
     if (q.length < MIN_TEXT && !c.classes.includes('hex64')) return []
     const found = await hyLookups.search(net, q, signal)
