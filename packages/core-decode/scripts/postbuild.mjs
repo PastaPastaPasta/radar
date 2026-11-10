@@ -13,12 +13,18 @@ copyFileSync(
   path.join(root, 'dist', 'core_decode.d.ts'),
 )
 
-let wasmOpt = null
+const WASM_OPT_VERSION = 'version_129'
+let found = ''
 try {
-  execFileSync('wasm-opt', ['--version'], { stdio: 'ignore' })
-  wasmOpt = 'wasm-opt'
+  found = execFileSync('wasm-opt', ['--version'], { encoding: 'utf8' }).trim()
 } catch {
-  // wasm-opt is optional
+  // reported below
+}
+const wasmOpt = found.includes(WASM_OPT_VERSION) ? 'wasm-opt' : null
+if (!wasmOpt && !process.env.RADAR_SKIP_WASM_OPT) {
+  throw new Error(
+    `binaryen ${WASM_OPT_VERSION} is required because the committed dist is built with it (found: ${found || 'no wasm-opt on PATH'}). Set RADAR_SKIP_WASM_OPT=1 for a local build that is not meant to be committed.`,
+  )
 }
 const before = statSync(wasm).size
 if (wasmOpt) {
