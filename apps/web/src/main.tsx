@@ -5,12 +5,14 @@ import { createRoot } from 'react-dom/client'
 import { App } from './app'
 import { loadDevnets } from './app/devnets'
 import { installProductionDapiTransport } from './data/dapi-core/production'
+import { setSdkDevnets } from './data/sdk/devnets'
 import './styles.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Missing #root element')
 
 async function start(container: HTMLElement) {
+  setSdkDevnets(loadDevnets)
   if (import.meta.env.VITE_DATA_MODE === 'fixtures') {
     const { startFixtureWorker } = await import('./test/msw/browser')
     await startFixtureWorker()

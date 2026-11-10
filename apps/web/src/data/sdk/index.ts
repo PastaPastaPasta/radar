@@ -1,1 +1,6 @@
 export type * from './methods'
+export { sdk, createSdkClient, setSdkTransport } from './client'
+export { setSdkDevnets } from './devnets'
+export type { SdkClient, SdkState, SdkTransport } from './client'
+export { proofStore } from './proof-store'
+export type { ProofRecord } from './proof-store'

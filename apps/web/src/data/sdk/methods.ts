@@ -33,11 +33,22 @@ export interface PlatformStatusDto {
   catchingUp: boolean
 }
 
+export interface EpochDto {
+  index: number
+  firstBlockTimeMs: number
+  firstBlockHeight: number
+  firstCoreBlockHeight: number
+  feeMultiplierPermille: number
+  protocolVersion: number
+}
+
 export interface SdkMethods {
   'identities.fetch': { args: { id: string }; result: IdentityDto | null }
   'identities.balances': { args: { ids: string[] }; result: Map<string, bigint | null> }
   'contracts.getMany': { args: { ids: string[] }; result: Map<string, ContractDto | null> }
   'system.status': { args: Record<string, never>; result: PlatformStatusDto }
+  'system.totalCredits': { args: Record<string, never>; result: bigint | null }
+  'epoch.current': { args: Record<string, never>; result: EpochDto }
   // … one entry per facade method in PLAN §3.2; implementers add entries, never rename them
 }
 export type SdkMethodName = keyof SdkMethods
@@ -78,11 +89,15 @@ export interface WireError {
   error: { kind: SourceErrorKind; message: string; code?: string }
 }
 
+export interface SdkConnectInfo {
+  sdkVersion: string
+  protocolVersion: number
+  tookMs: number
+}
+
 export interface SdkWorkerApi {
   /** Idempotent. Resolves when the SDK for that network is connected and its trusted context is prefetched. */
-  connect(
-    cfg: SdkNetworkConfig,
-  ): Promise<{ sdkVersion: string; protocolVersion: number; tookMs: number }>
+  connect(cfg: SdkNetworkConfig): Promise<SdkConnectInfo | WireError>
   call<M extends SdkMethodName>(
     net: NetworkId,
     method: M,
