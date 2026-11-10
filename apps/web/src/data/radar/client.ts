@@ -194,7 +194,7 @@ export const radar = {
       schema: RadarMasternodeDetailSchema,
       notFound: 'null',
       signal,
-      asOf: (b, res) => b.last_seen ?? lastModifiedMs(res),
+      asOf: modified,
     })
   },
 

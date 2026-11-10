@@ -182,11 +182,12 @@ describe('radar asOf from the crawl the document was built from', () => {
     expect(out.asOfFetched).toBeUndefined()
   })
 
-  it('a masternode is as old as the crawl that last reached it', async () => {
+  it('a masternode carries no crawl time, so it is stamped as fetched, not by its last_seen', async () => {
     const body = await fixtureBody<{ last_seen: number }>('radar', 'mainnet', `masternodes__${EVO}`)
     const out = await radar.masternode('mainnet', EVO)
-    expect(out.asOf).toBe(body.last_seen * 1000)
-    expect(out.asOfFetched).toBeUndefined()
+    expect(out.asOf).not.toBe(body.last_seen * 1000)
+    expect(out.asOfFetched).toBe(true)
+    expect(out.data?.last_seen).toBe(body.last_seen * 1000)
   })
 
   it('summary, platform, activation and bench keep their own time fields', async () => {

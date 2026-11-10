@@ -183,7 +183,7 @@ Radar sends no `Last-Modified` (checked against `radar.dashhq.org`, 2026-11-10; 
 | `/{net}/activation` | `updated` |
 | `/{net}/bench` | the newest `vantages[].updated` |
 | `/{net}/masternodes` | the newest row `last_seen`, which is the start of the latest crawl (`crawl_id` names it, but the crawl's times are only in `/summary`) |
-| `/{net}/masternodes/{protx}` | its `last_seen`; a node the crawler never reached has none |
+| `/{net}/masternodes/{protx}` | none: `fetchedAt`, `asOfFetched` set. Its `last_seen` is when the crawler last reached that node, which for an offline node can be days before the latest crawl |
 | `/masternodes/{protx}/check` | `checked` |
 | `/releases`, `/{net}/geo`, `/{net}/changes`, `/{net}/history`, `/masternodes/{protx}/payments`, `/masternodes/{protx}/bench` | no document time: `fetchedAt`, `asOfFetched` set. `geo` carries only `crawl_id`; `history` buckets are day or hour starts; `changes` and `payments` carry event times; a masternode benchmark's `results[].ts` is a test time on a 14-day cycle |
 
