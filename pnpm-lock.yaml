@@ -221,8 +221,11 @@ importers:
         specifier: 2.3.0
         version: 2.3.0(@bufbuild/protobuf@2.16.0)(@connectrpc/connect@2.3.0(@bufbuild/protobuf@2.16.0))
       '@dashevo/evo-sdk':
-        specifier: 5.0.2
-        version: 5.0.2
+        specifier: 5.0.3
+        version: 5.0.3
+      '@dashevo/wasm-sdk':
+        specifier: 5.0.3
+        version: 5.0.3
       '@lingui/core':
         specifier: 5.9.5
         version: 5.9.5(@lingui/babel-plugin-lingui-macro@5.9.5(supports-color@10.2.2)(typescript@6.0.3))
@@ -722,12 +725,12 @@ packages:
     resolution: {integrity: sha512-OoKoR0f76dCY666JlcbhmVTs2drYj1GUXZTYTcbUgJjh9Nv41aFfZ21bPQTERm5+L5cBDo466NltB2lplS5GBw==}
     engines: {node: '>=20.19.0'}
 
-  '@dashevo/evo-sdk@5.0.2':
-    resolution: {integrity: sha512-SueDQsuJqpvYOT77oPoCt1v4ECJDR6mzFw3Xy2RqDpUebZPTy/FjAayy5IZc0LjLxk/w+ch1O29NP8yromYnPQ==}
+  '@dashevo/evo-sdk@5.0.3':
+    resolution: {integrity: sha512-rfYrmGs+CK3hk3PCKb+AkTy6vunrtRJX4CcT+7Wm2cpc+0qVxH9LMyG6oWX0GRJOPRtcYly5u3nM6nYf5ElSFA==}
     engines: {node: '>=18.18'}
 
-  '@dashevo/wasm-sdk@5.0.2':
-    resolution: {integrity: sha512-Nhj23+Xq0X4r9RYuBOYUK6BLq9AezTU2Jn+Etd2rFkORN5kagXGZq/y5mfsNurYLQbk5JUS/iqCXsBXs8JkSuw==}
+  '@dashevo/wasm-sdk@5.0.3':
+    resolution: {integrity: sha512-4GpUI3jt/gNRAQcBwjOzjp+2ohssbUYz6FIkebQ7YF16ca+OIZNjDMqogJcjH7gN4upXyheGCDN/h3RGgVFJQQ==}
     engines: {node: '>=18.18'}
 
   '@emnapi/runtime@1.11.3':
@@ -5036,11 +5039,11 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.2': {}
 
-  '@dashevo/evo-sdk@5.0.2':
+  '@dashevo/evo-sdk@5.0.3':
     dependencies:
-      '@dashevo/wasm-sdk': 5.0.2
+      '@dashevo/wasm-sdk': 5.0.3
 
-  '@dashevo/wasm-sdk@5.0.2': {}
+  '@dashevo/wasm-sdk@5.0.3': {}
 
   '@emnapi/runtime@1.11.3':
     dependencies:
