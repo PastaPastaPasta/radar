@@ -135,7 +135,7 @@ describe('Transaction page', () => {
     renderAt(`/tx/${MAINNET.transfer}`)
     const toggle = await screen.findByRole('button', { name: /Show as a table/ }, { timeout: 4000 })
     await user.click(toggle)
-    const flow = document.querySelector('#flow')!
+    const flow = document.querySelector<HTMLElement>('#flow')!
     expect(within(flow).getAllByRole('table').length).toBeGreaterThan(0)
   })
 })

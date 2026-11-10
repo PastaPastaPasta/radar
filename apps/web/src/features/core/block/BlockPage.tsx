@@ -18,7 +18,6 @@ import {
   Hash,
   Icon,
   KeyValue,
-  Skeleton,
   SourceLine,
   Stat,
   Time,
@@ -26,7 +25,8 @@ import {
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { CbTxRows } from '../tx/Payload'
-import { CoreBand, NotFound, RecordHeader, Section } from './frame'
+import { sumOutputs } from '../tx/tx-info'
+import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from './use-hyphen-fit'
 
 export const TXS_PER_PAGE = 100
@@ -51,6 +51,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   if (!ref || block.data?.data === null) {
     return (
       <NotFound
+        title={t`Block`}
         net={net}
         path={`/block/${id}`}
         what={t`There is no block with this height or hash on this network.`}
@@ -72,7 +73,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
       </div>
     )
   }
-  if (!block.data?.data) return <BlockSkeleton />
+  if (!block.data?.data) return <CoreBandSkeleton />
 
   return (
     <BlockView
@@ -81,21 +82,6 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
       tipHeight={tip.data?.data.height}
       page={page}
     />
-  )
-}
-
-function BlockSkeleton() {
-  return (
-    <CoreBand crumbs={[]} current="/blocks">
-      <div className="rx-rec" aria-busy="true">
-        <h1 className="rx-rec__title" id="h-page">
-          <Skeleton shape="line" width="40%" />
-        </h1>
-      </div>
-      <div className="rx-kpis">
-        <Skeleton shape="stat" count={4} />
-      </div>
-    </CoreBand>
   )
 }
 
@@ -130,7 +116,6 @@ function BlockView({
   const hasNext = tipHeight !== undefined && block.height < tipHeight
   const pages = Math.max(1, Math.ceil(block.txs.length / TXS_PER_PAGE))
   const current = Math.min(Math.max(1, page), pages)
-  const slice = block.txs.slice((current - 1) * TXS_PER_PAGE, current * TXS_PER_PAGE)
   const offset = (current - 1) * TXS_PER_PAGE
   const quorumCommitments = block.txs.filter((x) => x.type === 'quorum-commitment').length
   const chainwork = hy.data?.data?.chainwork
@@ -165,15 +150,16 @@ function BlockView({
       {
         id: 'out',
         header: t`Total out`,
-        cell: ({ row }) => (
-          <Amount value={row.original.outputs.reduce((sum, o) => sum + o.value, 0n)} kind="duffs" />
-        ),
+        cell: ({ row }) => <Amount value={sumOutputs(row.original)} kind="duffs" />,
         meta: { numeric: true, align: 'end' },
       },
     ],
     [t],
   )
-  const rows = useMemo(() => slice.map((x, i) => ({ ...x, n: offset + i })), [slice, offset])
+  const rows = useMemo(
+    () => block.txs.slice(offset, offset + TXS_PER_PAGE).map((x, i) => ({ ...x, n: offset + i })),
+    [block.txs, offset],
+  )
 
   return (
     <article data-page="/block/$id" data-layer="core">

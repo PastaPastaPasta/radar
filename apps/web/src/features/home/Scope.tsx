@@ -14,8 +14,8 @@ import { LiveNotice } from './LiveNotice'
 import { usePlatformTip } from './platform-tip'
 import { useFrozen } from './use-frozen'
 
-export const LANE_CORE = 8
-export const LANE_PLATFORM = 10
+const LANE_CORE = 8
+const LANE_PLATFORM = 10
 export const CORE_ROWS = 12
 
 function yesterday(): string {
@@ -336,7 +336,10 @@ export function Scope() {
         <div className="rx-scope__grid">
           <div className="rx-scope__left">
             <Kicker />
-            <h1 id="h-scope">{t`The Dash network, now`}</h1>
+            <h1 id="h-scope">
+              <span className="sr-only">{t`Radar:`} </span>
+              {t`The Dash network, now`}
+            </h1>
             <p className="rx-scope__lede">
               {t`Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is.`}
             </p>

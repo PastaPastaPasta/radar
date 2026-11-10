@@ -10,7 +10,7 @@ import { Entity, PageLink, useDocumentTitle, useNetwork } from '@/features/entit
 import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { Card, DataTable, Empty, Hash, Icon, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
-import { BLOCKS_PER_PAGE, DAY_MS, dayStartMs, shiftDay, windowOf } from './blocks-range'
+import { BLOCKS_PER_PAGE, DAY_MS, dayStartMs, shiftDay, todayUtc, windowOf } from './blocks-range'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
@@ -82,7 +82,6 @@ function useFreshRows(rows: BlockRow[], live: boolean): Set<string> {
 function DayNav({ date, canNext }: { date: string; canNext: boolean }) {
   const { t } = useLingui()
   const navigate = useNavigate()
-  const today = new Date().toISOString().slice(0, 10)
   return (
     <div className="rx-row" style={{ gap: 8, flexWrap: 'wrap' }} data-nav="day">
       <PageLink
@@ -111,7 +110,7 @@ function DayNav({ date, canNext }: { date: string; canNext: boolean }) {
           type="date"
           className="dh-input"
           value={date}
-          max={today}
+          max={todayUtc()}
           min="2014-01-19"
           onChange={(e) => {
             const value = e.target.value
@@ -144,8 +143,8 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
     return all.filter((r) => r.time >= start && r.time < start + DAY_MS)
   }, [rowsQuery.data, date])
   const newestPage = window !== null && window.newer === null
-  const todayUtc = new Date().toISOString().slice(0, 10)
-  const fresh = useFreshRows(rows, newestPage && (!date || date === todayUtc))
+  const today = todayUtc()
+  const fresh = useFreshRows(rows, newestPage && (!date || date === today))
   const hasPool = rows.some((r) => r.pool)
 
   const columns = useMemo<ColumnDef<BlockRow>[]>(
@@ -235,7 +234,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
               {!date ? (
                 <PageLink
                   to="/blocks"
-                  search={{ date: todayUtc }}
+                  search={{ date: today }}
                   className="dh-btn"
                   data-nav="by-date"
                 >

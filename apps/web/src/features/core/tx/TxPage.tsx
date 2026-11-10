@@ -17,13 +17,12 @@ import {
   ErrorState,
   Hash,
   Icon,
-  Skeleton,
   SourceLine,
   Stat,
   Time,
   TypeBadge,
 } from '@/ui'
-import { CoreBand, NotFound, RecordHeader, Section } from '../block/frame'
+import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
 import { useHyphenFit } from '../block/use-hyphen-fit'
 import { IoTables } from './IoTables'
 import { PayloadRows, usePayloadInfo } from './Payload'
@@ -56,6 +55,7 @@ export function TxPage({ txid }: { txid: string }) {
   if (!valid || tx.data?.data === null) {
     return (
       <NotFound
+        title={t`Transaction`}
         net={net}
         path={`/tx/${txid}`}
         what={t`There is no transaction with this ID on this network. It may be too new, or on another network.`}
@@ -70,18 +70,7 @@ export function TxPage({ txid }: { txid: string }) {
     )
   }
   if (!tx.data?.data) {
-    return (
-      <CoreBand crumbs={[]} current="/blocks">
-        <div className="rx-rec" aria-busy="true">
-          <h1 className="rx-rec__title" id="h-page">
-            <Skeleton shape="line" width="40%" />
-          </h1>
-        </div>
-        <div className="rx-kpis">
-          <Skeleton shape="stat" count={4} />
-        </div>
-      </CoreBand>
-    )
+    return <CoreBandSkeleton />
   }
   return <TxView tx={tx.data.data} stamp={stampOf(tx.data)} />
 }
@@ -177,7 +166,6 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
     fee !== undefined && tx.size > 0
       ? (Number(fee) / tx.size).toFixed(1).replace(/\.0$/, '')
       : undefined
-  const confirmations = tx.confirmations
 
   return (
     <article data-page="/tx/$txid" data-layer="core">
@@ -238,9 +226,9 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
                   </Badge>
                 ) : null}
                 {mined ? null : <Badge tone="warning">{t`Unconfirmed`}</Badge>}
-                {confirmations === undefined || !mined ? null : (
+                {tx.confirmations === undefined || !mined ? null : (
                   <span>
-                    {plural(confirmations, { one: '# confirmation', other: '# confirmations' })}
+                    {plural(tx.confirmations, { one: '# confirmation', other: '# confirmations' })}
                   </span>
                 )}
                 <SourceLine stamp={stamp} />

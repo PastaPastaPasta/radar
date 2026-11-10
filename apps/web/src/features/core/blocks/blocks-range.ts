@@ -9,6 +9,10 @@ export function shiftDay(date: string, days: number): string {
   return new Date(dayStartMs(date) + days * DAY_MS).toISOString().slice(0, 10)
 }
 
+export function todayUtc(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
 export interface Window {
   /** Height of the newest row on this page. */
   top: number

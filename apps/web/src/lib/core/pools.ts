@@ -19,14 +19,17 @@ const POOL_TAGS: readonly (readonly [RegExp, string])[] = [
   [/dash\.org|dashpool|dash pool/i, 'Dash pool'],
 ]
 
-function textOf(hex: string): string {
-  const bytes = Uint8Array.from(hex.match(/../g)?.map((h) => parseInt(h, 16)) ?? [])
-  // eslint-disable-next-line no-control-regex
-  return new TextDecoder().decode(bytes).replace(/[\u0000-\u001f\u007f\ufffd]+/g, ' ')
-}
-
 export function coinbaseTagOf(scriptHex: string | undefined): string {
-  return scriptHex ? textOf(scriptHex).replace(/\s+/g, ' ').trim() : ''
+  if (!scriptHex) return ''
+  const bytes = Uint8Array.from(scriptHex.match(/../g)?.map((h) => parseInt(h, 16)) ?? [])
+  return (
+    new TextDecoder()
+      .decode(bytes)
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\u0000-\u001f\u007f\ufffd]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  )
 }
 
 /** The pool named in a coinbase scriptSig (hex), or undefined when it carries no known tag. */

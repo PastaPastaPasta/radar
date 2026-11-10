@@ -1,9 +1,9 @@
 import { useLingui } from '@lingui/react/macro'
-import { Fragment, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { useDocumentTitle, networkName, PageLink, pagesInSection } from '@/features/entity'
 import { type NetworkId } from '@/lib/network'
-import { Empty, LayerTile, SourceLine, type IconName } from '@/ui'
+import { Empty, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
 
 export interface Crumb {
   label: ReactNode
@@ -37,14 +37,29 @@ export function CoreBand({
         </nav>
         <ol className="rx-crumbs" aria-label={t`Where this is`}>
           {crumbs.map((c, i) => (
-            <Fragment key={i}>
-              <li aria-current={c.to ? undefined : 'page'}>{c.to ?? c.label}</li>
-            </Fragment>
+            <li key={i} aria-current={c.to ? undefined : 'page'}>
+              {c.to ?? c.label}
+            </li>
           ))}
         </ol>
         {children}
       </div>
     </section>
+  )
+}
+
+export function CoreBandSkeleton() {
+  return (
+    <CoreBand crumbs={[]} current="/blocks">
+      <div className="rx-rec" aria-busy="true">
+        <h1 className="rx-rec__title" id="h-page">
+          <Skeleton shape="line" width="40%" />
+        </h1>
+      </div>
+      <div className="rx-kpis">
+        <Skeleton shape="stat" count={4} />
+      </div>
+    </CoreBand>
   )
 }
 
@@ -125,10 +140,13 @@ const OTHER: Record<'mainnet' | 'testnet', 'mainnet' | 'testnet'> = {
 
 /** What to say when a block or transaction isn't on this network, with the other network offered when the input's shape fits it. */
 export function NotFound({
+  title,
   what,
   path,
   net,
 }: {
+  /** The page's own name, as its heading. */
+  title: string
   what: ReactNode
   /** Path of this record, for the other network's link. */
   path: string
@@ -138,6 +156,7 @@ export function NotFound({
   const other = net === 'mainnet' || net === 'testnet' ? OTHER[net] : undefined
   return (
     <div className="dh-container" style={{ paddingBlock: '48px 80px' }}>
+      <h1 className="sr-only">{title}</h1>
       <Empty
         kind="not-found"
         title={t`Not found on ${networkName(net)}`}
