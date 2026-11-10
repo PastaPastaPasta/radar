@@ -158,6 +158,47 @@ function writePath(p: URLSearchParams): Hit {
   return { path: '/about', drop }
 }
 
+const CHANGE_KINDS = ['joins', 'pose', 'address', 'keys']
+
+function csvOf(p: URLSearchParams, key: string, map: (v: string) => string): string {
+  const parts = (p.get(key) ?? '').split(',').map((v) => map(v.trim().toLowerCase()))
+  return [...new Set(parts.filter(Boolean))].sort().join(',')
+}
+
+const asType = (v: string) => (v === 'evo' || v === 'regular' ? v : '')
+const asReach = (v: string) => (v === 'reachable' || v === 'unreachable' ? v : '')
+const asStatus = (v: string) =>
+  v === 'enabled' ? v : v === 'pose-banned' || v === 'pose banned' ? 'pose-banned' : ''
+
+function masternodeFilters(p: URLSearchParams, withSort: boolean): Hit {
+  const set: Record<string, string> = {}
+  const drop = ['dir', 'host', 'version', 'dkg', 'page']
+  const type = csvOf(p, 'type', asType)
+  const status = csvOf(p, 'status', asStatus)
+  // Before reachability and registration were separate, ?status= also carried Reachable/Unreachable.
+  const reach = csvOf(p, 'reach', asReach) || asReach(lower(p.get('status')))
+  for (const [k, v] of [
+    ['type', type],
+    ['status', status],
+    ['reach', reach],
+  ] as const) {
+    if (v) set[k] = v
+    else drop.push(k)
+  }
+  const sort = p.get('sort')
+  if (!withSort) drop.push('sort')
+  else if (sort && !sort.startsWith('-') && p.get('dir') === 'desc') set.sort = `-${sort}`
+  return { path: '/masternodes', drop, set }
+}
+
+const lower = (v: string | null) => v?.trim().toLowerCase() ?? ''
+
+function mapFilters(p: URLSearchParams): Hit {
+  const hit = masternodeFilters(p, false)
+  if (p.get('layer') !== 'nodes') hit.drop!.push('layer')
+  return { ...hit, path: '/map' }
+}
+
 const LEGACY: [RegExp, (m: RegExpExecArray, p: URLSearchParams) => Hit][] = [
   [/^\/block-index\/(\d+)$/, (m) => ({ path: `/block/${m[1]}` })],
   [/^\/insight\/block-index\/(\d+)$/, (m) => ({ path: `/block/${m[1]}` })],
@@ -174,7 +215,17 @@ const LEGACY: [RegExp, (m: RegExpExecArray, p: URLSearchParams) => Hit][] = [
   [/^\/insight\/status$/, () => ({ path: '/status' })],
   [/^\/insight\/messages\/verify$/, () => ({ path: '/tools/verify-message' })],
   [/^\/insight\/?$/, () => ({ path: '/' })],
-  [/^\/(masternodes|map|v24|changes|api)\.html$/, (m) => ({ path: `/${m[1]}` })],
+  [/^\/masternodes(?:\.html)?$/, (_m, p) => masternodeFilters(p, true)],
+  [/^\/map(?:\.html)?$/, (_m, p) => mapFilters(p)],
+  [
+    /^\/changes(?:\.html)?$/,
+    (_m, p) => ({
+      path: '/changes',
+      drop: CHANGE_KINDS.includes(p.get('kind') ?? '') ? [] : ['kind'],
+    }),
+  ],
+  [/^\/(v24|api)\.html$/, (m) => ({ path: `/${m[1]}` })],
+  [/^\/tools\/fees$/, () => ({ path: '/mempool' })],
   [/^\/mn\.html$/, () => ({ path: '/masternodes' })],
   [/^\/platform\.html$/, () => ({ path: '/epochs' })],
   [/^\/index\.html$/, () => ({ path: '/' })],

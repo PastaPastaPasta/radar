@@ -51,6 +51,10 @@ const LEGACY_SAMPLES = [
   `/mn.html`,
   `/platform.html`,
   `/index.html`,
+  `/masternodes?sort=uptime_7d&dir=desc&type=Evo&status=Unreachable`,
+  `/map?layer=nodes&type=Regular`,
+  `/changes?kind=bogus`,
+  `/tools/fees`,
 ]
 
 function target(path: string, query: URLSearchParams, host: string) {
@@ -83,6 +87,40 @@ describe('redirect targets', () => {
         LEGACY_SAMPLES.some((s) => re.test(new URL(s, 'https://x.invalid').pathname)),
         String(re),
       ).toBe(true)
+    }
+  })
+
+  it('translates the old Radar list and map parameters', () => {
+    const at = (path: string, q: Record<string, string>) =>
+      target(path, new URLSearchParams(q), 'radar.dashhq.org')
+    const qs = (u: URL | null) => Object.fromEntries(u?.searchParams ?? [])
+    expect(
+      qs(
+        at('/masternodes', { sort: 'uptime_7d', dir: 'desc', type: 'Evo', status: 'Unreachable' }),
+      ),
+    ).toEqual({
+      sort: '-uptime_7d',
+      type: 'evo',
+      reach: 'unreachable',
+    })
+    expect(qs(at('/masternodes.html', { sort: 'version', host: 'AS1', page: '3' }))).toEqual({
+      sort: 'version',
+    })
+    expect(qs(at('/map', { layer: 'nodes', type: 'Regular', sort: 'x' }))).toEqual({
+      layer: 'nodes',
+      type: 'regular',
+    })
+    expect(at('/map', { layer: 'mn' })?.search).toBe('')
+    expect(qs(at('/changes', { kind: 'pose' }))).toEqual({})
+    expect(at('/changes', { kind: 'bogus' })?.search ?? '').toBe('')
+    expect(at('/tools/fees', {})?.pathname).toBe('/mempool')
+    for (const fixed of [
+      ['/masternodes', { sort: '-status', type: 'evo,regular' }],
+      ['/masternodes', { reach: 'reachable', status: 'enabled' }],
+      ['/map', { layer: 'nodes' }],
+      ['/changes', { kind: 'pose' }],
+    ] as const) {
+      expect(at(fixed[0], fixed[1]), fixed[0]).toBeNull()
     }
   })
 

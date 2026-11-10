@@ -504,6 +504,20 @@ describe('redirects', () => {
     await check('radar.localhost', '/map?net=testnet&q=x', '/map?q=x&network=testnet')
   })
 
+  it('translates the old Radar list, map and changes parameters', async () => {
+    await check(
+      'radar.localhost',
+      '/masternodes?sort=uptime_7d&dir=desc&type=Evo&status=Unreachable',
+      '/masternodes?sort=-uptime_7d&type=evo&reach=unreachable',
+    )
+    await check('radar.localhost', '/map?layer=nodes&type=Regular', '/map?layer=nodes&type=regular')
+    await check('radar.localhost', '/map?layer=mn', '/map')
+    await check('radar.localhost', '/changes?kind=bogus', '/changes')
+    await check('radar.localhost', '/changes?kind=pose', null)
+    await check('radar.localhost', '/tools/fees', '/mempool')
+    await check('explorer.dashhq.org', '/tools/fees/', '/mempool')
+  })
+
   it('never redirects to another origin', async () => {
     for (const p of [
       '//evil.example/x?net=testnet',
