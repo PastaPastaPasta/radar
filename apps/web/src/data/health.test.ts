@@ -1,15 +1,18 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { BudgetSnapshot } from './dapi-core/budget'
 import { createHealthRegistry } from './health'
 
+const START = 1_000_000
+
 function setup() {
-  let now = 1_000_000
-  const reg = createHealthRegistry(() => now)
-  const advance = (ms: number) => {
-    now += ms
-  }
+  vi.useFakeTimers()
+  vi.setSystemTime(START)
+  const reg = createHealthRegistry()
+  const advance = (ms: number) => vi.advanceTimersByTime(ms)
   return { reg, advance }
 }
+
+afterEach(() => vi.useRealTimers())
 
 const ok = (latencyMs = 100) => ({ ok: true, latencyMs })
 const fail = (kind: 'network' | 'timeout' | 'http' | 'invalid-response' | 'rate-limited') => ({
@@ -33,7 +36,7 @@ describe('health registry states', () => {
     reg.report('mainnet', 'pe', ok())
     const h = reg.get('mainnet', 'pe')
     expect(h.state).toBe('ok')
-    expect(h.lastOkAt).toBe(1_000_000)
+    expect(h.lastOkAt).toBe(START)
     expect(h.p50LatencyMs).toBe(100)
   })
 
@@ -57,13 +60,35 @@ describe('health registry states', () => {
     expect(reg.get('mainnet', 'pe').state).not.toBe('down')
   })
 
-  it('is down on two failures with no success in 120 s', () => {
+  it('is down on a failing call with no success in 120 s', () => {
     const { reg, advance } = setup()
     reg.report('mainnet', 'radar', ok())
     advance(121_000)
     reg.report('mainnet', 'radar', fail('network'))
-    reg.report('mainnet', 'radar', fail('network'))
     expect(reg.get('mainnet', 'radar').state).toBe('down')
+    reg.report('mainnet', 'radar', ok())
+    expect(reg.get('mainnet', 'radar').state).not.toBe('down')
+  })
+
+  it('is down on the first failure of a source that has never answered', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'radar', fail('timeout'))
+    expect(reg.get('mainnet', 'radar').state).toBe('down')
+  })
+
+  it('does not go down on a lone failure inside 120 s of a success', () => {
+    const { reg, advance } = setup()
+    reg.report('mainnet', 'radar', ok())
+    advance(60_000)
+    reg.report('mainnet', 'radar', fail('network'))
+    expect(reg.get('mainnet', 'radar').state).not.toBe('down')
+  })
+
+  it('does not go down on failures of other kinds when nothing has succeeded', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'radar', fail('rate-limited'))
+    reg.report('mainnet', 'radar', fail('invalid-response'))
+    expect(reg.get('mainnet', 'radar').state).toBe('degraded')
   })
 
   it('is degraded at 25 % failures over the last calls', () => {
@@ -80,6 +105,7 @@ describe('health registry states', () => {
     reg.report('mainnet', 'pe', fail('invalid-response'))
     expect(reg.get('mainnet', 'pe').state).toBe('degraded')
     for (let i = 0; i < 20; i++) reg.report('mainnet', 'pe', ok())
+    expect(reg.get('mainnet', 'pe').state).toBe('degraded')
     advance(5 * 60_000 + 1)
     expect(reg.get('mainnet', 'pe').state).toBe('ok')
   })
@@ -179,5 +205,69 @@ describe('health registry states', () => {
     expect(reg.get('mainnet', 'pe')).toBe(a)
     reg.report('mainnet', 'pe', ok(200))
     expect(reg.get('mainnet', 'pe')).not.toBe(a)
+  })
+})
+
+describe('health registry over time', () => {
+  it('notifies when the invalid-response memory ends with no new call', () => {
+    const { reg, advance } = setup()
+    reg.report('mainnet', 'pe', ok())
+    reg.report('mainnet', 'pe', fail('invalid-response'))
+    for (let i = 0; i < 20; i++) reg.report('mainnet', 'pe', ok())
+    const cb = vi.fn()
+    reg.subscribe(cb)
+
+    advance(5 * 60_000)
+    expect(cb).not.toHaveBeenCalled()
+    expect(reg.get('mainnet', 'pe').state).toBe('degraded')
+    advance(1)
+    expect(cb).toHaveBeenCalledTimes(1)
+    expect(reg.get('mainnet', 'pe').state).toBe('ok')
+  })
+
+  it('notifies when 120 s of silence turns a failing source down', () => {
+    const { reg, advance } = setup()
+    reg.report('mainnet', 'hyphen', ok())
+    reg.report('mainnet', 'hyphen', fail('network'))
+    expect(reg.get('mainnet', 'hyphen').state).not.toBe('down')
+    const cb = vi.fn()
+    reg.subscribe(cb)
+
+    advance(120_000)
+    expect(cb).not.toHaveBeenCalled()
+    advance(1)
+    expect(cb).toHaveBeenCalledTimes(1)
+    expect(reg.get('mainnet', 'hyphen').state).toBe('down')
+  })
+
+  it('schedules nothing once the boundary has passed or a success supersedes it', () => {
+    const { reg, advance } = setup()
+    reg.report('mainnet', 'hyphen', ok())
+    reg.report('mainnet', 'hyphen', fail('network'))
+    reg.report('mainnet', 'hyphen', ok())
+    const cb = vi.fn()
+    reg.subscribe(cb)
+    advance(10 * 60_000)
+    expect(cb).not.toHaveBeenCalled()
+    expect(vi.getTimerCount()).toBe(0)
+  })
+
+  it('returns the same snapshot between notifications even as the clock moves', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'pe', ok())
+    reg.report('mainnet', 'pe', fail('invalid-response'))
+    const a = reg.get('mainnet', 'pe')
+    vi.setSystemTime(START + 60 * 60_000)
+    expect(reg.get('mainnet', 'pe')).toBe(a)
+    expect(a.state).toBe('degraded')
+  })
+
+  it('stops its timer on reset', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'pe', ok())
+    reg.report('mainnet', 'pe', fail('invalid-response'))
+    expect(vi.getTimerCount()).toBe(1)
+    reg.reset()
+    expect(vi.getTimerCount()).toBe(0)
   })
 })

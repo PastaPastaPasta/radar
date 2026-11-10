@@ -71,6 +71,21 @@ const STALE_AFTER: Partial<Record<SourceId, { blocks?: number; ms?: number }>> =
 
 const DOWN_KINDS: ReadonlySet<SourceErrorKind> = new Set(['network', 'timeout', 'http'])
 
+function isDownFailure(call: Call | undefined): boolean {
+  return call !== undefined && !call.ok && DOWN_KINDS.has(call.kind ?? 'network')
+}
+
+/** The next instant after `now` at which `compute` would answer differently with no new report. */
+function nextTimeBoundary(rec: Tally, now: number): number | undefined {
+  const candidates: number[] = []
+  if (rec.lastInvalidAt !== undefined) candidates.push(rec.lastInvalidAt + INVALID_MEMORY_MS + 1)
+  if (rec.lastOkAt !== undefined && isDownFailure(rec.calls[rec.calls.length - 1])) {
+    candidates.push(rec.lastOkAt + DOWN_SILENCE_MS + 1)
+  }
+  const future = candidates.filter((t) => t > now)
+  return future.length > 0 ? Math.min(...future) : undefined
+}
+
 function median(xs: number[]): number | undefined {
   if (xs.length === 0) return undefined
   const sorted = [...xs].sort((a, b) => a - b)
@@ -100,12 +115,8 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
   const lastCall = rec.calls[rec.calls.length - 1]
   if (!lastCall && !rec.lag && !rec.budget) return health
 
-  const failing = lastCall !== undefined && !lastCall.ok
   const silent = rec.lastOkAt === undefined || now - rec.lastOkAt > DOWN_SILENCE_MS
-  if (
-    rec.consecutiveDownFailures >= DOWN_FAILURES ||
-    (failing && rec.consecutiveDownFailures >= 2 && silent)
-  ) {
+  if (rec.consecutiveDownFailures >= DOWN_FAILURES || (isDownFailure(lastCall) && silent)) {
     health.state = 'down'
     return health
   }
@@ -132,13 +143,15 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
   return health
 }
 
-export function createHealthRegistry(now: () => number = Date.now): HealthRegistry & {
+export function createHealthRegistry(now: () => number = () => Date.now()): HealthRegistry & {
   setBudget(net: NetworkId, snapshot: BudgetSnapshot | undefined): void
   reset(): void
 } {
   const records = new Map<string, Tally>()
   const cache = new Map<string, SourceHealth>()
   const listeners = new Set<() => void>()
+  let snapshotAt = now()
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const keyOf = (net: NetworkId, source: SourceId) => `${net}\u0000${source}`
 
@@ -152,7 +165,22 @@ export function createHealthRegistry(now: () => number = Date.now): HealthRegist
     return rec
   }
 
-  const changed = () => {
+  const schedule = () => {
+    clearTimeout(timer)
+    timer = undefined
+    let next: number | undefined
+    for (const rec of records.values()) {
+      const boundary = nextTimeBoundary(rec, snapshotAt)
+      if (boundary !== undefined && (next === undefined || boundary < next)) next = boundary
+    }
+    if (next === undefined) return
+    timer = setTimeout(changed, Math.max(0, next - now()))
+    ;(timer as { unref?: () => void }).unref?.()
+  }
+
+  function changed(): void {
+    snapshotAt = now()
+    schedule()
     for (const cb of [...listeners]) cb()
   }
 
@@ -160,7 +188,8 @@ export function createHealthRegistry(now: () => number = Date.now): HealthRegist
     report(net, source, r) {
       const rec = touch(net, source)
       const at = now()
-      rec.calls.push({ ok: r.ok, at, kind: r.ok ? undefined : (r.kind as FailureKind | undefined) })
+      const kind = r.kind ?? 'network'
+      rec.calls.push({ ok: r.ok, at, kind: r.ok ? undefined : (kind as FailureKind) })
       if (rec.calls.length > CALL_WINDOW) rec.calls.shift()
       rec.latencies.push(r.latencyMs)
       if (rec.latencies.length > LATENCY_WINDOW) rec.latencies.shift()
@@ -168,7 +197,6 @@ export function createHealthRegistry(now: () => number = Date.now): HealthRegist
         rec.consecutiveDownFailures = 0
         rec.lastOkAt = at
       } else {
-        const kind = r.kind ?? 'network'
         if (DOWN_KINDS.has(kind)) rec.consecutiveDownFailures++
         else rec.consecutiveDownFailures = 0
         if (kind === 'invalid-response') rec.lastInvalidAt = at
@@ -186,7 +214,7 @@ export function createHealthRegistry(now: () => number = Date.now): HealthRegist
     },
     get(net, source) {
       const key = keyOf(net, source)
-      const fresh = compute(net, source, records.get(key), now())
+      const fresh = compute(net, source, records.get(key), snapshotAt)
       const hit = cache.get(key)
       if (hit && sameHealth(hit, fresh)) return hit
       cache.set(key, fresh)
