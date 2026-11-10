@@ -104,6 +104,21 @@ test.describe('ui kit', () => {
     expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe('hidden')
   })
 
+  test('an open dialog reserves a scrollbar gutter only on a page that has a scrollbar', async ({
+    page,
+  }) => {
+    const hadScrollbar = await page.evaluate(
+      () => window.innerWidth > document.documentElement.clientWidth,
+    )
+    await page.keyboard.press('Control+k')
+    await expect(page.getByRole('dialog')).toBeVisible()
+    expect(await page.locator('html').evaluate((el) => el.hasAttribute('data-scroll-gutter'))).toBe(
+      hadScrollbar,
+    )
+    await page.keyboard.press('Escape')
+    await expect(page.locator('html')).not.toHaveAttribute('data-scroll-gutter', /.*/)
+  })
+
   test('theme control switches the page between light and dark', async ({ page }) => {
     await page.getByRole('button', { name: 'Dark' }).click()
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
