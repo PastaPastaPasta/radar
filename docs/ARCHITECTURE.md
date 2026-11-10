@@ -1006,6 +1006,15 @@ What it measures: TLS to evonode IPs, CORS, unary and server streams through con
 | **Match-all filter refused** | Live feed from Hyphen `/stream` `mempool_tx` (already the in-flight fallback) |
 | **Browsers can't reach evonodes** (cert or CORS failure on most nodes) | `data/core` serves Core facts from Hyphen `/rawblock` and `/rawtx`, decoded locally, stamped `hyphen`. The façade and decode path don't change. No relay on the edge Worker: it would put every visitor behind Cloudflare's egress IPs and the shared per-IP limit. `@dashevo/dapi-client` is not a fallback for this case: it uses the same gRPC-web endpoints |
 
+**Outcome (2026-11-10, `docs/spikes/dapi-core.md`): works, unary and streams.** §4 stands as written. What the spike adds:
+- 96% of enabled mainnet evonodes and 98% on testnet answered. IP-SAN certificates are publicly trusted, CORS reflects any origin, and `grpc-status` and `ratelimit-*` are readable, so the server's headers drive the budget.
+- Over the limit: HTTP 200, `grpc-status: 8`, `ratelimit-reset` honoured exactly, with no extra penalty seen. The per-node cap stays at 50/min; bench until `ratelimit-reset`.
+- Ports: 443 mainnet, 1443 testnet, for every node that answered (RAD's masternode list doesn't carry the Platform HTTP port).
+- Certificates last about 6 days, so treat a TLS failure as a short bench, not a ban.
+- `getEstimatedTransactionFee` answers 403 everywhere; nothing in Radar needs it.
+- Streams close at 601 s; the 1.35 MB first masternode-list diff means the list stream opens only on network pages, never on home.
+- Reference code to lift into `data/dapi-core`: `spikes/dapi-core/src/{dapi.ts,pool.ts,gen/}`.
+
 ### (b) `core-decode` wasm from rust-dashcore (T-010)
 
 What it measures: build, gzipped size, speed on a 2 MB block, coverage of every special payload (ProReg, ProUpServ, ProUpReg, ProUpRev, cbTx, quorum commitment, MNHF, asset lock, asset unlock), and the masternode list diff.
