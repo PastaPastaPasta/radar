@@ -1,2 +1,5 @@
 export * from './keys'
 export * from './stale'
+export * from './defaults'
+export * from './persister'
+export * from './batch'
