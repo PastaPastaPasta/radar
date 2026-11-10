@@ -1,3 +1,6 @@
+import { msg } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react/macro'
+import type { MessageDescriptor } from '@lingui/core'
 import * as Dialog from '@radix-ui/react-dialog'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
@@ -13,18 +16,19 @@ export function useShortcuts(): ShortcutsApi {
   return useContext(Context)
 }
 
-const ROWS: { keys: string[]; does: string }[] = [
-  { keys: ['/'], does: 'Search Radar' },
-  { keys: ['Ctrl', 'K'], does: 'Search Radar (⌘K on a Mac)' },
-  { keys: ['?'], does: 'Show these shortcuts' },
-  { keys: ['Esc'], does: 'Close a dialog or the search' },
-  { keys: ['↑', '↓'], does: 'Move through search results' },
-  { keys: ['Enter'], does: 'Open the result, or all results' },
-  { keys: ['j', 'k'], does: 'Move through table rows' },
-  { keys: ['Enter'], does: 'Open the selected table row' },
+const ROWS: { keys: string[]; does: MessageDescriptor }[] = [
+  { keys: ['/'], does: msg`Search Radar` },
+  { keys: ['Ctrl', 'K'], does: msg`Search Radar (⌘K on a Mac)` },
+  { keys: ['?'], does: msg`Show these shortcuts` },
+  { keys: ['Esc'], does: msg`Close a dialog or the search` },
+  { keys: ['↑', '↓'], does: msg`Move through search results` },
+  { keys: ['Enter'], does: msg`Open the result, or all results` },
+  { keys: ['j', 'k'], does: msg`Move through table rows` },
+  { keys: ['Enter'], does: msg`Open the selected table row` },
 ]
 
 export function ShortcutsProvider({ children }: { children: ReactNode }) {
+  const { t, i18n } = useLingui()
   const [isOpen, setOpen] = useState(false)
   const open = useCallback(() => setOpen(true), [])
   const api = useMemo(() => ({ open }), [open])
@@ -51,10 +55,10 @@ export function ShortcutsProvider({ children }: { children: ReactNode }) {
             aria-describedby={undefined}
             className="fixed top-[12vh] left-1/2 z-[101] w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 rounded-lg border bg-[var(--dh-surface,Canvas)] p-5 text-[var(--dh-ink,CanvasText)] shadow-xl"
           >
-            <Dialog.Title className="mb-3 text-lg font-semibold">Keyboard shortcuts</Dialog.Title>
+            <Dialog.Title className="mb-3 text-lg font-semibold">{t`Keyboard shortcuts`}</Dialog.Title>
             <dl className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2">
               {ROWS.map((row) => (
-                <div key={row.keys.join('+') + row.does} className="contents">
+                <div key={row.keys.join('+') + row.does.id} className="contents">
                   <dt className="flex gap-1">
                     {row.keys.map((k) => (
                       <kbd key={k} className="rounded border px-1.5 text-sm">
@@ -62,11 +66,11 @@ export function ShortcutsProvider({ children }: { children: ReactNode }) {
                       </kbd>
                     ))}
                   </dt>
-                  <dd>{row.does}</dd>
+                  <dd>{i18n._(row.does)}</dd>
                 </div>
               ))}
             </dl>
-            <Dialog.Close className="mt-4 rounded border px-3 py-1.5">Close</Dialog.Close>
+            <Dialog.Close className="mt-4 rounded border px-3 py-1.5">{t`Close`}</Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>

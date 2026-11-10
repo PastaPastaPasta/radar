@@ -1,3 +1,6 @@
+import { msg } from '@lingui/core/macro'
+import type { MessageDescriptor } from '@lingui/core'
+import { useLingui } from '@lingui/react/macro'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { allDevnets, useDevnets } from '@/app/devnets'
@@ -17,21 +20,22 @@ import { routerLocation } from './spa-links'
 
 interface NavItem {
   section: SiteSection
-  label: string
+  label: MessageDescriptor
   icon: () => React.JSX.Element
   surface?: 'phone' | 'desktop'
 }
 
 const NAV: NavItem[] = [
-  { section: 'home', label: 'Home', icon: HomeIcon, surface: 'phone' },
-  { section: 'core', label: 'Core', icon: CoreIcon },
-  { section: 'network', label: 'Network', icon: NetworkIcon },
-  { section: 'platform', label: 'Platform', icon: PlatformIcon },
-  { section: 'tools', label: 'Tools', icon: SearchIcon, surface: 'desktop' },
-  { section: 'search', label: 'Search', icon: SearchIcon, surface: 'phone' },
+  { section: 'home', label: msg`Home`, icon: HomeIcon, surface: 'phone' },
+  { section: 'core', label: msg`Core`, icon: CoreIcon },
+  { section: 'network', label: msg`Network`, icon: NetworkIcon },
+  { section: 'platform', label: msg`Platform`, icon: PlatformIcon },
+  { section: 'tools', label: msg`Tools`, icon: SearchIcon, surface: 'desktop' },
+  { section: 'search', label: msg`Search`, icon: SearchIcon, surface: 'phone' },
 ]
 
 export function ShellBar() {
+  const { t, i18n } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
   const devnets = useDevnets()
@@ -42,6 +46,7 @@ export function ShellBar() {
   const section = sectionOfPath(pathname)
   const record = findPage(routeId)?.record
 
+  const network = networkName(net)
   const networks = [
     'mainnet',
     'testnet',
@@ -68,10 +73,10 @@ export function ShellBar() {
       network={net}
       networks={networks}
       phone-nav="tabs"
-      network-note={record ? `This ${record} is on ${networkName(net)}.` : undefined}
+      network-note={record ? t`This ${record} is on ${network}.` : undefined}
       sticky
     >
-      <nav slot="nav" aria-label="Radar">
+      <nav slot="nav" aria-label={t`Radar`}>
         {NAV.map(({ section: s, label, icon: Icon, surface }) => (
           <PageLink
             key={s}
@@ -81,7 +86,7 @@ export function ShellBar() {
             {...(surface === 'desktop' ? { 'data-dh-desktop': '' } : {})}
           >
             {surface === 'desktop' ? null : <Icon />}
-            {label}
+            {i18n._(label)}
           </PageLink>
         ))}
       </nav>
