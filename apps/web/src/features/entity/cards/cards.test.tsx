@@ -26,7 +26,7 @@ const block: DecodedBlock = {
 
 const tx: DecodedTx = {
   txid: TXID,
-  type: 'regular',
+  type: 'transfer',
   version: 3,
   lockTime: 0,
   size: 200,
@@ -82,9 +82,20 @@ describe('hover cards for Core kinds', () => {
     const { getHoverCard } = await import('@/ui/hover-cards')
     const { registerEntityHoverCards } = await import('../register')
     registerEntityHoverCards()
-    expect(getHoverCard('block')).toBe((await import('./block')).BlockHoverCard)
-    expect(getHoverCard('tx')).toBe((await import('./tx')).TxHoverCard)
-    expect(getHoverCard('address')).toBe((await import('./address')).AddressHoverCard)
+    for (const kind of ['block', 'tx', 'address'] as const) {
+      expect(getHoverCard(kind)?.name, kind).toBe('LazyCard')
+    }
+  })
+
+  it('loads the card code when one opens', async () => {
+    setCoreClient(core())
+    const { getHoverCard } = await import('@/ui/hover-cards')
+    const { registerEntityHoverCards } = await import('../register')
+    registerEntityHoverCards()
+    const Card = getHoverCard('block')!
+    const Harness = await harness(<Card id={HASH} />)
+    render(<Harness />)
+    expect(await screen.findByText('Block 2,570,010', {}, { timeout: 5000 })).toBeInTheDocument()
   })
 })
 

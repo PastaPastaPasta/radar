@@ -1,7 +1,5 @@
 import { registerHoverCard } from '@/ui'
-import { AddressHoverCard } from './cards/address'
-import { BlockHoverCard } from './cards/block'
-import { TxHoverCard } from './cards/tx'
+import { lazyCard } from './cards/lazy'
 import { GenericHoverCard } from './GenericHoverCard'
 
 const KINDS = [
@@ -31,7 +29,16 @@ export function registerEntityHoverCards(): void {
   if (registered) return
   registered = true
   for (const kind of KINDS) registerHoverCard(kind, GenericHoverCard(kind))
-  registerHoverCard('block', BlockHoverCard)
-  registerHoverCard('tx', TxHoverCard)
-  registerHoverCard('address', AddressHoverCard)
+  registerHoverCard(
+    'block',
+    lazyCard(() => import('./cards/block').then((m) => m.BlockHoverCard)),
+  )
+  registerHoverCard(
+    'tx',
+    lazyCard(() => import('./cards/tx').then((m) => m.TxHoverCard)),
+  )
+  registerHoverCard(
+    'address',
+    lazyCard(() => import('./cards/address').then((m) => m.AddressHoverCard)),
+  )
 }

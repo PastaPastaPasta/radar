@@ -24,6 +24,14 @@ function collect(key) {
 }
 collect(entryKey)
 
+// Classic scripts in index.html (the vendored dashhq shell) block first paint and are not in the manifest.
+const html = readFileSync(join(distDir, 'index.html'), 'utf8')
+for (const [tag] of html.matchAll(/<script\b[^>]*>/g)) {
+  const src = /\bsrc="([^"]+)"/.exec(tag)?.[1]
+  if (!src || /\btype="module"/.test(tag) || /^https?:/.test(src)) continue
+  files.add(src.replace(/^\//, '').split('?')[0])
+}
+
 let total = 0
 for (const file of [...files].sort()) {
   const gzipped = gzipSync(readFileSync(join(distDir, file)), { level: 9 }).length
