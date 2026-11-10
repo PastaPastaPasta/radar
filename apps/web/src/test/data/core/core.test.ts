@@ -266,6 +266,16 @@ describe('Hyphen fallback', () => {
     expect(transport.calls).toHaveLength(0)
   })
 
+  it('pages below the newest block with a cursor pinned to the index snapshot', async () => {
+    const { core, transport } = setup()
+    transport.budget.setPressure('tight')
+    const rows = await core.blockRows('mainnet', { fromHeight: 2566380, count: 10 })
+    expect(rows).toMatchObject({ source: 'hyphen', fallback: 'dapi-budget' })
+    expect(rows.data.map((r) => r.height)).toEqual(
+      Array.from({ length: 10 }, (_, i) => 2566380 - i),
+    )
+  })
+
   it('keeps the list on Hyphen for two minutes, then tries DAPI again', async () => {
     let now = 1_000_000
     const { core, transport } = setup({ now: () => now })
