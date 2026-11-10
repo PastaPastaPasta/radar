@@ -28,7 +28,11 @@ const ALLOWED_PATHS = new RegExp(
   ].join('|')})$`,
 )
 
-const ALLOWED_PARAMS = new Set(['limit', 'cursor', 'blocks', 'points', 'q', 'status', 'type'])
+export const HYPHEN_PARAMS = ['limit', 'cursor', 'blocks', 'points', 'q', 'status', 'type'] as const
+
+export type HyphenParam = (typeof HYPHEN_PARAMS)[number]
+
+const ALLOWED_PARAMS: ReadonlySet<string> = new Set(HYPHEN_PARAMS)
 const MAX_QUERY_LENGTH = 1024
 const MAX_VALUE_LENGTH = 256
 

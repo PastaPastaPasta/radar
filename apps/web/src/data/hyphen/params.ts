@@ -1,3 +1,5 @@
+import type { HyphenParam } from '../../../../../workers/edge/src/hyphen-path'
+
 export interface HyCursor {
   asOfHeight: number
   height: number
@@ -38,8 +40,12 @@ export function decodeCursor(cursor: string): Record<string, unknown> | null {
   }
 }
 
-export interface HyListQuery {
+/** Only names the edge Worker forwards, so a client call cannot send a parameter that is silently dropped. */
+export type HyQueryParams = Partial<Record<HyphenParam, string | number>>
+
+export interface HyListQuery extends HyQueryParams {
   limit?: number
   cursor?: string
-  [extra: string]: string | number | undefined
+  status?: string
+  type?: 'regular' | 'evonode'
 }

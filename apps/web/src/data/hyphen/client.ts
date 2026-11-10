@@ -50,10 +50,10 @@ import {
   type HyValidator,
   type HyValidatorDetail,
 } from './schemas'
-import { cursorFromHeight, decodeCursor, type HyListQuery } from './params'
+import { cursorFromHeight, decodeCursor, type HyListQuery, type HyQueryParams } from './params'
 import { openHyphenStream } from './stream'
 
-function qs(q: Readonly<Record<string, string | number | undefined>> | undefined): string {
+function qs(q: HyQueryParams | undefined): string {
   if (!q) return ''
   const sp = new URLSearchParams()
   for (const [k, v] of Object.entries(q)) if (v !== undefined) sp.set(k, String(v))
@@ -297,7 +297,7 @@ export const hyphen = {
 
   validators(
     net: NetworkId,
-    q: HyListQuery & { status?: string; type?: 'regular' | 'evonode' } = {},
+    q: HyListQuery = {},
     signal?: AbortSignal,
   ): Promise<Sourced<HyPage<HyValidator>>> {
     return get(net, `/validators${qs(q)}`, hyPage(HyValidatorSchema), signal)
