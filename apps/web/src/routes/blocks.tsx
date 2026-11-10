@@ -3,15 +3,11 @@ import { z } from 'zod'
 import { zIsoDate } from '@/app/search'
 import { BlocksPage } from '@/features/core'
 
-export const blocksSearch = z.object({
+const blocksSearch = z.object({
   date: zIsoDate.optional().catch(undefined),
 })
 
 export const Route = createFileRoute('/blocks')({
   validateSearch: blocksSearch,
-  component: BlocksRoute,
+  component: BlocksPage,
 })
-
-function BlocksRoute() {
-  return <BlocksPage />
-}

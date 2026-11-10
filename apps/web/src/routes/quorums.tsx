@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { QuorumsPage } from '@/features/platform'
 
 export const Route = createFileRoute('/quorums')({
-  component: QuorumsRoute,
+  component: QuorumsPage,
 })
-
-function QuorumsRoute() {
-  return <QuorumsPage />
-}

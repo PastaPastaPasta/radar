@@ -15,9 +15,5 @@ export const Route = createFileRoute('/platform/')({
     const to = LEGACY_ANCHORS[location.hash]
     if (to) throwRedirect({ to }, search)
   },
-  component: PlatformHomeRoute,
+  component: PlatformHomePage,
 })
-
-function PlatformHomeRoute() {
-  return <PlatformHomePage />
-}

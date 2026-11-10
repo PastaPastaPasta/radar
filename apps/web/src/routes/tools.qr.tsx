@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { QrPage } from '@/features/tools'
 
 export const Route = createFileRoute('/tools/qr')({
-  component: QrRoute,
+  component: QrPage,
 })
-
-function QrRoute() {
-  return <QrPage />
-}

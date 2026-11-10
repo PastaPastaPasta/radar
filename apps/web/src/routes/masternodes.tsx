@@ -5,7 +5,7 @@ import { MasternodesPage } from '@/features/network'
 
 const defaults = { sort: '-status', view: 'list' } as const
 
-export const masternodesSearch = z.object({
+const masternodesSearch = z.object({
   q: z.string().optional().catch(undefined),
   type: zCsvEnum(['regular', 'evo']).optional().catch(undefined),
   status: zCsvEnum(['enabled', 'pose-banned']).optional().catch(undefined),
@@ -18,9 +18,5 @@ export const masternodesSearch = z.object({
 export const Route = createFileRoute('/masternodes')({
   validateSearch: masternodesSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
-  component: MasternodesRoute,
+  component: MasternodesPage,
 })
-
-function MasternodesRoute() {
-  return <MasternodesPage />
-}

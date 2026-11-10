@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { StatusPage } from '@/features/core'
 
 export const Route = createFileRoute('/status')({
-  component: StatusRoute,
+  component: StatusPage,
 })
-
-function StatusRoute() {
-  return <StatusPage />
-}

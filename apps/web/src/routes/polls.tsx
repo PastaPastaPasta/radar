@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { PollsPage } from '@/features/platform'
 
 export const Route = createFileRoute('/polls')({
-  component: PollsRoute,
+  component: PollsPage,
 })
-
-function PollsRoute() {
-  return <PollsPage />
-}

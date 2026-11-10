@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { RichListPage } from '@/features/core'
 
 export const Route = createFileRoute('/rich-list')({
-  component: RichListRoute,
+  component: RichListPage,
 })
-
-function RichListRoute() {
-  return <RichListPage />
-}

@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { NamesPage } from '@/features/platform'
 
 export const Route = createFileRoute('/names')({
-  component: NamesRoute,
+  component: NamesPage,
 })
-
-function NamesRoute() {
-  return <NamesPage />
-}

@@ -2,9 +2,5 @@ import { createFileRoute } from '@tanstack/react-router'
 import { TokensPage } from '@/features/platform'
 
 export const Route = createFileRoute('/tokens')({
-  component: TokensRoute,
+  component: TokensPage,
 })
-
-function TokensRoute() {
-  return <TokensPage />
-}
