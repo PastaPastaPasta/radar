@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { DecodedTx, PrevOut } from '@/data/core/types'
 import { Entity } from '@/features/entity'
@@ -12,26 +12,21 @@ const INITIAL = 10
 const short = (id: string) => `${id.slice(0, 4)}…${id.slice(-4)}`
 
 function anchorIndex(hash: string, prefix: 'in' | 'out'): number | undefined {
-  const m = new RegExp(`^#${prefix}-(\\d+)$`).exec(hash)
+  const m = new RegExp(`^${prefix}-(\\d+)$`).exec(hash)
   return m ? Number(m[1]) : undefined
 }
 
-function useAnchor(): { in?: number; out?: number } {
-  const [hash, setHash] = useState(() => (typeof location === 'undefined' ? '' : location.hash))
-  useEffect(() => {
-    const on = () => setHash(location.hash)
-    window.addEventListener('hashchange', on)
-    return () => window.removeEventListener('hashchange', on)
-  }, [])
-  return { in: anchorIndex(hash, 'in'), out: anchorIndex(hash, 'out') }
+function useAnchor(): { in?: number; out?: number; hash: string } {
+  const hash = useRouterState({ select: (s) => s.location.hash })
+  return { in: anchorIndex(hash, 'in'), out: anchorIndex(hash, 'out'), hash }
 }
 
 /** Scrolls a deep-linked row into view once it is rendered. */
-function useScrollToAnchor(ready: boolean) {
+function useScrollToAnchor(ready: boolean, hash: string) {
   useEffect(() => {
-    if (!ready || !location.hash) return
-    document.getElementById(location.hash.slice(1))?.scrollIntoView?.({ block: 'center' })
-  }, [ready])
+    if (!ready || !hash) return
+    document.getElementById(hash)?.scrollIntoView?.({ block: 'center' })
+  }, [ready, hash])
 }
 
 export interface IoState {
@@ -63,7 +58,7 @@ export function IoTables({
   const outCount = tx.outputs.length
   const inLimit = showAllIn || (anchor.in ?? -1) >= INITIAL ? inCount : INITIAL
   const outLimit = showAllOut || (anchor.out ?? -1) >= INITIAL ? outCount : INITIAL
-  useScrollToAnchor(true)
+  useScrollToAnchor(true, anchor.hash)
   const coinbase = isCoinbaseTx(tx)
   const inTotal = tx.inputs.every((i) => prevouts?.has(prevoutKey(i.txid, i.vout)))
     ? tx.inputs.reduce((s, i) => s + (prevouts?.get(prevoutKey(i.txid, i.vout))?.value ?? 0n), 0n)
