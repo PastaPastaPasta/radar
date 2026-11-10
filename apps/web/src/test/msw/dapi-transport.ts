@@ -84,6 +84,8 @@ function abortError(): SourceError {
 
 export class FixtureDapiTransport implements DapiTransport {
   readonly budget: FixtureBudget
+  /** A live-follow transcript stays open after its last message, as the real stream would. Set false to end it there. */
+  holdOpen = true
   /** Every request served or refused, in order, for tests that assert on what the façade asked. */
   readonly calls: { net: NetworkId; method: string; key: string }[] = []
 
@@ -126,6 +128,7 @@ export class FixtureDapiTransport implements DapiTransport {
     const fixture = this.find(net, method, request)
     fixture.catch(() => undefined)
     const signal = opts?.signal
+    const holdOpen = () => this.holdOpen
     async function* messages(): AsyncGenerator<Uint8Array> {
       if (signal?.aborted) throw abortError()
       const f = await fixture
@@ -134,7 +137,7 @@ export class FixtureDapiTransport implements DapiTransport {
         if (signal?.aborted) throw abortError()
         yield fromBase64(m)
       }
-      if (f.ended) return
+      if (f.ended || !holdOpen()) return
       await new Promise<void>((_, reject) => {
         if (!signal) return
         signal.addEventListener('abort', () => reject(abortError()), { once: true })

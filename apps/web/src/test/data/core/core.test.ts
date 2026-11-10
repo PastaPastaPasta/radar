@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { FixtureDapiTransport } from '@/test/msw/dapi-transport'
 import { takeFixtureMisses } from '@/test/msw/handlers/fixtures'
 import { loadDapiManifest, type DapiManifest } from '@/test/fixtures/dapi-load'
+import { createDapiRpc } from '@/data/dapi-core'
 import { isSourceError } from '@/data/errors'
 import type { HealthState } from '@/data/health'
 import { hyphen } from '@/data/hyphen/client'
@@ -252,6 +253,34 @@ describe('mainnet block heights', () => {
     expect(found.data!.txs[0]!.type).toBe('coinbase')
     expect(found.data!.txs[0]!.payload).toBeUndefined()
     expect(found.data!.chainLocked).toBe(true)
+  })
+})
+
+describe('InstantSend lock evidence', () => {
+  it('parses every lock in the recorded transaction stream and matches it to a streamed transaction', async () => {
+    const manifest = await loadDapiManifest('mainnet')
+    const transport = new FixtureDapiTransport()
+    transport.holdOpen = false
+    const rpc = createDapiRpc(transport)
+    const locks = []
+    const txids = new Set<string>()
+    const stream = rpc.transactionStream('mainnet', { fromHeight: manifest.tip.height })
+    for await (const event of stream.events) {
+      if (event.kind === 'instantSendLocks') {
+        for (const m of event.messages) locks.push(await decoder.isLock(m))
+      }
+      if (event.kind === 'transactions') {
+        for (const raw of event.transactions) txids.add((await decoder.tx(raw, 'mainnet')).txid)
+      }
+    }
+    expect(locks.length).toBeGreaterThan(0)
+    for (const lock of locks) {
+      expect(lock.txid).toMatch(/^[0-9a-f]{64}$/)
+      expect(lock.cycleHash).toMatch(/^[0-9a-f]{64}$/)
+      expect(lock.signature).toMatch(/^[0-9a-f]{192}$/)
+      expect(lock.inputs.length).toBeGreaterThan(0)
+    }
+    expect(locks.some((l) => txids.has(l.txid))).toBe(true)
   })
 })
 
