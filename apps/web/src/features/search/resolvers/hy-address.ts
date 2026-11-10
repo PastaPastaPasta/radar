@@ -1,5 +1,4 @@
 import { stampOf } from '@/data/envelope'
-import { hyLookups } from '@/data/hyphen/lookups'
 import { formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { isDevnet } from '@/lib/network'
@@ -15,6 +14,7 @@ export const hyAddress: Resolver = {
   cost: 'index',
   async resolve(c, { net, signal }) {
     if (c.warning || isDevnet(net)) return []
+    const { hyLookups } = await import('@/data/hyphen/lookups')
     const found = await hyLookups.address(net, c.normalized, signal)
     const a = found.data
     const balance = a
