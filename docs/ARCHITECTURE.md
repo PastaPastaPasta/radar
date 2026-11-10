@@ -78,8 +78,8 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 | `shell/**` | `ui`, `lib`, `i18n`, `app`, `features/search` (palette) | `data` clients |
 
 `eslint.boundaries.js` also rejects:
-- `proved: true` literals (also behind `as const` or `satisfies`) outside `data/sdk/**`; `ui/kit/**` and tests are exempt;
-- `window.fetch`, `globalThis.fetch` and `self.fetch` outside `data/**`;
+- `proved: true` literals (also behind `as const` or `satisfies`) and `{ proved }` shorthand outside `data/sdk/**`; `ui/kit/**` and tests are exempt. A variable assigned `true` and passed as `proved: flag` isn't caught; review does that;
+- `fetch`, `window.fetch`, `globalThis.fetch` and `self.fetch` anywhere outside `data/**` and tests (one scope for both rules);
 - `queryKey` arrays behind `as const`, `satisfies` or `<const>`, as well as plain ones (§5.1);
 - imports of `data/hyphen/stream.ts` from features.
 
@@ -123,6 +123,8 @@ export interface SourceStamp {
   asOf: number
   /** ms epoch: when the browser received it. */
   fetchedAt: number
+  /** The source gave no time for this answer, so `asOf` is `fetchedAt`. Labels say "fetched", not what the source did. */
+  asOfFetched?: true
   /** True only when this exact value came from a call that returned a verified proof. */
   proved: boolean
   proof?: ProofMeta // present iff proved
@@ -164,11 +166,28 @@ Rules:
 |---|---|---|---|
 | `sdk` | `metadata.timeMs` (Platform block time of the answer) | `metadata.height` | finalized epochs, historic contract versions |
 | `dapi` | `fetchedAt`; tip-relative facts from the header stream | block height | block or tx at or below the best ChainLock height |
-| `radar` | the document's crawl or publish time field (`summary.crawl.finished`, `platform.now.updated`, `activation.updated`, `bench` max `vantages[].updated`, `check.checked`, and `status` for the **requested** network's `chain.updated`), else `Last-Modified`, else `fetchedAt`. Event times (`last_seen`, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp | — | no |
+| `radar` | the crawl time the answer carries, per resource (table below), else `Last-Modified`, else `fetchedAt` with `asOfFetched` set. Event times (a masternode's `last_seen` on a list row, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp by themselves | — | no |
 | `pe` | `fetchedAt` (indexer lag is a health matter, §2.5) | indexed Platform height when the response has it | no |
 | `hyphen` | `fetchedAt` | `asOfHeight` | no |
 | `rate` | `fetchedAt` | — | no |
 | `local` | computation time | — | inputs' |
+
+Radar sends no `Last-Modified` (checked against `radar.dashhq.org`, 2026-11-10; every response carries only `etag` and `cache-control: no-cache`), so each resource is stamped from a time inside its own document. The client still reads `Last-Modified` ahead of the fetch time in case the server adds it.
+
+| Resource | `asOf` |
+|---|---|
+| `/status` | the **requested** network's `chain.updated` (`crawl.last_finished` sets the Radar crawl lag for both networks) |
+| `/health` | the active network's `age_secs.crawl` (the older of both networks on a devnet), counted back from the response |
+| `/{net}/summary` | `crawl.finished` |
+| `/{net}/platform` | `now.updated` |
+| `/{net}/activation` | `updated` |
+| `/{net}/bench` | the newest `vantages[].updated` |
+| `/{net}/masternodes` | the newest row `last_seen`, which is the start of the latest crawl (`crawl_id` names it, but the crawl's times are only in `/summary`) |
+| `/{net}/masternodes/{protx}` | its `last_seen`; a node the crawler never reached has none |
+| `/masternodes/{protx}/check` | `checked` |
+| `/releases`, `/{net}/geo`, `/{net}/changes`, `/{net}/history`, `/masternodes/{protx}/payments`, `/masternodes/{protx}/bench` | no document time: `fetchedAt`, `asOfFetched` set. `geo` carries only `crawl_id`; `history` buckets are day or hour starts; `changes` and `payments` carry event times; a masternode benchmark's `results[].ts` is a test time on a 14-day cycle |
+
+A stamp with `asOfFetched` reads "Fetched from Radar · 6 s ago" (§7.3), never "Crawled".
 
 ### 2.3 Errors (`data/errors.ts`)
 
@@ -219,7 +238,7 @@ export async function fetchSourced<S extends z.ZodType>(req: {
 `fetchSourced` adds the timeout, reports `{ok, latencyMs, kind}` to the health registry, parses with zod, and maps failures to `SourceError`. HTTP 404 resolves to `Sourced<null>` only with `notFound: 'null'`; otherwise it throws `http`. ETag revalidation is left to the browser HTTP cache (Radar sends `no-cache` with an ETag, so browsers revalidate and get 304s); no manual `If-None-Match`.
 
 - `reject` turns a parsed body into a failure: a returned `{ kind, detail? }` is thrown as that `SourceError` and reported to health once, with the call's real latency, in place of the success report. PE's `/status` uses it for the `{ error }` body that arrives with a 503.
-- `asOf` returning `undefined` means `fetchedAt`.
+- `asOf` returning `undefined` means `fetchedAt`, and the stamp gets `asOfFetched: true`.
 
 ```ts
 // data/radar/client.ts (shape repeated by pe, hyphen, rate)
@@ -288,7 +307,7 @@ export interface SourceHealth {
 }
 
 export const healthRegistry: {
-  report(net: NetworkId, source: SourceId, r: { ok: boolean; latencyMs: number; kind?: SourceErrorKind }): void
+  report(net: NetworkId, source: SourceId, r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind }): void // omit latencyMs when the report is not one round trip
   setLag(net: NetworkId, source: SourceId, lag: SourceHealth['lag']): void
   get(net: NetworkId, source: SourceId): SourceHealth
   subscribe(cb: () => void): () => void
@@ -307,6 +326,8 @@ State rules, applied in this order (first match wins):
 | `slow` | p50 latency over the last 10 calls > 3 s (dapi, sdk: > 5 s) |
 | `ok` | at least one success, none of the above |
 | `unknown` | no calls yet |
+
+A report without `latencyMs` (a stream that broke after being open for a while) leaves the latency window alone; a batch that omits keys reports the batch call's own latency.
 
 The registry schedules a timer for the next time boundary (the end of the 5 min `invalid-response` memory, the end of the 120 s silence window) and notifies subscribers when it fires. It snapshots `now` once per notification, so `get` returns the same object until a notification.
 
@@ -354,7 +375,7 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 
 **Hyphen pass-through (`/x/hy/{mainnet|testnet}/*`).**
 - Only `GET` and `HEAD`. Paths must match the API surface the app uses (`blocks`, `block/{id}`, `block/{id}/txs`, `rawblock/{id}`, `tx/{id}`, `rawtx/{id}`, `address/{a}`, `address/{a}/txs|utxos`, `balances`, `status`, `network`, `mempool`, `mempool/txs`, `metrics/latest|chart`, `proposals`, `proposal/{h}`, `proposal/{h}/votes`, `validators`, `validator/{h}`, `search`, `stream`); anything else is 404 `unknown_path`. Encoded slashes, backslashes and dot segments are 400 `bad_path`.
-- Query parameters are limited to `limit, cursor, blocks, points, q, status, type`. Others are dropped, the first value of each is kept, and the keys are sorted, so each request shape is one cache entry. A query over 1024 characters or a value over 256 is 400 `bad_query`. Add a name to `ALLOWED_PARAMS` in `workers/edge/src/hyphen-path.ts` when the client starts sending a new one.
+- Query parameters are limited to `limit, cursor, blocks, points, q, status, type`. Others are dropped, the first value of each is kept, and the keys are sorted, so each request shape is one cache entry. A query over 1024 characters or a value over 256 is 400 `bad_query`. Add a name to `HYPHEN_PARAMS` in `workers/edge/src/hyphen-path.ts` when the client starts sending a new one; the client's `HyListQuery` type is built from that list, so an unlisted name doesn't type-check.
 - The response `content-type` is never copied. JSON (`application/json` or `+json`) is relayed as its bare media type; `/stream` also accepts `application/x-ndjson`. Any other type on a success status is 502 `{error:'bad_upstream_type'}`; an error status with a non-JSON body keeps its status with `{error:'upstream_error'}`.
 - Every proxy response carries `content-security-policy: default-src 'none'; sandbox` and `cross-origin-resource-policy: same-origin`. The Worker's global CSP is applied only to responses that have none.
 - `vite dev` and `vite preview` use the same `resolveHyphenRequest` (from `workers/edge/src/hyphen-path.ts`), so they refuse what production refuses. They don't check the upstream content type.
@@ -830,6 +851,7 @@ type LinkOutTarget =
 | `sdk`, `fallback: 'sdk-cold'` on a PE value | Indexed by Platform Explorer · checking… | spinner |
 | `dapi` | Served by DAPI | node on hover |
 | `radar` | Crawled by Radar · 6 min ago | — |
+| `radar`, `asOfFetched` | Fetched from Radar · 6 s ago | — |
 | `pe` | Indexed by Platform Explorer · 12 s ago | — |
 | `hyphen` | Indexed by Hyphen · 30 s ago | — |
 | `hyphen`, `fallback` | Indexed by Hyphen · DAPI busy / DAPI unreachable | — |
@@ -880,7 +902,7 @@ export interface Classified {
   normalized: string            // trimmed; hex lower-cased; '.dash' kept for dpns
   classes: InputClass[]         // priority order; one input may have several ("1234" is 'int' then 'dpns')
   networkHint?: NetworkId       // address prefix or HRP that names another network
-  warning?: 'secret' | 'possible-secret' // §8.3; `classes` is empty and `normalized` is ''
+  warning?: 'secret' | 'possible-secret' // §8.3; `secret` has no classes and an empty `normalized`
 }
 ```
 
@@ -919,14 +941,23 @@ export function useSearch(q: string, opts: { mode: 'palette' | 'page' }): {
 
 ### 8.3 Secrets in the search box
 
-`classify()` tokenises on any non-letter, so quotes, brackets, numbering, commas, hyphens, slashes and line breaks around a phrase don't hide it. Two warnings exist:
+Two warnings exist.
 
-- `secret`: an extended private key (`xprv`, `tprv`, `drkv`, `drkp`), a WIF, or a run of 12 or more consecutive BIP39 English words. It is never resolved and never put in the URL, the page title or history. The `/search` form refuses to navigate, clears the box and shows a notice. A `/search?q=<secret>` link loads, then replaces its own history entry with `/search`; the notice is kept in the entry's `state`, not the URL.
-- `possible-secret`: a run of 3 or more consecutive BIP39 English words (a phrase being typed, or a prefix of one), or 12 or more letter-only tokens separated by whitespace (non-English wordlists: accented Spanish and French, Japanese with ideographic spaces, Chinese). It is treated like `secret` for the URL, the title and every resolver; the notice says it "could be part of a recovery phrase".
+- `secret`: an extended private key (`xprv`, `tprv`, `drkv`, `drkp`), a WIF, or a run of 12 or more consecutive BIP39 English words. For this check `classify()` tokenises on any non-letter, so quotes, brackets, numbering, commas, hyphens, slashes and line breaks around a phrase don't hide it. A `secret` has no classes and an empty `normalized`.
+- `possible-secret`: a run of 5 or more consecutive BIP39 English words, or 12 or more consecutive letter-only tokens of any language (the non-English wordlists: accented Spanish and French, Japanese with ideographic spaces, Chinese written with spaces). Tokens are separated only by whitespace, commas, semicolons, quotes and brackets. Hyphens and dots join a token into one word, so `game-zone-arena.dash` and `happy-cat-dog` are never phrases, and anything that parses as a DPNS name is never `possible-secret`. Three or four BIP39 words ("Gold Coin Token", "real estate token", "world cup ticket") are ordinary text. The input keeps its normal classes.
 
-Resolvers see only inputs with no warning (`classes` is empty and `normalized` is `''` for both), so any future remote resolver (`pe-search`, `hy-search`, `dpns-prefix`) never receives them. Keep it that way.
+Why 5: four leaked words of a 12-word phrase leave about 88 bits unknown, so a threshold of 5 bounds what a debounced remote search can ever receive, and it still lets real names through.
 
-Known gap: a raw 64-hex or base64 private key can't be told apart from a hash or an ID, so it isn't detected. A 64-hex value is classified `hex64` and searched like any block or transaction hash.
+For both warnings:
+- The value never reaches the URL, `document.title`, history, or any resolver that sends anything off the device. `planResolvers` keeps only `cost: 'local'` resolvers for a flagged input, so pure parsing and local exact matches still answer, and every `index`, `dapi` and `sdk` resolver (the future `pe-search`, `hy-search`, `dpns-prefix`) never receives it. Keep it that way.
+- Nothing clears the search box. The notice appears in place, live as the text changes, and the text stays so the user can fix it. The form and the palette's Enter do nothing while it is flagged.
+- A `/search?q=<value>` link loads, then replaces its own history entry with `/search`; the notice is kept in the entry's `state`, not the URL. The box stays empty because the text came from a link, not from the user. By then the original URL has already reached the browser's global history and the edge request log, which the client can't undo.
+
+Known gaps:
+- A raw 64-hex or base64 private key can't be told apart from a hash or an ID, so it isn't detected. A 64-hex value is classified `hex64` and searched like any block or transaction hash.
+- Chinese written without spaces is one token and isn't detected as a partial phrase. Segmenting it would be guesswork, so it is left undetected rather than guessed at.
+- A numbered list ("1. abandon 2. ability …") breaks the run at each number, so only the 12-word `secret` rule catches it.
+- An ordinary English sentence of 12 or more words, with no hyphenated or punctuated word, is flagged by the non-English rule.
 
 The English wordlist ships with the classifier (`features/search/bip39-words.ts`) as a template string and is turned into a `Set` on first use.
 
@@ -984,7 +1015,7 @@ No page-level error unless the route itself can't render (bad route param after 
 - `pnpm check:bundle` fails if `apps/web/dist` contains the worker, its script or the kit page.
 - Specs must wait for the first render (a heading) before calling `fetch` themselves, because the worker is registered before the app mounts but after `load`.
 
-**E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exception is `disposition: 'report'` for `require-trusted-types-for` and `trusted-types`, which the report-only header produces by design.
+**E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exceptions are the two third-party Trusted Types sinks the report-only header still reports: the MSW worker registration (fixture builds only) and echarts' own `innerHTML` writes, each matched by its bundle file and sink. Any other Trusted Types report fails the test.
 
 **Story tags.**
 - Every Playwright test title carries its story IDs as tags: `test('block page shows header, cbTx, reward and pool @IN-03 @HY-05', …)`.
@@ -1048,7 +1079,9 @@ Accepted from the M0 data and build work:
 - **Hyphen lag is measured against Radar's crawled Core height, not the DAPI tip (§2.5 table).** M0 has no DAPI or Core tip in the data layer: `data/dapi-core` holds only the budget, and `CoreClient.tip` is a contract type. `healthQueries.hyphen` takes `chain.blocks` from Radar's `/status` for the network. When that call fails, the hyphen lag is cleared rather than left at its last value, so a stale lag can't stick. Switch the reference to `core.tip(net)` when the Core façade lands.
 - **`down` needs the silence condition as well as the failure kind (§2.5).** The 120 s clause applies to a last call that failed with `network`, `timeout` or `http`, and a source that has never answered counts as silent.
 - **The Hyphen stream is a client method only (§5.5).** `openHyphenStream` and `readNdjson` are no longer exported from `data/hyphen`; features reach the stream as `hyphen.stream`.
-- **`react-remove-scroll-bar` is aliased** (`vite.config.ts`) to `src/app/remove-scroll-bar.ts`, which only sets `data-scroll-locked` on `<body>`. The package injects an inline `<style>` that `style-src 'self'` refuses. `body[data-scroll-locked]` in `radar-components.css` does the locking, and `html:has(body[data-scroll-locked]) { scrollbar-gutter: stable }` keeps the layout from shifting. Revisit when Radix or react-remove-scroll changes the marker attribute.
+- **`react-remove-scroll-bar` is aliased** (`vite.config.ts`) to `src/app/remove-scroll-bar.ts`, which only sets `data-scroll-locked` on `<body>`. The package injects an inline `<style>` that `style-src 'self'` refuses. `body[data-scroll-locked]` in `radar-components.css` does the locking. When the first lock starts on a page that has a scrollbar, the shim also sets `data-scroll-gutter` on `<html>`, and `html[data-scroll-gutter] { scrollbar-gutter: stable }` keeps the layout from shifting; a page with no scrollbar reserves nothing. Revisit when Radix or react-remove-scroll changes the marker attribute.
+- **`SourceStamp.asOfFetched` and an optional `latencyMs` (§2.1, §2.5).** Radar sends no time for several documents, so a stamp can now say its `asOf` is only the fetch time, and `SourceLine` words it "Fetched from Radar". `healthRegistry.report` accepts a report with no latency for outcomes that aren't one round trip.
+- **The Hyphen client types its query names from the Worker's allowlist (§2.7).** `HYPHEN_PARAMS` in `workers/edge/src/hyphen-path.ts` is the one list; `data/hyphen/params.ts` imports its type, so a call can't send a name the Worker drops.
 
 ---
 

@@ -27,6 +27,8 @@ pnpm --filter @radar/web dev
 
 `packages/core-decode` builds with Rust (`wasm32-unknown-unknown` and `wasm-bindgen-cli` 0.2.118): `pnpm --filter @radar/core-decode build:wasm`, then `test:wasm` and `test:rust` in that package. CI runs them in their own job.
 
+The committed `packages/core-decode/dist` is reproducible, so the build refuses to finish without [binaryen](https://github.com/WebAssembly/binaryen/releases/tag/version_129) `version_129` (`wasm-opt` on `PATH`; CI installs that release and fails if a rebuild changes `dist/`). A change to the Rust sources, `Cargo.lock`, `rust-toolchain.toml` or binaryen needs a rebuilt `dist/` committed with it. For a local build you won't commit, set `RADAR_SKIP_WASM_OPT=1` to skip the size pass; the result is larger and differs from the committed files, so don't commit it.
+
 First run of Playwright needs the browser: `pnpm --filter @radar/e2e exec playwright install chromium`.
 
 ## Layout
