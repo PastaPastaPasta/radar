@@ -1,5 +1,6 @@
 import { retainSearchParams, type SearchMiddleware } from '@tanstack/react-router'
 import { z } from 'zod'
+import { setActiveNetwork } from '@/data/active-network'
 import { parseNetworkParam } from '@/lib/network'
 
 export const parseSearch = (s: string): Record<string, string> =>
@@ -121,3 +122,8 @@ export const networkMiddlewares: SearchMiddleware<RootSearch>[] = [
   canonicalize,
   retainSearchParams(['network']),
 ]
+
+/** Tells the data layer which network the route names, before the route's loaders and queries run. */
+export function activateNetwork(search: RootSearch): void {
+  setActiveNetwork(parseNetworkParam(search.network, search.net).net)
+}

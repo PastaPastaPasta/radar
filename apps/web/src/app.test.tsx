@@ -1,8 +1,9 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { App } from './app'
 import { DEVNET_STORAGE_KEY } from './app/devnets'
+import { getActiveNetwork } from './data/active-network'
 import { SITE_MAP } from './features/entity'
 
 function renderAt(url: string) {
@@ -27,6 +28,20 @@ describe('App', () => {
 
     expect(await screen.findByRole('heading', { name: 'Radar' })).toBeInTheDocument()
     expect(document.documentElement.dataset.networkKind).toBe('test')
+  })
+})
+
+describe('active network', () => {
+  it('follows the route, including the legacy parameter', async () => {
+    const history = renderAt('/status?network=testnet')
+    await screen.findByRole('heading', { level: 1 })
+    expect(getActiveNetwork()).toBe('testnet')
+
+    await act(() => history.push('/status'))
+    await waitFor(() => expect(getActiveNetwork()).toBe('mainnet'))
+
+    await act(() => history.push('/status?net=testnet'))
+    await waitFor(() => expect(getActiveNetwork()).toBe('testnet'))
   })
 })
 
