@@ -237,7 +237,7 @@ test.describe('network', () => {
   })
 
   test('a devnet Radar does not know asks for its addresses first @NX-75', async ({ page }) => {
-    await page.goto('/status?network=devnet-paloma')
+    await page.goto('/sources?network=devnet-paloma')
 
     await expect(page.getByRole('heading', { name: 'Set up the paloma devnet' })).toBeVisible()
     await page.getByRole('button', { name: 'Use this devnet' }).click()
@@ -246,7 +246,7 @@ test.describe('network', () => {
     await page.getByLabel('DAPI addresses').fill('192.0.2.10:1443')
     await page.getByRole('button', { name: 'Use this devnet' }).click()
 
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Data sources' })).toBeVisible()
     await expect(page.locator('[data-testnet-keyline="dev"]')).toBeAttached()
   })
 
