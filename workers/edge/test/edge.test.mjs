@@ -198,8 +198,151 @@ describe('hyphen pass-through', () => {
     assert.equal(upstreamCalls.length, 0)
   })
 
+  it('relays only JSON, and NDJSON on the stream', async () => {
+    const types = [
+      'text/html',
+      'text/javascript',
+      'application/javascript',
+      'application/x-ndjson',
+      '',
+    ]
+    for (const type of types) {
+      reset(() => new Response('alert(1)', { headers: type ? { 'content-type': type } : {} }))
+      const res = await get('/x/hy/mainnet/blocks')
+      assert.equal(res.status, 502, type)
+      assert.deepEqual(await res.json(), { error: 'bad_upstream_type' }, type)
+      assert.equal(res.headers.get('cache-control'), 'no-store')
+    }
+    reset(() => new Response('{}', { headers: { 'content-type': 'text/event-stream' } }))
+    assert.equal((await get('/x/hy/mainnet/stream')).status, 502)
+    for (const type of [
+      'application/json; charset=utf-8',
+      'APPLICATION/JSON',
+      'application/problem+json',
+    ]) {
+      reset(() => new Response('{"a":1}', { headers: { 'content-type': type } }))
+      const res = await get('/x/hy/mainnet/blocks')
+      assert.equal(res.status, 200, type)
+      assert.equal(res.headers.get('content-type'), type.split(';')[0].toLowerCase())
+      assert.deepEqual(await res.json(), { a: 1 })
+    }
+  })
+
+  it('keeps an error status but not an HTML or empty error body', async () => {
+    reset(
+      () =>
+        new Response('<h1>nope</h1>', { status: 404, headers: { 'content-type': 'text/html' } }),
+    )
+    let res = await get('/x/hy/mainnet/block/1')
+    assert.equal(res.status, 404)
+    assert.deepEqual(await res.json(), { error: 'upstream_error' })
+    reset(() => new Response(null, { status: 404 }))
+    res = await get('/x/hy/mainnet/block/1')
+    assert.equal(res.status, 404)
+    assert.match(res.headers.get('content-type'), /json/)
+    reset(() => new Response(null, { status: 304, headers: { etag: '"v1"' } }))
+    res = await get('/x/hy/mainnet/blocks', { headers: { 'if-none-match': '"v1"' } })
+    assert.equal(res.status, 304)
+    assert.equal(res.headers.get('etag'), '"v1"')
+  })
+
+  it('locks proxy responses down so they can never run or render as the app', async () => {
+    reset(() => Response.json({}))
+    const responses = [
+      await get('/x/hy/mainnet/blocks'),
+      await get('/x/hy/mainnet/blocks', { method: 'POST' }),
+      await get('/x/hy/mainnet/nope'),
+      await get('/x/hy/devnet/blocks'),
+    ]
+    for (const res of responses) {
+      assert.equal(res.headers.get('content-security-policy'), "default-src 'none'; sandbox")
+      assert.equal(res.headers.get('cross-origin-resource-policy'), 'same-origin')
+      assert.equal(res.headers.get('x-content-type-options'), 'nosniff')
+    }
+    const page = await get('/')
+    assert.match(page.headers.get('content-security-policy'), /default-src 'self'/)
+  })
+
+  it('refuses paths the app does not use', async () => {
+    reset(() => Response.json({}))
+    for (const p of [
+      'admin',
+      'blocks/',
+      'blocks/extra',
+      'block',
+      'block/1/txs/2',
+      'block/1/utxos',
+      'address/x/votes',
+      'metrics',
+      'mainnetX/blocks',
+    ]) {
+      const res = await get(`/x/hy/mainnet/${p}`)
+      assert.equal(res.status, 404, p)
+      assert.deepEqual(await res.json(), { error: 'unknown_path' }, p)
+    }
+    assert.equal((await get('/x/hy/mainnetX/blocks')).status, 404)
+    assert.equal((await get('/x/hy/mainnet')).status, 404)
+    assert.equal(upstreamCalls.length, 0)
+    for (const p of [
+      'blocks',
+      'balances',
+      'status',
+      'network',
+      'mempool',
+      'mempool/txs',
+      'metrics/latest',
+      'metrics/chart',
+      'proposals',
+      'validators',
+      'search',
+      'block/1',
+      'block/ab/txs',
+      'rawblock/ab',
+      'tx/ab',
+      'rawtx/ab',
+      'address/X1',
+      'address/X1/txs',
+      'address/X1/utxos',
+      'proposal/ab',
+      'proposal/ab/votes',
+      'validator/ab',
+    ]) {
+      const res = await get(`/x/hy/testnet/${p}`)
+      assert.equal(res.status, 200, p)
+    }
+  })
+
+  it('drops unknown parameters, keeps one value of each, and bounds the query', async () => {
+    reset(() => Response.json({}))
+    await get('/x/hy/mainnet/blocks?utm=1&limit=5&bust=abc&cursor=ff&limit=9&x[]=1')
+    assert.equal(upstreamCalls[0].url, 'https://hy.kw.vg/api/v1/blocks?cursor=ff&limit=5')
+    await get('/x/hy/mainnet/blocks?cb=1')
+    await get('/x/hy/mainnet/blocks?cb=2')
+    assert.equal(upstreamCalls[1].url, upstreamCalls[2].url)
+    assert.equal(upstreamCalls[1].url, 'https://hy.kw.vg/api/v1/blocks')
+    const count = upstreamCalls.length
+    assert.equal((await get(`/x/hy/mainnet/search?q=${'a'.repeat(300)}`)).status, 400)
+    assert.equal((await get(`/x/hy/mainnet/blocks?junk=${'a'.repeat(2000)}`)).status, 400)
+    assert.equal(upstreamCalls.length, count)
+  })
+
+  it('rejects encoded dot segments and slashes', async () => {
+    reset()
+    for (const p of ['%2e%2e/status', '%2E%2E%2Fstatus', 'block%2f1', '.']) {
+      const { status } = await get(`/x/hy/mainnet/${p}`)
+      assert.ok(status === 400 || status === 404, `${p} -> ${status}`)
+    }
+    assert.equal(upstreamCalls.length, 0)
+  })
+
   it('does not cache upstream errors', async () => {
-    reset(() => new Response('nope', { status: 500 }))
+    reset(
+      () =>
+        new Response('{"error":"boom"}', {
+          status: 500,
+          headers: { 'content-type': 'application/json' },
+        }),
+    )
     const bad = await get('/x/hy/mainnet/blocks')
     assert.equal(bad.status, 500)
     assert.equal(bad.headers.get('cache-control'), 'no-store')
@@ -384,12 +527,14 @@ describe('redirects', () => {
 })
 
 describe('per-entity title and OG', () => {
+  const BOT = { headers: { 'user-agent': 'Slackbot-LinkExpanding 1.0' } }
+  const getAsBot = (p) => get(p, BOT)
   const protx = 'e'.repeat(64)
   const identity = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 
   it('fills title and OG tags from one backend read', async () => {
     reset(() => Response.json({ type: 'Evo', status: 'enabled', version: '24.0.0', country: 'DE' }))
-    const res = await get(`/mn/${protx}`)
+    const res = await getAsBot(`/mn/${protx}`)
     const html = await res.text()
     assert.equal(upstreamCalls.length, 1)
     assert.equal(
@@ -406,7 +551,7 @@ describe('per-entity title and OG', () => {
     reset(() =>
       Response.json({ blockHeight: 1234567, txCount: 3, blockTime: '2026-11-10T00:00:00Z' }),
     )
-    const res = await get('/block/1234567?network=testnet')
+    const res = await getAsBot('/block/1234567?network=testnet')
     const html = await res.text()
     assert.equal(upstreamCalls[0].url, 'https://ts.kw.vg/api/v1/block/1234567')
     assert.match(html, /<title>Block 1,234,567 · Radar<\/title>/)
@@ -418,7 +563,7 @@ describe('per-entity title and OG', () => {
 
   it('names an identity by its first DPNS alias', async () => {
     reset(() => Response.json({ aliases: [{ alias: 'pshenmic.dash' }] }))
-    const html = await (await get(`/identity/${identity}`)).text()
+    const html = await (await getAsBot(`/identity/${identity}`)).text()
     assert.equal(upstreamCalls[0].url, `https://api.pe.dashhq.org/identity/${identity}`)
     assert.match(html, /<title>Identity pshenmic\.dash · Radar<\/title>/)
   })
@@ -427,7 +572,7 @@ describe('per-entity title and OG', () => {
     reset(() =>
       Response.json({ name: '"><script>alert(1)</script>', description: '<img src=x onerror=1>' }),
     )
-    const html = await (await get(`/contract/${identity}`)).text()
+    const html = await (await getAsBot(`/contract/${identity}`)).text()
     assert.doesNotMatch(html, /<script>alert/)
     assert.doesNotMatch(html, /<img src=x/)
     assert.match(html, /&lt;script&gt;/)
@@ -435,24 +580,61 @@ describe('per-entity title and OG', () => {
 
   it('falls back to a generic title when the backend fails or the id is malformed', async () => {
     reset(() => new Response('boom', { status: 500 }))
-    let html = await (await get(`/token/${identity}`)).text()
+    let html = await (await getAsBot(`/token/${identity}`)).text()
     assert.match(html, /<title>Token · Radar<\/title>/)
     reset()
-    html = await (await get('/tx/not-a-txid')).text()
+    html = await (await getAsBot('/tx/not-a-txid')).text()
     assert.match(html, /<title>Transaction · Radar<\/title>/)
     assert.equal(upstreamCalls.length, 0)
     reset(() => {
       throw new Error('timeout')
     })
-    html = await (await get(`/mn/${protx}`)).text()
+    html = await (await getAsBot(`/mn/${protx}`)).text()
     assert.match(html, /<title>Masternode · Radar<\/title>/)
   })
 
   it('makes no backend call for devnets or other routes', async () => {
     reset()
-    await get(`/mn/${protx}?network=devnet-x`)
+    await getAsBot(`/mn/${protx}?network=devnet-x`)
     await get('/masternodes')
     await get('/')
     assert.equal(upstreamCalls.length, 0)
+  })
+
+  it('answers people at once with generic tags and no backend call', async () => {
+    reset(() => new Promise(() => undefined))
+    for (const agent of [
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile Safari/604.1',
+      '',
+    ]) {
+      const res = await get(`/mn/${protx}`, { headers: { 'user-agent': agent } })
+      const html = await res.text()
+      assert.match(html, /<title>Masternode · Radar<\/title>/, agent)
+      assert.match(html, /<div id="root">/)
+      assert.match(res.headers.get('vary'), /user-agent/i)
+    }
+    assert.equal(upstreamCalls.length, 0)
+  })
+
+  it('looks the entity up for link-preview and search crawlers', async () => {
+    for (const agent of [
+      'Twitterbot/1.0',
+      'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)',
+      'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)',
+      'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+      'LinkedInBot/1.0 (compatible; Mozilla/5.0; Apache-HttpClient +https://www.linkedin.com)',
+      'TelegramBot (like TwitterBot)',
+      'WhatsApp/2.23.20.0 A',
+      'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+      'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+    ]) {
+      reset(() =>
+        Response.json({ type: 'Evo', status: 'enabled', version: '24.0.0', country: 'DE' }),
+      )
+      const html = await (await get(`/mn/${protx}`, { headers: { 'user-agent': agent } })).text()
+      assert.equal(upstreamCalls.length, 1, agent)
+      assert.match(html, /<title>Evonode eeeeeeee…eeeeee · Radar<\/title>/, agent)
+    }
   })
 })

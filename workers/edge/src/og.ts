@@ -120,6 +120,14 @@ const ROUTE = /^\/(mn|block|tx|identity|contract|token)\/([^/]+)\/?$/
 const FETCH_TIMEOUT_MS = 2000
 const CACHE_TTL_SECONDS = 300
 
+const LINK_PREVIEW_AGENT =
+  /bot|crawler|spider|facebookexternalhit|whatsapp|slack|skypeuripreview|embedly|iframely|quora link preview|vkshare|preview|mastodon|pleroma|bluesky|opengraph/i
+
+/** Link unfurlers and crawlers read the tags from the first response; people never see them. */
+export function isLinkPreviewAgent(userAgent: string | null): boolean {
+  return userAgent !== null && LINK_PREVIEW_AGENT.test(userAgent)
+}
+
 export function matchOgRoute(pathname: string): { kind: OgKind; id: string } | null {
   const m = ROUTE.exec(pathname)
   if (!m) return null
@@ -131,6 +139,10 @@ export function matchOgRoute(pathname: string): { kind: OgKind; id: string } | n
     return null
   }
   return { kind, id }
+}
+
+export function genericOg(kind: OgKind): OgMeta {
+  return SOURCES[kind].generic
 }
 
 export async function resolveOg(kind: OgKind, id: string, network: string | null): Promise<OgMeta> {

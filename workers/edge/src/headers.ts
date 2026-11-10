@@ -29,6 +29,9 @@ export const SECURITY_HEADERS: Record<string, string> = {
 
 export function withSecurityHeaders(res: Response): Response {
   const out = new Response(res.body, res)
-  for (const [k, v] of Object.entries(SECURITY_HEADERS)) out.headers.set(k, v)
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+    if (k === 'content-security-policy' && out.headers.has(k)) continue
+    out.headers.set(k, v)
+  }
   return out
 }

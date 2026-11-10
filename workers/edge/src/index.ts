@@ -1,5 +1,5 @@
 import { withSecurityHeaders } from './headers'
-import { matchOgRoute, resolveOg, rewriteHead } from './og'
+import { genericOg, isLinkPreviewAgent, matchOgRoute, resolveOg, rewriteHead } from './og'
 import { handleProxy, isProxyPath } from './proxy'
 import { redirectFor } from './redirects'
 
@@ -57,10 +57,13 @@ async function handle(request: Request, env: Env): Promise<Response> {
   const og = matchOgRoute(url.pathname)
   const isHtml = res.headers.get('content-type')?.startsWith('text/html') === true
   if (og && res.ok && isHtml && request.method === 'GET') {
+    const out = new Response(res.body, res)
+    out.headers.append('vary', 'user-agent')
     const network = url.searchParams.get('network')
-    const meta = await resolveOg(og.kind, og.id, network)
+    const preview = isLinkPreviewAgent(request.headers.get('user-agent'))
+    const meta = preview ? await resolveOg(og.kind, og.id, network) : genericOg(og.kind)
     const canonical = `${url.origin}${url.pathname}${network ? `?network=${encodeURIComponent(network)}` : ''}`
-    return rewriteHead(res, meta, canonical)
+    return rewriteHead(out, meta, canonical)
   }
   return res
 }
