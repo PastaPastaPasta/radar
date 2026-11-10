@@ -2,6 +2,12 @@ import { http, HttpResponse, type AnyHandler } from 'msw'
 import { loadHttpFixture, loadStreamFixture } from '../../fixtures/load'
 
 const misses: string[] = []
+let onMiss: ((request: string) => void) | undefined
+
+/** Called for every request to a fixtured source with no recording, in addition to `takeFixtureMisses()`. */
+export function onFixtureMiss(listener: ((request: string) => void) | undefined): void {
+  onMiss = listener
+}
 
 /** Requests for a fixtured source that had no recording, since the last `takeFixtureMisses()`. */
 export function takeFixtureMisses(): string[] {
@@ -22,6 +28,7 @@ function serve(method: 'GET' | 'POST') {
     const fixture = await loadHttpFixture(url, method)
     if (!fixture) {
       misses.push(`${method} ${url}`)
+      onMiss?.(`${method} ${url}`)
       return HttpResponse.error()
     }
     const headers = new Headers(fixture.headers)

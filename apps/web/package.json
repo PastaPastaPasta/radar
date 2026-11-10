@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:e2e": "vite build --outDir dist-e2e --emptyOutDir",
+    "build:e2e": "VITE_DATA_MODE=fixtures vite build --outDir dist-e2e --emptyOutDir",
     "preview": "vite preview",
-    "preview:e2e": "vite preview --outDir dist-e2e --port 4173 --strictPort",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },

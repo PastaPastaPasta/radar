@@ -45,8 +45,7 @@ export default defineConfig({
         timeout: 300_000,
       }
     : {
-        command:
-          'pnpm --filter @radar/web build:e2e && pnpm --filter @radar/web preview:e2e --host 127.0.0.1',
+        command: `pnpm --filter @radar/web build:e2e && node ../review/serve.mjs --dist ../apps/web/dist-e2e --port ${fixturePort}`,
         url: `http://127.0.0.1:${fixturePort}`,
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,

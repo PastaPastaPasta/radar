@@ -13,6 +13,7 @@
     "test": "pnpm -r --if-present test",
     "build": "pnpm -r --if-present build",
     "size": "node scripts/size.mjs",
+    "check:bundle": "node scripts/check-bundle.mjs",
     "e2e:fixtures": "pnpm --filter @radar/e2e e2e",
     "e2e:smoke": "pnpm --filter @radar/e2e e2e --grep @smoke",
     "e2e:live": "pnpm --filter @radar/e2e e2e:live",

@@ -31,6 +31,7 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: pnpm size
+      - run: pnpm check:bundle
       - run: pnpm exec playwright install --with-deps chromium
         working-directory: e2e
       - run: pnpm test:review
