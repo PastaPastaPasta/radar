@@ -17,7 +17,7 @@ const CSP = [
 
 const TRUSTED_TYPES_REPORT_ONLY = "require-trusted-types-for 'script'"
 
-const SECURITY_HEADERS: Record<string, string> = {
+export const SECURITY_HEADERS: Record<string, string> = {
   'content-security-policy': CSP,
   'content-security-policy-report-only': TRUSTED_TYPES_REPORT_ONLY,
   'strict-transport-security': 'max-age=31536000; includeSubDomains',

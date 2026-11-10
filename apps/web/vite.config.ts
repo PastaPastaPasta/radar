@@ -4,6 +4,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 import { dashhqAssets } from './build/dashhq-assets'
+import { securityHeaders } from './build/security-headers'
 import { hyphenProxy } from './src/data/hyphen/dev-proxy'
 
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     dashhqAssets(),
+    securityHeaders(),
   ],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
