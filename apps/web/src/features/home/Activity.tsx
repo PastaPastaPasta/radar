@@ -140,8 +140,8 @@ function TransitionsCard() {
       padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
       actions={
-        <PageLink to="/platform/txs" className="rx-go">
-          {t`All transitions`}
+        <PageLink to="/platform/txs" className="rx-go" aria-label={t`All transitions`}>
+          {t`View all`}
         </PageLink>
       }
     >

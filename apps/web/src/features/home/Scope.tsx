@@ -26,7 +26,7 @@ function Kicker() {
   const { t } = useLingui()
   const net = useNetwork()
   return (
-    <p className="rx-scope__kicker">
+    <p className="rx-scope__kicker" style={{ flexWrap: 'wrap', whiteSpace: 'normal' }}>
       <LiveDot state="ok" bare />
       <b>{t`Live`}</b>
       <span>

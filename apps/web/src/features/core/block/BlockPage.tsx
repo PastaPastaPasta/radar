@@ -255,8 +255,8 @@ function BlockView({
           />
           <Stat
             label={t`Time`}
-            value={<Time ms={block.time} mode="absolute" />}
-            note={<Time ms={block.time} mode="relative" live />}
+            value={<Time ms={block.time} mode="relative" live />}
+            note={<Time ms={block.time} mode="absolute" />}
           />
         </div>
       </CoreBand>

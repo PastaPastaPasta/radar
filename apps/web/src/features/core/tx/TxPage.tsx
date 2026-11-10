@@ -275,8 +275,8 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
           />
           <Stat
             label={mined ? t`Mined` : t`Status`}
-            value={mined && tx.time ? <Time ms={tx.time} mode="absolute" /> : t`Unconfirmed`}
-            note={mined && tx.time ? <Time ms={tx.time} mode="relative" live /> : t`In the mempool`}
+            value={mined && tx.time ? <Time ms={tx.time} mode="relative" live /> : t`Unconfirmed`}
+            note={mined && tx.time ? <Time ms={tx.time} mode="absolute" /> : t`In the mempool`}
           />
         </div>
       </CoreBand>
