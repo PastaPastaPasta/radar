@@ -24,7 +24,7 @@ export function QrPage() {
   const [camera, setCamera] = useState<Camera>('off')
   const [notice, setNotice] = useState<Notice | undefined>()
   const [busy, setBusy] = useState(false)
-  const stamp = useRef(local(null)).current
+  const [stamp] = useState(() => local(null))
 
   const stop = useCallback(() => {
     window.clearInterval(timer.current)
@@ -92,7 +92,8 @@ export function QrPage() {
           })
       }, FRAME_MS)
     } catch (e) {
-      const denied = e instanceof DOMException && (e.name === 'NotAllowedError' || e.name === 'SecurityError')
+      const denied =
+        e instanceof DOMException && (e.name === 'NotAllowedError' || e.name === 'SecurityError')
       setCamera(denied ? 'denied' : 'unavailable')
     }
   }

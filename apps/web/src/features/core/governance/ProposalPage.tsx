@@ -6,7 +6,20 @@ import { stampOf } from '@/data/envelope'
 import type { HyProposalVote } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Badge, Card, DataTable, Empty, Hash, KeyValue, QueryView, Skeleton, Stat, Time, useNow } from '@/ui'
+import {
+  Amount,
+  Badge,
+  Card,
+  DataTable,
+  Empty,
+  Hash,
+  KeyValue,
+  QueryView,
+  Skeleton,
+  Stat,
+  Time,
+  useNow,
+} from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { ProposalLinks } from './ProposalLinks'
@@ -97,10 +110,16 @@ function ProposalContent({ hash }: { hash: string }) {
                     },
                     {
                       label: t`Created`,
-                      value: p.creationTime == null ? '—' : <Time ms={p.creationTime} mode="absolute" />,
+                      value:
+                        p.creationTime == null ? '—' : <Time ms={p.creationTime} mode="absolute" />,
                     },
                     ...(p.collateralHash
-                      ? [{ label: t`Collateral`, value: <Entity kind="tx" id={p.collateralHash} /> }]
+                      ? [
+                          {
+                            label: t`Collateral`,
+                            value: <Entity kind="tx" id={p.collateralHash} />,
+                          },
+                        ]
                       : []),
                     {
                       label: t`Counted as valid`,
@@ -142,7 +161,13 @@ function VoteHistory({ hash }: { hash: string }) {
           const v = row.original.vote.toLowerCase()
           return (
             <Badge tone={v === 'yes' ? 'success' : v === 'no' ? 'danger' : 'neutral'}>
-              {v === 'yes' ? t`Yes` : v === 'no' ? t`No` : v === 'abstain' ? t`Abstain` : row.original.vote}
+              {v === 'yes'
+                ? t`Yes`
+                : v === 'no'
+                  ? t`No`
+                  : v === 'abstain'
+                    ? t`Abstain`
+                    : row.original.vote}
             </Badge>
           )
         },
@@ -171,7 +196,15 @@ function VoteHistory({ hash }: { hash: string }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => `${r.proTxHash}:${r.voteTime}`}
-        state={votes.isPending ? 'loading' : votes.isError && rows.length === 0 ? 'error' : rows.length === 0 ? 'empty' : 'ready'}
+        state={
+          votes.isPending
+            ? 'loading'
+            : votes.isError && rows.length === 0
+              ? 'error'
+              : rows.length === 0
+                ? 'empty'
+                : 'ready'
+        }
         error={votes.error}
         onRetry={() => void votes.refetch()}
         empty={<Empty kind="none-yet" title={t`No votes recorded for this proposal.`} />}

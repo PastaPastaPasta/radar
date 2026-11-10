@@ -19,9 +19,14 @@ describe('Charts page', () => {
   it('offers 1 h, 1 d, 1 w, 1 m, 1 y and all ranges, and 1 d is selected first @HY-02', async () => {
     renderAt('/charts')
     const range = await screen.findByRole('group', { name: 'Range' })
-    const labels = within(range).getAllByRole('button').map((b) => b.textContent)
+    const labels = within(range)
+      .getAllByRole('button')
+      .map((b) => b.textContent)
     expect(labels).toEqual(['1 h', '1 d', '1 w', '1 m', '1 y', 'All'])
-    expect(within(range).getByRole('button', { name: '1 d' })).toHaveAttribute('aria-pressed', 'true')
+    expect(within(range).getByRole('button', { name: '1 d' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
   it.each([
@@ -30,13 +35,19 @@ describe('Charts page', () => {
     ['1m', '1 m'],
     ['1y', '1 y'],
     ['all', 'All'],
-  ])('loads the %s range from Hyphen and says which blocks it covers @HY-02', async (range, label) => {
-    renderAt(`/charts?range=${range}`)
-    const group = await screen.findByRole('group', { name: 'Range' })
-    expect(within(group).getByRole('button', { name: label })).toHaveAttribute('aria-pressed', 'true')
-    await waitFor(() => expect(document.querySelector('[data-chart-span]')).not.toBeNull())
-    expect(document.querySelector('[data-chart-span]')).toHaveTextContent(/Blocks .* to /)
-  })
+  ])(
+    'loads the %s range from Hyphen and says which blocks it covers @HY-02',
+    async (range, label) => {
+      renderAt(`/charts?range=${range}`)
+      const group = await screen.findByRole('group', { name: 'Range' })
+      expect(within(group).getByRole('button', { name: label })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      )
+      await waitFor(() => expect(document.querySelector('[data-chart-span]')).not.toBeNull())
+      expect(document.querySelector('[data-chart-span]')).toHaveTextContent(/Blocks .* to /)
+    },
+  )
 
   it('changes range from the control @HY-02', async () => {
     const user = userEvent.setup()
@@ -44,7 +55,10 @@ describe('Charts page', () => {
     const group = await screen.findByRole('group', { name: 'Range' })
     await user.click(within(group).getByRole('button', { name: '1 w' }))
     await waitFor(() =>
-      expect(within(group).getByRole('button', { name: '1 w' })).toHaveAttribute('aria-pressed', 'true'),
+      expect(within(group).getByRole('button', { name: '1 w' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      ),
     )
   })
 

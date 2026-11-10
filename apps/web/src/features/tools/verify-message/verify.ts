@@ -53,7 +53,8 @@ function hash160(pubkey: Uint8Array): Uint8Array {
   return ripemd160(sha256(pubkey))
 }
 
-const sameBytes = (a: Uint8Array, b: Uint8Array) => a.length === b.length && a.every((v, i) => v === b[i])
+const sameBytes = (a: Uint8Array, b: Uint8Array) =>
+  a.length === b.length && a.every((v, i) => v === b[i])
 
 /**
  * Checks a Dash signed message the way Dash Core's `verifymessage` does: recover the public key from the
@@ -65,10 +66,14 @@ export function verifySignedMessage(input: {
   signature: string
 }): VerifyOutcome {
   const decoded = base58CheckDecode(input.address.trim())
-  if (!decoded || decoded.payload.length !== 20) return { kind: 'error', problem: 'address' }
+  if (decoded?.payload.length !== 20) return { kind: 'error', problem: 'address' }
   if (P2SH.has(decoded.version)) return { kind: 'error', problem: 'script-address' }
   const network =
-    decoded.version === P2PKH.mainnet ? 'mainnet' : decoded.version === P2PKH.testnet ? 'testnet' : undefined
+    decoded.version === P2PKH.mainnet
+      ? 'mainnet'
+      : decoded.version === P2PKH.testnet
+        ? 'testnet'
+        : undefined
   if (!network) return { kind: 'error', problem: 'address' }
 
   const sig = decodeSignature(input.signature)
@@ -94,4 +99,3 @@ export function verifySignedMessage(input: {
   if (sameBytes(found, decoded.payload)) return { kind: 'valid', network }
   return { kind: 'mismatch', signedBy: base58CheckEncode(decoded.version, found), network }
 }
-

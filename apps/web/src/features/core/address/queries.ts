@@ -1,8 +1,7 @@
 import type { NetworkId } from '@/lib/network'
-import { hyphen } from '@/data/hyphen/client'
 import { hyQueries } from '@/data/hyphen/queries'
+import { hyPages } from '@/data/hyphen/pages'
 import { hyKeys } from '@/data/query/keys'
-import { cursorPages } from '../hy-shared/queries'
 
 export const HISTORY_LIMIT = 25
 export const UTXO_LIMIT = 25
@@ -18,11 +17,7 @@ export function addressKeys(net: NetworkId, address: string) {
 
 export const addressQueries = {
   summary: hyQueries.address,
-  txs: (net: NetworkId, address: string) =>
-    cursorPages({
-      key: addressKeys(net, address).txs,
-      fetchPage: (cursor, signal) =>
-        hyphen.addressTxs(net, address, { limit: HISTORY_LIMIT, cursor }, signal),
-    }),
-  utxos: (net: NetworkId, address: string) => hyQueries.addressUtxos(net, address, { limit: UTXO_LIMIT }),
+  txs: (net: NetworkId, address: string) => hyPages.addressTxs(net, address, HISTORY_LIMIT),
+  utxos: (net: NetworkId, address: string) =>
+    hyQueries.addressUtxos(net, address, { limit: UTXO_LIMIT }),
 }

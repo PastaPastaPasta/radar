@@ -1,4 +1,4 @@
-import { Trans, useLingui } from '@lingui/react/macro'
+import { Plural, useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery, type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { lazy, Suspense, useMemo } from 'react'
@@ -8,18 +8,7 @@ import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { classify } from '@/features/search'
 import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import {
-  Amount,
-  Badge,
-  Card,
-  DataTable,
-  Empty,
-  Hash,
-  LiveDot,
-  Skeleton,
-  Stat,
-  Time,
-} from '@/ui'
+import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
@@ -95,7 +84,9 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const a = summary.data?.data ?? NONE
   const unconfirmed = live.pending.reduce((sum, p) => sum + p.net, 0n)
   const rows = txs.data?.pages.flatMap((p) => p.data.items) ?? []
-  const txStamp: SourceStamp | undefined = txs.data?.pages[0] ? stampOf(txs.data.pages[0]) : undefined
+  const txStamp: SourceStamp | undefined = txs.data?.pages[0]
+    ? stampOf(txs.data.pages[0])
+    : undefined
 
   const columns = useMemo<ColumnDef<HyAddressTx>[]>(
     () => [
@@ -176,7 +167,10 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               source={live.pending[0] ? stampOf(live.pending[0].tx) : undefined}
             />
             <Stat label={t`Transactions`} value={formatInt(a.txCount)} />
-            <Stat label={t`Total received`} value={<Amount value={a.totalReceived} kind="duffs" />} />
+            <Stat
+              label={t`Total received`}
+              value={<Amount value={a.totalReceived} kind="duffs" />}
+            />
             <Stat label={t`Total sent`} value={<Amount value={a.totalSent} kind="duffs" />} />
             <Stat
               label={t`First and last seen`}
@@ -220,7 +214,15 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           columns={columns}
           rows={rows}
           getRowId={(r) => r.txHash}
-          state={txs.isPending ? 'loading' : txs.isError && rows.length === 0 ? 'error' : rows.length === 0 ? 'empty' : 'ready'}
+          state={
+            txs.isPending
+              ? 'loading'
+              : txs.isError && rows.length === 0
+                ? 'error'
+                : rows.length === 0
+                  ? 'empty'
+                  : 'ready'
+          }
           error={txs.error}
           onRetry={() => void txs.refetch()}
           empty={
@@ -244,7 +246,13 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   )
 }
 
-function LiveNotice({ status, arrived }: { status: 'connecting' | 'live' | 'reconnecting'; arrived: number }) {
+function LiveNotice({
+  status,
+  arrived,
+}: {
+  status: 'connecting' | 'live' | 'reconnecting'
+  arrived: number
+}) {
   const { t } = useLingui()
   return (
     <p role="status" data-live={status} className="flex items-center gap-2 text-sm">
@@ -256,9 +264,11 @@ function LiveNotice({ status, arrived }: { status: 'connecting' | 'live' | 'reco
           : t`Live feed interrupted, reconnecting…`}
       {arrived > 0 ? (
         <strong data-arrived>
-          <Trans>
-            {arrived} new {arrived === 1 ? 'transaction' : 'transactions'} since you opened this page
-          </Trans>
+          <Plural
+            value={arrived}
+            one="# new transaction since you opened this page"
+            other="# new transactions since you opened this page"
+          />
         </strong>
       ) : null}
     </p>
@@ -321,7 +331,15 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
         columns={columns}
         rows={rows}
         getRowId={(r) => `${r.txHash}:${r.vout}`}
-        state={query.isPending ? 'loading' : query.isError ? 'error' : rows.length === 0 ? 'empty' : 'ready'}
+        state={
+          query.isPending
+            ? 'loading'
+            : query.isError
+              ? 'error'
+              : rows.length === 0
+                ? 'empty'
+                : 'ready'
+        }
         error={query.error}
         onRetry={() => void query.refetch()}
         empty={<Empty kind="none-yet" title={t`No unspent outputs.`} />}

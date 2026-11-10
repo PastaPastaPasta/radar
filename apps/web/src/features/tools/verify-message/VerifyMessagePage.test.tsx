@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { base58CheckEncode } from '@/lib/base58'
-import { renderAt } from '@/features/core/hy-shared/test-utils'
+import { renderAt } from '../test-utils'
 import vectors from './vectors.json'
 import { verifySignedMessage } from './verify'
 
@@ -14,7 +14,9 @@ const signature = (() => {
       Buffer.from(v.r, 'hex'),
       Buffer.from(v.s, 'hex'),
     ]).toString('base64')
-    if (verifySignedMessage({ address: v.mainnet, message: v.msg, signature: sig }).kind === 'valid') {
+    if (
+      verifySignedMessage({ address: v.mainnet, message: v.msg, signature: sig }).kind === 'valid'
+    ) {
       return sig
     }
   }

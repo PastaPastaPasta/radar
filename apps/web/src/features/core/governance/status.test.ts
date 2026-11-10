@@ -21,7 +21,9 @@ const proposal = (over: Partial<HyProposal>): HyProposal => ({
 
 describe('proposal status', () => {
   it('reads funded, passing, failing, ended and invalid from the flags', () => {
-    expect(proposalStatus(proposal({ funded: true, meetsFundingThreshold: true }), NOW)).toBe('funded')
+    expect(proposalStatus(proposal({ funded: true, meetsFundingThreshold: true }), NOW)).toBe(
+      'funded',
+    )
     expect(proposalStatus(proposal({ meetsFundingThreshold: true }), NOW)).toBe('passing')
     expect(proposalStatus(proposal({}), NOW)).toBe('failing')
     expect(proposalStatus(proposal({ endTime: NOW - 1, funded: true }), NOW)).toBe('ended')
@@ -51,6 +53,8 @@ describe('proposal status', () => {
 
   it('builds the Governance link from the hash', () => {
     expect(govProposalUrl('ab12')).toBe('https://gov.dashhq.org/p/h/ab12')
-    expect(govProposalUrl('ab12', 'testnet')).toBe('https://gov.dashhq.org/p/h/ab12?network=testnet')
+    expect(govProposalUrl('ab12', 'testnet')).toBe(
+      'https://gov.dashhq.org/p/h/ab12?network=testnet',
+    )
   })
 })

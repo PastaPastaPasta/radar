@@ -12,7 +12,14 @@ export interface PageFrameProps {
   children: ReactNode
 }
 
-export function PageFrame({ path, title, eyebrow = 'Core', lede, actions, children }: PageFrameProps) {
+export function PageFrame({
+  path,
+  title,
+  eyebrow = 'Core',
+  lede,
+  actions,
+  children,
+}: PageFrameProps) {
   const net = useNetwork()
   useDocumentTitle(title)
   return (

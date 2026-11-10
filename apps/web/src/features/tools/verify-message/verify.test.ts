@@ -101,11 +101,16 @@ describe('verifySignedMessage', () => {
 
   it.each([
     ['not an address', 'hello', 'address'],
-    ['a corrupted checksum', `${vectors[0]!.mainnet.slice(0, -1)}${vectors[0]!.mainnet.endsWith('a') ? 'b' : 'a'}`, 'address'],
+    [
+      'a corrupted checksum',
+      `${vectors[0]!.mainnet.slice(0, -1)}${vectors[0]!.mainnet.endsWith('a') ? 'b' : 'a'}`,
+      'address',
+    ],
   ])('reports %s as a problem with the address @IN-08', (_name, address, problem) => {
-    expect(
-      verifySignedMessage({ address, message: v.msg, signature: signature(v, 0) }),
-    ).toEqual({ kind: 'error', problem })
+    expect(verifySignedMessage({ address, message: v.msg, signature: signature(v, 0) })).toEqual({
+      kind: 'error',
+      problem,
+    })
   })
 
   it('says a script address cannot sign a message @IN-08', () => {
@@ -119,8 +124,14 @@ describe('verifySignedMessage', () => {
   it.each([
     ['text that is not base64', 'not a signature'],
     ['a signature that is too short', 'AAAA'],
-    ['a header byte out of range', Buffer.concat([Buffer.from([99]), Buffer.alloc(64, 1)]).toString('base64')],
-    ['an all-zero r and s', Buffer.concat([Buffer.from([31]), Buffer.alloc(64)]).toString('base64')],
+    [
+      'a header byte out of range',
+      Buffer.concat([Buffer.from([99]), Buffer.alloc(64, 1)]).toString('base64'),
+    ],
+    [
+      'an all-zero r and s',
+      Buffer.concat([Buffer.from([31]), Buffer.alloc(64)]).toString('base64'),
+    ],
   ])('reports %s as a problem with the signature @IN-08', (_name, sig) => {
     expect(verifySignedMessage({ address: v.mainnet, message: v.msg, signature: sig })).toEqual({
       kind: 'error',

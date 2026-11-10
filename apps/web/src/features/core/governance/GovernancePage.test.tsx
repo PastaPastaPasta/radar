@@ -18,7 +18,9 @@ describe('Governance page', () => {
     const budget = document.querySelector('[data-budget]')
     expect(budget).toHaveTextContent('Funded')
     expect(budget).toHaveTextContent('Not passing')
-    expect(await screen.findByRole('table', { name: /Requested payments of open proposals/ })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('table', { name: /Requested payments of open proposals/ }),
+    ).toBeInTheDocument()
   })
 
   it('expands a proposal to its details, with a link out to Governance @HY-13 @X-11', async () => {
@@ -28,7 +30,7 @@ describe('Governance page', () => {
     expect(row).toHaveAttribute('aria-expanded', 'false')
     await user.click(row)
     expect(row).toHaveAttribute('aria-expanded', 'true')
-    const details = document.querySelector('[data-proposal-details]') as HTMLElement
+    const details = document.querySelector<HTMLElement>('[data-proposal-details]')!
     expect(within(details).getByText('Paid to')).toBeInTheDocument()
     expect(within(details).getByText('Voting window')).toBeInTheDocument()
     const vote = within(details).getByRole('link', { name: /Vote in Governance/ })
@@ -57,13 +59,17 @@ describe('Proposal page', () => {
   })
 
   it('links the testnet proposal to the testnet Governance @HY-19', async () => {
-    renderAt('/governance/01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd?network=testnet')
+    renderAt(
+      '/governance/01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd?network=testnet',
+    )
     const link = await screen.findByRole('link', { name: /Vote in Governance/ })
     expect(link).toHaveAttribute('href', expect.stringContaining('network=testnet'))
   })
 
   it('says when no proposal has the hash @HY-13', async () => {
     renderAt(`/governance/${'0'.repeat(64)}`)
-    expect(await screen.findByText('No proposal with this hash on this network.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('No proposal with this hash on this network.'),
+    ).toBeInTheDocument()
   })
 })

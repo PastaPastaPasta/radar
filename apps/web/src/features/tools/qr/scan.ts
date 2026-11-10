@@ -1,6 +1,7 @@
+import type * as ZXingReader from 'zxing-wasm/reader'
 import readerWasm from 'zxing-wasm/reader/zxing_reader.wasm?url'
 
-type Reader = typeof import('zxing-wasm/reader')
+type Reader = typeof ZXingReader
 
 let loaded: Promise<Reader> | undefined
 

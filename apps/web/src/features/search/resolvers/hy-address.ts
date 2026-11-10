@@ -1,5 +1,5 @@
 import { stampOf } from '@/data/envelope'
-import { hyphen } from '@/data/hyphen/client'
+import { hyLookups } from '@/data/hyphen/lookups'
 import { formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { isDevnet } from '@/lib/network'
@@ -15,9 +15,11 @@ export const hyAddress: Resolver = {
   cost: 'index',
   async resolve(c, { net, signal }) {
     if (c.warning || isDevnet(net)) return []
-    const found = await hyphen.address(net, c.normalized, signal)
+    const found = await hyLookups.address(net, c.normalized, signal)
     const a = found.data
-    const balance = a ? formatAmountText(a.balance, 'duffs', { testnet: net !== 'mainnet' }) : undefined
+    const balance = a
+      ? formatAmountText(a.balance, 'duffs', { testnet: net !== 'mainnet' })
+      : undefined
     return [
       {
         kind: 'address',

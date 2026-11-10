@@ -1,12 +1,12 @@
 import { stampOf, type SourceStamp } from '@/data/envelope'
-import { hyphen } from '@/data/hyphen/client'
+import { hyLookups } from '@/data/hyphen/lookups'
 import { isDevnet } from '@/lib/network'
 import type { Resolver, SearchHit } from '../types'
 
 const MIN_TEXT = 4
 const MAX_NAMED_PROPOSALS = 5
 
-type Found = NonNullable<Awaited<ReturnType<typeof hyphen.search>>['data']>['value'][number]
+type Found = NonNullable<Awaited<ReturnType<typeof hyLookups.search>>['data']>['value'][number]
 
 function str(v: unknown): string | undefined {
   return typeof v === 'string' && v !== '' ? v : undefined
@@ -99,7 +99,7 @@ export const hySearch: Resolver = {
     if (c.classes[0] === 'int') return []
     const q = c.normalized
     if (q.length < MIN_TEXT && !c.classes.includes('hex64')) return []
-    const found = await hyphen.search(net, q, signal)
+    const found = await hyLookups.search(net, q, signal)
     if (!found.data) return []
     const stamp = stampOf(found)
     const exact = c.classes.includes('hex64')
@@ -111,7 +111,7 @@ export const hySearch: Resolver = {
     await Promise.all(
       named.map(async (h) => {
         try {
-          const p = await hyphen.proposal(net, h.id, signal)
+          const p = await hyLookups.proposal(net, h.id, signal)
           if (p.data) h.title = p.data.name
         } catch {
           // the hash is still a usable label

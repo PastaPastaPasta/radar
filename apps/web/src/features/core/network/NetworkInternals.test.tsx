@@ -21,7 +21,9 @@ describe('Network internals', () => {
     await waitFor(() =>
       expect(document.querySelector('[data-internals-versions]')).toHaveTextContent('23.1.8'),
     )
-    const peers = await screen.findByRole('table', { name: /Peers of the node Hyphen indexes from/ })
+    const peers = await screen.findByRole('table', {
+      name: /Peers of the node Hyphen indexes from/,
+    })
     await waitFor(() => expect(within(peers).getAllByRole('row')).toHaveLength(11))
   })
 

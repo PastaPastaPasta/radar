@@ -2,15 +2,18 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { base58CheckEncode } from '@/lib/base58'
-import { renderAt } from '@/features/core/hy-shared/test-utils'
+import { renderAt } from '../test-utils'
 
-const scan = vi.hoisted(() => ({ read: vi.fn<(input: Blob | ImageData) => Promise<string | undefined>>() }))
+const scan = vi.hoisted(() => ({
+  read: vi.fn<(input: Blob | ImageData) => Promise<string | undefined>>(),
+}))
 vi.mock('./scan', () => ({ readQr: scan.read }))
 
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const WIF = base58CheckEncode(0xcc, Uint8Array.from([...new Uint8Array(32).fill(9), 1]))
 
-const picture = () => new File([new Uint8Array([137, 80, 78, 71])], 'code.png', { type: 'image/png' })
+const picture = () =>
+  new File([new Uint8Array([137, 80, 78, 71])], 'code.png', { type: 'image/png' })
 
 afterEach(() => {
   scan.read.mockReset()
@@ -31,7 +34,9 @@ describe('QR page', () => {
     renderAt('/tools/qr')
     await user.upload(await screen.findByLabelText('Choose a picture with a QR code'), picture())
     expect(await screen.findByRole('heading', { level: 1, name: 'Search' })).toBeInTheDocument()
-    await waitFor(() => expect(document.querySelector('input[type="search"], input')).not.toBeNull())
+    await waitFor(() =>
+      expect(document.querySelector('input[type="search"], input')).not.toBeNull(),
+    )
     expect(scan.read).toHaveBeenCalledTimes(1)
   })
 
@@ -60,7 +65,9 @@ describe('QR page', () => {
     const user = userEvent.setup()
     renderAt('/tools/qr')
     await user.upload(await screen.findByLabelText('Choose a picture with a QR code'), picture())
-    expect(await screen.findByText('That QR code isn’t something Radar can look up.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('That QR code isn’t something Radar can look up.'),
+    ).toBeInTheDocument()
   })
 
   it('points to the picture chooser when the camera is refused @IN-11', async () => {

@@ -102,10 +102,7 @@ function MempoolContent() {
             }
             meter={usage !== undefined ? { value: usage, max: 1 } : undefined}
           />
-          <Stat
-            label={t`Updated`}
-            value={m ? <Time ms={m.updatedAt} live /> : '—'}
-          />
+          <Stat label={t`Updated`} value={m ? <Time ms={m.updatedAt} live /> : '—'} />
         </div>
       </Card>
       <Card

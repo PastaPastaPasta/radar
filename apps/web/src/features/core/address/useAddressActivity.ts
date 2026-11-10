@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { hyphen } from '@/data/hyphen/client'
+import { openAddressEvents } from '@/data/hyphen/live'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { NetworkId } from '@/lib/network'
 import { addressKeys } from './queries'
@@ -18,6 +18,13 @@ export interface AddressActivity {
 
 const FRESH = { staleTime: 0 } as const
 
+type Scoped = AddressActivity & { scope: string }
+
+const fresh = (scope: string): Scoped => ({ scope, status: 'connecting', pending: [], arrived: 0 })
+
+/** State from an earlier address or network never shows on the current one. */
+const current = (s: Scoped, scope: string): Scoped => (s.scope === scope ? s : fresh(scope))
+
 /** Opens Hyphen's event stream while the address page is on screen (§5.5). */
 export function useAddressActivity(
   net: NetworkId,
@@ -25,30 +32,29 @@ export function useAddressActivity(
   enabled: boolean,
 ): AddressActivity {
   const queryClient = useQueryClient()
-  const [state, setState] = useState<AddressActivity>({
-    status: 'connecting',
-    pending: [],
-    arrived: 0,
-  })
+  const scope = `${net}:${address}`
+  const [state, setState] = useState<Scoped>(() => fresh(scope))
   const pendingRef = useRef<PendingTx[]>([])
 
   useEffect(() => {
     if (!enabled) return
     const controller = new AbortController()
     pendingRef.current = []
-    setState({ status: 'connecting', pending: [], arrived: 0 })
     void watchAddress({
       address,
       signal: controller.signal,
-      open: (signal) => hyphen.stream(net, signal),
+      open: (signal) => openAddressEvents(net, signal),
       fetchTx: (txid) => queryClient.fetchQuery({ ...hyQueries.tx(net, txid), ...FRESH }),
       onStatus: (status) => {
-        setState((s) => ({ ...s, status }))
+        setState((s) => ({ ...current(s, scope), status }))
       },
       onPending: (tx) => {
         if (pendingRef.current.some((p) => p.txid === tx.txid)) return
         pendingRef.current = [tx, ...pendingRef.current]
-        setState((s) => ({ ...s, pending: pendingRef.current, arrived: s.arrived + 1 }))
+        setState((s) => {
+          const c = current(s, scope)
+          return { ...c, pending: pendingRef.current, arrived: c.arrived + 1 }
+        })
       },
       onBlock: () => {
         const keys = addressKeys(net, address)
@@ -61,7 +67,7 @@ export function useAddressActivity(
             .then((fresh) => {
               if (controller.signal.aborted || fresh.data?.blockHeight == null) return
               pendingRef.current = pendingRef.current.filter((q) => q.txid !== p.txid)
-              setState((s) => ({ ...s, pending: pendingRef.current }))
+              setState((s) => ({ ...current(s, scope), pending: pendingRef.current }))
             })
             .catch(() => undefined)
         }
@@ -70,7 +76,7 @@ export function useAddressActivity(
     return () => {
       controller.abort()
     }
-  }, [net, address, enabled, queryClient])
+  }, [net, address, enabled, queryClient, scope])
 
-  return state
+  return current(state, scope)
 }

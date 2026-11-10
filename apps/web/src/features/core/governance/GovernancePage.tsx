@@ -7,7 +7,18 @@ import { stampOf } from '@/data/envelope'
 import type { HyProposal } from '@/data/hyphen/schemas'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, Chart, Empty, ErrorState, KeyValue, Skeleton, Stat, Time, useNow } from '@/ui'
+import {
+  Amount,
+  Card,
+  Chart,
+  Empty,
+  ErrorState,
+  KeyValue,
+  Skeleton,
+  Stat,
+  Time,
+  useNow,
+} from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { governanceQueries } from './queries'
@@ -30,7 +41,13 @@ export function GovernancePage() {
   )
 }
 
-const ORDER: Record<ProposalStatus, number> = { funded: 0, passing: 1, failing: 2, ended: 3, invalid: 4 }
+const ORDER: Record<ProposalStatus, number> = {
+  funded: 0,
+  passing: 1,
+  failing: 2,
+  ended: 3,
+  invalid: 4,
+}
 
 function GovernanceContent() {
   const { t } = useLingui()
@@ -41,7 +58,8 @@ function GovernanceContent() {
     () =>
       [...(query.data?.data.items ?? [])].sort(
         (a, b) =>
-          ORDER[proposalStatus(a, now)] - ORDER[proposalStatus(b, now)] || netVotes(b) - netVotes(a),
+          ORDER[proposalStatus(a, now)] - ORDER[proposalStatus(b, now)] ||
+          netVotes(b) - netVotes(a),
       ),
     [query.data, now],
   )
@@ -90,7 +108,11 @@ function GovernanceContent() {
               table={{
                 columns: [t`Status`, t`Proposals`, t`Requested`],
                 rows: (['funded', 'passing', 'failing'] as const).map((s) => [
-                  s === 'funded' ? t`Funded` : s === 'passing' ? t`Passing, not yet funded` : t`Not passing`,
+                  s === 'funded'
+                    ? t`Funded`
+                    : s === 'passing'
+                      ? t`Passing, not yet funded`
+                      : t`Not passing`,
                   split.count[s],
                   `${formatInt(split[s] / 100_000_000n)} DASH`,
                 ]),
@@ -120,7 +142,11 @@ function GovernanceContent() {
 
       <Card
         title={t`Proposals`}
-        subtitle={query.data ? t`${formatInt(query.data.data.total ?? proposals.length)} proposals` : undefined}
+        subtitle={
+          query.data
+            ? t`${formatInt(query.data.data.total ?? proposals.length)} proposals`
+            : undefined
+        }
         layer="network"
         id="proposals"
         padding="flush"
@@ -221,8 +247,18 @@ function ProposalDetails({ p }: { p: HyProposal }) {
         columns={2}
         items={[
           { label: t`Paid to`, value: <Entity kind="address" id={p.paymentAddress} /> },
-          { label: t`Amount per cycle`, value: <Amount value={p.paymentAmount} kind="duffs" fiat /> },
-          { label: t`Voting window`, value: <><Time ms={p.startTime} mode="absolute" /> – <Time ms={p.endTime} mode="absolute" /></> },
+          {
+            label: t`Amount per cycle`,
+            value: <Amount value={p.paymentAmount} kind="duffs" fiat />,
+          },
+          {
+            label: t`Voting window`,
+            value: (
+              <>
+                <Time ms={p.startTime} mode="absolute" /> – <Time ms={p.endTime} mode="absolute" />
+              </>
+            ),
+          },
           {
             label: t`Created`,
             value: p.creationTime == null ? '—' : <Time ms={p.creationTime} mode="absolute" />,
@@ -232,10 +268,7 @@ function ProposalDetails({ p }: { p: HyProposal }) {
             : []),
           {
             label: t`Funding threshold`,
-            value:
-              p.fundingThreshold == null
-                ? '—'
-                : t`${formatInt(p.fundingThreshold)} net votes`,
+            value: p.fundingThreshold == null ? '—' : t`${formatInt(p.fundingThreshold)} net votes`,
           },
         ]}
       />
@@ -248,4 +281,3 @@ function ProposalDetails({ p }: { p: HyProposal }) {
     </div>
   )
 }
-

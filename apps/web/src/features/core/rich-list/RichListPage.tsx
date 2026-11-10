@@ -16,11 +16,7 @@ import { richListQueries } from './queries'
 export function RichListPage() {
   const { t } = useLingui()
   return (
-    <PageFrame
-      path="/rich-list"
-      title={t`Rich list`}
-      lede={t`The largest Core balances, ranked.`}
-    >
+    <PageFrame path="/rich-list" title={t`Rich list`} lede={t`The largest Core balances, ranked.`}>
       <HyphenGate>
         <RichListContent />
       </HyphenGate>
@@ -121,11 +117,25 @@ function RichListContent() {
             />
             <Stat
               label={t`Held by the top 10`}
-              value={top.data ? formatPercent(bands.slice(0, 3).reduce((s, b) => s + b.share, 0), 1) : '—'}
+              value={
+                top.data
+                  ? formatPercent(
+                      bands.slice(0, 3).reduce((s, b) => s + b.share, 0),
+                      1,
+                    )
+                  : '—'
+              }
             />
             <Stat
               label={t`Held by the top 100`}
-              value={top.data ? formatPercent(bands.reduce((s, b) => s + b.share, 0), 1) : '—'}
+              value={
+                top.data
+                  ? formatPercent(
+                      bands.reduce((s, b) => s + b.share, 0),
+                      1,
+                    )
+                  : '—'
+              }
             />
           </div>
           <Chart
@@ -142,7 +152,9 @@ function RichListContent() {
       </Card>
       <Card
         title={t`Largest balances`}
-        subtitle={first?.total === undefined ? undefined : t`${formatInt(first.total)} addresses ranked`}
+        subtitle={
+          first?.total === undefined ? undefined : t`${formatInt(first.total)} addresses ranked`
+        }
         layer="core"
         padding="flush"
         source={list.data?.pages[0] ? stampOf(list.data.pages[0]) : undefined}

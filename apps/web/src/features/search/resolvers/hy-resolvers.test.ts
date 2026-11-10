@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { hyphen } from '@/data/hyphen/client'
+import { hyLookups } from '@/data/hyphen/lookups'
 import { classify } from '../classify'
 import { planResolvers } from '../useSearch'
 import { hyAddress } from './hy-address'
@@ -49,23 +49,29 @@ describe('Hyphen resolvers never receive a secret @HY-14', () => {
     for (const r of planResolvers(c, 'mainnet', 'palette')) expect(r.cost).toBe('local')
   })
 
-  it.each(secrets)('and answers nothing, without a request, if called with %s anyway', async (_name, input) => {
-    const search = vi.spyOn(hyphen, 'search')
-    const address = vi.spyOn(hyphen, 'address')
-    const proposal = vi.spyOn(hyphen, 'proposal')
-    const c = classify(input, 'mainnet')
-    const forced = { ...c, classes: ['hex64', 'text', 'dpns', 'core-address'] as typeof c.classes }
-    expect(await hySearch.resolve(forced, ctx())).toEqual([])
-    expect(await hyAddress.resolve(forced, ctx())).toEqual([])
-    expect(search).not.toHaveBeenCalled()
-    expect(address).not.toHaveBeenCalled()
-    expect(proposal).not.toHaveBeenCalled()
-  })
+  it.each(secrets)(
+    'and answers nothing, without a request, if called with %s anyway',
+    async (_name, input) => {
+      const search = vi.spyOn(hyLookups, 'search')
+      const address = vi.spyOn(hyLookups, 'address')
+      const proposal = vi.spyOn(hyLookups, 'proposal')
+      const c = classify(input, 'mainnet')
+      const forced = {
+        ...c,
+        classes: ['hex64', 'text', 'dpns', 'core-address'] as typeof c.classes,
+      }
+      expect(await hySearch.resolve(forced, ctx())).toEqual([])
+      expect(await hyAddress.resolve(forced, ctx())).toEqual([])
+      expect(search).not.toHaveBeenCalled()
+      expect(address).not.toHaveBeenCalled()
+      expect(proposal).not.toHaveBeenCalled()
+    },
+  )
 
   it('plans both for an ordinary hash and address', () => {
-    expect(planResolvers(classify(TXID, 'mainnet'), 'mainnet', 'palette').map((r) => r.id)).toContain(
-      'hy-search',
-    )
+    expect(
+      planResolvers(classify(TXID, 'mainnet'), 'mainnet', 'palette').map((r) => r.id),
+    ).toContain('hy-search')
     expect(
       planResolvers(classify(ADDRESS, 'mainnet'), 'mainnet', 'palette').map((r) => r.id),
     ).toContain('hy-address')
@@ -88,13 +94,13 @@ describe('hy-search', () => {
   })
 
   it('does not search for text shorter than Hyphen accepts @HY-14', async () => {
-    const search = vi.spyOn(hyphen, 'search')
+    const search = vi.spyOn(hyLookups, 'search')
     expect(await hySearch.resolve(classify('abc', 'mainnet'), ctx())).toEqual([])
     expect(search).not.toHaveBeenCalled()
   })
 
   it('does not search a devnet @HY-19', async () => {
-    const search = vi.spyOn(hyphen, 'search')
+    const search = vi.spyOn(hyLookups, 'search')
     const c = classify(TXID, 'mainnet')
     expect(await hySearch.resolve(c, { ...ctx(), net: 'devnet-ruby' })).toEqual([])
     expect(search).not.toHaveBeenCalled()
@@ -103,7 +109,12 @@ describe('hy-search', () => {
   it('names a proposal found by its text @HY-14', async () => {
     const hits = await hySearch.resolve(classify('DashDaoGrowthEngine', 'mainnet'), ctx())
     expect(hits).toHaveLength(1)
-    expect(hits[0]).toMatchObject({ kind: 'proposal', id: PROPOSAL, title: 'DashDaoGrowthEngine', rank: 50 })
+    expect(hits[0]).toMatchObject({
+      kind: 'proposal',
+      id: PROPOSAL,
+      title: 'DashDaoGrowthEngine',
+      rank: 50,
+    })
     expect(hits[0]?.href).toEqual({ to: '/governance/$hash', params: { hash: PROPOSAL } })
   })
 })
@@ -113,7 +124,7 @@ describe('hy-address', () => {
     const hits = await hyAddress.resolve(classify(ADDRESS, 'mainnet'), ctx())
     expect(hits).toHaveLength(1)
     expect(hits[0]).toMatchObject({ kind: 'address', id: ADDRESS, rank: 100 })
-    expect(String(hits[0]?.subtitle)).toMatch(/992,908.*\sDASH · 189 transactions/)
+    expect(`${hits[0]?.subtitle as string}`).toMatch(/992,908.*\sDASH · 189 transactions/)
     expect(hits[0]?.stamp.source).toBe('hyphen')
   })
 

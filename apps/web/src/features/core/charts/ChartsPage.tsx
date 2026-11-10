@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -15,7 +16,14 @@ import { DEFAULT_RANGE, RANGES, type Range } from './ranges'
 
 export type ChartsTab = 'charts' | 'internals'
 
-const ORDER: MetricId[] = ['hashrate', 'transactions', 'difficulty', 'supply', 'utxos', 'credit-pool']
+const ORDER: MetricId[] = [
+  'hashrate',
+  'transactions',
+  'difficulty',
+  'supply',
+  'utxos',
+  'credit-pool',
+]
 
 export function ChartsPage({
   range = DEFAULT_RANGE,
@@ -140,7 +148,7 @@ function ChartGrid({ range }: { range: Range }) {
         />
         {chart ? (
           <p className="text-sm text-[var(--dh-ink-2,inherit)]" data-chart-span>
-            {t`Blocks ${formatInt(chart.startHeight)} to ${formatInt(chart.endHeight)}, one point per ${formatInt(chart.bucketBlocks)} ${chart.bucketBlocks === 1 ? t`block` : t`blocks`}`}
+            {t`Blocks ${formatInt(chart.startHeight)} to ${formatInt(chart.endHeight)}, one point per ${plural(chart.bucketBlocks, { one: '# block', other: '# blocks' })}`}
           </p>
         ) : null}
       </div>
@@ -175,4 +183,3 @@ function ChartGrid({ range }: { range: Range }) {
     </>
   )
 }
-

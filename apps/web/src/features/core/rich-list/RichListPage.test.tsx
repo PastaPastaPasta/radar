@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { renderAt, saveDevnet } from '../hy-shared/test-utils'
+import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
 
@@ -11,7 +11,15 @@ describe('Rich list page', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Rich list' })).toBeInTheDocument()
     const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
-    for (const head of ['Rank', 'Address', 'Balance', '% of supply', 'Received', 'Sent', 'Transactions']) {
+    for (const head of [
+      'Rank',
+      'Address',
+      'Balance',
+      '% of supply',
+      'Received',
+      'Sent',
+      'Transactions',
+    ]) {
       expect(within(table).getByRole('columnheader', { name: head })).toBeInTheDocument()
     }
     const first = within(table).getAllByRole('row')[1]
@@ -30,7 +38,9 @@ describe('Rich list page', () => {
 
   it('charts the supply held by rank band, with a table equivalent @HY-09', async () => {
     renderAt('/rich-list')
-    const table = await screen.findByRole('table', { name: /Share of the supply held by the top addresses/ })
+    const table = await screen.findByRole('table', {
+      name: /Share of the supply held by the top addresses/,
+    })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(7))
     const bands = within(table)
       .getAllByRole('row')

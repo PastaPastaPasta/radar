@@ -29,15 +29,27 @@ const sourced = (data: HyTxDetail | null): Sourced<HyTxDetail | null> => ({
   data,
 })
 
-const mempool = (id: string): HyStreamEvent => ({ type: 'mempool_tx', ts: 1, payload: { txid: id } })
+const mempool = (id: string): HyStreamEvent => ({
+  type: 'mempool_tx',
+  ts: 1,
+  payload: { txid: id },
+})
 
 async function* feed(events: HyStreamEvent[]): AsyncGenerator<HyStreamEvent> {
+  await Promise.resolve()
   for (const e of events) yield e
 }
 
 describe('effectOn', () => {
   it('adds what an address receives and subtracts what it spends', () => {
-    const tx = detail(txid(1), [[ADDRESS, 500n], [OTHER, 300n]], [[ADDRESS, 900n]])
+    const tx = detail(
+      txid(1),
+      [
+        [ADDRESS, 500n],
+        [OTHER, 300n],
+      ],
+      [[ADDRESS, 900n]],
+    )
     expect(effectOn(ADDRESS, tx)).toBe(-400n)
     expect(effectOn(OTHER, tx)).toBe(300n)
   })
@@ -93,7 +105,10 @@ describe('watchAddress', () => {
   })
 
   it('tells the page a block was chain-locked', async () => {
-    const r = run([{ type: 'chain_lock', ts: 1, payload: { blockHash: txid(1), blockHeight: 5 } }], {})
+    const r = run(
+      [{ type: 'chain_lock', ts: 1, payload: { blockHash: txid(1), blockHeight: 5 } }],
+      {},
+    )
     await r.done
     expect(r.onBlock).toHaveBeenCalledTimes(1)
   })

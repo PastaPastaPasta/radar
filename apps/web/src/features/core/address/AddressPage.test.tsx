@@ -1,9 +1,11 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { renderAt, saveDevnet } from '../hy-shared/test-utils'
+import { renderAt } from '../hy-shared/test-utils'
 
-vi.mock('./qr-image', () => ({ qrPng: () => Promise.resolve(new Blob(['png'], { type: 'image/png' })) }))
+vi.mock('./qr-image', () => ({
+  qrPng: () => Promise.resolve(new Blob(['png'], { type: 'image/png' })),
+}))
 
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const TESTNET_ADDRESS = 'yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa'
@@ -36,7 +38,9 @@ describe('Address page', () => {
 
   it('draws a QR code of the address @IN-06', async () => {
     renderAt(`/address/${ADDRESS}`)
-    const img = await screen.findByRole('img', { name: new RegExp(`QR code of the address ${ADDRESS}`) })
+    const img = await screen.findByRole('img', {
+      name: new RegExp(`QR code of the address ${ADDRESS}`),
+    })
     expect(img).toHaveAttribute('src', expect.stringMatching(/^blob:/))
   })
 

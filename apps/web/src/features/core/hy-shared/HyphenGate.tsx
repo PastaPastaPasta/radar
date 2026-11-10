@@ -37,7 +37,11 @@ export function StaleIndexNotice() {
   const health = useSourceHealth('hyphen')
   if (health.state !== 'stale' || !health.lag) return null
   return (
-    <p role="status" data-stale-index className="rounded border border-[var(--dh-warn,#b45309)] p-3">
+    <p
+      role="status"
+      data-stale-index
+      className="rounded border border-[var(--dh-warn,#b45309)] p-3"
+    >
       {t`Hyphen’s index is behind the chain: ${health.lag.detail}. Figures on this page are as of that block.`}
     </p>
   )

@@ -3,12 +3,7 @@ import type { HyMetrics } from '@/data/hyphen/schemas'
 import { formatInt, formatNumber } from '@/lib/format'
 
 export type MetricId =
-  | 'hashrate'
-  | 'transactions'
-  | 'difficulty'
-  | 'supply'
-  | 'utxos'
-  | 'credit-pool'
+  'hashrate' | 'transactions' | 'difficulty' | 'supply' | 'utxos' | 'credit-pool'
 
 export interface Metric {
   id: MetricId
@@ -49,7 +44,12 @@ export const METRICS: Record<MetricId, Metric> = {
     value: (r, prev) => (prev ? r.txCount - prev.txCount : undefined),
     format: (v) => formatInt(Math.round(v)),
   },
-  difficulty: { id: 'difficulty', shape: 'line', value: (r) => r.difficulty, format: formatCompact },
+  difficulty: {
+    id: 'difficulty',
+    shape: 'line',
+    value: (r) => r.difficulty,
+    format: formatCompact,
+  },
   supply: {
     id: 'supply',
     shape: 'line',
@@ -85,7 +85,11 @@ export function points(metric: Metric, rows: readonly HyMetrics[]): Point[] {
   return out
 }
 
-export function buildOption(metric: Metric, data: readonly Point[], seriesName: string): EChartsOption {
+export function buildOption(
+  metric: Metric,
+  data: readonly Point[],
+  seriesName: string,
+): EChartsOption {
   return {
     tooltip: {
       trigger: 'axis',
@@ -101,7 +105,14 @@ export function buildOption(metric: Metric, data: readonly Point[], seriesName: 
     yAxis: {
       type: 'value',
       scale: metric.shape === 'line',
-      axisLabel: { formatter: (v: number) => (metric.id === 'hashrate' ? formatHashrate(v) : metric.id === 'supply' || metric.id === 'credit-pool' ? formatDash(v) : formatCompact(v)) },
+      axisLabel: {
+        formatter: (v: number) =>
+          metric.id === 'hashrate'
+            ? formatHashrate(v)
+            : metric.id === 'supply' || metric.id === 'credit-pool'
+              ? formatDash(v)
+              : formatCompact(v),
+      },
     },
     series: [
       metric.shape === 'bar'

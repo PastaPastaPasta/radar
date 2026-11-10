@@ -270,7 +270,15 @@ export function NetworkInternals() {
           columns={peerColumns}
           rows={n?.peerInfo ?? []}
           getRowId={(p) => String(p.id)}
-          state={network.isPending ? 'loading' : network.isError ? 'error' : n?.peerInfo.length ? 'ready' : 'empty'}
+          state={
+            network.isPending
+              ? 'loading'
+              : network.isError
+                ? 'error'
+                : n?.peerInfo.length
+                  ? 'ready'
+                  : 'empty'
+          }
           error={network.error}
           onRetry={() => void network.refetch()}
         />

@@ -7,5 +7,8 @@ export function renderAt(url: string) {
 }
 
 export function saveDevnet(name = 'ruby'): void {
-  localStorage.setItem('radar.devnets', JSON.stringify([{ name, dapiAddresses: ['192.0.2.1:1443'] }]))
+  localStorage.setItem(
+    'radar.devnets',
+    JSON.stringify([{ name, dapiAddresses: ['192.0.2.1:1443'] }]),
+  )
 }

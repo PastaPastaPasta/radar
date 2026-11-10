@@ -28,7 +28,9 @@ export function VerifyMessagePage() {
   )
   const ready = fields.address.trim() !== '' && fields.signature.trim() !== '' && !secret
   const current =
-    outcome && outcome.for.address === fields.address && outcome.for.message === fields.message && outcome.for.signature === fields.signature
+    outcome?.for.address === fields.address &&
+    outcome.for.message === fields.message &&
+    outcome.for.signature === fields.signature
       ? outcome
       : undefined
 
@@ -162,7 +164,10 @@ function Result({ outcome }: { outcome: VerifyOutcome }) {
   if (outcome.kind === 'mismatch') {
     return (
       <Card layer="core">
-        <p className="flex flex-wrap items-center gap-2 text-lg font-semibold" data-result="invalid">
+        <p
+          className="flex flex-wrap items-center gap-2 text-lg font-semibold"
+          data-result="invalid"
+        >
           <Badge tone="danger">{t`Invalid`}</Badge>
           {t`This address did not sign this message.`}
         </p>

@@ -5,7 +5,8 @@ import { interpretScan, MAX_SCAN_CHARS } from './interpret'
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const TESTNET_ADDRESS = 'yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa'
 const TXID = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
-const PHRASE = 'abandon ability able about above absent absorb abstract absurd abuse access accident'
+const PHRASE =
+  'abandon ability able about above absent absorb abstract absurd abuse access accident'
 const WIF = base58CheckEncode(0xcc, Uint8Array.from([...new Uint8Array(32).fill(9), 1]))
 const XPRV =
   'xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'
@@ -51,7 +52,9 @@ describe('interpretScan', () => {
   })
 
   it('refuses a partial phrase as well @IN-11', () => {
-    expect(interpretScan('abandon ability able about above', 'mainnet')).toEqual({ kind: 'refused' })
+    expect(interpretScan('abandon ability able about above', 'mainnet')).toEqual({
+      kind: 'refused',
+    })
   })
 
   it.each([
