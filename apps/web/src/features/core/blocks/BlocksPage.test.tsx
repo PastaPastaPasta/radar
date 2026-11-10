@@ -1,9 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import type * as ClientModule from '@/data/core/client'
 import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/data/core/client', async (original) => {
-  const actual = await original<typeof import('@/data/core/client')>()
+  const actual = await original<typeof ClientModule>()
   const { fixtureCore } = await import('@/test/core-client')
   return { ...actual, core: fixtureCore().core }
 })

@@ -1,6 +1,8 @@
 import type { Resolver } from '../types'
 import { blocksOnDate } from './date'
 import { coreAddress } from './core-address'
+import { dapiBlock } from './dapi-block'
+import { dapiTx } from './dapi-tx'
 import { heights } from './height'
 import { masternodeAddress } from './masternode-address'
 import { nameLabel } from './name'
@@ -15,4 +17,6 @@ export const resolvers: Resolver[] = [
   publicKeyHash,
   masternodeAddress,
   nameLabel,
+  dapiBlock,
+  dapiTx,
 ]
