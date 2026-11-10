@@ -32,10 +32,22 @@ export function splitBuildFiles(): string[] {
  * of 9.1 MB over the wire, and Chrome keeps its compiled code). It routes around the package's `exports` map, so it
  * depends on the 5.0.x file layout; `sdk-split.test.ts` fails when that layout changes.
  */
-export function sdkSplit(): Plugin {
+export function sdkSplit(opts: { fixtures?: boolean } = {}): Plugin {
   return {
     name: 'radar:sdk-split',
     enforce: 'pre',
+    // Fixture builds replay recorded answers, so the worker, the SDK and its 25 MiB wasm stay out of their output.
+    load(id) {
+      if (!opts.fixtures) return null
+      const file = id.split('?')[0]!
+      if (file.endsWith('/data/sdk/transport-worker.ts')) {
+        return 'export const createWorkerTransport = () => Promise.reject(new Error("[radar-fixtures] no SDK worker in fixture builds"))'
+      }
+      if (file.endsWith('/data/sdk/transport-inline.ts')) {
+        return 'export const createInlineTransport = () => Promise.reject(new Error("[radar-fixtures] no inline SDK in fixture builds"))'
+      }
+      return null
+    },
     config() {
       return {
         resolve: {

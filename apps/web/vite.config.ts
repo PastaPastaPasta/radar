@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
       dashhqAssets(),
       securityHeaders(),
       fixtureWorker(fixtures),
-      sdkSplit(),
+      sdkSplit({ fixtures }),
     ],
     resolve: {
       alias: [
