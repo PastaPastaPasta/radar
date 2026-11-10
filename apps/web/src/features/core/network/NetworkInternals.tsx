@@ -9,6 +9,7 @@ import { useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Amount, Badge, Card, DataTable, Meter, Sparkline, Stat, Time } from '@/ui'
 import { formatHashrate } from '../charts/options'
+import { cardState } from '../hy-shared/infinite-list'
 import { coreVersion, velocity, versionCounts } from './versions'
 
 const HISTORY = { blocks: 144, points: 48 } as const
@@ -70,7 +71,7 @@ export function NetworkInternals() {
         title={t`Chain state`}
         layer="core"
         source={latest.data ? stampOf(latest.data) : undefined}
-        state={latest.isPending ? 'loading' : latest.isError ? 'error' : 'ready'}
+        state={cardState(latest)}
         error={latest.error}
         onRetry={() => void latest.refetch()}
         id="chainstate"
@@ -107,7 +108,7 @@ export function NetworkInternals() {
           title={t`Mempool pressure`}
           layer="core"
           source={mempool.data ? stampOf(mempool.data) : undefined}
-          state={mempool.isPending ? 'loading' : mempool.isError ? 'error' : 'ready'}
+          state={cardState(mempool)}
           error={mempool.error}
           onRetry={() => void mempool.refetch()}
           id="mempool-pressure"
@@ -137,7 +138,7 @@ export function NetworkInternals() {
           subtitle={t`Last ${formatInt(HISTORY.blocks)} blocks`}
           layer="core"
           source={history.data ? stampOf(history.data) : undefined}
-          state={history.isPending ? 'loading' : history.isError ? 'error' : 'ready'}
+          state={cardState(history)}
           error={history.error}
           onRetry={() => void history.refetch()}
           id="velocity"
@@ -204,7 +205,7 @@ export function NetworkInternals() {
           title={t`Masternodes by status`}
           layer="network"
           source={network.data ? stampOf(network.data) : undefined}
-          state={network.isPending ? 'loading' : network.isError ? 'error' : 'ready'}
+          state={cardState(network)}
           error={network.error}
           onRetry={() => void network.refetch()}
           id="masternodes"

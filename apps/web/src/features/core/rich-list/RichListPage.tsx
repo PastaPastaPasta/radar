@@ -9,6 +9,7 @@ import { Entity, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Amount, Card, Chart, DataTable, Empty, Stat } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { concentration } from './concentration'
 import { richListQueries } from './queries'
@@ -30,7 +31,7 @@ function RichListContent() {
   const list = useInfiniteQuery(richListQueries.rows(net))
   const top = useQuery(richListQueries.top(net))
 
-  const rows = list.data?.pages.flatMap((p) => p.data.items) ?? []
+  const table = infiniteTableProps(list)
   const first = list.data?.pages[0]?.data
   const bands = useMemo(() => concentration(top.data?.data.items ?? []), [top.data])
 
@@ -157,31 +158,14 @@ function RichListContent() {
         }
         layer="core"
         padding="flush"
-        source={list.data?.pages[0] ? stampOf(list.data.pages[0]) : undefined}
+        source={firstPageStamp(list)}
       >
         <DataTable
           caption={t`Addresses ranked by balance`}
           columns={columns}
-          rows={rows}
+          {...table}
           getRowId={(r) => r.address}
-          state={
-            list.isPending
-              ? 'loading'
-              : list.isError && rows.length === 0
-                ? 'error'
-                : rows.length === 0
-                  ? 'empty'
-                  : 'ready'
-          }
-          error={list.error}
-          onRetry={() => void list.refetch()}
           empty={<Empty kind="none-yet" title={t`No balances indexed yet.`} />}
-          paging={{
-            kind: 'infinite',
-            hasNext: list.hasNextPage,
-            fetchNext: () => void list.fetchNextPage(),
-            fetching: list.isFetchingNextPage,
-          }}
           rowLink={(r) => ({ to: '/address/$address', params: { address: r.address } })}
         />
       </Card>

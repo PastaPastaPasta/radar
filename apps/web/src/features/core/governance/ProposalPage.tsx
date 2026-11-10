@@ -2,7 +2,6 @@ import { useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { stampOf } from '@/data/envelope'
 import type { HyProposalVote } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
@@ -21,6 +20,7 @@ import {
   useNow,
 } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { ProposalLinks } from './ProposalLinks'
 import { governanceQueries } from './queries'
@@ -144,7 +144,7 @@ function VoteHistory({ hash }: { hash: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const votes = useInfiniteQuery(governanceQueries.votes(net, hash))
-  const rows = votes.data?.pages.flatMap((p) => p.data.items) ?? []
+  const table = infiniteTableProps(votes)
 
   const columns = useMemo<ColumnDef<HyProposalVote>[]>(
     () => [
@@ -189,31 +189,14 @@ function VoteHistory({ hash }: { hash: string }) {
       layer="network"
       id="vote-history"
       padding="flush"
-      source={votes.data?.pages[0] ? stampOf(votes.data.pages[0]) : undefined}
+      source={firstPageStamp(votes)}
     >
       <DataTable
         caption={t`Masternode votes on this proposal, newest first`}
         columns={columns}
-        rows={rows}
+        {...table}
         getRowId={(r) => `${r.proTxHash}:${r.voteTime}`}
-        state={
-          votes.isPending
-            ? 'loading'
-            : votes.isError && rows.length === 0
-              ? 'error'
-              : rows.length === 0
-                ? 'empty'
-                : 'ready'
-        }
-        error={votes.error}
-        onRetry={() => void votes.refetch()}
         empty={<Empty kind="none-yet" title={t`No votes recorded for this proposal.`} />}
-        paging={{
-          kind: 'infinite',
-          hasNext: votes.hasNextPage,
-          fetchNext: () => void votes.fetchNextPage(),
-          fetching: votes.isFetchingNextPage,
-        }}
       />
     </Card>
   )

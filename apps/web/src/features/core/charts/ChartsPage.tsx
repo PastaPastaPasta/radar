@@ -9,6 +9,7 @@ import { formatInt } from '@/lib/format'
 import { Amount, Card, Chart, Empty, SegFilter, Stat, Tabs } from '@/ui'
 import { NetworkInternals } from '../network/NetworkInternals'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { cardState } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { chartQueries } from './queries'
 import { buildOption, formatHashrate, METRICS, points, type MetricId } from './options'
@@ -104,7 +105,7 @@ function ChartGrid({ range }: { range: Range }) {
         title={t`Now`}
         layer="core"
         source={latest.data ? stampOf(latest.data) : undefined}
-        state={latest.isPending ? 'loading' : latest.isError ? 'error' : 'ready'}
+        state={cardState(latest)}
         error={latest.error}
         onRetry={() => void latest.refetch()}
       >

@@ -10,6 +10,7 @@ import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
 import { addressQueries } from './queries'
@@ -83,10 +84,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const stamp: SourceStamp | undefined = summary.data ? stampOf(summary.data) : undefined
   const a = summary.data?.data ?? NONE
   const unconfirmed = live.pending.reduce((sum, p) => sum + p.net, 0n)
-  const rows = txs.data?.pages.flatMap((p) => p.data.items) ?? []
-  const txStamp: SourceStamp | undefined = txs.data?.pages[0]
-    ? stampOf(txs.data.pages[0])
-    : undefined
+  const table = infiniteTableProps(txs)
 
   const columns = useMemo<ColumnDef<HyAddressTx>[]>(
     () => [
@@ -151,7 +149,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           title={t`Summary`}
           layer="core"
           source={stamp}
-          state={summary.isPending ? 'loading' : summary.isError ? 'error' : 'ready'}
+          state={cardState(summary)}
           error={summary.error}
           onRetry={() => void summary.refetch()}
         >
@@ -208,35 +206,24 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
         </Card>
       ) : null}
 
-      <Card title={t`Transactions`} layer="core" id="history" padding="flush" source={txStamp}>
+      <Card
+        title={t`Transactions`}
+        layer="core"
+        id="history"
+        padding="flush"
+        source={firstPageStamp(txs)}
+      >
         <DataTable
           caption={t`Transactions of this address, newest first`}
           columns={columns}
-          rows={rows}
+          {...table}
           getRowId={(r) => r.txHash}
-          state={
-            txs.isPending
-              ? 'loading'
-              : txs.isError && rows.length === 0
-                ? 'error'
-                : rows.length === 0
-                  ? 'empty'
-                  : 'ready'
-          }
-          error={txs.error}
-          onRetry={() => void txs.refetch()}
           empty={
             <Empty
               kind="none-yet"
               title={t`No transactions seen for this address on this network.`}
             />
           }
-          paging={{
-            kind: 'infinite',
-            hasNext: txs.hasNextPage,
-            fetchNext: () => void txs.fetchNextPage(),
-            fetching: txs.isFetchingNextPage,
-          }}
           rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txHash } })}
         />
       </Card>
