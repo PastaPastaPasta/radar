@@ -21,6 +21,7 @@ export default tseslint.config(
       '**/routeTree.gen.ts',
       'docs/**',
       'spikes/**',
+      'packages/core-decode/types/**',
     ],
   },
   js.configs.recommended,

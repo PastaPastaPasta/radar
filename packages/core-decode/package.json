@@ -1,0 +1,27 @@
+{
+  "name": "@radar/core-decode",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Decodes raw Dash Core blocks and transactions (incl. special transactions) to JSON in the browser, via rust-dashcore compiled to wasm",
+  "type": "module",
+  "main": "./dist/core_decode.js",
+  "module": "./dist/core_decode.js",
+  "types": "./dist/core_decode.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core_decode.d.ts",
+      "default": "./dist/core_decode.js"
+    },
+    "./core_decode_bg.wasm": "./dist/core_decode_bg.wasm"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build:wasm": "cargo build --release --target wasm32-unknown-unknown && wasm-bindgen --target web --out-dir dist --out-name core_decode target/wasm32-unknown-unknown/release/radar_core_decode.wasm && node scripts/postbuild.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:rust": "cargo test --release",
+    "fixtures": "node scripts/fetch-fixtures.mjs"
+  }
+}
