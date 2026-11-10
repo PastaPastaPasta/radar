@@ -33,6 +33,27 @@ describe('pe client', () => {
     expect(h.lag?.detail).toContain('unhealthy')
   })
 
+  it('status raises http 503 and counts a failure when PE answers with only an error', async () => {
+    server.use(
+      http.get(`${MAIN}/status`, () =>
+        HttpResponse.json({ error: 'backend down' }, { status: 503 }),
+      ),
+    )
+    const e = await pe.status('mainnet').catch((error: unknown) => error)
+    expect(isSourceError(e) && e.kind).toBe('http')
+    expect(isSourceError(e) && e.status).toBe(503)
+    expect(healthRegistry.get('mainnet', 'pe').state).not.toBe('ok')
+  })
+
+  it('rejects instead of throwing synchronously on a devnet', async () => {
+    let promise: Promise<unknown> | undefined
+    expect(() => {
+      promise = pe.search('devnet-ruby', 'x')
+    }).not.toThrow()
+    const e = await promise?.catch((error: unknown) => error)
+    expect(isSourceError(e) && e.kind).toBe('unavailable')
+  })
+
   it('lists come back as Page<T> with the total', async () => {
     const out = await pe.blocks('mainnet', { limit: 10, order: 'desc' })
     expect(out.data.items.length).toBeGreaterThan(0)

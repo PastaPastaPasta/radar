@@ -2,7 +2,8 @@ import { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
 import { formatBlock } from '../health-lag'
-import { fetchSourced, requireEndpoint } from '../http'
+import { SourceError } from '../errors'
+import { describeFailure, fetchSourced, requireEndpoint } from '../http'
 import { healthRegistry } from '../health'
 import type { Page } from '../page'
 import {
@@ -28,7 +29,7 @@ import {
   PeShieldHistoryPointSchema,
   PeShieldedPoolSchema,
   PeShieldedStatisticSchema,
-  PeStatusSchema,
+  PeStatusOrErrorSchema,
   PeTokenHolderSchema,
   PeTokenRatingSchema,
   PeTokenSchema,
@@ -106,7 +107,7 @@ function get<S extends z.ZodType>(
   return fetchSourced({
     source: 'pe',
     net,
-    url: `${base(net)}${path}`,
+    url: () => `${base(net)}${path}`,
     schema,
     signal,
     ...opts,
@@ -123,7 +124,7 @@ function getOrNull<S extends z.ZodType>(
   return fetchSourced({
     source: 'pe',
     net,
-    url: `${base(net)}${path}`,
+    url: () => `${base(net)}${path}`,
     schema,
     notFound: 'null',
     signal,
@@ -152,18 +153,28 @@ export const pe = {
     const out = await fetchSourced({
       source: 'pe',
       net,
-      url: `${base(net)}/status`,
-      schema: PeStatusSchema,
+      url: () => `${base(net)}/status`,
+      schema: PeStatusOrErrorSchema,
       acceptStatus: [503],
       signal,
-      height: statusHeight,
+      height: (b) => ('error' in b ? undefined : statusHeight(b)),
       asOf: (_b, res) => {
         unhealthy = res.status === 503
         return Date.now()
       },
     })
+    if ('error' in out.data) {
+      const error = new SourceError({
+        source: 'pe',
+        kind: 'http',
+        status: 503,
+        message: describeFailure('pe', 'http', 'Platform Explorer is unavailable'),
+      })
+      healthRegistry.report(net, 'pe', { ok: false, latencyMs: 0, kind: 'http' })
+      throw error
+    }
     reportPeLag(net, out.data, unhealthy)
-    return out
+    return { ...out, data: out.data }
   },
 
   epoch(net: NetworkId, index?: number, signal?: AbortSignal): Promise<Sourced<PeEpochDetail>> {
@@ -646,7 +657,7 @@ export const pe = {
       source: 'pe',
       net,
       method: 'POST',
-      url: `${base(net)}/transaction/verify`,
+      url: () => `${base(net)}/transaction/verify`,
       body: { base64 },
       schema: PeVerifySchema,
       signal,

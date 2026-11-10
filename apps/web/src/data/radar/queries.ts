@@ -56,13 +56,17 @@ export const radarQueries = {
     }),
   masternode: (net: NetworkId, protx: string) =>
     queryOptions({
-      queryKey: radarKeys(net, 'masternode', { protx }),
+      queryKey: radarKeys(net, 'masternode', { protx: protx.toLowerCase() }),
       queryFn: ({ signal }) => radar.masternode(net, protx, signal),
       ...dataClass('structural'),
     }),
   payments: (net: NetworkId, protx: string, q: { before?: number; limit?: number } = {}) =>
     queryOptions({
-      queryKey: radarKeys(net, 'payments', { protx, before: q.before, limit: q.limit }),
+      queryKey: radarKeys(net, 'payments', {
+        protx: protx.toLowerCase(),
+        before: q.before,
+        limit: q.limit,
+      }),
       queryFn: ({ signal }) => radar.payments(net, protx, q, signal),
       ...dataClass('crawl'),
     }),
@@ -74,7 +78,7 @@ export const radarQueries = {
     }),
   mnBench: (net: NetworkId, protx: string) =>
     queryOptions({
-      queryKey: radarKeys(net, 'mn-bench', { protx }),
+      queryKey: radarKeys(net, 'mn-bench', { protx: protx.toLowerCase() }),
       queryFn: ({ signal }) => radar.mnBench(net, protx, signal),
       ...dataClass('crawl'),
     }),

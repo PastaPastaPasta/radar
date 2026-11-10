@@ -1,7 +1,7 @@
 import type { NetworkId } from '@/lib/network'
 import { healthRegistry } from '../health'
 import { humanizeSpan } from '../health-lag'
-import { requireEndpoint, fetchSourced } from '../http'
+import { fetchSourced, lastModifiedMs, requireEndpoint } from '../http'
 import { RADAR_GLOBAL_BASE } from '../endpoints'
 import { mapSourced, type Sourced } from '../envelope'
 import {
@@ -102,7 +102,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/summary`,
+      url: () => `${netBase(net)}/summary`,
       schema: RadarSummarySchema,
       signal,
       asOf: (b) => b.crawl.finished,
@@ -124,7 +124,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/history?${params}`,
+      url: () => `${netBase(net)}/history?${params}`,
       schema: RadarHistorySchema,
       signal,
       asOf: (b) => b.t[b.t.length - 1] ?? Date.now(),
@@ -135,7 +135,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/geo`,
+      url: () => `${netBase(net)}/geo`,
       schema: RadarGeoSchema,
       signal,
     })
@@ -145,13 +145,12 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/masternodes`,
+      url: () => `${netBase(net)}/masternodes`,
       schema: RadarMasternodesSchema,
       signal,
       height: (b) => b.tip ?? undefined,
       asOf: (_b, res) => {
-        const lm = res.headers.get('last-modified')
-        return lm ? Date.parse(lm) : Date.now()
+        return lastModifiedMs(res) ?? Date.now()
       },
     }).then((s) => mapSourced(s, (d) => d.masternodes))
   },
@@ -164,7 +163,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/masternodes/${protxPath(protx)}`,
+      url: () => `${netBase(net)}/masternodes/${protxPath(protx)}`,
       schema: RadarMasternodeDetailSchema,
       notFound: 'null',
       signal,
@@ -185,7 +184,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/masternodes/${protxPath(protx)}/payments${qs}`,
+      url: () => `${netBase(net)}/masternodes/${protxPath(protx)}/payments${qs}`,
       schema: RadarPaymentsSchema,
       signal,
     }).then((s) => mapSourced(s, (d) => d.payments))
@@ -195,7 +194,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/bench`,
+      url: () => `${netBase(net)}/bench`,
       schema: RadarBenchSchema,
       signal,
       asOf: (b) => b.vantages.reduce((m, v) => Math.max(m, v.updated), 0) || Date.now(),
@@ -210,7 +209,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/masternodes/${protxPath(protx)}/bench`,
+      url: () => `${netBase(net)}/masternodes/${protxPath(protx)}/bench`,
       schema: RadarMnBenchSchema,
       notFound: 'null',
       signal,
@@ -221,7 +220,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/platform`,
+      url: () => `${netBase(net)}/platform`,
       schema: RadarPlatformSchema,
       signal,
       asOf: (b) => b.now.updated,
@@ -233,7 +232,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/activation`,
+      url: () => `${netBase(net)}/activation`,
       schema: RadarActivationSchema,
       signal,
       asOf: (b) => b.updated,
@@ -245,7 +244,7 @@ export const radar = {
     return fetchSourced({
       source: 'radar',
       net,
-      url: `${netBase(net)}/changes`,
+      url: () => `${netBase(net)}/changes`,
       schema: RadarChangesSchema,
       signal,
       asOf: (b) => b.changes.reduce((m, c) => Math.max(m, c.ts), 0) || Date.now(),
@@ -258,7 +257,7 @@ export const radar = {
       source: 'radar',
       net,
       method: 'POST',
-      url: `${netBase(net)}/masternodes/${protxPath(protx)}/check`,
+      url: () => `${netBase(net)}/masternodes/${protxPath(protx)}/check`,
       schema: RadarCheckSchema,
       signal,
       timeoutMs: 20_000,

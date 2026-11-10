@@ -101,6 +101,9 @@ export const PeStatusSchema = z.object({
 })
 export type PeStatus = z.output<typeof PeStatusSchema>
 
+/** PE answers a 503 with only `{ error }` when its backend is down. */
+export const PeStatusOrErrorSchema = z.union([PeStatusSchema, z.object({ error: z.unknown() })])
+
 export const PeRateSchema = z.object({
   usd: z.number(),
   btc: z.number().nullish(),

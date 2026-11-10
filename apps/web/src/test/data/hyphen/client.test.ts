@@ -133,6 +133,12 @@ describe('hyphen client', () => {
     expect(h.lag?.detail).toMatch(/^indexed to block 1,577,999 \(\d+ days? behind\)$/)
   })
 
+  it('status without a reference height leaves the probe lag in place', async () => {
+    await hyphen.status('testnet', undefined, 1_589_136)
+    await hyphen.status('testnet')
+    expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBe(1_589_136 - 1_577_999)
+  })
+
   it('status is ok when the index is within three blocks of the tip', async () => {
     const out = await hyphen.status('mainnet')
     const min = Math.min(...Object.values(out.data.indices).map((i) => i.indexedHeight))
@@ -145,6 +151,15 @@ describe('hyphen client', () => {
   it('search returns typed hits', async () => {
     const out = await hyphen.search('mainnet', ADDRESS)
     expect(out.data?.value[0]).toEqual({ type: 'address', address: ADDRESS })
+  })
+
+  it('rejects instead of throwing synchronously on a devnet', async () => {
+    let promise: Promise<unknown> | undefined
+    expect(() => {
+      promise = hyphen.search('devnet-ruby', 'x')
+    }).not.toThrow()
+    const e = await promise?.catch((error: unknown) => error)
+    expect(isSourceError(e) && e.kind).toBe('unavailable')
   })
 
   it('is unavailable on devnets', async () => {
@@ -219,9 +234,30 @@ describe('readNdjson', () => {
     expect(events.map((e) => e.type)).toEqual(['heartbeat'])
   })
 
-  it('throws invalid-response on a line that is not JSON', async () => {
-    const e = await collect(readNdjson(bytes('{oops\n'))).catch((error: unknown) => error)
-    expect(isSourceError(e) && e.kind).toBe('invalid-response')
+  it('skips a line that is not JSON and keeps reading', async () => {
+    const events = await collect(readNdjson(bytes(`{oops\n${chain(1)}\n`)))
+    expect(events).toHaveLength(1)
+  })
+
+  it('drops an unterminated tail that is cut mid-line', async () => {
+    const events = await collect(readNdjson(bytes(`${chain(1)}\n${chain(2).slice(0, 30)}`)))
+    expect(events).toHaveLength(1)
+  })
+
+  it('does not parse a buffered partial line after abort', async () => {
+    const controller = new AbortController()
+    const enc = new TextEncoder()
+    const stream = new ReadableStream<Uint8Array>({
+      start(c) {
+        c.enqueue(enc.encode(`${chain(1)}\n${chain(2).slice(0, 30)}`))
+      },
+    })
+    const seen: string[] = []
+    for await (const ev of readNdjson(stream, controller.signal)) {
+      seen.push(ev.type)
+      controller.abort()
+    }
+    expect(seen).toEqual(['chain_lock'])
   })
 
   it('ends quietly when the signal aborts and cancels the source', async () => {

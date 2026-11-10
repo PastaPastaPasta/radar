@@ -10,7 +10,8 @@ type HttpSource = Exclude<SourceId, 'sdk' | 'dapi' | 'local'>
 
 export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'null' = 'throw'> {
   source: HttpSource
-  url: string
+  /** A function defers endpoint lookup so a missing endpoint rejects the promise instead of throwing at the call. */
+  url: string | (() => string)
   schema: S
   /** Network the call is reported to in the health registry; the active network when omitted. */
   net?: NetworkId
@@ -111,6 +112,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
   type Out = N extends 'null' ? z.output<S> | null : z.output<S>
   const net = req.net ?? getActiveNetwork()
   const { source } = req
+  const url = typeof req.url === 'function' ? req.url() : req.url
   const started = performance.now()
   const timeoutMs = req.timeoutMs ?? DEFAULT_TIMEOUT_MS
 
@@ -165,7 +167,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
   try {
     let res: Response
     try {
-      res = await fetch(resolveUrl(req.url), {
+      res = await fetch(resolveUrl(url), {
         method: req.method ?? 'GET',
         headers: {
           accept: 'application/json',
@@ -213,7 +215,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
     if (!parsed.success) {
       const first = parsed.error.issues[0]
       console.error(
-        `[radar] ${source} ${req.method ?? 'GET'} ${req.url} failed schema validation at ${
+        `[radar] ${source} ${req.method ?? 'GET'} ${url} failed schema validation at ${
           first ? issuePath(first.path) : '(root)'
         }: ${first?.message ?? 'invalid'}`,
         parsed.error.issues,

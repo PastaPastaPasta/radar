@@ -74,7 +74,7 @@ function get<S extends z.ZodType>(net: NetworkId, path: string, schema: S, signa
   return fetchSourced({
     source: 'hyphen',
     net,
-    url: `${base(net)}${path}`,
+    url: () => `${base(net)}${path}`,
     schema,
     signal,
     height: (b: z.output<S>) => (b as Heighted).asOfHeight,
@@ -90,7 +90,7 @@ function getOrNull<S extends z.ZodType>(
   return fetchSourced({
     source: 'hyphen',
     net,
-    url: `${base(net)}${path}`,
+    url: () => `${base(net)}${path}`,
     schema,
     notFound: 'null',
     signal,
@@ -98,12 +98,12 @@ function getOrNull<S extends z.ZodType>(
   })
 }
 
-function reportHyphenLag(net: NetworkId, status: HyStatus, referenceHeight?: number): void {
+function reportHyphenLag(net: NetworkId, status: HyStatus, referenceHeight: number): void {
   const indexed = Object.values(status.indices)
   if (indexed.length === 0) return
   const min = indexed.reduce((m, i) => Math.min(m, i.indexedHeight), Infinity)
   const oldest = indexed.reduce((m, i) => Math.min(m, i.updatedAt), Infinity)
-  const reference = Math.max(referenceHeight ?? 0, status.blockHeight)
+  const reference = Math.max(referenceHeight, status.blockHeight)
   const behind = Math.max(0, reference - min)
   healthRegistry.setLag(net, 'hyphen', {
     blocks: behind,
@@ -125,12 +125,15 @@ export const hyphen = {
     const out = await fetchSourced({
       source: 'hyphen',
       net,
-      url: `${base(net)}/status`,
+      url: () => `${base(net)}/status`,
       schema: HyStatusSchema,
       signal,
-      height: (b) => Math.min(...Object.values(b.indices).map((i) => i.indexedHeight)),
+      height: (b) => {
+        const heights = Object.values(b.indices).map((i) => i.indexedHeight)
+        return heights.length > 0 ? Math.min(...heights) : undefined
+      },
     })
-    reportHyphenLag(net, out.data, referenceHeight)
+    if (referenceHeight !== undefined) reportHyphenLag(net, out.data, referenceHeight)
     return out
   },
 
@@ -231,7 +234,7 @@ export const hyphen = {
     return fetchSourced({
       source: 'hyphen',
       net,
-      url: `${base(net)}/metrics/latest`,
+      url: () => `${base(net)}/metrics/latest`,
       schema: HyMetricsSchema,
       signal,
       height: (b) => b.height,
