@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import {
   ENTITY_LABELS,
   PageLink,
@@ -32,7 +32,7 @@ export function SearchPage({ q }: { q?: string }) {
   const [draft, setDraft] = useState(() => (classify(query, net).warning ? '' : query))
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'page' })
   const secret = classified.warning
-  const [typed, setTyped] = useState<SecretWarning>()
+  const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net])
   const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
   const withheld = typed ?? secret ?? stripped
   useDocumentTitle(query && !secret ? `“${query}” · Search` : 'Search')
@@ -49,12 +49,7 @@ export function SearchPage({ q }: { q?: string }) {
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    const warning = classify(draft.trim(), net).warning
-    if (warning) {
-      setDraft('')
-      setTyped(warning)
-      return
-    }
+    if (typed) return
     void navigate({ to: '/search', search: { q: draft.trim() || undefined } })
   }
 
@@ -74,10 +69,7 @@ export function SearchPage({ q }: { q?: string }) {
               type="search"
               name="q"
               value={draft}
-              onChange={(e) => {
-                setDraft(e.target.value)
-                setTyped(undefined)
-              }}
+              onChange={(e) => setDraft(e.target.value)}
               placeholder="Height, hash, address, ProTx, IP, ID, name…"
               autoComplete="off"
               autoCapitalize="off"

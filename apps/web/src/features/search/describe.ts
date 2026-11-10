@@ -20,11 +20,11 @@ export function describeInput(c: Classified): string[] {
 const SECRET_NOTICES: Record<SecretWarning, { title: string; body: string }> = {
   secret: {
     title: 'That looks like a private key or recovery phrase',
-    body: 'Radar never needs one, so it wasn’t searched or sent anywhere, and it was kept out of the address bar and your history.',
+    body: 'Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history.',
   },
   'possible-secret': {
     title: 'That could be part of a recovery phrase',
-    body: 'Radar never needs one, so it wasn’t searched or sent anywhere, and it was kept out of the address bar and your history. Search for something else.',
+    body: 'Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead.',
   },
 }
 

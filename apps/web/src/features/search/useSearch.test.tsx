@@ -64,6 +64,27 @@ describe('planResolvers', () => {
     expect(planResolvers(c, 'mainnet', 'page')).toEqual([])
   })
 
+  it.each(['secret', 'possible-secret'] as const)(
+    'runs only local resolvers for a %s input',
+    (warning) => {
+      add({ id: 'fake-index', accepts: ['int'], cost: 'index', resolve: never })
+      add({ id: 'fake-dapi-int', accepts: ['int'], cost: 'dapi', resolve: never })
+      add({ id: 'fake-sdk-int', accepts: ['int'], cost: 'sdk', resolve: never })
+      const original = { ...searchEnv }
+      searchEnv.sdkState = () => 'ready'
+      const ordinary = classify('2569992', 'mainnet')
+      const flagged = { ...ordinary, warning }
+
+      const ids = planResolvers(flagged, 'mainnet', 'page').map((r) => r.id)
+      expect(ids).toContain('local-height')
+      expect(ids).not.toEqual(expect.arrayContaining(['fake-index']))
+      expect(ids).not.toContain('fake-dapi-int')
+      expect(ids).not.toContain('fake-sdk-int')
+      expect(planResolvers(ordinary, 'mainnet', 'page').map((r) => r.id)).toContain('fake-index')
+      Object.assign(searchEnv, original)
+    },
+  )
+
   it('runs SDK resolvers on the page but not in the palette until the SDK is ready', () => {
     add({ id: 'fake-sdk', accepts: ['hex64'], cost: 'sdk', resolve: never })
     const c = classify(HASH, 'mainnet')

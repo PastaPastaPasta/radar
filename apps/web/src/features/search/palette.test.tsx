@@ -100,6 +100,16 @@ describe('command palette', () => {
     ).toBeInTheDocument()
   })
 
+  it('keeps a partly typed phrase in the box and out of the address on Enter', async () => {
+    const { user, input } = await openPalette()
+
+    await user.type(input, 'abandon ability able about above{Enter}')
+
+    expect(await screen.findByText(/could be part of a recovery phrase/)).toBeInTheDocument()
+    expect(input).toHaveValue('abandon ability able about above')
+    expect(window.location.search).not.toContain('abandon')
+  })
+
   it('does not put a recovery phrase in the address bar on Enter', async () => {
     const { user, input } = await openPalette()
 
@@ -202,7 +212,9 @@ describe('/search page', () => {
     expect(
       await screen.findByText('That looks like a private key or recovery phrase'),
     ).toBeInTheDocument()
-    expect(box).toHaveValue('')
+    expect(box).toHaveValue(
+      '"abandon ability able about above absent absorb abstract absurd abuse access accident"',
+    )
     expect(visited.join()).not.toContain('abandon')
   })
 
@@ -212,12 +224,28 @@ describe('/search page', () => {
     render(<App history={history} />)
     const user = userEvent.setup()
 
-    await user.type(await screen.findByRole('searchbox'), 'abandon ability able about{Enter}')
+    const box = await screen.findByRole('searchbox')
+    await user.type(box, 'abandon ability able about above{Enter}')
 
     expect(await screen.findByText('That could be part of a recovery phrase')).toBeInTheDocument()
+    expect(box).toHaveValue('abandon ability able about above')
     expect(visited.join()).not.toContain('abandon')
     expect(document.title).not.toContain('abandon')
   })
+
+  it.each(['Gold Coin Token', 'real estate token', 'abandon ability able about'])(
+    'sends %s to the address like any other text',
+    async (text) => {
+      const history = createMemoryHistory({ initialEntries: ['/search'] })
+      render(<App history={history} />)
+      const user = userEvent.setup()
+
+      await user.type(await screen.findByRole('searchbox'), `${text}{Enter}`)
+
+      await waitFor(() => expect(decodeURIComponent(history.location.search)).toContain(text))
+      expect(screen.queryByText(/part of a recovery phrase/)).not.toBeInTheDocument()
+    },
+  )
 
   it('searches ordinary text as before', async () => {
     const history = createMemoryHistory({ initialEntries: ['/search'] })

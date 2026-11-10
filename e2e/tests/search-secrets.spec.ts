@@ -28,7 +28,7 @@ test.describe('secrets in the search page', () => {
     await page.getByRole('button', { name: 'Search' }).click()
 
     await expect(page.getByText(NOTICE)).toBeVisible()
-    await expect(box).toHaveValue('')
+    await expect(box).toHaveValue(PHRASE)
     expect(new URL(page.url()).search).toBe('')
     expect(await historyLength(page)).toBe(before)
     await expect(page).toHaveTitle(/^Search/)
@@ -45,12 +45,13 @@ test.describe('secrets in the search page', () => {
     for (const [input, notice] of [
       [`"${PHRASE}"`, NOTICE],
       [`my seed: ${PHRASE}`, NOTICE],
-      ['abandon ability able about', PARTIAL_NOTICE],
+      ['abandon ability able about above', PARTIAL_NOTICE],
+      ['"abandon", "ability", "able" about above', PARTIAL_NOTICE],
     ] as const) {
       await box.fill(input)
       await box.press('Enter')
       await expect(page.getByText(notice)).toBeVisible()
-      await expect(box).toHaveValue('')
+      await expect(box).toHaveValue(input)
       expect(new URL(page.url()).search).toBe('')
     }
 
@@ -79,5 +80,45 @@ test.describe('secrets in the search page', () => {
     await box.press('Enter')
 
     await expect(page).toHaveURL(/q=pshenmic\.dash$/)
+  })
+
+  test('names made of recovery-phrase words are ordinary searches @X-01', async ({ page }) => {
+    await page.goto('/search')
+    const box = page.getByRole('searchbox', { name: 'Search Radar' })
+
+    for (const text of ['Gold Coin Token', 'world cup ticket', 'abandon ability able about']) {
+      await box.fill(text)
+      await box.press('Enter')
+      await expect(page).toHaveURL((url) => url.searchParams.get('q') === text)
+      await expect(box).toHaveValue(text)
+      await expect(page.getByText(PARTIAL_NOTICE)).toBeHidden()
+    }
+  })
+
+  test('a hyphenated name still offers its name page @X-01', async ({ page }) => {
+    await page.goto('/search')
+    const box = page.getByRole('searchbox', { name: 'Search Radar' })
+
+    await box.fill('game-zone-arena.dash')
+    await box.press('Enter')
+
+    await expect(page).toHaveURL(/q=game-zone-arena\.dash$/)
+    await expect(page.getByRole('link', { name: /game-zone-arena\.dash/ })).toBeVisible()
+  })
+
+  test('the palette keeps a partial phrase in the box and out of the URL @X-01', async ({
+    page,
+  }) => {
+    await page.goto('/status')
+    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await page.keyboard.press('/')
+    const input = page.getByRole('dialog', { name: 'Search Radar' }).getByRole('combobox')
+
+    await input.fill('abandon ability able about above')
+    await input.press('Enter')
+
+    await expect(page.getByText(/could be part of a recovery phrase/)).toBeVisible()
+    await expect(input).toHaveValue('abandon ability able about above')
+    expect(page.url()).not.toContain('abandon')
   })
 })

@@ -108,7 +108,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
       <div className="empty:hidden">
         {secret ? (
           <p role="status" className="px-2 py-3 text-sm">
-            {secretNotice(secret).title}. Radar never needs one, so it wasn’t searched.
+            {secretNotice(secret).title}. Radar never sends it anywhere.
           </p>
         ) : null}
         {!secret && trimmed.length > 0 && description.length > 0 ? (

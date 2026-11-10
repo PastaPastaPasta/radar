@@ -244,7 +244,7 @@ const JAPANESE =
   'あいこくしん\u3000あいさつ\u3000あいだ\u3000あおぞら\u3000あかちゃん\u3000あきる\u3000あけがた\u3000あける\u3000あこがれる\u3000あさい\u3000あさひ\u3000あしあと'
 const CHINESE = '的 一 是 在 不 了 有 和 人 这 中 大'
 
-const secretRows: { name: string; input: string; warning: 'secret' | 'possible-secret' }[] = [
+const secretRows: { name: string; input: string; warning: 'secret' }[] = [
   { name: 'a plain phrase', input: PHRASE, warning: 'secret' },
   { name: 'a phrase in double quotes', input: `"${PHRASE}"`, warning: 'secret' },
   { name: 'a phrase in curly quotes', input: `“${PHRASE}”`, warning: 'secret' },
@@ -268,41 +268,28 @@ const secretRows: { name: string; input: string; warning: 'secret' | 'possible-s
     warning: 'secret',
   },
   { name: 'a phrase followed by a passphrase', input: `${PHRASE} hunter2`, warning: 'secret' },
-  { name: 'three words typed so far', input: 'abandon ability able', warning: 'possible-secret' },
-  {
-    name: 'eleven words typed so far',
-    input: WORDS.slice(0, 11).join(' '),
-    warning: 'possible-secret',
-  },
-  {
-    name: 'a partial phrase with a prefix',
-    input: 'seed: abandon ability able about',
-    warning: 'possible-secret',
-  },
-  {
-    name: 'a partial phrase in quotes',
-    input: '"abandon ability able',
-    warning: 'possible-secret',
-  },
+]
+
+const possibleRows: { name: string; input: string }[] = [
+  { name: 'five words typed so far', input: WORDS.slice(0, 5).join(' ') },
+  { name: 'eleven words typed so far', input: WORDS.slice(0, 11).join(' ') },
+  { name: 'a partial phrase with a prefix', input: 'seed: abandon ability able about above' },
+  { name: 'a partial phrase in quotes', input: '"abandon ability able about above' },
+  { name: 'quoted words with commas', input: '"abandon", "ability", "able", "about", "above"' },
+  { name: 'a partial phrase on several lines', input: WORDS.slice(0, 6).join('\n') },
+  { name: 'a partial phrase in upper case', input: WORDS.slice(0, 5).join(' ').toUpperCase() },
   {
     name: 'a phrase with one misspelt word',
     input: WORDS.map((w, i) => (i === 5 ? 'absnt' : w)).join(' '),
-    warning: 'possible-secret',
   },
-  { name: 'a Spanish phrase', input: SPANISH, warning: 'possible-secret' },
-  { name: 'a French phrase', input: FRENCH, warning: 'possible-secret' },
-  {
-    name: 'a decomposed French phrase',
-    input: FRENCH.normalize('NFD'),
-    warning: 'possible-secret',
-  },
-  {
-    name: 'a Japanese phrase with ideographic spaces',
-    input: JAPANESE,
-    warning: 'possible-secret',
-  },
-  { name: 'a Chinese phrase', input: CHINESE, warning: 'possible-secret' },
-  { name: 'a quoted Spanish phrase', input: `«${SPANISH}»`, warning: 'possible-secret' },
+  { name: 'a Spanish phrase', input: SPANISH },
+  { name: 'comma-joined Spanish words', input: SPANISH.split(' ').join(',') },
+  { name: 'comma-and-space Spanish words', input: SPANISH.split(' ').join(', ') },
+  { name: 'a French phrase', input: FRENCH },
+  { name: 'a decomposed French phrase', input: FRENCH.normalize('NFD') },
+  { name: 'a Japanese phrase with ideographic spaces', input: JAPANESE },
+  { name: 'a Chinese phrase with spaces', input: CHINESE },
+  { name: 'a quoted Spanish phrase', input: `«${SPANISH}»` },
 ]
 
 describe('classify secrets', () => {
@@ -311,6 +298,12 @@ describe('classify secrets', () => {
     expect(result.warning).toBe(warning)
     expect(result.classes).toEqual([])
     expect(result.normalized).toBe('')
+  })
+
+  it.each(possibleRows)('withholds $name as part of a phrase', ({ input }) => {
+    const result = classify(input, 'mainnet')
+    expect(result.warning).toBe('possible-secret')
+    expect(result.networkHint).toBeUndefined()
   })
 
   it.each([
@@ -328,6 +321,20 @@ describe('classify secrets', () => {
     'my contract is named dashpay',
     'masternode payments in epoch ninety',
     'abandon-ability',
+    'game-zone-arena.dash',
+    'happy-cat-dog.dash',
+    'happy-cat-dog',
+    'super-cool-dog',
+    'abandon-ability-able-about-above',
+    'abandon.ability.able.about.above',
+    'Gold Coin Token',
+    'Test Token Alpha',
+    'real estate token',
+    'world cup ticket',
+    'music artist fan club',
+    'abandon ability able about',
+    'abandon, ability, able, about',
+    'abandon ability able about-above',
     '2569992',
     '2026-10-01',
     '75.119.128.71',
@@ -338,5 +345,30 @@ describe('classify secrets', () => {
     '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy1',
   ])('does not flag %s', (input) => {
     expect(classify(input, 'mainnet').warning).toBeUndefined()
+  })
+})
+
+describe('classify possible phrases', () => {
+  it('counts only consecutive English words', () => {
+    expect(classify('abandon ability able about zzzz above', 'mainnet').warning).toBeUndefined()
+    expect(classify('abandon ability able about above', 'mainnet').warning).toBe('possible-secret')
+  })
+
+  it('never flags anything that parses as a name', () => {
+    for (const input of ['abandon-ability-able-about-above-absent', 'game-zone-arena', 'dash']) {
+      const result = classify(input, 'mainnet')
+      expect(result.classes).toContain('dpns')
+      expect(result.warning).toBeUndefined()
+    }
+  })
+
+  it('treats a hyphen-joined list of twelve letter words as one word', () => {
+    expect(classify(SPANISH.split(' ').join('-'), 'mainnet').warning).toBeUndefined()
+  })
+
+  it('keeps the classes of a partial phrase so local resolvers still run', () => {
+    const result = classify('abandon ability able about above', 'mainnet')
+    expect(result.classes).toEqual(['text'])
+    expect(classify(PHRASE, 'mainnet').classes).toEqual([])
   })
 })

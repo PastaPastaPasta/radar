@@ -48,7 +48,10 @@ function allowed(r: Resolver, net: NetworkId, mode: SearchMode): boolean {
 export function planResolvers(c: Classified, net: NetworkId, mode: SearchMode): Resolver[] {
   if (c.networkHint || c.classes.length === 0) return []
   return registry.filter(
-    (r) => r.accepts.some((k) => c.classes.includes(k)) && allowed(r, net, mode),
+    (r) =>
+      (!c.warning || r.cost === 'local') &&
+      r.accepts.some((k) => c.classes.includes(k)) &&
+      allowed(r, net, mode),
   )
 }
 

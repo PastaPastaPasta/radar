@@ -29,8 +29,9 @@ export interface Classified {
   /** Set when an address prefix names a network other than the current one. */
   networkHint?: NetworkId
   /**
-   * `secret`: the input is a private key or a recovery phrase.
-   * `possible-secret`: it might be part of one, so it is kept out of the URL, the page title and every resolver.
+   * `secret`: the input is a private key or a recovery phrase, so it has no classes.
+   * `possible-secret`: it might be part of one. Both are kept out of the URL, the page title, history
+   * and every resolver that sends anything off the device; only local resolvers still run.
    */
   warning?: SecretWarning
 }
@@ -102,7 +103,9 @@ const EXTENDED_KEY = /^(?:xprv|tprv|drkv|drkp)[1-9A-HJ-NP-Za-km-z]{80,}$/
 
 const NON_LETTERS = /[^\p{L}\p{M}]+/u
 const PHRASE_WORDS = 12
-const PARTIAL_PHRASE_WORDS = 3
+const PARTIAL_PHRASE_WORDS = 5
+const PHRASE_SEPARATORS = /[\s,;，、；"'“”‘’«»‹›「」『』()[\]{}]+/u
+const LETTERS_ONLY = /^[\p{L}\p{M}]+$/u
 
 function lettersOnly(value: string): string[] {
   return value.normalize('NFKC').toLowerCase().split(NON_LETTERS).filter(Boolean)
@@ -128,13 +131,21 @@ function looksSecret(value: string): boolean {
 }
 
 /**
- * A phrase being typed, or one in a language whose wordlist is not bundled. Only inputs made of
- * separate words qualify, so a mistyped hash or ID stays ordinary text.
+ * Words separated only by whitespace, commas or quotes: a run of 5 English recovery-phrase words,
+ * or 12 letter-only words of any language. Hyphens and dots join a token into one word, and a
+ * valid name is never a phrase.
  */
 function looksPartlySecret(value: string): boolean {
-  const tokens = lettersOnly(value)
-  if (longestEnglishRun(tokens) >= PARTIAL_PHRASE_WORDS) return true
-  return tokens.length >= PHRASE_WORDS && value.split(/\s+/).length >= PHRASE_WORDS
+  if (DPNS.test(value)) return false
+  let english = 0
+  let letters = 0
+  for (const token of value.normalize('NFKC').toLowerCase().split(PHRASE_SEPARATORS)) {
+    if (token === '') continue
+    english = isBip39EnglishWord(token) ? english + 1 : 0
+    letters = LETTERS_ONLY.test(token) ? letters + 1 : 0
+    if (english >= PARTIAL_PHRASE_WORDS || letters >= PHRASE_WORDS) return true
+  }
+  return false
 }
 
 function isBase58Id(value: string): boolean {
@@ -152,11 +163,16 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   const raw = input
   const trimmed = input.trim()
   const classes: InputClass[] = []
-  const result = (normalized: string, networkHint?: NetworkId): Classified => ({
+  const result = (
+    normalized: string,
+    networkHint?: NetworkId,
+    warning?: SecretWarning,
+  ): Classified => ({
     raw,
     normalized,
     classes,
     ...(networkHint && { networkHint }),
+    ...(warning && { warning }),
   })
 
   if (trimmed.length === 0) return result('')
@@ -204,7 +220,7 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     return result(trimmed.toLowerCase())
   }
 
-  if (looksPartlySecret(trimmed)) return withheld('possible-secret')
+  const partial = looksPartlySecret(trimmed) ? 'possible-secret' : undefined
 
   if (INT.test(trimmed)) {
     const n = Number(trimmed)
@@ -219,5 +235,5 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   if (trimmed.length >= 2 && !isNumber && !classes.includes('date')) classes.push('text')
 
   const lower = classes.includes('dpns') ? trimmed.toLowerCase() : trimmed
-  return result(lower)
+  return result(lower, undefined, partial)
 }
