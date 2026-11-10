@@ -989,8 +989,6 @@ Spikes T-009, T-010 and T-011 are already running, and they write only `docs/spi
 
 M2 onwards (network, Platform state, Platform history, tools) follows the same split: one data package if a new client is needed, then page packages by feature folder, at most four in parallel.
 
----
-
 ### 11.4 Design departures accepted (2026-11-10)
 
 The departures listed in `docs/RADAR-DESIGN.md` §15 are accepted for Radar: phone tabs, the navy plate in light mode, layer-hue tokens local to Radar, the card's source mark in the head, Proof-checked as a button that opens the proof inspector, 3 px layer-coloured tab underlines, `Stat.tone`, and warning orange (never amber) for stale ages. The contract lines above are updated to match; package A adds `tone` to the `Stat` stub.
