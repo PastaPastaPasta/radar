@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/document/EezAW562zipA7jUQ5ac8XxdVepssLFbg6QTtbWAbiUS6/revisions?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:01:44.009Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "EezAW562zipA7jUQ5ac8XxdVepssLFbg6QTtbWAbiUS6",
+        "dataContractIdentifier": null,
+        "revision": 1,
+        "txHash": "FA339F2426CB659267A260018A5C1FAE5C3BA16E7F8B02F810199CBC5402A5E1",
+        "deleted": null,
+        "data": "{\"label\":\"Aymenhs81\",\"records\":{\"identity\":\"3qx884x4ne2NmYDFVCANw5q2yABSfyLD4pETm5TavEGv\"},\"preorderSalt\":\"GEcQQB3rSCDRqSyi7vM3XtA1+zHpBnJ+ajpgIaBhEJ0=\",\"subdomainRules\":{\"allowSubdomains\":false},\"normalizedLabel\":\"aymenhs81\",\"parentDomainName\":\"dash\",\"normalizedParentDomainName\":\"dash\"}",
+        "timestamp": "2026-11-09T19:25:25.488Z",
+        "system": null,
+        "entropy": "83da910472944b0cf9113cbc01afcd70d58dd71ea64f654da3ed4ea2fc6dabba",
+        "prefundedVotingBalance": null,
+        "documentTypeName": null,
+        "transitionType": "DOCUMENT_CREATE",
+        "identityContractNonce": "2",
+        "gasUsed": 41508380,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "3qx884x4ne2NmYDFVCANw5q2yABSfyLD4pETm5TavEGv",
+          "aliases": [
+            {
+              "alias": "Aymenhs81.dash",
+              "status": "ok",
+              "timestamp": "2026-11-09T19:25:25.488Z",
+              "documentId": "EezAW562zipA7jUQ5ac8XxdVepssLFbg6QTtbWAbiUS6",
+              "contested": false
+            }
+          ]
+        }
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 1 }
+  }
+}

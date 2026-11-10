@@ -1,0 +1,406 @@
+{
+  "request": { "method": "GET", "url": "https://radar.dashhq.org/api/v1/testnet/summary" },
+  "recordedAt": "2026-11-10T15:02:15.462Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"feb1f4799d642f12e724e838b81709bc\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "crawl": {
+      "discovered": 0,
+      "finished": 1794322773,
+      "id": 1143,
+      "mn_reachable": 107,
+      "mn_total": 107,
+      "reachable": 158,
+      "started": 1794322762,
+      "tip_height": 1589139,
+      "tried": 411
+    },
+    "day_ago": {
+      "discovered": 0,
+      "finished": 1794236389,
+      "id": 1047,
+      "mn_reachable": 107,
+      "mn_total": 107,
+      "reachable": 152,
+      "started": 1794236362,
+      "tip_height": 1588520,
+      "tried": 421
+    },
+    "dists": {
+      "all": {
+        "asn": [
+          ["AS16509 Amazon.com, Inc.", 85],
+          ["AS205581 CVD Sp. z o.o. Sp.k.", 58],
+          ["AS214083 NodeHub LLC", 4],
+          ["AS212477 RoyaleHosting BV", 2],
+          ["AS24940 Hetzner Online GmbH", 2],
+          ["AS136557 Host Universal Pty Ltd", 1],
+          ["AS203273 NetCrafters OU", 1],
+          ["AS210644 AEZA GROUP LLC", 1],
+          ["AS396982 Google LLC", 1],
+          ["AS40021 Contabo Inc.", 1],
+          ["AS48988 Modern Server Solutions LLP", 1],
+          ["AS51167 Contabo GmbH", 1]
+        ],
+        "client": [["Dash Core", 158]],
+        "country": [
+          ["US", 86],
+          ["PL", 58],
+          ["DE", 5],
+          ["NL", 5],
+          ["AU", 2],
+          ["FI", 1],
+          ["KZ", 1]
+        ],
+        "network": [
+          ["ipv4", 128],
+          ["ipv6", 30]
+        ],
+        "protocol": [
+          ["70242", 154],
+          ["70240", 4]
+        ],
+        "reachable": [
+          ["yes", 158],
+          ["no", 1]
+        ],
+        "ua": [
+          ["/Dash Core:24.0.0/", 97],
+          ["/Dash Core:23.1.7/", 2],
+          ["/Dash Core:24.1.0/", 2],
+          ["/Dash Core:23.1.2/", 1],
+          ["/Dash Core:23.1.8/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-1)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-10)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-11)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-12)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-13)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-14)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-15)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-16)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-17)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-18)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-19)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-2)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-20)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-21)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-22)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-23)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-24)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-25)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-26)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-27)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-28)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-29)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-3)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-30)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-31)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-32)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-33)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-34)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-35)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-36)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-37)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-38)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-39)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-4)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-40)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-41)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-42)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-43)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-44)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-45)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-46)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-47)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-48)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-49)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-5)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-50)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-51)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-52)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-53)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-6)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-7)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-8)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-9)/", 1],
+          ["/Dash Core:24.0.0(dcg-seed-1)/", 1],
+          ["/Dash Core:24.0.0(dcg-seed-2)/", 1]
+        ],
+        "version": [
+          ["24.0.0", 152],
+          ["23.1.7", 2],
+          ["24.1.0", 2],
+          ["23.1.2", 1],
+          ["23.1.8", 1]
+        ]
+      },
+      "evo": {
+        "asn": [
+          ["AS16509 Amazon.com, Inc.", 29],
+          ["AS205581 CVD Sp. z o.o. Sp.k.", 10],
+          ["AS136557 Host Universal Pty Ltd", 1],
+          ["AS212477 RoyaleHosting BV", 1],
+          ["AS214083 NodeHub LLC", 1]
+        ],
+        "country": [
+          ["US", 29],
+          ["PL", 10],
+          ["AU", 1],
+          ["DE", 1],
+          ["NL", 1]
+        ],
+        "network": [["ipv4", 42]],
+        "protocol": [["70242", 42]],
+        "reachable": [["yes", 42]],
+        "status": [
+          ["enabled", 42],
+          ["pose_banned", 31]
+        ],
+        "type": [["Evo", 42]],
+        "ua": [["/Dash Core:24.0.0/", 42]],
+        "version": [["24.0.0", 42]]
+      },
+      "mn": {
+        "asn": [
+          ["AS16509 Amazon.com, Inc.", 82],
+          ["AS205581 CVD Sp. z o.o. Sp.k.", 16],
+          ["AS214083 NodeHub LLC", 4],
+          ["AS212477 RoyaleHosting BV", 2],
+          ["AS136557 Host Universal Pty Ltd", 1],
+          ["AS203273 NetCrafters OU", 1],
+          ["AS396982 Google LLC", 1]
+        ],
+        "country": [
+          ["US", 82],
+          ["PL", 16],
+          ["DE", 4],
+          ["NL", 4],
+          ["AU", 1]
+        ],
+        "network": [["ipv4", 107]],
+        "protocol": [["70242", 107]],
+        "reachable": [["yes", 107]],
+        "status": [
+          ["pose_banned", 291],
+          ["enabled", 107]
+        ],
+        "type": [
+          ["Regular", 65],
+          ["Evo", 42]
+        ],
+        "ua": [
+          ["/Dash Core:24.0.0/", 53],
+          ["/Dash Core:24.0.0(dcg-masternode-1)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-10)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-11)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-12)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-13)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-14)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-15)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-16)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-17)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-18)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-19)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-2)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-20)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-21)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-22)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-23)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-24)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-25)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-26)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-27)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-28)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-29)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-3)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-30)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-31)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-32)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-33)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-34)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-35)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-36)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-37)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-38)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-39)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-4)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-40)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-41)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-42)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-43)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-44)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-45)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-46)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-47)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-48)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-49)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-5)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-50)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-51)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-52)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-53)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-6)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-7)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-8)/", 1],
+          ["/Dash Core:24.0.0(dcg-masternode-9)/", 1],
+          ["/Dash Core:24.1.0/", 1]
+        ],
+        "version": [
+          ["24.0.0", 106],
+          ["24.1.0", 1]
+        ]
+      },
+      "nonmn": {
+        "asn": [
+          ["AS205581 CVD Sp. z o.o. Sp.k.", 42],
+          ["AS16509 Amazon.com, Inc.", 3],
+          ["AS210644 AEZA GROUP LLC", 1],
+          ["AS24940 Hetzner Online GmbH", 1],
+          ["AS40021 Contabo Inc.", 1],
+          ["AS48988 Modern Server Solutions LLP", 1]
+        ],
+        "client": [["Dash Core", 49]],
+        "country": [
+          ["PL", 42],
+          ["US", 4],
+          ["FI", 1],
+          ["KZ", 1],
+          ["NL", 1]
+        ],
+        "network": [
+          ["ipv6", 30],
+          ["ipv4", 19]
+        ],
+        "protocol": [
+          ["70242", 47],
+          ["70240", 2]
+        ],
+        "ua": [
+          ["/Dash Core:24.0.0/", 44],
+          ["/Dash Core:23.1.2/", 1],
+          ["/Dash Core:23.1.7/", 1],
+          ["/Dash Core:24.0.0(dcg-seed-1)/", 1],
+          ["/Dash Core:24.0.0(dcg-seed-2)/", 1],
+          ["/Dash Core:24.1.0/", 1]
+        ],
+        "version": [
+          ["24.0.0", 46],
+          ["23.1.2", 1],
+          ["23.1.7", 1],
+          ["24.1.0", 1]
+        ]
+      }
+    },
+    "dkg_readiness": {
+      "beyond_version": 0,
+      "checks": {
+        "filters": { "fail": 0, "pass": 107, "unknown": 0 },
+        "platform_ban": { "fail": 0, "pass": 42, "unknown": 0 },
+        "protocol": { "fail": 0, "pass": 107, "unknown": 0 },
+        "reachable": { "fail": 0, "pass": 107, "unknown": 0 },
+        "relay": { "fail": 0, "pass": 107, "unknown": 0 }
+      },
+      "masternodes": 107,
+      "overall": { "fail": 0, "pass": 107, "unknown": 0 },
+      "rules": {
+        "compact_filters_bit": 6,
+        "core_commit": "v24.0.0",
+        "core_max_failed_outbound": 5,
+        "min_protocol": 70242,
+        "protocol_check": true,
+        "reach_failures": 3,
+        "release": "Dash Core 24"
+      },
+      "version_only": 0
+    },
+    "networks": [
+      {
+        "crawled": true,
+        "known": 4419,
+        "masternodes": 109,
+        "network": "ipv4",
+        "reachable": 128,
+        "reason": null,
+        "tried": 381
+      },
+      {
+        "crawled": true,
+        "known": 628,
+        "masternodes": 0,
+        "network": "ipv6",
+        "reachable": 30,
+        "reason": null,
+        "tried": 30
+      },
+      {
+        "crawled": true,
+        "known": 0,
+        "masternodes": 0,
+        "network": "onion",
+        "reachable": 0,
+        "reason": null,
+        "tried": 0
+      },
+      {
+        "crawled": true,
+        "known": 0,
+        "masternodes": 0,
+        "network": "i2p",
+        "reachable": 0,
+        "reason": null,
+        "tried": 0
+      },
+      {
+        "crawled": false,
+        "known": 0,
+        "masternodes": 0,
+        "network": "cjdns",
+        "reachable": 0,
+        "reason": "disabled (CJDNS=false)",
+        "tried": 0
+      }
+    ],
+    "platform": {
+      "cert_expiring_3d": 11,
+      "checked": 42,
+      "dapi": [
+        ["5.0.0-rc.8", 29],
+        ["5.0.3", 11],
+        ["Unknown", 1],
+        ["5.0.2", 1]
+      ],
+      "drive": [
+        ["5.0.0-rc.8", 29],
+        ["5.0.3", 11],
+        ["Unknown", 1],
+        ["5.0.2", 1]
+      ],
+      "healthy": 41,
+      "https_ok": 41,
+      "max_height": 666982,
+      "p2p_ok": 42,
+      "tenderdash": [
+        ["unreleased-v1.8-dev-be7e73cbb9a15917c1e8f9eccd9b63abdf8ee6b3", 28],
+        ["1.8.2", 12],
+        ["unreleased-v1.8-dev-0284cfca894b3349b4ad8cb8103a92603fb226ac", 1],
+        ["Unknown", 1]
+      ],
+      "updated": 1794322145
+    },
+    "returns": {
+      "evo": {
+        "masternodes": 30,
+        "median_annual_yield": 0.6903,
+        "median_platform_yield": 1.1003,
+        "median_total_yield": 1.7883,
+        "platform_span_days": 90
+      },
+      "regular": { "masternodes": 54, "median_annual_yield": 2.7522 },
+      "window_days": 90
+    }
+  }
+}

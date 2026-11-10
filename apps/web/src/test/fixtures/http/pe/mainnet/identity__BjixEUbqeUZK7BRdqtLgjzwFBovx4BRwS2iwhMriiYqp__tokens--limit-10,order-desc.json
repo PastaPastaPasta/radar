@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/identity/BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp/tokens?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:01:41.523Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz",
+        "position": 0,
+        "timestamp": null,
+        "description": "Lynx bucks are for the Lynx to do with as he pleases.",
+        "localizations": {
+          "en": { "pluralForm": "lynxbucks", "singularForm": "LynxBucks", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F",
+          "aliases": [
+            {
+              "alias": "pshenmic.dash",
+              "status": "ok",
+              "timestamp": "2024-10-06T08:06:14.075Z",
+              "documentId": "7iPVZSZos4GmEf3cz3pwZ1y8YsFSZgvgTSV7XcQ9Vkap",
+              "contested": true
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "41jfTtvL4jV5WW7CxLv2Ftn7zjkESL1mxmokQSKwG7bw",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 2,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null,
+        "balance": "1100"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 1 }
+  }
+}

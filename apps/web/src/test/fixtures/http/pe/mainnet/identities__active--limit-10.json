@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/identities/active?limit=10" },
+  "recordedAt": "2026-11-10T15:01:36.961Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+        "transactionsCount": "1",
+        "aliases": [
+          {
+            "alias": "Iva.dash",
+            "status": "ok",
+            "timestamp": "2026-09-09T13:53:34.911Z",
+            "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+            "contested": true
+          }
+        ]
+      },
+      {
+        "identifier": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+        "transactionsCount": "2",
+        "aliases": []
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 2 }
+  }
+}

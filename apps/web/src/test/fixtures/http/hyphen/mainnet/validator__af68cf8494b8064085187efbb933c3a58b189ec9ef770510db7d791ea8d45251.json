@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/validator/af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251"
+  },
+  "recordedAt": "2026-11-10T15:28:00.583Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570013,
+    "proTxHash": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+    "collateralHash": "b9fe273f51c2c7de187297fc07bacf3a27323363e747db4c4e0ea329f328971e",
+    "collateralIndex": 0,
+    "addresses": {
+      "owner": "XnqCzB4wPnuyur8ADgFWAGhqXBiGnjELJN",
+      "voting": "XnqCzB4wPnuyur8ADgFWAGhqXBiGnjELJN",
+      "payout": "XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG"
+    },
+    "live": {
+      "type": "Regular",
+      "valid": true,
+      "status": "valid",
+      "lastPaidHeight": 0,
+      "lastPaidAt": "2014-01-19T01:40:18Z",
+      "consecutivePayments": 0,
+      "pose": { "banScore": 0, "revivedHeight": -1, "banHeight": -1 },
+      "revocationReason": 0
+    },
+    "operatorPubKey": "b9da9991c8da12dbc5fe1a6d66f159de9c20d3c148c014a0c1b7339240bb85bbbd94a465a056abf82e03997c4342e39f",
+    "operatorReward": 0,
+    "type": "regular",
+    "status": "registered",
+    "services": { "coreP2p": ["144.202.37.1:9999"], "platformP2p": [], "platformHttps": [] },
+    "registeredHeight": 2569884,
+    "lastUpdatedHeight": 2569884,
+    "history": [
+      {
+        "txHash": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+        "txType": "provider_register",
+        "payload": {
+          "collateralHash": "b9fe273f51c2c7de187297fc07bacf3a27323363e747db4c4e0ea329f328971e",
+          "collateralIndex": 0,
+          "mnType": "Regular",
+          "operatorPubKey": "b9da9991c8da12dbc5fe1a6d66f159de9c20d3c148c014a0c1b7339240bb85bbbd94a465a056abf82e03997c4342e39f",
+          "operatorReward": 0,
+          "ownerKeyId": "85367ed33721cea52645648a4b3e01f30ca235e0",
+          "version": 2,
+          "votingKeyId": "85367ed33721cea52645648a4b3e01f30ca235e0"
+        },
+        "blockHeight": 2569884
+      }
+    ]
+  }
+}

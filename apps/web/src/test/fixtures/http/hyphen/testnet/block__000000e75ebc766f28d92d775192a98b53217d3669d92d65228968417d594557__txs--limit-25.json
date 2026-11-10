@@ -1,0 +1,83 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/testnet/block/000000e75ebc766f28d92d775192a98b53217d3669d92d65228968417d594557/txs?limit=25"
+  },
+  "recordedAt": "2026-11-10T15:03:03.439Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 1577999,
+    "totalCount": 5,
+    "value": [
+      {
+        "txHash": "47935f210011510af770cdb6a6feca5b21a12da3ba6404fb030e3235c7ab96c1",
+        "blockHeight": 1577996,
+        "blockPos": 0,
+        "txVersion": 3,
+        "txType": "coinbase",
+        "lockTime": 0,
+        "txSize": 306,
+        "valueOut": 238134252,
+        "inputCount": 1,
+        "outputCount": 3,
+        "tags": { "mined": true, "coinbase": true }
+      },
+      {
+        "txHash": "40d9c894460f30f6b88119fa5ca48fc298af792ab59879c9e32cf378c9eb2de4",
+        "blockHeight": 1577996,
+        "blockPos": 1,
+        "txVersion": 2,
+        "txType": "normal",
+        "lockTime": 0,
+        "txSize": 167,
+        "valueOut": 0,
+        "inputCount": 1,
+        "outputCount": 1,
+        "tags": { "mined": true, "coinbase": false }
+      },
+      {
+        "txHash": "e5a25e09c8c037019855832c2e65440114a4bf45e2736aeaa2981f50e999647d",
+        "blockHeight": 1577996,
+        "blockPos": 2,
+        "txVersion": 2,
+        "txType": "normal",
+        "lockTime": 0,
+        "txSize": 191,
+        "valueOut": 10000,
+        "inputCount": 1,
+        "outputCount": 1,
+        "tags": { "mined": true, "coinbase": false }
+      },
+      {
+        "txHash": "a4d718c5f4c32ace5df8e043a40257bcd06574e111f72991e943bfdf65e3940e",
+        "blockHeight": 1577996,
+        "blockPos": 3,
+        "txVersion": 3,
+        "txType": "asset_unlock",
+        "lockTime": 0,
+        "txSize": 190,
+        "valueOut": 112574285,
+        "inputCount": 0,
+        "outputCount": 1,
+        "tags": { "mined": true, "coinbase": false }
+      },
+      {
+        "txHash": "2c487828d8bf1225b5ef3309bfde0f257e3f31494f905d60ec44096f68c4a18b",
+        "blockHeight": 1577996,
+        "blockPos": 4,
+        "txVersion": 2,
+        "txType": "normal",
+        "lockTime": 1577995,
+        "txSize": 225,
+        "valueOut": 59551,
+        "inputCount": 1,
+        "outputCount": 2,
+        "tags": { "mined": true, "coinbase": false }
+      }
+    ]
+  }
+}

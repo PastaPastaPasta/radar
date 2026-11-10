@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/testnet/proposal/01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd"
+  },
+  "recordedAt": "2026-11-10T15:03:09.176Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "hash": "01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd",
+    "collateralHash": "9aee5e1a4bc69b8201775daef93be1f21264a28c1cb6dc9e859b91f2e1497df0",
+    "name": "test",
+    "url": "https://test.com",
+    "paymentAddress": "yeRZBWYfeNE4yVUHV4ZLs83Ppn9aMRH57A",
+    "paymentAmount": 500000000,
+    "startTime": "2025-06-07T23:07:22Z",
+    "endTime": "2027-06-23T04:24:02Z",
+    "votes": { "yes": 1, "no": 31, "abstain": 6 },
+    "fundingThreshold": 10,
+    "meetsFundingThreshold": false,
+    "funded": false,
+    "valid": true,
+    "creationTime": "2025-05-26T16:14:07Z"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/contestedResource/WyJkYXNoIiwidGVzdDExMSJd/votes?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:02:57.625Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "B5B44A711FEC6D61AE524FAD59789955D40FFAE2ED9F1DB2AD55871E9A270617",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2024-09-09T21:57:51.394Z",
+        "towardsIdentity": "4zSRishbrvJpW2XPm9jxD9xHVqKxQDwNU3F5sGejB61L",
+        "identityAliases": [
+          {
+            "alias": "test111.dash",
+            "status": "ok",
+            "timestamp": "2024-08-27T14:29:47.954Z",
+            "documentId": "Hjnpqdj13WQKBQJfYfULiLsyNqfn3TVVYeLpzG4meGzm",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": "Hjnpqdj13WQKBQJfYfULiLsyNqfn3TVVYeLpzG4meGzm",
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "test111"],
+        "power": 1
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 1 }
+  }
+}

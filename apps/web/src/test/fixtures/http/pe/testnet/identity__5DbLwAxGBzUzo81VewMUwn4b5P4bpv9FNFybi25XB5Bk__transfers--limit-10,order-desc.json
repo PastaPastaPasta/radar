@@ -1,0 +1,134 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/identity/5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk/transfers?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:02:43.513Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "amount": "1000000",
+        "sender": "DejXJ53k72nvvgCgd9ZuGy7N4h7ppx3eTQHmYjznEa4R",
+        "recipient": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "timestamp": "2026-07-06T02:35:28.365Z",
+        "txHash": "C50FF67F9F4C92734EB3DD00E78C948E485E61220670FD5CCA27D9E4BD4B3EA0",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "FBA2BBD0E4DEF367F9E5D483FE27ADED40AED2B3B120CFBF145900BB3FDE6652",
+        "gasUsed": 2732620,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "190000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": null,
+        "timestamp": "2026-01-10T00:52:39.395Z",
+        "txHash": "789A2A4DD91FB23FD9DEFC33939A7CA5FF064BD4EB788601B9F732A6FCE99C1C",
+        "type": "IDENTITY_CREDIT_WITHDRAWAL",
+        "blockHash": "E5F2E74CD03DA0B6A94119D6657B3BDBC304D4FB16A35C0D39D81141E1FC5237",
+        "gasUsed": 203370160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000000",
+        "sender": "EzucyuShNrJce51LDUFdpMymEbe1UL3gZY2fyB5zfmEN",
+        "recipient": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "timestamp": "2025-08-23T19:52:06.685Z",
+        "txHash": "0D78B77A1F8D004A31A0BA5B0DC8D9DC87AAE58167EFC10FE3F9C8ACE27AF3B8",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "A3EFE7ECA8078CFAE59A407C47A6385785162E3503A2DDEECEB8D089A6E03E8C",
+        "gasUsed": 2766000,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "10000000",
+        "sender": null,
+        "recipient": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "timestamp": "2025-08-10T12:38:13.007Z",
+        "txHash": "0DF2629C2EF14BA0292AB32B0A64EAC20FFBA079040B363245032EF8886D4230",
+        "type": "BATCH",
+        "blockHash": "284A6245CB0AF051317285178F352DEAAB72D2D6004EC5242CA65E2309070B4E",
+        "gasUsed": 100449060,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:44:33.827Z",
+        "txHash": "4862054B31E33E4E19151E36E6AF213BBB945C3ED73CC7FDD38FE662E459EA93",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "5E1763307864527D2089640F4D6A0E3411E153AD230067277666D8CBD6B597B1",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:25:25.480Z",
+        "txHash": "093DF6B0C7837F59021AC3165CC55E49E6BA916C088AA376BDD229483369E7E3",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "D7355B6B3A275A95E0C77553E80844F1FAA701B6B038C28B859F00D97071A502",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:23:34.663Z",
+        "txHash": "EF08D3E5904CB22165EC8A44A20C137537274BC60CEA582273A0E3E40B44BA9B",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "1DE9F4F8901D473624D3161CE6011A829D532D951962FB08533FB88F796AF9C5",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:23:23.167Z",
+        "txHash": "9434F983CC5341518C6F77B45BEDAD8204E80AEAF4586492CC07AA2F71DC9EF5",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "500214154F7A82BCD3AF9F976D3A0C733A6A7B6D2F2ADC3044B00883DC9A2D67",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:23:08.126Z",
+        "txHash": "F668F23E5E79E4A915D459EBBD54B03AD0313444765652560DFC82CB30290A92",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "12DD86F68B429F014439729433DF987FD665BCE84AD8E7C006FFF4F259AD9646",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      },
+      {
+        "amount": "1000000",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "recipient": "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA",
+        "timestamp": "2025-08-09T17:21:57.190Z",
+        "txHash": "5CB61C71E9BB1EEB6E015BF256D2E7FC9EA631A65B717594DA25F99E13DA18A0",
+        "type": "IDENTITY_CREDIT_TRANSFER",
+        "blockHash": "ABFA6CE5E2A3599EE4518CC64645D11A9B7EE82281E510C1C379424D6E4CA583",
+        "gasUsed": 2843160,
+        "status": "SUCCESS",
+        "error": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 36 }
+  }
+}

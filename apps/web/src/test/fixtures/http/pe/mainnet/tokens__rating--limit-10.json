@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/tokens/rating?limit=10" },
+  "recordedAt": "2026-11-10T15:01:37.711Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "localizations": {
+          "en": { "pluralForm": "SANS", "singularForm": "SANS", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+        "transitionCount": 0
+      },
+      {
+        "localizations": {
+          "en": { "pluralForm": "DUSD", "singularForm": "DUSD", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+        "transitionCount": 0
+      },
+      {
+        "localizations": {
+          "en": { "pluralForm": "lattes", "singularForm": "latte", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "Fo3o3J5RQLJNptdjiKFyEycn6br4C7uLz5jte49mHPQH",
+        "transitionCount": 0
+      },
+      {
+        "localizations": {
+          "en": { "pluralForm": "lattes", "singularForm": "latte", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "DKf6EaeSy94RgPcQM65dKUCDP3qSF6nQg9dNoGPrUuYh",
+        "transitionCount": 0
+      },
+      {
+        "localizations": {
+          "en": { "pluralForm": "lynxbucks", "singularForm": "LynxBucks", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz",
+        "transitionCount": 0
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 5 }
+  }
+}

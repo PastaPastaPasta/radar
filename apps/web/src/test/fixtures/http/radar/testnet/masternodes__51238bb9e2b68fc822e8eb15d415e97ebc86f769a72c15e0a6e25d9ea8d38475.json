@@ -1,0 +1,255 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://radar.dashhq.org/api/v1/testnet/masternodes/51238bb9e2b68fc822e8eb15d415e97ebc86f769a72c15e0a6e25d9ea8d38475"
+  },
+  "recordedAt": "2026-11-10T15:02:21.929Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"4b284fbe7a63c91b3eb61f62d8004e72\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "as_org": "NetCrafters OU",
+    "asn": 203273,
+    "changes": [],
+    "city": "Amsterdam",
+    "collateral": "3efc16d756edba48884ae59974ea4496244ed6433fef111adf4b7496e23d6673-0",
+    "collateral_address": null,
+    "consecutive_payments": 0,
+    "continent": "EU",
+    "core_p2p": [{ "address": "62.60.244.174:19999", "network": "ipv4" }],
+    "country": "NL",
+    "dkg_readiness": {
+      "checks": { "filters": "pass", "protocol": "pass", "reachable": "pass", "relay": "pass" },
+      "overall": "pass",
+      "rules": {
+        "compact_filters_bit": 6,
+        "core_commit": "v24.0.0",
+        "core_max_failed_outbound": 5,
+        "min_protocol": 70242,
+        "protocol_check": true,
+        "reach_failures": 3,
+        "release": "Dash Core 24"
+      }
+    },
+    "first_seen": 1793305672,
+    "last_error": null,
+    "last_paid_height": 1589128,
+    "last_seen": 1794322762,
+    "lat": 52.37,
+    "latency_ms": 193,
+    "lon": 4.9,
+    "network": "ipv4",
+    "operator_payout_address": null,
+    "operator_reward": 10,
+    "owner_address": "yZZYwCnt37PiDJntTFDE2fNEYkcNu7ZiEw",
+    "payments": [
+      {
+        "amount_duffs": 111633884,
+        "block_hash": "0000006994985b70f3ca15672689b4cb632fed3f040694dc4a874466c5742296",
+        "height": 1589128,
+        "time": 1794321553
+      },
+      {
+        "amount_duffs": 111662240,
+        "block_hash": "0000002b0f8d169869cf06b9f8e54d36cb0d3704e414cb8a12d2b431253db513",
+        "height": 1589021,
+        "time": 1794306898
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "00000049c62e3546e65c0e574fd7d5cd325d9bd79a68fc8df6d2c155be17c102",
+        "height": 1588914,
+        "time": 1794292443
+      },
+      {
+        "amount_duffs": 111650637,
+        "block_hash": "000001057b1e9c6b13cce343835df3fe825549ffd2a1f96a3ffa65588dc665de",
+        "height": 1588807,
+        "time": 1794278050
+      },
+      {
+        "amount_duffs": 111626722,
+        "block_hash": "000000b5253aff46957528e40bce0f999cc977dd8d9000b60188ffa52c942aa1",
+        "height": 1588700,
+        "time": 1794262664
+      },
+      {
+        "amount_duffs": 111619053,
+        "block_hash": "000000a7861be68fbb30b527703eb4e36f190bf2bdbba543f00cb9b1b2697dee",
+        "height": 1588593,
+        "time": 1794246430
+      },
+      {
+        "amount_duffs": 111618884,
+        "block_hash": "0000007a47a100f010c5933a059257a8b8288588a1b502ceaa4d1b1a8f6601e4",
+        "height": 1588486,
+        "time": 1794231641
+      },
+      {
+        "amount_duffs": 111635272,
+        "block_hash": "000000b6b92346686e073054422110fa92d073bb23070e8799a3f7cff28cbc65",
+        "height": 1588379,
+        "time": 1794217359
+      },
+      {
+        "amount_duffs": 111641384,
+        "block_hash": "000000014d457150934d54d537cda04e7cc62244a2fd3a321bb0c5874a5698c3",
+        "height": 1588272,
+        "time": 1794204563
+      },
+      {
+        "amount_duffs": 111660018,
+        "block_hash": "0000000407909c5dfb926471ba339f8b761f01e5e25aa229a5e784f7236206f2",
+        "height": 1588165,
+        "time": 1794189131
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "000000cd88845f7b3b68490217a637fd25b4935e01986edae6894018afb65b08",
+        "height": 1588058,
+        "time": 1794174102
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "000000d88b12a3fa2b30291b2047bc242055a9a542d26c12c6c3c2381a678613",
+        "height": 1587951,
+        "time": 1794160358
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "0000004476c6dd75d21d9591d8da3b51722e2c0cd0a4a3729f9c5a6b86c8a765",
+        "height": 1587844,
+        "time": 1794145045
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "00000082bd4295f14f13a951a78fefee6f063f4344b00537ed49cefbabb9fee7",
+        "height": 1587737,
+        "time": 1794131195
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "00000087b0eef954087bc5b51585b0d8c14eb46a560deea0e4e5ee828ee62745",
+        "height": 1587631,
+        "time": 1794115590
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "0000009c0e375c4bbddb1e8303e62cd71f04d7130b5ff9133d10d5cc800ce6a1",
+        "height": 1587524,
+        "time": 1794100771
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "000000261250a1b3c6246c307c658bdb516076e6c0e96313e92479368dc5a39a",
+        "height": 1587417,
+        "time": 1794087553
+      },
+      {
+        "amount_duffs": 111628762,
+        "block_hash": "000000884094d07d4574529bb5c90833b1245d3c11096a6f9cfbe044691222c8",
+        "height": 1587310,
+        "time": 1794073831
+      },
+      {
+        "amount_duffs": 111626384,
+        "block_hash": "0000006ddfb26788a81292a586cd9dd52b8a1504433336ded934b39d37656a95",
+        "height": 1587203,
+        "time": 1794058393
+      },
+      {
+        "amount_duffs": 111685876,
+        "block_hash": "00000048d7950def788db3c2cbdb93b3de8869086d47c10c115da4716805c278",
+        "height": 1587097,
+        "time": 1794042955
+      },
+      {
+        "amount_duffs": 111666832,
+        "block_hash": "0000009a5c05bb416076546465d2712080be025a640cef1fffe6d55089d92334",
+        "height": 1586992,
+        "time": 1794026576
+      },
+      {
+        "amount_duffs": 111656384,
+        "block_hash": "00000088be6fcc4843da94d6a385c75e9e7ca367c444473f770195b625560b19",
+        "height": 1586888,
+        "time": 1794010798
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "00000025268d79c5e4692e165f4380335e20f663066a8462a5185782b1ece7e0",
+        "height": 1586783,
+        "time": 1793995921
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "0000014caf609b088ac90a28caff1d8d38f20299b86dbdfab1bab5ba692dbdc1",
+        "height": 1586678,
+        "time": 1793981497
+      },
+      {
+        "amount_duffs": 111633554,
+        "block_hash": "0000006bb46b9e088a21b8421b9264d9841d9269759c45dff58344b854d1e8f3",
+        "height": 1586573,
+        "time": 1793967592
+      }
+    ],
+    "payments_summary": {
+      "count": 7846,
+      "first_height": 438926,
+      "indexed": { "from": 7300, "to": 1589139 },
+      "total_duffs": 2585668247130
+    },
+    "payout_address": "yQ1t16Fi1kyjhKwZ7jVrxgnyxzSbhx3ago",
+    "platform_banned": false,
+    "platform_https": null,
+    "platform_node_id": null,
+    "platform_p2p": null,
+    "pose_ban_height": -1,
+    "pose_penalty": 0,
+    "pose_revived_height": 1579824,
+    "protocol": 70242,
+    "protx": "51238bb9e2b68fc822e8eb15d415e97ebc86f769a72c15e0a6e25d9ea8d38475",
+    "pubkey_operator": "ace65ce6933fbafc8686ea9e8ba72bc98f3d07905b4ccfb83162db440308e9255f708ce4f2623b27f9fc04fe11cf6057",
+    "reachable": true,
+    "registered_height": 438777,
+    "relay": true,
+    "removed": null,
+    "returns": {
+      "annual_yield": 2.0008,
+      "indexed_since": 1545127296,
+      "paid_30d": 17413183231,
+      "paid_365d": 233759216197,
+      "paid_90d": 49334161525,
+      "window_days": 90
+    },
+    "revocation_reason": 0,
+    "service": "62.60.244.174:19999",
+    "services": 7237,
+    "start_height": 1589139,
+    "status": "enabled",
+    "type": "Regular",
+    "uptime_daily": [
+      { "attempts": 17, "day": "2026-10-29", "ok": 17 },
+      { "attempts": 64, "day": "2026-10-30", "ok": 64 },
+      { "attempts": 99, "day": "2026-10-31", "ok": 99 },
+      { "attempts": 97, "day": "2026-11-01", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-02", "ok": 96 },
+      { "attempts": 97, "day": "2026-11-03", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-04", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-05", "ok": 96 },
+      { "attempts": 98, "day": "2026-11-06", "ok": 98 },
+      { "attempts": 96, "day": "2026-11-07", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-08", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-09", "ok": 96 },
+      { "attempts": 60, "day": "2026-11-10", "ok": 60 }
+    ],
+    "user_agent": "/Dash Core:24.1.0/",
+    "version": "24.1.0",
+    "versions": [{ "protocol": 70242, "ts": 1793305680, "user_agent": "/Dash Core:24.1.0/" }],
+    "voting_address": "yN5GKRn9zTKgaVTo1uJxihub6sbD6bFMG6"
+  }
+}

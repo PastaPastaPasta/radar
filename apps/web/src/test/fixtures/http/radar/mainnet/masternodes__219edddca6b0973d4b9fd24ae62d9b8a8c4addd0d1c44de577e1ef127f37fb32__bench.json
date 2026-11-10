@@ -1,0 +1,139 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://radar.dashhq.org/api/v1/mainnet/masternodes/219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32/bench"
+  },
+  "recordedAt": "2026-11-10T15:00:58.118Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"88714607de0f7ea6e8070142f32b950c\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "protx": "219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32",
+    "vantages": [
+      {
+        "vantage": "us-east",
+        "location": "United States (New York)",
+        "results": [
+          {
+            "address": "85.209.241.228:9999",
+            "connect_ms": 106.1,
+            "error": null,
+            "grade": {
+              "completeness": 100,
+              "connectivity": 98.7,
+              "latency": 93.8,
+              "letter": "A",
+              "reliability": 100,
+              "score": 99.3,
+              "throughput": 100
+            },
+            "handshake_ms": 108.2,
+            "headers": {
+              "bytes": 4050675,
+              "per_sec": 12845.2,
+              "requested": 50000,
+              "seconds": 3.893,
+              "served": 50000,
+              "stalls": 0,
+              "start_height": 2514032,
+              "valid": true
+            },
+            "height": 2564044,
+            "mnlistdiff": { "bytes": 502786, "entries": 2999, "ok": true, "seconds": 0.349 },
+            "ok": true,
+            "ping_ms": { "max": 113.3, "median": 108.8, "min": 106.9, "samples": 5 },
+            "protocol": 70240,
+            "ts": 1793383483,
+            "user_agent": "/Dash Core:23.1.9/",
+            "vantage": "us-east"
+          }
+        ],
+        "percentile": 0.37045252883762203
+      },
+      {
+        "vantage": "eu-west",
+        "location": "Netherlands (Amsterdam)",
+        "results": [
+          {
+            "address": "85.209.241.228:9999",
+            "connect_ms": 26.6,
+            "error": null,
+            "grade": {
+              "completeness": 100,
+              "connectivity": 100,
+              "latency": 100,
+              "letter": "A",
+              "reliability": 100,
+              "score": 100,
+              "throughput": 100
+            },
+            "handshake_ms": 28.7,
+            "headers": {
+              "bytes": 4050675,
+              "per_sec": 33487.2,
+              "requested": 50000,
+              "seconds": 1.493,
+              "served": 50000,
+              "stalls": 0,
+              "start_height": 2514000,
+              "valid": true
+            },
+            "height": 2564023,
+            "mnlistdiff": { "bytes": 502722, "entries": 2999, "ok": true, "seconds": 0.226 },
+            "ok": true,
+            "ping_ms": { "max": 41.7, "median": 27.2, "min": 26.7, "samples": 5 },
+            "protocol": 70240,
+            "ts": 1793380015,
+            "user_agent": "/Dash Core:23.1.9/",
+            "vantage": "eu-west"
+          }
+        ],
+        "percentile": 0.3935226264418811
+      },
+      {
+        "vantage": "ap-southeast",
+        "location": "Singapore",
+        "results": [
+          {
+            "address": "85.209.241.228:9999",
+            "connect_ms": 258.8,
+            "error": null,
+            "grade": {
+              "completeness": 100,
+              "connectivity": 92.3,
+              "latency": 78.1,
+              "letter": "A",
+              "reliability": 100,
+              "score": 97.4,
+              "throughput": 100
+            },
+            "handshake_ms": 265.6,
+            "headers": {
+              "bytes": 4050675,
+              "per_sec": 6476.4,
+              "requested": 50000,
+              "seconds": 7.72,
+              "served": 50000,
+              "stalls": 0,
+              "start_height": 2514000,
+              "valid": true
+            },
+            "height": 2564024,
+            "mnlistdiff": { "bytes": 502722, "entries": 2999, "ok": true, "seconds": 0.672 },
+            "ok": true,
+            "ping_ms": { "max": 267, "median": 258, "min": 256.6, "samples": 5 },
+            "protocol": 70240,
+            "ts": 1793380218,
+            "user_agent": "/Dash Core:23.1.9/",
+            "vantage": "ap-southeast"
+          }
+        ],
+        "percentile": 0.12549889135254988
+      }
+    ],
+    "combined": { "score": 98.9, "letter": "A", "vantages": 3 }
+  }
+}

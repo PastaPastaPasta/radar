@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/mainnet/block/2570003" },
+  "recordedAt": "2026-11-10T15:02:02.330Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570006,
+    "blockHeight": 2570003,
+    "blockHash": "0000000000000002f8d327ba50aca312c62c370edb505ad612845f58885df98c",
+    "prevBlockHash": "00000000000000040e6b53514a36154e7933fda4209bea01d71ab37f2f3134c7",
+    "merkle": "83054781991c9c45f3da69e57b582c5c2f37fd3d7cd3be0f6b9ab5dda36dd0c0",
+    "blockTime": "2026-11-10T14:50:51Z",
+    "bits": "1924cb46",
+    "nonce": 3704973230,
+    "blockVersion": 536870912,
+    "blockSize": 10165,
+    "txCount": 18,
+    "status": "canonical",
+    "tags": { "orphan": false },
+    "live": {
+      "tags": { "chainlock": false },
+      "coreHeight": 2570006,
+      "seenAt": "2026-11-10T15:01:58Z"
+    },
+    "chainwork": "00000000000000000000000000000000000000000000c21a06d82ef89d2953ad",
+    "cbTx": {
+      "height": 2570003,
+      "merkleRootMnList": "3d2dcfd72c5d2ab0e2a6cf203c77791cf84691da95b3945728e4e229a51120fb",
+      "merkleFlags": 3,
+      "bestClHeight": 2570003,
+      "bestClSignature": "930c4ade25a576c526df5e8231ae1d7592504d4d28328a94c5523f162db51d62084bfe5034080cb206b8a6eb5baa9ec4189ef2c5676abafb4c3d5399bff99009850b721832f397f239895e91ad0646c1593a4887ede89d504b379b0f678326e3",
+      "creditPoolBalance": 3757601606481
+    }
+  }
+}

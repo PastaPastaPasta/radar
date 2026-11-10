@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/identity/5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk/withdrawals?order=desc"
+  },
+  "recordedAt": "2026-11-10T15:02:44.072Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "document": "i65Hz6eVR4XCL6jSCDUnCvTi7ym7GWSo9886TuiiHRi",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "status": "COMPLETE",
+        "timestamp": "2026-01-10T00:52:39.395Z",
+        "amount": 190000,
+        "withdrawalAddress": "yWcqHe1X9aT4cfyB5pC59nQAxTQiWoCsbD",
+        "transactionIndex": 449,
+        "transactionSignHeight": 1399035,
+        "hash": "789A2A4DD91FB23FD9DEFC33939A7CA5FF064BD4EB788601B9F732A6FCE99C1C"
+      },
+      {
+        "document": "BGKrZmPDZtt52C8PQsH2XnEnjhsqkeAiw4Wi1oaPM5HD",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "status": "COMPLETE",
+        "timestamp": "2025-08-04T20:27:58.288Z",
+        "amount": 10000000,
+        "withdrawalAddress": "yZage5y2M7FsVkq3JPruAxTSw6qWYHHuyu",
+        "transactionIndex": 219,
+        "transactionSignHeight": 1301490,
+        "hash": "1F021EC95CA4D5614B12978125098A4D0D8C923E2A9AA64C97FA823B8975A1FB"
+      },
+      {
+        "document": "Grc2k5PDARwPEDdjSm7TLm1oUEBJGoDXa6nFiAVaGG18",
+        "sender": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+        "status": "COMPLETE",
+        "timestamp": "2025-07-24T11:44:25.120Z",
+        "amount": 100000000000,
+        "withdrawalAddress": "yZage5y2M7FsVkq3JPruAxTSw6qWYHHuyu",
+        "transactionIndex": 212,
+        "transactionSignHeight": 1294462,
+        "hash": "BDD216A2A852F1CE7148BF4B0ABECAE97B888E2DCC54877970551E75C1E434B3"
+      }
+    ],
+    "pagination": { "page": null, "limit": null, "total": null }
+  }
+}

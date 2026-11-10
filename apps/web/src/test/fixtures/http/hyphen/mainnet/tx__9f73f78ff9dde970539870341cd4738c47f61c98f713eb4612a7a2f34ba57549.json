@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/9f73f78ff9dde970539870341cd4738c47f61c98f713eb4612a7a2f34ba57549"
+  },
+  "recordedAt": "2026-11-10T15:02:01.778Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570005,
+    "txHash": "9f73f78ff9dde970539870341cd4738c47f61c98f713eb4612a7a2f34ba57549",
+    "blockHeight": 2570003,
+    "blockPos": 1,
+    "txVersion": 3,
+    "txType": "quorum_commitment",
+    "lockTime": 0,
+    "txSize": 354,
+    "valueOut": 0,
+    "inputCount": 0,
+    "outputCount": 0,
+    "fee": 0,
+    "tags": { "mined": true, "coinbase": false },
+    "live": { "tags": { "mempool": false, "islock": false } },
+    "payload": {
+      "commitmentVersion": 3,
+      "height": 2570003,
+      "llmqType": "Llmq100_67",
+      "quorumHash": "5c52da4b3ba896089694c85f7a073c4ce5d6a686f5db06a11b00000000000000",
+      "quorumIndex": null,
+      "version": 1
+    },
+    "vin": [],
+    "vout": []
+  }
+}

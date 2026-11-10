@@ -1,0 +1,195 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/testnet/mempool/txs?limit=20" },
+  "recordedAt": "2026-11-10T15:03:01.157Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=5, s-maxage=5"
+  },
+  "body": {
+    "totalCount": 485,
+    "value": [
+      {
+        "txHash": "4ecaa7f39b1c5c7ad97c494858e295b2eee1e9ef96c87275192e69b5f9fd5ee7",
+        "txType": "asset_lock",
+        "txSize": 240,
+        "valueOut": 1856102365,
+        "firstSeenAt": "2026-11-10T09:24:40Z",
+        "lastSeenAt": "2026-11-10T09:24:40Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "1d17c91cf2fa82aff4b967926a8b9dc0bae83dd967346d58fe59e2ac1459f193",
+        "txType": "asset_lock",
+        "txSize": 239,
+        "valueOut": 1859102628,
+        "firstSeenAt": "2026-11-10T09:23:21Z",
+        "lastSeenAt": "2026-11-10T09:23:21Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "a815cd90fb63f3493a23276bc6d9554b1742e4cec84d11379d062aae66aaf99d",
+        "txType": "normal",
+        "txSize": 191,
+        "valueOut": 699773,
+        "firstSeenAt": "2026-11-10T03:51:48Z",
+        "lastSeenAt": "2026-11-10T03:51:48Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "7188e86f90cb5f8849066b3d2cf7b800c3c0923502a21add9567cf6f1feef298",
+        "txType": "normal",
+        "txSize": 374,
+        "valueOut": 1399172,
+        "firstSeenAt": "2026-11-10T03:25:04Z",
+        "lastSeenAt": "2026-11-10T03:25:04Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "757766d133f71e2e66c0af0b4c4db9ceb3fe66718d7acef2f0274d3a51ae1694",
+        "txType": "asset_lock",
+        "txSize": 240,
+        "valueOut": 2999737,
+        "firstSeenAt": "2026-11-09T14:18:13Z",
+        "lastSeenAt": "2026-11-09T14:18:13Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "b569fe3a138b6f5ef322c9bc39a0d88366fb0fc34622f7b372580d992b232698",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 56767616,
+        "firstSeenAt": "2026-11-09T14:15:44Z",
+        "lastSeenAt": "2026-11-09T14:15:44Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "c28ace37f5fe7ec452bda0fe9c0225ad6e51c7a1a905bf476f6083871c784c76",
+        "txType": "normal",
+        "txSize": 373,
+        "valueOut": 2999626,
+        "firstSeenAt": "2026-11-09T09:15:26Z",
+        "lastSeenAt": "2026-11-09T09:15:26Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "824f3c22c6114de606f9c16b2087038a901033329455766fe19ed301bce5e4a0",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 56957217,
+        "firstSeenAt": "2026-11-09T09:10:49Z",
+        "lastSeenAt": "2026-11-09T09:10:49Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "602a4fe092267db7ac859d8efbad7ff4fe4f3d5b6b51ff54c30ed9fd859e6ce7",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 56982000,
+        "firstSeenAt": "2026-11-09T08:56:41Z",
+        "lastSeenAt": "2026-11-09T08:56:41Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "ee9af3076ef2a6f27db0d64a3f57dff90e46bc50aede7399491c5907c0cb7b53",
+        "txType": "asset_lock",
+        "txSize": 239,
+        "valueOut": 2999737,
+        "firstSeenAt": "2026-11-09T08:52:49Z",
+        "lastSeenAt": "2026-11-09T08:52:49Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "6502b9edeb7b568daf21c4299ab6274594cb24acf9a529e48eb904f8e821a357",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 56990000,
+        "firstSeenAt": "2026-11-09T08:50:30Z",
+        "lastSeenAt": "2026-11-09T08:50:30Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "0f61dcf49960491952978c7a785952df87f10d6ef12ce96fcda818005077231b",
+        "txType": "normal",
+        "txSize": 226,
+        "valueOut": 399511,
+        "firstSeenAt": "2026-11-09T08:48:34Z",
+        "lastSeenAt": "2026-11-09T08:48:34Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "7034f7fe71b358831b1203276e6eb3bee2f4b6ceb1784d91b345e1f29fe76ce3",
+        "txType": "asset_lock",
+        "txSize": 239,
+        "valueOut": 3399737,
+        "firstSeenAt": "2026-11-09T08:46:48Z",
+        "lastSeenAt": "2026-11-09T08:46:48Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "ad78190a3e9db3271cfa35e23bb65ac57c58bb14ee6da308e3ae8f2a9122cc49",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 57168000,
+        "firstSeenAt": "2026-11-09T08:45:48Z",
+        "lastSeenAt": "2026-11-09T08:45:48Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "af7db32d4635ef6a64a5f8e140d5b1930ffcf6fa36bc3755f4fbf2666817a175",
+        "txType": "normal",
+        "txSize": 226,
+        "valueOut": 1499548,
+        "firstSeenAt": "2026-11-09T08:40:37Z",
+        "lastSeenAt": "2026-11-09T08:40:37Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "94c0fbb8e37a67239d61c17f6c85d883c076ccf57e87d9310c1c666610189a3a",
+        "txType": "normal",
+        "txSize": 226,
+        "valueOut": 1999774,
+        "firstSeenAt": "2026-11-09T08:36:47Z",
+        "lastSeenAt": "2026-11-09T08:36:47Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "33bd09bfc76d757be5daa6aed4fcd84da29a7a393c4ded2d85d5a758508046c3",
+        "txType": "normal",
+        "txSize": 226,
+        "valueOut": 57574000,
+        "firstSeenAt": "2026-11-09T08:31:59Z",
+        "lastSeenAt": "2026-11-09T08:31:59Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "718cc9726e8adb934fff237446e02ea019aea2cb3046cae2b7fd1cbfd8fd45c8",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 999548,
+        "firstSeenAt": "2026-11-09T08:29:53Z",
+        "lastSeenAt": "2026-11-09T08:29:53Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "43651ac86274f3801d3fcb8f042f94c522bfd17758ef5d332f921a89dc959166",
+        "txType": "normal",
+        "txSize": 226,
+        "valueOut": 1999774,
+        "firstSeenAt": "2026-11-09T08:27:56Z",
+        "lastSeenAt": "2026-11-09T08:27:56Z",
+        "tags": { "mined": false, "coinbase": false }
+      },
+      {
+        "txHash": "4c7c55ecd548d5476313bac757179c23a4f81ce63b8e0811faf9e5656ae98faf",
+        "txType": "normal",
+        "txSize": 225,
+        "valueOut": 57768000,
+        "firstSeenAt": "2026-11-09T08:26:20Z",
+        "lastSeenAt": "2026-11-09T08:26:20Z",
+        "tags": { "mined": false, "coinbase": false }
+      }
+    ],
+    "nextCursor": "7b226c6173745365656e4174223a313739343231323738302c2274786964223a2234633763353565636435343864353437363331336261633735373137396332336134663831636536336238653038313166616639653536353661653938666166227d"
+  }
+}

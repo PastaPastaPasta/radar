@@ -1,0 +1,54 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/status" },
+  "recordedAt": "2026-11-10T15:01:27.090Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "epoch": {
+      "number": 88,
+      "firstBlockHeight": "467862",
+      "firstCoreBlockHeight": 2569070,
+      "startTime": 1794174796794,
+      "feeMultiplier": "1000",
+      "endTime": 1794178396794,
+      "totalBlocksInEpoch": null,
+      "totalProcessingFees": null,
+      "totalDistributedStorageFees": null,
+      "totalCreatedStorageFees": null,
+      "coreBlockRewards": null,
+      "blockProposers": null
+    },
+    "transactionsCount": 79250,
+    "totalCredits": "3682093498899781",
+    "totalCollectedFeesDay": 7551161060,
+    "transfersCount": 31613,
+    "dataContractsCount": 88,
+    "documentsCount": 22547,
+    "identitiesCount": 5023,
+    "network": "evo1",
+    "api": {
+      "version": "2.5.4",
+      "block": {
+        "height": 468963,
+        "hash": "4C2C616FCD570F751760ADC4C8BF3BA734B13A56B3B1E00D63B1043866EECD4E",
+        "timestamp": "2026-11-10T14:59:31.100Z"
+      }
+    },
+    "tenderdash": {
+      "version": "1.8.2",
+      "block": {
+        "height": 468963,
+        "hash": "4C2C616FCD570F751760ADC4C8BF3BA734B13A56B3B1E00D63B1043866EECD4E",
+        "timestamp": "2026-11-10T14:59:31.1Z"
+      }
+    },
+    "indexer": { "status": "synced", "syncProgress": 100 },
+    "versions": {
+      "software": { "dapi": "5.0.3", "drive": "5.0.3", "tenderdash": "1.8.2" },
+      "protocol": {
+        "tenderdash": { "p2p": null, "block": 14 },
+        "drive": { "latest": 14, "current": 14 }
+      }
+    }
+  }
+}

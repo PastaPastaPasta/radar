@@ -1,0 +1,885 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://radar.dashhq.org/api/v1/mainnet/masternodes/d353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff"
+  },
+  "recordedAt": "2026-11-10T15:00:54.969Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"bc5e40f8e57c681589cbe97e6c255bad\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "as_org": "Shenzhen Tencent Computer Systems Company Limited",
+    "asn": 45090,
+    "changes": [],
+    "city": "Guangzhou",
+    "collateral": "1bef898f3ca65a9dba18282b3efa8e0e6d8592a35a5ce1fb03f70c94de76ab08-1",
+    "collateral_address": null,
+    "consecutive_payments": 0,
+    "continent": "AS",
+    "core_p2p": [{ "address": "114.132.172.215:9999", "network": "ipv4" }],
+    "country": "CN",
+    "dkg_readiness": {
+      "checks": {
+        "filters": "pass",
+        "platform_ban": "pass",
+        "protocol": "pass",
+        "reachable": "pass",
+        "relay": "pass"
+      },
+      "overall": "pass",
+      "rules": {
+        "compact_filters_bit": 6,
+        "core_commit": "v24.0.0",
+        "core_max_failed_outbound": 5,
+        "min_protocol": 70242,
+        "protocol_check": true,
+        "reach_failures": 3,
+        "release": "Dash Core 24"
+      }
+    },
+    "first_seen": 1793305692,
+    "last_error": null,
+    "last_paid_height": 2568740,
+    "last_seen": 1794321862,
+    "lat": 23.13,
+    "latency_ms": 476,
+    "lon": 113.26,
+    "network": "ipv4",
+    "operator_payout_address": null,
+    "operator_reward": 0,
+    "owner_address": "XtXnZFVYz7naGT1cdekwEQUjPAs81UmDRH",
+    "payments": [
+      {
+        "amount_duffs": 77060207,
+        "block_hash": "000000000000001c9702de0adb7e4ba65be9d1a1e2f94d1811405deeda8bfafb",
+        "height": 2568740,
+        "time": 1794123189
+      },
+      {
+        "amount_duffs": 77102205,
+        "block_hash": "0000000000000007c86729551374a62644990f39485c42f1c78b0443dd7819a0",
+        "height": 2566513,
+        "time": 1793772334
+      },
+      {
+        "amount_duffs": 77100251,
+        "block_hash": "000000000000000fbfb3b6bc08bc23ffcebd2ffce63e696404c20a83d7668e34",
+        "height": 2564278,
+        "time": 1793419283
+      },
+      {
+        "amount_duffs": 77055807,
+        "block_hash": "0000000000000017c6a3a8c22efcf53e38a0f72c56598efb48faf7ee0330fd2d",
+        "height": 2562033,
+        "time": 1793066675
+      },
+      {
+        "amount_duffs": 77052207,
+        "block_hash": "0000000000000002b5533a4ff8a07c57983ea11e1be978e2c4ac044e5bff61d8",
+        "height": 2559783,
+        "time": 1792711969
+      },
+      {
+        "amount_duffs": 77052707,
+        "block_hash": "000000000000000306546b8ef728f719841d35ece3aa866cd7eaa10cec26f348",
+        "height": 2557565,
+        "time": 1792363322
+      },
+      {
+        "amount_duffs": 77054457,
+        "block_hash": "000000000000000768c16db2f6f222af3f0c234c53cce9b6136ed8a897602c1f",
+        "height": 2555389,
+        "time": 1792018839
+      },
+      {
+        "amount_duffs": 77069810,
+        "block_hash": "00000000000000251817667cf5e4f955ac1d9f1c0bb32da993f8fc1c1fbeb3d5",
+        "height": 2553246,
+        "time": 1791681613
+      },
+      {
+        "amount_duffs": 77069457,
+        "block_hash": "00000000000000107c88ab26dd9133f2b06e8e854e1642f147eefeb2d1b7cae3",
+        "height": 2551143,
+        "time": 1791350655
+      },
+      {
+        "amount_duffs": 77082392,
+        "block_hash": "000000000000001c190b90a8a7b37586a5f7eb0968e5fbe05c3be39a61250ee7",
+        "height": 2549071,
+        "time": 1791024050
+      },
+      {
+        "amount_duffs": 77081471,
+        "block_hash": "0000000000000008703b87ace1ba038c923f0bfaabc1897cced1ccaa633974e9",
+        "height": 2546999,
+        "time": 1790696233
+      },
+      {
+        "amount_duffs": 77063038,
+        "block_hash": "000000000000000d6ac4ba0feac2c10f0c9b8bf71212a6495643874a2995e609",
+        "height": 2544906,
+        "time": 1790367937
+      },
+      {
+        "amount_duffs": 77052207,
+        "block_hash": "000000000000002103f8cbc324b81a2f3b87f668afd1f86851676fd6aa67a76e",
+        "height": 2542836,
+        "time": 1790041374
+      },
+      {
+        "amount_duffs": 77059527,
+        "block_hash": "000000000000001b3900848c46b448ba45711716c53af1c11401af578003886a",
+        "height": 2540742,
+        "time": 1789710726
+      },
+      {
+        "amount_duffs": 77054071,
+        "block_hash": "0000000000000001834000c89aa54c71825091070f66a32851aa1d4b9df604fd",
+        "height": 2538654,
+        "time": 1789382516
+      },
+      {
+        "amount_duffs": 77053525,
+        "block_hash": "000000000000001314d40e3f947cd5d7b89a282a088c88a2872af49f6481add8",
+        "height": 2536571,
+        "time": 1789052801
+      },
+      {
+        "amount_duffs": 77172518,
+        "block_hash": "00000000000000258c11bf613b21920207dc62a15e30eed409e848f3460c187c",
+        "height": 2534490,
+        "time": 1788726110
+      },
+      {
+        "amount_duffs": 77076375,
+        "block_hash": "0000000000000025dd7dc50ec52cd6cd4e4b3ff150c4238c630276737a616441",
+        "height": 2532405,
+        "time": 1788397461
+      },
+      {
+        "amount_duffs": 77062842,
+        "block_hash": "000000000000002445013a001c8596515f3a84bf7f4b360d5b832ffd73ccafc4",
+        "height": 2530311,
+        "time": 1788066817
+      },
+      {
+        "amount_duffs": 77081505,
+        "block_hash": "000000000000002663fc204f53c8c88f08cb8ceef40bca4a733f3bcf91fde19f",
+        "height": 2528222,
+        "time": 1787737787
+      },
+      {
+        "amount_duffs": 77067795,
+        "block_hash": "0000000000000016058d23cd9213b7ff088ea57cbc1e70577b41dfe08f1b912a",
+        "height": 2526138,
+        "time": 1787409881
+      },
+      {
+        "amount_duffs": 77057723,
+        "block_hash": "000000000000002cad4c04569e3e98ed98ae203416be31b101c2eafb2eab727f",
+        "height": 2524037,
+        "time": 1787077801
+      },
+      {
+        "amount_duffs": 82979299,
+        "block_hash": "0000000000000014463a7ccd3935dc726c2346a107d69a30136081630a389e47",
+        "height": 2521949,
+        "time": 1786748330
+      },
+      {
+        "amount_duffs": 82986970,
+        "block_hash": "000000000000000659ab88e33e81d1d68ba1b8c150288c34d821c653ab5047c2",
+        "height": 2519877,
+        "time": 1786422334
+      },
+      {
+        "amount_duffs": 83029614,
+        "block_hash": "00000000000000362c9934b552a23919974c6d442d945f89c90faabf3e3c7a38",
+        "height": 2517811,
+        "time": 1786096842
+      }
+    ],
+    "payments_summary": {
+      "count": 454,
+      "first_height": 1903153,
+      "indexed": { "from": 1047200, "to": 2569999 },
+      "total_duffs": 54524875642
+    },
+    "payout_address": "XtjXTsWwpqGX37SYrmdjbw2euoGXHFY9h9",
+    "platform": {
+      "daily": [
+        { "attempts": 7, "day": "2026-10-30", "ok": 7 },
+        { "attempts": 97, "day": "2026-10-31", "ok": 97 },
+        { "attempts": 95, "day": "2026-11-01", "ok": 95 },
+        { "attempts": 94, "day": "2026-11-02", "ok": 94 },
+        { "attempts": 95, "day": "2026-11-03", "ok": 95 },
+        { "attempts": 93, "day": "2026-11-04", "ok": 93 },
+        { "attempts": 94, "day": "2026-11-05", "ok": 94 },
+        { "attempts": 95, "day": "2026-11-06", "ok": 94 },
+        { "attempts": 94, "day": "2026-11-07", "ok": 94 },
+        { "attempts": 94, "day": "2026-11-08", "ok": 94 },
+        { "attempts": 94, "day": "2026-11-09", "ok": 94 },
+        { "attempts": 58, "day": "2026-11-10", "ok": 58 }
+      ],
+      "latest": {
+        "catching_up": false,
+        "cert": { "expires": 1805327999, "issuer": "ZeroSSL GmbH" },
+        "drive_protocol": { "current": 14, "latest": 14, "next_epoch": 14 },
+        "height": 468958,
+        "https": { "error": null, "ms": 704 },
+        "node_protx": "d353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff",
+        "p2p": { "error": null, "ms": 2248 },
+        "peers": 258,
+        "software": { "dapi": "5.0.3", "drive": "5.0.3", "tenderdash": "1.8.2" },
+        "ts": 1794321999
+      }
+    },
+    "platform_banned": false,
+    "platform_https": "114.132.172.215:443",
+    "platform_node_id": "bb0f7022648eaaad15650a0c1a0114125b1b5b28",
+    "platform_p2p": "114.132.172.215:26656",
+    "platform_rewards": {
+      "annual_yield": 0.0634,
+      "balance": { "credits": 27531841161563, "ts": 1794321438 },
+      "balance_history": [
+        { "credits": 27531841161563, "ts": 1794175064 },
+        { "credits": 26921758895858, "ts": 1793503034 }
+      ],
+      "current": {
+        "accrued": 78166042953,
+        "blocks": 2,
+        "blocks_total": 1093,
+        "epoch": 88,
+        "pool_so_far": 42717742474176,
+        "proposers": 344,
+        "rank": 217,
+        "turns": {
+          "expected_blocks": 3,
+          "expected_share": 0.00269990977688434,
+          "missed": 0,
+          "turns": 1
+        }
+      },
+      "d30_of": 363,
+      "d30_percentile": 0.298,
+      "epochs": [
+        {
+          "blocks": 16,
+          "credits": 610082265705,
+          "end": 1794174796,
+          "epoch": 87,
+          "of": 361,
+          "rank": 186,
+          "share": 0.0026320118440532982,
+          "start": 1793386337
+        },
+        {
+          "blocks": 16,
+          "credits": 665248910976,
+          "end": 1793386337,
+          "epoch": 86,
+          "of": 360,
+          "rank": 129,
+          "share": 0.002870985106764759,
+          "start": 1792598042
+        },
+        {
+          "blocks": 14,
+          "credits": 653520059675,
+          "end": 1792598042,
+          "epoch": 85,
+          "of": 364,
+          "rank": 164,
+          "share": 0.0028157683024939663,
+          "start": 1791809541
+        },
+        {
+          "blocks": 11,
+          "credits": 464608916868,
+          "end": 1791809541,
+          "epoch": 84,
+          "of": 351,
+          "rank": 313,
+          "share": 0.0020058351568198397,
+          "start": 1791021218
+        },
+        {
+          "blocks": 20,
+          "credits": 720337835235,
+          "end": 1791021218,
+          "epoch": 83,
+          "of": 355,
+          "rank": 115,
+          "share": 0.00310896937665164,
+          "start": 1790232776
+        },
+        {
+          "blocks": 14,
+          "credits": 662869723043,
+          "end": 1790232776,
+          "epoch": 82,
+          "of": 342,
+          "rank": 159,
+          "share": 0.0028583095140873828,
+          "start": 1789444437
+        },
+        {
+          "blocks": 13,
+          "credits": 520182531301,
+          "end": 1789444437,
+          "epoch": 81,
+          "of": 343,
+          "rank": 289,
+          "share": 0.002235213204951857,
+          "start": 1788656009
+        },
+        {
+          "blocks": 20,
+          "credits": 889602914292,
+          "end": 1788656009,
+          "epoch": 80,
+          "of": 347,
+          "rank": 19,
+          "share": 0.003837298541826554,
+          "start": 1787867658
+        },
+        {
+          "blocks": 13,
+          "credits": 521308898544,
+          "end": 1787867658,
+          "epoch": 79,
+          "of": 349,
+          "rank": 281,
+          "share": 0.0022545959070412766,
+          "start": 1787079304
+        },
+        {
+          "blocks": 10,
+          "credits": 505279407496,
+          "end": 1787079304,
+          "epoch": 78,
+          "of": 343,
+          "rank": 294,
+          "share": 0.002059308072487644,
+          "start": 1786290743
+        },
+        {
+          "blocks": 10,
+          "credits": 509490411721,
+          "end": 1786290743,
+          "epoch": 77,
+          "of": 330,
+          "rank": 293,
+          "share": 0.002044989775051125,
+          "start": 1785502401
+        },
+        {
+          "blocks": 9,
+          "credits": 463574698542,
+          "end": 1785502401,
+          "epoch": 76,
+          "of": 335,
+          "rank": 308,
+          "share": 0.0018637399047421825,
+          "start": 1784714107
+        },
+        {
+          "blocks": 15,
+          "credits": 807736610788,
+          "end": 1784714107,
+          "epoch": 75,
+          "of": 335,
+          "rank": 93,
+          "share": 0.003247456159341849,
+          "start": 1783925692
+        },
+        {
+          "blocks": 12,
+          "credits": 631284985503,
+          "end": 1783925692,
+          "epoch": 74,
+          "of": 344,
+          "rank": 227,
+          "share": 0.0025311115798354778,
+          "start": 1783137161
+        },
+        {
+          "blocks": 12,
+          "credits": 606452270585,
+          "end": 1783137161,
+          "epoch": 73,
+          "of": 342,
+          "rank": 252,
+          "share": 0.0024296416278598906,
+          "start": 1782348760
+        },
+        {
+          "blocks": 12,
+          "credits": 610780155721,
+          "end": 1782348760,
+          "epoch": 72,
+          "of": 347,
+          "rank": 243,
+          "share": 0.0024549918166939444,
+          "start": 1781560424
+        },
+        {
+          "blocks": 16,
+          "credits": 811131094538,
+          "end": 1781560424,
+          "epoch": 71,
+          "of": 355,
+          "rank": 76,
+          "share": 0.0032533550223668157,
+          "start": 1780772008
+        },
+        {
+          "blocks": 12,
+          "credits": 622528971528,
+          "end": 1780772008,
+          "epoch": 70,
+          "of": 358,
+          "rank": 224,
+          "share": 0.0025,
+          "start": 1779983643
+        },
+        {
+          "blocks": 14,
+          "credits": 732265286731,
+          "end": 1779983643,
+          "epoch": 69,
+          "of": 364,
+          "rank": 120,
+          "share": 0.002938090241343127,
+          "start": 1779195136
+        },
+        {
+          "blocks": 15,
+          "credits": 804495404535,
+          "end": 1779195136,
+          "epoch": 68,
+          "of": 358,
+          "rank": 73,
+          "share": 0.0032285837279380112,
+          "start": 1778406901
+        },
+        {
+          "blocks": 14,
+          "credits": 720866783808,
+          "end": 1778406901,
+          "epoch": 67,
+          "of": 359,
+          "rank": 132,
+          "share": 0.0028949545078577337,
+          "start": 1777618474
+        },
+        {
+          "blocks": 14,
+          "credits": 747087355296,
+          "end": 1777618474,
+          "epoch": 66,
+          "of": 359,
+          "rank": 119,
+          "share": 0.0029985007496251873,
+          "start": 1776830078
+        },
+        {
+          "blocks": 13,
+          "credits": 687292501851,
+          "end": 1776830078,
+          "epoch": 65,
+          "of": 384,
+          "rank": 159,
+          "share": 0.002760084925690021,
+          "start": 1776041585
+        },
+        {
+          "blocks": 13,
+          "credits": 678773736530,
+          "end": 1776041585,
+          "epoch": 64,
+          "of": 355,
+          "rank": 163,
+          "share": 0.0027242246437552387,
+          "start": 1775253162
+        },
+        {
+          "blocks": 12,
+          "credits": 670159348819,
+          "end": 1775253162,
+          "epoch": 63,
+          "of": 353,
+          "rank": 184,
+          "share": 0.0026929982046678637,
+          "start": 1774464822
+        },
+        {
+          "blocks": 16,
+          "credits": 891855435504,
+          "end": 1774464822,
+          "epoch": 62,
+          "of": 351,
+          "rank": 48,
+          "share": 0.0035834266517357225,
+          "start": 1773676461
+        },
+        {
+          "blocks": 15,
+          "credits": 837274212175,
+          "end": 1773676461,
+          "epoch": 61,
+          "of": 343,
+          "rank": 86,
+          "share": 0.0033579583613163196,
+          "start": 1772888056
+        },
+        {
+          "blocks": 13,
+          "credits": 717717890816,
+          "end": 1772888056,
+          "epoch": 60,
+          "of": 341,
+          "rank": 152,
+          "share": 0.002878653675819309,
+          "start": 1772099604
+        },
+        {
+          "blocks": 7,
+          "credits": 379130782647,
+          "end": 1772099604,
+          "epoch": 59,
+          "of": 340,
+          "rank": 331,
+          "share": 0.0015217391304347826,
+          "start": 1771311256
+        },
+        {
+          "blocks": 13,
+          "credits": 713093658363,
+          "end": 1771311256,
+          "epoch": 58,
+          "of": 335,
+          "rank": 174,
+          "share": 0.00286154523442659,
+          "start": 1770522840
+        },
+        {
+          "blocks": 14,
+          "credits": 779090449510,
+          "end": 1770522840,
+          "epoch": 57,
+          "of": 338,
+          "rank": 125,
+          "share": 0.003129890453834116,
+          "start": 1769734476
+        },
+        {
+          "blocks": 16,
+          "credits": 705653295759,
+          "end": 1769734476,
+          "epoch": 56,
+          "of": 333,
+          "rank": 189,
+          "share": 0.0028338646829613886,
+          "start": 1768946089
+        },
+        {
+          "blocks": 14,
+          "credits": 615335947770,
+          "end": 1768946089,
+          "epoch": 55,
+          "of": 336,
+          "rank": 251,
+          "share": 0.0024639211545230554,
+          "start": 1768157542
+        },
+        {
+          "blocks": 10,
+          "credits": 517675384541,
+          "end": 1768157542,
+          "epoch": 54,
+          "of": 336,
+          "rank": 297,
+          "share": 0.002079002079002079,
+          "start": 1767369231
+        },
+        {
+          "blocks": 8,
+          "credits": 401513227419,
+          "end": 1767369231,
+          "epoch": 53,
+          "of": 332,
+          "rank": 323,
+          "share": 0.0016109544905356424,
+          "start": 1766580905
+        },
+        {
+          "blocks": 17,
+          "credits": 866631532938,
+          "end": 1766580905,
+          "epoch": 52,
+          "of": 334,
+          "rank": 69,
+          "share": 0.0034793286942284077,
+          "start": 1765792347
+        },
+        {
+          "blocks": 14,
+          "credits": 729172236850,
+          "end": 1765792347,
+          "epoch": 51,
+          "of": 329,
+          "rank": 154,
+          "share": 0.002930709650408206,
+          "start": 1765003972
+        },
+        {
+          "blocks": 15,
+          "credits": 787507106220,
+          "end": 1765003972,
+          "epoch": 50,
+          "of": 330,
+          "rank": 139,
+          "share": 0.0031625553447185324,
+          "start": 1764215686
+        },
+        {
+          "blocks": 10,
+          "credits": 550317324227,
+          "end": 1764215686,
+          "epoch": 49,
+          "of": 325,
+          "rank": 283,
+          "share": 0.0022060445621001545,
+          "start": 1763427306
+        },
+        {
+          "blocks": 16,
+          "credits": 882877203190,
+          "end": 1763427306,
+          "epoch": 48,
+          "of": 322,
+          "rank": 79,
+          "share": 0.0035398230088495575,
+          "start": 1762638785
+        },
+        {
+          "blocks": 15,
+          "credits": 803648678274,
+          "end": 1762638785,
+          "epoch": 47,
+          "of": 348,
+          "rank": 124,
+          "share": 0.0032285837279380112,
+          "start": 1761850452
+        },
+        {
+          "blocks": 15,
+          "credits": 828650905334,
+          "end": 1761850452,
+          "epoch": 46,
+          "of": 332,
+          "rank": 91,
+          "share": 0.0033193184332816995,
+          "start": 1761062039
+        },
+        {
+          "blocks": 12,
+          "credits": 630994341261,
+          "end": 1761062039,
+          "epoch": 45,
+          "of": 327,
+          "rank": 245,
+          "share": 0.002530044275774826,
+          "start": 1760273541
+        },
+        {
+          "blocks": 15,
+          "credits": 776211093104,
+          "end": 1760273541,
+          "epoch": 44,
+          "of": 328,
+          "rank": 134,
+          "share": 0.003112678979041295,
+          "start": 1759485180
+        },
+        {
+          "blocks": 23,
+          "credits": 951167017742,
+          "end": 1759485180,
+          "epoch": 43,
+          "of": 322,
+          "rank": 37,
+          "share": 0.0038218677301429045,
+          "start": 1758696921
+        },
+        {
+          "blocks": 13,
+          "credits": 706267908026,
+          "end": 1758696921,
+          "epoch": 42,
+          "of": 318,
+          "rank": 188,
+          "share": 0.0028347143480157,
+          "start": 1757908510
+        },
+        {
+          "blocks": 11,
+          "credits": 566380318173,
+          "end": 1757908510,
+          "epoch": 41,
+          "of": 320,
+          "rank": 275,
+          "share": 0.002268976897689769,
+          "start": 1757120072
+        },
+        {
+          "blocks": 12,
+          "credits": 565341882457,
+          "end": 1757120072,
+          "epoch": 40,
+          "of": 316,
+          "rank": 287,
+          "share": 0.0022675736961451248,
+          "start": 1756331585
+        },
+        {
+          "blocks": 11,
+          "credits": 570196927764,
+          "end": 1756331585,
+          "epoch": 39,
+          "of": 312,
+          "rank": 275,
+          "share": 0.0022911893355550927,
+          "start": 1755543279
+        },
+        {
+          "blocks": 12,
+          "credits": 652497440106,
+          "end": 1755543279,
+          "epoch": 38,
+          "of": 311,
+          "rank": 233,
+          "share": 0.00261437908496732,
+          "start": 1754754892
+        },
+        {
+          "blocks": 7,
+          "credits": 362335689854,
+          "end": 1754754892,
+          "epoch": 37,
+          "of": 308,
+          "rank": 305,
+          "share": 0.001454998960715028,
+          "start": 1753966420
+        },
+        {
+          "blocks": 13,
+          "credits": 758714625929,
+          "end": 1753966420,
+          "epoch": 36,
+          "of": 309,
+          "rank": 189,
+          "share": 0.002881844380403458,
+          "start": 1753178027
+        },
+        {
+          "blocks": 18,
+          "credits": 946193357851,
+          "end": 1753178027,
+          "epoch": 35,
+          "of": 308,
+          "rank": 106,
+          "share": 0.0035266457680250786,
+          "start": 1752389591
+        },
+        {
+          "blocks": 17,
+          "credits": 1034920295716,
+          "end": 1752389591,
+          "epoch": 34,
+          "of": 309,
+          "rank": 49,
+          "share": 0.003854875283446712,
+          "start": 1751601268
+        }
+      ],
+      "explorer": {
+        "before_ours": 0,
+        "epoch": 88,
+        "fetched": 1794236344,
+        "ours_to_then": 36845327249151,
+        "total_reward": 36845327249151
+      },
+      "first_epoch": 34,
+      "in_validator_sets": true,
+      "monthly": 2069424901622,
+      "monthly_basis_days": 54.749525462962964,
+      "next": { "eta": 1794386399, "sampled": 1794321858, "slots": 481 },
+      "totals": {
+        "d30": 2393460153224,
+        "d365": 26691806767560,
+        "d90": 6213041463135,
+        "epochs_paid": 54,
+        "last_epoch": 610082265705,
+        "last_epoch_index": 87,
+        "lifetime": 36845327249151
+      },
+      "turns_30d": { "expected_share": 0.0033726213139483713, "missed": 0, "turns": 15 },
+      "vote": { "ts": 1794321438, "version": 14 },
+      "watched": []
+    },
+    "pose_ban_height": -1,
+    "pose_penalty": 0,
+    "pose_revived_height": 2187920,
+    "protocol": 70242,
+    "protx": "d353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff",
+    "pubkey_operator": "87ea31e0e46c5c74d3978bd4243229b9d003f56294459115e2abc01da6da1072459ce6ffba23d5d79f1852472dcb505b",
+    "reachable": true,
+    "registered_height": 1899867,
+    "relay": true,
+    "removed": null,
+    "returns": {
+      "annual_yield": 0.018,
+      "indexed_since": 1554246129,
+      "paid_30d": 539477841,
+      "paid_365d": 7675801699,
+      "paid_90d": 1778561396,
+      "window_days": 90
+    },
+    "revocation_reason": 0,
+    "service": "114.132.172.215:9999",
+    "services": 7237,
+    "start_height": 2569996,
+    "status": "enabled",
+    "type": "Evo",
+    "uptime_daily": [
+      { "attempts": 17, "day": "2026-10-29", "ok": 17 },
+      { "attempts": 63, "day": "2026-10-30", "ok": 63 },
+      { "attempts": 99, "day": "2026-10-31", "ok": 99 },
+      { "attempts": 97, "day": "2026-11-01", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-02", "ok": 96 },
+      { "attempts": 97, "day": "2026-11-03", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-04", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-05", "ok": 95 },
+      { "attempts": 97, "day": "2026-11-06", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-07", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-08", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-09", "ok": 96 },
+      { "attempts": 59, "day": "2026-11-10", "ok": 59 }
+    ],
+    "user_agent": "/Dash Core:24.0.0/",
+    "version": "24.0.0",
+    "versions": [
+      { "protocol": 70242, "ts": 1793976261, "user_agent": "/Dash Core:24.0.0/" },
+      { "protocol": 70240, "ts": 1793804469, "user_agent": "/Dash Core:23.1.10/" },
+      { "protocol": 70240, "ts": 1793504824, "user_agent": "/Dash Core:23.1.9/" },
+      { "protocol": 70240, "ts": 1793305700, "user_agent": "/Dash Core:23.1.8/" }
+    ],
+    "voting_address": "XkaqdSmFeCySpQZd5B7HAoyVPSy9kF4pED"
+  }
+}

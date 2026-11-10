@@ -1,0 +1,62 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/testnet/proposals?limit=20" },
+  "recordedAt": "2026-11-10T15:03:01.826Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "totalCount": 3,
+    "value": [
+      {
+        "hash": "01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd",
+        "collateralHash": "9aee5e1a4bc69b8201775daef93be1f21264a28c1cb6dc9e859b91f2e1497df0",
+        "name": "test",
+        "url": "https://test.com",
+        "paymentAddress": "yeRZBWYfeNE4yVUHV4ZLs83Ppn9aMRH57A",
+        "paymentAmount": 500000000,
+        "startTime": "2025-06-07T23:07:22Z",
+        "endTime": "2027-06-23T04:24:02Z",
+        "votes": { "yes": 1, "no": 31, "abstain": 6 },
+        "fundingThreshold": 10,
+        "meetsFundingThreshold": false,
+        "funded": false,
+        "valid": true,
+        "creationTime": "2025-05-26T16:14:07Z"
+      },
+      {
+        "hash": "7531d5e06fea29dcde36b80767b4bd204aa7552a7fe5a1622f66732ab43e9354",
+        "collateralHash": "1761d33b194f094d9f197cdbd404586145122d9c00f7afaa1a5d5a46de6b47b3",
+        "name": "Another-demo-govenr",
+        "url": "https://govenr.vercel.app/proposals/another-demo-govenr",
+        "paymentAddress": "yd83NmVwTmdZ4C7y3gmWxgf7prAj89q8ji",
+        "paymentAmount": 15000000000,
+        "startTime": "2026-10-06T01:56:20Z",
+        "endTime": "2026-12-04T16:45:40Z",
+        "votes": { "yes": 1, "no": 0, "abstain": 6 },
+        "fundingThreshold": 10,
+        "meetsFundingThreshold": false,
+        "funded": false,
+        "valid": true,
+        "creationTime": "2026-10-01T12:11:25Z"
+      },
+      {
+        "hash": "c6f5059ca0055fb327a6a0b15b9dd80c64b8c0956c1621061b294f8b93edab7f",
+        "collateralHash": "38e7621be9ca265288095a324dc185b6ba739fe3846858e3133f775c12a91306",
+        "name": "testing",
+        "url": "https://secondarytesting.com",
+        "paymentAddress": "yeRZBWYfeNE4yVUHV4ZLs83Ppn9aMRH57A",
+        "paymentAmount": 2000000000,
+        "startTime": "2025-06-07T23:11:38Z",
+        "endTime": "2027-01-25T03:24:58Z",
+        "votes": { "yes": 33, "no": 38, "abstain": 6 },
+        "fundingThreshold": 10,
+        "meetsFundingThreshold": false,
+        "funded": false,
+        "valid": true,
+        "creationTime": "2025-05-26T16:26:08Z"
+      }
+    ]
+  }
+}

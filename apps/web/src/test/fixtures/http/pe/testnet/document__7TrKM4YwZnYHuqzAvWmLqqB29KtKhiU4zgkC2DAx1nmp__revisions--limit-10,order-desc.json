@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/document/7TrKM4YwZnYHuqzAvWmLqqB29KtKhiU4zgkC2DAx1nmp/revisions?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:02:47.880Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "7TrKM4YwZnYHuqzAvWmLqqB29KtKhiU4zgkC2DAx1nmp",
+        "dataContractIdentifier": null,
+        "revision": null,
+        "txHash": "3ADAF742A53E7850498D1FB21353152BA719FC2BA4C778A5FD3F29018D30F591",
+        "deleted": null,
+        "data": null,
+        "timestamp": "2025-07-14T11:24:22.835Z",
+        "system": null,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": null,
+        "transitionType": "DOCUMENT_DELETE",
+        "identityContractNonce": null,
+        "gasUsed": 5524820,
+        "totalGasUsed": null,
+        "owner": { "identifier": "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r", "aliases": [] }
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 1 }
+  }
+}

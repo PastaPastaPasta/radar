@@ -1,0 +1,60 @@
+{
+  "request": { "method": "GET", "url": "https://radar.dashhq.org/api/v1/status" },
+  "recordedAt": "2026-11-10T15:02:13.722Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"7cd8243651e513cf995bb2079dba12a1\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "crawler_location": "United States (New York)",
+    "networks": {
+      "mainnet": {
+        "chain": {
+          "best_block_time": 1794322110,
+          "blocks": 2570006,
+          "dashd_version": "/Dash Core:24.0.0/",
+          "error": null,
+          "headers": 2570006,
+          "synced": true,
+          "updated": 1794322870,
+          "verification_progress": 0.9999995707547638
+        },
+        "crawl": {
+          "last_error": null,
+          "last_finished": 1794322011,
+          "last_id": 1142,
+          "running": true
+        },
+        "geo_loaded": true,
+        "payments_indexed": { "from": 1047200, "to": 2570006 }
+      },
+      "testnet": {
+        "chain": {
+          "best_block_time": 1794322210,
+          "blocks": 1589141,
+          "dashd_version": "/Dash Core:24.0.0/",
+          "error": null,
+          "headers": 1589141,
+          "synced": true,
+          "updated": 1794322860,
+          "verification_progress": 0.9999999238337112
+        },
+        "crawl": {
+          "last_error": null,
+          "last_finished": 1794322773,
+          "last_id": 1143,
+          "running": false
+        },
+        "geo_loaded": true,
+        "payments_indexed": { "from": 7300, "to": 1589141 }
+      }
+    },
+    "snapshots": {
+      "app-mainnet": { "error": null, "saved": 1794319631 },
+      "app-testnet": { "error": null, "saved": 1794319705 }
+    },
+    "version": "0.1.0"
+  }
+}

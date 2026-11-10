@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6/transactions?limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-10T15:02:44.679Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "type": "BATCH",
+        "action": [
+          {
+            "action": "DOCUMENT_DELETE",
+            "documentIdentifier": "7TrKM4YwZnYHuqzAvWmLqqB29KtKhiU4zgkC2DAx1nmp",
+            "tokenIdentifier": null,
+            "recipient": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "owner": { "identifier": "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r", "aliases": [] },
+        "timestamp": "2025-07-14T11:24:22.835Z",
+        "gasUsed": 5524820,
+        "error": null,
+        "hash": "3ADAF742A53E7850498D1FB21353152BA719FC2BA4C778A5FD3F29018D30F591"
+      },
+      {
+        "type": "BATCH",
+        "action": [
+          {
+            "action": "DOCUMENT_DELETE",
+            "documentIdentifier": "5ZK7n7NMd6km1fcWgp7KeLpxxZddsYgKBfhYDX7fR53m",
+            "tokenIdentifier": null,
+            "recipient": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "owner": { "identifier": "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r", "aliases": [] },
+        "timestamp": "2025-07-14T11:18:32.698Z",
+        "gasUsed": 17058600,
+        "error": null,
+        "hash": "017CF14977EA962AADF53BF3591B65D29AD7618084F3FFAF92BBEF231DC833EC"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 2 }
+  }
+}

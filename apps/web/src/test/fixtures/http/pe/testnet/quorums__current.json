@@ -1,0 +1,296 @@
+{
+  "request": { "method": "GET", "url": "https://api.testnet.pe.dashhq.org/quorums/current" },
+  "recordedAt": "2026-11-10T15:02:29.255Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "blockHeight": 1588824,
+    "creationHeight": 1588824,
+    "minedBlockHash": "00000026e98d2c5f373ce40ac9c38eca3ac141d252ecb57bd6d0551fc4266008",
+    "numValidMembers": 25,
+    "healthRatio": "1.00",
+    "type": "llmq_25_67",
+    "quorumHash": "000000AF6A7C134ABB3210FEAE59E4BD56CA7C71928BD2B31FAECF53FB7399B7",
+    "quorumIndex": 0,
+    "quorumPublicKey": "82b5e2d3ec077635be36a85437e5ea3eba39608754961f4abc3a5b5d7d0a63322c93b349f93447f00c82ce73ff648f78",
+    "previousConsecutiveDKGFailures": null,
+    "isCurrent": true,
+    "members": [
+      {
+        "proTxHash": "40784F3F9A761C60156F9244A902C0626F8BC8FE003786C70F1FC6BE41DA467D",
+        "service": "68.67.122.11:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.11:19999"],
+          "platform_https": ["68.67.122.11:1443"],
+          "platform_p2p": ["68.67.122.11:36656"]
+        },
+        "pubKeyOperator": "82f60dad4b7b498379d1c700da56d4927727eab4387a793b861a96df47bdabe5666c270acf04b5b842ab54045bbf102a",
+        "valid": true
+      },
+      {
+        "proTxHash": "C0E7B1D893533E7552F64245B53E8819C5347A3F206BDAC325AE582191C1AEF6",
+        "service": "85.209.243.5:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.5:19999"],
+          "platform_https": ["85.209.243.5:1443"],
+          "platform_p2p": ["85.209.243.5:36656"]
+        },
+        "pubKeyOperator": "b362c9e1c662e038e334bd6c5ab36d31ec161df27439b2662acb55677815bee23929ccdeda8df9a8cb5d97f5c2119555",
+        "valid": true
+      },
+      {
+        "proTxHash": "5C6542766615387183715D958A925552472F93335FA1612880423E4BBDAEF436",
+        "service": "68.67.122.16:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.16:19999"],
+          "platform_https": ["68.67.122.16:1443"],
+          "platform_p2p": ["68.67.122.16:36656"]
+        },
+        "pubKeyOperator": "86d0a2ca6f434eaa47ff6919ecafa4fc3b012b89c62a04835a24c00faf62c3d30d3f8755c33a7abc595e96fb5b79594a",
+        "valid": true
+      },
+      {
+        "proTxHash": "61D33F478933797BE4DE88353C7C2D843C21310F6D00F6EFF31424A756EE7DFB",
+        "service": "68.67.122.5:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.5:19999"],
+          "platform_p2p": ["68.67.122.5:36656"],
+          "platform_https": ["68.67.122.5:1443"]
+        },
+        "pubKeyOperator": "a6a63376eb861bda6afa09e28e39ba40cdfb877ee6f9aace10eaccd4caafe8d9243f2f2c0ef982a0766347073cc199bb",
+        "valid": true
+      },
+      {
+        "proTxHash": "88251BD4B124EFEB87537DEABEEC54F6C8F575F4DF81F10CF5E8EEA073092B6F",
+        "service": "68.67.122.19:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.19:19999"],
+          "platform_https": ["68.67.122.19:1443"],
+          "platform_p2p": ["68.67.122.19:36656"]
+        },
+        "pubKeyOperator": "af9cd8567923fea3f6e6bbf5e1b3a76bf772f6a3c72b41be15c257af50533b32cc3923cebdeda9fce7a6bc9659123d53",
+        "valid": true
+      },
+      {
+        "proTxHash": "9712E85D660FA2F761F980EF5812C225F33F336F285728803DCD421937D3DF54",
+        "service": "68.67.122.14:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.14:19999"],
+          "platform_https": ["68.67.122.14:1443"],
+          "platform_p2p": ["68.67.122.14:36656"]
+        },
+        "pubKeyOperator": "a8dbccb130522909dc710a65728006732c18441757f12a338cf4a6d8cbd5baf1a484537a6a0542f51bb686e6e546f1a0",
+        "valid": true
+      },
+      {
+        "proTxHash": "05B687978344FA2433B2AA99D41F643E2D8581A789CDC23084889CECA5244EA8",
+        "service": "68.67.122.24:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.24:19999"],
+          "platform_https": ["68.67.122.24:1443"],
+          "platform_p2p": ["68.67.122.24:36656"]
+        },
+        "pubKeyOperator": "80f8efb42f65ed9650078785be5d13e6e90eb9df87a99261d4de34df2b4b79a9c9b8c5e1aec7ac068ebef14636ceac4c",
+        "valid": true
+      },
+      {
+        "proTxHash": "F37DE98BCD094E33307C6705204BCCDF4D7AD10EB08999C1C9281847B5EF22B0",
+        "service": "68.67.122.3:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.3:19999"],
+          "platform_https": ["68.67.122.3:1443"],
+          "platform_p2p": ["68.67.122.3:36656"]
+        },
+        "pubKeyOperator": "a96efd6e93a689473ce1d03d0c00a5d193b6f1e9e64a826f912ce335b0512446e30aff8841ce34155d2a967fe019a292",
+        "valid": true
+      },
+      {
+        "proTxHash": "EDB952979A9FD4057F12468490CF3CADC923AE99D8C48E063EFBDDAF5A1447A0",
+        "service": "87.229.22.126:19999",
+        "addresses": {
+          "core_p2p": ["87.229.22.126:19999"],
+          "platform_https": ["87.229.22.126:1443"],
+          "platform_p2p": ["87.229.22.126:36656"]
+        },
+        "pubKeyOperator": "82be9e928577bd4f1050a030418b083d625dbb4ad963494ce146ca818c49879dfec6fb746cae1cda4342b9ad442937cb",
+        "valid": true
+      },
+      {
+        "proTxHash": "2770D2493755B59B3426474B2A18EB5C34DF636530AE8059AA1FE4B22CE47C3C",
+        "service": "85.209.243.10:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.10:19999"],
+          "platform_p2p": ["85.209.243.10:36656"],
+          "platform_https": ["85.209.243.10:1443"]
+        },
+        "pubKeyOperator": "b03a69e21639859a0448d9ad97ee33d9c7807adc1aba1791c759b87aa81b99d79c19ba8778cdda6533ce9f0534a8392f",
+        "valid": true
+      },
+      {
+        "proTxHash": "49E557FE809A82E775CFFD3FF86937C4EC85AD393E5DAF080D2B3071DC3F9929",
+        "service": "68.67.122.29:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.29:19999"],
+          "platform_https": ["68.67.122.29:1443"],
+          "platform_p2p": ["68.67.122.29:36656"]
+        },
+        "pubKeyOperator": "8f2df81ba65db70eaab625c5fe46f0f5e52a45b25c761686db23b4f18e547cb0d161912dd187302eb6f7c4a9a666a323",
+        "valid": true
+      },
+      {
+        "proTxHash": "8DE8B12952F7058D827BD04CDFF1C2175D87BBF89F28B52452A637BC979ADDC4",
+        "service": "68.67.122.20:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.20:19999"],
+          "platform_https": ["68.67.122.20:1443"],
+          "platform_p2p": ["68.67.122.20:36656"]
+        },
+        "pubKeyOperator": "9502bb884b3437d65c0e025e49fb00ff6ea9f55d5bcdc36330b46c8bd18be9126b7a6d7f35f558ef8040f2c2284500a5",
+        "valid": true
+      },
+      {
+        "proTxHash": "87075234AC47353B42BB97CE46330CB67CD4648C01F0B2393D7E729B0D678918",
+        "service": "68.67.122.7:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.7:19999"],
+          "platform_https": ["68.67.122.7:1443"],
+          "platform_p2p": ["68.67.122.7:36656"]
+        },
+        "pubKeyOperator": "a7afe7674de986aff5e2e0a173be8c29abed8b5d6f878389ea18be0d43c62ad1ba66a59e9e8d8453aa0ed1a696976758",
+        "valid": true
+      },
+      {
+        "proTxHash": "2FB3D30B3EF097122DC057E3132438E4B48883F4A5EC239977B3A3AE3E0F766F",
+        "service": "85.209.243.4:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.4:19999"],
+          "platform_https": ["85.209.243.4:1443"],
+          "platform_p2p": ["85.209.243.4:36656"]
+        },
+        "pubKeyOperator": "af71f8ffeab47423d514744e6705d6720dbfbeb342c9a0e81343616e3cee9f778320b48f8bf219d83e18d760aece6859",
+        "valid": true
+      },
+      {
+        "proTxHash": "F79999936526435B33DBC8117E293C1A408C40F0EF867CB13EA83639B8308E8F",
+        "service": "85.209.243.9:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.9:19999"],
+          "platform_https": ["85.209.243.9:1443"],
+          "platform_p2p": ["85.209.243.9:36656"]
+        },
+        "pubKeyOperator": "ab052bc57acf5257a1c88bc1240f658bbb5661a83771eca2dd8b09338b12f8003f955790afcaebbe477377fd08338e5f",
+        "valid": true
+      },
+      {
+        "proTxHash": "6D1B185BA036EFCD44A77E05A9AAF69A0C4E40976AEC00B04773E52863320966",
+        "service": "68.67.122.13:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.13:19999"],
+          "platform_https": ["68.67.122.13:1443"],
+          "platform_p2p": ["68.67.122.13:36656"]
+        },
+        "pubKeyOperator": "b8a2161c64bfdc7d621df51de569911a219f718bad4d6058dcca9bddf6696d43ddc4c1e3cf91640c93f820e5680efac3",
+        "valid": true
+      },
+      {
+        "proTxHash": "FCB1DFEC4DE18C6A86E02C0CD94370CBC74778C64726AD67972532296ACF15DF",
+        "service": "85.209.243.1:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.1:19999"],
+          "platform_https": ["85.209.243.1:1443"],
+          "platform_p2p": ["85.209.243.1:36656"]
+        },
+        "pubKeyOperator": "95ab47efb395f60ed95d41b2794c8e9bf58b401ebce334f5ba89fd5df5d072fd4e398e69392f1fdf3451476043285ed8",
+        "valid": true
+      },
+      {
+        "proTxHash": "F58D935608FF003E697DE5700F67363493DEDC5EF63E83CA668A2ACD0AC69919",
+        "service": "206.245.167.63:19999",
+        "addresses": {
+          "core_p2p": ["206.245.167.63:19999"],
+          "platform_https": ["206.245.167.63:1443"],
+          "platform_p2p": ["206.245.167.63:36656"]
+        },
+        "pubKeyOperator": "8de9ff4dbb2fab156e5b3d8aca182a4c6807fa924307c8b6830180892cdff466f3b43ee0ef4370d3ac4828e2dd341649",
+        "valid": true
+      },
+      {
+        "proTxHash": "B3B5748571B60FE9AD112715D6A51725D6E5A52A9C3AF5FD36A1724CF50D862F",
+        "service": "68.67.122.21:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.21:19999"],
+          "platform_https": ["68.67.122.21:1443"],
+          "platform_p2p": ["68.67.122.21:36656"]
+        },
+        "pubKeyOperator": "816ab3f50007333bcb40445130cd0e82139f8c68b592001cd686efc15e303206491fada6cf90af8f24a28b81a9b59ccf",
+        "valid": true
+      },
+      {
+        "proTxHash": "85F15A31D3838293A9C1D72A1A0FA21E66110CE20878BD4C1024C4AE1D5BE824",
+        "service": "68.67.122.10:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.10:19999"],
+          "platform_https": ["68.67.122.10:1443"],
+          "platform_p2p": ["68.67.122.10:36656"]
+        },
+        "pubKeyOperator": "ac3026b3e3023db1db9ec8e3b7678761820a2a6e96e7a5d9a39b1894170f9cea7765d3d131d60fa9d17492ba560fb1f9",
+        "valid": true
+      },
+      {
+        "proTxHash": "91BBCE94C34EBDE0D099C0A2CB7635C0C31425EBABCEC644F4F1A0854BFA605D",
+        "service": "68.67.122.15:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.15:19999"],
+          "platform_https": ["68.67.122.15:1443"],
+          "platform_p2p": ["68.67.122.15:36656"]
+        },
+        "pubKeyOperator": "81ad0f9be5a88ae62ff54fe938dfceea71be03bd4c6a7aebf75896e8d495d310acc4146aa4820bc0e5f5b06579dedea5",
+        "valid": true
+      },
+      {
+        "proTxHash": "D9B090CFC19CAF2E27D512E69C43812A274BDF29C081D0ADE4FD272AD56A5F89",
+        "service": "68.67.122.9:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.9:19999"],
+          "platform_https": ["68.67.122.9:1443"],
+          "platform_p2p": ["68.67.122.9:36656"]
+        },
+        "pubKeyOperator": "86108e551691da2642f37b68bcfbc5bbe9984ca51aca15ee24b6fa9b8690ed62c6ed722d091e04ef617cfc99341fd358",
+        "valid": true
+      },
+      {
+        "proTxHash": "B68426D450248C92136E1AD3ABB9AC20909EE7F504348BB2CA2E9078147F5B0A",
+        "service": "68.67.122.6:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.6:19999"],
+          "platform_https": ["68.67.122.6:1443"],
+          "platform_p2p": ["68.67.122.6:36656"]
+        },
+        "pubKeyOperator": "b8a150e6472bc281b51537dda3d077264786f207d05c4ec8d314b5883e32b14b15077bf39ccf5d92543a6fd0ee238978",
+        "valid": true
+      },
+      {
+        "proTxHash": "143DCD6A6B7684FDE01E88A10E5D65DE9A29244C5ECD586D14A342657025F113",
+        "service": "68.67.122.18:19999",
+        "addresses": {
+          "core_p2p": ["68.67.122.18:19999"],
+          "platform_https": ["68.67.122.18:1443"],
+          "platform_p2p": ["68.67.122.18:36656"]
+        },
+        "pubKeyOperator": "b928fa4e127214ccb2b5de1660b5e371d2f3c9845077bc3900fc6aabe82ddd2e61530be3765cea15752e30fc761ab730",
+        "valid": true
+      },
+      {
+        "proTxHash": "4384AC000ABDFC9A3B74F4BB1AF7AF6CEE6A785F668708A4718F2E8AB9AAD823",
+        "service": "85.209.243.7:19999",
+        "addresses": {
+          "core_p2p": ["85.209.243.7:19999"],
+          "platform_https": ["85.209.243.7:1443"],
+          "platform_p2p": ["85.209.243.7:36656"]
+        },
+        "pubKeyOperator": "a08769d8e414245828d46b3411da93c2c62188f6e5168b0b32e6a04e5efc4af076f6792e10dbb0b6a3896ed77f4314fb",
+        "valid": true
+      }
+    ]
+  }
+}

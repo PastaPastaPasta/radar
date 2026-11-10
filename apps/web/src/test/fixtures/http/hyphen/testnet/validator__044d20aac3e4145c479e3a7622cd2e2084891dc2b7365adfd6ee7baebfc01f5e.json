@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/testnet/validator/044d20aac3e4145c479e3a7622cd2e2084891dc2b7365adfd6ee7baebfc01f5e"
+  },
+  "recordedAt": "2026-11-10T15:03:08.855Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 1577999,
+    "proTxHash": "044d20aac3e4145c479e3a7622cd2e2084891dc2b7365adfd6ee7baebfc01f5e",
+    "collateralHash": "3f59630f28d5e1e5d1d40c64558d860a0821ca11840be5fdfad512e56ee22a37",
+    "collateralIndex": 1,
+    "addresses": {
+      "owner": "yQdUkkdz3R8Rz4bJcTpDUm7EV2LruVwMQ3",
+      "voting": "yRN2bSKNP571hhh6wupDrGDWmR1bEnVBx2",
+      "payout": "yf3chcrNDQLC9ZsN9eZpduVRdVxYsniLrc"
+    },
+    "live": {
+      "type": "Evo",
+      "valid": true,
+      "status": "valid",
+      "lastPaidHeight": 1577910,
+      "lastPaidAt": "2026-10-23T12:16:25Z",
+      "consecutivePayments": 0,
+      "pose": { "banScore": 0, "revivedHeight": -1, "banHeight": -1 },
+      "revocationReason": 0
+    },
+    "operatorPubKey": "b03a69e21639859a0448d9ad97ee33d9c7807adc1aba1791c759b87aa81b99d79c19ba8778cdda6533ce9f0534a8392f",
+    "operatorReward": 0,
+    "type": "evonode",
+    "status": "registered",
+    "services": { "coreP2p": ["85.209.243.10:19999"], "platformP2p": [], "platformHttps": [] },
+    "registeredHeight": 1576918,
+    "lastUpdatedHeight": 1576918,
+    "history": [
+      {
+        "txHash": "044d20aac3e4145c479e3a7622cd2e2084891dc2b7365adfd6ee7baebfc01f5e",
+        "txType": "provider_register",
+        "payload": {
+          "collateralHash": "3f59630f28d5e1e5d1d40c64558d860a0821ca11840be5fdfad512e56ee22a37",
+          "collateralIndex": 1,
+          "mnType": "Evo",
+          "operatorPubKey": "b03a69e21639859a0448d9ad97ee33d9c7807adc1aba1791c759b87aa81b99d79c19ba8778cdda6533ce9f0534a8392f",
+          "operatorReward": 0,
+          "ownerKeyId": "2f4994deef0702c2c368301f92e11d0bcaec5daf",
+          "version": 2,
+          "votingKeyId": "3755a14e2aab8750b9f853e0b9b07fd15a38c974"
+        },
+        "blockHeight": 1576918
+      }
+    ]
+  }
+}

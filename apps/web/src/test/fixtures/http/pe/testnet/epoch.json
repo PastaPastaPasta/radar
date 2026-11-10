@@ -1,0 +1,47 @@
+{
+  "request": { "method": "GET", "url": "https://api.testnet.pe.dashhq.org/epoch" },
+  "recordedAt": "2026-11-10T15:02:27.029Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "epoch": {
+      "number": 20269,
+      "firstBlockHeight": "666786",
+      "firstCoreBlockHeight": 1589128,
+      "startTime": 1794321611405,
+      "feeMultiplier": "1000",
+      "endTime": 1794325211405,
+      "totalBlocksInEpoch": null,
+      "totalProcessingFees": null,
+      "totalDistributedStorageFees": null,
+      "totalCreatedStorageFees": null,
+      "coreBlockRewards": null,
+      "blockProposers": null
+    },
+    "tps": 0.10305555555555555,
+    "totalCollectedFees": 4015494060,
+    "bestValidator": "F79999936526435B33DBC8117E293C1A408C40F0EF867CB13EA83639B8308E8F",
+    "topVotedResource": {
+      "resourceValue": null,
+      "totalCountTowardsIdentity": 0,
+      "totalCountAbstain": 0,
+      "totalCountLock": 0
+    },
+    "bestVoter": {
+      "identifier": null,
+      "totalCountTowardsIdentity": 0,
+      "totalCountAbstain": 0,
+      "totalCountLock": 0
+    },
+    "totalVotesCount": 0,
+    "totalVotesGasUsed": 0,
+    "totalTxCount": 371,
+    "totalCreatedDocumentsCount": 7,
+    "totalDeletedDocumentsCount": 0,
+    "totalRegisteredNamesCount": 0,
+    "totalContestedDocumentsCount": 0,
+    "avgBlockTime": 2797,
+    "pendingBlocksInEpoch": 476,
+    "pendingEpochReward": 4020167320
+  }
+}

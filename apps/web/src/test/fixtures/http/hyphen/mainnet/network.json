@@ -1,0 +1,108 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/mainnet/network" },
+  "recordedAt": "2026-11-10T15:27:55.504Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "networkInfo": {
+      "version": 230108,
+      "subversion": "/Dash Core:23.1.8/",
+      "protocolVersion": 70240,
+      "timeOffset": 0,
+      "connections": 10,
+      "relayFee": 0.00001,
+      "warnings": ""
+    },
+    "peerInfo": [
+      {
+        "id": 20665,
+        "addr": "185.142.212.144:9999",
+        "addrLocal": "167.235.4.176:49280",
+        "subversion": "/Dash Core:23.1.8/",
+        "inbound": false,
+        "startingHeight": 2563522
+      },
+      {
+        "id": 20837,
+        "addr": "91.99.169.186:9999",
+        "addrLocal": "167.235.4.176:49456",
+        "subversion": "/Dash Core:23.1.8/",
+        "inbound": false,
+        "startingHeight": 2563800
+      },
+      {
+        "id": 21016,
+        "addr": "95.85.21.42:9999",
+        "addrLocal": "167.235.4.176:50970",
+        "subversion": "/Dash Core:23.1.0/",
+        "inbound": false,
+        "startingHeight": 2564128
+      },
+      {
+        "id": 22210,
+        "addr": "107.170.165.78:9999",
+        "addrLocal": "167.235.4.176:51638",
+        "subversion": "/Dash Core:23.1.0/",
+        "inbound": false,
+        "startingHeight": 2566064
+      },
+      {
+        "id": 23165,
+        "addr": "85.209.241.16:9999",
+        "addrLocal": "167.235.4.176:52976",
+        "subversion": "/Dash Core:24.0.0/",
+        "inbound": false,
+        "startingHeight": 2567569
+      },
+      {
+        "id": 23240,
+        "addr": "192.169.6.87:9999",
+        "addrLocal": "167.235.4.176:33094",
+        "subversion": "/Dash Core:23.1.7/",
+        "inbound": false,
+        "startingHeight": 2567700
+      },
+      {
+        "id": 23321,
+        "addr": "178.63.236.98:9999",
+        "addrLocal": "167.235.4.176:55946",
+        "subversion": "/Dash Core:24.0.0/",
+        "inbound": false,
+        "startingHeight": 2567817
+      },
+      {
+        "id": 23712,
+        "addr": "70.34.198.26:9999",
+        "addrLocal": "167.235.4.176:39748",
+        "subversion": "/Dash Core:24.0.0/",
+        "inbound": false,
+        "startingHeight": 2568443
+      },
+      {
+        "id": 24049,
+        "addr": "37.27.67.164:9999",
+        "addrLocal": "167.235.4.176:43962",
+        "subversion": "/Dash Core:24.0.0/",
+        "inbound": false,
+        "startingHeight": 2568982
+      },
+      {
+        "id": 24071,
+        "addr": "46.4.217.244:9999",
+        "addrLocal": "167.235.4.176:59002",
+        "subversion": "/Dash Core:24.0.0/",
+        "inbound": false,
+        "startingHeight": 2569005
+      }
+    ],
+    "peerCount": 10,
+    "validators": {
+      "regular": { "total": 2626, "status": { "banned": 782, "valid": 1844 } },
+      "evonode": { "total": 371, "status": { "banned": 8, "valid": 363 } }
+    },
+    "updatedAt": "2026-11-10T15:27:45Z"
+  }
+}

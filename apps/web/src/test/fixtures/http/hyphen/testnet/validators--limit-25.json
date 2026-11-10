@@ -1,0 +1,628 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/testnet/validators?limit=25" },
+  "recordedAt": "2026-11-10T15:03:02.425Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 1577999,
+    "totalCount": 1276,
+    "value": [
+      {
+        "proTxHash": "044d20aac3e4145c479e3a7622cd2e2084891dc2b7365adfd6ee7baebfc01f5e",
+        "collateralHash": "3f59630f28d5e1e5d1d40c64558d860a0821ca11840be5fdfad512e56ee22a37",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yQdUkkdz3R8Rz4bJcTpDUm7EV2LruVwMQ3",
+          "voting": "yRN2bSKNP571hhh6wupDrGDWmR1bEnVBx2",
+          "payout": "yf3chcrNDQLC9ZsN9eZpduVRdVxYsniLrc"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577910,
+          "lastPaidAt": "2026-10-23T12:16:25Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": -1, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "b03a69e21639859a0448d9ad97ee33d9c7807adc1aba1791c759b87aa81b99d79c19ba8778cdda6533ce9f0534a8392f",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "registered",
+        "services": { "coreP2p": ["85.209.243.10:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1576918,
+        "lastUpdatedHeight": 1576918
+      },
+      {
+        "proTxHash": "733e2c1868548ff5b012fae4f9073b628d5cfa89fbc8962957ceddaf097f9d08",
+        "collateralHash": "148b407492299cb3f919642432a028f3a4b976d7f7e0e2a11eebbf5a4118250f",
+        "collateralIndex": 2,
+        "addresses": {
+          "owner": "yha37dtnWueRh5uq5Ggf7sgQnPEFXDGBRH",
+          "voting": "yha37dtnWueRh5uq5Ggf7sgQnPEFXDGBRH",
+          "payout": "ybKi7qesiLAh3RMo8eaTCbUp7PwhDTtxEG"
+        },
+        "live": {
+          "type": "Regular",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577940,
+          "lastPaidAt": "2026-10-23T13:37:28Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": -1, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "a8284d7f998de96142e7e9e78641b5889062af51fc107a094e76811d632ebf62472b2663468a8d7db497dc11ff41320a",
+        "operatorReward": 0,
+        "type": "regular",
+        "status": "registered",
+        "services": { "coreP2p": ["151.244.85.178:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1576259,
+        "lastUpdatedHeight": 1576259
+      },
+      {
+        "proTxHash": "99b70013e2464247d122f0cecf73203f3480b4126fb0f9b14a32c6fc500a6d90",
+        "collateralHash": "6793d7013fdcee6ea14cfbd03812699ca563c90cffcd2458d4e026b430c56680",
+        "collateralIndex": 0,
+        "addresses": {
+          "owner": "ySA7umMA5Rwdr7oZWnauaCVVhtqxhdfpLk",
+          "voting": "ySA7umMA5Rwdr7oZWnauaCVVhtqxhdfpLk",
+          "payout": "yQPWMq72ve1soYVGgc6s21x2ebGXunXLr7"
+        },
+        "live": {
+          "type": "Regular",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577939,
+          "lastPaidAt": "2026-10-23T13:33:35Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": -1, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "8762ab6cda7a38827e39e8dffcea30aea015ac78895cdf9a64c650f5ba71b36c25d29211bfee08619267d71971371d86",
+        "operatorReward": 0,
+        "type": "regular",
+        "status": "registered",
+        "services": { "coreP2p": ["151.244.85.96:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1576258,
+        "lastUpdatedHeight": 1576258
+      },
+      {
+        "proTxHash": "4c2fa6533b652968d5f554918d8b7e605d45e8cdff9e7c764d5c5ca3849c24ea",
+        "collateralHash": "148b407492299cb3f919642432a028f3a4b976d7f7e0e2a11eebbf5a4118250f",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yeZ4TrwMtkRUV1qZP2QDVBNxLsY5gWbWfY",
+          "voting": "yeZ4TrwMtkRUV1qZP2QDVBNxLsY5gWbWfY",
+          "payout": "yWW6HuLjJz1D8taZVQPTqnUasHgdm5cQWF"
+        },
+        "live": {
+          "type": "Regular",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577977,
+          "lastPaidAt": "2026-10-23T15:13:35Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": 1575523, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "90fd924ac1997c50397612532e96cbe96564436e4cfe587f1cdbf95c977b0138f2183bbfe7f8db3e1fb177b2ec3b69aa",
+        "operatorReward": 0,
+        "type": "regular",
+        "status": "registered",
+        "services": { "coreP2p": ["151.244.85.48:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1575346,
+        "lastUpdatedHeight": 1575546
+      },
+      {
+        "proTxHash": "a356adb832df288623522d5fbacd0905530818b4c3f79dfa80a96e76f94175b2",
+        "collateralHash": "5c20c6b1cde0dc0517d799a482edf51359662cc2f06e120739e08ccefa233beb",
+        "collateralIndex": 0,
+        "addresses": {
+          "owner": "ySXZ5JbNFKCmi84xTSMAhbGDLZv2pm6Jsr",
+          "voting": "yUDmafWzAqDX4yDhLSMpAsdLXyCG1rn34o",
+          "payout": "yMaRbUBSrfEqSGjJUPiC2NicdVQB4m4zuQ"
+        },
+        "live": {
+          "type": "Regular",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577985,
+          "lastPaidAt": "2026-10-23T15:34:57Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": 1576597, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "adad41e17d64581f58fcbc8dff2845a9a10c2e57db782dc5fd41a175729e59048dc3fb82d9f0620eeaac3eacadced01a",
+        "operatorReward": 0,
+        "type": "regular",
+        "status": "registered",
+        "services": { "coreP2p": ["78.17.70.175:19899"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1573098,
+        "lastUpdatedHeight": 1576597
+      },
+      {
+        "proTxHash": "274cb920928f958cca4295f2fab4ff956b1593fb752e3112d85d83b6d0ff5803",
+        "collateralHash": "5fdc476db4ec6244ff149cb161b465fb337e947f57d3d32bd1857a9f2e233ca7",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yiYZcqfPsnuVEZJ1L8KQEdRBuAT7tJ76dL",
+          "voting": "yNMNAgh59FiuFqhCRoVJLFHBGUoPtVbzMW",
+          "payout": "yPpoCUMPBP5PrKLQi54EjLRuwkwBHWdRRA"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1565679,
+          "lastPaidAt": "2026-10-03T21:44:17Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1565699 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "9561a686a3a58768c0792d699480035d5345b95a8030cb3d5fa5d2e7dcfbb6a8d5371c75e166a116c1c66542de2c4a6c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "registered",
+        "services": { "coreP2p": ["167.86.75.135:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561138,
+        "lastUpdatedHeight": 1561138
+      },
+      {
+        "proTxHash": "8a7a0cee7799d1e17da2e4440f357051a3205f2ab94717d9963ff13e8d4b3576",
+        "collateralHash": "5ba2febcfea485bd280e8ff72eadd054843ed3efd8f60ae1dd5afbb2fd8b3aa7",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yQzDhPfipuPecmBDW3HjUUEmFW6Pg3EzEe",
+          "voting": "yTukWL81TzEyPMGWaevwAs87Ps3BWpG4P4",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Regular",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577933,
+          "lastPaidAt": "2026-10-23T13:14:33Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": 1573165, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "8770575dae922740f47bf040e13281a74e1424fbf9990edd3fb04d84f51b5edb1ed6535afcbf235d8af573b90b3a16a5",
+        "operatorReward": 0,
+        "type": "regular",
+        "status": "registered",
+        "services": { "coreP2p": ["85.209.243.41:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561127,
+        "lastUpdatedHeight": 1573165
+      },
+      {
+        "proTxHash": "a6e76de734bfe472ede7df997745fd53dfecc9047878f50b00bad934759dbac5",
+        "collateralHash": "417f3bc62b64f94ff2b8b583d92b46570b16049350a82c8f54ce7e30dcf65127",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yTuxcLa4PkphKzkbN9xsdyjkT91X9Eob4Q",
+          "voting": "yXqu4HVfucCZpPwDn5DXWRGum9qGVK6tEd",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 0,
+          "lastPaidAt": "2014-01-25T16:10:06Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 258, "revivedHeight": -1, "banHeight": 1561156 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "84c1d9c422c5e3a6cce4e15467a372836d7400c04bedc01a11ba89a6410d02815df5a6366ae79268e8a916d29f9aa75c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.19:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561119,
+        "lastUpdatedHeight": 1561156
+      },
+      {
+        "proTxHash": "fa359f219be4388522a5ccbf852f3daac0405f64d3803c46cdf52ce086020a53",
+        "collateralHash": "48bd265c4c3b1618a0a70d44394d4037152bea60b675d44a4ec4be9aeaa55caf",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yenY62sUQ4EPmjBDYgmUK8souA8VCHTYv8",
+          "voting": "yUk4B2Sfmhme7MUVhdXEfuxcQZw8JfjHJy",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 0,
+          "lastPaidAt": "2014-01-25T16:10:06Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 258, "revivedHeight": -1, "banHeight": 1561156 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "b4af8513360a0fba87c63fc77089944ea5d941efa0a3f5ab2317f1e367d953131d1fa986765165d29ed9f8feee88e52c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.20:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561119,
+        "lastUpdatedHeight": 1561156
+      },
+      {
+        "proTxHash": "19c90c6afcd3c3d3a178ed0663f67738f25efac961ac86428c55be953cd402ec",
+        "collateralHash": "4f595b79fcf76adbb4bb18825b488c763c6a45a5a4eff8e81591802c34c207f6",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yYw9pBJEj387MpyzZFgksJtPmFbMWWGAaK",
+          "voting": "yRnLgbxyvAgZ39Ty3f4H1qoH2NkncPDuTS",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 0,
+          "lastPaidAt": "2014-01-25T16:10:06Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 258, "revivedHeight": -1, "banHeight": 1561156 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "98070d977d88ce47e03f503c2acee8db694140323781ba827e2c19176dde147a5218387d9a384670bc02e7d8c1bac890",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.18:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1561156
+      },
+      {
+        "proTxHash": "0016b7db21c1c9e5a774fea77e4637ee0821fffcd0534371fac9d2334c8d78cd",
+        "collateralHash": "1463f7923b84beb33536f89f6ae2fc0a63aee7a66deb9cd32e71235c3209cfcd",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ybwfpKS8w2tpMgxwZCKMmBbgwUe6sQjCd3",
+          "voting": "ycu6qrf3bYfuVCtxUGKUEDB5QacZFuUvYx",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1562265,
+          "lastPaidAt": "2026-09-28T10:03:32Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1562343 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "b53f3de71b69ea85134886dce12482c4f4d077ad21c5f5261a695e9bc845c6bce92d337a30d446d5350f2e40ab932ba7",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.12:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1562343
+      },
+      {
+        "proTxHash": "47de100f2bdf8665b318bce21d48c09f5c312cad46ba408a81026d1fa5584372",
+        "collateralHash": "1b3905520a6b0f0b317eddcd75a8629565a2a0a73892851de0587967da7b051e",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yYpdxRpmPpuRYkiquoB62C5WfTrxPhfmi3",
+          "voting": "yhXiesbxZ83vd2QcJTt8FFP9hystXeyC8L",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1562264,
+          "lastPaidAt": "2026-09-28T10:02:44Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1562343 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "81ddaca89a5fb005b2b76d9718c9c12ef8af038c29629a4efe609e1715f5a5aee6d4e3dc4c7fbcb42ec6a9a4cbb291ba",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.14:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1562343
+      },
+      {
+        "proTxHash": "e62d388bd1b0e6686ac5790d0f2d011cbf1652480f129af2bacdb4f095d3a568",
+        "collateralHash": "334dd599886abf556449d9244d301ef61b9926e794368f5d9dc59a673aabdb05",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yM4p91d48R8VD1fAhaZw4s3uoWRNYbSRtX",
+          "voting": "yYjwGwVmB7jfRXQi2HzzyohqvgGVrwg7gg",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1563065,
+          "lastPaidAt": "2026-09-29T17:31:25Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1563126 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "811ffd8ee916e3aec179c752914f3a3a44d35826683f5748a1c9261342a8845573d5355efdf327e87250b6aab63afd93",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.11:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1563126
+      },
+      {
+        "proTxHash": "dda1bf992c6c875049000284a6bbdbf8d8aa34127cc7553531b972077ae5f062",
+        "collateralHash": "3ac5cca122c3651d94d7439493a503201bd23508420be30264f0d9dcdda6c421",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ygSHi4DTbxDkcufK1gHwiNCGJSnkkguEFw",
+          "voting": "yXouNEFMVRKejGir75v739c1ZjRspUUyci",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1562262,
+          "lastPaidAt": "2026-09-28T09:57:47Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1562343 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "b568e3cd31f562a30822412417fc62ff418c8fa201fc28c34f2ffbd2cab60d0b92048f29fefe4df8cd1bd92fa6261021",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.13:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1562343
+      },
+      {
+        "proTxHash": "b11fc6fdab3f258468cff57cf80aeb242ee6506ca1cdf83ab62fe098ced4824c",
+        "collateralHash": "2a762cb2f295ea6cca3de4fef923107894afa39a8db694747c8d60a5fabefb7e",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ybWREoTs9fCAg1eFBMjg5ToRWdM4Bqa61Y",
+          "voting": "yb6itm97fNeRAv9rfzSvegf7sW8CciEnDy",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1561326,
+          "lastPaidAt": "2026-09-26T22:32:39Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1561345 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "b646f8a63fcf1d4a461fc09a0123325809c7704ebd5b7e48bd4643d80d0c6794e2f68af8b95b5b08cf2bc78b6fea9e6d",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.16:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1561345
+      },
+      {
+        "proTxHash": "6fdd012d37cee1684fdeda102fb0611ddcbaa63d445c18254b35cb8fe6e4d10b",
+        "collateralHash": "e47a26041c3d50cb0c956fba7c9e815a7e23281bcd4d73e7f83a29d5e4733086",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yhxeG8R9DEPePZtHXDVV1GD626otjrP4yx",
+          "voting": "ySGbhgjd8BG6UcjNZi2NwuqU1VUZ1RhiKj",
+          "payout": "ydihMLVVY8wsCWu6yeH4qHYYY1zcCSPzca"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1561325,
+          "lastPaidAt": "2026-09-26T22:30:02Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1561345 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "8a8dc1a5714e531af60574cecd4000ba32b256db5f89c699b0dea5f5abf6706109aeb7dce436762697fda12f5ef5992f",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.17:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1561345
+      },
+      {
+        "proTxHash": "c78fac771e2daff2ea3120276b090513a0638307b27ff87863dbbf4f24fad402",
+        "collateralHash": "fa30f8ef4a27e5a6401f6483dd1f301d82c040a31a87ef6fdb453d3c9a22cdae",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ydkePC42ADHj7qXKaJEMAoUDXg9zWS9LRm",
+          "voting": "yMnvbA7Beu1eX6SA2kFizfAVLYzFi6DTPv",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": false,
+          "status": "banned",
+          "lastPaidHeight": 1561323,
+          "lastPaidAt": "2026-09-26T22:29:28Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 391, "revivedHeight": -1, "banHeight": 1561345 },
+          "revocationReason": 1
+        },
+        "operatorPubKey": "a3c18886aed25d4355a08f05cd352d71c2049572a4d7c585bfcbc42f00599fc404a2abb4e0b15a3eaa846a4c78f50614",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.15:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561118,
+        "lastUpdatedHeight": 1561345
+      },
+      {
+        "proTxHash": "7074608a9e5360249572cb14ae43734f7afefaf07ff5bbf41a9f6904da6d828a",
+        "collateralHash": "334dd599886abf556449d9244d301ef61b9926e794368f5d9dc59a673aabdb05",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yaUuWvxbrNeutnV8qTtx9rbSHStqagPBiW",
+          "voting": "yRQvuV2Ag6HkbzM3Dg5Va7Cb7nXA62qqa1",
+          "payout": "yZmiSVEAkeWMLea3zf7zawTDgrHWJ6afcA"
+        },
+        "live": {},
+        "operatorPubKey": "811ffd8ee916e3aec179c752914f3a3a44d35826683f5748a1c9261342a8845573d5355efdf327e87250b6aab63afd93",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.11:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561056,
+        "lastUpdatedHeight": 1561112
+      },
+      {
+        "proTxHash": "7ccf579b46a2dc49dc969c21cdc0613d1e4b8061d4fdc1afddc1a0189c2ee91f",
+        "collateralHash": "1463f7923b84beb33536f89f6ae2fc0a63aee7a66deb9cd32e71235c3209cfcd",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yQhp1wT3c3bMj4n65QfQoZA1ptCodrQehs",
+          "voting": "yVagzAskFLxaxsuunFSCmfTyFUGCMnREWo",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "93087085cc094e9f4ab7ee0ec513397b92927d76ba2982a5e50dd805d93da5f721fda084664add33899eb77adead104c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.12:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1561056,
+        "lastUpdatedHeight": 1561112
+      },
+      {
+        "proTxHash": "8176ae51d4e3ac1338de8406eb35b1b1f7864daccd90508444443d66e8b3bc79",
+        "collateralHash": "48bd265c4c3b1618a0a70d44394d4037152bea60b675d44a4ec4be9aeaa55caf",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yWsEfUZaDMLef64wzfCcx2vK3rj6ZxSBjw",
+          "voting": "yh5sV2sVj2DyVhASen6HgNBjsqtskZfvEH",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "b4af8513360a0fba87c63fc77089944ea5d941efa0a3f5ab2317f1e367d953131d1fa986765165d29ed9f8feee88e52c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.20:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560606,
+        "lastUpdatedHeight": 1560720
+      },
+      {
+        "proTxHash": "05577b62b906ac60bbd64b0ba3878c7756c651ad389cf3b05da7266d6ed4f1e2",
+        "collateralHash": "2a762cb2f295ea6cca3de4fef923107894afa39a8db694747c8d60a5fabefb7e",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yV3dbxNydqG4oiw6tJqskbWPCrxeYiDKY3",
+          "voting": "yTcEbCmaaVSDDUoyudHfhRLjtBxpSmy68i",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "b646f8a63fcf1d4a461fc09a0123325809c7704ebd5b7e48bd4643d80d0c6794e2f68af8b95b5b08cf2bc78b6fea9e6d",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.16:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560605,
+        "lastUpdatedHeight": 1560720
+      },
+      {
+        "proTxHash": "36ba5c4963ec834c104e64c797a46d375e776ed228ad1041d0d67303a26af0c5",
+        "collateralHash": "4f595b79fcf76adbb4bb18825b488c763c6a45a5a4eff8e81591802c34c207f6",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ye9qZc8oZ5pjBVXBWk6j2VmnQCTFNSnLtg",
+          "voting": "yS9ybC9NpSdmoQyfeZkZwLTcX8YKQP71Nq",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "98070d977d88ce47e03f503c2acee8db694140323781ba827e2c19176dde147a5218387d9a384670bc02e7d8c1bac890",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.18:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560605,
+        "lastUpdatedHeight": 1560720
+      },
+      {
+        "proTxHash": "59bb47e82536bb9b728ef5908cfa9ddb4a5ed44dfca75b027bf265d55ec5b6a0",
+        "collateralHash": "417f3bc62b64f94ff2b8b583d92b46570b16049350a82c8f54ce7e30dcf65127",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yMXtqkW17R8fe48KsfMxCE9fMZN2kunsVY",
+          "voting": "ydwLPXjytq858myxH8asPyhh8virEbWfTd",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "84c1d9c422c5e3a6cce4e15467a372836d7400c04bedc01a11ba89a6410d02815df5a6366ae79268e8a916d29f9aa75c",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.19:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560605,
+        "lastUpdatedHeight": 1560720
+      },
+      {
+        "proTxHash": "16e8bc6dcdedd9ede83a885bb1a198e8305df540357b90f6dcc78e5c0d7d5c91",
+        "collateralHash": "e47a26041c3d50cb0c956fba7c9e815a7e23281bcd4d73e7f83a29d5e4733086",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "yd2Kq1X3AgsYBfTzqSxKeFVVtw7He3Z3xs",
+          "voting": "ybxKXezqmUk91q9FFNVD2GzvJ9mrmSATw1",
+          "payout": "yStvD597am8AEy6wgqb112mExYD1ipKk7C"
+        },
+        "live": {},
+        "operatorPubKey": "8a8dc1a5714e531af60574cecd4000ba32b256db5f89c699b0dea5f5abf6706109aeb7dce436762697fda12f5ef5992f",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "revoked",
+        "services": { "coreP2p": ["85.209.243.17:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560605,
+        "lastUpdatedHeight": 1560720
+      },
+      {
+        "proTxHash": "edb952979a9fd4057f12468490cf3cadc923ae99d8c48e063efbddaf5a1447a0",
+        "collateralHash": "ec63eeb626a0e49a3087a7d930491254a90f2ad1d7450f695285837b1ea24007",
+        "collateralIndex": 1,
+        "addresses": {
+          "owner": "ya7wK3qFXnLqvWPrhc7P4ozWtQykopfy69",
+          "voting": "ya7wK3qFXnLqvWPrhc7P4ozWtQykopfy69",
+          "payout": "ySBPdhNkjpXFhVbQzx1Soa4bGCsHtsnGg4"
+        },
+        "live": {
+          "type": "Evo",
+          "valid": true,
+          "status": "valid",
+          "lastPaidHeight": 1577944,
+          "lastPaidAt": "2026-10-23T13:52:16Z",
+          "consecutivePayments": 0,
+          "pose": { "banScore": 0, "revivedHeight": 1567482, "banHeight": -1 },
+          "revocationReason": 0
+        },
+        "operatorPubKey": "82be9e928577bd4f1050a030418b083d625dbb4ad963494ce146ca818c49879dfec6fb746cae1cda4342b9ad442937cb",
+        "operatorReward": 0,
+        "type": "evonode",
+        "status": "registered",
+        "services": { "coreP2p": ["87.229.22.126:19999"], "platformP2p": [], "platformHttps": [] },
+        "registeredHeight": 1560597,
+        "lastUpdatedHeight": 1567482
+      }
+    ],
+    "nextCursor": "7b2261734f66486569676874223a313537373939392c2272656769737465726564486569676874223a313536303539372c2270726f547848617368223a2265646239353239373961396664343035376631323436383439306366336361646339323361653939643863343865303633656662646461663561313434376130222c22737461747573223a6e756c6c2c2276616c696461746f7254797065223a6e756c6c7d"
+  }
+}

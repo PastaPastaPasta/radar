@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/validator/06A9EE248111BF6D6D5B123CC40B3A9C9C9C3C84A58E5A2ED9DF97AD7C4E7289/earnings?timeframe=30d"
+  },
+  "recordedAt": "2026-11-10T15:01:49.860Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "core": { "payments": 0, "amount": 0 },
+    "platform": {
+      "epochs": 0,
+      "firstEpoch": null,
+      "lastEpoch": null,
+      "blocksProposed": 0,
+      "reward": 0
+    },
+    "estimate": {
+      "periodDays": 30,
+      "eligible": false,
+      "corePerMonth": null,
+      "platformPerMonth": null,
+      "totalPerMonth": null,
+      "platformHistory": null
+    }
+  }
+}

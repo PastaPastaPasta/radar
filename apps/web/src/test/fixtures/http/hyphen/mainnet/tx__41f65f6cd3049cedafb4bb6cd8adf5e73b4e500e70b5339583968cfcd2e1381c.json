@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/41f65f6cd3049cedafb4bb6cd8adf5e73b4e500e70b5339583968cfcd2e1381c"
+  },
+  "recordedAt": "2026-11-10T15:02:01.191Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570006,
+    "txHash": "41f65f6cd3049cedafb4bb6cd8adf5e73b4e500e70b5339583968cfcd2e1381c",
+    "blockHeight": 2570003,
+    "blockPos": 0,
+    "txVersion": 3,
+    "txType": "coinbase",
+    "lockTime": 0,
+    "txSize": 354,
+    "valueOut": 164412360,
+    "inputCount": 1,
+    "outputCount": 3,
+    "tags": { "mined": true, "coinbase": true },
+    "live": { "tags": { "mempool": false, "islock": false } },
+    "payload": {
+      "bestClHeightDiff": 0,
+      "bestClSignature": "930c4ade25a576c526df5e8231ae1d7592504d4d28328a94c5523f162db51d62084bfe5034080cb206b8a6eb5baa9ec4189ef2c5676abafb4c3d5399bff99009850b721832f397f239895e91ad0646c1593a4887ede89d504b379b0f678326e3",
+      "creditPoolBalance": 3757601606481,
+      "height": 2570003,
+      "merkleRootMnList": "3d2dcfd72c5d2ab0e2a6cf203c77791cf84691da95b3945728e4e229a51120fb",
+      "merkleRootQuorums": "538afb64fe1b2511544416387f6651c9643e19e9933d22179bedde3798e3b3c5",
+      "version": 3
+    },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "031337271b2f5669614254432f4d696e6564206279207a68616e676261696c2f10c1a2ca002fad54036998cbc653fd0100"
+        },
+        "sequence": 4294967295,
+        "coinbase": "031337271b2f5669614254432f4d696e6564206279207a68616e676261696c2f10c1a2ca002fad54036998cbc653fd0100"
+      }
+    ],
+    "vout": [
+      {
+        "n": 0,
+        "value": 41103090,
+        "scriptPubKey": { "hex": "76a914bc89d6071dabc5b4494d303af761a052a5c70d5788ac" },
+        "address": "XssjzLKgsfATYGqTQmiJURQzeKdpL5K1k3",
+        "spent": false
+      },
+      { "n": 1, "value": 46231323, "scriptPubKey": { "hex": "6a" }, "spent": false },
+      {
+        "n": 2,
+        "value": 77077947,
+        "scriptPubKey": { "hex": "76a914da159951d9a03130eeaee347907e1cf88d63be7988ac" },
+        "address": "XvZy1npHNGeYHCuDnB6upKqdf6XU9q94qu",
+        "spent": false
+      }
+    ]
+  }
+}

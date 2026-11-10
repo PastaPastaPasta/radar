@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "url": "https://radar.dashhq.org/api/v1/health" },
+  "recordedAt": "2026-11-10T15:02:14.148Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"6e995ba8ce18d2c8769f6bbf176919d1\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "ok": true,
+    "age_secs": {
+      "mainnet": { "crawl": 923, "chain": 64 },
+      "testnet": { "crawl": 161, "chain": 74 }
+    }
+  }
+}

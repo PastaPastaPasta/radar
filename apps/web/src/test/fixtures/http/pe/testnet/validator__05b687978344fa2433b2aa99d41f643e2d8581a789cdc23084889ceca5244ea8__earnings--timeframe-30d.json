@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/validator/05B687978344FA2433B2AA99D41F643E2D8581A789CDC23084889CECA5244EA8/earnings?timeframe=30d"
+  },
+  "recordedAt": "2026-11-10T15:02:51.086Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "core": { "payments": 184, "amount": 20539128254 },
+    "platform": {
+      "epochs": 537,
+      "firstEpoch": 19549,
+      "lastEpoch": 20268,
+      "blocksProposed": 1202,
+      "reward": 30884384838984
+    },
+    "estimate": {
+      "periodDays": 30,
+      "eligible": true,
+      "corePerMonth": 203.76648713988882,
+      "platformPerMonth": 308.84384838984,
+      "totalPerMonth": 512.6103355297288,
+      "platformHistory": {
+        "firstEpoch": 19549,
+        "lastEpoch": 20268,
+        "startTime": "2026-10-11T15:02:50.947Z",
+        "endTime": "2026-11-10T15:02:50.947Z",
+        "reward": 30884384838984
+      }
+    }
+  }
+}

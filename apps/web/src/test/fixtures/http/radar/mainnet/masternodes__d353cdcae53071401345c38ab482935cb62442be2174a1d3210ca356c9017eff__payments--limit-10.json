@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://radar.dashhq.org/api/v1/mainnet/masternodes/d353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff/payments?limit=10"
+  },
+  "recordedAt": "2026-11-10T15:00:55.362Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"e123b568119d8ae6d6da96a131e406f2\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "payments": [
+      {
+        "amount_duffs": 77060207,
+        "block_hash": "000000000000001c9702de0adb7e4ba65be9d1a1e2f94d1811405deeda8bfafb",
+        "height": 2568740,
+        "time": 1794123189
+      },
+      {
+        "amount_duffs": 77102205,
+        "block_hash": "0000000000000007c86729551374a62644990f39485c42f1c78b0443dd7819a0",
+        "height": 2566513,
+        "time": 1793772334
+      },
+      {
+        "amount_duffs": 77100251,
+        "block_hash": "000000000000000fbfb3b6bc08bc23ffcebd2ffce63e696404c20a83d7668e34",
+        "height": 2564278,
+        "time": 1793419283
+      },
+      {
+        "amount_duffs": 77055807,
+        "block_hash": "0000000000000017c6a3a8c22efcf53e38a0f72c56598efb48faf7ee0330fd2d",
+        "height": 2562033,
+        "time": 1793066675
+      },
+      {
+        "amount_duffs": 77052207,
+        "block_hash": "0000000000000002b5533a4ff8a07c57983ea11e1be978e2c4ac044e5bff61d8",
+        "height": 2559783,
+        "time": 1792711969
+      },
+      {
+        "amount_duffs": 77052707,
+        "block_hash": "000000000000000306546b8ef728f719841d35ece3aa866cd7eaa10cec26f348",
+        "height": 2557565,
+        "time": 1792363322
+      },
+      {
+        "amount_duffs": 77054457,
+        "block_hash": "000000000000000768c16db2f6f222af3f0c234c53cce9b6136ed8a897602c1f",
+        "height": 2555389,
+        "time": 1792018839
+      },
+      {
+        "amount_duffs": 77069810,
+        "block_hash": "00000000000000251817667cf5e4f955ac1d9f1c0bb32da993f8fc1c1fbeb3d5",
+        "height": 2553246,
+        "time": 1791681613
+      },
+      {
+        "amount_duffs": 77069457,
+        "block_hash": "00000000000000107c88ab26dd9133f2b06e8e854e1642f147eefeb2d1b7cae3",
+        "height": 2551143,
+        "time": 1791350655
+      },
+      {
+        "amount_duffs": 77082392,
+        "block_hash": "000000000000001c190b90a8a7b37586a5f7eb0968e5fbe05c3be39a61250ee7",
+        "height": 2549071,
+        "time": 1791024050
+      }
+    ]
+  }
+}
