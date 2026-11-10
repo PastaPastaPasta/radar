@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto'
 import { QueryClient } from '@tanstack/react-query'
-import { createStore } from 'idb-keyval'
+import { createStore, type UseStore } from 'idb-keyval'
 import { describe, expect, it } from 'vitest'
 import { createPersister, shouldPersist, SCHEMA_VERSION } from './persister'
 
@@ -84,6 +84,16 @@ describe('persister', () => {
       staleTime: Infinity,
     })
     expect(calls).toBe(2)
+  })
+
+  it('still runs the query when the database cannot be opened', async () => {
+    const store: UseStore = () => Promise.reject(new DOMException('closed', 'InvalidStateError'))
+    const value = await client(createPersister({ appVersion: '1', store })).fetchQuery({
+      queryKey: ['mainnet', 'sdk', 'identity', { id: 'z' }],
+      queryFn: () => Promise.resolve(7),
+      meta: { persist: true },
+    })
+    expect(value).toBe(7)
   })
 
   it('discards entries written by another app version', async () => {

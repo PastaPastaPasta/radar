@@ -27,14 +27,18 @@ export function createPersister({ appVersion, store, maxAge }: PersisterOptions)
   const idb = store ?? createStore('radar-query', 'queries')
   return experimental_createQueryPersister({
     storage: {
-      getItem: (key) => get(key, idb),
-      setItem: (key, value) => set(key, value, idb),
-      removeItem: (key) => del(key, idb),
-      entries: async () =>
-        (await entries(idb)).map(([k, v]): [string, unknown] => [
-          typeof k === 'string' ? k : JSON.stringify(k),
-          v,
-        ]),
+      getItem: (key) => get(key, idb).catch(() => undefined),
+      setItem: (key, value) => set(key, value, idb).catch(() => undefined),
+      removeItem: (key) => del(key, idb).catch(() => undefined),
+      entries: () =>
+        entries(idb).then(
+          (all) =>
+            all.map(([k, v]): [string, unknown] => [
+              typeof k === 'string' ? k : JSON.stringify(k),
+              v,
+            ]),
+          () => [],
+        ),
     },
     maxAge: maxAge ?? PERSIST_MAX_AGE_MS,
     buster: `${appVersion}:${SCHEMA_VERSION}`,
