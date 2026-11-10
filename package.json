@@ -14,7 +14,10 @@
     "build": "pnpm -r --if-present build",
     "size": "node scripts/size.mjs",
     "e2e:fixtures": "pnpm --filter @radar/e2e e2e",
-    "e2e:smoke": "pnpm --filter @radar/e2e e2e --grep @smoke"
+    "e2e:smoke": "pnpm --filter @radar/e2e e2e --grep @smoke",
+    "e2e:live": "pnpm --filter @radar/e2e e2e:live",
+    "check:stories": "node scripts/check-stories.mjs",
+    "test:review": "node --test review/test/*.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
