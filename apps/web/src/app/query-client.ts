@@ -1,33 +1,25 @@
 import { QueryClient } from '@tanstack/react-query'
-import { isSourceError } from '@/data/errors'
+import { createQueryClientConfig, createPersister } from '@/data/query'
 
-export function retryable(e: unknown): boolean {
-  if (!isSourceError(e)) return false
-  switch (e.kind) {
-    case 'network':
-    case 'timeout':
-    case 'rate-limited':
-      return true
-    case 'http':
-      return e.status === undefined || e.status >= 500
-    default:
-      return false
+function openPersister() {
+  if (typeof indexedDB === 'undefined') return undefined
+  try {
+    return createPersister({ appVersion: __APP_VERSION__ })
+  } catch {
+    return undefined
   }
 }
 
-export function retryDelay(attempt: number, e: unknown): number {
-  const after = isSourceError(e) ? e.retryAfterMs : undefined
-  return after ?? 1000 * 2 ** attempt
-}
-
 export function createQueryClient(): QueryClient {
+  const config = createQueryClientConfig()
+  const persister = openPersister()
   return new QueryClient({
+    ...config,
     defaultOptions: {
+      ...config.defaultOptions,
       queries: {
-        staleTime: 30_000,
-        refetchOnWindowFocus: false,
-        retry: (count, e) => count < 2 && retryable(e),
-        retryDelay,
+        ...config.defaultOptions?.queries,
+        ...(persister && { persister: persister.persisterFn }),
       },
     },
   })

@@ -1,4 +1,4 @@
-export { createQueryClient, retryable } from './query-client'
+export { createQueryClient } from './query-client'
 export { ErrorBoundary } from './error-boundary'
 export { NetworkGate, useNetwork } from './network-context'
 export {
