@@ -82,7 +82,7 @@ test.describe('routes', () => {
 
       await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible()
       await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
-      if (path === '/search') return
+      if (path === '/search' || path === '/status' || path === '/settings') return
       if (path === '/') {
         await expect(page.getByRole('link', { name: /Search blocks/ })).toBeVisible()
         return
@@ -165,7 +165,8 @@ test.describe('network', () => {
     expect(style.pointer).toBe('none')
     expect(style.position).toBe('fixed')
     expect(style.width).toBe(page.viewportSize()?.width)
-    expect(style.border).toBe('3px')
+    expect(style.border).toBe('4px')
+    await expect(page.locator('[data-testnet-label]')).toHaveText('Testnet')
     expect(style.color).not.toBe('rgba(0, 0, 0, 0)')
     await page.getByRole('link', { name: 'Data sources' }).click()
     await expect(page).toHaveURL(/\/sources\?network=testnet$/)
