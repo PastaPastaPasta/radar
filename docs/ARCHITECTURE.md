@@ -993,6 +993,8 @@ M2 onwards (network, Platform state, Platform history, tools) follows the same s
 
 The departures listed in `docs/RADAR-DESIGN.md` §15 are accepted for Radar: phone tabs, the navy plate in light mode, layer-hue tokens local to Radar, the card's source mark in the head, Proof-checked as a button that opens the proof inspector, 3 px layer-coloured tab underlines, `Stat.tone`, and warning orange (never amber) for stale ages. The contract lines above are updated to match; package A adds `tone` to the `Stat` stub.
 
+Accepted from package A (2026-11-10): `Stat.note` (a second line under the value) and `LiveDot.bare`; extra exports `LiveControl`, `TableTools` and `HoverCardScope`; `Tabs` uses exact active matching; the rate `SourceLine` reads "Price via Platform Explorer" (no provider field on `SourceStamp`); the `/__kit` route file is `src/routes/[_][_]kit.tsx` because `__kit.tsx` is a pathless layout to the router generator.
+
 ---
 
 ## 12. Open questions the spikes answer

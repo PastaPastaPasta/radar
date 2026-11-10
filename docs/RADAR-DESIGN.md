@@ -245,7 +245,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - Body: 0 20 px 18 px. `padding="flush"` for tables, which run edge to edge.
 - Foot: 11 px × 20 px, 1 px top rule, 13 px `--dh-ink-2`; "All … →" link at the right; keyboard hints on the left (desktop only).
 - `layer` sets `data-layer`, which tints the title tile, the table flash and focus row.
-- States: loading → `Skeleton` blocks in the body; empty → `Empty` in the body; error → `ErrorState` in the body; source down → body at 45% opacity with the down message on top and the last-good age (§6.13).
+- States: loading → `Skeleton` blocks in the body; empty → `Empty` in the body; error → `ErrorState` in the body; source down → body at 74% opacity and greyscale with the down message on top and the last-good age (§6.13).
 
 ### 5.4 Composition rules
 
@@ -409,7 +409,7 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 
 ### 6.13 Source down on a card
 
-When `useSourceHealth` reports the card's source down, the body drops to 45% opacity and an overlay band (bad-soft, 1 px bad border, 8 px radius) sits over its top: "Platform Explorer isn't answering · showing data from 4 min ago · Retry". Stale keeps full opacity and only the `SourceLine` changes.
+When `useSourceHealth` reports the card's source down, the body drops to 74% opacity with a greyscale filter (45% failed colour contrast) and an overlay band (bad-soft, 1 px bad border, 8 px radius) sits over its top: "Platform Explorer isn't answering · showing data from 4 min ago · Retry". Stale keeps full opacity and only the `SourceLine` changes.
 
 ### 6.14 ⌘K palette (`CommandPalette`)
 
