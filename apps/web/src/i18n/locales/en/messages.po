@@ -21,6 +21,9 @@ msgstr "{0} of {1}"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocks behind the tip"
 
+msgid "{count, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{count, plural, one {# confirmation} other {# confirmations}}"
+
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 
@@ -33,8 +36,15 @@ msgstr "Add devnet"
 msgid "Amounts"
 msgstr "Amounts"
 
+msgid "Balance"
+msgstr "Balance"
+
 msgid "Best ChainLock"
 msgstr "Best ChainLock"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Block {0}"
+msgstr "Block {0}"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -42,6 +52,9 @@ msgstr "Cancel"
 #. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
 msgid "Catching up, {0}"
 msgstr "Catching up, {0}"
+
+msgid "ChainLocked"
+msgstr "ChainLocked"
 
 msgid "ChainLocked block hash"
 msgstr "ChainLocked block hash"
@@ -52,14 +65,23 @@ msgstr "Checking the sources…"
 msgid "Core"
 msgstr "Core"
 
+msgid "Core address"
+msgstr "Core address"
+
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Core addresses, mempool, governance and block lists"
+
+msgid "Core block"
+msgstr "Core block"
 
 msgid "Core tip"
 msgstr "Core tip"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Core tip, blocks and transactions, straight from evonodes"
+
+msgid "Core transaction"
+msgstr "Core transaction"
 
 msgid "Custom devnets"
 msgstr "Custom devnets"
@@ -73,6 +95,9 @@ msgstr "DAPI addresses"
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 
+msgid "DAPI is busy. Open this page to load them."
+msgstr "DAPI is busy. Open this page to load them."
+
 msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
 msgstr "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
 
@@ -81,6 +106,9 @@ msgstr "DAPI request budget"
 
 msgid "Dash Core"
 msgstr "Dash Core"
+
+msgid "Details"
+msgstr "Details"
 
 msgid "Devnet name"
 msgstr "Devnet name"
@@ -106,6 +134,9 @@ msgstr "Example"
 msgid "Figures computed on your device"
 msgstr "Figures computed on your device"
 
+msgid "Finality"
+msgstr "Finality"
+
 msgid "Getting tight"
 msgstr "Getting tight"
 
@@ -121,11 +152,27 @@ msgstr "How each source is answering, and how far behind its data is."
 msgid "Hyphen"
 msgstr "Hyphen"
 
+msgid "Hyphen has not seen this address on this network."
+msgstr "Hyphen has not seen this address on this network."
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "In block {0}"
+msgstr "In block {0}"
+
+msgid "In the mempool"
+msgstr "In the mempool"
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 
 msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
 msgstr "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+
+msgid "Inputs and outputs"
+msgstr "Inputs and outputs"
+
+msgid "InstantSend"
+msgstr "InstantSend"
 
 msgid "It answered with an error."
 msgstr "It answered with an error."
@@ -157,8 +204,17 @@ msgstr "Last crawl finished {0}. Its Core node is at block {1}."
 msgid "Last good {0}."
 msgstr "Last good {0}."
 
+msgid "Last seen"
+msgstr "Last seen"
+
 msgid "Median answer {rounded} ms"
 msgstr "Median answer {rounded} ms"
+
+msgid "Moved"
+msgstr "Moved"
+
+msgid "No block with this ID on this network."
+msgstr "No block with this ID on this network."
 
 msgid "No crawl has finished yet."
 msgstr "No crawl has finished yet."
@@ -169,6 +225,9 @@ msgstr "No DAPI requests have been made on this network yet."
 msgid "No devnets saved."
 msgstr "No devnets saved."
 
+msgid "No transaction with this ID on this network."
+msgstr "No transaction with this ID on this network."
+
 msgid "Node sync"
 msgstr "Node sync"
 
@@ -177,6 +236,9 @@ msgstr "Nodes resting"
 
 msgid "Not available right now"
 msgstr "Not available right now"
+
+msgid "Not ChainLocked yet"
+msgstr "Not ChainLocked yet"
 
 msgid "Not offered"
 msgstr "Not offered"
@@ -223,6 +285,9 @@ msgstr "Radar crawler"
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 
+msgid "Received"
+msgstr "Received"
+
 msgid "Remove"
 msgstr "Remove"
 
@@ -231,6 +296,9 @@ msgstr "Remove {devnet}"
 
 msgid "Requests in the last minute"
 msgstr "Requests in the last minute"
+
+msgid "Result"
+msgstr "Result"
 
 msgid "Save changes"
 msgstr "Save changes"
@@ -249,6 +317,9 @@ msgstr "Show the USD value next to DASH amounts"
 
 msgid "Show times in UTC"
 msgstr "Show times in UTC"
+
+msgid "Size"
+msgstr "Size"
 
 msgid "Some requests are failing."
 msgstr "Some requests are failing."
@@ -301,11 +372,20 @@ msgstr "This browser"
 msgid "This network doesn’t have this source."
 msgstr "This network doesn’t have this source."
 
+msgid "Time"
+msgstr "Time"
+
 msgid "Times"
 msgstr "Times"
 
 msgid "Tip hash"
 msgstr "Tip hash"
+
+msgid "Transactions"
+msgstr "Transactions"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unit for DASH amounts"
 msgstr "Unit for DASH amounts"
