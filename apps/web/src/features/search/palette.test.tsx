@@ -99,6 +99,20 @@ describe('command palette', () => {
       await screen.findByText(/looks like a private key or recovery phrase/),
     ).toBeInTheDocument()
   })
+
+  it('does not put a recovery phrase in the address bar on Enter', async () => {
+    const { user, input } = await openPalette()
+
+    await user.type(
+      input,
+      'abandon ability able about above absent absorb abstract absurd abuse access accident{Enter}',
+    )
+
+    expect(window.location.search).not.toContain('abandon')
+    expect(
+      await screen.findByText(/looks like a private key or recovery phrase/),
+    ).toBeInTheDocument()
+  })
 })
 
 describe('/search page', () => {

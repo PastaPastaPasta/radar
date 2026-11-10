@@ -7,6 +7,7 @@ const BUILT_IN: DevnetConfig[] = []
 
 const listeners = new Set<() => void>()
 let cache: { raw: string | null; value: DevnetConfig[] } | undefined
+let unsaved: DevnetConfig[] | undefined
 
 function isConfig(value: unknown): value is DevnetConfig {
   if (typeof value !== 'object' || value === null) return false
@@ -29,6 +30,7 @@ function readRaw(): string | null {
 
 export function loadDevnets(): DevnetConfig[] {
   const raw = readRaw()
+  if (unsaved && raw === null) return unsaved
   if (cache?.raw === raw) return cache.value
   let value: DevnetConfig[] = []
   try {
@@ -49,8 +51,9 @@ export function saveDevnet(config: DevnetConfig): void {
   const next = [...loadDevnets().filter((d) => d.name !== config.name), config]
   try {
     localStorage.setItem(DEVNET_STORAGE_KEY, JSON.stringify(next))
+    unsaved = undefined
   } catch {
-    cache = { raw: JSON.stringify(next), value: next }
+    unsaved = next
   }
   emit()
 }
@@ -59,8 +62,9 @@ export function removeDevnet(name: string): void {
   const next = loadDevnets().filter((d) => d.name !== name)
   try {
     localStorage.setItem(DEVNET_STORAGE_KEY, JSON.stringify(next))
+    unsaved = undefined
   } catch {
-    cache = { raw: JSON.stringify(next), value: next }
+    unsaved = next
   }
   emit()
 }

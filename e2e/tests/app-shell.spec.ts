@@ -215,6 +215,15 @@ test.describe('network', () => {
     await expect(page.getByRole('button', { name: /Network: Testnet/ })).toBeVisible()
   })
 
+  test('an old ?net=testnet link keeps testnet through redirects @RA-91 @X-04', async ({
+    page,
+  }) => {
+    await page.goto('/validators?net=testnet')
+
+    await expect(page).toHaveURL(/\/masternodes\?.*network=testnet/)
+    await expect(page.getByRole('button', { name: /Network: Testnet/ })).toBeVisible()
+  })
+
   test('network stays on in-page links @X-03', async ({ page }) => {
     await page.goto('/blocks?network=testnet')
 

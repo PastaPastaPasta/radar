@@ -95,7 +95,11 @@ const EXTENDED_KEY = /^(?:xprv|tprv|drkv|drkp)[1-9A-HJ-NP-Za-km-z]{80,}$/
 
 function looksSecret(value: string): boolean {
   if (EXTENDED_KEY.test(value)) return true
-  if (value.split(/\s+/).length >= 12 && /^[a-z ]+$/i.test(value)) return true
+  const words = value
+    .replace(/[\d.,;:()]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+  if (words.length >= 12 && words.every((w) => /^[a-z]{3,8}$/i.test(w))) return true
   if (value.length !== 51 && value.length !== 52) return false
   const decoded = base58CheckDecode(value)
   if (!decoded || (decoded.version !== 0xcc && decoded.version !== 0xef)) return false

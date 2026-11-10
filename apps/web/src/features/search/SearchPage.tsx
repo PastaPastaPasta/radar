@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react'
 import { ENTITY_LABELS, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
+import { classify } from './classify'
 import { describeInput } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { useSearch } from './useSearch'
@@ -23,7 +24,7 @@ export function SearchPage({ q }: { q?: string }) {
   const net = useNetwork()
   const navigate = useNavigate()
   const query = (q ?? '').trim()
-  const [draft, setDraft] = useState(query)
+  const [draft, setDraft] = useState(() => (classify(query, net).warning === 'secret' ? '' : query))
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'page' })
   const secret = classified.warning === 'secret'
   useDocumentTitle(query && !secret ? `“${query}” · Search` : 'Search')
@@ -48,7 +49,7 @@ export function SearchPage({ q }: { q?: string }) {
             <input
               type="search"
               name="q"
-              value={secret ? '' : draft}
+              value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Height, hash, address, ProTx, IP, ID, name…"
               autoComplete="off"

@@ -231,6 +231,33 @@ test.describe('palette', () => {
     await expect(page).toHaveURL(/\/status$/)
   })
 
+  test('Enter on a recovery phrase never reaches the address bar @X-01', async ({ page }) => {
+    const dialog = await openPalette(page, '/')
+
+    await dialog
+      .getByRole('combobox')
+      .fill('abandon ability able about above absent absorb abstract absurd abuse access accident')
+    await page.keyboard.press('Enter')
+
+    await expect(dialog.getByText(/private key or recovery phrase/)).toBeVisible()
+    expect(page.url()).not.toContain('abandon')
+  })
+
+  test('the search box follows the address when the palette changes the query @X-01', async ({
+    page,
+  }) => {
+    await page.goto('/search?q=foo')
+    const box = page.getByRole('searchbox', { name: 'Search Radar' })
+    await expect(box).toHaveValue('foo')
+
+    await page.keyboard.press('Control+k')
+    await page.getByRole('combobox', { name: 'Search Radar' }).fill('2569992')
+    await page.keyboard.press('Enter')
+
+    await expect(page).toHaveURL(/\/search\?q=2569992$/)
+    await expect(box).toHaveValue('2569992')
+  })
+
   test('/ does not steal typing from a text box @X-07', async ({ page }) => {
     await page.goto('/search')
     const box = page.getByRole('searchbox', { name: 'Search Radar' })

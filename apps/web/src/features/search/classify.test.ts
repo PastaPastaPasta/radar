@@ -223,6 +223,7 @@ describe('classify', () => {
       'abandon ability able about above absent absorb abstract absurd abuse access accident'
     for (const input of [
       phrase,
+      '1. abandon 2. ability 3. able 4. about 5. above 6. absent 7. absorb 8. abstract 9. absurd 10. abuse 11. access 12. accident',
       `xprv${'9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'}`,
     ]) {
       const result = classify(input, 'mainnet')

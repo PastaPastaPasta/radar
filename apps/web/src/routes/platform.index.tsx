@@ -13,7 +13,7 @@ const LEGACY_ANCHORS: Record<string, '/epochs' | '/protocol' | '/validators'> = 
 export const Route = createFileRoute('/platform/')({
   beforeLoad: ({ location, search }) => {
     const to = LEGACY_ANCHORS[location.hash]
-    if (to) throwRedirect({ to }, search.network)
+    if (to) throwRedirect({ to }, search)
   },
   component: PlatformHomeRoute,
 })

@@ -109,7 +109,7 @@ export type RootSearch = z.output<typeof rootSearch>
 
 const canonicalize: SearchMiddleware<RootSearch> = ({ search, next }) => {
   const result = { ...next(search) }
-  const { net } = parseNetworkParam(result.network, result.net)
+  const { net } = parseNetworkParam(result.network ?? search.network, result.net ?? search.net)
   delete result.net
   if (net === 'mainnet') delete result.network
   else result.network = net

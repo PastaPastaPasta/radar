@@ -13,5 +13,5 @@ export const Route = createFileRoute('/search')({
 
 function SearchRoute() {
   const { q } = Route.useSearch()
-  return <SearchPage q={q} />
+  return <SearchPage key={q ?? ''} q={q} />
 }

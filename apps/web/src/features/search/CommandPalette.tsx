@@ -2,9 +2,10 @@ import { useNavigate } from '@tanstack/react-router'
 import * as Dialog from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Command } from 'cmdk'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { ENTITY_LABELS, SECTION_LABELS, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui'
+import { classify } from './classify'
 import { describeInput } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { matchPages } from './pages'
@@ -54,6 +55,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'palette' })
   const pages = matchPages(query)
   const trimmed = query.trim()
+  const secret = useMemo(() => classify(trimmed, net).warning === 'secret', [trimmed, net])
 
   useEffect(() => {
     arrowed.current = false
@@ -77,7 +79,8 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
     if (trimmed.length === 0) return
     e.preventDefault()
     e.stopPropagation()
-    const only = decide(hits)
+    if (secret) return
+    const only = classified.raw.trim() === trimmed ? decide(hits) : undefined
     if (only) go(only.href)
     else openSearchPage()
   }
@@ -102,19 +105,26 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
         aria-label="Search Radar"
         className="w-full border-b bg-transparent px-4 py-3 text-base outline-none"
       />
-      <Command.List className="max-h-[60vh] overflow-y-auto p-2">
-        {classified.warning === 'secret' ? (
+      <div className="empty:hidden">
+        {secret ? (
           <p role="status" className="px-2 py-3 text-sm">
             That looks like a private key or recovery phrase. Radar never needs one, so it wasn’t
             searched.
           </p>
         ) : null}
-        {trimmed.length > 0 && description.length > 0 ? (
+        {!secret && trimmed.length > 0 && description.length > 0 ? (
           <p data-classified className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
             Looks like {description.join(' · ')}
           </p>
         ) : null}
 
+        {failed.length > 0 ? (
+          <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
+            Some sources didn’t answer: {failed.map((f) => f.id).join(', ')}.
+          </p>
+        ) : null}
+      </div>
+      <Command.List className="max-h-[60vh] overflow-y-auto p-2">
         {groups.map(([group, items]) => (
           <Command.Group key={group} heading={GROUP_LABELS[group]}>
             {items.map((hit) => (
@@ -158,7 +168,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </Command.Group>
         ) : null}
 
-        {trimmed.length > 0 ? (
+        {trimmed.length > 0 && !secret ? (
           <Command.Group>
             <Command.Item
               value={SEARCH_ALL}
@@ -168,12 +178,6 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
               See all results for “{trimmed}”{net === 'mainnet' ? '' : ` on ${net}`}
             </Command.Item>
           </Command.Group>
-        ) : null}
-
-        {failed.length > 0 ? (
-          <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
-            Some sources didn’t answer: {failed.map((f) => f.id).join(', ')}.
-          </p>
         ) : null}
       </Command.List>
     </Command>
