@@ -27,6 +27,9 @@ interface Row {
   hint?: NetworkId
 }
 
+const PHRASE =
+  'abandon ability able about above absent absorb abstract absurd abuse access accident'
+
 const rows: Row[] = [
   { name: 'Core height', input: '2569992', net: 'mainnet', classes: ['int', 'dpns'] },
   { name: 'short number', input: '12', net: 'mainnet', classes: ['int'] },
@@ -219,10 +222,8 @@ describe('classify', () => {
 
   it('does not search private keys or recovery phrases', () => {
     const wif = '7rUXQhHrDyLDeWVaDUCM6G7VMYeMpSLZ1Vt5A6dhZAeqeRsbLTx'
-    const phrase =
-      'abandon ability able about above absent absorb abstract absurd abuse access accident'
     for (const input of [
-      phrase,
+      PHRASE,
       '1. abandon 2. ability 3. able 4. about 5. above 6. absent 7. absorb 8. abstract 9. absurd 10. abuse 11. access 12. accident',
       `xprv${'9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'}`,
     ]) {
@@ -231,5 +232,111 @@ describe('classify', () => {
       expect(result.warning).toBe('secret')
     }
     expect(classify(wif, 'mainnet').warning).toBeUndefined()
+  })
+})
+
+const WORDS = PHRASE.split(' ')
+
+const SPANISH = 'ábaco abdomen abeja abierto abogado abono aborto abrazo abrir abuelo abuso acabar'
+const FRENCH =
+  'abaisser abandon abdiquer abeille abolir aborder aboutir aboyer abrasif abreuver abriter abroger'
+const JAPANESE =
+  'あいこくしん\u3000あいさつ\u3000あいだ\u3000あおぞら\u3000あかちゃん\u3000あきる\u3000あけがた\u3000あける\u3000あこがれる\u3000あさい\u3000あさひ\u3000あしあと'
+const CHINESE = '的 一 是 在 不 了 有 和 人 这 中 大'
+
+const secretRows: { name: string; input: string; warning: 'secret' | 'possible-secret' }[] = [
+  { name: 'a plain phrase', input: PHRASE, warning: 'secret' },
+  { name: 'a phrase in double quotes', input: `"${PHRASE}"`, warning: 'secret' },
+  { name: 'a phrase in curly quotes', input: `“${PHRASE}”`, warning: 'secret' },
+  { name: 'a phrase in brackets', input: `[${PHRASE}]`, warning: 'secret' },
+  { name: 'a phrase with a prefix', input: `my seed: ${PHRASE}`, warning: 'secret' },
+  { name: 'a phrase with a short prefix', input: `it is ${PHRASE}`, warning: 'secret' },
+  { name: 'a comma-separated phrase', input: WORDS.join(', '), warning: 'secret' },
+  { name: 'a hyphen-joined phrase', input: WORDS.join('-'), warning: 'secret' },
+  { name: 'a slash-joined phrase', input: WORDS.join('/'), warning: 'secret' },
+  { name: 'a multi-line phrase', input: WORDS.join('\n'), warning: 'secret' },
+  {
+    name: 'a phrase on two lines with tabs',
+    input: `${WORDS.slice(0, 6).join(' ')}\t\n${WORDS.slice(6).join(' ')}`,
+    warning: 'secret',
+  },
+  { name: 'an upper-case phrase', input: PHRASE.toUpperCase(), warning: 'secret' },
+  { name: 'a 24-word phrase', input: [...WORDS, ...WORDS].join(' '), warning: 'secret' },
+  {
+    name: 'a numbered phrase',
+    input: WORDS.map((w, i) => `${i + 1}.${w}`).join(' '),
+    warning: 'secret',
+  },
+  { name: 'a phrase followed by a passphrase', input: `${PHRASE} hunter2`, warning: 'secret' },
+  { name: 'three words typed so far', input: 'abandon ability able', warning: 'possible-secret' },
+  {
+    name: 'eleven words typed so far',
+    input: WORDS.slice(0, 11).join(' '),
+    warning: 'possible-secret',
+  },
+  {
+    name: 'a partial phrase with a prefix',
+    input: 'seed: abandon ability able about',
+    warning: 'possible-secret',
+  },
+  {
+    name: 'a partial phrase in quotes',
+    input: '"abandon ability able',
+    warning: 'possible-secret',
+  },
+  {
+    name: 'a phrase with one misspelt word',
+    input: WORDS.map((w, i) => (i === 5 ? 'absnt' : w)).join(' '),
+    warning: 'possible-secret',
+  },
+  { name: 'a Spanish phrase', input: SPANISH, warning: 'possible-secret' },
+  { name: 'a French phrase', input: FRENCH, warning: 'possible-secret' },
+  {
+    name: 'a decomposed French phrase',
+    input: FRENCH.normalize('NFD'),
+    warning: 'possible-secret',
+  },
+  {
+    name: 'a Japanese phrase with ideographic spaces',
+    input: JAPANESE,
+    warning: 'possible-secret',
+  },
+  { name: 'a Chinese phrase', input: CHINESE, warning: 'possible-secret' },
+  { name: 'a quoted Spanish phrase', input: `«${SPANISH}»`, warning: 'possible-secret' },
+]
+
+describe('classify secrets', () => {
+  it.each(secretRows)('flags $name', ({ input, warning }) => {
+    const result = classify(input, 'mainnet')
+    expect(result.warning).toBe(warning)
+    expect(result.classes).toEqual([])
+    expect(result.normalized).toBe('')
+  })
+
+  it.each([
+    'dashpay',
+    'DashPay Token',
+    'pshenmic.dash',
+    'alice-bob.dash',
+    'dpns',
+    'dash platform',
+    'abandon ability',
+    'fire wall',
+    'about above',
+    'Evo Bridge Wallet',
+    'payments for masternodes',
+    'my contract is named dashpay',
+    'masternode payments in epoch ninety',
+    'abandon-ability',
+    '2569992',
+    '2026-10-01',
+    '75.119.128.71',
+    'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec',
+    '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6',
+    'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0',
+    '7rUXQhHrDyLDeWVaDUCM6G7VMYeMpSLZ1Vt5A6dhZAeqeRsbLTx',
+    '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy1',
+  ])('does not flag %s', (input) => {
+    expect(classify(input, 'mainnet').warning).toBeUndefined()
   })
 })

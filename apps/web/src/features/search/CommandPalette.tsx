@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { ENTITY_LABELS, SECTION_LABELS, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui'
 import { classify } from './classify'
-import { describeInput } from './describe'
+import { describeInput, secretNotice } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { matchPages } from './pages'
 import { useCommandPalette } from './palette-context'
@@ -55,7 +55,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'palette' })
   const pages = matchPages(query)
   const trimmed = query.trim()
-  const secret = useMemo(() => classify(trimmed, net).warning === 'secret', [trimmed, net])
+  const secret = useMemo(() => classify(trimmed, net).warning, [trimmed, net])
 
   useEffect(() => {
     arrowed.current = false
@@ -108,8 +108,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
       <div className="empty:hidden">
         {secret ? (
           <p role="status" className="px-2 py-3 text-sm">
-            That looks like a private key or recovery phrase. Radar never needs one, so it wasn’t
-            searched.
+            {secretNotice(secret).title}. Radar never needs one, so it wasn’t searched.
           </p>
         ) : null}
         {!secret && trimmed.length > 0 && description.length > 0 ? (

@@ -115,6 +115,12 @@ describe('command palette', () => {
   })
 })
 
+function recordVisits(history: ReturnType<typeof createMemoryHistory>): string[] {
+  const visited: string[] = []
+  history.subscribe(({ location }) => visited.push(location.href))
+  return visited
+}
+
 describe('/search page', () => {
   it('shows grouped results for a number', async () => {
     const history = createMemoryHistory({ initialEntries: ['/search?q=2569992'] })
@@ -163,17 +169,63 @@ describe('/search page', () => {
     expect(await screen.findByText('What you can search for')).toBeInTheDocument()
   })
 
-  it('never echoes a private key or phrase', async () => {
+  it('never echoes a private key or phrase and strips it from the address', async () => {
     const phrase =
       'abandon ability able about above absent absorb abstract absurd abuse access accident'
     const history = createMemoryHistory({
       initialEntries: [`/search?q=${encodeURIComponent(phrase)}`],
     })
+    const visited = recordVisits(history)
     render(<App history={history} />)
 
+    await waitFor(() => expect(history.location.search).toBe(''))
     expect(
       await screen.findByText('That looks like a private key or recovery phrase'),
     ).toBeInTheDocument()
     expect(screen.getByRole('searchbox')).toHaveValue('')
+    expect(visited.join()).not.toContain('abandon')
+    expect(document.title).not.toContain('abandon')
+  })
+
+  it('keeps a recovery phrase typed into the page form out of the address', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/search'] })
+    const visited = recordVisits(history)
+    render(<App history={history} />)
+    const user = userEvent.setup()
+
+    const box = await screen.findByRole('searchbox')
+    await user.type(
+      box,
+      '"abandon ability able about above absent absorb abstract absurd abuse access accident"{Enter}',
+    )
+
+    expect(
+      await screen.findByText('That looks like a private key or recovery phrase'),
+    ).toBeInTheDocument()
+    expect(box).toHaveValue('')
+    expect(visited.join()).not.toContain('abandon')
+  })
+
+  it('keeps a partly typed phrase out of the address and the title', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/search'] })
+    const visited = recordVisits(history)
+    render(<App history={history} />)
+    const user = userEvent.setup()
+
+    await user.type(await screen.findByRole('searchbox'), 'abandon ability able about{Enter}')
+
+    expect(await screen.findByText('That could be part of a recovery phrase')).toBeInTheDocument()
+    expect(visited.join()).not.toContain('abandon')
+    expect(document.title).not.toContain('abandon')
+  })
+
+  it('searches ordinary text as before', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/search'] })
+    render(<App history={history} />)
+    const user = userEvent.setup()
+
+    await user.type(await screen.findByRole('searchbox'), 'pshenmic.dash{Enter}')
+
+    await waitFor(() => expect(history.location.search).toContain('pshenmic.dash'))
   })
 })

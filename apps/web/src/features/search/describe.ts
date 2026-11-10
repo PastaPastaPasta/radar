@@ -1,4 +1,4 @@
-import type { Classified, InputClass } from './classify'
+import type { Classified, InputClass, SecretWarning } from './classify'
 
 const NAMES: Record<InputClass, string> = {
   int: 'a number: a Core height, Platform height or epoch',
@@ -15,4 +15,19 @@ const NAMES: Record<InputClass, string> = {
 
 export function describeInput(c: Classified): string[] {
   return c.classes.map((k) => NAMES[k])
+}
+
+const SECRET_NOTICES: Record<SecretWarning, { title: string; body: string }> = {
+  secret: {
+    title: 'That looks like a private key or recovery phrase',
+    body: 'Radar never needs one, so it wasn’t searched or sent anywhere, and it was kept out of the address bar and your history.',
+  },
+  'possible-secret': {
+    title: 'That could be part of a recovery phrase',
+    body: 'Radar never needs one, so it wasn’t searched or sent anywhere, and it was kept out of the address bar and your history. Search for something else.',
+  },
+}
+
+export function secretNotice(warning: SecretWarning): { title: string; body: string } {
+  return SECRET_NOTICES[warning]
 }

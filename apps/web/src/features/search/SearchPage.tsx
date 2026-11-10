@@ -1,5 +1,5 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
+import { useEffect, useState, type FormEvent } from 'react'
 import {
   ENTITY_LABELS,
   PageLink,
@@ -9,8 +9,8 @@ import {
 } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
-import { classify } from './classify'
-import { describeInput } from './describe'
+import { classify, type SecretWarning } from './classify'
+import { describeInput, secretNotice } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { useSearch } from './useSearch'
 
@@ -20,17 +20,41 @@ function otherNetwork(net: NetworkId): NetworkId {
   return net === 'mainnet' ? 'testnet' : 'mainnet'
 }
 
+function withheldFrom(state: unknown): SecretWarning | undefined {
+  const value = (state as { withheld?: unknown } | undefined)?.withheld
+  return value === 'secret' || value === 'possible-secret' ? value : undefined
+}
+
 export function SearchPage({ q }: { q?: string }) {
   const net = useNetwork()
   const navigate = useNavigate()
   const query = (q ?? '').trim()
-  const [draft, setDraft] = useState(() => (classify(query, net).warning === 'secret' ? '' : query))
+  const [draft, setDraft] = useState(() => (classify(query, net).warning ? '' : query))
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'page' })
-  const secret = classified.warning === 'secret'
+  const secret = classified.warning
+  const [typed, setTyped] = useState<SecretWarning>()
+  const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
+  const withheld = typed ?? secret ?? stripped
   useDocumentTitle(query && !secret ? `“${query}” · Search` : 'Search')
+
+  useEffect(() => {
+    if (!secret) return
+    void navigate({
+      to: '/search',
+      search: (prev) => ({ ...prev, q: undefined }),
+      replace: true,
+      state: (prev) => ({ ...prev, withheld: secret }),
+    })
+  }, [secret, navigate])
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
+    const warning = classify(draft.trim(), net).warning
+    if (warning) {
+      setDraft('')
+      setTyped(warning)
+      return
+    }
     void navigate({ to: '/search', search: { q: draft.trim() || undefined } })
   }
 
@@ -50,7 +74,10 @@ export function SearchPage({ q }: { q?: string }) {
               type="search"
               name="q"
               value={draft}
-              onChange={(e) => setDraft(e.target.value)}
+              onChange={(e) => {
+                setDraft(e.target.value)
+                setTyped(undefined)
+              }}
               placeholder="Height, hash, address, ProTx, IP, ID, name…"
               autoComplete="off"
               autoCapitalize="off"
@@ -64,11 +91,11 @@ export function SearchPage({ q }: { q?: string }) {
         </form>
       </header>
 
-      {secret ? (
+      {withheld ? (
         <Empty
           kind="blocked"
-          title="That looks like a private key or recovery phrase"
-          body="Radar never needs one, so it wasn’t searched or sent anywhere. Clear the search box before sharing this page."
+          title={secretNotice(withheld).title}
+          body={secretNotice(withheld).body}
         />
       ) : null}
 

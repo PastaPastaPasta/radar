@@ -2,6 +2,7 @@ import { base58CheckDecode, base58Decode, isBase58 } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { isHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
+import { isBip39EnglishWord } from './bip39-words'
 
 export type InputClass =
   | 'int'
@@ -27,9 +28,14 @@ export interface Classified {
   classes: InputClass[]
   /** Set when an address prefix names a network other than the current one. */
   networkHint?: NetworkId
-  /** The input looks like a private key or recovery phrase. It is never searched for. */
-  warning?: 'secret'
+  /**
+   * `secret`: the input is a private key or a recovery phrase.
+   * `possible-secret`: it might be part of one, so it is kept out of the URL, the page title and every resolver.
+   */
+  warning?: SecretWarning
 }
+
+export type SecretWarning = 'secret' | 'possible-secret'
 
 const MAINNET_ADDRESS_VERSIONS = new Set([0x4c, 0x10])
 const TESTNET_ADDRESS_VERSIONS = new Set([0x8c, 0x13])
@@ -94,17 +100,41 @@ function coreAddressNetwork(value: string): 'mainnet' | 'testnet' | undefined {
 
 const EXTENDED_KEY = /^(?:xprv|tprv|drkv|drkp)[1-9A-HJ-NP-Za-km-z]{80,}$/
 
+const NON_LETTERS = /[^\p{L}\p{M}]+/u
+const PHRASE_WORDS = 12
+const PARTIAL_PHRASE_WORDS = 3
+
+function lettersOnly(value: string): string[] {
+  return value.normalize('NFKC').toLowerCase().split(NON_LETTERS).filter(Boolean)
+}
+
+function longestEnglishRun(tokens: string[]): number {
+  let longest = 0
+  let current = 0
+  for (const token of tokens) {
+    current = isBip39EnglishWord(token) ? current + 1 : 0
+    longest = Math.max(longest, current)
+  }
+  return longest
+}
+
 function looksSecret(value: string): boolean {
   if (EXTENDED_KEY.test(value)) return true
-  const words = value
-    .replace(/[\d.,;:()]+/g, ' ')
-    .split(/\s+/)
-    .filter(Boolean)
-  if (words.length >= 12 && words.every((w) => /^[a-z]{3,8}$/i.test(w))) return true
+  if (longestEnglishRun(lettersOnly(value)) >= PHRASE_WORDS) return true
   if (value.length !== 51 && value.length !== 52) return false
   const decoded = base58CheckDecode(value)
   if (!decoded || (decoded.version !== 0xcc && decoded.version !== 0xef)) return false
   return decoded.payload.length === 32 || decoded.payload.length === 33
+}
+
+/**
+ * A phrase being typed, or one in a language whose wordlist is not bundled. Only inputs made of
+ * separate words qualify, so a mistyped hash or ID stays ordinary text.
+ */
+function looksPartlySecret(value: string): boolean {
+  const tokens = lettersOnly(value)
+  if (longestEnglishRun(tokens) >= PARTIAL_PHRASE_WORDS) return true
+  return tokens.length >= PHRASE_WORDS && value.split(/\s+/).length >= PHRASE_WORDS
 }
 
 function isBase58Id(value: string): boolean {
@@ -131,7 +161,13 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
 
   if (trimmed.length === 0) return result('')
 
-  if (looksSecret(trimmed)) return { raw, normalized: '', classes, warning: 'secret' }
+  const withheld = (warning: SecretWarning): Classified => ({
+    raw,
+    normalized: '',
+    classes,
+    warning,
+  })
+  if (looksSecret(trimmed)) return withheld('secret')
 
   const hex = trimmed.replace(/^0x/i, '')
   if (isHex(hex, 32)) {
@@ -167,6 +203,8 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     classes.push('ip')
     return result(trimmed.toLowerCase())
   }
+
+  if (looksPartlySecret(trimmed)) return withheld('possible-secret')
 
   if (INT.test(trimmed)) {
     const n = Number(trimmed)
