@@ -1,10 +1,21 @@
-import { mkdirSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { expectAccessible } from '../helpers/a11y'
 import { expect, test } from '../helpers/test'
 
-const SHOTS = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'shots', 'kit')
+const SECTION_IDS = [
+  'tokens',
+  'layout',
+  'figures',
+  'amount',
+  'entities',
+  'badges',
+  'charts',
+  'sources',
+  'states',
+  'tabs',
+  'table',
+  'linkouts',
+  'palette',
+]
 
 test.describe('ui kit', () => {
   test.beforeEach(async ({ page }) => {
@@ -19,21 +30,7 @@ test.describe('ui kit', () => {
   })
 
   test('renders every section without horizontal overflow', async ({ page }) => {
-    for (const id of [
-      'tokens',
-      'layout',
-      'figures',
-      'amount',
-      'entities',
-      'badges',
-      'charts',
-      'sources',
-      'states',
-      'tabs',
-      'table',
-      'linkouts',
-      'palette',
-    ]) {
+    for (const id of SECTION_IDS) {
       await expect(page.locator(`#${id}`), id).toBeAttached()
     }
     const overflow = await page.evaluate(
@@ -42,16 +39,21 @@ test.describe('ui kit', () => {
     expect(overflow).toBeLessThanOrEqual(0)
   })
 
-  test('screenshot', async ({ page }, testInfo) => {
-    mkdirSync(SHOTS, { recursive: true })
-    await page.addStyleTag({
-      content: '*,*::before,*::after{animation:none!important;transition:none!important}',
-    })
+  test('every section takes up room on the page and the full page is attached', async ({
+    page,
+  }, testInfo) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.evaluate(() => document.fonts.ready)
-    await page.screenshot({
-      path: join(SHOTS, `${testInfo.project.name}.png`),
-      fullPage: true,
-      scale: 'css',
+    const viewportWidth = page.viewportSize()?.width ?? 0
+    for (const id of SECTION_IDS) {
+      const box = await page.locator(`#${id}`).boundingBox()
+      expect(box, id).not.toBeNull()
+      expect(box?.height, `${id} height`).toBeGreaterThan(40)
+      expect(box?.width, `${id} width`).toBeGreaterThan(viewportWidth * 0.5)
+    }
+    await testInfo.attach('kit', {
+      body: await page.screenshot({ fullPage: true, scale: 'css' }),
+      contentType: 'image/png',
     })
   })
 
