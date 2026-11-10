@@ -1,11 +1,13 @@
 import {
   createDapiRpc,
   getDapiTransport,
+  loadCoreCache,
   GRPC_INVALID_ARGUMENT,
   GRPC_NOT_FOUND,
   type DapiTransport,
 } from '../dapi-core'
 import type { DapiRpc } from '../dapi-core'
+import type { CoreCache } from '../dapi-core/cache'
 import { stampOf, type FallbackReason, type Sourced } from '../envelope'
 import { isSourceError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
@@ -51,6 +53,8 @@ export interface CoreDeps {
   >
   health: Pick<typeof healthRegistry, 'get'>
   now: () => number
+  /** Where immutable answers are kept between visits. Resolves nothing when the build has no cache. */
+  cache?: () => Promise<CoreCache | undefined>
 }
 
 const defaultDeps: CoreDeps = {
@@ -59,6 +63,7 @@ const defaultDeps: CoreDeps = {
   hyphen,
   health: healthRegistry,
   now: Date.now,
+  cache: loadCoreCache,
 }
 
 const reversed = (bytes: Uint8Array) => bytesToHex(Uint8Array.from(bytes).reverse())
@@ -87,6 +92,7 @@ function limited<T, R>(items: T[], limit: number, run: (item: T) => Promise<R>):
 
 export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
   const { decoder } = deps
+  const getCache = deps.cache ?? (() => Promise.resolve(undefined))
   const rpcs = new WeakMap<DapiTransport, DapiRpc>()
   const rpc = (): DapiRpc => {
     const transport = deps.transport()
@@ -149,6 +155,12 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
   function rememberChainLock(net: NetworkId, cl: { height: number; hash: string }): void {
     const known = chainLocks.get(net)
     if (!known || cl.height >= known.height) chainLocks.set(net, { ...cl, at: deps.now() })
+  }
+
+  /** The highest tip this client has seen, so a transaction read from disk can say how deep it is. */
+  const seenTips = new Map<NetworkId, number>()
+  const rememberTip = (net: NetworkId, height: number): void => {
+    if (height > (seenTips.get(net) ?? -1)) seenTips.set(net, height)
   }
 
   async function fetchChainLock(
@@ -221,6 +233,17 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
     if (count < 1 || count > MAX_HEADERS) {
       throw new RangeError(`Ask for 1 to ${MAX_HEADERS} headers at a time`)
     }
+    const cache = await getCache()
+    const cached = await cache?.getHeaders(net, fromHeight, count)
+    if (cached) {
+      return {
+        headers: cached.map((h) => ({
+          height: h.height,
+          hash: h.hash,
+          time: parseHeader(h.header).time * 1000,
+        })),
+      }
+    }
     const stream = rpc().headerStream(net, { fromHeight, count }, { signal })
     const raw: Uint8Array[] = []
     for await (const event of stream.events) {
@@ -233,6 +256,18 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
       const next = parsed[i + 1]
       const hash = next ? next.prevHash : await decoder.headerHash(raw[i]!, net)
       headers.push({ height: fromHeight + i, hash, time: parsed[i]!.time * 1000 })
+    }
+    const lockedUpTo = chainLocks.get(net)?.height ?? -1
+    const settledHeaders = headers.filter((h) => h.height <= lockedUpTo)
+    if (cache && settledHeaders.length > 0) {
+      void cache.putHeaders(
+        net,
+        settledHeaders.map((h) => ({
+          height: h.height,
+          hash: h.hash,
+          header: raw[h.height - fromHeight]!,
+        })),
+      )
     }
     return { headers, node: stream.node }
   }
@@ -250,6 +285,19 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
   }
 
   async function dapiTx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<RawTx | null> {
+    const cache = await getCache()
+    const hit = await cache?.getTx(net, txid)
+    if (hit) {
+      const tip = Math.max(seenTips.get(net) ?? -1, chainLocks.get(net)?.height ?? -1)
+      return {
+        tx: await decoder.tx(hit.bytes, net),
+        blockHash: hit.blockHash,
+        height: hit.height,
+        confirmations: tip >= hit.height ? tip - hit.height + 1 : undefined,
+        isInstantLocked: hit.isInstantLocked,
+        isChainLocked: true,
+      }
+    }
     let answered
     try {
       answered = await rpc().transaction(net, txid, { signal })
@@ -260,6 +308,16 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
     const m = answered.message
     const tx = await decoder.tx(m.transaction, net)
     const mined = m.height > 0 && m.blockHash.length > 0
+    if (cache && mined && m.isChainLocked) {
+      void cache.putTx(net, {
+        txid: tx.txid,
+        bytes: m.transaction,
+        blockHash: bytesToHex(m.blockHash),
+        height: m.height,
+        isInstantLocked: m.isInstantLocked,
+        isChainLocked: true,
+      })
+    }
     return {
       tx,
       blockHash: mined ? bytesToHex(m.blockHash) : undefined,
@@ -328,6 +386,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
           node: status.node,
         })
       }
+      rememberTip(net, height)
       return dapi({ height, hash, time: header.time }, { node: status.node, height })
     },
 
@@ -350,6 +409,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
         syncProgress: m.syncProgress,
         isSynced: chain?.isSynced ?? false,
       }
+      rememberTip(net, data.blocks)
       return dapi(data, { node, height: data.blocks })
     },
 
@@ -357,6 +417,14 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
       const byHash = 'hash' in ref
       if (byHash && !isHex(ref.hash, 32)) return dapi(null)
       if (!byHash && !(Number.isInteger(ref.height) && ref.height >= 0)) return dapi(null)
+      const cache = await getCache()
+      const hit = byHash
+        ? await cache?.getBlockByHash(net, ref.hash.toLowerCase())
+        : await cache?.getBlockByHeight(net, ref.height)
+      if (hit) {
+        const block = await decoder.block(hit.bytes, net)
+        return dapi({ ...block, chainLocked: true }, { height: block.height, immutable: true })
+      }
       if (dapiDown(net) && hyphenFit(net)) return hyphenBlock(net, ref, signal)
 
       let answered
@@ -380,6 +448,13 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
         })
       }
       const chainLocked = await isChainLockedHeight(net, block.height, signal)
+      if (cache && chainLocked) {
+        void cache.putBlock(net, {
+          hash: block.hash,
+          height: block.height,
+          bytes: answered.message.block,
+        })
+      }
       return dapi(
         { ...block, chainLocked },
         { node: answered.node, height: block.height, immutable: chainLocked },
@@ -482,12 +557,24 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
         (_, i) => fromHeight - i,
       )
       let node: string | undefined
+      const cache = await getCache()
+      const fetched = new Map<number, Uint8Array>()
       const rows = await limited(heights, ROW_CONCURRENCY, async (height) => {
+        const hit = await cache?.getBlockByHeight(net, height)
+        if (hit) return decoder.block(hit.bytes, net)
         const answered = await rpc().block(net, { height }, { signal, priority: 'list' })
         node ??= answered.node
+        fetched.set(height, answered.message.block)
         return decoder.block(answered.message.block, net)
       })
       const lockedUpTo = (await bestChainLockHeight(net, signal)) ?? -1
+      if (cache) {
+        for (const b of rows) {
+          const bytes = fetched.get(b.height)
+          if (bytes && b.height <= lockedUpTo)
+            void cache.putBlock(net, { hash: b.hash, height: b.height, bytes })
+        }
+      }
       const data: BlockRow[] = rows.map((b) => ({
         height: b.height,
         hash: b.hash,
