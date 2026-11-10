@@ -314,6 +314,18 @@ describe('redirects', () => {
     await check('radar.localhost', '/map?net=testnet&q=x', '/map?q=x&network=testnet')
   })
 
+  it('never redirects to another origin', async () => {
+    for (const p of [
+      '//evil.example/x?net=testnet',
+      '///evil.example?network=mainnet',
+      '/\\evil.example?net=testnet',
+    ]) {
+      const res = await mf.dispatchFetch(`http://radar.localhost${p}`, { redirect: 'manual' })
+      const loc = res.headers.get('location')
+      if (loc) assert.match(loc, /^\/(?![/\\])/, p)
+    }
+  })
+
   it('leaves canonical URLs alone', async () => {
     await check('radar.localhost', '/masternodes?network=testnet&sort=-balance', null)
     await check('radar.localhost', '/search?network=testnet&q=x', null)

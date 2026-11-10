@@ -156,7 +156,7 @@ export function redirectFor(url: URL, opts: RedirectOptions): string | null {
   if (!network && nativeHit && nativeHost) network = 'testnet'
   if (network && network !== 'mainnet') target.set('network', network)
 
-  const path2 = hit ? hit.path : url.pathname
+  const path2 = hit ? hit.path : url.pathname.replace(/^\/{2,}/, '/')
   const search = target.size ? `?${target.toString()}` : ''
   const same = path2 === url.pathname && canonical(target) === canonical(q)
   return same ? null : `${path2}${search}`
