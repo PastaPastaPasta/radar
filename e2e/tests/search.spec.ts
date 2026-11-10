@@ -200,7 +200,7 @@ test.describe('search page', () => {
     await page.goto('/search?q=2569992')
     await expect(page.getByRole('link', { name: /Core block 2,569,992/ })).toBeVisible()
 
-    await expectAccessible(page, { exclude: ['dashhq-bar'] })
+    await expectAccessible(page)
   })
 })
 
@@ -350,6 +350,6 @@ test.describe('palette', () => {
     const viewport = page.viewportSize()
     expect(box?.x).toBeGreaterThanOrEqual(0)
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(viewport?.width ?? 0)
-    await expectAccessible(page, { exclude: ['dashhq-bar'] })
+    await expectAccessible(page)
   })
 })

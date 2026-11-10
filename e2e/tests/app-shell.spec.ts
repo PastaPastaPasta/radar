@@ -107,7 +107,7 @@ test.describe('routes', () => {
     await page.goto('/masternodes')
     await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
 
-    await expectAccessible(page, { exclude: ['dashhq-bar'] })
+    await expectAccessible(page)
   })
 
   test('section pages are one tap from each other @X-08', async ({ page }) => {
