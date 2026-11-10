@@ -5,14 +5,16 @@ export const SOURCE_LOCALE = 'en'
  * its own script. To add one, add a line here, run `pnpm i18n:extract`, translate the new
  * `locales/<code>/messages.po`, and commit; nothing else changes.
  */
-export const LOCALES = [{ code: 'en', name: 'English' }] as const
+export type LocaleCode = string
 
-export type LocaleCode = (typeof LOCALES)[number]['code']
+export const LOCALES: readonly { code: LocaleCode; name: string }[] = [
+  { code: 'en', name: 'English' },
+]
 
 export const LOCALE_CODES: readonly LocaleCode[] = LOCALES.map((l) => l.code)
 
 export function isLocale(value: unknown): value is LocaleCode {
-  return LOCALE_CODES.some((c) => c === value)
+  return typeof value === 'string' && LOCALE_CODES.includes(value)
 }
 
 /** The first supported locale among the browser's languages, matching "de-AT" to "de". */

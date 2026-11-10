@@ -13,6 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} of {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "{behind} blocks behind the tip"
+
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 
@@ -25,14 +33,54 @@ msgstr "Add devnet"
 msgid "Amounts"
 msgstr "Amounts"
 
+msgid "Best ChainLock"
+msgstr "Best ChainLock"
+
 msgid "Cancel"
 msgstr "Cancel"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "Catching up, {0}"
+
+msgid "ChainLocked block hash"
+msgstr "ChainLocked block hash"
+
+msgid "Checking the sources…"
+msgstr "Checking the sources…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Core addresses, mempool, governance and block lists"
+
+msgid "Core tip"
+msgstr "Core tip"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Core tip, blocks and transactions, straight from evonodes"
 
 msgid "Custom devnets"
 msgstr "Custom devnets"
 
+msgid "DAPI"
+msgstr "DAPI"
+
 msgid "DAPI addresses"
 msgstr "DAPI addresses"
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+
+msgid "DAPI request budget"
+msgstr "DAPI request budget"
+
+msgid "Dash Core"
+msgstr "Dash Core"
 
 msgid "Devnet name"
 msgstr "Devnet name"
@@ -46,14 +94,95 @@ msgstr "Edit {editName}"
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "Enter at least one DAPI address as host:port, one per line."
 
+msgid "Every source is answering."
+msgstr "Every source is answering."
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Everything Core shows comes from DAPI."
+
 msgid "Example"
 msgstr "Example"
+
+msgid "Figures computed on your device"
+msgstr "Figures computed on your device"
+
+msgid "Getting tight"
+msgstr "Getting tight"
+
+msgid "Headers and blocks"
+msgstr "Headers and blocks"
+
+msgid "Headroom"
+msgstr "Headroom"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "How each source is answering, and how far behind its data is."
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+
+msgid "It answered with an error."
+msgstr "It answered with an error."
+
+msgid "It hasn’t answered yet."
+msgstr "It hasn’t answered yet."
+
+msgid "It is rate limiting this browser."
+msgstr "It is rate limiting this browser."
+
+msgid "It sent an answer Radar can’t read."
+msgstr "It sent an answer Radar can’t read."
+
+msgid "It took too long to answer."
+msgstr "It took too long to answer."
+
+msgid "Its data is behind."
+msgstr "Its data is behind."
 
 msgid "Language"
 msgstr "Language"
 
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "Last crawl finished {0}. Its Core node is at block {1}."
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "Last good {0}."
+
+msgid "Median answer {rounded} ms"
+msgstr "Median answer {rounded} ms"
+
+msgid "No crawl has finished yet."
+msgstr "No crawl has finished yet."
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "No DAPI requests have been made on this network yet."
+
 msgid "No devnets saved."
 msgstr "No devnets saved."
+
+msgid "Node sync"
+msgstr "Node sync"
+
+msgid "Nodes resting"
+msgstr "Nodes resting"
+
+msgid "Not available right now"
+msgstr "Not available right now"
+
+msgid "Not offered"
+msgstr "Not offered"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "Nothing has asked it yet on this network."
 
 msgid "Open"
 msgstr "Open"
@@ -64,14 +193,44 @@ msgstr "optional"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Platform lists and counts"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Plenty of room"
+msgstr "Plenty of room"
+
+msgid "Pressure"
+msgstr "Pressure"
+
+msgid "Price feed"
+msgstr "Price feed"
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "Proof-checked Platform state, verified in this browser"
+
 msgid "Quorum list URL"
 msgstr "Quorum list URL"
+
+msgid "Radar crawler"
+msgstr "Radar crawler"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 
 msgid "Remove"
 msgstr "Remove"
 
 msgid "Remove {devnet}"
 msgstr "Remove {devnet}"
+
+msgid "Requests in the last minute"
+msgstr "Requests in the last minute"
 
 msgid "Save changes"
 msgstr "Save changes"
@@ -91,20 +250,62 @@ msgstr "Show the USD value next to DASH amounts"
 msgid "Show times in UTC"
 msgstr "Show times in UTC"
 
+msgid "Some requests are failing."
+msgstr "Some requests are failing."
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "Some sources are slow or behind. The rest still work."
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "Some sources aren’t answering. The rest still work."
+
+msgid "Sources"
+msgstr "Sources"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Synced"
+msgstr "Synced"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Test coins have no value, so Testnet and devnets never show USD."
 
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 
+msgid "The connection failed."
+msgstr "The connection failed."
+
+msgid "The masternode census and network history"
+msgstr "The masternode census and network history"
+
+msgid "The median answer takes {seconds} s."
+msgstr "The median answer takes {seconds} s."
+
 msgid "The quorum list URL must start with https://."
 msgstr "The quorum list URL must start with https://."
+
+msgid "The request budget is nearly used."
+msgstr "The request budget is nearly used."
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "The USD rate, through Platform Explorer"
 
 msgid "These choices stay in this browser. Radar never sends them anywhere."
 msgstr "These choices stay in this browser. Radar never sends them anywhere."
 
+msgid "This browser"
+msgstr "This browser"
+
+msgid "This network doesn’t have this source."
+msgstr "This network doesn’t have this source."
+
 msgid "Times"
 msgstr "Times"
+
+msgid "Tip hash"
+msgstr "Tip hash"
 
 msgid "Unit for DASH amounts"
 msgstr "Unit for DASH amounts"
@@ -114,6 +315,12 @@ msgstr "USD is rounded to three significant figures and always follows the DASH 
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Use lowercase letters, digits and hyphens, for example \"ruby\"."
+
+msgid "Used up for now"
+msgstr "Used up for now"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "What the evonodes report about the chain right now."
 
 msgid "You"
 msgstr "You"

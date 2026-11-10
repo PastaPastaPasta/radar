@@ -3,13 +3,14 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { App } from '@/app'
-import { DEVNET_STORAGE_KEY } from '@/app/devnets'
 
 function renderAt(url: string) {
   const history = createMemoryHistory({ initialEntries: [url] })
   render(<App history={history} />)
   return history
 }
+
+const DEVNET_STORAGE_KEY = 'radar.devnets'
 
 afterEach(() => {
   localStorage.clear()
@@ -105,9 +106,10 @@ describe('Settings', () => {
     await user.clear(addresses)
     await user.type(addresses, '192.0.2.20:1443')
     await user.click(within(list).getByRole('button', { name: 'Save changes' }))
-    expect(JSON.parse(localStorage.getItem(DEVNET_STORAGE_KEY)!)[0].dapiAddresses).toEqual([
-      '192.0.2.20:1443',
-    ])
+    expect(
+      (JSON.parse(localStorage.getItem(DEVNET_STORAGE_KEY)!) as { dapiAddresses: string[] }[])[0]
+        ?.dapiAddresses,
+    ).toEqual(['192.0.2.20:1443'])
 
     await user.click(within(list).getByRole('button', { name: 'Remove ruby' }))
     await screen.findByText('No devnets saved.')

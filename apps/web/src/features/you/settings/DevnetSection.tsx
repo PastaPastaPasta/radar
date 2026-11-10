@@ -178,7 +178,7 @@ export function DevnetSection({ devnets }: { devnets: SettingsDevnets }) {
           ))}
         </ul>
       )}
-      <DevnetForm onSubmit={devnets.save} />
+      <DevnetForm onSubmit={(config) => devnets.save(config)} />
     </Card>
   )
 }

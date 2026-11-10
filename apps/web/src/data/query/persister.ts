@@ -87,7 +87,7 @@ export function createPersister({ appVersion, store, maxAge, gc = true }: Persis
     filters: { predicate: (query) => shouldPersist(query) },
   })
   if (gc) whenIdle(() => void persister.persisterGc().catch(() => undefined))
-  return { ...persister, persisterFn: withDataClass(persister.persisterFn as PersisterFn) }
+  return { ...persister, persisterFn: withDataClass(persister.persisterFn) }
 }
 
 /** Removes every persisted query of one network from IndexedDB. */

@@ -1,0 +1,148 @@
+import { createMemoryHistory } from '@tanstack/react-router'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
+import { App } from '@/app'
+import type { CoreClient } from '@/data/core/types'
+import { SourceError } from '@/data/errors'
+import { healthRegistry } from '@/data/health'
+import { setCoreClient } from '@/features/entity'
+
+const NOW = Date.now()
+const stamp = { source: 'dapi' as const, asOf: NOW, fetchedAt: NOW, proved: false }
+
+function core(overrides: Partial<CoreClient> = {}): CoreClient {
+  const never = () => Promise.reject(new Error('unused'))
+  return {
+    tip: () =>
+      Promise.resolve({ ...stamp, data: { height: 2_570_010, hash: 'ab'.repeat(32), time: NOW } }),
+    chainLock: () =>
+      Promise.resolve({ ...stamp, data: { height: 2_570_008, hash: 'cd'.repeat(32) } }),
+    status: () =>
+      Promise.resolve({
+        ...stamp,
+        data: {
+          chain: 'main',
+          blocks: 2_570_010,
+          headers: 2_570_010,
+          bestBlockHash: 'ab'.repeat(32),
+          difficulty: 1,
+          medianTime: NOW,
+          chainWork: '0',
+          syncProgress: 1,
+          isSynced: true,
+        },
+      }),
+    block: never,
+    tx: never,
+    prevouts: never,
+    headers: never,
+    blockRows: never,
+    heightAtTime: never,
+    nodeSelfStatus: never,
+    masternodeList: never,
+    ...overrides,
+  }
+}
+
+function renderAt(url: string) {
+  render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
+}
+
+afterEach(() => setCoreClient(undefined))
+
+describe('Status page', () => {
+  it('shows the Core tip, the best ChainLock and how far apart they are @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Status' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(document.querySelector('[data-status="tip"]')).toHaveTextContent('2,570,010'),
+    )
+    expect(document.querySelector('[data-status="chainlock"]')).toHaveTextContent(
+      '2,570,008 · 2 blocks behind the tip',
+    )
+    expect(document.querySelector('[data-status="sync"]')).toHaveTextContent('Synced')
+  })
+
+  it('lists every source with its state and what its backend reports @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    const list = await screen.findByRole('list', { name: 'Sources' })
+    const names = within(list)
+      .getAllByRole('listitem')
+      .map((li) => li.getAttribute('data-source-row'))
+    expect(names).toEqual(['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'rate'])
+
+    await waitFor(() => {
+      expect(within(list).getByText(/Indexed to Platform block/)).toBeInTheDocument()
+      expect(within(list).getByText(/Last crawl finished/)).toBeInTheDocument()
+      expect(within(list).getByText(/Indexed to Core block/)).toBeInTheDocument()
+    })
+  })
+
+  it('says a source is down, since when, and that the rest still work @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    await screen.findByRole('list', { name: 'Sources' })
+    act(() => {
+      healthRegistry.report('mainnet', 'sdk', { ok: true, latencyMs: 80 })
+      for (let i = 0; i < 3; i++) {
+        healthRegistry.report('mainnet', 'sdk', { ok: false, kind: 'network', latencyMs: 10 })
+      }
+    })
+    const row = document.querySelector<HTMLElement>('[data-source-row="sdk"]')!
+    await waitFor(() => expect(row.getAttribute('data-state')).toBe('down'))
+    expect(row).toHaveTextContent('The connection failed.')
+    expect(row).toHaveTextContent(/Last good/)
+    expect(screen.getByRole('status')).toHaveTextContent('The rest still work')
+  })
+
+  it('shows the Hyphen lag on testnet instead of pretending it is fine @IN-16', async () => {
+    setCoreClient(core())
+    renderAt('/status?network=testnet')
+    const row = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-source-row="hyphen"]')!
+      expect(el.getAttribute('data-state')).toBe('stale')
+      return el
+    })
+    expect(row).toHaveTextContent(/indexed to block 1,577,999/)
+  })
+
+  it('shows what is missing when Core cannot be reached', async () => {
+    setCoreClient(
+      core({
+        tip: () =>
+          Promise.reject(new SourceError({ source: 'dapi', kind: 'network', message: 'down' })),
+        chainLock: () =>
+          Promise.reject(new SourceError({ source: 'dapi', kind: 'network', message: 'down' })),
+        status: () =>
+          Promise.reject(new SourceError({ source: 'dapi', kind: 'network', message: 'down' })),
+      }),
+    )
+    renderAt('/status')
+    expect(await screen.findByRole('heading', { name: 'Dash Core' })).toBeInTheDocument()
+    await waitFor(
+      () => expect(screen.getAllByRole('button', { name: /Retry/ }).length).toBeGreaterThan(0),
+      {
+        timeout: 8000,
+      },
+    )
+    expect(screen.getByRole('list', { name: 'Sources' })).toBeInTheDocument()
+  }, 15_000)
+
+  it('marks the sources a devnet does not have', async () => {
+    localStorage.setItem(
+      'radar.devnets',
+      JSON.stringify([{ name: 'ruby', dapiAddresses: ['192.0.2.1:1443'] }]),
+    )
+    setCoreClient(core())
+    renderAt('/status?network=devnet-ruby')
+    const list = await screen.findByRole('list', { name: 'Sources' })
+    for (const source of ['radar', 'pe', 'hyphen', 'rate']) {
+      const row = list.querySelector(`[data-source-row="${source}"]`)
+      expect(row).toHaveTextContent('Not offered')
+    }
+    expect(list.querySelector('[data-source-row="dapi"]')).not.toHaveTextContent('Not offered')
+    localStorage.clear()
+  })
+})

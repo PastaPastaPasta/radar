@@ -4,7 +4,7 @@ import { useState, useSyncExternalStore } from 'react'
 import { rateQueries } from '@/data/rate/queries'
 import { stampOf } from '@/data/envelope'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
-import { AVAILABLE_LOCALES, useLocale, type LocaleCode } from '@/i18n'
+import { AVAILABLE_LOCALES, useLocale } from '@/i18n'
 import { readUtcPreference } from '@/lib/format'
 import {
   DISPLAY_UNITS,
@@ -101,7 +101,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
             id="locale"
             className="dh-select"
             value={locale}
-            onChange={(e) => void setLocale(e.target.value as LocaleCode)}
+            onChange={(e) => void setLocale(e.target.value)}
           >
             {AVAILABLE_LOCALES.map((l) => (
               <option key={l.code} value={l.code} lang={l.code}>

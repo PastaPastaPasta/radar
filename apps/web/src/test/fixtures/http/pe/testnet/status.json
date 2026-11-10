@@ -1,16 +1,21 @@
 {
-  "request": { "method": "GET", "url": "https://api.testnet.pe.dashhq.org/status" },
-  "recordedAt": "2026-11-10T15:02:26.556Z",
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/status"
+  },
+  "recordedAt": "2026-11-10T15:02:59.005Z",
   "status": 200,
-  "headers": { "content-type": "application/json; charset=utf-8" },
+  "headers": {
+    "content-type": "application/json; charset=utf-8"
+  },
   "body": {
     "epoch": {
-      "number": 20269,
-      "firstBlockHeight": "666786",
-      "firstCoreBlockHeight": 1589128,
-      "startTime": 1794321611405,
+      "number": 20272,
+      "firstBlockHeight": "668334",
+      "firstCoreBlockHeight": 1589206,
+      "startTime": 1794332498927,
       "feeMultiplier": "1000",
-      "endTime": 1794325211405,
+      "endTime": 1794336098927,
       "totalBlocksInEpoch": null,
       "totalProcessingFees": null,
       "totalDistributedStorageFees": null,
@@ -18,36 +23,49 @@
       "coreBlockRewards": null,
       "blockProposers": null
     },
-    "transactionsCount": 361077,
-    "totalCredits": "37563083484728063",
-    "totalCollectedFeesDay": 48575859480,
-    "transfersCount": 21440,
-    "dataContractsCount": 4650,
-    "documentsCount": 293105,
-    "identitiesCount": 11045,
+    "transactionsCount": 361894,
+    "totalCredits": "37567268738773047",
+    "totalCollectedFeesDay": 86459979778,
+    "transfersCount": 21471,
+    "dataContractsCount": 4651,
+    "documentsCount": 293884,
+    "identitiesCount": 11050,
     "network": "dash-testnet-51",
     "api": {
       "version": "2.5.4",
       "block": {
-        "height": 667261,
-        "hash": "2C4438EAA943463147DA165035B0AC7629E0AC4A94B7A08E3186E19DBA21AFC3",
-        "timestamp": "2026-11-10T15:02:19.937Z"
+        "height": 668365,
+        "hash": "C8D81E8F9F360F50259D79DCED604CC339F37DABDF9E4C583A42DD951906BEA9",
+        "timestamp": "2026-11-10T18:22:26.714Z"
       }
     },
     "tenderdash": {
       "version": "1.8.2",
       "block": {
-        "height": 667262,
-        "hash": "C60489A76C618F4228C3EC7F80CA53E024831BBB42504412806244BCBE7322EC",
-        "timestamp": "2026-11-10T15:02:23.606Z"
+        "height": 668365,
+        "hash": "C8D81E8F9F360F50259D79DCED604CC339F37DABDF9E4C583A42DD951906BEA9",
+        "timestamp": "2026-11-10T18:22:26.714Z"
       }
     },
-    "indexer": { "status": "synced", "syncProgress": 99.99985013383049 },
+    "indexer": {
+      "status": "synced",
+      "syncProgress": 100
+    },
     "versions": {
-      "software": { "dapi": "5.0.3", "drive": "5.0.3", "tenderdash": "1.8.2" },
+      "software": {
+        "dapi": "5.0.3",
+        "drive": "5.0.3",
+        "tenderdash": "1.8.2"
+      },
       "protocol": {
-        "tenderdash": { "p2p": null, "block": 14 },
-        "drive": { "latest": 14, "current": 14 }
+        "tenderdash": {
+          "p2p": null,
+          "block": 14
+        },
+        "drive": {
+          "latest": 14,
+          "current": 14
+        }
       }
     }
   }
