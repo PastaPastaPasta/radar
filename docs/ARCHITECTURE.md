@@ -77,6 +77,14 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 | `routes/**` | `features/*/index.ts`, `app/*`, `data/query/*`, `data/*/queries.ts` (for loaders) | `ui` internals, clients directly |
 | `shell/**` | `ui`, `lib`, `i18n`, `app`, `features/search` (palette) | `data` clients |
 
+`eslint.boundaries.js` also rejects:
+- `proved: true` literals (also behind `as const` or `satisfies`) outside `data/sdk/**`; `ui/kit/**` and tests are exempt;
+- `window.fetch`, `globalThis.fetch` and `self.fetch` outside `data/**`;
+- `queryKey` arrays behind `as const`, `satisfies` or `<const>`, as well as plain ones (§5.1);
+- imports of `data/hyphen/stream.ts` from features.
+
+The lint rules are tested in `apps/web/src/data/boundaries.test.ts`.
+
 Two rules carry most of the weight:
 - **Features never call `fetch`, gRPC or the SDK directly.** They use `data/*/queries.ts` factories or the `data/core` and `data/sdk` clients. That keeps every figure inside an envelope.
 - **`ui` is presentational.** It gets data through props. The two exceptions are the hover-card registry (§7.4) and `SourceLine` reading source health.
@@ -147,6 +155,8 @@ Rules:
 - A lookup that finds nothing resolves to `Sourced<null>`. Not found is data, not an error, and it carries a stamp: a proved absence ("No identity with this ID, proof-checked") is a real answer.
 - A view that joins sources keeps a stamp per part. The card's `source` prop takes `SourceStamp[]`, and `SourceLine` renders both ("Served by DAPI + Crawled by Radar").
 - `proved` is never inferred. Only `data/sdk` sets it, and only from a `*WithProof`/`*WithProofInfo` response that came back without error.
+- `sourceView` logs (`console.error`, development and test builds) a stamp that breaks "`proof` present iff `proved`" or that sets `proved` on a source other than `sdk`.
+- A batcher (§5.4) resolves a key to `Sourced<null>` only when the source returned that key with an explicit `null`. A key missing from the run's result rejects its waiters with `SourceError('invalid-response')` and is reported to health.
 
 ### 2.2 What `asOf` means per source
 
@@ -154,7 +164,7 @@ Rules:
 |---|---|---|---|
 | `sdk` | `metadata.timeMs` (Platform block time of the answer) | `metadata.height` | finalized epochs, historic contract versions |
 | `dapi` | `fetchedAt`; tip-relative facts from the header stream | block height | block or tx at or below the best ChainLock height |
-| `radar` | the document's crawl or publish time field (each schema names it), else `Last-Modified` | — | no |
+| `radar` | the document's crawl or publish time field (`summary.crawl.finished`, `platform.now.updated`, `activation.updated`, `bench` max `vantages[].updated`, `check.checked`, and `status` for the **requested** network's `chain.updated`), else `Last-Modified`, else `fetchedAt`. Event times (`last_seen`, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp | — | no |
 | `pe` | `fetchedAt` (indexer lag is a health matter, §2.5) | indexed Platform height when the response has it | no |
 | `hyphen` | `fetchedAt` | `asOfHeight` | no |
 | `rate` | `fetchedAt` | — | no |
@@ -200,17 +210,21 @@ export async function fetchSourced<S extends z.ZodType>(req: {
   signal?: AbortSignal
   timeoutMs?: number            // default 10_000
   notFound?: 'throw' | 'null'   // default 'throw'; detail endpoints pass 'null' so 404 → Sourced<null>
-  asOf?: (body: z.output<S>, res: Response) => number
+  asOf?: (body: z.output<S>, res: Response) => number | undefined // undefined → fetchedAt
+  reject?: (body: z.output<S>, res: Response) => { kind: SourceErrorKind; detail?: string } | undefined
   height?: (body: z.output<S>) => number | undefined
 }): Promise<Sourced<z.output<S>>>
 ```
 
 `fetchSourced` adds the timeout, reports `{ok, latencyMs, kind}` to the health registry, parses with zod, and maps failures to `SourceError`. HTTP 404 resolves to `Sourced<null>` only with `notFound: 'null'`; otherwise it throws `http`. ETag revalidation is left to the browser HTTP cache (Radar sends `no-cache` with an ETag, so browsers revalidate and get 304s); no manual `If-None-Match`.
 
+- `reject` turns a parsed body into a failure: a returned `{ kind, detail? }` is thrown as that `SourceError` and reported to health once, with the call's real latency, in place of the success report. PE's `/status` uses it for the `{ error }` body that arrives with a 503.
+- `asOf` returning `undefined` means `fetchedAt`.
+
 ```ts
 // data/radar/client.ts (shape repeated by pe, hyphen, rate)
 export const radar = {
-  status: (signal?: AbortSignal) => Promise<Sourced<RadarStatus>>,           // global, not per network
+  status: (signal?: AbortSignal, net = activeNetwork) => Promise<Sourced<RadarStatus>>, // global document, read for one network
   health: (signal?) => Promise<Sourced<RadarHealth>>,
   summary: (net: NetworkId, signal?) => Promise<Sourced<RadarSummary>>,
   history: (net, q: RadarHistoryQuery, signal?) => Promise<Sourced<RadarHistory>>,
@@ -240,17 +254,18 @@ export interface Page<T> {
 ```
 
 - **PE**: `{resultSet, pagination: {page, limit, total}}` → `Page<T>`. `total === -1` means empty. Base URL per network (§2.6). Write endpoints except `POST /transaction/verify` are never called; the client does not define them.
-- **Hyphen**: base `/x/hy/{mainnet|testnet}` (the edge Worker pass-through; in `vite dev` a proxy in `vite.config.ts` points at the same path). `{asOfHeight, value, nextCursor}` → `Page<T>` with `height = asOfHeight`. Cursors are hex-encoded JSON (`{"asOfHeight":H,"height":h}`). `hyphen.cursorFromHeight(asOfHeight, height)` builds one, so "jump to height" works without walking. `/stream` is read with `readNdjson(res.body, signal): AsyncIterable<HyStreamEvent>`.
-- **Radar**: absolute base `https://radar.dashhq.org/api/v1`. `{net}` is `mainnet|testnet` only.
+- **Hyphen**: base `/x/hy/{mainnet|testnet}`, the edge Worker pass-through (§2.7; `vite dev` and `vite preview` proxy the same path). `{asOfHeight, value, nextCursor}` → `Page<T>` with `height = asOfHeight`. Cursors are hex-encoded JSON (`{"asOfHeight":H,"height":h}`). `hyphen.cursorFromHeight(asOfHeight, height)` builds one, so "jump to height" works without walking. `/stream` is opened through `hyphen.stream` and read with `readNdjson(body, signal?, onFailure?): AsyncIterable<HyStreamEvent>`. A line longer than 1 MiB (`MAX_NDJSON_LINE_CHARS`) fails as `invalid-response`; read failures and that error go to `onFailure`, which `openHyphenStream` wires to the health record of the network the stream was opened on.
+- **Radar**: absolute base `https://radar.dashhq.org/api/v1`. `{net}` is `mainnet|testnet` only. The global calls (`status`, and the `rate` call) report to the health record of the requested or active network: `radar.status(signal?, net = activeNetwork)`, `radarQueries.status(net = 'mainnet')`.
 - **Rate**: `rate.usd(signal)` reads PE mainnet `/rate` → `Sourced<{ usd: number; provider: string }>`, used on every network. Testnet never shows fiat.
 
 **zod conventions** (`data/zod.ts`):
 - Schemas live in `<source>/schemas.ts`, one per endpoint, named `XxxSchema`; types are `z.output<typeof XxxSchema>` exported as `Xxx`.
 - Objects are non-strict (unknown keys stripped). Fields Radar reads are required; fields it doesn't read are left out.
-- Amounts become `bigint` at the edge: `zBigint` accepts a number or a numeric string. Duffs, credits and token units are `bigint` everywhere after parsing; heights, counts and times are `number`.
+- Amounts become `bigint` at the edge: `zBigint` accepts a JSON number only if `Number.isSafeInteger`; larger values must arrive as numeric strings. Duffs, credits and token units are `bigint` everywhere after parsing; heights, counts and times are `number`.
 - Hashes become lower-case hex (`zHex64`); Hyphen and Radar already send lower case, PE sends upper case.
 - Times become ms epoch numbers (`zIsoDate`, `zUnixSeconds`).
 - A schema failure throws `invalid-response`, marks the source `degraded`, and logs the zod issue path with `console.error` in every build (so the issue is visible in reviewers' consoles).
+- `data/zod.ts` runs `z.config({ jitless: true })`: the CSP forbids `eval`, which zod's JIT compiler would use.
 
 ### 2.5 Source-health registry (`data/health.ts`)
 
@@ -286,12 +301,14 @@ State rules, applied in this order (first match wins):
 
 | State | Condition |
 |---|---|
-| `down` | 3 consecutive failures of kind `network`/`timeout`/`http` 5xx, or no success in the last 120 s while calls are failing. Recovers on the next success |
+| `down` | 3 consecutive failures of kind `network`/`timeout`/`http`, or a last call that failed with one of those kinds while there has been no success in the last 120 s (a source that has never answered counts as silent). Recovers on the next success |
 | `stale` | Lag over the source's threshold (below) |
 | `degraded` | ≥ 25 % failures over the last 20 calls, any `invalid-response` in the last 5 min, or (dapi) budget pressure `tight`/`exhausted` |
 | `slow` | p50 latency over the last 10 calls > 3 s (dapi, sdk: > 5 s) |
 | `ok` | at least one success, none of the above |
 | `unknown` | no calls yet |
+
+The registry schedules a timer for the next time boundary (the end of the 5 min `invalid-response` memory, the end of the 120 s silence window) and notifies subscribers when it fires. It snapshots `now` once per notification, so `get` returns the same object until a notification.
 
 Freshness probes are TanStack queries under `[net, 'health', source]`, refetched every 60 s while visible. They run only when a mounted card uses that source, or on `/status`:
 
@@ -299,7 +316,7 @@ Freshness probes are TanStack queries under `[net, 'health', source]`, refetched
 |---|---|---|
 | radar | `GET /api/v1/status` | network's last crawl > 45 min (Radar's own rule) |
 | pe | `GET /status` | indexer height behind Tenderdash height by > 10 blocks, or the PE status reports itself unhealthy (503) |
-| hyphen | `GET /status` | min `indices.*.indexedHeight` behind the DAPI tip by > 3 blocks (testnet today: weeks) |
+| hyphen | `GET /status` | min `indices.*.indexedHeight` behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) by > 3 blocks (testnet today: weeks). See §11.4 |
 | dapi | header stream / `getBestBlockHeight` | no new header for 20 min |
 | sdk | metadata of any recent answer | `timeMs` older than 15 min |
 
@@ -324,14 +341,25 @@ export const isDevnet = (n: NetworkId): n is `devnet-${string}`
 
 | | mainnet | testnet | devnet |
 |---|---|---|---|
-| quorums (node list, SDK trust) | `https://quorums.mainnet.networks.dash.org` | `https://quorums.testnet.networks.dash.org` | config `quorumUrl` or `https://quorums.<name>.networks.dash.org` |
+| quorums (node list, SDK trust) | `https://quorums.mainnet.networks.dash.org` | `https://quorums.testnet.networks.dash.org` | the configured `quorumUrl`, else `https://quorums.<name>.networks.dash.org` |
 | DAPI default port | 443 | 1443 | from config |
 | radar | `https://radar.dashhq.org/api/v1/mainnet` | `…/testnet` | none |
 | pe | `https://api.pe.dashhq.org` | `https://api.testnet.pe.dashhq.org` | none |
 | hyphen | `/x/hy/mainnet` | `/x/hy/testnet` | none |
 | rate | PE mainnet `/rate` | none | none |
 
-`endpoint(net, source)` returns `null` where a cell says none; the client then throws `unavailable` without a request, and cards render `Empty kind="unsupported-network"`.
+For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the entry in `devnets` with that name when it has one. `endpoint(net, source)` returns `null` where a cell says none; the client then throws `unavailable` without a request, and cards render `Empty kind="unsupported-network"`.
+
+### 2.7 Edge Worker (`workers/edge`)
+
+**Hyphen pass-through (`/x/hy/{mainnet|testnet}/*`).**
+- Only `GET` and `HEAD`. Paths must match the API surface the app uses (`blocks`, `block/{id}`, `block/{id}/txs`, `rawblock/{id}`, `tx/{id}`, `rawtx/{id}`, `address/{a}`, `address/{a}/txs|utxos`, `balances`, `status`, `network`, `mempool`, `mempool/txs`, `metrics/latest|chart`, `proposals`, `proposal/{h}`, `proposal/{h}/votes`, `validators`, `validator/{h}`, `search`, `stream`); anything else is 404 `unknown_path`. Encoded slashes, backslashes and dot segments are 400 `bad_path`.
+- Query parameters are limited to `limit, cursor, blocks, points, q, status, type`. Others are dropped, the first value of each is kept, and the keys are sorted, so each request shape is one cache entry. A query over 1024 characters or a value over 256 is 400 `bad_query`. Add a name to `ALLOWED_PARAMS` in `workers/edge/src/hyphen-path.ts` when the client starts sending a new one.
+- The response `content-type` is never copied. JSON (`application/json` or `+json`) is relayed as its bare media type; `/stream` also accepts `application/x-ndjson`. Any other type on a success status is 502 `{error:'bad_upstream_type'}`; an error status with a non-JSON body keeps its status with `{error:'upstream_error'}`.
+- Every proxy response carries `content-security-policy: default-src 'none'; sandbox` and `cross-origin-resource-policy: same-origin`. The Worker's global CSP is applied only to responses that have none.
+- `vite dev` and `vite preview` use the same `resolveHyphenRequest` (from `workers/edge/src/hyphen-path.ts`), so they refuse what production refuses. They don't check the upstream content type.
+
+**Link previews (OG tags).** HTML for `/block/*`, `/tx/*`, `/mn/*`, `/identity/*`, `/contract/*` and `/token/*` gets per-entity tags from a backend read only for link-preview and crawler user agents (bots, crawlers, spiders, Slack, WhatsApp, Facebook and similar; see `isLinkPreviewAgent` in `workers/edge/src/og.ts`). Everyone else gets the page at once with the generic per-kind tags (`Block · Radar`). The response carries `vary: user-agent`.
 
 ---
 
@@ -618,7 +646,7 @@ export function useHydratedFact<K, V>(batcher: Batcher<K, V>, key: K, backend: F
 
 - Core tip, ChainLock and latest blocks come only from `coreLive` (§4.6), which writes to the cache. No component opens a stream itself.
 - `features/*` that need "new rows slide in" use `useLiveList(query, { holdWhileHovered: true })`, which buffers incoming rows while the pointer is over the list (from PE).
-- Hyphen `/stream` is opened only for address pages (IN-06 new-tx notice) and as the live-feed fallback.
+- Hyphen `/stream` is opened only for address pages (IN-06 new-tx notice) and as the live-feed fallback. `data/hyphen/index.ts` and `queries.ts` don't export `openHyphenStream` or `readNdjson`; the stream is reachable only as `hyphen.stream` on the client object. The address-page and live-feed hooks (M1) add a `useHyphenStream`-style hook in a hyphen `queries` file, with this restriction.
 
 ---
 
@@ -791,6 +819,8 @@ type LinkOutTarget =
   | { app: 'pe'; path: string; net: NetworkId } | { app: 'hyphen'; path: string; net: NetworkId } | { app: 'insight'; path: string; net: NetworkId }
 ```
 
+`networkName(net)` lives in `ui/network-name.ts` and is exported from `@/ui` ("Mainnet", "Testnet", "Devnet ruby"); `features/entity` re-exports it. Where a slug is needed, use the `NetworkId` itself.
+
 ### 7.3 `SourceLine` wording (i18n messages in `ui/source-labels.ts`)
 
 | Stamp | Text | Glyph |
@@ -822,7 +852,7 @@ export function registerHoverCard(kind: EntityKind, C: ComponentType<{ id: strin
 ### 7.5 Palette and kit page
 
 - `CommandPalette` (cmdk inside a Radix dialog) is exported from `features/search`, mounted once by `shell/`, and opened with ⌘K / Ctrl+K, `/`, or `useCommandPalette().open(initialQuery?)`.
-- `/__kit` (dev and e2e builds only) renders every component in every state, light and dark. Playwright screenshots it, and axe checks it.
+- `/__kit` renders every component in every state, light and dark. Playwright screenshots it, and axe checks it. `ui/kit/KitPage.tsx` imports the page body (`KitContent`) only when `import.meta.env.DEV`, `VITE_DATA_MODE === 'fixtures'` or `VITE_RADAR_KIT === '1'`; a production build keeps a small stub that renders "Not found". `ui/index.ts` still exports the lazy `KitPage`, and the stub is what remains of that chunk. `pnpm check:bundle` fails if `apps/web/dist` contains the kit page.
 
 ---
 
@@ -850,6 +880,7 @@ export interface Classified {
   normalized: string            // trimmed; hex lower-cased; '.dash' kept for dpns
   classes: InputClass[]         // priority order; one input may have several ("1234" is 'int' then 'dpns')
   networkHint?: NetworkId       // address prefix or HRP that names another network
+  warning?: 'secret' | 'possible-secret' // §8.3; `classes` is empty and `normalized` is ''
 }
 ```
 
@@ -885,6 +916,19 @@ export function useSearch(q: string, opts: { mode: 'palette' | 'page' }): {
   - `local` resolvers (ProTx and IP over the cached masternode join, saved items, route names) always run.
 - **Enter.** With exactly one rank-100 hit, Enter navigates to it; otherwise it opens `/search?q=`.
 - **Ownership.** The resolver set is in `features/search/resolvers/index.ts`. Each feature package adds resolvers for its own entity kinds there (one file per resolver).
+
+### 8.3 Secrets in the search box
+
+`classify()` tokenises on any non-letter, so quotes, brackets, numbering, commas, hyphens, slashes and line breaks around a phrase don't hide it. Two warnings exist:
+
+- `secret`: an extended private key (`xprv`, `tprv`, `drkv`, `drkp`), a WIF, or a run of 12 or more consecutive BIP39 English words. It is never resolved and never put in the URL, the page title or history. The `/search` form refuses to navigate, clears the box and shows a notice. A `/search?q=<secret>` link loads, then replaces its own history entry with `/search`; the notice is kept in the entry's `state`, not the URL.
+- `possible-secret`: a run of 3 or more consecutive BIP39 English words (a phrase being typed, or a prefix of one), or 12 or more letter-only tokens separated by whitespace (non-English wordlists: accented Spanish and French, Japanese with ideographic spaces, Chinese). It is treated like `secret` for the URL, the title and every resolver; the notice says it "could be part of a recovery phrase".
+
+Resolvers see only inputs with no warning (`classes` is empty and `normalized` is `''` for both), so any future remote resolver (`pe-search`, `hy-search`, `dpns-prefix`) never receives them. Keep it that way.
+
+Known gap: a raw 64-hex or base64 private key can't be told apart from a hash or an ID, so it isn't detected. A 64-hex value is classified `hex64` and searched like any block or transaction hash.
+
+The English wordlist ships with the classifier (`features/search/bip39-words.ts`) as a template string and is turned into a `Set` on first use.
 
 ---
 
@@ -927,19 +971,24 @@ No page-level error unless the route itself can't render (bad route param after 
 | Story e2e (fixtures) | Playwright, fixture build | `e2e/tests/<group>.spec.ts` | `pnpm e2e:fixtures` |
 | Live smoke | Playwright, live build | same files, tests tagged `@live` | `pnpm e2e:live` |
 | a11y | `@axe-core/playwright` via `expectAccessible(page)` | every story test | both |
-| Decoder | `cargo test` + Vitest vectors | `packages/core-decode` | `pnpm test` |
+| Decoder | `node --test` vectors; `cargo test` | `packages/core-decode` | `pnpm test` (wasm, against the committed `dist/`, no Rust); the `core-decode` CI job (`pnpm --filter @radar/core-decode test:rust` and the `dist/` diff) |
 
 **Fixtures.**
 - `scripts/record-fixtures.mjs --net mainnet|testnet` reads `review/fixtures/<net>.json` (the picked entities, §5.4 of the plan) and records:
   - HTTP sources as `apps/web/src/test/fixtures/http/<source>/<net>/<slug>.json`: `{ request: { method, url }, recordedAt, status, headers, body }`. MSW handlers in `src/test/msw/handlers/<source>.ts` serve them by URL (query string normalised).
   - DAPI as `…/dapi/<net>/<method>/<sha256(request bytes)>.bin` (raw response message) plus stream transcripts as `….ndjson` (base64 messages). Served by `FixtureDapiTransport`, which replaces the Connect transport.
   - SDK as `…/sdk/<net>/<method>/<sha256(stable-json(args))>.json`, holding the `WireResult` with proof bytes base64-encoded. Served by `FixtureSdkTransport`, so the worker isn't involved and proof verification isn't rerun.
-- Fixture mode is the build flag `VITE_DATA_MODE=fixtures` (used by `build:e2e`). It starts the MSW browser worker and swaps the two transports. A request with no fixture fails the test with the URL or method it wanted, never a silent empty.
-- The fixtures' `recordedAt` drives a frozen clock in fixture e2e (`page.clock.setFixedTime`), so ages are stable in screenshots.
+- Fixture mode is the build flag `VITE_DATA_MODE=fixtures`, set by `build:e2e`. `main.tsx` then starts an MSW browser worker (`src/test/msw/browser.ts`) over the same handlers and slug scheme as the Vitest server, before the app renders, and swaps the two transports. `build/fixture-worker.ts` emits `mockServiceWorker.js` into that build only.
+- A request with no fixture fails the test with the URL or method it wanted, never a silent empty. Any request to another origin, any `/x/hy/*` request, and any Radar, PE or Hyphen request without a recording is answered with a network error and logged as `[radar-fixtures] …` on the console; the shared Playwright `context` fixture (`e2e/helpers/test.ts`) fails the test on that. The preview and dev Hyphen proxy isn't installed in fixture mode.
+- The fixtures' `recordedAt` drives the page clock in fixture e2e: `pinClockToFixtures(page)` (`e2e/helpers/clock.ts`) starts it at the newest `recordedAt`, so ages are stable in screenshots.
+- `pnpm check:bundle` fails if `apps/web/dist` contains the worker, its script or the kit page.
+- Specs must wait for the first render (a heading) before calling `fetch` themselves, because the worker is registered before the app mounts but after `load`.
+
+**E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exception is `disposition: 'report'` for `require-trusted-types-for` and `trusted-types`, which the report-only header produces by design.
 
 **Story tags.**
 - Every Playwright test title carries its story IDs as tags: `test('block page shows header, cbTx, reward and pool @IN-03 @HY-05', …)`.
-- `review/check-stories.mjs` (in CI) fails if a story in `review/stories.yaml` has no test or a tag names no story.
+- `pnpm check:stories` (`scripts/check-stories.mjs`, in CI) fails on a tag that names no story in `review/stories.yaml`. Stories with no test are only reported; `--strict` fails on both.
 - Spec files are grouped by area: `core.spec.ts`, `network.spec.ts`, `platform-state.spec.ts`, `platform-history.spec.ts`, `tools.spec.ts`, `unification.spec.ts`. Per-page files can split them (`core-tx.spec.ts`) when they pass 400 lines.
 - Projects: `desktop` (1440×900) and `phone` (390×844, Pixel 7 profile) for fixtures; `live` for `@live`.
 - Assertions use roles and accessible names first. Provenance assertions use `SourceLine`'s attributes (`[data-source="dapi"]`, `[data-proved="true"]`). `data-testid` is allowed only where no role fits.
@@ -995,6 +1044,12 @@ The departures listed in `docs/RADAR-DESIGN.md` §15 are accepted for Radar: pho
 
 Accepted from package A (2026-11-10): `Stat.note` (a second line under the value) and `LiveDot.bare`; extra exports `LiveControl`, `TableTools` and `HoverCardScope`; `Tabs` uses exact active matching; the rate `SourceLine` reads "Price via Platform Explorer" (no provider field on `SourceStamp`); the `/__kit` route file is `src/routes/[_][_]kit.tsx` because `__kit.tsx` is a pathless layout to the router generator.
 
+Accepted from the M0 data and build work:
+- **Hyphen lag is measured against Radar's crawled Core height, not the DAPI tip (§2.5 table).** M0 has no DAPI or Core tip in the data layer: `data/dapi-core` holds only the budget, and `CoreClient.tip` is a contract type. `healthQueries.hyphen` takes `chain.blocks` from Radar's `/status` for the network. When that call fails, the hyphen lag is cleared rather than left at its last value, so a stale lag can't stick. Switch the reference to `core.tip(net)` when the Core façade lands.
+- **`down` needs the silence condition as well as the failure kind (§2.5).** The 120 s clause applies to a last call that failed with `network`, `timeout` or `http`, and a source that has never answered counts as silent.
+- **The Hyphen stream is a client method only (§5.5).** `openHyphenStream` and `readNdjson` are no longer exported from `data/hyphen`; features reach the stream as `hyphen.stream`.
+- **`react-remove-scroll-bar` is aliased** (`vite.config.ts`) to `src/app/remove-scroll-bar.ts`, which only sets `data-scroll-locked` on `<body>`. The package injects an inline `<style>` that `style-src 'self'` refuses. `body[data-scroll-locked]` in `radar-components.css` does the locking, and `html:has(body[data-scroll-locked]) { scrollbar-gutter: stable }` keeps the layout from shifting. Revisit when Radix or react-remove-scroll changes the marker attribute.
+
 ---
 
 ## 12. Open questions the spikes answer
@@ -1046,7 +1101,8 @@ Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the h
 | **Fails, or misses payloads** | `@dashevo/dashcore-lib` behind the same `CoreDecoder` for structure (inputs, outputs, scripts, addresses, cbTx). Payloads it can't parse come from Hyphen `/tx/{txid}` `payload`, stamped `source: 'hyphen'` ("Indexed by Hyphen"); with Hyphen stale, the raw payload hex shows with a note. Masternode list diff decoding moves to a small TS parser in `lib/core/mnlistdiff.ts`; if that is too much for M2, rule 6 degrades to RAD as in (a) |
 
 **Outcome (2026-11-10, `docs/spikes/core-decode.md`): works; no dashcore-lib fallback.** `packages/core-decode` decodes blocks, transactions and every special payload on the list, checked against Insight's JSON for real mainnet transactions of eight of the nine special types. It is 320 KB gzipped, and a 900 KB block decodes in 15–18 ms. Decisions:
-- **`dist/` is committed**, so the app and the main CI job build without Rust. `build:wasm` and `test:rust` rebuild and test it natively; they need a native `wasm-opt` and a clang that targets wasm32 (libsecp256k1 is C). Package E adds a separate CI job that rebuilds the wasm and fails if `dist/` differs.
+- **`dist/` is committed**, so the app and the main CI job build without Rust; `pnpm test` runs the wasm tests against it. `build:wasm` and `test:rust` rebuild and test it natively; they need binaryen `version_129` and a clang that targets wasm32 (libsecp256k1 is C).
+- **The committed `packages/core-decode/dist` is reproducible.** `packages/core-decode/rust-toolchain.toml` pins the Rust toolchain (1.99.1), `scripts/build-wasm.mjs` remaps the cargo, rustup and checkout paths out of the wasm (`--remap-path-prefix`), wasm-bindgen is 0.2.118, and `scripts/postbuild.mjs` refuses to run without binaryen `version_129` (set `RADAR_SKIP_WASM_OPT=1` for a local build that must not be committed). The `core-decode` CI job installs that binaryen release (sha256-checked), rebuilds, and fails if `git diff` shows any change under `dist/`. A change to the Rust sources, the lockfile, the toolchain pin or binaryen therefore needs a rebuilt and committed `dist/` in the same commit.
 - **Pinned to rust-dashcore `dev` at 568d5866**, because that is where the special-transaction types live.
 - **Gaps:** MNHF has no real mainnet vector (none in the last 30 days), and ProDissolveTx, ProUpShareTx and ProUpSharedRegTx are mapped but untested (they exist only on rust-dashcore `dev`). The UI renders an unknown or failed payload as raw hex with its type number; it never hides the transaction.
 
