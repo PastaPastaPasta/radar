@@ -14,7 +14,10 @@ import {
   GetMasternodeStatusResponseSchema,
   GetTransactionRequestSchema,
   GetTransactionResponseSchema,
+  TransactionsWithProofsRequestSchema,
+  TransactionsWithProofsResponseSchema,
   type BlockHeadersWithChainLocksResponse,
+  type TransactionsWithProofsResponse,
   type GetBestBlockHeightResponse,
   type GetBlockResponse,
   type GetBlockchainStatusResponse,
@@ -41,6 +44,11 @@ function decode<T>(schema: Parameters<typeof fromBinary>[0], bytes: Uint8Array, 
     })
   }
 }
+
+export type TransactionStreamEvent =
+  | { kind: 'transactions'; transactions: Uint8Array[] }
+  | { kind: 'instantSendLocks'; messages: Uint8Array[] }
+  | { kind: 'merkleBlock'; block: Uint8Array }
 
 export type HeaderStreamEvent =
   { kind: 'headers'; headers: Uint8Array[] } | { kind: 'chainLock'; chainLock: Uint8Array }
@@ -158,6 +166,43 @@ export function createDapiRpc(transport: DapiTransport) {
             yield { kind: 'headers', headers: m.responses.value.headers }
           } else if (m.responses.case === 'chainLock') {
             yield { kind: 'chainLock', chainLock: m.responses.value }
+          }
+        }
+      }
+      return { node: handle.node, events: events() }
+    },
+
+    /** Every transaction, InstantSend lock and merkle block from `fromHeight` on: a match-all bloom filter, open until aborted. */
+    transactionStream(
+      net: NetworkId,
+      q: { fromHeight: number },
+      opts?: DapiCallOptions,
+    ): { node?: string; events: AsyncIterable<TransactionStreamEvent> } {
+      const request = create(TransactionsWithProofsRequestSchema, {
+        bloomFilter: { vData: new Uint8Array([0xff]), nHashFuncs: 1, nTweak: 0, nFlags: 0 },
+        fromBlock: { case: 'fromBlockHeight', value: q.fromHeight },
+        count: 0,
+        sendTransactionHashes: false,
+      })
+      const handle = transport.stream(
+        net,
+        'subscribeToTransactionsWithProofs',
+        toBinary(TransactionsWithProofsRequestSchema, request),
+        opts,
+      )
+      async function* events(): AsyncGenerator<TransactionStreamEvent> {
+        for await (const bytes of handle.messages) {
+          const m = decode<TransactionsWithProofsResponse>(
+            TransactionsWithProofsResponseSchema,
+            bytes,
+            handle.node,
+          )
+          if (m.responses.case === 'rawTransactions') {
+            yield { kind: 'transactions', transactions: m.responses.value.transactions }
+          } else if (m.responses.case === 'instantSendLockMessages') {
+            yield { kind: 'instantSendLocks', messages: m.responses.value.messages }
+          } else if (m.responses.case === 'rawMerkleBlock') {
+            yield { kind: 'merkleBlock', block: m.responses.value }
           }
         }
       }

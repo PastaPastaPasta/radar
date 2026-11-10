@@ -106,18 +106,42 @@ export interface DecodedIsLock {
 }
 
 export interface CoreClient {
-  tip(net: NetworkId): Promise<Sourced<{ height: number; hash: string; time: number }>>
-  chainLock(net: NetworkId): Promise<Sourced<{ height: number; hash: string }>>
-  status(net: NetworkId): Promise<Sourced<CoreChainStatus>> // getBlockchainStatus
-  block(net: NetworkId, ref: BlockRef): Promise<Sourced<DecodedBlock | null>>
-  tx(net: NetworkId, txid: string): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
-  prevouts(net: NetworkId, tx: DecodedTx): Promise<Sourced<Map<string /*txid:vout*/, PrevOut>>>
-  headers(net: NetworkId, fromHeight: number, count: number): Promise<Sourced<HeaderInfo[]>>
-  /** List pages: decides DAPI vs Hyphen per call (rule below). */
-  blockRows(net: NetworkId, q: { fromHeight: number; count: number }): Promise<Sourced<BlockRow[]>>
-  heightAtTime(net: NetworkId, ms: number): Promise<Sourced<number>> // IN-02 binary search over headers
-  nodeSelfStatus(net: NetworkId, nodeUrl: string): Promise<Sourced<DapiNodeStatus>> // evonode /mn/ page
-  masternodeList(net: NetworkId): Promise<Sourced<Map<string, DapiMnEntry>>>
+  tip(
+    net: NetworkId,
+    signal?: AbortSignal,
+  ): Promise<Sourced<{ height: number; hash: string; time: number }>>
+  chainLock(
+    net: NetworkId,
+    signal?: AbortSignal,
+  ): Promise<Sourced<{ height: number; hash: string }>>
+  status(net: NetworkId, signal?: AbortSignal): Promise<Sourced<CoreChainStatus>> // getBlockchainStatus
+  block(net: NetworkId, ref: BlockRef, signal?: AbortSignal): Promise<Sourced<DecodedBlock | null>>
+  tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
+  prevouts(
+    net: NetworkId,
+    tx: DecodedTx,
+    signal?: AbortSignal,
+  ): Promise<Sourced<Map<string /*txid:vout*/, PrevOut>>>
+  headers(
+    net: NetworkId,
+    fromHeight: number,
+    count: number,
+    signal?: AbortSignal,
+  ): Promise<Sourced<HeaderInfo[]>>
+  /** List pages: decides DAPI vs Hyphen per call (rule below). Newest first: `fromHeight`, then `count - 1` blocks below it. */
+  blockRows(
+    net: NetworkId,
+    q: { fromHeight: number; count: number },
+    signal?: AbortSignal,
+  ): Promise<Sourced<BlockRow[]>>
+  /** The lowest height whose block time is at or after `ms`; the tip's height when `ms` is later than the tip's time. */
+  heightAtTime(net: NetworkId, ms: number, signal?: AbortSignal): Promise<Sourced<number>> // IN-02 binary search over headers
+  nodeSelfStatus(
+    net: NetworkId,
+    nodeUrl: string,
+    signal?: AbortSignal,
+  ): Promise<Sourced<DapiNodeStatus>> // evonode /mn/ page
+  masternodeList(net: NetworkId, signal?: AbortSignal): Promise<Sourced<Map<string, DapiMnEntry>>>
 }
 export type BlockRef = { height: number } | { hash: string }
 export interface BlockRow {

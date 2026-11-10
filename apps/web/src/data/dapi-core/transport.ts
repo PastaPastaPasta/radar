@@ -61,5 +61,6 @@ export interface DapiTransport {
   ): DapiStreamHandle
 }
 
-/** gRPC status code NOT_FOUND, carried in `SourceError.status` on `kind: 'http'`. */
+/** gRPC status codes carried in `SourceError.status` on `kind: 'http'`. */
+export const GRPC_INVALID_ARGUMENT = 3
 export const GRPC_NOT_FOUND = 5
