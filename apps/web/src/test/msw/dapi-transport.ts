@@ -51,7 +51,7 @@ export class FixtureBudget implements Budget {
     const headroom = this.pressure === 'ok' ? CAPACITY : this.pressure === 'tight' ? 100 : 0
     return { pressure: this.pressure, headroom, capacity: CAPACITY, benched: 0, usedLastMinute: 0 }
   }
-  canAfford(_net: NetworkId, _n: number): boolean {
+  canAfford(): boolean {
     return this.pressure === 'ok'
   }
   subscribe(cb: () => void): () => void {
