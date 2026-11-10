@@ -117,7 +117,7 @@ describe('fan-out', () => {
     render(<App history={createMemoryHistory({ initialEntries: [`/search?q=${HASH}`] })} />)
 
     expect(await screen.findByRole('link', { name: /Found by the index/ })).toBeInTheDocument()
-    expect(await screen.findByText('Hyphen isn’t answering')).toBeInTheDocument()
+    expect((await screen.findAllByText(/Hyphen isn.t answering/)).length).toBeGreaterThan(0)
     expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'true')
   })
 

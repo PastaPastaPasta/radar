@@ -41,10 +41,7 @@ export const stringifySearch = (o: Record<string, unknown>): string => {
   return pairs.length === 0 ? '' : `?${pairs.join('&')}`
 }
 
-const csvInput = z.preprocess(
-  (v) => (Array.isArray(v) ? v.map(String).join(',') : v),
-  z.string(),
-)
+const csvInput = z.preprocess((v) => (Array.isArray(v) ? v.map(String).join(',') : v), z.string())
 
 export const zCsv = csvInput.transform((s) => [...new Set(s.split(',').filter(Boolean))].sort())
 

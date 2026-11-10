@@ -292,9 +292,7 @@ test.describe('old paths', () => {
 })
 
 test.describe('phone navigation', () => {
-  test.beforeEach(({}, testInfo) => {
-    test.skip(!testInfo.project.name.startsWith('phone'), 'phone layout only')
-  })
+  test.skip(({ viewport }) => (viewport?.width ?? 0) > 600, 'phone layout only')
 
   test('the tab bar sits at the bottom and never covers the last content @X-08 @HY-18', async ({
     page,
