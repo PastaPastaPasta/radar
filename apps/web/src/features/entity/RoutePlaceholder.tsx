@@ -64,7 +64,7 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
   return (
     <article data-page={page.path} data-layer={page.layer} className="grid gap-6">
       <header className="grid gap-2">
-        <p data-eyebrow className="text-sm opacity-70">
+        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
           {SECTION_LABELS[page.section]}
           {net === 'mainnet' ? null : ` · ${net === 'testnet' ? 'Testnet' : net}`}
         </p>
@@ -73,7 +73,9 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
           <dl className="flex flex-wrap gap-x-6 gap-y-1">
             {entries.map(([key, value]) => (
               <div key={key} className="flex items-baseline gap-2">
-                <dt className="text-sm opacity-70">{PARAM_LABELS[key] ?? key}</dt>
+                <dt className="text-sm text-[var(--dh-ink-2,inherit)]">
+                  {PARAM_LABELS[key] ?? key}
+                </dt>
                 <dd>
                   <Hash value={value} display="short" head={10} tail={6} />
                 </dd>

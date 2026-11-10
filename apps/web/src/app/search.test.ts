@@ -52,6 +52,15 @@ describe('search schema helpers', () => {
     expect(zCsvEnum(['regular', 'evo']).parse('evo,bogus,regular')).toEqual(['evo', 'regular'])
   })
 
+  it('validates its own output again', () => {
+    expect(zCsv.parse(zCsv.parse('b,a'))).toEqual(['a', 'b'])
+    expect(zCsvEnum(['regular', 'evo']).parse(['evo'])).toEqual(['evo'])
+    expect(zRange.parse(zRange.parse('1..9'))).toEqual({ min: 1, max: 9 })
+    expect(stringifySearch({ bal: { min: 100 }, span: { min: 1, max: 9 } })).toBe(
+      '?bal=100..&span=1..9',
+    )
+  })
+
   it('reads ranges with either side optional', () => {
     expect(zRange.parse('100..')).toEqual({ min: 100 })
     expect(zRange.parse('..2.5')).toEqual({ max: 2.5 })

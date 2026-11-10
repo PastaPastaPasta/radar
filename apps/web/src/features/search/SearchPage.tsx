@@ -83,7 +83,7 @@ export function SearchPage({ q }: { q?: string }) {
             </li>
             <li>Names ending in .dash, epochs and dates (the Core blocks of a day)</li>
           </ul>
-          <p className="mt-3 text-sm opacity-70">
+          <p className="mt-3 text-sm text-[var(--dh-ink-2,inherit)]">
             Try{' '}
             {EXAMPLES.map((example, i) => (
               <span key={example}>
@@ -99,7 +99,7 @@ export function SearchPage({ q }: { q?: string }) {
 
       {!secret && query.length > 0 ? (
         <section aria-label="Results" className="grid gap-4" aria-busy={!settled}>
-          <p data-classified role="status" className="text-sm opacity-70">
+          <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
             {description.length > 0
               ? `“${query}” looks like ${description.join(' · ')}.`
               : `“${query}” isn’t something Radar can look up.`}
@@ -116,7 +116,9 @@ export function SearchPage({ q }: { q?: string }) {
                     <Link {...hit.href} className="min-w-0">
                       <span className="block truncate">{hit.title}</span>
                       {hit.subtitle ? (
-                        <span className="block truncate text-sm opacity-70">{hit.subtitle}</span>
+                        <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
+                          {hit.subtitle}
+                        </span>
                       ) : null}
                     </Link>
                     <Badge size="sm">{ENTITY_LABELS[hit.kind]}</Badge>

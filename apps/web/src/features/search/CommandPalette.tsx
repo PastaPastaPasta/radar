@@ -90,6 +90,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
       label="Search Radar"
       shouldFilter={false}
       loop
+      vimBindings={false}
       value={selected}
       onValueChange={setSelected}
       onKeyDownCapture={onKeyDown}
@@ -109,7 +110,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </p>
         ) : null}
         {trimmed.length > 0 && description.length > 0 ? (
-          <p data-classified className="px-2 py-1 text-xs opacity-70">
+          <p data-classified className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
             Looks like {description.join(' · ')}
           </p>
         ) : null}
@@ -126,7 +127,9 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
                 <span className="min-w-0">
                   <span className="block truncate">{hit.title}</span>
                   {hit.subtitle ? (
-                    <span className="block truncate text-xs opacity-70">{hit.subtitle}</span>
+                    <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
+                      {hit.subtitle}
+                    </span>
                   ) : null}
                 </span>
                 <Badge size="sm">{ENTITY_LABELS[hit.kind]}</Badge>
@@ -147,7 +150,9 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
                 className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
               >
                 <span>{p.title}</span>
-                <span className="text-xs opacity-70">{SECTION_LABELS[p.section]}</span>
+                <span className="text-xs text-[var(--dh-ink-2,inherit)]">
+                  {SECTION_LABELS[p.section]}
+                </span>
               </Command.Item>
             ))}
           </Command.Group>
@@ -166,7 +171,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
         ) : null}
 
         {failed.length > 0 ? (
-          <p role="status" className="px-2 py-1 text-xs opacity-70">
+          <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
             Some sources didn’t answer: {failed.map((f) => f.id).join(', ')}.
           </p>
         ) : null}

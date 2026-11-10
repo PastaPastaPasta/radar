@@ -20,7 +20,10 @@ function scalar(value: unknown): string | undefined {
     const parts = value.map(String).filter((v) => v !== '')
     return parts.length === 0 ? undefined : [...new Set(parts)].sort().join(',')
   }
-  if (typeof value === 'object') return JSON.stringify(value)
+  if (typeof value === 'object') {
+    const { min, max } = value as NumericRange
+    return `${min ?? ''}..${max ?? ''}`
+  }
   return typeof value === 'string' || typeof value === 'number' || typeof value === 'bigint'
     ? String(value)
     : undefined
@@ -38,16 +41,19 @@ export const stringifySearch = (o: Record<string, unknown>): string => {
   return pairs.length === 0 ? '' : `?${pairs.join('&')}`
 }
 
-export const zCsv = z.string().transform((s) => [...new Set(s.split(',').filter(Boolean))].sort())
+const csvInput = z.preprocess(
+  (v) => (Array.isArray(v) ? v.map(String).join(',') : v),
+  z.string(),
+)
+
+export const zCsv = csvInput.transform((s) => [...new Set(s.split(',').filter(Boolean))].sort())
 
 export const zCsvEnum = <const T extends readonly [string, ...string[]]>(values: T) =>
-  z
-    .string()
-    .transform((s) =>
-      [...new Set(s.split(','))]
-        .filter((v): v is T[number] => (values as readonly string[]).includes(v))
-        .sort(),
-    )
+  csvInput.transform((s) =>
+    [...new Set(s.split(','))]
+      .filter((v): v is T[number] => (values as readonly string[]).includes(v))
+      .sort(),
+  )
 
 const NUMBER = /^-?\d+(?:\.\d+)?$/
 
@@ -56,24 +62,29 @@ export interface NumericRange {
   max?: number
 }
 
-/** `min..max`, either side optional. */
-export const zRange = z.string().transform((s, ctx): NumericRange => {
-  const parts = s.split('..')
-  const [lo, hi] = parts
-  const ok =
-    parts.length === 2 &&
-    (lo === '' || NUMBER.test(lo ?? '')) &&
-    (hi === '' || NUMBER.test(hi ?? '')) &&
-    s !== '..'
-  if (!ok) {
-    ctx.issues.push({ code: 'custom', message: 'Not a range', input: s })
-    return z.NEVER
-  }
-  return {
-    ...(lo ? { min: Number(lo) } : {}),
-    ...(hi ? { max: Number(hi) } : {}),
-  }
-})
+const rangeObject = z.object({ min: z.number().optional(), max: z.number().optional() })
+
+/** `min..max`, either side optional. Accepts its own output so a validated search can be validated again. */
+export const zRange = z.union([
+  rangeObject,
+  z.string().transform((s, ctx): NumericRange => {
+    const parts = s.split('..')
+    const [lo, hi] = parts
+    const ok =
+      parts.length === 2 &&
+      (lo === '' || NUMBER.test(lo ?? '')) &&
+      (hi === '' || NUMBER.test(hi ?? '')) &&
+      s !== '..'
+    if (!ok) {
+      ctx.issues.push({ code: 'custom', message: 'Not a range', input: s })
+      return z.NEVER
+    }
+    return {
+      ...(lo ? { min: Number(lo) } : {}),
+      ...(hi ? { max: Number(hi) } : {}),
+    }
+  }),
+])
 
 export const zIsoDate = z.string().refine((s) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false
