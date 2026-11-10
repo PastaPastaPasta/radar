@@ -2,8 +2,12 @@ import js from '@eslint/js'
 import prettier from 'eslint-config-prettier'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import reactHooks from 'eslint-plugin-react-hooks'
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript'
+import importX from 'eslint-plugin-import-x'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
+import { boundaryConfigs } from './eslint.boundaries.js'
 
 export default tseslint.config(
   {
@@ -43,5 +47,6 @@ export default tseslint.config(
     files: ['**/*.{js,mjs}'],
     extends: [tseslint.configs.disableTypeChecked],
   },
+  ...boundaryConfigs({ importX, createTypeScriptImportResolver }),
   prettier,
 )

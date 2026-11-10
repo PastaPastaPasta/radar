@@ -1,0 +1,25 @@
+export type Layer = 'core' | 'platform' | 'network' | 'neutral'
+export type Tone = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
+export type EntityKind =
+  | 'block'
+  | 'tx'
+  | 'address'
+  | 'masternode'
+  | 'evonode'
+  | 'proposal' // Core and network
+  | 'platform-block'
+  | 'transition'
+  | 'identity'
+  | 'contract'
+  | 'document' // Platform
+  | 'token'
+  | 'name'
+  | 'platform-address'
+  | 'epoch'
+  | 'quorum'
+  | 'group'
+  | 'contest'
+export type AmountUnit = 'DASH' | 'mDASH' | 'uDASH' | 'duffs'
+export type LoadState = 'loading' | 'ready' | 'empty' | 'error'
+
+export type { CoreTxType, TransitionType } from '@/lib/tx-types'
