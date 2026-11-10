@@ -1,10 +1,13 @@
 import { z } from 'zod'
 
+// zod's JIT compiles validators with `new Function`, which the production CSP reports as an eval violation.
+z.config({ jitless: true })
+
 const DIGITS = /^-?\d+$/
 
 /** Duffs, credits and token units: a JSON number or a numeric string, held as bigint. */
 export const zBigint = z
-  .union([z.number().refine(Number.isInteger), z.string().regex(DIGITS)])
+  .union([z.number().refine(Number.isSafeInteger), z.string().regex(DIGITS)])
   .transform((v) => BigInt(v))
 
 /** Nullable variant for fields a backend sends as null before it has a value. */
