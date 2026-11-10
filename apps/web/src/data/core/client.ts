@@ -169,9 +169,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
         }
       }
     } catch (e) {
-      if (isSourceError(e) && e.kind === 'aborted' && !signal?.aborted) {
-        // our own abort after the lock arrived is not an error
-      } else throw e
+      // Our own abort after the lock arrived is not an error.
+      if (!(isSourceError(e) && e.kind === 'aborted' && !signal?.aborted)) throw e
     } finally {
       abort.abort()
       signal?.removeEventListener('abort', onAbort)
@@ -486,8 +485,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
       const rows = await limited(heights, ROW_CONCURRENCY, async (height) => {
         const answered = await rpc().block(net, { height }, { signal, priority: 'list' })
         node ??= answered.node
-        const block = await decoder.block(answered.message.block, net)
-        return block
+        return decoder.block(answered.message.block, net)
       })
       const lockedUpTo = (await bestChainLockHeight(net, signal)) ?? -1
       const data: BlockRow[] = rows.map((b) => ({
