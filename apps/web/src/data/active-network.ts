@@ -49,7 +49,6 @@ export function getActiveNetwork(): NetworkId {
 }
 
 export const setActiveNetwork = (net: NetworkId): void => active.set(net)
-export const subscribeActiveNetwork = (cb: () => void): (() => void) => active.subscribe(cb)
 
 export const getRenderedNetwork = (): NetworkId => rendered.get() ?? getActiveNetwork()
 export const setRenderedNetwork = (net: NetworkId): void => rendered.set(net)

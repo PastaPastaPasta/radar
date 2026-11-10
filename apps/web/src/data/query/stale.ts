@@ -40,7 +40,7 @@ export function dataClass(c: DataClass): ClassOptions {
   }
 }
 
-export const STALE_AGE_FACTOR = 4
+const STALE_AGE_FACTOR = 4
 
 /** Tip data is pushed, so its staleTime is infinite; the age that matters is the header-stream silence in §2.5. */
 const TIP_STALE_AGE_MS = 20 * MINUTE
