@@ -43,7 +43,9 @@ const NATIVE: Record<string, Rule> = {
       ? { path: `/token/${seg(p.get('id')!)}/holders`, drop: ['id'] }
       : { path: '/tokens' },
   '/dpns': (p) =>
-    p.get('name') ? { path: `/name/${seg(p.get('name')!)}`, drop: ['name'] } : { path: '/names' },
+    p.get('name')
+      ? { path: `/name/${seg(p.get('name')!.replace(/\.dash$/i, ''))}`, drop: ['name'] }
+      : { path: '/names' },
   '/dpns/search': () => ({ path: '/names' }),
   '/governance/contested': () => ({ path: '/contests' }),
   '/governance/contested/detail': () => ({ path: '/contests' }),
@@ -135,7 +137,12 @@ function trimSlash(pathname: string): string {
   return pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
 }
 
-export function redirectFor(url: URL, opts: RedirectOptions): string | null {
+export interface Redirect {
+  location: string
+  permanent: boolean
+}
+
+export function redirectFor(url: URL, opts: RedirectOptions): Redirect | null {
   const path = trimSlash(url.pathname)
   const q = new URLSearchParams(url.search)
   const nativeHost = opts.nativeHosts.includes(url.hostname)
@@ -153,13 +160,14 @@ export function redirectFor(url: URL, opts: RedirectOptions): string | null {
   for (const [k, v] of Object.entries(hit?.set ?? {})) target.set(k, v)
   target.delete('net')
   target.delete('network')
-  if (!network && nativeHit && nativeHost) network = 'testnet'
+  const defaultedToTestnet = !network && !!nativeHit && nativeHost && nativeHit.path !== path
+  if (defaultedToTestnet) network = 'testnet'
   if (network && network !== 'mainnet') target.set('network', network)
 
   const path2 = hit ? hit.path : url.pathname.replace(/^\/{2,}/, '/')
   const search = target.size ? `?${target.toString()}` : ''
   const same = path2 === url.pathname && canonical(target) === canonical(q)
-  return same ? null : `${path2}${search}`
+  return same ? null : { location: `${path2}${search}`, permanent: !defaultedToTestnet }
 }
 
 const canonical = (p: URLSearchParams) =>

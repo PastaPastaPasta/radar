@@ -2,25 +2,30 @@ import { appendFileSync } from 'node:fs'
 
 const READ_ONLY = new Set(['GET', 'HEAD'])
 
+const SEND_BODY =
+  /broadcastStateTransition|broadcastTransaction|sendrawtransaction|sendtoaddress|sendmany|"method"\s*:\s*"send/i
+
 export const RULES = [
   {
     name: 'dapi-broadcastStateTransition',
-    test: ({ url, body }) => /broadcastStateTransition/i.test(url + body),
+    test: ({ pathname, body, method }) =>
+      /\/broadcastStateTransition\/?$/i.test(pathname) ||
+      (!READ_ONLY.has(method) && /broadcastStateTransition/i.test(body)),
   },
   {
     name: 'broadcastTransaction',
-    test: ({ url, body }) => /broadcastTransaction/i.test(url + body),
+    test: ({ pathname, body, method }) =>
+      /\/broadcastTransaction\/?$/i.test(pathname) ||
+      (!READ_ONLY.has(method) && /broadcastTransaction/i.test(body)),
   },
   {
     name: 'core-rpc-send',
-    test: ({ body }) =>
-      /sendrawtransaction|sendtoaddress|sendmany|"method"\s*:\s*"send/i.test(body),
+    test: ({ body, method }) => !READ_ONLY.has(method) && SEND_BODY.test(body),
   },
   { name: 'insight-tx-send', test: ({ pathname }) => /\/tx\/send\/?$/i.test(pathname) },
   {
     name: 'pe-broadcast',
-    test: ({ pathname, method }) =>
-      !READ_ONLY.has(method) &&
+    test: ({ pathname }) =>
       /\/(transactions?|state-?transitions?|tx|stateTransitions?)\/(broadcast|send|submit)\/?$/i.test(
         pathname,
       ),
@@ -30,6 +35,10 @@ export const RULES = [
     test: ({ pathname, method }) => !READ_ONLY.has(method) && /\/broadcast(\/|$)/i.test(pathname),
   },
 ]
+
+export function matchBody(text) {
+  return SEND_BODY.test(text)
+}
 
 const SECRET_WORDS = [
   'mnemonic',
@@ -63,6 +72,7 @@ export function matchRule(request) {
   let pathname = ''
   try {
     pathname = new URL(url).pathname
+    pathname = decodeURIComponent(pathname)
   } catch {
     pathname = url
   }
@@ -108,6 +118,32 @@ export async function installQaGuard(
       headers: { 'access-control-allow-origin': '*' },
       body: JSON.stringify({ error: 'blocked by review QA guard', rule }),
     })
+  })
+
+  await context.routeWebSocket(/.*/, (ws) => {
+    const server = ws.connectToServer()
+    ws.onMessage((message) => {
+      if (
+        !matchBody(typeof message === 'string' ? message : Buffer.from(message).toString('latin1'))
+      ) {
+        server.send(message)
+        return
+      }
+      const entry = {
+        time: new Date().toISOString(),
+        rule: 'websocket-send',
+        method: 'WS',
+        url: ws.url(),
+        page: null,
+      }
+      blocked.push(entry)
+      if (logFile) appendFileSync(logFile, JSON.stringify(entry) + '\n')
+      onBlock?.(entry)
+      ws.close({ code: 1008, reason: 'blocked by review QA guard' })
+    })
+    server.onMessage((message) => ws.send(message))
+    server.onClose((code, reason) => ws.close({ code, reason }))
+    ws.onClose((code, reason) => server.close({ code, reason }))
   })
 
   for (const page of context.pages()) wrapScreenshot(page)

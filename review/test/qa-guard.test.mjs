@@ -39,6 +39,26 @@ describe('matchRule', () => {
       assert.ok(matchRule(fakeRequest(url, method, body)), url)
   })
 
+  it('blocks encoded paths and GET broadcasts, not look-alike reads', () => {
+    assert.ok(matchRule(fakeRequest('https://insight.dash.org/insight-api/tx/%73end', 'POST')))
+    assert.ok(
+      matchRule(fakeRequest('https://api.pe.dashhq.org/transaction/broadcast?hex=00', 'GET')),
+    )
+    assert.equal(
+      matchRule(
+        fakeRequest(
+          'https://radar.dashhq.org/sdk-reference?method=broadcastStateTransition',
+          'GET',
+        ),
+      ),
+      null,
+    )
+    assert.equal(
+      matchRule(fakeRequest('https://radar.dashhq.org/assets/broadcastTransaction-ab12.js', 'GET')),
+      null,
+    )
+  })
+
   it('lets reads through', () => {
     const cases = [
       ['https://api.pe.dashhq.org/transactions?limit=5', 'GET'],

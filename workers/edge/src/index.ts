@@ -8,12 +8,13 @@ export interface Env {
   NATIVE_HOSTS?: string
 }
 
-const HAS_EXTENSION = /\.[A-Za-z0-9]{1,8}$/
+const STATIC_FILE =
+  /\.(js|mjs|css|map|json|png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|wasm|txt|xml|webmanifest)$/i
 
 async function serveAssets(request: Request, env: Env, url: URL): Promise<Response> {
   const res = await env.ASSETS.fetch(request)
   if (res.status !== 404 || (request.method !== 'GET' && request.method !== 'HEAD')) return res
-  if (HAS_EXTENSION.test(url.pathname)) return res
+  if (STATIC_FILE.test(url.pathname)) return res
   return env.ASSETS.fetch(new Request(new URL('/', url), request))
 }
 
@@ -40,12 +41,16 @@ async function handle(request: Request, env: Env): Promise<Response> {
     .split(',')
     .map((h) => h.trim())
     .filter(Boolean)
-  const location = redirectFor(url, { nativeHosts })
-  if (location)
+  const redirect = redirectFor(url, { nativeHosts })
+  if (redirect) {
     return new Response(null, {
-      status: 301,
-      headers: { location, 'cache-control': 'public, max-age=300' },
+      status: redirect.permanent ? 301 : 302,
+      headers: {
+        location: redirect.location,
+        'cache-control': redirect.permanent ? 'public, max-age=300' : 'no-store',
+      },
     })
+  }
 
   const res = await serveAssets(request, env, url)
 

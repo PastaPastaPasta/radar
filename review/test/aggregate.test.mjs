@@ -81,6 +81,24 @@ describe('aggregate', () => {
     assert.equal(out.design.aggregate, 6.5)
   })
 
+  it('takes the cap value only from shards that applied it', () => {
+    const rs = synthetic()
+    for (const i of [0, 1]) {
+      rs[i].scores.design_cap_applied = true
+      rs[i].scores.design_cap_value = 7.5
+    }
+    rs[2].scores.design_cap_value = 3
+    assert.equal(aggregate(rs).design.cap_value, 7.5)
+  })
+
+  it('ignores reviewed stories that are not in the story list', () => {
+    const ids = synthetic().flatMap((r) => r.stories.map((s) => s.id))
+    const out = aggregate(synthetic(), { allStoryIds: ids.filter((id) => id !== 'X-02') })
+    assert.equal(out.parity.stories, 13)
+    assert.equal(out.parity.verdicts.PARTIAL, 1)
+    assert.ok(out.warnings.some((w) => /X-02/.test(w)))
+  })
+
   it('warns instead of guessing when a cap has no value', () => {
     const two = synthetic()
     two[0].scores.design_cap_applied = true

@@ -242,7 +242,7 @@ describe('redirects', () => {
     if (expected === null) {
       assert.notEqual(res.status, 301, `${host}${p} should not redirect`)
     } else {
-      assert.equal(res.status, 301, `${host}${p}`)
+      assert.ok([301, 302].includes(res.status), `${host}${p}`)
       assert.equal(res.headers.get('location'), expected, `${host}${p}`)
     }
   }
@@ -269,7 +269,7 @@ describe('redirects', () => {
     )
     await check(h, '/token/?id=T1&network=mainnet', '/token/T1')
     await check(h, '/token/holders/?id=T1', '/token/T1/holders?network=testnet')
-    await check(h, '/dpns/?name=alice.dash', '/name/alice.dash?network=testnet')
+    await check(h, '/dpns/?name=alice.dash', '/name/alice?network=testnet')
     await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12')
     await check(h, '/epoch/detail/?index=5', '/epoch/5?network=testnet')
     await check(h, '/network/status/?network=mainnet', '/status')
@@ -277,7 +277,7 @@ describe('redirects', () => {
     await check(h, '/state-transition/?hash=AB', '/platform/tx/AB?network=testnet')
     await check(h, '/tools/?tool=state-transition', '/tools/state-transition?network=testnet')
     await check(h, '/governance/polls/?network=mainnet', '/polls')
-    await check(h, '/search/?q=alice', '/search?q=alice&network=testnet')
+    await check(h, '/search/?q=alice', '/search?q=alice')
   })
 
   it('sends write paths to the entity page and drops signing parameters', async () => {
@@ -285,6 +285,28 @@ describe('redirects', () => {
     await check(h, '/broadcast/?op=transfer&identity=ID1&network=mainnet', '/identity/ID1')
     await check(h, '/broadcast/?op=mint&token=T9', '/token/T9?network=testnet')
     await check(h, '/wallet/', '/about?network=testnet')
+  })
+
+  it('does not bounce same-path native pages to testnet, and keeps mainnet reachable', async () => {
+    const h = 'explorer.dashhq.org'
+    await check(h, '/search?q=x', null)
+    await check(h, '/search?q=x&network=mainnet', '/search?q=x')
+    await check(h, '/settings', null)
+    const moved = await mf.dispatchFetch('http://explorer.dashhq.org/identity/?id=A', {
+      redirect: 'manual',
+    })
+    assert.equal(moved.status, 302)
+    assert.equal(moved.headers.get('cache-control'), 'no-store')
+    const legacy = await mf.dispatchFetch('http://radar.localhost/block-index/5', {
+      redirect: 'manual',
+    })
+    assert.equal(legacy.status, 301)
+  })
+
+  it('serves the app for ids that contain dots', async () => {
+    const res = await get('/name/alice.dash')
+    assert.equal(res.status, 200)
+    assert.match(await res.text(), /<div id="root">/)
   })
 
   it('does not apply the testnet default off the native host', async () => {

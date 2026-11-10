@@ -60,14 +60,19 @@ export function aggregate(reviews, { allStoryIds } = {}) {
   }
 
   const counts = Object.fromEntries(VERDICTS.map((v) => [v, 0]))
+  if (allStoryIds) {
+    for (const id of [...verdictOf.keys()]) if (!allStoryIds.includes(id)) verdictOf.delete(id)
+  }
   for (const s of verdictOf.values()) counts[s.verdict]++
   const missing = allStoryIds ? allStoryIds.filter((id) => !verdictOf.has(id)) : []
-  const unknown = allStoryIds ? [...verdictOf.keys()].filter((id) => !allStoryIds.includes(id)) : []
+  const unknown = allStoryIds
+    ? [...shardOfStory.keys()].filter((id) => !allStoryIds.includes(id))
+    : []
   if (missing.length)
     warnings.push(`${missing.length} stories have no verdict and count as not passing`)
   if (unknown.length)
     warnings.push(
-      `${unknown.length} reviewed stories are not in stories.yaml: ${unknown.join(', ')}`,
+      `${unknown.length} reviewed stories are not in stories.yaml and are ignored: ${unknown.join(', ')}`,
     )
   const total = verdictOf.size + missing.length
   const denominator = total - counts.BLOCKED
@@ -102,6 +107,7 @@ export function aggregate(reviews, { allStoryIds } = {}) {
     .map((r) => r.shard)
   const designCapApplied = cappedShards.length >= 2
   const capValues = [...byShard.values()]
+    .filter((r) => r.scores.design_cap_applied === true)
     .map((r) => r.scores.design_cap_value)
     .filter((v) => typeof v === 'number')
   const designCapValue = capValues.length ? Math.min(...capValues) : null
@@ -219,7 +225,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     return r
   })
   if (values['design-cap'] !== undefined) {
-    const cap = Number(values['design-cap'])
+    const cap = num(Number(values['design-cap']), '--design-cap')
     for (const r of reviews) r.scores.design_cap_value = cap
   }
   const allStoryIds = values.stories ? loadStories(values.stories).map((s) => s.id) : undefined

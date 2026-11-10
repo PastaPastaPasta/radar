@@ -175,8 +175,11 @@ export function rewriteHead(res: Response, meta: OgMeta, canonicalUrl: string): 
         `<meta ${k!.startsWith('og:') ? 'property' : 'name'}="${k}" content="${esc(v!)}">`,
     )
     .join('')
+  const out = new Response(res.body, res)
+  out.headers.delete('etag')
+  out.headers.delete('last-modified')
   return new HTMLRewriter()
     .on('title', { element: (el) => void el.setInnerContent(title) })
     .on('head', { element: (el) => void el.append(tags, { html: true }) })
-    .transform(res)
+    .transform(out)
 }

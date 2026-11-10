@@ -20,6 +20,7 @@ export interface Guard {
 
 export const RULES: { name: string }[]
 export const SECRET_SELECTOR: string
+export function matchBody(text: string): boolean
 export function matchRule(
   request: Pick<Request, 'url' | 'method' | 'postDataBuffer'>,
 ): string | null
