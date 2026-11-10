@@ -80,7 +80,28 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
   }
 }
 
+/** What is wrong with a stamp's proof fields, or undefined: `proof` exists iff `proved`, and only the SDK proves. */
+export function stampViolation(stamp: SourceStamp): string | undefined {
+  if (stamp.proved && !stamp.proof) return 'a stamp is marked proved but carries no proof'
+  if (!stamp.proved && stamp.proof) return 'a stamp carries a proof but is not marked proved'
+  if (stamp.proved && stamp.source !== 'sdk') {
+    return `a ${stamp.source} stamp is marked proved; only sdk answers are proof-checked`
+  }
+  return undefined
+}
+
+const reported = new WeakSet<SourceStamp>()
+
+function assertStamp(stamp: SourceStamp): void {
+  if (import.meta.env.PROD || reported.has(stamp)) return
+  const problem = stampViolation(stamp)
+  if (!problem) return
+  reported.add(stamp)
+  console.error(`[radar] ${problem} (docs/ARCHITECTURE.md §2.1)`, stamp)
+}
+
 export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number): SourceView {
+  assertStamp(stamp)
   const b = base(stamp)
   const down = health.state === 'down'
   const ageMs = Math.max(0, now - stamp.asOf)
