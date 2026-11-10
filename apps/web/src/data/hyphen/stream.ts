@@ -42,12 +42,7 @@ export async function openHyphenStream(
   }
   healthRegistry.report(net, 'hyphen', { ok: true, latencyMs: performance.now() - started })
   return readNdjson(res.body, signal, (error) =>
-    healthRegistry.report(net, 'hyphen', {
-      ok: false,
-      latencyMs: performance.now() - started,
-      kind: error.kind,
-      message: error.message,
-    }),
+    healthRegistry.report(net, 'hyphen', { ok: false, kind: error.kind, message: error.message }),
   )
 }
 

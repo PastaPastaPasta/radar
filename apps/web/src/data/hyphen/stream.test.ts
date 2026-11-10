@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { isSourceError, type SourceError } from '../errors'
-import { healthRegistry } from '../health'
+import { healthRegistry, resetHealthRegistry } from '../health'
 import { MAX_NDJSON_LINE_CHARS, openHyphenStream, readNdjson } from './stream'
 import type { HyStreamEvent } from './schemas'
 
@@ -87,5 +87,29 @@ describe('openHyphenStream health', () => {
     }
     expect(healthRegistry.get('testnet', 'hyphen').lastError?.kind).toBe('network')
     expect(healthRegistry.get('mainnet', 'hyphen').state).toBe('unknown')
+  })
+
+  it('leaves the latency window alone when an open stream breaks', async () => {
+    vi.useFakeTimers()
+    resetHealthRegistry()
+    const body = new ReadableStream<Uint8Array>({
+      async pull(controller) {
+        await new Promise((resolve) => setTimeout(resolve, 40 * 60_000))
+        controller.error(new Error('reset'))
+      },
+    })
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(body))
+    try {
+      const events = await openHyphenStream('mainnet')
+      const done = drain(events)
+      await vi.advanceTimersByTimeAsync(41 * 60_000)
+      await done
+    } finally {
+      fetchSpy.mockRestore()
+      vi.useRealTimers()
+    }
+    const health = healthRegistry.get('mainnet', 'hyphen')
+    expect(health.lastError?.kind).toBe('network')
+    expect(health.p50LatencyMs).toBeLessThan(1000)
   })
 })

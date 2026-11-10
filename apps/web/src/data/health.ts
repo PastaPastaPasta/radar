@@ -24,7 +24,8 @@ export interface HealthRegistry {
   report(
     net: NetworkId,
     source: SourceId,
-    r: { ok: boolean; latencyMs: number; kind?: SourceErrorKind; message?: string },
+    /** Leave `latencyMs` out when the report is not the outcome of one round trip, such as a stream that broke. */
+    r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind; message?: string },
   ): void
   setLag(net: NetworkId, source: SourceId, lag: SourceHealth['lag']): void
   get(net: NetworkId, source: SourceId): SourceHealth
@@ -191,8 +192,10 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
       const kind = r.kind ?? 'network'
       rec.calls.push({ ok: r.ok, at, kind: r.ok ? undefined : (kind as FailureKind) })
       if (rec.calls.length > CALL_WINDOW) rec.calls.shift()
-      rec.latencies.push(r.latencyMs)
-      if (rec.latencies.length > LATENCY_WINDOW) rec.latencies.shift()
+      if (r.latencyMs !== undefined) {
+        rec.latencies.push(r.latencyMs)
+        if (rec.latencies.length > LATENCY_WINDOW) rec.latencies.shift()
+      }
       if (r.ok) {
         rec.consecutiveDownFailures = 0
         rec.lastOkAt = at

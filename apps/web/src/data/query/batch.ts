@@ -82,6 +82,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
     chunk: { key: K; waiters: Waiter<V>[] }[],
   ): Promise<void> {
     let result: Sourced<Map<K, V | null>>
+    const started = performance.now()
     try {
       result = await opts.run(
         net,
@@ -91,6 +92,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
       for (const e of chunk) for (const w of e.waiters) w.reject(error)
       return
     }
+    const latencyMs = performance.now() - started
     const byId = new Map<string, V | null>()
     for (const [k, v] of result.data) byId.set(keyId(k), v)
     const stamp = stampOf(result)
@@ -119,7 +121,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
       console.error(`[radar] ${opts.source} ${opts.name} batch omitted keys`, missing)
       healthRegistry.report(net, opts.source, {
         ok: false,
-        latencyMs: 0,
+        latencyMs,
         kind: 'invalid-response',
         message,
       })

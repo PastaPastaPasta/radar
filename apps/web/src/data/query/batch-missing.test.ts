@@ -53,6 +53,23 @@ describe('createBatcher with keys missing from the result', () => {
     expect(out.proved).toBe(true)
   })
 
+  it('reports the omission with the latency of the batch call', async () => {
+    const batcher = createBatcher<string, number>({
+      name: 'identity-balance',
+      source: 'sdk',
+      maxBatch: 100,
+      run: () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve(proved(new Map<string, number | null>())), 120),
+        ),
+    })
+    const dropped = batcher.fetch('mainnet', 'x').catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(200)
+    await dropped
+
+    expect(healthRegistry.get('mainnet', 'sdk').p50LatencyMs).toBe(120)
+  })
+
   it('rejects every waiter of an omitted key and reports the source once', async () => {
     const batcher = createBatcher<string, number>({
       name: 'identity-balance',
