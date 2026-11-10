@@ -114,13 +114,12 @@ const queryKeySelectors = [
 const provedMessage =
   'Only data/sdk sets `proved`, and only from a verified *WithProof response (docs/ARCHITECTURE.md §2.1)'
 const provedSelectors = [
-  'Literal',
-  'TSAsExpression > Literal',
-  'TSSatisfiesExpression > Literal',
-].map((shape) => ({
-  selector: `Property[key.name='proved'] > ${shape}[value=true], Property[key.value='proved'] > ${shape}[value=true]`,
-  message: provedMessage,
-}))
+  ...['Literal', 'TSAsExpression > Literal', 'TSSatisfiesExpression > Literal'].map((shape) => ({
+    selector: `Property[key.name='proved'] > ${shape}[value=true], Property[key.value='proved'] > ${shape}[value=true]`,
+    message: provedMessage,
+  })),
+  { selector: "Property[key.name='proved'][shorthand=true]", message: provedMessage },
+]
 const guardedSelectors = [...queryKeySelectors, ...provedSelectors]
 const globalFetchProperties = ['window', 'globalThis', 'self'].map((object) => ({
   object,
@@ -165,18 +164,18 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
     {
       files: [`${rel}/{ui,features,routes,shell}/**/*.{ts,tsx}`],
       ignores: testFiles,
-      rules: {
-        'no-restricted-imports': ['error', { patterns: sourceClientPatterns }],
-        'no-restricted-globals': [
-          'error',
-          { name: 'fetch', message: 'Fetch through a data/*/queries.ts factory' },
-        ],
-      },
+      rules: { 'no-restricted-imports': ['error', { patterns: sourceClientPatterns }] },
     },
     {
       files: [web],
       ignores: [`${rel}/data/**`, ...testFiles],
-      rules: { 'no-restricted-properties': ['error', ...globalFetchProperties] },
+      rules: {
+        'no-restricted-globals': [
+          'error',
+          { name: 'fetch', message: 'Fetch through a data/*/queries.ts factory' },
+        ],
+        'no-restricted-properties': ['error', ...globalFetchProperties],
+      },
     },
     {
       files: [`${rel}/**/queries.ts`],

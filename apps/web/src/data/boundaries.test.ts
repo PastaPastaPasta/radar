@@ -77,6 +77,23 @@ describe('proved literals (docs/ARCHITECTURE.md §2.1)', () => {
     }
   })
 
+  it('is rejected as a shorthand property', async () => {
+    for (const body of [
+      'const proved = true\nconst s = { source: "pe", proved }',
+      'const proved = flag()\nconst s = { proved }',
+    ]) {
+      await expectRule(
+        'features/core/join.ts',
+        `${body}\nexport default s\ndeclare function flag(): boolean\n`,
+        /Only data\/sdk sets/,
+      )
+    }
+    await expectClean(
+      'data/sdk/index.ts',
+      'const proved = true\nexport const s = { source: "sdk", proved }\n',
+    )
+  })
+
   it('is rejected in a queries.ts', async () => {
     await expectRule('data/pe/queries.ts', stamp, /Only data\/sdk sets/)
   })
@@ -113,16 +130,23 @@ describe('global fetch (docs/ARCHITECTURE.md §1.2)', () => {
     },
   )
 
-  it('the bare global is still rejected in features', async () => {
-    await expectRule(
+  it('the bare global is rejected in every folder outside data, like the properties', async () => {
+    for (const file of [
       'features/core/x.ts',
-      "export const f = () => fetch('/x')\n",
-      /no-restricted-globals/,
-    )
+      'ui/x.tsx',
+      'routes/x.tsx',
+      'shell/x.tsx',
+      'app/x.ts',
+      'lib/x.ts',
+    ]) {
+      await expectRule(file, "export const f = () => fetch('/x')\n", /no-restricted-globals/)
+    }
   })
 
   it('data clients and tests may call it', async () => {
     await expectClean('data/http.ts', "export const f = () => globalThis.fetch('/x')\n")
+    await expectClean('data/pe/client.ts', "export const f = () => fetch('/x')\n")
+    await expectClean('features/core/x.test.ts', "export const f = () => fetch('/x')\n")
     await expectClean('features/core/x.test.ts', "export const f = () => window.fetch('/x')\n")
   })
 })
