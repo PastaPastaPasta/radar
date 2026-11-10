@@ -89,7 +89,10 @@ const nodes = fit
   .sort((a, b) => a.url.localeCompare(b.url))
 
 const file = join(OUT, `seed.${net}.json`)
-writeFileSync(file, JSON.stringify({ net, generatedAt: new Date().toISOString(), nodes }, null, 2) + '\n')
+writeFileSync(
+  file,
+  JSON.stringify({ net, generatedAt: new Date().toISOString(), nodes }, null, 2) + '\n',
+)
 console.log(
   `${net}: ${candidates.length} candidates, ${probed.length} answered, ${fit.length} at the tip (${tip}) and under ${MAX_LATENCY_MS} ms; wrote ${nodes.length} to ${file}`,
 )

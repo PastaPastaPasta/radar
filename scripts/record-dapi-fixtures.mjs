@@ -57,16 +57,19 @@ const server = await createServer({
   optimizeDeps: { noDiscovery: true, include: [] },
 })
 
-const wasm = await import(pathToFileURL(join(ROOT, 'packages/core-decode/dist/core_decode.js')).href)
+const wasm = await import(
+  pathToFileURL(join(ROOT, 'packages/core-decode/dist/core_decode.js')).href
+)
 wasm.initSync({ module: readFileSync(join(ROOT, 'packages/core-decode/dist/core_decode_bg.wasm')) })
 
 const load = (p) => server.ssrLoadModule(p)
-const [{ LiveDapiTransport, RecordingDapiTransport }, scenarios, decodeMod, clientMod] = await Promise.all([
-  load('/src/test/msw/dapi-recording.ts'),
-  load('/src/test/msw/dapi-scenarios.ts'),
-  load('/src/data/core/decode.ts'),
-  load('/src/data/core/client.ts'),
-])
+const [{ LiveDapiTransport, RecordingDapiTransport }, scenarios, decodeMod, clientMod] =
+  await Promise.all([
+    load('/src/test/msw/dapi-recording.ts'),
+    load('/src/test/msw/dapi-scenarios.ts'),
+    load('/src/data/core/decode.ts'),
+    load('/src/data/core/client.ts'),
+  ])
 
 const seeds = JSON.parse(readFileSync(join(WEB, `src/data/dapi-core/seed.${net}.json`), 'utf8'))
 const live = new LiveDapiTransport(net, seeds.nodes)
@@ -95,7 +98,10 @@ const recording = new RecordingDapiTransport(live)
 const core = clientMod.createCoreClient({
   transport: () => recording,
   decoder,
-  hyphen: new Proxy({}, { get: () => () => Promise.reject(new Error('Hyphen is not used while recording DAPI')) }),
+  hyphen: new Proxy(
+    {},
+    { get: () => () => Promise.reject(new Error('Hyphen is not used while recording DAPI')) },
+  ),
   health: { get: () => ({ state: 'ok' }) },
   now: Date.now,
 })
@@ -129,7 +135,9 @@ const write = async (file, value) => {
   writeFileSync(file, await format(JSON.stringify(value), { ...prettierOptions, parser: 'json' }))
 }
 
-say(`${recording.exchanges.size} exchanges, ${live.requestCount} requests over ${live.requests.size} nodes`)
+say(
+  `${recording.exchanges.size} exchanges, ${live.requestCount} requests over ${live.requests.size} nodes`,
+)
 if (!args.dry) {
   const dir = join(OUT, net)
   if (existsSync(dir)) rmSync(dir, { recursive: true })
