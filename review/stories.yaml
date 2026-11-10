@@ -1,5 +1,5 @@
 # Radar user stories: source of truth for the review harness.
-# Placeholders like {mn_regular} or {doc_history.type} are entities picked by
+# Placeholders like {mn_regular} or {doc.type} are entities picked by
 # review/fixtures.mjs into review/fixtures/{mainnet,testnet}.json. {key} is the
 # entity's primary id; {key.field} reads another field.
 # prod URLs are mainnet addresses; the harness maps them to the testnet host or
@@ -578,27 +578,27 @@ stories:
     shard: S2
     story: As a developer I want to browse a document type
     acceptance: Each document type opens a documents browser for that type
-    radar_start: /contract/{contract}/documents/{doc_history.type}
+    radar_start: /contract/{contract}/documents/{doc.type}
     prod:
-      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc_history.type}
+      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc.type}
     phone: false
   - id: NX-22
     group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
     shard: S2
     story: As a developer I want to query documents by index
     acceptance: Filters offered from the type's indices (= < ≤ > ≥ in, starts with); order by; page size; next and previous pages; all in the URL; invalid filters explained before running
-    radar_start: /contract/{contract}/documents/{doc_history.type}
+    radar_start: /contract/{contract}/documents/{doc.type}
     prod:
-      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc_history.type}
+      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc.type}
     phone: true
   - id: NX-23
     group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
     shard: S2
     story: As a developer I want a document
     acceptance: Data, metadata (revision, created, updated, transferred) and paged revision history when the type keeps history
-    radar_start: /document/{doc_history.contract}/{doc_history.type}/{doc_history}
+    radar_start: /document/{doc.contract}/{doc.type}/{doc}
     prod:
-      - https://explorer.dashhq.org/contract/document/?id={doc_history.contract}&type={doc_history.type}&docId={doc_history}
+      - https://explorer.dashhq.org/contract/document/?id={doc.contract}&type={doc.type}&docId={doc}
     phone: false
   - id: NX-24
     group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
@@ -1010,9 +1010,9 @@ stories:
     shard: S4
     story: As a Platform watcher I want a document's provenance
     acceptance: Document page shows the transaction that created or last changed it, and its revisions
-    radar_start: /document/{doc_history.contract}/{doc_history.type}/{doc_history}
+    radar_start: /document/{doc.contract}/{doc.type}/{doc}
     prod:
-      - https://pe.dashhq.org/document/{doc_history}
+      - https://pe.dashhq.org/document/{doc}
     phone: false
   - id: PE-19
     group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'

@@ -255,6 +255,16 @@ async function pickPlatform(src, entities, log) {
     }
   }
 
+  if (entities.doc_history) entities.doc = { ...entities.doc_history }
+  else {
+    const dpns = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
+    const docs = await attempt(log, 'doc dpns', () =>
+      getJson(`${src.pe}/dataContract/${dpns}/documents?limit=1&document_type_name=domain`),
+    )
+    const d = docs?.resultSet?.[0]
+    if (d) entities.doc = { id: d.identifier, contract: dpns, type: 'domain' }
+  }
+
   const contests =
     (
       await attempt(log, 'contests', () =>
@@ -311,6 +321,7 @@ export async function pickFixtures(network) {
     'identity',
     'pkh',
     'contract',
+    'doc',
     'doc_history',
     'token',
     'name_registered',
