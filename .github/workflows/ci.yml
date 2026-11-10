@@ -36,7 +36,6 @@ jobs:
       - run: pnpm test:review
 
       - run: pnpm check:stories
-        continue-on-error: true
 
       - run: pnpm e2e:fixtures
 
@@ -61,8 +60,17 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: rustup target add wasm32-unknown-unknown
+      - name: Install binaryen version_129
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/binaryen.tar.gz" https://github.com/WebAssembly/binaryen/releases/download/version_129/binaryen-version_129-x86_64-linux.tar.gz
+          echo "50b9fa62b9abea752da92ec57e0c555fee578760cd237c40107957715d2976ba  $RUNNER_TEMP/binaryen.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/binaryen.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/binaryen-version_129/bin" >> "$GITHUB_PATH"
       - run: cargo install wasm-bindgen-cli --version 0.2.118 --locked
       - run: pnpm --filter @radar/core-decode build:wasm
-      - run: pnpm --filter @radar/core-decode test:wasm
+      - name: The committed dist matches a fresh build
+        run: |
+          git add --intent-to-add packages/core-decode/dist
+          git diff --exit-code --stat packages/core-decode/dist
+      - run: pnpm --filter @radar/core-decode test
       - run: pnpm --filter @radar/core-decode test:rust

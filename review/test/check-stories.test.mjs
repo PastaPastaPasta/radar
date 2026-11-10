@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { describe, it } from 'node:test'
-import { checkStories, collectTags } from '../../scripts/check-stories.mjs'
+import { checkStories, collectTags, failed } from '../../scripts/check-stories.mjs'
 
 describe('check-stories', () => {
   it('reports untagged stories and tags that name no story', () => {
@@ -17,5 +17,16 @@ describe('check-stories', () => {
     writeFileSync(path.join(dir, 'helper.ts'), '// @IN-04 in a non-spec file is ignored\n')
     const result = checkStories(['IN-03', 'IN-04', 'HY-05', 'RA-20'], collectTags(dir))
     assert.deepEqual(result, { total: 4, tagged: 3, missing: ['IN-04'], unknown: ['RA-99'] })
+  })
+
+  it('fails on unknown tags always and on missing stories only when strict', () => {
+    const base = { total: 2, tagged: 2, missing: [], unknown: [] }
+    assert.equal(failed(base, false), false)
+    assert.equal(failed(base, true), false)
+    const missing = { ...base, tagged: 1, missing: ['IN-04'] }
+    assert.equal(failed(missing, false), false)
+    assert.equal(failed(missing, true), true)
+    const unknown = { ...base, unknown: ['RA-99'] }
+    assert.equal(failed(unknown, false), true)
   })
 })

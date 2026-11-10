@@ -34,6 +34,11 @@ export function checkStories(storyIds, tags) {
   return { total: storyIds.length, tagged: storyIds.length - missing.length, missing, unknown }
 }
 
+/** A tag that names no story always fails; missing stories fail only with `--strict`. */
+export function failed(result, strict) {
+  return result.unknown.length > 0 || (strict && result.missing.length > 0)
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const { values } = parseArgs({
     options: {
@@ -52,5 +57,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       console.log(`  ${prefix}: ${list.join(' ')}`)
   }
   if (result.unknown.length) console.log(`tags naming no story: ${result.unknown.join(' ')}`)
-  if (values.strict && (result.missing.length || result.unknown.length)) process.exit(1)
+  if (failed(result, values.strict)) process.exit(1)
 }
