@@ -1050,6 +1050,16 @@ What it measures: wasm init and trusted-context prefetch inside a module worker,
 | **Cold start > 6 s on the test phone** | No design change; the `sdk-cold` fallback (§3.3) carries the first view, and warm-up also starts on first idle on every route, not only Platform ones |
 | **Some `*WithProofInfo` variant returns data that won't map** | That method uses its plain variant, `proved: false`, listed in `docs/spikes.md`; an upstream issue goes on the plan's §7.2 list |
 
+**Outcome (2026-11-10, `docs/spikes/sdk-worker.md`): works in a module worker behind Comlink**, mainnet and testnet, with full proof metadata. §3 stands. Decisions taken on the results:
+- **Split build.** Load the wasm as a separate asset (5.8 MB brotli, cold start 844 ms on localhost) rather than the package default with the wasm inlined in JS (9.1 MB over the wire, 1317 ms). It needs a Vite alias past the package's `exports` map. Guard it with a unit test that fails if the aliased file is missing, so an SDK bump that moves it fails CI instead of production. The inlined build is the fallback.
+- **Every SDK call gets a worker-side timeout of 8 s and one retry.** The SDK's own timeout did not stop a call to a dead node (it hung 68–132 s). A second timeout is a `SourceError` of kind `timeout`, and health marks the SDK degraded.
+- **Plain calls are proof-verified too.** Keep calling the `WithProof` variants anyway, for the metadata the proof inspector shows.
+- **Not-found is a stamped null for every entity.** The worker maps the not-found errors for contracts and tokens to `null` (identities and DPNS names already return `null` plus a proof).
+- **DPNS lookups normalise the label** (homograph mapping as DPNS does: o→0, i/l→1, lowercase) before calling the SDK, which doesn't.
+- **CSP:** `script-src 'self' 'wasm-unsafe-eval'` and `connect-src 'self' https:` are enough; no COOP/COEP.
+- **Version.** The spike ran 5.0.3. The repo pins 5.0.2 until 5.0.3 clears the 7-day release-age rule (2026-11-10 19:40 UTC); package E bumps it.
+- Reference code to lift into `data/sdk`: `spikes/sdk-worker/src/`.
+
 ### Not decided by spikes, owned elsewhere
 
 - Hyphen CORS fix, testnet resync, `spentBy` and unconfirmed balance: upstream asks (plan §7.2). When CORS is fixed, `endpoints.ts` points `hyphen` at `https://{hy,ts}.kw.vg/api/v1` and the Worker route is removed. Nothing else changes.
