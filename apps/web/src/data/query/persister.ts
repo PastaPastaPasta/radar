@@ -1,6 +1,7 @@
 import type { Query, QueryFunction, QueryFunctionContext } from '@tanstack/query-core'
 import { experimental_createQueryPersister } from '@tanstack/query-persist-client-core'
 import { createStore, del, entries, get, set, type UseStore } from 'idb-keyval'
+import type { NetworkId } from '@/lib/network'
 import type { SourceStamp } from '../envelope'
 import { staleAfterMs, type DataClass } from './stale'
 
@@ -87,4 +88,19 @@ export function createPersister({ appVersion, store, maxAge, gc = true }: Persis
   })
   if (gc) whenIdle(() => void persister.persisterGc().catch(() => undefined))
   return { ...persister, persisterFn: withDataClass(persister.persisterFn as PersisterFn) }
+}
+
+/** Removes every persisted query of one network from IndexedDB. */
+export async function clearPersistedNetwork(net: NetworkId, store?: UseStore): Promise<void> {
+  if (!store && typeof indexedDB === 'undefined') return
+  const idb = store ?? createStore('radar-query', 'queries')
+  const all = await entries(idb).catch(() => [])
+  await Promise.all(
+    all.flatMap(([key, value]) => {
+      const queryKey = (value as { queryKey?: unknown } | undefined)?.queryKey
+      return Array.isArray(queryKey) && queryKey[0] === net
+        ? [del(key, idb).catch(() => undefined)]
+        : []
+    }),
+  )
 }

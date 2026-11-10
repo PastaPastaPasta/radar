@@ -3,7 +3,13 @@ import { QueryClient } from '@tanstack/react-query'
 import { createStore, type UseStore } from 'idb-keyval'
 import { describe, expect, it, vi } from 'vitest'
 import { dataClass } from './stale'
-import { createPersister, shouldPersist, SCHEMA_VERSION, withDataClass } from './persister'
+import {
+  clearPersistedNetwork,
+  createPersister,
+  shouldPersist,
+  SCHEMA_VERSION,
+  withDataClass,
+} from './persister'
 
 let n = 0
 const freshStore = () => createStore(`test-${n++}`, 'q')
@@ -202,5 +208,26 @@ describe('persister GC', () => {
     const { entries } = await import('idb-keyval')
     expect(await entries(store)).toHaveLength(0)
     vi.unstubAllGlobals()
+  })
+})
+
+describe('clearPersistedNetwork', () => {
+  it('removes one network and keeps the others', async () => {
+    const store = freshStore()
+    const qc = client(createPersister({ appVersion: '1', store, gc: false }))
+    for (const net of ['devnet-ruby', 'mainnet'] as const) {
+      await qc.fetchQuery({
+        queryKey: [net, 'sdk', 'identity'],
+        queryFn: () => 1,
+        ...dataClass('immutable'),
+      })
+    }
+    await settle()
+    const { entries } = await import('idb-keyval')
+    expect(await entries(store)).toHaveLength(2)
+    await clearPersistedNetwork('devnet-ruby', store)
+    const left = await entries(store)
+    expect(left).toHaveLength(1)
+    expect((left[0]![1] as { queryKey: unknown[] }).queryKey[0]).toBe('mainnet')
   })
 })
