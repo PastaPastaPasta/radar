@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react'
-import { getActiveNetwork, subscribeActiveNetwork } from './active-network'
+import { getRenderedNetwork, subscribeRenderedNetwork } from './active-network'
 import type { BudgetSnapshot } from './dapi-core/budget'
 import type { SourceErrorKind } from './errors'
 import type { SourceId } from './envelope'
@@ -257,7 +257,7 @@ const subscribe = (cb: () => void): (() => void) => healthRegistry.subscribe(cb)
 const ALL_SOURCES: SourceId[] = ['sdk', 'dapi', 'radar', 'pe', 'hyphen', 'rate']
 
 export function useSourceHealth(source: SourceId): SourceHealth {
-  const net = useSyncExternalStore(subscribeActiveNetwork, getActiveNetwork, getActiveNetwork)
+  const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)
   const snapshot = () => healthRegistry.get(net, source)
   return useSyncExternalStore(subscribe, snapshot, snapshot)
 }
@@ -265,7 +265,7 @@ export function useSourceHealth(source: SourceId): SourceHealth {
 let allCache: { net: NetworkId; items: SourceHealth[] } | undefined
 
 export function useAllSourceHealth(): SourceHealth[] {
-  const net = useSyncExternalStore(subscribeActiveNetwork, getActiveNetwork, getActiveNetwork)
+  const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)
   return useSyncExternalStore(
     subscribe,
     () => {

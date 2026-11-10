@@ -1,6 +1,6 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useSyncExternalStore } from 'react'
-import { getActiveNetwork, subscribeActiveNetwork } from '../active-network'
+import { getRenderedNetwork, subscribeRenderedNetwork } from '../active-network'
 import { stampOf, type Fact, type SourceId, type Sourced } from '../envelope'
 import { SourceError } from '../errors'
 import { describeFailure } from '../http'
@@ -190,7 +190,7 @@ export function useHydratedFact<K, V>(
   key: K,
   backend: Fact<V> | undefined,
 ): Fact<V> | undefined {
-  const net = useSyncExternalStore(subscribeActiveNetwork, getActiveNetwork, getActiveNetwork)
+  const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)
   const query = useQuery(batcher.queryOptions(net, key))
   const hydrated = query.data
   if (hydrated && hydrated.data !== null) {

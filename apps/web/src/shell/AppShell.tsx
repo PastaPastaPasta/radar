@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
 import { NetworkGate } from '@/app/network-context'
 import { UnitsMount } from '@/app/units-mount'
+import { useRenderedNetworkSync } from '@/app/rendered-network'
 import { CommandPalette, CommandPaletteProvider } from '@/features/search'
 import { I18nProvider, i18n } from '@/i18n'
 import { SectionNav } from './SectionNav'
@@ -28,6 +29,7 @@ function RouteAnnouncer() {
 
 export function AppShell() {
   useSpaLinks()
+  useRenderedNetworkSync()
   return (
     <I18nProvider i18n={i18n}>
       <UnitsMount>

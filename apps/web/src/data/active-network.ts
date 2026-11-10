@@ -1,7 +1,34 @@
 import { parseNetworkParam, type NetworkId } from '@/lib/network'
 
-const listeners = new Set<() => void>()
-let current: NetworkId | undefined
+/**
+ * Two readings of "the network". The active one follows the route being loaded, so loaders and
+ * clients hit the right backend as soon as a navigation starts. The rendered one follows the page
+ * on screen and only changes when the navigation commits: anything drawn from the cache (source
+ * health, hydrated facts) reads it, so the old page never shows the new network's state while it
+ * waits for its replacement.
+ */
+interface NetworkStore {
+  get(): NetworkId | undefined
+  set(net: NetworkId): void
+  subscribe(cb: () => void): () => void
+}
+
+function networkStore(): NetworkStore {
+  const listeners = new Set<() => void>()
+  let current: NetworkId | undefined
+  return {
+    get: () => current,
+    set(net) {
+      if (current === net) return
+      current = net
+      for (const cb of [...listeners]) cb()
+    },
+    subscribe(cb) {
+      listeners.add(cb)
+      return () => listeners.delete(cb)
+    },
+  }
+}
 
 function fromLocation(): NetworkId {
   if (typeof location === 'undefined') return 'mainnet'
@@ -9,18 +36,29 @@ function fromLocation(): NetworkId {
   return parseNetworkParam(params.get('network') ?? undefined, params.get('net') ?? undefined).net
 }
 
+const active = networkStore()
+const rendered = networkStore()
+
 export function getActiveNetwork(): NetworkId {
-  current ??= fromLocation()
-  return current
+  let net = active.get()
+  if (!net) {
+    net = fromLocation()
+    active.set(net)
+  }
+  return net
 }
 
-export function setActiveNetwork(net: NetworkId): void {
-  if (current === net) return
-  current = net
-  for (const cb of [...listeners]) cb()
-}
+export const setActiveNetwork = (net: NetworkId): void => active.set(net)
+export const subscribeActiveNetwork = (cb: () => void): (() => void) => active.subscribe(cb)
 
-export function subscribeActiveNetwork(cb: () => void): () => void {
-  listeners.add(cb)
-  return () => listeners.delete(cb)
+export const getRenderedNetwork = (): NetworkId => rendered.get() ?? getActiveNetwork()
+export const setRenderedNetwork = (net: NetworkId): void => rendered.set(net)
+
+export function subscribeRenderedNetwork(cb: () => void): () => void {
+  const offRendered = rendered.subscribe(cb)
+  const offActive = active.subscribe(cb)
+  return () => {
+    offRendered()
+    offActive()
+  }
 }
