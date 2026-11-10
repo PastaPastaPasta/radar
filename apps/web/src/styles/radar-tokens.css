@@ -1,0 +1,224 @@
+/* Radar tokens: layer hues, the plate, data colours, motion. Values from docs/RADAR-DESIGN.md §4. Light on :root, dark under prefers-color-scheme and [data-theme="dark"]. */
+:root {
+  /* layer hues: Core = Dash blue, Platform = teal, Network = plate navy */
+  --rx-core: #0070c4;
+  --rx-core-ink: #ffffff;
+  --rx-core-soft: #e0effa;
+  --rx-core-line: #008de4;
+  --rx-core-text: #0067ad;
+  --rx-plat: #25b8a6;
+  --rx-plat-ink: #0a2a3d;
+  --rx-plat-soft: #dcf4f1;
+  --rx-plat-line: #1e9586;
+  --rx-plat-text: #0b6b60;
+  --rx-net: #0a2a3d;
+  --rx-net-ink: #cfe6f7;
+  --rx-net-soft: #e4ebf0;
+  --rx-net-line: #0a2a3d;
+  --rx-net-text: #0a2a3d;
+
+  /* the plate: Radar's dark island (network bands, the home scope). Same in both themes, a step lighter in dark. */
+  --rx-plate: #0a2a3d;
+  --rx-plate-2: #103650;
+  --rx-plate-3: #16435f;
+  --rx-plate-line: rgba(166, 216, 247, 0.16);
+  --rx-plate-dot: rgba(166, 216, 247, 0.36);
+  --rx-plate-0: #061e2d; /* wells on the plate */
+  --rx-plate-4: #1e5170; /* hover on plate-3 */
+  --rx-plate-edge: #2c5a78; /* decorative edges */
+  --rx-plate-ctl: #7a9db4; /* control borders, 3:1 on every plate surface */
+  --rx-callout: rgba(6, 30, 45, 0.92);
+  --rx-tip-core: #123f5c;
+  --rx-tip-core-line: #3d7ba6;
+  --rx-tip-plat: #0f4447;
+  --rx-tip-plat-line: #2e9c8f;
+  /* activity calendar levels: each 3:1 against the empty cell (--dh-sunken) */
+  --rx-cal-1: #1e9586;
+  --rx-cal-2: #0b6b60;
+  --rx-cal-3: #06403a;
+
+  /* ordered data: the family's blue ramp (--dh-ramp-1..5) plus a teal ramp for Platform series */
+  --rx-teal-1: #0b6b60;
+  --rx-teal-2: #1e9586;
+  --rx-teal-3: #25b8a6;
+  --rx-teal-4: #7fd6ca;
+  --rx-teal-5: #bdebe4;
+
+  /* identicon fills (hash → one of eight). Blue family and teal only: no purple, no status hues. */
+  --rx-id-0: #0070c4;
+  --rx-id-1: #1e9586;
+  --rx-id-2: #0a2a3d;
+  --rx-id-3: #2b90bc;
+  --rx-id-4: #0b6b60;
+  --rx-id-5: #4a6b85;
+  --rx-id-6: #1f7fb8;
+  --rx-id-7: #2e8f99;
+
+  /* testnet frame */
+  --rx-testnet: #f2c230;
+  --rx-testnet-ink: #0a2a3d;
+  --rx-testnet-soft: #fcf3d3;
+
+  /* liveness */
+  --rx-flash-core: color-mix(in srgb, var(--rx-core-line) 16%, transparent);
+  --rx-flash-plat: color-mix(in srgb, var(--rx-plat) 20%, transparent);
+
+  /* type additions */
+  --rx-fs-hero: 62px; /* one headline number per home */
+  --rx-fs-big: 34px; /* band KPI value */
+  --rx-fs-mono-sm: 12.5px;
+  --rx-dur-3: 240ms; /* entering rows, hover cards */
+  --rx-dur-4: 1200ms; /* flash fade, pings */
+  --rx-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --rx-hc-w: 340px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --rx-core: #1a9cf0;
+    --rx-core-ink: #0a2a3d;
+    --rx-core-soft: #0d2b40;
+    --rx-core-line: #1a9cf0;
+    --rx-core-text: #5ec2f6;
+    --rx-plat: #25b8a6;
+    --rx-plat-ink: #0a2a3d;
+    --rx-plat-soft: #103a40;
+    --rx-plat-line: #25b8a6;
+    --rx-plat-text: #5fd9c7;
+    --rx-net: #a6d8f7;
+    --rx-net-ink: #0a2a3d;
+    --rx-net-soft: #10222f;
+    --rx-net-line: #a6d8f7;
+    --rx-net-text: #a6d8f7;
+    --rx-plate: #0d3149;
+    --rx-plate-2: #123a52;
+    --rx-plate-3: #18475f;
+    --rx-teal-1: #bdebe4;
+    --rx-teal-2: #7fd6ca;
+    --rx-teal-3: #25b8a6;
+    --rx-teal-4: #1e9586;
+    --rx-teal-5: #155e57;
+    --rx-id-2: #a6d8f7;
+    --rx-id-5: #8fb3cc;
+    --rx-testnet: #f2c94c;
+    --rx-testnet-soft: #3a2f0c;
+    --rx-cal-1: #1e9586;
+    --rx-cal-2: #5fd9c7;
+    --rx-cal-3: #bdebe4;
+  }
+}
+:root[data-theme='dark'] {
+  --rx-core: #1a9cf0;
+  --rx-core-ink: #0a2a3d;
+  --rx-core-soft: #0d2b40;
+  --rx-core-line: #1a9cf0;
+  --rx-core-text: #5ec2f6;
+  --rx-plat: #25b8a6;
+  --rx-plat-ink: #0a2a3d;
+  --rx-plat-soft: #103a40;
+  --rx-plat-line: #25b8a6;
+  --rx-plat-text: #5fd9c7;
+  --rx-net: #a6d8f7;
+  --rx-net-ink: #0a2a3d;
+  --rx-net-soft: #10222f;
+  --rx-net-line: #a6d8f7;
+  --rx-net-text: #a6d8f7;
+  --rx-plate: #0d3149;
+  --rx-plate-2: #123a52;
+  --rx-plate-3: #18475f;
+  --rx-teal-1: #bdebe4;
+  --rx-teal-2: #7fd6ca;
+  --rx-teal-3: #25b8a6;
+  --rx-teal-4: #1e9586;
+  --rx-teal-5: #155e57;
+  --rx-id-2: #a6d8f7;
+  --rx-id-5: #8fb3cc;
+  --rx-testnet: #f2c94c;
+  --rx-testnet-soft: #3a2f0c;
+  --rx-cal-1: #1e9586;
+  --rx-cal-2: #5fd9c7;
+  --rx-cal-3: #bdebe4;
+}
+
+.rx-layer-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--rx-l, var(--rx-core-line));
+  flex: none;
+}
+[data-layer='core'] {
+  --rx-l: var(--rx-core-line);
+  --rx-l-fill: var(--rx-core);
+  --rx-l-ink: var(--rx-core-ink);
+  --rx-l-soft: var(--rx-core-soft);
+  --rx-l-text: var(--rx-core-text);
+}
+[data-layer='platform'] {
+  --rx-l: var(--rx-plat-line);
+  --rx-l-fill: var(--rx-plat);
+  --rx-l-ink: var(--rx-plat-ink);
+  --rx-l-soft: var(--rx-plat-soft);
+  --rx-l-text: var(--rx-plat-text);
+}
+[data-layer='network'] {
+  --rx-l: var(--rx-net-line);
+  --rx-l-fill: var(--rx-net);
+  --rx-l-ink: var(--rx-net-ink);
+  --rx-l-soft: var(--rx-net-soft);
+  --rx-l-text: var(--rx-net-text);
+}
+
+/* ============================================================ 3. the plate: a dark island
+   Inside .rx-plate every dh-* token takes its dark value, so family components work unchanged on the navy ground. */
+.rx-plate {
+  color-scheme: dark;
+  --dh-page: var(--rx-plate);
+  --dh-surface: var(--rx-plate-2);
+  --dh-sunken: var(--rx-plate-0);
+  --dh-raised: var(--rx-plate-3);
+  --dh-raised-hover: var(--rx-plate-4);
+  --dh-raised-line: var(--rx-plate-ctl);
+  --dh-chip: var(--rx-plate-3);
+  --dh-chip-line: var(--rx-plate-line);
+  --dh-hover: rgba(220, 232, 240, 0.06);
+  --dh-ink: #e4f3fc;
+  --dh-ink-2: #9bbdd2;
+  --dh-ink-3: #6a8292;
+  --dh-line: var(--rx-plate-line);
+  --dh-line-2: var(--rx-plate-ctl);
+  --dh-brand: #1a9cf0;
+  --dh-brand-ink: #8fd0fa;
+  --dh-brand-soft: #0d2b40;
+  --dh-good: #4cc38a;
+  --dh-good-soft: #0d2a1e;
+  --dh-warn: #f29c5f;
+  --dh-warn-soft: #33210c;
+  --dh-bad: #ff8f86;
+  --dh-bad-soft: #3a1614;
+  --dh-focus: #8fd0fa;
+  --dh-select: #1a9cf0;
+  --dh-ramp-1: #a9d9fa;
+  --dh-ramp-2: #62b8f3;
+  --dh-ramp-3: #2b90da;
+  --dh-ramp-4: #1f6ca3;
+  --dh-ramp-5: #1a4a6e;
+  --rx-core: #1a9cf0;
+  --rx-core-ink: #0a2a3d;
+  --rx-core-line: #1a9cf0;
+  --rx-core-text: #8fd0fa;
+  --rx-plat-text: #5fd9c7;
+  --rx-net: #a6d8f7;
+  --rx-net-ink: #0a2a3d;
+  --rx-net-line: #a6d8f7;
+  --rx-net-text: #a6d8f7;
+  background-color: var(--rx-plate);
+  color: var(--dh-ink);
+  background-image: radial-gradient(var(--rx-plate-line) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: -1px -1px;
+}
+
+:root {
+  scroll-padding-top: calc(var(--dh-bar-h) + 16px);
+}

@@ -1,4 +1,133 @@
-@import 'tailwindcss';
+@layer theme, base, dashhq, components, utilities;
 
-@theme {
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import '../vendor/dashhq/dashhq-tokens.css' layer(dashhq);
+@import '../vendor/dashhq/dashhq-shell.css' layer(dashhq);
+@import '../vendor/dashhq/dashhq-components.css' layer(dashhq);
+@import './styles/radar-tokens.css' layer(dashhq);
+@import './styles/radar-components.css' layer(components);
+@import './styles/radar-signatures.css' layer(components);
+@import './styles/radar-kit.css' layer(components);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme='light']), :root:not([data-theme='light']) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+}
+
+@theme inline {
+  /* family */
+  --color-page: var(--dh-page);
+  --color-surface: var(--dh-surface);
+  --color-sunken: var(--dh-sunken);
+  --color-raised: var(--dh-raised);
+  --color-chip: var(--dh-chip);
+  --color-hover: var(--dh-hover);
+  --color-ink: var(--dh-ink);
+  --color-ink-2: var(--dh-ink-2);
+  --color-ink-3: var(--dh-ink-3);
+  --color-line: var(--dh-line);
+  --color-line-2: var(--dh-line-2);
+  --color-brand: var(--dh-brand);
+  --color-brand-ink: var(--dh-brand-ink);
+  --color-brand-soft: var(--dh-brand-soft);
+  --color-act: var(--dh-act);
+  --color-act-ink: var(--dh-act-ink);
+  --color-select: var(--dh-select);
+  --color-select-soft: var(--dh-select-soft);
+  --color-good: var(--dh-good);
+  --color-good-soft: var(--dh-good-soft);
+  --color-warn: var(--dh-warn);
+  --color-warn-soft: var(--dh-warn-soft);
+  --color-bad: var(--dh-bad);
+  --color-bad-soft: var(--dh-bad-soft);
+  --color-ramp-1: var(--dh-ramp-1);
+  --color-ramp-2: var(--dh-ramp-2);
+  --color-ramp-3: var(--dh-ramp-3);
+  --color-ramp-4: var(--dh-ramp-4);
+  --color-ramp-5: var(--dh-ramp-5);
+  --font-sans: var(--dh-font);
+  --font-mono: var(--dh-mono);
+  --radius-1: var(--dh-r1);
+  --radius-2: var(--dh-r2);
+  --radius-3: var(--dh-r3);
+  --shadow-pop: var(--dh-shadow-pop);
+
+  /* layers */
+  --color-core: var(--rx-core);
+  --color-core-ink: var(--rx-core-ink);
+  --color-core-soft: var(--rx-core-soft);
+  --color-core-line: var(--rx-core-line);
+  --color-core-text: var(--rx-core-text);
+  --color-plat: var(--rx-plat);
+  --color-plat-ink: var(--rx-plat-ink);
+  --color-plat-soft: var(--rx-plat-soft);
+  --color-plat-line: var(--rx-plat-line);
+  --color-plat-text: var(--rx-plat-text);
+  --color-net: var(--rx-net);
+  --color-net-ink: var(--rx-net-ink);
+  --color-net-soft: var(--rx-net-soft);
+  --color-net-line: var(--rx-net-line);
+  --color-net-text: var(--rx-net-text);
+  --color-layer: var(--rx-l);
+  --color-layer-fill: var(--rx-l-fill);
+  --color-layer-ink: var(--rx-l-ink);
+  --color-layer-soft: var(--rx-l-soft);
+  --color-layer-text: var(--rx-l-text);
+
+  /* plate */
+  --color-plate: var(--rx-plate);
+  --color-plate-2: var(--rx-plate-2);
+  --color-plate-3: var(--rx-plate-3);
+  --color-plate-line: var(--rx-plate-line);
+  --color-plate-dot: var(--rx-plate-dot);
+  --color-plate-0: var(--rx-plate-0);
+  --color-plate-4: var(--rx-plate-4);
+  --color-plate-edge: var(--rx-plate-edge);
+  --color-plate-ctl: var(--rx-plate-ctl);
+  --color-callout: var(--rx-callout);
+  --color-tip-core: var(--rx-tip-core);
+  --color-tip-core-line: var(--rx-tip-core-line);
+  --color-tip-plat: var(--rx-tip-plat);
+  --color-tip-plat-line: var(--rx-tip-plat-line);
+  --color-cal-1: var(--rx-cal-1);
+  --color-cal-2: var(--rx-cal-2);
+  --color-cal-3: var(--rx-cal-3);
+
+  /* data */
+  --color-teal-1: var(--rx-teal-1);
+  --color-teal-2: var(--rx-teal-2);
+  --color-teal-3: var(--rx-teal-3);
+  --color-teal-4: var(--rx-teal-4);
+  --color-teal-5: var(--rx-teal-5);
+  --color-id-0: var(--rx-id-0);
+  --color-id-1: var(--rx-id-1);
+  --color-id-2: var(--rx-id-2);
+  --color-id-3: var(--rx-id-3);
+  --color-id-4: var(--rx-id-4);
+  --color-id-5: var(--rx-id-5);
+  --color-id-6: var(--rx-id-6);
+  --color-id-7: var(--rx-id-7);
+  --color-testnet: var(--rx-testnet);
+  --color-testnet-ink: var(--rx-testnet-ink);
+  --color-testnet-soft: var(--rx-testnet-soft);
+  --color-flash-core: var(--rx-flash-core);
+  --color-flash-plat: var(--rx-flash-plat);
+
+  /* type, motion, sizes */
+  --text-hero: 62px;
+  --text-big: 34px;
+  --text-mono-sm: 12.5px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-enter: rx-enter 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-flash: rx-flash 1200ms ease-out;
+  --width-hovercard: 340px;
+  --container-hovercard: 340px;
 }

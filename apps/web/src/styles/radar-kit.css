@@ -1,0 +1,658 @@
+/* Radar kit additions: states the mockups show but radar.css leaves to the components. */
+
+/* chips, hashes, copy */
+.rx-chipwrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  min-width: 0;
+  vertical-align: middle;
+}
+.rx-chip__name {
+  font-size: 13px;
+}
+.rx-chip--sm {
+  gap: 6px;
+}
+.rx-chip--sm .rx-chip__text,
+.rx-chip--sm .rx-chip__name {
+  font-size: 12.5px;
+}
+.rx-chip--sm .rx-glyph {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+.rx-chip--sm .rx-glyph .rx-ico {
+  width: 11px;
+  height: 11px;
+}
+.rx-chip--strong .rx-chip__text {
+  font-weight: 600;
+}
+.rx-hash {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2px;
+  max-width: 100%;
+  min-width: 0;
+  vertical-align: middle;
+}
+.rx-hash .rx-mono {
+  font-size: 13px;
+  color: var(--dh-ink);
+}
+.rx-hash-full {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.rx-hash-full.is-wrap {
+  word-break: break-all;
+}
+.rx-hash .rx-copy {
+  margin-top: -1px;
+}
+.rx-time {
+  font-variant-numeric: tabular-nums;
+}
+.rx-amt--pos {
+  color: var(--dh-good);
+}
+.rx-fiat {
+  margin-left: 4px;
+}
+
+/* hover card */
+.rx-hc--pop {
+  position: relative;
+  z-index: 45;
+  transform-origin: var(--radix-hover-card-content-transform-origin);
+}
+.rx-hc__inner {
+  display: block;
+}
+.rx-hc .rx-hc__foot {
+  flex-wrap: wrap;
+}
+
+/* badges */
+.rx-badge--sm {
+  height: 18px;
+  padding-inline: 6px;
+  font-size: 11px;
+}
+
+/* source marks and live dots */
+.rx-sources--compact {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  vertical-align: middle;
+}
+.rx-sources .dh-spin {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+}
+.rx-srcline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-srcline time {
+  color: var(--dh-ink-2);
+}
+.rx-livedot {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: var(--dh-w-ui) var(--dh-fs-sm) / 1 var(--dh-font);
+  color: var(--dh-ink);
+}
+.rx-fresh--unknown {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--dh-ink-3);
+}
+.rx-live__word {
+  white-space: nowrap;
+}
+
+/* stat, delta, meter, sparkline */
+.rx-stat__meter {
+  height: 6px;
+  margin-top: 6px;
+}
+.rx-delta--good {
+  color: var(--dh-good);
+}
+.rx-delta--bad {
+  color: var(--dh-bad);
+}
+.rx-meterbox {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.rx-meterbox--marked {
+  padding-top: 18px;
+}
+.rx-meterbox__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-meterbox__head .rx-num {
+  color: var(--dh-ink);
+  font-weight: var(--dh-w-ui);
+}
+.rx-meter--bad > i {
+  background: var(--dh-bad);
+}
+.rx-meter__mlabel {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11.5px;
+  font-weight: var(--dh-w-ui);
+  color: var(--dh-ink-2);
+}
+.rx-sparkbox {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  padding-right: 3px;
+}
+.rx-sparkbox .rx-spark {
+  position: absolute;
+  inset: 0 3px 0 0;
+  width: calc(100% - 3px);
+  height: 100%;
+  overflow: visible;
+}
+.rx-spark__dot {
+  position: absolute;
+  left: calc((100% - 3px) * var(--k));
+  top: var(--y);
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--rx-l, var(--dh-brand));
+  box-shadow: 0 0 0 2px var(--dh-surface);
+}
+
+/* skeletons */
+.rx-skels {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.rx-skels--stat,
+.rx-skels--chip {
+  gap: 10px;
+}
+.rx-skel--block {
+  border-radius: var(--dh-r3);
+}
+.rx-skel-stat {
+  display: grid;
+  gap: 8px;
+}
+.rx-skel--value {
+  width: 120px;
+  height: 26px;
+}
+.rx-skel-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.rx-skel-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.rx-skel--glyph {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  flex: none;
+}
+.rx-skel-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.rx-skel-chart .rx-skel {
+  flex: 1;
+  height: 50%;
+  border-radius: 2px 2px 0 0;
+  opacity: 0.5;
+}
+.rx-skelrow td {
+  height: 53px;
+}
+.rx-skelrow:hover {
+  background: none;
+}
+
+/* empty and error */
+.rx-empty__tile--warn {
+  background: var(--dh-warn-soft);
+  color: var(--dh-warn);
+}
+.rx-errrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  color: var(--dh-ink);
+  font-size: var(--dh-fs-ui);
+  white-space: normal;
+}
+.rx-errrow .rx-ico {
+  color: var(--dh-bad);
+}
+.rx-errrow .dh-btn {
+  margin-left: auto;
+}
+
+/* cards, sections, key-values */
+.rx-card__sub {
+  margin: 0;
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-card__lag {
+  margin: 0 20px 10px;
+  font-size: 12.5px;
+  color: var(--dh-warn);
+}
+.rx-card__body--flush {
+  padding: 0;
+}
+.rx-card__head:hover .rx-sec__copy,
+.rx-card__head:focus-within .rx-sec__copy {
+  opacity: 1;
+}
+.rx-sec__copy {
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--dh-ink-2);
+  cursor: pointer;
+}
+.rx-sec__copy:hover {
+  background: var(--dh-hover);
+  color: var(--dh-ink);
+}
+.rx-sec__copy:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 1px;
+}
+@media (hover: none) {
+  .rx-sec__copy {
+    opacity: 1;
+  }
+}
+.rx-kv {
+  grid-template-columns: var(--rx-kv-label, 160px) minmax(0, 1fr);
+}
+.rx-split > aside,
+.rx-aside {
+  --rx-kv-label: 110px;
+}
+.rx-kv__hint {
+  display: block;
+  font-size: 12.5px;
+  color: var(--dh-ink-2);
+}
+.rx-kvgrid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  gap: 0 24px;
+}
+.rx-kvgrid[data-columns='2'] {
+  --cols: 2;
+}
+.rx-kvgrid[data-columns='3'] {
+  --cols: 3;
+}
+.rx-kvgrid .rx-kv {
+  grid-template-columns: minmax(0, 120px) minmax(0, 1fr);
+}
+@media (max-width: 860px) {
+  .rx-kvgrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* tabs */
+.rx-tabs li {
+  display: flex;
+}
+.rx-tabs__off {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  color: var(--dh-ink-3);
+  cursor: default;
+  white-space: nowrap;
+  font: var(--dh-w-ui) var(--dh-fs-ui) / 1 var(--dh-font);
+}
+.rx-go-ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--dh-brand-ink);
+  text-decoration: none;
+  font-size: var(--dh-fs-sm);
+}
+.rx-go-ext:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rx-go-ext:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+  border-radius: var(--dh-r1);
+}
+.rx-ext {
+  width: 13px;
+  height: 13px;
+}
+
+/* data table */
+.rx-tablewrap {
+  position: relative;
+}
+.rx-tablescroll {
+  min-width: 0;
+}
+@media (max-width: 1023px) {
+  .rx-tablescroll {
+    overflow-x: auto;
+  }
+  .rx-table th {
+    position: static;
+  }
+}
+@media (max-width: 640px) {
+  .rx-tablescroll {
+    overflow-x: visible;
+  }
+  .rx-tablewrap--scroll .rx-tablescroll {
+    overflow-x: auto;
+  }
+}
+.rx-table--scrolls {
+  min-width: 720px;
+}
+.rx-tablewrap--scroll .rx-table--scrolls th:first-child,
+.rx-tablewrap--scroll .rx-table--scrolls td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--dh-surface);
+  box-shadow: 1px 0 0 var(--dh-line);
+}
+.rx-tablewrap--scroll::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  pointer-events: none;
+  background: linear-gradient(to left, var(--dh-surface), transparent);
+}
+.rx-table caption {
+  text-align: left;
+}
+.rx-table--link tbody tr {
+  cursor: pointer;
+}
+.rx-table tbody tr:focus {
+  outline: none;
+}
+.rx-table tbody tr:focus-visible {
+  outline: none;
+  background: var(--dh-select-soft);
+  box-shadow: inset 3px 0 0 var(--dh-select);
+}
+.rx-cellbtn:hover::after,
+.rx-cellbtn:focus-visible::after {
+  content: '';
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-left: 5px;
+  vertical-align: -1px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M4 5h16l-6 7.5V19l-4 2v-8.5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M4 5h16l-6 7.5V19l-4 2v-8.5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+.rx-loadmore td {
+  height: 40px;
+}
+.rx-pad td {
+  padding: 0;
+  border: 0;
+}
+.rx-pad:hover {
+  background: none;
+}
+.rx-newrows {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--dh-select);
+  border-radius: 14px;
+  background: var(--dh-select-soft);
+  color: var(--dh-brand-ink);
+  font: 600 var(--dh-fs-sm) / 1 var(--dh-font);
+  cursor: pointer;
+}
+.rx-newrows:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+}
+.rx-tfoot .rx-keys kbd + kbd {
+  margin-left: 0;
+}
+.rx-activef b {
+  color: var(--dh-ink);
+}
+.rx-activef__note {
+  margin-left: auto;
+}
+.rx-pager .dh-btn {
+  text-decoration: none;
+}
+.rx-go--up::after {
+  content: ' \2191';
+}
+@media (max-width: 640px) {
+  .rx-table--cards tbody tr {
+    cursor: pointer;
+  }
+  .rx-skelrow td:not(:first-child) {
+    display: none;
+  }
+  .rx-errrow {
+    padding: 8px 0;
+  }
+}
+
+/* charts */
+.rx-chart {
+  margin: 0;
+  min-width: 0;
+}
+.rx-chart__view {
+  width: 100%;
+  height: 100%;
+}
+.rx-chart__cap {
+  margin-top: 6px;
+  text-align: right;
+}
+.rx-chart__table {
+  margin-top: 8px;
+  overflow-x: auto;
+}
+
+/* ⌘K palette */
+.rx-pal {
+  display: flex;
+  flex-direction: column;
+  animation: rx-palin var(--dh-dur-2) var(--dh-ease);
+}
+.rx-pal__cmd {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.rx-pal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.rx-pal__input kbd {
+  flex: none;
+}
+.rx-pal__cancel {
+  all: unset;
+  display: none;
+  flex: none;
+  color: var(--dh-brand-ink);
+  font-weight: var(--dh-w-strong);
+  cursor: pointer;
+  font-size: 15px;
+}
+.rx-pal__cancel:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.rx-pal__empty {
+  padding: 28px 18px;
+  font-size: var(--dh-fs-ui);
+  color: var(--dh-ink-2);
+}
+[cmdk-group-heading] {
+  padding: 0;
+}
+.rx-pal__group svg {
+  flex: none;
+}
+.rx-pal__group .n {
+  margin-left: 2px;
+}
+.rx-prev {
+  display: grid;
+  gap: 0;
+}
+.rx-prev .rx-hc__foot {
+  margin-top: 14px;
+}
+.rx-prev .rx-hc__foot .rx-go {
+  margin-left: auto;
+}
+@keyframes rx-palin {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+@media (max-width: 760px) {
+  .rx-pal {
+    animation-name: rx-palin-full;
+  }
+  .rx-pal__cancel {
+    display: inline-block;
+  }
+  .rx-pal__input kbd {
+    display: none;
+  }
+}
+@keyframes rx-palin-full {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* plate variants of kit parts */
+.rx-plate .rx-type {
+  background: var(--rx-plate-3);
+}
+.rx-plate .rx-skel {
+  background: linear-gradient(
+    90deg,
+    var(--rx-plate-0) 0,
+    var(--rx-plate-3) 50%,
+    var(--rx-plate-0) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* stat tiles adapt to their column width */
+.rx-stat {
+  container-type: inline-size;
+}
+.rx-stat__value {
+  font-size: clamp(22px, 17cqi, var(--dh-fs-stat));
+}
+.rx-stat--big .rx-stat__value {
+  font-size: clamp(26px, 20cqi, var(--rx-fs-big));
+}
+.rx-stat .rx-sources {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.rx-stat .rx-src {
+  max-width: 100%;
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+button.rx-srcline {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.rx-srcline:hover {
+  text-decoration: underline;
+}
