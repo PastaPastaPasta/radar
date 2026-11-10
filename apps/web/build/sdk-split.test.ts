@@ -10,7 +10,9 @@ describe('split SDK build', () => {
   })
 
   it('aliases the package entry and its wasm entry', () => {
-    const config = sdkSplit().config as () => { resolve: { alias: { replacement: string }[] } }
+    const config = sdkSplit().config as unknown as () => {
+      resolve: { alias: { replacement: string }[] }
+    }
     const aliases = config().resolve.alias.map((a) => a.replacement)
     expect(aliases).toContain(evoSdkSourceFile())
     expect(aliases.some((a) => a.endsWith('wasm-split.ts'))).toBe(true)

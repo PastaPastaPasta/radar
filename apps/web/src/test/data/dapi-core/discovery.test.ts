@@ -70,7 +70,10 @@ function memoryStore(initial?: {
   }
 }
 
-const okFetch = () => vi.fn(() => Promise.resolve(new Response(JSON.stringify(body))))
+const okFetch = () =>
+  vi.fn<(url: string) => Promise<Response>>(() =>
+    Promise.resolve(new Response(JSON.stringify(body))),
+  )
 
 describe('discoverNodes', () => {
   it('starts from the bundled seeds and refreshes from the quorum service behind them', async () => {
