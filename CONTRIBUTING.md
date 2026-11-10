@@ -18,9 +18,10 @@ pnpm --filter @radar/web dev
 | `pnpm test`                       | Vitest unit and component tests                                              |
 | `pnpm build`                      | Production build of every package                                            |
 | `pnpm size`                       | Fails if the initial JS of `apps/web/dist` exceeds 220 kB gzipped            |
+| `pnpm check:bundle`               | Fails if the production build contains the fixture worker or the kit page    |
 | `pnpm test:review`                | Unit tests for the review harness in `review/`                               |
 | `pnpm check:stories`              | Lists user stories no e2e test is tagged with; fails on tags naming no story |
-| `pnpm e2e:fixtures`               | Playwright (Chromium) against a `vite preview` of a fresh web build          |
+| `pnpm e2e:fixtures`               | Playwright (Chromium) against a fixture build served by the edge Worker      |
 | `pnpm e2e:fixtures --grep @RA-20` | Only tests tagged `@RA-20`; `pnpm e2e:smoke` runs the `@smoke` subset        |
 | `pnpm e2e:live`                   | The `@live` tests against live services; not part of CI                      |
 
