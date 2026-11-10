@@ -18,6 +18,7 @@ const featureZones = FEATURES.flatMap((feature) => {
   const clientFiles = [
     ...HTTP_SOURCES.map((source) => at('data', source, 'client.ts')),
     at('data/http.ts'),
+    at('data/hyphen/stream.ts'),
     at('data/sdk/worker'),
     ...['nodes', 'transport', 'client', 'streams', 'cache'].map((f) =>
       at('data/dapi-core', `${f}.ts`),
@@ -99,10 +100,33 @@ const sourceClientPatterns = [
   },
 ]
 
-const queryKeySelector = {
-  selector: "Property[key.name='queryKey'] > ArrayExpression",
-  message: 'Build query keys with the factories in data/query/keys.ts (docs/ARCHITECTURE.md §5.1)',
-}
+const queryKeyMessage =
+  'Build query keys with the factories in data/query/keys.ts (docs/ARCHITECTURE.md §5.1)'
+const queryKeySelectors = [
+  'ArrayExpression',
+  'TSAsExpression > ArrayExpression',
+  'TSSatisfiesExpression > ArrayExpression',
+  'TSTypeAssertion > ArrayExpression',
+].map((shape) => ({
+  selector: `Property[key.name='queryKey'] > ${shape}, Property[key.value='queryKey'] > ${shape}`,
+  message: queryKeyMessage,
+}))
+const provedMessage =
+  'Only data/sdk sets `proved`, and only from a verified *WithProof response (docs/ARCHITECTURE.md §2.1)'
+const provedSelectors = [
+  'Literal',
+  'TSAsExpression > Literal',
+  'TSSatisfiesExpression > Literal',
+].map((shape) => ({
+  selector: `Property[key.name='proved'] > ${shape}[value=true], Property[key.value='proved'] > ${shape}[value=true]`,
+  message: provedMessage,
+}))
+const guardedSelectors = [...queryKeySelectors, ...provedSelectors]
+const globalFetchProperties = ['window', 'globalThis', 'self'].map((object) => ({
+  object,
+  property: 'fetch',
+  message: 'Fetch through a data/*/queries.ts factory (docs/ARCHITECTURE.md §1.2)',
+}))
 const sdkWriteSelector = {
   selector:
     "MemberExpression[property.name=/^(broadcast\\w*|create|publish|transfer|masternodeVote|topUp|withdraw|purchase|mint|burn|freeze|unfreeze|destroyFrozenFunds|emergencyAction|claim|setPrice)$/]:not([object.name='Comlink'])",
@@ -113,6 +137,7 @@ const testFiles = ['**/*.test.{ts,tsx}', `${SRC.slice(2)}/test/**`]
 const web = `${SRC.slice(2)}/**/*.{ts,tsx}`
 
 export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
+  const rel = SRC.slice(2)
   return [
     {
       files: [web],
@@ -124,21 +149,21 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
       },
       rules: {
         'import-x/no-restricted-paths': ['error', { basePath: import.meta.dirname, zones }],
-        'no-restricted-syntax': ['error', queryKeySelector],
+        'no-restricted-syntax': ['error', ...guardedSelectors],
       },
     },
     {
-      files: [`${SRC.slice(2)}/{lib,data}/**/*.{ts,tsx}`],
+      files: [`${rel}/{lib,data}/**/*.{ts,tsx}`],
       rules: {
         'no-restricted-imports': ['error', { patterns: [...reactPatterns, queryHookPattern] }],
       },
     },
     {
-      files: [`${SRC.slice(2)}/data/health.ts`, `${SRC.slice(2)}/data/query/batch.ts`],
+      files: [`${rel}/data/health.ts`, `${rel}/data/query/batch.ts`],
       rules: { 'no-restricted-imports': 'off' },
     },
     {
-      files: [`${SRC.slice(2)}/{ui,features,routes,shell}/**/*.{ts,tsx}`],
+      files: [`${rel}/{ui,features,routes,shell}/**/*.{ts,tsx}`],
       ignores: testFiles,
       rules: {
         'no-restricted-imports': ['error', { patterns: sourceClientPatterns }],
@@ -149,17 +174,30 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
       },
     },
     {
-      files: [`${SRC.slice(2)}/**/queries.ts`, ...testFiles],
-      rules: { 'no-restricted-syntax': 'off' },
+      files: [web],
+      ignores: [`${rel}/data/**`, ...testFiles],
+      rules: { 'no-restricted-properties': ['error', ...globalFetchProperties] },
     },
     {
-      files: [`${SRC.slice(2)}/data/sdk/**/*.{ts,tsx}`],
+      files: [`${rel}/**/queries.ts`],
+      rules: { 'no-restricted-syntax': ['error', ...provedSelectors] },
+    },
+    {
+      files: [`${rel}/ui/kit/**/*.{ts,tsx}`],
+      rules: { 'no-restricted-syntax': ['error', ...queryKeySelectors] },
+    },
+    {
+      files: [`${rel}/data/sdk/**/*.{ts,tsx}`],
       ignores: testFiles,
-      rules: { 'no-restricted-syntax': ['error', queryKeySelector, sdkWriteSelector] },
+      rules: { 'no-restricted-syntax': ['error', ...queryKeySelectors, sdkWriteSelector] },
     },
     {
-      files: [`${SRC.slice(2)}/data/sdk/**/queries.ts`],
+      files: [`${rel}/data/sdk/**/queries.ts`],
       rules: { 'no-restricted-syntax': ['error', sdkWriteSelector] },
+    },
+    {
+      files: testFiles,
+      rules: { 'no-restricted-syntax': 'off', 'no-restricted-properties': 'off' },
     },
   ]
 }
