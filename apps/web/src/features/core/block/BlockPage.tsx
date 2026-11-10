@@ -1,5 +1,378 @@
-import { RoutePlaceholder } from '@/features/entity'
+import { plural } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react/macro'
+import { Link } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useMemo } from 'react'
+import { coreQueries } from '@/data/core/queries'
+import type { DecodedBlock, DecodedTx } from '@/data/core/types'
+import { stampOf } from '@/data/envelope'
+import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
+import { hyQueries } from '@/data/hyphen/queries'
+import { formatBytes, formatInt, formatNumber } from '@/lib/format'
+import {
+  Amount,
+  Badge,
+  Card,
+  DataTable,
+  Hash,
+  Icon,
+  KeyValue,
+  Skeleton,
+  SourceLine,
+  Stat,
+  Time,
+  TypeBadge,
+} from '@/ui'
+import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
+import { CbTxRows } from '../tx/Payload'
+import { CoreBand, NotFound, RecordHeader, Section } from './frame'
+import { useHyphenFit } from './use-hyphen-fit'
 
-export function BlockPage({ id }: { id: string }) {
-  return <RoutePlaceholder path="/block/$id" params={{ id }} />
+export const TXS_PER_PAGE = 100
+
+const HASH = /^[0-9a-f]{64}$/i
+const HEIGHT = /^\d{1,9}$/
+
+export function parseBlockRef(id: string): { height: number } | { hash: string } | null {
+  if (HEIGHT.test(id)) return { height: Number(id) }
+  if (HASH.test(id)) return { hash: id.toLowerCase() }
+  return null
+}
+
+export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const ref = parseBlockRef(id)
+  useDocumentTitle(ref && 'height' in ref ? t`Block ${formatInt(ref.height)}` : t`Block`)
+  const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
+  const tip = useQuery({ ...coreQueries.tip(net), enabled: ref !== null })
+
+  if (!ref || block.data?.data === null) {
+    return (
+      <NotFound
+        net={net}
+        path={`/block/${id}`}
+        what={t`There is no block with this height or hash on this network.`}
+      />
+    )
+  }
+  if (block.isError && !block.data) {
+    return (
+      <div className="dh-container" style={{ paddingBlock: '48px 80px' }}>
+        <Card
+          layer="core"
+          source={undefined}
+          state="error"
+          error={block.error}
+          onRetry={() => void block.refetch()}
+        >
+          {null}
+        </Card>
+      </div>
+    )
+  }
+  if (!block.data?.data) return <BlockSkeleton />
+
+  return (
+    <BlockView
+      block={block.data.data}
+      stamp={stampOf(block.data)}
+      tipHeight={tip.data?.data.height}
+      page={page}
+    />
+  )
+}
+
+function BlockSkeleton() {
+  return (
+    <CoreBand crumbs={[]} current="/blocks">
+      <div className="rx-rec" aria-busy="true">
+        <h1 className="rx-rec__title" id="h-page">
+          <Skeleton shape="line" width="40%" />
+        </h1>
+      </div>
+      <div className="rx-kpis">
+        <Skeleton shape="stat" count={4} />
+      </div>
+    </CoreBand>
+  )
+}
+
+const pageLink = (id: string, page: number) =>
+  ({
+    to: '/block/$id',
+    params: { id },
+    search: (s: Record<string, unknown>) => ({ ...s, page: page === 1 ? undefined : page }),
+  }) as never
+
+function BlockView({
+  block,
+  stamp,
+  tipHeight,
+  page,
+}: {
+  block: DecodedBlock
+  stamp: ReturnType<typeof stampOf>
+  tipHeight: number | undefined
+  page: number
+}) {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const hyphenFit = useHyphenFit(net)
+  const hy = useQuery({ ...hyQueries.block(net, block.hash), enabled: hyphenFit })
+  const coinbase = block.txs[0]
+  const pool = poolOf(coinbase)
+  const reward = blockReward(block)
+  const cb = cbTxOf(block)
+  const confirmations =
+    tipHeight === undefined ? undefined : Math.max(1, tipHeight - block.height + 1)
+  const hasNext = tipHeight !== undefined && block.height < tipHeight
+  const pages = Math.max(1, Math.ceil(block.txs.length / TXS_PER_PAGE))
+  const current = Math.min(Math.max(1, page), pages)
+  const slice = block.txs.slice((current - 1) * TXS_PER_PAGE, current * TXS_PER_PAGE)
+  const offset = (current - 1) * TXS_PER_PAGE
+  const quorumCommitments = block.txs.filter((x) => x.type === 'quorum-commitment').length
+  const chainwork = hy.data?.data?.chainwork
+
+  const columns = useMemo<ColumnDef<DecodedTx & { n: number }>[]>(
+    () => [
+      { id: 'n', header: '#', accessorFn: (r) => r.n, meta: { numeric: true, phone: 'secondary' } },
+      {
+        id: 'tx',
+        header: t`Transaction`,
+        cell: ({ row }) => <Entity kind="tx" id={row.original.txid} />,
+        meta: { phone: 'title' },
+      },
+      {
+        id: 'type',
+        header: t`Type`,
+        cell: ({ row }) => <TypeBadge type={row.original.type} />,
+        meta: { phone: 'primary' },
+      },
+      {
+        id: 'io',
+        header: t`Inputs → outputs`,
+        accessorFn: (r) => `${formatInt(r.inputs.length)} → ${formatInt(r.outputs.length)}`,
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'size',
+        header: t`Size`,
+        accessorFn: (r) => formatBytes(r.size),
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'out',
+        header: t`Total out`,
+        cell: ({ row }) => (
+          <Amount value={row.original.outputs.reduce((sum, o) => sum + o.value, 0n)} kind="duffs" />
+        ),
+        meta: { numeric: true, align: 'end' },
+      },
+    ],
+    [t],
+  )
+  const rows = useMemo(() => slice.map((x, i) => ({ ...x, n: offset + i })), [slice, offset])
+
+  return (
+    <article data-page="/block/$id" data-layer="core">
+      <CoreBand
+        current="/blocks"
+        crumbs={[
+          { label: t`Core`, to: <Link to="/blocks">{t`Core`}</Link> },
+          { label: t`Block ${formatInt(block.height)}` },
+        ]}
+      >
+        <RecordHeader
+          icon="block"
+          kicker={
+            <>
+              <span className="rx-type" data-layer="core">
+                <Icon name="block" />
+                {t`Block`}
+              </span>
+              <span>
+                {t`Version ${block.version.toString(16)}`} ·{' '}
+                {plural(block.txs.length, { one: '# transaction', other: '# transactions' })}
+              </span>
+            </>
+          }
+          title={t`Block ${formatInt(block.height)}`}
+          actions={
+            <>
+              <Link
+                className="dh-btn"
+                to="/block/$id"
+                params={{ id: block.prevHash }}
+                aria-label={t`Previous block`}
+                data-nav="prev"
+              >
+                {t`← Previous`}
+              </Link>
+              {hasNext ? (
+                <Link
+                  className="dh-btn"
+                  to="/block/$id"
+                  params={{ id: String(block.height + 1) }}
+                  aria-label={t`Next block`}
+                  data-nav="next"
+                >
+                  {t`Next →`}
+                </Link>
+              ) : null}
+            </>
+          }
+          meta={
+            <>
+              <div className="rx-rec__meta">
+                <span className="rx-dim">{t`Hash`}</span>
+                <Hash value={block.hash} display="full" />
+              </div>
+              <div className="rx-rec__meta">
+                {block.chainLocked ? (
+                  <Badge tone="success" icon={<Icon name="cl" size="sm" />}>
+                    {t`ChainLocked`}
+                  </Badge>
+                ) : (
+                  <Badge tone="warning">{t`Not ChainLocked yet`}</Badge>
+                )}
+                {confirmations === undefined ? null : (
+                  <span>
+                    {plural(confirmations, { one: '# confirmation', other: '# confirmations' })}
+                  </span>
+                )}
+                <SourceLine stamp={stamp} />
+              </div>
+            </>
+          }
+        />
+        <div className="rx-kpis">
+          <Stat
+            size="lg"
+            layer="core"
+            label={t`Transactions`}
+            value={formatInt(block.txs.length)}
+            note={formatBytes(block.size)}
+          />
+          <Stat
+            label={t`Block reward`}
+            value={<Amount value={reward} kind="duffs" />}
+            note={t`Everything the coinbase pays out`}
+          />
+          <Stat
+            label={t`Mined by`}
+            value={pool ?? t`Unknown pool`}
+            note={
+              pool ? t`From the coinbase tag` : coinbaseTag(coinbase) || t`No tag in the coinbase`
+            }
+          />
+          <Stat
+            label={t`Time`}
+            value={<Time ms={block.time} mode="absolute" />}
+            note={<Time ms={block.time} mode="relative" live />}
+          />
+        </div>
+      </CoreBand>
+
+      <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
+        <Section id="header" title={t`Header`} source={stamp}>
+          <Card layer="core">
+            <KeyValue
+              columns={2}
+              items={[
+                { label: t`Height`, value: formatInt(block.height) },
+                { label: t`Time`, value: <Time ms={block.time} mode="both" /> },
+                { label: t`Size`, value: `${formatInt(block.size)} bytes` },
+                {
+                  label: t`Difficulty`,
+                  value: formatNumber(difficultyFromBits(block.bits), {
+                    maximumFractionDigits: 2,
+                  }),
+                },
+                { label: t`Bits`, value: <span className="rx-mono">{block.bits}</span> },
+                { label: t`Nonce`, value: formatInt(block.nonce) },
+                { label: t`Merkle root`, value: <Hash value={block.merkleRoot} display="wrap" /> },
+                {
+                  label: t`Chainwork`,
+                  value: chainwork ? (
+                    <Hash value={chainwork} display="wrap" />
+                  ) : (
+                    <span className="rx-dim">{t`Not in DAPI`}</span>
+                  ),
+                  source: hy.data ? stampOf(hy.data) : undefined,
+                },
+                {
+                  label: t`Version`,
+                  value: <span className="rx-mono">{block.version.toString(16)}</span>,
+                },
+                {
+                  label: t`Previous block`,
+                  value: (
+                    <Entity
+                      kind="block"
+                      id={block.prevHash}
+                      label={t`Block ${formatInt(Math.max(0, block.height - 1))}`}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </Card>
+        </Section>
+
+        {cb ? (
+          <Section
+            id="coinbase"
+            title={t`Coinbase payload`}
+            description={t`Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock.`}
+            source={stamp}
+          >
+            <Card layer="core">
+              <div data-payload="cbTx">
+                <CbTxRows payload={cb} />
+                {quorumCommitments > 0 ? (
+                  <p className="rx-note">
+                    {plural(quorumCommitments, {
+                      one: '# quorum commitment in this block',
+                      other: '# quorum commitments in this block',
+                    })}
+                  </p>
+                ) : null}
+              </div>
+            </Card>
+          </Section>
+        ) : null}
+
+        <Section
+          id="transactions"
+          title={t`Transactions`}
+          description={plural(block.txs.length, { one: '# transaction', other: '# transactions' })}
+          source={stamp}
+        >
+          <Card layer="core" padding="flush">
+            <DataTable
+              caption={t`Transactions in block ${formatInt(block.height)}`}
+              columns={columns}
+              rows={rows}
+              getRowId={(r) => r.txid}
+              state="ready"
+              paging={
+                pages > 1
+                  ? {
+                      kind: 'page',
+                      page: current,
+                      limit: TXS_PER_PAGE,
+                      total: block.txs.length,
+                      to: (p) => pageLink(String(block.height), p),
+                    }
+                  : undefined
+              }
+              rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
+            />
+          </Card>
+        </Section>
+      </div>
+    </article>
+  )
 }
