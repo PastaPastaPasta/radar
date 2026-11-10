@@ -2157,3 +2157,13 @@ button.rx-src--proof:hover {
   font-size: 11px;
   padding: 0 5px;
 }
+
+/* Dialogs mark <body> with data-scroll-locked (src/app/remove-scroll-bar.ts); this is the lock. */
+body[data-scroll-locked] {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+html:has(body[data-scroll-locked]) {
+  scrollbar-gutter: stable;
+}

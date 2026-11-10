@@ -33,7 +33,13 @@ export default defineConfig(({ mode }) => {
       fixtureWorker(fixtures),
     ],
     resolve: {
-      alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+      alias: [
+        { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+        {
+          find: /^react-remove-scroll-bar$/,
+          replacement: fileURLToPath(new URL('./src/app/remove-scroll-bar.ts', import.meta.url)),
+        },
+      ],
     },
     server: { proxy: fixtures ? undefined : hyphenProxy() },
     preview: { proxy: fixtures ? undefined : hyphenProxy() },

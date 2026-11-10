@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from '../helpers/test'
 
 test('home page renders', { tag: '@smoke' }, async ({ page }) => {
   await page.goto('/')

@@ -94,6 +94,16 @@ test.describe('ui kit', () => {
     await expect(page.locator('.rx-hc')).toBeHidden()
   })
 
+  test('an open dialog locks page scrolling without an inline style', async ({ page }) => {
+    await page.keyboard.press('Control+k')
+    await expect(page.getByRole('dialog')).toBeVisible()
+    await expect(page.locator('body')).toHaveAttribute('data-scroll-locked', /\d+/)
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).toBe('hidden')
+    await page.keyboard.press('Escape')
+    await expect(page.locator('body')).not.toHaveAttribute('data-scroll-locked', /.*/)
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe('hidden')
+  })
+
   test('theme control switches the page between light and dark', async ({ page }) => {
     await page.getByRole('button', { name: 'Dark' }).click()
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
