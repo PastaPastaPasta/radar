@@ -3,7 +3,7 @@ import { Card, Empty, Hash, KeyValue } from '@/ui'
 import type { SourceId } from '@/data/envelope'
 import { isDevnet } from '@/lib/network'
 import { useDocumentTitle } from './document-title'
-import { useNetwork } from './network'
+import { networkName, useNetwork } from './network'
 import { PageLink } from './PageLink'
 import { findPage, SECTION_LABELS, SOURCE_LABELS } from './site-map'
 
@@ -66,7 +66,7 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
       <header className="grid gap-2">
         <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
           {SECTION_LABELS[page.section]}
-          {net === 'mainnet' ? null : ` · ${net === 'testnet' ? 'Testnet' : net}`}
+          {net === 'mainnet' ? null : ` · ${networkName(net)}`}
         </p>
         <h1 className="text-3xl font-semibold">{heading ?? page.title}</h1>
         {entries.length > 0 ? (
@@ -110,10 +110,7 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
           columns={2}
           items={[
             { label: 'Read from', value: listSources(page.sources) },
-            {
-              label: 'Network',
-              value: net === 'mainnet' ? 'Mainnet' : net === 'testnet' ? 'Testnet' : net,
-            },
+            { label: 'Network', value: networkName(net) },
           ]}
         />
       </Card>

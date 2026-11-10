@@ -1,7 +1,7 @@
 export { Entity } from './Entity'
 export type { EntityProps } from './Entity'
 export { entityHref, entityPath, ENTITY_LABELS } from './hrefs'
-export { useNetwork, withNetwork } from './network'
+export { networkName, useNetwork, withNetwork } from './network'
 export { PageLink } from './PageLink'
 export type { PageLinkProps } from './PageLink'
 export { RoutePlaceholder } from './RoutePlaceholder'
@@ -14,7 +14,6 @@ export {
   SECTION_LABELS,
   SOURCE_LABELS,
   findPage,
-  normalizeRoutePath,
   pagesInSection,
   sectionOfPath,
 } from './site-map'

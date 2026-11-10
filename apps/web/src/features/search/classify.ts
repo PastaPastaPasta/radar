@@ -1,5 +1,6 @@
 import { base58CheckDecode, base58Decode, isBase58 } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
+import { isHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
 
 export type InputClass =
@@ -133,11 +134,11 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   if (looksSecret(trimmed)) return { raw, normalized: '', classes, warning: 'secret' }
 
   const hex = trimmed.replace(/^0x/i, '')
-  if (/^[0-9a-f]{64}$/i.test(hex)) {
+  if (isHex(hex, 32)) {
     classes.push('hex64')
     return result(hex.toLowerCase())
   }
-  if (/^[0-9a-f]{40}$/i.test(hex)) {
+  if (isHex(hex, 20)) {
     classes.push('hex40')
     return result(hex.toLowerCase())
   }

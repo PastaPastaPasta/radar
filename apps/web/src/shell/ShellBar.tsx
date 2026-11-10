@@ -1,7 +1,6 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
-import { allDevnets, useDevnets } from '@/app/devnets'
-import { parseSearch } from '@/app/search'
+import { allDevnets, devnetName, useDevnets } from '@/app/devnets'
 import {
   PageLink,
   SECTION_ENTRY,
@@ -14,6 +13,7 @@ import {
 import type { NetworkId } from '@/lib/network'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
+import { routerLocation } from './spa-links'
 
 interface NavItem {
   section: SiteSection
@@ -34,7 +34,7 @@ const NAV: NavItem[] = [
 function networkName(net: NetworkId): string {
   if (net === 'mainnet') return 'Mainnet'
   if (net === 'testnet') return 'Testnet'
-  return `Devnet ${net.replace(/^devnet-/, '')}`
+  return `Devnet ${devnetName(net)}`
 }
 
 export function ShellBar() {
@@ -61,11 +61,7 @@ export function ShellBar() {
       const detail = (e as CustomEvent<DashhqNetworkDetail>).detail
       const url = new URL(detail.href, location.href)
       e.preventDefault()
-      void navigate({
-        to: url.pathname as '/',
-        search: parseSearch(url.search) as never,
-        hash: url.hash ? url.hash.slice(1) : undefined,
-      })
+      void navigate(routerLocation(url))
     }
     bar.addEventListener('dashhq-network', onNetwork)
     return () => bar.removeEventListener('dashhq-network', onNetwork)

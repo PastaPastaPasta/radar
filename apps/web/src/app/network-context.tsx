@@ -4,8 +4,6 @@ import { useNetwork } from '@/features/entity'
 import { isDevnet, type DevnetConfig } from '@/lib/network'
 import { devnetName, hasDevnet, saveDevnet, useDevnets } from './devnets'
 
-export { useNetwork }
-
 const ADDRESS = /^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):\d{1,5}$/i
 
 function parseAddresses(text: string): string[] {

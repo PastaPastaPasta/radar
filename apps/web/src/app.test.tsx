@@ -37,10 +37,10 @@ describe('active network', () => {
     await screen.findByRole('heading', { level: 1 })
     expect(getActiveNetwork()).toBe('testnet')
 
-    await act(() => history.push('/status'))
+    act(() => history.push('/status'))
     await waitFor(() => expect(getActiveNetwork()).toBe('mainnet'))
 
-    await act(() => history.push('/status?net=testnet'))
+    act(() => history.push('/status?net=testnet'))
     await waitFor(() => expect(getActiveNetwork()).toBe('testnet'))
   })
 })

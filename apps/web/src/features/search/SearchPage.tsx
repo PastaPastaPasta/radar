@@ -1,6 +1,12 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
-import { ENTITY_LABELS, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
+import {
+  ENTITY_LABELS,
+  PageLink,
+  networkName,
+  useDocumentTitle,
+  useNetwork,
+} from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
 import { classify } from './classify'
@@ -12,12 +18,6 @@ const EXAMPLES = ['2569992', 'pshenmic.dash', '75.119.128.71', '2026-10-01']
 
 function otherNetwork(net: NetworkId): NetworkId {
   return net === 'mainnet' ? 'testnet' : 'mainnet'
-}
-
-function networkName(net: NetworkId): string {
-  if (net === 'mainnet') return 'Mainnet'
-  if (net === 'testnet') return 'Testnet'
-  return net
 }
 
 export function SearchPage({ q }: { q?: string }) {

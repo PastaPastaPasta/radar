@@ -2,6 +2,14 @@ import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { parseSearch } from '@/app/search'
 
+export function routerLocation(url: URL) {
+  return {
+    to: url.pathname as '/',
+    search: parseSearch(url.search) as never,
+    hash: url.hash ? url.hash.slice(1) : undefined,
+  }
+}
+
 /**
  * Plain anchors to Radar's own pages (entity chips, links in markdown-like text) navigate inside
  * the app instead of reloading it.
@@ -33,11 +41,7 @@ export function useSpaLinks(): void {
       const known = router.matchRoutes(url.pathname, {}).some((m) => m.routeId !== '__root__')
       if (!known) return
       e.preventDefault()
-      void router.navigate({
-        to: url.pathname as '/',
-        search: parseSearch(url.search) as never,
-        hash: url.hash ? url.hash.slice(1) : undefined,
-      })
+      void router.navigate(routerLocation(url))
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)

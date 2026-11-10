@@ -1,20 +1,7 @@
-import type { NetworkId } from '@/lib/network'
+import { networkName } from '@/features/entity'
 import type { Classified } from './classify'
 import { localStamp } from './resolvers/helpers'
 import type { SearchHit } from './types'
-
-const LABELS = { mainnet: 'a mainnet', testnet: 'a testnet' } as const
-
-function hintLabel(net: NetworkId): string {
-  if (net === 'mainnet' || net === 'testnet') return LABELS[net]
-  return `a ${net}`
-}
-
-function networkName(net: NetworkId): string {
-  if (net === 'mainnet') return 'Mainnet'
-  if (net === 'testnet') return 'Testnet'
-  return net
-}
 
 /** The single hit for an address whose prefix names another network. */
 export function networkHintHit(c: Classified): SearchHit | undefined {
@@ -27,7 +14,7 @@ export function networkHintHit(c: Classified): SearchHit | undefined {
   return {
     kind: platform ? 'platform-address' : 'address',
     id: c.normalized,
-    title: `This is ${hintLabel(target)} ${noun}`,
+    title: `This is a ${target} ${noun}`,
     subtitle: `Open on ${networkName(target)}`,
     href: platform
       ? {

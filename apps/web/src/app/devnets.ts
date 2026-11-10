@@ -47,8 +47,7 @@ function emit(): void {
   for (const cb of [...listeners]) cb()
 }
 
-export function saveDevnet(config: DevnetConfig): void {
-  const next = [...loadDevnets().filter((d) => d.name !== config.name), config]
+function store(next: DevnetConfig[]): void {
   try {
     localStorage.setItem(DEVNET_STORAGE_KEY, JSON.stringify(next))
     unsaved = undefined
@@ -58,15 +57,12 @@ export function saveDevnet(config: DevnetConfig): void {
   emit()
 }
 
+export function saveDevnet(config: DevnetConfig): void {
+  store([...loadDevnets().filter((d) => d.name !== config.name), config])
+}
+
 export function removeDevnet(name: string): void {
-  const next = loadDevnets().filter((d) => d.name !== name)
-  try {
-    localStorage.setItem(DEVNET_STORAGE_KEY, JSON.stringify(next))
-    unsaved = undefined
-  } catch {
-    unsaved = next
-  }
-  emit()
+  store(loadDevnets().filter((d) => d.name !== name))
 }
 
 function subscribe(cb: () => void): () => void {
