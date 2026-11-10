@@ -23,9 +23,11 @@ Options:
   --discover             scan recent blocks for one transaction of each special type, print them, record nothing
   --blocks <n>           how many blocks --discover scans, newest first (default 1500)
   --from <height>        --discover starts here instead of the tip
-  --dry                  run the scenarios but write nothing`
+  --dry                  run the scenarios but write nothing
+  --rows <from:count,…>  only record these blockRows pages and add them to the existing recordings
+                         (nothing is removed and the manifest is left as it is)`
 
-const args = { net: undefined, discover: false, blocks: 1500, from: undefined, dry: false }
+const args = { net: undefined, discover: false, blocks: 1500, from: undefined, dry: false, rows: [] }
 const argv = process.argv.slice(2)
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i]
@@ -34,6 +36,9 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--blocks') args.blocks = Number(argv[++i])
   else if (a === '--from') args.from = Number(argv[++i])
   else if (a === '--dry') args.dry = true
+  else if (a === '--rows') {
+    args.rows = argv[++i].split(',').map((r) => r.split(':').map(Number))
+  }
   else {
     console.error(USAGE)
     process.exit(a === '--help' ? 0 : 2)
@@ -105,6 +110,25 @@ const core = clientMod.createCoreClient({
   health: { get: () => ({ state: 'ok' }) },
   now: Date.now,
 })
+
+if (args.rows.length > 0) {
+  for (const [fromHeight, count] of args.rows) {
+    await core.blockRows(net, { fromHeight, count })
+    say(`blockRows ${fromHeight} x ${count}`)
+  }
+  say(`${recording.exchanges.size} exchanges, ${live.requestCount} requests`)
+  if (!args.dry) {
+    const prettier = (await resolveConfig(join(ROOT, 'package.json'))) ?? {}
+    for (const x of recording.exchanges.values()) {
+      const file = join(OUT, net, x.method, `${x.key}.json`)
+      if (existsSync(file)) continue
+      mkdirSync(dirname(file), { recursive: true })
+      writeFileSync(file, await format(JSON.stringify(x.fixture), { ...prettier, parser: 'json' }))
+      say(`  + ${x.method}/${x.key}`)
+    }
+  }
+  await finish()
+}
 
 const entries = []
 const startedAt = new Date()
