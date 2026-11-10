@@ -60,6 +60,17 @@ describe('Address page', () => {
     )
   })
 
+  it('shows an address with no activity as empty, not as an error @IN-06', async () => {
+    renderAt('/address/XbKzysY6LYGbsGwNG8B7K1BRoA1ffLodAT')
+    expect(
+      await screen.findByText('No transactions seen for this address on this network.', undefined, {
+        timeout: 4000,
+      }),
+    ).toBeInTheDocument()
+    expect(document.querySelector('[data-address-summary]')).toHaveTextContent('Not seen yet')
+    expect(screen.queryByText('Something went wrong')).toBeNull()
+  })
+
   it('works on testnet @IN-16 @HY-19', async () => {
     renderAt(`/address/${TESTNET_ADDRESS}?network=testnet`)
     const summary = await waitFor(() => {
