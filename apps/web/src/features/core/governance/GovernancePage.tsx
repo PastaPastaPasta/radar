@@ -169,7 +169,7 @@ function ProposalTable({ proposals, now }: { proposals: HyProposal[]; now: numbe
   const [open, setOpen] = useState<string | undefined>(undefined)
   const base = useId()
   return (
-    <div className="rx-tablewrap">
+    <div className="rx-tablewrap rx-tablewrap--scroll">
       <div className="rx-tablescroll">
         <table className="rx-table rx-table--scrolls">
           <caption className="dh-sr">{t`Budget proposals`}</caption>

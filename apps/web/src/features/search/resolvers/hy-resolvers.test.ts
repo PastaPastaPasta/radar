@@ -123,7 +123,7 @@ describe('hy-address', () => {
   it('says what is at the address: balance and transactions @HY-14', async () => {
     const hits = await hyAddress.resolve(classify(ADDRESS, 'mainnet'), ctx())
     expect(hits).toHaveLength(1)
-    expect(hits[0]).toMatchObject({ kind: 'address', id: ADDRESS, rank: 100 })
+    expect(hits[0]).toMatchObject({ kind: 'address', id: ADDRESS, rank: 101 })
     expect(`${hits[0]?.subtitle as string}`).toMatch(/992,908.*\sDASH · 189 transactions/)
     expect(hits[0]?.stamp.source).toBe('hyphen')
   })

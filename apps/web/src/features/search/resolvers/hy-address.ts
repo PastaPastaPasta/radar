@@ -30,7 +30,8 @@ export const hyAddress: Resolver = {
           : 'Core address · no activity seen',
         href: { to: '/address/$address', params: { address: c.normalized } },
         stamp: stampOf(found),
-        rank: 100,
+        // One above the local address hit so this richer hit replaces it: ties keep the first.
+        rank: 101,
       },
     ]
   },

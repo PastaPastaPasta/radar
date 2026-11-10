@@ -144,7 +144,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
       <StaleIndexNotice />
       <LiveNotice status={live.status} arrived={live.arrived} />
 
-      <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
         <Card
           title={t`Summary`}
           layer="core"
@@ -153,11 +153,18 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           error={summary.error}
           onRetry={() => void summary.refetch()}
         >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-address-summary>
+          <div
+            className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            data-address-summary
+          >
             <Stat
               size="lg"
               label={t`Balance`}
-              value={<Amount value={a.balance} kind="duffs" fiat />}
+              value={
+                <span className="max-sm:text-[length:clamp(18px,6.5cqi,36px)]">
+                  <Amount value={a.balance} kind="duffs" fiat />
+                </span>
+              }
             />
             <Stat
               label={t`Unconfirmed`}
@@ -174,10 +181,10 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               label={t`First and last seen`}
               value={
                 a.firstSeen && a.lastSeen ? (
-                  <>
-                    <Time ms={a.firstSeen} mode="absolute" /> –{' '}
+                  <span className="grid gap-1 text-base font-normal">
+                    <Time ms={a.firstSeen} mode="absolute" />
                     <Time ms={a.lastSeen} mode="absolute" />
-                  </>
+                  </span>
                 ) : (
                   t`Not seen yet`
                 )
