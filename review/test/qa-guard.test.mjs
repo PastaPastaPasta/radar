@@ -73,7 +73,8 @@ describe('matchRule', () => {
 
 describe('installQaGuard', () => {
   const html = `<!doctype html><textarea id="phrase" placeholder="Recovery phrase"></textarea>
-    <input type="password" id="pw"><input id="visible" value="public">`
+    <input type="password" id="pw"><input type="search" id="page-search">
+    <input aria-label="Search Radar" id="palette-input"><input id="visible" value="public">`
 
   it('blocks and logs broadcasts in a real browser, allows reads', async () => {
     const context = await browser.newContext({ serviceWorkers: 'block' })
@@ -117,7 +118,7 @@ describe('installQaGuard', () => {
     await context.close()
   })
 
-  it('masks recovery-phrase and password fields in screenshots', async () => {
+  it('masks recovery-phrase, password and search fields in screenshots', async () => {
     const { context } = await newGuardedContext(browser)
     await context.route('https://site.test/**', (route) =>
       route.fulfill({ contentType: 'text/html', body: html }),
@@ -146,6 +147,8 @@ describe('installQaGuard', () => {
     }
     assert.equal(await darkness(await area('#phrase')), 0)
     assert.equal(await darkness(await area('#pw')), 0)
+    assert.equal(await darkness(await area('#page-search')), 0)
+    assert.equal(await darkness(await area('#palette-input')), 0)
     assert.ok((await darkness(await area('#visible'))) > 0.5)
     await context.close()
   })

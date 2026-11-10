@@ -55,6 +55,8 @@ const SECRET_ATTRS = ['name', 'id', 'placeholder', 'aria-label', 'autocomplete',
 
 export const SECRET_SELECTOR = [
   'input[type="password"]',
+  'input[type="search"]',
+  'input[aria-label="Search Radar" i]',
   ...SECRET_WORDS.flatMap((w) => SECRET_ATTRS.map((a) => `:is(input, textarea)[${a}*="${w}" i]`)),
 ].join(', ')
 
