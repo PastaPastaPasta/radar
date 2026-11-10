@@ -5,14 +5,8 @@ export interface TransitionKind {
   label: string
 }
 
-const WORDS: Record<string, string> = { top: 'top-up' }
-
 function humanize(raw: string): string {
-  const text = raw
-    .toLowerCase()
-    .split('_')
-    .map((w) => WORDS[w] ?? w)
-    .join(' ')
+  const text = raw.toLowerCase().replace('top_up', 'top-up').split('_').join(' ')
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
