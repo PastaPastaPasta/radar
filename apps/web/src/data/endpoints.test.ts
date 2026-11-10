@@ -18,6 +18,23 @@ describe('endpoint', () => {
     expect(endpoint('testnet', 'rate')).toBeNull()
   })
 
+  it('a devnet uses its configured quorum URL and falls back to the default', () => {
+    const devnets = [
+      { name: 'ruby', dapiAddresses: [], quorumUrl: ' https://q.example.test ' },
+      { name: 'jade', dapiAddresses: [] },
+    ]
+    expect(endpoint('devnet-ruby', 'quorums', devnets)).toBe('https://q.example.test')
+    expect(endpoint('devnet-jade', 'quorums', devnets)).toBe(
+      'https://quorums.jade.networks.dash.org',
+    )
+    expect(endpoint('devnet-onyx', 'quorums', devnets)).toBe(
+      'https://quorums.onyx.networks.dash.org',
+    )
+    expect(endpoint('testnet', 'quorums', devnets)).toBe(
+      'https://quorums.testnet.networks.dash.org',
+    )
+  })
+
   it('devnets have only a quorum list', () => {
     expect(endpoint('devnet-ruby', 'quorums')).toBe('https://quorums.ruby.networks.dash.org')
     for (const s of ['radar', 'pe', 'hyphen', 'rate'] as const) {

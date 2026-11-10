@@ -1,4 +1,4 @@
-import { isDevnet, type NetworkId } from '@/lib/network'
+import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
 
 export type EndpointSource = 'quorums' | 'radar' | 'pe' | 'hyphen' | 'rate'
 
@@ -11,13 +11,23 @@ const PE_BASE = {
 
 const DEVNET_NAME = /^devnet-(.+)$/
 
-/** Base URL for a source on a network, or null where the source isn't offered. */
-export function endpoint(net: NetworkId, source: EndpointSource): string | null {
+/**
+ * Base URL for a source on a network, or null where the source isn't offered.
+ * `devnets` supplies a devnet's configured `quorumUrl`.
+ */
+export function endpoint(
+  net: NetworkId,
+  source: EndpointSource,
+  devnets: readonly DevnetConfig[] = [],
+): string | null {
   switch (source) {
     case 'quorums':
       if (isDevnet(net)) {
         const name = DEVNET_NAME.exec(net)?.[1]
-        return name ? `https://quorums.${name}.networks.dash.org` : null
+        if (!name) return null
+        const configured = devnets.find((d) => d.name === name)?.quorumUrl?.trim()
+        if (configured) return configured
+        return `https://quorums.${name}.networks.dash.org`
       }
       return `https://quorums.${net}.networks.dash.org`
     case 'radar':
