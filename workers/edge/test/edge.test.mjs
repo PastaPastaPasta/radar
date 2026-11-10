@@ -275,7 +275,18 @@ describe('redirects', () => {
     await check(h, '/network/status/?network=mainnet', '/status')
     await check(h, '/address/?addr=dash1x', '/platform-address/dash1x?network=testnet')
     await check(h, '/state-transition/?hash=AB', '/platform/tx/AB?network=testnet')
-    await check(h, '/tools/?tool=state-transition', '/tools/state-transition?network=testnet')
+    await check(h, '/tools/?tool=state-transition', '/tools/transition?network=testnet')
+    await check(h, '/tools/?tool=proof', '/tools/proof?network=testnet')
+    await check(h, '/tools/?tool=path-elements', '/tools/transition?network=testnet')
+    await check(
+      h,
+      '/governance/contested/detail/?contract=C1&docType=domain&indexName=parentNameAndLabel&indexValues=%5B%22dash%22%2C%22al1ce%22%5D',
+      '/contest/al1ce?network=testnet',
+    )
+    await check(h, '/governance/contested/detail/?indexValues=nope', '/contests?network=testnet')
+    await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
+    await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
+    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?network=testnet')
     await check(h, '/governance/polls/?network=mainnet', '/polls')
     await check(h, '/search/?q=alice', '/search?q=alice')
   })
@@ -328,6 +339,7 @@ describe('redirects', () => {
       '/blocks?date=2026-10-01',
     )
     await check('radar.localhost', '/masternodes.html?net=testnet', '/masternodes?network=testnet')
+    await check('radar.localhost', '/mn.html', '/masternodes')
     await check(
       'radar.localhost',
       '/mn/' + 'c'.repeat(64) + '?net=testnet',

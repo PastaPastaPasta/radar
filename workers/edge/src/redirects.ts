@@ -12,6 +12,25 @@ type Rule = (p: URLSearchParams) => Hit | null
 
 const seg = (v: string) => encodeURIComponent(v)
 
+const TOOLS: Record<string, string> = {
+  'state-transition': 'transition',
+  contract: 'contract',
+  document: 'document',
+  identity: 'identity',
+  proof: 'proof',
+}
+
+function contestLabel(raw: string | null): string | null {
+  if (!raw) return null
+  try {
+    const values: unknown = JSON.parse(raw)
+    const label = Array.isArray(values) ? (values as unknown[])[1] : undefined
+    return typeof label === 'string' && label ? label : null
+  } catch {
+    return null
+  }
+}
+
 const NATIVE: Record<string, Rule> = {
   '/identity': (p) =>
     p.get('id')
@@ -35,7 +54,9 @@ const NATIVE: Record<string, Rule> = {
         }
       : { path: '/contracts' },
   '/contract/token': (p) =>
-    p.get('id') ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id'] } : { path: '/tokens' },
+    p.get('id')
+      ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id', 'position'] }
+      : { path: '/tokens' },
   '/token': (p) =>
     p.get('id') ? { path: `/token/${seg(p.get('id')!)}`, drop: ['id'] } : { path: '/tokens' },
   '/token/holders': (p) =>
@@ -48,19 +69,23 @@ const NATIVE: Record<string, Rule> = {
       : { path: '/names' },
   '/dpns/search': () => ({ path: '/names' }),
   '/governance/contested': () => ({ path: '/contests' }),
-  '/governance/contested/detail': () => ({ path: '/contests' }),
-  '/governance/polls': () => ({ path: '/polls' }),
-  '/groups': (p) => {
-    const c = p.get('id') ?? p.get('contract')
-    return c ? { path: `/groups/${seg(c)}`, drop: ['id', 'contract'] } : { path: '/contracts' }
+  '/governance/contested/detail': (p) => {
+    const label = contestLabel(p.get('indexValues'))
+    const drop = ['contract', 'docType', 'indexName', 'indexValues']
+    return label ? { path: `/contest/${seg(label)}`, drop } : { path: '/contests', drop }
   },
+  '/governance/polls': () => ({ path: '/polls' }),
+  '/groups': (p) =>
+    p.get('contractId')
+      ? { path: `/groups/${seg(p.get('contractId')!)}`, drop: ['contractId'] }
+      : { path: '/contracts' },
   '/groups/detail': (p) => {
-    const c = p.get('id') ?? p.get('contract')
-    const pos = p.get('position') ?? p.get('pos')
+    const c = p.get('contractId')
+    const pos = p.get('position')
     return c && pos
-      ? { path: `/group/${seg(c)}/${seg(pos)}`, drop: ['id', 'contract', 'position', 'pos'] }
+      ? { path: `/group/${seg(c)}/${seg(pos)}`, drop: ['contractId', 'position'] }
       : c
-        ? { path: `/groups/${seg(c)}`, drop: ['id', 'contract'] }
+        ? { path: `/groups/${seg(c)}`, drop: ['contractId', 'position'] }
         : { path: '/contracts' }
   },
   '/epoch': () => ({ path: '/epochs' }),
@@ -87,9 +112,10 @@ const NATIVE: Record<string, Rule> = {
       ? { path: `/platform/tx/${seg(p.get('hash')!)}`, drop: ['hash'] }
       : { path: '/platform/txs' },
   '/tools': (p) => ({
-    path: p.get('tool') ? `/tools/${seg(p.get('tool')!)}` : '/tools/transition',
+    path: `/tools/${TOOLS[p.get('tool') ?? ''] ?? 'transition'}`,
     drop: ['tool'],
   }),
+  '/destinations': () => ({ path: '/', drop: ['group'] }),
   '/broadcast': (p) => writePath(p),
   '/wallet': (p) => writePath(p),
   '/offline': () => ({ path: '/', drop: [] }),
@@ -100,6 +126,8 @@ const NATIVE: Record<string, Rule> = {
   '/sdk-reference': () => ({ path: '/sdk-reference' }),
   '/query': () => ({ path: '/query' }),
 }
+
+export const NATIVE_PATHS: readonly string[] = Object.keys(NATIVE)
 
 function writePath(p: URLSearchParams): Hit {
   const drop = [...p.keys()].filter((k) => k !== 'network' && k !== 'net')
@@ -129,9 +157,12 @@ const LEGACY: [RegExp, (m: RegExpExecArray, p: URLSearchParams) => Hit][] = [
   [/^\/insight\/messages\/verify$/, () => ({ path: '/tools/verify-message' })],
   [/^\/insight\/?$/, () => ({ path: '/' })],
   [/^\/(masternodes|map|v24|changes|api)\.html$/, (m) => ({ path: `/${m[1]}` })],
+  [/^\/mn\.html$/, () => ({ path: '/masternodes' })],
   [/^\/platform\.html$/, () => ({ path: '/epochs' })],
   [/^\/index\.html$/, () => ({ path: '/' })],
 ]
+
+export const LEGACY_PATTERNS: readonly RegExp[] = LEGACY.map(([re]) => re)
 
 function trimSlash(pathname: string): string {
   return pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
