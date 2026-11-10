@@ -15,8 +15,6 @@ import type { NetworkId } from '@/lib/network'
 import { loadDapiFixture, type DapiFixture } from '../fixtures/dapi-load'
 import { reportFixtureMiss } from './handlers/fixtures'
 
-export const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
-
 function fromBase64(b64: string): Uint8Array {
   const bin = atob(b64)
   const out = new Uint8Array(bin.length)
@@ -63,7 +61,6 @@ export class FixtureBudget implements Budget {
 function miss(net: NetworkId, method: string, key: string): never {
   const what = `DAPI ${method} on ${net} (request ${key})`
   reportFixtureMiss(what)
-  console.error(`${FIXTURE_ERROR_PREFIX} no recorded fixture for ${what}`)
   throw new SourceError({
     source: 'dapi',
     kind: 'network',

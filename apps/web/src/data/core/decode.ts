@@ -1,6 +1,8 @@
 import * as Comlink from 'comlink'
 import type * as Wasm from '@radar/core-decode'
 import { SourceError } from '../errors'
+import { trustedWorkerUrl } from '../trusted-worker'
+import workerUrl from './decode.worker.ts?worker&url'
 import type { NetworkId } from '@/lib/network'
 import { HEADER_BYTES, headerAsEmptyBlock } from '@/lib/core/header'
 import { blockHeightOf, mapBlock, mapTx, wasmNetwork } from './convert'
@@ -109,7 +111,9 @@ function parseIsLock(bytes: Uint8Array): DecodedIsLock {
 
 /** The decoder in a module worker: the wasm module loads on first use and never touches the main thread. */
 function workerLoader(): Promise<WasmCore> {
-  const worker = new Worker(new URL('./decode.worker.ts', import.meta.url), { type: 'module' })
+  const worker = new Worker(trustedWorkerUrl(new URL(workerUrl, location.href)), {
+    type: 'module',
+  })
   return Promise.resolve(Comlink.wrap<WasmCore>(worker))
 }
 

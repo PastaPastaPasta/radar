@@ -1,5 +1,8 @@
 import { http, HttpResponse } from 'msw'
 import { setupWorker } from 'msw/browser'
+import { core } from '@/data/core/client'
+import { setDapiTransport } from '@/data/dapi-core'
+import { FixtureDapiTransport } from './dapi-transport'
 import { fixtureHandlers, onFixtureMiss } from './handlers'
 
 export const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
@@ -20,6 +23,9 @@ const refuseUnrecorded = http.all('*', ({ request }) => {
 })
 
 export async function startFixtureWorker(): Promise<void> {
+  setDapiTransport(new FixtureDapiTransport())
+  // The Core façade, so a spec can call it without a page that renders its answers.
+  ;(window as unknown as { __radarCore: typeof core }).__radarCore = core
   onFixtureMiss((request) => {
     fail(`no recorded fixture for ${request}`)
   })

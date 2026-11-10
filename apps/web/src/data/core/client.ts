@@ -631,3 +631,5 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
 
   return client
 }
+
+export const core: CoreClient = createCoreClient()
