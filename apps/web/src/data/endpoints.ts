@@ -1,16 +1,42 @@
-import type { NetworkId } from '@/lib/network'
+import { isDevnet, type NetworkId } from '@/lib/network'
 
 export type EndpointSource = 'quorums' | 'radar' | 'pe' | 'hyphen' | 'rate'
 
+const RADAR_BASE = 'https://radar.dashhq.org/api/v1'
+
+const PE_BASE = {
+  mainnet: 'https://api.pe.dashhq.org',
+  testnet: 'https://api.testnet.pe.dashhq.org',
+} as const
+
+const DEVNET_NAME = /^devnet-(.+)$/
+
 /** Base URL for a source on a network, or null where the source isn't offered. */
 export function endpoint(net: NetworkId, source: EndpointSource): string | null {
-  void net
-  void source
-  throw new Error('not implemented')
+  switch (source) {
+    case 'quorums':
+      if (isDevnet(net)) {
+        const name = DEVNET_NAME.exec(net)?.[1]
+        return name ? `https://quorums.${name}.networks.dash.org` : null
+      }
+      return `https://quorums.${net}.networks.dash.org`
+    case 'radar':
+      return net === 'mainnet' || net === 'testnet' ? `${RADAR_BASE}/${net}` : null
+    case 'pe':
+      return net === 'mainnet' || net === 'testnet' ? PE_BASE[net] : null
+    case 'hyphen':
+      return net === 'mainnet' || net === 'testnet' ? `/x/hy/${net}` : null
+    case 'rate':
+      return net === 'mainnet' ? PE_BASE.mainnet : null
+  }
 }
 
 /** Port used for a quorum-list entry without `platformHTTPPort`; null on devnets (from config). */
 export function dapiDefaultPort(net: NetworkId): number | null {
-  void net
-  throw new Error('not implemented')
+  if (net === 'mainnet') return 443
+  if (net === 'testnet') return 1443
+  return null
 }
+
+/** Radar's network-independent endpoints (`/status`, `/health`, `/releases`). */
+export const RADAR_GLOBAL_BASE = RADAR_BASE

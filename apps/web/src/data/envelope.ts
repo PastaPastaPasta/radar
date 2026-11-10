@@ -48,17 +48,16 @@ export interface Fact<T> {
 }
 
 export function stampOf<T>(s: Sourced<T>): SourceStamp {
-  void s
-  throw new Error('not implemented')
+  const { data, ...stamp } = s
+  void data
+  return stamp
 }
 
 export function mapSourced<A, B>(s: Sourced<A>, f: (a: A) => B): Sourced<B> {
-  void s
-  void f
-  throw new Error('not implemented')
+  return { ...s, data: f(s.data) }
 }
 
 export function local<T>(data: T): Sourced<T> {
-  void data
-  throw new Error('not implemented')
+  const now = Date.now()
+  return { source: 'local', asOf: now, fetchedAt: now, proved: false, data }
 }
