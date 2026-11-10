@@ -19,6 +19,7 @@ export default tseslint.config(
       '**/playwright-report/**',
       '**/test-results/**',
       '**/routeTree.gen.ts',
+      'apps/web/src/i18n/locales/**/messages.js',
       'apps/web/vendor/**',
       'docs/**',
       'spikes/**',

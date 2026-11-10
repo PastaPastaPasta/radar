@@ -2,7 +2,9 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
 import { NetworkGate } from '@/app/network-context'
+import { UnitsMount } from '@/app/units-mount'
 import { CommandPalette, CommandPaletteProvider } from '@/features/search'
+import { I18nProvider, i18n } from '@/i18n'
 import { SectionNav } from './SectionNav'
 import { ShellBar } from './ShellBar'
 import { ShellFooter } from './ShellFooter'
@@ -27,28 +29,32 @@ function RouteAnnouncer() {
 export function AppShell() {
   useSpaLinks()
   return (
-    <CommandPaletteProvider>
-      <ShortcutsProvider>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:bg-[var(--dh-surface,Canvas)] focus:px-3 focus:py-2"
-        >
-          Skip to content
-        </a>
-        <TestnetKeyline />
-        <ShellBar />
-        <RouteAnnouncer />
-        <main id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
-          <SectionNav />
-          <ErrorBoundary>
-            <NetworkGate>
-              <Outlet />
-            </NetworkGate>
-          </ErrorBoundary>
-        </main>
-        <ShellFooter />
-        <CommandPalette />
-      </ShortcutsProvider>
-    </CommandPaletteProvider>
+    <I18nProvider i18n={i18n}>
+      <UnitsMount>
+        <CommandPaletteProvider>
+          <ShortcutsProvider>
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:bg-[var(--dh-surface,Canvas)] focus:px-3 focus:py-2"
+            >
+              Skip to content
+            </a>
+            <TestnetKeyline />
+            <ShellBar />
+            <RouteAnnouncer />
+            <main id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
+              <SectionNav />
+              <ErrorBoundary>
+                <NetworkGate>
+                  <Outlet />
+                </NetworkGate>
+              </ErrorBoundary>
+            </main>
+            <ShellFooter />
+            <CommandPalette />
+          </ShortcutsProvider>
+        </CommandPaletteProvider>
+      </UnitsMount>
+    </I18nProvider>
   )
 }

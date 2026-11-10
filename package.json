@@ -18,7 +18,10 @@
     "e2e:smoke": "pnpm --filter @radar/e2e e2e --grep @smoke",
     "e2e:live": "pnpm --filter @radar/e2e e2e:live",
     "check:stories": "node scripts/check-stories.mjs",
-    "test:review": "node --test review/test/*.test.mjs"
+    "test:review": "node --test review/test/*.test.mjs",
+    "i18n:extract": "pnpm --filter @radar/web i18n:extract",
+    "i18n:compile": "pnpm --filter @radar/web i18n:compile",
+    "i18n:check": "pnpm --filter @radar/web i18n:check"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
-    "gen:dapi": "cd src/data/dapi-core && buf generate && sed -i '/eslint-disable/d' gen/core/v0/core_pb.ts && prettier --write gen"
+    "gen:dapi": "cd src/data/dapi-core && buf generate && sed -i '/eslint-disable/d' gen/core/v0/core_pb.ts && prettier --write gen",
+    "i18n:extract": "lingui extract --clean",
+    "i18n:compile": "lingui compile",
+    "i18n:check": "node ../../scripts/check-i18n.mjs"
   },
   "dependencies": {
     "@bufbuild/protobuf": "2.16.0",

@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { lingui } from '@lingui/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
@@ -26,7 +27,8 @@ export default defineConfig(({ mode }) => {
     define: { __APP_VERSION__: JSON.stringify(appVersion()) },
     plugins: [
       tanstackRouter({ target: 'react', autoCodeSplitting: true }),
-      react(),
+      react({ babel: { plugins: ['@lingui/babel-plugin-lingui-macro'] } }),
+      lingui(),
       tailwindcss(),
       dashhqAssets(),
       securityHeaders(),
