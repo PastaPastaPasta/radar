@@ -4,8 +4,20 @@ export { expect } from '@playwright/test'
 
 const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
 
-/** Trusted Types is only reported (never enforced) by the report-only header. */
-const REPORT_ONLY_DIRECTIVES = new Set(['require-trusted-types-for', 'trusted-types'])
+/**
+ * Trusted Types is report-only. These two third-party sinks are all that remains: the MSW worker
+ * registration (fixture mode only, see check:bundle) and echarts' own `innerHTML` writes. Any other
+ * report fails the test.
+ */
+const KNOWN_TRUSTED_TYPES_SINKS = [
+  { source: /\/assets\/browser-[\w-]+\.js:/, sample: 'ServiceWorkerContainer register|' },
+  { source: /\/assets\/chart-view-[\w-]+\.js:/, sample: 'Element innerHTML|' },
+]
+
+const isKnownSink = (v: Violation) =>
+  v.disposition === 'report' &&
+  v.directive === 'require-trusted-types-for' &&
+  KNOWN_TRUSTED_TYPES_SINKS.some((k) => k.source.test(v.source) && v.sample.startsWith(k.sample))
 
 interface Violation {
   disposition: string
@@ -28,7 +40,7 @@ export const test = base.extend({
 
     const violations: string[] = []
     await context.exposeBinding('__radarCspViolation', (_source, v: Violation) => {
-      if (v.disposition === 'report' && REPORT_ONLY_DIRECTIVES.has(v.directive)) return
+      if (isKnownSink(v)) return
       violations.push(`${v.disposition} ${describeViolation(v)}`)
     })
     await context.addInitScript(() => {
