@@ -1,0 +1,1561 @@
+# Radar user stories: source of truth for the review harness.
+# Placeholders like {mn_regular} or {doc_history.type} are entities picked by
+# review/fixtures.mjs into review/fixtures/{mainnet,testnet}.json. {key} is the
+# entity's primary id; {key.field} reads another field.
+# prod URLs are mainnet addresses; the harness maps them to the testnet host or
+# parameter of the same product (review/lib/sites.mjs).
+stories:
+  - id: RA-01
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want the network's size and freshness at a glance
+    acceptance: Home shows nodes that answered the last crawl, the day-over-day change, the Core tip height and "crawled N min ago"; the numbers match the same crawl's figures on radar.dashhq.org
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: true
+  - id: RA-02
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want each headline figure to open the nodes behind it
+    acceptance: Reachable masternodes, enabled, PoSe-banned, countries, hosting providers and addresses tried each open a filtered list or section that shows that many items
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-03
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to scope the census to masternodes, evonodes, other full nodes or all
+    acceptance: A scope control changes the version, location and reach sections; the scope survives reload and a copied link
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-04
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to see which Dash Core versions the network runs, now and over time
+    acceptance: Release ladder (releases, release candidates, non-release builds, other clients; < 1% folded) with the latest-release share; an over-time chart with 24 h / 7 d / 30 d / 90 d / 1 y ranges; an every-version table with a Core-vs-other column
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-05
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to see where nodes are hosted and in which countries
+    acceptance: Hosting and country breakdowns with ranked lists and "show all"; for masternode and evonode scopes each row opens the filtered masternode list
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: true
+  - id: RA-06
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to know how reachable the network is
+    acceptance: Answered / didn't answer / not checked share with a "see which" link; an address-network table (IPv4, IPv6, Tor, I2P, CJDNS, with a reason when one isn't crawled); a network-size chart with a hover tooltip and keyboard stepping
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-07
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to know whether masternodes are ready for Core 24 quorums
+    acceptance: Per-check DKG readiness counts; each failing count opens the masternode list filtered to that check
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-08
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want the typical yield for regular masternodes and evonodes
+    acceptance: Median annual yield for each type, with how it's measured
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-09
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want evonodes' Platform health
+    acceptance: Healthy share, DAPI answered, Tenderdash P2P open, Platform height, and Drive and Tenderdash version breakdowns
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: true
+  - id: RA-10
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to know how fast nodes serve
+    acceptance: Speed-test grade distribution per vantage (hidden only when no tests exist)
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-11
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to see when a Core upgrade activation is under way
+    acceptance: While v24 is pending or recently active, home links to the activation tracker
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-12
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to know if the data is stale
+    acceptance: Every page shows tip height and crawl age; after 45 min without a crawl a visible stale warning appears
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-13
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a network watcher I want to share a section
+    acceptance: Each section heading offers a copy-link control; the link scrolls to that section
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: true
+  - id: RA-20
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want the full masternode list
+    acceptance: Table with ProTx, address, country, hosting, version, protocol, status (reach and PoSe), uptime 7 d and 30 d, last paid, registered, PoSe penalty; evonodes add Platform 30 d and next block; a total count; paging or virtual scrolling across every node
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: true
+  - id: RA-21
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to find a masternode by any identifier
+    acceptance: Search matches ProTx, IP, payout address, hosting name, user agent, Platform node ID and city
+    radar_start: /masternodes?q={mn_regular.ip}
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: false
+  - id: RA-22
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to filter the list
+    acceptance: 'Filters with option counts: type, reachability, registration status, version, country, hosting/AS, DKG readiness; active-filter count; clicking a country, hosting, version, type or status cell applies that filter'
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: false
+  - id: RA-23
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to sort the list
+    acceptance: Every column sorts by mouse and keyboard and announces its sort; on a phone a sort control and a card layout replace the table
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: true
+  - id: RA-24
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want the list state to be shareable
+    acceptance: Filters, search, sort and page are in the URL; reload, back and forward restore them, including scroll position
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: false
+  - id: RA-25
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to export what I'm looking at
+    acceptance: CSV download of the filtered rows with every column, named by network; cells starting with = + - @ are neutralised
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+    phone: false
+  - id: RA-26
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to see the filtered masternodes on a map
+    acceptance: '"View on map" opens the map with the same filters'
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+      - https://radar.dashhq.org/map
+    phone: false
+  - id: RA-30
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want my masternode's state at a glance
+    acceptance: '`/mn/{mn_regular}` shows type, status, PoSe, version, uptime 30 d, last paid and earned in the last 90 days'
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: true
+  - id: RA-31
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want its registration details
+    acceptance: Payout and owner addresses (each linking to Radar's address page), voting key, operator key, collateral, PoSe penalty and ban height
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-32
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to check it is reachable right now
+    acceptance: Network card shows the latest port check, error, last answered, user agent, protocol, services, height and latency; "Check now" runs a live check and shows the result or a rate-limit message
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-33
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to know where it is hosted
+    acceptance: Location with "show on map" (map centred on it) and hosting that opens the list filtered to that AS
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-34
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want its history
+    acceptance: 90-day uptime strip, version history and registration changes
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: true
+  - id: RA-35
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want its payments
+    acceptance: Most recent payments with height, time and amount; "show more" pages back through older payments
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-36
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want to know why it isn't DKG-ready
+    acceptance: Overall badge and each check's result with fix text and a link to the rule
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-37
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an operator I want its speed-test result
+    acceptance: Grade, percentile, per-dimension bars and per-vantage table (when tested)
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+    phone: false
+  - id: RA-38
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want its Platform rewards
+    acceptance: "`/mn/{mn_evo}` shows claimable now, last epoch, this epoch so far, next block, rank strip, earned table (including PE's figure), estimates and an every-epoch chart with an 80% band and a table"
+    radar_start: /mn/{mn_evo}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_evo}
+    phone: true
+  - id: RA-39
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want to verify its rewards against Platform itself
+    acceptance: A "live from Platform" section shows the proof-checked claimable balance, blocks this epoch, a 12-epoch comparison and withdrawals, each marked proof-checked
+    radar_start: /mn/{mn_evo}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_evo}
+    phone: false
+  - id: RA-40
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want its Platform endpoints' health
+    acceptance: Endpoint status, TLS certificate expiry, height, software versions and daily health
+    radar_start: /mn/{mn_evo}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_evo}
+    phone: false
+  - id: RA-41
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want a useful answer for an unknown ProTx
+    acceptance: A ProTx registered only on the other network takes me there (or offers to); an unknown one offers search
+    radar_start: /mn/0000000000000000000000000000000000000000000000000000000000000000
+    prod:
+      - https://radar.dashhq.org/mn/0000000000000000000000000000000000000000000000000000000000000000
+    phone: false
+  - id: RA-50
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a visitor I want to see the network on a map
+    acceptance: Full-width map with masternode clusters coloured by reachability, PoSe, version or type; clicking a cluster zooms or lists it; a node popup opens the masternode
+    radar_start: /map
+    prod:
+      - https://radar.dashhq.org/map
+    phone: true
+  - id: RA-51
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a visitor I want to filter the map
+    acceptance: Search, masternodes vs all nodes, colour-by, category chips with counts, type/version/country/hosting/DKG filters; a headline with counts and "open these as a list"
+    radar_start: /map
+    prod:
+      - https://radar.dashhq.org/map
+    phone: false
+  - id: RA-52
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a visitor I want to share a map view and use it on a phone
+    acceptance: Map state (filters, layer, colour, hidden categories, focused ProTx) is in the URL; on a phone the controls live in a bottom sheet that drags and closes with Esc
+    radar_start: /map
+    prod:
+      - https://radar.dashhq.org/map
+    phone: true
+  - id: RA-60
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want the current Platform epoch
+    acceptance: Epoch number, % through, blocks so far, pool so far, last pool, per block, median monthly earnings and yield
+    radar_start: /epochs
+    prod:
+      - https://radar.dashhq.org/platform
+    phone: false
+  - id: RA-61
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want the protocol upgrade vote
+    acceptance: Vote meter against the activation threshold, per-candidate stats and pending votes
+    radar_start: /protocol
+    prod:
+      - https://radar.dashhq.org/platform
+    phone: true
+  - id: RA-62
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want to know who proposes next
+    acceptance: Top 12 upcoming proposers with slot count and ETA
+    radar_start: /epochs
+    prod:
+      - https://radar.dashhq.org/platform
+    phone: false
+  - id: RA-63
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want epoch history
+    acceptance: Per-epoch band (p10–p90) and median for the last 60 epochs, and a table that shows more on request
+    radar_start: /epochs
+    prod:
+      - https://radar.dashhq.org/platform
+    phone: false
+  - id: RA-64
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As an evonode operator I want every evonode compared
+    acceptance: Table with search (ProTx, IP, Drive version), a filter (all / proposed this epoch / not in a validator set / upgraded vote not counted), nine sortable columns and paging
+    radar_start: /masternodes?type=evo&view=platform
+    prod:
+      - https://radar.dashhq.org/platform
+    phone: true
+  - id: RA-70
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a watcher I want Core 24 activation status
+    acceptance: Status, threshold, current window, earliest activation, masternode signal and milestones; refreshes itself about every minute; shows when its data is stale
+    radar_start: /v24
+    prod:
+      - https://radar.dashhq.org/v24
+    phone: true
+  - id: RA-71
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a watcher I want the masternode signal
+    acceptance: Quorum meter and the quorums that would sign now (hidden once the signal is mined)
+    radar_start: /v24
+    prod:
+      - https://radar.dashhq.org/v24
+    phone: false
+  - id: RA-72
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a watcher I want miners' signalling
+    acceptance: Current window block by block with a cumulative line and projection; window-by-window bars; thresholds by window; an explanation of activation
+    radar_start: /v24
+    prod:
+      - https://radar.dashhq.org/v24
+    phone: false
+  - id: RA-80
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a watcher I want recent masternode list changes
+    acceptance: Latest changes with time, block, masternode and change type; filter by kind (registrations/removals, PoSe bans/revivals, address, payout/key) kept in the URL
+    radar_start: /changes
+    prod:
+      - https://radar.dashhq.org/changes
+    phone: false
+  - id: RA-90
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a developer I want Radar's API documented and unchanged
+    acceptance: An API page lists every endpoint with copy links and curl examples; `https://radar.dashhq.org/api/v1/*` URLs return the same documents as today
+    radar_start: /api
+    prod:
+      - https://radar.dashhq.org/api
+    phone: true
+  - id: RA-91
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a visitor I want to switch networks
+    acceptance: A network switch on every page; testnet pages are clearly marked; old `?net=testnet` links open the testnet view
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: RA-92
+    group: 'Radar (RA): compare with radar.dashhq.org'
+    shard: S1
+    story: As a visitor I want light and dark themes and calm motion
+    acceptance: Theme switch shared with the dashhq family; with reduced motion set, map pings and transitions stop
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+    phone: false
+  - id: NX-01
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want the chain's vital signs
+    acceptance: Platform height, current epoch with progress, total credits (with a USD estimate), protocol version with pending upgrade votes and active quorum count
+    radar_start: /platform
+    prod:
+      - https://explorer.dashhq.org/
+    phone: false
+  - id: NX-02
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want this epoch's top proposers
+    acceptance: Top 10 evonodes by blocks this epoch, each opening its masternode page
+    radar_start: /platform
+    prod:
+      - https://explorer.dashhq.org/
+    phone: true
+  - id: NX-03
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want quick entry points
+    acceptance: Inputs (or one search) for identity ID, DPNS name, token ID and epoch that go straight to the entity
+    radar_start: /platform
+    prod:
+      - https://explorer.dashhq.org/
+    phone: false
+  - id: NX-04
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want quorums, upcoming polls and well-known contracts
+    acceptance: Quorums by size; vote polls ending in the next 30 days; a list of well-known contracts with names
+    radar_start: /platform
+    prod:
+      - https://explorer.dashhq.org/
+    phone: false
+  - id: NX-05
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want search to tell me what my input is
+    acceptance: For an epoch number, base58 ID, 64-hex hash, bech32m address, 40-hex key hash and a name, results say what each was classified as and show the matching entities; no match says so and offers the other network
+    radar_start: /search?q={identity}
+    prod:
+      - https://explorer.dashhq.org/search/?q={identity}
+    phone: false
+  - id: NX-06
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want to save entities
+    acceptance: Save an identity, contract or token; a saved page filters by network scope and kind, opens, removes and clears items; saved items stay only in this browser
+    radar_start: /saved
+    prod:
+      - https://explorer.dashhq.org/saved/
+    phone: true
+  - id: NX-10
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want an identity's state
+    acceptance: '`/identity/{identity}` shows balance (DASH and credits), revision, nonce and DPNS names, each marked proof-checked; save and copy-link controls'
+    radar_start: /identity/{identity}
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}
+    phone: false
+  - id: NX-11
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want its keys
+    acceptance: Public keys with ID, purpose, type, security level, data and disabled state
+    radar_start: /identity/{identity}?tab=keys
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=keys
+    phone: false
+  - id: NX-12
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want its names
+    acceptance: Every DPNS name it owns, each linking to the name page
+    radar_start: /identity/{identity}?tab=names
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=dpns
+    phone: false
+  - id: NX-13
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want its token balances
+    acceptance: Balances for well-known tokens plus any token ID I add
+    radar_start: /identity/{identity}?tab=tokens
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=tokens
+    phone: true
+  - id: NX-14
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want its group memberships
+    acceptance: Groups with contract, position and power
+    radar_start: /identity/{identity}?tab=groups
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=groups
+    phone: false
+  - id: NX-15
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want its contest votes
+    acceptance: Contested-resource votes cast by this identity
+    radar_start: /identity/{identity}?tab=votes
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=votes
+    phone: false
+  - id: NX-16
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want contract-specific nonce and keys
+    acceptance: Given a contract ID, shows the identity's contract nonce and contract keys
+    radar_start: /identity/{identity}?tab=advanced
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}&tab=advanced
+    phone: false
+  - id: NX-17
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want to find an identity by public key hash
+    acceptance: A 40-hex HASH160 finds the unique identity, or pages through non-unique matches without losing earlier pages
+    radar_start: /identity/lookup?pkh={pkh}
+    prod:
+      - https://explorer.dashhq.org/identity/lookup/?pkh={pkh}
+    phone: true
+  - id: NX-18
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a Platform user I want to control what the explorer remembers
+    acceptance: Viewed identities are remembered only if enabled, can be cleared, and feed the token-holder seed list
+    radar_start: /settings
+    prod:
+      - https://explorer.dashhq.org/settings/
+    phone: false
+  - id: NX-20
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a developer I want a contract's definition
+    acceptance: '`/contract/{contract}` shows owner, version, document types and a navigable schema'
+    radar_start: /contract/{contract}
+    prod:
+      - https://explorer.dashhq.org/contract/?id={contract}
+    phone: false
+  - id: NX-21
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a developer I want to browse a document type
+    acceptance: Each document type opens a documents browser for that type
+    radar_start: /contract/{contract}/documents/{doc_history.type}
+    prod:
+      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc_history.type}
+    phone: false
+  - id: NX-22
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a developer I want to query documents by index
+    acceptance: Filters offered from the type's indices (= < ≤ > ≥ in, starts with); order by; page size; next and previous pages; all in the URL; invalid filters explained before running
+    radar_start: /contract/{contract}/documents/{doc_history.type}
+    prod:
+      - https://explorer.dashhq.org/contract/documents/?id={contract}&type={doc_history.type}
+    phone: true
+  - id: NX-23
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a developer I want a document
+    acceptance: Data, metadata (revision, created, updated, transferred) and paged revision history when the type keeps history
+    radar_start: /document/{doc_history.contract}/{doc_history.type}/{doc_history}
+    prod:
+      - https://explorer.dashhq.org/contract/document/?id={doc_history.contract}&type={doc_history.type}&docId={doc_history}
+    phone: false
+  - id: NX-24
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a developer I want a contract's tokens, groups, version history and config
+    acceptance: Tabs for tokens (with IDs), groups, version history with a diff (when kept) and internal config
+    radar_start: /contract/{contract}?tab=tokens
+    prod:
+      - https://explorer.dashhq.org/contract/?id={contract}&tab=tokens
+    phone: false
+  - id: NX-30
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a token holder I want a token's facts
+    acceptance: '`/token/{token}` shows name, supply, price, paused state, definition, status and balance lookup'
+    radar_start: /token/{token}
+    prod:
+      - https://explorer.dashhq.org/token/?id={token}
+    phone: false
+  - id: NX-31
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a token holder I want balances for a list of holders
+    acceptance: Enter identity IDs or names (or add viewed or well-known identities) and see their balances; the page says Platform has no holder index (PE's holder index, PE-25, is also available)
+    radar_start: /token/{token}/holders
+    prod:
+      - https://explorer.dashhq.org/token/holders/?id={token}
+    phone: true
+  - id: NX-32
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a token holder I want a token by contract and position
+    acceptance: Contract ID plus position opens the token
+    radar_start: /token/{token}
+    prod:
+      - https://explorer.dashhq.org/contract/token/?id={token.contract}&position={token.position}
+    phone: false
+  - id: NX-40
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want a DPNS name's status
+    acceptance: '`/name/{name}` says invalid, available, registered or contested, with owner, the record and a contest link when contested'
+    radar_start: /name/{name_registered}
+    prod:
+      - https://explorer.dashhq.org/dpns/?name={name_registered}
+    phone: false
+  - id: NX-41
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want to search names by prefix
+    acceptance: Homograph-safe prefix search (o→0, i/l→1) with paging; an empty search browses all names alphabetically
+    radar_start: /names?q=ali
+    prod:
+      - https://explorer.dashhq.org/dpns/search/?q=ali
+    phone: false
+  - id: NX-42
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want active name contests
+    acceptance: Active contests for a contract (DPNS by default)
+    radar_start: /contests
+    prod:
+      - https://explorer.dashhq.org/governance/contested/
+    phone: true
+  - id: NX-43
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want one contest's state
+    acceptance: Status, end time, total votes, a tally bar (towards each contender, abstain, lock), contenders with prefunded balance and winner, voters per contender (paged)
+    radar_start: /contest/{contest}
+    prod:
+      - https://explorer.dashhq.org/governance/contested/
+    phone: false
+  - id: NX-44
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want upcoming vote polls
+    acceptance: Polls by end date with 24 h / 7 d / 30 d / 90 d / all upcoming / custom range presets, sort direction and paging
+    radar_start: /polls
+    prod:
+      - https://explorer.dashhq.org/governance/polls/
+    phone: false
+  - id: NX-45
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S2
+    story: As a name hunter I want a contract's groups
+    acceptance: Groups with position and threshold; a group's members by power and its actions (active and closed) with signers
+    radar_start: /groups/{contract}
+    prod:
+      - https://explorer.dashhq.org/groups/?id={contract}
+    phone: false
+  - id: NX-50
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want the current epoch's proposers
+    acceptance: Start, estimated end, first block, fees and top 20 proposers, sortable
+    radar_start: /epochs
+    prod:
+      - https://explorer.dashhq.org/epoch/
+    phone: true
+  - id: NX-51
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want a past epoch
+    acceptance: Finalized totals and proposers with previous and next epoch links
+    radar_start: /epoch/{epoch_final}
+    prod:
+      - https://explorer.dashhq.org/epoch/detail/?index={epoch_final}
+    phone: false
+  - id: NX-52
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want a range of epochs
+    acceptance: A range table (start, end, fees) defaulting to the latest 20, with a custom range
+    radar_start: /epochs
+    prod:
+      - https://explorer.dashhq.org/epoch/
+    phone: false
+  - id: NX-53
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want an evonode's Platform record by epoch
+    acceptance: 'On its masternode page: an epoch selector over recent epochs with blocks proposed, rank, share and upgrade-vote badge; accepts hex and base58 ProTx'
+    radar_start: /mn/{mn_evo}?tab=platform
+    prod:
+      - https://explorer.dashhq.org/evonode/?proTxHash={mn_evo}
+    phone: false
+  - id: NX-54
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want Platform's live status
+    acceptance: Sync state, a Live / Lagging / Stalled banner with reasons, Platform height, Core chain-locked height, Core tip, chain ID, peers, last block time (ticking), latest block hash, the node's ProTx and software versions
+    radar_start: /status
+    prod:
+      - https://explorer.dashhq.org/network/status/
+    phone: true
+  - id: NX-55
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want current quorums
+    acceptance: Table of current quorums
+    radar_start: /quorums
+    prod:
+      - https://explorer.dashhq.org/network/quorums/
+    phone: false
+  - id: NX-56
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want protocol version voting
+    acceptance: Current and next version, votes for it, a tally across versions and a sortable per-evonode vote table
+    radar_start: /protocol
+    prod:
+      - https://explorer.dashhq.org/network/protocol/
+    phone: false
+  - id: NX-57
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want Platform's total credits and specialised balances
+    acceptance: Total credits with a USD estimate; lookup of a prefunded specialised balance by ID
+    radar_start: /credits
+    prod:
+      - https://explorer.dashhq.org/network/credits/
+    phone: false
+  - id: NX-58
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want the shielded pool's state
+    acceptance: Pool state, anchors, most recent anchor, encrypted notes and nullifier lookup, with copy controls
+    radar_start: /shielded
+    prod:
+      - https://explorer.dashhq.org/network/shielded/
+    phone: true
+  - id: NX-59
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want a Platform address
+    acceptance: '`/platform-address/{paddr}` shows balance and nonce (proof-checked)'
+    radar_start: /platform-address/{paddr}
+    prod:
+      - https://explorer.dashhq.org/address/?addr={paddr}
+    phone: false
+  - id: NX-60
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As an evonode operator I want the result of a state transition sent elsewhere
+    acceptance: A transition hash shows its execution status and error, or "not yet executed" with retry
+    radar_start: /platform/tx/{ptx}
+    prod:
+      - https://explorer.dashhq.org/state-transition/?hash={ptx}
+    phone: false
+  - id: NX-61
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a sceptic I want to see the proof behind a figure
+    acceptance: Every proof-checked figure has a mark that opens its proof details; I can export the evidence as JSON
+    radar_start: /identity/{identity}
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}
+    phone: false
+  - id: NX-62
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a sceptic I want to see what the explorer asked the network
+    acceptance: A diagnostics view lists recent queries with status, copyable as JSON
+    radar_start: /settings
+    prod:
+      - https://explorer.dashhq.org/settings/
+    phone: true
+  - id: NX-70
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to query documents with SQL
+    acceptance: Editor with contract picker and schema help; ⌘/Ctrl+Enter runs; presets and saved queries; up to two statements; cancel; copy query link; document and aggregate (COUNT/SUM/AVG, GROUP BY) results; export JSON and CSV; copy an SDK example; unsupported syntax (OR, NOT, !=, OFFSET, JOIN, DISTINCT, projections) is rejected with a reason
+    radar_start: /query
+    prod:
+      - https://explorer.dashhq.org/query/
+    phone: true
+  - id: NX-71
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to decode Platform bytes offline
+    acceptance: Paste hex, base64 or bytes to decode a state transition, data contract, identity or GroveDB proof
+    radar_start: /tools/transition
+    prod:
+      - https://explorer.dashhq.org/tools/
+    phone: false
+  - id: NX-72
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want raw network tools
+    acceptance: Decode document bytes for a contract and type; read GroveDB path elements with presets
+    radar_start: /tools/transition
+    prod:
+      - https://explorer.dashhq.org/tools/
+    phone: false
+  - id: NX-73
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to know which SDK call backs each page
+    acceptance: An SDK reference maps pages to calls
+    radar_start: /sdk-reference
+    prod:
+      - https://explorer.dashhq.org/sdk-reference/
+    phone: true
+  - id: NX-74
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to tune the connection
+    acceptance: Settings for quorum URL, timeouts, retries, banning failed nodes and log level, with reset; clear the SDK cache; inspector and diagnostics toggles with their shortcuts; local well-known labels; build info with a version-mismatch warning
+    radar_start: /settings
+    prod:
+      - https://explorer.dashhq.org/settings/
+    phone: false
+  - id: NX-75
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to use a devnet
+    acceptance: Add, use and remove a custom devnet (name, DAPI addresses, quorum URL); share links carry it
+    radar_start: /settings
+    prod:
+      - https://explorer.dashhq.org/settings/
+    phone: false
+  - id: NX-76
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want to understand what the explorer can and can't prove
+    acceptance: An about page covering the proof model, what can't be listed, where to go to act (Bridge, Governance) and privacy
+    radar_start: /about
+    prod:
+      - https://explorer.dashhq.org/about/
+    phone: false
+  - id: NX-77
+    group: 'Native Platform Explorer (NX): compare with explorer.dashhq.org'
+    shard: S3
+    story: As a developer I want it to survive a flaky connection
+    acceptance: Revisiting offline shows an offline page; a new version offers to reload
+    radar_start: /
+    prod:
+      - https://explorer.dashhq.org/offline/
+    phone: true
+  - id: PE-01
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a live pulse
+    acceptance: Indexer live state, Platform height (ticking up), average block time, time since last block and current epoch with countdown
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-02
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want the newest blocks and transitions
+    acceptance: Latest 5 Platform blocks and transitions update live; hovering holds the list still
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-03
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want recent epochs
+    acceptance: Current and previous three epochs with key totals
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-04
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want activity charts
+    acceptance: Transaction activity, identity growth, transaction types and shielded pool (shield/unshield) charts with 24 h / 3 d / 1 w / 1 m ranges and tooltips
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: true
+  - id: PE-05
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want leaderboards
+    acceptance: Most active identities, top-rated and most active contracts, richest identities (by balance or transaction count) and trending tokens
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-06
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want validator and quorum totals
+    acceptance: Validators total/active/banned/inactive, quorum list, current quorum and last proposer
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-10
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want every Platform block
+    acceptance: Block list with height, hash, epoch, proposer, gas, transaction count and time; filters for height, epoch, proposer, gas, transaction count and date; paging or infinite scroll
+    radar_start: /platform/blocks
+    prod:
+      - https://pe.dashhq.org/blocks
+    phone: true
+  - id: PE-11
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want one Platform block
+    acceptance: "`/platform/block/{pblock}`: digest, the Core block it is locked to (linking to Radar's Core block), its transitions, quorum members and quorum info"
+    radar_start: /platform/block/{pblock}
+    prod:
+      - https://pe.dashhq.org/block/{pblock}
+    phone: true
+  - id: PE-12
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want every state transition
+    acceptance: List with hash, status, type, block, gas, owner and time; filters for type and batch type (multi), status, gas, owner and date, in the URL
+    radar_start: /platform/txs
+    prod:
+      - https://pe.dashhq.org/transactions
+    phone: false
+  - id: PE-13
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want one state transition
+    acceptance: '`/platform/tx/{ptx}`: time, hash, block, index, type, status, owner, gas, fee multiplier, signature, raw (JSON/hex/base64), a type-specific panel for every transition type, and duplicates'
+    radar_start: /platform/tx/{ptx}
+    prod:
+      - https://pe.dashhq.org/transaction/{ptx}
+    phone: true
+  - id: PE-14
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want to list identities
+    acceptance: Identity list with type, balance, transactions, documents, contracts and creation time; filters and sort by balance and transaction count
+    radar_start: /identities
+    prod:
+      - https://pe.dashhq.org/identities
+    phone: false
+  - id: PE-15
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want an identity's history
+    acceptance: "On the identity page: tabs for transactions, contracts, documents (filterable), transfers and tokens; the funding Core transaction links to Radar's Core tx page"
+    radar_start: /identity/{identity}
+    prod:
+      - https://pe.dashhq.org/identity/{identity}
+    phone: true
+  - id: PE-16
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want to list contracts
+    acceptance: Featured contracts plus a table (ID, name, owner, system, tokens, documents, time) with filters
+    radar_start: /contracts
+    prod:
+      - https://pe.dashhq.org/dataContracts
+    phone: false
+  - id: PE-17
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a contract's activity
+    acceptance: 'On the contract page: transactions and documents filterable by type, owner, revision and date'
+    radar_start: /contract/{contract}
+    prod:
+      - https://pe.dashhq.org/dataContract/{contract}
+    phone: false
+  - id: PE-18
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a document's provenance
+    acceptance: Document page shows the transaction that created or last changed it, and its revisions
+    radar_start: /document/{doc_history.contract}/{doc_history.type}/{doc_history}
+    prod:
+      - https://pe.dashhq.org/document/{doc_history}
+    phone: false
+  - id: PE-19
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want every contested resource
+    acceptance: List with value, status, contract, index, type, votes, end, plus stats; filters for status, type, contract and date
+    radar_start: /contests
+    prod:
+      - https://pe.dashhq.org/contestedResources
+    phone: true
+  - id: PE-20
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a contested resource's votes
+    acceptance: Votes grouped by towards each contender, abstain and lock, with voter, power and time
+    radar_start: /contest/{contest}
+    prod:
+      - https://pe.dashhq.org/contestedResources
+    phone: false
+  - id: PE-21
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want every masternode vote
+    acceptance: List with voter, choice, resource, towards, power, contract and time; filters for voter, towards and date
+    radar_start: /votes
+    prod:
+      - https://pe.dashhq.org/masternodeVotes
+    phone: false
+  - id: PE-22
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want the validator set
+    acceptance: Validators with active/queued, last height, blocks proposed and last block; filters; lookup by identity
+    radar_start: /validators
+    prod:
+      - https://pe.dashhq.org/validators
+    phone: false
+  - id: PE-23
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a validator's record
+    acceptance: 'On `/mn/{mn_evo}`: endpoint reachability, epoch, rewards this epoch and total, blocks proposed, last block, withdrawals, PoSe, keys and addresses linking to Radar, and blocks and rewards charts'
+    radar_start: /mn/{mn_evo}
+    prod:
+      - https://pe.dashhq.org/validator/{mn_evo}
+    phone: true
+  - id: PE-24
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want every token
+    acceptance: Token list with name, position, supply, price, contract and owner; trending tokens; filters
+    radar_start: /tokens
+    prod:
+      - https://pe.dashhq.org/tokens
+    phone: false
+  - id: PE-25
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a token's activity and holders
+    acceptance: 'Token page: activity (transitions) and holders with balances, localisations, distribution rules and prices'
+    radar_start: /token/{token}
+    prod:
+      - https://pe.dashhq.org/token/{token}
+    phone: false
+  - id: PE-26
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want a Platform address's history
+    acceptance: Platform address page lists its transitions, paged
+    radar_start: /platform-address/{paddr}
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-27
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want one search across indexed Platform data
+    acceptance: Search finds blocks by height or hash, transitions, validators, identities, contracts (by name, keywords or description), documents, tokens (by name), Platform addresses and DPNS names, grouped by kind
+    radar_start: /search?q={name_registered}
+    prod:
+      - https://pe.dashhq.org/
+    phone: true
+  - id: PE-28
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want to know what data Radar gets from where
+    acceptance: A data-sources page documents each backend and links to PE's API documentation
+    radar_start: /sources
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-34
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S3
+    story: As a Platform watcher I want to check a raw transition before I send it elsewhere
+    acceptance: '`/tools/transition`: paste hex or base64; decode; verify (consensus check, no broadcast) with a readable error; no signing or broadcast, with a pointer to Bridge for sending'
+    radar_start: /tools/transition
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-36
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want to switch networks in place
+    acceptance: Mainnet and testnet switch without leaving Radar
+    radar_start: /platform
+    prod:
+      - https://pe.dashhq.org/
+    phone: false
+  - id: PE-37
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want fiat estimates
+    acceptance: Credit and DASH amounts show a USD estimate on hover or inline, to three significant figures
+    radar_start: /identities
+    prod:
+      - https://pe.dashhq.org/identities
+    phone: true
+  - id: PE-38
+    group: 'Platform Explorer (PE): compare with pe.dashhq.org / testnet.pe.dashhq.org'
+    shard: S4
+    story: As a Platform watcher I want to choose infinite scroll or pages
+    acceptance: Long lists offer scroll or pages with page size; the choice is remembered
+    radar_start: /platform/txs
+    prod:
+      - https://pe.dashhq.org/transactions
+    phone: false
+  - id: IN-01
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want the latest blocks and transactions
+    acceptance: Home shows the latest Core blocks and a live feed of new transactions, both updating without reload
+    radar_start: /
+    prod:
+      - https://insight.dash.org/insight/
+    phone: false
+  - id: IN-02
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want blocks for a given day
+    acceptance: Pick a UTC date; see that day's blocks; previous/next day; older blocks from that date
+    radar_start: /blocks?date={date_with_blocks}
+    prod:
+      - https://insight.dash.org/insight/blocks?blockDate={date_with_blocks}
+    phone: false
+  - id: IN-03
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want a block
+    acceptance: '`/block/{block}` by hash or height: hash, height, time, size, difficulty, bits, nonce, merkle root, chainwork, reward, mined by (pool), confirmations, previous/next, transactions (paged)'
+    radar_start: /block/{block_recent}
+    prod:
+      - https://insight.dash.org/insight/block/{block_recent}
+    phone: true
+  - id: IN-04
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want old block links to work
+    acceptance: '`/block-index/<height>` and Insight-style `/insight/block/<hash>` paths open the block'
+    radar_start: /block-index/{block_recent.height}
+    prod:
+      - https://insight.dash.org/insight/block-index/{block_recent.height}
+    phone: false
+  - id: IN-05
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want a transaction
+    acceptance: '`/tx/{tx}`: confirmations, time, fee, size, InstantSend and ChainLock state, inputs and outputs with addresses and values, show more for long lists, spent outputs linking to the spending transaction, and deep links to an input or output'
+    radar_start: /tx/{tx_normal}
+    prod:
+      - https://insight.dash.org/insight/tx/{tx_normal}
+    phone: true
+  - id: IN-06
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want an address
+    acceptance: '`/address/{addr}`: balance, total received and sent, unconfirmed balance, transaction count, QR code, paged transactions, and a notice when a new transaction arrives'
+    radar_start: /address/{address_history}
+    prod:
+      - https://insight.dash.org/insight/address/{address_history}
+    phone: true
+  - id: IN-08
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want to verify a signed message
+    acceptance: Address, signature and message say valid or invalid
+    radar_start: /tools/verify-message
+    prod:
+      - https://insight.dash.org/insight/messages/verify
+    phone: true
+  - id: IN-09
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want the explorer's sync state
+    acceptance: A status page with Core tip, best ChainLock, and each backend's sync state and lag
+    radar_start: /status
+    prod:
+      - https://insight.dash.org/insight/status
+    phone: false
+  - id: IN-10
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want search to understand Core inputs
+    acceptance: A height opens the block; an address opens the address; a 64-hex value opens the block or transaction; nonsense says no match
+    radar_start: /
+    prod:
+      - https://insight.dash.org/insight/
+    phone: false
+  - id: IN-11
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want to scan a QR code
+    acceptance: Scan with the camera or from an image file into search
+    radar_start: /tools/qr
+    prod:
+      - https://insight.dash.org/insight/
+    phone: false
+  - id: IN-12
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want amounts in my unit
+    acceptance: DASH, mDASH, µDASH, duffs and USD; the choice is remembered
+    radar_start: /settings
+    prod:
+      - https://insight.dash.org/insight/
+    phone: true
+  - id: IN-13
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want the explorer in my language
+    acceptance: German, English, French, Spanish, Portuguese, Japanese and Chinese are available
+    radar_start: /settings
+    prod:
+      - https://insight.dash.org/insight/
+    phone: false
+  - id: IN-14
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want to copy any hash or address
+    acceptance: One-click copy with feedback
+    radar_start: /tx/{tx_normal}
+    prod:
+      - https://insight.dash.org/insight/tx/{tx_normal}
+    phone: false
+  - id: IN-15
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want to know if live updates have stopped
+    acceptance: A visible indicator when the live connection drops, and current height in the header
+    radar_start: /
+    prod:
+      - https://insight.dash.org/insight/
+    phone: false
+  - id: IN-16
+    group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
+    shard: S5
+    story: As a Dash user I want the same on testnet
+    acceptance: All of the above work with `?network=testnet`
+    radar_start: /
+    prod:
+      - https://insight.dash.org/insight/
+    phone: true
+    network: testnet
+  - id: HY-01
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want Core's headline numbers
+    acceptance: Height, difficulty, circulating supply and blockchain size
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+  - id: HY-02
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want hash-rate and transaction charts
+    acceptance: Hash rate and processed transactions with 1 h / 1 d / 1 w / 1 m / 1 y / all ranges and tooltips
+    radar_start: /charts
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+  - id: HY-03
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want latest blocks and pending transactions
+    acceptance: Latest 12 blocks and 8 pending transactions, each opening its page
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+  - id: HY-04
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want every Core block
+    acceptance: Block list with infinite scroll or paging through the whole chain
+    radar_start: /blocks
+    prod:
+      - https://hy.kw.vg/blocks
+    phone: true
+  - id: HY-05
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want Dash-specific block detail
+    acceptance: ChainLock tag, cbTx fields (credit pool balance, best ChainLock height and signature, merkle roots), and transactions (100 per page)
+    radar_start: /block/{block_special}
+    prod:
+      - https://hy.kw.vg/block/{block_special}
+    phone: true
+  - id: HY-06
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want the mempool
+    acceptance: Mempool summary (count, size, usage) and pending transactions with type, size, value and first seen, paged
+    radar_start: /mempool
+    prod:
+      - https://hy.kw.vg/transactions
+    phone: false
+  - id: HY-07
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want special transactions explained
+    acceptance: Fee rate, received and mined time, and readable renderers for ProRegTx, ProUpServTx, ProUpRegTx, ProUpRevTx, quorum commitment, asset lock, asset unlock, MNHF and coinbase payloads; IS lock tag
+    radar_start: /tx/{tx_proreg}
+    prod:
+      - https://hy.kw.vg/transaction/{tx_proreg}
+    phone: false
+  - id: HY-08
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want an address's history
+    acceptance: First and last seen, and history rows with direction and net value
+    radar_start: /address/{address_history}
+    prod:
+      - https://hy.kw.vg/address/{address_history}
+    phone: true
+  - id: HY-09
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want the rich list
+    acceptance: Rank, address, balance, % of supply, received, sent, transactions; paged; a supply-concentration chart (top 1, 2–5, 6–10, 11–25, 26–50, 51–100)
+    radar_start: /rich-list
+    prod:
+      - https://hy.kw.vg/balances
+    phone: false
+  - id: HY-10
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S1
+    story: As an analyst I want the masternode list with last paid
+    acceptance: Type, IP, status and last paid for every masternode (Radar's list, RA-20, covers this)
+    radar_start: /masternodes
+    prod:
+      - https://hy.kw.vg/validators
+    phone: false
+  - id: HY-11
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S1
+    story: As an analyst I want a masternode's special-transaction history
+    acceptance: 'On its masternode page: every ProReg/ProUp* transaction with block and a link'
+    radar_start: /mn/{mn_regular}?tab=history
+    prod:
+      - https://hy.kw.vg/validator/{mn_regular}
+    phone: false
+  - id: HY-12
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want the network's internals
+    acceptance: Peers of the indexing node, mempool pressure, transaction velocity, chainstate and UTXO set size, Core versions, masternode status counts, credit pool and metrics history
+    radar_start: /status
+    prod:
+      - https://hy.kw.vg/network
+    phone: true
+  - id: HY-13
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want governance proposals
+    acceptance: Budget donut and a proposal table with status, votes and amounts; expanding a proposal shows its details
+    radar_start: /governance
+    prod:
+      - https://hy.kw.vg/proposals
+    phone: false
+  - id: HY-14
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want search suggestions
+    acceptance: Typing suggests matching blocks, transactions, addresses, masternodes and proposals; arrow keys and Enter choose
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+  - id: HY-15
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want the explorer in Russian, Spanish, Turkish, Chinese or Ukrainian
+    acceptance: Those locales are available
+    radar_start: /settings
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+  - id: HY-16
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want duffs and µDASH
+    acceptance: Denomination menu includes DASH, mDASH, µDASH and duffs
+    radar_start: /settings
+    prod:
+      - https://hy.kw.vg/
+    phone: true
+  - id: HY-17
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want testnet to look different from mainnet
+    acceptance: Testnet is unmistakable at a glance (colour and label) in both themes
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+    network: testnet
+  - id: HY-18
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want a phone-first layout
+    acceptance: On a phone, primary navigation stays reachable with one thumb and doesn't cover content
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: true
+  - id: HY-19
+    group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
+    shard: S5
+    story: As an analyst I want the same on testnet
+    acceptance: All of the above work on testnet
+    radar_start: /
+    prod:
+      - https://hy.kw.vg/
+    phone: false
+    network: testnet
+  - id: X-01
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want one search for everything
+    acceptance: One box (also on `/` and ⌘K) accepts any Core height, block hash, txid, address, ProTx, IP, Platform block height or hash, transition hash, identity, contract, document, token, DPNS name, Platform address, public-key hash or epoch, and shows grouped live results with previews while typing
+    radar_start: /
+    prod:
+      - https://explorer.dashhq.org/search/?q={identity}
+      - https://pe.dashhq.org/
+    phone: true
+  - id: X-02
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want to follow links across layers
+    acceptance: Asset-lock tx ↔ the identity it funded; masternode ↔ its Platform validator record; Platform withdrawal ↔ its Core asset-unlock tx; payout address ↔ address page; Platform block ↔ locked Core block
+    radar_start: /tx/{tx_assetlock}
+    prod:
+      - https://pe.dashhq.org/identity/{identity}
+      - https://hy.kw.vg/transaction/{tx_assetlock}
+    phone: false
+  - id: X-03
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want switching network to keep my place
+    acceptance: Switching on a list or search keeps the page and query; on an entity page it offers that page's equivalent or a search on the other network
+    radar_start: /masternodes
+    prod:
+      - https://radar.dashhq.org/masternodes
+      - https://pe.dashhq.org/
+    phone: false
+  - id: X-04
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want old links to keep working
+    acceptance: The native explorer's explorer.dashhq.org paths and Radar's own old paths open the equivalent page after each cutover (pe.dashhq.org stays as it is)
+    radar_start: /identity/?id={identity}
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}
+    phone: false
+  - id: X-05
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want to know where every figure comes from and how fresh it is
+    acceptance: Each figure or card names its source (proof-checked by Platform, served by DAPI, indexed by Platform Explorer, indexed by Hyphen, crawled by Radar) and its age
+    radar_start: /
+    prod:
+      - https://pe.dashhq.org/
+      - https://explorer.dashhq.org/
+    phone: true
+  - id: X-06
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want to peek before I click
+    acceptance: Hovering or long-pressing any hash or ID shows a preview card (type, key facts)
+    radar_start: /block/{block_recent}
+    prod:
+      - https://hy.kw.vg/block/{block_recent}
+      - https://pe.dashhq.org/
+    phone: false
+  - id: X-07
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want keyboard control
+    acceptance: '`/` or ⌘K focuses search, `?` lists shortcuts, j/k move through table rows and Enter opens one'
+    radar_start: /
+    prod:
+      - https://pe.dashhq.org/
+      - https://hy.kw.vg/
+    phone: true
+  - id: X-08
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want it to work on my phone
+    acceptance: Every key page fits 390 px with no horizontal page scroll; tables become cards; navigation never covers content
+    radar_start: /
+    prod:
+      - https://radar.dashhq.org/
+      - https://pe.dashhq.org/
+      - https://hy.kw.vg/
+    phone: true
+  - id: X-09
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want honest failure
+    acceptance: When a backend or DAPI is down, the page still shows what other sources can provide and says plainly what is missing and why
+    radar_start: /status
+    prod:
+      - https://explorer.dashhq.org/network/status/
+      - https://hy.kw.vg/network
+    phone: true
+  - id: X-10
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want good share links
+    acceptance: Every entity page has a copy-link control, and the link previews with the entity's title
+    radar_start: /mn/{mn_regular}
+    prod:
+      - https://radar.dashhq.org/mn/{mn_regular}
+      - https://pe.dashhq.org/validator/{mn_regular}
+    phone: false
+  - id: X-11
+    group: 'Unification (X): compare with the best of the five for each task'
+    shard: S6
+    story: As anyone I want to act on what I see without Radar touching my keys
+    acceptance: Identity, name, token and contract pages offer "Manage in Bridge" with the entity prefilled; contest and masternode pages offer "Vote in Governance" (`gov.dashhq.org/names/<label>`); proposals link to `gov.dashhq.org/p/h/<hash>`; no Radar page asks for a key, mnemonic or signature. Compared with the in-page write entry points of the native explorer and PE
+    radar_start: /identity/{identity}
+    prod:
+      - https://explorer.dashhq.org/identity/?id={identity}
+      - https://pe.dashhq.org/identity/{identity}
+    phone: false
