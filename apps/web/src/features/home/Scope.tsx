@@ -51,7 +51,6 @@ function Omni() {
       to="/search"
       className="rx-omni"
       data-palette-trigger
-      aria-label={t`Search Radar (press /)`}
       aria-keyshortcuts="/ Control+K Meta+K"
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
@@ -266,7 +265,12 @@ function Lanes() {
           <span className="rx-layer-dot" />
           {t`Core`}
         </div>
-        <div className="rx-lane" id="lane-core" aria-label={t`Latest Core blocks, oldest first`}>
+        <div
+          className="rx-lane"
+          id="lane-core"
+          role="group"
+          aria-label={t`Latest Core blocks, oldest first`}
+        >
           {core.length === 0 ? <Skeleton shape="chip" count={4} /> : null}
           {core.map((b, i) => (
             <Link
@@ -292,6 +296,7 @@ function Lanes() {
         <div
           className="rx-lane"
           id="lane-plat"
+          role="group"
           aria-label={t`Latest Platform blocks, oldest first`}
         >
           {isDevnet(net) ? (
@@ -357,7 +362,7 @@ export function Scope() {
               <PageLink to="/mempool">{t`mempool`}</PageLink>
             </p>
             <div className="rx-row" style={{ gap: '10px 16px' }}>
-              <PageLink to="/map" className="dh-btn dh-btn--primary">
+              <PageLink to="/map" className="dh-btn">
                 <Icon name="map" />
                 {t`Open the map`}
               </PageLink>
