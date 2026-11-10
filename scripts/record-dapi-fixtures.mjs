@@ -25,9 +25,19 @@ Options:
   --from <height>        --discover starts here instead of the tip
   --dry                  run the scenarios but write nothing
   --rows <from:count,…>  only record these blockRows pages and add them to the existing recordings
-                         (nothing is removed and the manifest is left as it is)`
+                         (nothing is removed and the manifest is left as it is)
+  --lookups <list>       the same for single lookups: block:<height|hash> and tx:<txid>, comma-separated;
+                         a hash or id that does not exist is recorded as the not-found answer`
 
-const args = { net: undefined, discover: false, blocks: 1500, from: undefined, dry: false, rows: [] }
+const args = {
+  net: undefined,
+  discover: false,
+  blocks: 1500,
+  from: undefined,
+  dry: false,
+  rows: [],
+  lookups: [],
+}
 const argv = process.argv.slice(2)
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i]
@@ -38,8 +48,9 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--dry') args.dry = true
   else if (a === '--rows') {
     args.rows = argv[++i].split(',').map((r) => r.split(':').map(Number))
-  }
-  else {
+  } else if (a === '--lookups') {
+    args.lookups = argv[++i].split(',').map((r) => r.split(':'))
+  } else {
     console.error(USAGE)
     process.exit(a === '--help' ? 0 : 2)
   }
@@ -111,10 +122,19 @@ const core = clientMod.createCoreClient({
   now: Date.now,
 })
 
-if (args.rows.length > 0) {
+if (args.rows.length > 0 || args.lookups.length > 0) {
   for (const [fromHeight, count] of args.rows) {
     await core.blockRows(net, { fromHeight, count })
     say(`blockRows ${fromHeight} x ${count}`)
+  }
+  for (const [kind, id] of args.lookups) {
+    try {
+      if (kind === 'tx') await core.tx(net, id)
+      else await core.block(net, /^\d+$/.test(id) ? { height: Number(id) } : { hash: id })
+      say(`${kind} ${id}`)
+    } catch (e) {
+      say(`${kind} ${id} failed: ${e instanceof Error ? e.message : e}`)
+    }
   }
   say(`${recording.exchanges.size} exchanges, ${live.requestCount} requests`)
   if (!args.dry) {
