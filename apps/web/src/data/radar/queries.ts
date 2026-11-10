@@ -6,10 +6,10 @@ import { radar } from './client'
 import type { RadarHistoryQuery } from './schemas'
 
 export const radarQueries = {
-  status: () =>
+  status: (net: NetworkId = 'mainnet') =>
     queryOptions({
-      queryKey: radarKeys('mainnet', 'status'),
-      queryFn: ({ signal }) => radar.status(signal),
+      queryKey: radarKeys(net, 'status'),
+      queryFn: ({ signal }) => radar.status(signal, net),
       ...dataClass('crawl'),
       refetchInterval: POLL_MS.radarStatus,
     }),

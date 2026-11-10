@@ -1,4 +1,5 @@
 import type { NetworkId } from '@/lib/network'
+import { getActiveNetwork } from '../active-network'
 import { healthRegistry } from '../health'
 import { humanizeSpan } from '../health-lag'
 import { fetchSourced, lastModifiedMs, requireEndpoint } from '../http'
@@ -61,40 +62,52 @@ function reportCrawlLag(status: RadarStatus): void {
   }
 }
 
+const modified = (_body: unknown, res: Response) => lastModifiedMs(res)
+
 export const radar = {
-  /** Global, not per network. Reported to the mainnet health record; lag is set for both networks. */
-  async status(signal?: AbortSignal): Promise<Sourced<RadarStatus>> {
+  /**
+   * Global document, read for one network (the active one by default): `net` picks the stamp and the
+   * health record it reports to. The crawl lag is set for both networks. Radar offers no devnet.
+   */
+  async status(
+    signal?: AbortSignal,
+    net: NetworkId = getActiveNetwork(),
+  ): Promise<Sourced<RadarStatus>> {
     const out = await fetchSourced({
       source: 'radar',
-      net: 'mainnet',
-      url: `${RADAR_GLOBAL_BASE}/status`,
+      net,
+      url: () => {
+        netBase(net)
+        return `${RADAR_GLOBAL_BASE}/status`
+      },
       schema: RadarStatusSchema,
       signal,
-      asOf: (b) => Math.max(b.networks.mainnet.chain.updated, b.networks.testnet.chain.updated),
+      asOf: (b) => b.networks[net === 'testnet' ? 'testnet' : 'mainnet'].chain.updated,
     })
     reportCrawlLag(out.data)
     return out
   },
 
+  /** Global. Reported to the active network's health record. */
   health(signal?: AbortSignal): Promise<Sourced<RadarHealth>> {
     return fetchSourced({
       source: 'radar',
-      net: 'mainnet',
       url: `${RADAR_GLOBAL_BASE}/health`,
       schema: RadarHealthSchema,
       acceptStatus: [503],
       signal,
+      asOf: modified,
     })
   },
 
+  /** Global. Reported to the active network's health record. */
   releases(signal?: AbortSignal): Promise<Sourced<RadarReleases>> {
     return fetchSourced({
       source: 'radar',
-      net: 'mainnet',
       url: `${RADAR_GLOBAL_BASE}/releases`,
       schema: RadarReleasesSchema,
       signal,
-      asOf: (b) => b.releases.reduce((m, r) => Math.max(m, r.published), 0) || Date.now(),
+      asOf: modified,
     })
   },
 
@@ -127,7 +140,7 @@ export const radar = {
       url: () => `${netBase(net)}/history?${params}`,
       schema: RadarHistorySchema,
       signal,
-      asOf: (b) => b.t[b.t.length - 1] ?? Date.now(),
+      asOf: modified,
     })
   },
 
@@ -138,6 +151,7 @@ export const radar = {
       url: () => `${netBase(net)}/geo`,
       schema: RadarGeoSchema,
       signal,
+      asOf: modified,
     })
   },
 
@@ -149,9 +163,7 @@ export const radar = {
       schema: RadarMasternodesSchema,
       signal,
       height: (b) => b.tip ?? undefined,
-      asOf: (_b, res) => {
-        return lastModifiedMs(res) ?? Date.now()
-      },
+      asOf: modified,
     }).then((s) => mapSourced(s, (d) => d.masternodes))
   },
 
@@ -167,7 +179,7 @@ export const radar = {
       schema: RadarMasternodeDetailSchema,
       notFound: 'null',
       signal,
-      asOf: (b) => b.last_seen ?? Date.now(),
+      asOf: modified,
     })
   },
 
@@ -187,6 +199,7 @@ export const radar = {
       url: () => `${netBase(net)}/masternodes/${protxPath(protx)}/payments${qs}`,
       schema: RadarPaymentsSchema,
       signal,
+      asOf: modified,
     }).then((s) => mapSourced(s, (d) => d.payments))
   },
 
@@ -197,7 +210,8 @@ export const radar = {
       url: () => `${netBase(net)}/bench`,
       schema: RadarBenchSchema,
       signal,
-      asOf: (b) => b.vantages.reduce((m, v) => Math.max(m, v.updated), 0) || Date.now(),
+      asOf: (b, res) =>
+        b.vantages.reduce((m, v) => Math.max(m, v.updated), 0) || lastModifiedMs(res),
     })
   },
 
@@ -213,6 +227,7 @@ export const radar = {
       schema: RadarMnBenchSchema,
       notFound: 'null',
       signal,
+      asOf: modified,
     })
   },
 
@@ -247,7 +262,7 @@ export const radar = {
       url: () => `${netBase(net)}/changes`,
       schema: RadarChangesSchema,
       signal,
-      asOf: (b) => b.changes.reduce((m, c) => Math.max(m, c.ts), 0) || Date.now(),
+      asOf: modified,
     })
   },
 
@@ -261,7 +276,7 @@ export const radar = {
       schema: RadarCheckSchema,
       signal,
       timeoutMs: 20_000,
-      asOf: (b) => b.checked ?? Date.now(),
+      asOf: (b) => b.checked ?? undefined,
     })
   },
 }

@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
+import { healthRegistry } from './health'
 import { hyphen } from './hyphen/client'
 import { pe } from './pe/client'
 import { healthKeys } from './query/keys'
@@ -19,7 +20,7 @@ export const healthQueries = {
   radar: (net: NetworkId) =>
     queryOptions({
       queryKey: healthKeys(net, 'radar'),
-      queryFn: ({ signal }) => radar.status(signal),
+      queryFn: ({ signal }) => radar.status(signal, net),
       ...probe,
     }),
   pe: (net: NetworkId) =>
@@ -32,9 +33,12 @@ export const healthQueries = {
     queryOptions({
       queryKey: healthKeys(net, 'hyphen'),
       queryFn: async ({ signal }) => {
-        const radarStatus = await radar.status(signal).catch(() => undefined)
         const key = net === 'testnet' ? 'testnet' : 'mainnet'
-        const tip = radarStatus?.data.networks[key].chain.blocks
+        const tip = await radar
+          .status(signal, key)
+          .then((s) => s.data.networks[key].chain.blocks)
+          .catch(() => undefined)
+        if (tip === undefined) healthRegistry.setLag(net, 'hyphen', undefined)
         return hyphen.status(net, signal, tip)
       },
       ...probe,
