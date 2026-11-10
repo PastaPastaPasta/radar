@@ -90,8 +90,11 @@ describe('redirect targets', () => {
     const at = (path: string, q: Record<string, string>) =>
       target(path, new URLSearchParams(q), 'explorer.dashhq.org')
     expect(
-      at('/governance/contested/detail', { indexValues: '["dash","alice"]', docType: 'domain' })
-        ?.pathname,
+      at('/governance/contested/detail', {
+        indexValues: '["dash","alice"]',
+        docType: 'domain',
+        indexName: 'parentNameAndLabel',
+      })?.pathname,
     ).toBe('/contest/alice')
     expect(at('/groups/detail', { contractId: ID, position: '2' })?.pathname).toBe(`/group/${ID}/2`)
     expect(at('/groups', { contractId: ID })?.pathname).toBe(`/groups/${ID}`)

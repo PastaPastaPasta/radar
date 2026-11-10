@@ -286,6 +286,17 @@ describe('redirects', () => {
       '/contest/al1ce?network=testnet',
     )
     await check(h, '/governance/contested/detail/?indexValues=nope', '/contests?network=testnet')
+    await check(
+      h,
+      '/governance/contested/detail/?contract=X&docType=foo&indexName=bar&indexValues=%5B%22a%22%2C%22b%22%5D',
+      '/contests?network=testnet',
+    )
+    await check(
+      h,
+      '/governance/contested/detail/?docType=domain&indexName=parentNameAndLabel&indexValues=%255B%2522dash%2522%252C%2522al1ce%2522%255D',
+      '/contest/al1ce?network=testnet',
+    )
+    await check(h, '/tools/?tool=constructor', '/tools/transition?network=testnet')
     await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
     await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
     await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?network=testnet')

@@ -20,15 +20,33 @@ const TOOLS: Record<string, string> = {
   proof: 'proof',
 }
 
-function contestLabel(raw: string | null): string | null {
-  if (!raw) return null
+function toolPath(tool: string | null): string {
+  return tool !== null && Object.hasOwn(TOOLS, tool) ? TOOLS[tool]! : 'transition'
+}
+
+function parseJson(raw: string): unknown {
   try {
-    const values: unknown = JSON.parse(raw)
-    const label = Array.isArray(values) ? (values as unknown[])[1] : undefined
-    return typeof label === 'string' && label ? label : null
+    return JSON.parse(raw)
   } catch {
-    return null
+    return undefined
   }
+}
+
+function contestLabel(p: URLSearchParams): string | null {
+  if (p.get('docType') !== 'domain' || p.get('indexName') !== 'parentNameAndLabel') return null
+  const raw = p.get('indexValues')
+  if (!raw) return null
+  let values = parseJson(raw)
+  if (values === undefined) {
+    try {
+      values = parseJson(decodeURIComponent(raw))
+    } catch {
+      return null
+    }
+  }
+  if (!Array.isArray(values)) return null
+  const [parent, label] = values as unknown[]
+  return parent === 'dash' && typeof label === 'string' && label ? label : null
 }
 
 const NATIVE: Record<string, Rule> = {
@@ -70,7 +88,7 @@ const NATIVE: Record<string, Rule> = {
   '/dpns/search': () => ({ path: '/names' }),
   '/governance/contested': () => ({ path: '/contests' }),
   '/governance/contested/detail': (p) => {
-    const label = contestLabel(p.get('indexValues'))
+    const label = contestLabel(p)
     const drop = ['contract', 'docType', 'indexName', 'indexValues']
     return label ? { path: `/contest/${seg(label)}`, drop } : { path: '/contests', drop }
   },
@@ -112,7 +130,7 @@ const NATIVE: Record<string, Rule> = {
       ? { path: `/platform/tx/${seg(p.get('hash')!)}`, drop: ['hash'] }
       : { path: '/platform/txs' },
   '/tools': (p) => ({
-    path: `/tools/${TOOLS[p.get('tool') ?? ''] ?? 'transition'}`,
+    path: `/tools/${toolPath(p.get('tool'))}`,
     drop: ['tool'],
   }),
   '/destinations': () => ({ path: '/', drop: ['group'] }),
