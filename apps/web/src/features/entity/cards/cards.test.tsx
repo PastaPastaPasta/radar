@@ -3,7 +3,14 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { budget } from '@/data/dapi-core/budget'
 import type { CoreClient, DecodedBlock, DecodedTx } from '@/data/core/types'
-import { setCoreClient } from '../index'
+
+const mocked = vi.hoisted(() => ({ client: undefined as CoreClient | undefined }))
+vi.mock('@/data/core/client', () => ({
+  core: new Proxy({}, { get: (_t, key) => Reflect.get(mocked.client ?? {}, key) as unknown }),
+}))
+const setCoreClient = (client: CoreClient | undefined): void => {
+  mocked.client = client
+}
 
 const NOW = 1_794_000_000_000
 const stamp = { source: 'dapi' as const, asOf: NOW, fetchedAt: NOW, proved: false }

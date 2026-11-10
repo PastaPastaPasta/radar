@@ -1,11 +1,18 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import type { CoreClient } from '@/data/core/types'
 import { SourceError } from '@/data/errors'
 import { healthRegistry } from '@/data/health'
-import { setCoreClient } from '@/features/entity'
+
+const mocked = vi.hoisted(() => ({ client: undefined as CoreClient | undefined }))
+vi.mock('@/data/core/client', () => ({
+  core: new Proxy({}, { get: (_t, key) => Reflect.get(mocked.client ?? {}, key) as unknown }),
+}))
+const setCoreClient = (client: CoreClient | undefined): void => {
+  mocked.client = client
+}
 
 const NOW = Date.now()
 const stamp = { source: 'dapi' as const, asOf: NOW, fetchedAt: NOW, proved: false }

@@ -1,20 +1,19 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatBytes, formatInt } from '@/lib/format'
 import { Badge, ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
 import { entityHref, entityPath } from '../hrefs'
 import { useNetwork } from '../network'
 import { BusyCard, CardLoading, mayReadDapi } from './frame'
-import { getCoreClient } from './core-client'
-import { coreCardQueries } from './queries'
 
 export function BlockHoverCard({ id }: { id: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const allowed = mayReadDapi(net)
   const ref = /^\d+$/.test(id) ? { height: Number(id) } : { hash: id }
-  const query = useQuery({ ...coreCardQueries(getCoreClient()).block(net, ref), enabled: allowed })
+  const query = useQuery({ ...coreQueries.block(net, ref), enabled: allowed })
   const href = entityHref('block', id, net)
   const common = {
     layer: 'core',

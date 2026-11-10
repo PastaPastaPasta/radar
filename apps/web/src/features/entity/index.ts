@@ -18,4 +18,3 @@ export {
   sectionOfPath,
 } from './site-map'
 export type { SitePage, SiteSection } from './site-map'
-export { getCoreClient, setCoreClient } from './cards/core-client'

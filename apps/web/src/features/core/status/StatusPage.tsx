@@ -1,8 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
 import { useAllSourceHealth } from '@/data/health'
-import { getCoreClient, useDocumentTitle, useNetwork } from '@/features/entity'
+import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { LiveDot } from '@/ui'
 import { BudgetCard } from './BudgetCard'
 import { CoreCard } from './CoreCard'
@@ -14,14 +13,12 @@ import { statusQueries } from './queries'
 export function StatusPage() {
   const { t } = useLingui()
   const net = useNetwork()
-  const core = getCoreClient()
   const health = useAllSourceHealth()
   useDocumentTitle(t`Status`)
 
-  const q = useMemo(() => statusQueries(core), [core])
-  const tip = useQuery(q.tip(net))
-  const chainLock = useQuery(q.chainLock(net))
-  const chain = useQuery(q.chain(net))
+  const tip = useQuery(statusQueries.tip(net))
+  const chainLock = useQuery(statusQueries.chainLock(net))
+  const chain = useQuery(statusQueries.chain(net))
   const probes = useProbes(net)
 
   const rows = sourceRows(net, health)

@@ -1,20 +1,19 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatInt } from '@/lib/format'
 import { Amount, Badge, ErrorState, HoverCardLayout, LayerGlyph, TypeBadge } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
 import { BusyCard, CardLoading, mayReadDapi } from './frame'
-import { getCoreClient } from './core-client'
-import { coreCardQueries } from './queries'
 
 export function TxHoverCard({ id }: { id: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const allowed = mayReadDapi(net)
-  const query = useQuery({ ...coreCardQueries(getCoreClient()).tx(net, id), enabled: allowed })
+  const query = useQuery({ ...coreQueries.tx(net, id), enabled: allowed })
   const common = {
     layer: 'core',
     glyph: <LayerGlyph layer="core" icon="tx" />,
