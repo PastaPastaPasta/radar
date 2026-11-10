@@ -3,7 +3,7 @@ import { healthRegistry } from '../health'
 import { humanizeSpan } from '../health-lag'
 import { requireEndpoint, fetchSourced } from '../http'
 import { RADAR_GLOBAL_BASE } from '../endpoints'
-import type { Sourced } from '../envelope'
+import { mapSourced, type Sourced } from '../envelope'
 import {
   RadarActivationSchema,
   RadarBenchSchema,
@@ -153,7 +153,7 @@ export const radar = {
         const lm = res.headers.get('last-modified')
         return lm ? Date.parse(lm) : Date.now()
       },
-    }).then((s) => ({ ...s, data: s.data.masternodes }))
+    }).then((s) => mapSourced(s, (d) => d.masternodes))
   },
 
   masternode(
@@ -188,7 +188,7 @@ export const radar = {
       url: `${netBase(net)}/masternodes/${protxPath(protx)}/payments${qs}`,
       schema: RadarPaymentsSchema,
       signal,
-    }).then((s) => ({ ...s, data: s.data.payments }))
+    }).then((s) => mapSourced(s, (d) => d.payments))
   },
 
   bench(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarBench>> {

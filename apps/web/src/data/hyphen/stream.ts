@@ -1,7 +1,7 @@
 import type { NetworkId } from '@/lib/network'
 import { SourceError } from '../errors'
 import { healthRegistry } from '../health'
-import { describeFailure, requireEndpoint } from '../http'
+import { cancelled, describeFailure, requireEndpoint } from '../http'
 import { HyStreamEventSchema, type HyStreamEvent } from './schemas'
 
 /** Live events as NDJSON. The iterator ends when `signal` aborts or the server closes the stream. */
@@ -16,12 +16,7 @@ export async function openHyphenStream(
     res = await fetch(url, { signal, headers: { accept: 'application/x-ndjson' } })
   } catch (cause) {
     if (signal?.aborted) {
-      throw new SourceError({
-        source: 'hyphen',
-        kind: 'aborted',
-        message: 'The request was cancelled',
-        cause,
-      })
+      throw cancelled('hyphen', cause)
     }
     const message = describeFailure('hyphen', 'network')
     healthRegistry.report(net, 'hyphen', {

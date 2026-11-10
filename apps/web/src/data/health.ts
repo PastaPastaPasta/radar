@@ -227,11 +227,8 @@ const ALL_SOURCES: SourceId[] = ['sdk', 'dapi', 'radar', 'pe', 'hyphen', 'rate']
 
 export function useSourceHealth(source: SourceId): SourceHealth {
   const net = useSyncExternalStore(subscribeActiveNetwork, getActiveNetwork, getActiveNetwork)
-  return useSyncExternalStore(
-    subscribe,
-    () => healthRegistry.get(net, source),
-    () => healthRegistry.get(net, source),
-  )
+  const snapshot = () => healthRegistry.get(net, source)
+  return useSyncExternalStore(subscribe, snapshot, snapshot)
 }
 
 let allCache: { net: NetworkId; items: SourceHealth[] } | undefined

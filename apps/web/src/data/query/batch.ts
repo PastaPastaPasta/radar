@@ -51,6 +51,12 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
   const windowMs = opts.windowMs ?? DEFAULT_WINDOW_MS
   const keyParam = opts.keyParam ?? 'id'
   const cls = dataClass(opts.dataClass ?? 'live')
+  const cancelled = () =>
+    new SourceError({
+      source: opts.source,
+      kind: 'aborted',
+      message: 'The request was cancelled',
+    })
 
   interface Pending {
     keys: Map<string, { key: K; waiters: Waiter<V>[] }>
@@ -87,21 +93,14 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
     for (const [k, v] of result.data) byId.set(keyId(k), v)
     for (const e of chunk) {
       const value = byId.get(keyId(e.key)) ?? null
-      const { data, ...stamp } = result
-      void data
+      const stamp = stampOf(result)
       for (const w of e.waiters) w.resolve({ ...stamp, data: value })
     }
   }
 
   function fetch(net: NetworkId, key: K, signal?: AbortSignal): Promise<Sourced<V | null>> {
     if (signal?.aborted) {
-      return Promise.reject(
-        new SourceError({
-          source: opts.source,
-          kind: 'aborted',
-          message: 'The request was cancelled',
-        }),
-      )
+      return Promise.reject(cancelled())
     }
     return new Promise<Sourced<V | null>>((resolve, reject) => {
       let batch = pending.get(net)
@@ -123,13 +122,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
         () => {
           const idx = entry.waiters.indexOf(waiter)
           if (idx >= 0) entry.waiters.splice(idx, 1)
-          reject(
-            new SourceError({
-              source: opts.source,
-              kind: 'aborted',
-              message: 'The request was cancelled',
-            }),
-          )
+          reject(cancelled())
         },
         { once: true },
       )

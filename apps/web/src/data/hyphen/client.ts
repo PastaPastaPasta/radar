@@ -70,8 +70,6 @@ interface Heighted {
   asOfHeight?: number
 }
 
-const heightOf = (b: Heighted) => b.asOfHeight
-
 function get<S extends z.ZodType>(net: NetworkId, path: string, schema: S, signal?: AbortSignal) {
   return fetchSourced({
     source: 'hyphen',
@@ -79,7 +77,7 @@ function get<S extends z.ZodType>(net: NetworkId, path: string, schema: S, signa
     url: `${base(net)}${path}`,
     schema,
     signal,
-    height: (b: z.output<S>) => heightOf(b as Heighted),
+    height: (b: z.output<S>) => (b as Heighted).asOfHeight,
   })
 }
 
@@ -96,7 +94,7 @@ function getOrNull<S extends z.ZodType>(
     schema,
     notFound: 'null',
     signal,
-    height: (b: z.output<S>) => heightOf(b as Heighted),
+    height: (b: z.output<S>) => (b as Heighted).asOfHeight,
   })
 }
 

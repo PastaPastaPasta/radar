@@ -97,6 +97,10 @@ async function errorDetail(res: Response): Promise<string> {
   return fallback
 }
 
+export function cancelled(source: SourceId, cause?: unknown): SourceError {
+  return new SourceError({ source, kind: 'aborted', message: 'The request was cancelled', cause })
+}
+
 function issuePath(path: readonly PropertyKey[]): string {
   return path.map((p) => String(p)).join('.') || '(root)'
 }
@@ -141,7 +145,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
   }
 
   if (req.signal?.aborted) {
-    throw new SourceError({ source, kind: 'aborted', message: 'The request was cancelled' })
+    throw cancelled(source)
   }
 
   const controller = new AbortController()
@@ -150,6 +154,11 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
     timedOut = true
     controller.abort()
   }, timeoutMs)
+  const interrupted = (cause: unknown): SourceError | undefined => {
+    if (timedOut) return fail({ kind: 'timeout', cause })
+    if (req.signal?.aborted) return cancelled(source, cause)
+    return undefined
+  }
   const onAbort = () => controller.abort()
   req.signal?.addEventListener('abort', onAbort, { once: true })
 
@@ -166,16 +175,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
         signal: controller.signal,
       })
     } catch (cause) {
-      if (timedOut) throw fail({ kind: 'timeout', cause })
-      if (req.signal?.aborted) {
-        throw new SourceError({
-          source,
-          kind: 'aborted',
-          message: 'The request was cancelled',
-          cause,
-        })
-      }
-      throw fail({ kind: 'network', cause })
+      throw interrupted(cause) ?? fail({ kind: 'network', cause })
     }
 
     const accepted = req.acceptStatus?.includes(res.status) === true
@@ -203,16 +203,10 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
     try {
       json = await res.json()
     } catch (cause) {
-      if (timedOut) throw fail({ kind: 'timeout', cause })
-      if (req.signal?.aborted) {
-        throw new SourceError({
-          source,
-          kind: 'aborted',
-          message: 'The request was cancelled',
-          cause,
-        })
-      }
-      throw fail({ kind: 'invalid-response', status: res.status, detail: 'not JSON', cause })
+      throw (
+        interrupted(cause) ??
+        fail({ kind: 'invalid-response', status: res.status, detail: 'not JSON', cause })
+      )
     }
 
     const parsed = req.schema.safeParse(json)

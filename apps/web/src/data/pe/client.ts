@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
+import { formatBlock } from '../health-lag'
 import { fetchSourced, requireEndpoint } from '../http'
 import { healthRegistry } from '../health'
 import type { Page } from '../page'
@@ -138,10 +139,10 @@ function reportPeLag(net: NetworkId, body: PeStatus, unhealthy: boolean): void {
   healthRegistry.setLag(net, 'pe', {
     blocks: effective,
     detail: unhealthy
-      ? `Platform Explorer reports its indexer as unhealthy (indexed to block ${body.api.block.height.toLocaleString('en-US')})`
+      ? `Platform Explorer reports its indexer as unhealthy (indexed to block ${formatBlock(body.api.block.height)})`
       : blocks === 0
-        ? `indexed to block ${body.api.block.height.toLocaleString('en-US')}`
-        : `indexed to block ${body.api.block.height.toLocaleString('en-US')} (${blocks} behind)`,
+        ? `indexed to block ${formatBlock(body.api.block.height)}`
+        : `indexed to block ${formatBlock(body.api.block.height)} (${blocks} behind)`,
   })
 }
 
