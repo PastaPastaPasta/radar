@@ -42,8 +42,13 @@ before(async () => {
     { cwd: root, stdio: 'pipe' },
   )
   mf = new Miniflare({
-    modules: true,
-    scriptPath: path.join(outdir, 'index.js'),
+    modules: [
+      {
+        type: 'ESModule',
+        path: 'index.js',
+        contents: readFileSync(path.join(outdir, 'index.js'), 'utf8'),
+      },
+    ],
     compatibilityDate: '2026-08-01',
     bindings: { NATIVE_HOSTS: 'explorer.dashhq.org' },
     assets: {
