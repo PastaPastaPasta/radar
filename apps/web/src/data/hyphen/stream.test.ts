@@ -1,0 +1,91 @@
+import { describe, expect, it, vi } from 'vitest'
+import { isSourceError, type SourceError } from '../errors'
+import { healthRegistry } from '../health'
+import { MAX_NDJSON_LINE_CHARS, openHyphenStream, readNdjson } from './stream'
+import type { HyStreamEvent } from './schemas'
+
+const encoder = new TextEncoder()
+
+function stream(chunks: (string | Error)[]): ReadableStream<Uint8Array> {
+  const queue = [...chunks]
+  return new ReadableStream<Uint8Array>({
+    pull(controller) {
+      const next = queue.shift()
+      if (next === undefined) controller.close()
+      else if (next instanceof Error) controller.error(next)
+      else controller.enqueue(encoder.encode(next))
+    },
+  })
+}
+
+async function drain(source: AsyncIterable<HyStreamEvent>): Promise<unknown> {
+  try {
+    for await (const event of source) void event
+  } catch (error) {
+    return error
+  }
+  return undefined
+}
+
+describe('readNdjson limits', () => {
+  it('fails as invalid-response when a line grows past the cap without a newline', async () => {
+    const seen: SourceError[] = []
+    const chunk = 'x'.repeat(256 * 1024)
+    const chunks = Array.from({ length: MAX_NDJSON_LINE_CHARS / chunk.length + 2 }, () => chunk)
+    const error = await drain(readNdjson(stream(chunks), undefined, (e) => seen.push(e)))
+    expect(isSourceError(error) && [error.source, error.kind]).toEqual([
+      'hyphen',
+      'invalid-response',
+    ])
+    expect(seen).toEqual([error])
+  })
+
+  it('fails on a single over-long line that does end in a newline', async () => {
+    const error = await drain(readNdjson(stream(['x'.repeat(MAX_NDJSON_LINE_CHARS + 10) + '\n'])))
+    expect(isSourceError(error) && error.kind).toBe('invalid-response')
+  })
+
+  it('keeps reading normal lines below the cap', async () => {
+    const line = JSON.stringify({ type: 'heartbeat' }) + '\n'
+    const error = await drain(readNdjson(stream([line.repeat(2000)])))
+    expect(error).toBeUndefined()
+  })
+
+  it('tells onFailure when the connection drops mid-stream', async () => {
+    const seen: SourceError[] = []
+    const error = await drain(
+      readNdjson(stream(['{"type":"heartbeat"}\n', new Error('reset')]), undefined, (e) =>
+        seen.push(e),
+      ),
+    )
+    expect(isSourceError(error) && error.kind).toBe('network')
+    expect(seen).toHaveLength(1)
+  })
+
+  it('stays silent when the caller aborts', async () => {
+    const controller = new AbortController()
+    const onFailure = vi.fn()
+    const body = new ReadableStream<Uint8Array>({
+      pull() {
+        controller.abort()
+        return new Promise(() => undefined)
+      },
+    })
+    expect(await drain(readNdjson(body, controller.signal, onFailure))).toBeUndefined()
+    expect(onFailure).not.toHaveBeenCalled()
+  })
+})
+
+describe('openHyphenStream health', () => {
+  it('reports a mid-stream failure for the network it was opened on', async () => {
+    const body = stream(['{"type":"heartbeat"}\n', new Error('reset')])
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(body))
+    try {
+      await drain(await openHyphenStream('testnet'))
+    } finally {
+      fetchSpy.mockRestore()
+    }
+    expect(healthRegistry.get('testnet', 'hyphen').lastError?.kind).toBe('network')
+    expect(healthRegistry.get('mainnet', 'hyphen').state).toBe('unknown')
+  })
+})

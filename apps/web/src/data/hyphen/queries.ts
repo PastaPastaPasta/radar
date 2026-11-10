@@ -6,7 +6,6 @@ import { hyphen } from './client'
 import type { HyListQuery } from './params'
 
 export { cursorFromHeight, decodeCursor, type HyCursor, type HyListQuery } from './params'
-export { openHyphenStream, readNdjson } from './stream'
 
 const params = (q: HyListQuery) => ({ ...q })
 
