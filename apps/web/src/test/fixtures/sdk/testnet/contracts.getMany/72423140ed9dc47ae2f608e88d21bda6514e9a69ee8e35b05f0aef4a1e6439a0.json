@@ -1,0 +1,166 @@
+{
+  "method": "contracts.getMany",
+  "args": {
+    "ids": ["FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx", "11111111111111111111111111111111"]
+  },
+  "recordedAt": "2026-11-10T19:11:17.781Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        [
+          "FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx",
+          {
+            "id": "FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx",
+            "ownerId": "7Yowk46VwwHqmD5yZyyygggh937aP6h2UW7aQWBdWpM5",
+            "version": 1,
+            "documentSchemas": {
+              "identityVerify": {
+                "documentsMutable": true,
+                "canBeDeleted": true,
+                "type": "object",
+                "properties": {
+                  "normalizedLabel": {
+                    "position": 0,
+                    "type": "string",
+                    "pattern": "^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-]{0,61}[a-hj-km-np-z0-9]$",
+                    "maxLength": 63,
+                    "description": "Domain label converted to lowercase for case-insensitive uniqueness validation. \"o\", \"i\" and \"l\" replaced with \"0\" and \"1\" to mitigate homograph attack. e.g. 'b0b'",
+                    "$comment": "Must match a domain document to provide further information. Must be equal to the label in lowercase. \"o\", \"i\" and \"l\" must be replaced with \"0\" and \"1\"."
+                  },
+                  "normalizedParentDomainName": {
+                    "type": "string",
+                    "pattern": "^$|^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-\\.]{0,61}[a-hj-km-np-z0-9]$",
+                    "minLength": 0,
+                    "maxLength": 63,
+                    "position": 1,
+                    "description": "A parent domain name in lowercase for case-insensitive uniqueness validation. \"o\", \"i\" and \"l\" replaced with \"0\" and \"1\" to mitigate homograph attack. e.g. 'dash'",
+                    "$comment": "Must either be equal to an existing domain or empty to create a top level domain. \"o\", \"i\" and \"l\" must be replaced with \"0\" and \"1\". Only the data contract owner can create top level domains."
+                  },
+                  "url": {
+                    "position": 2,
+                    "type": "string",
+                    "description": "The identity verification URL to be stored.",
+                    "maxLength": 128,
+                    "pattern": "^https?://.*",
+                    "format": "uri"
+                  }
+                },
+                "indices": [
+                  {
+                    "name": "ownerId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ownerId_NormDomainName_NormLabel",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "normalizedParentDomainName": "asc"
+                      },
+                      {
+                        "normalizedLabel": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "uniqueUsernameIndex",
+                    "properties": [
+                      {
+                        "normalizedLabel": "asc"
+                      }
+                    ],
+                    "unique": true
+                  }
+                ],
+                "required": ["url", "normalizedLabel", "normalizedParentDomainName"],
+                "additionalProperties": false
+              },
+              "tx_metadata": {
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "ownerId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ownerIdAndCreatedAt",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "keyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The index of the owners identity public key used to derive the encryption key.",
+                    "position": 0
+                  },
+                  "encryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The secondary index used to derive the encryption key that is used to encrypt and decrypt encryptedData.",
+                    "position": 1
+                  },
+                  "encryptedMetadata": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 4096,
+                    "description": "encrypted metadata using AES-CBC-256",
+                    "position": 2
+                  }
+                },
+                "required": ["keyIndex", "encryptionKeyIndex", "encryptedMetadata", "$createdAt"],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        ["11111111111111111111111111111111", null]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 668394,
+      "coreChainLockedHeight": 1589251,
+      "epoch": 20273,
+      "timeMs": 1794337875006,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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d2l0aCAiMCIgYW5kICIxIiB0byBtaXRpZ2F0ZSBob21vZ3JhcGggYXR0YWNrLiBlLmcuICdiMGInEggkY29tbWVudBKZTXVzdCBtYXRjaCBhIGRvbWFpbiBkb2N1bWVudCB0byBwcm92aWRlIGZ1cnRoZXIgaW5mb3JtYXRpb24uIE11c3QgYmUgZXF1YWwgdG8gdGhlIGxhYmVsIGluIGxvd2VyY2FzZS4gIm8iLCAiaSIgYW5kICJsIiBtdXN0IGJlIHJlcGxhY2VkIHdpdGggIjAiIGFuZCAiMSIuEhpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRYHEgR0eXBlEgZzdHJpbmcSB3BhdHRlcm4SQV4kfF5bYS1oai1rbS1ucC16MC05XVthLWhqLWttLW5wLXowLTktXC5dezAsNjF9W2EtaGota20tbnAtejAtOV0kEgltaW5MZW5ndGgCABIJbWF4TGVuZ3RoAj8SCHBvc2l0aW9uAgESC2Rlc2NyaXB0aW9uEqJBIHBhcmVudCBkb21haW4gbmFtZSBpbiBsb3dlcmNhc2UgZm9yIGNhc2UtaW5zZW5zaXRpdmUgdW5pcXVlbmVzcyB2YWxpZGF0aW9uLiAibyIsICJpIiBhbmQgImwiIHJlcGxhY2VkIHdpdGggIjAiIGFuZCAiMSIgdG8gbWl0aWdhdGUgaG9tb2dyYXBoIGF0dGFjay4gZS5nLiAnZGFzaCcSCCRjb21tZW50EsBNdXN0IGVpdGhlciBiZSBlcXVhbCB0byBhbiBleGlzdGluZyBkb21haW4gb3IgZW1wdHkgdG8gY3JlYXRlIGEgdG9wIGxldmVsIGRvbWFpbi4gIm8iLCAiaSIgYW5kICJsIiBtdXN0IGJlIHJlcGxhY2VkIHdpdGggIjAiIGFuZCAiMSIuIE9ubHkgdGhlIGRhdGEgY29udHJhY3Qgb3duZXIgY2FuIGNyZWF0ZSB0b3AgbGV2ZWwgZG9tYWlucy4SA3VybBYGEghwb3NpdGlvbgICEgR0eXBlEgZzdHJpbmcSC2Rlc2NyaXB0aW9uEitUaGUgaWRlbnRpdHkgdmVyaWZpY2F0aW9uIFVSTCB0byBiZSBzdG9yZWQuEgltYXhMZW5ndGgCgBIHcGF0dGVybhIMXmh0dHBzPzovLy4qEgZmb3JtYXQSA3VyaRIHaW5kaWNlcxUDFgISBG5hbWUSB293bmVySWQSCnByb3BlcnRpZXMVARYBEggkb3duZXJJZBIDYXNjFgISBG5hbWUSIG93bmVySWRfTm9ybURvbWFpbk5hbWVfTm9ybUxhYmVsEgpwcm9wZXJ0aWVzFQMWARIIJG93bmVySWQSA2FzYxYBEhpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIDYXNjFgESD25vcm1hbGl6ZWRMYWJlbBIDYXNjFgMSBG5hbWUSE3VuaXF1ZVVzZXJuYW1lSW5kZXgSCnByb3BlcnRpZXMVARYBEg9ub3JtYWxpemVkTGFiZWwSA2FzYxIGdW5pcXVlEwESCHJlcXVpcmVkFQMSA3VybBIPbm9ybWFsaXplZExhYmVsEhpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAt0eF9tZXRhZGF0YRYFEgR0eXBlEgZvYmplY3QSB2luZGljZXMVAhYCEgRuYW1lEgdvd25lcklkEgpwcm9wZXJ0aWVzFQEWARIIJG93bmVySWQSA2FzYxYCEgRuYW1lEhNvd25lcklkQW5kQ3JlYXRlZEF0Egpwcm9wZXJ0aWVzFQIWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWAxIIa2V5SW5kZXgWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgtkZXNjcmlwdGlvbhJOVGhlIGluZGV4IG9mIHRoZSBvd25lcnMgaWRlbnRpdHkgcHVibGljIGtleSB1c2VkIHRvIGRlcml2ZSB0aGUgZW5jcnlwdGlvbiBrZXkuEghwb3NpdGlvbgIAEhJlbmNyeXB0aW9uS2V5SW5kZXgWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgtkZXNjcmlwdGlvbhJoVGhlIHNlY29uZGFyeSBpbmRleCB1c2VkIHRvIGRlcml2ZSB0aGUgZW5jcnlwdGlvbiBrZXkgdGhhdCBpcyB1c2VkIHRvIGVuY3J5cHQgYW5kIGRlY3J5cHQgZW5jcnlwdGVkRGF0YS4SCHBvc2l0aW9uAgESEWVuY3J5cHRlZE1ldGFkYXRhFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMC+xAAEgtkZXNjcmlwdGlvbhIkZW5jcnlwdGVkIG1ldGFkYXRhIHVzaW5nIEFFUy1DQkMtMjU2Eghwb3NpdGlvbgICEghyZXF1aXJlZBUEEghrZXlJbmRleBISZW5jcnlwdGlvbktleUluZGV4EhFlbmNyeXB0ZWRNZXRhZGF0YRIKJGNyZWF0ZWRBdBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAACjDWqbpKmaGihSjOepuhCMgiaxO9iSEwgCA/hktgTNBwQARIP2bOUp5+vquvwtCWQh2D5mnPGrPm317XCn+XZW5ojEQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAAbwvj3f/dNxCGgmIFd63Alxq/ufw0a7S5JDx9pBg="
+      },
+      "signature": {
+        "$u8": "s4HSJ8EiqHGIpqmYITAXHSOMoPNs+Ny6hLUGPw7zV/jHB38kTLkYZe6/6aV/eYy2Cfu3rVVyncdpr/tsHyBiXK8/2k2OStFei9EQNxskhLKSw654M2JJrLADtkk8Thvb"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "ouZ6mHvcDcPYIllCQlAbDoZpJkoT6bEH60I2NcSOJEg="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 183.68146700000034
+  }
+}

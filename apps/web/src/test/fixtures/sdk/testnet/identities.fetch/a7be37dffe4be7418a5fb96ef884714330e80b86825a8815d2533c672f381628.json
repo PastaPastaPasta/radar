@@ -1,0 +1,105 @@
+{
+  "method": "identities.fetch",
+  "args": {
+    "id": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+  },
+  "recordedAt": "2026-11-10T19:11:16.794Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+      "balance": {
+        "$bigint": "42367592163887"
+      },
+      "revision": 2,
+      "keys": [
+        {
+          "id": 0,
+          "type": 2,
+          "purpose": 0,
+          "securityLevel": 0,
+          "readOnly": false,
+          "data": {
+            "$u8": "BwAAAAAJAwkACAAAAAIHBwUABAAGCQcHBgcHBAABAAYCAwAAAQQJCA=="
+          }
+        },
+        {
+          "id": 1,
+          "type": 2,
+          "purpose": 0,
+          "securityLevel": 1,
+          "readOnly": false,
+          "data": {
+            "$u8": "BQEIAAMIAAAIBQgEBgEAAAAACQAEBwgAAAkJBAAAAAgABQcABwUDAQ=="
+          }
+        },
+        {
+          "id": 2,
+          "type": 2,
+          "purpose": 0,
+          "securityLevel": 2,
+          "readOnly": false,
+          "data": {
+            "$u8": "AAAABwAAAgQBBAAFAAIJAAAHAAAFBgAJAAIDAAMECQAAAAkHBwADAA=="
+          }
+        },
+        {
+          "id": 3,
+          "type": 2,
+          "purpose": 3,
+          "securityLevel": 1,
+          "readOnly": false,
+          "data": {
+            "$u8": "BQUBAwUGAwAAAQAFAQkBAAkDBAAEAAAAAAkJAQAACQcHAAcCBAcABw=="
+          }
+        },
+        {
+          "id": 4,
+          "type": 0,
+          "purpose": 0,
+          "securityLevel": 3,
+          "readOnly": false,
+          "data": {
+            "$u8": "AAMABwQAAAAJBQgABQAHBAQAAAMHCQABCQcBAAIAAAkHAAABAAABAQAABQMECAAIAwAEAAAABQAAAAMGBgEDBAgC"
+          }
+        },
+        {
+          "id": 5,
+          "type": 0,
+          "purpose": 3,
+          "securityLevel": 1,
+          "readOnly": false,
+          "data": {
+            "$u8": "AAMAAAAJAAAACQEDBAMHBgMAAAQFBwABCAgIBwQBAAAFBAQFCQAAAAEHAAAABAAGAgYBAAEGBwAABgAFAAMFBAgA"
+          }
+        }
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 668394,
+      "coreChainLockedHeight": 1589251,
+      "epoch": 20273,
+      "timeMs": 1794337875006,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAbwvj3f/dNxCGgmIFd63Alxq/ufw0a7S5JDx9pBg="
+      },
+      "signature": {
+        "$u8": "s4HSJ8EiqHGIpqmYITAXHSOMoPNs+Ny6hLUGPw7zV/jHB38kTLkYZe6/6aV/eYy2Cfu3rVVyncdpr/tsHyBiXK8/2k2OStFei9EQNxskhLKSw654M2JJrLADtkk8Thvb"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "ouZ6mHvcDcPYIllCQlAbDoZpJkoT6bEH60I2NcSOJEg="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 187.08714799999984
+  }
+}

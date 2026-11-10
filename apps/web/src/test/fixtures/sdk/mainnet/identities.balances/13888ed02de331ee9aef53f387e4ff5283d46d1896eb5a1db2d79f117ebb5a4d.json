@@ -1,0 +1,47 @@
+{
+  "method": "identities.balances",
+  "args": {
+    "ids": ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp", "11111111111111111111111111111111"]
+  },
+  "recordedAt": "2026-11-10T19:11:14.968Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        [
+          "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+          {
+            "$bigint": "1013331591984"
+          }
+        ],
+        ["11111111111111111111111111111111", null]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 469065,
+      "coreChainLockedHeight": 2570099,
+      "epoch": 88,
+      "timeMs": 1794337718422,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABXjE9pbrG/+SOrQPMYI5tSCv+lMOMolUM0="
+      },
+      "signature": {
+        "$u8": "hBNU1ST9xuYvkyymbNv1SbQsi+h8SpbMSpLtzkEfuu5nP94Y6RTK+Erm7OdWh0BjBCpB1tY1x+2csEb34xmthJRfGix//V2r5DoZzglk90R36cvWjzmfUZMTL3SbB6z4"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "uv6UrjMSLKEfhMvLVWRrqh0qmzpON346NatrGT2/rM8="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 150.6335439999998
+  }
+}
