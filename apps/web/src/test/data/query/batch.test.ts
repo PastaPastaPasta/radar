@@ -52,6 +52,28 @@ describe('createBatcher', () => {
     expect(calls).toEqual([['aa', 'bbb']])
   })
 
+  it('drops a key from the batch when its only caller aborts', async () => {
+    const { batcher, calls } = make()
+    const controller = new AbortController()
+    const a = batcher.fetch('mainnet', 'aa', controller.signal).catch((e: unknown) => e)
+    controller.abort()
+    await a
+    await vi.advanceTimersByTimeAsync(50)
+    expect(calls).toEqual([])
+  })
+
+  it('keeps a shared key while another caller still wants it', async () => {
+    const { batcher, calls } = make()
+    const controller = new AbortController()
+    const a = batcher.fetch('mainnet', 'aa', controller.signal).catch((e: unknown) => e)
+    const b = batcher.fetch('mainnet', 'aa')
+    controller.abort()
+    await a
+    await vi.advanceTimersByTimeAsync(15)
+    expect((await b).data).toBe(2)
+    expect(calls).toEqual([['aa']])
+  })
+
   it('shares one lookup between duplicate keys', async () => {
     const { batcher, calls } = make()
     const a = batcher.fetch('mainnet', 'aa')
@@ -124,7 +146,7 @@ describe('createBatcher', () => {
     expect(isSourceError(aborted) && aborted.kind).toBe('aborted')
     await vi.advanceTimersByTimeAsync(15)
     expect((await b).data).toBe(3)
-    expect(calls).toEqual([['aa', 'bbb']])
+    expect(calls).toEqual([['bbb']])
   })
 
   it('rejects at once when the signal is already aborted', async () => {

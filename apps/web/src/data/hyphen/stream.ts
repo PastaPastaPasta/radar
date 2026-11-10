@@ -41,7 +41,7 @@ export async function openHyphenStream(
   return readNdjson(res.body, signal)
 }
 
-/** Splits a byte stream into NDJSON lines and yields each recognised event. Unknown event types are skipped. */
+/** Splits a byte stream into NDJSON lines and yields each recognised event. Unknown event types and malformed lines are skipped. */
 export async function* readNdjson(
   body: ReadableStream<Uint8Array>,
   signal?: AbortSignal,
@@ -56,13 +56,8 @@ export async function* readNdjson(
     let raw: unknown
     try {
       raw = JSON.parse(line)
-    } catch (cause) {
-      throw new SourceError({
-        source: 'hyphen',
-        kind: 'invalid-response',
-        message: describeFailure('hyphen', 'invalid-response', 'stream line is not JSON'),
-        cause,
-      })
+    } catch {
+      return undefined
     }
     const parsed = HyStreamEventSchema.safeParse(raw)
     return parsed.success ? parsed.data : undefined
@@ -94,7 +89,7 @@ export async function* readNdjson(
         if (event) yield event
       }
     }
-    const tail = (buffer + decoder.decode()).trim()
+    const tail = signal?.aborted ? '' : (buffer + decoder.decode()).trim()
     if (tail) {
       const event = parse(tail)
       if (event) yield event

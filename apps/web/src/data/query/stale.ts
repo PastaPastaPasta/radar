@@ -7,6 +7,7 @@ export interface ClassOptions {
   gcTime: number
   meta?: { persist: true }
   refetchInterval?: number
+  refetchOnWindowFocus?: boolean
 }
 
 const SECOND = 1000
@@ -18,16 +19,18 @@ const persist = { persist: true } as const
 const CLASSES: Record<DataClass, ClassOptions> = {
   immutable: { staleTime: Infinity, gcTime: 24 * HOUR, meta: persist },
   structural: { staleTime: 5 * MINUTE, gcTime: HOUR, meta: persist },
-  live: { staleTime: 30 * SECOND, gcTime: 10 * MINUTE },
+  live: { staleTime: 30 * SECOND, gcTime: 10 * MINUTE, refetchOnWindowFocus: true },
   tip: { staleTime: Infinity, gcTime: 10 * MINUTE },
   crawl: { staleTime: 5 * MINUTE, gcTime: 30 * MINUTE },
-  index: { staleTime: 30 * SECOND, gcTime: 10 * MINUTE },
+  index: { staleTime: 30 * SECOND, gcTime: 10 * MINUTE, refetchOnWindowFocus: true },
   latest: { staleTime: 10 * SECOND, gcTime: 5 * MINUTE },
   rate: { staleTime: MINUTE, gcTime: 30 * MINUTE, refetchInterval: MINUTE },
 }
 
 /** Classes whose queries refetch when the window regains focus. */
-export const REFETCH_ON_FOCUS: ReadonlySet<DataClass> = new Set(['live', 'index'])
+export const REFETCH_ON_FOCUS: ReadonlySet<DataClass> = new Set(
+  (Object.keys(CLASSES) as DataClass[]).filter((c) => CLASSES[c].refetchOnWindowFocus),
+)
 
 export function dataClass(c: DataClass): ClassOptions {
   const o = CLASSES[c]

@@ -115,17 +115,30 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
         entry = { key, waiters: [] }
         batch.keys.set(id, entry)
       }
-      const waiter: Waiter<V> = { resolve, reject }
-      entry.waiters.push(waiter)
-      signal?.addEventListener(
-        'abort',
-        () => {
-          const idx = entry.waiters.indexOf(waiter)
-          if (idx >= 0) entry.waiters.splice(idx, 1)
-          reject(cancelled())
+      const onAbort = () => {
+        const idx = entry.waiters.indexOf(waiter)
+        if (idx >= 0) entry.waiters.splice(idx, 1)
+        if (entry.waiters.length === 0 && batch.keys.get(id) === entry) {
+          batch.keys.delete(id)
+          if (batch.keys.size === 0) {
+            clearTimeout(batch.timer)
+            pending.delete(net)
+          }
+        }
+        reject(cancelled())
+      }
+      const waiter: Waiter<V> = {
+        resolve: (s) => {
+          signal?.removeEventListener('abort', onAbort)
+          resolve(s)
         },
-        { once: true },
-      )
+        reject: (e: unknown) => {
+          signal?.removeEventListener('abort', onAbort)
+          reject(e instanceof Error ? e : new Error(String(e)))
+        },
+      }
+      entry.waiters.push(waiter)
+      signal?.addEventListener('abort', onAbort, { once: true })
     })
   }
 
