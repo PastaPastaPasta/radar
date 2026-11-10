@@ -1,0 +1,163 @@
+import { useLingui } from '@lingui/react/macro'
+import { useQuery } from '@tanstack/react-query'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useMemo } from 'react'
+import { coreQueries } from '@/data/core/queries'
+import { stampOf } from '@/data/envelope'
+import { useSourceHealth } from '@/data/health'
+import { hyQueries } from '@/data/hyphen/queries'
+import type { HyMempoolTx } from '@/data/hyphen/schemas'
+import { Entity, PageLink, useNetwork } from '@/features/entity'
+import { formatBytes, formatInt, formatNumber } from '@/lib/format'
+import { isDevnet } from '@/lib/network'
+import { Amount, Card, DataTable, Empty, SectionBand, Stat, Time } from '@/ui'
+import { useHyphenFit } from './use-hyphen-fit'
+
+const PENDING = 8
+
+function useHyphenBlocked() {
+  const net = useNetwork()
+  const fit = useHyphenFit(net)
+  const health = useSourceHealth('hyphen')
+  return { net, fit, lag: health.lag?.detail, devnet: isDevnet(net) }
+}
+
+function Headline() {
+  const { t } = useLingui()
+  const { net, fit, lag, devnet } = useHyphenBlocked()
+  const tip = useQuery(coreQueries.tip(net))
+  const status = useQuery(coreQueries.status(net))
+  const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: fit })
+  const m = metrics.data?.data
+  const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
+  return (
+    <div className="rx-stats" data-headline>
+      <Stat
+        layer="core"
+        label={t`Height`}
+        value={tip.data ? formatInt(tip.data.data.height) : '—'}
+        loading={tip.isPending}
+        source={tip.data ? stampOf(tip.data) : undefined}
+      />
+      <Stat
+        layer="core"
+        label={t`Difficulty`}
+        value={
+          status.data
+            ? formatNumber(status.data.data.difficulty, { maximumFractionDigits: 0 })
+            : '—'
+        }
+        loading={status.isPending}
+        source={status.data ? stampOf(status.data) : undefined}
+      />
+      <Stat
+        layer="core"
+        label={t`Circulating supply`}
+        value={m ? <Amount value={m.circulatingSupply} kind="duffs" compact fiat /> : '—'}
+        note={m ? undefined : fit ? undefined : note}
+        loading={fit && metrics.isPending}
+        source={metrics.data ? stampOf(metrics.data) : undefined}
+      />
+      <Stat
+        layer="core"
+        label={t`Blockchain size`}
+        value={m ? formatBytes(m.blockchainSize) : '—'}
+        note={m ? undefined : fit ? undefined : note}
+        loading={fit && metrics.isPending}
+        source={metrics.data ? stampOf(metrics.data) : undefined}
+      />
+    </div>
+  )
+}
+
+function PendingCard() {
+  const { t } = useLingui()
+  const { net, fit, lag, devnet } = useHyphenBlocked()
+  const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
+  const columns = useMemo<ColumnDef<HyMempoolTx>[]>(
+    () => [
+      {
+        id: 'tx',
+        header: t`Transaction`,
+        cell: ({ row }) => <Entity kind="tx" id={row.original.txHash} />,
+        meta: { phone: 'title' },
+      },
+      {
+        id: 'value',
+        header: t`Value`,
+        cell: ({ row }) => <Amount value={row.original.valueOut} kind="duffs" />,
+        meta: { numeric: true, align: 'end', phone: 'secondary' },
+      },
+      {
+        id: 'size',
+        header: t`Size`,
+        accessorFn: (r) => formatBytes(r.txSize),
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'seen',
+        header: t`First seen`,
+        cell: ({ row }) => <Time ms={row.original.firstSeenAt} mode="relative" live />,
+        meta: { phone: 'primary' },
+      },
+    ],
+    [t],
+  )
+  return (
+    <Card
+      layer="core"
+      title={t`Pending transactions`}
+      padding="flush"
+      source={query.data ? stampOf(query.data) : undefined}
+      actions={
+        <PageLink to="/mempool" className="rx-go">
+          {t`Mempool`}
+        </PageLink>
+      }
+    >
+      {devnet || !fit ? (
+        <Empty
+          kind={devnet ? 'unsupported-network' : 'blocked'}
+          title={devnet ? t`Hyphen doesn't index devnets` : t`Pending transactions are unavailable`}
+          body={devnet ? undefined : (lag ?? t`Hyphen's index is still being checked.`)}
+        />
+      ) : (
+        <DataTable
+          caption={t`Pending transactions`}
+          columns={columns}
+          rows={(query.data?.data.items ?? []).slice(0, PENDING)}
+          getRowId={(r) => r.txHash}
+          state={query.isError && !query.data ? 'error' : query.data ? 'ready' : 'loading'}
+          error={query.error}
+          onRetry={() => void query.refetch()}
+          empty={<Empty kind="none-yet" title={t`No transactions in the mempool right now`} />}
+          rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txHash } })}
+        />
+      )}
+    </Card>
+  )
+}
+
+export function CoreZone() {
+  const { t } = useLingui()
+  return (
+    <SectionBand
+      layer="core"
+      id="core"
+      title={t`Dash Core`}
+      description={t`The chain itself: height, difficulty, supply and what is waiting to be mined.`}
+      actions={
+        <PageLink to="/charts" className="rx-go">
+          {t`Charts`}
+        </PageLink>
+      }
+    >
+      <Headline />
+      <div className="rx-grid" style={{ marginTop: 16 }}>
+        <div className="rx-c12">
+          <PendingCard />
+        </div>
+      </div>
+    </SectionBand>
+  )
+}
