@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/ea25cc59f4fe3a7bac8873d0a722d995eb5ea37b47f1f83511bf2f1e888daae9"
+  },
+  "recordedAt": "2026-11-10T19:12:32.124Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570102,
+    "txHash": "ea25cc59f4fe3a7bac8873d0a722d995eb5ea37b47f1f83511bf2f1e888daae9",
+    "blockHeight": 2570002,
+    "blockPos": 0,
+    "txVersion": 3,
+    "txType": "coinbase",
+    "lockTime": 595085040,
+    "txSize": 344,
+    "valueOut": 164444049,
+    "inputCount": 1,
+    "outputCount": 3,
+    "tags": { "mined": true, "coinbase": true },
+    "live": { "tags": { "mempool": false, "islock": false } },
+    "payload": {
+      "bestClHeightDiff": 0,
+      "bestClSignature": "a75d7307423eea96afc627867d89e1c70253b1fe04e455c8299a70b1447678b52efd761d22a0d53718f401b233bc65eb0a5dcb775e8ace4dfe2c2fd895d3bb8233946c8b5fdefc929088a99992da0ce923e471afe66624d65366490729184e91",
+      "creditPoolBalance": 3757555375158,
+      "height": 2570002,
+      "merkleRootMnList": "3d2dcfd72c5d2ab0e2a6cf203c77791cf84691da95b3945728e4e229a51120fb",
+      "merkleRootQuorums": "fd740e5b1db542ae87500e7671b217e29cd19a3e5059896f83ce7c0cccd3a8ad",
+      "version": 3
+    },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "0312372704192ff36a0800006699711b02000fe4b883e5bda9e7a59ee4bb99e9b1bc04f09f909f"
+        },
+        "sequence": 3028346521,
+        "coinbase": "0312372704192ff36a0800006699711b02000fe4b883e5bda9e7a59ee4bb99e9b1bc04f09f909f"
+      }
+    ],
+    "vout": [
+      {
+        "n": 0,
+        "value": 41111013,
+        "scriptPubKey": { "hex": "76a91464d4d4127bbce4b888bb4af080fa4de863b02b3f88ac" },
+        "address": "XjszN1jZJthEoaQDhGthRkaHL9AqaG3Vzw",
+        "spent": false
+      },
+      { "n": 1, "value": 46231323, "scriptPubKey": { "hex": "6a" }, "spent": false },
+      {
+        "n": 2,
+        "value": 77101713,
+        "scriptPubKey": { "hex": "76a914da159951d9a03130eeaee347907e1cf88d63be7988ac" },
+        "address": "XvZy1npHNGeYHCuDnB6upKqdf6XU9q94qu",
+        "spent": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251"
+  },
+  "recordedAt": "2026-11-10T19:12:32.783Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570014,
+    "txHash": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+    "blockHeight": 2569884,
+    "blockPos": 47,
+    "txVersion": 3,
+    "txType": "provider_register",
+    "lockTime": 0,
+    "txSize": 468,
+    "valueOut": 77057021,
+    "inputCount": 1,
+    "outputCount": 1,
+    "fee": 478,
+    "tags": { "mined": true, "coinbase": false },
+    "live": { "tags": { "mempool": false, "islock": false } },
+    "payload": {
+      "collateralHash": "b9fe273f51c2c7de187297fc07bacf3a27323363e747db4c4e0ea329f328971e",
+      "collateralIndex": 0,
+      "mnType": "Regular",
+      "operatorPubKey": "b9da9991c8da12dbc5fe1a6d66f159de9c20d3c148c014a0c1b7339240bb85bbbd94a465a056abf82e03997c4342e39f",
+      "operatorReward": 0,
+      "ownerKeyId": "85367ed33721cea52645648a4b3e01f30ca235e0",
+      "version": 2,
+      "votingKeyId": "85367ed33721cea52645648a4b3e01f30ca235e0"
+    },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402201c06cd8de3d9e33d8c7ca51b63e07a74407dfaa6cd04aa10a1831d0eebd794120220634ba04bd6e754c967c11a92e2fbe4dbe47ab1d912233716754955a11ed030df012102c1dc8e00695a5a257b0e24184df8aee6c6f534b06e07833971d57058345dea02"
+        },
+        "sequence": 4294967294,
+        "address": "XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG",
+        "value": 77057499,
+        "txHash": "d2cbe30578ccad465839c38cc4cb6566551eadf02fcf3867b29be742f50d5846",
+        "vout": 2
+      }
+    ],
+    "vout": [
+      {
+        "n": 0,
+        "value": 77057021,
+        "scriptPubKey": { "hex": "76a9144bab14fcf3724b1e307dbf792996646e322e491a88ac" },
+        "address": "XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG",
+        "spent": false
+      }
+    ]
+  }
+}

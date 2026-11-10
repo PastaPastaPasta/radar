@@ -60,7 +60,7 @@ describe('Block page', () => {
     renderAt('/block/2570002')
     const table = await screen.findByRole('table', { name: /Transactions in block 2,570,002/ })
     await waitFor(() => expect(within(table).getAllByRole('row').length).toBeGreaterThan(1))
-    expect(await screen.findByText(/quorum commitment/)).toBeInTheDocument()
+    expect((await screen.findAllByText(/quorum commitment/i)).length).toBeGreaterThan(0)
   })
 
   it('opens an early block from before masternodes @IN-03', async () => {
@@ -82,6 +82,6 @@ describe('Block page', () => {
   it('works on testnet @IN-16 @HY-19', async () => {
     renderAt('/block/1589232?network=testnet')
     expect(await screen.findByRole('heading', { level: 1, name: /1,589,232/ })).toBeInTheDocument()
-    expect(await screen.findByText(/quorum commitment/)).toBeInTheDocument()
+    expect((await screen.findAllByText(/quorum commitment/i)).length).toBeGreaterThan(0)
   })
 })
