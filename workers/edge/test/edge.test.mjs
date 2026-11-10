@@ -10,7 +10,9 @@ import { Miniflare } from 'miniflare'
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const outdir = mkdtempSync(path.join(tmpdir(), 'radar-edge-'))
 
-const wrangler = JSON.parse(readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8'))
+const wrangler = JSON.parse(
+  readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8').replace(/,(\s*[}\]])/g, '$1'),
+)
 const patterns = wrangler.assets.run_worker_first
 const routerConfig = {
   has_user_worker: true,
