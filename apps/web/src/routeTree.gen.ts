@@ -10,33 +10,830 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ApiRouteImport } from './routes/api'
+import { Route as BlocksRouteImport } from './routes/blocks'
+import { Route as ChangesRouteImport } from './routes/changes'
+import { Route as ChartsRouteImport } from './routes/charts'
+import { Route as ContestsRouteImport } from './routes/contests'
+import { Route as ContractsRouteImport } from './routes/contracts'
+import { Route as CreditsRouteImport } from './routes/credits'
+import { Route as EpochsRouteImport } from './routes/epochs'
+import { Route as IdentitiesRouteImport } from './routes/identities'
+import { Route as MapRouteImport } from './routes/map'
+import { Route as MasternodesRouteImport } from './routes/masternodes'
+import { Route as MempoolRouteImport } from './routes/mempool'
+import { Route as NamesRouteImport } from './routes/names'
+import { Route as NodesRouteImport } from './routes/nodes'
+import { Route as PollsRouteImport } from './routes/polls'
+import { Route as ProtocolRouteImport } from './routes/protocol'
+import { Route as QueryRouteImport } from './routes/query'
+import { Route as QuorumsRouteImport } from './routes/quorums'
+import { Route as RichListRouteImport } from './routes/rich-list'
+import { Route as SavedRouteImport } from './routes/saved'
+import { Route as SdkReferenceRouteImport } from './routes/sdk-reference'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShieldedRouteImport } from './routes/shielded'
+import { Route as SourcesRouteImport } from './routes/sources'
+import { Route as StatusRouteImport } from './routes/status'
+import { Route as TokensRouteImport } from './routes/tokens'
+import { Route as V24RouteImport } from './routes/v24'
+import { Route as ValidatorsRouteImport } from './routes/validators'
+import { Route as VotesRouteImport } from './routes/votes'
+import { Route as AddressAddressRouteImport } from './routes/address.$address'
+import { Route as BlockIndexHeightRouteImport } from './routes/block-index.$height'
+import { Route as BlockIdRouteImport } from './routes/block.$id'
+import { Route as ContestLabelRouteImport } from './routes/contest.$label'
+import { Route as EpochNRouteImport } from './routes/epoch.$n'
+import { Route as GovernanceIndexRouteImport } from './routes/governance.index'
+import { Route as GovernanceHashRouteImport } from './routes/governance.$hash'
+import { Route as GroupsContractRouteImport } from './routes/groups.$contract'
+import { Route as IdentityIdRouteImport } from './routes/identity.$id'
+import { Route as IdentityLookupRouteImport } from './routes/identity.lookup'
+import { Route as InsightSplatRouteImport } from './routes/insight.$'
+import { Route as MnProtxRouteImport } from './routes/mn.$protx'
+import { Route as NameLabelRouteImport } from './routes/name.$label'
+import { Route as PlatformAddressAddrRouteImport } from './routes/platform-address.$addr'
+import { Route as PlatformIndexRouteImport } from './routes/platform.index'
+import { Route as PlatformBlocksRouteImport } from './routes/platform.blocks'
+import { Route as PlatformTxsRouteImport } from './routes/platform.txs'
+import { Route as ToolsDecoderRouteImport } from './routes/tools.$decoder'
+import { Route as ToolsQrRouteImport } from './routes/tools.qr'
+import { Route as ToolsTransitionRouteImport } from './routes/tools.transition'
+import { Route as ToolsVerifyMessageRouteImport } from './routes/tools.verify-message'
+import { Route as TxTxidRouteImport } from './routes/tx.$txid'
+import { Route as ContractIdIndexRouteImport } from './routes/contract.$id.index'
+import { Route as GroupContractPosRouteImport } from './routes/group.$contract.$pos'
+import { Route as PlatformBlockIdRouteImport } from './routes/platform.block.$id'
+import { Route as PlatformTxHashRouteImport } from './routes/platform.tx.$hash'
+import { Route as TokenIdIndexRouteImport } from './routes/token.$id.index'
+import { Route as TokenIdHoldersRouteImport } from './routes/token.$id.holders'
+import { Route as ContractIdDocumentsTypeRouteImport } from './routes/contract.$id.documents.$type'
+import { Route as DocumentContractTypeIdRouteImport } from './routes/document.$contract.$type.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRoute = ApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlocksRoute = BlocksRouteImport.update({
+  id: '/blocks',
+  path: '/blocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangesRoute = ChangesRouteImport.update({
+  id: '/changes',
+  path: '/changes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChartsRoute = ChartsRouteImport.update({
+  id: '/charts',
+  path: '/charts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContestsRoute = ContestsRouteImport.update({
+  id: '/contests',
+  path: '/contests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractsRoute = ContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreditsRoute = CreditsRouteImport.update({
+  id: '/credits',
+  path: '/credits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EpochsRoute = EpochsRouteImport.update({
+  id: '/epochs',
+  path: '/epochs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdentitiesRoute = IdentitiesRouteImport.update({
+  id: '/identities',
+  path: '/identities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MasternodesRoute = MasternodesRouteImport.update({
+  id: '/masternodes',
+  path: '/masternodes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MempoolRoute = MempoolRouteImport.update({
+  id: '/mempool',
+  path: '/mempool',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NamesRoute = NamesRouteImport.update({
+  id: '/names',
+  path: '/names',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NodesRoute = NodesRouteImport.update({
+  id: '/nodes',
+  path: '/nodes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PollsRoute = PollsRouteImport.update({
+  id: '/polls',
+  path: '/polls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtocolRoute = ProtocolRouteImport.update({
+  id: '/protocol',
+  path: '/protocol',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QueryRoute = QueryRouteImport.update({
+  id: '/query',
+  path: '/query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuorumsRoute = QuorumsRouteImport.update({
+  id: '/quorums',
+  path: '/quorums',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RichListRoute = RichListRouteImport.update({
+  id: '/rich-list',
+  path: '/rich-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SdkReferenceRoute = SdkReferenceRouteImport.update({
+  id: '/sdk-reference',
+  path: '/sdk-reference',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShieldedRoute = ShieldedRouteImport.update({
+  id: '/shielded',
+  path: '/shielded',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SourcesRoute = SourcesRouteImport.update({
+  id: '/sources',
+  path: '/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TokensRoute = TokensRouteImport.update({
+  id: '/tokens',
+  path: '/tokens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const V24Route = V24RouteImport.update({
+  id: '/v24',
+  path: '/v24',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ValidatorsRoute = ValidatorsRouteImport.update({
+  id: '/validators',
+  path: '/validators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VotesRoute = VotesRouteImport.update({
+  id: '/votes',
+  path: '/votes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddressAddressRoute = AddressAddressRouteImport.update({
+  id: '/address/$address',
+  path: '/address/$address',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlockIndexHeightRoute = BlockIndexHeightRouteImport.update({
+  id: '/block-index/$height',
+  path: '/block-index/$height',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlockIdRoute = BlockIdRouteImport.update({
+  id: '/block/$id',
+  path: '/block/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContestLabelRoute = ContestLabelRouteImport.update({
+  id: '/contest/$label',
+  path: '/contest/$label',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EpochNRoute = EpochNRouteImport.update({
+  id: '/epoch/$n',
+  path: '/epoch/$n',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GovernanceIndexRoute = GovernanceIndexRouteImport.update({
+  id: '/governance/',
+  path: '/governance/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GovernanceHashRoute = GovernanceHashRouteImport.update({
+  id: '/governance/$hash',
+  path: '/governance/$hash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroupsContractRoute = GroupsContractRouteImport.update({
+  id: '/groups/$contract',
+  path: '/groups/$contract',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdentityIdRoute = IdentityIdRouteImport.update({
+  id: '/identity/$id',
+  path: '/identity/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdentityLookupRoute = IdentityLookupRouteImport.update({
+  id: '/identity/lookup',
+  path: '/identity/lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightSplatRoute = InsightSplatRouteImport.update({
+  id: '/insight/$',
+  path: '/insight/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MnProtxRoute = MnProtxRouteImport.update({
+  id: '/mn/$protx',
+  path: '/mn/$protx',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NameLabelRoute = NameLabelRouteImport.update({
+  id: '/name/$label',
+  path: '/name/$label',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformAddressAddrRoute = PlatformAddressAddrRouteImport.update({
+  id: '/platform-address/$addr',
+  path: '/platform-address/$addr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformIndexRoute = PlatformIndexRouteImport.update({
+  id: '/platform/',
+  path: '/platform/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformBlocksRoute = PlatformBlocksRouteImport.update({
+  id: '/platform/blocks',
+  path: '/platform/blocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformTxsRoute = PlatformTxsRouteImport.update({
+  id: '/platform/txs',
+  path: '/platform/txs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsDecoderRoute = ToolsDecoderRouteImport.update({
+  id: '/tools/$decoder',
+  path: '/tools/$decoder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsQrRoute = ToolsQrRouteImport.update({
+  id: '/tools/qr',
+  path: '/tools/qr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsTransitionRoute = ToolsTransitionRouteImport.update({
+  id: '/tools/transition',
+  path: '/tools/transition',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsVerifyMessageRoute = ToolsVerifyMessageRouteImport.update({
+  id: '/tools/verify-message',
+  path: '/tools/verify-message',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TxTxidRoute = TxTxidRouteImport.update({
+  id: '/tx/$txid',
+  path: '/tx/$txid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractIdIndexRoute = ContractIdIndexRouteImport.update({
+  id: '/contract/$id/',
+  path: '/contract/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroupContractPosRoute = GroupContractPosRouteImport.update({
+  id: '/group/$contract/$pos',
+  path: '/group/$contract/$pos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformBlockIdRoute = PlatformBlockIdRouteImport.update({
+  id: '/platform/block/$id',
+  path: '/platform/block/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformTxHashRoute = PlatformTxHashRouteImport.update({
+  id: '/platform/tx/$hash',
+  path: '/platform/tx/$hash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TokenIdIndexRoute = TokenIdIndexRouteImport.update({
+  id: '/token/$id/',
+  path: '/token/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TokenIdHoldersRoute = TokenIdHoldersRouteImport.update({
+  id: '/token/$id/holders',
+  path: '/token/$id/holders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractIdDocumentsTypeRoute = ContractIdDocumentsTypeRouteImport.update({
+  id: '/contract/$id/documents/$type',
+  path: '/contract/$id/documents/$type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentContractTypeIdRoute = DocumentContractTypeIdRouteImport.update({
+  id: '/document/$contract/$type/$id',
+  path: '/document/$contract/$type/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/api': typeof ApiRoute
+  '/blocks': typeof BlocksRoute
+  '/changes': typeof ChangesRoute
+  '/charts': typeof ChartsRoute
+  '/contests': typeof ContestsRoute
+  '/contracts': typeof ContractsRoute
+  '/credits': typeof CreditsRoute
+  '/epochs': typeof EpochsRoute
+  '/identities': typeof IdentitiesRoute
+  '/map': typeof MapRoute
+  '/masternodes': typeof MasternodesRoute
+  '/mempool': typeof MempoolRoute
+  '/names': typeof NamesRoute
+  '/nodes': typeof NodesRoute
+  '/polls': typeof PollsRoute
+  '/protocol': typeof ProtocolRoute
+  '/query': typeof QueryRoute
+  '/quorums': typeof QuorumsRoute
+  '/rich-list': typeof RichListRoute
+  '/saved': typeof SavedRoute
+  '/sdk-reference': typeof SdkReferenceRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shielded': typeof ShieldedRoute
+  '/sources': typeof SourcesRoute
+  '/status': typeof StatusRoute
+  '/tokens': typeof TokensRoute
+  '/v24': typeof V24Route
+  '/validators': typeof ValidatorsRoute
+  '/votes': typeof VotesRoute
+  '/address/$address': typeof AddressAddressRoute
+  '/block-index/$height': typeof BlockIndexHeightRoute
+  '/block/$id': typeof BlockIdRoute
+  '/contest/$label': typeof ContestLabelRoute
+  '/epoch/$n': typeof EpochNRoute
+  '/governance/$hash': typeof GovernanceHashRoute
+  '/groups/$contract': typeof GroupsContractRoute
+  '/identity/$id': typeof IdentityIdRoute
+  '/identity/lookup': typeof IdentityLookupRoute
+  '/insight/$': typeof InsightSplatRoute
+  '/mn/$protx': typeof MnProtxRoute
+  '/name/$label': typeof NameLabelRoute
+  '/platform-address/$addr': typeof PlatformAddressAddrRoute
+  '/platform/blocks': typeof PlatformBlocksRoute
+  '/platform/txs': typeof PlatformTxsRoute
+  '/tools/$decoder': typeof ToolsDecoderRoute
+  '/tools/qr': typeof ToolsQrRoute
+  '/tools/transition': typeof ToolsTransitionRoute
+  '/tools/verify-message': typeof ToolsVerifyMessageRoute
+  '/tx/$txid': typeof TxTxidRoute
+  '/governance/': typeof GovernanceIndexRoute
+  '/platform/': typeof PlatformIndexRoute
+  '/group/$contract/$pos': typeof GroupContractPosRoute
+  '/platform/block/$id': typeof PlatformBlockIdRoute
+  '/platform/tx/$hash': typeof PlatformTxHashRoute
+  '/token/$id/holders': typeof TokenIdHoldersRoute
+  '/contract/$id/': typeof ContractIdIndexRoute
+  '/token/$id/': typeof TokenIdIndexRoute
+  '/contract/$id/documents/$type': typeof ContractIdDocumentsTypeRoute
+  '/document/$contract/$type/$id': typeof DocumentContractTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/api': typeof ApiRoute
+  '/blocks': typeof BlocksRoute
+  '/changes': typeof ChangesRoute
+  '/charts': typeof ChartsRoute
+  '/contests': typeof ContestsRoute
+  '/contracts': typeof ContractsRoute
+  '/credits': typeof CreditsRoute
+  '/epochs': typeof EpochsRoute
+  '/identities': typeof IdentitiesRoute
+  '/map': typeof MapRoute
+  '/masternodes': typeof MasternodesRoute
+  '/mempool': typeof MempoolRoute
+  '/names': typeof NamesRoute
+  '/nodes': typeof NodesRoute
+  '/polls': typeof PollsRoute
+  '/protocol': typeof ProtocolRoute
+  '/query': typeof QueryRoute
+  '/quorums': typeof QuorumsRoute
+  '/rich-list': typeof RichListRoute
+  '/saved': typeof SavedRoute
+  '/sdk-reference': typeof SdkReferenceRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shielded': typeof ShieldedRoute
+  '/sources': typeof SourcesRoute
+  '/status': typeof StatusRoute
+  '/tokens': typeof TokensRoute
+  '/v24': typeof V24Route
+  '/validators': typeof ValidatorsRoute
+  '/votes': typeof VotesRoute
+  '/address/$address': typeof AddressAddressRoute
+  '/block-index/$height': typeof BlockIndexHeightRoute
+  '/block/$id': typeof BlockIdRoute
+  '/contest/$label': typeof ContestLabelRoute
+  '/epoch/$n': typeof EpochNRoute
+  '/governance/$hash': typeof GovernanceHashRoute
+  '/groups/$contract': typeof GroupsContractRoute
+  '/identity/$id': typeof IdentityIdRoute
+  '/identity/lookup': typeof IdentityLookupRoute
+  '/insight/$': typeof InsightSplatRoute
+  '/mn/$protx': typeof MnProtxRoute
+  '/name/$label': typeof NameLabelRoute
+  '/platform-address/$addr': typeof PlatformAddressAddrRoute
+  '/platform/blocks': typeof PlatformBlocksRoute
+  '/platform/txs': typeof PlatformTxsRoute
+  '/tools/$decoder': typeof ToolsDecoderRoute
+  '/tools/qr': typeof ToolsQrRoute
+  '/tools/transition': typeof ToolsTransitionRoute
+  '/tools/verify-message': typeof ToolsVerifyMessageRoute
+  '/tx/$txid': typeof TxTxidRoute
+  '/governance': typeof GovernanceIndexRoute
+  '/platform': typeof PlatformIndexRoute
+  '/group/$contract/$pos': typeof GroupContractPosRoute
+  '/platform/block/$id': typeof PlatformBlockIdRoute
+  '/platform/tx/$hash': typeof PlatformTxHashRoute
+  '/token/$id/holders': typeof TokenIdHoldersRoute
+  '/contract/$id': typeof ContractIdIndexRoute
+  '/token/$id': typeof TokenIdIndexRoute
+  '/contract/$id/documents/$type': typeof ContractIdDocumentsTypeRoute
+  '/document/$contract/$type/$id': typeof DocumentContractTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/api': typeof ApiRoute
+  '/blocks': typeof BlocksRoute
+  '/changes': typeof ChangesRoute
+  '/charts': typeof ChartsRoute
+  '/contests': typeof ContestsRoute
+  '/contracts': typeof ContractsRoute
+  '/credits': typeof CreditsRoute
+  '/epochs': typeof EpochsRoute
+  '/identities': typeof IdentitiesRoute
+  '/map': typeof MapRoute
+  '/masternodes': typeof MasternodesRoute
+  '/mempool': typeof MempoolRoute
+  '/names': typeof NamesRoute
+  '/nodes': typeof NodesRoute
+  '/polls': typeof PollsRoute
+  '/protocol': typeof ProtocolRoute
+  '/query': typeof QueryRoute
+  '/quorums': typeof QuorumsRoute
+  '/rich-list': typeof RichListRoute
+  '/saved': typeof SavedRoute
+  '/sdk-reference': typeof SdkReferenceRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shielded': typeof ShieldedRoute
+  '/sources': typeof SourcesRoute
+  '/status': typeof StatusRoute
+  '/tokens': typeof TokensRoute
+  '/v24': typeof V24Route
+  '/validators': typeof ValidatorsRoute
+  '/votes': typeof VotesRoute
+  '/address/$address': typeof AddressAddressRoute
+  '/block-index/$height': typeof BlockIndexHeightRoute
+  '/block/$id': typeof BlockIdRoute
+  '/contest/$label': typeof ContestLabelRoute
+  '/epoch/$n': typeof EpochNRoute
+  '/governance/$hash': typeof GovernanceHashRoute
+  '/groups/$contract': typeof GroupsContractRoute
+  '/identity/$id': typeof IdentityIdRoute
+  '/identity/lookup': typeof IdentityLookupRoute
+  '/insight/$': typeof InsightSplatRoute
+  '/mn/$protx': typeof MnProtxRoute
+  '/name/$label': typeof NameLabelRoute
+  '/platform-address/$addr': typeof PlatformAddressAddrRoute
+  '/platform/blocks': typeof PlatformBlocksRoute
+  '/platform/txs': typeof PlatformTxsRoute
+  '/tools/$decoder': typeof ToolsDecoderRoute
+  '/tools/qr': typeof ToolsQrRoute
+  '/tools/transition': typeof ToolsTransitionRoute
+  '/tools/verify-message': typeof ToolsVerifyMessageRoute
+  '/tx/$txid': typeof TxTxidRoute
+  '/governance/': typeof GovernanceIndexRoute
+  '/platform/': typeof PlatformIndexRoute
+  '/group/$contract/$pos': typeof GroupContractPosRoute
+  '/platform/block/$id': typeof PlatformBlockIdRoute
+  '/platform/tx/$hash': typeof PlatformTxHashRoute
+  '/token/$id/holders': typeof TokenIdHoldersRoute
+  '/contract/$id/': typeof ContractIdIndexRoute
+  '/token/$id/': typeof TokenIdIndexRoute
+  '/contract/$id/documents/$type': typeof ContractIdDocumentsTypeRoute
+  '/document/$contract/$type/$id': typeof DocumentContractTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/api'
+    | '/blocks'
+    | '/changes'
+    | '/charts'
+    | '/contests'
+    | '/contracts'
+    | '/credits'
+    | '/epochs'
+    | '/identities'
+    | '/map'
+    | '/masternodes'
+    | '/mempool'
+    | '/names'
+    | '/nodes'
+    | '/polls'
+    | '/protocol'
+    | '/query'
+    | '/quorums'
+    | '/rich-list'
+    | '/saved'
+    | '/sdk-reference'
+    | '/search'
+    | '/settings'
+    | '/shielded'
+    | '/sources'
+    | '/status'
+    | '/tokens'
+    | '/v24'
+    | '/validators'
+    | '/votes'
+    | '/address/$address'
+    | '/block-index/$height'
+    | '/block/$id'
+    | '/contest/$label'
+    | '/epoch/$n'
+    | '/governance/$hash'
+    | '/groups/$contract'
+    | '/identity/$id'
+    | '/identity/lookup'
+    | '/insight/$'
+    | '/mn/$protx'
+    | '/name/$label'
+    | '/platform-address/$addr'
+    | '/platform/blocks'
+    | '/platform/txs'
+    | '/tools/$decoder'
+    | '/tools/qr'
+    | '/tools/transition'
+    | '/tools/verify-message'
+    | '/tx/$txid'
+    | '/governance/'
+    | '/platform/'
+    | '/group/$contract/$pos'
+    | '/platform/block/$id'
+    | '/platform/tx/$hash'
+    | '/token/$id/holders'
+    | '/contract/$id/'
+    | '/token/$id/'
+    | '/contract/$id/documents/$type'
+    | '/document/$contract/$type/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/api'
+    | '/blocks'
+    | '/changes'
+    | '/charts'
+    | '/contests'
+    | '/contracts'
+    | '/credits'
+    | '/epochs'
+    | '/identities'
+    | '/map'
+    | '/masternodes'
+    | '/mempool'
+    | '/names'
+    | '/nodes'
+    | '/polls'
+    | '/protocol'
+    | '/query'
+    | '/quorums'
+    | '/rich-list'
+    | '/saved'
+    | '/sdk-reference'
+    | '/search'
+    | '/settings'
+    | '/shielded'
+    | '/sources'
+    | '/status'
+    | '/tokens'
+    | '/v24'
+    | '/validators'
+    | '/votes'
+    | '/address/$address'
+    | '/block-index/$height'
+    | '/block/$id'
+    | '/contest/$label'
+    | '/epoch/$n'
+    | '/governance/$hash'
+    | '/groups/$contract'
+    | '/identity/$id'
+    | '/identity/lookup'
+    | '/insight/$'
+    | '/mn/$protx'
+    | '/name/$label'
+    | '/platform-address/$addr'
+    | '/platform/blocks'
+    | '/platform/txs'
+    | '/tools/$decoder'
+    | '/tools/qr'
+    | '/tools/transition'
+    | '/tools/verify-message'
+    | '/tx/$txid'
+    | '/governance'
+    | '/platform'
+    | '/group/$contract/$pos'
+    | '/platform/block/$id'
+    | '/platform/tx/$hash'
+    | '/token/$id/holders'
+    | '/contract/$id'
+    | '/token/$id'
+    | '/contract/$id/documents/$type'
+    | '/document/$contract/$type/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/api'
+    | '/blocks'
+    | '/changes'
+    | '/charts'
+    | '/contests'
+    | '/contracts'
+    | '/credits'
+    | '/epochs'
+    | '/identities'
+    | '/map'
+    | '/masternodes'
+    | '/mempool'
+    | '/names'
+    | '/nodes'
+    | '/polls'
+    | '/protocol'
+    | '/query'
+    | '/quorums'
+    | '/rich-list'
+    | '/saved'
+    | '/sdk-reference'
+    | '/search'
+    | '/settings'
+    | '/shielded'
+    | '/sources'
+    | '/status'
+    | '/tokens'
+    | '/v24'
+    | '/validators'
+    | '/votes'
+    | '/address/$address'
+    | '/block-index/$height'
+    | '/block/$id'
+    | '/contest/$label'
+    | '/epoch/$n'
+    | '/governance/$hash'
+    | '/groups/$contract'
+    | '/identity/$id'
+    | '/identity/lookup'
+    | '/insight/$'
+    | '/mn/$protx'
+    | '/name/$label'
+    | '/platform-address/$addr'
+    | '/platform/blocks'
+    | '/platform/txs'
+    | '/tools/$decoder'
+    | '/tools/qr'
+    | '/tools/transition'
+    | '/tools/verify-message'
+    | '/tx/$txid'
+    | '/governance/'
+    | '/platform/'
+    | '/group/$contract/$pos'
+    | '/platform/block/$id'
+    | '/platform/tx/$hash'
+    | '/token/$id/holders'
+    | '/contract/$id/'
+    | '/token/$id/'
+    | '/contract/$id/documents/$type'
+    | '/document/$contract/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ApiRoute: typeof ApiRoute
+  BlocksRoute: typeof BlocksRoute
+  ChangesRoute: typeof ChangesRoute
+  ChartsRoute: typeof ChartsRoute
+  ContestsRoute: typeof ContestsRoute
+  ContractsRoute: typeof ContractsRoute
+  CreditsRoute: typeof CreditsRoute
+  EpochsRoute: typeof EpochsRoute
+  IdentitiesRoute: typeof IdentitiesRoute
+  MapRoute: typeof MapRoute
+  MasternodesRoute: typeof MasternodesRoute
+  MempoolRoute: typeof MempoolRoute
+  NamesRoute: typeof NamesRoute
+  NodesRoute: typeof NodesRoute
+  PollsRoute: typeof PollsRoute
+  ProtocolRoute: typeof ProtocolRoute
+  QueryRoute: typeof QueryRoute
+  QuorumsRoute: typeof QuorumsRoute
+  RichListRoute: typeof RichListRoute
+  SavedRoute: typeof SavedRoute
+  SdkReferenceRoute: typeof SdkReferenceRoute
+  SearchRoute: typeof SearchRoute
+  SettingsRoute: typeof SettingsRoute
+  ShieldedRoute: typeof ShieldedRoute
+  SourcesRoute: typeof SourcesRoute
+  StatusRoute: typeof StatusRoute
+  TokensRoute: typeof TokensRoute
+  V24Route: typeof V24Route
+  ValidatorsRoute: typeof ValidatorsRoute
+  VotesRoute: typeof VotesRoute
+  AddressAddressRoute: typeof AddressAddressRoute
+  BlockIndexHeightRoute: typeof BlockIndexHeightRoute
+  BlockIdRoute: typeof BlockIdRoute
+  ContestLabelRoute: typeof ContestLabelRoute
+  EpochNRoute: typeof EpochNRoute
+  GovernanceHashRoute: typeof GovernanceHashRoute
+  GroupsContractRoute: typeof GroupsContractRoute
+  IdentityIdRoute: typeof IdentityIdRoute
+  IdentityLookupRoute: typeof IdentityLookupRoute
+  InsightSplatRoute: typeof InsightSplatRoute
+  MnProtxRoute: typeof MnProtxRoute
+  NameLabelRoute: typeof NameLabelRoute
+  PlatformAddressAddrRoute: typeof PlatformAddressAddrRoute
+  PlatformBlocksRoute: typeof PlatformBlocksRoute
+  PlatformTxsRoute: typeof PlatformTxsRoute
+  ToolsDecoderRoute: typeof ToolsDecoderRoute
+  ToolsQrRoute: typeof ToolsQrRoute
+  ToolsTransitionRoute: typeof ToolsTransitionRoute
+  ToolsVerifyMessageRoute: typeof ToolsVerifyMessageRoute
+  TxTxidRoute: typeof TxTxidRoute
+  GovernanceIndexRoute: typeof GovernanceIndexRoute
+  PlatformIndexRoute: typeof PlatformIndexRoute
+  GroupContractPosRoute: typeof GroupContractPosRoute
+  PlatformBlockIdRoute: typeof PlatformBlockIdRoute
+  PlatformTxHashRoute: typeof PlatformTxHashRoute
+  TokenIdHoldersRoute: typeof TokenIdHoldersRoute
+  ContractIdIndexRoute: typeof ContractIdIndexRoute
+  TokenIdIndexRoute: typeof TokenIdIndexRoute
+  ContractIdDocumentsTypeRoute: typeof ContractIdDocumentsTypeRoute
+  DocumentContractTypeIdRoute: typeof DocumentContractTypeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +845,499 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api': {
+      id: '/api'
+      path: '/api'
+      fullPath: '/api'
+      preLoaderRoute: typeof ApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blocks': {
+      id: '/blocks'
+      path: '/blocks'
+      fullPath: '/blocks'
+      preLoaderRoute: typeof BlocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changes': {
+      id: '/changes'
+      path: '/changes'
+      fullPath: '/changes'
+      preLoaderRoute: typeof ChangesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/charts': {
+      id: '/charts'
+      path: '/charts'
+      fullPath: '/charts'
+      preLoaderRoute: typeof ChartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contests': {
+      id: '/contests'
+      path: '/contests'
+      fullPath: '/contests'
+      preLoaderRoute: typeof ContestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contracts': {
+      id: '/contracts'
+      path: '/contracts'
+      fullPath: '/contracts'
+      preLoaderRoute: typeof ContractsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/credits': {
+      id: '/credits'
+      path: '/credits'
+      fullPath: '/credits'
+      preLoaderRoute: typeof CreditsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/epochs': {
+      id: '/epochs'
+      path: '/epochs'
+      fullPath: '/epochs'
+      preLoaderRoute: typeof EpochsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/identities': {
+      id: '/identities'
+      path: '/identities'
+      fullPath: '/identities'
+      preLoaderRoute: typeof IdentitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/masternodes': {
+      id: '/masternodes'
+      path: '/masternodes'
+      fullPath: '/masternodes'
+      preLoaderRoute: typeof MasternodesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mempool': {
+      id: '/mempool'
+      path: '/mempool'
+      fullPath: '/mempool'
+      preLoaderRoute: typeof MempoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/names': {
+      id: '/names'
+      path: '/names'
+      fullPath: '/names'
+      preLoaderRoute: typeof NamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nodes': {
+      id: '/nodes'
+      path: '/nodes'
+      fullPath: '/nodes'
+      preLoaderRoute: typeof NodesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/polls': {
+      id: '/polls'
+      path: '/polls'
+      fullPath: '/polls'
+      preLoaderRoute: typeof PollsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/protocol': {
+      id: '/protocol'
+      path: '/protocol'
+      fullPath: '/protocol'
+      preLoaderRoute: typeof ProtocolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/query': {
+      id: '/query'
+      path: '/query'
+      fullPath: '/query'
+      preLoaderRoute: typeof QueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quorums': {
+      id: '/quorums'
+      path: '/quorums'
+      fullPath: '/quorums'
+      preLoaderRoute: typeof QuorumsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rich-list': {
+      id: '/rich-list'
+      path: '/rich-list'
+      fullPath: '/rich-list'
+      preLoaderRoute: typeof RichListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sdk-reference': {
+      id: '/sdk-reference'
+      path: '/sdk-reference'
+      fullPath: '/sdk-reference'
+      preLoaderRoute: typeof SdkReferenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shielded': {
+      id: '/shielded'
+      path: '/shielded'
+      fullPath: '/shielded'
+      preLoaderRoute: typeof ShieldedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sources': {
+      id: '/sources'
+      path: '/sources'
+      fullPath: '/sources'
+      preLoaderRoute: typeof SourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tokens': {
+      id: '/tokens'
+      path: '/tokens'
+      fullPath: '/tokens'
+      preLoaderRoute: typeof TokensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/v24': {
+      id: '/v24'
+      path: '/v24'
+      fullPath: '/v24'
+      preLoaderRoute: typeof V24RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/validators': {
+      id: '/validators'
+      path: '/validators'
+      fullPath: '/validators'
+      preLoaderRoute: typeof ValidatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/votes': {
+      id: '/votes'
+      path: '/votes'
+      fullPath: '/votes'
+      preLoaderRoute: typeof VotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/address/$address': {
+      id: '/address/$address'
+      path: '/address/$address'
+      fullPath: '/address/$address'
+      preLoaderRoute: typeof AddressAddressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/block-index/$height': {
+      id: '/block-index/$height'
+      path: '/block-index/$height'
+      fullPath: '/block-index/$height'
+      preLoaderRoute: typeof BlockIndexHeightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/block/$id': {
+      id: '/block/$id'
+      path: '/block/$id'
+      fullPath: '/block/$id'
+      preLoaderRoute: typeof BlockIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contest/$label': {
+      id: '/contest/$label'
+      path: '/contest/$label'
+      fullPath: '/contest/$label'
+      preLoaderRoute: typeof ContestLabelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/epoch/$n': {
+      id: '/epoch/$n'
+      path: '/epoch/$n'
+      fullPath: '/epoch/$n'
+      preLoaderRoute: typeof EpochNRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/governance/': {
+      id: '/governance/'
+      path: '/governance'
+      fullPath: '/governance/'
+      preLoaderRoute: typeof GovernanceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/governance/$hash': {
+      id: '/governance/$hash'
+      path: '/governance/$hash'
+      fullPath: '/governance/$hash'
+      preLoaderRoute: typeof GovernanceHashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/groups/$contract': {
+      id: '/groups/$contract'
+      path: '/groups/$contract'
+      fullPath: '/groups/$contract'
+      preLoaderRoute: typeof GroupsContractRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/identity/$id': {
+      id: '/identity/$id'
+      path: '/identity/$id'
+      fullPath: '/identity/$id'
+      preLoaderRoute: typeof IdentityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/identity/lookup': {
+      id: '/identity/lookup'
+      path: '/identity/lookup'
+      fullPath: '/identity/lookup'
+      preLoaderRoute: typeof IdentityLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insight/$': {
+      id: '/insight/$'
+      path: '/insight/$'
+      fullPath: '/insight/$'
+      preLoaderRoute: typeof InsightSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mn/$protx': {
+      id: '/mn/$protx'
+      path: '/mn/$protx'
+      fullPath: '/mn/$protx'
+      preLoaderRoute: typeof MnProtxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/name/$label': {
+      id: '/name/$label'
+      path: '/name/$label'
+      fullPath: '/name/$label'
+      preLoaderRoute: typeof NameLabelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform-address/$addr': {
+      id: '/platform-address/$addr'
+      path: '/platform-address/$addr'
+      fullPath: '/platform-address/$addr'
+      preLoaderRoute: typeof PlatformAddressAddrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform/': {
+      id: '/platform/'
+      path: '/platform'
+      fullPath: '/platform/'
+      preLoaderRoute: typeof PlatformIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform/blocks': {
+      id: '/platform/blocks'
+      path: '/platform/blocks'
+      fullPath: '/platform/blocks'
+      preLoaderRoute: typeof PlatformBlocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform/txs': {
+      id: '/platform/txs'
+      path: '/platform/txs'
+      fullPath: '/platform/txs'
+      preLoaderRoute: typeof PlatformTxsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/$decoder': {
+      id: '/tools/$decoder'
+      path: '/tools/$decoder'
+      fullPath: '/tools/$decoder'
+      preLoaderRoute: typeof ToolsDecoderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/qr': {
+      id: '/tools/qr'
+      path: '/tools/qr'
+      fullPath: '/tools/qr'
+      preLoaderRoute: typeof ToolsQrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/transition': {
+      id: '/tools/transition'
+      path: '/tools/transition'
+      fullPath: '/tools/transition'
+      preLoaderRoute: typeof ToolsTransitionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/verify-message': {
+      id: '/tools/verify-message'
+      path: '/tools/verify-message'
+      fullPath: '/tools/verify-message'
+      preLoaderRoute: typeof ToolsVerifyMessageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tx/$txid': {
+      id: '/tx/$txid'
+      path: '/tx/$txid'
+      fullPath: '/tx/$txid'
+      preLoaderRoute: typeof TxTxidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contract/$id/': {
+      id: '/contract/$id/'
+      path: '/contract/$id'
+      fullPath: '/contract/$id/'
+      preLoaderRoute: typeof ContractIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/group/$contract/$pos': {
+      id: '/group/$contract/$pos'
+      path: '/group/$contract/$pos'
+      fullPath: '/group/$contract/$pos'
+      preLoaderRoute: typeof GroupContractPosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform/block/$id': {
+      id: '/platform/block/$id'
+      path: '/platform/block/$id'
+      fullPath: '/platform/block/$id'
+      preLoaderRoute: typeof PlatformBlockIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform/tx/$hash': {
+      id: '/platform/tx/$hash'
+      path: '/platform/tx/$hash'
+      fullPath: '/platform/tx/$hash'
+      preLoaderRoute: typeof PlatformTxHashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/token/$id/': {
+      id: '/token/$id/'
+      path: '/token/$id'
+      fullPath: '/token/$id/'
+      preLoaderRoute: typeof TokenIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/token/$id/holders': {
+      id: '/token/$id/holders'
+      path: '/token/$id/holders'
+      fullPath: '/token/$id/holders'
+      preLoaderRoute: typeof TokenIdHoldersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contract/$id/documents/$type': {
+      id: '/contract/$id/documents/$type'
+      path: '/contract/$id/documents/$type'
+      fullPath: '/contract/$id/documents/$type'
+      preLoaderRoute: typeof ContractIdDocumentsTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/document/$contract/$type/$id': {
+      id: '/document/$contract/$type/$id'
+      path: '/document/$contract/$type/$id'
+      fullPath: '/document/$contract/$type/$id'
+      preLoaderRoute: typeof DocumentContractTypeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ApiRoute: ApiRoute,
+  BlocksRoute: BlocksRoute,
+  ChangesRoute: ChangesRoute,
+  ChartsRoute: ChartsRoute,
+  ContestsRoute: ContestsRoute,
+  ContractsRoute: ContractsRoute,
+  CreditsRoute: CreditsRoute,
+  EpochsRoute: EpochsRoute,
+  IdentitiesRoute: IdentitiesRoute,
+  MapRoute: MapRoute,
+  MasternodesRoute: MasternodesRoute,
+  MempoolRoute: MempoolRoute,
+  NamesRoute: NamesRoute,
+  NodesRoute: NodesRoute,
+  PollsRoute: PollsRoute,
+  ProtocolRoute: ProtocolRoute,
+  QueryRoute: QueryRoute,
+  QuorumsRoute: QuorumsRoute,
+  RichListRoute: RichListRoute,
+  SavedRoute: SavedRoute,
+  SdkReferenceRoute: SdkReferenceRoute,
+  SearchRoute: SearchRoute,
+  SettingsRoute: SettingsRoute,
+  ShieldedRoute: ShieldedRoute,
+  SourcesRoute: SourcesRoute,
+  StatusRoute: StatusRoute,
+  TokensRoute: TokensRoute,
+  V24Route: V24Route,
+  ValidatorsRoute: ValidatorsRoute,
+  VotesRoute: VotesRoute,
+  AddressAddressRoute: AddressAddressRoute,
+  BlockIndexHeightRoute: BlockIndexHeightRoute,
+  BlockIdRoute: BlockIdRoute,
+  ContestLabelRoute: ContestLabelRoute,
+  EpochNRoute: EpochNRoute,
+  GovernanceHashRoute: GovernanceHashRoute,
+  GroupsContractRoute: GroupsContractRoute,
+  IdentityIdRoute: IdentityIdRoute,
+  IdentityLookupRoute: IdentityLookupRoute,
+  InsightSplatRoute: InsightSplatRoute,
+  MnProtxRoute: MnProtxRoute,
+  NameLabelRoute: NameLabelRoute,
+  PlatformAddressAddrRoute: PlatformAddressAddrRoute,
+  PlatformBlocksRoute: PlatformBlocksRoute,
+  PlatformTxsRoute: PlatformTxsRoute,
+  ToolsDecoderRoute: ToolsDecoderRoute,
+  ToolsQrRoute: ToolsQrRoute,
+  ToolsTransitionRoute: ToolsTransitionRoute,
+  ToolsVerifyMessageRoute: ToolsVerifyMessageRoute,
+  TxTxidRoute: TxTxidRoute,
+  GovernanceIndexRoute: GovernanceIndexRoute,
+  PlatformIndexRoute: PlatformIndexRoute,
+  GroupContractPosRoute: GroupContractPosRoute,
+  PlatformBlockIdRoute: PlatformBlockIdRoute,
+  PlatformTxHashRoute: PlatformTxHashRoute,
+  TokenIdHoldersRoute: TokenIdHoldersRoute,
+  ContractIdIndexRoute: ContractIdIndexRoute,
+  TokenIdIndexRoute: TokenIdIndexRoute,
+  ContractIdDocumentsTypeRoute: ContractIdDocumentsTypeRoute,
+  DocumentContractTypeIdRoute: DocumentContractTypeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
