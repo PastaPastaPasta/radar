@@ -62,7 +62,11 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
     case 'dapi':
       return { label: 'Served by DAPI', icon: ICON.dapi, showAge: true }
     case 'radar':
-      return { label: 'Crawled by Radar', icon: ICON.radar, showAge: true }
+      return {
+        label: stamp.asOfFetched ? 'Fetched from Radar' : 'Crawled by Radar',
+        icon: ICON.radar,
+        showAge: true,
+      }
     case 'pe':
       return { label: 'Indexed by Platform Explorer', icon: ICON.pe, showAge: true }
     case 'hyphen':

@@ -64,6 +64,21 @@ function reportCrawlLag(status: RadarStatus): void {
 
 const modified = (_body: unknown, res: Response) => lastModifiedMs(res)
 
+function newest(times: Iterable<number | null | undefined>): number | undefined {
+  let max: number | undefined
+  for (const t of times) if (t != null && (max === undefined || t > max)) max = t
+  return max
+}
+
+function healthCrawlTime(body: RadarHealth, res: Response): number | undefined {
+  const active = getActiveNetwork()
+  const nets = active === 'mainnet' || active === 'testnet' ? [active] : ['mainnet', 'testnet']
+  const ages = nets.map((n) => body.age_secs?.[n]?.crawl)
+  const oldest =
+    ages.includes(undefined) || ages.includes(null) ? undefined : Math.max(...(ages as number[]))
+  return oldest === undefined ? lastModifiedMs(res) : Date.now() - oldest * 1000
+}
+
 export const radar = {
   /**
    * Global document, read for one network (the active one by default): `net` picks the stamp and the
@@ -96,7 +111,7 @@ export const radar = {
       schema: RadarHealthSchema,
       acceptStatus: [503],
       signal,
-      asOf: modified,
+      asOf: healthCrawlTime,
     })
   },
 
@@ -163,7 +178,7 @@ export const radar = {
       schema: RadarMasternodesSchema,
       signal,
       height: (b) => b.tip ?? undefined,
-      asOf: modified,
+      asOf: (b, res) => newest(b.masternodes.map((m) => m.last_seen)) ?? lastModifiedMs(res),
     }).then((s) => mapSourced(s, (d) => d.masternodes))
   },
 
@@ -179,7 +194,7 @@ export const radar = {
       schema: RadarMasternodeDetailSchema,
       notFound: 'null',
       signal,
-      asOf: modified,
+      asOf: (b, res) => b.last_seen ?? lastModifiedMs(res),
     })
   },
 

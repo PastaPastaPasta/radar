@@ -1,12 +1,14 @@
 import { http, HttpResponse } from 'msw'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
+import { setActiveNetwork } from '@/data/active-network'
 import { healthRegistry } from '@/data/health'
 import { radar } from '@/data/radar/client'
 
 const BASE = 'https://radar.dashhq.org/api/v1'
 const EVO = 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff'
+const BANNED = 'a8355582b280be9452f939d34637ab82226ba2c97e1aac15eaf6db878fec0130'
 
 const MODIFIED = Date.UTC(2026, 10, 10, 12, 0, 0)
 const modifiedHeader = { 'last-modified': new Date(MODIFIED).toUTCString() }
@@ -24,128 +26,181 @@ async function serve(
   server.use(http.get(url, () => HttpResponse.json(body, { headers })))
 }
 
-type Call = () => Promise<{ asOf: number; fetchedAt: number }>
+interface Timed {
+  asOf: number
+  fetchedAt: number
+  asOfFetched?: true
+}
+type Call = () => Promise<Timed>
 
-/** Resources with no time field of their own, plus ones whose time fields are event times. */
-const CASES: { name: string; arrange: (h: Record<string, string>) => Promise<void>; call: Call }[] =
-  [
-    {
-      name: 'releases',
-      arrange: (h) => serve('radar', 'global', 'releases', `${BASE}/releases`, h),
-      call: () => radar.releases(),
-    },
-    {
-      name: 'health',
-      arrange: (h) => serve('radar', 'global', 'health', `${BASE}/health`, h),
-      call: () => radar.health(),
-    },
-    {
-      name: 'geo',
-      arrange: (h) => serve('radar', 'mainnet', 'geo', `${BASE}/mainnet/geo`, h),
-      call: () => radar.geo('mainnet'),
-    },
-    {
-      name: 'masternodes',
-      arrange: (h) => serve('radar', 'mainnet', 'masternodes', `${BASE}/mainnet/masternodes`, h),
-      call: () => radar.masternodes('mainnet'),
-    },
-    {
-      name: 'masternode (last_seen is an event time)',
-      arrange: (h) =>
-        serve(
-          'radar',
-          'mainnet',
-          `masternodes__${EVO}`,
-          `${BASE}/mainnet/masternodes/${EVO}`,
-          h,
-          (b) => {
-            b.last_seen = 1_000
-          },
-        ),
-      call: () => radar.masternode('mainnet', EVO),
-    },
-    {
-      name: 'payments',
-      arrange: (h) =>
-        serve(
-          'radar',
-          'mainnet',
-          `masternodes__${EVO}__payments--limit-10`,
-          `${BASE}/mainnet/masternodes/${EVO}/payments`,
-          h,
-        ),
-      call: () => radar.payments('mainnet', EVO, { limit: 10 }),
-    },
-    {
-      name: 'mnBench',
-      arrange: (h) =>
-        serve(
-          'radar',
-          'mainnet',
-          `masternodes__${EVO}__bench`,
-          `${BASE}/mainnet/masternodes/${EVO}/bench`,
-          h,
-        ),
-      call: () => radar.mnBench('mainnet', EVO),
-    },
-    {
-      name: 'changes (the newest change is an event time)',
-      arrange: (h) =>
-        serve('radar', 'mainnet', 'changes', `${BASE}/mainnet/changes`, h, (b) => {
-          b.changes = [
-            {
-              ts: 5,
-              height: 1,
-              protx: EVO,
-              type: 'Evo',
-              field: 'service',
-              old: null,
-              new: 'x',
-            },
-          ]
-        }),
-      call: () => radar.changes('mainnet'),
-    },
-    {
-      name: 'history (the last bucket is an event time)',
-      arrange: (h) =>
-        serve(
-          'radar',
-          'mainnet',
-          'history--days-30,dim-totals,scope-all',
-          `${BASE}/mainnet/history`,
-          h,
-          (b) => {
-            b.t = [1, 2]
-            b.series = []
-          },
-        ),
-      call: () => radar.history('mainnet', { dim: 'totals' }),
-    },
-  ]
+/** Resources whose documents carry no crawl time: a time field in them would be an event time. */
+const UNTIMED: {
+  name: string
+  arrange: (h: Record<string, string>) => Promise<void>
+  call: Call
+}[] = [
+  {
+    name: 'releases',
+    arrange: (h) => serve('radar', 'global', 'releases', `${BASE}/releases`, h),
+    call: () => radar.releases(),
+  },
+  {
+    name: 'geo',
+    arrange: (h) => serve('radar', 'mainnet', 'geo', `${BASE}/mainnet/geo`, h),
+    call: () => radar.geo('mainnet'),
+  },
+  {
+    name: 'a banned masternode, which was never reached',
+    arrange: (h) =>
+      serve(
+        'radar',
+        'mainnet',
+        `masternodes__${BANNED}`,
+        `${BASE}/mainnet/masternodes/${BANNED}`,
+        h,
+      ),
+    call: () => radar.masternode('mainnet', BANNED),
+  },
+  {
+    name: 'payments',
+    arrange: (h) =>
+      serve(
+        'radar',
+        'mainnet',
+        `masternodes__${EVO}__payments--limit-10`,
+        `${BASE}/mainnet/masternodes/${EVO}/payments`,
+        h,
+      ),
+    call: () => radar.payments('mainnet', EVO, { limit: 10 }),
+  },
+  {
+    name: 'mnBench',
+    arrange: (h) =>
+      serve(
+        'radar',
+        'mainnet',
+        `masternodes__${EVO}__bench`,
+        `${BASE}/mainnet/masternodes/${EVO}/bench`,
+        h,
+      ),
+    call: () => radar.mnBench('mainnet', EVO),
+  },
+  {
+    name: 'changes',
+    arrange: (h) => serve('radar', 'mainnet', 'changes', `${BASE}/mainnet/changes`, h),
+    call: () => radar.changes('mainnet'),
+  },
+  {
+    name: 'history',
+    arrange: (h) =>
+      serve(
+        'radar',
+        'mainnet',
+        'history--days-30,dim-totals,scope-all',
+        `${BASE}/mainnet/history`,
+        h,
+      ),
+    call: () => radar.history('mainnet', { dim: 'totals' }),
+  },
+]
 
-describe('radar asOf is when the document was true, not the age of its newest event', () => {
-  it.each(CASES)('$name uses Last-Modified when the response has it', async ({ arrange, call }) => {
-    await arrange(modifiedHeader)
-    const out = await call()
-    expect(out.asOf).toBe(MODIFIED)
-  })
-
-  it.each(CASES)('$name falls back to the time it was fetched', async ({ arrange, call }) => {
+describe('radar asOf without a time field in the document', () => {
+  it.each(UNTIMED)('$name is stamped as fetched', async ({ arrange, call }) => {
     await arrange({})
     const before = Date.now()
     const out = await call()
     expect(out.asOf).toBe(out.fetchedAt)
     expect(out.asOf).toBeGreaterThanOrEqual(before)
+    expect(out.asOfFetched).toBe(true)
   })
 
-  it('summary, platform and activation keep their crawl and publish time fields', async () => {
+  it.each(UNTIMED)(
+    '$name uses Last-Modified if the server ever sends it',
+    async ({ arrange, call }) => {
+      await arrange(modifiedHeader)
+      const out = await call()
+      expect(out.asOf).toBe(MODIFIED)
+      expect(out.asOfFetched).toBeUndefined()
+    },
+  )
+})
+
+afterEach(() => setActiveNetwork('mainnet'))
+
+describe('radar asOf from the crawl the document was built from', () => {
+  it('health is the age of the active network’s crawl', async () => {
+    const body = await fixtureBody<{ age_secs: Record<string, { crawl: number }> }>(
+      'radar',
+      'global',
+      'health',
+    )
+    const before = Date.now()
+    const out = await radar.health()
+    const age = (body.age_secs.mainnet?.crawl ?? 0) * 1000
+    expect(out.asOf).toBeGreaterThanOrEqual(before - age)
+    expect(out.asOf).toBeLessThanOrEqual(out.fetchedAt - age)
+    expect(out.asOfFetched).toBeUndefined()
+  })
+
+  it('health on a devnet takes the older of the two crawls', async () => {
+    setActiveNetwork('devnet-ruby')
+    server.use(
+      http.get(`${BASE}/health`, () =>
+        HttpResponse.json({
+          ok: true,
+          age_secs: { mainnet: { crawl: 100, chain: 5 }, testnet: { crawl: 900, chain: 5 } },
+        }),
+      ),
+    )
+    const out = await radar.health()
+    expect(Math.round((out.fetchedAt - out.asOf) / 1000)).toBe(900)
+  })
+
+  it('health without a crawl age falls back to Last-Modified, then to the fetch', async () => {
+    server.use(http.get(`${BASE}/health`, () => HttpResponse.json({ ok: true })))
+    const bare = await radar.health()
+    expect(bare.asOf).toBe(bare.fetchedAt)
+    expect(bare.asOfFetched).toBe(true)
+
+    server.use(
+      http.get(`${BASE}/health`, () =>
+        HttpResponse.json({ ok: true }, { headers: modifiedHeader }),
+      ),
+    )
+    expect((await radar.health()).asOf).toBe(MODIFIED)
+  })
+
+  it('the masternode list is as old as the newest node the crawler reached', async () => {
+    const body = await fixtureBody<{ masternodes: { last_seen: number | null }[] }>(
+      'radar',
+      'mainnet',
+      'masternodes',
+    )
+    const newest = Math.max(...body.masternodes.map((m) => m.last_seen ?? 0)) * 1000
+    const out = await radar.masternodes('mainnet')
+    expect(out.asOf).toBe(newest)
+    expect(out.asOfFetched).toBeUndefined()
+  })
+
+  it('a masternode is as old as the crawl that last reached it', async () => {
+    const body = await fixtureBody<{ last_seen: number }>('radar', 'mainnet', `masternodes__${EVO}`)
+    const out = await radar.masternode('mainnet', EVO)
+    expect(out.asOf).toBe(body.last_seen * 1000)
+    expect(out.asOfFetched).toBeUndefined()
+  })
+
+  it('summary, platform, activation and bench keep their own time fields', async () => {
     const summary = await radar.summary('mainnet')
     expect(summary.asOf).toBe(summary.data.crawl.finished)
     const platform = await radar.platform('mainnet')
     expect(platform.asOf).toBe(platform.data.now.updated)
     const activation = await radar.activation('mainnet')
     expect(activation.asOf).toBe(activation.data.updated)
+    const bench = await radar.bench('mainnet')
+    expect(bench.asOf).toBe(Math.max(...bench.data.vantages.map((v) => v.updated)))
+    for (const out of [summary, platform, activation, bench]) {
+      expect(out.asOfFetched).toBeUndefined()
+    }
   })
 })
 

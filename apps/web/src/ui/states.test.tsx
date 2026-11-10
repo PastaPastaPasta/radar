@@ -97,6 +97,17 @@ describe('SourceLine', () => {
     expect(screen.getByText(/Crawled by Radar/)).toBeInTheDocument()
   })
 
+  it('does not claim a crawl for a Radar answer that carries no time', () => {
+    render(
+      <SourceLine
+        stamp={stamp({ source: 'radar', asOf: NOW - 2000, asOfFetched: true })}
+        compact
+      />,
+    )
+    expect(screen.getByText(/Fetched from Radar/)).toHaveTextContent('2 s ago')
+    expect(screen.queryByText(/Crawled/)).not.toBeInTheDocument()
+  })
+
   it('reads as one plain line when not compact', () => {
     render(<SourceLine stamp={stamp({ source: 'radar', asOf: NOW - 780_000 })} />)
     expect(screen.getByText(/Crawled by Radar/)).toHaveTextContent('13 min ago')

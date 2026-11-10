@@ -245,13 +245,15 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
 
     report({ ok: true, latencyMs: performance.now() - started })
     const fetchedAt = Date.now()
+    const sourceTime = req.asOf?.(body, res)
     const out: Sourced<Out> = {
       source,
-      asOf: req.asOf?.(body, res) ?? fetchedAt,
+      asOf: sourceTime ?? fetchedAt,
       fetchedAt,
       proved: false,
       data: body as Out,
     }
+    if (sourceTime === undefined) out.asOfFetched = true
     const height = req.height?.(body)
     if (height !== undefined) out.height = height
     return out
