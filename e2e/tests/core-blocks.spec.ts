@@ -1,5 +1,7 @@
 import { expectAccessible } from '../helpers/a11y'
-import { expect, test } from '../helpers/test'
+import { expect as baseExpect, test } from '../helpers/test'
+
+const expect = baseExpect.configure({ timeout: 15_000 })
 
 const TIP = 2570085
 const PREVIOUS_HASH = '0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce4'

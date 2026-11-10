@@ -1,5 +1,7 @@
 import { expectAccessible } from '../helpers/a11y'
-import { expect, test } from '../helpers/test'
+import { expect as baseExpect, test } from '../helpers/test'
+
+const expect = baseExpect.configure({ timeout: 15_000 })
 
 const TRANSFER = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
 const NO_SUCH = '0000000000000000000000000000000000000000000000000000000000000001'

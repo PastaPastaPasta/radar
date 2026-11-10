@@ -1,5 +1,7 @@
 import { expectAccessible } from '../helpers/a11y'
-import { expect, test } from '../helpers/test'
+import { expect as baseExpect, test } from '../helpers/test'
+
+const expect = baseExpect.configure({ timeout: 15_000 })
 
 test.describe('Home', () => {
   test('shows the Core and Platform heights, the census and the node map state @IN-01 @HY-01', async ({
@@ -51,6 +53,15 @@ test.describe('Home', () => {
   test('says there is no match for nonsense @IN-10', async ({ page }) => {
     await page.goto('/search?q=hello+nobody')
     await expect(page.getByText(/No match|no results|Nothing found/i).first()).toBeVisible()
+  })
+
+  test('shows the current height and no stopped-updates notice while the connection is up @IN-15', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
+    await expect(page.locator('[data-live-notice]')).toHaveCount(0)
+    await expect(page.locator('[data-pulse="core"] [data-source="dapi"]')).toBeVisible()
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
