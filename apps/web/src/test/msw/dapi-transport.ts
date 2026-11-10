@@ -71,6 +71,16 @@ function miss(net: NetworkId, method: string, key: string): never {
   })
 }
 
+function recordedError(f: DapiFixture): SourceError {
+  return new SourceError({
+    source: 'dapi',
+    kind: f.error!.kind as SourceError['kind'],
+    message: f.error!.message,
+    status: f.error!.status,
+    node: f.node,
+  })
+}
+
 function abortError(): SourceError {
   return new SourceError({ source: 'dapi', kind: 'aborted', message: 'The request was aborted' })
 }
@@ -99,6 +109,7 @@ export class FixtureDapiTransport implements DapiTransport {
   ): Promise<DapiUnaryReply> {
     if (opts?.signal?.aborted) throw abortError()
     const fixture = await this.find(net, method, request)
+    if (fixture.error) throw recordedError(fixture)
     if (fixture.response === undefined) {
       throw new SourceError({
         source: 'dapi',
@@ -121,6 +132,7 @@ export class FixtureDapiTransport implements DapiTransport {
     async function* messages(): AsyncGenerator<Uint8Array> {
       if (signal?.aborted) throw abortError()
       const f = await fixture
+      if (f.error) throw recordedError(f)
       for (const m of f.messages ?? []) {
         if (signal?.aborted) throw abortError()
         yield fromBase64(m)

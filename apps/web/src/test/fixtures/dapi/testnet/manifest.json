@@ -1,0 +1,233 @@
+{
+  "net": "testnet",
+  "recordedAt": "2026-11-10T18:31:45.491Z",
+  "tip": {
+    "height": 1589232,
+    "hash": "00000014137cf6de1ce7f055b5f34f76f56431c9b9a4942088faa6a3e3d9c19d"
+  },
+  "entries": [
+    {
+      "id": "tip",
+      "purpose": "Chain tip: height, hash and block time (getBlockchainStatus + the tip header)",
+      "call": "tip(\"testnet\")",
+      "height": 1589232,
+      "hash": "00000014137cf6de1ce7f055b5f34f76f56431c9b9a4942088faa6a3e3d9c19d",
+      "tags": ["tip"]
+    },
+    {
+      "id": "status",
+      "purpose": "Chain status: blocks, headers, difficulty, chain work, sync state",
+      "call": "status(\"testnet\")",
+      "height": 1589232,
+      "tags": ["status"]
+    },
+    {
+      "id": "chain-lock",
+      "purpose": "Best ChainLock: the height every block at or below it is final at",
+      "call": "chainLock(\"testnet\")",
+      "height": 1589232,
+      "hash": "00000014137cf6de1ce7f055b5f34f76f56431c9b9a4942088faa6a3e3d9c19d",
+      "tags": ["chain-lock"]
+    },
+    {
+      "id": "latest-blocks",
+      "purpose": "The 20 newest blocks as list rows (1589232 down to 1589213), the home and blocks-list page",
+      "call": "blockRows(\"testnet\", { fromHeight: 1589232, count: 20 })",
+      "height": 1589232,
+      "tags": ["block-rows", "tip-page"]
+    },
+    {
+      "id": "block-tip",
+      "purpose": "The tip block by height, with its coinbase (cbTx) and every transaction decoded",
+      "call": "block(\"testnet\", { height: 1589232 })",
+      "height": 1589232,
+      "hash": "00000014137cf6de1ce7f055b5f34f76f56431c9b9a4942088faa6a3e3d9c19d",
+      "tags": ["block", "by-height", "chain-locked", "cbtx", "quorum-commitment"]
+    },
+    {
+      "id": "block-by-hash",
+      "purpose": "A recent block looked up by hash (the block page URL form)",
+      "call": "block(\"testnet\", { hash: \"000000b1dbd02a45fcda1f664e6b8ab5986fc3fba9c449d523927a086ad76a54\" })",
+      "height": 1589231,
+      "hash": "000000b1dbd02a45fcda1f664e6b8ab5986fc3fba9c449d523927a086ad76a54",
+      "tags": ["block", "by-hash", "chain-locked", "cbtx", "quorum-commitment"]
+    },
+    {
+      "id": "headers-100",
+      "purpose": "A range of 100 headers ending at the tip: heights, hashes, times (block-time charts)",
+      "call": "headers(\"testnet\", 1589133, 100)",
+      "height": 1589232,
+      "tags": ["headers"]
+    },
+    {
+      "id": "block-qc-commitment",
+      "purpose": "A block that carries a quorum commitment (qcTx) next to its coinbase cbTx",
+      "call": "block(\"testnet\", { height: 1589224 }) and { hash: \"0000017076f0053865130c1397c7000e1f6aa58b370ec3177b5c4fe89a2069be\" }",
+      "height": 1589224,
+      "hash": "0000017076f0053865130c1397c7000e1f6aa58b370ec3177b5c4fe89a2069be",
+      "tags": ["block", "chain-locked", "cbtx", "quorum-commitment"]
+    },
+    {
+      "id": "block-mnhf",
+      "purpose": "The block that carries the v24 hard-fork signal (MnHfSignal)",
+      "call": "block(\"testnet\", { height: 1565132 }) and { hash: \"00000018f4fe1c38aaab3a6969753df499db2caec8ab002c985127c29a202c7b\" }",
+      "height": 1565132,
+      "hash": "00000018f4fe1c38aaab3a6969753df499db2caec8ab002c985127c29a202c7b",
+      "tags": ["block", "chain-locked", "cbtx"]
+    },
+    {
+      "id": "block-pre-dip3",
+      "purpose": "An old block from before DIP-3 (no cbTx): its height comes from the BIP-34 push in the coinbase script",
+      "call": "block(\"testnet\", { height: 100000 }) and { hash: \"000000008650f09124958e7352f844f9c15705171ac38ee6668534c5c238b916\" }",
+      "height": 100000,
+      "hash": "000000008650f09124958e7352f844f9c15705171ac38ee6668534c5c238b916",
+      "tags": ["block", "chain-locked", "cbtx"]
+    },
+    {
+      "id": "date-jump-start",
+      "purpose": "First block of 2026-11-03 (UTC), found by searching header ranges",
+      "call": "heightAtTime(\"testnet\", Date.parse(\"2026-11-03T00:00:00Z\"))",
+      "height": 1584403,
+      "tags": ["date-jump"]
+    },
+    {
+      "id": "date-jump-end",
+      "purpose": "First block after 2026-11-03 (UTC); the day's last block is one below it",
+      "call": "heightAtTime(\"testnet\", Date.parse(\"2026-11-03T00:00:00Z\") + 86_400_000)",
+      "height": 1584985,
+      "tags": ["date-jump"]
+    },
+    {
+      "id": "date-page-end",
+      "purpose": "The last 10 blocks of 2026-11-03 as list rows, newest first (blocks-by-date page)",
+      "call": "blockRows(\"testnet\", { fromHeight: 1584984, count: 10 })",
+      "height": 1584984,
+      "tags": ["block-rows", "date-jump"]
+    },
+    {
+      "id": "tx-normal-multi",
+      "purpose": "A normal transaction with 6 inputs, so prevouts show several previous transactions",
+      "call": "tx(\"testnet\", \"92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6\") then prevouts(\"testnet\", tx)",
+      "txid": "92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6",
+      "height": 1577837,
+      "tags": ["transfer", "multi-input", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-coinbase",
+      "purpose": "A coinbase transaction near the tip (block reward, no prevouts)",
+      "call": "tx(\"testnet\", \"8c1bf242243832db911ea2e794244b062f991b67c7f0f955436f9bcdb556e629\") then prevouts(\"testnet\", tx)",
+      "txid": "8c1bf242243832db911ea2e794244b062f991b67c7f0f955436f9bcdb556e629",
+      "height": 1589229,
+      "tags": ["coinbase", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-cbtx",
+      "purpose": "A coinbase with a CbTx payload in a block that also holds a quorum commitment",
+      "call": "tx(\"testnet\", \"e3f2b81be0d55e2da55a798966802fbc1bcc7dc692a7e6db0fa87d62033c1215\") then prevouts(\"testnet\", tx)",
+      "txid": "e3f2b81be0d55e2da55a798966802fbc1bcc7dc692a7e6db0fa87d62033c1215",
+      "height": 1589224,
+      "tags": ["coinbase", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-qctx",
+      "purpose": "A quorum commitment transaction (QcTx)",
+      "call": "tx(\"testnet\", \"cdf09f2c5be5e458576ab866be4f15ff961586503e4bf75c6f32ae29af647eec\") then prevouts(\"testnet\", tx)",
+      "txid": "cdf09f2c5be5e458576ab866be4f15ff961586503e4bf75c6f32ae29af647eec",
+      "height": 1589224,
+      "tags": ["quorum-commitment", "chain-locked"]
+    },
+    {
+      "id": "tx-proreg",
+      "purpose": "A ProRegTx: a masternode registration",
+      "call": "tx(\"testnet\", \"25a15522aa5a5b65c0148fc83198ab69bf2cd3c921864b4d41c32ac4756c2397\") then prevouts(\"testnet\", tx)",
+      "txid": "25a15522aa5a5b65c0148fc83198ab69bf2cd3c921864b4d41c32ac4756c2397",
+      "height": 1589218,
+      "tags": ["pro-reg", "chain-locked"]
+    },
+    {
+      "id": "tx-proupserv",
+      "purpose": "A ProUpServTx: a masternode service update",
+      "call": "tx(\"testnet\", \"230acd206d7e2e0b78ca04d60d77a4d218ca2259e380e9ad3638a04efcec8f90\") then prevouts(\"testnet\", tx)",
+      "txid": "230acd206d7e2e0b78ca04d60d77a4d218ca2259e380e9ad3638a04efcec8f90",
+      "height": 1588449,
+      "tags": ["pro-up-serv", "chain-locked"]
+    },
+    {
+      "id": "tx-proupreg",
+      "purpose": "A ProUpRegTx: a masternode registrar update",
+      "call": "tx(\"testnet\", \"7d5c6d47f8d9c4dec61abc260f1fda2d44b0b3b25d73e35f18f42511769590e9\") then prevouts(\"testnet\", tx)",
+      "txid": "7d5c6d47f8d9c4dec61abc260f1fda2d44b0b3b25d73e35f18f42511769590e9",
+      "height": 1588400,
+      "tags": ["pro-up-reg", "chain-locked"]
+    },
+    {
+      "id": "tx-uprevtx",
+      "purpose": "A ProUpRevTx: a masternode revocation",
+      "call": "tx(\"testnet\", \"a0477146ba15f9e0410c4056d846bfa28cc60e209861277fd54c5322e7953d26\") then prevouts(\"testnet\", tx)",
+      "txid": "a0477146ba15f9e0410c4056d846bfa28cc60e209861277fd54c5322e7953d26",
+      "height": 1584426,
+      "tags": ["pro-up-rev", "chain-locked"]
+    },
+    {
+      "id": "tx-mnhf",
+      "purpose": "A MnHfSignal: the v24 hard-fork signal",
+      "call": "tx(\"testnet\", \"46a47fe65c9fd29e9379f3f74020df33dabb1d4095c8da6b1fa05e508b74a491\") then prevouts(\"testnet\", tx)",
+      "txid": "46a47fe65c9fd29e9379f3f74020df33dabb1d4095c8da6b1fa05e508b74a491",
+      "height": 1565132,
+      "tags": ["mnhf-signal", "chain-locked"]
+    },
+    {
+      "id": "tx-assetlock",
+      "purpose": "An AssetLockTx: Core funds locked to credit a Platform identity",
+      "call": "tx(\"testnet\", \"ed87dec2e2e6439f29b20945895588a5889b6a30f13abdfff6d799efb57edf08\") then prevouts(\"testnet\", tx)",
+      "txid": "ed87dec2e2e6439f29b20945895588a5889b6a30f13abdfff6d799efb57edf08",
+      "height": 1589218,
+      "tags": ["asset-lock", "multi-output", "instant-locked", "chain-locked"]
+    },
+    {
+      "id": "tx-assetunlock",
+      "purpose": "An AssetUnlockTx: a Platform withdrawal paying out on Core",
+      "call": "tx(\"testnet\", \"467bb08672e00eb2ef4a2d4412ed810d763c88018c017ad92472defe89e84458\") then prevouts(\"testnet\", tx)",
+      "txid": "467bb08672e00eb2ef4a2d4412ed810d763c88018c017ad92472defe89e84458",
+      "height": 1589213,
+      "tags": ["asset-unlock", "chain-locked"]
+    },
+    {
+      "id": "tx-prodissolve",
+      "purpose": "A ProDissolveTx (DIP-26, testnet only): a type the badge palette has no entry for, so it renders as a plain transfer with its payload kind",
+      "call": "tx(\"testnet\", \"f7bf7b0c90febf2d4fb48dcc1c1cbf5c1798839efb6a31f3759e5189b030c981\") then prevouts(\"testnet\", tx)",
+      "txid": "f7bf7b0c90febf2d4fb48dcc1c1cbf5c1798839efb6a31f3759e5189b030c981",
+      "height": 1588070,
+      "tags": ["transfer", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-not-found",
+      "purpose": "A transaction id no node knows: resolves to null (DAPI NOT_FOUND)",
+      "call": "tx(\"testnet\", \"0000000000000000000000000000000000000000000000000000000000000001\")",
+      "txid": "0000000000000000000000000000000000000000000000000000000000000001",
+      "tags": ["not-found"]
+    },
+    {
+      "id": "block-beyond-tip",
+      "purpose": "A height far above the tip: resolves to null (DAPI INVALID_ARGUMENT)",
+      "call": "block(\"testnet\", { height: 1689232 })",
+      "height": 1689232,
+      "tags": ["not-found"]
+    },
+    {
+      "id": "live-tip-stream",
+      "purpose": "Follow the chain from the tip: the best ChainLock, then headers as blocks arrive (coreLive.tip). The transcript stays open until aborted",
+      "call": "subscribeToBlockHeadersWithChainLocks(fromBlockHeight: 1589232, count: 0)",
+      "height": 1589232,
+      "tags": ["stream", "chain-lock", "tip"]
+    },
+    {
+      "id": "live-tx-stream",
+      "purpose": "Every transaction and InstantSend lock from the tip on (match-all bloom filter): 27 transactions and 1 IS locks in the transcript. The live feed card; the IS lock bytes are the evidence for a lock",
+      "call": "subscribeToTransactionsWithProofs(matchAll, fromBlockHeight: 1589232, count: 0)",
+      "height": 1589232,
+      "tags": ["stream", "instant-send", "mempool"]
+    }
+  ],
+  "gaps": []
+}

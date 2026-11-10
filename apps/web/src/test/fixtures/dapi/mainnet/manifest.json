@@ -1,0 +1,222 @@
+{
+  "net": "mainnet",
+  "recordedAt": "2026-11-10T18:29:30.229Z",
+  "tip": {
+    "height": 2570085,
+    "hash": "00000000000000113f922ff76a11a8c409e05fc5d1497214da86a40dec23a296"
+  },
+  "entries": [
+    {
+      "id": "tip",
+      "purpose": "Chain tip: height, hash and block time (getBlockchainStatus + the tip header)",
+      "call": "tip(\"mainnet\")",
+      "height": 2570085,
+      "hash": "00000000000000113f922ff76a11a8c409e05fc5d1497214da86a40dec23a296",
+      "tags": ["tip"]
+    },
+    {
+      "id": "status",
+      "purpose": "Chain status: blocks, headers, difficulty, chain work, sync state",
+      "call": "status(\"mainnet\")",
+      "height": 2570085,
+      "tags": ["status"]
+    },
+    {
+      "id": "chain-lock",
+      "purpose": "Best ChainLock: the height every block at or below it is final at",
+      "call": "chainLock(\"mainnet\")",
+      "height": 2570085,
+      "hash": "00000000000000113f922ff76a11a8c409e05fc5d1497214da86a40dec23a296",
+      "tags": ["chain-lock"]
+    },
+    {
+      "id": "latest-blocks",
+      "purpose": "The 20 newest blocks as list rows (2570085 down to 2570066), the home and blocks-list page",
+      "call": "blockRows(\"mainnet\", { fromHeight: 2570085, count: 20 })",
+      "height": 2570085,
+      "tags": ["block-rows", "tip-page"]
+    },
+    {
+      "id": "block-tip",
+      "purpose": "The tip block by height, with its coinbase (cbTx) and every transaction decoded",
+      "call": "block(\"mainnet\", { height: 2570085 })",
+      "height": 2570085,
+      "hash": "00000000000000113f922ff76a11a8c409e05fc5d1497214da86a40dec23a296",
+      "tags": ["block", "by-height", "chain-locked", "cbtx"]
+    },
+    {
+      "id": "block-by-hash",
+      "purpose": "A recent block looked up by hash (the block page URL form)",
+      "call": "block(\"mainnet\", { hash: \"0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce4\" })",
+      "height": 2570084,
+      "hash": "0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce4",
+      "tags": ["block", "by-hash", "chain-locked", "cbtx"]
+    },
+    {
+      "id": "headers-100",
+      "purpose": "A range of 100 headers ending at the tip: heights, hashes, times (block-time charts)",
+      "call": "headers(\"mainnet\", 2569986, 100)",
+      "height": 2570085,
+      "tags": ["headers"]
+    },
+    {
+      "id": "block-qc-commitment",
+      "purpose": "A block that carries a quorum commitment (qcTx) next to its coinbase cbTx",
+      "call": "block(\"mainnet\", { height: 2570002 }) and { hash: \"00000000000000040e6b53514a36154e7933fda4209bea01d71ab37f2f3134c7\" }",
+      "height": 2570002,
+      "hash": "00000000000000040e6b53514a36154e7933fda4209bea01d71ab37f2f3134c7",
+      "tags": ["block", "chain-locked", "cbtx", "quorum-commitment"]
+    },
+    {
+      "id": "block-pre-dip3",
+      "purpose": "An old block from before DIP-3 (no cbTx): its height comes from the BIP-34 push in the coinbase script",
+      "call": "block(\"mainnet\", { height: 100000 }) and { hash: \"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\" }",
+      "height": 100000,
+      "hash": "00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2",
+      "tags": ["block", "chain-locked"]
+    },
+    {
+      "id": "date-jump-start",
+      "purpose": "First block of 2026-11-03 (UTC), found by searching header ranges",
+      "call": "heightAtTime(\"mainnet\", Date.parse(\"2026-11-03T00:00:00Z\"))",
+      "height": 2565827,
+      "tags": ["date-jump"]
+    },
+    {
+      "id": "date-jump-end",
+      "purpose": "First block after 2026-11-03 (UTC); the day's last block is one below it",
+      "call": "heightAtTime(\"mainnet\", Date.parse(\"2026-11-03T00:00:00Z\") + 86_400_000)",
+      "height": 2566381,
+      "tags": ["date-jump"]
+    },
+    {
+      "id": "date-page-end",
+      "purpose": "The last 10 blocks of 2026-11-03 as list rows, newest first (blocks-by-date page)",
+      "call": "blockRows(\"mainnet\", { fromHeight: 2566380, count: 10 })",
+      "height": 2566380,
+      "tags": ["block-rows", "date-jump"]
+    },
+    {
+      "id": "tx-normal-multi",
+      "purpose": "A normal transaction with 9 inputs and 9 outputs, InstantSend-locked and ChainLocked, so prevouts and the lock flags both show",
+      "call": "tx(\"mainnet\", \"8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90\") then prevouts(\"mainnet\", tx)",
+      "txid": "8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90",
+      "height": 2570010,
+      "tags": ["transfer", "multi-input", "multi-output", "instant-locked", "chain-locked"]
+    },
+    {
+      "id": "tx-coinbase",
+      "purpose": "A coinbase transaction (block reward, no prevouts)",
+      "call": "tx(\"mainnet\", \"ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328\") then prevouts(\"mainnet\", tx)",
+      "txid": "ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328",
+      "height": 2570010,
+      "tags": ["coinbase", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-coinbase-classic",
+      "purpose": "A classic coinbase from before DIP-3: no payload, one input, two outputs",
+      "call": "tx(\"mainnet\", \"9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430\") then prevouts(\"mainnet\", tx)",
+      "txid": "9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430",
+      "height": 100000,
+      "tags": ["coinbase", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-cbtx",
+      "purpose": "A coinbase with a CbTx payload (merkle roots, best ChainLock, credit pool balance)",
+      "call": "tx(\"mainnet\", \"ea25cc59f4fe3a7bac8873d0a722d995eb5ea37b47f1f83511bf2f1e888daae9\") then prevouts(\"mainnet\", tx)",
+      "txid": "ea25cc59f4fe3a7bac8873d0a722d995eb5ea37b47f1f83511bf2f1e888daae9",
+      "height": 2570002,
+      "tags": ["coinbase", "multi-output", "chain-locked"]
+    },
+    {
+      "id": "tx-qctx",
+      "purpose": "A quorum commitment transaction (QcTx)",
+      "call": "tx(\"mainnet\", \"4fa48aca80dfcf1e7fa0c59eb36e15ae7470195d79185a0b9fd3f4e5c10be76b\") then prevouts(\"mainnet\", tx)",
+      "txid": "4fa48aca80dfcf1e7fa0c59eb36e15ae7470195d79185a0b9fd3f4e5c10be76b",
+      "height": 2570002,
+      "tags": ["quorum-commitment", "chain-locked"]
+    },
+    {
+      "id": "tx-proreg",
+      "purpose": "A ProRegTx: a masternode registration",
+      "call": "tx(\"mainnet\", \"af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251\") then prevouts(\"mainnet\", tx)",
+      "txid": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+      "height": 2569884,
+      "tags": ["pro-reg", "chain-locked"]
+    },
+    {
+      "id": "tx-proupserv",
+      "purpose": "A ProUpServTx: a masternode service update",
+      "call": "tx(\"mainnet\", \"e788264d6b8e02fbb029503c43d568093e73d0119f639102410db46cc822eb51\") then prevouts(\"mainnet\", tx)",
+      "txid": "e788264d6b8e02fbb029503c43d568093e73d0119f639102410db46cc822eb51",
+      "height": 2569992,
+      "tags": ["pro-up-serv", "chain-locked"]
+    },
+    {
+      "id": "tx-proupreg",
+      "purpose": "A ProUpRegTx: a masternode registrar update",
+      "call": "tx(\"mainnet\", \"188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7\") then prevouts(\"mainnet\", tx)",
+      "txid": "188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7",
+      "height": 2569411,
+      "tags": ["pro-up-reg", "chain-locked"]
+    },
+    {
+      "id": "tx-uprevtx",
+      "purpose": "A ProUpRevTx: a masternode revocation",
+      "call": "tx(\"mainnet\", \"9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4\") then prevouts(\"mainnet\", tx)",
+      "txid": "9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4",
+      "height": 2560105,
+      "tags": ["pro-up-rev", "chain-locked"]
+    },
+    {
+      "id": "tx-assetlock",
+      "purpose": "An AssetLockTx: Core funds locked to credit a Platform identity",
+      "call": "tx(\"mainnet\", \"2972859ef7fdc7a52397b7f844d69888414e22dcaa2be2b6e432a81c7b812cf6\") then prevouts(\"mainnet\", tx)",
+      "txid": "2972859ef7fdc7a52397b7f844d69888414e22dcaa2be2b6e432a81c7b812cf6",
+      "height": 2569980,
+      "tags": ["asset-lock", "instant-locked", "chain-locked"]
+    },
+    {
+      "id": "tx-assetunlock",
+      "purpose": "An AssetUnlockTx: a Platform withdrawal paying out on Core",
+      "call": "tx(\"mainnet\", \"5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a\") then prevouts(\"mainnet\", tx)",
+      "txid": "5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a",
+      "height": 2569997,
+      "tags": ["asset-unlock", "chain-locked"]
+    },
+    {
+      "id": "tx-not-found",
+      "purpose": "A transaction id no node knows: resolves to null (DAPI NOT_FOUND)",
+      "call": "tx(\"mainnet\", \"0000000000000000000000000000000000000000000000000000000000000001\")",
+      "txid": "0000000000000000000000000000000000000000000000000000000000000001",
+      "tags": ["not-found"]
+    },
+    {
+      "id": "block-beyond-tip",
+      "purpose": "A height far above the tip: resolves to null (DAPI INVALID_ARGUMENT)",
+      "call": "block(\"mainnet\", { height: 2670085 })",
+      "height": 2670085,
+      "tags": ["not-found"]
+    },
+    {
+      "id": "live-tip-stream",
+      "purpose": "Follow the chain from the tip: the best ChainLock, then headers as blocks arrive (coreLive.tip). The transcript stays open until aborted",
+      "call": "subscribeToBlockHeadersWithChainLocks(fromBlockHeight: 2570085, count: 0)",
+      "height": 2570085,
+      "tags": ["stream", "chain-lock", "tip"]
+    },
+    {
+      "id": "live-tx-stream",
+      "purpose": "Every transaction and InstantSend lock from the tip on (match-all bloom filter): 60 transactions and 1 IS locks in the transcript. The live feed card; the IS lock bytes are the evidence for a lock",
+      "call": "subscribeToTransactionsWithProofs(matchAll, fromBlockHeight: 2570085, count: 0)",
+      "height": 2570085,
+      "tags": ["stream", "instant-send", "mempool"]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "tx-mnhf",
+      "reason": "No MnHfSignal on mainnet in the searched range: the v24 deployment has not been signalled yet"
+    }
+  ]
+}

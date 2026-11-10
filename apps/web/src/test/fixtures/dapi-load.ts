@@ -12,6 +12,8 @@ export interface DapiFixture {
   response?: string
   messages?: string[]
   ended?: boolean
+  /** The recorded call failed: `status` is the gRPC code (5 NOT_FOUND, 3 INVALID_ARGUMENT, …). */
+  error?: { kind: string; status?: number; message: string }
 }
 
 export interface DapiManifestEntry {

@@ -1,0 +1,78 @@
+{
+  "dateJump": "2026-11-03",
+  "blocks": [
+    {
+      "id": "block-qc-commitment",
+      "height": 2570002,
+      "purpose": "A block that carries a quorum commitment (qcTx) next to its coinbase cbTx"
+    },
+    {
+      "id": "block-pre-dip3",
+      "height": 100000,
+      "purpose": "An old block from before DIP-3 (no cbTx): its height comes from the BIP-34 push in the coinbase script"
+    }
+  ],
+  "txs": [
+    {
+      "id": "tx-normal-multi",
+      "txid": "8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90",
+      "purpose": "A normal transaction with 9 inputs and 9 outputs, InstantSend-locked and ChainLocked, so prevouts and the lock flags both show"
+    },
+    {
+      "id": "tx-coinbase",
+      "txid": "ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328",
+      "purpose": "A coinbase transaction (block reward, no prevouts)"
+    },
+    {
+      "id": "tx-coinbase-classic",
+      "txid": "9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430",
+      "purpose": "A classic coinbase from before DIP-3: no payload, one input, two outputs"
+    },
+    {
+      "id": "tx-cbtx",
+      "txid": "ea25cc59f4fe3a7bac8873d0a722d995eb5ea37b47f1f83511bf2f1e888daae9",
+      "purpose": "A coinbase with a CbTx payload (merkle roots, best ChainLock, credit pool balance)"
+    },
+    {
+      "id": "tx-qctx",
+      "txid": "4fa48aca80dfcf1e7fa0c59eb36e15ae7470195d79185a0b9fd3f4e5c10be76b",
+      "purpose": "A quorum commitment transaction (QcTx)"
+    },
+    {
+      "id": "tx-proreg",
+      "txid": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+      "purpose": "A ProRegTx: a masternode registration"
+    },
+    {
+      "id": "tx-proupserv",
+      "txid": "e788264d6b8e02fbb029503c43d568093e73d0119f639102410db46cc822eb51",
+      "purpose": "A ProUpServTx: a masternode service update"
+    },
+    {
+      "id": "tx-proupreg",
+      "txid": "188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7",
+      "purpose": "A ProUpRegTx: a masternode registrar update"
+    },
+    {
+      "id": "tx-uprevtx",
+      "txid": "9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4",
+      "purpose": "A ProUpRevTx: a masternode revocation"
+    },
+    {
+      "id": "tx-assetlock",
+      "txid": "2972859ef7fdc7a52397b7f844d69888414e22dcaa2be2b6e432a81c7b812cf6",
+      "purpose": "An AssetLockTx: Core funds locked to credit a Platform identity"
+    },
+    {
+      "id": "tx-assetunlock",
+      "txid": "5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a",
+      "purpose": "An AssetUnlockTx: a Platform withdrawal paying out on Core"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "tx-mnhf",
+      "reason": "No MnHfSignal on mainnet in the searched range: the v24 deployment has not been signalled yet"
+    }
+  ]
+}
