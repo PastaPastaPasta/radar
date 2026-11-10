@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  bech32Decode,
-  bech32Encode,
-  decodePlatformAddress,
-  encodePlatformAddress,
-} from './bech32'
+import { bech32Decode, bech32Encode, decodePlatformAddress, encodePlatformAddress } from './bech32'
 import { bytesToHex } from './hex'
 
 describe('bech32', () => {
@@ -17,22 +12,19 @@ describe('bech32', () => {
     expect(bech32Decode(value)?.variant).toBe('bech32m')
   })
 
-  it.each([
-    'A12UEL5L',
-    'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-  ])('reads the bech32 vector %s as bech32', (value) => {
-    expect(bech32Decode(value)?.variant).toBe('bech32')
-  })
+  it.each(['A12UEL5L', 'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw'])(
+    'reads the bech32 vector %s as bech32',
+    (value) => {
+      expect(bech32Decode(value)?.variant).toBe('bech32')
+    },
+  )
 
-  it.each([
-    'A1LQFN3A'.replace('3', '4'),
-    'a1LQFN3A',
-    '1qyrz8wqd2c9m',
-    'abc1',
-    'abc1qqqqqq0',
-  ])('rejects %s', (value) => {
-    expect(bech32Decode(value)).toBeNull()
-  })
+  it.each(['A1LQFN3A'.replace('3', '4'), 'a1LQFN3A', '1qyrz8wqd2c9m', 'abc1', 'abc1qqqqqq0'])(
+    'rejects %s',
+    (value) => {
+      expect(bech32Decode(value)).toBeNull()
+    },
+  )
 
   it('round-trips bytes', () => {
     const bytes = Uint8Array.from([1, 2, 3, 250, 251])

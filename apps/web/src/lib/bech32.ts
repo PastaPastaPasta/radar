@@ -33,8 +33,7 @@ export function convertBits(
   let bits = 0
   const out: number[] = []
   const max = (1 << to) - 1
-  for (let i = 0; i < data.length; i++) {
-    const value = data[i] ?? 0
+  for (const value of Array.from(data)) {
     if (value < 0 || value >> from !== 0) return null
     acc = (acc << from) | value
     bits += from
