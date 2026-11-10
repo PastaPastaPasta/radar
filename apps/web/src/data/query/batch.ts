@@ -3,6 +3,8 @@ import { useSyncExternalStore } from 'react'
 import { getActiveNetwork, subscribeActiveNetwork } from '../active-network'
 import { stampOf, type Fact, type SourceId, type Sourced } from '../envelope'
 import { SourceError } from '../errors'
+import { describeFailure } from '../http'
+import { healthRegistry } from '../health'
 import type { NetworkId } from '@/lib/network'
 import { queryKey, type QueryKeyOf } from './keys'
 import { dataClass, type DataClass } from './stale'
@@ -91,10 +93,36 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
     }
     const byId = new Map<string, V | null>()
     for (const [k, v] of result.data) byId.set(keyId(k), v)
+    const stamp = stampOf(result)
+    const missing: string[] = []
     for (const e of chunk) {
-      const value = byId.get(keyId(e.key)) ?? null
-      const stamp = stampOf(result)
+      const id = keyId(e.key)
+      if (!byId.has(id)) {
+        missing.push(id)
+        const error = new SourceError({
+          source: opts.source,
+          kind: 'invalid-response',
+          message: describeFailure(opts.source, 'invalid-response', `no answer for ${id}`),
+        })
+        for (const w of e.waiters) w.reject(error)
+        continue
+      }
+      const value = byId.get(id) ?? null
       for (const w of e.waiters) w.resolve({ ...stamp, data: value })
+    }
+    if (missing.length > 0) {
+      const message = describeFailure(
+        opts.source,
+        'invalid-response',
+        `${opts.name}: no answer for ${missing.length} of ${chunk.length} keys`,
+      )
+      console.error(`[radar] ${opts.source} ${opts.name} batch omitted keys`, missing)
+      healthRegistry.report(net, opts.source, {
+        ok: false,
+        latencyMs: 0,
+        kind: 'invalid-response',
+        message,
+      })
     }
   }
 
