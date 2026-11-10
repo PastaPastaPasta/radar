@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { HYPHEN_UPSTREAM, hyphenProxy, singleAllowOrigin } from './dev-proxy'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { HYPHEN_UPSTREAM, checkHyphenRequest, hyphenProxy, singleAllowOrigin } from './dev-proxy'
 
 describe('singleAllowOrigin', () => {
   it('collapses a duplicated header to one permissive value', () => {
@@ -40,5 +41,75 @@ describe('hyphenProxy', () => {
     const res = { headers: { 'access-control-allow-origin': ['*', 'http://localhost'] } }
     handlers.proxyRes?.(res)
     expect(res.headers['access-control-allow-origin']).toBe('*')
+  })
+})
+
+describe('hyphenProxy request rules', () => {
+  const proxy = hyphenProxy()
+  const rewrite = proxy['/x/hy/mainnet']!.rewrite!
+  const bypass = proxy['/x/hy/mainnet']!.bypass!
+
+  function run(url: string, method = 'GET') {
+    const res = {
+      statusCode: 200,
+      writableEnded: false,
+      headers: {} as Record<string, string>,
+      body: '',
+      setHeader(name: string, value: string) {
+        this.headers[name] = value
+      },
+      end(body: string) {
+        this.body = body
+        this.writableEnded = true
+      },
+    }
+    const req = { url, method } as IncomingMessage
+    const result = bypass(req, res as unknown as ServerResponse, {})
+    return { res, result }
+  }
+
+  it('lets the paths and parameters the app uses through', () => {
+    const { res, result } = run('/x/hy/mainnet/address/Xabc/txs?limit=10&cursor=ff')
+    expect(res.writableEnded).toBe(false)
+    expect(result).toBeUndefined()
+  })
+
+  it('answers like the Worker for unsafe, unknown and look-alike paths', () => {
+    const cases: [string, number, string][] = [
+      ['/x/hy/mainnet/..%2fstatus', 400, 'bad_path'],
+      ['/x/hy/mainnet/a%5cb', 400, 'bad_path'],
+      ['/x/hy/mainnet/block%2f1', 400, 'bad_path'],
+      ['/x/hy/mainnetX/blocks', 404, 'unknown_network'],
+      ['/x/hy/mainnet', 404, 'unknown_network'],
+      ['/x/hy/mainnet/admin', 404, 'unknown_path'],
+      ['/x/hy/mainnet/search?q=' + 'a'.repeat(300), 400, 'bad_query'],
+    ]
+    for (const [url, status, error] of cases) {
+      const { res, result } = run(url)
+      expect(res.statusCode, url).toBe(status)
+      expect(JSON.parse(res.body), url).toEqual({ error })
+      expect(result, url).toBe(url)
+    }
+  })
+
+  it('accepts GET and HEAD only', () => {
+    for (const method of ['POST', 'PUT', 'DELETE', 'OPTIONS']) {
+      const { res } = run('/x/hy/mainnet/blocks', method)
+      expect(res.statusCode, method).toBe(405)
+      expect(res.headers.allow).toBe('GET, HEAD')
+    }
+    expect(run('/x/hy/mainnet/blocks', 'HEAD').res.writableEnded).toBe(false)
+  })
+
+  it("forwards only the known parameters, in the Worker's order", () => {
+    expect(rewrite('/x/hy/mainnet/blocks?utm=1&limit=5&cursor=ff')).toBe(
+      '/api/v1/blocks?cursor=ff&limit=5',
+    )
+  })
+
+  it('does nothing without a response to write to', () => {
+    expect(() =>
+      checkHyphenRequest({ url: '/x/hy/mainnet/x', method: 'GET' } as IncomingMessage, undefined),
+    ).not.toThrow()
   })
 })
