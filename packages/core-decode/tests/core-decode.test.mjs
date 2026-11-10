@@ -21,7 +21,7 @@ const dts = readFileSync(path.join(root, 'dist', 'core_decode.d.ts'), 'utf8')
 const interfaces = {}
 for (const m of dts.matchAll(/export interface (\w+) \{([\s\S]*?)\n\}/g)) {
   const fields = {}
-  for (const f of m[2].matchAll(/^ {2}(\w+): (.+);$/gm)) fields[f[1]] = f[2]
+  for (const f of m[2].matchAll(/^ {2}(\w+): (.+?);?$/gm)) fields[f[1]] = f[2]
   interfaces[m[1]] = fields
 }
 const kindToInterface = (kind) => kind[0].toUpperCase() + kind.slice(1) + 'Payload'
@@ -43,8 +43,8 @@ function checkType(value, type, where) {
     assert.equal(typeof value, t, `${where}: expected ${t}`)
   } else if (aliases[t]) {
     assert.equal(typeof value, 'string', `${where}: expected string`)
-  } else if (/^"/.test(t)) {
-    const allowed = t.split('|').map((x) => x.trim().replace(/"/g, ''))
+  } else if (/^["']/.test(t)) {
+    const allowed = t.split('|').map((x) => x.trim().replace(/["']/g, ''))
     assert.ok(allowed.includes(value), `${where}: ${value} not in ${t}`)
   } else {
     assert.fail(`${where}: typings use unsupported type ${type}`)
