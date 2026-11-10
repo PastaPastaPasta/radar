@@ -22,9 +22,18 @@ export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'n
   notFound?: N
   /** Non-2xx statuses whose body is still parsed with `schema` (Radar's 503 health report). */
   acceptStatus?: readonly number[]
+  /**
+   * Called with a parsed body (including an `acceptStatus` one). A returned failure is thrown and reported
+   * to health once, with the call's real latency, instead of the call counting as a success.
+   */
+  reject?: (
+    body: z.output<S>,
+    res: Response,
+  ) => { kind: SourceErrorKind; detail?: string } | undefined
   method?: 'GET' | 'POST'
   body?: unknown
-  asOf?: (body: z.output<S>, res: Response) => number
+  /** Defaults to `fetchedAt`; returning undefined also means `fetchedAt`. */
+  asOf?: (body: z.output<S>, res: Response) => number | undefined
   height?: (body: z.output<S>) => number | undefined
 }
 
@@ -111,6 +120,8 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
 ): Promise<Sourced<N extends 'null' ? z.output<S> | null : z.output<S>>> {
   type Out = N extends 'null' ? z.output<S> | null : z.output<S>
   const net = req.net ?? getActiveNetwork()
+  const report = (r: Parameters<typeof healthRegistry.report>[2]) =>
+    healthRegistry.report(net, source, r)
   const { source } = req
   const url = typeof req.url === 'function' ? req.url() : req.url
   const started = performance.now()
@@ -127,9 +138,9 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
   }): SourceError => {
     const message = describeFailure(source, init.kind, init.detail)
     if (init.reportOk) {
-      healthRegistry.report(net, source, { ok: true, latencyMs: performance.now() - started })
+      report({ ok: true, latencyMs: performance.now() - started })
     } else if (init.report !== false) {
-      healthRegistry.report(net, source, {
+      report({
         ok: false,
         latencyMs: performance.now() - started,
         kind: init.kind,
@@ -184,7 +195,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
     if (!res.ok && !accepted) {
       if (res.status === 404) {
         if (req.notFound === 'null') {
-          healthRegistry.report(net, source, { ok: true, latencyMs: performance.now() - started })
+          report({ ok: true, latencyMs: performance.now() - started })
           const now = Date.now()
           return { source, asOf: now, fetchedAt: now, proved: false, data: null as Out }
         }
@@ -228,13 +239,15 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
       })
     }
 
-    const latencyMs = performance.now() - started
-    healthRegistry.report(net, source, { ok: true, latencyMs })
     const body: z.output<S> = parsed.data
+    const rejected = req.reject?.(body, res)
+    if (rejected) throw fail({ ...rejected, status: res.status })
+
+    report({ ok: true, latencyMs: performance.now() - started })
     const fetchedAt = Date.now()
     const out: Sourced<Out> = {
       source,
-      asOf: req.asOf ? req.asOf(body, res) : fetchedAt,
+      asOf: req.asOf?.(body, res) ?? fetchedAt,
       fetchedAt,
       proved: false,
       data: body as Out,

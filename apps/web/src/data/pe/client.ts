@@ -158,20 +158,19 @@ export const pe = {
       acceptStatus: [503],
       signal,
       height: (b) => ('error' in b ? undefined : statusHeight(b)),
-      asOf: (_b, res) => {
+      reject: (b, res) => {
         unhealthy = res.status === 503
-        return Date.now()
+        return 'error' in b
+          ? { kind: 'http', detail: 'Platform Explorer is unavailable' }
+          : undefined
       },
     })
     if ('error' in out.data) {
-      const error = new SourceError({
+      throw new SourceError({
         source: 'pe',
-        kind: 'http',
-        status: 503,
-        message: describeFailure('pe', 'http', 'Platform Explorer is unavailable'),
+        kind: 'invalid-response',
+        message: describeFailure('pe', 'invalid-response'),
       })
-      healthRegistry.report(net, 'pe', { ok: false, latencyMs: 0, kind: 'http' })
-      throw error
     }
     reportPeLag(net, out.data, unhealthy)
     return { ...out, data: out.data }
