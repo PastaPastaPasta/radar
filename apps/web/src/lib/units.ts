@@ -12,22 +12,74 @@ const SCALE: Record<'duffs' | 'credits', Record<DisplayUnit, number>> = {
 }
 
 const UNIT_KEY = 'radar.unit'
-const UNITS: readonly DisplayUnit[] = ['DASH', 'mDASH', 'uDASH', 'duffs']
+const FIAT_KEY = 'radar.fiat'
+export const DISPLAY_UNITS: readonly DisplayUnit[] = ['DASH', 'mDASH', 'uDASH', 'duffs']
 
-export function readUnitPreference(): DisplayUnit {
+export interface UnitPrefs {
+  unit: DisplayUnit
+  /** Show the USD value after DASH figures that ask for it (mainnet only). */
+  fiat: boolean
+}
+
+function readKey(key: string): string | null {
   try {
-    const stored = globalThis.localStorage?.getItem(UNIT_KEY)
-    return UNITS.find((u) => u === stored) ?? 'DASH'
+    return globalThis.localStorage?.getItem(key) ?? null
   } catch {
-    return 'DASH'
+    return null
   }
 }
 
-export function writeUnitPreference(unit: DisplayUnit): void {
+function writeKey(key: string, value: string): void {
   try {
-    globalThis.localStorage?.setItem(UNIT_KEY, unit)
+    globalThis.localStorage?.setItem(key, value)
   } catch {
     // storage unavailable: the preference lasts for the session only
+  }
+}
+
+export function readUnitPreference(): DisplayUnit {
+  const stored = readKey(UNIT_KEY)
+  return DISPLAY_UNITS.find((u) => u === stored) ?? 'DASH'
+}
+
+export function readFiatPreference(): boolean {
+  return readKey(FIAT_KEY) !== '0'
+}
+
+const prefListeners = new Set<() => void>()
+let prefSnapshot: UnitPrefs = { unit: 'DASH', fiat: true }
+
+/** A stable object until a preference changes, for `useSyncExternalStore`. */
+export function getUnitPrefs(): UnitPrefs {
+  const unit = readUnitPreference()
+  const fiat = readFiatPreference()
+  if (prefSnapshot.unit !== unit || prefSnapshot.fiat !== fiat) prefSnapshot = { unit, fiat }
+  return prefSnapshot
+}
+
+function emitPrefs(): void {
+  for (const cb of [...prefListeners]) cb()
+}
+
+export function writeUnitPreference(unit: DisplayUnit): void {
+  writeKey(UNIT_KEY, unit)
+  emitPrefs()
+}
+
+export function writeFiatPreference(fiat: boolean): void {
+  writeKey(FIAT_KEY, fiat ? '1' : '0')
+  emitPrefs()
+}
+
+export function subscribeUnitPrefs(cb: () => void): () => void {
+  prefListeners.add(cb)
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === null || e.key === UNIT_KEY || e.key === FIAT_KEY) cb()
+  }
+  globalThis.addEventListener?.('storage', onStorage)
+  return () => {
+    prefListeners.delete(cb)
+    globalThis.removeEventListener?.('storage', onStorage)
   }
 }
 
@@ -237,6 +289,7 @@ export function formatFiat(duffs: bigint, usdPerDash: number): string {
     int = (rounded.value * 10n ** BigInt(-rounded.scale)).toString()
     frac = ''
   }
+  if (duffs !== 0n && rounded.value === 0n) return '< $0.000001'
   const sign = duffs < 0n && rounded.value > 0n ? MINUS : ''
   return `≈ ${sign}$${groupDigits(int)}${rounded.scale > 0 ? trimmedFraction(frac) : ''}`
 }

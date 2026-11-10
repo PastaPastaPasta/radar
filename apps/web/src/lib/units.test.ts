@@ -1,6 +1,12 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
+  DISPLAY_UNITS,
+  formatAmountParts,
   fixedParts,
+  getUnitPrefs,
+  readFiatPreference,
+  subscribeUnitPrefs,
+  writeFiatPreference,
   formatAmountText,
   formatFiat,
   readUnitPreference,
@@ -126,5 +132,144 @@ describe('unit preference', () => {
     localStorage.setItem('radar.unit', 'bogus')
     expect(readUnitPreference()).toBe('DASH')
     localStorage.removeItem('radar.unit')
+  })
+})
+
+describe('unit and fiat preferences', () => {
+  it('offers the four units in order', () => {
+    expect(DISPLAY_UNITS).toEqual(['DASH', 'mDASH', 'uDASH', 'duffs'])
+  })
+
+  it('shows USD unless switched off, and remembers it', () => {
+    localStorage.clear()
+    expect(readFiatPreference()).toBe(true)
+    writeFiatPreference(false)
+    expect(localStorage.getItem('radar.fiat')).toBe('0')
+    expect(readFiatPreference()).toBe(false)
+    writeFiatPreference(true)
+    expect(readFiatPreference()).toBe(true)
+  })
+
+  it('hands out one snapshot until something changes and tells subscribers', () => {
+    localStorage.clear()
+    const first = getUnitPrefs()
+    expect(getUnitPrefs()).toBe(first)
+    const seen = vi.fn()
+    const off = subscribeUnitPrefs(seen)
+    writeUnitPreference('duffs')
+    expect(seen).toHaveBeenCalledTimes(1)
+    expect(getUnitPrefs()).toEqual({ unit: 'duffs', fiat: true })
+    expect(getUnitPrefs()).not.toBe(first)
+    off()
+    writeUnitPreference('DASH')
+    expect(seen).toHaveBeenCalledTimes(1)
+  })
+
+  it('still answers when storage throws', () => {
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    expect(readUnitPreference()).toBe('DASH')
+    expect(readFiatPreference()).toBe(true)
+    expect(() => writeUnitPreference('mDASH')).not.toThrow()
+    get.mockRestore()
+    set.mockRestore()
+  })
+})
+
+describe('amount edge cases', () => {
+  it('prints zero in every unit without a sign or decimals', () => {
+    for (const unit of DISPLAY_UNITS) {
+      expect(formatAmountText(0n, 'duffs', { unit })).toBe(`0${NB}${unitLabel(unit)}`)
+      expect(formatAmountText(0n, 'credits', { unit, signed: true })).toBe(
+        `0${NB}${unitLabel(unit)}`,
+      )
+    }
+    expect(formatAmountParts(0n, 'duffs').zero).toBe(true)
+  })
+
+  it('shows one duff in each unit at its own precision', () => {
+    expect(formatAmountText(1n, 'duffs', { unit: 'duffs' })).toBe(`1${NB}duffs`)
+    expect(formatAmountText(1n, 'duffs', { unit: 'uDASH' })).toBe(`0.01${NB}µDASH`)
+    expect(formatAmountText(1n, 'duffs', { unit: 'mDASH' })).toBe(`0${NB}mDASH`)
+    expect(formatAmountText(1n, 'duffs', { unit: 'mDASH', density: 'table' })).toBe(
+      `0.00001${NB}mDASH`,
+    )
+    expect(formatAmountText(1n, 'duffs', { unit: 'DASH', density: 'table' })).toBe(
+      `0.00000001${NB}DASH`,
+    )
+  })
+
+  it('handles the whole DASH supply and beyond 2^64 exactly', () => {
+    const supply = 18_920_000n * 100_000_000n
+    expect(formatAmountText(supply, 'duffs')).toBe(`18,920,000${NB}DASH`)
+    expect(formatAmountText(supply, 'duffs', { unit: 'duffs' })).toBe(
+      `1,892,000,000,000,000${NB}duffs`,
+    )
+    const huge = 123_456_789_012_345_678_901_234_567_890n
+    expect(formatAmountText(huge, 'duffs', { unit: 'duffs' })).toBe(
+      `123,456,789,012,345,678,901,234,567,890${NB}duffs`,
+    )
+    expect(formatAmountText(huge, 'credits', { density: 'table' })).toBe(
+      `1,234,567,890,123,456,789.01234568${NB}DASH`,
+    )
+  })
+
+  it('keeps the minus sign on negative amounts in every unit and density', () => {
+    expect(formatAmountText(-123_456_789n, 'duffs')).toBe(`−1.2346${NB}DASH`)
+    expect(formatAmountText(-123_456_789n, 'duffs', { density: 'table' })).toBe(
+      `−1.23456789${NB}DASH`,
+    )
+    expect(formatAmountText(-250n, 'duffs', { unit: 'duffs' })).toBe(`−250${NB}duffs`)
+  })
+
+  it('rounds half away from zero at the last shown digit, and carries', () => {
+    expect(formatAmountText(5n, 'duffs', { unit: 'mDASH', density: 'table' })).toBe(
+      `0.00005${NB}mDASH`,
+    )
+    expect(formatAmountText(99_995n, 'duffs', { unit: 'DASH' })).toBe(`0.0010${NB}DASH`)
+    expect(formatAmountText(99_994n, 'duffs', { unit: 'DASH' })).toBe(`0.0010${NB}DASH`)
+    expect(formatAmountText(-99_995n, 'duffs', { unit: 'DASH' })).toBe(`−0.0010${NB}DASH`)
+    expect(formatAmountText(199_999_995n, 'duffs', { unit: 'DASH' })).toBe(`2${NB}DASH`)
+  })
+
+  it('formats tokens by their own decimals, including none', () => {
+    expect(formatAmountText(1_234_567n, { token: { decimals: 0, symbol: 'PTS' } })).toBe(
+      `1,234,567${NB}PTS`,
+    )
+    expect(formatAmountText(-5n, { token: { decimals: 8, symbol: 'X' } })).toBe(`−0.00000005${NB}X`)
+    expect(formatAmountText(10n ** 30n, { token: { decimals: 18, symbol: 'Y' } })).toBe(
+      `1,000,000,000,000${NB}Y`,
+    )
+  })
+
+  it('labels every unit on testnet', () => {
+    expect(unitLabel('DASH', true)).toBe('tDASH')
+    expect(unitLabel('mDASH', true)).toBe('tmDASH')
+  })
+})
+
+describe('formatFiat edge cases', () => {
+  it('shows dust as a bound, not as zero', () => {
+    expect(formatFiat(1n, 46.2)).toBe('< $0.000001')
+    expect(formatFiat(0n, 46.2)).toBe('≈ $0')
+  })
+
+  it('keeps three significant figures across magnitudes', () => {
+    expect(formatFiat(18_920_000n * 100_000_000n, 46.2)).toBe('≈ $874,000,000')
+    expect(formatFiat(123_456_789n, 0.000123)).toBe('≈ $0.000152')
+    expect(formatFiat(100_000_000n, 1234.5678)).toBe('≈ $1,230')
+    expect(formatFiat(100_000_000n, 999.5)).toBe('≈ $1,000')
+  })
+
+  it('does not overflow on amounts beyond 2^64 duffs', () => {
+    expect(formatFiat(10n ** 25n, 46.2)).toBe('≈ $4,620,000,000,000,000,000')
+  })
+
+  it('refuses a negative rate', () => {
+    expect(formatFiat(1_000_000n, -1)).toBe('')
   })
 })
