@@ -14,6 +14,12 @@ export function takeFixtureMisses(): string[] {
   return misses.splice(0)
 }
 
+/** Records a request that had no recording, for every fixture transport (HTTP and DAPI alike). */
+export function reportFixtureMiss(request: string): void {
+  misses.push(request)
+  onMiss?.(request)
+}
+
 const PE_ORIGINS = ['https://api.pe.dashhq.org', 'https://api.testnet.pe.dashhq.org']
 
 function serve(method: 'GET' | 'POST') {
@@ -27,8 +33,7 @@ function serve(method: 'GET' | 'POST') {
     }
     const fixture = await loadHttpFixture(url, method)
     if (!fixture) {
-      misses.push(`${method} ${url}`)
-      onMiss?.(`${method} ${url}`)
+      reportFixtureMiss(`${method} ${url}`)
       return HttpResponse.error()
     }
     const headers = new Headers(fixture.headers)

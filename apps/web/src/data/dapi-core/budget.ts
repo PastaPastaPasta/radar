@@ -8,12 +8,13 @@ export interface BudgetSnapshot {
   benched: number
   usedLastMinute: number
 }
-export const budget: {
+export interface Budget {
   snapshot(net: NetworkId): BudgetSnapshot
   /** True if n more requests fit without moving pressure past 'ok'. */
   canAfford(net: NetworkId, n: number): boolean
   subscribe(cb: () => void): () => void
-} = {
+}
+export const budget: Budget = {
   snapshot() {
     throw new Error('not implemented')
   },
