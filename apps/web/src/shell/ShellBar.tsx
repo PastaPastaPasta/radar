@@ -1,6 +1,6 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
-import { allDevnets, devnetName, useDevnets } from '@/app/devnets'
+import { allDevnets, useDevnets } from '@/app/devnets'
 import {
   PageLink,
   SECTION_ENTRY,
@@ -10,7 +10,7 @@ import {
   useNetwork,
   type SiteSection,
 } from '@/features/search'
-import type { NetworkId } from '@/lib/network'
+import { networkName } from '@/ui'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
 import { routerLocation } from './spa-links'
@@ -30,12 +30,6 @@ const NAV: NavItem[] = [
   { section: 'tools', label: 'Tools', icon: SearchIcon, surface: 'desktop' },
   { section: 'search', label: 'Search', icon: SearchIcon, surface: 'phone' },
 ]
-
-function networkName(net: NetworkId): string {
-  if (net === 'mainnet') return 'Mainnet'
-  if (net === 'testnet') return 'Testnet'
-  return `Devnet ${devnetName(net)}`
-}
 
 export function ShellBar() {
   const net = useNetwork()
