@@ -4,7 +4,7 @@ export interface RedirectOptions {
 
 interface Hit {
   path: string
-  drop?: readonly string[]
+  drop?: string[]
   set?: Record<string, string>
 }
 
