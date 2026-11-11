@@ -21,6 +21,8 @@ interface Sample {
   network?: 'testnet'
   looksLike: RegExp
   result?: { name: RegExp; href: string }
+  /** A reading whose page is not built yet: search must not offer it. */
+  withheld?: RegExp
 }
 
 const samples: Sample[] = [
@@ -35,7 +37,8 @@ const samples: Sample[] = [
     q: '1500000',
     network: 'testnet',
     looksLike: /a number/,
-    result: { name: /Platform block 1,500,000/, href: '/platform/block/1500000?network=testnet' },
+    result: { name: /Core block 1,500,000/, href: '/block/1500000?network=testnet' },
+    withheld: /Platform block|Epoch/,
   },
   {
     label: 'a block hash',
@@ -52,7 +55,7 @@ const samples: Sample[] = [
     label: 'a public-key hash',
     q: PKH,
     looksLike: /a 40-character hash: a public-key hash/,
-    result: { name: /Identity with this public-key hash/, href: `/identity/lookup?pkh=${PKH}` },
+    withheld: /Identity with this public-key hash/,
   },
   {
     label: 'an identity or contract ID',
@@ -92,25 +95,22 @@ const samples: Sample[] = [
     label: 'a Platform address',
     q: MAINNET_PLATFORM,
     looksLike: /a Platform address/,
-    result: { name: new RegExp(MAINNET_PLATFORM), href: `/platform-address/${MAINNET_PLATFORM}` },
+    withheld: new RegExp(MAINNET_PLATFORM),
   },
   {
     label: 'a testnet Platform address',
     q: TESTNET_PLATFORM,
     network: 'testnet',
     looksLike: /a Platform address/,
-    result: {
-      name: new RegExp(TESTNET_PLATFORM),
-      href: `/platform-address/${TESTNET_PLATFORM}?network=testnet`,
-    },
+    withheld: new RegExp(TESTNET_PLATFORM),
   },
   {
     label: 'an IP address with a port',
-    q: '75.119.128.71:9999',
+    q: '85.209.241.228:9999',
     looksLike: /an IP address: a masternode’s service address/,
     result: {
-      name: /Masternodes at 75.119.128.71:9999/,
-      href: '/masternodes?q=75.119.128.71:9999',
+      name: /Masternode 85\.209\.241\.228:9999/,
+      href: '/mn/219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
     },
   },
   {
@@ -120,10 +120,10 @@ const samples: Sample[] = [
     result: { name: /Core blocks on October 1, 2026/, href: '/blocks?date=2026-10-01' },
   },
   {
-    label: 'a name, offered as a guess when no source confirms it',
+    label: 'a name, not offered as a guess while its page is unfinished',
     q: 'Pshenmic.dash',
     looksLike: /text: a contract or token name/,
-    result: { name: /pshenmic\.dash/, href: '/name/pshenmic' },
+    withheld: /pshenmic\.dash/,
   },
 ]
 
@@ -149,6 +149,10 @@ test.describe('search page', () => {
         await expect(link).toBeVisible()
         await expect(link).toHaveAttribute('href', s.result.href)
       }
+      if (s.withheld) {
+        await expect(page.locator('[data-classified]')).toBeVisible()
+        await expect(page.getByRole('link', { name: s.withheld })).toHaveCount(0)
+      }
     })
   }
 
@@ -163,15 +167,13 @@ test.describe('search page', () => {
     await expect(page.getByText('No match for', { exact: false })).toContainText('Testnet')
   })
 
-  test('says plainly that nonsense matched no Core record and labels the name reading a guess @IN-10', async ({
+  test('says plainly that nonsense matched no Core record and offers no name guess @IN-10', async ({
     page,
   }) => {
     await page.goto('/search?q=zzzz-not-a-real-core-thing-12345')
 
     await expect(page.getByText(/No match for .* as a Core record/)).toBeVisible()
-    const guess = page.getByRole('region', { name: 'A guess' })
-    await expect(guess).toContainText('zzzz-not-a-real-core-thing-12345.dash')
-    await expect(guess).toContainText('Guess')
+    await expect(page.getByRole('region', { name: 'A guess' })).toHaveCount(0)
     await expect(page.getByRole('heading', { name: 'Platform' })).toHaveCount(0)
   })
 
@@ -221,6 +223,7 @@ test.describe('search page', () => {
 test.describe('palette', () => {
   test('opens from the bar, with / and with Ctrl+K, and returns focus @X-01 @X-07', async ({
     page,
+    viewport,
   }) => {
     await page.goto('/status')
     await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
@@ -237,11 +240,10 @@ test.describe('palette', () => {
     await page.keyboard.press('Control+k')
     await expect(dialog).toBeHidden()
 
-    await page
-      .getByRole('link', { name: /Search Radar/ })
-      .first()
-      .click()
-    await expect(dialog).toBeVisible()
+    if ((viewport?.width ?? 0) > 640) {
+      await page.locator('[data-palette-trigger]:visible').first().click()
+      await expect(dialog).toBeVisible()
+    }
     await expect(page).toHaveURL(/\/status$/)
   })
 
@@ -324,13 +326,13 @@ test.describe('palette', () => {
     const dialog = await openPalette(page, '/')
 
     await dialog.getByRole('combobox').fill('2569992')
-    await expect(dialog.getByRole('option', { name: /Platform block 2,569,992/ })).toBeVisible()
-    await page.keyboard.press('ArrowDown')
+    await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
+    await expect(dialog.getByRole('option', { name: /Platform block|Epoch/ })).toHaveCount(0)
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('Enter')
 
     await expect(page).not.toHaveURL(/\/search/)
-    await expect(page).toHaveURL(/\/(block|platform\/block|epoch)\/2569992$/)
+    await expect(page).toHaveURL(/\/block\/2569992$/)
   })
 
   test('finds pages by name @X-01', async ({ page }) => {

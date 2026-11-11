@@ -32,11 +32,11 @@ afterEach(() => {
   for (const r of added.splice(0)) resolvers.splice(resolvers.indexOf(r), 1)
 })
 
-function exactHit(kind: SearchHit['kind'], to: '/platform/block/$id', n: number): SearchHit {
+function exactHit(kind: SearchHit['kind'], to: '/block/$id', n: number): SearchHit {
   return {
     kind,
     id: String(n),
-    title: `Platform block ${n}`,
+    title: `Block ${n}`,
     href: { to, params: { id: String(n) } },
     stamp: localStamp(),
     rank: 110,
@@ -67,7 +67,8 @@ describe('command palette', () => {
   it('lists pages before anything is typed', async () => {
     const { dialog } = await openPalette()
 
-    expect(within(dialog).getByRole('option', { name: /Masternodes/ })).toBeInTheDocument()
+    expect(within(dialog).getByRole('option', { name: /Blocks/ })).toBeInTheDocument()
+    expect(within(dialog).queryByRole('option', { name: /Masternodes/ })).toBeNull()
   })
 
   it('says what the input is and opens a valid address on Enter', async () => {
@@ -127,14 +128,14 @@ describe('command palette', () => {
       cost: 'local',
       resolve: async () => {
         await new Promise((resolve) => setTimeout(resolve, 200))
-        return [exactHit('platform-block', '/platform/block/$id', 2569992)]
+        return [exactHit('block', '/block/$id', 2569992)]
       },
     })
     const { user, history, input } = await openPalette()
 
     await user.type(input, '2569992{Enter}')
 
-    await waitFor(() => expect(history.location.pathname).toBe('/platform/block/2569992'))
+    await waitFor(() => expect(history.location.pathname).toBe('/block/2569992'))
   })
 
   it('stops waiting for a network resolver after the grace period', async () => {
@@ -219,7 +220,7 @@ describe('/search page', () => {
       'href',
       '/block/2569992',
     )
-    expect(screen.getByRole('link', { name: /Epoch 2,569,992/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Epoch 2,569,992/ })).toBeNull()
   })
 
   it('keeps the network on result links', async () => {
@@ -239,7 +240,7 @@ describe('/search page', () => {
     expect(await screen.findByText(/isn’t something Radar can look up/)).toBeInTheDocument()
   })
 
-  it('says nothing matched a Core record and keeps the name reading apart as a guess @IN-10', async () => {
+  it('says nothing matched a Core record and offers no name guess while the name page is unfinished @IN-10 @HY-14', async () => {
     server.use(http.get('*/x/hy/mainnet/search', () => HttpResponse.json({ value: [] })))
     const history = createMemoryHistory({
       initialEntries: ['/search?q=zzzz-not-a-real-core-thing-12345'],
@@ -249,19 +250,26 @@ describe('/search page', () => {
     expect(
       await screen.findByText(/No match for “zzzz-not-a-real-core-thing-12345” as a Core record/),
     ).toBeInTheDocument()
-    const guess = await screen.findByRole('region', { name: 'A guess' })
-    expect(within(guess).getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeInTheDocument()
-    expect(within(guess).getByText('Guess')).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
+    expect(screen.queryByText('zzzz-not-a-real-core-thing-12345.dash')).toBeNull()
     expect(screen.queryByRole('heading', { name: 'Platform' })).toBeNull()
   })
 
-  it('shows a confirmed name as a result, not a guess @IN-10', async () => {
+  it('shows a confirmed hit as a result, not a guess, and drops one whose page is unfinished', async () => {
     addResolver({
-      id: 'confirmed-name',
+      id: 'confirmed-hits',
       accepts: ['dpns'],
       cost: 'local',
       resolve: () =>
         Promise.resolve([
+          {
+            kind: 'masternode',
+            id: 'a'.repeat(64),
+            title: 'Masternode 1.2.3.4',
+            href: { to: '/mn/$protx', params: { protx: 'a'.repeat(64) } },
+            stamp: localStamp(),
+            rank: 80,
+          },
           {
             kind: 'name',
             id: 'pshenmic',
@@ -275,7 +283,9 @@ describe('/search page', () => {
     const history = createMemoryHistory({ initialEntries: ['/search?q=pshenmic.dash'] })
     render(<App history={history} />)
 
-    expect(await screen.findByRole('heading', { name: 'Platform' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Network' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Masternode 1.2.3.4/ })).toBeInTheDocument()
+    expect(screen.queryByText('pshenmic.dash')).toBeNull()
     expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
     expect(screen.queryByText(/No match for/)).toBeNull()
   })

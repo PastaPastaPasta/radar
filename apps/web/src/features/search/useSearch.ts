@@ -5,6 +5,7 @@ import type { NetworkId } from '@/lib/network'
 import { classify, type Classified, type Tip } from './classify'
 import { searchEnv } from './env'
 import { networkHintHit } from './network-hint'
+import { offered } from './offered'
 import { useWordlistLoaded } from './wordlist'
 import { resolvers as registry } from './resolvers'
 import type { Resolver, SearchHit, SearchMode, SearchResult } from './types'
@@ -127,7 +128,9 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
 
   const settled = state.key === key ? state.settled : EMPTY.settled
   const hint = networkHintHit(classified)
-  const hits = hint ? [hint] : mergeHits(planned.map((r) => settled[r.id]?.hits ?? []))
+  const hits = (hint ? [hint] : mergeHits(planned.map((r) => settled[r.id]?.hits ?? []))).filter(
+    offered,
+  )
   const pending = planned.map((r) => r.id).filter((id) => !(id in settled))
   const pendingLocal = planned
     .filter((r) => r.cost === 'local' && !(r.id in settled))

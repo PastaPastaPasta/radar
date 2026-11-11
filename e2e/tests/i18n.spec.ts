@@ -104,7 +104,6 @@ test.describe('Russian', () => {
     await page.goto('/search?q=zzzz-not-a-real-core-thing-12345')
     await expect(page.getByRole('heading', { level: 1, name: 'Поиск' })).toBeVisible()
     await expect(page.getByText(/Нет совпадений/)).toBeVisible()
-    await expect(page.getByRole('region', { name: 'Предположение' })).toBeVisible()
     await expectAccessible(page)
   })
 })

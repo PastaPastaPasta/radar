@@ -95,7 +95,9 @@ test.describe('secrets in the search page', () => {
     }
   })
 
-  test('a hyphenated name still offers its name page @X-01', async ({ page }) => {
+  test('a hyphenated name is searched as a name, not held back as a phrase @X-01', async ({
+    page,
+  }) => {
     await page.goto('/search')
     const box = page.getByRole('searchbox', { name: 'Search Radar' })
 
@@ -103,7 +105,8 @@ test.describe('secrets in the search page', () => {
     await box.press('Enter')
 
     await expect(page).toHaveURL(/q=game-zone-arena\.dash$/)
-    await expect(page.getByRole('link', { name: /game-zone-arena\.dash/ })).toBeVisible()
+    await expect(page.locator('[data-classified]')).toContainText(/a contract or token name/)
+    await expect(page.getByText(PARTIAL_NOTICE)).toBeHidden()
   })
 
   test('the palette keeps a partial phrase in the box and out of the URL @X-01', async ({

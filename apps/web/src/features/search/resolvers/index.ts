@@ -6,10 +6,10 @@ import { dapiTx } from './dapi-tx'
 import { heights } from './height'
 import { hyAddress } from './hy-address'
 import { hySearch } from './hy-search'
-import { masternodeAddress } from './masternode-address'
 import { nameLabel } from './name'
 import { platformAddress } from './platform-address'
 import { publicKeyHash } from './public-key-hash'
+import { radarMasternodeByAddress } from './radar-masternode'
 
 export const resolvers: Resolver[] = [
   coreAddress,
@@ -17,7 +17,7 @@ export const resolvers: Resolver[] = [
   blocksOnDate,
   heights,
   publicKeyHash,
-  masternodeAddress,
+  radarMasternodeByAddress,
   nameLabel,
   hyAddress,
   hySearch,
