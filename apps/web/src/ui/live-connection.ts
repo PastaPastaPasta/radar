@@ -52,6 +52,8 @@ export interface LiveView {
   dot: LiveDotState
   /** "Live", "Reconnecting…", "Stopped since 14:32". */
   word: string
+  /** One short word for a cramped header, empty while live. */
+  short: string
   /** The same in a sentence, for a tooltip. */
   title: string
   /** True while the page is receiving updates. */
@@ -70,6 +72,7 @@ export function liveView({ state, lastEventAt }: LiveConnection): LiveView {
         state,
         dot: 'live',
         word: t`Live`,
+        short: '',
         title: t`New blocks reach this page as they happen.`,
         up: true,
       }
@@ -78,6 +81,7 @@ export function liveView({ state, lastEventAt }: LiveConnection): LiveView {
         state,
         dot: 'unknown',
         word: t`Connecting…`,
+        short: '',
         title: t`Opening the live connection.`,
         up: false,
       }
@@ -86,6 +90,7 @@ export function liveView({ state, lastEventAt }: LiveConnection): LiveView {
         state,
         dot: 'stale',
         word: t`Reconnecting…`,
+        short: t`Retrying`,
         title: t`The live connection dropped. Radar is opening it again.`,
         up: false,
       }
@@ -94,6 +99,7 @@ export function liveView({ state, lastEventAt }: LiveConnection): LiveView {
         state,
         dot: 'stale',
         word: t`Checking every 30 s`,
+        short: t`Slow`,
         title: t`The live connection keeps failing, so Radar asks for the latest block every 30 seconds.`,
         up: true,
       }
@@ -103,6 +109,7 @@ export function liveView({ state, lastEventAt }: LiveConnection): LiveView {
         state,
         dot: 'down',
         word: since ? t`Stopped since ${since}` : t`Stopped`,
+        short: t`Stopped`,
         title: since
           ? t`Live updates have stopped. The last update arrived at ${since}.`
           : t`Live updates have stopped.`,

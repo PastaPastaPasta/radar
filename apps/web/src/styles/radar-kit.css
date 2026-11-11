@@ -191,11 +191,31 @@
 .rx-hdrtip[data-connection='stopped'] .rx-hdrtip__state {
   color: var(--dh-bad);
 }
+.rx-hdrtip__short {
+  display: none;
+  font-size: 11px;
+  font-weight: var(--dh-w-strong);
+  color: var(--dh-warn);
+}
+.rx-hdrtip[data-connection='stopped'] .rx-hdrtip__short {
+  color: var(--dh-bad);
+}
 @media (max-width: 720px) {
-  .rx-hdrtip__label {
+  .rx-hdrtip__label,
+  .rx-hdrtip__state {
     display: none;
   }
-  .rx-hdrtip__state {
+  .rx-hdrtip__short {
+    display: inline;
+  }
+  .rx-hdrtip {
+    gap: 2px;
+  }
+  .rx-hdrtip__link {
+    padding: 4px;
+    gap: 6px;
+  }
+  .rx-hdrtip:not([data-connection='live']) .rx-hdrtip__lock {
     display: none;
   }
 }

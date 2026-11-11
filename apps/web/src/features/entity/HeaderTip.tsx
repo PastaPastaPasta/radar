@@ -47,9 +47,14 @@ export function HeaderTip() {
         </span>
       </PageLink>
       {view.state === 'live' ? null : (
-        <span className="rx-hdrtip__state" aria-hidden="true">
-          {view.word}
-        </span>
+        <>
+          <span className="rx-hdrtip__state" aria-hidden="true">
+            {view.word}
+          </span>
+          <span className="rx-hdrtip__short" aria-hidden="true">
+            {view.short || view.word}
+          </span>
+        </>
       )}
       <span className="dh-sr" aria-live="polite" aria-atomic="true" data-live-state={view.state}>
         {view.state === 'live' ? '' : view.title}

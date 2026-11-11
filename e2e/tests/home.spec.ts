@@ -123,6 +123,9 @@ test.describe('Home', () => {
     await expect(word).toHaveText(/^Stopped since \d\d:\d\d$/)
     await expect(tip).toHaveAttribute('data-connection', 'stopped')
     await expect(tip).toContainText('Stopped since')
+    await expect(tip.locator('.rx-hdrtip__state:visible, .rx-hdrtip__short:visible')).toContainText(
+      'Stopped',
+    )
     await expect(page.locator('.rx-lanes .rx-live')).toContainText('Stopped since')
 
     await context.setOffline(false)
