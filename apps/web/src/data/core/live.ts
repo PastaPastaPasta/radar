@@ -16,6 +16,8 @@ import type { CoreClientHooks, DecodedIsLock, DecodedTx } from './types'
 
 const POLL_MS = 30_000
 const STREAM_RETRY_MS = 120_000
+/** Once the transaction stream has failed repeatedly its watchers read Hyphen instead, so a reopen costs little to wait for. */
+const TX_STREAM_RETRY_MS = 5 * 60_000
 const SILENT_TX_MS = 60_000
 const STALE_AFTER_MS = 20 * 60_000
 const LAG_TICK_MS = 60_000
@@ -295,6 +297,9 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
             state: 'reconnecting',
             fallbackHint: detail.failures >= DEGRADE_AFTER_FAILURES,
           })
+      },
+      async degraded({ signal }) {
+        await sleep(TX_STREAM_RETRY_MS, signal)
       },
       async session({ signal, avoidNode, markLive }) {
         const emit = (event: LiveTxEvent) => {

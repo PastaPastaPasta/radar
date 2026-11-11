@@ -427,4 +427,29 @@ describe('coreLive.transactions', () => {
     await settle(10_000)
     expect(live.txStatus(NET)).toMatchObject({ state: 'reconnecting', fallbackHint: true })
   })
+
+  it('waits five minutes between reopens once it has given up, so a dead feed costs little @IN-06', async () => {
+    const down = new SourceError({ source: 'dapi', kind: 'network', message: 'down' })
+    const { live, opened, tipCalls } = setup(
+      [
+        { messages: [], then: down },
+        { messages: [], then: down },
+        { messages: [], then: down },
+        { messages: [], then: down },
+      ],
+      { decodeTx },
+    )
+    live.transactions(NET, () => undefined)
+    await settle(10_000)
+    expect(opened).toHaveLength(3)
+    expect(tipCalls).toHaveLength(3)
+    await settle(4 * 60_000)
+    expect(opened).toHaveLength(3)
+    expect(live.txStatus(NET).fallbackHint).toBe(true)
+    await settle(60_000)
+    expect(opened).toHaveLength(4)
+    expect(tipCalls).toHaveLength(4)
+    await settle(4 * 60_000)
+    expect(opened).toHaveLength(4)
+  })
 })

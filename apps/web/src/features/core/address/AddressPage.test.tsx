@@ -97,9 +97,9 @@ describe('Address page', () => {
       },
       { timeout: 4000 },
     )
-    expect(notice).toHaveTextContent('New transaction')
+    expect(notice).toHaveTextContent('Unconfirmed transaction')
     expect(notice).toHaveTextContent('2.5')
-    expect(await screen.findByText(/1 new transaction since you opened this page/)).toBeVisible()
+    expect(await screen.findByText(/1 transaction seen since you opened this page/)).toBeVisible()
     expect(document.querySelector('[data-pending]')).toHaveTextContent('Unconfirmed')
   })
 
@@ -140,7 +140,7 @@ describe('Address page', () => {
     )
     expect(notice).toHaveTextContent('New transaction')
     expect(within(notice).queryByRole('link', { name: 'See unconfirmed activity' })).toBeNull()
-    expect(await screen.findByText(/1 new transaction since you opened this page/)).toBeVisible()
+    expect(await screen.findByText(/1 transaction seen since you opened this page/)).toBeVisible()
     expect(document.querySelector('[data-pending]')).toBeNull()
   })
 

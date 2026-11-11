@@ -149,7 +149,9 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           data-new-transaction
           className="flex flex-wrap items-center gap-2 rounded border border-[var(--dh-line)] p-3 text-sm"
         >
-          <Badge tone="warning">{t`New transaction`}</Badge>
+          <Badge tone="warning">
+            {live.pending.includes(live.latest) ? t`Unconfirmed transaction` : t`New transaction`}
+          </Badge>
           <Entity kind="tx" id={live.latest.txid} />
           <Amount value={live.latest.net} kind="duffs" signed />
           {live.pending.includes(live.latest) ? (
@@ -283,8 +285,8 @@ function LiveNotice({ status, arrived }: { status: LiveStatus; arrived: number }
         <strong data-arrived>
           <Plural
             value={arrived}
-            one="# new transaction since you opened this page"
-            other="# new transactions since you opened this page"
+            one="# transaction seen since you opened this page"
+            other="# transactions seen since you opened this page"
           />
         </strong>
       ) : null}
