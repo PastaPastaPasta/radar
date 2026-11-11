@@ -79,6 +79,16 @@ export interface DecodedBlock {
   chainLockClaim?: 'one-node'
 }
 
+export interface CoreChainLock {
+  height: number
+  hash: string
+  /**
+   * Set when only one node reports this ChainLock and no second source reaches its height. It is that node's claim,
+   * not a fact: say "reported by one node" and do not draw it as locked. Absent once a second source agrees.
+   */
+  claim?: 'one-node'
+}
+
 export interface DapiNodeStatus {
   proTxHash: string
   state: string
@@ -123,10 +133,7 @@ export interface CoreClient {
     net: NetworkId,
     signal?: AbortSignal,
   ): Promise<Sourced<{ height: number; hash: string; time: number }>>
-  chainLock(
-    net: NetworkId,
-    signal?: AbortSignal,
-  ): Promise<Sourced<{ height: number; hash: string }>>
+  chainLock(net: NetworkId, signal?: AbortSignal): Promise<Sourced<CoreChainLock>>
   status(net: NetworkId, signal?: AbortSignal): Promise<Sourced<CoreChainStatus>> // getBlockchainStatus
   block(
     net: NetworkId,

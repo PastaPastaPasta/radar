@@ -209,6 +209,21 @@ describe('a node that answers with something other than what was asked', () => {
     expect(two.puts.block).toEqual([tip.hash])
   })
 
+  it('reports the best ChainLock as one node’s claim until a second node agrees', async () => {
+    const onlyOne = new FixtureDapiTransport()
+    const original = onlyOne.stream.bind(onlyOne)
+    onlyOne.stream = (net, method, request, opts) =>
+      original(net, method, request, { ...opts, avoidNodes: [] })
+    const lone = await setup(onlyOne).core.chainLock(NET)
+    expect(lone.data.claim).toBe('one-node')
+    expect(lone.data.height).toBeGreaterThan(0)
+
+    const agreed = await setup(new FixtureDapiTransport()).core.chainLock(NET)
+    expect(agreed.data.claim).toBeUndefined()
+    expect(agreed.data.height).toBe(lone.data.height)
+    expect(agreed.data.hash).toBe(lone.data.hash)
+  })
+
   it('does not cache headers above a ChainLock only one node reported', async () => {
     const onlyOne = new FixtureDapiTransport()
     const original = onlyOne.stream.bind(onlyOne)

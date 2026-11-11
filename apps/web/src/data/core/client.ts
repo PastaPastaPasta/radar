@@ -28,6 +28,7 @@ import type {
   BlockRef,
   BlockRow,
   CoreCallOptions,
+  CoreChainLock,
   CoreChainStatus,
   CoreClient,
   CoreClientHooks,
@@ -726,7 +727,13 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
     async chainLock(net: NetworkId, signal?: AbortSignal) {
       const { lock, node } = await fetchLockFrom(net, signal)
-      return dapi({ height: lock.height, hash: lock.hash }, { node, height: lock.height })
+      const status = await lockStatusOrKnown(net, lock.height, signal)
+      const data: CoreChainLock = {
+        height: lock.height,
+        hash: lock.hash,
+        ...(status === 'locked' ? {} : { claim: 'one-node' as const }),
+      }
+      return dapi(data, { node, height: lock.height })
     },
 
     async status(net: NetworkId, signal?: AbortSignal) {
