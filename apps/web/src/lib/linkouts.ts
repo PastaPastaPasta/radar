@@ -30,7 +30,14 @@ const INSIGHT: Partial<Record<NetworkId, string>> = {
   testnet: 'https://insight.testnet.networks.dash.org/insight',
 }
 
-const withPath = (base: string, path: string) => base + (path.startsWith('/') ? path : `/${path}`)
+function explorerUrl(
+  bases: Partial<Record<NetworkId, string>>,
+  target: { path: string; net: NetworkId },
+) {
+  const base = bases[target.net]
+  if (!base) return null
+  return base + (target.path.startsWith('/') ? target.path : `/${target.path}`)
+}
 
 /** Governance, like the other dashhq products, reads `?network=`; mainnet is the absence of it. */
 function govUrl(path: string, net: NetworkId): string {
@@ -42,6 +49,44 @@ function govUrl(path: string, net: NetworkId): string {
 function bridgeUrl(params: [string, string][], net: NetworkId): string {
   const search = new URLSearchParams([...params, ['network', net]])
   return `${BRIDGE}?${search}`
+}
+
+function bridgeTarget(target: Extract<LinkOutTarget, { app: 'bridge' }>): string {
+  switch (target.action) {
+    case 'identity':
+      return bridgeUrl(
+        [
+          ['mode', 'topup'],
+          ['identity', target.id],
+        ],
+        target.net,
+      )
+    case 'name':
+      return bridgeUrl(
+        [
+          ['mode', 'dpns'],
+          ['identity', target.id],
+        ],
+        target.net,
+      )
+    case 'platform-address':
+      return bridgeUrl([['address', target.id]], target.net)
+    case 'contract':
+      return bridgeUrl([['mode', 'contract']], target.net)
+    case 'token':
+      return bridgeUrl([], target.net)
+  }
+}
+
+function govTarget(target: Extract<LinkOutTarget, { app: 'gov' }>): string {
+  switch (target.action) {
+    case 'proposal':
+      return govUrl(`/p/h/${encodeURIComponent(target.hash)}`, target.net)
+    case 'contest-vote':
+      return govUrl(`/names/${encodeURIComponent(target.label)}`, target.net)
+    case 'masternodes':
+      return govUrl('/masternodes', target.net)
+  }
 }
 
 /**
@@ -56,50 +101,14 @@ function bridgeUrl(params: [string, string][], net: NetworkId): string {
 export function linkOutUrl(target: LinkOutTarget): string | null {
   switch (target.app) {
     case 'bridge':
-      switch (target.action) {
-        case 'identity':
-          return bridgeUrl(
-            [
-              ['mode', 'topup'],
-              ['identity', target.id],
-            ],
-            target.net,
-          )
-        case 'name':
-          return bridgeUrl(
-            [
-              ['mode', 'dpns'],
-              ['identity', target.id],
-            ],
-            target.net,
-          )
-        case 'platform-address':
-          return bridgeUrl([['address', target.id]], target.net)
-        case 'contract':
-          return bridgeUrl([['mode', 'contract']], target.net)
-        case 'token':
-          return bridgeUrl([], target.net)
-      }
+      return bridgeTarget(target)
     case 'gov':
-      switch (target.action) {
-        case 'proposal':
-          return govUrl(`/p/h/${encodeURIComponent(target.hash)}`, target.net)
-        case 'contest-vote':
-          return govUrl(`/names/${encodeURIComponent(target.label)}`, target.net)
-        case 'masternodes':
-          return govUrl('/masternodes', target.net)
-      }
-    case 'pe': {
-      const base = PE[target.net]
-      return base ? withPath(base, target.path) : null
-    }
-    case 'hyphen': {
-      const base = HYPHEN[target.net]
-      return base ? withPath(base, target.path) : null
-    }
-    case 'insight': {
-      const base = INSIGHT[target.net]
-      return base ? withPath(base, target.path) : null
-    }
+      return govTarget(target)
+    case 'pe':
+      return explorerUrl(PE, target)
+    case 'hyphen':
+      return explorerUrl(HYPHEN, target)
+    case 'insight':
+      return explorerUrl(INSIGHT, target)
   }
 }

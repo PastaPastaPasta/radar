@@ -200,7 +200,7 @@ test.describe('Transaction page', () => {
           .evaluateAll((els) =>
             els
               .map((e) => e.getBoundingClientRect())
-              .map((r) => [r.left, r.top, r.right, r.bottom]),
+              .map((r): [number, number, number, number] => [r.left, r.top, r.right, r.bottom]),
           )
         expect(boxes.length).toBeGreaterThan(3)
         for (let a = 0; a < boxes.length; a++) {
