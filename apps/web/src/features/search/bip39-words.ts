@@ -193,8 +193,8 @@ export function isBip39EnglishPrefix(prefix: string): boolean {
   let hi = list.length
   while (lo < hi) {
     const mid = (lo + hi) >>> 1
-    if ((list[mid] as string) < prefix) lo = mid + 1
+    if (list[mid]! < prefix) lo = mid + 1
     else hi = mid
   }
-  return lo < list.length && (list[lo] as string).startsWith(prefix)
+  return lo < list.length && list[lo]!.startsWith(prefix)
 }

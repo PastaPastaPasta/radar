@@ -1,13 +1,18 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { keepPreviousOnNetwork } from '@/app/keep-previous'
 import { Link, useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
-import { Entity, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  PageLink,
+  useDocumentTitle,
+  useNetwork,
+  keepPreviousOnNetwork,
+} from '@/features/entity'
 import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { Card, DataTable, Empty, Hash, Icon, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'

@@ -96,7 +96,7 @@ export async function watchAddress(opts: WatchOptions): Promise<void> {
 
   const withinRate = () => {
     const cutoff = now() - 60_000
-    while (fetched.length > 0 && (fetched[0] as number) <= cutoff) fetched.shift()
+    while (fetched.length > 0 && fetched[0]! <= cutoff) fetched.shift()
     return fetched.length < MAX_FETCHES_PER_MINUTE
   }
 

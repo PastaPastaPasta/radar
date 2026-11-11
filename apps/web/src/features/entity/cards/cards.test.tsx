@@ -127,7 +127,7 @@ describe('BlockHoverCard', () => {
     const Harness = await harness(<BlockHoverCard id="2570010" />)
     render(<Harness />)
     await screen.findByText('Block 2,570,010', {}, { timeout: 5000 })
-    expect(blockFn).toHaveBeenCalledWith('mainnet', { height: 2570010 }, expect.anything())
+    expect(blockFn.mock.calls[0]?.slice(0, 2)).toEqual(['mainnet', { height: 2570010 }])
   })
 
   it('does not read DAPI while the budget is not ok', async () => {

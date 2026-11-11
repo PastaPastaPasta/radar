@@ -163,10 +163,11 @@ describe('routes', () => {
       const url = path.replace(/\$\w+/g, (m) => encodeURIComponent(SAMPLE[m] ?? 'x'))
       renderAt(url)
 
-      await waitFor(() =>
-        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-          path === '/' ? 'Radar' : title,
-        ),
+      await waitFor(
+        () =>
+          expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+            path === '/' ? 'Radar' : title,
+          ),
         { timeout: 12_000 },
       )
     },

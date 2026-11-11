@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react'
+import type * as Bip39 from './bip39-words'
 
-type Words = typeof import('./bip39-words')
+type Words = typeof Bip39
 
 let loaded: Words | undefined
 let loading: Promise<void> | undefined

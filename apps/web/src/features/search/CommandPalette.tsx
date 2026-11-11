@@ -66,21 +66,22 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
   const secret = useMemo(() => classify(trimmed, net).warning, [trimmed, net, wordsReady])
 
-  const [submitted, setSubmitted] = useState(false)
-  const [graceOver, setGraceOver] = useState(false)
+  // What Enter was pressed on, so typing on or arrowing away cancels it without any reset.
+  const [submittedFor, setSubmittedFor] = useState<string | null>(null)
+  const [graceOverFor, setGraceOverFor] = useState<string | null>(null)
+  const submitted = submittedFor === trimmed
+  const graceOver = graceOverFor === trimmed
   const caughtUp = classified.raw.trim() === trimmed
 
   useEffect(() => {
     arrowed.current = false
-    setSubmitted(false)
-    setGraceOver(false)
   }, [query])
 
   useEffect(() => {
     if (!submitted || !caughtUp) return
-    const id = setTimeout(() => setGraceOver(true), ENTER_GRACE_MS)
+    const id = setTimeout(() => setGraceOverFor(trimmed), ENTER_GRACE_MS)
     return () => clearTimeout(id)
-  }, [submitted, caughtUp])
+  }, [submitted, caughtUp, trimmed])
 
   const finished = useRef(false)
   const go = (href: SearchHit['href']) => {
@@ -94,14 +95,14 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
       arrowed.current = true
-      setSubmitted(false)
+      setSubmittedFor(null)
       return
     }
     if (e.key !== 'Enter' || arrowed.current || e.nativeEvent.isComposing) return
     if (trimmed.length === 0) return
     e.preventDefault()
     e.stopPropagation()
-    if (!secret) setSubmitted(true)
+    if (!secret) setSubmittedFor(trimmed)
   }
 
   useEffect(() => {
