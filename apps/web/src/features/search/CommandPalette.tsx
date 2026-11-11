@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro'
 import { useNavigate } from '@tanstack/react-router'
 import * as Dialog from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
@@ -7,7 +8,7 @@ import { ENTITY_LABELS, SECTION_LABELS, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui/base'
 import { classify, type Classified } from './classify'
 import { describeInput, secretNotice } from './describe'
-import { GROUP_LABELS, groupHits } from './groups'
+import { groupHits, groupLabel } from './groups'
 import { matchPages } from './pages'
 import { useCommandPalette } from './palette-context'
 import { useSearch } from './useSearch'
@@ -28,6 +29,7 @@ function decide(hits: SearchHit[], classified: Classified): SearchHit | undefine
 }
 
 export function CommandPalette() {
+  const { t } = useLingui()
   const palette = useCommandPalette()
   return (
     <Dialog.Root
@@ -44,7 +46,7 @@ export function CommandPalette() {
           className="fixed top-[10vh] left-1/2 z-[101] w-[min(40rem,calc(100vw-2rem))] -translate-x-1/2 rounded-lg border bg-[var(--dh-surface,Canvas)] text-[var(--dh-ink,CanvasText)] shadow-xl"
         >
           <VisuallyHidden>
-            <Dialog.Title>Search Radar</Dialog.Title>
+            <Dialog.Title>{t`Search Radar`}</Dialog.Title>
           </VisuallyHidden>
           <PaletteBody initialQuery={palette.initialQuery} onDone={() => palette.close()} />
         </Dialog.Content>
@@ -54,6 +56,7 @@ export function CommandPalette() {
 }
 
 function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: () => void }) {
+  const { t } = useLingui()
   const navigate = useNavigate()
   const net = useNetwork()
   const [query, setQuery] = useState(initialQuery)
@@ -114,12 +117,12 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
     // eslint-disable-next-line react-hooks/exhaustive-deps -- navigation helpers are recreated each render
   }, [submitted, caughtUp, pending.length, pendingLocal.length, graceOver, hits, classified])
 
-  const groups = groupHits(hits)
+  const { groups, guesses } = groupHits(hits)
   const description = describeInput(classified)
 
   return (
     <Command
-      label="Search Radar"
+      label={t`Search Radar`}
       shouldFilter={false}
       loop
       vimBindings={false}
@@ -130,37 +133,37 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
       <Command.Input
         value={query}
         onValueChange={setQuery}
-        placeholder="Search blocks, transactions, masternodes, names…"
-        aria-label="Search Radar"
+        placeholder={t`Search blocks, transactions, masternodes, names…`}
+        aria-label={t`Search Radar`}
         className="w-full border-b bg-transparent px-4 py-3 text-base outline-none"
       />
       <div className="empty:hidden">
         {secret ? (
           <p role="status" className="px-2 py-3 text-sm">
-            {secretNotice(secret).title}. Radar never sends it anywhere.
+            {t`${secretNotice(secret).title}. Radar never sends it anywhere.`}
           </p>
         ) : null}
         {!secret && trimmed.length > 0 && description.length > 0 ? (
           <p data-classified className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
-            Looks like {description.join(' · ')}
+            {t`Looks like ${description.join(' · ')}`}
           </p>
         ) : null}
 
         {pending.length > 0 ? (
           <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
-            Searching…
+            {t`Searching…`}
           </p>
         ) : null}
 
         {failed.length > 0 ? (
           <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
-            Some sources didn’t answer: {failed.map((f) => f.id).join(', ')}.
+            {t`Some sources didn’t answer: ${failed.map((f) => f.id).join(', ')}.`}
           </p>
         ) : null}
       </div>
       <Command.List className="max-h-[60vh] overflow-y-auto p-2">
         {groups.map(([group, items]) => (
-          <Command.Group key={group} heading={GROUP_LABELS[group]}>
+          <Command.Group key={group} heading={groupLabel(group)}>
             {items.map((hit) => (
               <Command.Item
                 key={`${hit.kind}:${hit.id}`}
@@ -182,8 +185,31 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </Command.Group>
         ))}
 
+        {guesses.length > 0 ? (
+          <Command.Group heading={t`A guess, not a result`} data-guess>
+            {guesses.map((hit) => (
+              <Command.Item
+                key={`${hit.kind}:${hit.id}`}
+                value={`${hit.kind}:${hit.id}`}
+                onSelect={() => go(hit.href)}
+                className="flex items-center justify-between gap-3 rounded border border-dashed px-2 py-2 data-[selected=true]:bg-black/5"
+              >
+                <span className="min-w-0">
+                  <span className="block truncate">{hit.title}</span>
+                  {hit.subtitle ? (
+                    <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
+                      {hit.subtitle}
+                    </span>
+                  ) : null}
+                </span>
+                <Badge size="sm">{t`Guess`}</Badge>
+              </Command.Item>
+            ))}
+          </Command.Group>
+        ) : null}
+
         {pages.length > 0 ? (
-          <Command.Group heading={trimmed.length === 0 ? 'Go to' : 'Pages'}>
+          <Command.Group heading={trimmed.length === 0 ? t`Go to` : t`Pages`}>
             {pages.map((p) => (
               <Command.Item
                 key={p.path}
@@ -207,7 +233,9 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
               onSelect={openSearchPage}
               className="rounded px-2 py-2 data-[selected=true]:bg-black/5"
             >
-              See all results for “{trimmed}”{net === 'mainnet' ? '' : ` on ${net}`}
+              {net === 'mainnet'
+                ? t`See all results for “${trimmed}”`
+                : t`See all results for “${trimmed}” on ${net}`}
             </Command.Item>
           </Command.Group>
         ) : null}

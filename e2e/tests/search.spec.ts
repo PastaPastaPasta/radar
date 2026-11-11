@@ -155,12 +155,24 @@ test.describe('search page', () => {
   test('says nothing was found and offers the other network @X-01 @NX-05', async ({ page }) => {
     await page.goto(`/search?q=${UNKNOWN_HASH}`)
 
-    await expect(page.getByText('Nothing found for', { exact: false })).toBeVisible()
+    await expect(page.getByText('No match for', { exact: false })).toBeVisible()
     await page.getByRole('link', { name: 'Search Testnet' }).click()
 
     await expect(page).toHaveURL(new RegExp(`/search\\?.*network=testnet`))
     await expect(page.getByRole('button', { name: /Network: Testnet/ })).toBeVisible()
-    await expect(page.getByText('Nothing found for', { exact: false })).toContainText('Testnet')
+    await expect(page.getByText('No match for', { exact: false })).toContainText('Testnet')
+  })
+
+  test('says plainly that nonsense matched no Core record and labels the name reading a guess @IN-10', async ({
+    page,
+  }) => {
+    await page.goto('/search?q=zzzz-not-a-real-core-thing-12345')
+
+    await expect(page.getByText(/No match for .* as a Core record/)).toBeVisible()
+    const guess = page.getByRole('region', { name: 'A guess' })
+    await expect(guess).toContainText('zzzz-not-a-real-core-thing-12345.dash')
+    await expect(guess).toContainText('Guess')
+    await expect(page.getByRole('heading', { name: 'Platform' })).toHaveCount(0)
   })
 
   test('says what it cannot look up @X-01', async ({ page }) => {

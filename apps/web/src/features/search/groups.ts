@@ -1,11 +1,17 @@
+import { msg } from '@lingui/core/macro'
+import { i18n } from '@lingui/core'
 import type { EntityKind } from '@/ui'
 
 export type HitGroup = 'core' | 'network' | 'platform'
 
-export const GROUP_LABELS: Record<HitGroup, string> = {
-  core: 'Core',
-  network: 'Network',
-  platform: 'Platform',
+const GROUP_LABELS = {
+  core: msg`Core`,
+  network: msg`Network`,
+  platform: msg`Platform`,
+}
+
+export function groupLabel(group: HitGroup): string {
+  return i18n._(GROUP_LABELS[group])
 }
 
 const GROUP_OF: Record<EntityKind, HitGroup> = {
@@ -33,10 +39,15 @@ export function groupOf(kind: EntityKind): HitGroup {
   return GROUP_OF[kind]
 }
 
-export function groupHits<T extends { kind: EntityKind }>(hits: T[]): [HitGroup, T[]][] {
+/** Results the sources confirmed, grouped; readings nobody confirmed come back apart as guesses. */
+export function groupHits<T extends { kind: EntityKind; speculative?: boolean }>(
+  hits: T[],
+): { groups: [HitGroup, T[]][]; guesses: T[] } {
   const order: HitGroup[] = ['core', 'network', 'platform']
-  return order.flatMap((g) => {
-    const items = hits.filter((h) => groupOf(h.kind) === g)
+  const confirmed = hits.filter((h) => !h.speculative)
+  const groups = order.flatMap((g) => {
+    const items = confirmed.filter((h) => groupOf(h.kind) === g)
     return items.length > 0 ? [[g, items] as [HitGroup, T[]]] : []
   })
+  return { groups, guesses: hits.filter((h) => h.speculative) }
 }

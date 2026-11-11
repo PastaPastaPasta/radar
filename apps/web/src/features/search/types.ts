@@ -15,6 +15,8 @@ export interface SearchHit {
   stamp: SourceStamp
   /** 100 exact by ID or hash, 80 exact name, 50 prefix, 20 text. */
   rank: number
+  /** A reading of the input that no source confirmed; shown apart from results and labelled as a guess. */
+  speculative?: boolean
 }
 
 export interface ResolverContext {

@@ -1,8 +1,10 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { App } from '@/app'
+import { server } from '@/test/server'
 import { resolvers } from './resolvers'
 import { ensureWordlist } from './wordlist'
 import { localStamp } from './resolvers/helpers'
@@ -237,11 +239,52 @@ describe('/search page', () => {
     expect(await screen.findByText(/isn’t something Radar can look up/)).toBeInTheDocument()
   })
 
+  it('says nothing matched a Core record and keeps the name reading apart as a guess @IN-10', async () => {
+    server.use(http.get('*/x/hy/mainnet/search', () => HttpResponse.json({ value: [] })))
+    const history = createMemoryHistory({
+      initialEntries: ['/search?q=zzzz-not-a-real-core-thing-12345'],
+    })
+    render(<App history={history} />)
+
+    expect(
+      await screen.findByText(/No match for “zzzz-not-a-real-core-thing-12345” as a Core record/),
+    ).toBeInTheDocument()
+    const guess = await screen.findByRole('region', { name: 'A guess' })
+    expect(within(guess).getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeInTheDocument()
+    expect(within(guess).getByText('Guess')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Platform' })).toBeNull()
+  })
+
+  it('shows a confirmed name as a result, not a guess @IN-10', async () => {
+    addResolver({
+      id: 'confirmed-name',
+      accepts: ['dpns'],
+      cost: 'local',
+      resolve: () =>
+        Promise.resolve([
+          {
+            kind: 'name',
+            id: 'pshenmic',
+            title: 'pshenmic.dash',
+            href: { to: '/name/$label', params: { label: 'pshenmic' } },
+            stamp: localStamp(),
+            rank: 80,
+          },
+        ]),
+    })
+    const history = createMemoryHistory({ initialEntries: ['/search?q=pshenmic.dash'] })
+    render(<App history={history} />)
+
+    expect(await screen.findByRole('heading', { name: 'Platform' })).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
+    expect(screen.queryByText(/No match for/)).toBeNull()
+  })
+
   it('offers the other network when nothing matches a shape that fits both', async () => {
     const history = createMemoryHistory({ initialEntries: ['/search?q=' + 'ab'.repeat(32)] })
     render(<App history={history} />)
 
-    expect(await screen.findByText(/Nothing found for/)).toBeInTheDocument()
+    expect(await screen.findByText(/No match for/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Search Testnet' })).toHaveAttribute(
       'href',
       `/search?network=testnet&q=${'ab'.repeat(32)}`,

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { Resolver } from '../types'
 import { localStamp } from './helpers'
 
@@ -12,10 +13,11 @@ export const nameLabel: Resolver = {
         kind: 'name',
         id: label,
         title: `${label}.dash`,
-        subtitle: 'Name',
+        subtitle: t`A guess: Radar has not checked that this name exists`,
         href: { to: '/name/$label', params: { label } },
         stamp: localStamp(),
         rank: 80,
+        speculative: true,
       },
     ])
   },

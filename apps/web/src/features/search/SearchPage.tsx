@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import {
@@ -11,7 +12,7 @@ import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
 import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
-import { GROUP_LABELS, groupHits } from './groups'
+import { groupHits, groupLabel } from './groups'
 import { useSearch } from './useSearch'
 import { useWordlistLoaded } from './wordlist'
 
@@ -27,6 +28,7 @@ function withheldFrom(state: unknown): SecretWarning | undefined {
 }
 
 export function SearchPage({ q }: { q?: string }) {
+  const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
   const query = (q ?? '').trim()
@@ -38,7 +40,7 @@ export function SearchPage({ q }: { q?: string }) {
   const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net, wordsReady])
   const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
   const withheld = typed ?? secret ?? stripped
-  useDocumentTitle(query && !secret ? `“${query}” · Search` : 'Search')
+  useDocumentTitle(query && !secret ? t`“${query}” · Search` : t`Search`)
 
   useEffect(() => {
     if (!secret) return
@@ -56,24 +58,29 @@ export function SearchPage({ q }: { q?: string }) {
     void navigate({ to: '/search', search: { q: draft.trim() || undefined } })
   }
 
-  const groups = groupHits(hits)
-  const description = describeInput(classified)
+  const { groups, guesses } = groupHits(hits)
+  const description = describeInput({
+    ...classified,
+    classes: classified.classes.filter((k) => k !== 'dpns'),
+  })
   const settled = pending.length === 0
+  const noMatch = settled && groups.length === 0
+  const network = networkName(net)
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
 
   return (
     <div className="grid gap-6" data-page="/search">
       <header className="grid gap-3">
-        <h1 className="text-3xl font-semibold">Search</h1>
+        <h1 className="text-3xl font-semibold">{t`Search`}</h1>
         <form role="search" onSubmit={submit} className="flex gap-2">
           <label className="grow">
-            <span className="sr-only">Search Radar</span>
+            <span className="sr-only">{t`Search Radar`}</span>
             <input
               type="search"
               name="q"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Height, hash, address, ProTx, IP, ID, name…"
+              placeholder={t`Height, hash, address, ProTx, IP, ID, name…`}
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
@@ -81,7 +88,7 @@ export function SearchPage({ q }: { q?: string }) {
             />
           </label>
           <button type="submit" className="rounded px-4 py-2 font-medium">
-            Search
+            {t`Search`}
           </button>
         </form>
       </header>
@@ -95,19 +102,18 @@ export function SearchPage({ q }: { q?: string }) {
       ) : null}
 
       {!secret && query.length === 0 ? (
-        <Card title="What you can search for">
+        <Card title={t`What you can search for`}>
           <ul className="grid gap-1">
-            <li>Core block heights and hashes, transaction IDs and addresses</li>
-            <li>Masternodes by ProTx hash or IP address</li>
-            <li>Platform blocks, state transitions and Platform addresses</li>
+            <li>{t`Core block heights and hashes, transaction IDs and addresses`}</li>
+            <li>{t`Masternodes by ProTx hash or IP address`}</li>
+            <li>{t`Platform blocks, state transitions and Platform addresses`}</li>
             <li>
-              Identities, contracts, tokens and documents by ID, or an identity by its public-key
-              hash
+              {t`Identities, contracts, tokens and documents by ID, or an identity by its public-key hash`}
             </li>
-            <li>Names ending in .dash, epochs and dates (the Core blocks of a day)</li>
+            <li>{t`Names ending in .dash, epochs and dates (the Core blocks of a day)`}</li>
           </ul>
           <p className="mt-3 text-sm text-[var(--dh-ink-2,inherit)]">
-            Try{' '}
+            {t`Try`}{' '}
             {EXAMPLES.map((example, i) => (
               <span key={example}>
                 {i > 0 ? ', ' : ''}
@@ -121,15 +127,20 @@ export function SearchPage({ q }: { q?: string }) {
       ) : null}
 
       {!secret && query.length > 0 ? (
-        <section aria-label="Results" className="grid gap-4" aria-busy={!settled}>
-          <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
-            {description.length > 0
-              ? `“${query}” looks like ${description.join(' · ')}.`
-              : `“${query}” isn’t something Radar can look up.`}
-          </p>
+        <section aria-label={t`Results`} className="grid gap-4" aria-busy={!settled}>
+          {classified.classes.length === 0 ? (
+            <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
+              {t`“${query}” isn’t something Radar can look up.`}
+            </p>
+          ) : null}
+          {description.length > 0 ? (
+            <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
+              {t`“${query}” looks like ${description.join(' · ')}.`}
+            </p>
+          ) : null}
 
           {groups.map(([group, items]) => (
-            <Card key={group} title={GROUP_LABELS[group]} layer={group}>
+            <Card key={group} title={groupLabel(group)} layer={group}>
               <ul className="grid gap-2">
                 {items.map((hit) => (
                   <li
@@ -157,23 +168,56 @@ export function SearchPage({ q }: { q?: string }) {
             <ErrorState key={f.id} error={f.error} source={f.error.source} compact />
           ))}
 
-          {settled && hits.length === 0 ? (
+          {noMatch ? (
             <Empty
               kind="no-match"
-              title={`Nothing found for “${query}” on ${networkName(net)}`}
+              title={t`No match for “${query}” as a Core record on ${network}`}
               body={
                 description.length > 0
-                  ? 'Radar checked every source that can answer this kind of input.'
-                  : 'Try a height, a hash, an address, an ID or a name.'
+                  ? t`Radar checked every source that can answer this kind of input.`
+                  : t`Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name.`
               }
               action={
                 portable && !isDevnet(net) && description.length > 0 ? (
                   <PageLink to="/search" search={{ q: query, network: otherNetwork(net) }}>
-                    Search {networkName(otherNetwork(net))}
+                    {t`Search ${networkName(otherNetwork(net))}`}
                   </PageLink>
                 ) : undefined
               }
             />
+          ) : null}
+
+          {settled && guesses.length > 0 ? (
+            <section
+              aria-label={t`A guess`}
+              data-guess
+              className="grid gap-2 rounded border border-dashed p-4"
+            >
+              <h2 className="text-sm font-medium text-[var(--dh-ink-2,inherit)]">
+                {t`A guess, not a result`}
+              </h2>
+              <p className="text-sm text-[var(--dh-ink-2,inherit)]">
+                {t`Nothing above confirms this. It is only one way to read what you typed.`}
+              </p>
+              <ul className="grid gap-2">
+                {guesses.map((hit) => (
+                  <li
+                    key={`${hit.kind}:${hit.id}`}
+                    className="flex items-center justify-between gap-3"
+                  >
+                    <Link {...hit.href} className="min-w-0">
+                      <span className="block truncate">{hit.title}</span>
+                      {hit.subtitle ? (
+                        <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
+                          {hit.subtitle}
+                        </span>
+                      ) : null}
+                    </Link>
+                    <Badge size="sm">{t`Guess`}</Badge>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ) : null}
         </section>
       ) : null}

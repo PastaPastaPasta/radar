@@ -61,7 +61,8 @@ export function mergeHits(lists: SearchHit[][]): SearchHit[] {
   for (const hit of lists.flat()) {
     const key = `${hit.kind}:${hit.id}`
     const current = best.get(key)
-    if (!current || hit.rank > current.rank) best.set(key, hit)
+    const confirms = current?.speculative && !hit.speculative
+    if (!current || hit.rank > current.rank || confirms) best.set(key, hit)
   }
   return [...best.values()].sort((a, b) => b.rank - a.rank)
 }
