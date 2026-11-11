@@ -38,25 +38,37 @@ data/
   endpoints.ts                       per-network base URLs (§2.6)
   http.ts                            fetchSourced(): fetch + timeout + ETag + zod + health reporting
   zod.ts                             shared schema helpers (zBigint, zHex, zIsoDate, …)
+  active-network.ts                  the active network (follows the route being loaded) and the rendered one (§6.2)
   query/
     keys.ts                          key helpers (§5.1)
-    stale.ts                         DataClass → staleTime/gcTime/persist (§5.2)
+    stale.ts                         DataClass → staleTime/gcTime/persist, staleAfterMs (§5.2)
     batch.ts                         createBatcher, useHydratedFact (§5.4)
-  radar/ pe/ hyphen/ rate/           client.ts, schemas.ts, queries.ts (queryOptions factories), *.test.ts
-  dapi-core/                         nodes.ts, budget.ts, transport.ts, client.ts, streams.ts, cache.ts, gen/ (protoc output)
+    persister.ts, network-cache.ts   IndexedDB persister and its GC; resetNetworkCache (§5.3)
+    loader.ts                        prefetchForRoute, the gates, registerSdkReadyProbe (§6.3)
+    health-probes.ts, route-prefetch.ts   the prefetch items loaders import on demand (§6.3)
+  radar/ pe/ rate/                   client.ts, schemas.ts, queries.ts (queryOptions factories), *.test.ts
+  hyphen/                            the same, plus pages.ts (infinite lists), lookups.ts (resolvers), live.ts (address stream), fit.ts (useHyphenFit) (§5.6)
+  dapi-core/                         transport.ts (the seam, §4.1), rpc.ts, grpc-web.ts, discovery.ts, nodes.ts, budget.ts, pool.ts,
+                                     streams.ts, cache.ts, lazy.ts + production.ts (loads the pool on first use), client.ts, gen/ (protoc output)
   core/                              Core façade the features use: DAPI-first with Hyphen fallback (§4.7), decode bindings, live tip
     types.ts                         CoreClient, decoded block/tx types  ← contract file
     decode.ts, decode.worker.ts      core-decode wasm behind Comlink (§12b)
+    live.ts                          coreLive: follows the tip, ChainLock and mempool feed (§4.6)
   sdk/
     methods.ts                       SdkMethods map: method name → args/result DTO types  ← contract file
-    client.ts                        main-thread SdkClient (worker or inline transport)
+    client.ts                        main-thread SdkClient (worker or inline transport), registers the SDK-ready probe
+    queries.ts                       sdkQueries factories, platformTipQuery
     proof-store.ts                   LRU of full proofs for the inspector (NX-61)
     worker/sdk.worker.ts             Comlink endpoint
     worker/impl.ts                   method implementations + DTO mapping (runs in worker or inline)
+    worker/wasm-split.ts             stands in for the SDK's wasm loader: fetches the wasm parts (§12c)
+  trusted-worker.ts                  Trusted Types policy for `new Worker(url)`
 ui/                                  design-system components (§7); index.ts is the only import path
+  base.ts                            the slice of the kit the shell and first-paint code use (§1.2, §7.5)
+  hash.tsx                           Hash and Copy (kept apart from EntityChip so they stay in the entry chunk)
   types.ts                           Layer, Tone, EntityKind, AmountUnit  ← contract file
 lib/                                 pure, framework-free: network.ts, units.ts, format.ts, hex.ts, base58.ts, bech32.ts,
-                                     core/header.ts, core/chainlock.ts, linkouts.ts, time.ts
+                                     core/{header,chainlock,pools,block-ref}.ts, linkouts.ts, time.ts
 i18n/                                Lingui setup, locales/<locale>/messages.po, useLocale
 test/                                setup.ts, server.ts (exist), msw/handlers/*, fixtures loader, sdk and dapi fixture transports
 ```
@@ -70,7 +82,7 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 | Module | May import | Must not import |
 |---|---|---|
 | `lib/**` | nothing internal; small pure deps (`@noble/*`) | React, `data`, `ui`, `features` |
-| `data/**` | `lib`, `data/**` | React (except `data/health.ts` and `data/query/batch.ts`, which export hooks), `ui`, `features`, `routes` |
+| `data/**` | `lib`, `data/**` | React (except `data/health.ts`, `data/hyphen/fit.ts` and `data/query/batch.ts`, which export hooks), `ui`, `features`, `routes` |
 | `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts`, `@dashevo/evo-sdk`, `comlink` | anything else (no React, no DOM) |
 | `ui/**` | `lib`, `i18n`, type-only `data/envelope.ts`, `data/health.ts` (`useSourceHealth`) | `features`, `routes`, other `data` |
 | `features/<x>/**` | `ui`, `data`, `lib`, `i18n`, `features/entity`, `features/search` (their `index.ts` only) | other features' internals |
@@ -84,6 +96,8 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 - imports of `data/hyphen/stream.ts` from features.
 
 The lint rules are tested in `apps/web/src/data/boundaries.test.ts`.
+
+**Entry-chunk rule.** Rollup puts a module in the entry chunk when anything in the entry reaches it, even through a barrel, and keeps it there once any lazy chunk uses it. So code loaded with the app (shell, `app/`, the search and entity registries) imports from `@/ui/base`, never from the `@/ui` barrel, which also re-exports the hover card, charts and art. `features/entity` and `features/search` do the same. Pages and routes keep using `@/ui`. Nothing in the entry chunk may import a feature page, a resolver's data module, the Hyphen, DAPI or SDK clients, protobuf, charts, QR or a message catalog; they load from route chunks or on first use (`await import(...)`). `pnpm size` counts the entry chunk and the vendored shell script against a 220 kB gzipped budget.
 
 Two rules carry most of the weight:
 - **Features never call `fetch`, gRPC or the SDK directly.** They use `data/*/queries.ts` factories or the `data/core` and `data/sdk` clients. That keeps every figure inside an envelope.
@@ -380,6 +394,14 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 - Every proxy response carries `content-security-policy: default-src 'none'; sandbox` and `cross-origin-resource-policy: same-origin`. The Worker's global CSP is applied only to responses that have none.
 - `vite dev` and `vite preview` use the same `resolveHyphenRequest` (from `workers/edge/src/hyphen-path.ts`), so they refuse what production refuses. They don't check the upstream content type.
 
+**Redirects (`workers/edge/src/redirects.ts`).** The old dashhq pages map to Radar's URLs with their filters translated; a URL already in the new form is a fixed point, never redirected again.
+- `/masternodes[.html]`: the old `sort` and `dir=desc` become `sort=-field`; `type`, `status` and `reach` are lower-cased and the old `?status=Reachable` form maps to `reach`; `host`, `version`, `dkg` and `page` are dropped.
+- `/map[.html]`: same filters; `layer=nodes` is kept, `layer=mn` (the default) dropped; `sort` dropped.
+- `/changes[.html]`: `kind` is kept when it is `joins`, `pose`, `address` or `keys`, else dropped.
+- `/tools/fees` (a dead link on the hub) goes to `/mempool`.
+- `apps/web/build/redirect-targets.test.ts` checks that every sample lands on a registered route and that the fixed points stay put. The `/map` and `/changes` search schemas have to accept `layer=nodes` and `kind=joins|pose|address|keys`, because the router drops unknown params.
+- The SPA's own `/insight/*` redirect keeps `blockDate` as `date`.
+
 **Link previews (OG tags).** HTML for `/block/*`, `/tx/*`, `/mn/*`, `/identity/*`, `/contract/*` and `/token/*` gets per-entity tags from a backend read only for link-preview and crawler user agents (bots, crawlers, spiders, Slack, WhatsApp, Facebook and similar; see `isLinkPreviewAgent` in `workers/edge/src/og.ts`). Everyone else gets the page at once with the generic per-kind tags (`Block · Radar`). The response carries `vary: user-agent`.
 
 ---
@@ -412,6 +434,8 @@ export interface SdkMethods {
   'identities.balances': { args: { ids: string[] }; result: Map<string, bigint | null> }
   'contracts.getMany': { args: { ids: string[] }; result: Map<string, ContractDto | null> }
   'system.status': { args: Record<string, never>; result: PlatformStatusDto }
+  'system.totalCredits': { args: Record<string, never>; result: bigint | null }
+  'epoch.current': { args: Record<string, never>; result: EpochDto }
   // … one entry per facade method in PLAN §3.2; implementers add entries, never rename them
 }
 export type SdkMethodName = keyof SdkMethods
@@ -436,8 +460,8 @@ export interface WireResult<R> {
 export interface WireError { ok: false; error: { kind: SourceErrorKind; message: string; code?: string } }
 
 export interface SdkWorkerApi {
-  /** Idempotent. Resolves when the SDK for that network is connected and its trusted context is prefetched. */
-  connect(cfg: SdkNetworkConfig): Promise<{ sdkVersion: string; protocolVersion: number; tookMs: number }>
+  /** Idempotent. Resolves when the SDK for that network is connected and its trusted context is prefetched. Never throws across Comlink. */
+  connect(cfg: SdkNetworkConfig): Promise<{ sdkVersion: string; protocolVersion: number; tookMs: number } | WireError>
   call<M extends SdkMethodName>(net: NetworkId, method: M, args: SdkMethods[M]['args']): Promise<WireResult<SdkMethods[M]['result']> | WireError>
   /** Local wasm decoders for tools (NX-71, PE-13, PE-34): no network. */
   decode(kind: 'stateTransition' | 'dataContract' | 'document' | 'identity', bytes: Uint8Array): Promise<WireResult<unknown> | WireError>
@@ -458,17 +482,20 @@ export interface SdkClient {
   state(net: NetworkId): 'cold' | 'loading' | 'ready' | 'failed'
   call<M extends SdkMethodName>(net: NetworkId, method: M, args: SdkMethods[M]['args'], signal?: AbortSignal): Promise<Sourced<SdkMethods[M]['result']>>
   decode: SdkWorkerApi['decode']
+  subscribe(cb: () => void): () => void // state changes
 }
 export const sdk: SdkClient
 export const sdkQueries: { [M in SdkMethodName]: (net: NetworkId, args: SdkMethods[M]['args']) => QueryOptions } // generated from the map
 ```
 
-- **Lazy loading.** `sdk.worker.ts` is created with `new Worker(new URL('./worker/sdk.worker.ts', import.meta.url), { type: 'module' })` on the first `warm` or `call`. The SDK package is imported only inside the worker, so it never enters the main bundle. `scripts/size.mjs` fails the build if `@dashevo/evo-sdk` appears in any main-thread chunk.
-- **Warm-up.** Three triggers, all `requestIdleCallback`-gated after first paint: on `/` and every Platform route, on hover or focus of a Platform nav link or Platform `EntityChip`, and on the first ⌘K open.
-- **Cold-start fallback (rule 4 applied to time).** Where PE indexes the same figure (Platform height, epoch, identity balance in lists), the card shows the PE value with `fallback: 'sdk-cold'` until the SDK answer lands; the SDK value then replaces it. Facts PE doesn't index show `Skeleton` with "Loading the Platform SDK (once per visit)".
+- **Lazy loading.** `data/sdk/client.ts` imports `transport-worker.ts` on the first `warm` or `call`; that file creates `sdk.worker.ts` as a module worker through `trustedWorkerUrl` (`data/trusted-worker.ts`: a same-origin Trusted Types policy, because a plain `new Worker(url)` is a violation under `require-trusted-types-for 'script'`). The SDK package and its wasm are imported only inside the worker, so they never enter the main bundle; the wasm is fetched in parts when the worker first connects (§12c). `scripts/check-bundle.mjs` fails the build if `@dashevo/evo-sdk` appears in a main-thread chunk.
+- **Warm-up.** Three triggers, all `requestIdleCallback`-gated after first paint: on `/` and every Platform route, on hover or focus of a Platform nav link or Platform `EntityChip`, and on the first ⌘K open. Built so far: the home page (its Platform tip query is enabled after the first idle moment, so the SDK loads then).
+- **Cold-start fallback (rule 4 applied to time).** Where PE indexes the same figure (Platform height, epoch, identity balance in lists), the card shows the PE value with `fallback: 'sdk-cold'` (`'sdk-down'` once the SDK has failed) until the SDK answer lands; the SDK value then replaces it. The home page does this in `features/home/platform-tip.ts` over `platformTipQuery(net)` (`data/sdk/queries.ts`, one proof-checked `getEpochsInfo` whose proof height is the Platform height). Facts PE doesn't index show `Skeleton` with "Loading the Platform SDK (once per visit)".
+- **Stamps.** `proved` is true exactly when the answer carries a proof (a `*WithProof` call); only `data/sdk` sets it. `asOf` is `metadata.timeMs`; an answer with no metadata has `asOfFetched: true` and `asOf = fetchedAt`. An SDK `InvalidArgument` maps to the `invalid-response` kind.
+- **Ready probe.** `data/sdk/client.ts` registers `registerSdkReadyProbe((net) => sdk.state(net) === 'ready')` with `data/query/loader.ts` when it loads, which is what lets a loader prefetch an `sdk` item (§6.3); until the SDK module has loaded nothing counts as ready.
 - **Proof store.** `proofStore.put(record)` keeps the last 300 full proofs (method, args, meta, bytes) in memory for the proof inspector and evidence export (NX-61). The envelope carries only `ProofMeta` with the record's `id`.
 - **Network switch.** The network is part of every query key (§5.1), so a switch reads a different cache; `sdk.warm(newNet)` runs on switch. Nothing is torn down.
-- **Testing.** `SdkClient` has two transports, `WorkerTransport` and `InlineTransport` (same `impl.ts`, in-thread), plus `FixtureTransport` in tests (§10). `VITE_SDK_TRANSPORT=worker|inline` picks between the first two; worker is the default.
+- **Testing.** `SdkClient` has two transports, `WorkerTransport` and `InlineTransport` (same `impl.ts`, in-thread), plus `FixtureSdkTransport` (`test/msw/sdk-transport.ts`, §10). `VITE_SDK_TRANSPORT=worker|inline` picks between the first two; worker is the default. `setSdkTransport` swaps the transport: jsdom has no `Worker`, so `test/setup.ts` installs the fixture transport for every unit test, and fixture builds install it at startup (their output has no SDK worker or wasm). `setSdkDevnets(loadDevnets)` in `main.tsx` tells the client where saved devnets are.
 
 ---
 
@@ -476,7 +503,19 @@ export const sdkQueries: { [M in SdkMethodName]: (net: NetworkId, args: SdkMetho
 
 ### 4.1 Transport
 
-`@connectrpc/connect-web` `createGrpcWebTransport({ baseUrl: node.url, useBinaryFormat: true })`, generated with `@bufbuild/protoc-gen-es` from `platform/packages/dapi-grpc/protos/core/v0/core.proto` into `data/dapi-core/gen/` (checked in; `pnpm gen:dapi` regenerates). `broadcastTransaction` is removed from the generated service, along with `getEstimatedTransactionFee`, which Radar doesn't use.
+The façade does not call Connect. It speaks to a `DapiTransport` (`data/dapi-core/transport.ts`), which moves protobuf **bytes**:
+
+```ts
+interface DapiTransport {
+  readonly budget: Budget // the pool's request budget; the façade reads it for the §4.7 list rule
+  unary(net, method: DapiUnaryMethod, request: Uint8Array, opts?: { signal?, priority?, nodeUrl?, avoidNode? }): Promise<{ response: Uint8Array; node?: string }>
+  stream(net, method: DapiStreamMethod, request: Uint8Array, opts?): { node?: string; messages: AsyncIterable<Uint8Array> }
+}
+```
+
+`data/dapi-core/rpc.ts` (`createDapiRpc(transport)`) turns the generated messages (`data/dapi-core/gen/`, from `platform/packages/dapi-grpc/protos/core/v0/core.proto`; `pnpm --filter @radar/web gen:dapi` regenerates; `broadcastTransaction` and `getEstimatedTransactionFee` are removed) into typed calls: `status`, `bestHeight`, `block`, `transaction`, `masternodeStatus`, `headerStream`, `transactionStream`. Requests are deterministic, so a recording replays by `sha256(request bytes)`. Transport failures are `SourceError`s with `source: 'dapi'`; a gRPC `NOT_FOUND` (5) and `INVALID_ARGUMENT` (3) arrive as `kind: 'http'` with `status` set to the gRPC code, and the façade turns them into `Sourced<null>`. `getDapiTransport()` and `setDapiTransport()` pick the transport; the default `unavailableDapiTransport` throws `unavailable` and reports no budget (so lists go to Hyphen). The façade reads the budget from `transport.budget`, not from a module-level singleton: the pool owns it, and the fixture transport can steer it.
+
+The production transport is `PoolDapiTransport` (`pool.ts`). `grpc-web.ts` does the framing, trailers and status mapping itself (`grpc-status` in headers or in trailers behind an HTTP 200, `ratelimit-*` parsing), without Connect. `main.tsx` calls `installProductionDapiTransport({ devnets })` (`production.ts`) in non-fixture builds; `lazy.ts` wraps the pool so that the pool, the gRPC-web client and the protobuf runtime load on the first Core request and stay out of the entry chunk.
 
 Facts that shape the client (dashmate gateway, `templates/platform/gateway/envoy.yaml.dot`):
 - CORS allows any origin and exposes `grpc-status`, `grpc-message`, `ratelimit-reset`, `ratelimit-limit` and `ratelimit-remaining`. Over-limit replies are HTTP 200 with `grpc-status: 8` and `ratelimit-reset` as headers.
@@ -486,7 +525,7 @@ Facts that shape the client (dashmate gateway, `templates/platform/gateway/envoy
 
 ### 4.2 Node discovery and selection (`nodes.ts`)
 
-1. **Discover.** `GET {quorums}/masternodes` (CORS `*`; about 370 entries on mainnet). Keep `status === 'ENABLED' && versionCheck === 'success'` (242 on mainnet and 41 on testnet on 2026-11-10). URL: `https://{ip}:{platformHTTPPort ?? defaultPort}`. Cache the list in IndexedDB for 1 h. If discovery fails, use `scripts/seed-nodes.mjs` output bundled at build (`data/dapi-core/seed.<net>.json`, 30 nodes). Devnets use their configured `dapiAddresses`.
+1. **Discover** (`discovery.ts`). `GET {quorums}/masternodes` (CORS `*`; about 370 entries on mainnet). Keep `status === 'ENABLED' && versionCheck === 'success'` (242 on mainnet and 41 on testnet on 2026-11-10). URL: `https://{ip}:{platformHTTPPort ?? defaultPort}`. Cache the list in IndexedDB (`meta`) for 1 h. If discovery fails, use `scripts/seed-nodes.mjs` output bundled at build (`data/dapi-core/seed.<net>.json`, 30 nodes). Devnets use their configured `dapiAddresses`; a devnet with none throws `unavailable`.
 2. **Active set.** At session start, pick 8 nodes at random. This keeps HTTP/2 connections warm and spreads load across visitors. When a node is benched, replace it with a random unused one.
 3. **Choose per request.** Pick the active, unbenched node with the most budget headroom, breaking ties by lowest latency EWMA (α = 0.3). Never use a node more than 2 blocks behind the best tip seen for height-sensitive calls (`getBestBlockHeight`, `getBlock` by height near the tip).
 
@@ -520,12 +559,14 @@ Pressure is `ok` while headroom ≥ 50 % of capacity, `tight` from 20 % to 50 % 
 - prefetch on hover stops;
 - list views fall back to Hyphen (§4.7).
 
-Requests over budget wait in a priority queue: detail pages first, then lists, then prefetch. They never go out early.
+Requests over budget wait in a priority queue: detail pages first, then lists, then prefetch. They never go out early. A queued call gives up after 70 s (`QUEUE_TIMEOUT_MS`), which must exceed the 60 s window or a full pool could never serve a queued call.
+
+The budget is the `budget` member of the installed transport (`getDapiTransport().budget`); `data/dapi-core/budget.ts` exports a `budget` that delegates to it for `SourceLine` and `/status`.
 
 ### 4.4 Racing, retries, benching
 
 - **Hedge.** A unary call goes to node A. If A hasn't answered after 1.5 s and pressure is `ok`, the same call goes to node B; the first success wins and the other is aborted. Both count against the budget.
-- **Attempts.** 8 s timeout per attempt; at most 3 attempts on distinct nodes.
+- **Attempts.** 8 s timeout per attempt; at most 3 attempts on distinct nodes. A hedge asks for a node other than the first (`avoidNode`).
 - **Bench table:**
 
 | Signal | Bench for |
@@ -550,7 +591,7 @@ Benching updates `healthRegistry` for `dapi`. The source is `down` when every no
 
 - Mempool and unlocked answers are never written; they live only in TanStack memory.
 - Reads check the cache before the budget is touched; a hit costs nothing and returns `immutable: true`.
-- Size cap 200 MB per origin, LRU by `lastRead`, trimmed to 150 MB at startup and every 10 min. Quota errors disable writes for the session; reads keep working.
+- Size cap 200 MB per origin, LRU by `lastRead` (store `lru`), trimmed to 150 MB at startup and every 10 min. Quota errors disable writes for the session; reads keep working. Devnet answers are never cached.
 - Decoded JSON is not stored; decoding is cheap compared with fetching.
 
 ### 4.6 Streams (`streams.ts`)
@@ -564,7 +605,9 @@ All streams are shared and reference-counted per network: the first subscriber o
 | `subscribeToTransactionsWithProofs`, match-all bloom filter (`vData = [0xff]`, `nHashFuncs = 1`) | the live feed card (IN-01), while visible | Raw txs and IS locks. Falls back to Hyphen `/stream` `mempool_tx` if the node refuses the filter or sends nothing for 60 s while the tip moves |
 | `subscribeToMasternodeList` | masternode views (RA-20, HY-10) while mounted | First message is the full list diff; later ones are updates. Decoded by core-decode into `Map<protx, DapiMnEntry>` |
 
-Reconnects: on end or error, reopen on a different node, resuming from the last height + 1, with backoff 1, 2, 4 … 30 s. The 601 s server cap means a clean reconnect about every 10 min; that's expected and not a health event. If the header stream fails 3 times in a row, `coreLive.tip` switches to polling `getBestBlockHeight` every 30 s and keeps trying the stream every 2 min.
+`SharedStream` (`streams.ts`) implements the sharing and the backoff. `coreLive` (`data/core/live.ts`) is the only code that opens these streams: `coreLive.tip(net, queryClient)` returns a release function; `.transactions(net, listener)` delivers every transaction and InstantSend lock; `.status(net)` and `.txStatus(net)` give the `LiveStatus` (`idle`, `connecting`, `live`, `reconnecting`, `polling`, `stopped`); `.subscribe(cb)` reports changes. The shell mounts the tip through `useLiveTip` (`app/live-tip.ts`), which loads `coreLive` on demand and which `main.tsx` enables after it installs the transport (page tests leave it off). The "live updates stopped" notice (IN-15) reads the DAPI source health, which the pool feeds on every failed call and `coreLive` feeds with a lag report when no header has arrived for 20 min.
+
+Reconnects: on end or error, reopen on a different node, resuming from the last height + 1, with backoff 1, 2, 4 … 30 s. The Envoy 601 s cut counts as a normal end. The 601 s server cap means a clean reconnect about every 10 min; that's expected and not a health event. If the header stream fails 3 times in a row, `coreLive.tip` switches to polling `getBestBlockHeight` every 30 s and keeps trying the stream every 2 min.
 
 ### 4.7 The Core façade and the Hyphen fallback rule (`data/core/types.ts`, contract file)
 
@@ -600,6 +643,39 @@ Hyphen keeps the data DAPI can't give at all: addresses, spent flags, rich list,
 
 **Prefetch budget.** Route loaders and hover prefetch may issue DAPI calls only when pressure is `ok`, at most 1 call per hover, and only for detail routes (`/block/`, `/tx/`).
 
+**What the façade does, as built.**
+- Times are ms since the epoch everywhere in `data/core` (`HeaderInfo.time`, `DecodedBlock.time`, `DecodedTx.time`, `BlockRow.time`, `tip.time`, `CoreChainStatus.medianTime`).
+- DAPI stamps use `asOf = fetchedAt` (§2.2): a block's time is an event time and never becomes `asOf`. `immutable` is set on a block when its height is at or below the best ChainLock, on a tx when `isChainLocked`, and on prevouts when every previous tx is chainlocked. Hyphen answers copy Hyphen's stamp and add `fallback`.
+- `tip` = `getBlockchainStatus` (height, hash) plus a one-header range (time): 2 requests. `chainLock` = a header range of one header from height 1; the stream sends the best ChainLock first, so that is one cheap request. Any header range also refreshes the façade's remembered best ChainLock, which `block()` uses for `chainLocked` (refreshed at most every 10 s).
+- Header hashes are X11. A range takes the hash of header *i* from the `prevHash` of header *i+1*; only the last header is hashed, by the wasm decoder (`decodeBlock(header ‖ 0x00)`). `lib/core/header.ts` and `lib/core/chainlock.ts` parse the fields without wasm.
+- `blockRows(net, { fromHeight, count })` is newest first: `fromHeight`, then `count - 1` blocks below it. Its DAPI cost is `count` `getBlock` calls plus one ChainLock lookup. `pool` comes from the coinbase scriptSig through `lib/core/pools.ts`.
+- `heightAtTime(net, ms)` is the lowest height whose block time is at or after `ms` (the tip's height when `ms` is after the tip). It interpolates over 500-header windows, usually in 2–3 requests.
+- `block()` by hash derives the height from the cbTx (DIP-3 on) or the BIP-34 push in the coinbase script (before), or 0 for the genesis block.
+- `tx()` costs 2 requests on DAPI (`getTransaction` plus the header of its block for `time`). `prevouts()` costs one `getTransaction` per distinct previous txid, 4 at a time.
+- Duff fields in payloads (`cbTx.creditPoolBalance`, `assetLockTx.totalCredit` and `creditOutputs[].value`, `assetUnlockTx.fee`, shared-collateral amounts) are `bigint`; everything else in `payload` is the decoder's plain JSON (numbers, hex strings, a `kind` tag). `DecodedTx.type` for a transaction type the badge palette has no entry for (ProDissolveTx, ProUpShareTx, ProUpSharedRegTx) is `transfer`; `payload.kind` carries the exact type.
+- Hyphen fallback, as built: lists use `hyphen.status` (indexed height) then `blocks` or `blocksFrom` (cursor from `cursorFromHeight`); after a fallback the list stays on Hyphen for 120 s without extending the hold. Details (`block`, `tx`, `prevouts`, `tip`) go to Hyphen only when the DAPI health is `down`, and never when Hyphen is `stale` or `down` or the network is a devnet. `status`, `chainLock` and `headers` have no Hyphen fallback.
+- Every `CoreClient` method takes a trailing `signal?: AbortSignal` (§2.4). Query factories are in `data/core/queries.ts` (`coreQueries`): `[net,'dapi','tip'|'chainlock'|'status'|'block'|'tx'|'prevouts'|'headers'|'height-at-time'|'node-status'|'masternode-list']` and `[net,'view','block-rows']`. Blocks and txs are class `live`, with `staleTime` ∞ once the answer is `immutable`.
+- `masternodeList` rejects `unavailable`: the masternode-list diff decoder is not in `core-decode`, so `CoreDecoder.mnListDiff` rejects the same way.
+
+**Hyphen fitness.** Pages that add Hyphen-only facts to a Core page (chainwork, spent flags, mempool rows) ask "is Hyphen fit?" before each Hyphen request: the `healthQueries.hyphen` probe has succeeded and the Hyphen source health is neither `stale` nor `down` (rule 3). `useHyphenFit(net)` in `data/hyphen/fit.ts` answers it; testnet's Hyphen lags by weeks, so testnet pages make no Hyphen requests for those facts.
+
+### 4.8 Core pages: where each figure comes from
+
+- **Block** (`/block/$id`, `?page=`): `coreQueries.block` (DAPI `getBlock`, decoded by `core-decode`) gives the header, the transactions (100 a page), the coinbase payload and the ChainLock flag. Difficulty is computed from `bits` (Dash Core's `GetDifficulty`). The reward is the sum of the coinbase outputs. The pool is read from the coinbase scriptSig against `lib/core/pools.ts` (`POOL_TAGS`, `coinbaseTagOf`, `poolOfCoinbase`). Chainwork exists only in Hyphen, so it is requested only when Hyphen is fit and carries its own stamp; otherwise the row says "Not in DAPI". `lib/core/block-ref.ts` parses the URL segment (height or hash).
+- **Transaction** (`/tx/$txid`): `coreQueries.tx` plus `coreQueries.prevouts` for the fee and input values. Prevouts load for the first 10 inputs (all of them up to 50); "Load all N inputs" fetches the rest, and until then the fee falls back to Hyphen's figure. Spent flags and the fee fallback come from Hyphen `tx`, only for mined transactions and only when Hyphen is fit. Settlement shows Seen, InstantSend, Mined and ChainLocked without inventing times: only the block time is known.
+- **Blocks list** (`/blocks?date=&from=`): `coreQueries.blockRows` (newest first, 20 a page, cursor = the height of the newest row). A day is the UTC range between `heightAtTime(day)` and `heightAtTime(day + 24 h) - 1`; "Older blocks from before this date" continues below the day. Rows fall back to Hyphen inside the façade when DAPI has no headroom, and the stamp says so. A "Mined by" column shows only when rows carry a pool.
+- **Home** (`/`): Core tip and ChainLock (`coreQueries.tip`, `chainLock`), the Platform height and epoch (`features/home/platform-tip.ts`: the SDK's proof-checked `epoch.current`, with Platform Explorer's figure stamped `sdk-cold` or `sdk-down` standing in until it lands, §3.3), the masternode census (Radar `summary.crawl`), the latest 12 Core blocks, the latest 8 Platform transitions and 8 pending transactions (Hyphen mempool, only when Hyphen is fit).
+- **Address** (`/address/$address`, IN-06, HY-08): summary (balance, unconfirmed, transactions, total received and sent, first and last seen), a QR card, an unconfirmed-activity card, the cursor-paged history and the UTXO card. Amounts use `Amount` and follow the unit setting; testnet addresses show `tDASH`. The QR code is drawn in the browser by the lazily loaded `zxing-wasm` writer, on white so any scanner reads it in either theme; the wasm is fetched only when the card renders. `useAddressActivity` opens the Hyphen stream only while the page is mounted (`watchAddress` in `live.ts`): it filters `mempool_tx` events, fetches the transaction through `hyQueries.tx` to see whether it touches the address, de-duplicates by txid, reconnects with backoff, and on a `chain_lock` event invalidates the summary, history and UTXO queries and drops transactions that have since confirmed. The notice says "N new transactions since you opened this page"; the history table is not reordered under the reader.
+- **Charts and network internals** (HY-02, HY-12): `/charts` has two tabs through `?tab=`: Charts (default) and Network internals (`?tab=internals`), so HY-12 lives at `/charts?tab=internals`, linked from `/status`. `?range=1h|1d|1w|1m|1y|all` maps to a block count and point count for `/metrics/chart` (`all` uses the tip height and 120 points). ECharts loads through the kit `Chart` (lazy); each chart sits beside a data table with the same figures. Internals shows chain size, spendable outputs, hash rate, mempool pressure (a `Meter`), transaction velocity, node version spread, masternode counts and the peers of the node Hyphen indexes from.
+- **Rich list and governance** (HY-09, HY-13): the concentration chart groups the top 100 balances into rank bands 1, 2–5, 6–10, 11–25, 26–50 and 51–100 and says it covers the top 100 only. Governance is read-only: "Vote in Governance" links to `https://gov.dashhq.org/p/h/<hash>` (`?network=testnet` off mainnet) with `rel="noopener noreferrer"`; a proposal's own URL is linked only when `safeProposalUrl` accepts it (https only). Proposal status is derived from Hyphen's fields, and the budget split from the same list, with no second request.
+- **Tools** (IN-08, IN-11): verify message (`verify.ts`) recovers the public key from the 65-byte compact signature with `@noble/secp256k1` and `@noble/hashes`, hashes it to an address on the network its prefix names and compares; results are `valid`, `mismatch` (which address did sign) and `error` with a reason. Fields never reach the URL, storage or the network, and a field the classifier calls a secret blocks the check with a warning and is not echoed. The QR reader uses `getUserMedia` with a frame loop over the lazily loaded `zxing-wasm` reader; "Choose a picture" is the fallback. The decoded text goes through `interpretScan`: `dash:` URIs are unwrapped, text over 200 characters is refused, and anything the classifier flags as `secret` or `possible-secret` is refused without being shown or searched; the rest goes to `/search?q=`.
+- **Hyphen page conventions** (`features/core/hy-shared/`): `PageFrame` (`data-page`, `data-layer="core"`, eyebrow with the network, one `h1`, document title); `HyphenGate` answers a devnet with `Empty kind="unsupported-network"` before any request (loaders skip the prefetch too); `StaleIndexNotice` says the lag once at the top when the Hyphen probe is `stale`; `TxTypeBadge` maps Hyphen's `txType` names onto `CoreTxType`, falling back to a plain `Badge`. A cursor list is a `DataTable` with a "Show more" button; its state is `loading` while the first page is pending, `error` only when no row is shown, and `empty` when the first page has no rows.
+- **Search resolvers** (HY-14): `hy-search` (`hex64`, `text`, `dpns`; cost `index`) calls Hyphen `/search` and maps address, block, transaction, validator and proposal hits (a proposal hit is named by one extra `proposal` lookup, at most five); `hy-address` (`core-address`) says "balance · N transactions" or "no activity seen" and ranks one above the local hit it enriches (a tie keeps the first hit). Both return `[]` without a request when `Classified.warning` is set, on a devnet, and (`hy-search`) when the first class is `int` or the text is under 4 characters unless it is a hash. `dapi-block` and `dapi-tx` look up heights, block hashes and txids. A resolver imports its data module with `await import()`, so the Hyphen client and its schemas stay out of the entry chunk.
+
+### 4.9 Hyphen quirks
+
+A cursor is opaque: send `nextCursor` back unchanged (fixture file names carry a truncated, hashed form of it). `/search` on testnet answers 503 for a height out of range, so `hy-search` skips pure numbers. An address with no activity answers 404, which the client turns into `Sourced<null>`; the page shows an empty state, not an error. Amounts are parsed to `bigint` by the schema (`zBigint`).
+
 ---
 
 ## 5. TanStack Query conventions
@@ -634,13 +710,14 @@ export function dataClass(c: DataClass): Pick<QueryOptions, 'staleTime' | 'gcTim
 | `latest` | 10 s | 5 min | no | 10 s (PE latest transitions), 15 s (mempool) | home feeds |
 | `rate` | 60 s | 30 min | no | 60 s | USD rate |
 
+- Every query carries `meta.dataClass` (spread `dataClass('live')` etc.; `meta` is `{ persist?: true; dataClass }`). `staleAfterMs(class)` is `staleTime × STALE_AGE_FACTOR (4)`, except `tip` (infinite `staleTime`), which is 20 min, and `immutable`, which never goes stale. The query client's default `persister` (`withDataClass`) stamps `SourceStamp.staleAfterMs` on every answer and on data restored from IndexedDB, and `SourceLine` turns orange at `stamp.staleAfterMs ?? STALE_AGE_MS[stamp.source]`, so a figure is judged by its class, not its source. Clients never set `staleAfterMs`; only the query layer does.
 - Polling uses `refetchInterval` with `refetchIntervalInBackground: false`, so hidden tabs never poll.
 - `refetchOnWindowFocus` is off globally, and on for `live` and `index`.
 - Retry: `retry: (n, e) => n < 2 && retryable(e)`, `retryDelay: (n, e) => e.retryAfterMs ?? 1000 * 2 ** n` (§2.3).
 
 ### 5.3 Persistence
 
-`experimental_createQueryPersister` with an `idb-keyval` store (`radar-query`), and `serialize`/`deserialize` set to identity, so IndexedDB's structured clone keeps `bigint`, `Map` and `Uint8Array`. Only queries with `meta.persist === true` (classes `immutable` and `structural`) are persisted. `maxAge` 7 days; `buster` = app version + `SCHEMA_VERSION` (bump when any DTO or schema changes shape). Raw Core bytes have their own store (§4.5); the persister holds decoded DTOs and backend answers.
+`experimental_createQueryPersister` with an `idb-keyval` store (`radar-query`), and `serialize`/`deserialize` set to identity, so IndexedDB's structured clone keeps `bigint`, `Map` and `Uint8Array`. Only queries with `meta.persist === true` (classes `immutable` and `structural`) are persisted. `maxAge` 7 days; `buster` = app version + `SCHEMA_VERSION` (bump when any DTO or schema changes shape). Raw Core bytes have their own store (§4.5); the persister holds decoded DTOs and backend answers. `createPersister` runs `persisterGc` once on idle after boot (`gc: false` in tests). `resetNetworkCache(client, net)` (`data/query/network-cache.ts`) removes a network's queries from memory and from IndexedDB; the settings page calls it when a saved devnet is re-saved with different addresses.
 
 ### 5.4 "Index for the set, SDK for the facts" (rule 4)
 
@@ -668,6 +745,14 @@ export function useHydratedFact<K, V>(batcher: Batcher<K, V>, key: K, backend: F
 - Core tip, ChainLock and latest blocks come only from `coreLive` (§4.6), which writes to the cache. No component opens a stream itself.
 - `features/*` that need "new rows slide in" use `useLiveList(query, { holdWhileHovered: true })`, which buffers incoming rows while the pointer is over the list (from PE).
 - Hyphen `/stream` is opened only for address pages (IN-06 new-tx notice) and as the live-feed fallback. `data/hyphen/index.ts` and `queries.ts` don't export `openHyphenStream` or `readNdjson`; the stream is reachable only as `hyphen.stream` on the client object. The address-page and live-feed hooks (M1) add a `useHyphenStream`-style hook in a hyphen `queries` file, with this restriction.
+
+### 5.6 Hyphen lists and lookups for features
+
+Features may not import `data/hyphen/client.ts` or `stream.ts` (§1.2), and `hyQueries` builds single-page lists only. Four small files close the gap without loosening a zone rule:
+- `pages.ts` exports `hyPages`: infinite-query options for the cursor-paged lists (`addressTxs`, `balances`, `mempoolTxs`, `proposalVotes`). Each keeps the earlier pages and chains `nextCursor`; their keys are `hyKeys(net, '<name>-pages', …)`, so a block event can invalidate them by prefix. Add a list here when a page needs "Show more".
+- `live.ts` exports `openAddressEvents(net, signal)`, the only way a feature reaches `hyphen.stream`. It is not re-exported from `index.ts` or `queries.ts`.
+- `lookups.ts` exports `hyLookups` (`search`, `address`, `proposal`) for search resolvers, which run outside React and have no query client.
+- `fit.ts` exports `useHyphenFit(net)` (§4.7).
 
 ---
 
@@ -706,6 +791,7 @@ Hash fragments are used only for tx input and output anchors (`#in-3`, `#out-1`)
 - Unknown `devnet-<name>`: if it's neither built in nor among the user's saved custom devnets (localStorage `radar.devnets`), `NetworkGate` renders a setup form instead of the page. No network is remembered across visits (family rule).
 - `retainSearchParams(['network'])` middleware on the root route keeps `network` on every `<Link>`, so links never drop it. Cross-network links (Radar's "exists on testnet" redirect) set it explicitly.
 - `useNetwork(): NetworkId` is the only way components read it.
+- `data/active-network.ts` keeps two readings. The *active* network follows the route being loaded (for loaders and clients, so they hit the right backend as soon as a navigation starts). The *rendered* network follows the page on screen (`AppShell` sets it through `useRenderedNetworkSync`). Anything drawn from shared state while the old page is still up (`useSourceHealth`, `useAllSourceHealth`, `useHydratedFact`) reads the rendered one, so a slow navigation never shows the old page the new network's health or SDK-hydrated values.
 
 ### 6.3 Per-route schemas
 
@@ -734,7 +820,28 @@ export const Route = createFileRoute('/masternodes')({
 
 Helpers in `app/search.ts`: `zCsv`, `zCsvEnum`, `zRange`, `zIsoDate`, `zPage`, `zLimit`, `zBool01`. Filter changes call `navigate({ search: (s) => ({ ...s, …, page: undefined }), replace: true })`: they replace history and reset paging. Paging and tab changes push.
 
-Loaders prefetch HTTP sources freely. They prefetch DAPI and SDK only under the §4.7 prefetch budget, and the SDK only when it's already `ready`.
+**Loaders** prefetch; they never block a page for long and never throw. Use `prefetchForRoute` from `@/data/query` (`data/query/loader.ts`):
+
+```ts
+export const Route = createFileRoute('/status')({
+  loaderDeps: ({ search }) => ({ network: search.network, net: search.net }),
+  loader: async ({ context, deps, preload }) => {
+    const net = routeNetwork(deps)
+    const { healthProbeItems } = await import('@/data/query/health-probes') // query modules load on demand
+    return prefetchForRoute(context.queryClient, net, healthProbeItems(net), { preload })
+  },
+  component: StatusPage,
+})
+```
+
+- An item is `prefetchItem(cost, queryOptions, flags?)`, with `cost` one of `'http' | 'dapi' | 'sdk'`. `flags.detail` marks a detail route's primary read; `flags.wait` makes the loader wait for it (otherwise it starts the fetch and the page renders from the cache as it fills).
+- Gates (§4.7), enforced in `allowedItems` and failing closed if a gate throws: HTTP items always run; at most `MAX_DAPI_PREFETCH` (1) DAPI item, only for a detail route and only when `budget.canAfford`; an SDK item only when `registerSdkReadyProbe`'s probe says that network's SDK is ready (§3.3). Hover and intent preloads (`preload: true`) run HTTP items only.
+- The loader waits at most `DEFAULT_LOADER_DEADLINE_MS` (1500 ms) for the `wait` items. A failed or late prefetch leaves the query to the page, which shows its own loading and error states.
+- Loaders stay in the entry chunk under `autoCodeSplitting`, so a loader imports its query factories with `await import(...)`, never at module level (a static import pulled the HTTP clients and the Core façade into the entry chunk). The item lists live in `data/query/health-probes.ts` and `data/query/route-prefetch.ts` for that reason (`homePrefetch`, `blocksPrefetch`, `blockPrefetch`, `txPrefetch`).
+- The loader reads the network from `routeNetwork(deps)`, not from `getActiveNetwork()`, and puts `network` and `net` in `loaderDeps` so a network switch re-runs it.
+- `routes` may not import `data/health-queries.ts`; the status route reaches the probes through `data/query/health-probes.ts`.
+
+Built loaders: `/` (census, Platform Explorer, Hyphen probe), `/blocks` (Hyphen probe only; a day's rows are a DAPI list), `/block/$id` and `/tx/$txid` (the one DAPI detail read, awaited, plus the probe), `/address/$address`, `/mempool`, `/rich-list`, `/charts`, `/governance` and `/governance/$hash` (the Hyphen summary query, awaited), `/status` (the health probes) and `/settings`.
 
 ---
 
@@ -858,7 +965,7 @@ type LinkOutTarget =
 | `rate` | Price from {provider} via Platform Explorer | — |
 | `local` | Computed in your browser | — |
 
-Age is hidden when `immutable`. The age turns warning orange (`--dh-warn`; amber is reserved for the primary action) past the data class's staleTime × 4, and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
+Age is hidden when `immutable`. The age turns warning orange (`--dh-warn`; amber is reserved for the primary action) past the stamp's `staleAfterMs`, which the query layer sets from the data class (§5.2), and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
 
 ### 7.4 Entities and hover cards
 
@@ -874,6 +981,8 @@ export function registerHoverCard(kind: EntityKind, C: ComponentType<{ id: strin
 ### 7.5 Palette and kit page
 
 - `CommandPalette` (cmdk inside a Radix dialog) is exported from `features/search`, mounted once by `shell/`, and opened with ⌘K / Ctrl+K, `/`, or `useCommandPalette().open(initialQuery?)`.
+- **Kit candidates** (built inside features for now, to move into `ui/` when a second layer needs them): `CoreBand`, `RecordHeader`, `Section` and `ValueFlow` (the Core record pages' frame, `features/core/block/frame.tsx` and the tx page); an expandable table row with a details region (governance proposals); a "Show more" pager for cursor lists on `DataTable`; the `hy-shared` page frame (`PageFrame`, `HyphenGate`, `StaleIndexNotice`).
+- `ui/base.ts` is the slice of the kit that app-load code imports (§1.2); a new kit export goes there only if the shell or a first-paint registry needs it.
 - `/__kit` renders every component in every state, light and dark. Playwright screenshots it, and axe checks it. `ui/kit/KitPage.tsx` imports the page body (`KitContent`) only when `import.meta.env.DEV`, `VITE_DATA_MODE === 'fixtures'` or `VITE_RADAR_KIT === '1'`; a production build keeps a small stub that renders "Not found". `ui/index.ts` still exports the lazy `KitPage`, and the stub is what remains of that chunk. `pnpm check:bundle` fails if `apps/web/dist` contains the kit page.
 
 ---
@@ -967,8 +1076,9 @@ The English wordlist ships with the classifier (`features/search/bip39-words.ts`
 
 ### 9.1 i18n (Lingui 5)
 
-- `@lingui/vite-plugin` + `@lingui/babel-plugin-lingui-macro` (through `@vitejs/plugin-react`'s babel option). Messages use the macros `` t`…` ``, `<Trans>`, `<Plural>`, with ICU syntax. No string concatenation of translatable text.
-- Source locale `en`. Ten locales, the union of Insight's and Hyphen's: `en, de, es, fr, ja, pt, ru, tr, uk, zh-Hans`. Catalogues: `src/i18n/locales/<locale>/messages.po`, compiled at build and lazy-loaded per locale. Machine translation (D6) runs as `pnpm i18n:translate`; CI runs `lingui extract --clean` and fails if `en` has untranslated or obsolete IDs in the committed catalogue.
+- `@lingui/vite-plugin` + `@lingui/babel-plugin-lingui-macro` (through `@vitejs/plugin-react`'s babel option). Source strings are marked with the macros `t` and `plural` (from `@lingui/core/macro`), `useLingui` (from `@lingui/react/macro`), `<Trans>`, and `msg` for module-level constants (rendered with `i18n._(descriptor)`), with ICU syntax. No string concatenation of translatable text.
+- Source locale `en`. The target set is ten locales, the union of Insight's and Hyphen's (`en, de, es, fr, ja, pt, ru, tr, uk, zh-Hans`); `LOCALES` in `src/i18n/locales.ts` lists the ones shipped (today `en`). Catalogues: `src/i18n/locales/<locale>/messages.po`, compiled at build. **No catalogue is in the entry chunk**: every one, `en` included, loads as its own chunk through `import.meta.glob`, and `main.tsx` waits for `i18nReady` (the visitor's locale, falling back to `en`) before it renders, so message ids never flash.
+- `pnpm i18n:extract` rewrites `apps/web/src/i18n/locales/*/messages.po`; commit the result. `pnpm i18n:check` (CI, after lint) runs the extraction and fails if any catalogue changed, or if `en` has untranslated or obsolete entries. Adding a locale is data only: add `{ code, name }` to `LOCALES`, run `pnpm i18n:extract`, translate `locales/<code>/messages.po`, commit; the language menu lists a locale only when its catalogue exists in the build. Hashes, IDs and amounts are never translated; the number and date locale follows the language.
 - Locale choice: `localStorage` `radar.locale`, else the first match in `navigator.languages`, else `en`. `<html lang>` follows it.
 - Formatting goes only through `lib/format.ts` (`formatNumber`, `formatInt`, `formatPercent`, `formatBytes`, `formatDuration`, `formatDate`), built on `Intl` with the active locale. Hashes, IDs and heights are never localised (heights get grouping separators; hashes don't).
 - Times: absolute times in the viewer's time zone with the zone abbreviation; the tooltip always shows ISO UTC. Settings has a "Show times in UTC" switch (`radar.utc`).
@@ -979,6 +1089,8 @@ The English wordlist ships with the classifier (`features/search/bip39-words.ts`
 - Display unit preference `radar.unit` ∈ `AmountUnit` (default `DASH`) applies to Core amounts and credits shown as DASH. Credits also show their raw count on hover. Testnet labels the unit `tDASH` (and `tmDASH`, …).
 - Fiat: USD only, from `rate`, rounded to three significant figures (family PRICE rule), shown after the DASH figure, never instead of it. Testnet and devnets show no fiat.
 - Conversion and formatting are integer-exact (`bigint` division with remainder), and unit-tested against Hyphen's and Insight's renderings.
+- `lib/units.ts` holds `DISPLAY_UNITS` (`DASH | mDASH | uDASH | duffs`), `formatAmountText` and `formatAmountParts`, and the preference store (`radar.unit`, `radar.fiat` in `localStorage`; `getUnitPrefs`, `subscribeUnitPrefs`, `writeUnitPreference`, `writeFiatPreference`). Fiat is three significant figures with `< $0.000001` for dust, never on testnet or devnets (their units read `tDASH` and so on). Negative, zero, dust and huge values are tested.
+- `app/units-mount.tsx` provides the unit, the testnet flag and the USD rate to `Amount`; the rate query loads only on mainnet with USD on (`app/fiat-rate.tsx`, lazy). Settings (`features/you/settings`) holds units, fiat, UTC, language and devnets; the devnet store is injected through `app/settings-route.tsx`.
 
 ### 9.3 Error and empty-state conventions
 
@@ -1007,24 +1119,28 @@ No page-level error unless the route itself can't render (bad route param after 
 **Fixtures.**
 - `scripts/record-fixtures.mjs --net mainnet|testnet` reads `review/fixtures/<net>.json` (the picked entities, §5.4 of the plan) and records:
   - HTTP sources as `apps/web/src/test/fixtures/http/<source>/<net>/<slug>.json`: `{ request: { method, url }, recordedAt, status, headers, body }`. MSW handlers in `src/test/msw/handlers/<source>.ts` serve them by URL (query string normalised).
-  - DAPI as `…/dapi/<net>/<method>/<sha256(request bytes)>.bin` (raw response message) plus stream transcripts as `….ndjson` (base64 messages). Served by `FixtureDapiTransport`, which replaces the Connect transport.
+  - DAPI by `scripts/record-dapi-fixtures.mjs --net mainnet|testnet`, which runs the Core façade against live seed nodes (`data/dapi-core/seed.<net>.json`, from `scripts/seed-nodes.mjs`) through a recording transport, so each request is stored exactly as the façade makes it. Entities come from `scripts/dapi-fixture-picks.<net>.json` (`--discover` finds new ones); `--rows <from:count,…>` adds only those `blockRows` pages without touching the rest. The recorder keeps each node under 40 requests a minute and 4 in flight. Output is `…/dapi/<net>/<method>/<sha256(request bytes)>.json`, one file per exchange: `{ request, recordedAt, node, response | messages + ended | error }`, all base64 protobuf, with NOT_FOUND answers recorded too, plus `<net>/manifest.json`: `{ net, recordedAt, tip, entries: [{ id, purpose, call, … tags }], gaps }`. `FixtureDapiTransport` (`test/msw/dapi-transport.ts`) serves them. One JSON per exchange rather than `.bin` and `.ndjson` lets `import.meta.glob` load it the same way in Vitest and in the browser.
   - SDK as `…/sdk/<net>/<method>/<sha256(stable-json(args))>.json`, holding the `WireResult` with proof bytes base64-encoded. Served by `FixtureSdkTransport`, so the worker isn't involved and proof verification isn't rerun.
 - Fixture mode is the build flag `VITE_DATA_MODE=fixtures`, set by `build:e2e`. `main.tsx` then starts an MSW browser worker (`src/test/msw/browser.ts`) over the same handlers and slug scheme as the Vitest server, before the app renders, and swaps the two transports. `build/fixture-worker.ts` emits `mockServiceWorker.js` into that build only.
-- A request with no fixture fails the test with the URL or method it wanted, never a silent empty. Any request to another origin, any `/x/hy/*` request, and any Radar, PE or Hyphen request without a recording is answered with a network error and logged as `[radar-fixtures] …` on the console; the shared Playwright `context` fixture (`e2e/helpers/test.ts`) fails the test on that. The preview and dev Hyphen proxy isn't installed in fixture mode.
+- `record-fixtures.mjs --extra <source>:<path> --only-extra` records just the listed app paths (repeatable) and skips any that already have a file. A spec that visits an entity the pick list doesn't cover adds it this way: for a Core record page that means its Hyphen page as well, because a fit Hyphen is asked for chainwork and spent flags. The mempool's second page can't be recorded (the mempool is nearly empty on both networks), so its paging is tested with an MSW override.
+- A request with no fixture fails the test with the URL or method it wanted, never a silent empty. A DAPI request with no recording throws `SourceError('network')` and joins the shared miss list (`reportFixtureMiss`), which fails Vitest in `afterEach` and logs `[radar-fixtures]` in the browser. Any request to another origin, any `/x/hy/*` request, and any Radar, PE or Hyphen request without a recording is answered with a network error and logged as `[radar-fixtures] …` on the console; the shared Playwright `context` fixture (`e2e/helpers/test.ts`) fails the test on that. The preview and dev Hyphen proxy isn't installed in fixture mode.
+- Fixture builds expose three hooks on `window` for specs: `__radarCore` (the Core façade), `__radarSdk` and `__radarFixtures`. `__radarFixtures.breakLiveConnection(net?)` makes the fixture DAPI transport fail every call and end its streams, and `restoreLiveConnection(net?)` undoes it; the IN-15 spec uses them to show and clear the "Live updates have stopped" notice. With DAPI down and Hyphen fit, the tip comes from Hyphen's `blocks?limit=1`, which is recorded for mainnet.
+- Page tests (`src/**/*Page.test.tsx`, `app.test.tsx`) render the whole `App` with `core` replaced by a client over the recorded exchanges (`src/test/core-client.ts`, `fixtureCore()`); each test file mocks `@/data/core/client` itself.
 - The fixtures' `recordedAt` drives the page clock in fixture e2e: `pinClockToFixtures(page)` (`e2e/helpers/clock.ts`) starts it at the newest `recordedAt`, so ages are stable in screenshots.
 - `pnpm check:bundle` fails if `apps/web/dist` contains the worker, its script or the kit page.
 - Specs must wait for the first render (a heading) before calling `fetch` themselves, because the worker is registered before the app mounts but after `load`.
 
-**E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exceptions are the two third-party Trusted Types sinks the report-only header still reports: the MSW worker registration (fixture builds only) and echarts' own `innerHTML` writes, each matched by its bundle file and sink. Any other Trusted Types report fails the test.
+**E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The fixture build has no SDK worker and no wasm, so no asset is near the Workers 25 MiB limit; the production build's wasm is split for the same limit (§12c). The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exceptions are the two third-party Trusted Types sinks the report-only header still reports: the MSW worker registration (fixture builds only) and echarts' own `innerHTML` writes, each matched by its bundle file and sink. Any other Trusted Types report fails the test.
 
 **Story tags.**
 - Every Playwright test title carries its story IDs as tags: `test('block page shows header, cbTx, reward and pool @IN-03 @HY-05', …)`.
 - `pnpm check:stories` (`scripts/check-stories.mjs`, in CI) fails on a tag that names no story in `review/stories.yaml`. Stories with no test are only reported; `--strict` fails on both.
 - Spec files are grouped by area: `core.spec.ts`, `network.spec.ts`, `platform-state.spec.ts`, `platform-history.spec.ts`, `tools.spec.ts`, `unification.spec.ts`. Per-page files can split them (`core-tx.spec.ts`) when they pass 400 lines.
-- Projects: `desktop` (1440×900) and `phone` (390×844, Pixel 7 profile) for fixtures; `live` for `@live`.
+- Projects: `desktop-light`, `desktop-dark` (1440×900), `phone-light` and `phone-dark` (390×844, Pixel 7 profile) for fixtures, each with its colour scheme; `live` for `@live`. A test that is only meaningful on one form skips itself with `test.skip(…)`.
+- Layout and error checks wait on `settled(page)` (`e2e/helpers/settled.ts`: no `[data-skeleton]` and no `aria-busy="true"` left) before they measure, so they look at a page's data and not its placeholders. The route sweep in `app-shell.spec.ts` checks every registered route for a level-1 heading, no error alert and no sideways scroll; a route that is still a designed empty state is checked for its "what will be here" text instead.
 - Assertions use roles and accessible names first. Provenance assertions use `SourceLine`'s attributes (`[data-source="dapi"]`, `[data-proved="true"]`). `data-testid` is allowed only where no role fits.
 
-**Live smoke (`@live`).** About 25 tests, each touching one source on one network, so a failure points at a source: home tip and ChainLock (DAPI), block and tx pages (DAPI + decode), masternode list join (DAPI + RAD), `/mn/` evonode, identity proof-checked (SDK), contract documents (SDK), PE transitions list, Hyphen address (mainnet), Hyphen fallback forced by `?debug=budget-exhausted` (dev flag), status page with every source, search for each input class. They run with retries 2, serially (`workers: 1`), so one CI run stays well inside the DAPI budget. `@smoke` stays the scaffold's "app boots" check.
+**Live smoke (`@live`).** About 25 tests, each touching one source on one network, so a failure points at a source: home tip and ChainLock (DAPI), block and tx pages (DAPI + decode), masternode list join (DAPI + RAD), `/mn/` evonode, identity proof-checked (SDK), contract documents (SDK), PE transitions list, Hyphen address (mainnet), Hyphen fallback forced by `?debug=budget-exhausted` (dev flag), status page with every source, search for each input class. They run with retries 2, serially (`workers: 1`), so one CI run stays well inside the DAPI budget. `@smoke` stays the scaffold's "app boots" check. `node scripts/dapi-smoke.mjs mainnet|testnet` is a separate read-only check of the production DAPI transport (a dozen requests: tip, ChainLock, a block, its coinbase, headers, the header stream, `coreLive.tip`); it needs no browser.
 
 ---
 
@@ -1081,6 +1197,16 @@ Accepted from the M0 data and build work:
 - **The Hyphen stream is a client method only (§5.5).** `openHyphenStream` and `readNdjson` are no longer exported from `data/hyphen`; features reach the stream as `hyphen.stream`.
 - **`react-remove-scroll-bar` is aliased** (`vite.config.ts`) to `src/app/remove-scroll-bar.ts`, which only sets `data-scroll-locked` on `<body>`. The package injects an inline `<style>` that `style-src 'self'` refuses. `body[data-scroll-locked]` in `radar-components.css` does the locking. When the first lock starts on a page that has a scrollbar, the shim also sets `data-scroll-gutter` on `<html>`, and `html[data-scroll-gutter] { scrollbar-gutter: stable }` keeps the layout from shifting; a page with no scrollbar reserves nothing. Revisit when Radix or react-remove-scroll changes the marker attribute.
 - **`SourceStamp.asOfFetched` and an optional `latencyMs` (§2.1, §2.5).** Radar sends no time for several documents, so a stamp can now say its `asOf` is only the fetch time, and `SourceLine` words it "Fetched from Radar". `healthRegistry.report` accepts a report with no latency for outcomes that aren't one round trip.
+- **The home Platform tip reads through the SDK (§3.3).** `features/home/platform-tip.ts` uses `platformTipQuery(net)` from `data/sdk/queries.ts`; while the SDK has no answer yet it shows Platform Explorer's figures, stamped `sdk-cold` or `sdk-down`, and swaps to the proved ones when they arrive.
+- **The production DAPI queue timeout is 70 s (§4.3).** `QUEUE_TIMEOUT_MS` has to exceed the 60 s rate window, or a full pool could never serve a queued call.
+- **`connect` on the SDK worker returns `SdkConnectInfo | WireError` (§3.2)**; it never throws across Comlink.
+- **An SDK `InvalidArgument` maps to the `invalid-response` kind (§2.3).**
+- **DAPI fixtures are one `.json` per exchange, not `.bin` and `.ndjson` (§10)**, so one glob loads them in Vitest and in the browser.
+- **`BlockRow.pool` (§4.7).** The Core façade sets `BlockRow.pool` from `lib/core/pools.ts` (`poolOfCoinbase`) when a row carries a coinbase script; the blocks list shows its "Mined by" column only when rows have a pool.
+- **The shared Hyphen fit hook lives in `data/hyphen/fit.ts` (§1.2)**; it is the one hook allowed in `data/`, and `eslint.boundaries.js` says so.
+- **Testnet frame (HY-17).** A fixed 4 px frame in `--rx-testnet` (dashed for devnets) with a name tab hanging from the top edge ("Testnet", "Devnet qa"), `data-testnet-keyline` and `data-testnet-label`, pointer-events none, both themes. It replaces the earlier `body::after` frame.
+- **The footer clears the phone tab bar from Radar's CSS (§1.1).** Preflight's `* { padding: 0 }` outranks the vendored footer's `:host` padding, so `radar-components.css` restates `dashhq-footer { padding-bottom: var(--dh-tabs-h, 0px) }`.
+- **The search palette's pending notice is a status line above the list (§8.2).** `Command.Loading` renders a `progressbar` inside the listbox, which axe reports as an unallowed child.
 - **The Hyphen client types its query names from the Worker's allowlist (§2.7).** `HYPHEN_PARAMS` in `workers/edge/src/hyphen-path.ts` is the one list; `data/hyphen/params.ts` imports its type, so a call can't send a name the Worker drops.
 
 ---
@@ -1139,6 +1265,8 @@ Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the h
 - **Pinned to rust-dashcore `dev` at 568d5866**, because that is where the special-transaction types live.
 - **Gaps:** MNHF has no real mainnet vector (none in the last 30 days), and ProDissolveTx, ProUpShareTx and ProUpSharedRegTx are mapped but untested (they exist only on rust-dashcore `dev`). The UI renders an unknown or failed payload as raw hex with its type number; it never hides the transaction.
 
+**As used (M1).** `data/core/decode.ts`: `createCoreDecoder(load)` maps the wasm output to the contract types on the calling thread. The default decoder runs the wasm in a module worker (`decode.worker.ts`, Comlink) and falls back to the main thread where `Worker` doesn't exist (jsdom). The worker is created through `trustedWorkerUrl` (`data/trusted-worker.ts`), a same-origin-only Trusted Types policy, because `require-trusted-types-for 'script'` reports a plain `new Worker(url)` as a violation. Import a worker as `./x.worker.ts?worker&url` and wrap `new URL(url, location.href)`; Vite doesn't bundle a worker whose `new URL(...)` sits inside another call. The SDK worker is created the same way. `CoreDecoder.isLock` is a small TS parser (DIP-22 v1 layout), and `mnListDiff` is not decoded yet (it rejects with `unavailable`; the wasm has no decoder for it), so `core.masternodeList` isn't built.
+
 ### (c) The Evo SDK in a web worker (T-011)
 
 What it measures: wasm init and trusted-context prefetch inside a module worker, cold-start time on a mid-range phone, whether `*WithProofInfo` results map cleanly to DTOs, whether the transfer of proof bytes works, and how plain calls behave with `trusted: true`.
@@ -1158,8 +1286,8 @@ What it measures: wasm init and trusted-context prefetch inside a module worker,
 - **Not-found is a stamped null for every entity.** The worker maps the not-found errors for contracts and tokens to `null` (identities and DPNS names already return `null` plus a proof).
 - **DPNS lookups normalise the label** (homograph mapping as DPNS does: o→0, i/l→1, lowercase) before calling the SDK, which doesn't.
 - **CSP:** `script-src 'self' 'wasm-unsafe-eval'` and `connect-src 'self' https:` are enough; no COOP/COEP.
-- **Version.** The spike ran 5.0.3. The repo pins 5.0.2 until 5.0.3 clears the 7-day release-age rule (2026-11-10 19:40 UTC); package E bumps it.
-- Reference code to lift into `data/sdk`: `spikes/sdk-worker/src/`.
+- **Version.** 5.0.3, pinned for `@dashevo/evo-sdk` and `@dashevo/wasm-sdk` (the latter is a direct dependency so its `raw` export resolves).
+- **As built (M1).** The wasm is 25.5 MiB (26,732,083 bytes), over the 25 MiB per-asset limit of Cloudflare Workers, which `review/serve.mjs` (Miniflare) enforces too. `build/sdk-split.ts` therefore emits it as parts of 16 MiB each (`WASM_PART_BYTES`) through a virtual module (`this.emitFile`, `import.meta.ROLLUP_FILE_URL_*`), and aliases `@dashevo/wasm-sdk/raw` to the package's `wasm_sdk.no_url.js` glue so the whole wasm is never emitted as one file. `data/sdk/worker/wasm-split.ts` fetches the parts in the worker and streams them through a synthetic `application/wasm` `Response` into wasm-bindgen's `init`. The worker build has its own plugin list (`worker.plugins` in `vite.config.ts`). `sdk-split.test.ts` checks that the parts rejoin to the same bytes and that each is under the limit, and guards `SDK_VERSION` and the file layout. The worker and the parts load on first SDK use, never from the entry chunk. Fixture builds omit both and use `FixtureSdkTransport`.
 
 ### Not decided by spikes, owned elsewhere
 

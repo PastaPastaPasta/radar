@@ -24,12 +24,21 @@ pnpm --filter @radar/web dev
 | `pnpm e2e:fixtures`               | Playwright (Chromium) against a fixture build served by the edge Worker      |
 | `pnpm e2e:fixtures --grep @RA-20` | Only tests tagged `@RA-20`; `pnpm e2e:smoke` runs the `@smoke` subset        |
 | `pnpm e2e:live`                   | The `@live` tests against live services; not part of CI                      |
+| `pnpm i18n:extract`               | Rewrites the message catalogs; commit the result. `pnpm i18n:check` is in CI |
 
 `packages/core-decode` builds with Rust (`wasm32-unknown-unknown` and `wasm-bindgen-cli` 0.2.118): `pnpm --filter @radar/core-decode build:wasm`, then `test:wasm` and `test:rust` in that package. CI runs them in their own job.
 
 The committed `packages/core-decode/dist` is reproducible, so the build refuses to finish without [binaryen](https://github.com/WebAssembly/binaryen/releases/tag/version_129) `version_129` (`wasm-opt` on `PATH`; CI installs that release and fails if a rebuild changes `dist/`). A change to the Rust sources, `Cargo.lock`, `rust-toolchain.toml` or binaryen needs a rebuilt `dist/` committed with it. For a local build you won't commit, set `RADAR_SKIP_WASM_OPT=1` to skip the size pass; the result is larger and differs from the committed files, so don't commit it.
 
 First run of Playwright needs the browser: `pnpm --filter @radar/e2e exec playwright install chromium`.
+
+## Fixtures and e2e
+
+- The e2e suite never touches a live service. `build:e2e` builds with `VITE_DATA_MODE=fixtures` into `apps/web/dist-e2e`, which `review/serve.mjs` serves through the real edge Worker. A request with no recording fails the test and names itself.
+- Recorded answers live under `apps/web/src/test/fixtures`. Record HTTP sources with `node scripts/record-fixtures.mjs --net mainnet|testnet` (add `--extra <source>:<path> --only-extra` to record one more path without touching the rest), DAPI with `node scripts/record-dapi-fixtures.mjs --net mainnet|testnet` (`--rows` adds block-list pages), and SDK answers with `node scripts/record-sdk-fixtures.mjs`. Recording reads from live nodes, so keep it to a handful of requests.
+- `node scripts/dapi-smoke.mjs mainnet|testnet` is a read-only live check of the production DAPI transport (about a dozen requests).
+- Wait for `settled(page)` (`e2e/helpers/settled.ts`) before measuring layout or checking for an error; a page's data arrives after its heading.
+- The SDK wasm is over the 25 MiB per-asset limit of Cloudflare Workers, so `build/sdk-split.ts` ships it in 16 MiB parts that the SDK worker reassembles. Fixture builds leave the SDK worker and the wasm out. After an SDK upgrade, run `pnpm test` (the plugin's test checks the package layout it depends on) and `pnpm build && pnpm size`.
 
 ## Layout
 
