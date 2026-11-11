@@ -13,7 +13,7 @@ import {
   useNetwork,
   type SiteSection,
 } from '@/features/search'
-import { networkName } from '@/ui'
+import { networkName } from '@/ui/base'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
 import { routerLocation } from './spa-links'

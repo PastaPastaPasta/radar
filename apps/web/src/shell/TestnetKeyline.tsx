@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNetwork } from '@/features/search'
 import { isDevnet } from '@/lib/network'
-import { networkName } from '@/ui'
+import { networkName } from '@/ui/base'
 
 /** A 4 px frame around the page on every network except mainnet, with the network's name hanging from its top edge. */
 export function TestnetKeyline() {

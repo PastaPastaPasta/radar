@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { useNetwork } from '@/features/entity'
 import { getUnitPrefs, subscribeUnitPrefs } from '@/lib/units'
-import { UnitsProvider } from '@/ui'
+import { UnitsProvider } from '@/ui/base'
 
 const FiatRate = lazy(() => import('./fiat-rate'))
 

@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { defaultGates } from '@/data/query'
 import type { NetworkId } from '@/lib/network'
-import { HoverCardLayout, Skeleton, type HoverCardLayoutProps } from '@/ui'
+import { HoverCardLayout, Skeleton, type HoverCardLayoutProps } from '@/ui/base'
 
 /** A hover card opened by a visitor may read DAPI only while the budget has room (§4.7). */
 export function mayReadDapi(net: NetworkId): boolean {

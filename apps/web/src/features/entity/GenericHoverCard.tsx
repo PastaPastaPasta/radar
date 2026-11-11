@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { Hash, type EntityKind } from '@/ui'
+import { Hash, type EntityKind } from '@/ui/base'
 import { ENTITY_LABELS } from './hrefs'
 
 export function GenericHoverCard(kind: EntityKind): ComponentType<{ id: string }> {

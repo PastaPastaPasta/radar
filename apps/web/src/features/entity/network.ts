@@ -9,7 +9,7 @@ export function useNetwork(): NetworkId {
   })
 }
 
-export { networkName } from '@/ui'
+export { networkName } from '@/ui/base'
 
 /** Adds `network=` to an in-app path or path-with-query, unless it is mainnet. */
 export function withNetwork(path: string, net: NetworkId): string {

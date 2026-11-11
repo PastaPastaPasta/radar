@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useLocation } from '@tanstack/react-router'
 import { PageLink, SearchTrigger, useDocumentTitle } from '@/features/search'
-import { Empty } from '@/ui'
+import { Empty } from '@/ui/base'
 
 export function NotFoundPage() {
   const { t } = useLingui()

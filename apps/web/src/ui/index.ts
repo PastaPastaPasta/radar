@@ -11,8 +11,10 @@ export { Badge, TypeBadge } from './badges'
 export type { BadgeProps, TypeBadgeProps } from './badges'
 export { Chart } from './chart'
 export type { ChartProps } from './chart'
-export { Hash, EntityChip, Copy } from './entities'
-export type { HashProps, EntityChipProps, CopyProps } from './entities'
+export { Hash, Copy } from './hash'
+export type { HashProps, CopyProps } from './hash'
+export { EntityChip } from './entities'
+export type { EntityChipProps } from './entities'
 export { SourceLine, Empty, ErrorState, Skeleton, LiveDot, LiveControl } from './states'
 export type {
   SourceLineProps,

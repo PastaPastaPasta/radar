@@ -1,4 +1,4 @@
-import { registerHoverCard } from '@/ui'
+import { registerHoverCard } from '@/ui/base'
 import { lazyCard } from './cards/lazy'
 import { GenericHoverCard } from './GenericHoverCard'
 
