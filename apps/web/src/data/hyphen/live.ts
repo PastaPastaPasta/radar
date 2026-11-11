@@ -101,7 +101,7 @@ export async function openAddressEvents(
   const controller = new AbortController()
   signal?.addEventListener('abort', () => controller.abort(), { once: true })
   const extra = newMempoolTxs(async (s) => {
-    const page = await hyphen.mempoolTxs(net, { limit: 50 }, s)
+    const page = await hyphen.mempoolTxs(net, { limit: 20 }, s)
     return page.data.items.map((tx) => tx.txHash)
   }, controller.signal)
   return mergeEvents(stream, extra, controller)
