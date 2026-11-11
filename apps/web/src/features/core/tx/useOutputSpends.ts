@@ -47,17 +47,14 @@ export function useOutputSpends({
   const queryClient = useQueryClient()
   const height = tx.height
   const mayHaveUtxos = mined && height !== undefined && hy?.detail != null
-  const utxoAddresses = mayHaveUtxos
-    ? [
-        ...new Set(
-          tx.outputs.flatMap((o, n) =>
-            n < visible && o.address && !isUnspendable(o.scriptPubKey) && !flaggedSpent(hy, n)
-              ? [o.address]
-              : [],
-          ),
-        ),
-      ]
-    : []
+  const outputsAt = new Map<string, number[]>()
+  if (mayHaveUtxos) {
+    tx.outputs.forEach((o, n) => {
+      if (n >= visible || !o.address || isUnspendable(o.scriptPubKey) || flaggedSpent(hy, n)) return
+      outputsAt.set(o.address, [...(outputsAt.get(o.address) ?? []), n])
+    })
+  }
+  const utxoAddresses = [...outputsAt.keys()]
   const utxoQueries = useQueries({
     queries: utxoAddresses.map((address) => ({
       queryKey: viewKeys(net, 'tx-utxos', { txid: tx.txid, address }),
@@ -74,6 +71,7 @@ export function useOutputSpends({
             asOf = res.height ?? res.data.asOfHeight
             for (const u of res.data.items) if (u.txHash === tx.txid) found.add(u.vout)
             if (!res.data.nextCursor) return { asOf, found, complete: true }
+            if ((outputsAt.get(address) ?? []).every((n) => found.has(n))) break
             cursor = res.data.nextCursor
           }
           return { asOf, found, complete: false }

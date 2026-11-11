@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/address/Xc4fQcc1WoFym2JYhenSwDg1FgjTueFopE/utxos?limit=100"
+  },
+  "recordedAt": "2026-11-11T10:07:55.711Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570443,
+    "totalCount": 4,
+    "value": [
+      {
+        "txHash": "ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328",
+        "vout": 2,
+        "value": 77137500,
+        "height": 2570010,
+        "scriptPubKey": "76a9140f189322fed68e52e2b4f887a754287180fabc9e88ac"
+      },
+      {
+        "txHash": "bf3f08bd465971bc7ea627a72c6a5497605fd836437098c40a2f1bd727ba75bd",
+        "vout": 0,
+        "value": 686138256,
+        "height": 2569340,
+        "scriptPubKey": "76a9140f189322fed68e52e2b4f887a754287180fabc9e88ac"
+      },
+      {
+        "txHash": "2fbc7a8bd399ce6fd97751fb8a951beda4d1cea8f4ea382d006cfeac252b8152",
+        "vout": 2,
+        "value": 77078942,
+        "height": 2567794,
+        "scriptPubKey": "76a9140f189322fed68e52e2b4f887a754287180fabc9e88ac"
+      },
+      {
+        "txHash": "7d1ff7398ff6aeac14cf4624f019060fade4c5b627ef5e9031645573c9e5dac4",
+        "vout": 1,
+        "value": 77088797,
+        "height": 2565565,
+        "scriptPubKey": "76a9140f189322fed68e52e2b4f887a754287180fabc9e88ac"
+      }
+    ]
+  }
+}

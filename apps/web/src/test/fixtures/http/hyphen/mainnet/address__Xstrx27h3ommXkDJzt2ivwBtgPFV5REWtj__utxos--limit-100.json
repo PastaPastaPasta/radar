@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/address/Xstrx27h3ommXkDJzt2ivwBtgPFV5REWtj/utxos?limit=100"
+  },
+  "recordedAt": "2026-11-11T10:07:57.394Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570443,
+    "totalCount": 2,
+    "value": [
+      {
+        "txHash": "188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7",
+        "vout": 0,
+        "value": 9941784,
+        "height": 2569411,
+        "scriptPubKey": "76a914bcc00fdff28f1b7b85ec5135b7a2d8c800a5c01888ac"
+      },
+      {
+        "txHash": "b0f1c6646e937124f57d9c09f6f266b2c89c7c9978405c87dcde431174706b80",
+        "vout": 0,
+        "value": 9960798,
+        "height": 2514054,
+        "scriptPubKey": "76a914bcc00fdff28f1b7b85ec5135b7a2d8c800a5c01888ac"
+      }
+    ]
+  }
+}

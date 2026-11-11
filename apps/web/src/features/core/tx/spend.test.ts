@@ -261,19 +261,29 @@ describe('outputSpends from the address UTXO lists @IN-05', () => {
     expect(state).toEqual({ state: 'unspent', asOf: 2000, behind: 1 })
   })
 
-  it('does not call an output spent from a list that was cut short or is older than the transaction', () => {
+  it('does not call an output spent from a list that was cut short or is older than the transaction, and falls back to what the page says', () => {
     const cut = outputSpends({
       ...base,
       tipHeight: 2000,
       utxos: new Map([['XaddrA', view([], { complete: false })]]),
     })
-    expect(cut[0]).toEqual({ state: 'unknown', reason: 'not-reported' })
+    expect(cut[0]).toMatchObject({ state: 'unknown', reason: 'behind' })
     const early = outputSpends({
       ...base,
       tipHeight: 2000,
       utxos: new Map([['XaddrA', view([], { asOf: 99 })]]),
     })
     expect(early[0]).toMatchObject({ state: 'unknown', reason: 'behind' })
+  })
+
+  it('keeps the page’s own unspent answer when its snapshot is current and the list was cut short', () => {
+    const [state] = outputSpends({
+      ...base,
+      hy: { detail: detail([false, false, false]), asOfHeight: 1999 },
+      tipHeight: 2000,
+      utxos: new Map([['XaddrA', view([], { complete: false })]]),
+    })
+    expect(state).toEqual({ state: 'unspent', asOf: 1999, behind: 1 })
   })
 
   it('stays unknown, not unspent, when the list itself is behind the chain', () => {

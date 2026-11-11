@@ -90,9 +90,6 @@ export function outputSpends({
           : { state: 'unspent', asOf: view.asOf, behind }
       }
       if (view.complete && tx.height !== undefined && view.asOf >= tx.height) return spentBy(n)
-      return behind > 0
-        ? { state: 'unknown', reason: 'behind', behind }
-        : { state: 'unknown', reason: 'not-reported' }
     }
     const asOf = hy.asOfHeight
     if (flag == null || asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
