@@ -117,6 +117,12 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </p>
         ) : null}
 
+        {pending.length > 0 ? (
+          <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
+            Searching…
+          </p>
+        ) : null}
+
         {failed.length > 0 ? (
           <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
             Some sources didn’t answer: {failed.map((f) => f.id).join(', ')}.
@@ -146,8 +152,6 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
             ))}
           </Command.Group>
         ))}
-
-        {pending.length > 0 ? <Command.Loading>Searching…</Command.Loading> : null}
 
         {pages.length > 0 ? (
           <Command.Group heading={trimmed.length === 0 ? 'Go to' : 'Pages'}>
