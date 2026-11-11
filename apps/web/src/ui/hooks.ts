@@ -33,12 +33,17 @@ export function useNow(active = true): number {
   return active ? value : Date.now()
 }
 
+function mediaQuery(query: string): MediaQueryList | null {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia(query)
+    : null
+}
+
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(() =>
-    typeof window === 'undefined' ? false : window.matchMedia(query).matches,
-  )
+  const [matches, setMatches] = useState(() => mediaQuery(query)?.matches ?? false)
   useEffect(() => {
-    const m = window.matchMedia(query)
+    const m = mediaQuery(query)
+    if (!m) return
     const on = () => setMatches(m.matches)
     on()
     m.addEventListener('change', on)
@@ -68,11 +73,11 @@ export function useThemeSignal(): number {
       attributes: true,
       attributeFilter: ['data-theme'],
     })
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    media.addEventListener('change', bump)
+    const media = mediaQuery('(prefers-color-scheme: dark)')
+    media?.addEventListener('change', bump)
     return () => {
       observer.disconnect()
-      media.removeEventListener('change', bump)
+      media?.removeEventListener('change', bump)
     }
   }, [])
   return n
