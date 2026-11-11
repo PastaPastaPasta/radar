@@ -82,7 +82,7 @@ describe('hyphenProxy request rules', () => {
       ['/x/hy/mainnetX/blocks', 404, 'unknown_network'],
       ['/x/hy/mainnet', 404, 'unknown_network'],
       ['/x/hy/mainnet/admin', 404, 'unknown_path'],
-      ['/x/hy/mainnet/search?q=' + 'a'.repeat(300), 400, 'bad_query'],
+      ['/x/hy/mainnet/search?q=' + 'a'.repeat(600), 400, 'bad_query'],
     ]
     for (const [url, status, error] of cases) {
       const { res, result } = run(url)
