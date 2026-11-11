@@ -2,7 +2,7 @@ import { base58CheckDecode, base58Decode, isBase58 } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { isHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { isBip39EnglishWord } from './bip39-words'
+import { isBip39EnglishPrefix, isBip39EnglishWord } from './bip39-words'
 
 export type InputClass =
   | 'int'
@@ -131,19 +131,32 @@ function looksSecret(value: string): boolean {
 }
 
 /**
- * Words separated only by whitespace, commas or quotes: a run of 5 English recovery-phrase words,
- * or 12 letter-only words of any language. Hyphens and dots join a token into one word, and a
- * valid name is never a phrase.
+ * Words separated only by whitespace, commas, semicolons, quotes or brackets (hyphens and dots join a
+ * token into one word, and a valid name is never a phrase). Flagged: 5 or more consecutive tokens with
+ * at most one that is not an English recovery-phrase word, so a typo or a gap doesn't hide a phrase;
+ * a last token of 2 or more letters that starts a phrase word counts as one, because it is still being
+ * typed. Also flagged: 12 letter-only words in a row, of any language.
  */
 function looksPartlySecret(value: string): boolean {
   if (DPNS.test(value)) return false
-  let english = 0
+  const tokens = value
+    .normalize('NFKC')
+    .toLowerCase()
+    .split(PHRASE_SEPARATORS)
+    .filter((token) => token !== '')
+  const last = tokens.length - 1
+  const isWord = tokens.map(
+    (token, i) =>
+      isBip39EnglishWord(token) || (i === last && token.length >= 2 && isBip39EnglishPrefix(token)),
+  )
   let letters = 0
-  for (const token of value.normalize('NFKC').toLowerCase().split(PHRASE_SEPARATORS)) {
-    if (token === '') continue
-    english = isBip39EnglishWord(token) ? english + 1 : 0
+  for (const [i, token] of tokens.entries()) {
     letters = LETTERS_ONLY.test(token) ? letters + 1 : 0
-    if (english >= PARTIAL_PHRASE_WORDS || letters >= PHRASE_WORDS) return true
+    if (letters >= PHRASE_WORDS) return true
+    if (i + 1 >= PARTIAL_PHRASE_WORDS) {
+      const window = isWord.slice(i + 1 - PARTIAL_PHRASE_WORDS, i + 1)
+      if (window.filter((word) => !word).length <= 1) return true
+    }
   }
   return false
 }

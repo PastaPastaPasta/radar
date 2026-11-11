@@ -334,6 +334,14 @@ describe('classify secrets', () => {
     'music artist fan club',
     'abandon ability able about',
     'abandon, ability, able, about',
+    'how to buy dash with a card',
+    'what is a masternode payment',
+    'latest block on the dash network',
+    'dash price in usd today',
+    'which pool found the last block',
+    'is my transaction confirmed yet',
+    'the network is slow today why',
+    'alice bob carol dave eve frank',
     'abandon ability able about-above',
     '2569992',
     '2026-10-01',
@@ -349,9 +357,27 @@ describe('classify secrets', () => {
 })
 
 describe('classify possible phrases', () => {
-  it('counts only consecutive English words', () => {
-    expect(classify('abandon ability able about zzzz above', 'mainnet').warning).toBeUndefined()
+  it('counts five consecutive tokens with at most one that is not an English word', () => {
     expect(classify('abandon ability able about above', 'mainnet').warning).toBe('possible-secret')
+    expect(classify('abandon ability able about zzzz above', 'mainnet').warning).toBe(
+      'possible-secret',
+    )
+    expect(classify('abandon ability zzzz about zzzz above', 'mainnet').warning).toBeUndefined()
+    expect(classify('abandon ability able zzzz zzzz above', 'mainnet').warning).toBeUndefined()
+  })
+
+  it('flags a phrase with one typo among eight words', () => {
+    const input = 'abandon ability able about abuve absent absorb abstract absurd'
+    expect(classify(input, 'mainnet').warning).toBe('possible-secret')
+    expect(classify(input.replaceAll(' ', ', '), 'mainnet').warning).toBe('possible-secret')
+  })
+
+  it('counts a last token that is still being typed as a word', () => {
+    expect(classify('abandon ability able about abov', 'mainnet').warning).toBe('possible-secret')
+    expect(classify('abandon ability able about ab', 'mainnet').warning).toBe('possible-secret')
+    expect(classify('abandon ability able zzzz a', 'mainnet').warning).toBeUndefined()
+    expect(classify('abandon ability able zzzz xq', 'mainnet').warning).toBeUndefined()
+    expect(classify('abandon ability able ab about', 'mainnet').warning).toBe('possible-secret')
   })
 
   it('never flags anything that parses as a name', () => {

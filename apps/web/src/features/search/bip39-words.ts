@@ -172,10 +172,29 @@ work world worry worth wrap wreck wrestle wrist write wrong yard year
 yellow you young youth zebra zero zone zoo
 `
 
+let words: readonly string[] | undefined
 let english: ReadonlySet<string> | undefined
+
+function sorted(): readonly string[] {
+  words ??= ENGLISH.split(/\s+/).filter(Boolean).sort()
+  return words
+}
 
 /** Whether `word` (lowercase) is in the BIP39 English wordlist. The set is built on first use. */
 export function isBip39EnglishWord(word: string): boolean {
-  english ??= new Set(ENGLISH.split(/\s+/).filter(Boolean))
+  english ??= new Set(sorted())
   return english.has(word)
+}
+
+/** Whether `prefix` (lowercase) starts a word of the BIP39 English wordlist, or is one. */
+export function isBip39EnglishPrefix(prefix: string): boolean {
+  const list = sorted()
+  let lo = 0
+  let hi = list.length
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1
+    if ((list[mid] as string) < prefix) lo = mid + 1
+    else hi = mid
+  }
+  return lo < list.length && (list[lo] as string).startsWith(prefix)
 }
