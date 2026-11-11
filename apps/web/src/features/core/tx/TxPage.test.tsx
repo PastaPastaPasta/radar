@@ -265,7 +265,7 @@ describe('Transaction page', () => {
     const note = await waitFor(
       () => {
         const el = [...document.querySelectorAll('.rx-kpis *')].find((e) =>
-          /to other addresses/.test(e.textContent ?? ''),
+          (e.textContent ?? '').includes('to other addresses'),
         )
         expect(el).toBeDefined()
         return el as HTMLElement

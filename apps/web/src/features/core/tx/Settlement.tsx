@@ -111,7 +111,7 @@ export function Settlement({
           </>
         }
         detail={
-          mined && tx.height !== undefined ? (
+          tx.height !== undefined ? (
             <>
               {tx.time ? <Time ms={tx.time} mode="absolute" /> : null}{' '}
               <Link to="/block/$id" params={{ id: tx.blockHash ?? String(tx.height) }}>

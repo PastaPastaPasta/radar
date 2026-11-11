@@ -52,14 +52,11 @@ export function outputSpends({
     if (!mined) return { state: 'unknown', reason: 'unconfirmed' }
     if (!hy?.detail) return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
     const flag = hy.detail.vout.find((v) => v.n === n)?.spent
-    if (flag === undefined || flag === null) return { state: 'unknown', reason: 'not-reported' }
+    if (flag == null) return { state: 'unknown', reason: 'not-reported' }
     if (flag) {
       const found = spenders.get(n)
-      return found === 'resolving'
-        ? { state: 'spent', resolving: true }
-        : found
-          ? { state: 'spent', by: found }
-          : { state: 'spent' }
+      if (found === 'resolving') return { state: 'spent', resolving: true }
+      return found ? { state: 'spent', by: found } : { state: 'spent' }
     }
     const asOf = hy.asOfHeight
     if (asOf === undefined) return { state: 'unknown', reason: 'not-reported' }

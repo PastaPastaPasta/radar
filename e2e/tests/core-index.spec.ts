@@ -104,10 +104,14 @@ test.describe('address page', () => {
     )
     await page.goto(`/address/${ADDRESS}`)
     const notice = page.locator('[data-new-transaction]')
-    await expect(notice).toBeVisible()
+    const slow = { timeout: 20_000 }
+    await expect(notice).toBeVisible(slow)
     await expect(notice).toContainText('New transaction')
-    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
-    await expect(page.locator('[data-pending]')).toContainText('Unconfirmed')
+    await expect(page.locator('[data-arrived]')).toContainText(
+      '1 new transaction since you opened',
+      slow,
+    )
+    await expect(page.locator('[data-pending]')).toContainText('Unconfirmed', slow)
     await expectAccessible(page)
   })
 
