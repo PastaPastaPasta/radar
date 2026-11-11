@@ -51,41 +51,35 @@ function bridgeUrl(params: [string, string][], net: NetworkId): string {
   return `${BRIDGE}?${search}`
 }
 
-function bridgeTarget(target: Extract<LinkOutTarget, { app: 'bridge' }>): string {
+function bridgeParams(target: Extract<LinkOutTarget, { app: 'bridge' }>): [string, string][] {
   switch (target.action) {
     case 'identity':
-      return bridgeUrl(
-        [
-          ['mode', 'topup'],
-          ['identity', target.id],
-        ],
-        target.net,
-      )
+      return [
+        ['mode', 'topup'],
+        ['identity', target.id],
+      ]
     case 'name':
-      return bridgeUrl(
-        [
-          ['mode', 'dpns'],
-          ['identity', target.id],
-        ],
-        target.net,
-      )
+      return [
+        ['mode', 'dpns'],
+        ['identity', target.id],
+      ]
     case 'platform-address':
-      return bridgeUrl([['address', target.id]], target.net)
+      return [['address', target.id]]
     case 'contract':
-      return bridgeUrl([['mode', 'contract']], target.net)
+      return [['mode', 'contract']]
     case 'token':
-      return bridgeUrl([], target.net)
+      return []
   }
 }
 
-function govTarget(target: Extract<LinkOutTarget, { app: 'gov' }>): string {
+function govPath(target: Extract<LinkOutTarget, { app: 'gov' }>): string {
   switch (target.action) {
     case 'proposal':
-      return govUrl(`/p/h/${encodeURIComponent(target.hash)}`, target.net)
+      return `/p/h/${encodeURIComponent(target.hash)}`
     case 'contest-vote':
-      return govUrl(`/names/${encodeURIComponent(target.label)}`, target.net)
+      return `/names/${encodeURIComponent(target.label)}`
     case 'masternodes':
-      return govUrl('/masternodes', target.net)
+      return '/masternodes'
   }
 }
 
@@ -101,9 +95,9 @@ function govTarget(target: Extract<LinkOutTarget, { app: 'gov' }>): string {
 export function linkOutUrl(target: LinkOutTarget): string | null {
   switch (target.app) {
     case 'bridge':
-      return bridgeTarget(target)
+      return bridgeUrl(bridgeParams(target), target.net)
     case 'gov':
-      return govTarget(target)
+      return govUrl(govPath(target), target.net)
     case 'pe':
       return explorerUrl(PE, target)
     case 'hyphen':

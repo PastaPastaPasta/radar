@@ -313,8 +313,8 @@ async function pickPlatform(src, entities, log) {
  * The special transactions are chosen by hand from live chain data, so a regeneration carries the
  * committed ones over rather than dropping them.
  */
-export function committedSpecialTxs(network, dir = FIXTURES_DIR) {
-  return loadFixtures(network, dir)?.entities?.special_txs
+export function committedSpecialTxs(network) {
+  return loadFixtures(network)?.entities?.special_txs
 }
 
 export async function pickFixtures(network, specialTxs = committedSpecialTxs(network)) {
