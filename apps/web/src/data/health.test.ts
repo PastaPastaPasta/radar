@@ -208,6 +208,51 @@ describe('health registry states', () => {
   })
 })
 
+describe('DAPI health counts nodes, not attempts', () => {
+  const failAt = (node: string, nodes: number, kind: 'network' | 'timeout' = 'network') => ({
+    ok: false,
+    kind,
+    node,
+    nodes,
+  })
+
+  it('stays up while only some nodes have failed, however many attempts that took', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'dapi', ok())
+    for (let i = 0; i < 10; i++) reg.report('mainnet', 'dapi', failAt(`n${i % 3}`, 30))
+    expect(reg.get('mainnet', 'dapi').state).not.toBe('down')
+  })
+
+  it('goes down when 16 distinct nodes have failed since the last answer', () => {
+    const { reg } = setup()
+    reg.report('mainnet', 'dapi', ok())
+    for (let i = 0; i < 15; i++) reg.report('mainnet', 'dapi', failAt(`n${i}`, 30))
+    expect(reg.get('mainnet', 'dapi').state).not.toBe('down')
+    reg.report('mainnet', 'dapi', failAt('n15', 30))
+    expect(reg.get('mainnet', 'dapi').state).toBe('down')
+    reg.report('mainnet', 'dapi', ok())
+    expect(reg.get('mainnet', 'dapi').state).not.toBe('down')
+  })
+
+  it('goes down on a devnet when its few nodes have all failed', () => {
+    const { reg } = setup()
+    reg.report('devnet-x', 'dapi', ok())
+    reg.report('devnet-x', 'dapi', failAt('a', 2))
+    expect(reg.get('devnet-x', 'dapi').state).not.toBe('down')
+    reg.report('devnet-x', 'dapi', failAt('b', 2, 'timeout'))
+    expect(reg.get('devnet-x', 'dapi').state).toBe('down')
+  })
+
+  it('forgets failures after two minutes', () => {
+    const { reg, advance } = setup()
+    reg.report('devnet-x', 'dapi', ok())
+    reg.report('devnet-x', 'dapi', failAt('a', 2))
+    advance(121_000)
+    reg.report('devnet-x', 'dapi', failAt('b', 2))
+    expect(reg.get('devnet-x', 'dapi').state).not.toBe('down')
+  })
+})
+
 describe('health registry over time', () => {
   it('notifies when the invalid-response memory ends with no new call', () => {
     const { reg, advance } = setup()

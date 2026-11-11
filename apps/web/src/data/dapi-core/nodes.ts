@@ -173,6 +173,14 @@ export class NodePool {
     }
   }
 
+  /** A request another client sent to `host` at `at`: it uses the node's window like one of ours. */
+  noteExternal(host: string, at: number): void {
+    const slot = this.slotByHost(host)
+    if (!slot) return
+    const i = slot.started.findLastIndex((t) => t <= at)
+    slot.started.splice(i + 1, 0, at)
+  }
+
   slotByHost(host: string): NodeSlot | undefined {
     return this.slots.get(`https://${host}`)
   }
@@ -219,13 +227,14 @@ export class NodePool {
     for (const slot of candidates) {
       if (slot === preferred && !opts.only) {
         const ok =
+          !slot.retired &&
           !opts.exclude?.has(slot.url) &&
           !(opts.heightSensitive && slot.behindUntil > now) &&
           this.canTake(slot, now)
         if (ok) return slot
         continue
       }
-      if (opts.exclude?.has(slot.url)) continue
+      if (opts.exclude?.has(slot.url) || slot.retired) continue
       if (opts.heightSensitive && slot.behindUntil > now) continue
       if (!this.canTake(slot, now)) continue
       const headroom = this.headroomOf(slot, now)
@@ -336,13 +345,13 @@ export class NodePool {
     this.fill()
   }
 
-  /** The middle of the tips the nodes report, so one node claiming a huge height cannot make the honest ones look behind. */
+  /** The lower middle of the tips the nodes report, so one node claiming a huge height cannot make the honest ones look behind. */
   private medianTip(): number {
     const tips = [...this.slots.values()]
       .map((s) => s.tipHeight)
       .filter((h): h is number => h !== undefined)
       .sort((a, b) => a - b)
-    return tips.length === 0 ? 0 : tips[tips.length >> 1]!
+    return tips.length === 0 ? 0 : tips[(tips.length - 1) >> 1]!
   }
 
   /** The node's own view of the tip. A node more than 2 blocks behind the middle one is left out of tip-sensitive calls for a while. */

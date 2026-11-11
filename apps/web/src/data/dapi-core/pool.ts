@@ -124,6 +124,11 @@ function isAnswer(e: unknown): boolean {
   return isSourceError(e) && e.kind === 'http' && e.status !== undefined && isAnswerStatus(e.status)
 }
 
+/** A reply that was still arriving when the deadline fell: another node would be as slow. */
+function isSlowLink(e: unknown): boolean {
+  return isSourceError(e) && e.bytesFlowing === true
+}
+
 function sameSnapshot(a: BudgetSnapshot | undefined, b: BudgetSnapshot): boolean {
   return (
     a?.pressure === b.pressure &&
@@ -486,7 +491,7 @@ export class PoolDapiTransport implements DapiTransport {
             unlink()
             failures++
             lastError = e
-            if (isAnswer(e) || failureKind(e) === 'aborted' || signal?.aborted) {
+            if (isAnswer(e) || isSlowLink(e) || failureKind(e) === 'aborted' || signal?.aborted) {
               settle(() => reject(e))
             } else if (failures >= flights.length) {
               settle(() => reject(lastError))
@@ -516,6 +521,13 @@ export class PoolDapiTransport implements DapiTransport {
       ),
     )
     return pool.hasUsableNode(avoided) ? avoided : new Set<string>()
+  }
+
+  noteExternalRequests(net: NetworkId, requests: { host: string; at: number }[]): void {
+    const pool = this.nets.get(net)?.ready
+    if (!pool || requests.length === 0) return
+    for (const r of requests) pool.noteExternal(r.host, r.at)
+    this.publish(net)
   }
 
   reportInvalid(net: NetworkId, node: string, message: string): void {
@@ -572,7 +584,9 @@ export class PoolDapiTransport implements DapiTransport {
           opts.signal,
         )
       } catch (e) {
-        if (isAnswer(e) || failureKind(e) === 'aborted' || opts.signal?.aborted) throw e
+        if (isAnswer(e) || isSlowLink(e) || failureKind(e) === 'aborted' || opts.signal?.aborted) {
+          throw e
+        }
         lastError = e
       }
     }

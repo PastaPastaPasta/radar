@@ -1,8 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SourceError } from '@/data/errors'
 import { bodyOf, grpcFail, grpcOk, trailerFrame } from '@/test/grpc-fake'
 import {
+  FrameError,
   FrameReader,
+  clampResetS,
   frameMessage,
   openCall,
   parseTrailers,
@@ -180,5 +182,152 @@ describe('openCall streams', () => {
     const it = open.messages
     expect((await it.next()).value).toEqual(bytes(1))
     expect(await it.next().catch((x: unknown) => x)).toMatchObject({ kind: 'network' })
+  })
+})
+
+describe('gRPC-web limits', () => {
+  it('refuses a frame that declares more than its method may send, before buffering it', () => {
+    const reader = new FrameReader(1024)
+    expect(() => reader.push(Uint8Array.from([0, 0xff, 0xff, 0xff, 0xff, 1, 2, 3]))).toThrow(
+      FrameError,
+    )
+    expect(() => new FrameReader(1024).push(frameMessage(new Uint8Array(1025)))).toThrow(FrameError)
+    expect(new FrameReader(1024).push(frameMessage(new Uint8Array(1024)))).toHaveLength(1)
+  })
+
+  it('refuses a compressed frame: compression was not negotiated', () => {
+    expect(() => new FrameReader().push(Uint8Array.from([1, 0, 0, 0, 1, 7]))).toThrow(FrameError)
+  })
+
+  it('reads a large frame sent in many small chunks without losing a byte', () => {
+    const message = Uint8Array.from({ length: 50_000 }, (_, i) => i % 251)
+    const wire = frameMessage(message)
+    const reader = new FrameReader(100_000)
+    const frames = []
+    for (let at = 0; at < wire.length; at += 97)
+      frames.push(...reader.push(wire.subarray(at, at + 97)))
+    expect(frames).toHaveLength(1)
+    expect((frames[0] as { data: Uint8Array }).data).toEqual(message)
+    expect(reader.pending).toBe(false)
+  })
+
+  it('treats a reply cut off mid-frame as invalid, not as an unreachable node', async () => {
+    const wire = frameMessage(bytes(1, 2, 3, 4))
+    const e = await call(new Response(bodyOf(wire.subarray(0, 7)), { status: 200 })).catch(
+      (x: unknown) => x,
+    )
+    expect(e).toMatchObject({ kind: 'invalid-response' })
+  })
+
+  it('treats a unary reply with no status as invalid, not as an unreachable node', async () => {
+    const e = await call(new Response(bodyOf(frameMessage(bytes(1))), { status: 200 })).catch(
+      (x: unknown) => x,
+    )
+    expect(e).toMatchObject({ kind: 'invalid-response' })
+  })
+
+  it('ignores message frames after the trailers', async () => {
+    const res = new Response(
+      bodyOf(frameMessage(bytes(5)), trailerFrame({ 'grpc-status': '0' }), frameMessage(bytes(6))),
+      { status: 200 },
+    )
+    const { response } = await call(res)
+    expect(response).toEqual(bytes(5))
+  })
+
+  it('keeps a node’s reset countdown to something a client can act on', () => {
+    expect(clampResetS(-5)).toBe(1)
+    expect(clampResetS(0)).toBe(1)
+    expect(clampResetS(17.2)).toBe(18)
+    expect(clampResetS(1.7e9)).toBe(120)
+    expect(rateLimitOf(new Headers({ 'ratelimit-reset': '-3' })).resetS).toBe(1)
+  })
+
+  it('reads an epoch timestamp in ratelimit-reset as the time left to it', () => {
+    const at = Math.floor(Date.now() / 1000) + 30
+    const reset = rateLimitOf(new Headers({ 'ratelimit-reset': String(at) })).resetS
+    expect(reset).toBeGreaterThanOrEqual(29)
+    expect(reset).toBeLessThanOrEqual(31)
+  })
+})
+
+describe('gRPC-web timeouts', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  /** Sends one chunk every `everyMs`; with `hold`, stays open after the last one. Errors when the request is aborted. */
+  function trickling(
+    chunks: Uint8Array[],
+    everyMs: number,
+    signal: AbortSignal | null | undefined,
+    hold = false,
+  ): Response {
+    let i = 0
+    return new Response(
+      new ReadableStream<Uint8Array>({
+        start(controller) {
+          signal?.addEventListener('abort', () => controller.error(signal.reason), { once: true })
+        },
+        async pull(controller) {
+          await new Promise((r) => setTimeout(r, everyMs))
+          const next = chunks[i++]
+          if (next) controller.enqueue(next)
+          else if (!hold) controller.close()
+          else await new Promise(() => undefined)
+        },
+      }),
+      { status: 200 },
+    )
+  }
+
+  const timed = (
+    make: (signal: AbortSignal | null | undefined) => Response,
+    t: { idleTimeoutMs?: number; deadlineMs?: number },
+  ) =>
+    unaryCall({
+      baseUrl: 'https://1.2.3.4:443',
+      method: 'getBestBlockHeight',
+      request: bytes(),
+      fetch: (_url, init) => Promise.resolve(make(init?.signal)),
+      headersTimeoutMs: 8_000,
+      ...t,
+    })
+
+  it('does not time out a body that keeps arriving, however long it takes within the deadline', async () => {
+    const wire = new Uint8Array([
+      ...frameMessage(new Uint8Array(40)),
+      ...trailerFrame({ 'grpc-status': '0' }),
+    ])
+    const chunks = Array.from({ length: 6 }, (_, i) =>
+      wire.subarray(i * 10, i === 5 ? wire.length : i * 10 + 10),
+    )
+    const pending = timed((signal) => trickling(chunks, 5_000, signal), {
+      idleTimeoutMs: 8_000,
+      deadlineMs: 60_000,
+    })
+    await vi.advanceTimersByTimeAsync(40_000)
+    expect((await pending).response).toHaveLength(40)
+  })
+
+  it('times out a body that goes quiet, as the node’s fault', async () => {
+    const part = frameMessage(new Uint8Array(40)).subarray(0, 10)
+    const pending = timed((signal) => trickling([part], 5_000, signal, true), {
+      idleTimeoutMs: 8_000,
+    }).catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(30_000)
+    const e = (await pending) as SourceError
+    expect(e).toMatchObject({ kind: 'timeout' })
+    expect(e.bytesFlowing).toBeUndefined()
+  })
+
+  it('times out a body that is still arriving at the overall deadline, as the link’s fault', async () => {
+    const wire = frameMessage(new Uint8Array(400))
+    const chunks = Array.from({ length: 40 }, (_, i) => wire.subarray(i * 10, i * 10 + 10))
+    const pending = timed((signal) => trickling(chunks, 5_000, signal), {
+      idleTimeoutMs: 8_000,
+      deadlineMs: 30_000,
+    }).catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(35_000)
+    expect(await pending).toMatchObject({ kind: 'timeout', bytesFlowing: true })
   })
 })

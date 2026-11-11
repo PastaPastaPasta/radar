@@ -187,19 +187,20 @@ describe('benching', () => {
     expect(pool.nextChangeAt()).toBeDefined()
   })
 
-  it('leaves a node that is behind the best tip out of height-sensitive calls', () => {
-    const { pool, clock } = setup(2, 2)
+  it('leaves a node that is behind the middle tip out of height-sensitive calls', () => {
+    const { pool, clock } = setup(3, 3)
     const a = pool.pick()!
     const b = pool.pick({ exclude: new Set([a.url]) })!
+    const c = pool.pick({ exclude: new Set([a.url, b.url]) })!
     pool.noteTip(a, 1000)
+    pool.noteTip(c, 1000)
     pool.noteTip(b, 997)
-    expect(pool.pick({ heightSensitive: true })).toBe(a)
-    pool.begin(a)
+    expect(pool.pick({ heightSensitive: true, exclude: new Set([c.url]) })).toBe(a)
     for (let i = 0; i < MAX_IN_FLIGHT; i++) pool.begin(a)
-    expect(pool.pick({ heightSensitive: true })).toBeUndefined()
-    expect(pool.pick({ heightSensitive: false })).toBe(b)
+    expect(pool.pick({ heightSensitive: true, exclude: new Set([c.url]) })).toBeUndefined()
+    expect(pool.pick({ heightSensitive: false, exclude: new Set([c.url]) })).toBe(b)
     pool.noteTip(b, 999)
-    expect(pool.pick({ heightSensitive: true })).toBe(b)
+    expect(pool.pick({ heightSensitive: true, exclude: new Set([c.url]) })).toBe(b)
     clock.t += 1
   })
 })
@@ -230,5 +231,91 @@ describe('pressure', () => {
     expect(pool.snapshot().headroom).toBe(390)
     clock.t += 60_001
     expect(pool.snapshot().usedLastMinute).toBe(0)
+  })
+})
+
+describe('NodePool trust and spreading', () => {
+  it('judges "behind" against the median tip, so one inflated claim cannot bench the honest nodes', () => {
+    const { pool } = setup(4, 4)
+    const slots = [0, 1, 2, 3].map(() => pool.pick({ exclude: new Set() })!)
+    const all = new Set<string>()
+    const picked = []
+    for (let i = 0; i < 4; i++) {
+      const s = pool.pick({ exclude: all })!
+      all.add(s.url)
+      picked.push(s)
+    }
+    void slots
+    pool.noteTip(picked[0]!, 1_000_000)
+    for (const s of picked.slice(1)) pool.noteTip(s, 1000)
+    for (const s of picked.slice(1)) expect(s.behindUntil).toBe(0)
+  })
+
+  it('wakes a waiter when a node stops being behind', () => {
+    const { pool, clock } = setup(1, 1)
+    const a = pool.pick()!
+    const other = { ...a }
+    void other
+    pool.noteTip(a, 1000)
+    a.behindUntil = clock.t + 30_000
+    expect(pool.pick({ heightSensitive: true })).toBeUndefined()
+    expect(pool.nextChangeAt()).toBe(clock.t + 30_000)
+  })
+
+  it('stops choosing seeds once the live list is adopted, and keeps their requests in flight', () => {
+    const { pool } = setup(10, 4)
+    const seed = pool.pick()!
+    pool.begin(seed)
+    const live: NodeInfo[] = Array.from({ length: 30 }, (_, i) => ({
+      url: `https://192.168.1.${i}:443`,
+      host: `192.168.1.${i}:443`,
+    }))
+    pool.adopt(live)
+    const fresh = new Set<string>()
+    for (let i = 0; i < 6; i++) {
+      const s = pool.pick({ exclude: fresh })
+      if (!s) break
+      fresh.add(s.url)
+      expect(s.url.startsWith('https://192.168.1.')).toBe(true)
+    }
+    expect(fresh.size).toBeGreaterThan(0)
+    expect(pool.hasUsableNode(new Set(live.map((n) => n.url)))).toBe(false)
+  })
+
+  it('counts a pinned node’s requests but never makes it part of the active set', () => {
+    const { pool } = setup(10, 4)
+    const pinned = pool.pinnedSlot({ url: 'https://9.9.9.9:443', host: '9.9.9.9:443' })
+    for (let i = 0; i < PER_NODE_LIMIT; i++) {
+      pool.begin(pinned)
+      pool.end(pinned)
+    }
+    expect(pool.pick({ only: pinned })).toBeUndefined()
+    expect(pool.snapshot().capacity).toBe(4 * PER_NODE_LIMIT)
+    expect(pool.snapshot().usedLastMinute).toBe(PER_NODE_LIMIT)
+    const seen = new Set<string>()
+    for (let i = 0; i < 4; i++) {
+      const s = pool.pick({ exclude: seen })!
+      seen.add(s.url)
+      expect(s.url).not.toBe(pinned.url)
+    }
+  })
+
+  it('prefers the node that reported a height when it has room', () => {
+    const { pool } = setup(10, 4)
+    const a = pool.pick()!
+    const b = pool.pick({ exclude: new Set([a.url]) })!
+    expect(pool.pick({ prefer: b.url })).toBe(b)
+    for (let i = 0; i < PER_NODE_LIMIT; i++) pool.begin(b)
+    expect(pool.pick({ prefer: b.url })).not.toBe(b)
+  })
+
+  it('clamps the reset a node reports', () => {
+    const { pool, clock } = setup()
+    const slot = pool.pick()!
+    pool.benchRateLimited(slot, { resetS: 1.7e9 })
+    expect(slot.benchedUntil).toBe(clock.t + 120_000)
+    const other = pool.pick({ exclude: new Set([slot.url]) })!
+    pool.noteRate(other, { remaining: 0, resetS: -4 })
+    expect(other.fullUntil).toBe(clock.t + 1_000)
   })
 })

@@ -71,6 +71,11 @@ export interface DapiTransport {
     request: Uint8Array,
     opts?: DapiCallOptions,
   ): DapiStreamHandle
+  /**
+   * Requests other clients on this page (the Platform SDK) sent to nodes, so they count against the same per-node
+   * budget as Core calls. A node outside the pool is ignored.
+   */
+  noteExternalRequests?(net: NetworkId, requests: { host: string; at: number }[]): void
   /** A node ("ip:port") sent an answer that does not hold up. The pool rests it and counts it against DAPI's health. */
   reportInvalid?(net: NetworkId, node: string, message: string): void
 }

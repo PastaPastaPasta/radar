@@ -1,6 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SourceError } from '@/data/errors'
-import { bestHeightReply, fakeFetch, grpcFail, grpcOk, hang, type FakeCall } from '@/test/grpc-fake'
+import {
+  bestHeightReply,
+  fakeFetch,
+  grpcFail,
+  grpcOk,
+  hang,
+  trailerFrame,
+  type FakeCall,
+} from '@/test/grpc-fake'
+import { frameMessage } from '@/data/dapi-core/grpc-web'
 import {
   ATTEMPT_TIMEOUT_MS,
   HEDGE_AFTER_MS,
@@ -14,6 +23,7 @@ const request = new Uint8Array([1])
 
 function setup(opts: {
   nodes?: number
+  online?: () => boolean
   handler: (call: FakeCall, init?: RequestInit) => Response | Promise<Response>
 }) {
   const addresses = hosts(opts.nodes ?? 12)
@@ -25,6 +35,7 @@ function setup(opts: {
     random: () => 0.5,
     devnets: () => [{ name: 't', dapiAddresses: addresses }],
     health,
+    online: opts.online ?? (() => true),
   })
   return { transport, health, ...fetcher }
 }
@@ -272,6 +283,173 @@ describe('PoolDapiTransport unary', () => {
   })
 })
 
+describe('PoolDapiTransport failures that are not the node’s', () => {
+  const refuse = () => Promise.reject(new TypeError('Failed to fetch'))
+
+  it('does not rest any node while the browser says it is offline', async () => {
+    const { transport } = setup({ online: () => false, handler: refuse })
+    await caught(transport.unary(NET, 'getBestBlockHeight', request))
+    expect(transport.budget.snapshot(NET).benched).toBe(0)
+  })
+
+  it('can answer again after a spell offline, once the short rests are over', async () => {
+    let up = false
+    const { transport } = setup({ nodes: 3, handler: () => (up ? ok() : refuse()) })
+    await caught(transport.unary(NET, 'getBestBlockHeight', request))
+    up = true
+    const pending = transport.unary(NET, 'getBestBlockHeight', request)
+    await settle(61_000)
+    expect((await pending).response.length).toBeGreaterThan(0)
+  })
+
+  /** A reply whose message never completes: 8 more bytes every 2 s. */
+  function slowBody(signal: AbortSignal | null | undefined): Response {
+    let timer: ReturnType<typeof setInterval>
+    return new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new Uint8Array([0, 0, 3, 13, 64]))
+          timer = setInterval(() => {
+            try {
+              controller.enqueue(new Uint8Array(8))
+            } catch {
+              clearInterval(timer)
+            }
+          }, 2_000)
+          signal?.addEventListener('abort', () => {
+            clearInterval(timer)
+            controller.error(signal.reason)
+          })
+        },
+        cancel() {
+          clearInterval(timer)
+        },
+      }),
+      { status: 200, headers: { 'content-type': 'application/grpc-web+proto' } },
+    )
+  }
+
+  it('does not rest a node, or call DAPI down, when its reply was still arriving at the deadline', async () => {
+    const { transport, health } = setup({ nodes: 3, handler: (_c, init) => slowBody(init?.signal) })
+    const pending = caught(transport.unary(NET, 'getBlock', request))
+    await settle(60_000)
+    expect(await pending).toMatchObject({ kind: 'timeout' })
+    expect(transport.budget.snapshot(NET).benched).toBe(0)
+    expect(health.report.mock.calls.some((c) => (c[2] as { ok: boolean }).ok === false)).toBe(false)
+  })
+
+  it('does not hedge once the first node has started answering', async () => {
+    let first: string | undefined
+    const { transport, calls } = setup({
+      handler: (c) => {
+        first ??= c.host
+        if (c.host !== first) return ok()
+        return new Response(
+          new ReadableStream({
+            start(controller) {
+              setTimeout(() => {
+                controller.enqueue(frameMessage(bestHeightReply(100)))
+                controller.enqueue(trailerFrame({ 'grpc-status': '0' }))
+                controller.close()
+              }, 4_000)
+            },
+          }),
+          { status: 200, headers: { 'content-type': 'application/grpc-web+proto' } },
+        )
+      },
+    })
+    const pending = transport.unary(NET, 'getBestBlockHeight', request)
+    await settle(5_000)
+    await pending
+    expect(calls).toHaveLength(1)
+  })
+})
+
+describe('PoolDapiTransport health', () => {
+  it('reports each failure with the node it came from and how many nodes there are', async () => {
+    const { transport, health } = setup({ nodes: 5, handler: () => grpcFail(14, 'unavailable') })
+    await caught(transport.unary(NET, 'getBestBlockHeight', request))
+    const failures = health.report.mock.calls.filter((c) => (c[2] as { ok: boolean }).ok === false)
+    expect(failures).toHaveLength(3)
+    for (const f of failures)
+      expect(f[2]).toMatchObject({ nodes: 5, node: expect.any(String) as string })
+    expect(new Set(failures.map((f) => (f[2] as { node: string }).node)).size).toBe(3)
+  })
+
+  it('rests a node that sent an answer that failed its checks, and counts it against DAPI', async () => {
+    const { transport, health } = setup({ handler: ok })
+    const reply = await transport.unary(NET, 'getBestBlockHeight', request)
+    transport.reportInvalid(NET, reply.node!, 'wrong block')
+    expect(transport.budget.snapshot(NET).benched).toBe(1)
+    expect(health.report).toHaveBeenLastCalledWith(
+      NET,
+      'dapi',
+      expect.objectContaining({ ok: false, kind: 'invalid-response', node: reply.node }),
+    )
+  })
+
+  it('keeps a pinned node’s failures out of the source’s health, and within its own budget', async () => {
+    const { transport, health, calls } = setup({ handler: () => grpcFail(14, 'unavailable') })
+    await caught(
+      transport.unary(NET, 'getMasternodeStatus', request, { nodeUrl: 'https://9.9.9.9:443' }),
+    )
+    expect(calls.map((c) => c.host)).toEqual(['9.9.9.9:443'])
+    expect(
+      health.report.mock.calls.filter((c) => (c[2] as { ok: boolean }).ok === false),
+    ).toHaveLength(0)
+    expect(transport.budget.snapshot(NET).usedLastMinute).toBe(1)
+  })
+
+  it('asks the node it was told to prefer, then falls back when it is spent', async () => {
+    const { transport, calls } = setup({ nodes: 6, handler: ok })
+    const first = await transport.unary(NET, 'getBestBlockHeight', request)
+    const again = await transport.unary(NET, 'getBestBlockHeight', request, { prefer: first.node })
+    expect(again.node).toBe(first.node)
+    expect(calls).toHaveLength(2)
+  })
+
+  it('avoids nodes it was told to avoid', async () => {
+    const { transport } = setup({ nodes: 3, handler: ok })
+    const first = await transport.unary(NET, 'getBestBlockHeight', request)
+    for (let i = 0; i < 5; i++) {
+      const next = await transport.unary(NET, 'getBestBlockHeight', request, {
+        avoidNodes: [first.node!],
+      })
+      expect(next.node).not.toBe(first.node)
+    }
+  })
+})
+
+describe('PoolDapiTransport requests sent by the SDK', () => {
+  it('counts them against the node’s minute budget', async () => {
+    const { transport } = setup({ nodes: 3, handler: ok })
+    const first = await transport.unary(NET, 'getBestBlockHeight', request)
+    expect(transport.budget.snapshot(NET).usedLastMinute).toBe(1)
+    const now = Date.now()
+    transport.noteExternalRequests?.(NET, [
+      { host: first.node!, at: now - 1_000 },
+      { host: first.node!, at: now - 500 },
+      { host: '203.0.113.9:443', at: now },
+    ])
+    expect(transport.budget.snapshot(NET).usedLastMinute).toBe(3)
+  })
+
+  it('lets them age out of the window like any other request', async () => {
+    const { transport } = setup({ nodes: 3, handler: ok })
+    const first = await transport.unary(NET, 'getBestBlockHeight', request)
+    transport.noteExternalRequests?.(NET, [{ host: first.node!, at: Date.now() }])
+    await settle(61_000)
+    expect(transport.budget.snapshot(NET).usedLastMinute).toBe(0)
+  })
+
+  it('ignores a network it has not opened', () => {
+    const { transport } = setup({ handler: ok })
+    expect(() =>
+      transport.noteExternalRequests?.(NET, [{ host: '10.1.0.1:443', at: Date.now() }]),
+    ).not.toThrow()
+  })
+})
+
 describe('PoolDapiTransport streams', () => {
   const messages = [new Uint8Array([1]), new Uint8Array([2])]
 
@@ -319,6 +497,18 @@ describe('PoolDapiTransport streams', () => {
     for await (const m of handle.messages) got.push(m[0]!)
     expect(got).toEqual([1, 2])
     expect(calls).toHaveLength(2)
+  })
+
+  it('counts a stream the node closes cleanly at once as that node’s fault, but only for a follow', async () => {
+    const { transport } = setup({ handler: () => grpcOk(messages) })
+    const bounded = transport.stream(NET, 'subscribeToBlockHeadersWithChainLocks', request)
+    for await (const m of bounded.messages) void m
+    expect(transport.budget.snapshot(NET).benched).toBe(0)
+    const follow = transport.stream(NET, 'subscribeToBlockHeadersWithChainLocks', request, {
+      follow: true,
+    })
+    for await (const m of follow.messages) void m
+    expect(transport.budget.snapshot(NET).benched).toBe(1)
   })
 
   it('stops on abort without reporting a failure', async () => {
