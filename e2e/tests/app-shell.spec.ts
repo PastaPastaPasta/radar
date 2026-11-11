@@ -1,9 +1,11 @@
 import { expectAccessible } from '../helpers/a11y'
+import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
 const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
 const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
 const ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
+const PROPOSAL = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
 const PROTX = '5'.repeat(64)
 const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 
@@ -11,7 +13,7 @@ const ROUTES: [path: string, heading: string][] = [
   ['/', 'Radar'],
   ['/search', 'Search'],
   ['/blocks', 'Blocks'],
-  ['/blocks?date=2026-10-01', 'Blocks'],
+  ['/blocks?date=2026-11-03', 'Blocks'],
   [`/block/${BLOCK_HASH}`, 'Block'],
   ['/block/2569992', 'Block'],
   [`/tx/${TXID}`, 'Transaction'],
@@ -20,7 +22,7 @@ const ROUTES: [path: string, heading: string][] = [
   ['/rich-list', 'Rich list'],
   ['/charts', 'Charts'],
   ['/governance', 'Governance'],
-  [`/governance/${TXID}`, 'Proposal'],
+  [`/governance/${PROPOSAL}`, 'Proposal'],
   ['/status', 'Status'],
   ['/nodes', 'Nodes'],
   ['/masternodes', 'Masternodes'],
@@ -73,35 +75,49 @@ const ROUTES: [path: string, heading: string][] = [
   ['/about', 'About'],
 ]
 
+/** The pages that are built: they show their own content, never the placeholder. */
+const BUILT = new Set([
+  '/',
+  '/search',
+  '/blocks',
+  '/blocks?date=2026-11-03',
+  `/block/${BLOCK_HASH}`,
+  '/block/2569992',
+  `/tx/${TXID}`,
+  `/address/${ADDRESS}`,
+  '/mempool',
+  '/rich-list',
+  '/charts',
+  '/governance',
+  `/governance/${PROPOSAL}`,
+  '/status',
+  '/settings',
+  '/tools/verify-message',
+  '/tools/qr',
+])
+
 test.describe('routes', () => {
   for (const [path, heading] of ROUTES) {
-    test(`${path} says what will be here and where the data comes from @X-08 @X-09`, async ({
+    const built = BUILT.has(path)
+    test(`${path} ${built ? 'shows its page, with no error' : 'says what will be here and where the data comes from'} and fits the width @X-08 @X-09`, async ({
       page,
     }) => {
       await page.goto(path)
 
       await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible()
       await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
-      if (path === '/search' || path === '/status' || path === '/settings') return
-      if (path === '/') {
-        await expect(page.getByRole('link', { name: /Search blocks/ })).toBeVisible()
-        return
+      await settled(page)
+
+      if (built) {
+        await expect(page.getByText('This page is on its way')).toHaveCount(0)
+        await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
+      } else {
+        await expect(page.getByText('This page is on its way')).toBeVisible()
+        await expect(page.getByText('Read from')).toBeVisible()
       }
-      await expect(page.getByText('This page is on its way')).toBeVisible()
-      await expect(page.getByText('Read from')).toBeVisible()
+      expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
     })
   }
-
-  test('no route needs horizontal page scroll @X-08', async ({ page }) => {
-    for (const [path] of ROUTES.slice(0, 30)) {
-      await page.goto(path)
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      )
-      expect(overflow, path).toBeLessThanOrEqual(0)
-    }
-  })
 
   test('a route has no serious accessibility violations @X-08', async ({ page }) => {
     await page.goto('/masternodes')
@@ -309,6 +325,8 @@ test.describe('phone navigation', () => {
   }) => {
     await page.goto('/blocks')
     await expect(page.getByRole('heading', { level: 1, name: 'Blocks' })).toBeVisible()
+    await expect(page.getByRole('table', { name: /Core blocks/ })).toBeVisible()
+    await settled(page)
 
     const tabs = await page.evaluate(() => {
       const probe = document.createElement('div')
@@ -351,10 +369,8 @@ test.describe('phone navigation', () => {
     ]) {
       await page.goto(path)
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      )
-      expect(overflow, path).toBeLessThanOrEqual(0)
+      await settled(page)
+      expect(await horizontalOverflow(page), path).toBeLessThanOrEqual(0)
     }
   })
 })

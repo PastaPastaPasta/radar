@@ -3,6 +3,10 @@ import { expect as baseExpect, test } from '../helpers/test'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
+interface RadarFixtureWindow {
+  __radarFixtures: { breakLiveConnection(): void; restoreLiveConnection(): void }
+}
+
 test.describe('Home', () => {
   test('shows the Core and Platform heights, the census and the node map state @IN-01 @HY-01', async ({
     page,
@@ -62,6 +66,29 @@ test.describe('Home', () => {
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-live-notice]')).toHaveCount(0)
     await expect(page.locator('[data-pulse="core"] [data-source="dapi"]')).toBeVisible()
+  })
+
+  test('says live updates stopped when the connection is cut, and clears once it is back @IN-15', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
+    await expect(page.locator('[data-live-notice]')).toHaveCount(0)
+
+    await page.evaluate(() =>
+      (window as unknown as RadarFixtureWindow).__radarFixtures.breakLiveConnection(),
+    )
+    const notice = page.locator('[data-live-notice]')
+    await expect(notice).toContainText('Live updates have stopped.')
+
+    await notice.getByRole('button', { name: 'Try again' }).click()
+    await expect(notice).toContainText('Live updates have stopped.')
+
+    await page.evaluate(() =>
+      (window as unknown as RadarFixtureWindow).__radarFixtures.restoreLiveConnection(),
+    )
+    await expect(notice).toHaveCount(0)
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {

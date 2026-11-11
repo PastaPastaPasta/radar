@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/mainnet/blocks?limit=1" },
+  "recordedAt": "2026-11-11T03:49:52.119Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570302,
+    "totalCount": 2570303,
+    "value": [
+      {
+        "blockHeight": 2570302,
+        "blockHash": "000000000000001d18c1e07d7cfb520aab838ca8667dafc5a07e593035e90603",
+        "prevBlockHash": "0000000000000018a866d9979ff7a86ea342c73716d05e79847e8c2a6b3aa11b",
+        "blockTime": "2026-11-11T03:47:25Z",
+        "bits": "1920515f",
+        "nonce": 2851172634,
+        "blockVersion": 536870912,
+        "blockSize": 434,
+        "txCount": 1,
+        "tags": { "orphan": false },
+        "live": {
+          "tags": { "chainlock": true },
+          "coreHeight": 2570302,
+          "seenAt": "2026-11-11T03:49:50Z"
+        }
+      }
+    ],
+    "nextCursor": "7b2261734f66486569676874223a323537303330322c22686569676874223a323537303330327d"
+  }
+}

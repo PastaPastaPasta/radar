@@ -10,6 +10,8 @@ const MAINNET_PLATFORM = 'dash1krma5z3ttj75la4m93xcndna9ullamq9y5e9n5rs'
 const TESTNET_PLATFORM = 'tdash1krma5z3ttj75la4m93xcndna9ullamq9y5fzq2j7'
 const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
 const TESTNET_BLOCK_HASH = '00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c'
+/** A 64-hex string that is no block or transaction on either network; its lookups are recorded as not found. */
+const UNKNOWN_HASH = '5ca1ab1e'.repeat(8)
 const PKH = '62e907b15cbf27d5425399ebf6f0fb50ebb88f18'
 const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 
@@ -151,7 +153,7 @@ test.describe('search page', () => {
   }
 
   test('says nothing was found and offers the other network @X-01 @NX-05', async ({ page }) => {
-    await page.goto(`/search?q=${BLOCK_HASH}`)
+    await page.goto(`/search?q=${UNKNOWN_HASH}`)
 
     await expect(page.getByText('Nothing found for', { exact: false })).toBeVisible()
     await page.getByRole('link', { name: 'Search Testnet' }).click()

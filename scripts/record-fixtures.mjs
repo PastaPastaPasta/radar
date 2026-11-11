@@ -19,6 +19,8 @@ Options:
   --entities <file>    JSON file naming the entities to record. Anything not named is
                        discovered from the live list endpoints.
   --extra <path>       also record this app path, e.g. pe:/blocks?limit=5 (repeatable)
+  --only-extra         record only the --extra paths, skip any that already have a file, and leave the rest of the
+                       tree and the entities file alone (the way to add one missing recording)
   --stream-seconds <n> seconds of Hyphen /stream to capture (default 8)
 
 Entity file keys (all optional): protx, evoProtx, bannedProtx, address, blockHash, txid, identity,
@@ -36,6 +38,7 @@ function parseArgs(argv) {
     else if (a === '--source') out.source = argv[++i].split(',')
     else if (a === '--entities') out.entities = argv[++i]
     else if (a === '--extra') out.extra.push(argv[++i])
+    else if (a === '--only-extra') out.onlyExtra = true
     else if (a === '--stream-seconds') out.streamSeconds = Number(argv[++i])
     else {
       console.error(`Unknown argument ${a}\n\n${USAGE}`)
@@ -160,7 +163,14 @@ const TRIMS = {
   hyphen: [],
 }
 
-async function record(source, path, { keep = [], optional = false } = {}) {
+async function record(source, path, { keep = [], optional = false, skipExisting = false } = {}) {
+  if (skipExisting) {
+    const { dir, slug } = fixtureLocation(source, path)
+    if (existsSync(join(dir, `${slug}.json`))) {
+      console.log(`  skip ${source} ${path}: already recorded`)
+      return null
+    }
+  }
   const url = upstreamUrl(source, path)
   const started = Date.now()
   let res
@@ -503,16 +513,22 @@ async function recordExtras() {
   for (const spec of args.extra) {
     const m = /^(radar|pe|hyphen):(\/.*)$/.exec(spec)
     if (!m) throw new Error(`--extra expects <source>:<path>, got ${spec}`)
-    await record(m[1], m[2], { optional: true })
+    await record(m[1], m[2], { optional: true, skipExisting: args.onlyExtra })
   }
 }
 
 const runs = { radar: recordRadar, pe: recordPe, hyphen: recordHyphen }
-for (const source of args.source) {
+for (const source of args.onlyExtra ? [] : args.source) {
   if (!runs[source]) throw new Error(`unknown source ${source}`)
   await runs[source]()
 }
 await recordExtras()
+
+if (args.onlyExtra) {
+  const failedExtras = results.filter((r) => !r.ok)
+  console.log(`\n${results.length - failedExtras.length}/${results.length} recorded`)
+  process.exit(failedExtras.length ? 1 : 0)
+}
 
 const entitiesFile = join(FIXTURES, 'entities', `${net}.json`)
 let previous = {}
