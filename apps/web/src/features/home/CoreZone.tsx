@@ -7,11 +7,12 @@ import { stampOf } from '@/data/envelope'
 import { useSourceHealth } from '@/data/health'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
-import { Entity, PageLink, networkName, useNetwork } from '@/features/entity'
+import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Amount, Card, DataTable, Empty, SectionBand, Stat, Stats, Time } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
+import { useHyphenLagSentence } from '../core/hy-shared/HyphenGate'
 
 const PENDING = 8
 
@@ -102,14 +103,13 @@ function Headline() {
 
 function StaleNote() {
   const { t } = useLingui()
-  const net = useNetwork()
-  const health = useSourceHealth('hyphen')
   const { stale } = useHyphenBlocked()
-  if (!stale || !health.lag) return null
-  const name = networkName(net)
+  const lagged = useHyphenLagSentence()
+  if (!stale || lagged === undefined) return null
   return (
     <p className="rx-note" role="note" data-hyphen-lag>
-      {t`Supply, blockchain size and pending transactions come only from Hyphen, whose ${name} index is behind the chain: ${health.lag.detail}. The height, difficulty, ChainLock and latest blocks here come from DAPI.`}
+      {lagged}{' '}
+      {t`Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI.`}
     </p>
   )
 }
