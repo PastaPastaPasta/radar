@@ -1,6 +1,6 @@
 export { classify } from './classify'
 export type { Classified, InputClass, Tip } from './classify'
-export { CommandPalette } from './CommandPalette'
+export { CommandPalette } from './CommandPalette.lazy'
 export { CommandPaletteProvider, useCommandPalette, isEditableTarget } from './palette-context'
 export type { PaletteApi } from './palette-context'
 export { SearchPage } from './SearchPage'
