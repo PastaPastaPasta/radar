@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FIXTURES_DIR } from './lib/stories.mjs'
 import { getJson } from './lib/http.mjs'
@@ -16,6 +17,23 @@ const NETWORKS = {
     pe: 'https://api.testnet.pe.dashhq.org',
     radar: 'https://radar.dashhq.org/api/v1/testnet',
   },
+}
+
+const VECTORS = fileURLToPath(
+  new URL('../apps/web/src/features/tools/verify-message/dashcore-vectors.json', import.meta.url),
+)
+
+/** A signature made by Dash Core, so IN-08 can check "valid" and, with the altered message, "invalid". */
+export function signedMessageEntity(network) {
+  const vector = JSON.parse(readFileSync(VECTORS, 'utf8')).find((v) => v.mainnet && v.testnet)
+  const address = vector[network]
+  return {
+    id: address,
+    address,
+    message: vector.msg,
+    signature: vector.signature,
+    altered_message: `${vector.msg}!`,
+  }
 }
 
 const MAX_TX_PAGES = 60
@@ -299,6 +317,7 @@ export async function pickFixtures(network) {
   const registeredHeight = await pickMasternodes(src, entities, log)
   await fillCoreDerived(src, entities, found, registeredHeight, log)
   await pickPlatform(src, entities, log)
+  entities.signed_message = signedMessageEntity(network)
   const expected = [
     'tip',
     'block_recent',
