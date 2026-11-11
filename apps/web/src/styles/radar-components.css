@@ -2,6 +2,10 @@
 html {
   scroll-padding-top: calc(var(--dh-bar-h) + 16px);
 }
+/* Preflight's `* { padding: 0 }` outranks the footer's own :host padding, which is what clears the phone tab bar. */
+dashhq-footer {
+  padding-bottom: var(--dh-tabs-h, 0px);
+}
 body {
   margin: 0;
   background: var(--dh-page);
