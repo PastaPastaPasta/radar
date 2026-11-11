@@ -13,7 +13,10 @@ export function BlockHoverCard({ id }: { id: string }) {
   const net = useNetwork()
   const allowed = mayReadDapi(net)
   const ref = /^\d+$/.test(id) ? { height: Number(id) } : { hash: id }
-  const query = useQuery({ ...coreQueries.block(net, ref), enabled: allowed })
+  const query = useQuery({
+    ...coreQueries.block(net, ref, { priority: 'prefetch' }),
+    enabled: allowed,
+  })
   const href = entityHref('block', id, net)
   const common = {
     layer: 'core',

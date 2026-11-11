@@ -1,4 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
+import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { coreQueries } from '@/data/core/queries'
@@ -9,7 +10,17 @@ import { networkName, PageLink, useNetwork, keepPreviousOnNetwork } from '@/feat
 import { useCommandPalette } from '@/features/search'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Icon, LiveControl, LiveDot, Skeleton, SourceLine, Time, usePausedFeed } from '@/ui'
+import {
+  Icon,
+  LiveControl,
+  LiveDot,
+  Skeleton,
+  SourceLine,
+  Time,
+  useLiveView,
+  usePausedFeed,
+} from '@/ui'
+import { HomeMap } from './HomeMap'
 import { LiveNotice } from './LiveNotice'
 import { usePlatformTip } from './platform-tip'
 import { useFrozen } from './use-frozen'
@@ -24,11 +35,14 @@ function yesterday(): string {
 
 function Kicker() {
   const { t } = useLingui()
+  const live = useLiveView()
   const net = useNetwork()
   return (
     <p className="rx-scope__kicker" style={{ flexWrap: 'wrap', whiteSpace: 'normal' }}>
-      <LiveDot state="ok" bare />
-      <b>{t`Live`}</b>
+      <LiveDot state="live" bare />
+      <b data-live-word data-connection={live.state}>
+        {live.word}
+      </b>
       <span>
         {net === 'mainnet' ? (
           <span data-net>{networkName(net)}</span>
@@ -62,35 +76,6 @@ function Omni() {
       <span>{t`Search blocks, txs, masternodes, names`}</span>
       <kbd aria-hidden="true">/</kbd>
     </PageLink>
-  )
-}
-
-function MapPlaceholder() {
-  const { t } = useLingui()
-  return (
-    <div className="rx-scope__map" data-map="pending">
-      <svg
-        className="rx-map"
-        viewBox="0 0 1000 520"
-        role="img"
-        aria-label={t`The node map is not loaded yet`}
-      >
-        <defs>
-          <pattern id="rx-dots" width="22" height="22" patternUnits="userSpaceOnUse">
-            <circle cx="11" cy="11" r="1.6" style={{ fill: 'var(--rx-plate-dot)' }} />
-          </pattern>
-        </defs>
-        <rect width="1000" height="520" fill="url(#rx-dots)" />
-      </svg>
-      <div
-        className="rx-callout"
-        data-layer="network"
-        style={{ left: '50%', top: '46%', transform: 'translate(-50%,-50%)' }}
-      >
-        <b>{t`Node map`}</b>
-        <span>{t`Arrives with the network pages. The census figures below are live.`}</span>
-      </div>
-    </div>
   )
 }
 
@@ -213,7 +198,7 @@ function CensusPulse() {
           <>
             <span>{t`${formatInt(crawl.mn_reachable)} of ${formatInt(crawl.mn_total)}`}</span>
             <span>
-              {t`crawled`} <Time ms={crawl.finished * 1000} mode="relative" live />
+              {t`crawled`} <Time ms={crawl.finished} mode="relative" live />
             </span>
           </>
         ) : isDevnet(net) ? (
@@ -222,6 +207,19 @@ function CensusPulse() {
       </span>
     </Link>
   )
+}
+
+/** A lane that scrolls (on a phone) opens on its newest block, which is last. */
+function useOpenOnNewest(ready: boolean) {
+  const ref = useRef<HTMLDivElement>(null)
+  const done = useRef(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!ready || done.current || !el) return
+    done.current = true
+    el.scrollLeft = el.scrollWidth
+  }, [ready])
+  return ref
 }
 
 function Lanes() {
@@ -243,6 +241,8 @@ function Lanes() {
   const platRows = useFrozen(platform.data, paused)
   const core = (coreRows?.data ?? []).slice(0, LANE_CORE).reverse()
   const plat = (platRows?.data.items ?? []).slice(0, LANE_PLATFORM).reverse()
+  const coreLane = useOpenOnNewest(core.length > 0)
+  const platLane = useOpenOnNewest(plat.length > 0)
   const newCount =
     paused && rows.data && coreRows
       ? Math.max(0, (rows.data.data[0]?.height ?? 0) - (coreRows.data[0]?.height ?? 0))
@@ -268,6 +268,7 @@ function Lanes() {
         <div
           className="rx-lane"
           id="lane-core"
+          ref={coreLane}
           role="group"
           aria-label={t`Latest Core blocks, oldest first`}
         >
@@ -296,6 +297,7 @@ function Lanes() {
         <div
           className="rx-lane"
           id="lane-plat"
+          ref={platLane}
           role="group"
           aria-label={t`Latest Platform blocks, oldest first`}
         >
@@ -371,7 +373,7 @@ export function Scope() {
               </PageLink>
             </div>
           </div>
-          <MapPlaceholder />
+          <HomeMap />
         </div>
         <div className="rx-pulse">
           <CorePulse />

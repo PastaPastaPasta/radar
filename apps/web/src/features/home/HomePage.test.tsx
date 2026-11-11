@@ -1,8 +1,9 @@
 import { act, configure, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { healthRegistry } from '@/data/health'
+import { resetLiveConnection, setLiveConnection } from '@/ui'
 import { renderAt } from './test-utils'
 
 configure({ asyncUtilTimeout: 5000 })
@@ -23,6 +24,8 @@ function coreRow(height: string): Promise<HTMLElement> {
 }
 
 describe('Home page', () => {
+  afterEach(() => resetLiveConnection())
+
   it('shows the Core tip with its ChainLock and a source line @IN-01', async () => {
     renderAt('/')
     const row = await coreRow('2,570,085')
@@ -60,9 +63,64 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="radar"]')).not.toBeNull()
   })
 
-  it('says the node map is not loaded yet instead of drawing an empty one @IN-01', async () => {
+  it('draws the masternode map from the crawl, with the busiest place called out @IN-01', async () => {
     renderAt('/')
-    expect(await screen.findByLabelText('The node map is not loaded yet')).toBeInTheDocument()
+    const map = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-map="nodes"]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(map.querySelectorAll('circle.mn').length).toBeGreaterThan(10)
+    expect(map.querySelector('.rx-callout')).toHaveTextContent(/masternodes/)
+    expect(map.querySelector('[data-source="radar"]')).not.toBeNull()
+    expect(screen.queryByText(/not loaded yet|Arrives with/)).toBeNull()
+  })
+
+  it('dates the crawl in the present, not centuries ahead @IN-01', async () => {
+    renderAt('/')
+    const row = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-pulse="census"]')
+      expect(el).not.toBeNull()
+      expect(el!.querySelector('.rx-pulse__meta time')).not.toBeNull()
+      return el!
+    })
+    const crawled = row.querySelector<HTMLTimeElement>('.rx-pulse__meta time')!
+    const years = Math.abs(Date.now() - Date.parse(crawled.dateTime)) / (365 * 86_400_000)
+    expect(years).toBeLessThan(5)
+    expect(crawled.title).not.toMatch(/\d{5}/)
+  })
+
+  it('keeps the current Core height and its ChainLock in the header @IN-15', async () => {
+    renderAt('/')
+    const tip = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-header-tip]')
+      expect(el).toHaveTextContent('2,570,085')
+      return el!
+    })
+    await waitFor(() => expect(tip).toHaveTextContent('ChainLocked'))
+    expect(tip).toHaveAttribute('data-connection', 'live')
+  })
+
+  it('qualifies every Live when the connection drops, and recovers @IN-15', async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
+    const kicker = () => document.querySelector<HTMLElement>('[data-live-word]')!
+    const lanes = () => document.querySelector<HTMLElement>('.rx-lanes .rx-live')!
+    const tip = () => document.querySelector<HTMLElement>('[data-header-tip]')!
+    expect(kicker()).toHaveTextContent('Live')
+    act(() => setLiveConnection({ state: 'reconnecting', lastEventAt: Date.now() }))
+    expect(kicker()).toHaveTextContent('Reconnecting…')
+    expect(lanes()).toHaveTextContent('Reconnecting…')
+    expect(tip()).toHaveTextContent('Reconnecting…')
+    act(() => setLiveConnection({ state: 'stopped', lastEventAt: Date.UTC(2026, 10, 11, 9, 41) }))
+    expect(kicker()).toHaveTextContent(/Stopped since \d\d:\d\d/)
+    expect(lanes()).toHaveTextContent(/Stopped since/)
+    expect(tip()).toHaveTextContent(/Stopped since/)
+    expect(tip()).toHaveAttribute('data-up', 'false')
+    act(() => setLiveConnection({ state: 'live' }))
+    expect(kicker()).toHaveTextContent('Live')
+    expect(lanes()).not.toHaveTextContent(/Stopped|Reconnecting/)
+    expect(tip().querySelector('.rx-hdrtip__state')).toBeNull()
   })
 
   it('says live updates stopped when the Core connection is down, and offers a retry @IN-15', async () => {

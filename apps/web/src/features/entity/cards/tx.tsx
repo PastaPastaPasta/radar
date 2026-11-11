@@ -13,7 +13,7 @@ export function TxHoverCard({ id }: { id: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const allowed = mayReadDapi(net)
-  const query = useQuery({ ...coreQueries.tx(net, id), enabled: allowed })
+  const query = useQuery({ ...coreQueries.tx(net, id, { priority: 'prefetch' }), enabled: allowed })
   const common = {
     layer: 'core',
     glyph: <LayerGlyph layer="core" icon="tx" />,

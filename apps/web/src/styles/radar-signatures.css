@@ -116,7 +116,7 @@
 .rx-pulse__row {
   position: relative;
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-columns: 40px max-content minmax(0, 1fr);
   grid-template-rows: auto auto;
   align-items: center;
   gap: 4px 14px;
@@ -216,6 +216,12 @@
   stroke: var(--rx-plate);
   stroke-width: 0.9;
 }
+.rx-map .mn--all {
+  fill: none;
+  stroke: #a6d8f7;
+  stroke-opacity: 0.55;
+  stroke-width: 1.2;
+}
 .rx-map .evo {
   fill: #25b8a6;
 }
@@ -284,6 +290,7 @@
   position: absolute;
   left: 4%;
   bottom: 2px;
+  max-width: 62%;
   z-index: 3;
   display: flex;
   flex-wrap: wrap;
@@ -303,6 +310,11 @@
   height: 9px;
   border-radius: 50%;
   background: #a6d8f7;
+}
+.rx-maplegend .d.d--all {
+  background: none;
+  border: 1.4px solid #a6d8f7;
+  box-sizing: border-box;
 }
 .rx-maplegend .d.evo {
   background: #25b8a6;
@@ -1006,5 +1018,111 @@
     vertical-align: 4px !important;
     margin-left: 4px !important;
     white-space: nowrap;
+  }
+}
+
+/* home scope on tablet and phone: after the base rules above, which would otherwise win at equal specificity */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .rx-pulse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rx-scope__grid {
+    grid-template-columns: 340px minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .rx-scope__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding-top: 18px;
+  }
+  .rx-pulse {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .rx-scope h1 {
+    font-size: 28px;
+  }
+  .rx-scope__map {
+    margin: 0 -16px;
+    order: -1;
+  }
+  .rx-scope__left {
+    order: 0;
+  }
+  .rx-maplegend {
+    position: static;
+    justify-content: flex-start;
+    max-width: none;
+    padding: 6px 16px 0;
+  }
+  .rx-maplegend__key {
+    display: none;
+  }
+  .rx-callout {
+    display: none;
+  }
+  .rx-pulse__row {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    padding: 10px 12px;
+  }
+  .rx-pulse__row .rx-tile {
+    --s: 34px;
+  }
+  .rx-pulse__value {
+    font-size: 22px;
+  }
+  .rx-pulse .rx-meter {
+    width: 84px;
+  }
+  .rx-lanes__body {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+  }
+  .rx-lane {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    padding-bottom: 6px;
+  }
+  .rx-lane .rx-blk {
+    flex: 0 0 104px;
+  }
+  .rx-ties {
+    display: none;
+  }
+  .rx-lane__label {
+    margin-top: 4px;
+  }
+}
+
+/* on a phone the header's search is an icon: the label stays for screen readers, and the tab bar has Search too */
+@media (max-width: 640px) {
+  .rx-hdr-search {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--dh-r2);
+    color: var(--dh-ink);
+  }
+  .rx-hdr-search > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .rx-hdr-search > kbd {
+    display: none;
+  }
+  .rx-hdr-search::before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='M16 16l4.5 4.5'/%3E%3C/svg%3E")
+      center / contain no-repeat;
   }
 }
