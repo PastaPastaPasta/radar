@@ -44,7 +44,7 @@ export function StatusPage() {
       </header>
 
       <p>
-        <Link to="/charts" search={{ tab: 'internals' }} className="rx-go">
+        <Link to="/charts" search={{ tab: 'internals' }} className="rx-go whitespace-normal">
           {t`Network internals: peers, mempool pressure, versions and history`}
         </Link>
       </p>
