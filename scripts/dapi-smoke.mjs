@@ -1,5 +1,5 @@
 // Live check of the production DAPI transport. Read-only, about a dozen requests: tip, ChainLock, a block, its
-// coinbase, a header range, then the header stream for a few seconds (the best ChainLock arrives at once).
+// coinbase (each answer is verified against its request; a lone ChainLock claim is labelled, not trusted), a header range, then the header stream for a few seconds (the best ChainLock arrives at once).
 // Usage: node scripts/dapi-smoke.mjs mainnet|testnet
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -87,11 +87,19 @@ await step('chainLock', async () => {
 })
 await step('block', async () => {
   const r = await core.block(net, { height: tip.height - 20 })
-  return `${r.data.txs.length} txs, chainLocked ${r.data.chainLocked}, immutable ${r.immutable === true}`
+  // Every answer is checked against its request (txid, block hash, merkle root, proof of work) before it comes back.
+  const lock =
+    r.chainLockClaim === 'one-node'
+      ? 'ChainLock claimed by one node'
+      : r.data.chainLocked
+        ? 'ChainLocked (two nodes)'
+        : 'not ChainLocked'
+  return `${r.data.txs.length} txs, ${lock}, proved ${r.proved === true}, cached as immutable ${r.immutable === true}`
 })
 await step('coinbase tx', async () => {
   const b = await core.block(net, { height: tip.height - 20 })
   const r = await core.tx(net, b.data.txs[0].txid)
+  if (r.data.txid !== b.data.txs[0].txid) throw new Error('tx answer has another txid')
   return `type ${r.data.type}, ${r.data.confirmations} confirmations`
 })
 await step('headers', async () => {
