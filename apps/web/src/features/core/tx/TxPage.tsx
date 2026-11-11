@@ -218,6 +218,21 @@ function TxView({
       ? (Number(fee) / tx.size).toFixed(1).replace(/\.0$/, '')
       : undefined
 
+  let feeNote: string | undefined
+  if (fee !== undefined) {
+    if (feeRate) {
+      feeNote = spendsNothing
+        ? t`${feeRate} duffs a byte: it spends no coins`
+        : t`${feeRate} duffs a byte`
+    }
+  } else if (coinbase) {
+    feeNote = t`Coinbase transactions pay none`
+  } else if ((prevouts.isPending || prevouts.isPlaceholderData) && needsPrevouts) {
+    feeNote = t`Loading inputs…`
+  } else {
+    feeNote = t`Load all inputs to work it out`
+  }
+
   return (
     <article data-page="/tx/$txid" data-layer="core">
       <CoreBand
@@ -296,19 +311,7 @@ function TxView({
           <Stat
             label={t`Fee`}
             value={fee === undefined ? '—' : <Amount value={fee} kind="duffs" />}
-            note={
-              fee !== undefined
-                ? feeRate
-                  ? spendsNothing
-                    ? t`${feeRate} duffs a byte: it spends no coins`
-                    : t`${feeRate} duffs a byte`
-                  : undefined
-                : coinbase
-                  ? t`Coinbase transactions pay none`
-                  : (prevouts.isPending || prevouts.isPlaceholderData) && needsPrevouts
-                    ? t`Loading inputs…`
-                    : t`Load all inputs to work it out`
-            }
+            note={feeNote}
             source={feeStamp}
           />
           <Stat

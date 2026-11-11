@@ -168,7 +168,10 @@ function ChartGrid({ range }: { range: Range }) {
               source={series.data ? stampOf(series.data) : undefined}
               id={`chart-${id}`}
             >
-              <div style={{ '--rx-l': `var(${metric.hue})` } as CSSProperties} data-chart-hue={metric.hue}>
+              <div
+                style={{ '--rx-l': `var(${metric.hue})` } as CSSProperties}
+                data-chart-hue={metric.hue}
+              >
                 <Chart
                   option={buildOption(metric, data, titles[id], units)}
                   height={240}

@@ -171,7 +171,7 @@ describe('Transaction page', () => {
 
   describe('transactions that spend nothing @HY-07', () => {
     const flowOf = () => document.querySelector<HTMLElement>('#flow')!
-    const feeCard = () => screen.getByText('Fee').closest('.rx-stat') as HTMLElement
+    const feeCard = () => screen.getByText('Fee').closest('.rx-stat')!
 
     it.each([
       ['a quorum commitment', `/tx/${MAINNET.qctx}`, 'qcTx'],

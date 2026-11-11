@@ -36,6 +36,7 @@ function RichListContent() {
 
   const phone = useMediaQuery('(max-width: 640px)')
   const table = infiniteTableProps(list)
+  const firstPageSource = firstPageStamp(list)
   const first = list.data?.pages[0]?.data
   const bands = useMemo(() => concentration(top.data?.data.items ?? []), [top.data])
 
@@ -163,7 +164,7 @@ function RichListContent() {
         }
         layer="core"
         padding="flush"
-        source={firstPageStamp(list)}
+        source={firstPageSource}
       >
         {phone ? (
           <RichListCompact
@@ -174,7 +175,7 @@ function RichListContent() {
             hasNext={table.paging.hasNext}
             fetching={table.paging.fetching}
             fetchNext={table.paging.fetchNext}
-            source={firstPageStamp(list)}
+            source={firstPageSource}
             summaryId={SUMMARY_ID}
           />
         ) : (

@@ -57,12 +57,11 @@ export async function* mergeEvents(
   let wake: (() => void) | undefined
   let finished = false
   let failure: { error: unknown } | undefined
-  const notify = () => wake?.()
   const drain = async (source: AsyncIterable<HyStreamEvent>, primary: boolean) => {
     try {
       for await (const event of source) {
         queue.push(event)
-        notify()
+        wake?.()
       }
     } catch (error) {
       if (primary) failure = { error }
@@ -70,7 +69,7 @@ export async function* mergeEvents(
       if (primary) {
         finished = true
         controller.abort()
-        notify()
+        wake?.()
       }
     }
   }

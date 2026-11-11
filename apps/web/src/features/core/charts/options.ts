@@ -126,7 +126,7 @@ export const METRICS: Record<MetricId, Metric> = {
   },
   utxos: {
     id: 'utxos',
-    hue: '--rx-teal-1',
+    hue: '--rx-id-7',
     shape: 'line',
     value: (r) => r.utxosSpendable,
     format: (v) => formatInt(Math.round(v)),
