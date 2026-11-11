@@ -1,5 +1,12 @@
 import { t } from '@lingui/core/macro'
-import { clampSkew, formatDate, formatInt, formatIsoUtc, formatRelative } from '@/lib/format'
+import {
+  clampSkew,
+  formatDate,
+  formatInt,
+  formatIsoUtc,
+  formatRelative,
+  UNIT_GAP,
+} from '@/lib/format'
 import { formatAmountParts, formatFiat, type AmountKind, type DisplayUnit } from '@/lib/units'
 import { cx } from './cx'
 import { useNow } from './hooks'
@@ -42,7 +49,12 @@ export function Amount({
       {a.frac}
       {a.dim ? <span className="rx-d2">{a.dim}</span> : null}
       {a.suffix}
-      {a.unit ? <span className="rx-u">{a.unit}</span> : null}
+      {a.unit ? (
+        <span className="rx-u">
+          {UNIT_GAP}
+          {a.unit}
+        </span>
+      ) : null}
     </>
   )
   return (

@@ -8,7 +8,7 @@ import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
-import { formatBytes, formatInt, UNIT_GAP } from '@/lib/format'
+import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { useFollowTip } from '../follow-tip'
 import {
@@ -317,7 +317,7 @@ function TxView({
           <Stat
             label={t`Size`}
             value={formatInt(tx.size)}
-            unit={`${UNIT_GAP}${t`bytes`}`}
+            unit={t`bytes`}
             note={formatBytes(tx.size)}
           />
           <Stat

@@ -136,7 +136,6 @@ test.describe('Transaction page', () => {
   })
 
   test('puts a no-break space between every amount and its unit @IN-05', async ({ page }) => {
-    test.fixme(true, 'Amount draws its unit in a margin; it needs the gap in ui/amount.tsx')
     await page.goto(`/tx/${TRANSFER}`)
     await expect(page.locator('#io')).toBeVisible()
     const run = await page.locator('main').evaluate((main) => {

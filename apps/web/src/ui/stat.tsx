@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { Children, cloneElement, isValidElement, useId, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
-import { formatNumber, MINUS } from '@/lib/format'
+import { formatNumber, MINUS, UNIT_GAP } from '@/lib/format'
 import { cx, cssVars, layerAttr } from './cx'
 import { useChanged } from './hooks'
 import { SourceLine, Skeleton } from './states'
@@ -246,7 +246,12 @@ export function Stat({
         <>
           <span className="rx-stat__value">
             <Rolled>{value}</Rolled>
-            {unit ? <small>{unit}</small> : null}
+            {unit ? (
+              <small>
+                {UNIT_GAP}
+                {unit}
+              </small>
+            ) : null}
           </span>
           {note || delta ? (
             <span className="rx-stat__note">

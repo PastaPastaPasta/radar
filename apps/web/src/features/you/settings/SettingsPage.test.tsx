@@ -71,7 +71,7 @@ describe('Settings', () => {
       'aria-pressed',
       'true',
     )
-    expect(await screen.findByText(/Example/)).toHaveTextContent(/≈ \$[\d,.]+\(1\.2346DASH\)/)
+    expect(await screen.findByText(/Example/)).toHaveTextContent(/≈ \$[\d,.]+\(1\.2346 DASH\)/)
     const note = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('#units [data-rate-note]')
       expect(el).not.toBeNull()

@@ -141,15 +141,15 @@ describe('Amount', () => {
       </>,
     )
     const [prose, table] = Array.from(container.querySelectorAll('.rx-amt'))
-    expect(prose).toHaveTextContent('50.0061DASH')
-    expect(table).toHaveTextContent('50.00000000DASH')
+    expect(prose).toHaveTextContent('50.0061 DASH')
+    expect(table).toHaveTextContent('50.00000000 DASH')
     expect(table?.querySelector('.rx-d2')).toHaveTextContent('0000')
   })
 
   it('formats credits and shows the raw count as a tooltip', () => {
     render(<Amount value={1_013_331_591_984n} kind="credits" />)
     const el = document.querySelector('.rx-amt')
-    expect(el).toHaveTextContent('10.1333DASH')
+    expect(el).toHaveTextContent('10.1333 DASH')
     expect(el).toHaveAttribute('title', '1,013,331,591,984 credits')
   })
 
@@ -172,7 +172,7 @@ describe('Amount', () => {
       </UnitsProvider>,
     )
     expect(container.querySelector('.rx-fiat')).toBeNull()
-    expect(container.querySelector('.rx-amt')).toHaveTextContent('+1tDASH')
+    expect(container.querySelector('.rx-amt')).toHaveTextContent('+1 tDASH')
   })
 
   it('leads with USD and follows with the DASH figure when USD is the primary unit @IN-12', () => {
@@ -184,11 +184,11 @@ describe('Amount', () => {
       </UnitsProvider>,
     )
     const [a, b, c] = Array.from(container.querySelectorAll('.rx-amt'))
-    expect(a).toHaveTextContent('≈ $2,310(50.0061DASH)')
+    expect(a).toHaveTextContent('≈ $2,310(50.0061 DASH)')
     expect(a).toHaveAttribute('data-usd')
-    expect(a?.querySelector('.rx-fiat')).toHaveTextContent('(50.0061DASH)')
-    expect(b).toHaveTextContent('≈ −$46.2(−1DASH)')
-    expect(c).toHaveTextContent('≈ +$46.2(+1DASH)')
+    expect(a?.querySelector('.rx-fiat')).toHaveTextContent('(50.0061 DASH)')
+    expect(b).toHaveTextContent('≈ −$46.2(−1 DASH)')
+    expect(c).toHaveTextContent('≈ +$46.2(+1 DASH)')
     expect(a).toHaveAttribute('data-amount', '5000607499')
 
     rerender(
@@ -196,7 +196,7 @@ describe('Amount', () => {
         <Amount value={100_000_000n} kind="duffs" />
       </UnitsProvider>,
     )
-    expect(container.querySelector('.rx-amt')).toHaveTextContent('1tDASH')
+    expect(container.querySelector('.rx-amt')).toHaveTextContent('1 tDASH')
     expect(container.querySelector('.rx-amt')).not.toHaveTextContent('$')
 
     rerender(
@@ -204,7 +204,7 @@ describe('Amount', () => {
         <Amount value={100_000_000n} kind="duffs" />
       </UnitsProvider>,
     )
-    expect(container.querySelector('.rx-amt')).toHaveTextContent('1DASH')
+    expect(container.querySelector('.rx-amt')).toHaveTextContent('1 DASH')
   })
 
   it('follows the unit preference unless a unit is given', () => {
@@ -215,8 +215,8 @@ describe('Amount', () => {
       </UnitsProvider>,
     )
     const [a, b] = Array.from(document.querySelectorAll('.rx-amt'))
-    expect(a).toHaveTextContent('746mDASH')
-    expect(b).toHaveTextContent('0.7460DASH')
+    expect(a).toHaveTextContent('746 mDASH')
+    expect(b).toHaveTextContent('0.7460 DASH')
   })
 })
 
