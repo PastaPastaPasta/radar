@@ -9,6 +9,8 @@ import { SITE_MAP } from './features/entity'
 
 configure({ asyncUtilTimeout: 5000 })
 
+vi.mock('./ui/chart-view', () => ({ default: () => null }))
+
 vi.mock('./data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
   const { fixtureCore } = await import('./test/core-client')
