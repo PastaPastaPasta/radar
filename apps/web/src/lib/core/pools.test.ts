@@ -16,6 +16,11 @@ describe('poolOfCoinbase', () => {
     expect(poolOfCoinbase('6a')).toBeUndefined()
     expect(poolOfCoinbase(undefined)).toBeUndefined()
   })
+  it('drops bidi and other format characters from the tag', () => {
+    const tag = coinbaseTagOf(hex('/Pool\u202e evil\u2066\u200b\u2069 tag/'))
+    expect(tag).not.toMatch(/[\u202a-\u202e\u2066-\u2069\u200b]/u)
+    expect(tag).toBe('/Pool evil tag/')
+  })
   it('collapses control bytes in the tag', () => {
     expect(coinbaseTagOf(`0001${hex('/nodeStratum/')}`)).toBe('/nodeStratum/')
   })

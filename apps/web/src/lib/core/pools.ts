@@ -1,4 +1,7 @@
-/** Mining pools by the tag they put in the coinbase script. First match wins. */
+/**
+ * Mining pools by the tag they put in the coinbase script. First match wins. The tag is whatever the miner
+ * wrote, so a match says what the tag claims, never who mined the block.
+ */
 const POOL_TAGS: readonly (readonly [RegExp, string])[] = [
   [/f2pool|🐟|七彩神仙鱼/i, 'F2Pool'],
   [/poolin/i, 'Poolin'],
@@ -26,13 +29,13 @@ export function coinbaseTagOf(scriptHex: string | undefined): string {
     new TextDecoder()
       .decode(bytes)
       // eslint-disable-next-line no-control-regex
-      .replace(/[\u0000-\u001f\u007f\ufffd]+/g, ' ')
+      .replace(/[\u0000-\u001f\u007f\ufffd\p{Cc}\p{Cf}\p{Zl}\p{Zp}]+/gu, ' ')
       .replace(/\s+/g, ' ')
       .trim()
   )
 }
 
-/** The pool named in a coinbase scriptSig (hex), or undefined when it carries no known tag. */
+/** The pool a coinbase scriptSig (hex) says it is from, or undefined when it carries no known tag. */
 export function poolOfCoinbase(scriptHex: string | undefined): string | undefined {
   const tag = coinbaseTagOf(scriptHex)
   return tag ? POOL_TAGS.find(([re]) => re.test(tag))?.[1] : undefined
