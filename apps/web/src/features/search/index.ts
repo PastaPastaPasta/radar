@@ -16,7 +16,6 @@ export {
   PageLink,
   SITE_MAP,
   SECTION_ENTRY,
-  SECTION_LABELS,
   pageTitle,
   recordLabel,
   sectionLabel,

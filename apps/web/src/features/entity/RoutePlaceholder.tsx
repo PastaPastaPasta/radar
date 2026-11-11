@@ -8,7 +8,7 @@ import { isDevnet } from '@/lib/network'
 import { useDocumentTitle } from './document-title'
 import { networkName, useNetwork } from './network'
 import { PageLink } from './PageLink'
-import { findPage, SECTION_LABELS, SOURCE_LABELS } from './site-map'
+import { findPage, pageSummary, pageTitle, sectionLabel, sourceLabel } from './site-map'
 
 const DEVNET_SOURCES = new Set<SourceId>(['sdk', 'dapi', 'local'])
 
@@ -51,13 +51,13 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
   const { t, i18n } = useLingui()
   const net = useNetwork()
   const page = findPage(path)
-  const title = heading ?? (page ? i18n._(page.title) : 'Radar')
+  const title = heading ?? (page ? pageTitle(page) : 'Radar')
   useDocumentTitle(title)
   if (!page) return null
 
   const listSources = (sources: SourceId[]) =>
     new Intl.ListFormat(i18n.locale, { style: 'long', type: 'conjunction' }).format(
-      sources.map((s) => i18n._(SOURCE_LABELS[s])),
+      sources.map(sourceLabel),
     )
 
   const unsupported = isDevnet(net) ? page.sources.find((s) => !DEVNET_SOURCES.has(s)) : undefined
@@ -68,7 +68,7 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
     <article data-page={page.path} data-layer={page.layer} className="grid gap-6">
       <header className="grid gap-2">
         <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {i18n._(SECTION_LABELS[page.section])}
+          {sectionLabel(page.section)}
           {net === 'mainnet' ? null : ` · ${networkName(net)}`}
         </p>
         <h1 className="text-3xl font-semibold">{title}</h1>
@@ -103,7 +103,7 @@ export function RoutePlaceholder({ path, params, heading, children }: RoutePlace
         <Empty
           kind="none-yet"
           title={t`This page is on its way`}
-          body={i18n._(page.summary)}
+          body={pageSummary(page)}
           action={children}
         />
       )}

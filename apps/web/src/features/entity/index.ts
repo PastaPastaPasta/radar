@@ -1,6 +1,6 @@
 export { Entity } from './Entity'
 export type { EntityProps } from './Entity'
-export { entityHref, entityLabel, entityPath, ENTITY_LABELS } from './hrefs'
+export { entityHref, entityLabel, entityPath } from './hrefs'
 export { networkName, useNetwork, withNetwork } from './network'
 export { PageLink } from './PageLink'
 export type { PageLinkProps } from './PageLink'
@@ -11,13 +11,9 @@ export { registerEntityHoverCards } from './register'
 export {
   SITE_MAP,
   SECTION_ENTRY,
-  SECTION_LABELS,
-  SOURCE_LABELS,
-  pageSummary,
   pageTitle,
   recordLabel,
   sectionLabel,
-  sourceLabel,
   findPage,
   pagesInSection,
   sectionOfPath,
