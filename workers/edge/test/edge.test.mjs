@@ -85,6 +85,7 @@ describe('security headers', () => {
     assert.match(csp, /connect-src 'self' https:(;|$)/)
     assert.match(csp, /frame-ancestors 'none'/)
     assert.match(csp, /object-src 'none'/)
+    assert.match(csp, /worker-src 'self'(;|$)/)
     assert.doesNotMatch(csp, /script-src[^;]*(https:|unsafe-inline|unsafe-eval(?!\b)|\*)/)
     assert.equal(res.headers.get('x-content-type-options'), 'nosniff')
     assert.match(res.headers.get('strict-transport-security'), /max-age=\d+/)

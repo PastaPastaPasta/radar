@@ -6,7 +6,7 @@ const CSP = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https:",
-  "worker-src 'self' blob:",
+  "worker-src 'self'",
   "manifest-src 'self'",
   "media-src 'self'",
   "object-src 'none'",
