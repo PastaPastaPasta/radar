@@ -53,6 +53,16 @@ describe('command palette', () => {
     await waitFor(() => expect(history.location.pathname).toBe(`/address/${MAINNET_ADDRESS}`))
   })
 
+  it('still opens the address on Enter once Hyphen has added its own, richer hit', async () => {
+    const { user, history, dialog, input } = await openPalette()
+
+    await user.type(input, MAINNET_ADDRESS)
+    await within(dialog).findByRole('option', { name: /Core address · / })
+    await user.keyboard('{Enter}')
+
+    await waitFor(() => expect(history.location.pathname).toBe(`/address/${MAINNET_ADDRESS}`))
+  })
+
   it('offers the other network for an address from it', async () => {
     const { user, history, input } = await openPalette()
 

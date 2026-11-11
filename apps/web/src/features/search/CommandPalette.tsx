@@ -16,7 +16,7 @@ import type { SearchHit } from './types'
 const SEARCH_ALL = '__search-all'
 
 function decide(hits: SearchHit[]): SearchHit | undefined {
-  const exact = hits.filter((h) => h.rank === 100)
+  const exact = hits.filter((h) => h.rank >= 100)
   return exact.length === 1 ? exact[0] : undefined
 }
 
