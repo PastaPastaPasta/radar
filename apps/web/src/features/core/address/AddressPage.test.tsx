@@ -11,14 +11,27 @@ const events: { push(e: HyStreamEvent): void; stop(): void } = {
 
 const arrivals = new Map<string, HyTxDetail>()
 
+type PagedCall = (q: { limit?: number; cursor?: string }) => Promise<unknown>
+let addressTxsOverride: PagedCall | undefined
+
 vi.mock('@/data/hyphen/client', async (original) => {
   const actual = await original<{
-    hyphen: { tx(net: string, txid: string, signal?: AbortSignal): Promise<unknown> }
+    hyphen: {
+      tx(net: string, txid: string, signal?: AbortSignal): Promise<unknown>
+      addressTxs(net: string, a: string, q: object, signal?: AbortSignal): Promise<unknown>
+    }
   }>()
   return {
     ...actual,
     hyphen: {
       ...actual.hyphen,
+      addressTxs: (
+        net: string,
+        a: string,
+        q: { limit?: number; cursor?: string },
+        signal?: AbortSignal,
+      ) =>
+        addressTxsOverride ? addressTxsOverride(q) : actual.hyphen.addressTxs(net, a, q, signal),
       tx: (net: string, txid: string, signal?: AbortSignal) => {
         const arrived = arrivals.get(txid)
         if (!arrived) return actual.hyphen.tx(net, txid, signal)
@@ -66,6 +79,7 @@ const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const TESTNET_ADDRESS = 'yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa'
 
 afterEach(() => {
+  addressTxsOverride = undefined
   events.stop()
   vi.restoreAllMocks()
 })
@@ -128,6 +142,74 @@ describe('Address page', () => {
     await user.click(screen.getByRole('button', { name: 'Show more' }))
     await waitFor(() => expect(within(table).getAllByRole('row').length).toBeGreaterThan(before))
     expect(within(table).getAllByText('Sent').length).toBeGreaterThan(0)
+  })
+
+  const historyPage = (index: number, pages: number, limit: number) => {
+    const items = Array.from({ length: limit }, (_, i) => {
+      const n = index * limit + i
+      return {
+        txHash: n.toString(16).padStart(64, '0'),
+        blockHeight: 2_000_000 - n,
+        blockPos: 1,
+        blockTime: 1_700_000_000_000 - n * 150_000,
+        txType: 'normal',
+        valueOut: 1_000n,
+        netValue: 1_000n,
+        direction: 'in' as const,
+      }
+    })
+    return Promise.resolve({
+      source: 'hyphen' as const,
+      asOf: Date.now(),
+      fetchedAt: Date.now(),
+      proved: false,
+      height: 2_000_100,
+      data: {
+        items,
+        total: pages * limit,
+        nextCursor: index + 1 < pages ? `cursor-${index + 1}` : undefined,
+        asOfHeight: 2_000_100,
+      },
+    })
+  }
+
+  it('keeps paging through an address with more than 75 transactions @IN-06', async () => {
+    const user = userEvent.setup()
+    const asked: (string | undefined)[] = []
+    addressTxsOverride = (q) => {
+      asked.push(q.cursor)
+      return historyPage(q.cursor ? Number(q.cursor.slice(7)) : 0, 4, q.limit ?? 25)
+    }
+    renderAt(`/address/${ADDRESS}`)
+    const table = await screen.findByRole('table', { name: /Transactions of this address/ })
+    for (const loaded of [25, 50, 75]) {
+      await waitFor(() => expect(screen.getByText(`${loaded} loaded`)).toBeInTheDocument())
+      await user.click(screen.getByRole('button', { name: 'Show more' }))
+    }
+    await waitFor(() => expect(screen.getByText('100 loaded')).toBeInTheDocument())
+    expect(within(table).getAllByRole('row')).toHaveLength(101)
+    expect(screen.queryByRole('button', { name: 'Show more' })).toBeNull()
+    expect(asked).toEqual([undefined, 'cursor-1', 'cursor-2', 'cursor-3'])
+  })
+
+  it('says so and offers another try when the next transactions cannot be loaded @IN-06', async () => {
+    const user = userEvent.setup()
+    let fail = true
+    addressTxsOverride = (q) => {
+      if (q.cursor && fail) return Promise.reject(new Error('bad query'))
+      return historyPage(q.cursor ? 1 : 0, 2, 25)
+    }
+    renderAt(`/address/${ADDRESS}`)
+    await screen.findByRole('table', { name: /Transactions of this address/ })
+    await waitFor(() => expect(screen.getByText('25 loaded')).toBeInTheDocument())
+    await user.click(screen.getByRole('button', { name: 'Show more' }))
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent('The next transactions could not be loaded')
+    expect(screen.getByText('25 loaded')).toBeInTheDocument()
+    fail = false
+    await user.click(within(alert).getByRole('button', { name: 'Try again' }))
+    await waitFor(() => expect(screen.getByText('50 loaded')).toBeInTheDocument())
+    expect(screen.queryByRole('alert')).toBeNull()
   })
 
   it('draws a QR code of the address @IN-06', async () => {
