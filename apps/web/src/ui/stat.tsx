@@ -1,9 +1,10 @@
-import { useId, type ReactNode } from 'react'
+import { Children, cloneElement, isValidElement, useId, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { formatNumber, MINUS } from '@/lib/format'
 import { cx, cssVars, layerAttr } from './cx'
 import { useChanged } from './hooks'
 import { SourceLine, Skeleton } from './states'
+import { sourceKey, useCoveredSource } from './source-scope'
 import type { Layer, Tone } from './types'
 
 export interface MeterProps {
@@ -228,12 +229,13 @@ export function Stat({
   tone = 'neutral',
 }: StatProps) {
   const labelId = useId()
+  const covered = useCoveredSource(source)
   const Tag = href ? 'a' : 'div'
   const body = (
     <>
       <span className="rx-stat__label" id={labelId}>
         {label}
-        {source ? (
+        {source && !covered ? (
           <SourceLine stamp={href ? { ...source, proof: undefined } : source} compact />
         ) : null}
       </span>
@@ -282,5 +284,26 @@ export function Stat({
     >
       {body}
     </Tag>
+  )
+}
+
+/**
+ * A row of stats. When several share a source, only the first carries its badge: the rest are read as part of the same
+ * group, so a card of four figures from two sources shows two badges, not four.
+ */
+export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
+  const seen = new Set<string>()
+  const stats = Children.map(children, (child) => {
+    if (!isValidElement<StatProps>(child) || child.type !== Stat || !child.props.source)
+      return child
+    const key = sourceKey(child.props.source)
+    if (seen.has(key)) return cloneElement(child, { source: undefined })
+    seen.add(key)
+    return child
+  })
+  return (
+    <div className="rx-stats" {...rest}>
+      {stats}
+    </div>
   )
 }

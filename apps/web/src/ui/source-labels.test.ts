@@ -75,3 +75,15 @@ describe('sourceView stale age', () => {
     ).toBe('stale')
   })
 })
+
+describe('sourceView fallbacks', () => {
+  it('gives an SDK that has failed its own label, distinct from the cold one @IN-09', () => {
+    const pe = { source: 'pe' as const, asOf: NOW, fetchedAt: NOW, proved: false }
+    const down = sourceView({ ...pe, fallback: 'sdk-down' }, health, NOW)
+    const cold = sourceView({ ...pe, fallback: 'sdk-cold' }, health, NOW)
+    expect(down.label).toBe('Indexed by Platform Explorer · proofs unavailable')
+    expect(down.label).not.toBe(cold.label)
+    expect(down.spinner).toBe(false)
+    expect(down.age).toBeDefined()
+  })
+})

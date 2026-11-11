@@ -64,6 +64,13 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
   if (stamp.fallback === 'sdk-cold') {
     return { label: t`Indexed by Platform Explorer · checking…`, icon: 'index', showAge: false }
   }
+  if (stamp.fallback === 'sdk-down') {
+    return {
+      label: t`Indexed by Platform Explorer · proofs unavailable`,
+      icon: 'index',
+      showAge: true,
+    }
+  }
   switch (stamp.source) {
     case 'sdk':
       return stamp.proved

@@ -71,6 +71,17 @@ describe('Status page', () => {
     expect(document.querySelector('[data-status="sync"]')).toHaveTextContent('Synced')
   })
 
+  it("names the Core summary's source once, not once per figure @IN-09", async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    await waitFor(() =>
+      expect(document.querySelector('[data-status="tip"]')).toHaveTextContent('2,570,010'),
+    )
+    const card = document.querySelector<HTMLElement>('#core')!
+    await waitFor(() => expect(card.querySelectorAll('[data-source]').length).toBeGreaterThan(0))
+    expect(card.querySelectorAll('[data-source="dapi"]')).toHaveLength(1)
+  })
+
   it('links to the network internals on the charts page @HY-12', async () => {
     setCoreClient(core())
     renderAt('/status')

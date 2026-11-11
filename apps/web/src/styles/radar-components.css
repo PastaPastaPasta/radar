@@ -681,22 +681,23 @@ a.rx-stat:focus-visible {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  min-height: 20px;
-  padding: 1px 6px 1px 5px;
-  border: 1px dotted var(--dh-line-2);
+  gap: 4px;
+  min-height: 18px;
+  padding: 0 4px 0 3px;
+  border: 1px solid transparent;
   border-radius: var(--dh-r1);
   white-space: nowrap;
   vertical-align: 1px;
   text-decoration: none;
-  font: var(--dh-w-ui) var(--dh-fs-xs)/1.2 var(--dh-font);
+  font: var(--dh-w-body) 11px/1.2 var(--dh-font);
   color: var(--dh-ink-2);
   background: transparent;
 }
 .rx-src .rx-ico {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   stroke-width: 2;
+  opacity: 0.75;
 }
 .rx-src time {
   color: var(--dh-ink-2);
@@ -1982,65 +1983,6 @@ button.rx-src--proof:hover {
   .rx-band {
     padding-block: 18px 22px;
   }
-  .rx-scope__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    padding-top: 18px;
-  }
-  .rx-pulse {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-  .rx-scope h1 {
-    font-size: 28px;
-  }
-  .rx-scope__map {
-    margin: 0 -16px;
-    order: -1;
-  }
-  .rx-scope__left {
-    order: 0;
-  }
-  .rx-maplegend {
-    position: static;
-    justify-content: flex-start;
-    padding: 6px 16px 0;
-  }
-  .rx-callout {
-    display: none;
-  }
-  .rx-pulse__row {
-    grid-template-columns: 34px minmax(0, 1fr) auto;
-    padding: 10px 12px;
-  }
-  .rx-pulse__row .rx-tile {
-    --s: 34px;
-  }
-  .rx-pulse__value {
-    font-size: 22px;
-  }
-  .rx-pulse .rx-meter {
-    width: 84px;
-  }
-  .rx-lanes__body {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 6px;
-  }
-  .rx-lane {
-    overflow: hidden;
-  }
-  .rx-lane .rx-blk {
-    flex: 0 0 104px;
-  }
-  .rx-lane .rx-blk:nth-child(-n + 9) {
-    display: none;
-  }
-  .rx-ties {
-    display: none;
-  }
-  .rx-lane__label {
-    margin-top: 4px;
-  }
   .rx-tools {
     padding: 12px 14px;
   }
@@ -2131,14 +2073,6 @@ button.rx-src--proof:hover {
   color: var(--dh-good);
   vertical-align: -2px;
   margin-left: 2px;
-}
-@media (min-width: 641px) and (max-width: 1023px) {
-  .rx-pulse {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .rx-scope__grid {
-    grid-template-columns: 340px minmax(0, 1fr);
-  }
 }
 .rx-chip--full .rx-chip__text {
   overflow: visible;

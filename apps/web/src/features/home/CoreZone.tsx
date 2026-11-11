@@ -10,7 +10,7 @@ import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Amount, Card, DataTable, Empty, SectionBand, Stat, Time } from '@/ui'
+import { Amount, Card, DataTable, Empty, SectionBand, Stat, Stats, Time } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
 
 const PENDING = 8
@@ -31,7 +31,7 @@ function Headline() {
   const m = metrics.data?.data
   const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
   return (
-    <div className="rx-stats" data-headline>
+    <Stats data-headline>
       <Stat
         layer="core"
         label={t`Height`}
@@ -66,7 +66,7 @@ function Headline() {
         loading={fit && metrics.isPending}
         source={metrics.data ? stampOf(metrics.data) : undefined}
       />
-    </div>
+    </Stats>
   )
 }
 

@@ -12,10 +12,19 @@ test.describe('status', () => {
     const sources = page.getByRole('heading', { name: 'Sources' })
     await expect(sources).toBeVisible()
     for (const name of ['DAPI', 'Hyphen', 'Platform Explorer', 'Radar']) {
-      await expect(page.getByText(name, { exact: false }).first()).toBeVisible()
+      await expect(page.locator('main').getByText(name, { exact: false }).first()).toBeVisible()
     }
     await expect(page.getByText('DAPI request budget')).toBeVisible()
     await expectAccessible(page)
+  })
+
+  test("names the Core summary's source once, beside its heading @IN-09", async ({ page }) => {
+    await page.goto('/status')
+    const card = page.locator('#core')
+    await expect(card.locator('[data-status="tip"]')).toContainText('2,570,')
+    await expect(card.locator('[data-status="sync"]')).toBeVisible()
+    await expect(card.locator('[data-source="dapi"]')).toHaveCount(1)
+    await expect(card.locator('[data-source]').first()).toBeVisible()
   })
 
   test('works on testnet and says which network it is reading @IN-16 @HY-19', async ({ page }) => {

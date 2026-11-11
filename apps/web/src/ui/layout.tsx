@@ -1,5 +1,5 @@
 import { t } from '@lingui/core/macro'
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { useAllSourceHealth } from '@/data/health'
 import { clampSkew, formatRelative } from '@/lib/format'
@@ -10,6 +10,7 @@ import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
 import { useNow } from './hooks'
 import { sourceName } from './source-labels'
+import { SourceScope, sourceKey, useCoveredSource } from './source-scope'
 import { Empty, ErrorState, Skeleton, SourceLine } from './states'
 import type { Layer, LoadState } from './types'
 
@@ -77,6 +78,8 @@ export function Card({
   children,
 }: CardProps) {
   const { stamps, down, lag } = useCardSource(source)
+  const keys = stamps.map(sourceKey).join(',')
+  const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
   const hasHead = [title, actions, subtitle].some(present) || stamps.length > 0
   const attr = layerAttr(layer)
@@ -134,7 +137,7 @@ export function Card({
         <Empty kind="none-yet" title="Nothing to show" />
       ) : (
         <div className={cx('rx-card__body', padding === 'flush' && 'rx-card__body--flush')}>
-          {children}
+          <SourceScope value={covered}>{children}</SourceScope>
         </div>
       )}
     </section>
@@ -185,12 +188,13 @@ export interface KeyValueProps {
 }
 
 function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
+  const covered = useCoveredSource(item.source)
   return (
     <div>
       <dt>{item.label}</dt>
       <dd>
         {item.value}
-        {item.source ? (
+        {item.source && !covered ? (
           <>
             {' '}
             <SourceLine stamp={item.source} compact />
