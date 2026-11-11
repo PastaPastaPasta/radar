@@ -123,3 +123,11 @@ describe('chart metrics', () => {
     })
   })
 })
+
+describe('metric hues @HY-02', () => {
+  it('gives every chart its own design token', () => {
+    const hues = Object.values(METRICS).map((m) => m.hue)
+    expect(new Set(hues).size).toBe(hues.length)
+    expect(hues.every((h) => /^--(rx|dh)-[a-z0-9-]+$/.test(h))).toBe(true)
+  })
+})

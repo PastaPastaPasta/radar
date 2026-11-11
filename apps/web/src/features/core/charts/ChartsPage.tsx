@@ -1,7 +1,7 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useMemo, type CSSProperties } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useNavigate } from '@tanstack/react-router'
 import { useNetwork } from '@/features/entity'
@@ -168,17 +168,19 @@ function ChartGrid({ range }: { range: Range }) {
               source={series.data ? stampOf(series.data) : undefined}
               id={`chart-${id}`}
             >
-              <Chart
-                option={buildOption(metric, data, titles[id], units)}
-                height={240}
-                group="core-metrics"
-                label={t`${titles[id]} by block height`}
-                loading={!chart}
-                table={{
-                  columns: [t`Block height`, titles[id]],
-                  rows: data.map((p) => [formatInt(p.height), metric.format(p.value, units)]),
-                }}
-              />
+              <div style={{ '--rx-l': `var(${metric.hue})` } as CSSProperties} data-chart-hue={metric.hue}>
+                <Chart
+                  option={buildOption(metric, data, titles[id], units)}
+                  height={240}
+                  group="core-metrics"
+                  label={t`${titles[id]} by block height`}
+                  loading={!chart}
+                  table={{
+                    columns: [t`Block height`, titles[id]],
+                    rows: data.map((p) => [formatInt(p.height), metric.format(p.value, units)]),
+                  }}
+                />
+              </div>
             </Card>
           ))}
         </div>
