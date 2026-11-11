@@ -194,7 +194,8 @@ function ProposalTable({ proposals, now }: { proposals: HyProposal[]; now: numbe
                   <td>
                     <button
                       type="button"
-                      className="dh-btn dh-btn--link min-h-6 min-w-6"
+                      className="dh-btn dh-btn--link"
+                      style={{ minBlockSize: 24, minInlineSize: 24 }}
                       aria-expanded={expanded}
                       aria-controls={panel}
                       onClick={() => {

@@ -40,6 +40,13 @@ describe('Governance page', () => {
     expect(document.querySelector('[data-proposal-details]')).toBeNull()
   })
 
+  it('sizes the proposal expander to at least 24px in both directions, as an inline style the component CSS cannot override @HY-13', async () => {
+    renderAt('/governance')
+    const row = await screen.findByRole('button', { name: 'DashDaoGrowthEngine' })
+    expect(row.style.minBlockSize).toBe('24px')
+    expect(row.style.minInlineSize).toBe('24px')
+  })
+
   it('works on testnet @HY-19', async () => {
     renderAt('/governance?network=testnet')
     expect(await screen.findByRole('button', { name: 'test' })).toBeInTheDocument()
