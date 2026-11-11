@@ -225,18 +225,16 @@ export class NodePool {
         ? [preferred, ...this.active]
         : this.active
     for (const slot of candidates) {
+      const usable =
+        !slot.retired &&
+        !opts.exclude?.has(slot.url) &&
+        !(opts.heightSensitive && slot.behindUntil > now) &&
+        this.canTake(slot, now)
       if (slot === preferred && !opts.only) {
-        const ok =
-          !slot.retired &&
-          !opts.exclude?.has(slot.url) &&
-          !(opts.heightSensitive && slot.behindUntil > now) &&
-          this.canTake(slot, now)
-        if (ok) return slot
+        if (usable) return slot
         continue
       }
-      if (opts.exclude?.has(slot.url) || slot.retired) continue
-      if (opts.heightSensitive && slot.behindUntil > now) continue
-      if (!this.canTake(slot, now)) continue
+      if (!usable) continue
       const headroom = this.headroomOf(slot, now)
       const better =
         headroom > bestHeadroom ||
@@ -254,16 +252,10 @@ export class NodePool {
   hasUsableNode(exclude?: ReadonlySet<string>, only?: NodeSlot): boolean {
     const now = this.now()
     this.fill()
-    if (only)
-      return (
-        !exclude?.has(only.url) && !(this.isBenched(only, now) && only.benchedUntil === SESSION)
-      )
-    return [...this.slots.values()].some(
-      (s) =>
-        !s.retired &&
-        !exclude?.has(s.url) &&
-        !(this.isBenched(s, now) && s.benchedUntil === SESSION),
-    )
+    const mayReturn = (s: NodeSlot) =>
+      !exclude?.has(s.url) && !(this.isBenched(s, now) && s.benchedUntil === SESSION)
+    if (only) return mayReturn(only)
+    return [...this.slots.values()].some((s) => !s.retired && mayReturn(s))
   }
 
   /** The soonest instant a full active node frees a slot or a resting one returns; undefined when nothing will. */

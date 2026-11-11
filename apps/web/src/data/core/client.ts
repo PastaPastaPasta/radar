@@ -10,7 +10,7 @@ import {
 import type { DapiRpc } from '../dapi-core'
 import type { CoreCache } from '../dapi-core/cache'
 import { stampOf, type FallbackReason, type Sourced } from '../envelope'
-import { isSourceError, SourceError } from '../errors'
+import { abortedError, isSourceError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
 import { hyphen } from '../hyphen/client'
 import type { HyBlockSummary } from '../hyphen/schemas'
@@ -98,9 +98,7 @@ const isInvalid = (e: unknown): boolean => isSourceError(e) && e.kind === 'inval
 
 const isAborted = (e: unknown): boolean => isSourceError(e) && e.kind === 'aborted'
 
-function abortError(): SourceError {
-  return new SourceError({ source: 'dapi', kind: 'aborted', message: 'The request was aborted' })
-}
+const abortError = () => abortedError('dapi')
 
 /** Resolves with `p`, or rejects as soon as `signal` fires; `p` itself keeps running for its other callers. */
 function raceAbort<T>(p: Promise<T>, signal: AbortSignal | undefined): Promise<T> {
@@ -190,8 +188,6 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  const dapiDown = (net: NetworkId) => deps.health.get(net, 'dapi').state === 'down'
-
   /** Rule 3: Hyphen serves only while its index is current, and only on networks it covers. */
   function hyphenFit(net: NetworkId, opts: { unknownIsFit: boolean } = { unknownIsFit: true }) {
     if (isDevnet(net)) return false
@@ -199,6 +195,9 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     if (state === 'unknown') return opts.unknownIsFit
     return state !== 'stale' && state !== 'down'
   }
+
+  const hyphenStandsIn = (net: NetworkId) =>
+    deps.health.get(net, 'dapi').state === 'down' && hyphenFit(net)
 
   // ---- what the nodes say about ChainLocks ---------------------------------
   //
@@ -323,6 +322,26 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     if (lockView(net).corroborated < height) await refreshLocks(net, signal, priority)
     return statusAt(net, height)
   }
+
+  /** The lock status, or what is already known when the lookup fails; only the caller leaving is an error. */
+  async function lockStatusOrKnown(
+    net: NetworkId,
+    height: number,
+    signal?: AbortSignal,
+    priority?: CoreCallOptions['priority'],
+  ): Promise<LockStatus> {
+    try {
+      return await lockStatus(net, height, signal, priority)
+    } catch (e) {
+      if (isAborted(e)) throw e
+      return statusAt(net, height)
+    }
+  }
+
+  /** Whether Hyphen's answer for a block at `height` is final: a lock is known, or the block is deep under its index. */
+  const hyphenFinal = (net: NetworkId, height: number, indexedTo: number | undefined) =>
+    statusAt(net, height) !== 'none' ||
+    (indexedTo !== undefined && indexedTo - height >= HYPHEN_FINAL_DEPTH)
 
   const lockFields = (status: LockStatus) => ({
     chainLocked: status === 'locked',
@@ -653,10 +672,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const asOfHeight = detail.data.asOfHeight
     const block =
       height === undefined ? null : await deps.hyphen.block(net, height, signal).catch(() => null)
-    const final =
-      height !== undefined &&
-      (statusAt(net, height) !== 'none' ||
-        (asOfHeight !== undefined && asOfHeight - height >= HYPHEN_FINAL_DEPTH))
+    const final = height !== undefined && hyphenFinal(net, height, asOfHeight)
     return {
       stamp: detail,
       value: {
@@ -683,7 +699,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
   const client: CoreClient & CoreClientHooks = {
     async tip(net: NetworkId, signal?: AbortSignal) {
-      if (dapiDown(net) && hyphenFit(net)) {
+      if (hyphenStandsIn(net)) {
         const page = await deps.hyphen.blocks(net, { limit: 1 }, signal)
         const top = page.data.items[0]
         if (top) {
@@ -746,15 +762,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         : await cache?.getBlockByHeight(net, ref.height)
       if (hit) {
         const block = await decoder.block(hit.bytes, net, hit.height)
-        const status = await lockStatus(net, block.height, signal, opts.priority).catch(
-          (e: unknown) => {
-            if (isAborted(e)) throw e
-            return statusAt(net, block.height)
-          },
-        )
+        const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
         return dapi({ ...block, ...lockFields(status) }, { height: block.height })
       }
-      if (dapiDown(net) && hyphenFit(net)) return hyphenBlock(net, ref, signal)
+      if (hyphenStandsIn(net)) return hyphenBlock(net, ref, signal)
 
       // Start the ChainLock lookup beside the block fetch: by height the answer to "is it locked" is already known to be needed.
       const early = byHash
@@ -766,12 +777,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       const fetched = await fetchVerifiedBlock(net, ref, { signal, priority: opts.priority })
       if (!fetched) return dapi(null)
       const { block, bytes, node } = fetched
-      const status = await lockStatus(net, block.height, signal, opts.priority).catch(
-        (e: unknown) => {
-          if (isAborted(e)) throw e
-          return statusAt(net, block.height)
-        },
-      )
+      const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
       if (cache && status === 'locked') {
         void cache.putBlock(net, { hash: block.hash, height: block.height, bytes })
       }
@@ -786,7 +792,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     ): Promise<Sourced<DecodedTx | null>> {
       const id = normalizedTxid(txid)
       if (!id) return dapi(null)
-      if (dapiDown(net) && hyphenFit(net)) {
+      if (hyphenStandsIn(net)) {
         const found = await hyphenRawTx(net, id, signal)
         if (!found) return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
         const { tx, height, time, confirmations, isInstantLocked, isChainLocked } = found.value
@@ -826,7 +832,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         if (input.coinbase !== undefined || /^0+$/.test(input.txid)) continue
         wanted.set(input.txid, [...(wanted.get(input.txid) ?? []), input.vout])
       }
-      const useHyphen = dapiDown(net) && hyphenFit(net)
+      const useHyphen = hyphenStandsIn(net)
       let node: string | undefined
       let allFound = true
       let hyphenStamp: Sourced<unknown> | undefined
@@ -903,9 +909,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       )
       let node: string | undefined
       const cache = await getCache()
-      const locks = lockStatus(net, heights[0]!, signal, 'list').catch((e: unknown) => {
-        if (isAborted(e)) throw e
-      })
+      const locks = lockStatusOrKnown(net, heights[0]!, signal, 'list')
       locks.catch(() => undefined)
       const rows = await limited(
         heights,
@@ -1091,8 +1095,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       chainLocked:
         b.live?.tags?.chainlock === true ||
         b.blockHeight <= lockedTop ||
-        statusAt(net, b.blockHeight) !== 'none' ||
-        asOf - b.blockHeight >= HYPHEN_FINAL_DEPTH,
+        hyphenFinal(net, b.blockHeight, asOf),
     })
     return fromHyphen(page, items.map(toRow), 'dapi-budget', { height: page.data.asOfHeight })
   }
@@ -1118,11 +1121,9 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         message: (e as Error).message,
       })
     }
-    const asOf = detail.data.asOfHeight
     const chainLocked =
       detail.data.live?.tags?.chainlock === true ||
-      statusAt(net, block.height) !== 'none' ||
-      (asOf !== undefined && asOf - block.height >= HYPHEN_FINAL_DEPTH)
+      hyphenFinal(net, block.height, detail.data.asOfHeight)
     return fromHyphen(raw, { ...block, chainLocked }, 'dapi-down', { height: block.height })
   }
 

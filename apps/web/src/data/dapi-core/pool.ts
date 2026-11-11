@@ -1,5 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { SourceError, isSourceError, type SourceErrorKind } from '../errors'
+import { SourceError, abortedError, isSourceError, type SourceErrorKind } from '../errors'
 import { healthRegistry, setBudgetSnapshot } from '../health'
 import type { DevnetConfig, NetworkId } from '@/lib/network'
 import type { Budget, BudgetSnapshot } from './budget'
@@ -8,7 +8,7 @@ import {
   GetBestBlockHeightResponseSchema,
   GetBlockchainStatusResponseSchema,
 } from './gen/core/v0/core_pb'
-import { isAnswerStatus, openCall, unaryCall, type FetchLike } from './grpc-web'
+import { isAnswerStatus, linkSignal, openCall, unaryCall, type FetchLike } from './grpc-web'
 import { ACTIVE_SET_SIZE, NodePool, PER_NODE_LIMIT, type NodeSlot } from './nodes'
 import type {
   DapiCallOptions,
@@ -108,9 +108,7 @@ interface NetState {
   lastOkReportAt: number
 }
 
-function abortError(): SourceError {
-  return new SourceError({ source: 'dapi', kind: 'aborted', message: 'The request was aborted' })
-}
+const abortError = () => abortedError('dapi')
 
 function failureKind(e: unknown): SourceErrorKind {
   return isSourceError(e) ? e.kind : 'network'
@@ -127,6 +125,11 @@ function isAnswer(e: unknown): boolean {
 /** A reply that was still arriving when the deadline fell: another node would be as slow. */
 function isSlowLink(e: unknown): boolean {
   return isSourceError(e) && e.bytesFlowing === true
+}
+
+/** Another node would not change a unary call's outcome: it was answered, too slow to beat, or called off. */
+function endsUnaryCall(e: unknown, signal: AbortSignal | undefined): boolean {
+  return isAnswer(e) || isSlowLink(e) || failureKind(e) === 'aborted' || signal?.aborted === true
 }
 
 function sameSnapshot(a: BudgetSnapshot | undefined, b: BudgetSnapshot): boolean {
@@ -336,17 +339,6 @@ export class PoolDapiTransport implements DapiTransport {
 
   // ---- one request to one node ---------------------------------------------
 
-  private link(signal: AbortSignal | undefined, ctrl: AbortController): () => void {
-    if (!signal) return () => undefined
-    if (signal.aborted) {
-      ctrl.abort(signal.reason)
-      return () => undefined
-    }
-    const onAbort = () => ctrl.abort(signal.reason)
-    signal.addEventListener('abort', onAbort, { once: true })
-    return () => signal.removeEventListener('abort', onAbort)
-  }
-
   private learnTip(pool: NodePool, slot: NodeSlot, method: string, response: Uint8Array): void {
     try {
       if (method === 'getBestBlockHeight') {
@@ -387,7 +379,7 @@ export class PoolDapiTransport implements DapiTransport {
       return
     }
     // The reply was arriving when the deadline fell: a slow link, not a failing node.
-    if (isSourceError(e) && e.bytesFlowing) return
+    if (isSlowLink(e)) return
     if (kind === 'rate-limited') {
       const reset = isSourceError(e) ? e.retryAfterMs : undefined
       pool.benchRateLimited(slot, reset === undefined ? {} : { resetS: reset / 1000 })
@@ -477,7 +469,7 @@ export class PoolDapiTransport implements DapiTransport {
       const launch = (slot: NodeSlot) => {
         const ctrl = new AbortController()
         flights.push(ctrl)
-        const unlink = this.link(signal, ctrl)
+        const unlink = linkSignal(signal, ctrl)
         this.send(net, pool, slot, method, request, ctrl.signal, {
           onHeaders: () => {
             headered = true
@@ -491,7 +483,7 @@ export class PoolDapiTransport implements DapiTransport {
             unlink()
             failures++
             lastError = e
-            if (isAnswer(e) || isSlowLink(e) || failureKind(e) === 'aborted' || signal?.aborted) {
+            if (endsUnaryCall(e, signal)) {
               settle(() => reject(e))
             } else if (failures >= flights.length) {
               settle(() => reject(lastError))
@@ -511,6 +503,32 @@ export class PoolDapiTransport implements DapiTransport {
       }, HEDGE_AFTER_MS)
       ;(hedgeTimer as { unref?: () => void }).unref?.()
     })
+  }
+
+  /** The next node for a retried call, marked as tried; a failure to get one is the call's last error, if it had one. */
+  private async acquireNext(
+    net: NetworkId,
+    pool: NodePool,
+    opts: DapiCallOptions,
+    tried: Set<string>,
+    heightSensitive: boolean,
+    attempt: number,
+    lastError: unknown,
+  ): Promise<NodeSlot> {
+    let slot: NodeSlot
+    try {
+      slot = await this.acquire(net, pool, {
+        priority: opts.priority ?? 'detail',
+        tried,
+        heightSensitive,
+        signal: opts.signal,
+        prefer: attempt === 0 ? opts.prefer && `https://${opts.prefer}` : undefined,
+      })
+    } catch (e) {
+      throw lastError ?? e
+    }
+    tried.add(slot.url)
+    return slot
   }
 
   /** The nodes a call must not use, unless that would leave it none. */
@@ -559,19 +577,15 @@ export class PoolDapiTransport implements DapiTransport {
     const tried = this.avoidSet(pool, opts)
     let lastError: unknown
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-      let slot: NodeSlot
-      try {
-        slot = await this.acquire(net, pool, {
-          priority: opts.priority ?? 'detail',
-          tried,
-          heightSensitive,
-          signal: opts.signal,
-          prefer: attempt === 0 ? opts.prefer && `https://${opts.prefer}` : undefined,
-        })
-      } catch (e) {
-        throw lastError ?? e
-      }
-      tried.add(slot.url)
+      const slot = await this.acquireNext(
+        net,
+        pool,
+        opts,
+        tried,
+        heightSensitive,
+        attempt,
+        lastError,
+      )
       try {
         return await this.attempt(
           net,
@@ -584,9 +598,7 @@ export class PoolDapiTransport implements DapiTransport {
           opts.signal,
         )
       } catch (e) {
-        if (isAnswer(e) || isSlowLink(e) || failureKind(e) === 'aborted' || opts.signal?.aborted) {
-          throw e
-        }
+        if (endsUnaryCall(e, opts.signal)) throw e
         lastError = e
       }
     }
@@ -617,7 +629,7 @@ export class PoolDapiTransport implements DapiTransport {
       only,
     })
     const ctrl = new AbortController()
-    const unlink = this.link(opts.signal, ctrl)
+    const unlink = linkSignal(opts.signal, ctrl)
     try {
       return await this.send(net, pool, slot, method, request, ctrl.signal, { pinned: true })
     } finally {
@@ -656,21 +668,17 @@ export class PoolDapiTransport implements DapiTransport {
     const tried = this.avoidSet(pool, opts)
     let lastError: unknown
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-      let slot: NodeSlot
-      try {
-        slot = await this.acquire(net, pool, {
-          priority: opts.priority ?? 'detail',
-          tried,
-          heightSensitive: HEIGHT_SENSITIVE.has(method),
-          signal: opts.signal,
-          prefer: attempt === 0 ? opts.prefer && `https://${opts.prefer}` : undefined,
-        })
-      } catch (e) {
-        throw lastError ?? e
-      }
-      tried.add(slot.url)
+      const slot = await this.acquireNext(
+        net,
+        pool,
+        opts,
+        tried,
+        HEIGHT_SENSITIVE.has(method),
+        attempt,
+        lastError,
+      )
       const ctrl = new AbortController()
-      const unlink = this.link(opts.signal, ctrl)
+      const unlink = linkSignal(opts.signal, ctrl)
       const started = this.deps.now()
       let call: Awaited<ReturnType<typeof openCall>>
       try {

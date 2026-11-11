@@ -1,6 +1,6 @@
 import { bytesToHex } from '@/lib/hex'
 import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
-import { SourceError } from '../errors'
+import { abortedError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
 import type { ProofMeta, Sourced } from '../envelope'
 import { getDapiTransport } from '../dapi-core/client'
@@ -95,10 +95,6 @@ function deadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
       },
     )
   })
-}
-
-function aborted(): SourceError {
-  return new SourceError({ source: 'sdk', kind: 'aborted', message: 'The request was aborted' })
 }
 
 export function createSdkClient(deps: SdkClientDeps): SdkClient {
@@ -204,13 +200,13 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     state: (net) => entry(net).state,
 
     async call(net, method, args, signal) {
-      if (signal?.aborted) throw aborted()
+      if (signal?.aborted) throw abortedError('sdk')
       const transport = await ensure(net)
-      if (signal?.aborted) throw aborted()
+      if (signal?.aborted) throw abortedError('sdk')
       const wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
       if (wire.requests) deps.noteRequests?.(net, wire.requests)
       // A wasm call can't be cancelled; its late answer is dropped here.
-      if (signal?.aborted) throw aborted()
+      if (signal?.aborted) throw abortedError('sdk')
       if (!wire.ok) {
         const error = toSourceError(wire.error)
         deps.health.report(net, 'sdk', { ok: false, kind: error.kind, message: error.message })

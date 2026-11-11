@@ -44,3 +44,7 @@ export class SourceError extends Error {
 export function isSourceError(e: unknown): e is SourceError {
   return e instanceof SourceError
 }
+
+export function abortedError(source: SourceId): SourceError {
+  return new SourceError({ source, kind: 'aborted', message: 'The request was aborted' })
+}

@@ -113,10 +113,6 @@ export class CoreCache implements NodeListStore {
     return !isDevnet(net)
   }
 
-  private touch(db: IDBPDatabase<RadarCoreDb>, store: StoreName, key: string): void {
-    this.touchAll(db, [{ store, key }])
-  }
-
   /** Marks entries as read now, at most once every 10 minutes each, in one transaction. */
   private touchAll(
     db: IDBPDatabase<RadarCoreDb>,
@@ -150,8 +146,9 @@ export class CoreCache implements NodeListStore {
     const db = await this.handle()
     if (!db) return undefined
     try {
-      const value = await db.get<S>(store, `${net}:${key}`)
-      if (value) this.touch(db, store, `${net}:${key}`)
+      const scoped = `${net}:${key}`
+      const value = await db.get<S>(store, scoped)
+      if (value) this.touchAll(db, [{ store, key: scoped }])
       return value
     } catch {
       return undefined

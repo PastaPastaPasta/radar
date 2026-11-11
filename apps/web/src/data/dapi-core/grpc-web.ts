@@ -308,17 +308,14 @@ export async function openCall(init: CallInit): Promise<OpenCall> {
     clearTimers()
     unlink()
   }
-  if (!res.ok) {
+  const refuse = (error: SourceError): never => {
     finish()
     void res.body?.cancel().catch(() => undefined)
-    throw httpError(res, node, rate)
+    throw error
   }
+  if (!res.ok) refuse(httpError(res, node, rate))
   const headerStatus = statusOf(res.headers)
-  if (headerStatus && headerStatus.code !== 0) {
-    finish()
-    void res.body?.cancel().catch(() => undefined)
-    throw grpcError(headerStatus, node, rate)
-  }
+  if (headerStatus && headerStatus.code !== 0) refuse(grpcError(headerStatus, node, rate))
   if (init.deadlineMs !== undefined)
     timers.deadline = setTimeout(timeOut(DEADLINE_ERROR), init.deadlineMs)
   armIdle()
@@ -428,7 +425,8 @@ export async function unaryCall(
   return { response, rate: call.rate }
 }
 
-function linkSignal(signal: AbortSignal | undefined, ctrl: AbortController): () => void {
+/** Aborts `ctrl` with the reason of `signal`. Returns the function that stops following it. */
+export function linkSignal(signal: AbortSignal | undefined, ctrl: AbortController): () => void {
   if (!signal) return () => undefined
   if (signal.aborted) {
     ctrl.abort(signal.reason)
