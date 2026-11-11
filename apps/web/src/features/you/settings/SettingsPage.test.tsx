@@ -76,14 +76,25 @@ describe('Settings', () => {
     expect(localStorage.getItem('radar.utc')).toBeNull()
   })
 
-  it('offers the languages that have a catalog', async () => {
+  it('offers the ten languages, each in its own script @IN-13 @HY-15', async () => {
     renderAt('/settings')
     const select = await screen.findByRole('combobox', { name: 'Language' })
     expect(
       within(select)
         .getAllByRole('option')
         .map((o) => o.textContent),
-    ).toEqual(['English'])
+    ).toEqual([
+      'English',
+      'Deutsch',
+      'Français',
+      'Español',
+      'Português',
+      '日本語',
+      '简体中文',
+      'Русский',
+      'Türkçe',
+      'Українська',
+    ])
   })
 
   it('adds, edits and removes a devnet', async () => {

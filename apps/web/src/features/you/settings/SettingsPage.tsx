@@ -4,7 +4,7 @@ import { useState, useSyncExternalStore } from 'react'
 import { rateQueries } from '@/data/rate/queries'
 import { stampOf } from '@/data/envelope'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
-import { AVAILABLE_LOCALES, useLocale } from '@/i18n'
+import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { readUtcPreference } from '@/lib/format'
 import {
   DISPLAY_UNITS,
@@ -25,7 +25,6 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const { t } = useLingui()
   const net = useNetwork()
   const prefs = useSyncExternalStore(subscribeUnitPrefs, getUnitPrefs, getUnitPrefs)
-  const { locale, setLocale } = useLocale()
   const [utc, setUtc] = useState(readUtcPreference)
   const mainnet = net === 'mainnet'
   const rate = useQuery({ ...rateQueries.usd(), enabled: mainnet && prefs.fiat })
@@ -97,18 +96,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
       <Card id="language" title={t`Language`}>
         <div className="dh-field max-w-xs">
           <label htmlFor="locale">{t`Language`}</label>
-          <select
-            id="locale"
-            className="dh-select"
-            value={locale}
-            onChange={(e) => void setLocale(e.target.value)}
-          >
-            {AVAILABLE_LOCALES.map((l) => (
-              <option key={l.code} value={l.code} lang={l.code}>
-                {l.name}
-              </option>
-            ))}
-          </select>
+          <LanguageSelect id="locale" />
         </div>
         <p className="mt-2 text-[var(--dh-ink-2)]">
           {t`Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated.`}

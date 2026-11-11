@@ -9,6 +9,15 @@ export type LocaleCode = string
 
 export const LOCALES: readonly { code: LocaleCode; name: string }[] = [
   { code: 'en', name: 'English' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'fr', name: 'Français' },
+  { code: 'es', name: 'Español' },
+  { code: 'pt', name: 'Português' },
+  { code: 'ja', name: '日本語' },
+  { code: 'zh', name: '简体中文' },
+  { code: 'ru', name: 'Русский' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'uk', name: 'Українська' },
 ]
 
 export const LOCALE_CODES: readonly LocaleCode[] = LOCALES.map((l) => l.code)

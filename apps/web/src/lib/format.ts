@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+
 const DEFAULT_LOCALE = 'en'
 
 let activeLocale = DEFAULT_LOCALE
@@ -69,10 +71,10 @@ export function formatDuration(ms: number): string {
   const h = Math.floor((total % 86400) / 3600)
   const m = Math.floor((total % 3600) / 60)
   const s = total % 60
-  if (d > 0) return h > 0 ? `${d} d ${h} h` : `${d} d`
-  if (h > 0) return m > 0 ? `${h} h ${m} min` : `${h} h`
-  if (m > 0) return `${m} min`
-  return `${s} s`
+  if (d > 0) return h > 0 ? t`${d} d ${h} h` : t`${d} d`
+  if (h > 0) return m > 0 ? t`${h} h ${m} min` : t`${h} h`
+  if (m > 0) return t`${m} min`
+  return t`${s} s`
 }
 
 export interface DateOptions {
@@ -130,11 +132,19 @@ export function formatRelative(ms: number, now: number = Date.now()): string {
   const delta = now - ms
   const abs = Math.abs(delta)
   const future = delta <= -SECOND
-  const wrap = (text: string) => (future ? `in ${text}` : `${text} ago`)
-  if (abs < MINUTE) return wrap(`${Math.max(0, Math.floor(abs / SECOND))} s`)
-  if (abs < HOUR) return wrap(`${Math.floor(abs / MINUTE)} min`)
-  if (abs < DAY) return wrap(`${Math.floor(abs / HOUR)} h`)
-  if (!future && abs < 2 * DAY) return 'yesterday'
+  if (abs < MINUTE) {
+    const n = Math.max(0, Math.floor(abs / SECOND))
+    return future ? t`in ${n} s` : t`${n} s ago`
+  }
+  if (abs < HOUR) {
+    const n = Math.floor(abs / MINUTE)
+    return future ? t`in ${n} min` : t`${n} min ago`
+  }
+  if (abs < DAY) {
+    const n = Math.floor(abs / HOUR)
+    return future ? t`in ${n} h` : t`${n} h ago`
+  }
+  if (!future && abs < 2 * DAY) return t`yesterday`
   const sameYear = new Date(ms).getUTCFullYear() === new Date(now).getUTCFullYear()
   return new Intl.DateTimeFormat(dateLocale(), {
     day: 'numeric',
