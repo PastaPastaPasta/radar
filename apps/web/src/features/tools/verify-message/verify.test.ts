@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { base58CheckEncode } from '@/lib/base58'
+import coreVectorFile from './dashcore-vectors.json'
 import vectorFile from './vectors.json'
 import { messageDigest, verifySignedMessage } from './verify'
 
@@ -137,5 +138,55 @@ describe('verifySignedMessage', () => {
       kind: 'error',
       problem: 'signature',
     })
+  })
+})
+
+interface CoreVector {
+  name: string
+  compressed: boolean
+  msg: string
+  signature: string
+  mainnet: string
+  testnet: string
+}
+
+/** Signed by `signmessagewithprivkey` and checked with `verifymessage` on a Dash Core v24.1 regtest node. */
+const CORE_VECTORS: CoreVector[] = coreVectorFile
+
+describe('signatures made by Dash Core', () => {
+  it.each(CORE_VECTORS.map((c) => [c.name, c] as const))(
+    'accepts what signmessagewithprivkey produced: %s @IN-08 @IN-16',
+    (_name, c) => {
+      const { signature, msg } = c
+      expect(verifySignedMessage({ address: c.mainnet, message: msg, signature })).toEqual({
+        kind: 'valid',
+        network: 'mainnet',
+      })
+      expect(verifySignedMessage({ address: c.testnet, message: msg, signature })).toEqual({
+        kind: 'valid',
+        network: 'testnet',
+      })
+    },
+  )
+
+  it.each(CORE_VECTORS.map((c) => [c.name, c] as const))(
+    'rejects an altered message for %s @IN-08',
+    (_name, c) => {
+      const result = verifySignedMessage({
+        address: c.mainnet,
+        message: `${c.msg}!`,
+        signature: c.signature,
+      })
+      expect(result.kind).toBe('mismatch')
+    },
+  )
+
+  it('reads the header byte the way Dash Core writes it @IN-08', () => {
+    const header = (c: CoreVector) => Buffer.from(c.signature, 'base64')[0] ?? 0
+    for (const c of CORE_VECTORS) {
+      expect(header(c) >= 31, c.name).toBe(c.compressed)
+      expect(header(c)).toBeGreaterThanOrEqual(27)
+      expect(header(c)).toBeLessThanOrEqual(34)
+    }
   })
 })
