@@ -2,10 +2,12 @@ import { useLingui } from '@lingui/react/macro'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { DecodedTx, PrevOut } from '@/data/core/types'
-import { Entity } from '@/features/entity'
+import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, AmountDensity, Card } from '@/ui'
+import type { OutputSpend } from './spend'
 import { isCoinbaseTx, prevoutKey } from './tx-info'
+import { useOutputSpends } from './useOutputSpends'
 
 const INITIAL = 10
 
@@ -29,28 +31,101 @@ function useScrollToAnchor(ready: boolean, hash: string) {
   }, [ready, hash])
 }
 
-export interface IoState {
-  /** Per output: `true` spent, `false` unspent, `undefined` unknown. */
-  spent?: (boolean | undefined)[]
+type SpendContext = Omit<Parameters<typeof useOutputSpends>[0], 'net' | 'tx' | 'visible'>
+
+function SpendState({ spend, index }: { spend: OutputSpend | undefined; index: number }) {
+  const { t } = useLingui()
+  if (!spend) return <span className="rx-dim rx-sm">—</span>
+  switch (spend.state) {
+    case 'spent':
+      return (
+        <span data-spend="spent">
+          <span className="rx-st rx-st--warn rx-sm">{t`Spent`}</span>{' '}
+          {spend.by ? (
+            <Link
+              className="rx-sub"
+              to="/tx/$txid"
+              params={{ txid: spend.by.txid }}
+              hash={`in-${spend.by.vin}`}
+              title={t`Output ${index} is spent by input ${spend.by.vin} of this transaction`}
+            >
+              {t`in ${short(spend.by.txid)}`}
+            </Link>
+          ) : spend.resolving ? (
+            <span className="rx-dim rx-sm">{t`finding where…`}</span>
+          ) : (
+            <span
+              className="rx-dim rx-sm"
+              title={t`Hyphen says it is spent but its history does not show which transaction spent it.`}
+            >
+              {t`spender not found`}
+            </span>
+          )}
+        </span>
+      )
+    case 'unspent':
+      return (
+        <span data-spend="unspent">
+          <span className="rx-st rx-st--good rx-sm">{t`Unspent`}</span>
+          {spend.asOf !== undefined && spend.behind > 0 ? (
+            <>
+              {' '}
+              <span className="rx-dim rx-sm">{t`as of block ${formatInt(spend.asOf)}`}</span>
+            </>
+          ) : null}
+        </span>
+      )
+    case 'unspendable':
+      return (
+        <span data-spend="unspendable" className="rx-dim rx-sm">
+          {t`Unspendable`}
+        </span>
+      )
+    case 'unknown':
+      return (
+        <span
+          data-spend="unknown"
+          className="rx-dim rx-sm"
+          title={
+            spend.reason === 'behind'
+              ? t`Hyphen's index is ${formatInt(spend.behind ?? 0)} blocks behind the chain, so it cannot say whether this output has been spent since.`
+              : spend.reason === 'unconfirmed'
+                ? t`The transaction is not in a block yet.`
+                : spend.reason === 'loading'
+                  ? t`Asking Hyphen.`
+                  : t`No source can say whether this output is spent.`
+          }
+        >
+          {spend.reason === 'loading'
+            ? '…'
+            : spend.reason === 'unconfirmed'
+              ? t`Not mined yet`
+              : spend.reason === 'behind'
+                ? t`Unknown: index behind`
+                : t`Unknown`}
+        </span>
+      )
+  }
 }
 
 export function IoTables({
   tx,
   prevouts,
   senders,
-  spent,
+  spendContext,
   partial,
   onLoadAll,
 }: {
   tx: DecodedTx
   prevouts: ReadonlyMap<string, PrevOut> | undefined
   senders: Set<string>
-  spent: (boolean | null | undefined)[] | undefined
+  spendContext: SpendContext
   /** Inputs beyond this index are not loaded; offer to load them. */
   partial?: { loaded: number; loading: boolean }
   onLoadAll?: () => void
 }) {
   const { t } = useLingui()
+  const net = useNetwork()
   const anchor = useAnchor()
   const [showAllIn, setShowAllIn] = useState(false)
   const [showAllOut, setShowAllOut] = useState(false)
@@ -59,6 +134,7 @@ export function IoTables({
   const inLimit = showAllIn || (anchor.in ?? -1) >= INITIAL ? inCount : INITIAL
   const outLimit = showAllOut || (anchor.out ?? -1) >= INITIAL ? outCount : INITIAL
   useScrollToAnchor(true, anchor.hash)
+  const spends = useOutputSpends({ net, tx, visible: outLimit, ...spendContext })
   const coinbase = isCoinbaseTx(tx)
   const inTotal =
     inCount > 0 && tx.inputs.every((i) => prevouts?.has(prevoutKey(i.txid, i.vout)))
@@ -169,7 +245,6 @@ export function IoTables({
             </thead>
             <tbody>
               {tx.outputs.slice(0, outLimit).map((o, n) => {
-                const flag = spent?.[n]
                 return (
                   <tr key={n} id={`out-${n}`} data-anchor={anchor.out === n ? 'on' : undefined}>
                     <td className="rx-dim rx-num u">#{n}</td>
@@ -189,13 +264,7 @@ export function IoTables({
                       <Amount value={o.value} kind="duffs" />
                     </td>
                     <td className="s">
-                      {flag === undefined || flag === null ? (
-                        <span className="rx-dim rx-sm">—</span>
-                      ) : flag ? (
-                        <span className="rx-st rx-st--warn rx-sm">{t`Spent`}</span>
-                      ) : (
-                        <span className="rx-st rx-st--good rx-sm">{t`Unspent`}</span>
-                      )}
+                      <SpendState spend={spends[n]} index={n} />
                     </td>
                   </tr>
                 )

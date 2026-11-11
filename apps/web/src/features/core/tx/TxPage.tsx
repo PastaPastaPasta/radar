@@ -17,19 +17,28 @@ import {
   Card,
   ErrorState,
   Hash,
-  Icon,
   SourceLine,
   Stat,
   Time,
   TypeBadge,
   useUnits,
 } from '@/ui'
-import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
+import {
+  ChainLockBadge,
+  CoreBand,
+  CoreBandSkeleton,
+  InstantSendBadge,
+  NotFound,
+  RecordHeader,
+  Section,
+} from '../block/frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
+import { HyphenOnlyNote } from '../block/HyphenOnlyNote'
 import { IoTables } from './IoTables'
 import { PayloadRows, usePayloadInfo } from './Payload'
 import { txQueries } from './queries'
 import { Settlement } from './Settlement'
+import { useFirstSeen } from './useFirstSeen'
 import {
   inputValues,
   isCoinbaseTx,
@@ -125,12 +134,10 @@ function TxView({
   const values = useMemo(() => inputValues(tx, prev), [tx, prev])
   const senders = useMemo(() => senderAddresses(values), [values])
   const sums = totals(tx, prev)
+  const firstSeen = useFirstSeen(net, tx.txid, { enabled: hyphenFit && !mined })
   const hyFee = hy.data?.data?.fee ?? undefined
   const fee = sums.fee ?? hyFee
   const outTotal = sumOutputs(tx)
-  const spent = hy.data?.data
-    ? tx.outputs.map((_, n) => hy.data?.data?.vout.find((v) => v.n === n)?.spent)
-    : undefined
   const toOthers = tx.outputs.reduce(
     (s, o) => (o.address && senders.has(o.address) ? s : s + o.value),
     0n,
@@ -217,7 +224,6 @@ function TxView({
   return (
     <article data-page="/tx/$txid" data-layer="core">
       <CoreBand
-        current="/blocks"
         crumbs={[
           { label: t`Core`, to: <Link to="/blocks">{t`Core`}</Link> },
           ...(tx.height !== undefined
@@ -262,16 +268,8 @@ function TxView({
                 <Hash value={tx.txid} display="full" />
               </div>
               <div className="rx-rec__meta">
-                {tx.isInstantLocked ? (
-                  <Badge tone="success" icon={<Icon name="is" size="sm" />}>
-                    {t`InstantSend locked`}
-                  </Badge>
-                ) : null}
-                {tx.isChainLocked ? (
-                  <Badge tone="success" icon={<Icon name="cl" size="sm" />}>
-                    {t`ChainLocked`}
-                  </Badge>
-                ) : null}
+                {tx.isInstantLocked ? <InstantSendBadge claim={tx.instantLockClaim} /> : null}
+                <ChainLockBadge locked={tx.isChainLocked === true} claim={tx.chainLockClaim} />
                 {mined ? null : <Badge tone="warning">{t`Unconfirmed`}</Badge>}
                 {confirmations === undefined || !mined ? null : (
                   <span>
@@ -323,7 +321,17 @@ function TxView({
           <Stat
             label={mined ? t`Mined` : t`Status`}
             value={mined && tx.time ? <Time ms={tx.time} mode="relative" live /> : t`Unconfirmed`}
-            note={mined && tx.time ? <Time ms={tx.time} mode="absolute" /> : t`In the mempool`}
+            note={
+              mined && tx.time ? (
+                <Time ms={tx.time} mode="absolute" />
+              ) : firstSeen ? (
+                <>
+                  {t`First seen`} <Time ms={firstSeen.at} mode="absolute" />
+                </>
+              ) : (
+                t`In the mempool`
+              )
+            }
           />
         </div>
       </CoreBand>
@@ -358,10 +366,10 @@ function TxView({
           id="settlement"
           title={t`How it settled`}
           description={mined ? undefined : t`Waiting to be mined.`}
-          source={stamp}
+          source={firstSeen ? [stamp, firstSeen.stamp] : stamp}
         >
           <Card layer="core">
-            <Settlement tx={tx} coinbase={coinbase} />
+            <Settlement tx={tx} coinbase={coinbase} firstSeen={firstSeen} />
           </Card>
         </Section>
 
@@ -380,11 +388,17 @@ function TxView({
             ...(hy.data ? [stampOf(hy.data)] : []),
           ]}
         >
+          <HyphenOnlyNote what={t`Spent and unspent states`} />
           <IoTables
             tx={tx}
             prevouts={prev}
             senders={senders}
-            spent={spent}
+            spendContext={{
+              mined,
+              hy: hy.data ? { detail: hy.data.data, asOfHeight: hy.data.height } : undefined,
+              hyLoading: hyphenFit && mined && hy.isPending,
+              tipHeight,
+            }}
             partial={needsPrevouts ? { loaded: count, loading: prevouts.isFetching } : undefined}
             onLoadAll={() => setCount(tx.inputs.length)}
           />

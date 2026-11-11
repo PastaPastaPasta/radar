@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/a1782604010574eeafc6c667602a6826832a6a9e3d9752b8b559a4732ea32cee"
+  },
+  "recordedAt": "2026-11-11T06:49:41.758Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2570365,
+    "txHash": "a1782604010574eeafc6c667602a6826832a6a9e3d9752b8b559a4732ea32cee",
+    "blockHeight": 2564866,
+    "blockPos": 11,
+    "txVersion": 3,
+    "txType": "provider_register",
+    "lockTime": 0,
+    "txSize": 468,
+    "valueOut": 7365277,
+    "inputCount": 1,
+    "outputCount": 1,
+    "fee": 478,
+    "tags": { "mined": true, "coinbase": false },
+    "live": { "tags": { "mempool": false, "islock": false } },
+    "payload": {
+      "collateralHash": "d58e016ab769e468a6687ae1863cb32bb6fd37a46319512adbb390bcc6e80eb9",
+      "collateralIndex": 1,
+      "mnType": "Regular",
+      "operatorPubKey": "b96054c6a9d7ee370f2a87810b4c9a13ab26e3c5dc34d7dc36dfebde7fa44890b891459786812bc4e61bf3d268e47d2e",
+      "operatorReward": 0,
+      "ownerKeyId": "bec20ba0ef4ca87ec591c182264108ac8c4088ff",
+      "version": 2,
+      "votingKeyId": "6c125118c889721e811869c188372a6bebff1579"
+    },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402202228eeeace73f4fd8ffb018cfb049a4552eebdc15d8d3f499fa7bd7a16c4bc3d02201a71e5e1c4cba898ad6b84eb332be59fc661b50ff2005bc7d832398b09d4b3c40121035ffbab73725c430b2904c10563007c5047257aae6caefcda4b47ed70c03b2f6e"
+        },
+        "sequence": 4294967294,
+        "address": "XsPYocbGL8ubicsjgfav5E8ubFPMHSNzUU",
+        "value": 7365755,
+        "txHash": "9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4",
+        "vout": 0
+      }
+    ],
+    "vout": [
+      {
+        "n": 0,
+        "value": 7365277,
+        "scriptPubKey": { "hex": "76a914b734da3d63094c95589fcf9252cd8d9c46eebafa88ac" },
+        "address": "XsPYocbGL8ubicsjgfav5E8ubFPMHSNzUU",
+        "spent": true
+      }
+    ]
+  }
+}

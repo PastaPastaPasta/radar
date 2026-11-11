@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router'
 import type { DecodedTx } from '@/data/core/types'
 import { formatInt } from '@/lib/format'
 import { Icon, Time } from '@/ui'
+import type { FirstSeen } from './useFirstSeen'
 
 type State = 'done' | 'pending' | 'future'
 
@@ -30,10 +31,19 @@ function Step({
 }
 
 /**
- * Seen → InstantSend locked → mined → ChainLocked. DAPI gives no time for the first two steps, so they say
- * what is known (that it happened) and never a time that would have to be guessed.
+ * Received → InstantSend locked → mined → ChainLocked. The received time is the mempool's first sighting
+ * when Hyphen still holds it; after that the best a mined transaction can say is that it arrived no later
+ * than its block's time. Nothing here is a time that would have to be guessed.
  */
-export function Settlement({ tx, coinbase }: { tx: DecodedTx; coinbase: boolean }) {
+export function Settlement({
+  tx,
+  coinbase,
+  firstSeen,
+}: {
+  tx: DecodedTx
+  coinbase: boolean
+  firstSeen?: FirstSeen
+}) {
   const { t } = useLingui()
   const mined = tx.height !== undefined
   const locked = tx.isChainLocked === true
@@ -44,8 +54,26 @@ export function Settlement({ tx, coinbase }: { tx: DecodedTx; coinbase: boolean 
         <Step
           name="seen"
           state="done"
-          title={t`Seen`}
-          detail={mined ? t`before it was mined` : t`in the mempool`}
+          title={t`Received`}
+          detail={
+            firstSeen ? (
+              <>
+                <Time ms={firstSeen.at} mode="absolute" /> {t`first seen in the mempool`}
+              </>
+            ) : mined ? (
+              <span title={t`No source keeps when a transaction first arrived once it is mined.`}>
+                {tx.time ? (
+                  <>
+                    {t`at or before`} <Time ms={tx.time} mode="absolute" />
+                  </>
+                ) : (
+                  t`before it was mined`
+                )}
+              </span>
+            ) : (
+              t`in the mempool`
+            )
+          }
         />
       )}
       {coinbase ? null : (
@@ -55,12 +83,18 @@ export function Settlement({ tx, coinbase }: { tx: DecodedTx; coinbase: boolean 
           title={
             <>
               <Icon name="is" size="sm" />
-              {instant ? t`InstantSend locked` : t`InstantSend`}
+              {instant
+                ? tx.instantLockClaim
+                  ? t`InstantSend lock`
+                  : t`InstantSend locked`
+                : t`InstantSend`}
             </>
           }
           detail={
             instant
-              ? t`masternodes locked its inputs; final from here`
+              ? tx.instantLockClaim
+                ? t`reported by one node; no second source has confirmed it`
+                : t`masternodes locked its inputs; final from here`
               : mined
                 ? t`No InstantSend lock was seen`
                 : t`waiting for the masternodes to lock it`
@@ -101,9 +135,11 @@ export function Settlement({ tx, coinbase }: { tx: DecodedTx; coinbase: boolean 
         detail={
           locked
             ? t`the block can't be reorganised`
-            : mined
-              ? t`waiting for the masternodes to ChainLock the block`
-              : t`after it is mined`
+            : tx.chainLockClaim
+              ? t`reported by one node; waiting for a second source to agree`
+              : mined
+                ? t`waiting for the masternodes to ChainLock the block`
+                : t`after it is mined`
         }
       />
     </ol>

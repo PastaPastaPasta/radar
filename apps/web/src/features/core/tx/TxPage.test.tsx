@@ -26,6 +26,10 @@ const MAINNET = {
   assetunlock: '5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a',
 }
 const MNHF = '46a47fe65c9fd29e9379f3f74020df33dabb1d4095c8da6b1fa05e508b74a491'
+const TESTNET_NORMAL = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
+/** Spends output 0 of `uprevtx`'s transaction in its own block-time neighbour; see the recorded Hyphen address history. */
+const SPENT_SOURCE = MAINNET.uprevtx
+const SPENDER = 'a1782604010574eeafc6c667602a6826832a6a9e3d9752b8b559a4732ea32cee'
 const NO_SUCH = '0000000000000000000000000000000000000000000000000000000000000001'
 
 async function payload(url: string, kind: string): Promise<HTMLElement> {
@@ -183,6 +187,103 @@ describe('Transaction page', () => {
     renderAt(`/tx/${MAINNET.transfer}#out-1`)
     await waitFor(() => expect(document.querySelector('#out-1')).not.toBeNull(), { timeout: 4000 })
     expect(document.querySelector('#out-1')).toHaveAttribute('data-anchor', 'on')
+  })
+
+  it('links a spent output to the transaction that spent it, at the input that did @IN-05', async () => {
+    renderAt(`/tx/${SPENT_SOURCE}`)
+    const row = await waitFor(
+      () => {
+        const el = document.querySelector<HTMLElement>('#out-0')
+        expect(el).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+    const link = await within(row).findByRole('link', { name: /in [0-9a-f]{4}…[0-9a-f]{4}/ })
+    expect(link.getAttribute('href')).toBe(`/tx/${SPENDER}#in-0`)
+    expect(row).toHaveTextContent('Spent')
+  })
+
+  it('never calls an output unspent that the source cannot vouch for @HY-07', async () => {
+    renderAt(`/tx/${MAINNET.coinbase}`)
+    await waitFor(
+      () => expect(document.querySelector('#out-1 [data-spend="unspendable"]')).not.toBeNull(),
+      { timeout: 4000 },
+    )
+    expect(document.querySelector('#out-1')).toHaveTextContent('Unspendable')
+    await waitFor(() => expect(document.querySelector('#out-0 [data-spend]')).not.toBeNull(), {
+      timeout: 4000,
+    })
+    expect(screen.queryByText('Unspent')).toBeNull()
+    expect(document.querySelector('#out-0 [data-spend]')?.getAttribute('data-spend')).toBe(
+      'unknown',
+    )
+  })
+
+  it('shows when the transaction was received, and when it was mined @HY-07', async () => {
+    renderAt(`/tx/${MAINNET.proreg}`)
+    const received = await waitFor(
+      () => {
+        const el = document.querySelector<HTMLElement>('[data-step="seen"]')
+        expect(el).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+    expect(received).toHaveTextContent('Received')
+    expect(received).toHaveTextContent(/at or before .*2026/)
+    const mined = document.querySelector<HTMLElement>('[data-step="mined"]')!
+    expect(mined).toHaveTextContent(/2026/)
+  })
+
+  it('says a lock is reported by one node until a second source agrees @IN-05', async () => {
+    const original = core.tx.bind(core)
+    vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
+      const found = await original(net, txid, signal)
+      return found.data
+        ? {
+            ...found,
+            data: {
+              ...found.data,
+              isChainLocked: false,
+              chainLockClaim: 'one-node' as const,
+              isInstantLocked: true,
+              instantLockClaim: 'one-node' as const,
+            },
+          }
+        : found
+    })
+    renderAt(`/tx/${MAINNET.transfer}`)
+    expect(await screen.findByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(screen.getByText('InstantSend lock reported by one node')).toBeInTheDocument()
+    expect(screen.queryByText('ChainLocked')).toBeNull()
+    expect(screen.queryByText('InstantSend locked')).toBeNull()
+  })
+
+  it('names testnet amounts in tDASH everywhere on the page @IN-16', async () => {
+    renderAt(`/tx/${TESTNET_NORMAL}?network=testnet`)
+    const note = await waitFor(
+      () => {
+        const el = [...document.querySelectorAll('.rx-kpis *')].find((e) =>
+          /to other addresses/.test(e.textContent ?? ''),
+        )
+        expect(el).toBeDefined()
+        return el as HTMLElement
+      },
+      { timeout: 4000 },
+    )
+    expect(note.textContent).toMatch(/tDASH to other addresses/)
+    const kpis = document.querySelector('.rx-kpis')!.textContent ?? ''
+    expect(kpis).not.toMatch(/(^|[^t])DASH/)
+  })
+
+  it('has one Core section navigation @IN-03', async () => {
+    renderAt(`/tx/${MAINNET.transfer}`)
+    await screen.findByRole('heading', { level: 1, name: /Transaction/ })
+    const bars = screen
+      .getAllByRole('navigation')
+      .filter((n) => within(n).queryByRole('link', { name: 'Mempool' }) !== null)
+    expect(bars).toHaveLength(1)
   })
 
   it('shows the table form of the flow on request @HY-07', async () => {
