@@ -1,14 +1,23 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 import { QueryClient } from '@tanstack/query-core'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createCoreLive, type CoreLiveDeps } from '@/data/core/live'
+import {
+  createCoreLive,
+  merkleBlockTxids,
+  type CoreLiveDeps,
+  type LiveTxEvent,
+} from '@/data/core/live'
+import type { DecodedTx } from '@/data/core/types'
 import type { DapiStreamHandle, DapiTransport } from '@/data/dapi-core'
 import {
   BlockHeadersWithChainLocksRequestSchema,
   BlockHeadersWithChainLocksResponseSchema,
+  TransactionsWithProofsResponseSchema,
 } from '@/data/dapi-core/gen/core/v0/core_pb'
 import type { Sourced } from '@/data/envelope'
 import { SourceError } from '@/data/errors'
+import { bytesToHex, hexToBytes } from '@/lib/hex'
+import txStreamFixture from '@/test/fixtures/dapi/mainnet/subscribeToTransactionsWithProofs/8e6c6177319136197e8b3a8203e6c12613dc407dd40471f0e4eeff81463703d6.json'
 
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
@@ -302,5 +311,120 @@ describe('coreLive.tip', () => {
       'dapi',
       expect.objectContaining({ ms: expect.any(Number) as number }),
     )
+  })
+})
+
+const id = (n: number) => n.toString(16).padStart(64, '0')
+
+/** A transaction "encoded" as its id, so the fake decoder can give it back. */
+const txMessage = (...ids: string[]) =>
+  toBinary(
+    TransactionsWithProofsResponseSchema,
+    create(TransactionsWithProofsResponseSchema, {
+      responses: { case: 'rawTransactions', value: { transactions: ids.map(hexToBytes) } },
+    }),
+  )
+
+/** A merkle block of two transactions, both matched. */
+function merkleBlock(a: string, b: string): Uint8Array {
+  const leaf = (txid: string) => hexToBytes(txid).reverse()
+  const out = new Uint8Array(80 + 4 + 1 + 64 + 2)
+  out[80] = 2
+  out[84] = 2
+  out.set(leaf(a), 85)
+  out.set(leaf(b), 117)
+  out[149] = 1
+  out[150] = 0b111
+  return out
+}
+const blockMessage = (a: string, b: string) =>
+  toBinary(
+    TransactionsWithProofsResponseSchema,
+    create(TransactionsWithProofsResponseSchema, {
+      responses: { case: 'rawMerkleBlock', value: merkleBlock(a, b) },
+    }),
+  )
+
+const decodeTx = (bytes: Uint8Array) =>
+  Promise.resolve({ txid: bytesToHex(bytes), inputs: [], outputs: [] } as unknown as DecodedTx)
+
+describe('merkleBlockTxids', () => {
+  it('reads the matched transaction ids of a merkle block in block order', () => {
+    expect(merkleBlockTxids(merkleBlock(id(1), id(2)))).toEqual([id(1), id(2)])
+  })
+
+  it('names the transactions of the recorded tip block', () => {
+    const raw = txStreamFixture.messages
+      .map((m) =>
+        fromBinary(
+          TransactionsWithProofsResponseSchema,
+          Uint8Array.from(atob(m), (c) => c.charCodeAt(0)),
+        ),
+      )
+      .find((m) => m.responses.case === 'rawMerkleBlock')
+    const txids = merkleBlockTxids(raw!.responses.value as Uint8Array)
+    expect(txids).toHaveLength(9)
+    expect(txids).toContain('078f9796125159f699ccf18a3f2f627fb83ef35be4316030299ca7a93256ab93')
+  })
+})
+
+describe('coreLive.transactions', () => {
+  it('holds back the replayed tip block and passes on only what reaches the mempool after it @IN-06', async () => {
+    const { live } = setup(
+      [
+        {
+          messages: [txMessage(id(1), id(2)), blockMessage(id(1), id(2)), txMessage(id(3))],
+          then: 'hold',
+        },
+      ],
+      { decodeTx },
+    )
+    const events: LiveTxEvent[] = []
+    const release = live.transactions(NET, (e) => events.push(e))
+    await settle(0)
+    expect(events.map((e) => (e.kind === 'tx' ? e.tx.txid : e.kind))).toEqual([id(3)])
+    expect(live.txStatus(NET)).toEqual({ state: 'live', fallbackHint: false })
+    release()
+  })
+
+  it('reports each later block with the transactions it confirmed @IN-06', async () => {
+    const { live } = setup(
+      [
+        {
+          messages: [
+            txMessage(id(1)),
+            blockMessage(id(1), id(9)),
+            txMessage(id(3)),
+            blockMessage(id(3), id(4)),
+          ],
+          then: 'hold',
+        },
+      ],
+      { decodeTx },
+    )
+    const events: LiveTxEvent[] = []
+    live.transactions(NET, (e) => events.push(e))
+    await settle(0)
+    expect(events).toEqual([
+      { kind: 'tx', tx: expect.objectContaining({ txid: id(3) }) as DecodedTx },
+      { kind: 'block', txids: [id(3), id(4)] },
+    ])
+  })
+
+  it('hints at the Hyphen fallback after three failed opens @IN-06', async () => {
+    const down = new SourceError({ source: 'dapi', kind: 'network', message: 'down' })
+    const { live } = setup(
+      [
+        { messages: [], then: down },
+        { messages: [], then: down },
+        { messages: [], then: down },
+      ],
+      { decodeTx },
+    )
+    live.transactions(NET, () => undefined)
+    await settle(0)
+    expect(live.txStatus(NET).fallbackHint).toBe(false)
+    await settle(10_000)
+    expect(live.txStatus(NET)).toMatchObject({ state: 'reconnecting', fallbackHint: true })
   })
 })

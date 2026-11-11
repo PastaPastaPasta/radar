@@ -9,6 +9,7 @@ import { onNetworkReset } from '../query/network-cache'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { parseChainLock } from '@/lib/core/chainlock'
 import { parseHeader } from '@/lib/core/header'
+import { bytesToHex } from '@/lib/hex'
 import { core } from './client'
 import { coreDecoder } from './decode'
 import type { CoreClientHooks, DecodedIsLock, DecodedTx } from './types'
@@ -36,11 +37,18 @@ export interface LiveStatus {
   node?: string
 }
 
-export type LiveTxEvent = { kind: 'tx'; tx: DecodedTx } | { kind: 'islock'; lock: DecodedIsLock }
+/**
+ * `tx`: a transaction the node took into its mempool. `block`: a new block was mined, with the ids of its transactions,
+ * so whatever was pending among them is confirmed now.
+ */
+export type LiveTxEvent =
+  | { kind: 'tx'; tx: DecodedTx }
+  | { kind: 'islock'; lock: DecodedIsLock }
+  | { kind: 'block'; txids: string[] }
 
 export interface LiveTxStatus {
   state: 'idle' | 'connecting' | 'live' | 'reconnecting'
-  /** The node sent nothing for 60 s while blocks kept arriving, or refused the filter: use Hyphen's `mempool_tx` stream. */
+  /** The node sent nothing for 60 s while blocks kept arriving, or the stream failed three times in a row: use Hyphen. */
   fallbackHint: boolean
 }
 
@@ -289,6 +297,9 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
           })
       },
       async session({ signal, avoidNode, markLive }) {
+        const emit = (event: LiveTxEvent) => {
+          for (const l of [...created.listeners]) l(event)
+        }
         const tip = await deps.tip(net, signal)
         const stream = rpc().transactionStream(
           net,
@@ -303,6 +314,9 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
         }, SILENT_TX_MS / 4)
         ;(watchdog as { unref?: () => void }).unref?.()
         let live = false
+        // The node starts by replaying the tip block (its transactions, then its merkle block) before the mempool;
+        // those transactions are already mined, so they are held back until that first merkle block names them.
+        let replay: DecodedTx[] | undefined = []
         try {
           for await (const event of stream.events) {
             if (!live) {
@@ -314,12 +328,23 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
             if (event.kind === 'transactions') {
               for (const raw of event.transactions) {
                 const tx = await deps.decodeTx(raw, net)
-                for (const l of [...created.listeners]) l({ kind: 'tx', tx })
+                if (replay) replay.push(tx)
+                else emit({ kind: 'tx', tx })
               }
             } else if (event.kind === 'instantSendLocks') {
               for (const raw of event.messages) {
                 const lock = await deps.decodeIsLock(raw)
-                for (const l of [...created.listeners]) l({ kind: 'islock', lock })
+                emit({ kind: 'islock', lock })
+              }
+            } else {
+              const txids = merkleBlockTxids(event.block)
+              if (replay) {
+                const mined = new Set(txids)
+                const held = replay
+                replay = undefined
+                for (const tx of held) if (!mined.has(tx.txid)) emit({ kind: 'tx', tx })
+              } else {
+                emit({ kind: 'block', txids })
               }
             }
           }
@@ -378,7 +403,10 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
       return tips.get(net)?.status ?? IDLE
     },
 
-    /** Every transaction and InstantSend lock the node sees, decoded (IN-01 live feed). Returns the unsubscribe function. */
+    /**
+     * Every transaction and InstantSend lock that reaches the node's mempool from now on, decoded, and each new block
+     * with its transaction ids (IN-01 live feed, IN-06). Returns the unsubscribe function.
+     */
     transactions(net: NetworkId, listener: (event: LiveTxEvent) => void): () => void {
       const f = txFollower(net)
       f.listeners.add(listener)
@@ -407,6 +435,56 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
       }
     },
   }
+}
+
+/**
+ * The transaction ids a merkle block marks as matched (BIP 37 partial merkle tree), in block order. Under the match-all
+ * filter that is every transaction of the block. The tree is read, not checked against the header's merkle root.
+ */
+export function merkleBlockTxids(block: Uint8Array): string[] {
+  let at = 80
+  const u32 = () => {
+    const v = new DataView(block.buffer, block.byteOffset + at, 4).getUint32(0, true)
+    at += 4
+    return v
+  }
+  const varint = () => {
+    const first = block[at++]!
+    if (first < 0xfd) return first
+    if (first === 0xfd) {
+      const v = block[at]! | (block[at + 1]! << 8)
+      at += 2
+      return v
+    }
+    return u32()
+  }
+  const total = u32()
+  const hashes: string[] = []
+  for (let n = varint(); n > 0; n--) {
+    hashes.push(bytesToHex(block.slice(at, at + 32).reverse()))
+    at += 32
+  }
+  const flags = block.subarray(at + 1, at + 1 + block[at]!)
+  if (total === 0) return []
+  const width = (height: number) => Math.ceil(total / 2 ** height)
+  let height = 0
+  while (width(height) > 1) height++
+  let bit = 0
+  let next = 0
+  const matched: string[] = []
+  const walk = (h: number, pos: number) => {
+    const flag = ((flags[bit >> 3] ?? 0) >> (bit & 7)) & 1
+    bit++
+    if (h === 0 || !flag) {
+      const hash = hashes[next++]
+      if (h === 0 && flag && hash) matched.push(hash)
+      return
+    }
+    walk(h - 1, pos * 2)
+    if (pos * 2 + 1 < width(h - 1)) walk(h - 1, pos * 2 + 1)
+  }
+  walk(height, 0)
+  return matched
 }
 
 const IDLE: LiveStatus = { state: 'idle', since: 0 }
