@@ -7,12 +7,15 @@ import { stampOf } from '@/data/envelope'
 import type { HyRichRow } from '@/data/hyphen/schemas'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Amount, Card, Chart, DataTable, Empty, Stat } from '@/ui'
+import { Amount, Card, Chart, DataTable, Empty, Stat, useMediaQuery } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { concentration } from './concentration'
+import { RichListCompact } from './RichListCompact'
 import { richListQueries } from './queries'
+
+const SUMMARY_ID = 'concentration'
 
 export function RichListPage() {
   const { t } = useLingui()
@@ -31,6 +34,7 @@ function RichListContent() {
   const list = useInfiniteQuery(richListQueries.rows(net))
   const top = useQuery(richListQueries.top(net))
 
+  const phone = useMediaQuery('(max-width: 640px)')
   const table = infiniteTableProps(list)
   const first = list.data?.pages[0]?.data
   const bands = useMemo(() => concentration(top.data?.data.items ?? []), [top.data])
@@ -105,6 +109,7 @@ function RichListContent() {
         title={t`Supply concentration`}
         subtitle={t`Share of the supply held by each rank band`}
         layer="core"
+        id={SUMMARY_ID}
         source={top.data ? stampOf(top.data) : undefined}
         state={top.isError ? 'error' : 'ready'}
         error={top.error}
@@ -160,14 +165,28 @@ function RichListContent() {
         padding="flush"
         source={firstPageStamp(list)}
       >
-        <DataTable
-          caption={t`Addresses ranked by balance`}
-          columns={columns}
-          {...table}
-          getRowId={(r) => r.address}
-          empty={<Empty kind="none-yet" title={t`No balances indexed yet.`} />}
-          rowLink={(r) => ({ to: '/address/$address', params: { address: r.address } })}
-        />
+        {phone ? (
+          <RichListCompact
+            rows={table.rows}
+            state={table.state}
+            error={table.error}
+            onRetry={table.onRetry}
+            hasNext={table.paging.hasNext}
+            fetching={table.paging.fetching}
+            fetchNext={table.paging.fetchNext}
+            source={firstPageStamp(list)}
+            summaryId={SUMMARY_ID}
+          />
+        ) : (
+          <DataTable
+            caption={t`Addresses ranked by balance`}
+            columns={columns}
+            {...table}
+            getRowId={(r) => r.address}
+            empty={<Empty kind="none-yet" title={t`No balances indexed yet.`} />}
+            rowLink={(r) => ({ to: '/address/$address', params: { address: r.address } })}
+          />
+        )}
       </Card>
     </>
   )

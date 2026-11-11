@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -65,5 +65,62 @@ describe('Rich list page', () => {
     renderAt('/rich-list?network=testnet')
     const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+  })
+
+  describe('on a phone @HY-09', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+    const phone = () =>
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string): MediaQueryList =>
+          ({
+            matches: query === '(max-width: 640px)',
+            media: query,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
+            addListener: () => undefined,
+            removeListener: () => undefined,
+            dispatchEvent: () => false,
+            onchange: null,
+          }) as MediaQueryList,
+      )
+
+    it('lists one compact line per address with the rest on tap', async () => {
+      phone()
+      renderAt('/rich-list')
+      const list = await screen.findByRole('list', { name: 'Addresses ranked by balance' })
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
+      expect(screen.queryByRole('table', { name: /Addresses ranked by balance/ })).toBeNull()
+      const first = within(list).getAllByRole('listitem')[0]!
+      const summary = first.querySelector('summary')!
+      expect(summary).toHaveTextContent('1')
+      expect(summary).toHaveTextContent('7.70%')
+      expect(summary.textContent).toMatch(/…/)
+      for (const label of ['Received', 'Sent', 'Transactions']) {
+        expect(within(first).getByText(label)).toBeInTheDocument()
+      }
+      expect(first.querySelector('details')).not.toHaveAttribute('open')
+      expect(within(first).getByRole('link')).toHaveAttribute(
+        'href',
+        expect.stringContaining('/address/'),
+      )
+    })
+
+    it('loads more ranks and keeps the summary one tap away', async () => {
+      phone()
+      const user = userEvent.setup()
+      const scrolled = vi.fn()
+      window.HTMLElement.prototype.scrollIntoView = scrolled
+      renderAt('/rich-list')
+      const list = await screen.findByRole('list', { name: 'Addresses ranked by balance' })
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
+      await user.click(screen.getByRole('button', { name: 'Show more' }))
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(50))
+      await user.click(screen.getByRole('link', { name: 'Back to summary' }))
+      expect(scrolled).toHaveBeenCalled()
+      expect(document.getElementById('concentration')).not.toBeNull()
+    })
   })
 })
