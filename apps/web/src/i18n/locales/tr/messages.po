@@ -63,10 +63,6 @@ msgstr "Sayfa başına {0} blok, en yeniden eskiye."
 msgid "{0} by block height"
 msgstr "Blok yüksekliğine göre {0}"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} bayt"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} yanıt vermiyor"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} yanıt vermiyor · {1} tarihli veriler gösteriliyor"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "{0} yüklendi"
@@ -216,8 +213,8 @@ msgstr "{0}: {2} kontrolün {1} tanesine yanıt verdi"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar bunu hiçbir yere göndermez."
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, one {Bu sayfayı açtığınızdan beri # yeni işlem} other {Bu sayfayı açtığınızdan beri # yeni işlem}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, one {Bu sayfayı açtığınızdan beri # işlem görüldü} other {Bu sayfayı açtığınızdan beri # işlem görüldü}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
@@ -245,6 +242,9 @@ msgstr "{days, plural, one {# gün} other {# gün}}"
 
 msgid "{feeRate} duffs a byte"
 msgstr "Bayt başına {feeRate} duff"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "Bayt başına {feeRate} duff: hiç coin harcamaz"
 
 msgid "{h} h"
 msgstr "{h} sa"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, one {Bu blokta # quorum taahhüdü} other {B
 msgid "{s} s"
 msgstr "{s} sn"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} yalnızca Hyphen’den geliyor; Hyphen’in {name} dizini zincirin gerisinde: {0}. Bu sayfadaki diğer her şey DAPI’den geliyor."
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} yalnızca Hyphen’den gelir. Bu sayfadaki diğer her şey DAPI’den gelir."
 
 msgid "% of supply"
 msgstr "Arzın % ’si"
@@ -474,6 +473,9 @@ msgstr "Tutarlar"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Tutarlar ilk {0} girdi için yüklenir. Her biri bir DAPI isteğidir."
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "Tutarlar {unitName} cinsinden gösterilir. Dolar değerinin önce gelmesi için USD’yi seçin."
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "bir kimlik numarası: bir kimlik, sözleşme, token veya belge"
 
@@ -528,6 +530,9 @@ msgstr "veya öncesinde"
 
 msgid "Back to Mainnet"
 msgstr "Mainnet’e dön"
+
+msgid "Back to summary"
+msgstr "Özete dön"
 
 msgid "Back to top"
 msgstr "Başa dön"
@@ -701,6 +706,13 @@ msgstr "İmzalı bir mesajı bir Core adresiyle tarayıcınızda doğrulayın."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Bir Dash adresinin bir mesajı imzalayıp imzalamadığını denetleyin. Denetim bu tarayıcıda yapılır: burada yazdığınız hiçbir şey herhangi bir yere gönderilmez ve Radar asla anahtar istemez."
+
+msgid "Checked"
+msgstr "Kontrol edildi"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "Her {0} saniyede bir kontrol edilir, ancak indeks zincirin gerisinde olduğu için bu canlı bir görünüm değildir."
 
 msgid "Checking"
 msgstr "Denetleniyor"
@@ -1134,6 +1146,9 @@ msgstr "Radar’dan alındı"
 msgid "Figures computed on your device"
 msgstr "Cihazınızda hesaplanan rakamlar"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "Bu sayfadaki rakamlar o blok itibarıyladır, canlı değildir."
+
 msgid "Filter by {text}"
 msgstr "{text} ile süz"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen bu adresi bu ağda görmedi."
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen harcandığını söylüyor ancak geçmişinde hangi işlemin harcadığı görünmüyor."
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "Hyphen’in {name} indeksi zincirin gerisinde: {lag}."
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen’in dizini zincirin {0} blok gerisinde, bu yüzden bu çıktının sonradan harcanıp harcanmadığını söyleyemez."
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "Hyphen’in dizini zincirin gerisinde: {0}. Bu sayfadaki rakamlar o blok itibarıyladır."
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen’in dizini hâlâ denetleniyor."
@@ -1383,6 +1397,9 @@ msgstr "{block}. bloğa kadar indekslendi ({0} geride)"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "{block}. bloğa kadar indekslendi ({0} blok geride)"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "{indexed}. Core bloğuna kadar indekslendi (zincir: {chain}). Hyphen senkronizasyonuna “{sync}” diyor, ancak indeksi zincirin gerisinde."
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Core bloğu {indexed}/{chain} dizinlendi. Eşitleme: {sync}."
 
@@ -1427,6 +1444,9 @@ msgstr "Bu tarayıcının isteklerini sınırlıyor."
 
 msgid "It sent an answer Radar can’t read."
 msgstr "Radar’ın okuyamadığı bir yanıt gönderdi."
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "Hiç coin harcamaz ve çıktı oluşturmaz, bu yüzden çizilecek bir akış yoktur. Kaydettiği şey yükünün içindedir."
 
 msgid "It took too long to answer."
 msgstr "Yanıt vermesi çok uzun sürdü."
@@ -1517,9 +1537,6 @@ msgstr "Canlı"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "Canlı akış kesildi, yeniden bağlanılıyor…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "Ağ meşgul olduğu için canlı güncellemeler duraklatıldı. Bu sayfa bir sonraki blokta yenilenir."
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "Bu sekme arka plandayken canlı güncellemeler duraklatılır."
@@ -1860,6 +1877,9 @@ msgstr "Bu ağda bu adres için işlem görülmedi."
 
 msgid "No unspent outputs."
 msgstr "Harcanmamış çıktı yok."
+
+msgid "No value moves in this transaction"
+msgstr "Bu işlemde hiçbir değer hareket etmiyor"
 
 msgid "No votes recorded for this proposal."
 msgstr "Bu teklif için kayıtlı oy yok."
@@ -2864,9 +2884,8 @@ msgstr "Özet"
 msgid "Supply concentration"
 msgstr "Arz yoğunlaşması"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "Arz, blokzincir boyutu ve bekleyen işlemler yalnızca Hyphen’den gelir; Hyphen’in {name} indeksi zincirin gerisindedir: {0}. Buradaki yükseklik, zorluk, ChainLock ve en yeni bloklar DAPI’den gelir."
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "Arz, blokzincir boyutu ve bekleyen işlemler yalnızca Hyphen’den gelir ve canlı değildir. Buradaki yükseklik, zorluk, ChainLock ve en yeni bloklar DAPI’den gelir."
 
 msgid "Switch to mainnet"
 msgstr "Mainnet’e geç"
@@ -3268,6 +3287,9 @@ msgstr "Onaylanmamış"
 msgid "Unconfirmed activity"
 msgstr "Onaylanmamış etkinlik"
 
+msgid "Unconfirmed transaction"
+msgstr "Onaylanmamış işlem"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "Gelen onaysız işlemler; boyut, ücret oranı ve InstantSend kilitleriyle."
 
@@ -3312,14 +3334,17 @@ msgstr "Çalışma süresi, 30 gün"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD, DASH başına {0} kurundan, kaynak {1}."
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "Önce USD gelir, kur geldiğinde ardından DASH değeri gösterilir."
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD yalnızca mainnet için geçerlidir: test coinlerinin değeri yoktur."
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "USD üç anlamlı basamağa yuvarlanır ve her zaman DASH rakamının yanında yer alır."
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD üç anlamlı basamağa yuvarlanır ve {unitName} cinsinden tutarı izler."
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "Kur geldiğinde Dash tutarları önce USD, ardından DASH olarak gösterilir."
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD üç anlamlı basamağa yuvarlanır. USD önce gösterildiği sürece bu seçim geçerli değildir."
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Küçük harf, rakam ve tire kullanın, örneğin “ruby”."

@@ -63,10 +63,6 @@ msgstr "{0} bloques por página, los más recientes primero."
 msgid "{0} by block height"
 msgstr "{0} por altura de bloque"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} bytes"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} no responde"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} no responde · se muestran datos de {1}"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "{0} cargados"
@@ -216,8 +213,8 @@ msgstr "{0}: respondió a {1} de {2} comprobaciones"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar no lo envía a ningún sitio."
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, one {# transacción nueva desde que abriste esta página} many {# de transacciones nuevas desde que abriste esta página} other {# transacciones nuevas desde que abriste esta página}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, one {# transacción vista desde que abriste esta página} many {# de transacciones vistas desde que abriste esta página} other {# transacciones vistas desde que abriste esta página}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
@@ -245,6 +242,9 @@ msgstr "{days, plural, one {# día} other {# días}}"
 
 msgid "{feeRate} duffs a byte"
 msgstr "{feeRate} duffs por byte"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "{feeRate} duffs por byte: no gasta ninguna moneda"
 
 msgid "{h} h"
 msgstr "{h} h"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, one {# compromiso de quórum en este bloque}
 msgid "{s} s"
 msgstr "{s} s"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} provienen solo de Hyphen, cuyo índice {name} va por detrás de la cadena: {0}. Todo lo demás de esta página proviene de DAPI."
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} provienen solo de Hyphen. Todo lo demás de esta página proviene de DAPI."
 
 msgid "% of supply"
 msgstr "% del suministro"
@@ -474,6 +473,9 @@ msgstr "Importes"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Los importes se cargan para las primeras {0} entradas. Cada una es una solicitud a DAPI."
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "Los importes se muestran en {unitName}. Elige USD para que el valor en dólares vaya primero."
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "un ID: una identidad, un contrato, un token o un documento"
 
@@ -528,6 +530,9 @@ msgstr "en o antes de"
 
 msgid "Back to Mainnet"
 msgstr "Volver a la mainnet"
+
+msgid "Back to summary"
+msgstr "Volver al resumen"
 
 msgid "Back to top"
 msgstr "Volver arriba"
@@ -701,6 +706,13 @@ msgstr "Comprueba un mensaje firmado con una dirección Core, en tu navegador."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Comprueba que una dirección Dash firmó un mensaje. La comprobación se hace en este navegador: nada de lo que escribas aquí se envía a ninguna parte, y Radar nunca pide una clave."
+
+msgid "Checked"
+msgstr "Comprobado"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "Se comprueba cada {0} segundos, pero el índice va por detrás de la cadena, así que no es una vista en vivo."
 
 msgid "Checking"
 msgstr "Comprobando"
@@ -1134,6 +1146,9 @@ msgstr "Obtenido de Radar"
 msgid "Figures computed on your device"
 msgstr "Cifras calculadas en tu dispositivo"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "Las cifras de esta página corresponden a ese bloque, no son en vivo."
+
 msgid "Filter by {text}"
 msgstr "Filtrar por {text}"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen no ha visto esta dirección en esta red."
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen indica que está gastada, pero su historial no muestra qué transacción la gastó."
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "El índice de {name} de Hyphen va por detrás de la cadena: {lag}."
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "El índice de Hyphen va {0} bloques por detrás de la cadena, así que no puede decir si esta salida se ha gastado desde entonces."
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "El índice de Hyphen va por detrás de la cadena: {0}. Las cifras de esta página corresponden a ese bloque."
 
 msgid "Hyphen's index is still being checked."
 msgstr "El índice de Hyphen aún se está comprobando."
@@ -1383,6 +1397,9 @@ msgstr "indexado hasta el bloque {block} ({0} de retraso)"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "indexado hasta el bloque {block} ({0} bloques de retraso)"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Indexado hasta el bloque {indexed} de {chain} de Core. Hyphen dice que su sincronización es «{sync}», pero su índice va por detrás de la cadena."
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Indexado hasta el bloque Core {indexed} de {chain}. Sincronización: {sync}."
 
@@ -1427,6 +1444,9 @@ msgstr "Está limitando las solicitudes de este navegador."
 
 msgid "It sent an answer Radar can’t read."
 msgstr "Envió una respuesta que Radar no puede leer."
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "No gasta ninguna moneda ni crea salidas, así que no hay flujo que dibujar. Lo que registra está en su payload."
 
 msgid "It took too long to answer."
 msgstr "Tardó demasiado en responder."
@@ -1517,9 +1537,6 @@ msgstr "En vivo"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "Transmisión en directo interrumpida, reconectando…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "Las actualizaciones en directo están en pausa porque la red está ocupada. Esta página se actualiza en el siguiente bloque."
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "Las actualizaciones en directo están en pausa mientras esta pestaña está en segundo plano."
@@ -1860,6 +1877,9 @@ msgstr "No se han visto transacciones para esta dirección en esta red."
 
 msgid "No unspent outputs."
 msgstr "No hay salidas sin gastar."
+
+msgid "No value moves in this transaction"
+msgstr "En esta transacción no se mueve ningún valor"
 
 msgid "No votes recorded for this proposal."
 msgstr "No se han registrado votos para esta propuesta."
@@ -2864,9 +2884,8 @@ msgstr "Resumen"
 msgid "Supply concentration"
 msgstr "Concentración del suministro"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "El suministro, el tamaño de la blockchain y las transacciones pendientes solo vienen de Hyphen, cuyo índice de {name} va por detrás de la cadena: {0}. La altura, la dificultad, el ChainLock y los últimos bloques provienen aquí de DAPI."
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "El suministro, el tamaño de la blockchain y las transacciones pendientes solo vienen de Hyphen y no están en vivo. La altura, la dificultad, el ChainLock y los últimos bloques provienen aquí de DAPI."
 
 msgid "Switch to mainnet"
 msgstr "Cambiar a la mainnet"
@@ -3268,6 +3287,9 @@ msgstr "Sin confirmar"
 msgid "Unconfirmed activity"
 msgstr "Actividad sin confirmar"
 
+msgid "Unconfirmed transaction"
+msgstr "Transacción sin confirmar"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "Transacciones sin confirmar a medida que llegan, con tamaño, tasa de comisión y bloqueos de InstantSend."
 
@@ -3312,14 +3334,17 @@ msgstr "Disponibilidad, 30 días"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD a {0} por DASH, de {1}."
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "USD va primero y la cifra en DASH le sigue en cuanto llega la tasa."
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD solo está disponible en mainnet: las monedas de prueba no tienen valor."
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "El USD se redondea a tres cifras significativas y siempre acompaña a la cifra en DASH."
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD se redondea a tres cifras significativas y sigue al importe en {unitName}."
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "USD va delante de los importes en Dash y muestra después la cifra en DASH, cuando llega la tasa."
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD se redondea a tres cifras significativas. Esta opción no se aplica mientras USD va primero."
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Usa letras minúsculas, dígitos y guiones, por ejemplo “ruby”."

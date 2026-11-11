@@ -63,10 +63,6 @@ msgstr "{0} blocks a page, newest first."
 msgid "{0} by block height"
 msgstr "{0} by block height"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} bytes"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} isn't answering"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} isn't answering · showing data from {1}"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "{0} loaded"
@@ -216,8 +213,8 @@ msgstr "{0}: answered {1} of {2} checks"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar never sends it anywhere."
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
@@ -245,6 +242,9 @@ msgstr "{days, plural, one {# day} other {# days}}"
 
 msgid "{feeRate} duffs a byte"
 msgstr "{feeRate} duffs a byte"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "{feeRate} duffs a byte: it spends no coins"
 
 msgid "{h} h"
 msgstr "{h} h"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, one {# quorum commitment in this block} othe
 msgid "{s} s"
 msgstr "{s} s"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} come only from Hyphen. Everything else on this page is from DAPI."
 
 msgid "% of supply"
 msgstr "% of supply"
@@ -474,6 +473,9 @@ msgstr "Amounts"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "an ID: an identity, contract, token or document"
 
@@ -528,6 +530,9 @@ msgstr "at or before"
 
 msgid "Back to Mainnet"
 msgstr "Back to Mainnet"
+
+msgid "Back to summary"
+msgstr "Back to summary"
 
 msgid "Back to top"
 msgstr "Back to top"
@@ -701,6 +706,13 @@ msgstr "Check a signed message against a Core address, in your browser."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
+
+msgid "Checked"
+msgstr "Checked"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
 
 msgid "Checking"
 msgstr "Checking"
@@ -1134,6 +1146,9 @@ msgstr "Fetched from Radar"
 msgid "Figures computed on your device"
 msgstr "Figures computed on your device"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "Figures on this page are as of that block, not live."
+
 msgid "Filter by {text}"
 msgstr "Filter by {text}"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen has not seen this address on this network."
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen says it is spent but its history does not show which transaction spent it."
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "Hyphen’s {name} index is behind the chain: {lag}."
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen's index is still being checked."
@@ -1383,6 +1397,9 @@ msgstr "indexed to block {block} ({0} behind)"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "indexed to block {block} ({0} blocks behind)"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 
@@ -1427,6 +1444,9 @@ msgstr "It is rate limiting this browser."
 
 msgid "It sent an answer Radar can’t read."
 msgstr "It sent an answer Radar can’t read."
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
 
 msgid "It took too long to answer."
 msgstr "It took too long to answer."
@@ -1517,9 +1537,6 @@ msgstr "Live"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "Live feed interrupted, reconnecting…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "Live updates are paused because the network is busy. This page refreshes at the next block."
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "Live updates are paused while this tab is in the background."
@@ -1860,6 +1877,9 @@ msgstr "No transactions seen for this address on this network."
 
 msgid "No unspent outputs."
 msgstr "No unspent outputs."
+
+msgid "No value moves in this transaction"
+msgstr "No value moves in this transaction"
 
 msgid "No votes recorded for this proposal."
 msgstr "No votes recorded for this proposal."
@@ -2864,9 +2884,8 @@ msgstr "Summary"
 msgid "Supply concentration"
 msgstr "Supply concentration"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
 
 msgid "Switch to mainnet"
 msgstr "Switch to mainnet"
@@ -3268,6 +3287,9 @@ msgstr "Unconfirmed"
 msgid "Unconfirmed activity"
 msgstr "Unconfirmed activity"
 
+msgid "Unconfirmed transaction"
+msgstr "Unconfirmed transaction"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 
@@ -3312,14 +3334,17 @@ msgstr "Uptime, 30 days"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD at {0} per DASH, from {1}."
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "USD comes first, with the DASH figure after it once the rate is in."
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD is for mainnet only: test coins have no value."
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "USD is rounded to three significant figures and always follows the DASH figure."
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD is rounded to three significant figures and follows the amount in {unitName}."
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Use lowercase letters, digits and hyphens, for example \"ruby\"."

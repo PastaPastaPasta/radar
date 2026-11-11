@@ -63,10 +63,6 @@ msgstr "每页 {0} 个区块，最新的在前。"
 msgid "{0} by block height"
 msgstr "按区块高度查看{0}"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} 字节"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} 没有响应"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} 没有响应 · 显示的是 {1} 的数据"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "已加载 {0} 项"
@@ -216,8 +213,8 @@ msgstr "{0}：{2} 次检查中应答 {1} 次"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}。Radar 不会将其发送到任何地方。"
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, other {自打开此页面以来有 # 笔新交易}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, other {自打开此页面以来已看到 # 笔交易}}"
 
 msgid "{base} ({detail})"
 msgstr "{base}（{detail}）"
@@ -245,6 +242,9 @@ msgstr "{days, plural, other {# 天}}"
 
 msgid "{feeRate} duffs a byte"
 msgstr "每字节 {feeRate} duff"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "每字节 {feeRate} duff：它不花费任何币"
 
 msgid "{h} h"
 msgstr "{h}小时"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}
 msgid "{s} s"
 msgstr "{s}秒"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} 仅来自 Hyphen，其 {name} 索引落后于区块链：{0}。此页面的其余内容均来自 DAPI。"
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} 仅来自 Hyphen。此页面的其余内容均来自 DAPI。"
 
 msgid "% of supply"
 msgstr "占总供应量的 %"
@@ -474,6 +473,9 @@ msgstr "金额"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "仅加载前 {0} 个输入的金额，每个输入对应一次 DAPI 请求。"
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "金额以 {unitName} 显示。选择 USD 可让美元金额排在前面。"
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "ID：身份、合约、代币或文档"
 
@@ -528,6 +530,9 @@ msgstr "在此时或之前"
 
 msgid "Back to Mainnet"
 msgstr "返回主网"
+
+msgid "Back to summary"
+msgstr "返回摘要"
 
 msgid "Back to top"
 msgstr "返回顶部"
@@ -701,6 +706,13 @@ msgstr "在浏览器中用 Core 地址验证已签名的消息。"
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "检查某个 Dash 地址是否签署了一条消息。检查在此浏览器中完成：你在这里输入的任何内容都不会被发送到别处，Radar 也绝不会索要密钥。"
+
+msgid "Checked"
+msgstr "检查时间"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "每 {0} 秒检查一次，但索引落后于区块链，因此这不是实时视图。"
 
 msgid "Checking"
 msgstr "检查中"
@@ -1134,6 +1146,9 @@ msgstr "从 Radar 获取"
 msgid "Figures computed on your device"
 msgstr "在你的设备上计算的数据"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "此页面的数据截至该区块，并非实时。"
+
 msgid "Filter by {text}"
 msgstr "按 {text} 筛选"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen 在此网络上未见过该地址。"
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen 显示已花费，但其历史记录没有显示是哪笔交易花费的。"
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "Hyphen 的 {name} 索引落后于区块链：{lag}。"
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen 的索引落后链 {0} 个区块，因此无法判断该输出之后是否已被花费。"
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "Hyphen 的索引落后于区块链：{0}。此页面的数据截至该区块。"
 
 msgid "Hyphen's index is still being checked."
 msgstr "仍在检查 Hyphen 的索引。"
@@ -1383,6 +1397,9 @@ msgstr "已索引至区块 {block}（落后 {0}）"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "已索引至区块 {block}（落后 {0} 个区块）"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "已索引至 Core 区块 {indexed}（链上为 {chain}）。它称同步状态为“{sync}”，但索引落后于区块链。"
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "已索引至 Core 区块 {indexed}（链上共 {chain}）。同步：{sync}。"
 
@@ -1427,6 +1444,9 @@ msgstr "它正在限制此浏览器的请求频率。"
 
 msgid "It sent an answer Radar can’t read."
 msgstr "它发送了 Radar 无法读取的响应。"
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "它不花费任何币，也不产生输出，因此没有可绘制的资金流。它记录的内容在载荷中。"
 
 msgid "It took too long to answer."
 msgstr "它响应超时。"
@@ -1517,9 +1537,6 @@ msgstr "实时"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "实时数据流已中断，正在重新连接…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "网络繁忙，实时更新已暂停。此页面将在下一个区块时刷新。"
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "此标签页在后台时，实时更新会暂停。"
@@ -1860,6 +1877,9 @@ msgstr "此网络上未发现该地址的交易。"
 
 msgid "No unspent outputs."
 msgstr "没有未花费的输出。"
+
+msgid "No value moves in this transaction"
+msgstr "这笔交易没有价值转移"
 
 msgid "No votes recorded for this proposal."
 msgstr "此提案没有投票记录。"
@@ -2864,9 +2884,8 @@ msgstr "摘要"
 msgid "Supply concentration"
 msgstr "供应集中度"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "供应量、区块链大小和待处理交易只来自 Hyphen，而它的 {name} 索引落后于链：{0}。此处的高度、难度、ChainLock 和最新区块来自 DAPI。"
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "供应量、区块链大小和待处理交易只来自 Hyphen，且并非实时。此处的高度、难度、ChainLock 和最新区块来自 DAPI。"
 
 msgid "Switch to mainnet"
 msgstr "切换到主网"
@@ -3268,6 +3287,9 @@ msgstr "未确认"
 msgid "Unconfirmed activity"
 msgstr "未确认的活动"
 
+msgid "Unconfirmed transaction"
+msgstr "未确认交易"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "实时显示未确认交易，含大小、费率和 InstantSend 锁。"
 
@@ -3312,14 +3334,17 @@ msgstr "在线率，30 天"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "美元按每 DASH {0} 计，来自 {1}。"
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "USD 排在前面，获取到汇率后，后面附上 DASH 数值。"
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "美元仅适用于主网：测试币没有价值。"
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "美元金额保留三位有效数字，并始终跟在 DASH 金额之后。"
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD 四舍五入到三位有效数字，并跟随以 {unitName} 显示的金额。"
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "获取到汇率后，Dash 金额以美元为主，后面附上 DASH 数值。"
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD 四舍五入到三位有效数字。USD 排在前面时，此选项不适用。"
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "请使用小写字母、数字和连字符，例如“ruby”。"

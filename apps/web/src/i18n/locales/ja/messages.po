@@ -63,10 +63,6 @@ msgstr "1ページ {0} ブロック、新しい順。"
 msgid "{0} by block height"
 msgstr "ブロック高別の {0}"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} バイト"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} が応答していません"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} が応答していません・{1}のデータを表示中"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "{0} 件を読み込み済み"
@@ -216,8 +213,8 @@ msgstr "{0}: {2} 回中 {1} 回応答"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}。Radar はこれをどこにも送信しません。"
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, other {このページを開いてから新しいトランザクション #件}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, other {このページを開いてから確認したトランザクション #件}}"
 
 msgid "{base} ({detail})"
 msgstr "{base}（{detail}）"
@@ -245,6 +242,9 @@ msgstr "{days, plural, other {#日}}"
 
 msgid "{feeRate} duffs a byte"
 msgstr "1バイトあたり {feeRate} duff"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "1バイトあたり {feeRate} duff：コインを使用しません"
 
 msgid "{h} h"
 msgstr "{h}時間"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, other {このブロック内のクォーラ�
 msgid "{s} s"
 msgstr "{s}秒"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} は Hyphen からのみ取得しています。Hyphen の {name} インデックスがチェーンに遅れています: {0}。このページのそれ以外は DAPI から取得しています。"
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} は Hyphen からのみ取得しています。このページのそれ以外は DAPI から取得しています。"
 
 msgid "% of supply"
 msgstr "供給量の %"
@@ -474,6 +473,9 @@ msgstr "金額"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "最初の {0} 件の入力について金額を読み込みます。1件ごとに DAPI リクエストが1回発生します。"
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "金額は {unitName} で表示されます。USD を選ぶと、ドルの金額が先頭に表示されます。"
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "ID（アイデンティティ、コントラクト、トークン、またはドキュメント）"
 
@@ -528,6 +530,9 @@ msgstr "以前"
 
 msgid "Back to Mainnet"
 msgstr "メインネットに戻る"
+
+msgid "Back to summary"
+msgstr "概要に戻る"
 
 msgid "Back to top"
 msgstr "トップへ戻る"
@@ -701,6 +706,13 @@ msgstr "署名済みメッセージを Core アドレスに対してブラウザ
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Dash アドレスがメッセージに署名したかを確認します。確認はこのブラウザ内で行われ、ここに入力した内容はどこにも送信されません。Radar が鍵を求めることもありません。"
+
+msgid "Checked"
+msgstr "確認"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "{0} 秒ごとに確認していますが、インデックスがチェーンに遅れているため、ライブ表示ではありません。"
 
 msgid "Checking"
 msgstr "確認中"
@@ -1134,6 +1146,9 @@ msgstr "Radar から取得"
 msgid "Figures computed on your device"
 msgstr "お使いの端末で計算した数値"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "このページの数値はそのブロック時点のもので、ライブではありません。"
+
 msgid "Filter by {text}"
 msgstr "{text} で絞り込む"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen はこのネットワークでこのアドレスを確認して�
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen は使用済みとしていますが、履歴からどのトランザクションが使ったかは分かりません。"
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "Hyphen の {name} インデックスがチェーンに遅れています: {lag}。"
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen のインデックスはチェーンより {0} ブロック遅れているため、この出力がその後使われたかどうかは分かりません。"
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "Hyphen のインデックスがチェーンに遅れています: {0}。このページの数値はそのブロック時点のものです。"
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen のインデックスはまだ確認中です。"
@@ -1383,6 +1397,9 @@ msgstr "ブロック {block} までインデックス済み（{0}遅れ）"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "ブロック {block} までインデックス済み（{0}ブロック遅れ）"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Core ブロック {indexed}（チェーンは {chain}）までインデックス済みです。同期は「{sync}」と表示されていますが、インデックスはチェーンに遅れています。"
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Core ブロック {indexed}/{chain} までインデックス済み。同期: {sync}。"
 
@@ -1427,6 +1444,9 @@ msgstr "このブラウザのリクエストを制限しています。"
 
 msgid "It sent an answer Radar can’t read."
 msgstr "Radar が読み取れない応答を返しました。"
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "コインを使用せず、出力も作らないため、描画するフローはありません。記録している内容はペイロードに入っています。"
 
 msgid "It took too long to answer."
 msgstr "応答に時間がかかりすぎました。"
@@ -1517,9 +1537,6 @@ msgstr "ライブ"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "ライブフィードが中断されました。再接続中…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "ネットワークが混み合っているため、ライブ更新を一時停止しています。このページは次のブロックで更新されます。"
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "このタブがバックグラウンドにある間、ライブ更新は一時停止されます。"
@@ -1860,6 +1877,9 @@ msgstr "このネットワークでこのアドレスのトランザクション
 
 msgid "No unspent outputs."
 msgstr "未使用の出力はありません。"
+
+msgid "No value moves in this transaction"
+msgstr "このトランザクションでは価値が移動しません"
 
 msgid "No votes recorded for this proposal."
 msgstr "この提案への投票は記録されていません。"
@@ -2864,9 +2884,8 @@ msgstr "概要"
 msgid "Supply concentration"
 msgstr "供給量の集中度"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "供給量、ブロックチェーンのサイズ、保留中のトランザクションは Hyphen のみが提供しており、その {name} のインデックスはチェーンに遅れています：{0}。ここでの高さ、難易度、ChainLock、最新ブロックは DAPI から取得しています。"
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "供給量、ブロックチェーンのサイズ、保留中のトランザクションは Hyphen のみが提供しており、ライブではありません。ここでの高さ、難易度、ChainLock、最新ブロックは DAPI から取得しています。"
 
 msgid "Switch to mainnet"
 msgstr "メインネットに切り替え"
@@ -3268,6 +3287,9 @@ msgstr "未承認"
 msgid "Unconfirmed activity"
 msgstr "未承認のアクティビティ"
 
+msgid "Unconfirmed transaction"
+msgstr "未承認のトランザクション"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "未承認トランザクションを到着順に表示（サイズ、手数料率、InstantSend ロック付き）。"
 
@@ -3312,14 +3334,17 @@ msgstr "稼働率（30 日間）"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD は 1 DASH あたり {0}（{1}）。"
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "USD が先頭になり、レートが取得できると、その後ろに DASH の金額が表示されます。"
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD はメインネット専用です。テストコインに価値はありません。"
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "USD は有効数字3桁に丸められ、常に DASH の数値に付随して表示されます。"
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD は有効数字3桁に丸められ、{unitName} の金額に連動します。"
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "レートが取得できると、Dash の金額は USD が先頭になり、その後ろに DASH の金額が表示されます。"
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD は有効数字3桁に丸められます。USD が先頭のときは、この選択は適用されません。"
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "小文字、数字、ハイフンを使用してください（例：「ruby」）。"

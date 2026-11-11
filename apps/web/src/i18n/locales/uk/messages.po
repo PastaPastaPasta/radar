@@ -63,10 +63,6 @@ msgstr "{0} блоків на сторінці, спочатку нові."
 msgid "{0} by block height"
 msgstr "{0} за висотою блока"
 
-#. placeholder {0}: formatInt(block.size)
-msgid "{0} bytes"
-msgstr "{0} Б"
-
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
@@ -112,6 +108,7 @@ msgstr "{0} не відповідає"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} не відповідає · показано дані від {1}"
 
+#. placeholder {0}: formatInt(rows.length)
 #. placeholder {0}: formatInt(shown)
 msgid "{0} loaded"
 msgstr "завантажено: {0}"
@@ -216,8 +213,8 @@ msgstr "{0}: відповів на {1} з {2} перевірок"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar нікуди його не надсилає."
 
-msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
-msgstr "{arrived, plural, one {# нова транзакція від відкриття сторінки} few {# нові транзакції від відкриття сторінки} many {# нових транзакцій від відкриття сторінки} other {# нової транзакції від відкриття сторінки}}"
+msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
+msgstr "{arrived, plural, one {З моменту відкриття сторінки помічено # транзакцію} few {З моменту відкриття сторінки помічено # транзакції} many {З моменту відкриття сторінки помічено # транзакцій} other {З моменту відкриття сторінки помічено # транзакції}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
@@ -245,6 +242,9 @@ msgstr "{days, plural, one {# день} few {# дні} many {# днів} other {
 
 msgid "{feeRate} duffs a byte"
 msgstr "{feeRate} дафф за байт"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "{feeRate} дафф за байт: вона не витрачає монет"
 
 msgid "{h} h"
 msgstr "{h} год"
@@ -312,9 +312,8 @@ msgstr "{quorumCommitments, plural, one {# коммітмент кворуму �
 msgid "{s} s"
 msgstr "{s} с"
 
-#. placeholder {0}: health.lag.detail
-msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
-msgstr "{what} надходять лише з Hyphen, індекс {name} якого відстає від ланцюга: {0}. Усе інше на цій сторінці — з DAPI."
+msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
+msgstr "{what} надходять лише з Hyphen. Усе інше на цій сторінці — з DAPI."
 
 msgid "% of supply"
 msgstr "% від пропозиції"
@@ -474,6 +473,9 @@ msgstr "Суми"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Суми завантажуються для перших {0} входів. Кожен із них — це запит до DAPI."
 
+msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
+msgstr "Суми показуються в {unitName}. Виберіть USD, щоб спершу показувати суму в доларах."
+
 msgid "an ID: an identity, contract, token or document"
 msgstr "ідентифікатор: ідентичність, контракт, токен або документ"
 
@@ -528,6 +530,9 @@ msgstr "у момент або раніше"
 
 msgid "Back to Mainnet"
 msgstr "Назад до основної мережі"
+
+msgid "Back to summary"
+msgstr "Назад до зведення"
 
 msgid "Back to top"
 msgstr "Нагору"
@@ -701,6 +706,13 @@ msgstr "Перевірте підписане повідомлення за ад
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Перевірте, чи підписала адреса Dash повідомлення. Перевірка виконується в цьому браузері: нічого з уведеного тут нікуди не надсилається, а Radar ніколи не просить ключ."
+
+msgid "Checked"
+msgstr "Перевірено"
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
+msgstr "Перевіряється кожні {0} с, але індекс відстає від ланцюга, тож це не наживо."
 
 msgid "Checking"
 msgstr "Перевірка"
@@ -1134,6 +1146,9 @@ msgstr "Отримано з Radar"
 msgid "Figures computed on your device"
 msgstr "Значення, обчислені на вашому пристрої"
 
+msgid "Figures on this page are as of that block, not live."
+msgstr "Цифри на цій сторінці — станом на цей блок, не наживо."
+
 msgid "Filter by {text}"
 msgstr "Фільтр: {text}"
 
@@ -1280,13 +1295,12 @@ msgstr "Hyphen не бачив цю адресу в цій мережі."
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen повідомляє, що її витрачено, але в історії не видно, яка транзакція її витратила."
 
+msgid "Hyphen’s {name} index is behind the chain: {lag}."
+msgstr "Індекс {name} у Hyphen відстає від ланцюга: {lag}."
+
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Індекс Hyphen відстає від ланцюга на {0} блоків, тому не може сказати, чи витрачено цей вихід відтоді."
-
-#. placeholder {0}: health.lag.detail
-msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
-msgstr "Індекс Hyphen відстає від ланцюга: {0}. Цифри на цій сторінці — станом на цей блок."
 
 msgid "Hyphen's index is still being checked."
 msgstr "Індекс Hyphen ще перевіряється."
@@ -1383,6 +1397,9 @@ msgstr "проіндексовано до блоку {block} (відставан
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "проіндексовано до блоку {block} (відставання: {0} блоків)"
 
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Проіндексовано до блоку Core {indexed} із {chain}. Hyphen називає свою синхронізацію «{sync}», але її індекс відстає від ланцюга."
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Проіндексовано до блока Core {indexed} із {chain}. Синхронізація: {sync}."
 
@@ -1427,6 +1444,9 @@ msgstr "Він обмежує запити з цього браузера."
 
 msgid "It sent an answer Radar can’t read."
 msgstr "Він надіслав відповідь, яку Radar не може прочитати."
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "Вона не витрачає монет і не створює виходів, тож малювати нічого. Те, що вона записує, міститься в її корисному навантаженні."
 
 msgid "It took too long to answer."
 msgstr "Він надто довго відповідав."
@@ -1517,9 +1537,6 @@ msgstr "Наживо"
 
 msgid "Live feed interrupted, reconnecting…"
 msgstr "Живу стрічку перервано, перепідключення…"
-
-msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
-msgstr "Оновлення наживо призупинено, бо мережа зайнята. Сторінка оновиться на наступному блоці."
 
 msgid "Live updates are paused while this tab is in the background."
 msgstr "Оновлення наживо призупинено, поки вкладка у фоновому режимі."
@@ -1860,6 +1877,9 @@ msgstr "Для цієї адреси в цій мережі транзакцій
 
 msgid "No unspent outputs."
 msgstr "Невитрачених виходів немає."
+
+msgid "No value moves in this transaction"
+msgstr "У цій транзакції не переміщуються кошти"
 
 msgid "No votes recorded for this proposal."
 msgstr "За цією пропозицією голосів не зафіксовано."
@@ -2864,9 +2884,8 @@ msgstr "Підсумок"
 msgid "Supply concentration"
 msgstr "Концентрація пропозиції"
 
-#. placeholder {0}: health.lag.detail
-msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "Пропозиція, розмір блокчейну та очікувані транзакції надходять лише з Hyphen, чий індекс {name} відстає від ланцюга: {0}. Висота, складність, ChainLock і найновіші блоки тут надходять з DAPI."
+msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "Пропозиція, розмір блокчейну та очікувані транзакції надходять лише з Hyphen і не є наживо. Висота, складність, ChainLock і найновіші блоки тут надходять з DAPI."
 
 msgid "Switch to mainnet"
 msgstr "Перемкнутися на основну мережу"
@@ -3268,6 +3287,9 @@ msgstr "Непідтверджено"
 msgid "Unconfirmed activity"
 msgstr "Непідтверджена активність"
 
+msgid "Unconfirmed transaction"
+msgstr "Непідтверджена транзакція"
+
 msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
 msgstr "Непідтверджені транзакції в міру надходження: розмір, ставка комісії та блокування InstantSend."
 
@@ -3312,14 +3334,17 @@ msgstr "Доступність за 30 днів"
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD за курсом {0} за DASH, джерело — {1}."
 
+msgid "USD comes first, with the DASH figure after it once the rate is in."
+msgstr "Спершу показується USD, а потім сума в DASH, коли курс отримано."
+
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD доступний лише в mainnet: тестові монети нічого не варті."
 
-msgid "USD is rounded to three significant figures and always follows the DASH figure."
-msgstr "USD округлюється до трьох значущих цифр і завжди стоїть поруч із сумою в DASH."
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgstr "USD округлюється до трьох значущих цифр і слідує за сумою в {unitName}."
 
-msgid "USD leads Dash amounts and shows the DASH figure after it, once the rate is in."
-msgstr "Коли курс отримано, суми в Dash показуються спершу в USD, а потім у DASH."
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgstr "USD округлюється до трьох значущих цифр. Цей вибір не діє, поки USD показується першим."
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Використовуйте малі літери, цифри та дефіси, наприклад «ruby»."
