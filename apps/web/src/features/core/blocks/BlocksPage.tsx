@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { keepPreviousOnNetwork } from '@/app/keep-previous'
 import { Link, useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
@@ -134,7 +135,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
   const rowsQuery = useQuery({
     ...coreQueries.blockRows(net, { fromHeight: window?.top ?? 0, count: window?.count ?? 0 }),
     enabled: window !== null,
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousOnNetwork(net),
   })
   const rows = useMemo(() => {
     const all = rowsQuery.data?.data ?? []

@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { keepPreviousOnNetwork } from '@/app/keep-previous'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
@@ -24,7 +25,7 @@ function BlocksCard() {
   const rows = useQuery({
     ...coreQueries.blockRows(net, { fromHeight: from ?? 0, count: CORE_ROWS }),
     enabled: from !== undefined,
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousOnNetwork(net),
   })
   const hasPool = (rows.data?.data ?? []).some((r) => r.pool)
   const columns = useMemo<ColumnDef<BlockRow>[]>(

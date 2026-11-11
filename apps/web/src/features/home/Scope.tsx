@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { keepPreviousOnNetwork } from '@/app/keep-previous'
 import { Link } from '@tanstack/react-router'
 import { coreQueries } from '@/data/core/queries'
 import { peQueries } from '@/data/pe/queries'
@@ -233,7 +234,7 @@ function Lanes() {
   const rows = useQuery({
     ...coreQueries.blockRows(net, { fromHeight: from ?? 0, count: CORE_ROWS }),
     enabled: from !== undefined,
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousOnNetwork(net),
   })
   const platform = useQuery({
     ...peQueries.latestBlocks(net, LANE_PLATFORM),
