@@ -62,3 +62,14 @@ describe('FixtureDapiTransport', () => {
     expect(healthRegistry.get('mainnet', 'dapi').state).not.toBe('down')
   })
 })
+
+describe('a block above the recorded tip', () => {
+  it('is not found, as the recorded chain has no such block', async () => {
+    const transport = new FixtureDapiTransport()
+    const above = new Uint8Array([0x08, 0xbb, 0xf0, 0x9c, 0x01])
+    await expect(transport.unary('mainnet', 'getBlock', above)).rejects.toMatchObject({
+      kind: 'http',
+      status: 5,
+    })
+  })
+})

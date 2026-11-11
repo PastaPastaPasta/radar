@@ -10,10 +10,11 @@ import type {
   DapiUnaryMethod,
   DapiUnaryReply,
 } from '@/data/dapi-core'
+import { GRPC_NOT_FOUND } from '@/data/dapi-core/transport'
 import { healthRegistry } from '@/data/health'
 import { bytesToHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { loadDapiFixture, type DapiFixture } from '../fixtures/dapi-load'
+import { loadDapiFixture, loadDapiManifest, type DapiFixture } from '../fixtures/dapi-load'
 import { reportFixtureMiss } from './handlers/fixtures'
 
 function fromBase64(b64: string): Uint8Array {
@@ -140,7 +141,27 @@ export class FixtureDapiTransport implements DapiTransport {
       })
     }
     const fixture = await loadDapiFixture(net, method, key)
-    return fixture ?? miss(net, method, key)
+    if (fixture) return fixture
+    if (method === 'getBlock' && (await this.aboveRecordedTip(net, request))) {
+      return {
+        request: key,
+        recordedAt: '',
+        node: '',
+        error: { kind: 'http', status: GRPC_NOT_FOUND, message: 'Block not found' },
+      }
+    }
+    return miss(net, method, key)
+  }
+
+  /** A block by height beyond the recorded tip: the chain the fixtures describe has no such block, so a node would say not found. */
+  private async aboveRecordedTip(net: NetworkId, request: Uint8Array): Promise<boolean> {
+    if (request[0] !== 0x08) return false
+    let height = 0
+    for (let i = 1, shift = 0; i < request.length; i++, shift += 7) {
+      height += (request[i]! & 0x7f) * 2 ** shift
+      if (request[i]! < 0x80) break
+    }
+    return height > (await loadDapiManifest(net)).tip.height
   }
 
   async unary(
