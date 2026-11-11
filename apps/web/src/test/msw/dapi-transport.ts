@@ -10,6 +10,7 @@ import type {
   DapiUnaryMethod,
   DapiUnaryReply,
 } from '@/data/dapi-core'
+import { healthRegistry } from '@/data/health'
 import { bytesToHex } from '@/lib/hex'
 import type { NetworkId } from '@/lib/network'
 import { loadDapiFixture, type DapiFixture } from '../fixtures/dapi-load'
@@ -88,9 +89,37 @@ export class FixtureDapiTransport implements DapiTransport {
   holdOpen = true
   /** Every request served or refused, in order, for tests that assert on what the façade asked. */
   readonly calls: { net: NetworkId; method: string; key: string }[] = []
+  private broken = false
+  private readonly openStreams = new Set<(error: SourceError) => void>()
 
   constructor(opts: { budget?: FixtureBudget } = {}) {
     this.budget = opts.budget ?? new FixtureBudget()
+  }
+
+  /**
+   * Cuts the connection the way a dead node pool would: open streams fail, every later call fails, and the DAPI
+   * source reports failures until `restoreConnection` (IN-15). Fixture builds expose this to specs.
+   */
+  breakConnection(net: NetworkId): void {
+    this.broken = true
+    const error = this.lostError()
+    for (const fail of [...this.openStreams]) fail(error)
+    for (let i = 0; i < 3; i++) {
+      healthRegistry.report(net, 'dapi', { ok: false, kind: 'network', message: error.message })
+    }
+  }
+
+  restoreConnection(net: NetworkId): void {
+    this.broken = false
+    healthRegistry.report(net, 'dapi', { ok: true })
+  }
+
+  private lostError(): SourceError {
+    return new SourceError({
+      source: 'dapi',
+      kind: 'network',
+      message: 'The fixture connection was cut',
+    })
   }
 
   private async find(net: NetworkId, method: string, request: Uint8Array): Promise<DapiFixture> {
@@ -107,6 +136,7 @@ export class FixtureDapiTransport implements DapiTransport {
     opts?: DapiCallOptions,
   ): Promise<DapiUnaryReply> {
     if (opts?.signal?.aborted) throw abortError()
+    if (this.broken) throw this.lostError()
     const fixture = await this.find(net, method, request)
     if (fixture.error) throw recordedError(fixture)
     if (fixture.response === undefined) {
@@ -125,10 +155,11 @@ export class FixtureDapiTransport implements DapiTransport {
     request: Uint8Array,
     opts?: DapiCallOptions,
   ): DapiStreamHandle {
-    const fixture = this.find(net, method, request)
+    const fixture = this.broken ? Promise.reject(this.lostError()) : this.find(net, method, request)
     fixture.catch(() => undefined)
     const signal = opts?.signal
     const holdOpen = () => this.holdOpen
+    const openStreams = this.openStreams
     async function* messages(): AsyncGenerator<Uint8Array> {
       if (signal?.aborted) throw abortError()
       const f = await fixture
@@ -138,10 +169,12 @@ export class FixtureDapiTransport implements DapiTransport {
         yield fromBase64(m)
       }
       if (f.ended || !holdOpen()) return
+      let fail: ((error: SourceError) => void) | undefined
       await new Promise<void>((_, reject) => {
-        if (!signal) return
-        signal.addEventListener('abort', () => reject(abortError()), { once: true })
-      })
+        fail = reject
+        openStreams.add(reject)
+        signal?.addEventListener('abort', () => reject(abortError()), { once: true })
+      }).finally(() => openStreams.delete(fail!))
     }
     return { messages: messages() }
   }

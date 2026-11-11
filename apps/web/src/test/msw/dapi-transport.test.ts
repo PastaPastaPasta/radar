@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Budget } from '@/data/dapi-core'
+import { healthRegistry } from '@/data/health'
 import { isSourceError } from '@/data/errors'
 import { takeFixtureMisses } from './handlers/fixtures'
 import { FixtureDapiTransport, requestKey } from './dapi-transport'
@@ -35,5 +36,20 @@ describe('FixtureDapiTransport', () => {
     transport.budget.setPressure('tight')
     expect(budget.canAfford('mainnet', 1)).toBe(false)
     expect(transport.budget.snapshot().pressure).toBe('tight')
+  })
+
+  it('cuts the connection on request: calls fail without a recording and the source reports down', async () => {
+    const transport = new FixtureDapiTransport()
+    transport.breakConnection('mainnet')
+    const failure = await transport
+      .unary('mainnet', 'getBlock', new Uint8Array([4]))
+      .catch((e: unknown) => e)
+    expect(failure).toMatchObject({ source: 'dapi', kind: 'network' })
+    expect(transport.calls).toEqual([])
+    expect(takeFixtureMisses()).toEqual([])
+    expect(healthRegistry.get('mainnet', 'dapi').state).toBe('down')
+
+    transport.restoreConnection('mainnet')
+    expect(healthRegistry.get('mainnet', 'dapi').state).not.toBe('down')
   })
 })

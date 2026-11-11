@@ -4,6 +4,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './app'
 import { loadDevnets } from './app/devnets'
+import { enableLiveTip } from './app/live-tip'
 import { setSdkDevnets } from './data/sdk/devnets'
 import { i18nReady } from './i18n'
 import './styles.css'
@@ -20,6 +21,7 @@ async function start(container: HTMLElement) {
     const { installProductionDapiTransport } = await import('./data/dapi-core/production')
     installProductionDapiTransport({ devnets: loadDevnets })
   }
+  enableLiveTip()
   await i18nReady
   createRoot(container).render(
     <StrictMode>

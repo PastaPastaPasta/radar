@@ -2,6 +2,7 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
 import { NetworkGate } from '@/app/network-context'
+import { useLiveTip } from '@/app/live-tip'
 import { UnitsMount } from '@/app/units-mount'
 import { useRenderedNetworkSync } from '@/app/rendered-network'
 import { CommandPalette, CommandPaletteProvider } from '@/features/search'
@@ -30,6 +31,7 @@ function RouteAnnouncer() {
 export function AppShell() {
   useSpaLinks()
   useRenderedNetworkSync()
+  useLiveTip()
   return (
     <I18nProvider i18n={i18n}>
       <UnitsMount>
