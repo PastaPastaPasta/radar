@@ -1,4 +1,6 @@
 import { expectAccessible } from '../helpers/a11y'
+import { tabBarHeight } from '../helpers/contrast'
+import { settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
@@ -52,7 +54,7 @@ test.describe('Home', () => {
     await page.goto('/')
     const headline = page.locator('[data-headline]')
     await expect(headline).toContainText(/Height.*2,570,085/)
-    await expect(headline).toContainText(/Difficulty.*106,426,840/)
+    await expect(headline).toContainText(/Difficulty.*106,426,839\.80/)
   })
 
   test('a phone jumps from the top of the page to the Core figures @HY-01', async ({
@@ -221,4 +223,82 @@ test.describe('Home', () => {
     await page.getByRole('heading', { name: /Latest blocks/ }).scrollIntoViewIfNeeded()
     await expect(page.locator('[data-pulse="core"]')).toBeVisible()
   })
+})
+
+test.describe('Home on a phone', () => {
+  test.skip(({ viewport }) => (viewport?.width ?? 0) > 600, 'phone layout only')
+
+  for (const [name, path, locked] of [
+    ['mainnet', '/', true],
+    ['testnet', '/?network=testnet', false],
+  ] as const) {
+    for (const width of [320, 390, 430]) {
+      test(`shows the Core height and its lock state above the tab bar at ${width} px on ${name} @HY-18 @IN-01 @HY-01 @HY-19`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width, height: 844 })
+        await page.goto(path)
+        const core = page.locator('[data-pulse="core"]')
+        await expect(core.locator('.rx-tick')).toContainText(/\d/)
+        await expect(core.locator('.rx-pulse__meta')).toContainText(/ago/)
+        await settled(page)
+        expect(await page.evaluate(() => window.scrollY)).toBe(0)
+        const barTop = 844 - (await tabBarHeight(page))
+        for (const part of [
+          core,
+          core.locator('.rx-pulse__value'),
+          core.locator('.rx-pulse__meta'),
+          ...(locked ? [core.locator('.rx-ok')] : []),
+        ]) {
+          const box = await part.boundingBox()
+          expect(box, 'the Core figure is laid out').not.toBeNull()
+          expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(barTop)
+        }
+      })
+    }
+  }
+
+  test('puts the Core figures before the long activity lists @HY-01', async ({ page }) => {
+    await page.goto('/')
+    await settled(page)
+    const supply = await page.getByText('Circulating supply').boundingBox()
+    const activity = await page.locator('.rx-home__activity').boundingBox()
+    expect(supply?.y ?? Infinity).toBeLessThan(activity?.y ?? 0)
+  })
+
+  for (const width of [320, 390, 430]) {
+    for (const [name, path] of [
+      ['mainnet', '/'],
+      ['testnet', '/?network=testnet'],
+    ] as const) {
+      test(`keeps the brand whole in every connection state at ${width} px on ${name} @HY-18 @IN-15`, async ({
+        page,
+        context,
+      }) => {
+        await page.setViewportSize({ width, height: 800 })
+        await page.goto(path)
+        const tip = page.locator('[data-header-tip]')
+        const lockup = page.locator('dashhq-bar .lockup')
+        const whole = async (state: string) => {
+          const box = await lockup.boundingBox()
+          const [scroll, client] = await lockup.evaluate((el) => [el.scrollWidth, el.clientWidth])
+          expect(box?.width ?? 0, `${state}: brand width`).toBeGreaterThanOrEqual(46)
+          expect(scroll, `${state}: brand is not clipped`).toBeLessThanOrEqual(client)
+        }
+        await expect(tip).toHaveAttribute('data-connection', 'live')
+        await whole('live')
+
+        await page.evaluate(() =>
+          (window as unknown as RadarFixtureWindow).__radarFixtures.breakLiveConnection(),
+        )
+        await expect(tip).toHaveAttribute('data-connection', /reconnecting|polling/)
+        await whole('retrying')
+
+        await context.setOffline(true)
+        await expect(tip).toHaveAttribute('data-connection', 'stopped')
+        await whole('stopped')
+        await expect(tip.locator('[data-live-state]')).toContainText(/stopped/)
+      })
+    }
+  }
 })

@@ -47,7 +47,7 @@ describe('Home page', () => {
       expect(el).toHaveTextContent(/Height.*2,570,085/)
       return el!
     })
-    expect(headline).toHaveTextContent(/Difficulty.*106,426,840/)
+    expect(headline).toHaveTextContent(/Difficulty.*106,426,839\.80/)
     expect(headline.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 

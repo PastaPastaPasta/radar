@@ -491,8 +491,9 @@ kbd,
   outline-offset: 1px;
 }
 .rx-copy .rx-ico {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
 }
 .rx-copy.is-done {
   color: var(--dh-good);
@@ -2106,4 +2107,22 @@ body[data-scroll-locked] {
 
 html[data-scroll-gutter] {
   scrollbar-gutter: stable;
+}
+
+/* A form's action row stays above the phone tab bar, so Verify and Clear are in reach whatever the screen's height. */
+.rx-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .rx-form-actions {
+    position: sticky;
+    bottom: var(--dh-tabs-h, 0px);
+    z-index: 2;
+    padding-block: 10px;
+    background: var(--dh-surface);
+    box-shadow: 0 -1px 0 var(--dh-line);
+  }
 }

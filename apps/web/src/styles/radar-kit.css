@@ -233,6 +233,26 @@
   }
 }
 
+/* On a narrow phone the connection word would squeeze the brand, so it becomes a mark: a ring while retrying or slow, a solid dot once stopped. The word stays in the link's title and the live region. */
+@media (max-width: 430px) {
+  .rx-hdrtip__short {
+    font-size: 0;
+    display: inline-flex;
+    margin-right: 4px;
+  }
+  .rx-hdrtip__short::before {
+    content: '';
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+  }
+  .rx-hdrtip[data-connection='stopped'] .rx-hdrtip__short::before {
+    background: currentColor;
+  }
+}
+
 dashhq-footer .rx-ratenote {
   display: block;
   margin: 0 0 8px;
@@ -772,4 +792,106 @@ button.rx-srcline {
 }
 button.rx-srcline:hover {
   text-decoration: underline;
+}
+
+/* the footer: the shell's slot flattens what it holds, so the controls sit inside one block it leaves alone */
+.rx-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  width: max-content;
+  max-width: 100%;
+  font-size: var(--dh-fs-sm);
+}
+.rx-foot__links,
+.rx-foot__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+}
+.rx-foot__links {
+  margin-inline: -10px;
+}
+.rx-foot__tools > button {
+  margin-inline-start: -10px;
+}
+.rx-foot a,
+.rx-foot button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--dh-r2);
+  color: var(--dh-ink-2);
+  font: var(--dh-w-ui) var(--dh-fs-sm) / 1 var(--dh-font);
+  text-decoration: none;
+  cursor: pointer;
+}
+.rx-foot a:hover,
+.rx-foot button:hover {
+  background: var(--dh-hover);
+  color: var(--dh-ink);
+}
+.rx-foot a[aria-current='page'] {
+  background: var(--dh-chip);
+  color: var(--dh-ink);
+}
+.rx-foot a:focus-visible,
+.rx-foot button:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 1px;
+}
+.rx-foot__lang {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--dh-line-2);
+  border-radius: var(--dh-r2);
+  color: var(--dh-ink-2);
+}
+.rx-foot__lang:hover {
+  border-color: var(--dh-ink-2);
+}
+.rx-foot__lang:focus-within {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 1px;
+}
+.rx-foot__lang > .rx-ico {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+}
+.rx-foot__lang > .rx-ico:last-child {
+  left: auto;
+  right: 8px;
+}
+.rx-foot__lang select {
+  appearance: none;
+  height: 30px;
+  min-width: 8.5rem;
+  padding: 0 28px 0 32px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--dh-ink);
+  font: var(--dh-w-ui) var(--dh-fs-sm) / 1 var(--dh-font);
+  cursor: pointer;
+  outline: none;
+}
+.rx-foot__lang option {
+  background: var(--dh-surface);
+  color: var(--dh-ink);
+}
+@media (pointer: coarse) {
+  .rx-foot a,
+  .rx-foot button {
+    min-height: 40px;
+  }
+  .rx-foot__lang select {
+    height: 38px;
+    font-size: 16px;
+  }
 }

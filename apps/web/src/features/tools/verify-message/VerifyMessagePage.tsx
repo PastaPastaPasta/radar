@@ -3,7 +3,7 @@ import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { local } from '@/data/envelope'
 import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
 import { classify, useWordlistLoaded } from '@/features/search'
-import { Badge, Card, Hash, SourceLine } from '@/ui'
+import { Badge, Card, Hash } from '@/ui'
 import { verifySignedMessage, type VerifyOutcome } from './verify'
 
 interface Fields {
@@ -105,7 +105,10 @@ export function VerifyMessagePage() {
               {t`This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead.`}
             </p>
           ) : null}
-          <div className="flex flex-wrap items-center gap-3">
+          <p className="text-sm text-[var(--dh-ink-2,inherit)]">
+            {t`Spaces and line breaks in the message count: it must be exactly what was signed.`}
+          </p>
+          <div className="rx-form-actions" data-form-actions>
             <button type="submit" className="dh-btn dh-btn--primary" disabled={!ready}>
               {t`Verify`}
             </button>
@@ -119,11 +122,7 @@ export function VerifyMessagePage() {
             >
               {t`Clear`}
             </button>
-            <SourceLine stamp={stamp} compact />
           </div>
-          <p className="text-sm text-[var(--dh-ink-2,inherit)]">
-            {t`Spaces and line breaks in the message count: it must be exactly what was signed.`}
-          </p>
         </form>
       </Card>
 

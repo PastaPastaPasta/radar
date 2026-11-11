@@ -1061,14 +1061,33 @@
   }
   .rx-scope__left {
     order: 0;
+    gap: 10px;
+  }
+  .rx-scope__tail {
+    display: none;
+  }
+  .rx-scope__lede {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .rx-home {
+    display: flex;
+    flex-direction: column;
+  }
+  .rx-home > #core {
+    order: 1;
+  }
+  .rx-home > .rx-home__activity {
+    order: 2;
   }
   .rx-maplegend {
     position: static;
     justify-content: flex-start;
     max-width: none;
-    padding: 6px 16px 0;
+    padding: 4px 16px 0;
+    gap: 2px 12px;
   }
-  .rx-maplegend__key {
+  .rx-maplegend .rx-maplegend__key {
     display: none;
   }
   .rx-callout {

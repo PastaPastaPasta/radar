@@ -1,5 +1,7 @@
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { tabBarHeight } from '../helpers/contrast'
+import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
@@ -47,6 +49,44 @@ test.describe('verify message', () => {
     await page.getByRole('button', { name: 'Verify' }).click()
     await expect(page.getByText('This address did not sign this message.')).toBeVisible()
     await expect(page.locator('[data-result="invalid"]')).toBeVisible()
+  })
+
+  test('keeps Verify and Clear above the phone tab bar, and nothing under it at the end @IN-08 @HY-18', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    const sizes = [
+      { width: 320, height: 640 },
+      { width: 320, height: 844 },
+      { width: 390, height: 640 },
+      { width: 390, height: 844 },
+      { width: 430, height: 640 },
+      { width: 430, height: 844 },
+    ]
+    for (const { width, height } of sizes) {
+      await page.setViewportSize({ width, height })
+      await page.goto('/tools/verify-message')
+      await expect(page.getByRole('heading', { level: 1, name: 'Verify message' })).toBeVisible()
+      await settled(page)
+      const where = `${width}x${height}`
+      const barTop = height - (await tabBarHeight(page))
+      expect(barTop, where).toBeLessThan(height)
+      const actions = page.locator('[data-form-actions]')
+      for (const name of ['Verify', 'Clear']) {
+        const box = await actions.getByRole('button', { name }).boundingBox()
+        expect(box, `${where} ${name}`).not.toBeNull()
+        expect(box?.y ?? -1, `${where} ${name} top`).toBeGreaterThanOrEqual(0)
+        expect((box?.y ?? 0) + (box?.height ?? 0), `${where} ${name} bottom`).toBeLessThanOrEqual(
+          barTop,
+        )
+      }
+
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      const last = await page.getByRole('button', { name: 'Keyboard shortcuts' }).boundingBox()
+      expect((last?.y ?? 0) + (last?.height ?? 0), `${where} end of page`).toBeLessThanOrEqual(
+        barTop + 1,
+      )
+    }
   })
 
   test('a malformed signature is "can’t check", not "invalid" @IN-08', async ({ page }) => {

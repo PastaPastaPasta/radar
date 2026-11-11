@@ -51,8 +51,8 @@ function Kicker() {
           <span className="rx-tnbadge" data-net>
             {networkName(net)}
           </span>
-        )}{' '}
-        · {t`Core, Platform and the masternode network`}
+        )}
+        <span className="rx-scope__tail"> · {t`Core, Platform and the masternode network`}</span>
       </span>
     </p>
   )
