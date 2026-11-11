@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { healthQueries } from '@/data/health-queries'
-import { useSourceHealth } from '@/data/health'
+import { healthQueries } from '../health-queries'
+import { useSourceHealth } from '../health'
 import { isDevnet, type NetworkId } from '@/lib/network'
 
 /**

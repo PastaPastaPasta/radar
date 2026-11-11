@@ -1,23 +1,41 @@
 import { useQuery } from '@tanstack/react-query'
-import { mapSourced, type Sourced } from '@/data/envelope'
+import { useEffect, useState } from 'react'
+import { mapSourced, type FallbackReason, type Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
+import { platformTipQuery, type PlatformTip } from '@/data/sdk/queries'
 import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 
-export interface PlatformTip {
-  height: number
-  epoch: { number: number; firstBlockHeight: number; startedAt: number }
+export type { PlatformTip }
+
+/** True once the browser has had an idle moment after first paint, so loading the SDK never competes with it (§3.3). */
+function useAfterIdle(): boolean {
+  const [idle, setIdle] = useState(false)
+  useEffect(() => {
+    const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => number })
+      .requestIdleCallback
+    const cancel = (globalThis as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback
+    if (!ric) {
+      const timer = setTimeout(() => setIdle(true), 1)
+      return () => clearTimeout(timer)
+    }
+    const id = ric(() => setIdle(true))
+    return () => cancel?.(id)
+  }, [])
+  return idle
 }
 
 /**
- * The one place the home page reads the Platform tip. Today it comes from Platform Explorer and is stamped
- * `pe`; when the SDK client's `system.status` lands, only this hook's query changes and the stamp turns into
- * "Proof-checked".
+ * The home page's Platform height and epoch (§3.3). The proof-checked SDK answer wins; until it lands, Platform
+ * Explorer's figure stands in, stamped `sdk-cold` (or `sdk-down` once the SDK has failed). Devnets have no Platform
+ * Explorer, so they show the SDK answer or nothing.
  */
 export function usePlatformTip(net: NetworkId) {
-  return useQuery({
+  const afterIdle = useAfterIdle()
+  const sdkTip = useQuery({ ...platformTipQuery(net), enabled: afterIdle })
+  const explorerTip = useQuery({
     ...peQueries.status(net),
-    enabled: !isDevnet(net),
+    enabled: !isDevnet(net) && !sdkTip.data,
     select: (s): Sourced<PlatformTip> =>
       mapSourced(s, (d) => ({
         height: d.tenderdash.block.height,
@@ -28,4 +46,10 @@ export function usePlatformTip(net: NetworkId) {
         },
       })),
   })
+  if (sdkTip.data) return { data: sdkTip.data, isError: false }
+  const fallback: FallbackReason = sdkTip.isError ? 'sdk-down' : 'sdk-cold'
+  return {
+    data: explorerTip.data ? { ...explorerTip.data, fallback } : undefined,
+    isError: sdkTip.isError && (explorerTip.isError || isDevnet(net)),
+  }
 }

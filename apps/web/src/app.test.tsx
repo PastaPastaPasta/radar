@@ -131,6 +131,13 @@ describe('legacy and alias paths', () => {
     const byHash = renderAt(`/insight/block/${hash}`)
     await waitFor(() => expect(byHash.location.pathname).toBe(`/block/${hash}`))
   })
+
+  it('keeps the day when it opens an Insight blocks list', async () => {
+    const history = renderAt('/insight/blocks?blockDate=2026-10-01')
+    await waitFor(() => expect(history.location.pathname).toBe('/blocks'))
+    expect(history.location.search).toContain('date=2026-10-01')
+    expect(history.location.search).not.toContain('blockDate')
+  })
 })
 
 describe('routes', () => {

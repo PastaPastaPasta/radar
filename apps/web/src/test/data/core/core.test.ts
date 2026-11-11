@@ -9,6 +9,7 @@ import { isSourceError } from '@/data/errors'
 import type { HealthState } from '@/data/health'
 import { hyphen } from '@/data/hyphen/client'
 import { createCoreClient } from '@/data/core/client'
+import { poolOfCoinbase } from '@/lib/core/pools'
 import { createCoreDecoder } from '@/data/core/decode'
 import type { CoreClient, DecodedTx } from '@/data/core/types'
 
@@ -125,6 +126,14 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     )
     expect(rows.data[0]!.hash).toBe(manifest.tip.hash)
     expect(rows.data.every((r) => r.txCount >= 1 && r.size > 0)).toBe(true)
+  })
+
+  it('names the pool in a row from the coinbase tag, when it has one', async () => {
+    const rows = await core.blockRows(net, { fromHeight: manifest.tip.height, count: 20 })
+    for (const row of rows.data) {
+      const block = (await core.block(net, { height: row.height })).data!
+      expect(row.pool).toBe(poolOfCoinbase(block.txs[0]!.inputs[0]!.coinbase))
+    }
   })
 
   it('reads a header range with hashes linked by prevHash', async () => {

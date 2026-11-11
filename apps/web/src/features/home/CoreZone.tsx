@@ -11,7 +11,7 @@ import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Amount, Card, DataTable, Empty, SectionBand, Stat, Time } from '@/ui'
-import { useHyphenFit } from './use-hyphen-fit'
+import { useHyphenFit } from '@/data/hyphen/fit'
 
 const PENDING = 8
 

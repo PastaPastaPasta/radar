@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { useAllSourceHealth } from '@/data/health'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { LiveDot } from '@/ui'
@@ -41,6 +42,12 @@ export function StatusPage() {
           {overall === 'checking' ? t`Checking the sources…` : null}
         </p>
       </header>
+
+      <p>
+        <Link to="/charts" search={{ tab: 'internals' }} className="rx-go">
+          {t`Network internals: peers, mempool pressure, versions and history`}
+        </Link>
+      </p>
 
       <CoreCard tip={tip} chainLock={chainLock} chain={chain} />
       <SourcesCard rows={rows} probes={probes} />

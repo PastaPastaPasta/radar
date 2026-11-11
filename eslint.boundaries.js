@@ -158,7 +158,7 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
       },
     },
     {
-      files: [`${rel}/data/health.ts`, `${rel}/data/query/batch.ts`],
+      files: [`${rel}/data/health.ts`, `${rel}/data/hyphen/fit.ts`, `${rel}/data/query/batch.ts`],
       rules: { 'no-restricted-imports': 'off' },
     },
     {

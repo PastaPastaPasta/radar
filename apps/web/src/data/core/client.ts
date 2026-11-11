@@ -18,6 +18,7 @@ import { isDevnet } from '@/lib/network'
 import { bytesToHex, hexToBytes, isHex } from '@/lib/hex'
 import { parseChainLock } from '@/lib/core/chainlock'
 import { parseHeader } from '@/lib/core/header'
+import { poolOfCoinbase } from '@/lib/core/pools'
 import { coreDecoder, type createCoreDecoder } from './decode'
 import type {
   BlockRef,
@@ -574,14 +575,18 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient {
             void cache.putBlock(net, { hash: b.hash, height: b.height, bytes })
         }
       }
-      const data: BlockRow[] = rows.map((b) => ({
-        height: b.height,
-        hash: b.hash,
-        time: b.time,
-        txCount: b.txs.length,
-        size: b.size,
-        chainLocked: b.height <= lockedUpTo,
-      }))
+      const data: BlockRow[] = rows.map((b) => {
+        const pool = poolOfCoinbase(b.txs[0]?.inputs[0]?.coinbase)
+        return {
+          height: b.height,
+          hash: b.hash,
+          time: b.time,
+          txCount: b.txs.length,
+          size: b.size,
+          chainLocked: b.height <= lockedUpTo,
+          ...(pool ? { pool } : {}),
+        }
+      })
       return dapi(data, { node, height: data[0]?.height })
     },
 

@@ -27,18 +27,10 @@ import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './
 import { CbTxRows } from '../tx/Payload'
 import { sumOutputs } from '../tx/tx-info'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
-import { useHyphenFit } from './use-hyphen-fit'
+import { useHyphenFit } from '@/data/hyphen/fit'
+import { parseBlockRef } from '@/lib/core/block-ref'
 
 export const TXS_PER_PAGE = 100
-
-const HASH = /^[0-9a-f]{64}$/i
-const HEIGHT = /^\d{1,9}$/
-
-export function parseBlockRef(id: string): { height: number } | { hash: string } | null {
-  if (HEIGHT.test(id)) return { height: Number(id) }
-  if (HASH.test(id)) return { hash: id.toLowerCase() }
-  return null
-}
 
 export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   const { t } = useLingui()

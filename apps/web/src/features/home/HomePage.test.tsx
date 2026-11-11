@@ -39,14 +39,15 @@ describe('Home page', () => {
     await waitFor(() => expect(within(transitions).getAllByRole('row').length).toBeGreaterThan(1))
   })
 
-  it('shows the Platform height and epoch from Platform Explorer @IN-01', async () => {
+  it('shows the Platform height and epoch from the proof-checked SDK answer @IN-01', async () => {
     renderAt('/')
     const row = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('[data-pulse="platform"]')
       expect(el).toHaveTextContent(/Epoch \d+/)
+      expect(el!.querySelector('[data-source="sdk"]')).not.toBeNull()
       return el!
     })
-    expect(row.querySelector('[data-source="pe"]')).not.toBeNull()
+    expect(row.querySelector('[data-source="pe"]')).toBeNull()
   })
 
   it('shows the census headline from Radar @IN-01', async () => {

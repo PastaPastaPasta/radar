@@ -71,6 +71,13 @@ describe('Status page', () => {
     expect(document.querySelector('[data-status="sync"]')).toHaveTextContent('Synced')
   })
 
+  it('links to the network internals on the charts page @HY-12', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    const link = await screen.findByRole('link', { name: /Network internals/ })
+    expect(link).toHaveAttribute('href', '/charts?tab=internals')
+  })
+
   it('lists every source with its state and what its backend reports @IN-09', async () => {
     setCoreClient(core())
     renderAt('/status')

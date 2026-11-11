@@ -23,7 +23,7 @@ import {
   TypeBadge,
 } from '@/ui'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
-import { useHyphenFit } from '../block/use-hyphen-fit'
+import { useHyphenFit } from '@/data/hyphen/fit'
 import { IoTables } from './IoTables'
 import { PayloadRows, usePayloadInfo } from './Payload'
 import { txQueries } from './queries'
