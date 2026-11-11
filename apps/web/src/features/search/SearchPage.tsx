@@ -30,7 +30,7 @@ function withheldFrom(state: unknown): SecretWarning | undefined {
 
 function HitList({ hits, badge }: { hits: SearchHit[]; badge: (hit: SearchHit) => string }) {
   return (
-    <ul className="grid gap-2">
+    <ul className="grid grid-cols-[minmax(0,1fr)] gap-2">
       {hits.map((hit) => (
         <li key={`${hit.kind}:${hit.id}`} className="flex items-center justify-between gap-3">
           <Link {...hit.href} className="min-w-0">
@@ -90,11 +90,11 @@ export function SearchPage({ q }: { q?: string }) {
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
 
   return (
-    <div className="grid gap-6" data-page="/search">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6" data-page="/search">
       <header className="grid gap-3">
         <h1 className="text-3xl font-semibold">{t`Search`}</h1>
         <form role="search" onSubmit={submit} className="flex gap-2">
-          <label className="grow">
+          <label className="min-w-0 grow">
             <span className="sr-only">{t`Search Radar`}</span>
             <input
               type="search"
@@ -105,7 +105,7 @@ export function SearchPage({ q }: { q?: string }) {
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
-              className="w-full rounded border px-3 py-2"
+              className="w-full min-w-0 rounded border px-3 py-2"
             />
           </label>
           <button type="submit" className="rounded px-4 py-2 font-medium">
@@ -148,7 +148,11 @@ export function SearchPage({ q }: { q?: string }) {
       ) : null}
 
       {!secret && query.length > 0 ? (
-        <section aria-label={t`Results`} className="grid gap-4" aria-busy={!settled}>
+        <section
+          aria-label={t`Results`}
+          className="grid grid-cols-[minmax(0,1fr)] gap-4"
+          aria-busy={!settled}
+        >
           {classified.classes.length === 0 ? (
             <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
               {t`“${query}” isn’t something Radar can look up.`}
@@ -195,7 +199,7 @@ export function SearchPage({ q }: { q?: string }) {
             <section
               aria-label={t`A guess`}
               data-guess
-              className="grid gap-2 rounded border border-dashed p-4"
+              className="grid grid-cols-[minmax(0,1fr)] gap-2 rounded border border-dashed p-4"
             >
               <h2 className="text-sm font-medium text-[var(--dh-ink-2,inherit)]">
                 {t`A guess, not a result`}

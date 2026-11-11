@@ -150,21 +150,28 @@ test.describe('routes', () => {
 })
 
 test.describe('first paint', () => {
-  const STALLED_MS = 3_000
-  test.describe.configure({ retries: 2 })
+  // The loader waits for a detail read for at most 1.5 s (DEFAULT_LOADER_DEADLINE_MS); a loader that
+  // blocked first paint on it would show the shell that much after the read began.
+  const LOADER_DEADLINE_MS = 1_500
 
   for (const [name, path] of [
     ['block', '/block/2569992'],
     ['transaction', `/tx/${TXID}`],
   ] as const) {
-    test(`a cold deep link to a ${name} paints the shell within 500 ms while DAPI is slow @X-08`, async ({
+    test(`a cold deep link to a ${name} paints the shell without waiting for DAPI @X-08`, async ({
       page,
     }) => {
-      await page.addInitScript((stall) => {
+      // The test holds every Core block and transaction read until it releases them.
+      await page.addInitScript(() => {
         const w = window as unknown as {
           __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
+          __coreCallAt?: number
           __shellAt?: number
+          __releaseCore: () => void
         }
+        let release!: () => void
+        const gate = new Promise<void>((resolve) => (release = resolve))
+        w.__releaseCore = release
         let core: typeof w.__radarCore
         Object.defineProperty(w, '__radarCore', {
           configurable: true,
@@ -175,7 +182,8 @@ test.describe('first paint', () => {
               const original = value?.[method]
               if (!value || !original) continue
               value[method] = async (...args) => {
-                await new Promise((resolve) => setTimeout(resolve, stall))
+                w.__coreCallAt ??= performance.now()
+                await gate
                 return original.apply(value, args)
               }
             }
@@ -187,19 +195,22 @@ test.describe('first paint', () => {
             observer.disconnect()
           }
         }).observe(document, { childList: true, subtree: true })
-      }, STALLED_MS)
+      })
 
-      // A loaded machine adds tens of ms to any one navigation; the best of three is the page's own cost.
-      const paints: number[] = []
-      for (let attempt = 0; attempt < 3; attempt++) {
-        await page.goto(path, { waitUntil: 'commit' })
-        await expect(page.locator('#root dashhq-bar')).toBeAttached({ timeout: 10_000 })
-        const shellAt = await page.evaluate(
-          () => (window as unknown as { __shellAt?: number }).__shellAt,
-        )
-        paints.push(shellAt ?? Infinity)
-      }
-      expect(Math.min(...paints)).toBeLessThan(500)
+      await page.goto(path, { waitUntil: 'commit' })
+      await expect(page.locator('#root dashhq-bar')).toBeAttached({ timeout: 15_000 })
+      const { shellAt, callAt } = await page.evaluate(() => {
+        const w = window as unknown as { __shellAt?: number; __coreCallAt?: number }
+        return { shellAt: w.__shellAt ?? Infinity, callAt: w.__coreCallAt }
+      })
+      expect(
+        shellAt - (callAt ?? shellAt),
+        'shell paint after the Core read began, in ms',
+      ).toBeLessThan(LOADER_DEADLINE_MS / 2)
+
+      await page.evaluate(() =>
+        (window as unknown as { __releaseCore: () => void }).__releaseCore(),
+      )
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 15_000 })
     })
   }
