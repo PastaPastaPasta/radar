@@ -33,6 +33,12 @@ function placeholders(text) {
   return [...new Set(names), ...new Set(tags)].sort().join(' ')
 }
 
+function listIds(ids, limit = 10) {
+  const lines = ids.slice(0, limit).map((id) => `    ${id}`)
+  if (ids.length > limit) lines.push(`    … and ${ids.length - limit} more`)
+  return lines
+}
+
 const shipped = shippedLocales()
 const problems = []
 
@@ -83,12 +89,11 @@ for (const code of shipped) {
   }
   if (missing.length > 0) {
     problems.push(`${code}: ${missing.length} message(s) missing a translation`)
-    for (const id of missing.slice(0, 10)) problems.push(`    ${id}`)
-    if (missing.length > 10) problems.push(`    … and ${missing.length - 10} more`)
+    problems.push(...listIds(missing))
   }
   if (broken.length > 0) {
     problems.push(`${code}: ${broken.length} translation(s) whose placeholders differ`)
-    for (const id of broken.slice(0, 10)) problems.push(`    ${id}`)
+    problems.push(...listIds(broken))
   }
 }
 

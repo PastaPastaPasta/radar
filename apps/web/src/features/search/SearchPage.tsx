@@ -13,6 +13,7 @@ import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
 import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { groupHits, groupLabel } from './groups'
+import type { SearchHit } from './types'
 import { useSearch } from './useSearch'
 import { useWordlistLoaded } from './wordlist'
 
@@ -25,6 +26,26 @@ function otherNetwork(net: NetworkId): NetworkId {
 function withheldFrom(state: unknown): SecretWarning | undefined {
   const value = (state as { withheld?: unknown } | undefined)?.withheld
   return value === 'secret' || value === 'possible-secret' ? value : undefined
+}
+
+function HitList({ hits, badge }: { hits: SearchHit[]; badge: (hit: SearchHit) => string }) {
+  return (
+    <ul className="grid gap-2">
+      {hits.map((hit) => (
+        <li key={`${hit.kind}:${hit.id}`} className="flex items-center justify-between gap-3">
+          <Link {...hit.href} className="min-w-0">
+            <span className="block truncate">{hit.title}</span>
+            {hit.subtitle ? (
+              <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
+                {hit.subtitle}
+              </span>
+            ) : null}
+          </Link>
+          <Badge size="sm">{badge(hit)}</Badge>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 export function SearchPage({ q }: { q?: string }) {
@@ -141,24 +162,7 @@ export function SearchPage({ q }: { q?: string }) {
 
           {groups.map(([group, items]) => (
             <Card key={group} title={groupLabel(group)} layer={group}>
-              <ul className="grid gap-2">
-                {items.map((hit) => (
-                  <li
-                    key={`${hit.kind}:${hit.id}`}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <Link {...hit.href} className="min-w-0">
-                      <span className="block truncate">{hit.title}</span>
-                      {hit.subtitle ? (
-                        <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
-                          {hit.subtitle}
-                        </span>
-                      ) : null}
-                    </Link>
-                    <Badge size="sm">{ENTITY_LABELS[hit.kind]}</Badge>
-                  </li>
-                ))}
-              </ul>
+              <HitList hits={items} badge={(hit) => ENTITY_LABELS[hit.kind]} />
             </Card>
           ))}
 
@@ -199,24 +203,7 @@ export function SearchPage({ q }: { q?: string }) {
               <p className="text-sm text-[var(--dh-ink-2,inherit)]">
                 {t`Nothing above confirms this. It is only one way to read what you typed.`}
               </p>
-              <ul className="grid gap-2">
-                {guesses.map((hit) => (
-                  <li
-                    key={`${hit.kind}:${hit.id}`}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <Link {...hit.href} className="min-w-0">
-                      <span className="block truncate">{hit.title}</span>
-                      {hit.subtitle ? (
-                        <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
-                          {hit.subtitle}
-                        </span>
-                      ) : null}
-                    </Link>
-                    <Badge size="sm">{t`Guess`}</Badge>
-                  </li>
-                ))}
-              </ul>
+              <HitList hits={guesses} badge={() => t`Guess`} />
             </section>
           ) : null}
         </section>

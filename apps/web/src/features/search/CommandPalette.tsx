@@ -55,6 +55,36 @@ export function CommandPalette() {
   )
 }
 
+function PaletteHit({
+  hit,
+  badge,
+  guess = false,
+  onSelect,
+}: {
+  hit: SearchHit
+  badge: string
+  guess?: boolean
+  onSelect: (href: SearchHit['href']) => void
+}) {
+  return (
+    <Command.Item
+      value={`${hit.kind}:${hit.id}`}
+      onSelect={() => onSelect(hit.href)}
+      className={`flex items-center justify-between gap-3 rounded ${guess ? 'border border-dashed ' : ''}px-2 py-2 data-[selected=true]:bg-black/5`}
+    >
+      <span className="min-w-0">
+        <span className="block truncate">{hit.title}</span>
+        {hit.subtitle ? (
+          <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
+            {hit.subtitle}
+          </span>
+        ) : null}
+      </span>
+      <Badge size="sm">{badge}</Badge>
+    </Command.Item>
+  )
+}
+
 function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: () => void }) {
   const { t } = useLingui()
   const navigate = useNavigate()
@@ -165,22 +195,12 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
         {groups.map(([group, items]) => (
           <Command.Group key={group} heading={groupLabel(group)}>
             {items.map((hit) => (
-              <Command.Item
+              <PaletteHit
                 key={`${hit.kind}:${hit.id}`}
-                value={`${hit.kind}:${hit.id}`}
-                onSelect={() => go(hit.href)}
-                className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
-              >
-                <span className="min-w-0">
-                  <span className="block truncate">{hit.title}</span>
-                  {hit.subtitle ? (
-                    <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
-                      {hit.subtitle}
-                    </span>
-                  ) : null}
-                </span>
-                <Badge size="sm">{ENTITY_LABELS[hit.kind]}</Badge>
-              </Command.Item>
+                hit={hit}
+                badge={ENTITY_LABELS[hit.kind]}
+                onSelect={go}
+              />
             ))}
           </Command.Group>
         ))}
@@ -188,22 +208,13 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
         {guesses.length > 0 ? (
           <Command.Group heading={t`A guess, not a result`} data-guess>
             {guesses.map((hit) => (
-              <Command.Item
+              <PaletteHit
                 key={`${hit.kind}:${hit.id}`}
-                value={`${hit.kind}:${hit.id}`}
-                onSelect={() => go(hit.href)}
-                className="flex items-center justify-between gap-3 rounded border border-dashed px-2 py-2 data-[selected=true]:bg-black/5"
-              >
-                <span className="min-w-0">
-                  <span className="block truncate">{hit.title}</span>
-                  {hit.subtitle ? (
-                    <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
-                      {hit.subtitle}
-                    </span>
-                  ) : null}
-                </span>
-                <Badge size="sm">{t`Guess`}</Badge>
-              </Command.Item>
+                hit={hit}
+                badge={t`Guess`}
+                guess
+                onSelect={go}
+              />
             ))}
           </Command.Group>
         ) : null}
