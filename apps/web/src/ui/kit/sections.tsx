@@ -8,7 +8,7 @@ import { Chart } from '../chart'
 import { EntityChip } from '../entities'
 import { Copy, Hash } from '../hash'
 import { Icon } from '../icon'
-import { KIND_META, TYPE_META } from '../kinds'
+import { KIND_META, TYPE_META, labelOf } from '../kinds'
 import { Card, KeyValue, SectionBand } from '../layout'
 import { LinkOut, LinkOutCard } from '../link-out'
 import { Meter, Sparkline, Stat } from '../stat'
@@ -235,8 +235,9 @@ export function LayoutSection() {
             layer={l}
             id={`kit-band-${l}`}
             title={
-              KIND_META[l === 'core' ? 'block' : l === 'platform' ? 'identity' : 'masternode']
-                .label + ' zone'
+              labelOf(
+                KIND_META[l === 'core' ? 'block' : l === 'platform' ? 'identity' : 'masternode'],
+              ) + ' zone'
             }
             description="One ruled head per zone"
             actions={<span className="rx-go">All records</span>}
@@ -626,7 +627,7 @@ export function EntitySection() {
           <Card title="Every kind" subtitle="md, hover card on">
             <div className="grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
               {CHIP_SAMPLES.map((c, i) => (
-                <Row key={i} label={KIND_META[c.kind].label}>
+                <Row key={i} label={labelOf(KIND_META[c.kind])}>
                   <EntityChip kind={c.kind} id={c.id} label={c.label} href="#entities" />
                 </Row>
               ))}

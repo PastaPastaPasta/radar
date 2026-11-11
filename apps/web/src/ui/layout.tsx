@@ -21,11 +21,11 @@ function AnchorLink({ id }: { id: string }) {
     <button
       type="button"
       className="rx-sec__copy"
-      aria-label="Copy link to this section"
+      aria-label={t`Copy link to this section`}
       onClick={() => {
         const url = `${location.origin}${location.pathname}${location.search}#${id}`
         void copyText(url).then((ok) => {
-          if (ok) announce('Link copied')
+          if (ok) announce(t`Link copied`)
         })
       }}
     >
@@ -120,7 +120,7 @@ export function Card({
           </span>
           {onRetry ? (
             <button type="button" className="dh-btn dh-btn--sm" onClick={onRetry}>
-              Retry
+              {t`Retry`}
             </button>
           ) : null}
         </p>
@@ -134,7 +134,7 @@ export function Card({
       ) : state === 'error' ? (
         <ErrorState error={error} source={stamps[0]?.source} onRetry={onRetry} />
       ) : state === 'empty' ? (
-        <Empty kind="none-yet" title="Nothing to show" />
+        <Empty kind="none-yet" title={t`Nothing to show`} />
       ) : (
         <div className={cx('rx-card__body', padding === 'flush' && 'rx-card__body--flush')}>
           <SourceScope value={covered}>{children}</SourceScope>

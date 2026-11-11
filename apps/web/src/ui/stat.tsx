@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { Children, cloneElement, isValidElement, useId, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { formatNumber, MINUS } from '@/lib/format'
@@ -162,7 +163,7 @@ export function Sparkline({
         />
       ) : null}
       <span id={summaryId} className="dh-sr">
-        {`${values.length} points, from ${formatNumber(values[0] ?? 0)} to ${formatNumber(values[values.length - 1] ?? 0)}, low ${formatNumber(lo)}, high ${formatNumber(hi)}`}
+        {t`${values.length} points, from ${formatNumber(values[0] ?? 0)} to ${formatNumber(values[values.length - 1] ?? 0)}, low ${formatNumber(lo)}, high ${formatNumber(hi)}`}
       </span>
     </span>
   )
@@ -260,11 +261,11 @@ export function Stat({
               value={meter.value}
               max={meter.max}
               labelledBy={labelId}
-              valueText={`${formatNumber(meter.value)} of ${formatNumber(meter.max)}`}
+              valueText={t`${formatNumber(meter.value)} of ${formatNumber(meter.max)}`}
             />
           ) : null}
           {spark && spark.length > 1 ? (
-            <Sparkline values={spark} label="Trend" layer={layer} height={28} />
+            <Sparkline values={spark} label={t`Trend`} layer={layer} height={28} />
           ) : null}
         </>
       )}

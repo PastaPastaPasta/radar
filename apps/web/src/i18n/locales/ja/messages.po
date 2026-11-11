@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-11 07:00+0000\n"
+"POT-Creation-Date: 2026-11-11 08:01+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,6 +29,12 @@ msgstr "「{query}」は {0} のようです。"
 msgid "(opens in a new tab)"
 msgstr "(新しいタブで開きます)"
 
+msgid "(out of date)"
+msgstr "（古い情報）"
+
+msgid "(source down)"
+msgstr "（ソース停止中）"
+
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, other {入力 #件}}"
@@ -40,6 +46,10 @@ msgstr "{0, plural, other {出力 #件}}"
 #. placeholder {0}: block.txs.length
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, other {トランザクション #件}}"
+
+#. placeholder {0}: Math.floor(ms / 60_000)
+msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
+msgstr "{0, plural, other {最後のブロックヘッダー: #分前}}"
 
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
@@ -53,11 +63,27 @@ msgstr "1ページ {0} ブロック、新しい順。"
 msgid "{0} by block height"
 msgstr "ブロック高別の {0}"
 
+#. placeholder {0}: formatInt(block.size)
+msgid "{0} bytes"
+msgstr "{0} バイト"
+
 #. placeholder {0}: formatInt(n.peerCount)
 #. placeholder {1}: n.networkInfo.subversion
 #. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
 msgid "{0} connections · {1} · protocol {2}"
 msgstr "接続 {0} 件・{1}・プロトコル {2}"
+
+#. placeholder {0}: formatInt(value)
+msgid "{0} credits"
+msgstr "{0} クレジット"
+
+#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
+msgid "{0} doesn’t cover devnets."
+msgstr "{0} は devnet に対応していません。"
+
+#. placeholder {0}: formatInt(n.value)
+msgid "{0} duffs"
+msgstr "{0} duff"
 
 #. placeholder {0}: formatInt(total)
 msgid "{0} in the mempool"
@@ -82,6 +108,10 @@ msgstr "{0} が応答していません"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} が応答していません・{1}のデータを表示中"
 
+#. placeholder {0}: formatInt(shown)
+msgid "{0} loaded"
+msgstr "{0} 件を読み込み済み"
+
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "マスターノード {0} 台"
@@ -104,6 +134,10 @@ msgstr "必要 {0}・投票済み {1}"
 msgid "{0} net votes"
 msgstr "純投票数 {0}"
 
+#. placeholder {0}: formatInt(count)
+msgid "{0} new {noun} · show"
+msgstr "新しい{noun} {0} 件・表示"
+
 #. placeholder {0}: formatInt(budget.usedLastMinute)
 #. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
@@ -121,6 +155,18 @@ msgstr "{1} ピア中 {0}"
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "出力 {0} 件"
+
+#. placeholder {0}: sectionLabel(section)
+msgid "{0} pages"
+msgstr "{0}のページ"
+
+#. placeholder {0}: values.length
+#. placeholder {1}: formatNumber(values[0] ?? 0)
+#. placeholder {2}: formatNumber(values[values.length - 1] ?? 0)
+#. placeholder {3}: formatNumber(lo)
+#. placeholder {4}: formatNumber(hi)
+msgid "{0} points, from {1} to {2}, low {3}, high {4}"
+msgstr "{0} 点、{1} から {2}、最小 {3}、最大 {4}"
 
 #. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
@@ -141,6 +187,12 @@ msgstr "他のアドレスへ {0}"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} tx"
+
+#. placeholder {0}: formatInt(start)
+#. placeholder {1}: formatInt(end)
+#. placeholder {2}: formatInt(paging.total)
+msgid "{0}–{1} of {2}"
+msgstr "{2} 件中 {0}–{1} 件"
 
 #. placeholder {0}: secretNotice(secret).title
 msgid "{0}. Radar never sends it anywhere."
@@ -170,6 +222,9 @@ msgstr "{d}日"
 msgid "{d} d {h} h"
 msgstr "{d}日{h}時間"
 
+msgid "{days, plural, one {# day} other {# days}}"
+msgstr "{days, plural, other {#日}}"
+
 msgid "{feeRate} duffs a byte"
 msgstr "1バイトあたり {feeRate} duff"
 
@@ -179,8 +234,14 @@ msgstr "{h}時間"
 msgid "{h} h {m} min"
 msgstr "{h}時間{m}分"
 
+msgid "{hours, plural, one {# hour} other {# hours}}"
+msgstr "{hours, plural, other {#時間}}"
+
 msgid "{m} min"
 msgstr "{m}分"
+
+msgid "{minutes, plural, one {# minute} other {# minutes}}"
+msgstr "{minutes, plural, other {#分}}"
 
 msgid "{n} h ago"
 msgstr "{n}時間前"
@@ -200,17 +261,29 @@ msgstr "{n}秒前"
 msgid "{name} couldn’t be reached"
 msgstr "{name} に接続できません"
 
+msgid "{name} is busy"
+msgstr "{name} は混雑しています"
+
 msgid "{name} is not available on this network"
 msgstr "{name} はこのネットワークでは利用できません"
 
 msgid "{name} is rate limiting requests"
 msgstr "{name} がリクエストを制限しています"
 
+msgid "{name} isn't answering"
+msgstr "{name} が応答しません"
+
+msgid "{name} isn't available here"
+msgstr "{name} はここでは利用できません"
+
 msgid "{name} returned an error"
 msgstr "{name} がエラーを返しました"
 
 msgid "{name} sent an answer that could not be read"
 msgstr "{name} が読み取れない応答を返しました"
+
+msgid "{name} sent something Radar couldn't read"
+msgstr "{name} が Radar で読み取れないデータを返しました"
 
 msgid "{name} took too long to answer"
 msgstr "{name} の応答に時間がかかりすぎました"
@@ -234,6 +307,10 @@ msgstr "← 前へ"
 msgid "← Previous day"
 msgstr "← 前の日"
 
+#. placeholder {0}: formatInt(matches)
+msgid "<0>{0}</0> match"
+msgstr "<0>{0}</0> 件が一致"
+
 msgid "1 d"
 msgstr "1日"
 
@@ -255,8 +332,14 @@ msgstr "40文字のハッシュ（公開鍵ハッシュ）"
 msgid "a 64-character hash: a block, transaction, ProTx or transition"
 msgstr "64文字のハッシュ（ブロック、トランザクション、ProTx、またはトランジション）"
 
+msgid "A contract’s groups with position, threshold and members."
+msgstr "コントラクトのグループ（位置、しきい値、メンバー）。"
+
 msgid "a Core address"
 msgstr "Core アドレス"
+
+msgid "A Core address’s balance, history and unspent outputs, with new-activity notices."
+msgstr "Core アドレスの残高、履歴、未使用の出力。新しい動きの通知付き。"
 
 msgid "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
 msgstr "Dash アドレスは34文字で、メインネットでは X または 7、テストネットでは y または 8 で始まります。"
@@ -282,6 +365,12 @@ msgstr "数値（Coreの高さ、Platformの高さ、またはエポック）"
 msgid "a Platform address"
 msgstr "Platform アドレス"
 
+msgid "A Platform address’s balance and nonce, proof-checked, and its transitions."
+msgstr "Platform アドレスの残高とノンス（証明で検証済み）と、そのトランジション。"
+
+msgid "A proof didn't verify"
+msgstr "証明を検証できませんでした"
+
 msgid "A quorum signals that masternodes are ready for a protocol upgrade."
 msgstr "クォーラムは、マスターノードがプロトコルのアップグレードに対応できることを通知します。"
 
@@ -300,14 +389,29 @@ msgstr "概要"
 msgid "Abstain"
 msgstr "棄権"
 
+msgid "Active contested names with end time, votes and status."
+msgstr "進行中の争奪中の名前（終了時刻、投票数、状態）。"
+
 msgid "Add a devnet"
 msgstr "devnet を追加"
 
 msgid "Add devnet"
 msgstr "devnet を追加"
 
+msgid "address"
+msgstr "アドレス"
+
 msgid "Address"
 msgstr "アドレス"
+
+msgid "Address funding"
+msgstr "アドレスへの入金"
+
+msgid "Address transfer"
+msgstr "アドレス間送金"
+
+msgid "Address withdrawal"
+msgstr "アドレスからの出金"
 
 msgid "Addresses ranked by balance"
 msgstr "残高順のアドレス"
@@ -382,17 +486,29 @@ msgstr "以前"
 msgid "Back to Mainnet"
 msgstr "メインネットに戻る"
 
+msgid "Back to top"
+msgstr "トップへ戻る"
+
 msgid "Balance"
 msgstr "残高"
 
+msgid "Balances for the identities you choose, and the holders Platform Explorer has indexed."
+msgstr "選んだアイデンティティの残高と、Platform Explorer がインデックスした保有者。"
+
 msgid "before it was mined"
 msgstr "マイニングされる前"
+
+msgid "Behind"
+msgstr "遅延"
 
 msgid "Best ChainLock"
 msgstr "最新の ChainLock"
 
 msgid "Bits"
 msgstr "Bits"
+
+msgid "block"
+msgstr "ブロック"
 
 msgid "Block"
 msgstr "ブロック"
@@ -437,6 +553,9 @@ msgstr "{date} のブロック"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} のブロック"
 
+msgid "Browse a contract’s documents of one type, filtered by its indices."
+msgstr "コントラクトの特定タイプのドキュメントを、インデックスで絞り込んで閲覧します。"
+
 msgid "Browse by date"
 msgstr "日付で探す"
 
@@ -448,6 +567,9 @@ msgstr "予算提案"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "予算提案と投票状況です。投票は Governance で行います。"
+
+msgid "Budget proposals with vote counts, status and the next superblock."
+msgstr "予算提案（票数、状態、次のスーパーブロック）。"
 
 msgid "bytes"
 msgstr "バイト"
@@ -478,8 +600,8 @@ msgid "ChainLock"
 msgstr "ChainLock"
 
 #. placeholder {0}: formatInt(lock.data.data.height)
-msgid "ChainLock at {0}"
-msgstr "{0} の ChainLock"
+msgid "ChainLock at {0}, reported by one node"
+msgstr "ChainLock は {0}（1つのノードが報告）"
 
 msgid "ChainLock reported by one node"
 msgstr "1つのノードが報告した ChainLock"
@@ -505,11 +627,20 @@ msgstr "おつり"
 msgid "Change to sender"
 msgstr "送信者へのおつり"
 
+msgid "Changes"
+msgstr "変更"
+
 msgid "Charts"
 msgstr "チャート"
 
+msgid "Check a signed message against a Core address, in your browser."
+msgstr "署名済みメッセージを Core アドレスに対してブラウザ内で検証します。"
+
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Dash アドレスがメッセージに署名したかを確認します。確認はこのブラウザ内で行われ、ここに入力した内容はどこにも送信されません。Radar が鍵を求めることもありません。"
+
+msgid "Checking"
+msgstr "確認中"
 
 msgid "Checking every 30 s"
 msgstr "30秒ごとに確認"
@@ -532,6 +663,9 @@ msgstr "流通供給量"
 msgid "Clear"
 msgstr "クリア"
 
+msgid "close"
+msgstr "閉じる"
+
 msgid "Close"
 msgstr "閉じる"
 
@@ -540,6 +674,9 @@ msgstr "ダイアログまたは検索を閉じる"
 
 msgid "Code {reason}"
 msgstr "コード {reason}"
+
+msgid "Coinbase"
+msgstr "コインベース"
 
 msgid "Coinbase payload"
 msgstr "Coinbase ペイロード"
@@ -565,8 +702,51 @@ msgstr "ライブフィードに接続中…"
 msgid "Connecting…"
 msgstr "接続中…"
 
+msgid "contest"
+msgstr "争奪"
+
+msgid "Contested name"
+msgstr "争奪中の名前"
+
+msgid "contract"
+msgstr "コントラクト"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract create"
+msgstr "コントラクト作成"
+
+msgid "Contract update"
+msgstr "コントラクト更新"
+
+msgid "Contracts"
+msgstr "コントラクト"
+
+msgid "Copied"
+msgstr "コピーしました"
+
+msgid "Copy"
+msgstr "コピー"
+
+#. placeholder {0}: labelOf(meta)
+msgid "Copy {0} ID"
+msgstr "{0} の ID をコピー"
+
+msgid "Copy full value"
+msgstr "完全な値をコピー"
+
+msgid "Copy ID"
+msgstr "ID をコピー"
+
+msgid "Copy link to this section"
+msgstr "このセクションへのリンクをコピー"
+
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24 activation"
+msgstr "Core 24 の有効化"
 
 msgid "Core address"
 msgstr "Core アドレス"
@@ -610,8 +790,14 @@ msgstr "Core のブロック、マスターノード、Platform のレコード�
 msgid "Core height"
 msgstr "Core の高さ"
 
+msgid "Core network metrics over time: transactions, fees, difficulty, supply and mining."
+msgstr "Core ネットワーク指標の推移：トランザクション、手数料、難易度、供給量、マイニング。"
+
 msgid "Core tip"
 msgstr "Core の先頭"
+
+msgid "Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status."
+msgstr "Core の先頭と ChainLock、Platform の高さとエポック、ノードマップとセンサスの概要、最新のブロックとトランジション、アップグレードの状況。"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Core の先頭、ブロック、トランザクションを evonode から直接取得"
@@ -656,8 +842,20 @@ msgstr "クレジットプール"
 msgid "Credit pool balance"
 msgstr "クレジットプールの残高"
 
+msgid "Credit transfer"
+msgstr "クレジット送金"
+
+msgid "Credit withdrawal"
+msgstr "クレジット出金"
+
 msgid "Credited on Platform"
 msgstr "Platform に反映済み"
+
+msgid "Credits"
+msgstr "クレジット"
+
+msgid "Current Platform quorums with size, members and the last proposer."
+msgstr "現在の Platform クォーラム（サイズ、メンバー、直近のプロポーザー）。"
 
 msgid "Custom devnets"
 msgstr "カスタム devnet"
@@ -692,11 +890,23 @@ msgstr "データ"
 msgid "Data (OP_RETURN)"
 msgstr "データ (OP_RETURN)"
 
+msgid "Data contract"
+msgstr "データコントラクト"
+
 msgid "Data sources"
 msgstr "データソース"
 
 msgid "Days run from 00:00 to 24:00 UTC."
 msgstr "1日は UTC の 00:00 から 24:00 です。"
+
+msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
+msgstr "生のバイト列をオフラインでデコードします：トランザクション、ブロック、アイデンティティ、コントラクト、ドキュメント、証明。"
+
+msgid "decoder"
+msgstr "デコーダー"
+
+msgid "Decoder"
+msgstr "デコーダー"
 
 msgid "Details"
 msgstr "詳細"
@@ -713,6 +923,24 @@ msgstr "直近 {0} ブロックの難易度"
 
 msgid "Direction"
 msgstr "方向"
+
+msgid "document"
+msgstr "ドキュメント"
+
+msgid "Document"
+msgstr "ドキュメント"
+
+msgid "Document batch"
+msgstr "ドキュメントバッチ"
+
+msgid "document type"
+msgstr "ドキュメントタイプ"
+
+msgid "Documents"
+msgstr "ドキュメント"
+
+msgid "Down"
+msgstr "停止"
 
 msgid "Each Platform block is locked to a Core block."
 msgstr "各 Platform ブロックは Core ブロックに紐づいています。"
@@ -735,22 +963,55 @@ msgstr "終了予定"
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "DAPI アドレスを host:port 形式で1行に1つ、少なくとも1つ入力してください。"
 
+msgid "epoch"
+msgstr "エポック"
+
+msgid "Epoch"
+msgstr "エポック"
+
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
 msgstr "エポック {0}・{1} ブロック経過"
 
+msgid "Epoch {id}"
+msgstr "エポック {id}"
+
 msgid "Epoch {label}"
 msgstr "エポック {label}"
 
+msgid "Epochs"
+msgstr "エポック"
+
+msgid "Esc"
+msgstr "Esc"
+
+msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
+msgstr "Radar が読み取るすべてのデータソースの、このネットワークでの状態と鮮度、および DAPI のリクエスト予算。"
+
+msgid "Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link."
+msgstr "すべてのマスターノードとエボノード（状態、バージョン、所在地、稼働率、支払い）。フィルター、並べ替え、ページ位置はリンクに含まれます。"
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "すべてのマスターノード投票（投票者、選択、対象、時刻）。"
+
+msgid "Every Platform block with epoch, proposer, transactions and time, filterable."
+msgstr "すべての Platform ブロック（エポック、プロポーザー、トランザクション、時刻）。フィルター可能。"
+
 msgid "Every source is answering."
 msgstr "すべてのソースが応答しています。"
+
+msgid "Every state transition with type, status, block, gas and owner, filterable."
+msgstr "すべてのステートトランジション（タイプ、状態、ブロック、ガス、所有者）。フィルター可能。"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core に表示されるものはすべて DAPI から取得しています。"
 
 msgid "Everything the coinbase pays out"
 msgstr "coinbase が支払うものすべて"
+
+msgid "Evonode"
+msgstr "エボノード"
 
 msgid "Evonode (high-performance)"
 msgstr "Evonode（高性能）"
@@ -761,6 +1022,9 @@ msgstr "Evonode"
 msgid "Example"
 msgstr "例"
 
+msgid "Featured and indexed data contracts with owner, documents and tokens."
+msgstr "注目およびインデックス済みのデータコントラクト（所有者、ドキュメント、トークン）。"
+
 msgid "Fee"
 msgstr "手数料"
 
@@ -770,8 +1034,14 @@ msgstr "Radar から取得"
 msgid "Figures computed on your device"
 msgstr "お使いの端末で計算した数値"
 
+msgid "Filter by {text}"
+msgstr "{text} で絞り込む"
+
 msgid "Finality"
 msgstr "ファイナリティ"
+
+msgid "Find the identity that holds a public key, from its 40-character key hash."
+msgstr "40 文字のキーハッシュから、その公開鍵を持つアイデンティティを探します。"
 
 msgid "finding where…"
 msgstr "場所を特定中…"
@@ -793,6 +1063,9 @@ msgstr "メモリプールで初めて確認"
 msgid "From"
 msgstr "送信元"
 
+msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
+msgstr "高さ、ハッシュ、アドレス、ProTx、IP、アイデンティティ、コントラクト、トークン、名前、エポックの全結果を、種類別にまとめて表示します。"
+
 msgid "Funded"
 msgstr "資金確保済み"
 
@@ -810,6 +1083,15 @@ msgstr "ガバナンス"
 
 msgid "Governance proposal"
 msgstr "ガバナンス提案"
+
+msgid "group"
+msgstr "グループ"
+
+msgid "Group"
+msgstr "グループ"
+
+msgid "Groups"
+msgstr "グループ"
 
 msgid "Guess"
 msgstr "推測"
@@ -856,6 +1138,9 @@ msgstr "上位10件が保有"
 msgid "Held by the top 100"
 msgstr "上位100件が保有"
 
+msgid "Hide table"
+msgstr "表を隠す"
+
 msgid "Hide the table"
 msgstr "表を隠す"
 
@@ -897,8 +1182,38 @@ msgstr "Hyphen のインデックスがチェーンに遅れています: {0}。
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen のインデックスはまだ確認中です。"
 
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "アイデンティティ"
+
+msgid "Identities with balance, transactions and creation time; sort by balance or activity."
+msgstr "残高、トランザクション、作成時刻付きのアイデンティティ。残高やアクティビティで並べ替えできます。"
+
 msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
 msgstr "ID によるアイデンティティ、コントラクト、トークン、ドキュメント、または公開鍵ハッシュによるアイデンティティ"
+
+msgid "Identities, contracts, tokens and masternodes you saved. They stay in this browser."
+msgstr "保存したアイデンティティ、コントラクト、トークン、マスターノード。このブラウザ内にのみ保存されます。"
+
+msgid "identity"
+msgstr "アイデンティティ"
+
+msgid "Identity"
+msgstr "アイデンティティ"
+
+msgid "Identity by key hash"
+msgstr "キーハッシュからアイデンティティを検索"
+
+msgid "Identity create"
+msgstr "アイデンティティ作成"
+
+msgid "Identity top-up"
+msgstr "アイデンティティへの追加入金"
+
+msgid "Identity update"
+msgstr "アイデンティティ更新"
 
 msgid "Identity with this public-key hash"
 msgstr "この公開鍵ハッシュを持つアイデンティティ"
@@ -946,6 +1261,18 @@ msgstr "Platform Explorer がインデックス化・確認中…"
 
 msgid "Indexed by Platform Explorer · proofs unavailable"
 msgstr "Platform Explorer がインデックス化・証明は利用不可"
+
+msgid "indexed to block {block}"
+msgstr "ブロック {block} までインデックス済み"
+
+#. placeholder {0}: formatBlock(blocks)
+#. placeholder {0}: humanizeSpan(msBehind)
+msgid "indexed to block {block} ({0} behind)"
+msgstr "ブロック {block} までインデックス済み（{0}遅れ）"
+
+#. placeholder {0}: formatBlock(blocksBehind)
+msgid "indexed to block {block} ({0} blocks behind)"
+msgstr "ブロック {block} までインデックス済み（{0}ブロック遅れ）"
 
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Core ブロック {indexed}/{chain} までインデックス済み。同期: {sync}。"
@@ -1007,12 +1334,22 @@ msgstr "キーボードショートカット"
 msgid "Language"
 msgstr "言語"
 
+msgid "Language, units, time zone, connection options and custom devnets."
+msgstr "言語、単位、タイムゾーン、接続オプション、カスタム devnet。"
+
 msgid "Largest balances"
 msgstr "残高の多い順"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
 msgstr "直近 {0} ブロック"
+
+msgid "Last block"
+msgstr "最新ブロック"
+
+#. placeholder {0}: humanizeSpan(ms)
+msgid "last crawl finished {0} ago"
+msgstr "最後のクロールは{0}前に完了"
 
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
@@ -1047,6 +1384,9 @@ msgstr "最新の Platform ブロック（古い順）"
 
 msgid "Latest Platform transitions"
 msgstr "最新の Platform トランジション"
+
+msgid "Link copied"
+msgstr "リンクをコピーしました"
 
 msgid "Link to one with"
 msgstr "次の形式でリンク"
@@ -1099,8 +1439,14 @@ msgstr "{0} のようです"
 msgid "mainnet"
 msgstr "メインネット"
 
+msgid "Map"
+msgstr "マップ"
+
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Radar がマスターノードを見つけた場所ごとに円を描いた世界地図。{summary}。"
+
+msgid "masternode"
+msgstr "マスターノード"
 
 msgid "Masternode"
 msgstr "マスターノード"
@@ -1124,11 +1470,20 @@ msgstr "マスターノードの取り消し"
 msgid "Masternode service update"
 msgstr "マスターノードのサービス更新"
 
+msgid "Masternode vote"
+msgstr "マスターノード投票"
+
+msgid "Masternode votes"
+msgstr "マスターノード投票"
+
 msgid "Masternode votes on this proposal, newest first"
 msgstr "この提案へのマスターノードの投票（新しい順）"
 
 msgid "Masternodes"
 msgstr "マスターノード"
+
+msgid "Masternodes and other nodes on a world map, coloured by reachability, version or type."
+msgstr "マスターノードとその他のノードを世界地図上に表示。到達性、バージョン、タイプで色分けします。"
 
 msgid "Masternodes answering"
 msgstr "応答中のマスターノード"
@@ -1183,6 +1538,12 @@ msgstr "マイナー"
 msgid "Mined for height"
 msgstr "対象の高さ"
 
+msgid "MnHF signal"
+msgstr "MnHF シグナル"
+
+msgid "move"
+msgstr "移動"
+
 msgid "Move through search results"
 msgstr "検索結果を移動"
 
@@ -1191,6 +1552,21 @@ msgstr "表の行を移動"
 
 msgid "Moved"
 msgstr "移動済み"
+
+msgid "name"
+msgstr "名前"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Name contest"
+msgstr "名前の争奪"
+
+msgid "Name contests"
+msgstr "名前の争奪"
+
+msgid "Names"
+msgstr "名前"
 
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr ".dash で終わる名前、エポック、日付（1日分の Core ブロック）"
@@ -1231,14 +1607,23 @@ msgstr "新しい行は上に追加されます。"
 msgid "New service address"
 msgstr "新しいサービスアドレス"
 
+msgid "new tab"
+msgstr "新しいタブ"
+
 msgid "New transaction"
 msgstr "新しいトランザクション"
 
 msgid "New voting key"
 msgstr "新しい投票キー"
 
+msgid "Newer"
+msgstr "新しい方へ"
+
 msgid "Newly generated coins"
 msgstr "新規発行されたコイン"
+
+msgid "Next"
+msgstr "次へ"
 
 msgid "Next →"
 msgstr "次へ →"
@@ -1327,6 +1712,9 @@ msgstr "この提案への投票は記録されていません。"
 msgid "Node sync"
 msgstr "ノードの同期"
 
+msgid "Nodes"
+msgstr "ノード"
+
 msgid "Nodes resting"
 msgstr "待機中のノード"
 
@@ -1335,6 +1723,9 @@ msgstr "ノンス"
 
 msgid "None"
 msgstr "なし"
+
+msgid "Not available for this record"
+msgstr "このレコードでは利用できません"
 
 msgid "Not available right now"
 msgstr "現在利用できません"
@@ -1376,11 +1767,68 @@ msgstr "上の結果には裏付けがありません。入力内容の読み方
 msgid "Nothing has asked it yet on this network."
 msgstr "このネットワークではまだ誰も問い合わせていません。"
 
+msgid "Nothing to show"
+msgstr "表示するものがありません"
+
+msgid "Nothing to show yet"
+msgstr "まだ表示するものがありません"
+
 msgid "Now"
 msgstr "現在"
 
+msgid "Number"
+msgstr "番号"
+
+msgid "Older"
+msgstr "古い方へ"
+
 msgid "Older blocks from before this date"
 msgstr "この日付より前の古いブロック"
+
+msgid "One contest: status, tally, contenders with prefunded balance and who voted."
+msgstr "1 件の争奪：状態、集計、事前積立残高を持つ候補、投票者。"
+
+msgid "One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions."
+msgstr "高さまたはハッシュで指定する 1 つの Core ブロック：ヘッダー、コインベースのペイロード、報酬の分配、ChainLock、含まれるトランザクション。"
+
+msgid "One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded."
+msgstr "1 つの Core トランザクション：入力、出力、特殊ペイロード、InstantSend と ChainLock の状態、資金を供給した Platform アイデンティティ。"
+
+msgid "One data contract: owner, version, document types, schema, tokens and groups."
+msgstr "1 つのデータコントラクト：所有者、バージョン、ドキュメントタイプ、スキーマ、トークン、グループ。"
+
+msgid "One document with its data, metadata, revision history and the transition that wrote it."
+msgstr "1 つのドキュメント：データ、メタデータ、リビジョン履歴、書き込んだトランジション。"
+
+msgid "One DPNS name: whether it is available, registered or contested, and who owns it."
+msgstr "1 つの DPNS 名：利用可能・登録済み・争奪中のいずれか、および所有者。"
+
+msgid "One finalized Platform epoch: totals, proposers and the neighbouring epochs."
+msgstr "確定済みの Platform エポック 1 つ：合計、プロポーザー、前後のエポック。"
+
+msgid "One governance proposal: payment, timeline, vote history and a link to vote."
+msgstr "1 件のガバナンス提案：支払い、タイムライン、投票履歴、投票へのリンク。"
+
+msgid "One group: members by power and its active and closed actions with signers."
+msgstr "1 つのグループ：権限順のメンバー、進行中・終了済みのアクションと署名者。"
+
+msgid "One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked."
+msgstr "1 つのアイデンティティ：残高、鍵、名前、トークン、コントラクト、ドキュメント、資金供給トランザクション（それぞれ証明で検証済み）。"
+
+msgid "One masternode: overview, network reachability, Platform record, history and payments."
+msgstr "1 つのマスターノード：概要、ネットワーク到達性、Platform レコード、履歴、支払い。"
+
+msgid "One Platform block: digest, the Core block it is locked to, its transitions and quorum."
+msgstr "1 つの Platform ブロック：ダイジェスト、ロック先の Core ブロック、含まれるトランジション、クォーラム。"
+
+msgid "One state transition: status, fees, signature, raw bytes and a panel for its type."
+msgstr "1 つのステートトランジション：状態、手数料、署名、生バイト列、タイプ別のパネル。"
+
+msgid "One token: supply, price, pause state, definition, activity and a balance lookup."
+msgstr "1 つのトークン：供給量、価格、一時停止の状態、定義、アクティビティ、残高照会。"
+
+msgid "open"
+msgstr "開く"
 
 msgid "Open"
 msgstr "開く"
@@ -1396,6 +1844,13 @@ msgstr "支払額別に提案を開く"
 
 msgid "Open the map"
 msgstr "地図を開く"
+
+msgid "Open the proof for this figure"
+msgstr "この数値の証明を開く"
+
+#. placeholder {0}: v.title
+msgid "Open the proof for this figure · {0}"
+msgstr "この数値の証明を開く · {0}"
 
 msgid "Open the proposal"
 msgstr "提案を開く"
@@ -1470,6 +1925,9 @@ msgstr "ページが見つかりません"
 msgid "Pages"
 msgstr "ページ"
 
+msgid "Pagination"
+msgstr "ページ送り"
+
 msgid "Paid to"
 msgstr "支払先"
 
@@ -1479,11 +1937,29 @@ msgstr "可決"
 msgid "Passing, not yet funded"
 msgstr "可決、資金は未確保"
 
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードして検証できます。署名も送信も行いません。"
+
+msgid "Pause {noun}"
+msgstr "{noun}を一時停止"
+
+msgid "Pause live updates"
+msgstr "ライブ更新を一時停止"
+
+msgid "Paused"
+msgstr "一時停止中"
+
+msgid "Paused · {newCount} new"
+msgstr "一時停止中・新着 {newCount} 件"
+
 msgid "Payload"
 msgstr "ペイロード"
 
 msgid "Payload version"
 msgstr "ペイロードのバージョン"
+
+msgid "Payment"
+msgstr "支払い"
 
 msgid "Payout"
 msgstr "支払い"
@@ -1521,11 +1997,17 @@ msgstr "Platform"
 msgid "Platform address"
 msgstr "Platform アドレス"
 
+msgid "Platform block"
+msgstr "Platform ブロック"
+
 msgid "Platform block {label}"
 msgstr "Platform ブロック {label}"
 
 msgid "Platform block height"
 msgstr "Platform ブロック高"
+
+msgid "Platform blocks"
+msgstr "Platform ブロック"
 
 msgid "Platform blocks, state transitions and Platform addresses"
 msgstr "Platform のブロック、ステートトランジション、アドレス"
@@ -1545,6 +2027,9 @@ msgstr "Platform Explorer は devnet をインデックスしません。"
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer が応答していません"
 
+msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
+msgstr "Platform Explorer はインデクサーが異常と報告しています（ブロック {block} までインデックス済み）"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
 
@@ -1557,11 +2042,17 @@ msgstr "Platform ノード ID"
 msgid "Platform ports"
 msgstr "Platform のポート"
 
+msgid "Platform protocol version voting: the current and next version and each evonode’s vote."
+msgstr "Platform プロトコルバージョンの投票：現行版と次期版、各エボノードの投票。"
+
 msgid "Platform SDK"
 msgstr "Platform SDK"
 
 msgid "Platform transitions"
 msgstr "Platform トランジション"
+
+msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
+msgstr "Platform の鼓動：高さ、エポック、アクティビティのチャート、リーダー、最新のブロックとステートトランジション。"
 
 msgid "Plenty of room"
 msgstr "十分な余裕"
@@ -1569,8 +2060,17 @@ msgstr "十分な余裕"
 msgid "Point the camera at a QR code."
 msgstr "カメラを QR コードに向けてください。"
 
+msgid "Position"
+msgstr "位置"
+
 msgid "Pressure"
 msgstr "負荷"
+
+msgid "Preview"
+msgstr "プレビュー"
+
+msgid "Previous"
+msgstr "前へ"
 
 msgid "Previous block"
 msgstr "前のブロック"
@@ -1590,6 +2090,9 @@ msgstr "証明で検証済み"
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "証明で検証済みの Platform の状態（このブラウザで検証）"
 
+msgid "proposal"
+msgstr "提案"
+
 msgid "Proposal"
 msgstr "提案"
 
@@ -1600,6 +2103,24 @@ msgstr "提案 {0}"
 msgid "Proposals"
 msgstr "提案"
 
+msgid "ProRegTx"
+msgstr "ProRegTx"
+
+msgid "Protocol"
+msgstr "プロトコル"
+
+msgid "ProTx hash"
+msgstr "ProTx ハッシュ"
+
+msgid "ProUpRegTx"
+msgstr "ProUpRegTx"
+
+msgid "ProUpRevTx"
+msgstr "ProUpRevTx"
+
+msgid "ProUpServTx"
+msgstr "ProUpServTx"
+
 msgid "QR code"
 msgstr "QR コード"
 
@@ -1608,6 +2129,12 @@ msgstr "アドレス {address} の QR コード"
 
 msgid "QR reader"
 msgstr "QR リーダー"
+
+msgid "Query"
+msgstr "クエリ"
+
+msgid "Quorum"
+msgstr "クォーラム"
 
 msgid "Quorum commitment"
 msgstr "クォーラムコミットメント"
@@ -1621,6 +2148,9 @@ msgstr "クォーラムのインデックス"
 msgid "Quorum list URL"
 msgstr "クォーラム一覧の URL"
 
+msgid "Quorum list URL (optional)"
+msgstr "クォーラムリストの URL（任意）"
+
 msgid "Quorum public key"
 msgstr "クォーラムの公開鍵"
 
@@ -1629,6 +2159,9 @@ msgstr "クォーラムの署名"
 
 msgid "Quorum type"
 msgstr "クォーラムの種類"
+
+msgid "Quorums"
+msgstr "クォーラム"
 
 msgid "Quorums root"
 msgstr "クォーラムのルート"
@@ -1654,6 +2187,9 @@ msgstr "Radar は devnet をクロールしません"
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar は devnet をクロールしないため、地図に表示するものがありません。"
 
+msgid "Radar doesn’t know this devnet yet. Add the addresses of a few of its DAPI nodes and it will read the network from them. This stays in this browser."
+msgstr "Radar はこの devnet をまだ知りません。DAPI ノードのアドレスをいくつか追加すると、そこからネットワークを読み取ります。この情報はこのブラウザ内にのみ保存されます。"
+
 msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
 msgstr "Radar はこれに該当するブロック、トランザクション、アドレス、マスターノードなどのレコードを見つけられませんでした。高さ、ハッシュ、アドレス、ID、名前をお試しください。"
 
@@ -1675,8 +2211,14 @@ msgstr "Radar がこれを必要とすることはないため、どこにも送
 msgid "Radar shows this payload type as raw data."
 msgstr "Radar はこの種類のペイロードを生データで表示します。"
 
+msgid "Radar won't show the figure as proof-checked. {rest}"
+msgstr "Radar はこの数値を証明検証済みとして表示しません。{rest}"
+
 msgid "Radar:"
 msgstr "Radar:"
+
+msgid "Radar’s crawl"
+msgstr "Radar のクロール"
 
 msgid "Range"
 msgstr "範囲"
@@ -1696,6 +2238,9 @@ msgstr "生のペイロード"
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "カメラまたは画像から QR コードを読み取り、その内容を検索します。画像はこのブラウザ内で読み取られ、アップロードされません。"
 
+msgid "Read from"
+msgstr "読み取り元"
+
 msgid "Reading the picture…"
 msgstr "画像を読み取り中…"
 
@@ -1704,6 +2249,9 @@ msgstr "理由"
 
 msgid "Received"
 msgstr "受信"
+
+msgid "Recent Core blocks with height, size, transactions, miner and ChainLock state, and a date picker that lists a day’s blocks."
+msgstr "最近の Core ブロック（高さ、サイズ、トランザクション、マイナー、ChainLock の状態）と、1 日分のブロックを一覧できる日付選択。"
 
 msgid "Reconnecting…"
 msgstr "再接続中…"
@@ -1718,6 +2266,9 @@ msgstr "{0} 秒ごとに更新されます。"
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "マスターノードまたは evonode を登録し、それを運用する鍵を設定します。"
 
+msgid "Registrations, updates, bans and removals across the masternode list, newest first."
+msgstr "マスターノードリスト全体の登録、更新、BAN、削除（新しい順）。"
+
 msgid "Regular masternode"
 msgstr "通常のマスターノード"
 
@@ -1729,6 +2280,10 @@ msgstr "削除"
 
 msgid "Remove {devnet}"
 msgstr "{devnet} を削除"
+
+#. placeholder {0}: tok.label
+msgid "Remove filter {0}"
+msgstr "フィルター {0} を削除"
 
 msgid "reported by one node; no second source has confirmed it"
 msgstr "1つのノードが報告。2つ目のソースによる確認はありません"
@@ -1757,6 +2312,15 @@ msgstr "結果"
 msgid "Results"
 msgstr "結果"
 
+msgid "Resume {noun}"
+msgstr "{noun}を再開"
+
+msgid "Resume live updates"
+msgstr "ライブ更新を再開"
+
+msgid "Retry"
+msgstr "再試行"
+
 msgid "Retrying"
 msgstr "再試行中"
 
@@ -1765,6 +2329,9 @@ msgstr "リボンの幅が金額です。灰色は送信者へのおつり、オ
 
 msgid "Rich list"
 msgstr "長者番付"
+
+msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
+msgstr "コントラクトのドキュメントに対する読み取り専用 SQL。プリセット、保存済みクエリ、共有リンク付き。"
 
 msgid "Save changes"
 msgstr "変更を保存"
@@ -1777,6 +2344,12 @@ msgstr "保存済みの devnet"
 
 msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
 msgstr "このブラウザに保存されます。Radar が知らない名前の devnet では、そのアドレスの入力が求められます。"
+
+msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
+msgstr "QR コードを読み取るかアップロードして、中身（アドレス、支払いリンク、キーハッシュ）を開きます。"
+
+msgid "SDK reference"
+msgstr "SDK リファレンス"
 
 msgid "Search"
 msgstr "検索"
@@ -1792,6 +2365,9 @@ msgstr "ブロック、トランザクション、マスターノード、名前
 msgid "Search blocks, txs, masternodes, names"
 msgstr "ブロック、tx、マスターノード、名前を検索"
 
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "DPNS 名を接頭辞で検索するか、アルファベット順にすべて閲覧します。"
+
 msgid "Search Radar"
 msgstr "Radar を検索"
 
@@ -1800,6 +2376,9 @@ msgstr "Radar を検索（Mac では ⌘K）"
 
 msgid "Searching…"
 msgstr "検索中…"
+
+msgid "Sections"
+msgstr "セクション"
 
 msgid "See all results for “{trimmed}”"
 msgstr "「{trimmed}」のすべての結果を見る"
@@ -1821,6 +2400,9 @@ msgstr "DAPI から提供・未証明"
 
 msgid "Service address"
 msgstr "サービスアドレス"
+
+msgid "Set up the {name} devnet"
+msgstr "devnet「{name}」を設定"
 
 msgid "Settings"
 msgstr "設定"
@@ -1849,6 +2431,12 @@ msgstr "共有マスターノードが解散されました"
 msgid "Shared masternode registrar update"
 msgstr "共有マスターノードのレジストラー更新"
 
+msgid "Shielded"
+msgstr "シールド"
+
+msgid "Shielded pool"
+msgstr "シールドプール"
+
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
 msgstr "{0} 件の入力をすべて表示"
@@ -1859,6 +2447,9 @@ msgstr "{0} 件の出力をすべて表示"
 
 msgid "Show as a table"
 msgstr "表として表示"
+
+msgid "Show more"
+msgstr "もっと見る"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "DASH の金額の横に USD 換算額を表示"
@@ -1887,6 +2478,9 @@ msgstr "署名クォーラム"
 msgid "Size"
 msgstr "サイズ"
 
+msgid "Skip to content"
+msgstr "本文へスキップ"
+
 msgid "Slow"
 msgstr "低速"
 
@@ -1905,6 +2499,22 @@ msgstr "一部のソースが応答していません。ほかは引き続き動
 #. placeholder {0}: failed.map((f) => f.id).join(', ')
 msgid "Some sources didn’t answer: {0}."
 msgstr "応答しなかったソース: {0}。"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "ページで問題が発生しました。Radar のほかの部分は引き続き使えます。"
+
+msgid "Something went wrong"
+msgstr "問題が発生しました"
+
+#. placeholder {0}: headerText(sortedHeader)
+msgid "sorted by {0}"
+msgstr "{0}で並べ替え"
+
+msgid "Sorted by {column}, ascending"
+msgstr "{column}の昇順で並べ替え"
+
+msgid "Sorted by {column}, descending"
+msgstr "{column}の降順で並べ替え"
 
 msgid "Sources"
 msgstr "ソース"
@@ -1937,6 +2547,15 @@ msgstr "使用済みと未使用の状態"
 msgid "State"
 msgstr "状態"
 
+msgid "state transition"
+msgstr "ステートトランジション"
+
+msgid "State transition"
+msgstr "ステートトランジション"
+
+msgid "State transitions"
+msgstr "ステートトランジション"
+
 msgid "Status"
 msgstr "ステータス"
 
@@ -1954,6 +2573,10 @@ msgstr "概要"
 
 msgid "Supply concentration"
 msgstr "供給量の集中度"
+
+#. placeholder {0}: health.lag.detail
+msgid "Supply, blockchain size and pending transactions come only from Hyphen, whose {name} index is behind the chain: {0}. The height, difficulty, ChainLock and latest blocks here come from DAPI."
+msgstr "供給量、ブロックチェーンのサイズ、保留中のトランザクションは Hyphen のみが提供しており、その {name} のインデックスはチェーンに遅れています：{0}。ここでの高さ、難易度、ChainLock、最新ブロックは DAPI から取得しています。"
 
 msgid "Switch to mainnet"
 msgstr "メインネットに切り替え"
@@ -2009,6 +2632,9 @@ msgstr "ブロックはリオーグできません"
 msgid "The browser didn’t give Radar the camera. Allow it in the site settings, or choose a picture instead."
 msgstr "ブラウザが Radar にカメラへのアクセスを許可しませんでした。サイトの設定で許可するか、代わりに画像を選択してください。"
 
+msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
+msgstr "センサス：最後のクロールに応答したノード数、バージョン、ホスティング、国、到達性。"
+
 msgid "The chain itself: height, difficulty, supply and what is waiting to be mined."
 msgstr "チェーン自体の情報：高さ、難易度、供給量、マイニング待ちのもの。"
 
@@ -2018,11 +2644,17 @@ msgstr "チャートのデータを読み込めませんでした。"
 msgid "The connection failed."
 msgstr "接続に失敗しました。"
 
+msgid "The current Platform epoch, who proposes next and what evonodes earned in past epochs."
+msgstr "現在の Platform エポック、次に提案するノード、過去のエポックでエボノードが得た報酬。"
+
 msgid "The Dash network, now"
 msgstr "Dash ネットワークの現在"
 
 msgid "The largest Core balances, ranked."
 msgstr "Core の最大残高を順位順に表示します。"
+
+msgid "The largest Core balances, with share of supply and the labels Radar knows."
+msgstr "Core の大口残高（供給量に占める割合と、Radar が把握しているラベル付き）。"
 
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "リンクが古いか、入力ミスの可能性があります。探しているものを検索するか、いずれかのセクションから始めてください。"
@@ -2051,11 +2683,23 @@ msgstr "オペレーターがマスターノードのサービスを終了しま
 msgid "The owner changes a masternode's operator key, voting key or payout."
 msgstr "オーナーがマスターノードのオペレーターキー、投票キー、または支払先を変更します。"
 
+msgid "the Platform Explorer price feed"
+msgstr "Platform Explorer の価格フィード"
+
 msgid "The Platform SDK"
 msgstr "Platform SDK"
 
+msgid "the Platform SDK, proof-checked"
+msgstr "Platform SDK（証明で検証）"
+
+msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
+msgstr "Platform のバリデーターセット：Platform レコード付きのエボノード（マスターノード一覧に表示）。"
+
 msgid "The price feed"
 msgstr "価格フィード"
+
+msgid "The public API behind the node census and masternode pages, with examples."
+msgstr "ノードセンサスとマスターノードのページを支える公開 API（例付き）。"
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "ここでは QR コードを描画できませんでした。上のアドレスと同じものです。"
@@ -2069,14 +2713,29 @@ msgstr "リクエスト予算がほぼ尽きています。"
 msgid "The request was cancelled"
 msgstr "リクエストはキャンセルされました"
 
+msgid "The rest of this page still works."
+msgstr "このページのほかの部分は引き続き使えます。"
+
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "持分保有者が共有マスターノードのオペレーターキーまたは投票キーを変更します。"
 
 msgid "The shareholders end a shared masternode and take their collateral back."
 msgstr "持分保有者が共有マスターノードを解散し、担保を取り戻します。"
 
+msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
+msgstr "シールドプールの状態、アンカー、暗号化ノート、ヌリファイア照会。"
+
 msgid "The signature is well formed, but it was made by a different key. It matches this address:"
 msgstr "署名の形式は正しいですが、別の鍵で作成されています。次のアドレスと一致します："
+
+msgid "The source is busy"
+msgstr "ソースが混雑しています"
+
+msgid "The source isn't answering"
+msgstr "ソースが応答しません"
+
+msgid "The source sent something Radar couldn't read"
+msgstr "ソースが Radar で読み取れないデータを返しました"
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "DAPI のバイト列から Radar がデコードしたトランザクションです。金額の単位は duff です。"
@@ -2126,6 +2785,9 @@ msgstr "これはメインネットのアドレスです。"
 msgid "This is a mainnet Platform address"
 msgstr "これはメインネットの Platform アドレスです"
 
+msgid "This is a Radar bug, not your connection. {rest}"
+msgstr "これは Radar の不具合で、接続の問題ではありません。{rest}"
+
 msgid "This is a testnet address"
 msgstr "これはテストネットのアドレスです"
 
@@ -2144,8 +2806,21 @@ msgstr "このネットワークにはこのソースがありません。"
 msgid "This network has no blocks in this day, or the day has not happened yet."
 msgstr "このネットワークにはこの日のブロックがないか、その日がまだ来ていません。"
 
+msgid "This page couldn’t be shown"
+msgstr "このページを表示できませんでした"
+
+msgid "This page is on its way"
+msgstr "このページは準備中です"
+
+#. placeholder {0}: listSources(page.sources)
+msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
+msgstr "このページは {0} から読み取ります。表示するには Mainnet または Testnet に切り替えてください。"
+
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "このページは Hyphen から読み込みます。表示するにはメインネットまたはテストネットに切り替えてください。"
+
+msgid "This source isn't available here"
+msgstr "このソースはここでは利用できません"
 
 msgid "Threshold signature"
 msgstr "しきい値署名"
@@ -2162,12 +2837,30 @@ msgstr "先頭のハッシュ"
 msgid "To"
 msgstr "送信先"
 
+msgid "token"
+msgstr "トークン"
+
+msgid "Token"
+msgstr "トークン"
+
+msgid "Token holders"
+msgstr "トークン保有者"
+
+msgid "Tokens"
+msgstr "トークン"
+
+msgid "Tokens with supply, price and contract, and the trending ones."
+msgstr "供給量、価格、コントラクト付きのトークンと、注目のトークン。"
+
 msgid "Tools"
 msgstr "ツール"
 
 #. placeholder {0}: b.id
 msgid "Top {0}"
 msgstr "上位 {0}"
+
+msgid "Total credits in Platform, with a fiat estimate, and prefunded specialised balances."
+msgstr "Platform 内のクレジット総量（法定通貨での概算付き）と、事前積立された専用残高。"
 
 msgid "Total out"
 msgstr "出力合計"
@@ -2177,6 +2870,9 @@ msgstr "受信合計"
 
 msgid "Total sent"
 msgstr "送信合計"
+
+msgid "transaction"
+msgstr "トランザクション"
 
 msgid "Transaction"
 msgstr "トランザクション"
@@ -2193,6 +2889,9 @@ msgstr "トランザクション {0}…"
 #. placeholder {1}: tx.txid.slice(-6)
 msgid "Transaction {0}…{1}"
 msgstr "トランザクション {0}…{1}"
+
+msgid "Transaction ID"
+msgstr "トランザクション ID"
 
 msgid "Transaction velocity"
 msgstr "トランザクション速度"
@@ -2229,6 +2928,12 @@ msgstr "トランザクション（累計）"
 msgid "Transition"
 msgstr "トランジション"
 
+msgid "Transition decoder"
+msgstr "トランジションデコーダー"
+
+msgid "Trend"
+msgstr "推移"
+
 msgid "Try"
 msgstr "例："
 
@@ -2237,6 +2942,9 @@ msgstr "コード全体が写った、よりはっきりした画像をお試し
 
 msgid "Try again"
 msgstr "再試行"
+
+msgid "Try again in a moment. {rest}"
+msgstr "しばらくしてからもう一度お試しください。{rest}"
 
 msgid "Txid"
 msgstr "Txid"
@@ -2252,6 +2960,9 @@ msgstr "未承認"
 
 msgid "Unconfirmed activity"
 msgstr "未承認のアクティビティ"
+
+msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
+msgstr "未承認トランザクションを到着順に表示（サイズ、手数料率、InstantSend ロック付き）。"
 
 msgid "Unit for DASH amounts"
 msgstr "DASH 金額の単位"
@@ -2277,6 +2988,9 @@ msgstr "未使用の出力"
 msgid "Unspent outputs of this address"
 msgstr "このアドレスの未使用の出力"
 
+msgid "Upcoming vote polls by end date."
+msgstr "今後の投票を終了日順に表示。"
+
 msgid "Updated"
 msgstr "更新"
 
@@ -2292,8 +3006,14 @@ msgstr "署名したアドレスを使用してください。メインネット
 msgid "Use the camera"
 msgstr "カメラを使う"
 
+msgid "Use this devnet"
+msgstr "この devnet を使う"
+
 msgid "Used up for now"
 msgstr "現在は使い切りました"
+
+msgid "Username"
+msgstr "ユーザー名"
 
 msgid "UTC day"
 msgstr "UTC 日"
@@ -2303,6 +3023,9 @@ msgstr "有効"
 
 msgid "Valid members"
 msgstr "有効なメンバー"
+
+msgid "Validators"
+msgstr "バリデーター"
 
 msgid "Value"
 msgstr "値"
@@ -2344,6 +3067,9 @@ msgstr "投票履歴"
 msgid "Vote in Governance"
 msgstr "Governance で投票"
 
+msgid "Vote polls"
+msgstr "投票"
+
 msgid "Votes"
 msgstr "投票数"
 
@@ -2368,6 +3094,9 @@ msgstr "マイニング待ちです。"
 msgid "Watching for new transactions on this address."
 msgstr "このアドレスの新しいトランザクションを監視中です。"
 
+msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
+msgstr "Radar が証明できること・できないこと、見たものに対して行動できる場所、そして Radar が記憶すること。"
+
 msgid "What the evonodes report about the chain right now."
 msgstr "evonode が現在チェーンについて報告している内容。"
 
@@ -2377,11 +3106,23 @@ msgstr "検索できるもの"
 msgid "When"
 msgstr "日時"
 
+msgid "Where every figure comes from, how each source is checked and what each can’t tell you."
+msgstr "各数値の出所、各ソースの検証方法、各ソースでは分からないこと。"
+
+msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
+msgstr "Core 24 有効化の進捗：しきい値、マイナーのシグナルをウィンドウごとに、マスターノードの準備状況。"
+
+msgid "Where the data comes from"
+msgstr "データの出所"
+
 msgid "Where the value went"
 msgstr "価値の行き先"
 
 msgid "Where this is"
 msgstr "所在地"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "どの Platform SDK 呼び出しがどの Radar ページを支えているか（引数付き）。"
 
 msgid "Withdrawal index"
 msgstr "出金インデックス"
@@ -2394,6 +3135,9 @@ msgstr "昨日"
 
 msgid "You"
 msgstr "あなた"
+
+msgid "your browser"
+msgstr "お使いのブラウザ"
 
 msgid "Your browser"
 msgstr "お使いのブラウザ"

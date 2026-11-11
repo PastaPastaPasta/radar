@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { NetworkId } from '@/lib/network'
 import { getActiveNetwork } from '../active-network'
 import { healthRegistry } from '../health'
@@ -57,7 +58,7 @@ function reportCrawlLag(status: RadarStatus): void {
     const ms = Math.max(0, now - finished)
     healthRegistry.setLag(net, 'radar', {
       ms,
-      detail: `last crawl finished ${humanizeSpan(ms)} ago`,
+      detail: t`last crawl finished ${humanizeSpan(ms)} ago`,
     })
   }
 }

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { ReactNode } from 'react'
 import { linkOutUrl, type LinkOutTarget } from '@/lib/linkouts'
 import { LayerTile } from './art'
@@ -47,7 +48,7 @@ export function LinkOut({ to, children }: LinkOutProps) {
         <LayerTile layer="neutral" icon={app.icon} size={24} className={app.className} />
         {text}
         <Icon name="ext" className="rx-ext" />
-        <span className="dh-sr"> (opens in a new tab)</span>
+        <span className="dh-sr"> {t`(opens in a new tab)`}</span>
       </a>
     )
   }
@@ -61,7 +62,7 @@ export function LinkOut({ to, children }: LinkOutProps) {
     >
       {text}
       <Icon name="ext" size="sm" className="rx-ext" />
-      <span className="dh-sr"> (opens in a new tab)</span>
+      <span className="dh-sr"> {t`(opens in a new tab)`}</span>
     </a>
   )
 }
@@ -87,7 +88,7 @@ export function LinkOutCard({ to, title, description }: LinkOutCardProps) {
       <span className="rx-out__t">{title}</span>
       <span className="rx-out__d">{description}</span>
       <Icon name="ext" className="rx-ext" />
-      <span className="dh-sr"> (opens in a new tab)</span>
+      <span className="dh-sr"> {t`(opens in a new tab)`}</span>
     </a>
   )
 }

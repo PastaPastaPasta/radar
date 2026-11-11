@@ -1,13 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import {
-  ENTITY_LABELS,
-  PageLink,
-  networkName,
-  useDocumentTitle,
-  useNetwork,
-} from '@/features/entity'
+import { entityLabel, PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
 import { classify, type SecretWarning } from './classify'
@@ -166,7 +160,7 @@ export function SearchPage({ q }: { q?: string }) {
 
           {groups.map(([group, items]) => (
             <Card key={group} title={groupLabel(group)} layer={group}>
-              <HitList hits={items} badge={(hit) => ENTITY_LABELS[hit.kind]} />
+              <HitList hits={items} badge={(hit) => entityLabel(hit.kind)} />
             </Card>
           ))}
 

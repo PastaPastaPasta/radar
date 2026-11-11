@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 import { Amount } from '../amount'
 import { Identicon, LayerTile, Nodeprint } from '../art'
 import { HoverCardLayout } from '../hover-card-layout'
-import { KIND_META } from '../kinds'
+import { KIND_META, labelOf } from '../kinds'
 import type { EntityKind } from '../types'
 import { STAMPS } from './samples'
 
@@ -21,8 +21,8 @@ function generic(kind: EntityKind): ComponentType<{ id: string }> {
       <HoverCardLayout
         layer={meta.layer}
         glyph={glyph}
-        kind={meta.label}
-        title={kind === 'block' ? 'Block 2,569,992' : meta.label}
+        kind={labelOf(meta)}
+        title={kind === 'block' ? 'Block 2,569,992' : labelOf(meta)}
         id={id}
         rows={[
           {
@@ -34,7 +34,7 @@ function generic(kind: EntityKind): ComponentType<{ id: string }> {
         ]}
         source={kind === 'identity' ? STAMPS.proof : STAMPS.dapi}
         href="#"
-        openLabel={`Open ${meta.label.toLowerCase()}`}
+        openLabel={`Open ${labelOf(meta).toLowerCase()}`}
       />
     )
   }

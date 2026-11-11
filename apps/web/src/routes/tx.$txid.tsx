@@ -10,7 +10,12 @@ export const Route = createFileRoute('/tx/$txid')({
       async (opts) => {
         const net = routeNetwork(deps)
         const { txPrefetch } = await import('@/data/query/route-prefetch')
-        return prefetchForRoute(context.queryClient, net, txPrefetch(net, params.txid, preload), opts)
+        return prefetchForRoute(
+          context.queryClient,
+          net,
+          txPrefetch(net, params.txid, preload),
+          opts,
+        )
       },
       { preload },
     ),

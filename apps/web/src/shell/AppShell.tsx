@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
@@ -6,7 +7,7 @@ import { useLiveTip } from '@/app/live-tip'
 import { UnitsMount } from '@/app/units-mount'
 import { useRenderedNetworkSync } from '@/app/rendered-network'
 import { CommandPalette, CommandPaletteProvider } from '@/features/search'
-import { I18nProvider, i18n } from '@/i18n'
+import { I18nProvider, i18n, useLocale } from '@/i18n'
 import { SectionNav } from './SectionNav'
 import { ShellBar } from './ShellBar'
 import { ShellFooter } from './ShellFooter'
@@ -29,6 +30,7 @@ function RouteAnnouncer() {
 }
 
 export function AppShell() {
+  const { locale } = useLocale()
   useSpaLinks()
   useRenderedNetworkSync()
   useLiveTip()
@@ -41,12 +43,12 @@ export function AppShell() {
               href="#main"
               className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:bg-[var(--dh-surface,Canvas)] focus:px-3 focus:py-2"
             >
-              Skip to content
+              {t`Skip to content`}
             </a>
             <TestnetKeyline />
             <ShellBar />
             <RouteAnnouncer />
-            <main id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
+            <main key={locale} id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
               <SectionNav />
               <ErrorBoundary>
                 <NetworkGate>

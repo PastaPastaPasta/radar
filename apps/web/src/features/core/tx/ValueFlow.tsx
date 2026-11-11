@@ -71,7 +71,7 @@ export function ValueFlow({
                 rx={2}
               />
               <text className="v" x={n.x + 18} y={n.y + n.h / 2 + 4}>
-                {n.kind === 'fee' ? `${formatInt(n.value)} duffs` : text(n.value)}
+                {n.kind === 'fee' ? t`${formatInt(n.value)} duffs` : text(n.value)}
               </text>
               <text className="m" x={900} y={n.y + n.h / 2 + 4}>
                 {n.kind === 'fee' ? t`Fee` : n.label}
@@ -130,7 +130,7 @@ export function ValueFlow({
                   {n.kind === 'fee' ? t`Fee` : n.kind === 'change' ? t`Change to sender` : n.label}
                 </span>
               )}
-              <b>{n.kind === 'fee' ? `${formatInt(n.value)} duffs` : text(n.value)}</b>
+              <b>{n.kind === 'fee' ? t`${formatInt(n.value)} duffs` : text(n.value)}</b>
             </li>
           ))}
         </ul>

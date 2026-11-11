@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { ReactNode } from 'react'
 import type { SourceId, SourceStamp } from '@/data/envelope'
 import { useSourceHealth, type HealthState } from '@/data/health'
@@ -34,9 +35,9 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
   ) : null
   const status =
     v.variant === 'stale' ? (
-      <span className="dh-sr"> (out of date)</span>
+      <span className="dh-sr"> {t`(out of date)`}</span>
     ) : v.variant === 'down' ? (
-      <span className="dh-sr"> (source down)</span>
+      <span className="dh-sr"> {t`(source down)`}</span>
     ) : null
 
   if (!compact) {
@@ -57,7 +58,11 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
           type="button"
           className="rx-srcline rx-srcline--button"
           {...attrs}
-          title={`Open the proof for this figure${v.title ? ` · ${v.title}` : ''}`}
+          title={
+            v.title
+              ? t`Open the proof for this figure · ${v.title}`
+              : t`Open the proof for this figure`
+          }
           onClick={() => {
             openProofInspector(openable)
           }}
@@ -94,7 +99,11 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
         type="button"
         className={className}
         {...attrs}
-        title={`Open the proof for this figure${v.title ? ` · ${v.title}` : ''}`}
+        title={
+          v.title
+            ? t`Open the proof for this figure · ${v.title}`
+            : t`Open the proof for this figure`
+        }
         onClick={() => {
           openProofInspector(proof)
         }}
@@ -121,14 +130,21 @@ export function SourceLine({ stamp, compact = false }: SourceLineProps) {
   )
 }
 
-const LIVE_WORD: Record<HealthState | 'live', string> = {
-  live: 'Live',
-  ok: 'Live',
-  slow: 'Slow',
-  stale: 'Behind',
-  degraded: 'Behind',
-  down: 'Down',
-  unknown: 'Checking',
+const liveWord = (state: HealthState | 'live'): string => {
+  switch (state) {
+    case 'live':
+    case 'ok':
+      return t`Live`
+    case 'slow':
+      return t`Slow`
+    case 'stale':
+    case 'degraded':
+      return t`Behind`
+    case 'down':
+      return t`Down`
+    case 'unknown':
+      return t`Checking`
+  }
 }
 
 const LIVE_CLASS: Record<HealthState | 'live', string> = {
@@ -168,7 +184,7 @@ export function LiveDot({ state, bare = false }: LiveDotProps) {
       title={state === 'live' ? view.title : undefined}
     >
       {dot}
-      {state === 'live' ? view.word : LIVE_WORD[state]}
+      {state === 'live' ? view.word : liveWord(state)}
     </span>
   )
 }
@@ -180,19 +196,16 @@ export interface LiveControlProps {
   newCount?: number
   /** Change to replay the one-ring pulse when data lands. */
   pulseKey?: string | number
+  /** What is being paused, as a noun phrase in the active language; the default is "live updates". */
   noun?: string
 }
 
 /** The Live/Pause pill every auto-updating feed carries. */
-export function LiveControl({
-  paused,
-  onToggle,
-  newCount = 0,
-  pulseKey,
-  noun = 'live updates',
-}: LiveControlProps) {
+export function LiveControl({ paused, onToggle, newCount = 0, pulseKey, noun }: LiveControlProps) {
   const view = useLiveView()
-  const word = paused ? (newCount > 0 ? `Paused · ${newCount} new` : 'Paused') : view.word
+  const word = paused ? (newCount > 0 ? t`Paused · ${newCount} new` : t`Paused`) : view.word
+  const pauseLabel = noun ? t`Pause ${noun}` : t`Pause live updates`
+  const resumeLabel = noun ? t`Resume ${noun}` : t`Resume live updates`
   const degraded = !paused && view.dot !== 'live'
   return (
     <span
@@ -212,7 +225,7 @@ export function LiveControl({
       <span className="rx-live__word">{word}</span>
       <button
         type="button"
-        aria-label={paused ? `Resume ${noun}` : `Pause ${noun}`}
+        aria-label={paused ? resumeLabel : pauseLabel}
         aria-pressed={paused}
         onClick={onToggle}
       >
@@ -267,28 +280,42 @@ export function describeError(error: unknown, source?: SourceId): { title: strin
   const e: ErrorShape = typeof error === 'object' && error !== null ? error : {}
   const from = e.source ?? source
   const name = from ? sourceName(from) : undefined
-  const rest = 'The rest of this page still works.'
+  const rest = t`The rest of this page still works.`
   switch (e.kind) {
     case 'rate-limited':
-      return { title: `${name ?? 'The source'} is busy`, body: `Try again in a moment. ${rest}` }
+      return {
+        title: name ? t`${name} is busy` : t`The source is busy`,
+        body: t`Try again in a moment. ${rest}`,
+      }
     case 'invalid-response':
       return {
-        title: `${name ?? 'The source'} sent something Radar couldn't read`,
-        body: `This is a Radar bug, not your connection. ${rest}`,
+        title: name
+          ? t`${name} sent something Radar couldn't read`
+          : t`The source sent something Radar couldn't read`,
+        body: t`This is a Radar bug, not your connection. ${rest}`,
       }
     case 'proof-failed':
       return {
-        title: "A proof didn't verify",
-        body: `Radar won't show the figure as proof-checked. ${rest}`,
+        title: t`A proof didn't verify`,
+        body: t`Radar won't show the figure as proof-checked. ${rest}`,
       }
     case 'unavailable':
-      return { title: `${name ?? 'This source'} isn't available here`, body: rest }
+      return {
+        title: name ? t`${name} isn't available here` : t`This source isn't available here`,
+        body: rest,
+      }
     case 'network':
     case 'timeout':
     case 'http':
-      return { title: `${name ?? 'The source'} isn't answering`, body: rest }
+      return {
+        title: name ? t`${name} isn't answering` : t`The source isn't answering`,
+        body: rest,
+      }
     default:
-      return { title: name ? `${name} isn't answering` : 'Something went wrong', body: rest }
+      return {
+        title: name ? t`${name} isn't answering` : t`Something went wrong`,
+        body: rest,
+      }
   }
 }
 
@@ -297,7 +324,7 @@ export function ErrorState({ error, source, onRetry, compact }: ErrorStateProps)
   const detail = error instanceof Error ? error.message : undefined
   const retry = onRetry ? (
     <button type="button" className="dh-btn dh-btn--sm" onClick={onRetry}>
-      Retry
+      {t`Retry`}
     </button>
   ) : null
   if (compact) {

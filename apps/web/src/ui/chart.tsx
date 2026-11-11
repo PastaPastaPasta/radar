@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { EChartsOption } from 'echarts'
 import { lazy, Suspense, useId, useState } from 'react'
 import { Skeleton } from './states'
@@ -37,7 +38,7 @@ export function Chart({ option, height, label, table, group, loading }: ChartPro
             setShown((s) => !s)
           }}
         >
-          {shown ? 'Hide table' : 'Show as a table'}
+          {shown ? t`Hide table` : t`Show as a table`}
         </button>
       </figcaption>
       <div id={tableId} className={shown ? 'rx-chart__table' : 'dh-sr'}>

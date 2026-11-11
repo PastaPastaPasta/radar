@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import type { QueryClient } from '@tanstack/query-core'
 import { createDapiRpc, getDapiTransport, type DapiTransport } from '../dapi-core'
 import { DEGRADE_AFTER_FAILURES, sleep, SharedStream, type StreamState } from '../dapi-core/streams'
@@ -350,7 +351,10 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
           if (ms > STALE_AFTER_MS) {
             deps.health.setLag(net, 'dapi', {
               ms,
-              detail: `last block header ${Math.floor(ms / 60_000)} minutes ago`,
+              detail: plural(Math.floor(ms / 60_000), {
+                one: 'last block header # minute ago',
+                other: 'last block header # minutes ago',
+              }),
             })
           }
         }, LAG_TICK_MS)

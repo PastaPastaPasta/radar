@@ -1,5 +1,6 @@
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
+import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { PageLink } from '@/features/search'
 import { DashhqFooter } from './elements'
 import { useShortcuts } from './shortcuts'
@@ -26,7 +27,8 @@ export function ShellFooter() {
       ))}{' '}
       <button type="button" onClick={() => shortcuts.open()}>
         {t`Keyboard shortcuts`}
-      </button>
+      </button>{' '}
+      <LanguageSelect label={t`Language`} className="dh-select dh-select--sm" />
     </DashhqFooter>
   )
 }

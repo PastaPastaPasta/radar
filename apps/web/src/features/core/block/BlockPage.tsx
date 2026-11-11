@@ -270,7 +270,7 @@ function BlockView({
               items={[
                 { label: t`Height`, value: formatInt(block.height) },
                 { label: t`Time`, value: <Time ms={block.time} mode="both" /> },
-                { label: t`Size`, value: `${formatInt(block.size)} bytes` },
+                { label: t`Size`, value: t`${formatInt(block.size)} bytes` },
                 {
                   label: t`Difficulty`,
                   value: formatNumber(difficultyFromBits(block.bits), {

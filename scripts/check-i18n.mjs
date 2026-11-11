@@ -33,6 +33,39 @@ function placeholders(text) {
   return [...new Set(names), ...new Set(tags)].sort().join(' ')
 }
 
+/** The plural categories a locale needs for whole numbers: ru and uk need few and many, ja and zh only other. */
+function requiredPlurals(code) {
+  const rules = new Intl.PluralRules(code)
+  const categories = new Set(['other'])
+  for (let n = 0; n <= 200; n++) categories.add(rules.select(n))
+  return categories
+}
+
+/** For each plural in a message, the categories it spells out ("one", "few", "=0", ...). */
+function pluralBlocks(text) {
+  const blocks = []
+  for (const match of text.matchAll(/\{\s*\w+\s*,\s*(?:plural|selectordinal)\s*,/g)) {
+    const found = new Set()
+    let depth = 1
+    let word = ''
+    for (let i = match.index + match[0].length; i < text.length && depth > 0; i++) {
+      const ch = text[i]
+      if (ch === '{') {
+        if (depth === 1 && word) found.add(word)
+        word = ''
+        depth++
+      } else if (ch === '}') {
+        depth--
+        word = ''
+      } else if (depth === 1) {
+        if (!/\s/.test(ch)) word += ch
+      }
+    }
+    blocks.push(found)
+  }
+  return blocks
+}
+
 function listIds(ids, limit = 10) {
   const lines = ids.slice(0, limit).map((id) => `    ${id}`)
   if (ids.length > limit) lines.push(`    … and ${ids.length - limit} more`)
@@ -77,6 +110,8 @@ for (const code of shipped) {
   const catalog = parse(code)
   const missing = []
   const broken = []
+  const plurals = []
+  const needed = requiredPlurals(code)
   for (const [id, entry] of Object.entries(english)) {
     const translation = catalog[id]?.translation
     if (!translation || translation.trim() === '') {
@@ -85,11 +120,19 @@ for (const code of shipped) {
       broken.push(id)
     } else if (catalog[id]?.extra?.flags?.includes('fuzzy')) {
       missing.push(id)
+    } else if (pluralBlocks(translation).some((found) => [...needed].some((c) => !found.has(c)))) {
+      plurals.push(id)
     }
   }
   if (missing.length > 0) {
     problems.push(`${code}: ${missing.length} message(s) missing a translation`)
     problems.push(...listIds(missing))
+  }
+  if (plurals.length > 0) {
+    problems.push(
+      `${code}: ${plurals.length} plural(s) without every category it needs (${[...needed].join(', ')})`,
+    )
+    problems.push(...listIds(plurals))
   }
   if (broken.length > 0) {
     problems.push(`${code}: ${broken.length} translation(s) whose placeholders differ`)

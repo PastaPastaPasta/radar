@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro'
+import { t } from '@lingui/core/macro'
 import type { ReactNode } from 'react'
 import { Badge } from './badges'
 import { Icon } from './icon'
@@ -19,7 +19,6 @@ export function ChainLockBadge({
   unlockedLabel?: ReactNode
   size?: 'sm'
 }) {
-  const { t } = useLingui()
   if (locked) {
     return (
       <Badge tone="success" size={size} icon={<Icon name="cl" size="sm" />}>
@@ -45,7 +44,6 @@ export function ChainLockBadge({
 
 /** An InstantSend lock is reported by the node that answered; no second source is asked. */
 export function InstantSendBadge({ claim, size }: { claim: 'one-node' | undefined; size?: 'sm' }) {
-  const { t } = useLingui()
   return claim ? (
     <span data-claim="one-node">
       <Badge tone="warning" size={size} icon={<Icon name="is" size="sm" />}>
@@ -72,7 +70,6 @@ export function LockMark({
   claim: 'one-node' | undefined
   compact?: boolean
 }) {
-  const { t } = useLingui()
   if (locked) {
     return (
       <span className="rx-lockmark" title={t`ChainLocked`}>

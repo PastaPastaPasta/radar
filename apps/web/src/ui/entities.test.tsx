@@ -119,7 +119,7 @@ describe('EntityChip', () => {
     const writeText = stubClipboard()
     render(<EntityChip kind="tx" id={TXID} hover={false} />)
     expect(document.querySelector('.rx-chip__text')).toHaveTextContent('cb4c0d…cdf0')
-    await user.click(screen.getByRole('button', { name: 'Copy core transaction ID' }))
+    await user.click(screen.getByRole('button', { name: 'Copy Core transaction ID' }))
     expect(writeText).toHaveBeenCalledWith(TXID)
   })
 

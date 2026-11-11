@@ -78,7 +78,8 @@ describe('Settings', () => {
 
   it('offers the ten languages, each in its own script @IN-13 @HY-15', async () => {
     renderAt('/settings')
-    const select = await screen.findByRole('combobox', { name: 'Language' })
+    const main = await screen.findByRole('main')
+    const select = await within(main).findByRole('combobox', { name: 'Language' })
     expect(
       within(select)
         .getAllByRole('option')

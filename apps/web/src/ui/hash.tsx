@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { announce } from './announce'
 import { copyText } from './clipboard'
@@ -11,7 +12,7 @@ export interface CopyProps {
 
 const COPIED_MS = 1400
 
-export function Copy({ value, label = 'Copy' }: CopyProps) {
+export function Copy({ value, label }: CopyProps) {
   const [done, setDone] = useState(false)
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
@@ -19,13 +20,13 @@ export function Copy({ value, label = 'Copy' }: CopyProps) {
     <button
       type="button"
       className={cx('rx-copy', done && 'is-done')}
-      aria-label={label}
+      aria-label={label ?? t`Copy`}
       data-copy={value}
       onClick={() => {
         void copyText(value).then((ok) => {
           if (!ok) return
           setDone(true)
-          announce('Copied')
+          announce(t`Copied`)
           window.clearTimeout(timer.current)
           timer.current = window.setTimeout(() => {
             setDone(false)
@@ -93,7 +94,7 @@ export function Hash({ value, display = 'short', head = 6, tail = 4, copy = true
       >
         {text}
       </code>
-      {copy ? <Copy value={value} label="Copy full value" /> : null}
+      {copy ? <Copy value={value} label={t`Copy full value`} /> : null}
     </span>
   )
 }

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { Link, useRouter, type LinkProps } from '@tanstack/react-router'
 import {
   flexRender,
@@ -122,7 +123,7 @@ function CellContent<Row>({
       <button
         type="button"
         className="rx-cellbtn"
-        title={`Filter by ${text}`}
+        title={t`Filter by ${text}`}
         onClick={() => {
           onFilter(cell.column.id, text)
         }}
@@ -144,7 +145,7 @@ function Pager({
   if (paging.kind === 'infinite') {
     return (
       <div className="rx-pager">
-        <span>{formatInt(shown)} loaded</span>
+        <span>{t`${formatInt(shown)} loaded`}</span>
         {paging.hasNext ? (
           <button
             type="button"
@@ -152,7 +153,7 @@ function Pager({
             disabled={paging.fetching}
             onClick={paging.fetchNext}
           >
-            Show more
+            {t`Show more`}
           </button>
         ) : null}
         <a
@@ -163,18 +164,14 @@ function Pager({
             window.scrollTo({ top: 0 })
           }}
         >
-          Back to top
+          {t`Back to top`}
         </a>
       </div>
     )
   }
-  const link = (props: LinkProps | undefined, label: string) =>
+  const link = (props: LinkProps | undefined, label: string, rel: 'next' | 'prev') =>
     props ? (
-      <Link
-        {...props}
-        className="dh-btn dh-btn--sm"
-        rel={label === 'Next' || label === 'Older' ? 'next' : 'prev'}
-      >
+      <Link {...props} className="dh-btn dh-btn--sm" rel={rel}>
         {label}
       </Link>
     ) : (
@@ -184,9 +181,9 @@ function Pager({
     )
   if (paging.kind === 'cursor') {
     return (
-      <nav className="rx-pager" aria-label="Pagination">
-        {link(paging.prev, 'Newer')}
-        {link(paging.next, 'Older')}
+      <nav className="rx-pager" aria-label={t`Pagination`}>
+        {link(paging.prev, t`Newer`, 'prev')}
+        {link(paging.next, t`Older`, 'next')}
       </nav>
     )
   }
@@ -194,13 +191,16 @@ function Pager({
   const end = start + shown - 1
   const hasNext = paging.total === undefined ? shown >= paging.limit : end < paging.total
   return (
-    <nav className="rx-pager" aria-label="Pagination">
+    <nav className="rx-pager" aria-label={t`Pagination`}>
       <span>
-        {shown === 0 ? '0' : `${formatInt(start)}–${formatInt(end)}`}
-        {paging.total === undefined ? '' : ` of ${formatInt(paging.total)}`}
+        {shown === 0
+          ? '0'
+          : paging.total === undefined
+            ? `${formatInt(start)}–${formatInt(end)}`
+            : t`${formatInt(start)}–${formatInt(end)} of ${formatInt(paging.total)}`}
       </span>
-      {link(paging.page > 1 ? paging.to(paging.page - 1) : undefined, 'Previous')}
-      {link(hasNext ? paging.to(paging.page + 1) : undefined, 'Next')}
+      {link(paging.page > 1 ? paging.to(paging.page - 1) : undefined, t`Previous`, 'prev')}
+      {link(hasNext ? paging.to(paging.page + 1) : undefined, t`Next`, 'next')}
     </nav>
   )
 }
@@ -334,7 +334,8 @@ export function DataTable<Row>({
     const current = sorting[0]
     const desc = current?.id === id ? !current.desc : header.column.columnDef.meta?.numeric === true
     sort.onChange(stringifySort(id, desc))
-    announce(`Sorted by ${headerText(header)}, ${desc ? 'descending' : 'ascending'}`)
+    const column = headerText(header)
+    announce(desc ? t`Sorted by ${column}, descending` : t`Sorted by ${column}, ascending`)
   }
 
   const isReady = state === 'ready' && modelRows.length > 0
@@ -406,7 +407,7 @@ export function DataTable<Row>({
       <tbody>
         <tr>
           <td colSpan={columnCount}>
-            {empty ?? <Empty kind="none-yet" title="Nothing to show yet" />}
+            {empty ?? <Empty kind="none-yet" title={t`Nothing to show yet`} />}
           </td>
         </tr>
       </tbody>
@@ -519,7 +520,7 @@ export function DataTable<Row>({
           >
             <caption className="dh-sr">
               {caption}
-              {sortedHeader ? `, sorted by ${headerText(sortedHeader)}` : ''}
+              {sortedHeader ? `, ${t`sorted by ${headerText(sortedHeader)}`}` : ''}
             </caption>
             {head}
             {body}
@@ -531,7 +532,7 @@ export function DataTable<Row>({
           {rowLink && isReady ? (
             <span className="rx-keys rx-hide-sm">
               <kbd>j</kbd>
-              <kbd>k</kbd> move <kbd>↵</kbd> open
+              <kbd>k</kbd> {t`move`} <kbd>↵</kbd> {t`open`}
             </span>
           ) : null}
           {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}
@@ -555,7 +556,7 @@ export function NewRowsPill({
   return (
     <button type="button" className="rx-newrows" onClick={onShow}>
       <Icon name="up" size="sm" />
-      {formatInt(count)} new {noun} · show
+      {t`${formatInt(count)} new ${noun} · show`}
     </button>
   )
 }

@@ -10,6 +10,7 @@ import {
   SECTION_ENTRY,
   SearchTrigger,
   findPage,
+  recordLabel,
   sectionOfPath,
   useNetwork,
   type SiteSection,
@@ -45,7 +46,8 @@ export function ShellBar() {
     select: (s) => ({ pathname: s.location.pathname, routeId: s.matches.at(-1)?.routeId ?? '' }),
   })
   const section = sectionOfPath(pathname)
-  const record = findPage(routeId)?.record
+  const page = findPage(routeId)
+  const record = page && recordLabel(page)
 
   const network = networkName(net)
   const networks = [

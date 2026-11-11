@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
@@ -136,14 +137,15 @@ const statusHeight = (b: PeStatus) => b.tenderdash.block.height
 
 function reportPeLag(net: NetworkId, body: PeStatus, unhealthy: boolean): void {
   const blocks = Math.max(0, body.tenderdash.block.height - body.api.block.height)
+  const block = formatBlock(body.api.block.height)
   const effective = unhealthy ? Math.max(blocks, PE_STALE_BLOCKS + 1) : blocks
   healthRegistry.setLag(net, 'pe', {
     blocks: effective,
     detail: unhealthy
-      ? `Platform Explorer reports its indexer as unhealthy (indexed to block ${formatBlock(body.api.block.height)})`
+      ? t`Platform Explorer reports its indexer as unhealthy (indexed to block ${block})`
       : blocks === 0
-        ? `indexed to block ${formatBlock(body.api.block.height)}`
-        : `indexed to block ${formatBlock(body.api.block.height)} (${blocks} behind)`,
+        ? t`indexed to block ${block}`
+        : t`indexed to block ${block} (${formatBlock(blocks)} behind)`,
   })
 }
 

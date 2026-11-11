@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { CoreTxType, TransitionType } from '@/lib/tx-types'
 import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
-import { typeMeta } from './kinds'
+import { labelOf, typeMeta } from './kinds'
 import type { Tone } from './types'
 
 export interface BadgeProps {
@@ -41,7 +41,7 @@ export function TypeBadge({ type }: TypeBadgeProps) {
   return (
     <span className="rx-type" data-layer={layerAttr(meta.layer)} data-type={type}>
       <Icon name={meta.icon} />
-      {meta.label}
+      {labelOf(meta)}
     </span>
   )
 }

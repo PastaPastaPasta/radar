@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { Command } from 'cmdk'
@@ -100,12 +101,12 @@ export function PaletteShell({
           onKeyDownCapture={onKeyDownCapture}
         >
           <VisuallyHidden.Root asChild>
-            <Dialog.Title>Search Radar</Dialog.Title>
+            <Dialog.Title>{t`Search Radar`}</Dialog.Title>
           </VisuallyHidden.Root>
           <Command
             shouldFilter={false}
             loop
-            label="Search Radar"
+            label={t`Search Radar`}
             value={selectedId}
             onValueChange={onSelectedChange}
             className="rx-pal__cmd"
@@ -117,8 +118,8 @@ export function PaletteShell({
                 onValueChange={onQueryChange}
                 placeholder={placeholder}
               />
-              <kbd className="rx-hide-sm">Esc</kbd>
-              <Dialog.Close className="rx-pal__cancel rx-only-sm">Cancel</Dialog.Close>
+              <kbd className="rx-hide-sm">{t`Esc`}</kbd>
+              <Dialog.Close className="rx-pal__cancel rx-only-sm">{t`Cancel`}</Dialog.Close>
             </div>
             {classifier ? (
               <div className="rx-pal__class">
@@ -133,7 +134,7 @@ export function PaletteShell({
               <Command.List className="rx-pal__list" aria-busy={loading ? true : undefined}>
                 {total === 0 ? (
                   <Command.Empty className="rx-pal__empty">
-                    {loading ? 'Searching…' : empty}
+                    {loading ? t`Searching…` : empty}
                   </Command.Empty>
                 ) : null}
                 {groups
@@ -168,7 +169,7 @@ export function PaletteShell({
                   ))}
               </Command.List>
               {preview ? (
-                <aside className="rx-pal__prev" aria-label="Preview">
+                <aside className="rx-pal__prev" aria-label={t`Preview`}>
                   {preview}
                 </aside>
               ) : null}
@@ -176,17 +177,17 @@ export function PaletteShell({
             <div className="rx-pal__foot">
               <span className="k">
                 <kbd>↑</kbd>
-                <kbd>↓</kbd> move
+                <kbd>↓</kbd> {t`move`}
               </span>
               <span className="k">
-                <kbd>↵</kbd> open
+                <kbd>↵</kbd> {t`open`}
               </span>
               <span className="k">
                 <kbd>⇧</kbd>
-                <kbd>↵</kbd> new tab
+                <kbd>↵</kbd> {t`new tab`}
               </span>
               <span className="k">
-                <kbd>Esc</kbd> close
+                <kbd>{t`Esc`}</kbd> {t`close`}
               </span>
               {networkHint ? <span className="rx-net">{networkHint}</span> : null}
             </div>
@@ -238,7 +239,7 @@ export function PalettePreview({
       </dl>
       <div className="rx-hc__foot">
         {source ? <SourceLine stamp={source} compact /> : null}
-        {id ? <Copy value={id} label="Copy ID" /> : null}
+        {id ? <Copy value={id} label={t`Copy ID`} /> : null}
         {href ? (
           <a className="rx-go" href={href}>
             {openLabel}

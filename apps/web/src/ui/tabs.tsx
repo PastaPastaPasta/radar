@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
@@ -20,7 +21,7 @@ export function Tabs({ tabs, value, to, layer }: TabsProps) {
   return (
     <div className="rx-tabbar">
       <div className="dh-container">
-        <nav aria-label="Sections" data-layer={layerAttr(layer)}>
+        <nav aria-label={t`Sections`} data-layer={layerAttr(layer)}>
           <ul className="rx-tabs" ref={ref}>
             {tabs.map((tab) => (
               <li key={tab.id}>
@@ -28,7 +29,7 @@ export function Tabs({ tabs, value, to, layer }: TabsProps) {
                   <span
                     className="rx-tabs__off"
                     aria-disabled="true"
-                    title="Not available for this record"
+                    title={t`Not available for this record`}
                   >
                     {tab.label}
                   </span>

@@ -157,7 +157,7 @@ describe('routes', () => {
   }
   const pages = SITE_MAP.filter((p) => p.path !== '/validators')
 
-  it.each(pages.map((p) => [p.path, p.title] as const))(
+  it.each(pages.map((p) => [p.path, p.title.message ?? p.path] as const))(
     '%s has a heading and says where its data comes from',
     async (path, title) => {
       const url = path.replace(/\$\w+/g, (m) => encodeURIComponent(SAMPLE[m] ?? 'x'))

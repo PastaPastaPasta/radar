@@ -1,4 +1,4 @@
-import { SECTION_LABELS, SITE_MAP, type SitePage } from '@/features/entity'
+import { pageTitle, sectionLabel, SITE_MAP, type SitePage } from '@/features/entity'
 
 const FEATURED = [
   '/blocks',
@@ -23,14 +23,14 @@ export function matchPages(query: string, limit = 6): SitePage[] {
     return FEATURED.flatMap((path) => SEARCHABLE.filter((p) => p.path === path))
   }
   const scored = SEARCHABLE.flatMap((p) => {
-    const title = p.title.toLowerCase()
+    const titles = [pageTitle(p), p.title.message ?? ''].map((x) => x.toLowerCase())
     const keywords = (p.keywords ?? []).map((k) => k.toLowerCase())
     let score = 0
-    if (title === q) score = 4
-    else if (title.startsWith(q)) score = 3
-    else if (title.includes(q)) score = 2
+    if (titles.includes(q)) score = 4
+    else if (titles.some((x) => x.startsWith(q))) score = 3
+    else if (titles.some((x) => x.includes(q))) score = 2
     else if (keywords.some((k) => k.startsWith(q))) score = 2
-    else if (keywords.some((k) => k.includes(q)) || SECTION_LABELS[p.section].toLowerCase() === q) {
+    else if (keywords.some((k) => k.includes(q)) || sectionLabel(p.section).toLowerCase() === q) {
       score = 1
     }
     return score > 0 ? [{ p, score }] : []

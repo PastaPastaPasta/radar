@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
 import { cx } from './cx'
@@ -113,16 +115,18 @@ export function ActiveFilters({
   return (
     <div className="rx-activef" role="status">
       <span>
-        <b>{formatInt(matches)}</b> match
+        <Trans>
+          <b>{formatInt(matches)}</b> match
+        </Trans>
       </span>
-      {tokens.map((t) => (
-        <span key={t.id} className="rx-token">
-          {t.label}
+      {tokens.map((tok) => (
+        <span key={tok.id} className="rx-token">
+          {tok.label}
           <button
             type="button"
-            aria-label={`Remove filter ${t.label}`}
+            aria-label={t`Remove filter ${tok.label}`}
             onClick={() => {
-              onRemove(t.id)
+              onRemove(tok.id)
             }}
           >
             <Icon name="x" size="sm" />
@@ -131,7 +135,7 @@ export function ActiveFilters({
       ))}
       {tokens.length > 0 ? (
         <button type="button" className="dh-btn dh-btn--link" onClick={onClear}>
-          Clear
+          {t`Clear`}
         </button>
       ) : null}
       {children ? <span className="rx-activef__note rx-hide-sm">{children}</span> : null}

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import * as HoverCard from '@radix-ui/react-hover-card'
 import { createElement, type ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
@@ -5,7 +6,7 @@ import { Identicon, LayerGlyph, Nodeprint } from './art'
 import { cx, layerAttr } from './cx'
 import { Copy, ShortText, shortHash } from './hash'
 import { useHoverCard } from './hover-cards'
-import { KIND_META } from './kinds'
+import { KIND_META, labelOf } from './kinds'
 import type { EntityKind } from './types'
 
 export interface EntityChipProps {
@@ -56,7 +57,7 @@ function chipLabel(
   if ((kind === 'block' || kind === 'platform-block') && NUMERIC.test(id)) {
     return { node: formatInt(Number(id)), mono: false }
   }
-  if (kind === 'epoch') return { node: `Epoch ${id}`, mono: false }
+  if (kind === 'epoch') return { node: t`Epoch ${id}`, mono: false }
   if (kind === 'name') return { node: nameParts(id), mono: false }
   const short = shortHash(id)
   if (short) {
@@ -141,7 +142,7 @@ export function EntityChip({
       ) : (
         trigger
       )}
-      {copy ? <Copy value={id} label={`Copy ${meta.label.toLowerCase()} ID`} /> : null}
+      {copy ? <Copy value={id} label={t`Copy ${labelOf(meta)} ID`} /> : null}
     </span>
   )
 }

@@ -4,7 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Command } from 'cmdk'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import { ENTITY_LABELS, SECTION_LABELS, useNetwork } from '@/features/entity'
+import { entityLabel, pageTitle, sectionLabel, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui/base'
 import { classify, type Classified } from './classify'
 import { describeInput, secretNotice } from './describe'
@@ -198,7 +198,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
               <PaletteHit
                 key={`${hit.kind}:${hit.id}`}
                 hit={hit}
-                badge={ENTITY_LABELS[hit.kind]}
+                badge={entityLabel(hit.kind)}
                 onSelect={go}
               />
             ))}
@@ -228,9 +228,9 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
                 onSelect={() => go({ to: p.path as '/' })}
                 className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
               >
-                <span>{p.title}</span>
+                <span>{pageTitle(p)}</span>
                 <span className="text-xs text-[var(--dh-ink-2,inherit)]">
-                  {SECTION_LABELS[p.section]}
+                  {sectionLabel(p.section)}
                 </span>
               </Command.Item>
             ))}

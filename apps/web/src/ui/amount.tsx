@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { clampSkew, formatDate, formatInt, formatIsoUtc, formatRelative } from '@/lib/format'
 import { formatAmountParts, formatFiat, type AmountKind, type DisplayUnit } from '@/lib/units'
 import { cx } from './cx'
@@ -37,7 +38,7 @@ export function Amount({
     <span
       className={cx('rx-amt', 'rx-num', signed && a.sign === '+' && 'rx-amt--pos')}
       data-amount={value.toString()}
-      title={kind === 'credits' ? `${formatInt(value)} credits` : undefined}
+      title={kind === 'credits' ? t`${formatInt(value)} credits` : undefined}
     >
       {a.sign}
       {a.int}

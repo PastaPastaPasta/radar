@@ -1,7 +1,9 @@
+import { t } from '@lingui/core/macro'
 import { useRouterState } from '@tanstack/react-router'
 import {
   PageLink,
-  SECTION_LABELS,
+  pageTitle,
+  sectionLabel,
   findPage,
   pagesInSection,
   sectionOfPath,
@@ -18,7 +20,7 @@ export function SectionNav() {
   const current = findPage(routeId)
   return (
     <nav
-      aria-label={`${SECTION_LABELS[section]} pages`}
+      aria-label={t`${sectionLabel(section)} pages`}
       data-section-nav={section}
       className="mb-6 overflow-x-auto"
     >
@@ -30,7 +32,7 @@ export function SectionNav() {
               aria-current={current?.path === p.path ? 'page' : undefined}
               className="inline-block py-2"
             >
-              {p.title}
+              {pageTitle(p)}
             </PageLink>
           </li>
         ))}

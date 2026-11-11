@@ -1,3 +1,6 @@
+import { i18n } from '@lingui/core'
+import { msg } from '@lingui/core/macro'
+import type { MessageDescriptor } from '@lingui/core'
 import type { EntityKind } from '@/ui'
 import type { NetworkId } from '@/lib/network'
 import { withNetwork } from './network'
@@ -50,23 +53,26 @@ export function entityHref(kind: EntityKind, id: string, net: NetworkId): string
   return withNetwork(entityPath(kind, id), net)
 }
 
-export const ENTITY_LABELS: Record<EntityKind, string> = {
-  block: 'Core block',
-  tx: 'Core transaction',
-  address: 'Core address',
-  masternode: 'Masternode',
-  evonode: 'Evonode',
-  proposal: 'Proposal',
-  'platform-block': 'Platform block',
-  transition: 'State transition',
-  identity: 'Identity',
-  contract: 'Contract',
-  document: 'Document',
-  token: 'Token',
-  name: 'Name',
-  'platform-address': 'Platform address',
-  epoch: 'Epoch',
-  quorum: 'Quorum',
-  group: 'Group',
-  contest: 'Name contest',
+export const ENTITY_LABELS: Record<EntityKind, MessageDescriptor> = {
+  block: msg`Core block`,
+  tx: msg`Core transaction`,
+  address: msg`Core address`,
+  masternode: msg`Masternode`,
+  evonode: msg`Evonode`,
+  proposal: msg`Proposal`,
+  'platform-block': msg`Platform block`,
+  transition: msg`State transition`,
+  identity: msg`Identity`,
+  contract: msg`Contract`,
+  document: msg`Document`,
+  token: msg`Token`,
+  name: msg`Name`,
+  'platform-address': msg`Platform address`,
+  epoch: msg`Epoch`,
+  quorum: msg`Quorum`,
+  group: msg`Group`,
+  contest: msg`Name contest`,
 }
+
+/** The kind's name in the active language. */
+export const entityLabel = (kind: EntityKind): string => i18n._(ENTITY_LABELS[kind])
