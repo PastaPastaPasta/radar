@@ -253,11 +253,11 @@ test.describe('palette', () => {
     await expect(box).toHaveValue('foo')
 
     await page.keyboard.press('Control+k')
-    await page.getByRole('combobox', { name: 'Search Radar' }).fill('2569992')
+    await page.getByRole('combobox', { name: 'Search Radar' }).fill('abandon ability able about')
     await page.keyboard.press('Enter')
 
-    await expect(page).toHaveURL(/\/search\?q=2569992$/)
-    await expect(box).toHaveValue('2569992')
+    await expect(page).toHaveURL(/\/search\?q=abandon%20ability%20able%20about$/)
+    await expect(box).toHaveValue('abandon ability able about')
   })
 
   test('/ does not steal typing from a text box @X-07', async ({ page }) => {
@@ -299,15 +299,13 @@ test.describe('palette', () => {
     await expect(page.getByRole('button', { name: /Network: Testnet/ })).toBeVisible()
   })
 
-  test('an ambiguous number opens the results page @X-01', async ({ page }) => {
+  test('a typed height opens its Core block, never the results page @X-01', async ({ page }) => {
     const dialog = await openPalette(page, '/')
 
     await dialog.getByRole('combobox').fill('2569992')
-    await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
     await page.keyboard.press('Enter')
 
-    await expect(page).toHaveURL(/\/search\?q=2569992$/)
-    await expect(page.getByRole('link', { name: /Core block 2,569,992/ })).toBeVisible()
+    await expect(page).toHaveURL(/\/block\/2569992$/)
   })
 
   test('arrow keys choose a result @X-07', async ({ page }) => {
@@ -339,8 +337,7 @@ test.describe('palette', () => {
     await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
     await page.keyboard.press('Enter')
 
-    await expect(page).toHaveURL(/\/search\?.*network=testnet/)
-    await expect(page).toHaveURL(/q=2569992/)
+    await expect(page).toHaveURL(/\/block\/2569992\?network=testnet$/)
   })
 
   test('fits a phone and has no serious accessibility violations @X-08', async ({ page }) => {

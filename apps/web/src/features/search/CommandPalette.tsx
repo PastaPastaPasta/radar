@@ -5,7 +5,7 @@ import { Command } from 'cmdk'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { ENTITY_LABELS, SECTION_LABELS, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui/base'
-import { classify } from './classify'
+import { classify, type Classified } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { matchPages } from './pages'
@@ -15,9 +15,15 @@ import type { SearchHit } from './types'
 
 const SEARCH_ALL = '__search-all'
 
-function decide(hits: SearchHit[]): SearchHit | undefined {
-  const exact = hits.filter((h) => h.rank >= 100)
-  return exact.length === 1 ? exact[0] : undefined
+/** How long Enter waits for resolvers that need the network once the local ones have answered. */
+export const ENTER_GRACE_MS = 300
+
+/** The hit Enter opens: the best exact one, or the Core block for a typed height. */
+function decide(hits: SearchHit[], classified: Classified): SearchHit | undefined {
+  const [best] = hits
+  if (best && best.rank >= 100) return best
+  if (classified.classes.includes('int')) return hits.find((h) => h.kind === 'block')
+  return undefined
 }
 
 export function CommandPalette() {
@@ -52,38 +58,57 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const [query, setQuery] = useState(initialQuery)
   const [selected, setSelected] = useState('')
   const arrowed = useRef(false)
-  const { hits, pending, failed, classified } = useSearch(query, { mode: 'palette' })
+  const { hits, pending, pendingLocal, failed, classified } = useSearch(query, { mode: 'palette' })
   const pages = matchPages(query)
   const trimmed = query.trim()
   const secret = useMemo(() => classify(trimmed, net).warning, [trimmed, net])
 
+  const [submitted, setSubmitted] = useState(false)
+  const [graceOver, setGraceOver] = useState(false)
+  const caughtUp = classified.raw.trim() === trimmed
+
   useEffect(() => {
     arrowed.current = false
+    setSubmitted(false)
+    setGraceOver(false)
   }, [query])
 
+  useEffect(() => {
+    if (!submitted || !caughtUp) return
+    const id = setTimeout(() => setGraceOver(true), ENTER_GRACE_MS)
+    return () => clearTimeout(id)
+  }, [submitted, caughtUp])
+
+  const finished = useRef(false)
   const go = (href: SearchHit['href']) => {
+    if (finished.current) return
+    finished.current = true
     onDone()
     void navigate(href)
   }
-  const openSearchPage = () => {
-    onDone()
-    void navigate({ to: '/search', search: { q: trimmed } })
-  }
+  const openSearchPage = () => go({ to: '/search', search: { q: trimmed } })
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
       arrowed.current = true
+      setSubmitted(false)
       return
     }
     if (e.key !== 'Enter' || arrowed.current || e.nativeEvent.isComposing) return
     if (trimmed.length === 0) return
     e.preventDefault()
     e.stopPropagation()
-    if (secret) return
-    const only = classified.raw.trim() === trimmed ? decide(hits) : undefined
-    if (only) go(only.href)
-    else openSearchPage()
+    if (!secret) setSubmitted(true)
   }
+
+  useEffect(() => {
+    if (!submitted || !caughtUp || pendingLocal.length > 0) return
+    if (pending.length > 0 && !graceOver) return
+    const target = decide(hits, classified)
+    if (target) go(target.href)
+    else openSearchPage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navigation helpers are recreated each render
+  }, [submitted, caughtUp, pending.length, pendingLocal.length, graceOver, hits, classified])
 
   const groups = groupHits(hits)
   const description = describeInput(classified)

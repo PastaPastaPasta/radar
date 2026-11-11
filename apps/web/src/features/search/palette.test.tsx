@@ -1,8 +1,11 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { App } from '@/app'
+import { resolvers } from './resolvers'
+import { localStamp } from './resolvers/helpers'
+import type { Resolver, SearchHit } from './types'
 
 const MAINNET_ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const TESTNET_ADDRESS = 'yhq7ifNCtTKEpY4Yu5XPCcztQco6Fh6JsZ'
@@ -15,6 +18,26 @@ beforeAll(() => {
   }
   Element.prototype.scrollIntoView = () => undefined
 })
+
+const added: Resolver[] = []
+function addResolver(r: Resolver) {
+  resolvers.push(r)
+  added.push(r)
+}
+afterEach(() => {
+  for (const r of added.splice(0)) resolvers.splice(resolvers.indexOf(r), 1)
+})
+
+function exactHit(kind: SearchHit['kind'], to: '/platform/block/$id', n: number): SearchHit {
+  return {
+    kind,
+    id: String(n),
+    title: `Platform block ${n}`,
+    href: { to, params: { id: String(n) } },
+    stamp: localStamp(),
+    rank: 110,
+  }
+}
 
 async function openPalette(url = '/') {
   const history = createMemoryHistory({ initialEntries: [url] })
@@ -74,15 +97,56 @@ describe('command palette', () => {
     expect(history.location.search).toBe('?network=testnet')
   })
 
-  it('opens the results page when the input is ambiguous', async () => {
+  it('opens the Core block for a typed height, however fast the other sources answer', async () => {
     const { user, history, input } = await openPalette()
 
     await user.type(input, '2569992')
-    await screen.findByRole('option', { name: /Core block 2,569,992/ })
+    await user.keyboard('{Enter}')
+
+    await waitFor(() => expect(history.location.pathname).toBe('/block/2569992'))
+  })
+
+  it('opens the results page for text that is not an exact match', async () => {
+    const { user, history, input } = await openPalette()
+
+    await user.type(input, 'abandon ability able about')
     await user.keyboard('{Enter}')
 
     await waitFor(() => expect(history.location.pathname).toBe('/search'))
-    expect(history.location.search).toBe('?q=2569992')
+    expect(history.location.search).toBe('?q=abandon%20ability%20able%20about')
+  })
+
+  it('waits for a slow local resolver before it picks a hit', async () => {
+    addResolver({
+      id: 'slow-local',
+      accepts: ['int'],
+      cost: 'local',
+      resolve: async () => {
+        await new Promise((resolve) => setTimeout(resolve, 200))
+        return [exactHit('platform-block', '/platform/block/$id', 2569992)]
+      },
+    })
+    const { user, history, input } = await openPalette()
+
+    await user.type(input, '2569992{Enter}')
+
+    await waitFor(() => expect(history.location.pathname).toBe('/platform/block/2569992'))
+  })
+
+  it('stops waiting for a network resolver after the grace period', async () => {
+    addResolver({
+      id: 'stuck-remote',
+      accepts: ['int'],
+      cost: 'index',
+      resolve: () => new Promise(() => undefined),
+    })
+    const { user, history, input } = await openPalette()
+
+    await user.type(input, '2569992{Enter}')
+
+    await waitFor(() => expect(history.location.pathname).toBe('/block/2569992'), {
+      timeout: 2000,
+    })
   })
 
   it('opens the highlighted result after arrow keys', async () => {

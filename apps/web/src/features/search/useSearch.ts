@@ -123,10 +123,13 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
 
   const settled = state.key === key ? state.settled : EMPTY.settled
   const hint = networkHintHit(classified)
-  const hits = hint ? [hint] : mergeHits(Object.values(settled).map((s) => s.hits ?? []))
+  const hits = hint ? [hint] : mergeHits(planned.map((r) => settled[r.id]?.hits ?? []))
   const pending = planned.map((r) => r.id).filter((id) => !(id in settled))
+  const pendingLocal = planned
+    .filter((r) => r.cost === 'local' && !(r.id in settled))
+    .map((r) => r.id)
   const failed = Object.entries(settled).flatMap(([id, s]) =>
     s.error ? [{ id, error: s.error }] : [],
   )
-  return { hits, pending, failed, classified }
+  return { hits, pending, pendingLocal, failed, classified }
 }

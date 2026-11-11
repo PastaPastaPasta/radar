@@ -32,9 +32,12 @@ export interface Resolver {
 }
 
 export interface SearchResult {
+  /** Best first; equal ranks keep the order of the resolver registry. */
   hits: SearchHit[]
   /** Resolver ids still running. */
   pending: string[]
+  /** The pending resolvers that run on the device, which never wait on a network. */
+  pendingLocal: string[]
   failed: { id: string; error: SourceError }[]
   classified: Classified
 }
