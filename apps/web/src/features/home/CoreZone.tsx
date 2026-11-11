@@ -64,6 +64,7 @@ function Headline() {
               layer="core"
               label={t`Best ChainLock`}
               value={chainLock.data ? formatInt(chainLock.data.data.height) : '—'}
+              note={chainLock.data?.data.claim ? t`ChainLock reported by one node` : undefined}
               loading={chainLock.isPending}
               source={chainLock.data ? stampOf(chainLock.data) : undefined}
             />,

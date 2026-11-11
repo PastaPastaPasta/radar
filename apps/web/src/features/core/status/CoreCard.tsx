@@ -1,12 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { stampOf, type Sourced } from '@/data/envelope'
-import type { CoreChainStatus } from '@/data/core/types'
+import type { CoreChainLock, CoreChainStatus } from '@/data/core/types'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, Hash, KeyValue, Time } from '@/ui'
 
 type Tip = Sourced<{ height: number; hash: string; time: number }>
-type ChainLock = Sourced<{ height: number; hash: string }>
+type ChainLock = Sourced<CoreChainLock>
 
 export interface CoreCardProps {
   tip: UseQueryResult<Tip>
@@ -30,6 +30,8 @@ export function CoreCard({ tip, chainLock, chain }: CoreCardProps) {
     tip.data && chainLock.data
       ? Math.max(0, tip.data.data.height - chainLock.data.data.height)
       : undefined
+
+  const claim = chainLock.data?.data.claim !== undefined
 
   const missing = (r: UseQueryResult) => (r.isError ? t`Not available right now` : '…')
 
@@ -71,6 +73,9 @@ export function CoreCard({ tip, chainLock, chain }: CoreCardProps) {
                 {behind === undefined || behind === 0
                   ? ''
                   : ` · ${t`${behind} blocks behind the tip`}`}
+                {claim ? (
+                  <span data-claim="one-node"> · {t`ChainLock reported by one node`}</span>
+                ) : null}
               </span>
             ) : (
               missing(chainLock)
@@ -82,7 +87,9 @@ export function CoreCard({ tip, chainLock, chain }: CoreCardProps) {
             value: tip.data ? <Hash value={tip.data.data.hash} /> : missing(tip),
           },
           {
-            label: t`ChainLocked block hash`,
+            label: claim
+              ? t`ChainLock block hash, reported by one node`
+              : t`ChainLocked block hash`,
             value: chainLock.data ? <Hash value={chainLock.data.data.hash} /> : missing(chainLock),
           },
           {

@@ -24,8 +24,13 @@ function coreRow(height: string): Promise<HTMLElement> {
   })
 }
 
+const realChainLock = () => core.chainLock('mainnet')
+
 describe('Home page', () => {
-  afterEach(() => resetLiveConnection())
+  afterEach(() => {
+    vi.restoreAllMocks()
+    resetLiveConnection()
+  })
 
   it('shows the Core tip with its ChainLock and a source line @IN-01', async () => {
     renderAt('/')
@@ -46,6 +51,11 @@ describe('Home page', () => {
           chainLockClaim: 'one-node' as const,
         })),
       }
+    })
+    const lock = await realChainLock()
+    vi.spyOn(core, 'chainLock').mockResolvedValue({
+      ...lock,
+      data: { ...lock.data, claim: 'one-node' as const },
     })
     renderAt('/')
     const row = await coreRow('2,570,085')
@@ -130,7 +140,37 @@ describe('Home page', () => {
       return el!
     })
     await waitFor(() => expect(tip).toHaveTextContent('ChainLocked'))
+    expect(tip.querySelector('.rx-hdrtip__lock')).not.toBeNull()
     expect(tip).toHaveAttribute('data-connection', 'live')
+  })
+
+  it('does not draw the header lock for a ChainLock only one node reports @IN-15', async () => {
+    const lock = await realChainLock()
+    vi.spyOn(core, 'chainLock').mockResolvedValue({
+      ...lock,
+      data: { ...lock.data, height: 2_570_085, claim: 'one-node' as const },
+    })
+    renderAt('/')
+    const tip = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-header-tip]')
+      expect(el).toHaveTextContent('2,570,085')
+      return el!
+    })
+    await waitFor(() => expect(tip).toHaveTextContent('ChainLock reported by one node'))
+    expect(tip.querySelector('.rx-hdrtip__lock')).toBeNull()
+    expect(tip).not.toHaveTextContent('ChainLocked')
+  })
+
+  it('does not call a corroborated ChainLock below the tip a claim on the Core row @IN-01', async () => {
+    const original = core.blockRows.bind(core)
+    vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
+      const rows = await original(net, q, signal)
+      return { ...rows, data: rows.data.map((r) => ({ ...r, chainLocked: false })) }
+    })
+    renderAt('/')
+    const row = await coreRow('2,570,085')
+    await screen.findByRole('table', { name: 'Latest Core blocks' })
+    expect(row).not.toHaveTextContent(/ChainLock/)
   })
 
   it('qualifies every Live when the connection drops, and recovers @IN-15', async () => {
@@ -189,6 +229,22 @@ describe('Home page', () => {
       /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
     )
     expect(headline.querySelectorAll('[data-source="dapi"]').length).toBe(1)
+  })
+
+  it('words a one-node best ChainLock as a claim on the stale-Hyphen headline @IN-16', async () => {
+    const lock = await core.chainLock('testnet')
+    vi.spyOn(core, 'chainLock').mockResolvedValue({
+      ...lock,
+      data: { ...lock.data, claim: 'one-node' as const },
+    })
+    renderAt('/?network=testnet')
+    await coreRow('1,589,232')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-headline]')
+      expect(el).toHaveTextContent('Best ChainLock')
+      return el!
+    })
+    await waitFor(() => expect(headline).toHaveTextContent('ChainLock reported by one node'))
   })
 
   it('works on testnet and names the network @IN-16 @HY-19', async () => {

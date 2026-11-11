@@ -71,6 +71,38 @@ describe('Status page', () => {
     expect(document.querySelector('[data-status="sync"]')).toHaveTextContent('Synced')
   })
 
+  it('says a one-node ChainLock is one node’s word, not a lock @IN-09', async () => {
+    setCoreClient(
+      core({
+        chainLock: () =>
+          Promise.resolve({
+            ...stamp,
+            data: { height: 2_570_010, hash: 'cd'.repeat(32), claim: 'one-node' as const },
+          }),
+      }),
+    )
+    renderAt('/status')
+    await waitFor(() =>
+      expect(document.querySelector('[data-status="chainlock"]')).toHaveTextContent(
+        '2,570,010 · ChainLock reported by one node',
+      ),
+    )
+    const card = document.querySelector<HTMLElement>('#core')!
+    expect(within(card).getByText('ChainLock block hash, reported by one node')).toBeInTheDocument()
+    expect(within(card).queryByText('ChainLocked block hash')).toBeNull()
+  })
+
+  it('keeps the plain ChainLock wording once a second source agrees @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    await waitFor(() =>
+      expect(document.querySelector('[data-status="chainlock"]')).toHaveTextContent('2,570,008'),
+    )
+    const card = document.querySelector<HTMLElement>('#core')!
+    expect(card.querySelector('[data-claim]')).toBeNull()
+    expect(within(card).getByText('ChainLocked block hash')).toBeInTheDocument()
+  })
+
   it("names the Core summary's source once, not once per figure @IN-09", async () => {
     setCoreClient(core())
     renderAt('/status')

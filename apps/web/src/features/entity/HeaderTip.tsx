@@ -20,9 +20,17 @@ export function HeaderTip() {
   const tip = useQuery(coreQueries.tip(net))
   const lock = useQuery(coreQueries.chainLock(net))
   const height = tip.data?.data.height
-  const locked = height !== undefined && lock.data ? lock.data.data.height >= height : undefined
+  const covers = height !== undefined && lock.data ? lock.data.data.height >= height : undefined
+  const claim = lock.data?.data.claim
+  const locked = covers === undefined ? undefined : covers && !claim
   const lockWord =
-    locked === undefined ? undefined : locked ? t`ChainLocked` : t`Not ChainLocked yet`
+    covers === undefined
+      ? undefined
+      : locked
+        ? t`ChainLocked`
+        : covers
+          ? t`ChainLock reported by one node`
+          : t`Not ChainLocked yet`
   return (
     <div
       className="rx-hdrtip"

@@ -123,7 +123,7 @@ function CorePulse() {
               <Icon name="cl" size="sm" />
               {t`ChainLocked`}
             </span>
-          ) : lock.data ? (
+          ) : lock.data?.data.claim ? (
             <span data-claim="one-node">
               {t`ChainLock at ${formatInt(lock.data.data.height)}, reported by one node`}
             </span>
