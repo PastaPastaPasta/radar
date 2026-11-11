@@ -6,7 +6,7 @@ const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf340
 const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
 const ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const PROPOSAL = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
-const PROTX = '5'.repeat(64)
+const PROTX = '0'.repeat(64)
 const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 
 const ROUTES: [path: string, heading: string][] = [
@@ -90,6 +90,8 @@ const BUILT = new Set([
   '/charts',
   '/governance',
   `/governance/${PROPOSAL}`,
+  `/mn/${PROTX}`,
+  `/mn/${PROTX}?tab=payments`,
   '/status',
   '/settings',
   '/tools/verify-message',

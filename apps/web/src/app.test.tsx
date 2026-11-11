@@ -146,7 +146,7 @@ describe('routes', () => {
     $txid: 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47',
     $address: 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc',
     $hash: '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6',
-    $protx: '5'.repeat(64),
+    $protx: '0'.repeat(64),
     $n: '12',
     $label: 'alice',
     $type: 'domain',
