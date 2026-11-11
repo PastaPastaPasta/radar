@@ -155,4 +155,11 @@ describe('Block page', () => {
     expect(await screen.findByRole('heading', { level: 1, name: /1,589,232/ })).toBeInTheDocument()
     expect((await screen.findAllByText(/quorum commitment/i)).length).toBeGreaterThan(0)
   })
+
+  it('shows a testnet difficulty below one with its digits, not as zero @IN-16 @HY-19', async () => {
+    renderAt('/block/1589232?network=testnet')
+    const label = await screen.findByText('Difficulty')
+    const value = label.parentElement?.textContent ?? ''
+    expect(value).toMatch(/Difficulty0\.\d*[1-9]/)
+  })
 })

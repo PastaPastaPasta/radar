@@ -8,7 +8,7 @@ import type { HyNetwork } from '@/data/hyphen/schemas'
 import { useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Amount, Badge, Card, DataTable, Meter, Sparkline, Stat, Time } from '@/ui'
-import { formatHashrate } from '../charts/options'
+import { formatCompact, formatHashrate } from '../charts/options'
 import { cardState } from '../hy-shared/infinite-list'
 import { coreVersion, velocity, versionCounts } from './versions'
 
@@ -82,10 +82,7 @@ export function NetworkInternals() {
           <Stat label={t`Unspendable outputs`} value={l ? formatInt(l.utxosUnspendable) : '—'} />
           <Stat label={t`Transactions, all time`} value={l ? formatInt(l.txCount) : '—'} />
           <Stat label={t`Hash rate`} value={l ? formatHashrate(l.hashrate) : '—'} />
-          <Stat
-            label={t`Difficulty`}
-            value={l ? formatNumber(l.difficulty, { notation: 'compact' }) : '—'}
-          />
+          <Stat label={t`Difficulty`} value={l ? formatCompact(l.difficulty) : '—'} />
           <Stat
             label={t`Circulating supply`}
             value={l ? <Amount value={l.circulatingSupply} kind="duffs" compact /> : '—'}

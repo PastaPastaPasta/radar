@@ -55,4 +55,65 @@ describe('chart metrics', () => {
     expect(rangeWindow('all', undefined)).toBeUndefined()
     expect(rangeWindow('1d', undefined)).toEqual({ blocks: 576, points: 96 })
   })
+
+  describe('axis labels @HY-02 @IN-16', () => {
+    const DASH = 100_000_000
+    type Axis = { axisLabel: { formatter: (v: number) => string } }
+
+    /** The ticks a value axis lays over [low, high]: multiples of a 1, 2 or 5 step, about five of them. */
+    function ticks(low: number, high: number): number[] {
+      const raw = (high - low) / 5
+      const power = 10 ** Math.floor(Math.log10(raw))
+      const step = ([1, 2, 5, 10].find((m) => m * power >= raw) ?? 10) * power
+      const out: number[] = []
+      for (let v = Math.ceil(low / step) * step; v <= high; v += step) out.push(v)
+      return out
+    }
+
+    function labels(
+      id: keyof typeof METRICS,
+      values: number[],
+      units?: { unit: 'DASH'; testnet: boolean },
+    ) {
+      const metric = METRICS[id]
+      const data = values.map((value, i) => ({ height: i, value }))
+      const axis = buildOption(metric, data, 'x', units).yAxis as Axis
+      const low = metric.shape === 'bar' ? Math.min(0, ...values) : Math.min(...values)
+      return ticks(low, Math.max(...values)).map((v) => axis.axisLabel.formatter(v))
+    }
+
+    const distinct = (l: string[]) => expect(new Set(l).size).toBe(l.length)
+
+    it('tells the ticks of a slowly moving supply apart', () => {
+      const l = labels('supply', [13_170_100 * DASH, 13_170_350 * DASH, 13_170_700 * DASH])
+      distinct(l)
+      expect(l.length).toBeGreaterThan(2)
+    })
+
+    it('tells the ticks of a count that barely moves apart', () => {
+      const l = labels('utxos', [4_530_000, 4_531_500, 4_533_000])
+      distinct(l)
+      expect(l.length).toBeGreaterThan(2)
+    })
+
+    it('tells the ticks of a hash rate apart', () => {
+      distinct(labels('hashrate', [3.4357e15, 3.4359e15, 3.436e15]))
+    })
+
+    it('keeps small nonzero difficulties distinct from zero', () => {
+      const l = labels('difficulty', [0.0038, 0.004, 0.0042])
+      distinct(l)
+      expect(l.every((label) => label !== '0')).toBe(true)
+    })
+
+    it('stays short when the values span a wide range', () => {
+      expect(labels('supply', [1_000_000 * DASH, 13_000_000 * DASH])).toEqual(
+        expect.arrayContaining([expect.stringMatching(/^\d+ M\u00a0DASH$/)]),
+      )
+    })
+
+    it('shows a small difficulty with its significant digits in tooltips and tables', () => {
+      expect(METRICS.difficulty.format(0.004010969129951115)).toBe('0.004011')
+    })
+  })
 })

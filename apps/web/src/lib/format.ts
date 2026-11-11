@@ -33,6 +33,22 @@ export function formatInt(n: number | bigint): string {
     : formatNumber(Math.round(n), { maximumFractionDigits: 0 })
 }
 
+/**
+ * A figure whose small values stay readable: whole numbers from 1,000 up, otherwise `significant` significant
+ * digits, so a difficulty of 0.004011 never shows as 0.
+ */
+export function formatSignificant(n: number | bigint, significant = 4): string {
+  if (typeof n === 'bigint') return formatNumber(n)
+  if (Math.abs(n) >= 1000) return formatInt(n)
+  return formatNumber(n, { maximumSignificantDigits: significant })
+}
+
+/** Fraction digits needed to tell values `step` apart, at most `max`. */
+export function digitsFor(step: number, max = 8): number {
+  if (!(step > 0) || !Number.isFinite(step)) return 0
+  return Math.min(max, Math.max(0, Math.ceil(-Math.log10(step) - 1e-9)))
+}
+
 export function formatPercent(ratio: number, fractionDigits = 1): string {
   return `${formatNumber(ratio * 100, {
     minimumFractionDigits: fractionDigits,

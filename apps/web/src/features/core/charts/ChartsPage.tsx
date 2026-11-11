@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useNavigate } from '@tanstack/react-router'
 import { useNetwork } from '@/features/entity'
-import { formatInt } from '@/lib/format'
+import { formatInt, formatSignificant } from '@/lib/format'
 import { Amount, Card, Chart, Empty, SegFilter, Stat, Tabs, useUnits } from '@/ui'
 import { NetworkInternals } from '../network/NetworkInternals'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
@@ -112,7 +112,7 @@ function ChartGrid({ range }: { range: Range }) {
       >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-charts-now>
           <Stat size="lg" label={t`Hash rate`} value={l ? formatHashrate(l.hashrate) : '—'} />
-          <Stat label={t`Difficulty`} value={l ? formatInt(Math.round(l.difficulty)) : '—'} />
+          <Stat label={t`Difficulty`} value={l ? formatSignificant(l.difficulty) : '—'} />
           <Stat
             label={t`Circulating supply`}
             value={l ? <Amount value={l.circulatingSupply} kind="duffs" compact /> : '—'}

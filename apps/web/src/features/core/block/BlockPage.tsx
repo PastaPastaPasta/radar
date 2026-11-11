@@ -10,7 +10,7 @@ import { stampOf } from '@/data/envelope'
 import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
 import { HyphenOnlyNote } from './HyphenOnlyNote'
-import { formatBytes, formatInt, formatNumber } from '@/lib/format'
+import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import {
   Amount,
   Card,
@@ -273,9 +273,7 @@ function BlockView({
                 { label: t`Size`, value: t`${formatInt(block.size)} bytes` },
                 {
                   label: t`Difficulty`,
-                  value: formatNumber(difficultyFromBits(block.bits), {
-                    maximumFractionDigits: 2,
-                  }),
+                  value: formatSignificant(difficultyFromBits(block.bits), 6),
                 },
                 { label: t`Bits`, value: <span className="rx-mono">{block.bits}</span> },
                 { label: t`Nonce`, value: formatInt(block.nonce) },
