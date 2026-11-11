@@ -34,7 +34,8 @@ export type HyphenParam = (typeof HYPHEN_PARAMS)[number]
 
 const ALLOWED_PARAMS: ReadonlySet<string> = new Set(HYPHEN_PARAMS)
 const MAX_QUERY_LENGTH = 1024
-const MAX_VALUE_LENGTH = 256
+/** An address-history cursor is 358 hex characters, since it names the address and the last transaction. */
+const MAX_VALUE_LENGTH = 512
 
 const UNSAFE_PATH = /%2f|%5c|\\|(^|\/)(\.|%2e){1,2}(\/|$)/i
 const PREFIX = /^\/x\/hy\/(mainnet|testnet)\/(.*)$/

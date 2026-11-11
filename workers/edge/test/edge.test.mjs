@@ -151,6 +151,18 @@ describe('hyphen pass-through', () => {
     assert.equal(upstreamCalls[1].url, 'https://ts.kw.vg/api/v1/block/123')
   })
 
+  it('passes an address-history cursor, which is far longer than a block cursor @IN-06', async () => {
+    reset(() => Response.json({ value: [] }))
+    const cursor = '7b'.repeat(179)
+    const res = await get(`/x/hy/mainnet/address/Xaddr/txs?limit=25&cursor=${cursor}`)
+    assert.equal(res.status, 200)
+    assert.equal(
+      upstreamCalls[0].url,
+      `https://hy.kw.vg/api/v1/address/Xaddr/txs?cursor=${cursor}&limit=25`,
+    )
+    assert.equal((await get(`/x/hy/mainnet/blocks?cursor=${'7b'.repeat(257)}`)).status, 400)
+  })
+
   it('strips duplicate access-control headers and upstream noise', async () => {
     reset(() => {
       const h = new Headers({ 'content-type': 'application/json', etag: '"abc"' })
@@ -328,7 +340,7 @@ describe('hyphen pass-through', () => {
     assert.equal(upstreamCalls[1].url, upstreamCalls[2].url)
     assert.equal(upstreamCalls[1].url, 'https://hy.kw.vg/api/v1/blocks')
     const count = upstreamCalls.length
-    assert.equal((await get(`/x/hy/mainnet/search?q=${'a'.repeat(300)}`)).status, 400)
+    assert.equal((await get(`/x/hy/mainnet/search?q=${'a'.repeat(600)}`)).status, 400)
     assert.equal((await get(`/x/hy/mainnet/blocks?junk=${'a'.repeat(2000)}`)).status, 400)
     assert.equal(upstreamCalls.length, count)
   })
