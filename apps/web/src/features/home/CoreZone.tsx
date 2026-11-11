@@ -10,9 +10,18 @@ import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Amount, Card, DataTable, Empty, SectionBand, Stat, Stats, Time } from '@/ui'
+import {
+  Amount,
+  Card,
+  DataTable,
+  Empty,
+  SectionBand,
+  Stat,
+  Stats,
+  Time,
+  useHyphenLagSentence,
+} from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
-import { useHyphenLagSentence } from '../core/hy-shared/HyphenGate'
 
 const PENDING = 8
 
@@ -103,9 +112,9 @@ function Headline() {
 
 function StaleNote() {
   const { t } = useLingui()
-  const { stale } = useHyphenBlocked()
-  const lagged = useHyphenLagSentence()
-  if (!stale || lagged === undefined) return null
+  const { net, lag, stale } = useHyphenBlocked()
+  const lagged = useHyphenLagSentence(net, stale ? lag : undefined)
+  if (lagged === undefined) return null
   return (
     <p className="rx-note" role="note" data-hyphen-lag>
       {lagged}{' '}

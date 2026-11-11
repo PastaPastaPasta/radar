@@ -1,7 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useNetwork } from '@/features/entity'
-import { useHyphenLagSentence } from '../hy-shared/HyphenGate'
+import { useHyphenFreshness } from '../hy-shared/HyphenGate'
+import { useHyphenLagSentence } from '@/ui'
 
 /**
  * Says plainly why a figure only Hyphen can give is missing: its index trails the chain, and by how much.
@@ -9,8 +10,9 @@ import { useHyphenLagSentence } from '../hy-shared/HyphenGate'
  */
 export function HyphenOnlyNote({ what }: { what: string }) {
   const { t } = useLingui()
-  useHyphenFit(useNetwork())
-  const lagged = useHyphenLagSentence()
+  const net = useNetwork()
+  useHyphenFit(net)
+  const lagged = useHyphenLagSentence(net, useHyphenFreshness().lag)
   if (lagged === undefined) return null
   return (
     <p className="rx-note" role="note" data-hyphen-lag>

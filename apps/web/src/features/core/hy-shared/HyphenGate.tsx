@@ -4,8 +4,8 @@ import type { ReactNode } from 'react'
 import { healthQueries } from '@/data/health-queries'
 import { useSourceHealth } from '@/data/health'
 import { isDevnet } from '@/lib/network'
-import { PageLink, networkName, useNetwork } from '@/features/entity'
-import { Empty } from '@/ui'
+import { PageLink, useNetwork } from '@/features/entity'
+import { Empty, useHyphenLagSentence } from '@/ui'
 
 /** Hyphen indexes mainnet and testnet only. A devnet gets a plain explanation instead of a failed request. */
 export function HyphenGate({ children }: { children: ReactNode }) {
@@ -39,19 +39,9 @@ export function useHyphenFreshness(): { stale: boolean; lag: string | undefined 
   return { stale, lag: stale ? health.lag?.detail : undefined }
 }
 
-/** The one sentence every page uses to say Hyphen's index trails the chain; undefined while it is current. */
-export function useHyphenLagSentence(): string | undefined {
-  const { t } = useLingui()
-  const net = useNetwork()
-  const { lag } = useHyphenFreshness()
-  if (lag === undefined) return undefined
-  const name = networkName(net)
-  return t`Hyphen’s ${name} index is behind the chain: ${lag}.`
-}
-
 export function StaleIndexNotice() {
   const { t } = useLingui()
-  const lagged = useHyphenLagSentence()
+  const lagged = useHyphenLagSentence(useNetwork(), useHyphenFreshness().lag)
   if (lagged === undefined) return null
   return (
     <p
