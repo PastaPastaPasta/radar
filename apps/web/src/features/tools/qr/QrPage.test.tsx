@@ -1,6 +1,8 @@
-import { screen, waitFor } from '@testing-library/react'
+import { createMemoryHistory } from '@tanstack/react-router'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { App } from '@/app'
 import { base58CheckEncode } from '@/lib/base58'
 import { renderAt } from '../test-utils'
 
@@ -90,7 +92,7 @@ describe('QR page', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('No camera could be opened here')
   })
 
-  it('stops the camera when the page is left @IN-11', async () => {
+  it('stops the camera when Stop is pressed @IN-11', async () => {
     const stopTrack = vi.fn()
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
@@ -106,5 +108,50 @@ describe('QR page', () => {
     await user.click(screen.getByRole('button', { name: 'Stop the camera' }))
     expect(stopTrack).toHaveBeenCalledTimes(1)
     expect(await screen.findByRole('button', { name: 'Use the camera' })).toBeInTheDocument()
+  })
+
+  it('stops the camera when the page is left @IN-11', async () => {
+    const stopTrack = vi.fn()
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: () => Promise.resolve({ getTracks: () => [{ stop: stopTrack }] }),
+      },
+    })
+    HTMLMediaElement.prototype.play = () => Promise.resolve()
+    const user = userEvent.setup()
+    const { unmount } = render(
+      <App history={createMemoryHistory({ initialEntries: ['/tools/qr'] })} />,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Use the camera' }))
+    await screen.findByRole('button', { name: 'Stop the camera' })
+
+    unmount()
+
+    expect(stopTrack).toHaveBeenCalledTimes(1)
+  })
+
+  it('stops a camera that is allowed only after the page was left @IN-11', async () => {
+    const stopTrack = vi.fn()
+    let allow: (stream: unknown) => void = () => undefined
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: () =>
+          new Promise((resolve) => {
+            allow = resolve
+          }),
+      },
+    })
+    const user = userEvent.setup()
+    const { unmount } = render(
+      <App history={createMemoryHistory({ initialEntries: ['/tools/qr'] })} />,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Use the camera' }))
+    unmount()
+
+    allow({ getTracks: () => [{ stop: stopTrack }] })
+
+    await waitFor(() => expect(stopTrack).toHaveBeenCalledTimes(1))
   })
 })

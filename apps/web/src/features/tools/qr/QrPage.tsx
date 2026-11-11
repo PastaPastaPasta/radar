@@ -21,12 +21,14 @@ export function QrPage() {
   const video = useRef<HTMLVideoElement>(null)
   const stream = useRef<MediaStream | null>(null)
   const timer = useRef<number | undefined>(undefined)
+  const session = useRef(0)
   const [camera, setCamera] = useState<Camera>('off')
   const [notice, setNotice] = useState<Notice | undefined>()
   const [busy, setBusy] = useState(false)
   const [stamp] = useState(() => local(null))
 
   const stop = useCallback(() => {
+    session.current += 1
     window.clearInterval(timer.current)
     stream.current?.getTracks().forEach((track) => {
       track.stop()
@@ -58,18 +60,27 @@ export function QrPage() {
       setCamera('unavailable')
       return
     }
+    window.clearInterval(timer.current)
+    const mine = ++session.current
     setCamera('starting')
     try {
       const media = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
         audio: false,
       })
+      if (session.current !== mine) {
+        media.getTracks().forEach((track) => {
+          track.stop()
+        })
+        return
+      }
       stream.current = media
       const el = video.current
       if (el) {
         el.srcObject = media
         await el.play().catch(() => undefined)
       }
+      if (session.current !== mine) return
       setCamera('on')
       const canvas = document.createElement('canvas')
       let reading = false
@@ -84,7 +95,7 @@ export function QrPage() {
         reading = true
         readQr(context.getImageData(0, 0, canvas.width, canvas.height))
           .then((text) => {
-            if (handle(text)) stop()
+            if (session.current === mine && handle(text)) stop()
           })
           .catch(() => undefined)
           .finally(() => {
@@ -92,6 +103,7 @@ export function QrPage() {
           })
       }, FRAME_MS)
     } catch (e) {
+      if (session.current !== mine) return
       const denied =
         e instanceof DOMException && (e.name === 'NotAllowedError' || e.name === 'SecurityError')
       setCamera(denied ? 'denied' : 'unavailable')
