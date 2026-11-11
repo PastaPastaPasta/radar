@@ -1,6 +1,7 @@
 import { configure, screen, waitFor, within } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { core } from '@/data/core/client'
 import { renderAt } from '../hy-shared/test-utils'
 
 configure({ asyncUtilTimeout: 5000 })
@@ -15,6 +16,24 @@ const TIP = 2570085
 const BY_HASH = '0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce4'
 
 describe('Block page', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('offers no previous block for the genesis block @IN-03', async () => {
+    const original = core.block.bind(core)
+    vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal) => {
+      const found = await original(net, ref, signal)
+      return found.data ? { ...found, data: { ...found.data, height: 0 } } : found
+    })
+
+    renderAt(`/block/${TIP}`)
+
+    expect(await screen.findByRole('heading', { level: 1, name: /Block 0/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Previous block' })).toBeNull()
+    expect(screen.queryByText('Previous block')).toBeNull()
+  })
+
   it('shows the tip block with its header, coinbase payload and transactions @IN-03 @HY-05', async () => {
     renderAt(`/block/${TIP}`)
     expect(await screen.findByRole('heading', { level: 1, name: /2,570,085/ })).toBeInTheDocument()

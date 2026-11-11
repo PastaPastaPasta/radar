@@ -25,6 +25,7 @@ import {
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { CbTxRows } from '../tx/Payload'
+import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
@@ -38,7 +39,11 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   const ref = parseBlockRef(id)
   useDocumentTitle(ref && 'height' in ref ? t`Block ${formatInt(ref.height)}` : t`Block`)
   const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
-  const tip = useQuery({ ...coreQueries.tip(net), enabled: ref !== null })
+  const tipHeight = useFollowTip(net, {
+    key: coreQueries.block(net, ref ?? { height: 0 }).queryKey,
+    settled: block.data?.data?.chainLocked === true,
+    enabled: ref !== null,
+  })
 
   if (!ref || block.data?.data === null) {
     return (
@@ -71,7 +76,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
     <BlockView
       block={block.data.data}
       stamp={stampOf(block.data)}
-      tipHeight={tip.data?.data.height}
+      tipHeight={tipHeight}
       page={page}
     />
   )
@@ -179,15 +184,17 @@ function BlockView({
           title={t`Block ${formatInt(block.height)}`}
           actions={
             <>
-              <Link
-                className="dh-btn"
-                to="/block/$id"
-                params={{ id: block.prevHash }}
-                aria-label={t`Previous block`}
-                data-nav="prev"
-              >
-                {t`← Previous`}
-              </Link>
+              {block.height > 0 ? (
+                <Link
+                  className="dh-btn"
+                  to="/block/$id"
+                  params={{ id: block.prevHash }}
+                  aria-label={t`Previous block`}
+                  data-nav="prev"
+                >
+                  {t`← Previous`}
+                </Link>
+              ) : null}
               {hasNext ? (
                 <Link
                   className="dh-btn"
@@ -284,16 +291,20 @@ function BlockView({
                   label: t`Version`,
                   value: <span className="rx-mono">{block.version.toString(16)}</span>,
                 },
-                {
-                  label: t`Previous block`,
-                  value: (
-                    <Entity
-                      kind="block"
-                      id={block.prevHash}
-                      label={t`Block ${formatInt(Math.max(0, block.height - 1))}`}
-                    />
-                  ),
-                },
+                ...(block.height > 0
+                  ? [
+                      {
+                        label: t`Previous block`,
+                        value: (
+                          <Entity
+                            kind="block"
+                            id={block.prevHash}
+                            label={t`Block ${formatInt(block.height - 1)}`}
+                          />
+                        ),
+                      },
+                    ]
+                  : []),
               ]}
             />
           </Card>

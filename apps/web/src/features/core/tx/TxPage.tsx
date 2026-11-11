@@ -10,6 +10,7 @@ import { hyQueries } from '@/data/hyphen/queries'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
+import { useFollowTip } from '../follow-tip'
 import {
   Amount,
   Badge,
@@ -21,6 +22,7 @@ import {
   Stat,
   Time,
   TypeBadge,
+  useUnits,
 } from '@/ui'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
@@ -51,6 +53,12 @@ export function TxPage({ txid }: { txid: string }) {
   const valid = TXID.test(txid)
   useDocumentTitle(t`Transaction ${txid.slice(0, 8)}…`)
   const tx = useQuery({ ...coreQueries.tx(net, txid), enabled: valid })
+  const found = tx.data?.data
+  const tipHeight = useFollowTip(net, {
+    key: coreQueries.tx(net, txid).queryKey,
+    settled: found?.isChainLocked === true,
+    enabled: valid,
+  })
 
   if (!valid || tx.data?.data === null) {
     return (
@@ -72,16 +80,38 @@ export function TxPage({ txid }: { txid: string }) {
   if (!tx.data?.data) {
     return <CoreBandSkeleton />
   }
-  return <TxView tx={tx.data.data} stamp={stampOf(tx.data)} />
+  return (
+    <TxView
+      key={tx.data.data.txid}
+      tx={tx.data.data}
+      stamp={stampOf(tx.data)}
+      tipHeight={tipHeight}
+    />
+  )
 }
 
 function jsonOf(tx: DecodedTx): string {
   return JSON.stringify(tx, (_k, v: unknown) => (typeof v === 'bigint' ? v.toString() : v), 2)
 }
 
-function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
+function TxView({
+  tx,
+  stamp,
+  tipHeight,
+}: {
+  tx: DecodedTx
+  stamp: SourceStamp
+  tipHeight: number | undefined
+}) {
   const { t } = useLingui()
   const net = useNetwork()
+  const units = useUnits()
+  const confirmations =
+    tx.height === undefined
+      ? undefined
+      : tipHeight === undefined
+        ? tx.confirmations
+        : Math.max(1, tipHeight - tx.height + 1)
   const coinbase = isCoinbaseTx(tx)
   const mined = tx.height !== undefined
   const [count, setCount] = useState(
@@ -116,7 +146,21 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
         ? stampOf(hy.data)
         : undefined
 
+  const unloaded = values.filter((v) => v === undefined).length
+  const loadedTotal = values.reduce((s, v) => s + (v?.value ?? 0n), 0n)
   const flow = useMemo(() => {
+    const missing = outTotal + (fee ?? 0n) - loadedTotal
+    const unloadedInput: FlowNode[] =
+      unloaded > 0 && missing > 0n
+        ? [
+            {
+              key: 'unloaded',
+              label: t`${formatInt(unloaded)} inputs not loaded`,
+              value: missing,
+              kind: 'in',
+            },
+          ]
+        : []
     const inputs: FlowNode[] = coinbase
       ? [{ key: 'new', label: t`Newly generated coins`, value: outTotal, kind: 'in' }]
       : tx.inputs.length === 0
@@ -130,20 +174,23 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
                 kind: 'in',
               },
             ]
-          : tx.inputs.flatMap((_, n) => {
-              const v = values[n]
-              return v
-                ? [
-                    {
-                      key: `i${n}`,
-                      label: `#${n} ${v.address ? short(v.address) : ''}`.trim(),
-                      value: v.value,
-                      kind: 'in' as const,
-                      address: v.address,
-                    },
-                  ]
-                : []
-            })
+          : [
+              ...tx.inputs.flatMap((_, n) => {
+                const v = values[n]
+                return v
+                  ? [
+                      {
+                        key: `i${n}`,
+                        label: `#${n} ${v.address ? short(v.address) : ''}`.trim(),
+                        value: v.value,
+                        kind: 'in' as const,
+                        address: v.address,
+                      },
+                    ]
+                  : []
+              }),
+              ...unloadedInput,
+            ]
     const outputs: FlowNode[] = tx.outputs.flatMap((o, n) =>
       o.value === 0n
         ? []
@@ -160,7 +207,7 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
     if (fee !== undefined && fee > 0n)
       outputs.push({ key: 'fee', label: t`Fee`, value: fee, kind: 'fee' })
     return { inputs, outputs }
-  }, [coinbase, tx, values, senders, outTotal, fee, t])
+  }, [coinbase, tx, values, senders, outTotal, fee, unloaded, loadedTotal, t])
 
   const feeRate =
     fee !== undefined && tx.size > 0
@@ -226,9 +273,9 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
                   </Badge>
                 ) : null}
                 {mined ? null : <Badge tone="warning">{t`Unconfirmed`}</Badge>}
-                {tx.confirmations === undefined || !mined ? null : (
+                {confirmations === undefined || !mined ? null : (
                   <span>
-                    {plural(tx.confirmations, { one: '# confirmation', other: '# confirmations' })}
+                    {plural(confirmations, { one: '# confirmation', other: '# confirmations' })}
                   </span>
                 )}
                 <SourceLine stamp={stamp} />
@@ -247,7 +294,7 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
               coinbase
                 ? t`Block reward, masternode and fee payments`
                 : senders.size > 0
-                  ? t`${formatAmountText(toOthers, 'duffs')} to other addresses`
+                  ? t`${formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })} to other addresses`
                   : undefined
             }
           />
@@ -261,7 +308,7 @@ function TxView({ tx, stamp }: { tx: DecodedTx; stamp: SourceStamp }) {
                   : undefined
                 : coinbase
                   ? t`Coinbase transactions pay none`
-                  : prevouts.isPending && needsPrevouts
+                  : (prevouts.isPending || prevouts.isPlaceholderData) && needsPrevouts
                     ? t`Loading inputs…`
                     : t`Load all inputs to work it out`
             }

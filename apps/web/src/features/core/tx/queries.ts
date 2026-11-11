@@ -16,5 +16,9 @@ export const txQueries = {
         core.prevouts(net, { ...tx, inputs: tx.inputs.slice(0, count) }, signal),
       staleTime: Infinity,
       gcTime: dataClass('immutable').gcTime,
+      placeholderData: (previous, previousQuery) => {
+        const params = previousQuery?.queryKey[3] as { txid?: string } | undefined
+        return previousQuery?.queryKey[0] === net && params?.txid === tx.txid ? previous : undefined
+      },
     }),
 }
