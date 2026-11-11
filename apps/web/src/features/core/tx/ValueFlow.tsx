@@ -6,6 +6,9 @@ import { formatAmountText } from '@/lib/units'
 import { Amount, useUnits } from '@/ui'
 import { FLOW, layoutFlow, limitNodes, type FlowNode } from './tx-info'
 
+const swatch = (kind: FlowNode['kind']) =>
+  kind === 'fee' ? 'var(--dh-warn)' : kind === 'change' ? 'var(--dh-line-2)' : 'var(--rx-core)'
+
 function short(address: string): string {
   return address.length > 14 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address
 }
@@ -99,12 +102,7 @@ export function ValueFlow({
               style={{
                 flex: Number(n.value) || 1,
                 minWidth: 6,
-                background:
-                  n.kind === 'fee'
-                    ? 'var(--dh-warn)'
-                    : n.kind === 'change'
-                      ? 'var(--dh-line-2)'
-                      : 'var(--rx-core)',
+                background: swatch(n.kind),
               }}
             />
           ))}
@@ -112,17 +110,7 @@ export function ValueFlow({
         <ul className="rx-flowsm__l">
           {outs.map((n) => (
             <li key={n.key}>
-              <span
-                className="rx-sw"
-                style={{
-                  ['--c' as string]:
-                    n.kind === 'fee'
-                      ? 'var(--dh-warn)'
-                      : n.kind === 'change'
-                        ? 'var(--dh-line-2)'
-                        : 'var(--rx-core)',
-                }}
-              />
+              <span className="rx-sw" style={{ ['--c' as string]: swatch(n.kind) }} />
               {n.kind === 'out' && n.address ? (
                 <Entity kind="address" id={n.address} label={short(n.address)} />
               ) : (

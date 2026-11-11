@@ -58,7 +58,9 @@ describe('chart metrics', () => {
 
   describe('axis labels @HY-02 @IN-16', () => {
     const DASH = 100_000_000
-    type Axis = { axisLabel: { formatter: (v: number) => string } }
+    interface Axis {
+      axisLabel: { formatter: (v: number) => string }
+    }
 
     /** The ticks a value axis lays over [low, high]: multiples of a 1, 2 or 5 step, about five of them. */
     function ticks(low: number, high: number): number[] {

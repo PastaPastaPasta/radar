@@ -73,6 +73,12 @@ export function outputSpends({
     if (found === 'resolving') return { state: 'spent', resolving: true }
     return found ? { state: 'spent', by: found } : { state: 'spent' }
   }
+  const unspentAsOf = (asOf: number): OutputSpend => {
+    const behind = tipHeight === undefined ? 0 : Math.max(0, tipHeight - asOf)
+    return behind > UNSPENT_LAG_BLOCKS
+      ? { state: 'unknown', reason: 'behind', behind }
+      : { state: 'unspent', asOf, behind }
+  }
   return tx.outputs.map((o, n): OutputSpend => {
     if (isUnspendable(o.scriptPubKey)) return { state: 'unspendable' }
     if (!mined) return { state: 'unknown', reason: 'unconfirmed' }
@@ -83,20 +89,12 @@ export function outputSpends({
     if (view === 'resolving') return { state: 'unknown', reason: 'loading' }
     if (view) {
       if (view.asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
-      const behind = tipHeight === undefined ? 0 : Math.max(0, tipHeight - view.asOf)
-      if (view.found.has(n)) {
-        return behind > UNSPENT_LAG_BLOCKS
-          ? { state: 'unknown', reason: 'behind', behind }
-          : { state: 'unspent', asOf: view.asOf, behind }
-      }
+      if (view.found.has(n)) return unspentAsOf(view.asOf)
       if (view.complete && tx.height !== undefined && view.asOf >= tx.height) return spentBy(n)
     }
     const asOf = hy.asOfHeight
     if (flag == null || asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
-    const behind = tipHeight === undefined ? 0 : Math.max(0, tipHeight - asOf)
-    return behind > UNSPENT_LAG_BLOCKS
-      ? { state: 'unknown', reason: 'behind', behind }
-      : { state: 'unspent', asOf, behind }
+    return unspentAsOf(asOf)
   })
 }
 
