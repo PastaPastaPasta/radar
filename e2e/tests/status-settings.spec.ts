@@ -138,6 +138,33 @@ test.describe('units and fiat', () => {
     await expect(note).toContainText('Price via Platform Explorer')
   })
 
+  test('explains the amount order once, for the unit that is selected @IN-12 @HY-16', async ({
+    page,
+  }) => {
+    await page.goto('/settings')
+    const units = page.locator('#units')
+    const group = page.getByRole('group', { name: 'Unit for amounts' })
+    const example = units.getByText(/Example/)
+    const contradicts = [/USD leads/, /always follows/]
+
+    for (const unit of ['DASH', 'mDASH', 'µDASH', 'duffs']) {
+      await group.getByRole('button', { name: unit, exact: true }).click()
+      await expect(units).toContainText(`Amounts show in ${unit}.`)
+      await expect(units).toContainText(`follows the amount in ${unit}`)
+      await expect(units).not.toContainText('USD comes first')
+      for (const text of contradicts) await expect(units.getByText(text)).toHaveCount(0)
+      await expect(example).toHaveText(new RegExp(`^Example:\\s*[\\d,.]+\\s*${unit}`))
+    }
+
+    await group.getByRole('button', { name: 'USD', exact: true }).click()
+    await expect(units).toContainText('USD comes first, with the DASH figure after it')
+    await expect(units).toContainText('This choice doesn’t apply while USD comes first')
+    await expect(units).not.toContainText('Amounts show in')
+    await expect(units).not.toContainText('follows the amount in')
+    for (const text of contradicts) await expect(units.getByText(text)).toHaveCount(0)
+    await expect(example).toHaveText(/^Example:\s*≈ \$[\d,.]+\s*\(1\.2346\s*DASH\)/)
+  })
+
   test('USD is not offered on testnet, which shows DASH there @IN-12 @IN-16', async ({ page }) => {
     await page.goto('/settings')
     await page

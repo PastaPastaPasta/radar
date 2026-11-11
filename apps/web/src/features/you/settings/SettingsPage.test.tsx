@@ -82,6 +82,28 @@ describe('Settings', () => {
     expect(screen.getByRole('checkbox', { name: /USD value/ })).toBeDisabled()
   })
 
+  it('explains the amount order for the selected unit only, never both orders @IN-12 @HY-16', async () => {
+    const user = userEvent.setup()
+    renderAt('/settings')
+    const group = await screen.findByRole('group', { name: 'Unit for amounts' })
+    const units = document.querySelector<HTMLElement>('#units')!
+
+    expect(units).toHaveTextContent('Amounts show in DASH.')
+    expect(units).toHaveTextContent('follows the amount in DASH')
+    expect(units).not.toHaveTextContent('USD comes first')
+
+    await user.click(within(group).getByRole('button', { name: 'µDASH' }))
+    expect(units).toHaveTextContent('Amounts show in µDASH.')
+    expect(units).toHaveTextContent('follows the amount in µDASH')
+
+    await user.click(within(group).getByRole('button', { name: 'USD' }))
+    expect(units).toHaveTextContent('USD comes first, with the DASH figure after it')
+    expect(units).not.toHaveTextContent('Amounts show in')
+    expect(units).not.toHaveTextContent('follows the amount in')
+    expect(units).not.toHaveTextContent('always follows')
+    expect(units).not.toHaveTextContent('USD leads')
+  })
+
   it('offers no USD on testnet and keeps the choice for mainnet @IN-12 @IN-16', async () => {
     localStorage.setItem('radar.unit', 'USD')
     renderAt('/settings?network=testnet')

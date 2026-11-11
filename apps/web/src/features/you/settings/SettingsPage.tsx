@@ -9,6 +9,7 @@ import { readUtcPreference } from '@/lib/format'
 import {
   DISPLAY_UNITS,
   DUFFS_PER_DASH,
+  denomination,
   formatFiat,
   getUnitPrefs,
   subscribeUnitPrefs,
@@ -33,6 +34,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const showsRate = mainnet && (prefs.fiat || usdPrimary)
   const rate = useQuery({ ...rateQueries.usd(), enabled: showsRate })
   const unit = prefs.unit === 'USD' && !mainnet ? 'DASH' : prefs.unit
+  const unitName = unitLabel(denomination(unit))
 
   useDocumentTitle(t`Settings`)
 
@@ -61,9 +63,11 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               ]}
             />
             <p className="text-[var(--dh-ink-2)]">
-              {mainnet
-                ? t`USD leads Dash amounts and shows the DASH figure after it, once the rate is in.`
-                : t`USD is for mainnet only: test coins have no value.`}
+              {!mainnet
+                ? t`USD is for mainnet only: test coins have no value.`
+                : usdPrimary
+                  ? t`USD comes first, with the DASH figure after it once the rate is in.`
+                  : t`Amounts show in ${unitName}. Choose USD to lead with the dollar value.`}
             </p>
             <p className="text-[var(--dh-ink-2)]">
               {t`Example`}: <Amount value={SAMPLE_DUFFS} kind="duffs" fiat />
@@ -81,9 +85,11 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               {t`Show the USD value next to DASH amounts`}
             </label>
             <p className="text-[var(--dh-ink-2)]">
-              {mainnet
-                ? t`USD is rounded to three significant figures and always follows the DASH figure.`
-                : t`Test coins have no value, so Testnet and devnets never show USD.`}
+              {!mainnet
+                ? t`Test coins have no value, so Testnet and devnets never show USD.`
+                : usdPrimary
+                  ? t`USD is rounded to three significant figures. This choice doesn’t apply while USD comes first.`
+                  : t`USD is rounded to three significant figures and follows the amount in ${unitName}.`}
             </p>
             {showsRate && rate.data ? (
               <p className="flex flex-wrap items-center gap-x-3 text-[var(--dh-ink-2)]">
