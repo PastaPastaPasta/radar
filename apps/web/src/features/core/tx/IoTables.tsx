@@ -60,9 +60,10 @@ export function IoTables({
   const outLimit = showAllOut || (anchor.out ?? -1) >= INITIAL ? outCount : INITIAL
   useScrollToAnchor(true, anchor.hash)
   const coinbase = isCoinbaseTx(tx)
-  const inTotal = tx.inputs.every((i) => prevouts?.has(prevoutKey(i.txid, i.vout)))
-    ? tx.inputs.reduce((s, i) => s + (prevouts?.get(prevoutKey(i.txid, i.vout))?.value ?? 0n), 0n)
-    : undefined
+  const inTotal =
+    inCount > 0 && tx.inputs.every((i) => prevouts?.has(prevoutKey(i.txid, i.vout)))
+      ? tx.inputs.reduce((s, i) => s + (prevouts?.get(prevoutKey(i.txid, i.vout))?.value ?? 0n), 0n)
+      : undefined
   const outTotal = tx.outputs.reduce((s, o) => s + o.value, 0n)
 
   return (

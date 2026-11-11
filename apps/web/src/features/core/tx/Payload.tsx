@@ -91,6 +91,8 @@ function ProRegRows({ p, txid }: { p: Obj; txid: string }) {
   const payouts = list(p.payouts)
   const service = (obj(p.service) as Service | undefined)?.address
   const platformNodeId = str(p.platformNodeId)
+  const shared = obj(p.sharedCollateral)
+  const sharedPenalty = big(shared?.earlyPenalty)
   return (
     <KeyValue
       columns={2}
@@ -144,6 +146,22 @@ function ProRegRows({ p, txid }: { p: Obj; txid: string }) {
               },
             ]
           : []),
+        ...(shared
+          ? [
+              {
+                label: t`Shared collateral`,
+                value: t`${formatInt(list(shared.shares).length)} shares, ${formatInt(num(shared.earlyPeriodBlocks) ?? 0)} blocks of early-leave penalty`,
+              },
+              ...(sharedPenalty === undefined
+                ? []
+                : [
+                    {
+                      label: t`Early-leave penalty`,
+                      value: <Amount value={sharedPenalty} kind="duffs" />,
+                    },
+                  ]),
+            ]
+          : []),
       ]}
     />
   )
@@ -152,11 +170,15 @@ function ProRegRows({ p, txid }: { p: Obj; txid: string }) {
 function ProUpServRows({ p }: { p: Obj }) {
   const { t } = useLingui()
   const service = (obj(p.service) as Service | undefined)?.address
+  const evo = num(p.mnType) === 1 || str(p.platformNodeId) !== undefined
   return (
     <KeyValue
       columns={2}
       items={[
-        { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
+        {
+          label: t`Masternode`,
+          value: <Entity kind={evo ? 'evonode' : 'masternode'} id={str(p.proTxHash) ?? ''} />,
+        },
         {
           label: t`New service address`,
           value: service ? <span className="rx-mono">{service}</span> : '—',
@@ -314,6 +336,63 @@ function AssetUnlockRows({ p }: { p: Obj }) {
   )
 }
 
+function SignatureRows({ p }: { p: Obj }) {
+  const signatures = list(p.signatures)
+  return signatures.length === 0 ? null : (
+    <>
+      {signatures.map((sig, i) => (
+        <div key={i}>{hashValue(sig, 16, 8)}</div>
+      ))}
+    </>
+  )
+}
+
+function ProDissolveRows({ p }: { p: Obj }) {
+  const { t } = useLingui()
+  return (
+    <KeyValue
+      columns={2}
+      items={[
+        { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
+        { label: t`Share index`, value: String(num(p.actorIndex) ?? '') },
+        { label: t`Signatures`, value: <SignatureRows p={p} /> },
+      ]}
+    />
+  )
+}
+
+function ProUpShareRows({ p }: { p: Obj }) {
+  const { t } = useLingui()
+  return (
+    <KeyValue
+      columns={2}
+      items={[
+        { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
+        { label: t`Share index`, value: String(num(p.shareIndex) ?? '') },
+        { label: t`New reward payout`, value: scriptValue(p.scriptReward, t`None`) },
+        { label: t`Inputs hash`, value: fullHash(p.inputsHash) },
+        { label: t`Signature`, value: hashValue(p.payloadSig) },
+      ]}
+    />
+  )
+}
+
+function ProUpSharedRegRows({ p }: { p: Obj }) {
+  const { t } = useLingui()
+  return (
+    <KeyValue
+      columns={2}
+      items={[
+        { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
+        { label: t`Operator public key`, value: hashValue(p.operatorPublicKey, 16, 8) },
+        { label: t`Voting key`, value: addressOf(p.votingKey) },
+        { label: t`Inputs hash`, value: fullHash(p.inputsHash) },
+        { label: t`Signatures`, value: <SignatureRows p={p} /> },
+      ]}
+    />
+  )
+}
+
 function GenericRows({ p }: { p: Obj }) {
   const { t } = useLingui()
   const kind = str(p.kind) ?? 'raw'
@@ -366,6 +445,21 @@ export function usePayloadInfo(kind: string | undefined): PayloadInfo | undefine
         title: t`Masternode revocation`,
         about: t`The operator ends a masternode's service; it must be registered again to return.`,
       }
+    case 'proDissolveTx':
+      return {
+        title: t`Shared masternode dissolved`,
+        about: t`The shareholders end a shared masternode and take their collateral back.`,
+      }
+    case 'proUpShareTx':
+      return {
+        title: t`Share payout update`,
+        about: t`A shareholder of a shared masternode changes where their reward is paid.`,
+      }
+    case 'proUpSharedRegTx':
+      return {
+        title: t`Shared masternode registrar update`,
+        about: t`The shareholders change a shared masternode's operator key or voting key.`,
+      }
     case 'cbTx':
       return {
         title: t`Coinbase payload`,
@@ -409,6 +503,12 @@ export function PayloadRows({ payload, txid }: { payload: Obj; txid: string }) {
       return <ProUpRegRows p={payload} />
     case 'proUpRevTx':
       return <ProUpRevRows p={payload} />
+    case 'proDissolveTx':
+      return <ProDissolveRows p={payload} />
+    case 'proUpShareTx':
+      return <ProUpShareRows p={payload} />
+    case 'proUpSharedRegTx':
+      return <ProUpSharedRegRows p={payload} />
     case 'cbTx':
       return <CbTxRows payload={payload} />
     case 'qcTx':

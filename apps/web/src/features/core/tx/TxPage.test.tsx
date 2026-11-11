@@ -1,7 +1,8 @@
 import { configure, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { core } from '@/data/core/client'
 import { renderAt } from '../hy-shared/test-utils'
 
 configure({ asyncUtilTimeout: 5000 })
@@ -38,6 +39,60 @@ async function payload(url: string, kind: string): Promise<HTMLElement> {
     { timeout: 4000 },
   )
 }
+
+const HASH = 'ab'.repeat(32)
+const SIG = 'cd'.repeat(96)
+
+describe('shared masternode payloads', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it.each([
+    [
+      'proDissolveTx',
+      { version: 1, proTxHash: HASH, actorIndex: 2, signatures: [SIG] },
+      'Share index',
+    ],
+    [
+      'proUpShareTx',
+      {
+        version: 1,
+        proTxHash: HASH,
+        shareIndex: 1,
+        scriptReward: null,
+        inputsHash: HASH,
+        payloadSig: SIG,
+      },
+      'New reward payout',
+    ],
+    [
+      'proUpSharedRegTx',
+      {
+        version: 1,
+        proTxHash: HASH,
+        operatorPublicKey: SIG,
+        votingKey: { address: null },
+        inputsHash: HASH,
+        signatures: [SIG],
+      },
+      'Operator public key',
+    ],
+  ])('shows the fields of a %s instead of only its name @IN-05', async (kind, fields, label) => {
+    const original = core.tx.bind(core)
+    vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
+      const found = await original(net, txid, signal)
+      return found.data
+        ? { ...found, data: { ...found.data, payload: { kind, ...fields } } }
+        : found
+    })
+
+    const el = await payload(`/tx/${MAINNET.uprevtx}`, kind)
+
+    expect(within(el).getByText(label)).toBeInTheDocument()
+    expect(within(el).queryByText('Raw payload')).toBeNull()
+  })
+})
 
 describe('Transaction page', () => {
   it('shows a transfer with its fee, flow, settlement and inputs @IN-05 @HY-07', async () => {
