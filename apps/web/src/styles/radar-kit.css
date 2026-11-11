@@ -200,6 +200,19 @@
 .rx-hdrtip[data-connection='stopped'] .rx-hdrtip__short {
   color: var(--dh-bad);
 }
+@media (max-width: 599px) {
+  dashhq-bar .rx-hdr-search {
+    display: none;
+  }
+}
+@media (max-width: 379px) {
+  .rx-hdrtip__link > .rx-fresh {
+    display: none;
+  }
+  .rx-hdrtip--pending {
+    min-width: 5.5rem;
+  }
+}
 @media (max-width: 720px) {
   .rx-hdrtip__label,
   .rx-hdrtip__state {

@@ -16,6 +16,7 @@ import {
   type SiteSection,
 } from '@/features/search'
 import { networkName } from '@/ui/base'
+import { adoptBarOverlay } from './bar-overlay'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
 import { routerLocation } from './spa-links'
@@ -59,6 +60,10 @@ export function ShellBar() {
   useEffect(() => {
     const bar = barRef.current
     if (!bar) return
+    let live = true
+    void customElements.whenDefined('dashhq-bar').then(() => {
+      if (live) adoptBarOverlay(bar)
+    })
     const onNetwork = (e: Event) => {
       const detail = (e as CustomEvent<DashhqNetworkDetail>).detail
       const url = new URL(detail.href, location.href)
@@ -66,7 +71,10 @@ export function ShellBar() {
       void navigate(routerLocation(url))
     }
     bar.addEventListener('dashhq-network', onNetwork)
-    return () => bar.removeEventListener('dashhq-network', onNetwork)
+    return () => {
+      live = false
+      bar.removeEventListener('dashhq-network', onNetwork)
+    }
   }, [navigate])
 
   return (

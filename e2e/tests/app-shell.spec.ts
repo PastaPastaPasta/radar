@@ -416,6 +416,49 @@ test.describe('phone navigation', () => {
     )
   })
 
+  test('the network menu opens inside the screen from 320 to 430 px and the header names the network @IN-16 @HY-17 @HY-18', async ({
+    page,
+  }) => {
+    for (const width of [320, 340, 359, 360, 390, 430]) {
+      await page.setViewportSize({ width, height: 800 })
+      for (const [path, name] of [
+        ['/', 'Mainnet'],
+        ['/?network=testnet', 'Testnet'],
+      ] as const) {
+        await page.goto(path)
+        const button = page.locator('dashhq-bar button.net')
+        await expect(button).toBeVisible()
+        const where = `${width}px ${name}`
+        const widthOf = (selector: string) => async () =>
+          (await page.locator(selector).boundingBox())?.width ?? 0
+        await expect(page.locator('dashhq-bar button.net .nl'), where).toHaveText(name)
+        await expect
+          .poll(widthOf('dashhq-bar button.net .nl'), { message: where })
+          .toBeGreaterThan(6)
+        await expect
+          .poll(widthOf('dashhq-bar .lockup'), { message: where })
+          .toBeGreaterThanOrEqual(40)
+        await expect(page.locator('[data-tip="header"]'), where).toContainText(/\d/)
+        const tip = await page.locator('[data-header-tip]').boundingBox()
+        expect(tip?.x ?? -1, where).toBeGreaterThanOrEqual(0)
+        expect((tip?.x ?? 0) + (tip?.width ?? 0), where).toBeLessThanOrEqual(width)
+
+        await button.click()
+        const menu = page.locator('dashhq-bar .netpop')
+        await expect(menu).toBeVisible()
+        const box = await menu.boundingBox()
+        expect(box?.x ?? -1, where).toBeGreaterThanOrEqual(0)
+        expect((box?.x ?? 0) + (box?.width ?? 0), where).toBeLessThanOrEqual(width)
+        for (const option of ['Mainnet', 'Testnet']) {
+          const o = await menu.getByRole('link', { name: option }).boundingBox()
+          expect(o?.x ?? -1, `${where} ${option}`).toBeGreaterThanOrEqual(0)
+          expect((o?.x ?? 0) + (o?.width ?? 0), `${where} ${option}`).toBeLessThanOrEqual(width)
+        }
+        await page.keyboard.press('Escape')
+      }
+    }
+  })
+
   test('Home, Core, Network, Platform and Search are the tabs @X-08 @HY-18', async ({ page }) => {
     await page.goto('/')
 
