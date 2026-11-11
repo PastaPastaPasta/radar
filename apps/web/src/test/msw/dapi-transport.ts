@@ -12,7 +12,7 @@ import type {
 } from '@/data/dapi-core'
 import { healthRegistry } from '@/data/health'
 import { bytesToHex } from '@/lib/hex'
-import type { NetworkId } from '@/lib/network'
+import { isDevnet, type NetworkId } from '@/lib/network'
 import { loadDapiFixture, type DapiFixture } from '../fixtures/dapi-load'
 import { reportFixtureMiss } from './handlers/fixtures'
 
@@ -125,6 +125,13 @@ export class FixtureDapiTransport implements DapiTransport {
   private async find(net: NetworkId, method: string, request: Uint8Array): Promise<DapiFixture> {
     const key = requestKey(request)
     this.calls.push({ net, method, key })
+    if (isDevnet(net)) {
+      throw new SourceError({
+        source: 'dapi',
+        kind: 'unavailable',
+        message: 'No DAPI node is configured for a devnet in fixture mode',
+      })
+    }
     const fixture = await loadDapiFixture(net, method, key)
     return fixture ?? miss(net, method, key)
   }

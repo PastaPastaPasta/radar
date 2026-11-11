@@ -29,6 +29,15 @@ describe('FixtureDapiTransport', () => {
     expect(takeFixtureMisses()).toHaveLength(1)
   })
 
+  it('says a devnet has no node, without counting a missing recording', async () => {
+    const transport = new FixtureDapiTransport()
+    const failure = await transport
+      .unary('devnet-qa', 'getBlockchainStatus', new Uint8Array())
+      .catch((e: unknown) => e)
+    expect(failure).toMatchObject({ source: 'dapi', kind: 'unavailable' })
+    expect(takeFixtureMisses()).toEqual([])
+  })
+
   it('steers the budget', () => {
     const transport = new FixtureDapiTransport()
     const budget: Budget = transport.budget
