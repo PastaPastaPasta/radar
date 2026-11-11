@@ -29,6 +29,15 @@ describe('chart metrics', () => {
     expect(p).toEqual([{ height: 2, value: 5 }])
   })
 
+  it('labels money axes with the reader’s unit and the network’s ticker', () => {
+    const supply = 12_000_000n * 100_000_000n
+    expect(METRICS.supply.format(Number(supply))).toMatch(/DASH$/)
+    expect(METRICS.supply.format(Number(supply), { unit: 'DASH', testnet: true })).toMatch(/tDASH$/)
+    expect(METRICS.supply.format(Number(supply), { unit: 'mDASH', testnet: false })).toMatch(
+      /mDASH$/,
+    )
+  })
+
   it('formats a hash rate in the largest fitting unit', () => {
     expect(formatHashrate(3.4357e15)).toBe('3.44 PH/s')
     expect(formatHashrate(114_846)).toBe('114.85 kH/s')

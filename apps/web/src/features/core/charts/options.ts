@@ -1,6 +1,7 @@
 import type { EChartsOption } from 'echarts'
 import type { HyMetrics } from '@/data/hyphen/schemas'
 import { formatInt, formatNumber } from '@/lib/format'
+import { formatAmountText, type DisplayUnit } from '@/lib/units'
 
 export type MetricId =
   'hashrate' | 'transactions' | 'difficulty' | 'supply' | 'utxos' | 'credit-pool'
@@ -10,10 +11,14 @@ export interface Metric {
   shape: 'line' | 'bar'
   /** The value for one bucket; `prev` is the bucket before it (undefined for the first). */
   value(row: HyMetrics, prev: HyMetrics | undefined): number | undefined
-  format(v: number): string
+  format(v: number, units?: ChartUnits): string
 }
 
-const DUFFS = 1e8
+/** The reader's unit setting, as the amount components get it from `useUnits()`. */
+export interface ChartUnits {
+  unit: DisplayUnit
+  testnet: boolean
+}
 
 const HASH_UNITS: [number, string][] = [
   [1e18, 'EH/s'],
@@ -33,8 +38,12 @@ export function formatCompact(n: number): string {
   return formatNumber(n, { notation: 'compact', maximumFractionDigits: 2 })
 }
 
-const formatDash = (duffs: number): string =>
-  `${formatNumber(duffs / DUFFS, { notation: 'compact', maximumFractionDigits: 2 })} DASH`
+const formatDash = (duffs: number, units?: ChartUnits): string =>
+  formatAmountText(BigInt(Math.round(duffs)), 'duffs', {
+    compact: true,
+    unit: units && units.unit !== 'DASH' ? units.unit : undefined,
+    testnet: units?.testnet,
+  })
 
 export const METRICS: Record<MetricId, Metric> = {
   hashrate: { id: 'hashrate', shape: 'line', value: (r) => r.hashrate, format: formatHashrate },
@@ -89,12 +98,13 @@ export function buildOption(
   metric: Metric,
   data: readonly Point[],
   seriesName: string,
+  units?: ChartUnits,
 ): EChartsOption {
   return {
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: metric.shape === 'bar' ? 'shadow' : 'line' },
-      valueFormatter: (v) => metric.format(Number(v)),
+      valueFormatter: (v) => metric.format(Number(v), units),
     },
     grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
     xAxis: {
@@ -110,7 +120,7 @@ export function buildOption(
           metric.id === 'hashrate'
             ? formatHashrate(v)
             : metric.id === 'supply' || metric.id === 'credit-pool'
-              ? formatDash(v)
+              ? formatDash(v, units)
               : formatCompact(v),
       },
     },

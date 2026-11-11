@@ -6,7 +6,7 @@ import { stampOf } from '@/data/envelope'
 import { useNavigate } from '@tanstack/react-router'
 import { useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, Chart, Empty, SegFilter, Stat, Tabs } from '@/ui'
+import { Amount, Card, Chart, Empty, SegFilter, Stat, Tabs, useUnits } from '@/ui'
 import { NetworkInternals } from '../network/NetworkInternals'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState } from '../hy-shared/infinite-list'
@@ -66,6 +66,7 @@ export function ChartsPage({
 function ChartGrid({ range }: { range: Range }) {
   const { t } = useLingui()
   const net = useNetwork()
+  const units = useUnits()
   const latest = useQuery(chartQueries.latest(net))
   const series = useQuery(chartQueries.series(net, range, latest.data?.data.height))
   const chart = series.data?.data
@@ -167,14 +168,14 @@ function ChartGrid({ range }: { range: Range }) {
               id={`chart-${id}`}
             >
               <Chart
-                option={buildOption(metric, data, titles[id])}
+                option={buildOption(metric, data, titles[id], units)}
                 height={240}
                 group="core-metrics"
                 label={t`${titles[id]} by block height`}
                 loading={!chart}
                 table={{
                   columns: [t`Block height`, titles[id]],
-                  rows: data.map((p) => [formatInt(p.height), metric.format(p.value)]),
+                  rows: data.map((p) => [formatInt(p.height), metric.format(p.value, units)]),
                 }}
               />
             </Card>
