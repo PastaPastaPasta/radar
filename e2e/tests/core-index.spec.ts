@@ -290,6 +290,7 @@ test.describe('governance', () => {
     await expect(vote).toHaveAttribute('href', `https://gov.dashhq.org/p/h/${PROPOSAL}`)
     await expect(vote).toHaveAttribute('rel', 'noopener noreferrer')
     await sourced(page)
+    await page.evaluate(() => window.scrollTo(0, 0))
     await expectAccessible(page)
     await expectNoSideScroll(page)
   })
