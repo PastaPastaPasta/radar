@@ -35,12 +35,17 @@ export function peFacts(status: PeStatus, stamp: SourceStamp): ProbeFacts {
   }
 }
 
-export function hyphenFacts(status: HyStatus, stamp: SourceStamp): ProbeFacts {
+export function hyphenFacts(status: HyStatus, stamp: SourceStamp, behind = false): ProbeFacts {
   const heights = Object.values(status.indices).map((i) => i.indexedHeight)
   const indexed = formatInt(heights.length > 0 ? Math.min(...heights) : 0)
   const chain = formatInt(status.blockHeight)
   const sync = status.syncMode ? `${status.syncStatus}, ${status.syncMode}` : status.syncStatus
-  return { stamp, report: t`Indexed to Core block ${indexed} of ${chain}. Sync: ${sync}.` }
+  return {
+    stamp,
+    report: behind
+      ? t`Indexed to Core block ${indexed} of ${chain}. It calls its sync “${sync}”, but its index is behind the chain.`
+      : t`Indexed to Core block ${indexed} of ${chain}. Sync: ${sync}.`,
+  }
 }
 
 const ERROR_TEXT: Record<string, () => string> = {

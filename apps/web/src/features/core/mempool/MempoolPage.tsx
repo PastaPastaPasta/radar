@@ -8,7 +8,7 @@ import { POLL_MS } from '@/data/query/stale'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatPercent } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, LiveDot, Stat, Time } from '@/ui'
-import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { HyphenGate, StaleIndexNotice, useHyphenFreshness } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
@@ -37,6 +37,7 @@ function MempoolContent() {
   const m = summary.data?.data
   const table = infiniteTableProps(txs)
   const total = txs.data?.pages[0]?.data.total
+  const { stale, lag } = useHyphenFreshness()
   const usage = m?.usageBytes != null && m.maxBytes ? m.usageBytes / m.maxBytes : undefined
 
   const columns = useMemo<ColumnDef<HyMempoolTx>[]>(
@@ -79,8 +80,10 @@ function MempoolContent() {
     <>
       <StaleIndexNotice />
       <p role="status" className="flex items-center gap-2 text-sm">
-        <LiveDot state="live" />
-        {t`Refreshes every ${POLL_MS.mempool / 1000} seconds.`}
+        <LiveDot state={stale ? 'stale' : 'live'} />
+        {stale
+          ? t`Checked every ${POLL_MS.mempool / 1000} seconds, but the index is behind the chain, so this is not a live view.`
+          : t`Refreshes every ${POLL_MS.mempool / 1000} seconds.`}
       </p>
       <Card
         title={t`Summary`}
@@ -103,7 +106,11 @@ function MempoolContent() {
             }
             meter={usage !== undefined ? { value: usage, max: 1 } : undefined}
           />
-          <Stat label={t`Updated`} value={m ? <Time ms={m.updatedAt} live /> : '—'} />
+          <Stat
+            label={stale ? t`Checked` : t`Updated`}
+            value={m ? <Time ms={m.updatedAt} live /> : '—'}
+            note={lag}
+          />
         </div>
       </Card>
       <Card

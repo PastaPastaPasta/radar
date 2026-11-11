@@ -25,6 +25,7 @@ function probeFacts(
   probes: Probes,
   net: string,
   now: number,
+  behind: boolean,
 ): ProbeFacts | undefined {
   if (source === 'radar' && probes.radar.data) {
     const status = probes.radar.data.data.networks[net === 'testnet' ? 'testnet' : 'mainnet']
@@ -33,7 +34,7 @@ function probeFacts(
   if (source === 'pe' && probes.pe.data)
     return peFacts(probes.pe.data.data, stampOf(probes.pe.data))
   if (source === 'hyphen' && probes.hyphen.data) {
-    return hyphenFacts(probes.hyphen.data.data, stampOf(probes.hyphen.data))
+    return hyphenFacts(probes.hyphen.data.data, stampOf(probes.hyphen.data), behind)
   }
   return undefined
 }
@@ -51,7 +52,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
       <ul className="grid gap-0" aria-label={t`Sources`}>
         {rows.map(({ source, offered, health }) => {
           const { name, role } = SOURCE_ROLE[source]()
-          const facts = probeFacts(source, probes, net, now)
+          const facts = probeFacts(source, probes, net, now, health.state === 'stale')
           const probeError =
             source === 'radar' || source === 'pe' || source === 'hyphen'
               ? probes[source].error

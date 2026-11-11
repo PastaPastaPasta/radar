@@ -64,6 +64,27 @@ describe('Mempool page', () => {
     )
   })
 
+  it('does not look live while the index trails the chain @HY-19', async () => {
+    renderAt('/mempool?network=testnet')
+    const status = await screen.findByText(/not a live view/)
+    expect(status).toHaveTextContent('Checked every 15 seconds')
+    expect(status.closest('p')?.querySelector('[data-live-dot]')).toHaveAttribute(
+      'data-live-dot',
+      'stale',
+    )
+    expect(screen.queryByText(/Refreshes every/)).toBeNull()
+    expect(screen.queryByText('Live')).toBeNull()
+    expect(screen.getByText('Checked')).toBeInTheDocument()
+    expect(document.querySelector('[data-stale-index]')).toHaveTextContent('not live')
+  })
+
+  it('says it refreshes while the index is current @HY-19', async () => {
+    renderAt('/mempool')
+    expect(await screen.findByText('Refreshes every 15 seconds.')).toBeInTheDocument()
+    expect(screen.getByText('Updated')).toBeInTheDocument()
+    expect(document.querySelector('[data-stale-index]')).toBeNull()
+  })
+
   it('explains that devnets are not indexed @HY-19', async () => {
     saveDevnet()
     renderAt('/mempool?network=devnet-ruby')

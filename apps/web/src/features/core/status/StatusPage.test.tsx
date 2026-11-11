@@ -163,6 +163,8 @@ describe('Status page', () => {
       return el
     })
     expect(row).toHaveTextContent(/indexed to block 1,577,999/)
+    await waitFor(() => expect(row).toHaveTextContent('but its index is behind the chain'))
+    expect(row).not.toHaveTextContent(/Sync: synced/)
   })
 
   it('shows what is missing when Core cannot be reached', async () => {

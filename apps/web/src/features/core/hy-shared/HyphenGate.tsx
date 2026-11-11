@@ -27,22 +27,29 @@ export function HyphenGate({ children }: { children: ReactNode }) {
 }
 
 /**
- * Runs Hyphen's freshness probe while a page is open, so a stale index says so. The notice stays quiet
- * until the probe has measured a lag: it is a statement about the index, never a guess.
+ * Runs Hyphen's freshness probe while a page is open. `lag` is set only once the probe has measured the index
+ * behind the chain: a statement about the index, never a guess. A page whose connection polls fine can still be
+ * showing old data, so it asks this, not whether its own requests succeed, before it says "live".
  */
-export function StaleIndexNotice() {
-  const { t } = useLingui()
+export function useHyphenFreshness(): { stale: boolean; lag: string | undefined } {
   const net = useNetwork()
   useQuery({ ...healthQueries.hyphen(net), enabled: !isDevnet(net) })
   const health = useSourceHealth('hyphen')
-  if (health.state !== 'stale' || !health.lag) return null
+  const stale = health.state === 'stale' && health.lag !== undefined
+  return { stale, lag: stale ? health.lag?.detail : undefined }
+}
+
+export function StaleIndexNotice() {
+  const { t } = useLingui()
+  const { lag } = useHyphenFreshness()
+  if (lag === undefined) return null
   return (
     <p
       role="status"
       data-stale-index
       className="rounded border border-[var(--dh-warn,#b45309)] p-3"
     >
-      {t`Hyphen’s index is behind the chain: ${health.lag.detail}. Figures on this page are as of that block.`}
+      {t`Hyphen’s index is behind the chain: ${lag}. Figures on this page are as of that block, not live.`}
     </p>
   )
 }
