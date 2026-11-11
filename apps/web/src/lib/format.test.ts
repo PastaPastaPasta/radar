@@ -5,7 +5,9 @@ import {
   formatDuration,
   digitsFor,
   formatInt,
+  formatFull,
   formatSignificant,
+  withUnit,
   formatIsoUtc,
   formatPercent,
   formatRelative,
@@ -29,10 +31,10 @@ describe('format', () => {
   })
 
   it('formats bytes in decimal units', () => {
-    expect(formatBytes(68_900)).toBe('68.9 kB')
-    expect(formatBytes(512)).toBe('512 B')
-    expect(formatBytes(1_250_000)).toBe('1.3 MB')
-    expect(formatBytes(999_960)).toBe('1.0 MB')
+    expect(formatBytes(68_900)).toBe('68.9\u00a0kB')
+    expect(formatBytes(512)).toBe('512\u00a0B')
+    expect(formatBytes(1_250_000)).toBe('1.3\u00a0MB')
+    expect(formatBytes(999_960)).toBe('1.0\u00a0MB')
   })
 
   it('formats durations with the two largest units', () => {
@@ -70,9 +72,10 @@ describe('formatSignificant @IN-16', () => {
     expect(formatSignificant(0.0000123)).toBe('0.0000123')
   })
 
-  it('rounds to a whole number from 1,000 up and to significant digits below', () => {
-    expect(formatSignificant(123_456_789.6)).toBe('123,456,790')
-    expect(formatSignificant(1234.4)).toBe('1,234')
+  it('keeps two decimals from 1,000 up and significant digits below @IN-03 @HY-05', () => {
+    expect(formatSignificant(111_221_977.4375)).toBe('111,221,977.44')
+    expect(formatSignificant(124_941_321.06)).toBe('124,941,321.06')
+    expect(formatSignificant(1234.4)).toBe('1,234.40')
     expect(formatSignificant(12.3456)).toBe('12.35')
     expect(formatSignificant(0)).toBe('0')
   })
@@ -87,5 +90,20 @@ describe('digitsFor @HY-02', () => {
     expect(digitsFor(0.001)).toBe(3)
     expect(digitsFor(1e-12)).toBe(8)
     expect(digitsFor(0)).toBe(0)
+  })
+})
+
+describe('value and unit spacing @IN-05 @HY-13', () => {
+  it('joins a value to its unit with a no-break space in every locale', () => {
+    for (const locale of ['en', 'de', 'fr', 'ja']) {
+      setFormatLocale(locale)
+      expect(withUnit(formatInt(1640), 'bytes')).toBe(`${formatInt(1640)}\u00a0bytes`)
+      expect(formatBytes(1640)).toMatch(/\d\u00a0kB$/)
+    }
+  })
+
+  it('writes every digit of a difficulty for a title', () => {
+    expect(formatFull(111_221_977.4375)).toBe('111,221,977.4375')
+    expect(formatFull(0.004010969129951115)).toBe('0.004010969129951115')
   })
 })

@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { HyMetrics } from '@/data/hyphen/schemas'
-import { digitsFor, formatInt, formatNumber } from '@/lib/format'
+import { digitsFor, formatInt, formatNumber, formatSignificant } from '@/lib/format'
 import { formatAmountText, unitLabel, type DisplayUnit } from '@/lib/units'
 
 export type MetricId =
@@ -110,7 +110,7 @@ export const METRICS: Record<MetricId, Metric> = {
     id: 'difficulty',
     shape: 'line',
     value: (r) => r.difficulty,
-    format: (v) => formatCompact(v),
+    format: (v) => formatSignificant(v),
   },
   supply: {
     id: 'supply',

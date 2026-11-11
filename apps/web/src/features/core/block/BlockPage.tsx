@@ -10,7 +10,7 @@ import { stampOf } from '@/data/envelope'
 import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
 import { HyphenOnlyNote } from './HyphenOnlyNote'
-import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
+import { formatBytes, formatInt, withUnit } from '@/lib/format'
 import {
   Amount,
   Card,
@@ -25,6 +25,7 @@ import {
   ChainLockBadge,
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
+import { Difficulty } from '../hy-shared/Difficulty'
 import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
@@ -274,10 +275,10 @@ function BlockView({
               items={[
                 { label: t`Height`, value: formatInt(block.height) },
                 { label: t`Time`, value: <Time ms={block.time} mode="both" /> },
-                { label: t`Size`, value: t`${formatInt(block.size)} bytes` },
+                { label: t`Size`, value: withUnit(formatInt(block.size), t`bytes`) },
                 {
                   label: t`Difficulty`,
-                  value: formatSignificant(difficultyFromBits(block.bits), 6),
+                  value: <Difficulty value={difficultyFromBits(block.bits)} significant={6} />,
                 },
                 { label: t`Bits`, value: <span className="rx-mono">{block.bits}</span> },
                 { label: t`Nonce`, value: formatInt(block.nonce) },

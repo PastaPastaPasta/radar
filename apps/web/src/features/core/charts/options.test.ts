@@ -117,5 +117,9 @@ describe('chart metrics', () => {
     it('shows a small difficulty with its significant digits in tooltips and tables', () => {
       expect(METRICS.difficulty.format(0.004010969129951115)).toBe('0.004011')
     })
+
+    it('keeps two decimals on a large difficulty in tooltips and tables @IN-03', () => {
+      expect(METRICS.difficulty.format(111_221_977.4375)).toBe('111,221,977.44')
+    })
   })
 })

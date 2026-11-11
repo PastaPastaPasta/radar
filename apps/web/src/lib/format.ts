@@ -33,14 +33,27 @@ export function formatInt(n: number | bigint): string {
     : formatNumber(Math.round(n), { maximumFractionDigits: 0 })
 }
 
+/** Between a value and its unit: a no-break space, so "1,640 bytes" never wraps or runs together. */
+export const UNIT_GAP = '\u00a0'
+
+export function withUnit(value: string, unit: string): string {
+  return `${value}${UNIT_GAP}${unit}`
+}
+
 /**
- * A figure whose small values stay readable: whole numbers from 1,000 up, otherwise `significant` significant
- * digits, so a difficulty of 0.004011 never shows as 0.
+ * A figure whose small values stay readable: two decimals from 1,000 up ("111,221,977.44"), otherwise `significant`
+ * significant digits, so a difficulty of 0.004011 never shows as 0.
  */
 export function formatSignificant(n: number | bigint, significant = 4): string {
   if (typeof n === 'bigint') return formatNumber(n)
-  if (Math.abs(n) >= 1000) return formatInt(n)
+  if (Math.abs(n) >= 1000)
+    return formatNumber(n, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   return formatNumber(n, { maximumSignificantDigits: significant })
+}
+
+/** Every digit the number carries, for a title or a copy affordance. */
+export function formatFull(n: number | bigint): string {
+  return typeof n === 'bigint' ? formatNumber(n) : formatNumber(n, { maximumFractionDigits: 20 })
 }
 
 /** Fraction digits needed to tell values `step` apart, at most `max`. */
@@ -72,7 +85,7 @@ export function formatBytes(bytes: number): string {
     digits = 1
   }
   const text = formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
-  return `${bytes < 0 ? MINUS : ''}${text} ${BYTE_UNITS[i]}`
+  return `${bytes < 0 ? MINUS : ''}${withUnit(text, BYTE_UNITS[i]!)}`
 }
 
 const SECOND = 1000
