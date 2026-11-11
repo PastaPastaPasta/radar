@@ -207,12 +207,12 @@ describe('Transaction page', () => {
   it('reads the spend state of a recent transaction from the current address lists, not its cached page @IN-05', async () => {
     renderAt(`/tx/${MAINNET.transfer}`)
     await waitFor(
-      () => expect(document.querySelectorAll('#io [data-spend="spent"]')).toHaveLength(8),
-      {
-        timeout: 4000,
+      () => {
+        expect(document.querySelectorAll('#io [data-spend="spent"]')).toHaveLength(8)
+        expect(document.querySelectorAll('#io [data-spend="unknown"]')).toHaveLength(0)
       },
+      { timeout: 4000 },
     )
-    expect(document.querySelectorAll('#io [data-spend="unknown"]')).toHaveLength(0)
     expect(document.querySelector('#out-8 [data-spend]')?.getAttribute('data-spend')).toBe(
       'unspent',
     )
