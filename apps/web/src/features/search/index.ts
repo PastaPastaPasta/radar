@@ -8,6 +8,7 @@ export { SearchTrigger } from './SearchTrigger'
 export type { SearchTriggerProps } from './SearchTrigger'
 export { useSearch } from './useSearch'
 export { searchEnv } from './env'
+export { ensureWordlist, useWordlistLoaded } from './wordlist'
 export type { SearchEnv, SdkState } from './env'
 export type { Resolver, ResolverContext, SearchHit, SearchMode, SearchResult } from './types'
 export {

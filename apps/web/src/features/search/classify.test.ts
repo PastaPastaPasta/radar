@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
+import { ensureWordlist } from './wordlist'
 import type { NetworkId } from '@/lib/network'
 import { classify, type InputClass } from './classify'
 
@@ -202,6 +203,10 @@ const rows: Row[] = [
     classes: ['dpns', 'text'],
   },
 ]
+
+beforeAll(async () => {
+  await ensureWordlist()
+})
 
 describe('classify', () => {
   it.each(rows)('$name', ({ input, net, classes, normalized, hint }) => {

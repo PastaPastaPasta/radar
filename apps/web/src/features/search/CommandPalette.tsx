@@ -11,6 +11,7 @@ import { GROUP_LABELS, groupHits } from './groups'
 import { matchPages } from './pages'
 import { useCommandPalette } from './palette-context'
 import { useSearch } from './useSearch'
+import { useWordlistLoaded } from './wordlist'
 import type { SearchHit } from './types'
 
 const SEARCH_ALL = '__search-all'
@@ -61,7 +62,9 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const { hits, pending, pendingLocal, failed, classified } = useSearch(query, { mode: 'palette' })
   const pages = matchPages(query)
   const trimmed = query.trim()
-  const secret = useMemo(() => classify(trimmed, net).warning, [trimmed, net])
+  const wordsReady = useWordlistLoaded()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
+  const secret = useMemo(() => classify(trimmed, net).warning, [trimmed, net, wordsReady])
 
   const [submitted, setSubmitted] = useState(false)
   const [graceOver, setGraceOver] = useState(false)

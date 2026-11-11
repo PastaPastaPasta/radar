@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { local } from '@/data/envelope'
 import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
-import { classify } from '@/features/search'
+import { classify, useWordlistLoaded } from '@/features/search'
 import { Badge, Card, Hash, SourceLine } from '@/ui'
 import { verifySignedMessage, type VerifyOutcome } from './verify'
 
@@ -23,6 +23,7 @@ export function VerifyMessagePage() {
   const [outcome, setOutcome] = useState<(VerifyOutcome & { for: Fields }) | undefined>()
   const stamp = useMemo(() => local(null), [])
 
+  useWordlistLoaded()
   const secret = (['address', 'message', 'signature'] as const).some(
     (k) => classify(fields[k], net).warning === 'secret',
   )

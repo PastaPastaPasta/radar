@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
+import { ensureWordlist } from '@/features/search'
 import { base58CheckEncode } from '@/lib/base58'
 import { interpretScan, MAX_SCAN_CHARS } from './interpret'
 
@@ -10,6 +11,10 @@ const PHRASE =
 const WIF = base58CheckEncode(0xcc, Uint8Array.from([...new Uint8Array(32).fill(9), 1]))
 const XPRV =
   'xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'
+
+beforeAll(async () => {
+  await ensureWordlist()
+})
 
 describe('interpretScan', () => {
   it('turns an address into a search @IN-11', () => {

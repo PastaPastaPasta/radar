@@ -4,13 +4,15 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { App } from '@/app'
 import { resolvers } from './resolvers'
+import { ensureWordlist } from './wordlist'
 import { localStamp } from './resolvers/helpers'
 import type { Resolver, SearchHit } from './types'
 
 const MAINNET_ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const TESTNET_ADDRESS = 'yhq7ifNCtTKEpY4Yu5XPCcztQco6Fh6JsZ'
 
-beforeAll(() => {
+beforeAll(async () => {
+  await ensureWordlist()
   globalThis.ResizeObserver ??= class {
     observe = () => undefined
     unobserve = () => undefined

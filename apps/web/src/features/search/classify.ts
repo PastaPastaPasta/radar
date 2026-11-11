@@ -2,7 +2,7 @@ import { base58CheckDecode, base58Decode, isBase58 } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { isHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { isBip39EnglishPrefix, isBip39EnglishWord } from './bip39-words'
+import { wordlist } from './wordlist'
 
 export type InputClass =
   | 'int'
@@ -111,19 +111,24 @@ function lettersOnly(value: string): string[] {
   return value.normalize('NFKC').toLowerCase().split(NON_LETTERS).filter(Boolean)
 }
 
-function longestEnglishRun(tokens: string[]): number {
+type Words = NonNullable<ReturnType<typeof wordlist>>
+
+function longestEnglishRun(tokens: string[], words: Words): number {
   let longest = 0
   let current = 0
   for (const token of tokens) {
-    current = isBip39EnglishWord(token) ? current + 1 : 0
+    current = words.isBip39EnglishWord(token) ? current + 1 : 0
     longest = Math.max(longest, current)
   }
   return longest
 }
 
-function looksSecret(value: string): boolean {
+function looksSecret(value: string, words: Words | undefined): boolean {
   if (EXTENDED_KEY.test(value)) return true
-  if (longestEnglishRun(lettersOnly(value)) >= PHRASE_WORDS) return true
+  const tokens = lettersOnly(value)
+  if (words ? longestEnglishRun(tokens, words) >= PHRASE_WORDS : tokens.length >= PHRASE_WORDS) {
+    return true
+  }
   if (value.length !== 51 && value.length !== 52) return false
   const decoded = base58CheckDecode(value)
   if (!decoded || (decoded.version !== 0xcc && decoded.version !== 0xef)) return false
@@ -137,17 +142,19 @@ function looksSecret(value: string): boolean {
  * a last token of 2 or more letters that starts a phrase word counts as one, because it is still being
  * typed. Also flagged: 12 letter-only words in a row, of any language.
  */
-function looksPartlySecret(value: string): boolean {
+function looksPartlySecret(value: string, words: Words | undefined): boolean {
   if (DPNS.test(value)) return false
   const tokens = value
     .normalize('NFKC')
     .toLowerCase()
     .split(PHRASE_SEPARATORS)
     .filter((token) => token !== '')
+  if (!words) return tokens.length >= PARTIAL_PHRASE_WORDS
   const last = tokens.length - 1
   const isWord = tokens.map(
     (token, i) =>
-      isBip39EnglishWord(token) || (i === last && token.length >= 2 && isBip39EnglishPrefix(token)),
+      words.isBip39EnglishWord(token) ||
+      (i === last && token.length >= 2 && words.isBip39EnglishPrefix(token)),
   )
   let letters = 0
   for (const [i, token] of tokens.entries()) {
@@ -196,7 +203,8 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     classes,
     warning,
   })
-  if (looksSecret(trimmed)) return withheld('secret')
+  const words = wordlist()
+  if (looksSecret(trimmed, words)) return withheld('secret')
 
   const hex = trimmed.replace(/^0x/i, '')
   if (isHex(hex, 32)) {
@@ -233,7 +241,7 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     return result(trimmed.toLowerCase())
   }
 
-  const partial = looksPartlySecret(trimmed) ? 'possible-secret' : undefined
+  const partial = looksPartlySecret(trimmed, words) ? 'possible-secret' : undefined
 
   if (INT.test(trimmed)) {
     const n = Number(trimmed)

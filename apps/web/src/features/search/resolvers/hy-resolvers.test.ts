@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { ensureWordlist } from '../wordlist'
 import { hyLookups } from '@/data/hyphen/lookups'
 import { classify } from '../classify'
 import { planResolvers } from '../useSearch'
@@ -22,6 +23,10 @@ const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const PROPOSAL = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
 
 afterEach(() => vi.restoreAllMocks())
+
+beforeAll(async () => {
+  await ensureWordlist()
+})
 
 describe('Hyphen resolvers are registered', () => {
   it('adds hy-search and hy-address next to the local ones @HY-14', () => {

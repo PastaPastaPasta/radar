@@ -180,7 +180,7 @@ function sorted(): readonly string[] {
   return words
 }
 
-/** Whether `word` (lowercase) is in the BIP39 English wordlist. The set is built on first use. */
+/** Whether `word` (lowercase) is in the BIP39 English wordlist. */
 export function isBip39EnglishWord(word: string): boolean {
   english ??= new Set(sorted())
   return english.has(word)

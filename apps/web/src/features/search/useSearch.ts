@@ -5,6 +5,7 @@ import type { NetworkId } from '@/lib/network'
 import { classify, type Classified, type Tip } from './classify'
 import { searchEnv } from './env'
 import { networkHintHit } from './network-hint'
+import { useWordlistLoaded } from './wordlist'
 import { resolvers as registry } from './resolvers'
 import type { Resolver, SearchHit, SearchMode, SearchResult } from './types'
 
@@ -92,7 +93,9 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
   const tipKey = JSON.stringify(searchEnv.tip(net) ?? null)
   const tip = useMemo(() => (JSON.parse(tipKey) as Tip | null) ?? undefined, [tipKey])
-  const classified = useMemo(() => classify(input, net, tip), [input, net, tip])
+  const wordsReady = useWordlistLoaded()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
+  const classified = useMemo(() => classify(input, net, tip), [input, net, tip, wordsReady])
   const planned = planResolvers(classified, net, mode)
   const plannedIds = planned.map((r) => r.id).join(',')
   const key = `${net}|${mode}|${classified.normalized}|${plannedIds}`

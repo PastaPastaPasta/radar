@@ -13,6 +13,7 @@ import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { GROUP_LABELS, groupHits } from './groups'
 import { useSearch } from './useSearch'
+import { useWordlistLoaded } from './wordlist'
 
 const EXAMPLES = ['2569992', 'pshenmic.dash', '75.119.128.71', '2026-10-01']
 
@@ -32,7 +33,9 @@ export function SearchPage({ q }: { q?: string }) {
   const [draft, setDraft] = useState(() => (classify(query, net).warning ? '' : query))
   const { hits, pending, failed, classified } = useSearch(query, { mode: 'page' })
   const secret = classified.warning
-  const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net])
+  const wordsReady = useWordlistLoaded()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
+  const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net, wordsReady])
   const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
   const withheld = typed ?? secret ?? stripped
   useDocumentTitle(query && !secret ? `“${query}” · Search` : 'Search')
