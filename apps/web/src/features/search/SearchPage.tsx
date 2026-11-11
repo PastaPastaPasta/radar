@@ -80,12 +80,12 @@ export function SearchPage({ q }: { q?: string }) {
   }
 
   const { groups, guesses } = groupHits(hits)
-  const description = describeInput({
-    ...classified,
-    classes: classified.classes.filter((k) => k !== 'dpns'),
-  })
   const settled = pending.length === 0
   const noMatch = settled && groups.length === 0
+  const description = describeInput({
+    ...classified,
+    classes: noMatch ? classified.classes.filter((k) => k !== 'dpns') : classified.classes,
+  })
   const network = networkName(net)
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
 
