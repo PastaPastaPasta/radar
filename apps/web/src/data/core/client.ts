@@ -1062,15 +1062,17 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     // ones. A window wholly above its index gets its newest rows, which is all it has.
     const missing = Math.max(0, fromHeight - indexed)
     const page =
-      missing >= count
-        ? await deps.hyphen.blocks(net, { limit: count }, signal)
-        : missing > 0
-          ? await deps.hyphen.blocks(net, { limit: count - missing }, signal)
-          : await deps.hyphen.blocksFrom(
-              net,
-              { fromHeight, asOfHeight: indexed, limit: count },
-              signal,
-            )
+      fromHeight >= indexed
+        ? await deps.hyphen.blocks(
+            net,
+            { limit: missing >= count ? count : count - missing },
+            signal,
+          )
+        : await deps.hyphen.blocksFrom(
+            net,
+            { fromHeight, asOfHeight: indexed, limit: count },
+            signal,
+          )
     const items =
       missing >= count
         ? page.data.items
