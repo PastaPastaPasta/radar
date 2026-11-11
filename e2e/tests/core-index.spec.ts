@@ -111,9 +111,11 @@ test.describe('address page', () => {
     await page.goto(`/address/${BUSY}`)
     const notice = page.locator('[data-new-transaction]')
     await expect(notice).toBeVisible({ timeout: 20_000 })
-    await expect(notice).toContainText('New transaction')
+    await expect(notice).toContainText('Unconfirmed transaction')
     await expect(notice.locator('a[href*="f96fddff"]')).toBeVisible()
-    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
+    await expect(page.locator('[data-arrived]')).toContainText(
+      '1 transaction seen since you opened',
+    )
     await expect(page.locator('[data-pending]')).toContainText('Unconfirmed')
     await expect(page.locator('[data-pending] a[href*="078f9796"]')).toHaveCount(0)
     await expectAccessible(page)
@@ -137,7 +139,9 @@ test.describe('address page', () => {
     const notice = page.locator('[data-new-transaction]')
     await expect(notice.locator(`a[href*="${id}"]`)).toBeVisible({ timeout: 60_000 })
     await expect(notice).toContainText('New transaction')
-    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
+    await expect(page.locator('[data-arrived]')).toContainText(
+      '1 transaction seen since you opened',
+    )
     await expect(page.locator('[data-pending]')).toHaveCount(0)
   })
 
@@ -348,11 +352,29 @@ test.describe('charts', () => {
         const card = el.closest('.rx-card') ?? el
         const ground = parse(getComputedStyle(card).backgroundColor)
         const [hi, lo] = [lum(line), lum(ground)].sort((a, b) => b - a) as [number, number]
-        return { line: line.join(','), contrast: (hi + 0.05) / (lo + 0.05) }
+        return { line: line.join(','), rgb: line, contrast: (hi + 0.05) / (lo + 0.05) }
       })
     })
     expect(new Set(colours.map((c) => c.line)).size).toBe(6)
     for (const c of colours) expect(c.contrast, c.line).toBeGreaterThanOrEqual(3)
+    const lab = (rgb: number[]) => {
+      const [r, g, b] = rgb.map((v) => {
+        const s = v / 255
+        return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+      }) as [number, number, number]
+      const f = (t: number) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116)
+      const x = f((r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047)
+      const y = f(r * 0.2126 + g * 0.7152 + b * 0.0722)
+      const z = f((r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883)
+      return [116 * y - 16, 500 * (x - y), 200 * (y - z)] as const
+    }
+    for (const [i, a] of colours.entries()) {
+      for (const b of colours.slice(i + 1)) {
+        const [p, q] = [lab(a.rgb), lab(b.rgb)]
+        const apart = Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])
+        expect(apart, `${a.line} and ${b.line} look alike`).toBeGreaterThanOrEqual(18)
+      }
+    }
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {

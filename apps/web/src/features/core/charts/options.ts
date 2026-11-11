@@ -112,7 +112,7 @@ export const METRICS: Record<MetricId, Metric> = {
   },
   difficulty: {
     id: 'difficulty',
-    hue: '--rx-id-5',
+    hue: '--dh-accent-forge-select',
     shape: 'line',
     value: (r) => r.difficulty,
     format: (v) => formatSignificant(v),
@@ -126,7 +126,7 @@ export const METRICS: Record<MetricId, Metric> = {
   },
   utxos: {
     id: 'utxos',
-    hue: '--rx-id-7',
+    hue: '--dh-good',
     shape: 'line',
     value: (r) => r.utxosSpendable,
     format: (v) => formatInt(Math.round(v)),
