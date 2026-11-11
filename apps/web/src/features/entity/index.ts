@@ -19,3 +19,4 @@ export {
 } from './site-map'
 export type { SitePage, SiteSection } from './site-map'
 export { keepPreviousOnNetwork } from './keep-previous'
+export { HeaderTip } from './HeaderTip.lazy'

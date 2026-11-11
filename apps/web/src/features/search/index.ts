@@ -12,6 +12,7 @@ export { ensureWordlist, useWordlistLoaded } from './wordlist'
 export type { SearchEnv, SdkState } from './env'
 export type { Resolver, ResolverContext, SearchHit, SearchMode, SearchResult } from './types'
 export {
+  HeaderTip,
   PageLink,
   SITE_MAP,
   SECTION_ENTRY,

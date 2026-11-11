@@ -62,6 +62,19 @@
 .rx-fiat {
   margin-left: 4px;
 }
+.rx-stat__value .rx-amt {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  max-width: 100%;
+}
+.rx-stat__value .rx-fiat {
+  flex-basis: 100%;
+  margin: 2px 0 0;
+  font-weight: var(--dh-w-body);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 
 /* hover card */
 .rx-hc--pop {
@@ -119,6 +132,72 @@
 }
 .rx-live__word {
   white-space: nowrap;
+}
+.rx-live--stale {
+  background: var(--dh-warn-soft);
+  color: var(--dh-warn);
+}
+.rx-live--down {
+  background: var(--dh-bad-soft);
+  color: var(--dh-bad);
+}
+.rx-live--unknown {
+  background: var(--dh-chip);
+  color: var(--dh-ink-2);
+}
+
+/* the header's live Core height: dot, "Core", number, ChainLock, and the connection word only when it is not live */
+.rx-hdrtip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: var(--dh-fs-sm);
+  white-space: nowrap;
+}
+.rx-hdrtip--pending {
+  min-width: 7.5rem;
+}
+.rx-hdrtip__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px;
+  border-radius: var(--dh-r2);
+  color: var(--dh-ink);
+  text-decoration: none;
+}
+.rx-hdrtip__link:hover {
+  background: var(--dh-hover);
+}
+.rx-hdrtip__link:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 1px;
+}
+.rx-hdrtip__label {
+  color: var(--dh-ink-2);
+}
+.rx-hdrtip__height {
+  font-weight: var(--dh-w-strong);
+  font-variant-numeric: tabular-nums;
+}
+.rx-hdrtip__lock {
+  color: var(--dh-good);
+}
+.rx-hdrtip__state {
+  font-weight: var(--dh-w-strong);
+  color: var(--dh-warn);
+}
+.rx-hdrtip[data-connection='stopped'] .rx-hdrtip__state {
+  color: var(--dh-bad);
+}
+@media (max-width: 720px) {
+  .rx-hdrtip__label {
+    display: none;
+  }
+  .rx-hdrtip__state {
+    display: none;
+  }
 }
 
 /* stat, delta, meter, sparkline */

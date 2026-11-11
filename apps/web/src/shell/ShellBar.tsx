@@ -5,6 +5,7 @@ import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { allDevnets, useDevnets } from '@/app/devnets'
 import {
+  HeaderTip,
   PageLink,
   SECTION_ENTRY,
   SearchTrigger,
@@ -91,7 +92,8 @@ export function ShellBar() {
         ))}
       </nav>
       <div slot="actions">
-        <SearchTrigger />
+        <HeaderTip />
+        <SearchTrigger className="rx-hdr-search" />
       </div>
     </DashhqBar>
   )

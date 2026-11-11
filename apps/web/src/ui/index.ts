@@ -3,7 +3,7 @@ export { Card, SectionBand, KeyValue } from './layout'
 export type { CardProps, SectionBandProps, KeyValueProps } from './layout'
 export { QueryView } from './query-view'
 export type { QueryViewProps } from './query-view'
-export { Stat, Meter, Sparkline } from './stat'
+export { Stat, Stats, Meter, Sparkline } from './stat'
 export type { StatProps, MeterProps, SparklineProps } from './stat'
 export { Amount, Time } from './amount'
 export type { AmountProps, TimeProps } from './amount'
@@ -24,6 +24,14 @@ export type {
   LiveDotProps,
   LiveControlProps,
 } from './states'
+export {
+  liveView,
+  resetLiveConnection,
+  setLiveConnection,
+  useLiveConnection,
+  useLiveView,
+} from './live-connection'
+export type { ConnectionState, LiveConnection, LiveView } from './live-connection'
 export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
 export { DataTable, NewRowsPill } from './data-table'

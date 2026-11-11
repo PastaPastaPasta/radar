@@ -4,8 +4,10 @@ import { useSourceHealth, type HealthState } from '@/data/health'
 import { cx } from './cx'
 import { Icon, type IconName } from './icon'
 import { useNow } from './hooks'
+import { useLiveView } from './live-connection'
 import { openProofInspector } from './proof'
 import { sourceName, sourceView } from './source-labels'
+import { distinctSources } from './source-scope'
 
 export interface SourceLineProps {
   stamp: SourceStamp | SourceStamp[]
@@ -109,7 +111,7 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
 }
 
 export function SourceLine({ stamp, compact = false }: SourceLineProps) {
-  const stamps = Array.isArray(stamp) ? stamp : [stamp]
+  const stamps = distinctSources(Array.isArray(stamp) ? stamp : [stamp])
   return (
     <span className={cx('rx-sources', compact && 'rx-sources--compact')}>
       {stamps.map((s, i) => (
@@ -146,19 +148,27 @@ export interface LiveDotProps {
 }
 
 export function LiveDot({ state, bare = false }: LiveDotProps) {
-  const pulses = state === 'live' || state === 'ok'
+  const view = useLiveView()
+  // An explicit "live" is the page's own claim; the connection can qualify it.
+  const shown = state === 'live' ? view.dot : state
+  const pulses = shown === 'live' || shown === 'ok'
   const dot = (
     <span
-      className={cx('rx-fresh', LIVE_CLASS[state], pulses && 'is-pulse')}
+      className={cx('rx-fresh', LIVE_CLASS[shown], pulses && 'is-pulse')}
       aria-hidden="true"
-      data-live-dot={state}
+      data-live-dot={shown}
     />
   )
   if (bare) return dot
   return (
-    <span className="rx-livedot" data-state={state}>
+    <span
+      className="rx-livedot"
+      data-state={shown}
+      data-connection={state === 'live' ? view.state : undefined}
+      title={state === 'live' ? view.title : undefined}
+    >
       {dot}
-      {LIVE_WORD[state]}
+      {state === 'live' ? view.word : LIVE_WORD[state]}
     </span>
   )
 }
@@ -181,10 +191,24 @@ export function LiveControl({
   pulseKey,
   noun = 'live updates',
 }: LiveControlProps) {
-  const word = paused ? (newCount > 0 ? `Paused · ${newCount} new` : 'Paused') : 'Live'
+  const view = useLiveView()
+  const word = paused ? (newCount > 0 ? `Paused · ${newCount} new` : 'Paused') : view.word
+  const degraded = !paused && view.dot !== 'live'
   return (
-    <span className={cx('rx-live', paused && 'is-paused')}>
-      <span key={pulseKey} className={cx('rx-fresh', !paused && 'is-pulse')} aria-hidden="true" />
+    <span
+      className={cx('rx-live', paused && 'is-paused', degraded && `rx-live--${view.dot}`)}
+      data-connection={paused ? undefined : view.state}
+      title={paused ? undefined : view.title}
+    >
+      <span
+        key={pulseKey}
+        className={cx(
+          'rx-fresh',
+          !paused && view.dot === 'live' && 'is-pulse',
+          degraded && LIVE_CLASS[view.dot],
+        )}
+        aria-hidden="true"
+      />
       <span className="rx-live__word">{word}</span>
       <button
         type="button"
