@@ -1,0 +1,2393 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-11 07:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: uk\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+msgid "· change"
+msgstr "· змінити"
+
+msgid "“{query}” · Search"
+msgstr "«{query}» · Пошук"
+
+msgid "“{query}” isn’t something Radar can look up."
+msgstr "Radar не може знайти «{query}»."
+
+#. placeholder {0}: description.join(' · ')
+msgid "“{query}” looks like {0}."
+msgstr "«{query}» схоже на {0}."
+
+msgid "(opens in a new tab)"
+msgstr "(відкриється в новій вкладці)"
+
+#. placeholder {0}: tx.inputs.length
+msgid "{0, plural, one {# input} other {# inputs}}"
+msgstr "{0, plural, one {# вхід} few {# входи} many {# входів} other {# входу}}"
+
+#. placeholder {0}: tx.outputs.length
+msgid "{0, plural, one {# output} other {# outputs}}"
+msgstr "{0, plural, one {# вихід} few {# виходи} many {# виходів} other {# виходу}}"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, one {# транзакція} few {# транзакції} many {# транзакцій} other {# транзакції}}"
+
+#. placeholder {0}: formatInt(first.total)
+msgid "{0} addresses ranked"
+msgstr "Адрес у рейтингу: {0}"
+
+#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+msgid "{0} blocks a page, newest first."
+msgstr "{0} блоків на сторінці, спочатку нові."
+
+#. placeholder {0}: titles[id]
+msgid "{0} by block height"
+msgstr "{0} за висотою блока"
+
+#. placeholder {0}: formatInt(n.peerCount)
+#. placeholder {1}: n.networkInfo.subversion
+#. placeholder {2}: formatInt(n.networkInfo.protocolVersion)
+msgid "{0} connections · {1} · protocol {2}"
+msgstr "З’єднань: {0} · {1} · протокол {2}"
+
+#. placeholder {0}: formatInt(total)
+msgid "{0} in the mempool"
+msgstr "{0} у мемпулі"
+
+#. placeholder {0}: formatInt(inCount)
+#. placeholder {0}: formatInt(inputs.length)
+#. placeholder {0}: formatInt(tx.inputs.length)
+msgid "{0} inputs"
+msgstr "Входів: {0}"
+
+#. placeholder {0}: formatInt(unloaded)
+msgid "{0} inputs not loaded"
+msgstr "Входів не завантажено: {0}"
+
+#. placeholder {0}: sourceName(stamp.source)
+msgid "{0} isn't answering"
+msgstr "{0} не відповідає"
+
+#. placeholder {0}: sourceName(down.source)
+#. placeholder {1}: formatRelative(clampSkew(down.fetchedAt, now), now)
+msgid "{0} isn't answering · showing data from {1}"
+msgstr "{0} не відповідає · показано дані від {1}"
+
+#. placeholder {0}: formatInt(p.masternodes)
+msgid "{0} masternodes"
+msgstr "Мастернод: {0}"
+
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(points.length)
+msgid "{0} masternodes in {1} places"
+msgstr "Мастернод: {0}, місць: {1}"
+
+#. placeholder {0}: formatInt(top.masternodes)
+msgid "{0} masternodes, the most of any place"
+msgstr "Мастернод: {0}, найбільше серед усіх місць"
+
+#. placeholder {0}: formatInt(p.fundingThreshold)
+#. placeholder {1}: formatInt(totalVotes(p))
+msgid "{0} needed · {1} cast"
+msgstr "Потрібно {0} · подано {1}"
+
+#. placeholder {0}: formatInt(p.fundingThreshold)
+msgid "{0} net votes"
+msgstr "Чистих голосів: {0}"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {0}: formatInt(crawl.mn_reachable)
+#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
+#. placeholder {1}: formatBytes(m.maxBytes)
+#. placeholder {1}: formatInt(budget.capacity)
+#. placeholder {1}: formatInt(crawl.mn_total)
+msgid "{0} of {1}"
+msgstr "{0} з {1}"
+
+#. placeholder {0}: formatInt(c)
+#. placeholder {1}: formatInt(n?.peerInfo.length ?? 0)
+msgid "{0} of {1} peers"
+msgstr "{0} з {1} пірів"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "{0} outputs"
+msgstr "Виходів: {0}"
+
+#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(split.count.failing)
+#. placeholder {0}: formatInt(split.count.funded)
+msgid "{0} proposals"
+msgstr "Пропозицій: {0}"
+
+#. placeholder {0}: formatInt(list(shared.shares).length)
+#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
+msgid "{0} shares, {1} blocks of early-leave penalty"
+msgstr "Часток: {0}, штрафних блоків за ранній вихід: {1}"
+
+#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} to other addresses"
+msgstr "{0} на інші адреси"
+
+#. placeholder {0}: formatInt(b.txCount)
+#. placeholder {0}: formatInt(b.txs.length)
+msgid "{0} tx"
+msgstr "{0} тх"
+
+#. placeholder {0}: secretNotice(secret).title
+msgid "{0}. Radar never sends it anywhere."
+msgstr "{0}. Radar нікуди його не надсилає."
+
+msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
+msgstr "{arrived, plural, one {# нова транзакція від відкриття сторінки} few {# нові транзакції від відкриття сторінки} many {# нових транзакцій від відкриття сторінки} other {# нової транзакції від відкриття сторінки}}"
+
+msgid "{base} ({detail})"
+msgstr "{base} ({detail})"
+
+msgid "{behind} blocks behind the tip"
+msgstr "Відставання від вершини: {behind} блоків"
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
+
+msgid "{count, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{count, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
+
+msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
+msgstr "{count, plural, one {# адреса DAPI} few {# адреси DAPI} many {# адрес DAPI} other {# адреси DAPI}}"
+
+msgid "{d} d"
+msgstr "{d} д"
+
+msgid "{d} d {h} h"
+msgstr "{d} д {h} год"
+
+msgid "{feeRate} duffs a byte"
+msgstr "{feeRate} дафф за байт"
+
+msgid "{h} h"
+msgstr "{h} год"
+
+msgid "{h} h {m} min"
+msgstr "{h} год {m} хв"
+
+msgid "{m} min"
+msgstr "{m} хв"
+
+msgid "{n} h ago"
+msgstr "{n} год тому"
+
+msgid "{n} min ago"
+msgstr "{n} хв тому"
+
+msgid "{n} more inputs"
+msgstr "Ще входів: {n}"
+
+msgid "{n} more outputs"
+msgstr "Ще виходів: {n}"
+
+msgid "{n} s ago"
+msgstr "{n} с тому"
+
+msgid "{name} couldn’t be reached"
+msgstr "{name} недоступний"
+
+msgid "{name} is not available on this network"
+msgstr "{name} недоступний у цій мережі"
+
+msgid "{name} is rate limiting requests"
+msgstr "{name} обмежує кількість запитів"
+
+msgid "{name} returned an error"
+msgstr "{name} повернув помилку"
+
+msgid "{name} sent an answer that could not be read"
+msgstr "{name} надіслав відповідь, яку не вдалося прочитати"
+
+msgid "{name} took too long to answer"
+msgstr "{name} надто довго відповідав"
+
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, one {# коммітмент кворуму в цьому блоці} few {# коммітменти кворуму в цьому блоці} many {# коммітментів кворуму в цьому блоці} other {# коммітменту кворуму в цьому блоці}}"
+
+msgid "{s} s"
+msgstr "{s} с"
+
+#. placeholder {0}: health.lag.detail
+msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
+msgstr "{what} надходять лише з Hyphen, індекс {name} якого відстає від ланцюга: {0}. Усе інше на цій сторінці — з DAPI."
+
+msgid "% of supply"
+msgstr "% від пропозиції"
+
+msgid "← Previous"
+msgstr "← Назад"
+
+msgid "← Previous day"
+msgstr "← Попередній день"
+
+msgid "1 d"
+msgstr "1 д"
+
+msgid "1 h"
+msgstr "1 год"
+
+msgid "1 m"
+msgstr "1 міс"
+
+msgid "1 w"
+msgstr "1 тиж"
+
+msgid "1 y"
+msgstr "1 р"
+
+msgid "a 40-character hash: a public-key hash"
+msgstr "40-символьний хеш: хеш відкритого ключа"
+
+msgid "a 64-character hash: a block, transaction, ProTx or transition"
+msgstr "64-символьний хеш: блок, транзакція, ProTx або перехід"
+
+msgid "a Core address"
+msgstr "адреса Core"
+
+msgid "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
+msgstr "Адреса Dash складається з 34 символів і в основній мережі починається з X або 7, у тестовій — з y або 8."
+
+msgid "a date: the Core blocks of that UTC day"
+msgstr "дата: блоки Core за цю добу за UTC"
+
+msgid "A guess"
+msgstr "Припущення"
+
+msgid "A guess, not a result"
+msgstr "Припущення, а не результат"
+
+msgid "A guess: Radar has not checked that this name exists"
+msgstr "Припущення: Radar не перевіряв, чи існує це ім’я"
+
+msgid "a name"
+msgstr "ім’я"
+
+msgid "a number: a Core height, Platform height or epoch"
+msgstr "число: висота Core, висота Platform або епоха"
+
+msgid "a Platform address"
+msgstr "адреса Platform"
+
+msgid "A quorum signals that masternodes are ready for a protocol upgrade."
+msgstr "Кворум сигналізує, що мастерноди готові до оновлення протоколу."
+
+msgid "A script address (starting with 7 or 8) can’t sign a message."
+msgstr "Адреса скрипту (починається з 7 або 8) не може підписувати повідомлення."
+
+msgid "A shareholder of a shared masternode changes where their reward is paid."
+msgstr "Співвласник спільної мастерноди змінює адресу, на яку виплачується його винагорода."
+
+msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
+msgstr "Підпис — це 88 символів base64, що закінчуються на «=», у тому вигляді, в якому його виводить signmessage у Dash Core."
+
+msgid "About"
+msgstr "Про проєкт"
+
+msgid "Abstain"
+msgstr "Утриматися"
+
+msgid "Add a devnet"
+msgstr "Додати devnet"
+
+msgid "Add devnet"
+msgstr "Додати devnet"
+
+msgid "Address"
+msgstr "Адреса"
+
+msgid "Addresses ranked by balance"
+msgstr "Адреси за розміром балансу"
+
+msgid "Addresses with a balance"
+msgstr "Адреси з балансом"
+
+msgid "after it is mined"
+msgstr "після видобутку"
+
+msgid "Age"
+msgstr "Вік"
+
+msgid "All"
+msgstr "Усі"
+
+msgid "All blocks"
+msgstr "Усі блоки"
+
+msgid "All proposals"
+msgstr "Усі пропозиції"
+
+msgid "Among the peers of the indexing node"
+msgstr "Серед пірів індексувального вузла"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "Amount per cycle"
+msgstr "Сума за цикл"
+
+msgid "Amounts"
+msgstr "Суми"
+
+#. placeholder {0}: formatInt(partial.loaded)
+msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
+msgstr "Суми завантажуються для перших {0} входів. Кожен із них — це запит до DAPI."
+
+msgid "an ID: an identity, contract, token or document"
+msgstr "ідентифікатор: ідентичність, контракт, токен або документ"
+
+msgid "an IP address: a masternode’s service address"
+msgstr "IP-адреса: службова адреса мастерноди"
+
+#. placeholder {0}: stamp.node
+msgid "Answered by {0}"
+msgstr "Відповів: {0}"
+
+#. placeholder {0}: formatIsoUtc(stamp.asOf)
+msgid "As of {0}"
+msgstr "Станом на {0}"
+
+#. placeholder {0}: formatInt(spend.asOf)
+msgid "as of block {0}"
+msgstr "станом на блок {0}"
+
+msgid "Asking Hyphen."
+msgstr "Запитуємо Hyphen."
+
+msgid "Asset lock"
+msgstr "Блокування активів"
+
+msgid "Asset unlock"
+msgstr "Розблокування активів"
+
+msgid "Asset unlocks root"
+msgstr "Корінь розблокувань активів"
+
+msgid "at or before"
+msgstr "у момент або раніше"
+
+msgid "Back to Mainnet"
+msgstr "Назад до основної мережі"
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "before it was mined"
+msgstr "до видобутку"
+
+msgid "Best ChainLock"
+msgstr "Найкращий ChainLock"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "Блок"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "block {0}"
+msgstr "блок {0}"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(ref.height)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Block height"
+msgstr "Висота блока"
+
+msgid "Block reward"
+msgstr "Нагорода за блок"
+
+msgid "Block reward, masternode and fee payments"
+msgstr "Нагорода за блок, виплати мастернодам і комісії"
+
+msgid "block updates"
+msgstr "оновлення блоків"
+
+msgid "Blockchain size"
+msgstr "Розмір блокчейна"
+
+msgid "Blocks"
+msgstr "Блоки"
+
+#. placeholder {0}: formatInt(chart.startHeight)
+#. placeholder {1}: formatInt(chart.endHeight)
+#. placeholder {2}: chart.bucketBlocks
+msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
+msgstr "Блоки з {0} по {1}, одна точка на {2, plural, one {# блок} few {# блоки} many {# блоків} other {# блока}}"
+
+msgid "Blocks on {date}"
+msgstr "Блоки за {date}"
+
+msgid "Blocks on {dateLabel}"
+msgstr "Блоки за {dateLabel}"
+
+msgid "Browse by date"
+msgstr "Перегляд за датою"
+
+msgid "Budget"
+msgstr "Бюджет"
+
+msgid "Budget proposals"
+msgstr "Бюджетні пропозиції"
+
+msgid "Budget proposals and where their votes stand. Voting happens in Governance."
+msgstr "Бюджетні пропозиції та стан голосування за них. Голосують у Governance."
+
+msgid "bytes"
+msgstr "байт"
+
+msgid "Camera"
+msgstr "Камера"
+
+msgid "Camera preview"
+msgstr "Перегляд з камери"
+
+msgid "Can’t check"
+msgstr "Не вдається перевірити"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "Синхронізація, {0}"
+
+msgid "Chain size"
+msgstr "Розмір ланцюга"
+
+msgid "Chain state"
+msgstr "Стан ланцюга"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+#. placeholder {0}: formatInt(lock.data.data.height)
+msgid "ChainLock at {0}"
+msgstr "ChainLock на {0}"
+
+msgid "ChainLock reported by one node"
+msgstr "ChainLock повідомлено одним вузлом"
+
+msgid "ChainLock signature"
+msgstr "Підпис ChainLock"
+
+msgid "ChainLocked"
+msgstr "ChainLocked"
+
+msgid "ChainLocked block hash"
+msgstr "Хеш блока з ChainLock"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "change"
+msgstr "решта"
+
+msgid "Change"
+msgstr "Решта"
+
+msgid "Change to sender"
+msgstr "Решта відправнику"
+
+msgid "Charts"
+msgstr "Графіки"
+
+msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
+msgstr "Перевірте, чи підписала адреса Dash повідомлення. Перевірка виконується в цьому браузері: нічого з уведеного тут нікуди не надсилається, а Radar ніколи не просить ключ."
+
+msgid "Checking every 30 s"
+msgstr "Перевірка кожні 30 с"
+
+msgid "Checking Hyphen…"
+msgstr "Перевіряємо Hyphen…"
+
+msgid "Checking the sources…"
+msgstr "Перевіряємо джерела…"
+
+msgid "Choose a picture with a QR code"
+msgstr "Вибрати зображення з QR-кодом"
+
+msgid "Choose a PNG or JPEG image."
+msgstr "Виберіть зображення PNG або JPEG."
+
+msgid "Circulating supply"
+msgstr "Обсяг в обігу"
+
+msgid "Clear"
+msgstr "Очистити"
+
+msgid "Close"
+msgstr "Закрити"
+
+msgid "Close a dialog or the search"
+msgstr "Закрити діалог або пошук"
+
+msgid "Code {reason}"
+msgstr "Код {reason}"
+
+msgid "Coinbase payload"
+msgstr "Корисне навантаження coinbase"
+
+msgid "Coinbase tag says"
+msgstr "Тег coinbase повідомляє"
+
+msgid "Coinbase transactions pay none"
+msgstr "Транзакції coinbase їх не сплачують"
+
+msgid "Collateral"
+msgstr "Застава"
+
+msgid "Commits the block to the masternode list and the latest ChainLock."
+msgstr "Прив’язує блок до списку мастернод і останнього ChainLock."
+
+msgid "Computed in your browser"
+msgstr "Обчислено у вашому браузері"
+
+msgid "Connecting to the live feed…"
+msgstr "Підключення до живої стрічки…"
+
+msgid "Connecting…"
+msgstr "Підключення…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core address"
+msgstr "Адреса Core"
+
+#. placeholder {0}: balance ?? ''
+#. placeholder {1}: a.txCount
+msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
+msgstr "Адреса Core · {0} · {1, plural, one {# транзакція} few {# транзакції} many {# транзакцій} other {# транзакції}}"
+
+msgid "Core address · no activity seen"
+msgstr "Адреса Core · активності не виявлено"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Адреси Core, мемпул, управління та списки блоків"
+
+msgid "Core block"
+msgstr "Блок Core"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Core block {0}"
+msgstr "Блок Core {0}"
+
+msgid "Core block {label}"
+msgstr "Блок Core {label}"
+
+msgid "Core block height"
+msgstr "Висота блока Core"
+
+msgid "Core block heights and hashes, transaction IDs and addresses"
+msgstr "Висоти та хеші блоків Core, ID транзакцій і адреси"
+
+msgid "Core blocks"
+msgstr "Блоки Core"
+
+msgid "Core blocks on {label}"
+msgstr "Блоки Core за {label}"
+
+msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
+msgstr "Блоки Core, мастерноди й записи Platform в одному місці. Кожна цифра вказує, звідки вона взята і наскільки свіжа."
+
+msgid "Core height"
+msgstr "Висота Core"
+
+msgid "Core tip"
+msgstr "Вершина Core"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Вершина Core, блоки й транзакції — безпосередньо від evonode"
+
+msgid "Core transaction"
+msgstr "Транзакція Core"
+
+#. placeholder {0}: formatInt(height)
+msgid "Core transaction in block {0}"
+msgstr "Транзакція Core в блоці {0}"
+
+msgid "Core transaction, unconfirmed"
+msgstr "Транзакція Core, непідтверджена"
+
+msgid "Core version"
+msgstr "Версія Core"
+
+msgid "Core versions"
+msgstr "Версії Core"
+
+msgid "Core, Platform and the masternode network"
+msgstr "Core, Platform і мережа мастернод"
+
+msgid "Counted as valid"
+msgstr "Зараховано як дійсне"
+
+msgid "crawled"
+msgstr "опитано"
+
+msgid "Crawled by Radar"
+msgstr "Опитано Radar"
+
+msgid "Created"
+msgstr "Створено"
+
+msgid "Credit outputs"
+msgstr "Кредитні виходи"
+
+msgid "Credit pool"
+msgstr "Пул кредитів"
+
+msgid "Credit pool balance"
+msgstr "Баланс пулу кредитів"
+
+msgid "Credited on Platform"
+msgstr "Зараховано на Platform"
+
+msgid "Custom devnets"
+msgstr "Користувацькі devnet"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI addresses"
+msgstr "Адреси DAPI"
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI зайнятий, тому списки блоків беруться з Hyphen, поки відновлюється ліміт запитів. Подробиці, як і раніше, йдуть через DAPI."
+
+msgid "DAPI is busy. Open this page to load them."
+msgstr "DAPI зайнятий. Відкрийте цю сторінку, щоб їх завантажити."
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI не відповідає, тому подробиці про блоки й транзакції беруться з Hyphen, і це зазначено."
+
+msgid "DAPI request budget"
+msgstr "Ліміт запитів до DAPI"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash додає до coinbase корисне навантаження, яке фіксує список мастернод і останній ChainLock."
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "data"
+msgstr "дані"
+
+msgid "Data (OP_RETURN)"
+msgstr "Дані (OP_RETURN)"
+
+msgid "Data sources"
+msgstr "Джерела даних"
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "Доба триває з 00:00 до 24:00 за UTC."
+
+msgid "Details"
+msgstr "Подробиці"
+
+msgid "Devnet name"
+msgstr "Назва devnet"
+
+msgid "Difficulty"
+msgstr "Складність"
+
+#. placeholder {0}: formatInt(HISTORY.blocks)
+msgid "Difficulty over the last {0} blocks"
+msgstr "Складність за останні {0} блоків"
+
+msgid "Direction"
+msgstr "Напрям"
+
+msgid "Each Platform block is locked to a Core block."
+msgstr "Кожен блок Platform прив’язаний до блока Core."
+
+msgid "Early-leave penalty"
+msgstr "Штраф за ранній вихід"
+
+msgid "Edit"
+msgstr "Редагувати"
+
+msgid "Edit {editName}"
+msgstr "Редагувати {editName}"
+
+msgid "Ended"
+msgstr "Завершено"
+
+msgid "Ends"
+msgstr "Закінчується"
+
+msgid "Enter at least one DAPI address as host:port, one per line."
+msgstr "Введіть принаймні одну адресу DAPI у форматі хост:порт, по одній у рядку."
+
+#. placeholder {0}: formatInt(data.epoch.number)
+#. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
+msgid "Epoch {0} · {1} blocks in"
+msgstr "Епоха {0} · минуло блоків: {1}"
+
+msgid "Epoch {label}"
+msgstr "Епоха {label}"
+
+msgid "Every source is answering."
+msgstr "Усі джерела відповідають."
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Усе, що показує Core, береться з DAPI."
+
+msgid "Everything the coinbase pays out"
+msgstr "Усе, що виплачує coinbase"
+
+msgid "Evonode (high-performance)"
+msgstr "Evonode (високопродуктивна)"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Example"
+msgstr "Приклад"
+
+msgid "Fee"
+msgstr "Комісія"
+
+msgid "Fetched from Radar"
+msgstr "Отримано з Radar"
+
+msgid "Figures computed on your device"
+msgstr "Значення, обчислені на вашому пристрої"
+
+msgid "Finality"
+msgstr "Фінальність"
+
+msgid "finding where…"
+msgstr "шукаємо, де…"
+
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {1}: formatInt(total)
+msgid "First {0} of {1}"
+msgstr "Перші {0} із {1}"
+
+msgid "First and last seen"
+msgstr "Уперше й востаннє помічено"
+
+msgid "First seen"
+msgstr "Уперше помічено"
+
+msgid "first seen in the mempool"
+msgstr "уперше помічено в мемпулі"
+
+msgid "From"
+msgstr "Від"
+
+msgid "Funded"
+msgstr "Профінансовано"
+
+msgid "Funding threshold"
+msgstr "Поріг фінансування"
+
+msgid "Getting tight"
+msgstr "Запас скорочується"
+
+msgid "Go to"
+msgstr "Перейти"
+
+msgid "Governance"
+msgstr "Управління"
+
+msgid "Governance proposal"
+msgstr "Пропозиція щодо управління"
+
+msgid "Guess"
+msgstr "Припущення"
+
+msgid "Hard-fork signal"
+msgstr "Сигнал хардфорку"
+
+msgid "Hash"
+msgstr "Хеш"
+
+msgid "Hash rate"
+msgstr "Хешрейт"
+
+#. placeholder {0}: formatInt(HISTORY.blocks)
+msgid "Hash rate over the last {0} blocks"
+msgstr "Хешрейт за останні {0} блоків"
+
+msgid "Header"
+msgstr "Заголовок"
+
+msgid "Headers and blocks"
+msgstr "Заголовки та блоки"
+
+msgid "Headroom"
+msgstr "Запас"
+
+msgid "Height"
+msgstr "Висота"
+
+msgid "Height when connected"
+msgstr "Висота під час підключення"
+
+msgid "Height, hash, address, ProTx, IP, ID, name…"
+msgstr "Висота, хеш, адреса, ProTx, IP, ID, ім’я…"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "Heights {0} to {1}"
+msgstr "Висоти з {0} по {1}"
+
+msgid "Held by the top 10"
+msgstr "Належить топ-10"
+
+msgid "Held by the top 100"
+msgstr "Належить топ-100"
+
+msgid "Hide the table"
+msgstr "Сховати таблицю"
+
+msgid "Home"
+msgstr "Головна"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "Як відповідає кожне джерело і наскільки відстають його дані."
+
+msgid "How it settled"
+msgstr "Чим закінчилося"
+
+msgid "How the Core chain is doing: mining, transactions, supply and the state it carries."
+msgstr "Як почувається ланцюг Core: майнінг, транзакції, пропозиція та стан, який він зберігає."
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Hyphen doesn't index devnets"
+msgstr "Hyphen не індексує devnet"
+
+msgid "Hyphen doesn’t index devnets."
+msgstr "Hyphen не індексує devnet."
+
+msgid "Hyphen has not seen this address on this network."
+msgstr "Hyphen не бачив цю адресу в цій мережі."
+
+msgid "Hyphen says it is spent but its history does not show which transaction spent it."
+msgstr "Hyphen повідомляє, що її витрачено, але в історії не видно, яка транзакція її витратила."
+
+#. placeholder {0}: formatInt(spend.behind ?? 0)
+msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
+msgstr "Індекс Hyphen відстає від ланцюга на {0} блоків, тому не може сказати, чи витрачено цей вихід відтоді."
+
+#. placeholder {0}: health.lag.detail
+msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
+msgstr "Індекс Hyphen відстає від ланцюга: {0}. Цифри на цій сторінці — станом на цей блок."
+
+msgid "Hyphen's index is still being checked."
+msgstr "Індекс Hyphen ще перевіряється."
+
+msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
+msgstr "Ідентичності, контракти, токени й документи за ID, а також ідентичність за хешем її відкритого ключа"
+
+msgid "Identity with this public-key hash"
+msgstr "Ідентичність із цим хешем відкритого ключа"
+
+#. placeholder {0}: short(spend.by.txid)
+msgid "in {0}"
+msgstr "у {0}"
+
+msgid "in {n} h"
+msgstr "через {n} год"
+
+msgid "in {n} min"
+msgstr "через {n} хв"
+
+msgid "in {n} s"
+msgstr "через {n} с"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "In block {0}"
+msgstr "У блоці {0}"
+
+msgid "in the mempool"
+msgstr "у мемпулі"
+
+msgid "In the mempool"
+msgstr "У мемпулі"
+
+msgid "Inbound"
+msgstr "Вхідні"
+
+msgid "Indexed by Hyphen"
+msgstr "Проіндексовано Hyphen"
+
+msgid "Indexed by Hyphen · DAPI busy"
+msgstr "Проіндексовано Hyphen · DAPI зайнятий"
+
+msgid "Indexed by Hyphen · DAPI unreachable"
+msgstr "Проіндексовано Hyphen · DAPI недоступний"
+
+msgid "Indexed by Platform Explorer"
+msgstr "Проіндексовано Platform Explorer"
+
+msgid "Indexed by Platform Explorer · checking…"
+msgstr "Проіндексовано Platform Explorer · перевірка…"
+
+msgid "Indexed by Platform Explorer · proofs unavailable"
+msgstr "Проіндексовано Platform Explorer · докази недоступні"
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Проіндексовано до блока Core {indexed} із {chain}. Синхронізація: {sync}."
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Проіндексовано до блока Platform {indexed} із {chain}. Індексатор: {state}."
+
+msgid "Inputs"
+msgstr "Входи"
+
+msgid "Inputs → outputs"
+msgstr "Входи → виходи"
+
+msgid "Inputs and outputs"
+msgstr "Входи та виходи"
+
+msgid "Inputs hash"
+msgstr "Хеш входів"
+
+msgid "InstantSend"
+msgstr "InstantSend"
+
+msgid "InstantSend lock"
+msgstr "Блокування InstantSend"
+
+msgid "InstantSend lock reported by one node"
+msgstr "Блокування InstantSend повідомлено одним вузлом"
+
+msgid "InstantSend locked"
+msgstr "Заблоковано InstantSend"
+
+msgid "Invalid"
+msgstr "Недійсно"
+
+msgid "It answered with an error."
+msgstr "Він відповів помилкою."
+
+msgid "It hasn’t answered yet."
+msgstr "Він ще не відповів."
+
+msgid "It is rate limiting this browser."
+msgstr "Він обмежує запити з цього браузера."
+
+msgid "It sent an answer Radar can’t read."
+msgstr "Він надіслав відповідь, яку Radar не може прочитати."
+
+msgid "It took too long to answer."
+msgstr "Він надто довго відповідав."
+
+msgid "Its data is behind."
+msgstr "Його дані відстають."
+
+msgid "Jump to a date"
+msgstr "Перейти до дати"
+
+msgid "Keyboard shortcuts"
+msgstr "Гарячі клавіші"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Largest balances"
+msgstr "Найбільші баланси"
+
+#. placeholder {0}: formatInt(HISTORY.blocks)
+msgid "Last {0} blocks"
+msgstr "Останні {0} блоків"
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "Останнє опитування завершилося {0}. Його вузол Core на блоці {1}."
+
+#. placeholder {0}: formatRelative(clampSkew(last, now), now)
+msgid "last good {0}"
+msgstr "остання успішна {0}"
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "Остання успішна відповідь: {0}."
+
+msgid "Last seen"
+msgstr "Востаннє помічено"
+
+msgid "Latest activity"
+msgstr "Остання активність"
+
+msgid "Latest blocks"
+msgstr "Останні блоки"
+
+msgid "Latest Core blocks"
+msgstr "Останні блоки Core"
+
+msgid "Latest Core blocks, oldest first"
+msgstr "Останні блоки Core, спочатку старіші"
+
+msgid "Latest Platform blocks, oldest first"
+msgstr "Останні блоки Platform, спочатку старіші"
+
+msgid "Latest Platform transitions"
+msgstr "Останні переходи Platform"
+
+msgid "Link to one with"
+msgstr "Посилання на один із них:"
+
+msgid "Live"
+msgstr "Наживо"
+
+msgid "Live feed interrupted, reconnecting…"
+msgstr "Живу стрічку перервано, перепідключення…"
+
+msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
+msgstr "Оновлення наживо призупинено, бо мережа зайнята. Сторінка оновиться на наступному блоці."
+
+msgid "Live updates are paused while this tab is in the background."
+msgstr "Оновлення наживо призупинено, поки вкладка у фоновому режимі."
+
+msgid "Live updates have stopped."
+msgstr "Оновлення наживо зупинено."
+
+msgid "Live updates have stopped. The chain shown is as of {since}."
+msgstr "Оновлення наживо зупинено. Показано ланцюг станом на {since}."
+
+msgid "Live updates have stopped. The last update arrived at {since}."
+msgstr "Оновлення наживо зупинено. Останнє оновлення надійшло о {since}."
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Load all {0} inputs"
+msgstr "Завантажити всі входи: {0}"
+
+msgid "Load all inputs to work it out"
+msgstr "Завантажте всі входи, щоб дізнатися"
+
+msgid "Loading inputs…"
+msgstr "Завантаження входів…"
+
+msgid "Loading…"
+msgstr "Завантаження…"
+
+#. placeholder {0}: formatInt(b.header.l1LockedHeight)
+msgid "Locked to Core block {0}"
+msgstr "Прив’язаний до блока Core {0}"
+
+msgid "Locks Dash on Core to create credits on Platform."
+msgstr "Блокує Dash у Core, щоб створити кредити на Platform."
+
+#. placeholder {0}: description.join(' · ')
+msgid "Looks like {0}"
+msgstr "Схоже на {0}"
+
+msgid "mainnet"
+msgstr "основна мережа"
+
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
+msgstr "Карта світу з кружком у кожному місці, де Radar знайшов мастерноди. {summary}."
+
+msgid "Masternode"
+msgstr "Мастернода"
+
+#. placeholder {0}: short(hash)
+msgid "Masternode {0}"
+msgstr "Мастернода {0}"
+
+msgid "Masternode list root"
+msgstr "Корінь списку мастернод"
+
+msgid "Masternode registrar update"
+msgstr "Оновлення реєстратора мастерноди"
+
+msgid "Masternode registration"
+msgstr "Реєстрація мастерноди"
+
+msgid "Masternode revocation"
+msgstr "Відкликання мастерноди"
+
+msgid "Masternode service update"
+msgstr "Оновлення служби мастерноди"
+
+msgid "Masternode votes on this proposal, newest first"
+msgstr "Голоси мастернод за цю пропозицію, спочатку нові"
+
+msgid "Masternodes"
+msgstr "Мастерноди"
+
+msgid "Masternodes answering"
+msgstr "Мастерноди, що відповідають"
+
+#. placeholder {0}: c.normalized
+msgid "Masternodes at {0}"
+msgstr "Мастерноди за адресою {0}"
+
+msgid "Masternodes by ProTx hash or IP address"
+msgstr "Мастерноди за хешем ProTx або IP-адресою"
+
+msgid "Masternodes by status"
+msgstr "Мастерноди за статусом"
+
+msgid "masternodes locked its inputs; final from here"
+msgstr "Мастерноди заблокували його входи; відтепер остаточно"
+
+msgid "Median answer {rounded} ms"
+msgstr "Медіанний час відповіді {rounded} мс"
+
+msgid "Memory in use"
+msgstr "Використана пам’ять"
+
+#. placeholder {0}: formatBytes(m.maxBytes)
+msgid "Memory in use of {0}"
+msgstr "Використано пам’яті з {0}"
+
+msgid "mempool"
+msgstr "мемпул"
+
+msgid "Mempool"
+msgstr "Мемпул"
+
+msgid "Mempool pressure"
+msgstr "Навантаження мемпулу"
+
+msgid "Merkle root"
+msgstr "Корінь Меркла"
+
+msgid "Message"
+msgstr "Повідомлення"
+
+msgid "Metrics history"
+msgstr "Історія метрик"
+
+msgid "Mined"
+msgstr "Видобуто"
+
+msgid "Mined by"
+msgstr "Видобув"
+
+msgid "Mined for height"
+msgstr "Видобуто для висоти"
+
+msgid "Move through search results"
+msgstr "Переходити за результатами пошуку"
+
+msgid "Move through table rows"
+msgstr "Переходити за рядками таблиці"
+
+msgid "Moved"
+msgstr "Переміщено"
+
+msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
+msgstr "Імена, що закінчуються на .dash, епохи та дати (блоки Core за добу)"
+
+msgid "Net value"
+msgstr "Чиста вартість"
+
+msgid "Net votes"
+msgstr "Чисті голоси"
+
+msgid "Network"
+msgstr "Мережа"
+
+msgid "Network census"
+msgstr "Перепис мережі"
+
+msgid "Network internals"
+msgstr "Внутрішня будова мережі"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "Внутрішня будова мережі: піри, навантаження мемпулу, версії та історія"
+
+msgid "Network pulse"
+msgstr "Пульс мережі"
+
+msgid "New blocks reach this page as they happen."
+msgstr "Нові блоки з’являються на цій сторінці одразу, як виникають."
+
+msgid "New operator key"
+msgstr "Новий ключ оператора"
+
+msgid "New reward payout"
+msgstr "Нова виплата нагороди"
+
+msgid "New rows appear at the top."
+msgstr "Нові рядки з’являються вгорі."
+
+msgid "New service address"
+msgstr "Нова службова адреса"
+
+msgid "New transaction"
+msgstr "Нова транзакція"
+
+msgid "New voting key"
+msgstr "Новий ключ голосування"
+
+msgid "Newly generated coins"
+msgstr "Щойно створені монети"
+
+msgid "Next →"
+msgstr "Далі →"
+
+msgid "Next block"
+msgstr "Наступний блок"
+
+msgid "Next day"
+msgstr "Наступний день"
+
+msgid "Next day →"
+msgstr "Наступний день →"
+
+msgid "No"
+msgstr "Ні"
+
+msgid "No address"
+msgstr "Немає адреси"
+
+msgid "No balances indexed yet."
+msgstr "Баланси ще не проіндексовано."
+
+msgid "No block with this ID on this network."
+msgstr "У цій мережі немає блока з таким ID."
+
+msgid "No blocks on this date"
+msgstr "За цією датою блоків немає"
+
+msgid "No camera could be opened here. Choose a picture instead."
+msgstr "Тут не вдалося відкрити камеру. Виберіть зображення."
+
+msgid "No crawl has finished yet."
+msgstr "Жодне опитування ще не завершилося."
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "У цій мережі ще не було запитів до DAPI."
+
+msgid "No devnets saved."
+msgstr "Збережених devnet немає."
+
+msgid "No InstantSend lock was seen"
+msgstr "Блокування InstantSend не виявлено"
+
+msgid "No known pool"
+msgstr "Відомого пулу немає"
+
+msgid "No match for “{query}” as a Core record on {network}"
+msgstr "Немає збігів для «{query}» серед записів Core у мережі {network}"
+
+msgid "No proposal with this hash on this network."
+msgstr "У цій мережі немає пропозиції з таким хешем."
+
+msgid "No proposals on this network."
+msgstr "У цій мережі немає пропозицій."
+
+msgid "No QR code found in that picture."
+msgstr "На цьому зображенні QR-код не знайдено."
+
+msgid "No source can say whether this output is spent."
+msgstr "Жодне джерело не може сказати, чи витрачено цей вихід."
+
+msgid "No source keeps when a transaction first arrived once it is mined."
+msgstr "Жодне джерело не зберігає, коли транзакція вперше з’явилася, після того як її видобуто."
+
+msgid "No tag in the coinbase"
+msgstr "У coinbase немає тега"
+
+msgid "No transaction with this ID on this network."
+msgstr "У цій мережі немає транзакції з таким ID."
+
+msgid "No transactions in the mempool right now"
+msgstr "Зараз у мемпулі немає транзакцій"
+
+msgid "No transactions in the mempool right now."
+msgstr "Зараз у мемпулі немає транзакцій."
+
+msgid "No transactions seen for this address on this network."
+msgstr "Для цієї адреси в цій мережі транзакцій не помічено."
+
+msgid "No unspent outputs."
+msgstr "Невитрачених виходів немає."
+
+msgid "No votes recorded for this proposal."
+msgstr "За цією пропозицією голосів не зафіксовано."
+
+msgid "Node sync"
+msgstr "Синхронізація вузла"
+
+msgid "Nodes resting"
+msgstr "Вузли в простої"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Немає"
+
+msgid "Not available right now"
+msgstr "Зараз недоступно"
+
+msgid "Not ChainLocked yet"
+msgstr "Ще без ChainLock"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "Не знайдено в мережі {0}"
+
+msgid "not in a block yet"
+msgstr "ще не в блоці"
+
+msgid "Not in DAPI"
+msgstr "Немає в DAPI"
+
+msgid "Not in this version"
+msgstr "Немає в цій версії"
+
+msgid "Not loaded"
+msgstr "Не завантажено"
+
+msgid "Not mined yet"
+msgstr "Ще не видобуто"
+
+msgid "Not offered"
+msgstr "Не пропонується"
+
+msgid "Not passing"
+msgstr "Не проходить"
+
+msgid "Not seen yet"
+msgstr "Ще не помічено"
+
+msgid "Nothing above confirms this. It is only one way to read what you typed."
+msgstr "Ніщо вище цього не підтверджує. Це лише один зі способів прочитати ваш ввід."
+
+msgid "Nothing has asked it yet on this network."
+msgstr "У цій мережі до нього ще ніхто не звертався."
+
+msgid "Now"
+msgstr "Зараз"
+
+msgid "Older blocks from before this date"
+msgstr "Старіші блоки до цієї дати"
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open it on {name}"
+msgstr "Відкрити в {name}"
+
+msgid "Open on {where}"
+msgstr "Відкрити в мережі {where}"
+
+msgid "Open proposals by what their payment would be"
+msgstr "Відкрити пропозиції за розміром виплати"
+
+msgid "Open the map"
+msgstr "Відкрити карту"
+
+msgid "Open the proposal"
+msgstr "Відкрити пропозицію"
+
+msgid "Open the result, or all results"
+msgstr "Відкрити результат або всі результати"
+
+msgid "Open the selected table row"
+msgstr "Відкрити вибраний рядок таблиці"
+
+msgid "Opening the live connection."
+msgstr "Відкриваємо живе з’єднання."
+
+msgid "Operator payout"
+msgstr "Виплата оператору"
+
+msgid "Operator public key"
+msgstr "Відкритий ключ оператора"
+
+msgid "Operator reward"
+msgstr "Нагорода оператора"
+
+msgid "Operator signature"
+msgstr "Підпис оператора"
+
+msgid "optional"
+msgstr "необов’язково"
+
+msgid "or"
+msgstr "або"
+
+msgid "Other reachable nodes"
+msgstr "Інші доступні вузли"
+
+msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
+msgstr "Інакше час відображається за часовим поясом цього пристрою. Під час наведення на час завжди показується UTC."
+
+msgid "Outbound"
+msgstr "Вихідні"
+
+msgid "Output"
+msgstr "Вихід"
+
+#. placeholder {0}: num(collateral?.vout) ?? 0
+msgid "Output {0} of this transaction"
+msgstr "Вихід {0} цієї транзакції"
+
+#. placeholder {0}: spend.by.vin
+msgid "Output {index} is spent by input {0} of this transaction"
+msgstr "Вихід {index} витрачено входом {0} цієї транзакції"
+
+msgid "Output this input spends"
+msgstr "Вихід, який витрачає цей вхід"
+
+msgid "Outputs"
+msgstr "Виходи"
+
+msgid "Owner key"
+msgstr "Ключ власника"
+
+msgid "Owner signature"
+msgstr "Підпис власника"
+
+#. placeholder {0}: num(p.platformP2pPort) ?? '—'
+#. placeholder {1}: num(p.platformHttpPort) ?? '—'
+msgid "P2P {0}, HTTPS {1}"
+msgstr "P2P {0}, HTTPS {1}"
+
+msgid "Page not found"
+msgstr "Сторінку не знайдено"
+
+msgid "Pages"
+msgstr "Сторінки"
+
+msgid "Paid to"
+msgstr "Виплачено"
+
+msgid "Passing"
+msgstr "Проходить"
+
+msgid "Passing, not yet funded"
+msgstr "Проходить, ще не профінансовано"
+
+msgid "Payload"
+msgstr "Корисне навантаження"
+
+msgid "Payload version"
+msgstr "Версія корисного навантаження"
+
+msgid "Payout"
+msgstr "Виплата"
+
+msgid "Pays out a Platform withdrawal from the credit pool."
+msgstr "Виплачує виведення коштів з Platform із пулу кредитів."
+
+msgid "Peer"
+msgstr "Пір"
+
+msgid "Peers of the indexing node"
+msgstr "Пір індексувального вузла"
+
+msgid "Peers of the node Hyphen indexes from"
+msgstr "Піри вузла, з якого індексує Hyphen"
+
+msgid "Pending transactions"
+msgstr "Транзакції в очікуванні"
+
+msgid "Pending transactions are unavailable"
+msgstr "Транзакції в очікуванні недоступні"
+
+msgid "Pending transactions, newest first"
+msgstr "Транзакції в очікуванні, спочатку нові"
+
+msgid "Picture"
+msgstr "Зображення"
+
+msgid "Places with the most masternodes"
+msgstr "Місця з найбільшою кількістю мастернод"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адреса Platform"
+
+msgid "Platform block {label}"
+msgstr "Блок Platform {label}"
+
+msgid "Platform block height"
+msgstr "Висота блока Platform"
+
+msgid "Platform blocks, state transitions and Platform addresses"
+msgstr "Блоки Platform, переходи стану та адреси Platform"
+
+msgid "Platform epoch"
+msgstr "Епоха Platform"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer не індексує devnet"
+
+msgid "Platform Explorer doesn't index devnets."
+msgstr "Platform Explorer не індексує devnet."
+
+msgid "Platform Explorer isn't answering"
+msgstr "Platform Explorer не відповідає"
+
+msgid "Platform height"
+msgstr "Висота Platform"
+
+msgid "Platform lists and counts"
+msgstr "Списки та лічильники Platform"
+
+msgid "Platform node ID"
+msgstr "ID вузла Platform"
+
+msgid "Platform ports"
+msgstr "Порти Platform"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform transitions"
+msgstr "Переходи Platform"
+
+msgid "Plenty of room"
+msgstr "Великий запас"
+
+msgid "Point the camera at a QR code."
+msgstr "Наведіть камеру на QR-код."
+
+msgid "Pressure"
+msgstr "Навантаження"
+
+msgid "Previous block"
+msgstr "Попередній блок"
+
+msgid "Previous day"
+msgstr "Попередній день"
+
+msgid "Price feed"
+msgstr "Джерело цін"
+
+msgid "Price via Platform Explorer"
+msgstr "Ціна через Platform Explorer"
+
+msgid "Proof-checked"
+msgstr "Підтверджено доказом"
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "Стан Platform, підтверджений доказом і перевірений у цьому браузері"
+
+msgid "Proposal"
+msgstr "Пропозиція"
+
+#. placeholder {0}: short(found.hash)
+msgid "Proposal {0}"
+msgstr "Пропозиція {0}"
+
+msgid "Proposals"
+msgstr "Пропозиції"
+
+msgid "QR code"
+msgstr "QR-код"
+
+msgid "QR code of the address {address}"
+msgstr "QR-код адреси {address}"
+
+msgid "QR reader"
+msgstr "Зчитувач QR"
+
+msgid "Quorum commitment"
+msgstr "Коммітмент кворуму"
+
+msgid "Quorum hash"
+msgstr "Хеш кворуму"
+
+msgid "Quorum index"
+msgstr "Індекс кворуму"
+
+msgid "Quorum list URL"
+msgstr "URL списку кворумів"
+
+msgid "Quorum public key"
+msgstr "Відкритий ключ кворуму"
+
+msgid "Quorum signature"
+msgstr "Підпис кворуму"
+
+msgid "Quorum type"
+msgstr "Тип кворуму"
+
+msgid "Quorums root"
+msgstr "Корінь кворумів"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar API"
+msgstr "API Radar"
+
+msgid "Radar checked every source that can answer this kind of input."
+msgstr "Radar перевірив усі джерела, які можуть відповісти на такий ввід."
+
+msgid "Radar crawler"
+msgstr "Обходчик Radar"
+
+msgid "Radar didn’t keep it, show it or search for it. Radar never needs a key: if this one is yours, treat it as exposed."
+msgstr "Radar його не зберігав, не показував і не шукав. Radar ніколи не потребує ключа: якщо цей ключ ваш, вважайте його скомпрометованим."
+
+msgid "Radar doesn't crawl devnets"
+msgstr "Radar не обходить devnet"
+
+msgid "Radar doesn't crawl devnets, so there is nothing to map."
+msgstr "Radar не обходить devnet, тому на карті нічого відображати."
+
+msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
+msgstr "Radar не знайшов для цього ні блока, ні транзакції, ні адреси, ні мастерноди, ні іншого запису. Спробуйте висоту, хеш, адресу, ID або ім’я."
+
+msgid "Radar isn't answering, so the map shows no nodes."
+msgstr "Radar не відповідає, тому на карті немає вузлів."
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar тримає навантаження на кожну evonode значно нижче її ліміту запитів, щоб один відвідувач не витісняв іншого."
+
+msgid "Radar looks up addresses, blocks, transactions, names, masternodes and the like."
+msgstr "Radar шукає адреси, блоки, транзакції, імена, мастерноди й подібне."
+
+msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
+msgstr "Radar ніколи не потребує фрази відновлення, тому такі слова нікуди не надсилаються і не потрапляють в адресний рядок та історію. Краще шукайте ім’я, ID або число."
+
+msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
+msgstr "Radar ніколи цього не потребує, тому це нікуди не надсилається і не потрапляє в адресний рядок та історію."
+
+msgid "Radar shows this payload type as raw data."
+msgstr "Radar показує цей тип корисного навантаження як необроблені дані."
+
+msgid "Radar:"
+msgstr "Radar:"
+
+msgid "Range"
+msgstr "Діапазон"
+
+msgid "Rank"
+msgstr "Місце"
+
+msgid "Rank band"
+msgstr "Діапазон місць"
+
+msgid "Raw data"
+msgstr "Необроблені дані"
+
+msgid "Raw payload"
+msgstr "Необроблене корисне навантаження"
+
+msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
+msgstr "Зчитайте QR-код камерою або із зображення й знайдіть те, що в ньому міститься. Зображення читається в цьому браузері й не завантажується."
+
+msgid "Reading the picture…"
+msgstr "Читання зображення…"
+
+msgid "Reason"
+msgstr "Причина"
+
+msgid "Received"
+msgstr "Отримано"
+
+msgid "Reconnecting…"
+msgstr "Перепідключення…"
+
+msgid "Records that a quorum finished its key generation and who signed."
+msgstr "Фіксує, що кворум завершив генерацію ключів, і хто підписав."
+
+#. placeholder {0}: POLL_MS.mempool / 1000
+msgid "Refreshes every {0} seconds."
+msgstr "Оновлюється кожні {0} с."
+
+msgid "Registers a masternode or evonode and sets the keys that run it."
+msgstr "Реєструє мастерноду або evonode і задає ключі, які нею керують."
+
+msgid "Regular masternode"
+msgstr "Звичайна мастернода"
+
+msgid "Regular masternodes"
+msgstr "Звичайні мастерноди"
+
+msgid "Remove"
+msgstr "Видалити"
+
+msgid "Remove {devnet}"
+msgstr "Видалити {devnet}"
+
+msgid "reported by one node; no second source has confirmed it"
+msgstr "повідомлено одним вузлом; друге джерело не підтвердило"
+
+msgid "reported by one node; waiting for a second source to agree"
+msgstr "повідомлено одним вузлом; чекаємо на підтвердження від другого джерела"
+
+msgid "Requested"
+msgstr "Запитано"
+
+msgid "Requested at height"
+msgstr "Запитано на висоті"
+
+msgid "Requested payments"
+msgstr "Запитані виплати"
+
+msgid "Requested payments of open proposals: funded, passing and not passing"
+msgstr "Запитані виплати за відкритими пропозиціями: профінансовані, ті, що проходять, і ті, що не проходять"
+
+msgid "Requests in the last minute"
+msgstr "Запитів за останню хвилину"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "Results"
+msgstr "Результати"
+
+msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
+msgstr "Ширина стрічки — це сума. Сірий — решта відправнику, помаранчевий — комісія."
+
+msgid "Rich list"
+msgstr "Список найбагатших"
+
+msgid "Save changes"
+msgstr "Зберегти зміни"
+
+msgid "Saved"
+msgstr "Збережене"
+
+msgid "Saved devnets"
+msgstr "Збережені devnet"
+
+msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
+msgstr "Збережено в цьому браузері. Для devnet із невідомою Radar назвою потрібні його адреси."
+
+msgid "Search"
+msgstr "Пошук"
+
+#. placeholder {0}: networkName(other)
+#. placeholder {0}: networkName(otherNetwork(net))
+msgid "Search {0}"
+msgstr "Шукати в мережі {0}"
+
+msgid "Search blocks, transactions, masternodes, names…"
+msgstr "Пошук блоків, транзакцій, мастернод, імен…"
+
+msgid "Search blocks, txs, masternodes, names"
+msgstr "Пошук блоків, тх, мастернод, імен"
+
+msgid "Search Radar"
+msgstr "Пошук у Radar"
+
+msgid "Search Radar (⌘K on a Mac)"
+msgstr "Пошук у Radar (⌘K на Mac)"
+
+msgid "Searching…"
+msgstr "Пошук…"
+
+msgid "See all results for “{trimmed}”"
+msgstr "Усі результати за запитом «{trimmed}»"
+
+msgid "See all results for “{trimmed}” on {net}"
+msgstr "Усі результати за запитом «{trimmed}» у мережі {net}"
+
+msgid "See unconfirmed activity"
+msgstr "Переглянути непідтверджену активність"
+
+msgid "Sent"
+msgstr "Надіслано"
+
+msgid "Served by DAPI"
+msgstr "Надано DAPI"
+
+msgid "Served by DAPI · not proved"
+msgstr "Надано DAPI · без доказу"
+
+msgid "Service address"
+msgstr "Службова адреса"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Share index"
+msgstr "Індекс частки"
+
+msgid "Share of supply"
+msgstr "Частка пропозиції"
+
+msgid "Share of the supply held by each rank band"
+msgstr "Частка пропозиції в кожного діапазону місць"
+
+msgid "Share of the supply held by the top addresses, by rank band"
+msgstr "Частка пропозиції найбільших адрес за діапазонами місць"
+
+msgid "Share payout update"
+msgstr "Оновлення виплат за частками"
+
+msgid "Shared collateral"
+msgstr "Спільна застава"
+
+msgid "Shared masternode dissolved"
+msgstr "Спільну мастерноду розпущено"
+
+msgid "Shared masternode registrar update"
+msgstr "Оновлення реєстратора спільної мастерноди"
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs"
+msgstr "Показати всі входи: {0}"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "Show all {0} outputs"
+msgstr "Показати всі виходи: {0}"
+
+msgid "Show as a table"
+msgstr "Показати таблицею"
+
+msgid "Show the USD value next to DASH amounts"
+msgstr "Показувати вартість у USD поруч із сумами в DASH"
+
+msgid "Show these shortcuts"
+msgstr "Показати ці сполучення клавіш"
+
+msgid "Show times in UTC"
+msgstr "Показувати час у UTC"
+
+msgid "Signature"
+msgstr "Підпис"
+
+msgid "Signatures"
+msgstr "Підписи"
+
+msgid "Signed message"
+msgstr "Підписане повідомлення"
+
+msgid "Signers"
+msgstr "Підписанти"
+
+msgid "Signing quorum"
+msgstr "Підписувальний кворум"
+
+msgid "Size"
+msgstr "Розмір"
+
+msgid "Small amounts are drawn at a minimum height."
+msgstr "Малі суми малюються з мінімальною висотою."
+
+msgid "Some requests are failing."
+msgstr "Частина запитів завершується помилкою."
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "Деякі джерела повільні або відстають. Решта працює."
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "Деякі джерела не відповідають. Решта працює."
+
+#. placeholder {0}: failed.map((f) => f.id).join(', ')
+msgid "Some sources didn’t answer: {0}."
+msgstr "Деякі джерела не відповіли: {0}."
+
+msgid "Sources"
+msgstr "Джерела"
+
+msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
+msgstr "Пробіли та розриви рядків у повідомленні враховуються: воно має точно збігатися з підписаним."
+
+msgid "Special transaction payload"
+msgstr "Корисне навантаження спеціальної транзакції"
+
+msgid "Spendable outputs"
+msgstr "Виходи, доступні для витрат"
+
+#. placeholder {0}: formatInt(HISTORY.blocks)
+msgid "Spendable outputs over the last {0} blocks"
+msgstr "Виходи, доступні для витрат, за останні {0} блоків"
+
+msgid "spender not found"
+msgstr "витратника не знайдено"
+
+msgid "Spends"
+msgstr "Витрати"
+
+msgid "Spent"
+msgstr "Витрачено"
+
+msgid "Spent and unspent states"
+msgstr "Стани «витрачено» і «не витрачено»"
+
+msgid "State"
+msgstr "Стан"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Stop the camera"
+msgstr "Зупинити камеру"
+
+msgid "Stopped"
+msgstr "Зупинено"
+
+msgid "Stopped since {since}"
+msgstr "Зупинено з {since}"
+
+msgid "Summary"
+msgstr "Підсумок"
+
+msgid "Supply concentration"
+msgstr "Концентрація пропозиції"
+
+msgid "Switch to mainnet"
+msgstr "Перемкнутися на основну мережу"
+
+msgid "Switch to testnet"
+msgstr "Перемкнутися на тестову мережу"
+
+msgid "Synced"
+msgstr "Синхронізовано"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "Тег: {tag}. Його пише майнер, тому це не доказ."
+
+msgid "Test coins have no value, so Testnet and devnets never show USD."
+msgstr "Тестові монети не мають вартості, тому в тестовій мережі та devnet USD не показується."
+
+msgid "testnet"
+msgstr "тестова мережа"
+
+msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
+msgstr "Текст, який ще не перекладено, відображається англійською. Хеші, ID і суми ніколи не перекладаються."
+
+msgid "text: a contract or token name"
+msgstr "текст: назва контракту або токена"
+
+msgid "That could be part of a recovery phrase"
+msgstr "Це може бути частиною фрази відновлення"
+
+msgid "That isn’t a Dash address Radar can check."
+msgstr "Це не адреса Dash, яку Radar може перевірити."
+
+msgid "That isn’t a Dash address."
+msgstr "Це не адреса Dash."
+
+msgid "That isn’t a Dash signature."
+msgstr "Це не підпис Dash."
+
+msgid "That looks like a private key or recovery phrase"
+msgstr "Це схоже на закритий ключ або фразу відновлення"
+
+msgid "That picture couldn’t be read."
+msgstr "Не вдалося прочитати це зображення."
+
+msgid "That QR code holds a private key or a recovery phrase."
+msgstr "Цей QR-код містить закритий ключ або фразу відновлення."
+
+msgid "That QR code isn’t something Radar can look up."
+msgstr "Radar не може знайти цей QR-код."
+
+msgid "the block can't be reorganised"
+msgstr "блок не може бути реорганізований"
+
+msgid "The browser didn’t give Radar the camera. Allow it in the site settings, or choose a picture instead."
+msgstr "Браузер не надав Radar доступ до камери. Дозвольте його в налаштуваннях сайту або виберіть зображення."
+
+msgid "The chain itself: height, difficulty, supply and what is waiting to be mined."
+msgstr "Сам ланцюг: висота, складність, пропозиція і те, що чекає на видобуток."
+
+msgid "The chart data didn’t load."
+msgstr "Дані графіка не завантажилися."
+
+msgid "The connection failed."
+msgstr "Не вдалося підключитися."
+
+msgid "The Dash network, now"
+msgstr "Мережа Dash зараз"
+
+msgid "The largest Core balances, ranked."
+msgstr "Найбільші баланси Core за місцями."
+
+msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
+msgstr "Посилання може бути застарілим або з помилкою. Знайдіть те, що вам потрібно, або почніть з одного з розділів."
+
+msgid "The live connection dropped. Radar is opening it again."
+msgstr "Живе з’єднання розірвалося. Radar відкриває його знову."
+
+msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
+msgstr "Живе з’єднання постійно обривається, тому Radar запитує останній блок кожні 30 секунд."
+
+msgid "The masternode census and network history"
+msgstr "Перепис мастернод та історія мережі"
+
+msgid "The median answer takes {seconds} s."
+msgstr "Медіанний час відповіді — {seconds} с."
+
+msgid "The node map"
+msgstr "Карта вузлів"
+
+msgid "The operator announces a new network address for a masternode."
+msgstr "Оператор оголошує нову мережеву адресу мастерноди."
+
+msgid "The operator ends a masternode's service; it must be registered again to return."
+msgstr "Оператор припиняє роботу мастерноди; щоб повернутися, її потрібно зареєструвати заново."
+
+msgid "The owner changes a masternode's operator key, voting key or payout."
+msgstr "Власник змінює ключ оператора, ключ голосування або виплату мастерноди."
+
+msgid "The Platform SDK"
+msgstr "Platform SDK"
+
+msgid "The price feed"
+msgstr "Джерело цін"
+
+msgid "The QR code could not be drawn here. The address above is the same."
+msgstr "Не вдалося намалювати QR-код. Адреса вище — та сама."
+
+msgid "The quorum list URL must start with https://."
+msgstr "URL списку кворумів має починатися з https://."
+
+msgid "The request budget is nearly used."
+msgstr "Ліміт запитів майже вичерпано."
+
+msgid "The request was cancelled"
+msgstr "Запит скасовано"
+
+msgid "The shareholders change a shared masternode's operator key or voting key."
+msgstr "Співвласники змінюють ключ оператора або ключ голосування спільної мастерноди."
+
+msgid "The shareholders end a shared masternode and take their collateral back."
+msgstr "Співвласники розпускають спільну мастерноду й забирають свою заставу."
+
+msgid "The signature is well formed, but it was made by a different key. It matches this address:"
+msgstr "Підпис складено правильно, але створено іншим ключем. Він відповідає цій адресі:"
+
+msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
+msgstr "Транзакція в тому вигляді, в якому Radar декодував її з байтів DAPI. Суми вказано в даффах."
+
+msgid "The transaction is not in a block yet."
+msgstr "Транзакції ще немає в блоці."
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "Курс USD через Platform Explorer"
+
+msgid "Their size"
+msgstr "Їхній розмір"
+
+msgid "There is no block with this height or hash on this network."
+msgstr "У цій мережі немає блока з такою висотою або хешем."
+
+msgid "There is no page at {pathname}"
+msgstr "За адресою {pathname} немає сторінки"
+
+msgid "There is no transaction with this ID on this network. It may be too new, or on another network."
+msgstr "У цій мережі немає транзакції з таким ID. Можливо, вона надто нова або в іншій мережі."
+
+msgid "These choices stay in this browser. Radar never sends them anywhere."
+msgstr "Ці налаштування зберігаються в цьому браузері. Radar ніколи нікуди їх не надсилає."
+
+msgid "This {record} is on {network}."
+msgstr "Цей {record} розташований у мережі {network}."
+
+msgid "This address did not sign this message."
+msgstr "Ця адреса не підписувала це повідомлення."
+
+msgid "This address signed this message."
+msgstr "Ця адреса підписала це повідомлення."
+
+msgid "This browser"
+msgstr "Цей браузер"
+
+msgid "This is a {name} address."
+msgstr "Це адреса {name}."
+
+msgid "This is a mainnet address"
+msgstr "Це адреса основної мережі"
+
+msgid "This is a mainnet address."
+msgstr "Це адреса основної мережі."
+
+msgid "This is a mainnet Platform address"
+msgstr "Це адреса Platform основної мережі"
+
+msgid "This is a testnet address"
+msgstr "Це адреса тестової мережі"
+
+msgid "This is a testnet address."
+msgstr "Це адреса тестової мережі."
+
+msgid "This is a testnet Platform address"
+msgstr "Це адреса Platform тестової мережі"
+
+msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
+msgstr "Це схоже на закритий ключ або фразу відновлення. Radar вони ніколи не потрібні, тому перевіряти це він не буде. Очистіть поле й вставте натомість підписане повідомлення."
+
+msgid "This network doesn’t have this source."
+msgstr "У цій мережі немає такого джерела."
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "У цій мережі за цю добу немає блоків, або цієї доби ще не настало."
+
+msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
+msgstr "Ця сторінка читає дані з Hyphen. Перемкніться на основну або тестову мережу, щоб її побачити."
+
+msgid "Threshold signature"
+msgstr "Порогальний підпис"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "Times"
+msgstr "Час"
+
+msgid "Tip hash"
+msgstr "Хеш вершини"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Tools"
+msgstr "Інструменти"
+
+#. placeholder {0}: b.id
+msgid "Top {0}"
+msgstr "Топ-{0}"
+
+msgid "Total out"
+msgstr "Усього виведено"
+
+msgid "Total received"
+msgstr "Усього отримано"
+
+msgid "Total sent"
+msgstr "Усього надіслано"
+
+msgid "Transaction"
+msgstr "Транзакція"
+
+#. placeholder {0}: short(hash)
+msgid "Transaction {0}"
+msgstr "Транзакція {0}"
+
+#. placeholder {0}: txid.slice(0, 8)
+msgid "Transaction {0}…"
+msgstr "Транзакція {0}…"
+
+#. placeholder {0}: tx.txid.slice(0, 10)
+#. placeholder {1}: tx.txid.slice(-6)
+msgid "Transaction {0}…{1}"
+msgstr "Транзакція {0}…{1}"
+
+msgid "Transaction velocity"
+msgstr "Швидкість транзакцій"
+
+msgid "Transactions"
+msgstr "Транзакції"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "Транзакції в блоці {0}"
+
+msgid "Transactions of this address, newest first"
+msgstr "Транзакції цієї адреси, спочатку нові"
+
+msgid "Transactions per block"
+msgstr "Транзакцій на блок"
+
+#. placeholder {0}: formatInt(HISTORY.blocks)
+msgid "Transactions per bucket over the last {0} blocks"
+msgstr "Транзакцій на інтервал за останні {0} блоків"
+
+msgid "Transactions processed"
+msgstr "Оброблені транзакції"
+
+msgid "Transactions the network has seen and not yet mined."
+msgstr "Транзакції, які мережа бачила, але ще не видобула."
+
+msgid "Transactions waiting"
+msgstr "Транзакції в очікуванні"
+
+msgid "Transactions, all time"
+msgstr "Транзакції за весь час"
+
+msgid "Transition"
+msgstr "Перехід"
+
+msgid "Try"
+msgstr "Спробуйте"
+
+msgid "Try a sharper picture, with the whole code in view."
+msgstr "Спробуйте чіткіше зображення, на якому видно весь код."
+
+msgid "Try again"
+msgstr "Спробувати знову"
+
+msgid "Txid"
+msgstr "Txid"
+
+msgid "Txs"
+msgstr "Тх"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unconfirmed"
+msgstr "Непідтверджено"
+
+msgid "Unconfirmed activity"
+msgstr "Непідтверджена активність"
+
+msgid "Unit for DASH amounts"
+msgstr "Одиниця для сум у DASH"
+
+msgid "Unknown"
+msgstr "Невідомо"
+
+msgid "Unknown: index behind"
+msgstr "Невідомо: індекс відстає"
+
+msgid "Unspendable"
+msgstr "Не може бути витрачений"
+
+msgid "Unspendable outputs"
+msgstr "Виходи, які не можна витратити"
+
+msgid "Unspent"
+msgstr "Не витрачено"
+
+msgid "Unspent outputs"
+msgstr "Невитрачені виходи"
+
+msgid "Unspent outputs of this address"
+msgstr "Невитрачені виходи цієї адреси"
+
+msgid "Updated"
+msgstr "Оновлено"
+
+msgid "USD is rounded to three significant figures and always follows the DASH figure."
+msgstr "USD округлюється до трьох значущих цифр і завжди стоїть поруч із сумою в DASH."
+
+msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
+msgstr "Використовуйте малі літери, цифри та дефіси, наприклад «ruby»."
+
+msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
+msgstr "Використовуйте адресу, яка підписала повідомлення; в основній мережі вона починається з X, у тестовій — з y."
+
+msgid "Use the camera"
+msgstr "Використати камеру"
+
+msgid "Used up for now"
+msgstr "Наразі вичерпано"
+
+msgid "UTC day"
+msgstr "Доба за UTC"
+
+msgid "Valid"
+msgstr "Дійсно"
+
+msgid "Valid members"
+msgstr "Дійсні учасники"
+
+msgid "Value"
+msgstr "Значення"
+
+#. placeholder {0}: formatInt(tx.inputs.length)
+#. placeholder {1}: formatInt(tx.outputs.length)
+msgid "Value flow: {0} inputs into {1} outputs"
+msgstr "Потік вартості: входів {0} → виходів {1}"
+
+msgid "Verify"
+msgstr "Перевірити"
+
+msgid "Verify message"
+msgstr "Перевірка повідомлення"
+
+msgid "Version"
+msgstr "Версія"
+
+#. placeholder {0}: block.version.toString(16)
+#. placeholder {0}: tx.version
+msgid "Version {0}"
+msgstr "Версія {0}"
+
+msgid "Version bit"
+msgstr "Біт версії"
+
+msgid "View all"
+msgstr "Показати все"
+
+msgid "View all transitions"
+msgstr "Показати всі переходи"
+
+msgid "Vote"
+msgstr "Голос"
+
+msgid "Vote history"
+msgstr "Історія голосів"
+
+msgid "Vote in Governance"
+msgstr "Голосувати в Governance"
+
+msgid "Votes"
+msgstr "Голоси"
+
+msgid "Voting key"
+msgstr "Ключ голосування"
+
+msgid "Voting window"
+msgstr "Вікно голосування"
+
+msgid "Waiting for the camera…"
+msgstr "Очікування камери…"
+
+msgid "waiting for the masternodes to ChainLock the block"
+msgstr "очікування, поки мастерноди зафіксують блок через ChainLock"
+
+msgid "waiting for the masternodes to lock it"
+msgstr "очікування, поки мастерноди її заблокують"
+
+msgid "Waiting to be mined."
+msgstr "Очікує на видобуток."
+
+msgid "Watching for new transactions on this address."
+msgstr "Стежимо за новими транзакціями цієї адреси."
+
+msgid "What the evonodes report about the chain right now."
+msgstr "Що зараз повідомляють про ланцюг evonode."
+
+msgid "What you can search for"
+msgstr "Що можна шукати"
+
+msgid "When"
+msgstr "Коли"
+
+msgid "Where the value went"
+msgstr "Куди пішла вартість"
+
+msgid "Where this is"
+msgstr "Де це розташовано"
+
+msgid "Withdrawal index"
+msgstr "Індекс виведення"
+
+msgid "Yes"
+msgstr "Так"
+
+msgid "yesterday"
+msgstr "вчора"
+
+msgid "You"
+msgstr "Ви"
+
+msgid "Your browser"
+msgstr "Ваш браузер"

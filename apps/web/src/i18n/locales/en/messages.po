@@ -16,6 +16,16 @@ msgstr ""
 msgid "· change"
 msgstr "· change"
 
+msgid "“{query}” · Search"
+msgstr "“{query}” · Search"
+
+msgid "“{query}” isn’t something Radar can look up."
+msgstr "“{query}” isn’t something Radar can look up."
+
+#. placeholder {0}: description.join(' · ')
+msgid "“{query}” looks like {0}."
+msgstr "“{query}” looks like {0}."
+
 msgid "(opens in a new tab)"
 msgstr "(opens in a new tab)"
 
@@ -72,6 +82,19 @@ msgstr "{0} isn't answering"
 msgid "{0} isn't answering · showing data from {1}"
 msgstr "{0} isn't answering · showing data from {1}"
 
+#. placeholder {0}: formatInt(p.masternodes)
+msgid "{0} masternodes"
+msgstr "{0} masternodes"
+
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(points.length)
+msgid "{0} masternodes in {1} places"
+msgstr "{0} masternodes in {1} places"
+
+#. placeholder {0}: formatInt(top.masternodes)
+msgid "{0} masternodes, the most of any place"
+msgstr "{0} masternodes, the most of any place"
+
 #. placeholder {0}: formatInt(p.fundingThreshold)
 #. placeholder {1}: formatInt(totalVotes(p))
 msgid "{0} needed · {1} cast"
@@ -119,8 +142,15 @@ msgstr "{0} to other addresses"
 msgid "{0} tx"
 msgstr "{0} tx"
 
+#. placeholder {0}: secretNotice(secret).title
+msgid "{0}. Radar never sends it anywhere."
+msgstr "{0}. Radar never sends it anywhere."
+
 msgid "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
 msgstr "{arrived, plural, one {# new transaction since you opened this page} other {# new transactions since you opened this page}}"
+
+msgid "{base} ({detail})"
+msgstr "{base} ({detail})"
 
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocks behind the tip"
@@ -134,8 +164,29 @@ msgstr "{count, plural, one {# confirmation} other {# confirmations}}"
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 
+msgid "{d} d"
+msgstr "{d} d"
+
+msgid "{d} d {h} h"
+msgstr "{d} d {h} h"
+
 msgid "{feeRate} duffs a byte"
 msgstr "{feeRate} duffs a byte"
+
+msgid "{h} h"
+msgstr "{h} h"
+
+msgid "{h} h {m} min"
+msgstr "{h} h {m} min"
+
+msgid "{m} min"
+msgstr "{m} min"
+
+msgid "{n} h ago"
+msgstr "{n} h ago"
+
+msgid "{n} min ago"
+msgstr "{n} min ago"
 
 msgid "{n} more inputs"
 msgstr "{n} more inputs"
@@ -143,8 +194,36 @@ msgstr "{n} more inputs"
 msgid "{n} more outputs"
 msgstr "{n} more outputs"
 
+msgid "{n} s ago"
+msgstr "{n} s ago"
+
+msgid "{name} couldn’t be reached"
+msgstr "{name} couldn’t be reached"
+
+msgid "{name} is not available on this network"
+msgstr "{name} is not available on this network"
+
+msgid "{name} is rate limiting requests"
+msgstr "{name} is rate limiting requests"
+
+msgid "{name} returned an error"
+msgstr "{name} returned an error"
+
+msgid "{name} sent an answer that could not be read"
+msgstr "{name} sent an answer that could not be read"
+
+msgid "{name} took too long to answer"
+msgstr "{name} took too long to answer"
+
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+
+msgid "{s} s"
+msgstr "{s} s"
+
+#. placeholder {0}: health.lag.detail
+msgid "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
+msgstr "{what} come only from Hyphen, whose {name} index is behind the chain: {0}. Everything else on this page is from DAPI."
 
 msgid "% of supply"
 msgstr "% of supply"
@@ -170,8 +249,38 @@ msgstr "1 w"
 msgid "1 y"
 msgstr "1 y"
 
+msgid "a 40-character hash: a public-key hash"
+msgstr "a 40-character hash: a public-key hash"
+
+msgid "a 64-character hash: a block, transaction, ProTx or transition"
+msgstr "a 64-character hash: a block, transaction, ProTx or transition"
+
+msgid "a Core address"
+msgstr "a Core address"
+
 msgid "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
 msgstr "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
+
+msgid "a date: the Core blocks of that UTC day"
+msgstr "a date: the Core blocks of that UTC day"
+
+msgid "A guess"
+msgstr "A guess"
+
+msgid "A guess, not a result"
+msgstr "A guess, not a result"
+
+msgid "A guess: Radar has not checked that this name exists"
+msgstr "A guess: Radar has not checked that this name exists"
+
+msgid "a name"
+msgstr "a name"
+
+msgid "a number: a Core height, Platform height or epoch"
+msgstr "a number: a Core height, Platform height or epoch"
+
+msgid "a Platform address"
+msgstr "a Platform address"
 
 msgid "A quorum signals that masternodes are ready for a protocol upgrade."
 msgstr "A quorum signals that masternodes are ready for a protocol upgrade."
@@ -237,16 +346,26 @@ msgstr "Amounts"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 
+msgid "an ID: an identity, contract, token or document"
+msgstr "an ID: an identity, contract, token or document"
+
+msgid "an IP address: a masternode’s service address"
+msgstr "an IP address: a masternode’s service address"
+
 #. placeholder {0}: stamp.node
 msgid "Answered by {0}"
 msgstr "Answered by {0}"
 
-msgid "Arrives with the network pages. The census figures below are live."
-msgstr "Arrives with the network pages. The census figures below are live."
-
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
 msgstr "As of {0}"
+
+#. placeholder {0}: formatInt(spend.asOf)
+msgid "as of block {0}"
+msgstr "as of block {0}"
+
+msgid "Asking Hyphen."
+msgstr "Asking Hyphen."
 
 msgid "Asset lock"
 msgstr "Asset lock"
@@ -256,6 +375,9 @@ msgstr "Asset unlock"
 
 msgid "Asset unlocks root"
 msgstr "Asset unlocks root"
+
+msgid "at or before"
+msgstr "at or before"
 
 msgid "Back to Mainnet"
 msgstr "Back to Mainnet"
@@ -359,6 +481,9 @@ msgstr "ChainLock"
 msgid "ChainLock at {0}"
 msgstr "ChainLock at {0}"
 
+msgid "ChainLock reported by one node"
+msgstr "ChainLock reported by one node"
+
 msgid "ChainLock signature"
 msgstr "ChainLock signature"
 
@@ -385,6 +510,9 @@ msgstr "Charts"
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
+
+msgid "Checking every 30 s"
+msgstr "Checking every 30 s"
 
 msgid "Checking Hyphen…"
 msgstr "Checking Hyphen…"
@@ -416,6 +544,9 @@ msgstr "Code {reason}"
 msgid "Coinbase payload"
 msgstr "Coinbase payload"
 
+msgid "Coinbase tag says"
+msgstr "Coinbase tag says"
+
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase transactions pay none"
 
@@ -430,6 +561,9 @@ msgstr "Computed in your browser"
 
 msgid "Connecting to the live feed…"
 msgstr "Connecting to the live feed…"
+
+msgid "Connecting…"
+msgstr "Connecting…"
 
 msgid "Core"
 msgstr "Core"
@@ -451,18 +585,30 @@ msgstr "Core addresses, mempool, governance and block lists"
 msgid "Core block"
 msgstr "Core block"
 
-#. placeholder {0}: INT.format(block.height)
+#. placeholder {0}: formatInt(block.height)
 msgid "Core block {0}"
 msgstr "Core block {0}"
+
+msgid "Core block {label}"
+msgstr "Core block {label}"
 
 msgid "Core block height"
 msgstr "Core block height"
 
+msgid "Core block heights and hashes, transaction IDs and addresses"
+msgstr "Core block heights and hashes, transaction IDs and addresses"
+
 msgid "Core blocks"
 msgstr "Core blocks"
 
+msgid "Core blocks on {label}"
+msgstr "Core blocks on {label}"
+
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
+
+msgid "Core height"
+msgstr "Core height"
 
 msgid "Core tip"
 msgstr "Core tip"
@@ -473,7 +619,7 @@ msgstr "Core tip, blocks and transactions, straight from evonodes"
 msgid "Core transaction"
 msgstr "Core transaction"
 
-#. placeholder {0}: INT.format(height)
+#. placeholder {0}: formatInt(height)
 msgid "Core transaction in block {0}"
 msgstr "Core transaction in block {0}"
 
@@ -594,6 +740,9 @@ msgstr "Enter at least one DAPI address as host:port, one per line."
 msgid "Epoch {0} · {1} blocks in"
 msgstr "Epoch {0} · {1} blocks in"
 
+msgid "Epoch {label}"
+msgstr "Epoch {label}"
+
 msgid "Every source is answering."
 msgstr "Every source is answering."
 
@@ -624,6 +773,9 @@ msgstr "Figures computed on your device"
 msgid "Finality"
 msgstr "Finality"
 
+msgid "finding where…"
+msgstr "finding where…"
+
 #. placeholder {0}: formatInt(rows.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
@@ -635,11 +787,11 @@ msgstr "First and last seen"
 msgid "First seen"
 msgstr "First seen"
 
+msgid "first seen in the mempool"
+msgstr "first seen in the mempool"
+
 msgid "From"
 msgstr "From"
-
-msgid "From the coinbase tag"
-msgstr "From the coinbase tag"
 
 msgid "Funded"
 msgstr "Funded"
@@ -650,11 +802,17 @@ msgstr "Funding threshold"
 msgid "Getting tight"
 msgstr "Getting tight"
 
+msgid "Go to"
+msgstr "Go to"
+
 msgid "Governance"
 msgstr "Governance"
 
 msgid "Governance proposal"
 msgstr "Governance proposal"
+
+msgid "Guess"
+msgstr "Guess"
 
 msgid "Hard-fork signal"
 msgstr "Hard-fork signal"
@@ -683,6 +841,9 @@ msgstr "Height"
 
 msgid "Height when connected"
 msgstr "Height when connected"
+
+msgid "Height, hash, address, ProTx, IP, ID, name…"
+msgstr "Height, hash, address, ProTx, IP, ID, name…"
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -722,12 +883,38 @@ msgstr "Hyphen doesn’t index devnets."
 msgid "Hyphen has not seen this address on this network."
 msgstr "Hyphen has not seen this address on this network."
 
+msgid "Hyphen says it is spent but its history does not show which transaction spent it."
+msgstr "Hyphen says it is spent but its history does not show which transaction spent it."
+
+#. placeholder {0}: formatInt(spend.behind ?? 0)
+msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
+msgstr "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
+
 #. placeholder {0}: health.lag.detail
 msgid "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
 msgstr "Hyphen’s index is behind the chain: {0}. Figures on this page are as of that block."
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen's index is still being checked."
+
+msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
+msgstr "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
+
+msgid "Identity with this public-key hash"
+msgstr "Identity with this public-key hash"
+
+#. placeholder {0}: short(spend.by.txid)
+msgid "in {0}"
+msgstr "in {0}"
+
+msgid "in {n} h"
+msgstr "in {n} h"
+
+msgid "in {n} min"
+msgstr "in {n} min"
+
+msgid "in {n} s"
+msgstr "in {n} s"
 
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
@@ -757,6 +944,9 @@ msgstr "Indexed by Platform Explorer"
 msgid "Indexed by Platform Explorer · checking…"
 msgstr "Indexed by Platform Explorer · checking…"
 
+msgid "Indexed by Platform Explorer · proofs unavailable"
+msgstr "Indexed by Platform Explorer · proofs unavailable"
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 
@@ -777,6 +967,12 @@ msgstr "Inputs hash"
 
 msgid "InstantSend"
 msgstr "InstantSend"
+
+msgid "InstantSend lock"
+msgstr "InstantSend lock"
+
+msgid "InstantSend lock reported by one node"
+msgstr "InstantSend lock reported by one node"
 
 msgid "InstantSend locked"
 msgstr "InstantSend locked"
@@ -873,6 +1069,9 @@ msgstr "Live updates have stopped."
 msgid "Live updates have stopped. The chain shown is as of {since}."
 msgstr "Live updates have stopped. The chain shown is as of {since}."
 
+msgid "Live updates have stopped. The last update arrived at {since}."
+msgstr "Live updates have stopped. The last update arrived at {since}."
+
 #. placeholder {0}: formatInt(inCount)
 msgid "Load all {0} inputs"
 msgstr "Load all {0} inputs"
@@ -893,8 +1092,15 @@ msgstr "Locked to Core block {0}"
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Locks Dash on Core to create credits on Platform."
 
+#. placeholder {0}: description.join(' · ')
+msgid "Looks like {0}"
+msgstr "Looks like {0}"
+
 msgid "mainnet"
 msgstr "mainnet"
+
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
+msgstr "Map of the world with a disc for each place Radar found masternodes. {summary}."
 
 msgid "Masternode"
 msgstr "Masternode"
@@ -926,6 +1132,13 @@ msgstr "Masternodes"
 
 msgid "Masternodes answering"
 msgstr "Masternodes answering"
+
+#. placeholder {0}: c.normalized
+msgid "Masternodes at {0}"
+msgstr "Masternodes at {0}"
+
+msgid "Masternodes by ProTx hash or IP address"
+msgstr "Masternodes by ProTx hash or IP address"
 
 msgid "Masternodes by status"
 msgstr "Masternodes by status"
@@ -979,6 +1192,9 @@ msgstr "Move through table rows"
 msgid "Moved"
 msgstr "Moved"
 
+msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
+msgstr "Names ending in .dash, epochs and dates (the Core blocks of a day)"
+
 msgid "Net value"
 msgstr "Net value"
 
@@ -1000,6 +1216,9 @@ msgstr "Network internals: peers, mempool pressure, versions and history"
 msgid "Network pulse"
 msgstr "Network pulse"
 
+msgid "New blocks reach this page as they happen."
+msgstr "New blocks reach this page as they happen."
+
 msgid "New operator key"
 msgstr "New operator key"
 
@@ -1011,6 +1230,9 @@ msgstr "New rows appear at the top."
 
 msgid "New service address"
 msgstr "New service address"
+
+msgid "New transaction"
+msgstr "New transaction"
 
 msgid "New voting key"
 msgstr "New voting key"
@@ -1060,6 +1282,12 @@ msgstr "No devnets saved."
 msgid "No InstantSend lock was seen"
 msgstr "No InstantSend lock was seen"
 
+msgid "No known pool"
+msgstr "No known pool"
+
+msgid "No match for “{query}” as a Core record on {network}"
+msgstr "No match for “{query}” as a Core record on {network}"
+
 msgid "No proposal with this hash on this network."
 msgstr "No proposal with this hash on this network."
 
@@ -1068,6 +1296,12 @@ msgstr "No proposals on this network."
 
 msgid "No QR code found in that picture."
 msgstr "No QR code found in that picture."
+
+msgid "No source can say whether this output is spent."
+msgstr "No source can say whether this output is spent."
+
+msgid "No source keeps when a transaction first arrived once it is mined."
+msgstr "No source keeps when a transaction first arrived once it is mined."
 
 msgid "No tag in the coinbase"
 msgstr "No tag in the coinbase"
@@ -1089,9 +1323,6 @@ msgstr "No unspent outputs."
 
 msgid "No votes recorded for this proposal."
 msgstr "No votes recorded for this proposal."
-
-msgid "Node map"
-msgstr "Node map"
 
 msgid "Node sync"
 msgstr "Node sync"
@@ -1127,6 +1358,9 @@ msgstr "Not in this version"
 msgid "Not loaded"
 msgstr "Not loaded"
 
+msgid "Not mined yet"
+msgstr "Not mined yet"
+
 msgid "Not offered"
 msgstr "Not offered"
 
@@ -1135,6 +1369,9 @@ msgstr "Not passing"
 
 msgid "Not seen yet"
 msgstr "Not seen yet"
+
+msgid "Nothing above confirms this. It is only one way to read what you typed."
+msgstr "Nothing above confirms this. It is only one way to read what you typed."
 
 msgid "Nothing has asked it yet on this network."
 msgstr "Nothing has asked it yet on this network."
@@ -1151,6 +1388,9 @@ msgstr "Open"
 msgid "Open it on {name}"
 msgstr "Open it on {name}"
 
+msgid "Open on {where}"
+msgstr "Open on {where}"
+
 msgid "Open proposals by what their payment would be"
 msgstr "Open proposals by what their payment would be"
 
@@ -1165,6 +1405,9 @@ msgstr "Open the result, or all results"
 
 msgid "Open the selected table row"
 msgstr "Open the selected table row"
+
+msgid "Opening the live connection."
+msgstr "Opening the live connection."
 
 msgid "Operator payout"
 msgstr "Operator payout"
@@ -1184,6 +1427,9 @@ msgstr "optional"
 msgid "or"
 msgstr "or"
 
+msgid "Other reachable nodes"
+msgstr "Other reachable nodes"
+
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 
@@ -1196,6 +1442,10 @@ msgstr "Output"
 #. placeholder {0}: num(collateral?.vout) ?? 0
 msgid "Output {0} of this transaction"
 msgstr "Output {0} of this transaction"
+
+#. placeholder {0}: spend.by.vin
+msgid "Output {index} is spent by input {0} of this transaction"
+msgstr "Output {index} is spent by input {0} of this transaction"
 
 msgid "Output this input spends"
 msgstr "Output this input spends"
@@ -1216,6 +1466,9 @@ msgstr "P2P {0}, HTTPS {1}"
 
 msgid "Page not found"
 msgstr "Page not found"
+
+msgid "Pages"
+msgstr "Pages"
 
 msgid "Paid to"
 msgstr "Paid to"
@@ -1259,11 +1512,26 @@ msgstr "Pending transactions, newest first"
 msgid "Picture"
 msgstr "Picture"
 
+msgid "Places with the most masternodes"
+msgstr "Places with the most masternodes"
+
 msgid "Platform"
 msgstr "Platform"
 
+msgid "Platform address"
+msgstr "Platform address"
+
+msgid "Platform block {label}"
+msgstr "Platform block {label}"
+
 msgid "Platform block height"
 msgstr "Platform block height"
+
+msgid "Platform blocks, state transitions and Platform addresses"
+msgstr "Platform blocks, state transitions and Platform addresses"
+
+msgid "Platform epoch"
+msgstr "Platform epoch"
 
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
@@ -1276,6 +1544,9 @@ msgstr "Platform Explorer doesn't index devnets."
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer isn't answering"
+
+msgid "Platform height"
+msgstr "Platform height"
 
 msgid "Platform lists and counts"
 msgstr "Platform lists and counts"
@@ -1368,6 +1639,9 @@ msgstr "Radar"
 msgid "Radar API"
 msgstr "Radar API"
 
+msgid "Radar checked every source that can answer this kind of input."
+msgstr "Radar checked every source that can answer this kind of input."
+
 msgid "Radar crawler"
 msgstr "Radar crawler"
 
@@ -1377,11 +1651,26 @@ msgstr "Radar didn’t keep it, show it or search for it. Radar never needs a ke
 msgid "Radar doesn't crawl devnets"
 msgstr "Radar doesn't crawl devnets"
 
+msgid "Radar doesn't crawl devnets, so there is nothing to map."
+msgstr "Radar doesn't crawl devnets, so there is nothing to map."
+
+msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
+msgstr "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
+
+msgid "Radar isn't answering, so the map shows no nodes."
+msgstr "Radar isn't answering, so the map shows no nodes."
+
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 
 msgid "Radar looks up addresses, blocks, transactions, names, masternodes and the like."
 msgstr "Radar looks up addresses, blocks, transactions, names, masternodes and the like."
+
+msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
+msgstr "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
+
+msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
+msgstr "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 
 msgid "Radar shows this payload type as raw data."
 msgstr "Radar shows this payload type as raw data."
@@ -1416,6 +1705,9 @@ msgstr "Reason"
 msgid "Received"
 msgstr "Received"
 
+msgid "Reconnecting…"
+msgstr "Reconnecting…"
+
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "Records that a quorum finished its key generation and who signed."
 
@@ -1438,6 +1730,12 @@ msgstr "Remove"
 msgid "Remove {devnet}"
 msgstr "Remove {devnet}"
 
+msgid "reported by one node; no second source has confirmed it"
+msgstr "reported by one node; no second source has confirmed it"
+
+msgid "reported by one node; waiting for a second source to agree"
+msgstr "reported by one node; waiting for a second source to agree"
+
 msgid "Requested"
 msgstr "Requested"
 
@@ -1455,6 +1753,9 @@ msgstr "Requests in the last minute"
 
 msgid "Result"
 msgstr "Result"
+
+msgid "Results"
+msgstr "Results"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
@@ -1478,8 +1779,12 @@ msgid "Search"
 msgstr "Search"
 
 #. placeholder {0}: networkName(other)
+#. placeholder {0}: networkName(otherNetwork(net))
 msgid "Search {0}"
 msgstr "Search {0}"
+
+msgid "Search blocks, transactions, masternodes, names…"
+msgstr "Search blocks, transactions, masternodes, names…"
 
 msgid "Search blocks, txs, masternodes, names"
 msgstr "Search blocks, txs, masternodes, names"
@@ -1490,8 +1795,17 @@ msgstr "Search Radar"
 msgid "Search Radar (⌘K on a Mac)"
 msgstr "Search Radar (⌘K on a Mac)"
 
-msgid "Seen"
-msgstr "Seen"
+msgid "Searching…"
+msgstr "Searching…"
+
+msgid "See all results for “{trimmed}”"
+msgstr "See all results for “{trimmed}”"
+
+msgid "See all results for “{trimmed}” on {net}"
+msgstr "See all results for “{trimmed}” on {net}"
+
+msgid "See unconfirmed activity"
+msgstr "See unconfirmed activity"
 
 msgid "Sent"
 msgstr "Sent"
@@ -1582,6 +1896,10 @@ msgstr "Some sources are slow or behind. The rest still work."
 msgid "Some sources aren’t answering. The rest still work."
 msgstr "Some sources aren’t answering. The rest still work."
 
+#. placeholder {0}: failed.map((f) => f.id).join(', ')
+msgid "Some sources didn’t answer: {0}."
+msgstr "Some sources didn’t answer: {0}."
+
 msgid "Sources"
 msgstr "Sources"
 
@@ -1598,11 +1916,17 @@ msgstr "Spendable outputs"
 msgid "Spendable outputs over the last {0} blocks"
 msgstr "Spendable outputs over the last {0} blocks"
 
+msgid "spender not found"
+msgstr "spender not found"
+
 msgid "Spends"
 msgstr "Spends"
 
 msgid "Spent"
 msgstr "Spent"
+
+msgid "Spent and unspent states"
+msgstr "Spent and unspent states"
 
 msgid "State"
 msgstr "State"
@@ -1612,6 +1936,12 @@ msgstr "Status"
 
 msgid "Stop the camera"
 msgstr "Stop the camera"
+
+msgid "Stopped"
+msgstr "Stopped"
+
+msgid "Stopped since {since}"
+msgstr "Stopped since {since}"
 
 msgid "Summary"
 msgstr "Summary"
@@ -1628,6 +1958,9 @@ msgstr "Switch to testnet"
 msgid "Synced"
 msgstr "Synced"
 
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "Tag: {tag}. The miner writes it, so it is not proof."
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Test coins have no value, so Testnet and devnets never show USD."
 
@@ -1637,6 +1970,12 @@ msgstr "testnet"
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 
+msgid "text: a contract or token name"
+msgstr "text: a contract or token name"
+
+msgid "That could be part of a recovery phrase"
+msgstr "That could be part of a recovery phrase"
+
 msgid "That isn’t a Dash address Radar can check."
 msgstr "That isn’t a Dash address Radar can check."
 
@@ -1645,6 +1984,9 @@ msgstr "That isn’t a Dash address."
 
 msgid "That isn’t a Dash signature."
 msgstr "That isn’t a Dash signature."
+
+msgid "That looks like a private key or recovery phrase"
+msgstr "That looks like a private key or recovery phrase"
 
 msgid "That picture couldn’t be read."
 msgstr "That picture couldn’t be read."
@@ -1679,14 +2021,20 @@ msgstr "The largest Core balances, ranked."
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 
+msgid "The live connection dropped. Radar is opening it again."
+msgstr "The live connection dropped. Radar is opening it again."
+
+msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
+msgstr "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
+
 msgid "The masternode census and network history"
 msgstr "The masternode census and network history"
 
 msgid "The median answer takes {seconds} s."
 msgstr "The median answer takes {seconds} s."
 
-msgid "The node map is not loaded yet"
-msgstr "The node map is not loaded yet"
+msgid "The node map"
+msgstr "The node map"
 
 msgid "The operator announces a new network address for a masternode."
 msgstr "The operator announces a new network address for a masternode."
@@ -1696,6 +2044,9 @@ msgstr "The operator ends a masternode's service; it must be registered again to
 
 msgid "The owner changes a masternode's operator key, voting key or payout."
 msgstr "The owner changes a masternode's operator key, voting key or payout."
+
+msgid "The Platform SDK"
+msgstr "The Platform SDK"
 
 msgid "The price feed"
 msgstr "The price feed"
@@ -1709,6 +2060,9 @@ msgstr "The quorum list URL must start with https://."
 msgid "The request budget is nearly used."
 msgstr "The request budget is nearly used."
 
+msgid "The request was cancelled"
+msgstr "The request was cancelled"
+
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "The shareholders change a shared masternode's operator key or voting key."
 
@@ -1720,6 +2074,9 @@ msgstr "The signature is well formed, but it was made by a different key. It mat
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
+
+msgid "The transaction is not in a block yet."
+msgstr "The transaction is not in a block yet."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "The USD rate, through Platform Explorer"
@@ -1754,11 +2111,23 @@ msgstr "This browser"
 msgid "This is a {name} address."
 msgstr "This is a {name} address."
 
+msgid "This is a mainnet address"
+msgstr "This is a mainnet address"
+
 msgid "This is a mainnet address."
 msgstr "This is a mainnet address."
 
+msgid "This is a mainnet Platform address"
+msgstr "This is a mainnet Platform address"
+
+msgid "This is a testnet address"
+msgstr "This is a testnet address"
+
 msgid "This is a testnet address."
 msgstr "This is a testnet address."
+
+msgid "This is a testnet Platform address"
+msgstr "This is a testnet Platform address"
 
 msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
 msgstr "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
@@ -1881,8 +2250,14 @@ msgstr "Unconfirmed activity"
 msgid "Unit for DASH amounts"
 msgstr "Unit for DASH amounts"
 
-msgid "Unknown pool"
-msgstr "Unknown pool"
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Unknown: index behind"
+msgstr "Unknown: index behind"
+
+msgid "Unspendable"
+msgstr "Unspendable"
 
 msgid "Unspendable outputs"
 msgstr "Unspendable outputs"
@@ -1913,6 +2288,9 @@ msgstr "Use the camera"
 
 msgid "Used up for now"
 msgstr "Used up for now"
+
+msgid "UTC day"
+msgstr "UTC day"
 
 msgid "Valid"
 msgstr "Valid"
@@ -1987,6 +2365,9 @@ msgstr "Watching for new transactions on this address."
 msgid "What the evonodes report about the chain right now."
 msgstr "What the evonodes report about the chain right now."
 
+msgid "What you can search for"
+msgstr "What you can search for"
+
 msgid "When"
 msgstr "When"
 
@@ -2001,6 +2382,9 @@ msgstr "Withdrawal index"
 
 msgid "Yes"
 msgstr "Yes"
+
+msgid "yesterday"
+msgstr "yesterday"
 
 msgid "You"
 msgstr "You"
