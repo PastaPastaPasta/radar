@@ -8,12 +8,14 @@ import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { readUtcPreference } from '@/lib/format'
 import {
   DISPLAY_UNITS,
+  DUFFS_PER_DASH,
+  formatFiat,
   getUnitPrefs,
   subscribeUnitPrefs,
   unitLabel,
   writeFiatPreference,
   writeUnitPreference,
-  type DisplayUnit,
+  type UnitChoice,
 } from '@/lib/units'
 import { Amount, Card, SegFilter, SourceLine } from '@/ui'
 import { DevnetSection, type SettingsDevnets } from './DevnetSection'
@@ -27,7 +29,10 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const prefs = useSyncExternalStore(subscribeUnitPrefs, getUnitPrefs, getUnitPrefs)
   const [utc, setUtc] = useState(readUtcPreference)
   const mainnet = net === 'mainnet'
-  const rate = useQuery({ ...rateQueries.usd(), enabled: mainnet && prefs.fiat })
+  const usdPrimary = mainnet && prefs.unit === 'USD'
+  const showsRate = mainnet && (prefs.fiat || usdPrimary)
+  const rate = useQuery({ ...rateQueries.usd(), enabled: showsRate })
+  const unit = prefs.unit === 'USD' && !mainnet ? 'DASH' : prefs.unit
 
   useDocumentTitle(t`Settings`)
 
@@ -47,11 +52,19 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
         <div className="grid gap-5">
           <div className="grid gap-2">
             <SegFilter
-              label={t`Unit for DASH amounts`}
-              value={prefs.unit}
-              onChange={(unit) => writeUnitPreference(unit as DisplayUnit)}
-              options={DISPLAY_UNITS.map((u) => ({ id: u, label: unitLabel(u) }))}
+              label={t`Unit for amounts`}
+              value={unit}
+              onChange={(next) => writeUnitPreference(next as UnitChoice)}
+              options={[
+                ...DISPLAY_UNITS.map((u) => ({ id: u, label: unitLabel(u) })),
+                { id: 'USD', label: 'USD', disabled: !mainnet },
+              ]}
             />
+            <p className="text-[var(--dh-ink-2)]">
+              {mainnet
+                ? t`USD leads Dash amounts and shows the DASH figure after it, once the rate is in.`
+                : t`USD is for mainnet only: test coins have no value.`}
+            </p>
             <p className="text-[var(--dh-ink-2)]">
               {t`Example`}: <Amount value={SAMPLE_DUFFS} kind="duffs" fiat />
             </p>
@@ -62,6 +75,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               <input
                 type="checkbox"
                 checked={prefs.fiat}
+                disabled={usdPrimary}
                 onChange={(e) => writeFiatPreference(e.target.checked)}
               />
               {t`Show the USD value next to DASH amounts`}
@@ -71,7 +85,14 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
                 ? t`USD is rounded to three significant figures and always follows the DASH figure.`
                 : t`Test coins have no value, so Testnet and devnets never show USD.`}
             </p>
-            {mainnet && prefs.fiat && rate.data ? <SourceLine stamp={stampOf(rate.data)} /> : null}
+            {showsRate && rate.data ? (
+              <p className="flex flex-wrap items-center gap-x-3 text-[var(--dh-ink-2)]">
+                <span data-rate-note>
+                  {t`Rate: ${formatFiat(DUFFS_PER_DASH, rate.data.data.usd)} per DASH, from ${rate.data.data.provider}.`}
+                </span>
+                <SourceLine stamp={stampOf(rate.data)} />
+              </p>
+            ) : null}
           </div>
         </div>
       </Card>

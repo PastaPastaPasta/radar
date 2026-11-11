@@ -33,22 +33,38 @@ export function Amount({
     density,
   })
   const duffs = kind === 'duffs' ? value : kind === 'credits' ? value / 1000n : undefined
-  const showFiat = fiat && !units.testnet && units.usdPerDash !== undefined && duffs !== undefined
-  return (
-    <span
-      className={cx('rx-amt', 'rx-num', signed && a.sign === '+' && 'rx-amt--pos')}
-      data-amount={value.toString()}
-      title={kind === 'credits' ? t`${formatInt(value)} credits` : undefined}
-    >
+  const rate = !units.testnet && duffs !== undefined ? units.usdPerDash : undefined
+  const usdFirst = rate !== undefined && units.usdPrimary === true
+  const dash = (
+    <>
       {a.sign}
       {a.int}
       {a.frac}
       {a.dim ? <span className="rx-d2">{a.dim}</span> : null}
       {a.suffix}
       {a.unit ? <span className="rx-u">{a.unit}</span> : null}
-      {showFiat && units.usdPerDash !== undefined && duffs !== undefined ? (
-        <span className="rx-fiat"> {formatFiat(duffs, units.usdPerDash)}</span>
-      ) : null}
+    </>
+  )
+  return (
+    <span
+      className={cx('rx-amt', 'rx-num', signed && a.sign === '+' && 'rx-amt--pos')}
+      data-amount={value.toString()}
+      data-usd={usdFirst ? '' : undefined}
+      title={kind === 'credits' ? t`${formatInt(value)} credits` : undefined}
+    >
+      {usdFirst && rate !== undefined && duffs !== undefined ? (
+        <>
+          {formatFiat(duffs, rate, signed)}
+          <span className="rx-fiat">({dash})</span>
+        </>
+      ) : (
+        <>
+          {dash}
+          {fiat && rate !== undefined && duffs !== undefined ? (
+            <span className="rx-fiat"> {formatFiat(duffs, rate)}</span>
+          ) : null}
+        </>
+      )}
     </span>
   )
 }

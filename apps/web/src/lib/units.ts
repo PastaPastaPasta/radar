@@ -15,8 +15,17 @@ const UNIT_KEY = 'radar.unit'
 const FIAT_KEY = 'radar.fiat'
 export const DISPLAY_UNITS: readonly DisplayUnit[] = ['DASH', 'mDASH', 'uDASH', 'duffs']
 
+/** What the reader picks as the primary unit: a Dash denomination, or USD (mainnet only; DASH then follows it). */
+export type UnitChoice = DisplayUnit | 'USD'
+export const UNIT_CHOICES: readonly UnitChoice[] = [...DISPLAY_UNITS, 'USD']
+
+/** The Dash denomination to draw DASH figures in: DASH itself when USD is the primary unit. */
+export function denomination(choice: UnitChoice): DisplayUnit {
+  return choice === 'USD' ? 'DASH' : choice
+}
+
 export interface UnitPrefs {
-  unit: DisplayUnit
+  unit: UnitChoice
   /** Show the USD value after DASH figures that ask for it (mainnet only). */
   fiat: boolean
 }
@@ -37,9 +46,9 @@ function writeKey(key: string, value: string): void {
   }
 }
 
-export function readUnitPreference(): DisplayUnit {
+export function readUnitPreference(): UnitChoice {
   const stored = readKey(UNIT_KEY)
-  return DISPLAY_UNITS.find((u) => u === stored) ?? 'DASH'
+  return UNIT_CHOICES.find((u) => u === stored) ?? 'DASH'
 }
 
 export function readFiatPreference(): boolean {
@@ -61,7 +70,7 @@ function emitPrefs(): void {
   for (const cb of [...prefListeners]) cb()
 }
 
-export function writeUnitPreference(unit: DisplayUnit): void {
+export function writeUnitPreference(unit: UnitChoice): void {
   writeKey(UNIT_KEY, unit)
   emitPrefs()
 }
@@ -272,7 +281,7 @@ function roundSignificant(n: bigint, scale: number, sig: number): { value: bigin
 const RATE_PRECISION = 1_000_000
 
 /** USD for an amount of duffs at `usdPerDash`, to three significant figures, e.g. "≈ $2,310". */
-export function formatFiat(duffs: bigint, usdPerDash: number): string {
+export function formatFiat(duffs: bigint, usdPerDash: number, signed = false): string {
   if (!Number.isFinite(usdPerDash) || usdPerDash < 0) return ''
   const rateMicro = BigInt(Math.round(usdPerDash * RATE_PRECISION))
   const abs = duffs < 0n ? -duffs : duffs
@@ -290,6 +299,6 @@ export function formatFiat(duffs: bigint, usdPerDash: number): string {
     frac = ''
   }
   if (duffs !== 0n && rounded.value === 0n) return '< $0.000001'
-  const sign = duffs < 0n && rounded.value > 0n ? MINUS : ''
+  const sign = rounded.value === 0n ? '' : duffs < 0n ? MINUS : signed ? '+' : ''
   return `≈ ${sign}$${groupDigits(int)}${rounded.scale > 0 ? trimmedFraction(frac) : ''}`
 }

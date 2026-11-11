@@ -175,6 +175,38 @@ describe('Amount', () => {
     expect(container.querySelector('.rx-amt')).toHaveTextContent('+1tDASH')
   })
 
+  it('leads with USD and follows with the DASH figure when USD is the primary unit @IN-12', () => {
+    const { container, rerender } = render(
+      <UnitsProvider value={{ unit: 'DASH', usdPerDash: 46.2, usdPrimary: true, testnet: false }}>
+        <Amount value={5_000_607_499n} kind="duffs" />
+        <Amount value={-100_000_000n} kind="duffs" />
+        <Amount value={100_000_000n} kind="duffs" signed />
+      </UnitsProvider>,
+    )
+    const [a, b, c] = Array.from(container.querySelectorAll('.rx-amt'))
+    expect(a).toHaveTextContent('≈ $2,310(50.0061DASH)')
+    expect(a).toHaveAttribute('data-usd')
+    expect(a?.querySelector('.rx-fiat')).toHaveTextContent('(50.0061DASH)')
+    expect(b).toHaveTextContent('≈ −$46.2(−1DASH)')
+    expect(c).toHaveTextContent('≈ +$46.2(+1DASH)')
+    expect(a).toHaveAttribute('data-amount', '5000607499')
+
+    rerender(
+      <UnitsProvider value={{ unit: 'DASH', usdPerDash: 46.2, usdPrimary: true, testnet: true }}>
+        <Amount value={100_000_000n} kind="duffs" />
+      </UnitsProvider>,
+    )
+    expect(container.querySelector('.rx-amt')).toHaveTextContent('1tDASH')
+    expect(container.querySelector('.rx-amt')).not.toHaveTextContent('$')
+
+    rerender(
+      <UnitsProvider value={{ unit: 'DASH', testnet: false, usdPrimary: false }}>
+        <Amount value={100_000_000n} kind="duffs" />
+      </UnitsProvider>,
+    )
+    expect(container.querySelector('.rx-amt')).toHaveTextContent('1DASH')
+  })
+
   it('follows the unit preference unless a unit is given', () => {
     render(
       <UnitsProvider value={{ unit: 'mDASH', testnet: false }}>

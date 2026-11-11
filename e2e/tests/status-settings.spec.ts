@@ -86,7 +86,7 @@ test.describe('units and fiat', () => {
   }) => {
     await page.goto('/settings')
     await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible()
-    const group = page.getByRole('group', { name: 'Unit for DASH amounts' })
+    const group = page.getByRole('group', { name: 'Unit for amounts' })
     const example = page.locator('#units').getByText(/Example/)
 
     for (const [unit, shown] of [
@@ -107,6 +107,53 @@ test.describe('units and fiat', () => {
     await page.reload()
     await expect(page.locator('#units').getByText(/Example/)).toHaveText(/123,456,789\s*duffs/)
     await expectAccessible(page)
+  })
+
+  test('USD can be the primary unit on mainnet, with DASH after it, and is remembered @IN-12', async ({
+    page,
+  }) => {
+    await page.goto('/settings')
+    const group = page.getByRole('group', { name: 'Unit for amounts' })
+    const example = page.locator('#units').getByText(/Example/)
+    await group.getByRole('button', { name: 'USD', exact: true }).click()
+    await expect(group.getByRole('button', { name: 'USD', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await expect(example).toHaveText(/≈ \$[\d,.]+\s*\(1\.2346\s*DASH\)/)
+    await expect(page.locator('[data-rate-note]').first()).toContainText(
+      /Rate: ≈ \$[\d,.]+ per DASH/,
+    )
+
+    await page.reload()
+    await expect(group.getByRole('button', { name: 'USD', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await expect(example).toHaveText(/≈ \$[\d,.]+\s*\(1\.2346\s*DASH\)/)
+
+    await page.goto('/blocks')
+    const note = page.locator('footer, dashhq-footer').locator('[data-rate-note]')
+    await expect(note).toContainText(/USD at ≈ \$[\d,.]+ per DASH, from /)
+    await expect(note).toContainText('Price via Platform Explorer')
+  })
+
+  test('USD is not offered on testnet, which shows DASH there @IN-12 @IN-16', async ({ page }) => {
+    await page.goto('/settings')
+    await page
+      .getByRole('group', { name: 'Unit for amounts' })
+      .getByRole('button', { name: 'USD' })
+      .click()
+
+    await page.goto('/settings?network=testnet')
+    const group = page.getByRole('group', { name: 'Unit for amounts' })
+    await expect(group.getByRole('button', { name: 'USD' })).toBeDisabled()
+    await expect(group.getByRole('button', { name: 'DASH', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await expect(page.locator('#units').getByText(/Example/)).not.toContainText('$')
+    await expect(page.locator('[data-rate-note]')).toHaveCount(0)
   })
 
   test('fiat is a choice on mainnet and absent on testnet @IN-12 @HY-17', async ({ page }) => {

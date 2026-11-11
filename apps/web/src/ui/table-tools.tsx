@@ -11,7 +11,7 @@ export function TableTools({ children }: { children: ReactNode }) {
 
 export interface SegFilterProps {
   label: string
-  options: { id: string; label: ReactNode; count?: number }[]
+  options: { id: string; label: ReactNode; count?: number; disabled?: boolean }[]
   value: string
   onChange: (id: string) => void
 }
@@ -24,6 +24,7 @@ export function SegFilter({ label, options, value, onChange }: SegFilterProps) {
           key={o.id}
           type="button"
           aria-pressed={o.id === value}
+          disabled={o.disabled}
           onClick={() => {
             onChange(o.id)
           }}

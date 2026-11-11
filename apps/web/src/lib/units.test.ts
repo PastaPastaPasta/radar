@@ -8,6 +8,7 @@ import {
   subscribeUnitPrefs,
   writeFiatPreference,
   formatAmountText,
+  denomination,
   formatFiat,
   readUnitPreference,
   unitLabel,
@@ -271,5 +272,27 @@ describe('formatFiat edge cases', () => {
 
   it('refuses a negative rate', () => {
     expect(formatFiat(1_000_000n, -1)).toBe('')
+  })
+})
+
+describe('USD as the primary unit @IN-12', () => {
+  it('is remembered next to the Dash denominations and read back', () => {
+    writeUnitPreference('USD')
+    expect(localStorage.getItem('radar.unit')).toBe('USD')
+    expect(readUnitPreference()).toBe('USD')
+    expect(getUnitPrefs().unit).toBe('USD')
+    localStorage.removeItem('radar.unit')
+  })
+
+  it('draws DASH figures in DASH when USD leads', () => {
+    expect(denomination('USD')).toBe('DASH')
+    expect(denomination('mDASH')).toBe('mDASH')
+  })
+
+  it('signs a USD figure and keeps three significant figures', () => {
+    expect(formatFiat(100_000_000n, 46.2, true)).toBe('≈ +$46.2')
+    expect(formatFiat(-100_000_000n, 46.2, true)).toBe('≈ −$46.2')
+    expect(formatFiat(0n, 46.2, true)).toBe('≈ $0')
+    expect(formatFiat(5_000_607_499n, 46.2, true)).toBe('≈ +$2,310')
   })
 })

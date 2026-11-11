@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react/macro'
 import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { PageLink } from '@/features/search'
 import { DashhqFooter } from './elements'
+import { RateNote } from './RateNote'
 import { useShortcuts } from './shortcuts'
 
 const LINKS = [
@@ -20,6 +21,7 @@ export function ShellFooter() {
   const shortcuts = useShortcuts()
   return (
     <DashhqFooter product="radar" source="https://github.com/PastaPastaPasta/radar">
+      <RateNote />
       {LINKS.map((l) => (
         <PageLink key={l.to} to={l.to}>
           {i18n._(l.label)}

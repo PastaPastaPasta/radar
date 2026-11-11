@@ -17,15 +17,15 @@ afterEach(() => {
 })
 
 describe('Settings', () => {
-  it('lists the four units and shows the example in the chosen one', async () => {
+  it('lists the units and shows the example in the chosen one @IN-12', async () => {
     const user = userEvent.setup()
     renderAt('/settings')
-    const group = await screen.findByRole('group', { name: 'Unit for DASH amounts' })
+    const group = await screen.findByRole('group', { name: 'Unit for amounts' })
     expect(
       within(group)
         .getAllByRole('button')
         .map((b) => b.textContent),
-    ).toEqual(['DASH', 'mDASH', 'µDASH', 'duffs'])
+    ).toEqual(['DASH', 'mDASH', 'µDASH', 'duffs', 'USD'])
     expect(await screen.findByText(/1\.2346/)).toBeInTheDocument()
 
     await user.click(within(group).getByRole('button', { name: 'duffs' }))
@@ -38,11 +38,11 @@ describe('Settings', () => {
     )
   })
 
-  it('remembers the unit and the USD choice after a reload', async () => {
+  it('remembers the unit and the USD choice after a reload @IN-12', async () => {
     localStorage.setItem('radar.unit', 'mDASH')
     localStorage.setItem('radar.fiat', '0')
     renderAt('/settings')
-    const group = await screen.findByRole('group', { name: 'Unit for DASH amounts' })
+    const group = await screen.findByRole('group', { name: 'Unit for amounts' })
     expect(within(group).getByRole('button', { name: 'mDASH' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -53,11 +53,47 @@ describe('Settings', () => {
   it('shows the USD figure on mainnet from the rate and hides it on testnet', async () => {
     const user = userEvent.setup()
     renderAt('/settings')
-    expect(await screen.findByText(/≈ \$/)).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText(/Example/)).toHaveTextContent(/≈ \$/))
 
     await user.click(screen.getByRole('checkbox', { name: /USD value/ }))
     expect(localStorage.getItem('radar.fiat')).toBe('0')
     await waitFor(() => expect(screen.queryByText(/≈ \$/)).toBeNull())
+  })
+
+  it('makes USD the primary unit on mainnet and says the rate’s source and age @IN-12', async () => {
+    const user = userEvent.setup()
+    renderAt('/settings')
+    const group = await screen.findByRole('group', { name: 'Unit for amounts' })
+    await user.click(within(group).getByRole('button', { name: 'USD' }))
+
+    expect(localStorage.getItem('radar.unit')).toBe('USD')
+    expect(within(group).getByRole('button', { name: 'USD' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(await screen.findByText(/Example/)).toHaveTextContent(/≈ \$[\d,.]+\(1\.2346DASH\)/)
+    const note = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#units [data-rate-note]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(note).toHaveTextContent(/Rate: ≈ \$[\d,.]+ per DASH, from /)
+    expect(note.parentElement).toHaveTextContent(/Price via Platform Explorer/)
+    expect(screen.getByRole('checkbox', { name: /USD value/ })).toBeDisabled()
+  })
+
+  it('offers no USD on testnet and keeps the choice for mainnet @IN-12 @IN-16', async () => {
+    localStorage.setItem('radar.unit', 'USD')
+    renderAt('/settings?network=testnet')
+    const group = await screen.findByRole('group', { name: 'Unit for amounts' })
+    expect(within(group).getByRole('button', { name: 'USD' })).toBeDisabled()
+    expect(within(group).getByRole('button', { name: 'DASH' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByText(/USD is for mainnet only/)).toBeInTheDocument()
+    expect(screen.queryByText(/≈ \$/)).toBeNull()
+    expect(localStorage.getItem('radar.unit')).toBe('USD')
   })
 
   it('never shows USD on testnet', async () => {
