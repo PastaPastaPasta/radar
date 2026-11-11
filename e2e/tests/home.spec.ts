@@ -71,7 +71,7 @@ test.describe('Home', () => {
   test('opens a block from search by height @IN-10', async ({ page }) => {
     await page.goto('/')
     await page.locator('[data-palette-trigger]:visible').first().click()
-    await page.getByRole('combobox').fill('2570085')
+    await page.locator('[data-palette] input').fill('2570085')
     await page
       .getByRole('option', { name: /Core block 2,570,085/ })
       .first()

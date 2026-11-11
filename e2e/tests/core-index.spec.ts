@@ -156,7 +156,7 @@ test.describe('address page', () => {
   test('shows balances in the unit that was chosen @IN-12', async ({ page }) => {
     await page.goto('/settings')
     await page
-      .getByRole('group', { name: 'Unit for DASH amounts' })
+      .getByRole('group', { name: 'Unit for amounts' })
       .getByRole('button', { name: 'duffs', exact: true })
       .click()
     await page.goto(`/address/${ADDRESS}`)

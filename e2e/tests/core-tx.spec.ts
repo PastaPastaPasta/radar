@@ -142,6 +142,7 @@ test.describe('Transaction page', () => {
     await expect(page.locator('#out-0 [data-spend="spent"]')).toBeVisible()
     await expect(page.locator('#out-2 [data-spend="unspent"]')).toBeVisible()
     await expect(page.locator('#io [data-spend="unknown"]')).toHaveCount(0)
+    await expect(page.locator('#out-0')).not.toContainText('finding where')
   })
 
   test('shows both when it was received and when it was mined @HY-07', async ({ page }) => {
