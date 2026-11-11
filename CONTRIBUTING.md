@@ -36,9 +36,23 @@ First run of Playwright needs the browser: `pnpm --filter @radar/e2e exec playwr
 
 - The e2e suite never touches a live service. `build:e2e` builds with `VITE_DATA_MODE=fixtures` into `apps/web/dist-e2e`, which `review/serve.mjs` serves through the real edge Worker. A request with no recording fails the test and names itself.
 - Recorded answers live under `apps/web/src/test/fixtures`. Record HTTP sources with `node scripts/record-fixtures.mjs --net mainnet|testnet` (add `--extra <source>:<path> --only-extra` to record one more path without touching the rest), DAPI with `node scripts/record-dapi-fixtures.mjs --net mainnet|testnet` (`--rows` adds block-list pages), and SDK answers with `node scripts/record-sdk-fixtures.mjs`. Recording reads from live nodes, so keep it to a handful of requests.
+- A transaction page with spent outputs looks up each spender through Hyphen's address history. A spec that opens another such transaction needs two more recordings per output: `node scripts/record-fixtures.mjs --net mainnet --only-extra --extra "hyphen:/address/<address>/txs?limit=100" --extra "hyphen:/tx/<spender txid>"`.
+- `review/fixtures.mjs` regenerates `review/fixtures/{mainnet,testnet}.json` and keeps the `signed_message` entity, which comes from `apps/web/src/features/tools/verify-message/dashcore-vectors.json`.
+- Tests of first paint hold the DAPI read behind a gate the test releases (`e2e/tests/app-shell.spec.ts`, "first paint"). Don't replace that with a wall-clock limit.
 - `node scripts/dapi-smoke.mjs mainnet|testnet` is a read-only live check of the production DAPI transport (about a dozen requests).
 - Wait for `settled(page)` (`e2e/helpers/settled.ts`) before measuring layout or checking for an error; a page's data arrives after its heading.
 - The SDK wasm is over the 25 MiB per-asset limit of Cloudflare Workers, so `build/sdk-split.ts` ships it in 16 MiB parts that the SDK worker reassembles. Fixture builds leave the SDK worker and the wasm out. After an SDK upgrade, run `pnpm test` (the plugin's test checks the package layout it depends on) and `pnpm build && pnpm size`.
+
+## Translations
+
+Ten languages ship: `en` (source), `de`, `fr`, `es`, `pt`, `ja`, `zh`, `ru`, `tr` and `uk`. `pnpm i18n:check` (CI) fails if a catalog is stale, a message has no translation in any locale, a placeholder or tag differs from the source, a translation is marked fuzzy, or a plural lacks a category its language needs.
+
+1. Mark the text: `t`, `plural`, `<Trans>` or `msg` from the Lingui macros, with every placeholder inside the message. Don't join translated fragments. In `apps/web/src/ui` use the global `t` from `@lingui/core/macro`; elsewhere in components use `useLingui()` from `@lingui/react/macro`. A module-level table of labels holds `msg` descriptors and renders them with `i18n._()`.
+2. `pnpm i18n:extract` adds the new messages to `apps/web/src/i18n/locales/*/messages.po`.
+3. Fill the `msgstr` of every new message in all nine non-English catalogs, in the same commit. Keep ICU placeholders (`{count}`, `<0>…</0>`) as they are and product names unchanged (Radar, Dash, DAPI, ChainLock, InstantSend, Hyphen, Platform Explorer). Write the plural forms the language needs: Russian and Ukrainian take `one`, `few`, `many` and `other`; Japanese and Chinese only `other`.
+4. `pnpm i18n:check`.
+
+Switch language in the footer to see a page in another locale. `key={locale}` on the routed content remounts the page on a switch, so a string read with the global `t` still updates.
 
 ## Layout
 
