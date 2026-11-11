@@ -1,7 +1,7 @@
-import { existsSync, realpathSync } from 'node:fs'
+import { existsSync, readFileSync, realpathSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Plugin } from 'vite'
+import type { Plugin, ResolvedConfig } from 'vite'
 
 const here = dirname(fileURLToPath(import.meta.url))
 
@@ -20,11 +20,29 @@ export function evoSdkSourceFile(): string {
 
 export const evoSdkDist = (): string => join(evoSdkDir(), 'dist')
 
+export const WASM_PARTS_MODULE = 'virtual:radar-sdk-wasm-parts'
+const RESOLVED_PARTS_MODULE = `\0${WASM_PARTS_MODULE}`
+
+/** Cloudflare Workers refuses a static asset over 25 MiB and the wasm is 25.5 MiB, so production ships it in pieces. */
+export const WASM_PART_BYTES = 16 * 1024 * 1024
+
+/** The glue without its default `new URL('wasm_sdk_bg.wasm')`, which would make the bundler emit the whole wasm too. */
+export const noUrlGlue = (): string => join(wasmSdkDir(), 'dist/raw/wasm_sdk.no_url.js')
+
+export const wasmFile = (): string => join(wasmSdkDir(), 'dist/raw/wasm_sdk_bg.wasm')
+
+export function splitBytes(bytes: Uint8Array, partBytes = WASM_PART_BYTES): Uint8Array[] {
+  const parts: Uint8Array[] = []
+  for (let at = 0; at < bytes.length; at += partBytes)
+    parts.push(bytes.subarray(at, at + partBytes))
+  return parts
+}
+
 export const WASM_SHIM = join(here, '../src/data/sdk/worker/wasm-split.ts')
 
 /** Every file the split build depends on, so a test can fail when an SDK bump moves one. */
 export function splitBuildFiles(): string[] {
-  return [evoSdkSourceFile(), WASM_SHIM, join(wasmSdkDir(), 'dist/raw/wasm_sdk_bg.wasm')]
+  return [evoSdkSourceFile(), WASM_SHIM, wasmFile(), noUrlGlue()]
 }
 
 /**
@@ -33,11 +51,28 @@ export function splitBuildFiles(): string[] {
  * depends on the 5.0.x file layout; `sdk-split.test.ts` fails when that layout changes.
  */
 export function sdkSplit(opts: { fixtures?: boolean } = {}): Plugin {
+  let serving = false
   return {
     name: 'radar:sdk-split',
     enforce: 'pre',
+    configResolved(config: ResolvedConfig) {
+      serving = config.command === 'serve'
+    },
+    resolveId(id) {
+      return id === WASM_PARTS_MODULE ? RESOLVED_PARTS_MODULE : null
+    },
     // Fixture builds replay recorded answers, so the worker, the SDK and its 25 MiB wasm stay out of their output.
     load(id) {
+      if (id === RESOLVED_PARTS_MODULE) {
+        if (serving) {
+          return `import wasmUrl from ${JSON.stringify(`${wasmFile()}?url`)}\nexport default [wasmUrl]`
+        }
+        const urls = splitBytes(readFileSync(wasmFile())).map((source, i) => {
+          const ref = this.emitFile({ type: 'asset', name: `wasm_sdk_bg.part${i}.wasm`, source })
+          return `import.meta.ROLLUP_FILE_URL_${ref}`
+        })
+        return `export default [${urls.join(', ')}]`
+      }
       if (!opts.fixtures) return null
       const file = id.split('?')[0]!
       if (file.endsWith('/data/sdk/transport-worker.ts')) {
@@ -56,7 +91,7 @@ export function sdkSplit(opts: { fixtures?: boolean } = {}): Plugin {
             { find: /^@dashevo\/wasm-sdk\/compressed$/, replacement: WASM_SHIM },
             {
               find: /^@dashevo\/wasm-sdk\/raw$/,
-              replacement: join(wasmSdkDir(), 'dist/raw/wasm_sdk.js'),
+              replacement: noUrlGlue(),
             },
             {
               find: /^@dashevo\/wasm-sdk\/raw\/(.*)$/,

@@ -45,6 +45,7 @@ export default defineConfig(({ mode }) => {
         },
       ],
     },
+    worker: { format: 'es', plugins: () => [sdkSplit({ fixtures })] },
     server: { proxy: fixtures ? undefined : hyphenProxy() },
     preview: { proxy: fixtures ? undefined : hyphenProxy() },
     build: {
