@@ -345,6 +345,17 @@ kbd,
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.rx-jump-core {
+  display: none;
+}
+.rx-jump-core::after {
+  content: ' \2193';
+}
+@media (max-width: 640px) {
+  .rx-jump-core {
+    display: inline;
+  }
+}
 
 /* ============================================================ 7. tiles, glyphs, identicons, nodeprints */
 .rx-tile {

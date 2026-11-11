@@ -37,14 +37,17 @@ function Headline() {
   const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: fit })
   const m = metrics.data?.data
   const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
+  // The tip read follows its status read with a header read; the status already carries the height.
+  const height = tip.data?.data.height ?? status.data?.data.blocks
+  const heightSource = tip.data ? stampOf(tip.data) : status.data ? stampOf(status.data) : undefined
   return (
     <Stats data-headline>
       <Stat
         layer="core"
         label={t`Height`}
-        value={tip.data ? formatInt(tip.data.data.height) : '—'}
-        loading={tip.isPending}
-        source={tip.data ? stampOf(tip.data) : undefined}
+        value={height === undefined ? '—' : formatInt(height)}
+        loading={height === undefined && (tip.isPending || status.isPending)}
+        source={heightSource}
       />
       <Stat
         layer="core"

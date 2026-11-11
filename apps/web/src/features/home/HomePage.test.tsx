@@ -39,6 +39,25 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
+  it('shows the Core height and difficulty as soon as the status answers, without the tip @HY-01 @IN-01', async () => {
+    vi.spyOn(core, 'tip').mockImplementation(() => new Promise(() => undefined))
+    renderAt('/')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-headline]')
+      expect(el).toHaveTextContent(/Height.*2,570,085/)
+      return el!
+    })
+    expect(headline).toHaveTextContent(/Difficulty.*106,426,840/)
+    expect(headline.querySelector('[data-source="dapi"]')).not.toBeNull()
+  })
+
+  it('offers a jump to the Core figures from the top of the page @HY-01', async () => {
+    renderAt('/')
+    const link = await screen.findByRole('link', { name: 'Core figures' })
+    expect(link).toHaveAttribute('href', '#core')
+    expect(document.getElementById('core')).not.toBeNull()
+  })
+
   it('says one node reported a ChainLock on the home lists instead of drawing a lock @IN-01', async () => {
     const original = core.blockRows.bind(core)
     vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {

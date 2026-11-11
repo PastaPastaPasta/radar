@@ -379,6 +379,9 @@ export function Scope() {
               <PageLink to="/nodes" className="rx-go">
                 {t`Network census`}
               </PageLink>
+              <a href="#core" className="rx-go rx-jump-core">
+                {t`Core figures`}
+              </a>
             </div>
           </div>
           <HomeMap />

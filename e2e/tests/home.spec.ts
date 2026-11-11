@@ -46,9 +46,31 @@ test.describe('Home', () => {
     await expect(headline).toContainText('Blockchain size')
   })
 
+  test('puts the height and difficulty in the Core figures as soon as DAPI answers @HY-01', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const headline = page.locator('[data-headline]')
+    await expect(headline).toContainText(/Height.*2,570,085/)
+    await expect(headline).toContainText(/Difficulty.*106,426,840/)
+  })
+
+  test('a phone jumps from the top of the page to the Core figures @HY-01', async ({
+    page,
+    viewport,
+  }) => {
+    test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
+    await page.goto('/')
+    await page.getByRole('link', { name: 'Core figures' }).click()
+    await expect(page).toHaveURL(/#core$/)
+    const box = await page.locator('[data-headline]').boundingBox()
+    expect(box?.y ?? -1).toBeGreaterThanOrEqual(0)
+    expect(box?.y ?? 9999).toBeLessThan(page.viewportSize()!.height / 2)
+  })
+
   test('opens a block from search by height @IN-10', async ({ page }) => {
     await page.goto('/')
-    await page.locator('[data-palette-trigger]').first().click()
+    await page.locator('[data-palette-trigger]:visible').first().click()
     await page.getByRole('combobox').fill('2570085')
     await page
       .getByRole('option', { name: /Core block 2,570,085/ })
