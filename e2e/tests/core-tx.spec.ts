@@ -108,6 +108,44 @@ test.describe('Transaction page', () => {
     })
   }
 
+  for (const [name, url] of [
+    ['a quorum commitment', `/tx/${PAYLOADS[1]!.txid}`],
+    ['a hard-fork signal', `/tx/${MNHF}?network=testnet`],
+  ] as const) {
+    test(`gives ${name} a zero fee and no value ribbon @HY-07`, async ({ page }) => {
+      await page.goto(url)
+      const fee = page.locator('.rx-stat').filter({ hasText: /^Fee/ })
+      await expect(fee).toContainText('0 duffs a byte')
+      await expect(fee).not.toContainText('Load all inputs')
+      const flow = page.locator('#flow')
+      await expect(flow).toContainText('No value moves in this transaction')
+      await expect(flow.locator('svg.rx-flow')).toHaveCount(0)
+      await expect(flow).not.toContainText('Credit pool')
+    })
+  }
+
+  test('keeps the credit-pool ribbon on an asset unlock @HY-07', async ({ page }) => {
+    await page.goto('/tx/5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a')
+    await expect(page.locator('#flow svg.rx-flow')).toBeAttached()
+    await expect(page.locator('#flow')).toContainText('Credit pool')
+  })
+
+  test('puts a no-break space between the size and its unit @IN-05', async ({ page }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.locator('.rx-kpis')).toContainText(/[\d,]+\u00a0bytes/)
+  })
+
+  test('puts a no-break space between every amount and its unit @IN-05', async ({ page }) => {
+    test.fixme(true, 'Amount draws its unit in a margin; it needs the gap in ui/amount.tsx')
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.locator('#io')).toBeVisible()
+    const run = await page.locator('main').evaluate((main) => {
+      const text = (main as HTMLElement).innerText
+      return text.match(/\d(DASH|tDASH|mDASH|µDASH|duffs|bytes|kB|MB)\b/g) ?? []
+    })
+    expect(run, 'a value running into its unit').toEqual([])
+  })
+
   test('explains a hard-fork signal on testnet @HY-07 @IN-16 @HY-19', async ({ page }) => {
     await page.goto(`/tx/${MNHF}?network=testnet`)
     await expect(page.locator('[data-payload="mnhfTx"]')).toContainText('Version bit')

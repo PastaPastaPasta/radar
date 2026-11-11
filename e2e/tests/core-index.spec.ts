@@ -183,6 +183,22 @@ test.describe('mempool', () => {
     await expectNoSideScroll(page)
   })
 
+  test('does not look live while the testnet index trails the chain @HY-19', async ({ page }) => {
+    await page.goto('/mempool?network=testnet')
+    const line = page.getByText(/not a live view/)
+    await expect(line).toBeVisible({ timeout: 15_000 })
+    await expect(line).toContainText('Checked every 15 seconds')
+    await expect(page.locator('[data-stale-index]')).toContainText('not live')
+    await expect(page.getByText('Refreshes every 15 seconds.')).toHaveCount(0)
+    await expect(page.locator('main [data-live-dot="live"]')).toHaveCount(0)
+  })
+
+  test('says it refreshes when the mainnet index is current @HY-19', async ({ page }) => {
+    await page.goto('/mempool')
+    await expect(page.getByText('Refreshes every 15 seconds.')).toBeVisible()
+    await expect(page.locator('[data-stale-index]')).toHaveCount(0)
+  })
+
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/mempool?network=testnet')
     await expect(page.getByRole('heading', { level: 1, name: 'Mempool' })).toBeVisible()
@@ -194,20 +210,47 @@ test.describe('rich list', () => {
   test('ranks balances and charts how concentrated they are @HY-09', async ({ page }) => {
     await page.goto('/rich-list')
     await expect(page.getByRole('heading', { level: 1, name: 'Rich list' })).toBeVisible()
-    const table = page.getByRole('table', { name: /Addresses ranked by balance/ })
-    await expect(table).toBeVisible()
+    const ranked = page
+      .getByRole('table', { name: /Addresses ranked by balance/ })
+      .or(page.getByRole('list', { name: 'Addresses ranked by balance' }))
+    await expect(ranked).toBeVisible()
     await expect(page.getByText('Supply concentration')).toBeVisible()
-    const before = await table.getByRole('row').count()
+    const items = ranked.getByRole('row').or(ranked.getByRole('listitem'))
+    const before = await items.count()
     await page.getByRole('button', { name: 'Show more' }).click()
-    await expect.poll(async () => table.getByRole('row').count()).toBeGreaterThan(before)
+    await expect.poll(async () => items.count()).toBeGreaterThan(before)
     await sourced(page)
     await expectAccessible(page)
     await expectNoSideScroll(page)
   })
 
-  test('keeps received, sent and transactions on every row, phone or desktop @HY-09', async ({
+  test('lists compact rows on a phone, with the rest on tap and the summary in reach @HY-09', async ({
     page,
   }) => {
+    test.skip((page.viewportSize()?.width ?? 1000) > 640, 'phone layout only')
+    await page.goto('/rich-list')
+    const list = page.getByRole('list', { name: 'Addresses ranked by balance' })
+    await expect(list.getByRole('listitem')).toHaveCount(25)
+    await expect(page.getByRole('table', { name: /Addresses ranked by balance/ })).toHaveCount(0)
+    const first = list.getByRole('listitem').first()
+    const row = await first.boundingBox()
+    expect(row!.height, 'a collapsed row stays one compact line or two').toBeLessThan(72)
+    await expect(first.getByText('Received')).toBeHidden()
+    await first.locator('summary').click()
+    for (const label of ['Received', 'Sent', 'Transactions']) {
+      await expect(first.getByText(label, { exact: true })).toBeVisible()
+    }
+    await page.getByRole('button', { name: 'Show more' }).click()
+    await expect(list.getByRole('listitem')).toHaveCount(50)
+    const before = await page.evaluate(() => window.scrollY)
+    await page.getByRole('link', { name: 'Back to summary' }).click()
+    await expect(page.getByText('Supply concentration')).toBeInViewport()
+    expect(await page.evaluate(() => window.scrollY)).toBeLessThan(before)
+    await expectNoSideScroll(page)
+  })
+
+  test('keeps received, sent and transactions on every row, desktop @HY-09', async ({ page }) => {
+    test.skip((page.viewportSize()?.width ?? 0) <= 640, 'tables are for wider screens')
     await page.goto('/rich-list')
     const first = page
       .getByRole('table', { name: /Addresses ranked by balance/ })
@@ -226,7 +269,11 @@ test.describe('rich list', () => {
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/rich-list?network=testnet')
-    await expect(page.getByRole('table', { name: /Addresses ranked by balance/ })).toBeVisible()
+    await expect(
+      page
+        .getByRole('table', { name: /Addresses ranked by balance/ })
+        .or(page.getByRole('list', { name: 'Addresses ranked by balance' })),
+    ).toBeVisible()
   })
 })
 
@@ -248,6 +295,38 @@ test.describe('charts', () => {
     await sourced(page)
     await expectAccessible(page)
     await expectNoSideScroll(page)
+  })
+
+  test('draws each metric in its own colour, legible on the card @HY-02', async ({ page }) => {
+    await page.goto('/charts')
+    const hues = page.locator('[data-chart-hue]')
+    await expect(hues).toHaveCount(6)
+    const colours = await hues.evaluateAll((els) => {
+      const parse = (c: string): [number, number, number] => {
+        const m = c.match(/[\d.]+/g)!.map(Number)
+        return [m[0]!, m[1]!, m[2]!]
+      }
+      const lum = ([r, g, b]: [number, number, number]) => {
+        const f = (v: number) => {
+          const s = v / 255
+          return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+        }
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+      }
+      return els.map((el) => {
+        const probe = document.createElement('i')
+        probe.style.color = getComputedStyle(el).getPropertyValue('--rx-l')
+        el.appendChild(probe)
+        const line = parse(getComputedStyle(probe).color)
+        probe.remove()
+        const card = el.closest('.rx-card') ?? el
+        const ground = parse(getComputedStyle(card).backgroundColor)
+        const [hi, lo] = [lum(line), lum(ground)].sort((a, b) => b - a) as [number, number]
+        return { line: line.join(','), contrast: (hi + 0.05) / (lo + 0.05) }
+      })
+    })
+    expect(new Set(colours.map((c) => c.line)).size).toBe(6)
+    for (const c of colours) expect(c.contrast, c.line).toBeGreaterThanOrEqual(3)
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {

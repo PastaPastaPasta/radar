@@ -115,6 +115,22 @@ test.describe('Block page', () => {
     expect(text).toBe(true)
   })
 
+  test('keeps two decimals on a large difficulty and the full value in its title @IN-03 @HY-05', async ({
+    page,
+  }) => {
+    await page.goto(`/block/${TIP}`)
+    const difficulty = page.locator('#header [title]').filter({ hasText: /^[\d,]{9,}\.\d{2}$/ })
+    await expect(difficulty).toBeVisible()
+    const title = await difficulty.getAttribute('title')
+    expect(title).toMatch(/^[\d,]+\.\d{2,}$/)
+    expect(title!.startsWith((await difficulty.textContent())!.slice(0, -1))).toBe(true)
+  })
+
+  test('joins the block size to its unit with a no-break space @IN-05', async ({ page }) => {
+    await page.goto(`/block/${TIP}`)
+    await expect(page.locator('#header')).toContainText(/Size\s*[\d,]+\u00a0bytes/)
+  })
+
   test('shows a small testnet difficulty with its digits @IN-16 @HY-19', async ({ page }) => {
     await page.goto(`/block/${TESTNET_TIP}?network=testnet`)
     const header = page.locator('#header')
