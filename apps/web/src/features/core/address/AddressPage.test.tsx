@@ -1,23 +1,29 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { HyStreamEvent, HyTxDetail } from '@/data/hyphen/schemas'
+import type { LiveTxEvent } from '@/data/core/live'
+import type { DecodedTx } from '@/data/core/types'
 import { renderAt } from '../hy-shared/test-utils'
 
-const events: { push(e: HyStreamEvent): void; stop(): void } = {
-  push: () => undefined,
-  stop: () => undefined,
-}
+const feed = vi.hoisted(() => ({
+  listeners: new Set<(e: unknown) => void>(),
+  status: { state: 'live', fallbackHint: false },
+}))
 
-const arrivals = new Map<string, HyTxDetail>()
+vi.mock('@/data/query/stale', async (original) => {
+  const actual = await original<{ POLL_MS: Record<string, number> }>()
+  return { ...actual, POLL_MS: { ...actual.POLL_MS, addressFallback: 50 } }
+})
 
-type PagedCall = (q: { limit?: number; cursor?: string }) => Promise<unknown>
+type PagedCall = (
+  q: { limit?: number; cursor?: string },
+  real: () => Promise<unknown>,
+) => Promise<unknown>
 let addressTxsOverride: PagedCall | undefined
 
 vi.mock('@/data/hyphen/client', async (original) => {
   const actual = await original<{
     hyphen: {
-      tx(net: string, txid: string, signal?: AbortSignal): Promise<unknown>
       addressTxs(net: string, a: string, q: object, signal?: AbortSignal): Promise<unknown>
     }
   }>()
@@ -31,45 +37,28 @@ vi.mock('@/data/hyphen/client', async (original) => {
         q: { limit?: number; cursor?: string },
         signal?: AbortSignal,
       ) =>
-        addressTxsOverride ? addressTxsOverride(q) : actual.hyphen.addressTxs(net, a, q, signal),
-      tx: (net: string, txid: string, signal?: AbortSignal) => {
-        const arrived = arrivals.get(txid)
-        if (!arrived) return actual.hyphen.tx(net, txid, signal)
-        return Promise.resolve({
-          source: 'hyphen' as const,
-          asOf: Date.now(),
-          fetchedAt: Date.now(),
-          proved: false,
-          data: arrived,
-        })
-      },
+        addressTxsOverride
+          ? addressTxsOverride(q, () => actual.hyphen.addressTxs(net, a, q, signal))
+          : actual.hyphen.addressTxs(net, a, q, signal),
     },
   }
 })
 
-vi.mock('@/data/hyphen/live', () => ({
-  openAddressEvents: () =>
-    Promise.resolve(
-      (async function* () {
-        const queue: HyStreamEvent[] = []
-        let wake: () => void = () => undefined
-        let done = false
-        events.push = (e) => {
-          queue.push(e)
-          wake()
-        }
-        events.stop = () => {
-          done = true
-          wake()
-        }
-        while (!done) {
-          const next = queue.shift()
-          if (next) yield next
-          else await new Promise<void>((r) => (wake = r))
-        }
-      })(),
-    ),
+vi.mock('@/data/core/live', () => ({
+  coreLive: {
+    transactions(_net: string, listener: (e: unknown) => void) {
+      feed.listeners.add(listener)
+      return () => feed.listeners.delete(listener)
+    },
+    txStatus: () => feed.status,
+    status: () => ({ state: 'idle', since: 0 }),
+    subscribe: () => () => undefined,
+  },
 }))
+
+const emit = (e: LiveTxEvent) => {
+  for (const l of [...feed.listeners]) l(e)
+}
 
 vi.mock('./qr-image', () => ({
   qrPng: () => Promise.resolve(new Blob(['png'], { type: 'image/png' })),
@@ -80,31 +69,26 @@ const TESTNET_ADDRESS = 'yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa'
 
 afterEach(() => {
   addressTxsOverride = undefined
-  events.stop()
+  feed.status = { state: 'live', fallbackHint: false }
   vi.restoreAllMocks()
 })
 
 describe('Address page', () => {
   it('tells the viewer when a new transaction arrives for the address @IN-06', async () => {
     const id = 'ab'.repeat(32)
-    const tx: HyTxDetail = {
-      txHash: id,
-      txVersion: 3,
-      txType: 'normal',
-      txSize: 226,
-      valueOut: 250_000_000n,
-      inputCount: 1,
-      outputCount: 1,
-      vin: [
-        { n: 0, sequence: 0, address: 'XmzJZQ5tib4NUwqXDH2fAg6jXUkYo4Gwmd', value: 300_000_000n },
-      ],
-      vout: [{ n: 0, value: 250_000_000n, scriptPubKey: { hex: '' }, address: ADDRESS }],
+    const tx: DecodedTx = {
+      txid: id,
+      type: 'transfer',
+      version: 3,
+      lockTime: 0,
+      size: 226,
+      inputs: [{ txid: 'cd'.repeat(32), vout: 0, scriptSig: '', sequence: 0 }],
+      outputs: [{ value: 250_000_000n, scriptPubKey: '', address: ADDRESS }],
     }
-    arrivals.set(id, tx)
     renderAt(`/address/${ADDRESS}`)
     await screen.findByText(/Watching for new transactions/)
     expect(document.querySelector('[data-new-transaction]')).toBeNull()
-    events.push({ type: 'mempool_tx', ts: 1, payload: { txid: id } })
+    emit({ kind: 'tx', tx })
     const notice = await waitFor(
       () => {
         const el = document.querySelector<HTMLElement>('[data-new-transaction]')
@@ -117,6 +101,47 @@ describe('Address page', () => {
     expect(notice).toHaveTextContent('2.5')
     expect(await screen.findByText(/1 new transaction since you opened this page/)).toBeVisible()
     expect(document.querySelector('[data-pending]')).toHaveTextContent('Unconfirmed')
+  })
+
+  it('follows the address history when DAPI has given up, and says what arrived @IN-06', async () => {
+    feed.status = { state: 'reconnecting', fallbackHint: true }
+    const id = 'ef'.repeat(32)
+    let looks = 0
+    const row = (txHash: string, netValue: bigint) => ({
+      txHash,
+      blockHeight: 2_000_001,
+      blockTime: 1_700_000_000_000,
+      txType: 'normal',
+      valueOut: netValue,
+      netValue,
+      direction: 'in' as const,
+    })
+    addressTxsOverride = (q, real) => {
+      if (q.limit !== 10) return real()
+      looks++
+      const items =
+        looks > 1 ? [row(id, 7_000n), row('aa'.repeat(32), 1n)] : [row('aa'.repeat(32), 1n)]
+      return Promise.resolve({
+        source: 'hyphen' as const,
+        asOf: Date.now(),
+        fetchedAt: Date.now(),
+        proved: false,
+        data: { items, total: items.length },
+      })
+    }
+    renderAt(`/address/${ADDRESS}`)
+    const notice = await waitFor(
+      () => {
+        const el = document.querySelector<HTMLElement>('[data-new-transaction]')
+        expect(el).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+    expect(notice).toHaveTextContent('New transaction')
+    expect(within(notice).queryByRole('link', { name: 'See unconfirmed activity' })).toBeNull()
+    expect(await screen.findByText(/1 new transaction since you opened this page/)).toBeVisible()
+    expect(document.querySelector('[data-pending]')).toBeNull()
   })
 
   it('shows the balance, totals and counts from Hyphen @IN-06 @HY-08', async () => {

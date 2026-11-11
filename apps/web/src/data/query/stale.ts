@@ -57,5 +57,7 @@ export const POLL_MS = {
   radarActivation: MINUTE,
   peLatest: 10 * SECOND,
   mempool: 15 * SECOND,
+  /** The address page's own history, read only while DAPI's transaction stream has given up (IN-06). */
+  addressFallback: 30 * SECOND,
   rate: MINUTE,
 } as const

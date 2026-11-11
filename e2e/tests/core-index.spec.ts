@@ -15,6 +15,66 @@ async function expectNoSideScroll(page: Page) {
   expect(overflow, 'horizontal overflow in px').toBeLessThanOrEqual(1)
 }
 
+const BUSY = 'XtNfacxAyGM1qfmTifGgLL1Q7JxX7pGXck'
+const MINED = '078f9796125159f699ccf18a3f2f627fb83ef35be4316030299ca7a93256ab93'
+
+/**
+ * Answers the Hyphen reads of an address the fixtures hold no recording for. `recent` rows appear in the newest
+ * transactions from the second read of them on, as if they had just been mined.
+ */
+function stubAddress({
+  address,
+  utxos,
+  recent,
+}: {
+  address: string
+  utxos: object[]
+  recent: { txHash: string; netValue: number }[]
+}) {
+  const real = window.fetch.bind(window)
+  const json = (body: unknown) =>
+    Promise.resolve(
+      new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } }),
+    )
+  const row = (txHash: string, netValue: number) => ({
+    txHash,
+    blockHeight: 2570086,
+    blockTime: '2026-11-11T12:00:00Z',
+    txType: 'normal',
+    valueOut: netValue,
+    netValue,
+    direction: 'in',
+  })
+  const old = row('cd'.repeat(32), 1000)
+  let reads = 0
+  window.fetch = (input, init) => {
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+    const path = new URL(url, location.href).pathname
+    const base = `/x/hy/mainnet/address/${address}`
+    if (path === base) {
+      return json({
+        asOfHeight: 2570085,
+        address,
+        balance: 1000,
+        totalReceived: 5000,
+        totalSent: 4000,
+        txCount: 3,
+        firstSeen: '2016-03-16T07:00:03Z',
+        lastSeen: '2026-11-11T12:00:00Z',
+      })
+    }
+    if (path === `${base}/utxos`) {
+      return json({ asOfHeight: 2570085, totalCount: utxos.length, value: utxos })
+    }
+    if (path === `${base}/txs`) {
+      const fresh = url.includes('limit=10') && reads++ > 0
+      const rows = [...(fresh ? recent.map((r) => row(r.txHash, r.netValue)) : []), old]
+      return json({ asOfHeight: 2570085, totalCount: rows.length, value: rows })
+    }
+    return real(input, init)
+  }
+}
+
 const sourced = (page: Page) =>
   expect(page.locator('main [data-source="hyphen"]').first()).toBeVisible()
 
@@ -38,81 +98,47 @@ test.describe('address page', () => {
     await expectNoSideScroll(page)
   })
 
-  test('tells the viewer when a new transaction arrives for the address @IN-06', async ({
+  test('tells the viewer when a new transaction arrives for the address, from DAPI @IN-06', async ({
     page,
   }) => {
-    const id = 'ab'.repeat(32)
-    await page.addInitScript(
-      ({ address, id }) => {
-        const real = window.fetch.bind(window)
-        const json = (body: unknown) =>
-          new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } })
-        window.fetch = (input, init) => {
-          const url =
-            typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
-          if (url.includes('/x/hy/mainnet/stream')) {
-            const encoder = new TextEncoder()
-            const stream = new ReadableStream<Uint8Array>({
-              start(controller) {
-                setTimeout(() => {
-                  const event = {
-                    type: 'mempool_tx',
-                    ts: Math.floor(Date.now() / 1000),
-                    payload: { txid: id },
-                  }
-                  controller.enqueue(encoder.encode(JSON.stringify(event) + '\n'))
-                }, 1500)
-                init?.signal?.addEventListener('abort', () => {
-                  try {
-                    controller.close()
-                  } catch {
-                    // already closed
-                  }
-                })
-              },
-            })
-            return Promise.resolve(
-              new Response(stream, { headers: { 'content-type': 'application/x-ndjson' } }),
-            )
-          }
-          if (url.includes(`/x/hy/mainnet/tx/${id}`)) {
-            return Promise.resolve(
-              json({
-                txHash: id,
-                txVersion: 3,
-                txType: 'normal',
-                txSize: 226,
-                valueOut: 250000000,
-                inputCount: 1,
-                outputCount: 1,
-                vin: [
-                  {
-                    n: 0,
-                    sequence: 0,
-                    address: 'XmzJZQ5tib4NUwqXDH2fAg6jXUkYo4Gwmd',
-                    value: 300000000,
-                  },
-                ],
-                vout: [{ n: 0, value: 250000000, scriptPubKey: { hex: '76' }, address }],
-              }),
-            )
-          }
-          return real(input, init)
-        }
-      },
-      { address: ADDRESS, id },
-    )
-    await page.goto(`/address/${ADDRESS}`)
+    // The recorded transaction stream replays the tip block, where BUSY receives 078f9796…, then the mempool, where
+    // f96fddff… pays BUSY 631,511 duffs and spends that output.
+    await page.addInitScript(stubAddress, {
+      address: BUSY,
+      utxos: [{ txHash: MINED, vout: 0, value: 1000, height: 2570085, scriptPubKey: '76' }],
+      recent: [],
+    })
+    await page.goto(`/address/${BUSY}`)
     const notice = page.locator('[data-new-transaction]')
-    const slow = { timeout: 20_000 }
-    await expect(notice).toBeVisible(slow)
+    await expect(notice).toBeVisible({ timeout: 20_000 })
     await expect(notice).toContainText('New transaction')
-    await expect(page.locator('[data-arrived]')).toContainText(
-      '1 new transaction since you opened',
-      slow,
-    )
-    await expect(page.locator('[data-pending]')).toContainText('Unconfirmed', slow)
+    await expect(notice.locator('a[href*="f96fddff"]')).toBeVisible()
+    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
+    await expect(page.locator('[data-pending]')).toContainText('Unconfirmed')
+    await expect(page.locator('[data-pending] a[href*="078f9796"]')).toHaveCount(0)
     await expectAccessible(page)
+  })
+
+  test('falls back to the address history when the DAPI feed is down @IN-06', async ({ page }) => {
+    test.slow()
+    const id = 'ab'.repeat(32)
+    await page.addInitScript(stubAddress, {
+      address: BUSY,
+      utxos: [],
+      recent: [{ txHash: id, netValue: 250000000 }],
+    })
+    await page.goto(`/address/${BUSY}`)
+    await expect(page.locator('[data-live]')).toBeVisible()
+    await page.evaluate(() =>
+      (
+        window as unknown as { __radarFixtures: { breakLiveConnection(): void } }
+      ).__radarFixtures.breakLiveConnection(),
+    )
+    const notice = page.locator('[data-new-transaction]')
+    await expect(notice.locator(`a[href*="${id}"]`)).toBeVisible({ timeout: 60_000 })
+    await expect(notice).toContainText('New transaction')
+    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
+    await expect(page.locator('[data-pending]')).toHaveCount(0)
   })
 
   test('pages the history by cursor and keeps what is already shown @IN-06', async ({ page }) => {

@@ -1,61 +1,73 @@
-import type { Sourced } from '@/data/envelope'
-import type { HyStreamEvent, HyTxDetail } from '@/data/hyphen/schemas'
+import type { LiveTxEvent, LiveTxStatus } from '@/data/core/live'
+import type { DecodedTx } from '@/data/core/types'
+import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
+import type { HyAddressTx } from '@/data/hyphen/schemas'
 
 export interface PendingTx {
   txid: string
-  /** Outputs paying the address minus inputs it spends, in duffs. */
+  /** Outputs paying the address minus the outputs of it that the transaction spends, in duffs. */
   net: bigint
-  tx: Sourced<HyTxDetail>
+  /** Already mined when it was seen: Hyphen's history, the fallback, lists only mined transactions. */
+  confirmed: boolean
+  stamp: SourceStamp
 }
 
-/** What an unconfirmed transaction does to one address, or undefined when it doesn't touch it. */
-export function effectOn(address: string, tx: HyTxDetail): bigint | undefined {
+/** Outputs of the address a transaction may spend: `txid:vout` → value. */
+export type Spendable = (outpoint: string) => bigint | undefined
+
+/**
+ * What a transaction does to one address, or undefined when it doesn't touch it. A raw transaction names the outputs
+ * it spends but not their owner, so a spend counts only when `spendable` knows that output.
+ */
+export function effectOn(address: string, tx: DecodedTx, spendable: Spendable): bigint | undefined {
   let touches = false
   let net = 0n
-  for (const out of tx.vout) {
+  for (const out of tx.outputs) {
     if (out.address === address) {
       touches = true
       net += out.value
     }
   }
-  for (const input of tx.vin) {
-    if (input.address === address) {
+  for (const input of tx.inputs) {
+    const value = spendable(`${input.txid}:${input.vout}`)
+    if (value !== undefined) {
       touches = true
-      net -= input.value ?? 0n
+      net -= value
     }
   }
   return touches ? net : undefined
 }
 
-const MAX_QUEUE = 100
 const MAX_SEEN = 5000
-const CONCURRENCY = 3
-const MAX_FETCHES_PER_MINUTE = 60
-const BACKOFF_START_MS = 2000
-const BACKOFF_MAX_MS = 30_000
-const STABLE_AFTER_MS = 30_000
 
-export type WatchStatus = 'live' | 'reconnecting' | 'paused' | 'busy'
+export type WatchStatus = 'connecting' | 'live' | 'reconnecting' | 'paused'
 
 export interface WatchOptions {
   address: string
-  open(signal: AbortSignal): Promise<AsyncIterable<HyStreamEvent>>
-  fetchTx(txid: string, signal: AbortSignal): Promise<Sourced<HyTxDetail | null>>
-  /**
-   * `paused`: the tab is in the background, so nothing is fetched. `busy`: the mempool is moving faster
-   * than the address check is allowed to follow, so some transactions are skipped.
-   */
+  signal: AbortSignal
+  /** DAPI's live transaction feed (`coreLive`): subscribing opens it, the returned function releases it. */
+  dapi: {
+    transactions(listener: (event: LiveTxEvent) => void): () => void
+    status(): LiveTxStatus
+    subscribe(onChange: () => void): () => void
+  }
+  /** The newest transactions of the address from Hyphen: read only while DAPI's feed has given up. */
+  recent(signal: AbortSignal): Promise<Sourced<HyAddressTx[]>>
+  /** Outputs of the address known to the page (its UTXOs). */
+  spendable: Spendable
+  /** `paused`: the tab is in the background, so nothing is followed. */
   onStatus(status: WatchStatus): void
   onPending(tx: PendingTx): void
   /**
-   * A block was chain-locked: pending transactions may now be mined, and the address may have moved.
-   * Also called when the tab comes back after missing events.
+   * A block was mined (`mined` lists the transactions now confirmed), or the tab came back after missing events
+   * (`mined` undefined): pending transactions may have been mined and the address may have moved.
    */
-  onBlock(): void
-  signal: AbortSignal
+  onBlock(mined?: ReadonlySet<string>): void
   /** Whether the page is visible; `subscribe` calls back whenever that changes. */
   visibility?: { hidden(): boolean; subscribe(onChange: () => void): () => void }
-  /** Wait between reconnects; replaced in tests. */
+  /** How often the fallback reads the address history. */
+  every: number
+  /** Waits between fallback reads; replaced in tests. */
   sleep?: (ms: number, signal: AbortSignal) => Promise<void>
   now?: () => number
 }
@@ -74,120 +86,132 @@ const sleepFor = (ms: number, signal: AbortSignal) =>
   })
 
 /**
- * Follows Hyphen's event stream for transactions that touch one address. The stream carries a mempool
- * event per transaction without its addresses, so each new one is fetched and checked here, a few at a
- * time, at most {@link MAX_FETCHES_PER_MINUTE} a minute, and never while the tab is hidden. Whatever is
- * skipped is made up for by one refresh when the tab returns or the next block arrives.
+ * Follows new transactions of one address (IN-06). DAPI's transaction stream carries every mempool transaction in
+ * full, so each is checked here without another request. Only while that feed has given up (`fallbackHint`) is
+ * Hyphen asked, for the address's own newest transactions every `every` ms. Nothing is followed while the tab is
+ * hidden; one refresh makes up for it when the tab returns.
  */
-export async function watchAddress(opts: WatchOptions): Promise<void> {
-  const { signal, address, visibility } = opts
+export function watchAddress(opts: WatchOptions): void {
+  const { signal, address, dapi, visibility } = opts
   const sleep = opts.sleep ?? sleepFor
   const now = opts.now ?? Date.now
   const seen = new Set<string>()
-  const queue: string[] = []
-  const fetched: number[] = []
-  let running = 0
+  const own = new Map<string, bigint>()
+  let release: (() => void) | undefined
+  let fallback: AbortController | undefined
   let missed = false
-  let busy = false
-  let connected = false
+  let last: WatchStatus | undefined
 
   const hidden = () => visibility?.hidden() ?? false
-  const steady = (): WatchStatus => (connected ? 'live' : 'reconnecting')
+  const spendable: Spendable = (outpoint) => own.get(outpoint) ?? opts.spendable(outpoint)
 
-  const withinRate = () => {
-    const cutoff = now() - 60_000
-    while (fetched.length > 0 && fetched[0]! <= cutoff) fetched.shift()
-    return fetched.length < MAX_FETCHES_PER_MINUTE
+  const report = (status: WatchStatus) => {
+    if (status === last) return
+    last = status
+    opts.onStatus(status)
   }
 
-  const pump = () => {
-    while (running < CONCURRENCY && queue.length > 0 && !signal.aborted) {
-      if (!withinRate()) {
-        queue.length = 0
-        missed = true
-        if (!busy) {
-          busy = true
-          opts.onStatus('busy')
-        }
-        return
-      }
-      const txid = queue.shift()
-      if (txid === undefined) break
-      if (busy) {
-        busy = false
-        opts.onStatus(steady())
-      }
-      fetched.push(now())
-      running++
-      opts
-        .fetchTx(txid, signal)
-        .then((tx) => {
-          if (!tx.data || signal.aborted) return
-          const detail = tx.data
-          const net = effectOn(address, detail)
-          if (net !== undefined) opts.onPending({ txid, net, tx: { ...tx, data: detail } })
-        })
-        .catch(() => undefined)
-        .finally(() => {
-          running--
-          pump()
-        })
+  const remember = (txid: string): boolean => {
+    if (seen.has(txid)) return false
+    if (seen.size >= MAX_SEEN) seen.clear()
+    seen.add(txid)
+    return true
+  }
+
+  const onEvent = (event: LiveTxEvent) => {
+    if (signal.aborted) return
+    if (event.kind === 'tx') {
+      const { tx } = event
+      if (seen.has(tx.txid)) return
+      const net = effectOn(address, tx, spendable)
+      if (net === undefined) return
+      remember(tx.txid)
+      tx.outputs.forEach((out, n) => {
+        if (out.address === address) own.set(`${tx.txid}:${n}`, out.value)
+      })
+      const at = now()
+      opts.onPending({
+        txid: tx.txid,
+        net,
+        confirmed: false,
+        stamp: { source: 'dapi', asOf: at, fetchedAt: at, proved: false },
+      })
+    } else if (event.kind === 'block') {
+      opts.onBlock(new Set(event.txids))
     }
   }
 
-  const resync = () => {
-    missed = false
-    opts.onBlock()
+  async function followHistory(ctrl: AbortController): Promise<void> {
+    let known: Set<string> | undefined
+    while (!ctrl.signal.aborted) {
+      try {
+        const page = await opts.recent(ctrl.signal)
+        if (ctrl.signal.aborted) return
+        const ids = new Set(page.data.map((t) => t.txHash))
+        if (known) {
+          const fresh = page.data.filter((t) => !known!.has(t.txHash))
+          const stamp = stampOf(page)
+          for (const t of [...fresh].reverse()) {
+            if (!remember(t.txHash)) continue
+            opts.onPending({ txid: t.txHash, net: t.netValue, confirmed: true, stamp })
+          }
+          if (fresh.length > 0) opts.onBlock(ids)
+        }
+        known = ids
+      } catch {
+        // the next read tries again
+      }
+      await sleep(opts.every, ctrl.signal)
+    }
   }
 
-  const unsubscribe = visibility?.subscribe(() => {
+  const stopFallback = () => {
+    fallback?.abort()
+    fallback = undefined
+  }
+
+  const sync = () => {
     if (signal.aborted) return
     if (hidden()) {
-      queue.length = 0
-      opts.onStatus('paused')
+      release?.()
+      release = undefined
+      stopFallback()
+      missed = true
+      report('paused')
       return
     }
-    opts.onStatus(steady())
-    if (missed) resync()
-  })
-  signal.addEventListener('abort', () => unsubscribe?.(), { once: true })
-
-  let delay = BACKOFF_START_MS
-  while (!signal.aborted) {
-    const startedAt = now()
-    let delivered = false
-    try {
-      const events = await opts.open(signal)
-      connected = true
-      opts.onStatus(hidden() ? 'paused' : 'live')
-      for await (const event of events) {
-        delivered = true
-        if (event.type === 'mempool_tx') {
-          if (hidden()) {
-            missed = true
-            continue
-          }
-          const txid = event.payload.txid ?? event.payload.txHash
-          if (txid && !seen.has(txid)) {
-            if (seen.size >= MAX_SEEN) seen.clear()
-            seen.add(txid)
-            queue.push(txid)
-            if (queue.length > MAX_QUEUE) queue.shift()
-            pump()
-          }
-        } else if (event.type === 'chain_lock') {
-          if (hidden()) missed = true
-          else resync()
-        }
-      }
-    } catch {
-      // a failed or interrupted stream is retried below
+    release ??= dapi.transactions(onEvent)
+    const status = dapi.status()
+    if (!status.fallbackHint) {
+      stopFallback()
+    } else if (!fallback) {
+      fallback = new AbortController()
+      void followHistory(fallback)
     }
-    if (signal.aborted) return
-    connected = false
-    opts.onStatus('reconnecting')
-    if (delivered || now() - startedAt >= STABLE_AFTER_MS) delay = BACKOFF_START_MS
-    await sleep(delay, signal)
-    delay = Math.min(delay * 2, BACKOFF_MAX_MS)
+    report(
+      status.fallbackHint || status.state === 'live'
+        ? 'live'
+        : status.state === 'reconnecting'
+          ? 'reconnecting'
+          : 'connecting',
+    )
+    if (missed) {
+      missed = false
+      opts.onBlock()
+    }
   }
+
+  const unsubscribeDapi = dapi.subscribe(sync)
+  const unsubscribeVisibility = visibility?.subscribe(sync)
+  sync()
+  signal.addEventListener(
+    'abort',
+    () => {
+      unsubscribeDapi()
+      unsubscribeVisibility?.()
+      release?.()
+      fallback?.abort()
+    },
+    { once: true },
+  )
 }

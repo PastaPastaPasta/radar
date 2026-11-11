@@ -1,20 +1,27 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { openAddressEvents } from '@/data/hyphen/live'
+import { coreLive } from '@/data/core/live'
+import { mapSourced } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
+import { POLL_MS } from '@/data/query/stale'
 import type { NetworkId } from '@/lib/network'
-import { addressKeys } from './queries'
+import { addressKeys, addressQueries } from './queries'
 import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
-export type LiveStatus = 'connecting' | WatchStatus
+export type LiveStatus = WatchStatus
 
 export interface AddressActivity {
   status: LiveStatus
   /** Unconfirmed transactions that touch the address, newest first. */
   pending: PendingTx[]
+  /** The newest transaction seen since this page opened, pending or not. */
+  latest?: PendingTx
   /** Transactions seen since this page opened, counting those that have since confirmed. */
   arrived: number
 }
+
+/** How many of the address's newest transactions the fallback reads. */
+const RECENT_LIMIT = 10
 
 const FRESH = { staleTime: 0 } as const
 
@@ -44,7 +51,10 @@ const fresh = (scope: string): Scoped => ({ scope, status: 'connecting', pending
 /** State from an earlier address or network never shows on the current one. */
 const current = (s: Scoped, scope: string): Scoped => (s.scope === scope ? s : fresh(scope))
 
-/** Opens Hyphen's event stream while the address page is on screen (§5.5). */
+/**
+ * Follows new transactions of the address while its page is on screen (§5.5): DAPI's live transaction feed, and
+ * Hyphen's history of the address only while that feed has given up.
+ */
 export function useAddressActivity(
   net: NetworkId,
   address: string,
@@ -59,36 +69,59 @@ export function useAddressActivity(
     if (!enabled) return
     const controller = new AbortController()
     pendingRef.current = []
-    void watchAddress({
+    const keep = (next: PendingTx[]) => {
+      if (next.length === pendingRef.current.length) return
+      pendingRef.current = next
+      setState((s) => ({ ...current(s, scope), pending: next }))
+    }
+    watchAddress({
       address,
       signal: controller.signal,
-      open: (signal) => openAddressEvents(net, signal),
+      dapi: {
+        transactions: (listener) => coreLive.transactions(net, listener),
+        status: () => coreLive.txStatus(net),
+        subscribe: (onChange) => coreLive.subscribe(onChange),
+      },
+      recent: (signal) =>
+        untilAborted(
+          queryClient.fetchQuery({
+            ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),
+            ...FRESH,
+          }),
+          signal,
+        ).then((page) => mapSourced(page, (p) => p.items)),
+      spendable: (outpoint) => {
+        const utxos = queryClient.getQueryData(addressQueries.utxos(net, address).queryKey)?.data
+          .items
+        return utxos?.find((u) => `${u.txHash}:${u.vout}` === outpoint)?.value
+      },
+      every: POLL_MS.addressFallback,
       visibility: pageVisibility,
-      fetchTx: (txid, signal) =>
-        untilAborted(queryClient.fetchQuery({ ...hyQueries.tx(net, txid), ...FRESH }), signal),
       onStatus: (status) => {
         setState((s) => ({ ...current(s, scope), status }))
       },
       onPending: (tx) => {
-        if (pendingRef.current.some((p) => p.txid === tx.txid)) return
-        pendingRef.current = [tx, ...pendingRef.current]
+        if (!tx.confirmed) pendingRef.current = [tx, ...pendingRef.current]
         setState((s) => {
           const c = current(s, scope)
-          return { ...c, pending: pendingRef.current, arrived: c.arrived + 1 }
+          return { ...c, pending: pendingRef.current, latest: tx, arrived: c.arrived + 1 }
         })
       },
-      onBlock: () => {
+      onBlock: (mined) => {
         const keys = addressKeys(net, address)
         void queryClient.invalidateQueries({ queryKey: keys.summary })
         void queryClient.invalidateQueries({ queryKey: keys.txs })
         void queryClient.invalidateQueries({ queryKey: keys.utxos })
+        if (mined) {
+          keep(pendingRef.current.filter((p) => !mined.has(p.txid)))
+          return
+        }
         for (const p of pendingRef.current) {
           void queryClient
             .fetchQuery({ ...hyQueries.tx(net, p.txid), ...FRESH })
-            .then((fresh) => {
-              if (controller.signal.aborted || fresh.data?.blockHeight == null) return
-              pendingRef.current = pendingRef.current.filter((q) => q.txid !== p.txid)
-              setState((s) => ({ ...current(s, scope), pending: pendingRef.current }))
+            .then((tx) => {
+              if (controller.signal.aborted || tx.data?.blockHeight == null) return
+              keep(pendingRef.current.filter((q) => q.txid !== p.txid))
             })
             .catch(() => undefined)
         }

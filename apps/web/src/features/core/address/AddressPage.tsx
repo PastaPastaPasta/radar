@@ -143,16 +143,18 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
     <>
       <StaleIndexNotice />
       <LiveNotice status={live.status} arrived={live.arrived} />
-      {live.pending[0] ? (
+      {live.latest ? (
         <p
           role="status"
           data-new-transaction
           className="flex flex-wrap items-center gap-2 rounded border border-[var(--dh-line)] p-3 text-sm"
         >
           <Badge tone="warning">{t`New transaction`}</Badge>
-          <Entity kind="tx" id={live.pending[0].txid} />
-          <Amount value={live.pending[0].net} kind="duffs" signed />
-          <a href="#unconfirmed">{t`See unconfirmed activity`}</a>
+          <Entity kind="tx" id={live.latest.txid} />
+          <Amount value={live.latest.net} kind="duffs" signed />
+          {live.pending.includes(live.latest) ? (
+            <a href="#unconfirmed">{t`See unconfirmed activity`}</a>
+          ) : null}
         </p>
       ) : null}
 
@@ -181,7 +183,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
             <Stat
               label={t`Unconfirmed`}
               value={<Amount value={unconfirmed} kind="duffs" signed />}
-              source={live.pending[0] ? stampOf(live.pending[0].tx) : undefined}
+              source={live.pending[0]?.stamp}
             />
             <Stat label={t`Transactions`} value={formatInt(a.txCount)} />
             <Stat
@@ -276,9 +278,7 @@ function LiveNotice({ status, arrived }: { status: LiveStatus; arrived: number }
           ? t`Connecting to the live feed…`
           : status === 'paused'
             ? t`Live updates are paused while this tab is in the background.`
-            : status === 'busy'
-              ? t`Live updates are paused because the network is busy. This page refreshes at the next block.`
-              : t`Live feed interrupted, reconnecting…`}
+            : t`Live feed interrupted, reconnecting…`}
       {arrived > 0 ? (
         <strong data-arrived>
           <Plural
