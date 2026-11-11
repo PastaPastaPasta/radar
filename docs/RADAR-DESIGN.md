@@ -96,7 +96,7 @@ Archivo variable (family), system mono for hashes, addresses, versions and keys.
 
 Rules:
 
-- Units after a value are 14 px, weight 520, `--dh-ink-2`, 2 px gap ("10.1333 DASH", "666 duffs").
+- Units after a value are 14 px, weight 520, `--dh-ink-2`, joined by one no-break space, not a margin ("10.1333 DASH", "666 duffs").
 - Eight-decimal DASH amounts dim the last four digits (`.rx-d2`, `--dh-ink-2`) so the significant part reads first: 50.0000**0000**.
 - Hashes in running text are short: first 6, ellipsis, last 4 (`cb4c0d…cdf0`). Full hashes appear once per record header, with the first 4 and last 2 characters bold.
 - Usernames: label bold, `.dash` in `--dh-ink-2`.
@@ -150,13 +150,14 @@ A **type badge takes the layer the type touches**, not the chain it is recorded 
 ### 4.3 Data colours
 
 - **Single series:** the layer line colour (`--rx-l`). Platform bars use `--rx-plat-line` in light (`#1E9586`, 3.7:1 on white); `--rx-plat` (`#25B8A6`) is only for fills that carry text in `--rx-plat-ink` or for marks on the plate.
+- **Core chart families** (`/charts`): one token each, so six cards read apart in both themes: hash rate `--rx-core-line` (blue), transactions `--rx-plat-line` (teal), difficulty `--dh-accent-forge-select` (ember), supply `--rx-net-line` (navy; pale blue in dark), unspent outputs `--dh-good` (green), credit pool `--rx-id-3` (cyan). The chart's wrapper sets `--rx-l`. Each is at least 3:1 on the card.
 - **Ordered series** (versions, ranks): the family blue ramp `--dh-ramp-1…5`, newest/most first, then `--dh-line-2` for "Other".
 - **Platform ordered series:** teal ramp `--rx-teal-1…5` (`#0B6B60 #1E9586 #25B8A6 #7FD6CA #BDEBE4`; reversed in dark).
 - **Heatmaps** (activity calendar): `--rx-cal-1…3`, each at least 3:1 against the empty cell: light `#1E9586 #0B6B60 #06403A`, dark `#1E9586 #5FD9C7 #BDEBE4`.
 - **Comparison band** ("middle 80% of evonodes"): the layer fill at 18% opacity behind the bars.
 - **Status in data** (answering / no answer / banned; uptime cells): `--dh-good`, `--dh-warn`, `--dh-bad` with a legend that names them.
 - **Fee** is `--dh-warn` in the value-flow chart; change is `--dh-line-2`.
-- Never more than five hues in one chart. No purple, indigo, magenta, gradients or neon.
+- Never more than five hues in one chart (the six Core charts are six separate charts). No purple, indigo, magenta, gradients or neon.
 
 ### 4.4 Identicons and nodeprints
 
@@ -271,7 +272,7 @@ Box: `--dh-surface` (plate-2 on the plate), 1 px line, 10 px radius, padding 14 
 
 - Label: 13 px `--dh-ink-2`, with the `SourceLine` (compact) inline after it.
 - Value: 26 px (`size="lg"`: 34 px), weight 660, stretch 108%, tabular; tone colours the value too for good/warn/bad.
-- Unit: 14 px `--dh-ink-2`.
+- Unit: 14 px `--dh-ink-2`, after a no-break space.
 - Note: 12.5 px `--dh-ink-2`, one or two lines.
 - `meter`: 6 px meter under the note. `spark`: 28 px high sparkline under the note.
 - `delta`: "+14 this week" in the note; coloured only when `goodWhen` makes it meaningful, with ↑/↓.
