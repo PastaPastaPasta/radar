@@ -41,7 +41,7 @@ export function readChartTokens(el: Element = document.documentElement): ChartTo
   return out
 }
 
-const axisLabel = (t: ChartTokens) => ({ color: t['dh-ink-2'], fontSize: 12 })
+const axisLabel = (t: ChartTokens) => ({ color: t['dh-ink-2'], fontSize: 13 })
 
 export const radarChartTheme = (t: ChartTokens) => {
   const category = {

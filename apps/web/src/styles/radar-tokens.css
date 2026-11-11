@@ -74,6 +74,7 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
+    --dh-ink-2: #b0c6d4; /* 9.6:1 on the card: small captions, timestamps, axis labels, copy icons */
     --rx-core: #1a9cf0;
     --rx-core-ink: #0a2a3d;
     --rx-core-soft: #0d2b40;
@@ -107,6 +108,7 @@
   }
 }
 :root[data-theme='dark'] {
+  --dh-ink-2: #b0c6d4;
   --rx-core: #1a9cf0;
   --rx-core-ink: #0a2a3d;
   --rx-core-soft: #0d2b40;
@@ -183,7 +185,7 @@
   --dh-chip-line: var(--rx-plate-line);
   --dh-hover: rgba(220, 232, 240, 0.06);
   --dh-ink: #e4f3fc;
-  --dh-ink-2: #9bbdd2;
+  --dh-ink-2: #b8d2e2;
   --dh-ink-3: #6a8292;
   --dh-line: var(--rx-plate-line);
   --dh-line-2: var(--rx-plate-ctl);

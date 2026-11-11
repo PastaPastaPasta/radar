@@ -1,4 +1,5 @@
 import { expectAccessible } from '../helpers/a11y'
+import { lowContrastText } from '../helpers/contrast'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
@@ -507,5 +508,62 @@ test.describe('keyboard', () => {
     await page.keyboard.press('Tab')
 
     await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused()
+  })
+})
+
+const TRANSFER = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
+
+test.describe('legibility', () => {
+  for (const path of ['/', '/charts', `/tx/${TRANSFER}`, '/settings', '/tools/verify-message']) {
+    test(`every small text on ${path.slice(0, 12)} meets WCAG AA in this theme @IN-14 @HY-02`, async ({
+      page,
+    }) => {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await settled(page)
+      expect(await lowContrastText(page)).toEqual([])
+    })
+  }
+
+  test('secondary text, source stamps and copy icons stay clear of the card ground @IN-14 @HY-02', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    await settled(page)
+    const grounds = ['--dh-page', '--dh-surface', '--dh-sunken', '--dh-chip']
+    const ratios = await page.evaluate((names) => {
+      const probe = (name: string) => {
+        const el = document.createElement('div')
+        el.style.cssText = `position:absolute;visibility:hidden;color:var(${name})`
+        document.body.append(el)
+        const c = getComputedStyle(el).color
+        el.remove()
+        return (
+          c
+            .match(/\d+(\.\d+)?/g)
+            ?.slice(0, 3)
+            .map(Number) ?? [0, 0, 0]
+        )
+      }
+      const lum = ([r = 0, g = 0, b = 0]: number[]) => {
+        const f = (v: number) => {
+          const s = v / 255
+          return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+        }
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+      }
+      const ink = lum(probe('--dh-ink-2'))
+      return names.map((n) => {
+        const [hi, lo] = [ink, lum(probe(n))].sort((a, b) => b - a)
+        return [n, ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05)] as const
+      })
+    }, grounds)
+    const dark = await page.evaluate(() => matchMedia('(prefers-color-scheme: dark)').matches)
+    for (const [name, ratio] of ratios) {
+      expect(ratio, `--dh-ink-2 on ${name}`).toBeGreaterThanOrEqual(dark ? 7 : 4.5)
+    }
+    const icon = page.locator('.rx-copy .rx-ico').first()
+    await expect(icon).toBeVisible()
+    expect((await icon.boundingBox())?.width).toBeGreaterThanOrEqual(16)
   })
 })
