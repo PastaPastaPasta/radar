@@ -8,7 +8,7 @@ import { useSourceHealth } from '@/data/health'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { Entity, PageLink, networkName, useNetwork } from '@/features/entity'
-import { formatBytes, formatInt, formatNumber } from '@/lib/format'
+import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Amount, Card, DataTable, Empty, SectionBand, Stat, Stats, Time } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
@@ -52,11 +52,7 @@ function Headline() {
       <Stat
         layer="core"
         label={t`Difficulty`}
-        value={
-          status.data
-            ? formatNumber(status.data.data.difficulty, { maximumFractionDigits: 0 })
-            : '—'
-        }
+        value={status.data ? formatSignificant(status.data.data.difficulty) : '—'}
         loading={status.isPending}
         source={status.data ? stampOf(status.data) : undefined}
       />

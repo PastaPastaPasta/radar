@@ -51,6 +51,21 @@ describe('Home page', () => {
     expect(headline.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
+  it('keeps the digits of a difficulty below one @IN-16', async () => {
+    const original = core.status.bind(core)
+    vi.spyOn(core, 'status').mockImplementation(async (net, signal) => {
+      const status = await original(net, signal)
+      return { ...status, data: { ...status.data, difficulty: 0.00123456 } }
+    })
+    renderAt('/')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-headline]')
+      expect(el).toHaveTextContent(/Difficulty.*0\.001235/)
+      return el!
+    })
+    expect(headline).not.toHaveTextContent(/Difficulty\s*0(?!\.)/)
+  })
+
   it('offers a jump to the Core figures from the top of the page @HY-01', async () => {
     renderAt('/')
     const link = await screen.findByRole('link', { name: 'Core figures' })
