@@ -52,7 +52,7 @@ describe('Block page', () => {
   it('names the reward, the pool slot and the confirmations @IN-03', async () => {
     renderAt(`/block/${TIP}`)
     expect(await screen.findByText('Block reward')).toBeInTheDocument()
-    expect(screen.getByText('Mined by')).toBeInTheDocument()
+    expect(screen.getByText('Coinbase tag says')).toBeInTheDocument()
     expect(await screen.findByText(/1 confirmation/)).toBeInTheDocument()
   })
 
@@ -67,6 +67,58 @@ describe('Block page', () => {
       'href',
       expect.stringMatching(/^\/block\/[0-9a-f]{64}/),
     )
+  })
+
+  it('says a ChainLock is reported by one node, not that the block is locked @IN-03', async () => {
+    const original = core.block.bind(core)
+    vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal) => {
+      const found = await original(net, ref, signal)
+      return found.data
+        ? { ...found, data: { ...found.data, chainLocked: false, chainLockClaim: 'one-node' } }
+        : found
+    })
+    renderAt(`/block/${TIP}`)
+    expect(await screen.findByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(screen.queryByText('ChainLocked')).toBeNull()
+    expect(screen.queryByText('Not ChainLocked yet')).toBeNull()
+  })
+
+  it('words the pool as what the coinbase tag says and shows no bidi controls @IN-03', async () => {
+    const original = core.block.bind(core)
+    const tag = Array.from(new TextEncoder().encode('/ViaBTC/\u202e evil\u2066/'))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+    vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal) => {
+      const found = await original(net, ref, signal)
+      const block = found.data
+      const coinbase = block?.txs[0]
+      if (!block || !coinbase) return found
+      const first = coinbase.inputs[0]
+      return {
+        ...found,
+        data: {
+          ...block,
+          txs: [
+            { ...coinbase, inputs: [{ ...first!, coinbase: tag }, ...coinbase.inputs.slice(1)] },
+            ...block.txs.slice(1),
+          ],
+        },
+      }
+    })
+    renderAt(`/block/${TIP}`)
+    const stat = (await screen.findByText('Coinbase tag says')).closest('div')!.parentElement!
+    expect(stat).toHaveTextContent('ViaBTC')
+    expect(stat.textContent).not.toMatch(/[\u202a-\u202e\u2066-\u2069]/u)
+    expect(stat).toHaveTextContent(/not proof/)
+  })
+
+  it('has one Core section navigation @IN-03', async () => {
+    renderAt(`/block/${TIP}`)
+    await screen.findByRole('heading', { level: 1, name: /2,570,085/ })
+    const bars = screen
+      .getAllByRole('navigation')
+      .filter((n) => within(n).queryByRole('link', { name: 'Mempool' }) !== null)
+    expect(bars).toHaveLength(1)
   })
 
   it('has no next block at the tip @IN-03', async () => {

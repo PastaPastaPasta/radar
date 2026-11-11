@@ -9,10 +9,10 @@ import type { DecodedBlock, DecodedTx } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
 import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
+import { HyphenOnlyNote } from './HyphenOnlyNote'
 import { formatBytes, formatInt, formatNumber } from '@/lib/format'
 import {
   Amount,
-  Badge,
   Card,
   DataTable,
   Hash,
@@ -27,7 +27,14 @@ import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './
 import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
-import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
+import {
+  ChainLockBadge,
+  CoreBand,
+  CoreBandSkeleton,
+  NotFound,
+  RecordHeader,
+  Section,
+} from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { parseBlockRef } from '@/lib/core/block-ref'
 
@@ -106,6 +113,7 @@ function BlockView({
   const hy = useQuery({ ...hyQueries.block(net, block.hash), enabled: hyphenFit })
   const coinbase = block.txs[0]
   const pool = poolOf(coinbase)
+  const tag = coinbaseTag(coinbase)
   const reward = blockReward(block)
   const cb = cbTxOf(block)
   const confirmations =
@@ -161,7 +169,6 @@ function BlockView({
   return (
     <article data-page="/block/$id" data-layer="core">
       <CoreBand
-        current="/blocks"
         crumbs={[
           { label: t`Core`, to: <Link to="/blocks">{t`Core`}</Link> },
           { label: t`Block ${formatInt(block.height)}` },
@@ -215,13 +222,11 @@ function BlockView({
                 <Hash value={block.hash} display="full" />
               </div>
               <div className="rx-rec__meta">
-                {block.chainLocked ? (
-                  <Badge tone="success" icon={<Icon name="cl" size="sm" />}>
-                    {t`ChainLocked`}
-                  </Badge>
-                ) : (
-                  <Badge tone="warning">{t`Not ChainLocked yet`}</Badge>
-                )}
+                <ChainLockBadge
+                  locked={block.chainLocked}
+                  claim={block.chainLockClaim}
+                  unlockedLabel={t`Not ChainLocked yet`}
+                />
                 {confirmations === undefined ? null : (
                   <span>
                     {plural(confirmations, { one: '# confirmation', other: '# confirmations' })}
@@ -246,10 +251,12 @@ function BlockView({
             note={t`Everything the coinbase pays out`}
           />
           <Stat
-            label={t`Mined by`}
-            value={pool ?? t`Unknown pool`}
+            label={t`Coinbase tag says`}
+            value={pool ?? t`No known pool`}
             note={
-              pool ? t`From the coinbase tag` : coinbaseTag(coinbase) || t`No tag in the coinbase`
+              tag
+                ? t`Tag: ${tag}. The miner writes it, so it is not proof.`
+                : t`No tag in the coinbase`
             }
           />
           <Stat
@@ -262,6 +269,7 @@ function BlockView({
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
         <Section id="header" title={t`Header`} source={stamp}>
+          <HyphenOnlyNote what={t`Chainwork`} />
           <Card layer="core">
             <KeyValue
               columns={2}

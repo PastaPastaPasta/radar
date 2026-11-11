@@ -48,13 +48,12 @@ function useRange(date: string | undefined) {
   const pending = !tipBlock || !first.data || !next.data
   const failed =
     (tip.isError && !tip.data) || (first.isError && !first.data) || (next.isError && !next.data)
-  const future = tipBlock !== undefined && start > tipBlock.time
   return {
     tip,
     state: pending ? (failed ? ('error' as const) : ('loading' as const)) : ('ready' as const),
     floor: first.data?.data ?? 0,
     ceiling:
-      future || !tipBlock || !next.data
+      !tipBlock || !next.data
         ? -1
         : tipBlock.time < start + DAY_MS
           ? tipBlock.height
@@ -142,12 +141,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
     enabled: window !== null,
     placeholderData: keepPreviousOnNetwork(net),
   })
-  const rows = useMemo(() => {
-    const all = rowsQuery.data?.data ?? []
-    if (!date) return all
-    const start = dayStartMs(date)
-    return all.filter((r) => r.time >= start && r.time < start + DAY_MS)
-  }, [rowsQuery.data, date])
+  const rows = useMemo(() => rowsQuery.data?.data ?? [], [rowsQuery.data])
   const newestPage = window !== null && window.newer === null
   const today = todayUtc()
   const fresh = useFreshRows(rows, newestPage && (!date || date === today))
@@ -161,7 +155,13 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
         cell: ({ row }) => (
           <span className="rx-row" style={{ gap: 6 }}>
             <Entity kind="block" id={String(row.original.height)} />
-            {row.original.chainLocked ? <Icon name="cl" size="sm" className="rx-lock" /> : null}
+            {row.original.chainLocked ? (
+              <Icon name="cl" size="sm" className="rx-lock" />
+            ) : row.original.chainLockClaim ? (
+              <span className="rx-tag" data-claim="one-node">
+                {t`ChainLock reported by one node`}
+              </span>
+            ) : null}
           </span>
         ),
         meta: { phone: 'title' },
@@ -194,7 +194,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
         ? [
             {
               id: 'pool',
-              header: t`Mined by`,
+              header: t`Coinbase tag says`,
               accessorFn: (r: BlockRow) => r.pool ?? '—',
               meta: { phone: 'hidden' as const },
             },
@@ -229,7 +229,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
 
   return (
     <article data-page="/blocks" data-layer="core">
-      <CoreBand crumbs={[{ label: t`Core` }, { label: t`Blocks` }]} current="/blocks">
+      <CoreBand crumbs={[{ label: t`Core` }, { label: t`Blocks` }]}>
         <RecordHeader
           icon="block"
           kicker={t`Core`}

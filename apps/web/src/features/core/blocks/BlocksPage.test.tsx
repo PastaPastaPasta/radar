@@ -1,6 +1,7 @@
 import { configure, screen, waitFor, within } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { core } from '@/data/core/client'
 import { renderAt } from '../hy-shared/test-utils'
 
 configure({ asyncUtilTimeout: 5000 })
@@ -12,6 +13,10 @@ vi.mock('@/data/core/client', async (original) => {
 })
 
 describe('Blocks list', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('lists the newest blocks with a link to older ones @HY-04', async () => {
     renderAt('/blocks')
     const table = await screen.findByRole('table', { name: 'Core blocks' })
@@ -48,6 +53,37 @@ describe('Blocks list', () => {
     const table = await screen.findByRole('table', { name: 'Core blocks' })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
     expect(within(table).getByRole('link', { name: /1,589,232/ })).toBeInTheDocument()
+  })
+
+  it('marks a row whose ChainLock one node reported without calling it locked @IN-02', async () => {
+    const original = core.blockRows.bind(core)
+    vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
+      const rows = await original(net, q, signal)
+      return {
+        ...rows,
+        data: rows.data.map((r, i) =>
+          i === 0 ? { ...r, chainLocked: false, chainLockClaim: 'one-node' as const } : r,
+        ),
+      }
+    })
+    renderAt('/blocks')
+    const table = await screen.findByRole('table', { name: 'Core blocks' })
+    expect(await within(table).findByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(within(table).getAllByText('ChainLock reported by one node')).toHaveLength(1)
+  })
+
+  it('keeps blocks stamped across midnight on their day instead of dropping them @IN-02', async () => {
+    const original = core.blockRows.bind(core)
+    vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
+      const rows = await original(net, q, signal)
+      return {
+        ...rows,
+        data: rows.data.map((r, i) => (i === 0 ? { ...r, time: Date.UTC(2026, 10, 4, 1) } : r)),
+      }
+    })
+    renderAt('/blocks?date=2026-11-03')
+    const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
   })
 
   it('says a day in the future has no blocks yet @IN-02', async () => {

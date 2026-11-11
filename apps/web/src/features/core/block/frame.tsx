@@ -1,40 +1,21 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
-import { useDocumentTitle, networkName, PageLink, pagesInSection } from '@/features/entity'
+import { useDocumentTitle, networkName, PageLink } from '@/features/entity'
 import { type NetworkId } from '@/lib/network'
-import { Empty, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
+import { Badge, Empty, Icon, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
 
 export interface Crumb {
   label: ReactNode
   to?: ReactNode
 }
 
-/** The Core page band: the layer's sub-page links, breadcrumbs, then the record header and KPI row. */
-export function CoreBand({
-  crumbs,
-  current,
-  children,
-}: {
-  crumbs: Crumb[]
-  current: string
-  children: ReactNode
-}) {
+/** The Core page band: breadcrumbs, then the record header and KPI row. The Core page links live in the shell's section bar. */
+export function CoreBand({ crumbs, children }: { crumbs: Crumb[]; children: ReactNode }) {
   const { t } = useLingui()
   return (
     <section className="rx-band" data-layer="core" aria-labelledby="h-page">
       <div className="dh-container">
-        <nav className="rx-band__nav" aria-label={t`Core`}>
-          {pagesInSection('core').map((p) => (
-            <PageLink
-              key={p.path}
-              to={p.path}
-              aria-current={p.path === current ? 'page' : undefined}
-            >
-              {p.title}
-            </PageLink>
-          ))}
-        </nav>
         <ol className="rx-crumbs" aria-label={t`Where this is`}>
           {crumbs.map((c, i) => (
             <li key={i} aria-current={c.to ? undefined : 'page'}>
@@ -50,7 +31,7 @@ export function CoreBand({
 
 export function CoreBandSkeleton() {
   return (
-    <CoreBand crumbs={[]} current="/blocks">
+    <CoreBand crumbs={[]}>
       <div className="rx-rec" aria-busy="true">
         <h1 className="rx-rec__title" id="h-page">
           <Skeleton shape="line" width="40%" />
@@ -170,5 +151,55 @@ export function NotFound({
         }
       />
     </div>
+  )
+}
+
+/**
+ * A ChainLock is shown as locked only once a second source agrees. One node's word is shown as exactly that,
+ * and an unlocked block is not called locked at all.
+ */
+export function ChainLockBadge({
+  locked,
+  claim,
+  unlockedLabel,
+}: {
+  locked: boolean
+  claim: 'one-node' | undefined
+  /** What to say when nothing reports a lock; omit to say nothing. */
+  unlockedLabel?: ReactNode
+}) {
+  const { t } = useLingui()
+  if (locked) {
+    return (
+      <Badge tone="success" icon={<Icon name="cl" size="sm" />}>
+        {t`ChainLocked`}
+      </Badge>
+    )
+  }
+  if (claim) {
+    return (
+      <span data-claim="one-node">
+        <Badge tone="warning" icon={<Icon name="cl" size="sm" />}>
+          {t`ChainLock reported by one node`}
+        </Badge>
+      </span>
+    )
+  }
+  return unlockedLabel ? <Badge tone="warning">{unlockedLabel}</Badge> : null
+}
+
+/** An InstantSend lock is reported by the node that answered; no second source is asked. */
+export function InstantSendBadge({ claim }: { claim: 'one-node' | undefined }) {
+  const { t } = useLingui()
+  return claim ? (
+    <span data-claim="one-node">
+      <Badge tone="warning" icon={<Icon name="is" size="sm" />}>
+        {t`InstantSend lock reported by one node`}
+      </Badge>
+    </span>
+  ) : (
+    <Badge tone="success" icon={<Icon name="is" size="sm" />}>
+      {t`InstantSend locked`}
+    </Badge>
   )
 }
