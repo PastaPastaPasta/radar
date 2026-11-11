@@ -58,6 +58,11 @@ const PAYLOADS: { name: string; txid: string; kind: string; shows: string }[] = 
   },
 ]
 
+const REVOCATION = '9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4'
+const COINBASE = 'ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328'
+const PROREG = 'af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251'
+const TESTNET_TRANSFER = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
+
 test.describe('Transaction page', () => {
   test('shows the fee, flow, settlement steps and both lists @IN-05', async ({ page }) => {
     await page.goto(`/tx/${TRANSFER}`)
@@ -113,5 +118,52 @@ test.describe('Transaction page', () => {
     await page.goto(`/tx/${NO_SUCH}`)
     await expect(page.getByText('Not found on Mainnet')).toBeVisible()
     await expect(page.getByRole('link', { name: 'Search Testnet' })).toBeVisible()
+  })
+
+  test('links a spent output to the transaction that spent it, at its input @IN-05', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${REVOCATION}#out-0`)
+    const link = page.locator('#out-0').getByRole('link', { name: /^in [0-9a-f]{4}…[0-9a-f]{4}/ })
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute(
+      'href',
+      '/tx/a1782604010574eeafc6c667602a6826832a6a9e3d9752b8b559a4732ea32cee#in-0',
+    )
+    await expectAccessible(page)
+  })
+
+  test('does not call an output unspent when its source cannot vouch for it @HY-07', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${COINBASE}`)
+    await expect(page.locator('#out-1')).toContainText('Unspendable')
+    await expect(page.locator('#out-0 [data-spend]')).toBeVisible()
+    await expect(page.locator('#out-0 [data-spend="unknown"]')).toBeVisible()
+    await expect(page.locator('#io').getByText('Unspent', { exact: true })).toHaveCount(0)
+  })
+
+  test('shows both when it was received and when it was mined @HY-07', async ({ page }) => {
+    await page.goto(`/tx/${PROREG}`)
+    const settled = page.locator('#settlement')
+    await expect(settled.locator('[data-step="seen"]')).toContainText(
+      /Received.*at or before.*2026/,
+    )
+    await expect(settled.locator('[data-step="mined"]')).toContainText(/Mined.*2026/)
+  })
+
+  test('has a single Core section navigation @IN-03', async ({ page }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.getByRole('heading', { level: 1, name: /Transaction/ })).toBeVisible()
+    await expect(page.getByRole('navigation').filter({ hasText: 'Mempool' })).toHaveCount(1)
+  })
+
+  test('names every testnet amount in tDASH @IN-16', async ({ page }) => {
+    await page.goto(`/tx/${TESTNET_TRANSFER}?network=testnet`)
+    const kpis = page.locator('.rx-kpis')
+    await expect(kpis).toContainText('tDASH to other addresses')
+    const text = (await kpis.textContent()) ?? ''
+    expect(text).not.toMatch(/(^|[^t])DASH/)
+    expect((await page.locator('#io').textContent()) ?? '').not.toMatch(/(^|[^t])DASH/)
   })
 })

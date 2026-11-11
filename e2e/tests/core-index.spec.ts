@@ -38,6 +38,79 @@ test.describe('address page', () => {
     await expectNoSideScroll(page)
   })
 
+  test('tells the viewer when a new transaction arrives for the address @IN-06', async ({
+    page,
+  }) => {
+    const id = 'ab'.repeat(32)
+    await page.addInitScript(
+      ({ address, id }) => {
+        const real = window.fetch.bind(window)
+        const json = (body: unknown) =>
+          new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } })
+        window.fetch = (input, init) => {
+          const url =
+            typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+          if (url.includes('/x/hy/mainnet/stream')) {
+            const encoder = new TextEncoder()
+            const stream = new ReadableStream<Uint8Array>({
+              start(controller) {
+                setTimeout(() => {
+                  const event = {
+                    type: 'mempool_tx',
+                    ts: Math.floor(Date.now() / 1000),
+                    payload: { txid: id },
+                  }
+                  controller.enqueue(encoder.encode(JSON.stringify(event) + '\n'))
+                }, 1500)
+                init?.signal?.addEventListener('abort', () => {
+                  try {
+                    controller.close()
+                  } catch {
+                    // already closed
+                  }
+                })
+              },
+            })
+            return Promise.resolve(
+              new Response(stream, { headers: { 'content-type': 'application/x-ndjson' } }),
+            )
+          }
+          if (url.includes(`/x/hy/mainnet/tx/${id}`)) {
+            return Promise.resolve(
+              json({
+                txHash: id,
+                txVersion: 3,
+                txType: 'normal',
+                txSize: 226,
+                valueOut: 250000000,
+                inputCount: 1,
+                outputCount: 1,
+                vin: [
+                  {
+                    n: 0,
+                    sequence: 0,
+                    address: 'XmzJZQ5tib4NUwqXDH2fAg6jXUkYo4Gwmd',
+                    value: 300000000,
+                  },
+                ],
+                vout: [{ n: 0, value: 250000000, scriptPubKey: { hex: '76' }, address }],
+              }),
+            )
+          }
+          return real(input, init)
+        }
+      },
+      { address: ADDRESS, id },
+    )
+    await page.goto(`/address/${ADDRESS}`)
+    const notice = page.locator('[data-new-transaction]')
+    await expect(notice).toBeVisible()
+    await expect(notice).toContainText('New transaction')
+    await expect(page.locator('[data-arrived]')).toContainText('1 new transaction since you opened')
+    await expect(page.locator('[data-pending]')).toContainText('Unconfirmed')
+    await expectAccessible(page)
+  })
+
   test('pages the history by cursor and keeps what is already shown @IN-06', async ({ page }) => {
     await page.goto(`/address/${ADDRESS}`)
     const table = page.getByRole('table', { name: /Transactions/ })
@@ -126,6 +199,25 @@ test.describe('rich list', () => {
     await sourced(page)
     await expectAccessible(page)
     await expectNoSideScroll(page)
+  })
+
+  test('keeps received, sent and transactions on every row, phone or desktop @HY-09', async ({
+    page,
+  }) => {
+    await page.goto('/rich-list')
+    const first = page
+      .getByRole('table', { name: /Addresses ranked by balance/ })
+      .locator('tbody tr')
+      .first()
+    for (const label of ['Received', 'Sent', 'Transactions']) {
+      await expect(first.locator(`td[data-l="${label}"]`)).toBeVisible()
+    }
+    await page.getByRole('button', { name: 'Show more' }).click()
+    const rows = page
+      .getByRole('table', { name: /Addresses ranked by balance/ })
+      .locator('tbody tr')
+    await expect(rows).toHaveCount(50)
+    await expect(rows.nth(40).locator('td[data-l="Sent"]')).toBeVisible()
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
