@@ -4,9 +4,9 @@ import { openAddressEvents } from '@/data/hyphen/live'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { NetworkId } from '@/lib/network'
 import { addressKeys } from './queries'
-import { watchAddress, type PendingTx } from './live'
+import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
-export type LiveStatus = 'connecting' | 'live' | 'reconnecting'
+export type LiveStatus = 'connecting' | WatchStatus
 
 export interface AddressActivity {
   status: LiveStatus
@@ -17,6 +17,25 @@ export interface AddressActivity {
 }
 
 const FRESH = { staleTime: 0 } as const
+
+const pageVisibility = {
+  hidden: () => document.hidden,
+  subscribe(onChange: () => void) {
+    document.addEventListener('visibilitychange', onChange)
+    return () => document.removeEventListener('visibilitychange', onChange)
+  },
+}
+
+/** Stops waiting for `work` when `signal` aborts; the query itself is left to finish on its own. */
+function untilAborted<T>(work: Promise<T>, signal: AbortSignal): Promise<T> {
+  return new Promise((resolve, reject) => {
+    if (signal.aborted) return reject(new DOMException('Aborted', 'AbortError'))
+    signal.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')), {
+      once: true,
+    })
+    work.then(resolve, reject)
+  })
+}
 
 type Scoped = AddressActivity & { scope: string }
 
@@ -44,7 +63,9 @@ export function useAddressActivity(
       address,
       signal: controller.signal,
       open: (signal) => openAddressEvents(net, signal),
-      fetchTx: (txid) => queryClient.fetchQuery({ ...hyQueries.tx(net, txid), ...FRESH }),
+      visibility: pageVisibility,
+      fetchTx: (txid, signal) =>
+        untilAborted(queryClient.fetchQuery({ ...hyQueries.tx(net, txid), ...FRESH }), signal),
       onStatus: (status) => {
         setState((s) => ({ ...current(s, scope), status }))
       },

@@ -14,7 +14,7 @@ import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infi
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
 import { addressQueries } from './queries'
-import { useAddressActivity } from './useAddressActivity'
+import { useAddressActivity, type LiveStatus } from './useAddressActivity'
 
 const AddressQr = lazy(() => import('./AddressQr'))
 
@@ -240,13 +240,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   )
 }
 
-function LiveNotice({
-  status,
-  arrived,
-}: {
-  status: 'connecting' | 'live' | 'reconnecting'
-  arrived: number
-}) {
+function LiveNotice({ status, arrived }: { status: LiveStatus; arrived: number }) {
   const { t } = useLingui()
   return (
     <p role="status" data-live={status} className="flex items-center gap-2 text-sm">
@@ -255,7 +249,11 @@ function LiveNotice({
         ? t`Watching for new transactions on this address.`
         : status === 'connecting'
           ? t`Connecting to the live feed…`
-          : t`Live feed interrupted, reconnecting…`}
+          : status === 'paused'
+            ? t`Live updates are paused while this tab is in the background.`
+            : status === 'busy'
+              ? t`Live updates are paused because the network is busy. This page refreshes at the next block.`
+              : t`Live feed interrupted, reconnecting…`}
       {arrived > 0 ? (
         <strong data-arrived>
           <Plural
