@@ -1,7 +1,6 @@
 import { i18n, type Messages } from '@lingui/core'
 import { useSyncExternalStore } from 'react'
 import { setFormatLocale } from '@/lib/format'
-import { messages as sourceMessages } from './locales/en/messages.po'
 import { isLocale, LOCALES, matchLocale, SOURCE_LOCALE, type LocaleCode } from './locales'
 
 export { I18nProvider } from '@lingui/react'
@@ -11,15 +10,10 @@ export type { LocaleCode } from './locales'
 
 const LOCALE_KEY = 'radar.locale'
 
-const loaders = import.meta.glob<{ messages: Messages }>([
-  './locales/*/messages.po',
-  '!./locales/en/messages.po',
-])
+const loaders = import.meta.glob<{ messages: Messages }>('./locales/*/messages.po')
 
 /** The locales whose catalogs are built into this version of Radar. */
-export const AVAILABLE_LOCALES = LOCALES.filter(
-  (l) => l.code === SOURCE_LOCALE || `./locales/${l.code}/messages.po` in loaders,
-)
+export const AVAILABLE_LOCALES = LOCALES.filter((l) => `./locales/${l.code}/messages.po` in loaders)
 
 function storedLocale(): LocaleCode | undefined {
   try {
@@ -39,10 +33,6 @@ export function detectLocale(): LocaleCode {
 }
 
 async function load(code: LocaleCode): Promise<void> {
-  if (code === SOURCE_LOCALE) {
-    i18n.load(code, sourceMessages)
-    return
-  }
   const loader = loaders[`./locales/${code}/messages.po`]
   if (!loader) throw new Error(`No catalog for locale ${code}`)
   i18n.load(code, (await loader()).messages)
@@ -66,11 +56,13 @@ export async function activateLocale(code: LocaleCode, remember = false): Promis
   }
 }
 
-// English is built in, so the first render never waits. Another saved locale loads in the background.
-i18n.load(SOURCE_LOCALE, sourceMessages)
-apply(SOURCE_LOCALE)
-const wanted = detectLocale()
-if (wanted !== SOURCE_LOCALE) void activateLocale(wanted).catch(() => undefined)
+/**
+ * The catalog of the visitor's locale, loaded as its own chunk so it stays out of the entry. The app renders after this
+ * settles, which keeps message ids from flashing; a missing catalog falls back to English and then to the ids.
+ */
+export const i18nReady: Promise<void> = activateLocale(detectLocale())
+  .catch(() => activateLocale(SOURCE_LOCALE))
+  .catch(() => undefined)
 
 export function useLocale(): {
   locale: LocaleCode

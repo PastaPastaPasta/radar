@@ -2,8 +2,11 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { resetHealthRegistry } from '@/data/health'
+import { i18nReady } from '@/i18n'
 import { takeFixtureMisses } from './msw/handlers'
 import { server } from './server'
+
+await i18nReady
 
 Element.prototype.scrollTo = () => undefined
 window.scrollTo = () => undefined

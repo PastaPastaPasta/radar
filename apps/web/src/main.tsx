@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from './app'
 import { loadDevnets } from './app/devnets'
 import { setSdkDevnets } from './data/sdk/devnets'
+import { i18nReady } from './i18n'
 import './styles.css'
 
 const root = document.getElementById('root')
@@ -19,6 +20,7 @@ async function start(container: HTMLElement) {
     const { installProductionDapiTransport } = await import('./data/dapi-core/production')
     installProductionDapiTransport({ devnets: loadDevnets })
   }
+  await i18nReady
   createRoot(container).render(
     <StrictMode>
       <App />
