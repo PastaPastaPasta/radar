@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { DecodedTx, PrevOut } from '@/data/core/types'
-import { layoutFlow, limitNodes, totals, type FlowNode, FLOW } from './tx-info'
+import { layoutFlow, limitNodes, movesNoValue, totals, type FlowNode, FLOW } from './tx-info'
 
 const tx = (over: Partial<DecodedTx>): DecodedTx => ({
   txid: 'a'.repeat(64),
@@ -38,9 +38,28 @@ describe('totals', () => {
     })
     expect(totals(cb, undefined)).toEqual({ out: 99n })
   })
+  it('gives a transaction with no inputs a zero fee @HY-07', () => {
+    const signal = tx({ inputs: [], outputs: [], payload: { kind: 'mnhfTx' } })
+    expect(totals(signal, undefined)).toEqual({ in: 0n, out: 0n, fee: 0n })
+  })
   it('reads an asset unlock fee from its payload', () => {
     const unlock = tx({ inputs: [], payload: { kind: 'assetUnlockTx', fee: 7n } })
     expect(totals(unlock, undefined)).toEqual({ out: 99n, fee: 7n })
+  })
+})
+
+describe('movesNoValue @HY-07', () => {
+  it('is true for a transaction with no inputs and no outputs', () => {
+    expect(movesNoValue(tx({ inputs: [], outputs: [], payload: { kind: 'qcTx' } }))).toBe(true)
+  })
+  it('is false when coins move, and for an asset unlock', () => {
+    expect(movesNoValue(tx({}))).toBe(false)
+    expect(movesNoValue(tx({ inputs: [], payload: { kind: 'assetUnlockTx', fee: 7n } }))).toBe(
+      false,
+    )
+    expect(movesNoValue(tx({ inputs: [], outputs: [], payload: { kind: 'assetUnlockTx' } }))).toBe(
+      false,
+    )
   })
 })
 

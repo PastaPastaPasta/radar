@@ -8,7 +8,7 @@ import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
-import { formatBytes, formatInt } from '@/lib/format'
+import { formatBytes, formatInt, UNIT_GAP } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { useFollowTip } from '../follow-tip'
 import {
@@ -36,6 +36,7 @@ import { useFirstSeen } from './useFirstSeen'
 import {
   inputValues,
   isCoinbaseTx,
+  movesNoValue,
   senderAddresses,
   sumOutputs,
   totals,
@@ -210,6 +211,8 @@ function TxView({
     return { inputs, outputs }
   }, [coinbase, tx, values, senders, outTotal, fee, unloaded, loadedTotal, t])
 
+  const noValue = movesNoValue(tx)
+  const spendsNothing = !coinbase && tx.inputs.length === 0 && fee === 0n
   const feeRate =
     fee !== undefined && tx.size > 0
       ? (Number(fee) / tx.size).toFixed(1).replace(/\.0$/, '')
@@ -296,7 +299,9 @@ function TxView({
             note={
               fee !== undefined
                 ? feeRate
-                  ? t`${feeRate} duffs a byte`
+                  ? spendsNothing
+                    ? t`${feeRate} duffs a byte: it spends no coins`
+                    : t`${feeRate} duffs a byte`
                   : undefined
                 : coinbase
                   ? t`Coinbase transactions pay none`
@@ -309,7 +314,7 @@ function TxView({
           <Stat
             label={t`Size`}
             value={formatInt(tx.size)}
-            unit={t`bytes`}
+            unit={`${UNIT_GAP}${t`bytes`}`}
             note={formatBytes(tx.size)}
           />
           <Stat
@@ -344,15 +349,30 @@ function TxView({
         <Section
           id="flow"
           title={t`Where the value went`}
-          description={t`Ribbon width is the amount. Grey is change back to the sender, orange is the fee.`}
+          description={
+            noValue
+              ? undefined
+              : t`Ribbon width is the amount. Grey is change back to the sender, orange is the fee.`
+          }
           source={prevouts.data ? [stamp, stampOf(prevouts.data)] : stamp}
         >
           <Card layer="core">
-            <ValueFlow
-              inputs={flow.inputs}
-              outputs={flow.outputs}
-              caption={t`Value flow: ${formatInt(tx.inputs.length)} inputs into ${formatInt(tx.outputs.length)} outputs`}
-            />
+            {noValue ? (
+              <div data-no-value>
+                <p
+                  style={{ fontWeight: 600, margin: 0 }}
+                >{t`No value moves in this transaction`}</p>
+                <p className="rx-note">
+                  {t`It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload.`}
+                </p>
+              </div>
+            ) : (
+              <ValueFlow
+                inputs={flow.inputs}
+                outputs={flow.outputs}
+                caption={t`Value flow: ${formatInt(tx.inputs.length)} inputs into ${formatInt(tx.outputs.length)} outputs`}
+              />
+            )}
           </Card>
         </Section>
 

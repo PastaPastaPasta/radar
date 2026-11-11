@@ -169,6 +169,32 @@ describe('Transaction page', () => {
     expect(el).toHaveTextContent('Version bit')
   })
 
+  describe('transactions that spend nothing @HY-07', () => {
+    const flowOf = () => document.querySelector<HTMLElement>('#flow')!
+    const feeCard = () => screen.getByText('Fee').closest('.rx-stat') as HTMLElement
+
+    it.each([
+      ['a quorum commitment', `/tx/${MAINNET.qctx}`, 'qcTx'],
+      ['a hard-fork signal', `/tx/${MNHF}?network=testnet`, 'mnhfTx'],
+    ])('shows %s with a zero fee and no value ribbon', async (_name, url, kind) => {
+      await payload(url, kind)
+      await waitFor(() => expect(feeCard()).toHaveTextContent('0 duffs a byte'))
+      expect(feeCard()).toHaveTextContent('it spends no coins')
+      expect(feeCard()).not.toHaveTextContent('Load all inputs')
+      expect(document.body).not.toHaveTextContent('Load all inputs to work it out')
+      expect(flowOf()).toHaveTextContent('No value moves in this transaction')
+      expect(flowOf().querySelector('svg.rx-flow')).toBeNull()
+      expect(flowOf()).not.toHaveTextContent('Credit pool')
+    })
+
+    it('keeps the credit-pool ribbon for an asset unlock, where the pool pays out', async () => {
+      await payload(`/tx/${MAINNET.assetunlock}`, 'assetUnlockTx')
+      await waitFor(() => expect(flowOf().querySelector('svg.rx-flow')).not.toBeNull())
+      expect(flowOf()).toHaveTextContent('Credit pool')
+      expect(flowOf()).not.toHaveTextContent('No value moves')
+    })
+  })
+
   it('says a transaction is not there, and offers the other network @IN-05 @IN-16', async () => {
     renderAt(`/tx/${NO_SUCH}`)
     expect(await screen.findByText('Not found on Mainnet')).toBeInTheDocument()

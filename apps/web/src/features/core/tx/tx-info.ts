@@ -24,7 +24,8 @@ export interface Totals {
 
 /**
  * The fee is inputs minus outputs, known only once every input's previous output is. An asset unlock has
- * no inputs and carries its own fee in the payload; a coinbase pays no fee.
+ * no inputs and carries its own fee in the payload; a coinbase pays no fee; any other transaction without inputs
+ * (a quorum commitment, an upgrade signal) spends nothing, so it pays nothing.
  */
 export function totals(tx: DecodedTx, prevouts: ReadonlyMap<string, PrevOut> | undefined): Totals {
   const out = sumOutputs(tx)
@@ -33,11 +34,16 @@ export function totals(tx: DecodedTx, prevouts: ReadonlyMap<string, PrevOut> | u
     return { out, fee: typeof fee === 'bigint' ? fee : undefined }
   }
   if (isCoinbaseTx(tx)) return { out }
+  if (tx.inputs.length === 0) return { in: 0n, out, fee: 0n }
   const values = inputValues(tx, prevouts)
-  if (values.length === 0 || values.some((v) => v === undefined)) return { out }
+  if (values.some((v) => v === undefined)) return { out }
   const total = values.reduce((sum, v) => sum + (v?.value ?? 0n), 0n)
   return { in: total, out, fee: total - out }
 }
+
+/** A transaction that spends nothing and creates nothing: no ribbon can say anything true about it. */
+export const movesNoValue = (tx: Pick<DecodedTx, 'inputs' | 'outputs' | 'payload'>): boolean =>
+  tx.inputs.length === 0 && tx.payload?.kind !== 'assetUnlockTx' && sumOutputs(tx) === 0n
 
 /** Addresses the inputs spend from, so an output back to one of them reads as change. */
 export function senderAddresses(values: (PrevOut | undefined)[]): Set<string> {
