@@ -65,9 +65,9 @@ test.describe('Home', () => {
     await page.goto('/')
     await page.getByRole('link', { name: 'Core figures' }).click()
     await expect(page).toHaveURL(/#core$/)
-    const box = await page.locator('[data-headline]').boundingBox()
-    expect(box?.y ?? -1).toBeGreaterThanOrEqual(0)
-    expect(box?.y ?? 9999).toBeLessThan(page.viewportSize()!.height / 2)
+    const top = async () => (await page.locator('[data-headline]').boundingBox())?.y ?? -1
+    await expect.poll(top).toBeGreaterThanOrEqual(0)
+    await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)
   })
 
   test('opens a block from search by height @IN-10', async ({ page }) => {
