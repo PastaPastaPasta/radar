@@ -1,4 +1,5 @@
 import { expectAccessible } from '../helpers/a11y'
+import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
 test.describe('status', () => {
@@ -25,6 +26,49 @@ test.describe('status', () => {
     await expect(card.locator('[data-status="sync"]')).toBeVisible()
     await expect(card.locator('[data-source="dapi"]')).toHaveCount(1)
     await expect(card.locator('[data-source]').first()).toBeVisible()
+  })
+
+  test('source and freshness labels stay at least 12 px, 500 weight and AA contrast @IN-09', async ({
+    page,
+  }) => {
+    for (const path of ['/status', '/', '/status?network=testnet']) {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await settled(page)
+      const labels = await page.evaluate(() => {
+        const parse = (c: string) => c.match(/[\d.]+/g)!.map(Number)
+        const lum = ([r, g, b]: number[]) => {
+          const f = (x: number) =>
+            (x /= 255) <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4
+          return 0.2126 * f(r!) + 0.7152 * f(g!) + 0.0722 * f(b!)
+        }
+        const backdrop = (el: Element) => {
+          for (let e: Element | null = el; e; e = e.parentElement) {
+            const c = parse(getComputedStyle(e).backgroundColor)
+            if (c.length < 4 || c[3]! > 0.5) return c
+          }
+          return [255, 255, 255]
+        }
+        return [...document.querySelectorAll('.rx-src, .rx-src time')]
+          .filter((el) => (el as HTMLElement).offsetParent)
+          .map((el) => {
+            const cs = getComputedStyle(el)
+            const a = lum(parse(cs.color))
+            const b = lum(backdrop(el))
+            return {
+              size: parseFloat(cs.fontSize),
+              weight: Number(cs.fontWeight),
+              ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+            }
+          })
+      })
+      expect(labels.length, path).toBeGreaterThan(0)
+      for (const l of labels) {
+        expect(l.size, path).toBeGreaterThanOrEqual(12)
+        expect(l.weight, path).toBeGreaterThanOrEqual(500)
+        expect(l.ratio, path).toBeGreaterThanOrEqual(4.5)
+      }
+    }
   })
 
   test('works on testnet and says which network it is reading @IN-16 @HY-19', async ({ page }) => {

@@ -689,19 +689,18 @@ a.rx-stat:focus-visible {
   white-space: nowrap;
   vertical-align: 1px;
   text-decoration: none;
-  font: var(--dh-w-body) 11px/1.2 var(--dh-font);
+  font: var(--dh-w-ui) var(--dh-fs-xs)/1.2 var(--dh-font);
   color: var(--dh-ink-2);
   background: transparent;
 }
 .rx-src .rx-ico {
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   stroke-width: 2;
-  opacity: 0.75;
 }
 .rx-src time {
   color: var(--dh-ink-2);
-  font-weight: var(--dh-w-body);
+  font-weight: var(--dh-w-ui);
 }
 .rx-src time::before {
   content: '\00b7\00a0';
