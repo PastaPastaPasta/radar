@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
+import { loadBehindFirstPaint } from '@/app/first-load'
 import { zPage } from '@/app/search'
 import { prefetchForRoute, routeNetwork } from '@/data/query'
 import { BlockPage } from '@/features/core'
@@ -11,11 +12,15 @@ const blockSearch = z.object({
 export const Route = createFileRoute('/block/$id')({
   validateSearch: blockSearch,
   loaderDeps: ({ search }) => ({ network: search.network, net: search.net }),
-  loader: async ({ context, deps, params, preload }) => {
-    const net = routeNetwork(deps)
-    const { blockPrefetch } = await import('@/data/query/route-prefetch')
-    return prefetchForRoute(context.queryClient, net, blockPrefetch(net, params.id), { preload })
-  },
+  loader: ({ context, deps, params, preload }) =>
+    loadBehindFirstPaint(
+      async (opts) => {
+        const net = routeNetwork(deps)
+        const { blockPrefetch } = await import('@/data/query/route-prefetch')
+        return prefetchForRoute(context.queryClient, net, blockPrefetch(net, params.id), opts)
+      },
+      { preload },
+    ),
   component: BlockRoute,
 })
 

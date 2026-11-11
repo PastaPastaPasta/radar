@@ -149,6 +149,57 @@ test.describe('routes', () => {
   })
 })
 
+test.describe('first paint', () => {
+  const STALLED_MS = 5_000
+
+  for (const [name, path] of [
+    ['block', '/block/2569992'],
+    ['transaction', `/tx/${TXID}`],
+  ] as const) {
+    test(`a cold deep link to a ${name} paints the shell within 500 ms while DAPI is slow @X-08`, async ({
+      page,
+    }) => {
+      await page.addInitScript((stall) => {
+        const w = window as unknown as {
+          __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
+          __shellAt?: number
+        }
+        let core: typeof w.__radarCore
+        Object.defineProperty(w, '__radarCore', {
+          configurable: true,
+          get: () => core,
+          set(value: typeof core) {
+            core = value
+            for (const method of ['block', 'tx'] as const) {
+              const original = value?.[method]
+              if (!value || !original) continue
+              value[method] = async (...args) => {
+                await new Promise((resolve) => setTimeout(resolve, stall))
+                return original.apply(value, args)
+              }
+            }
+          },
+        })
+        new MutationObserver((_, observer) => {
+          if (document.querySelector('#root dashhq-bar')) {
+            w.__shellAt = performance.now()
+            observer.disconnect()
+          }
+        }).observe(document, { childList: true, subtree: true })
+      }, STALLED_MS)
+
+      await page.goto(path, { waitUntil: 'commit' })
+      await expect(page.locator('#root dashhq-bar')).toBeAttached({ timeout: 10_000 })
+
+      const shellAt = await page.evaluate(
+        () => (window as unknown as { __shellAt?: number }).__shellAt,
+      )
+      expect(shellAt).toBeLessThan(500)
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    })
+  }
+})
+
 test.describe('network', () => {
   test('mainnet is the default and testnet is marked @RA-91 @HY-17', async ({ page }) => {
     await page.goto('/status')
