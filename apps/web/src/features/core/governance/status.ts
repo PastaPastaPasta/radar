@@ -49,12 +49,12 @@ export function budgetSplit(proposals: readonly HyProposal[], now: number): Budg
   return split
 }
 
-/** Only web links are shown as links; a proposal URL is typed by whoever submitted it. */
+/** Only https links are shown as links; a proposal URL is typed by whoever submitted it. */
 export function safeProposalUrl(url: string | null | undefined): URL | undefined {
   if (!url) return undefined
   try {
     const u = new URL(url)
-    return u.protocol === 'https:' || u.protocol === 'http:' ? u : undefined
+    return u.protocol === 'https:' ? u : undefined
   } catch {
     return undefined
   }

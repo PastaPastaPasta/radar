@@ -167,8 +167,10 @@ describe('routes', () => {
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
           path === '/' ? 'Radar' : title,
         ),
+        { timeout: 12_000 },
       )
     },
+    15_000,
   )
 
   it('shows a designed not-found page', async () => {

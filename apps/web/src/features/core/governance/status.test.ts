@@ -44,8 +44,10 @@ describe('proposal status', () => {
     expect(split.count).toEqual({ funded: 1, passing: 1, failing: 1 })
   })
 
-  it('links only web URLs', () => {
+  it('links only https URLs', () => {
     expect(safeProposalUrl('https://example.org/p')?.host).toBe('example.org')
+    expect(safeProposalUrl('http://example.org/p')).toBeUndefined()
+    expect(safeProposalUrl('data:text/html,hi')).toBeUndefined()
     expect(safeProposalUrl('javascript:alert(1)')).toBeUndefined()
     expect(safeProposalUrl('not a url')).toBeUndefined()
     expect(safeProposalUrl(null)).toBeUndefined()
