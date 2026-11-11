@@ -516,10 +516,22 @@
   font-size: 12px;
   fill: var(--dh-brand-ink);
 }
-.rx-flow text.c {
+.rx-flow .c {
+  font-family: var(--dh-font);
   font-weight: 650;
   font-size: 11px;
   fill: var(--dh-ink-2);
+}
+/* Below this the drawing would shrink its labels past reading, so the list stands in for it. */
+@media (max-width: 900px) {
+  .rx-flow-wide {
+    display: none;
+  }
+}
+@media (min-width: 901px) {
+  .rx-flow-narrow {
+    display: none;
+  }
 }
 .rx-life {
   display: grid;

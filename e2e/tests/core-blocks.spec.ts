@@ -100,4 +100,24 @@ test.describe('Block page', () => {
     await expect(page.getByText(/quorum commitment/i).first()).toBeVisible()
     await expect(page.locator('[data-payload="cbTx"]')).toBeVisible()
   })
+
+  test('keeps an unknown pool’s text inside its card @IN-16', async ({ page }) => {
+    await page.goto(`/block/${TESTNET_TIP}?network=testnet`)
+    const card = page.locator('.rx-stat').filter({ hasText: 'Coinbase tag says' })
+    await expect(card.getByText('No known pool')).toBeVisible()
+    const box = await card.boundingBox()
+    for (const part of [card.locator('.rx-stat__value'), card.locator('.rx-stat__note')]) {
+      const inner = await part.boundingBox()
+      expect(inner!.x).toBeGreaterThanOrEqual(box!.x - 1)
+      expect(inner!.x + inner!.width).toBeLessThanOrEqual(box!.x + box!.width + 1)
+    }
+    const text = await card.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)
+    expect(text).toBe(true)
+  })
+
+  test('shows a small testnet difficulty with its digits @IN-16 @HY-19', async ({ page }) => {
+    await page.goto(`/block/${TESTNET_TIP}?network=testnet`)
+    const header = page.locator('#header')
+    await expect(header).toContainText(/Difficulty\s*0\.\d*[1-9]/)
+  })
 })

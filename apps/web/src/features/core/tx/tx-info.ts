@@ -96,7 +96,8 @@ export interface FlowLayout {
   raised: boolean
 }
 
-export const FLOW = { width: 1060, left: 300, right: 760, top: 20, area: 230, gap: 10, min: 16 }
+/** `min` and `gap` leave room for a node's amount and its identity on two lines. */
+export const FLOW = { width: 1060, left: 300, right: 760, top: 20, area: 280, gap: 12, min: 22 }
 
 function heights(values: number[], k: number): number[] {
   return values.map((v) => Math.max(FLOW.min, v * k))

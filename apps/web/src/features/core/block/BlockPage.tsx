@@ -246,7 +246,11 @@ function BlockView({
           />
           <Stat
             label={t`Coinbase tag says`}
-            value={pool ?? t`No known pool`}
+            value={
+              <span className="whitespace-normal [overflow-wrap:anywhere]">
+                {pool ?? t`No known pool`}
+              </span>
+            }
             note={
               tag
                 ? t`Tag: ${tag}. The miner writes it, so it is not proof.`

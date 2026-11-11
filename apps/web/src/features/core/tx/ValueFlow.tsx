@@ -35,7 +35,7 @@ export function ValueFlow({
   const height = FLOW.top * 2 + FLOW.area
   return (
     <div>
-      <div className="rx-hide-sm">
+      <div className="rx-flow-wide">
         <svg
           className="rx-flow"
           viewBox={`0 0 ${FLOW.width} ${height}`}
@@ -52,10 +52,10 @@ export function ValueFlow({
           {layout.left.map((n) => (
             <g key={`l-${n.key}`}>
               <rect className="node" x={n.x - 8} y={n.y} width={8} height={n.h} rx={2} />
-              <text className="v" x={n.x - 18} y={n.y + n.h / 2 + 4} textAnchor="end">
+              <text className="v" x={n.x - 18} y={n.y + n.h / 2 - 2} textAnchor="end">
                 {text(n.value)}
               </text>
-              <text className="m" x={160} y={n.y + n.h / 2 + 4} textAnchor="end">
+              <text className="m" x={n.x - 18} y={n.y + n.h / 2 + 12} textAnchor="end">
                 {n.label}
               </text>
             </g>
@@ -70,22 +70,22 @@ export function ValueFlow({
                 height={n.h}
                 rx={2}
               />
-              <text className="v" x={n.x + 18} y={n.y + n.h / 2 + 4}>
+              <text className="v" x={n.x + 18} y={n.y + n.h / 2 - 2}>
                 {n.kind === 'fee' ? t`${formatInt(n.value)} duffs` : text(n.value)}
               </text>
-              <text className="m" x={900} y={n.y + n.h / 2 + 4}>
+              <text className="m" x={n.x + 18} y={n.y + n.h / 2 + 12}>
                 {n.kind === 'fee' ? t`Fee` : n.label}
+                {n.kind === 'change' ? (
+                  <tspan className="c" dx={8}>
+                    {t`· change`}
+                  </tspan>
+                ) : null}
               </text>
-              {n.kind === 'change' ? (
-                <text className="c" x={1018} y={n.y + n.h / 2 + 4}>
-                  {t`· change`}
-                </text>
-              ) : null}
             </g>
           ))}
         </svg>
       </div>
-      <div className="rx-only-sm rx-flowsm">
+      <div className="rx-flow-narrow rx-flowsm">
         <p className="rx-flowsm__h">
           <span>{t`${formatInt(inputs.length)} inputs`}</span>
           <b>

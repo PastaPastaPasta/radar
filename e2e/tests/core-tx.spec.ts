@@ -5,6 +5,7 @@ const expect = baseExpect.configure({ timeout: 15_000 })
 
 const TRANSFER = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
 const NO_SUCH = '0000000000000000000000000000000000000000000000000000000000000001'
+const ASSET_LOCK = '2972859ef7fdc7a52397b7f844d69888414e22dcaa2be2b6e432a81c7b812cf6'
 const MNHF = '46a47fe65c9fd29e9379f3f74020df33dabb1d4095c8da6b1fa05e508b74a491'
 
 const PAYLOADS: { name: string; txid: string; kind: string; shows: string }[] = [
@@ -133,14 +134,14 @@ test.describe('Transaction page', () => {
     await expectAccessible(page)
   })
 
-  test('does not call an output unspent when its source cannot vouch for it @HY-07', async ({
+  test('gives each coinbase output the state its address’s current list backs @HY-07 @IN-05', async ({
     page,
   }) => {
     await page.goto(`/tx/${COINBASE}`)
     await expect(page.locator('#out-1')).toContainText('Unspendable')
-    await expect(page.locator('#out-0 [data-spend]')).toBeVisible()
-    await expect(page.locator('#out-0 [data-spend="unknown"]')).toBeVisible()
-    await expect(page.locator('#io').getByText('Unspent', { exact: true })).toHaveCount(0)
+    await expect(page.locator('#out-0 [data-spend="spent"]')).toBeVisible()
+    await expect(page.locator('#out-2 [data-spend="unspent"]')).toBeVisible()
+    await expect(page.locator('#io [data-spend="unknown"]')).toHaveCount(0)
   })
 
   test('shows both when it was received and when it was mined @HY-07', async ({ page }) => {
@@ -166,4 +167,54 @@ test.describe('Transaction page', () => {
     expect(text).not.toMatch(/(^|[^t])DASH/)
     expect((await page.locator('#io').textContent()) ?? '').not.toMatch(/(^|[^t])DASH/)
   })
+
+  test('names the spender of a recent transaction’s outputs, and the one still unspent @IN-05', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.locator('#io [data-spend="spent"]')).toHaveCount(8)
+    await expect(page.locator('#out-8 [data-spend="unspent"]')).toBeVisible()
+    await expect(page.locator('#io [data-spend="unknown"]')).toHaveCount(0)
+    await expect(
+      page.locator('#out-0').getByRole('link', { name: /^in 653f…82a4/ }),
+    ).toHaveAttribute(
+      'href',
+      '/tx/653ff05aacefc2c93e664f8cc41b3a71f5ab2a6b6f6315f8108de696182482a4#in-14',
+    )
+  })
+
+  for (const [name, txid] of [
+    ['an asset lock', ASSET_LOCK],
+    ['a payment with nine outputs', TRANSFER],
+  ] as const) {
+    test(`keeps the flow's amounts and identities apart at every width: ${name} @HY-07`, async ({
+      page,
+    }) => {
+      for (const width of [1440, 1100, 901]) {
+        await page.setViewportSize({ width, height: 900 })
+        await page.goto(`/tx/${txid}`)
+        const svg = page.locator('#flow svg.rx-flow')
+        await expect(svg).toBeVisible()
+        const boxes = await svg
+          .locator('text')
+          .evaluateAll((els) =>
+            els
+              .map((e) => e.getBoundingClientRect())
+              .map((r) => [r.left, r.top, r.right, r.bottom]),
+          )
+        expect(boxes.length).toBeGreaterThan(3)
+        for (let a = 0; a < boxes.length; a++) {
+          for (let b = a + 1; b < boxes.length; b++) {
+            const [al, at, ar, ab] = boxes[a]!
+            const [bl, bt, br, bb] = boxes[b]!
+            const overlaps = al < br - 0.5 && bl < ar - 0.5 && at < bb - 0.5 && bt < ab - 0.5
+            expect(overlaps, `${width}px: label ${a} overlaps label ${b}`).toBe(false)
+          }
+        }
+      }
+      await page.setViewportSize({ width: 700, height: 900 })
+      await expect(page.locator('#flow svg.rx-flow')).toBeHidden()
+      await expect(page.locator('#flow .rx-flowsm')).toBeVisible()
+    })
+  }
 })
