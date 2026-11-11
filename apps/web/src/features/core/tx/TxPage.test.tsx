@@ -204,6 +204,26 @@ describe('Transaction page', () => {
     expect(row).toHaveTextContent('Spent')
   })
 
+  it('reads the spend state of a recent transaction from the current address lists, not its cached page @IN-05', async () => {
+    renderAt(`/tx/${MAINNET.transfer}`)
+    await waitFor(
+      () => expect(document.querySelectorAll('#io [data-spend="spent"]')).toHaveLength(8),
+      {
+        timeout: 4000,
+      },
+    )
+    expect(document.querySelectorAll('#io [data-spend="unknown"]')).toHaveLength(0)
+    expect(document.querySelector('#out-8 [data-spend]')?.getAttribute('data-spend')).toBe(
+      'unspent',
+    )
+    const first = await within(document.querySelector<HTMLElement>('#out-0')!).findByRole('link', {
+      name: /in [0-9a-f]{4}…[0-9a-f]{4}/,
+    })
+    expect(first.getAttribute('href')).toBe(
+      '/tx/653ff05aacefc2c93e664f8cc41b3a71f5ab2a6b6f6315f8108de696182482a4#in-14',
+    )
+  })
+
   it('never calls an output unspent that the source cannot vouch for @HY-07', async () => {
     renderAt(`/tx/${MAINNET.coinbase}`)
     await waitFor(

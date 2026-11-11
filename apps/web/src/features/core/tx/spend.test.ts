@@ -5,6 +5,7 @@ import {
   limiter,
   outputSpends,
   SPENDER_MAX_CANDIDATES,
+  type AddressUtxos,
   UNSPENT_LAG_BLOCKS,
   type SpenderDeps,
 } from './spend'
@@ -221,6 +222,86 @@ describe('outputSpends @HY-07', () => {
       { state: 'spent', resolving: true },
       { state: 'spent' },
     ])
+  })
+})
+
+describe('outputSpends from the address UTXO lists @IN-05', () => {
+  const outputs = (n: number) =>
+    Array.from({ length: n }, () => ({ value: 1n, scriptPubKey: '76', address: 'XaddrA' }))
+  const base = {
+    mined: true,
+    hyLoading: false,
+    tx: { height: 100, outputs: outputs(3) },
+    spenders: new Map<number, never>(),
+    // A transaction page cached long ago: every output unspent as of block 100, long behind the chain.
+    hy: { detail: detail([false, false, false]), asOfHeight: 100 },
+  }
+  const view = (found: number[], over: Partial<AddressUtxos> = {}): AddressUtxos => ({
+    asOf: 2000,
+    found: new Set(found),
+    complete: true,
+    ...over,
+  })
+
+  it('names an output spent when a complete current list no longer has it, whatever the cached page says', () => {
+    const states = outputSpends({
+      ...base,
+      tipHeight: 2000,
+      utxos: new Map([['XaddrA', view([1])]]),
+    })
+    expect(states.map((s) => s.state)).toEqual(['spent', 'unspent', 'spent'])
+  })
+
+  it('calls an output unspent from a current list even when the cached page is far behind', () => {
+    const [state] = outputSpends({
+      ...base,
+      tipHeight: 2001,
+      utxos: new Map([['XaddrA', view([0])]]),
+    })
+    expect(state).toEqual({ state: 'unspent', asOf: 2000, behind: 1 })
+  })
+
+  it('does not call an output spent from a list that was cut short or is older than the transaction', () => {
+    const cut = outputSpends({
+      ...base,
+      tipHeight: 2000,
+      utxos: new Map([['XaddrA', view([], { complete: false })]]),
+    })
+    expect(cut[0]).toEqual({ state: 'unknown', reason: 'not-reported' })
+    const early = outputSpends({
+      ...base,
+      tipHeight: 2000,
+      utxos: new Map([['XaddrA', view([], { asOf: 99 })]]),
+    })
+    expect(early[0]).toMatchObject({ state: 'unknown', reason: 'behind' })
+  })
+
+  it('stays unknown, not unspent, when the list itself is behind the chain', () => {
+    const [state] = outputSpends({
+      ...base,
+      tipHeight: 2000 + UNSPENT_LAG_BLOCKS + 1,
+      utxos: new Map([['XaddrA', view([0])]]),
+    })
+    expect(state).toMatchObject({ state: 'unknown', reason: 'behind' })
+  })
+
+  it('waits for the list, and falls back to the page’s own flags when the list cannot be read', () => {
+    expect(
+      outputSpends({ ...base, tipHeight: 2000, utxos: new Map([['XaddrA', 'resolving']]) })[0],
+    ).toEqual({ state: 'unknown', reason: 'loading' })
+    expect(
+      outputSpends({ ...base, tipHeight: 102, utxos: new Map([['XaddrA', null]]) })[0],
+    ).toMatchObject({ state: 'unspent' })
+  })
+
+  it('carries the spender found for an output the list showed spent', () => {
+    const [state] = outputSpends({
+      ...base,
+      tipHeight: 2000,
+      utxos: new Map([['XaddrA', view([])]]),
+      spenders: new Map([[0, { txid: id(2), vin: 1 }]]),
+    })
+    expect(state).toEqual({ state: 'spent', by: { txid: id(2), vin: 1 } })
   })
 })
 

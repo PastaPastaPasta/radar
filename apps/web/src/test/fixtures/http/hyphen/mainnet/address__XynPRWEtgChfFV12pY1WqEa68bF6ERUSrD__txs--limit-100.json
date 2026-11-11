@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/address/XynPRWEtgChfFV12pY1WqEa68bF6ERUSrD/txs?limit=100"
+  },
+  "recordedAt": "2026-11-11T09:41:10.302Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570433,
+    "totalCount": 1,
+    "value": [
+      {
+        "txHash": "8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90",
+        "blockHeight": 2570010,
+        "blockPos": 12,
+        "blockTime": "2026-11-10T15:09:21Z",
+        "txVersion": 2,
+        "txType": "normal",
+        "txSize": 1640,
+        "valueOut": 9000090,
+        "netValue": 1000010,
+        "direction": "in",
+        "fee": 0,
+        "tags": { "mined": true, "coinbase": false }
+      }
+    ]
+  }
+}

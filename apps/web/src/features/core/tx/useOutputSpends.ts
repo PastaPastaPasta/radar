@@ -5,14 +5,27 @@ import type { HyTxDetail } from '@/data/hyphen/schemas'
 import { hyQueries } from '@/data/hyphen/queries'
 import { viewKeys } from '@/data/query'
 import type { NetworkId } from '@/lib/network'
-import { findSpender, limiter, outputSpends, type OutputSpend, type Spender } from './spend'
+import {
+  findSpender,
+  flaggedSpent,
+  isUnspendable,
+  limiter,
+  outputSpends,
+  type AddressUtxos,
+  type OutputSpend,
+  type Spender,
+} from './spend'
 
 const ADDRESS_PAGE = 100
+const UTXO_MAX_PAGES = 3
 const lookups = limiter(3)
+const NO_SPENDERS = new Map<number, Spender | null | 'resolving'>()
 
 /**
- * The spend state of each output. Where Hyphen reports an output spent, the spending transaction is looked
- * up for the first `visible` outputs only, since each lookup is a few Hyphen requests.
+ * The spend state of each output of the first `visible`. Hyphen's transaction page is cached for as long as
+ * the transaction is mined, so unless it already says spent, the output address's current UTXO list decides:
+ * an output still in it is unspent, one missing from a complete list is spent. For spent outputs the spending
+ * transaction is then looked up, which costs a few Hyphen requests each.
  */
 export function useOutputSpends({
   net,
@@ -33,8 +46,62 @@ export function useOutputSpends({
 }): OutputSpend[] {
   const queryClient = useQueryClient()
   const height = tx.height
+  const mayHaveUtxos = mined && height !== undefined && hy?.detail != null
+  const utxoAddresses = mayHaveUtxos
+    ? [
+        ...new Set(
+          tx.outputs.flatMap((o, n) =>
+            n < visible && o.address && !isUnspendable(o.scriptPubKey) && !flaggedSpent(hy, n)
+              ? [o.address]
+              : [],
+          ),
+        ),
+      ]
+    : []
+  const utxoQueries = useQueries({
+    queries: utxoAddresses.map((address) => ({
+      queryKey: viewKeys(net, 'tx-utxos', { txid: tx.txid, address }),
+      queryFn: ({ signal }: { signal: AbortSignal }): Promise<AddressUtxos> =>
+        lookups(async () => {
+          const found = new Set<number>()
+          let cursor: string | undefined
+          let asOf: number | undefined
+          for (let page = 0; page < UTXO_MAX_PAGES; page++) {
+            signal.throwIfAborted()
+            const res = await queryClient.fetchQuery(
+              hyQueries.addressUtxos(net, address, { limit: ADDRESS_PAGE, cursor }),
+            )
+            asOf = res.height ?? res.data.asOfHeight
+            for (const u of res.data.items) if (u.txHash === tx.txid) found.add(u.vout)
+            if (!res.data.nextCursor) return { asOf, found, complete: true }
+            cursor = res.data.nextCursor
+          }
+          return { asOf, found, complete: false }
+        }),
+      staleTime: 30_000,
+      gcTime: 10 * 60_000,
+      retry: 1,
+    })),
+  })
+  const utxoKey = utxoQueries
+    .map(
+      (q) =>
+        `${q.status}:${q.data?.asOf ?? ''}:${q.data?.complete ?? ''}:${[...(q.data?.found ?? [])].join(',')}`,
+    )
+    .join('|')
+  const utxos = useMemo(() => {
+    const byAddress = new Map<string, AddressUtxos | 'resolving' | null>()
+    utxoAddresses.forEach((address, i) => {
+      const q = utxoQueries[i]
+      if (q) byAddress.set(address, q.isPending ? 'resolving' : (q.data ?? null))
+    })
+    return byAddress
+    // `utxoQueries` changes identity every render; its settled contents are summed up in `utxoKey`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [utxoKey])
+  const spent = outputSpends({ tx, mined, hy, hyLoading, tipHeight, spenders: NO_SPENDERS, utxos })
   const wanted = tx.outputs.flatMap((o, n) =>
-    n < visible && height !== undefined && hy?.detail?.vout.find((v) => v.n === n)?.spent === true
+    n < visible && height !== undefined && spent[n]?.state === 'spent'
       ? [{ n, address: o.address }]
       : [],
   )
@@ -75,8 +142,8 @@ export function useOutputSpends({
       if (!q) return
       spenders.set(n, q.isPending ? 'resolving' : (q.data ?? null))
     })
-    return outputSpends({ tx, mined, hy, hyLoading, tipHeight, spenders })
+    return outputSpends({ tx, mined, hy, hyLoading, tipHeight, spenders, utxos })
     // `found` changes identity every render; its settled contents are summed up in `resultKey`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx, mined, hy, hyLoading, tipHeight, resultKey])
+  }, [tx, mined, hy, hyLoading, tipHeight, utxos, resultKey])
 }

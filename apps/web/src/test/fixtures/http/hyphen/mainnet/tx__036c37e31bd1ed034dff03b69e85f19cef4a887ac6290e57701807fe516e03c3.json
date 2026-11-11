@@ -1,0 +1,156 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/036c37e31bd1ed034dff03b69e85f19cef4a887ac6290e57701807fe516e03c3"
+  },
+  "recordedAt": "2026-11-11T09:41:12.119Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": null,
+    "txHash": "c3036e51fe071870570e29c67a884aef9cf1859eb603ff4d03edd11be3376c03",
+    "txVersion": 2,
+    "txType": "normal",
+    "lockTime": 0,
+    "txSize": 1277,
+    "valueOut": 7000070,
+    "inputCount": 7,
+    "outputCount": 7,
+    "fee": 0,
+    "tags": { "mined": false, "coinbase": false },
+    "live": { "tags": { "mempool": true, "islock": true } },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402201eede5eb2ff4b1eb46fc42de17dd57db2e69b8fb9a91068da3062a41b6998552022077ea2cacaf4d56a4712be1610dc9a561c3836bd00f2d715fe1d0a3a9078998ab812103f26d00832c7e64f0b0ac57c183f3faab5e4e41a90fe935ab5631a74c5dcc3d93"
+        },
+        "sequence": 4294967295,
+        "address": "XmbNKEEQJScsLXS7QRVYQnvWEyvdFQPCfv",
+        "value": 1000010,
+        "txHash": "204d607f92460313b398edf63e9ac57405913011823f6aa74d52db2066ee43b1",
+        "vout": 21
+      },
+      {
+        "n": 1,
+        "scriptSig": {
+          "hex": "47304402207f69c9d52a8e8138ad1e6b4fc359050cf9e6944f137f2a375cc654fa054a33940220063c5d6cb896956698c45d9dcbbf92f43a242be50c13bb1e713ff98031d6636781210243406f30226f535717efcf0c049263feeaf81ebc7bd1bc88dc06274e40e4f670"
+        },
+        "sequence": 4294967295,
+        "address": "XjtscqJMAT5XDpbCeVavmLYax4TmQ6Teqk",
+        "value": 1000010,
+        "txHash": "7c7c0c4ae6b83ede171ac81dc06004a2610af040803553823a9678776e92838c",
+        "vout": 5
+      },
+      {
+        "n": 2,
+        "scriptSig": {
+          "hex": "473044022018c2e31bbf16bdbab1e7056636ef1756d7d2d94faca857ed2ee2a53a5d7cf514022023ad6333f0d6e49454fd8d8e7e39c63908b80a49a48ea0df1ea276374240685e812103323ecbffe551dceaf77d757a38dbe5c34ad36f0792d66e6db18e4584e75a64f3"
+        },
+        "sequence": 4294967295,
+        "address": "XtZk4jEpk1jCjy5QKKKcfqbHzfn6XqvfYE",
+        "value": 1000010,
+        "txHash": "8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90",
+        "vout": 6
+      },
+      {
+        "n": 3,
+        "scriptSig": {
+          "hex": "473044022024864ec06a35fdd59222f1792da2d0d23b6e74a0de125932dac6929846ed6a680220567b0921daedd61dbeed3c37f4887ce51080a41ea5360dea6173543101829b818121028ad47c2a7139a1db954a7a376ec56a87b8013555e3f2e0b5b21e356396946fef"
+        },
+        "sequence": 4294967295,
+        "address": "XvRr54xLV54qUWZbzLjYA89A1m7XRzLYJY",
+        "value": 1000010,
+        "txHash": "d4f6396a1c8d5b11c3ec3215b7efae2eeee619202afdc748d59d855cbee5d3da",
+        "vout": 6
+      },
+      {
+        "n": 4,
+        "scriptSig": {
+          "hex": "473044022013e2bfd7bd0551086244cb0ca17bd35bfae63e632dcc1216f8231a0ede504dcd02207cb6b936dd36526e4b5a4a73fe044ee399f56c7cfa85ecf31ec39b8bece223638121034d267ce4dbbd164e41b7b01aea9e8b88a71e5158671ce5fbb69eba914a357045"
+        },
+        "sequence": 4294967295,
+        "address": "XvuBFw2oq3wJrCG43oDoyywivkqRtASA69",
+        "value": 1000010,
+        "txHash": "e63d8538e1f64da44dc1ffc8358bf9546bd76bee2f0a165bb645ee7cc2e35ba1",
+        "vout": 7
+      },
+      {
+        "n": 5,
+        "scriptSig": {
+          "hex": "473044022076e9786f25f682a0e01c8b31cb879aee35d92ca7fdae02101072585ee780b8fc022039eca779d04c56e4116eb05a10243a87f356a2c90a611ba229715e65a93f342e8121022215ffcfb014f19e93ca2ec5b67263accdd562c5199d32e30ce8f6ae45538cff"
+        },
+        "sequence": 4294967295,
+        "address": "XwJnxh7est9NLYUsz257gWGA7fUWEkRScq",
+        "value": 1000010,
+        "txHash": "f47527c5983ac85506a0c20d7970ba6ad0a22c678eb3dcb093eeb9b347a8a6ea",
+        "vout": 18
+      },
+      {
+        "n": 6,
+        "scriptSig": {
+          "hex": "47304402203c41919c81c9a07533fd06c74adaba0fa9dcb604c54909454fe40397d7c7e1a202201726814c3babbff5a5884d8ba540604f4cee9929b86f8739065c9a01f03fba05812102cba68178949fa79a2422cc9617e29334cdc889399a392ff36867909e4b49da49"
+        },
+        "sequence": 4294967295,
+        "address": "Xiw4XZRUdibWKDTDwMC89MP7rxYgiRerSy",
+        "value": 1000010,
+        "txHash": "fe3a6ad43aa88d44d8a9364af1654977cebd09684147a84c081f0ee0e45c492c",
+        "vout": 3
+      }
+    ],
+    "vout": [
+      {
+        "n": 0,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a9145af0afb5b9a450a8c4baf41b35e5590a4e9191d688ac" },
+        "address": "XiygyhZVf42UQpHx71nqxax9VHF69ttQhE",
+        "spent": false
+      },
+      {
+        "n": 1,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a9146b8e93f9363af61dbe94e8c1d3776ef2653aebf788ac" },
+        "address": "XkVYwGqi7zjM8rL19SRAefFMYeBmNLjYZn",
+        "spent": false
+      },
+      {
+        "n": 2,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a914a4e7e36703a2801365058e9af2f6832871565a3088ac" },
+        "address": "XqinSbSJ3tMqQJGLy78sXo1VaCmAhypNG1",
+        "spent": false
+      },
+      {
+        "n": 3,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a914b630ebf4101bc39326b5abd3ddc8396eedbc537c88ac" },
+        "address": "XsJBRJfeQiiVjPBMqMmn2hX4cypCLYYYbo",
+        "spent": false
+      },
+      {
+        "n": 4,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a914cf9c6d1d82242bd09e5880153f1999bf5bec99c088ac" },
+        "address": "Xucb6eWKhuj6t6sdjzJDtyt6eHQ3r3BhNa",
+        "spent": false
+      },
+      {
+        "n": 5,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a914db7d4c2e2125ee6dedbc8a84dd5d0695ab3128f388ac" },
+        "address": "XvhPv6LBp44DgqX5gYr1rLRAA8dVejQLow",
+        "spent": false
+      },
+      {
+        "n": 6,
+        "value": 1000010,
+        "scriptPubKey": { "hex": "76a914de0e5b03d5b26e387563c480e4347b7197399a2788ac" },
+        "address": "Xvvy3H9wEgKg1YS4g17GwLAqSmFCfJvZgf",
+        "spent": false
+      }
+    ]
+  }
+}

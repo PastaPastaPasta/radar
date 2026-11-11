@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/address/XuDY8DvSPtomRUB4AqQJwWvkWKJT6eB3w1/txs?limit=100"
+  },
+  "recordedAt": "2026-11-11T09:41:20.762Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2570433,
+    "totalCount": 2,
+    "value": [
+      {
+        "txHash": "d4f6396a1c8d5b11c3ec3215b7efae2eeee619202afdc748d59d855cbee5d3da",
+        "blockHeight": 2570013,
+        "blockPos": 18,
+        "blockTime": "2026-11-10T15:20:47Z",
+        "txVersion": 2,
+        "txType": "normal",
+        "txSize": 1458,
+        "valueOut": 8000080,
+        "netValue": -1000010,
+        "direction": "out",
+        "fee": 0,
+        "tags": { "mined": true, "coinbase": false }
+      },
+      {
+        "txHash": "8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90",
+        "blockHeight": 2570010,
+        "blockPos": 12,
+        "blockTime": "2026-11-10T15:09:21Z",
+        "txVersion": 2,
+        "txType": "normal",
+        "txSize": 1640,
+        "valueOut": 9000090,
+        "netValue": 1000010,
+        "direction": "in",
+        "fee": 0,
+        "tags": { "mined": true, "coinbase": false }
+      }
+    ]
+  }
+}

@@ -24,20 +24,40 @@ export type OutputSpend =
 
 export const UNSPENT_LAG_BLOCKS = 3
 
+/**
+ * What an address's current UTXO list says about the outputs of one transaction. `found` holds the indexes
+ * of its outputs that are still in the list; when the list was read to its end (`complete`), the others
+ * have been spent.
+ */
+export interface AddressUtxos {
+  asOf: number | undefined
+  found: ReadonlySet<number>
+  complete: boolean
+}
+
 /** An OP_RETURN output can never be spent. */
 export const isUnspendable = (scriptPubKey: string): boolean => scriptPubKey.startsWith('6a')
 
 export interface SpendInput {
-  tx: Pick<DecodedTx, 'outputs'>
+  tx: Pick<DecodedTx, 'outputs'> & Partial<Pick<DecodedTx, 'height'>>
   mined: boolean
-  /** Hyphen's transaction page, or what we know about why there is none. */
+  /**
+   * Hyphen's transaction page, or what we know about why there is none. Hyphen serves a mined transaction as
+   * immutable, so its `spent` flags are only as fresh as the first time anyone asked.
+   */
   hy: { detail: HyTxDetail | null | undefined; asOfHeight: number | undefined } | undefined
   hyLoading: boolean
   /** The chain tip as DAPI or the live feed reports it. */
   tipHeight: number | undefined
   /** Spenders found so far, by output index; `null` where the lookup finished without finding one. */
   spenders: ReadonlyMap<number, Spender | null | 'resolving'>
+  /** Current UTXO lists of the output addresses, which are read afresh; absent where none was asked for. */
+  utxos?: ReadonlyMap<string, AddressUtxos | 'resolving' | null>
 }
+
+/** True where the transaction page's own `spent: true` flag is the answer: a spend cannot be undone. */
+export const flaggedSpent = (hy: SpendInput['hy'], n: number): boolean =>
+  hy?.detail?.vout.find((v) => v.n === n)?.spent === true
 
 export function outputSpends({
   tx,
@@ -46,20 +66,36 @@ export function outputSpends({
   hyLoading,
   tipHeight,
   spenders,
+  utxos,
 }: SpendInput): OutputSpend[] {
+  const spentBy = (n: number): OutputSpend => {
+    const found = spenders.get(n)
+    if (found === 'resolving') return { state: 'spent', resolving: true }
+    return found ? { state: 'spent', by: found } : { state: 'spent' }
+  }
   return tx.outputs.map((o, n): OutputSpend => {
     if (isUnspendable(o.scriptPubKey)) return { state: 'unspendable' }
     if (!mined) return { state: 'unknown', reason: 'unconfirmed' }
     if (!hy?.detail) return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
     const flag = hy.detail.vout.find((v) => v.n === n)?.spent
-    if (flag == null) return { state: 'unknown', reason: 'not-reported' }
-    if (flag) {
-      const found = spenders.get(n)
-      if (found === 'resolving') return { state: 'spent', resolving: true }
-      return found ? { state: 'spent', by: found } : { state: 'spent' }
+    if (flag) return spentBy(n)
+    const view = o.address ? utxos?.get(o.address) : undefined
+    if (view === 'resolving') return { state: 'unknown', reason: 'loading' }
+    if (view) {
+      if (view.asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
+      const behind = tipHeight === undefined ? 0 : Math.max(0, tipHeight - view.asOf)
+      if (view.found.has(n)) {
+        return behind > UNSPENT_LAG_BLOCKS
+          ? { state: 'unknown', reason: 'behind', behind }
+          : { state: 'unspent', asOf: view.asOf, behind }
+      }
+      if (view.complete && tx.height !== undefined && view.asOf >= tx.height) return spentBy(n)
+      return behind > 0
+        ? { state: 'unknown', reason: 'behind', behind }
+        : { state: 'unknown', reason: 'not-reported' }
     }
     const asOf = hy.asOfHeight
-    if (asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
+    if (flag == null || asOf === undefined) return { state: 'unknown', reason: 'not-reported' }
     const behind = tipHeight === undefined ? 0 : Math.max(0, tipHeight - asOf)
     return behind > UNSPENT_LAG_BLOCKS
       ? { state: 'unknown', reason: 'behind', behind }
