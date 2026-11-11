@@ -143,6 +143,18 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
     <>
       <StaleIndexNotice />
       <LiveNotice status={live.status} arrived={live.arrived} />
+      {live.pending[0] ? (
+        <p
+          role="status"
+          data-new-transaction
+          className="flex flex-wrap items-center gap-2 rounded border border-[var(--dh-line)] p-3 text-sm"
+        >
+          <Badge tone="warning">{t`New transaction`}</Badge>
+          <Entity kind="tx" id={live.pending[0].txid} />
+          <Amount value={live.pending[0].net} kind="duffs" signed />
+          <a href="#unconfirmed">{t`See unconfirmed activity`}</a>
+        </p>
+      ) : null}
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
         <Card
