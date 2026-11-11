@@ -210,7 +210,7 @@ export function watchAddress(opts: WatchOptions): void {
       unsubscribeDapi()
       unsubscribeVisibility?.()
       release?.()
-      fallback?.abort()
+      stopFallback()
     },
     { once: true },
   )

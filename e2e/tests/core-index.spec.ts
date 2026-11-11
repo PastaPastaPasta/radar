@@ -237,13 +237,17 @@ test.describe('mempool', () => {
   })
 })
 
+/** The ranked addresses: a table on wider screens, a compact list on a phone. */
+const rankedList = (page: Page) =>
+  page
+    .getByRole('table', { name: /Addresses ranked by balance/ })
+    .or(page.getByRole('list', { name: 'Addresses ranked by balance' }))
+
 test.describe('rich list', () => {
   test('ranks balances and charts how concentrated they are @HY-09', async ({ page }) => {
     await page.goto('/rich-list')
     await expect(page.getByRole('heading', { level: 1, name: 'Rich list' })).toBeVisible()
-    const ranked = page
-      .getByRole('table', { name: /Addresses ranked by balance/ })
-      .or(page.getByRole('list', { name: 'Addresses ranked by balance' }))
+    const ranked = rankedList(page)
     await expect(ranked).toBeVisible()
     await expect(page.getByText('Supply concentration')).toBeVisible()
     const items = ranked.getByRole('row').or(ranked.getByRole('listitem'))
@@ -300,11 +304,7 @@ test.describe('rich list', () => {
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/rich-list?network=testnet')
-    await expect(
-      page
-        .getByRole('table', { name: /Addresses ranked by balance/ })
-        .or(page.getByRole('list', { name: 'Addresses ranked by balance' })),
-    ).toBeVisible()
+    await expect(rankedList(page)).toBeVisible()
   })
 })
 

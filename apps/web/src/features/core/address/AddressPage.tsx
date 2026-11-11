@@ -14,7 +14,8 @@ import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infi
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
 import { addressQueries } from './queries'
-import { useAddressActivity, type LiveStatus } from './useAddressActivity'
+import type { WatchStatus } from './live'
+import { useAddressActivity } from './useAddressActivity'
 
 const AddressQr = lazy(() => import('./AddressQr'))
 
@@ -84,6 +85,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const stamp: SourceStamp | undefined = summary.data ? stampOf(summary.data) : undefined
   const a = summary.data?.data ?? NONE
   const unconfirmed = live.pending.reduce((sum, p) => sum + p.net, 0n)
+  const latestPending = live.latest !== undefined && live.pending.includes(live.latest)
   const table = infiniteTableProps(txs)
 
   const columns = useMemo<ColumnDef<HyAddressTx>[]>(
@@ -150,13 +152,11 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           className="flex flex-wrap items-center gap-2 rounded border border-[var(--dh-line)] p-3 text-sm"
         >
           <Badge tone="warning">
-            {live.pending.includes(live.latest) ? t`Unconfirmed transaction` : t`New transaction`}
+            {latestPending ? t`Unconfirmed transaction` : t`New transaction`}
           </Badge>
           <Entity kind="tx" id={live.latest.txid} />
           <Amount value={live.latest.net} kind="duffs" signed />
-          {live.pending.includes(live.latest) ? (
-            <a href="#unconfirmed">{t`See unconfirmed activity`}</a>
-          ) : null}
+          {latestPending ? <a href="#unconfirmed">{t`See unconfirmed activity`}</a> : null}
         </p>
       ) : null}
 
@@ -269,7 +269,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   )
 }
 
-function LiveNotice({ status, arrived }: { status: LiveStatus; arrived: number }) {
+function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number }) {
   const { t } = useLingui()
   return (
     <p role="status" data-live={status} className="flex items-center gap-2 text-sm">

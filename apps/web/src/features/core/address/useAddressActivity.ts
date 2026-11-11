@@ -8,10 +8,8 @@ import type { NetworkId } from '@/lib/network'
 import { addressKeys, addressQueries } from './queries'
 import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
-export type LiveStatus = WatchStatus
-
 export interface AddressActivity {
-  status: LiveStatus
+  status: WatchStatus
   /** Unconfirmed transactions that touch the address, newest first. */
   pending: PendingTx[]
   /** The newest transaction seen since this page opened, pending or not. */

@@ -167,17 +167,7 @@ function RichListContent() {
         source={firstPageSource}
       >
         {phone ? (
-          <RichListCompact
-            rows={table.rows}
-            state={table.state}
-            error={table.error}
-            onRetry={table.onRetry}
-            hasNext={table.paging.hasNext}
-            fetching={table.paging.fetching}
-            fetchNext={table.paging.fetchNext}
-            source={firstPageSource}
-            summaryId={SUMMARY_ID}
-          />
+          <RichListCompact {...table} source={firstPageSource} summaryId={SUMMARY_ID} />
         ) : (
           <DataTable
             caption={t`Addresses ranked by balance`}

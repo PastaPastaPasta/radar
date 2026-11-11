@@ -10,9 +10,7 @@ export interface RichListCompactProps {
   state: LoadState
   error?: unknown
   onRetry?: () => void
-  hasNext: boolean
-  fetching: boolean
-  fetchNext: () => void
+  paging: { hasNext: boolean; fetching: boolean; fetchNext: () => void }
   source?: SourceStamp
   summaryId: string
 }
@@ -28,9 +26,7 @@ export function RichListCompact({
   state,
   error,
   onRetry,
-  hasNext,
-  fetching,
-  fetchNext,
+  paging: { hasNext, fetching, fetchNext },
   source,
   summaryId,
 }: RichListCompactProps) {
