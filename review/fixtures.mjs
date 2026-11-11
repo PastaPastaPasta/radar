@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
-import { FIXTURES_DIR } from './lib/stories.mjs'
+import { FIXTURES_DIR, loadFixtures } from './lib/stories.mjs'
 import { getJson } from './lib/http.mjs'
 
 const NETWORKS = {
@@ -309,7 +309,15 @@ async function pickPlatform(src, entities, log) {
   }
 }
 
-export async function pickFixtures(network) {
+/**
+ * The special transactions are chosen by hand from live chain data, so a regeneration carries the
+ * committed ones over rather than dropping them.
+ */
+export function committedSpecialTxs(network, dir = FIXTURES_DIR) {
+  return loadFixtures(network, dir)?.entities?.special_txs
+}
+
+export async function pickFixtures(network, specialTxs = committedSpecialTxs(network)) {
   const src = NETWORKS[network]
   const entities = {}
   const log = []
@@ -318,6 +326,7 @@ export async function pickFixtures(network) {
   await fillCoreDerived(src, entities, found, registeredHeight, log)
   await pickPlatform(src, entities, log)
   entities.signed_message = signedMessageEntity(network)
+  if (specialTxs) entities.special_txs = specialTxs
   const expected = [
     'tip',
     'block_recent',
@@ -352,6 +361,7 @@ export async function pickFixtures(network) {
     'paddr',
     'epoch_current',
     'epoch_final',
+    'special_txs',
     ...Object.keys(PE_TX_TYPES),
   ]
   return {
