@@ -524,16 +524,12 @@ for (const source of args.onlyExtra ? [] : args.source) {
 }
 await recordExtras()
 
-if (args.onlyExtra) {
-  const failedExtras = results.filter((r) => !r.ok)
-  console.log(`\n${results.length - failedExtras.length}/${results.length} recorded`)
-  process.exit(failedExtras.length ? 1 : 0)
+if (!args.onlyExtra) {
+  const entitiesFile = join(FIXTURES, 'entities', `${net}.json`)
+  let previous = {}
+  if (existsSync(entitiesFile)) previous = JSON.parse(readFileSync(entitiesFile, 'utf8'))
+  await writeJson(entitiesFile, { ...previous, ...entities })
 }
-
-const entitiesFile = join(FIXTURES, 'entities', `${net}.json`)
-let previous = {}
-if (existsSync(entitiesFile)) previous = JSON.parse(readFileSync(entitiesFile, 'utf8'))
-await writeJson(entitiesFile, { ...previous, ...entities })
 
 const failed = results.filter((r) => !r.ok)
 console.log(`\n${results.length - failed.length}/${results.length} recorded`)
