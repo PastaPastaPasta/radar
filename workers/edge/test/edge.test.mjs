@@ -190,6 +190,12 @@ describe('hyphen pass-through', () => {
     assert.equal(sent.get('if-none-match'), '"v1"')
   })
 
+  it("sends its own user agent upstream, never the browser's", async () => {
+    reset(() => Response.json({}))
+    await get('/x/hy/mainnet/blocks', { headers: { 'user-agent': 'Mozilla/5.0 (private)' } })
+    assert.match(upstreamCalls[0].headers.get('user-agent') ?? '', /^Radar\//)
+  })
+
   it('rejects unknown networks and path escapes', async () => {
     reset()
     assert.equal((await get('/x/hy/devnet/blocks')).status, 404)

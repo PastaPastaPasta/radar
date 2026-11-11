@@ -1,6 +1,8 @@
 import { resolveHyphenRequest } from './hyphen-path'
 
 const FORWARD_REQUEST = ['accept', 'if-none-match']
+// Hyphen answers 520 to requests without a User-Agent, and Workers send none by default.
+const UPSTREAM_USER_AGENT = 'Radar/1 (+https://explorer.dashhq.org)'
 const KEEP_RESPONSE = ['etag', 'last-modified', 'content-language', 'vary']
 const LIST_TTL_SECONDS = 15
 const UPSTREAM_TIMEOUT_MS = 10_000
@@ -46,7 +48,7 @@ export async function handleProxy(request: Request, url: URL): Promise<Response>
   if (!resolved.ok) return json(resolved.status, { error: resolved.error })
   const { url: target, stream: isStream } = resolved
 
-  const headers = new Headers()
+  const headers = new Headers({ 'user-agent': UPSTREAM_USER_AGENT })
   for (const name of FORWARD_REQUEST) {
     const v = request.headers.get(name)
     if (v) headers.set(name, v)
