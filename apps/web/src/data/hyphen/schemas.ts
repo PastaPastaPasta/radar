@@ -4,6 +4,13 @@ import { zBigint, zHex, zHex64, zIsoDate, zUnixSeconds } from '../zod'
 
 const CHAIN_HASH = zHex64
 
+/** Hyphen sends `null` for a transaction page it cached while the transaction was still in the mempool. */
+const zAsOfHeight = z
+  .number()
+  .nullish()
+  .transform((v) => v ?? undefined)
+  .optional()
+
 export const HyStatusSchema = z.object({
   syncStatus: z.string(),
   syncMode: z.string().nullish(),
@@ -16,7 +23,7 @@ export type HyStatus = z.output<typeof HyStatusSchema>
 export function hyPage<T extends z.ZodType>(item: T) {
   return z
     .object({
-      asOfHeight: z.number().optional(),
+      asOfHeight: zAsOfHeight,
       totalCount: z.number().nullish(),
       value: z.array(item),
       nextCursor: z.string().nullish(),
@@ -55,7 +62,7 @@ export const HyBlockSummarySchema = z.object({
 export type HyBlockSummary = z.output<typeof HyBlockSummarySchema>
 
 export const HyBlockDetailSchema = HyBlockSummarySchema.extend({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   merkle: CHAIN_HASH,
   status: z.string().nullish(),
   chainwork: z.string().nullish(),
@@ -92,7 +99,7 @@ export const HyBlockTxSchema = z.object({
 export type HyBlockTx = z.output<typeof HyBlockTxSchema>
 
 export const HyRawBlockSchema = z.object({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   source: z.string(),
   rawblock: zHex,
 })
@@ -118,7 +125,7 @@ export const HyTxOutputSchema = z.object({
 })
 
 export const HyTxDetailSchema = z.object({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   txHash: CHAIN_HASH,
   blockHeight: z.number().nullish(),
   blockPos: z.number().nullish(),
@@ -143,14 +150,14 @@ export const HyTxDetailSchema = z.object({
 export type HyTxDetail = z.output<typeof HyTxDetailSchema>
 
 export const HyRawTxSchema = z.object({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   source: z.string(),
   rawtx: zHex,
 })
 export type HyRawTx = z.output<typeof HyRawTxSchema>
 
 export const HyAddressSchema = z.object({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   address: z.string(),
   balance: zBigint,
   totalReceived: zBigint,
@@ -199,7 +206,7 @@ export type HyRichRow = z.output<typeof HyRichRowSchema>
 
 export const HyBalancesSchema = z
   .object({
-    asOfHeight: z.number().optional(),
+    asOfHeight: zAsOfHeight,
     totalCount: z.number().nullish(),
     positiveBalanceCount: z.number().nullish(),
     value: z.array(HyRichRowSchema),
@@ -231,7 +238,7 @@ export const HyMetricsSchema = z.object({
 export type HyMetrics = z.output<typeof HyMetricsSchema>
 
 export const HyMetricsChartSchema = z.object({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   startHeight: z.number(),
   endHeight: z.number(),
   bucketBlocks: z.number(),
@@ -360,7 +367,7 @@ export const HyValidatorSchema = HyValidatorBaseSchema
 export type HyValidator = z.output<typeof HyValidatorSchema>
 
 export const HyValidatorDetailSchema = HyValidatorBaseSchema.extend({
-  asOfHeight: z.number().optional(),
+  asOfHeight: zAsOfHeight,
   history: z.array(
     z.object({
       txHash: CHAIN_HASH,

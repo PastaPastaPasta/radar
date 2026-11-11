@@ -77,6 +77,25 @@ describe('hyphen schema behaviour', () => {
     expect(row.balance).toBe(99290823006000n)
   })
 
+  it('reads a transaction page cached while the transaction was in the mempool, whose snapshot height is null @IN-05', () => {
+    const tx = S.HyTxDetailSchema.parse({
+      asOfHeight: null,
+      txHash: 'ab'.repeat(32),
+      txVersion: 2,
+      txType: 'normal',
+      txSize: 100,
+      valueOut: 1,
+      inputCount: 0,
+      outputCount: 0,
+      vin: [],
+      vout: [],
+    })
+    expect(tx.asOfHeight).toBeUndefined()
+    expect(
+      S.hyPage(S.HyUtxoSchema).parse({ asOfHeight: null, value: [] }).asOfHeight,
+    ).toBeUndefined()
+  })
+
   it('rejects a stream event with an unknown shape for a known type', () => {
     expect(
       S.HyStreamEventSchema.safeParse({ type: 'chain_lock', ts: 1, payload: {} }).success,
