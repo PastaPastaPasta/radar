@@ -39,7 +39,7 @@ Each record type gets one visual that only it has. They earn their place by answ
 |---|---|---|
 | `/` | the scope (map + pulses + two-lane chain) | Is the network alive, and where is it working right now? |
 | `/tx/<txid>` | value-flow ribbon + settlement steps (seen → InstantSend → mined → ChainLocked) | Where did the money go, and is it final? |
-| `/mn/<protx>` | 90-day uptime strip + rewards-by-epoch bars against the middle 80% band | Is this node healthy and earning like its peers? |
+| `/mn/<protx>` | uptime strip (one cell per crawled day) + rewards-by-epoch bars against the middle 80% band (the bars wait for M2) | Is this node healthy and earning like its peers? |
 | `/identity/<id>` | activity calendar (one square a day, a year wide) | How active is this identity, and when? |
 | `/epoch`, Platform home | epoch clock (track with blocks-so-far and ETA) | Where are we in the epoch? |
 | `/masternodes` | status stack bar above the census stats | How much of the list is healthy? |
@@ -299,7 +299,7 @@ Mono, `--dh-ink`. `short`: 6…4 with the ellipsis in `--dh-ink-2`. `full`: one 
 ### 6.5 `Amount` and `Time`
 
 - `Amount` default unit DASH. Eight decimals in tables (last four dimmed, §3), four decimals in stats and prose ("50.0061 DASH"). `duffs` for fees under 0.0001 DASH ("666 duffs"). Credits show as DASH with the credit count in the note ("10.1333 DASH · 1,013,331,591,984 credits"). `mDASH` for Platform fees ("0.7460 mDASH").
-- `fiat`: "≈ $2,310" in the note, never as the main value, mainnet only.
+- `fiat`: "≈ $2,310" in the note, mainnet only. When the reader chooses USD as the unit (mainnet, rate in) the figure leads instead: "≈ $2,310 (50.0061 DASH)", the DASH amount in parentheses and `signed` giving "≈ +$…"; the footer says "USD at ≈ $47.1 per DASH, from <provider>." with the rate's source line, and charts keep their DASH axes.
 - `signed`: "+1.3916" in `--dh-good`, "−0.5" in ink (outflows are not errors).
 - `compact`: "1.2k DASH", "12.66 M DASH" (supply). Use it in tiles where the exact value is one click away; stats on record pages stay exact ("36,921 DASH").
 - `Time` `mode="both"`: "14:28 UTC · 2 min ago". Relative: "21 s", "8 min", "2 h", "yesterday", then "6 Nov". Absolute: "14:28 UTC" or "10 Nov 2026, 14:28 UTC". Relative values tick every 10 s when `live`. A `title` always carries the full UTC time.
@@ -358,7 +358,7 @@ Links, not buttons. 44 px high, 22 px gap, 14 px weight 520 `--dh-ink-2`; curren
 
 ### 6.9 `SourceLine` and `LiveDot`
 
-Compact mark (the family source tag): 20 px min height, 1 × 6 px padding, 1 px dotted `--dh-line-2` border, 3 px radius, transparent ground, 12 px weight 520 `--dh-ink-2`, 12–13 px glyph. Wording is ARCHITECTURE.md §7.3; the looks:
+Compact mark (the family source tag): 20 px min height, 1 × 6 px padding, 1 px dotted `--dh-line-2` border, 3 px radius, transparent ground, 12 px weight 520 `--dh-ink-2` (6.0:1 or better on every card surface in both themes), 12–13 px glyph. Wording is ARCHITECTURE.md §7.3; the looks:
 
 | Stamp | Look |
 |---|---|
@@ -397,14 +397,14 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 - Bar strips (`.rx-bars`): 56 px high, 2 px gaps, 2 px top radius, layer line colour at 90%; `dim` bars at 35% for incomplete periods.
 - `Meter`: 8 px track (`--dh-sunken`, plate-3 on the plate), 4 px radius, fill in the layer line colour or the threshold tone; `--lg` is 14 px. `marker`: a 2 px ink tick 4 px taller than the track with its label above.
 - Stack bar (status mix): 14–16 px, 4 px radius, 2 px gaps between segments, min segment 3 px, always with a legend that has counts.
-- Uptime strip: 90 cells (masternode page), 2 px gap, 34 px high, good/warn/bad; 30-cell compact form 2 px wide × 14 px in tables. A tooltip and a hidden text summary ("Missed 9 of 48 checks on 5–6 Sep") per bad stretch.
+- Uptime strip: one cell per day Radar has crawled, up to 90 (masternode page), 2 px gap, 34 px high, good/warn/bad; 30-cell compact form 2 px wide × 14 px in tables. A tooltip and a hidden text summary ("Missed 9 of 48 checks on 5–6 Sep") per bad stretch.
 - Epoch clock: 18 px track, 9 px radius, `--rx-plat-line` fill, blocks-so-far tick, end time and "Ends in about 7.4 days" at the right.
 - Activity calendar: 7 rows × 53 columns of square cells that fill the card width (about 10 px in the 1440 layout), 3 px gap, 2 px radius; levels 1 / 2–4 / 5+ in `--rx-cal-1…3`; empty days `--dh-sunken`. Month labels under it. Each cell's count is in its accessible table equivalent, not only in a tooltip.
 - `Chart` (ECharts): §7. `loading` shows the `chart` skeleton at the chart's height.
 
 ### 6.12 Value flow and settlement (tx page)
 
-- Flow: SVG 1060 × 270; inputs at x = 300, outputs at x = 760; nodes are 8 px bars in the layer fill (change `--dh-line-2`, fee `--dh-warn`); ribbons are cubic curves at 22% fill (change 14% ink-2, fee 35% warn). Amounts tiny relative to the largest get a 16 px minimum height and the caption says so. Labels: address mono 12 px brand-ink, value 13.5 px weight 650. Phone: one 22 px stacked bar plus a ruled legend (address, change, fee with amounts).
+- Flow: SVG 1060 × 270; inputs at x = 300, outputs at x = 760; nodes are 8 px bars in the layer fill (change `--dh-line-2`, fee `--dh-warn`); ribbons are cubic curves at 22% fill (change 14% ink-2, fee 35% warn). Amounts tiny relative to the largest get a 16 px minimum height and the caption says so. Labels: two lines beside each bar, the value (13.5 px weight 650) above the identity (address mono 12 px brand-ink, a pool, or "· change"), so neighbouring labels never share a row; no two label boxes may overlap. At 900 px and below: one 22 px stacked bar plus a ruled legend (address, change, fee with amounts).
 - Settlement: four steps in a row (stacked on phone), 14 px dots on a 2 px line; done steps `--dh-good` dot and line, pending step hollow with a pulsing ring, future steps `--dh-line-2`. Each step: glyph + 14 px weight 620 title, 13 px time and detail.
 
 ### 6.13 Source down on a card
@@ -427,7 +427,7 @@ When `useSourceHealth` reports the card's source down, the body drops to 74% opa
 
 Radar never asks for keys. Actions that need them leave Radar through `LinkOut`:
 
-- Inline: secondary button with a 24 px app tile (Governance `#0070C4` with a ballot glyph, Bridge `#25B8A6` with a bridge glyph, white/ink glyph) + label + external glyph ("Vote in Governance ↗", "Manage in Bridge ↗"). Never amber.
+- Inline: secondary button with a 24 px app tile (Governance `#0070C4` with a ballot glyph, Bridge `#25B8A6` with a bridge glyph, white/ink glyph) + label + external glyph ("Vote in Governance ↗", "Manage in Bridge ↗"). Never amber. The link goes to the most specific page the app has for the record and the network; where the app has none (Governance has no page per masternode), it goes to the nearest page and the label stays honest about the action.
 - Card (home "Act on what you see"): 40 px tile, 17 px title, one-line description, external glyph top right; 1 px line, hover border `--dh-line-2`.
 - Explorer cross-links (PE, Hyphen, Insight) are plain text links with the external glyph in record footers.
 
@@ -542,7 +542,7 @@ Mockup: `home.html?testnet`, shot `shots/home-testnet--desk-light.png`.
 ## 11. Phone navigation
 
 - The family bar with `phone-nav="tabs"`: a fixed bottom tab bar, 56 px + safe area, five tabs with 22 px icons and 11 px labels: **Home, Core, Network, Platform, Search**. The current tab follows the shell's tab-bar look (selection keyline and ink text); others `--dh-ink-2`. "Search" opens the full-screen palette.
-- The top bar keeps the logo, network switch, theme toggle and the menu (Tools, other dashhq products, settings).
+- The top bar keeps the logo, network switch, theme toggle, the live Core height and the menu (Tools, other dashhq products, settings); the header search icon is hidden below 600 px because the tab bar has Search. The network menu opens against the bar row so it is fully visible from 320 px, and the pill keeps the network's name (its first letter below 360 px, with the dot and the Testnet keyline saying the rest). Below 380 px the Core height loses its connection dot.
 - Band navs and record tabs scroll horizontally; the current one scrolls into view.
 - Tables become cards (§6.7). Filters collapse to a "Filters n" button that opens a bottom sheet.
 - Hover cards are off; chips navigate on tap and copy buttons are always visible (40 px targets via the family touch rules).
