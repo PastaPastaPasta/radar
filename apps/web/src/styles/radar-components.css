@@ -1839,14 +1839,6 @@ button.rx-src--proof:hover {
 }
 
 /* ============================================================ 21. testnet frame (HY-17) */
-:root.rx-testnet body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 4px var(--rx-testnet);
-}
 .rx-tnbadge {
   display: inline-flex;
   align-items: center;
