@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatBytes, formatInt } from '@/lib/format'
-import { Badge, ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
+import { ChainLockBadge, ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
 import { entityHref, entityPath } from '../hrefs'
 import { useNetwork } from '../network'
 import { BusyCard, CardLoading, mayReadDapi } from './frame'
@@ -50,14 +50,13 @@ export function BlockHoverCard({ id }: { id: string }) {
           { label: t`Size`, value: formatBytes(block.size) },
           {
             label: t`Finality`,
-            value: block.chainLocked ? (
-              <Badge tone="success" size="sm">
-                {t`ChainLocked`}
-              </Badge>
-            ) : (
-              <Badge tone="warning" size="sm">
-                {t`Not ChainLocked yet`}
-              </Badge>
+            value: (
+              <ChainLockBadge
+                locked={block.chainLocked}
+                claim={block.chainLockClaim}
+                unlockedLabel={t`Not ChainLocked yet`}
+                size="sm"
+              />
             ),
           },
         ]}

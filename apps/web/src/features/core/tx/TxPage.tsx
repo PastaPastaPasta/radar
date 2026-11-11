@@ -22,16 +22,10 @@ import {
   Time,
   TypeBadge,
   useUnits,
-} from '@/ui'
-import {
   ChainLockBadge,
-  CoreBand,
-  CoreBandSkeleton,
   InstantSendBadge,
-  NotFound,
-  RecordHeader,
-  Section,
-} from '../block/frame'
+} from '@/ui'
+import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { HyphenOnlyNote } from '../block/HyphenOnlyNote'
 import { IoTables } from './IoTables'

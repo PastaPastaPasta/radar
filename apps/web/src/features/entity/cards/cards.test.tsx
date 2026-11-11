@@ -45,6 +45,7 @@ const tx: DecodedTx = {
   height: 2_570_000,
   confirmations: 11,
   isInstantLocked: true,
+  instantLockClaim: 'one-node',
   isChainLocked: false,
 }
 
@@ -120,6 +121,26 @@ describe('BlockHoverCard', () => {
     expect(root.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
+  it('says one node reported the ChainLock instead of calling the block locked @X-06', async () => {
+    setCoreClient(
+      core({
+        block: () =>
+          Promise.resolve({
+            ...stamp,
+            data: { ...block, chainLocked: false, chainLockClaim: 'one-node' as const },
+          }),
+      }),
+    )
+    const { BlockHoverCard } = await import('./block')
+    const Harness = await harness(<BlockHoverCard id={HASH} />)
+    render(<Harness />)
+    const card = await screen.findByText('Block 2,570,010', {}, { timeout: 5000 })
+    const root = card.closest<HTMLElement>('[data-hover-card="block"]')!
+    expect(within(root).getByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(within(root).queryByText('ChainLocked')).toBeNull()
+    expect(within(root).queryByText('Not ChainLocked yet')).toBeNull()
+  })
+
   it('asks by height when the id is a number', async () => {
     const blockFn = vi.fn(() => Promise.resolve({ ...stamp, data: block }))
     setCoreClient(core({ block: blockFn }))
@@ -159,9 +180,29 @@ describe('TxHoverCard', () => {
     const root = (
       await screen.findByText(/In block 2,570,000/, {}, { timeout: 5000 })
     ).closest<HTMLElement>('[data-hover-card="tx"]')!
-    expect(within(root).getByText('InstantSend')).toBeInTheDocument()
+    expect(within(root).getByText('InstantSend lock reported by one node')).toBeInTheDocument()
     expect(root.querySelector('[data-amount="200000000"]')).toHaveTextContent('2')
     expect(within(root).getByText('1 → 2')).toBeInTheDocument()
+  })
+
+  it('says one node reported the ChainLock instead of calling the transaction locked @X-06', async () => {
+    setCoreClient(
+      core({
+        tx: () =>
+          Promise.resolve({
+            ...stamp,
+            data: { ...tx, isInstantLocked: false, chainLockClaim: 'one-node' as const },
+          }),
+      }),
+    )
+    const { TxHoverCard } = await import('./tx')
+    const Harness = await harness(<TxHoverCard id={TXID} />)
+    render(<Harness />)
+    const root = (
+      await screen.findByText(/In block 2,570,000/, {}, { timeout: 5000 })
+    ).closest<HTMLElement>('[data-hover-card="tx"]')!
+    expect(within(root).getByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(within(root).queryByText('ChainLocked')).toBeNull()
   })
 
   it('shows a transaction without a block as in the mempool', async () => {

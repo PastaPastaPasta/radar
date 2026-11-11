@@ -14,6 +14,7 @@ import {
   Icon,
   LiveControl,
   LiveDot,
+  LockMark,
   Skeleton,
   SourceLine,
   Time,
@@ -85,7 +86,12 @@ function CorePulse() {
   const tip = useQuery(coreQueries.tip(net))
   const lock = useQuery(coreQueries.chainLock(net))
   const height = tip.data?.data.height
-  const locked = tip.data && lock.data ? lock.data.data.height >= tip.data.data.height : false
+  const rows = useQuery({
+    ...coreQueries.blockRows(net, { fromHeight: height ?? 0, count: CORE_ROWS }),
+    enabled: height !== undefined,
+    placeholderData: keepPreviousOnNetwork(net),
+  })
+  const locked = rows.data?.data.find((r) => r.height === height)?.chainLocked === true
   return (
     <Link
       className="rx-pulse__row"
@@ -118,7 +124,9 @@ function CorePulse() {
               {t`ChainLocked`}
             </span>
           ) : lock.data ? (
-            <span>{t`ChainLock at ${formatInt(lock.data.data.height)}`}</span>
+            <span data-claim="one-node">
+              {t`ChainLock at ${formatInt(lock.data.data.height)}, reported by one node`}
+            </span>
           ) : null
         ) : null}
         {tip.data ? <Time ms={tip.data.data.time} mode="relative" live /> : null}
@@ -286,7 +294,7 @@ function Lanes() {
               <span>
                 {t`${formatInt(b.txCount)} tx`} · <Time ms={b.time} mode="relative" live />
               </span>
-              {b.chainLocked ? <Icon name="cl" size="sm" className="rx-lock" /> : null}
+              <LockMark locked={b.chainLocked} claim={b.chainLockClaim} compact />
             </Link>
           ))}
         </div>

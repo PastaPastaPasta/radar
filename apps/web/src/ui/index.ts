@@ -32,6 +32,7 @@ export {
   useLiveView,
 } from './live-connection'
 export type { ConnectionState, LiveConnection, LiveView } from './live-connection'
+export { ChainLockBadge, InstantSendBadge, LockMark } from './lock-badges'
 export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
 export { DataTable, NewRowsPill } from './data-table'

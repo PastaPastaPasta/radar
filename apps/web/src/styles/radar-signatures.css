@@ -1126,3 +1126,19 @@
       center / contain no-repeat;
   }
 }
+.rx-lockmark {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+.rx-lockmark[data-claim='one-node'] {
+  color: var(--dh-warn);
+}
+.rx-blk .rx-lockmark {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+.rx-blk .rx-lockmark .rx-lock {
+  position: static;
+}

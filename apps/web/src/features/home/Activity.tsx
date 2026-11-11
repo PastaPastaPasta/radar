@@ -10,7 +10,7 @@ import type { PeTransaction } from '@/data/pe/schemas'
 import { Entity, PageLink, useNetwork, keepPreviousOnNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Card, DataTable, Empty, Icon, Time, TYPE_META } from '@/ui'
+import { Card, DataTable, Empty, Icon, LockMark, Time, TYPE_META } from '@/ui'
 import { CORE_ROWS } from './Scope'
 import { transitionKind } from './transition-types'
 
@@ -35,7 +35,7 @@ function BlocksCard() {
         cell: ({ row }) => (
           <span className="rx-row" style={{ gap: 6 }}>
             <Entity kind="block" id={String(row.original.height)} />
-            {row.original.chainLocked ? <Icon name="cl" size="sm" className="rx-lock" /> : null}
+            <LockMark locked={row.original.chainLocked} claim={row.original.chainLockClaim} />
           </span>
         ),
         meta: { phone: 'title' },

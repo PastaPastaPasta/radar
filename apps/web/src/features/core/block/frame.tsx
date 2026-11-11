@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { useDocumentTitle, networkName, PageLink } from '@/features/entity'
 import { type NetworkId } from '@/lib/network'
-import { Badge, Empty, Icon, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
+import { Empty, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
 
 export interface Crumb {
   label: ReactNode
@@ -151,55 +151,5 @@ export function NotFound({
         }
       />
     </div>
-  )
-}
-
-/**
- * A ChainLock is shown as locked only once a second source agrees. One node's word is shown as exactly that,
- * and an unlocked block is not called locked at all.
- */
-export function ChainLockBadge({
-  locked,
-  claim,
-  unlockedLabel,
-}: {
-  locked: boolean
-  claim: 'one-node' | undefined
-  /** What to say when nothing reports a lock; omit to say nothing. */
-  unlockedLabel?: ReactNode
-}) {
-  const { t } = useLingui()
-  if (locked) {
-    return (
-      <Badge tone="success" icon={<Icon name="cl" size="sm" />}>
-        {t`ChainLocked`}
-      </Badge>
-    )
-  }
-  if (claim) {
-    return (
-      <span data-claim="one-node">
-        <Badge tone="warning" icon={<Icon name="cl" size="sm" />}>
-          {t`ChainLock reported by one node`}
-        </Badge>
-      </span>
-    )
-  }
-  return unlockedLabel ? <Badge tone="warning">{unlockedLabel}</Badge> : null
-}
-
-/** An InstantSend lock is reported by the node that answered; no second source is asked. */
-export function InstantSendBadge({ claim }: { claim: 'one-node' | undefined }) {
-  const { t } = useLingui()
-  return claim ? (
-    <span data-claim="one-node">
-      <Badge tone="warning" icon={<Icon name="is" size="sm" />}>
-        {t`InstantSend lock reported by one node`}
-      </Badge>
-    </span>
-  ) : (
-    <Badge tone="success" icon={<Icon name="is" size="sm" />}>
-      {t`InstantSend locked`}
-    </Badge>
   )
 }

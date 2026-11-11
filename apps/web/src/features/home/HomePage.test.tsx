@@ -2,6 +2,7 @@ import { act, configure, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { core } from '@/data/core/client'
 import { healthRegistry } from '@/data/health'
 import { resetLiveConnection, setLiveConnection } from '@/ui'
 import { renderAt } from './test-utils'
@@ -31,6 +32,37 @@ describe('Home page', () => {
     const row = await coreRow('2,570,085')
     await waitFor(() => expect(row).toHaveTextContent('ChainLocked'))
     expect(row.querySelector('[data-source="dapi"]')).not.toBeNull()
+  })
+
+  it('says one node reported a ChainLock on the home lists instead of drawing a lock @IN-01', async () => {
+    const original = core.blockRows.bind(core)
+    vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
+      const rows = await original(net, q, signal)
+      return {
+        ...rows,
+        data: rows.data.map((r) => ({
+          ...r,
+          chainLocked: false,
+          chainLockClaim: 'one-node' as const,
+        })),
+      }
+    })
+    renderAt('/')
+    const row = await coreRow('2,570,085')
+    await waitFor(() => expect(row).toHaveTextContent('reported by one node'))
+    expect(row).not.toHaveTextContent(/ChainLocked/)
+    const blocks = await screen.findByRole('table', { name: 'Latest Core blocks' })
+    await waitFor(() =>
+      expect(within(blocks).getAllByText('ChainLock reported by one node').length).toBeGreaterThan(
+        5,
+      ),
+    )
+    const lane = document.querySelector('#lane-core')!
+    await waitFor(() =>
+      expect(lane.querySelectorAll('[data-claim="one-node"]').length).toBeGreaterThan(3),
+    )
+    expect(lane.querySelector('.rx-lock')).toBeNull()
+    vi.restoreAllMocks()
   })
 
   it('lists the latest Core blocks and Platform transitions @IN-01', async () => {

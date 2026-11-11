@@ -4,7 +4,16 @@ import { useQuery } from '@tanstack/react-query'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatInt } from '@/lib/format'
-import { Amount, Badge, ErrorState, HoverCardLayout, LayerGlyph, TypeBadge } from '@/ui'
+import {
+  Amount,
+  Badge,
+  ChainLockBadge,
+  ErrorState,
+  HoverCardLayout,
+  InstantSendBadge,
+  LayerGlyph,
+  TypeBadge,
+} from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
 import { BusyCard, CardLoading, mayReadDapi } from './frame'
@@ -55,14 +64,14 @@ export function TxHoverCard({ id }: { id: string }) {
               ) : (
                 <span className="inline-flex flex-wrap items-center gap-1">
                   {t`In block ${formatInt(tx.height)}`}
-                  {tx.isChainLocked ? (
-                    <Badge tone="success" size="sm">
-                      {t`ChainLocked`}
-                    </Badge>
+                  {tx.isChainLocked || tx.chainLockClaim ? (
+                    <ChainLockBadge
+                      locked={tx.isChainLocked === true}
+                      claim={tx.chainLockClaim}
+                      size="sm"
+                    />
                   ) : tx.isInstantLocked ? (
-                    <Badge tone="info" size="sm">
-                      {t`InstantSend`}
-                    </Badge>
+                    <InstantSendBadge claim={tx.instantLockClaim} size="sm" />
                   ) : (
                     <span>{confirmationsText(confirmations)}</span>
                   )}

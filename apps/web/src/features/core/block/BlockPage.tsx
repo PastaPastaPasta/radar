@@ -22,19 +22,13 @@ import {
   Stat,
   Time,
   TypeBadge,
+  ChainLockBadge,
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
-import {
-  ChainLockBadge,
-  CoreBand,
-  CoreBandSkeleton,
-  NotFound,
-  RecordHeader,
-  Section,
-} from './frame'
+import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { parseBlockRef } from '@/lib/core/block-ref'
 

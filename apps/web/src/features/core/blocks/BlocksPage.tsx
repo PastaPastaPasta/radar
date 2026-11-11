@@ -14,7 +14,7 @@ import {
   keepPreviousOnNetwork,
 } from '@/features/entity'
 import { formatBytes, formatDate, formatInt } from '@/lib/format'
-import { Card, DataTable, Empty, Hash, Icon, SourceLine, Time } from '@/ui'
+import { Card, DataTable, Empty, Hash, LockMark, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import { BLOCKS_PER_PAGE, DAY_MS, dayStartMs, shiftDay, todayUtc, windowOf } from './blocks-range'
 
@@ -155,13 +155,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
         cell: ({ row }) => (
           <span className="rx-row" style={{ gap: 6 }}>
             <Entity kind="block" id={String(row.original.height)} />
-            {row.original.chainLocked ? (
-              <Icon name="cl" size="sm" className="rx-lock" />
-            ) : row.original.chainLockClaim ? (
-              <span className="rx-tag" data-claim="one-node">
-                {t`ChainLock reported by one node`}
-              </span>
-            ) : null}
+            <LockMark locked={row.original.chainLocked} claim={row.original.chainLockClaim} />
           </span>
         ),
         meta: { phone: 'title' },
