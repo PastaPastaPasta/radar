@@ -19,10 +19,6 @@ msgstr "· change"
 msgid "(opens in a new tab)"
 msgstr "(opens in a new tab)"
 
-#. placeholder {0}: tx.confirmations
-msgid "{0, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{0, plural, one {# confirmation} other {# confirmations}}"
-
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, one {# input} other {# inputs}}"
@@ -63,6 +59,19 @@ msgstr "{0} in the mempool"
 msgid "{0} inputs"
 msgstr "{0} inputs"
 
+#. placeholder {0}: formatInt(unloaded)
+msgid "{0} inputs not loaded"
+msgstr "{0} inputs not loaded"
+
+#. placeholder {0}: sourceName(stamp.source)
+msgid "{0} isn't answering"
+msgstr "{0} isn't answering"
+
+#. placeholder {0}: sourceName(down.source)
+#. placeholder {1}: formatRelative(clampSkew(down.fetchedAt, now), now)
+msgid "{0} isn't answering · showing data from {1}"
+msgstr "{0} isn't answering · showing data from {1}"
+
 #. placeholder {0}: formatInt(p.fundingThreshold)
 #. placeholder {1}: formatInt(totalVotes(p))
 msgid "{0} needed · {1} cast"
@@ -96,7 +105,12 @@ msgstr "{0} outputs"
 msgid "{0} proposals"
 msgstr "{0} proposals"
 
-#. placeholder {0}: formatAmountText(toOthers, 'duffs')
+#. placeholder {0}: formatInt(list(shared.shares).length)
+#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
+msgid "{0} shares, {1} blocks of early-leave penalty"
+msgstr "{0} shares, {1} blocks of early-leave penalty"
+
+#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
 msgid "{0} to other addresses"
 msgstr "{0} to other addresses"
 
@@ -165,6 +179,9 @@ msgstr "A quorum signals that masternodes are ready for a protocol upgrade."
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "A script address (starting with 7 or 8) can’t sign a message."
 
+msgid "A shareholder of a shared masternode changes where their reward is paid."
+msgstr "A shareholder of a shared masternode changes where their reward is paid."
+
 msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
 msgstr "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
 
@@ -220,8 +237,16 @@ msgstr "Amounts"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 
+#. placeholder {0}: stamp.node
+msgid "Answered by {0}"
+msgstr "Answered by {0}"
+
 msgid "Arrives with the network pages. The census figures below are live."
 msgstr "Arrives with the network pages. The census figures below are live."
+
+#. placeholder {0}: formatIsoUtc(stamp.asOf)
+msgid "As of {0}"
+msgstr "As of {0}"
 
 msgid "Asset lock"
 msgstr "Asset lock"
@@ -254,7 +279,7 @@ msgstr "Block"
 msgid "block {0}"
 msgstr "block {0}"
 
-#. placeholder {0}: formatInt(Math.max(0, block.height - 1))
+#. placeholder {0}: formatInt(block.height - 1)
 #. placeholder {0}: formatInt(block.height)
 #. placeholder {0}: formatInt(ref.height)
 msgid "Block {0}"
@@ -400,6 +425,9 @@ msgstr "Collateral"
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Commits the block to the masternode list and the latest ChainLock."
 
+msgid "Computed in your browser"
+msgstr "Computed in your browser"
+
 msgid "Connecting to the live feed…"
 msgstr "Connecting to the live feed…"
 
@@ -409,11 +437,23 @@ msgstr "Core"
 msgid "Core address"
 msgstr "Core address"
 
+#. placeholder {0}: balance ?? ''
+#. placeholder {1}: a.txCount
+msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
+msgstr "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
+
+msgid "Core address · no activity seen"
+msgstr "Core address · no activity seen"
+
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Core addresses, mempool, governance and block lists"
 
 msgid "Core block"
 msgstr "Core block"
+
+#. placeholder {0}: INT.format(block.height)
+msgid "Core block {0}"
+msgstr "Core block {0}"
 
 msgid "Core block height"
 msgstr "Core block height"
@@ -433,6 +473,13 @@ msgstr "Core tip, blocks and transactions, straight from evonodes"
 msgid "Core transaction"
 msgstr "Core transaction"
 
+#. placeholder {0}: INT.format(height)
+msgid "Core transaction in block {0}"
+msgstr "Core transaction in block {0}"
+
+msgid "Core transaction, unconfirmed"
+msgstr "Core transaction, unconfirmed"
+
 msgid "Core version"
 msgstr "Core version"
 
@@ -447,6 +494,9 @@ msgstr "Counted as valid"
 
 msgid "crawled"
 msgstr "crawled"
+
+msgid "Crawled by Radar"
+msgstr "Crawled by Radar"
 
 msgid "Created"
 msgstr "Created"
@@ -521,6 +571,9 @@ msgstr "Direction"
 msgid "Each Platform block is locked to a Core block."
 msgstr "Each Platform block is locked to a Core block."
 
+msgid "Early-leave penalty"
+msgstr "Early-leave penalty"
+
 msgid "Edit"
 msgstr "Edit"
 
@@ -562,6 +615,9 @@ msgstr "Example"
 msgid "Fee"
 msgstr "Fee"
 
+msgid "Fetched from Radar"
+msgstr "Fetched from Radar"
+
 msgid "Figures computed on your device"
 msgstr "Figures computed on your device"
 
@@ -596,6 +652,9 @@ msgstr "Getting tight"
 
 msgid "Governance"
 msgstr "Governance"
+
+msgid "Governance proposal"
+msgstr "Governance proposal"
 
 msgid "Hard-fork signal"
 msgstr "Hard-fork signal"
@@ -683,6 +742,21 @@ msgstr "In the mempool"
 msgid "Inbound"
 msgstr "Inbound"
 
+msgid "Indexed by Hyphen"
+msgstr "Indexed by Hyphen"
+
+msgid "Indexed by Hyphen · DAPI busy"
+msgstr "Indexed by Hyphen · DAPI busy"
+
+msgid "Indexed by Hyphen · DAPI unreachable"
+msgstr "Indexed by Hyphen · DAPI unreachable"
+
+msgid "Indexed by Platform Explorer"
+msgstr "Indexed by Platform Explorer"
+
+msgid "Indexed by Platform Explorer · checking…"
+msgstr "Indexed by Platform Explorer · checking…"
+
 msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 msgstr "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
 
@@ -697,6 +771,9 @@ msgstr "Inputs → outputs"
 
 msgid "Inputs and outputs"
 msgstr "Inputs and outputs"
+
+msgid "Inputs hash"
+msgstr "Inputs hash"
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -746,6 +823,10 @@ msgstr "Last {0} blocks"
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
 msgstr "Last crawl finished {0}. Its Core node is at block {1}."
 
+#. placeholder {0}: formatRelative(clampSkew(last, now), now)
+msgid "last good {0}"
+msgstr "last good {0}"
+
 #. placeholder {0}: ago(health.lastOkAt)
 msgid "Last good {0}."
 msgstr "Last good {0}."
@@ -780,6 +861,12 @@ msgstr "Live"
 msgid "Live feed interrupted, reconnecting…"
 msgstr "Live feed interrupted, reconnecting…"
 
+msgid "Live updates are paused because the network is busy. This page refreshes at the next block."
+msgstr "Live updates are paused because the network is busy. This page refreshes at the next block."
+
+msgid "Live updates are paused while this tab is in the background."
+msgstr "Live updates are paused while this tab is in the background."
+
 msgid "Live updates have stopped."
 msgstr "Live updates have stopped."
 
@@ -811,6 +898,10 @@ msgstr "mainnet"
 
 msgid "Masternode"
 msgstr "Masternode"
+
+#. placeholder {0}: short(hash)
+msgid "Masternode {0}"
+msgstr "Masternode {0}"
 
 msgid "Masternode list root"
 msgstr "Masternode list root"
@@ -911,6 +1002,9 @@ msgstr "Network pulse"
 
 msgid "New operator key"
 msgstr "New operator key"
+
+msgid "New reward payout"
+msgstr "New reward payout"
 
 msgid "New rows appear at the top."
 msgstr "New rows appear at the top."
@@ -1216,11 +1310,21 @@ msgstr "Previous day"
 msgid "Price feed"
 msgstr "Price feed"
 
+msgid "Price via Platform Explorer"
+msgstr "Price via Platform Explorer"
+
+msgid "Proof-checked"
+msgstr "Proof-checked"
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Proof-checked Platform state, verified in this browser"
 
 msgid "Proposal"
 msgstr "Proposal"
+
+#. placeholder {0}: short(found.hash)
+msgid "Proposal {0}"
+msgstr "Proposal {0}"
 
 msgid "Proposals"
 msgstr "Proposals"
@@ -1392,11 +1496,20 @@ msgstr "Seen"
 msgid "Sent"
 msgstr "Sent"
 
+msgid "Served by DAPI"
+msgstr "Served by DAPI"
+
+msgid "Served by DAPI · not proved"
+msgstr "Served by DAPI · not proved"
+
 msgid "Service address"
 msgstr "Service address"
 
 msgid "Settings"
 msgstr "Settings"
+
+msgid "Share index"
+msgstr "Share index"
 
 msgid "Share of supply"
 msgstr "Share of supply"
@@ -1406,6 +1519,18 @@ msgstr "Share of the supply held by each rank band"
 
 msgid "Share of the supply held by the top addresses, by rank band"
 msgstr "Share of the supply held by the top addresses, by rank band"
+
+msgid "Share payout update"
+msgstr "Share payout update"
+
+msgid "Shared collateral"
+msgstr "Shared collateral"
+
+msgid "Shared masternode dissolved"
+msgstr "Shared masternode dissolved"
+
+msgid "Shared masternode registrar update"
+msgstr "Shared masternode registrar update"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -1429,6 +1554,9 @@ msgstr "Show times in UTC"
 
 msgid "Signature"
 msgstr "Signature"
+
+msgid "Signatures"
+msgstr "Signatures"
 
 msgid "Signed message"
 msgstr "Signed message"
@@ -1569,6 +1697,9 @@ msgstr "The operator ends a masternode's service; it must be registered again to
 msgid "The owner changes a masternode's operator key, voting key or payout."
 msgstr "The owner changes a masternode's operator key, voting key or payout."
 
+msgid "The price feed"
+msgstr "The price feed"
+
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "The QR code could not be drawn here. The address above is the same."
 
@@ -1577,6 +1708,12 @@ msgstr "The quorum list URL must start with https://."
 
 msgid "The request budget is nearly used."
 msgstr "The request budget is nearly used."
+
+msgid "The shareholders change a shared masternode's operator key or voting key."
+msgstr "The shareholders change a shared masternode's operator key or voting key."
+
+msgid "The shareholders end a shared masternode and take their collateral back."
+msgstr "The shareholders end a shared masternode and take their collateral back."
 
 msgid "The signature is well formed, but it was made by a different key. It matches this address:"
 msgstr "The signature is well formed, but it was made by a different key. It matches this address:"
@@ -1669,9 +1806,18 @@ msgstr "Total sent"
 msgid "Transaction"
 msgstr "Transaction"
 
+#. placeholder {0}: short(hash)
+msgid "Transaction {0}"
+msgstr "Transaction {0}"
+
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "Transaction {0}…"
+
+#. placeholder {0}: tx.txid.slice(0, 10)
+#. placeholder {1}: tx.txid.slice(-6)
+msgid "Transaction {0}…{1}"
+msgstr "Transaction {0}…{1}"
 
 msgid "Transaction velocity"
 msgstr "Transaction velocity"
@@ -1858,3 +2004,6 @@ msgstr "Yes"
 
 msgid "You"
 msgstr "You"
+
+msgid "Your browser"
+msgstr "Your browser"
