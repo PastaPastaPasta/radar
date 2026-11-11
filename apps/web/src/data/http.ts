@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { z } from 'zod'
 import { getActiveNetwork } from './active-network'
 import { endpoint, type EndpointSource } from './endpoints'
@@ -39,27 +40,45 @@ export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'n
 
 export const DEFAULT_TIMEOUT_MS = 10_000
 
-const COMMON_MESSAGE: Partial<Record<SourceErrorKind, string>> = {
-  network: "couldn't be reached",
-  timeout: 'took too long to answer',
-  'rate-limited': 'is rate limiting requests',
-  'invalid-response': 'sent an answer that could not be read',
-  unavailable: 'is not available on this network',
+function sourceName(source: SourceId): string {
+  switch (source) {
+    case 'sdk':
+      return t`The Platform SDK`
+    case 'dapi':
+      return 'DAPI'
+    case 'radar':
+      return 'Radar'
+    case 'pe':
+      return 'Platform Explorer'
+    case 'hyphen':
+      return 'Hyphen'
+    case 'rate':
+      return t`The price feed`
+    case 'local':
+      return t`This browser`
+  }
 }
 
-const SOURCE_NAME: Record<SourceId, string> = {
-  sdk: 'The Platform SDK',
-  dapi: 'DAPI',
-  radar: 'Radar',
-  pe: 'Platform Explorer',
-  hyphen: 'Hyphen',
-  rate: 'The price feed',
-  local: 'This browser',
+function failureText(name: string, kind: SourceErrorKind): string {
+  switch (kind) {
+    case 'network':
+      return t`${name} couldn’t be reached`
+    case 'timeout':
+      return t`${name} took too long to answer`
+    case 'rate-limited':
+      return t`${name} is rate limiting requests`
+    case 'invalid-response':
+      return t`${name} sent an answer that could not be read`
+    case 'unavailable':
+      return t`${name} is not available on this network`
+    default:
+      return t`${name} returned an error`
+  }
 }
 
 export function describeFailure(source: SourceId, kind: SourceErrorKind, detail?: string): string {
-  const base = `${SOURCE_NAME[source]} ${COMMON_MESSAGE[kind] ?? 'returned an error'}`
-  return detail ? `${base} (${detail})` : base
+  const base = failureText(sourceName(source), kind)
+  return detail ? t`${base} (${detail})` : base
 }
 
 /** Base URL for an HTTP source, or a thrown `unavailable` error where the network has none. */
@@ -108,7 +127,7 @@ async function errorDetail(res: Response): Promise<string> {
 }
 
 export function cancelled(source: SourceId, cause?: unknown): SourceError {
-  return new SourceError({ source, kind: 'aborted', message: 'The request was cancelled', cause })
+  return new SourceError({ source, kind: 'aborted', message: t`The request was cancelled`, cause })
 }
 
 function issuePath(path: readonly PropertyKey[]): string {
