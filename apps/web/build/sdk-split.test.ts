@@ -8,6 +8,7 @@ import {
   evoSdkSourceFile,
   missingSplitFiles,
   sdkSplit,
+  sha256Hex,
   splitBytes,
   wasmFile,
 } from './sdk-split'
@@ -45,5 +46,31 @@ describe('split SDK build', () => {
     for (const part of parts) expect(part.length).toBeLessThanOrEqual(WASM_PART_BYTES)
     expect(WASM_PART_BYTES).toBeLessThan(25 * 1024 * 1024)
     expect(Buffer.concat(parts).equals(bytes)).toBe(true)
+  })
+})
+
+describe('split SDK build digests', () => {
+  it('emits a SHA-256 for each wasm part that matches the part’s bytes', () => {
+    const bytes = readFileSync(wasmFile())
+    const parts = splitBytes(bytes)
+    const emitted: Uint8Array[] = []
+    const plugin = sdkSplit()
+    const load = plugin.load as unknown as (
+      this: { emitFile: (f: { source: Uint8Array }) => string },
+      id: string,
+    ) => string | null
+    const code = load.call(
+      {
+        emitFile: (f) => {
+          emitted.push(f.source)
+          return String(emitted.length - 1)
+        },
+      },
+      '\0virtual:radar-sdk-wasm-parts',
+    )
+    expect(code).not.toBeNull()
+    const digests = [...code!.matchAll(/sha256: "([0-9a-f]{64})"/g)].map((m) => m[1])
+    expect(digests).toEqual(parts.map(sha256Hex))
+    expect(emitted).toHaveLength(parts.length)
   })
 })

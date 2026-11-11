@@ -257,3 +257,90 @@ describe('sdkQueries', () => {
     )
   })
 })
+
+describe('SdkClient when the worker fails', () => {
+  const info = { sdkVersion: '5', protocolVersion: 14, tookMs: 1 }
+
+  it('drops a worker that never answers, so the retry gets a new one', async () => {
+    vi.useFakeTimers()
+    try {
+      const dropTransport = vi.fn()
+      const dead: SdkTransport = {
+        connect: () => new Promise(() => undefined),
+        call: () => new Promise(() => undefined),
+        decode: () => new Promise(() => undefined),
+      }
+      const client = createSdkClient({
+        transport: () => Promise.resolve(dead),
+        devnets: () => [],
+        proofs: createProofStore(),
+        health: { report: vi.fn() },
+        dropTransport,
+        now: () => Date.now(),
+        whenIdle: (fn) => fn(),
+      })
+      const failed = client.call('mainnet', 'system.status', {}).catch((e: unknown) => e)
+      await vi.advanceTimersByTimeAsync(31_000)
+      expect(await failed).toMatchObject({ kind: 'timeout' })
+      expect(dropTransport).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('drops a worker whose calls reject, and connects again on the next try', async () => {
+    let n = 0
+    let now = NOW
+    const dropTransport = vi.fn()
+    const good = new FixtureSdkTransport()
+    const client = createSdkClient({
+      transport: () => {
+        n++
+        return Promise.resolve<SdkTransport>(
+          n === 1
+            ? {
+                connect: () => Promise.reject(new Error('worker script failed to load')),
+                call: () => Promise.reject(new Error('unused')),
+                decode: () => Promise.reject(new Error('unused')),
+              }
+            : good,
+        )
+      },
+      devnets: () => [],
+      proofs: createProofStore(),
+      health: { report: vi.fn() },
+      dropTransport,
+      now: () => now,
+      whenIdle: (fn) => fn(),
+    })
+    await expect(client.call('mainnet', 'system.status', {})).rejects.toMatchObject({
+      kind: 'network',
+    })
+    expect(dropTransport).toHaveBeenCalledTimes(1)
+    now += 6_000
+    const r = await client.call('mainnet', 'system.status', {})
+    expect(r.data.chainId).toBe('evo1')
+    expect(info.protocolVersion).toBe(14)
+  })
+
+  it('passes the requests the SDK sent on to the budget', async () => {
+    const noteRequests = vi.fn()
+    const transport = new FixtureSdkTransport()
+    const original = transport.call.bind(transport)
+    transport.call = async (net, method, args) => ({
+      ...(await original(net, method, args)),
+      requests: [{ host: '1.2.3.4:443', at: 5 }],
+    })
+    const client = createSdkClient({
+      transport: () => Promise.resolve(transport),
+      devnets: () => [],
+      proofs: createProofStore(),
+      health: { report: vi.fn() },
+      noteRequests,
+      now: () => NOW,
+      whenIdle: (fn) => fn(),
+    })
+    await client.call('mainnet', 'system.status', {})
+    expect(noteRequests).toHaveBeenCalledWith('mainnet', [{ host: '1.2.3.4:443', at: 5 }])
+  })
+})

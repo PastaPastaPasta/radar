@@ -79,6 +79,13 @@ export interface WireProof {
   quorumType: number
 }
 
+/** One request the SDK sent to a node, so the Core pool can count it against that node's budget. */
+export interface NodeUse {
+  /** "ip:port" */
+  host: string
+  at: number
+}
+
 export interface WireResult<R> {
   ok: true
   data: R
@@ -87,16 +94,20 @@ export interface WireResult<R> {
   proof?: WireProof
   node?: string
   tookMs: number
+  /** Platform requests sent since the previous reply. */
+  requests?: NodeUse[]
 }
 export interface WireError {
   ok: false
   error: { kind: SourceErrorKind; message: string; code?: string }
+  requests?: NodeUse[]
 }
 
 export interface SdkConnectInfo {
   sdkVersion: string
   protocolVersion: number
   tookMs: number
+  requests?: NodeUse[]
 }
 
 export interface SdkWorkerApi {

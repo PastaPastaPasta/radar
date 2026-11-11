@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { existsSync, readFileSync, realpathSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -38,6 +39,9 @@ export function splitBytes(bytes: Uint8Array, partBytes = WASM_PART_BYTES): Uint
   return parts
 }
 
+export const sha256Hex = (bytes: Uint8Array): string =>
+  createHash('sha256').update(bytes).digest('hex')
+
 export const WASM_SHIM = join(here, '../src/data/sdk/worker/wasm-split.ts')
 
 /** Every file the split build depends on, so a test can fail when an SDK bump moves one. */
@@ -64,14 +68,15 @@ export function sdkSplit(opts: { fixtures?: boolean } = {}): Plugin {
     // Fixture builds replay recorded answers, so the worker, the SDK and its 25 MiB wasm stay out of their output.
     load(id) {
       if (id === RESOLVED_PARTS_MODULE) {
+        const bytes = readFileSync(wasmFile())
         if (serving) {
-          return `import wasmUrl from ${JSON.stringify(`${wasmFile()}?url`)}\nexport default [wasmUrl]`
+          return `import wasmUrl from ${JSON.stringify(`${wasmFile()}?url`)}\nexport default [{ url: wasmUrl, sha256: ${JSON.stringify(sha256Hex(bytes))} }]`
         }
-        const urls = splitBytes(readFileSync(wasmFile())).map((source, i) => {
+        const parts = splitBytes(bytes).map((source, i) => {
           const ref = this.emitFile({ type: 'asset', name: `wasm_sdk_bg.part${i}.wasm`, source })
-          return `import.meta.ROLLUP_FILE_URL_${ref}`
+          return `{ url: import.meta.ROLLUP_FILE_URL_${ref}, sha256: ${JSON.stringify(sha256Hex(source))} }`
         })
-        return `export default [${urls.join(', ')}]`
+        return `export default [${parts.join(', ')}]`
       }
       if (!opts.fixtures) return null
       const file = id.split('?')[0]!

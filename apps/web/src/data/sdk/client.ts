@@ -3,12 +3,14 @@ import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
 import { SourceError } from '../errors'
 import { healthRegistry } from '../health'
 import type { ProofMeta, Sourced } from '../envelope'
+import { getDapiTransport } from '../dapi-core/client'
 import { registerSdkReadyProbe } from '../query/loader'
 import type {
   SdkMethodName,
   SdkMethods,
   SdkNetworkConfig,
   SdkWorkerApi,
+  NodeUse,
   WireError,
 } from './methods'
 import { sdkDevnets } from './devnets'
@@ -18,7 +20,10 @@ import { proofStore as defaultProofStore, type ProofStore } from './proof-store'
 export type SdkState = 'cold' | 'loading' | 'ready' | 'failed'
 
 /** What the client needs from the worker (or its in-thread or fixture stand-ins). */
-export type SdkTransport = SdkWorkerApi
+export type SdkTransport = SdkWorkerApi & {
+  /** Stops a worker that failed, so the next connect starts a new one. */
+  dispose?: () => void
+}
 
 export interface SdkClient {
   /** Start loading and connecting. Never awaited by UI. */
@@ -39,12 +44,19 @@ export interface SdkClientDeps {
   devnets: () => readonly DevnetConfig[]
   proofs: ProofStore
   health: Pick<typeof healthRegistry, 'report'>
+  /** Forgets the transport after it failed as a whole, so `transport()` makes a new one. */
+  dropTransport?: () => void
+  /** Counts the Platform requests the SDK sent against the Core pool's per-node budget. */
+  noteRequests?: (net: NetworkId, requests: NodeUse[]) => void
   now: () => number
   /** Runs `fn` when the browser is idle, so warm-up never competes with the page. */
   whenIdle: (fn: () => void) => void
 }
 
 const RETRY_CONNECT_AFTER_MS = 5_000
+/** The worker has its own 20 s connect limit; this one is for a worker that never answers at all. */
+export const CONNECT_DEADLINE_MS = 30_000
+export const CALL_DEADLINE_MS = 20_000
 
 const idle = (fn: () => void): void => {
   const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback
@@ -57,6 +69,31 @@ function toSourceError(error: WireError['error']): SourceError {
     source: 'sdk',
     kind: error.kind,
     message: error.message,
+  })
+}
+
+function deadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
+  return new Promise<T>((resolve, rejectWith) => {
+    const reject = rejectWith as (reason: unknown) => void
+    const timer = setTimeout(() => {
+      reject(
+        new SourceError({
+          source: 'sdk',
+          kind: 'timeout',
+          message: `${what} did not answer in time`,
+        }),
+      )
+    }, ms)
+    p.then(
+      (v) => {
+        clearTimeout(timer)
+        resolve(v)
+      },
+      (e: unknown) => {
+        clearTimeout(timer)
+        reject(e)
+      },
+    )
   })
 }
 
@@ -114,7 +151,21 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     const started = deps.now()
     e.ready = (async () => {
       const transport = await deps.transport()
-      const info = await transport.connect(configFor(net))
+      let info
+      try {
+        info = await deadline(
+          transport.connect(configFor(net)),
+          CONNECT_DEADLINE_MS,
+          'The Platform SDK',
+        )
+      } catch (e) {
+        // The worker failed as a whole (never started, died, or never answered): the next try gets a new one.
+        if (!(e instanceof SourceError && e.source === 'sdk' && e.kind !== 'timeout')) {
+          deps.dropTransport?.()
+        }
+        throw e
+      }
+      if (info.requests) deps.noteRequests?.(net, info.requests)
       if ('ok' in info) {
         throw toSourceError(info.error)
       }
@@ -156,7 +207,8 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
       if (signal?.aborted) throw aborted()
       const transport = await ensure(net)
       if (signal?.aborted) throw aborted()
-      const wire = await transport.call(net, method, args)
+      const wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
+      if (wire.requests) deps.noteRequests?.(net, wire.requests)
       // A wasm call can't be cancelled; its late answer is dropped here.
       if (signal?.aborted) throw aborted()
       if (!wire.ok) {
@@ -228,17 +280,32 @@ let transportFactory: () => Promise<SdkTransport> = defaultTransport
 /** Fixture builds and tests replace the transport; production builds leave the worker. */
 export function setSdkTransport(make: (() => Promise<SdkTransport>) | undefined): void {
   transportFactory = make ?? defaultTransport
-  shared = undefined
+  dropSharedTransport()
 }
 
 let shared: Promise<SdkTransport> | undefined
 const sharedTransport = (): Promise<SdkTransport> => (shared ??= transportFactory())
+
+function dropSharedTransport(): void {
+  const old = shared
+  shared = undefined
+  void old?.then(
+    (t) => t.dispose?.(),
+    () => undefined,
+  )
+}
+
+function noteRequests(net: NetworkId, requests: NodeUse[]): void {
+  getDapiTransport().noteExternalRequests?.(net, requests)
+}
 
 export const sdk: SdkClient = createSdkClient({
   transport: sharedTransport,
   devnets: sdkDevnets,
   proofs: defaultProofStore,
   health: healthRegistry,
+  dropTransport: dropSharedTransport,
+  noteRequests,
   now: Date.now,
   whenIdle: idle,
 })

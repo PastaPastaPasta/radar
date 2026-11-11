@@ -1,7 +1,11 @@
 import * as Comlink from 'comlink'
 import type { SdkWorkerApi, WireError, WireResult } from '../methods'
 import { createSdkWorkerApi } from './api'
+import { createFetchGuard } from './fetch-guard'
 import { createEvoSdk, decodeWithWasm } from './sdk-factory'
+
+const guard = createFetchGuard(globalThis.fetch.bind(globalThis))
+globalThis.fetch = guard.fetch
 
 const api = createSdkWorkerApi({ createSdk: createEvoSdk, decode: decodeWithWasm })
 
@@ -15,9 +19,12 @@ function proofBuffers(r: WireResult<unknown> | WireError | { ok: true }): ArrayB
 
 /** Proof bytes move to the main thread instead of being copied (§3.2). */
 const exposed: SdkWorkerApi = {
-  connect: (cfg) => api.connect(cfg),
+  async connect(cfg) {
+    const result = await api.connect(cfg)
+    return { ...result, requests: guard.drain() }
+  },
   async call(net, method, args) {
-    const result = await api.call(net, method, args)
+    const result = { ...(await api.call(net, method, args)), requests: guard.drain() }
     return Comlink.transfer(result, proofBuffers(result))
   },
   decode: (kind, bytes) => api.decode(kind, bytes),
