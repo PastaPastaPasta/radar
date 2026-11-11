@@ -26,6 +26,18 @@ describe('Rich list page', () => {
     expect(first).toHaveTextContent('7.70%')
   })
 
+  it('keeps received, sent and transaction count on each phone card @HY-09', async () => {
+    renderAt('/rich-list')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    const cells = [...within(table).getAllByRole('row')[1]!.querySelectorAll('td')]
+    for (const label of ['Received', 'Sent', 'Transactions']) {
+      const cell = cells.find((c) => c.getAttribute('data-l') === label)
+      expect(cell, label).toBeDefined()
+      expect(cell?.className).not.toMatch(/(^|\s)h(\s|$)/)
+    }
+  })
+
   it('pages on with Show more @HY-09', async () => {
     const user = userEvent.setup()
     renderAt('/rich-list')
