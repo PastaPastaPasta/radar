@@ -54,7 +54,12 @@ export interface DecodedTx {
   time?: number
   confirmations?: number
   isInstantLocked?: boolean
+  /** True only when two independent sources report the ChainLock that covers this transaction's block. */
   isChainLocked?: boolean
+  /** One node reported the ChainLock and nothing corroborates it yet. */
+  chainLockClaim?: 'one-node'
+  /** Whoever reports an InstantSend lock is the node that answered; no second source is asked. */
+  instantLockClaim?: 'one-node'
 }
 
 export interface DecodedBlock {
@@ -68,7 +73,10 @@ export interface DecodedBlock {
   nonce: number
   size: number
   txs: DecodedTx[]
+  /** True only when two independent sources report a ChainLock at or above this height. */
   chainLocked: boolean
+  /** One node reported a ChainLock covering this block and nothing corroborates it yet. */
+  chainLockClaim?: 'one-node'
 }
 
 export interface DapiNodeStatus {
@@ -105,6 +113,11 @@ export interface DecodedIsLock {
   signature: string
 }
 
+/** What a call may say about its place in the queue, when it is not the page's own read. */
+export interface CoreCallOptions {
+  priority?: 'detail' | 'list' | 'prefetch'
+}
+
 export interface CoreClient {
   tip(
     net: NetworkId,
@@ -115,8 +128,18 @@ export interface CoreClient {
     signal?: AbortSignal,
   ): Promise<Sourced<{ height: number; hash: string }>>
   status(net: NetworkId, signal?: AbortSignal): Promise<Sourced<CoreChainStatus>> // getBlockchainStatus
-  block(net: NetworkId, ref: BlockRef, signal?: AbortSignal): Promise<Sourced<DecodedBlock | null>>
-  tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
+  block(
+    net: NetworkId,
+    ref: BlockRef,
+    signal?: AbortSignal,
+    opts?: CoreCallOptions,
+  ): Promise<Sourced<DecodedBlock | null>>
+  tx(
+    net: NetworkId,
+    txid: string,
+    signal?: AbortSignal,
+    opts?: CoreCallOptions,
+  ): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
   prevouts(
     net: NetworkId,
     tx: DecodedTx,
@@ -134,7 +157,7 @@ export interface CoreClient {
     q: { fromHeight: number; count: number },
     signal?: AbortSignal,
   ): Promise<Sourced<BlockRow[]>>
-  /** The lowest height whose block time is at or after `ms`; the tip's height when `ms` is later than the tip's time. */
+  /** The lowest height whose block time is at or after `ms`; the tip's height plus one when `ms` is later than the tip's time (no such block yet). */
   heightAtTime(net: NetworkId, ms: number, signal?: AbortSignal): Promise<Sourced<number>> // IN-02 binary search over headers
   nodeSelfStatus(
     net: NetworkId,
@@ -151,12 +174,24 @@ export interface BlockRow {
   txCount: number
   size: number
   chainLocked: boolean
+  chainLockClaim?: 'one-node'
   pool?: string
 }
 
 export interface CoreDecoder {
-  block(bytes: Uint8Array, net: NetworkId): Promise<DecodedBlock>
+  /** `expectHeight`: the height the caller asked for. Below BIP-34 a coinbase need not carry its height, so this one is used. */
+  block(bytes: Uint8Array, net: NetworkId, expectHeight?: number): Promise<DecodedBlock>
   tx(bytes: Uint8Array, net: NetworkId): Promise<DecodedTx>
   mnListDiff(bytes: Uint8Array, net: NetworkId): Promise<DapiMnListDiff>
   isLock(bytes: Uint8Array): Promise<DecodedIsLock>
+}
+
+/** What only the live feeds and the network reset need from the client. */
+export interface CoreClientHooks {
+  /** The live header stream's tip, so a date lookup does not ask for it again. */
+  observeTip(net: NetworkId, tip: { height: number; hash: string; time: number }): void
+  /** A ChainLock the live header stream received, from `node`. */
+  observeChainLock(net: NetworkId, lock: { height: number; hash: string }, node?: string): void
+  /** Drops what the client remembers of a network. */
+  forget(net: NetworkId): void
 }

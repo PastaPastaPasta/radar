@@ -89,6 +89,12 @@ export class FixtureDapiTransport implements DapiTransport {
   holdOpen = true
   /** Every request served or refused, in order, for tests that assert on what the façade asked. */
   readonly calls: { net: NetworkId; method: string; key: string }[] = []
+  /** The bytes of the latest request per method, for tests that build their own answers to it. */
+  private readonly requests = new Map<string, Uint8Array>()
+
+  lastRequest(method: string): Uint8Array | undefined {
+    return this.requests.get(method)
+  }
   private broken = false
   private readonly openStreams = new Set<(error: SourceError) => void>()
 
@@ -125,6 +131,7 @@ export class FixtureDapiTransport implements DapiTransport {
   private async find(net: NetworkId, method: string, request: Uint8Array): Promise<DapiFixture> {
     const key = requestKey(request)
     this.calls.push({ net, method, key })
+    this.requests.set(method, request)
     if (isDevnet(net)) {
       throw new SourceError({
         source: 'dapi',
@@ -153,7 +160,7 @@ export class FixtureDapiTransport implements DapiTransport {
         message: `The ${method} fixture holds no response`,
       })
     }
-    return { response: fromBase64(fixture.response), node: fixture.node }
+    return { response: fromBase64(fixture.response), node: replicaOf(fixture.node, opts) }
   }
 
   stream(
@@ -183,6 +190,35 @@ export class FixtureDapiTransport implements DapiTransport {
         signal?.addEventListener('abort', () => reject(abortError()), { once: true })
       }).finally(() => openStreams.delete(fail!))
     }
-    return { messages: messages() }
+    const handle: { node?: string; messages: AsyncGenerator<Uint8Array> } = {
+      messages: messages(),
+    }
+    void fixture.then(
+      (f) => {
+        handle.node = replicaOf(f.node, opts)
+      },
+      () => undefined,
+    )
+    return handle
   }
+
+  /** The nodes the façade reported for sending an answer that failed its checks. */
+  readonly invalid: string[] = []
+
+  reportInvalid(_net: NetworkId, node: string): void {
+    this.invalid.push(node)
+  }
+}
+
+/**
+ * A recording holds one node's answer. When the caller asks to avoid that node (it wants a second opinion), the same
+ * bytes come back as from a second replica, so a ChainLock or a block can be seen by two nodes in fixture builds too.
+ */
+function replicaOf(node: string | undefined, opts?: DapiCallOptions): string | undefined {
+  if (!node) return node
+  const avoided = new Set([
+    ...(opts?.avoidNodes ?? []),
+    ...(opts?.avoidNode ? [opts.avoidNode] : []),
+  ])
+  return avoided.has(node) ? `${node}~2` : node
 }

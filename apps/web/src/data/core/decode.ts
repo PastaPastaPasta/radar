@@ -5,7 +5,7 @@ import { trustedWorkerUrl } from '../trusted-worker'
 import workerUrl from './decode.worker.ts?worker&url'
 import type { NetworkId } from '@/lib/network'
 import { HEADER_BYTES, headerAsEmptyBlock } from '@/lib/core/header'
-import { blockHeightOf, mapBlock, mapTx, wasmNetwork } from './convert'
+import { bip34Height, blockHeightOf, mapBlock, mapTx, NO_HEIGHT, wasmNetwork } from './convert'
 import type { CoreDecoder, DapiMnListDiff, DecodedBlock, DecodedIsLock, DecodedTx } from './types'
 
 /** The two wasm exports, in a worker (as a Comlink proxy) or in this thread. */
@@ -35,7 +35,7 @@ export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & 
   const wasm = () => (loaded ??= load())
 
   return {
-    async block(bytes, net): Promise<DecodedBlock> {
+    async block(bytes, net, expectHeight): Promise<DecodedBlock> {
       const core = await wasm()
       let raw: Wasm.DecodedBlock
       try {
@@ -43,8 +43,11 @@ export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & 
       } catch (cause) {
         throw invalid('block', cause)
       }
+      if (expectHeight !== undefined && expectHeight < bip34Height(net)) {
+        return mapBlock(raw, expectHeight)
+      }
       const height = blockHeightOf(raw)
-      if (height === undefined) throw invalid('block', new Error('no height in the coinbase'))
+      if (height === undefined) throw invalid('block', new Error(NO_HEIGHT))
       return mapBlock(raw, height)
     },
     async tx(bytes, net): Promise<DecodedTx> {

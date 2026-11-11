@@ -12,13 +12,10 @@ export interface CachedBlock {
   height: number
   bytes: Uint8Array
 }
+/** A serialized transaction whose double SHA-256 is its id. Where it was mined is a node's claim and is not kept. */
 export interface CachedTx {
   txid: string
   bytes: Uint8Array
-  blockHash: string
-  height: number
-  isInstantLocked: boolean
-  isChainLocked: true
 }
 export interface CachedHeader {
   height: number
@@ -40,24 +37,26 @@ interface LruEntry {
 interface RadarCoreDb extends DBSchema {
   blocks: { key: string; value: { bytes: Uint8Array; height: number } }
   heights: { key: string; value: { hash: string } }
-  txs: {
-    key: string
-    value: { bytes: Uint8Array; blockHash: string; height: number; isInstantLocked: boolean }
-  }
+  txs: { key: string; value: { bytes: Uint8Array } }
   headers: { key: string; value: { header: Uint8Array; hash: string } }
   meta: { key: string; value: { nodes: NodeInfo[]; at: number } }
   lru: { key: string; value: LruEntry; indexes: { lastRead: number } }
 }
 
+const CACHE_VERSION = 2
+const TOUCH_EVERY_MS = 10 * 60_000
+const TOUCH_MAP_LIMIT = 5_000
+
 /**
- * Immutable Core answers kept in IndexedDB (§4.5). Only what is at or below the best ChainLock is written;
- * a hit costs no request. Devnets are not cached: a devnet can be rebuilt under the same name.
+ * Core answers kept in IndexedDB (§4.5) that can be checked on their own: transactions that hash to their id, blocks
+ * whose hash, proof of work and merkle root hold, headers that chain. Blocks and headers are written only at or below
+ * a ChainLock that two sources report. A hit costs no request. Devnets are not cached: a devnet can be rebuilt under the same name.
  * Every method resolves quietly when storage is missing, full or blocked; a failed write turns writes off for the session.
  */
 export class CoreCache implements NodeListStore {
   private db: Promise<IDBPDatabase<RadarCoreDb> | undefined> | undefined
   private writesOff = false
-  private readonly touched = new Set<string>()
+  private readonly touched = new Map<string, number>()
   private total = 0
   private trimming = false
   private timer: ReturnType<typeof setInterval> | undefined
@@ -65,12 +64,20 @@ export class CoreCache implements NodeListStore {
   constructor(
     private readonly now: () => number = Date.now,
     private readonly open: () => Promise<IDBPDatabase<RadarCoreDb>> = () =>
-      openDB<RadarCoreDb>(CACHE_DB, 1, {
-        upgrade(db) {
-          for (const name of ['blocks', 'heights', 'txs', 'headers', 'meta'] as const) {
-            db.createObjectStore(name)
+      openDB<RadarCoreDb>(CACHE_DB, CACHE_VERSION, {
+        upgrade(db, oldVersion) {
+          // Version 1 kept answers nobody had checked; none of them is trusted.
+          if (oldVersion > 0 && oldVersion < 2) {
+            for (const name of ['blocks', 'heights', 'txs', 'headers', 'lru'] as const) {
+              db.deleteObjectStore(name)
+            }
           }
-          db.createObjectStore('lru', { keyPath: 'id' }).createIndex('lastRead', 'lastRead')
+          for (const name of ['blocks', 'heights', 'txs', 'headers', 'meta'] as const) {
+            if (!db.objectStoreNames.contains(name)) db.createObjectStore(name)
+          }
+          if (!db.objectStoreNames.contains('lru')) {
+            db.createObjectStore('lru', { keyPath: 'id' }).createIndex('lastRead', 'lastRead')
+          }
         },
       }),
   ) {}
@@ -107,13 +114,29 @@ export class CoreCache implements NodeListStore {
   }
 
   private touch(db: IDBPDatabase<RadarCoreDb>, store: StoreName, key: string): void {
-    const id = `${store}|${key}`
-    if (this.touched.has(id)) return
-    this.touched.add(id)
+    this.touchAll(db, [{ store, key }])
+  }
+
+  /** Marks entries as read now, at most once every 10 minutes each, in one transaction. */
+  private touchAll(
+    db: IDBPDatabase<RadarCoreDb>,
+    entries: { store: StoreName; key: string }[],
+  ): void {
+    const now = this.now()
+    const due = entries
+      .map((e) => `${e.store}|${e.key}`)
+      .filter((id) => now - (this.touched.get(id) ?? -Infinity) >= TOUCH_EVERY_MS)
+    if (due.length === 0) return
+    if (this.touched.size > TOUCH_MAP_LIMIT) this.touched.clear()
+    for (const id of due) this.touched.set(id, now)
     void (async () => {
       const tx = db.transaction('lru', 'readwrite')
-      const entry = await tx.store.get(id)
-      if (entry) await tx.store.put({ ...entry, lastRead: this.now() })
+      await Promise.all(
+        due.map(async (id) => {
+          const entry = await tx.store.get(id)
+          if (entry) await tx.store.put({ ...entry, lastRead: now })
+        }),
+      )
       await tx.done
     })().catch(() => undefined)
   }
@@ -192,7 +215,7 @@ export class CoreCache implements NodeListStore {
 
   async getTx(net: NetworkId, txid: string): Promise<CachedTx | undefined> {
     const row = await this.read(net, 'txs', txid)
-    return row && { txid, ...row, isChainLocked: true }
+    return row && { txid, bytes: row.bytes }
   }
 
   putTx(net: NetworkId, tx: CachedTx): Promise<void> {
@@ -200,12 +223,7 @@ export class CoreCache implements NodeListStore {
       {
         store: 'txs',
         key: tx.txid,
-        value: {
-          bytes: tx.bytes,
-          blockHash: tx.blockHash,
-          height: tx.height,
-          isInstantLocked: tx.isInstantLocked,
-        },
+        value: { bytes: tx.bytes },
         size: tx.bytes.length + 128,
       },
     ])
@@ -220,13 +238,22 @@ export class CoreCache implements NodeListStore {
     count: number,
   ): Promise<CachedHeader[] | undefined> {
     if (!this.enabled(net)) return undefined
-    const out: CachedHeader[] = []
-    for (let height = from; height < from + count; height++) {
-      const row = await this.read(net, 'headers', String(height))
-      if (!row) return undefined
-      out.push({ height, ...row })
+    const db = await this.handle()
+    if (!db) return undefined
+    try {
+      const tx = db.transaction('headers')
+      const rows = await Promise.all(
+        Array.from({ length: count }, (_, i) => tx.store.get(`${net}:${from + i}`)),
+      )
+      if (rows.some((r) => r === undefined)) return undefined
+      this.touchAll(db, [
+        { store: 'headers', key: `${net}:${from}` },
+        { store: 'headers', key: `${net}:${from + count - 1}` },
+      ])
+      return rows.map((row, i) => ({ height: from + i, ...row! }))
+    } catch {
+      return undefined
     }
-    return out
   }
 
   putHeaders(net: NetworkId, headers: CachedHeader[]): Promise<void> {
@@ -270,6 +297,8 @@ export class CoreCache implements NodeListStore {
     if (!db) return
     this.trimming = true
     try {
+      // Other tabs write too: size up what is really stored before deciding.
+      this.total = await this.sumSizes(db)
       if (this.total <= CACHE_MAX_BYTES) return
       let cursor = await db.transaction('lru').store.index('lastRead').openCursor()
       const doomed: LruEntry[] = []
@@ -288,7 +317,7 @@ export class CoreCache implements NodeListStore {
         ])
         await tx.done
       }
-      this.total = remaining
+      this.total = await this.sumSizes(db)
     } catch {
       // Trimming is best effort.
     } finally {

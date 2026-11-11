@@ -28,7 +28,7 @@ export function prefetchItem<TData, TKey extends QueryKey>(
 }
 
 export interface PrefetchGates {
-  /** True when one more DAPI call fits without moving the budget past `ok`. */
+  /** True when one more detail read (two DAPI calls) fits without moving the budget past `ok`. */
   dapi(net: NetworkId): boolean
   sdkReady(net: NetworkId): boolean
 }
@@ -43,7 +43,7 @@ export function registerSdkReadyProbe(probe: (net: NetworkId) => boolean): void 
 export const defaultGates: PrefetchGates = {
   dapi(net) {
     try {
-      return budget.snapshot(net).pressure === 'ok' && budget.canAfford(net, 1)
+      return budget.snapshot(net).pressure === 'ok' && budget.canAfford(net, DETAIL_DAPI_COST)
     } catch {
       return false
     }
@@ -51,6 +51,8 @@ export const defaultGates: PrefetchGates = {
   sdkReady: (net) => sdkProbe(net),
 }
 
+/** What one detail-page read costs: the block or transaction itself and the ChainLock lookup behind it. */
+export const DETAIL_DAPI_COST = 2
 export const MAX_DAPI_PREFETCH = 1
 export const DEFAULT_LOADER_DEADLINE_MS = 1500
 

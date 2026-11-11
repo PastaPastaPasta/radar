@@ -3,13 +3,26 @@ import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
 import { dapiKeys, dataClass, viewKeys } from '../query'
 import { core } from './client'
-import type { BlockRef, DecodedTx } from './types'
+import type { BlockRef, CoreCallOptions, DecodedTx } from './types'
 
 const SETTLED_STALE_MS = 15_000
+const LOCKED_STALE_MS = 5 * 60_000
 
-/** A chainlocked answer never changes (§5.2 `immutable`); anything else is re-read after a short while. */
-const staleUnlessImmutable = (query: { state: { data: Sourced<unknown> | undefined } }): number =>
-  query.state.data?.immutable ? Infinity : SETTLED_STALE_MS
+const isLocked = (data: unknown): boolean => {
+  const d = data as { chainLocked?: boolean; isChainLocked?: boolean } | null
+  return d?.chainLocked === true || d?.isChainLocked === true
+}
+
+/**
+ * Only an answer that checks out against the request itself (a transaction that hashes to its id) never changes.
+ * Whether a block or transaction is ChainLocked is a node's claim until a signature is checked, so it is re-read, less
+ * often once two sources agree.
+ */
+const staleUnlessImmutable = (query: { state: { data: Sourced<unknown> | undefined } }): number => {
+  const data = query.state.data
+  if (data?.immutable) return Infinity
+  return isLocked(data?.data) ? LOCKED_STALE_MS : SETTLED_STALE_MS
+}
 
 const settled = () => ({
   ...dataClass('live'),
@@ -38,16 +51,17 @@ export const coreQueries = {
       queryFn: ({ signal }) => core.status(net, signal),
       ...dataClass('live'),
     }),
-  block: (net: NetworkId, ref: BlockRef) =>
+  /** `opts.priority` is how the call queues for budget; it is not part of the query's identity. */
+  block: (net: NetworkId, ref: BlockRef, opts?: CoreCallOptions) =>
     queryOptions({
       queryKey: dapiKeys(net, 'block', refKey(ref)),
-      queryFn: ({ signal }) => core.block(net, ref, signal),
+      queryFn: ({ signal }) => core.block(net, ref, signal, opts),
       ...settled(),
     }),
-  tx: (net: NetworkId, txid: string) =>
+  tx: (net: NetworkId, txid: string, opts?: CoreCallOptions) =>
     queryOptions({
       queryKey: dapiKeys(net, 'tx', { txid: txid.toLowerCase() }),
-      queryFn: ({ signal }) => core.tx(net, txid, signal),
+      queryFn: ({ signal }) => core.tx(net, txid, signal, opts),
       ...settled(),
     }),
   prevouts: (net: NetworkId, tx: DecodedTx) =>

@@ -88,6 +88,15 @@ export function mapTx(tx: Wasm.DecodedTx, place: TxPlace = {}): DecodedTx {
   }
 }
 
+/** The height from which Dash Core requires a coinbase to begin with its block height. */
+export function bip34Height(net: NetworkId): number {
+  if (net === 'mainnet') return 951
+  if (net === 'testnet') return 76
+  return 1
+}
+
+export const NO_HEIGHT = 'no height in the coinbase'
+
 /**
  * The height a block says it has: the coinbase transaction's own field from DIP-3 on, BIP-34's
  * height push in the coinbase script before that, 0 for the genesis block.

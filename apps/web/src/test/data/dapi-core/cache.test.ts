@@ -34,22 +34,10 @@ describe('CoreCache', () => {
     expect(await cache.getHeaders('devnet-x', 1, 1)).toBeUndefined()
   })
 
-  it('stores a chainlocked transaction with its block', async () => {
+  it('stores a transaction by its id', async () => {
     const cache = new CoreCache()
-    await cache.putTx('mainnet', {
-      txid: 'tt',
-      bytes: bytes(200),
-      blockHash: 'bb',
-      height: 5,
-      isInstantLocked: true,
-      isChainLocked: true,
-    })
-    expect(await cache.getTx('mainnet', 'tt')).toMatchObject({
-      blockHash: 'bb',
-      height: 5,
-      isInstantLocked: true,
-      isChainLocked: true,
-    })
+    await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) })
+    expect(await cache.getTx('mainnet', 'tt')).toMatchObject({ txid: 'tt' })
     expect(await cache.getTx('mainnet', 'zz')).toBeUndefined()
   })
 

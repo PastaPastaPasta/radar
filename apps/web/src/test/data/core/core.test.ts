@@ -98,7 +98,7 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
       true,
     )
     expect(block.bits).toMatch(/^[0-9a-f]{8}$/)
-    expect(found.immutable === true).toBe(block.chainLocked)
+    expect(found.immutable).toBeUndefined()
   })
 
   it('finds a block by hash', async () => {
@@ -107,7 +107,7 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect(found.data!.hash).toBe(e.hash)
     expect(found.data!.height).toBe(e.height)
     expect(found.data!.chainLocked).toBe(true)
-    expect(found.immutable).toBe(true)
+    expect(found.immutable).toBeUndefined()
   })
 
   it('carries bigint amounts and the cbTx credit pool', async () => {
