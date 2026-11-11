@@ -34,7 +34,7 @@ export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'n
   method?: 'GET' | 'POST'
   body?: unknown
   /** Defaults to `fetchedAt`; returning undefined also means `fetchedAt`. */
-  asOf?: (body: z.output<S>, res: Response) => number | undefined
+  asOf?: (body: z.output<S>, res: Response, fetchedAt: number) => number | undefined
   height?: (body: z.output<S>) => number | undefined
 }
 
@@ -264,7 +264,7 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
 
     report({ ok: true, latencyMs: performance.now() - started })
     const fetchedAt = Date.now()
-    const sourceTime = req.asOf?.(body, res)
+    const sourceTime = req.asOf?.(body, res, fetchedAt)
     const out: Sourced<Out> = {
       source,
       asOf: sourceTime ?? fetchedAt,

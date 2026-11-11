@@ -138,7 +138,7 @@ describe('radar asOf from the crawl the document was built from', () => {
     const out = await radar.health()
     const age = (body.age_secs.mainnet?.crawl ?? 0) * 1000
     expect(out.asOf).toBeGreaterThanOrEqual(before - age)
-    expect(out.asOf).toBeLessThanOrEqual(out.fetchedAt - age)
+    expect(out.asOf).toBe(out.fetchedAt - age)
     expect(out.asOfFetched).toBeUndefined()
   })
 

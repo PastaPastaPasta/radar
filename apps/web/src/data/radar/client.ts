@@ -71,13 +71,13 @@ function newest(times: Iterable<number | null | undefined>): number | undefined 
   return max
 }
 
-function healthCrawlTime(body: RadarHealth, res: Response): number | undefined {
+function healthCrawlTime(body: RadarHealth, res: Response, fetchedAt: number): number | undefined {
   const active = getActiveNetwork()
   const nets = active === 'mainnet' || active === 'testnet' ? [active] : ['mainnet', 'testnet']
   const ages = nets.map((n) => body.age_secs?.[n]?.crawl)
   const oldest =
     ages.includes(undefined) || ages.includes(null) ? undefined : Math.max(...(ages as number[]))
-  return oldest === undefined ? lastModifiedMs(res) : Date.now() - oldest * 1000
+  return oldest === undefined ? lastModifiedMs(res) : fetchedAt - oldest * 1000
 }
 
 export const radar = {
