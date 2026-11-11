@@ -1,8 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
+import { formatInt } from '@/lib/format'
 import type { Resolver } from '../types'
-
-const INT = new Intl.NumberFormat('en')
 
 /** Confirms a 64-character hash is a transaction on this network. */
 export const dapiTx: Resolver = {
@@ -23,7 +22,7 @@ export const dapiTx: Resolver = {
         subtitle:
           height === undefined
             ? t`Core transaction, unconfirmed`
-            : t`Core transaction in block ${INT.format(height)}`,
+            : t`Core transaction in block ${formatInt(height)}`,
         href: { to: '/tx/$txid', params: { txid: tx.txid } },
         stamp: stampOf(found),
         rank: 100,

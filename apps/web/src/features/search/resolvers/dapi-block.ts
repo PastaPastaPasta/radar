@@ -1,8 +1,7 @@
 import { plural, t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
+import { formatInt } from '@/lib/format'
 import type { Resolver } from '../types'
-
-const INT = new Intl.NumberFormat('en')
 
 /** Confirms a height or a block hash against Core, so a block that doesn't exist yields no hit. */
 export const dapiBlock: Resolver = {
@@ -22,7 +21,7 @@ export const dapiBlock: Resolver = {
       {
         kind: 'block',
         id,
-        title: t`Core block ${INT.format(block.height)}`,
+        title: t`Core block ${formatInt(block.height)}`,
         subtitle: plural(block.txs.length, { one: '# transaction', other: '# transactions' }),
         href: { to: '/block/$id', params: { id } },
         stamp: stampOf(found),

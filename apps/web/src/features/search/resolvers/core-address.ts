@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { Resolver } from '../types'
 import { localStamp } from './helpers'
 
@@ -11,7 +12,7 @@ export const coreAddress: Resolver = {
         kind: 'address',
         id: c.normalized,
         title: c.normalized,
-        subtitle: 'Core address',
+        subtitle: t`Core address`,
         href: { to: '/address/$address', params: { address: c.normalized } },
         stamp: localStamp(),
         rank: 100,

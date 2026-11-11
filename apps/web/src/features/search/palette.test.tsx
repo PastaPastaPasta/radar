@@ -226,7 +226,7 @@ describe('/search page', () => {
     const history = createMemoryHistory({ initialEntries: ['/search?q=2569992&network=testnet'] })
     render(<App history={history} />)
 
-    expect(await screen.findByRole('link', { name: /Core block/ })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: /Core block 2,569,992/ })).toHaveAttribute(
       'href',
       '/block/2569992?network=testnet',
     )

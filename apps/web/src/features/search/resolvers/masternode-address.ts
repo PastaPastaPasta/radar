@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { Resolver } from '../types'
 import { localStamp } from './helpers'
 
@@ -10,8 +11,8 @@ export const masternodeAddress: Resolver = {
       {
         kind: 'masternode',
         id: `ip:${c.normalized}`,
-        title: `Masternodes at ${c.normalized}`,
-        subtitle: 'Service address',
+        title: t`Masternodes at ${c.normalized}`,
+        subtitle: t`Service address`,
         href: { to: '/masternodes', search: { q: c.normalized } },
         stamp: localStamp(),
         rank: 80,

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { Resolver } from '../types'
 import { localStamp } from './helpers'
 
@@ -10,7 +11,7 @@ export const publicKeyHash: Resolver = {
       {
         kind: 'identity',
         id: `pkh:${c.normalized}`,
-        title: 'Identity with this public-key hash',
+        title: t`Identity with this public-key hash`,
         subtitle: c.normalized,
         href: { to: '/identity/lookup', search: { pkh: c.normalized } },
         stamp: localStamp(),
