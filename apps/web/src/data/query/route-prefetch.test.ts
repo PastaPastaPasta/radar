@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { QueryClient } from '@tanstack/query-core'
+import { describe, expect, it, vi } from 'vitest'
+import { core } from '../core'
 import { blockPrefetch, blocksPrefetch, homePrefetch, txPrefetch } from './route-prefetch'
 
 const HASH = 'ab'.repeat(32)
@@ -10,6 +12,28 @@ describe('route prefetch items', () => {
       expect(dapi).toHaveLength(1)
       expect(dapi[0]).toMatchObject({ detail: true, wait: true })
     }
+  })
+
+  it('queues a router preload as prefetch and a real navigation as detail', async () => {
+    const block = vi.spyOn(core, 'block').mockRejectedValue(new Error('stop'))
+    const tx = vi.spyOn(core, 'tx').mockRejectedValue(new Error('stop'))
+    const run = async (items: ReturnType<typeof blockPrefetch>) => {
+      const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      await items.find((i) => i.cost === 'dapi')?.start(client)
+    }
+    await run(blockPrefetch('mainnet', '2570000', true))
+    await run(blockPrefetch('mainnet', '2570000'))
+    await run(txPrefetch('mainnet', HASH, true))
+    await run(txPrefetch('mainnet', HASH))
+    expect(block.mock.calls.map((c) => c[3])).toEqual([
+      { priority: 'prefetch' },
+      { priority: 'detail' },
+    ])
+    expect(tx.mock.calls.map((c) => c[3])).toEqual([
+      { priority: 'prefetch' },
+      { priority: 'detail' },
+    ])
+    vi.restoreAllMocks()
   })
 
   it('starts nothing for an id that names no block or transaction', () => {

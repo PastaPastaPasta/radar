@@ -17,7 +17,7 @@ export const Route = createFileRoute('/block/$id')({
       async (opts) => {
         const net = routeNetwork(deps)
         const { blockPrefetch } = await import('@/data/query/route-prefetch')
-        return prefetchForRoute(context.queryClient, net, blockPrefetch(net, params.id), opts)
+        return prefetchForRoute(context.queryClient, net, blockPrefetch(net, params.id, preload), opts)
       },
       { preload },
     ),

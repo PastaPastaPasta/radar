@@ -2,6 +2,7 @@ import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 import { parseBlockRef } from '@/lib/core/block-ref'
 import { coreQueries } from '../core/queries'
+import type { CoreCallOptions } from '../core/types'
 import { endpoint } from '../endpoints'
 import { healthQueries } from '../health-queries'
 import { peQueries } from '../pe/queries'
@@ -30,21 +31,32 @@ export function homePrefetch(net: NetworkId): PrefetchItem[] {
 /** `/blocks`: the day's rows are a DAPI list, which a loader never starts (§4.7). */
 export const blocksPrefetch = hyphenProbe
 
+/** A hover or focus preload queues behind the reads a visible page needs. */
+function callOptions(preload: boolean): CoreCallOptions {
+  return { priority: preload ? 'prefetch' : 'detail' }
+}
+
 /** `/block/$id`: the block itself is the one DAPI read a detail route may start, and the page waits for it. */
-export function blockPrefetch(net: NetworkId, id: string): PrefetchItem[] {
+export function blockPrefetch(net: NetworkId, id: string, preload = false): PrefetchItem[] {
   const ref = parseBlockRef(id)
   if (!ref) return []
   return [
-    prefetchItem('dapi', coreQueries.block(net, ref), { detail: true, wait: true }),
+    prefetchItem('dapi', coreQueries.block(net, ref, callOptions(preload)), {
+      detail: true,
+      wait: true,
+    }),
     ...hyphenProbe(net),
   ]
 }
 
 /** `/tx/$txid`: likewise for the transaction. */
-export function txPrefetch(net: NetworkId, txid: string): PrefetchItem[] {
+export function txPrefetch(net: NetworkId, txid: string, preload = false): PrefetchItem[] {
   if (!TXID.test(txid)) return []
   return [
-    prefetchItem('dapi', coreQueries.tx(net, txid), { detail: true, wait: true }),
+    prefetchItem('dapi', coreQueries.tx(net, txid, callOptions(preload)), {
+      detail: true,
+      wait: true,
+    }),
     ...hyphenProbe(net),
   ]
 }
