@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { base58CheckEncode } from '@/lib/base58'
 import coreVectorFile from './dashcore-vectors.json'
@@ -189,4 +191,29 @@ describe('signatures made by Dash Core', () => {
       expect(header(c)).toBeLessThanOrEqual(34)
     }
   })
+})
+
+describe('the signed message in the review fixtures', () => {
+  const fixtureDir = join(process.cwd(), '..', '..', 'review', 'fixtures')
+
+  it.each(['mainnet', 'testnet'] as const)(
+    'is valid on %s and a mismatch once the message is altered @IN-08',
+    (network) => {
+      const fixture = JSON.parse(readFileSync(join(fixtureDir, `${network}.json`), 'utf8')) as {
+        entities: {
+          signed_message: {
+            address: string
+            message: string
+            signature: string
+            altered_message: string
+          }
+        }
+      }
+      const { address, message, signature, altered_message } = fixture.entities.signed_message
+      expect(verifySignedMessage({ address, message, signature }).kind).toBe('valid')
+      expect(verifySignedMessage({ address, message: altered_message, signature }).kind).toBe(
+        'mismatch',
+      )
+    },
+  )
 })

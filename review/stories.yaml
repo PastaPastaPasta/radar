@@ -1198,7 +1198,7 @@ stories:
     group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
     shard: S5
     story: As a Dash user I want to verify a signed message
-    acceptance: Address, signature and message say valid or invalid
+    acceptance: 'Address, signature and message say valid or invalid. Use the public sample {signed_message} from the fixtures (its address, message and signature fields): it says valid, and the same address and signature with its altered_message says invalid'
     radar_start: /tools/verify-message
     prod:
       - https://insight.dash.org/insight/messages/verify
