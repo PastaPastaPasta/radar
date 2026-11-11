@@ -130,19 +130,20 @@ test.describe('address page', () => {
       recent: [{ txHash: id, netValue: 250000000 }],
     })
     await page.goto(`/address/${BUSY}`)
-    await expect(page.locator('[data-live]')).toBeVisible()
+    const notice = page.locator('[data-new-transaction]')
+    await expect(notice.locator('a[href*="f96fddff"]')).toBeVisible({ timeout: 20_000 })
     await page.evaluate(() =>
       (
         window as unknown as { __radarFixtures: { breakLiveConnection(): void } }
       ).__radarFixtures.breakLiveConnection(),
     )
-    const notice = page.locator('[data-new-transaction]')
     await expect(notice.locator(`a[href*="${id}"]`)).toBeVisible({ timeout: 60_000 })
     await expect(notice).toContainText('New transaction')
     await expect(page.locator('[data-arrived]')).toContainText(
-      '1 transaction seen since you opened',
+      '2 transactions seen since you opened',
     )
-    await expect(page.locator('[data-pending]')).toHaveCount(0)
+    await expect(page.locator('[data-pending] a[href*="f96fddff"]')).toHaveCount(1)
+    await expect(page.locator('[data-pending] a[href*="ababab"]')).toHaveCount(0)
   })
 
   test('pages the history by cursor and keeps what is already shown @IN-06', async ({ page }) => {

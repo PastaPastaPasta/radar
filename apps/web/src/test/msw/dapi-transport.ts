@@ -194,6 +194,7 @@ export class FixtureDapiTransport implements DapiTransport {
     fixture.catch(() => undefined)
     const signal = opts?.signal
     const holdOpen = () => this.holdOpen
+    const lost = () => (this.broken ? this.lostError() : undefined)
     const openStreams = this.openStreams
     async function* messages(): AsyncGenerator<Uint8Array> {
       if (signal?.aborted) throw abortError()
@@ -201,8 +202,12 @@ export class FixtureDapiTransport implements DapiTransport {
       if (f.error) throw recordedError(f)
       for (const m of f.messages ?? []) {
         if (signal?.aborted) throw abortError()
+        const cut = lost()
+        if (cut) throw cut
         yield fromBase64(m)
       }
+      const cut = lost()
+      if (cut) throw cut
       if (f.ended || !holdOpen()) return
       let fail: ((error: SourceError) => void) | undefined
       await new Promise<void>((_, reject) => {
