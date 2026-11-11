@@ -1,0 +1,175 @@
+import { createMemoryHistory } from '@tanstack/react-router'
+import { render, screen, waitFor, within } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { App } from '@/app'
+
+const MAINNET = {
+  regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
+  evo: 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff',
+  banned: 'a8355582b280be9452f939d34637ab82226ba2c97e1aac15eaf6db878fec0130',
+}
+const TESTNET = {
+  regular: '51238bb9e2b68fc822e8eb15d415e97ebc86f769a72c15e0a6e25d9ea8d38475',
+  evo: '05b687978344fa2433b2aa99d41f643e2d8581a789cdc23084889ceca5244ea8',
+}
+const MISSING = '0'.repeat(64)
+
+function renderAt(url: string) {
+  render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
+}
+
+describe('Masternode page', () => {
+  it('shows type, status, PoSe, version, uptime, last paid and earnings for a regular masternode @RA-30', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    const header = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-masternode-header]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(header).toHaveTextContent('Regular masternode')
+    expect(header).toHaveTextContent('85.209.241.228')
+    expect(header).toHaveTextContent(':9999')
+    expect(header).toHaveTextContent('Enabled, no PoSe penalty')
+    expect(header).toHaveTextContent('24.0.0')
+    const kpis = document.querySelector<HTMLElement>('[data-masternode-kpis]')!
+    expect(kpis).toHaveTextContent('Uptime, 30 days')
+    expect(kpis).toHaveTextContent('100%')
+    expect(kpis).toHaveTextContent('Last paid')
+    expect(kpis).toHaveTextContent('2,568,655')
+    expect(kpis).toHaveTextContent('Earned on Core, 90 days')
+    expect(kpis).toHaveTextContent('PoSe penalty')
+  })
+
+  it('lists the registration with payout, owner and voting addresses linked to their pages, keys, collateral and PoSe @RA-31', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#registration')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    for (const label of [
+      'Payout',
+      'Owner',
+      'Voting',
+      'Operator key',
+      'Collateral',
+      'Registered',
+      'PoSe',
+    ]) {
+      expect(within(card).getByText(label)).toBeInTheDocument()
+    }
+    const hrefs = within(card)
+      .getAllByRole('link')
+      .map((a) => a.getAttribute('href'))
+    expect(hrefs).toContain('/address/Xt77nU5qc5wquYng2om1fRSHsnmUB3WL1Z')
+    expect(hrefs.filter((h) => h === '/address/XtqJ5rnqadDmgRmZQ769UN6y9zYjMDhBMf')).toHaveLength(2)
+    expect(card).toHaveTextContent('Same as the owner address')
+    expect(card).toHaveTextContent('1,028,165')
+    expect(card).toHaveTextContent('No penalty')
+  })
+
+  it('gives every card a source line from Radar’s crawl @RA-30', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    await waitFor(() => expect(document.querySelector('#registration')).not.toBeNull())
+    for (const id of ['uptime', 'payments', 'registration', 'location']) {
+      const card = document.getElementById(id)!
+      expect(card.querySelector('[data-source="radar"]')).not.toBeNull()
+    }
+  })
+
+  it('draws the uptime strip with a tone for each day and lists recent payments', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    const strip = await waitFor(() => {
+      const el = document.querySelector('[data-uptime-strip]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(strip.querySelectorAll('i').length).toBe(13)
+    const table = await screen.findByRole('table', { name: 'Recent payments to this masternode' })
+    expect(within(table).getAllByRole('row').length).toBeGreaterThan(5)
+  })
+
+  it('shows an evonode’s Platform endpoints with certificate, height, versions and daily health @RA-40', async () => {
+    renderAt(`/mn/${MAINNET.evo}`)
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#platform')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(document.querySelector('[data-masternode-header]')).toHaveTextContent('Evonode')
+    expect(card).toHaveTextContent('HTTPS (DAPI)')
+    expect(card).toHaveTextContent('P2P (Tenderdash)')
+    expect(card).toHaveTextContent('TLS certificate')
+    expect(card).toHaveTextContent('ZeroSSL GmbH')
+    expect(card).toHaveTextContent('468,958')
+    expect(card).toHaveTextContent('DAPI 5.0.3')
+    expect(card).toHaveTextContent('Tenderdash 1.8.2')
+    expect(card.querySelector('[data-platform-daily] [data-uptime-strip]')).not.toBeNull()
+  })
+
+  it('has no Platform card for a regular masternode', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    await waitFor(() => expect(document.querySelector('#registration')).not.toBeNull())
+    expect(document.querySelector('#platform')).toBeNull()
+  })
+
+  it('marks a PoSe-banned masternode as banned', async () => {
+    renderAt(`/mn/${MAINNET.banned}`)
+    const status = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-status]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(status).toHaveTextContent('PoSe banned')
+  })
+
+  it('links to Governance for voting, on the matching network', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    const link = await screen.findByRole('link', { name: /Vote in Governance/ })
+    expect(link).toHaveAttribute('href', 'https://gov.dashhq.org/')
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
+  it('works on testnet @HY-19', async () => {
+    renderAt(`/mn/${TESTNET.regular}?network=testnet`)
+    const header = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-masternode-header]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(header).toHaveTextContent('Regular masternode')
+    expect(await screen.findByRole('link', { name: /Vote in Governance/ })).toHaveAttribute(
+      'href',
+      'https://gov.dashhq.org/?network=testnet',
+    )
+  })
+
+  it('offers the other network for a ProTx registered only there @RA-41', async () => {
+    renderAt(`/mn/${TESTNET.regular}`)
+    const link = await screen.findByRole('link', { name: 'Open it on testnet' })
+    expect(link).toHaveAttribute('data-other-network', 'testnet')
+    expect(link.getAttribute('href')).toContain(`/mn/${TESTNET.regular}`)
+    expect(link.getAttribute('href')).toContain('network=testnet')
+  })
+
+  it('offers the mainnet for a mainnet ProTx opened on testnet @RA-41', async () => {
+    renderAt(`/mn/${MAINNET.regular}?network=testnet`)
+    expect(await screen.findByRole('link', { name: 'Open it on mainnet' })).toBeInTheDocument()
+  })
+
+  it('offers search for a ProTx nobody lists @RA-41', async () => {
+    renderAt(`/mn/${MISSING}`)
+    expect(await screen.findByText('No masternode with this ProTx on mainnet.')).toBeInTheDocument()
+    const offer = await waitFor(() => {
+      const el = document.querySelector('[data-search-offer]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(offer.getAttribute('href')).toContain('/search')
+  })
+
+  it('says a malformed ProTx is not one, without asking Radar', async () => {
+    renderAt('/mn/not-a-protx')
+    expect(await screen.findByText('That isn’t a ProTx hash.')).toBeInTheDocument()
+  })
+})
