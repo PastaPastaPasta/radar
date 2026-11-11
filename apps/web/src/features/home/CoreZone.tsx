@@ -7,7 +7,7 @@ import { stampOf } from '@/data/envelope'
 import { useSourceHealth } from '@/data/health'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
-import { Entity, PageLink, useNetwork } from '@/features/entity'
+import { Entity, PageLink, networkName, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Amount, Card, DataTable, Empty, SectionBand, Stat, Stats, Time } from '@/ui'
@@ -19,14 +19,21 @@ function useHyphenBlocked() {
   const net = useNetwork()
   const fit = useHyphenFit(net)
   const health = useSourceHealth('hyphen')
-  return { net, fit, lag: health.lag?.detail, devnet: isDevnet(net) }
+  return {
+    net,
+    fit,
+    lag: health.lag?.detail,
+    devnet: isDevnet(net),
+    stale: health.state === 'stale' && health.lag !== undefined,
+  }
 }
 
 function Headline() {
   const { t } = useLingui()
-  const { net, fit, lag, devnet } = useHyphenBlocked()
+  const { net, fit, lag, devnet, stale } = useHyphenBlocked()
   const tip = useQuery(coreQueries.tip(net))
   const status = useQuery(coreQueries.status(net))
+  const chainLock = useQuery({ ...coreQueries.chainLock(net), enabled: stale })
   const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: fit })
   const m = metrics.data?.data
   const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
@@ -50,23 +57,60 @@ function Headline() {
         loading={status.isPending}
         source={status.data ? stampOf(status.data) : undefined}
       />
-      <Stat
-        layer="core"
-        label={t`Circulating supply`}
-        value={m ? <Amount value={m.circulatingSupply} kind="duffs" compact fiat /> : '—'}
-        note={m ? undefined : fit ? undefined : note}
-        loading={fit && metrics.isPending}
-        source={metrics.data ? stampOf(metrics.data) : undefined}
-      />
-      <Stat
-        layer="core"
-        label={t`Blockchain size`}
-        value={m ? formatBytes(m.blockchainSize) : '—'}
-        note={m ? undefined : fit ? undefined : note}
-        loading={fit && metrics.isPending}
-        source={metrics.data ? stampOf(metrics.data) : undefined}
-      />
+      {stale
+        ? [
+            <Stat
+              key="lock"
+              layer="core"
+              label={t`Best ChainLock`}
+              value={chainLock.data ? formatInt(chainLock.data.data.height) : '—'}
+              loading={chainLock.isPending}
+              source={chainLock.data ? stampOf(chainLock.data) : undefined}
+            />,
+            <Stat
+              key="last"
+              layer="core"
+              label={t`Last block`}
+              value={tip.data ? <Time ms={tip.data.data.time} mode="relative" live /> : '—'}
+              loading={tip.isPending}
+              source={tip.data ? stampOf(tip.data) : undefined}
+            />,
+          ]
+        : [
+            <Stat
+              key="supply"
+              layer="core"
+              label={t`Circulating supply`}
+              value={m ? <Amount value={m.circulatingSupply} kind="duffs" compact fiat /> : '—'}
+              note={m ? undefined : fit ? undefined : note}
+              loading={fit && metrics.isPending}
+              source={metrics.data ? stampOf(metrics.data) : undefined}
+            />,
+            <Stat
+              key="size"
+              layer="core"
+              label={t`Blockchain size`}
+              value={m ? formatBytes(m.blockchainSize) : '—'}
+              note={m ? undefined : fit ? undefined : note}
+              loading={fit && metrics.isPending}
+              source={metrics.data ? stampOf(metrics.data) : undefined}
+            />,
+          ]}
     </Stats>
+  )
+}
+
+function StaleNote() {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const health = useSourceHealth('hyphen')
+  const { stale } = useHyphenBlocked()
+  if (!stale || !health.lag) return null
+  const name = networkName(net)
+  return (
+    <p className="rx-note" role="note" data-hyphen-lag>
+      {t`Supply, blockchain size and pending transactions come only from Hyphen, whose ${name} index is behind the chain: ${health.lag.detail}. The height, difficulty, ChainLock and latest blocks here come from DAPI.`}
+    </p>
   )
 }
 
@@ -153,6 +197,7 @@ export function CoreZone() {
       }
     >
       <Headline />
+      <StaleNote />
       <div className="rx-grid" style={{ marginTop: 16 }}>
         <div className="rx-c12">
           <PendingCard />

@@ -185,6 +185,10 @@ test.describe('Home', () => {
     await page.goto('/?network=testnet')
     await expect(page.locator('[data-pulse="core"]')).toContainText('1,589,232')
     await expect(page.locator('dashhq-bar')).toHaveAttribute('network', 'testnet')
+    await expect(page.locator('[data-headline]')).toContainText('Best ChainLock')
+    await expect(page.locator('[data-hyphen-lag]')).toContainText(
+      /Testnet index is behind the chain/,
+    )
   })
 
   test('keeps the tab bar below the content on a phone @HY-18', async ({ page }, testInfo) => {

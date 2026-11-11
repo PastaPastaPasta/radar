@@ -171,6 +171,26 @@ describe('Home page', () => {
     await user.click(within(notice).getByRole('button', { name: 'Try again' }))
   })
 
+  it('shows DAPI-backed testnet figures and says what is stale and by how much while Hyphen trails @IN-16 @HY-19', async () => {
+    renderAt('/?network=testnet')
+    await coreRow('1,589,232')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-headline]')
+      expect(el).toHaveTextContent('Best ChainLock')
+      return el!
+    })
+    expect(headline).toHaveTextContent('Last block')
+    expect(headline).not.toHaveTextContent('Circulating supply')
+    const note = await screen.findByRole('note')
+    expect(note).toHaveTextContent(
+      /Supply, blockchain size and pending transactions come only from Hyphen/,
+    )
+    expect(note).toHaveTextContent(
+      /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
+    )
+    expect(headline.querySelectorAll('[data-source="dapi"]').length).toBe(1)
+  })
+
   it('works on testnet and names the network @IN-16 @HY-19', async () => {
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
