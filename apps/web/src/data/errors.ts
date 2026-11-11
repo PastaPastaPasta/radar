@@ -18,6 +18,8 @@ export interface SourceErrorInit {
   retryAfterMs?: number
   node?: string
   cause?: unknown
+  /** A timeout that fell while the reply was still arriving: a slow link, not a failing node. */
+  bytesFlowing?: boolean
 }
 
 export class SourceError extends Error {
@@ -26,6 +28,7 @@ export class SourceError extends Error {
   readonly status?: number // HTTP status or gRPC code
   readonly retryAfterMs?: number
   readonly node?: string
+  readonly bytesFlowing?: boolean
   constructor(init: SourceErrorInit) {
     super(init.message, init.cause === undefined ? undefined : { cause: init.cause })
     this.name = 'SourceError'
@@ -34,6 +37,7 @@ export class SourceError extends Error {
     this.status = init.status
     this.retryAfterMs = init.retryAfterMs
     this.node = init.node
+    this.bytesFlowing = init.bytesFlowing
   }
 }
 

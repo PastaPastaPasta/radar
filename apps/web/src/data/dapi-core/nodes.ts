@@ -1,7 +1,7 @@
 import type { NetworkId } from '@/lib/network'
 import type { BudgetSnapshot } from './budget'
 import type { NodeInfo } from './discovery'
-import type { RateLimitHeaders } from './grpc-web'
+import { clampResetS, type RateLimitHeaders } from './grpc-web'
 
 export const ACTIVE_SET_SIZE = 8
 export const PER_NODE_LIMIT = 50
@@ -16,6 +16,9 @@ const BEHIND_HOLD_MS = 60_000
 const STRIKES_BEFORE_LONG_BENCH = 3
 const SHORT_BENCH_MS = 60_000
 const LONG_BENCH_MS = 10 * 60_000
+const NETWORK_BENCH_MS = [60_000, 5 * 60_000, 10 * 60_000]
+/** Consecutive unreachable results, while other nodes answered, after which a node rests for the session. */
+const NETWORK_STRIKES_FOR_SESSION = 5
 const OK_SHARE = 0.5
 const TIGHT_SHARE = 0.2
 const TIGHT_BENCHED = 3
@@ -31,6 +34,10 @@ export interface NodeSlot extends NodeInfo {
   fullUntil: number
   benchedUntil: number
   strikes: number
+  /** Consecutive times this node could not be reached; any answer clears it. */
+  unreachable: number
+  /** Dropped from the active set for good: a seed that the live list replaced. */
+  retired?: boolean
   ewmaMs?: number
   tipHeight?: number
   behindUntil: number
@@ -58,11 +65,14 @@ function shuffled<T>(items: T[], random: () => number): T[] {
  */
 export class NodePool {
   private readonly slots = new Map<string, NodeSlot>()
+  /** Nodes asked for by URL (a node's own /mn/ page): counted and limited like the rest, never part of the active set. */
+  private readonly pinned = new Map<string, NodeSlot>()
   private active: NodeSlot[] = []
+  /** The last time any node answered, to tell a node that is down from a client that is offline. */
+  lastSuccessAt = 0
   private readonly now: () => number
   private readonly random: () => number
   private readonly activeSize: number
-  private bestTip = 0
 
   constructor(
     readonly net: NetworkId,
@@ -80,23 +90,49 @@ export class NodePool {
   add(nodes: NodeInfo[]): void {
     for (const node of nodes) {
       if (this.slots.has(node.url)) continue
-      this.slots.set(node.url, {
-        ...node,
-        started: [],
-        inFlight: 0,
-        fullUntil: 0,
-        benchedUntil: 0,
-        strikes: 0,
-        behindUntil: 0,
-        everActive: false,
-      })
+      this.slots.set(node.url, this.newSlot(node))
     }
     this.fill()
   }
 
-  /** A node asked for by URL (a node's own /mn/ page), added without joining the active set. */
-  slotFor(url: string): NodeSlot | undefined {
-    return this.slots.get(url)
+  private newSlot(node: NodeInfo): NodeSlot {
+    return {
+      ...node,
+      started: [],
+      inFlight: 0,
+      fullUntil: 0,
+      benchedUntil: 0,
+      strikes: 0,
+      unreachable: 0,
+      behindUntil: 0,
+      everActive: false,
+    }
+  }
+
+  /** How many nodes this pool can choose from. */
+  get size(): number {
+    return this.slots.size
+  }
+
+  /**
+   * The live list has arrived: nodes outside it (the bundled seeds) stop being chosen, so the load spreads over the
+   * whole network instead of the same few dozen addresses. Requests already in flight finish.
+   */
+  adopt(live: NodeInfo[]): void {
+    if (live.length === 0) return
+    const liveUrls = new Set(live.map((n) => n.url))
+    for (const slot of this.slots.values()) if (!liveUrls.has(slot.url)) slot.retired = true
+    this.active = this.active.filter((s) => !s.retired || s.inFlight > 0)
+    this.add(live)
+  }
+
+  /** The slot of a node that is asked for by URL. It is counted like any other but never joins the active set. */
+  pinnedSlot(node: NodeInfo): NodeSlot {
+    const known = this.slots.get(node.url)
+    if (known) return known
+    let slot = this.pinned.get(node.url)
+    if (!slot) this.pinned.set(node.url, (slot = this.newSlot(node)))
+    return slot
   }
 
   private isBenched(slot: NodeSlot, now = this.now()): boolean {
@@ -113,18 +149,20 @@ export class NodePool {
   /** Brings the active set back to size from unused, unbenched candidates. */
   private fill(): void {
     const now = this.now()
-    this.active = this.active.filter((s) => !this.isBenched(s, now) || s.inFlight > 0)
+    this.active = this.active.filter(
+      (s) => (!this.isBenched(s, now) && !s.retired) || s.inFlight > 0,
+    )
     if (this.active.length >= this.activeSize) return
     const fresh = shuffled(
       [...this.slots.values()].filter(
-        (s) => !this.active.includes(s) && !this.isBenched(s, now) && !s.everActive,
+        (s) => !this.active.includes(s) && !this.isBenched(s, now) && !s.everActive && !s.retired,
       ),
       this.random,
     )
     // After every unused node has had a turn, recovered ones come back.
     const rested = shuffled(
       [...this.slots.values()].filter(
-        (s) => !this.active.includes(s) && !this.isBenched(s, now) && s.everActive,
+        (s) => !this.active.includes(s) && !this.isBenched(s, now) && s.everActive && !s.retired,
       ),
       this.random,
     )
@@ -135,9 +173,15 @@ export class NodePool {
     }
   }
 
+  slotByHost(host: string): NodeSlot | undefined {
+    return this.slots.get(`https://${host}`)
+  }
+
   /** Nodes resting right now: they were active and are benched. */
   private resting(now: number): NodeSlot[] {
-    return [...this.slots.values()].filter((s) => s.everActive && this.isBenched(s, now))
+    return [...this.slots.values()].filter(
+      (s) => s.everActive && !s.retired && this.isBenched(s, now),
+    )
   }
 
   private headroomOf(slot: NodeSlot, now: number): number {
@@ -155,13 +199,32 @@ export class NodePool {
    * for calls that depend on the tip. Returns nothing when every node is full or resting.
    */
   pick(
-    opts: { exclude?: ReadonlySet<string>; heightSensitive?: boolean } = {},
+    opts: {
+      exclude?: ReadonlySet<string>
+      heightSensitive?: boolean
+      only?: NodeSlot
+      prefer?: string
+    } = {},
   ): NodeSlot | undefined {
     const now = this.now()
     this.fill()
     let best: NodeSlot | undefined
     let bestHeadroom = -1
-    for (const slot of this.active) {
+    const preferred = opts.prefer ? this.slots.get(opts.prefer) : undefined
+    const candidates = opts.only
+      ? [opts.only]
+      : preferred && this.active.includes(preferred)
+        ? [preferred, ...this.active]
+        : this.active
+    for (const slot of candidates) {
+      if (slot === preferred && !opts.only) {
+        const ok =
+          !opts.exclude?.has(slot.url) &&
+          !(opts.heightSensitive && slot.behindUntil > now) &&
+          this.canTake(slot, now)
+        if (ok) return slot
+        continue
+      }
       if (opts.exclude?.has(slot.url)) continue
       if (opts.heightSensitive && slot.behindUntil > now) continue
       if (!this.canTake(slot, now)) continue
@@ -179,11 +242,18 @@ export class NodePool {
   }
 
   /** True when some node outside `exclude` is not resting for good, so waiting for capacity can end. */
-  hasUsableNode(exclude?: ReadonlySet<string>): boolean {
+  hasUsableNode(exclude?: ReadonlySet<string>, only?: NodeSlot): boolean {
     const now = this.now()
     this.fill()
+    if (only)
+      return (
+        !exclude?.has(only.url) && !(this.isBenched(only, now) && only.benchedUntil === SESSION)
+      )
     return [...this.slots.values()].some(
-      (s) => !exclude?.has(s.url) && !(this.isBenched(s, now) && s.benchedUntil === SESSION),
+      (s) =>
+        !s.retired &&
+        !exclude?.has(s.url) &&
+        !(this.isBenched(s, now) && s.benchedUntil === SESSION),
     )
   }
 
@@ -194,11 +264,12 @@ export class NodePool {
     const consider = (at: number) => {
       if (at > now && Number.isFinite(at) && (soonest === undefined || at < soonest)) soonest = at
     }
-    for (const slot of [...this.slots.values()]) {
+    for (const slot of [...this.slots.values(), ...this.pinned.values()]) {
       if (this.isBenched(slot, now)) {
         consider(slot.benchedUntil)
         continue
       }
+      consider(slot.behindUntil)
       if (slot.fullUntil > now) consider(slot.fullUntil)
       this.prune(slot, now)
       if (slot.started.length >= PER_NODE_LIMIT) consider(slot.started[0]! + WINDOW_MS)
@@ -217,6 +288,8 @@ export class NodePool {
 
   succeeded(slot: NodeSlot, latencyMs: number, rate: RateLimitHeaders): void {
     slot.strikes = 0
+    slot.unreachable = 0
+    this.lastSuccessAt = this.now()
     slot.ewmaMs =
       slot.ewmaMs === undefined
         ? latencyMs
@@ -228,17 +301,27 @@ export class NodePool {
   noteRate(slot: NodeSlot, rate: RateLimitHeaders): void {
     if (rate.remaining === undefined) return
     slot.fullUntil =
-      rate.remaining < SERVER_FULL_BELOW ? this.now() + (rate.resetS ?? 60) * 1000 : 0
+      rate.remaining < SERVER_FULL_BELOW ? this.now() + clampResetS(rate.resetS ?? 60) * 1000 : 0
   }
 
   /** `ratelimit-reset` seconds, else 60 s. */
   benchRateLimited(slot: NodeSlot, rate: RateLimitHeaders): void {
-    this.bench(slot, (rate.resetS ?? DEFAULT_RESET_MS / 1000) * 1000)
+    this.bench(slot, clampResetS(rate.resetS ?? DEFAULT_RESET_MS / 1000) * 1000)
   }
 
-  /** The node could not be reached at all (refused, TLS, CORS, DNS): out for the session. */
+  /**
+   * The node could not be reached (refused, TLS, CORS, DNS, a dropped connection). The browser cannot tell that from
+   * its own link going away, so the node rests for 1, then 5, then 10 minutes, and for the session only after five
+   * misses in a row while other nodes were answering.
+   */
   benchUnreachable(slot: NodeSlot): void {
-    this.bench(slot, SESSION)
+    slot.unreachable++
+    const others = this.lastSuccessAt > 0 && this.now() - this.lastSuccessAt < LONG_BENCH_MS
+    if (slot.unreachable >= NETWORK_STRIKES_FOR_SESSION && others) {
+      this.bench(slot, SESSION)
+      return
+    }
+    this.bench(slot, NETWORK_BENCH_MS[Math.min(slot.unreachable, NETWORK_BENCH_MS.length) - 1]!)
   }
 
   /** UNAVAILABLE, DEADLINE_EXCEEDED, 5xx, timeout: 60 s, then 10 min once it has struck three times in a row. */
@@ -253,11 +336,20 @@ export class NodePool {
     this.fill()
   }
 
-  /** The node's own view of the tip. A node more than 2 blocks behind the best seen is left out of tip-sensitive calls for a while. */
+  /** The middle of the tips the nodes report, so one node claiming a huge height cannot make the honest ones look behind. */
+  private medianTip(): number {
+    const tips = [...this.slots.values()]
+      .map((s) => s.tipHeight)
+      .filter((h): h is number => h !== undefined)
+      .sort((a, b) => a - b)
+    return tips.length === 0 ? 0 : tips[tips.length >> 1]!
+  }
+
+  /** The node's own view of the tip. A node more than 2 blocks behind the middle one is left out of tip-sensitive calls for a while. */
   noteTip(slot: NodeSlot, height: number): void {
     slot.tipHeight = height
-    if (height > this.bestTip) this.bestTip = height
-    slot.behindUntil = height < this.bestTip - BEHIND_BLOCKS ? this.now() + BEHIND_HOLD_MS : 0
+    if (this.pinned.get(slot.url) === slot) return
+    slot.behindUntil = height < this.medianTip() - BEHIND_BLOCKS ? this.now() + BEHIND_HOLD_MS : 0
   }
 
   snapshot(): BudgetSnapshot {
@@ -266,7 +358,7 @@ export class NodePool {
     let headroom = 0
     for (const slot of this.active) headroom += this.headroomOf(slot, now)
     let used = 0
-    for (const slot of this.slots.values()) {
+    for (const slot of [...this.slots.values(), ...this.pinned.values()]) {
       this.prune(slot, now)
       used += slot.started.length
     }

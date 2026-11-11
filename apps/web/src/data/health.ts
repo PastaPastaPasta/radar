@@ -25,7 +25,15 @@ export interface HealthRegistry {
     net: NetworkId,
     source: SourceId,
     /** Leave `latencyMs` out when the report is not the outcome of one round trip, such as a stream that broke. */
-    r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind; message?: string },
+    r: {
+      ok: boolean
+      latencyMs?: number
+      kind?: SourceErrorKind
+      message?: string
+      /** DAPI: the node a failure came from, and how many nodes the pool can use. `down` needs every one of them to have failed. */
+      node?: string
+      nodes?: number
+    },
   ): void
   setLag(net: NetworkId, source: SourceId, lag: SourceHealth['lag']): void
   get(net: NetworkId, source: SourceId): SourceHealth
@@ -37,6 +45,8 @@ type FailureKind = Exclude<SourceErrorKind, 'aborted'>
 interface Call {
   ok: boolean
   at: number
+  /** The failure came from one named node. */
+  tagged?: boolean
   kind?: FailureKind
 }
 
@@ -44,6 +54,9 @@ interface Tally {
   calls: Call[]
   latencies: number[]
   consecutiveDownFailures: number
+  /** Nodes that failed since the last answer, with when. */
+  failedNodes: Map<string, number>
+  nodeCount?: number
   lastOkAt?: number
   lastInvalidAt?: number
   lastError?: SourceHealth['lastError']
@@ -55,6 +68,9 @@ const MIN = 60_000
 const CALL_WINDOW = 20
 const LATENCY_WINDOW = 10
 const DOWN_FAILURES = 3
+/** DAPI is down when this many distinct nodes (the active set and its 8 replacements), or all it has, failed inside the window. */
+const DOWN_NODES = 16
+const DOWN_NODES_WINDOW_MS = 2 * 60_000
 const DOWN_SILENCE_MS = 120_000
 const DEGRADED_RATIO = 0.25
 const INVALID_MEMORY_MS = 5 * MIN
@@ -83,6 +99,7 @@ function nextTimeBoundary(rec: Tally, now: number): number | undefined {
   if (rec.lastOkAt !== undefined && isDownFailure(rec.calls[rec.calls.length - 1])) {
     candidates.push(rec.lastOkAt + DOWN_SILENCE_MS + 1)
   }
+  for (const at of rec.failedNodes.values()) candidates.push(at + DOWN_NODES_WINDOW_MS + 1)
   const future = candidates.filter((t) => t > now)
   return future.length > 0 ? Math.min(...future) : undefined
 }
@@ -117,7 +134,19 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
   if (!lastCall && !rec.lag && !rec.budget) return health
 
   const silent = rec.lastOkAt === undefined || now - rec.lastOkAt > DOWN_SILENCE_MS
-  if (rec.consecutiveDownFailures >= DOWN_FAILURES || (isDownFailure(lastCall) && silent)) {
+  // One node's failures say nothing about the network: DAPI is down when the nodes it can use have all failed.
+  const failedNodes = [...rec.failedNodes.values()].filter((at) => now - at <= DOWN_NODES_WINDOW_MS)
+  if (
+    rec.failedNodes.size > 0 &&
+    failedNodes.length >= Math.min(DOWN_NODES, rec.nodeCount ?? DOWN_NODES)
+  ) {
+    health.state = 'down'
+    return health
+  }
+  if (
+    rec.consecutiveDownFailures >= DOWN_FAILURES ||
+    (isDownFailure(lastCall) && !lastCall?.tagged && silent)
+  ) {
     health.state = 'down'
     return health
   }
@@ -160,7 +189,7 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
     const key = keyOf(net, source)
     let rec = records.get(key)
     if (!rec) {
-      rec = { calls: [], latencies: [], consecutiveDownFailures: 0 }
+      rec = { calls: [], latencies: [], consecutiveDownFailures: 0, failedNodes: new Map() }
       records.set(key, rec)
     }
     return rec
@@ -190,7 +219,13 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
       const rec = touch(net, source)
       const at = now()
       const kind = r.kind ?? 'network'
-      rec.calls.push({ ok: r.ok, at, kind: r.ok ? undefined : (kind as FailureKind) })
+      const tagged = source === 'dapi' && !r.ok && r.node !== undefined
+      rec.calls.push({
+        ok: r.ok,
+        at,
+        kind: r.ok ? undefined : (kind as FailureKind),
+        ...(tagged ? { tagged } : {}),
+      })
       if (rec.calls.length > CALL_WINDOW) rec.calls.shift()
       if (r.latencyMs !== undefined) {
         rec.latencies.push(r.latencyMs)
@@ -198,9 +233,15 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
       }
       if (r.ok) {
         rec.consecutiveDownFailures = 0
+        rec.failedNodes.clear()
         rec.lastOkAt = at
       } else {
-        if (DOWN_KINDS.has(kind)) rec.consecutiveDownFailures++
+        if (tagged) {
+          if (DOWN_KINDS.has(kind)) {
+            rec.failedNodes.set(r.node!, at)
+            rec.nodeCount = r.nodes
+          }
+        } else if (DOWN_KINDS.has(kind)) rec.consecutiveDownFailures++
         else rec.consecutiveDownFailures = 0
         if (kind === 'invalid-response') rec.lastInvalidAt = at
         rec.lastError = { kind, message: r.message ?? kind, at }

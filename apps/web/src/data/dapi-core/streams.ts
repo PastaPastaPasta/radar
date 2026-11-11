@@ -4,6 +4,10 @@ export const BACKOFF_MAX_MS = 30_000
 /** Consecutive failed connections after which a stream's owner may fall back to polling (§4.6). */
 export const DEGRADE_AFTER_FAILURES = 3
 const CLEAN_RECONNECT_MS = 250
+/** A connection the server ends on schedule lives about 601 s; one that ends sooner counts as a failure. */
+export const EXPECTED_LIFETIME_MS = 590_000
+/** Backoff starts over only after a connection has stayed open this long, not on its first message. */
+export const STABLE_AFTER_MS = 60_000
 
 export type StreamState = 'idle' | 'connecting' | 'live' | 'reconnecting' | 'degraded'
 
@@ -30,7 +34,7 @@ export interface SessionContext {
   failures: number
   /** The node that served the previous connection, to be avoided this time. */
   avoidNode?: string
-  /** Call when the connection delivers its first message: the failure count resets. */
+  /** Call when the connection delivers its first message. */
   markLive: (node?: string) => void
 }
 
@@ -44,6 +48,7 @@ export interface SharedStreamOptions {
    */
   degraded?: (ctx: { signal: AbortSignal; failures: number }) => Promise<void>
   lingerMs?: number
+  now?: () => number
 }
 
 /**
@@ -102,37 +107,53 @@ export class SharedStream {
   }
 
   private async loop(signal: AbortSignal): Promise<void> {
+    const now = this.opts.now ?? Date.now
     let failures = 0
     while (!signal.aborted) {
       this.setState(
         failures === 0 && this.lastNode === undefined ? 'connecting' : 'reconnecting',
         failures,
       )
+      let liveAt: number | undefined
+      const lived = () => (liveAt === undefined ? 0 : now() - liveAt)
       try {
         await this.opts.session({
           signal,
           failures,
           avoidNode: failures > 0 ? this.lastNode : undefined,
           markLive: (node) => {
-            failures = 0
+            liveAt ??= now()
             if (node) this.lastNode = node
-            this.setState('live', 0)
+            this.setState('live', failures)
           },
         })
         if (signal.aborted) return
-        // The server's own end (601 s): reconnect straight away, and it is not a failure.
-        await sleep(CLEAN_RECONNECT_MS, signal)
+        if (lived() >= STABLE_AFTER_MS) failures = 0
+        if (lived() >= EXPECTED_LIFETIME_MS) {
+          // The server's own end (601 s): reconnect straight away, and it is not a failure.
+          await sleep(CLEAN_RECONNECT_MS, signal)
+          continue
+        }
+        // Ending early is a failure even with a clean status: reopening at once on the same node would loop.
+        failures++
+        this.setState('reconnecting', failures)
+        await this.pause(signal, failures)
       } catch (error) {
         if (signal.aborted) return
+        if (lived() >= STABLE_AFTER_MS) failures = 0
         failures++
         this.setState('reconnecting', failures, error)
-        if (failures >= DEGRADE_AFTER_FAILURES && this.opts.degraded) {
-          this.setState('degraded', failures, error)
-          await this.opts.degraded({ signal, failures })
-        } else {
-          await sleep(backoffMs(failures), signal)
-        }
+        await this.pause(signal, failures, error)
       }
+    }
+  }
+
+  private async pause(signal: AbortSignal, failures: number, error?: unknown): Promise<void> {
+    if (failures >= DEGRADE_AFTER_FAILURES && this.opts.degraded) {
+      this.setState('degraded', failures, error)
+      await this.opts.degraded({ signal, failures })
+    } else {
+      await sleep(backoffMs(failures), signal)
     }
   }
 }

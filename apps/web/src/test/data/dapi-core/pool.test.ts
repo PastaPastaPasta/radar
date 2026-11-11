@@ -71,7 +71,7 @@ describe('PoolDapiTransport unary', () => {
     expect(health.report).toHaveBeenCalledWith(NET, 'dapi', expect.objectContaining({ ok: true }))
   })
 
-  it('benches a node that cannot be reached for the session and retries on another', async () => {
+  it('rests a node that cannot be reached for a minute and retries on another', async () => {
     let first: string | undefined
     const { transport, calls } = setup({
       handler: (c) => {
@@ -83,8 +83,8 @@ describe('PoolDapiTransport unary', () => {
     expect(reply.node).not.toBe(first)
     expect(calls).toHaveLength(2)
     expect(transport.budget.snapshot(NET).benched).toBe(1)
-    await settle(24 * 3_600_000)
-    expect(transport.budget.snapshot(NET).benched).toBe(1)
+    await settle(61_000)
+    expect(transport.budget.snapshot(NET).benched).toBe(0)
   })
 
   it('tries at most 3 distinct nodes, then fails with the last error', async () => {

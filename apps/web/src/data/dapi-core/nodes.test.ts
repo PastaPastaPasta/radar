@@ -105,14 +105,40 @@ describe('benching', () => {
     expect(other.benchedUntil).toBe(clock.t + 60_000)
   })
 
-  it('benches an unreachable node for the rest of the session', () => {
+  it('rests an unreachable node 1, 5, then 10 minutes, and comes back for it after', () => {
     const { pool, clock } = setup()
     const slot = pool.pick()!
     pool.benchUnreachable(slot)
+    expect(slot.benchedUntil).toBe(clock.t + 60_000)
+    pool.benchUnreachable(slot)
+    expect(slot.benchedUntil).toBe(clock.t + 300_000)
+    pool.benchUnreachable(slot)
+    expect(slot.benchedUntil).toBe(clock.t + 600_000)
+    clock.t += 600_001
+    expect(pool.snapshot().benched).toBe(0)
+  })
+
+  it('rests an unreachable node for the session only after five misses while other nodes answer', () => {
+    const { pool, clock } = setup()
+    const slot = pool.pick()!
+    const other = pool.pick({ exclude: new Set([slot.url]) })!
+    for (let i = 0; i < 6; i++) {
+      pool.succeeded(other, 10, {})
+      pool.benchUnreachable(slot)
+      clock.t += 700_000
+    }
     expect(slot.benchedUntil).toBe(SESSION)
-    clock.t += 24 * 3_600_000
-    expect(pool.snapshot().benched).toBe(1)
     expect(pool.pick({ exclude: new Set() })).not.toBe(slot)
+  })
+
+  it('does not rest a node for the session when nothing has answered lately: that is the client offline', () => {
+    const { pool, clock } = setup()
+    const slot = pool.pick()!
+    for (let i = 0; i < 8; i++) {
+      pool.benchUnreachable(slot)
+      clock.t += 700_000
+    }
+    expect(slot.benchedUntil).toBeLessThan(SESSION)
   })
 
   it('benches a failing node for 60 s, then 10 min from the third strike', () => {
@@ -152,12 +178,13 @@ describe('benching', () => {
     expect(pool.snapshot().pressure).toBe('exhausted')
   })
 
-  it('has nothing left to try when every node is benched for the session', () => {
+  it('has nothing to pick, but something to wait for, when every node is resting', () => {
     const { pool } = setup(2, 2)
     pool.benchUnreachable(pool.pick()!)
     pool.benchUnreachable(pool.pick()!)
-    expect(pool.hasUsableNode()).toBe(false)
     expect(pool.pick()).toBeUndefined()
+    expect(pool.hasUsableNode()).toBe(true)
+    expect(pool.nextChangeAt()).toBeDefined()
   })
 
   it('leaves a node that is behind the best tip out of height-sensitive calls', () => {

@@ -29,6 +29,10 @@ import {
 } from './gen/core/v0/core_pb'
 import type { DapiCallOptions, DapiTransport } from './transport'
 
+/** A header range of known length is a bounded reply: it gets the deadlines a unary call has. */
+const BOUNDED_IDLE_MS = 8_000
+const BOUNDED_DEADLINE_MS = 30_000
+
 export interface Answered<T> {
   message: T
   node?: string
@@ -161,7 +165,9 @@ export function createDapiRpc(transport: DapiTransport) {
         net,
         'subscribeToBlockHeadersWithChainLocks',
         toBinary(BlockHeadersWithChainLocksRequestSchema, request),
-        opts,
+        q.count === 0
+          ? { ...opts, follow: true }
+          : { idleTimeoutMs: BOUNDED_IDLE_MS, deadlineMs: BOUNDED_DEADLINE_MS, ...opts },
       )
       async function* events(): AsyncGenerator<HeaderStreamEvent> {
         for await (const bytes of handle.messages) {
@@ -194,7 +200,7 @@ export function createDapiRpc(transport: DapiTransport) {
         net,
         'subscribeToMasternodeList',
         toBinary(MasternodeListRequestSchema, create(MasternodeListRequestSchema)),
-        opts,
+        { ...opts, follow: true },
       )
       async function* events(): AsyncGenerator<MasternodeListEvent> {
         for await (const bytes of handle.messages) {
@@ -226,7 +232,7 @@ export function createDapiRpc(transport: DapiTransport) {
         net,
         'subscribeToTransactionsWithProofs',
         toBinary(TransactionsWithProofsRequestSchema, request),
-        opts,
+        { ...opts, follow: true },
       )
       async function* events(): AsyncGenerator<TransactionStreamEvent> {
         for await (const bytes of handle.messages) {

@@ -42,6 +42,8 @@ const chainLockMessage = (height: number) => {
 interface Script {
   messages: Uint8Array[]
   then: 'hold' | 'end' | Error
+  /** Wait this long, then end (for `then: 'end'`). */
+  afterMs?: number
 }
 
 function scriptedTransport(scripts: Script[]) {
@@ -70,7 +72,10 @@ function scriptedTransport(scripts: Script[]) {
         messages: (async function* () {
           for (const m of script.messages) yield m
           if (script.then instanceof Error) throw script.then
-          if (script.then === 'end') return
+          if (script.then === 'end') {
+            if (script.afterMs) await new Promise((r) => setTimeout(r, script.afterMs))
+            return
+          }
           await new Promise<void>((_, reject) => {
             opts?.signal?.addEventListener('abort', () =>
               reject(new SourceError({ source: 'dapi', kind: 'aborted', message: 'aborted' })),
@@ -178,15 +183,48 @@ describe('coreLive.tip', () => {
     expect(live.status(NET).state).toBe('live')
   })
 
-  it('does not call the server ending a stream a failure', async () => {
+  it('does not call the server cutting a stream at its 601 s a failure', async () => {
     const { live, qc, opened } = setup([
-      { messages: [headersMessage(1)], then: 'end' },
+      { messages: [headersMessage(1)], then: 'end', afterMs: 601_000 },
       { messages: [], then: 'hold' },
     ])
     live.tip(NET, qc)
-    await settle(500)
+    await settle(601_500)
     expect(opened).toHaveLength(2)
     expect(opened[1]!.avoidNode).toBeUndefined()
+  })
+
+  it('reopens on another node, after a pause, when a stream ends cleanly at once', async () => {
+    const { live, qc, opened } = setup([
+      { messages: [headersMessage(1)], then: 'end' },
+      { messages: [headersMessage(2)], then: 'hold' },
+    ])
+    live.tip(NET, qc)
+    await settle(500)
+    expect(opened).toHaveLength(1)
+    await settle(600)
+    expect(opened).toHaveLength(2)
+    expect(opened[1]!.avoidNode).toBe(opened[0]!.node)
+  })
+
+  it('reopens a connection that goes silent for six minutes on mainnet', async () => {
+    const { live, qc, opened } = setup([
+      { messages: [headersMessage(1)], then: 'hold' },
+      { messages: [headersMessage(2)], then: 'hold' },
+    ])
+    live.tip(NET, qc)
+    await settle(5 * 60_000)
+    expect(opened).toHaveLength(1)
+    await settle(61_000 + 1_100)
+    expect(opened).toHaveLength(2)
+    expect(opened[1]!.avoidNode).toBe(opened[0]!.node)
+  })
+
+  it('does not close a quiet devnet connection', async () => {
+    const { live, qc, opened } = setup([{ messages: [headersMessage(1)], then: 'hold' }])
+    live.tip('devnet-x', qc)
+    await settle(30 * 60_000)
+    expect(opened).toHaveLength(1)
   })
 
   it('polls the tip every 30 s after three failures and says so', async () => {
@@ -256,11 +294,11 @@ describe('coreLive.tip', () => {
 
   it('marks DAPI stale after 20 quiet minutes', async () => {
     const { live, qc, lag } = setup([{ messages: [headersMessage(1)], then: 'hold' }])
-    live.tip(NET, qc)
+    live.tip('devnet-x', qc)
     await settle(0)
     await settle(21 * 60_000)
     expect(lag).toHaveBeenCalledWith(
-      NET,
+      'devnet-x',
       'dapi',
       expect.objectContaining({ ms: expect.any(Number) as number }),
     )

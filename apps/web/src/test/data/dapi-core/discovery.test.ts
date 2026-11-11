@@ -106,7 +106,7 @@ describe('discoverNodes', () => {
     expect(fetch).not.toHaveBeenCalled()
   })
 
-  it('ignores a cached list older than an hour', async () => {
+  it('uses a cached list older than an hour while the live one loads, ahead of the seeds', async () => {
     const fetch = okFetch()
     const cached = { nodes: parseQuorumNodes(body, 'testnet'), at: 1000 }
     const found = await discoverNodes('testnet', {
@@ -115,7 +115,8 @@ describe('discoverNodes', () => {
       store: memoryStore(cached),
       devnets: () => [],
     })
-    expect(found.source).toBe('seed')
+    expect(found.source).toBe('cache')
+    expect(found.refreshed).toBeDefined()
   })
 
   it('falls back to the seeds when the quorum service is down', async () => {

@@ -23,6 +23,16 @@ export interface DapiCallOptions {
   nodeUrl?: string
   /** "ip:port" of a node not to use, for a stream reopened after that node failed. */
   avoidNode?: string
+  /** More nodes not to use: those that already sent an answer that failed its checks. */
+  avoidNodes?: readonly string[]
+  /** "ip:port" of the node to use if it has room: the one that just reported the tip a follow-up read depends on. */
+  prefer?: string
+  /** A stream that stays open until aborted: the node closing it early is a fault, not the end of a reply. */
+  follow?: boolean
+  /** Streams: the longest silence between messages. Leave it out for a stream that may be quiet. */
+  idleTimeoutMs?: number
+  /** Streams: the longest the whole reply may take. For a bounded range, not a follow. */
+  deadlineMs?: number
 }
 
 export interface DapiUnaryReply {
@@ -61,6 +71,8 @@ export interface DapiTransport {
     request: Uint8Array,
     opts?: DapiCallOptions,
   ): DapiStreamHandle
+  /** A node ("ip:port") sent an answer that does not hold up. The pool rests it and counts it against DAPI's health. */
+  reportInvalid?(net: NetworkId, node: string, message: string): void
 }
 
 /** gRPC status codes carried in `SourceError.status` on `kind: 'http'`. */

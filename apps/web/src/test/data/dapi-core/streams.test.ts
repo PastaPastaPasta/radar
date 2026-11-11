@@ -83,12 +83,15 @@ describe('SharedStream', () => {
     })
     stream.retain()
     await settle(0)
-    // markLive resets the count, so every drop here is the first failure.
+    // A drop soon after opening is a failure however many messages came first, so the wait doubles.
     await settle(1000)
     expect(contexts).toHaveLength(2)
     expect(contexts[1]!.avoidNode).toBe('node-1')
-    await settle(1000)
+    await settle(1999)
+    expect(contexts).toHaveLength(2)
+    await settle(1)
     expect(contexts).toHaveLength(3)
+    expect(contexts[2]!.failures).toBe(2)
   })
 
   it('doubles the wait while connections fail before delivering anything', async () => {
@@ -104,22 +107,59 @@ describe('SharedStream', () => {
     expect(times.slice(1).map((t, i) => t - times[i]!)).toEqual([1000, 2000, 4000, 8000])
   })
 
-  it('treats the server ending the stream as a clean reconnect, not a failure', async () => {
+  it('treats a connection the server cuts after its 601 s as a clean reconnect, not a failure', async () => {
     const failures: number[] = []
+    const avoided: (string | undefined)[] = []
+    const stream = new SharedStream({
+      session: async (ctx) => {
+        failures.push(ctx.failures)
+        avoided.push(ctx.avoidNode)
+        ctx.markLive('n')
+        await new Promise((r) => setTimeout(r, 601_000))
+      },
+    })
+    stream.retain()
+    await settle(601_000 * 3)
+    expect(failures.length).toBeGreaterThanOrEqual(3)
+    expect(failures.every((f) => f === 0)).toBe(true)
+    expect(stream.state).not.toBe('degraded')
+  })
+
+  it('backs off when a connection ends cleanly but early, instead of reopening at once', async () => {
     let n = 0
+    const avoided: (string | undefined)[] = []
     const stream = new SharedStream({
       session: (ctx) => {
-        failures.push(ctx.failures)
         n++
-        ctx.markLive()
+        avoided.push(ctx.avoidNode)
+        ctx.markLive('same-node')
         return Promise.resolve()
       },
     })
     stream.retain()
-    await settle(2_000)
-    expect(n).toBeGreaterThan(3)
-    expect(failures.every((f) => f === 0)).toBe(true)
-    expect(stream.state).not.toBe('degraded')
+    await settle(60_000)
+    expect(n).toBeLessThanOrEqual(8)
+    expect(avoided[1]).toBe('same-node')
+  })
+
+  it('starts the backoff over only once a connection has stayed up for a minute', async () => {
+    const failures: number[] = []
+    let n = 0
+    const stream = new SharedStream({
+      session: async (ctx) => {
+        failures.push(ctx.failures)
+        n++
+        ctx.markLive('x')
+        if (n === 1) throw new Error('early')
+        await new Promise((r) => setTimeout(r, 90_000))
+        throw new Error('late')
+      },
+    })
+    stream.retain()
+    await settle(1_000 + 90_000 + 5)
+    expect(failures.slice(0, 2)).toEqual([0, 1])
+    await settle(1_000)
+    expect(failures[2]).toBe(1)
   })
 
   it('hands over to its fallback after three failures in a row, then tries again', async () => {

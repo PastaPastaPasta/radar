@@ -25,6 +25,13 @@ export const ATTEMPT_TIMEOUT_MS = 8_000
 export const MAX_ATTEMPTS = 3
 export const QUEUE_TIMEOUT_MS = 70_000
 export const STREAM_OPEN_TIMEOUT_MS = 10_000
+/** Once a reply has started, the longest silence between its chunks, and the longest the whole body may take. */
+export const IDLE_TIMEOUT_MS = 8_000
+export const DEADLINE_MS = 45_000
+/** Network failures from this many distinct nodes inside the window, with no answer in between, are this client's link. */
+const LINK_DOWN_NODES = 3
+const LINK_DOWN_WINDOW_MS = 15_000
+const OK_REPORT_EVERY_MS = 30_000
 /** Envoy cuts every stream at 601 s; ending near that is the server's doing, not a fault. */
 const EXPECTED_STREAM_LIFETIME_MS = 590_000
 const PUBLISH_EVERY_MS = 5_000
@@ -41,7 +48,15 @@ export interface HealthSink {
   report(
     net: NetworkId,
     source: 'dapi',
-    r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind; message?: string },
+    r: {
+      ok: boolean
+      latencyMs?: number
+      kind?: SourceErrorKind
+      message?: string
+      /** The node a failure came from, and how many nodes the pool can use: DAPI is down when they all fail. */
+      node?: string
+      nodes?: number
+    },
   ): void
   setBudget(net: NetworkId, snapshot: BudgetSnapshot): void
 }
@@ -53,6 +68,8 @@ export interface PoolTransportDeps {
   devnets: () => readonly DevnetConfig[]
   nodeStore?: NodeListStore
   health: HealthSink
+  /** False while the browser knows it has no network: nodes are not blamed for that. */
+  online: () => boolean
 }
 
 const defaultDeps = (): PoolTransportDeps => ({
@@ -60,6 +77,7 @@ const defaultDeps = (): PoolTransportDeps => ({
   now: Date.now,
   random: Math.random,
   devnets: () => [],
+  online: () => typeof navigator === 'undefined' || navigator.onLine !== false,
   health: {
     report: (net, source, r) => healthRegistry.report(net, source, r),
     setBudget: (net, snapshot) => setBudgetSnapshot(net, snapshot),
@@ -67,6 +85,8 @@ const defaultDeps = (): PoolTransportDeps => ({
 })
 
 interface Waiter {
+  only?: NodeSlot
+  prefer?: string
   priority: number
   seq: number
   tried: ReadonlySet<string>
@@ -83,6 +103,9 @@ interface NetState {
   waiters: Waiter[]
   timer?: ReturnType<typeof setTimeout>
   lastPublished?: BudgetSnapshot
+  /** Recent unreachable results, to tell a dead link from dead nodes. */
+  unreachable: { url: string; at: number }[]
+  lastOkReportAt: number
 }
 
 function abortError(): SourceError {
@@ -150,7 +173,7 @@ export class PoolDapiTransport implements DapiTransport {
 
   private state(net: NetworkId): NetState {
     let s = this.nets.get(net)
-    if (!s) this.nets.set(net, (s = { waiters: [] }))
+    if (!s) this.nets.set(net, (s = { waiters: [], unreachable: [], lastOkReportAt: 0 }))
     return s
   }
 
@@ -169,7 +192,7 @@ export class PoolDapiTransport implements DapiTransport {
         })
         state.ready = pool
         void found.refreshed?.then((live) => {
-          if (live) pool.add(live)
+          if (live) pool.adopt(live)
           this.publish(net)
         })
         this.startTicker()
@@ -215,12 +238,16 @@ export class PoolDapiTransport implements DapiTransport {
       tried: ReadonlySet<string>
       heightSensitive: boolean
       signal?: AbortSignal
+      only?: NodeSlot
+      prefer?: string
     },
   ): Promise<NodeSlot> {
     const state = this.state(net)
     return new Promise<NodeSlot>((resolve, reject) => {
       if (opts.signal?.aborted) return reject(abortError())
       const waiter: Waiter = {
+        only: opts.only,
+        prefer: opts.prefer,
         priority: PRIORITY_ORDER[opts.priority],
         seq: this.seq++,
         tried: opts.tried,
@@ -269,14 +296,19 @@ export class PoolDapiTransport implements DapiTransport {
       state.timer = undefined
     }
     for (const waiter of [...state.waiters]) {
-      const slot = pool.pick({ exclude: waiter.tried, heightSensitive: waiter.heightSensitive })
+      const slot = pool.pick({
+        exclude: waiter.tried,
+        heightSensitive: waiter.heightSensitive,
+        only: waiter.only,
+        prefer: waiter.prefer,
+      })
       if (slot) {
         this.removeWaiter(state, waiter)
         pool.begin(slot)
         waiter.resolve(slot)
         continue
       }
-      if (!pool.hasUsableNode(waiter.tried)) {
+      if (!pool.hasUsableNode(waiter.tried, waiter.only)) {
         this.removeWaiter(state, waiter)
         waiter.reject(
           new SourceError({
@@ -323,27 +355,52 @@ export class PoolDapiTransport implements DapiTransport {
     }
   }
 
-  /** Records a failed attempt against its node: what to bench, what to report. */
+  private linkLooksDown(net: NetworkId, pool: NodePool, slot: NodeSlot): boolean {
+    if (!this.deps.online()) return true
+    const state = this.state(net)
+    const now = this.deps.now()
+    state.unreachable = state.unreachable.filter((u) => now - u.at < LINK_DOWN_WINDOW_MS)
+    state.unreachable.push({ url: slot.url, at: now })
+    const nodes = new Set(state.unreachable.map((u) => u.url))
+    return nodes.size >= LINK_DOWN_NODES && pool.lastSuccessAt < now - LINK_DOWN_WINDOW_MS
+  }
+
+  /** Records a failed attempt against its node: what to bench, what to report. A pinned node's results stay out of the source's health. */
   private failed(
     net: NetworkId,
     pool: NodePool,
     slot: NodeSlot,
     e: unknown,
     latencyMs?: number,
+    pinned = false,
   ): void {
     const kind = failureKind(e)
     if (kind === 'aborted') return
     if (isAnswer(e)) {
       pool.succeeded(slot, latencyMs ?? 0, {})
-      this.deps.health.report(net, 'dapi', { ok: true, latencyMs })
+      if (!pinned) this.deps.health.report(net, 'dapi', { ok: true, latencyMs })
       return
     }
+    // The reply was arriving when the deadline fell: a slow link, not a failing node.
+    if (isSourceError(e) && e.bytesFlowing) return
     if (kind === 'rate-limited') {
       const reset = isSourceError(e) ? e.retryAfterMs : undefined
       pool.benchRateLimited(slot, reset === undefined ? {} : { resetS: reset / 1000 })
-    } else if (kind === 'network') pool.benchUnreachable(slot)
-    else pool.benchFailing(slot)
-    this.deps.health.report(net, 'dapi', failureReport(e))
+    } else if (kind === 'network') {
+      if (!this.linkLooksDown(net, pool, slot)) pool.benchUnreachable(slot)
+    } else pool.benchFailing(slot)
+    if (!pinned) {
+      this.deps.health.report(net, 'dapi', {
+        ...failureReport(e),
+        node: slot.host,
+        nodes: pool.size,
+      })
+    }
+  }
+
+  private reportOk(net: NetworkId, latencyMs?: number): void {
+    this.state(net).lastOkReportAt = this.deps.now()
+    this.deps.health.report(net, 'dapi', { ok: true, latencyMs })
   }
 
   /** The slot is already counted (`begin`); this sends, then settles the node's books. */
@@ -354,33 +411,32 @@ export class PoolDapiTransport implements DapiTransport {
     method: DapiUnaryMethod,
     request: Uint8Array,
     signal: AbortSignal,
+    opts: { onHeaders?: () => void; pinned?: boolean } = {},
   ): Promise<DapiUnaryReply> {
-    const ctrl = new AbortController()
-    const unlink = this.link(signal, ctrl)
-    const timeout = setTimeout(
-      () => ctrl.abort(new DOMException('The node did not answer in time', 'TimeoutError')),
-      ATTEMPT_TIMEOUT_MS,
-    )
     const started = this.deps.now()
     try {
       const { response, rate } = await unaryCall({
         baseUrl: slot.url,
         method,
         request,
-        signal: ctrl.signal,
+        signal,
         fetch: this.deps.fetch,
+        headersTimeoutMs: ATTEMPT_TIMEOUT_MS,
+        idleTimeoutMs: IDLE_TIMEOUT_MS,
+        deadlineMs: DEADLINE_MS,
+        onHeaders: opts.onHeaders,
       })
       const latency = this.deps.now() - started
       pool.succeeded(slot, latency, rate)
-      this.learnTip(pool, slot, method, response)
-      this.deps.health.report(net, 'dapi', { ok: true, latencyMs: latency })
+      if (!opts.pinned) {
+        this.learnTip(pool, slot, method, response)
+        this.deps.health.report(net, 'dapi', { ok: true, latencyMs: latency })
+      }
       return { response, node: slot.host }
     } catch (e) {
-      this.failed(net, pool, slot, e, this.deps.now() - started)
+      this.failed(net, pool, slot, e, this.deps.now() - started, opts.pinned)
       throw e
     } finally {
-      clearTimeout(timeout)
-      unlink()
       pool.end(slot)
       this.pump(net, pool)
     }
@@ -403,6 +459,7 @@ export class PoolDapiTransport implements DapiTransport {
       let settled = false
       let failures = 0
       let lastError: unknown
+      let headered = false
       let hedgeTimer: ReturnType<typeof setTimeout> | undefined
 
       const settle = (fn: () => void) => {
@@ -416,7 +473,11 @@ export class PoolDapiTransport implements DapiTransport {
         const ctrl = new AbortController()
         flights.push(ctrl)
         const unlink = this.link(signal, ctrl)
-        this.send(net, pool, slot, method, request, ctrl.signal).then(
+        this.send(net, pool, slot, method, request, ctrl.signal, {
+          onHeaders: () => {
+            headered = true
+          },
+        }).then(
           (reply) => {
             unlink()
             settle(() => resolve(reply))
@@ -436,7 +497,7 @@ export class PoolDapiTransport implements DapiTransport {
       launch(first)
       hedgeTimer = setTimeout(() => {
         hedgeTimer = undefined
-        if (settled || pool.snapshot().pressure !== 'ok') return
+        if (settled || headered || pool.snapshot().pressure !== 'ok') return
         const second = pool.pick({ exclude: tried, heightSensitive })
         if (!second) return
         tried.add(second.url)
@@ -445,6 +506,30 @@ export class PoolDapiTransport implements DapiTransport {
       }, HEDGE_AFTER_MS)
       ;(hedgeTimer as { unref?: () => void }).unref?.()
     })
+  }
+
+  /** The nodes a call must not use, unless that would leave it none. */
+  private avoidSet(pool: NodePool, opts: DapiCallOptions): Set<string> {
+    const avoided = new Set(
+      [...(opts.avoidNodes ?? []), ...(opts.avoidNode ? [opts.avoidNode] : [])].map(
+        (host) => `https://${host}`,
+      ),
+    )
+    return pool.hasUsableNode(avoided) ? avoided : new Set<string>()
+  }
+
+  reportInvalid(net: NetworkId, node: string, message: string): void {
+    const pool = this.nets.get(net)?.ready
+    const slot = pool?.slotByHost(node)
+    if (pool && slot) pool.benchFailing(slot)
+    this.deps.health.report(net, 'dapi', {
+      ok: false,
+      kind: 'invalid-response',
+      message,
+      node,
+      nodes: pool?.size,
+    })
+    if (pool) this.publish(net)
   }
 
   async unary(
@@ -459,7 +544,7 @@ export class PoolDapiTransport implements DapiTransport {
 
     if (opts.nodeUrl) return this.unaryToNode(net, pool, method, request, opts)
 
-    const tried = new Set<string>()
+    const tried = this.avoidSet(pool, opts)
     let lastError: unknown
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
       let slot: NodeSlot
@@ -469,6 +554,7 @@ export class PoolDapiTransport implements DapiTransport {
           tried,
           heightSensitive,
           signal: opts.signal,
+          prefer: attempt === 0 ? opts.prefer && `https://${opts.prefer}` : undefined,
         })
       } catch (e) {
         throw lastError ?? e
@@ -508,13 +594,18 @@ export class PoolDapiTransport implements DapiTransport {
         message: 'Not a node address',
       })
     }
-    pool.add([node])
-    const slot = pool.slotFor(node.url)!
-    pool.begin(slot)
+    const only = pool.pinnedSlot(node)
+    const slot = await this.acquire(net, pool, {
+      priority: opts.priority ?? 'detail',
+      tried: new Set(),
+      heightSensitive: false,
+      signal: opts.signal,
+      only,
+    })
     const ctrl = new AbortController()
     const unlink = this.link(opts.signal, ctrl)
     try {
-      return await this.send(net, pool, slot, method, request, ctrl.signal)
+      return await this.send(net, pool, slot, method, request, ctrl.signal, { pinned: true })
     } finally {
       unlink()
     }
@@ -548,8 +639,7 @@ export class PoolDapiTransport implements DapiTransport {
   ): AsyncGenerator<Uint8Array> {
     if (opts.signal?.aborted) throw abortError()
     const pool = await this.poolFor(net)
-    const avoided = new Set<string>(opts.avoidNode ? [`https://${opts.avoidNode}`] : [])
-    const tried = pool.hasUsableNode(avoided) ? avoided : new Set<string>()
+    const tried = this.avoidSet(pool, opts)
     let lastError: unknown
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
       let slot: NodeSlot
@@ -559,6 +649,7 @@ export class PoolDapiTransport implements DapiTransport {
           tried,
           heightSensitive: HEIGHT_SENSITIVE.has(method),
           signal: opts.signal,
+          prefer: attempt === 0 ? opts.prefer && `https://${opts.prefer}` : undefined,
         })
       } catch (e) {
         throw lastError ?? e
@@ -566,10 +657,6 @@ export class PoolDapiTransport implements DapiTransport {
       tried.add(slot.url)
       const ctrl = new AbortController()
       const unlink = this.link(opts.signal, ctrl)
-      const timeout = setTimeout(
-        () => ctrl.abort(new DOMException('The node did not answer in time', 'TimeoutError')),
-        STREAM_OPEN_TIMEOUT_MS,
-      )
       const started = this.deps.now()
       let call: Awaited<ReturnType<typeof openCall>>
       try {
@@ -579,6 +666,9 @@ export class PoolDapiTransport implements DapiTransport {
           request,
           signal: ctrl.signal,
           fetch: this.deps.fetch,
+          headersTimeoutMs: STREAM_OPEN_TIMEOUT_MS,
+          idleTimeoutMs: opts.idleTimeoutMs,
+          deadlineMs: opts.deadlineMs,
         })
       } catch (e) {
         unlink()
@@ -587,15 +677,14 @@ export class PoolDapiTransport implements DapiTransport {
         if (isAnswer(e) || failureKind(e) === 'aborted' || opts.signal?.aborted) throw e
         continue
       } finally {
-        clearTimeout(timeout)
         pool.end(slot)
         this.pump(net, pool)
       }
       const latency = this.deps.now() - started
       pool.succeeded(slot, latency, call.rate)
-      this.deps.health.report(net, 'dapi', { ok: true, latencyMs: latency })
+      this.reportOk(net, latency)
       onNode(slot.host)
-      yield* this.readStream(net, pool, slot, call.messages, ctrl, unlink, opts.signal)
+      yield* this.readStream(net, pool, slot, call.messages, ctrl, unlink, opts)
       return
     }
     throw lastError
@@ -608,25 +697,30 @@ export class PoolDapiTransport implements DapiTransport {
     messages: AsyncGenerator<Uint8Array>,
     ctrl: AbortController,
     unlink: () => void,
-    signal: AbortSignal | undefined,
+    opts: DapiCallOptions,
   ): AsyncGenerator<Uint8Array> {
+    const signal = opts.signal
     const openedAt = this.deps.now()
+    const early = () => this.deps.now() - openedAt < EXPECTED_STREAM_LIFETIME_MS
+    let ended = false
     try {
       for await (const message of messages) {
         if (signal?.aborted) throw abortError()
+        if (this.deps.now() - this.state(net).lastOkReportAt >= OK_REPORT_EVERY_MS) {
+          this.reportOk(net)
+        }
         yield message
       }
+      ended = true
     } catch (e) {
       if (signal?.aborted) throw abortError()
-      const lived = this.deps.now() - openedAt
-      if (lived < EXPECTED_STREAM_LIFETIME_MS && failureKind(e) !== 'aborted') {
-        pool.benchFailing(slot)
-        this.deps.health.report(net, 'dapi', failureReport(e))
-      }
+      if (early() && failureKind(e) !== 'aborted') this.failed(net, pool, slot, e)
       throw e
     } finally {
       unlink()
       ctrl.abort(abortError())
     }
+    // An open-ended stream that the node closes cleanly long before Envoy's own cut is that node's fault.
+    if (ended && opts.follow && early()) pool.benchFailing(slot)
   }
 }

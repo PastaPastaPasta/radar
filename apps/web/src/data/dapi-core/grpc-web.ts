@@ -1,4 +1,4 @@
-import { SourceError } from '../errors'
+import { isSourceError, SourceError } from '../errors'
 import { GRPC_INVALID_ARGUMENT, GRPC_NOT_FOUND } from './transport'
 
 export const CORE_SERVICE = 'org.dash.platform.dapi.v0.Core'
@@ -6,6 +6,10 @@ export const CORE_SERVICE = 'org.dash.platform.dapi.v0.Core'
 const GRPC_DEADLINE_EXCEEDED = 4
 const GRPC_RESOURCE_EXHAUSTED = 8
 const DEFAULT_RESET_S = 60
+const MIN_RESET_S = 1
+const MAX_RESET_S = 120
+/** A reset above this is a clock time in epoch seconds, not a countdown. */
+const EPOCH_RESET_S = 3_600
 
 export interface RateLimitHeaders {
   limit?: number
@@ -30,8 +34,14 @@ export function rateLimitOf(headers: Headers): RateLimitHeaders {
   const reset = readNumber(headers, 'ratelimit-reset')
   if (limit !== undefined) out.limit = limit
   if (remaining !== undefined) out.remaining = remaining
-  if (reset !== undefined) out.resetS = reset
+  if (reset !== undefined)
+    out.resetS = clampResetS(reset > EPOCH_RESET_S ? reset - Date.now() / 1000 : reset)
   return out
+}
+
+/** A node's reset countdown kept to a range a client can act on: 0 or negative would bench nothing, a huge one for good. */
+export function clampResetS(seconds: number): number {
+  return Math.min(MAX_RESET_S, Math.max(MIN_RESET_S, Math.ceil(seconds)))
 }
 
 /** One gRPC-web data frame: flag 0, a 4-byte big-endian length, the protobuf message. */
@@ -44,39 +54,89 @@ export function frameMessage(message: Uint8Array): Uint8Array<ArrayBuffer> {
 
 export type GrpcFrame = { kind: 'message'; data: Uint8Array } | { kind: 'trailers'; text: string }
 
+/** Largest reply message the client reads, by method; a node that declares more is not speaking for the chain. */
+export const MAX_FRAME_BYTES: Record<string, number> = {
+  getBlock: 4 * 1024 * 1024,
+  getTransaction: 2 * 1024 * 1024,
+  subscribeToBlockHeadersWithChainLocks: 512 * 1024,
+  subscribeToTransactionsWithProofs: 4 * 1024 * 1024,
+  subscribeToMasternodeList: 16 * 1024 * 1024,
+}
+export const DEFAULT_MAX_FRAME_BYTES = 64 * 1024
+const MAX_TRAILER_BYTES = 16 * 1024
+
+/** The byte stream is not valid gRPC-web: too long a frame, a compressed one, or a cut-off one. */
+export class FrameError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'FrameError'
+  }
+}
+
 /** Splits a gRPC-web byte stream into frames. Feed it chunks as they arrive. */
 export class FrameReader {
-  private buffer: Uint8Array = new Uint8Array(0)
+  private chunks: Uint8Array[] = []
+  private buffered = 0
+
+  constructor(private readonly maxFrameBytes = DEFAULT_MAX_FRAME_BYTES) {}
+
+  private take(n: number): Uint8Array {
+    const out = new Uint8Array(n)
+    let at = 0
+    while (at < n) {
+      const head = this.chunks[0]!
+      const use = Math.min(head.length, n - at)
+      out.set(head.subarray(0, use), at)
+      at += use
+      if (use === head.length) this.chunks.shift()
+      else this.chunks[0] = head.subarray(use)
+    }
+    this.buffered -= n
+    return out
+  }
+
+  private peekHeader(): Uint8Array {
+    const out = new Uint8Array(5)
+    let at = 0
+    for (const chunk of this.chunks) {
+      const use = Math.min(chunk.length, 5 - at)
+      out.set(chunk.subarray(0, use), at)
+      at += use
+      if (at === 5) break
+    }
+    return out
+  }
 
   push(chunk: Uint8Array): GrpcFrame[] {
-    if (this.buffer.length === 0) this.buffer = chunk
-    else {
-      const joined = new Uint8Array(this.buffer.length + chunk.length)
-      joined.set(this.buffer)
-      joined.set(chunk, this.buffer.length)
-      this.buffer = joined
+    if (chunk.length > 0) {
+      this.chunks.push(chunk)
+      this.buffered += chunk.length
     }
     const frames: GrpcFrame[] = []
-    for (;;) {
-      if (this.buffer.length < 5) break
-      const view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.length)
-      const length = view.getUint32(1)
-      if (this.buffer.length < 5 + length) break
-      const flag = this.buffer[0]!
-      const body = this.buffer.subarray(5, 5 + length)
+    while (this.buffered >= 5) {
+      const header = this.peekHeader()
+      const flag = header[0]!
+      const length = new DataView(header.buffer).getUint32(1)
+      const isTrailer = (flag & 0x80) !== 0
+      if (flag & 0x7f) throw new FrameError('The DAPI reply is compressed')
+      if (length > (isTrailer ? MAX_TRAILER_BYTES : this.maxFrameBytes)) {
+        throw new FrameError(`The DAPI reply declares a ${length}-byte frame`)
+      }
+      if (this.buffered < 5 + length) break
+      this.take(5)
+      const body = this.take(length)
       frames.push(
-        flag & 0x80
+        isTrailer
           ? { kind: 'trailers', text: new TextDecoder().decode(body) }
-          : { kind: 'message', data: body.slice() },
+          : { kind: 'message', data: body },
       )
-      this.buffer = this.buffer.subarray(5 + length)
     }
     return frames
   }
 
   /** True when bytes of an unfinished frame are still buffered. */
   get pending(): boolean {
-    return this.buffer.length > 0
+    return this.buffered > 0
   }
 }
 
@@ -127,7 +187,7 @@ export function grpcError(
       kind: 'rate-limited',
       message,
       status: status.code,
-      retryAfterMs: (rate.resetS ?? DEFAULT_RESET_S) * 1000,
+      retryAfterMs: clampResetS(rate.resetS ?? DEFAULT_RESET_S) * 1000,
       node,
     })
   }
@@ -148,6 +208,14 @@ export interface CallInit {
   request: Uint8Array
   signal?: AbortSignal
   fetch?: FetchLike
+  /** How long the node has to send response headers. */
+  headersTimeoutMs?: number
+  /** Once headers are in: the longest silence between chunks of the body. */
+  idleTimeoutMs?: number
+  /** Once headers are in: the longest the whole body may take, however steadily it flows. */
+  deadlineMs?: number
+  /** Called when the response headers arrive. */
+  onHeaders?: () => void
 }
 
 export interface OpenCall {
@@ -167,7 +235,7 @@ function httpError(res: Response, node: string, rate: RateLimitHeaders): SourceE
       kind: 'rate-limited',
       message: 'DAPI node is rate limiting this client',
       status: 429,
-      retryAfterMs: (rate.resetS ?? DEFAULT_RESET_S) * 1000,
+      retryAfterMs: clampResetS(rate.resetS ?? DEFAULT_RESET_S) * 1000,
       node,
     })
   }
@@ -180,10 +248,41 @@ function httpError(res: Response, node: string, rate: RateLimitHeaders): SourceE
   })
 }
 
+/** A stalled call is the node's fault; a body that was still flowing when the deadline fell is the link's. */
+const DEADLINE_ERROR = 'DeadlineError'
+
 /** Sends one gRPC-web call. Resolves once the response headers are in; the body is read through `messages`. */
 export async function openCall(init: CallInit): Promise<OpenCall> {
   const node = nodeOf(init.baseUrl)
   const doFetch = init.fetch ?? ((input, opts) => fetch(input, opts))
+  const inner = new AbortController()
+  const unlink = linkSignal(init.signal, inner)
+  const timers: {
+    headers?: ReturnType<typeof setTimeout>
+    idle?: ReturnType<typeof setTimeout>
+    deadline?: ReturnType<typeof setTimeout>
+  } = {}
+  const clearTimers = () => {
+    clearTimeout(timers.headers)
+    clearTimeout(timers.idle)
+    clearTimeout(timers.deadline)
+  }
+  inner.signal.addEventListener('abort', clearTimers, { once: true })
+  const timeOut = (name: string) => () =>
+    inner.abort(new DOMException('The DAPI node was too slow', name))
+  if (init.headersTimeoutMs !== undefined) {
+    timers.headers = setTimeout(timeOut('TimeoutError'), init.headersTimeoutMs)
+  }
+  const armIdle = () => {
+    if (init.idleTimeoutMs === undefined) return
+    clearTimeout(timers.idle)
+    timers.idle = setTimeout(timeOut('TimeoutError'), init.idleTimeoutMs)
+  }
+  const fail = (cause: unknown): never => {
+    clearTimers()
+    unlink()
+    throw fetchFailure(cause, node, inner.signal)
+  }
   let res: Response
   try {
     res = await doFetch(`${init.baseUrl}/${CORE_SERVICE}/${init.method}`, {
@@ -194,22 +293,40 @@ export async function openCall(init: CallInit): Promise<OpenCall> {
         accept: 'application/grpc-web+proto',
       },
       body: frameMessage(init.request),
-      signal: init.signal,
+      signal: inner.signal,
       credentials: 'omit',
       cache: 'no-store',
       referrerPolicy: 'no-referrer',
     })
   } catch (cause) {
-    throw fetchFailure(cause, node, init.signal)
+    return fail(cause)
   }
+  clearTimeout(timers.headers)
+  init.onHeaders?.()
   const rate = rateLimitOf(res.headers)
-  if (!res.ok) throw httpError(res, node, rate)
+  const finish = () => {
+    clearTimers()
+    unlink()
+  }
+  if (!res.ok) {
+    finish()
+    void res.body?.cancel().catch(() => undefined)
+    throw httpError(res, node, rate)
+  }
   const headerStatus = statusOf(res.headers)
-  if (headerStatus && headerStatus.code !== 0) throw grpcError(headerStatus, node, rate)
+  if (headerStatus && headerStatus.code !== 0) {
+    finish()
+    void res.body?.cancel().catch(() => undefined)
+    throw grpcError(headerStatus, node, rate)
+  }
+  if (init.deadlineMs !== undefined)
+    timers.deadline = setTimeout(timeOut(DEADLINE_ERROR), init.deadlineMs)
+  armIdle()
 
   async function* messages(): AsyncGenerator<Uint8Array> {
-    const reader = new FrameReader()
+    const reader = new FrameReader(MAX_FRAME_BYTES[init.method] ?? DEFAULT_MAX_FRAME_BYTES)
     let trailerStatus: GrpcStatus | undefined
+    let sawTrailer = false
     if (res.body) {
       const stream = res.body.getReader()
       try {
@@ -218,17 +335,44 @@ export async function openCall(init: CallInit): Promise<OpenCall> {
           try {
             chunk = await stream.read()
           } catch (cause) {
-            throw fetchFailure(cause, node, init.signal)
+            throw fetchFailure(cause, node, inner.signal, 'body')
           }
           if (chunk.done) break
-          for (const frame of reader.push(chunk.value)) {
+          armIdle()
+          let frames: GrpcFrame[]
+          try {
+            frames = reader.push(chunk.value)
+          } catch (cause) {
+            throw new SourceError({
+              source: 'dapi',
+              kind: 'invalid-response',
+              message:
+                cause instanceof Error ? cause.message : 'The DAPI reply is not valid gRPC-web',
+              node,
+              cause,
+            })
+          }
+          for (const frame of frames) {
+            if (sawTrailer) continue
             if (frame.kind === 'message') yield frame.data
-            else trailerStatus = statusOf(parseTrailers(frame.text))
+            else {
+              sawTrailer = true
+              trailerStatus = statusOf(parseTrailers(frame.text))
+            }
           }
         }
       } finally {
+        finish()
         stream.cancel().catch(() => undefined)
       }
+    } else finish()
+    if (reader.pending) {
+      throw new SourceError({
+        source: 'dapi',
+        kind: 'invalid-response',
+        message: 'The DAPI reply ended in the middle of a frame',
+        node,
+      })
     }
     if (trailerStatus) {
       if (trailerStatus.code !== 0) throw grpcError(trailerStatus, node, rate)
@@ -239,21 +383,39 @@ export async function openCall(init: CallInit): Promise<OpenCall> {
     throw new SourceError({
       source: 'dapi',
       kind: 'network',
-      message: 'The DAPI stream ended without a status',
+      message: ENDED_WITHOUT_STATUS,
       node,
     })
   }
   return { rate, messages: messages() }
 }
 
-/** One request, exactly one response message. */
+export const ENDED_WITHOUT_STATUS = 'The DAPI stream ended without a status'
+
+/**
+ * One request, exactly one response message. A reply that is cut off, or ends without a status, came from a node that
+ * answered and then failed, not from one that could not be reached.
+ */
 export async function unaryCall(
   init: CallInit,
 ): Promise<{ response: Uint8Array; rate: RateLimitHeaders }> {
   const call = await openCall(init)
   let response: Uint8Array | undefined
-  for await (const message of call.messages) {
-    response ??= message
+  try {
+    for await (const message of call.messages) {
+      response ??= message
+    }
+  } catch (e) {
+    if (isSourceError(e) && e.kind === 'network') {
+      throw new SourceError({
+        source: 'dapi',
+        kind: 'invalid-response',
+        message: 'The DAPI reply was cut short',
+        node: e.node,
+        cause: e,
+      })
+    }
+    throw e
   }
   if (response === undefined) {
     throw new SourceError({
@@ -266,23 +428,42 @@ export async function unaryCall(
   return { response, rate: call.rate }
 }
 
-function fetchFailure(cause: unknown, node: string, signal?: AbortSignal): SourceError {
+function linkSignal(signal: AbortSignal | undefined, ctrl: AbortController): () => void {
+  if (!signal) return () => undefined
+  if (signal.aborted) {
+    ctrl.abort(signal.reason)
+    return () => undefined
+  }
+  const onAbort = () => ctrl.abort(signal.reason)
+  signal.addEventListener('abort', onAbort, { once: true })
+  return () => signal.removeEventListener('abort', onAbort)
+}
+
+function fetchFailure(
+  cause: unknown,
+  node: string,
+  signal?: AbortSignal,
+  phase: 'headers' | 'body' = 'headers',
+): SourceError {
   if (cause instanceof SourceError) return cause
   if (signal?.aborted) {
     const reason: unknown = signal.reason
-    const timedOut = (reason as { name?: string } | undefined)?.name === 'TimeoutError'
+    const name = (reason as { name?: string } | undefined)?.name
+    const timedOut = name === 'TimeoutError' || name === DEADLINE_ERROR
     return new SourceError({
       source: 'dapi',
       kind: timedOut ? 'timeout' : 'aborted',
       message: timedOut ? 'The DAPI node did not answer in time' : 'The request was aborted',
       node,
       cause,
+      ...(name === DEADLINE_ERROR ? { bytesFlowing: true } : {}),
     })
   }
   return new SourceError({
     source: 'dapi',
     kind: 'network',
-    message: 'The DAPI node could not be reached',
+    message:
+      phase === 'body' ? 'The DAPI reply was cut short' : 'The DAPI node could not be reached',
     node,
     cause,
   })

@@ -4,18 +4,21 @@ import { DEGRADE_AFTER_FAILURES, sleep, SharedStream, type StreamState } from '.
 import type { Sourced } from '../envelope'
 import { healthRegistry } from '../health'
 import { dapiKeys, viewKeys } from '../query'
-import type { NetworkId } from '@/lib/network'
+import { onNetworkReset } from '../query/network-cache'
+import { isDevnet, type NetworkId } from '@/lib/network'
 import { parseChainLock } from '@/lib/core/chainlock'
 import { parseHeader } from '@/lib/core/header'
 import { core } from './client'
 import { coreDecoder } from './decode'
-import type { DecodedIsLock, DecodedTx } from './types'
+import type { CoreClientHooks, DecodedIsLock, DecodedTx } from './types'
 
 const POLL_MS = 30_000
 const STREAM_RETRY_MS = 120_000
 const SILENT_TX_MS = 60_000
 const STALE_AFTER_MS = 20 * 60_000
 const LAG_TICK_MS = 60_000
+/** Blocks come every 2.5 minutes on average; a connection silent for this long has died without telling anyone. */
+const IDLE_ABORT_MS = 6 * 60_000
 
 /**
  * `live`: the header stream is open. `reconnecting`: it dropped and is being reopened. `polling`: it failed three
@@ -52,6 +55,8 @@ export interface CoreLiveDeps {
   decodeIsLock: (bytes: Uint8Array) => Promise<DecodedIsLock>
   now: () => number
   health: Pick<typeof healthRegistry, 'setLag'>
+  /** Told of every tip and ChainLock the stream delivers, so the client does not ask for them again. */
+  observe?: Pick<CoreClientHooks, 'observeTip' | 'observeChainLock'>
 }
 
 const defaultDeps: CoreLiveDeps = {
@@ -62,6 +67,7 @@ const defaultDeps: CoreLiveDeps = {
   decodeIsLock: (bytes) => coreDecoder.isLock(bytes),
   now: Date.now,
   health: healthRegistry,
+  observe: core,
 }
 
 function stamp<T extends { height: number }>(data: T, now: number, node?: string): Sourced<T> {
@@ -132,6 +138,7 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
     f.lastHeight = Math.max(f.lastHeight ?? -1, tip.height)
     f.lastHeaderAt = now
     deps.health.setLag(net, 'dapi', undefined)
+    deps.observe?.observeTip(net, tip)
     const stamped = stamp(tip, now, node)
     for (const qc of f.clients) {
       qc.setQueryData(dapiKeys(net, 'tip'), stamped)
@@ -147,6 +154,7 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
     node?: string,
   ): void {
     const now = deps.now()
+    deps.observe?.observeChainLock(net, lock, node)
     const stamped = stamp(lock, now, node)
     for (const qc of f.clients) qc.setQueryData(dapiKeys(net, 'chainlock'), stamped)
     setStatus(f, { lastEventAt: now })
@@ -183,35 +191,53 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
       async session({ signal, avoidNode, markLive }) {
         // A reconnect resumes at the last height seen: the node resends that header, and nothing between is missed.
         const start = f.lastHeight ?? (await deps.tip(net, signal)).data.height
+        const own = new AbortController()
+        const onAbort = () => own.abort()
+        signal.addEventListener('abort', onAbort, { once: true })
+        let idle: ReturnType<typeof setTimeout> | undefined
+        const rearm = () => {
+          clearTimeout(idle)
+          idle = setTimeout(() => own.abort(), IDLE_ABORT_MS)
+          ;(idle as { unref?: () => void }).unref?.()
+        }
         const stream = rpc().headerStream(
           net,
           { fromHeight: start, count: 0 },
-          { signal, avoidNode },
+          { signal: own.signal, avoidNode },
         )
         let next = start
         let live = false
-        for await (const event of stream.events) {
-          if (!live) {
-            live = true
-            markLive(stream.node)
-            setStatus(f, { node: stream.node })
+        // A devnet can go hours between blocks; only a network with a steady rhythm can tell a dead connection from a quiet one.
+        const watch = !isDevnet(net)
+        if (watch) rearm()
+        try {
+          for await (const event of stream.events) {
+            if (watch) rearm()
+            if (!live) {
+              live = true
+              markLive(stream.node)
+              setStatus(f, { node: stream.node })
+            }
+            if (event.kind === 'chainLock') {
+              publishChainLock(net, f, parseChainLock(event.chainLock), stream.node)
+              continue
+            }
+            const parsed = event.headers.map(parseHeader)
+            const last = event.headers.length - 1
+            if (last < 0) continue
+            const lastHeader = event.headers[last]!
+            const hash = await deps.headerHash(lastHeader, net)
+            next += event.headers.length
+            publishTip(
+              net,
+              f,
+              { height: next - 1, hash, time: parsed[last]!.time * 1000 },
+              stream.node,
+            )
           }
-          if (event.kind === 'chainLock') {
-            publishChainLock(net, f, parseChainLock(event.chainLock), stream.node)
-            continue
-          }
-          const parsed = event.headers.map(parseHeader)
-          const last = event.headers.length - 1
-          if (last < 0) continue
-          const lastHeader = event.headers[last]!
-          const hash = await deps.headerHash(lastHeader, net)
-          next += event.headers.length
-          publishTip(
-            net,
-            f,
-            { height: next - 1, hash, time: parsed[last]!.time * 1000 },
-            stream.node,
-          )
+        } finally {
+          clearTimeout(idle)
+          signal.removeEventListener('abort', onAbort)
         }
       },
     })
@@ -367,6 +393,15 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
       listeners.add(cb)
       return () => listeners.delete(cb)
     },
+
+    /** Forgets where the tip stream resumes for a network, after the network has been reset. */
+    forget(net: NetworkId): void {
+      const f = tips.get(net)
+      if (f) {
+        f.lastHeight = undefined
+        f.lastHeaderAt = undefined
+      }
+    },
   }
 }
 
@@ -374,3 +409,4 @@ const IDLE: LiveStatus = { state: 'idle', since: 0 }
 const IDLE_TX: LiveTxStatus = { state: 'idle', fallbackHint: false }
 
 export const coreLive = createCoreLive()
+onNetworkReset((net) => coreLive.forget(net))

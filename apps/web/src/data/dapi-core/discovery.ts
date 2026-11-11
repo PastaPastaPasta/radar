@@ -137,13 +137,14 @@ export async function fetchNodeList(net: NetworkId, deps: DiscoveryDeps): Promis
 export interface Discovered {
   nodes: NodeInfo[]
   source: DiscoverySource
-  /** Resolves with the live list when the first answer came from a seed or an old cache; never rejects. */
+  /** Resolves with the live list when the first answer came from a seed or a stale cache; never rejects. */
   refreshed?: Promise<NodeInfo[] | undefined>
 }
 
 /**
- * Cache first (1 h), else the bundled seeds right away with a live refresh behind them, so the first call
- * never waits for the 170 KB list. Devnets use their configured addresses and refresh nothing.
+ * A list from the last hour, else an older one or the bundled seeds right away with a live refresh behind them, so
+ * the first call never waits for the 170 KB list; the pool swaps to the live list when it lands. Devnets use their
+ * configured addresses and refresh nothing.
  */
 export async function discoverNodes(net: NetworkId, deps: DiscoveryDeps): Promise<Discovered> {
   if (isDevnet(net)) {
@@ -168,11 +169,12 @@ export async function discoverNodes(net: NetworkId, deps: DiscoveryDeps): Promis
     },
     () => undefined,
   )
+  // A list from an earlier visit spreads the load better than 30 bundled addresses, so it goes first.
+  if (cached && cached.nodes.length > 0) return { nodes: cached.nodes, source: 'cache', refreshed }
   const seeds = await loadSeeds(net)
   if (seeds.length > 0) return { nodes: seeds, source: 'seed', refreshed }
   const live = await refreshed
   if (live) return { nodes: live, source: 'live' }
-  if (cached && cached.nodes.length > 0) return { nodes: cached.nodes, source: 'cache' }
   throw new SourceError({
     source: 'dapi',
     kind: 'unavailable',
