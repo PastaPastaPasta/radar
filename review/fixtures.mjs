@@ -317,7 +317,16 @@ export function committedSpecialTxs(network) {
   return loadFixtures(network)?.entities?.special_txs
 }
 
-export async function pickFixtures(network, specialTxs = committedSpecialTxs(network)) {
+/** An address that receives a transaction every few minutes, so IN-06's arrival notice can be seen; chosen by hand, carried over. */
+export function committedBusyAddress(network) {
+  return loadFixtures(network)?.entities?.busy_address
+}
+
+export async function pickFixtures(
+  network,
+  specialTxs = committedSpecialTxs(network),
+  busyAddress = committedBusyAddress(network),
+) {
   const src = NETWORKS[network]
   const entities = {}
   const log = []
@@ -327,6 +336,7 @@ export async function pickFixtures(network, specialTxs = committedSpecialTxs(net
   await pickPlatform(src, entities, log)
   entities.signed_message = signedMessageEntity(network)
   if (specialTxs) entities.special_txs = specialTxs
+  if (busyAddress) entities.busy_address = busyAddress
   const expected = [
     'tip',
     'block_recent',
@@ -362,6 +372,7 @@ export async function pickFixtures(network, specialTxs = committedSpecialTxs(net
     'epoch_current',
     'epoch_final',
     'special_txs',
+    ...(network === 'mainnet' ? ['busy_address'] : []),
     ...Object.keys(PE_TX_TYPES),
   ]
   return {

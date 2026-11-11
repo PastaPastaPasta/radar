@@ -1189,7 +1189,7 @@ stories:
     group: 'Insight (IN): compare with insight.dash.org / insight.testnet.networks.dash.org'
     shard: S5
     story: As a Dash user I want an address
-    acceptance: '`/address/{addr}`: balance, total received and sent, unconfirmed balance, transaction count, QR code, paged transactions, and a notice when a new transaction arrives'
+    acceptance: '`/address/{addr}`: balance, total received and sent, unconfirmed balance, transaction count, QR code, paged transactions, and a notice when a new transaction arrives. {address_history} is quiet; to see the notice, keep `/address/{busy_address}` open, which receives a transaction every few minutes, until it appears'
     radar_start: /address/{address_history}
     prod:
       - https://insight.dash.org/insight/address/{address_history}
