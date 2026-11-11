@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
 import type { Resolver } from '../types'
 
@@ -18,11 +19,11 @@ export const dapiTx: Resolver = {
       {
         kind: 'tx',
         id: tx.txid,
-        title: `Transaction ${tx.txid.slice(0, 10)}…${tx.txid.slice(-6)}`,
+        title: t`Transaction ${tx.txid.slice(0, 10)}…${tx.txid.slice(-6)}`,
         subtitle:
           height === undefined
-            ? 'Core transaction, unconfirmed'
-            : `Core transaction in block ${INT.format(height)}`,
+            ? t`Core transaction, unconfirmed`
+            : t`Core transaction in block ${INT.format(height)}`,
         href: { to: '/tx/$txid', params: { txid: tx.txid } },
         stamp: stampOf(found),
         rank: 100,

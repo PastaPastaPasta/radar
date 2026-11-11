@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { useAllSourceHealth } from '@/data/health'
@@ -8,7 +9,7 @@ import { copyText } from './clipboard'
 import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
 import { useNow } from './hooks'
-import { SOURCE_NAME } from './source-labels'
+import { sourceName } from './source-labels'
 import { Empty, ErrorState, Skeleton, SourceLine } from './states'
 import type { Layer, LoadState } from './types'
 
@@ -112,8 +113,7 @@ export function Card({
         <p className="rx-down__msg" role="status">
           <Icon name="alert" />
           <span>
-            {SOURCE_NAME[down.source]} isn't answering · showing data from{' '}
-            {formatRelative(clampSkew(down.fetchedAt, now), now)}
+            {t`${sourceName(down.source)} isn't answering · showing data from ${formatRelative(clampSkew(down.fetchedAt, now), now)}`}
           </span>
           {onRetry ? (
             <button type="button" className="dh-btn dh-btn--sm" onClick={onRetry}>

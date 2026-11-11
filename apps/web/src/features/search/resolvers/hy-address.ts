@@ -1,5 +1,5 @@
+import { plural, t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
-import { formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { isDevnet } from '@/lib/network'
 import type { Resolver } from '../types'
@@ -26,8 +26,8 @@ export const hyAddress: Resolver = {
         id: c.normalized,
         title: c.normalized,
         subtitle: a
-          ? `Core address · ${balance ?? ''} · ${formatInt(a.txCount)} ${a.txCount === 1 ? 'transaction' : 'transactions'}`
-          : 'Core address · no activity seen',
+          ? t`Core address · ${balance ?? ''} · ${plural(a.txCount, { one: '# transaction', other: '# transactions' })}`
+          : t`Core address · no activity seen`,
         href: { to: '/address/$address', params: { address: c.normalized } },
         stamp: stampOf(found),
         // One above the local address hit so this richer hit replaces it: ties keep the first.

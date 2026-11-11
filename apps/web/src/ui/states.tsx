@@ -5,7 +5,7 @@ import { cx } from './cx'
 import { Icon, type IconName } from './icon'
 import { useNow } from './hooks'
 import { openProofInspector } from './proof'
-import { SOURCE_NAME, sourceView } from './source-labels'
+import { sourceName, sourceView } from './source-labels'
 
 export interface SourceLineProps {
   stamp: SourceStamp | SourceStamp[]
@@ -242,7 +242,7 @@ interface ErrorShape {
 export function describeError(error: unknown, source?: SourceId): { title: string; body: string } {
   const e: ErrorShape = typeof error === 'object' && error !== null ? error : {}
   const from = e.source ?? source
-  const name = from ? SOURCE_NAME[from] : undefined
+  const name = from ? sourceName(from) : undefined
   const rest = 'The rest of this page still works.'
   switch (e.kind) {
     case 'rate-limited':

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import type { SourceId, SourceStamp } from '@/data/envelope'
 import type { HealthState, SourceHealth } from '@/data/health'
 import { clampSkew, formatRelative, formatIsoUtc } from '@/lib/format'
@@ -30,14 +31,23 @@ export const STALE_AGE_MS: Record<SourceId, number> = {
   local: Infinity,
 }
 
-export const SOURCE_NAME: Record<SourceId, string> = {
-  sdk: 'DAPI',
-  dapi: 'DAPI',
-  radar: 'Radar',
-  pe: 'Platform Explorer',
-  hyphen: 'Hyphen',
-  rate: 'The price feed',
-  local: 'Your browser',
+/** What a source is called in a sentence. Product names stay as they are; the generic ones are translated. */
+export function sourceName(source: SourceId): string {
+  switch (source) {
+    case 'sdk':
+    case 'dapi':
+      return 'DAPI'
+    case 'radar':
+      return 'Radar'
+    case 'pe':
+      return 'Platform Explorer'
+    case 'hyphen':
+      return 'Hyphen'
+    case 'rate':
+      return t`The price feed`
+    case 'local':
+      return t`Your browser`
+  }
 }
 
 const ICON: Record<SourceId, IconName> = {
@@ -52,35 +62,35 @@ const ICON: Record<SourceId, IconName> = {
 
 function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boolean } {
   if (stamp.fallback === 'sdk-cold') {
-    return { label: 'Indexed by Platform Explorer · checking…', icon: 'index', showAge: false }
+    return { label: t`Indexed by Platform Explorer · checking…`, icon: 'index', showAge: false }
   }
   switch (stamp.source) {
     case 'sdk':
       return stamp.proved
-        ? { label: 'Proof-checked', icon: 'proof', showAge: true }
-        : { label: 'Served by DAPI · not proved', icon: 'dapi', showAge: false }
+        ? { label: t`Proof-checked`, icon: 'proof', showAge: true }
+        : { label: t`Served by DAPI · not proved`, icon: 'dapi', showAge: false }
     case 'dapi':
-      return { label: 'Served by DAPI', icon: ICON.dapi, showAge: true }
+      return { label: t`Served by DAPI`, icon: ICON.dapi, showAge: true }
     case 'radar':
       return {
-        label: stamp.asOfFetched ? 'Fetched from Radar' : 'Crawled by Radar',
+        label: stamp.asOfFetched ? t`Fetched from Radar` : t`Crawled by Radar`,
         icon: ICON.radar,
         showAge: true,
       }
     case 'pe':
-      return { label: 'Indexed by Platform Explorer', icon: ICON.pe, showAge: true }
+      return { label: t`Indexed by Platform Explorer`, icon: ICON.pe, showAge: true }
     case 'hyphen':
       if (stamp.fallback === 'dapi-down') {
-        return { label: 'Indexed by Hyphen · DAPI unreachable', icon: ICON.hyphen, showAge: false }
+        return { label: t`Indexed by Hyphen · DAPI unreachable`, icon: ICON.hyphen, showAge: false }
       }
       if (stamp.fallback === 'dapi-budget') {
-        return { label: 'Indexed by Hyphen · DAPI busy', icon: ICON.hyphen, showAge: false }
+        return { label: t`Indexed by Hyphen · DAPI busy`, icon: ICON.hyphen, showAge: false }
       }
-      return { label: 'Indexed by Hyphen', icon: ICON.hyphen, showAge: true }
+      return { label: t`Indexed by Hyphen`, icon: ICON.hyphen, showAge: true }
     case 'rate':
-      return { label: 'Price via Platform Explorer', icon: ICON.rate, showAge: true }
+      return { label: t`Price via Platform Explorer`, icon: ICON.rate, showAge: true }
     case 'local':
-      return { label: 'Computed in your browser', icon: ICON.local, showAge: false }
+      return { label: t`Computed in your browser`, icon: ICON.local, showAge: false }
   }
 }
 
@@ -119,9 +129,9 @@ export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number
 
   const proof = stamp.source === 'sdk' && stamp.proved && !stamp.fallback
   const title = [
-    stamp.node ? `Answered by ${stamp.node}` : undefined,
+    stamp.node ? t`Answered by ${stamp.node}` : undefined,
     health.lag?.detail,
-    `As of ${formatIsoUtc(stamp.asOf)}`,
+    t`As of ${formatIsoUtc(stamp.asOf)}`,
   ]
     .filter(Boolean)
     .join(' · ')
@@ -129,10 +139,10 @@ export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number
   if (down) {
     const last = health.lastOkAt ?? stamp.fetchedAt
     return {
-      label: `${SOURCE_NAME[stamp.source]} isn't answering`,
+      label: t`${sourceName(stamp.source)} isn't answering`,
       icon: b.icon,
       variant: 'down',
-      age: `last good ${formatRelative(clampSkew(last, now), now)}`,
+      age: t`last good ${formatRelative(clampSkew(last, now), now)}`,
       ageTitle: formatIsoUtc(last),
       title,
       state: 'down',

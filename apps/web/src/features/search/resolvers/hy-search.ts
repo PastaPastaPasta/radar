@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import type { HySearch } from '@/data/hyphen/schemas'
 import { isDevnet } from '@/lib/network'
@@ -28,7 +29,7 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
         kind: 'address',
         id: found.address,
         title: found.address,
-        subtitle: 'Core address',
+        subtitle: t`Core address`,
         href: { to: '/address/$address', params: { address: found.address } },
         stamp,
         rank,
@@ -39,8 +40,8 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
       return {
         kind: 'block',
         id: hash,
-        title: `Block ${short(hash)}`,
-        subtitle: 'Core block',
+        title: t`Block ${short(hash)}`,
+        subtitle: t`Core block`,
         href: { to: '/block/$id', params: { id: hash } },
         stamp,
         rank,
@@ -52,8 +53,8 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
       return {
         kind: 'tx',
         id: hash,
-        title: `Transaction ${short(hash)}`,
-        subtitle: 'Core transaction',
+        title: t`Transaction ${short(hash)}`,
+        subtitle: t`Core transaction`,
         href: { to: '/tx/$txid', params: { txid: hash } },
         stamp,
         rank,
@@ -65,8 +66,8 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
       return {
         kind: 'masternode',
         id: hash,
-        title: `Masternode ${short(hash)}`,
-        subtitle: 'Masternode',
+        title: t`Masternode ${short(hash)}`,
+        subtitle: t`Masternode`,
         href: { to: '/mn/$protx', params: { protx: hash } },
         stamp,
         rank,
@@ -76,8 +77,8 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
       return {
         kind: 'proposal',
         id: found.hash,
-        title: `Proposal ${short(found.hash)}`,
-        subtitle: 'Governance proposal',
+        title: t`Proposal ${short(found.hash)}`,
+        subtitle: t`Governance proposal`,
         href: { to: '/governance/$hash', params: { hash: found.hash } },
         stamp,
         rank,

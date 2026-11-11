@@ -1,3 +1,4 @@
+import { plural, t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
 import type { Resolver } from '../types'
 
@@ -21,8 +22,8 @@ export const dapiBlock: Resolver = {
       {
         kind: 'block',
         id,
-        title: `Core block ${INT.format(block.height)}`,
-        subtitle: `${INT.format(block.txs.length)} transactions`,
+        title: t`Core block ${INT.format(block.height)}`,
+        subtitle: plural(block.txs.length, { one: '# transaction', other: '# transactions' }),
         href: { to: '/block/$id', params: { id } },
         stamp: stampOf(found),
         rank: 100,
