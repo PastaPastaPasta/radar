@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { HyProposal } from '@/data/hyphen/schemas'
-import { budgetSplit, govProposalUrl, proposalStatus, safeProposalUrl } from './status'
+import { budgetSplit, proposalStatus, safeProposalUrl } from './status'
 
 const NOW = Date.parse('2026-11-10T12:00:00Z')
 
@@ -51,12 +51,5 @@ describe('proposal status', () => {
     expect(safeProposalUrl('javascript:alert(1)')).toBeUndefined()
     expect(safeProposalUrl('not a url')).toBeUndefined()
     expect(safeProposalUrl(null)).toBeUndefined()
-  })
-
-  it('builds the Governance link from the hash', () => {
-    expect(govProposalUrl('ab12')).toBe('https://gov.dashhq.org/p/h/ab12')
-    expect(govProposalUrl('ab12', 'testnet')).toBe(
-      'https://gov.dashhq.org/p/h/ab12?network=testnet',
-    )
   })
 })

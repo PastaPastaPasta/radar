@@ -24,27 +24,15 @@ const APPS: Record<LinkOutTarget['app'], AppMeta> = {
   insight: { label: 'Insight', icon: 'block', className: '' },
 }
 
-function safeUrl(to: LinkOutTarget): string {
-  try {
-    return linkOutUrl(to)
-  } catch {
-    return '#'
-  }
-}
-
 export function LinkOut({ to, children }: LinkOutProps) {
+  const href = linkOutUrl(to)
+  if (!href) return null
   const app = APPS[to.app]
   const actionApp = to.app === 'gov' || to.app === 'bridge'
   const text = children ?? app.label
   if (actionApp) {
     return (
-      <a
-        className="rx-out"
-        href={safeUrl(to)}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-app={to.app}
-      >
+      <a className="rx-out" href={href} target="_blank" rel="noopener noreferrer" data-app={to.app}>
         <LayerTile layer="neutral" icon={app.icon} size={24} className={app.className} />
         {text}
         <Icon name="ext" className="rx-ext" />
@@ -55,7 +43,7 @@ export function LinkOut({ to, children }: LinkOutProps) {
   return (
     <a
       className="rx-go-ext"
-      href={safeUrl(to)}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       data-app={to.app}
@@ -75,11 +63,13 @@ export interface LinkOutCardProps {
 
 /** The home page's "Act on what you see" card. */
 export function LinkOutCard({ to, title, description }: LinkOutCardProps) {
+  const href = linkOutUrl(to)
+  if (!href) return null
   const app = APPS[to.app]
   return (
     <a
       className="rx-out__card"
-      href={safeUrl(to)}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       data-app={to.app}

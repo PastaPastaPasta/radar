@@ -126,7 +126,7 @@ describe('Masternode page', () => {
   it('links to Governance for voting, on the matching network', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     const link = await screen.findByRole('link', { name: /Vote in Governance/ })
-    expect(link).toHaveAttribute('href', 'https://gov.dashhq.org/')
+    expect(link).toHaveAttribute('href', 'https://gov.dashhq.org/masternodes')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
@@ -140,7 +140,7 @@ describe('Masternode page', () => {
     expect(header).toHaveTextContent('Regular masternode')
     expect(await screen.findByRole('link', { name: /Vote in Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/?network=testnet',
+      'https://gov.dashhq.org/masternodes?network=testnet',
     )
   })
 

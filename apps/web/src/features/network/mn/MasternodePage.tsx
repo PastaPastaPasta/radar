@@ -14,6 +14,7 @@ import {
   Hash,
   Icon,
   KeyValue,
+  LinkOut,
   Nodeprint,
   QueryView,
   Skeleton,
@@ -25,7 +26,6 @@ import { PaymentsCard } from './PaymentsCard'
 import { PlatformCard } from './PlatformCard'
 import { ReadinessCard } from './ReadinessCard'
 import { UptimeCard } from './UptimeCard'
-import { govUrl } from './links'
 import {
   heightOrNull,
   isEvonode,
@@ -216,17 +216,7 @@ function Header({
         )}
       </h1>
       <div className="rx-rec__actions">
-        <a
-          className="rx-out"
-          href={govUrl(net)}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-app="gov"
-        >
-          {t`Vote in Governance`}
-          <Icon name="ext" className="rx-ext" />
-          <span className="dh-sr"> {t`(opens in a new tab)`}</span>
-        </a>
+        <LinkOut to={{ app: 'gov', action: 'masternodes', net }}>{t`Vote in Governance`}</LinkOut>
       </div>
       <div className="rx-rec__meta">
         <span className="rx-dim">{t`ProTx`}</span>

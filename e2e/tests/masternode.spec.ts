@@ -49,7 +49,7 @@ test.describe('masternode page', () => {
     }
     await expect(page.getByRole('link', { name: /Vote in Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/',
+      'https://gov.dashhq.org/masternodes',
     )
   })
 
@@ -83,7 +83,7 @@ test.describe('masternode page', () => {
 
     await expect(page.getByRole('link', { name: /Vote in Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/?network=testnet',
+      'https://gov.dashhq.org/masternodes?network=testnet',
     )
   })
 

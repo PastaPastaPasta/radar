@@ -1,5 +1,4 @@
 import type { HyProposal } from '@/data/hyphen/schemas'
-import type { NetworkId } from '@/lib/network'
 
 export type ProposalStatus = 'funded' | 'passing' | 'failing' | 'ended' | 'invalid'
 
@@ -58,10 +57,4 @@ export function safeProposalUrl(url: string | null | undefined): URL | undefined
   } catch {
     return undefined
   }
-}
-
-/** Governance reads `?network=` like the other dashhq products; mainnet is the absence of it. */
-export function govProposalUrl(hash: string, net: NetworkId = 'mainnet'): string {
-  const base = `https://gov.dashhq.org/p/h/${encodeURIComponent(hash)}`
-  return net === 'mainnet' ? base : `${base}?network=${encodeURIComponent(net)}`
 }

@@ -1005,7 +1005,9 @@ export function LinkOutSection() {
       description="Radar never asks for keys. Actions leave through a secondary link-out."
     >
       <Row>
-        <LinkOut to={{ app: 'gov', action: 'proposal', hash: 'a1b2' }}>Vote in Governance</LinkOut>
+        <LinkOut to={{ app: 'gov', action: 'proposal', hash: 'a1b2', net: 'mainnet' }}>
+          Vote in Governance
+        </LinkOut>
         <LinkOut to={{ app: 'bridge', action: 'identity', id: IDS.identity, net: 'mainnet' }}>
           Manage in Bridge
         </LinkOut>
@@ -1016,7 +1018,7 @@ export function LinkOutSection() {
       <div className="rx-grid mt-3">
         <div className="rx-c6">
           <LinkOutCard
-            to={{ app: 'gov', action: 'proposal', hash: 'a1b2' }}
+            to={{ app: 'gov', action: 'proposal', hash: 'a1b2', net: 'mainnet' }}
             title="Governance"
             description="Vote on proposals and contested usernames."
           />
