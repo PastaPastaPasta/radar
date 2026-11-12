@@ -1,11 +1,36 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { delay, http, HttpResponse } from 'msw'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { core } from '@/data/core/client'
+import { resetHealthRegistry } from '@/data/health'
+import { fixtureBody } from '@/test/fixtures/load'
+import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
 
 const HASH = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
+const OLD = 'e'.repeat(64)
+
+interface HyProposalBody {
+  hash: string
+  name: string
+  votes: { yes: number; no: number; abstain: number }
+  [k: string]: unknown
+}
+
+/** A proposal only Hyphen's older index has: Insight's node no longer holds it. */
+async function olderProposal(): Promise<HyProposalBody> {
+  const page = await fixtureBody<{ value: HyProposalBody[] }>(
+    'hyphen',
+    'testnet',
+    'proposals--limit-100',
+  )
+  return { ...page.value[0]!, hash: OLD, name: 'Older budget request' }
+}
+
+afterEach(() => vi.restoreAllMocks())
 
 describe('Governance page', () => {
   it('shows the budget split and a proposal table with status, votes and amounts @HY-13', async () => {
@@ -61,6 +86,90 @@ describe('Governance page', () => {
   })
 })
 
+describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => {
+  const tip = (time: number) =>
+    vi.spyOn(core, 'tip').mockResolvedValue({
+      source: 'dapi',
+      asOf: 0,
+      fetchedAt: 0,
+      proved: false,
+      data: { height: 1_589_232, hash: '00', time },
+    })
+
+  it('never paints Hyphen’s list before it has learned to read Insight’s, however slow the probe is', async () => {
+    resetHealthRegistry()
+    const status = await fixtureBody<Record<string, unknown>>('hyphen', 'testnet', 'status')
+    server.use(
+      http.get('*/x/hy/testnet/status', async () => {
+        await delay(400)
+        return HttpResponse.json(status)
+      }),
+    )
+    renderAt('/governance?network=testnet')
+    await screen.findByRole('button', { name: 'test' })
+    expect(document.querySelector('#proposals [data-source="insight"]')).not.toBeNull()
+    expect(document.querySelector('#proposals [data-source="hyphen"]')).toBeNull()
+  })
+
+  it('adds the proposals only Hyphen still has after Insight’s, labelled as Hyphen’s and behind', async () => {
+    const old = await olderProposal()
+    const page = await fixtureBody<{ value: unknown[] }>(
+      'hyphen',
+      'testnet',
+      'proposals--limit-100',
+    )
+    server.use(
+      http.get('*/x/hy/testnet/proposals', () =>
+        HttpResponse.json({ ...page, asOfHeight: 1_577_999, value: [...page.value, old] }),
+      ),
+    )
+    renderAt('/governance?network=testnet')
+    const older = await screen.findByRole('button', { name: 'Older budget request' })
+    const group = document.querySelector('[data-earlier-proposals]')!
+    expect(group).toHaveTextContent('Earlier proposals, from Hyphen’s index')
+    const rows = [...document.querySelectorAll<HTMLElement>('[data-proposal]')].map(
+      (r) => r.dataset.proposal,
+    )
+    expect(rows.at(-1)).toBe(OLD)
+    expect(rows).toHaveLength(5)
+    expect(group.compareDocumentPosition(older) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    const card = document.querySelector('#proposals')!
+    expect(card.querySelector('[data-source="insight"]')).not.toBeNull()
+    expect(card.querySelector('[data-source="hyphen"]')).not.toBeNull()
+    expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
+      'Earlier proposals below are from Hyphen’s index',
+    )
+  })
+
+  it('keeps Insight’s own copy when both indexes have a proposal', async () => {
+    renderAt('/governance?network=testnet')
+    await screen.findByRole('button', { name: 'test' })
+    expect(document.querySelectorAll('[data-proposal]')).toHaveLength(4)
+    expect(document.querySelector('[data-earlier-proposals]')).toBeNull()
+  })
+
+  it('says Funded and Passing are worked out from Insight’s vote counts and the superblock time', async () => {
+    tip(1_760_000_000_000)
+    renderAt('/governance?network=testnet')
+    await screen.findByRole('button', { name: 'test' })
+    expect(document.querySelector('[data-derived-funding]')).toHaveTextContent(
+      'worked out by Radar from Insight’s vote counts and the time of the next superblock',
+    )
+  })
+
+  it('shows no proposal as funded, and says why, when the superblock time cannot be found', async () => {
+    vi.spyOn(core, 'tip').mockRejectedValue(new Error('no DAPI'))
+    renderAt('/governance?network=testnet')
+    await screen.findByRole('button', { name: 'test' })
+    expect(document.querySelector('[data-derived-funding]')).toHaveTextContent(
+      'time of the next superblock isn’t known',
+    )
+    for (const row of document.querySelectorAll('[data-proposal]')) {
+      expect(row).not.toHaveTextContent(/\bFunded\b/)
+    }
+  })
+})
+
 describe('Proposal page', () => {
   it('shows the votes, details, vote history and the link to vote @HY-13 @X-11', async () => {
     renderAt(`/governance/${HASH}`)
@@ -81,6 +190,37 @@ describe('Proposal page', () => {
     expect(link).toHaveAttribute('href', expect.stringContaining('network=testnet'))
     await waitFor(() => expect(document.querySelector('[data-source="insight"]')).not.toBeNull())
     expect(document.querySelectorAll('[data-stale-index]')).toHaveLength(1)
+  })
+
+  it('falls back to Hyphen’s index for a proposal Insight no longer holds, and says so @IN-16 @HY-19', async () => {
+    const old = await olderProposal()
+    server.use(
+      http.get(`*/x/hy/testnet/proposal/${OLD}`, () => HttpResponse.json(old)),
+      http.get(`*/x/hy/testnet/proposal/${OLD}/votes`, () =>
+        HttpResponse.json({ asOfHeight: 1_577_999, value: [] }),
+      ),
+    )
+    renderAt(`/governance/${OLD}?network=testnet`)
+    expect(await screen.findByText('Older budget request', { exact: false })).toBeInTheDocument()
+    expect(screen.queryByText('No proposal with this hash on this network.')).toBeNull()
+    await waitFor(() => expect(document.querySelector('[data-source="hyphen"]')).not.toBeNull())
+    expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
+      'This proposal and its vote history are from Hyphen’s index',
+    )
+    expect(document.querySelector('[data-derived-funding]')).toBeNull()
+    expect(screen.getByText('Counted as valid')).toBeInTheDocument()
+  })
+
+  it('says not found on testnet only when neither index has the proposal @IN-16', async () => {
+    server.use(
+      http.get(`*/x/hy/testnet/proposal/${OLD}`, () =>
+        HttpResponse.json({ error: 'not found' }, { status: 404 }),
+      ),
+    )
+    renderAt(`/governance/${OLD}?network=testnet`)
+    expect(
+      await screen.findByText('No proposal with this hash on this network.'),
+    ).toBeInTheDocument()
   })
 
   it('says when no proposal has the hash @HY-13', async () => {

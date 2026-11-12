@@ -23,6 +23,7 @@ import {
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
+import { DerivedFundingNote } from './DerivedFundingNote'
 import { ProposalLinks } from './ProposalLinks'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { netVotes, proposalStatus, totalVotes } from './status'
@@ -46,15 +47,26 @@ function ProposalContent({ hash }: { hash: string }) {
   const insight = index.readFrom === 'insight'
   const hy = useQuery({
     ...governanceQueries.proposal(net, hash),
-    enabled: !insight && !index.pending,
+    enabled: !index.pending && !insight,
   })
   const ins = useQuery({ ...insightGovernanceQueries.proposal(net, hash), enabled: insight })
-  const query = insight ? ins : hy
+  // Insight lists only the proposals its node still holds; one it lacks may be in Hyphen's older index.
+  const missing = insight && ins.isSuccess && ins.data.data === null
+  const older = useQuery({ ...governanceQueries.proposal(net, hash), enabled: missing })
+  const fromInsight = insight && !missing
+  const query = !insight ? hy : missing ? older : ins
   const now = useNow(false)
 
   return (
     <>
-      <StaleIndexNotice scope={t`The vote history below is as of that block, not live.`} />
+      <StaleIndexNotice
+        reads="insight"
+        scope={
+          missing
+            ? t`This proposal and its vote history are from Hyphen’s index, as of that block, not live.`
+            : t`The vote history below is as of that block, not live.`
+        }
+      />
       <QueryView
         query={query}
         skeleton={<Skeleton shape="block" height={160} />}
@@ -78,6 +90,9 @@ function ProposalContent({ hash }: { hash: string }) {
                 <Hash value={p.hash} display="wrap" />
               </header>
               <Card title={t`Votes`} layer="network" source={stamp}>
+                {fromInsight ? (
+                  <DerivedFundingNote proposals={[p]} className="rx-note mb-3" />
+                ) : null}
                 <div className="grid gap-4 sm:grid-cols-4" data-votes>
                   <Stat label={t`Yes`} value={formatInt(p.votes.yes)} tone="good" />
                   <Stat label={t`No`} value={formatInt(p.votes.no)} tone="bad" />
@@ -129,7 +144,7 @@ function ProposalContent({ hash }: { hash: string }) {
                           },
                         ]
                       : []),
-                    ...(insight
+                    ...(fromInsight
                       ? []
                       : [
                           {

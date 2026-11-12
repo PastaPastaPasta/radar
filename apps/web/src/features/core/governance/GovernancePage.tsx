@@ -20,11 +20,12 @@ import {
   Time,
   useNow,
 } from '@/ui'
-import { HyphenGate } from '../hy-shared/HyphenGate'
+import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ProposalLinks } from './ProposalLinks'
+import { DerivedFundingNote } from './DerivedFundingNote'
 import { StatusBadge } from './StatusBadge'
 
 export function GovernancePage() {
@@ -55,21 +56,31 @@ function GovernanceContent() {
   const net = useNetwork()
   const index = useIndexHealth(net)
   const insight = index.readFrom === 'insight'
-  const hy = useQuery({ ...governanceQueries.proposals(net), enabled: !insight && !index.pending })
+  // While Insight is the source, Hyphen's list still holds the proposals Insight's node no longer has.
+  const hy = useQuery({ ...governanceQueries.proposals(net), enabled: !index.pending })
   const ins = useQuery({ ...insightGovernanceQueries.proposals(net), enabled: insight })
   const query = insight ? ins : hy
+  const waiting = index.pending || query.isPending
   const now = useNow(false)
-  const proposals = useMemo(
-    () =>
-      [...(query.data?.data.items ?? [])].sort(
+  const rank = useMemo(
+    () => (list: readonly HyProposal[]) =>
+      [...list].sort(
         (a, b) =>
           ORDER[proposalStatus(a, now)] - ORDER[proposalStatus(b, now)] ||
           netVotes(b) - netVotes(a),
       ),
-    [query.data, now],
+    [now],
   )
+  const data = index.pending ? undefined : query.data
+  const proposals = useMemo(() => rank(data?.data.items ?? []), [data, rank])
+  const earlier = useMemo(() => {
+    if (!insight || !hy.data) return []
+    const current = new Set(proposals.map((p) => p.hash))
+    return rank(hy.data.data.items.filter((p) => !current.has(p.hash)))
+  }, [insight, hy.data, proposals, rank])
   const split = useMemo(() => budgetSplit(proposals, now), [proposals, now])
-  const stamp = query.data ? stampOf(query.data) : undefined
+  const stamp = data ? stampOf(data) : undefined
+  const stamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
 
   const option: EChartsOption = {
     tooltip: {
@@ -93,12 +104,20 @@ function GovernanceContent() {
 
   return (
     <>
+      <StaleIndexNotice
+        reads="insight"
+        scope={
+          earlier.length > 0
+            ? t`Earlier proposals below are from Hyphen’s index, as of that block, not live.`
+            : undefined
+        }
+      />
       <Card
         title={t`Budget`}
         subtitle={t`Open proposals by what their payment would be`}
         layer="network"
         source={stamp}
-        state={query.isPending ? 'loading' : 'ready'}
+        state={waiting ? 'loading' : 'ready'}
       >
         {query.isError && !query.data ? (
           <ErrorState error={query.error} onRetry={() => void query.refetch()} />
@@ -108,7 +127,7 @@ function GovernanceContent() {
               option={option}
               height={220}
               label={t`Requested payments of open proposals: funded, passing and not passing`}
-              loading={query.isPending}
+              loading={waiting}
               table={{
                 columns: [t`Status`, t`Proposals`, t`Requested`],
                 rows: (['funded', 'passing', 'failing'] as const).map((s) => [
@@ -146,32 +165,91 @@ function GovernanceContent() {
 
       <Card
         title={t`Proposals`}
-        subtitle={
-          query.data
-            ? t`${formatInt(query.data.data.total ?? proposals.length)} proposals`
-            : undefined
-        }
+        subtitle={data ? t`${formatInt(data.data.total ?? proposals.length)} proposals` : undefined}
         layer="network"
         id="proposals"
         padding="flush"
-        source={stamp}
+        source={stamps}
       >
-        {query.isPending ? (
+        {insight && data ? <DerivedFundingNote proposals={proposals} /> : null}
+        {waiting ? (
           <Skeleton shape="row" count={6} />
-        ) : proposals.length === 0 ? (
+        ) : proposals.length === 0 && earlier.length === 0 ? (
           <Empty kind="none-yet" title={t`No proposals on this network.`} />
         ) : (
-          <ProposalTable proposals={proposals} now={now} />
+          <ProposalTable proposals={proposals} earlier={earlier} now={now} />
         )}
+        {insight && hy.isError && !hy.data ? (
+          <p role="status" className="rx-note p-3" data-earlier-missing>
+            {t`Earlier proposals could not be read from Hyphen.`}
+          </p>
+        ) : null}
       </Card>
     </>
   )
 }
 
-function ProposalTable({ proposals, now }: { proposals: HyProposal[]; now: number }) {
+function ProposalTable({
+  proposals,
+  earlier,
+  now,
+}: {
+  proposals: HyProposal[]
+  earlier: HyProposal[]
+  now: number
+}) {
   const { t } = useLingui()
   const [open, setOpen] = useState<string | undefined>(undefined)
   const base = useId()
+  const row = (p: HyProposal) => {
+    const expanded = open === p.hash
+    const panel = `${base}-${p.hash}`
+    return (
+      <tbody key={p.hash} data-proposal={p.hash}>
+        <tr>
+          <td>
+            <button
+              type="button"
+              className="dh-btn dh-btn--link"
+              style={{ minBlockSize: 24, minInlineSize: 24 }}
+              aria-expanded={expanded}
+              aria-controls={panel}
+              onClick={() => {
+                setOpen(expanded ? undefined : p.hash)
+              }}
+            >
+              {p.name}
+            </button>
+          </td>
+          <td>
+            <StatusBadge status={proposalStatus(p, now)} />
+          </td>
+          <td className="r rx-num">{formatInt(p.votes.yes)}</td>
+          <td className="r rx-num">{formatInt(p.votes.no)}</td>
+          <td className="r rx-num">{formatInt(p.votes.abstain)}</td>
+          <td className="r rx-num">
+            {formatInt(netVotes(p))}
+            {p.fundingThreshold == null ? null : (
+              <span className="text-sm"> / {formatInt(p.fundingThreshold)}</span>
+            )}
+          </td>
+          <td className="r">
+            <Amount value={p.paymentAmount} kind="duffs" />
+          </td>
+          <td>
+            <Time ms={p.endTime} mode="absolute" />
+          </td>
+        </tr>
+        {expanded ? (
+          <tr id={panel} data-proposal-details>
+            <td colSpan={8}>
+              <ProposalDetails p={p} />
+            </td>
+          </tr>
+        ) : null}
+      </tbody>
+    )
+  }
   return (
     <div className="rx-tablewrap rx-tablewrap--scroll">
       <div className="rx-tablescroll">
@@ -189,55 +267,17 @@ function ProposalTable({ proposals, now }: { proposals: HyProposal[]; now: numbe
               <th scope="col">{t`Ends`}</th>
             </tr>
           </thead>
-          {proposals.map((p) => {
-            const expanded = open === p.hash
-            const panel = `${base}-${p.hash}`
-            return (
-              <tbody key={p.hash} data-proposal={p.hash}>
-                <tr>
-                  <td>
-                    <button
-                      type="button"
-                      className="dh-btn dh-btn--link"
-                      style={{ minBlockSize: 24, minInlineSize: 24 }}
-                      aria-expanded={expanded}
-                      aria-controls={panel}
-                      onClick={() => {
-                        setOpen(expanded ? undefined : p.hash)
-                      }}
-                    >
-                      {p.name}
-                    </button>
-                  </td>
-                  <td>
-                    <StatusBadge status={proposalStatus(p, now)} />
-                  </td>
-                  <td className="r rx-num">{formatInt(p.votes.yes)}</td>
-                  <td className="r rx-num">{formatInt(p.votes.no)}</td>
-                  <td className="r rx-num">{formatInt(p.votes.abstain)}</td>
-                  <td className="r rx-num">
-                    {formatInt(netVotes(p))}
-                    {p.fundingThreshold == null ? null : (
-                      <span className="text-sm"> / {formatInt(p.fundingThreshold)}</span>
-                    )}
-                  </td>
-                  <td className="r">
-                    <Amount value={p.paymentAmount} kind="duffs" />
-                  </td>
-                  <td>
-                    <Time ms={p.endTime} mode="absolute" />
-                  </td>
-                </tr>
-                {expanded ? (
-                  <tr id={panel} data-proposal-details>
-                    <td colSpan={8}>
-                      <ProposalDetails p={p} />
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            )
-          })}
+          {proposals.map(row)}
+          {earlier.length > 0 ? (
+            <tbody data-earlier-proposals>
+              <tr>
+                <th scope="colgroup" colSpan={8} className="text-start">
+                  {t`Earlier proposals, from Hyphen’s index (behind the chain)`}
+                </th>
+              </tr>
+            </tbody>
+          ) : null}
+          {earlier.map(row)}
         </table>
       </div>
     </div>
