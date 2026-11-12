@@ -72,8 +72,8 @@ test.describe('First and last seen from Insight', () => {
     await expect(seen).toContainText('First:')
     await expect(seen).toContainText('Last:')
     await expect(seen).toContainText('9 Feb 2026')
-    const stat = page.locator('[data-address-summary] .rx-stat', { hasText: 'First and last seen' })
-    await expect(stat.locator('[data-source="insight"]')).toBeVisible()
+    const card = page.locator('section, article').filter({ has: seen }).last()
+    await expect(card.getByText('Indexed by Insight').first()).toBeVisible()
   })
 })
 
