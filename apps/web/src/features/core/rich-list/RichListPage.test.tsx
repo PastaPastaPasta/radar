@@ -131,6 +131,30 @@ describe('Rich list page', () => {
       )
     })
 
+    it('puts the three figures in one row and the share note on one line with the rest behind a tap @HY-09', async () => {
+      phone()
+      const user = userEvent.setup()
+      renderAt('/rich-list')
+      await screen.findByRole('list', { name: 'Addresses ranked by balance' })
+      const summary = document.querySelector<HTMLElement>('[data-rich-summary]')!
+      expect(summary.className).toMatch(/\bgrid-cols-3\b/)
+      expect(summary.querySelectorAll('.rx-stat')).toHaveLength(3)
+      const notes = await waitFor(() => {
+        const found = [...document.querySelectorAll<HTMLElement>('[data-share-basis]')]
+        expect(found).toHaveLength(1)
+        return found
+      })
+      const note = notes[0]!
+      expect(note.tagName).toBe('DETAILS')
+      expect(note).not.toHaveAttribute('open')
+      expect(within(note).getByText(/Shares are of address balances/)).toBeVisible()
+      expect(note).toHaveTextContent(/held in positive address balances at block [\d,]+/)
+      await user.click(note.querySelector('summary')!)
+      expect(note).toHaveAttribute('open')
+      const chart = screen.getByRole('img', { name: /Share of the supply held by the top/ })
+      expect(note.compareDocumentPosition(chart) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
     it('hints at the tap and gives every row a chevron that follows its state @HY-09', async () => {
       phone()
       const user = userEvent.setup()

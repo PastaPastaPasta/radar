@@ -25,19 +25,34 @@ function ShareBasis({
   supply,
   height,
   style,
+  short = false,
 }: {
   supply: bigint | undefined
   height: number | undefined
   style?: React.CSSProperties
+  /** One line with the full explanation behind a tap, for a phone. */
+  short?: boolean
 }) {
   if (supply === undefined || height === undefined) return null
+  const full = (
+    <Trans>
+      Shares are of the <Amount value={supply} kind="duffs" compact /> held in positive address
+      balances at block {formatInt(height)}, not of the circulating supply shown elsewhere in Radar.
+    </Trans>
+  )
+  if (short) {
+    return (
+      <details className="rx-note rx-sharebasis" data-share-basis>
+        <summary>
+          <Trans>Shares are of address balances, not of the circulating supply.</Trans>
+        </summary>
+        <p className="m-0 mt-1">{full}</p>
+      </details>
+    )
+  }
   return (
     <p className="rx-note" data-share-basis style={style}>
-      <Trans>
-        Shares are of the <Amount value={supply} kind="duffs" compact /> held in positive address
-        balances at block {formatInt(height)}, not of the circulating supply shown elsewhere in
-        Radar.
-      </Trans>
+      {full}
     </p>
   )
 }
@@ -142,7 +157,7 @@ function RichListContent() {
         onRetry={() => void top.refetch()}
       >
         <div className="grid gap-4">
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4" data-rich-summary>
             <Stat
               label={t`Addresses with a balance`}
               value={first?.positiveBalanceCount ? formatInt(first.positiveBalanceCount) : '—'}
@@ -170,10 +185,14 @@ function RichListContent() {
               }
             />
           </div>
-          <ShareBasis supply={top.data?.data.includedSupply} height={top.data?.data.asOfHeight} />
+          <ShareBasis
+            supply={top.data?.data.includedSupply}
+            height={top.data?.data.asOfHeight}
+            short={phone}
+          />
           <Chart
             option={option}
-            height={240}
+            height={phone ? 180 : 240}
             label={t`Share of the supply held by the top addresses, by rank band`}
             loading={top.isPending}
             table={{
@@ -192,11 +211,13 @@ function RichListContent() {
         padding="flush"
         source={firstPageSource}
       >
-        <ShareBasis
-          supply={first?.includedSupply}
-          height={first?.asOfHeight}
-          style={{ margin: 0, padding: '12px 16px 4px' }}
-        />
+        {phone ? null : (
+          <ShareBasis
+            supply={first?.includedSupply}
+            height={first?.asOfHeight}
+            style={{ margin: 0, padding: '12px 16px 4px' }}
+          />
+        )}
         {phone ? (
           <RichListCompact {...table} source={firstPageSource} summaryId={SUMMARY_ID} />
         ) : (

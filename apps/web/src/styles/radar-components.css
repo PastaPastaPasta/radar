@@ -689,12 +689,12 @@ a.rx-stat:focus-visible {
     font-size: 12px;
   }
   .rx-statgrid .rx-stat__value {
-    font-size: 18px;
+    font-size: 16px;
     white-space: normal;
     overflow-wrap: anywhere;
   }
   .rx-statgrid .rx-stat--big .rx-stat__value {
-    font-size: 18px;
+    font-size: 16px;
   }
   .rx-statgrid .rx-stat__value small {
     font-size: 12px;
@@ -2284,5 +2284,21 @@ html[data-scroll-gutter] {
   }
   [data-address-summary] [data-seen] {
     font-size: 14px;
+  }
+}
+
+/* The rich list's summary on a phone: three short tiles in one row, and the share note as a line. */
+@media (max-width: 640px) {
+  [data-rich-summary] .rx-stat {
+    padding: 8px 8px 8px 10px;
+  }
+  [data-rich-summary] .rx-stat .rx-stat__label {
+    font-size: 12px;
+  }
+  [data-rich-summary] .rx-stat .rx-stat__value {
+    font-size: 16px;
+  }
+  .rx-sharebasis summary {
+    cursor: pointer;
   }
 }
