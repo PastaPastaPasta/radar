@@ -98,7 +98,7 @@ function RichRow({ row: r }: { row: HyRichRow }) {
             {formatPercent(r.pctSupply, 2)}
           </span>
         </span>
-        <Icon name="chevron" size="sm" className="rx-rich-chevron self-center" />
+        <Icon name="chevron" className="rx-rich-chevron self-center" />
       </button>
       <dl
         id={detailId}
