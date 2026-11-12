@@ -186,6 +186,44 @@ test.describe('address page', () => {
     )
   })
 
+  test('reads a testnet address from Insight while Hyphen trails, with the Insight label @IN-16 @HY-19 @IN-06', async ({
+    page,
+  }) => {
+    await page.goto(`/address/${TESTNET_ADDRESS}?network=testnet`)
+    const summary = page.locator('[data-address-summary]')
+    await expect(summary).toContainText(/tDASH/)
+    await expect(summary).toContainText('Balance')
+    await expect(page.locator('main [data-source="insight"]').first()).toBeVisible()
+    await expect(page.locator('main [data-source="hyphen"]')).toHaveCount(0)
+    await expect(page.getByText('Indexed by Insight').first()).toBeVisible()
+    await expectNoSideScroll(page)
+  })
+
+  test('shows the Hyphen label for a mainnet address, whose index is current @IN-06', async ({
+    page,
+  }) => {
+    await page.goto(`/address/${ADDRESS}`)
+    await expect(page.locator('[data-address-summary]')).toContainText('Balance')
+    await expect(page.locator('main [data-source="hyphen"]').first()).toBeVisible()
+    await expect(page.locator('main [data-source="insight"]')).toHaveCount(0)
+  })
+
+  test('shows one notice on a stale analytics page and no per-section warning @IN-03 @HY-19', async ({
+    page,
+  }) => {
+    for (const path of ['/rich-list', '/charts', '/mempool']) {
+      await page.goto(`${path}?network=testnet`)
+      await expect(page.locator('[data-stale-index]')).toHaveCount(1, { timeout: 15_000 })
+      await expect(page.locator('[data-stale-index]')).toContainText(
+        'Blocks, transactions and addresses elsewhere in Radar are current.',
+      )
+      await expect(
+        page.locator('[data-stale-index]').getByRole('link', { name: 'See the sources' }),
+      ).toHaveAttribute('href', /\/status/)
+      await expect(page.locator('.rx-card__lag')).toHaveCount(0)
+    }
+  })
+
   test('shows balances in the unit that was chosen @IN-12', async ({ page }) => {
     await page.goto('/settings')
     await page
@@ -502,6 +540,15 @@ test.describe('governance', () => {
     )
     await expectAccessible(page)
     await expectNoSideScroll(page)
+  })
+
+  test('reads testnet proposals from Insight while Hyphen trails @IN-16 @HY-19 @IN-03', async ({
+    page,
+  }) => {
+    await page.goto('/governance?network=testnet')
+    await expect(page.getByRole('button', { name: 'test', exact: true })).toBeVisible()
+    await expect(page.locator('main [data-source="insight"]').first()).toBeVisible()
+    await expect(page.locator('[data-stale-index]')).toHaveCount(0)
   })
 
   test('testnet proposals link to the testnet Governance @IN-16 @HY-19', async ({ page }) => {

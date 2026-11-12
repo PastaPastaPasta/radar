@@ -145,6 +145,17 @@ test.describe('Block page', () => {
     await expect(page.locator('[data-payload="cbTx"]')).toBeVisible()
   })
 
+  test('shows a testnet block’s chainwork from Insight, labelled as Insight @IN-16 @HY-19 @IN-03', async ({
+    page,
+  }) => {
+    await page.goto(`/block/${TESTNET_TIP}?network=testnet`)
+    const row = page.locator('div').filter({ has: page.getByText('Chainwork', { exact: true }) })
+    await expect(row.last()).toContainText(/[0-9a-f]{8}/)
+    await expect(page.getByText('Not in DAPI')).toHaveCount(0)
+    await expect(page.locator('main [data-source="insight"]').first()).toBeVisible()
+    await expect(page.locator('[data-stale-index]')).toHaveCount(0)
+  })
+
   test('keeps an unknown pool’s text inside its card @IN-16', async ({ page }) => {
     await page.goto(`/block/${TESTNET_TIP}?network=testnet`)
     const card = page.locator('.rx-stat').filter({ hasText: 'Coinbase tag says' })

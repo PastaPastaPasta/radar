@@ -56,8 +56,7 @@ test.describe('one home order for eyes and keyboard', () => {
       expect(boxes[0]!.card!.left).toBeLessThan(boxes[1]!.card!.left)
       expect(boxes[1]!.card!.left).toBeLessThan(boxes[2]!.card!.left)
       if (name === 'testnet') {
-        expect(boxes[2]!.note, 'the pending column says Hyphen is behind').toBe(true)
-        await expect(columns.nth(2)).toContainText(/index is behind the chain/)
+        await expect(columns.nth(2)).toContainText(/since you opened this page/)
       } else {
         expect(boxes[2]!.note).toBe(false)
         expect(await columns.nth(2).locator('tbody tr').count()).toBeGreaterThanOrEqual(1)

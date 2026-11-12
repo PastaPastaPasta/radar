@@ -313,9 +313,6 @@ msgstr "{quorumCommitments, plural, one {# compromiso de quórum en este bloque}
 msgid "{s} s"
 msgstr "{s} s"
 
-msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
-msgstr "{what} provienen solo de Hyphen. Todo lo demás de esta página proviene de DAPI."
-
 msgid "% of supply"
 msgstr "% del suministro"
 
@@ -397,6 +394,9 @@ msgstr "Un quórum indica que los masternodes están listos para una actualizaci
 
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "Una dirección de script (que empieza por 7 u 8) no puede firmar un mensaje."
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Un segundo índice para direcciones, salidas gastadas, chainwork y gobernanza"
 
 msgid "A shareholder of a shared masternode changes where their reward is paid."
 msgstr "Un participante de un masternode compartido cambia a dónde se paga su recompensa."
@@ -609,6 +609,9 @@ msgstr "Bloques del {date}"
 
 msgid "Blocks on {dateLabel}"
 msgstr "Bloques del {dateLabel}"
+
+msgid "Blocks, transactions and addresses elsewhere in Radar are current."
+msgstr "Los bloques, las transacciones y las direcciones en el resto de Radar están al día."
 
 msgid "Browse a contract’s documents of one type, filtered by its indices."
 msgstr "Explora los documentos de un contrato de un tipo, filtrados por sus índices."
@@ -1371,6 +1374,9 @@ msgstr "Indexado por Hyphen · DAPI ocupado"
 msgid "Indexed by Hyphen · DAPI unreachable"
 msgstr "Indexado por Hyphen · DAPI inaccesible"
 
+msgid "Indexed by Insight"
+msgstr "Indexado por Insight"
+
 msgid "Indexed by Platform Explorer"
 msgstr "Indexado por Platform Explorer"
 
@@ -1413,6 +1419,12 @@ msgstr "Entradas y salidas"
 msgid "Inputs hash"
 msgstr "Hash de las entradas"
 
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Insight couldn’t be reached"
+msgstr "No se pudo contactar con Insight"
+
 msgid "InstantSend"
 msgstr "InstantSend"
 
@@ -1448,6 +1460,12 @@ msgstr "Tardó demasiado en responder."
 
 msgid "Its data is behind."
 msgstr "Sus datos van retrasados."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Su punta es el bloque {tip} de Core, por detrás de la cadena."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Su punta es el bloque {tip} de Core."
 
 msgid "Jump to a date"
 msgstr "Ir a una fecha"
@@ -1656,6 +1674,9 @@ msgstr "mempool"
 
 msgid "Mempool"
 msgstr "Mempool"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "Las horas de llegada al mempool no se conservan una vez minada la transacción."
 
 msgid "Mempool pressure"
 msgstr "Presión del mempool"
@@ -1940,17 +1961,20 @@ msgstr "No aprobada"
 msgid "Not ready"
 msgstr "No está listo"
 
-msgid "not recorded; Hyphen keeps first-seen times only while a transaction is pending"
-msgstr "no registrado; Hyphen solo conserva la hora de primera vez visto mientras la transacción está pendiente"
-
 msgid "Not seen yet"
 msgstr "Aún no visto"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Nada de lo anterior lo confirma. Es solo una forma de interpretar lo que escribiste."
 
+msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
+msgstr "No ha llegado nada desde que abriste esta página. La lista completa del mempool necesita el índice de Hyphen, que va por detrás de la cadena."
+
 msgid "Nothing has asked it yet on this network."
 msgstr "Nadie le ha preguntado todavía en esta red."
+
+msgid "Nothing seen yet"
+msgstr "Aún no se ha visto nada"
 
 msgid "Nothing to show"
 msgstr "Nada que mostrar"
@@ -2195,6 +2219,9 @@ msgstr "Transacciones pendientes"
 
 msgid "Pending transactions are unavailable"
 msgstr "Las transacciones pendientes no están disponibles"
+
+msgid "Pending transactions seen since you opened this page"
+msgstr "Transacciones pendientes vistas desde que abriste esta página"
 
 msgid "Pending transactions, newest first"
 msgstr "Transacciones pendientes, las más recientes primero"
@@ -2691,8 +2718,17 @@ msgstr "Ver todos los resultados de “{trimmed}”"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "Ver todos los resultados de “{trimmed}” en {net}"
 
+msgid "See the sources"
+msgstr "Ver las fuentes"
+
 msgid "See unconfirmed activity"
 msgstr "Ver la actividad sin confirmar"
+
+msgid "Seen"
+msgstr "Visto"
+
+msgid "Seen since you opened this page"
+msgstr "Visto desde que abriste esta página"
 
 msgid "Sent"
 msgstr "Enviado"
@@ -2856,9 +2892,6 @@ msgstr "Gastos"
 msgid "Spent"
 msgstr "Gastado"
 
-msgid "Spent and unspent states"
-msgstr "Estados gastado y sin gastar"
-
 msgid "State"
 msgstr "Estado"
 
@@ -2886,11 +2919,11 @@ msgstr "Detenido desde {since}"
 msgid "Summary"
 msgstr "Resumen"
 
+msgid "Supply and blockchain size are Hyphen’s and not live."
+msgstr "El suministro y el tamaño de la cadena son de Hyphen y no están en vivo."
+
 msgid "Supply concentration"
 msgstr "Concentración del suministro"
-
-msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "El suministro, el tamaño de la blockchain y las transacciones pendientes solo vienen de Hyphen y no están en vivo. La altura, la dificultad, el ChainLock y los últimos bloques provienen aquí de DAPI."
 
 msgid "Switch to mainnet"
 msgstr "Cambiar a la mainnet"
@@ -3073,6 +3106,9 @@ msgstr "La transacción aún no está en un bloque."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "La cotización en USD a través de Platform Explorer"
+
+msgid "The vote history below is as of that block, not live."
+msgstr "El historial de votos de abajo corresponde a ese bloque, no está en vivo."
 
 msgid "Their size"
 msgstr "Su tamaño"

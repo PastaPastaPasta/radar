@@ -313,9 +313,6 @@ msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}
 msgid "{s} s"
 msgstr "{s}秒"
 
-msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
-msgstr "{what} 仅来自 Hyphen。此页面的其余内容均来自 DAPI。"
-
 msgid "% of supply"
 msgstr "占总供应量的 %"
 
@@ -397,6 +394,9 @@ msgstr "Quorum 表示主节点已准备好进行协议升级。"
 
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "脚本地址（以 7 或 8 开头）无法签署消息。"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "用于地址、已花费输出、链工作量和治理的第二个索引"
 
 msgid "A shareholder of a shared masternode changes where their reward is paid."
 msgstr "共享主节点的份额持有者更改其奖励的支付地址。"
@@ -609,6 +609,9 @@ msgstr "{date} 的区块"
 
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} 的区块"
+
+msgid "Blocks, transactions and addresses elsewhere in Radar are current."
+msgstr "Radar 其他位置的区块、交易和地址都是最新的。"
 
 msgid "Browse a contract’s documents of one type, filtered by its indices."
 msgstr "按索引筛选，浏览合约中某一类型的文档。"
@@ -1371,6 +1374,9 @@ msgstr "由 Hyphen 索引 · DAPI 繁忙"
 msgid "Indexed by Hyphen · DAPI unreachable"
 msgstr "由 Hyphen 索引 · DAPI 无法访问"
 
+msgid "Indexed by Insight"
+msgstr "由 Insight 索引"
+
 msgid "Indexed by Platform Explorer"
 msgstr "由 Platform Explorer 索引"
 
@@ -1413,6 +1419,12 @@ msgstr "输入和输出"
 msgid "Inputs hash"
 msgstr "输入哈希"
 
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Insight couldn’t be reached"
+msgstr "无法连接 Insight"
+
 msgid "InstantSend"
 msgstr "InstantSend"
 
@@ -1448,6 +1460,12 @@ msgstr "它响应超时。"
 
 msgid "Its data is behind."
 msgstr "它的数据已落后。"
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "其最新区块是 Core 区块 {tip}，落后于链。"
+
+msgid "Its tip is Core block {tip}."
+msgstr "其最新区块是 Core 区块 {tip}。"
 
 msgid "Jump to a date"
 msgstr "跳转到日期"
@@ -1656,6 +1674,9 @@ msgstr "内存池"
 
 msgid "Mempool"
 msgstr "内存池"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "交易被打包后，不再保留其进入内存池的时间。"
 
 msgid "Mempool pressure"
 msgstr "内存池压力"
@@ -1940,17 +1961,20 @@ msgstr "未通过"
 msgid "Not ready"
 msgstr "未就绪"
 
-msgid "not recorded; Hyphen keeps first-seen times only while a transaction is pending"
-msgstr "未记录；Hyphen 仅在交易待处理期间保留首次出现时间"
-
 msgid "Not seen yet"
 msgstr "尚未出现"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上面没有任何结果能证实这一点，这只是对你输入内容的一种解读。"
 
+msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
+msgstr "打开此页面后尚未收到任何交易。完整的内存池列表需要 Hyphen 的索引，而它落后于链。"
+
 msgid "Nothing has asked it yet on this network."
 msgstr "此网络上还没有人向它发出请求。"
+
+msgid "Nothing seen yet"
+msgstr "暂未看到任何交易"
 
 msgid "Nothing to show"
 msgstr "暂无内容"
@@ -2195,6 +2219,9 @@ msgstr "待处理交易"
 
 msgid "Pending transactions are unavailable"
 msgstr "无法获取待处理交易"
+
+msgid "Pending transactions seen since you opened this page"
+msgstr "打开此页面后看到的待处理交易"
 
 msgid "Pending transactions, newest first"
 msgstr "待处理交易，最新的在前"
@@ -2691,8 +2718,17 @@ msgstr "查看“{trimmed}”的全部结果"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "在 {net} 上查看“{trimmed}”的全部结果"
 
+msgid "See the sources"
+msgstr "查看数据源"
+
 msgid "See unconfirmed activity"
 msgstr "查看未确认的活动"
+
+msgid "Seen"
+msgstr "发现时间"
+
+msgid "Seen since you opened this page"
+msgstr "打开此页面后看到"
 
 msgid "Sent"
 msgstr "已发送"
@@ -2856,9 +2892,6 @@ msgstr "花费"
 msgid "Spent"
 msgstr "已花费"
 
-msgid "Spent and unspent states"
-msgstr "已花费与未花费状态"
-
 msgid "State"
 msgstr "状态"
 
@@ -2886,11 +2919,11 @@ msgstr "自 {since} 起停止"
 msgid "Summary"
 msgstr "摘要"
 
+msgid "Supply and blockchain size are Hyphen’s and not live."
+msgstr "供应量和区块链大小来自 Hyphen，并非实时数据。"
+
 msgid "Supply concentration"
 msgstr "供应集中度"
-
-msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "供应量、区块链大小和待处理交易只来自 Hyphen，且并非实时。此处的高度、难度、ChainLock 和最新区块来自 DAPI。"
 
 msgid "Switch to mainnet"
 msgstr "切换到主网"
@@ -3073,6 +3106,9 @@ msgstr "该交易尚未进入区块。"
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "经由 Platform Explorer 的美元汇率"
+
+msgid "The vote history below is as of that block, not live."
+msgstr "下面的投票记录截至该区块，并非实时数据。"
 
 msgid "Their size"
 msgstr "它们的大小"

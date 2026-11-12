@@ -71,6 +71,17 @@ test.describe('status', () => {
     }
   })
 
+  test('lists Insight as a backend with its tip on both networks @IN-09 @IN-16 @HY-19', async ({
+    page,
+  }) => {
+    for (const path of ['/status', '/status?network=testnet']) {
+      await page.goto(path)
+      const row = page.locator('main').getByText('Insight', { exact: false }).first()
+      await expect(row).toBeVisible()
+      await expect(page.getByText(/Its tip is Core block/)).toBeVisible()
+    }
+  })
+
   test('works on testnet and says which network it is reading @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/status?network=testnet')
     await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()

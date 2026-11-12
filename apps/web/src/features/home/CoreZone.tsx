@@ -118,8 +118,7 @@ function StaleNote() {
   if (lagged === undefined) return null
   return (
     <p className="rx-note" role="note" data-hyphen-lag>
-      {lagged}{' '}
-      {t`Supply and blockchain size come only from Hyphen and are not live. Pending transactions are those this page has seen arrive. The height, difficulty, ChainLock and latest blocks come from DAPI.`}{' '}
+      {lagged} {t`Supply and blockchain size are Hyphen’s and not live.`}{' '}
       <PageLink to="/status">{t`See the sources`}</PageLink>
     </p>
   )
@@ -203,7 +202,7 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
       layer="core"
       className={feed ? 'rx-card--feed' : undefined}
       title={t`Pending transactions`}
-      subtitle={stale ? t`Seen since you opened this page` : undefined}
+      subtitle={stale && seen.rows.length > 0 ? t`Seen since you opened this page` : undefined}
       padding="flush"
       source={stale ? seen.stamp : query.data ? stampOf(query.data) : undefined}
       actions={
@@ -212,20 +211,19 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
         </PageLink>
       }
     >
-      {stale && !devnet ? (
+      {stale && !devnet && seen.rows.length === 0 ? (
+        <Empty
+          kind="none-yet"
+          title={t`Nothing seen yet`}
+          body={t`Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain.`}
+        />
+      ) : stale && !devnet ? (
         <DataTable
           caption={t`Pending transactions seen since you opened this page`}
           columns={seenColumns}
           rows={seen.rows.slice(0, PENDING)}
           getRowId={(r) => r.txid}
           state="ready"
-          empty={
-            <Empty
-              kind="none-yet"
-              title={t`Nothing has arrived since you opened this page`}
-              body={t`The full mempool list needs Hyphen’s index, which is behind the chain.`}
-            />
-          }
           rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
         />
       ) : devnet || !fit ? (

@@ -313,9 +313,6 @@ msgstr "{quorumCommitments, plural, one {Bu blokta # quorum taahhüdü} other {B
 msgid "{s} s"
 msgstr "{s} sn"
 
-msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
-msgstr "{what} yalnızca Hyphen’den gelir. Bu sayfadaki diğer her şey DAPI’den gelir."
-
 msgid "% of supply"
 msgstr "Arzın % ’si"
 
@@ -397,6 +394,9 @@ msgstr "Bir quorum, masternode’ların bir protokol yükseltmesine hazır oldu�
 
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "Bir betik adresi (7 veya 8 ile başlayan) mesaj imzalayamaz."
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Adresler, harcanmış çıktılar, chainwork ve yönetişim için ikinci bir dizin"
 
 msgid "A shareholder of a shared masternode changes where their reward is paid."
 msgstr "Paylaşımlı bir masternode’un pay sahibi, ödülünün ödendiği yeri değiştirir."
@@ -609,6 +609,9 @@ msgstr "{date} tarihli bloklar"
 
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} tarihli bloklar"
+
+msgid "Blocks, transactions and addresses elsewhere in Radar are current."
+msgstr "Radar’ın diğer bölümlerindeki bloklar, işlemler ve adresler günceldir."
 
 msgid "Browse a contract’s documents of one type, filtered by its indices."
 msgstr "Bir sözleşmenin tek türdeki belgelerine göz atın; dizinlerine göre süzülür."
@@ -1371,6 +1374,9 @@ msgstr "Hyphen tarafından dizinlendi · DAPI meşgul"
 msgid "Indexed by Hyphen · DAPI unreachable"
 msgstr "Hyphen tarafından dizinlendi · DAPI erişilemiyor"
 
+msgid "Indexed by Insight"
+msgstr "Insight tarafından dizinlendi"
+
 msgid "Indexed by Platform Explorer"
 msgstr "Platform Explorer tarafından dizinlendi"
 
@@ -1413,6 +1419,12 @@ msgstr "Girdiler ve çıktılar"
 msgid "Inputs hash"
 msgstr "Girdi hash’i"
 
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Insight couldn’t be reached"
+msgstr "Insight’a ulaşılamadı"
+
 msgid "InstantSend"
 msgstr "InstantSend"
 
@@ -1448,6 +1460,12 @@ msgstr "Yanıt vermesi çok uzun sürdü."
 
 msgid "Its data is behind."
 msgstr "Verileri geride kalıyor."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Ucu Core’un {tip} numaralı bloğu; zincirin gerisinde."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Ucu Core’un {tip} numaralı bloğu."
 
 msgid "Jump to a date"
 msgstr "Bir tarihe git"
@@ -1656,6 +1674,9 @@ msgstr "mempool"
 
 msgid "Mempool"
 msgstr "Mempool"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "Bir işlem madenciliği yapıldıktan sonra mempool varış zamanları tutulmaz."
 
 msgid "Mempool pressure"
 msgstr "Mempool baskısı"
@@ -1940,17 +1961,20 @@ msgstr "Geçmiyor"
 msgid "Not ready"
 msgstr "Hazır değil"
 
-msgid "not recorded; Hyphen keeps first-seen times only while a transaction is pending"
-msgstr "kaydedilmedi; Hyphen ilk görülme zamanını yalnızca işlem beklerken tutar"
-
 msgid "Not seen yet"
 msgstr "Henüz görülmedi"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Yukarıdakilerin hiçbiri bunu doğrulamıyor. Yazdığınızı okumanın yalnızca bir yolu."
 
+msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
+msgstr "Bu sayfayı açtığınızdan beri hiçbir şey gelmedi. Mempool’un tam listesi için Hyphen’in dizini gerekir; bu dizin zincirin gerisinde."
+
 msgid "Nothing has asked it yet on this network."
 msgstr "Bu ağda henüz kimse ona sormadı."
+
+msgid "Nothing seen yet"
+msgstr "Henüz bir şey görülmedi"
 
 msgid "Nothing to show"
 msgstr "Gösterilecek bir şey yok"
@@ -2195,6 +2219,9 @@ msgstr "Bekleyen işlemler"
 
 msgid "Pending transactions are unavailable"
 msgstr "Bekleyen işlemler kullanılamıyor"
+
+msgid "Pending transactions seen since you opened this page"
+msgstr "Bu sayfayı açtığınızdan beri görülen bekleyen işlemler"
 
 msgid "Pending transactions, newest first"
 msgstr "Bekleyen işlemler, en yeniden eskiye"
@@ -2691,8 +2718,17 @@ msgstr "“{trimmed}” için tüm sonuçları gör"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "{net} üzerinde “{trimmed}” için tüm sonuçları gör"
 
+msgid "See the sources"
+msgstr "Kaynaklara bak"
+
 msgid "See unconfirmed activity"
 msgstr "Onaylanmamış etkinliği gör"
+
+msgid "Seen"
+msgstr "Görüldü"
+
+msgid "Seen since you opened this page"
+msgstr "Bu sayfayı açtığınızdan beri görüldü"
 
 msgid "Sent"
 msgstr "Gönderildi"
@@ -2856,9 +2892,6 @@ msgstr "Harcamalar"
 msgid "Spent"
 msgstr "Harcandı"
 
-msgid "Spent and unspent states"
-msgstr "Harcanmış ve harcanmamış durumlar"
-
 msgid "State"
 msgstr "Durum"
 
@@ -2886,11 +2919,11 @@ msgstr "{since} tarihinden beri durdu"
 msgid "Summary"
 msgstr "Özet"
 
+msgid "Supply and blockchain size are Hyphen’s and not live."
+msgstr "Arz ve blokzincir boyutu Hyphen’e aittir ve canlı değildir."
+
 msgid "Supply concentration"
 msgstr "Arz yoğunlaşması"
-
-msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "Arz, blokzincir boyutu ve bekleyen işlemler yalnızca Hyphen’den gelir ve canlı değildir. Buradaki yükseklik, zorluk, ChainLock ve en yeni bloklar DAPI’den gelir."
 
 msgid "Switch to mainnet"
 msgstr "Mainnet’e geç"
@@ -3073,6 +3106,9 @@ msgstr "İşlem henüz bir blokta değil."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "Platform Explorer üzerinden USD kuru"
+
+msgid "The vote history below is as of that block, not live."
+msgstr "Aşağıdaki oy geçmişi o bloğa aittir, canlı değildir."
 
 msgid "Their size"
 msgstr "Boyutları"

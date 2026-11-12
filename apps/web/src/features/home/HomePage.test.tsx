@@ -404,8 +404,8 @@ describe('Home page', () => {
     expect(headline).toHaveTextContent('Last block')
     expect(headline).not.toHaveTextContent('Circulating supply')
     const note = await screen.findByRole('note')
-    expect(note).toHaveTextContent(/Supply and blockchain size come only from Hyphen/)
-    expect(note).toHaveTextContent(/Pending transactions are those this page has seen arrive/)
+    expect(note).toHaveTextContent(/Supply and blockchain size are Hyphen’s and not live/)
+    expect(note).toHaveTextContent(/See the sources/)
     expect(note).toHaveTextContent(
       /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
     )
@@ -441,10 +441,9 @@ describe('Home page', () => {
         c.textContent?.includes('Pending transactions'),
       ) as HTMLElement
     const column = await waitFor(() => {
-      expect(find()).toHaveTextContent('Seen since you opened this page')
+      expect(find()).toHaveTextContent('Nothing seen yet')
       return find()
     })
-    expect(column).toHaveTextContent('Nothing has arrived since you opened this page')
     expect(column).not.toHaveTextContent('unavailable')
     const tx = { ...(await core.tx('testnet', TESTNET_TX)).data!, height: undefined }
     act(() => deliver?.({ kind: 'tx', tx }))
@@ -452,11 +451,10 @@ describe('Home page', () => {
       name: 'Pending transactions seen since you opened this page',
     })
     expect(within(table).getAllByRole('row')).toHaveLength(2)
+    expect(find()).toHaveTextContent('Seen since you opened this page')
     expect(find().querySelector('[data-source="dapi"]')).not.toBeNull()
     act(() => deliver?.({ kind: 'block', txids: [tx.txid] }))
-    await waitFor(() =>
-      expect(find()).toHaveTextContent('Nothing has arrived since you opened this page'),
-    )
+    await waitFor(() => expect(find()).toHaveTextContent('Nothing seen yet'))
   })
 
   it('works on testnet and names the network @IN-16 @HY-19', async () => {

@@ -313,9 +313,6 @@ msgstr "{quorumCommitments, plural, one {# коммітмент кворуму �
 msgid "{s} s"
 msgstr "{s} с"
 
-msgid "{what} come only from Hyphen. Everything else on this page is from DAPI."
-msgstr "{what} надходять лише з Hyphen. Усе інше на цій сторінці — з DAPI."
-
 msgid "% of supply"
 msgstr "% від пропозиції"
 
@@ -397,6 +394,9 @@ msgstr "Кворум сигналізує, що мастерноди готов�
 
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "Адреса скрипту (починається з 7 або 8) не може підписувати повідомлення."
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Другий індекс для адрес, витрачених виходів, chainwork і управління"
 
 msgid "A shareholder of a shared masternode changes where their reward is paid."
 msgstr "Співвласник спільної мастерноди змінює адресу, на яку виплачується його винагорода."
@@ -609,6 +609,9 @@ msgstr "Блоки за {date}"
 
 msgid "Blocks on {dateLabel}"
 msgstr "Блоки за {dateLabel}"
+
+msgid "Blocks, transactions and addresses elsewhere in Radar are current."
+msgstr "Блоки, транзакції та адреси в інших розділах Radar актуальні."
 
 msgid "Browse a contract’s documents of one type, filtered by its indices."
 msgstr "Перегляд документів одного типу з контракту з фільтрацією за його індексами."
@@ -1371,6 +1374,9 @@ msgstr "Проіндексовано Hyphen · DAPI зайнятий"
 msgid "Indexed by Hyphen · DAPI unreachable"
 msgstr "Проіндексовано Hyphen · DAPI недоступний"
 
+msgid "Indexed by Insight"
+msgstr "Індексовано Insight"
+
 msgid "Indexed by Platform Explorer"
 msgstr "Проіндексовано Platform Explorer"
 
@@ -1413,6 +1419,12 @@ msgstr "Входи та виходи"
 msgid "Inputs hash"
 msgstr "Хеш входів"
 
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Insight couldn’t be reached"
+msgstr "Не вдалося зв’язатися з Insight"
+
 msgid "InstantSend"
 msgstr "InstantSend"
 
@@ -1448,6 +1460,12 @@ msgstr "Він надто довго відповідав."
 
 msgid "Its data is behind."
 msgstr "Його дані відстають."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Його вершина — блок Core {tip}, він відстає від ланцюга."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Його вершина — блок Core {tip}."
 
 msgid "Jump to a date"
 msgstr "Перейти до дати"
@@ -1656,6 +1674,9 @@ msgstr "мемпул"
 
 msgid "Mempool"
 msgstr "Мемпул"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "Час надходження до мемпулу не зберігається після майнінгу транзакції."
 
 msgid "Mempool pressure"
 msgstr "Навантаження мемпулу"
@@ -1940,17 +1961,20 @@ msgstr "Не проходить"
 msgid "Not ready"
 msgstr "Не готовий"
 
-msgid "not recorded; Hyphen keeps first-seen times only while a transaction is pending"
-msgstr "не записано; Hyphen зберігає час першої появи, лише поки транзакція очікує"
-
 msgid "Not seen yet"
 msgstr "Ще не помічено"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Ніщо вище цього не підтверджує. Це лише один зі способів прочитати ваш ввід."
 
+msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
+msgstr "Відколи ви відкрили сторінку, нічого не надійшло. Для повного списку мемпулу потрібен індекс Hyphen, який відстає від ланцюга."
+
 msgid "Nothing has asked it yet on this network."
 msgstr "У цій мережі до нього ще ніхто не звертався."
+
+msgid "Nothing seen yet"
+msgstr "Поки що нічого не помічено"
 
 msgid "Nothing to show"
 msgstr "Нічого показувати"
@@ -2195,6 +2219,9 @@ msgstr "Транзакції в очікуванні"
 
 msgid "Pending transactions are unavailable"
 msgstr "Транзакції в очікуванні недоступні"
+
+msgid "Pending transactions seen since you opened this page"
+msgstr "Непідтверджені транзакції, помічені відколи ви відкрили сторінку"
 
 msgid "Pending transactions, newest first"
 msgstr "Транзакції в очікуванні, спочатку нові"
@@ -2691,8 +2718,17 @@ msgstr "Усі результати за запитом «{trimmed}»"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "Усі результати за запитом «{trimmed}» у мережі {net}"
 
+msgid "See the sources"
+msgstr "Переглянути джерела"
+
 msgid "See unconfirmed activity"
 msgstr "Переглянути непідтверджену активність"
+
+msgid "Seen"
+msgstr "Помічено"
+
+msgid "Seen since you opened this page"
+msgstr "Помічено відколи ви відкрили сторінку"
 
 msgid "Sent"
 msgstr "Надіслано"
@@ -2856,9 +2892,6 @@ msgstr "Витрати"
 msgid "Spent"
 msgstr "Витрачено"
 
-msgid "Spent and unspent states"
-msgstr "Стани «витрачено» і «не витрачено»"
-
 msgid "State"
 msgstr "Стан"
 
@@ -2886,11 +2919,11 @@ msgstr "Зупинено з {since}"
 msgid "Summary"
 msgstr "Підсумок"
 
+msgid "Supply and blockchain size are Hyphen’s and not live."
+msgstr "Пропозиція та розмір блокчейну — дані Hyphen, не в реальному часі."
+
 msgid "Supply concentration"
 msgstr "Концентрація пропозиції"
-
-msgid "Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI."
-msgstr "Пропозиція, розмір блокчейну та очікувані транзакції надходять лише з Hyphen і не є наживо. Висота, складність, ChainLock і найновіші блоки тут надходять з DAPI."
 
 msgid "Switch to mainnet"
 msgstr "Перемкнутися на основну мережу"
@@ -3073,6 +3106,9 @@ msgstr "Транзакції ще немає в блоці."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "Курс USD через Platform Explorer"
+
+msgid "The vote history below is as of that block, not live."
+msgstr "Історія голосів нижче відповідає цьому блоку й не є актуальною в реальному часі."
 
 msgid "Their size"
 msgstr "Їхній розмір"
