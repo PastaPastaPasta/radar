@@ -918,6 +918,9 @@ msgstr "Core 版本"
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform 和主节点网络"
 
+msgid "Could not be read"
+msgstr "无法读取"
+
 msgid "Counted as valid"
 msgstr "计为有效"
 
@@ -1201,6 +1204,9 @@ msgstr "正在查找位置…"
 msgid "First"
 msgstr "首次"
 
+msgid "First (approximately)"
+msgstr "首次（约）"
+
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
@@ -1288,8 +1294,8 @@ msgstr "连接时的高度"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "高度、哈希、地址、ProTx、IP、ID、名称…"
 
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
+#. placeholder {0}: formatInt(Math.min(...rows.map((r) => r.height)))
+#. placeholder {1}: formatInt(Math.max(...rows.map((r) => r.height)))
 msgid "Heights {0} to {1}"
 msgstr "高度 {0} 至 {1}"
 
@@ -1469,6 +1475,9 @@ msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight 无法返回此地址最早的交易。"
+
+msgid "Insight could not return this address’s transactions."
+msgstr "Insight 无法返回此地址的交易。"
 
 msgid "Insight couldn’t be reached"
 msgstr "无法连接 Insight"
@@ -1891,6 +1900,9 @@ msgstr "尚未索引任何余额。"
 msgid "No block with this ID on this network."
 msgstr "此网络上没有该 ID 的区块。"
 
+msgid "No blocks came back for this page"
+msgstr "此页没有返回任何区块"
+
 msgid "No blocks on this date"
 msgstr "这一天没有区块"
 
@@ -2218,6 +2230,10 @@ msgstr "找不到页面"
 
 msgid "Pages"
 msgstr "页面"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "每页 {0} 个区块需要最新的索引，而目前没有可用的。"
 
 msgid "Pagination"
 msgstr "分页"
@@ -3172,6 +3188,11 @@ msgstr "数据源繁忙"
 
 msgid "The source isn't answering"
 msgstr "数据源没有响应"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "数据源没有返回高度 {0} 到 {1} 的区块。请尝试相邻的页面，或更短的页面。"
 
 msgid "The source sent something Radar couldn't read"
 msgstr "数据源返回了 Radar 无法读取的内容"

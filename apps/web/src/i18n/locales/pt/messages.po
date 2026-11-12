@@ -918,6 +918,9 @@ msgstr "Versões do Core"
 msgid "Core, Platform and the masternode network"
 msgstr "Core, Platform e a rede de masternodes"
 
+msgid "Could not be read"
+msgstr "Não foi possível ler"
+
 msgid "Counted as valid"
 msgstr "Contado como válido"
 
@@ -1201,6 +1204,9 @@ msgstr "a procurar onde…"
 msgid "First"
 msgstr "Primeira"
 
+msgid "First (approximately)"
+msgstr "Primeira vez (aproximada)"
+
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
@@ -1288,8 +1294,8 @@ msgstr "Altura ao ligar"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "Altura, hash, endereço, ProTx, IP, ID, nome…"
 
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
+#. placeholder {0}: formatInt(Math.min(...rows.map((r) => r.height)))
+#. placeholder {1}: formatInt(Math.max(...rows.map((r) => r.height)))
 msgid "Heights {0} to {1}"
 msgstr "Alturas {0} a {1}"
 
@@ -1469,6 +1475,9 @@ msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "O Insight não conseguiu devolver as transações mais antigas deste endereço."
+
+msgid "Insight could not return this address’s transactions."
+msgstr "O Insight não conseguiu devolver as transações deste endereço."
 
 msgid "Insight couldn’t be reached"
 msgstr "Não foi possível contactar o Insight"
@@ -1891,6 +1900,9 @@ msgstr "Ainda não há saldos indexados."
 msgid "No block with this ID on this network."
 msgstr "Não há nenhum bloco com este ID nesta rede."
 
+msgid "No blocks came back for this page"
+msgstr "Nenhum bloco voltou para esta página"
+
 msgid "No blocks on this date"
 msgstr "Não há blocos nesta data"
 
@@ -2218,6 +2230,10 @@ msgstr "Página não encontrada"
 
 msgid "Pages"
 msgstr "Páginas"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "Páginas de {0} precisam de um índice atualizado, e nenhum está agora."
 
 msgid "Pagination"
 msgstr "Paginação"
@@ -3172,6 +3188,11 @@ msgstr "A fonte está ocupada"
 
 msgid "The source isn't answering"
 msgstr "A fonte não está a responder"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "A fonte não devolveu blocos para as alturas {0} a {1}. Tente a página anterior ou a seguinte, ou uma página mais curta."
 
 msgid "The source sent something Radar couldn't read"
 msgstr "A fonte enviou algo que o Radar não conseguiu ler"

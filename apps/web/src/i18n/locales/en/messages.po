@@ -918,6 +918,9 @@ msgstr "Core versions"
 msgid "Core, Platform and the masternode network"
 msgstr "Core, Platform and the masternode network"
 
+msgid "Could not be read"
+msgstr "Could not be read"
+
 msgid "Counted as valid"
 msgstr "Counted as valid"
 
@@ -1201,6 +1204,9 @@ msgstr "finding where…"
 msgid "First"
 msgstr "First"
 
+msgid "First (approximately)"
+msgstr "First (approximately)"
+
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
@@ -1288,8 +1294,8 @@ msgstr "Height when connected"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "Height, hash, address, ProTx, IP, ID, name…"
 
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
+#. placeholder {0}: formatInt(Math.min(...rows.map((r) => r.height)))
+#. placeholder {1}: formatInt(Math.max(...rows.map((r) => r.height)))
 msgid "Heights {0} to {1}"
 msgstr "Heights {0} to {1}"
 
@@ -1469,6 +1475,9 @@ msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight could not return this address’s oldest transactions."
+
+msgid "Insight could not return this address’s transactions."
+msgstr "Insight could not return this address’s transactions."
 
 msgid "Insight couldn’t be reached"
 msgstr "Insight couldn’t be reached"
@@ -1891,6 +1900,9 @@ msgstr "No balances indexed yet."
 msgid "No block with this ID on this network."
 msgstr "No block with this ID on this network."
 
+msgid "No blocks came back for this page"
+msgstr "No blocks came back for this page"
+
 msgid "No blocks on this date"
 msgstr "No blocks on this date"
 
@@ -2218,6 +2230,10 @@ msgstr "Page not found"
 
 msgid "Pages"
 msgstr "Pages"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "Pages of {0} need an index that is up to date, and none is right now."
 
 msgid "Pagination"
 msgstr "Pagination"
@@ -3172,6 +3188,11 @@ msgstr "The source is busy"
 
 msgid "The source isn't answering"
 msgstr "The source isn't answering"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
 
 msgid "The source sent something Radar couldn't read"
 msgstr "The source sent something Radar couldn't read"

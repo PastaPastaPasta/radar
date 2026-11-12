@@ -918,6 +918,9 @@ msgstr "Core のバージョン"
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform、マスターノードネットワーク"
 
+msgid "Could not be read"
+msgstr "読み取れませんでした"
+
 msgid "Counted as valid"
 msgstr "有効として集計"
 
@@ -1201,6 +1204,9 @@ msgstr "場所を特定中…"
 msgid "First"
 msgstr "最初"
 
+msgid "First (approximately)"
+msgstr "初回（概算）"
+
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
@@ -1288,8 +1294,8 @@ msgstr "接続時の高さ"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "高さ、ハッシュ、アドレス、ProTx、IP、ID、名前…"
 
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
+#. placeholder {0}: formatInt(Math.min(...rows.map((r) => r.height)))
+#. placeholder {1}: formatInt(Math.max(...rows.map((r) => r.height)))
 msgid "Heights {0} to {1}"
 msgstr "高さ {0} から {1}"
 
@@ -1469,6 +1475,9 @@ msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insightはこのアドレスの最も古いトランザクションを返せませんでした。"
+
+msgid "Insight could not return this address’s transactions."
+msgstr "Insight からこのアドレスのトランザクションを取得できませんでした。"
 
 msgid "Insight couldn’t be reached"
 msgstr "Insight に接続できませんでした"
@@ -1891,6 +1900,9 @@ msgstr "インデックス済みの残高はまだありません。"
 msgid "No block with this ID on this network."
 msgstr "このネットワークにこの ID のブロックはありません。"
 
+msgid "No blocks came back for this page"
+msgstr "このページのブロックは返されませんでした"
+
 msgid "No blocks on this date"
 msgstr "この日付のブロックはありません"
 
@@ -2218,6 +2230,10 @@ msgstr "ページが見つかりません"
 
 msgid "Pages"
 msgstr "ページ"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "{0} 件のページには最新のインデックスが必要ですが、現在は該当するものがありません。"
 
 msgid "Pagination"
 msgstr "ページ送り"
@@ -3172,6 +3188,11 @@ msgstr "ソースが混雑しています"
 
 msgid "The source isn't answering"
 msgstr "ソースが応答しません"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "高さ {0} から {1} のブロックは取得元から返されませんでした。前後のページか、より短いページをお試しください。"
 
 msgid "The source sent something Radar couldn't read"
 msgstr "ソースが Radar で読み取れないデータを返しました"
