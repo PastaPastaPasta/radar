@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import recorded from '@/test/fixtures/http/hyphen/mainnet/balances--limit-25.json'
 import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -59,6 +60,25 @@ describe('Rich list page', () => {
       .slice(1)
       .map((r) => within(r).getAllByRole('rowheader')[0]?.textContent)
     expect(bands).toEqual(['1', '2–5', '6–10', '11–25', '26–50', '51–100'])
+  })
+
+  it('names the total each share is of, and the shares add up against it @HY-09', async () => {
+    renderAt('/rich-list')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    const notes = await waitFor(() => {
+      const found = [...document.querySelectorAll<HTMLElement>('[data-share-basis]')]
+      expect(found).toHaveLength(2)
+      return found
+    })
+    for (const note of notes) {
+      expect(note).toHaveTextContent(/Shares are of the 12\.89 M DASH held in positive address/)
+      expect(note).toHaveTextContent(/not of the circulating supply/)
+    }
+    expect(notes[1]).toHaveTextContent('block 2,570,013')
+    const { value, meta } = recorded.body
+    const share = value[0]!.balance / meta.includedSupply
+    expect(within(table).getAllByRole('row')[1]).toHaveTextContent(`${(share * 100).toFixed(2)}%`)
   })
 
   it('works on testnet @HY-19', async () => {

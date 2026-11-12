@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { EChartsOption } from 'echarts'
@@ -16,6 +16,31 @@ import { RichListCompact } from './RichListCompact'
 import { richListQueries } from './queries'
 
 const SUMMARY_ID = 'concentration'
+
+/**
+ * Hyphen's shares are of the positive address balances in the snapshot, which is not the circulating supply the rest of
+ * Radar shows; the note says which total each percentage is of.
+ */
+function ShareBasis({
+  supply,
+  height,
+  style,
+}: {
+  supply: bigint | undefined
+  height: number | undefined
+  style?: React.CSSProperties
+}) {
+  if (supply === undefined || height === undefined) return null
+  return (
+    <p className="rx-note" data-share-basis style={style}>
+      <Trans>
+        Shares are of the <Amount value={supply} kind="duffs" compact /> held in positive address
+        balances at block {formatInt(height)}, not of the circulating supply shown elsewhere in
+        Radar.
+      </Trans>
+    </p>
+  )
+}
 
 export function RichListPage() {
   const { t } = useLingui()
@@ -145,6 +170,7 @@ function RichListContent() {
               }
             />
           </div>
+          <ShareBasis supply={top.data?.data.includedSupply} height={top.data?.data.asOfHeight} />
           <Chart
             option={option}
             height={240}
@@ -166,6 +192,11 @@ function RichListContent() {
         padding="flush"
         source={firstPageSource}
       >
+        <ShareBasis
+          supply={first?.includedSupply}
+          height={first?.asOfHeight}
+          style={{ margin: 0, padding: '12px 16px 4px' }}
+        />
         {phone ? (
           <RichListCompact {...table} source={firstPageSource} summaryId={SUMMARY_ID} />
         ) : (

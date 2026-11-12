@@ -261,6 +261,20 @@ test.describe('rich list', () => {
     await expectNoSideScroll(page)
   })
 
+  test('says which total the shares are of, next to the shares and the chart @HY-09', async ({
+    page,
+  }) => {
+    await page.goto('/rich-list')
+    await expect(rankedList(page)).toBeVisible()
+    const notes = page.locator('[data-share-basis]')
+    await expect(notes).toHaveCount(2)
+    for (const note of await notes.all()) {
+      await expect(note).toBeVisible()
+      await expect(note).toContainText('Shares are of the 12.89 M DASH held in positive address')
+      await expect(note).toContainText('not of the circulating supply')
+    }
+  })
+
   test('lists compact rows on a phone, with the rest on tap and the summary in reach @HY-09', async ({
     page,
   }) => {
