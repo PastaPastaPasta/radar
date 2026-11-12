@@ -22,9 +22,10 @@ describe('Blocks list', () => {
 
   it('lists the newest blocks with a link to older ones @HY-04', async () => {
     renderAt('/blocks')
-    const table = await screen.findByRole('table', { name: 'Core blocks' })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
-    expect(within(table).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument()
+    await screen.findByRole('table', { name: 'Core blocks' })
+    const table = () => screen.getByRole('table', { name: 'Core blocks' })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    expect(within(table()).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument()
     const pager = screen.getByRole('navigation', { name: 'Pagination' })
     expect(within(pager).getByRole('link', { name: 'Older' })).toHaveAttribute(
       'href',
@@ -35,9 +36,10 @@ describe('Blocks list', () => {
 
   it('carries a short unit on each count for the phone card, which has no column header @HY-04', async () => {
     renderAt('/blocks')
-    const table = await screen.findByRole('table', { name: 'Core blocks' })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
-    const cells = table.querySelectorAll('tbody td[data-u]')
+    await screen.findByRole('table', { name: 'Core blocks' })
+    const table = () => screen.getByRole('table', { name: 'Core blocks' })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    const cells = table().querySelectorAll('tbody td[data-u]')
     expect(cells).toHaveLength(20)
     for (const cell of cells) expect(cell).toHaveAttribute('data-u', 'tx')
   })
@@ -47,9 +49,10 @@ describe('Blocks list', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: /Blocks on 3 Nov 2026/ }),
     ).toBeInTheDocument()
-    const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
-    expect(within(table).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
+    await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    expect(within(table()).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Previous day' })).toHaveAttribute(
       'href',
       expect.stringContaining('date=2026-11-02'),
@@ -62,9 +65,10 @@ describe('Blocks list', () => {
 
   it('works on testnet @IN-16 @HY-19', async () => {
     renderAt('/blocks?network=testnet')
-    const table = await screen.findByRole('table', { name: 'Core blocks' })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
-    expect(within(table).getByRole('link', { name: /1,589,232/ })).toBeInTheDocument()
+    await screen.findByRole('table', { name: 'Core blocks' })
+    const table = () => screen.getByRole('table', { name: 'Core blocks' })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    expect(within(table()).getByRole('link', { name: /1,589,232/ })).toBeInTheDocument()
   })
 
   it('marks a row whose ChainLock one node reported without calling it locked @IN-02', async () => {
@@ -79,9 +83,10 @@ describe('Blocks list', () => {
       }
     })
     renderAt('/blocks')
-    const table = await screen.findByRole('table', { name: 'Core blocks' })
-    expect(await within(table).findByText('ChainLock reported by one node')).toBeInTheDocument()
-    expect(within(table).getAllByText('ChainLock reported by one node')).toHaveLength(1)
+    await screen.findByRole('table', { name: 'Core blocks' })
+    const table = () => screen.getByRole('table', { name: 'Core blocks' })
+    expect(await within(table()).findByText('ChainLock reported by one node')).toBeInTheDocument()
+    expect(within(table()).getAllByText('ChainLock reported by one node')).toHaveLength(1)
   })
 
   it('keeps blocks stamped across midnight on their day instead of dropping them @IN-02', async () => {
@@ -94,8 +99,9 @@ describe('Blocks list', () => {
       }
     })
     renderAt('/blocks?date=2026-11-03')
-    const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
+    await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
   })
 
   it('shows the first rows of a day while the rest of the page is still being read @IN-02', async () => {
@@ -111,13 +117,14 @@ describe('Blocks list', () => {
       return original(net, q, signal)
     })
     renderAt('/blocks?date=2026-11-03')
-    const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(FIRST_CHUNK + 1))
-    expect(within(table).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
-    expect(table.querySelectorAll('[data-pending-row]')).toHaveLength(20 - FIRST_CHUNK)
+    await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(FIRST_CHUNK + 1))
+    expect(within(table()).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
+    expect(table().querySelectorAll('[data-pending-row]')).toHaveLength(20 - FIRST_CHUNK)
     release()
-    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
-    expect(table.querySelectorAll('[data-pending-row]')).toHaveLength(0)
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    expect(table().querySelectorAll('[data-pending-row]')).toHaveLength(0)
     expect(counts).toEqual([FIRST_CHUNK, 20 - FIRST_CHUNK])
   })
 
@@ -149,8 +156,9 @@ describe('Blocks list', () => {
 
     it('offers 20, 50 and 100 with 20 chosen, and keeps the date in the links @IN-02', async () => {
       renderAt('/blocks?date=2026-11-03')
-      const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-      await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
+      await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
       const group = screen.getByRole('group', { name: 'Blocks per page' })
       expect(within(group).getByRole('button', { name: '20' })).toHaveAttribute(
         'aria-pressed',
@@ -169,8 +177,9 @@ describe('Blocks list', () => {
         return Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight, q.count) })
       })
       renderAt('/blocks?date=2026-11-03&size=50')
-      const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-      await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(51))
+      await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(51))
       expect(calls).toEqual([{ count: 50, via: 'index' }])
       expect(screen.getByText('50 blocks a page, newest first.')).toBeInTheDocument()
       const pager = screen.getByRole('navigation', { name: 'Pagination' })
@@ -193,8 +202,9 @@ describe('Blocks list', () => {
       const hundred = within(group).getByRole('button', { name: '100' })
       await waitFor(() => expect(hundred).toBeEnabled())
       await user.click(hundred)
-      const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
-      await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(101))
+      await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(101))
       expect(
         within(screen.getByRole('group', { name: 'Blocks per page' })).getByRole('button', {
           name: '100',
