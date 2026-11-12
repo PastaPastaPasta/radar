@@ -67,7 +67,7 @@ Radar keeps the family 1200 px container. Two things break out on purpose: the s
 |---|---|
 | ≥ 1024 | full layout; 12-col grid; split with 360 px aside |
 | 1023 – 861 | grid items fall to 6 columns (wide ones full); split stacks (aside under main); scope stacks map under copy |
-| 860 – 641 | inputs/outputs stack with a rotated arrow; record actions wrap under the title |
+| 1099 – 641 | inputs/outputs stack with a rotated arrow; record actions wrap under the title |
 | ≤ 640 (phone) | single column; stat rows 2-up; tables become cards (§6.7); bottom tab bar (§11); the ⌘K palette goes full screen; card padding 14 px |
 
 Page rhythm: band padding 28/32 px; zone padding 40 px top; section gap 56 px (40 px on phone); card gap 16–20 px; inside cards 20 px sides (14 px phone).
