@@ -94,18 +94,41 @@ describe('Rich list page', () => {
       await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
       expect(screen.queryByRole('table', { name: /Addresses ranked by balance/ })).toBeNull()
       const first = within(list).getAllByRole('listitem')[0]!
-      const summary = first.querySelector('summary')!
-      expect(summary).toHaveTextContent('1')
-      expect(summary).toHaveTextContent('7.70%')
-      expect(summary.textContent).toMatch(/…/)
+      const toggle = within(first).getByRole('button', { expanded: false })
+      expect(toggle).toHaveTextContent('1')
+      expect(toggle).toHaveTextContent('7.70%')
+      expect(toggle.textContent).toMatch(/…/)
       for (const label of ['Received', 'Sent', 'Transactions']) {
-        expect(within(first).getByText(label)).toBeInTheDocument()
+        expect(within(first).getByText(label)).not.toBeVisible()
       }
-      expect(first.querySelector('details')).not.toHaveAttribute('open')
+      await userEvent.setup().click(toggle)
+      for (const label of ['Received', 'Sent', 'Transactions']) {
+        expect(within(first).getByText(label)).toBeVisible()
+      }
       expect(within(first).getByRole('link')).toHaveAttribute(
         'href',
         expect.stringContaining('/address/'),
       )
+    })
+
+    it('hints at the tap and gives every row a chevron that follows its state @HY-09', async () => {
+      phone()
+      const user = userEvent.setup()
+      renderAt('/rich-list')
+      const list = await screen.findByRole('list', { name: 'Addresses ranked by balance' })
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
+      expect(screen.getByText('Tap a row for received, sent and transactions')).toBeInTheDocument()
+      const toggles = within(list).getAllByRole('button')
+      expect(toggles).toHaveLength(25)
+      for (const toggle of toggles) {
+        expect(toggle).toHaveAttribute('aria-expanded', 'false')
+        expect(toggle.querySelector('.rx-rich-chevron')).not.toBeNull()
+      }
+      await user.click(toggles[0]!)
+      expect(toggles[0]).toHaveAttribute('aria-expanded', 'true')
+      expect(toggles[1]).toHaveAttribute('aria-expanded', 'false')
+      await user.click(toggles[0]!)
+      expect(toggles[0]).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('loads more ranks and keeps the summary one tap away', async () => {

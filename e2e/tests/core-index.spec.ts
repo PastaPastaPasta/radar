@@ -270,8 +270,12 @@ test.describe('rich list', () => {
     const first = list.getByRole('listitem').first()
     const row = await first.boundingBox()
     expect(row!.height, 'a collapsed row stays one compact line or two').toBeLessThan(72)
+    await expect(page.getByText('Tap a row for received, sent and transactions')).toBeVisible()
+    const toggle = first.getByRole('button', { expanded: false })
+    await expect(toggle.locator('.rx-rich-chevron')).toBeVisible()
     await expect(first.getByText('Received')).toBeHidden()
-    await first.locator('summary').click()
+    await toggle.click()
+    await expect(first.getByRole('button', { expanded: true })).toBeVisible()
     for (const label of ['Received', 'Sent', 'Transactions']) {
       await expect(first.getByText(label, { exact: true })).toBeVisible()
     }

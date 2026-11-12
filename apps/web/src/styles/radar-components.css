@@ -1094,6 +1094,30 @@ button.rx-src--proof:hover {
   align-items: center;
   gap: 5px;
 }
+.rx-verify-result {
+  scroll-margin-block-end: calc(var(--dh-tabs-h, 0px) + 16px);
+}
+.rx-rich-row {
+  appearance: none;
+  min-height: 44px;
+}
+.rx-rich-row:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: -2px;
+}
+.rx-rich-chevron {
+  color: var(--dh-ink-2);
+  transition: transform 0.15s ease;
+  transform: rotate(-90deg);
+}
+.rx-rich-row[aria-expanded='true'] .rx-rich-chevron {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rx-rich-chevron {
+    transition: none;
+  }
+}
 .rx-pager {
   margin-left: auto;
   display: flex;
