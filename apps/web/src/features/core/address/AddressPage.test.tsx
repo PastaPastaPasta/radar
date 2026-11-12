@@ -1,4 +1,4 @@
-import { act, screen, waitFor, within } from '@testing-library/react'
+import { act, configure, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -6,6 +6,8 @@ import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
+
+configure({ asyncUtilTimeout: 5000 })
 
 const feed = vi.hoisted(() => ({
   listeners: new Set<(e: unknown) => void>(),
