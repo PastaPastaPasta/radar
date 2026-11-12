@@ -1,5 +1,6 @@
 import type { DecodedTx } from '@/data/core/types'
 import type { HyAddressTx, HyTxDetail } from '@/data/hyphen/schemas'
+import { txTip } from '@/data/insight/adapt'
 import type { InsTx } from '@/data/insight/schemas'
 
 export interface Spender {
@@ -36,21 +37,6 @@ export interface AddressUtxos {
   complete: boolean
 }
 
-/** The spend state Insight's transaction answer gives, or undefined when it has none (not found, not mined). */
-export function insightSpendsOf(tx: InsTx | null | undefined): InsightSpends | undefined {
-  if (!tx || (tx.blockheight ?? -1) < 0 || tx.blockheight == null) return undefined
-  const asOf =
-    tx.confirmations != null && tx.confirmations > 0
-      ? tx.blockheight + tx.confirmations - 1
-      : undefined
-  return {
-    asOf,
-    vout: new Map(
-      tx.vout.map((o) => [o.n, o.spentTxId ? { txid: o.spentTxId, vin: o.spentIndex ?? 0 } : null]),
-    ),
-  }
-}
-
 /** An OP_RETURN output can never be spent. */
 export const isUnspendable = (scriptPubKey: string): boolean => scriptPubKey.startsWith('6a')
 
@@ -62,6 +48,17 @@ export interface InsightSpends {
   asOf: number | undefined
   /** Per output index: its spender, or `null` where Insight says it is unspent. */
   vout: ReadonlyMap<number, Spender | null>
+}
+
+/** The spend state Insight's transaction answer gives, or undefined when it has none (not found, not mined). */
+export function insightSpendsOf(tx: InsTx | null | undefined): InsightSpends | undefined {
+  if (!tx || (tx.blockheight ?? -1) < 0) return undefined
+  return {
+    asOf: txTip(tx),
+    vout: new Map(
+      tx.vout.map((o) => [o.n, o.spentTxId ? { txid: o.spentTxId, vin: o.spentIndex ?? 0 } : null]),
+    ),
+  }
 }
 
 export interface SpendInput {

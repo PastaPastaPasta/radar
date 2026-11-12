@@ -3,4 +3,9 @@ import { hyphenHandlers, insightHandlers, peHandlers, radarHandlers } from './fi
 
 export { onFixtureMiss, takeFixtureMisses } from './fixtures'
 
-export const fixtureHandlers: AnyHandler[] = [...radarHandlers, ...peHandlers, ...hyphenHandlers, ...insightHandlers]
+export const fixtureHandlers: AnyHandler[] = [
+  ...radarHandlers,
+  ...peHandlers,
+  ...hyphenHandlers,
+  ...insightHandlers,
+]

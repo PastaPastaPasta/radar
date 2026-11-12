@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 import { coreLive } from '@/data/core/live'
 import { mapSourced } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
-import { adaptAddressTx } from '@/data/insight/adapt'
 import { insQueries } from '@/data/insight/queries'
 import { POLL_MS } from '@/data/query/stale'
 import type { NetworkId } from '@/lib/network'
-import { addressKeys, addressQueries, type IndexSource } from './queries'
+import { addressKeys, addressQueries, txRows, type IndexSource } from './queries'
 import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
 export interface AddressActivity {
@@ -89,9 +88,7 @@ export function useAddressActivity(
           ? untilAborted(
               queryClient.fetchQuery({ ...insQueries.addressTxs(net, address, 0), ...FRESH }),
               signal,
-            ).then((page) =>
-              mapSourced(page, (p) => p.txs.flatMap((tx) => adaptAddressTx(tx, address) ?? [])),
-            )
+            ).then((page) => mapSourced(page, (p) => txRows(address, p)))
           : untilAborted(
               queryClient.fetchQuery({
                 ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),

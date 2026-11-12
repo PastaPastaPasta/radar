@@ -19,6 +19,12 @@ export function insightTxType(tx: Pick<InsTx, 'type' | 'vin'>): string {
   return TX_TYPES[tx.type ?? 0] ?? 'normal'
 }
 
+/** The chain tip an answer about a confirmed transaction was read at: its height plus its confirmations, less one. */
+export const txTip = (tx: InsTx): number | undefined =>
+  tx.blockheight != null && tx.blockheight >= 0 && tx.confirmations != null && tx.confirmations > 0
+    ? tx.blockheight + tx.confirmations - 1
+    : undefined
+
 export const adaptAddress = (a: InsAddress): HyAddress => ({
   address: a.address,
   balance: a.balance,

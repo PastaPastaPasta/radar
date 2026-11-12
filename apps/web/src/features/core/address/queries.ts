@@ -24,7 +24,7 @@ export function addressKeys(net: NetworkId, address: string, from: IndexSource =
   }
 }
 
-const txRows = (address: string, page: InsTxPage): HyAddressTx[] =>
+export const txRows = (address: string, page: InsTxPage): HyAddressTx[] =>
   page.txs.flatMap((tx) => adaptAddressTx(tx, address) ?? [])
 
 /** The address page's reads in Hyphen's shapes; Insight's answers are adapted to them. */

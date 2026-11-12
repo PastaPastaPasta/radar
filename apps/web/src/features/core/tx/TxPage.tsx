@@ -423,11 +423,7 @@ function TxView({
               mined,
               hy: hy.data ? { detail: hy.data.data, asOfHeight: hy.data.height } : undefined,
               hyLoading: hyphenFit && mined && hy.isPending,
-              insight: ins.isPending
-                ? ins.fetchStatus === 'idle'
-                  ? undefined
-                  : 'pending'
-                : insightSpends,
+              insight: ins.isPending && ins.fetchStatus !== 'idle' ? 'pending' : insightSpends,
               tipHeight,
             }}
             partial={needsPrevouts ? { loaded: count, loading: prevouts.isFetching } : undefined}

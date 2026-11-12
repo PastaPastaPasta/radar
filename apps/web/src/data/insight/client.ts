@@ -4,6 +4,7 @@ import type { Sourced } from '../envelope'
 import { healthRegistry } from '../health'
 import { indexedLagDetail } from '../health-lag'
 import { fetchSourced, requireEndpoint } from '../http'
+import { txTip } from './adapt'
 import {
   InsAddressSchema,
   InsBlockIndexSchema,
@@ -26,34 +27,24 @@ import {
 
 const seg = encodeURIComponent
 
-function base(net: NetworkId): string {
-  return requireEndpoint(net, 'insight', 'insight')
-}
-
-function get<S extends z.ZodType>(
+function get<S extends z.ZodType, N extends 'throw' | 'null' = 'throw'>(
   net: NetworkId,
   path: string,
   schema: S,
   opts: {
     signal?: AbortSignal
+    notFound?: N
     height?: (body: z.output<S>) => number | undefined
   } = {},
 ) {
   return fetchSourced({
     source: 'insight',
     net,
-    url: () => `${base(net)}${path}`,
+    url: () => `${requireEndpoint(net, 'insight', 'insight')}${path}`,
     schema,
-    signal: opts.signal,
-    height: opts.height,
+    ...opts,
   })
 }
-
-/** The chain tip an answer about a confirmed transaction was read at: its height plus its confirmations, less one. */
-const txTip = (tx: InsTx): number | undefined =>
-  tx.blockheight != null && tx.blockheight >= 0 && tx.confirmations != null && tx.confirmations > 0
-    ? tx.blockheight + tx.confirmations - 1
-    : undefined
 
 export const insight = {
   /** `referenceHeight`: the chain tip from a source outside Insight, to measure how far its index trails. */
@@ -84,22 +75,14 @@ export const insight = {
   ): Promise<Sourced<InsBlock | null>> {
     let hash = String(hashOrHeight)
     if (typeof hashOrHeight === 'number' || /^\d+$/.test(hash)) {
-      const index = await fetchSourced({
-        source: 'insight',
-        net,
-        url: () => `${base(net)}/block-index/${seg(hash)}`,
-        schema: InsBlockIndexSchema,
+      const index = await get(net, `/block-index/${seg(hash)}`, InsBlockIndexSchema, {
         notFound: 'null',
         signal,
       })
       if (!index.data) return { ...index, data: null }
       hash = index.data.blockHash
     }
-    return fetchSourced({
-      source: 'insight',
-      net,
-      url: () => `${base(net)}/block/${seg(hash)}`,
-      schema: InsBlockSchema,
+    return get(net, `/block/${seg(hash)}`, InsBlockSchema, {
       notFound: 'null',
       signal,
       height: (b) => b.height,
@@ -125,15 +108,7 @@ export const insight = {
   },
 
   tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<InsTx | null>> {
-    return fetchSourced({
-      source: 'insight',
-      net,
-      url: () => `${base(net)}/tx/${seg(txid)}`,
-      schema: InsTxSchema,
-      notFound: 'null',
-      signal,
-      height: txTip,
-    })
+    return get(net, `/tx/${seg(txid)}`, InsTxSchema, { notFound: 'null', signal, height: txTip })
   },
 
   proposals(net: NetworkId, signal?: AbortSignal): Promise<Sourced<InsProposal[]>> {

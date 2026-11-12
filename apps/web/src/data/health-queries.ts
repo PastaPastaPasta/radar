@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
+import type { Sourced } from './envelope'
 import { healthRegistry } from './health'
 import { hyphen } from './hyphen/client'
 import { insight } from './insight/client'
@@ -33,6 +34,23 @@ async function referenceTip(net: NetworkId, signal: AbortSignal): Promise<number
     .catch(() => undefined)
 }
 
+/** An index source's probe: its status, measured against `referenceTip`; with no tip to measure against, no lag is claimed. */
+function indexProbe<T>(
+  source: 'hyphen' | 'insight',
+  status: (net: NetworkId, signal: AbortSignal, tip: number | undefined) => Promise<Sourced<T>>,
+) {
+  return (net: NetworkId) =>
+    queryOptions({
+      queryKey: healthKeys(net, source),
+      queryFn: async ({ signal }) => {
+        const tip = await referenceTip(net, signal)
+        if (tip === undefined) healthRegistry.setLag(net, source, undefined)
+        return status(net, signal, tip)
+      },
+      ...probe,
+    })
+}
+
 /** Freshness probes, `[net, 'health', source]`. Mounted only where a card uses the source, and on /status. */
 export const healthQueries = {
   radar: (net: NetworkId) =>
@@ -47,24 +65,6 @@ export const healthQueries = {
       queryFn: ({ signal }) => pe.status(net, signal),
       ...probe,
     }),
-  hyphen: (net: NetworkId) =>
-    queryOptions({
-      queryKey: healthKeys(net, 'hyphen'),
-      queryFn: async ({ signal }) => {
-        const tip = await referenceTip(net, signal)
-        if (tip === undefined) healthRegistry.setLag(net, 'hyphen', undefined)
-        return hyphen.status(net, signal, tip)
-      },
-      ...probe,
-    }),
-  insight: (net: NetworkId) =>
-    queryOptions({
-      queryKey: healthKeys(net, 'insight'),
-      queryFn: async ({ signal }) => {
-        const tip = await referenceTip(net, signal)
-        if (tip === undefined) healthRegistry.setLag(net, 'insight', undefined)
-        return insight.status(net, signal, tip)
-      },
-      ...probe,
-    }),
+  hyphen: indexProbe('hyphen', (net, signal, tip) => hyphen.status(net, signal, tip)),
+  insight: indexProbe('insight', (net, signal, tip) => insight.status(net, signal, tip)),
 }

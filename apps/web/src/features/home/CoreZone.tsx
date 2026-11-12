@@ -6,7 +6,6 @@ import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import { hyQueries } from '@/data/hyphen/queries'
-import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
@@ -22,9 +21,16 @@ import {
   useHyphenLagSentence,
 } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
-import { useSeenPending, type SeenTx } from './seen-pending'
+import { useSeenPending } from './seen-pending'
 
 const PENDING = 8
+
+interface PendingRow {
+  txid: string
+  value: bigint
+  size: number
+  at: number
+}
 
 function useHyphenBlocked() {
   const net = useNetwork()
@@ -139,37 +145,10 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
   const { t } = useLingui()
   const { net, fit, devnet, stale } = useHyphenBlocked()
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
-  const seen = useSeenPending(net, stale && !devnet)
-  const columns = useMemo<ColumnDef<HyMempoolTx>[]>(() => {
+  const seenOnly = stale && !devnet
+  const seen = useSeenPending(net, seenOnly)
+  const columns = useMemo<ColumnDef<PendingRow>[]>(() => {
     return [
-      {
-        id: 'tx',
-        header: t`Transaction`,
-        cell: ({ row }) => <Entity kind="tx" id={row.original.txHash} />,
-        meta: { phone: 'title' },
-      },
-      {
-        id: 'value',
-        header: t`Value`,
-        cell: ({ row }) => <Amount value={row.original.valueOut} kind="duffs" />,
-        meta: { numeric: true, align: 'end', phone: 'secondary' },
-      },
-      {
-        id: 'size',
-        header: t`Size`,
-        accessorFn: (r) => formatBytes(r.txSize),
-        meta: { numeric: true, phone: 'secondary' },
-      },
-      {
-        id: 'seen',
-        header: t`First seen`,
-        cell: ({ row }) => <Time ms={row.original.firstSeenAt} mode="relative" live />,
-        meta: { phone: 'primary' },
-      },
-    ]
-  }, [t])
-  const seenColumns = useMemo<ColumnDef<SeenTx>[]>(
-    () => [
       {
         id: 'tx',
         header: t`Transaction`,
@@ -190,13 +169,20 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
       },
       {
         id: 'seen',
-        header: t`Seen`,
-        cell: ({ row }) => <Time ms={row.original.seenAt} mode="relative" live />,
+        header: seenOnly ? t`Seen` : t`First seen`,
+        cell: ({ row }) => <Time ms={row.original.at} mode="relative" live />,
         meta: { phone: 'primary' },
       },
-    ],
-    [t],
-  )
+    ]
+  }, [t, seenOnly])
+  const rows: PendingRow[] = seenOnly
+    ? seen.rows.map((r) => ({ txid: r.txid, value: r.value, size: r.size, at: r.seenAt }))
+    : (query.data?.data.items ?? []).map((r) => ({
+        txid: r.txHash,
+        value: r.valueOut,
+        size: r.txSize,
+        at: r.firstSeenAt,
+      }))
   return (
     <Card
       layer="core"
@@ -211,17 +197,17 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
         </PageLink>
       }
     >
-      {stale && !devnet && seen.rows.length === 0 ? (
+      {seenOnly && rows.length === 0 ? (
         <Empty
           kind="none-yet"
           title={t`Nothing seen yet`}
           body={t`Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain.`}
         />
-      ) : stale && !devnet ? (
+      ) : seenOnly ? (
         <DataTable
           caption={t`Pending transactions seen since you opened this page`}
-          columns={seenColumns}
-          rows={seen.rows.slice(0, PENDING)}
+          columns={columns}
+          rows={rows.slice(0, PENDING)}
           getRowId={(r) => r.txid}
           state="ready"
           rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
@@ -236,13 +222,13 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
         <DataTable
           caption={t`Pending transactions`}
           columns={columns}
-          rows={(query.data?.data.items ?? []).slice(0, PENDING)}
-          getRowId={(r) => r.txHash}
+          rows={rows.slice(0, PENDING)}
+          getRowId={(r) => r.txid}
           state={query.isError && !query.data ? 'error' : query.data ? 'ready' : 'loading'}
           error={query.error}
           onRetry={() => void query.refetch()}
           empty={<Empty kind="none-yet" title={t`No transactions in the mempool right now`} />}
-          rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txHash } })}
+          rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
         />
       )}
     </Card>

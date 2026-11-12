@@ -11,12 +11,6 @@ const lower = (s: string) => s.toLowerCase()
 
 /** Insight is a shared public service: its reads are cached like Hyphen's and never polled faster. */
 export const insQueries = {
-  status: (net: NetworkId) =>
-    queryOptions({
-      queryKey: insKeys(net, 'status'),
-      queryFn: ({ signal }) => insight.status(net, signal),
-      ...dataClass('index'),
-    }),
   block: (net: NetworkId, hashOrHeight: string | number) =>
     queryOptions({
       queryKey: insKeys(net, 'block', { id: lower(String(hashOrHeight)) }),
@@ -47,12 +41,6 @@ export const insQueries = {
       queryFn: ({ signal }) => insight.tx(net, txid, signal),
       ...dataClass('index'),
     }),
-  proposals: (net: NetworkId) =>
-    queryOptions({
-      queryKey: insKeys(net, 'proposals'),
-      queryFn: ({ signal }) => insight.proposals(net, signal),
-      ...dataClass('index'),
-    }),
   /** Every proposal in Hyphen's shape, with funding worked out from the vote counts and the budget (`adaptProposals`). */
   proposalPage: (net: NetworkId) =>
     queryOptions({
@@ -66,12 +54,6 @@ export const insQueries = {
           items: adaptProposals(items, info.data, Date.now()),
         }))
       },
-      ...dataClass('index'),
-    }),
-  governanceInfo: (net: NetworkId) =>
-    queryOptions({
-      queryKey: insKeys(net, 'governance-info'),
-      queryFn: ({ signal }) => insight.governanceInfo(net, signal),
       ...dataClass('index'),
     }),
 }

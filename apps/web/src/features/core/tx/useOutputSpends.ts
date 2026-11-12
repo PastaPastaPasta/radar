@@ -49,6 +49,7 @@ export function useOutputSpends({
   visible: number
 }): OutputSpend[] {
   const answered = insight === 'pending' ? undefined : insight
+  const loading = hyLoading || insight === 'pending'
   const queryClient = useQueryClient()
   const height = tx.height
   const mayHaveUtxos = mined && height !== undefined && hy?.detail != null && insight === undefined
@@ -106,7 +107,7 @@ export function useOutputSpends({
     tx,
     mined,
     hy,
-    hyLoading: hyLoading || insight === 'pending',
+    hyLoading: loading,
     tipHeight,
     spenders: NO_SPENDERS,
     utxos,
@@ -158,7 +159,7 @@ export function useOutputSpends({
       tx,
       mined,
       hy,
-      hyLoading: hyLoading || insight === 'pending',
+      hyLoading: loading,
       tipHeight,
       spenders,
       utxos,
@@ -166,5 +167,5 @@ export function useOutputSpends({
     })
     // `found` changes identity every render; its settled contents are summed up in `resultKey`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx, mined, hy, hyLoading, insight, tipHeight, utxos, resultKey])
+  }, [tx, mined, hy, loading, answered, tipHeight, utxos, resultKey])
 }
