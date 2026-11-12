@@ -256,9 +256,12 @@ function Lanes() {
   const coreRows = useFrozen(rows.data, paused)
   const platRows = useFrozen(platform.data, paused)
   const phone = useHomeWidth() === 'phone'
-  // The height card above already shows the newest Core block on a phone.
+  // The height card above already shows the newest Core block on a phone. A paused or placeholder feed may not hold
+  // that block at its head, so it is dropped by height and not by position.
+  const tipHeight = tip.data?.data.height
   const core = (coreRows?.data ?? [])
-    .slice(phone ? 1 : 0, phone ? LANE_CORE + 1 : LANE_CORE)
+    .filter((r) => !phone || r.height !== tipHeight)
+    .slice(0, LANE_CORE)
     .reverse()
   const plat = (platRows?.data.items ?? []).slice(0, LANE_PLATFORM).reverse()
   const coreLane = useOpenOnNewest(core.length > 0)

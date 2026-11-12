@@ -107,6 +107,25 @@ describe('Home page', () => {
       expect(heights).toHaveLength(8)
     })
 
+    it('keeps the first chip when the rows on show are the previous tip’s, so no block is on the page twice or not at all on a phone @IN-01', async () => {
+      width(['(max-width: 640px)'])
+      const original = core.blockRows.bind(core)
+      vi.spyOn(core, 'blockRows').mockImplementation(async (n, q, signal) => {
+        const rows = await original(n, q, signal)
+        return { ...rows, data: rows.data.map((r) => ({ ...r, height: r.height - 1 })) }
+      })
+      renderAt('/')
+      await coreRow('2,570,085')
+      const lane = document.querySelector('#lane-core')!
+      await waitFor(() => expect(lane.querySelectorAll('a.rx-blk').length).toBeGreaterThan(0))
+      const heights = [...lane.querySelectorAll<HTMLElement>('a.rx-blk')].map((a) =>
+        Number(a.dataset.h),
+      )
+      expect(heights).toContain(2570084)
+      expect(heights).not.toContain(2570085)
+      expect(heights).toHaveLength(8)
+    })
+
     it.each(['(min-width: 1024px)', null] as const)(
       'keeps the newest Core block as the last chip beyond a phone (%s) @IN-01',
       async (query) => {
