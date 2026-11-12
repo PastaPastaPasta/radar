@@ -432,7 +432,8 @@ export function BlocksPage({
   })
   // A page read from Insight can come back short of its window (see `readInsightPage`), so the page after it starts at
   // the lowest height it shows and no block is skipped.
-  const lowest = rows.length > 0 ? Math.min(...rows.map((r) => r.height)) : undefined
+  const heights = rows.map((r) => r.height)
+  const lowest = heights.length > 0 ? Math.min(...heights) : undefined
   const older =
     pageSource.source === 'insight' && lowest !== undefined && page.settled
       ? lowest - 1 >= range.floor
@@ -474,8 +475,8 @@ export function BlocksPage({
           id="blocks"
           title={dateLabel ? t`Blocks on ${dateLabel}` : t`Latest blocks`}
           description={
-            rows.length > 0 && page.pending === 0
-              ? t`Heights ${formatInt(Math.min(...rows.map((r) => r.height)))} to ${formatInt(Math.max(...rows.map((r) => r.height)))}`
+            lowest !== undefined && page.pending === 0
+              ? t`Heights ${formatInt(lowest)} to ${formatInt(Math.max(...heights))}`
               : undefined
           }
           source={stamp}

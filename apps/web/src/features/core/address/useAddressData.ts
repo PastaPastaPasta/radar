@@ -66,12 +66,7 @@ export function useAddressData(net: NetworkId, address: string) {
   const movedTo = oldest.data?.data.pagesTotal
   const oldestAgain = useQuery({
     ...insightAddressQueries.oldestPage(net, address, movedTo ?? 1),
-    enabled:
-      insight &&
-      !wholeHistoryLoaded &&
-      movedTo !== undefined &&
-      movedTo !== pagesTotal &&
-      movedTo > 1,
+    enabled: insight && !wholeHistoryLoaded && movedPast(pagesTotal, movedTo),
   })
 
   // Insight's pages count the mempool, so a first page can hold only unconfirmed transactions while history follows.
@@ -115,6 +110,11 @@ export function useAddressData(net: NetworkId, address: string) {
   }
 }
 
+/** The history's page count changed to a real multi-page count since it was asked for. */
+function movedPast(asked: number | undefined, reported: number | undefined): boolean {
+  return reported !== undefined && reported !== asked && reported > 1
+}
+
 function isWholeHistory(loaded: { pages: unknown[]; pagesTotal?: number } | undefined): boolean {
   return loaded?.pagesTotal !== undefined && loaded.pages.length >= loaded.pagesTotal
 }
@@ -143,7 +143,7 @@ function insightSeen(
   const last = rows.length > 0 ? Math.max(...times(rows)) : undefined
   const historyFailed = rows.length === 0 && (history.isError || history.isFetchNextPageError)
   const reported = oldest.first.data?.data.pagesTotal
-  const reread = reported !== undefined && reported !== oldest.asked && reported > 1
+  const reread = movedPast(oldest.asked, reported)
   const read = reread ? oldest.again : oldest.first
   const firstSource: Sourced<unknown> | undefined = whole ? loaded?.pages.at(-1) : read.data
   const list = whole ? rows : (read.data?.data.rows ?? [])
