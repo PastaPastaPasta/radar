@@ -907,7 +907,7 @@ button.rx-srcline:hover {
   }
 }
 
-/* The unit chip: in the header from 641 px, and at the end of the section rail below that, where the header has no room */
+/* The unit chip: in the header from 641 px, and on its own line under the section rail below that, where the header has no room and the rail needs its full width */
 .rx-unit {
   display: inline-flex;
   align-items: center;
@@ -976,6 +976,11 @@ button.rx-srcline:hover {
     display: none;
   }
   .rx-unit--rail {
-    display: inline-flex;
+    display: flex;
+    justify-content: flex-end;
+    margin: -14px 0 14px;
+  }
+  .rx-unit--rail select {
+    height: 28px;
   }
 }

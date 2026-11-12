@@ -53,28 +53,30 @@ export function SectionNav() {
   if (section === 'home' || section === 'search') return null
   const pages = pagesInSection(section)
   return (
-    <div className="rx-secrail">
-      <nav
-        ref={railRef}
-        aria-label={t`${sectionLabel(section)} pages`}
-        data-section-nav={section}
-        onScroll={update}
-      >
-        <ul className="flex gap-x-5 gap-y-1 whitespace-nowrap">
-          {pages.map((p) => (
-            <li key={p.path}>
-              <PageLink
-                to={p.path}
-                aria-current={current?.path === p.path ? 'page' : undefined}
-                className="inline-block py-2"
-              >
-                {pageTitle(p)}
-              </PageLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
+    <>
+      <div className="rx-secrail">
+        <nav
+          ref={railRef}
+          aria-label={t`${sectionLabel(section)} pages`}
+          data-section-nav={section}
+          onScroll={update}
+        >
+          <ul className="flex gap-x-5 gap-y-1 whitespace-nowrap">
+            {pages.map((p) => (
+              <li key={p.path}>
+                <PageLink
+                  to={p.path}
+                  aria-current={current?.path === p.path ? 'page' : undefined}
+                  className="inline-block py-2"
+                >
+                  {pageTitle(p)}
+                </PageLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
       <UnitSwitch className="rx-unit--rail" />
-    </div>
+    </>
   )
 }
