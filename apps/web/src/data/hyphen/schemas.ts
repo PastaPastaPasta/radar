@@ -188,7 +188,8 @@ export const HyUtxoSchema = z.object({
   txHash: CHAIN_HASH,
   vout: z.number(),
   value: zBigint,
-  height: z.number(),
+  /** Absent while the output is unconfirmed: Hyphen lists mined outputs only, Insight lists mempool ones too. */
+  height: z.number().nullish(),
   scriptPubKey: zHex,
 })
 export type HyUtxo = z.output<typeof HyUtxoSchema>

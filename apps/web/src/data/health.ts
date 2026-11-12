@@ -4,6 +4,7 @@ import type { BudgetSnapshot } from './dapi-core/budget'
 import type { SourceErrorKind } from './errors'
 import type { SourceId } from './envelope'
 import type { NetworkId } from '@/lib/network'
+import { INDEX_SOURCES, nextIndexState, type IndexState } from './index-state'
 
 export type HealthState = 'unknown' | 'ok' | 'slow' | 'stale' | 'degraded' | 'down'
 
@@ -16,6 +17,11 @@ export interface SourceHealth {
   p50LatencyMs?: number
   /** Freshness lag, when the source reports one. */
   lag?: { blocks?: number; ms?: number; detail: string } // detail: "indexed to block 1,577,999 (18 days behind)"
+  /**
+   * An index source's last decided state, by the one stale rule (`index-state.ts`): it moves only when a lag
+   * has been measured, so a probe with nothing to measure against leaves the earlier answer standing.
+   */
+  index?: IndexState
   /** dapi only */
   budget?: BudgetSnapshot
 }
@@ -61,6 +67,7 @@ interface Tally {
   lastInvalidAt?: number
   lastError?: SourceHealth['lastError']
   lag?: SourceHealth['lag']
+  index?: IndexState
   budget?: BudgetSnapshot
 }
 
@@ -81,8 +88,6 @@ const SLOW_DEFAULT_MS = 3_000
 const STALE_AFTER: Partial<Record<SourceId, { blocks?: number; ms?: number }>> = {
   radar: { ms: 45 * MIN },
   pe: { blocks: 10 },
-  hyphen: { blocks: 3 },
-  insight: { blocks: 3 },
   dapi: { ms: 20 * MIN },
   sdk: { ms: 15 * MIN },
 }
@@ -112,7 +117,9 @@ function median(xs: number[]): number | undefined {
   return sorted.length % 2 ? sorted[mid] : ((sorted[mid - 1] ?? 0) + (sorted[mid] ?? 0)) / 2
 }
 
-function exceedsLag(source: SourceId, lag: SourceHealth['lag']): boolean {
+function exceedsLag(source: SourceId, rec: Tally): boolean {
+  if (INDEX_SOURCES.has(source)) return rec.index === 'stale'
+  const lag = rec.lag
   if (!lag) return false
   const limit = STALE_AFTER[source]
   if (!limit) return false
@@ -129,6 +136,7 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
   health.lastError = rec.lastError
   health.p50LatencyMs = median(rec.latencies)
   health.lag = rec.lag
+  health.index = rec.index
   if (source === 'dapi') health.budget = rec.budget
 
   const lastCall = rec.calls[rec.calls.length - 1]
@@ -151,7 +159,7 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
     health.state = 'down'
     return health
   }
-  if (exceedsLag(source, rec.lag)) {
+  if (exceedsLag(source, rec)) {
     health.state = 'stale'
     return health
   }
@@ -250,7 +258,11 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
       changed()
     },
     setLag(net, source, lag) {
-      touch(net, source).lag = lag
+      const rec = touch(net, source)
+      rec.lag = lag
+      if (INDEX_SOURCES.has(source) && lag?.blocks !== undefined) {
+        rec.index = nextIndexState(rec.index, lag.blocks)
+      }
       changed()
     },
     setBudget(net, snapshot) {
@@ -284,6 +296,7 @@ function sameHealth(a: SourceHealth, b: SourceHealth): boolean {
     a.lastError === b.lastError &&
     a.p50LatencyMs === b.p50LatencyMs &&
     a.lag === b.lag &&
+    a.index === b.index &&
     a.budget === b.budget
   )
 }
@@ -294,14 +307,22 @@ export const healthRegistry: HealthRegistry = registry
 export const setBudgetSnapshot = (net: NetworkId, snapshot: BudgetSnapshot | undefined): void =>
   registry.setBudget(net, snapshot)
 export const resetHealthRegistry = (): void => registry.reset()
+
+/** An index's last decided state, so a route loader can pick the source to prefetch before any probe has run. */
+export const rememberedIndexState = (net: NetworkId) => registry.get(net, 'hyphen').index
 const subscribe = (cb: () => void): (() => void) => healthRegistry.subscribe(cb)
 
 const ALL_SOURCES: SourceId[] = ['sdk', 'dapi', 'radar', 'pe', 'hyphen', 'insight', 'rate']
 
-export function useSourceHealth(source: SourceId): SourceHealth {
-  const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)
+/** One source's health on a named network, for a page that is told its network rather than reading the rendered one. */
+export function useNetworkSourceHealth(net: NetworkId, source: SourceId): SourceHealth {
   const snapshot = () => healthRegistry.get(net, source)
   return useSyncExternalStore(subscribe, snapshot, snapshot)
+}
+
+export function useSourceHealth(source: SourceId): SourceHealth {
+  const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)
+  return useNetworkSourceHealth(net, source)
 }
 
 let allCache: { net: NetworkId; items: SourceHealth[] } | undefined

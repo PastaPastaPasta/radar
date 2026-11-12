@@ -130,9 +130,9 @@ describe('health registry states', () => {
   it('is stale when lag passes the per-source threshold, and stale outranks degraded and slow', () => {
     const { reg } = setup()
     reg.report('mainnet', 'hyphen', ok())
-    reg.setLag('mainnet', 'hyphen', { blocks: 3, detail: 'indexed to block 10' })
+    reg.setLag('mainnet', 'hyphen', { blocks: 6, detail: 'indexed to block 10' })
     expect(reg.get('mainnet', 'hyphen').state).toBe('ok')
-    reg.setLag('mainnet', 'hyphen', { blocks: 4, detail: 'indexed to block 10 (4 behind)' })
+    reg.setLag('mainnet', 'hyphen', { blocks: 7, detail: 'indexed to block 10 (7 behind)' })
     expect(reg.get('mainnet', 'hyphen').state).toBe('stale')
 
     reg.report('mainnet', 'pe', ok())
@@ -148,6 +148,25 @@ describe('health registry states', () => {
     expect(reg.get('mainnet', 'radar').state).toBe('stale')
     reg.setLag('mainnet', 'radar', undefined)
     expect(reg.get('mainnet', 'radar').state).toBe('ok')
+  })
+
+  it('judges both indexes by the page rule: stale past 6, fresh again at 2, and unmoved by a probe with nothing to measure', () => {
+    const { reg } = setup()
+    for (const source of ['hyphen', 'insight'] as const) {
+      reg.report('testnet', source, ok())
+      reg.setLag('testnet', source, { blocks: 7, detail: 'x' })
+      expect(reg.get('testnet', source)).toMatchObject({ state: 'stale', index: 'stale' })
+      for (const behind of [6, 4, 3]) {
+        reg.setLag('testnet', source, { blocks: behind, detail: 'x' })
+        expect(reg.get('testnet', source).state).toBe('stale')
+      }
+      reg.setLag('testnet', source, { detail: 'indexed to block 10' })
+      expect(reg.get('testnet', source).state).toBe('stale')
+      reg.setLag('testnet', source, { blocks: 2, detail: 'x' })
+      expect(reg.get('testnet', source)).toMatchObject({ state: 'ok', index: 'fresh' })
+      reg.setLag('testnet', source, { blocks: 5, detail: 'x' })
+      expect(reg.get('testnet', source).state).toBe('ok')
+    }
   })
 
   it('down outranks stale', () => {

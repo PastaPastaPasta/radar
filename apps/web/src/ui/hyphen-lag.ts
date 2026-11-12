@@ -9,3 +9,11 @@ export function useHyphenLagSentence(net: NetworkId, lag: string | undefined): s
   const name = networkName(net)
   return t`Hyphen’s ${name} index is behind the chain: ${lag}.`
 }
+
+/** The same, for Insight, said after Hyphen's when both trail the chain. */
+export function useInsightLagSentence(net: NetworkId, lag: string | undefined): string | undefined {
+  const { t } = useLingui()
+  if (lag === undefined) return undefined
+  const name = networkName(net)
+  return t`Insight’s ${name} index is behind too: ${lag}.`
+}

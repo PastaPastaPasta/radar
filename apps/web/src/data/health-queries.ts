@@ -34,7 +34,7 @@ async function referenceTip(net: NetworkId, signal: AbortSignal): Promise<number
     .catch(() => undefined)
 }
 
-/** An index source's probe: its status, measured against `referenceTip`; with no tip to measure against, no lag is claimed. */
+/** An index source's probe: its status, measured against `referenceTip`. With no tip to measure against it claims no lag, and the state it was last decided in stands (`HealthRegistry.setLag`). */
 function indexProbe<T>(
   source: 'hyphen' | 'insight',
   status: (net: NetworkId, signal: AbortSignal, tip: number | undefined) => Promise<Sourced<T>>,

@@ -139,12 +139,12 @@ describe('hyphen client', () => {
     expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBe(1_589_136 - 1_577_999)
   })
 
-  it('status is ok when the index is within three blocks of the tip', async () => {
+  it('status is ok when the index is within six blocks of the tip', async () => {
     const out = await hyphen.status('mainnet')
     const min = Math.min(...Object.values(out.data.indices).map((i) => i.indexedHeight))
-    await hyphen.status('mainnet', undefined, min + 2)
+    await hyphen.status('mainnet', undefined, min + 6)
     expect(healthRegistry.get('mainnet', 'hyphen').state).toBe('ok')
-    await hyphen.status('mainnet', undefined, min + 4)
+    await hyphen.status('mainnet', undefined, min + 7)
     expect(healthRegistry.get('mainnet', 'hyphen').state).toBe('stale')
   })
 

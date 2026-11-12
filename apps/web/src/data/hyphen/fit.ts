@@ -1,4 +1,4 @@
-import { useSourceHealth } from '../health'
+import { useNetworkSourceHealth } from '../health'
 import { useIndexHealth } from '../index-health'
 import type { NetworkId } from '@/lib/network'
 
@@ -8,6 +8,6 @@ import type { NetworkId } from '@/lib/network'
  */
 export function useHyphenFit(net: NetworkId): boolean {
   const index = useIndexHealth(net)
-  const health = useSourceHealth('hyphen')
+  const health = useNetworkSourceHealth(net, 'hyphen')
   return index.probed && index.state !== 'stale' && health.state !== 'down'
 }

@@ -3,6 +3,7 @@ import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
 import { healthRegistry } from '../health'
 import { indexedLagDetail } from '../health-lag'
+import { INDEX_STALE_BLOCKS } from '../index-state'
 import { fetchSourced, requireEndpoint } from '../http'
 import {
   HyAddressSchema,
@@ -98,12 +99,20 @@ function getOrNull<S extends z.ZodType>(
   })
 }
 
-function reportHyphenLag(net: NetworkId, status: HyStatus, referenceHeight: number): void {
+function reportHyphenLag(
+  net: NetworkId,
+  status: HyStatus,
+  referenceHeight: number | undefined,
+): void {
   const indexed = Object.values(status.indices)
   if (indexed.length === 0) return
   const min = indexed.reduce((m, i) => Math.min(m, i.indexedHeight), Infinity)
   const oldest = indexed.reduce((m, i) => Math.min(m, i.updatedAt), Infinity)
-  const reference = Math.max(referenceHeight, status.blockHeight)
+  // Hyphen's own chain height is no proof that it is fresh, but a gap between it and its indexes is proof that it is not.
+  const own = status.blockHeight - min > INDEX_STALE_BLOCKS ? status.blockHeight : undefined
+  const reference =
+    referenceHeight === undefined ? own : Math.max(referenceHeight, status.blockHeight)
+  if (reference === undefined) return
   const behind = Math.max(0, reference - min)
   healthRegistry.setLag(net, 'hyphen', {
     blocks: behind,
@@ -133,7 +142,7 @@ export const hyphen = {
         return heights.length > 0 ? Math.min(...heights) : undefined
       },
     })
-    if (referenceHeight !== undefined) reportHyphenLag(net, out.data, referenceHeight)
+    reportHyphenLag(net, out.data, referenceHeight)
     return out
   },
 

@@ -6,7 +6,7 @@ import type { CoreCallOptions } from '../core/types'
 import { endpoint } from '../endpoints'
 import { healthQueries } from '../health-queries'
 import { hyQueries } from '../hyphen/queries'
-import { rememberedIndexState } from '../index-state'
+import { rememberedIndexState } from '../health'
 import { insQueries } from '../insight/queries'
 import { peQueries } from '../pe/queries'
 import { radarQueries } from '../radar/queries'
@@ -64,17 +64,40 @@ export function txPrefetch(net: NetworkId, txid: string, preload = false): Prefe
   ]
 }
 
-/** Insight reads the index when the last probe found Hyphen's stale; the first visit starts with Hyphen's, as the probe has not run. */
+/** Insight reads the index when Hyphen's was found stale; until a probe has decided, nothing is known and Hyphen's is read. */
 const readsInsight = (net: NetworkId): boolean =>
   rememberedIndexState(net) === 'stale' && endpoint(net, 'insight') !== null
+
+/**
+ * A read the stale rule routes (§4.7a). On a first visit the probe has not decided yet, so the loader waits for it (within
+ * its deadline) before starting either read: a stale network never pays for a Hyphen read the page then throws away,
+ * and the page never paints Hyphen's answer before it learns to read Insight's.
+ */
+function indexRead(
+  net: NetworkId,
+  pick: (from: 'hyphen' | 'insight') => PrefetchItem,
+): PrefetchItem {
+  return {
+    cost: 'http',
+    wait: true,
+    async start(client) {
+      if (rememberedIndexState(net) === undefined && endpoint(net, 'hyphen')) {
+        await client.prefetchQuery(healthQueries.hyphen(net))
+      }
+      await pick(readsInsight(net) ? 'insight' : 'hyphen').start(client)
+    },
+  }
+}
 
 /** `/address/$address`: the summary, from whichever index the page will read. */
 export function addressPrefetch(net: NetworkId, address: string): PrefetchItem[] {
   return [
     ...hyphenProbe(net),
-    readsInsight(net)
-      ? prefetchItem('http', insQueries.address(net, address), { wait: true })
-      : prefetchItem('http', hyQueries.address(net, address), { wait: true }),
+    indexRead(net, (from) =>
+      from === 'insight'
+        ? prefetchItem('http', insQueries.address(net, address))
+        : prefetchItem('http', hyQueries.address(net, address)),
+    ),
   ]
 }
 
@@ -82,9 +105,11 @@ export function addressPrefetch(net: NetworkId, address: string): PrefetchItem[]
 export function proposalsPrefetch(net: NetworkId): PrefetchItem[] {
   return [
     ...hyphenProbe(net),
-    readsInsight(net)
-      ? prefetchItem('http', insQueries.proposalPage(net), { wait: true })
-      : prefetchItem('http', hyQueries.proposals(net, { limit: 100 }), { wait: true }),
+    indexRead(net, (from) =>
+      from === 'insight'
+        ? prefetchItem('http', insQueries.proposalPage(net))
+        : prefetchItem('http', hyQueries.proposals(net, { limit: 100 })),
+    ),
   ]
 }
 
@@ -92,8 +117,10 @@ export function proposalsPrefetch(net: NetworkId): PrefetchItem[] {
 export function proposalPrefetch(net: NetworkId, hash: string): PrefetchItem[] {
   return [
     ...hyphenProbe(net),
-    readsInsight(net)
-      ? prefetchItem('http', insQueries.proposalPage(net), { wait: true })
-      : prefetchItem('http', hyQueries.proposal(net, hash), { wait: true }),
+    indexRead(net, (from) =>
+      from === 'insight'
+        ? prefetchItem('http', insQueries.proposalPage(net))
+        : prefetchItem('http', hyQueries.proposal(net, hash)),
+    ),
   ]
 }

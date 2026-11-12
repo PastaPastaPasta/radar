@@ -32,7 +32,7 @@ describe('global calls report to the active network', () => {
 describe('hyphen probe lag', () => {
   const client = () => new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
-  it('is measured against radar, and cleared when radar cannot be read', async () => {
+  it('is measured against radar, and its claim is cleared (its state kept) when radar cannot be read', async () => {
     const c = client()
     await c.fetchQuery(healthQueries.hyphen('testnet'))
     expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBeGreaterThan(0)
@@ -44,6 +44,7 @@ describe('hyphen probe lag', () => {
     )
     await c.fetchQuery({ ...healthQueries.hyphen('testnet'), staleTime: 0 })
     expect(healthRegistry.get('testnet', 'hyphen').lag).toBeUndefined()
-    expect(healthRegistry.get('testnet', 'hyphen').state).not.toBe('stale')
+    // Nothing to measure against, so the state decided before stands.
+    expect(healthRegistry.get('testnet', 'hyphen').state).toBe('stale')
   })
 })
