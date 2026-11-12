@@ -6,7 +6,13 @@ import { hyQueries } from '@/data/hyphen/queries'
 import { insQueries } from '@/data/insight/queries'
 import { POLL_MS } from '@/data/query/stale'
 import type { NetworkId } from '@/lib/network'
-import { addressKeys, addressQueries, txRows, type IndexSource } from './queries'
+import {
+  addressKeys,
+  knownOutputValue,
+  txRows,
+  utxosWorthRefreshing,
+  type IndexSource,
+} from './queries'
 import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
 export interface AddressActivity {
@@ -96,11 +102,7 @@ export function useAddressActivity(
               }),
               signal,
             ).then((page) => mapSourced(page, (p) => p.items)),
-      spendable: (outpoint) => {
-        const utxos = queryClient.getQueryData(addressQueries.utxos(net, address).queryKey)?.data
-          .items
-        return utxos?.find((u) => `${u.txHash}:${u.vout}` === outpoint)?.value
-      },
+      spendable: (outpoint) => knownOutputValue(queryClient, net, address, from, outpoint),
       every: POLL_MS.addressFallback,
       visibility: pageVisibility,
       onStatus: (status) => {
@@ -117,7 +119,10 @@ export function useAddressActivity(
         const keys = addressKeys(net, address, from)
         void queryClient.invalidateQueries({ queryKey: keys.summary })
         void queryClient.invalidateQueries({ queryKey: keys.txs })
-        void queryClient.invalidateQueries({ queryKey: keys.utxos })
+        void queryClient.invalidateQueries({
+          queryKey: keys.utxos,
+          predicate: utxosWorthRefreshing,
+        })
         if (mined) {
           keep(pendingRef.current.filter((p) => !mined.has(p.txid)))
           return

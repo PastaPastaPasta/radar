@@ -1,7 +1,7 @@
 import { Plural, useLingui } from '@lingui/react/macro'
 import { type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { HyAddress, HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
@@ -10,11 +10,11 @@ import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
 import { deferred } from '@/ui/deferred'
-import { HyphenGate } from '../hy-shared/HyphenGate'
+import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
-import type { WatchStatus } from './live'
+import type { PendingTx, WatchStatus } from './live'
 import { useAddressActivity } from './useAddressActivity'
 import { useAddressData } from './useAddressData'
 
@@ -81,12 +81,23 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
 
 function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const { t } = useLingui()
-  const { index, from, summary, txs, utxos } = useAddressData(net, address)
+  const { index, from, summary, txs, utxos, pendingInIndex } = useAddressData(net, address)
   const live = useAddressActivity(net, address, !isDevnet(net) && !index.pending, from)
 
   const stamp: SourceStamp | undefined = summary.data ? stampOf(summary.data) : undefined
   const a = summary.data?.data ?? NONE
-  const unconfirmed = live.pending.reduce((sum, p) => sum + p.net, 0n)
+  const pending = useMemo<PendingTx[]>(() => {
+    const known = new Set(live.pending.map((p) => p.txid))
+    const first = txs.data?.pages[0]
+    const reported: PendingTx[] =
+      first === undefined
+        ? []
+        : pendingInIndex
+            .filter((p) => !known.has(p.txid))
+            .map((p) => ({ ...p, confirmed: false, stamp: stampOf(first) }))
+    return [...live.pending, ...reported]
+  }, [live.pending, pendingInIndex, txs.data])
+  const unconfirmed = pending.reduce((sum, p) => sum + p.net, 0n)
   const latestPending = live.latest !== undefined && live.pending.includes(live.latest)
   const table = infiniteTableProps(txs)
 
@@ -145,6 +156,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
 
   return (
     <>
+      <StaleIndexNotice reads="insight" />
       <LiveNotice status={live.status} arrived={live.arrived} />
       {live.latest ? (
         <p
@@ -186,7 +198,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
             <Stat
               label={t`Unconfirmed`}
               value={<Amount value={unconfirmed} kind="duffs" signed />}
-              source={live.pending[0]?.stamp}
+              source={pending[0]?.stamp}
             />
             <Stat label={t`Transactions`} value={formatInt(a.txCount)} />
             <Stat
@@ -216,10 +228,10 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
         </Card>
       </div>
 
-      {live.pending.length > 0 ? (
+      {pending.length > 0 ? (
         <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed">
           <ul className="grid gap-2" data-pending>
-            {live.pending.map((p) => (
+            {pending.map((p) => (
               <li key={p.txid} className="flex flex-wrap items-center gap-3">
                 <Entity kind="tx" id={p.txid} />
                 <Amount value={p.net} kind="duffs" signed />
@@ -295,10 +307,15 @@ function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number 
   )
 }
 
+const UTXO_PAGE = 25
+
 function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> }) {
   const { t } = useLingui()
-  const rows = query.data?.data.items ?? []
+  const [shown, setShown] = useState(UTXO_PAGE)
+  const all = query.data?.data.items ?? []
+  const rows = all.slice(0, shown)
   const total = query.data?.data.total
+  const pending = all.filter((u) => u.height == null).length
   const columns = useMemo<ColumnDef<HyUtxo>[]>(
     () => [
       {
@@ -321,31 +338,41 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
       {
         id: 'height',
         header: t`Block`,
-        cell: ({ row }) => (
-          <Entity
-            kind="block"
-            id={String(row.original.height)}
-            label={formatInt(row.original.height)}
-          />
-        ),
+        cell: ({ row }) =>
+          row.original.height == null ? (
+            <Badge tone="warning">{t`Pending`}</Badge>
+          ) : (
+            <Entity
+              kind="block"
+              id={String(row.original.height)}
+              label={formatInt(row.original.height)}
+            />
+          ),
         meta: { phone: 'secondary' },
       },
     ],
     [t],
   )
+  const subtitle =
+    total !== undefined && total > all.length
+      ? t`First ${formatInt(all.length)} of ${formatInt(total)}`
+      : total !== undefined && total > rows.length
+        ? t`${formatInt(rows.length)} of ${formatInt(total)}`
+        : undefined
   return (
     <Card
       title={t`Unspent outputs`}
-      subtitle={
-        total !== undefined && total > rows.length
-          ? t`First ${formatInt(rows.length)} of ${formatInt(total)}`
-          : undefined
-      }
+      subtitle={subtitle}
       layer="core"
       id="utxos"
       padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
     >
+      {pending > 0 ? (
+        <p className="rx-note p-3" data-utxo-pending>
+          {t`Pending outputs are not mined yet, so the balance above does not count them.`}
+        </p>
+      ) : null}
       <DataTable
         caption={t`Unspent outputs of this address`}
         columns={columns}
@@ -363,6 +390,16 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
         error={query.error}
         onRetry={() => void query.refetch()}
         empty={<Empty kind="none-yet" title={t`No unspent outputs.`} />}
+        paging={
+          all.length > UTXO_PAGE
+            ? {
+                kind: 'infinite',
+                hasNext: all.length > rows.length,
+                fetchNext: () => setShown((n) => n + UTXO_PAGE),
+                fetching: false,
+              }
+            : undefined
+        }
       />
     </Card>
   )

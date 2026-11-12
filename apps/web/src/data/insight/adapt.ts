@@ -33,17 +33,26 @@ export const adaptAddress = (a: InsAddress): HyAddress => ({
   txCount: a.txCount,
 })
 
-/** A transaction's effect on one address; undefined while it is unconfirmed (history rows are confirmed ones). */
-export function adaptAddressTx(tx: InsTx, address: string): HyAddressTx | undefined {
-  const height = tx.blockheight
-  const time = tx.blocktime ?? tx.time
-  if (height == null || height < 0 || time == null) return undefined
+/** Whether Insight has put the transaction in a block; a mempool transaction has no height and no confirmations. */
+export const isMined = (tx: Pick<InsTx, 'blockheight' | 'confirmations'>): boolean =>
+  tx.blockheight != null && tx.blockheight >= 0 && (tx.confirmations ?? 1) > 0
+
+/** What a transaction does to one address, in duffs: outputs paying it less the inputs it spends. */
+export function netEffectOn(tx: Pick<InsTx, 'vin' | 'vout'>, address: string): bigint {
   let net = 0n
   for (const i of tx.vin) if (i.addr === address) net -= i.valueSat ?? 0n
   for (const o of tx.vout) if (o.scriptPubKey.addresses?.includes(address)) net += o.value
+  return net
+}
+
+/** A transaction's effect on one address; undefined while it is unconfirmed (history rows are confirmed ones). */
+export function adaptAddressTx(tx: InsTx, address: string): HyAddressTx | undefined {
+  const time = tx.blocktime ?? tx.time
+  if (!isMined(tx) || tx.blockheight == null || time == null) return undefined
+  const net = netEffectOn(tx, address)
   return {
     txHash: tx.txid,
-    blockHeight: height,
+    blockHeight: tx.blockheight,
     blockTime: time,
     txType: insightTxType(tx),
     valueOut: tx.vout.reduce((sum, o) => sum + o.value, 0n),
@@ -52,33 +61,51 @@ export function adaptAddressTx(tx: InsTx, address: string): HyAddressTx | undefi
   }
 }
 
+/** An unconfirmed transaction's effect on one address, for the pending area; undefined once it is mined. */
+export function adaptPendingTx(
+  tx: InsTx,
+  address: string,
+): { txid: string; net: bigint } | undefined {
+  return isMined(tx) ? undefined : { txid: tx.txid, net: netEffectOn(tx, address) }
+}
+
+/** An unconfirmed output has no block: it is listed, but marked pending and left out of the balance. */
 export const adaptUtxo = (u: InsUtxo): HyUtxo => ({
   txHash: u.txid,
   vout: u.vout,
   value: u.satoshis,
-  height: u.height ?? 0,
+  height: u.height != null && u.height > 0 && (u.confirmations ?? 1) > 0 ? u.height : undefined,
   scriptPubKey: u.scriptPubKey,
 })
 
 /**
- * Insight lists proposals with their vote counts but not their funding state. "Meets the threshold" is the
- * absolute yes count against the network's funding threshold; "funded" is derived the way the budget is cut:
- * open proposals that meet it, most absolute yes votes first, take their payment while the superblock budget lasts.
+ * Insight lists proposals with their vote counts but not their funding state, so Radar works it out. "Meets the
+ * threshold" is the absolute yes count against the network's funding threshold. "Funded" is derived the way the
+ * budget is cut: proposals whose window covers the next superblock (`superblockAt`, in ms) and that meet the
+ * threshold, most absolute yes votes first, take their payment while the superblock budget lasts. Without a
+ * superblock time to measure windows against, no proposal is called funded.
  */
 export function adaptProposals(
   list: readonly InsProposal[],
   info: InsGovernanceInfo,
-  now: number,
+  superblockAt: number | undefined,
 ): HyProposal[] {
-  const passing = list
-    .filter((p) => p.AbsoluteYesCount >= info.fundingthreshold && p.DataObject.end_epoch >= now)
-    .sort((a, b) => b.AbsoluteYesCount - a.AbsoluteYesCount || (a.Hash < b.Hash ? 1 : -1))
   const funded = new Set<string>()
-  let left = info.governancebudget
-  for (const p of passing) {
-    if (p.DataObject.payment_amount > left) continue
-    left -= p.DataObject.payment_amount
-    funded.add(p.Hash)
+  if (superblockAt !== undefined) {
+    const passing = list
+      .filter(
+        (p) =>
+          p.AbsoluteYesCount >= info.fundingthreshold &&
+          p.DataObject.start_epoch <= superblockAt &&
+          p.DataObject.end_epoch >= superblockAt,
+      )
+      .sort((a, b) => b.AbsoluteYesCount - a.AbsoluteYesCount || (a.Hash < b.Hash ? 1 : -1))
+    let left = info.governancebudget
+    for (const p of passing) {
+      if (p.DataObject.payment_amount > left) continue
+      left -= p.DataObject.payment_amount
+      funded.add(p.Hash)
+    }
   }
   return list.map((p) => ({
     hash: p.Hash,
@@ -91,6 +118,6 @@ export function adaptProposals(
     votes: { yes: p.YesCount, no: p.NoCount, abstain: p.AbstainCount },
     fundingThreshold: info.fundingthreshold,
     meetsFundingThreshold: p.AbsoluteYesCount >= info.fundingthreshold,
-    funded: funded.has(p.Hash),
+    funded: superblockAt === undefined ? undefined : funded.has(p.Hash),
   }))
 }

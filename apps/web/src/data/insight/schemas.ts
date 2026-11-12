@@ -105,6 +105,7 @@ export const InsUtxoSchema = z.object({
   scriptPubKey: zHex,
   satoshis: zBigint,
   height: z.number().nullish(),
+  confirmations: z.number().nullish(),
 })
 export type InsUtxo = z.output<typeof InsUtxoSchema>
 export const InsUtxoListSchema = z.array(InsUtxoSchema)

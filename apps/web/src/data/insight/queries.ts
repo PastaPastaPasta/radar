@@ -6,8 +6,28 @@ import { insKeys } from '../query/keys'
 import { dataClass } from '../query/stale'
 import { adaptProposals } from './adapt'
 import { insight } from './client'
+import type { InsGovernanceInfo } from './schemas'
 
 const lower = (s: string) => s.toLowerCase()
+
+const BLOCK_MS = 150_000
+
+/**
+ * When the next superblock is due, from the chain's own tip (DAPI's, never an index's stand-in) and the 2.5 minute block
+ * target, or undefined when either is missing. The browser's clock is no reference for a payment window.
+ */
+async function superblockTime(
+  net: NetworkId,
+  info: InsGovernanceInfo,
+  signal: AbortSignal,
+): Promise<number | undefined> {
+  if (info.nextsuperblock == null) return undefined
+  const tip = await import('../core/client')
+    .then((m) => m.core.tip(net, signal))
+    .catch(() => undefined)
+  if (!tip || tip.fallback) return undefined
+  return tip.data.time + (info.nextsuperblock - tip.data.height) * BLOCK_MS
+}
 
 /** Insight is a shared public service: its reads are cached like Hyphen's and never polled faster. */
 export const insQueries = {
@@ -34,6 +54,8 @@ export const insQueries = {
       queryKey: insKeys(net, 'address-utxos', { address }),
       queryFn: ({ signal }) => insight.addressUtxos(net, address, signal),
       ...dataClass('index'),
+      // The whole set comes in one answer: a new block refreshes it while the address page is open, a focus never does.
+      refetchOnWindowFocus: false,
     }),
   tx: (net: NetworkId, txid: string) =>
     queryOptions({
@@ -50,8 +72,9 @@ export const insQueries = {
           insight.proposals(net, signal),
           insight.governanceInfo(net, signal),
         ])
+        const at = await superblockTime(net, info.data, signal)
         return mapSourced(list, (items): HyPage<HyProposal> => ({
-          items: adaptProposals(items, info.data, Date.now()),
+          items: adaptProposals(items, info.data, at),
         }))
       },
       ...dataClass('index'),

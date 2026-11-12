@@ -34,6 +34,7 @@ import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
+import { StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
 import { parseBlockRef } from '@/lib/core/block-ref'
 
@@ -252,6 +253,7 @@ function BlockView({
             </>
           }
         />
+        <StaleIndexNotice reads="insight" />
         <div className="rx-kpis">
           <Stat
             size="lg"

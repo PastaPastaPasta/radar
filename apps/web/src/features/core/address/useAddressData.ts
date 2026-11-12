@@ -1,7 +1,15 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useIndexHealth } from '@/data/index-health'
 import type { NetworkId } from '@/lib/network'
-import { addressQueries, insightAddressQueries, type IndexSource } from './queries'
+import {
+  addressQueries,
+  insightAddressQueries,
+  type IndexedPending,
+  type IndexSource,
+} from './queries'
+
+const NO_PENDING: IndexedPending[] = []
 
 /**
  * What the address page reads: Hyphen's index, or Insight's while Hyphen's is stale (§4.7). Neither is asked
@@ -22,5 +30,35 @@ export function useAddressData(net: NetworkId, address: string) {
     utxos: useQuery({ ...insightAddressQueries.utxos(net, address), enabled: insight }),
   }
   const from: IndexSource = insight ? 'insight' : 'hyphen'
-  return { index, from, ...(insight ? ins : hy) }
+
+  // Insight's pages count the mempool, so a first page can hold only unconfirmed transactions while history follows.
+  const { data, hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage } = ins.txs
+  const confirmed = data?.pages.reduce((n, p) => n + p.data.items.length, 0) ?? 0
+  useEffect(() => {
+    if (
+      insight &&
+      data &&
+      confirmed === 0 &&
+      hasNextPage &&
+      !isFetchingNextPage &&
+      !isFetchNextPageError
+    ) {
+      void fetchNextPage()
+    }
+  }, [
+    insight,
+    data,
+    confirmed,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    fetchNextPage,
+  ])
+
+  return {
+    index,
+    from,
+    pendingInIndex: insight ? (data?.pending ?? NO_PENDING) : NO_PENDING,
+    ...(insight ? ins : hy),
+  }
 }

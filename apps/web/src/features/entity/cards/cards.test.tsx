@@ -233,10 +233,34 @@ describe('AddressHoverCard', () => {
     expect(root.querySelector('[data-source="hyphen"]')).not.toBeNull()
     await waitFor(() => expect(within(root).getByText('Transactions')).toBeInTheDocument())
   })
+
+  it('follows the address page’s source rule: Insight while Hyphen’s index is stale, and no Hyphen read @X-06 @IN-16', async () => {
+    const asked: string[] = []
+    const listener = ({ request }: { request: Request }) => void asked.push(request.url)
+    const { server } = await import('@/test/server')
+    server.events.on('request:start', listener)
+    try {
+      const { AddressHoverCard } = await import('./address')
+      const Harness = await harness(
+        <AddressHoverCard id="yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa" />,
+        '/?network=testnet',
+      )
+      render(<Harness />)
+      const root = (await screen.findByText('Balance', {}, { timeout: 5000 })).closest<HTMLElement>(
+        '[data-hover-card="address"]',
+      )!
+      expect(root).toHaveTextContent('999,999')
+      await waitFor(() => expect(root.querySelector('[data-source="insight"]')).not.toBeNull())
+      expect(root.querySelector('[data-source="hyphen"]')).toBeNull()
+      expect(asked.filter((u) => u.includes('/x/hy/testnet/address'))).toEqual([])
+    } finally {
+      server.events.removeListener('request:start', listener)
+    }
+  })
 })
 
 /** Renders the card inside the app's providers by mounting it as the page at a throwaway route. */
-async function harness(card: React.ReactNode) {
+async function harness(card: React.ReactNode, url = '/') {
   const { RouterProvider, createRootRoute, createRoute, createRouter } =
     await import('@tanstack/react-router')
   const { QueryClientProvider } = await import('@tanstack/react-query')
@@ -246,7 +270,7 @@ async function harness(card: React.ReactNode) {
   const page = createRoute({ getParentRoute: () => root, path: '/', component: () => card })
   const router = createRouter({
     routeTree: root.addChildren([page]),
-    history: createMemoryHistory({ initialEntries: ['/'] }),
+    history: createMemoryHistory({ initialEntries: [url] }),
   })
   const client = createQueryClient()
   return function Harness() {

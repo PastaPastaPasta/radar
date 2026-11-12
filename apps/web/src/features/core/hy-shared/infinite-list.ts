@@ -8,7 +8,8 @@ type PageItems<P> = P extends Sourced<{ items: readonly (infer T)[] }> ? T : nev
 
 /**
  * The props every cursor-paged `DataTable` takes from its infinite query: the flattened rows, a state
- * that keeps already-loaded rows on screen when a later page fails, retry, and "Show more" paging.
+ * that keeps already-loaded rows on screen when a later page fails, retry, and "Show more" paging. A list with
+ * no rows yet but more pages to read is loading, not empty.
  */
 export function infiniteTableProps<P extends ListPage>(
   query: UseInfiniteQueryResult<InfiniteData<P>>,
@@ -20,7 +21,9 @@ export function infiniteTableProps<P extends ListPage>(
     : query.isError && rows.length === 0
       ? ('error' as const)
       : rows.length === 0
-        ? ('empty' as const)
+        ? query.hasNextPage
+          ? ('loading' as const)
+          : ('empty' as const)
         : ('ready' as const)
   return {
     rows,

@@ -1,8 +1,10 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
+import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
 const feed = vi.hoisted(() => ({
@@ -299,5 +301,313 @@ describe('Address page', () => {
     expect(within(history).getByText('Indexed by Insight')).toBeInTheDocument()
     expect(document.querySelector('[data-stale-index]')).toBeNull()
     expect(screen.queryByText('Not seen yet')).toBeNull()
+  })
+})
+
+const INSIGHT_TESTNET = 'https://insight.testnet.networks.dash.org/insight-api'
+const OTHER_TESTNET = 'ycUsXFtJGbJRVDH57gcMnQQP8kByuNp2fb'
+const OTHER_MAINNET = 'XsPYocbGL8ubicsjgfav5E8ubFPMHSNzUU'
+/** Recorded UTXOs: Hyphen's first mainnet one (1 DASH) and Insight's only testnet one. */
+const MAINNET_UTXO = { txid: 'ebe7c581', vout: 0, value: 100_000_000n }
+const TESTNET_UTXO = {
+  txid: 'edb04a34191b7066b3db7bc5216cf345873d050f044820b425b81c0ce7ea5fae',
+  vout: 1,
+  value: 99_999_899_997_288n,
+}
+
+const idOf = (n: number) => n.toString(16).padStart(64, '0')
+
+function insTx(
+  n: number,
+  over: Record<string, unknown> = {},
+  paysAddress = TESTNET_ADDRESS,
+  value = '1.00000000',
+) {
+  return {
+    txid: idOf(n),
+    version: 1,
+    vin: [{ n: 0, txid: idOf(900 + n), vout: 0, addr: OTHER_TESTNET, valueSat: 200_000_000 }],
+    vout: [
+      { n: 0, value, scriptPubKey: { hex: '76a9', addresses: [paysAddress] }, spentTxId: null },
+    ],
+    blockheight: 1_590_000 - n,
+    confirmations: 10 + n,
+    time: 1_760_000_000 - n * 100,
+    blocktime: 1_760_000_000 - n * 100,
+    ...over,
+  }
+}
+
+const mempoolTx = (n: number) =>
+  insTx(n, { blockheight: null, confirmations: 0, blocktime: null, time: 1_760_000_100 })
+
+function serveInsightTxs(pages: Record<string, unknown>[][], seen?: string[]) {
+  server.use(
+    http.get(`${INSIGHT_TESTNET}/txs`, ({ request }) => {
+      const page = Number(new URL(request.url).searchParams.get('pageNum') ?? 0)
+      seen?.push(request.url)
+      return HttpResponse.json({ pagesTotal: pages.length, txs: pages[page] ?? [] })
+    }),
+  )
+}
+
+describe('Address page watching a spend of its own coins @IN-06 @IN-16', () => {
+  const spend = (
+    spent: { txid: string; vout: number },
+    outputs: { value: bigint; address: string }[],
+  ): DecodedTx => ({
+    txid: 'ab'.repeat(32),
+    type: 'transfer',
+    version: 3,
+    lockTime: 0,
+    size: 226,
+    inputs: [{ ...spent, scriptSig: '', sequence: 0 }],
+    outputs: outputs.map((o) => ({ ...o, scriptPubKey: '' })),
+  })
+
+  async function watchSpend(url: string, tx: DecodedTx) {
+    renderAt(url)
+    await screen.findByText(/Watching for new transactions/)
+    const utxos = await screen.findByRole('table', { name: /Unspent outputs of this address/ })
+    await waitFor(() => expect(within(utxos).getAllByRole('row').length).toBeGreaterThan(1))
+    emit({ kind: 'tx', tx })
+    return waitFor(
+      () => {
+        const el = document.querySelector<HTMLElement>('[data-pending]')
+        expect(el).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+  }
+
+  const stat = (label: string) =>
+    within(document.querySelector<HTMLElement>('[data-address-summary]')!)
+      .getByText(label)
+      .closest('.rx-stat')!
+
+  describe.each([
+    {
+      name: 'a stale network, read from Insight',
+      url: `/address/${TESTNET_ADDRESS}?network=testnet`,
+      address: TESTNET_ADDRESS,
+      other: OTHER_TESTNET,
+      utxo: { txid: TESTNET_UTXO.txid, vout: TESTNET_UTXO.vout },
+      value: TESTNET_UTXO.value,
+    },
+    {
+      name: 'a fresh network, read from Hyphen',
+      url: `/address/${ADDRESS}`,
+      address: ADDRESS,
+      other: OTHER_MAINNET,
+      utxo: { txid: '', vout: MAINNET_UTXO.vout },
+      value: MAINNET_UTXO.value,
+    },
+  ])('on $name', ({ url, address, other, utxo, value }) => {
+    const outpoint = async () => {
+      if (utxo.txid) return utxo
+      const full = await import('@/test/fixtures/load').then((m) =>
+        m.fixtureBody<{ value: { txHash: string; vout: number; value: bigint | string }[] }>(
+          'hyphen',
+          'mainnet',
+          `address__${ADDRESS}__utxos--limit-25`,
+        ),
+      )
+      return { txid: full.value[0]!.txHash, vout: full.value[0]!.vout }
+    }
+
+    it('counts a spend with change as a loss of what left, not a receipt of the change', async () => {
+      const coin = await outpoint()
+      const change = value / 2n
+      const pending = await watchSpend(
+        url,
+        spend(coin, [
+          { value: value / 4n, address: other },
+          { value: change, address },
+        ]),
+      )
+      const loss = value - change
+      expect(pending).toHaveTextContent(/[-−]/)
+      expect(pending.textContent).not.toMatch(/\+/)
+      expect(stat('Unconfirmed')).toHaveTextContent(/[-−]/)
+      expect(loss).toBeGreaterThan(0n)
+    })
+
+    it('shows a spend with no change at all, as a loss of the whole coin', async () => {
+      const coin = await outpoint()
+      const pending = await watchSpend(url, spend(coin, [{ value: value - 1000n, address: other }]))
+      expect(pending).toHaveTextContent(/[-−]/)
+      expect(stat('Unconfirmed')).toHaveTextContent(/[-−]/)
+      expect(document.querySelector('[data-new-transaction]')).toHaveTextContent(
+        'Unconfirmed transaction',
+      )
+    })
+  })
+})
+
+describe('Address page reading Insight @IN-06 @IN-16', () => {
+  const url = `/address/${TESTNET_ADDRESS}?network=testnet`
+
+  it('shows an unconfirmed output as pending, with no block link, and says the balance leaves it out', async () => {
+    server.use(
+      http.get(`${INSIGHT_TESTNET}/addr/${TESTNET_ADDRESS}/utxo`, () =>
+        HttpResponse.json([
+          {
+            address: TESTNET_ADDRESS,
+            txid: idOf(1),
+            vout: 0,
+            scriptPubKey: '76a9',
+            satoshis: 5_000_000,
+            height: 1_590_000,
+            confirmations: 12,
+          },
+          {
+            address: TESTNET_ADDRESS,
+            txid: idOf(2),
+            vout: 1,
+            scriptPubKey: '76a9',
+            satoshis: 7_000_000,
+            confirmations: 0,
+          },
+        ]),
+      ),
+    )
+    renderAt(url)
+    const table = await screen.findByRole('table', { name: /Unspent outputs of this address/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(3))
+    const pendingRow = within(table)
+      .getAllByRole('row')
+      .find((r) => r.textContent?.includes('Pending'))!
+    expect(pendingRow).toBeDefined()
+    expect(pendingRow.querySelector('a[href*="/block/"]')).toBeNull()
+    expect(table.querySelector('a[href*="/block/0"]')).toBeNull()
+    expect(document.querySelector('[data-utxo-pending]')).toHaveTextContent(
+      'balance above does not count them',
+    )
+  })
+
+  it('reads the whole UTXO list once and pages through it in the browser, without refetching on focus', async () => {
+    const reads: string[] = []
+    server.use(
+      http.get(`${INSIGHT_TESTNET}/addr/${TESTNET_ADDRESS}/utxo`, ({ request }) => {
+        reads.push(request.url)
+        return HttpResponse.json(
+          Array.from({ length: 60 }, (_, i) => ({
+            address: TESTNET_ADDRESS,
+            txid: idOf(i + 1),
+            vout: 0,
+            scriptPubKey: '76a9',
+            satoshis: 1_000 + i,
+            height: 1_500_000 + i,
+            confirmations: 100,
+          })),
+        )
+      }),
+    )
+    const user = userEvent.setup()
+    renderAt(url)
+    const table = await screen.findByRole('table', { name: /Unspent outputs of this address/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    await user.click(within(table.closest('#utxos')!).getByRole('button', { name: 'Show more' }))
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(51))
+    act(() => {
+      window.dispatchEvent(new Event('focus'))
+      document.dispatchEvent(new Event('visibilitychange'))
+    })
+    await new Promise((r) => setTimeout(r, 100))
+    expect(reads).toHaveLength(1)
+  })
+
+  it('keeps unconfirmed transactions out of the paged history and puts them in the unconfirmed area', async () => {
+    serveInsightTxs([[mempoolTx(1), insTx(2), insTx(3)], [insTx(4)]])
+    renderAt(url)
+    const history = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#history')!
+      expect(within(el).getAllByRole('row').length).toBeGreaterThan(1)
+      return el
+    })
+    expect(within(history).getAllByRole('row')).toHaveLength(1 + 2)
+    const pending = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-pending]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(pending.querySelectorAll('li')).toHaveLength(1)
+    expect(pending.querySelector(`a[href*="${idOf(1)}"]`)).not.toBeNull()
+    expect(history.querySelector(`a[href*="${idOf(1)}"]`)).toBeNull()
+  })
+
+  it('lists a transaction once when a new block shifts it onto the next page', async () => {
+    serveInsightTxs([
+      [insTx(2), insTx(3)],
+      [insTx(3), insTx(4)],
+    ])
+    const user = userEvent.setup()
+    renderAt(url)
+    const history = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#history')!
+      expect(within(el).getAllByRole('row').length).toBeGreaterThan(1)
+      return el
+    })
+    await user.click(within(history).getByRole('button', { name: 'Show more' }))
+    await waitFor(() => expect(within(history).getAllByRole('row')).toHaveLength(1 + 3))
+    expect(history.querySelectorAll(`a[href*="${idOf(3)}"]`)).toHaveLength(1)
+  })
+
+  it('reads a first page that holds only unconfirmed transactions on to the history, never as empty', async () => {
+    serveInsightTxs([
+      [mempoolTx(1), mempoolTx(2)],
+      [insTx(3), insTx(4)],
+    ])
+    renderAt(url)
+    await waitFor(() => {
+      expect(
+        within(document.querySelector<HTMLElement>('#history')!).getAllByRole('row'),
+      ).toHaveLength(1 + 2)
+    })
+    expect(screen.queryByText('No transactions seen for this address on this network.')).toBeNull()
+  })
+
+  it('refreshes the history and the unspent outputs when a block arrives, not on focus', async () => {
+    const seen: string[] = []
+    serveInsightTxs([[insTx(2)]], seen)
+    renderAt(url)
+    await waitFor(() => {
+      expect(
+        within(document.querySelector<HTMLElement>('#history')!).getAllByRole('row').length,
+      ).toBeGreaterThan(1)
+    })
+    const before = seen.length
+    serveInsightTxs([[insTx(5), insTx(2)]], seen)
+    emit({ kind: 'block', txids: [] })
+    await waitFor(() => expect(seen.length).toBeGreaterThan(before))
+    await waitFor(() =>
+      expect(
+        within(document.querySelector<HTMLElement>('#history')!).getAllByRole('row'),
+      ).toHaveLength(1 + 2),
+    )
+  })
+
+  it('names both indexes when Insight trails the chain as well, and marks its source line', async () => {
+    server.use(
+      http.get(`${INSIGHT_TESTNET}/status`, () =>
+        HttpResponse.json({ info: { blocks: 1_580_000, network: 'testnet' } }),
+      ),
+    )
+    renderAt(url)
+    const notice = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-stale-index]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(notice).toHaveTextContent('Hyphen’s Testnet index is behind the chain')
+    expect(notice).toHaveTextContent('Insight’s Testnet index is behind too')
+    expect(notice).toHaveTextContent('1,580,000')
+    expect(notice).toHaveTextContent('as of those blocks')
+    await waitFor(() =>
+      expect(
+        document.querySelector('#history [data-source="insight"]')?.getAttribute('data-state'),
+      ).toBe('stale'),
+    )
   })
 })
