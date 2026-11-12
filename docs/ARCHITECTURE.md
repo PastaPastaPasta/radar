@@ -82,7 +82,7 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 | Module | May import | Must not import |
 |---|---|---|
 | `lib/**` | nothing internal; small pure deps (`@noble/*`) | React, `data`, `ui`, `features` |
-| `data/**` | `lib`, `data/**` | React (except `data/health.ts`, `data/hyphen/fit.ts` and `data/query/batch.ts`, which export hooks), `ui`, `features`, `routes` |
+| `data/**` | `lib`, `data/**` | React (except `data/health.ts`, `data/index-health.ts`, `data/hyphen/fit.ts` and `data/query/batch.ts`, which export hooks), `ui`, `features`, `routes` |
 | `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts`, `@dashevo/evo-sdk`, `comlink` | anything else (no React, no DOM) |
 | `ui/**` | `lib`, `i18n`, type-only `data/envelope.ts`, `data/health.ts` (`useSourceHealth`) | `features`, `routes`, other `data` |
 | `features/<x>/**` | `ui`, `data`, `lib`, `i18n`, `features/entity`, `features/search` (their `index.ts` only) | other features' internals |
@@ -183,6 +183,7 @@ Rules:
 | `radar` | the crawl time the answer carries, per resource (table below), else `Last-Modified`, else `fetchedAt` with `asOfFetched` set. Event times (a masternode's `last_seen` on a list row, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp by themselves | — | no |
 | `pe` | `fetchedAt` (indexer lag is a health matter, §2.5) | indexed Platform height when the response has it | no |
 | `hyphen` | `fetchedAt` | `asOfHeight` | no |
+| `insight` | `fetchedAt`, `asOfFetched` set (a block's time is an event time); `/status` also carries its tip | the tip height of the answer | no |
 | `rate` | `fetchedAt` | — | no |
 | `local` | computation time | — | inputs' |
 
@@ -230,7 +231,7 @@ export function isSourceError(e: unknown): e is SourceError
 - `proof-failed` is never retried and never falls back. Showing a different source's value instead would hide a failed check. The card shows `ErrorState` with "This answer's proof didn't verify" and a link to the proof inspector.
 - TanStack retry policy (§5.2): retry `network`, `timeout`, `http` 5xx and `rate-limited` up to 2 times; never retry `invalid-response`, `proof-failed`, `unavailable` or `aborted`.
 
-### 2.4 HTTP clients (radar, pe, hyphen, rate)
+### 2.4 HTTP clients (radar, pe, hyphen, insight, rate)
 
 Each module exposes plain async functions plus `queryOptions` factories. Every one takes `net: NetworkId` first and an optional `AbortSignal` last.
 
@@ -351,13 +352,14 @@ Freshness probes are TanStack queries under `[net, 'health', source]`, refetched
 |---|---|---|
 | radar | `GET /api/v1/status` | network's last crawl > 45 min (Radar's own rule) |
 | pe | `GET /status` | indexer height behind Tenderdash height by > 10 blocks, or the PE status reports itself unhealthy (503) |
-| hyphen | `GET /status` | min `indices.*.indexedHeight` behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) by > 3 blocks (testnet today: weeks). See §11.4 |
+| hyphen | `GET /status` | min `indices.*.indexedHeight` behind the DAPI best height by > 3 blocks (health state; pages choose their source by the 6 / 2 rule in §4.7a), or, when DAPI has no height (or only a `fallback` one), behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) (testnet today: weeks). See §4.7a and §11.4 |
+| insight | `GET /insight-api/status` (mainnet `insight.dash.org`, testnet `insight.testnet.networks.dash.org`; none on devnets) | tip behind the DAPI best height by > 3 blocks (health state); pages choose their source by the 6 / 2 rule in §4.7a |
 | dapi | header stream / `getBestBlockHeight` | no new header for 20 min |
 | sdk | metadata of any recent answer | `timeMs` older than 15 min |
 
 The UI reads health in three places only:
 - `SourceLine`: dot colour and the "isn't answering (last good 4 min ago)" text.
-- `Card` with a `source` prop: greys its body and overlays the down message when that source is `down`; when it is `stale`, it keeps the content and shows the lag detail.
+- `Card` with a `source` prop: greys its body and overlays the down message when that source is `down`; when it is `stale`, it keeps the content and its source line keeps the stamp. A stale index is announced once per page (§4.7a), never per card.
 - `/status` (IN-09) and the shell's status chip: `useAllSourceHealth()`.
 
 ### 2.6 Networks and endpoints
@@ -696,6 +698,21 @@ Hyphen keeps the data DAPI can't give at all: addresses, spent flags, rich list,
 
 **Hyphen fitness.** Pages that add Hyphen-only facts to a Core page (chainwork, spent flags, mempool rows) ask "is Hyphen fit?" before each Hyphen request: the `healthQueries.hyphen` probe has succeeded and the Hyphen source health is neither `stale` nor `down` (rule 3). `useHyphenFit(net)` in `data/hyphen/fit.ts` answers it; testnet's Hyphen lags by weeks, so testnet pages make no Hyphen requests for those facts.
 
+### 4.7a The stale-index rule (`data/index-health.ts`, `data/index-state.ts`)
+
+Hyphen's index can stop behind the chain (testnet since block 1,578,000, the first with a version-4 coinbase payload; mainnet will meet the same wall at Core v24). One hook decides, for every page, whether it is behind:
+
+```ts
+useIndexHealth(net): { state: 'fresh' | 'stale' | 'unknown'; pending: boolean; readFrom: 'hyphen' | 'insight'; probed: boolean; indexedHeight?: number; behind?: number; lag?: string }
+```
+
+- **Measure.** The `healthQueries.hyphen` probe compares the indexed height with DAPI's best height (`core.tip`; a tip stamped `fallback` is ignored), and with Radar's crawled height only when DAPI has none. The result is the Hyphen `lag.blocks` in the health registry.
+- **Hysteresis.** Stale when more than 6 blocks behind; fresh again at 2 or fewer; in between the previous state stands (`nextIndexState`). The state is remembered per network (`rememberedIndexState`), so a route loader can pick the source before any component mounts.
+- **Where reads go while stale.** Insight (`data/insight`, label "Indexed by Insight", §7.3) answers: the address summary, paged history and the "new since you opened this page" poll; a tx page's spent flags and spender links (one `/tx/{id}` per page, no per-output requests; also used when Hyphen is fresh but lacks a spender); block chainwork; the governance proposal list and detail (funded status derived from the budget and absolute yes votes; the "counted as valid" column is dropped). Rich list, charts, mempool list and the network view have no Insight equivalent and stay on Hyphen.
+- **Devnets** have neither index and behave as before.
+- **One notice per page.** A page that still shows Hyphen-only figures from a stale index renders `StaleIndexNotice` once (what is behind and by how much, what is still current, a link to `/status`). Cards say nothing more; their source lines keep the stamp. The home page's pending column on a stale network is filled from the DAPI live transaction stream and labelled "Seen since you opened this page".
+- **Pending.** Until the probe has answered, `pending` is true and `readFrom` is `'hyphen'`; pages that can switch source do not fire either request until `probed`.
+
 ### 4.8 Core pages: where each figure comes from
 
 - **Block** (`/block/$id`, `?page=`): `coreQueries.block` (DAPI `getBlock`, decoded by `core-decode`) gives the header, the transactions (100 a page), the coinbase payload and the ChainLock flag. Difficulty is computed from `bits` (Dash Core's `GetDifficulty`) and shown with `formatSignificant` (`lib/format.ts`: two decimals from 1,000 up, "111,221,977.44", otherwise significant figures), so a testnet difficulty of 0.004011 never reads 0. The `Difficulty` component (`features/core/hy-shared/Difficulty.tsx`) puts `formatFull`, every digit, in the title; the block page, Charts "Now" and Network internals use it, chart tooltips and tables use `formatSignificant`, and axes stay compact. The reward is the sum of the coinbase outputs. The pool is read from the coinbase scriptSig against `lib/core/pools.ts` (`POOL_TAGS`, `coinbaseTagOf`, `poolOfCoinbase`) and shown as "Coinbase tag says <pool>" with the tag text and a note that the miner writes it, so it is not proof; control, bidi and other format characters (`\p{Cc}`, `\p{Cf}`, line and paragraph separators) are removed from the tag first. Chainwork exists only in Hyphen, so it is requested only when Hyphen is fit and carries its own stamp; otherwise the row says "Not in DAPI". `lib/core/block-ref.ts` parses the URL segment (height or hash).
@@ -703,7 +720,7 @@ Hyphen keeps the data DAPI can't give at all: addresses, spent flags, rich list,
   - **Spend state** (`features/core/tx/spend.ts`, `useOutputSpends.ts`). Each output is `spent`, `unspent`, `unspendable` or `unknown`, never a bare boolean. `unspendable`: the script starts with OP_RETURN (`6a`). Hyphen caches a mined transaction's `/tx` response as immutable, so its `spent` flags stay as they were on the first read; only `spent: true` is trusted from it, because a spend cannot be undone. For every other output that has an address, the page reads that address's current UTXO list (`/address/{a}/utxos?limit=100`, at most 3 pages, 3 lookups at a time, stale after 30 s). An output still in the list is `unspent`; an output missing from a list read to its end, whose snapshot is at or past the transaction's block, is `spent`. `unspent` is offered only while the list's own height is within `UNSPENT_LAG_BLOCKS` (3) of the DAPI tip, and the page shows "as of block N" whenever the index is behind at all. Where no list is available (an output without an address, a failed read, a list cut at 3 pages that doesn't show the output) the state falls back to the transaction page's flag and `asOfHeight` by the same rule. `unknown` is everything else (not mined yet, Hyphen not fit or loading, flag absent, index more than 3 blocks behind), worded "Unknown" or "Unknown: index behind" with a title that says why. Hyphen pages cached while a transaction was unmined carry `asOfHeight: null`; the schemas read that as absent.
   - **Spender.** Hyphen sends `spent` but not which transaction spent the output (upstream ask `spentBy`, plan §7.2, still open). For each visible output the state above calls spent, `findSpender` reads the output address's history (`/address/{a}/txs?limit=100`, at most 3 pages), takes later `direction: 'out'` transactions oldest first and opens each (`/tx/{id}`, at most 8) until one has an input naming `txid:vout`. The row then reads "Spent in <txid>" and links to `/tx/{spender}#in-{n}`; a busy address, a script without an address or a miss reads "Spent · spender not found". Lookups share a limiter (3 at a time) and are cached per output (`['view','tx-spender']`, stale time ∞ once found). Only the first `INITIAL` (10) outputs are looked up, or all once shown.
   - **Value flow.** Above 900 px the drawing puts each node's label on two lines, the amount and then the identity (address, pool or "· change"), so neighbouring labels never share a row; at 900 px and below a stacked bar and a list replace it (`.rx-flow-wide`, `.rx-flow-narrow`). `e2e/tests/core-tx.spec.ts` checks that no two label boxes overlap at 1440, 1100 and 901 px. An unknown pool's text stays inside its summary card on a phone.
-  - **Received and mined times.** `useFirstSeen` takes the first-seen time from Hyphen's mempool list (`/mempool/txs?limit=20`, polled) while the transaction is unconfirmed and keeps it once the tx is mined with the page open. A transaction first opened after it was mined has no first-seen time in any source, so Received says so ("not recorded; Hyphen keeps first-seen times only while a transaction is pending") instead of showing the block time as an upper bound; a known time is shown to the second (`Time seconds`), as is the mined time beside it.
+  - **Received and mined times.** `useFirstSeen` takes the first-seen time from Hyphen's mempool list (`/mempool/txs?limit=20`, polled) while the transaction is unconfirmed and keeps it once the tx is mined with the page open. A transaction first opened after it was mined has no first-seen time in any source, so the Received step is not shown and the timeline starts at the step it has (InstantSend lock or Mined), with one muted line: "Mempool arrival times aren't kept once a transaction is mined." A known time is shown to the second (`Time seconds`), as is the mined time beside it.
   - **Transactions that spend nothing.** `totals()` gives a transaction with no inputs (an asset unlock excepted, which carries its own fee) a fee of 0 and so a fee rate of 0: "0 duffs a byte: it spends no coins". `movesNoValue()` (no inputs, no output value, not an asset unlock) replaces the ribbon with "No value moves in this transaction". A coinbase keeps its own "Coinbase transactions pay none" note.
   - **Hyphen-only facts** (spend state, chainwork) are followed by `HyphenOnlyNote` while Hyphen's probe says stale, in the shared sentence (below) and then "<what> come only from Hyphen. Everything else on this page is from DAPI."
   - The Core band draws no page links of its own; the shell's section bar is the one Core navigation.
@@ -1042,6 +1059,7 @@ linkOutUrl(target): string | null
 | `pe` | Indexed by Platform Explorer · 12 s ago | — |
 | `hyphen` | Indexed by Hyphen · 30 s ago | — |
 | `hyphen`, `fallback` | Indexed by Hyphen · DAPI busy / DAPI unreachable | — |
+| `insight` | Indexed by Insight · 12 s ago (the age is the fetch time) | — |
 | `rate` | Price from {provider} via Platform Explorer | — |
 | `local` | Computed in your browser | — |
 
@@ -1231,6 +1249,7 @@ No page-level error unless the route itself can't render (bad route param after 
   - SDK as `…/sdk/<net>/<method>/<sha256(stable-json(args))>.json`, holding the `WireResult` with proof bytes base64-encoded. Served by `FixtureSdkTransport`, so the worker isn't involved and proof verification isn't rerun.
 - Fixture mode is the build flag `VITE_DATA_MODE=fixtures`, set by `build:e2e`. `main.tsx` then starts an MSW browser worker (`src/test/msw/browser.ts`) over the same handlers and slug scheme as the Vitest server, before the app renders, and swaps the two transports. `build/fixture-worker.ts` emits `mockServiceWorker.js` into that build only.
 - `record-fixtures.mjs --extra <source>:<path> --only-extra` records just the listed app paths (repeatable) and skips any that already have a file. A spec that visits an entity the pick list doesn't cover adds it this way: for a Core record page that means its Hyphen page as well, because a fit Hyphen is asked for chainwork and spent flags. A transaction page with spent outputs also needs the spender lookups (§4.8): `--extra hyphen:/address/<a>/txs?limit=100 --extra hyphen:/tx/<spender> --only-extra` for each output address and each spender. A spec that waits for a spender lookup to finish needs every page and candidate the lookup opens (up to 3 history pages and 8 transactions), or the run fails on the first request with no recording. The recordings cover the mainnet transactions the specs visit (`5d0c5900:0`, `9f827f91:0`, `e63d8538:3,4,6`, and the coinbase `out-0`). The mempool's second page can't be recorded (the mempool is nearly empty on both networks), so its paging is tested with an MSW override.
+- Insight fixtures live under `http/insight/<net>/` (the `/insight-api` prefix is dropped from the slug). `record-fixtures.mjs` reads Insight through `curl`, because Cloudflare challenges Node's `fetch` on `insight.dash.org`; `--skip-existing` records only what is missing. The recorded mainnet Hyphen `status.json` has an indexed height at or just above the DAPI fixture tip, so mainnet is fresh under the §4.7a rule; testnet's Hyphen index (1,577,999) is behind the DAPI fixture tip (1,589,232), so testnet pages read from Insight in every fixture test.
 - A request with no fixture fails the test with the URL or method it wanted, never a silent empty. A DAPI request with no recording throws `SourceError('network')` and joins the shared miss list (`reportFixtureMiss`), which fails Vitest in `afterEach` and logs `[radar-fixtures]` in the browser. Any request to another origin, any `/x/hy/*` request, and any Radar, PE or Hyphen request without a recording is answered with a network error and logged as `[radar-fixtures] …` on the console; the shared Playwright `context` fixture (`e2e/helpers/test.ts`) fails the test on that. The preview and dev Hyphen proxy isn't installed in fixture mode.
 - Fixture builds expose three hooks on `window` for specs: `__radarCore` (the Core façade), `__radarSdk` and `__radarFixtures`. `__radarFixtures.breakLiveConnection(net?)` makes the fixture DAPI transport fail every call and cut its streams (one still replaying its recording stops at its next message), and `restoreLiveConnection(net?)` undoes it; the IN-15 spec uses them to show and clear the "Live updates have stopped" notice. With DAPI down and Hyphen fit, the tip comes from Hyphen's `blocks?limit=1`, which is recorded for mainnet.
 - A fixture transport names a replica node `<node>~2` when the caller avoids the recorded node, so the two-source agreement of §4.4a works in fixtures.
