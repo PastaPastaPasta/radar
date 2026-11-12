@@ -93,6 +93,9 @@ test.describe('address page', () => {
     await expect(summary).toContainText(/DASH/)
 
     await expect(page.getByRole('table', { name: /Transactions/ })).toBeVisible()
+    const showQr = page.getByRole('button', { name: 'Show QR code' })
+    if ((page.viewportSize()?.width ?? 1000) <= 640) await showQr.click()
+    else await expect(showQr).toHaveCount(0)
     await expect(page.getByRole('img', { name: /QR code of the address/ })).toBeVisible()
     await expect(page.locator('[data-live]')).toBeVisible()
     await sourced(page)
@@ -305,7 +308,9 @@ test.describe('rich list', () => {
     await page.goto('/rich-list')
     await expect(rankedList(page)).toBeVisible()
     const notes = page.locator('[data-share-basis]')
-    await expect(notes).toHaveCount(2)
+    const phone = (page.viewportSize()?.width ?? 1000) <= 640
+    await expect(notes).toHaveCount(phone ? 1 : 2)
+    if (phone) await notes.first().locator('summary').click()
     for (const note of await notes.all()) {
       await expect(note).toBeVisible()
       await expect(note).toContainText('Shares are of the 12.89 M DASH held in positive address')

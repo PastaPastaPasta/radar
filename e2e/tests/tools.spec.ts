@@ -173,6 +173,8 @@ test.describe('QR reader', () => {
     page,
   }) => {
     await page.goto(`/address/${ADDRESS}`)
+    const showQr = page.getByRole('button', { name: 'Show QR code' })
+    if ((page.viewportSize()?.width ?? 1000) <= 640) await showQr.click()
     const qr = page.getByRole('img', { name: /QR code of the address/ })
     await expect(qr).toBeVisible()
     const png = await qr.evaluate(async (img: HTMLImageElement) => {
