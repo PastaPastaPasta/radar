@@ -2268,3 +2268,21 @@ html[data-scroll-gutter] {
     box-shadow: 0 -1px 0 var(--dh-line);
   }
 }
+
+/* An address's figures on a phone: one compact block, the balance first, the rest two to a row. */
+@media (max-width: 640px) {
+  [data-address-summary] .rx-stat {
+    gap: 1px;
+    padding: 7px 10px 7px 12px;
+  }
+  [data-address-summary] .rx-stat .rx-stat__value {
+    font-size: 17px;
+    line-height: 1.2;
+  }
+  [data-address-summary] .rx-stat--big .rx-stat__value {
+    font-size: 22px;
+  }
+  [data-address-summary] [data-seen] {
+    font-size: 14px;
+  }
+}

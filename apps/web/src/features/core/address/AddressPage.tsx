@@ -8,7 +8,19 @@ import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { classify } from '@/features/search'
 import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
+import {
+  Amount,
+  Badge,
+  Card,
+  DataTable,
+  Empty,
+  Hash,
+  LiveDot,
+  Skeleton,
+  Stat,
+  Time,
+  useMediaQuery,
+} from '@/ui'
 import { deferred } from '@/ui/deferred'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
@@ -81,6 +93,8 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
 
 function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const { t } = useLingui()
+  const phone = useMediaQuery('(max-width: 640px)')
+  const [qrOpen, setQrOpen] = useState(false)
   const { index, from, seen, summary, txs, utxos, pendingInIndex } = useAddressData(net, address)
   const live = useAddressActivity(net, address, !isDevnet(net) && !index.pending, from)
 
@@ -178,23 +192,38 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           title={t`Summary`}
           layer="core"
           source={stamp}
+          actions={
+            phone ? (
+              <button
+                type="button"
+                className="dh-btn dh-btn--sm"
+                aria-expanded={qrOpen}
+                aria-controls="address-qr"
+                data-address-qr-toggle
+                onClick={() => {
+                  setQrOpen((v) => !v)
+                }}
+              >
+                {qrOpen ? t`Hide QR code` : t`Show QR code`}
+              </button>
+            ) : undefined
+          }
           state={cardState(summary)}
           error={summary.error}
           onRetry={() => void summary.refetch()}
         >
-          <div
-            className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-3"
-            data-address-summary
-          >
-            <Stat
-              size="lg"
-              label={t`Balance`}
-              value={
-                <span className="max-sm:text-[length:clamp(18px,6.5cqi,36px)]">
-                  <Amount value={a.balance} kind="duffs" fiat />
-                </span>
-              }
-            />
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-3" data-address-summary>
+            <div className="col-span-2 sm:col-span-1">
+              <Stat
+                size="lg"
+                label={t`Balance`}
+                value={
+                  <span className="max-sm:text-[length:clamp(18px,6.5cqi,36px)]">
+                    <Amount value={a.balance} kind="duffs" fiat />
+                  </span>
+                }
+              />
+            </div>
             <Stat
               label={t`Unconfirmed`}
               value={<Amount value={unconfirmed} kind="duffs" signed />}
@@ -206,18 +235,27 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               value={<Amount value={a.totalReceived} kind="duffs" />}
             />
             <Stat label={t`Total sent`} value={<Amount value={a.totalSent} kind="duffs" />} />
-            <SeenStat
-              first={seen ? seen.first : (a.firstSeen ?? undefined)}
-              last={seen ? seen.last : (a.lastSeen ?? undefined)}
-              loading={seen ? seen.loading : false}
-              failed={seen?.failed ?? false}
-              source={seen?.stamp}
-            />
+            <div className="col-span-2 sm:col-span-1">
+              <SeenStat
+                first={seen ? seen.first : (a.firstSeen ?? undefined)}
+                last={seen ? seen.last : (a.lastSeen ?? undefined)}
+                loading={seen ? seen.loading : false}
+                failed={seen?.failed ?? false}
+                source={seen?.stamp}
+              />
+            </div>
           </div>
+          {phone && qrOpen ? (
+            <div id="address-qr" className="mt-3" data-address-qr>
+              <AddressQr address={address} />
+            </div>
+          ) : null}
         </Card>
-        <Card title={t`QR code`} layer="core">
-          <AddressQr address={address} />
-        </Card>
+        {phone ? null : (
+          <Card title={t`QR code`} layer="core">
+            <AddressQr address={address} />
+          </Card>
+        )}
       </div>
 
       {pending.length > 0 ? (

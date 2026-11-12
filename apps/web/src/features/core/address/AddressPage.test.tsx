@@ -79,6 +79,64 @@ afterEach(() => {
 })
 
 describe('Address page', () => {
+  it('keeps the QR code in its own card on a wide screen @IN-06', async () => {
+    renderAt(`/address/${ADDRESS}`)
+    expect(await screen.findByRole('heading', { name: 'QR code' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Show QR code' })).toBeNull()
+  })
+
+  describe('on a phone', () => {
+    const phone = () =>
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string): MediaQueryList =>
+          ({
+            matches: query === '(max-width: 640px)',
+            media: query,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
+            addListener: () => undefined,
+            removeListener: () => undefined,
+            dispatchEvent: () => false,
+            onchange: null,
+          }) as MediaQueryList,
+      )
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('groups the figures in one block and shows the QR code only on request @IN-06 @HY-08', async () => {
+      phone()
+      const user = userEvent.setup()
+      renderAt(`/address/${ADDRESS}`)
+      const summary = await waitFor(() => {
+        const el = document.querySelector<HTMLElement>('[data-address-summary]')
+        expect(el).toHaveTextContent('Total received')
+        return el!
+      })
+      for (const label of [
+        'Balance',
+        'Unconfirmed',
+        'Transactions',
+        'Total received',
+        'Total sent',
+      ]) {
+        expect(within(summary).getByText(label)).toBeInTheDocument()
+      }
+      expect(screen.queryByRole('heading', { name: 'QR code' })).toBeNull()
+      expect(screen.queryByRole('img', { name: /QR code of the address/ })).toBeNull()
+      expect(screen.getByText(/Watching for new transactions/)).toBeVisible()
+      const toggle = screen.getByRole('button', { name: 'Show QR code' })
+      expect(toggle).toHaveAttribute('aria-expanded', 'false')
+      await user.click(toggle)
+      expect(await screen.findByRole('img', { name: /QR code of the address/ })).toBeVisible()
+      expect(screen.getByRole('button', { name: 'Hide QR code' })).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      )
+      await user.click(screen.getByRole('button', { name: 'Hide QR code' }))
+      expect(screen.queryByRole('img', { name: /QR code of the address/ })).toBeNull()
+    })
+  })
+
   it('tells the viewer when a new transaction arrives for the address @IN-06', async () => {
     const id = 'ab'.repeat(32)
     const tx: DecodedTx = {
