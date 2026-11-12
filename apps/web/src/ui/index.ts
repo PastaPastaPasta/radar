@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { deferred } from './deferred'
 export { Card, SectionBand, KeyValue } from './layout'
 export type { CardProps, SectionBandProps, KeyValueProps } from './layout'
 export { QueryView } from './query-view'
@@ -75,4 +75,4 @@ export type {
   TransitionType,
 } from './types'
 
-export const KitPage = lazy(() => import('./kit/KitPage'))
+export const KitPage = deferred(() => import('./kit/KitPage').then((m) => m.default))

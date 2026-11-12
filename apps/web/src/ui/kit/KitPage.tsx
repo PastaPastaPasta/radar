@@ -1,10 +1,10 @@
-import { lazy, Suspense } from 'react'
+import { deferred } from '../deferred'
 
 const KitContent =
   import.meta.env.DEV ||
   import.meta.env.VITE_DATA_MODE === 'fixtures' ||
   import.meta.env.VITE_RADAR_KIT === '1'
-    ? lazy(() => import('./KitContent'))
+    ? deferred(() => import('./KitContent').then((m) => m.default))
     : null
 
 export default function KitPage() {
@@ -16,9 +16,5 @@ export default function KitPage() {
       </div>
     )
   }
-  return (
-    <Suspense fallback={null}>
-      <KitContent />
-    </Suspense>
-  )
+  return <KitContent />
 }

@@ -1,9 +1,10 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { deferred } from '@/ui/deferred'
 import { useCommandPalette } from './palette-context'
 
 const loadModule = () => import('./CommandPalette')
 const PRELOAD_DELAY_MS = 1500
-const Loaded = lazy(() => loadModule().then((m) => ({ default: m.CommandPalette })))
+const Loaded = deferred(() => loadModule().then((m) => m.CommandPalette))
 
 /**
  * The search dialog, with its command list and every resolver, is fetched at the first sign of a visitor
@@ -29,9 +30,5 @@ export function CommandPalette() {
     }
   }, [])
 
-  return wanted ? (
-    <Suspense fallback={null}>
-      <Loaded />
-    </Suspense>
-  ) : null
+  return wanted ? <Loaded /> : null
 }

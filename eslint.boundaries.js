@@ -100,6 +100,14 @@ const sourceClientPatterns = [
   },
 ]
 
+const lazyPaths = [
+  {
+    name: 'react',
+    importNames: ['lazy'],
+    message: 'Use deferred() from ui/deferred.tsx: React.lazy can loop forever under act()',
+  },
+]
+
 const queryKeyMessage =
   'Build query keys with the factories in data/query/keys.ts (docs/ARCHITECTURE.md §5.1)'
 const queryKeySelectors = [
@@ -164,7 +172,14 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
     {
       files: [`${rel}/{ui,features,routes,shell}/**/*.{ts,tsx}`],
       ignores: testFiles,
-      rules: { 'no-restricted-imports': ['error', { patterns: sourceClientPatterns }] },
+      rules: {
+        'no-restricted-imports': ['error', { patterns: sourceClientPatterns, paths: lazyPaths }],
+      },
+    },
+    {
+      files: [`${rel}/app/**/*.{ts,tsx}`, `${rel}/*.{ts,tsx}`],
+      ignores: testFiles,
+      rules: { 'no-restricted-imports': ['error', { paths: lazyPaths }] },
     },
     {
       files: [web],

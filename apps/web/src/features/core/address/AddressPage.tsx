@@ -1,7 +1,7 @@
 import { Plural, useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery, type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { lazy, Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { HyAddress, HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
@@ -9,6 +9,7 @@ import { classify } from '@/features/search'
 import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
+import { deferred } from '@/ui/deferred'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
@@ -17,7 +18,10 @@ import { addressQueries } from './queries'
 import type { WatchStatus } from './live'
 import { useAddressActivity } from './useAddressActivity'
 
-const AddressQr = lazy(() => import('./AddressQr'))
+const AddressQr = deferred(
+  () => import('./AddressQr').then((m) => m.default),
+  <Skeleton shape="block" height={200} />,
+)
 
 const NONE: HyAddress = {
   address: '',
@@ -209,9 +213,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           </div>
         </Card>
         <Card title={t`QR code`} layer="core">
-          <Suspense fallback={<Skeleton shape="block" height={200} />}>
-            <AddressQr address={address} />
-          </Suspense>
+          <AddressQr address={address} />
         </Card>
       </div>
 

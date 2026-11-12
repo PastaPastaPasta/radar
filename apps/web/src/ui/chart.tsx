@@ -1,6 +1,7 @@
 import { t } from '@lingui/core/macro'
 import type { EChartsOption } from 'echarts'
-import { lazy, Suspense, useId, useState } from 'react'
+import { useId, useState } from 'react'
+import { deferred } from './deferred'
 import { Skeleton } from './states'
 
 export interface ChartProps {
@@ -12,7 +13,10 @@ export interface ChartProps {
   loading?: boolean
 }
 
-const ChartView = lazy(() => import('./chart-view'))
+const ChartView = deferred<{ option: EChartsOption; group?: string; height: number }>(
+  () => import('./chart-view').then((m) => m.default),
+  ({ height }) => <Skeleton shape="chart" height={height} />,
+)
 
 export function Chart({ option, height, label, table, group, loading }: ChartProps) {
   const [shown, setShown] = useState(false)
@@ -23,9 +27,7 @@ export function Chart({ option, height, label, table, group, loading }: ChartPro
         {loading ? (
           <Skeleton shape="chart" height={height} />
         ) : (
-          <Suspense fallback={<Skeleton shape="chart" height={height} />}>
-            <ChartView option={option} group={group} />
-          </Suspense>
+          <ChartView option={option} group={group} height={height} />
         )}
       </div>
       <figcaption className="rx-chart__cap">
