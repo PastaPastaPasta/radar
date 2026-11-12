@@ -12,7 +12,7 @@ import { parseHeader } from '@/lib/core/header'
 import { bytesToHex } from '@/lib/hex'
 import { core } from './client'
 import { coreDecoder } from './decode'
-import type { CoreClientHooks, DecodedIsLock, DecodedTx } from './types'
+import type { CoreChainLock, CoreClientHooks, DecodedIsLock, DecodedTx } from './types'
 
 const POLL_MS = 30_000
 const STREAM_RETRY_MS = 120_000
@@ -165,8 +165,12 @@ export function createCoreLive(deps: CoreLiveDeps = defaultDeps) {
     node?: string,
   ): void {
     const now = deps.now()
-    deps.observe?.observeChainLock(net, lock, node)
-    const stamped = stamp(lock, now, node)
+    const corroborated = deps.observe?.observeChainLock(net, lock, node) === true
+    const stamped = stamp<CoreChainLock>(
+      corroborated ? lock : { ...lock, claim: 'one-node' },
+      now,
+      node,
+    )
     for (const qc of f.clients) qc.setQueryData(dapiKeys(net, 'chainlock'), stamped)
     setStatus(f, { lastEventAt: now })
   }

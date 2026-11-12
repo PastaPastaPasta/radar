@@ -306,6 +306,61 @@ describe('InstantSend lock evidence', () => {
   })
 })
 
+describe('Hyphen ChainLock claims', () => {
+  const taggedHyphen = (tagged: number) => ({
+    ...hyphen,
+    blocksFrom: async (...args: Parameters<typeof hyphen.blocksFrom>) => {
+      const page = await hyphen.blocksFrom(...args)
+      const items = page.data.items.map((b, i) =>
+        i < tagged ? { ...b, live: { ...b.live, tags: { ...b.live?.tags, chainlock: true } } } : b,
+      )
+      return { ...page, data: { ...page.data, items } }
+    },
+  })
+
+  it('reads a ChainLock only Hyphen reports as one source’s claim on every row it covers @IN-03', async () => {
+    const transport = new FixtureDapiTransport()
+    const core = createCoreClient({
+      transport: () => transport,
+      decoder,
+      hyphen: taggedHyphen(2),
+      health: { get: () => ({ state: 'ok' }) as never },
+      now: Date.now,
+    })
+    const rows = await core.blockRows('mainnet', { fromHeight: 2566380, count: 10, via: 'index' })
+    expect(rows.data).toHaveLength(10)
+    for (const row of rows.data) {
+      expect(row.chainLocked).toBe(false)
+      expect(row.chainLockClaim).toBe('one-node')
+    }
+  })
+
+  it('reads the same rows as locked once a node reports a lock that reaches them @IN-03', async () => {
+    const transport = new FixtureDapiTransport()
+    const core = createCoreClient({
+      transport: () => transport,
+      decoder,
+      hyphen: taggedHyphen(1),
+      health: { get: () => ({ state: 'ok' }) as never },
+      now: Date.now,
+    })
+    core.observeChainLock('mainnet', { height: 2566380, hash: 'a' }, 'node-a:1443')
+    const rows = await core.blockRows('mainnet', { fromHeight: 2566380, count: 10, via: 'index' })
+    for (const row of rows.data) {
+      expect(row.chainLocked).toBe(true)
+      expect(row.chainLockClaim).toBeUndefined()
+    }
+  })
+
+  it('tells a live ChainLock push which source count it has @IN-03', () => {
+    const { core } = setup()
+    const lock = { height: 2570100, hash: 'a' }
+    expect(core.observeChainLock('mainnet', lock, 'node-a:1443')).toBe(false)
+    expect(core.observeChainLock('mainnet', lock, 'node-a:1443')).toBe(false)
+    expect(core.observeChainLock('mainnet', lock, 'node-b:1443')).toBe(true)
+  })
+})
+
 describe('Hyphen fallback', () => {
   it('serves a list page from Hyphen when the budget is short, stamped as a fallback', async () => {
     const { core, transport } = setup()

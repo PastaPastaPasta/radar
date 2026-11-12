@@ -352,15 +352,20 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  /** Whether Hyphen's answer for a block at `height` is final: a lock is known, or the block is deep under its index. */
-  const hyphenFinal = (net: NetworkId, height: number, indexedTo: number | undefined) =>
-    statusAt(net, height) !== 'none' ||
-    (indexedTo !== undefined && indexedTo - height >= HYPHEN_FINAL_DEPTH)
-
   const lockFields = (status: LockStatus) => ({
     chainLocked: status === 'locked',
     ...(status === 'claimed' ? { chainLockClaim: 'one-node' as const } : {}),
   })
+
+  /**
+   * The lock flags for a block Hyphen served. Hyphen's own lock tag is one source's claim, so it reads as locked only
+   * once a second source agrees; a block deep under Hyphen's index with no claim at all is final by depth.
+   */
+  function hyphenLockFields(net: NetworkId, height: number, indexedTo: number | undefined) {
+    const status = statusAt(net, height)
+    const deep = indexedTo !== undefined && indexedTo - height >= HYPHEN_FINAL_DEPTH
+    return lockFields(status === 'none' && deep ? 'locked' : status)
+  }
 
   // ---- answers are checked before anything is shown or kept -----------------
 
@@ -686,7 +691,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const asOfHeight = detail.data.asOfHeight
     const block =
       height === undefined ? null : await deps.hyphen.block(net, height, signal).catch(() => null)
-    const final = height !== undefined && hyphenFinal(net, height, asOfHeight)
+    const lock =
+      height === undefined ? lockFields('none') : hyphenLockFields(net, height, asOfHeight)
     return {
       stamp: detail,
       value: {
@@ -697,7 +703,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         confirmations:
           height !== undefined && asOfHeight !== undefined ? asOfHeight - height + 1 : undefined,
         isInstantLocked: detail.data.live?.tags?.islock === true,
-        isChainLocked: final,
+        isChainLocked: lock.chainLocked,
+        ...(lock.chainLockClaim ? { chainLockClaim: lock.chainLockClaim } : {}),
       },
     }
   }
@@ -1064,8 +1071,13 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       rememberTip(net, tip)
     },
 
-    observeChainLock(net: NetworkId, lock: { height: number; hash: string }, node?: string): void {
+    observeChainLock(
+      net: NetworkId,
+      lock: { height: number; hash: string },
+      node?: string,
+    ): boolean {
       claimLock(net, node ?? 'unknown', lock)
+      return lockView(net).corroborated >= lock.height
     },
 
     forget(net: NetworkId): void {
@@ -1119,10 +1131,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       time: b.blockTime,
       txCount: b.txCount,
       size: b.blockSize,
-      chainLocked:
-        b.live?.tags?.chainlock === true ||
-        b.blockHeight <= lockedTop ||
-        hyphenFinal(net, b.blockHeight, asOf),
+      ...hyphenLockFields(net, b.blockHeight, asOf),
     })
     return fromHyphen(page, items.map(toRow), fallback, { height: page.data.asOfHeight })
   }
@@ -1148,10 +1157,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         message: (e as Error).message,
       })
     }
-    const chainLocked =
-      detail.data.live?.tags?.chainlock === true ||
-      hyphenFinal(net, block.height, detail.data.asOfHeight)
-    return fromHyphen(raw, { ...block, chainLocked }, 'dapi-down', { height: block.height })
+    if (detail.data.live?.tags?.chainlock === true) {
+      claimLock(net, 'hyphen', { height: block.height, hash: block.hash })
+    }
+    const lock = hyphenLockFields(net, block.height, detail.data.asOfHeight)
+    return fromHyphen(raw, { ...block, ...lock }, 'dapi-down', { height: block.height })
   }
 
   return client

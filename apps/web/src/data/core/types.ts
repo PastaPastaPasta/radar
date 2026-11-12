@@ -200,8 +200,11 @@ export interface CoreDecoder {
 export interface CoreClientHooks {
   /** The live header stream's tip, so a date lookup does not ask for it again. */
   observeTip(net: NetworkId, tip: { height: number; hash: string; time: number }): void
-  /** A ChainLock the live header stream received, from `node`. */
-  observeChainLock(net: NetworkId, lock: { height: number; hash: string }, node?: string): void
+  /**
+   * A ChainLock the live header stream received, from `node`. True when a second, independent source also reports a
+   * lock at or above its height; false while it is one node's claim.
+   */
+  observeChainLock(net: NetworkId, lock: { height: number; hash: string }, node?: string): boolean
   /** Drops what the client remembers of a network. */
   forget(net: NetworkId): void
 }

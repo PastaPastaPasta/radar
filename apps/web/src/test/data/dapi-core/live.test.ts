@@ -165,6 +165,25 @@ describe('coreLive.tip', () => {
     ).toBe(99)
   })
 
+  it('marks a pushed ChainLock as one node’s claim until a second source agrees', async () => {
+    const observeChainLock = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true)
+    const { live, qc } = setup(
+      [{ messages: [chainLockMessage(99), chainLockMessage(100)], then: 'hold' }],
+      { observe: { observeTip: () => undefined, observeChainLock } },
+    )
+    const lockOf = () =>
+      qc.getQueryData<Sourced<{ height: number; claim?: string }>>([NET, 'dapi', 'chainlock'])?.data
+    const seen: unknown[] = []
+    qc.getQueryCache().subscribe((e) => {
+      if (e.type === 'updated') seen.push(lockOf()?.claim)
+    })
+    live.tip(NET, qc)
+    await settle(0)
+    expect(seen).toContain('one-node')
+    expect(lockOf()).toMatchObject({ height: 100 })
+    expect(lockOf()?.claim).toBeUndefined()
+  })
+
   it('invalidates the latest blocks view on every header', async () => {
     const { live, qc } = setup([{ messages: [headersMessage(1), headersMessage(2)], then: 'hold' }])
     const spy = vi.spyOn(qc, 'invalidateQueries')
