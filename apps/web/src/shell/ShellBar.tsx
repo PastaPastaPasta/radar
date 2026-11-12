@@ -20,6 +20,7 @@ import { adoptBarOverlay } from './bar-overlay'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
 import { routerLocation } from './spa-links'
+import { UnitSwitch } from './UnitSwitch'
 
 interface NavItem {
   section: SiteSection
@@ -102,6 +103,7 @@ export function ShellBar() {
         ))}
       </nav>
       <div slot="actions">
+        <UnitSwitch className="rx-unit--bar" />
         <HeaderTip />
         <SearchTrigger className="rx-hdr-search" />
       </div>
