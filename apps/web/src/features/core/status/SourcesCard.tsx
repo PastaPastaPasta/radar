@@ -59,21 +59,37 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
             source === 'radar' || source === 'pe' || source === 'hyphen'
               ? probes[source].error
               : undefined
+          const state = offered ? (
+            <LiveDot state={health.state} />
+          ) : (
+            <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
+          )
+          const extra = (
+            <>
+              {facts ? (
+                <p className="text-[var(--dh-ink-2)]">
+                  {facts.report} <SourceLine stamp={facts.stamp} compact />
+                </p>
+              ) : null}
+              {probeError && health.state !== 'down' ? (
+                <ErrorState error={probeError} source={source} compact />
+              ) : null}
+            </>
+          )
+          const rowProps = {
+            'data-source-row': source,
+            'data-state': offered ? health.state : 'unsupported',
+          }
           if (phone) {
             return (
               <li
                 key={source}
-                data-source-row={source}
-                data-state={offered ? health.state : 'unsupported'}
+                {...rowProps}
                 className="grid gap-1 border-b border-[var(--dh-line)] py-3 last:border-b-0"
               >
                 <div className="flex items-center justify-between gap-3">
                   <strong>{name}</strong>
-                  {offered ? (
-                    <LiveDot state={health.state} />
-                  ) : (
-                    <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
-                  )}
+                  {state}
                 </div>
                 <p className="text-[var(--dh-ink-2)]">{role}</p>
                 {offered ? (
@@ -85,14 +101,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
                     </summary>
                     <div className="mt-1 grid gap-1">
                       <p>{describeHealth(health, now)}</p>
-                      {facts ? (
-                        <p className="text-[var(--dh-ink-2)]">
-                          {facts.report} <SourceLine stamp={facts.stamp} compact />
-                        </p>
-                      ) : null}
-                      {probeError && health.state !== 'down' ? (
-                        <ErrorState error={probeError} source={source} compact />
-                      ) : null}
+                      {extra}
                     </div>
                   </details>
                 ) : null}
@@ -102,21 +111,14 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           return (
             <li
               key={source}
-              data-source-row={source}
-              data-state={offered ? health.state : 'unsupported'}
+              {...rowProps}
               className="grid gap-1 border-b border-[var(--dh-line)] py-3 last:border-b-0 md:grid-cols-[minmax(0,14rem)_8rem_minmax(0,1fr)]"
             >
               <div>
                 <strong>{name}</strong>
                 <p className="text-[var(--dh-ink-2)]">{role}</p>
               </div>
-              <div className="flex items-start">
-                {offered ? (
-                  <LiveDot state={health.state} />
-                ) : (
-                  <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
-                )}
-              </div>
+              <div className="flex items-start">{state}</div>
               <div className="grid gap-1">
                 {offered ? (
                   <>
@@ -124,14 +126,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
                     {health.p50LatencyMs !== undefined ? (
                       <p className="text-[var(--dh-ink-2)]">{medianText(health.p50LatencyMs)}</p>
                     ) : null}
-                    {facts ? (
-                      <p className="text-[var(--dh-ink-2)]">
-                        {facts.report} <SourceLine stamp={facts.stamp} compact />
-                      </p>
-                    ) : null}
-                    {probeError && health.state !== 'down' ? (
-                      <ErrorState error={probeError} source={source} compact />
-                    ) : null}
+                    {extra}
                   </>
                 ) : (
                   <p className="text-[var(--dh-ink-2)]">
