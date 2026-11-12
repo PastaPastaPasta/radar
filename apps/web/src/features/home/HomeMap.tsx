@@ -75,6 +75,7 @@ export function HomeMap() {
   const masternodes = points.reduce((n, p) => n + p.masternodes, 0)
   const top = points.find((p) => p.masternodes > 0)
   const [tx, ty] = top ? project(top.lon, top.lat) : [0, 0]
+  const txShare = tx / WIDTH
   const summary =
     points.length > 0
       ? t`${formatInt(masternodes)} masternodes in ${formatInt(points.length)} places`
@@ -118,10 +119,10 @@ export function HomeMap() {
           className="rx-callout"
           data-layer="network"
           style={{
-            left: `${(tx / WIDTH) * 100}%`,
+            left: `${txShare * 100}%`,
             top: `${(ty / HEIGHT) * 100}%`,
             transform:
-              tx / WIDTH < 0.4 ? 'translate(12px, -50%)' : 'translate(calc(-100% - 12px), -50%)',
+              txShare < 0.4 ? 'translate(12px, -50%)' : 'translate(calc(-100% - 12px), -50%)',
           }}
         >
           <b>{place(top)}</b>

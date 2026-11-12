@@ -219,11 +219,6 @@
 .rx-home__activity {
   padding-top: 40px;
 }
-@media (min-width: 1024px) {
-  .rx-home__activity {
-    padding-top: 24px;
-  }
-}
 /* A wide hero gives the left column room to set the title on one line and the lede on two, which keeps the home's latest activity on the first screen. */
 @media (min-width: 1200px) {
   .rx-scope__grid {
@@ -235,6 +230,9 @@
 }
 /* From 1024 px the four figures are one strip, so the latest activity stays on the first screen. */
 @media (min-width: 1024px) {
+  .rx-home__activity {
+    padding-top: 24px;
+  }
   .rx-corefig {
     margin-top: 10px;
   }
