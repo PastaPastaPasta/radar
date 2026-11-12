@@ -7,8 +7,10 @@ import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
-import { adaptBlockRows } from '@/data/insight/adapt'
-import { insQueries } from '@/data/insight/queries'
+import { core } from '@/data/core/client'
+import { insight } from '@/data/insight/client'
+import { insKeys } from '@/data/query/keys'
+import { dataClass } from '@/data/query/stale'
 import {
   Entity,
   PageLink,
@@ -16,7 +18,7 @@ import {
   useNetwork,
   keepPreviousOnNetwork,
 } from '@/features/entity'
-import { formatBytes, formatDate, formatInt, formatIsoUtc } from '@/lib/format'
+import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
@@ -32,6 +34,7 @@ import {
   windowOf,
   type Window,
 } from './blocks-range'
+import { readInsightPage } from './insight-page'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
@@ -83,6 +86,8 @@ type RowSource = 'dapi' | 'hyphen' | 'insight'
 
 interface PageRows {
   rows: BlockRow[]
+  /** The page's reads have finished and answered, whatever they held. */
+  settled: boolean
   pending: number
   stamp: ReturnType<typeof stampOf> | undefined
   error: unknown
@@ -117,6 +122,10 @@ function useDapiRows(window: Window | null, enabled: boolean): PageRows {
   const last = rest.data && !rest.isPlaceholderData ? rest : first
   return {
     rows,
+    settled:
+      first.isSuccess &&
+      !first.isPlaceholderData &&
+      (restCount === 0 || (rest.isSuccess && !rest.isPlaceholderData)),
     pending: first.data && restCount > 0 && !restData && !rest.isError ? restCount : 0,
     stamp: last.data ? stampOf(last.data) : undefined,
     error: first.error ?? rest.error,
@@ -139,6 +148,7 @@ function useHyphenRows(window: Window | null, enabled: boolean): PageRows {
   })
   return {
     rows: query.data?.data ?? [],
+    settled: query.isSuccess && !query.isPlaceholderData,
     pending: 0,
     stamp: query.data ? stampOf(query.data) : undefined,
     error: query.error,
@@ -148,51 +158,49 @@ function useHyphenRows(window: Window | null, enabled: boolean): PageRows {
 }
 
 /**
- * A long page from Insight's day list while Hyphen's index is stale: one header read for the time the page starts at,
- * then one list request. The list orders blocks by time, so rows are kept to the page's heights, and whether each is
- * locked comes from the best ChainLock DAPI reports, with the one-node qualifier it carries.
+ * A long page from Insight's day list while Hyphen's index is stale (`readInsightPage` joins the day requests it takes),
+ * with whether each row is locked taken from the best ChainLock DAPI reports and the one-node qualifier it carries.
  */
-function useInsightRows(
-  window: Window | null,
-  enabled: boolean,
-  date: string | undefined,
-): PageRows {
+function useInsightRows(window: Window | null, enabled: boolean): PageRows {
   const net = useNetwork()
   const top = window?.top ?? 0
-  const header = useQuery({
-    ...coreQueries.headers(net, top, 1),
+  const count = window?.count ?? 0
+  const floor = window ? window.top - window.count + 1 : 0
+  const page = useQuery({
+    queryKey: insKeys(net, 'blocks-page', { top, count }),
+    queryFn: async ({ signal }) => {
+      const read = await readInsightPage(top, count, floor, {
+        timeAt: (height) => core.headers(net, height, 1, signal).then((h) => h.data[0]?.time),
+        list: (q) => insight.blocks(net, q, signal),
+      })
+      if (!read) throw new Error('Insight has no block list for this page')
+      return read
+    },
     enabled: enabled && window !== null,
-  })
-  const startMs = header.data?.data[0]?.time
-  const day = date ?? (startMs === undefined ? undefined : formatIsoUtc(startMs).slice(0, 10))
-  const list = useQuery({
-    ...insQueries.blocks(net, {
-      date: day ?? '',
-      limit: window?.count ?? 0,
-      startTimestamp: startMs === undefined ? undefined : Math.floor(startMs / 1000),
-    }),
-    enabled: enabled && window !== null && day !== undefined && startMs !== undefined,
     placeholderData: keepPreviousOnNetwork(net),
+    ...dataClass('index'),
   })
   const lock = useQuery({ ...coreQueries.chainLock(net), enabled: enabled && window !== null })
   const best = lock.data?.data
-  const rows = useMemo(() => {
-    if (!list.data) return []
-    return adaptBlockRows(list.data.data, top).map((r) =>
-      best === undefined || r.height > best.height
-        ? r
-        : best.claim
-          ? { ...r, chainLockClaim: 'one-node' as const }
-          : { ...r, chainLocked: true },
-    )
-  }, [list.data, top, best])
+  const rows = useMemo(
+    () =>
+      (page.data?.rows ?? []).map((r) =>
+        best === undefined || r.height > best.height
+          ? r
+          : best.claim
+            ? { ...r, chainLockClaim: 'one-node' as const }
+            : { ...r, chainLocked: true },
+      ),
+    [page.data, best],
+  )
   return {
     rows,
+    settled: page.isSuccess && !page.isPlaceholderData,
     pending: 0,
-    stamp: list.data ? stampOf(list.data) : undefined,
-    error: header.error ?? list.error,
-    failed: (header.isError && !header.data) || (list.isError && !list.data),
-    refetch: () => void Promise.all([header.refetch(), list.refetch()]),
+    stamp: page.data ? stampOf(page.data.list) : undefined,
+    error: page.error,
+    failed: page.isError && !page.data,
+    refetch: () => void page.refetch(),
   }
 }
 
@@ -341,7 +349,7 @@ export function BlocksPage({
 
   const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
   const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
-  const insightRows = useInsightRows(window, pageSource.source === 'insight', date)
+  const insightRows = useInsightRows(window, pageSource.source === 'insight')
   const page = { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
   const rows = page.rows
   const newestPage = window !== null && window.newer === null
@@ -401,20 +409,20 @@ export function BlocksPage({
   )
 
   const stamp = page.stamp
+  const noBlocks = window === null && range.state === 'ready' && !pageSource.waiting
+  const shownEmpty = window !== null && page.settled && rows.length === 0
   const state =
     range.state === 'error' || page.failed
       ? 'error'
-      : rows.length > 0
+      : rows.length > 0 || noBlocks
         ? 'ready'
-        : window === null && range.state === 'ready'
-          ? 'ready'
-          : 'loading'
+        : 'loading'
   const dateLabel = date ? formatDate(dayStartMs(date), { utc: true, time: false }) : undefined
   const tipTime = range.tip.data?.data.time
   const canNextDay =
     date !== undefined && tipTime !== undefined && dayStartMs(date) + DAY_MS <= tipTime
 
-  const link = (search: { from?: number }, pageSize: number = size) => ({
+  const link = (search: { from?: number }, pageSize: number = pageSource.requested) => ({
     to: '/blocks' as const,
     search: {
       ...(date ? { date } : {}),
@@ -422,11 +430,11 @@ export function BlocksPage({
       ...(pageSize === BLOCKS_PER_PAGE ? {} : { size: pageSize }),
     },
   })
-  // An index list can come back short (a day's end, blocks out of time order), so the page after it starts at what it
-  // actually reached and no block is skipped.
+  // A page read from Insight can come back short of its window (see `readInsightPage`), so the page after it starts at
+  // the lowest height it shows and no block is skipped.
   const lowest = rows.length > 0 ? Math.min(...rows.map((r) => r.height)) : undefined
   const older =
-    pageSource.source === 'insight' && lowest !== undefined
+    pageSource.source === 'insight' && lowest !== undefined && page.settled
       ? lowest - 1 >= range.floor
         ? { from: lowest - 1 }
         : null
@@ -466,25 +474,58 @@ export function BlocksPage({
           id="blocks"
           title={dateLabel ? t`Blocks on ${dateLabel}` : t`Latest blocks`}
           description={
-            window
-              ? t`Heights ${formatInt(window.top - window.count + 1)} to ${formatInt(window.top)}`
+            rows.length > 0 && page.pending === 0
+              ? t`Heights ${formatInt(Math.min(...rows.map((r) => r.height)))} to ${formatInt(Math.max(...rows.map((r) => r.height)))}`
               : undefined
           }
           source={stamp}
         >
           {pageSource.offered ? (
             <PageSizeControl
-              size={pageSource.requested}
+              size={pageSource.waiting ? pageSource.requested : size}
               available={pageSource.longPageAvailable}
               link={(n) => void navigate(link({ from }, n) as never)}
             />
           ) : null}
+          {!pageSource.waiting && pageSource.requested > size ? (
+            <p className="rx-note rx-dim" data-nav="page-size-note">
+              {t`Pages of ${formatInt(pageSource.requested)} need an index that is up to date, and none is right now.`}
+            </p>
+          ) : null}
           <Card layer="core" padding="flush">
-            {window === null && range.state === 'ready' ? (
+            {noBlocks ? (
               <Empty
                 kind="none-yet"
                 title={t`No blocks on this date`}
                 body={t`This network has no blocks in this day, or the day has not happened yet.`}
+              />
+            ) : shownEmpty ? (
+              <Empty
+                kind="none-yet"
+                title={t`No blocks came back for this page`}
+                body={t`The source returned no blocks for heights ${formatInt(window.top - window.count + 1)} to ${formatInt(window.top)}. Try the page either side, or a shorter page.`}
+                action={
+                  <span
+                    className="rx-row"
+                    style={{ gap: 8, flexWrap: 'wrap' }}
+                    data-nav="empty-page"
+                  >
+                    {window.newer ? (
+                      <Link
+                        className="dh-btn"
+                        to="/blocks"
+                        search={link(window.newer).search as never}
+                      >
+                        {t`Newer`}
+                      </Link>
+                    ) : null}
+                    {older ? (
+                      <Link className="dh-btn" to="/blocks" search={link(older).search as never}>
+                        {t`Older`}
+                      </Link>
+                    ) : null}
+                  </span>
+                }
               />
             ) : (
               <DataTable
@@ -512,7 +553,17 @@ export function BlocksPage({
           </Card>
           {firstOfDay !== undefined && firstOfDay > 0 && window && !older ? (
             <p className="rx-note" data-nav="older-than-day">
-              <Link to="/blocks" search={{ from: firstOfDay - 1 } as never}>
+              <Link
+                to="/blocks"
+                search={
+                  {
+                    from: firstOfDay - 1,
+                    ...(pageSource.requested === BLOCKS_PER_PAGE
+                      ? {}
+                      : { size: pageSource.requested }),
+                  } as never
+                }
+              >
                 {t`Older blocks from before this date`}
               </Link>
             </p>

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/blocks?blockDate=2014-01-01&limit=20&startTimestamp=1388620800"
+  },
+  "recordedAt": "2026-11-12T21:42:16.689Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "blocks": [],
+    "length": 0,
+    "pagination": {
+      "next": "2014-01-02",
+      "prev": "2013-12-31",
+      "currentTs": 1388620799,
+      "current": "2014-01-01",
+      "isToday": false,
+      "more": false
+    }
+  }
+}

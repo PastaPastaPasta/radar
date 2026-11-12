@@ -1,10 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
-import { resetHealthRegistry } from '@/data/health'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 import { FIRST_CHUNK } from './blocks-range'
@@ -134,9 +134,6 @@ describe('Blocks list', () => {
   })
 
   describe('page size @IN-02', () => {
-    afterEach(() => {
-      resetHealthRegistry()
-    })
     const hashOf = (h: number) => h.toString(16).padStart(64, '0')
     const rowsFor = (top: number, count: number) =>
       Array.from({ length: count }, (_, i) => ({
@@ -256,6 +253,190 @@ describe('Blocks list', () => {
       const older = within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')!
       expect(older).toContain('size=100')
       expect(older).toContain('from=1589132')
+    })
+
+    it('shows a page that crosses UTC midnight whole, reading both days, and pages on from its last row @IN-02 @IN-16', async () => {
+      const times: Record<number, number> = { 1586890: 1794011097_000, 1586878: 1794009534_000 }
+      vi.spyOn(core, 'headers').mockImplementation((_net, from) =>
+        Promise.resolve({
+          ...stamp('dapi'),
+          data: [{ height: from, hash: hashOf(from), time: times[from]! }],
+        }),
+      )
+      const days: string[] = []
+      server.use(
+        http.get(
+          'https://insight.testnet.networks.dash.org/insight-api/blocks',
+          async ({ request }) => {
+            const q = new URL(request.url).searchParams
+            days.push(`${q.get('blockDate')}:${q.get('limit')}`)
+            const slug = `blocks--blockDate-${q.get('blockDate')},limit-${q.get('limit')},startTimestamp-${q.get('startTimestamp')}`
+            return HttpResponse.json(await fixtureBody('insight', 'testnet', slug))
+          },
+        ),
+      )
+      renderAt('/blocks?network=testnet&size=50&from=1586890')
+      await screen.findByRole('table', { name: 'Core blocks' })
+      await waitFor(() =>
+        expect(
+          within(screen.getByRole('table', { name: 'Core blocks' })).getAllByRole('row'),
+        ).toHaveLength(51),
+      )
+      const table = screen.getByRole('table', { name: 'Core blocks' })
+      const shown = [...table.querySelectorAll('tbody tr')].map((r) =>
+        Number(/[\d,]{9}/.exec(r.textContent ?? '')?.[0].replaceAll(',', '')),
+      )
+      expect(shown).toEqual(Array.from({ length: 50 }, (_, i) => 1586890 - i))
+      expect(days).toEqual(['2026-11-07:50', '2026-11-06:38'])
+      expect(screen.getByText('Heights 1,586,841 to 1,586,890')).toBeInTheDocument()
+      const pager = screen.getByRole('navigation', { name: 'Pagination' })
+      expect(within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')).toContain(
+        'from=1586840',
+      )
+      expect(within(pager).getByRole('link', { name: 'Newer' }).getAttribute('href')).toContain(
+        'from=1586940',
+      )
+    })
+
+    it('starts the page after a short one at the lowest block it showed @IN-02', async () => {
+      vi.spyOn(core, 'headers').mockImplementation((_net, from) =>
+        from === 1_589_232
+          ? Promise.resolve({
+              ...stamp('dapi'),
+              data: [{ height: from, hash: hashOf(from), time: 1_794_000_000_000 }],
+            })
+          : Promise.reject(new Error('no header')),
+      )
+      server.use(
+        http.get('https://insight.testnet.networks.dash.org/insight-api/blocks', () =>
+          HttpResponse.json({
+            blocks: Array.from({ length: 60 }, (_, i) => ({
+              height: 1_589_232 - i,
+              hash: hashOf(1_589_232 - i),
+              time: 1_794_000_000 - i * 150,
+              size: 400,
+              txlength: 1,
+            })),
+          }),
+        ),
+      )
+      renderAt('/blocks?network=testnet&size=100')
+      await waitFor(() =>
+        expect(
+          within(screen.getByRole('table', { name: 'Core blocks' })).getAllByRole('row'),
+        ).toHaveLength(61),
+      )
+      const pager = screen.getByRole('navigation', { name: 'Pagination' })
+      const older = within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')!
+      expect(older).toContain('from=1589172')
+      expect(older).toContain('size=100')
+      expect(screen.getByText('Heights 1,589,173 to 1,589,232')).toBeInTheDocument()
+    })
+
+    it('says what happened when Insight returns no blocks, with the page either side @IN-02', async () => {
+      vi.spyOn(core, 'headers').mockImplementation((_net, from) =>
+        Promise.resolve({
+          ...stamp('dapi'),
+          data: [{ height: from, hash: hashOf(from), time: 1_794_000_000_000 }],
+        }),
+      )
+      const empty = await fixtureBody<{ blocks: never[] }>(
+        'insight',
+        'mainnet',
+        'blocks--blockDate-2014-01-01,limit-20,startTimestamp-1388620800',
+      )
+      server.use(
+        http.get('https://insight.testnet.networks.dash.org/insight-api/blocks', () =>
+          HttpResponse.json(empty),
+        ),
+      )
+      renderAt('/blocks?network=testnet&size=50&from=1589000')
+      expect(await screen.findByText('No blocks came back for this page')).toBeInTheDocument()
+      expect(
+        document.querySelector('[data-nav="empty-page"] a[href*="from=1588950"]'),
+      ).not.toBeNull()
+      expect(
+        document.querySelector('[data-nav="empty-page"] a[href*="from=1589050"]'),
+      ).not.toBeNull()
+      expect(document.querySelector('[data-nav="empty-page"] a[href*="size=50"]')).not.toBeNull()
+      expect(screen.queryByText('No blocks on this date')).toBeNull()
+    })
+
+    it('shows loading, not "No blocks on this date", while the health probe is pending @IN-02', async () => {
+      const status = await fixtureBody<Record<string, unknown>>('hyphen', 'mainnet', 'status')
+      let release: () => void = () => undefined
+      const held = new Promise<void>((resolve) => {
+        release = resolve
+      })
+      server.use(
+        http.get('*/x/hy/mainnet/status', async () => {
+          await held
+          return HttpResponse.json(status)
+        }),
+      )
+      vi.spyOn(core, 'blockRows').mockImplementation((_net, q) =>
+        Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight, q.count) }),
+      )
+      renderAt('/blocks?date=2026-11-03&size=50')
+      await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      await delay(300)
+      expect(screen.queryByText('No blocks on this date')).toBeNull()
+      expect(
+        within(screen.getByRole('group', { name: 'Blocks per page' })).getByRole('button', {
+          name: '50',
+        }),
+      ).toHaveAttribute('aria-pressed', 'true')
+      release()
+      await waitFor(() =>
+        expect(
+          within(screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })).getAllByRole('row'),
+        ).toHaveLength(51),
+      )
+    })
+
+    it('keeps size in the links and shows what is on screen while no index can serve 50 @IN-02', async () => {
+      server.use(
+        http.get('*/x/hy/mainnet/status', () =>
+          HttpResponse.json({ error: 'down' }, { status: 503 }),
+        ),
+      )
+      renderAt('/blocks?date=2026-11-03&size=50')
+      const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+      void table
+      await waitFor(() =>
+        expect(
+          within(screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })).getAllByRole('row'),
+        ).toHaveLength(21),
+      )
+      const group = screen.getByRole('group', { name: 'Blocks per page' })
+      expect(within(group).getByRole('button', { name: '20' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      )
+      expect(within(group).getByRole('button', { name: '50' })).toBeDisabled()
+      expect(screen.getByText(/Pages of 50 need an index that is up to date/)).toBeInTheDocument()
+      const pager = screen.getByRole('navigation', { name: 'Pagination' })
+      expect(within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')).toContain(
+        'size=50',
+      )
+    })
+
+    it('keeps size on the link to blocks before the day @IN-02', async () => {
+      vi.spyOn(core, 'blockRows').mockImplementation((_net, q) =>
+        Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight, q.count) }),
+      )
+      renderAt('/blocks?date=2026-11-03&size=50&from=2565827')
+      const link = await screen.findByRole('link', { name: 'Older blocks from before this date' })
+      expect(link.getAttribute('href')).toContain('size=50')
+      expect(link.getAttribute('href')).toContain('from=2565826')
+    })
+
+    it('titles the page by the heights its rows hold, not the ones asked for @IN-02', async () => {
+      vi.spyOn(core, 'blockRows').mockImplementation((_net, q) =>
+        Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight - 10, q.count - 10) }),
+      )
+      renderAt('/blocks?date=2026-11-03&size=50')
+      expect(await screen.findByText('Heights 2,566,331 to 2,566,370')).toBeInTheDocument()
     })
   })
 })

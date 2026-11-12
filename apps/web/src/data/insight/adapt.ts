@@ -131,9 +131,9 @@ export function adaptProposals(
 }
 
 /**
- * A day's block list as block rows, newest first, no higher than `top`. Insight orders blocks by time, so a block whose
- * time ties or trails its neighbour's can sit out of height order; rows are sorted by height. A lock is not Insight's to
- * say (`withLocks`), so none is claimed here.
+ * A block list as block rows, newest first by height, no higher than `top`. Insight orders blocks by time, so a block whose
+ * time ties or trails its neighbour's can sit out of height order. A lock is not Insight's to say (`withLocks`), so none
+ * is claimed here.
  */
 export function adaptBlockRows(list: InsBlockList, top: number): BlockRow[] {
   return list.blocks
