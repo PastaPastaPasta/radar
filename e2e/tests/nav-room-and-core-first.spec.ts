@@ -146,11 +146,10 @@ test.describe('Core figures first on the home page', () => {
     for (const label of ['Height', 'Difficulty', 'Circulating supply', 'Blockchain size']) {
       await expect(headline).toContainText(label)
     }
-    const pending = await page.locator('#core').boundingBox()
-    const activity = await page.locator('.rx-home__activity').boundingBox()
-    expect(pending!.y, 'the pending list follows the latest activity').toBeGreaterThan(
-      activity!.y + activity!.height - 1,
+    await expect(page.locator('#core'), 'the pending list is a column of the activity').toHaveCount(
+      0,
     )
+    await expect(page.locator('.rx-activity__grid > .rx-card')).toHaveCount(3)
   })
 
   for (const [name, path] of [

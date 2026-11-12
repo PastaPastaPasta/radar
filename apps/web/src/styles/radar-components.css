@@ -324,6 +324,10 @@ kbd,
   .rx-card__head {
     padding: 12px 14px 10px;
   }
+  .rx-card__aside {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
   .rx-card__body {
     padding: 0 14px 14px;
   }
@@ -1322,6 +1326,86 @@ button.rx-src--proof:hover {
   }
   .rx-table--cards .rx-cellbtn,
   .rx-table--cards td:not(.t) a {
+    position: relative;
+    z-index: 1;
+  }
+}
+/* The same row cards in a narrow column beyond a phone, where a table would not fit. */
+@media (min-width: 641px) {
+  .rx-card--feed .rx-table--cards thead {
+    display: none;
+  }
+  .rx-card--feed .rx-table--cards,
+  .rx-card--feed .rx-table--cards tbody {
+    display: block;
+  }
+  .rx-card--feed .rx-table--cards tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 12px;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--dh-line);
+  }
+  .rx-card--feed .rx-table--cards td {
+    display: block;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    font-size: var(--dh-fs-sm);
+    color: var(--dh-ink-2);
+  }
+  .rx-card--feed .rx-table--cards td:first-child {
+    padding-left: 0;
+  }
+  .rx-card--feed .rx-table--cards td:last-child {
+    padding-right: 0;
+  }
+  .rx-card--feed .rx-table--cards td.t {
+    grid-column: 1;
+    font-size: var(--dh-fs-body);
+    color: var(--dh-ink);
+  }
+  .rx-card--feed .rx-table--cards td.e {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+    color: var(--dh-ink);
+  }
+  .rx-card--feed .rx-table--cards td.f {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+  .rx-card--feed .rx-table--cards td.h {
+    display: none;
+  }
+  .rx-card--feed .rx-table--cards td.u {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: left;
+  }
+  .rx-card--feed .rx-table--cards td.s {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+  }
+  .rx-card--feed .rx-table--cards td[data-u]::after {
+    content: ' ' attr(data-u);
+    color: var(--dh-ink-2);
+  }
+  .rx-card--feed .rx-table--cards td[data-l]::before {
+    content: attr(data-l) ' ';
+    color: var(--dh-ink-2);
+  }
+  .rx-card--feed .rx-table--cards td.t a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .rx-card--feed .rx-table--cards .rx-cellbtn,
+  .rx-card--feed .rx-table--cards td:not(.t) a {
     position: relative;
     z-index: 1;
   }

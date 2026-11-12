@@ -11,12 +11,14 @@ import { Entity, PageLink, useNetwork, keepPreviousOnNetwork } from '@/features/
 import { formatBytes, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Icon, LockMark, Time, TYPE_META } from '@/ui'
+import { PendingCard } from './CoreZone'
+import { useHomeWidth, type HomeWidth } from './home-width'
 import { CORE_ROWS } from './Scope'
 import { transitionKind } from './transition-types'
 
 const TRANSITIONS = 8
 
-function BlocksCard() {
+function BlocksCard({ compact }: { compact: boolean }) {
   const { t } = useLingui()
   const net = useNetwork()
   const tip = useQuery(coreQueries.tip(net))
@@ -71,6 +73,13 @@ function BlocksCard() {
     ],
     [t, hasPool],
   )
+  const shown = useMemo(
+    () =>
+      compact
+        ? columns.filter((c) => c.id === 'block' || c.id === 'age' || c.id === 'txs')
+        : columns,
+    [columns, compact],
+  )
   return (
     <Card
       layer="core"
@@ -85,7 +94,7 @@ function BlocksCard() {
     >
       <DataTable
         caption={t`Latest Core blocks`}
-        columns={columns}
+        columns={shown}
         rows={rows.data?.data ?? []}
         getRowId={(r) => String(r.height)}
         state={rows.isError && !rows.data ? 'error' : rows.data ? 'ready' : 'loading'}
@@ -136,6 +145,7 @@ function TransitionsCard() {
   return (
     <Card
       layer="platform"
+      className="rx-card--feed"
       title={t`Platform transitions`}
       padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
@@ -163,23 +173,22 @@ function TransitionsCard() {
   )
 }
 
+/** Core blocks, Platform transitions and, beyond a phone, the pending transactions, in that order in the page and on screen. */
 export function Activity() {
   const { t } = useLingui()
+  const width: HomeWidth = useHomeWidth()
   return (
-    <section className="rx-sec" aria-labelledby="h-latest">
+    <section className="rx-sec rx-activity" aria-labelledby="h-latest">
       <div className="rx-sec__head">
         <h2 className="rx-sec__title" id="h-latest">
           {t`Latest activity`}
         </h2>
         <p className="rx-sec__desc">{t`New rows appear at the top.`}</p>
       </div>
-      <div className="rx-grid">
-        <div className="rx-c6">
-          <BlocksCard />
-        </div>
-        <div className="rx-c6">
-          <TransitionsCard />
-        </div>
+      <div className="rx-activity__grid">
+        <BlocksCard compact={width !== 'phone'} />
+        <TransitionsCard />
+        {width === 'phone' ? null : <PendingCard compact={width === 'wide'} />}
       </div>
     </section>
   )

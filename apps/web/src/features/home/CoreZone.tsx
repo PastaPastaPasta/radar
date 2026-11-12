@@ -133,9 +133,11 @@ export function CoreFigures() {
   )
 }
 
-function PendingCard() {
+/** The pending list: four columns in the phone band and the full-width tablet row, three in a desktop column. */
+export function PendingCard({ compact = false }: { compact?: boolean }) {
   const { t } = useLingui()
   const { net, fit, lag, devnet } = useHyphenBlocked()
+  const lagged = useHyphenLagSentence(net, lag)
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
   const columns = useMemo<ColumnDef<HyMempoolTx>[]>(
     () => [
@@ -151,12 +153,16 @@ function PendingCard() {
         cell: ({ row }) => <Amount value={row.original.valueOut} kind="duffs" />,
         meta: { numeric: true, align: 'end', phone: 'secondary' },
       },
-      {
-        id: 'size',
-        header: t`Size`,
-        accessorFn: (r) => formatBytes(r.txSize),
-        meta: { numeric: true, phone: 'secondary' },
-      },
+      ...(compact
+        ? []
+        : [
+            {
+              id: 'size',
+              header: t`Size`,
+              accessorFn: (r: HyMempoolTx) => formatBytes(r.txSize),
+              meta: { numeric: true, phone: 'secondary' as const },
+            },
+          ]),
       {
         id: 'seen',
         header: t`First seen`,
@@ -164,11 +170,12 @@ function PendingCard() {
         meta: { phone: 'primary' },
       },
     ],
-    [t],
+    [t, compact],
   )
   return (
     <Card
       layer="core"
+      className={compact ? 'rx-card--feed' : undefined}
       title={t`Pending transactions`}
       padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
@@ -182,7 +189,7 @@ function PendingCard() {
         <Empty
           kind={devnet ? 'unsupported-network' : 'blocked'}
           title={devnet ? t`Hyphen doesn't index devnets` : t`Pending transactions are unavailable`}
-          body={devnet ? undefined : (lag ?? t`Hyphen's index is still being checked.`)}
+          body={devnet ? undefined : (lagged ?? t`Hyphen's index is still being checked.`)}
         />
       ) : (
         <DataTable

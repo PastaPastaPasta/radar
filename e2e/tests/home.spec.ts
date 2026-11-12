@@ -125,7 +125,7 @@ test.describe('Home', () => {
     const tip = page.locator('[data-header-tip]')
     await expect(tip).toContainText('2,570,085')
     await expect(tip.locator('.rx-hdrtip__lock')).toBeVisible()
-    await page.getByRole('heading', { name: 'Dash Core' }).scrollIntoViewIfNeeded()
+    await page.getByRole('heading', { name: 'Latest activity' }).scrollIntoViewIfNeeded()
     await expect(tip).toBeInViewport()
     await expect(tip).toContainText('2,570,085')
     await page.goto('/status')

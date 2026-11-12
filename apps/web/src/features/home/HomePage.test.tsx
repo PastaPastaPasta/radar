@@ -39,14 +39,73 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
-  it('puts the latest activity before the pending list in reading order @IN-01 @HY-03', async () => {
+  it('lists the pending transactions beside the block lists, in the same section and after them in reading order @IN-01 @HY-03', async () => {
     renderAt('/')
     await coreRow('2,570,085')
     const activity = document.querySelector('.rx-home__activity')!
-    const pending = document.querySelector('#core')!
-    expect(
-      activity.compareDocumentPosition(pending) & Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy()
+    expect(document.querySelector('#core')).toBeNull()
+    const titles = [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent)
+    expect(titles).toEqual(['Core blocks', 'Platform transitions', 'Pending transactions'])
+    const pending = await within(activity).findByRole('table', { name: 'Pending transactions' })
+    await waitFor(() => expect(within(pending).getAllByRole('row').length).toBeGreaterThan(1))
+    expect(within(pending).getAllByRole('row').length).toBeLessThanOrEqual(9)
+    expect(within(activity).getByRole('link', { name: 'Mempool' })).toHaveAttribute(
+      'href',
+      '/mempool',
+    )
+  })
+
+  describe('by width @IN-01 @HY-03', () => {
+    afterEach(() => vi.unstubAllGlobals())
+    const width = (matching: readonly string[]) =>
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string): MediaQueryList =>
+          ({
+            matches: matching.includes(query),
+            media: query,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
+            addListener: () => undefined,
+            removeListener: () => undefined,
+            dispatchEvent: () => false,
+            onchange: null,
+          }) as MediaQueryList,
+      )
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING)
+
+    it('puts the pending band between the hero and the block lists on a phone, in the page and not by CSS', async () => {
+      width(['(max-width: 640px)'])
+      renderAt('/')
+      await coreRow('2,570,085')
+      const activity = document.querySelector('.rx-home__activity')!
+      const band = document.querySelector('#core')!
+      expect(follows(document.querySelector('.rx-scope')!, band)).toBe(true)
+      expect(follows(band, activity)).toBe(true)
+      expect(
+        [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent),
+      ).toEqual(['Core blocks', 'Platform transitions'])
+      expect(band).toHaveTextContent('Pending transactions')
+    })
+
+    it('keeps the four pending columns when the pending list sits full width on a tablet', async () => {
+      width([])
+      renderAt('/')
+      await coreRow('2,570,085')
+      expect(document.querySelector('#core')).toBeNull()
+      const pending = await screen.findByRole('table', { name: 'Pending transactions' })
+      expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
+    })
+
+    it('mounts the three-column tree from 1024 px', async () => {
+      width(['(min-width: 1024px)'])
+      renderAt('/')
+      await coreRow('2,570,085')
+      expect(document.querySelector('#core')).toBeNull()
+      const pending = await screen.findByRole('table', { name: 'Pending transactions' })
+      expect(within(pending).queryByRole('columnheader', { name: 'Size' })).toBeNull()
+    })
   })
 
   it('shows the Core height and difficulty as soon as the status answers, without the tip @HY-01 @IN-01', async () => {
@@ -83,7 +142,7 @@ describe('Home page', () => {
     expect(document.getElementById('core-figures')).not.toBeNull()
   })
 
-  it('shows the Core headline figures inside the hero plate, ahead of the lanes, with the pending list below @HY-01 @HY-03', async () => {
+  it('shows the Core headline figures inside the hero plate, ahead of the lanes @HY-01 @HY-03', async () => {
     renderAt('/')
     const headline = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('.rx-scope [data-headline]')
@@ -99,8 +158,10 @@ describe('Home page', () => {
       'headline precedes the lanes',
     ).toBeTruthy()
     expect(document.querySelectorAll('[data-headline]')).toHaveLength(1)
-    expect(document.querySelector('#core [data-headline]')).toBeNull()
-    expect(document.querySelector('#core')).toHaveTextContent('Pending transactions')
+    expect(
+      document.querySelector('.rx-home__activity [data-headline]'),
+      'no second headline in the activity',
+    ).toBeNull()
   })
 
   it('keeps the Platform-locked-to-Core line on the lane title for phones @IN-01', async () => {
@@ -333,6 +394,22 @@ describe('Home page', () => {
       return el!
     })
     await waitFor(() => expect(headline).toHaveTextContent('ChainLock reported by one node'))
+  })
+
+  it('says in the pending column that Hyphen is behind instead of listing rows, on testnet @IN-16 @HY-19 @HY-03', async () => {
+    renderAt('/?network=testnet')
+    await coreRow('1,589,232')
+    const column = await waitFor(() => {
+      const el = [...document.querySelectorAll('.rx-activity__grid .rx-card')].find((c) =>
+        c.textContent?.includes('Pending transactions'),
+      )
+      expect(el).toHaveTextContent('Pending transactions are unavailable')
+      return el as HTMLElement
+    })
+    expect(column).toHaveTextContent(
+      /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
+    )
+    expect(within(column).queryByRole('table')).toBeNull()
   })
 
   it('works on testnet and names the network @IN-16 @HY-19', async () => {
