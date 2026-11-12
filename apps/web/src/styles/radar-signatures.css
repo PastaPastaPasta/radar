@@ -1069,9 +1069,31 @@
   .rx-scope__tail {
     display: none;
   }
-  .rx-scope__lede {
-    font-size: 15px;
-    line-height: 1.45;
+  .rx-scope__lede,
+  .rx-try {
+    display: none;
+  }
+  .rx-scope__map .rx-map {
+    width: 82%;
+    margin-inline: auto;
+  }
+  .rx-scope > .dh-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rx-scope .rx-pulse {
+    display: contents;
+  }
+  .rx-scope .rx-lanes {
+    order: 1;
+  }
+  .rx-lanes__head > span:not([class]) {
+    display: none;
+  }
+  .rx-scope [data-pulse='platform'],
+  .rx-scope [data-pulse='census'] {
+    order: 2;
   }
   .rx-home {
     display: flex;

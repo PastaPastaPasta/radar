@@ -42,7 +42,7 @@ export function SectionNav() {
 
   useEffect(() => {
     const rail = railRef.current
-    if (!rail) return
+    if (!rail || typeof ResizeObserver === 'undefined') return
     const observer = new ResizeObserver(update)
     observer.observe(rail)
     return () => {

@@ -35,7 +35,7 @@ export type { ConnectionState, LiveConnection, LiveView } from './live-connectio
 export { ChainLockBadge, InstantSendBadge, LockMark } from './lock-badges'
 export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
-export { DataTable, NewRowsPill } from './data-table'
+export { DataTable, NewRowsPill, Pager } from './data-table'
 export type { DataTableProps } from './data-table'
 export { TableTools, SegFilter, SearchField, FilterButton, ActiveFilters } from './table-tools'
 export { LinkOut, LinkOutCard } from './link-out'

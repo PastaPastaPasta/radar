@@ -139,7 +139,7 @@ function CellContent<Row>({
   return <>{content}</>
 }
 
-function Pager({
+export function Pager({
   paging,
   shown,
 }: {

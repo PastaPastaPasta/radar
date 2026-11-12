@@ -15,6 +15,7 @@ import {
   Amount,
   Card,
   DataTable,
+  type DataTableProps,
   Hash,
   Icon,
   KeyValue,
@@ -23,12 +24,14 @@ import {
   Time,
   TypeBadge,
   ChainLockBadge,
+  useMediaQuery,
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { Difficulty } from '../hy-shared/Difficulty'
 import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
+import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { parseBlockRef } from '@/lib/core/block-ref'
@@ -160,6 +163,19 @@ function BlockView({
     () => block.txs.slice(offset, offset + TXS_PER_PAGE).map((x, i) => ({ ...x, n: offset + i })),
     [block.txs, offset],
   )
+
+  const phone = useMediaQuery('(max-width: 640px)')
+  const txCaption = t`Transactions in block ${formatInt(block.height)}`
+  const paging: DataTableProps<BlockTx>['paging'] =
+    pages > 1
+      ? {
+          kind: 'page',
+          page: current,
+          limit: TXS_PER_PAGE,
+          total: block.txs.length,
+          to: (p) => pageLink(String(block.height), p),
+        }
+      : undefined
 
   return (
     <article data-page="/block/$id" data-layer="core">
@@ -348,25 +364,19 @@ function BlockView({
           source={stamp}
         >
           <Card layer="core" padding="flush">
-            <DataTable
-              caption={t`Transactions in block ${formatInt(block.height)}`}
-              columns={columns}
-              rows={rows}
-              getRowId={(r) => r.txid}
-              state="ready"
-              paging={
-                pages > 1
-                  ? {
-                      kind: 'page',
-                      page: current,
-                      limit: TXS_PER_PAGE,
-                      total: block.txs.length,
-                      to: (p) => pageLink(String(block.height), p),
-                    }
-                  : undefined
-              }
-              rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
-            />
+            {phone ? (
+              <BlockTxCompact rows={rows} caption={txCaption} paging={paging} />
+            ) : (
+              <DataTable
+                caption={txCaption}
+                columns={columns}
+                rows={rows}
+                getRowId={(r) => r.txid}
+                state="ready"
+                paging={paging}
+                rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
+              />
+            )}
           </Card>
         </Section>
       </div>

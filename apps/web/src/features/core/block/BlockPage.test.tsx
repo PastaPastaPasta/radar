@@ -1,4 +1,5 @@
 import { configure, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
@@ -18,6 +19,34 @@ const BY_HASH = '0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce
 describe('Block page', () => {
   afterEach(() => {
     vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
+
+  it('lists a block’s transactions one compact line each on a phone, with the rest on tap @IN-03', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      (query: string): MediaQueryList =>
+        ({
+          matches: query === '(max-width: 640px)',
+          media: query,
+          addEventListener: () => undefined,
+          removeEventListener: () => undefined,
+          addListener: () => undefined,
+          removeListener: () => undefined,
+          dispatchEvent: () => false,
+          onchange: null,
+        }) as MediaQueryList,
+    )
+    renderAt(`/block/${TIP}`)
+    const list = await screen.findByRole('list', { name: /Transactions in block 2,570,085/ })
+    expect(screen.queryByRole('table', { name: /Transactions in block/ })).toBeNull()
+    const first = within(list).getAllByRole('listitem')[0]!
+    const toggle = within(first).getByRole('button', { expanded: false })
+    expect(toggle.textContent).toMatch(/…/)
+    expect(within(first).getByText('Inputs → outputs')).not.toBeVisible()
+    await userEvent.setup().click(toggle)
+    expect(within(first).getByText('Inputs → outputs')).toBeVisible()
+    expect(within(first).getByRole('link')).toHaveAttribute('href', expect.stringContaining('/tx/'))
   })
 
   it('offers no previous block for the genesis block @IN-03', async () => {
