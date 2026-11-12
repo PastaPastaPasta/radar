@@ -344,6 +344,11 @@ describe('Home page', () => {
   })
 
   it('does not call a corroborated ChainLock below the tip a claim on the Core row @IN-01', async () => {
+    const lock = await realChainLock()
+    vi.spyOn(core, 'chainLock').mockResolvedValue({
+      ...lock,
+      data: { ...lock.data, height: lock.data.height - 1 },
+    })
     const original = core.blockRows.bind(core)
     vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
       const rows = await original(net, q, signal)
@@ -353,6 +358,48 @@ describe('Home page', () => {
     const row = await coreRow('2,570,085')
     await screen.findByRole('table', { name: 'Latest Core blocks' })
     expect(row).not.toHaveTextContent(/ChainLock/)
+  })
+
+  it.each([
+    ['mainnet', '/', '2,570,085'],
+    ['testnet', '/?network=testnet', '1,589,232'],
+  ] as const)(
+    'keeps the ChainLock state on the %s Core row when the block rows were read before the lock arrived @IN-01',
+    async (net, url, height) => {
+      const original = core.blockRows.bind(core)
+      vi.spyOn(core, 'blockRows').mockImplementation(async (n, q, signal) => {
+        const rows = await original(n, q, signal)
+        return { ...rows, data: rows.data.map((r) => ({ ...r, chainLocked: false })) }
+      })
+      const lock = await core.chainLock(net)
+      const tip = await core.tip(net)
+      vi.spyOn(core, 'chainLock').mockResolvedValue({
+        ...lock,
+        data: { height: tip.data.height, hash: tip.data.hash },
+      })
+      renderAt(url)
+      const row = await coreRow(height)
+      await waitFor(() => expect(row).toHaveTextContent('ChainLocked'))
+      expect(row).not.toHaveTextContent('one node')
+      expect(row.querySelector('.rx-ok .rx-icon, .rx-ok svg')).not.toBeNull()
+    },
+  )
+
+  it('words a lock only one node reports as that on the Core row even when its block row has not heard of it @IN-01', async () => {
+    const original = core.blockRows.bind(core)
+    vi.spyOn(core, 'blockRows').mockImplementation(async (n, q, signal) => {
+      const rows = await original(n, q, signal)
+      return { ...rows, data: rows.data.map((r) => ({ ...r, chainLocked: false })) }
+    })
+    const lock = await realChainLock()
+    vi.spyOn(core, 'chainLock').mockResolvedValue({
+      ...lock,
+      data: { ...lock.data, claim: 'one-node' as const },
+    })
+    renderAt('/')
+    const row = await coreRow('2,570,085')
+    await waitFor(() => expect(row).toHaveTextContent('reported by one node'))
+    expect(row).not.toHaveTextContent(/ChainLocked/)
   })
 
   it('qualifies every Live when the connection drops, and recovers @IN-15', async () => {

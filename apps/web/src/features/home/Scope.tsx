@@ -92,7 +92,11 @@ function CorePulse() {
     enabled: height !== undefined,
     placeholderData: keepPreviousOnNetwork(net),
   })
-  const locked = rows.data?.data.find((r) => r.height === height)?.chainLocked === true
+  const tipRow = rows.data?.data.find((r) => r.height === height)
+  const best = lock.data?.data
+  // The rows are read once per new tip, often before the lock arrives; the best lock is re-read and settles it.
+  const bestCoversTip = height !== undefined && best !== undefined && best.height >= height
+  const locked = tipRow?.chainLocked === true || (bestCoversTip && !best.claim)
   return (
     <Link
       className="rx-pulse__row"
@@ -124,10 +128,12 @@ function CorePulse() {
               <Icon name="cl" size="sm" />
               {t`ChainLocked`}
             </span>
-          ) : lock.data?.data.claim ? (
+          ) : best?.claim ? (
             <span data-claim="one-node">
-              {t`ChainLock at ${formatInt(lock.data.data.height)}, reported by one node`}
+              {t`ChainLock at ${formatInt(best.height)}, reported by one node`}
             </span>
+          ) : tipRow?.chainLockClaim ? (
+            <span data-claim="one-node">{t`ChainLock reported by one node`}</span>
           ) : null
         ) : null}
         {tip.data ? <Time ms={tip.data.data.time} mode="relative" live /> : null}
