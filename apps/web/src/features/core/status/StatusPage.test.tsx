@@ -137,7 +137,7 @@ describe('Status page', () => {
     })
   })
 
-  it('lists the sources on a phone as short rows with the explanation behind a disclosure @HY-12', async () => {
+  it('lists the sources on a phone with sync height and lag on the row and latency behind a disclosure @HY-12 @IN-09', async () => {
     vi.stubGlobal(
       'matchMedia',
       (query: string): MediaQueryList =>
@@ -159,11 +159,20 @@ describe('Status page', () => {
       await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(6))
       const hyphen = list.querySelector<HTMLElement>('[data-source-row="hyphen"]')!
       expect(within(hyphen).getByText('Hyphen')).toBeInTheDocument()
-      expect(hyphen.querySelectorAll('p').length).toBeLessThanOrEqual(1 + 2)
       const details = hyphen.querySelector('details')!
       expect(details.open).toBe(false)
-      expect(details.querySelector('summary')).not.toBeNull()
-      await waitFor(() => expect(details).toHaveTextContent(/Indexed to Core block/))
+      expect(details.querySelector('summary')).toHaveTextContent(/Median answer|Details/)
+      await waitFor(() =>
+        expect(hyphen.querySelector('[data-source-sync]')).toHaveTextContent(
+          /Indexed to Core block/,
+        ),
+      )
+      expect(details.contains(hyphen.querySelector('[data-source-sync]'))).toBe(false)
+      expect(details.contains(hyphen.querySelector('[data-source-lag]'))).toBe(false)
+      for (const source of ['dapi', 'sdk', 'radar', 'pe', 'hyphen']) {
+        const row = list.querySelector(`[data-source-row="${source}"]`)!
+        expect(row.querySelector('[data-source-lag]'), `${source} lag line`).not.toBeNull()
+      }
     } finally {
       vi.unstubAllGlobals()
     }

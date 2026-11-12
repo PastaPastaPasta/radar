@@ -64,18 +64,18 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           ) : (
             <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
           )
-          const extra = (
-            <>
-              {facts ? (
-                <p className="text-[var(--dh-ink-2)]">
-                  {facts.report} <SourceLine stamp={facts.stamp} compact />
-                </p>
-              ) : null}
-              {probeError && health.state !== 'down' ? (
-                <ErrorState error={probeError} source={source} compact />
-              ) : null}
-            </>
-          )
+          const lag = <p data-source-lag>{describeHealth(health, now)}</p>
+          const sync = facts ? (
+            <p data-source-sync className="text-[var(--dh-ink-2)]">
+              {facts.report} <SourceLine stamp={facts.stamp} compact />
+            </p>
+          ) : null
+          const probeFailure =
+            probeError && health.state !== 'down' ? (
+              <ErrorState error={probeError} source={source} compact />
+            ) : null
+          const latency =
+            health.p50LatencyMs !== undefined ? medianText(health.p50LatencyMs) : undefined
           const rowProps = {
             'data-source-row': source,
             'data-state': offered ? health.state : 'unsupported',
@@ -91,20 +91,21 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
                   <strong>{name}</strong>
                   {state}
                 </div>
-                <p className="text-[var(--dh-ink-2)]">{role}</p>
                 {offered ? (
-                  <details open={ATTENTION.has(health.state)} data-source-details>
-                    <summary className="cursor-pointer">
-                      {health.p50LatencyMs !== undefined
-                        ? medianText(health.p50LatencyMs)
-                        : t`Details`}
-                    </summary>
-                    <div className="mt-1 grid gap-1">
-                      <p>{describeHealth(health, now)}</p>
-                      {extra}
-                    </div>
-                  </details>
-                ) : null}
+                  <>
+                    {lag}
+                    {sync}
+                    <details open={ATTENTION.has(health.state)} data-source-details>
+                      <summary className="cursor-pointer">{latency ?? t`Details`}</summary>
+                      <div className="mt-1 grid gap-1">
+                        <p className="text-[var(--dh-ink-2)]">{role}</p>
+                        {probeFailure}
+                      </div>
+                    </details>
+                  </>
+                ) : (
+                  <p className="text-[var(--dh-ink-2)]">{role}</p>
+                )}
               </li>
             )
           }
@@ -122,11 +123,10 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
               <div className="grid gap-1">
                 {offered ? (
                   <>
-                    <p>{describeHealth(health, now)}</p>
-                    {health.p50LatencyMs !== undefined ? (
-                      <p className="text-[var(--dh-ink-2)]">{medianText(health.p50LatencyMs)}</p>
-                    ) : null}
-                    {extra}
+                    {lag}
+                    {sync}
+                    {latency ? <p className="text-[var(--dh-ink-2)]">{latency}</p> : null}
+                    {probeFailure}
                   </>
                 ) : (
                   <p className="text-[var(--dh-ink-2)]">
