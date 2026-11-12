@@ -170,6 +170,29 @@ describe('a nonzero amount never shows as zero @IN-03', () => {
   })
 })
 
+describe('amounts near the last shown digit @IN-03', () => {
+  it.each(['prose', 'table'] as const)(
+    'never read a larger amount as a smaller one (%s)',
+    (density) => {
+      const read = (n: bigint) =>
+        Number(formatAmountText(n, 'duffs', { unit: 'DASH', density }).replace(/[^0-9.]/g, ''))
+      let before = 0
+      for (let n = 1n; n <= 25_000n; n += 7n) {
+        const shown = read(n)
+        expect(shown, `${n} duffs`).toBeGreaterThanOrEqual(before)
+        expect(shown, `${n} duffs`).toBeGreaterThan(0)
+        before = shown
+      }
+    },
+  )
+
+  it('shows 4,999 and 5,000 duffs alike', () => {
+    expect(formatAmountText(4_999n, 'duffs', { unit: 'DASH' })).toBe(`0.000050${NB}DASH`)
+    expect(formatAmountText(5_000n, 'duffs', { unit: 'DASH' })).toBe(`0.000050${NB}DASH`)
+    expect(formatAmountText(10_000n, 'duffs', { unit: 'DASH' })).toBe(`0.0001${NB}DASH`)
+  })
+})
+
 describe('formatFiat', () => {
   it('rounds to three significant figures', () => {
     expect(formatFiat(5_000_607_499n, 46.2)).toBe('≈ $2,310')

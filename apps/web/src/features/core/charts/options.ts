@@ -61,8 +61,7 @@ export function formatCompact(n: number, resolve?: number): string {
       maximumFractionDigits: scaled,
     })
   }
-  const digits = digitsFor(resolve)
-  return formatNumber(n, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+  return neverZero(n, digitsFor(resolve))
 }
 
 const UNIT_DUFFS: Record<DisplayUnit, number> = { DASH: 1e8, mDASH: 1e5, uDASH: 1e2, duffs: 1 }
@@ -71,6 +70,12 @@ const SCALE_SUFFIX: [number, string][] = [
   [1e6, ' M'],
   [1e3, 'k'],
 ]
+
+/** `n` to `digits` places, or to two significant digits when it is nonzero and those places would print it as zero. */
+const neverZero = (n: number, digits: number): string =>
+  n !== 0 && Math.abs(n) < 0.5 * 10 ** -digits
+    ? formatNumber(n, { maximumSignificantDigits: 2 })
+    : formatNumber(n, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
 const formatDash = (duffs: number, units?: ChartUnits, resolve?: number): string => {
   const unit = units && units.unit !== 'DASH' ? units.unit : undefined
@@ -88,10 +93,7 @@ const formatDash = (duffs: number, units?: ChartUnits, resolve?: number): string
   const scaled = digitsFor(step / scale)
   const [divisor, tail, digits] =
     scale > 1 && scaled <= MAX_SCALED_DIGITS ? [scale, suffix, scaled] : [1, '', digitsFor(step)]
-  const shown = formatNumber(value / divisor, {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  })
+  const shown = neverZero(value / divisor, digits)
   return `${shown}${tail}\u00a0${unitLabel(unit ?? 'DASH', units?.testnet)}`
 }
 

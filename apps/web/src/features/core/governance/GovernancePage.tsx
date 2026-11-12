@@ -258,11 +258,15 @@ function ProposalList({
           ]}
         />
       </TableTools>
-      {filtering ? (
-        <p className="rx-note m-0 px-4 py-2" role="status" data-filter-result>
-          {t`${formatInt(shown.length + shownEarlier.length)} of ${formatInt(all.length)} proposals match`}
-        </p>
-      ) : null}
+      <p
+        className={filtering ? 'rx-note m-0 px-4 py-2' : 'sr-only'}
+        role="status"
+        data-filter-result
+      >
+        {filtering
+          ? t`${formatInt(shown.length + shownEarlier.length)} of ${formatInt(all.length)} proposals match`
+          : null}
+      </p>
       {shown.length + shownEarlier.length === 0 ? (
         <Empty
           kind="none-yet"

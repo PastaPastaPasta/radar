@@ -114,6 +114,13 @@ describe('chart metrics', () => {
       )
     })
 
+    it('never prints a small nonzero money tick as zero @IN-03', () => {
+      const units = { unit: 'DASH' as const, testnet: false }
+      expect(METRICS.supply.format(4_000, units, 1_000_000)).toBe('0.00004\u00a0DASH')
+      expect(METRICS['credit-pool'].format(-4_000, units, 1_000_000)).toMatch(/0\.00004/)
+      expect(METRICS.supply.format(0, units, 1_000_000)).toBe('0.00\u00a0DASH')
+    })
+
     it('shows a small difficulty with its significant digits in tooltips and tables', () => {
       expect(METRICS.difficulty.format(0.004010969129951115)).toBe('0.004011')
     })

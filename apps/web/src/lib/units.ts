@@ -166,11 +166,12 @@ function trimmedFraction(frac: string): string {
   return trimmed ? decimalSeparator() + trimmed : ''
 }
 
-/** `wanted` decimals, or, for a nonzero value they would round to zero, enough to show its first two significant digits. */
+/**
+ * `wanted` decimals, or, for a nonzero value below one unit of the last of them, enough to show its first two
+ * significant digits. Every value under that unit reads the same way, so a larger amount never prints as a smaller one.
+ */
 function placesFor(abs: bigint, scale: number, wanted: number): number {
-  if (abs === 0n || wanted >= scale) return wanted
-  const rounded = fixedParts(abs, scale, wanted)
-  if (rounded.int !== '0' || /[1-9]/.test(rounded.frac)) return wanted
+  if (abs === 0n || wanted >= scale || abs >= 10n ** BigInt(scale - wanted)) return wanted
   return Math.min(scale, scale - abs.toString().length + 2)
 }
 

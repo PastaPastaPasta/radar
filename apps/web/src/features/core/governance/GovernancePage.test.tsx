@@ -71,6 +71,21 @@ describe('Governance page', () => {
     await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(total))
   })
 
+  it('keeps the match count in a status region that is on the page before the first filter, so it is announced @HY-13', async () => {
+    const user = userEvent.setup()
+    renderAt('/governance')
+    await screen.findByRole('table', { name: 'Budget proposals' })
+    const region = screen.getByRole('status', { name: '' })
+    expect(region).toHaveAttribute('data-filter-result')
+    expect(region).toBeEmptyDOMElement()
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Filter proposals by name or hash' }),
+      'growthengine',
+    )
+    await waitFor(() => expect(region).toHaveTextContent(/^1 of \d+ proposals match$/))
+    expect(document.querySelector('[data-filter-result]')).toBe(region)
+  })
+
   it('narrows the table by status, with the counts of each @HY-13', async () => {
     const user = userEvent.setup()
     renderAt('/governance')
