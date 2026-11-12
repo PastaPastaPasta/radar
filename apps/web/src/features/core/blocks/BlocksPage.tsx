@@ -176,7 +176,7 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
         id: 'txs',
         header: t`Txs`,
         accessorFn: (r) => formatInt(r.txCount),
-        meta: { numeric: true, phone: 'secondary' },
+        meta: { numeric: true, phone: 'secondary', phoneUnit: t`tx` },
       },
       {
         id: 'size',

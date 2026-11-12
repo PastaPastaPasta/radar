@@ -56,6 +56,8 @@ declare module '@tanstack/react-table' {
     align?: 'start' | 'end'
     numeric?: boolean
     phone?: 'title' | 'primary' | 'secondary' | 'hidden'
+    /** A short unit written after the value on a phone card, where the column header is not shown. */
+    phoneUnit?: string
     filterable?: boolean
     width?: string
   }
@@ -465,6 +467,7 @@ export function DataTable<Row>({
                       meta?.numeric && 'rx-num',
                     )}
                     data-l={labelled}
+                    data-u={meta?.phoneUnit}
                   >
                     <CellContent cell={cell} onFilter={onCellFilter} />
                   </td>

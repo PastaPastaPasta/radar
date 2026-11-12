@@ -19,6 +19,18 @@ test.describe('Blocks list', () => {
     await expect(page.getByRole('link', { name: 'Newer' })).toBeVisible()
   })
 
+  test('writes the unit after each block’s transaction count on a phone @HY-04', async ({
+    page,
+  }) => {
+    test.skip((page.viewportSize()?.width ?? 1000) > 640, 'phone layout only')
+    await page.goto('/blocks')
+    const cell = page.locator('td[data-u]').first()
+    await expect(cell).toBeVisible()
+    await expect(cell).toHaveAttribute('data-u', 'tx')
+    const unit = await cell.evaluate((el) => getComputedStyle(el, '::after').content)
+    expect(unit).toMatch(/tx/)
+  })
+
   test('shows one UTC day with the days either side @IN-02', async ({ page }) => {
     await page.goto('/blocks?date=2026-11-03')
     await expect(

@@ -30,6 +30,15 @@ describe('Blocks list', () => {
     expect(within(pager).queryByRole('link', { name: 'Newer' })).toBeNull()
   })
 
+  it('carries a short unit on each count for the phone card, which has no column header @HY-04', async () => {
+    renderAt('/blocks')
+    const table = await screen.findByRole('table', { name: 'Core blocks' })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
+    const cells = table.querySelectorAll('tbody td[data-u]')
+    expect(cells).toHaveLength(20)
+    for (const cell of cells) expect(cell).toHaveAttribute('data-u', 'tx')
+  })
+
   it('shows a UTC day and the days either side @IN-02', async () => {
     renderAt('/blocks?date=2026-11-03')
     expect(
