@@ -77,13 +77,10 @@ describe('Governance page', () => {
     await screen.findByRole('table', { name: 'Budget proposals' })
     const group = screen.getByRole('group', { name: 'Filter proposals by status' })
     const total = document.querySelectorAll('[data-proposal]').length
-    const count = (name: string) =>
-      Number(
-        within(group)
-          .getByRole('button', { name: new RegExp(`^${name}`) })
-          .textContent?.match(/[\d,]+$/)![0]
-          .replace(/,/g, ''),
-      )
+    const count = (name: string) => {
+      const label = within(group).getByRole('button', { name: new RegExp(`^${name}`) }).textContent
+      return Number(/[\d,]+$/.exec(label ?? '')?.[0].replace(/,/g, ''))
+    }
     expect(count('All')).toBe(total)
     const funded = count('Funded')
     const failing = count('Not passing')
