@@ -183,11 +183,17 @@ test.describe('transaction inputs and outputs', () => {
     await expect(outputs).toBeVisible()
     await expect(outputs.locator('th .rx-colunit')).toHaveText('DASH')
     await expect(outputs.locator('td.e .rx-amt .rx-u').first()).toBeHidden()
-    const figure = await outputs.locator('td.e .rx-amt').first().boundingBox()
-    const state = await outputs.locator('td.s > *').first().boundingBox()
-    expect(state!.x - (figure!.x + figure!.width), 'gap between amount and state').toBeGreaterThan(
-      16,
-    )
+    await settled(page)
+    await expect
+      .poll(
+        async () => {
+          const figure = await outputs.locator('td.e .rx-amt').first().boundingBox()
+          const state = await outputs.locator('td.s > *').first().boundingBox()
+          return state!.x - (figure!.x + figure!.width)
+        },
+        { message: 'gap between amount and state' },
+      )
+      .toBeGreaterThan(16)
     const rights = await outputs
       .locator('td.e .rx-amt')
       .evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().right)))
