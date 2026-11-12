@@ -696,6 +696,12 @@ a.rx-stat:focus-visible {
     font-size: 12px;
   }
 }
+@media (max-width: 360px) {
+  .rx-statgrid .rx-stat__value,
+  .rx-statgrid .rx-stat--big .rx-stat__value {
+    font-size: 16px;
+  }
+}
 
 /* number ticker: digits roll on change (JS swaps a span; CSS animates it) */
 .rx-tick {

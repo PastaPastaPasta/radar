@@ -290,6 +290,23 @@ test.describe('rich list', () => {
     await expectNoSideScroll(page)
   })
 
+  test('keeps an opened row inside the screen at 320 px @HY-09', async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    await page.setViewportSize({ width: 320, height: 640 })
+    await page.goto('/rich-list')
+    const first = page
+      .getByRole('list', { name: 'Addresses ranked by balance' })
+      .getByRole('listitem')
+      .first()
+    await first.getByRole('button', { expanded: false }).click()
+    for (const label of ['Received', 'Sent', 'Transactions']) {
+      const box = await first.getByText(label, { exact: true }).boundingBox()
+      expect(box, label).not.toBeNull()
+      expect(box!.x + box!.width, `${label} stays inside the screen`).toBeLessThanOrEqual(320)
+    }
+    await expectNoSideScroll(page)
+  })
+
   test('keeps received, sent and transactions on every row, desktop @HY-09', async ({ page }) => {
     test.skip((page.viewportSize()?.width ?? 0) <= 640, 'tables are for wider screens')
     await page.goto('/rich-list')

@@ -103,7 +103,7 @@ function RichRow({ row: r }: { row: HyRichRow }) {
       <dl
         id={detailId}
         hidden={!open}
-        className="m-0 grid grid-cols-3 gap-2 px-4 pb-3 pl-[3.25rem] text-sm"
+        className="m-0 flex flex-wrap gap-x-5 gap-y-2 px-4 pb-3 pl-[3.25rem] text-sm"
       >
         <div>
           <dt className="text-[var(--dh-ink-2)]">{t`Received`}</dt>
@@ -121,7 +121,7 @@ function RichRow({ row: r }: { row: HyRichRow }) {
           <dt className="text-[var(--dh-ink-2)]">{t`Transactions`}</dt>
           <dd className="rx-num m-0">{formatInt(r.txCount)}</dd>
         </div>
-        <div className="col-span-3">
+        <div className="basis-full">
           <Entity kind="address" id={r.address} />
         </div>
       </dl>
