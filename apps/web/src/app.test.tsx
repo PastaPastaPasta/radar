@@ -1,13 +1,11 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { act, configure, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from './data/core/client'
 import { App } from './app'
 import { DEVNET_STORAGE_KEY } from './app/devnets'
 import { getActiveNetwork } from './data/active-network'
 import { SITE_MAP } from './features/entity'
-
-configure({ asyncUtilTimeout: 5000 })
 
 vi.mock('./ui/chart-view', () => ({ default: () => null }))
 

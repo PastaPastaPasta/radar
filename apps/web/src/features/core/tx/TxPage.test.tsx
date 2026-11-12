@@ -1,4 +1,4 @@
-import { configure, screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -6,8 +6,6 @@ import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
-
-configure({ asyncUtilTimeout: 5000 })
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()

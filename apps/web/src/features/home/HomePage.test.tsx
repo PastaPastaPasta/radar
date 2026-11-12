@@ -1,4 +1,4 @@
-import { act, configure, screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
@@ -7,9 +7,6 @@ import { coreLive, type LiveTxEvent } from '@/data/core/live'
 import { healthRegistry } from '@/data/health'
 import { resetLiveConnection, setLiveConnection } from '@/ui'
 import { renderAt } from './test-utils'
-
-configure({ asyncUtilTimeout: 5000 })
-vi.setConfig({ testTimeout: 15000 })
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()

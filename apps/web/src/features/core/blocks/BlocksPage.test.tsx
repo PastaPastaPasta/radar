@@ -1,4 +1,4 @@
-import { configure, screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -8,9 +8,6 @@ import { resetHealthRegistry } from '@/data/health'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 import { FIRST_CHUNK } from './blocks-range'
-
-configure({ asyncUtilTimeout: 15000 })
-vi.setConfig({ testTimeout: 30000 })
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()

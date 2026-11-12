@@ -1,11 +1,8 @@
-import { configure, waitFor } from '@testing-library/react'
+import { waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { installFixtureSdk } from '@/test/msw/sdk-transport'
 import { renderAt } from './test-utils'
-
-configure({ asyncUtilTimeout: 5000 })
-vi.setConfig({ testTimeout: 15000 })
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
