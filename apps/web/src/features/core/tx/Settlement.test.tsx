@@ -29,28 +29,33 @@ async function renderSettlement(
       <Settlement tx={t} coinbase={false} firstSeen={firstSeen} />
     </I18nProvider>,
   )
-  return screen.getByText('Received').closest<HTMLElement>('[data-step="seen"]')!
+  return document.querySelector<HTMLElement>('[data-step="seen"]')
 }
 
 describe('Settlement received time @HY-07', () => {
   it('shows an exact receipt time, also once the transaction is mined', async () => {
     const seen = await renderSettlement(tx(), { at: SEEN, stamp: stamp({ source: 'hyphen' }) })
+    expect(seen).toHaveTextContent('Received')
     expect(seen).toHaveTextContent('first seen in the mempool')
     expect(seen).toHaveTextContent('09:41:12 UTC')
-    expect(seen).not.toHaveTextContent('not recorded')
-    expect(seen).not.toHaveTextContent('at or before')
+    expect(screen.queryByText(/aren’t kept once/)).toBeNull()
   })
 
-  it('says it was not recorded, and why, when a mined transaction has no receipt time', async () => {
+  it('opens at the step a mined transaction has, with no empty Received step and one muted line', async () => {
     const seen = await renderSettlement(tx())
-    expect(seen).toHaveTextContent(
-      'not recorded; Hyphen keeps first-seen times only while a transaction is pending',
-    )
-    expect(seen).not.toHaveTextContent('09:42')
+    expect(seen).toBeNull()
+    expect(screen.queryByText('Received')).toBeNull()
+    expect(screen.queryByText(/not recorded/)).toBeNull()
+    expect(document.querySelector('[data-step]')).toHaveAttribute('data-step', 'instantsend')
+    expect(
+      screen.getByText('Mempool arrival times aren’t kept once a transaction is mined.'),
+    ).toBeVisible()
   })
 
   it('says it is in the mempool while a transaction is pending with no sighting', async () => {
     const seen = await renderSettlement(tx({ height: undefined, time: undefined }))
+    expect(seen).toHaveTextContent('Received')
     expect(seen).toHaveTextContent('in the mempool')
+    expect(screen.queryByText(/aren’t kept once/)).toBeNull()
   })
 })

@@ -266,23 +266,22 @@ describe('Transaction page', () => {
     )
   })
 
-  it('says plainly that a mined transaction has no recorded receipt time, and shows when it was mined @HY-07', async () => {
+  it('opens a mined transaction’s settlement at the step it has and says arrival times are not kept @HY-07', async () => {
     renderAt(`/tx/${MAINNET.proreg}`)
-    const received = await waitFor(
+    const mined = await waitFor(
       () => {
-        const el = document.querySelector<HTMLElement>('[data-step="seen"]')
+        const el = document.querySelector<HTMLElement>('[data-step="mined"]')
         expect(el).not.toBeNull()
         return el!
       },
       { timeout: 4000 },
     )
-    expect(received).toHaveTextContent('Received')
-    expect(received).toHaveTextContent(
-      'not recorded; Hyphen keeps first-seen times only while a transaction is pending',
-    )
-    expect(received).not.toHaveTextContent(/at or before/)
-    const mined = document.querySelector<HTMLElement>('[data-step="mined"]')!
     expect(mined).toHaveTextContent(/2026/)
+    expect(document.querySelector('[data-step="seen"]')).toBeNull()
+    expect(screen.queryByText(/not recorded/)).toBeNull()
+    expect(
+      screen.getByText('Mempool arrival times aren’t kept once a transaction is mined.'),
+    ).toBeInTheDocument()
   })
 
   it('says a lock is reported by one node until a second source agrees @IN-05', async () => {
@@ -324,6 +323,30 @@ describe('Transaction page', () => {
     expect(note.textContent).toMatch(/tDASH to other addresses/)
     const kpis = document.querySelector('.rx-kpis')!.textContent ?? ''
     expect(kpis).not.toMatch(/(^|[^t])DASH/)
+  })
+
+  it('links a testnet output to its spender from Insight, labelled as Insight @IN-05 @IN-16 @HY-19', async () => {
+    renderAt(`/tx/${TESTNET_NORMAL}?network=testnet`)
+    const out0 = await waitFor(
+      () => {
+        const el = document.querySelector<HTMLElement>('#out-0')
+        expect(el).not.toBeNull()
+        expect(el!.querySelector('[data-spend="spent"]')).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+    const link = await within(out0).findByRole('link', { name: /in [0-9a-f]{4}…[0-9a-f]{4}/ })
+    expect(link.getAttribute('href')).toMatch(
+      /^\/tx\/0666a44a[0-9a-f]{56}\?network=testnet#in-\d+$/,
+    )
+    const out1 = document.querySelector<HTMLElement>('#out-1')!
+    expect(
+      (await within(out1).findByRole('link', { name: /in [0-9a-f]{4}…[0-9a-f]{4}/ })).getAttribute(
+        'href',
+      ),
+    ).toMatch(/^\/tx\/85ff0299[0-9a-f]{56}\?network=testnet#in-\d+$/)
+    expect(document.querySelector('#io [data-source="insight"]')).not.toBeNull()
   })
 
   it('has one Core section navigation @IN-03', async () => {

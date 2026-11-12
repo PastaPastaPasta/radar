@@ -6,6 +6,7 @@ import type { Probes } from './probes'
 import {
   describeHealth,
   hyphenFacts,
+  insightFacts,
   medianText,
   peFacts,
   radarFacts,
@@ -35,6 +36,9 @@ function probeFacts(
   if (source === 'hyphen' && probes.hyphen.data) {
     return hyphenFacts(probes.hyphen.data.data, stampOf(probes.hyphen.data), behind)
   }
+  if (source === 'insight' && probes.insight.data) {
+    return insightFacts(probes.insight.data.data, stampOf(probes.insight.data), behind)
+  }
   return undefined
 }
 
@@ -56,7 +60,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           const { name, role } = SOURCE_ROLE[source]()
           const facts = probeFacts(source, probes, net, now, health.state === 'stale')
           const probeError =
-            source === 'radar' || source === 'pe' || source === 'hyphen'
+            source === 'radar' || source === 'pe' || source === 'hyphen' || source === 'insight'
               ? probes[source].error
               : undefined
           const state = offered ? (

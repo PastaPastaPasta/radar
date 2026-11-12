@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import type { EChartsOption } from 'echarts'
 import { useId, useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
+import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
@@ -19,9 +20,9 @@ import {
   Time,
   useNow,
 } from '@/ui'
-import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { HyphenGate } from '../hy-shared/HyphenGate'
 import { PageFrame } from '../hy-shared/PageFrame'
-import { governanceQueries } from './queries'
+import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ProposalLinks } from './ProposalLinks'
 import { StatusBadge } from './StatusBadge'
@@ -52,7 +53,11 @@ const ORDER: Record<ProposalStatus, number> = {
 function GovernanceContent() {
   const { t } = useLingui()
   const net = useNetwork()
-  const query = useQuery(governanceQueries.proposals(net))
+  const index = useIndexHealth(net)
+  const insight = index.readFrom === 'insight'
+  const hy = useQuery({ ...governanceQueries.proposals(net), enabled: !insight && !index.pending })
+  const ins = useQuery({ ...insightGovernanceQueries.proposals(net), enabled: insight })
+  const query = insight ? ins : hy
   const now = useNow(false)
   const proposals = useMemo(
     () =>
@@ -88,7 +93,6 @@ function GovernanceContent() {
 
   return (
     <>
-      <StaleIndexNotice />
       <Card
         title={t`Budget`}
         subtitle={t`Open proposals by what their payment would be`}

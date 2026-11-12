@@ -51,6 +51,14 @@ describe('Governance page', () => {
     renderAt('/governance?network=testnet')
     expect(await screen.findByRole('button', { name: 'test' })).toBeInTheDocument()
   })
+
+  it('reads testnet proposals from Insight while Hyphen trails, and says so @IN-16 @HY-19', async () => {
+    renderAt('/governance?network=testnet')
+    await screen.findByRole('button', { name: 'test' })
+    await waitFor(() => expect(document.querySelector('[data-source="insight"]')).not.toBeNull())
+    expect(document.querySelector('[data-source="hyphen"]')).toBeNull()
+    expect(document.querySelector('[data-stale-index]')).toBeNull()
+  })
 })
 
 describe('Proposal page', () => {
@@ -71,6 +79,8 @@ describe('Proposal page', () => {
     )
     const link = await screen.findByRole('link', { name: /Vote in Governance/ })
     expect(link).toHaveAttribute('href', expect.stringContaining('network=testnet'))
+    await waitFor(() => expect(document.querySelector('[data-source="insight"]')).not.toBeNull())
+    expect(document.querySelectorAll('[data-stale-index]')).toHaveLength(1)
   })
 
   it('says when no proposal has the hash @HY-13', async () => {

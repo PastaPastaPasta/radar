@@ -1,5 +1,5 @@
 import { Plural, useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery, useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
@@ -10,13 +10,13 @@ import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Hash, LiveDot, Skeleton, Stat, Time } from '@/ui'
 import { deferred } from '@/ui/deferred'
-import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { HyphenGate } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
-import { addressQueries } from './queries'
 import type { WatchStatus } from './live'
 import { useAddressActivity } from './useAddressActivity'
+import { useAddressData } from './useAddressData'
 
 const AddressQr = deferred(
   () => import('./AddressQr').then((m) => m.default),
@@ -81,10 +81,8 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
 
 function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const { t } = useLingui()
-  const summary = useQuery(addressQueries.summary(net, address))
-  const txs = useInfiniteQuery(addressQueries.txs(net, address))
-  const utxos = useQuery(addressQueries.utxos(net, address))
-  const live = useAddressActivity(net, address, !isDevnet(net))
+  const { index, from, summary, txs, utxos } = useAddressData(net, address)
+  const live = useAddressActivity(net, address, !isDevnet(net) && !index.pending, from)
 
   const stamp: SourceStamp | undefined = summary.data ? stampOf(summary.data) : undefined
   const a = summary.data?.data ?? NONE
@@ -147,7 +145,6 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
 
   return (
     <>
-      <StaleIndexNotice />
       <LiveNotice status={live.status} arrived={live.arrived} />
       {live.latest ? (
         <p
@@ -197,19 +194,21 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               value={<Amount value={a.totalReceived} kind="duffs" />}
             />
             <Stat label={t`Total sent`} value={<Amount value={a.totalSent} kind="duffs" />} />
-            <Stat
-              label={t`First and last seen`}
-              value={
-                a.firstSeen && a.lastSeen ? (
-                  <span className="grid gap-1 text-base font-normal">
-                    <Time ms={a.firstSeen} mode="absolute" />
-                    <Time ms={a.lastSeen} mode="absolute" />
-                  </span>
-                ) : (
-                  t`Not seen yet`
-                )
-              }
-            />
+            {from === 'hyphen' ? (
+              <Stat
+                label={t`First and last seen`}
+                value={
+                  a.firstSeen && a.lastSeen ? (
+                    <span className="grid gap-1 text-base font-normal">
+                      <Time ms={a.firstSeen} mode="absolute" />
+                      <Time ms={a.lastSeen} mode="absolute" />
+                    </span>
+                  ) : (
+                    t`Not seen yet`
+                  )
+                }
+              />
+            ) : null}
           </div>
         </Card>
         <Card title={t`QR code`} layer="core">

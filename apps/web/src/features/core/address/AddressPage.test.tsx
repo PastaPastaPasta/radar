@@ -285,4 +285,19 @@ describe('Address page', () => {
     })
     expect(summary).toHaveTextContent('tDASH')
   })
+
+  it('reads a testnet address from Insight while Hyphen’s index is stale, and says so @IN-16 @HY-19', async () => {
+    renderAt(`/address/${TESTNET_ADDRESS}?network=testnet`)
+    await waitFor(() => {
+      const el = document.querySelector('[data-address-summary]')
+      expect(el).toHaveTextContent('999,999')
+    })
+    await waitFor(() => expect(screen.getAllByText('Indexed by Insight').length).toBeGreaterThan(1))
+    expect(screen.queryByText(/Indexed by Hyphen/)).toBeNull()
+    const history = document.querySelector<HTMLElement>('#history')!
+    await waitFor(() => expect(within(history).getAllByRole('row').length).toBeGreaterThan(1))
+    expect(within(history).getByText('Indexed by Insight')).toBeInTheDocument()
+    expect(document.querySelector('[data-stale-index]')).toBeNull()
+    expect(screen.queryByText('Not seen yet')).toBeNull()
+  })
 })

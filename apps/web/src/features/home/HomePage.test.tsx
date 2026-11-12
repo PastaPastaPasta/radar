@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
+import { coreLive, type LiveTxEvent } from '@/data/core/live'
 import { healthRegistry } from '@/data/health'
 import { resetLiveConnection, setLiveConnection } from '@/ui'
 import { renderAt } from './test-utils'
@@ -26,6 +27,8 @@ function coreRow(height: string): Promise<HTMLElement> {
 
 const gridTitles = (activity: Element) =>
   [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent)
+
+const TESTNET_TX = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
 
 const realChainLock = () => core.chainLock('mainnet')
 
@@ -401,9 +404,8 @@ describe('Home page', () => {
     expect(headline).toHaveTextContent('Last block')
     expect(headline).not.toHaveTextContent('Circulating supply')
     const note = await screen.findByRole('note')
-    expect(note).toHaveTextContent(
-      /Supply, blockchain size and pending transactions come only from Hyphen/,
-    )
+    expect(note).toHaveTextContent(/Supply and blockchain size come only from Hyphen/)
+    expect(note).toHaveTextContent(/Pending transactions are those this page has seen arrive/)
     expect(note).toHaveTextContent(
       /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
     )
@@ -426,20 +428,35 @@ describe('Home page', () => {
     await waitFor(() => expect(headline).toHaveTextContent('ChainLock reported by one node'))
   })
 
-  it('says in the pending column that Hyphen is behind instead of listing rows, on testnet @IN-16 @HY-19 @HY-03', async () => {
+  it('fills the pending column from the live feed while Hyphen is behind, labelled as seen since the page opened, on testnet @IN-16 @HY-19 @HY-03', async () => {
+    let deliver: ((e: LiveTxEvent) => void) | undefined
+    vi.spyOn(coreLive, 'transactions').mockImplementation((_net, listener) => {
+      deliver = listener
+      return () => undefined
+    })
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
-    const column = await waitFor(() => {
-      const el = [...document.querySelectorAll('.rx-activity__grid .rx-card')].find((c) =>
+    const find = () =>
+      [...document.querySelectorAll('.rx-activity__grid .rx-card')].find((c) =>
         c.textContent?.includes('Pending transactions'),
-      )
-      expect(el).toHaveTextContent('Pending transactions are unavailable')
-      return el as HTMLElement
+      ) as HTMLElement
+    const column = await waitFor(() => {
+      expect(find()).toHaveTextContent('Seen since you opened this page')
+      return find()
     })
-    expect(column).toHaveTextContent(
-      /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
+    expect(column).toHaveTextContent('Nothing has arrived since you opened this page')
+    expect(column).not.toHaveTextContent('unavailable')
+    const tx = { ...(await core.tx('testnet', TESTNET_TX)).data!, height: undefined }
+    act(() => deliver?.({ kind: 'tx', tx }))
+    const table = await within(find()).findByRole('table', {
+      name: 'Pending transactions seen since you opened this page',
+    })
+    expect(within(table).getAllByRole('row')).toHaveLength(2)
+    expect(find().querySelector('[data-source="dapi"]')).not.toBeNull()
+    act(() => deliver?.({ kind: 'block', txids: [tx.txid] }))
+    await waitFor(() =>
+      expect(find()).toHaveTextContent('Nothing has arrived since you opened this page'),
     )
-    expect(within(column).queryByRole('table')).toBeNull()
   })
 
   it('works on testnet and names the network @IN-16 @HY-19', async () => {

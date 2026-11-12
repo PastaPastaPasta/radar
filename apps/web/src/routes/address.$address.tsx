@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { prefetchForRoute, prefetchItem, routeNetwork } from '@/data/query'
+import { prefetchForRoute, routeNetwork } from '@/data/query'
 import { AddressPage } from '@/features/core'
 import { classify } from '@/features/search'
 import { isDevnet } from '@/lib/network'
@@ -11,13 +11,10 @@ export const Route = createFileRoute('/address/$address')({
     const checked = classify(params.address, net)
     const elsewhere = checked.networkHint !== undefined && checked.networkHint !== net
     if (isDevnet(net) || elsewhere || !checked.classes.includes('core-address')) return
-    const { hyQueries } = await import('@/data/hyphen/queries')
-    await prefetchForRoute(
-      context.queryClient,
-      net,
-      [prefetchItem('http', hyQueries.address(net, params.address), { wait: true })],
-      { preload },
-    )
+    const { addressPrefetch } = await import('@/data/query/route-prefetch')
+    await prefetchForRoute(context.queryClient, net, addressPrefetch(net, params.address), {
+      preload,
+    })
   },
   component: AddressRoute,
 })

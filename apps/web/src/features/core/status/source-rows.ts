@@ -3,7 +3,15 @@ import type { SourceHealth } from '@/data/health'
 import { endpoint } from '@/data/endpoints'
 import type { NetworkId } from '@/lib/network'
 
-export const STATUS_SOURCES: readonly SourceId[] = ['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'rate']
+export const STATUS_SOURCES: readonly SourceId[] = [
+  'dapi',
+  'sdk',
+  'radar',
+  'pe',
+  'hyphen',
+  'insight',
+  'rate',
+]
 
 export interface SourceRow {
   source: SourceId
@@ -18,6 +26,7 @@ export function offers(net: NetworkId, source: SourceId): boolean {
     case 'radar':
     case 'pe':
     case 'hyphen':
+    case 'insight':
     case 'rate':
       return endpoint(net, source) !== null
     default:

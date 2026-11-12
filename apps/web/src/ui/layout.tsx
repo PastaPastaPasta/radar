@@ -53,10 +53,7 @@ function useCardSource(source: CardProps['source']) {
   const health = useAllSourceHealth()
   const stamps = source === undefined ? [] : Array.isArray(source) ? source : [source]
   const down = stamps.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
-  const stale = stamps
-    .map((s) => health.find((h) => h.source === s.source))
-    .find((h) => h?.state === 'stale' && h.lag)
-  return { stamps, down, lag: stale?.lag?.detail }
+  return { stamps, down }
 }
 
 function present(node: ReactNode): boolean {
@@ -77,7 +74,7 @@ export function Card({
   className,
   children,
 }: CardProps) {
-  const { stamps, down, lag } = useCardSource(source)
+  const { stamps, down } = useCardSource(source)
   const keys = stamps.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
@@ -124,8 +121,6 @@ export function Card({
             </button>
           ) : null}
         </p>
-      ) : lag ? (
-        <p className="rx-card__lag">{lag}</p>
       ) : null}
       {state === 'loading' ? (
         <div className="rx-card__body">

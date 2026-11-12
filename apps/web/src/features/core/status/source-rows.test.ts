@@ -13,10 +13,12 @@ describe('offers', () => {
   it('has DAPI and the SDK everywhere and the indexes only on mainnet and testnet', () => {
     expect(offers('devnet-ruby', 'dapi')).toBe(true)
     expect(offers('devnet-ruby', 'sdk')).toBe(true)
-    for (const s of ['radar', 'pe', 'hyphen', 'rate'] as const) {
+    for (const s of ['radar', 'pe', 'hyphen', 'insight', 'rate'] as const) {
       expect(offers('devnet-ruby', s), s).toBe(false)
     }
     expect(offers('testnet', 'pe')).toBe(true)
+    expect(offers('testnet', 'insight')).toBe(true)
+    expect(offers('mainnet', 'insight')).toBe(true)
     expect(offers('testnet', 'rate')).toBe(false)
     expect(offers('mainnet', 'rate')).toBe(true)
   })
@@ -25,7 +27,15 @@ describe('offers', () => {
 describe('sourceRows', () => {
   it('lists every source in order and fills in the ones that have not been called', () => {
     const rows = sourceRows('mainnet', [h('pe', 'ok')])
-    expect(rows.map((r) => r.source)).toEqual(['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'rate'])
+    expect(rows.map((r) => r.source)).toEqual([
+      'dapi',
+      'sdk',
+      'radar',
+      'pe',
+      'hyphen',
+      'insight',
+      'rate',
+    ])
     expect(rows.find((r) => r.source === 'pe')?.health.state).toBe('ok')
     expect(rows.find((r) => r.source === 'radar')?.health.state).toBe('unknown')
   })

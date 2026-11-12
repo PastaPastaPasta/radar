@@ -128,12 +128,13 @@ describe('Status page', () => {
     const names = within(list)
       .getAllByRole('listitem')
       .map((li) => li.getAttribute('data-source-row'))
-    expect(names).toEqual(['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'rate'])
+    expect(names).toEqual(['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'insight', 'rate'])
 
     await waitFor(() => {
       expect(within(list).getByText(/Indexed to Platform block/)).toBeInTheDocument()
       expect(within(list).getByText(/Last crawl finished/)).toBeInTheDocument()
       expect(within(list).getByText(/Indexed to Core block/)).toBeInTheDocument()
+      expect(within(list).getByText(/Its tip is Core block/)).toBeInTheDocument()
     })
   })
 
@@ -156,7 +157,7 @@ describe('Status page', () => {
       setCoreClient(core())
       renderAt('/status')
       const list = await screen.findByRole('list', { name: 'Sources' })
-      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(6))
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(7))
       const hyphen = list.querySelector<HTMLElement>('[data-source-row="hyphen"]')!
       expect(within(hyphen).getByText('Hyphen')).toBeInTheDocument()
       const details = hyphen.querySelector('details')!
@@ -169,7 +170,7 @@ describe('Status page', () => {
       )
       expect(details.contains(hyphen.querySelector('[data-source-sync]'))).toBe(false)
       expect(details.contains(hyphen.querySelector('[data-source-lag]'))).toBe(false)
-      for (const source of ['dapi', 'sdk', 'radar', 'pe', 'hyphen']) {
+      for (const source of ['dapi', 'sdk', 'radar', 'pe', 'hyphen', 'insight']) {
         const row = list.querySelector(`[data-source-row="${source}"]`)!
         expect(row.querySelector('[data-source-lag]'), `${source} lag line`).not.toBeNull()
       }

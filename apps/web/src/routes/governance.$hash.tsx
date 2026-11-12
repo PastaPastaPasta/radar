@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { prefetchForRoute, prefetchItem, routeNetwork } from '@/data/query'
+import { prefetchForRoute, routeNetwork } from '@/data/query'
 import { ProposalPage } from '@/features/core'
 import { isDevnet } from '@/lib/network'
 
@@ -8,13 +8,10 @@ export const Route = createFileRoute('/governance/$hash')({
   loader: async ({ context, deps, params, preload }) => {
     const net = routeNetwork(deps)
     if (isDevnet(net)) return
-    const { hyQueries } = await import('@/data/hyphen/queries')
-    await prefetchForRoute(
-      context.queryClient,
-      net,
-      [prefetchItem('http', hyQueries.proposal(net, params.hash), { wait: true })],
-      { preload },
-    )
+    const { proposalPrefetch } = await import('@/data/query/route-prefetch')
+    await prefetchForRoute(context.queryClient, net, proposalPrefetch(net, params.hash), {
+      preload,
+    })
   },
   component: ProposalRoute,
 })

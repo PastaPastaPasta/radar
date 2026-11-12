@@ -1,5 +1,6 @@
 import type { DecodedTx } from '@/data/core/types'
 import type { HyAddressTx, HyTxDetail } from '@/data/hyphen/schemas'
+import type { InsTx } from '@/data/insight/schemas'
 
 export interface Spender {
   txid: string
@@ -35,8 +36,33 @@ export interface AddressUtxos {
   complete: boolean
 }
 
+/** The spend state Insight's transaction answer gives, or undefined when it has none (not found, not mined). */
+export function insightSpendsOf(tx: InsTx | null | undefined): InsightSpends | undefined {
+  if (!tx || (tx.blockheight ?? -1) < 0 || tx.blockheight == null) return undefined
+  const asOf =
+    tx.confirmations != null && tx.confirmations > 0
+      ? tx.blockheight + tx.confirmations - 1
+      : undefined
+  return {
+    asOf,
+    vout: new Map(
+      tx.vout.map((o) => [o.n, o.spentTxId ? { txid: o.spentTxId, vin: o.spentIndex ?? 0 } : null]),
+    ),
+  }
+}
+
 /** An OP_RETURN output can never be spent. */
 export const isUnspendable = (scriptPubKey: string): boolean => scriptPubKey.startsWith('6a')
+
+/**
+ * Insight's transaction answer, which names the spender of every spent output and so needs no history search.
+ * `asOf` is the chain height it was read at: the transaction's height plus its confirmations, less one.
+ */
+export interface InsightSpends {
+  asOf: number | undefined
+  /** Per output index: its spender, or `null` where Insight says it is unspent. */
+  vout: ReadonlyMap<number, Spender | null>
+}
 
 export interface SpendInput {
   tx: Pick<DecodedTx, 'outputs'> & Partial<Pick<DecodedTx, 'height'>>
@@ -53,6 +79,8 @@ export interface SpendInput {
   spenders: ReadonlyMap<number, Spender | null | 'resolving'>
   /** Current UTXO lists of the output addresses, which are read afresh; absent where none was asked for. */
   utxos?: ReadonlyMap<string, AddressUtxos | 'resolving' | null>
+  /** Insight's answer for this transaction; it decides every output it covers once Hyphen's own flag has not. */
+  insight?: InsightSpends
 }
 
 /** True where the transaction page's own `spent: true` flag is the answer: a spend cannot be undone. */
@@ -67,6 +95,7 @@ export function outputSpends({
   tipHeight,
   spenders,
   utxos,
+  insight,
 }: SpendInput): OutputSpend[] {
   const spentBy = (n: number): OutputSpend => {
     const found = spenders.get(n)
@@ -82,9 +111,16 @@ export function outputSpends({
   return tx.outputs.map((o, n): OutputSpend => {
     if (isUnspendable(o.scriptPubKey)) return { state: 'unspendable' }
     if (!mined) return { state: 'unknown', reason: 'unconfirmed' }
-    if (!hy?.detail) return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
-    const flag = hy.detail.vout.find((v) => v.n === n)?.spent
+    const by = insight?.vout.get(n)
+    if (by) return { state: 'spent', by }
+    const flag = hy?.detail?.vout.find((v) => v.n === n)?.spent
     if (flag) return spentBy(n)
+    if (insight?.vout.has(n)) {
+      return insight.asOf === undefined
+        ? { state: 'unknown', reason: 'not-reported' }
+        : unspentAsOf(insight.asOf)
+    }
+    if (!hy?.detail) return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
     const view = o.address ? utxos?.get(o.address) : undefined
     if (view === 'resolving') return { state: 'unknown', reason: 'loading' }
     if (view) {

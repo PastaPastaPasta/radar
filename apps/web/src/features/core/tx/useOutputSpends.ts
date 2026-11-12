@@ -12,6 +12,7 @@ import {
   limiter,
   outputSpends,
   type AddressUtxos,
+  type InsightSpends,
   type OutputSpend,
   type Spender,
 } from './spend'
@@ -33,6 +34,7 @@ export function useOutputSpends({
   mined,
   hy,
   hyLoading,
+  insight,
   tipHeight,
   visible,
 }: {
@@ -41,12 +43,15 @@ export function useOutputSpends({
   mined: boolean
   hy: { detail: HyTxDetail | null | undefined; asOfHeight: number | undefined } | undefined
   hyLoading: boolean
+  /** Insight's answer, `'pending'` while it is on its way, or undefined where it is not asked or failed. */
+  insight: InsightSpends | 'pending' | undefined
   tipHeight: number | undefined
   visible: number
 }): OutputSpend[] {
+  const answered = insight === 'pending' ? undefined : insight
   const queryClient = useQueryClient()
   const height = tx.height
-  const mayHaveUtxos = mined && height !== undefined && hy?.detail != null
+  const mayHaveUtxos = mined && height !== undefined && hy?.detail != null && insight === undefined
   const outputsAt = new Map<string, number[]>()
   if (mayHaveUtxos) {
     tx.outputs.forEach((o, n) => {
@@ -97,9 +102,18 @@ export function useOutputSpends({
     // `utxoQueries` changes identity every render; its settled contents are summed up in `utxoKey`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [utxoKey])
-  const spent = outputSpends({ tx, mined, hy, hyLoading, tipHeight, spenders: NO_SPENDERS, utxos })
+  const spent = outputSpends({
+    tx,
+    mined,
+    hy,
+    hyLoading: hyLoading || insight === 'pending',
+    tipHeight,
+    spenders: NO_SPENDERS,
+    utxos,
+    insight: answered,
+  })
   const wanted = tx.outputs.flatMap((o, n) =>
-    n < visible && height !== undefined && spent[n]?.state === 'spent'
+    n < visible && height !== undefined && spent[n]?.state === 'spent' && insight === undefined
       ? [{ n, address: o.address }]
       : [],
   )
@@ -140,8 +154,17 @@ export function useOutputSpends({
       if (!q) return
       spenders.set(n, q.isPending ? 'resolving' : (q.data ?? null))
     })
-    return outputSpends({ tx, mined, hy, hyLoading, tipHeight, spenders, utxos })
+    return outputSpends({
+      tx,
+      mined,
+      hy,
+      hyLoading: hyLoading || insight === 'pending',
+      tipHeight,
+      spenders,
+      utxos,
+      insight: answered,
+    })
     // `found` changes identity every render; its settled contents are summed up in `resultKey`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx, mined, hy, hyLoading, tipHeight, utxos, resultKey])
+  }, [tx, mined, hy, hyLoading, insight, tipHeight, utxos, resultKey])
 }

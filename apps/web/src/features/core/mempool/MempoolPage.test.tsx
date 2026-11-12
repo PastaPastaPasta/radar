@@ -78,6 +78,21 @@ describe('Mempool page', () => {
     expect(document.querySelector('[data-stale-index]')).toHaveTextContent('not live')
   })
 
+  it('shows one notice for the stale index and no warning line inside any section @IN-03 @HY-19', async () => {
+    renderAt('/mempool?network=testnet')
+    await screen.findByRole('table', { name: /Pending transactions/ })
+    await waitFor(() => expect(document.querySelector('[data-stale-index]')).not.toBeNull())
+    const notices = document.querySelectorAll('[data-stale-index]')
+    expect(notices).toHaveLength(1)
+    expect(notices[0]).toHaveTextContent(
+      'Blocks, transactions and addresses elsewhere in Radar are current.',
+    )
+    expect(
+      within(notices[0] as HTMLElement).getByRole('link', { name: 'See the sources' }),
+    ).toHaveAttribute('href', expect.stringContaining('/status'))
+    expect(document.querySelector('.rx-card__lag')).toBeNull()
+  })
+
   it('says it refreshes while the index is current @HY-19', async () => {
     renderAt('/mempool')
     expect(await screen.findByText('Refreshes every 15 seconds.')).toBeInTheDocument()

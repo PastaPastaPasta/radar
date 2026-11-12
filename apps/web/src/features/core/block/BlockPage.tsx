@@ -1,15 +1,14 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedBlock, DecodedTx } from '@/data/core/types'
-import { stampOf } from '@/data/envelope'
+import { stampOf, type Sourced } from '@/data/envelope'
 import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
-import { HyphenOnlyNote } from './HyphenOnlyNote'
 import { formatBytes, formatInt, withUnit } from '@/lib/format'
 import {
   Amount,
@@ -34,6 +33,8 @@ import { sumOutputs } from '../tx/tx-info'
 import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
+import { useIndexHealth } from '@/data/index-health'
+import { insQueries } from '@/data/insight/queries'
 import { parseBlockRef } from '@/lib/core/block-ref'
 
 export const TXS_PER_PAGE = 100
@@ -108,7 +109,10 @@ function BlockView({
   const { t } = useLingui()
   const net = useNetwork()
   const hyphenFit = useHyphenFit(net)
+  const insight = useIndexHealth(net).readFrom === 'insight'
   const hy = useQuery({ ...hyQueries.block(net, block.hash), enabled: hyphenFit })
+  const ins = useQuery({ ...insQueries.block(net, block.hash), enabled: insight })
+  const work: UseQueryResult<Sourced<{ chainwork?: string | null } | null>> = insight ? ins : hy
   const coinbase = block.txs[0]
   const pool = poolOf(coinbase)
   const tag = coinbaseTag(coinbase)
@@ -121,7 +125,7 @@ function BlockView({
   const current = Math.min(Math.max(1, page), pages)
   const offset = (current - 1) * TXS_PER_PAGE
   const quorumCommitments = block.txs.filter((x) => x.type === 'quorum-commitment').length
-  const chainwork = hy.data?.data?.chainwork
+  const chainwork = work.data?.data?.chainwork
 
   const columns = useMemo<ColumnDef<DecodedTx & { n: number }>[]>(
     () => [
@@ -284,7 +288,6 @@ function BlockView({
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
         <Section id="header" title={t`Header`} source={stamp}>
-          <HyphenOnlyNote what={t`Chainwork`} />
           <Card layer="core">
             <KeyValue
               columns={2}
@@ -307,9 +310,11 @@ function BlockView({
                   value: chainwork ? (
                     <Hash value={chainwork} display="wrap" phoneShort />
                   ) : (
-                    <span className="rx-dim">{t`Not in DAPI`}</span>
+                    <span className="rx-dim">
+                      {ins.isError ? t`Insight couldn’t be reached` : t`Not in DAPI`}
+                    </span>
                   ),
-                  source: hy.data ? stampOf(hy.data) : undefined,
+                  source: work.data ? stampOf(work.data) : undefined,
                 },
                 {
                   label: t`Version`,

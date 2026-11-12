@@ -3,6 +3,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { HyProposalVote } from '@/data/hyphen/schemas'
+import { useIndexHealth } from '@/data/index-health'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
@@ -23,7 +24,7 @@ import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { PageFrame } from '../hy-shared/PageFrame'
 import { ProposalLinks } from './ProposalLinks'
-import { governanceQueries } from './queries'
+import { governanceQueries, insightGovernanceQueries } from './queries'
 import { netVotes, proposalStatus, totalVotes } from './status'
 import { StatusBadge } from './StatusBadge'
 
@@ -41,12 +42,19 @@ export function ProposalPage({ hash }: { hash: string }) {
 function ProposalContent({ hash }: { hash: string }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const query = useQuery(governanceQueries.proposal(net, hash))
+  const index = useIndexHealth(net)
+  const insight = index.readFrom === 'insight'
+  const hy = useQuery({
+    ...governanceQueries.proposal(net, hash),
+    enabled: !insight && !index.pending,
+  })
+  const ins = useQuery({ ...insightGovernanceQueries.proposal(net, hash), enabled: insight })
+  const query = insight ? ins : hy
   const now = useNow(false)
 
   return (
     <>
-      <StaleIndexNotice />
+      <StaleIndexNotice scope={t`The vote history below is as of that block, not live.`} />
       <QueryView
         query={query}
         skeleton={<Skeleton shape="block" height={160} />}
@@ -121,10 +129,14 @@ function ProposalContent({ hash }: { hash: string }) {
                           },
                         ]
                       : []),
-                    {
-                      label: t`Counted as valid`,
-                      value: p.valid === false ? t`No` : t`Yes`,
-                    },
+                    ...(insight
+                      ? []
+                      : [
+                          {
+                            label: t`Counted as valid`,
+                            value: p.valid === false ? t`No` : t`Yes`,
+                          },
+                        ]),
                   ]}
                 />
                 <div className="mt-4 flex flex-wrap items-center gap-3">

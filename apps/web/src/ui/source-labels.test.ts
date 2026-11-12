@@ -87,3 +87,31 @@ describe('sourceView fallbacks', () => {
     expect(down.age).toBeDefined()
   })
 })
+
+describe('Insight source line', () => {
+  it('labels an Insight answer, with its age, and switches the label with the source', () => {
+    const base = { asOf: NOW - 5_000, fetchedAt: NOW - 5_000, proved: false } as const
+    const insight = sourceView(
+      { source: 'insight', ...base },
+      { ...health, source: 'insight' },
+      NOW,
+    )
+    expect(insight).toMatchObject({ label: 'Indexed by Insight', variant: 'ok' })
+    expect(insight.age).toBe('5 s ago')
+    const hyphen = sourceView({ source: 'hyphen', ...base }, { ...health, source: 'hyphen' }, NOW)
+    expect(hyphen.label).toBe('Indexed by Hyphen')
+  })
+
+  it('turns warning past its age limit and says Insight isn’t answering when it is down', () => {
+    const old = { asOf: NOW - 10 * 60_000, fetchedAt: NOW - 10 * 60_000, proved: false } as const
+    expect(
+      sourceView({ source: 'insight', ...old }, { ...health, source: 'insight' }, NOW).variant,
+    ).toBe('stale')
+    const down = sourceView(
+      { source: 'insight', ...old },
+      { ...health, source: 'insight', state: 'down' },
+      NOW,
+    )
+    expect(down.label).toBe("Insight isn't answering")
+  })
+})

@@ -4,7 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
-import { useSourceHealth } from '@/data/health'
+import { useIndexHealth } from '@/data/index-health'
 import { hyQueries } from '@/data/hyphen/queries'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
@@ -22,19 +22,20 @@ import {
   useHyphenLagSentence,
 } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
+import { useSeenPending, type SeenTx } from './seen-pending'
 
 const PENDING = 8
 
 function useHyphenBlocked() {
   const net = useNetwork()
   const fit = useHyphenFit(net)
-  const health = useSourceHealth('hyphen')
+  const index = useIndexHealth(net)
   return {
     net,
     fit,
-    lag: health.lag?.detail,
+    lag: index.lag,
     devnet: isDevnet(net),
-    stale: health.state === 'stale' && health.lag !== undefined,
+    stale: index.state === 'stale',
   }
 }
 
@@ -118,7 +119,8 @@ function StaleNote() {
   return (
     <p className="rx-note" role="note" data-hyphen-lag>
       {lagged}{' '}
-      {t`Supply, blockchain size and pending transactions come only from Hyphen and are not live. The height, difficulty, ChainLock and latest blocks here come from DAPI.`}
+      {t`Supply and blockchain size come only from Hyphen and are not live. Pending transactions are those this page has seen arrive. The height, difficulty, ChainLock and latest blocks come from DAPI.`}{' '}
+      <PageLink to="/status">{t`See the sources`}</PageLink>
     </p>
   )
 }
@@ -136,9 +138,9 @@ export function CoreFigures() {
 /** The pending list: a table in the full-width tablet row, row cards in the phone band and, as a feed, in a desktop column. */
 export function PendingCard({ feed = false }: { feed?: boolean }) {
   const { t } = useLingui()
-  const { net, fit, lag, devnet } = useHyphenBlocked()
-  const lagged = useHyphenLagSentence(net, lag)
+  const { net, fit, devnet, stale } = useHyphenBlocked()
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
+  const seen = useSeenPending(net, stale && !devnet)
   const columns = useMemo<ColumnDef<HyMempoolTx>[]>(() => {
     return [
       {
@@ -167,24 +169,70 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
       },
     ]
   }, [t])
+  const seenColumns = useMemo<ColumnDef<SeenTx>[]>(
+    () => [
+      {
+        id: 'tx',
+        header: t`Transaction`,
+        cell: ({ row }) => <Entity kind="tx" id={row.original.txid} />,
+        meta: { phone: 'title' },
+      },
+      {
+        id: 'value',
+        header: t`Value`,
+        cell: ({ row }) => <Amount value={row.original.value} kind="duffs" />,
+        meta: { numeric: true, align: 'end', phone: 'secondary' },
+      },
+      {
+        id: 'size',
+        header: t`Size`,
+        accessorFn: (r) => formatBytes(r.size),
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'seen',
+        header: t`Seen`,
+        cell: ({ row }) => <Time ms={row.original.seenAt} mode="relative" live />,
+        meta: { phone: 'primary' },
+      },
+    ],
+    [t],
+  )
   return (
     <Card
       layer="core"
       className={feed ? 'rx-card--feed' : undefined}
       title={t`Pending transactions`}
+      subtitle={stale ? t`Seen since you opened this page` : undefined}
       padding="flush"
-      source={query.data ? stampOf(query.data) : undefined}
+      source={stale ? seen.stamp : query.data ? stampOf(query.data) : undefined}
       actions={
         <PageLink to="/mempool" className="rx-go">
           {t`Mempool`}
         </PageLink>
       }
     >
-      {devnet || !fit ? (
+      {stale && !devnet ? (
+        <DataTable
+          caption={t`Pending transactions seen since you opened this page`}
+          columns={seenColumns}
+          rows={seen.rows.slice(0, PENDING)}
+          getRowId={(r) => r.txid}
+          state="ready"
+          empty={
+            <Empty
+              kind="none-yet"
+              title={t`Nothing has arrived since you opened this page`}
+              body={t`The full mempool list needs Hyphen’s index, which is behind the chain.`}
+            />
+          }
+          rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
+        />
+      ) : devnet || !fit ? (
         <Empty
           kind={devnet ? 'unsupported-network' : 'blocked'}
           title={devnet ? t`Hyphen doesn't index devnets` : t`Pending transactions are unavailable`}
-          body={devnet ? undefined : (lagged ?? t`Hyphen's index is still being checked.`)}
+          body={devnet ? undefined : t`Hyphen's index is still being checked.`}
         />
       ) : (
         <DataTable

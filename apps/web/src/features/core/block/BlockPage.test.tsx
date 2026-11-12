@@ -185,6 +185,20 @@ describe('Block page', () => {
     expect((await screen.findAllByText(/quorum commitment/i)).length).toBeGreaterThan(0)
   })
 
+  it('shows testnet chainwork from Insight while Hyphen’s index is stale @IN-16 @IN-03', async () => {
+    renderAt('/block/1589232?network=testnet')
+    const row = await waitFor(() => {
+      const label = screen.getByText('Chainwork')
+      const el = label.closest<HTMLElement>('div')?.parentElement
+      expect(el).not.toBeNull()
+      expect(el).toHaveTextContent(/[0-9a-f]{8}/)
+      return el!
+    })
+    expect(row).not.toHaveTextContent('Not in DAPI')
+    await waitFor(() => expect(document.querySelector('[data-source="insight"]')).not.toBeNull())
+    expect(document.querySelector('[data-hyphen-lag]')).toBeNull()
+  })
+
   it('shows a testnet difficulty below one with its digits, not as zero @IN-16 @HY-19', async () => {
     renderAt('/block/1589232?network=testnet')
     const label = await screen.findByText('Difficulty')

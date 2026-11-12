@@ -52,6 +52,21 @@ describe('locateFixture', () => {
     expect(locateFixture('https://api.testnet.pe.dashhq.org/status')?.net).toBe('testnet')
   })
 
+  it('maps both Insight hosts, dropping the API prefix and keeping the query', () => {
+    expect(locateFixture('https://insight.dash.org/insight-api/status?q=getInfo')).toMatchObject({
+      source: 'insight',
+      net: 'mainnet',
+      path: '/status',
+      slug: 'status--q-getInfo',
+    })
+    expect(
+      locateFixture(
+        'https://insight.testnet.networks.dash.org/insight-api/txs?address=yA&pageNum=1',
+      ),
+    ).toMatchObject({ source: 'insight', net: 'testnet', path: '/txs' })
+    expect(locateFixture('https://insight.dash.org/elsewhere')).toBeNull()
+  })
+
   it('ignores hosts it has no fixtures for', () => {
     expect(locateFixture('https://example.com/status')).toBeNull()
     expect(locateFixture('https://radar.dashhq.org/other')).toBeNull()

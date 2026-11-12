@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { coreLive } from '@/data/core/live'
 import { mapSourced } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
+import { adaptAddressTx } from '@/data/insight/adapt'
+import { insQueries } from '@/data/insight/queries'
 import { POLL_MS } from '@/data/query/stale'
 import type { NetworkId } from '@/lib/network'
-import { addressKeys, addressQueries } from './queries'
+import { addressKeys, addressQueries, type IndexSource } from './queries'
 import { watchAddress, type PendingTx, type WatchStatus } from './live'
 
 export interface AddressActivity {
@@ -51,12 +53,14 @@ const current = (s: Scoped, scope: string): Scoped => (s.scope === scope ? s : f
 
 /**
  * Follows new transactions of the address while its page is on screen (§5.5): DAPI's live transaction feed, and
- * Hyphen's history of the address only while that feed has given up.
+ * the history of the address (Hyphen's, or Insight's while Hyphen's index is stale) only while that feed has
+ * given up.
  */
 export function useAddressActivity(
   net: NetworkId,
   address: string,
   enabled: boolean,
+  from: IndexSource = 'hyphen',
 ): AddressActivity {
   const queryClient = useQueryClient()
   const scope = `${net}:${address}`
@@ -81,13 +85,20 @@ export function useAddressActivity(
         subscribe: (onChange) => coreLive.subscribe(onChange),
       },
       recent: (signal) =>
-        untilAborted(
-          queryClient.fetchQuery({
-            ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),
-            ...FRESH,
-          }),
-          signal,
-        ).then((page) => mapSourced(page, (p) => p.items)),
+        from === 'insight'
+          ? untilAborted(
+              queryClient.fetchQuery({ ...insQueries.addressTxs(net, address, 0), ...FRESH }),
+              signal,
+            ).then((page) =>
+              mapSourced(page, (p) => p.txs.flatMap((tx) => adaptAddressTx(tx, address) ?? [])),
+            )
+          : untilAborted(
+              queryClient.fetchQuery({
+                ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),
+                ...FRESH,
+              }),
+              signal,
+            ).then((page) => mapSourced(page, (p) => p.items)),
       spendable: (outpoint) => {
         const utxos = queryClient.getQueryData(addressQueries.utxos(net, address).queryKey)?.data
           .items
@@ -106,7 +117,7 @@ export function useAddressActivity(
         })
       },
       onBlock: (mined) => {
-        const keys = addressKeys(net, address)
+        const keys = addressKeys(net, address, from)
         void queryClient.invalidateQueries({ queryKey: keys.summary })
         void queryClient.invalidateQueries({ queryKey: keys.txs })
         void queryClient.invalidateQueries({ queryKey: keys.utxos })
@@ -115,10 +126,17 @@ export function useAddressActivity(
           return
         }
         for (const p of pendingRef.current) {
-          void queryClient
-            .fetchQuery({ ...hyQueries.tx(net, p.txid), ...FRESH })
-            .then((tx) => {
-              if (controller.signal.aborted || tx.data?.blockHeight == null) return
+          const mined =
+            from === 'insight'
+              ? queryClient
+                  .fetchQuery({ ...insQueries.tx(net, p.txid), ...FRESH })
+                  .then((tx) => (tx.data?.blockheight ?? -1) >= 0)
+              : queryClient
+                  .fetchQuery({ ...hyQueries.tx(net, p.txid), ...FRESH })
+                  .then((tx) => tx.data?.blockHeight != null)
+          void mined
+            .then((isMined) => {
+              if (controller.signal.aborted || !isMined) return
               keep(pendingRef.current.filter((q) => q.txid !== p.txid))
             })
             .catch(() => undefined)
@@ -128,7 +146,7 @@ export function useAddressActivity(
     return () => {
       controller.abort()
     }
-  }, [net, address, enabled, queryClient, scope])
+  }, [net, address, enabled, from, queryClient, scope])
 
   return current(state, scope)
 }
