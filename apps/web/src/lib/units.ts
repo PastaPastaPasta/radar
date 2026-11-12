@@ -166,6 +166,14 @@ function trimmedFraction(frac: string): string {
   return trimmed ? decimalSeparator() + trimmed : ''
 }
 
+/** `wanted` decimals, or, for a nonzero value they would round to zero, enough to show its first two significant digits. */
+function placesFor(abs: bigint, scale: number, wanted: number): number {
+  if (abs === 0n || wanted >= scale) return wanted
+  const rounded = fixedParts(abs, scale, wanted)
+  if (rounded.int !== '0' || /[1-9]/.test(rounded.frac)) return wanted
+  return Math.min(scale, scale - abs.toString().length + 2)
+}
+
 const COMPACT = [
   { pow: 9, suffix: ' B' },
   { pow: 6, suffix: ' M' },
@@ -214,8 +222,8 @@ export function formatAmountParts(
   let dim = ''
   let suffix = ''
 
-  const tableDigits = Math.min(scale, 8)
-  const proseDigits = Math.min(scale, 4)
+  const tableDigits = placesFor(abs, scale, Math.min(scale, 8))
+  const proseDigits = placesFor(abs, scale, Math.min(scale, 4))
   const compacted = compact ? compactParts(abs, scale) : undefined
 
   if (compacted) {
@@ -237,7 +245,7 @@ export function formatAmountParts(
       frac = shown
     }
   } else {
-    const digits = compact ? Math.min(scale, 2) : proseDigits
+    const digits = compact ? placesFor(abs, scale, Math.min(scale, 2)) : proseDigits
     const p = fixedParts(abs, scale, digits)
     int = groupDigits(p.int)
     const f = compact ? p.frac.replace(/0+$/, '') : p.frac

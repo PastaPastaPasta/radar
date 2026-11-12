@@ -82,11 +82,10 @@ describe('formatAmountText', () => {
   })
 
   it('never prints a sign on something that shows as zero', () => {
-    expect(formatAmountText(-1n, 'duffs', { unit: 'DASH' })).toBe(`0${NB}DASH`)
-    expect(formatAmountText(-4n, 'credits', { unit: 'DASH', density: 'table' })).toBe(
+    expect(formatAmountText(0n, 'duffs', { unit: 'DASH', signed: true })).toBe(`0${NB}DASH`)
+    expect(formatAmountText(-0n, 'credits', { unit: 'DASH', density: 'table' })).toBe(
       `0.00000000${NB}DASH`,
     )
-    expect(formatAmountText(1n, 'duffs', { unit: 'DASH', signed: true })).toBe(`0${NB}DASH`)
   })
 
   it('shows credits below 0.0001 DASH in duffs', () => {
@@ -105,6 +104,69 @@ describe('formatAmountText', () => {
     expect(formatAmountText(250n, 'duffs', { unit: 'uDASH' })).toBe(`2.50${NB}µDASH`)
     expect(unitLabel('uDASH', true)).toBe('tµDASH')
     expect(unitLabel('duffs', true)).toBe('duffs')
+  })
+})
+
+describe('a nonzero amount never shows as zero @IN-03', () => {
+  const small = [1n, 7n, 49n, 300n, 3_000n, 30_000n, 29_999n, 149_999n, 1_234_567n]
+  const densities = ['prose', 'table'] as const
+  const kinds = ['duffs', 'credits'] as const
+
+  it.each(DISPLAY_UNITS)('in %s, compact, prose and table, for duffs and credits', (unit) => {
+    for (const kind of kinds) {
+      for (const base of small) {
+        const value = kind === 'credits' ? base * 1000n : base
+        for (const sign of [1n, -1n]) {
+          for (const opts of [
+            { compact: true },
+            ...densities.map((density) => ({ density })),
+            { compact: true, density: 'table' as const },
+          ]) {
+            const parts = formatAmountParts(value * sign, kind, { unit, ...opts })
+            expect(
+              `${parts.int}${parts.frac}${parts.dim}`,
+              `${value * sign} ${kind} ${unit}`,
+            ).toMatch(/[1-9]/)
+            expect(parts.zero).toBe(false)
+            expect(parts.negative).toBe(sign < 0n)
+          }
+        }
+      }
+    }
+  })
+
+  it('keeps two significant digits of a tiny compact amount', () => {
+    expect(formatAmountText(30_000n, 'duffs', { compact: true })).toBe(`0.0003${NB}DASH`)
+    expect(formatAmountText(30_000n, 'duffs', { compact: true, unit: 'DASH' })).toBe(
+      `0.0003${NB}DASH`,
+    )
+    expect(formatAmountText(12_345n, 'duffs', { compact: true, unit: 'DASH' })).toBe(
+      `0.00012${NB}DASH`,
+    )
+    expect(formatAmountText(30_000n, 'duffs', { compact: true, unit: 'mDASH' })).toBe(
+      `0.3${NB}mDASH`,
+    )
+    expect(formatAmountText(1n, 'duffs', { compact: true, unit: 'mDASH' })).toBe(
+      `0.00001${NB}mDASH`,
+    )
+    expect(formatAmountText(1n, 'duffs', { compact: true, unit: 'uDASH' })).toBe(`0.01${NB}µDASH`)
+    expect(formatAmountText(1n, 'duffs', { compact: true, unit: 'DASH' })).toBe(
+      `0.00000001${NB}DASH`,
+    )
+    expect(formatAmountText(-30_000n, 'duffs', { compact: true, unit: 'DASH', signed: true })).toBe(
+      `−0.0003${NB}DASH`,
+    )
+    expect(formatAmountText(4n, 'credits', { unit: 'DASH', density: 'table' })).toBe(
+      `0.00000000004${NB}DASH`,
+    )
+  })
+
+  it('leaves amounts that already round to something alone', () => {
+    expect(formatAmountText(2_000_000_000n, 'duffs', { compact: true })).toBe(`20${NB}DASH`)
+    expect(formatAmountText(1_000_000n, 'duffs', { compact: true, unit: 'DASH' })).toBe(
+      `0.01${NB}DASH`,
+    )
+    expect(formatAmountText(0n, 'duffs', { compact: true, unit: 'DASH' })).toBe(`0${NB}DASH`)
   })
 })
 
@@ -195,7 +257,7 @@ describe('amount edge cases', () => {
   it('shows one duff in each unit at its own precision', () => {
     expect(formatAmountText(1n, 'duffs', { unit: 'duffs' })).toBe(`1${NB}duffs`)
     expect(formatAmountText(1n, 'duffs', { unit: 'uDASH' })).toBe(`0.01${NB}µDASH`)
-    expect(formatAmountText(1n, 'duffs', { unit: 'mDASH' })).toBe(`0${NB}mDASH`)
+    expect(formatAmountText(1n, 'duffs', { unit: 'mDASH' })).toBe(`0.00001${NB}mDASH`)
     expect(formatAmountText(1n, 'duffs', { unit: 'mDASH', density: 'table' })).toBe(
       `0.00001${NB}mDASH`,
     )

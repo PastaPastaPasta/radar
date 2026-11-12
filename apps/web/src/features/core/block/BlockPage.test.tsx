@@ -49,6 +49,39 @@ describe('Block page', () => {
     expect(within(first).getByRole('link')).toHaveAttribute('href', expect.stringContaining('/tx/'))
   })
 
+  it('never reads a small payment as zero in a phone transaction line @IN-03', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      (query: string): MediaQueryList =>
+        ({
+          matches: query === '(max-width: 640px)',
+          media: query,
+          addEventListener: () => undefined,
+          removeEventListener: () => undefined,
+          addListener: () => undefined,
+          removeListener: () => undefined,
+          dispatchEvent: () => false,
+          onchange: null,
+        }) as MediaQueryList,
+    )
+    const original = core.block.bind(core)
+    vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal, opts) => {
+      const found = await original(net, ref, signal, opts)
+      const block = found.data
+      if (!block) return found
+      const txs = block.txs.map((tx, i) =>
+        i === 0 ? { ...tx, outputs: [{ ...tx.outputs[0]!, value: 30_000n }] } : tx,
+      )
+      return { ...found, data: { ...block, txs } }
+    })
+    renderAt(`/block/${TIP}`)
+    const list = await screen.findByRole('list', { name: /Transactions in block 2,570,085/ })
+    const first = within(list).getAllByRole('listitem')[0]!
+    const amount = first.querySelector<HTMLElement>('[data-amount]')!
+    expect(amount.dataset.amount).toBe('30000')
+    expect(amount).toHaveTextContent(/^0\.0003\s*DASH$/)
+  })
+
   it('offers no previous block for the genesis block @IN-03', async () => {
     const original = core.block.bind(core)
     vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal) => {
