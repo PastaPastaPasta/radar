@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { SourceStamp } from '@/data/envelope'
 import { InsBlockListSchema } from '@/data/insight/schemas'
 import { fixtureBody } from '@/test/fixtures/load'
-import { readInsightPage } from './insight-page'
+import { readInsightPage } from '@/data/insight/blocks-page'
 
 const stamp: SourceStamp = { source: 'insight', asOf: 0, fetchedAt: 0, proved: false }
 
@@ -56,14 +56,14 @@ describe('readInsightPage @IN-02', () => {
     expect(heights(first.blocks)).not.toContain(2567399)
     expect(heights(first.blocks)).toContain(2567398)
 
-    const page = await readInsightPage(2567418, 20, 0, reads)
+    const page = await readInsightPage(2567418, 20, reads)
     expect(heights(page!.rows)).toEqual(run(2567418, 20))
     expect(asked.map((q) => q.limit)).toEqual([20, 1])
   })
 
   it('reads the day before when a page crosses UTC midnight @IN-02', async () => {
     const { reads, asked } = recorded('mainnet', MIDNIGHT)
-    const page = await readInsightPage(2566930, 20, 0, reads)
+    const page = await readInsightPage(2566930, 20, reads)
     expect(heights(page!.rows)).toEqual(run(2566930, 20))
     expect(asked.map((q) => [q.date, q.limit])).toEqual([
       ['2026-11-05', 20],
@@ -73,7 +73,7 @@ describe('readInsightPage @IN-02', () => {
 
   it('does the same on testnet with a page of 50 @IN-16', async () => {
     const { reads, asked } = recorded('testnet', TESTNET_MIDNIGHT)
-    const page = await readInsightPage(1586890, 50, 0, reads)
+    const page = await readInsightPage(1586890, 50, reads)
     expect(heights(page!.rows)).toEqual(run(1586890, 50))
     expect(asked.map((q) => [q.date, q.limit])).toEqual([
       ['2026-11-07', 50],
@@ -88,13 +88,13 @@ describe('readInsightPage @IN-02', () => {
       timeAt: (h: number) =>
         h === 2567418 ? reads.timeAt(h) : Promise.reject(new Error('DAPI is out of budget')),
     }
-    const page = await readInsightPage(2567418, 20, 0, failing)
+    const page = await readInsightPage(2567418, 20, failing)
     expect(heights(page!.rows)).toEqual(run(2567418, 19))
   })
 
   it('stops after a read that finds nothing new', async () => {
     const { reads, asked } = recorded('mainnet', { 2567418: 1793914737, 2567399: 1793914737 })
-    const page = await readInsightPage(2567418, 20, 0, reads)
+    const page = await readInsightPage(2567418, 20, reads)
     expect(heights(page!.rows)).toEqual(run(2567418, 19))
     expect(asked).toHaveLength(2)
   })
@@ -102,13 +102,13 @@ describe('readInsightPage @IN-02', () => {
   it('fails when the first read fails', async () => {
     const { reads } = recorded('mainnet', {})
     await expect(
-      readInsightPage(2567418, 20, 0, { ...reads, timeAt: () => Promise.reject(new Error('no')) }),
+      readInsightPage(2567418, 20, { ...reads, timeAt: () => Promise.reject(new Error('no')) }),
     ).rejects.toThrow('no')
   })
 
   it('has no page when the first block time is unknown', async () => {
     const { reads } = recorded('mainnet', {})
-    expect(await readInsightPage(2567418, 20, 0, reads)).toBeNull()
+    expect(await readInsightPage(2567418, 20, reads)).toBeNull()
   })
 
   it('returns an empty page for an empty list, not a pending one', async () => {
@@ -127,7 +127,7 @@ describe('readInsightPage @IN-02', () => {
         ),
       }),
     }
-    const page = await readInsightPage(5, 20, 0, empty)
+    const page = await readInsightPage(5, 20, empty)
     expect(page?.rows).toEqual([])
   })
 })

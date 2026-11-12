@@ -1,7 +1,7 @@
-import type { BlockRow } from '@/data/core/types'
-import type { Sourced } from '@/data/envelope'
-import { adaptBlockRows } from '@/data/insight/adapt'
-import type { InsBlockList } from '@/data/insight/schemas'
+import type { BlockRow } from '../core/types'
+import type { Sourced } from '../envelope'
+import { adaptBlockRows } from './adapt'
+import type { InsBlockList } from './schemas'
 
 /** Reads one request per UTC day the page spans, plus one for each block-time inversion; four covers any real page. */
 const MAX_READS = 4
@@ -12,7 +12,7 @@ export interface InsightPage {
   list: Sourced<InsBlockList>
 }
 
-interface Reads {
+export interface InsightPageReads {
   /** The block time (ms) at `height`, or undefined when no node has it. */
   timeAt: (height: number) => Promise<number | undefined>
   list: (q: {
@@ -33,8 +33,7 @@ interface Reads {
 export async function readInsightPage(
   top: number,
   count: number,
-  floor: number,
-  reads: Reads,
+  reads: InsightPageReads,
 ): Promise<InsightPage | null> {
   const found = new Map<number, InsBlockList['blocks'][number]>()
   let newest: Sourced<InsBlockList> | undefined
@@ -57,7 +56,7 @@ export async function readInsightPage(
     }
     let next = missing
     while (found.has(next)) next--
-    const done = top - next >= count || next < floor
+    const done = top - next >= count
     const progressed = next < missing
     missing = next
     if (done || !progressed) break

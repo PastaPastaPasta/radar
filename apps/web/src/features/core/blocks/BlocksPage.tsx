@@ -6,11 +6,8 @@ import { useMemo, useState } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
+import { insQueries } from '@/data/insight/queries'
 import { useIndexHealth } from '@/data/index-health'
-import { core } from '@/data/core/client'
-import { insight } from '@/data/insight/client'
-import { insKeys } from '@/data/query/keys'
-import { dataClass } from '@/data/query/stale'
 import {
   Entity,
   PageLink,
@@ -34,7 +31,6 @@ import {
   windowOf,
   type Window,
 } from './blocks-range'
-import { readInsightPage } from './insight-page'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
@@ -165,20 +161,10 @@ function useInsightRows(window: Window | null, enabled: boolean): PageRows {
   const net = useNetwork()
   const top = window?.top ?? 0
   const count = window?.count ?? 0
-  const floor = window ? window.top - window.count + 1 : 0
   const page = useQuery({
-    queryKey: insKeys(net, 'blocks-page', { top, count }),
-    queryFn: async ({ signal }) => {
-      const read = await readInsightPage(top, count, floor, {
-        timeAt: (height) => core.headers(net, height, 1, signal).then((h) => h.data[0]?.time),
-        list: (q) => insight.blocks(net, q, signal),
-      })
-      if (!read) throw new Error('Insight has no block list for this page')
-      return read
-    },
+    ...insQueries.blocksPage(net, { top, count }),
     enabled: enabled && window !== null,
     placeholderData: keepPreviousOnNetwork(net),
-    ...dataClass('index'),
   })
   const lock = useQuery({ ...coreQueries.chainLock(net), enabled: enabled && window !== null })
   const best = lock.data?.data

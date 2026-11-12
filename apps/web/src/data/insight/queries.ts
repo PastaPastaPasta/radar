@@ -5,6 +5,7 @@ import type { HyPage, HyProposal } from '../hyphen/schemas'
 import { insKeys } from '../query/keys'
 import { dataClass } from '../query/stale'
 import { adaptProposals } from './adapt'
+import { readInsightPage } from './blocks-page'
 import { insight } from './client'
 import type { InsGovernanceInfo } from './schemas'
 
@@ -42,6 +43,24 @@ export const insQueries = {
     queryOptions({
       queryKey: insKeys(net, 'blocks', q),
       queryFn: ({ signal }) => insight.blocks(net, q, signal),
+      ...dataClass('index'),
+    }),
+  /**
+   * A page of blocks `[top - count + 1, top]` joined from Insight's day lists into one contiguous run, with the block
+   * times it needs from DAPI.
+   */
+  blocksPage: (net: NetworkId, q: { top: number; count: number }) =>
+    queryOptions({
+      queryKey: insKeys(net, 'blocks-page', q),
+      queryFn: async ({ signal }) => {
+        const { core } = await import('../core/client')
+        const read = await readInsightPage(q.top, q.count, {
+          timeAt: (height) => core.headers(net, height, 1, signal).then((h) => h.data[0]?.time),
+          list: (list) => insight.blocks(net, list, signal),
+        })
+        if (!read) throw new Error('Insight has no block list for this page')
+        return read
+      },
       ...dataClass('index'),
     }),
   address: (net: NetworkId, address: string) =>
