@@ -176,7 +176,7 @@ test.describe('address page', () => {
     await page.goto(`/address/${TESTNET_ADDRESS}?network=testnet`)
     await expect(page.locator('[data-testnet-keyline="test"]')).toBeAttached()
     await expect(page.locator('[data-address-summary]')).toContainText(/tDASH/)
-    await sourced(page)
+    await expect(page.locator('main [data-source="insight"]').first()).toBeVisible()
 
     await page.goto(`/address/${TESTNET_ADDRESS}`)
     await expect(page.getByText('This is a testnet address.')).toBeVisible()
