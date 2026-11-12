@@ -139,8 +139,14 @@ export function PendingCard({ compact = false }: { compact?: boolean }) {
   const { net, fit, lag, devnet } = useHyphenBlocked()
   const lagged = useHyphenLagSentence(net, lag)
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
-  const columns = useMemo<ColumnDef<HyMempoolTx>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<HyMempoolTx>[]>(() => {
+    const size: ColumnDef<HyMempoolTx> = {
+      id: 'size',
+      header: t`Size`,
+      accessorFn: (r) => formatBytes(r.txSize),
+      meta: { numeric: true, phone: 'secondary' },
+    }
+    return [
       {
         id: 'tx',
         header: t`Transaction`,
@@ -153,25 +159,15 @@ export function PendingCard({ compact = false }: { compact?: boolean }) {
         cell: ({ row }) => <Amount value={row.original.valueOut} kind="duffs" />,
         meta: { numeric: true, align: 'end', phone: 'secondary' },
       },
-      ...(compact
-        ? []
-        : [
-            {
-              id: 'size',
-              header: t`Size`,
-              accessorFn: (r: HyMempoolTx) => formatBytes(r.txSize),
-              meta: { numeric: true, phone: 'secondary' as const },
-            },
-          ]),
+      ...(compact ? [] : [size]),
       {
         id: 'seen',
         header: t`First seen`,
         cell: ({ row }) => <Time ms={row.original.firstSeenAt} mode="relative" live />,
         meta: { phone: 'primary' },
       },
-    ],
-    [t, compact],
-  )
+    ]
+  }, [t, compact])
   return (
     <Card
       layer="core"

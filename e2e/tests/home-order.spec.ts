@@ -17,7 +17,7 @@ test.describe('one home order for eyes and keyboard', () => {
       await page.goto(path)
       await expect(page.locator('#h-latest')).toBeVisible()
       await settled(page)
-      const heights = await page.evaluate(() => window.innerHeight)
+      const viewportHeight = await page.evaluate(() => window.innerHeight)
       const columns = page.locator('.rx-activity__grid > .rx-card')
       await expect(columns).toHaveCount(3)
       const titles = await columns.locator('.rx-card__title').allTextContents()
@@ -45,12 +45,12 @@ test.describe('one home order for eyes and keyboard', () => {
         expect(
           b.heading!.bottom,
           `column ${i} heading inside the first screen`,
-        ).toBeLessThanOrEqual(heights)
+        ).toBeLessThanOrEqual(viewportHeight)
         expect(b.first, `column ${i} has a first row or note`).not.toBeNull()
         expect(
           b.first!.bottom,
           `column ${i} first row inside the first screen`,
-        ).toBeLessThanOrEqual(heights)
+        ).toBeLessThanOrEqual(viewportHeight)
         expect(Math.abs(b.card!.top - boxes[0]!.card!.top), `column ${i} is level`).toBeLessThan(2)
       })
       expect(boxes[0]!.card!.left).toBeLessThan(boxes[1]!.card!.left)
@@ -153,11 +153,7 @@ test.describe('one home order for eyes and keyboard', () => {
       page,
     }, testInfo) => {
       test.skip(
-        width >= 1024
-          ? !testInfo.project.name.startsWith('desktop')
-          : width > 640
-            ? !testInfo.project.name.startsWith('desktop')
-            : !testInfo.project.name.startsWith('phone'),
+        !testInfo.project.name.startsWith(width > 640 ? 'desktop' : 'phone'),
         'matching form factor only',
       )
       await page.setViewportSize({ width, height: 900 })

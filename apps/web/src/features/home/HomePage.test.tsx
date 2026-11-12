@@ -24,6 +24,9 @@ function coreRow(height: string): Promise<HTMLElement> {
   })
 }
 
+const gridTitles = (activity: Element) =>
+  [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent)
+
 const realChainLock = () => core.chainLock('mainnet')
 
 describe('Home page', () => {
@@ -42,10 +45,13 @@ describe('Home page', () => {
   it('lists the pending transactions beside the block lists, in the same section and after them in reading order @IN-01 @HY-03', async () => {
     renderAt('/')
     await coreRow('2,570,085')
-    const activity = document.querySelector('.rx-home__activity')!
+    const activity = document.querySelector<HTMLElement>('.rx-home__activity')!
     expect(document.querySelector('#core')).toBeNull()
-    const titles = [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent)
-    expect(titles).toEqual(['Core blocks', 'Platform transitions', 'Pending transactions'])
+    expect(gridTitles(activity)).toEqual([
+      'Core blocks',
+      'Platform transitions',
+      'Pending transactions',
+    ])
     const pending = await within(activity).findByRole('table', { name: 'Pending transactions' })
     await waitFor(() => expect(within(pending).getAllByRole('row').length).toBeGreaterThan(1))
     expect(within(pending).getAllByRole('row').length).toBeLessThanOrEqual(9)
@@ -83,9 +89,7 @@ describe('Home page', () => {
       const band = document.querySelector('#core')!
       expect(follows(document.querySelector('.rx-scope')!, band)).toBe(true)
       expect(follows(band, activity)).toBe(true)
-      expect(
-        [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent),
-      ).toEqual(['Core blocks', 'Platform transitions'])
+      expect(gridTitles(activity)).toEqual(['Core blocks', 'Platform transitions'])
       expect(band).toHaveTextContent('Pending transactions')
     })
 

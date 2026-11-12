@@ -177,6 +177,7 @@ function TransitionsCard() {
 export function Activity() {
   const { t } = useLingui()
   const width: HomeWidth = useHomeWidth()
+  const phone = width === 'phone'
   return (
     <section className="rx-sec rx-activity" aria-labelledby="h-latest">
       <div className="rx-sec__head">
@@ -186,9 +187,9 @@ export function Activity() {
         <p className="rx-sec__desc">{t`New rows appear at the top.`}</p>
       </div>
       <div className="rx-activity__grid">
-        <BlocksCard compact={width !== 'phone'} />
+        <BlocksCard compact={!phone} />
         <TransitionsCard />
-        {width === 'phone' ? null : <PendingCard compact={width === 'wide'} />}
+        {phone ? null : <PendingCard compact={width === 'wide'} />}
       </div>
     </section>
   )
