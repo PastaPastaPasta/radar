@@ -975,12 +975,36 @@ button.rx-srcline:hover {
   .rx-unit--bar {
     display: none;
   }
+  /* The select is 44 px tall for the thumb and its lower 18 px lie over the empty top padding of the page below; the chip the eye sees is the 26 px box drawn behind its top part. */
   .rx-unit--rail {
+    position: relative;
+    z-index: 1;
     display: flex;
-    justify-content: flex-end;
-    margin: -24px 0 2px;
+    width: max-content;
+    margin: -24px 0 -16px auto;
+  }
+  .rx-unit--rail::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 18px;
+    border: 1px solid var(--dh-line-2);
+    border-radius: var(--dh-r2);
+    background: var(--dh-surface);
+    pointer-events: none;
+  }
+  .rx-unit--rail:has(select:focus-visible)::before {
+    outline: 2px solid var(--dh-brand);
+    outline-offset: 2px;
   }
   .rx-unit--rail select {
-    height: 26px;
+    position: relative;
+    height: 44px;
+    padding-bottom: 18px;
+    border-color: transparent;
+    background-color: transparent;
+    background-position: right 8px top 7px;
+  }
+  .rx-unit--rail select:focus-visible {
+    outline: none;
   }
 }
