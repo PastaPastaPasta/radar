@@ -526,9 +526,6 @@ msgstr "アセットアンロック"
 msgid "Asset unlocks root"
 msgstr "アセットアンロックのルート"
 
-msgid "at or before"
-msgstr "以前"
-
 msgid "Back to Mainnet"
 msgstr "メインネットに戻る"
 
@@ -557,9 +554,6 @@ msgstr "ブロック {0} で BAN"
 
 msgid "Banned on Platform"
 msgstr "Platform で BAN 済み"
-
-msgid "before it was mined"
-msgstr "マイニングされる前"
 
 msgid "Behind"
 msgstr "遅延"
@@ -1858,9 +1852,6 @@ msgstr "その画像に QR コードは見つかりませんでした。"
 msgid "No source can say whether this output is spent."
 msgstr "このアウトプットが使用済みかどうかを判断できるソースはありません。"
 
-msgid "No source keeps when a transaction first arrived once it is mined."
-msgstr "トランザクションがマイニングされた後、最初に到着した時刻を保持しているソースはありません。"
-
 msgid "No tag in the coinbase"
 msgstr "coinbase にタグなし"
 
@@ -1948,6 +1939,9 @@ msgstr "可決されていません"
 
 msgid "Not ready"
 msgstr "準備未完了"
+
+msgid "not recorded; Hyphen keeps first-seen times only while a transaction is pending"
+msgstr "記録なし。Hyphen は保留中のあいだだけ初回確認時刻を保持します"
 
 msgid "Not seen yet"
 msgstr "まだ確認されていません"
@@ -2265,6 +2259,9 @@ msgstr "Platform の高さ"
 
 msgid "Platform lists and counts"
 msgstr "Platform の一覧と件数"
+
+msgid "Platform locks to Core"
+msgstr "Platform は Core に固定"
 
 msgid "Platform node"
 msgstr "Platform ノード"
@@ -2957,9 +2954,6 @@ msgstr "ブラウザが Radar にカメラへのアクセスを許可しませ�
 msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
 msgstr "センサス：最後のクロールに応答したノード数、バージョン、ホスティング、国、到達性。"
 
-msgid "The chain itself: height, difficulty, supply and what is waiting to be mined."
-msgstr "チェーン自体の情報：高さ、難易度、供給量、マイニング待ちのもの。"
-
 msgid "The chart data didn’t load."
 msgstr "チャートのデータを読み込めませんでした。"
 
@@ -3458,6 +3452,9 @@ msgstr "マイニング待ちです。"
 
 msgid "Watching for new transactions on this address."
 msgstr "このアドレスの新しいトランザクションを監視中です。"
+
+msgid "What is waiting to be mined."
+msgstr "マイニング待ちのもの。"
 
 msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
 msgstr "Radar が証明できること・できないこと、見たものに対して行動できる場所、そして Radar が記憶すること。"

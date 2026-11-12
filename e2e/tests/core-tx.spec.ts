@@ -204,7 +204,9 @@ test.describe('Transaction page', () => {
     await expect(page.locator('#out-0')).not.toContainText('finding where')
   })
 
-  test('says a mined transaction’s receipt time is not recorded, next to when it was mined @HY-07', async ({ page }) => {
+  test('says a mined transaction’s receipt time is not recorded, next to when it was mined @HY-07', async ({
+    page,
+  }) => {
     await page.goto(`/tx/${PROREG}`)
     const settled = page.locator('#settlement')
     await expect(settled.locator('[data-step="seen"]')).toContainText(

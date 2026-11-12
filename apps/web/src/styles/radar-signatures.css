@@ -193,6 +193,29 @@
   height: 6px;
   background: var(--rx-plate-3);
 }
+/* The Core headline figures under the hero, as plate tiles */
+.rx-corefig {
+  position: relative;
+  z-index: 2;
+  margin-top: 12px;
+}
+.rx-corefig .rx-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.rx-corefig .rx-stat {
+  gap: 2px;
+  padding: 10px 14px 10px 16px;
+  background: color-mix(in srgb, var(--rx-plate-2) 90%, transparent);
+  border-color: var(--rx-plate-line);
+  color: var(--dh-ink);
+}
+.rx-corefig .rx-stat__value {
+  font-size: 22px;
+}
+.rx-corefig .rx-note {
+  margin: 10px 0 0;
+}
 .rx-scope__map {
   position: relative;
   min-width: 0;
@@ -358,6 +381,9 @@
 }
 .rx-lanes__head .rx-live {
   margin-left: auto;
+}
+.rx-lanes__short {
+  display: none;
 }
 .rx-lanes__body {
   position: relative;
@@ -667,7 +693,7 @@
   background: var(--dh-good-soft);
   color: var(--dh-good);
 }
-@media (max-width: 860px) {
+@media (max-width: 1099px) {
   .rx-io {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1075,7 +1101,24 @@
     grid-template-columns: 340px minmax(0, 1fr);
   }
 }
+@media (max-width: 1023px) {
+  .rx-corefig .rx-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 640px) {
+  .rx-corefig {
+    margin-top: 0;
+  }
+  .rx-corefig .rx-stats {
+    gap: 8px;
+  }
+  .rx-corefig .rx-stat {
+    padding: 8px 10px 8px 12px;
+  }
+  .rx-corefig .rx-stat__value {
+    font-size: 18px;
+  }
   .rx-scope__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
@@ -1118,12 +1161,27 @@
   .rx-scope .rx-lanes {
     order: 1;
   }
+  .rx-scope .rx-corefig {
+    order: 2;
+  }
+  .rx-lanes__head {
+    flex-wrap: nowrap;
+    gap: 6px 12px;
+  }
   .rx-lanes__head > span:not([class]) {
     display: none;
   }
+  .rx-lanes__head > .rx-lanes__short {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+  }
   .rx-scope [data-pulse='platform'],
   .rx-scope [data-pulse='census'] {
-    order: 2;
+    order: 3;
   }
   .rx-home {
     display: flex;

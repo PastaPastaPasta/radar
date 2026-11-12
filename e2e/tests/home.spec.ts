@@ -64,7 +64,7 @@ test.describe('Home', () => {
     test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
     await page.goto('/')
     await page.getByRole('link', { name: 'Core figures' }).click()
-    await expect(page).toHaveURL(/#core$/)
+    await expect(page).toHaveURL(/#core-figures$/)
     const top = async () => (await page.locator('[data-headline]').boundingBox())?.y ?? -1
     await expect.poll(top).toBeGreaterThanOrEqual(0)
     await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)

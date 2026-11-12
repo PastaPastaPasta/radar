@@ -123,6 +123,16 @@ function StaleNote() {
   )
 }
 
+/** The Core headline figures and the note on a stale Hyphen index, shown in the home plate under the hero. */
+export function CoreFigures() {
+  return (
+    <div className="rx-corefig" id="core-figures">
+      <Headline />
+      <StaleNote />
+    </div>
+  )
+}
+
 function PendingCard() {
   const { t } = useLingui()
   const { net, fit, lag, devnet } = useHyphenBlocked()
@@ -198,16 +208,14 @@ export function CoreZone() {
       layer="core"
       id="core"
       title={t`Dash Core`}
-      description={t`The chain itself: height, difficulty, supply and what is waiting to be mined.`}
+      description={t`What is waiting to be mined.`}
       actions={
         <PageLink to="/charts" className="rx-go">
           {t`Charts`}
         </PageLink>
       }
     >
-      <Headline />
-      <StaleNote />
-      <div className="rx-grid" style={{ marginTop: 16 }}>
+      <div className="rx-grid">
         <div className="rx-c12">
           <PendingCard />
         </div>

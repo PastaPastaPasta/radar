@@ -69,8 +69,35 @@ describe('Home page', () => {
   it('offers a jump to the Core figures from the top of the page @HY-01', async () => {
     renderAt('/')
     const link = await screen.findByRole('link', { name: 'Core figures' })
-    expect(link).toHaveAttribute('href', '#core')
-    expect(document.getElementById('core')).not.toBeNull()
+    expect(link).toHaveAttribute('href', '#core-figures')
+    expect(document.getElementById('core-figures')).not.toBeNull()
+  })
+
+  it('shows the Core headline figures inside the hero plate, ahead of the lanes, with the pending list below @HY-01 @HY-03', async () => {
+    renderAt('/')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('.rx-scope [data-headline]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    for (const label of ['Height', 'Difficulty', 'Circulating supply', 'Blockchain size']) {
+      expect(headline).toHaveTextContent(label)
+    }
+    const lanes = document.querySelector('.rx-scope .rx-lanes')!
+    expect(
+      headline.compareDocumentPosition(lanes) & Node.DOCUMENT_POSITION_FOLLOWING,
+      'headline precedes the lanes',
+    ).toBeTruthy()
+    expect(document.querySelectorAll('[data-headline]')).toHaveLength(1)
+    expect(document.querySelector('#core [data-headline]')).toBeNull()
+    expect(document.querySelector('#core')).toHaveTextContent('Pending transactions')
+  })
+
+  it('keeps the Platform-locked-to-Core line on the lane title for phones @IN-01', async () => {
+    renderAt('/')
+    const title = await screen.findByRole('heading', { name: 'Latest blocks' })
+    expect(title).toHaveAttribute('title', 'Each Platform block is locked to a Core block.')
+    expect(document.querySelector('.rx-lanes__short')).toHaveTextContent('Platform locks to Core')
   })
 
   it('says one node reported a ChainLock on the home lists instead of drawing a lock @IN-01', async () => {

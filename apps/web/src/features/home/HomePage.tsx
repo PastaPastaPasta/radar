@@ -8,10 +8,10 @@ export function HomePage() {
   return (
     <article data-page="/" data-layer="network" className="rx-home">
       <Scope />
+      <CoreZone />
       <div className="dh-container rx-home__activity" style={{ paddingTop: 40 }}>
         <Activity />
       </div>
-      <CoreZone />
     </article>
   )
 }

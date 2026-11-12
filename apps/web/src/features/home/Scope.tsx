@@ -21,6 +21,7 @@ import {
   useLiveView,
   usePausedFeed,
 } from '@/ui'
+import { CoreFigures } from './CoreZone'
 import { HomeMap } from './HomeMap'
 import { LiveNotice } from './LiveNotice'
 import { usePlatformTip } from './platform-tip'
@@ -258,8 +259,13 @@ function Lanes() {
   return (
     <div className="rx-lanes" aria-labelledby="h-lanes">
       <div className="rx-lanes__head">
-        <h2 id="h-lanes">{t`Latest blocks`}</h2>
+        <h2 id="h-lanes" title={t`Each Platform block is locked to a Core block.`}>
+          {t`Latest blocks`}
+        </h2>
         <span>{t`Each Platform block is locked to a Core block.`}</span>
+        <span className="rx-lanes__short" aria-hidden="true">
+          {t`Platform locks to Core`}
+        </span>
         <LiveControl
           paused={paused}
           onToggle={() => setPaused(!paused)}
@@ -379,7 +385,7 @@ export function Scope() {
               <PageLink to="/nodes" className="rx-go">
                 {t`Network census`}
               </PageLink>
-              <a href="#core" className="rx-go rx-jump-core">
+              <a href="#core-figures" className="rx-go rx-jump-core">
                 {t`Core figures`}
               </a>
             </div>
@@ -391,6 +397,7 @@ export function Scope() {
           <PlatformPulse />
           <CensusPulse />
         </div>
+        <CoreFigures />
         <Lanes />
       </div>
     </section>
