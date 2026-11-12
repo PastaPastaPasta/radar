@@ -2302,3 +2302,43 @@ html[data-scroll-gutter] {
     cursor: pointer;
   }
 }
+
+/* A proposal's votes read as one block: tinted, with a rule on each side of the group. */
+.rx-table .rx-votes {
+  background: color-mix(in oklab, var(--dh-surface) 92%, var(--dh-ink-2));
+}
+.rx-table .rx-votes--first {
+  border-inline-start: 1px solid var(--dh-line);
+}
+.rx-table .rx-votes--last {
+  border-inline-end: 1px solid var(--dh-line);
+}
+.rx-table .rx-votes-group th {
+  text-align: center;
+  font-size: var(--dh-fs-sm);
+  font-weight: var(--dh-w-ui);
+  color: var(--dh-ink-2);
+  padding-block: 6px;
+}
+.rx-table .rx-votes-group td {
+  background: transparent;
+  border: 0;
+}
+
+/* On a phone the table scrolls sideways under its sticky first column, so that column carries the votes too. */
+.rx-propline {
+  display: none;
+}
+@media (max-width: 640px) {
+  .rx-propline {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--dh-fs-sm);
+    color: var(--dh-ink-2);
+    white-space: nowrap;
+  }
+  .rx-tools .dh-seg {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}

@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import type { EChartsOption } from 'echarts'
-import { useId, useMemo, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
@@ -15,8 +15,11 @@ import {
   Empty,
   ErrorState,
   KeyValue,
+  SearchField,
+  SegFilter,
   Skeleton,
   Stat,
+  TableTools,
   Time,
   useNow,
 } from '@/ui'
@@ -177,7 +180,7 @@ function GovernanceContent() {
         ) : proposals.length === 0 && earlier.length === 0 ? (
           <Empty kind="none-yet" title={t`No proposals on this network.`} />
         ) : (
-          <ProposalTable proposals={proposals} earlier={earlier} now={now} />
+          <ProposalList proposals={proposals} earlier={earlier} now={now} />
         )}
         {insight && hy.isError && !hy.data ? (
           <p role="status" className="rx-note p-3" data-earlier-missing>
@@ -185,6 +188,90 @@ function GovernanceContent() {
           </p>
         ) : null}
       </Card>
+    </>
+  )
+}
+
+type StatusFilter = 'all' | 'funded' | 'passing' | 'failing' | 'ended'
+
+/** A proposal matches a typed fragment of its name or hash, ignoring case. */
+export function matchesText(p: Pick<HyProposal, 'name' | 'hash'>, text: string): boolean {
+  const needle = text.trim().toLowerCase()
+  return (
+    needle === '' || p.name.toLowerCase().includes(needle) || p.hash.toLowerCase().includes(needle)
+  )
+}
+
+/** The proposals with a name or hash and a status the reader asked for; invalid ones show under "All" only. */
+function ProposalList({
+  proposals,
+  earlier,
+  now,
+}: {
+  proposals: HyProposal[]
+  earlier: HyProposal[]
+  now: number
+}) {
+  const { t } = useLingui()
+  const [text, setText] = useState('')
+  const [status, setStatus] = useState<StatusFilter>('all')
+  const all = useMemo(() => [...proposals, ...earlier], [proposals, earlier])
+  const counts = useMemo(() => {
+    const c: Record<StatusFilter, number> = { all: 0, funded: 0, passing: 0, failing: 0, ended: 0 }
+    for (const p of all) {
+      if (!matchesText(p, text)) continue
+      c.all++
+      const s = proposalStatus(p, now)
+      if (s !== 'invalid') c[s]++
+    }
+    return c
+  }, [all, text, now])
+  const keep = useCallback(
+    (p: HyProposal) =>
+      matchesText(p, text) && (status === 'all' || proposalStatus(p, now) === status),
+    [text, status, now],
+  )
+  const shown = useMemo(() => proposals.filter(keep), [proposals, keep])
+  const shownEarlier = useMemo(() => earlier.filter(keep), [earlier, keep])
+  const filtering = text.trim() !== '' || status !== 'all'
+  return (
+    <>
+      <TableTools>
+        <SearchField
+          label={t`Filter proposals by name or hash`}
+          placeholder={t`Name or hash`}
+          value={text}
+          onChange={setText}
+        />
+        <SegFilter
+          label={t`Filter proposals by status`}
+          value={status}
+          onChange={(id) => {
+            setStatus(id as StatusFilter)
+          }}
+          options={[
+            { id: 'all', label: t`All`, count: counts.all },
+            { id: 'funded', label: t`Funded`, count: counts.funded },
+            { id: 'passing', label: t`Passing`, count: counts.passing },
+            { id: 'failing', label: t`Not passing`, count: counts.failing },
+            { id: 'ended', label: t`Ended`, count: counts.ended },
+          ]}
+        />
+      </TableTools>
+      {filtering ? (
+        <p className="rx-note m-0 px-4 py-2" role="status" data-filter-result>
+          {t`${formatInt(shown.length + shownEarlier.length)} of ${formatInt(all.length)} proposals match`}
+        </p>
+      ) : null}
+      {shown.length + shownEarlier.length === 0 ? (
+        <Empty
+          kind="none-yet"
+          title={t`No proposals match`}
+          body={t`Try another name or hash, or choose All.`}
+        />
+      ) : (
+        <ProposalTable proposals={shown} earlier={shownEarlier} now={now} />
+      )}
     </>
   )
 }
@@ -220,14 +307,17 @@ function ProposalTable({
             >
               {p.name}
             </button>
+            <span className="rx-propline" aria-hidden="true">
+              {t`${formatInt(p.votes.yes)} yes · ${formatInt(p.votes.no)} no · ${formatInt(p.votes.abstain)} abstain · net ${formatInt(netVotes(p))}`}
+            </span>
           </td>
           <td>
             <StatusBadge status={proposalStatus(p, now)} />
           </td>
-          <td className="r rx-num">{formatInt(p.votes.yes)}</td>
-          <td className="r rx-num">{formatInt(p.votes.no)}</td>
-          <td className="r rx-num">{formatInt(p.votes.abstain)}</td>
-          <td className="r rx-num">
+          <td className="r rx-num rx-votes rx-votes--first">{formatInt(p.votes.yes)}</td>
+          <td className="r rx-num rx-votes">{formatInt(p.votes.no)}</td>
+          <td className="r rx-num rx-votes">{formatInt(p.votes.abstain)}</td>
+          <td className="r rx-num rx-votes rx-votes--last">
             {formatInt(netVotes(p))}
             {p.fundingThreshold == null ? null : (
               <span className="text-sm"> / {formatInt(p.fundingThreshold)}</span>
@@ -256,13 +346,20 @@ function ProposalTable({
         <table className="rx-table rx-table--scrolls">
           <caption className="dh-sr">{t`Budget proposals`}</caption>
           <thead>
+            <tr className="rx-votes-group">
+              <td colSpan={2} />
+              <th scope="colgroup" colSpan={4} className="rx-votes rx-votes--first rx-votes--last">
+                {t`Votes`}
+              </th>
+              <td colSpan={2} />
+            </tr>
             <tr>
               <th scope="col">{t`Proposal`}</th>
               <th scope="col">{t`Status`}</th>
-              <th scope="col" className="r">{t`Yes`}</th>
-              <th scope="col" className="r">{t`No`}</th>
-              <th scope="col" className="r">{t`Abstain`}</th>
-              <th scope="col" className="r">{t`Net votes`}</th>
+              <th scope="col" className="r rx-votes rx-votes--first">{t`Yes`}</th>
+              <th scope="col" className="r rx-votes">{t`No`}</th>
+              <th scope="col" className="r rx-votes">{t`Abstain`}</th>
+              <th scope="col" className="r rx-votes rx-votes--last">{t`Net votes`}</th>
               <th scope="col" className="r">{t`Amount`}</th>
               <th scope="col">{t`Ends`}</th>
             </tr>

@@ -48,6 +48,81 @@ describe('Governance page', () => {
     ).toBeInTheDocument()
   })
 
+  it('narrows the table by a typed name or hash and says how many match @HY-13', async () => {
+    const user = userEvent.setup()
+    renderAt('/governance')
+    const table = await screen.findByRole('table', { name: 'Budget proposals' })
+    const total = document.querySelectorAll('[data-proposal]').length
+    expect(total).toBeGreaterThan(3)
+    const box = screen.getByRole('searchbox', { name: 'Filter proposals by name or hash' })
+    await user.type(box, 'growthengine')
+    await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(1))
+    expect(within(table).getByRole('button', { name: 'DashDaoGrowthEngine' })).toBeInTheDocument()
+    expect(screen.getByText(`1 of ${total} proposals match`)).toBeInTheDocument()
+    await user.clear(box)
+    await user.type(box, HASH.slice(0, 12).toUpperCase())
+    await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(1))
+    expect(document.querySelector(`[data-proposal="${HASH}"]`)).not.toBeNull()
+    await user.clear(box)
+    await user.type(box, 'no such proposal anywhere')
+    expect(await screen.findByText('No proposals match')).toBeInTheDocument()
+    expect(screen.queryByRole('table', { name: 'Budget proposals' })).toBeNull()
+    await user.clear(box)
+    await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(total))
+  })
+
+  it('narrows the table by status, with the counts of each @HY-13', async () => {
+    const user = userEvent.setup()
+    renderAt('/governance')
+    await screen.findByRole('table', { name: 'Budget proposals' })
+    const group = screen.getByRole('group', { name: 'Filter proposals by status' })
+    const total = document.querySelectorAll('[data-proposal]').length
+    const count = (name: string) =>
+      Number(
+        within(group)
+          .getByRole('button', { name: new RegExp(`^${name}`) })
+          .textContent?.match(/[\d,]+$/)![0]
+          .replace(/,/g, ''),
+      )
+    expect(count('All')).toBe(total)
+    const funded = count('Funded')
+    const failing = count('Not passing')
+    expect(funded + failing).toBeGreaterThan(0)
+    for (const [name, n, label] of [
+      ['Not passing', failing, 'Not passing'],
+      ['Funded', funded, 'Funded'],
+    ] as const) {
+      await user.click(within(group).getByRole('button', { name: new RegExp(`^${name}`) }))
+      expect(within(group).getByRole('button', { name: new RegExp(`^${name}`) })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      )
+      await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(n))
+      for (const row of document.querySelectorAll('[data-proposal]')) {
+        expect(
+          within(row as HTMLElement).getByText(label, { selector: '.dh-badge, .dh-badge *' }),
+        ).toBeInTheDocument()
+      }
+    }
+    await user.click(within(group).getByRole('button', { name: /^All/ }))
+    await waitFor(() => expect(document.querySelectorAll('[data-proposal]').length).toBe(total))
+  })
+
+  it('groups yes, no, abstain and net votes under one Votes heading @HY-13', async () => {
+    renderAt('/governance')
+    const table = await screen.findByRole('table', { name: 'Budget proposals' })
+    const group = within(table).getByRole('columnheader', { name: 'Votes' })
+    expect(group).toHaveAttribute('colspan', '4')
+    const heads = [...table.querySelectorAll('thead tr:last-child th')]
+    const grouped = heads.filter((h) => h.classList.contains('rx-votes')).map((h) => h.textContent)
+    expect(grouped).toEqual(['Yes', 'No', 'Abstain', 'Net votes'])
+    const row = document.querySelector('[data-proposal] tr')!
+    expect(row.querySelectorAll('td.rx-votes')).toHaveLength(4)
+    const line = row.querySelector('.rx-propline')!
+    expect(line).toHaveAttribute('aria-hidden', 'true')
+    expect(line.textContent).toMatch(/^[\d,]+ yes · [\d,]+ no · [\d,]+ abstain · net -?[\d,]+$/)
+  })
+
   it('expands a proposal to its details, with a link out to Governance @HY-13 @X-11', async () => {
     const user = userEvent.setup()
     renderAt('/governance')
