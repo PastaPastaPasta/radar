@@ -240,7 +240,7 @@ test.describe('Home on a phone', () => {
         await page.goto(path)
         const core = page.locator('[data-pulse="core"]')
         await expect(core.locator('.rx-tick')).toContainText(/\d/)
-        await expect(core.locator('.rx-pulse__meta')).toContainText(/ago/)
+        await expect(core.locator('.rx-pulse__meta time')).toHaveText(/\S/)
         await settled(page)
         expect(await page.evaluate(() => window.scrollY)).toBe(0)
         const barTop = 844 - (await tabBarHeight(page))
