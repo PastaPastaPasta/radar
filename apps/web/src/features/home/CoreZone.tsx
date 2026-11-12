@@ -133,19 +133,13 @@ export function CoreFigures() {
   )
 }
 
-/** The pending list: four columns in the phone band and the full-width tablet row, three in a desktop column. */
-export function PendingCard({ compact = false }: { compact?: boolean }) {
+/** The pending list: a table in the full-width tablet row, row cards in the phone band and, as a feed, in a desktop column. */
+export function PendingCard({ feed = false }: { feed?: boolean }) {
   const { t } = useLingui()
   const { net, fit, lag, devnet } = useHyphenBlocked()
   const lagged = useHyphenLagSentence(net, lag)
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
   const columns = useMemo<ColumnDef<HyMempoolTx>[]>(() => {
-    const size: ColumnDef<HyMempoolTx> = {
-      id: 'size',
-      header: t`Size`,
-      accessorFn: (r) => formatBytes(r.txSize),
-      meta: { numeric: true, phone: 'secondary' },
-    }
     return [
       {
         id: 'tx',
@@ -159,7 +153,12 @@ export function PendingCard({ compact = false }: { compact?: boolean }) {
         cell: ({ row }) => <Amount value={row.original.valueOut} kind="duffs" />,
         meta: { numeric: true, align: 'end', phone: 'secondary' },
       },
-      ...(compact ? [] : [size]),
+      {
+        id: 'size',
+        header: t`Size`,
+        accessorFn: (r) => formatBytes(r.txSize),
+        meta: { numeric: true, phone: 'secondary' },
+      },
       {
         id: 'seen',
         header: t`First seen`,
@@ -167,11 +166,11 @@ export function PendingCard({ compact = false }: { compact?: boolean }) {
         meta: { phone: 'primary' },
       },
     ]
-  }, [t, compact])
+  }, [t])
   return (
     <Card
       layer="core"
-      className={compact ? 'rx-card--feed' : undefined}
+      className={feed ? 'rx-card--feed' : undefined}
       title={t`Pending transactions`}
       padding="flush"
       source={query.data ? stampOf(query.data) : undefined}

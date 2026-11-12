@@ -18,7 +18,7 @@ import { transitionKind } from './transition-types'
 
 const TRANSITIONS = 8
 
-function BlocksCard({ compact }: { compact: boolean }) {
+function BlocksCard({ phone }: { phone: boolean }) {
   const { t } = useLingui()
   const net = useNetwork()
   const tip = useQuery(coreQueries.tip(net))
@@ -52,7 +52,7 @@ function BlocksCard({ compact }: { compact: boolean }) {
         id: 'txs',
         header: t`Txs`,
         accessorFn: (r) => formatInt(r.txCount),
-        meta: { numeric: true, phone: 'secondary' },
+        meta: { numeric: true, phone: 'secondary', phoneUnit: t`tx` },
       },
       {
         id: 'size',
@@ -66,23 +66,17 @@ function BlocksCard({ compact }: { compact: boolean }) {
               id: 'pool',
               header: t`Mined by`,
               accessorFn: (r: BlockRow) => r.pool ?? '—',
-              meta: { phone: 'hidden' as const },
+              meta: { phone: phone ? ('hidden' as const) : undefined },
             },
           ]
         : []),
     ],
-    [t, hasPool],
-  )
-  const shown = useMemo(
-    () =>
-      compact
-        ? columns.filter((c) => c.id === 'block' || c.id === 'age' || c.id === 'txs')
-        : columns,
-    [columns, compact],
+    [t, hasPool, phone],
   )
   return (
     <Card
       layer="core"
+      className="rx-card--feed rx-card--blocks"
       title={t`Core blocks`}
       padding="flush"
       source={rows.data ? stampOf(rows.data) : undefined}
@@ -94,7 +88,7 @@ function BlocksCard({ compact }: { compact: boolean }) {
     >
       <DataTable
         caption={t`Latest Core blocks`}
-        columns={shown}
+        columns={columns}
         rows={rows.data?.data ?? []}
         getRowId={(r) => String(r.height)}
         state={rows.isError && !rows.data ? 'error' : rows.data ? 'ready' : 'loading'}
@@ -173,7 +167,7 @@ function TransitionsCard() {
   )
 }
 
-/** Core blocks, Platform transitions and, beyond a phone, the pending transactions, in that order in the page and on screen. */
+/** Core blocks, Platform transitions and, beyond a phone, the pending transactions, in that order in the page and on screen. The phone's Charts link sits in the Dash Core band above. */
 export function Activity() {
   const { t } = useLingui()
   const width: HomeWidth = useHomeWidth()
@@ -185,11 +179,18 @@ export function Activity() {
           {t`Latest activity`}
         </h2>
         <p className="rx-sec__desc">{t`New rows appear at the top.`}</p>
+        {phone ? null : (
+          <div className="rx-sec__actions">
+            <PageLink to="/charts" className="rx-go">
+              {t`Charts`}
+            </PageLink>
+          </div>
+        )}
       </div>
       <div className="rx-activity__grid">
-        <BlocksCard compact={!phone} />
+        <BlocksCard phone={phone} />
         <TransitionsCard />
-        {phone ? null : <PendingCard compact={width === 'wide'} />}
+        {phone ? null : <PendingCard feed={width === 'wide'} />}
       </div>
     </section>
   )

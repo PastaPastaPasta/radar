@@ -71,6 +71,77 @@ test.describe('one home order for eyes and keyboard', () => {
     })
   }
 
+  for (const [name, path] of NETWORKS) {
+    test(`shows size, the reported pool and "tx" counts on the Core rows, and size on the pending rows, in the first desktop screen on ${name} @IN-01 @HY-03`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
+      await page.goto(path)
+      await expect(page.locator('#h-latest')).toBeVisible()
+      await settled(page)
+      const viewportHeight = await page.evaluate(() => window.innerHeight)
+      const columns = page.locator('.rx-activity__grid > .rx-card')
+      const rows = (card: number) =>
+        columns
+          .nth(card)
+          .locator('tbody tr')
+          .first()
+          .evaluate((tr) => {
+            const pseudo = (td: Element, which: '::before' | '::after') => {
+              const c = getComputedStyle(td, which).content
+              return c === 'none' || c === 'normal' ? '' : c.replace(/^"|"$/g, '')
+            }
+            return {
+              bottom: tr.getBoundingClientRect().bottom,
+              cells: [...tr.querySelectorAll('td')]
+                .filter((td) => td.getBoundingClientRect().width > 0)
+                .map((td) =>
+                  `${pseudo(td, '::before')}${td.textContent?.trim() ?? ''}${pseudo(td, '::after')}`
+                    .replace(/\s+/g, ' ')
+                    .trim(),
+                ),
+            }
+          })
+      const size = /^[\d.,]+ (B|kB|MB)$/
+      const core = await rows(0)
+      expect(core.bottom, 'first Core row inside the first screen').toBeLessThanOrEqual(
+        viewportHeight,
+      )
+      expect(
+        core.cells.some((c) => /^[\d,]+ tx$/.test(c)),
+        'the count carries its unit',
+      ).toBe(true)
+      expect(
+        core.cells.some((c) => size.test(c)),
+        'the size is shown',
+      ).toBe(true)
+      expect(
+        core.cells.some((c) => /^Mined by \S/.test(c)),
+        'the reported pool is shown',
+      ).toBe(name === 'mainnet')
+      if (name === 'mainnet') {
+        const pending = await rows(2)
+        expect(pending.bottom).toBeLessThanOrEqual(viewportHeight)
+        expect(
+          pending.cells.some((c) => size.test(c)),
+          'the pending size is shown',
+        ).toBe(true)
+        expect(pending.cells.some((c) => c.endsWith('DASH'))).toBe(true)
+      }
+    })
+  }
+
+  test('links the charts from the Latest activity header on desktop @IN-01 @HY-02', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
+    await page.goto('/')
+    await expect(page.locator('#h-latest')).toBeVisible()
+    const link = page.locator('.rx-activity .rx-sec__head').getByRole('link', { name: 'Charts' })
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute('href', /\/charts/)
+  })
+
   for (const width of [1024, 1100, 1280]) {
     test(`keeps the three columns inside their cards at ${width} px @IN-01 @HY-03`, async ({
       page,

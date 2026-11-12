@@ -102,13 +102,39 @@ describe('Home page', () => {
       expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
     })
 
-    it('mounts the three-column tree from 1024 px', async () => {
+    it('mounts the three-column tree from 1024 px, each row carrying its detail', async () => {
       width(['(min-width: 1024px)'])
       renderAt('/')
       await coreRow('2,570,085')
       expect(document.querySelector('#core')).toBeNull()
       const pending = await screen.findByRole('table', { name: 'Pending transactions' })
-      expect(within(pending).queryByRole('columnheader', { name: 'Size' })).toBeNull()
+      expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
+      const blocks = await screen.findByRole('table', { name: 'Latest Core blocks' })
+      await waitFor(() => expect(within(blocks).getAllByRole('row').length).toBeGreaterThan(1))
+      for (const name of ['Txs', 'Size', 'Mined by']) {
+        expect(within(blocks).getByRole('columnheader', { name })).toBeInTheDocument()
+      }
+      const first = within(blocks).getAllByRole('row')[1]!
+      expect(first.querySelector('td[data-u="tx"]')).toHaveTextContent('9')
+      expect(first.querySelector('td[data-l="Mined by"]')).toHaveTextContent(/\S/)
+      expect(first).toHaveTextContent(/\d(\.\d)? kB/)
+    })
+
+    it('links the charts from the activity header beyond a phone', async () => {
+      width(['(min-width: 1024px)'])
+      renderAt('/')
+      await coreRow('2,570,085')
+      const head = document.querySelector<HTMLElement>('.rx-activity .rx-sec__head')!
+      expect(within(head).getByRole('link', { name: 'Charts' })).toHaveAttribute('href', '/charts')
+    })
+
+    it('keeps the charts link in the Dash Core band on a phone and out of the activity header', async () => {
+      width(['(max-width: 640px)'])
+      renderAt('/')
+      await coreRow('2,570,085')
+      expect(document.querySelector('.rx-activity .rx-sec__head a')).toBeNull()
+      const band = document.querySelector<HTMLElement>('#core')!
+      expect(within(band).getByRole('link', { name: 'Charts' })).toBeInTheDocument()
     })
   })
 
