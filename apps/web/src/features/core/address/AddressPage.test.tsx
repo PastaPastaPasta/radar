@@ -637,6 +637,7 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
       const lastPage = seen.filter((u) => u.includes('pageNum=2'))
       expect(lastPage).toHaveLength(1)
       expect(document.querySelector('[data-address-summary]')).not.toHaveTextContent('Not seen yet')
+      expect(document.querySelector('[data-seen]')).toHaveTextContent(/First:.*Last:/)
       emit({ kind: 'block', txids: [] })
       await new Promise((r) => setTimeout(r, 150))
       expect(seen.filter((u) => u.includes('pageNum=2'))).toHaveLength(1)

@@ -1,7 +1,7 @@
 import { Plural, useLingui } from '@lingui/react/macro'
 import { type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { HyAddress, HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
@@ -312,6 +312,15 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   )
 }
 
+function SeenLine({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span>
+      <span className="text-[var(--dh-ink-2)]">{label}: </span>
+      {children}
+    </span>
+  )
+}
+
 function SeenStat({
   first,
   last,
@@ -334,13 +343,19 @@ function SeenStat({
       value={
         first && last ? (
           <span className="grid gap-1 text-base font-normal" data-seen>
-            <Time ms={first} mode="absolute" />
-            <Time ms={last} mode="absolute" />
+            <SeenLine label={t`First`}>
+              <Time ms={first} mode="absolute" />
+            </SeenLine>
+            <SeenLine label={t`Last`}>
+              <Time ms={last} mode="absolute" />
+            </SeenLine>
           </span>
         ) : last ? (
           <span className="grid gap-1 text-base font-normal" data-seen>
             <span className="text-[var(--dh-ink-2)]">{t`First: not available`}</span>
-            <Time ms={last} mode="absolute" />
+            <SeenLine label={t`Last`}>
+              <Time ms={last} mode="absolute" />
+            </SeenLine>
           </span>
         ) : (
           t`Not seen yet`
