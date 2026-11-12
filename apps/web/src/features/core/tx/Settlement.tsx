@@ -31,9 +31,9 @@ function Step({
 }
 
 /**
- * Received → InstantSend locked → mined → ChainLocked. The received time is the mempool's first sighting
- * when Hyphen still holds it; after that the best a mined transaction can say is that it arrived no later
- * than its block's time. Nothing here is a time that would have to be guessed.
+ * Received → InstantSend locked → mined → ChainLocked. The received time is the mempool's first sighting,
+ * seen while the transaction was pending (here or by this page). Once it is mined and no sighting was kept,
+ * the line says so rather than offering the block time as a stand-in.
  */
 export function Settlement({
   tx,
@@ -58,18 +58,10 @@ export function Settlement({
           detail={
             firstSeen ? (
               <>
-                <Time ms={firstSeen.at} mode="absolute" /> {t`first seen in the mempool`}
+                <Time ms={firstSeen.at} mode="absolute" seconds /> {t`first seen in the mempool`}
               </>
             ) : mined ? (
-              <span title={t`No source keeps when a transaction first arrived once it is mined.`}>
-                {tx.time ? (
-                  <>
-                    {t`at or before`} <Time ms={tx.time} mode="absolute" />
-                  </>
-                ) : (
-                  t`before it was mined`
-                )}
-              </span>
+              t`not recorded; Hyphen keeps first-seen times only while a transaction is pending`
             ) : (
               t`in the mempool`
             )
@@ -113,7 +105,7 @@ export function Settlement({
         detail={
           tx.height !== undefined ? (
             <>
-              {tx.time ? <Time ms={tx.time} mode="absolute" /> : null}{' '}
+              {tx.time ? <Time ms={tx.time} mode="absolute" seconds /> : null}{' '}
               <Link to="/block/$id" params={{ id: tx.blockHash ?? String(tx.height) }}>
                 {t`block ${formatInt(tx.height)}`}
               </Link>

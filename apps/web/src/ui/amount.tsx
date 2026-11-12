@@ -85,20 +85,22 @@ export interface TimeProps {
   ms: number
   mode?: 'relative' | 'absolute' | 'both'
   live?: boolean
+  /** Adds seconds to the absolute time, for a moment that is compared with another within the same minute. */
+  seconds?: boolean
 }
 
-function absolute(ms: number, now: number): string {
+function absolute(ms: number, now: number, seconds: boolean): string {
   const sameDay = formatDate(ms, { time: false }) === formatDate(now, { time: false })
-  return formatDate(ms, { date: !sameDay })
+  return formatDate(ms, { date: !sameDay, seconds })
 }
 
-export function Time({ ms, mode = 'relative', live = false }: TimeProps) {
+export function Time({ ms, mode = 'relative', live = false, seconds = false }: TimeProps) {
   const now = useNow(live && mode !== 'absolute')
   const text =
     mode === 'absolute'
-      ? absolute(ms, now)
+      ? absolute(ms, now, seconds)
       : mode === 'both'
-        ? `${absolute(ms, now)} · ${formatRelative(clampSkew(ms, now), now)}`
+        ? `${absolute(ms, now, seconds)} · ${formatRelative(clampSkew(ms, now), now)}`
         : formatRelative(clampSkew(ms, now), now)
   return (
     <time className="rx-time" dateTime={formatIsoUtc(ms)} title={formatIsoUtc(ms)}>

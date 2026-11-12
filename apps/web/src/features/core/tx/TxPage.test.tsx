@@ -266,7 +266,7 @@ describe('Transaction page', () => {
     )
   })
 
-  it('shows when the transaction was received, and when it was mined @HY-07', async () => {
+  it('says plainly that a mined transaction has no recorded receipt time, and shows when it was mined @HY-07', async () => {
     renderAt(`/tx/${MAINNET.proreg}`)
     const received = await waitFor(
       () => {
@@ -277,7 +277,10 @@ describe('Transaction page', () => {
       { timeout: 4000 },
     )
     expect(received).toHaveTextContent('Received')
-    expect(received).toHaveTextContent(/at or before .*2026/)
+    expect(received).toHaveTextContent(
+      'not recorded; Hyphen keeps first-seen times only while a transaction is pending',
+    )
+    expect(received).not.toHaveTextContent(/at or before/)
     const mined = document.querySelector<HTMLElement>('[data-step="mined"]')!
     expect(mined).toHaveTextContent(/2026/)
   })

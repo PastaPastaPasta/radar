@@ -204,12 +204,13 @@ test.describe('Transaction page', () => {
     await expect(page.locator('#out-0')).not.toContainText('finding where')
   })
 
-  test('shows both when it was received and when it was mined @HY-07', async ({ page }) => {
+  test('says a mined transaction’s receipt time is not recorded, next to when it was mined @HY-07', async ({ page }) => {
     await page.goto(`/tx/${PROREG}`)
     const settled = page.locator('#settlement')
     await expect(settled.locator('[data-step="seen"]')).toContainText(
-      /Received.*at or before.*2026/,
+      /Received.*not recorded; Hyphen keeps first-seen times only while a transaction is pending/,
     )
+    await expect(settled.locator('[data-step="seen"]')).not.toContainText('at or before')
     await expect(settled.locator('[data-step="mined"]')).toContainText(/Mined.*2026/)
   })
 
