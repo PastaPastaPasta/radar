@@ -8,6 +8,7 @@ import { txTip } from './adapt'
 import {
   InsAddressSchema,
   InsBlockIndexSchema,
+  InsBlockListSchema,
   InsBlockSchema,
   InsGovernanceInfoSchema,
   InsProposalListSchema,
@@ -17,6 +18,7 @@ import {
   InsUtxoListSchema,
   type InsAddress,
   type InsBlock,
+  type InsBlockList,
   type InsGovernanceInfo,
   type InsProposal,
   type InsStatus,
@@ -87,6 +89,25 @@ export const insight = {
       signal,
       height: (b) => b.height,
     })
+  },
+
+  /**
+   * Up to `limit` blocks of a UTC day, newest first. `startTimestamp` (seconds) is the newest block time to include,
+   * so a page can start part way through the day.
+   */
+  blocks(
+    net: NetworkId,
+    q: { date: string; limit: number; startTimestamp?: number },
+    signal?: AbortSignal,
+  ): Promise<Sourced<InsBlockList>> {
+    const start =
+      q.startTimestamp === undefined ? '' : `&startTimestamp=${Math.floor(q.startTimestamp)}`
+    return get(
+      net,
+      `/blocks?blockDate=${seg(q.date)}&limit=${Math.floor(q.limit)}${start}`,
+      InsBlockListSchema,
+      { signal, height: (b) => b.blocks[0]?.height },
+    )
   },
 
   address(net: NetworkId, address: string, signal?: AbortSignal): Promise<Sourced<InsAddress>> {

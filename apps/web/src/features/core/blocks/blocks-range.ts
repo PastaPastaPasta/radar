@@ -1,4 +1,9 @@
 export const BLOCKS_PER_PAGE = 20
+/** Page sizes on offer. Past `BLOCKS_PER_PAGE` a page comes from an index list in one request, not from DAPI block by block. */
+export const PAGE_SIZES = [20, 50, 100] as const
+export type PageSize = (typeof PAGE_SIZES)[number]
+
+export const isPageSize = (n: number | undefined): n is PageSize => PAGE_SIZES.some((s) => s === n)
 /** Rows read first on a page: one round of block reads, so something shows as soon as the first nodes answer. */
 export const FIRST_CHUNK = 4
 export const DAY_MS = 86_400_000
@@ -26,14 +31,19 @@ export interface Window {
 }
 
 /**
- * The page of blocks `[floor, ceiling]` that starts at `from` (the newest by default), `BLOCKS_PER_PAGE` rows at a time,
+ * The page of blocks `[floor, ceiling]` that starts at `from` (the newest by default), `size` rows at a time,
  * with the cursors for the pages either side.
  */
-export function windowOf(ceiling: number, floor: number, from: number | undefined): Window | null {
+export function windowOf(
+  ceiling: number,
+  floor: number,
+  from: number | undefined,
+  size: number = BLOCKS_PER_PAGE,
+): Window | null {
   if (ceiling < floor) return null
   const top = Math.min(Math.max(from ?? ceiling, floor), ceiling)
-  const count = Math.min(BLOCKS_PER_PAGE, top - floor + 1)
-  const newerTop = top + BLOCKS_PER_PAGE
+  const count = Math.min(size, top - floor + 1)
+  const newerTop = top + size
   return {
     top,
     count,

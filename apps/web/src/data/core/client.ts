@@ -190,14 +190,14 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
   function fromHyphen<T>(
     s: Sourced<unknown>,
     data: T,
-    fallback: FallbackReason,
+    fallback: FallbackReason | undefined,
     extra: { height?: number; immutable?: boolean } = {},
   ): Sourced<T> {
     return {
       ...stampOf(s),
       ...(extra.height !== undefined ? { height: extra.height } : {}),
       ...(extra.immutable ? { immutable: true as const } : {}),
-      fallback,
+      ...(fallback ? { fallback } : {}),
       data,
     }
   }
@@ -904,12 +904,18 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
     async blockRows(
       net: NetworkId,
-      q: { fromHeight: number; count: number },
+      q: { fromHeight: number; count: number; via?: 'index' },
       signal?: AbortSignal,
     ): Promise<Sourced<BlockRow[]>> {
       const count = Math.max(0, Math.floor(q.count))
       const fromHeight = Math.floor(q.fromHeight)
       if (count === 0 || fromHeight < 0) return dapi([])
+      if (q.via === 'index') {
+        if (!hyphenFit(net, { unknownIsFit: false })) {
+          throw invalid('Hyphen is not fit to serve a long block list')
+        }
+        return hyphenRows(net, fromHeight, count, signal, undefined)
+      }
 
       const transport = deps.transport()
       const listKey = `${net}:${count}`
@@ -918,7 +924,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         transport.budget.snapshot(net).pressure === 'ok' &&
         transport.budget.canAfford(net, count + 1)
       if ((held || !affordable) && hyphenFit(net, { unknownIsFit: false })) {
-        const rows = await hyphenRows(net, fromHeight, count, signal)
+        const rows = await hyphenRows(net, fromHeight, count, signal, 'dapi-budget')
         if (!held) heldUntil.set(listKey, deps.now() + FALLBACK_HOLD_MS)
         return rows
       }
@@ -1078,7 +1084,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     net: NetworkId,
     fromHeight: number,
     count: number,
-    signal?: AbortSignal,
+    signal: AbortSignal | undefined,
+    fallback: FallbackReason | undefined,
   ): Promise<Sourced<BlockRow[]>> {
     const status = await deps.hyphen.status(net, signal)
     const indexed = status.height ?? status.data.blockHeight
@@ -1117,7 +1124,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         b.blockHeight <= lockedTop ||
         hyphenFinal(net, b.blockHeight, asOf),
     })
-    return fromHyphen(page, items.map(toRow), 'dapi-budget', { height: page.data.asOfHeight })
+    return fromHyphen(page, items.map(toRow), fallback, { height: page.data.asOfHeight })
   }
 
   async function hyphenBlock(

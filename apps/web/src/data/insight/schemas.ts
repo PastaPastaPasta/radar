@@ -138,3 +138,18 @@ export const InsGovernanceInfoSchema = z.object({
   }),
 })
 export type InsGovernanceInfo = z.output<typeof InsGovernanceInfoSchema>['result']
+
+/** `/blocks?blockDate=…`: a day's blocks, newest first; `moreTs` is where the next older page starts, when there is one. */
+export const InsBlockListSchema = z.object({
+  blocks: z.array(
+    z.object({
+      height: z.number(),
+      hash: zHex64,
+      time: zSeconds,
+      size: z.number(),
+      txlength: z.number(),
+    }),
+  ),
+  pagination: z.object({ more: z.boolean().nullish(), moreTs: z.number().nullish() }).nullish(),
+})
+export type InsBlockList = z.output<typeof InsBlockListSchema>

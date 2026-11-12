@@ -6,6 +6,9 @@ import { useMemo, useState } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
+import { useIndexHealth } from '@/data/index-health'
+import { adaptBlockRows } from '@/data/insight/adapt'
+import { insQueries } from '@/data/insight/queries'
 import {
   Entity,
   PageLink,
@@ -13,14 +16,17 @@ import {
   useNetwork,
   keepPreviousOnNetwork,
 } from '@/features/entity'
-import { formatBytes, formatDate, formatInt } from '@/lib/format'
-import { Card, DataTable, Empty, Hash, LockMark, SourceLine, Time } from '@/ui'
+import { formatBytes, formatDate, formatInt, formatIsoUtc } from '@/lib/format'
+import { isDevnet } from '@/lib/network'
+import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import {
   BLOCKS_PER_PAGE,
   DAY_MS,
   FIRST_CHUNK,
+  PAGE_SIZES,
   dayStartMs,
+  isPageSize,
   shiftDay,
   todayUtc,
   windowOf,
@@ -72,22 +78,35 @@ function useRange(date: string | undefined) {
   }
 }
 
+/** Where a page's rows come from: DAPI block by block, or one request to an index list. */
+type RowSource = 'dapi' | 'hyphen' | 'insight'
+
+interface PageRows {
+  rows: BlockRow[]
+  pending: number
+  stamp: ReturnType<typeof stampOf> | undefined
+  error: unknown
+  failed: boolean
+  refetch: () => void
+}
+
 /**
- * A page's rows in two reads, the first `FIRST_CHUNK` rows and then the rest, so the top of the table shows after two
- * rounds of block reads and not after all twenty. The rest waits for the first so it never competes with it for budget.
+ * A short page's rows in two reads, the first `FIRST_CHUNK` rows and then the rest, so the top of the table shows after
+ * two rounds of block reads and not after all twenty. The rest waits for the first so it never competes with it for budget.
  */
-function usePageRows(window: Window | null) {
+function useDapiRows(window: Window | null, enabled: boolean): PageRows {
   const net = useNetwork()
   const head = Math.min(FIRST_CHUNK, window?.count ?? 0)
   const first = useQuery({
     ...coreQueries.blockRows(net, { fromHeight: window?.top ?? 0, count: head }),
-    enabled: window !== null,
+    enabled: enabled && window !== null,
     placeholderData: keepPreviousOnNetwork(net),
   })
   const restCount = window ? window.count - head : 0
   const rest = useQuery({
     ...coreQueries.blockRows(net, { fromHeight: (window?.top ?? 0) - head, count: restCount }),
-    enabled: window !== null && restCount > 0 && first.isSuccess && !first.isPlaceholderData,
+    enabled:
+      enabled && window !== null && restCount > 0 && first.isSuccess && !first.isPlaceholderData,
     placeholderData: keepPreviousOnNetwork(net),
   })
   const restData = restCount > 0 && !rest.isPlaceholderData ? rest.data : undefined
@@ -103,6 +122,77 @@ function usePageRows(window: Window | null) {
     error: first.error ?? rest.error,
     failed: (first.isError && !first.data) || (rest.isError && !rest.data),
     refetch: () => void Promise.all([first.refetch(), rest.refetch()]),
+  }
+}
+
+/** A long page from Hyphen's block list: one request for the whole page. */
+function useHyphenRows(window: Window | null, enabled: boolean): PageRows {
+  const net = useNetwork()
+  const query = useQuery({
+    ...coreQueries.blockRows(net, {
+      fromHeight: window?.top ?? 0,
+      count: window?.count ?? 0,
+      via: 'index',
+    }),
+    enabled: enabled && window !== null,
+    placeholderData: keepPreviousOnNetwork(net),
+  })
+  return {
+    rows: query.data?.data ?? [],
+    pending: 0,
+    stamp: query.data ? stampOf(query.data) : undefined,
+    error: query.error,
+    failed: query.isError && !query.data,
+    refetch: () => void query.refetch(),
+  }
+}
+
+/**
+ * A long page from Insight's day list while Hyphen's index is stale: one header read for the time the page starts at,
+ * then one list request. The list orders blocks by time, so rows are kept to the page's heights, and whether each is
+ * locked comes from the best ChainLock DAPI reports, with the one-node qualifier it carries.
+ */
+function useInsightRows(
+  window: Window | null,
+  enabled: boolean,
+  date: string | undefined,
+): PageRows {
+  const net = useNetwork()
+  const top = window?.top ?? 0
+  const header = useQuery({
+    ...coreQueries.headers(net, top, 1),
+    enabled: enabled && window !== null,
+  })
+  const startMs = header.data?.data[0]?.time
+  const day = date ?? (startMs === undefined ? undefined : formatIsoUtc(startMs).slice(0, 10))
+  const list = useQuery({
+    ...insQueries.blocks(net, {
+      date: day ?? '',
+      limit: window?.count ?? 0,
+      startTimestamp: startMs === undefined ? undefined : Math.floor(startMs / 1000),
+    }),
+    enabled: enabled && window !== null && day !== undefined && startMs !== undefined,
+    placeholderData: keepPreviousOnNetwork(net),
+  })
+  const lock = useQuery({ ...coreQueries.chainLock(net), enabled: enabled && window !== null })
+  const best = lock.data?.data
+  const rows = useMemo(() => {
+    if (!list.data) return []
+    return adaptBlockRows(list.data.data, top).map((r) =>
+      best === undefined || r.height > best.height
+        ? r
+        : best.claim
+          ? { ...r, chainLockClaim: 'one-node' as const }
+          : { ...r, chainLocked: true },
+    )
+  }, [list.data, top, best])
+  return {
+    rows,
+    pending: 0,
+    stamp: list.data ? stampOf(list.data) : undefined,
+    error: header.error ?? list.error,
+    failed: (header.isError && !header.data) || (list.isError && !list.data),
+    refetch: () => void Promise.all([header.refetch(), list.refetch()]),
   }
 }
 
@@ -173,13 +263,90 @@ function DayNav({ date, canNext }: { date: string; canNext: boolean }) {
   )
 }
 
-export function BlocksPage({ date, from }: { date?: string; from?: number }) {
+const requestedPageSize = (n: number | undefined) => (isPageSize(n) ? n : BLOCKS_PER_PAGE)
+
+/** Page sizes the reader can ask for, and where a page of that size comes from. */
+function usePageSource(requested: number | undefined) {
+  const net = useNetwork()
+  const index = useIndexHealth(net)
+  const wanted = requestedPageSize(requested)
+  const longPage = wanted > BLOCKS_PER_PAGE
+  const hasIndex = !isDevnet(net)
+  const source: RowSource = !longPage
+    ? 'dapi'
+    : index.readFrom === 'insight'
+      ? 'insight'
+      : index.state === 'fresh'
+        ? 'hyphen'
+        : 'dapi'
+  return {
+    // A long page waits for the health probe to say which index, if any, can serve it.
+    waiting: longPage && hasIndex && index.pending,
+    size: source === 'dapi' ? BLOCKS_PER_PAGE : wanted,
+    source,
+    offered: hasIndex,
+    longPageAvailable: hasIndex && (index.readFrom === 'insight' || index.state === 'fresh'),
+  }
+}
+
+function PageSizeControl({
+  size,
+  available,
+  link,
+}: {
+  size: number
+  available: boolean
+  link: (size: number) => void
+}) {
   const { t } = useLingui()
+  return (
+    <div className="rx-row" style={{ gap: 8, flexWrap: 'wrap' }} data-nav="page-size">
+      <span className="rx-dim">{t`Blocks per page`}</span>
+      <SegFilter
+        label={t`Blocks per page`}
+        value={String(size)}
+        onChange={(id) => {
+          link(Number(id))
+        }}
+        options={PAGE_SIZES.map((n) => ({
+          id: String(n),
+          label: formatInt(n),
+          disabled: n > BLOCKS_PER_PAGE && !available,
+        }))}
+      />
+    </div>
+  )
+}
+
+export function BlocksPage({
+  date,
+  from,
+  size: requestedSize,
+}: {
+  date?: string
+  from?: number
+  size?: number
+}) {
+  const { t } = useLingui()
+  const navigate = useNavigate()
   const range = useRange(date)
-  const window = range.state === 'ready' ? windowOf(range.ceiling, range.floor, from) : null
+  const pageSource = usePageSource(requestedSize)
+  const size = pageSource.size
+  const window =
+    range.state === 'ready' && !pageSource.waiting
+      ? windowOf(range.ceiling, range.floor, from, size)
+      : null
   useDocumentTitle(date ? t`Blocks on ${date}` : t`Blocks`)
 
-  const page = usePageRows(window)
+  const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
+  const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
+  const insightRows = useInsightRows(window, pageSource.source === 'insight', date)
+  const page =
+    pageSource.source === 'hyphen'
+      ? hyphenRows
+      : pageSource.source === 'insight'
+        ? insightRows
+        : dapiRows
   const rows = page.rows
   const newestPage = window !== null && window.newer === null
   const today = todayUtc()
@@ -251,13 +418,23 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
   const canNextDay =
     date !== undefined && tipTime !== undefined && dayStartMs(date) + DAY_MS <= tipTime
 
-  const link = (search: { from?: number }) => ({
+  const link = (search: { from?: number }, pageSize: number = size) => ({
     to: '/blocks' as const,
     search: {
       ...(date ? { date } : {}),
       ...(search.from === undefined ? {} : { from: search.from }),
+      ...(pageSize === BLOCKS_PER_PAGE ? {} : { size: pageSize }),
     },
   })
+  // An index list can come back short (a day's end, blocks out of time order), so the page after it starts at what it
+  // actually reached and no block is skipped.
+  const lowest = rows.length > 0 ? Math.min(...rows.map((r) => r.height)) : undefined
+  const older =
+    pageSource.source === 'insight' && lowest !== undefined
+      ? lowest - 1 >= range.floor
+        ? { from: lowest - 1 }
+        : null
+      : (window?.older ?? null)
   const firstOfDay = date && range.state === 'ready' ? range.floor : undefined
 
   return (
@@ -299,6 +476,13 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
           }
           source={stamp}
         >
+          {pageSource.offered ? (
+            <PageSizeControl
+              size={requestedPageSize(requestedSize)}
+              available={pageSource.longPageAvailable}
+              link={(n) => void navigate(link({ from }, n) as never)}
+            />
+          ) : null}
           <Card layer="core" padding="flush">
             {window === null && range.state === 'ready' ? (
               <Empty
@@ -323,23 +507,21 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
                     ? {
                         kind: 'cursor',
                         prev: window.newer ? (link(window.newer) as never) : undefined,
-                        next: window.older ? (link(window.older) as never) : undefined,
+                        next: older ? (link(older) as never) : undefined,
                       }
                     : undefined
                 }
               />
             )}
           </Card>
-          {firstOfDay !== undefined && firstOfDay > 0 && window && !window.older ? (
+          {firstOfDay !== undefined && firstOfDay > 0 && window && !older ? (
             <p className="rx-note" data-nav="older-than-day">
               <Link to="/blocks" search={{ from: firstOfDay - 1 } as never}>
                 {t`Older blocks from before this date`}
               </Link>
             </p>
           ) : null}
-          <p className="rx-note rx-dim">
-            {t`${formatInt(BLOCKS_PER_PAGE)} blocks a page, newest first.`}
-          </p>
+          <p className="rx-note rx-dim">{t`${formatInt(size)} blocks a page, newest first.`}</p>
         </Section>
       </div>
     </article>

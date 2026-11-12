@@ -1,5 +1,13 @@
 import type { HyAddress, HyAddressTx, HyProposal, HyUtxo } from '../hyphen/schemas'
-import type { InsAddress, InsGovernanceInfo, InsProposal, InsTx, InsUtxo } from './schemas'
+import type { BlockRow } from '../core/types'
+import type {
+  InsAddress,
+  InsBlockList,
+  InsGovernanceInfo,
+  InsProposal,
+  InsTx,
+  InsUtxo,
+} from './schemas'
 
 /** Hyphen's `txType` names, so one badge and one label table serve both indexes. */
 const TX_TYPES: Record<number, string> = {
@@ -120,4 +128,23 @@ export function adaptProposals(
     meetsFundingThreshold: p.AbsoluteYesCount >= info.fundingthreshold,
     funded: superblockAt === undefined ? undefined : funded.has(p.Hash),
   }))
+}
+
+/**
+ * A day's block list as block rows, newest first, no higher than `top`. Insight orders blocks by time, so a block whose
+ * time ties or trails its neighbour's can sit out of height order; rows are sorted by height. A lock is not Insight's to
+ * say (`withLocks`), so none is claimed here.
+ */
+export function adaptBlockRows(list: InsBlockList, top: number): BlockRow[] {
+  return list.blocks
+    .filter((b) => b.height <= top)
+    .map((b) => ({
+      height: b.height,
+      hash: b.hash,
+      time: b.time,
+      txCount: b.txlength,
+      size: b.size,
+      chainLocked: false,
+    }))
+    .sort((a, b) => b.height - a.height)
 }

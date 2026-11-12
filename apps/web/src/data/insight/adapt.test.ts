@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { adaptAddressTx, adaptPendingTx, adaptProposals, adaptUtxo, insightTxType } from './adapt'
+import {
+  adaptAddressTx,
+  adaptBlockRows,
+  adaptPendingTx,
+  adaptProposals,
+  adaptUtxo,
+  insightTxType,
+} from './adapt'
 import type { InsProposal, InsTx } from './schemas'
 
 const A = 'yjSvwyLB5X4dqQqVMPMu6UdrFpYZ3u9v5U'
@@ -164,5 +171,36 @@ describe('adaptProposals', () => {
   it('shows no proposal as funded when the superblock time is not known', () => {
     const out = adaptProposals([proposal(1, { AbsoluteYesCount: 90 })], info, undefined)
     expect(out[0]).toMatchObject({ funded: undefined, meetsFundingThreshold: true })
+  })
+})
+
+describe('adaptBlockRows @IN-02', () => {
+  const hash = (n: number) => n.toString(16).padStart(64, '0')
+  const block = (height: number, time = 1_760_000_000 - height) => ({
+    height,
+    hash: hash(height),
+    time: time * 1000,
+    size: 300 + height,
+    txlength: 2,
+  })
+
+  it('maps a day list to rows, newest height first, never above the page top', () => {
+    const rows = adaptBlockRows({ blocks: [block(103), block(101), block(102), block(100)] }, 102)
+    expect(rows.map((r) => r.height)).toEqual([102, 101, 100])
+    expect(rows[0]).toEqual({
+      height: 102,
+      hash: hash(102),
+      time: (1_760_000_000 - 102) * 1000,
+      txCount: 2,
+      size: 402,
+      chainLocked: false,
+    })
+  })
+
+  it('claims no lock and no pool, which Insight does not say', () => {
+    const [row] = adaptBlockRows({ blocks: [block(5)] }, 5)
+    expect(row).not.toHaveProperty('chainLockClaim')
+    expect(row).not.toHaveProperty('pool')
+    expect(row!.chainLocked).toBe(false)
   })
 })

@@ -158,10 +158,13 @@ export interface CoreClient {
     count: number,
     signal?: AbortSignal,
   ): Promise<Sourced<HeaderInfo[]>>
-  /** List pages: decides DAPI vs Hyphen per call (rule below). Newest first: `fromHeight`, then `count - 1` blocks below it. */
+  /**
+   * List pages: decides DAPI vs Hyphen per call (rule below). Newest first: `fromHeight`, then `count - 1` blocks below it.
+   * `via: 'index'` asks for the page from Hyphen's list in one request, which a page too long for DAPI's budget uses.
+   */
   blockRows(
     net: NetworkId,
-    q: { fromHeight: number; count: number },
+    q: { fromHeight: number; count: number; via?: 'index' },
     signal?: AbortSignal,
   ): Promise<Sourced<BlockRow[]>>
   /** The lowest height whose block time is at or after `ms`; the tip's height plus one when `ms` is later than the tip's time (no such block yet). */

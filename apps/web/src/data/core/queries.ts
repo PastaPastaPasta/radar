@@ -77,9 +77,9 @@ export const coreQueries = {
       ...dataClass('latest'),
     }),
   /** A list page may come from DAPI or from Hyphen, so it is a view, not a DAPI read. */
-  blockRows: (net: NetworkId, q: { fromHeight: number; count: number }) =>
+  blockRows: (net: NetworkId, q: { fromHeight: number; count: number; via?: 'index' }) =>
     queryOptions({
-      queryKey: viewKeys(net, 'block-rows', { from: q.fromHeight, count: q.count }),
+      queryKey: viewKeys(net, 'block-rows', { from: q.fromHeight, count: q.count, via: q.via }),
       queryFn: ({ signal }) => core.blockRows(net, q, signal),
       ...dataClass('latest'),
     }),

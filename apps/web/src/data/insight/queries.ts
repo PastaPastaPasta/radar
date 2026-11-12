@@ -37,6 +37,13 @@ export const insQueries = {
       queryFn: ({ signal }) => insight.block(net, hashOrHeight, signal),
       ...dataClass('index'),
     }),
+  /** One page of a day's block list, in one request (§4.7). Times are ms. */
+  blocks: (net: NetworkId, q: { date: string; limit: number; startTimestamp?: number }) =>
+    queryOptions({
+      queryKey: insKeys(net, 'blocks', q),
+      queryFn: ({ signal }) => insight.blocks(net, q, signal),
+      ...dataClass('index'),
+    }),
   address: (net: NetworkId, address: string) =>
     queryOptions({
       queryKey: insKeys(net, 'address', { address }),

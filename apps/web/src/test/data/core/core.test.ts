@@ -317,6 +317,27 @@ describe('Hyphen fallback', () => {
     expect(transport.calls).toHaveLength(0)
   })
 
+  it('reads a long list page from Hyphen in one request, with no DAPI call and no fallback mark @IN-02', async () => {
+    const { core, transport } = setup()
+    transport.budget.setPressure('ok')
+    const rows = await core.blockRows('mainnet', { fromHeight: 2566380, count: 10, via: 'index' })
+    expect(rows.source).toBe('hyphen')
+    expect(rows.fallback).toBeUndefined()
+    expect(rows.data.map((r) => r.height)).toEqual(
+      Array.from({ length: 10 }, (_, i) => 2566380 - i),
+    )
+    expect(transport.calls).toHaveLength(0)
+  })
+
+  it('refuses an index list page while Hyphen is stale, so a long page never falls to DAPI @IN-02', async () => {
+    const { core, transport } = setup({ health: { hyphen: 'stale' } })
+    const error = await core
+      .blockRows('mainnet', { fromHeight: 2566380, count: 10, via: 'index' })
+      .catch((e: unknown) => e)
+    expect(isSourceError(error)).toBe(true)
+    expect(transport.calls).toHaveLength(0)
+  })
+
   it('pages below the newest block with a cursor pinned to the index snapshot', async () => {
     const { core, transport } = setup()
     transport.budget.setPressure('tight')
