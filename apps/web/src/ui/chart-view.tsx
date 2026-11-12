@@ -9,7 +9,7 @@ import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import type { EChartsOption } from 'echarts'
 import { useEffect, useRef } from 'react'
-import { radarChartTheme, readChartTokens, withChartMotion } from './chart-theme'
+import { radarChartTheme, readChartTokens, withChartMotion, withEdgeRoom } from './chart-theme'
 import { useReducedMotion, useThemeSignal } from './hooks'
 
 echarts.use([
@@ -34,7 +34,7 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
   useEffect(() => {
     optionRef.current = option
     reducedRef.current = reduced
-    chartRef.current?.setOption(withChartMotion(option, reduced), true)
+    chartRef.current?.setOption(withChartMotion(withEdgeRoom(option), reduced), true)
   }, [option, reduced])
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
     echarts.registerTheme('radar', radarChartTheme(readChartTokens(el)))
     const chart = echarts.init(el, 'radar', { renderer: 'canvas' })
     chartRef.current = chart
-    chart.setOption(withChartMotion(optionRef.current, reducedRef.current))
+    chart.setOption(withChartMotion(withEdgeRoom(optionRef.current), reducedRef.current))
     if (group) {
       chart.group = group
       echarts.connect(group)

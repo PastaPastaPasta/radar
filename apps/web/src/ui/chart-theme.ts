@@ -99,3 +99,23 @@ export const CHART_HEIGHT = { card: 200, page: 280 } as const
 export function withChartMotion(option: EChartsOption, reducedMotion: boolean): EChartsOption {
   return reducedMotion ? { ...option, animation: false } : option
 }
+
+/** Width of one character of a 13 px axis label, rounded up so tabular digits never overshoot. */
+const LABEL_CHAR_PX = 7.6
+
+/**
+ * ECharts centres the last category label on the grid's right edge but only reserves room for the labels it laid
+ * out before it thinned them, so the one that ends up at the edge is cut. Keep half the widest label free.
+ */
+export function withEdgeRoom(option: EChartsOption): EChartsOption {
+  const axis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis
+  const data = axis && 'data' in axis && Array.isArray(axis.data) ? axis.data : undefined
+  const grid = Array.isArray(option.grid) ? undefined : option.grid
+  if (!data?.length || !grid) return option
+  const widest = Math.max(
+    ...data.map((d) => String(typeof d === 'object' && d ? d.value : d).length),
+  )
+  const room = Math.ceil((widest * LABEL_CHAR_PX) / 2) + 2
+  const right = typeof grid.right === 'number' ? grid.right : 0
+  return right >= room ? option : { ...option, grid: { ...grid, right: room } }
+}
