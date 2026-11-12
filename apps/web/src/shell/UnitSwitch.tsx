@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSyncExternalStore } from 'react'
-import { useNetwork } from '@/features/entity'
+import { useNetwork } from '@/features/search'
 import {
   DISPLAY_UNITS,
   getUnitPrefs,
