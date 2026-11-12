@@ -4,7 +4,7 @@ const at = (...parts) => [SRC, ...parts].filter(Boolean).join('/')
 const FEATURES = ['home', 'core', 'network', 'platform', 'tools', 'you', 'search', 'entity']
 const SHARED_FEATURES = ['entity', 'search']
 
-const HTTP_SOURCES = ['radar', 'pe', 'hyphen', 'rate']
+const HTTP_SOURCES = ['radar', 'pe', 'hyphen', 'insight', 'rate']
 
 const zone = (target, from, except) => ({
   target: at(target),
@@ -166,7 +166,12 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
       },
     },
     {
-      files: [`${rel}/data/health.ts`, `${rel}/data/hyphen/fit.ts`, `${rel}/data/query/batch.ts`],
+      files: [
+        `${rel}/data/health.ts`,
+        `${rel}/data/hyphen/fit.ts`,
+        `${rel}/data/index-health.ts`,
+        `${rel}/data/query/batch.ts`,
+      ],
       rules: { 'no-restricted-imports': 'off' },
     },
     {

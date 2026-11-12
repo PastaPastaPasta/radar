@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/addr/yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa/utxo"
+  },
+  "recordedAt": "2026-11-12T17:04:34.890Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"123-2MSy6JezmKGRQVFhJaWRkIJPHz4\""
+  },
+  "body": [
+    {
+      "address": "yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa",
+      "txid": "edb04a34191b7066b3db7bc5216cf345873d050f044820b425b81c0ce7ea5fae",
+      "vout": 1,
+      "scriptPubKey": "76a9147639978f428b5bee015c97dea7150778aac4284188ac",
+      "amount": 999998.99997288,
+      "satoshis": 99999899997288,
+      "height": 962811,
+      "confirmations": 627600
+    }
+  ],
+  "trimmed": "utxos: 1 -> 1"
+}

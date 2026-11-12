@@ -20,6 +20,10 @@ export function reportFixtureMiss(request: string): void {
   onMiss?.(request)
 }
 
+const INSIGHT_ORIGINS = [
+  'https://insight.dash.org/insight-api',
+  'https://insight.testnet.networks.dash.org/insight-api',
+]
 const PE_ORIGINS = ['https://api.pe.dashhq.org', 'https://api.testnet.pe.dashhq.org']
 
 function serve(method: 'GET' | 'POST') {
@@ -49,3 +53,4 @@ function forOrigin(pattern: string): AnyHandler[] {
 export const radarHandlers = forOrigin('https://radar.dashhq.org/api/v1/*')
 export const peHandlers = PE_ORIGINS.flatMap((o) => forOrigin(`${o}/*`))
 export const hyphenHandlers = forOrigin('*/x/hy/*')
+export const insightHandlers = INSIGHT_ORIGINS.flatMap((o) => forOrigin(`${o}/*`))

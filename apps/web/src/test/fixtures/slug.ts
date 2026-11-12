@@ -1,4 +1,4 @@
-export type FixtureSource = 'radar' | 'pe' | 'hyphen'
+export type FixtureSource = 'radar' | 'pe' | 'hyphen' | 'insight'
 
 export interface FixtureLocation {
   source: FixtureSource
@@ -15,6 +15,12 @@ const PE_HOSTS: Record<string, string> = {
   'api.pe.dashhq.org': 'mainnet',
   'api.testnet.pe.dashhq.org': 'testnet',
 }
+
+const INSIGHT_HOSTS: Record<string, string> = {
+  'insight.dash.org': 'mainnet',
+  'insight.testnet.networks.dash.org': 'testnet',
+}
+const INSIGHT_PATH = /^\/insight-api(\/.*)$/
 
 function fnv1a(s: string): string {
   let h = 0x811c9dc5
@@ -66,6 +72,12 @@ export function locateFixture(url: string, method = 'GET'): FixtureLocation | nu
   const peNet = PE_HOSTS[u.hostname]
   if (peNet) {
     return { source: 'pe', net: peNet, path: u.pathname, slug: slugOf(u.pathname, query, method) }
+  }
+  const insightNet = INSIGHT_HOSTS[u.hostname]
+  if (insightNet) {
+    const path = INSIGHT_PATH.exec(u.pathname)?.[1]
+    if (!path) return null
+    return { source: 'insight', net: insightNet, path, slug: slugOf(path, query, method) }
   }
   return null
 }

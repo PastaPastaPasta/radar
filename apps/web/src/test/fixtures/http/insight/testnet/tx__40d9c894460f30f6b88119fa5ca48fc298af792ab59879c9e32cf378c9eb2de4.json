@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/40d9c894460f30f6b88119fa5ca48fc298af792ab59879c9e32cf378c9eb2de4"
+  },
+  "recordedAt": "2026-11-12T17:04:23.811Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"487-sc0WN9qWAr9fTEJOYat2T6bODEk\""
+  },
+  "body": {
+    "txid": "40d9c894460f30f6b88119fa5ca48fc298af792ab59879c9e32cf378c9eb2de4",
+    "version": 2,
+    "locktime": 0,
+    "vin": [
+      {
+        "txid": "afb8f20f7145b06902f0ad0d1456c035526e611802f9e19304e040d19f73247f",
+        "vout": 0,
+        "sequence": 4294967295,
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402202d593c937e45876bf8f05cb4461dffe017e1a0760d027881d7bafba8acab4f35022001cc1ae56419dd9714ef3ccb45973e3333f492c33ba541529809fcc5f20aaf130121025918c6f760161c6acb2effb38891650b21965f8a9fd49ecf6c5bba0e96ed9f84",
+          "asm": "304402202d593c937e45876bf8f05cb4461dffe017e1a0760d027881d7bafba8acab4f35022001cc1ae56419dd9714ef3ccb45973e3333f492c33ba541529809fcc5f20aaf13[ALL] 025918c6f760161c6acb2effb38891650b21965f8a9fd49ecf6c5bba0e96ed9f84"
+        },
+        "addr": "yfe153EshAqNX1WnPixVeiLF6grJkwGWgH",
+        "valueSat": 19551,
+        "value": 0.00019551,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "0.00000000",
+        "n": 0,
+        "scriptPubKey": { "hex": "6a", "asm": "OP_RETURN" },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "000000e75ebc766f28d92d775192a98b53217d3669d92d65228968417d594557",
+    "blockheight": 1577996,
+    "confirmations": 12415,
+    "time": 1792771336,
+    "blocktime": 1792771336,
+    "valueOut": 0,
+    "size": 167,
+    "valueIn": 0.00019551,
+    "fees": 0.00019551,
+    "txlock": true
+  }
+}

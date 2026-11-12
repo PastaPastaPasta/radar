@@ -1,0 +1,65 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/tx/e788264d6b8e02fbb029503c43d568093e73d0119f639102410db46cc822eb51"
+  },
+  "recordedAt": "2026-11-12T17:16:15.267Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "e788264d6b8e02fbb029503c43d568093e73d0119f639102410db46cc822eb51",
+    "version": 3,
+    "type": 2,
+    "locktime": 0,
+    "extraPayloadSize": 183,
+    "extraPayload": "020000007893f24eaad4cfee024e06d7bbdddb163153c98f9ff19eeb34f620bdd2f2a81500000000000000000000ffff6bb3845d270f0038d9992eb3800957ec9eaa65fe89801850495c850d4c6a8abfb0b379e7600603a9fd8f297abae53a2a3f313c72cd33a8ef4404ecd5dbd4347761519bff40a7ac0a418c2024c8f8f4b4dd6136039978dc06900ccb2f4bfd66262b31ef98c108801ee4e5bdf4e42236fe61be29332c2616e3621d38f19002ec0ad6c3ba7279e3db",
+    "vin": [
+      {
+        "txid": "8de5e40c43e252a9700b5416eed05e0a37445f63faeeec16a06d4c37935a57b5",
+        "vout": 1,
+        "sequence": 4294967294,
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402204748c88683473a982b92c0f0f717736a54cc80c5fde9644eae746bc8b6209e4b0220686c6309838322d0257e2be7d77ebc89663bb6cc2fcd94f9f3b9ce798174e9b30121022ac75d730b2495bc725eb693530a0a2150433eaf7f023dbd6708bf5f2467f9c3",
+          "asm": "304402204748c88683473a982b92c0f0f717736a54cc80c5fde9644eae746bc8b6209e4b0220686c6309838322d0257e2be7d77ebc89663bb6cc2fcd94f9f3b9ce798174e9b3[ALL] 022ac75d730b2495bc725eb693530a0a2150433eaf7f023dbd6708bf5f2467f9c3"
+        },
+        "addr": "XkpG1iVpr2upMV1UPzRfLTT8QDos9raxjU",
+        "valueSat": 82982299,
+        "value": 0.82982299,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "0.82981914",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a9146f185ab66fd17f33006da62f26730eafee7e5f5f88ac",
+          "asm": "OP_DUP OP_HASH160 6f185ab66fd17f33006da62f26730eafee7e5f5f OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["XkpG1iVpr2upMV1UPzRfLTT8QDos9raxjU"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "000000000000001ba106dbf586a6d6e54c3c077a5fc894960896a83b4bda525c",
+    "blockheight": 2569992,
+    "confirmations": 1160,
+    "time": 1794320900,
+    "blocktime": 1794320900,
+    "valueOut": 0.82981914,
+    "size": 375,
+    "valueIn": 0.82982299,
+    "fees": 0.00000385,
+    "txlock": true,
+    "proUpServTx": {
+      "version": 2,
+      "type": 0,
+      "proTxHash": "15a8f2d2bd20f634eb9ef19f8fc9533116dbddbbd7064e02eecfd4aa4ef29378",
+      "service": "107.179.132.93:9999",
+      "inputsHash": "030660e779b3b0bf8a6a4c0d855c4950188089fe65aa9eec570980b32e99d938"
+    }
+  }
+}

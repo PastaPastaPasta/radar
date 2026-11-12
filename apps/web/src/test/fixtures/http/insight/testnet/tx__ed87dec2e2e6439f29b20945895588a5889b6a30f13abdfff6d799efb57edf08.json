@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/ed87dec2e2e6439f29b20945895588a5889b6a30f13abdfff6d799efb57edf08"
+  },
+  "recordedAt": "2026-11-12T17:04:27.978Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"655-lFXHJcW5k17rW0/ngKX+OQ0Hrp8\""
+  },
+  "body": {
+    "txid": "ed87dec2e2e6439f29b20945895588a5889b6a30f13abdfff6d799efb57edf08",
+    "version": 3,
+    "type": 8,
+    "locktime": 0,
+    "extraPayloadSize": 36,
+    "extraPayload": "010180969800000000001976a914e24c6ebbfb4221b322982bf978bad7e685a2d68a88ac",
+    "vin": [
+      {
+        "txid": "9c80b43b4e62aa55a9171d699d5d8c6560ea15087a5f070d731093c2264333f5",
+        "vout": 0,
+        "sequence": 4294967295,
+        "n": 0,
+        "scriptSig": {
+          "hex": "4730440220212be8520fa429b5ff61106dee7242e98813f5a3fbd5148b7b622be5e176bed9022017bbba54a0f66ccb4ea4b74ad94abedd9cb9cc8e756daa70f3bc36da3e7226210121038ac30aa9bea4d7c86c6c6b5991a30e340c148e72937a4fb28f7baf8d63a38936",
+          "asm": "30440220212be8520fa429b5ff61106dee7242e98813f5a3fbd5148b7b622be5e176bed9022017bbba54a0f66ccb4ea4b74ad94abedd9cb9cc8e756daa70f3bc36da3e722621[ALL] 038ac30aa9bea4d7c86c6c6b5991a30e340c148e72937a4fb28f7baf8d63a38936"
+        },
+        "addr": "yi15aP58JbeECn3bvuY4LaynHdWzwX5BJC",
+        "valueSat": 10000010000,
+        "value": 100.0001,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "0.10000000",
+        "n": 0,
+        "scriptPubKey": { "hex": "6a00", "asm": "OP_RETURN 0" },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      },
+      {
+        "value": "99.90009573",
+        "n": 1,
+        "scriptPubKey": {
+          "hex": "76a914a527d8d2b49eb68cccdf36a3743b7893d7148d5488ac",
+          "asm": "OP_DUP OP_HASH160 a527d8d2b49eb68cccdf36a3743b7893d7148d54 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["ybNi5UFrNsJgTysXmnGgmKTwjxWBH3MXWv"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "000002169e00f653cb1095a39be077e5ddd44a0744241f03711aec6b03296bac",
+    "blockheight": 1589218,
+    "confirmations": 1193,
+    "time": 1794334347,
+    "blocktime": 1794334347,
+    "valueOut": 100.00009573,
+    "size": 239,
+    "valueIn": 100.0001,
+    "fees": 0.00000427,
+    "txlock": true
+  }
+}

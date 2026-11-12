@@ -1,0 +1,71 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/tx/af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251"
+  },
+  "recordedAt": "2026-11-12T17:16:14.345Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251",
+    "version": 3,
+    "type": 1,
+    "locktime": 0,
+    "extraPayloadSize": 274,
+    "extraPayload": "0200000000001e9728f329a30e4e4cdb47e7633332273acfba07fc977218dec7c2513f27feb90000000000000000000000000000ffff90ca2501270f85367ed33721cea52645648a4b3e01f30ca235e0b9da9991c8da12dbc5fe1a6d66f159de9c20d3c148c014a0c1b7339240bb85bbbd94a465a056abf82e03997c4342e39f85367ed33721cea52645648a4b3e01f30ca235e000001976a9144bab14fcf3724b1e307dbf792996646e322e491a88acd1020033ad40d26879e4f59d82cff775b5a6ef7ad224e2b128d6eba0dffdcd2f411f56be2e7a558168c03c1fe0a0ffd8b4f64b65930ee51f7e8a7ae87b2be6707b0f184178520a66db2ab02d98236f093f81135460d50f60a97e6efca21d890780ee",
+    "vin": [
+      {
+        "txid": "d2cbe30578ccad465839c38cc4cb6566551eadf02fcf3867b29be742f50d5846",
+        "vout": 2,
+        "sequence": 4294967294,
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402201c06cd8de3d9e33d8c7ca51b63e07a74407dfaa6cd04aa10a1831d0eebd794120220634ba04bd6e754c967c11a92e2fbe4dbe47ab1d912233716754955a11ed030df012102c1dc8e00695a5a257b0e24184df8aee6c6f534b06e07833971d57058345dea02",
+          "asm": "304402201c06cd8de3d9e33d8c7ca51b63e07a74407dfaa6cd04aa10a1831d0eebd794120220634ba04bd6e754c967c11a92e2fbe4dbe47ab1d912233716754955a11ed030df[ALL] 02c1dc8e00695a5a257b0e24184df8aee6c6f534b06e07833971d57058345dea02"
+        },
+        "addr": "XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG",
+        "valueSat": 77057499,
+        "value": 0.77057499,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "0.77057021",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a9144bab14fcf3724b1e307dbf792996646e322e491a88ac",
+          "asm": "OP_DUP OP_HASH160 4bab14fcf3724b1e307dbf792996646e322e491a OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "000000000000001632de4ff3dd504776555dd0a58d0caf67086c8e08cecf942d",
+    "blockheight": 2569884,
+    "confirmations": 1268,
+    "time": 1794303731,
+    "blocktime": 1794303731,
+    "valueOut": 0.77057021,
+    "size": 468,
+    "valueIn": 0.77057499,
+    "fees": 0.00000478,
+    "txlock": true,
+    "proRegTx": {
+      "version": 2,
+      "type": 0,
+      "collateralHash": "b9fe273f51c2c7de187297fc07bacf3a27323363e747db4c4e0ea329f328971e",
+      "collateralIndex": 0,
+      "service": "144.202.37.1:9999",
+      "ownerAddress": "XnqCzB4wPnuyur8ADgFWAGhqXBiGnjELJN",
+      "votingAddress": "XnqCzB4wPnuyur8ADgFWAGhqXBiGnjELJN",
+      "payoutAddress": "XhawTdEDN3cxKheLG1Y4K8KeSzjLxyHymG",
+      "pubKeyOperator": "b9da9991c8da12dbc5fe1a6d66f159de9c20d3c148c014a0c1b7339240bb85bbbd94a465a056abf82e03997c4342e39f",
+      "operatorReward": 0,
+      "inputsHash": "2fcdfddfa0ebd628b1e224d27aefa6b575f7cf829df5e47968d240ad330002d1"
+    }
+  }
+}

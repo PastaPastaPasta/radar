@@ -82,6 +82,7 @@ const STALE_AFTER: Partial<Record<SourceId, { blocks?: number; ms?: number }>> =
   radar: { ms: 45 * MIN },
   pe: { blocks: 10 },
   hyphen: { blocks: 3 },
+  insight: { blocks: 3 },
   dapi: { ms: 20 * MIN },
   sdk: { ms: 15 * MIN },
 }
@@ -295,7 +296,7 @@ export const setBudgetSnapshot = (net: NetworkId, snapshot: BudgetSnapshot | und
 export const resetHealthRegistry = (): void => registry.reset()
 const subscribe = (cb: () => void): (() => void) => healthRegistry.subscribe(cb)
 
-const ALL_SOURCES: SourceId[] = ['sdk', 'dapi', 'radar', 'pe', 'hyphen', 'rate']
+const ALL_SOURCES: SourceId[] = ['sdk', 'dapi', 'radar', 'pe', 'hyphen', 'insight', 'rate']
 
 export function useSourceHealth(source: SourceId): SourceHealth {
   const net = useSyncExternalStore(subscribeRenderedNetwork, getRenderedNetwork, getRenderedNetwork)

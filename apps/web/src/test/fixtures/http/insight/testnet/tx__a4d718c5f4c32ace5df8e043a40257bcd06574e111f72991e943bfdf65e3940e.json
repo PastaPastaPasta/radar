@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/a4d718c5f4c32ace5df8e043a40257bcd06574e111f72991e943bfdf65e3940e"
+  },
+  "recordedAt": "2026-11-12T17:04:24.172Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"400-2gNotgLdrdjGiBBcmiSUPgMX4/M\""
+  },
+  "body": {
+    "txid": "a4d718c5f4c32ace5df8e043a40257bcd06574e111f72991e943bfdf65e3940e",
+    "version": 3,
+    "type": 9,
+    "locktime": 0,
+    "extraPayloadSize": 145,
+    "extraPayload": "016308000000000000be0000000b141800d7c59f2f096e9bb88f05515523e91d9fb80dce305cfe4b1ba889bc6b5f000000ad0d7da09930935917493526302120472c62f99515886fc2d0512a2aa5149b07c808857838f6e6a0cff9081d6a8dcd021387308c68bd54815710ee8cf6f24e740c6ccf5775e0ad140c397a2728e33ad8ebfc1da74ac993252cff01097416aff5",
+    "vin": [],
+    "vout": [
+      {
+        "value": "1.12574285",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a914404abe2451a4018480e44f8eefe8c183442a3dd188ac",
+          "asm": "OP_DUP OP_HASH160 404abe2451a4018480e44f8eefe8c183442a3dd1 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["ySBPdhNkjpXFhVbQzx1Soa4bGCsHtsnGg4"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "000000e75ebc766f28d92d775192a98b53217d3669d92d65228968417d594557",
+    "blockheight": 1577996,
+    "confirmations": 12415,
+    "time": 1792771336,
+    "blocktime": 1792771336,
+    "valueOut": 1.12574285,
+    "size": 190,
+    "valueIn": 0,
+    "fees": -1.12574285,
+    "txlock": true
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/8c1bf242243832db911ea2e794244b062f991b67c7f0f955436f9bcdb556e629"
+  },
+  "recordedAt": "2026-11-12T17:04:24.971Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"89d-r6Px8TPjXzGLNwQ0zt+MlVikThs\""
+  },
+  "body": {
+    "txid": "8c1bf242243832db911ea2e794244b062f991b67c7f0f955436f9bcdb556e629",
+    "version": 3,
+    "type": 5,
+    "locktime": 0,
+    "extraPayloadSize": 207,
+    "extraPayload": "0400ed3f18000c10d18e762e2e205c548c23d306a6e864f671f9b5dc1da2554ead7668532042ef4d1b483d7929240ae60d44edbc285406feb8d4ba1e8705839110e65a824a2f01a251d40dbcc6d3305768cc4ee8dc6a1281bf1f91a25cfcc6165a5dfb93d93b8d50e1966bce735f410cfc79783a8a26880fd5a1c088311bc5de94d7e5e971e2f218ecc8a831c096ac3118a269def4973229413a4e3a98c0aada6550a119977da1ce32b021be2200000000000000000000000000000000000000000000000000000000000000000000",
+    "vin": [{ "coinbase": "6a", "sequence": 4294967295, "n": 0 }],
+    "vout": [
+      {
+        "value": "0.59526072",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a914b489115851ca07a26a5ad8bac3cec3c7dbebd83188ac",
+          "asm": "OP_DUP OP_HASH160 b489115851ca07a26a5ad8bac3cec3c7dbebd831 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["ycn2gNExGVmcwJALr4PciWqWuN1DEsUBEN"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      },
+      {
+        "value": "0.66966830",
+        "n": 1,
+        "scriptPubKey": { "hex": "6a", "asm": "OP_RETURN" },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      },
+      {
+        "value": "1.11611384",
+        "n": 2,
+        "scriptPubKey": {
+          "hex": "76a91464f2b2b84f62d68a2cd7f7f5fb2b5aa75ef716d788ac",
+          "asm": "OP_DUP OP_HASH160 64f2b2b84f62d68a2cd7f7f5fb2b5aa75ef716d7 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["yVXDAM73Tg6A44Bm3qduXsMCYxzuqBCT48"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "0000003d369330a12cda4a5e196308b9a052154198698fa2073cd293810e851e",
+    "blockheight": 1589229,
+    "confirmations": 1182,
+    "time": 1794335156,
+    "blocktime": 1794335156,
+    "isCoinBase": true,
+    "valueOut": 2.38104286,
+    "size": 338,
+    "txlock": true,
+    "cbTx": {
+      "version": 4,
+      "height": 1589229,
+      "merkleRootMNList": "4220536876ad4e55a21ddcb5f971f664e8a606d3238c545c202e2e768ed1100c",
+      "merkleRootQuorums": "2f4a825ae610918305871ebad4b8fe065428bced440de60a2429793d481b4def",
+      "bestCLHeightDiff": 1,
+      "bestCLSignature": "a251d40dbcc6d3305768cc4ee8dc6a1281bf1f91a25cfcc6165a5dfb93d93b8d50e1966bce735f410cfc79783a8a26880fd5a1c088311bc5de94d7e5e971e2f218ecc8a831c096ac3118a269def4973229413a4e3a98c0aada6550a119977da1",
+      "creditPoolBalance": 382000.04326094,
+      "merkleRootAssetUnlocks": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  }
+}

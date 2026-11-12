@@ -52,6 +52,8 @@ function sourceName(source: SourceId): string {
       return 'Platform Explorer'
     case 'hyphen':
       return 'Hyphen'
+    case 'insight':
+      return 'Insight'
     case 'rate':
       return t`The price feed`
     case 'local':

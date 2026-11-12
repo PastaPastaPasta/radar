@@ -1,12 +1,17 @@
 import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
 
-export type EndpointSource = 'quorums' | 'radar' | 'pe' | 'hyphen' | 'rate'
+export type EndpointSource = 'quorums' | 'radar' | 'pe' | 'hyphen' | 'insight' | 'rate'
 
 const RADAR_BASE = 'https://radar.dashhq.org/api/v1'
 
 const PE_BASE = {
   mainnet: 'https://api.pe.dashhq.org',
   testnet: 'https://api.testnet.pe.dashhq.org',
+} as const
+
+const INSIGHT_BASE = {
+  mainnet: 'https://insight.dash.org/insight-api',
+  testnet: 'https://insight.testnet.networks.dash.org/insight-api',
 } as const
 
 const DEVNET_NAME = /^devnet-(.+)$/
@@ -36,6 +41,8 @@ export function endpoint(
       return net === 'mainnet' || net === 'testnet' ? PE_BASE[net] : null
     case 'hyphen':
       return net === 'mainnet' || net === 'testnet' ? `/x/hy/${net}` : null
+    case 'insight':
+      return net === 'mainnet' || net === 'testnet' ? INSIGHT_BASE[net] : null
     case 'rate':
       return net === 'mainnet' ? PE_BASE.mainnet : null
   }

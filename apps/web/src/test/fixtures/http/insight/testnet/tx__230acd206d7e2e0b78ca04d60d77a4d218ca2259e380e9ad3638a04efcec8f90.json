@@ -1,0 +1,68 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/230acd206d7e2e0b78ca04d60d77a4d218ca2259e380e9ad3638a04efcec8f90"
+  },
+  "recordedAt": "2026-11-12T17:04:26.786Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"82b-naHPRDy5Gzlu9SqbcRrA8hgeck0\""
+  },
+  "body": {
+    "txid": "230acd206d7e2e0b78ca04d60d77a4d218ca2259e380e9ad3638a04efcec8f90",
+    "version": 3,
+    "type": 2,
+    "locktime": 0,
+    "extraPayloadSize": 183,
+    "extraPayload": "0200000094a9e7f5451557b8201a6a572c4c7bc19c7cfa9e78762ea906bea06b836363f900000000000000000000ffff010203044e1f006c7e9122f4bff41a63d71ec4a818c1b4c95e5ed668bea0b3d353f00a210d5a7395225f8514953531606d9b98bd8e5f7238fa04e9e2c176d1a5e4793cec3adeb5d952347ee87c371aa1674be892eb875611a1c2584d5ebce6b63fc7db05e830c7a3096471e6ba46c3cc418f4e574ec335164624779a8319bd11d697f761b93c0b",
+    "vin": [
+      {
+        "txid": "7d5c6d47f8d9c4dec61abc260f1fda2d44b0b3b25d73e35f18f42511769590e9",
+        "vout": 0,
+        "sequence": 4294967295,
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402205057a56a265797c10ac417e7e55e3c63eac82795d9d0ab866895b3b9d93c992402203357777b927ae02d8f1326aed00814bb7c22c2fb6a2179aa3fe343845603119c0121020f51a065ebe77b0e3716e4ca7adc0bb9876cfcadc86a34eafa09ce319d97e6c2",
+          "asm": "304402205057a56a265797c10ac417e7e55e3c63eac82795d9d0ab866895b3b9d93c992402203357777b927ae02d8f1326aed00814bb7c22c2fb6a2179aa3fe343845603119c[ALL] 020f51a065ebe77b0e3716e4ca7adc0bb9876cfcadc86a34eafa09ce319d97e6c2"
+        },
+        "addr": "yaYL1Jh5oyX9HVDJo3TZdhocteihhC3pWt",
+        "valueSat": 49999998790,
+        "value": 499.9999879,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "499.99998254",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a914de255bf231501ed0f95a540574fdbb1e59a9cc4688ac",
+          "asm": "OP_DUP OP_HASH160 de255bf231501ed0f95a540574fdbb1e59a9cc46 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["yga3cYqHZ8FuxnZWUYivWm12dFXwSgdRvM"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "92353dd7be501bb0afc5070b4823da53f1dacdad18f8a412037a6e6a020f94aa",
+        "spentIndex": 1,
+        "spentHeight": 1589344
+      }
+    ],
+    "blockhash": "00000016cecbe2839249e88f82ecaf0746ef1e0d1202b99988dafa3886e19570",
+    "blockheight": 1588449,
+    "confirmations": 1962,
+    "time": 1794226972,
+    "blocktime": 1794226972,
+    "valueOut": 499.99998254,
+    "size": 375,
+    "valueIn": 499.9999879,
+    "fees": 0.00000536,
+    "txlock": true,
+    "proUpServTx": {
+      "version": 2,
+      "type": 0,
+      "proTxHash": "f96363836ba0be06a92e76789efa7c9cc17b4c2c576a1a20b8571545f5e7a994",
+      "addresses": { "core_p2p": ["1.2.3.4:19999"] },
+      "inputsHash": "735a0d210af053d3b3a0be68d65e5ec9b4c118a8c41ed7631af4bff422917e6c"
+    }
+  }
+}

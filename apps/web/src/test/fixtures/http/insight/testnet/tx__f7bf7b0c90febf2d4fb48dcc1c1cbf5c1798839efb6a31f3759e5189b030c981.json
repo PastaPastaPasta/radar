@@ -1,0 +1,81 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/tx/f7bf7b0c90febf2d4fb48dcc1c1cbf5c1798839efb6a31f3759e5189b030c981"
+  },
+  "recordedAt": "2026-11-12T17:16:13.399Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "f7bf7b0c90febf2d4fb48dcc1c1cbf5c1798839efb6a31f3759e5189b030c981",
+    "version": 3,
+    "type": 10,
+    "locktime": 0,
+    "extraPayloadSize": 102,
+    "extraPayload": "0100be5a6f1fda07468f4f3bef0ffccb9e994b54203ebc2f1044d047e20719228458020001205aeec30cf25a30946cd3e679ffc59bdf7225e6bd7a25a5052f3f9aeff38a9e415386c4a0bc6c0d1d76589433e97e8348855c9160b6dce78efaf1de979029c2c4",
+    "vin": [
+      {
+        "txid": "5884221907e247d044102fbc3e20544b999ecbfc0fef3b4f8f4607da1f6f5abe",
+        "vout": 3,
+        "sequence": 4294967295,
+        "n": 0,
+        "scriptSig": { "hex": "", "asm": null },
+        "addr": null,
+        "valueSat": 100000000000,
+        "value": 1000,
+        "doubleSpentTxID": null
+      }
+    ],
+    "vout": [
+      {
+        "value": "503.12500000",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a914f5e39ebf4b0ede3685a8de904d71bea7c71a5f9d88ac",
+          "asm": "OP_DUP OP_HASH160 f5e39ebf4b0ede3685a8de904d71bea7c71a5f9d OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["yijb5XLCAQEwoucqSwLhj7djVY5xr3hxvU"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "5ae451a1683c50015474147d9d96fc7f141d618740716bef328849302759d187",
+        "spentIndex": 1,
+        "spentHeight": 1588389
+      },
+      {
+        "value": "301.87500000",
+        "n": 1,
+        "scriptPubKey": {
+          "hex": "76a91492cc55887af36a89aa15f3b4b9b10511d2fe557d88ac",
+          "asm": "OP_DUP OP_HASH160 92cc55887af36a89aa15f3b4b9b10511d2fe557d OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["yZheHbNWvrtM4PwQT8HNaKASAJ2F7eEmHN"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "f4f808361d2fd055350b1322b0a9d74cdfdf07db1b497f3df0d0469d8bc41a19",
+        "spentIndex": 0,
+        "spentHeight": 1588423
+      },
+      {
+        "value": "194.99900000",
+        "n": 2,
+        "scriptPubKey": {
+          "hex": "76a914108877a8e51ff82bfe7204835f209efe3494182d88ac",
+          "asm": "OP_DUP OP_HASH160 108877a8e51ff82bfe7204835f209efe3494182d OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["yMps9CG9hHbRu95X47SqGg82czpFLwHjGt"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "0000009780703671e67016ec38004e8506961720d562c39e8c78323b967cbb64",
+    "blockheight": 1588070,
+    "confirmations": 2343,
+    "time": 1794175418,
+    "blocktime": 1794175418,
+    "valueOut": 999.999,
+    "size": 256,
+    "valueIn": 1000,
+    "fees": 0.001,
+    "txlock": true
+  }
+}

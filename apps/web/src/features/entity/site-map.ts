@@ -29,6 +29,7 @@ export const SOURCE_LABELS: Record<SourceId, MessageDescriptor> = {
   radar: msg`Radar’s crawl`,
   pe: msg`Platform Explorer`,
   hyphen: msg`Hyphen`,
+  insight: msg`Insight`,
   rate: msg`the Platform Explorer price feed`,
   local: msg`your browser`,
 }

@@ -1,26 +1,31 @@
-import { mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs'
+import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs'
+import { execFile } from 'node:child_process'
 import { dirname, join, resolve } from 'node:path'
+import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { format, resolveConfig } from 'prettier'
 import { slugOf } from '../apps/web/src/test/fixtures/slug.ts'
 
+const execFileAsync = promisify(execFile)
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const FIXTURES = join(ROOT, 'apps/web/src/test/fixtures')
 const HTTP_DIR = join(FIXTURES, 'http')
 
 const USAGE = `Usage: node scripts/record-fixtures.mjs --net mainnet|testnet [options]
 
-Records real responses from the live Radar, Platform Explorer and Hyphen APIs into
+Records real responses from the live Radar, Platform Explorer, Hyphen and Insight APIs into
 apps/web/src/test/fixtures/http/<source>/<net>/<slug>.json.
 
 Options:
   --net <net>          mainnet or testnet (required)
-  --source <list>      comma-separated: radar,pe,hyphen (default: all)
+  --source <list>      comma-separated: radar,pe,hyphen,insight (default: radar,pe,hyphen; insight reads the
+                       entities the Hyphen and DAPI recordings already hold, so record those first)
   --entities <file>    JSON file naming the entities to record. Anything not named is
                        discovered from the live list endpoints.
   --extra <path>       also record this app path, e.g. pe:/blocks?limit=5 (repeatable)
   --only-extra         record only the --extra paths, skip any that already have a file, and leave the rest of the
                        tree and the entities file alone (the way to add one missing recording)
+  --skip-existing      leave any path that already has a recording alone (adds only what is missing)
   --stream-seconds <n> seconds of Hyphen /stream to capture (default 8)
 
 Entity file keys (all optional): protx, evoProtx, bannedProtx, address, blockHash, txid, identity,
@@ -39,6 +44,7 @@ function parseArgs(argv) {
     else if (a === '--entities') out.entities = argv[++i]
     else if (a === '--extra') out.extra.push(argv[++i])
     else if (a === '--only-extra') out.onlyExtra = true
+    else if (a === '--skip-existing') out.skipExisting = true
     else if (a === '--stream-seconds') out.streamSeconds = Number(argv[++i])
     else {
       console.error(`Unknown argument ${a}\n\n${USAGE}`)
@@ -59,6 +65,10 @@ const BASES = {
   radar: 'https://radar.dashhq.org/api/v1',
   pe: net === 'mainnet' ? 'https://api.pe.dashhq.org' : 'https://api.testnet.pe.dashhq.org',
   hyphen: net === 'mainnet' ? 'https://hy.kw.vg/api/v1' : 'https://ts.kw.vg/api/v1',
+  insight:
+    net === 'mainnet'
+      ? 'https://insight.dash.org/insight-api'
+      : 'https://insight.testnet.networks.dash.org/insight-api',
 }
 const RADAR_GLOBAL = new Set(['/status', '/health', '/releases'])
 const KEEP_HEADERS = ['content-type', 'etag', 'last-modified', 'cache-control']
@@ -76,6 +86,7 @@ function upstreamUrl(source, path) {
 
 function appUrl(source, path) {
   if (source === 'hyphen') return `/x/hy/${net}${path}`
+  if (source === 'insight') return upstreamUrl(source, path)
   return upstreamUrl(source, path)
 }
 
@@ -98,11 +109,32 @@ async function writeJson(file, value) {
 
 const results = []
 
+/**
+ * Insight's mainnet host sits behind a Cloudflare challenge that turns Node's fetch away, so its recordings are
+ * read with curl, which it answers.
+ */
+async function curlGet(url) {
+  const { stdout } = await execFileAsync(
+    'curl',
+    ['-sS', '--max-time', '60', '-w', '\n%{http_code} %{content_type}', url],
+    { maxBuffer: 64 * 1024 * 1024 },
+  )
+  const cut = stdout.lastIndexOf('\n')
+  const [status, ...type] = stdout.slice(cut + 1).split(' ')
+  const text = stdout.slice(0, cut)
+  return new Response(text, {
+    status: Number(status),
+    headers: type.length ? { 'content-type': type.join(' ') } : {},
+  })
+}
+
 async function fetchWithRetry(url, init = {}) {
   let lastErr
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(url, { ...init, signal: AbortSignal.timeout(90_000) })
+      const res = url.startsWith(BASES.insight)
+        ? await curlGet(url)
+        : await fetch(url, { ...init, signal: AbortSignal.timeout(90_000) })
       if (res.status === 429 || res.status >= 502) {
         await sleep(2000 * (attempt + 1))
         lastErr = new Error(`HTTP ${res.status}`)
@@ -161,9 +193,23 @@ const TRIMS = {
     },
   ],
   hyphen: [],
+  insight: [
+    {
+      path: /^\/addr\/[^/]+\/utxo$/,
+      apply(body) {
+        const all = body.length
+        body.splice(40)
+        return `utxos: ${all} -> ${body.length}`
+      },
+    },
+  ],
 }
 
-async function record(source, path, { keep = [], optional = false, skipExisting = false } = {}) {
+async function record(
+  source,
+  path,
+  { keep = [], optional = false, skipExisting = args.skipExisting } = {},
+) {
   if (skipExisting) {
     const { dir, slug } = fixtureLocation(source, path)
     if (existsSync(join(dir, `${slug}.json`))) {
@@ -205,15 +251,17 @@ async function record(source, path, { keep = [], optional = false, skipExisting 
     headers,
     body,
   }
-  const trim = TRIMS[source]?.find((t) => t.path === path.split('?')[0])
-  if (trim && res.ok && typeof body === 'object') {
+  const trim = TRIMS[source]?.find((t) =>
+    t.path instanceof RegExp ? t.path.test(path.split('?')[0]) : t.path === path.split('?')[0],
+  )
+  if (trim && res.ok && body && typeof body === 'object') {
     fixture.trimmed = trim.apply(body, keep)
   }
   const { dir, slug } = fixtureLocation(source, path)
   await writeJson(join(dir, `${slug}.json`), fixture)
   results.push({ source, path, ok: true, status: res.status, ms: Date.now() - started })
   console.log(`  ok   ${source} ${path} (${res.status})`)
-  await sleep(120)
+  await sleep(source === 'insight' ? 300 : 120)
   return res.ok ? body : null
 }
 
@@ -509,15 +557,81 @@ async function recordStream() {
   results.push({ source: 'hyphen', path: '/stream', ok: true })
 }
 
+const HEX64 = /[0-9a-f]{64}/g
+
+function fixtureSlugs(source, prefix) {
+  const dir = join(HTTP_DIR, source, net)
+  if (!existsSync(dir)) return []
+  return readdirSync(dir)
+    .filter((f) => f.startsWith(prefix) && f.endsWith('.json'))
+    .map((f) => f.slice(prefix.length, -'.json'.length))
+}
+
+function manifestHashes(...idPrefixes) {
+  const file = join(FIXTURES, 'dapi', net, 'manifest.json')
+  if (!existsSync(file)) return []
+  const entries = JSON.parse(readFileSync(file, 'utf8')).entries
+  return entries
+    .filter((e) => idPrefixes.some((p) => e.id.startsWith(p)))
+    .flatMap((e) =>
+      [...`${e.call ?? ''} ${e.hash ?? ''} ${e.txid ?? ''}`.matchAll(HEX64)].map((m) => m[0]),
+    )
+}
+
+/**
+ * Insight answers for the entities the Hyphen and DAPI recordings already cover, so a page that falls back to
+ * Insight (or asks it for spending transactions) finds its own request in the fixtures. Addresses are testnet only:
+ * mainnet's Hyphen index is current, so no page asks Insight about a mainnet address.
+ */
+async function recordInsight() {
+  console.log(`insight (${net})`)
+  for (const p of ['/status', '/gobject/list', '/gobject/info']) await record('insight', p)
+  const zero = '0'.repeat(64)
+  const txids = new Set([...fixtureSlugs('hyphen', 'tx__'), ...manifestHashes('tx-')])
+  const blocks = new Set([
+    ...fixtureSlugs('hyphen', 'block__').filter((s) => /^[0-9a-f]{64}$/.test(s)),
+    ...manifestHashes('block-', 'latest-blocks'),
+  ])
+  for (const id of txids)
+    if (id !== zero && id !== `${'0'.repeat(63)}1`)
+      await record('insight', `/tx/${id}`, { optional: true })
+  for (const hash of blocks)
+    if (hash !== zero) await record('insight', `/block/${hash}`, { optional: true })
+  for (const h of fixtureSlugs('hyphen', 'block__').filter((s) => /^\d{1,9}$/.test(s))) {
+    await record('insight', `/block-index/${h}`, { optional: true })
+  }
+  if (net !== 'testnet') return
+  const addresses = new Set(
+    fixtureSlugs('hyphen', 'address__').filter((s) => /^[xy78][A-Za-z0-9]{33}$/i.test(s)),
+  )
+  for (const key of ['address_history', 'address_rich']) {
+    const id = pick(key)
+    if (typeof id === 'string') addresses.add(id)
+  }
+  for (const a of addresses) {
+    await record('insight', `/addr/${a}?noTxList=1`, { optional: true })
+    for (const page of [0, 1]) {
+      await record('insight', `/txs?address=${a}&pageNum=${page}`, { optional: true })
+    }
+    await record('insight', `/addr/${a}/utxo`, { optional: true })
+  }
+}
+
 async function recordExtras() {
   for (const spec of args.extra) {
-    const m = /^(radar|pe|hyphen):(\/.*)$/.exec(spec)
-    if (!m) throw new Error(`--extra expects <source>:<path>, got ${spec}`)
+    const m = /^(radar|pe|hyphen|insight):(\/.*)$/.exec(spec)
+    if (!m)
+      throw new Error(`--extra expects <source>:<path> (radar, pe, hyphen or insight), got ${spec}`)
     await record(m[1], m[2], { optional: true, skipExisting: args.onlyExtra })
   }
 }
 
-const runs = { radar: recordRadar, pe: recordPe, hyphen: recordHyphen }
+const runs = {
+  radar: recordRadar,
+  pe: recordPe,
+  hyphen: recordHyphen,
+  insight: recordInsight,
+}
 for (const source of args.onlyExtra ? [] : args.source) {
   if (!runs[source]) throw new Error(`unknown source ${source}`)
   await runs[source]()

@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/tx/9f73f78ff9dde970539870341cd4738c47f61c98f713eb4612a7a2f34ba57549"
+  },
+  "recordedAt": "2026-11-12T17:05:24.625Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "9f73f78ff9dde970539870341cd4738c47f61c98f713eb4612a7a2f34ba57549",
+    "version": 3,
+    "type": 6,
+    "locktime": 0,
+    "extraPayloadSize": 341,
+    "extraPayload": "0100133727000300045c52da4b3ba896089694c85f7a073c4ce5d6a686f5db06a11b0000000000000064ffffffffffffffffffffffff0f64ffffffffffffffffffffffff0f882b8a7b66e09b3fcaa2556965271b6a4056fdbd29148115890d5aa9bd2a6b0a85879e47fab86748666fda8e8615ae9086d599eb9285a066c75fff85adea73ab73029a32123424564b8fe6dc05a78ec38c378f039f13c7ea79b54bb2bb8fce0c33534ac6629f55f2a26835084579a4bacd05061bbfa9fe77fd8133280b09f27418f9530a5568c1033eb63fe098779a049948fe1d51e2db580e8508c45b472998756a250ad723451e8b417ae51bcad87ba67ba4ad37999ec87b37c163e565656ee44d829ba6812e2f189955c3f6c76ce0ae8ef7f226e5096e46c8e0096fab7fab06a5f23d314aa47bed3297300cd832e90dbe7181c4fb5530884f3766c6e9993d53e694fa55b77f8e8e22281fa2e54ef5",
+    "vin": [],
+    "vout": [],
+    "blockhash": "0000000000000002f8d327ba50aca312c62c370edb505ad612845f58885df98c",
+    "blockheight": 2570003,
+    "confirmations": 1146,
+    "time": 1794322251,
+    "blocktime": 1794322251,
+    "valueOut": 0,
+    "size": 354,
+    "valueIn": 0,
+    "fees": 0,
+    "txlock": true,
+    "qcTx": {
+      "version": 1,
+      "height": 2570003,
+      "commitment": {
+        "version": 3,
+        "llmqType": 4,
+        "quorumHash": "000000000000001ba106dbf586a6d6e54c3c077a5fc894960896a83b4bda525c",
+        "quorumIndex": 0,
+        "signersCount": 100,
+        "signers": "ffffffffffffffffffffffff0f",
+        "validMembersCount": 100,
+        "validMembers": "ffffffffffffffffffffffff0f",
+        "quorumPublicKey": "882b8a7b66e09b3fcaa2556965271b6a4056fdbd29148115890d5aa9bd2a6b0a85879e47fab86748666fda8e8615ae90",
+        "quorumVvecHash": "c38ea705dce68f4b56243412329a0273ab73eaad85ff5fc766a08592eb99d586",
+        "quorumSig": "8c378f039f13c7ea79b54bb2bb8fce0c33534ac6629f55f2a26835084579a4bacd05061bbfa9fe77fd8133280b09f27418f9530a5568c1033eb63fe098779a049948fe1d51e2db580e8508c45b472998756a250ad723451e8b417ae51bcad87b",
+        "membersSig": "a67ba4ad37999ec87b37c163e565656ee44d829ba6812e2f189955c3f6c76ce0ae8ef7f226e5096e46c8e0096fab7fab06a5f23d314aa47bed3297300cd832e90dbe7181c4fb5530884f3766c6e9993d53e694fa55b77f8e8e22281fa2e54ef5"
+      }
+    }
+  }
+}

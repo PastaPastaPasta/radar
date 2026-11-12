@@ -46,6 +46,7 @@ const factory =
 export const radarKeys: KeyFactory<'radar'> = factory('radar')
 export const peKeys: KeyFactory<'pe'> = factory('pe')
 export const hyKeys: KeyFactory<'hyphen'> = factory('hyphen')
+export const insKeys: KeyFactory<'insight'> = factory('insight')
 export const dapiKeys: KeyFactory<'dapi'> = factory('dapi')
 export const viewKeys: KeyFactory<'view'> = factory('view')
 export const rateKeys: KeyFactory<'rate'> = factory('rate')

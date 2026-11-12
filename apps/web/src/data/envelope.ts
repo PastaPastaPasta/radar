@@ -1,4 +1,4 @@
-export type SourceId = 'sdk' | 'dapi' | 'radar' | 'pe' | 'hyphen' | 'rate' | 'local'
+export type SourceId = 'sdk' | 'dapi' | 'radar' | 'pe' | 'hyphen' | 'insight' | 'rate' | 'local'
 
 /** Why a value came from a fallback instead of its primary source. */
 export type FallbackReason = 'dapi-budget' | 'dapi-down' | 'sdk-cold' | 'sdk-down'

@@ -25,6 +25,7 @@ export const STALE_AGE_MS: Record<SourceId, number> = {
   radar: 20 * MIN,
   pe: 2 * MIN,
   hyphen: 2 * MIN,
+  insight: 2 * MIN,
   dapi: 2 * MIN,
   sdk: 2 * MIN,
   rate: 4 * MIN,
@@ -43,6 +44,8 @@ export function sourceName(source: SourceId): string {
       return 'Platform Explorer'
     case 'hyphen':
       return 'Hyphen'
+    case 'insight':
+      return 'Insight'
     case 'rate':
       return t`The price feed`
     case 'local':
@@ -56,6 +59,7 @@ const ICON: Record<SourceId, IconName> = {
   radar: 'radar',
   pe: 'index',
   hyphen: 'index',
+  insight: 'index',
   rate: 'coin',
   local: 'cpu',
 }
@@ -94,6 +98,8 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
         return { label: t`Indexed by Hyphen · DAPI busy`, icon: ICON.hyphen, showAge: false }
       }
       return { label: t`Indexed by Hyphen`, icon: ICON.hyphen, showAge: true }
+    case 'insight':
+      return { label: t`Indexed by Insight`, icon: ICON.insight, showAge: true }
     case 'rate':
       return { label: t`Price via Platform Explorer`, icon: ICON.rate, showAge: true }
     case 'local':

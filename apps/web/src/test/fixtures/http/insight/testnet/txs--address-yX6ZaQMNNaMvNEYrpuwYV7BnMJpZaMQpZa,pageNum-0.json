@@ -1,0 +1,76 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/txs?address=yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa&pageNum=0"
+  },
+  "recordedAt": "2026-11-12T17:04:34.178Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"6be-7O/RrMUsX3x95LQ/Ir7Umr3LNME\""
+  },
+  "body": {
+    "pagesTotal": 1,
+    "txs": [
+      {
+        "txid": "edb04a34191b7066b3db7bc5216cf345873d050f044820b425b81c0ce7ea5fae",
+        "version": 1,
+        "locktime": 0,
+        "vin": [
+          {
+            "txid": "4abe840a615d0e57e6d96aeb13a35c097d112a20c759deb1a7c1e82b85b90189",
+            "vout": 1,
+            "sequence": 4294967295,
+            "n": 0,
+            "scriptSig": {
+              "hex": "47304402206220712024614f1993de3ef22a5b2348c668caef849cdcf8557f7c0292345a6e02205d3011e98236ce970b30b423366e0546ce3e18a287df6a0201961824c6569c9e01210320cc4d2b77d4916629d3568d0dfb58b1443d9d1a8687ef9977d85b7ff7b0d9e5",
+              "asm": "304402206220712024614f1993de3ef22a5b2348c668caef849cdcf8557f7c0292345a6e02205d3011e98236ce970b30b423366e0546ce3e18a287df6a0201961824c6569c9e[ALL] 0320cc4d2b77d4916629d3568d0dfb58b1443d9d1a8687ef9977d85b7ff7b0d9e5"
+            },
+            "addr": "yX1aw6J6DEEnneEYeMsTjVts86yUmB69zx",
+            "valueSat": 100000000000000,
+            "value": 1000000,
+            "doubleSpentTxID": null
+          }
+        ],
+        "vout": [
+          {
+            "value": "1.00000000",
+            "n": 0,
+            "scriptPubKey": {
+              "hex": "76a914b14a5a3baea9c551f62f70313fbdf52f00b287c288ac",
+              "asm": "OP_DUP OP_HASH160 b14a5a3baea9c551f62f70313fbdf52f00b287c2 OP_EQUALVERIFY OP_CHECKSIG",
+              "addresses": ["ycUsXFtJGbJRVDH57gcMnQQP8kByuNp2fb"],
+              "type": "pubkeyhash"
+            },
+            "spentTxId": null,
+            "spentIndex": null,
+            "spentHeight": null
+          },
+          {
+            "value": "999998.99997288",
+            "n": 1,
+            "scriptPubKey": {
+              "hex": "76a9147639978f428b5bee015c97dea7150778aac4284188ac",
+              "asm": "OP_DUP OP_HASH160 7639978f428b5bee015c97dea7150778aac42841 OP_EQUALVERIFY OP_CHECKSIG",
+              "addresses": ["yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa"],
+              "type": "pubkeyhash"
+            },
+            "spentTxId": null,
+            "spentIndex": null,
+            "spentHeight": null
+          }
+        ],
+        "blockhash": "000000263ffddaa2e757f758b5c7966592b3f810400659fa229fa4ce3da96ca7",
+        "blockheight": 962811,
+        "confirmations": 627600,
+        "time": 1706942187,
+        "blocktime": 1706942187,
+        "valueOut": 999999.99997288,
+        "size": 225,
+        "valueIn": 1000000,
+        "fees": 0.00002712,
+        "txlock": true
+      }
+    ]
+  }
+}

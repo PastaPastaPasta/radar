@@ -18,6 +18,7 @@ const SOURCE_NAMES: Record<SourceId, MessageDescriptor> = {
   radar: msg`Radar’s crawl`,
   pe: msg`Platform Explorer`,
   hyphen: msg`Hyphen`,
+  insight: msg`Insight`,
   rate: msg`The price feed`,
   local: msg`This browser`,
 }

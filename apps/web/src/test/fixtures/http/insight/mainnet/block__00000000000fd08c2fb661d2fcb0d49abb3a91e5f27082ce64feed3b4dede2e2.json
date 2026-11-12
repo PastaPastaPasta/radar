@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/block/00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2"
+  },
+  "recordedAt": "2026-11-12T17:05:35.926Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "hash": "00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2",
+    "size": 736,
+    "height": 100000,
+    "version": 2,
+    "merkleroot": "43eb305e7a85ec9d27b3724dab6b2ede5111d54f4568a03d4181231fbd356e81",
+    "tx": [
+      "9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430",
+      "836f0f697b6d3a6283c7c264a5a144c893e7b077ef4aea87dbb4f32d81ac86c5"
+    ],
+    "time": 1405041879,
+    "nonce": 5628506,
+    "bits": "1b10cf42",
+    "difficulty": 3898.664856022962,
+    "chainwork": "000000000000000000000000000000000000000000000000085f62fd3b71c941",
+    "confirmations": 2471149,
+    "previousblockhash": "0000000000108d4b9231f4ec99ab5dc970b6ec740745f44eee0754f67d598ac3",
+    "nextblockhash": "0000000000053598074c72412d5eb3ab1dc840e4aeb40f3396bb36819407d20f",
+    "reward": "5.00000000",
+    "isMainChain": true,
+    "poolInfo": {
+      "poolName": "Node Stratum Pool",
+      "url": "https://github.com/zone117x/node-stratum-pool"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/tx/ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328"
+  },
+  "recordedAt": "2026-11-12T17:05:31.826Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328",
+    "version": 3,
+    "type": 5,
+    "locktime": 0,
+    "extraPayloadSize": 175,
+    "extraPayload": "03001a3727003d2dcfd72c5d2ab0e2a6cf203c77791cf84691da95b3945728e4e229a51120fb538afb64fe1b2511544416387f6651c9643e19e9933d22179bedde3798e3b3c500a594c7bdfc89114fe7720f71bf1f9b44946cd6ef8ec556053bff773234abeb797a370307e6a9af28e5fb8fdea1380d0312ba50a39819d635bfcc823cf9ed5fc34416f8e44411d5775f5433e097a8f875cc59803f0060ac62a95977378ab59a100e55ccf56a030000",
+    "vin": [
+      {
+        "coinbase": "031a37271a2f5669614254432f4d696e65642062792077753030303531372f102da36400bbcf790cdff3b0cfc0160300",
+        "sequence": 4294967295,
+        "n": 0
+      }
+    ],
+    "vout": [
+      {
+        "value": "0.41122942",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a914bc89d6071dabc5b4494d303af761a052a5c70d5788ac",
+          "asm": "OP_DUP OP_HASH160 bc89d6071dabc5b4494d303af761a052a5c70d57 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["XssjzLKgsfATYGqTQmiJURQzeKdpL5K1k3"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "464f377363dd81754002544304fd198c0ab7100f265bdb976f9acd676ead28bc",
+        "spentIndex": 22,
+        "spentHeight": 2570139
+      },
+      {
+        "value": "0.46231323",
+        "n": 1,
+        "scriptPubKey": { "hex": "6a", "asm": "OP_RETURN" },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      },
+      {
+        "value": "0.77137500",
+        "n": 2,
+        "scriptPubKey": {
+          "hex": "76a9140f189322fed68e52e2b4f887a754287180fabc9e88ac",
+          "asm": "OP_DUP OP_HASH160 0f189322fed68e52e2b4f887a754287180fabc9e OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["Xc4fQcc1WoFym2JYhenSwDg1FgjTueFopE"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": null,
+        "spentIndex": null,
+        "spentHeight": null
+      }
+    ],
+    "blockhash": "0000000000000007c8c40d75c0695e77a4d7219d80a363f8896c1d3c4c1f9ac0",
+    "blockheight": 2570010,
+    "confirmations": 1139,
+    "time": 1794323361,
+    "blocktime": 1794323361,
+    "isCoinBase": true,
+    "valueOut": 1.64491765,
+    "size": 353,
+    "txlock": true,
+    "cbTx": {
+      "version": 3,
+      "height": 2570010,
+      "merkleRootMNList": "fb2011a529e2e4285794b395da9146f81c79773c20cfa6e2b02a5d2cd7cf2d3d",
+      "merkleRootQuorums": "c5b3e39837deed9b17223d93e9193e64c951667f3816445411251bfe64fb8a53",
+      "bestCLHeightDiff": 0,
+      "bestCLSignature": "a594c7bdfc89114fe7720f71bf1f9b44946cd6ef8ec556053bff773234abeb797a370307e6a9af28e5fb8fdea1380d0312ba50a39819d635bfcc823cf9ed5fc34416f8e44411d5775f5433e097a8f875cc59803f0060ac62a95977378ab59a10",
+      "creditPoolBalance": 37579.25225742
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.testnet.networks.dash.org/insight-api/gobject/list"
+  },
+  "recordedAt": "2026-11-12T17:04:23.089Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"595-xsWAvxmuWGbpMl2KzFOORzDcN64\""
+  },
+  "body": [
+    {
+      "Hash": "7531d5e06fea29dcde36b80767b4bd204aa7552a7fe5a1622f66732ab43e9354",
+      "DataObject": {
+        "end_epoch": 1796402740,
+        "name": "Another-demo-govenr",
+        "payment_address": "yd83NmVwTmdZ4C7y3gmWxgf7prAj89q8ji",
+        "payment_amount": 150,
+        "start_epoch": 1791251780,
+        "type": 1,
+        "url": "https://govenr.vercel.app/proposals/another-demo-govenr"
+      },
+      "AbsoluteYesCount": 1,
+      "YesCount": 1,
+      "NoCount": 0,
+      "AbstainCount": 6
+    },
+    {
+      "Hash": "c6f5059ca0055fb327a6a0b15b9dd80c64b8c0956c1621061b294f8b93edab7f",
+      "DataObject": {
+        "end_epoch": 1800847498,
+        "name": "testing",
+        "payment_address": "yeRZBWYfeNE4yVUHV4ZLs83Ppn9aMRH57A",
+        "payment_amount": 20,
+        "start_epoch": 1749337898,
+        "type": 1,
+        "url": "https://secondarytesting.com"
+      },
+      "AbsoluteYesCount": -6,
+      "YesCount": 32,
+      "NoCount": 38,
+      "AbstainCount": 6
+    },
+    {
+      "Hash": "ab31c1fffb2eef4587f4ba85a92ddf98b3256aaf96542fe5221a0532d620708d",
+      "DataObject": {
+        "end_epoch": 1795459104,
+        "name": "govhub-mn-voting-test-2026-10-24",
+        "payment_address": "yMbJNiVrPFaPJjCu4YjtiUtdb4zBofpNwo",
+        "payment_amount": 1,
+        "start_epoch": 1792867104,
+        "type": 1,
+        "url": "https://github.com/PastaPastaPasta/govhub"
+      },
+      "AbsoluteYesCount": 0,
+      "YesCount": 1,
+      "NoCount": 1,
+      "AbstainCount": 11
+    },
+    {
+      "Hash": "01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd",
+      "DataObject": {
+        "end_epoch": 1813724642,
+        "name": "test",
+        "payment_address": "yeRZBWYfeNE4yVUHV4ZLs83Ppn9aMRH57A",
+        "payment_amount": 5,
+        "start_epoch": 1749337642,
+        "type": 1,
+        "url": "https://test.com"
+      },
+      "AbsoluteYesCount": -30,
+      "YesCount": 1,
+      "NoCount": 31,
+      "AbstainCount": 6
+    }
+  ]
+}

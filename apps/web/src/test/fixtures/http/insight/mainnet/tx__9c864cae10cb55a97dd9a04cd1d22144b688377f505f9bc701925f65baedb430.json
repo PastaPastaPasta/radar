@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://insight.dash.org/insight-api/tx/9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430"
+  },
+  "recordedAt": "2026-11-12T17:05:32.345Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "txid": "9c864cae10cb55a97dd9a04cd1d22144b688377f505f9bc701925f65baedb430",
+    "version": 1,
+    "locktime": 0,
+    "vin": [
+      {
+        "coinbase": "03a08601062f503253482f04c83cbf530820032c3f6c0000000d2f6e6f64655374726174756d2f",
+        "sequence": 0,
+        "n": 0
+      }
+    ],
+    "vout": [
+      {
+        "value": "4.00000000",
+        "n": 0,
+        "scriptPubKey": {
+          "hex": "76a9142cd46be3ceeacca983e0fea3b88f26b08a26c29b88ac",
+          "asm": "OP_DUP OP_HASH160 2cd46be3ceeacca983e0fea3b88f26b08a26c29b OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["Xemt2zeYELCkddJHvsW4x9ytqTEnkiviaH"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "e0315709a5d43fd543942813e2867863ddf6afe058c88cfbd14483b216ef37f7",
+        "spentIndex": 0,
+        "spentHeight": 100385
+      },
+      {
+        "value": "1.00000000",
+        "n": 1,
+        "scriptPubKey": {
+          "hex": "76a914af825198106a492b3b0f5e776fdb77aa1ca797f288ac",
+          "asm": "OP_DUP OP_HASH160 af825198106a492b3b0f5e776fdb77aa1ca797f2 OP_EQUALVERIFY OP_CHECKSIG",
+          "addresses": ["XrgrCXZFhLNfyR4UKv9YT19CK7YVEPrc8Y"],
+          "type": "pubkeyhash"
+        },
+        "spentTxId": "d2287e057286246b4ae0ba29cc4d4b1d2e99d49dee02166ba785f85b06d4a087",
+        "spentIndex": 99,
+        "spentHeight": 226572
+      }
+    ],
+    "blockhash": "00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2",
+    "blockheight": 100000,
+    "confirmations": 2471149,
+    "time": 1405041879,
+    "blocktime": 1405041879,
+    "isCoinBase": true,
+    "valueOut": 5,
+    "size": 158,
+    "txlock": true
+  }
+}

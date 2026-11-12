@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import type { SourceStamp, SourceId } from '@/data/envelope'
 import type { SourceHealth } from '@/data/health'
 import type { HyStatus } from '@/data/hyphen/schemas'
+import type { InsStatus } from '@/data/insight/schemas'
 import type { PeStatus } from '@/data/pe/schemas'
 import type { RadarNetworkStatus } from '@/data/radar/schemas'
 import { clampSkew, formatInt, formatRelative } from '@/lib/format'
@@ -45,6 +46,16 @@ export function hyphenFacts(status: HyStatus, stamp: SourceStamp, behind = false
     report: behind
       ? t`Indexed to Core block ${indexed} of ${chain}. It calls its sync “${sync}”, but its index is behind the chain.`
       : t`Indexed to Core block ${indexed} of ${chain}. Sync: ${sync}.`,
+  }
+}
+
+export function insightFacts(status: InsStatus, stamp: SourceStamp, behind = false): ProbeFacts {
+  const tip = formatInt(status.info.blocks)
+  return {
+    stamp,
+    report: behind
+      ? t`Its tip is Core block ${tip}, behind the chain.`
+      : t`Its tip is Core block ${tip}.`,
   }
 }
 
@@ -99,6 +110,10 @@ export const SOURCE_ROLE: Record<SourceId, () => { name: string; role: string }>
   radar: () => ({ name: t`Radar crawler`, role: t`The masternode census and network history` }),
   pe: () => ({ name: t`Platform Explorer`, role: t`Platform lists and counts` }),
   hyphen: () => ({ name: t`Hyphen`, role: t`Core addresses, mempool, governance and block lists` }),
+  insight: () => ({
+    name: t`Insight`,
+    role: t`A second index for addresses, spent outputs, chainwork and governance`,
+  }),
   rate: () => ({ name: t`Price feed`, role: t`The USD rate, through Platform Explorer` }),
   local: () => ({ name: t`This browser`, role: t`Figures computed on your device` }),
 }
