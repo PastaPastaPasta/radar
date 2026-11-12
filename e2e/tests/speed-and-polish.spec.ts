@@ -1,0 +1,244 @@
+import type { Page } from '@playwright/test'
+import { settled } from '../helpers/settled'
+import { tabBarHeight } from '../helpers/contrast'
+import { expect as baseExpect, test } from '../helpers/test'
+
+const expect = baseExpect.configure({ timeout: 15_000 })
+
+const TRANSFER = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
+const TIP = 2570085
+const FIRST_CHUNK = 4
+
+const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1000) <= 640
+
+/** Whether anything is drawn in the outermost pixel column of a canvas, and whether the canvas shows anything at all. */
+function canvasEdges(page: Page) {
+  return page.evaluate(() =>
+    [...document.querySelectorAll<HTMLCanvasElement>('.rx-chart__view canvas')].map((c) => {
+      const ctx = c.getContext('2d')!
+      const alpha = (x: number, w: number) => {
+        const data = ctx.getImageData(x, 0, w, c.height).data
+        for (let i = 3; i < data.length; i += 4) if (data[i]! > 0) return true
+        return false
+      }
+      return { drawn: alpha(0, c.width), rightEdgeInk: alpha(c.width - 1, 1) }
+    }),
+  )
+}
+
+test.describe('last axis tick', () => {
+  for (const [width, label] of [
+    [null, 'the project width'],
+    [320, '320 px'],
+  ] as const) {
+    test(`stays inside every chart at ${label} on every range @HY-02`, async ({ page }) => {
+      if (width) await page.setViewportSize({ width, height: 844 })
+      for (const range of ['1d', '1w', '1m']) {
+        await page.goto(`/charts?range=${range}`)
+        await expect(page.getByRole('heading', { level: 1, name: 'Charts' })).toBeVisible()
+        await settled(page)
+        await expect
+          .poll(async () => (await canvasEdges(page)).filter((c) => c.drawn).length, {
+            message: `charts drawn on ${range}`,
+          })
+          .toBe(6)
+        // Let the entry animation finish so the labels are in place.
+        await page.waitForTimeout(700)
+        for (const edge of await canvasEdges(page)) {
+          expect(edge.rightEdgeInk, `ink on the right edge of a chart on ${range}`).toBe(false)
+        }
+      }
+    })
+  }
+})
+
+test.describe('blocks of a day', () => {
+  test('shows the first rows while the rest of the page is still being read @IN-02', async ({
+    page,
+  }) => {
+    await page.addInitScript((chunk) => {
+      const w = window as unknown as {
+        __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
+        __releaseRest: () => void
+      }
+      let release!: () => void
+      const gate = new Promise<void>((resolve) => (release = resolve))
+      w.__releaseRest = release
+      let core: typeof w.__radarCore
+      Object.defineProperty(w, '__radarCore', {
+        configurable: true,
+        get: () => core,
+        set(value: typeof core) {
+          core = value
+          const original = value?.blockRows
+          if (!value || !original) return
+          value.blockRows = async (...args) => {
+            const query = args[1] as { count: number }
+            if (query.count === 20 - chunk) await gate
+            return original.apply(value, args)
+          }
+        },
+      })
+    }, FIRST_CHUNK)
+    await page.goto('/blocks?date=2026-11-03')
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(FIRST_CHUNK)
+    await expect(page.locator('[data-pending-row]')).toHaveCount(20 - FIRST_CHUNK)
+    await expect(page.locator('a[href="/block/2566380"]').first()).toBeVisible()
+    await page.evaluate(() => (window as unknown as { __releaseRest: () => void }).__releaseRest())
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(20)
+    await expect(page.locator('[data-pending-row]')).toHaveCount(0)
+  })
+})
+
+test.describe('unit switch', () => {
+  test('changes the unit where amounts are read and remembers it @IN-12 @HY-16', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.locator('[data-amount]').first()).toBeVisible()
+    const control = page.locator('[data-unit-switch] select:visible')
+    await expect(control).toHaveCount(1)
+    await expect(control).toHaveValue('DASH')
+    await control.selectOption('duffs')
+    await expect(page.locator('.rx-amt .rx-u').filter({ hasText: 'DASH' })).toHaveCount(0)
+    await expect(
+      page
+        .locator('.rx-colunit:visible, .rx-amt .rx-u:visible')
+        .filter({ hasText: 'duffs' })
+        .first(),
+    ).toBeVisible()
+    await page.reload()
+    await expect(page.locator('[data-unit-switch] select:visible')).toHaveValue('duffs')
+    await page.goto('/settings')
+    await expect(page.getByRole('button', { name: 'duffs', pressed: true })).toBeVisible()
+  })
+
+  test('is reachable on a phone without opening Settings, and keeps USD off testnet @IN-12 @HY-16', async ({
+    page,
+  }) => {
+    await page.goto('/blocks?network=testnet')
+    const control = page.locator('[data-unit-switch] select:visible')
+    await expect(control).toHaveCount(1)
+    await expect(control.locator('option[value="USD"]')).toHaveAttribute('disabled', '')
+    const box = await control.boundingBox()
+    expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width)
+    if (isPhone(page)) {
+      const barTop = 844 - (await tabBarHeight(page))
+      expect(box!.y + box!.height).toBeLessThanOrEqual(barTop)
+    }
+  })
+})
+
+test.describe('phone home', () => {
+  for (const width of [320, 390, 430]) {
+    test(`reaches the latest Core blocks sooner at ${width} px @IN-01 @HY-01`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('/')
+      await settled(page)
+      expect(await page.evaluate(() => window.scrollY)).toBe(0)
+      const barTop = 844 - (await tabBarHeight(page))
+      const core = await page.locator('[data-pulse="core"]').boundingBox()
+      const lane = await page.locator('.rx-lane').first().boundingBox()
+      expect(core!.y + core!.height).toBeLessThanOrEqual(barTop)
+      expect(lane!.y, 'the Core block lane starts above the tab bar').toBeLessThan(barTop - 40)
+      expect(lane!.y, 'the lane follows the Core card').toBeGreaterThan(core!.y + core!.height)
+    })
+  }
+})
+
+test.describe('block transactions on a phone', () => {
+  test('are one line each, opened on tap @IN-03', async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    await page.goto(`/block/${TIP}`)
+    const list = page.getByRole('list', { name: /Transactions in block 2,570,085/ })
+    await expect(list).toBeVisible()
+    const rows = list.getByRole('listitem')
+    const first = rows.first()
+    const second = rows.nth(1)
+    const [a, b] = [await first.boundingBox(), await second.boundingBox()]
+    expect(a!.height, 'a closed row is one line').toBeLessThan(60)
+    expect(b!.y).toBeGreaterThanOrEqual(a!.y + a!.height - 1)
+    const toggle = first.locator('button[aria-expanded]')
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await toggle.click()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(first.getByText('Inputs → outputs')).toBeVisible()
+    await expect(first.getByRole('link')).toHaveAttribute('href', /\/tx\//)
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
+    ).toBeLessThanOrEqual(1)
+  })
+})
+
+test.describe('transaction inputs and outputs', () => {
+  test('keep the amount unit in the column header and a gap before the state @IN-14', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop tables')
+    await page.goto(`/tx/${TRANSFER}`)
+    const outputs = page.locator('table.rx-table--colunit').nth(1)
+    await expect(outputs).toBeVisible()
+    await expect(outputs.locator('th .rx-colunit')).toHaveText('DASH')
+    await expect(outputs.locator('td.e .rx-amt .rx-u').first()).toBeHidden()
+    const figure = await outputs.locator('td.e .rx-amt').first().boundingBox()
+    const state = await outputs.locator('td.s > *').first().boundingBox()
+    expect(state!.x - (figure!.x + figure!.width), 'gap between amount and state').toBeGreaterThan(
+      16,
+    )
+    const rights = await outputs
+      .locator('td.e .rx-amt')
+      .evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().right)))
+    expect(new Set(rights).size, 'amounts end on one edge').toBe(1)
+  })
+})
+
+test.describe('sources on a phone', () => {
+  test('are short rows with the explanation behind a disclosure @HY-12', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    await page.goto('/status')
+    const list = page.getByRole('list', { name: 'Sources' })
+    await expect(list).toBeVisible()
+    await settled(page)
+    const row = list.locator('[data-source-row="dapi"]')
+    const details = row.locator('details')
+    await expect(details.locator('summary')).toBeVisible()
+    const closed = await row.boundingBox()
+    expect(closed!.height, 'a source is a short row').toBeLessThan(150)
+    if (!(await details.evaluate((el: HTMLDetailsElement) => el.open))) {
+      await details.locator('summary').click()
+    }
+    await expect(details.getByText(/\S/).nth(1)).toBeVisible()
+  })
+})
+
+test.describe('section rail', () => {
+  test('fades the cropped end and scrolls the current page into view @HY-18', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    await page.setViewportSize({ width: 320, height: 844 })
+    await page.goto('/status')
+    const rail = page.locator('[data-section-nav="core"]')
+    await expect(rail).toBeVisible()
+    const info = await rail.evaluate((el) => ({
+      overflows: el.scrollWidth > el.clientWidth + 1,
+      end: (el as HTMLElement).dataset.moreEnd,
+      start: (el as HTMLElement).dataset.moreStart,
+      mask: getComputedStyle(el).maskImage,
+      current: (() => {
+        const a = el.querySelector('[aria-current="page"]')!.getBoundingClientRect()
+        const r = el.getBoundingClientRect()
+        return a.left >= r.left - 1 && a.right <= r.right + 1
+      })(),
+    }))
+    expect(info.overflows).toBe(true)
+    expect(info.current, 'the current page is fully inside the rail').toBe(true)
+    expect(info.start === 'true' || info.end === 'true').toBe(true)
+    expect(info.mask).not.toBe('none')
+  })
+})

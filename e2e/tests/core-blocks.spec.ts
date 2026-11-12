@@ -61,7 +61,10 @@ test.describe('Block page', () => {
     await page.goto(`/block/${TIP}`)
     await expect(page.getByRole('heading', { level: 1, name: /2,570,085/ })).toBeVisible()
     await expect(page.locator('[data-payload="cbTx"]')).toContainText('Masternode list root')
-    await expect(page.getByRole('table', { name: /Transactions in block 2,570,085/ })).toBeVisible()
+    const phone = (page.viewportSize()?.width ?? 1000) <= 640
+    await expect(
+      page.getByRole(phone ? 'list' : 'table', { name: /Transactions in block 2,570,085/ }),
+    ).toBeVisible()
     await expect(page.getByText('Chainwork')).toBeVisible()
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
     await expectAccessible(page)
