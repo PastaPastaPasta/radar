@@ -216,6 +216,74 @@
 .rx-corefig .rx-note {
   margin: 10px 0 0;
 }
+.rx-home__activity {
+  padding-top: 40px;
+}
+@media (min-width: 1024px) {
+  .rx-home__activity {
+    padding-top: 24px;
+  }
+}
+/* A wide hero gives the left column room to set the title on one line and the lede on two, which keeps the home's latest activity on the first screen. */
+@media (min-width: 1200px) {
+  .rx-scope__grid {
+    grid-template-columns: 560px minmax(0, 1fr);
+  }
+  .rx-scope__lede {
+    max-width: 52ch;
+  }
+}
+/* From 1024 px the four figures are one strip, so the latest activity stays on the first screen. */
+@media (min-width: 1024px) {
+  .rx-corefig {
+    margin-top: 10px;
+  }
+  .rx-corefig .rx-stats {
+    grid-template-columns: repeat(4, auto);
+    gap: 0;
+    border: 1px solid var(--rx-plate-line);
+    border-radius: var(--dh-r3);
+    background: color-mix(in srgb, var(--rx-plate-2) 90%, transparent);
+  }
+  .rx-corefig .rx-stat {
+    container-type: normal;
+    gap: 0;
+    padding: 7px 14px 7px 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .rx-corefig .rx-stat + .rx-stat {
+    border-left: 1px solid var(--rx-plate-line);
+  }
+  .rx-corefig .rx-stat::before {
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+  }
+  .rx-corefig .rx-stat__label,
+  .rx-corefig .rx-stat .rx-src,
+  .rx-corefig .rx-stat__value .rx-fiat {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .rx-corefig .rx-stat__value {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .rx-corefig .rx-stat__value .rx-amt {
+    flex-wrap: nowrap;
+    align-items: baseline;
+  }
+  .rx-corefig .rx-stat__value .rx-fiat {
+    flex-basis: auto;
+    margin: 0 0 0 8px;
+    font-size: var(--dh-fs-sm);
+  }
+  .rx-corefig .rx-note {
+    margin: 8px 0 0;
+  }
+}
 .rx-scope__map {
   position: relative;
   min-width: 0;

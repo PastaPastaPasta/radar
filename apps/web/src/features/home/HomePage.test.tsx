@@ -39,6 +39,16 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
+  it('puts the latest activity before the pending list in reading order @IN-01 @HY-03', async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
+    const activity = document.querySelector('.rx-home__activity')!
+    const pending = document.querySelector('#core')!
+    expect(
+      activity.compareDocumentPosition(pending) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+
   it('shows the Core height and difficulty as soon as the status answers, without the tip @HY-01 @IN-01', async () => {
     vi.spyOn(core, 'tip').mockImplementation(() => new Promise(() => undefined))
     renderAt('/')

@@ -45,6 +45,71 @@ test.describe('section rail room on phones', () => {
     }
   }
 
+  for (const width of [320, 390, 430]) {
+    test(`the unit switch has a hit area of at least 44 px at ${width} px, answering a tap below its visible chip @IN-12 @HY-16 @HY-18`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('/blocks')
+      const unit = page.locator('[data-unit-switch] select:visible')
+      await expect(unit).toHaveCount(1)
+      const box = (await unit.boundingBox())!
+      expect(box.height, 'hit area height').toBeGreaterThanOrEqual(44)
+      expect(box.width, 'hit area width').toBeGreaterThanOrEqual(44)
+      for (const dy of [2, box.height - 2]) {
+        const hit = await page.evaluate(
+          ([x, y]) => document.elementFromPoint(x!, y!)?.tagName,
+          [box.x + box.width / 2, box.y + dy],
+        )
+        expect(hit, `a tap ${dy} px into the hit area reaches the select`).toBe('SELECT')
+      }
+      await unit.selectOption('duffs')
+      await expect(unit).toHaveValue('duffs')
+      const [rail, after] = await Promise.all([
+        page.locator('nav[data-section-nav]').boundingBox(),
+        unit.boundingBox(),
+      ])
+      expect(after!.y, 'under the rail, not over it').toBeGreaterThanOrEqual(
+        rail!.y + rail!.height - 1,
+      )
+    })
+  }
+
+  for (const path of [
+    '/blocks',
+    '/mempool',
+    '/rich-list',
+    '/charts',
+    '/masternodes',
+    '/tools/qr',
+  ]) {
+    test(`the unit switch's hit area covers nothing tappable on ${path} @IN-12 @HY-16 @HY-18`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto(path)
+      const unit = page.locator('[data-unit-switch] select:visible')
+      await expect(unit).toHaveCount(1)
+      await settled(page)
+      const box = (await unit.boundingBox())!
+      const beneath = await unit.evaluate(
+        (el, [x, y]) => {
+          const select = el as HTMLElement
+          select.style.pointerEvents = 'none'
+          const under = document.elementFromPoint(x!, y!)
+          select.style.pointerEvents = ''
+          return (
+            under?.closest('a, button, input, select, summary, [role="button"]')?.tagName ?? null
+          )
+        },
+        [box.x + box.width / 2, box.y + box.height - 3],
+      )
+      expect(beneath, 'what lies under the lower edge of the hit area').toBeNull()
+    })
+  }
+
   test('shows Blocks, Mempool, Rich list, Charts and part of Governance at 390 px @HY-18', async ({
     page,
   }, testInfo) => {
@@ -90,8 +155,34 @@ test.describe('Core figures first on the home page', () => {
     }
     const pending = await page.locator('#core').boundingBox()
     const activity = await page.locator('.rx-home__activity').boundingBox()
-    expect(pending!.y, 'the pending list follows the hero').toBeLessThan(activity!.y)
+    expect(pending!.y, 'the pending list follows the latest activity').toBeGreaterThan(
+      activity!.y + activity!.height - 1,
+    )
   })
+
+  for (const [name, path] of [
+    ['mainnet', '/'],
+    ['testnet', '/?network=testnet'],
+  ] as const) {
+    test(`keeps the latest activity heading on the first desktop screen on ${name} @IN-01 @HY-03 @IN-16`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
+      await page.goto(path)
+      const heading = page.locator('#h-latest')
+      await expect(heading).toBeVisible()
+      await settled(page)
+      await expect(page.locator('.rx-lane .rx-blk').first()).toBeVisible()
+      const top = () =>
+        heading.evaluate((el) => Math.round(el.getBoundingClientRect().top + window.scrollY))
+      await expect.poll(top, { message: 'heading top' }).toBeLessThan(900 - 24)
+      const box = (await heading.boundingBox())!
+      expect(box.y + box.height, 'the whole heading is inside 900 px').toBeLessThanOrEqual(900)
+      const strip = (await page.locator('.rx-scope [data-headline]').boundingBox())!
+      expect(strip.height, 'the Core figures are one compact strip').toBeLessThan(80)
+      await expect(page.locator('.rx-scope [data-headline] .rx-stat')).toHaveCount(4)
+    })
+  }
 
   for (const width of [320, 390, 430]) {
     test(`sit within two screens of the top at ${width} px, with the first view intact @HY-01 @HY-03`, async ({

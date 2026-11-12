@@ -120,7 +120,8 @@ export function HomeMap() {
           style={{
             left: `${(tx / WIDTH) * 100}%`,
             top: `${(ty / HEIGHT) * 100}%`,
-            transform: 'translate(calc(-100% - 12px), -50%)',
+            transform:
+              tx / WIDTH < 0.4 ? 'translate(12px, -50%)' : 'translate(calc(-100% - 12px), -50%)',
           }}
         >
           <b>{place(top)}</b>
