@@ -1334,7 +1334,7 @@ stories:
     group: 'Hyphen (HY): compare with hy.kw.vg / ts.kw.vg'
     shard: S5
     story: As an analyst I want special transactions explained
-    acceptance: 'Fee rate, received and mined time, and readable renderers for ProRegTx, ProUpServTx, ProUpRegTx, ProUpRevTx, quorum commitment, asset lock, asset unlock, MNHF and coinbase payloads; IS lock tag. The fixtures hold one sample of each type under special_txs: ProRegTx {special_txs.proregtx}, ProUpServTx {special_txs.proupservtx}, ProUpRegTx {special_txs.proupregtx}, ProUpRevTx {special_txs.uprevtx}, quorum commitment {special_txs.qctx}, asset lock {special_txs.assetlock}, asset unlock {special_txs.assetunlock}, coinbase with payload {special_txs.cbtx}, and on testnet only MNHF {special_txs.mnhf}'
+    acceptance: 'Fee rate, received time while pending and mined time once mined, and readable renderers for ProRegTx, ProUpServTx, ProUpRegTx, ProUpRevTx, quorum commitment, asset lock, asset unlock, MNHF and coinbase payloads; IS lock tag. The fixtures hold one sample of each type under special_txs: ProRegTx {special_txs.proregtx}, ProUpServTx {special_txs.proupservtx}, ProUpRegTx {special_txs.proupregtx}, ProUpRevTx {special_txs.uprevtx}, quorum commitment {special_txs.qctx}, asset lock {special_txs.assetlock}, asset unlock {special_txs.assetunlock}, coinbase with payload {special_txs.cbtx}, and on testnet only MNHF {special_txs.mnhf}'
     radar_start: /tx/{tx_proreg}
     prod:
       - https://hy.kw.vg/transaction?hash={tx_proreg}
