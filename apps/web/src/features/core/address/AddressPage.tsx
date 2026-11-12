@@ -81,7 +81,7 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
 
 function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   const { t } = useLingui()
-  const { index, from, summary, txs, utxos, pendingInIndex } = useAddressData(net, address)
+  const { index, from, seen, summary, txs, utxos, pendingInIndex } = useAddressData(net, address)
   const live = useAddressActivity(net, address, !isDevnet(net) && !index.pending, from)
 
   const stamp: SourceStamp | undefined = summary.data ? stampOf(summary.data) : undefined
@@ -206,21 +206,13 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               value={<Amount value={a.totalReceived} kind="duffs" />}
             />
             <Stat label={t`Total sent`} value={<Amount value={a.totalSent} kind="duffs" />} />
-            {from === 'hyphen' ? (
-              <Stat
-                label={t`First and last seen`}
-                value={
-                  a.firstSeen && a.lastSeen ? (
-                    <span className="grid gap-1 text-base font-normal">
-                      <Time ms={a.firstSeen} mode="absolute" />
-                      <Time ms={a.lastSeen} mode="absolute" />
-                    </span>
-                  ) : (
-                    t`Not seen yet`
-                  )
-                }
-              />
-            ) : null}
+            <SeenStat
+              first={seen ? seen.first : (a.firstSeen ?? undefined)}
+              last={seen ? seen.last : (a.lastSeen ?? undefined)}
+              loading={seen ? seen.loading : false}
+              failed={seen?.failed ?? false}
+              source={seen?.stamp}
+            />
           </div>
         </Card>
         <Card title={t`QR code`} layer="core">
@@ -279,6 +271,47 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
 
       <UtxoCard query={utxos} />
     </>
+  )
+}
+
+function SeenStat({
+  first,
+  last,
+  loading,
+  failed,
+  source,
+}: {
+  first?: number
+  last?: number
+  loading: boolean
+  failed: boolean
+  source?: SourceStamp
+}) {
+  const { t } = useLingui()
+  return (
+    <Stat
+      label={t`First and last seen`}
+      loading={loading}
+      source={source}
+      value={
+        first && last ? (
+          <span className="grid gap-1 text-base font-normal" data-seen>
+            <Time ms={first} mode="absolute" />
+            <Time ms={last} mode="absolute" />
+          </span>
+        ) : last ? (
+          <span className="grid gap-1 text-base font-normal" data-seen>
+            <span className="text-[var(--dh-ink-2)]">{t`First: not available`}</span>
+            <Time ms={last} mode="absolute" />
+          </span>
+        ) : (
+          t`Not seen yet`
+        )
+      }
+      note={
+        failed && last ? t`Insight could not return this address’s oldest transactions.` : undefined
+      }
+    />
   )
 }
 

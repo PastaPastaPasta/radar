@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
+import { formatIsoUtc } from '@/lib/format'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
@@ -554,6 +555,67 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
     await user.click(within(history).getByRole('button', { name: 'Show more' }))
     await waitFor(() => expect(within(history).getAllByRole('row')).toHaveLength(1 + 3))
     expect(history.querySelectorAll(`a[href*="${idOf(3)}"]`)).toHaveLength(1)
+  })
+
+  describe('first and last seen from Insight @HY-08 @IN-16 @HY-19', () => {
+    const iso = (n: number) => formatIsoUtc((1_760_000_000 - n * 100) * 1000)
+    const seenTimes = async () => {
+      const el = await waitFor(() => {
+        const found = document.querySelector<HTMLElement>('[data-address-summary] [data-seen]')
+        expect(found).not.toBeNull()
+        return found!
+      })
+      return [...el.querySelectorAll('time')].map((t) => t.getAttribute('title'))
+    }
+
+    it('takes last seen from the newest confirmed transaction and first seen from one read of the last page', async () => {
+      const seen: string[] = []
+      serveInsightTxs(
+        [[mempoolTx(1), insTx(2), insTx(3)], [insTx(4)], [insTx(9), insTx(8), insTx(7)]],
+        seen,
+      )
+      renderAt(url)
+      expect(await seenTimes()).toEqual([iso(9), iso(2)])
+      const lastPage = seen.filter((u) => u.includes('pageNum=2'))
+      expect(lastPage).toHaveLength(1)
+      expect(document.querySelector('[data-address-summary]')).not.toHaveTextContent('Not seen yet')
+      emit({ kind: 'block', txids: [] })
+      await new Promise((r) => setTimeout(r, 150))
+      expect(seen.filter((u) => u.includes('pageNum=2'))).toHaveLength(1)
+    })
+
+    it('reads no extra page for an address whose history fits on one', async () => {
+      const seen: string[] = []
+      serveInsightTxs([[insTx(2), insTx(3), insTx(4)]], seen)
+      renderAt(url)
+      expect(await seenTimes()).toEqual([iso(4), iso(2)])
+      expect(seen).toHaveLength(1)
+    })
+
+    it('reads past a first page of unconfirmed transactions for the newest confirmed one', async () => {
+      serveInsightTxs([[mempoolTx(1)], [insTx(5), insTx(6)]])
+      renderAt(url)
+      expect(await seenTimes()).toEqual([iso(6), iso(5)])
+    })
+
+    it('says first seen is unavailable, and keeps last seen, when the last page cannot be read', async () => {
+      server.use(
+        http.get(`${INSIGHT_TESTNET}/txs`, ({ request }) => {
+          const page = Number(new URL(request.url).searchParams.get('pageNum') ?? 0)
+          return page === 0
+            ? HttpResponse.json({ pagesTotal: 5000, txs: [insTx(2)] })
+            : new HttpResponse(null, { status: 500 })
+        }),
+      )
+      renderAt(url)
+      const times = await seenTimes()
+      expect(times).toEqual([iso(2)])
+      const stat = document.querySelector<HTMLElement>('[data-address-summary] [data-seen]')!
+      expect(stat).toHaveTextContent('First: not available')
+      expect(stat.closest('.rx-stat')).toHaveTextContent(
+        'Insight could not return this address’s oldest transactions.',
+      )
+    })
   })
 
   it('reads a first page that holds only unconfirmed transactions on to the history, never as empty', async () => {

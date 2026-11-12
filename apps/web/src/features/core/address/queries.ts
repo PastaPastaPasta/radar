@@ -72,8 +72,19 @@ export const insightAddressQueries = {
             return { items: txRows(address, fresh) }
           }),
         )
-        return { pages, pageParams: data.pageParams, pending }
+        return {
+          pages,
+          pageParams: data.pageParams,
+          pending,
+          pagesTotal: data.pages[0]?.data.pagesTotal,
+        }
       },
+    }),
+  /** The last page of the history: its oldest transaction is when the address was first seen. One request, cached with the others. */
+  oldestPage: (net: NetworkId, address: string, pagesTotal: number) =>
+    queryOptions({
+      ...insQueries.addressTxs(net, address, Math.max(0, pagesTotal - 1)),
+      select: (s) => mapSourced(s, (page) => txRows(address, page)),
     }),
   /** The whole list is read once; the card pages through it in the browser. */
   utxos: (net: NetworkId, address: string) =>

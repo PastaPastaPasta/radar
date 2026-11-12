@@ -610,8 +610,14 @@ async function recordInsight() {
   }
   for (const a of addresses) {
     await record('insight', `/addr/${a}?noTxList=1`, { optional: true })
+    let pagesTotal = 0
     for (const page of [0, 1]) {
-      await record('insight', `/txs?address=${a}&pageNum=${page}`, { optional: true })
+      const body = await record('insight', `/txs?address=${a}&pageNum=${page}`, { optional: true })
+      pagesTotal = Math.max(pagesTotal, Number(body?.pagesTotal) || 0)
+    }
+    // The address page reads the last page once for the oldest transaction (first seen).
+    if (pagesTotal > 2) {
+      await record('insight', `/txs?address=${a}&pageNum=${pagesTotal - 1}`, { optional: true })
     }
     await record('insight', `/addr/${a}/utxo`, { optional: true })
   }
