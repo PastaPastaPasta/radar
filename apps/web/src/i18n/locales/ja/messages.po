@@ -55,7 +55,7 @@ msgstr "{0, plural, other {最後のブロックヘッダー: #分前}}"
 msgid "{0} addresses ranked"
 msgstr "{0} 件のアドレスを順位付け"
 
-#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+#. placeholder {0}: formatInt(size)
 msgid "{0} blocks a page, newest first."
 msgstr "1ページ {0} ブロック、新しい順。"
 
@@ -158,6 +158,11 @@ msgstr "{0} / {1}"
 msgid "{0} of {1} peers"
 msgstr "{1} ピア中 {0}"
 
+#. placeholder {0}: formatInt(shown.length + shownEarlier.length)
+#. placeholder {1}: formatInt(all.length)
+msgid "{0} of {1} proposals match"
+msgstr "{1}件中{0}件の提案が一致"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "出力 {0} 件"
@@ -197,6 +202,13 @@ msgstr "他のアドレスへ {0}"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} tx"
+
+#. placeholder {0}: formatInt(p.votes.yes)
+#. placeholder {1}: formatInt(p.votes.no)
+#. placeholder {2}: formatInt(p.votes.abstain)
+#. placeholder {3}: formatInt(netVotes(p))
+msgid "{0} yes · {1} no · {2} abstain · net {3}"
+msgstr "賛成 {0} · 反対 {1} · 棄権 {2} · 差引 {3}"
 
 #. placeholder {0}: formatInt(start)
 #. placeholder {1}: formatInt(end)
@@ -616,6 +628,9 @@ msgstr "{date} のブロック"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} のブロック"
 
+msgid "Blocks per page"
+msgstr "1ページあたりのブロック数"
+
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Radar の他の場所のブロック、トランザクション、アドレスは最新です。"
 
@@ -668,7 +683,7 @@ msgstr "チェーンの状態"
 msgid "ChainLock"
 msgstr "ChainLock"
 
-#. placeholder {0}: formatInt(lock.data.data.height)
+#. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
 msgstr "ChainLock は {0}（1つのノードが報告）"
 
@@ -1168,6 +1183,12 @@ msgstr "このページの数値はそれらのブロック時点のもので、
 msgid "Filter by {text}"
 msgstr "{text} で絞り込む"
 
+msgid "Filter proposals by name or hash"
+msgstr "名前またはハッシュで提案を絞り込む"
+
+msgid "Filter proposals by status"
+msgstr "ステータスで提案を絞り込む"
+
 msgid "Finality"
 msgstr "ファイナリティ"
 
@@ -1176,6 +1197,9 @@ msgstr "40 文字のキーハッシュから、その公開鍵を持つアイデ
 
 msgid "finding where…"
 msgstr "場所を特定中…"
+
+msgid "First"
+msgstr "最初"
 
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
@@ -1190,6 +1214,9 @@ msgstr "初回確認"
 
 msgid "first seen in the mempool"
 msgstr "メモリプールで初めて確認"
+
+msgid "First: not available"
+msgstr "最初：取得できません"
 
 msgid "From"
 msgstr "送信元"
@@ -1271,6 +1298,9 @@ msgstr "上位10件が保有"
 
 msgid "Held by the top 100"
 msgstr "上位100件が保有"
+
+msgid "Hide QR code"
+msgstr "QRコードを隠す"
 
 msgid "Hide table"
 msgstr "表を隠す"
@@ -1437,6 +1467,9 @@ msgstr "入力のハッシュ"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Insight could not return this address’s oldest transactions."
+msgstr "Insightはこのアドレスの最も古いトランザクションを返せませんでした。"
+
 msgid "Insight couldn’t be reached"
 msgstr "Insight に接続できませんでした"
 
@@ -1505,6 +1538,9 @@ msgstr "言語、単位、タイムゾーン、接続オプション、カスタ
 
 msgid "Largest balances"
 msgstr "残高の多い順"
+
+msgid "Last"
+msgstr "最後"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
@@ -1761,6 +1797,9 @@ msgstr "名前の争奪"
 msgid "Name contests"
 msgstr "名前の争奪"
 
+msgid "Name or hash"
+msgstr "名前またはハッシュ"
+
 msgid "Names"
 msgstr "名前"
 
@@ -1887,6 +1926,9 @@ msgstr "ペナルティなし"
 
 msgid "No proposal with this hash on this network."
 msgstr "このネットワークにこのハッシュの提案はありません。"
+
+msgid "No proposals match"
+msgstr "一致する提案がありません"
 
 msgid "No proposals on this network."
 msgstr "このネットワークに提案はありません。"
@@ -2805,6 +2847,9 @@ msgstr "共有マスターノードが解散されました"
 msgid "Shared masternode registrar update"
 msgstr "共有マスターノードのレジストラー更新"
 
+msgid "Shares are of address balances, not of the circulating supply."
+msgstr "割合はアドレス残高に対するもので、流通供給量に対するものではありません。"
+
 #. placeholder {0}: formatInt(height)
 msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
 msgstr "割合は、ブロック {0} 時点で残高がプラスのアドレスが保有する <0/> に対するもので、Radar の他の場所に表示される流通供給量に対するものではありません。"
@@ -2828,6 +2873,9 @@ msgstr "表として表示"
 
 msgid "Show more"
 msgstr "もっと見る"
+
+msgid "Show QR code"
+msgstr "QRコードを表示"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "DASH の金額の横に USD 換算額を表示"
@@ -3345,6 +3393,9 @@ msgstr "再試行"
 
 msgid "Try again in a moment. {rest}"
 msgstr "しばらくしてからもう一度お試しください。{rest}"
+
+msgid "Try another name or hash, or choose All."
+msgstr "別の名前またはハッシュを試すか、「すべて」を選んでください。"
 
 msgid "tx"
 msgstr "Tx"

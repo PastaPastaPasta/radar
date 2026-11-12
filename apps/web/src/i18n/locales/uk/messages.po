@@ -55,7 +55,7 @@ msgstr "{0, plural, one {останній заголовок блоку # хви
 msgid "{0} addresses ranked"
 msgstr "Адрес у рейтингу: {0}"
 
-#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+#. placeholder {0}: formatInt(size)
 msgid "{0} blocks a page, newest first."
 msgstr "{0} блоків на сторінці, спочатку нові."
 
@@ -158,6 +158,11 @@ msgstr "{0} з {1}"
 msgid "{0} of {1} peers"
 msgstr "{0} з {1} пірів"
 
+#. placeholder {0}: formatInt(shown.length + shownEarlier.length)
+#. placeholder {1}: formatInt(all.length)
+msgid "{0} of {1} proposals match"
+msgstr "Збігається пропозицій: {0} з {1}"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "Виходів: {0}"
@@ -197,6 +202,13 @@ msgstr "{0} на інші адреси"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} тх"
+
+#. placeholder {0}: formatInt(p.votes.yes)
+#. placeholder {1}: formatInt(p.votes.no)
+#. placeholder {2}: formatInt(p.votes.abstain)
+#. placeholder {3}: formatInt(netVotes(p))
+msgid "{0} yes · {1} no · {2} abstain · net {3}"
+msgstr "{0} за · {1} проти · {2} утрималися · разом {3}"
 
 #. placeholder {0}: formatInt(start)
 #. placeholder {1}: formatInt(end)
@@ -616,6 +628,9 @@ msgstr "Блоки за {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Блоки за {dateLabel}"
 
+msgid "Blocks per page"
+msgstr "Блоків на сторінці"
+
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Блоки, транзакції та адреси в інших розділах Radar актуальні."
 
@@ -668,7 +683,7 @@ msgstr "Стан ланцюга"
 msgid "ChainLock"
 msgstr "ChainLock"
 
-#. placeholder {0}: formatInt(lock.data.data.height)
+#. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
 msgstr "ChainLock на {0}, повідомлений одним вузлом"
 
@@ -1168,6 +1183,12 @@ msgstr "Цифри на цій сторінці — станом на ці бл�
 msgid "Filter by {text}"
 msgstr "Фільтр: {text}"
 
+msgid "Filter proposals by name or hash"
+msgstr "Фільтр пропозицій за назвою або хешем"
+
+msgid "Filter proposals by status"
+msgstr "Фільтр пропозицій за статусом"
+
 msgid "Finality"
 msgstr "Фінальність"
 
@@ -1176,6 +1197,9 @@ msgstr "Знайдіть ідентичність, якій належить в�
 
 msgid "finding where…"
 msgstr "шукаємо, де…"
+
+msgid "First"
+msgstr "Перша"
 
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
@@ -1190,6 +1214,9 @@ msgstr "Уперше помічено"
 
 msgid "first seen in the mempool"
 msgstr "уперше помічено в мемпулі"
+
+msgid "First: not available"
+msgstr "Перша: недоступно"
 
 msgid "From"
 msgstr "Від"
@@ -1271,6 +1298,9 @@ msgstr "Належить топ-10"
 
 msgid "Held by the top 100"
 msgstr "Належить топ-100"
+
+msgid "Hide QR code"
+msgstr "Сховати QR-код"
 
 msgid "Hide table"
 msgstr "Сховати таблицю"
@@ -1437,6 +1467,9 @@ msgstr "Хеш входів"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Insight could not return this address’s oldest transactions."
+msgstr "Insight не зміг повернути найдавніші транзакції цієї адреси."
+
 msgid "Insight couldn’t be reached"
 msgstr "Не вдалося зв’язатися з Insight"
 
@@ -1505,6 +1538,9 @@ msgstr "Мова, одиниці, часовий пояс, параметри п
 
 msgid "Largest balances"
 msgstr "Найбільші баланси"
+
+msgid "Last"
+msgstr "Остання"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
@@ -1761,6 +1797,9 @@ msgstr "Суперечка за ім’я"
 msgid "Name contests"
 msgstr "Суперечки за імена"
 
+msgid "Name or hash"
+msgstr "Назва або хеш"
+
 msgid "Names"
 msgstr "Імена"
 
@@ -1887,6 +1926,9 @@ msgstr "Штрафу немає"
 
 msgid "No proposal with this hash on this network."
 msgstr "У цій мережі немає пропозиції з таким хешем."
+
+msgid "No proposals match"
+msgstr "Немає відповідних пропозицій"
 
 msgid "No proposals on this network."
 msgstr "У цій мережі немає пропозицій."
@@ -2805,6 +2847,9 @@ msgstr "Спільну мастерноду розпущено"
 msgid "Shared masternode registrar update"
 msgstr "Оновлення реєстратора спільної мастерноди"
 
+msgid "Shares are of address balances, not of the circulating supply."
+msgstr "Частки рахуються від балансів адрес, а не від обігової пропозиції."
+
 #. placeholder {0}: formatInt(height)
 msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
 msgstr "Частки обчислюються від <0/> на адресах із додатним балансом на блоці {0}, а не від циркулюючої пропозиції, яку показано в інших місцях Radar."
@@ -2828,6 +2873,9 @@ msgstr "Показати таблицею"
 
 msgid "Show more"
 msgstr "Показати ще"
+
+msgid "Show QR code"
+msgstr "Показати QR-код"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "Показувати вартість у USD поруч із сумами в DASH"
@@ -3345,6 +3393,9 @@ msgstr "Спробувати знову"
 
 msgid "Try again in a moment. {rest}"
 msgstr "Повторіть за хвилину. {rest}"
+
+msgid "Try another name or hash, or choose All."
+msgstr "Спробуйте іншу назву чи хеш або виберіть «Усі»."
 
 msgid "tx"
 msgstr "тх"

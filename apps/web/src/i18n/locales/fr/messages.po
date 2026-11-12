@@ -55,7 +55,7 @@ msgstr "{0, plural, one {dernier en-tête de bloc il y a # minute} other {dernie
 msgid "{0} addresses ranked"
 msgstr "{0} adresses classées"
 
-#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+#. placeholder {0}: formatInt(size)
 msgid "{0} blocks a page, newest first."
 msgstr "{0} blocs par page, du plus récent au plus ancien."
 
@@ -158,6 +158,11 @@ msgstr "{0} sur {1}"
 msgid "{0} of {1} peers"
 msgstr "{0} pairs sur {1}"
 
+#. placeholder {0}: formatInt(shown.length + shownEarlier.length)
+#. placeholder {1}: formatInt(all.length)
+msgid "{0} of {1} proposals match"
+msgstr "{0} propositions sur {1} correspondent"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "{0} sorties"
@@ -197,6 +202,13 @@ msgstr "{0} vers d’autres adresses"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} tx"
+
+#. placeholder {0}: formatInt(p.votes.yes)
+#. placeholder {1}: formatInt(p.votes.no)
+#. placeholder {2}: formatInt(p.votes.abstain)
+#. placeholder {3}: formatInt(netVotes(p))
+msgid "{0} yes · {1} no · {2} abstain · net {3}"
+msgstr "{0} oui · {1} non · {2} abstention · net {3}"
 
 #. placeholder {0}: formatInt(start)
 #. placeholder {1}: formatInt(end)
@@ -616,6 +628,9 @@ msgstr "Blocs du {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Blocs du {dateLabel}"
 
+msgid "Blocks per page"
+msgstr "Blocs par page"
+
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Les blocs, les transactions et les adresses ailleurs dans Radar sont à jour."
 
@@ -668,7 +683,7 @@ msgstr "État de la chaîne"
 msgid "ChainLock"
 msgstr "ChainLock"
 
-#. placeholder {0}: formatInt(lock.data.data.height)
+#. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
 msgstr "ChainLock à {0}, signalé par un seul nœud"
 
@@ -1168,6 +1183,12 @@ msgstr "Les chiffres de cette page correspondent à ces blocs, pas au direct."
 msgid "Filter by {text}"
 msgstr "Filtrer par {text}"
 
+msgid "Filter proposals by name or hash"
+msgstr "Filtrer les propositions par nom ou hash"
+
+msgid "Filter proposals by status"
+msgstr "Filtrer les propositions par statut"
+
 msgid "Finality"
 msgstr "Finalité"
 
@@ -1176,6 +1197,9 @@ msgstr "Trouvez l’identité qui détient une clé publique, à partir de son h
 
 msgid "finding where…"
 msgstr "recherche de l’emplacement…"
+
+msgid "First"
+msgstr "Première"
 
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
@@ -1190,6 +1214,9 @@ msgstr "Vu pour la première fois"
 
 msgid "first seen in the mempool"
 msgstr "vu pour la première fois dans le mempool"
+
+msgid "First: not available"
+msgstr "Première : indisponible"
 
 msgid "From"
 msgstr "De"
@@ -1271,6 +1298,9 @@ msgstr "Détenu par les 10 premiers"
 
 msgid "Held by the top 100"
 msgstr "Détenu par les 100 premiers"
+
+msgid "Hide QR code"
+msgstr "Masquer le code QR"
 
 msgid "Hide table"
 msgstr "Masquer le tableau"
@@ -1437,6 +1467,9 @@ msgstr "Hash des entrées"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Insight could not return this address’s oldest transactions."
+msgstr "Insight n’a pas pu renvoyer les plus anciennes transactions de cette adresse."
+
 msgid "Insight couldn’t be reached"
 msgstr "Insight n’a pas pu être joint"
 
@@ -1505,6 +1538,9 @@ msgstr "Langue, unités, fuseau horaire, options de connexion et devnets personn
 
 msgid "Largest balances"
 msgstr "Plus gros soldes"
+
+msgid "Last"
+msgstr "Dernière"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
@@ -1761,6 +1797,9 @@ msgstr "Contestation de nom"
 msgid "Name contests"
 msgstr "Contestations de noms"
 
+msgid "Name or hash"
+msgstr "Nom ou hash"
+
 msgid "Names"
 msgstr "Noms"
 
@@ -1887,6 +1926,9 @@ msgstr "Aucune pénalité"
 
 msgid "No proposal with this hash on this network."
 msgstr "Aucune proposition avec ce hash sur ce réseau."
+
+msgid "No proposals match"
+msgstr "Aucune proposition ne correspond"
 
 msgid "No proposals on this network."
 msgstr "Aucune proposition sur ce réseau."
@@ -2805,6 +2847,9 @@ msgstr "Masternode partagé dissous"
 msgid "Shared masternode registrar update"
 msgstr "Mise à jour du registrar d’un masternode partagé"
 
+msgid "Shares are of address balances, not of the circulating supply."
+msgstr "Les parts portent sur les soldes d’adresses, pas sur l’offre en circulation."
+
 #. placeholder {0}: formatInt(height)
 msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
 msgstr "Les parts sont calculées sur les <0/> détenus dans des soldes d'adresses positifs au bloc {0}, et non sur l'offre en circulation affichée ailleurs dans Radar."
@@ -2828,6 +2873,9 @@ msgstr "Afficher sous forme de tableau"
 
 msgid "Show more"
 msgstr "Afficher plus"
+
+msgid "Show QR code"
+msgstr "Afficher le code QR"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "Afficher la valeur en USD à côté des montants en DASH"
@@ -3345,6 +3393,9 @@ msgstr "Réessayer"
 
 msgid "Try again in a moment. {rest}"
 msgstr "Réessayez dans un instant. {rest}"
+
+msgid "Try another name or hash, or choose All."
+msgstr "Essayez un autre nom ou hash, ou choisissez Toutes."
 
 msgid "tx"
 msgstr "tx"

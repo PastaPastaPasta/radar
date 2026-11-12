@@ -55,7 +55,7 @@ msgstr "{0, plural, one {son blok başlığı # dakika önce} other {son blok ba
 msgid "{0} addresses ranked"
 msgstr "{0} adres sıralandı"
 
-#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+#. placeholder {0}: formatInt(size)
 msgid "{0} blocks a page, newest first."
 msgstr "Sayfa başına {0} blok, en yeniden eskiye."
 
@@ -158,6 +158,11 @@ msgstr "{0} / {1}"
 msgid "{0} of {1} peers"
 msgstr "{1} eşten {0}"
 
+#. placeholder {0}: formatInt(shown.length + shownEarlier.length)
+#. placeholder {1}: formatInt(all.length)
+msgid "{0} of {1} proposals match"
+msgstr "{1} tekliften {0} tanesi eşleşiyor"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "{0} çıktı"
@@ -197,6 +202,13 @@ msgstr "Diğer adreslere {0}"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} işlem"
+
+#. placeholder {0}: formatInt(p.votes.yes)
+#. placeholder {1}: formatInt(p.votes.no)
+#. placeholder {2}: formatInt(p.votes.abstain)
+#. placeholder {3}: formatInt(netVotes(p))
+msgid "{0} yes · {1} no · {2} abstain · net {3}"
+msgstr "{0} evet · {1} hayır · {2} çekimser · net {3}"
 
 #. placeholder {0}: formatInt(start)
 #. placeholder {1}: formatInt(end)
@@ -616,6 +628,9 @@ msgstr "{date} tarihli bloklar"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} tarihli bloklar"
 
+msgid "Blocks per page"
+msgstr "Sayfa başına blok"
+
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Radar’ın diğer bölümlerindeki bloklar, işlemler ve adresler günceldir."
 
@@ -668,7 +683,7 @@ msgstr "Zincir durumu"
 msgid "ChainLock"
 msgstr "ChainLock"
 
-#. placeholder {0}: formatInt(lock.data.data.height)
+#. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
 msgstr "{0} yüksekliğinde ChainLock, tek bir düğüm bildirdi"
 
@@ -1168,6 +1183,12 @@ msgstr "Bu sayfadaki rakamlar o bloklar itibarıyladır, canlı değildir."
 msgid "Filter by {text}"
 msgstr "{text} ile süz"
 
+msgid "Filter proposals by name or hash"
+msgstr "Teklifleri ada veya hash’e göre süz"
+
+msgid "Filter proposals by status"
+msgstr "Teklifleri duruma göre süz"
+
 msgid "Finality"
 msgstr "Kesinlik"
 
@@ -1176,6 +1197,9 @@ msgstr "40 karakterlik anahtar hash’inden, bir açık anahtarı tutan kimliği
 
 msgid "finding where…"
 msgstr "nerede olduğu bulunuyor…"
+
+msgid "First"
+msgstr "İlk"
 
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
@@ -1190,6 +1214,9 @@ msgstr "İlk görülme"
 
 msgid "first seen in the mempool"
 msgstr "mempool’da ilk görüldü"
+
+msgid "First: not available"
+msgstr "İlk: kullanılamıyor"
 
 msgid "From"
 msgstr "Gönderen"
@@ -1271,6 +1298,9 @@ msgstr "İlk 10’un elinde"
 
 msgid "Held by the top 100"
 msgstr "İlk 100’ün elinde"
+
+msgid "Hide QR code"
+msgstr "QR kodunu gizle"
 
 msgid "Hide table"
 msgstr "Tabloyu gizle"
@@ -1437,6 +1467,9 @@ msgstr "Girdi hash’i"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Insight could not return this address’s oldest transactions."
+msgstr "Insight bu adresin en eski işlemlerini getiremedi."
+
 msgid "Insight couldn’t be reached"
 msgstr "Insight’a ulaşılamadı"
 
@@ -1505,6 +1538,9 @@ msgstr "Dil, birimler, saat dilimi, bağlantı seçenekleri ve özel devnet’le
 
 msgid "Largest balances"
 msgstr "En büyük bakiyeler"
+
+msgid "Last"
+msgstr "Son"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
@@ -1761,6 +1797,9 @@ msgstr "Ad çekişmesi"
 msgid "Name contests"
 msgstr "Ad çekişmeleri"
 
+msgid "Name or hash"
+msgstr "Ad veya hash"
+
 msgid "Names"
 msgstr "Adlar"
 
@@ -1887,6 +1926,9 @@ msgstr "Ceza yok"
 
 msgid "No proposal with this hash on this network."
 msgstr "Bu ağda bu hash’e sahip bir teklif yok."
+
+msgid "No proposals match"
+msgstr "Eşleşen teklif yok"
 
 msgid "No proposals on this network."
 msgstr "Bu ağda teklif yok."
@@ -2805,6 +2847,9 @@ msgstr "Paylaşımlı masternode feshedildi"
 msgid "Shared masternode registrar update"
 msgstr "Paylaşımlı masternode kaydedici güncellemesi"
 
+msgid "Shares are of address balances, not of the circulating supply."
+msgstr "Paylar adres bakiyelerine göredir, dolaşımdaki arza göre değil."
+
 #. placeholder {0}: formatInt(height)
 msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
 msgstr "Paylar, {0} numaralı blokta pozitif bakiyeli adreslerde tutulan <0/> üzerinden hesaplanır; Radar'ın başka yerlerinde gösterilen dolaşımdaki arz üzerinden değil."
@@ -2828,6 +2873,9 @@ msgstr "Tablo olarak göster"
 
 msgid "Show more"
 msgstr "Daha fazla göster"
+
+msgid "Show QR code"
+msgstr "QR kodunu göster"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "DASH tutarlarının yanında USD değerini göster"
@@ -3345,6 +3393,9 @@ msgstr "Tekrar dene"
 
 msgid "Try again in a moment. {rest}"
 msgstr "Birazdan tekrar deneyin. {rest}"
+
+msgid "Try another name or hash, or choose All."
+msgstr "Başka bir ad veya hash deneyin ya da Tümü’nü seçin."
 
 msgid "tx"
 msgstr "işlem"

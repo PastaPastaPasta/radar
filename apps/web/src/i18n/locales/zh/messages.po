@@ -55,7 +55,7 @@ msgstr "{0, plural, other {最后一个区块头：# 分钟前}}"
 msgid "{0} addresses ranked"
 msgstr "已排名 {0} 个地址"
 
-#. placeholder {0}: formatInt(BLOCKS_PER_PAGE)
+#. placeholder {0}: formatInt(size)
 msgid "{0} blocks a page, newest first."
 msgstr "每页 {0} 个区块，最新的在前。"
 
@@ -158,6 +158,11 @@ msgstr "{0} / {1}"
 msgid "{0} of {1} peers"
 msgstr "{1} 个节点中的 {0} 个"
 
+#. placeholder {0}: formatInt(shown.length + shownEarlier.length)
+#. placeholder {1}: formatInt(all.length)
+msgid "{0} of {1} proposals match"
+msgstr "{1} 项提案中有 {0} 项匹配"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "{0} outputs"
 msgstr "{0} 个输出"
@@ -197,6 +202,13 @@ msgstr "转给其他地址 {0}"
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} 笔交易"
+
+#. placeholder {0}: formatInt(p.votes.yes)
+#. placeholder {1}: formatInt(p.votes.no)
+#. placeholder {2}: formatInt(p.votes.abstain)
+#. placeholder {3}: formatInt(netVotes(p))
+msgid "{0} yes · {1} no · {2} abstain · net {3}"
+msgstr "赞成 {0} · 反对 {1} · 弃权 {2} · 净 {3}"
 
 #. placeholder {0}: formatInt(start)
 #. placeholder {1}: formatInt(end)
@@ -616,6 +628,9 @@ msgstr "{date} 的区块"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} 的区块"
 
+msgid "Blocks per page"
+msgstr "每页区块数"
+
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Radar 其他位置的区块、交易和地址都是最新的。"
 
@@ -668,7 +683,7 @@ msgstr "链状态"
 msgid "ChainLock"
 msgstr "ChainLock"
 
-#. placeholder {0}: formatInt(lock.data.data.height)
+#. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
 msgstr "ChainLock 位于 {0}（仅一个节点报告）"
 
@@ -1168,6 +1183,12 @@ msgstr "此页面的数据截至这些区块,并非实时。"
 msgid "Filter by {text}"
 msgstr "按 {text} 筛选"
 
+msgid "Filter proposals by name or hash"
+msgstr "按名称或哈希筛选提案"
+
+msgid "Filter proposals by status"
+msgstr "按状态筛选提案"
+
 msgid "Finality"
 msgstr "最终性"
 
@@ -1176,6 +1197,9 @@ msgstr "通过 40 个字符的密钥哈希，找到持有该公钥的身份。"
 
 msgid "finding where…"
 msgstr "正在查找位置…"
+
+msgid "First"
+msgstr "首次"
 
 #. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
@@ -1190,6 +1214,9 @@ msgstr "首次出现"
 
 msgid "first seen in the mempool"
 msgstr "首次出现在内存池中"
+
+msgid "First: not available"
+msgstr "首次：不可用"
 
 msgid "From"
 msgstr "来自"
@@ -1271,6 +1298,9 @@ msgstr "前 10 名持有"
 
 msgid "Held by the top 100"
 msgstr "前 100 名持有"
+
+msgid "Hide QR code"
+msgstr "隐藏二维码"
 
 msgid "Hide table"
 msgstr "隐藏表格"
@@ -1437,6 +1467,9 @@ msgstr "输入哈希"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Insight could not return this address’s oldest transactions."
+msgstr "Insight 无法返回此地址最早的交易。"
+
 msgid "Insight couldn’t be reached"
 msgstr "无法连接 Insight"
 
@@ -1505,6 +1538,9 @@ msgstr "语言、单位、时区、连接选项和自定义开发网。"
 
 msgid "Largest balances"
 msgstr "最大余额"
+
+msgid "Last"
+msgstr "最近"
 
 #. placeholder {0}: formatInt(HISTORY.blocks)
 msgid "Last {0} blocks"
@@ -1761,6 +1797,9 @@ msgstr "名称争议"
 msgid "Name contests"
 msgstr "名称争议"
 
+msgid "Name or hash"
+msgstr "名称或哈希"
+
 msgid "Names"
 msgstr "名称"
 
@@ -1887,6 +1926,9 @@ msgstr "无罚分"
 
 msgid "No proposal with this hash on this network."
 msgstr "此网络上没有该哈希的提案。"
+
+msgid "No proposals match"
+msgstr "没有匹配的提案"
 
 msgid "No proposals on this network."
 msgstr "此网络上没有提案。"
@@ -2805,6 +2847,9 @@ msgstr "共享主节点已解散"
 msgid "Shared masternode registrar update"
 msgstr "共享主节点注册方更新"
 
+msgid "Shares are of address balances, not of the circulating supply."
+msgstr "占比基于地址余额，而非流通供应量。"
+
 #. placeholder {0}: formatInt(height)
 msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
 msgstr "占比是相对于区块 {0} 时持有正余额的地址所持有的 <0/> 计算的，而不是 Radar 其他位置显示的流通供应量。"
@@ -2828,6 +2873,9 @@ msgstr "以表格显示"
 
 msgid "Show more"
 msgstr "显示更多"
+
+msgid "Show QR code"
+msgstr "显示二维码"
 
 msgid "Show the USD value next to DASH amounts"
 msgstr "在 DASH 金额旁显示美元价值"
@@ -3345,6 +3393,9 @@ msgstr "重试"
 
 msgid "Try again in a moment. {rest}"
 msgstr "请稍后再试。{rest}"
+
+msgid "Try another name or hash, or choose All."
+msgstr "请尝试其他名称或哈希，或选择“全部”。"
 
 msgid "tx"
 msgstr "笔"
