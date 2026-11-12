@@ -54,6 +54,25 @@ test.describe('Blocks list', () => {
     await expect(page.locator(`a[href^="/block/${TESTNET_TIP}"]`).first()).toBeVisible()
     await expect(page.locator('dashhq-bar')).toHaveAttribute('network', 'testnet')
   })
+
+  test('shows a page of 50 that crosses UTC midnight whole, with no block missing @IN-02 @IN-16', async ({
+    page,
+  }) => {
+    await page.goto('/blocks?network=testnet&size=50&from=1586890')
+    await expect(page.locator('a[href^="/block/1586890"]').first()).toBeVisible()
+    await expect(page.locator('a[href^="/block/1586841"]').first()).toBeVisible()
+    const heights = await page
+      .locator('table tbody a[href^="/block/"]')
+      .evaluateAll((links) =>
+        links.map((a) => Number(/\/block\/(\d+)/.exec(a.getAttribute('href')!)![1])),
+      )
+    expect(heights).toEqual(Array.from({ length: 50 }, (_, i) => 1586890 - i))
+    await expect(page.getByText('Heights 1,586,841 to 1,586,890')).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Older' })).toHaveAttribute(
+      'href',
+      /from=1586840.*size=50|size=50.*from=1586840/,
+    )
+  })
 })
 
 test.describe('Block page', () => {

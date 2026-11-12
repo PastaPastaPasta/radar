@@ -28,7 +28,7 @@ Options:
                          (nothing is removed and the manifest is left as it is)
   --times <ms,…>         the same for the header reads of a height-at-time search, started from the tip the
                          manifest records so replays ask for the same windows (add a day's start and end)
-  --lookups <list>       the same for single lookups: block:<height|hash> and tx:<txid>, comma-separated;
+  --lookups <list>       the same for single lookups: block:<height|hash>, header:<height> and tx:<txid>, comma-separated;
                          a hash or id that does not exist is recorded as the not-found answer`
 
 const args = {
@@ -152,6 +152,7 @@ if (args.rows.length > 0 || args.lookups.length > 0 || args.times.length > 0) {
   for (const [kind, id] of args.lookups) {
     try {
       if (kind === 'tx') await core.tx(net, id)
+      else if (kind === 'header') await core.headers(net, Number(id), 1)
       else await core.block(net, /^\d+$/.test(id) ? { height: Number(id) } : { hash: id })
       say(`${kind} ${id}`)
     } catch (e) {
