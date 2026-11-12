@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { local } from '@/data/envelope'
 import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
 import { classify, useWordlistLoaded } from '@/features/search'
@@ -34,6 +34,11 @@ export function VerifyMessagePage() {
     outcome.for.signature === fields.signature
       ? outcome
       : undefined
+
+  const resultRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (outcome) resultRef.current?.scrollIntoView({ block: 'nearest' })
+  }, [outcome])
 
   const set = (key: keyof Fields) => (value: string) => {
     setFields((f) => ({ ...f, [key]: value }))
@@ -126,7 +131,7 @@ export function VerifyMessagePage() {
         </form>
       </Card>
 
-      <div role="status" aria-live="polite">
+      <div ref={resultRef} className="rx-verify-result" role="status" aria-live="polite">
         {current ? <Result outcome={current} /> : null}
       </div>
     </article>

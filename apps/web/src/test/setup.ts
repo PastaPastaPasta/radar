@@ -11,6 +11,7 @@ await i18nReady
 await installFixtureSdk()
 
 Element.prototype.scrollTo = () => undefined
+Element.prototype.scrollIntoView = () => undefined
 window.scrollTo = () => undefined
 
 beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))

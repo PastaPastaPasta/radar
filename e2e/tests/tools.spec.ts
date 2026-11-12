@@ -89,6 +89,41 @@ test.describe('verify message', () => {
     }
   })
 
+  test('brings the result above the phone tab bar without scrolling the form away @IN-08', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    for (const { width, height } of [
+      { width: 390, height: 844 },
+      { width: 390, height: 640 },
+      { width: 320, height: 640 },
+    ]) {
+      await page.setViewportSize({ width, height })
+      await page.goto('/tools/verify-message')
+      await expect(page.getByRole('heading', { level: 1, name: 'Verify message' })).toBeVisible()
+      await settled(page)
+      await fill(page, { address: SIGNER, message: MESSAGE, signature: SIGNATURE })
+      const verify = page.getByRole('button', { name: 'Verify' })
+      await verify.scrollIntoViewIfNeeded()
+      await verify.click()
+      const result = page.locator('[data-result="valid"]')
+      await expect(result).toBeVisible()
+      const where = `${width}x${height}`
+      const barTop = height - (await tabBarHeight(page))
+      await expect
+        .poll(async () => (await result.boundingBox())?.y ?? Infinity, { message: where })
+        .toBeLessThan(barTop)
+      const box = await result.boundingBox()
+      expect(box!.y, `${where} result top`).toBeGreaterThanOrEqual(0)
+      expect(box!.y + box!.height, `${where} result bottom`).toBeLessThanOrEqual(barTop)
+      const after = await verify.boundingBox()
+      expect(after!.y + after!.height, `${where} the form is still in reach`).toBeGreaterThan(0)
+      await expect(
+        page.locator('[role="status"][aria-live="polite"]').filter({ has: result }),
+      ).toHaveCount(1)
+    }
+  })
+
   test('a malformed signature is "can’t check", not "invalid" @IN-08', async ({ page }) => {
     await page.goto('/tools/verify-message')
     await fill(page, { address: SIGNER, message: MESSAGE, signature: 'not a signature' })

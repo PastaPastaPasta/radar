@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { base58CheckEncode } from '@/lib/base58'
 import { renderAt } from '../test-utils'
 import vectors from './vectors.json'
@@ -42,6 +42,19 @@ describe('Verify message page', () => {
     await user.click(screen.getByRole('button', { name: 'Verify' }))
     expect(await screen.findByText('This address signed this message.')).toBeInTheDocument()
     expect(document.querySelector('[data-result="valid"]')).not.toBeNull()
+  })
+
+  it('brings the result into view and announces it in a live region @IN-08', async () => {
+    const user = await fill(v.mainnet, v.msg, signature)
+    const scrolled = vi.spyOn(Element.prototype, 'scrollIntoView')
+    expect(document.querySelector('.rx-verify-result')).toHaveAttribute('aria-live', 'polite')
+    expect(scrolled).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Verify' }))
+    const result = await screen.findByText('This address signed this message.')
+    expect(result.closest('[role="status"]')).toHaveAttribute('aria-live', 'polite')
+    expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
+    expect(scrolled.mock.contexts[0]).toBe(document.querySelector('.rx-verify-result'))
+    scrolled.mockRestore()
   })
 
   it('says invalid, and who signed, when the message was changed @IN-08', async () => {
