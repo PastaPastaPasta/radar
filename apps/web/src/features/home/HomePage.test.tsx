@@ -152,6 +152,23 @@ describe('Home page', () => {
     expect(screen.queryByText(/not loaded yet|Arrives with/)).toBeNull()
   })
 
+  it('keys the map: filled for masternodes, hollow for other reachable nodes, beside the count @HY-18', async () => {
+    renderAt('/')
+    const legend = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('.rx-maplegend .rx-maplegend__sum')
+      expect(el).not.toBeNull()
+      return el!.parentElement!
+    })
+    const keys = legend.querySelectorAll('.rx-maplegend__key')
+    expect(keys).toHaveLength(2)
+    expect(keys[0]!.querySelector('i.d')).not.toBeNull()
+    expect(keys[0]!.querySelector('i.d--all')).toBeNull()
+    expect(keys[1]!.querySelector('i.d.d--all')).not.toBeNull()
+    expect(keys[0]).toHaveTextContent('Masternodes')
+    expect(keys[1]).toHaveTextContent('Other reachable nodes')
+    expect(legend.querySelector('.rx-maplegend__sum')).toHaveTextContent(/masternodes in/)
+  })
+
   it('dates the crawl in the present, not centuries ahead @IN-01', async () => {
     renderAt('/')
     const row = await waitFor(() => {

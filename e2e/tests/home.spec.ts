@@ -258,6 +258,37 @@ test.describe('Home on a phone', () => {
     }
   }
 
+  for (const width of [320, 390, 430]) {
+    test(`keys the map beside the masternode count without pushing the Core card down at ${width} px @HY-18`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('/')
+      const legend = page.locator('.rx-maplegend')
+      await expect(legend.locator('.rx-maplegend__sum')).toContainText(/masternodes/)
+      await settled(page)
+      const filled = legend.locator('.rx-maplegend__key').first().locator('i.d')
+      const hollow = legend.locator('.rx-maplegend__key--other i.d--all')
+      await expect(filled).toBeVisible()
+      await expect(hollow).toBeVisible()
+      await expect(legend.locator('.rx-maplegend__key--other')).toContainText(/\S/)
+      await expect(legend.locator('.rx-maplegend__key--other .rx-maplegend__long')).toBeHidden()
+      const sum = await legend.locator('.rx-maplegend__sum').boundingBox()
+      const dot = await filled.boundingBox()
+      expect(Math.abs(dot!.y + dot!.height / 2 - (sum!.y + sum!.height / 2))).toBeLessThan(8)
+      const other = await hollow.boundingBox()
+      const follows = other!.x > sum!.x || other!.y > sum!.y + sum!.height / 2
+      expect(follows, 'the hollow key follows the count, on its line or the next').toBe(true)
+      const box = await legend.boundingBox()
+      expect(box!.x + box!.width).toBeLessThanOrEqual(width)
+      const barTop = 844 - (await tabBarHeight(page))
+      for (const part of ['.rx-pulse__value', '.rx-pulse__meta']) {
+        const b = await page.locator(`[data-pulse="core"] ${part}`).boundingBox()
+        expect(b!.y + b!.height, `Core ${part} above the tab bar`).toBeLessThanOrEqual(barTop)
+      }
+    })
+  }
+
   test('puts the Core figures before the long activity lists @HY-01', async ({ page }) => {
     await page.goto('/')
     await settled(page)

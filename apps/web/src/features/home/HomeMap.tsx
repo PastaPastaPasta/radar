@@ -132,13 +132,17 @@ export function HomeMap() {
           <>
             <span className="rx-maplegend__key">
               <i className="d" aria-hidden="true" />
-              {t`Masternodes`}
+              <span className="rx-maplegend__long">{t`Masternodes`}</span>
             </span>
-            <span className="rx-maplegend__key">
+            <span className="rx-maplegend__key rx-maplegend__key--other">
               <i className="d d--all" aria-hidden="true" />
-              {t`Other reachable nodes`}
+              <span className="rx-maplegend__long">{t`Other reachable nodes`}</span>
+              <span className="rx-maplegend__short">{t`Other nodes`}</span>
             </span>
-            <span>{summary}</span>
+            <span className="rx-maplegend__sum">
+              <span className="rx-maplegend__full">{summary}</span>
+              <span className="rx-maplegend__brief">{t`${formatInt(masternodes)} masternodes`}</span>
+            </span>
           </>
         ) : devnet ? (
           <span>{t`Radar doesn't crawl devnets, so there is nothing to map.`}</span>

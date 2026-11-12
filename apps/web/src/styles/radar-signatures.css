@@ -305,6 +305,10 @@
   align-items: center;
   gap: 6px;
 }
+.rx-maplegend__short,
+.rx-maplegend__brief {
+  display: none !important;
+}
 .rx-maplegend .d {
   width: 9px;
   height: 9px;
@@ -1087,8 +1091,20 @@
     padding: 4px 16px 0;
     gap: 2px 12px;
   }
-  .rx-maplegend .rx-maplegend__key {
-    display: none;
+  .rx-maplegend__long {
+    display: none !important;
+  }
+  .rx-maplegend__short {
+    display: inline !important;
+  }
+  .rx-maplegend__key--other {
+    order: 2;
+  }
+  .rx-maplegend__sum {
+    order: 1;
+  }
+  .rx-maplegend > :not(.rx-maplegend__key, .rx-maplegend__sum) {
+    order: 3;
   }
   .rx-callout {
     display: none;
@@ -1124,6 +1140,15 @@
   }
   .rx-lane__label {
     margin-top: 4px;
+  }
+}
+
+@media (max-width: 380px) {
+  .rx-maplegend__full {
+    display: none !important;
+  }
+  .rx-maplegend__brief {
+    display: inline !important;
   }
 }
 
