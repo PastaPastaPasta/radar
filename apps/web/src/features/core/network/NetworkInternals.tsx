@@ -77,7 +77,10 @@ export function NetworkInternals() {
         onRetry={() => void latest.refetch()}
         id="chainstate"
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-internals-chain>
+        <div
+          className="rx-statgrid grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4"
+          data-internals-chain
+        >
           <Stat label={t`Chain size`} value={l ? formatBytes(l.blockchainSize) : '—'} />
           <Stat label={t`Spendable outputs`} value={l ? formatInt(l.utxosSpendable) : '—'} />
           <Stat label={t`Unspendable outputs`} value={l ? formatInt(l.utxosUnspendable) : '—'} />
@@ -112,7 +115,7 @@ export function NetworkInternals() {
           id="mempool-pressure"
         >
           <div className="grid gap-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rx-statgrid grid grid-cols-2 gap-2 sm:gap-4">
               <Stat label={t`Transactions waiting`} value={m ? formatInt(m.count) : '—'} />
               <Stat label={t`Their size`} value={m ? formatBytes(m.totalBytes) : '—'} />
             </div>

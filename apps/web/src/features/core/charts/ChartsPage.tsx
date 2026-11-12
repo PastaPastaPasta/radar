@@ -111,7 +111,7 @@ function ChartGrid({ range }: { range: Range }) {
         error={latest.error}
         onRetry={() => void latest.refetch()}
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-charts-now>
+        <div className="rx-statgrid grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-3" data-charts-now>
           <Stat size="lg" label={t`Hash rate`} value={l ? formatHashrate(l.hashrate) : '—'} />
           <Stat label={t`Difficulty`} value={l ? <Difficulty value={l.difficulty} /> : '—'} />
           <Stat

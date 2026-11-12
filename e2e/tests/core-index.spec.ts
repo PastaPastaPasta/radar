@@ -1,5 +1,7 @@
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { tabBarHeight } from '../helpers/contrast'
+import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
@@ -332,6 +334,26 @@ test.describe('charts', () => {
     await expectNoSideScroll(page)
   })
 
+  test('starts the first chart in the first phone screen, with the figures in two columns @HY-02', async ({
+    page,
+  }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/charts')
+    await expect(page.getByRole('heading', { level: 1, name: 'Charts' })).toBeVisible()
+    await settled(page)
+    const stats = page.locator('[data-charts-now] .rx-stat')
+    await expect(stats).toHaveCount(6)
+    const first = await stats.nth(0).boundingBox()
+    const second = await stats.nth(1).boundingBox()
+    expect(second!.y, 'the first two figures share a row').toBeCloseTo(first!.y, 0)
+    expect(second!.x).toBeGreaterThan(first!.x + first!.width / 2)
+    const barTop = 844 - (await tabBarHeight(page))
+    const chart = await page.locator('[data-chart-hue]').first().boundingBox()
+    expect(chart!.y, 'the first chart starts above the tab bar').toBeLessThanOrEqual(barTop - 24)
+    await expectNoSideScroll(page)
+  })
+
   test('draws each metric in its own colour, legible on the card @HY-02', async ({ page }) => {
     await page.goto('/charts')
     const hues = page.locator('[data-chart-hue]')
@@ -397,6 +419,15 @@ test.describe('charts', () => {
       .click()
     await expect(page).toHaveURL(/tab=internals/)
     await expect(page.locator('[data-internals-chain]')).toContainText('Chain size')
+    if ((page.viewportSize()?.width ?? 1000) <= 640) {
+      await settled(page)
+      const height = page.viewportSize()!.height
+      const barTop = height - (await tabBarHeight(page))
+      const chain = await page.locator('[data-internals-chain]').boundingBox()
+      expect(chain!.height, 'the chain figures stay compact on a phone').toBeLessThan(260)
+      const mempool = await page.locator('#mempool-pressure').boundingBox()
+      expect(mempool!.y, 'the next card starts in the first screen').toBeLessThan(barTop - 60)
+    }
     await expect(page.getByText('Mempool pressure')).toBeVisible()
     await expect(page.getByText('Transaction velocity')).toBeVisible()
     await expect(page.locator('[data-internals-versions]')).toBeVisible()
