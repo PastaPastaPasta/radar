@@ -80,11 +80,16 @@ export const insightAddressQueries = {
         }
       },
     }),
-  /** The last page of the history: its oldest transaction is when the address was first seen. One request, cached with the others. */
+  /**
+   * The last page of the history: its oldest transaction is when the address was first seen. One request, cached with
+   * the others. `pagesTotal` is what the answer itself says the history now spans, which differs from the count asked
+   * for when a transaction arrived in between and moved the oldest one onto a later page.
+   */
   oldestPage: (net: NetworkId, address: string, pagesTotal: number) =>
     queryOptions({
       ...insQueries.addressTxs(net, address, Math.max(0, pagesTotal - 1)),
-      select: (s) => mapSourced(s, (page) => txRows(address, page)),
+      select: (s) =>
+        mapSourced(s, (page) => ({ rows: txRows(address, page), pagesTotal: page.pagesTotal })),
     }),
   /** The whole list is read once; the card pages through it in the browser. */
   utxos: (net: NetworkId, address: string) =>

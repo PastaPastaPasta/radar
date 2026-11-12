@@ -17,6 +17,7 @@ import {
   Hash,
   LiveDot,
   Skeleton,
+  SourceLine,
   Stat,
   Time,
   useMediaQuery,
@@ -239,15 +240,19 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
               <SeenStat
                 first={seen ? seen.first : (a.firstSeen ?? undefined)}
                 last={seen ? seen.last : (a.lastSeen ?? undefined)}
+                firstStamp={seen?.firstStamp}
+                lastStamp={seen?.lastStamp}
+                firstApproximate={seen?.firstApproximate ?? false}
                 loading={seen ? seen.loading : false}
                 failed={seen?.failed ?? false}
-                source={seen?.stamp}
+                historyFailed={seen?.historyFailed ?? false}
+                onRetry={seen?.retry}
               />
             </div>
           </div>
-          {phone && qrOpen ? (
-            <div id="address-qr" className="mt-3" data-address-qr>
-              <AddressQr address={address} />
+          {phone ? (
+            <div id="address-qr" className="mt-3" data-address-qr hidden={!qrOpen}>
+              {qrOpen ? <AddressQr address={address} /> : null}
             </div>
           ) : null}
         </Card>
@@ -312,11 +317,20 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
   )
 }
 
-function SeenLine({ label, children }: { label: string; children: ReactNode }) {
+function SeenLine({
+  label,
+  stamp,
+  children,
+}: {
+  label: string
+  stamp?: SourceStamp
+  children: ReactNode
+}) {
   return (
     <span>
       <span className="text-[var(--dh-ink-2)]">{label}: </span>
       {children}
+      {stamp ? <SourceLine stamp={stamp} compact /> : null}
     </span>
   )
 }
@@ -324,42 +338,69 @@ function SeenLine({ label, children }: { label: string; children: ReactNode }) {
 function SeenStat({
   first,
   last,
+  firstStamp,
+  lastStamp,
+  firstApproximate,
   loading,
   failed,
-  source,
+  historyFailed,
+  onRetry,
 }: {
   first?: number
   last?: number
+  firstStamp?: SourceStamp
+  lastStamp?: SourceStamp
+  firstApproximate: boolean
   loading: boolean
   failed: boolean
-  source?: SourceStamp
+  historyFailed: boolean
+  onRetry?: () => void
 }) {
   const { t } = useLingui()
   return (
     <Stat
       label={t`First and last seen`}
       loading={loading}
-      source={source}
       value={
         last ? (
           <span className="grid gap-1 text-base font-normal" data-seen>
             {first ? (
-              <SeenLine label={t`First`}>
+              <SeenLine
+                label={firstApproximate ? t`First (approximately)` : t`First`}
+                stamp={firstStamp}
+              >
                 <Time ms={first} mode="absolute" />
               </SeenLine>
             ) : (
               <span className="text-[var(--dh-ink-2)]">{t`First: not available`}</span>
             )}
-            <SeenLine label={t`Last`}>
+            <SeenLine label={t`Last`} stamp={lastStamp}>
               <Time ms={last} mode="absolute" />
             </SeenLine>
+          </span>
+        ) : historyFailed ? (
+          <span className="grid gap-1 text-base font-normal" role="alert" data-seen-error>
+            {t`Could not be read`}
+            {onRetry ? (
+              <button
+                type="button"
+                className="dh-btn dh-btn--sm justify-self-start"
+                onClick={onRetry}
+              >
+                {t`Try again`}
+              </button>
+            ) : null}
           </span>
         ) : (
           t`Not seen yet`
         )
       }
       note={
-        failed && last ? t`Insight could not return this address’s oldest transactions.` : undefined
+        historyFailed
+          ? t`Insight could not return this address’s transactions.`
+          : failed && last
+            ? t`Insight could not return this address’s oldest transactions.`
+            : undefined
       }
     />
   )

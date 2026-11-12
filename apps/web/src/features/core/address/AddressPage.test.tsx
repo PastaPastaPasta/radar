@@ -133,6 +133,21 @@ describe('Address page', () => {
       await user.click(screen.getByRole('button', { name: 'Hide QR code' }))
       expect(screen.queryByRole('img', { name: /QR code of the address/ })).toBeNull()
     })
+
+    it('points the QR toggle at an element that exists whether the code is open or closed @IN-06', async () => {
+      phone()
+      const user = userEvent.setup()
+      renderAt(`/address/${ADDRESS}`)
+      const toggle = await screen.findByRole('button', { name: 'Show QR code' })
+      const target = () => document.getElementById(toggle.getAttribute('aria-controls')!)
+      expect(target()).not.toBeNull()
+      expect(target()).not.toBeVisible()
+      await user.click(toggle)
+      expect(target()).toBeVisible()
+      await user.click(toggle)
+      expect(target()).not.toBeNull()
+      expect(target()).not.toBeVisible()
+    })
   })
 
   it('tells the viewer when a new transaction arrives for the address @IN-06', async () => {
@@ -621,7 +636,9 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
         expect(found).not.toBeNull()
         return found!
       })
-      return [...el.querySelectorAll('time')].map((t) => t.getAttribute('title'))
+      return [...el.querySelectorAll('time')]
+        .filter((t) => !t.closest('[data-source]'))
+        .map((t) => t.getAttribute('title'))
     }
 
     it('takes last seen from the newest confirmed transaction and first seen from one read of the last page', async () => {
@@ -671,6 +688,77 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
       expect(stat).toHaveTextContent('First: not available')
       expect(stat.closest('.rx-stat')).toHaveTextContent(
         'Insight could not return this address’s oldest transactions.',
+      )
+    })
+
+    it('gives first seen and last seen each their own source line @HY-08 @IN-16', async () => {
+      serveInsightTxs([[insTx(2), insTx(3)], [insTx(4)], [insTx(9), insTx(8)]])
+      renderAt(url)
+      await seenTimes()
+      const lines = document.querySelectorAll('[data-address-summary] [data-seen] [data-source]')
+      expect(lines).toHaveLength(2)
+    })
+
+    it('reads the last page again when a transaction arrived since the first page, so first seen is the oldest @HY-08 @IN-16', async () => {
+      const asked: number[] = []
+      server.use(
+        http.get(`${INSIGHT_TESTNET}/txs`, ({ request }) => {
+          const page = Number(new URL(request.url).searchParams.get('pageNum') ?? 0)
+          asked.push(page)
+          if (page === 0) return HttpResponse.json({ pagesTotal: 2, txs: [insTx(2)] })
+          if (page === 1) return HttpResponse.json({ pagesTotal: 3, txs: [insTx(8)] })
+          return HttpResponse.json({ pagesTotal: 3, txs: [insTx(9)] })
+        }),
+      )
+      renderAt(url)
+      expect(await seenTimes()).toEqual([iso(9), iso(2)])
+      expect(asked).toEqual(expect.arrayContaining([0, 1, 2]))
+      expect(document.querySelector('[data-seen]')).not.toHaveTextContent('approximately')
+    })
+
+    it('marks first seen approximate when the history moved again during the second read @HY-08 @IN-16', async () => {
+      server.use(
+        http.get(`${INSIGHT_TESTNET}/txs`, ({ request }) => {
+          const page = Number(new URL(request.url).searchParams.get('pageNum') ?? 0)
+          if (page === 0) return HttpResponse.json({ pagesTotal: 2, txs: [insTx(2)] })
+          if (page === 1) return HttpResponse.json({ pagesTotal: 3, txs: [insTx(8)] })
+          return HttpResponse.json({ pagesTotal: 4, txs: [insTx(9)] })
+        }),
+      )
+      renderAt(url)
+      await seenTimes()
+      expect(document.querySelector('[data-seen]')).toHaveTextContent('First (approximately)')
+    })
+
+    it('shows the history failing as an error, not as an address never seen @HY-08 @IN-16', async () => {
+      server.use(http.get(`${INSIGHT_TESTNET}/txs`, () => new HttpResponse(null, { status: 500 })))
+      renderAt(url)
+      const error = await waitFor(
+        () => {
+          const el = document.querySelector<HTMLElement>('[data-address-summary] [data-seen-error]')
+          expect(el).not.toBeNull()
+          return el!
+        },
+        { timeout: 10000 },
+      )
+      expect(error).toHaveTextContent('Could not be read')
+      expect(document.querySelector('[data-address-summary]')).not.toHaveTextContent('Not seen yet')
+    })
+
+    it('stops loading when the page after a mempool-only first page fails to load @HY-08 @IN-16', async () => {
+      server.use(
+        http.get(`${INSIGHT_TESTNET}/txs`, ({ request }) => {
+          const page = Number(new URL(request.url).searchParams.get('pageNum') ?? 0)
+          return page === 0
+            ? HttpResponse.json({ pagesTotal: 3, txs: [mempoolTx(1)] })
+            : new HttpResponse(null, { status: 500 })
+        }),
+      )
+      renderAt(url)
+      await waitFor(
+        () =>
+          expect(document.querySelector('[data-address-summary] [data-seen-error]')).not.toBeNull(),
+        { timeout: 10000 },
       )
     })
   })
