@@ -104,9 +104,7 @@ export function withChartMotion(option: EChartsOption, reducedMotion: boolean): 
 const LABEL_CHAR_PX = 7.6
 
 const labelOf = (item: unknown): string =>
-  item !== null && typeof item === 'object' && 'value' in item
-    ? String(item.value)
-    : String(item)
+  item !== null && typeof item === 'object' && 'value' in item ? String(item.value) : String(item)
 
 /**
  * ECharts centres the last category label on the grid's right edge but only reserves room for the labels it laid
