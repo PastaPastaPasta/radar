@@ -41,6 +41,9 @@ import type {
 
 const MAX_HEADERS = 2000
 const HEADER_WINDOW = 500
+/** A window after the first probe only has to cover what interpolating between two known times leaves. */
+const SEARCH_WINDOW = 128
+const FIRST_WINDOW_MIN = 96
 const FALLBACK_HOLD_MS = 120_000
 const CHAIN_LOCK_REFRESH_MS = 10_000
 const CHAIN_LOCK_LOOKUP_MS = 12_000
@@ -53,6 +56,16 @@ const HYPHEN_FINAL_DEPTH = 24
 const AVERAGE_BLOCK_MS: Record<'mainnet' | 'testnet', number> = {
   mainnet: 157_000,
   testnet: 140_000,
+}
+
+/**
+ * Headers to read for the first probe of a time search, `back` blocks below the tip. The average block time is off by
+ * about the square root of the distance plus 1 % of it; the window covers four times that, so the first read usually holds
+ * the answer without moving 40 kB for a day that is a few hundred blocks away.
+ */
+export function firstWindow(back: number): number {
+  const spread = Math.sqrt(Math.max(0, back)) + 0.01 * Math.max(0, back)
+  return Math.min(HEADER_WINDOW, Math.max(FIRST_WINDOW_MIN, Math.ceil(4 * spread)))
 }
 
 type Decoder = ReturnType<typeof createCoreDecoder>
@@ -982,7 +995,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         } else {
           guess = hi.height - Math.round((hi.time - ms) / avg)
         }
-        const size = Math.min(HEADER_WINDOW, span + 1)
+        const size = Math.min(step === 0 ? firstWindow(hi.height - guess) : SEARCH_WINDOW, span + 1)
         const start = Math.max(
           lo.height,
           Math.min(hi.height - size + 1, guess - Math.floor(size / 2)),

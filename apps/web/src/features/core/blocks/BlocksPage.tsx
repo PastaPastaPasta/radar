@@ -16,22 +16,32 @@ import {
 import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { Card, DataTable, Empty, Hash, LockMark, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
-import { BLOCKS_PER_PAGE, DAY_MS, dayStartMs, shiftDay, todayUtc, windowOf } from './blocks-range'
+import {
+  BLOCKS_PER_PAGE,
+  DAY_MS,
+  FIRST_CHUNK,
+  dayStartMs,
+  shiftDay,
+  todayUtc,
+  windowOf,
+  type Window,
+} from './blocks-range'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
   const net = useNetwork()
   const tip = useQuery(coreQueries.tip(net))
   const start = date ? dayStartMs(date) : undefined
+  const tipBlock = tip.data?.data
+  // Both searches start from the tip, which the client remembers once it lands: asking before then reads it again.
   const first = useQuery({
     ...coreQueries.heightAtTime(net, start ?? 0),
-    enabled: start !== undefined,
+    enabled: start !== undefined && tipBlock !== undefined,
   })
   const next = useQuery({
     ...coreQueries.heightAtTime(net, (start ?? 0) + DAY_MS),
-    enabled: start !== undefined,
+    enabled: start !== undefined && tipBlock !== undefined,
   })
-  const tipBlock = tip.data?.data
   if (start === undefined) {
     return {
       tip,
@@ -59,6 +69,40 @@ function useRange(date: string | undefined) {
           ? tipBlock.height
           : next.data.data - 1,
     error: tip.error ?? first.error ?? next.error,
+  }
+}
+
+/**
+ * A page's rows in two reads, the first `FIRST_CHUNK` rows and then the rest, so the top of the table shows after two
+ * rounds of block reads and not after all twenty. The rest waits for the first so it never competes with it for budget.
+ */
+function usePageRows(window: Window | null) {
+  const net = useNetwork()
+  const head = Math.min(FIRST_CHUNK, window?.count ?? 0)
+  const first = useQuery({
+    ...coreQueries.blockRows(net, { fromHeight: window?.top ?? 0, count: head }),
+    enabled: window !== null,
+    placeholderData: keepPreviousOnNetwork(net),
+  })
+  const restCount = window ? window.count - head : 0
+  const rest = useQuery({
+    ...coreQueries.blockRows(net, { fromHeight: (window?.top ?? 0) - head, count: restCount }),
+    enabled: window !== null && restCount > 0 && first.isSuccess && !first.isPlaceholderData,
+    placeholderData: keepPreviousOnNetwork(net),
+  })
+  const restData = restCount > 0 && !rest.isPlaceholderData ? rest.data : undefined
+  const rows = useMemo(
+    () => [...(first.data?.data ?? []), ...(restData?.data ?? [])],
+    [first.data, restData],
+  )
+  const last = rest.data && !rest.isPlaceholderData ? rest : first
+  return {
+    rows,
+    pending: first.data && restCount > 0 && !restData && !rest.isError ? restCount : 0,
+    stamp: last.data ? stampOf(last.data) : undefined,
+    error: first.error ?? rest.error,
+    failed: (first.isError && !first.data) || (rest.isError && !rest.data),
+    refetch: () => void Promise.all([first.refetch(), rest.refetch()]),
   }
 }
 
@@ -131,17 +175,12 @@ function DayNav({ date, canNext }: { date: string; canNext: boolean }) {
 
 export function BlocksPage({ date, from }: { date?: string; from?: number }) {
   const { t } = useLingui()
-  const net = useNetwork()
   const range = useRange(date)
   const window = range.state === 'ready' ? windowOf(range.ceiling, range.floor, from) : null
   useDocumentTitle(date ? t`Blocks on ${date}` : t`Blocks`)
 
-  const rowsQuery = useQuery({
-    ...coreQueries.blockRows(net, { fromHeight: window?.top ?? 0, count: window?.count ?? 0 }),
-    enabled: window !== null,
-    placeholderData: keepPreviousOnNetwork(net),
-  })
-  const rows = useMemo(() => rowsQuery.data?.data ?? [], [rowsQuery.data])
+  const page = usePageRows(window)
+  const rows = page.rows
   const newestPage = window !== null && window.newer === null
   const today = todayUtc()
   const fresh = useFreshRows(rows, newestPage && (!date || date === today))
@@ -198,9 +237,9 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
     [t, hasPool],
   )
 
-  const stamp = rowsQuery.data ? stampOf(rowsQuery.data) : undefined
+  const stamp = page.stamp
   const state =
-    range.state === 'error' || (rowsQuery.isError && !rowsQuery.data)
+    range.state === 'error' || page.failed
       ? 'error'
       : rows.length > 0
         ? 'ready'
@@ -274,8 +313,9 @@ export function BlocksPage({ date, from }: { date?: string; from?: number }) {
                 rows={rows}
                 getRowId={(r) => String(r.height)}
                 state={state}
-                error={range.error ?? rowsQuery.error}
-                onRetry={() => void rowsQuery.refetch()}
+                error={range.error ?? page.error}
+                onRetry={page.refetch}
+                pendingRows={page.pending}
                 rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
                 live={{ newRowIds: fresh }}
                 paging={

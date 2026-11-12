@@ -26,6 +26,8 @@ Options:
   --dry                  run the scenarios but write nothing
   --rows <from:count,…>  only record these blockRows pages and add them to the existing recordings
                          (nothing is removed and the manifest is left as it is)
+  --times <ms,…>         the same for the header reads of a height-at-time search, started from the tip the
+                         manifest records so replays ask for the same windows (add a day's start and end)
   --lookups <list>       the same for single lookups: block:<height|hash> and tx:<txid>, comma-separated;
                          a hash or id that does not exist is recorded as the not-found answer`
 
@@ -36,6 +38,7 @@ const args = {
   from: undefined,
   dry: false,
   rows: [],
+  times: [],
   lookups: [],
 }
 const argv = process.argv.slice(2)
@@ -48,6 +51,8 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--dry') args.dry = true
   else if (a === '--rows') {
     args.rows = argv[++i].split(',').map((r) => r.split(':').map(Number))
+  } else if (a === '--times') {
+    args.times = argv[++i].split(',').map(Number)
   } else if (a === '--lookups') {
     args.lookups = argv[++i].split(',').map((r) => r.split(':'))
   } else {
@@ -63,9 +68,18 @@ const net = args.net
 
 const require = createRequire(join(WEB, 'package.json'))
 const { createServer } = await import(pathToFileURL(require.resolve('vite')).href)
+const importFrom = async (name) => (await import(pathToFileURL(require.resolve(name)).href)).default
+const { lingui } = await import(pathToFileURL(require.resolve('@lingui/vite-plugin')).href)
+process.chdir(WEB)
 const server = await createServer({
   root: WEB,
   configFile: false,
+  plugins: [
+    (await importFrom('@vitejs/plugin-react'))({
+      babel: { plugins: ['@lingui/babel-plugin-lingui-macro'] },
+    }),
+    lingui(),
+  ],
   logLevel: 'warn',
   appType: 'custom',
   resolve: { alias: [{ find: '@', replacement: join(WEB, 'src') }] },
@@ -122,7 +136,15 @@ const core = clientMod.createCoreClient({
   now: Date.now,
 })
 
-if (args.rows.length > 0 || args.lookups.length > 0) {
+if (args.rows.length > 0 || args.lookups.length > 0 || args.times.length > 0) {
+  if (args.times.length > 0) {
+    const manifest = JSON.parse(readFileSync(join(OUT, net, 'manifest.json'), 'utf8'))
+    const [head] = (await core.headers(net, manifest.tip.height, 1)).data
+    core.observeTip(net, { height: manifest.tip.height, hash: manifest.tip.hash, time: head.time })
+    for (const ms of args.times) {
+      say(`heightAtTime ${ms} -> ${(await core.heightAtTime(net, ms)).data}`)
+    }
+  }
   for (const [fromHeight, count] of args.rows) {
     await core.blockRows(net, { fromHeight, count })
     say(`blockRows ${fromHeight} x ${count}`)

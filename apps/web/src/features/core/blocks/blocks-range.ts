@@ -1,4 +1,6 @@
 export const BLOCKS_PER_PAGE = 20
+/** Rows read first on a page: enough to fill a phone screen and most of a desktop one. */
+export const FIRST_CHUNK = 8
 export const DAY_MS = 86_400_000
 
 export function dayStartMs(date: string): number {

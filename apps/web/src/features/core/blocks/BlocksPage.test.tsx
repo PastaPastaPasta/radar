@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
 import { renderAt } from '../hy-shared/test-utils'
+import { FIRST_CHUNK } from './blocks-range'
 
 configure({ asyncUtilTimeout: 5000 })
 
@@ -93,6 +94,29 @@ describe('Blocks list', () => {
     renderAt('/blocks?date=2026-11-03')
     const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
+  })
+
+  it('shows the first rows of a day while the rest of the page is still being read @IN-02', async () => {
+    const original = core.blockRows.bind(core)
+    let release: () => void = () => undefined
+    const held = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    const counts: number[] = []
+    vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
+      counts.push(q.count)
+      if (q.count === 20 - FIRST_CHUNK) await held
+      return original(net, q, signal)
+    })
+    renderAt('/blocks?date=2026-11-03')
+    const table = await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(FIRST_CHUNK + 1))
+    expect(within(table).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
+    expect(table.querySelectorAll('[data-pending-row]')).toHaveLength(20 - FIRST_CHUNK)
+    release()
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(21))
+    expect(table.querySelectorAll('[data-pending-row]')).toHaveLength(0)
+    expect(counts).toEqual([FIRST_CHUNK, 20 - FIRST_CHUNK])
   })
 
   it('says a day in the future has no blocks yet @IN-02', async () => {

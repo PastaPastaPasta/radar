@@ -8,7 +8,7 @@ import { createDapiRpc } from '@/data/dapi-core'
 import { isSourceError } from '@/data/errors'
 import type { HealthState } from '@/data/health'
 import { hyphen } from '@/data/hyphen/client'
-import { createCoreClient } from '@/data/core/client'
+import { createCoreClient, firstWindow } from '@/data/core/client'
 import { poolOfCoinbase } from '@/lib/core/pools'
 import { createCoreDecoder } from '@/data/core/decode'
 import type { CoreClient, DecodedTx } from '@/data/core/types'
@@ -153,6 +153,19 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect(next.data).toBe(entry('date-jump-end')!.height)
     expect(next.data - first.data).toBeGreaterThan(300)
     expect(next.data - first.data).toBeLessThan(900)
+  })
+
+  it('reads a day boundary in headers sized to how far it is from the tip @IN-02', async () => {
+    const start = Date.parse(`${await dayOf(net)}T00:00:00Z`)
+    const before = transport.calls.length
+    await core.heightAtTime(net, start + 86_400_000)
+    const reads = transport.calls
+      .slice(before)
+      .filter((c) => c.method.startsWith('subscribeToBlockHeaders'))
+    expect(reads.length).toBeLessThanOrEqual(2)
+    expect(firstWindow(100)).toBe(96)
+    expect(firstWindow(576)).toBeLessThan(150)
+    expect(firstWindow(100_000)).toBe(500)
   })
 
   it('answers a missing transaction and a block above the tip with a stamped null', async () => {

@@ -46,6 +46,8 @@ export interface DataTableProps<Row> {
   rowLink?: (r: Row) => LinkProps
   onCellFilter?: (columnId: string, value: string) => void
   live?: { newRowIds: Set<string> }
+  /** Placeholder rows after the real ones, for a page whose remaining rows are still on their way. */
+  pendingRows?: number
   phone?: 'cards' | 'scroll'
   source?: SourceStamp | SourceStamp[]
 }
@@ -222,6 +224,7 @@ export function DataTable<Row>({
   rowLink,
   onCellFilter,
   live,
+  pendingRows = 0,
   phone = 'cards',
   source,
 }: DataTableProps<Row>) {
@@ -481,6 +484,15 @@ export function DataTable<Row>({
             <td colSpan={columnCount} style={{ height: padBottom }} />
           </tr>
         ) : null}
+        {Array.from({ length: pendingRows }, (_, r) => (
+          <tr key={`pending-${r}`} className="rx-skelrow" aria-hidden="true" data-pending-row>
+            {headers.map((h, c) => (
+              <td key={h.id}>
+                <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
+              </td>
+            ))}
+          </tr>
+        ))}
         {paging?.kind === 'infinite' && paging.fetching ? (
           <tr className="rx-loadmore" aria-hidden="true">
             <td colSpan={columnCount}>
