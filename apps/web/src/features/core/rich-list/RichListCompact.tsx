@@ -83,7 +83,7 @@ function RichRow({ row: r }: { row: HyRichRow }) {
     <li className="border-b border-[var(--dh-line)]" data-rank={r.rank}>
       <button
         type="button"
-        className="rx-rich-row grid w-full cursor-pointer grid-cols-[2.25rem_minmax(0,1fr)_auto_1rem] items-baseline gap-x-2 border-0 bg-transparent px-4 py-2.5 text-start font-[inherit] text-[inherit]"
+        className="rx-rich-row grid w-full cursor-pointer grid-cols-[2.25rem_minmax(0,1fr)_auto_1rem] items-baseline gap-x-2 px-4 py-2.5 text-start"
         aria-expanded={open}
         aria-controls={detailId}
         onClick={() => {

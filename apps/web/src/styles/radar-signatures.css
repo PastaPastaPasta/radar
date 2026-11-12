@@ -305,9 +305,9 @@
   align-items: center;
   gap: 6px;
 }
-.rx-maplegend__short,
-.rx-maplegend__brief {
-  display: none !important;
+.rx-maplegend .rx-maplegend__short,
+.rx-maplegend .rx-maplegend__brief {
+  display: none;
 }
 .rx-maplegend .d {
   width: 9px;
@@ -1091,11 +1091,11 @@
     padding: 4px 16px 0;
     gap: 2px 12px;
   }
-  .rx-maplegend__long {
-    display: none !important;
+  .rx-maplegend .rx-maplegend__long {
+    display: none;
   }
-  .rx-maplegend__short {
-    display: inline !important;
+  .rx-maplegend .rx-maplegend__short {
+    display: inline-flex;
   }
   .rx-maplegend__key--other {
     order: 2;
@@ -1144,11 +1144,11 @@
 }
 
 @media (max-width: 380px) {
-  .rx-maplegend__full {
-    display: none !important;
+  .rx-maplegend .rx-maplegend__full {
+    display: none;
   }
-  .rx-maplegend__brief {
-    display: inline !important;
+  .rx-maplegend .rx-maplegend__brief {
+    display: inline-flex;
   }
 }
 

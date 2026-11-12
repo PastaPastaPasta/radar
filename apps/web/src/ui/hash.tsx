@@ -83,14 +83,15 @@ export function Hash({
   const phone = useMediaQuery(PHONE)
   const [open, setOpen] = useState(false)
   const toggles = display === 'wrap' && phoneShort && phone
-  const cut = display === 'short' || (toggles && !open)
-  const short = cut
-    ? shortHash(value, head ?? (display === 'short' ? 6 : 8), tail ?? (display === 'short' ? 4 : 6))
-    : null
+  const isShort = display === 'short'
+  const short =
+    isShort || (toggles && !open)
+      ? shortHash(value, head ?? (isShort ? 6 : 8), tail ?? (isShort ? 4 : 6))
+      : null
   let text: ReactNode
   if (short) {
     text = <ShortText short={short} />
-  } else if (display === 'short' || value.length <= 8) {
+  } else if (isShort || value.length <= 8) {
     text = value
   } else {
     text = (
@@ -105,7 +106,7 @@ export function Hash({
     <span className="rx-hash" data-display={display}>
       <code
         className={cx(
-          display === 'short' || short ? 'rx-mono' : 'rx-hash-full',
+          isShort || short ? 'rx-mono' : 'rx-hash-full',
           display === 'wrap' && !short && 'is-wrap',
         )}
         title={short ? value : undefined}
