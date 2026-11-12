@@ -1,8 +1,10 @@
 import { configure, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { http, HttpResponse } from 'msw'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
+import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
 configure({ asyncUtilTimeout: 5000 })
@@ -347,6 +349,66 @@ describe('Transaction page', () => {
       ),
     ).toMatch(/^\/tx\/85ff0299[0-9a-f]{56}\?network=testnet#in-\d+$/)
     expect(document.querySelector('#io [data-source="insight"]')).not.toBeNull()
+  })
+
+  describe('which index answers the spend state @IN-05 @IN-16', () => {
+    const INSIGHT = /insight\.(testnet\.networks\.)?dash\.org/
+    const SPENT_OUT_ADDRESS = 'XsPYocbGL8ubicsjgfav5E8ubFPMHSNzUU'
+    let urls: string[] = []
+    const record = ({ request }: { request: Request }) => void urls.push(request.url)
+    const insightTxReads = () => urls.filter((u) => INSIGHT.test(u) && /\/tx\/[0-9a-f]{64}/.test(u))
+    const hyphenReads = (what: RegExp) => urls.filter((u) => u.includes('/x/hy/') && what.test(u))
+
+    beforeEach(() => {
+      urls = []
+      server.events.on('request:start', record)
+    })
+    afterEach(() => {
+      server.events.removeListener('request:start', record)
+    })
+
+    it('keeps Hyphen as the source while it is fresh, and never asks Insight when it names the spender', async () => {
+      renderAt(`/tx/${SPENT_SOURCE}`)
+      const link = await within(
+        await waitFor(() => {
+          const el = document.querySelector<HTMLElement>('#out-0')
+          expect(el).not.toBeNull()
+          return el!
+        }),
+      ).findByRole('link', { name: /in [0-9a-f]{4}…[0-9a-f]{4}/ })
+      expect(link.getAttribute('href')).toBe(`/tx/${SPENDER}#in-0`)
+      expect(hyphenReads(/\/address\/.+\/txs/).length).toBeGreaterThan(0)
+      expect(urls.filter((u) => INSIGHT.test(u))).toEqual([])
+      expect(document.querySelector('#io [data-source="insight"]')).toBeNull()
+    })
+
+    it('asks Insight once for the spender when Hyphen says spent and its search finds none', async () => {
+      server.use(
+        http.get(`*/x/hy/mainnet/address/${SPENT_OUT_ADDRESS}/txs`, () =>
+          HttpResponse.json({ asOfHeight: 2_570_102, totalCount: 0, value: [] }),
+        ),
+      )
+      renderAt(`/tx/${SPENT_SOURCE}`)
+      const out0 = await waitFor(() => {
+        const el = document.querySelector<HTMLElement>('#out-0')
+        expect(el).not.toBeNull()
+        return el!
+      })
+      const link = await within(out0).findByRole('link', { name: /in [0-9a-f]{4}…[0-9a-f]{4}/ })
+      expect(link.getAttribute('href')).toMatch(/^\/tx\/a1782604[0-9a-f]{56}#in-\d+$/)
+      expect(insightTxReads()).toHaveLength(1)
+      expect(document.querySelector('#io [data-source="insight"]')).not.toBeNull()
+      expect(document.querySelector('#io [data-source="hyphen"]')).not.toBeNull()
+    })
+
+    it('reads one Insight transaction and no Hyphen spend lookups while Hyphen is stale', async () => {
+      renderAt(`/tx/${TESTNET_NORMAL}?network=testnet`)
+      await waitFor(() => {
+        expect(document.querySelectorAll('#io [data-spend="spent"]').length).toBeGreaterThan(0)
+      })
+      expect(insightTxReads()).toHaveLength(1)
+      expect(hyphenReads(/\/x\/hy\/testnet\/(address|tx)\//)).toEqual([])
+    })
   })
 
   it('has one Core section navigation @IN-03', async () => {

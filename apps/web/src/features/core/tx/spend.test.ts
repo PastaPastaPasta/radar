@@ -315,6 +315,73 @@ describe('outputSpends from the address UTXO lists @IN-05', () => {
   })
 })
 
+describe('outputSpends with Insight beside a fresh Hyphen @IN-05 @IN-16', () => {
+  const base = {
+    mined: true,
+    hyLoading: false,
+    tipHeight: 1000,
+    spenders: new Map<number, never>(),
+  }
+  const hyPage = (spent: (boolean | null)[], asOfHeight = 1000) => ({
+    detail: detail(spent),
+    asOfHeight,
+  })
+  const spender = { txid: id(9), vin: 2 }
+
+  it('takes the spender Insight names when Hyphen says spent but its search found none', () => {
+    const [state] = outputSpends({
+      ...base,
+      tx: tx(['76']),
+      hy: hyPage([true]),
+      spenders: new Map([[0, null]]),
+      insight: { asOf: 1000, vout: new Map([[0, spender]]) },
+    })
+    expect(state).toEqual({ state: 'spent', by: spender })
+  })
+
+  it('keeps the lookup open, not “spender not found”, while Insight’s answer is on its way', () => {
+    const [state] = outputSpends({
+      ...base,
+      tx: tx(['76']),
+      hy: hyPage([true]),
+      spenders: new Map([[0, null]]),
+      insightPending: true,
+    })
+    expect(state).toEqual({ state: 'spent', resolving: true })
+  })
+
+  it('never turns what Hyphen says spent into unspent because Insight trails the chain', () => {
+    const [state] = outputSpends({
+      ...base,
+      tx: tx(['76']),
+      hy: hyPage([true]),
+      spenders: new Map([[0, null]]),
+      insight: { asOf: 990, vout: new Map([[0, null]]) },
+    })
+    expect(state).toEqual({ state: 'spent' })
+  })
+
+  it('does not replace Hyphen’s unspent answer with an older one from Insight', () => {
+    const [state] = outputSpends({
+      ...base,
+      tx: tx(['76']),
+      hy: hyPage([false], 999),
+      insight: { asOf: 100, vout: new Map([[0, null]]) },
+    })
+    expect(state).toMatchObject({ state: 'unspent', asOf: 999 })
+  })
+
+  it('answers from Insight alone while Hyphen has no page, and says unknown when Insight trails', () => {
+    const insight = (asOf: number) => ({ asOf, vout: new Map([[0, null]]) })
+    expect(
+      outputSpends({ ...base, tx: tx(['76']), hy: undefined, insight: insight(999) })[0],
+    ).toMatchObject({ state: 'unspent', asOf: 999 })
+    expect(
+      outputSpends({ ...base, tx: tx(['76']), hy: undefined, insight: insight(100) })[0],
+    ).toMatchObject({ state: 'unknown', reason: 'behind' })
+  })
+})
+
 describe('limiter', () => {
   it('runs no more tasks at once than it was given', async () => {
     const run = limiter(2)

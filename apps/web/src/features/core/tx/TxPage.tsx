@@ -28,6 +28,7 @@ import {
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
+import { StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
 import { insightSpendsOf } from './spend'
 import { IoTables } from './IoTables'
@@ -127,12 +128,10 @@ function TxView({
   const prevouts = useQuery({ ...txQueries.prevouts(net, tx, count), enabled: needsPrevouts })
   const hyphenFit = useHyphenFit(net)
   const hy = useQuery({ ...hyQueries.tx(net, tx.txid), enabled: hyphenFit && mined })
-  const insightFirst = useIndexHealth(net).readFrom === 'insight'
-  const spentPerHyphen = hy.data?.data?.vout.some((o) => o.spent === true) === true
-  const ins = useQuery({
-    ...insQueries.tx(net, tx.txid),
-    enabled: mined && (insightFirst || spentPerHyphen),
-  })
+  const index = useIndexHealth(net)
+  const insightFirst = index.readFrom === 'insight'
+  // The spend state's own reads decide whether Insight is asked; this only watches the answer for its source line.
+  const ins = useQuery({ ...insQueries.tx(net, tx.txid), enabled: false })
   const insightSpends = useMemo(() => insightSpendsOf(ins.data?.data), [ins.data])
   const prev = prevouts.data?.data
   const values = useMemo(() => inputValues(tx, prev), [tx, prev])
@@ -303,6 +302,7 @@ function TxView({
             </>
           }
         />
+        <StaleIndexNotice reads="insight" />
         <div className="rx-kpis">
           <Stat
             size="lg"
@@ -422,8 +422,8 @@ function TxView({
             spendContext={{
               mined,
               hy: hy.data ? { detail: hy.data.data, asOfHeight: hy.data.height } : undefined,
-              hyLoading: hyphenFit && mined && hy.isPending,
-              insight: ins.isPending && ins.fetchStatus !== 'idle' ? 'pending' : insightSpends,
+              hyLoading: mined && (index.pending || (hyphenFit && hy.isPending)),
+              insightFirst,
               tipHeight,
             }}
             partial={needsPrevouts ? { loaded: count, loading: prevouts.isFetching } : undefined}

@@ -76,8 +76,13 @@ export interface SpendInput {
   spenders: ReadonlyMap<number, Spender | null | 'resolving'>
   /** Current UTXO lists of the output addresses, which are read afresh; absent where none was asked for. */
   utxos?: ReadonlyMap<string, AddressUtxos | 'resolving' | null>
-  /** Insight's answer for this transaction; it decides every output it covers once Hyphen's own flag has not. */
+  /**
+   * Insight's answer for this transaction. A spender it names is final; its "unspent" counts only where Hyphen
+   * has no page for the transaction, since Hyphen's answers are never overruled by an index that may trail them.
+   */
   insight?: InsightSpends
+  /** Insight's answer is on its way, so a spender Hyphen could not find may still turn up. */
+  insightPending?: boolean
 }
 
 /** True where the transaction page's own `spent: true` flag is the answer: a spend cannot be undone. */
@@ -93,10 +98,13 @@ export function outputSpends({
   spenders,
   utxos,
   insight,
+  insightPending,
 }: SpendInput): OutputSpend[] {
   const spentBy = (n: number): OutputSpend => {
     const found = spenders.get(n)
-    if (found === 'resolving') return { state: 'spent', resolving: true }
+    if (found === 'resolving' || (found === null && insightPending)) {
+      return { state: 'spent', resolving: true }
+    }
     return found ? { state: 'spent', by: found } : { state: 'spent' }
   }
   const unspentAsOf = (asOf: number): OutputSpend => {
@@ -112,12 +120,14 @@ export function outputSpends({
     if (by) return { state: 'spent', by }
     const flag = hy?.detail?.vout.find((v) => v.n === n)?.spent
     if (flag) return spentBy(n)
-    if (insight?.vout.has(n)) {
-      return insight.asOf === undefined
-        ? { state: 'unknown', reason: 'not-reported' }
-        : unspentAsOf(insight.asOf)
+    if (!hy?.detail) {
+      if (insight?.vout.has(n)) {
+        return insight.asOf === undefined
+          ? { state: 'unknown', reason: 'not-reported' }
+          : unspentAsOf(insight.asOf)
+      }
+      return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
     }
-    if (!hy?.detail) return { state: 'unknown', reason: hyLoading ? 'loading' : 'no-index' }
     const view = o.address ? utxos?.get(o.address) : undefined
     if (view === 'resolving') return { state: 'unknown', reason: 'loading' }
     if (view) {

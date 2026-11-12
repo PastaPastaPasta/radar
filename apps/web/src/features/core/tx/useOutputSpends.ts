@@ -1,18 +1,20 @@
-import { useQueries, useQueryClient } from '@tanstack/react-query'
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import type { DecodedTx } from '@/data/core/types'
 import type { HyTxDetail } from '@/data/hyphen/schemas'
 import { hyQueries } from '@/data/hyphen/queries'
+import { useIndexHealth } from '@/data/index-health'
+import { insQueries } from '@/data/insight/queries'
 import { viewKeys } from '@/data/query'
 import type { NetworkId } from '@/lib/network'
 import {
   findSpender,
   flaggedSpent,
+  insightSpendsOf,
   isUnspendable,
   limiter,
   outputSpends,
   type AddressUtxos,
-  type InsightSpends,
   type OutputSpend,
   type Spender,
 } from './spend'
@@ -27,6 +29,10 @@ const NO_SPENDERS = new Map<number, Spender | null | 'resolving'>()
  * the transaction is mined, so unless it already says spent, the output address's current UTXO list decides:
  * an output still in it is unspent, one missing from a complete list is spent. For spent outputs the spending
  * transaction is then looked up, which costs a few Hyphen requests each.
+ *
+ * While Hyphen is fit it stays the source of all of that. Insight's `/tx` (one request for the whole
+ * transaction) is read only while Hyphen's index is stale (`insightFirst`), or when Hyphen says an output is spent
+ * and its search finds no spender; a spender Insight names is final, while its "unspent" never overrules Hyphen.
  */
 export function useOutputSpends({
   net,
@@ -34,7 +40,7 @@ export function useOutputSpends({
   mined,
   hy,
   hyLoading,
-  insight,
+  insightFirst,
   tipHeight,
   visible,
 }: {
@@ -43,16 +49,15 @@ export function useOutputSpends({
   mined: boolean
   hy: { detail: HyTxDetail | null | undefined; asOfHeight: number | undefined } | undefined
   hyLoading: boolean
-  /** Insight's answer, `'pending'` while it is on its way, or undefined where it is not asked or failed. */
-  insight: InsightSpends | 'pending' | undefined
+  /** Hyphen's index is stale, so Insight answers instead of it. */
+  insightFirst: boolean
   tipHeight: number | undefined
   visible: number
 }): OutputSpend[] {
-  const answered = insight === 'pending' ? undefined : insight
-  const loading = hyLoading || insight === 'pending'
   const queryClient = useQueryClient()
   const height = tx.height
-  const mayHaveUtxos = mined && height !== undefined && hy?.detail != null && insight === undefined
+  const hyphenFit = hy?.detail != null
+  const mayHaveUtxos = mined && height !== undefined && hyphenFit
   const outputsAt = new Map<string, number[]>()
   if (mayHaveUtxos) {
     tx.outputs.forEach((o, n) => {
@@ -107,14 +112,13 @@ export function useOutputSpends({
     tx,
     mined,
     hy,
-    hyLoading: loading,
+    hyLoading,
     tipHeight,
     spenders: NO_SPENDERS,
     utxos,
-    insight: answered,
   })
   const wanted = tx.outputs.flatMap((o, n) =>
-    n < visible && height !== undefined && spent[n]?.state === 'spent' && insight === undefined
+    n < visible && height !== undefined && spent[n]?.state === 'spent' && hyphenFit
       ? [{ n, address: o.address }]
       : [],
   )
@@ -148,6 +152,13 @@ export function useOutputSpends({
   const resultKey = found
     .map((q) => `${q.status}:${q.data?.txid ?? ''}:${q.data?.vin ?? ''}`)
     .join('|')
+  const spenderMissing = found.some((q) => q.isSuccess && q.data === null)
+  const readInsight = mined && (insightFirst || spenderMissing)
+  useIndexHealth(net, { insight: readInsight })
+  const ins = useQuery({ ...insQueries.tx(net, tx.txid), enabled: readInsight })
+  const insight = useMemo(() => insightSpendsOf(ins.data?.data), [ins.data])
+  const insightPending = readInsight && ins.isPending && ins.fetchStatus !== 'idle'
+  const loading = hyLoading || (insightFirst && insightPending)
   return useMemo(() => {
     const spenders = new Map<number, Spender | null | 'resolving'>()
     wanted.forEach(({ n }, i) => {
@@ -163,9 +174,10 @@ export function useOutputSpends({
       tipHeight,
       spenders,
       utxos,
-      insight: answered,
+      insight,
+      insightPending,
     })
     // `found` changes identity every render; its settled contents are summed up in `resultKey`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx, mined, hy, loading, answered, tipHeight, utxos, resultKey])
+  }, [tx, mined, hy, loading, insight, insightPending, tipHeight, utxos, resultKey])
 }
