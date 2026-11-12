@@ -44,8 +44,7 @@ export function useAddressData(net: NetworkId, address: string) {
   }
   const from: IndexSource = insight ? 'insight' : 'hyphen'
   const pagesTotal = ins.txs.data?.pagesTotal
-  const wholeHistoryLoaded =
-    pagesTotal !== undefined && (ins.txs.data?.pages.length ?? 0) >= pagesTotal
+  const wholeHistoryLoaded = isWholeHistory(ins.txs.data)
   const oldest = useQuery({
     ...insightAddressQueries.oldestPage(net, address, pagesTotal ?? 1),
     enabled: insight && pagesTotal !== undefined && pagesTotal > 1 && !wholeHistoryLoaded,
@@ -75,7 +74,7 @@ export function useAddressData(net: NetworkId, address: string) {
     fetchNextPage,
   ])
 
-  const seen = insight ? insightSeen(ins.txs, oldest) : undefined
+  const seen = insight ? insightSeen(ins.txs, oldest, wholeHistoryLoaded) : undefined
 
   return {
     index,
@@ -86,6 +85,10 @@ export function useAddressData(net: NetworkId, address: string) {
   }
 }
 
+function isWholeHistory(loaded: { pages: unknown[]; pagesTotal?: number } | undefined): boolean {
+  return loaded?.pagesTotal !== undefined && loaded.pages.length >= loaded.pagesTotal
+}
+
 function insightSeen(
   history: {
     data?: { pages: Sourced<HyPage<HyAddressTx>>[]; pagesTotal?: number }
@@ -93,12 +96,12 @@ function insightSeen(
     hasNextPage: boolean
   },
   oldest: UseQueryResult<Sourced<HyAddressTx[]>>,
+  whole: boolean,
 ): InsightSeen {
   const loaded = history.data
   const rows = loaded?.pages.flatMap((p) => p.data.items) ?? []
   const times = (list: HyAddressTx[]) => list.map((r) => r.blockTime)
   const last = rows.length > 0 ? Math.max(...times(rows)) : undefined
-  const whole = loaded?.pagesTotal !== undefined && loaded.pages.length >= loaded.pagesTotal
   const source: Sourced<unknown> | undefined = whole ? loaded?.pages.at(-1) : oldest.data
   const list = whole ? rows : (oldest.data?.data ?? [])
   return {

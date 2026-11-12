@@ -282,6 +282,7 @@ function usePageSource(requested: number | undefined) {
   return {
     // A long page waits for the health probe to say which index, if any, can serve it.
     waiting: longPage && hasIndex && index.pending,
+    requested: wanted,
     size: source === 'dapi' ? BLOCKS_PER_PAGE : wanted,
     source,
     offered: hasIndex,
@@ -341,12 +342,7 @@ export function BlocksPage({
   const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
   const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
   const insightRows = useInsightRows(window, pageSource.source === 'insight', date)
-  const page =
-    pageSource.source === 'hyphen'
-      ? hyphenRows
-      : pageSource.source === 'insight'
-        ? insightRows
-        : dapiRows
+  const page = { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
   const rows = page.rows
   const newestPage = window !== null && window.newer === null
   const today = todayUtc()
@@ -478,7 +474,7 @@ export function BlocksPage({
         >
           {pageSource.offered ? (
             <PageSizeControl
-              size={requestedPageSize(requestedSize)}
+              size={pageSource.requested}
               available={pageSource.longPageAvailable}
               link={(n) => void navigate(link({ from }, n) as never)}
             />

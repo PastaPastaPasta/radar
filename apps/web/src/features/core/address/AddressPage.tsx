@@ -341,18 +341,15 @@ function SeenStat({
       loading={loading}
       source={source}
       value={
-        first && last ? (
+        last ? (
           <span className="grid gap-1 text-base font-normal" data-seen>
-            <SeenLine label={t`First`}>
-              <Time ms={first} mode="absolute" />
-            </SeenLine>
-            <SeenLine label={t`Last`}>
-              <Time ms={last} mode="absolute" />
-            </SeenLine>
-          </span>
-        ) : last ? (
-          <span className="grid gap-1 text-base font-normal" data-seen>
-            <span className="text-[var(--dh-ink-2)]">{t`First: not available`}</span>
+            {first ? (
+              <SeenLine label={t`First`}>
+                <Time ms={first} mode="absolute" />
+              </SeenLine>
+            ) : (
+              <span className="text-[var(--dh-ink-2)]">{t`First: not available`}</span>
+            )}
             <SeenLine label={t`Last`}>
               <Time ms={last} mode="absolute" />
             </SeenLine>
