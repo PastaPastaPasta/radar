@@ -67,6 +67,35 @@ test.describe('Block page', () => {
     await expectAccessible(page)
   })
 
+  test('cuts the header hashes in the middle on a phone and keeps the block’s own hash whole @IN-03', async ({
+    page,
+  }) => {
+    const phone = (page.viewportSize()?.width ?? 1000) <= 640
+    await page.goto(`/block/${TIP}`)
+    await expect(page.getByRole('heading', { level: 1, name: /Block 2,570,085/ })).toBeVisible()
+    const own = page.locator('.rx-rec__meta .rx-hash[data-display="full"] code')
+    await expect(own).toHaveText(/^[0-9a-f]{64}$/)
+    const header = page.locator('#header')
+    const cuts = header.locator('.rx-hash-toggle')
+    if (!phone) {
+      await expect(cuts).toHaveCount(0)
+      return
+    }
+    await expect(cuts).toHaveCount(2)
+    for (const cut of await cuts.all()) {
+      await expect(cut).toHaveText(/^[0-9a-f]{8}…[0-9a-f]{6}$/)
+      await expect(cut.locator('xpath=ancestor::code')).toHaveAttribute('title', /^[0-9a-f]{64}$/)
+    }
+    const first = cuts.first()
+    await first.click()
+    await expect(first).toHaveAttribute('aria-expanded', 'true')
+    await expect(first).toHaveText(/^[0-9a-f]{64}$/)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
+    expect(overflow).toBeLessThanOrEqual(0)
+  })
+
   test('opens by hash and walks to the previous block @IN-03', async ({ page }) => {
     await page.goto(`/block/${PREVIOUS_HASH}`)
     await expect(page.getByRole('heading', { level: 1, name: /2,570,084/ })).toBeVisible()

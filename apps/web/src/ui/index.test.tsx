@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   CHART_HEIGHT,
   CHART_TOKEN_NAMES,
@@ -126,5 +126,52 @@ describe('chart theme and map style', () => {
   it('exports the plate map values', () => {
     expect(RADAR_MAP_STYLE.ocean.light).toMatch(/^#/)
     expect(RADAR_MAP_STYLE.sources.lowZoomBelow).toBeGreaterThan(0)
+  })
+})
+
+describe('Hash on a phone', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+  const root = '0000000000000000000a1b2c3d4e5f60718293a4b5c6d7e8f9012345678abcd'
+  const phone = (on: boolean) =>
+    vi.stubGlobal(
+      'matchMedia',
+      (query: string): MediaQueryList =>
+        ({
+          matches: on && query === '(max-width: 640px)',
+          media: query,
+          addEventListener: () => undefined,
+          removeEventListener: () => undefined,
+        }) as unknown as MediaQueryList,
+    )
+
+  it('cuts a metadata hash in the middle, keeps the full value in the title and opens it on tap @IN-03 @IN-05', async () => {
+    phone(true)
+    const user = userEvent.setup()
+    render(<ui.Hash value={root} display="wrap" phoneShort />)
+    const toggle = screen.getByRole('button', { expanded: false })
+    expect(toggle.textContent).toBe(`${root.slice(0, 8)}…${root.slice(-6)}`)
+    expect(toggle.closest('code')).toHaveAttribute('title', root)
+    expect(screen.getByRole('button', { name: 'Copy full value' })).toHaveAttribute(
+      'data-copy',
+      root,
+    )
+    await user.click(toggle)
+    expect(screen.getByRole('button', { expanded: true }).textContent).toBe(root)
+  })
+
+  it('keeps a primary hash whole on a phone @IN-03 @IN-05', () => {
+    phone(true)
+    render(<ui.Hash value={root} display="full" />)
+    expect(screen.queryByRole('button', { expanded: false })).toBeNull()
+    expect(document.querySelector('.rx-hash-full')?.textContent).toBe(root)
+  })
+
+  it('keeps a metadata hash whole on a wide screen @IN-03', () => {
+    phone(false)
+    render(<ui.Hash value={root} display="wrap" phoneShort />)
+    expect(screen.queryByRole('button', { expanded: false })).toBeNull()
+    expect(document.querySelector('.rx-hash-full')?.textContent).toBe(root)
   })
 })

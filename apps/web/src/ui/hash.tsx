@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { announce } from './announce'
 import { copyText } from './clipboard'
 import { cx } from './cx'
+import { useMediaQuery } from './hooks'
 import { Icon } from './icon'
 
 export interface CopyProps {
@@ -45,7 +46,11 @@ export interface HashProps {
   head?: number
   tail?: number
   copy?: boolean
+  /** On a phone, a `wrap` hash is cut in the middle (the full value stays in the title and the copy button). */
+  phoneShort?: boolean
 }
+
+const PHONE = '(max-width: 640px)'
 
 export function shortHash(
   value: string,
@@ -67,8 +72,21 @@ export function ShortText({ short }: { short: { head: string; tail: string } }) 
   )
 }
 
-export function Hash({ value, display = 'short', head = 6, tail = 4, copy = true }: HashProps) {
-  const short = display === 'short' ? shortHash(value, head, tail) : null
+export function Hash({
+  value,
+  display = 'short',
+  head,
+  tail,
+  copy = true,
+  phoneShort = false,
+}: HashProps) {
+  const phone = useMediaQuery(PHONE)
+  const [open, setOpen] = useState(false)
+  const toggles = display === 'wrap' && phoneShort && phone
+  const cut = display === 'short' || (toggles && !open)
+  const short = cut
+    ? shortHash(value, head ?? (display === 'short' ? 6 : 8), tail ?? (display === 'short' ? 4 : 6))
+    : null
   let text: ReactNode
   if (short) {
     text = <ShortText short={short} />
@@ -87,12 +105,25 @@ export function Hash({ value, display = 'short', head = 6, tail = 4, copy = true
     <span className="rx-hash" data-display={display}>
       <code
         className={cx(
-          display === 'short' ? 'rx-mono' : 'rx-hash-full',
-          display === 'wrap' && 'is-wrap',
+          display === 'short' || short ? 'rx-mono' : 'rx-hash-full',
+          display === 'wrap' && !short && 'is-wrap',
         )}
         title={short ? value : undefined}
       >
-        {text}
+        {toggles ? (
+          <button
+            type="button"
+            className="rx-hash-toggle"
+            aria-expanded={open}
+            onClick={() => {
+              setOpen((v) => !v)
+            }}
+          >
+            {text}
+          </button>
+        ) : (
+          text
+        )}
       </code>
       {copy ? <Copy value={value} label={t`Copy full value`} /> : null}
     </span>

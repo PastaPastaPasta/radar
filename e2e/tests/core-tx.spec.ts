@@ -108,6 +108,28 @@ test.describe('Transaction page', () => {
     })
   }
 
+  test('cuts a payload hash in the middle on a phone and keeps the txid whole @IN-05', async ({
+    page,
+  }) => {
+    const phone = (page.viewportSize()?.width ?? 1000) <= 640
+    await page.goto(`/tx/${PAYLOADS[0]!.txid}`)
+    const payload = page.locator('[data-payload="cbTx"]')
+    await expect(payload).toContainText('Masternode list root')
+    await expect(page.locator('.rx-rec__meta .rx-hash[data-display="full"] code')).toHaveText(
+      PAYLOADS[0]!.txid,
+    )
+    const cuts = payload.locator('.rx-hash-toggle')
+    if (!phone) {
+      await expect(cuts).toHaveCount(0)
+      return
+    }
+    await expect(cuts.first()).toHaveText(/^[0-9a-f]{8}…[0-9a-f]{6}$/)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
+    expect(overflow).toBeLessThanOrEqual(0)
+  })
+
   for (const [name, url] of [
     ['a quorum commitment', `/tx/${PAYLOADS[1]!.txid}`],
     ['a hard-fork signal', `/tx/${MNHF}?network=testnet`],

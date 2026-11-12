@@ -50,6 +50,23 @@
 .rx-hash-full.is-wrap {
   word-break: break-all;
 }
+.rx-hash-toggle {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.rx-hash-toggle:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+}
 .rx-hash .rx-copy {
   margin-top: -1px;
 }

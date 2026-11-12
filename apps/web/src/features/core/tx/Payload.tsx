@@ -35,7 +35,7 @@ function hashValue(v: unknown, head = 12, tail = 8): ReactNode {
 
 function fullHash(v: unknown): ReactNode {
   const s = str(v)
-  return s ? <Hash value={s} display="wrap" /> : null
+  return s ? <Hash value={s} display="wrap" phoneShort /> : null
 }
 
 function addressOf(k: unknown): ReactNode {

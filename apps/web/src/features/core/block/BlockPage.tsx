@@ -282,11 +282,14 @@ function BlockView({
                 },
                 { label: t`Bits`, value: <span className="rx-mono">{block.bits}</span> },
                 { label: t`Nonce`, value: formatInt(block.nonce) },
-                { label: t`Merkle root`, value: <Hash value={block.merkleRoot} display="wrap" /> },
+                {
+                  label: t`Merkle root`,
+                  value: <Hash value={block.merkleRoot} display="wrap" phoneShort />,
+                },
                 {
                   label: t`Chainwork`,
                   value: chainwork ? (
-                    <Hash value={chainwork} display="wrap" />
+                    <Hash value={chainwork} display="wrap" phoneShort />
                   ) : (
                     <span className="rx-dim">{t`Not in DAPI`}</span>
                   ),
