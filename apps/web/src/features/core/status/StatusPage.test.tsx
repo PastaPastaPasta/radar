@@ -137,6 +137,38 @@ describe('Status page', () => {
     })
   })
 
+  it('lists the sources on a phone as short rows with the explanation behind a disclosure @HY-12', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      (query: string): MediaQueryList =>
+        ({
+          matches: query === '(max-width: 640px)',
+          media: query,
+          addEventListener: () => undefined,
+          removeEventListener: () => undefined,
+          addListener: () => undefined,
+          removeListener: () => undefined,
+          dispatchEvent: () => false,
+          onchange: null,
+        }) as MediaQueryList,
+    )
+    try {
+      setCoreClient(core())
+      renderAt('/status')
+      const list = await screen.findByRole('list', { name: 'Sources' })
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(6))
+      const hyphen = list.querySelector<HTMLElement>('[data-source-row="hyphen"]')!
+      expect(within(hyphen).getByText('Hyphen')).toBeInTheDocument()
+      expect(hyphen.querySelectorAll('p').length).toBeLessThanOrEqual(1 + 2)
+      const details = hyphen.querySelector('details')!
+      expect(details.open).toBe(false)
+      expect(details.querySelector('summary')).not.toBeNull()
+      await waitFor(() => expect(details).toHaveTextContent(/Indexed to Core block/))
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('says a source is down, since when, and that the rest still work @IN-09', async () => {
     setCoreClient(core())
     renderAt('/status')

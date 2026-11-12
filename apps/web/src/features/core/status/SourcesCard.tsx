@@ -1,6 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useNow } from '@/ui'
-import { Card, ErrorState, LiveDot, SourceLine } from '@/ui'
+import { Card, ErrorState, LiveDot, SourceLine, useMediaQuery, useNow } from '@/ui'
 import { stampOf } from '@/data/envelope'
 import { useNetwork } from '@/features/entity'
 import type { Probes } from './probes'
@@ -39,10 +38,13 @@ function probeFacts(
   return undefined
 }
 
+const ATTENTION = new Set(['down', 'stale', 'degraded', 'slow'])
+
 export function SourcesCard({ rows, probes }: SourcesCardProps) {
   const { t } = useLingui()
   const net = useNetwork()
   const now = useNow(true)
+  const phone = useMediaQuery('(max-width: 640px)')
   return (
     <Card
       id="sources"
@@ -57,6 +59,46 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
             source === 'radar' || source === 'pe' || source === 'hyphen'
               ? probes[source].error
               : undefined
+          if (phone) {
+            return (
+              <li
+                key={source}
+                data-source-row={source}
+                data-state={offered ? health.state : 'unsupported'}
+                className="grid gap-1 border-b border-[var(--dh-line)] py-3 last:border-b-0"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <strong>{name}</strong>
+                  {offered ? (
+                    <LiveDot state={health.state} />
+                  ) : (
+                    <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
+                  )}
+                </div>
+                <p className="text-[var(--dh-ink-2)]">{role}</p>
+                {offered ? (
+                  <details open={ATTENTION.has(health.state)} data-source-details>
+                    <summary className="cursor-pointer">
+                      {health.p50LatencyMs !== undefined
+                        ? medianText(health.p50LatencyMs)
+                        : t`Details`}
+                    </summary>
+                    <div className="mt-1 grid gap-1">
+                      <p>{describeHealth(health, now)}</p>
+                      {facts ? (
+                        <p className="text-[var(--dh-ink-2)]">
+                          {facts.report} <SourceLine stamp={facts.stamp} compact />
+                        </p>
+                      ) : null}
+                      {probeError && health.state !== 'down' ? (
+                        <ErrorState error={probeError} source={source} compact />
+                      ) : null}
+                    </div>
+                  </details>
+                ) : null}
+              </li>
+            )
+          }
           return (
             <li
               key={source}

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import type { DecodedTx, PrevOut } from '@/data/core/types'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, AmountDensity, Card } from '@/ui'
+import { unitLabel } from '@/lib/units'
+import { Amount, AmountDensity, Card, useUnits } from '@/ui'
 import type { OutputSpend } from './spend'
 import { isCoinbaseTx, prevoutKey } from './tx-info'
 import { useOutputSpends } from './useOutputSpends'
@@ -108,6 +109,10 @@ function SpendState({ spend, index }: { spend: OutputSpend | undefined; index: n
   }
 }
 
+/** From 641 px the amount column's unit moves into its header, so the figures line up; cards keep it on each amount. */
+const tableClass = (columnUnit: string | undefined) =>
+  `rx-table rx-table--cards${columnUnit ? ' rx-table--colunit' : ''}`
+
 export function IoTables({
   tx,
   prevouts,
@@ -126,6 +131,8 @@ export function IoTables({
 }) {
   const { t } = useLingui()
   const net = useNetwork()
+  const units = useUnits()
+  const columnUnit = units.usdPrimary ? undefined : unitLabel(units.unit, units.testnet)
   const anchor = useAnchor()
   const [showAllIn, setShowAllIn] = useState(false)
   const [showAllOut, setShowAllOut] = useState(false)
@@ -151,13 +158,16 @@ export function IoTables({
           padding="flush"
           actions={inTotal === undefined ? null : <Amount value={inTotal} kind="duffs" />}
         >
-          <table className="rx-table rx-table--cards">
+          <table className={tableClass(columnUnit)}>
             <caption className="dh-sr">{t`Inputs`}</caption>
             <thead>
               <tr>
                 <th>#</th>
                 <th>{t`From`}</th>
-                <th className="r">{t`Amount`}</th>
+                <th className="r">
+                  {t`Amount`}
+                  {columnUnit ? <span className="rx-colunit">{columnUnit}</span> : null}
+                </th>
                 <th>{t`Spends`}</th>
               </tr>
             </thead>
@@ -233,13 +243,16 @@ export function IoTables({
           padding="flush"
           actions={<Amount value={outTotal} kind="duffs" />}
         >
-          <table className="rx-table rx-table--cards">
+          <table className={tableClass(columnUnit)}>
             <caption className="dh-sr">{t`Outputs`}</caption>
             <thead>
               <tr>
                 <th>#</th>
                 <th>{t`To`}</th>
-                <th className="r">{t`Amount`}</th>
+                <th className="r">
+                  {t`Amount`}
+                  {columnUnit ? <span className="rx-colunit">{columnUnit}</span> : null}
+                </th>
                 <th>{t`State`}</th>
               </tr>
             </thead>
