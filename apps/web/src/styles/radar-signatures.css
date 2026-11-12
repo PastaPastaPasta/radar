@@ -607,14 +607,17 @@
 }
 .rx-io .rx-table th.r,
 .rx-io .rx-table td.e {
-  padding-right: 20px;
+  padding-right: 14px;
 }
 .rx-io .rx-table th:last-child,
 .rx-io .rx-table td.s {
-  padding-left: 12px;
+  padding-left: 8px;
+}
+.rx-io .rx-table td.s {
+  white-space: normal;
 }
 .rx-io [data-spend='spent'] .rx-st {
-  margin-right: 8px;
+  margin-right: 6px;
 }
 .rx-colunit {
   margin-left: 4px;
