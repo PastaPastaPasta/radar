@@ -178,7 +178,7 @@ msgstr "Всего проиндексировано выплат: {0}"
 msgid "{0} points, from {1} to {2}, low {3}, high {4}"
 msgstr "точек: {0}, от {1} до {2}, минимум {3}, максимум {4}"
 
-#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
 #. placeholder {0}: formatInt(split.count.funded)
 msgid "{0} proposals"
@@ -255,6 +255,9 @@ msgstr "{h} ч {m} мин"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# час} few {# часа} many {# часов} other {# часа}}"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} не видел этот адрес в этой сети."
 
 msgid "{m} min"
 msgstr "{m} мин"
@@ -603,6 +606,9 @@ msgstr "Блоки"
 #. placeholder {2}: chart.bucketBlocks
 msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
 msgstr "Блоки с {0} по {1}, одна точка на {2, plural, one {# блок} few {# блока} many {# блоков} other {# блока}}"
+
+msgid "Blocks and transactions elsewhere in Radar are current."
+msgstr "Блоки и транзакции в остальных разделах Radar актуальны."
 
 msgid "Blocks on {date}"
 msgstr "Блоки за {date}"
@@ -1027,6 +1033,15 @@ msgstr "Протокол Drive"
 msgid "Each Platform block is locked to a Core block."
 msgstr "Каждый блок Platform привязан к блоку Core."
 
+msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
+msgstr "Более ранние предложения ниже взяты из индекса Hyphen на момент этого блока, не в реальном времени."
+
+msgid "Earlier proposals could not be read from Hyphen."
+msgstr "Не удалось прочитать более ранние предложения из Hyphen."
+
+msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
+msgstr "Более ранние предложения из индекса Hyphen (отстаёт от цепочки)"
+
 msgid "Early-leave penalty"
 msgstr "Штраф за ранний выход"
 
@@ -1147,6 +1162,9 @@ msgstr "Значения, вычисленные на вашем устройс�
 msgid "Figures on this page are as of that block, not live."
 msgstr "Цифры на этой странице — на момент этого блока, не в реальном времени."
 
+msgid "Figures on this page are as of those blocks, not live."
+msgstr "Цифры на этой странице — на момент этих блоков, не в реальном времени."
+
 msgid "Filter by {text}"
 msgstr "Фильтр: {text}"
 
@@ -1159,7 +1177,7 @@ msgstr "Найдите идентичность, которой принадле
 msgid "finding where…"
 msgstr "ищем, где…"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
 msgstr "Первые {0} из {1}"
@@ -1286,9 +1304,6 @@ msgstr "Hyphen не индексирует devnet"
 
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen не индексирует devnet."
-
-msgid "Hyphen has not seen this address on this network."
-msgstr "Hyphen не видел этот адрес в этой сети."
 
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen сообщает, что она потрачена, но в истории не видно, какая транзакция её потратила."
@@ -1424,6 +1439,15 @@ msgstr "Insight"
 
 msgid "Insight couldn’t be reached"
 msgstr "Не удалось связаться с Insight"
+
+msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
+msgstr "Insight не сообщает о финансировании, а время следующего суперблока неизвестно, поэтому ни одно предложение не показано как профинансированное. «Проходит» Radar вычисляет по числу голосов из Insight."
+
+msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
+msgstr "Insight не сообщает о финансировании. «Профинансировано» и «Проходит» Radar вычисляет по числу голосов из Insight и времени следующего суперблока."
+
+msgid "Insight’s {name} index is behind too: {lag}."
+msgstr "Индекс {name} у Insight тоже отстаёт: {lag}."
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -2214,6 +2238,12 @@ msgstr "Пиры узла, с которого индексирует Hyphen"
 msgid "Penalty {0}"
 msgstr "Штраф {0}"
 
+msgid "Pending"
+msgstr "В ожидании"
+
+msgid "Pending outputs are not mined yet, so the balance above does not count them."
+msgstr "Ожидающие выходы ещё не включены в блок, поэтому баланс выше их не учитывает."
+
 msgid "Pending transactions"
 msgstr "Ожидающие транзакции"
 
@@ -2919,8 +2949,8 @@ msgstr "Остановлено с {since}"
 msgid "Summary"
 msgstr "Сводка"
 
-msgid "Supply and blockchain size are Hyphen’s and not live."
-msgstr "Предложение и размер блокчейна — данные Hyphen, не в реальном времени."
+msgid "Supply and blockchain size are not shown until it catches up."
+msgstr "Предложение монет и размер блокчейна не показываются, пока индекс не догонит цепочку."
 
 msgid "Supply concentration"
 msgstr "Концентрация предложения"
@@ -3185,6 +3215,9 @@ msgstr "Эта страница читает данные из: {0}. Перек�
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "Эта страница читает данные из Hyphen. Переключитесь на основную или тестовую сеть, чтобы её увидеть."
+
+msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
+msgstr "Это предложение и история голосования взяты из индекса Hyphen на момент этого блока, не в реальном времени."
 
 msgid "This source isn't available here"
 msgstr "Этот источник здесь недоступен"

@@ -178,7 +178,7 @@ msgstr "共索引 {0} 笔付款"
 msgid "{0} points, from {1} to {2}, low {3}, high {4}"
 msgstr "{0} 个数据点，从 {1} 到 {2}，最低 {3}，最高 {4}"
 
-#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
 #. placeholder {0}: formatInt(split.count.funded)
 msgid "{0} proposals"
@@ -255,6 +255,9 @@ msgstr "{h}小时{m}分钟"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, other {# 小时}}"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} 尚未在此网络上见过该地址。"
 
 msgid "{m} min"
 msgstr "{m}分钟"
@@ -603,6 +606,9 @@ msgstr "区块"
 #. placeholder {2}: chart.bucketBlocks
 msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
 msgstr "区块 {0} 至 {1}，每 {2, plural, other {# 个区块}}一个点"
+
+msgid "Blocks and transactions elsewhere in Radar are current."
+msgstr "Radar 其他位置的区块和交易都是最新的。"
 
 msgid "Blocks on {date}"
 msgstr "{date} 的区块"
@@ -1027,6 +1033,15 @@ msgstr "Drive 协议"
 msgid "Each Platform block is locked to a Core block."
 msgstr "每个 Platform 区块都与一个 Core 区块绑定。"
 
+msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
+msgstr "下面较早的提案来自 Hyphen 的索引,截至该区块,并非实时。"
+
+msgid "Earlier proposals could not be read from Hyphen."
+msgstr "无法从 Hyphen 读取较早的提案。"
+
+msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
+msgstr "较早的提案,来自 Hyphen 的索引(落后于区块链)"
+
 msgid "Early-leave penalty"
 msgstr "提前退出惩罚"
 
@@ -1147,6 +1162,9 @@ msgstr "在你的设备上计算的数据"
 msgid "Figures on this page are as of that block, not live."
 msgstr "此页面的数据截至该区块，并非实时。"
 
+msgid "Figures on this page are as of those blocks, not live."
+msgstr "此页面的数据截至这些区块,并非实时。"
+
 msgid "Filter by {text}"
 msgstr "按 {text} 筛选"
 
@@ -1159,7 +1177,7 @@ msgstr "通过 40 个字符的密钥哈希，找到持有该公钥的身份。"
 msgid "finding where…"
 msgstr "正在查找位置…"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
 msgstr "共 {1} 条，前 {0} 条"
@@ -1286,9 +1304,6 @@ msgstr "Hyphen 不索引开发网"
 
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen 不索引开发网。"
-
-msgid "Hyphen has not seen this address on this network."
-msgstr "Hyphen 在此网络上未见过该地址。"
 
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen 显示已花费，但其历史记录没有显示是哪笔交易花费的。"
@@ -1424,6 +1439,15 @@ msgstr "Insight"
 
 msgid "Insight couldn’t be reached"
 msgstr "无法连接 Insight"
+
+msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
+msgstr "Insight 不提供资助情况,且下一个超级区块的时间未知,因此没有提案显示为已获资助。“通过”由 Radar 根据 Insight 的票数计算。"
+
+msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
+msgstr "Insight 不提供资助情况。“已获资助”和“通过”由 Radar 根据 Insight 的票数和下一个超级区块的时间计算。"
+
+msgid "Insight’s {name} index is behind too: {lag}."
+msgstr "Insight 的 {name} 索引也落后了:{lag}。"
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -2214,6 +2238,12 @@ msgstr "Hyphen 用于索引的节点的对等节点"
 msgid "Penalty {0}"
 msgstr "罚分 {0}"
 
+msgid "Pending"
+msgstr "待确认"
+
+msgid "Pending outputs are not mined yet, so the balance above does not count them."
+msgstr "待确认的输出尚未被打包,因此上方余额不计入它们。"
+
 msgid "Pending transactions"
 msgstr "待处理交易"
 
@@ -2919,8 +2949,8 @@ msgstr "自 {since} 起停止"
 msgid "Summary"
 msgstr "摘要"
 
-msgid "Supply and blockchain size are Hyphen’s and not live."
-msgstr "供应量和区块链大小来自 Hyphen，并非实时数据。"
+msgid "Supply and blockchain size are not shown until it catches up."
+msgstr "在索引追上之前,不显示流通量和区块链大小。"
 
 msgid "Supply concentration"
 msgstr "供应集中度"
@@ -3185,6 +3215,9 @@ msgstr "此页面读取自{0}。请切换到 Mainnet 或 Testnet 查看。"
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "此页面的数据来自 Hyphen。请切换到主网或测试网查看。"
+
+msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
+msgstr "此提案及其投票记录来自 Hyphen 的索引,截至该区块,并非实时。"
 
 msgid "This source isn't available here"
 msgstr "此数据源在此不可用"

@@ -178,7 +178,7 @@ msgstr "合計 {0} 件の支払いを索引済み"
 msgid "{0} points, from {1} to {2}, low {3}, high {4}"
 msgstr "{0} 点、{1} から {2}、最小 {3}、最大 {4}"
 
-#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
 #. placeholder {0}: formatInt(split.count.funded)
 msgid "{0} proposals"
@@ -255,6 +255,9 @@ msgstr "{h}時間{m}分"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, other {#時間}}"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} はこのネットワークでこのアドレスをまだ確認していません。"
 
 msgid "{m} min"
 msgstr "{m}分"
@@ -603,6 +606,9 @@ msgstr "ブロック"
 #. placeholder {2}: chart.bucketBlocks
 msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
 msgstr "ブロック {0} から {1}、{2, plural, other {# ブロック}}ごとに1点"
+
+msgid "Blocks and transactions elsewhere in Radar are current."
+msgstr "Radar の他の場所のブロックとトランザクションは最新です。"
 
 msgid "Blocks on {date}"
 msgstr "{date} のブロック"
@@ -1027,6 +1033,15 @@ msgstr "Drive プロトコル"
 msgid "Each Platform block is locked to a Core block."
 msgstr "各 Platform ブロックは Core ブロックに紐づいています。"
 
+msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
+msgstr "以下の過去の提案は Hyphen のインデックスのもので、そのブロック時点の内容であり、ライブではありません。"
+
+msgid "Earlier proposals could not be read from Hyphen."
+msgstr "過去の提案を Hyphen から読み込めませんでした。"
+
+msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
+msgstr "過去の提案(Hyphen のインデックス、チェーンに遅れています)"
+
 msgid "Early-leave penalty"
 msgstr "早期離脱ペナルティ"
 
@@ -1147,6 +1162,9 @@ msgstr "お使いの端末で計算した数値"
 msgid "Figures on this page are as of that block, not live."
 msgstr "このページの数値はそのブロック時点のもので、ライブではありません。"
 
+msgid "Figures on this page are as of those blocks, not live."
+msgstr "このページの数値はそれらのブロック時点のもので、ライブではありません。"
+
 msgid "Filter by {text}"
 msgstr "{text} で絞り込む"
 
@@ -1159,7 +1177,7 @@ msgstr "40 文字のキーハッシュから、その公開鍵を持つアイデ
 msgid "finding where…"
 msgstr "場所を特定中…"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
 msgstr "{1} 件中先頭の {0} 件"
@@ -1286,9 +1304,6 @@ msgstr "Hyphen は devnet をインデックスしません"
 
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen は devnet をインデックスしません。"
-
-msgid "Hyphen has not seen this address on this network."
-msgstr "Hyphen はこのネットワークでこのアドレスを確認していません。"
 
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen は使用済みとしていますが、履歴からどのトランザクションが使ったかは分かりません。"
@@ -1424,6 +1439,15 @@ msgstr "Insight"
 
 msgid "Insight couldn’t be reached"
 msgstr "Insight に接続できませんでした"
+
+msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
+msgstr "Insight は資金確保の状況を報告せず、次のスーパーブロックの時刻も不明なため、どの提案も「資金確保済み」とは表示されません。「可決」は Insight の票数から Radar が算出しています。"
+
+msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
+msgstr "Insight は資金確保の状況を報告しません。「資金確保済み」と「可決」は、Insight の票数と次のスーパーブロックの時刻から Radar が算出しています。"
+
+msgid "Insight’s {name} index is behind too: {lag}."
+msgstr "Insight の {name} インデックスも遅れています: {lag}。"
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -2214,6 +2238,12 @@ msgstr "Hyphen がインデックスを作成するノードのピア"
 msgid "Penalty {0}"
 msgstr "ペナルティ {0}"
 
+msgid "Pending"
+msgstr "保留中"
+
+msgid "Pending outputs are not mined yet, so the balance above does not count them."
+msgstr "保留中のアウトプットはまだマイニングされていないため、上の残高には含まれていません。"
+
 msgid "Pending transactions"
 msgstr "保留中のトランザクション"
 
@@ -2919,8 +2949,8 @@ msgstr "{since} から停止中"
 msgid "Summary"
 msgstr "概要"
 
-msgid "Supply and blockchain size are Hyphen’s and not live."
-msgstr "供給量とブロックチェーンのサイズは Hyphen の値で、リアルタイムではありません。"
+msgid "Supply and blockchain size are not shown until it catches up."
+msgstr "インデックスが追いつくまで、供給量とブロックチェーンのサイズは表示されません。"
 
 msgid "Supply concentration"
 msgstr "供給量の集中度"
@@ -3185,6 +3215,9 @@ msgstr "このページは {0} から読み取ります。表示するには Mai
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "このページは Hyphen から読み込みます。表示するにはメインネットまたはテストネットに切り替えてください。"
+
+msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
+msgstr "この提案と投票履歴は Hyphen のインデックスのもので、そのブロック時点の内容であり、ライブではありません。"
 
 msgid "This source isn't available here"
 msgstr "このソースはここでは利用できません"

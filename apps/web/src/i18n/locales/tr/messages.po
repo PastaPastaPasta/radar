@@ -178,7 +178,7 @@ msgstr "Toplam {0} ödeme dizinlendi"
 msgid "{0} points, from {1} to {2}, low {3}, high {4}"
 msgstr "{0} nokta, {1} ile {2} arası, en düşük {3}, en yüksek {4}"
 
-#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
 #. placeholder {0}: formatInt(split.count.funded)
 msgid "{0} proposals"
@@ -255,6 +255,9 @@ msgstr "{h} sa {m} dk"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# saat} other {# saat}}"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} bu adresi bu ağda henüz görmedi."
 
 msgid "{m} min"
 msgstr "{m} dk"
@@ -603,6 +606,9 @@ msgstr "Bloklar"
 #. placeholder {2}: chart.bucketBlocks
 msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
 msgstr "{0} ile {1} arası bloklar, her {2, plural, one {# blok} other {# blok}} için bir nokta"
+
+msgid "Blocks and transactions elsewhere in Radar are current."
+msgstr "Radar’ın diğer bölümlerindeki bloklar ve işlemler günceldir."
 
 msgid "Blocks on {date}"
 msgstr "{date} tarihli bloklar"
@@ -1027,6 +1033,15 @@ msgstr "Drive protokolü"
 msgid "Each Platform block is locked to a Core block."
 msgstr "Her Platform bloğu bir Core bloğuna bağlıdır."
 
+msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
+msgstr "Aşağıdaki eski teklifler Hyphen’in indeksinden, o blok itibarıyla alınmıştır; canlı değildir."
+
+msgid "Earlier proposals could not be read from Hyphen."
+msgstr "Eski teklifler Hyphen’den okunamadı."
+
+msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
+msgstr "Eski teklifler, Hyphen’in indeksinden (zincirin gerisinde)"
+
 msgid "Early-leave penalty"
 msgstr "Erken ayrılma cezası"
 
@@ -1147,6 +1162,9 @@ msgstr "Cihazınızda hesaplanan rakamlar"
 msgid "Figures on this page are as of that block, not live."
 msgstr "Bu sayfadaki rakamlar o blok itibarıyladır, canlı değildir."
 
+msgid "Figures on this page are as of those blocks, not live."
+msgstr "Bu sayfadaki rakamlar o bloklar itibarıyladır, canlı değildir."
+
 msgid "Filter by {text}"
 msgstr "{text} ile süz"
 
@@ -1159,7 +1177,7 @@ msgstr "40 karakterlik anahtar hash’inden, bir açık anahtarı tutan kimliği
 msgid "finding where…"
 msgstr "nerede olduğu bulunuyor…"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
 msgstr "{1} içinden ilk {0}"
@@ -1286,9 +1304,6 @@ msgstr "Hyphen devnet’leri dizinlemez"
 
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen devnet’leri dizinlemez."
-
-msgid "Hyphen has not seen this address on this network."
-msgstr "Hyphen bu adresi bu ağda görmedi."
 
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen harcandığını söylüyor ancak geçmişinde hangi işlemin harcadığı görünmüyor."
@@ -1424,6 +1439,15 @@ msgstr "Insight"
 
 msgid "Insight couldn’t be reached"
 msgstr "Insight’a ulaşılamadı"
+
+msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
+msgstr "Insight finansmanı bildirmez ve sonraki süperblokun zamanı bilinmiyor; bu yüzden hiçbir teklif finanse edilmiş gösterilmez. “Geçiyor” durumunu Radar, Insight’ın oy sayılarından hesaplar."
+
+msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
+msgstr "Insight finansmanı bildirmez. “Finanse edildi” ve “Geçiyor” durumlarını Radar, Insight’ın oy sayılarından ve sonraki süperblokun zamanından hesaplar."
+
+msgid "Insight’s {name} index is behind too: {lag}."
+msgstr "Insight’ın {name} indeksi de geride: {lag}."
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -2214,6 +2238,12 @@ msgstr "Hyphen’in dizinlediği düğümün eşleri"
 msgid "Penalty {0}"
 msgstr "Ceza {0}"
 
+msgid "Pending"
+msgstr "Beklemede"
+
+msgid "Pending outputs are not mined yet, so the balance above does not count them."
+msgstr "Bekleyen çıktılar henüz bir bloğa girmedi, bu yüzden yukarıdaki bakiye onları saymaz."
+
 msgid "Pending transactions"
 msgstr "Bekleyen işlemler"
 
@@ -2919,8 +2949,8 @@ msgstr "{since} tarihinden beri durdu"
 msgid "Summary"
 msgstr "Özet"
 
-msgid "Supply and blockchain size are Hyphen’s and not live."
-msgstr "Arz ve blokzincir boyutu Hyphen’e aittir ve canlı değildir."
+msgid "Supply and blockchain size are not shown until it catches up."
+msgstr "İndeks yetişene kadar dolaşımdaki arz ve blokzincir boyutu gösterilmez."
 
 msgid "Supply concentration"
 msgstr "Arz yoğunlaşması"
@@ -3185,6 +3215,9 @@ msgstr "Bu sayfa {0} kaynaklarından okur. Görmek için Mainnet’e veya Testne
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "Bu sayfa Hyphen’den okur. Görmek için Mainnet’e veya Testnet’e geçin."
+
+msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
+msgstr "Bu teklif ve oy geçmişi Hyphen’in indeksinden, o blok itibarıyla alınmıştır; canlı değildir."
 
 msgid "This source isn't available here"
 msgstr "Bu kaynak burada kullanılamıyor"

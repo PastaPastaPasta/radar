@@ -178,7 +178,7 @@ msgstr "{0} pagos indexados en total"
 msgid "{0} points, from {1} to {2}, low {3}, high {4}"
 msgstr "{0} puntos, de {1} a {2}, mínimo {3}, máximo {4}"
 
-#. placeholder {0}: formatInt(query.data.data.total ?? proposals.length)
+#. placeholder {0}: formatInt(data.data.total ?? proposals.length)
 #. placeholder {0}: formatInt(split.count.failing)
 #. placeholder {0}: formatInt(split.count.funded)
 msgid "{0} proposals"
@@ -255,6 +255,9 @@ msgstr "{h} h {m} min"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# hora} other {# horas}}"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} no ha visto esta dirección en esta red."
 
 msgid "{m} min"
 msgstr "{m} min"
@@ -603,6 +606,9 @@ msgstr "Bloques"
 #. placeholder {2}: chart.bucketBlocks
 msgid "Blocks {0} to {1}, one point per {2, plural, one {# block} other {# blocks}}"
 msgstr "Bloques {0} a {1}, un punto por cada {2, plural, one {# bloque} many {# de bloques} other {# bloques}}"
+
+msgid "Blocks and transactions elsewhere in Radar are current."
+msgstr "Los bloques y las transacciones en el resto de Radar están al día."
 
 msgid "Blocks on {date}"
 msgstr "Bloques del {date}"
@@ -1027,6 +1033,15 @@ msgstr "Protocolo de Drive"
 msgid "Each Platform block is locked to a Core block."
 msgstr "Cada bloque de Platform está vinculado a un bloque de Core."
 
+msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
+msgstr "Las propuestas anteriores de abajo vienen del índice de Hyphen, a ese bloque, no en vivo."
+
+msgid "Earlier proposals could not be read from Hyphen."
+msgstr "No se pudieron leer las propuestas anteriores de Hyphen."
+
+msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
+msgstr "Propuestas anteriores, del índice de Hyphen (por detrás de la cadena)"
+
 msgid "Early-leave penalty"
 msgstr "Penalización por salida anticipada"
 
@@ -1147,6 +1162,9 @@ msgstr "Cifras calculadas en tu dispositivo"
 msgid "Figures on this page are as of that block, not live."
 msgstr "Las cifras de esta página corresponden a ese bloque, no son en vivo."
 
+msgid "Figures on this page are as of those blocks, not live."
+msgstr "Las cifras de esta página corresponden a esos bloques, no son en vivo."
+
 msgid "Filter by {text}"
 msgstr "Filtrar por {text}"
 
@@ -1159,7 +1177,7 @@ msgstr "Encuentra la identidad que posee una clave pública, a partir de su hash
 msgid "finding where…"
 msgstr "buscando dónde…"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(all.length)
 #. placeholder {1}: formatInt(total)
 msgid "First {0} of {1}"
 msgstr "Primeros {0} de {1}"
@@ -1286,9 +1304,6 @@ msgstr "Hyphen no indexa las devnets"
 
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen no indexa las devnets."
-
-msgid "Hyphen has not seen this address on this network."
-msgstr "Hyphen no ha visto esta dirección en esta red."
 
 msgid "Hyphen says it is spent but its history does not show which transaction spent it."
 msgstr "Hyphen indica que está gastada, pero su historial no muestra qué transacción la gastó."
@@ -1424,6 +1439,15 @@ msgstr "Insight"
 
 msgid "Insight couldn’t be reached"
 msgstr "No se pudo contactar con Insight"
+
+msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
+msgstr "Insight no informa de la financiación y no se conoce la hora del próximo superbloque, así que ninguna propuesta se muestra como financiada. Radar calcula «Aprobada» a partir de los recuentos de votos de Insight."
+
+msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
+msgstr "Insight no informa de la financiación. Radar calcula «Financiada» y «Aprobada» a partir de los recuentos de votos de Insight y de la hora del próximo superbloque."
+
+msgid "Insight’s {name} index is behind too: {lag}."
+msgstr "El índice de {name} de Insight también va por detrás: {lag}."
 
 msgid "InstantSend"
 msgstr "InstantSend"
@@ -2214,6 +2238,12 @@ msgstr "Pares del nodo desde el que indexa Hyphen"
 msgid "Penalty {0}"
 msgstr "Penalización {0}"
 
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "Pending outputs are not mined yet, so the balance above does not count them."
+msgstr "Las salidas pendientes aún no se han minado, así que el saldo de arriba no las cuenta."
+
 msgid "Pending transactions"
 msgstr "Transacciones pendientes"
 
@@ -2919,8 +2949,8 @@ msgstr "Detenido desde {since}"
 msgid "Summary"
 msgstr "Resumen"
 
-msgid "Supply and blockchain size are Hyphen’s and not live."
-msgstr "El suministro y el tamaño de la cadena son de Hyphen y no están en vivo."
+msgid "Supply and blockchain size are not shown until it catches up."
+msgstr "El suministro y el tamaño de la cadena no se muestran hasta que se ponga al día."
 
 msgid "Supply concentration"
 msgstr "Concentración del suministro"
@@ -3185,6 +3215,9 @@ msgstr "Esta página lee de {0}. Cambia a Mainnet o Testnet para verla."
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "Esta página lee de Hyphen. Cambia a la mainnet o a la testnet para verla."
+
+msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
+msgstr "Esta propuesta y su historial de votos vienen del índice de Hyphen, a ese bloque, no en vivo."
 
 msgid "This source isn't available here"
 msgstr "Esta fuente no está disponible aquí"
