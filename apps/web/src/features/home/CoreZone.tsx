@@ -124,7 +124,7 @@ function StaleNote() {
   if (lagged === undefined) return null
   return (
     <p className="rx-note" role="note" data-hyphen-lag>
-      {lagged} {t`Supply and blockchain size are Hyphen’s and not live.`}{' '}
+      {lagged} {t`Supply and blockchain size are not shown until it catches up.`}{' '}
       <PageLink to="/status">{t`See the sources`}</PageLink>
     </p>
   )

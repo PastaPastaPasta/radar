@@ -404,7 +404,7 @@ describe('Home page', () => {
     expect(headline).toHaveTextContent('Last block')
     expect(headline).not.toHaveTextContent('Circulating supply')
     const note = await screen.findByRole('note')
-    expect(note).toHaveTextContent(/Supply and blockchain size are Hyphen’s and not live/)
+    expect(note).toHaveTextContent(/Supply and blockchain size are not shown until it catches up/)
     expect(note).toHaveTextContent(/See the sources/)
     expect(note).toHaveTextContent(
       /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
@@ -434,6 +434,7 @@ describe('Home page', () => {
       deliver = listener
       return () => undefined
     })
+    vi.spyOn(coreLive, 'txStatus').mockReturnValue({ state: 'live', fallbackHint: false })
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
     const find = () =>
