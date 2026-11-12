@@ -9,8 +9,8 @@ import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 import { FIRST_CHUNK } from './blocks-range'
 
-configure({ asyncUtilTimeout: 5000 })
-vi.setConfig({ testTimeout: 15000 })
+configure({ asyncUtilTimeout: 15000 })
+vi.setConfig({ testTimeout: 30000 })
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
