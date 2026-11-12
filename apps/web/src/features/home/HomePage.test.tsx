@@ -96,6 +96,32 @@ describe('Home page', () => {
       expect(band).toHaveTextContent('Pending transactions')
     })
 
+    it('shows the newest Core height once on a phone: in the card, not again as the first chip @IN-01 @HY-01', async () => {
+      width(['(max-width: 640px)'])
+      renderAt('/')
+      await coreRow('2,570,085')
+      const lane = document.querySelector('#lane-core')!
+      await waitFor(() => expect(lane.querySelectorAll('a.rx-blk').length).toBeGreaterThan(0))
+      const heights = [...lane.querySelectorAll<HTMLElement>('a.rx-blk')].map((a) =>
+        Number(a.dataset.h),
+      )
+      expect(heights).not.toContain(2570085)
+      expect(Math.max(...heights)).toBe(2570084)
+      expect(heights).toHaveLength(8)
+    })
+
+    it.each(['(min-width: 1024px)', null] as const)(
+      'keeps the newest Core block as the last chip beyond a phone (%s) @IN-01',
+      async (query) => {
+        width(query ? [query] : [])
+        renderAt('/')
+        await coreRow('2,570,085')
+        const lane = document.querySelector('#lane-core')!
+        await waitFor(() => expect(lane.querySelector('a.rx-blk.is-tip')).not.toBeNull())
+        expect(lane.querySelector<HTMLElement>('a.rx-blk.is-tip')!.dataset.h).toBe('2570085')
+      },
+    )
+
     it('keeps the four pending columns when the pending list sits full width on a tablet', async () => {
       width([])
       renderAt('/')

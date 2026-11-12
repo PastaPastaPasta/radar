@@ -23,6 +23,7 @@ import {
 } from '@/ui'
 import { CoreFigures } from './CoreZone'
 import { HomeMap } from './HomeMap'
+import { useHomeWidth } from './home-width'
 import { LiveNotice } from './LiveNotice'
 import { usePlatformTip } from './platform-tip'
 import { useFrozen } from './use-frozen'
@@ -254,7 +255,11 @@ function Lanes() {
   })
   const coreRows = useFrozen(rows.data, paused)
   const platRows = useFrozen(platform.data, paused)
-  const core = (coreRows?.data ?? []).slice(0, LANE_CORE).reverse()
+  const phone = useHomeWidth() === 'phone'
+  // The height card above already shows the newest Core block on a phone.
+  const core = (coreRows?.data ?? [])
+    .slice(phone ? 1 : 0, phone ? LANE_CORE + 1 : LANE_CORE)
+    .reverse()
   const plat = (platRows?.data.items ?? []).slice(0, LANE_PLATFORM).reverse()
   const coreLane = useOpenOnNewest(core.length > 0)
   const platLane = useOpenOnNewest(plat.length > 0)
@@ -296,7 +301,7 @@ function Lanes() {
           {core.map((b, i) => (
             <Link
               key={b.hash}
-              className={`rx-blk${i === core.length - 1 ? ' is-tip' : ''}`}
+              className={`rx-blk${!phone && i === core.length - 1 ? ' is-tip' : ''}`}
               data-layer="core"
               to="/block/$id"
               params={{ id: String(b.height) }}
