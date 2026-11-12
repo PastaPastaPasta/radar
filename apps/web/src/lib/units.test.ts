@@ -181,6 +181,9 @@ describe('amounts near the last shown digit @IN-03', () => {
         const shown = read(n)
         expect(shown, `${n} duffs`).toBeGreaterThanOrEqual(before)
         expect(shown, `${n} duffs`).toBeGreaterThan(0)
+        if (n < 10_000n) {
+          expect(Math.abs(shown * 1e8 - Number(n)) / Number(n), `${n} duffs`).toBeLessThan(0.06)
+        }
         before = shown
       }
     },
