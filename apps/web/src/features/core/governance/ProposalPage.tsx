@@ -64,7 +64,7 @@ function ProposalContent({ hash }: { hash: string }) {
         scope={
           missing
             ? t`This proposal and its vote history are from Hyphen’s index, as of that block, not live.`
-            : t`The vote history below is as of that block, not live.`
+            : undefined
         }
       />
       <QueryView

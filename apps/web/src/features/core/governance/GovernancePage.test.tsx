@@ -189,7 +189,7 @@ describe('Proposal page', () => {
     const link = await screen.findByRole('link', { name: /Vote in Governance/ })
     expect(link).toHaveAttribute('href', expect.stringContaining('network=testnet'))
     await waitFor(() => expect(document.querySelector('[data-source="insight"]')).not.toBeNull())
-    expect(document.querySelectorAll('[data-stale-index]')).toHaveLength(1)
+    expect(document.querySelector('[data-stale-index]')).toBeNull()
   })
 
   it('falls back to Hyphen’s index for a proposal Insight no longer holds, and says so @IN-16 @HY-19', async () => {
