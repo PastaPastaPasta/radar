@@ -160,6 +160,30 @@ test.describe('one home order for eyes and keyboard', () => {
     })
   }
 
+  for (const [name, path] of [
+    ['mainnet', '/'],
+    ['testnet', '/?network=testnet'],
+  ] as const) {
+    test(`sizes each activity card to its own rows instead of the tallest one on ${name} @IN-01`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
+      await page.goto(path)
+      await expect(page.locator('#h-latest')).toBeVisible()
+      await settled(page)
+      const cards = await page.locator('.rx-activity__grid > .rx-card').evaluateAll((els) =>
+        els.map((el) => {
+          const box = el.getBoundingClientRect()
+          const last = el.lastElementChild!.getBoundingClientRect()
+          return { top: box.top, height: box.height, blank: box.bottom - last.bottom }
+        }),
+      )
+      expect(cards).toHaveLength(3)
+      for (const c of cards) expect(c.blank, 'no empty area under the last row').toBeLessThan(40)
+      for (const c of cards) expect(Math.abs(c.top - cards[0]!.top)).toBeLessThan(2)
+    })
+  }
+
   test('puts the pending list full width under the two block lists on a tablet @IN-01 @HY-03', async ({
     page,
   }, testInfo) => {
