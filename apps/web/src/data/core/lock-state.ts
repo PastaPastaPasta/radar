@@ -63,7 +63,3 @@ export function instantLockView(tx: LockFacts, hyphenLock?: boolean): InstantLoc
   const claimed = tx.instantLockClaim !== undefined || sources.includes('hyphen')
   return { state: claimed ? 'claimed' : 'corroborated', sources, historical }
 }
-
-export function instantLockState(tx: LockFacts, hyphenLock?: boolean): InstantLockState {
-  return instantLockView(tx, hyphenLock).state
-}

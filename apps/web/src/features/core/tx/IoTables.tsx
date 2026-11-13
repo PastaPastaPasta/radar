@@ -140,6 +140,7 @@ export function IoTables({
     setShowAllIn(true)
     onLoadAll?.()
   }
+  const loadsAmounts = partial !== undefined && !partial.requested
   const inCount = tx.inputs.length
   const outCount = tx.outputs.length
   const inLimit = showAllIn || (anchor.in ?? -1) >= INITIAL ? inCount : INITIAL
@@ -218,9 +219,9 @@ export function IoTables({
               <button
                 type="button"
                 className="dh-btn dh-btn--link"
-                onClick={partial && !partial.requested ? showAllInputs : () => setShowAllIn(true)}
+                onClick={loadsAmounts ? showAllInputs : () => setShowAllIn(true)}
               >
-                {partial && !partial.requested
+                {loadsAmounts
                   ? t`Show all ${formatInt(inCount)} inputs with their amounts`
                   : t`Show all ${formatInt(inCount)} inputs`}
               </button>
@@ -245,14 +246,17 @@ export function IoTables({
                   />{' '}
                   {t`Loading amounts: ${formatInt(partial.loaded)} of ${formatInt(inCount)} inputs. Each one is a DAPI request.`}
                 </span>
-              ) : inCount > inLimit ? (
-                t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`
               ) : (
                 <>
-                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`}{' '}
-                  <button type="button" className="dh-btn dh-btn--link" onClick={onLoadAll}>
-                    {t`Load the other ${formatInt(inCount - partial.loaded)} amounts`}
-                  </button>
+                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`}
+                  {inCount > inLimit ? null : (
+                    <>
+                      {' '}
+                      <button type="button" className="dh-btn dh-btn--link" onClick={onLoadAll}>
+                        {t`Load the other ${formatInt(inCount - partial.loaded)} amounts`}
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>

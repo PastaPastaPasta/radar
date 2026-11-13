@@ -281,8 +281,8 @@ function ProposalList({
   )
 }
 
-/** The year is left out of a deadline in the current year, so the column stays short. */
-const sameYear = (ms: number, now: number) =>
+/** A deadline in the current year omits its year, so the column stays short. */
+const showYear = (ms: number, now: number) =>
   new Date(ms).getUTCFullYear() !== new Date(now).getUTCFullYear()
 
 function ProposalTable({
@@ -342,7 +342,7 @@ function ProposalTable({
           </td>
           <td className="rx-propends">
             <time dateTime={formatIsoUtc(p.endTime)} title={formatIsoUtc(p.endTime)}>
-              {formatDate(p.endTime, { year: sameYear(p.endTime, now) })}
+              {formatDate(p.endTime, { year: showYear(p.endTime, now) })}
             </time>
           </td>
         </tr>

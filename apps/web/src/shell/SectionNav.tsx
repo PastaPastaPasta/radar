@@ -76,20 +76,16 @@ export function SectionNav() {
             ))}
           </ul>
         </nav>
-        <span
-          className="rx-secrail__hint rx-secrail__hint--start"
-          aria-hidden="true"
-          data-rail-hint="start"
-        >
-          <Icon name="chevron" size="sm" />
-        </span>
-        <span
-          className="rx-secrail__hint rx-secrail__hint--end"
-          aria-hidden="true"
-          data-rail-hint="end"
-        >
-          <Icon name="chevron" size="sm" />
-        </span>
+        {(['start', 'end'] as const).map((edge) => (
+          <span
+            key={edge}
+            className={`rx-secrail__hint rx-secrail__hint--${edge}`}
+            aria-hidden="true"
+            data-rail-hint={edge}
+          >
+            <Icon name="chevron" size="sm" />
+          </span>
+        ))}
       </div>
       <UnitSwitch className="rx-unit--rail" />
     </>
