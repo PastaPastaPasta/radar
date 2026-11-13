@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { sdk } from '@/data/sdk'
-import { renderAt } from '../../core/hy-shared/test-utils'
+import { renderAt } from './test-utils'
 
 const M = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 const PKH = '6da227047f83e9fd7c38792f4422fea3bcd2b824'
@@ -71,8 +71,9 @@ describe('Identity lookup by key hash @NX-17', () => {
     expect(await screen.findByText('That is every match.')).toBeInTheDocument()
     expect(document.querySelectorAll('[data-matches] li').length).toBe(before + 1)
     expect(pages[0]).toEqual({ pkh: TESTNET_PKH })
-    expect(pages[1]).toMatchObject({ pkh: TESTNET_PKH, startAfter: expect.any(String) })
-    expect(pages[2]).toMatchObject({ pkh: TESTNET_PKH, startAfter: expect.any(String) })
+    expect(pages).toHaveLength(3)
+    expect(pages.slice(1).map((p) => p.pkh)).toEqual([TESTNET_PKH, TESTNET_PKH])
+    expect(pages.slice(1).every((p) => typeof p.startAfter === 'string')).toBe(true)
   })
 
   it('says no identity holds a hash nobody uses @NX-17', async () => {

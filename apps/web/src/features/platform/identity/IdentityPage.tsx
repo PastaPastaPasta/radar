@@ -83,7 +83,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
     recordViewedIdentity(net, id)
   }, [net, id])
 
-  const missing = exists.data !== undefined && exists.data.data === null
+  const missing = exists.data?.data === null
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
 
   return (

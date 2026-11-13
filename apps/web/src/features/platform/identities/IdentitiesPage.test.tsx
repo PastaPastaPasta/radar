@@ -2,7 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { writeSourceMode } from '@/lib/source-mode'
-import { renderAt } from '../../core/hy-shared/test-utils'
+import { renderAt } from '../identity/test-utils'
 
 afterEach(() => {
   vi.restoreAllMocks()

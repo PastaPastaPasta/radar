@@ -215,7 +215,9 @@ describe('groups and votes', () => {
   it('answers no votes as an empty list', async () => {
     const out = await pIdImpl['voting.contestedResourceIdentityVotes'](
       reads({
-        voting: { contestedResourceIdentityVotesWithProof: () => Promise.resolve(proved(new Map())) },
+        voting: {
+          contestedResourceIdentityVotesWithProof: () => Promise.resolve(proved(new Map())),
+        },
       }),
       { identityId: ID },
     )

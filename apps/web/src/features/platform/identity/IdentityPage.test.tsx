@@ -2,9 +2,8 @@ import { cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { sdk } from '@/data/sdk'
-import { forgetViewed } from '@/features/entity/viewed'
 import type { IdentityVoteDto } from '@/data/sdk/methods/p-id'
-import { renderAt } from '../../core/hy-shared/test-utils'
+import { renderAt } from './test-utils'
 
 const M = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 const ABSENT = '7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds'
@@ -84,7 +83,6 @@ describe('Identity page', () => {
     expect(localStorage.getItem('radar.viewed')).toBeNull()
     cleanup()
     localStorage.setItem('radar.viewed', JSON.stringify({ on: true, items: [] }))
-    forgetViewed()
     renderAt(`/identity/${M}`)
     await waitFor(() => {
       expect(JSON.parse(localStorage.getItem('radar.viewed') ?? '{}')).toMatchObject({

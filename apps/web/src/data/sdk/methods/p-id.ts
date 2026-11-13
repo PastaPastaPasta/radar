@@ -29,9 +29,7 @@ export interface IdentityGroupDto {
 }
 
 export type VoteChoiceDto =
-  | { type: 'towardsIdentity'; identityId: string }
-  | { type: 'abstain' }
-  | { type: 'lock' }
+  { type: 'towardsIdentity'; identityId: string } | { type: 'abstain' } | { type: 'lock' }
 
 /** One contested-resource vote the identity cast. */
 export interface IdentityVoteDto {

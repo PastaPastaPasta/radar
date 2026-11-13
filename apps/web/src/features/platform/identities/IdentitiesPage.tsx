@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
@@ -80,10 +80,13 @@ const TYPE_LABELS: Record<string, MessageDescriptor> = {
 
 function IdentityList({ search }: { search: IdentitiesFilters }) {
   const { t, i18n } = useLingui()
-  const typeLabel = (type: string): string => {
-    const d = TYPE_LABELS[type]
-    return d ? i18n._(d) : type
-  }
+  const typeLabel = useCallback(
+    (type: string): string => {
+      const d = TYPE_LABELS[type]
+      return d ? i18n._(d) : type
+    },
+    [i18n],
+  )
   const net = useNetwork()
   const setFilters = useSetFilters()
   const listMode = useListMode('identities')
@@ -168,7 +171,7 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
         meta: { phone: 'secondary' },
       },
     ],
-    [t],
+    [t, typeLabel],
   )
 
   const type = search.type?.[0] ?? ''
