@@ -597,8 +597,8 @@ test.describe('charts', () => {
       const mempool = await page.locator('#mempool-pressure').boundingBox()
       expect(mempool!.y, 'the next card starts in the first screen').toBeLessThan(barTop - 60)
     }
-    await expect(page.getByText('Mempool pressure')).toBeVisible()
-    await expect(page.getByText('Transaction velocity')).toBeVisible()
+    await expect(page.getByRole('heading', { name: /^Mempool pressure/ })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /^Transaction velocity/ })).toBeVisible()
     await expect(page.locator('[data-internals-versions]')).toBeVisible()
     await expect(
       page.getByRole('table', { name: /Peers of the node Hyphen indexes from/ }),
