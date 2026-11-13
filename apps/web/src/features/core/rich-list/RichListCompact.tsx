@@ -4,6 +4,7 @@ import type { SourceStamp } from '@/data/envelope'
 import type { HyRichRow } from '@/data/hyphen/schemas'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
+import { shareOf } from './concentration'
 import { Amount, Empty, ErrorState, Icon, Skeleton, SourceLine, type LoadState } from '@/ui'
 
 export interface RichListCompactProps {
@@ -14,6 +15,8 @@ export interface RichListCompactProps {
   paging: { hasNext: boolean; fetching: boolean; fetchNext: () => void }
   source?: SourceStamp
   summaryId: string
+  /** The duffs each row's share is of; undefined while it is still being read. */
+  total: bigint | undefined
 }
 
 const short = (a: string) => (a.length > 16 ? `${a.slice(0, 7)}…${a.slice(-5)}` : a)
@@ -30,6 +33,7 @@ export function RichListCompact({
   paging: { hasNext, fetching, fetchNext },
   source,
   summaryId,
+  total,
 }: RichListCompactProps) {
   const { t } = useLingui()
   if (state === 'loading') return <Skeleton shape="row" count={8} />
@@ -42,7 +46,7 @@ export function RichListCompact({
       </p>
       <ol className="m-0 list-none p-0" aria-label={t`Addresses ranked by balance`}>
         {rows.map((r) => (
-          <RichRow key={r.address} row={r} />
+          <RichRow key={r.address} row={r} total={total} />
         ))}
       </ol>
       <div className="rx-tfoot">
@@ -75,7 +79,7 @@ export function RichListCompact({
   )
 }
 
-function RichRow({ row: r }: { row: HyRichRow }) {
+function RichRow({ row: r, total }: { row: HyRichRow; total: bigint | undefined }) {
   const { t } = useLingui()
   const [open, setOpen] = useState(false)
   const detailId = `rich-${r.rank}-detail`
@@ -95,7 +99,7 @@ function RichRow({ row: r }: { row: HyRichRow }) {
         <span className="rx-num text-right">
           <Amount value={r.balance} kind="duffs" compact />
           <span className="block text-xs text-[var(--dh-ink-2)]">
-            {formatPercent(r.pctSupply, 2)}
+            {total === undefined ? '—' : formatPercent(shareOf(r.balance, total), 2)}
           </span>
         </span>
         <Icon name="chevron" className="rx-rich-chevron self-center" />

@@ -292,6 +292,9 @@ msgstr "ほか {n} 件の出力"
 msgid "{n} s ago"
 msgstr "{n}秒前"
 
+msgid "{name} (reason {reason})"
+msgstr "{name}（理由 {reason}）"
+
 msgid "{name} couldn’t be reached"
 msgstr "{name} に接続できません"
 
@@ -327,6 +330,9 @@ msgstr "{quorumCommitments, plural, other {このブロック内のクォーラ�
 
 msgid "{s} s"
 msgstr "{s}秒"
+
+msgid "% of address balances"
+msgstr "アドレス残高に占める %"
 
 msgid "% of supply"
 msgstr "供給量の %"
@@ -532,6 +538,9 @@ msgstr "ブロック {0} 時点"
 msgid "Asking Hyphen."
 msgstr "Hyphen に問い合わせ中です。"
 
+msgid "Asking Platform for its latest block…"
+msgstr "Platform に最新ブロックを問い合わせ中…"
+
 msgid "Asset lock"
 msgstr "アセットロック"
 
@@ -711,6 +720,9 @@ msgstr "おつり"
 msgid "Change"
 msgstr "おつり"
 
+msgid "Change of keys"
+msgstr "鍵の変更"
+
 msgid "Change to sender"
 msgstr "送信者へのおつり"
 
@@ -766,9 +778,6 @@ msgstr "閉じる"
 msgid "Close a dialog or the search"
 msgstr "ダイアログまたは検索を閉じる"
 
-msgid "Code {reason}"
-msgstr "コード {reason}"
-
 msgid "Coinbase"
 msgstr "コインベース"
 
@@ -786,6 +795,9 @@ msgstr "担保"
 
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "ブロックをマスターノードリストと最新の ChainLock に結び付けます。"
+
+msgid "Compromised keys"
+msgstr "鍵の漏えい"
 
 msgid "Computed in your browser"
 msgstr "ブラウザ内で計算"
@@ -1815,6 +1827,9 @@ msgstr "名前"
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr ".dash で終わる名前、エポック、日付（1日分の Core ブロック）"
 
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "名称は、失効理由コードに関する Dash Core の定義に従っています。"
+
 msgid "Net value"
 msgstr "純額"
 
@@ -2041,6 +2056,9 @@ msgstr "準備未完了"
 
 msgid "Not seen yet"
 msgstr "まだ確認されていません"
+
+msgid "Not specified"
+msgstr "未指定"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上の結果には裏付けがありません。入力内容の読み方のひとつにすぎません。"
@@ -2447,6 +2465,9 @@ msgstr "プローブ日時"
 msgid "Proof-checked"
 msgstr "証明で検証済み"
 
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Platform ブロック {block}（エポック {epoch}）で証明により検証済み。このブロックは {age} です。"
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "証明で検証済みの Platform の状態（このブラウザで検証）"
 
@@ -2842,6 +2863,15 @@ msgstr "設定"
 msgid "Share index"
 msgstr "シェアのインデックス"
 
+msgid "Share of address balances"
+msgstr "アドレス残高に占める割合"
+
+msgid "Share of address balances held by each rank band"
+msgstr "順位帯ごとのアドレス残高に占める保有割合"
+
+msgid "Share of address balances held by the top addresses, by rank band"
+msgstr "上位アドレスの保有する、アドレス残高に占める割合（順位帯別）"
+
 msgid "Share of supply"
 msgstr "供給量に占める割合"
 
@@ -2863,12 +2893,8 @@ msgstr "共有マスターノードが解散されました"
 msgid "Shared masternode registrar update"
 msgstr "共有マスターノードのレジストラー更新"
 
-msgid "Shares are of address balances, not of the circulating supply."
-msgstr "割合はアドレス残高に対するもので、流通供給量に対するものではありません。"
-
-#. placeholder {0}: formatInt(height)
-msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
-msgstr "割合は、ブロック {0} 時点で残高がプラスのアドレスが保有する <0/> に対するもので、Radar の他の場所に表示される流通供給量に対するものではありません。"
+msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
+msgstr "割合は流通供給量 <0/> に対するもので、チャートのページに表示される数値と同じです。"
 
 msgid "Shielded"
 msgstr "シールド"
@@ -3037,6 +3063,9 @@ msgstr "行をタップすると受取額・送金額・取引数を表示"
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "トランザクションをタップすると入力、出力、サイズを表示します"
 
+msgid "Termination of service"
+msgstr "サービスの終了"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "テストコインに価値はないため、テストネットと devnet では USD は表示されません。"
 
@@ -3076,6 +3105,9 @@ msgstr "この QR コードには秘密鍵またはリカバリーフレーズ�
 msgid "That QR code isn’t something Radar can look up."
 msgstr "この QR コードは Radar で検索できません。"
 
+msgid "The <0/> held in positive address balances at block {block}."
+msgstr "ブロック {block} 時点で残高がプラスのアドレスが保有する <0/>。"
+
 msgid "the block can't be reorganised"
 msgstr "ブロックはリオーグできません"
 
@@ -3087,6 +3119,9 @@ msgstr "センサス：最後のクロールに応答したノード数、バー
 
 msgid "The chart data didn’t load."
 msgstr "チャートのデータを読み込めませんでした。"
+
+msgid "The circulating supply isn’t available, so shares are of address balances."
+msgstr "流通供給量を取得できないため、割合はアドレス残高に対するものです。"
 
 msgid "The connection failed."
 msgstr "接続に失敗しました。"
@@ -3447,6 +3482,9 @@ msgstr "金額の単位"
 
 msgid "Unknown"
 msgstr "不明"
+
+msgid "Unknown reason {reason}"
+msgstr "不明な理由 {reason}"
 
 msgid "Unknown: index behind"
 msgstr "不明：インデックスが遅れています"

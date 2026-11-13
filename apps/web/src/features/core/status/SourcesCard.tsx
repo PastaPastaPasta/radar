@@ -10,6 +10,7 @@ import {
   medianText,
   peFacts,
   radarFacts,
+  sdkFacts,
   SOURCE_ROLE,
   type ProbeFacts,
 } from './source-detail'
@@ -30,6 +31,9 @@ function probeFacts(
   if (source === 'radar' && probes.radar.data) {
     const status = probes.radar.data.data.networks[net === 'testnet' ? 'testnet' : 'mainnet']
     return radarFacts(status, stampOf(probes.radar.data), now)
+  }
+  if (source === 'sdk' && probes.sdk.data) {
+    return sdkFacts(probes.sdk.data.data, stampOf(probes.sdk.data), now)
   }
   if (source === 'pe' && probes.pe.data)
     return peFacts(probes.pe.data.data, stampOf(probes.pe.data))
@@ -60,7 +64,11 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           const { name, role } = SOURCE_ROLE[source]()
           const facts = probeFacts(source, probes, net, now, health.state === 'stale')
           const probeError =
-            source === 'radar' || source === 'pe' || source === 'hyphen' || source === 'insight'
+            source === 'radar' ||
+            source === 'pe' ||
+            source === 'hyphen' ||
+            source === 'insight' ||
+            source === 'sdk'
               ? probes[source].error
               : undefined
           const state = offered ? (
@@ -68,7 +76,12 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           ) : (
             <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
           )
-          const lag = <p data-source-lag>{describeHealth(health, now)}</p>
+          const checking = source === 'sdk' && probes.sdk.isPending
+          const lag = (
+            <p data-source-lag>
+              {checking ? t`Asking Platform for its latest block…` : describeHealth(health, now)}
+            </p>
+          )
           const sync = facts ? (
             <p data-source-sync className="text-[var(--dh-ink-2)]">
               {facts.report} <SourceLine stamp={facts.stamp} compact />

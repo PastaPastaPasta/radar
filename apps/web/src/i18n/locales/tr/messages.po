@@ -292,6 +292,9 @@ msgstr "{n} çıktı daha"
 msgid "{n} s ago"
 msgstr "{n} sn önce"
 
+msgid "{name} (reason {reason})"
+msgstr "{name} (neden {reason})"
+
 msgid "{name} couldn’t be reached"
 msgstr "{name} erişilemiyor"
 
@@ -327,6 +330,9 @@ msgstr "{quorumCommitments, plural, one {Bu blokta # quorum taahhüdü} other {B
 
 msgid "{s} s"
 msgstr "{s} sn"
+
+msgid "% of address balances"
+msgstr "Adres bakiyelerinin %’si"
 
 msgid "% of supply"
 msgstr "Arzın % ’si"
@@ -532,6 +538,9 @@ msgstr "{0}. bloktan itibaren"
 msgid "Asking Hyphen."
 msgstr "Hyphen’e soruluyor."
 
+msgid "Asking Platform for its latest block…"
+msgstr "Platform’a son bloğu soruluyor…"
+
 msgid "Asset lock"
 msgstr "Varlık kilidi"
 
@@ -711,6 +720,9 @@ msgstr "para üstü"
 msgid "Change"
 msgstr "Para üstü"
 
+msgid "Change of keys"
+msgstr "Anahtar değişikliği"
+
 msgid "Change to sender"
 msgstr "Göndericiye para üstü"
 
@@ -766,9 +778,6 @@ msgstr "Kapat"
 msgid "Close a dialog or the search"
 msgstr "Bir iletişim kutusunu veya aramayı kapat"
 
-msgid "Code {reason}"
-msgstr "Kod {reason}"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -786,6 +795,9 @@ msgstr "Teminat"
 
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Bloğu masternode listesine ve en son ChainLock’a bağlar."
+
+msgid "Compromised keys"
+msgstr "Ele geçirilmiş anahtarlar"
 
 msgid "Computed in your browser"
 msgstr "Tarayıcınızda hesaplandı"
@@ -1815,6 +1827,9 @@ msgstr "Adlar"
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr ".dash ile biten adlar, epoch’lar ve tarihler (bir günün Core blokları)"
 
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "Adlar, iptal nedeni kodları için Dash Core’un tanımlarını izler."
+
 msgid "Net value"
 msgstr "Net değer"
 
@@ -2041,6 +2056,9 @@ msgstr "Hazır değil"
 
 msgid "Not seen yet"
 msgstr "Henüz görülmedi"
+
+msgid "Not specified"
+msgstr "Belirtilmedi"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Yukarıdakilerin hiçbiri bunu doğrulamıyor. Yazdığınızı okumanın yalnızca bir yolu."
@@ -2447,6 +2465,9 @@ msgstr "Yoklandı"
 msgid "Proof-checked"
 msgstr "Kanıtla doğrulandı"
 
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Platform’un {block} numaralı bloğunda, {epoch}. dönemde kanıtla doğrulandı. Bu blok {age}."
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Kanıtla doğrulanmış Platform durumu, bu tarayıcıda doğrulandı"
 
@@ -2842,6 +2863,15 @@ msgstr "Ayarlar"
 msgid "Share index"
 msgstr "Pay dizini"
 
+msgid "Share of address balances"
+msgstr "Adres bakiyelerindeki pay"
+
+msgid "Share of address balances held by each rank band"
+msgstr "Her sıra bandının elindeki adres bakiyesi payı"
+
+msgid "Share of address balances held by the top addresses, by rank band"
+msgstr "En üstteki adreslerin elindeki adres bakiyesi payı, sıra bandına göre"
+
 msgid "Share of supply"
 msgstr "Arzdaki pay"
 
@@ -2863,12 +2893,8 @@ msgstr "Paylaşımlı masternode feshedildi"
 msgid "Shared masternode registrar update"
 msgstr "Paylaşımlı masternode kaydedici güncellemesi"
 
-msgid "Shares are of address balances, not of the circulating supply."
-msgstr "Paylar adres bakiyelerine göredir, dolaşımdaki arza göre değil."
-
-#. placeholder {0}: formatInt(height)
-msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
-msgstr "Paylar, {0} numaralı blokta pozitif bakiyeli adreslerde tutulan <0/> üzerinden hesaplanır; Radar'ın başka yerlerinde gösterilen dolaşımdaki arz üzerinden değil."
+msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
+msgstr "Paylar, Grafikler sayfasında gösterilen rakam olan <0/> dolaşımdaki arz üzerinden hesaplanır."
 
 msgid "Shielded"
 msgstr "Gizlenmiş"
@@ -3037,6 +3063,9 @@ msgstr "Alınan, gönderilen ve işlemler için bir satıra dokunun"
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Girdileri, çıktıları ve boyutu görmek için bir işleme dokunun"
 
+msgid "Termination of service"
+msgstr "Hizmetin sonlandırılması"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Test coin’lerin değeri yoktur; bu yüzden Testnet ve devnet’lerde USD hiç gösterilmez."
 
@@ -3076,6 +3105,9 @@ msgstr "Bu QR kodu bir özel anahtar veya kurtarma ifadesi içeriyor."
 msgid "That QR code isn’t something Radar can look up."
 msgstr "Radar bu QR kodunu arayamıyor."
 
+msgid "The <0/> held in positive address balances at block {block}."
+msgstr "{block} numaralı blokta pozitif bakiyeli adreslerde tutulan <0/>."
+
 msgid "the block can't be reorganised"
 msgstr "blok yeniden düzenlenemez"
 
@@ -3087,6 +3119,9 @@ msgstr "Sayım: son taramada kaç düğümün yanıt verdiği, sürümler, barı
 
 msgid "The chart data didn’t load."
 msgstr "Grafik verileri yüklenmedi."
+
+msgid "The circulating supply isn’t available, so shares are of address balances."
+msgstr "Dolaşımdaki arz şu an alınamıyor, bu yüzden paylar adres bakiyeleri üzerinden hesaplanıyor."
 
 msgid "The connection failed."
 msgstr "Bağlantı başarısız oldu."
@@ -3447,6 +3482,9 @@ msgstr "Tutarlar için birim"
 
 msgid "Unknown"
 msgstr "Bilinmiyor"
+
+msgid "Unknown reason {reason}"
+msgstr "Bilinmeyen neden {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Bilinmiyor: dizin geride"

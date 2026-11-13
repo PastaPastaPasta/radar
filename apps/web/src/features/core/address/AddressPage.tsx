@@ -409,17 +409,25 @@ function SeenStat({
 function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number }) {
   const { t } = useLingui()
   return (
-    <p role="status" data-live={status} className="flex items-center gap-2 text-sm">
-      <LiveDot state={status === 'live' ? 'live' : 'unknown'} />
-      {status === 'live'
-        ? t`Watching for new transactions on this address.`
-        : status === 'connecting'
-          ? t`Connecting to the live feed…`
-          : status === 'paused'
-            ? t`Live updates are paused while this tab is in the background.`
-            : t`Live feed interrupted, reconnecting…`}
+    <div
+      role="status"
+      data-live={status}
+      className="grid gap-1 text-sm sm:flex sm:flex-wrap sm:items-center sm:gap-x-3"
+    >
+      <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <LiveDot state={status === 'live' ? 'live' : 'unknown'} />
+        <span className="min-w-0">
+          {status === 'live'
+            ? t`Watching for new transactions on this address.`
+            : status === 'connecting'
+              ? t`Connecting to the live feed…`
+              : status === 'paused'
+                ? t`Live updates are paused while this tab is in the background.`
+                : t`Live feed interrupted, reconnecting…`}
+        </span>
+      </p>
       {arrived > 0 ? (
-        <strong data-arrived>
+        <strong data-arrived className="min-w-0">
           <Plural
             value={arrived}
             one="# transaction seen since you opened this page"
@@ -427,7 +435,7 @@ function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number 
           />
         </strong>
       ) : null}
-    </p>
+    </div>
   )
 }
 

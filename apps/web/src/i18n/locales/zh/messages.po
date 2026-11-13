@@ -292,6 +292,9 @@ msgstr "另有 {n} 个输出"
 msgid "{n} s ago"
 msgstr "{n}秒前"
 
+msgid "{name} (reason {reason})"
+msgstr "{name}（原因 {reason}）"
+
 msgid "{name} couldn’t be reached"
 msgstr "无法连接 {name}"
 
@@ -327,6 +330,9 @@ msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}
 
 msgid "{s} s"
 msgstr "{s}秒"
+
+msgid "% of address balances"
+msgstr "占地址余额的 %"
 
 msgid "% of supply"
 msgstr "占总供应量的 %"
@@ -532,6 +538,9 @@ msgstr "截至区块 {0}"
 msgid "Asking Hyphen."
 msgstr "正在向 Hyphen 查询。"
 
+msgid "Asking Platform for its latest block…"
+msgstr "正在向 Platform 询问最新区块…"
+
 msgid "Asset lock"
 msgstr "资产锁定"
 
@@ -711,6 +720,9 @@ msgstr "找零"
 msgid "Change"
 msgstr "找零"
 
+msgid "Change of keys"
+msgstr "更换密钥"
+
 msgid "Change to sender"
 msgstr "找零至发送方"
 
@@ -766,9 +778,6 @@ msgstr "关闭"
 msgid "Close a dialog or the search"
 msgstr "关闭对话框或搜索"
 
-msgid "Code {reason}"
-msgstr "代码 {reason}"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -786,6 +795,9 @@ msgstr "抵押品"
 
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "将区块绑定到主节点列表和最新的 ChainLock。"
+
+msgid "Compromised keys"
+msgstr "密钥泄露"
 
 msgid "Computed in your browser"
 msgstr "在你的浏览器中计算"
@@ -1815,6 +1827,9 @@ msgstr "名称"
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr "以 .dash 结尾的名称、纪元和日期（某一天的 Core 区块）"
 
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "名称遵循 Dash Core 对撤销原因代码的定义。"
+
 msgid "Net value"
 msgstr "净值"
 
@@ -2041,6 +2056,9 @@ msgstr "未就绪"
 
 msgid "Not seen yet"
 msgstr "尚未出现"
+
+msgid "Not specified"
+msgstr "未指定"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上面没有任何结果能证实这一点，这只是对你输入内容的一种解读。"
@@ -2447,6 +2465,9 @@ msgstr "探测时间"
 msgid "Proof-checked"
 msgstr "已通过证明验证"
 
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "已在 Platform 区块 {block}（第 {epoch} 个纪元）通过证明验证。该区块为 {age}。"
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "已通过证明验证的 Platform 状态，在此浏览器中验证"
 
@@ -2842,6 +2863,15 @@ msgstr "设置"
 msgid "Share index"
 msgstr "份额索引"
 
+msgid "Share of address balances"
+msgstr "占地址余额的比例"
+
+msgid "Share of address balances held by each rank band"
+msgstr "各排名区间持有的地址余额占比"
+
+msgid "Share of address balances held by the top addresses, by rank band"
+msgstr "排名靠前的地址持有的地址余额占比（按排名区间）"
+
 msgid "Share of supply"
 msgstr "占总供应量比例"
 
@@ -2863,12 +2893,8 @@ msgstr "共享主节点已解散"
 msgid "Shared masternode registrar update"
 msgstr "共享主节点注册方更新"
 
-msgid "Shares are of address balances, not of the circulating supply."
-msgstr "占比基于地址余额，而非流通供应量。"
-
-#. placeholder {0}: formatInt(height)
-msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
-msgstr "占比是相对于区块 {0} 时持有正余额的地址所持有的 <0/> 计算的，而不是 Radar 其他位置显示的流通供应量。"
+msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
+msgstr "占比以流通量 <0/> 为基数，与图表页面显示的数字一致。"
 
 msgid "Shielded"
 msgstr "隐私保护"
@@ -3037,6 +3063,9 @@ msgstr "点按一行查看收到、发出和交易数"
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "点按交易可查看其输入、输出和大小"
 
+msgid "Termination of service"
+msgstr "服务终止"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "测试币没有价值，因此测试网和开发网从不显示美元。"
 
@@ -3076,6 +3105,9 @@ msgstr "该二维码包含私钥或助记词。"
 msgid "That QR code isn’t something Radar can look up."
 msgstr "Radar 无法查询该二维码。"
 
+msgid "The <0/> held in positive address balances at block {block}."
+msgstr "区块 {block} 时余额为正的地址所持有的 <0/>。"
+
 msgid "the block can't be reorganised"
 msgstr "区块不会被重组"
 
@@ -3087,6 +3119,9 @@ msgstr "节点普查：上次抓取有多少节点响应，以及版本、托管
 
 msgid "The chart data didn’t load."
 msgstr "图表数据未能加载。"
+
+msgid "The circulating supply isn’t available, so shares are of address balances."
+msgstr "流通量暂不可用，因此占比以地址余额为基数。"
 
 msgid "The connection failed."
 msgstr "连接失败。"
@@ -3447,6 +3482,9 @@ msgstr "金额单位"
 
 msgid "Unknown"
 msgstr "未知"
+
+msgid "Unknown reason {reason}"
+msgstr "未知原因 {reason}"
 
 msgid "Unknown: index behind"
 msgstr "未知：索引落后"

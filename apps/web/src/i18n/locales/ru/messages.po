@@ -292,6 +292,9 @@ msgstr "Ещё выходов: {n}"
 msgid "{n} s ago"
 msgstr "{n} с назад"
 
+msgid "{name} (reason {reason})"
+msgstr "{name} (причина {reason})"
+
 msgid "{name} couldn’t be reached"
 msgstr "{name} недоступен"
 
@@ -327,6 +330,9 @@ msgstr "{quorumCommitments, plural, one {# коммитмент кворума �
 
 msgid "{s} s"
 msgstr "{s} с"
+
+msgid "% of address balances"
+msgstr "% от остатков на адресах"
 
 msgid "% of supply"
 msgstr "% от предложения"
@@ -532,6 +538,9 @@ msgstr "на момент блока {0}"
 msgid "Asking Hyphen."
 msgstr "Запрашиваем Hyphen."
 
+msgid "Asking Platform for its latest block…"
+msgstr "Запрашиваем у Platform последний блок…"
+
 msgid "Asset lock"
 msgstr "Блокировка активов"
 
@@ -711,6 +720,9 @@ msgstr "сдача"
 msgid "Change"
 msgstr "Сдача"
 
+msgid "Change of keys"
+msgstr "Смена ключей"
+
 msgid "Change to sender"
 msgstr "Сдача отправителю"
 
@@ -766,9 +778,6 @@ msgstr "Закрыть"
 msgid "Close a dialog or the search"
 msgstr "Закрыть диалог или поиск"
 
-msgid "Code {reason}"
-msgstr "Код {reason}"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -786,6 +795,9 @@ msgstr "Залог"
 
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Привязывает блок к списку мастернод и последнему ChainLock."
+
+msgid "Compromised keys"
+msgstr "Скомпрометированные ключи"
 
 msgid "Computed in your browser"
 msgstr "Вычислено в вашем браузере"
@@ -1815,6 +1827,9 @@ msgstr "Имена"
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr "Имена, оканчивающиеся на .dash, эпохи и даты (блоки Core за сутки)"
 
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "Названия соответствуют определениям Dash Core для кодов причин отзыва."
+
 msgid "Net value"
 msgstr "Чистая стоимость"
 
@@ -2041,6 +2056,9 @@ msgstr "Не готов"
 
 msgid "Not seen yet"
 msgstr "Ещё не замечено"
+
+msgid "Not specified"
+msgstr "Не указана"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Ничто выше этого не подтверждает. Это лишь один из способов прочитать ваш ввод."
@@ -2447,6 +2465,9 @@ msgstr "Проверено"
 msgid "Proof-checked"
 msgstr "Подтверждено доказательством"
 
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Подтверждено доказательством на блоке Platform {block}, эпоха {epoch}. Этому блоку {age}."
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Состояние Platform, подтверждённое доказательством и проверенное в этом браузере"
 
@@ -2842,6 +2863,15 @@ msgstr "Настройки"
 msgid "Share index"
 msgstr "Индекс доли"
 
+msgid "Share of address balances"
+msgstr "Доля от остатков на адресах"
+
+msgid "Share of address balances held by each rank band"
+msgstr "Доля от остатков на адресах у каждого диапазона мест"
+
+msgid "Share of address balances held by the top addresses, by rank band"
+msgstr "Доля от остатков на адресах у адресов из топа, по диапазонам мест"
+
 msgid "Share of supply"
 msgstr "Доля предложения"
 
@@ -2863,12 +2893,8 @@ msgstr "Общая мастернода распущена"
 msgid "Shared masternode registrar update"
 msgstr "Обновление регистратора общей мастерноды"
 
-msgid "Shares are of address balances, not of the circulating supply."
-msgstr "Доли считаются от балансов адресов, а не от обращающегося предложения."
-
-#. placeholder {0}: formatInt(height)
-msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
-msgstr "Доли считаются от <0/> на адресах с положительным балансом на блоке {0}, а не от циркулирующего предложения, которое показано в других местах Radar."
+msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
+msgstr "Доли считаются от объёма в обращении, <0/>, — это та же цифра, что показывает страница «Графики»."
 
 msgid "Shielded"
 msgstr "Защищённая"
@@ -3037,6 +3063,9 @@ msgstr "Нажмите на строку: получено, отправлено
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Нажмите на транзакцию, чтобы увидеть входы, выходы и размер"
 
+msgid "Termination of service"
+msgstr "Прекращение работы сервиса"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "У тестовых монет нет стоимости, поэтому в тестовой сети и devnet USD не показывается."
 
@@ -3076,6 +3105,9 @@ msgstr "Этот QR-код содержит закрытый ключ или ф�
 msgid "That QR code isn’t something Radar can look up."
 msgstr "Radar не может найти этот QR-код."
 
+msgid "The <0/> held in positive address balances at block {block}."
+msgstr "<0/> на адресах с положительным остатком на блоке {block}."
+
 msgid "the block can't be reorganised"
 msgstr "блок нельзя реорганизовать"
 
@@ -3087,6 +3119,9 @@ msgstr "Перепись: сколько узлов ответили при по
 
 msgid "The chart data didn’t load."
 msgstr "Данные графика не загрузились."
+
+msgid "The circulating supply isn’t available, so shares are of address balances."
+msgstr "Объём в обращении недоступен, поэтому доли считаются от остатков на адресах."
 
 msgid "The connection failed."
 msgstr "Не удалось подключиться."
@@ -3447,6 +3482,9 @@ msgstr "Единица для сумм"
 
 msgid "Unknown"
 msgstr "Неизвестно"
+
+msgid "Unknown reason {reason}"
+msgstr "Неизвестная причина {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Неизвестно: индекс отстаёт"

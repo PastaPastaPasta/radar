@@ -7,7 +7,7 @@ import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
 import { Entity, useNetwork } from '@/features/entity'
-import { formatInt } from '@/lib/format'
+import { formatDate, formatInt } from '@/lib/format'
 import {
   Amount,
   Card,
@@ -294,14 +294,15 @@ function ProposalTable({
   const base = useId()
   const row = (p: HyProposal) => {
     const expanded = open === p.hash
+    const status = proposalStatus(p, now)
     const panel = `${base}-${p.hash}`
     return (
-      <tbody key={p.hash} data-proposal={p.hash}>
+      <tbody key={p.hash} data-proposal={p.hash} data-status={status}>
         <tr>
-          <td>
+          <td className="rx-propcell">
             <button
               type="button"
-              className="dh-btn dh-btn--link"
+              className="rx-propname"
               style={{ minBlockSize: 24, minInlineSize: 24 }}
               aria-expanded={expanded}
               aria-controls={panel}
@@ -311,12 +312,15 @@ function ProposalTable({
             >
               {p.name}
             </button>
+            <span className="rx-prophash rx-mono" data-proposal-hash title={p.hash}>
+              {p.hash.slice(0, 8)}…{p.hash.slice(-6)}
+            </span>
             <span className="rx-propline" aria-hidden="true">
               {t`${formatInt(p.votes.yes)} yes · ${formatInt(p.votes.no)} no · ${formatInt(p.votes.abstain)} abstain · net ${formatInt(netVotes(p))}`}
             </span>
           </td>
           <td>
-            <StatusBadge status={proposalStatus(p, now)} />
+            <StatusBadge status={status} />
           </td>
           <td className="r rx-num rx-votes rx-votes--first">{formatInt(p.votes.yes)}</td>
           <td className="r rx-num rx-votes">{formatInt(p.votes.no)}</td>
@@ -330,8 +334,11 @@ function ProposalTable({
           <td className="r">
             <Amount value={p.paymentAmount} kind="duffs" />
           </td>
-          <td>
-            <Time ms={p.endTime} mode="absolute" />
+          <td className="rx-propends">
+            <Time ms={p.endTime} mode="relative" />
+            <span className="rx-prophash">
+              {formatDate(p.endTime, { time: false, zone: false })}
+            </span>
           </td>
         </tr>
         {expanded ? (

@@ -292,6 +292,9 @@ msgstr "{n} weitere Outputs"
 msgid "{n} s ago"
 msgstr "vor {n} Sek."
 
+msgid "{name} (reason {reason})"
+msgstr "{name} (Grund {reason})"
+
 msgid "{name} couldn’t be reached"
 msgstr "{name} ist nicht erreichbar"
 
@@ -327,6 +330,9 @@ msgstr "{quorumCommitments, plural, one {# Quorum-Commitment in diesem Block} ot
 
 msgid "{s} s"
 msgstr "{s} Sek."
+
+msgid "% of address balances"
+msgstr "% der Adressguthaben"
 
 msgid "% of supply"
 msgstr "% des Angebots"
@@ -532,6 +538,9 @@ msgstr "Stand von Block {0}"
 msgid "Asking Hyphen."
 msgstr "Hyphen wird gefragt."
 
+msgid "Asking Platform for its latest block…"
+msgstr "Platform wird nach dem neuesten Block gefragt …"
+
 msgid "Asset lock"
 msgstr "Asset-Lock"
 
@@ -711,6 +720,9 @@ msgstr "Wechselgeld"
 msgid "Change"
 msgstr "Wechselgeld"
 
+msgid "Change of keys"
+msgstr "Schlüsselwechsel"
+
 msgid "Change to sender"
 msgstr "Wechselgeld an den Absender"
 
@@ -766,9 +778,6 @@ msgstr "Schließen"
 msgid "Close a dialog or the search"
 msgstr "Dialog oder Suche schließen"
 
-msgid "Code {reason}"
-msgstr "Code {reason}"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -786,6 +795,9 @@ msgstr "Collateral"
 
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Bindet den Block an die Masternode-Liste und den neuesten ChainLock."
+
+msgid "Compromised keys"
+msgstr "Kompromittierte Schlüssel"
 
 msgid "Computed in your browser"
 msgstr "In deinem Browser berechnet"
@@ -1815,6 +1827,9 @@ msgstr "Namen"
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr "Namen auf .dash, Epochen und Daten (die Core-Blöcke eines Tages)"
 
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "Die Namen folgen den Definitionen von Dash Core für die Widerrufsgrund-Codes."
+
 msgid "Net value"
 msgstr "Nettowert"
 
@@ -2041,6 +2056,9 @@ msgstr "Nicht bereit"
 
 msgid "Not seen yet"
 msgstr "Noch nicht gesehen"
+
+msgid "Not specified"
+msgstr "Nicht angegeben"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Nichts oben bestätigt das. Es ist nur eine Möglichkeit, deine Eingabe zu lesen."
@@ -2447,6 +2465,9 @@ msgstr "Geprüft"
 msgid "Proof-checked"
 msgstr "Beweisgeprüft"
 
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Beweisgeprüft bei Platform-Block {block}, Epoche {epoch}. Dieser Block ist {age}."
+
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Beweisgeprüfter Platform-Zustand, in diesem Browser verifiziert"
 
@@ -2842,6 +2863,15 @@ msgstr "Einstellungen"
 msgid "Share index"
 msgstr "Anteilsindex"
 
+msgid "Share of address balances"
+msgstr "Anteil an den Adressguthaben"
+
+msgid "Share of address balances held by each rank band"
+msgstr "Anteil an den Adressguthaben je Rangband"
+
+msgid "Share of address balances held by the top addresses, by rank band"
+msgstr "Anteil an den Adressguthaben der Top-Adressen, nach Rangband"
+
 msgid "Share of supply"
 msgstr "Anteil am Angebot"
 
@@ -2863,12 +2893,8 @@ msgstr "Gemeinsamer Masternode aufgelöst"
 msgid "Shared masternode registrar update"
 msgstr "Registrar-Update eines gemeinsamen Masternodes"
 
-msgid "Shares are of address balances, not of the circulating supply."
-msgstr "Die Anteile beziehen sich auf Adresssalden, nicht auf das zirkulierende Angebot."
-
-#. placeholder {0}: formatInt(height)
-msgid "Shares are of the <0/> held in positive address balances at block {0}, not of the circulating supply shown elsewhere in Radar."
-msgstr "Die Anteile beziehen sich auf die <0/> in Adresssalden mit positivem Guthaben bei Block {0}, nicht auf die an anderer Stelle in Radar gezeigte umlaufende Menge."
+msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
+msgstr "Die Anteile beziehen sich auf die Umlaufmenge von <0/>, die Zahl, die auch die Seite Diagramme zeigt."
 
 msgid "Shielded"
 msgstr "Abgeschirmt"
@@ -3037,6 +3063,9 @@ msgstr "Zeile antippen für Empfangen, Gesendet und Transaktionen"
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Transaktion antippen für Eingänge, Ausgänge und Größe"
 
+msgid "Termination of service"
+msgstr "Beendigung des Dienstes"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Testcoins haben keinen Wert, daher zeigen Testnet und Devnets nie USD an."
 
@@ -3076,6 +3105,9 @@ msgstr "Dieser QR-Code enthält einen privaten Schlüssel oder eine Wiederherste
 msgid "That QR code isn’t something Radar can look up."
 msgstr "Diesen QR-Code kann Radar nicht nachschlagen."
 
+msgid "The <0/> held in positive address balances at block {block}."
+msgstr "Die <0/>, die bei Block {block} auf Adressen mit positivem Guthaben liegen."
+
 msgid "the block can't be reorganised"
 msgstr "der Block kann nicht umorganisiert werden"
 
@@ -3087,6 +3119,9 @@ msgstr "Die Zählung: wie viele Knoten beim letzten Crawl geantwortet haben, Ver
 
 msgid "The chart data didn’t load."
 msgstr "Die Diagrammdaten wurden nicht geladen."
+
+msgid "The circulating supply isn’t available, so shares are of address balances."
+msgstr "Die Umlaufmenge ist nicht verfügbar, daher beziehen sich die Anteile auf die Adressguthaben."
 
 msgid "The connection failed."
 msgstr "Die Verbindung ist fehlgeschlagen."
@@ -3447,6 +3482,9 @@ msgstr "Einheit für Beträge"
 
 msgid "Unknown"
 msgstr "Unbekannt"
+
+msgid "Unknown reason {reason}"
+msgstr "Unbekannter Grund {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Unbekannt: Index hinkt hinterher"

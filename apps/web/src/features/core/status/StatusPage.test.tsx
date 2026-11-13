@@ -179,6 +179,23 @@ describe('Status page', () => {
     }
   })
 
+  it('asks Platform’s SDK for its latest block instead of waiting for a Platform page @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    const row = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-source-row="sdk"]')!
+      expect(el).not.toBeNull()
+      return el
+    })
+    await waitFor(() =>
+      expect(row.querySelector('[data-source-sync]')).toHaveTextContent(
+        /Proof-checked at Platform block [\d,]+, epoch [\d,]+\. That block is /,
+      ),
+    )
+    expect(row).not.toHaveTextContent('Nothing has asked it yet')
+    expect(row.getAttribute('data-state')).toBe('ok')
+  })
+
   it('says a source is down, since when, and that the rest still work @IN-09', async () => {
     setCoreClient(core())
     renderAt('/status')

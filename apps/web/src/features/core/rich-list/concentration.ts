@@ -4,7 +4,7 @@ export interface Band {
   id: string
   from: number
   to: number
-  /** Share of the supply held by the addresses ranked `from` to `to`, as a ratio. */
+  /** Share of the denominator held by the addresses ranked `from` to `to`, as a ratio. */
   share: number
   /** How many ranks in the band were present in the rows given. */
   count: number
@@ -19,13 +19,23 @@ export const BANDS: readonly { id: string; from: number; to: number }[] = [
   { id: '51–100', from: 51, to: 100 },
 ]
 
-/** Splits the top of the rich list into the rank bands of the concentration chart. */
-export function concentration(rows: readonly HyRichRow[]): Band[] {
+const SCALE = 10_000_000n
+
+/** `balance` as a ratio of `total`, exact in bigint to seven digits so a duffs total past 2^53 loses nothing. */
+export function shareOf(balance: bigint, total: bigint): number {
+  return total > 0n ? Number((balance * SCALE) / total) / Number(SCALE) : 0
+}
+
+/** Splits the top of the rich list into the rank bands of the concentration chart, each a share of `total` duffs. */
+export function concentration(rows: readonly HyRichRow[], total: bigint): Band[] {
   return BANDS.map((b) => {
     const inBand = rows.filter((r) => r.rank >= b.from && r.rank <= b.to)
     return {
       ...b,
-      share: inBand.reduce((sum, r) => sum + r.pctSupply, 0),
+      share: shareOf(
+        inBand.reduce((sum, r) => sum + r.balance, 0n),
+        total,
+      ),
       count: inBand.length,
     }
   })

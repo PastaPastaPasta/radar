@@ -1,7 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import recorded from '@/test/fixtures/http/hyphen/mainnet/balances--limit-25.json'
+import metrics from '@/test/fixtures/http/hyphen/mainnet/metrics__latest.json'
+import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -24,7 +27,7 @@ describe('Rich list page', () => {
       expect(within(table).getByRole('columnheader', { name: head })).toBeInTheDocument()
     }
     const first = within(table).getAllByRole('row')[1]
-    expect(first).toHaveTextContent('7.70%')
+    await waitFor(() => expect(first).toHaveTextContent('7.54%'))
   })
 
   it('keeps received, sent and transaction count on each phone card @HY-09', async () => {
@@ -62,20 +65,48 @@ describe('Rich list page', () => {
     expect(bands).toEqual(['1', '2–5', '6–10', '11–25', '26–50', '51–100'])
   })
 
-  it('names the total each share is of, and the shares add up against it @HY-09', async () => {
+  it('shares the circulating supply the Charts page shows, with its source @HY-09', async () => {
     renderAt('/rich-list')
     const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
     const notes = await waitFor(() => {
       const found = [...document.querySelectorAll<HTMLElement>('[data-share-basis]')]
       expect(found).toHaveLength(2)
+      for (const n of found) expect(n).toHaveAttribute('data-share-basis', 'circulating')
       return found
     })
     for (const note of notes) {
-      expect(note).toHaveTextContent(/Shares are of the 12\.89 M DASH held in positive address/)
-      expect(note).toHaveTextContent(/not of the circulating supply/)
+      expect(note).toHaveTextContent(/Shares are of the circulating supply, 13\.17 M DASH/)
+      expect(note.querySelector('[data-source="hyphen"]')).not.toBeNull()
     }
-    expect(notes[1]).toHaveTextContent('block 2,570,013')
+    expect(within(table).getByRole('columnheader', { name: '% of supply' })).toBeInTheDocument()
+    const { value } = recorded.body
+    const share = value[0]!.balance / metrics.body.circulatingSupply
+    await waitFor(() =>
+      expect(within(table).getAllByRole('row')[1]).toHaveTextContent(
+        `${(share * 100).toFixed(2)}%`,
+      ),
+    )
+  })
+
+  it('says so and divides by the address balances when the circulating supply is unavailable @HY-09', async () => {
+    server.use(
+      http.get('*/x/hy/mainnet/metrics/latest', () => new HttpResponse(null, { status: 503 })),
+    )
+    renderAt('/rich-list')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    const notes = await waitFor(() => {
+      const found = [...document.querySelectorAll<HTMLElement>('[data-share-basis]')]
+      expect(found).toHaveLength(2)
+      for (const n of found) expect(n).toHaveAttribute('data-share-basis', 'balances')
+      return found
+    })
+    expect(notes[1]).toHaveTextContent(/circulating supply isn’t available/)
+    expect(notes[1]).toHaveTextContent(/held in positive address balances at block 2,570,013/)
+    expect(
+      within(table).getByRole('columnheader', { name: '% of address balances' }),
+    ).toBeInTheDocument()
     const { value, meta } = recorded.body
     const share = value[0]!.balance / meta.includedSupply
     expect(within(table).getAllByRole('row')[1]).toHaveTextContent(`${(share * 100).toFixed(2)}%`)
@@ -116,7 +147,7 @@ describe('Rich list page', () => {
       const first = within(list).getAllByRole('listitem')[0]!
       const toggle = within(first).getByRole('button', { expanded: false })
       expect(toggle).toHaveTextContent('1')
-      expect(toggle).toHaveTextContent('7.70%')
+      await waitFor(() => expect(toggle).toHaveTextContent('7.54%'))
       expect(toggle.textContent).toMatch(/…/)
       for (const label of ['Received', 'Sent', 'Transactions']) {
         expect(within(first).getByText(label)).not.toBeVisible()
@@ -147,8 +178,7 @@ describe('Rich list page', () => {
       const note = notes[0]!
       expect(note.tagName).toBe('DETAILS')
       expect(note).not.toHaveAttribute('open')
-      expect(within(note).getByText(/Shares are of address balances/)).toBeVisible()
-      expect(note).toHaveTextContent(/held in positive address balances at block [\d,]+/)
+      expect(within(note).getByText(/Shares are of the circulating supply/)).toBeVisible()
       await user.click(note.querySelector('summary')!)
       expect(note).toHaveAttribute('open')
       const chart = screen.getByRole('img', { name: /Share of the supply held by the top/ })

@@ -159,6 +159,29 @@ describe('Governance page', () => {
     expect(row.style.minInlineSize).toBe('24px')
   })
 
+  it('leads each row with the proposal name, with its hash secondary and its status on the leading edge @HY-13', async () => {
+    renderAt('/governance')
+    const button = await screen.findByRole('button', { name: 'DashDaoGrowthEngine' })
+    const body = button.closest('tbody')!
+    expect(body).toHaveAttribute('data-status')
+    const cell = button.closest('td')!
+    expect(cell.className).toContain('rx-propcell')
+    const hash = cell.querySelector('[data-proposal-hash]')!
+    expect(hash).toHaveAttribute('title', body.getAttribute('data-proposal'))
+    expect(hash.textContent).toMatch(/^[0-9a-f]{8}…[0-9a-f]{6}$/)
+    expect(button.compareDocumentPosition(hash) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    const statuses = new Set(
+      [...document.querySelectorAll('tbody[data-proposal]')].map((b) =>
+        b.getAttribute('data-status'),
+      ),
+    )
+    for (const status of statuses)
+      expect(['funded', 'passing', 'failing', 'ended', 'invalid']).toContain(status)
+    const table = within(screen.getByRole('table', { name: 'Budget proposals' }))
+    expect(table.getByRole('columnheader', { name: 'Status' })).toBeInTheDocument()
+    expect(table.getByRole('columnheader', { name: 'Votes' })).toBeInTheDocument()
+  })
+
   it('works on testnet @HY-19', async () => {
     renderAt('/governance?network=testnet')
     expect(await screen.findByRole('button', { name: 'test' })).toBeInTheDocument()

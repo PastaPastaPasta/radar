@@ -5,6 +5,7 @@ import type { HyStatus } from '@/data/hyphen/schemas'
 import type { InsStatus } from '@/data/insight/schemas'
 import type { PeStatus } from '@/data/pe/schemas'
 import type { RadarNetworkStatus } from '@/data/radar/schemas'
+import type { PlatformTip } from '@/data/sdk/queries'
 import { clampSkew, formatInt, formatRelative } from '@/lib/format'
 
 export interface ProbeFacts {
@@ -33,6 +34,16 @@ export function peFacts(status: PeStatus, stamp: SourceStamp): ProbeFacts {
   return {
     stamp,
     report: t`Indexed to Platform block ${indexed} of ${chain}. Indexer: ${state}.`,
+  }
+}
+
+export function sdkFacts(tip: PlatformTip, stamp: SourceStamp, now: number): ProbeFacts {
+  const block = formatInt(tip.height)
+  const epoch = formatInt(tip.epoch.number)
+  const age = formatRelative(clampSkew(stamp.asOf, now), now)
+  return {
+    stamp,
+    report: t`Proof-checked at Platform block ${block}, epoch ${epoch}. That block is ${age}.`,
   }
 }
 

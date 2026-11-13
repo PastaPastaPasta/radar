@@ -2325,6 +2325,61 @@ html[data-scroll-gutter] {
   border: 0;
 }
 
+/* A proposal leads with its name, then its hash; the status colours the row's leading edge so a column of them scans. */
+.rx-table .rx-propcell {
+  display: grid;
+  gap: 1px;
+  box-shadow: inset 3px 0 0 var(--rx-edge, transparent);
+}
+.rx-table tbody[data-status='funded'] {
+  --rx-edge: var(--dh-good);
+}
+.rx-table tbody[data-status='passing'] {
+  --rx-edge: var(--dh-brand, var(--dh-ink-2));
+}
+.rx-table tbody[data-status='failing'] {
+  --rx-edge: var(--dh-warn);
+}
+.rx-table tbody[data-status='invalid'] {
+  --rx-edge: var(--dh-bad);
+}
+.rx-table tbody[data-status='ended'] {
+  --rx-edge: var(--dh-line-2);
+}
+.rx-propname {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--dh-w-strong);
+  color: var(--dh-ink);
+  text-align: start;
+  cursor: pointer;
+  min-block-size: 24px;
+}
+.rx-propname:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rx-propname:focus-visible {
+  outline: 2px solid var(--dh-focus, currentColor);
+  outline-offset: 2px;
+}
+.rx-prophash {
+  display: block;
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-propends {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .rx-table .rx-propcell [data-proposal-hash] {
+    display: none;
+  }
+}
+
 /* On a phone the table scrolls sideways under its sticky first column, so that column carries the votes too. */
 .rx-propline {
   display: none;
