@@ -289,7 +289,7 @@ function BlockView({
       </CoreBand>
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
-        <Section id="header" title={t`Header`}>
+        <Section id="header" title={t`Header`} source={stamp}>
           <Card layer="core">
             <KeyValue
               columns={2}
@@ -317,6 +317,7 @@ function BlockView({
                     </span>
                   ),
                   source: work.data ? stampOf(work.data) : undefined,
+                  hint: work.data ? t`This source covers this row only` : undefined,
                 },
                 {
                   label: t`Version`,
