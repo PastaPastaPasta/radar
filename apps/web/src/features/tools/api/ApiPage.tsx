@@ -49,7 +49,7 @@ export function ApiPage() {
           <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3">
             {CURL_EXAMPLES.map((c) => (
               <div key={c.id} className="rx-api-curl min-w-0" data-curl={c.id}>
-                <pre className="min-w-0 overflow-x-auto" tabIndex={0}>
+                <pre className="min-w-0 whitespace-pre-wrap break-all">
                   <code>{c.command}</code>
                 </pre>
                 <Copy value={c.command} label={t`Copy command`} />
