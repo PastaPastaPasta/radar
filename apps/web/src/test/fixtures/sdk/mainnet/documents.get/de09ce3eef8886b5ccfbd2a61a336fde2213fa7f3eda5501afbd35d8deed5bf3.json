@@ -1,0 +1,68 @@
+{
+  "method": "documents.get",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "id": "ByxWf6Y65yJtneQtyeUf2rtgqzhcL1mLC1FaozEAhtva"
+  },
+  "recordedAt": "2026-11-13T17:54:20.555Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "ByxWf6Y65yJtneQtyeUf2rtgqzhcL1mLC1FaozEAhtva",
+      "ownerId": "395bEYpa6wtfAzCBsbqUzdSAjjdbfPwpzWF3whG8RfgB",
+      "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+      "type": "domain",
+      "revision": {
+        "$bigint": "1"
+      },
+      "createdAt": 1732194666214,
+      "updatedAt": 1732194666214,
+      "transferredAt": 1732194666214,
+      "createdAtBlockHeight": null,
+      "updatedAtBlockHeight": null,
+      "transferredAtBlockHeight": null,
+      "createdAtCoreBlockHeight": null,
+      "updatedAtCoreBlockHeight": null,
+      "transferredAtCoreBlockHeight": null,
+      "data": {
+        "label": "Alice",
+        "normalizedLabel": "a11ce",
+        "normalizedParentDomainName": "dash",
+        "parentDomainName": "dash",
+        "records": {
+          "identity": "395bEYpa6wtfAzCBsbqUzdSAjjdbfPwpzWF3whG8RfgB"
+        },
+        "subdomainRules": {
+          "allowSubdomains": false
+        }
+      }
+    },
+    "proved": true,
+    "meta": {
+      "height": 470778,
+      "coreChainLockedHeight": 2571711,
+      "epoch": 88,
+      "timeMs": 1794592307728,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAdqtuQRDmU3D0HbMpl5SGruEz44TfsWxnyeX0Dbst2fnBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAA7v+F1Z9A0+mv4qA9/osVAfiYaLMhDa4HyjAHznUKMCBABJVOV03iKKZc8v7g1T2/Mb9d5igXyX4BR70j/sYo8kXIRAQFAAPsBFQELXal6yu0F31pb06maMJ5zCIVOYH5eSKYH2XbNZK2BdAKCH2O1+hbmRzBwCD0CBNBge9eHPD453c5nCTgI1bOjYBABlNq2PUaqsWIBbujVstwevhs0LJm7NPnVFKCk19fVvlkCp0V/mPI9MKZhnIUEx8jRSNP3JVq8pkAyzhFVXr+hWSgQARqOib1TigO6hKP4gZ7zTAvChqtyG6WV4f7vdLsT9bF0BCDmaMZZr2au4ecsGG3ee1t+Ch1xKgnEDVch9iK/U8UxVQAFAgEBAQBtVoSRUXb+NeDhk9HzsLk/TmBtEcEsdnaAUJvPB/WDDBABOhTtXe3PVhBKJLfLJYqBt33JgrDfVEFty2fXj3io/aoREREBIOZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAHUBseIAKaFmKTZ9wwtoMsbEbNNh9ktmXGJ5F1FGGfPYJhAEAQEADAIBCHByZW9yZGVyAMWjWRvKM5i+eru1sa9a/M8K5Jxxh5eLiEzoVUuVIpedEAGNaJQG8QFmaUu58Auvw79wXRGNrED4HfElJE+g0paatREBAQEAagQGZG9tYWluAB4CARpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZQAhIS6hzfkwBqynIb53Sir1b3c4FfqQqcoRRpPzvbcc6wLp4VhwDmn8pYJJxgvQZaFY+RYo/L/TQkyB6zjdGZgbPBABBmRvbWFpbgCNBAEAACQCASBqTZ5qkXxF3mmusUhLCQdx+1Q6Y1GmkBMs0dV9q9srTwD45zN8/Vy5a7fkBtKxJzLSFV1TNO60N52xtpBs0M1I5AIE5gjyd53MkU6t564Qa+KOvNQrIbRWPevDFSmDAYVM1xABINcssk5FiGF1hkpjVl3z0A3PedQmTzTLphivFtEzzFQRAQEAAPsC4AGG3ld0hRU/VEGZH5AXo2QjA9HFb8xnI7qwrYfsPW/0CAIDLKuwL+mvm6hdsAxUgbwCymtcuUp+0/5ivcIaWrO37hAB413U9zsLKm3kBKE/Q8AIMRI+W3A5t550OG/d2PdGZKkCkt/iNhCGKv/oZkoEj4xAClld6A+m30gXnmgmB11PO2QQATfZOqphQ9fdDkToe0ggnkVG4dqugQH5YA16ef+ztAaCAiBxyy244hIazbHTYdVeTQ+hXbPY/V7EFGukCc0fsNdOEAFB6fpfKGhoV5p1XhUkbFCNg+RhgxRWCQ29sOvwYGms2QIz42SwDkuz4QBofnIp7pSt8BZ9ncYLd60d4lTpemheOxABn6CPYOeHOTzJ3qgC4FIwZJh9e+nAtBx8UwvvSGai8dECmR1+bumKeoS7CpiGjeUv2Env2KE8Oeip3ztGWa+mku8QAfhB9x88ZGl3KuovRPvadjSMI+jC7B1T1RQleASfxLrWAyCjLClTPVTahFMt7Y3jdK+6VRUvJdiJYJ5g+2ZN6MsLfwCcAJkAoywpUz1U2oRTLe2N43SvulUVLyXYiWCeYPtmTejLC38fyTXkojTJWo1FbZz5DOuPjPzSwM2rCQdXhYoBmq/ayAEABwAAAZNO2QbmAAABk07ZBuYAAAGTTtkG5gAFQWxpY2UFYTExY2UBBGRhc2gEZGFzaAAhAR/JNeSiNMlajUVtnPkM64+M/NLAzasJB1eFigGar9rIAQAAEAG9RC1rStvvbeEVq/Nt6eekc/APyVjIW67qtGWWkhRUeBECEy6KlbyJycKquKm5wyLjHnXoeo7R0ojFwZ72UGyuBOAQAfBgtbkrH4aHFgkAeOcBSzeqDj24O24+Ma7Fq+imOnZTERERERECVKyWgf7bLnYhagxaxP6TlxFPP91jwn7q4t2FTK8Pa4kQAaL6nnsicXpuKrlR60te7TDz2r0H4e8reUheNihQXxeXEREA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAByPjN+/5pKB548HBTVZCocGa4o4oXVPcUw="
+      },
+      "signature": {
+        "$u8": "hPXrrJAmirVoCb/VqPDhEdP88d3oWZv1r1N5rQebBL3CU2cUdvZ5tOmfH7pXWVURC3MWuX24h/OaDF60xSnYCvlGpYcaC2sk3PwAtOjec0tIo6gZyPYsern1v4s1SmO9"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "GC+hV1ylO/uYt88JR8A4m2VKUTbQKqiKojlFhhXGwMM="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 889.4487670000001
+  }
+}
