@@ -5,6 +5,7 @@ import {
   zBool01,
   zCsv,
   zCsvEnum,
+  zList,
   decodeWhere,
   encodeWhere,
   zHex40,
@@ -32,10 +33,21 @@ describe('parseSearch and stringifySearch', () => {
     expect(stringifySearch({ a: undefined, b: null, c: false })).toBe('')
   })
 
-  it('writes booleans as 1, numbers as digits and arrays comma-joined and sorted', () => {
-    expect(stringifySearch({ banned: true, page: 3, type: ['regular', 'evo'] })).toBe(
+  it('writes booleans as 1, numbers as digits and arrays comma-joined in their own order', () => {
+    expect(stringifySearch({ banned: true, page: 3, type: ['evo', 'regular'] })).toBe(
       '?banned=1&page=3&type=evo,regular',
     )
+    expect(stringifySearch({ order: ['toUserId:asc', '$createdAt:asc'] })).toBe(
+      '?order=toUserId:asc,%24createdAt:asc',
+    )
+  })
+
+  it('escapes commas and percent signs inside array items and reads them back', () => {
+    const text = stringifySearch({ host: ['Amazon.com, Inc.', '50%'], prev: ['b', 'a', 'b'] })
+    expect(text).toBe('?host=Amazon.com%252C Inc.,50%2525&prev=b,a,b'.replace(' ', '%20'))
+    const read = parseSearch(text)
+    expect(zCsv.parse(read.host)).toEqual(['50%', 'Amazon.com, Inc.'])
+    expect(zList.parse(read.prev)).toEqual(['b', 'a', 'b'])
   })
 
   it('leaves mainnet implicit and keeps other networks', () => {
@@ -59,6 +71,14 @@ describe('search schema helpers', () => {
     expect(zCsvEnum(['regular', 'evo']).parse('evo,bogus,regular')).toEqual(['evo', 'regular'])
   })
 
+  it('keeps the order and repeats of an ordered list, and an item with a comma', () => {
+    expect(zList.parse('toUserId:asc,$createdAt:asc')).toEqual(['toUserId:asc', '$createdAt:asc'])
+    expect(zList.parse('b,a,b,')).toEqual(['b', 'a', 'b'])
+    expect(zList.parse('a%2Cb,c')).toEqual(['a,b', 'c'])
+    expect(zCsv.parse('Amazon.com%2C Inc.,x')).toEqual(['Amazon.com, Inc.', 'x'])
+    expect(zList.parse(zList.parse('b,a'))).toEqual(['b', 'a'])
+  })
+
   it('validates its own output again', () => {
     expect(zCsv.parse(zCsv.parse('b,a'))).toEqual(['a', 'b'])
     expect(zCsvEnum(['regular', 'evo']).parse(['evo'])).toEqual(['evo'])
@@ -72,6 +92,7 @@ describe('search schema helpers', () => {
     expect(zRange.parse('100..')).toEqual({ min: 100 })
     expect(zRange.parse('..2.5')).toEqual({ max: 2.5 })
     expect(zRange.parse('1..9')).toEqual({ min: 1, max: 9 })
+    expect(zRange.parse('5..1')).toEqual({ min: 1, max: 5 })
     for (const bad of ['..', '5', 'a..b', '1..2..3']) {
       expect(zRange.safeParse(bad).success).toBe(false)
     }
@@ -86,6 +107,7 @@ describe('search schema helpers', () => {
   it('coerces page, limit and boolean flags', () => {
     expect(zPage.parse('3')).toBe(3)
     expect(zPage.safeParse('0').success).toBe(false)
+    expect(zPage.safeParse('999999999').success).toBe(false)
     expect(zLimit.parse('50')).toBe(50)
     expect(zLimit.safeParse('30').success).toBe(false)
     expect(zBool01.parse('1')).toBe(true)
@@ -126,6 +148,16 @@ describe('F0 search helpers', () => {
     expect(zWhere.parse(zWhere.parse(text))).toEqual(clauses)
   })
 
+  it('leaves out a clause it could not read back', () => {
+    expect(
+      encodeWhere([
+        { field: 'a', op: 'in', value: [] },
+        { field: '', op: 'eq', value: 'x' },
+        { field: 'b', op: 'eq', value: '' },
+      ]),
+    ).toBe('b~eq~')
+  })
+
   it('drops malformed clauses and keeps the rest', () => {
     expect(decodeWhere('')).toEqual([])
     expect(decodeWhere('a~eq~1,b~nope~2,c~eq,~eq~3,d~eq~%E0,e~eq~1~2,f~lt~9')).toEqual([
@@ -140,5 +172,19 @@ describe('F0 search helpers', () => {
     expect(decodeWhere(parseSearch(search).where ?? '')).toEqual([
       { field: 'a', op: 'eq', value: 'x' },
     ])
+  })
+})
+
+describe('the documents route search', () => {
+  it('keeps the order of `order` and `prev` through a round trip', async () => {
+    const { Route } = await import('@/routes/contract.$id.documents.$type')
+    const validate = Route.options.validateSearch as { parse(s: unknown): Record<string, unknown> }
+    const search = validate.parse({ order: 'toUserId:asc,$createdAt:asc', prev: 'zz,aa,mm' })
+    expect(search.order).toEqual(['toUserId:asc', '$createdAt:asc'])
+    expect(search.prev).toEqual(['zz', 'aa', 'mm'])
+    expect(validate.parse(parseSearch(stringifySearch(search)))).toMatchObject({
+      order: ['toUserId:asc', '$createdAt:asc'],
+      prev: ['zz', 'aa', 'mm'],
+    })
   })
 })

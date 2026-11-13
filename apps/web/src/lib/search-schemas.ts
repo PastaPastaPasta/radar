@@ -15,7 +15,28 @@ export interface WhereClause {
 
 const csvInput = z.preprocess((v) => (Array.isArray(v) ? v.map(String).join(',') : v), z.string())
 
-export const zCsv = csvInput.transform((s) => [...new Set(s.split(',').filter(Boolean))].sort())
+/** A list item as it sits between the commas of a URL value: `%` and `,` are written `%25` and `%2C`. */
+export const escapeListItem = (item: string): string =>
+  item.replace(/%/g, '%25').replace(/,/g, '%2C')
+
+export function unescapeListItem(item: string): string {
+  try {
+    return decodeURIComponent(item.replace(/%(?!25|2C)/gi, '%25'))
+  } catch {
+    return item
+  }
+}
+
+const listItems = (s: string): string[] => s.split(',').filter(Boolean).map(unescapeListItem)
+
+/** An unordered set of values: split on `,`, de-duplicated, sorted. An item may hold a comma as `%2C`. */
+export const zCsv = csvInput.transform((s) => [...new Set(listItems(s))].sort())
+
+/**
+ * An ordered list: split on `,`, order and repeats kept (a sort order, a cursor stack). An item may hold a comma as
+ * `%2C`. `stringifySearch` keeps the order of an array and escapes each item.
+ */
+export const zList = csvInput.transform(listItems)
 
 export const zCsvEnum = <const T extends readonly [string, ...string[]]>(values: T) =>
   csvInput.transform((s) =>
@@ -43,9 +64,13 @@ export const zRange = z.union([
       ctx.issues.push({ code: 'custom', message: 'Not a range', input: s })
       return z.NEVER
     }
+    const min = lo ? Number(lo) : undefined
+    const max = hi ? Number(hi) : undefined
+    const [low, high] =
+      min !== undefined && max !== undefined && min > max ? [max, min] : [min, max]
     return {
-      ...(lo ? { min: Number(lo) } : {}),
-      ...(hi ? { max: Number(hi) } : {}),
+      ...(low !== undefined ? { min: low } : {}),
+      ...(high !== undefined ? { max: high } : {}),
     }
   }),
 ])
@@ -65,7 +90,9 @@ export const zDefault = <T extends z.ZodType>(schema: T, value: NonNullable<z.ou
     .default(value as never)
     .catch(value as never) as z.ZodCatch<z.ZodDefault<T>>
 
-export const zPage = z.coerce.number().int().min(1)
+/** A page number; a value past `MAX_PAGE` is read as absent. */
+export const MAX_PAGE = 100_000
+export const zPage = z.coerce.number().int().min(1).max(MAX_PAGE)
 
 export const LIMITS = [10, 25, 50, 75, 100] as const
 export type Limit = (typeof LIMITS)[number]
@@ -103,9 +130,13 @@ const WHERE_OPS: readonly string[] = ['eq', 'lt', 'lte', 'gt', 'gte', 'in', 'sw'
 
 const part = (s: string): string => encodeURIComponent(s).replace(/~/g, '%7E')
 
-/** `field~op~value` clauses joined by `,`; the values of `in` joined by `|`; every part percent-encoded. */
+/**
+ * `field~op~value` clauses joined by `,`; the values of `in` joined by `|`; every part percent-encoded. A clause with no
+ * field, or an `in` with no values, can't be read back, so it is left out.
+ */
 export function encodeWhere(clauses: readonly WhereClause[]): string {
   return clauses
+    .filter((c) => c.field !== '' && (!Array.isArray(c.value) || c.value.length > 0))
     .map((c) => {
       const value = Array.isArray(c.value) ? c.value.map(part).join('|') : part(c.value)
       return `${part(c.field)}~${c.op}~${value}`

@@ -2,7 +2,11 @@ import { z } from 'zod'
 import { zCsv, zCsvEnum, zOpt } from '@/lib/search-schemas'
 import type { MnRow } from './rows'
 
-/** The masternode filter fields the list (`/masternodes`) and the map (`/map`) share, in the URL's string forms. */
+/**
+ * The masternode filter fields the list (`/masternodes`) and the map (`/map`) share, in the URL's string forms.
+ * `host` holds autonomous system numbers (`16509`), not organisation names: the names carry commas ("Amazon.com, Inc.").
+ * `mnHostLabels` gives the name to show for each.
+ */
 export const mnFilterSearch = z.object({
   q: zOpt(z.string()),
   type: zOpt(zCsvEnum(['regular', 'evo'])),
@@ -35,7 +39,7 @@ const facetValues = {
   reach: reachOf,
   country: (r: MnRow) => r.crawl?.country ?? undefined,
   version: (r: MnRow) => r.crawl?.version ?? undefined,
-  host: (r: MnRow) => r.crawl?.as_org ?? undefined,
+  host: (r: MnRow) => (r.crawl?.asn == null ? undefined : String(r.crawl.asn)),
   dkg: (r: MnRow) => r.crawl?.dkg_readiness?.overall,
 } satisfies Record<Exclude<keyof MnFilter, 'q'>, (r: MnRow) => string | undefined>
 
@@ -47,17 +51,32 @@ const searchText = (r: MnRow): string =>
     r.crawl?.city,
     r.crawl?.version,
     r.crawl?.as_org,
+    r.crawl?.asn == null ? undefined : `as${r.crawl.asn}`,
+    r.crawl?.user_agent,
+    r.crawl?.platform_node_id,
     r.crawl?.payout_address,
   ]
     .filter((v): v is string => typeof v === 'string')
     .join('\n')
     .toLowerCase()
 
-/** A row passes when it matches every field the filter sets; within a field, any of its values will do. */
+const CRAWL_FACETS: ReadonlySet<keyof typeof facetValues> = new Set([
+  'reach',
+  'country',
+  'version',
+  'host',
+  'dkg',
+])
+
+/**
+ * A row passes when it matches every field the filter sets; within a field, any of its values will do. While no row
+ * carries a crawl (Radar refused or down), the crawl's facets are ignored: they could only empty the list.
+ */
 export function filterMnRows(rows: readonly MnRow[], filter: MnFilter): MnRow[] {
   const q = filter.q?.trim().toLowerCase()
+  const crawled = rows.some((r) => r.crawl)
   const sets = (Object.keys(facetValues) as (keyof typeof facetValues)[]).flatMap((k) => {
-    const wanted = csv(filter[k])
+    const wanted = !crawled && CRAWL_FACETS.has(k) ? undefined : csv(filter[k])
     return wanted ? [[k, wanted] as const] : []
   })
   return rows.filter(
@@ -88,5 +107,13 @@ export function mnFilterFacets(rows: readonly MnRow[]): MnFacets {
       const v = facetValues[k](row)
       if (v !== undefined) out[k][v] = (out[k][v] ?? 0) + 1
     }
+  return out
+}
+
+/** The organisation name to show for each autonomous system number in the rows (`host` facet values). */
+export function mnHostLabels(rows: readonly MnRow[]): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const { crawl } of rows)
+    if (crawl?.asn != null && crawl.as_org) out[String(crawl.asn)] ??= crawl.as_org
   return out
 }
