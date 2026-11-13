@@ -172,7 +172,14 @@ const asStatus = (v: string) =>
 
 function masternodeFilters(p: URLSearchParams, withSort: boolean): Hit {
   const set: Record<string, string> = {}
-  const drop = ['dir', 'host', 'version', 'dkg', 'page']
+  const hosts = (p.get('host') ?? '').split(',')
+  const asns = hosts.every((v) => /^\d+$/.test(v))
+  const legacy = p.has('dir') || hosts.some((v) => /^AS\d+$/i.test(v))
+  const drop = [
+    'dir',
+    ...(legacy || !asns ? ['host'] : []),
+    ...(legacy ? ['version', 'dkg', 'page'] : []),
+  ]
   const type = csvOf(p, 'type', asType)
   const status = csvOf(p, 'status', asStatus)
   // Before reachability and registration were separate, ?status= also carried Reachable/Unreachable.

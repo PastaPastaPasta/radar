@@ -263,10 +263,6 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect(isSourceError(error) && error.source === 'dapi').toBe(true)
     expect(takeFixtureMisses()).toHaveLength(1)
   })
-
-  it('has no masternode list yet', async () => {
-    await expect(core.masternodeList(net)).rejects.toMatchObject({ kind: 'unavailable' })
-  })
 })
 
 async function dayOf(net: string): Promise<string> {

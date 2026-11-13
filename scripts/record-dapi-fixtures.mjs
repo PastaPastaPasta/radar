@@ -28,6 +28,8 @@ Options:
                          (nothing is removed and the manifest is left as it is)
   --times <ms,…>         the same for the header reads of a height-at-time search, started from the tip the
                          manifest records so replays ask for the same windows (add a day's start and end)
+  --mnlist               only record the masternode list (the first message of subscribeToMasternodeList and the header read
+                         that checks its block) and add it to the existing recordings, with its manifest entry
   --lookups <list>       the same for single lookups: block:<height|hash>, header:<height> and tx:<txid>, comma-separated;
                          a hash or id that does not exist is recorded as the not-found answer`
 
@@ -40,6 +42,7 @@ const args = {
   rows: [],
   times: [],
   lookups: [],
+  mnlist: false,
 }
 const argv = process.argv.slice(2)
 for (let i = 0; i < argv.length; i++) {
@@ -49,6 +52,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--blocks') args.blocks = Number(argv[++i])
   else if (a === '--from') args.from = Number(argv[++i])
   else if (a === '--dry') args.dry = true
+  else if (a === '--mnlist') args.mnlist = true
   else if (a === '--rows') {
     args.rows = argv[++i].split(',').map((r) => r.split(':').map(Number))
   } else if (a === '--times') {
@@ -93,12 +97,13 @@ const wasm = await import(
 wasm.initSync({ module: readFileSync(join(ROOT, 'packages/core-decode/dist/core_decode_bg.wasm')) })
 
 const load = (p) => server.ssrLoadModule(p)
-const [{ LiveDapiTransport, RecordingDapiTransport }, scenarios, decodeMod, clientMod] =
+const [{ LiveDapiTransport, RecordingDapiTransport }, scenarios, decodeMod, clientMod, mnListMod] =
   await Promise.all([
     load('/src/test/msw/dapi-recording.ts'),
     load('/src/test/msw/dapi-scenarios.ts'),
     load('/src/data/core/decode.ts'),
     load('/src/data/core/client.ts'),
+    load('/src/data/core/mn-list.ts'),
   ])
 
 const seeds = JSON.parse(readFileSync(join(WEB, `src/data/dapi-core/seed.${net}.json`), 'utf8'))
@@ -135,6 +140,52 @@ const core = clientMod.createCoreClient({
   health: { get: () => ({ state: 'ok' }) },
   now: Date.now,
 })
+
+/** Reads the list once through the recording, so its stream and the header read that checks it are kept. */
+async function recordMasternodeList() {
+  // A list message is over 100 kB on both networks, so its stream stops at the first message; header reads stay whole.
+  recording.streamLimits = { messages: 6, bytes: 100_000, ms: 30_000 }
+  const list = mnListMod.createMasternodeList({
+    transport: () => recording,
+    headers: core.headers,
+    now: Date.now,
+  })
+  const read = await list.masternodeList(net)
+  say(`masternode list: ${read.data.size} masternodes at block ${read.height} from ${read.node}`)
+  const evo = [...read.data.values()].filter((e) => e.type === 1).length
+  return {
+    id: picks.masternodeList?.id ?? 'masternode-list',
+    purpose:
+      picks.masternodeList?.purpose ??
+      `The deterministic masternode list: the first message of subscribeToMasternodeList (a full diff, ${read.data.size} entries, ${evo} evonodes) and the header read that checks its block`,
+    call: `masternodeList(${JSON.stringify(net)})`,
+    height: read.height,
+    tags: ['stream', 'masternode-list'],
+  }
+}
+
+if (args.mnlist) {
+  const entry = await recordMasternodeList()
+  say(`${recording.exchanges.size} exchanges, ${live.requestCount} requests`)
+  if (!args.dry) {
+    const prettier = (await resolveConfig(join(ROOT, 'package.json'))) ?? {}
+    for (const x of recording.exchanges.values()) {
+      const file = join(OUT, net, x.method, `${x.key}.json`)
+      if (existsSync(file)) continue
+      mkdirSync(dirname(file), { recursive: true })
+      writeFileSync(file, await format(JSON.stringify(x.fixture), { ...prettier, parser: 'json' }))
+      say(`  + ${x.method}/${x.key}`)
+    }
+    const manifestFile = join(OUT, net, 'manifest.json')
+    const manifest = JSON.parse(readFileSync(manifestFile, 'utf8'))
+    manifest.entries = [...manifest.entries.filter((e) => e.id !== entry.id), entry]
+    writeFileSync(
+      manifestFile,
+      await format(JSON.stringify(manifest), { ...prettier, parser: 'json' }),
+    )
+  }
+  await finish()
+}
 
 if (args.rows.length > 0 || args.lookups.length > 0 || args.times.length > 0) {
   if (args.times.length > 0) {
@@ -187,6 +238,8 @@ try {
   console.error(e)
   await finish(1)
 }
+
+if (picks.masternodeList) entries.push(await recordMasternodeList())
 
 const tip = entries.find((e) => e.id === 'tip')
 const manifest = {

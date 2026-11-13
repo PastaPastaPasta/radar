@@ -534,6 +534,17 @@ describe('redirects', () => {
     await check('radar.localhost', '/map?net=testnet&q=x', '/map?q=x&network=testnet')
   })
 
+  it('keeps the list and map filters that name an autonomous system, a version, readiness or a page', async () => {
+    await check('radar.localhost', '/masternodes?host=24940&version=24.0.0&dkg=ready&page=2', null)
+    await check('radar.localhost', '/map?host=24940,16509&version=24.0.0', null)
+    await check('radar.localhost', '/masternodes?host=Hetzner&page=2', '/masternodes?page=2')
+    await check(
+      'radar.localhost',
+      '/masternodes?host=24940&dir=asc&page=2&sort=version',
+      '/masternodes?sort=version',
+    )
+  })
+
   it('translates the old Radar list, map and changes parameters', async () => {
     await check(
       'radar.localhost',

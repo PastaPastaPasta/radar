@@ -4,9 +4,10 @@ import { core } from '../core/client'
 import type { DapiMnEntry } from '../core/types'
 import type { SourceStamp, Sourced } from '../envelope'
 import { stampOf } from '../envelope'
-import { isDisabledByMode } from '../errors'
+import { sourceOff } from '../endpoints'
+import { disabledByMode, isDisabledByMode } from '../errors'
 import { dataClass, viewKeys } from '../query'
-import { radar } from '../radar/client'
+import { radarQueries } from '../radar/queries'
 import type { RadarMasternode, RadarMasternodes } from '../radar/schemas'
 
 export type MnType = 'regular' | 'evo'
@@ -139,9 +140,11 @@ export function joinMnRows(
 export const mnRowsQuery = (net: NetworkId) =>
   queryOptions({
     queryKey: viewKeys(net, 'mn-rows'),
-    queryFn: async ({ signal }): Promise<Sourced<MnRows>> => {
+    queryFn: async ({ signal, client }): Promise<Sourced<MnRows>> => {
       const [crawl, list] = await Promise.allSettled([
-        radar.masternodes(net, signal),
+        sourceOff('radar')
+          ? Promise.reject(disabledByMode('radar'))
+          : client.ensureQueryData({ ...radarQueries.masternodes(net), revalidateIfStale: true }),
         core.masternodeList(net, signal),
       ])
       const joined = joinMnRows(
