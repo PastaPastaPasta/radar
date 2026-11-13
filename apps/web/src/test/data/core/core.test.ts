@@ -250,6 +250,14 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect(typeof tx.isChainLocked).toBe('boolean')
   })
 
+  it('reports an InstantSend lock as one node’s claim on the DAPI path @HY-07', async () => {
+    const tx = (
+      await core.tx(net, manifest.entries.find((x) => x.tags.includes('instant-locked'))!.txid!)
+    ).data!
+    expect(tx.isInstantLocked).toBe(true)
+    expect(tx.instantLockClaim).toBe('one-node')
+  })
+
   it('refuses to guess when a node request has no recording', async () => {
     const error = await core.block(net, { height: 7 }).catch((e: unknown) => e)
     expect(isSourceError(error) && error.source === 'dapi').toBe(true)
@@ -452,6 +460,7 @@ describe('Hyphen fallback', () => {
     expect(tx).toMatchObject({ source: 'hyphen', fallback: 'dapi-down' })
     expect(tx.data!.inputs).toHaveLength(9)
     expect(tx.data!.isInstantLocked).toBe(true)
+    expect(tx.data!.instantLockClaim).toBe('one-node')
     expect(transport.calls).toHaveLength(0)
   })
 

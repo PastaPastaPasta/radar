@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { instantLockFields } from '@/data/core/lock-state'
 import type { DecodedTx } from '@/data/core/types'
 import { I18nProvider, i18n } from '@/i18n'
 import { NOW, renderInRouter, stamp } from '@/ui/test-utils'
@@ -75,6 +76,14 @@ describe('Settlement step states @HY-07', () => {
   it('marks a lock one node reports as a claim and a confirmed one as done', async () => {
     await renderSettlement(tx({ isInstantLocked: true, instantLockClaim: 'one-node' }))
     expect(state('instantsend')).toBe('claimed')
+  })
+
+  it('never marks a lock done on the strength of one source, whichever path read it', async () => {
+    await renderSettlement(tx(instantLockFields(true)))
+    expect(state('instantsend')).toBe('claimed')
+    expect(
+      screen.getByText('reported by one node; no second source has confirmed it'),
+    ).toBeVisible()
   })
 
   it('marks every confirmed step done', async () => {

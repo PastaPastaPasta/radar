@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
+import { instantLockState } from '@/data/core/lock-state'
 import type { DecodedTx } from '@/data/core/types'
 import { formatInt } from '@/lib/format'
 import { Icon, Time } from '@/ui'
@@ -47,7 +48,7 @@ export function Settlement({
   const { t } = useLingui()
   const mined = tx.height !== undefined
   const locked = tx.isChainLocked === true
-  const instant = tx.isInstantLocked === true
+  const instant = instantLockState(tx)
   const received = !coinbase && (firstSeen !== undefined || !mined)
   return (
     <>
@@ -72,26 +73,32 @@ export function Settlement({
           <Step
             name="instantsend"
             state={
-              instant ? (tx.instantLockClaim ? 'claimed' : 'done') : mined ? 'skipped' : 'pending'
+              instant === 'corroborated'
+                ? 'done'
+                : instant === 'claimed'
+                  ? 'claimed'
+                  : mined
+                    ? 'skipped'
+                    : 'pending'
             }
             title={
               <>
                 <Icon name="is" size="sm" />
-                {instant
-                  ? tx.instantLockClaim
+                {instant === 'corroborated'
+                  ? t`InstantSend locked`
+                  : instant === 'claimed'
                     ? t`InstantSend lock`
-                    : t`InstantSend locked`
-                  : t`InstantSend`}
+                    : t`InstantSend`}
               </>
             }
             detail={
-              instant
-                ? tx.instantLockClaim
+              instant === 'corroborated'
+                ? t`masternodes locked its inputs; final from here`
+                : instant === 'claimed'
                   ? t`reported by one node; no second source has confirmed it`
-                  : t`masternodes locked its inputs; final from here`
-                : mined
-                  ? t`No InstantSend lock was seen`
-                  : t`waiting for the masternodes to lock it`
+                  : mined
+                    ? t`No InstantSend lock was seen`
+                    : t`waiting for the masternodes to lock it`
             }
           />
         )}

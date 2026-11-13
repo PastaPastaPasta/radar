@@ -19,6 +19,7 @@ import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 import { bytesToHex, hexToBytes, isHex } from '@/lib/hex'
 import { parseChainLock } from '@/lib/core/chainlock'
+import { instantLockFields } from './lock-state'
 import { parseHeader } from '@/lib/core/header'
 import { poolOfCoinbase } from '@/lib/core/pools'
 import { merkleRootOf, meetsProofOfWork, txidOfBytes } from '@/lib/core/verify'
@@ -830,7 +831,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
             height,
             ...(time !== undefined ? { time } : {}),
             confirmations,
-            isInstantLocked,
+            ...instantLockFields(isInstantLocked),
             isChainLocked,
           },
           'dapi-down',
@@ -845,8 +846,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         ...(raw.height !== undefined ? { height: raw.height } : {}),
         ...(raw.time !== undefined ? { time: raw.time } : {}),
         ...(raw.height !== undefined ? { confirmations: raw.confirmations } : {}),
-        isInstantLocked: raw.isInstantLocked,
-        ...(raw.isInstantLocked ? { instantLockClaim: 'one-node' as const } : {}),
+        ...instantLockFields(raw.isInstantLocked),
         isChainLocked: raw.lock === 'locked',
         ...(raw.lock === 'claimed' ? { chainLockClaim: 'one-node' as const } : {}),
       }
