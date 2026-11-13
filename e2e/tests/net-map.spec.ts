@@ -23,6 +23,18 @@ async function openMap(page: Page, query = '') {
   await settled(page)
 }
 
+/** Drags the sheet's handle up the way a thumb would, so everything in the sheet is within reach. */
+async function pullSheetUp(page: Page) {
+  const h = (await page.locator('.rx-map-handle').boundingBox())!
+  const x = h.x + h.width / 2
+  const y = h.y + h.height / 2
+  await page.mouse.move(x, y)
+  await page.mouse.down()
+  for (let i = 1; i <= 12; i++) await page.mouse.move(x, y - i * 40)
+  await page.mouse.up()
+  await expect(panel(page)).toHaveAttribute('data-snap', 'full')
+}
+
 /** On a phone the chips and selects are in the sheet's body, out of sight until it opens. */
 async function openControls(page: Page, info: TestInfo) {
   if (isPhone(info)) {
@@ -128,6 +140,8 @@ test.describe('The map', () => {
     await page.getByRole('searchbox', { name: 'Search masternodes' }).fill('')
     await expect(headline(page)).toContainText(/of \d+ masternodes answered/)
     const list = page.getByRole('link', { name: 'Open these as a list' })
+    await expect(list).not.toHaveAttribute('href', /q=zzzz/)
+    if (isPhone(info)) await pullSheetUp(page)
     await expect(list).toHaveAttribute('href', /\/masternodes\?.*country=DE/)
     await expect(list).toHaveAttribute('href', /reach=reachable/)
     await list.click()
