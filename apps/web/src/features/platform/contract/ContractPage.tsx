@@ -136,29 +136,31 @@ function Loaded({ ctx, pe }: { ctx: ContractContext; pe: ReturnType<typeof usePe
           ]}
         />
       </Card>
-      <Tabs
-        tabs={tabs}
-        value={tab}
-        layer="platform"
-        to={(next) =>
-          ({
-            to: '/contract/$id',
-            params: { id },
-            search: (s: Record<string, unknown>) => ({
-              ...s,
-              tab: next === 'overview' ? undefined : next,
-              page: undefined,
-              path: undefined,
-              rev: undefined,
-              base: undefined,
-              type: undefined,
-              owner: undefined,
-              from: undefined,
-              to: undefined,
-            }),
-          }) as LinkProps
-        }
-      />
+      <div className="min-w-0">
+        <Tabs
+          tabs={tabs}
+          value={tab}
+          layer="platform"
+          to={(next) =>
+            ({
+              to: '/contract/$id',
+              params: { id },
+              search: (s: Record<string, unknown>) => ({
+                ...s,
+                tab: next === 'overview' ? undefined : next,
+                page: undefined,
+                path: undefined,
+                rev: undefined,
+                base: undefined,
+                type: undefined,
+                owner: undefined,
+                from: undefined,
+                to: undefined,
+              }),
+            }) as LinkProps
+          }
+        />
+      </div>
       {tab === 'overview' ? <OverviewTab ctx={ctx} pe={pe} /> : null}
       {tab === 'schema' ? <SchemaTab ctx={ctx} /> : null}
       {tab === 'types' ? (

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-const MAX = 80
+const MAX = 60
 
 function plain(value: unknown): string {
   if (typeof value === 'string') return value
@@ -14,9 +14,9 @@ function plain(value: unknown): string {
 export function cellText(value: unknown): ReactNode {
   if (value === undefined || value === null) return '—'
   const text = plain(value)
-  if (text.length <= MAX) return <span className="break-all">{text}</span>
+  if (text.length <= MAX) return <span className="inline-block max-w-[20ch] break-all">{text}</span>
   return (
-    <span className="break-all" title={text}>
+    <span className="inline-block max-w-[20ch] break-all" title={text}>
       {text.slice(0, MAX - 1)}…
     </span>
   )

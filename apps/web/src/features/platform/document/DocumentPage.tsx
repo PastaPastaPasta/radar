@@ -159,12 +159,14 @@ function Loaded({
           ]}
         />
       </Card>
-      <Tabs
-        tabs={tabs}
-        value={tab}
-        layer="platform"
-        to={(next) => tabLink(ctx, next as DocumentTab)}
-      />
+      <div className="min-w-0">
+        <Tabs
+          tabs={tabs}
+          value={tab}
+          layer="platform"
+          to={(next) => tabLink(ctx, next as DocumentTab)}
+        />
+      </div>
       {tab === 'data' ? (
         <Card title={t`Data`} layer="platform" source={ctx.stamp} id="data">
           <JsonView value={doc.data} collapsedDepth={2} label={t`Document data`} />

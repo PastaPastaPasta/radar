@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { Link, type LinkProps } from '@tanstack/react-router'
@@ -86,15 +87,17 @@ export function GroupPage({ contract, pos, search }: GroupPageProps) {
               ]}
             />
           </Card>
-          <Tabs
-            tabs={[
-              { id: 'members', label: t`Members`, count: group.members.length },
-              { id: 'actions', label: t`Actions` },
-            ]}
-            value={search.tab}
-            layer="platform"
-            to={(id) => groupLink(contract, pos, { tab: id === 'members' ? undefined : id })}
-          />
+          <div className="min-w-0">
+            <Tabs
+              tabs={[
+                { id: 'members', label: t`Members`, count: group.members.length },
+                { id: 'actions', label: t`Actions` },
+              ]}
+              value={search.tab}
+              layer="platform"
+              to={(id) => groupLink(contract, pos, { tab: id === 'members' ? undefined : id })}
+            />
+          </div>
           {search.tab === 'members' ? (
             <Members contract={contract} position={position} required={group.requiredPower} />
           ) : (
@@ -146,7 +149,7 @@ function Members({
       ) : (members.data?.data.length ?? 0) === 0 ? (
         <Empty kind="none-yet" title={t`This group has no members.`} />
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={t`Members`}>
           <table className="rx-table w-full" aria-label={t`Members by power`}>
             <thead>
               <tr>
@@ -313,13 +316,18 @@ function ActionRow({
     enabled: open,
   })
   const list = signers.data?.data ?? []
+  const count = list.length
   const signed = list.reduce((n, s) => n + s.power, 0)
+  const tokenPosition = action.tokenPosition
+  const signedPower = formatInt(signed)
+  const requiredPower = formatInt(required)
+  const signerCount = plural(count, { one: '# signer', other: '# signers' })
   return (
     <li className="grid gap-2 border-t border-line pt-3" data-action={action.id}>
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone="info">{action.eventName}</Badge>
         <Hash value={action.id} />
-        <span className="text-ink-2">{t`token position ${action.tokenPosition}`}</span>
+        <span className="text-ink-2">{t`token position ${tokenPosition}`}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-ink-2">{t`Proposed by`}</span>
@@ -353,16 +361,19 @@ function ActionRow({
             <>
               <p className="text-ink-2">
                 {required > 0
-                  ? t`${list.length} signers, power ${formatInt(signed)} of ${formatInt(required)} required`
-                  : t`${list.length} signers`}
+                  ? t`${signerCount}, power ${signedPower} of ${requiredPower} required`
+                  : signerCount}
               </p>
               <ul className="flex flex-wrap gap-2">
-                {list.map((s) => (
-                  <li key={s.id} className="flex items-center gap-1" data-signer={s.id}>
-                    <IdentityRef id={s.id} />
-                    <Badge size="sm">{t`power ${s.power}`}</Badge>
-                  </li>
-                ))}
+                {list.map((s) => {
+                  const power = formatInt(s.power)
+                  return (
+                    <li key={s.id} className="flex items-center gap-1" data-signer={s.id}>
+                      <IdentityRef id={s.id} />
+                      <Badge size="sm">{t`power ${power}`}</Badge>
+                    </li>
+                  )
+                })}
               </ul>
             </>
           )}

@@ -12,3 +12,732 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "“{field}” için birden fazla koşul var. Birini kullanın ya da bir alt ve bir üst sınır verin."
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "“{field}” bu türün hiçbir dizininde yok, bu yüzden Platform ona göre süzemez."
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "“{field}” için önce “{other}” üzerinde bir koşul gerekir: {index} dizini sırayla okunur, önceki özellikler sonrakilerden önce gelir."
+
+msgid "“{field}” needs a value."
+msgstr "“{field}” için bir değer gerekir."
+
+msgid "“{field}” takes a whole number."
+msgstr "“{field}” bir tam sayı alır."
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "“{field}” bir tanımlayıcı alır: base58 ile yazılmış 32 bayt."
+
+msgid "“{field}” takes true or false."
+msgstr "“{field}” true veya false alır."
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "“ile başlar” metinler için çalışır ve “{field}” metin değildir."
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, one {# değişiklik} other {# değişiklik}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, one {# imzalayan} other {# imzalayan}}"
+
+msgid "{f}, ascending"
+msgstr "{f}, artan"
+
+msgid "{f}, descending"
+msgstr "{f}, azalan"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field}: “{typed}” için “{searched}” aranıyor (DPNS o, i ve l harflerini 0, 1 ve 1 olarak saklar)"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}, artan"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}, azalan"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} özellik · {indices} dizin"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}, gereken {requiredPower} ağırlığın {signedPower} kadarı"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "Bir sözleşme yalnızca token’lar ya da yalnızca gruplar içerebilir."
+
+msgid "A contract ID"
+msgstr "Bir sözleşme kimliği"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "Bir sözleşme kimliği en fazla 44 base58 karakterdir."
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "Bir grup, kimlikleri ve her birinin ağırlığını listeler; bir karar için ağırlığın grubun eşiğine ulaşması gerekir."
+
+msgid "A query can have only one “in” clause."
+msgstr "Bir sorguda yalnızca bir “in” koşulu olabilir."
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "“{field}” üzerindeki bir aralık (<, ≤, >, ≥, ile başlar), {index} dizininde süzdüğünüz son özellikte olmalı; ama “{other}” ondan sonra geliyor."
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "Eylem"
+
+msgid "Action details"
+msgstr "Eylem ayrıntıları"
+
+msgid "Actions"
+msgstr "Eylemler"
+
+msgid "Active"
+msgstr "Etkin"
+
+msgid "Activity"
+msgstr "Etkinlik"
+
+msgid "Add a filter"
+msgstr "Filtre ekle"
+
+msgid "Added"
+msgstr "Eklendi"
+
+msgid "All"
+msgstr "Tümü"
+
+msgid "All contracts"
+msgstr "Tüm sözleşmeler"
+
+msgid "All types"
+msgstr "Tüm türler"
+
+msgid "Any index"
+msgstr "Herhangi bir dizin"
+
+msgid "Apply"
+msgstr "Uygula"
+
+msgid "at block {height}"
+msgstr "{height} numaralı blokta"
+
+msgid "Back to the contract"
+msgstr "Sözleşmeye dön"
+
+msgid "Back to the previous page"
+msgstr "Önceki sayfaya dön"
+
+msgid "Base supply"
+msgstr "Temel arz"
+
+msgid "Browse documents"
+msgstr "Belgelere göz at"
+
+msgid "Browse the documents of this type"
+msgstr "Bu türdeki belgelere göz at"
+
+msgid "Can be deleted"
+msgstr "Silinebilir"
+
+msgid "Change or clear the filters to see more."
+msgstr "Daha fazlasını görmek için filtreleri değiştirin veya temizleyin."
+
+msgid "Changed"
+msgstr "Değişti"
+
+msgid "Changes"
+msgstr "Değişiklikler"
+
+msgid "Choose a version to see what it changed."
+msgstr "Neyi değiştirdiğini görmek için bir sürüm seçin."
+
+msgid "Clear"
+msgstr "Temizle"
+
+msgid "Clear filters"
+msgstr "Filtreleri temizle"
+
+msgid "Closed"
+msgstr "Kapalı"
+
+msgid "Compare"
+msgstr "Karşılaştır"
+
+msgid "Compare with"
+msgstr "Şununla karşılaştır"
+
+msgid "Comparison"
+msgstr "Karşılaştırma"
+
+msgid "Config"
+msgstr "Yapılandırma"
+
+msgid "Configuration"
+msgstr "Yapılandırma"
+
+msgid "Configuration JSON"
+msgstr "Yapılandırma JSON’u"
+
+msgid "Contested"
+msgstr "İtirazlı"
+
+msgid "Contract"
+msgstr "Sözleşme"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "Bir sözleşmenin etkinliği için Platform Explorer gerekir"
+
+msgid "Contracts"
+msgstr "Sözleşmeler"
+
+msgid "Created"
+msgstr "Oluşturuldu"
+
+msgid "Created or last changed by"
+msgstr "Oluşturan veya en son değiştiren"
+
+msgid "Current"
+msgstr "Güncel"
+
+msgid "Data"
+msgstr "Veri"
+
+msgid "Data at this revision"
+msgstr "Bu revizyondaki veri"
+
+msgid "Data contracts"
+msgstr "Veri sözleşmeleri"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "Veri sözleşmeleri, bir uygulamanın Platform’da neyi sakladığını tanımlar: belge türleri, token’lar ve gruplar."
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Decimals"
+msgstr "Ondalık basamak"
+
+msgid "Default"
+msgstr "Varsayılan"
+
+msgid "Deleted"
+msgstr "Silindi"
+
+msgid "Document"
+msgstr "Belge"
+
+msgid "Document data"
+msgstr "Belge verisi"
+
+msgid "Document type"
+msgstr "Belge türü"
+
+msgid "Document types"
+msgstr "Belge türleri"
+
+msgid "Documents"
+msgstr "Belgeler"
+
+msgid "Documents deletable by default"
+msgstr "Belgeler varsayılan olarak silinebilir"
+
+msgid "Documents keep history by default"
+msgstr "Belgeler varsayılan olarak geçmişi tutar"
+
+msgid "Documents mutable by default"
+msgstr "Belgeler varsayılan olarak değiştirilebilir"
+
+msgid "Documents of this contract"
+msgstr "Bu sözleşmenin belgeleri"
+
+msgid "Documents of type {type}"
+msgstr "{type} türündeki belgeler"
+
+msgid "Featured contracts"
+msgstr "Öne çıkan sözleşmeler"
+
+msgid "Filter documents"
+msgstr "Belgeleri süz"
+
+msgid "Filters"
+msgstr "Filtreler"
+
+msgid "Group"
+msgstr "Grup"
+
+msgid "Groups"
+msgstr "Gruplar"
+
+msgid "Groups of this contract"
+msgstr "Bu sözleşmenin grupları"
+
+msgid "Hide signers"
+msgstr "İmzalayanları gizle"
+
+msgid "History"
+msgstr "Geçmiş"
+
+msgid "ID"
+msgstr "Kimlik"
+
+msgid "Identities interacted"
+msgstr "Etkileşime giren kimlikler"
+
+msgid "Identity ID"
+msgstr "Kimlik ID’si"
+
+msgid "Index"
+msgstr "Dizin"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "{index} dizininde sıralanacak “{field}” özelliği yok."
+
+msgid "Indices of {type}"
+msgstr "{type} dizinleri"
+
+msgid "Keeps history"
+msgstr "Geçmişi tutar"
+
+msgid "Keeps version history"
+msgstr "Sürüm geçmişini tutar"
+
+msgid "Kept"
+msgstr "Tutuluyor"
+
+msgid "Kind"
+msgstr "Tür"
+
+msgid "Latest transition"
+msgstr "Son geçiş"
+
+msgid "Load more actions"
+msgstr "Daha fazla eylem yükle"
+
+msgid "Load older versions"
+msgstr "Daha eski sürümleri yükle"
+
+msgid "Manage in Bridge"
+msgstr "Bridge’de yönet"
+
+msgid "Maximum supply"
+msgstr "Azami arz"
+
+msgid "Member"
+msgstr "Üye"
+
+msgid "Members"
+msgstr "Üyeler"
+
+msgid "Members by power"
+msgstr "Ağırlığa göre üyeler"
+
+msgid "Metadata"
+msgstr "Üst veri"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Never"
+msgstr "Hiçbir zaman"
+
+msgid "Next"
+msgstr "Sonraki"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "No action has closed yet."
+msgstr "Henüz kapanmış bir eylem yok."
+
+msgid "No action is waiting for signatures."
+msgstr "İmza bekleyen eylem yok."
+
+msgid "No contract has this ID on this network."
+msgstr "Bu ağda bu kimliğe sahip bir sözleşme yok."
+
+msgid "No contracts match."
+msgstr "Eşleşen sözleşme yok."
+
+msgid "No document with this ID in this type."
+msgstr "Bu türde bu kimliğe sahip bir belge yok."
+
+msgid "No documents match."
+msgstr "Eşleşen belge yok."
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "Filtre yok: bu türün ilk belgeleri listeleniyor."
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "Dizin yok: belgeler yalnızca kimlikle alınabilir."
+
+msgid "No more documents."
+msgstr "Başka belge yok."
+
+msgid "No more revisions."
+msgstr "Başka revizyon yok."
+
+msgid "No revisions recorded."
+msgstr "Kayıtlı revizyon yok."
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "Hiçbir dizin hem “{field}” hem “{other}” içermiyor. Platform bir sorguyu tek bir dizinden yanıtlar."
+
+msgid "No transitions match."
+msgstr "Eşleşen geçiş yok."
+
+msgid "Nobody has created a document of this type yet."
+msgstr "Bu türde henüz kimse belge oluşturmadı."
+
+msgid "Not kept"
+msgstr "Tutulmuyor"
+
+msgid "Of the required"
+msgstr "Gerekenin"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "Yalnızca grup tanımlayan, çoğunlukla token’ları için tanımlayan sözleşmelerde grup bulunur."
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "Yalnızca bir özellikte aralık olabilir (<, ≤, >, ≥, ile başlar): “{field}” ve “{other}” ikisinde de var."
+
+msgid "Open"
+msgstr "Aç"
+
+msgid "Open a contract"
+msgstr "Bir sözleşme aç"
+
+msgid "Open a contract by ID"
+msgstr "Kimliğiyle sözleşme aç"
+
+msgid "Open a contract by its ID above."
+msgstr "Yukarıdan bir sözleşmeyi kimliğiyle açın."
+
+msgid "Open a part of this schema"
+msgstr "Bu şemanın bir bölümünü aç"
+
+msgid "Open groups page"
+msgstr "Gruplar sayfasını aç"
+
+msgid "Open in Platform Explorer"
+msgstr "Platform Explorer’da aç"
+
+msgid "Open the contract"
+msgstr "Sözleşmeyi aç"
+
+msgid "Open the current version"
+msgstr "Güncel sürümü aç"
+
+msgid "Open the whole schema"
+msgstr "Şemanın tamamını aç"
+
+msgid "Order by"
+msgstr "Sıralama"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "Sıralama dizinin özellik sırasını izlemeli ve “{field}” ile başlamalıdır."
+
+msgid "Overview"
+msgstr "Genel bakış"
+
+msgid "Owner"
+msgstr "Sahip"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "Sahip ve tarih yalnızca bu sayfadaki satırları daraltır; Platform Explorer sözleşmenin geçişlerini zamana göre sayfalar."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform bir seferde en fazla {DRIVE_MAX} belge döndürür."
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer yanıt vermedi, bu yüzden geçiş bilinmiyor."
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer devnet’leri kapsamaz."
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "Platform Explorer’ın bu belgeyle ilgili henüz kaydı yok."
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform yalnızca güncel sürümü, {currentVersion}, saklar. keepsHistory ayarlı bir sözleşme her sürümü tutar."
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform bu belgelerin yalnızca son revizyonunu saklar."
+
+msgid "Position"
+msgstr "Konum"
+
+msgid "Position {pos}"
+msgstr "Konum {pos}"
+
+msgid "Power"
+msgstr "Ağırlık"
+
+msgid "power {power}"
+msgstr "ağırlık {power}"
+
+msgid "Previous"
+msgstr "Önceki"
+
+msgid "Primary key ($id)"
+msgstr "Birincil anahtar ($id)"
+
+msgid "Properties, in order"
+msgstr "Özellikler, sırayla"
+
+msgid "Property"
+msgstr "Özellik"
+
+msgid "Proposed by"
+msgstr "Öneren"
+
+msgid "Provenance"
+msgstr "Köken"
+
+msgid "Query"
+msgstr "Sorgu"
+
+msgid "Read-only"
+msgstr "Salt okunur"
+
+msgid "Recorded"
+msgstr "Kaydedildi"
+
+msgid "Registered"
+msgstr "Kaydedildi"
+
+msgid "Remove filter"
+msgstr "Filtreyi kaldır"
+
+msgid "Removed"
+msgstr "Kaldırıldı"
+
+msgid "Required power"
+msgstr "Gereken ağırlık"
+
+msgid "Revision"
+msgstr "Revizyon"
+
+msgid "Revision {number}"
+msgstr "Revizyon {number}"
+
+msgid "Revision at least"
+msgstr "En az revizyon"
+
+msgid "Revision pages"
+msgstr "Revizyon sayfaları"
+
+msgid "Revisions"
+msgstr "Revizyonlar"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Platform Explorer’ın kaydettiği revizyonlar"
+
+msgid "Rows per page"
+msgstr "Sayfa başına satır"
+
+msgid "Run query"
+msgstr "Sorguyu çalıştır"
+
+msgid "Schema"
+msgstr "Şema"
+
+msgid "Schema JSON"
+msgstr "Şema JSON’u"
+
+msgid "Schema path"
+msgstr "Şema yolu"
+
+msgid "Schemas"
+msgstr "Şemalar"
+
+msgid "See changes"
+msgstr "Değişiklikleri gör"
+
+msgid "See its document types"
+msgstr "Belge türlerini gör"
+
+msgid "See the groups of this contract"
+msgstr "Bu sözleşmenin gruplarını gör"
+
+msgid "Show signers"
+msgstr "İmzalayanları göster"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "İlk {MAX_CHANGES} gösteriliyor."
+
+msgid "starts with"
+msgstr "ile başlar"
+
+msgid "State"
+msgstr "Durum"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "System"
+msgstr "Sistem"
+
+msgid "System contracts"
+msgstr "Sistem sözleşmeleri"
+
+msgid "System only"
+msgstr "Yalnızca sistem"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "Bu bir sözleşme kimliği değil: en fazla 44 base58 karakterdir."
+
+msgid "That isn’t a contract ID."
+msgstr "Bu bir sözleşme kimliği değil."
+
+msgid "That isn’t a document address."
+msgstr "Bu bir belge adresi değil."
+
+msgid "That isn’t a group address."
+msgstr "Bu bir grup adresi değil."
+
+msgid "That path isn’t in this schema."
+msgstr "Bu yol bu şemada yok."
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "“{field}” üzerindeki “in” koşulu en fazla 100 değer alır."
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "Sözleşme okunamadığı için geçmişinin tutulup tutulmadığı bilinmiyor."
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "Yukarıdaki belgenin verisi ve üst verisi doğrudan Platform’dan gelir."
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "Tüm sözleşmelerin listesi için Platform Explorer gerekir"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "Sıralamada in veya aralık koşulu olan “{field}” bulunmalıdır."
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "“{field}” üzerindeki “in” koşulunun değerlerinin hepsi farklı olmalıdır."
+
+msgid "These two versions are the same."
+msgstr "Bu iki sürüm aynı."
+
+msgid "This contract defines no groups."
+msgstr "Bu sözleşme grup tanımlamıyor."
+
+msgid "This contract defines no tokens."
+msgstr "Bu sözleşme token tanımlamıyor."
+
+msgid "This contract doesn’t keep its history."
+msgstr "Bu sözleşme geçmişini tutmuyor."
+
+msgid "This contract has no document type “{type}”."
+msgstr "Bu sözleşmede “{type}” belge türü yok."
+
+msgid "This contract has no document types."
+msgstr "Bu sözleşmede belge türü yok."
+
+msgid "This contract has no group at position {pos}."
+msgstr "Bu sözleşmede {pos}. konumda bir grup yok."
+
+msgid "This contract has no groups."
+msgstr "Bu sözleşmede grup yok."
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "Bu sözleşmenin {wantedVersion} sürümü yok."
+
+msgid "This document type doesn’t keep its history."
+msgstr "Bu belge türü geçmişini tutmuyor."
+
+msgid "This group has no members."
+msgstr "Bu grubun üyesi yok."
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "Token ID"
+msgstr "Token kimliği"
+
+msgid "token position {tokenPosition}"
+msgstr "token konumu {tokenPosition}"
+
+msgid "Tokens"
+msgstr "Token’lar"
+
+msgid "Tokens of this contract"
+msgstr "Bu sözleşmenin token’ları"
+
+msgid "Total power"
+msgstr "Toplam ağırlık"
+
+msgid "Transferred"
+msgstr "Devredildi"
+
+msgid "Transition"
+msgstr "Geçiş"
+
+msgid "Transitions"
+msgstr "Geçişler"
+
+msgid "Transitions on this contract"
+msgstr "Bu sözleşmenin geçişleri"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Types"
+msgstr "Türler"
+
+msgid "Unique"
+msgstr "Benzersiz"
+
+msgid "Updated"
+msgstr "Güncellendi"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "Bu sözleşmenin belgelerini okumak için belge tarayıcısını kullanın."
+
+msgid "value"
+msgstr "değer"
+
+msgid "Value"
+msgstr "Değer"
+
+msgid "Values, separated by commas"
+msgstr "Değerler, virgülle ayrılmış"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "Sürüm {fromVersion} → sürüm {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "{toVersion} sürümü kaydedilen ilk sürüm, bu yüzden öncesinde karşılaştıracak bir şey yok."
+
+msgid "Version {version}"
+msgstr "Sürüm {version}"
+
+msgid "Version history"
+msgstr "Sürüm geçmişi"
+
+msgid "Versions of this contract"
+msgstr "Bu sözleşmenin sürümleri"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "Bir belgeyi hangi geçişin yazdığını görmek için Platform Explorer gerekir"
+
+msgid "With tokens"
+msgstr "Token’lı"
+
+msgid "Won’t run"
+msgstr "Çalışmayacak"
+
+msgid "Yes"
+msgstr "Evet"

@@ -12,3 +12,732 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "“{field}”有多个条件。请只保留一个，或各用一个下限和上限。"
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "“{field}”不在此类型的任何索引中，因此 Platform 无法按它筛选。"
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "“{field}”之前需要先给“{other}”设置条件：索引 {index} 按顺序读取，靠前的属性在前。"
+
+msgid "“{field}” needs a value."
+msgstr "“{field}”需要一个值。"
+
+msgid "“{field}” takes a whole number."
+msgstr "“{field}”需要整数。"
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "“{field}”需要标识符：以 base58 书写的 32 字节。"
+
+msgid "“{field}” takes true or false."
+msgstr "“{field}”需要 true 或 false。"
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "“开头为”适用于文本，而“{field}”不是文本。"
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, other {# 项变更}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, other {# 位签名者}}"
+
+msgid "{f}, ascending"
+msgstr "{f}，升序"
+
+msgid "{f}, descending"
+msgstr "{f}，降序"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field}：用“{searched}”搜索“{typed}”（DPNS 将 o、i、l 存为 0、1、1）"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}，升序"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}，降序"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} 个属性 · {indices} 个索引"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}，所需权重 {requiredPower}，已达 {signedPower}"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "合约只能包含代币或群组之一。"
+
+msgid "A contract ID"
+msgstr "合约 ID"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "合约 ID 最多为 44 个 base58 字符。"
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "群组列出各身份及其权重；一项决定需要权重达到群组的阈值。"
+
+msgid "A query can have only one “in” clause."
+msgstr "一次查询只能有一个“in”条件。"
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "“{field}”上的范围条件（<、≤、>、≥、开头为）必须用在索引 {index} 中最后一个被筛选的属性上，但“{other}”排在它后面。"
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Action details"
+msgstr "操作详情"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Activity"
+msgstr "活动"
+
+msgid "Add a filter"
+msgstr "添加筛选"
+
+msgid "Added"
+msgstr "新增"
+
+msgid "All"
+msgstr "全部"
+
+msgid "All contracts"
+msgstr "所有合约"
+
+msgid "All types"
+msgstr "所有类型"
+
+msgid "Any index"
+msgstr "任意索引"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "at block {height}"
+msgstr "区块 {height}"
+
+msgid "Back to the contract"
+msgstr "返回合约"
+
+msgid "Back to the previous page"
+msgstr "返回上一页"
+
+msgid "Base supply"
+msgstr "基础供应量"
+
+msgid "Browse documents"
+msgstr "浏览文档"
+
+msgid "Browse the documents of this type"
+msgstr "浏览此类型的文档"
+
+msgid "Can be deleted"
+msgstr "可以删除"
+
+msgid "Change or clear the filters to see more."
+msgstr "修改或清除筛选即可看到更多。"
+
+msgid "Changed"
+msgstr "已变更"
+
+msgid "Changes"
+msgstr "变更"
+
+msgid "Choose a version to see what it changed."
+msgstr "选择一个版本，查看它改了什么。"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Clear filters"
+msgstr "清除筛选"
+
+msgid "Closed"
+msgstr "已关闭"
+
+msgid "Compare"
+msgstr "比较"
+
+msgid "Compare with"
+msgstr "比较对象"
+
+msgid "Comparison"
+msgstr "比较方式"
+
+msgid "Config"
+msgstr "配置"
+
+msgid "Configuration"
+msgstr "配置"
+
+msgid "Configuration JSON"
+msgstr "配置 JSON"
+
+msgid "Contested"
+msgstr "有争议"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "合约活动需要 Platform Explorer"
+
+msgid "Contracts"
+msgstr "合约"
+
+msgid "Created"
+msgstr "创建时间"
+
+msgid "Created or last changed by"
+msgstr "创建或最后修改它的交易"
+
+msgid "Current"
+msgstr "当前"
+
+msgid "Data"
+msgstr "数据"
+
+msgid "Data at this revision"
+msgstr "此修订的数据"
+
+msgid "Data contracts"
+msgstr "数据合约"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "数据合约定义应用在 Platform 上存储什么：文档类型、代币和群组。"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Decimals"
+msgstr "小数位数"
+
+msgid "Default"
+msgstr "默认"
+
+msgid "Deleted"
+msgstr "已删除"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "Document data"
+msgstr "文档数据"
+
+msgid "Document type"
+msgstr "文档类型"
+
+msgid "Document types"
+msgstr "文档类型"
+
+msgid "Documents"
+msgstr "文档"
+
+msgid "Documents deletable by default"
+msgstr "文档默认可删除"
+
+msgid "Documents keep history by default"
+msgstr "文档默认保留历史"
+
+msgid "Documents mutable by default"
+msgstr "文档默认可修改"
+
+msgid "Documents of this contract"
+msgstr "此合约的文档"
+
+msgid "Documents of type {type}"
+msgstr "类型为 {type} 的文档"
+
+msgid "Featured contracts"
+msgstr "精选合约"
+
+msgid "Filter documents"
+msgstr "筛选文档"
+
+msgid "Filters"
+msgstr "筛选"
+
+msgid "Group"
+msgstr "群组"
+
+msgid "Groups"
+msgstr "群组"
+
+msgid "Groups of this contract"
+msgstr "此合约的群组"
+
+msgid "Hide signers"
+msgstr "隐藏签名者"
+
+msgid "History"
+msgstr "历史"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities interacted"
+msgstr "参与过的身份"
+
+msgid "Identity ID"
+msgstr "身份 ID"
+
+msgid "Index"
+msgstr "索引"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "索引 {index} 没有可用于排序的属性“{field}”。"
+
+msgid "Indices of {type}"
+msgstr "{type} 的索引"
+
+msgid "Keeps history"
+msgstr "保留历史"
+
+msgid "Keeps version history"
+msgstr "保留版本历史"
+
+msgid "Kept"
+msgstr "保留"
+
+msgid "Kind"
+msgstr "类型"
+
+msgid "Latest transition"
+msgstr "最新状态转换"
+
+msgid "Load more actions"
+msgstr "加载更多操作"
+
+msgid "Load older versions"
+msgstr "加载更早的版本"
+
+msgid "Manage in Bridge"
+msgstr "在 Bridge 中管理"
+
+msgid "Maximum supply"
+msgstr "最大供应量"
+
+msgid "Member"
+msgstr "成员"
+
+msgid "Members"
+msgstr "成员"
+
+msgid "Members by power"
+msgstr "按权重排序的成员"
+
+msgid "Metadata"
+msgstr "元数据"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Never"
+msgstr "从未"
+
+msgid "Next"
+msgstr "下一页"
+
+msgid "No"
+msgstr "否"
+
+msgid "No action has closed yet."
+msgstr "尚无已关闭的操作。"
+
+msgid "No action is waiting for signatures."
+msgstr "没有等待签名的操作。"
+
+msgid "No contract has this ID on this network."
+msgstr "此网络上没有使用该 ID 的合约。"
+
+msgid "No contracts match."
+msgstr "没有匹配的合约。"
+
+msgid "No document with this ID in this type."
+msgstr "此类型中没有使用该 ID 的文档。"
+
+msgid "No documents match."
+msgstr "没有匹配的文档。"
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "没有筛选：列出此类型的前几个文档。"
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "没有索引：只能按 ID 获取文档。"
+
+msgid "No more documents."
+msgstr "没有更多文档了。"
+
+msgid "No more revisions."
+msgstr "没有更多修订了。"
+
+msgid "No revisions recorded."
+msgstr "没有记录的修订。"
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "没有任何一个索引同时包含“{field}”和“{other}”。Platform 只用一个索引来回答查询。"
+
+msgid "No transitions match."
+msgstr "没有匹配的状态转换。"
+
+msgid "Nobody has created a document of this type yet."
+msgstr "还没有人创建过此类型的文档。"
+
+msgid "Not kept"
+msgstr "不保留"
+
+msgid "Of the required"
+msgstr "占所需比例"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "只有定义了群组（通常用于其代币）的合约才有群组。"
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "只有一个属性可以使用范围条件（<、≤、>、≥、开头为）：“{field}”和“{other}”都用了。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open a contract"
+msgstr "打开合约"
+
+msgid "Open a contract by ID"
+msgstr "按 ID 打开合约"
+
+msgid "Open a contract by its ID above."
+msgstr "请在上方按 ID 打开合约。"
+
+msgid "Open a part of this schema"
+msgstr "打开此模式的一部分"
+
+msgid "Open groups page"
+msgstr "打开群组页面"
+
+msgid "Open in Platform Explorer"
+msgstr "在 Platform Explorer 中打开"
+
+msgid "Open the contract"
+msgstr "打开合约"
+
+msgid "Open the current version"
+msgstr "打开当前版本"
+
+msgid "Open the whole schema"
+msgstr "打开完整模式"
+
+msgid "Order by"
+msgstr "排序方式"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "排序必须遵循索引的属性顺序，并以“{field}”开头。"
+
+msgid "Overview"
+msgstr "概览"
+
+msgid "Owner"
+msgstr "所有者"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "所有者和日期只会缩小本页的行；Platform Explorer 按时间对合约的状态转换分页。"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform 一次最多返回 {DRIVE_MAX} 个文档。"
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer 没有响应，因此不知道是哪个状态转换。"
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer 不支持开发网。"
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "Platform Explorer 还没有这个文档的记录。"
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform 只存储当前版本 {currentVersion}。设置了 keepsHistory 的合约会保留每个版本。"
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform 只存储这些文档的最新修订。"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Position {pos}"
+msgstr "位置 {pos}"
+
+msgid "Power"
+msgstr "权重"
+
+msgid "power {power}"
+msgstr "权重 {power}"
+
+msgid "Previous"
+msgstr "上一页"
+
+msgid "Primary key ($id)"
+msgstr "主键（$id）"
+
+msgid "Properties, in order"
+msgstr "属性（按顺序）"
+
+msgid "Property"
+msgstr "属性"
+
+msgid "Proposed by"
+msgstr "提议者"
+
+msgid "Provenance"
+msgstr "来源"
+
+msgid "Query"
+msgstr "查询"
+
+msgid "Read-only"
+msgstr "只读"
+
+msgid "Recorded"
+msgstr "记录时间"
+
+msgid "Registered"
+msgstr "注册"
+
+msgid "Remove filter"
+msgstr "移除筛选"
+
+msgid "Removed"
+msgstr "移除"
+
+msgid "Required power"
+msgstr "所需权重"
+
+msgid "Revision"
+msgstr "修订"
+
+msgid "Revision {number}"
+msgstr "修订 {number}"
+
+msgid "Revision at least"
+msgstr "修订不低于"
+
+msgid "Revision pages"
+msgstr "修订分页"
+
+msgid "Revisions"
+msgstr "修订"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Platform Explorer 记录的修订"
+
+msgid "Rows per page"
+msgstr "每页行数"
+
+msgid "Run query"
+msgstr "运行查询"
+
+msgid "Schema"
+msgstr "模式"
+
+msgid "Schema JSON"
+msgstr "模式 JSON"
+
+msgid "Schema path"
+msgstr "模式路径"
+
+msgid "Schemas"
+msgstr "模式"
+
+msgid "See changes"
+msgstr "查看变更"
+
+msgid "See its document types"
+msgstr "查看其文档类型"
+
+msgid "See the groups of this contract"
+msgstr "查看此合约的群组"
+
+msgid "Show signers"
+msgstr "显示签名者"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "显示前 {MAX_CHANGES} 项。"
+
+msgid "starts with"
+msgstr "开头为"
+
+msgid "State"
+msgstr "状态"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "System"
+msgstr "系统"
+
+msgid "System contracts"
+msgstr "系统合约"
+
+msgid "System only"
+msgstr "仅系统"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "这不是合约 ID：最多 44 个 base58 字符。"
+
+msgid "That isn’t a contract ID."
+msgstr "这不是合约 ID。"
+
+msgid "That isn’t a document address."
+msgstr "这不是文档地址。"
+
+msgid "That isn’t a group address."
+msgstr "这不是群组地址。"
+
+msgid "That path isn’t in this schema."
+msgstr "此模式中没有该路径。"
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "“{field}”上的“in”条件最多可含 100 个值。"
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "无法读取该合约，因此不知道它是否保留历史。"
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "上方文档的数据和元数据直接来自 Platform。"
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "所有合约的列表需要 Platform Explorer"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "排序必须包含带有 in 或范围条件的“{field}”。"
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "“{field}”上“in”条件的值必须各不相同。"
+
+msgid "These two versions are the same."
+msgstr "这两个版本相同。"
+
+msgid "This contract defines no groups."
+msgstr "此合约没有定义群组。"
+
+msgid "This contract defines no tokens."
+msgstr "此合约没有定义代币。"
+
+msgid "This contract doesn’t keep its history."
+msgstr "此合约不保留历史。"
+
+msgid "This contract has no document type “{type}”."
+msgstr "此合约没有文档类型“{type}”。"
+
+msgid "This contract has no document types."
+msgstr "此合约没有文档类型。"
+
+msgid "This contract has no group at position {pos}."
+msgstr "此合约在位置 {pos} 没有群组。"
+
+msgid "This contract has no groups."
+msgstr "此合约没有群组。"
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "此合约没有版本 {wantedVersion}。"
+
+msgid "This document type doesn’t keep its history."
+msgstr "此文档类型不保留历史。"
+
+msgid "This group has no members."
+msgstr "此群组没有成员。"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "Token ID"
+msgstr "代币 ID"
+
+msgid "token position {tokenPosition}"
+msgstr "代币位置 {tokenPosition}"
+
+msgid "Tokens"
+msgstr "代币"
+
+msgid "Tokens of this contract"
+msgstr "此合约的代币"
+
+msgid "Total power"
+msgstr "总权重"
+
+msgid "Transferred"
+msgstr "转移时间"
+
+msgid "Transition"
+msgstr "状态转换"
+
+msgid "Transitions"
+msgstr "状态转换"
+
+msgid "Transitions on this contract"
+msgstr "此合约的状态转换"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Types"
+msgstr "类型"
+
+msgid "Unique"
+msgstr "唯一"
+
+msgid "Updated"
+msgstr "更新时间"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "请用文档浏览器查看此合约的文档。"
+
+msgid "value"
+msgstr "值"
+
+msgid "Value"
+msgstr "数值"
+
+msgid "Values, separated by commas"
+msgstr "值，用逗号分隔"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "从版本 {fromVersion} 到版本 {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "版本 {toVersion} 是第一个记录的版本，之前没有可比较的内容。"
+
+msgid "Version {version}"
+msgstr "版本 {version}"
+
+msgid "Version history"
+msgstr "版本历史"
+
+msgid "Versions of this contract"
+msgstr "此合约的版本"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "查看是哪个状态转换写入了文档需要 Platform Explorer"
+
+msgid "With tokens"
+msgstr "含代币"
+
+msgid "Won’t run"
+msgstr "不会运行"
+
+msgid "Yes"
+msgstr "是"

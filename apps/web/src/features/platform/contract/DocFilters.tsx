@@ -85,6 +85,7 @@ export function DocFilters({ indices, schema, initial, limits, onRun, onClear }:
     pinned === '' ? indexedFields(indices) : (chosen?.properties.map((p) => p.field) ?? [])
   const unused = fields.filter((f) => !drafts.some((d) => d.field === f))
   const orderFields = chosen?.properties.map((p) => p.field) ?? []
+  const pinnedOrderField = orderField(orderItem)
 
   const update = (i: number, patch: Partial<Draft>) => {
     setDrafts((all) => all.map((d, j) => (j === i ? { ...d, ...patch } : d)))
@@ -140,11 +141,11 @@ export function DocFilters({ indices, schema, initial, limits, onRun, onClear }:
                 {t`${f}, descending`}
               </option>,
             ])}
-            {orderItem !== '' && !orderFields.includes(orderField(orderItem)) ? (
+            {orderItem !== '' && !orderFields.includes(pinnedOrderField) ? (
               <option value={orderItem}>
                 {orderDirection(orderItem) === 'desc'
-                  ? t`${orderField(orderItem)}, descending`
-                  : t`${orderField(orderItem)}, ascending`}
+                  ? t`${pinnedOrderField}, descending`
+                  : t`${pinnedOrderField}, ascending`}
               </option>
             ) : null}
           </select>
@@ -194,7 +195,7 @@ export function DocFilters({ indices, schema, initial, limits, onRun, onClear }:
                 </select>
                 <select
                   className="dh-select dh-select--sm"
-                  aria-label={t`Operator`}
+                  aria-label={t`Comparison`}
                   value={d.op}
                   onChange={(e) => {
                     update(i, { op: e.target.value as WhereOp })
@@ -233,16 +234,18 @@ export function DocFilters({ indices, schema, initial, limits, onRun, onClear }:
       )}
 
       {problems.length > 0 ? (
-        <ul className="grid gap-1" role="alert" data-filter-problems>
-          {problems.map((p, i) => (
-            <li key={i} className="flex items-start gap-2" data-rule={p.rule}>
-              <Badge tone="danger" size="sm">
-                {t`Won’t run`}
-              </Badge>
-              <span>{problemText(i18n, p)}</span>
-            </li>
-          ))}
-        </ul>
+        <div role="alert" data-filter-problems>
+          <ul className="grid gap-1">
+            {problems.map((p, i) => (
+              <li key={i} className="flex items-start gap-2" data-rule={p.rule}>
+                <Badge tone="danger" size="sm">
+                  {t`Won’t run`}
+                </Badge>
+                <span>{problemText(i18n, p)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
 
       <div className="flex flex-wrap items-center gap-2">

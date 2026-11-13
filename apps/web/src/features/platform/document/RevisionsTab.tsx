@@ -9,6 +9,9 @@ import type { DocumentContext } from './DocumentPage'
 /** Platform answers at most this many revisions in one read. */
 export const REVISION_PAGE = 10
 
+const revisionNumber = (revision: bigint | number | undefined | null, fallback: number): string =>
+  String(revision ?? fallback)
+
 function pageLink(ctx: DocumentContext, page: number): LinkProps {
   return {
     to: '/document/$contract/$type/$id',
@@ -72,23 +75,26 @@ function Chunk({ ctx, n, startAtMs }: { ctx: DocumentContext; n: number; startAt
         />
       ) : (
         <ol className="grid gap-3" start={first} aria-label={t`Revisions`}>
-          {rows.map((r, i) => (
-            <li
-              key={r.atMs}
-              className="grid gap-2 border-t border-line pt-3"
-              data-revision={String(r.document.revision ?? first + i)}
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="info">{t`Revision ${String(r.document.revision ?? first + i)}`}</Badge>
-                <Time ms={r.atMs} mode="both" />
-              </div>
-              <JsonView
-                value={r.document.data}
-                collapsedDepth={1}
-                label={t`Data at this revision`}
-              />
-            </li>
-          ))}
+          {rows.map((r, i) => {
+            const number = revisionNumber(r.document.revision, first + i)
+            return (
+              <li
+                key={r.atMs}
+                className="grid gap-2 border-t border-line pt-3"
+                data-revision={number}
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge tone="info">{t`Revision ${number}`}</Badge>
+                  <Time ms={r.atMs} mode="both" />
+                </div>
+                <JsonView
+                  value={r.document.data}
+                  collapsedDepth={1}
+                  label={t`Data at this revision`}
+                />
+              </li>
+            )
+          })}
         </ol>
       )}
       <nav aria-label={t`Revision pages`} className="flex items-center gap-2" data-revision-pager>

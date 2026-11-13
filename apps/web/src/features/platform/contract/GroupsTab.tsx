@@ -16,7 +16,14 @@ export function GroupsTab({ ctx }: { ctx: ContractContext }) {
       {
         id: 'position',
         header: t`Position`,
-        cell: ({ row }) => row.original.position,
+        cell: ({ row }) => (
+          <Link
+            to="/group/$contract/$pos"
+            params={{ contract: id, pos: String(row.original.position) }}
+          >
+            {row.original.position}
+          </Link>
+        ),
         meta: { numeric: true, phone: 'title' },
       },
       {

@@ -22,7 +22,6 @@ import {
   prevCursor,
   type DocumentsSearch,
 } from './doc-query'
-import { problemText } from './problem-text'
 import { cellText } from './cell-text'
 
 export interface DocumentsPageProps {
@@ -32,7 +31,7 @@ export interface DocumentsPageProps {
 }
 
 export const PAGE_SIZES = [10, 25, 50, 100] as const
-const MAX_PROPERTY_COLUMNS = 6
+const MAX_PROPERTY_COLUMNS = 3
 
 function documentsLink(id: string, type: string, patch: Partial<DocumentsSearch>): LinkProps {
   return {
@@ -127,7 +126,7 @@ interface BrowserProps {
 }
 
 function Browser({ id, type, schema, indices, search, contractStamp }: BrowserProps) {
-  const { t, i18n } = useLingui()
+  const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
   const plan = useMemo(
@@ -209,8 +208,8 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
             <p className="text-ink-2" data-conversions>
               {plan.conversions
                 .map(
-                  (c) =>
-                    t`${c.field}: searching “${c.searched}” for “${c.typed}” (DPNS stores o, i and l as 0, 1 and 1)`,
+                  ({ field, searched, typed }) =>
+                    t`${field}: searching “${searched}” for “${typed}” (DPNS stores o, i and l as 0, 1 and 1)`,
                 )
                 .join(' · ')}
             </p>
@@ -224,11 +223,11 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
         source={query.data ? stampOf(query.data) : undefined}
       >
         {plan.problems.length > 0 ? (
-          <ul className="grid gap-1" role="alert" data-url-problems>
-            {plan.problems.map((p, i) => (
-              <li key={i}>{problemText(i18n, p)}</li>
-            ))}
-          </ul>
+          <Empty
+            kind="no-match"
+            title={t`Won’t run`}
+            body={t`Change or clear the filters to see more.`}
+          />
         ) : query.isError && !query.data ? (
           <div className="grid gap-3">
             <ErrorState

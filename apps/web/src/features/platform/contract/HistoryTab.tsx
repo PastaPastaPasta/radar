@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
 import { useQueries } from '@tanstack/react-query'
@@ -80,16 +81,17 @@ function Diff({ ctx, versions }: { ctx: ContractContext; versions: ContractVersi
       ? versions.find((v) => v.contract.version === search.base)
       : versions[index - 1]
   if (!to) return null
+  const toVersion = to.contract.version
   if (!from) {
     return (
       <p role="status" className="text-ink-2" data-diff-empty>
-        {t`Version ${to.contract.version} is the first one recorded, so there is nothing before it to compare with.`}
+        {t`Version ${toVersion} is the first one recorded, so there is nothing before it to compare with.`}
       </p>
     )
   }
   const changes = diffJson(comparable(from.contract), comparable(to.contract))
+  const changeCount = changes.length
   const fromVersion = from.contract.version
-  const toVersion = to.contract.version
   return (
     <section className="grid gap-3" aria-label={t`Changes`} data-diff>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -109,11 +111,14 @@ function Diff({ ctx, versions }: { ctx: ContractContext; versions: ContractVersi
           >
             {versions
               .filter((v) => v !== to)
-              .map((v) => (
-                <option key={v.contract.version} value={v.contract.version}>
-                  {t`Version ${v.contract.version}`}
-                </option>
-              ))}
+              .map((v) => {
+                const version = v.contract.version
+                return (
+                  <option key={version} value={version}>
+                    {t`Version ${version}`}
+                  </option>
+                )
+              })}
           </select>
         </label>
       </div>
@@ -123,7 +128,9 @@ function Diff({ ctx, versions }: { ctx: ContractContext; versions: ContractVersi
         </p>
       ) : (
         <>
-          <p className="text-ink-2">{t`${formatInt(changes.length)} changes`}</p>
+          <p className="text-ink-2">
+            {plural(changeCount, { one: '# change', other: '# changes' })}
+          </p>
           <ul>
             {changes.slice(0, MAX_CHANGES).map((c) => (
               <ChangeRow
@@ -179,6 +186,7 @@ function Versions({ ctx }: { ctx: ContractContext }) {
     }),
   ]
   const failed = queries.find((q) => q.isError && !q.data)
+  const wantedVersion = search.rev
   return (
     <Card
       title={t`Version history`}
@@ -195,7 +203,12 @@ function Versions({ ctx }: { ctx: ContractContext }) {
         <Skeleton shape="row" count={3} />
       ) : (
         <div className="grid gap-4">
-          <div className="overflow-x-auto">
+          <div
+            className="overflow-x-auto"
+            tabIndex={0}
+            role="region"
+            aria-label={t`Version history`}
+          >
             <table className="rx-table w-full" aria-label={t`Versions of this contract`}>
               <thead>
                 <tr>
@@ -244,7 +257,7 @@ function Versions({ ctx }: { ctx: ContractContext }) {
               {t`Load older versions`}
             </button>
           ) : null}
-          {search.rev === undefined ? (
+          {wantedVersion === undefined ? (
             <p className="text-ink-2">{t`Choose a version to see what it changed.`}</p>
           ) : missing && more ? (
             <Skeleton shape="block" />
@@ -253,7 +266,7 @@ function Versions({ ctx }: { ctx: ContractContext }) {
           ) : (
             <Empty
               kind="not-found"
-              title={t`This contract has no version ${search.rev}.`}
+              title={t`This contract has no version ${wantedVersion}.`}
               body={
                 <Link {...versionLink(ctx.contract.version)}>{t`Open the current version`}</Link>
               }
@@ -267,13 +280,14 @@ function Versions({ ctx }: { ctx: ContractContext }) {
 
 export function HistoryTab({ ctx }: { ctx: ContractContext }) {
   const { t } = useLingui()
+  const currentVersion = ctx.contract.version
   if (!ctx.contract.keepsHistory) {
     return (
       <Card title={t`Version history`} layer="platform" source={ctx.stamp} id="history">
         <Empty
           kind="none-yet"
           title={t`This contract doesn’t keep its history.`}
-          body={t`Platform stores only its current version, ${ctx.contract.version}. A contract that sets keepsHistory keeps every version.`}
+          body={t`Platform stores only its current version, ${currentVersion}. A contract that sets keepsHistory keeps every version.`}
         />
       </Card>
     )

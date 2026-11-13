@@ -11,7 +11,7 @@ export function ConfigTab({ ctx }: { ctx: ContractContext }) {
   const c = contract.config
   return (
     <Card title={t`Configuration`} layer="platform" source={stamp} id="config">
-      <div className="grid gap-4">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4">
         <KeyValue
           columns={2}
           items={[

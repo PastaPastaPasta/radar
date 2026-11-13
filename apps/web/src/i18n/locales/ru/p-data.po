@@ -12,3 +12,732 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "У «{field}» больше одного условия. Оставьте одно или задайте нижнюю и верхнюю границы."
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "«{field}» нет ни в одном индексе этого типа, поэтому Platform не может по нему фильтровать."
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "Для «{field}» сначала нужно условие по «{other}»: индекс {index} читается по порядку, сначала более ранние свойства."
+
+msgid "“{field}” needs a value."
+msgstr "Для «{field}» нужно значение."
+
+msgid "“{field}” takes a whole number."
+msgstr "«{field}» принимает целое число."
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "«{field}» принимает идентификатор: 32 байта в формате base58."
+
+msgid "“{field}” takes true or false."
+msgstr "«{field}» принимает true или false."
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "«начинается с» работает с текстом, а «{field}» — не текст."
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, one {# изменение} few {# изменения} many {# изменений} other {# изменения}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, one {# подписант} few {# подписанта} many {# подписантов} other {# подписанта}}"
+
+msgid "{f}, ascending"
+msgstr "{f}, по возрастанию"
+
+msgid "{f}, descending"
+msgstr "{f}, по убыванию"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field}: поиск «{searched}» вместо «{typed}» (DPNS хранит o, i и l как 0, 1 и 1)"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}, по возрастанию"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}, по убыванию"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} свойств · {indices} индексов"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}, вес {signedPower} из требуемых {requiredPower}"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "Контракт может содержать только токены или только группы."
+
+msgid "A contract ID"
+msgstr "ID контракта"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "ID контракта — не более 44 символов base58."
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "Группа перечисляет идентичности и вес каждой; для решения нужно набрать вес, достаточный для порога группы."
+
+msgid "A query can have only one “in” clause."
+msgstr "В запросе может быть только одно условие «in»."
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "Диапазон (<, ≤, >, ≥, начинается с) по «{field}» должен быть на последнем фильтруемом свойстве индекса {index}, но «{other}» идёт после него."
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "Действие"
+
+msgid "Action details"
+msgstr "Подробности действия"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Active"
+msgstr "Активна"
+
+msgid "Activity"
+msgstr "Активность"
+
+msgid "Add a filter"
+msgstr "Добавить фильтр"
+
+msgid "Added"
+msgstr "Добавлено"
+
+msgid "All"
+msgstr "Все"
+
+msgid "All contracts"
+msgstr "Все контракты"
+
+msgid "All types"
+msgstr "Все типы"
+
+msgid "Any index"
+msgstr "Любой индекс"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "at block {height}"
+msgstr "на блоке {height}"
+
+msgid "Back to the contract"
+msgstr "Назад к контракту"
+
+msgid "Back to the previous page"
+msgstr "Назад на предыдущую страницу"
+
+msgid "Base supply"
+msgstr "Базовое предложение"
+
+msgid "Browse documents"
+msgstr "Просмотреть документы"
+
+msgid "Browse the documents of this type"
+msgstr "Просмотреть документы этого типа"
+
+msgid "Can be deleted"
+msgstr "Можно удалить"
+
+msgid "Change or clear the filters to see more."
+msgstr "Измените или сбросьте фильтры, чтобы увидеть больше."
+
+msgid "Changed"
+msgstr "Изменено"
+
+msgid "Changes"
+msgstr "Изменения"
+
+msgid "Choose a version to see what it changed."
+msgstr "Выберите версию, чтобы увидеть, что она изменила."
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "Clear filters"
+msgstr "Сбросить фильтры"
+
+msgid "Closed"
+msgstr "Закрытые"
+
+msgid "Compare"
+msgstr "Сравнить"
+
+msgid "Compare with"
+msgstr "Сравнить с"
+
+msgid "Comparison"
+msgstr "Сравнение"
+
+msgid "Config"
+msgstr "Конфиг"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "Configuration JSON"
+msgstr "Конфигурация в JSON"
+
+msgid "Contested"
+msgstr "Оспариваемый"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "Активность контракта требует Platform Explorer"
+
+msgid "Contracts"
+msgstr "Контракты"
+
+msgid "Created"
+msgstr "Создано"
+
+msgid "Created or last changed by"
+msgstr "Создан или последний раз изменён"
+
+msgid "Current"
+msgstr "Текущий"
+
+msgid "Data"
+msgstr "Данные"
+
+msgid "Data at this revision"
+msgstr "Данные в этой ревизии"
+
+msgid "Data contracts"
+msgstr "Контракты данных"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "Контракты данных определяют, что приложение хранит в Platform: типы документов, токены и группы."
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Decimals"
+msgstr "Десятичные знаки"
+
+msgid "Default"
+msgstr "По умолчанию"
+
+msgid "Deleted"
+msgstr "Удалён"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document data"
+msgstr "Данные документа"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Document types"
+msgstr "Типы документов"
+
+msgid "Documents"
+msgstr "Документы"
+
+msgid "Documents deletable by default"
+msgstr "Документы удаляемы по умолчанию"
+
+msgid "Documents keep history by default"
+msgstr "Документы хранят историю по умолчанию"
+
+msgid "Documents mutable by default"
+msgstr "Документы изменяемы по умолчанию"
+
+msgid "Documents of this contract"
+msgstr "Документы этого контракта"
+
+msgid "Documents of type {type}"
+msgstr "Документы типа {type}"
+
+msgid "Featured contracts"
+msgstr "Избранные контракты"
+
+msgid "Filter documents"
+msgstr "Фильтр документов"
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "Group"
+msgstr "Группа"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Groups of this contract"
+msgstr "Группы этого контракта"
+
+msgid "Hide signers"
+msgstr "Скрыть подписантов"
+
+msgid "History"
+msgstr "История"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities interacted"
+msgstr "Взаимодействовавшие идентичности"
+
+msgid "Identity ID"
+msgstr "ID идентичности"
+
+msgid "Index"
+msgstr "Индекс"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "В индексе {index} нет свойства «{field}» для сортировки."
+
+msgid "Indices of {type}"
+msgstr "Индексы {type}"
+
+msgid "Keeps history"
+msgstr "Хранит историю"
+
+msgid "Keeps version history"
+msgstr "Хранит историю версий"
+
+msgid "Kept"
+msgstr "Хранится"
+
+msgid "Kind"
+msgstr "Тип"
+
+msgid "Latest transition"
+msgstr "Последний переход"
+
+msgid "Load more actions"
+msgstr "Загрузить ещё действия"
+
+msgid "Load older versions"
+msgstr "Загрузить более старые версии"
+
+msgid "Manage in Bridge"
+msgstr "Управлять в Bridge"
+
+msgid "Maximum supply"
+msgstr "Максимальное предложение"
+
+msgid "Member"
+msgstr "Участник"
+
+msgid "Members"
+msgstr "Участники"
+
+msgid "Members by power"
+msgstr "Участники по весу"
+
+msgid "Metadata"
+msgstr "Метаданные"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Never"
+msgstr "Никогда"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No action has closed yet."
+msgstr "Пока ни одно действие не закрыто."
+
+msgid "No action is waiting for signatures."
+msgstr "Ни одно действие не ждёт подписей."
+
+msgid "No contract has this ID on this network."
+msgstr "В этой сети нет контракта с таким ID."
+
+msgid "No contracts match."
+msgstr "Подходящих контрактов нет."
+
+msgid "No document with this ID in this type."
+msgstr "В этом типе нет документа с таким ID."
+
+msgid "No documents match."
+msgstr "Подходящих документов нет."
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "Без фильтра: показаны первые документы этого типа."
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "Индексов нет: документы можно получить только по ID."
+
+msgid "No more documents."
+msgstr "Больше документов нет."
+
+msgid "No more revisions."
+msgstr "Больше ревизий нет."
+
+msgid "No revisions recorded."
+msgstr "Ревизий не записано."
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "Ни один индекс не содержит одновременно «{field}» и «{other}». Platform отвечает на запрос по одному индексу."
+
+msgid "No transitions match."
+msgstr "Подходящих переходов нет."
+
+msgid "Nobody has created a document of this type yet."
+msgstr "Документов этого типа ещё никто не создавал."
+
+msgid "Not kept"
+msgstr "Не хранится"
+
+msgid "Of the required"
+msgstr "От требуемого"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "Группы есть только у контракта, который их определяет, обычно для своих токенов."
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "Диапазон (<, ≤, >, ≥, начинается с) может быть только у одного свойства: он задан и у «{field}», и у «{other}»."
+
+msgid "Open"
+msgstr "Открыть"
+
+msgid "Open a contract"
+msgstr "Открыть контракт"
+
+msgid "Open a contract by ID"
+msgstr "Открыть контракт по ID"
+
+msgid "Open a contract by its ID above."
+msgstr "Откройте контракт по ID выше."
+
+msgid "Open a part of this schema"
+msgstr "Открыть часть этой схемы"
+
+msgid "Open groups page"
+msgstr "Открыть страницу групп"
+
+msgid "Open in Platform Explorer"
+msgstr "Открыть в Platform Explorer"
+
+msgid "Open the contract"
+msgstr "Открыть контракт"
+
+msgid "Open the current version"
+msgstr "Открыть текущую версию"
+
+msgid "Open the whole schema"
+msgstr "Открыть всю схему"
+
+msgid "Order by"
+msgstr "Сортировка"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "Сортировка должна следовать порядку свойств индекса и начинаться с «{field}»."
+
+msgid "Overview"
+msgstr "Обзор"
+
+msgid "Owner"
+msgstr "Владелец"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "Владелец и дата сужают только строки этой страницы; Platform Explorer листает переходы контракта по времени."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform отвечает не более чем {DRIVE_MAX} документами за раз."
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer не ответил, поэтому переход неизвестен."
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer не охватывает девнеты."
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "У Platform Explorer пока нет записи об этом документе."
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform хранит только текущую версию, {currentVersion}. Контракт с keepsHistory хранит все версии."
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform хранит только последнюю ревизию этих документов."
+
+msgid "Position"
+msgstr "Позиция"
+
+msgid "Position {pos}"
+msgstr "Позиция {pos}"
+
+msgid "Power"
+msgstr "Вес"
+
+msgid "power {power}"
+msgstr "вес {power}"
+
+msgid "Previous"
+msgstr "Назад"
+
+msgid "Primary key ($id)"
+msgstr "Первичный ключ ($id)"
+
+msgid "Properties, in order"
+msgstr "Свойства по порядку"
+
+msgid "Property"
+msgstr "Свойство"
+
+msgid "Proposed by"
+msgstr "Предложил"
+
+msgid "Provenance"
+msgstr "Происхождение"
+
+msgid "Query"
+msgstr "Запрос"
+
+msgid "Read-only"
+msgstr "Только чтение"
+
+msgid "Recorded"
+msgstr "Записано"
+
+msgid "Registered"
+msgstr "Зарегистрирована"
+
+msgid "Remove filter"
+msgstr "Убрать фильтр"
+
+msgid "Removed"
+msgstr "Удалено"
+
+msgid "Required power"
+msgstr "Требуемый вес"
+
+msgid "Revision"
+msgstr "Ревизия"
+
+msgid "Revision {number}"
+msgstr "Ревизия {number}"
+
+msgid "Revision at least"
+msgstr "Ревизия не ниже"
+
+msgid "Revision pages"
+msgstr "Страницы ревизий"
+
+msgid "Revisions"
+msgstr "Ревизии"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Ревизии, записанные Platform Explorer"
+
+msgid "Rows per page"
+msgstr "Строк на странице"
+
+msgid "Run query"
+msgstr "Выполнить запрос"
+
+msgid "Schema"
+msgstr "Схема"
+
+msgid "Schema JSON"
+msgstr "Схема в JSON"
+
+msgid "Schema path"
+msgstr "Путь в схеме"
+
+msgid "Schemas"
+msgstr "Схемы"
+
+msgid "See changes"
+msgstr "Посмотреть изменения"
+
+msgid "See its document types"
+msgstr "Посмотреть его типы документов"
+
+msgid "See the groups of this contract"
+msgstr "Посмотреть группы этого контракта"
+
+msgid "Show signers"
+msgstr "Показать подписантов"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "Показаны первые {MAX_CHANGES}."
+
+msgid "starts with"
+msgstr "начинается с"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "System"
+msgstr "Система"
+
+msgid "System contracts"
+msgstr "Системные контракты"
+
+msgid "System only"
+msgstr "Только системные"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "Это не ID контракта: в нём не более 44 символов base58."
+
+msgid "That isn’t a contract ID."
+msgstr "Это не ID контракта."
+
+msgid "That isn’t a document address."
+msgstr "Это не адрес документа."
+
+msgid "That isn’t a group address."
+msgstr "Это не адрес группы."
+
+msgid "That path isn’t in this schema."
+msgstr "Этого пути нет в схеме."
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "Условие «in» по «{field}» принимает не более 100 значений."
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "Контракт не удалось прочитать, поэтому неизвестно, хранится ли его история."
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "Данные и метаданные документа выше получены напрямую из Platform."
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "Список всех контрактов требует Platform Explorer"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "В сортировку нужно включить «{field}», у которого есть условие in или диапазон."
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "Значения условия «in» по «{field}» должны быть все разными."
+
+msgid "These two versions are the same."
+msgstr "Эти две версии одинаковы."
+
+msgid "This contract defines no groups."
+msgstr "Этот контракт не определяет групп."
+
+msgid "This contract defines no tokens."
+msgstr "Этот контракт не определяет токенов."
+
+msgid "This contract doesn’t keep its history."
+msgstr "Этот контракт не хранит свою историю."
+
+msgid "This contract has no document type “{type}”."
+msgstr "В этом контракте нет типа документа «{type}»."
+
+msgid "This contract has no document types."
+msgstr "В этом контракте нет типов документов."
+
+msgid "This contract has no group at position {pos}."
+msgstr "В этом контракте нет группы на позиции {pos}."
+
+msgid "This contract has no groups."
+msgstr "В этом контракте нет групп."
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "У этого контракта нет версии {wantedVersion}."
+
+msgid "This document type doesn’t keep its history."
+msgstr "Этот тип документа не хранит свою историю."
+
+msgid "This group has no members."
+msgstr "В этой группе нет участников."
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Token ID"
+msgstr "ID токена"
+
+msgid "token position {tokenPosition}"
+msgstr "позиция токена {tokenPosition}"
+
+msgid "Tokens"
+msgstr "Токены"
+
+msgid "Tokens of this contract"
+msgstr "Токены этого контракта"
+
+msgid "Total power"
+msgstr "Общий вес"
+
+msgid "Transferred"
+msgstr "Передан"
+
+msgid "Transition"
+msgstr "Переход"
+
+msgid "Transitions"
+msgstr "Переходы"
+
+msgid "Transitions on this contract"
+msgstr "Переходы этого контракта"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Types"
+msgstr "Типы"
+
+msgid "Unique"
+msgstr "Уникальный"
+
+msgid "Updated"
+msgstr "Обновлено"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "Документы этого контракта можно прочитать в обозревателе документов."
+
+msgid "value"
+msgstr "значение"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Values, separated by commas"
+msgstr "Значения через запятую"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "От версии {fromVersion} к версии {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "Версия {toVersion} — первая из записанных, поэтому сравнивать её не с чем."
+
+msgid "Version {version}"
+msgstr "Версия {version}"
+
+msgid "Version history"
+msgstr "История версий"
+
+msgid "Versions of this contract"
+msgstr "Версии этого контракта"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "Чтобы узнать, какой переход записал документ, нужен Platform Explorer"
+
+msgid "With tokens"
+msgstr "С токенами"
+
+msgid "Won’t run"
+msgstr "Не будет выполнен"
+
+msgid "Yes"
+msgstr "Да"

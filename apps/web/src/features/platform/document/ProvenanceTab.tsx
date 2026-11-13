@@ -3,12 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import type { LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { stampOf } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDocument } from '@/data/pe/schemas'
 import { Entity } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, DataTable, Empty, KeyValue, Time, Unavailable } from '@/ui'
+import { Badge, Card, DataTable, Empty, KeyValue, SourceLine, Time, Unavailable } from '@/ui'
 import { usePeEnabled } from '../contract/contract-data'
 import type { DocumentContext } from './DocumentPage'
 
@@ -114,28 +115,31 @@ function Provenance({ ctx }: { ctx: DocumentContext }) {
         ) : !doc ? (
           <Empty kind="none-yet" title={t`Platform Explorer has no record of this document yet.`} />
         ) : (
-          <KeyValue
-            columns={2}
-            items={[
-              {
-                label: t`Transition`,
-                value: doc.txHash ? (
-                  <Entity kind="transition" id={doc.txHash.toLowerCase()} />
-                ) : (
-                  '—'
-                ),
-              },
-              {
-                label: t`Revision`,
-                value: doc.revision == null ? '—' : formatInt(doc.revision),
-              },
-              {
-                label: t`Time`,
-                value: doc.timestamp == null ? '—' : <Time ms={doc.timestamp} mode="both" />,
-              },
-              ...(doc.transitionType ? [{ label: t`Action`, value: doc.transitionType }] : []),
-            ]}
-          />
+          <>
+            <KeyValue
+              columns={2}
+              items={[
+                {
+                  label: t`Transition`,
+                  value: doc.txHash ? (
+                    <Entity kind="transition" id={doc.txHash.toLowerCase()} />
+                  ) : (
+                    '—'
+                  ),
+                },
+                {
+                  label: t`Revision`,
+                  value: doc.revision == null ? '—' : formatInt(doc.revision),
+                },
+                {
+                  label: t`Time`,
+                  value: doc.timestamp == null ? '—' : <Time ms={doc.timestamp} mode="both" />,
+                },
+                ...(doc.transitionType ? [{ label: t`Action`, value: doc.transitionType }] : []),
+              ]}
+            />
+            {record.data ? <SourceLine stamp={stampOf(record.data)} /> : null}
+          </>
         )}
       </section>
       <DataTable
