@@ -6,6 +6,9 @@ import { Command } from 'cmdk'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { entityLabel, pageTitle, sectionLabel, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui/base'
+import { SourceLine } from '@/ui/states'
+import { searchEnv } from './env'
+import { KindGlyph } from './KindGlyph'
 import { classify, type Classified } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { groupHits, groupLabel } from './groups'
@@ -72,15 +75,21 @@ function PaletteHit({
       onSelect={() => onSelect(hit.href)}
       className={`flex items-center justify-between gap-3 rounded ${guess ? 'border border-dashed ' : ''}px-2 py-2 data-[selected=true]:bg-black/5`}
     >
-      <span className="min-w-0">
-        <span className="block truncate">{hit.title}</span>
-        {hit.subtitle ? (
-          <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
-            {hit.subtitle}
-          </span>
-        ) : null}
+      <span className="flex min-w-0 items-center gap-2">
+        <KindGlyph kind={hit.kind} />
+        <span className="min-w-0">
+          <span className="block truncate">{hit.title}</span>
+          {hit.subtitle ? (
+            <span className="block truncate text-xs text-[var(--dh-ink-2,inherit)]">
+              {hit.subtitle}
+            </span>
+          ) : null}
+        </span>
       </span>
-      <Badge size="sm">{badge}</Badge>
+      <span className="flex shrink-0 items-center gap-2">
+        {hit.stamp.proved ? <SourceLine stamp={hit.stamp} compact /> : null}
+        <Badge size="sm">{badge}</Badge>
+      </span>
     </Command.Item>
   )
 }
@@ -109,6 +118,11 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   useEffect(() => {
     arrowed.current = false
   }, [query])
+
+  // Platform lookups wait for the SDK in the palette, so it starts connecting as soon as the palette opens.
+  useEffect(() => {
+    searchEnv.warmSdk(net)
+  }, [net])
 
   useEffect(() => {
     if (!submitted || !caughtUp) return
@@ -149,6 +163,27 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
 
   const { groups, guesses } = groupHits(hits)
   const description = describeInput(classified)
+  // A word is more likely a page than an entity, so pages lead; any typed ID, hash, address or number leads with its matches.
+  const pagesFirst = classified.classes.every((k) => k === 'text' || k === 'dpns')
+
+  const pagesGroup =
+    pages.length > 0 ? (
+      <Command.Group heading={trimmed.length === 0 ? t`Go to` : t`Pages`}>
+        {pages.map((p) => (
+          <Command.Item
+            key={p.path}
+            value={`page:${p.path}`}
+            onSelect={() => go({ to: p.path as '/' })}
+            className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
+          >
+            <span>{pageTitle(p)}</span>
+            <span className="text-xs text-[var(--dh-ink-2,inherit)]">
+              {sectionLabel(p.section)}
+            </span>
+          </Command.Item>
+        ))}
+      </Command.Group>
+    ) : null
 
   return (
     <Command
@@ -192,6 +227,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
         ) : null}
       </div>
       <Command.List className="max-h-[60vh] overflow-y-auto p-2">
+        {pagesFirst ? pagesGroup : null}
         {groups.map(([group, items]) => (
           <Command.Group key={group} heading={groupLabel(group)}>
             {items.map((hit) => (
@@ -219,23 +255,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </Command.Group>
         ) : null}
 
-        {pages.length > 0 ? (
-          <Command.Group heading={trimmed.length === 0 ? t`Go to` : t`Pages`}>
-            {pages.map((p) => (
-              <Command.Item
-                key={p.path}
-                value={`page:${p.path}`}
-                onSelect={() => go({ to: p.path as '/' })}
-                className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
-              >
-                <span>{pageTitle(p)}</span>
-                <span className="text-xs text-[var(--dh-ink-2,inherit)]">
-                  {sectionLabel(p.section)}
-                </span>
-              </Command.Item>
-            ))}
-          </Command.Group>
-        ) : null}
+        {pagesFirst ? null : pagesGroup}
 
         {trimmed.length > 0 && !secret ? (
           <Command.Group>

@@ -1,12 +1,15 @@
+import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { entityLabel, PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { Badge, Card, Empty, ErrorState, Skeleton, Unavailable } from '@/ui'
+import { Badge, Card, Empty, ErrorState, Skeleton, SourceLine, Unavailable } from '@/ui'
 import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
-import { groupHits, groupLabel } from './groups'
+import { groupHits, groupLabel, kindRuns } from './groups'
+import { KindGlyph } from './KindGlyph'
+import { lookupNames } from './unavailable'
 import type { SearchHit } from './types'
 import { useSearch } from './useSearch'
 import { useWordlistLoaded } from './wordlist'
@@ -22,23 +25,53 @@ function withheldFrom(state: unknown): SecretWarning | undefined {
   return value === 'secret' || value === 'possible-secret' ? value : undefined
 }
 
+const kindBadge = (hit: SearchHit) => entityLabel(hit.kind)
+
 function HitList({ hits, badge }: { hits: SearchHit[]; badge: (hit: SearchHit) => string }) {
   return (
     <ul className="grid grid-cols-[minmax(0,1fr)] gap-2">
       {hits.map((hit) => (
-        <li key={`${hit.kind}:${hit.id}`} className="flex items-center justify-between gap-3">
-          <Link {...hit.href} className="min-w-0">
-            <span className="block truncate">{hit.title}</span>
-            {hit.subtitle ? (
-              <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
-                {hit.subtitle}
-              </span>
-            ) : null}
-          </Link>
-          <Badge size="sm">{badge(hit)}</Badge>
+        <li
+          key={`${hit.kind}:${hit.id}`}
+          data-kind={hit.kind}
+          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+        >
+          <span className="flex min-w-48 flex-1 items-center gap-2">
+            <KindGlyph kind={hit.kind} />
+            <Link {...hit.href} className="min-w-0">
+              <span className="block truncate">{hit.title}</span>
+              {hit.subtitle ? (
+                <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
+                  {hit.subtitle}
+                </span>
+              ) : null}
+            </Link>
+          </span>
+          <span className="flex max-w-full flex-wrap items-center gap-2">
+            {hit.stamp.source === 'local' ? null : <SourceLine stamp={hit.stamp} compact />}
+            <Badge size="sm">{badge(hit)}</Badge>
+          </span>
         </li>
       ))}
     </ul>
+  )
+}
+
+/** One group's hits, split by kind with a heading for each when the group holds more than one. */
+function GroupHits({ items }: { items: SearchHit[] }) {
+  const runs = kindRuns(items)
+  if (runs.length === 1) return <HitList hits={items} badge={kindBadge} />
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-3">
+      {runs.map((run) => (
+        <section key={run.kind} aria-label={entityLabel(run.kind)} className="grid gap-1">
+          <h3 className="text-sm font-medium text-[var(--dh-ink-2,inherit)]">
+            {entityLabel(run.kind)}
+          </h3>
+          <HitList hits={run.items} badge={kindBadge} />
+        </section>
+      ))}
+    </div>
   )
 }
 
@@ -81,6 +114,9 @@ export function SearchPage({ q }: { q?: string }) {
     classes: noMatch ? classified.classes.filter((k) => k !== 'dpns') : classified.classes,
   })
   const network = networkName(net)
+  const skippedNames = lookupNames(skipped)
+  const skippedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(skippedNames)
+  const askedForId = classified.classes.includes('base58-id')
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
 
   return (
@@ -123,7 +159,7 @@ export function SearchPage({ q }: { q?: string }) {
             <li>{t`Masternodes by ProTx hash or IP address`}</li>
             <li>{t`Platform blocks, state transitions and Platform addresses`}</li>
             <li>
-              {t`Identities, contracts, tokens and documents by ID, or an identity by its public-key hash`}
+              {t`Identities, contracts and tokens by ID or name, a document by contract/type/ID, or an identity by its public-key hash`}
             </li>
             <li>{t`Names ending in .dash, epochs and dates (the Core blocks of a day)`}</li>
           </ul>
@@ -148,19 +184,27 @@ export function SearchPage({ q }: { q?: string }) {
           aria-busy={!settled}
         >
           {classified.classes.length === 0 ? (
-            <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
+            <p
+              data-classified
+              role="status"
+              className="text-sm text-[var(--dh-ink-2,inherit)] [overflow-wrap:anywhere]"
+            >
               {t`“${query}” isn’t something Radar can look up.`}
             </p>
           ) : null}
           {description.length > 0 ? (
-            <p data-classified role="status" className="text-sm text-[var(--dh-ink-2,inherit)]">
+            <p
+              data-classified
+              role="status"
+              className="text-sm text-[var(--dh-ink-2,inherit)] [overflow-wrap:anywhere]"
+            >
               {t`“${query}” looks like ${description.join(' · ')}.`}
             </p>
           ) : null}
 
           {groups.map(([group, items]) => (
             <Card key={group} title={groupLabel(group)} layer={group}>
-              <HitList hits={items} badge={(hit) => entityLabel(hit.kind)} />
+              <GroupHits items={items} />
             </Card>
           ))}
 
@@ -173,17 +217,25 @@ export function SearchPage({ q }: { q?: string }) {
           {skipped.length > 0 ? (
             <Unavailable
               compact
-              title={t`Lookups in an index were skipped, so some matches may be missing`}
+              title={
+                skippedNames.length > 0
+                  ? t`Lookups in an index were skipped, so some matches may be missing: ${skippedList}`
+                  : t`Lookups in an index were skipped, so some matches may be missing`
+              }
             />
           ) : null}
 
           {noMatch ? (
             <Empty
               kind="no-match"
-              title={t`No match for “${query}” as a Core record on ${network}`}
+              title={
+                <span className="[overflow-wrap:anywhere]">{t`No match for “${query}” on ${network}`}</span>
+              }
               body={
                 description.length > 0
-                  ? t`Radar checked every source that can answer this kind of input.`
+                  ? askedForId
+                    ? t`Radar checked every source that can answer this kind of input. A document has no lookup by its ID alone: paste its contract, type and ID as contract/type/ID.`
+                    : t`Radar checked every source that can answer this kind of input.`
                   : t`Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name.`
               }
               action={

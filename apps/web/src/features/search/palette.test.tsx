@@ -220,10 +220,11 @@ describe('/search page', () => {
       'href',
       '/block/2569992',
     )
-    expect(screen.getByRole('link', { name: /Epoch 2,569,992/ })).toHaveAttribute(
-      'href',
-      '/epoch/2569992',
+    await waitFor(() =>
+      expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'false'),
     )
+    expect(screen.queryByRole('link', { name: /Epoch 2,569,992/ })).toBeNull()
+    expect(screen.queryByRole('link', { name: /Platform block 2,569,992/ })).toBeNull()
   })
 
   it('keeps the network on result links', async () => {
@@ -243,7 +244,7 @@ describe('/search page', () => {
     expect(await screen.findByText(/isn’t something Radar can look up/)).toBeInTheDocument()
   })
 
-  it('says nothing matched a Core record and offers no name guess while the name page is unfinished @IN-10 @HY-14', async () => {
+  it('says nothing matched and offers no name guess while the name page is unfinished @IN-10 @HY-14', async () => {
     server.use(http.get('*/x/hy/mainnet/search', () => HttpResponse.json({ value: [] })))
     const history = createMemoryHistory({
       initialEntries: ['/search?q=zzzz-not-a-real-core-thing-12345'],
@@ -251,7 +252,7 @@ describe('/search page', () => {
     render(<App history={history} />)
 
     expect(
-      await screen.findByText(/No match for “zzzz-not-a-real-core-thing-12345” as a Core record/),
+      await screen.findByText(/No match for “zzzz-not-a-real-core-thing-12345” on Mainnet/),
     ).toBeInTheDocument()
     expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
     expect(screen.queryByText('zzzz-not-a-real-core-thing-12345.dash')).toBeNull()
