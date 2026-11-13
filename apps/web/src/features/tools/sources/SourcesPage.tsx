@@ -70,7 +70,7 @@ function BackendRow({ backend, words }: { backend: Backend; words: Words }) {
     backend.host === EVONODES ? (
       t`Evonodes from the node list, as https://address:port`
     ) : backend.host === null ? null : (
-      <code>{backend.host}</code>
+      <code className="break-all">{backend.host}</code>
     )
   return (
     <li
@@ -101,7 +101,7 @@ function BackendRow({ backend, words }: { backend: Backend; words: Words }) {
       </div>
       <div className="grid content-start gap-1">
         {host ? (
-          <p data-backend-host className="break-all">
+          <p data-backend-host>
             {host}
             {backend.upstream ? (
               <span className="text-[var(--dh-ink-2)]">

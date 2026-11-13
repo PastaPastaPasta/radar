@@ -289,6 +289,29 @@ test.describe('Decentralized only mode: the switch', () => {
     expect(await page.evaluate(() => localStorage.getItem('radar.sources'))).toBeNull()
   })
 
+  test('Tools → Sources breaks a long host anywhere but keeps the words of a sentence whole @X-05', async ({
+    page,
+  }) => {
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/sources')
+      const host = page.locator('[data-backend="dapi"] [data-backend-host]')
+      await expect(host).toBeVisible()
+      await settled(page)
+      const lines = await host.evaluate((el) => {
+        const text = el.firstChild as Text
+        const word = 'https://address:port'
+        const at = text.data.indexOf(word)
+        const range = document.createRange()
+        range.setStart(text, at)
+        range.setEnd(text, at + word.length)
+        return at < 0 ? -1 : range.getClientRects().length
+      })
+      expect(lines, `the address pattern at ${width} px`).toBe(1)
+      expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
+    }
+  })
+
   test('“Use all sources” on an unavailable state switches it off and the page reads its index again @X-05 @HY-19', async ({
     page,
   }) => {
