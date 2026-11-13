@@ -106,15 +106,15 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
 
   const label = (r: PollRange): string =>
     r === '24h'
-      ? t`24 hours`
+      ? t`24h`
       : r === '7d'
-        ? t`7 days`
+        ? t`7d`
         : r === '30d'
-          ? t`30 days`
+          ? t`30d`
           : r === '90d'
-            ? t`90 days`
+            ? t`90d`
             : r === 'upcoming'
-              ? t`All upcoming`
+              ? t`Upcoming`
               : t`Custom`
 
   return (

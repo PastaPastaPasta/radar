@@ -272,7 +272,7 @@ test.describe('Polls', () => {
   test('switches the window and the direction @NX-44', async ({ page }) => {
     await open(page, '/polls', 'Vote polls')
     const range = page.getByRole('group', { name: 'Ends within' })
-    await range.getByRole('button', { name: '7 days' }).click()
+    await range.getByRole('button', { name: '7d' }).click()
     await expect(page).toHaveURL(/range=7d/)
     await settled(page)
     await page

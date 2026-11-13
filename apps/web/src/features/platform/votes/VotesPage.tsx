@@ -6,15 +6,9 @@ import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeVote } from '@/data/pe/schemas'
 import { DPNS, peVotesQuery, VOTE_CHOICE, type VotesFilters } from '@/data/query/prefetch/p-vote'
-import {
-  Entity,
-  IdentityRef,
-  PageFrame,
-  PageGroupTabs,
-  PageLink,
-  useNetwork,
-} from '@/features/entity'
+import { Entity, PageFrame, PageGroupTabs, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
+import { isDevnet } from '@/lib/network'
 import {
   ActiveFilters,
   Badge,
@@ -36,6 +30,7 @@ export type VotesPageSearch = VotesFilters
 export function VotesPage({ search }: { search: VotesPageSearch }) {
   const { t } = useLingui()
   const decentralized = useDecentralizedOnly()
+  const devnet = isDevnet(useNetwork())
   return (
     <PageFrame
       path="/votes"
@@ -45,7 +40,18 @@ export function VotesPage({ search }: { search: VotesPageSearch }) {
       lede={t`Every masternode vote with voter, choice, resource and time.`}
     >
       <PageGroupTabs group="voting" />
-      {decentralized ? (
+      {devnet ? (
+        <Empty
+          kind="unsupported-network"
+          title={t`Platform Explorer doesn’t cover devnets.`}
+          body={t`This page reads from Platform Explorer. Switch to Mainnet or Testnet to see it.`}
+          action={
+            <PageLink to="/" search={{ network: 'mainnet' }}>
+              {t`Back to Mainnet`}
+            </PageLink>
+          }
+        />
+      ) : decentralized ? (
         <>
           <Unavailable title={t`The list of masternode votes needs Platform Explorer’s index`} />
           <p>
@@ -95,7 +101,11 @@ function VoteList({ search }: { search: VotesPageSearch }) {
         id: 'towards',
         header: t`Towards`,
         cell: ({ row }) =>
-          row.original.towardsIdentity ? <IdentityRef id={row.original.towardsIdentity} /> : '—',
+          row.original.towardsIdentity ? (
+            <Entity kind="identity" id={row.original.towardsIdentity} identicon />
+          ) : (
+            '—'
+          ),
         enableSorting: false,
         meta: { phone: 'secondary' },
       },
