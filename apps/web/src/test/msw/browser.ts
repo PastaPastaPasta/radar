@@ -34,8 +34,23 @@ export interface RadarFixtureHooks {
   dapiCalls(method: string): number
 }
 
+/** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
+export const FIXTURE_UNMINED_KEY = 'radar.fixture.unmined'
+
+function unminedFromSession(): Record<string, { instantLocked: boolean }> {
+  try {
+    return JSON.parse(sessionStorage.getItem(FIXTURE_UNMINED_KEY) ?? '{}') as Record<
+      string,
+      { instantLocked: boolean }
+    >
+  } catch {
+    return {}
+  }
+}
+
 export async function startFixtureWorker(): Promise<void> {
   const dapi = new FixtureDapiTransport()
+  for (const [txid, opts] of Object.entries(unminedFromSession())) dapi.answerAsUnmined(txid, opts)
   setDapiTransport(dapi)
   const hooks: RadarFixtureHooks = {
     breakLiveConnection: (net = 'mainnet') => dapi.breakConnection(net),

@@ -1,4 +1,9 @@
+import { fromBinary, toBinary } from '@bufbuild/protobuf'
 import { sha256 } from '@noble/hashes/sha2.js'
+import {
+  GetTransactionRequestSchema,
+  GetTransactionResponseSchema,
+} from '@/data/dapi-core/gen/core/v0/core_pb'
 import { SourceError } from '@/data/errors'
 import type {
   Budget,
@@ -97,6 +102,25 @@ export class FixtureDapiTransport implements DapiTransport {
     return this.requests.get(method)
   }
   private broken = false
+  /** Recorded transactions answered as if they were still in the mempool, so a spec can show a pending one. */
+  private readonly unmined = new Map<string, { instantLocked: boolean }>()
+
+  /** From now on `txid` is answered as unmined, with the InstantSend flag given. */
+  answerAsUnmined(txid: string, opts: { instantLocked: boolean }): void {
+    this.unmined.set(txid.toLowerCase(), opts)
+  }
+
+  private asUnmined(request: Uint8Array, response: Uint8Array): Uint8Array {
+    const pending = this.unmined.get(fromBinary(GetTransactionRequestSchema, request).id)
+    if (!pending) return response
+    const message = fromBinary(GetTransactionResponseSchema, response)
+    message.blockHash = new Uint8Array()
+    message.height = 0
+    message.confirmations = 0
+    message.isChainLocked = false
+    message.isInstantLocked = pending.instantLocked
+    return toBinary(GetTransactionResponseSchema, message)
+  }
   private readonly openStreams = new Set<(error: SourceError) => void>()
 
   constructor(opts: { budget?: FixtureBudget } = {}) {
@@ -181,7 +205,14 @@ export class FixtureDapiTransport implements DapiTransport {
         message: `The ${method} fixture holds no response`,
       })
     }
-    return { response: fromBase64(fixture.response), node: replicaOf(fixture.node, opts) }
+    const response = fromBase64(fixture.response)
+    return {
+      response:
+        method === 'getTransaction' && this.unmined.size > 0
+          ? this.asUnmined(request, response)
+          : response,
+      node: replicaOf(fixture.node, opts),
+    }
   }
 
   stream(

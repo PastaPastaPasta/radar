@@ -1,4 +1,5 @@
 import { expectAccessible } from '../helpers/a11y'
+import { answerAsUnmined } from '../helpers/fixtures'
 import { expect as baseExpect, test } from '../helpers/test'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
@@ -59,7 +60,7 @@ const PAYLOADS: { name: string; txid: string; kind: string; shows: string }[] = 
   },
 ]
 
-/** A ProUpRegTx whose block is ChainLocked, with no lock in DAPI's answer or in Hyphen's record. */
+/** A ProUpRegTx whose block is ChainLocked, with no InstantSend lock in DAPI's answer. */
 const NEVER_LOCKED = '188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7'
 const REVOCATION = '9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4'
 const COINBASE = 'ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328'
@@ -220,10 +221,11 @@ test.describe('Transaction page', () => {
   })
 
   test('shows a step green only if it happened, in both themes @HY-07', async ({ page }) => {
-    await page.goto(`/tx/${REVOCATION}`)
+    await answerAsUnmined(page, TRANSFER, { instantLocked: true })
+    await page.goto(`/tx/${TRANSFER}`)
     const settled = page.locator('#settlement')
     await expect(settled.locator('[data-step="instantsend"]')).toContainText(
-      'recorded by Hyphen; no second source has confirmed it',
+      'reported by one node; no second source has confirmed it',
     )
     const look = (name: string) =>
       settled.locator(`[data-step="${name}"]`).evaluate((el) => {
@@ -237,42 +239,60 @@ test.describe('Transaction page', () => {
         }
       })
     const instant = await look('instantsend')
-    const mined = await look('mined')
+    const seen = await look('seen')
     expect(instant.state).toBe('claimed')
-    expect(mined.state).toBe('done')
-    expect(instant.dot, 'a claim has no green dot').not.toBe(mined.dot)
-    expect(instant.line, 'nor a green line').not.toBe(mined.line)
-    expect(instant.ring).not.toBe(mined.dot)
+    expect(seen.state).toBe('done')
+    expect(instant.dot, 'a claim has no green dot').not.toBe(seen.dot)
+    expect(instant.line, 'nor a green line').not.toBe(seen.dot)
+    expect(seen.line, 'and the line into a claim is not green either').not.toBe(seen.dot)
+    expect(instant.ring).not.toBe(seen.dot)
   })
 
-  test('keeps the lock Hyphen recorded on every surface of an old transaction @IN-05 @HY-07', async ({
+  test('shows no InstantSend state anywhere once the block is ChainLocked @IN-05 @HY-07', async ({
     page,
   }) => {
-    for (const txid of [REVOCATION, ASSET_LOCK, TRANSFER]) {
+    for (const txid of [REVOCATION, ASSET_LOCK, TRANSFER, NEVER_LOCKED]) {
       await page.goto(`/tx/${txid}`)
-      await expect(page.locator('#settlement [data-step="instantsend"]')).toHaveAttribute(
+      const steps = page.locator('#settlement [data-step]')
+      await expect(steps).toHaveCount(2)
+      expect(
+        await steps.evaluateAll((els) => els.map((el) => el.getAttribute('data-step'))),
+      ).toEqual(['mined', 'chainlocked'])
+      await expect(page.locator('#settlement [data-step="chainlocked"]')).toHaveAttribute(
         'data-state',
-        'claimed',
+        'done',
       )
-      await expect(
-        page.getByText(/InstantSend lock recorded by (a DAPI node and )?Hyphen/),
-      ).toBeVisible()
-      await expect(page.getByText('No InstantSend lock was seen')).toHaveCount(0)
+      await expect(page.locator('main').getByText(/InstantSend/)).toHaveCount(0)
+      await expect(page.locator('main').getByText(/not known/)).toHaveCount(0)
     }
+    await expectAccessible(page)
   })
 
-  test('says the lock state is not known, in the neutral style, once no source reports one @IN-05 @HY-07', async ({
+  test('shows the node’s InstantSend answer for a pending transaction, as a one-source claim @IN-05 @HY-07', async ({
     page,
   }) => {
-    await page.goto(`/tx/${NEVER_LOCKED}`)
-    const step = page.locator('#settlement [data-step="instantsend"]')
-    await expect(step).toHaveAttribute('data-state', 'unknown')
-    await expect(step).toContainText('not known: nodes drop InstantSend locks')
-    await expect(page.getByText('No InstantSend lock was seen')).toHaveCount(0)
-    await expect(page.getByText(/InstantSend lock (recorded|reported)/)).toHaveCount(0)
-    const ring = await step.evaluate((el) => getComputedStyle(el, '::before').borderTopStyle)
-    expect(ring, 'not-known has its own dashed marker, not the skipped one').toBe('dashed')
+    await answerAsUnmined(page, TRANSFER, { instantLocked: true })
+    await page.goto(`/tx/${TRANSFER}`)
+    await expect(page.getByText('Unconfirmed').first()).toBeVisible()
+    await expect(page.getByText('InstantSend lock reported by one node')).toBeVisible()
+    await expect(page.locator('#settlement [data-step="instantsend"]')).toHaveAttribute(
+      'data-state',
+      'claimed',
+    )
+    await expect(page.locator('#settlement [data-step="mined"]')).toHaveAttribute(
+      'data-state',
+      'future',
+    )
     await expectAccessible(page)
+  })
+
+  test('says a pending transaction with no lock is waiting for one @IN-05', async ({ page }) => {
+    await answerAsUnmined(page, TRANSFER, { instantLocked: false })
+    await page.goto(`/tx/${TRANSFER}`)
+    const step = page.locator('#settlement [data-step="instantsend"]')
+    await expect(step).toHaveAttribute('data-state', 'pending')
+    await expect(step).toContainText('waiting for the masternodes to lock it')
+    await expect(page.getByText(/InstantSend lock (recorded|reported)/)).toHaveCount(0)
   })
 
   test('shows the numeric code beside a revocation reason and says whose names they are @HY-07', async ({
