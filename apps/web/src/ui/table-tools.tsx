@@ -209,14 +209,12 @@ export function RangeFilter({ label, value, onChange }: RangeFilterProps) {
       return
     }
     const next = `${a}..${b}`
-    const parsed = zRange.safeParse(next)
-    if (!parsed.success) {
-      setError(t`Enter plain numbers, like 100 or 2.5.`)
+    if (a && b && Number(a) > Number(b)) {
+      setError(t`The minimum is above the maximum.`)
       return
     }
-    const { min, max } = parsed.data
-    if (min !== undefined && max !== undefined && min > max) {
-      setError(t`The minimum is above the maximum.`)
+    if (!zRange.safeParse(next).success) {
+      setError(t`Enter plain numbers, like 100 or 2.5.`)
       return
     }
     setError(undefined)

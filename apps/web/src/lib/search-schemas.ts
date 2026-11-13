@@ -49,7 +49,7 @@ const NUMBER = /^-?\d+(?:\.\d+)?$/
 
 const rangeObject = z.object({ min: z.number().optional(), max: z.number().optional() })
 
-/** `min..max`, either side optional. Accepts its own output so a validated search can be validated again. */
+/** `min..max`, either side optional; a minimum above the maximum is not a range. Accepts its own output so a validated search can be validated again. */
 export const zRange = z.union([
   rangeObject,
   z.string().transform((s, ctx): NumericRange => {
@@ -66,11 +66,13 @@ export const zRange = z.union([
     }
     const min = lo ? Number(lo) : undefined
     const max = hi ? Number(hi) : undefined
-    const [low, high] =
-      min !== undefined && max !== undefined && min > max ? [max, min] : [min, max]
+    if (min !== undefined && max !== undefined && min > max) {
+      ctx.issues.push({ code: 'custom', message: 'The minimum is above the maximum', input: s })
+      return z.NEVER
+    }
     return {
-      ...(low !== undefined ? { min: low } : {}),
-      ...(high !== undefined ? { max: high } : {}),
+      ...(min !== undefined ? { min } : {}),
+      ...(max !== undefined ? { max } : {}),
     }
   }),
 ])

@@ -40,6 +40,16 @@ describe('locales', () => {
 })
 
 describe('switching language', () => {
+  it('settles on the last language asked for, even when an earlier one loads later', async () => {
+    await activateLocale('de')
+    await activateLocale('en')
+    const slow = activateLocale('ja')
+    const fast = activateLocale('de')
+    await Promise.all([slow, fast])
+    expect(i18n.locale).toBe('de')
+    expect(document.documentElement.lang).toBe('de')
+  })
+
   it('translates messages, sets <html lang> and remembers the choice @IN-13 @HY-15', async () => {
     await activateLocale('ru', true)
     expect(document.documentElement.lang).toBe('ru')

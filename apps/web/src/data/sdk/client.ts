@@ -202,10 +202,25 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
 
     async call(net, method, args, signal) {
       if (signal?.aborted) throw abortedError('sdk')
-      const transport = await ensure(net)
-      if (signal?.aborted) throw abortedError('sdk')
       const started = performance.now()
-      const wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
+      let wire: Awaited<ReturnType<SdkTransport['call']>>
+      try {
+        const transport = await ensure(net)
+        if (signal?.aborted) throw abortedError('sdk')
+        wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
+      } catch (e) {
+        if (!(e instanceof SourceError && e.kind === 'aborted')) {
+          queryLog.push({
+            net,
+            source: 'sdk',
+            what: method,
+            ok: false,
+            kind: e instanceof SourceError ? e.kind : 'network',
+            tookMs: Math.round(performance.now() - started),
+          })
+        }
+        throw e
+      }
       if (wire.requests) deps.noteRequests?.(net, wire.requests)
       // A wasm call can't be cancelled; its late answer is dropped here.
       if (signal?.aborted) throw abortedError('sdk')

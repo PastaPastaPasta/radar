@@ -2,6 +2,7 @@ import type { NetworkId } from '@/lib/network'
 import { sourceOff } from '../endpoints'
 import { SourceError, disabledByMode } from '../errors'
 import { healthRegistry } from '../health'
+import { queryLog } from '../query-log'
 import { cancelled, describeFailure, requireEndpoint } from '../http'
 import { HyStreamEventSchema, type HyStreamEvent } from './schemas'
 
@@ -16,6 +17,15 @@ export async function openHyphenStream(
   if (sourceOff('hyphen')) throw disabledByMode('hyphen')
   const url = `${requireEndpoint(net, 'hyphen', 'hyphen')}/stream`
   const started = performance.now()
+  const log = (ok: boolean, kind?: SourceError['kind']) =>
+    queryLog.push({
+      net,
+      source: 'hyphen',
+      what: 'GET /stream',
+      ok,
+      ...(kind ? { kind } : {}),
+      tookMs: Math.round(performance.now() - started),
+    })
   let res: Response
   try {
     res = await fetch(url, { signal, headers: { accept: 'application/x-ndjson' } })
@@ -23,6 +33,7 @@ export async function openHyphenStream(
     if (signal?.aborted) {
       throw cancelled('hyphen', cause)
     }
+    log(false, 'network')
     const message = describeFailure('hyphen', 'network')
     healthRegistry.report(net, 'hyphen', {
       ok: false,
@@ -33,6 +44,7 @@ export async function openHyphenStream(
     throw new SourceError({ source: 'hyphen', kind: 'network', message, cause })
   }
   if (!res.ok || !res.body) {
+    log(false, 'http')
     const message = describeFailure('hyphen', 'http', `HTTP ${res.status}`)
     healthRegistry.report(net, 'hyphen', {
       ok: false,
@@ -42,6 +54,7 @@ export async function openHyphenStream(
     })
     throw new SourceError({ source: 'hyphen', kind: 'http', message, status: res.status })
   }
+  log(true)
   healthRegistry.report(net, 'hyphen', { ok: true, latencyMs: performance.now() - started })
   return readNdjson(res.body, signal, (error) =>
     healthRegistry.report(net, 'hyphen', { ok: false, kind: error.kind, message: error.message }),

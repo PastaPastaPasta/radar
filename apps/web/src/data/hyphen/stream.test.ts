@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { isSourceError, type SourceError } from '../errors'
 import { healthRegistry, resetHealthRegistry } from '../health'
+import { queryLog } from '../query-log'
 import { MAX_NDJSON_LINE_CHARS, openHyphenStream, readNdjson } from './stream'
 import type { HyStreamEvent } from './schemas'
 
@@ -87,6 +88,24 @@ describe('openHyphenStream health', () => {
     }
     expect(healthRegistry.get('testnet', 'hyphen').lastError?.kind).toBe('network')
     expect(healthRegistry.get('mainnet', 'hyphen').state).toBe('unknown')
+  })
+
+  it('logs each stream it opens, and each failure to open one', async () => {
+    queryLog.clear()
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(stream([])))
+      .mockResolvedValueOnce(new Response('no', { status: 503 }))
+    try {
+      await drain(await openHyphenStream('testnet'))
+      await expect(openHyphenStream('testnet')).rejects.toMatchObject({ kind: 'http' })
+    } finally {
+      fetchSpy.mockRestore()
+    }
+    expect(queryLog.snapshot().map((e) => [e.source, e.what, e.ok, e.kind])).toEqual([
+      ['hyphen', 'GET /stream', true, undefined],
+      ['hyphen', 'GET /stream', false, 'http'],
+    ])
   })
 
   it('leaves the latency window alone when an open stream breaks', async () => {
