@@ -13,26 +13,161 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: polls.length
+msgid "{0, plural, one {# poll ends in the next 30 days.} other {# polls end in the next 30 days.}}"
+msgstr "{0, plural, other {今後30日以内に終了する投票は # 件です。}}"
+
+#. placeholder {0}: reason.blocks
+msgid "{0, plural, one {Platform's Core ChainLock is # block behind Core's tip.} other {Platform's Core ChainLock is # blocks behind Core's tip.}}"
+msgstr "{0, plural, other {Platform の Core ChainLock は Core の先頭より # ブロック遅れています。}}"
+
+#. placeholder {0}: Number(votes)
+msgid "{0, plural, one {Upgrade to v{next}: # vote so far} other {Upgrade to v{next}: # votes so far}}"
+msgstr "{0, plural, other {v{next} へのアップグレード: 現在 # 票}}"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(s.threshold)
+msgid "{0} members, {1} to sign"
+msgstr "メンバー {0} 人、署名に必要 {1} 人"
+
 #. placeholder {0}: formatInt(budget.usedLastMinute)
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
+#. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
+msgid "{0} s"
+msgstr "{0}秒"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+msgid "{0} valid"
+msgstr "{0} 件が有効"
+
 msgid "{behind} blocks behind the tip"
 msgstr "先頭から {behind} ブロック遅れ"
+
+msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
+msgstr "{fresh, plural, other {表示中は固定されています · 新着 # 件。カーソルを離すと表示されます。}}"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, other {証明で検証済みの回答 # 件を統合しています。}}"
+
+msgid "1 m"
+msgstr "1か月"
+
+msgid "1 w"
+msgstr "1週間"
+
+msgid "24 h"
+msgstr "24時間"
+
+msgid "3 d"
+msgstr "3日"
 
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "アドレス、使用済み出力、チェーンワーク、ガバナンスのための第2のインデックス"
 
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "Active quorums"
+msgstr "アクティブなクォーラム"
+
+msgid "All blocks"
+msgstr "すべてのブロック"
+
+msgid "All contracts"
+msgstr "すべてのコントラクト"
+
+msgid "All epochs"
+msgstr "すべてのエポック"
+
+msgid "All evonodes"
+msgstr "すべての Evonode"
+
+msgid "All identities"
+msgstr "すべてのアイデンティティ"
+
+msgid "All polls"
+msgstr "すべての投票"
+
+msgid "All quorums"
+msgstr "すべてのクォーラム"
+
+msgid "All time"
+msgstr "全期間"
+
+msgid "All tokens"
+msgstr "すべてのトークン"
+
+msgid "All transitions"
+msgstr "すべてのトランジション"
+
+msgid "An identity ID, a name, a token ID or an epoch number."
+msgstr "アイデンティティ ID、名前、トークン ID、またはエポック番号。"
+
+msgid "Answering node"
+msgstr "応答したノード"
+
 msgid "Asking Platform for its latest block…"
 msgstr "Platform に最新ブロックを問い合わせ中…"
+
+msgid "Average block time"
+msgstr "平均ブロック時間"
+
+msgid "Balance"
+msgstr "残高"
+
+msgid "Banned"
+msgstr "BAN 済み"
 
 msgid "Best ChainLock"
 msgstr "最新の ChainLock"
 
+msgid "blocks"
+msgstr "ブロック"
+
+msgid "Blocks"
+msgstr "ブロック"
+
+msgid "Blocks are arriving and Platform is locked to Core."
+msgstr "ブロックは到着しており、Platform は Core に固定されています。"
+
+msgid "Busiest identities"
+msgstr "最も利用されているアイデンティティ"
+
+msgid "By credit balance"
+msgstr "クレジット残高順"
+
+msgid "By recent token transitions"
+msgstr "最近のトークントランジション数順"
+
+msgid "By recent transitions"
+msgstr "最近のトランジション数順"
+
+msgid "By transition count"
+msgstr "トランジション数順"
+
+msgid "By transitions"
+msgstr "トランジション順"
+
+msgid "By transitions sent"
+msgstr "送信したトランジション数順"
+
+msgid "Catching up"
+msgstr "追いついています"
+
 #. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+#. placeholder {0}: formatPercent(s.indexer.syncProgress / 100, 0)
 msgid "Catching up, {0}"
 msgstr "同期中、{0}"
+
+msgid "Chain ID"
+msgstr "チェーン ID"
 
 msgid "ChainLock block hash, reported by one node"
 msgstr "ChainLock のブロックハッシュ(1 ノードの報告)"
@@ -52,14 +187,27 @@ msgstr "Core"
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Core のアドレス、メモリプール、ガバナンス、ブロック一覧"
 
+msgid "Core chain-locked height"
+msgstr "Core の ChainLock 済みの高さ"
+
 msgid "Core tip"
 msgstr "Core の先頭"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Core の先頭、ブロック、トランザクションを evonode から直接取得"
 
+msgid "Credits"
+msgstr "クレジット"
+
+msgid "Current"
+msgstr "現在"
+
 msgid "DAPI"
 msgstr "DAPI"
+
+#. placeholder {0}: s.dapiVersion
+msgid "DAPI {0}"
+msgstr "DAPI {0}"
 
 msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
 msgstr "DAPI と Platform SDK が応答しています。ホスト型のソースは「分散型のみ」モードではオフです。"
@@ -76,11 +224,36 @@ msgstr "DAPI リクエスト予算"
 msgid "Dash Core"
 msgstr "Dash Core"
 
+msgid "Dash Platform"
+msgstr "Dash Platform"
+
 msgid "Decentralized only mode doesn’t contact this source."
 msgstr "「分散型のみ」モードではこのソースに接続しません。"
 
 msgid "Details"
 msgstr "詳細"
+
+#. placeholder {0}: s.version
+msgid "Drive {0}"
+msgstr "Drive {0}"
+
+msgid "ends"
+msgstr "終了"
+
+msgid "Epoch"
+msgstr "エポック"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "エポック {0}。Evonode: {1}。提案されたブロック: {2}。"
+
+msgid "Epochs"
+msgstr "エポック"
+
+msgid "Every evonode Platform Explorer has seen validate."
+msgstr "Platform Explorer が検証を確認したすべての Evonode。"
 
 msgid "Every source is answering."
 msgstr "すべてのソースが応答しています。"
@@ -88,11 +261,26 @@ msgstr "すべてのソースが応答しています。"
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core に表示されるものはすべて DAPI から取得しています。"
 
+msgid "Evonode"
+msgstr "エボノード"
+
+msgid "Fees"
+msgstr "手数料"
+
 msgid "Figures computed on your device"
 msgstr "お使いの端末で計算した数値"
 
+msgid "Find on Platform"
+msgstr "Platform で検索"
+
 msgid "Getting tight"
 msgstr "余裕が少なくなっています"
+
+msgid "Go"
+msgstr "移動"
+
+msgid "Go straight to"
+msgstr "直接移動"
 
 msgid "Headers and blocks"
 msgstr "ヘッダーとブロック"
@@ -100,11 +288,38 @@ msgstr "ヘッダーとブロック"
 msgid "Headroom"
 msgstr "余裕"
 
+msgid "Held still while you look. New ones appear when you move away."
+msgstr "表示中は固定されます。カーソルを離すと新しいものが表示されます。"
+
+msgid "History and leaders"
+msgstr "履歴とリーダー"
+
+msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
+msgstr "Dash Platform の状況: 高さ、エポック、クレジット、ブロックを提案しているのは誰か、そして何が起きているか。"
+
 msgid "How each source is answering, and how far behind its data is."
 msgstr "各ソースの応答状況と、データがどれだけ遅れているか。"
 
 msgid "Hyphen"
 msgstr "Hyphen"
+
+msgid "Identities"
+msgstr "アイデンティティ"
+
+msgid "Identity growth"
+msgstr "アイデンティティの増加"
+
+msgid "Identity ID, name.dash, token ID or epoch"
+msgstr "アイデンティティ ID、name.dash、トークン ID、またはエポック"
+
+msgid "Identity ID, name.dash, token ID or epoch number"
+msgstr "アイデンティティ ID、name.dash、トークン ID、またはエポック番号"
+
+msgid "In sync"
+msgstr "同期済み"
+
+msgid "Inactive"
+msgstr "非アクティブ"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "Core ブロック {indexed}（チェーンは {chain}）までインデックス済みです。同期は「{sync}」と表示されていますが、インデックスはチェーンに遅れています。"
@@ -114,6 +329,9 @@ msgstr "Core ブロック {indexed}/{chain} までインデックス済み。同
 
 msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
 msgstr "Platform ブロック {indexed}/{chain} までインデックス済み。インデクサー: {state}。"
+
+msgid "Indexer"
+msgstr "インデクサー"
 
 msgid "Insight"
 msgstr "Insight"
@@ -142,6 +360,15 @@ msgstr "先端は Core のブロック {tip} で、チェーンより遅れて�
 msgid "Its tip is Core block {tip}."
 msgstr "先端は Core のブロック {tip} です。"
 
+msgid "Lagging"
+msgstr "遅延中"
+
+msgid "Last block"
+msgstr "最新ブロック"
+
+msgid "Last block proposed by"
+msgstr "最新ブロックの提案者"
+
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -151,11 +378,53 @@ msgstr "直近のクロールは {0} に完了しました。その Core ノー�
 msgid "Last good {0}."
 msgstr "最後に正常だったのは {0} です。"
 
+msgid "Later ones may be missing."
+msgstr "それ以降は表示されない場合があります。"
+
+msgid "Latest block hash"
+msgstr "最新ブロックのハッシュ"
+
+msgid "Live"
+msgstr "ライブ"
+
+msgid "Live activity"
+msgstr "ライブアクティビティ"
+
+msgid "Live activity, charts and leaderboards need Platform Explorer's index"
+msgstr "ライブアクティビティ、チャート、ランキングには Platform Explorer のインデックスが必要です"
+
+msgid "Live pulse"
+msgstr "ライブパルス"
+
+msgid "Looking…"
+msgstr "検索中…"
+
 msgid "Median answer {rounded} ms"
 msgstr "応答時間の中央値 {rounded} ms"
 
+msgid "Most active contracts"
+msgstr "最もアクティブなコントラクト"
+
+msgid "Most active identities"
+msgstr "最もアクティブなアイデンティティ"
+
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "ネットワークの内部情報：ピア、メモリプールの負荷、バージョン、履歴"
+
+msgid "Newest blocks"
+msgstr "最新のブロック"
+
+msgid "Newest Platform blocks"
+msgstr "最新の Platform ブロック"
+
+msgid "Newest Platform transitions"
+msgstr "最新の Platform トランジション"
+
+msgid "Newest transitions"
+msgstr "最新のトランジション"
+
+msgid "No active quorums"
+msgstr "アクティブなクォーラムはありません"
 
 msgid "No crawl has finished yet."
 msgstr "完了したクロールはまだありません。"
@@ -163,11 +432,39 @@ msgstr "完了したクロールはまだありません。"
 msgid "No DAPI requests have been made on this network yet."
 msgstr "このネットワークではまだ DAPI リクエストが行われていません。"
 
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "このエポックでブロックを提案した Evonode はまだありません。"
+
+msgid "No identity history in this range"
+msgstr "この範囲にアイデンティティの履歴はありません"
+
+#. placeholder {0}: formatDuration(reason.ageMs)
+msgid "No new Platform block for {0}."
+msgstr "{0} の間、新しい Platform ブロックはありません。"
+
+msgid "No quorums listed"
+msgstr "一覧にクォーラムはありません"
+
+msgid "No transitions in this range"
+msgstr "この範囲にトランジションはありません"
+
+msgid "No transitions yet"
+msgstr "トランジションはまだありません"
+
+msgid "No upgrade pending"
+msgstr "保留中のアップグレードはありません"
+
+msgid "No vote polls end in the next 30 days"
+msgstr "今後30日以内に終了する投票はありません"
+
 msgid "Node sync"
 msgstr "ノードの同期"
 
 msgid "Nodes resting"
 msgstr "待機中のノード"
+
+msgid "Not an evonode"
+msgstr "Evonode ではありません"
 
 msgid "Not available right now"
 msgstr "現在利用できません"
@@ -175,14 +472,38 @@ msgstr "現在利用できません"
 msgid "Not offered"
 msgstr "提供なし"
 
+msgid "Not proof-checked"
+msgstr "証明で未検証"
+
 msgid "Nothing has asked it yet on this network."
 msgstr "このネットワークではまだ誰も問い合わせていません。"
+
+msgid "Nothing ranked yet"
+msgstr "まだランキングはありません"
+
+msgid "Nothing shielded in this range"
+msgstr "この範囲にシールドされたものはありません"
 
 msgid "Off in this mode"
 msgstr "このモードではオフ"
 
+msgid "On the chain"
+msgstr "チェーン上"
+
+msgid "Peers"
+msgstr "ピア"
+
+msgid "Platform"
+msgstr "Platform"
+
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer は devnet をインデックスしません"
+
+msgid "Platform height"
+msgstr "Platform の高さ"
 
 msgid "Platform lists and counts"
 msgstr "Platform の一覧と件数"
@@ -192,6 +513,9 @@ msgstr "Platform SDK"
 
 msgid "Plenty of room"
 msgstr "十分な余裕"
+
+msgid "Polls ending soon"
+msgstr "まもなく終了する投票"
 
 msgid "Pressure"
 msgstr "負荷"
@@ -205,14 +529,77 @@ msgstr "Platform ブロック {block}（エポック {epoch}）で証明によ�
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "証明で検証済みの Platform の状態（このブラウザで検証）"
 
+msgid "Protocol"
+msgstr "プロトコル"
+
+msgid "Protocol version"
+msgstr "プロトコルバージョン"
+
+#. placeholder {0}: s.driveProtocol.current
+#. placeholder {1}: s.driveProtocol.latest
+#. placeholder {2}: s.tenderdashProtocol.block
+#. placeholder {3}: s.tenderdashProtocol.p2p
+msgid "Protocol: Drive {0} of {1}, block {2}, p2p {3}"
+msgstr "プロトコル: Drive {0}/{1}、ブロック {2}、p2p {3}"
+
+msgid "Quorums"
+msgstr "クォーラム"
+
+msgid "Quorums by size"
+msgstr "サイズ別クォーラム"
+
 msgid "Radar crawler"
 msgstr "Radar クローラー"
 
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar は各 evonode をレート制限よりずっと低く保つため、一人の訪問者が他の訪問者を押し出すことはありません。"
 
+msgid "Range"
+msgstr "範囲"
+
+msgid "Read from the Platform nodes and checked against their proofs."
+msgstr "Platform ノードから読み取り、その証明と照合しています。"
+
+msgid "Recent epochs"
+msgstr "最近のエポック"
+
+msgid "Registered identities"
+msgstr "登録済みアイデンティティ"
+
+#. placeholder {0}: labels[range]
+msgid "Registered identities, last {0}"
+msgstr "登録済みアイデンティティ（直近 {0}）"
+
 msgid "Requests in the last minute"
 msgstr "直近1分間のリクエスト"
+
+msgid "Richest identities"
+msgstr "残高の多いアイデンティティ"
+
+msgid "Richest identities by"
+msgstr "アイデンティティのランキング基準"
+
+msgid "Share"
+msgstr "割合"
+
+msgid "Shielded"
+msgstr "シールド"
+
+#. placeholder {0}: labels[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "シールド・アンシールドの金額（直近 {0}）"
+
+msgid "Shielded and unshielded, in DASH"
+msgstr "シールドとアンシールド（DASH 建て）"
+
+msgid "Shielded pool"
+msgstr "シールドプール"
+
+msgid "should have ended"
+msgstr "終了しているはず"
+
+msgid "Software"
+msgstr "ソフトウェア"
 
 msgid "Some requests are failing."
 msgstr "一部のリクエストが失敗しています。"
@@ -226,14 +613,42 @@ msgstr "一部のソースが応答していません。ほかは引き続き動
 msgid "Sources"
 msgstr "ソース"
 
+msgid "Stalled"
+msgstr "停止中"
+
+msgid "Start times and block counts are proof-checked; transitions and fees come from Platform Explorer."
+msgstr "開始時刻とブロック数は証明で検証済みです。トランジションと手数料は Platform Explorer から取得しています。"
+
+msgid "Start times and block counts are proof-checked."
+msgstr "開始時刻とブロック数は証明で検証済みです。"
+
+msgid "Started"
+msgstr "開始"
+
 msgid "Status"
 msgstr "ステータス"
+
+msgid "Sync state"
+msgstr "同期状態"
 
 msgid "Synced"
 msgstr "同期済み"
 
+#. placeholder {0}: s.tenderdashVersion
+msgid "Tenderdash {0}"
+msgstr "Tenderdash {0}"
+
+msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
+msgstr "これはリカバリーフレーズまたは秘密鍵のようです。どこにも送信されていません。"
+
 msgid "The connection failed."
 msgstr "接続に失敗しました。"
+
+msgid "The current epoch and the three before it"
+msgstr "現在のエポックとその前の3つ"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "このエポックで最も多くのブロックを提案した Evonode。"
 
 msgid "The masternode census and network history"
 msgstr "マスターノードの調査とネットワークの履歴"
@@ -241,8 +656,20 @@ msgstr "マスターノードの調査とネットワークの履歴"
 msgid "The median answer takes {seconds} s."
 msgstr "応答時間の中央値は {seconds} 秒です。"
 
+msgid "The node has no peers."
+msgstr "このノードにはピアがありません。"
+
+msgid "The node is still catching up with the chain."
+msgstr "ノードはまだチェーンに追いついていません。"
+
+msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform が現在署名に使っているクォーラム。証明では未検証です。SDK にこのリストの証明はありません。"
+
 msgid "The request budget is nearly used."
 msgstr "リクエスト予算がほぼ尽きています。"
+
+msgid "The system contracts every network ships with."
+msgstr "すべてのネットワークに標準で含まれるシステムコントラクト。"
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "Platform Explorer 経由の USD レート"
@@ -253,11 +680,85 @@ msgstr "このブラウザ"
 msgid "This network doesn’t have this source."
 msgstr "このネットワークにはこのソースがありません。"
 
+msgid "Time"
+msgstr "時刻"
+
 msgid "Tip hash"
 msgstr "先頭のハッシュ"
 
+msgid "Top proposers"
+msgstr "上位プロポーザー"
+
+msgid "Top proposers this epoch"
+msgstr "今エポックの上位プロポーザー"
+
+msgid "Top-rated contracts"
+msgstr "高評価のコントラクト"
+
+msgid "Total"
+msgstr "合計"
+
+msgid "Total credits"
+msgstr "クレジット合計"
+
+msgid "Transition activity"
+msgstr "トランジションのアクティビティ"
+
+msgid "Transition types"
+msgstr "トランジションの種類"
+
+msgid "transitions"
+msgstr "トランジション"
+
+msgid "Transitions"
+msgstr "トランジション"
+
+msgid "Transitions by type, all time"
+msgstr "種類別トランジション（全期間）"
+
+#. placeholder {0}: labels[range]
+msgid "Transitions per interval, last {0}"
+msgstr "期間ごとのトランジション（直近 {0}）"
+
+msgid "Trending tokens"
+msgstr "注目のトークン"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Unshielded"
+msgstr "アンシールド"
+
+msgid "Updates every few seconds. A list holds still while you point at it."
+msgstr "数秒ごとに更新されます。リストはポインターを合わせている間は固定されます。"
+
+msgid "Upgrade to v{next} is being voted on"
+msgstr "v{next} へのアップグレードは投票中です"
+
 msgid "Used up for now"
 msgstr "現在は使い切りました"
+
+msgid "Validators"
+msgstr "バリデーター"
+
+#. placeholder {0}: formatInt(version)
+msgid "version {0}"
+msgstr "バージョン {0}"
+
+msgid "Vital signs"
+msgstr "バイタルサイン"
+
+msgid "Vote polls that end in the next 30 days."
+msgstr "今後30日以内に終了する投票。"
+
+msgid "Well-known contracts"
+msgstr "主要なコントラクト"
+
+msgid "What Platform Explorer has indexed, a few seconds behind the chain."
+msgstr "Platform Explorer がインデックス化した内容。チェーンより数秒遅れています。"
+
+msgid "What the evonode that answered says about Platform right now."
+msgstr "応答した Evonode が今の Platform について伝えている内容。"
 
 msgid "What the evonodes report about the chain right now."
 msgstr "evonode が現在チェーンについて報告している内容。"

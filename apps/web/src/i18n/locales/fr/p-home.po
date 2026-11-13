@@ -13,26 +13,161 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: polls.length
+msgid "{0, plural, one {# poll ends in the next 30 days.} other {# polls end in the next 30 days.}}"
+msgstr "{0, plural, one {# sondage de vote se termine dans les 30 prochains jours.} other {# sondages de vote se terminent dans les 30 prochains jours.} many {# sondages de vote se terminent dans les 30 prochains jours.}}"
+
+#. placeholder {0}: reason.blocks
+msgid "{0, plural, one {Platform's Core ChainLock is # block behind Core's tip.} other {Platform's Core ChainLock is # blocks behind Core's tip.}}"
+msgstr "{0, plural, one {Le ChainLock Core de Platform a # bloc de retard sur la tête de Core.} other {Le ChainLock Core de Platform a # blocs de retard sur la tête de Core.} many {Le ChainLock Core de Platform a # blocs de retard sur la tête de Core.}}"
+
+#. placeholder {0}: Number(votes)
+msgid "{0, plural, one {Upgrade to v{next}: # vote so far} other {Upgrade to v{next}: # votes so far}}"
+msgstr "{0, plural, one {Passage à v{next} : # vote jusqu’ici} other {Passage à v{next} : # votes jusqu’ici} many {Passage à v{next} : # votes jusqu’ici}}"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(s.threshold)
+msgid "{0} members, {1} to sign"
+msgstr "{0} membres, {1} requis pour signer"
+
 #. placeholder {0}: formatInt(budget.usedLastMinute)
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
 
+#. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
+msgid "{0} s"
+msgstr "{0} s"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+msgid "{0} valid"
+msgstr "{0} valides"
+
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocs de retard sur la tête"
+
+msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
+msgstr "{fresh, plural, one {Figé pendant que vous regardez · # plus récent. Éloignez le pointeur pour le voir.} other {Figé pendant que vous regardez · # plus récents. Éloignez le pointeur pour les voir.} many {Figé pendant que vous regardez · # plus récents. Éloignez le pointeur pour les voir.}}"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Combiné à partir de # réponse vérifiée par preuve.} other {Combiné à partir de # réponses vérifiées par preuve.} many {Combiné à partir de # réponses vérifiées par preuve.}}"
+
+msgid "1 m"
+msgstr "1 m"
+
+msgid "1 w"
+msgstr "1 sem."
+
+msgid "24 h"
+msgstr "24 h"
+
+msgid "3 d"
+msgstr "3 j"
 
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "Un second index pour les adresses, les sorties dépensées, le chainwork et la gouvernance"
 
+msgid "Active"
+msgstr "Actif"
+
+msgid "Active quorums"
+msgstr "Quorums actifs"
+
+msgid "All blocks"
+msgstr "Tous les blocs"
+
+msgid "All contracts"
+msgstr "Tous les contrats"
+
+msgid "All epochs"
+msgstr "Toutes les époques"
+
+msgid "All evonodes"
+msgstr "Tous les evonodes"
+
+msgid "All identities"
+msgstr "Toutes les identités"
+
+msgid "All polls"
+msgstr "Tous les sondages de vote"
+
+msgid "All quorums"
+msgstr "Tous les quorums"
+
+msgid "All time"
+msgstr "Depuis toujours"
+
+msgid "All tokens"
+msgstr "Tous les jetons"
+
+msgid "All transitions"
+msgstr "Toutes les transitions"
+
+msgid "An identity ID, a name, a token ID or an epoch number."
+msgstr "Un ID d’identité, un nom, un ID de jeton ou un numéro d’époque."
+
+msgid "Answering node"
+msgstr "Nœud répondant"
+
 msgid "Asking Platform for its latest block…"
 msgstr "Interrogation de Platform sur son dernier bloc…"
+
+msgid "Average block time"
+msgstr "Temps de bloc moyen"
+
+msgid "Balance"
+msgstr "Solde"
+
+msgid "Banned"
+msgstr "Banni"
 
 msgid "Best ChainLock"
 msgstr "Dernier ChainLock"
 
+msgid "blocks"
+msgstr "blocs"
+
+msgid "Blocks"
+msgstr "Blocs"
+
+msgid "Blocks are arriving and Platform is locked to Core."
+msgstr "Les blocs arrivent et Platform est verrouillé sur Core."
+
+msgid "Busiest identities"
+msgstr "Identités les plus actives"
+
+msgid "By credit balance"
+msgstr "Par solde de crédits"
+
+msgid "By recent token transitions"
+msgstr "Par transitions de jetons récentes"
+
+msgid "By recent transitions"
+msgstr "Par transitions récentes"
+
+msgid "By transition count"
+msgstr "Par nombre de transitions"
+
+msgid "By transitions"
+msgstr "Par transitions"
+
+msgid "By transitions sent"
+msgstr "Par transitions envoyées"
+
+msgid "Catching up"
+msgstr "Rattrapage en cours"
+
 #. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+#. placeholder {0}: formatPercent(s.indexer.syncProgress / 100, 0)
 msgid "Catching up, {0}"
 msgstr "Rattrapage en cours, {0}"
+
+msgid "Chain ID"
+msgstr "ID de chaîne"
 
 msgid "ChainLock block hash, reported by one node"
 msgstr "Hash du bloc ChainLock, signalé par un nœud"
@@ -52,14 +187,27 @@ msgstr "Core"
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Adresses Core, mempool, governance et listes de blocs"
 
+msgid "Core chain-locked height"
+msgstr "Hauteur Core verrouillée par ChainLock"
+
 msgid "Core tip"
 msgstr "Pointe de Core"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Pointe de Core, blocs et transactions, directement depuis les evonodes"
 
+msgid "Credits"
+msgstr "Crédits"
+
+msgid "Current"
+msgstr "En cours"
+
 msgid "DAPI"
 msgstr "DAPI"
+
+#. placeholder {0}: s.dapiVersion
+msgid "DAPI {0}"
+msgstr "DAPI {0}"
 
 msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
 msgstr "DAPI et le SDK Platform répondent. Les sources hébergées sont désactivées en mode « Décentralisé uniquement »."
@@ -76,11 +224,36 @@ msgstr "Budget de requêtes DAPI"
 msgid "Dash Core"
 msgstr "Dash Core"
 
+msgid "Dash Platform"
+msgstr "Dash Platform"
+
 msgid "Decentralized only mode doesn’t contact this source."
 msgstr "Le mode « Décentralisé uniquement » ne contacte pas cette source."
 
 msgid "Details"
 msgstr "Détails"
+
+#. placeholder {0}: s.version
+msgid "Drive {0}"
+msgstr "Drive {0}"
+
+msgid "ends"
+msgstr "se termine"
+
+msgid "Epoch"
+msgstr "Époque"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Époque {0}. Evonodes : {1}. Blocs proposés : {2}."
+
+msgid "Epochs"
+msgstr "Époques"
+
+msgid "Every evonode Platform Explorer has seen validate."
+msgstr "Tous les evonodes que Platform Explorer a vus valider."
 
 msgid "Every source is answering."
 msgstr "Toutes les sources répondent."
@@ -88,11 +261,26 @@ msgstr "Toutes les sources répondent."
 msgid "Everything Core shows comes from DAPI."
 msgstr "Tout ce que Core affiche provient de DAPI."
 
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Fees"
+msgstr "Frais"
+
 msgid "Figures computed on your device"
 msgstr "Chiffres calculés sur votre appareil"
 
+msgid "Find on Platform"
+msgstr "Trouver sur Platform"
+
 msgid "Getting tight"
 msgstr "Ça se resserre"
+
+msgid "Go"
+msgstr "Aller"
+
+msgid "Go straight to"
+msgstr "Aller directement à"
 
 msgid "Headers and blocks"
 msgstr "En-têtes et blocs"
@@ -100,11 +288,38 @@ msgstr "En-têtes et blocs"
 msgid "Headroom"
 msgstr "Marge"
 
+msgid "Held still while you look. New ones appear when you move away."
+msgstr "Figé pendant que vous regardez. Les nouveaux éléments apparaissent dès que vous éloignez le pointeur."
+
+msgid "History and leaders"
+msgstr "Historique et meneurs"
+
+msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
+msgstr "L’état de santé de Dash Platform : sa hauteur, son époque et ses crédits, qui propose des blocs et ce qui s’y passe."
+
 msgid "How each source is answering, and how far behind its data is."
 msgstr "Comment chaque source répond et quel retard ont ses données."
 
 msgid "Hyphen"
 msgstr "Hyphen"
+
+msgid "Identities"
+msgstr "Identités"
+
+msgid "Identity growth"
+msgstr "Croissance des identités"
+
+msgid "Identity ID, name.dash, token ID or epoch"
+msgstr "ID d’identité, name.dash, ID de jeton ou époque"
+
+msgid "Identity ID, name.dash, token ID or epoch number"
+msgstr "ID d’identité, name.dash, ID de jeton ou numéro d’époque"
+
+msgid "In sync"
+msgstr "Synchronisé"
+
+msgid "Inactive"
+msgstr "Inactif"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "Indexé jusqu’au bloc Core {indexed} sur {chain}. Hyphen dit que sa synchronisation est « {sync} », mais son index est en retard sur la chaîne."
@@ -114,6 +329,9 @@ msgstr "Indexé jusqu’au bloc Core {indexed} sur {chain}. Synchronisation : {s
 
 msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
 msgstr "Indexé jusqu’au bloc Platform {indexed} sur {chain}. Indexeur : {state}."
+
+msgid "Indexer"
+msgstr "Indexeur"
 
 msgid "Insight"
 msgstr "Insight"
@@ -142,6 +360,15 @@ msgstr "Sa pointe est le bloc Core {tip}, en retard sur la chaîne."
 msgid "Its tip is Core block {tip}."
 msgstr "Sa pointe est le bloc Core {tip}."
 
+msgid "Lagging"
+msgstr "En retard"
+
+msgid "Last block"
+msgstr "Dernier bloc"
+
+msgid "Last block proposed by"
+msgstr "Dernier bloc proposé par"
+
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -151,11 +378,53 @@ msgstr "Le dernier crawl s’est terminé {0}. Son nœud Core est au bloc {1}."
 msgid "Last good {0}."
 msgstr "Dernier succès {0}."
 
+msgid "Later ones may be missing."
+msgstr "Les suivants peuvent manquer."
+
+msgid "Latest block hash"
+msgstr "Hash du dernier bloc"
+
+msgid "Live"
+msgstr "En direct"
+
+msgid "Live activity"
+msgstr "Activité en direct"
+
+msgid "Live activity, charts and leaderboards need Platform Explorer's index"
+msgstr "L’activité en direct, les graphiques et les classements nécessitent l’index de Platform Explorer"
+
+msgid "Live pulse"
+msgstr "Pouls en direct"
+
+msgid "Looking…"
+msgstr "Recherche…"
+
 msgid "Median answer {rounded} ms"
 msgstr "Temps de réponse médian {rounded} ms"
 
+msgid "Most active contracts"
+msgstr "Contrats les plus actifs"
+
+msgid "Most active identities"
+msgstr "Identités les plus actives"
+
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "Fonctionnement interne du réseau : pairs, pression du mempool, versions et historique"
+
+msgid "Newest blocks"
+msgstr "Derniers blocs"
+
+msgid "Newest Platform blocks"
+msgstr "Derniers blocs Platform"
+
+msgid "Newest Platform transitions"
+msgstr "Dernières transitions Platform"
+
+msgid "Newest transitions"
+msgstr "Dernières transitions"
+
+msgid "No active quorums"
+msgstr "Aucun quorum actif"
 
 msgid "No crawl has finished yet."
 msgstr "Aucun crawl n’est encore terminé."
@@ -163,11 +432,39 @@ msgstr "Aucun crawl n’est encore terminé."
 msgid "No DAPI requests have been made on this network yet."
 msgstr "Aucune requête DAPI n’a encore été faite sur ce réseau."
 
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "Aucun evonode n’a encore proposé de bloc durant cette époque."
+
+msgid "No identity history in this range"
+msgstr "Aucun historique d’identités dans cette plage"
+
+#. placeholder {0}: formatDuration(reason.ageMs)
+msgid "No new Platform block for {0}."
+msgstr "Aucun nouveau bloc Platform depuis {0}."
+
+msgid "No quorums listed"
+msgstr "Aucun quorum listé"
+
+msgid "No transitions in this range"
+msgstr "Aucune transition dans cette plage"
+
+msgid "No transitions yet"
+msgstr "Aucune transition pour l’instant"
+
+msgid "No upgrade pending"
+msgstr "Aucune mise à niveau en attente"
+
+msgid "No vote polls end in the next 30 days"
+msgstr "Aucun sondage de vote ne se termine dans les 30 prochains jours"
+
 msgid "Node sync"
 msgstr "Synchronisation du nœud"
 
 msgid "Nodes resting"
 msgstr "Nœuds au repos"
+
+msgid "Not an evonode"
+msgstr "Pas un evonode"
 
 msgid "Not available right now"
 msgstr "Indisponible pour le moment"
@@ -175,14 +472,38 @@ msgstr "Indisponible pour le moment"
 msgid "Not offered"
 msgstr "Non proposé"
 
+msgid "Not proof-checked"
+msgstr "Non vérifié par preuve"
+
 msgid "Nothing has asked it yet on this network."
 msgstr "Personne ne l’a encore interrogée sur ce réseau."
+
+msgid "Nothing ranked yet"
+msgstr "Rien de classé pour l’instant"
+
+msgid "Nothing shielded in this range"
+msgstr "Rien de blindé dans cette plage"
 
 msgid "Off in this mode"
 msgstr "Désactivé dans ce mode"
 
+msgid "On the chain"
+msgstr "Sur la chaîne"
+
+msgid "Peers"
+msgstr "Pairs"
+
+msgid "Platform"
+msgstr "Platform"
+
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer n’indexe pas les devnets"
+
+msgid "Platform height"
+msgstr "Hauteur Platform"
 
 msgid "Platform lists and counts"
 msgstr "Listes et compteurs Platform"
@@ -192,6 +513,9 @@ msgstr "SDK Platform"
 
 msgid "Plenty of room"
 msgstr "Beaucoup de marge"
+
+msgid "Polls ending soon"
+msgstr "Sondages de vote bientôt clôturés"
 
 msgid "Pressure"
 msgstr "Pression"
@@ -205,14 +529,77 @@ msgstr "Preuve vérifiée au bloc {block} de Platform, époque {epoch}. Ce bloc 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "État Platform vérifié par preuve, contrôlé dans ce navigateur"
 
+msgid "Protocol"
+msgstr "Protocole"
+
+msgid "Protocol version"
+msgstr "Version du protocole"
+
+#. placeholder {0}: s.driveProtocol.current
+#. placeholder {1}: s.driveProtocol.latest
+#. placeholder {2}: s.tenderdashProtocol.block
+#. placeholder {3}: s.tenderdashProtocol.p2p
+msgid "Protocol: Drive {0} of {1}, block {2}, p2p {3}"
+msgstr "Protocole : Drive {0} sur {1}, bloc {2}, p2p {3}"
+
+msgid "Quorums"
+msgstr "Quorums"
+
+msgid "Quorums by size"
+msgstr "Quorums par taille"
+
 msgid "Radar crawler"
 msgstr "Crawler de Radar"
 
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar maintient chaque evonode bien en dessous de sa limite de débit, afin qu’un visiteur n’en évince pas un autre."
 
+msgid "Range"
+msgstr "Plage"
+
+msgid "Read from the Platform nodes and checked against their proofs."
+msgstr "Lu depuis les nœuds Platform et vérifié à l’aide de leurs preuves."
+
+msgid "Recent epochs"
+msgstr "Époques récentes"
+
+msgid "Registered identities"
+msgstr "Identités enregistrées"
+
+#. placeholder {0}: labels[range]
+msgid "Registered identities, last {0}"
+msgstr "Identités enregistrées, sur {0}"
+
 msgid "Requests in the last minute"
 msgstr "Requêtes de la dernière minute"
+
+msgid "Richest identities"
+msgstr "Identités les plus riches"
+
+msgid "Richest identities by"
+msgstr "Identités les plus riches par"
+
+msgid "Share"
+msgstr "Part"
+
+msgid "Shielded"
+msgstr "Blindé"
+
+#. placeholder {0}: labels[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Montants blindés et non blindés, sur {0}"
+
+msgid "Shielded and unshielded, in DASH"
+msgstr "Blindé et non blindé, en DASH"
+
+msgid "Shielded pool"
+msgstr "Pool blindé"
+
+msgid "should have ended"
+msgstr "aurait dû se terminer"
+
+msgid "Software"
+msgstr "Logiciel"
 
 msgid "Some requests are failing."
 msgstr "Certaines requêtes échouent."
@@ -226,14 +613,42 @@ msgstr "Certaines sources ne répondent pas. Les autres fonctionnent toujours."
 msgid "Sources"
 msgstr "Sources"
 
+msgid "Stalled"
+msgstr "Bloqué"
+
+msgid "Start times and block counts are proof-checked; transitions and fees come from Platform Explorer."
+msgstr "Les heures de début et le nombre de blocs sont vérifiés par preuve ; les transitions et les frais proviennent de Platform Explorer."
+
+msgid "Start times and block counts are proof-checked."
+msgstr "Les heures de début et le nombre de blocs sont vérifiés par preuve."
+
+msgid "Started"
+msgstr "Début"
+
 msgid "Status"
 msgstr "Statut"
+
+msgid "Sync state"
+msgstr "État de synchronisation"
 
 msgid "Synced"
 msgstr "Synchronisé"
 
+#. placeholder {0}: s.tenderdashVersion
+msgid "Tenderdash {0}"
+msgstr "Tenderdash {0}"
+
+msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
+msgstr "Cela ressemble à une phrase de récupération ou à une clé privée. Rien n’a été envoyé."
+
 msgid "The connection failed."
 msgstr "La connexion a échoué."
+
+msgid "The current epoch and the three before it"
+msgstr "L’époque actuelle et les trois précédentes"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "Les evonodes qui ont proposé le plus de blocs durant cette époque."
 
 msgid "The masternode census and network history"
 msgstr "Le recensement des masternodes et l’historique du réseau"
@@ -241,8 +656,20 @@ msgstr "Le recensement des masternodes et l’historique du réseau"
 msgid "The median answer takes {seconds} s."
 msgstr "Le temps de réponse médian est de {seconds} s."
 
+msgid "The node has no peers."
+msgstr "Le nœud n’a aucun pair."
+
+msgid "The node is still catching up with the chain."
+msgstr "Le nœud rattrape encore la chaîne."
+
+msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
+msgstr "Les quorums avec lesquels Platform signe actuellement. Non vérifié par preuve : le SDK n’a pas de preuve pour cette liste."
+
 msgid "The request budget is nearly used."
 msgstr "Le budget de requêtes est presque épuisé."
+
+msgid "The system contracts every network ships with."
+msgstr "Les contrats système fournis avec chaque réseau."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "Le taux USD via Platform Explorer"
@@ -253,11 +680,85 @@ msgstr "Ce navigateur"
 msgid "This network doesn’t have this source."
 msgstr "Ce réseau n’a pas cette source."
 
+msgid "Time"
+msgstr "Heure"
+
 msgid "Tip hash"
 msgstr "Hash de la pointe"
 
+msgid "Top proposers"
+msgstr "Meilleurs proposeurs"
+
+msgid "Top proposers this epoch"
+msgstr "Meilleurs proposeurs de cette époque"
+
+msgid "Top-rated contracts"
+msgstr "Contrats les mieux notés"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Total credits"
+msgstr "Total des crédits"
+
+msgid "Transition activity"
+msgstr "Activité des transitions"
+
+msgid "Transition types"
+msgstr "Types de transition"
+
+msgid "transitions"
+msgstr "transitions"
+
+msgid "Transitions"
+msgstr "Transitions"
+
+msgid "Transitions by type, all time"
+msgstr "Transitions par type, depuis toujours"
+
+#. placeholder {0}: labels[range]
+msgid "Transitions per interval, last {0}"
+msgstr "Transitions par intervalle, sur {0}"
+
+msgid "Trending tokens"
+msgstr "Jetons tendance"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Unshielded"
+msgstr "Non blindé"
+
+msgid "Updates every few seconds. A list holds still while you point at it."
+msgstr "Mise à jour toutes les quelques secondes. Une liste reste figée tant que le pointeur la survole."
+
+msgid "Upgrade to v{next} is being voted on"
+msgstr "Le passage à v{next} est en cours de vote"
+
 msgid "Used up for now"
 msgstr "Épuisé pour l’instant"
+
+msgid "Validators"
+msgstr "Validateurs"
+
+#. placeholder {0}: formatInt(version)
+msgid "version {0}"
+msgstr "version {0}"
+
+msgid "Vital signs"
+msgstr "Signes vitaux"
+
+msgid "Vote polls that end in the next 30 days."
+msgstr "Sondages de vote qui se terminent dans les 30 prochains jours."
+
+msgid "Well-known contracts"
+msgstr "Contrats bien connus"
+
+msgid "What Platform Explorer has indexed, a few seconds behind the chain."
+msgstr "Ce que Platform Explorer a indexé, avec quelques secondes de retard sur la chaîne."
+
+msgid "What the evonode that answered says about Platform right now."
+msgstr "Ce que dit en ce moment de Platform l’evonode qui a répondu."
 
 msgid "What the evonodes report about the chain right now."
 msgstr "Ce que les evonodes rapportent actuellement sur la chaîne."
