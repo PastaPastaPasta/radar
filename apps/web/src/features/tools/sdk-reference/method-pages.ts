@@ -231,4 +231,16 @@ export const METHOD_PAGES: Record<string, MethodRow> = {
     call: 'group.contestedResourceVotersForIdentityWithProof({ dataContractId, documentTypeName, indexName, indexValues, contestantId, limit })',
     pages: ['/contest/$label'],
   },
+  'dpns.resolveName': {
+    call: 'dpns.resolveName(name)',
+    pages: ['/token/$id', '/token/$id/holders'],
+  },
+  'tokens.directPurchasePrices': {
+    call: 'tokens.directPurchasePricesWithProof(tokenIds)',
+    pages: ['/tokens', '/token/$id'],
+  },
+  'tokens.perpetualDistributionLastClaim': {
+    call: 'tokens.perpetualDistributionLastClaimWithProof(identityId, tokenId)',
+    pages: ['/token/$id'],
+  },
 }
