@@ -1,14 +1,660 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: fr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "(estimated)"
+msgstr "(estimée)"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, one {Signalé par # evonode} other {Signalé par # evonodes}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "{0} ancres contre lesquelles le pool accepte une dépense."
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} crédits"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "{0} evonodes ont proposé les {1} blocs de l’époque."
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} sur {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{0} evonodes sur {1} ({2})"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "{0} evonodes sur {1} sont nécessaires"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "{0} quorums à la hauteur Platform {1}. Non vérifié par preuve : le SDK n’a pas de preuve pour cette liste."
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Combiné à partir de # réponse vérifiée par preuve.} other {Combiné à partir de # réponses vérifiées par preuve.} many {Combiné à partir de # réponses vérifiées par preuve.}}"
+
+msgid "1 m"
+msgstr "1 m"
+
+msgid "1 w"
+msgstr "1 sem."
+
+msgid "24 h"
+msgstr "24 h"
+
+msgid "3 d"
+msgstr "3 j"
+
+msgid "64 hex characters"
+msgstr "64 caractères hexadécimaux"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "Un nullifier fait 32 octets, écrits sous la forme de 64 caractères hexadécimaux."
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "Un nullifier est publié lorsqu’une note blindée est dépensée. Collez-en un pour voir si le pool le contient."
+
+msgid "A year, on the collateral"
+msgstr "Un an, sur le collatéral"
+
+msgid "Activation threshold"
+msgstr "Seuil d’activation"
+
+msgid "All epochs"
+msgstr "Toutes les époques"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "Une époque est un nombre entier, par exemple 88."
+
+msgid "An estimate from the epoch’s length"
+msgstr "Une estimation d’après la durée de l’époque"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "Un ID fait 32 octets : une chaîne base58 de 43 ou 44 caractères, ou 64 caractères hexadécimaux."
+
+msgid "Anchors"
+msgstr "Ancres"
+
+msgid "Balance"
+msgstr "Solde"
+
+msgid "Balance ID"
+msgstr "ID du solde"
+
+msgid "Balance in the pool"
+msgstr "Solde du pool"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 ou 64 caractères hexadécimaux"
+
+msgid "blocks"
+msgstr "blocs"
+
+msgid "Blocks"
+msgstr "Blocs"
+
+msgid "Blocks so far"
+msgstr "Blocs jusqu’ici"
+
+msgid "Candidate version"
+msgstr "Version candidate"
+
+msgid "Choose a range of epochs"
+msgstr "Choisir une plage d’époques"
+
+msgid "Chunks of notes"
+msgstr "Blocs de notes"
+
+msgid "Commitment"
+msgstr "Engagement"
+
+msgid "Copy encrypted note"
+msgstr "Copier la note chiffrée"
+
+msgid "Copy ID"
+msgstr "Copier l’ID"
+
+msgid "Core block rewards"
+msgstr "Récompenses de blocs Core"
+
+msgid "Credits"
+msgstr "Crédits"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "Des crédits mis de côté pour un but précis, comme le vote sur un nom contesté. Cherchez-en un par son ID."
+
+msgid "Current epoch"
+msgstr "Époque actuelle"
+
+msgid "Current Platform quorums"
+msgstr "Quorums Platform actuels"
+
+msgid "Current quorums"
+msgstr "Quorums actuels"
+
+msgid "Current version"
+msgstr "Version actuelle"
+
+msgid "Each evonode’s vote"
+msgstr "Le vote de chaque evonode"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "Gains par evonode sur chacune des {0} dernières époques, en DASH"
+
+msgid "Encrypted note"
+msgstr "Note chiffrée"
+
+msgid "Encrypted notes"
+msgstr "Notes chiffrées"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "Notes chiffrées du pool blindé"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Ended"
+msgstr "Terminé"
+
+msgid "Epoch"
+msgstr "Époque"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Époque {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "L’époque {0} n’a pas de totaux finalisés"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "L’époque {0} n’a pas encore commencé"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Époque {0}. Evonodes : {1}. Blocs proposés : {2}."
+
+msgid "Epoch history"
+msgstr "Historique des époques"
+
+msgid "Epoch rewards"
+msgstr "Récompenses d’époque"
+
+msgid "Epochs"
+msgstr "Époques"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "Époques {0} à {1}."
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "Époques avec leur début, leur fin et leur multiplicateur de frais"
+
+msgid "Estimated end"
+msgstr "Fin estimée"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Chaque crédit dans Platform : soldes d’identités, soldes préfinancés et frais restant à verser."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Evonodes"
+msgstr "Evonodes"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "Evonodes selon la version du protocole pour laquelle ils votent"
+
+msgid "Evonodes not yet voting for it"
+msgstr "Evonodes qui ne votent pas encore pour elle"
+
+msgid "Fee multiplier"
+msgstr "Multiplicateur de frais"
+
+msgid "Final once the epoch ended."
+msgstr "Définitif une fois l’époque terminée."
+
+msgid "First block"
+msgstr "Premier bloc"
+
+msgid "From epoch"
+msgstr "De l’époque"
+
+msgid "Hash prefix"
+msgstr "Préfixe du hash"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "Combien d’evonodes votent pour chaque version du protocole."
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "En DASH, sur les {0} derniers."
+
+msgid "In Platform"
+msgstr "Dans Platform"
+
+msgid "Last pool"
+msgstr "Dernier pool"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "{0} derniers"
+
+msgid "Look up"
+msgstr "Rechercher"
+
+msgid "Median (DASH)"
+msgstr "Médiane (DASH)"
+
+msgid "Median monthly earnings"
+msgstr "Gains mensuels médians"
+
+msgid "Median yield"
+msgstr "Rendement médian"
+
+msgid "Members"
+msgstr "Membres"
+
+msgid "Most recent anchor"
+msgstr "Ancre la plus récente"
+
+msgid "Neighbouring epochs"
+msgstr "Époques voisines"
+
+msgid "Network"
+msgstr "Réseau"
+
+msgid "Next chunk"
+msgstr "Bloc suivant"
+
+msgid "Next epoch"
+msgstr "Époque suivante"
+
+msgid "Next epoch’s version"
+msgstr "Version de l’époque suivante"
+
+msgid "Next version"
+msgstr "Version suivante"
+
+msgid "No epochs in this range."
+msgstr "Aucune époque dans cette plage."
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "Aucun evonode n’a encore proposé de bloc durant cette époque."
+
+msgid "No evonode has voted."
+msgstr "Aucun evonode n’a voté."
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "Aucun evonode n’a proposé de bloc sur cette époque."
+
+msgid "No prefunded balance"
+msgstr "Aucun solde préfinancé"
+
+msgid "No quorum matches this filter."
+msgstr "Aucun quorum ne correspond à ce filtre."
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "Aucune mise à niveau vers une version plus récente du protocole n’est soumise au vote."
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "None proposed"
+msgstr "Aucune proposée"
+
+msgid "Not known"
+msgstr "Inconnu"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Non vérifié par preuve : le SDK n’a pas de preuve pour cette liste."
+
+msgid "Not spent"
+msgstr "Non dépensé"
+
+msgid "Not verified"
+msgstr "Non vérifié"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "Rien n’a été blindé ni désblindé dans cette plage."
+
+msgid "Nullifier"
+msgstr "Nullifier"
+
+msgid "Nullifier lookup"
+msgstr "Recherche de nullifier"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "Une époque Platform finalisée : ses totaux, qui a proposé ses blocs, et les époques de part et d’autre."
+
+msgid "p10 (DASH)"
+msgstr "p10 (DASH)"
+
+msgid "p90 (DASH)"
+msgstr "p90 (DASH)"
+
+msgid "Pending votes"
+msgstr "Votes en attente"
+
+msgid "Per block"
+msgstr "Par bloc"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Par evonode, sur {0} jours"
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer n’indexe pas les devnets"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "Platform ne détient aucun solde spécialisé préfinancé sous cet ID."
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform ne garde des totaux que pour les époques finalisées, et ce réseau n’en a aucun pour ce numéro."
+
+msgid "Platform reports no credits."
+msgstr "Platform ne signale aucun crédit."
+
+msgid "Pool so far"
+msgstr "Pool jusqu’ici"
+
+msgid "Pool state"
+msgstr "État du pool"
+
+msgid "Prefunded specialised balance"
+msgstr "Solde spécialisé préfinancé"
+
+msgid "Previous chunk"
+msgstr "Bloc précédent"
+
+msgid "Previous epoch"
+msgstr "Époque précédente"
+
+msgid "Processing fees"
+msgstr "Frais de traitement"
+
+msgid "Proposers"
+msgstr "Proposeurs"
+
+msgid "Proposers of this epoch"
+msgstr "Proposeurs de cette époque"
+
+msgid "Proposes around"
+msgstr "Propose vers"
+
+msgid "Protocol"
+msgstr "Protocole"
+
+msgid "Protocol version"
+msgstr "Version du protocole"
+
+msgid "Quorum hash"
+msgstr "Hash du quorum"
+
+msgid "Quorum hash starts with"
+msgstr "Le hash du quorum commence par"
+
+msgid "Quorum type"
+msgstr "Type de quorum"
+
+msgid "Quorums"
+msgstr "Quorums"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar n’explore pas les devnets"
+
+msgid "Radar has no epoch history yet."
+msgstr "Radar n’a pas encore d’historique des époques."
+
+msgid "Radar has no proposer schedule right now."
+msgstr "Radar n’a pas de calendrier des proposeurs pour le moment."
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Le seuil exact, la phase et les décomptes par candidat de Radar nécessitent le crawl de Radar"
+
+msgid "Range"
+msgstr "Plage"
+
+msgid "Rewards and schedule"
+msgstr "Récompenses et calendrier"
+
+msgid "Share"
+msgstr "Part"
+
+msgid "Shield and unshield history"
+msgstr "Historique des blindages et déblindages"
+
+msgid "Shielded"
+msgstr "Blindé"
+
+msgid "Shielded and unshielded"
+msgstr "Blindé et non blindé"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Montants blindés et non blindés, sur {0}"
+
+msgid "Shielded pool"
+msgstr "Pool blindé"
+
+msgid "Show"
+msgstr "Afficher"
+
+msgid "Show more"
+msgstr "Afficher plus"
+
+msgid "Slots"
+msgstr "Créneaux"
+
+msgid "Spent"
+msgstr "Dépensé"
+
+msgid "Start"
+msgstr "Début"
+
+msgid "Started"
+msgstr "Début"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "Établi d’après la règle du protocole : deux tiers des evonodes qui votent, {0} actuellement."
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "Établi d’après la règle du protocole : deux tiers des evonodes qui votent."
+
+msgid "Still needed"
+msgstr "Encore nécessaires"
+
+msgid "Storage fees created"
+msgstr "Frais de stockage créés"
+
+msgid "Storage fees distributed"
+msgstr "Frais de stockage distribués"
+
+msgid "That is not a nullifier"
+msgstr "Ce n’est pas un nullifier"
+
+msgid "That is not a valid ID"
+msgstr "Ce n’est pas un ID valide"
+
+msgid "That is not an epoch number"
+msgstr "Ce n’est pas un numéro d’époque"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "Les crédits détenus dans Platform, et la recherche d’un solde spécialisé préfinancé par son ID."
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "L’époque actuelle est la {0}."
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "Le pool, les gains, le rendement, le calendrier des proposeurs et l’historique de l’époque nécessitent le crawl de Radar"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "Les evonodes qui ont proposé le plus de blocs durant cette époque."
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "L’historique des blindages et déblindages nécessite l’index de Platform Explorer"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "Les {0} dernières époques."
+
+msgid "The next proposers"
+msgstr "Les prochains proposeurs"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "Les douze prochains proposeurs du calendrier, avec le nombre de blocs consécutifs de chacun."
+
+msgid "The node reported no quorums."
+msgstr "Le nœud n’a signalé aucun quorum."
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "La version du protocole Platform en vigueur, et comment les evonodes votent pour la suivante."
+
+msgid "The pool has no anchor yet."
+msgstr "Le pool n’a pas encore d’ancre."
+
+msgid "The pool has no anchors yet."
+msgstr "Le pool n’a pas encore d’ancres."
+
+msgid "The pool has no notes at this position."
+msgstr "Le pool n’a pas de notes à cette position."
+
+msgid "The pool has no such nullifier."
+msgstr "Le pool n’a pas ce nullifier."
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "Le pool contient ce nullifier : sa note a été dépensée."
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "Le pool contient {0} notes, servies par blocs de {1}. Les {NOTES_SHOWN} premières du bloc commençant à la note {2} sont affichées."
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "Le pool des crédits blindés : son solde, les ancres qu’il accepte, ses notes chiffrées, et si un nullifier a été dépensé."
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "Le pool sert ses notes par blocs de {0}. Les {NOTES_SHOWN} premières du bloc commençant à la note {1} sont affichées."
+
+msgid "The protocol version each evonode votes for"
+msgstr "La version du protocole pour laquelle chaque evonode vote"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "Les quorums que connaissent actuellement les nœuds de Platform, avec leur taille et leur seuil de signature."
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "Les racines de l’arbre des notes sur lesquelles une dépense peut être prouvée."
+
+msgid "Threshold"
+msgstr "Seuil"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "Seuil {0}"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "To epoch"
+msgstr "À l’époque"
+
+msgid "Top proposers"
+msgstr "Meilleurs proposeurs"
+
+msgid "Top proposers this epoch"
+msgstr "Meilleurs proposeurs de cette époque"
+
+msgid "Total credits"
+msgstr "Total des crédits"
+
+msgid "Totals"
+msgstr "Totaux"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Unshielded"
+msgstr "Non blindé"
+
+msgid "Upgrade vote"
+msgstr "Vote de mise à niveau"
+
+msgid "Verified"
+msgstr "Vérifié"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Votes by version"
+msgstr "Votes par version"
+
+msgid "Votes for"
+msgstr "Votes pour"
+
+msgid "Votes for a newer version"
+msgstr "Votes pour une version plus récente"
+
+msgid "Votes for it"
+msgstr "Votes pour elle"
+
+msgid "Votes for v{next}"
+msgstr "Votes pour v{next}"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "Ce qu’un evonode a gagné par époque : les 80 % du milieu des evonodes et la médiane, sur les {0} dernières époques."
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "Ce dont sont payés les evonodes, et ce que cela représente."
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "Où en est l’époque Platform actuelle, qui y propose des blocs, et les époques précédentes."
+
+msgid "Who proposes next"
+msgstr "Qui propose ensuite"

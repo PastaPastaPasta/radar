@@ -12,3 +12,648 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "(estimated)"
+msgstr "(estimated)"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "{0} anchors the pool accepts a spend against."
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} credits"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "{0} evonodes proposed the epoch’s {1} blocks."
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} of {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{0} of {1} evonodes ({2})"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "{0} of {1} evonodes are needed"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+
+msgid "1 m"
+msgstr "1 m"
+
+msgid "1 w"
+msgstr "1 w"
+
+msgid "24 h"
+msgstr "24 h"
+
+msgid "3 d"
+msgstr "3 d"
+
+msgid "64 hex characters"
+msgstr "64 hex characters"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "A nullifier is 32 bytes, written as 64 hex characters."
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+
+msgid "A year, on the collateral"
+msgstr "A year, on the collateral"
+
+msgid "Activation threshold"
+msgstr "Activation threshold"
+
+msgid "All epochs"
+msgstr "All epochs"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "An epoch is a whole number, such as 88."
+
+msgid "An estimate from the epoch’s length"
+msgstr "An estimate from the epoch’s length"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+
+msgid "Anchors"
+msgstr "Anchors"
+
+msgid "Balance"
+msgstr "Balance"
+
+msgid "Balance ID"
+msgstr "Balance ID"
+
+msgid "Balance in the pool"
+msgstr "Balance in the pool"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 or 64 hex characters"
+
+msgid "blocks"
+msgstr "blocks"
+
+msgid "Blocks"
+msgstr "Blocks"
+
+msgid "Blocks so far"
+msgstr "Blocks so far"
+
+msgid "Candidate version"
+msgstr "Candidate version"
+
+msgid "Choose a range of epochs"
+msgstr "Choose a range of epochs"
+
+msgid "Chunks of notes"
+msgstr "Chunks of notes"
+
+msgid "Commitment"
+msgstr "Commitment"
+
+msgid "Copy encrypted note"
+msgstr "Copy encrypted note"
+
+msgid "Copy ID"
+msgstr "Copy ID"
+
+msgid "Core block rewards"
+msgstr "Core block rewards"
+
+msgid "Credits"
+msgstr "Credits"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+
+msgid "Current epoch"
+msgstr "Current epoch"
+
+msgid "Current Platform quorums"
+msgstr "Current Platform quorums"
+
+msgid "Current quorums"
+msgstr "Current quorums"
+
+msgid "Current version"
+msgstr "Current version"
+
+msgid "Each evonode’s vote"
+msgstr "Each evonode’s vote"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "Earnings per evonode in each of the last {0} epochs, in DASH"
+
+msgid "Encrypted note"
+msgstr "Encrypted note"
+
+msgid "Encrypted notes"
+msgstr "Encrypted notes"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "Encrypted notes of the shielded pool"
+
+msgid "End"
+msgstr "End"
+
+msgid "Ended"
+msgstr "Ended"
+
+msgid "Epoch"
+msgstr "Epoch"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Epoch {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "Epoch {0} has no finalized totals"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "Epoch {0} has not started"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+
+msgid "Epoch history"
+msgstr "Epoch history"
+
+msgid "Epoch rewards"
+msgstr "Epoch rewards"
+
+msgid "Epochs"
+msgstr "Epochs"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "Epochs {0} to {1}."
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "Epochs with their start, end and fee multiplier"
+
+msgid "Estimated end"
+msgstr "Estimated end"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Evonodes"
+msgstr "Evonodes"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "Evonodes by the protocol version they vote for"
+
+msgid "Evonodes not yet voting for it"
+msgstr "Evonodes not yet voting for it"
+
+msgid "Fee multiplier"
+msgstr "Fee multiplier"
+
+msgid "Final once the epoch ended."
+msgstr "Final once the epoch ended."
+
+msgid "First block"
+msgstr "First block"
+
+msgid "From epoch"
+msgstr "From epoch"
+
+msgid "Hash prefix"
+msgstr "Hash prefix"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "How many evonodes vote for each protocol version."
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "In DASH, over the last {0}."
+
+msgid "In Platform"
+msgstr "In Platform"
+
+msgid "Last pool"
+msgstr "Last pool"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "Latest {0}"
+
+msgid "Look up"
+msgstr "Look up"
+
+msgid "Median (DASH)"
+msgstr "Median (DASH)"
+
+msgid "Median monthly earnings"
+msgstr "Median monthly earnings"
+
+msgid "Median yield"
+msgstr "Median yield"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Most recent anchor"
+msgstr "Most recent anchor"
+
+msgid "Neighbouring epochs"
+msgstr "Neighbouring epochs"
+
+msgid "Network"
+msgstr "Network"
+
+msgid "Next chunk"
+msgstr "Next chunk"
+
+msgid "Next epoch"
+msgstr "Next epoch"
+
+msgid "Next epoch’s version"
+msgstr "Next epoch’s version"
+
+msgid "Next version"
+msgstr "Next version"
+
+msgid "No epochs in this range."
+msgstr "No epochs in this range."
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "No evonode has proposed a block in this epoch yet."
+
+msgid "No evonode has voted."
+msgstr "No evonode has voted."
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "No evonode proposed a block in this epoch."
+
+msgid "No prefunded balance"
+msgstr "No prefunded balance"
+
+msgid "No quorum matches this filter."
+msgstr "No quorum matches this filter."
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "No upgrade to a newer protocol version is being voted on."
+
+msgid "None"
+msgstr "None"
+
+msgid "None proposed"
+msgstr "None proposed"
+
+msgid "Not known"
+msgstr "Not known"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Not proof-checked: the SDK has no proof for this list."
+
+msgid "Not spent"
+msgstr "Not spent"
+
+msgid "Not verified"
+msgstr "Not verified"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "Nothing was shielded or unshielded in this range."
+
+msgid "Nullifier"
+msgstr "Nullifier"
+
+msgid "Nullifier lookup"
+msgstr "Nullifier lookup"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+
+msgid "p10 (DASH)"
+msgstr "p10 (DASH)"
+
+msgid "p90 (DASH)"
+msgstr "p90 (DASH)"
+
+msgid "Pending votes"
+msgstr "Pending votes"
+
+msgid "Per block"
+msgstr "Per block"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Per evonode, over {0} days"
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer doesn’t index devnets"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "Platform holds no prefunded specialised balance under this ID."
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+
+msgid "Platform reports no credits."
+msgstr "Platform reports no credits."
+
+msgid "Pool so far"
+msgstr "Pool so far"
+
+msgid "Pool state"
+msgstr "Pool state"
+
+msgid "Prefunded specialised balance"
+msgstr "Prefunded specialised balance"
+
+msgid "Previous chunk"
+msgstr "Previous chunk"
+
+msgid "Previous epoch"
+msgstr "Previous epoch"
+
+msgid "Processing fees"
+msgstr "Processing fees"
+
+msgid "Proposers"
+msgstr "Proposers"
+
+msgid "Proposers of this epoch"
+msgstr "Proposers of this epoch"
+
+msgid "Proposes around"
+msgstr "Proposes around"
+
+msgid "Protocol"
+msgstr "Protocol"
+
+msgid "Protocol version"
+msgstr "Protocol version"
+
+msgid "Quorum hash"
+msgstr "Quorum hash"
+
+msgid "Quorum hash starts with"
+msgstr "Quorum hash starts with"
+
+msgid "Quorum type"
+msgstr "Quorum type"
+
+msgid "Quorums"
+msgstr "Quorums"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar doesn’t crawl devnets"
+
+msgid "Radar has no epoch history yet."
+msgstr "Radar has no epoch history yet."
+
+msgid "Radar has no proposer schedule right now."
+msgstr "Radar has no proposer schedule right now."
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+
+msgid "Range"
+msgstr "Range"
+
+msgid "Rewards and schedule"
+msgstr "Rewards and schedule"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Shield and unshield history"
+msgstr "Shield and unshield history"
+
+msgid "Shielded"
+msgstr "Shielded"
+
+msgid "Shielded and unshielded"
+msgstr "Shielded and unshielded"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Shielded and unshielded amounts, last {0}"
+
+msgid "Shielded pool"
+msgstr "Shielded pool"
+
+msgid "Show"
+msgstr "Show"
+
+msgid "Show more"
+msgstr "Show more"
+
+msgid "Slots"
+msgstr "Slots"
+
+msgid "Spent"
+msgstr "Spent"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Started"
+msgstr "Started"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+
+msgid "Still needed"
+msgstr "Still needed"
+
+msgid "Storage fees created"
+msgstr "Storage fees created"
+
+msgid "Storage fees distributed"
+msgstr "Storage fees distributed"
+
+msgid "That is not a nullifier"
+msgstr "That is not a nullifier"
+
+msgid "That is not a valid ID"
+msgstr "That is not a valid ID"
+
+msgid "That is not an epoch number"
+msgstr "That is not an epoch number"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "The current epoch is {0}."
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "The evonodes that proposed the most blocks this epoch."
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "The history of shielding and unshielding needs Platform Explorer’s index"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "The latest {0} epochs."
+
+msgid "The next proposers"
+msgstr "The next proposers"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "The next twelve proposers in the schedule, with how many blocks in a row each has."
+
+msgid "The node reported no quorums."
+msgstr "The node reported no quorums."
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "The Platform protocol version in force, and how the evonodes are voting on the next one."
+
+msgid "The pool has no anchor yet."
+msgstr "The pool has no anchor yet."
+
+msgid "The pool has no anchors yet."
+msgstr "The pool has no anchors yet."
+
+msgid "The pool has no notes at this position."
+msgstr "The pool has no notes at this position."
+
+msgid "The pool has no such nullifier."
+msgstr "The pool has no such nullifier."
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "The pool has this nullifier: its note was spent."
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+
+msgid "The protocol version each evonode votes for"
+msgstr "The protocol version each evonode votes for"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "The quorums Platform’s nodes currently know, with their size and signing threshold."
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "The roots of the note tree that a spend may be proved against."
+
+msgid "Threshold"
+msgstr "Threshold"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "Threshold {0}"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "To epoch"
+msgstr "To epoch"
+
+msgid "Top proposers"
+msgstr "Top proposers"
+
+msgid "Top proposers this epoch"
+msgstr "Top proposers this epoch"
+
+msgid "Total credits"
+msgstr "Total credits"
+
+msgid "Totals"
+msgstr "Totals"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Unshielded"
+msgstr "Unshielded"
+
+msgid "Upgrade vote"
+msgstr "Upgrade vote"
+
+msgid "Verified"
+msgstr "Verified"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Votes by version"
+msgstr "Votes by version"
+
+msgid "Votes for"
+msgstr "Votes for"
+
+msgid "Votes for a newer version"
+msgstr "Votes for a newer version"
+
+msgid "Votes for it"
+msgstr "Votes for it"
+
+msgid "Votes for v{next}"
+msgstr "Votes for v{next}"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "What the evonodes are paid from, and what that comes to."
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+
+msgid "Who proposes next"
+msgstr "Who proposes next"

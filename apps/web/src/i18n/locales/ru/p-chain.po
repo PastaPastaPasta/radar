@@ -1,14 +1,660 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ru\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "(estimated)"
+msgstr "(оценка)"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, one {Сообщила # эвонода} few {Сообщили # эвоноды} many {Сообщили # эвонод} other {Сообщили # эвоноды}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "{0} якорей, относительно которых пул принимает трату."
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} кредитов"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "Эвонод, предложивших {1} блоков эпохи: {0}."
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} из {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{0} из {1} эвонод ({2})"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "Нужно {0} из {1} эвонод"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "Кворумов на высоте Platform {1}: {0}. Не подтверждено доказательством: у SDK нет доказательства для этого списка."
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Собрано из # ответа, проверенного по доказательству.} few {Собрано из # ответов, проверенных по доказательствам.} many {Собрано из # ответов, проверенных по доказательствам.} other {Собрано из # ответа, проверенного по доказательствам.}}"
+
+msgid "1 m"
+msgstr "1 мес"
+
+msgid "1 w"
+msgstr "1 нед"
+
+msgid "24 h"
+msgstr "24 ч"
+
+msgid "3 d"
+msgstr "3 д"
+
+msgid "64 hex characters"
+msgstr "64 шестнадцатеричных символа"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "Нуллификатор — это 32 байта, записанные как 64 шестнадцатеричных символа."
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "Нуллификатор публикуется, когда тратится защищённая запись. Вставьте его, чтобы узнать, есть ли он в пуле."
+
+msgid "A year, on the collateral"
+msgstr "За год, на залог"
+
+msgid "Activation threshold"
+msgstr "Порог активации"
+
+msgid "All epochs"
+msgstr "Все эпохи"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "Эпоха — целое число, например 88."
+
+msgid "An estimate from the epoch’s length"
+msgstr "Оценка по длине эпохи"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "ID — это 32 байта: строка base58 из 43 или 44 символов либо 64 шестнадцатеричных символа."
+
+msgid "Anchors"
+msgstr "Якоря"
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "Balance ID"
+msgstr "ID баланса"
+
+msgid "Balance in the pool"
+msgstr "Баланс пула"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 или 64 шестнадцатеричных символа"
+
+msgid "blocks"
+msgstr "блоков"
+
+msgid "Blocks"
+msgstr "Блоки"
+
+msgid "Blocks so far"
+msgstr "Блоков на данный момент"
+
+msgid "Candidate version"
+msgstr "Версия-кандидат"
+
+msgid "Choose a range of epochs"
+msgstr "Выбрать диапазон эпох"
+
+msgid "Chunks of notes"
+msgstr "Блоки записей"
+
+msgid "Commitment"
+msgstr "Обязательство"
+
+msgid "Copy encrypted note"
+msgstr "Копировать зашифрованную запись"
+
+msgid "Copy ID"
+msgstr "Копировать ID"
+
+msgid "Core block rewards"
+msgstr "Награды за блоки Core"
+
+msgid "Credits"
+msgstr "Кредиты"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "Кредиты, отложенные на одну цель, например на голосование за спорное имя. Найдите их по ID."
+
+msgid "Current epoch"
+msgstr "Текущая эпоха"
+
+msgid "Current Platform quorums"
+msgstr "Текущие кворумы Platform"
+
+msgid "Current quorums"
+msgstr "Текущие кворумы"
+
+msgid "Current version"
+msgstr "Текущая версия"
+
+msgid "Each evonode’s vote"
+msgstr "Голос каждой эвоноды"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "Доход на эвоноду в каждой из последних эпох ({0}), в DASH"
+
+msgid "Encrypted note"
+msgstr "Зашифрованная запись"
+
+msgid "Encrypted notes"
+msgstr "Зашифрованные записи"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "Зашифрованные записи защищённого пула"
+
+msgid "End"
+msgstr "Конец"
+
+msgid "Ended"
+msgstr "Завершено"
+
+msgid "Epoch"
+msgstr "Эпоха"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Эпоха {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "У эпохи {0} нет завершённых итогов"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "Эпоха {0} ещё не началась"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Эпоха {0}. Эвоноды: {1}. Предложено блоков: {2}."
+
+msgid "Epoch history"
+msgstr "История эпох"
+
+msgid "Epoch rewards"
+msgstr "Награды эпохи"
+
+msgid "Epochs"
+msgstr "Эпохи"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "Эпохи с {0} по {1}."
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "Эпохи с началом, концом и множителем комиссии"
+
+msgid "Estimated end"
+msgstr "Ориентировочный конец"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Все кредиты в Platform: балансы идентичностей, предоплаченные балансы и комиссии, которые ещё предстоит выплатить."
+
+msgid "Evonode"
+msgstr "Эвонода"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "Эвоноды по версии протокола, за которую они голосуют"
+
+msgid "Evonodes not yet voting for it"
+msgstr "Эвоноды, ещё не голосующие за неё"
+
+msgid "Fee multiplier"
+msgstr "Множитель комиссии"
+
+msgid "Final once the epoch ended."
+msgstr "Окончательно после завершения эпохи."
+
+msgid "First block"
+msgstr "Первый блок"
+
+msgid "From epoch"
+msgstr "С эпохи"
+
+msgid "Hash prefix"
+msgstr "Префикс хеша"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "Сколько эвонод голосует за каждую версию протокола."
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "В DASH, за последние {0}."
+
+msgid "In Platform"
+msgstr "В Platform"
+
+msgid "Last pool"
+msgstr "Прошлый пул"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "Последние {0}"
+
+msgid "Look up"
+msgstr "Найти"
+
+msgid "Median (DASH)"
+msgstr "Медиана (DASH)"
+
+msgid "Median monthly earnings"
+msgstr "Медианный месячный доход"
+
+msgid "Median yield"
+msgstr "Медианная доходность"
+
+msgid "Members"
+msgstr "Участники"
+
+msgid "Most recent anchor"
+msgstr "Последний якорь"
+
+msgid "Neighbouring epochs"
+msgstr "Соседние эпохи"
+
+msgid "Network"
+msgstr "Сеть"
+
+msgid "Next chunk"
+msgstr "Следующий блок"
+
+msgid "Next epoch"
+msgstr "Следующая эпоха"
+
+msgid "Next epoch’s version"
+msgstr "Версия следующей эпохи"
+
+msgid "Next version"
+msgstr "Следующая версия"
+
+msgid "No epochs in this range."
+msgstr "В этом диапазоне нет эпох."
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "В этой эпохе ни одна эвонода ещё не предложила блок."
+
+msgid "No evonode has voted."
+msgstr "Ни одна эвонода не голосовала."
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "В эту эпоху ни одна эвонода не предложила блок."
+
+msgid "No prefunded balance"
+msgstr "Нет предоплаченного баланса"
+
+msgid "No quorum matches this filter."
+msgstr "Ни один кворум не подходит под этот фильтр."
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "Голосования за обновление до более новой версии протокола сейчас нет."
+
+msgid "None"
+msgstr "Нет"
+
+msgid "None proposed"
+msgstr "Не предложена"
+
+msgid "Not known"
+msgstr "Неизвестно"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Не подтверждено доказательством: у SDK нет доказательства для этого списка."
+
+msgid "Not spent"
+msgstr "Не потрачен"
+
+msgid "Not verified"
+msgstr "Не проверен"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "В этом диапазоне ничего не было защищено или возвращено из защиты."
+
+msgid "Nullifier"
+msgstr "Нуллификатор"
+
+msgid "Nullifier lookup"
+msgstr "Поиск нуллификатора"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "Одна завершённая эпоха Platform: её итоги, кто предлагал её блоки и соседние эпохи."
+
+msgid "p10 (DASH)"
+msgstr "p10 (DASH)"
+
+msgid "p90 (DASH)"
+msgstr "p90 (DASH)"
+
+msgid "Pending votes"
+msgstr "Ожидающие голоса"
+
+msgid "Per block"
+msgstr "На блок"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "На эвоноду, за {0} дн."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer не индексирует devnet"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "В Platform нет предоплаченного специализированного баланса с этим ID."
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform хранит итоги только завершённых эпох, а в этой сети для этого номера их нет."
+
+msgid "Platform reports no credits."
+msgstr "Platform не сообщает о кредитах."
+
+msgid "Pool so far"
+msgstr "Пул на данный момент"
+
+msgid "Pool state"
+msgstr "Состояние пула"
+
+msgid "Prefunded specialised balance"
+msgstr "Предоплаченный специализированный баланс"
+
+msgid "Previous chunk"
+msgstr "Предыдущий блок"
+
+msgid "Previous epoch"
+msgstr "Предыдущая эпоха"
+
+msgid "Processing fees"
+msgstr "Комиссии за обработку"
+
+msgid "Proposers"
+msgstr "Предлагающие"
+
+msgid "Proposers of this epoch"
+msgstr "Предлагающие этой эпохи"
+
+msgid "Proposes around"
+msgstr "Предложит около"
+
+msgid "Protocol"
+msgstr "Протокол"
+
+msgid "Protocol version"
+msgstr "Версия протокола"
+
+msgid "Quorum hash"
+msgstr "Хеш кворума"
+
+msgid "Quorum hash starts with"
+msgstr "Хеш кворума начинается с"
+
+msgid "Quorum type"
+msgstr "Тип кворума"
+
+msgid "Quorums"
+msgstr "Кворумы"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar не обходит devnet"
+
+msgid "Radar has no epoch history yet."
+msgstr "У Radar пока нет истории эпох."
+
+msgid "Radar has no proposer schedule right now."
+msgstr "У Radar сейчас нет расписания предлагающих."
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Точный порог, фаза и подсчёт по кандидатам от Radar требуют данных обхода Radar"
+
+msgid "Range"
+msgstr "Диапазон"
+
+msgid "Rewards and schedule"
+msgstr "Награды и расписание"
+
+msgid "Share"
+msgstr "Доля"
+
+msgid "Shield and unshield history"
+msgstr "История защиты и снятия защиты"
+
+msgid "Shielded"
+msgstr "Защищённая"
+
+msgid "Shielded and unshielded"
+msgstr "Защищено и незащищено"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Защищённые и незащищённые суммы за последние {0}"
+
+msgid "Shielded pool"
+msgstr "Защищённый пул"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Show more"
+msgstr "Показать ещё"
+
+msgid "Slots"
+msgstr "Слоты"
+
+msgid "Spent"
+msgstr "Потрачен"
+
+msgid "Start"
+msgstr "Начало"
+
+msgid "Started"
+msgstr "Начало"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "Указано по правилу протокола: две трети голосующих эвонод, сейчас их {0}."
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "Указано по правилу протокола: две трети голосующих эвонод."
+
+msgid "Still needed"
+msgstr "Ещё нужно"
+
+msgid "Storage fees created"
+msgstr "Созданные комиссии за хранение"
+
+msgid "Storage fees distributed"
+msgstr "Распределённые комиссии за хранение"
+
+msgid "That is not a nullifier"
+msgstr "Это не нуллификатор"
+
+msgid "That is not a valid ID"
+msgstr "Это недопустимый ID"
+
+msgid "That is not an epoch number"
+msgstr "Это не номер эпохи"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "Кредиты, хранящиеся в Platform, и поиск предоплаченного специализированного баланса по ID."
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "Текущая эпоха — {0}."
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "Пул, доход, доходность, расписание предлагающих и история эпохи требуют данных обхода Radar"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "Эвоноды, предложившие больше всего блоков в этой эпохе."
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "История защиты и снятия защиты требует индекса Platform Explorer"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "Последние эпохи ({0})."
+
+msgid "The next proposers"
+msgstr "Следующие предлагающие"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "Следующие двенадцать предлагающих в расписании и сколько блоков подряд у каждого."
+
+msgid "The node reported no quorums."
+msgstr "Узел не сообщил ни об одном кворуме."
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "Действующая версия протокола Platform и то, как эвоноды голосуют за следующую."
+
+msgid "The pool has no anchor yet."
+msgstr "В пуле пока нет якоря."
+
+msgid "The pool has no anchors yet."
+msgstr "В пуле пока нет якорей."
+
+msgid "The pool has no notes at this position."
+msgstr "В пуле на этой позиции нет записей."
+
+msgid "The pool has no such nullifier."
+msgstr "В пуле нет такого нуллификатора."
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "В пуле есть этот нуллификатор: его запись потрачена."
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "В пуле {0} записей, они отдаются блоками по {1}. Показаны первые {NOTES_SHOWN} из блока, начинающегося с записи {2}."
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "Пул защищённых кредитов: его баланс, принимаемые им якоря, зашифрованные записи и то, потрачен ли нуллификатор."
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "Пул отдаёт записи блоками по {0}. Показаны первые {NOTES_SHOWN} из блока, начинающегося с записи {1}."
+
+msgid "The protocol version each evonode votes for"
+msgstr "Версия протокола, за которую голосует каждая эвонода"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "Кворумы, которые сейчас знают узлы Platform, с размером и порогом подписи."
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "Корни дерева записей, относительно которых можно доказать трату."
+
+msgid "Threshold"
+msgstr "Порог"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "Порог {0}"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "To epoch"
+msgstr "До эпохи"
+
+msgid "Top proposers"
+msgstr "Топ предлагающих"
+
+msgid "Top proposers this epoch"
+msgstr "Топ предлагающих в этой эпохе"
+
+msgid "Total credits"
+msgstr "Всего кредитов"
+
+msgid "Totals"
+msgstr "Итоги"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unshielded"
+msgstr "Незащищённая"
+
+msgid "Upgrade vote"
+msgstr "Голос за обновление"
+
+msgid "Verified"
+msgstr "Проверен"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Votes by version"
+msgstr "Голоса по версиям"
+
+msgid "Votes for"
+msgstr "Голоса за"
+
+msgid "Votes for a newer version"
+msgstr "Голоса за более новую версию"
+
+msgid "Votes for it"
+msgstr "Голоса за неё"
+
+msgid "Votes for v{next}"
+msgstr "Голоса за v{next}"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "Сколько эвонода зарабатывала за эпоху: средние 80% эвонод и медиана за последние {0} эпох."
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "Из чего платят эвонодам и сколько это составляет."
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "Где сейчас текущая эпоха Platform, кто предлагает в ней блоки и какие эпохи были до неё."
+
+msgid "Who proposes next"
+msgstr "Кто предлагает следующим"

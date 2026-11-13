@@ -1,14 +1,660 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "(estimated)"
+msgstr "（估算）"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, other {由 # 个 Evonode 上报}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "池接受 {0} 个可用于验证花费的锚点。"
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} 积分"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "{0} 个 Evonode 提议了该纪元的 {1} 个区块。"
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{1} 个 Evonode 中的 {0} 个（{2}）"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "需要 {1} 个 Evonode 中的 {0} 个"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform 高度 {1} 时共 {0} 个 Quorum。未通过证明验证：SDK 没有此列表的证明。"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, other {由 # 个已通过证明验证的应答合并而成。}}"
+
+msgid "1 m"
+msgstr "1个月"
+
+msgid "1 w"
+msgstr "1周"
+
+msgid "24 h"
+msgstr "24小时"
+
+msgid "3 d"
+msgstr "3天"
+
+msgid "64 hex characters"
+msgstr "64 个十六进制字符"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "nullifier 为 32 字节，写作 64 个十六进制字符。"
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "花费隐私票据时会公布 nullifier。粘贴一个，即可查看池中是否有它。"
+
+msgid "A year, on the collateral"
+msgstr "按一年计，相对于抵押品"
+
+msgid "Activation threshold"
+msgstr "激活门槛"
+
+msgid "All epochs"
+msgstr "所有纪元"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "纪元是整数，例如 88。"
+
+msgid "An estimate from the epoch’s length"
+msgstr "根据纪元时长估算"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "ID 为 32 字节：43 或 44 个字符的 base58 字符串，或 64 个十六进制字符。"
+
+msgid "Anchors"
+msgstr "锚点"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "Balance ID"
+msgstr "余额 ID"
+
+msgid "Balance in the pool"
+msgstr "池中余额"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 或 64 个十六进制字符"
+
+msgid "blocks"
+msgstr "区块"
+
+msgid "Blocks"
+msgstr "区块"
+
+msgid "Blocks so far"
+msgstr "目前区块"
+
+msgid "Candidate version"
+msgstr "候选版本"
+
+msgid "Choose a range of epochs"
+msgstr "选择纪元范围"
+
+msgid "Chunks of notes"
+msgstr "笔记分块"
+
+msgid "Commitment"
+msgstr "承诺"
+
+msgid "Copy encrypted note"
+msgstr "复制加密票据"
+
+msgid "Copy ID"
+msgstr "复制 ID"
+
+msgid "Core block rewards"
+msgstr "Core 区块奖励"
+
+msgid "Credits"
+msgstr "积分"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "为某一用途预留的积分，例如争议名称的投票。可通过 ID 查询。"
+
+msgid "Current epoch"
+msgstr "当前纪元"
+
+msgid "Current Platform quorums"
+msgstr "当前的 Platform Quorum"
+
+msgid "Current quorums"
+msgstr "当前 Quorum"
+
+msgid "Current version"
+msgstr "当前版本"
+
+msgid "Each evonode’s vote"
+msgstr "每个 Evonode 的投票"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "最近 {0} 个纪元中每个 Evonode 的收益（DASH）"
+
+msgid "Encrypted note"
+msgstr "加密票据"
+
+msgid "Encrypted notes"
+msgstr "加密票据"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "隐私池的加密票据"
+
+msgid "End"
+msgstr "结束"
+
+msgid "Ended"
+msgstr "已结束"
+
+msgid "Epoch"
+msgstr "纪元"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "纪元 {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "纪元 {0} 没有已完结的汇总"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "纪元 {0} 尚未开始"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "纪元 {0}。Evonode：{1}。已提议区块：{2}。"
+
+msgid "Epoch history"
+msgstr "纪元历史"
+
+msgid "Epoch rewards"
+msgstr "纪元奖励"
+
+msgid "Epochs"
+msgstr "纪元"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "纪元 {0} 至 {1}。"
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "纪元的开始、结束和费用倍数"
+
+msgid "Estimated end"
+msgstr "预计结束"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Platform 中的全部积分：身份余额、预存余额以及尚待发放的费用。"
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "按所投协议版本划分的 Evonode"
+
+msgid "Evonodes not yet voting for it"
+msgstr "尚未投票支持的 Evonode"
+
+msgid "Fee multiplier"
+msgstr "费用倍数"
+
+msgid "Final once the epoch ended."
+msgstr "纪元结束后即为最终值。"
+
+msgid "First block"
+msgstr "首个区块"
+
+msgid "From epoch"
+msgstr "起始纪元"
+
+msgid "Hash prefix"
+msgstr "哈希前缀"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "每个协议版本有多少 Evonode 投票。"
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "以 DASH 计，最近 {0}。"
+
+msgid "In Platform"
+msgstr "在 Platform 中"
+
+msgid "Last pool"
+msgstr "上一期奖池"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "最近 {0}"
+
+msgid "Look up"
+msgstr "查询"
+
+msgid "Median (DASH)"
+msgstr "中位数（DASH）"
+
+msgid "Median monthly earnings"
+msgstr "每月收益中位数"
+
+msgid "Median yield"
+msgstr "收益率中位数"
+
+msgid "Members"
+msgstr "成员"
+
+msgid "Most recent anchor"
+msgstr "最新锚点"
+
+msgid "Neighbouring epochs"
+msgstr "相邻纪元"
+
+msgid "Network"
+msgstr "网络"
+
+msgid "Next chunk"
+msgstr "下一分块"
+
+msgid "Next epoch"
+msgstr "下一纪元"
+
+msgid "Next epoch’s version"
+msgstr "下一纪元的版本"
+
+msgid "Next version"
+msgstr "下一版本"
+
+msgid "No epochs in this range."
+msgstr "此范围内没有纪元。"
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "本纪元尚无 evonode 提议过区块。"
+
+msgid "No evonode has voted."
+msgstr "没有 Evonode 投票。"
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "本纪元没有 Evonode 提议区块。"
+
+msgid "No prefunded balance"
+msgstr "没有预存余额"
+
+msgid "No quorum matches this filter."
+msgstr "没有符合此筛选条件的 Quorum。"
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "目前没有升级到更新协议版本的投票。"
+
+msgid "None"
+msgstr "无"
+
+msgid "None proposed"
+msgstr "无提议"
+
+msgid "Not known"
+msgstr "未知"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "未通过证明验证：SDK 没有此列表的证明。"
+
+msgid "Not spent"
+msgstr "未花费"
+
+msgid "Not verified"
+msgstr "未验证"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "此范围内没有隐私保护或取消隐私保护的操作。"
+
+msgid "Nullifier"
+msgstr "Nullifier"
+
+msgid "Nullifier lookup"
+msgstr "Nullifier 查询"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "单个已完结的 Platform 纪元：其汇总、区块提议者以及前后相邻的纪元。"
+
+msgid "p10 (DASH)"
+msgstr "p10（DASH）"
+
+msgid "p90 (DASH)"
+msgstr "p90（DASH）"
+
+msgid "Pending votes"
+msgstr "待定投票"
+
+msgid "Per block"
+msgstr "每区块"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "每个 Evonode，{0} 天"
+
+msgid "Phase"
+msgstr "阶段"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer 不索引开发网"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "Platform 中没有此 ID 对应的预存专用余额。"
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform 只保存已完结纪元的汇总，而此网络没有该编号的汇总。"
+
+msgid "Platform reports no credits."
+msgstr "Platform 未报告任何积分。"
+
+msgid "Pool so far"
+msgstr "目前奖池"
+
+msgid "Pool state"
+msgstr "池状态"
+
+msgid "Prefunded specialised balance"
+msgstr "预存专用余额"
+
+msgid "Previous chunk"
+msgstr "上一分块"
+
+msgid "Previous epoch"
+msgstr "上一纪元"
+
+msgid "Processing fees"
+msgstr "处理费用"
+
+msgid "Proposers"
+msgstr "提议者"
+
+msgid "Proposers of this epoch"
+msgstr "本纪元的提议者"
+
+msgid "Proposes around"
+msgstr "大约提议于"
+
+msgid "Protocol"
+msgstr "协议"
+
+msgid "Protocol version"
+msgstr "协议版本"
+
+msgid "Quorum hash"
+msgstr "Quorum 哈希"
+
+msgid "Quorum hash starts with"
+msgstr "Quorum 哈希开头为"
+
+msgid "Quorum type"
+msgstr "Quorum 类型"
+
+msgid "Quorums"
+msgstr "Quorum"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar 不抓取开发网"
+
+msgid "Radar has no epoch history yet."
+msgstr "Radar 暂无纪元历史。"
+
+msgid "Radar has no proposer schedule right now."
+msgstr "Radar 目前没有提议者排期。"
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Radar 的确切门槛、阶段和各候选版本计数需要 Radar 的爬取数据"
+
+msgid "Range"
+msgstr "范围"
+
+msgid "Rewards and schedule"
+msgstr "奖励与排期"
+
+msgid "Share"
+msgstr "占比"
+
+msgid "Shield and unshield history"
+msgstr "隐私保护与取消保护历史"
+
+msgid "Shielded"
+msgstr "隐私保护"
+
+msgid "Shielded and unshielded"
+msgstr "隐私保护与未保护"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "最近 {0} 的隐私保护与未隐私保护金额"
+
+msgid "Shielded pool"
+msgstr "隐私池"
+
+msgid "Show"
+msgstr "显示"
+
+msgid "Show more"
+msgstr "显示更多"
+
+msgid "Slots"
+msgstr "时段"
+
+msgid "Spent"
+msgstr "已花费"
+
+msgid "Start"
+msgstr "开始"
+
+msgid "Started"
+msgstr "开始时间"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "按协议规则（投票 Evonode 的三分之二）给出，目前为 {0}。"
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "按协议规则（投票 Evonode 的三分之二）给出。"
+
+msgid "Still needed"
+msgstr "仍需"
+
+msgid "Storage fees created"
+msgstr "新增存储费用"
+
+msgid "Storage fees distributed"
+msgstr "已分配存储费用"
+
+msgid "That is not a nullifier"
+msgstr "这不是 nullifier"
+
+msgid "That is not a valid ID"
+msgstr "这不是有效的 ID"
+
+msgid "That is not an epoch number"
+msgstr "这不是纪元编号"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "Platform 中持有的积分，以及按 ID 查询预存专用余额。"
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "当前纪元为 {0}。"
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "纪元的奖池、收益、收益率、提议者排期和历史需要 Radar 的爬取数据"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "本纪元提议区块最多的 evonode。"
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "隐私保护与取消保护的历史需要 Platform Explorer 的索引"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "最近 {0} 个纪元。"
+
+msgid "The next proposers"
+msgstr "接下来的提议者"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "排期中接下来的十二位提议者，以及每位连续提议的区块数。"
+
+msgid "The node reported no quorums."
+msgstr "该节点未报告任何 Quorum。"
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "当前生效的 Platform 协议版本，以及 Evonode 对下一版本的投票情况。"
+
+msgid "The pool has no anchor yet."
+msgstr "池中暂无锚点。"
+
+msgid "The pool has no anchors yet."
+msgstr "池中暂无锚点。"
+
+msgid "The pool has no notes at this position."
+msgstr "池在此位置没有票据。"
+
+msgid "The pool has no such nullifier."
+msgstr "池中没有这个 nullifier。"
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "池中有这个 nullifier：对应的票据已被花费。"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "池中有 {0} 条票据，按每 {1} 条一块提供。显示从票据 {2} 开始的分块中的前 {NOTES_SHOWN} 条。"
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "隐私积分池：其余额、接受的锚点、加密票据，以及某个 nullifier 是否已被花费。"
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "池按每 {0} 条一块提供票据。显示从票据 {1} 开始的分块中的前 {NOTES_SHOWN} 条。"
+
+msgid "The protocol version each evonode votes for"
+msgstr "每个 Evonode 所投的协议版本"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "Platform 节点当前已知的 Quorum，含规模和签名门限。"
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "可用于证明花费的票据树根。"
+
+msgid "Threshold"
+msgstr "门槛"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "门槛 {0}"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "To epoch"
+msgstr "截止纪元"
+
+msgid "Top proposers"
+msgstr "提议者排行"
+
+msgid "Top proposers this epoch"
+msgstr "本纪元提议者排行"
+
+msgid "Total credits"
+msgstr "积分总量"
+
+msgid "Totals"
+msgstr "汇总"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Unshielded"
+msgstr "未隐私保护"
+
+msgid "Upgrade vote"
+msgstr "升级投票"
+
+msgid "Verified"
+msgstr "已验证"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Votes by version"
+msgstr "按版本统计的投票"
+
+msgid "Votes for"
+msgstr "投票支持"
+
+msgid "Votes for a newer version"
+msgstr "支持更新版本的投票"
+
+msgid "Votes for it"
+msgstr "支持票"
+
+msgid "Votes for v{next}"
+msgstr "支持 v{next} 的投票"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "每个纪元 Evonode 的收益：中间 80% 的 Evonode 与中位数，涵盖最近 {0} 个纪元。"
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "Evonode 的报酬来源及其总额。"
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "当前 Platform 纪元的进度、其中提议区块的人，以及之前的纪元。"
+
+msgid "Who proposes next"
+msgstr "下一个提议者"

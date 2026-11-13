@@ -60,7 +60,6 @@ describe('Search offers no dead ends @HY-14', () => {
 
   it('withholds the kinds whose page is not built yet', () => {
     for (const to of [
-      '/epoch/$n',
       '/name/$label',
       '/platform-address/$addr',
       '/about',
