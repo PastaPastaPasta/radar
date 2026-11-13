@@ -13,6 +13,56 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(c.unknown)
+#. placeholder {0}: formatInt(d.overall.unknown)
+msgid ", {0} unknown"
+msgstr ", {0} unknown"
+
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid ", at block {0}"
+msgstr ", at block {0}"
+
+msgid ", so the figures below may be out of date."
+msgstr ", so the figures below may be out of date."
+
+#. placeholder {0}: String(g.min_protocol)
+msgid "\"Announce 24\" counts valid members whose latest handshake with our crawler, in the past week, gave protocol {0} or newer. That's an estimate of who can sign, not the trigger itself: the signal needs that many actual signatures from one quorum, and members we couldn't reach may still sign. It can also count too many: release candidates 1 to 4 announce the same version and protocol but never sign Core 24 on mainnet, so a masternode still on one should upgrade."
+msgstr "\"Announce 24\" counts valid members whose latest handshake with our crawler, in the past week, gave protocol {0} or newer. That's an estimate of who can sign, not the trigger itself: the signal needs that many actual signatures from one quorum, and members we couldn't reach may still sign. It can also count too many: release candidates 1 to 4 announce the same version and protocol but never sign Core 24 on mainnet, so a masternode still on one should upgrade."
+
+msgid "(empty)"
+msgstr "(empty)"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
+msgstr "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
+
+#. placeholder {0}: formatPercent(v, 1)
+msgid "{0} a year"
+msgstr "{0} a year"
+
+#. placeholder {0}: countryName(c0[0])
+#. placeholder {1}: share(c0[1], sumCountries)
+msgid "{0} alone has {1}."
+msgstr "{0} alone has {1}."
+
+#. placeholder {0}: formatInt(c.fail)
+msgid "{0} fail"
+msgstr "{0} fail"
+
+#. placeholder {0}: formatInt(d.beyond_version)
+msgid "{0} fail another check that needs a fix."
+msgstr "{0} fail another check that needs a fix."
+
+#. placeholder {0}: formatInt(d.version_only)
+msgid "{0} fail only the version check and need just the upgrade. "
+msgstr "{0} fail only the version check and need just the upgrade. "
+
+#. placeholder {0}: o0.org
+#. placeholder {1}: share(o0.n, sumOrgs)
+#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
+msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
+msgstr "{0} hosts {1} of {noun}, and the three largest providers host {2}."
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -27,15 +77,186 @@ msgstr "{0} masternodes in {1} places"
 msgid "{0} masternodes, the most of any place"
 msgstr "{0} masternodes, the most of any place"
 
+#. placeholder {0}: formatInt(o.needed)
+#. placeholder {1}: formatInt(o.remaining ?? 0)
+msgid "{0} more needed in {1} blocks"
+msgstr "{0} more needed in {1} blocks"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} more versions"
+msgstr "{0} more versions"
+
+#. placeholder {0}: formatInt(threshold)
+msgid "{0} must sign"
+msgstr "{0} must sign"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+msgid "{0} nodes"
+msgstr "{0} nodes"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
+msgstr "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
+
 #. placeholder {0}: formatInt(crawl.mn_reachable)
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(q.valid)
 #. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(p.window)
 msgid "{0} of {1}"
 msgstr "{0} of {1}"
+
+#. placeholder {0}: formatInt(threshold ?? 0)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: share(p.threshold_min, p.window)
+msgid "{0} of {1} blocks in the first window, falling to {2}"
+msgstr "{0} of {1} blocks in the first window, falling to {2}"
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(progress.mined)
+#. placeholder {2}: formatInt(w.threshold ?? 0)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: formatInt(progress.projected)
+msgid "{0} of {1} blocks so far signalled; the window needs {2} of {3}; at this pace it ends with about {4}"
+msgstr "{0} of {1} blocks so far signalled; the window needs {2} of {3}; at this pace it ends with about {4}"
+
+#. placeholder {0}: formatInt(threshold)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: String(w.attempt + 1)
+msgid "{0} of {1} blocks, on attempt {2}"
+msgstr "{0} of {1} blocks, on attempt {2}"
+
+#. placeholder {0}: formatPercent(p.healthy / p.checked, 1)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
+msgstr "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
+
+#. placeholder {0}: ready(d.overall.pass)
+#. placeholder {1}: formatInt(d.masternodes)
+msgid "{0} of {1} enabled masternodes pass every check."
+msgstr "{0} of {1} enabled masternodes pass every check."
+
+#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {1}: formatInt(reach.no)
+msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
+msgstr "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "{0} of enabled answered"
+msgstr "{0} of enabled answered"
+
+#. placeholder {0}: formatInt(evo)
+msgid "{0} of them evonodes"
+msgstr "{0} of them evonodes"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other clients"
+msgstr "{0} other clients"
+
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
+msgstr "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other releases"
+msgstr "{0} other releases"
+
+#. placeholder {0}: formatInt(d.overall.pass)
+msgid "{0} ready"
+msgstr "{0} ready"
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+#. placeholder {2}: second[0]
+#. placeholder {3}: share(second[1], sum)
+msgid "{0} runs on {1} of {noun} and {2} on {3}."
+msgstr "{0} runs on {1} of {noun} and {2} on {3}."
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+msgid "{0} runs on {1} of {noun}."
+msgstr "{0} runs on {1} of {noun}."
+
+#. placeholder {0}: formatInt(v.tested)
+#. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
+#. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
+msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
+msgstr "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} tx"
+
+#. placeholder {0}: block(b)
+#. placeholder {1}: b.estimated ? t`about` + ' ' : ''
+#. placeholder {2}: when(blockMs(b))
+msgid "{0}, {1}{2}"
+msgstr "{0}, {1}{2}"
+
+msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
+msgstr "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
+
+msgid "<0.1%"
+msgstr "<0.1%"
+
+msgid "0 ready"
+msgstr "0 ready"
+
+msgid "1 y"
+msgstr "1 y"
+
+msgid "24 h"
+msgstr "24 h"
+
+msgid "30 d"
+msgstr "30 d"
+
+msgid "7 d"
+msgstr "7 d"
+
+msgid "90 d"
+msgstr "90 d"
+
+#. placeholder {0}: String(evo.params.bit)
+msgid "A second deployment, evo_shares (bit {0}), has the same window and thresholds, but Dash Core 24.0.0 doesn't sign its masternode signal, so it can't start until a later release does."
+msgstr "A second deployment, evo_shares (bit {0}), has the same window and thresholds, but Dash Core 24.0.0 doesn't sign its masternode signal, so it can't start until a later release does."
+
+#. placeholder {0}: when(p.timeout)
+msgid "A window that doesn't lock in and whose last block's median time is at or past {0} fails it."
+msgstr "A window that doesn't lock in and whose last block's median time is at or past {0} fails it."
+
+msgid "about"
+msgstr "about"
+
+#. placeholder {0}: when(blockMs(o.activation))
+#. placeholder {0}: when(blockMs(o.activation_if_reached))
+#. placeholder {0}: when(blockMs(o.earliest_activation))
+msgid "about {0}"
+msgstr "about {0}"
+
+msgid "Activation"
+msgstr "Activation"
+
+msgid "Activation if this window locks in"
+msgstr "Activation if this window locks in"
+
+msgid "Activation, at the earliest"
+msgstr "Activation, at the earliest"
+
+msgid "Activation, if this window locks in"
+msgstr "Activation, if this window locks in"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Address networks"
+msgstr "Address networks"
+
+msgid "Addresses tried"
+msgstr "Addresses tried"
 
 msgid "Age"
 msgstr "Age"
@@ -43,17 +264,64 @@ msgstr "Age"
 msgid "All blocks"
 msgstr "All blocks"
 
+msgid "all nodes"
+msgstr "all nodes"
+
+msgid "All nodes"
+msgstr "All nodes"
+
+msgid "Announce 24"
+msgstr "Announce 24"
+
+msgid "Answered"
+msgstr "Answered"
+
+msgid "at the earliest"
+msgstr "at the earliest"
+
+msgid "At this pace"
+msgstr "At this pace"
+
+#. placeholder {0}: g.llmq
+#. placeholder {1}: formatInt(size)
+#. placeholder {2}: formatInt(threshold)
+msgid "Before miners' votes count, one {0} quorum ({1} masternodes) must sign the Core 24 signal: {2} of its members, running Dash Core 24. A miner then puts it in a block."
+msgstr "Before miners' votes count, one {0} quorum ({1} masternodes) must sign the Core 24 signal: {2} of its members, running Dash Core 24. A miner then puts it in a block."
+
 msgid "Best ChainLock"
 msgstr "Best ChainLock"
 
 msgid "Block"
 msgstr "Block"
 
+#. placeholder {0}: formatInt(b.height)
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {0}: formatInt(q.height)
+msgid "block {0}"
+msgstr "block {0}"
+
+msgid "Block in the window"
+msgstr "Block in the window"
+
 msgid "block updates"
 msgstr "block updates"
 
 msgid "Blockchain size"
 msgstr "Blockchain size"
+
+#. placeholder {0}: formatInt(w.start.height)
+#. placeholder {1}: formatInt(w.end.height)
+msgid "blocks {0}–{1}"
+msgstr "blocks {0}–{1}"
+
+msgid "Builds that aren't releases"
+msgstr "Builds that aren't releases"
+
+msgid "Can they be reached"
+msgstr "Can they be reached"
+
+msgid "can't reach it any more"
+msgstr "can't reach it any more"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -68,14 +336,56 @@ msgstr "ChainLocked"
 msgid "Charts"
 msgstr "Charts"
 
+msgid "Checked every 15 minutes, last"
+msgstr "Checked every 15 minutes, last"
+
 msgid "Checking Hyphen…"
 msgstr "Checking Hyphen…"
 
 msgid "Circulating supply"
 msgstr "Circulating supply"
 
+msgid "CJDNS"
+msgstr "CJDNS"
+
+msgid "Client"
+msgstr "Client"
+
+msgid "Compact block filters"
+msgstr "Compact block filters"
+
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
+
+msgid "Core 24 activation"
+msgstr "Core 24 activation"
+
+#. placeholder {0}: when(p.start_time)
+msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
+msgstr "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
+
+msgid "Core 24 failed: it reached its timeout without locking in."
+msgstr "Core 24 failed: it reached its timeout without locking in."
+
+#. placeholder {0}: String(p.bit)
+#. placeholder {1}: when(p.start_time)
+#. placeholder {2}: doc.mnhf ?? 'masternode'
+msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
+msgstr "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is active since {0}."
+msgstr "Core 24 is active since {0}."
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is locked in. It activates at {0}."
+msgstr "Core 24 is locked in. It activates at {0}."
+
+msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
+msgstr "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 
 msgid "Core block height"
 msgstr "Core block height"
@@ -89,37 +399,174 @@ msgstr "Core blocks, masternodes and Platform records in one place. Every figure
 msgid "Core figures"
 msgstr "Core figures"
 
+msgid "Core height"
+msgstr "Core height"
+
+msgid "Core tip"
+msgstr "Core tip"
+
 msgid "Core, Platform and the masternode network"
 msgstr "Core, Platform and the masternode network"
+
+msgid "countries"
+msgstr "countries"
+
+msgid "Countries"
+msgstr "Countries"
 
 msgid "crawled"
 msgstr "crawled"
 
+msgid "DAPI answered"
+msgstr "DAPI answered"
+
+msgid "DAPI's masternode list isn't available right now."
+msgstr "DAPI's masternode list isn't available right now."
+
 msgid "Dash Core"
 msgstr "Dash Core"
+
+msgid "Dash Core 24 activation is under way."
+msgstr "Dash Core 24 activation is under way."
+
+msgid "Dash nodes answered the last crawl"
+msgstr "Dash nodes answered the last crawl"
+
+msgid "Dates of windows to come are estimates."
+msgstr "Dates of windows to come are estimates."
+
+msgid "Describing"
+msgstr "Describing"
+
+msgid "Didn't answer"
+msgstr "Didn't answer"
 
 msgid "Difficulty"
 msgstr "Difficulty"
 
+msgid "Drive versions"
+msgstr "Drive versions"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(d.recent.blocks)
+#. placeholder {3}: formatInt(d.recent.count)
+msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
+msgstr "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Each Platform block is locked to a Core block."
+
+msgid "Earliest activation"
+msgstr "Earliest activation"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Enabled masternodes"
+msgstr "Enabled masternodes"
 
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
 msgstr "Epoch {0} · {1} blocks in"
 
+msgid "estimate"
+msgstr "estimate"
+
+msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
+msgstr "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
+
+msgid "Every version and user agent"
+msgstr "Every version and user agent"
+
+msgid "Everything else"
+msgstr "Everything else"
+
+msgid "Evonode Platform health"
+msgstr "Evonode Platform health"
+
+msgid "evonodes"
+msgstr "evonodes"
+
+msgid "Evonodes"
+msgstr "Evonodes"
+
+msgid "evonodes only"
+msgstr "evonodes only"
+
+msgid "Evonodes, Core payments"
+msgstr "Evonodes, Core payments"
+
+msgid "Evonodes, Platform rewards"
+msgstr "Evonodes, Platform rewards"
+
+msgid "Failed"
+msgstr "Failed"
+
 msgid "First seen"
 msgstr "First seen"
 
+msgid "First window that can count opens"
+msgstr "First window that can count opens"
+
+msgid "First window that can count opens, at the earliest"
+msgstr "First window that can count opens, at the earliest"
+
+msgid "Focus the chart and press the arrow keys to read a point."
+msgstr "Focus the chart and press the arrow keys to read a point."
+
+msgid "Follow it on the activation tracker"
+msgstr "Follow it on the activation tracker"
+
+msgid "Formed at"
+msgstr "Formed at"
+
+msgid "From block"
+msgstr "From block"
+
+msgid "Grade {g}"
+msgstr "Grade {g}"
+
+msgid "Healthy"
+msgstr "Healthy"
+
 msgid "Height"
 msgstr "Height"
+
+msgid "highest seen"
+msgstr "highest seen"
+
+msgid "Hosting providers"
+msgstr "Hosting providers"
+
+msgid "How activation works"
+msgstr "How activation works"
+
+msgid "How fast they serve"
+msgstr "How fast they serve"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen doesn't index devnets"
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen's index is still being checked."
+
+msgid "I2P"
+msgstr "I2P"
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "IPv6"
+msgstr "IPv6"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "It's from block {0}; our dashd or the crawler host may be down."
+msgstr "It's from block {0}; our dashd or the crawler host may be down."
+
+msgid "Known addresses"
+msgstr "Known addresses"
 
 msgid "Last block"
 msgstr "Last block"
@@ -142,11 +589,29 @@ msgstr "Latest Platform blocks, oldest first"
 msgid "Latest Platform transitions"
 msgstr "Latest Platform transitions"
 
+msgid "latest release"
+msgstr "latest release"
+
 msgid "Live updates have stopped."
 msgstr "Live updates have stopped."
 
 msgid "Live updates have stopped. The chain shown is as of {since}."
 msgstr "Live updates have stopped. The chain shown is as of {since}."
+
+msgid "Lock-in threshold"
+msgstr "Lock-in threshold"
+
+msgid "Lock-in threshold of each window"
+msgstr "Lock-in threshold of each window"
+
+msgid "Lock-in, if it reaches the threshold"
+msgstr "Lock-in, if it reaches the threshold"
+
+msgid "Lock-in, if that window reaches the threshold"
+msgstr "Lock-in, if that window reaches the threshold"
+
+msgid "Locked in"
+msgstr "Locked in"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -155,11 +620,51 @@ msgstr "Locked to Core block {0}"
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Map of the world with a disc for each place Radar found masternodes. {summary}."
 
+msgid "Masternode list from DAPI"
+msgstr "Masternode list from DAPI"
+
+msgid "Masternode signal"
+msgstr "Masternode signal"
+
+msgid "masternodes"
+msgstr "masternodes"
+
 msgid "Masternodes"
 msgstr "Masternodes"
 
 msgid "Masternodes answering"
 msgstr "Masternodes answering"
+
+msgid "Masternodes reachable"
+msgstr "Masternodes reachable"
+
+msgid "Masternodes' signal mined"
+msgstr "Masternodes' signal mined"
+
+#. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
+msgid "median of {0}, on 1,000 DASH"
+msgstr "median of {0}, on 1,000 DASH"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
+msgstr "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
+msgstr "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
+
+msgid "Median time reaches the start time"
+msgstr "Median time reaches the start time"
+
+msgid "median, from the Core blocks that paid them"
+msgstr "median, from the Core blocks that paid them"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
+msgid "median, from the Platform epochs of the last {0} days"
+msgstr "median, from the Platform epochs of the last {0} days"
+
+msgid "Members of the quorum that would sign now that announce Dash Core 24"
+msgstr "Members of the quorum that would sign now that announce Dash Core 24"
 
 msgid "mempool"
 msgstr "mempool"
@@ -170,17 +675,120 @@ msgstr "Mempool"
 msgid "Mined by"
 msgstr "Mined by"
 
+#. placeholder {0}: formatInt(w?.count ?? 0)
+#. placeholder {1}: formatInt(w?.threshold ?? 0)
+#. placeholder {2}: formatInt(o.remaining ?? 0)
+msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
+msgstr "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatPercent(p.threshold_start / p.window, 1)
+#. placeholder {4}: formatInt(p.threshold_min)
+#. placeholder {5}: formatInt(d.recent.blocks)
+#. placeholder {6}: formatInt(d.recent.count)
+#. placeholder {7}: String(p.bit)
+msgid "Miners can't vote yet. From the first window that counts, each {0}-block window's blocks that set bit {1} (with the top version bits 001) count; {2} of them ({3}) lock Core 24 in, and each window that falls short lowers the bar for the next, down to {4}. In the last {5} blocks, {6} already set bit {7}."
+msgstr "Miners can't vote yet. From the first window that counts, each {0}-block window's blocks that set bit {1} (with the top version bits 001) count; {2} of them ({3}) lock Core 24 in, and each window that falls short lowers the bar for the next, down to {4}. In the last {5} blocks, {6} already set bit {7}."
+
+msgid "Miners' signalling"
+msgstr "Miners' signalling"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "needed before any window counts"
+msgstr "needed before any window counts"
+
+#. placeholder {0}: String(minProtocol)
+msgid "needs {0}+"
+msgstr "needs {0}+"
+
 msgid "Needs Radar's crawler: off in Decentralized only mode"
 msgstr "Needs Radar's crawler: off in Decentralized only mode"
+
+msgid "Network"
+msgstr "Network"
 
 msgid "Network census"
 msgstr "Network census"
 
+msgid "Network size"
+msgstr "Network size"
+
+msgid "Network size over time"
+msgstr "Network size over time"
+
+msgid "Network size. Use the left and right arrow keys to step through the points."
+msgstr "Network size. Use the left and right arrow keys to step through the points."
+
 msgid "New rows appear at the top."
 msgstr "New rows appear at the top."
 
+msgid "Next window that counts"
+msgstr "Next window that counts"
+
+msgid "No {noun} have told us their version yet."
+msgstr "No {noun} have told us their version yet."
+
+msgid "No answer"
+msgstr "No answer"
+
+msgid "no answer this week"
+msgstr "no answer this week"
+
+msgid "No answer this week"
+msgstr "No answer this week"
+
+msgid "No Core 24 deployment in the data."
+msgstr "No Core 24 deployment in the data."
+
+msgid "No data yet."
+msgstr "No data yet."
+
+msgid "No hosting data yet."
+msgstr "No hosting data yet."
+
+msgid "No location data yet."
+msgstr "No location data yet."
+
+msgid "No Platform ban"
+msgstr "No Platform ban"
+
 msgid "No transactions in the mempool right now"
 msgstr "No transactions in the mempool right now"
+
+msgid "No window to show yet."
+msgstr "No window to show yet."
+
+msgid "nodes"
+msgstr "nodes"
+
+msgid "Nodes"
+msgstr "Nodes"
+
+msgid "none fail"
+msgstr "none fail"
+
+msgid "not a release"
+msgstr "not a release"
+
+msgid "Not checked"
+msgstr "Not checked"
+
+msgid "not crawled"
+msgstr "not crawled"
+
+#. placeholder {0}: n.reason
+msgid "not crawled: {0}"
+msgstr "not crawled: {0}"
+
+msgid "not mined yet"
+msgstr "not mined yet"
+
+msgid "Not started"
+msgstr "Not started"
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
 msgstr "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
@@ -191,14 +799,59 @@ msgstr "Nothing has arrived since you opened this page. The full mempool list ne
 msgid "Nothing seen yet"
 msgstr "Nothing seen yet"
 
+msgid "now"
+msgstr "now"
+
+msgid "Now"
+msgstr "Now"
+
+#. placeholder {0}: formatInt(r.mined)
+msgid "of {0} so far"
+msgstr "of {0} so far"
+
+msgid "Older"
+msgstr "Older"
+
+msgid "on"
+msgstr "on"
+
+#. placeholder {0}: formatPercent(good / runs, 0)
+msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
+msgstr "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
+
 msgid "Open the map"
 msgstr "Open the map"
+
+msgid "Other"
+msgstr "Other"
+
+msgid "Other clients"
+msgstr "Other clients"
+
+msgid "other full nodes"
+msgstr "other full nodes"
+
+msgid "Other full nodes"
+msgstr "Other full nodes"
 
 msgid "Other nodes"
 msgstr "Other nodes"
 
 msgid "Other reachable nodes"
 msgstr "Other reachable nodes"
+
+#. placeholder {0}: dayMonthYear(history.t[0]!)
+msgid "Our history starts {0}, so this range shows less than it asks for."
+msgstr "Our history starts {0}, so this range shows less than it asks for."
+
+msgid "Our reading disagrees with our dashd's."
+msgstr "Our reading disagrees with our dashd's."
+
+msgid "Over time"
+msgstr "Over time"
+
+msgid "Pass every check"
+msgstr "Pass every check"
 
 msgid "Pending transactions"
 msgstr "Pending transactions"
@@ -227,6 +880,9 @@ msgstr "Platform Explorer doesn't index devnets."
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer isn't answering"
 
+msgid "Platform height"
+msgstr "Platform height"
+
 msgid "Platform locks to Core"
 msgstr "Platform locks to Core"
 
@@ -239,17 +895,97 @@ msgstr "Platform's latest blocks need Platform Explorer, which Decentralized onl
 msgid "Platform's latest transitions need Platform Explorer"
 msgstr "Platform's latest transitions need Platform Explorer"
 
+msgid "PoSe-banned"
+msgstr "PoSe-banned"
+
+msgid "Protocol"
+msgstr "Protocol"
+
+msgid "Protocol version"
+msgstr "Protocol version"
+
+msgid "providers"
+msgstr "providers"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorums that would sign the Core 24 signal"
+msgstr "Quorums that would sign the Core 24 signal"
+
 msgid "Radar doesn't crawl devnets"
 msgstr "Radar doesn't crawl devnets"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar doesn't crawl devnets, so there is nothing to map."
 
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar doesn't crawl devnets."
+
 msgid "Radar isn't answering, so the map shows no nodes."
 msgstr "Radar isn't answering, so the map shows no nodes."
 
+msgid "Radar reads every block header, counts the signals with Core's rules, and checks the states against its dashd's getdeploymentinfo."
+msgstr "Radar reads every block header, counts the signals with Core's rules, and checks the states against its dashd's getdeploymentinfo."
+
 msgid "Radar:"
 msgstr "Radar:"
+
+msgid "Radar's activation document doesn't list it."
+msgstr "Radar's activation document doesn't list it."
+
+msgid "Radar's last crawl finished"
+msgstr "Radar's last crawl finished"
+
+msgid "Reachability"
+msgstr "Reachability"
+
+msgid "Reachable"
+msgstr "Reachable"
+
+msgid "Reachable masternodes"
+msgstr "Reachable masternodes"
+
+msgid "Reachable nodes"
+msgstr "Reachable nodes"
+
+msgid "Reachable now"
+msgstr "Reachable now"
+
+#. placeholder {0}: doc.dashd || t`unknown version`
+#. placeholder {1}: formatInt(doc.tip.height)
+#. placeholder {2}: when(doc.updated)
+#. placeholder {3}: formatInt(doc.pace_blocks)
+#. placeholder {4}: String(Math.round(doc.block_seconds))
+msgid "Read from our dashd ({0}) at block {1}, {2}. Times to come are estimates at the last {3} blocks' pace, {4} s a block; a slower or faster chain moves them, and the masternode signal can come later than its earliest block."
+msgstr "Read from our dashd ({0}) at block {1}, {2}. Times to come are estimates at the last {3} blocks' pace, {4} s a block; a slower or faster chain moves them, and the masternode signal can come later than its earliest block."
+
+msgid "Ready for {release} quorums"
+msgstr "Ready for {release} quorums"
+
+msgid "Registered"
+msgstr "Registered"
+
+msgid "Regular · evonodes"
+msgstr "Regular · evonodes"
+
+msgid "Regular masternodes"
+msgstr "Regular masternodes"
+
+msgid "release candidate"
+msgstr "release candidate"
+
+msgid "Release candidates"
+msgstr "Release candidates"
+
+msgid "Release ladder"
+msgstr "Release ladder"
+
+msgid "Releases"
+msgstr "Releases"
+
+msgid "Request id"
+msgstr "Request id"
 
 msgid "Search blocks, txs, masternodes, names"
 msgstr "Search blocks, txs, masternodes, names"
@@ -257,20 +993,134 @@ msgstr "Search blocks, txs, masternodes, names"
 msgid "See the sources"
 msgstr "See the sources"
 
+msgid "See which"
+msgstr "See which"
+
 msgid "Seen"
 msgstr "Seen"
 
 msgid "Seen since you opened this page"
 msgstr "Seen since you opened this page"
 
+msgid "Series"
+msgstr "Series"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Share of {noun} by country"
+msgstr "Share of {noun} by country"
+
+msgid "Share of {noun} by hosting provider"
+msgstr "Share of {noun} by hosting provider"
+
+msgid "Share of {noun} by version"
+msgstr "Share of {noun} by version"
+
+msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
+msgstr "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "Show all {0}"
+msgstr "Show all {0}"
+
+msgid "Show fewer"
+msgstr "Show fewer"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "Showing the one from block {0}: {failed}"
+msgstr "Showing the one from block {0}: {failed}"
+
+msgid "Signalled"
+msgstr "Signalled"
+
+msgid "Signalled / threshold"
+msgstr "Signalled / threshold"
+
+msgid "Signalling"
+msgstr "Signalling"
+
+msgid "Signalling and threshold, window by window"
+msgstr "Signalling and threshold, window by window"
+
+msgid "Signalling blocks so far"
+msgstr "Signalling blocks so far"
+
+#. placeholder {0}: String(slots.length)
+msgid "Signalling share and threshold for {0} windows"
+msgstr "Signalling share and threshold for {0} windows"
+
+#. placeholder {0}: formatInt(d.since)
+msgid "since block {0}"
+msgstr "since block {0}"
+
 msgid "Size"
 msgstr "Size"
+
+msgid "Sources, Dash Core v24.0.0:"
+msgstr "Sources, Dash Core v24.0.0:"
+
+#. placeholder {0}: when(p.start_time)
+msgid "start time {0}"
+msgstr "start time {0}"
+
+msgid "Starts"
+msgstr "Starts"
+
+msgid "Status"
+msgstr "Status"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "Supply and blockchain size are not shown until it catches up."
 
+msgid "Tenderdash P2P open"
+msgstr "Tenderdash P2P open"
+
+msgid "Tenderdash versions"
+msgstr "Tenderdash versions"
+
+msgid "The activation tracker needs Radar's crawl"
+msgstr "The activation tracker needs Radar's crawl"
+
+msgid "The activation tracker reads Radar's view of mainnet and testnet."
+msgstr "The activation tracker reads Radar's view of mainnet and testnet."
+
+msgid "The census comes from Radar's crawl of mainnet and testnet."
+msgstr "The census comes from Radar's crawl of mainnet and testnet."
+
+msgid "The crawl is stale."
+msgstr "The crawl is stale."
+
 msgid "The Dash network, now"
 msgstr "The Dash network, now"
+
+msgid "The latest reading failed."
+msgstr "The latest reading failed."
+
+msgid "The masternode signal"
+msgstr "The masternode signal"
+
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {1}: d.ehf.block?.time != null ? `, ${when(blockMs(d.ehf.block))}` : ''
+msgid "The masternodes' signal for Core 24 is in block {0}{1}. From the first window after it, miners' blocks decide."
+msgstr "The masternodes' signal for Core 24 is in block {0}{1}. From the first window after it, miners' blocks decide."
+
+#. placeholder {0}: formatInt(d.ehf.height ?? 0)
+#. placeholder {1}: formatInt(o.earliest_start?.height ?? 0)
+msgid "The masternodes' signal is in block {0}; miners start signalling at block {1}."
+msgstr "The masternodes' signal is in block {0}; miners start signalling at block {1}."
+
+msgid "The network right now"
+msgstr "The network right now"
+
+msgid "The network size history didn't load."
+msgstr "The network size history didn't load."
+
+msgid "The node census needs Radar's crawl"
+msgstr "The node census needs Radar's crawl"
+
+msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
+msgstr "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 
 msgid "The node map"
 msgstr "The node map"
@@ -281,8 +1131,78 @@ msgstr "The node map needs Radar's crawler, which Decentralized only mode doesn'
 msgid "The Platform SDK isn't answering"
 msgstr "The Platform SDK isn't answering"
 
+msgid "the same as a day ago"
+msgstr "the same as a day ago"
+
+msgid "The share of all masternodes on Core 24 is on the node census."
+msgstr "The share of all masternodes on Core 24 is on the node census."
+
+msgid "The start time has passed; Core 24 is waiting for the masternodes' signal to be mined."
+msgstr "The start time has passed; Core 24 is waiting for the masternodes' signal to be mined."
+
+#. placeholder {0}: formatInt(p.threshold_start)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: String(p.falloff_coeff)
+#. placeholder {5}: formatInt(p.threshold_min)
+#. placeholder {6}: isDecided(d) ? '' : ` ${t`Dates of windows to come are estimates.`}`
+msgid "The threshold starts at {0} of {1} blocks and drops after each window that misses it: {2} − attempt² × {3} ÷ 100 ÷ {4}, rounded down at each step, never below {5}.{6}"
+msgstr "The threshold starts at {0} of {1} blocks and drops after each window that misses it: {2} − attempt² × {3} ÷ 100 ÷ {4}, rounded down at each step, never below {5}.{6}"
+
+msgid "The timeout passed without the signal: masternodes no longer sign it, and no block may carry it."
+msgstr "The timeout passed without the signal: masternodes no longer sign it, and no block may carry it."
+
+msgid "The version history didn't load."
+msgstr "The version history didn't load."
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: formatInt(p.window)
+msgid "Then the miners: the chain is cut into {0}-block windows, starting at heights that are multiples of {1}. The first window whose previous block is at or past both the start time and the signal's block is the first that counts. A window in which at least the threshold of blocks signal locks Core 24 in; the next window is locked in, and Core 24 is active from the one after."
+msgstr "Then the miners: the chain is cut into {0}-block windows, starting at heights that are multiples of {1}. The first window whose previous block is at or past both the start time and the signal's block is the first that counts. A window in which at least the threshold of blocks signal locks Core 24 in; the next window is locked in, and Core 24 is active from the one after."
+
+msgid "There's no timeout on this network."
+msgstr "There's no timeout on this network."
+
+msgid "This reading is stale."
+msgstr "This reading is stale."
+
+msgid "This window"
+msgstr "This window"
+
+#. placeholder {0}: String((w.attempt ?? 0) + 1)
+msgid "This window (attempt {0}), block by block"
+msgstr "This window (attempt {0}), block by block"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0})"
+msgstr "This window ends (attempt {0})"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+#. placeholder {0}: formatInt(w.threshold ?? 0)
+#. placeholder {1}: formatInt(progress.projected)
+msgid "Threshold {0}; at this pace the window ends with {1}."
+msgstr "Threshold {0}; at this pace the window ends with {1}."
+
+msgid "threshold reached"
+msgstr "threshold reached"
+
+msgid "Thresholds by window"
+msgstr "Thresholds by window"
+
+msgid "Time range"
+msgstr "Time range"
+
+msgid "Tor"
+msgstr "Tor"
+
 msgid "Transaction"
 msgstr "Transaction"
+
+msgid "Transaction relay"
+msgstr "Transaction relay"
 
 msgid "Transition"
 msgstr "Transition"
@@ -302,8 +1222,35 @@ msgstr "Txs"
 msgid "Type"
 msgstr "Type"
 
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "unknown version"
+msgstr "unknown version"
+
+msgid "Updated"
+msgstr "Updated"
+
+msgid "User agent"
+msgstr "User agent"
+
+msgid "Valid"
+msgstr "Valid"
+
+msgid "Valid members"
+msgstr "Valid members"
+
 msgid "Value"
 msgstr "Value"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Version share over time"
+msgstr "Version share over time"
+
+msgid "Versions view"
+msgstr "Versions view"
 
 msgid "View all"
 msgstr "View all"
@@ -311,5 +1258,41 @@ msgstr "View all"
 msgid "View all transitions"
 msgstr "View all transitions"
 
+#. placeholder {0}: g.error
+msgid "We couldn't read the signing quorum from our dashd: {0}"
+msgstr "We couldn't read the signing quorum from our dashd: {0}"
+
+msgid "What happens next"
+msgstr "What happens next"
+
 msgid "What is waiting to be mined."
 msgstr "What is waiting to be mined."
+
+#. placeholder {0}: String(r.window_days)
+msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
+msgstr "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
+
+msgid "What they earn"
+msgstr "What they earn"
+
+msgid "What they run"
+msgstr "What they run"
+
+msgid "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
+msgstr "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
+
+msgid "Where it stands"
+msgstr "Where it stands"
+
+msgid "Which nodes"
+msgstr "Which nodes"
+
+#. placeholder {0}: formatInt(g.quorums.length)
+msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
+msgstr "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
+
+msgid "Window"
+msgstr "Window"
+
+msgid "would sign now"
+msgstr "would sign now"

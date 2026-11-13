@@ -13,6 +13,56 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(c.unknown)
+#. placeholder {0}: formatInt(d.overall.unknown)
+msgid ", {0} unknown"
+msgstr "、不明 {0}"
+
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid ", at block {0}"
+msgstr "、ブロック {0} 時点"
+
+msgid ", so the figures below may be out of date."
+msgstr "。そのため、以下の数値は古い可能性があります。"
+
+#. placeholder {0}: String(g.min_protocol)
+msgid "\"Announce 24\" counts valid members whose latest handshake with our crawler, in the past week, gave protocol {0} or newer. That's an estimate of who can sign, not the trigger itself: the signal needs that many actual signatures from one quorum, and members we couldn't reach may still sign. It can also count too many: release candidates 1 to 4 announce the same version and protocol but never sign Core 24 on mainnet, so a masternode still on one should upgrade."
+msgstr "「Announce 24」は、過去1週間のクローラーとの直近のハンドシェイクでプロトコル {0} 以上を通知した有効なメンバーを数えたものです。署名できるメンバーの推定であり、発動条件そのものではありません。シグナルには1つのクォーラムからその数の実際の署名が必要で、到達できなかったメンバーが署名する可能性もあります。多めに数える場合もあります。リリース候補 1〜4 は同じバージョンとプロトコルを通知しますが、メインネットでは Core 24 に署名しないため、まだそれを使っているマスターノードはアップグレードしてください。"
+
+msgid "(empty)"
+msgstr "（空）"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
+msgstr "{0, plural, other {1日前より # ノード少ない}}"
+
+#. placeholder {0}: formatPercent(v, 1)
+msgid "{0} a year"
+msgstr "年 {0}"
+
+#. placeholder {0}: countryName(c0[0])
+#. placeholder {1}: share(c0[1], sumCountries)
+msgid "{0} alone has {1}."
+msgstr "{0} だけで {1} を占めます。"
+
+#. placeholder {0}: formatInt(c.fail)
+msgid "{0} fail"
+msgstr "不合格 {0}"
+
+#. placeholder {0}: formatInt(d.beyond_version)
+msgid "{0} fail another check that needs a fix."
+msgstr "{0} 台は修正が必要な別の確認に不合格です。"
+
+#. placeholder {0}: formatInt(d.version_only)
+msgid "{0} fail only the version check and need just the upgrade. "
+msgstr "{0} 台はバージョン確認のみ不合格で、アップグレードだけで済みます。"
+
+#. placeholder {0}: o0.org
+#. placeholder {1}: share(o0.n, sumOrgs)
+#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
+msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
+msgstr "{0} が {noun} の {1} をホストしており、上位3社のプロバイダーで {2} をホストしています。"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -27,15 +77,186 @@ msgstr "{1} か所にマスターノード {0} 台"
 msgid "{0} masternodes, the most of any place"
 msgstr "マスターノード {0} 台、最多の地域"
 
+#. placeholder {0}: formatInt(o.needed)
+#. placeholder {1}: formatInt(o.remaining ?? 0)
+msgid "{0} more needed in {1} blocks"
+msgstr "あと {1} ブロックで {0} 必要"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} more versions"
+msgstr "ほか {0} バージョン"
+
+#. placeholder {0}: formatInt(threshold)
+msgid "{0} must sign"
+msgstr "{0} の署名が必要"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+msgid "{0} nodes"
+msgstr "{0} ノード"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
+msgstr "試行した {1} 件のアドレスのうち {0} ノードが応答しました。今週1回以上応答したノードに、有効なマスターノードすべてを加えて数えています。"
+
 #. placeholder {0}: formatInt(crawl.mn_reachable)
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(q.valid)
 #. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(p.window)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(threshold ?? 0)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: share(p.threshold_min, p.window)
+msgid "{0} of {1} blocks in the first window, falling to {2}"
+msgstr "最初のウィンドウでは {1} ブロック中 {0}、その後 {2} まで低下"
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(progress.mined)
+#. placeholder {2}: formatInt(w.threshold ?? 0)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: formatInt(progress.projected)
+msgid "{0} of {1} blocks so far signalled; the window needs {2} of {3}; at this pace it ends with about {4}"
+msgstr "これまでの {1} ブロック中 {0} がシグナルを発信。このウィンドウには {3} 中 {2} が必要で、このペースだと約 {4} で終わります"
+
+#. placeholder {0}: formatInt(threshold)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: String(w.attempt + 1)
+msgid "{0} of {1} blocks, on attempt {2}"
+msgstr "{1} ブロック中 {0}、{2} 回目の試行"
+
+#. placeholder {0}: formatPercent(p.healthy / p.checked, 1)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
+msgstr "有効な {1} 台の Evonode のうち {0} が直近の Platform 確認に合格しました。Tenderdash の P2P ポートが開いており、DAPI が有効な TLS で応答しました。"
+
+#. placeholder {0}: ready(d.overall.pass)
+#. placeholder {1}: formatInt(d.masternodes)
+msgid "{0} of {1} enabled masternodes pass every check."
+msgstr "有効な {1} 台のマスターノードのうち {0} がすべての確認に合格しています。"
+
+#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {1}: formatInt(reach.no)
+msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
+msgstr "有効な{noun}の {0} が登録アドレスでハンドシェイクに応答しました。{1} 台は応答しませんでした。"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "{0} of enabled answered"
+msgstr "有効なノードの {0} が応答"
+
+#. placeholder {0}: formatInt(evo)
+msgid "{0} of them evonodes"
+msgstr "うち {0} が Evonode"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other clients"
+msgstr "ほか {0} クライアント"
+
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
+msgstr "ほか {0} 台のフルノードが接続を受け付けています。外向きにのみ接続するノードは外部から見えないため、実際の数はこれより多くなります。"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other releases"
+msgstr "ほか {0} リリース"
+
+#. placeholder {0}: formatInt(d.overall.pass)
+msgid "{0} ready"
+msgstr "{0} 台が対応済み"
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+#. placeholder {2}: second[0]
+#. placeholder {3}: share(second[1], sum)
+msgid "{0} runs on {1} of {noun} and {2} on {3}."
+msgstr "{noun}の {1} が {0}、{3} が {2} で動作しています。"
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+msgid "{0} runs on {1} of {noun}."
+msgstr "{noun}の {1} が {0} で動作しています。"
+
+#. placeholder {0}: formatInt(v.tested)
+#. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
+#. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
+msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
+msgstr "今回のサイクルでテストしたのは {0} 台。中央値は {1} ヘッダー/秒、ping {2} ms。"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} tx"
+
+#. placeholder {0}: block(b)
+#. placeholder {1}: b.estimated ? t`about` + ' ' : ''
+#. placeholder {2}: when(blockMs(b))
+msgid "{0}, {1}{2}"
+msgstr "{0}、{1}{2}"
+
+msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
+msgstr "{diff, plural, other {1日前より # ノード多い}}"
+
+msgid "<0.1%"
+msgstr "<0.1%"
+
+msgid "0 ready"
+msgstr "0 台が対応済み"
+
+msgid "1 y"
+msgstr "1年"
+
+msgid "24 h"
+msgstr "24時間"
+
+msgid "30 d"
+msgstr "30日"
+
+msgid "7 d"
+msgstr "7日"
+
+msgid "90 d"
+msgstr "90日"
+
+#. placeholder {0}: String(evo.params.bit)
+msgid "A second deployment, evo_shares (bit {0}), has the same window and thresholds, but Dash Core 24.0.0 doesn't sign its masternode signal, so it can't start until a later release does."
+msgstr "2つ目のデプロイメント evo_shares（ビット {0}）は同じウィンドウとしきい値ですが、Dash Core 24.0.0 はそのマスターノードのシグナルに署名しないため、署名する後続リリースが出るまで開始できません。"
+
+#. placeholder {0}: when(p.timeout)
+msgid "A window that doesn't lock in and whose last block's median time is at or past {0} fails it."
+msgstr "ロックインせず、最後のブロックの中央値時刻が {0} 以降になったウィンドウは失敗となります。"
+
+msgid "about"
+msgstr "約"
+
+#. placeholder {0}: when(blockMs(o.activation))
+#. placeholder {0}: when(blockMs(o.activation_if_reached))
+#. placeholder {0}: when(blockMs(o.earliest_activation))
+msgid "about {0}"
+msgstr "約 {0}"
+
+msgid "Activation"
+msgstr "有効化"
+
+msgid "Activation if this window locks in"
+msgstr "このウィンドウでロックインした場合の有効化"
+
+msgid "Activation, at the earliest"
+msgstr "有効化（最短）"
+
+msgid "Activation, if this window locks in"
+msgstr "有効化（このウィンドウでロックインした場合）"
+
+msgid "Active"
+msgstr "有効"
+
+msgid "Address networks"
+msgstr "アドレスのネットワーク"
+
+msgid "Addresses tried"
+msgstr "試行したアドレス"
 
 msgid "Age"
 msgstr "経過時間"
@@ -43,17 +264,64 @@ msgstr "経過時間"
 msgid "All blocks"
 msgstr "すべてのブロック"
 
+msgid "all nodes"
+msgstr "すべてのノード"
+
+msgid "All nodes"
+msgstr "すべてのノード"
+
+msgid "Announce 24"
+msgstr "Announce 24"
+
+msgid "Answered"
+msgstr "応答あり"
+
+msgid "at the earliest"
+msgstr "最短で"
+
+msgid "At this pace"
+msgstr "このペースでは"
+
+#. placeholder {0}: g.llmq
+#. placeholder {1}: formatInt(size)
+#. placeholder {2}: formatInt(threshold)
+msgid "Before miners' votes count, one {0} quorum ({1} masternodes) must sign the Core 24 signal: {2} of its members, running Dash Core 24. A miner then puts it in a block."
+msgstr "マイナーの投票が有効になる前に、{0} クォーラム1つ（マスターノード {1} 台）が Core 24 のシグナルに署名する必要があります。Dash Core 24 を実行しているメンバーのうち {2} の署名です。その後、マイナーがそれをブロックに含めます。"
+
 msgid "Best ChainLock"
 msgstr "最新の ChainLock"
 
 msgid "Block"
 msgstr "ブロック"
 
+#. placeholder {0}: formatInt(b.height)
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {0}: formatInt(q.height)
+msgid "block {0}"
+msgstr "ブロック {0}"
+
+msgid "Block in the window"
+msgstr "ウィンドウ内のブロック"
+
 msgid "block updates"
 msgstr "ブロックの更新"
 
 msgid "Blockchain size"
 msgstr "ブロックチェーンのサイズ"
+
+#. placeholder {0}: formatInt(w.start.height)
+#. placeholder {1}: formatInt(w.end.height)
+msgid "blocks {0}–{1}"
+msgstr "ブロック {0}–{1}"
+
+msgid "Builds that aren't releases"
+msgstr "リリースではないビルド"
+
+msgid "Can they be reached"
+msgstr "到達できるか"
+
+msgid "can't reach it any more"
+msgstr "もう到達できません"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -68,14 +336,56 @@ msgstr "ChainLocked"
 msgid "Charts"
 msgstr "チャート"
 
+msgid "Checked every 15 minutes, last"
+msgstr "15分ごとに確認、最終確認"
+
 msgid "Checking Hyphen…"
 msgstr "Hyphen を確認中…"
 
 msgid "Circulating supply"
 msgstr "流通供給量"
 
+msgid "CJDNS"
+msgstr "CJDNS"
+
+msgid "Client"
+msgstr "クライアント"
+
+msgid "Compact block filters"
+msgstr "コンパクトブロックフィルター"
+
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
+
+msgid "Core 24 activation"
+msgstr "Core 24 の有効化"
+
+#. placeholder {0}: when(p.start_time)
+msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
+msgstr "Core 24 は {0}（チェーンの中央値時刻）より前には開始できません。その後マスターノードがシグナルを発信し、マイナーがウィンドウごとに投票します。"
+
+msgid "Core 24 failed: it reached its timeout without locking in."
+msgstr "Core 24 は失敗しました。ロックインしないままタイムアウトに達しました。"
+
+#. placeholder {0}: String(p.bit)
+#. placeholder {1}: when(p.start_time)
+#. placeholder {2}: doc.mnhf ?? 'masternode'
+msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
+msgstr "Core 24 は2つの関門があるハードフォーク（デプロイメントビット {0}）です。まずマスターノード：{1}（チェーンの過去中央値時刻による）以降、{2} クォーラムが有効化リクエストに署名し、マイナーがその署名をブロックに含めます。これは DIP-0023 の拡張ハードフォークシグナル（EHF）です。これがマイニングされるまでは、いくらシグナルが発信されてもマイナーのブロックはカウントされません。"
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is active since {0}."
+msgstr "Core 24 は {0} から有効です。"
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is locked in. It activates at {0}."
+msgstr "Core 24 はロックインされました。{0} に有効化されます。"
+
+msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
+msgstr "マスターノードのシグナルがマイニングされる前に Core 24 のタイムアウトを過ぎたため、もう開始できません。"
 
 msgid "Core block height"
 msgstr "Core ブロック高"
@@ -89,37 +399,174 @@ msgstr "Core のブロック、マスターノード、Platform のレコード�
 msgid "Core figures"
 msgstr "Core の数値"
 
+msgid "Core height"
+msgstr "Core の高さ"
+
+msgid "Core tip"
+msgstr "Core の先頭"
+
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform、マスターノードネットワーク"
+
+msgid "countries"
+msgstr "か国"
+
+msgid "Countries"
+msgstr "国"
 
 msgid "crawled"
 msgstr "クロール済み"
 
+msgid "DAPI answered"
+msgstr "DAPI 応答"
+
+msgid "DAPI's masternode list isn't available right now."
+msgstr "DAPI のマスターノードリストは現在利用できません。"
+
 msgid "Dash Core"
 msgstr "Dash Core"
+
+msgid "Dash Core 24 activation is under way."
+msgstr "Dash Core 24 の有効化が進行中です。"
+
+msgid "Dash nodes answered the last crawl"
+msgstr "直近のクロールに応答した Dash ノード"
+
+msgid "Dates of windows to come are estimates."
+msgstr "今後のウィンドウの日付は推定です。"
+
+msgid "Describing"
+msgstr "内容"
+
+msgid "Didn't answer"
+msgstr "応答なし"
 
 msgid "Difficulty"
 msgstr "難易度"
 
+msgid "Drive versions"
+msgstr "Drive のバージョン"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(d.recent.blocks)
+#. placeholder {3}: formatInt(d.recent.count)
+msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
+msgstr "{0} ブロックのウィンドウごとに、ビット {1}（上位バージョンビットは 001）を立てたブロックがシグナルとして数えられます。しきい値に達したウィンドウで Core 24 がロックインされます。直近 {2} ブロックのうち {3} がシグナルを発信しました。"
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "各 Platform ブロックは Core ブロックに紐づいています。"
+
+msgid "Earliest activation"
+msgstr "最短の有効化"
+
+msgid "Enabled"
+msgstr "有効"
+
+msgid "Enabled masternodes"
+msgstr "有効なマスターノード"
 
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
 msgstr "エポック {0}・{1} ブロック経過"
 
+msgid "estimate"
+msgstr "推定"
+
+msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
+msgstr "クロールに応答するすべての Dash ノード：実行内容、ホスティング先、到達できるかどうか。"
+
+msgid "Every version and user agent"
+msgstr "すべてのバージョンとユーザーエージェント"
+
+msgid "Everything else"
+msgstr "その他すべて"
+
+msgid "Evonode Platform health"
+msgstr "Evonode の Platform 稼働状況"
+
+msgid "evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "evonodes only"
+msgstr "Evonode のみ"
+
+msgid "Evonodes, Core payments"
+msgstr "Evonode、Core の支払い"
+
+msgid "Evonodes, Platform rewards"
+msgstr "Evonode、Platform の報酬"
+
+msgid "Failed"
+msgstr "失敗"
+
 msgid "First seen"
 msgstr "初回確認"
 
+msgid "First window that can count opens"
+msgstr "カウント可能な最初のウィンドウが開く"
+
+msgid "First window that can count opens, at the earliest"
+msgstr "カウント可能な最初のウィンドウが開く（最短）"
+
+msgid "Focus the chart and press the arrow keys to read a point."
+msgstr "チャートにフォーカスして矢印キーを押すと、各点を読み取れます。"
+
+msgid "Follow it on the activation tracker"
+msgstr "有効化トラッカーで確認する"
+
+msgid "Formed at"
+msgstr "形成時"
+
+msgid "From block"
+msgstr "開始ブロック"
+
+msgid "Grade {g}"
+msgstr "グレード {g}"
+
+msgid "Healthy"
+msgstr "正常"
+
 msgid "Height"
 msgstr "高さ"
+
+msgid "highest seen"
+msgstr "最高値"
+
+msgid "Hosting providers"
+msgstr "ホスティングプロバイダー"
+
+msgid "How activation works"
+msgstr "有効化の仕組み"
+
+msgid "How fast they serve"
+msgstr "応答の速さ"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen は devnet をインデックスしません"
 
 msgid "Hyphen's index is still being checked."
 msgstr "Hyphen のインデックスはまだ確認中です。"
+
+msgid "I2P"
+msgstr "I2P"
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "IPv6"
+msgstr "IPv6"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "It's from block {0}; our dashd or the crawler host may be down."
+msgstr "ブロック {0} 時点のものです。dashd またはクローラーのホストが停止している可能性があります。"
+
+msgid "Known addresses"
+msgstr "既知のアドレス"
 
 msgid "Last block"
 msgstr "最新ブロック"
@@ -142,11 +589,29 @@ msgstr "最新の Platform ブロック（古い順）"
 msgid "Latest Platform transitions"
 msgstr "最新の Platform トランジション"
 
+msgid "latest release"
+msgstr "最新リリース"
+
 msgid "Live updates have stopped."
 msgstr "ライブ更新が停止しました。"
 
 msgid "Live updates have stopped. The chain shown is as of {since}."
 msgstr "ライブ更新が停止しました。表示中のチェーンは {since} 時点のものです。"
+
+msgid "Lock-in threshold"
+msgstr "ロックインのしきい値"
+
+msgid "Lock-in threshold of each window"
+msgstr "各ウィンドウのロックインしきい値"
+
+msgid "Lock-in, if it reaches the threshold"
+msgstr "ロックイン（しきい値に達した場合）"
+
+msgid "Lock-in, if that window reaches the threshold"
+msgstr "ロックイン（そのウィンドウがしきい値に達した場合）"
+
+msgid "Locked in"
+msgstr "ロックイン済み"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -155,11 +620,51 @@ msgstr "Core ブロック {0} に紐づけ"
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Radar がマスターノードを見つけた場所ごとに円を描いた世界地図。{summary}。"
 
+msgid "Masternode list from DAPI"
+msgstr "DAPI のマスターノードリスト"
+
+msgid "Masternode signal"
+msgstr "マスターノードのシグナル"
+
+msgid "masternodes"
+msgstr "マスターノード"
+
 msgid "Masternodes"
 msgstr "マスターノード"
 
 msgid "Masternodes answering"
 msgstr "応答中のマスターノード"
+
+msgid "Masternodes reachable"
+msgstr "到達可能なマスターノード"
+
+msgid "Masternodes' signal mined"
+msgstr "マスターノードのシグナルをマイニング済み"
+
+#. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
+msgid "median of {0}, on 1,000 DASH"
+msgstr "{0} 台の中央値、1,000 DASH あたり"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
+msgstr "{0} 台の中央値、4,000 DASH あたり、Core の支払いと Platform の報酬の合計"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
+msgstr "{0} 台の中央値、4,000 DASH あたり。Core の支払いのみで、Platform の報酬は含みません"
+
+msgid "Median time reaches the start time"
+msgstr "中央値時刻が開始時刻に達する"
+
+msgid "median, from the Core blocks that paid them"
+msgstr "中央値、支払いを行った Core ブロックから算出"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
+msgid "median, from the Platform epochs of the last {0} days"
+msgstr "中央値、直近 {0} 日間の Platform エポックから算出"
+
+msgid "Members of the quorum that would sign now that announce Dash Core 24"
+msgstr "今署名するクォーラムのメンバーのうち、Dash Core 24 を通知しているもの"
 
 msgid "mempool"
 msgstr "メモリプール"
@@ -170,17 +675,120 @@ msgstr "メモリプール"
 msgid "Mined by"
 msgstr "マイナー"
 
+#. placeholder {0}: formatInt(w?.count ?? 0)
+#. placeholder {1}: formatInt(w?.threshold ?? 0)
+#. placeholder {2}: formatInt(o.remaining ?? 0)
+msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
+msgstr "マイナーがシグナルを発信中：このウィンドウに必要な {1} ブロックのうち {0} 、残り {2} ブロック。"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatPercent(p.threshold_start / p.window, 1)
+#. placeholder {4}: formatInt(p.threshold_min)
+#. placeholder {5}: formatInt(d.recent.blocks)
+#. placeholder {6}: formatInt(d.recent.count)
+#. placeholder {7}: String(p.bit)
+msgid "Miners can't vote yet. From the first window that counts, each {0}-block window's blocks that set bit {1} (with the top version bits 001) count; {2} of them ({3}) lock Core 24 in, and each window that falls short lowers the bar for the next, down to {4}. In the last {5} blocks, {6} already set bit {7}."
+msgstr "マイナーはまだ投票できません。カウントされる最初のウィンドウから、{0} ブロックのウィンドウごとにビット {1}（上位バージョンビットは 001）を立てたブロックが数えられ、そのうち {2}（{3}）で Core 24 がロックインされます。届かなかったウィンドウがあるたびに次のウィンドウの基準は下がり、最終的に {4} まで下がります。直近 {5} ブロックのうち {6} がすでにビット {7} を立てています。"
+
+msgid "Miners' signalling"
+msgstr "マイナーのシグナル"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "needed before any window counts"
+msgstr "いずれかのウィンドウがカウントされる前に必要"
+
+#. placeholder {0}: String(minProtocol)
+msgid "needs {0}+"
+msgstr "{0} 以上が必要"
+
 msgid "Needs Radar's crawler: off in Decentralized only mode"
 msgstr "Radar のクローラーが必要: 「分散型のみ」モードではオフ"
+
+msgid "Network"
+msgstr "ネットワーク"
 
 msgid "Network census"
 msgstr "ネットワーク調査"
 
+msgid "Network size"
+msgstr "ネットワーク規模"
+
+msgid "Network size over time"
+msgstr "ネットワーク規模の推移"
+
+msgid "Network size. Use the left and right arrow keys to step through the points."
+msgstr "ネットワーク規模。左右の矢印キーで各点を順に移動できます。"
+
 msgid "New rows appear at the top."
 msgstr "新しい行は上に追加されます。"
 
+msgid "Next window that counts"
+msgstr "次にカウントされるウィンドウ"
+
+msgid "No {noun} have told us their version yet."
+msgstr "バージョンを通知した{noun}はまだありません。"
+
+msgid "No answer"
+msgstr "応答なし"
+
+msgid "no answer this week"
+msgstr "今週は応答なし"
+
+msgid "No answer this week"
+msgstr "今週は応答なし"
+
+msgid "No Core 24 deployment in the data."
+msgstr "データに Core 24 のデプロイメントがありません。"
+
+msgid "No data yet."
+msgstr "まだデータがありません。"
+
+msgid "No hosting data yet."
+msgstr "ホスティングのデータはまだありません。"
+
+msgid "No location data yet."
+msgstr "所在地のデータはまだありません。"
+
+msgid "No Platform ban"
+msgstr "Platform での BAN なし"
+
 msgid "No transactions in the mempool right now"
 msgstr "現在メモリプールにトランザクションはありません"
+
+msgid "No window to show yet."
+msgstr "表示できるウィンドウはまだありません。"
+
+msgid "nodes"
+msgstr "ノード"
+
+msgid "Nodes"
+msgstr "ノード"
+
+msgid "none fail"
+msgstr "不合格なし"
+
+msgid "not a release"
+msgstr "リリースではない"
+
+msgid "Not checked"
+msgstr "未確認"
+
+msgid "not crawled"
+msgstr "未クロール"
+
+#. placeholder {0}: n.reason
+msgid "not crawled: {0}"
+msgstr "未クロール: {0}"
+
+msgid "not mined yet"
+msgstr "まだマイニングされていません"
+
+msgid "Not started"
+msgstr "未開始"
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
 msgstr "このページを開いてから、まだ何も届いていません。メモリプールの完全なリストにはインデクサーが必要ですが、「分散型のみ」モードでは使用しません。"
@@ -191,14 +799,59 @@ msgstr "このページを開いてから何も届いていません。メモリ
 msgid "Nothing seen yet"
 msgstr "まだ何も確認していません"
 
+msgid "now"
+msgstr "今"
+
+msgid "Now"
+msgstr "現在"
+
+#. placeholder {0}: formatInt(r.mined)
+msgid "of {0} so far"
+msgstr "これまでの {0} のうち"
+
+msgid "Older"
+msgstr "古い方へ"
+
+msgid "on"
+msgstr "対象:"
+
+#. placeholder {0}: formatPercent(good / runs, 0)
+msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
+msgstr "2週間に1回、有効なすべてのマスターノードから最新の 50,000 ヘッダーとマスターノードリストをダウンロードします。直近のテストの {0} が A または B の評価でした。"
+
 msgid "Open the map"
 msgstr "地図を開く"
+
+msgid "Other"
+msgstr "その他"
+
+msgid "Other clients"
+msgstr "その他のクライアント"
+
+msgid "other full nodes"
+msgstr "その他のフルノード"
+
+msgid "Other full nodes"
+msgstr "その他のフルノード"
 
 msgid "Other nodes"
 msgstr "その他のノード"
 
 msgid "Other reachable nodes"
 msgstr "その他の到達可能なノード"
+
+#. placeholder {0}: dayMonthYear(history.t[0]!)
+msgid "Our history starts {0}, so this range shows less than it asks for."
+msgstr "記録は {0} から始まっているため、この範囲では指定より少ないデータが表示されます。"
+
+msgid "Our reading disagrees with our dashd's."
+msgstr "こちらの読み取り結果が dashd の結果と一致しません。"
+
+msgid "Over time"
+msgstr "推移"
+
+msgid "Pass every check"
+msgstr "すべての確認に合格"
 
 msgid "Pending transactions"
 msgstr "保留中のトランザクション"
@@ -227,6 +880,9 @@ msgstr "Platform Explorer は devnet をインデックスしません。"
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer が応答していません"
 
+msgid "Platform height"
+msgstr "Platform の高さ"
+
 msgid "Platform locks to Core"
 msgstr "Platform は Core に固定"
 
@@ -239,17 +895,97 @@ msgstr "Platform の最新のブロックには Platform Explorer が必要で�
 msgid "Platform's latest transitions need Platform Explorer"
 msgstr "Platform の最新のトランジションには Platform Explorer が必要です"
 
+msgid "PoSe-banned"
+msgstr "PoSe で BAN"
+
+msgid "Protocol"
+msgstr "プロトコル"
+
+msgid "Protocol version"
+msgstr "プロトコルバージョン"
+
+msgid "providers"
+msgstr "プロバイダー"
+
+msgid "Quorum"
+msgstr "クォーラム"
+
+msgid "Quorums that would sign the Core 24 signal"
+msgstr "Core 24 のシグナルに署名するクォーラム"
+
 msgid "Radar doesn't crawl devnets"
 msgstr "Radar は devnet をクロールしません"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar は devnet をクロールしないため、地図に表示するものがありません。"
 
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar は devnet をクロールしません。"
+
 msgid "Radar isn't answering, so the map shows no nodes."
 msgstr "Radar が応答していないため、地図にノードは表示されません。"
 
+msgid "Radar reads every block header, counts the signals with Core's rules, and checks the states against its dashd's getdeploymentinfo."
+msgstr "Radar はすべてのブロックヘッダーを読み取り、Core のルールでシグナルを数え、その状態を自身の dashd の getdeploymentinfo と照合します。"
+
 msgid "Radar:"
 msgstr "Radar:"
+
+msgid "Radar's activation document doesn't list it."
+msgstr "Radar の有効化ドキュメントにはありません。"
+
+msgid "Radar's last crawl finished"
+msgstr "Radar の直近のクロール完了"
+
+msgid "Reachability"
+msgstr "到達性"
+
+msgid "Reachable"
+msgstr "到達可能"
+
+msgid "Reachable masternodes"
+msgstr "到達可能なマスターノード"
+
+msgid "Reachable nodes"
+msgstr "到達可能なノード"
+
+msgid "Reachable now"
+msgstr "現在到達可能"
+
+#. placeholder {0}: doc.dashd || t`unknown version`
+#. placeholder {1}: formatInt(doc.tip.height)
+#. placeholder {2}: when(doc.updated)
+#. placeholder {3}: formatInt(doc.pace_blocks)
+#. placeholder {4}: String(Math.round(doc.block_seconds))
+msgid "Read from our dashd ({0}) at block {1}, {2}. Times to come are estimates at the last {3} blocks' pace, {4} s a block; a slower or faster chain moves them, and the masternode signal can come later than its earliest block."
+msgstr "dashd（{0}）からブロック {1}、{2} 時点で読み取りました。今後の時刻は直近 {3} ブロックのペース（1ブロックあたり {4} 秒）による推定で、チェーンが遅くなったり速くなったりするとずれます。マスターノードのシグナルは最短のブロックより後になることもあります。"
+
+msgid "Ready for {release} quorums"
+msgstr "{release} のクォーラムに対応済み"
+
+msgid "Registered"
+msgstr "登録"
+
+msgid "Regular · evonodes"
+msgstr "通常 · Evonode"
+
+msgid "Regular masternodes"
+msgstr "通常のマスターノード"
+
+msgid "release candidate"
+msgstr "リリース候補"
+
+msgid "Release candidates"
+msgstr "リリース候補"
+
+msgid "Release ladder"
+msgstr "リリース段階"
+
+msgid "Releases"
+msgstr "リリース"
+
+msgid "Request id"
+msgstr "リクエスト ID"
 
 msgid "Search blocks, txs, masternodes, names"
 msgstr "ブロック、tx、マスターノード、名前を検索"
@@ -257,20 +993,134 @@ msgstr "ブロック、tx、マスターノード、名前を検索"
 msgid "See the sources"
 msgstr "ソースを見る"
 
+msgid "See which"
+msgstr "該当を表示"
+
 msgid "Seen"
 msgstr "確認"
 
 msgid "Seen since you opened this page"
 msgstr "このページを開いてから確認"
 
+msgid "Series"
+msgstr "系列"
+
+msgid "Share"
+msgstr "割合"
+
+msgid "Share of {noun} by country"
+msgstr "国別の{noun}の割合"
+
+msgid "Share of {noun} by hosting provider"
+msgstr "ホスティングプロバイダー別の{noun}の割合"
+
+msgid "Share of {noun} by version"
+msgstr "バージョン別の{noun}の割合"
+
+msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
+msgstr "各ウィンドウのブロックに占める割合（しきい値を表示）。今後のウィンドウの日付は推定です。"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "Show all {0}"
+msgstr "{0} 件すべて表示"
+
+msgid "Show fewer"
+msgstr "表示を減らす"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "Showing the one from block {0}: {failed}"
+msgstr "ブロック {0} 時点のものを表示中: {failed}"
+
+msgid "Signalled"
+msgstr "シグナル発信済み"
+
+msgid "Signalled / threshold"
+msgstr "シグナル数 / しきい値"
+
+msgid "Signalling"
+msgstr "シグナル発信中"
+
+msgid "Signalling and threshold, window by window"
+msgstr "ウィンドウごとのシグナルとしきい値"
+
+msgid "Signalling blocks so far"
+msgstr "これまでのシグナル発信ブロック"
+
+#. placeholder {0}: String(slots.length)
+msgid "Signalling share and threshold for {0} windows"
+msgstr "{0} ウィンドウのシグナル割合としきい値"
+
+#. placeholder {0}: formatInt(d.since)
+msgid "since block {0}"
+msgstr "ブロック {0} 以降"
+
 msgid "Size"
 msgstr "サイズ"
+
+msgid "Sources, Dash Core v24.0.0:"
+msgstr "出典、Dash Core v24.0.0:"
+
+#. placeholder {0}: when(p.start_time)
+msgid "start time {0}"
+msgstr "開始時刻 {0}"
+
+msgid "Starts"
+msgstr "開始"
+
+msgid "Status"
+msgstr "ステータス"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "インデックスが追いつくまで、供給量とブロックチェーンのサイズは表示されません。"
 
+msgid "Tenderdash P2P open"
+msgstr "Tenderdash P2P 開放"
+
+msgid "Tenderdash versions"
+msgstr "Tenderdash のバージョン"
+
+msgid "The activation tracker needs Radar's crawl"
+msgstr "有効化トラッカーには Radar のクロールが必要です"
+
+msgid "The activation tracker reads Radar's view of mainnet and testnet."
+msgstr "有効化トラッカーは、Radar が把握しているメインネットとテストネットの状況を表示します。"
+
+msgid "The census comes from Radar's crawl of mainnet and testnet."
+msgstr "調査結果は、Radar によるメインネットとテストネットのクロールに基づきます。"
+
+msgid "The crawl is stale."
+msgstr "クロールが古くなっています。"
+
 msgid "The Dash network, now"
 msgstr "Dash ネットワークの現在"
+
+msgid "The latest reading failed."
+msgstr "直近の読み取りに失敗しました。"
+
+msgid "The masternode signal"
+msgstr "マスターノードのシグナル"
+
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {1}: d.ehf.block?.time != null ? `, ${when(blockMs(d.ehf.block))}` : ''
+msgid "The masternodes' signal for Core 24 is in block {0}{1}. From the first window after it, miners' blocks decide."
+msgstr "Core 24 のマスターノードのシグナルはブロック {0}{1} にあります。その後の最初のウィンドウから、マイナーのブロックで決まります。"
+
+#. placeholder {0}: formatInt(d.ehf.height ?? 0)
+#. placeholder {1}: formatInt(o.earliest_start?.height ?? 0)
+msgid "The masternodes' signal is in block {0}; miners start signalling at block {1}."
+msgstr "マスターノードのシグナルはブロック {0} にあり、マイナーはブロック {1} からシグナルを発信し始めます。"
+
+msgid "The network right now"
+msgstr "現在のネットワーク"
+
+msgid "The network size history didn't load."
+msgstr "ネットワーク規模の履歴を読み込めませんでした。"
+
+msgid "The node census needs Radar's crawl"
+msgstr "ノード調査には Radar のクロールが必要です"
+
+msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
+msgstr "不足しているのは、Radar のクロールが必要なノード調査の部分です。上の Core の先頭は DAPI から取得しています。"
 
 msgid "The node map"
 msgstr "ノードマップ"
@@ -281,8 +1131,78 @@ msgstr "ノードのマップには Radar のクローラーが必要ですが�
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK が応答していません"
 
+msgid "the same as a day ago"
+msgstr "1日前と同じ"
+
+msgid "The share of all masternodes on Core 24 is on the node census."
+msgstr "Core 24 を使用しているマスターノード全体の割合は、ノード調査に掲載されています。"
+
+msgid "The start time has passed; Core 24 is waiting for the masternodes' signal to be mined."
+msgstr "開始時刻を過ぎました。Core 24 はマスターノードのシグナルがマイニングされるのを待っています。"
+
+#. placeholder {0}: formatInt(p.threshold_start)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: String(p.falloff_coeff)
+#. placeholder {5}: formatInt(p.threshold_min)
+#. placeholder {6}: isDecided(d) ? '' : ` ${t`Dates of windows to come are estimates.`}`
+msgid "The threshold starts at {0} of {1} blocks and drops after each window that misses it: {2} − attempt² × {3} ÷ 100 ÷ {4}, rounded down at each step, never below {5}.{6}"
+msgstr "しきい値は {1} ブロック中 {0} から始まり、届かなかったウィンドウのたびに下がります：{2} − 試行回数² × {3} ÷ 100 ÷ {4}。各段階で切り捨て、{5} を下回ることはありません。{6}"
+
+msgid "The timeout passed without the signal: masternodes no longer sign it, and no block may carry it."
+msgstr "シグナルが出ないままタイムアウトを過ぎました。マスターノードはもう署名せず、どのブロックにも含められません。"
+
+msgid "The version history didn't load."
+msgstr "バージョン履歴を読み込めませんでした。"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: formatInt(p.window)
+msgid "Then the miners: the chain is cut into {0}-block windows, starting at heights that are multiples of {1}. The first window whose previous block is at or past both the start time and the signal's block is the first that counts. A window in which at least the threshold of blocks signal locks Core 24 in; the next window is locked in, and Core 24 is active from the one after."
+msgstr "次にマイナー：チェーンは {0} ブロックごとのウィンドウに区切られ、{1} の倍数の高さから始まります。直前のブロックが開始時刻とシグナルのブロックの両方に達しているか超えている最初のウィンドウが、最初にカウントされるウィンドウです。しきい値以上のブロックがシグナルを発信したウィンドウで Core 24 がロックインされ、次のウィンドウはロックイン済みとなり、その次のウィンドウから Core 24 が有効になります。"
+
+msgid "There's no timeout on this network."
+msgstr "このネットワークにはタイムアウトがありません。"
+
+msgid "This reading is stale."
+msgstr "この読み取り結果は古くなっています。"
+
+msgid "This window"
+msgstr "このウィンドウ"
+
+#. placeholder {0}: String((w.attempt ?? 0) + 1)
+msgid "This window (attempt {0}), block by block"
+msgstr "このウィンドウ（{0} 回目の試行）、ブロックごと"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0})"
+msgstr "このウィンドウの終了（{0} 回目の試行）"
+
+msgid "Threshold"
+msgstr "しきい値"
+
+#. placeholder {0}: formatInt(w.threshold ?? 0)
+#. placeholder {1}: formatInt(progress.projected)
+msgid "Threshold {0}; at this pace the window ends with {1}."
+msgstr "しきい値は {0}。このペースだとウィンドウは {1} で終わります。"
+
+msgid "threshold reached"
+msgstr "しきい値に到達"
+
+msgid "Thresholds by window"
+msgstr "ウィンドウごとのしきい値"
+
+msgid "Time range"
+msgstr "期間"
+
+msgid "Tor"
+msgstr "Tor"
+
 msgid "Transaction"
 msgstr "トランザクション"
+
+msgid "Transaction relay"
+msgstr "トランザクションリレー"
 
 msgid "Transition"
 msgstr "トランジション"
@@ -302,8 +1222,35 @@ msgstr "Tx"
 msgid "Type"
 msgstr "種類"
 
+msgid "Unknown"
+msgstr "不明"
+
+msgid "unknown version"
+msgstr "不明なバージョン"
+
+msgid "Updated"
+msgstr "更新"
+
+msgid "User agent"
+msgstr "ユーザーエージェント"
+
+msgid "Valid"
+msgstr "有効"
+
+msgid "Valid members"
+msgstr "有効なメンバー"
+
 msgid "Value"
 msgstr "値"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Version share over time"
+msgstr "バージョン割合の推移"
+
+msgid "Versions view"
+msgstr "バージョン表示"
 
 msgid "View all"
 msgstr "すべて表示"
@@ -311,5 +1258,41 @@ msgstr "すべて表示"
 msgid "View all transitions"
 msgstr "すべてのトランジションを表示"
 
+#. placeholder {0}: g.error
+msgid "We couldn't read the signing quorum from our dashd: {0}"
+msgstr "dashd から署名クォーラムを読み取れませんでした: {0}"
+
+msgid "What happens next"
+msgstr "この先の流れ"
+
 msgid "What is waiting to be mined."
 msgstr "マイニング待ちのもの。"
+
+#. placeholder {0}: String(r.window_days)
+msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
+msgstr "直近 {0} 日間にマスターノードへ実際に支払われた額を担保額に対して示したものです。その期間以上登録されている有効なマスターノードをすべて対象としています。"
+
+msgid "What they earn"
+msgstr "収益"
+
+msgid "What they run"
+msgstr "実行内容"
+
+msgid "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
+msgstr "Dash Core 24 の有効化の進捗：マスターノードのシグナル、ウィンドウごとのマイナーのシグナル、ロックインのしきい値、次のウィンドウが開く時期。"
+
+msgid "Where it stands"
+msgstr "現在の状況"
+
+msgid "Which nodes"
+msgstr "対象のノード"
+
+#. placeholder {0}: formatInt(g.quorums.length)
+msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
+msgstr "どのクォーラムが署名するかはリクエストと、その時点で有効なクォーラム（新しいものが約1日ごとに形成されます）によって決まります。そのため、現在有効な {0} 個を、今署名するものを先頭にして表示しています。"
+
+msgid "Window"
+msgstr "ウィンドウ"
+
+msgid "would sign now"
+msgstr "今署名するもの"
