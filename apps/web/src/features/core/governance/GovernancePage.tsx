@@ -6,7 +6,7 @@ import { useCallback, useId, useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
-import { Entity, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { formatDate, formatInt, formatIsoUtc } from '@/lib/format'
 import {
   Amount,
@@ -25,7 +25,6 @@ import {
   useNow,
 } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
-import { PageFrame } from '../hy-shared/PageFrame'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ProposalLinks } from './ProposalLinks'

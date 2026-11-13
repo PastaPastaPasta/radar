@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
+import { PageFrame } from '@/features/entity'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
-import { PageFrame } from '../hy-shared/PageFrame'
 import { NetworkInternals } from './NetworkInternals'
 
 export function InternalsPage() {

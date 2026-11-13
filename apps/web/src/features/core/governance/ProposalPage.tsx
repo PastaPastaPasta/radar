@@ -4,7 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { HyProposalVote } from '@/data/hyphen/schemas'
 import { useIndexHealth } from '@/data/index-health'
-import { Entity, PageLink, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
   Amount,
@@ -22,7 +22,6 @@ import {
 } from '@/ui'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
-import { PageFrame } from '../hy-shared/PageFrame'
 import { DerivedFundingNote } from './DerivedFundingNote'
 import { ProposalLinks } from './ProposalLinks'
 import { governanceQueries, insightGovernanceQueries } from './queries'
