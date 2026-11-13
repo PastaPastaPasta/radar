@@ -441,6 +441,28 @@
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "dashda0gr0wtheng1ne"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "dashdaogrowthengine.dash"
+      }
     ]
   ],
   "testnet": [

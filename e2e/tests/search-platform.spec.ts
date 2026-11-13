@@ -261,7 +261,9 @@ test.describe('nothing found', () => {
     await search(page, 'zzzz-not-a-real-core-thing-12345')
 
     await expect(page.getByText(/No match for/)).toContainText('Mainnet')
-    await expect(page.locator('li[data-kind="name"]')).toHaveCount(0)
+    // The only name on the page is the guess, never a result.
+    await expect(page.locator('[data-guess] li[data-kind="name"]')).toHaveCount(1)
+    await expect(page.locator('li[data-kind="name"]')).toHaveCount(1)
   })
 })
 
