@@ -6,9 +6,16 @@ import { expect, test } from '../helpers/test'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 700
-/** Rows a table shows: the header row counts on a desktop, where it is a real table. */
-const bodyRows = (page: Page, id: string) =>
-  card(page, id).locator(isPhone(page) ? '[data-card]' : 'tbody tr')
+/** The rows a table shows (a phone keeps the table and scrolls it sideways). */
+const bodyRows = (page: Page, id: string) => card(page, id).locator('tbody tr')
+
+/** An audit at the top of the page: a row that scrolled under the sticky bar counts as obscured. */
+async function audit(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    window.scrollTo(0, 0)
+  })
+  await expectAccessible(page)
+}
 
 async function open(page: Page, url: string, h1: string | RegExp): Promise<void> {
   await pinClockToFixtures(page)
@@ -46,7 +53,7 @@ test.describe('Epochs', () => {
       await expect(rewards.getByText(label, { exact: true })).toBeVisible()
     }
     await expect(rewards.locator('[data-source="radar"]').first()).toBeVisible()
-    await expectAccessible(page)
+    await audit(page)
   })
 
   test('ranks the twenty top proposers and sorts them @NX-50', async ({ page }) => {
@@ -180,8 +187,8 @@ test.describe('One epoch', () => {
     await proposers.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'epoch-proposers').first()).toBeVisible()
     await expect(proposers.locator('a[href^="/mn/"]').first()).toBeVisible()
-    await expect(page.getByRole('button', { name: /Copy link/ })).toBeVisible()
-    await expectAccessible(page)
+    await expect(page.getByRole('button', { name: 'Copy link', exact: true })).toBeVisible()
+    await audit(page)
   })
 
   test('links to the previous and next epoch @NX-51', async ({ page }) => {
@@ -253,7 +260,7 @@ test.describe('Protocol', () => {
     await expect(vote.getByText('Pending votes', { exact: true })).toBeVisible()
     await expect(vote.getByText('Candidate version', { exact: true })).toBeVisible()
     await expect(vote.locator('[data-source="radar"]').first()).toBeVisible()
-    await expectAccessible(page)
+    await audit(page)
   })
 
   test('tallies the votes across versions and lists each evonode’s vote @NX-56', async ({
@@ -279,7 +286,7 @@ test.describe('Protocol', () => {
       'aria-sort',
       'descending',
     )
-    await table.getByRole('button', { name: /Evonode/ }).click()
+    await table.getByRole('button', { name: 'Evonode', exact: true }).click()
     await expect(page).toHaveURL(/sort=node/)
     await expect(table.getByRole('columnheader', { name: /Evonode/ })).toHaveAttribute(
       'aria-sort',
@@ -340,7 +347,7 @@ test.describe('Chain state', () => {
     await expect(quorums.locator('[data-quorum-hash]').first()).toBeVisible()
     expect(await quorums.locator('[data-quorum-hash]').count()).toBeGreaterThan(3)
     await expect(quorums.getByRole('button', { name: /LLMQ/ }).first()).toBeVisible()
-    await expectAccessible(page)
+    await audit(page)
   })
 
   test('filters quorums by hash prefix and by type, and keeps both in the address @NX-55', async ({
@@ -397,7 +404,7 @@ test.describe('Chain state', () => {
     await expect(total.locator('[data-amount]').first()).toBeVisible()
     await expect(total.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
     await expect(total.locator('.rx-fiat')).toContainText('$')
-    await expectAccessible(page)
+    await audit(page)
   })
 
   test('shows no USD estimate in Decentralized only mode @NX-57', async ({ page }) => {
@@ -437,7 +444,7 @@ test.describe('Chain state', () => {
     await expect(anchors.locator('[data-anchors] [data-copy]')).toHaveCount(10)
     await anchors.getByRole('button', { name: 'Show more' }).click()
     expect(await anchors.locator('[data-anchors] li').count()).toBeGreaterThan(10)
-    await expectAccessible(page)
+    await audit(page)
   })
 
   test('lists encrypted notes a chunk at a time, with a copy control on every hash @NX-58', async ({
