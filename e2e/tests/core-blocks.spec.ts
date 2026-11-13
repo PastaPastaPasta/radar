@@ -89,7 +89,7 @@ test.describe('Block page', () => {
     await expectAccessible(page)
   })
 
-  test('states the page’s one source once and keeps copy controls quiet until hovered @IN-03', async ({
+  test('states the page’s DAPI source on the header only and keeps copy controls quiet until hovered @IN-03', async ({
     page,
   }) => {
     const touch = (page.viewportSize()?.width ?? 1000) <= 640
@@ -97,8 +97,12 @@ test.describe('Block page', () => {
     await expect(page.getByRole('heading', { level: 1, name: /Block 2,570,085/ })).toBeVisible()
     await expect(
       page.locator('article [data-source="dapi"]'),
-      'one DAPI line for the page',
-    ).toHaveCount(1)
+      'one DAPI line in the band and one on the header section',
+    ).toHaveCount(2)
+    await expect(page.locator('#header .rx-sec__actions [data-source="dapi"]')).toHaveCount(1)
+    await expect(
+      page.locator('#coinbase [data-source="dapi"], #transactions [data-source="dapi"]'),
+    ).toHaveCount(0)
     await expect(
       page.locator('#header [data-source="insight"], #header [data-source="hyphen"]').first(),
       'a different source keeps its own line',
