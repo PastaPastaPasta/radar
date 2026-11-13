@@ -293,19 +293,27 @@ export function Stat({
   )
 }
 
+/** A figure read this much earlier than its group's first shows its own age instead of borrowing the group's. */
+const SAME_READ_MS = 30_000
+
 /**
  * A row of stats. When several share a source, only the first carries its badge: the rest are read as part of the same
- * group, so a card of four figures from two sources shows two badges, not four.
+ * group, so a card of four figures from two sources shows two badges, not four. A figure that is clearly older than the
+ * first of its source keeps its own badge, so a figure that stopped refreshing can't hide behind one that is current.
  */
 export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
-  const seen = new Set<string>()
+  const seen = new Map<string, number>()
   const stats = Children.map(children, (child) => {
     if (!isValidElement<StatProps>(child) || child.type !== Stat || !child.props.source)
       return child
-    const key = sourceKey(child.props.source)
-    if (seen.has(key)) return cloneElement(child, { source: undefined })
-    seen.add(key)
-    return child
+    const { source } = child.props
+    const key = sourceKey(source)
+    const first = seen.get(key)
+    if (first === undefined) {
+      seen.set(key, source.asOf)
+      return child
+    }
+    return first - source.asOf > SAME_READ_MS ? child : cloneElement(child, { source: undefined })
   })
   return (
     <div className="rx-stats" {...rest}>

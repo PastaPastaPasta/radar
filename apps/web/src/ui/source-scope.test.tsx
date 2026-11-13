@@ -58,4 +58,16 @@ describe('quiet source badges', () => {
     expect(container.querySelectorAll('[data-source="hyphen"]')).toHaveLength(1)
     expect(container.querySelectorAll('.rx-stat')).toHaveLength(4)
   })
+
+  it('keeps the badge of a figure read well before the first one of its source @HY-01', () => {
+    const { container } = render(
+      <Stats>
+        <Stat label="Height" value="1" source={dapi} />
+        <Stat label="Difficulty" value="2" source={{ ...dapi, asOf: now - 20 * 60_000 }} />
+        <Stat label="Lock" value="3" source={{ ...dapi, asOf: now - 10_000 }} />
+      </Stats>,
+    )
+    expect(container.querySelectorAll('[data-source="dapi"]')).toHaveLength(2)
+    expect(screen.getByText('20 min ago')).toBeInTheDocument()
+  })
 })

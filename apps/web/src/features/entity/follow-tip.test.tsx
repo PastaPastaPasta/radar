@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { useFollowTip } from './follow-tip'
 
-vi.mock('./queries', () => ({
+vi.mock('@/data/core/queries', () => ({
   coreQueries: {
     tip: () => ({
       queryKey: ['mainnet', 'dapi', 'tip'],

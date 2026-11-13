@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
-import { coreQueries } from './queries'
+import { coreQueries } from '@/data/core/queries'
 import type { NetworkId } from '@/lib/network'
 
 /**
