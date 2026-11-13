@@ -152,6 +152,9 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
           columns={columns}
           rows={shown}
           getRowId={(e) => e.protx}
+          rowLink={(e) =>
+            ({ to: '/mn/$protx', params: { protx: e.protx }, search: { tab: 'platform' } }) as never
+          }
           state={shown.length === 0 ? 'empty' : 'ready'}
           empty={
             <Empty

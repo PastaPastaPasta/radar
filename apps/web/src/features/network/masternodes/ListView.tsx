@@ -88,6 +88,7 @@ export function ListView({ data, net, controls, stamps }: ListViewProps) {
             columns={columns}
             rows={shown}
             getRowId={(r) => r.protx}
+            rowLink={(r) => ({ to: '/mn/$protx', params: { protx: r.protx } }) as never}
             state={shown.length === 0 ? 'empty' : 'ready'}
             empty={
               <Empty

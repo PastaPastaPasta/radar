@@ -271,6 +271,7 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
           columns={columns}
           rows={rows}
           getRowId={(r) => r.identifier}
+          rowLink={(r) => ({ to: '/identity/$id', params: { id: r.identifier } }) as never}
           state={first?.isPending ? 'loading' : first?.isError && !first.data ? 'error' : 'ready'}
           error={first?.error}
           onRetry={() => void first?.refetch()}
