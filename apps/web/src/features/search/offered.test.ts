@@ -62,7 +62,6 @@ describe('Search offers no dead ends @HY-14', () => {
     for (const to of [
       '/platform/block/$id',
       '/epoch/$n',
-      '/name/$label',
       '/platform-address/$addr',
       '/about',
     ]) {

@@ -9,8 +9,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/about',
   '/api',
   '/changes',
-  '/contest/$label',
-  '/contests',
   '/contract/$id',
   '/contract/$id/documents/$type',
   '/contracts',
@@ -21,14 +19,11 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/group/$contract/$pos',
   '/groups/$contract',
   '/map',
-  '/name/$label',
-  '/names',
   '/platform-address/$addr',
   '/platform/block/$id',
   '/platform/blocks',
   '/platform/tx/$hash',
   '/platform/txs',
-  '/polls',
   '/protocol',
   '/query',
   '/quorums',
@@ -40,7 +35,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/tokens',
   '/tools/$decoder',
   '/tools/transition',
-  '/votes',
 ])
 
 export function isFinishedRoute(path: string): boolean {

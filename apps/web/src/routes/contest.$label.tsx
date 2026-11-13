@@ -25,5 +25,5 @@ export const Route = createFileRoute('/contest/$label')({
 
 function ContestPageRoute() {
   const { label } = Route.useParams()
-  return <ContestPage label={label} />
+  return <ContestPage label={label} search={Route.useSearch()} />
 }
