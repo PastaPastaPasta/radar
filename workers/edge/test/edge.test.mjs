@@ -638,12 +638,17 @@ describe('per-entity title and OG', () => {
       assert.match(html, new RegExp(`<title>${title} · Radar</title>`), route)
       assert.match(
         html,
-        new RegExp(`og:url" content="http://radar\\.localhost${route}\\?network=testnet&amp;sources=decentralized"`),
+        new RegExp(
+          `og:url" content="http://radar\\.localhost${route}\\?network=testnet&amp;sources=decentralized"`,
+        ),
         route,
       )
     }
     const html = await (await getAsBot('/block/1234567?sources=decentralized')).text()
-    assert.match(html, /og:url" content="http:\/\/radar\.localhost\/block\/1234567\?sources=decentralized"/)
+    assert.match(
+      html,
+      /og:url" content="http:\/\/radar\.localhost\/block\/1234567\?sources=decentralized"/,
+    )
     assert.equal(upstreamCalls.length, 0)
   })
 
