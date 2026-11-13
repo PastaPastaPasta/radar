@@ -31,7 +31,7 @@ import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
 import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
-import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'
+import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section, SectionIndex } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
 import { StaleIndexNotice } from '../hy-shared/HyphenGate'
@@ -289,6 +289,13 @@ function BlockView({
       </CoreBand>
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
+        <SectionIndex
+          sections={[
+            { id: 'header', label: t`Header` },
+            ...(cb ? [{ id: 'coinbase', label: t`Coinbase` }] : []),
+            { id: 'transactions', label: t`Transactions` },
+          ]}
+        />
         <Section id="header" title={t`Header`} source={stamp}>
           <Card layer="core">
             <KeyValue

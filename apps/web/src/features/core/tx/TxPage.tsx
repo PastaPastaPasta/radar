@@ -26,7 +26,14 @@ import {
   ChainLockBadge,
   InstantSendBadge,
 } from '@/ui'
-import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from '../block/frame'
+import {
+  CoreBand,
+  CoreBandSkeleton,
+  NotFound,
+  RecordHeader,
+  Section,
+  SectionIndex,
+} from '../block/frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
 import { StaleIndexNotice } from '../hy-shared/HyphenGate'
@@ -362,6 +369,15 @@ function TxView({
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
         {info && payload ? (
+        <SectionIndex
+          sections={[
+            ...(info && payload ? [{ id: 'payload', label: t`Payload` }] : []),
+            { id: 'flow', label: t`Value` },
+            { id: 'settlement', label: t`Settlement` },
+            { id: 'io', label: t`Inputs and outputs` },
+            { id: 'raw', label: t`Raw data` },
+          ]}
+        />
           <Section id="payload" title={info.title} description={info.about} source={stamp}>
             <Card layer="core">
               <div data-payload={String(payload.kind)}>
@@ -474,6 +490,8 @@ function RawData({ tx }: { tx: DecodedTx }) {
       <summary style={{ cursor: 'pointer', fontWeight: 600 }}>{t`Raw data`}</summary>
       {open ? (
         <>
+      id="raw"
+      data-sec-target
           <p className="rx-note">{t`The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs.`}</p>
           <pre className="rx-mono" style={{ overflow: 'auto', maxHeight: 420 }}>
             {jsonOf(tx)}

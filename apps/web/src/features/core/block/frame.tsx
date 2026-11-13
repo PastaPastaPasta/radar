@@ -75,6 +75,25 @@ export function RecordHeader({
   )
 }
 
+export interface SectionLink {
+  id: string
+  label: ReactNode
+}
+
+/** Phone-only row of in-page anchors for a long record page; the stylesheet hides it above 640 px. */
+export function SectionIndex({ sections }: { sections: SectionLink[] }) {
+  const { t } = useLingui()
+  return (
+    <nav className="rx-secindex" aria-label={t`On this page`}>
+      {sections.map((s) => (
+        <a key={s.id} href={`#${s.id}`}>
+          {s.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
 export function Section({
   id,
   title,
