@@ -28,7 +28,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/name/$label',
   '/names',
   '/nodes',
-  '/platform',
   '/platform-address/$addr',
   '/platform/block/$id',
   '/platform/blocks',
