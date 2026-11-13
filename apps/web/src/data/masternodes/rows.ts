@@ -48,6 +48,10 @@ export interface MnRows {
   radar: SourceStamp | null
 }
 
+const typeOf = (m: RadarMasternode): MnType => (m.type === 'Evo' ? 'evo' : 'regular')
+const statusOf = (m: RadarMasternode): MnStatus =>
+  m.status === 'enabled' ? 'enabled' : 'pose-banned'
+
 const hostOf = (service: string | null): string | null =>
   service ? service.replace(/:\d+$/, '').replace(/^\[(.*)\]$/, '$1') : null
 
@@ -76,8 +80,8 @@ function fromDapi(protx: string, e: DapiMnEntry, dapi: SourceStamp): MnRow {
 function fromRadar(m: RadarMasternode, radarStamp: SourceStamp): MnRow {
   return {
     protx: m.protx,
-    type: m.type === 'Evo' ? 'evo' : 'regular',
-    status: m.status === 'enabled' ? 'enabled' : 'pose-banned',
+    type: typeOf(m),
+    status: statusOf(m),
     service: m.service,
     host: hostOf(m.service),
     registration: null,
@@ -90,8 +94,8 @@ function fromRadar(m: RadarMasternode, radarStamp: SourceStamp): MnRow {
 function differs(row: MnRow, m: RadarMasternode): boolean {
   const nodeId = row.registration?.platformNodeId
   return (
-    row.type !== (m.type === 'Evo' ? 'evo' : 'regular') ||
-    row.status !== (m.status === 'enabled' ? 'enabled' : 'pose-banned') ||
+    row.type !== typeOf(m) ||
+    row.status !== statusOf(m) ||
     (m.service !== null && row.service !== null && m.service !== row.service) ||
     (nodeId !== undefined && m.platform_node_id !== null && m.platform_node_id !== nodeId)
   )

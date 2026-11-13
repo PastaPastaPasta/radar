@@ -165,13 +165,18 @@ function allKeys<V, R>(
 
 const same = (v: bigint): bigint => v
 
+/** Converts a wasm object to its DTO, then frees it. */
+function toDto<V extends Freeable, R>(value: V, map: (v: V) => R): R {
+  const dto = map(value)
+  value.free?.()
+  return dto
+}
+
 export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   async 'identities.fetch'(sdk, { id }) {
     const response = await sdk.identities.fetchWithProof(id)
     const identity = response.data
-    const data = identity ? identityDto(identity) : null
-    identity?.free?.()
-    return { data, response }
+    return { data: identity ? toDto(identity, identityDto) : null, response }
   },
 
   async 'identities.balances'(sdk, { ids }) {
@@ -182,20 +187,12 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   async 'identities.byPublicKeyHash'(sdk, { pkh }) {
     const response = await sdk.identities.byPublicKeyHashWithProof(pkh)
     const identity = response.data
-    const data = identity ? identityDto(identity) : null
-    identity?.free?.()
-    return { data, response }
+    return { data: identity ? toDto(identity, identityDto) : null, response }
   },
 
   async 'contracts.getMany'(sdk, { ids }) {
     const response = await sdk.contracts.getManyWithProof(ids)
-    const data = new Map<string, ReturnType<typeof contractDto> | null>(ids.map((id) => [id, null]))
-    for (const [id, contract] of response.data) {
-      if (!contract) continue
-      data.set(id, contractDto(contract))
-      contract.free?.()
-    }
-    return { data, response }
+    return { data: allKeys(ids, response.data, (c) => toDto(c, contractDto)), response }
   },
 
   async 'contracts.fetch'(sdk, { id }) {
@@ -208,9 +205,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
       throw e
     }
     const contract = response.data
-    const data = contract ? contractFullDto(contract) : null
-    contract?.free?.()
-    return { data, response }
+    return { data: contract ? toDto(contract, contractFullDto) : null, response }
   },
 
   async 'dpns.usernames'(sdk, { identityId, limit }) {
@@ -224,9 +219,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   async 'dpns.getUsernameByName'(sdk, { name }) {
     const response = await sdk.dpns.getUsernameByNameWithProof(name)
     const info = response.data
-    const data = info ? dpnsUsernameDto(info) : null
-    info?.free?.()
-    return { data, response }
+    return { data: info ? toDto(info, dpnsUsernameDto) : null, response }
   },
 
   async 'documents.query'(sdk, args) {
@@ -242,8 +235,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
     const data = []
     for (const doc of response.data.values()) {
       if (!doc) continue
-      data.push(documentDto(doc))
-      doc.free?.()
+      data.push(toDto(doc, documentDto))
     }
     return { data, response }
   },
@@ -251,17 +243,13 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   async 'documents.get'(sdk, { contractId, type, id }) {
     const response = await sdk.documents.getWithProof(contractId, type, id)
     const doc = response.data
-    const data = doc ? documentDto(doc) : null
-    doc?.free?.()
-    return { data, response }
+    return { data: doc ? toDto(doc, documentDto) : null, response }
   },
 
   async 'tokens.contractInfo'(sdk, { tokenId }) {
     const response = await sdk.tokens.contractInfoWithProof(tokenId)
     const info = response.data
-    const data = info ? tokenContractInfoDto(info) : null
-    info?.free?.()
-    return { data, response }
+    return { data: info ? toDto(info, tokenContractInfoDto) : null, response }
   },
 
   async 'tokens.totalSupply'(sdk, { tokenId }) {
@@ -271,38 +259,25 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'tokens.statuses'(sdk, { tokenIds }) {
     const response = await sdk.tokens.statusesWithProof(tokenIds)
-    const data = allKeys(tokenIds, response.data, (s) => {
-      const dto = tokenStatusDto(s)
-      s.free?.()
-      return dto
-    })
-    return { data, response }
+    return { data: allKeys(tokenIds, response.data, (s) => toDto(s, tokenStatusDto)), response }
   },
 
   async 'tokens.balances'(sdk, { tokenId, identityIds }) {
     const response = await sdk.tokens.balancesWithProof(identityIds, tokenId)
-    return {
-      data: allKeys(identityIds, response.data, same),
-      response,
-    }
+    return { data: allKeys(identityIds, response.data, same), response }
   },
 
   async 'tokens.identityBalances'(sdk, { identityId, tokenIds }) {
     const response = await sdk.tokens.identityBalancesWithProof(identityId, tokenIds)
-    return {
-      data: allKeys(tokenIds, response.data, same),
-      response,
-    }
+    return { data: allKeys(tokenIds, response.data, same), response }
   },
 
   async 'tokens.identityTokenInfos'(sdk, { identityId, tokenIds }) {
     const response = await sdk.tokens.identityTokenInfosWithProof(identityId, tokenIds)
-    const data = allKeys(tokenIds, response.data, (i) => {
-      const dto = identityTokenInfoDto(i)
-      i.free?.()
-      return dto
-    })
-    return { data, response }
+    return {
+      data: allKeys(tokenIds, response.data, (i) => toDto(i, identityTokenInfoDto)),
+      response,
+    }
   },
 
   async 'tokens.calculateId'(sdk, { contractId, position }) {
@@ -311,8 +286,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'system.status'(sdk) {
     const status = await sdk.system.status()
-    const { dto, coreChainLockedHeight, epoch, protocolVersion } = statusDto(status)
-    status.free?.()
+    const { dto, coreChainLockedHeight, epoch, protocolVersion } = toDto(status, statusDto)
     return {
       data: dto,
       unprovedMeta: {
@@ -333,16 +307,12 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'system.currentQuorumsInfo'(sdk) {
     const info = await sdk.system.currentQuorumsInfo()
-    const data = currentQuorumsDto(info)
-    info.free?.()
-    return { data }
+    return { data: toDto(info, currentQuorumsDto) }
   },
 
   async 'epoch.current'(sdk) {
     const response = await sdk.epoch.currentWithProof()
-    const data = epochDto(response.data)
-    response.data.free?.()
-    return { data, response }
+    return { data: toDto(response.data, epochDto), response }
   },
 
   async 'epoch.epochsInfo'(sdk, args) {
@@ -350,8 +320,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
     const data = []
     for (const info of response.data.values()) {
       if (!info) continue
-      data.push(epochDto(info))
-      info.free?.()
+      data.push(toDto(info, epochDto))
     }
     return { data, response }
   },
@@ -361,8 +330,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
     const data = []
     for (const [index, info] of response.data) {
       if (!info) continue
-      data.push(finalizedEpochDto(index, info))
-      info.free?.()
+      data.push(toDto(info, (i) => finalizedEpochDto(index, i)))
     }
     return { data, response }
   },
@@ -379,9 +347,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'protocol.versionUpgradeState'(sdk) {
     const response = await sdk.protocol.versionUpgradeStateWithProof()
-    const data = versionUpgradeStateDto(response.data)
-    response.data.free?.()
-    return { data, response }
+    return { data: toDto(response.data, versionUpgradeStateDto), response }
   },
 
   async 'protocol.versionUpgradeVoteStatus'(sdk, { startProTxHash, count }) {
@@ -396,29 +362,20 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'voting.votePollsByEndDate'(sdk, args) {
     const response = await sdk.voting.votePollsByEndDateWithProof(args)
-    const data = response.data.map((entry) => {
-      const dto = votePollsByEndDateDto(entry)
-      entry.free?.()
-      return dto
-    })
-    return { data, response }
+    return { data: response.data.map((entry) => toDto(entry, votePollsByEndDateDto)), response }
   },
 
   async 'addresses.get'(sdk, { address }) {
     const response = await sdk.addresses.getWithProof(address)
     const info = response.data
-    const data = info ? platformAddressInfoDto(address, info) : null
-    info?.free?.()
-    return { data, response }
+    return { data: info ? toDto(info, (i) => platformAddressInfoDto(address, i)) : null, response }
   },
 
   async 'addresses.getMany'(sdk, { addresses }) {
     const response = await sdk.addresses.getManyWithProof(addresses)
-    const data = allKeys(addresses, response.data, (info, address) => {
-      const dto = platformAddressInfoDto(address, info)
-      info.free?.()
-      return dto
-    })
+    const data = allKeys(addresses, response.data, (info, address) =>
+      toDto(info, (i) => platformAddressInfoDto(address, i)),
+    )
     return { data, response }
   },
 }

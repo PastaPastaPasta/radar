@@ -20,11 +20,7 @@ import type {
   VotePollDto,
   VotePollsByEndDateDto,
 } from '../methods'
-
-/** A wasm object, as far as these mappers read it. */
-interface Freeable {
-  free?: () => void
-}
+import type { Freeable } from './impl/types'
 
 interface IdentityKeyLike extends Freeable {
   keyId: number
@@ -171,13 +167,16 @@ export interface DocumentLike extends Freeable {
 const num = (v: bigint | number | null | undefined): number | null =>
   v === undefined || v === null ? null : Number(v)
 
+const big = (v: bigint | number | null | undefined): bigint | null =>
+  v === undefined || v === null ? null : BigInt(v)
+
 export function documentDto(doc: DocumentLike): DocumentDto {
   return {
     id: String(doc.id),
     ownerId: String(doc.ownerId),
     contractId: String(doc.dataContractId),
     type: doc.documentTypeName,
-    revision: doc.revision === undefined || doc.revision === null ? null : BigInt(doc.revision),
+    revision: big(doc.revision),
     createdAt: num(doc.createdAt),
     updatedAt: num(doc.updatedAt),
     transferredAt: num(doc.transferredAt),
@@ -340,7 +339,7 @@ export interface VersionUpgradeStateLike extends Freeable {
 export const versionUpgradeStateDto = (s: VersionUpgradeStateLike): VersionUpgradeStateDto => ({
   currentProtocolVersion: s.currentProtocolVersion,
   nextProtocolVersion: s.nextProtocolVersion ?? null,
-  voteCount: s.voteCount === undefined || s.voteCount === null ? null : BigInt(s.voteCount),
+  voteCount: big(s.voteCount),
 })
 
 export interface CurrentQuorumsLike extends Freeable {

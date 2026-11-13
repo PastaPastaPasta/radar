@@ -16,17 +16,15 @@ export const DPNS_CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const DPNS_FANOUT = 4
 
 /** Fills a result map so that every asked key has an entry, and keeps the stamp of the answer. */
-function keyed<K, V>(keys: K[], answer: Sourced<Map<string, V | null>>, id: (k: K) => string) {
-  return mapSourced(answer, (m) => new Map(keys.map((k) => [k, m.get(id(k)) ?? null])))
+function keyed<V>(keys: string[], answer: Sourced<Map<string, V | null>>) {
+  return mapSourced(answer, (m) => new Map(keys.map((k) => [k, m.get(k) ?? null])))
 }
-
-const same = (k: string) => k
 
 export const identityBalance = createBatcher<string, bigint>({
   name: 'identity-balance',
   source: 'sdk',
   maxBatch: DRIVE_MAX,
-  run: async (net, ids) => keyed(ids, await sdk.call(net, 'identities.balances', { ids }), same),
+  run: async (net, ids) => keyed(ids, await sdk.call(net, 'identities.balances', { ids })),
 })
 
 export const contractMeta = createBatcher<string, ContractDto>({
@@ -34,7 +32,7 @@ export const contractMeta = createBatcher<string, ContractDto>({
   source: 'sdk',
   maxBatch: DRIVE_MAX,
   dataClass: 'structural',
-  run: async (net, ids) => keyed(ids, await sdk.call(net, 'contracts.getMany', { ids }), same),
+  run: async (net, ids) => keyed(ids, await sdk.call(net, 'contracts.getMany', { ids })),
 })
 
 export const tokenStatus = createBatcher<string, TokenStatusDto>({
@@ -43,7 +41,7 @@ export const tokenStatus = createBatcher<string, TokenStatusDto>({
   maxBatch: DRIVE_MAX,
   keyParam: 'tokenId',
   run: async (net, tokenIds) =>
-    keyed(tokenIds, await sdk.call(net, 'tokens.statuses', { tokenIds }), same),
+    keyed(tokenIds, await sdk.call(net, 'tokens.statuses', { tokenIds })),
 })
 
 export interface TokenBalanceKey {
@@ -83,7 +81,7 @@ export const platformAddressInfo = createBatcher<string, PlatformAddressInfoDto>
   maxBatch: DRIVE_MAX,
   keyParam: 'address',
   run: async (net, addresses) =>
-    keyed(addresses, await sdk.call(net, 'addresses.getMany', { addresses }), same),
+    keyed(addresses, await sdk.call(net, 'addresses.getMany', { addresses })),
 })
 
 /** The label of a DPNS `domain` document, as the name shown for its owner. */

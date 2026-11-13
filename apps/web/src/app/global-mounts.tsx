@@ -11,7 +11,9 @@ const DiagnosticsMount = deferred(() => import('@/features/you').then((m) => m.D
 
 type Requested = Readonly<Record<GlobalMount, boolean>>
 
-let requested: Requested = { proof: false, diagnostics: false }
+const NONE: Requested = { proof: false, diagnostics: false }
+
+let requested = NONE
 const listeners = new Set<() => void>()
 
 /** Mounts a panel for the rest of the session; its code loads the first time this is called. */
@@ -23,7 +25,7 @@ export function requestGlobalMount(which: GlobalMount): void {
 
 /** Forgets every request; tests use it between cases. */
 export function resetGlobalMounts(): void {
-  requested = { proof: false, diagnostics: false }
+  requested = NONE
   for (const cb of [...listeners]) cb()
 }
 
