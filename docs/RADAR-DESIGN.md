@@ -413,6 +413,16 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 
 When `useSourceHealth` reports the card's source down, the body drops to 74% opacity with a greyscale filter (45% failed colour contrast) and an overlay band (bad-soft, 1 px bad border, 8 px radius) sits over its top: "Platform Explorer isn't answering · showing data from 4 min ago · Retry". Stale keeps full opacity and only the `SourceLine` changes.
 
+### 6.13a Unavailable in Decentralized only mode (`Unavailable`) and the header mark
+
+Not an error and not a warning: the viewer chose this, so the state is calm and says how to undo it.
+
+- **Full.** The `Empty` layout: a 32 px tile in `--dh-chip` with a shield glyph (never the alert glyph, never bad-soft or warn-soft), a 15 px weight 620 title that names what is missing and what it needs ("The rich list needs an indexer"), one line of 14 px `--dh-ink-2` body ("Decentralized only mode reads only DAPI nodes and the Platform SDK."), then a secondary button "Use all sources" and a text link "About sources" in one centred row that wraps (gap 6 × 14 px). Used once where a page's whole content is missing.
+- **Compact.** One row, 40 px minimum, 14 px `--dh-ink-2`: shield glyph, the title, and the same secondary button pushed to the right edge; it wraps under the title on a narrow screen. Used inside a page that still shows data, at most once per missing section.
+- **Never** a wall of them, never over a card as an overlay (§6.13 is for a source that is down), never with a Retry.
+- **Header mark.** A shield glyph in a 24 px square in the shell bar's actions, before the unit switch: 1 px `--dh-line-2` border from 1101 px (none below, where the header is tight), `--dh-r2` radius, `--dh-ink-2`. No fill and no status colour: it states a setting, not a problem. No word beside it, because the bar has no room for one next to the section links; "Decentralized only" is its accessible name and the tooltip says what the mode does. Hover is `--dh-hover`, focus the family ring. It links to Tools → Sources.
+- **Phone strip.** Below 412 px the bar cannot take the glyph without cutting the product name, so a strip sits directly under the bar instead: full width, 28 px, `--dh-sunken` with a 1 px `--dh-line` bottom border, the shield glyph and "Decentralized only" in `--dh-fs-sm` `--dh-ink-2`, left-aligned at the page gutter. The whole strip is the link. It is not sticky.
+
 ### 6.14 ⌘K palette (`CommandPalette`)
 
 - Opens with ⌘K / Ctrl+K or `/`, from the bar's search trigger (240 × 34 px, "Search Radar" with a `/` key hint) or the home omni search.
