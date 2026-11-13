@@ -8,7 +8,12 @@ const REPO = 'https://github.com/PastaPastaPasta/radar'
 
 function Out({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline underline-offset-2"
+    >
       {children}
     </a>
   )

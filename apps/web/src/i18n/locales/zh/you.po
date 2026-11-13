@@ -15,67 +15,57 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 
 #. placeholder {0}: record.proof.grovedbProof.length
-msgid ""
-"{0, plural, one {# byte of GroveDB proof} other {# bytes of GroveDB proof}}"
-msgstr ""
+msgid "{0, plural, one {# byte of GroveDB proof} other {# bytes of GroveDB proof}}"
+msgstr "{0, plural, other {# 字节的 GroveDB 证明}}"
 
 #. placeholder {0}: shown.length
 msgid "{0, plural, one {Remove # saved item?} other {Remove # saved items?}}"
-msgstr ""
+msgstr "{0, plural, other {移除 # 个已保存项目？}}"
 
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, other {# 个 DAPI 地址}}"
 
-msgid ""
-"{count, plural, one {# identity remembered on this network} other {# "
-"identities remembered on this network}}"
-msgstr ""
+msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
+msgstr "{count, plural, other {本网络已记住 # 个身份}}"
 
 msgid "A devnet with this name is already saved. Edit it instead."
-msgstr ""
+msgstr "已保存同名的开发网。请改为编辑它。"
 
-msgid ""
-"A figure Radar adds up from several proof-checked answers, such as a tally "
-"over a range of blocks, is not itself proved. It says “Combined from N "
-"proof-checked answers”."
-msgstr ""
+msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
+msgstr "Radar 由多个已通过证明验证的回答汇总得出的数据（例如某个区块范围内的合计）本身并未被证明。它会标注“由 N 个已通过证明验证的回答合并而成”。"
 
 msgid "A new version is available."
-msgstr ""
+msgstr "有新版本可用。"
 
-msgid ""
-"A proof answers a question about a key: this identity’s balance, this "
-"contract, this document. Dash Platform can’t prove a list of everything, so "
-"there is no “all identities”, “every holder of this token” or “all documents"
-" about X” to ask a node."
-msgstr ""
+msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
+msgstr "证明回答的是关于某个键的问题：这个身份的余额、这个合约、这份文档。Dash Platform 无法证明“所有内容”的列表，因此没有“所有身份”“此代币的所有持有者”或“关于 X 的所有文档”可以向节点询问。"
 
 msgid "About"
 msgstr "关于"
 
 msgid "Adapted code and data"
-msgstr ""
+msgstr "改编的代码和数据"
 
 msgid "Add a devnet"
 msgstr "添加开发网"
 
 msgid "Add a name"
-msgstr ""
+msgstr "添加名称"
 
 msgid "Add devnet"
 msgstr "添加开发网"
 
 msgid "Add name"
-msgstr ""
+msgstr "添加名称"
 
 msgid "All"
 msgstr "全部"
 
 msgid "All networks"
-msgstr ""
+msgstr "所有网络"
 
 msgid "All proofs"
-msgstr ""
+msgstr "所有证明"
 
 msgid "Amounts"
 msgstr "金额"
@@ -87,85 +77,85 @@ msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金额以 {unitName} 显示。选择 USD 可让美元金额排在前面。"
 
 msgid "Answered by"
-msgstr ""
+msgstr "响应方"
 
 msgid "Applied. The Platform SDK restarted."
-msgstr ""
+msgstr "已应用。Platform SDK 已重启。"
 
 msgid "Apply and restart the SDK"
-msgstr ""
+msgstr "应用并重启 SDK"
 
 msgid "Arguments"
-msgstr ""
+msgstr "参数"
 
 msgid "Asked"
-msgstr ""
+msgstr "请求时间"
 
 msgid "Ban nodes that fail"
-msgstr ""
+msgstr "封禁失败的节点"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Bridge"
 
 msgid "Browse identities"
-msgstr ""
+msgstr "浏览身份"
 
 msgid "Build"
-msgstr ""
+msgstr "构建"
 
 msgid "Call"
-msgstr ""
+msgstr "调用"
 
 msgid "Cancel"
 msgstr "取消"
 
 msgid "Chain"
-msgstr ""
+msgstr "链"
 
 msgid "Change the source or the failures filter."
-msgstr ""
+msgstr "请更改数据源或失败筛选条件。"
 
 msgid "Clear"
 msgstr "清除"
 
 msgid "Clear shown"
-msgstr ""
+msgstr "清除当前显示"
 
 msgid "Clear the SDK cache"
-msgstr ""
+msgstr "清除 SDK 缓存"
 
 msgid "Clear viewed identities"
-msgstr ""
+msgstr "清除浏览过的身份"
 
 msgid "Cleared."
-msgstr ""
+msgstr "已清除。"
 
 msgid "Close"
 msgstr "关闭"
 
 msgid "Confirm clearing"
-msgstr ""
+msgstr "确认清除"
 
 msgid "Connection"
-msgstr ""
+msgstr "连接"
 
 msgid "Connection settings"
-msgstr ""
+msgstr "连接设置"
 
 msgid "Connection settings applied. The Platform SDK restarted."
-msgstr ""
+msgstr "连接设置已应用。Platform SDK 已重启。"
 
 msgid "Copy a link to {devnet}"
-msgstr ""
+msgstr "复制指向 {devnet} 的链接"
 
 msgid "Copy as JSON"
-msgstr ""
+msgstr "复制为 JSON"
 
 msgid "Copy link"
 msgstr "复制链接"
 
 msgid "Copy proof as hex"
-msgstr ""
+msgstr "以十六进制复制证明"
 
 msgid "Core chain-locked height"
 msgstr "Core 已 ChainLock 高度"
@@ -176,25 +166,20 @@ msgstr "自定义开发网"
 msgid "DAPI addresses"
 msgstr "DAPI 地址"
 
-msgid ""
-"Dash Platform answers carry a cryptographic proof. The Platform SDK in your "
-"browser checks it against the public key of the validator quorum that signed"
-" it, before Radar shows the figure. A node that answered can’t make a value "
-"up: the check fails and Radar says so. Those figures are marked “Proof-"
-"checked”, and the mark opens the proof inspector."
-msgstr ""
+msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
+msgstr "Dash Platform 的回答都附带密码学证明。在 Radar 显示数据之前，浏览器中的 Platform SDK 会用签署该证明的验证者 Quorum 的公钥对其进行检查。给出回答的节点无法凭空编造数值：检查会失败，Radar 会如实告知。这些数据会标注“已通过证明验证”，点击该标记即可打开证明检查器。"
 
 msgid "Developer"
-msgstr ""
+msgstr "开发者"
 
 msgid "Devnet name"
 msgstr "开发网名称"
 
 msgid "Diagnostics"
-msgstr ""
+msgstr "诊断"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "关闭"
 
 msgid "Edit"
 msgstr "编辑"
@@ -203,77 +188,62 @@ msgid "Edit {editName}"
 msgstr "编辑 {editName}"
 
 msgid "Enter a full address such as https://quorums.example.org."
-msgstr ""
+msgstr "请输入完整地址，例如 https://quorums.example.org。"
 
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "请至少输入一个 host:port 格式的 DAPI 地址，每行一个。"
 
 msgid "Enter the ID as Base58 text, 32 to 44 characters."
-msgstr ""
+msgstr "请输入 Base58 文本形式的 ID，长度为 32 至 44 个字符。"
 
 msgid "Epoch"
 msgstr "纪元"
 
-msgid ""
-"Every “Proof-checked” mark opens it. It shows the call, the node, the "
-"Platform height, the quorum and the proof bytes, and exports them as "
-"evidence."
-msgstr ""
+msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
+msgstr "每个“已通过证明验证”标记都会打开它。它显示调用、节点、Platform 高度、Quorum 和证明字节，并可将其导出为证据。"
 
 msgid "Every proof this tab holds, newest first."
-msgstr ""
+msgstr "此标签页持有的所有证明，最新的在前。"
 
-msgid ""
-"Everything else is a one-node claim: one DAPI node, or one service such as "
-"Platform Explorer, Radar’s crawler, Hyphen or Insight, said so, and nothing "
-"in your browser could check it. Radar names the source beside each figure, "
-"with its age. Core data is read from DAPI nodes and is not proof-checked."
-msgstr ""
+msgid "Everything else is a one-node claim: one DAPI node, or one service such as Platform Explorer, Radar’s crawler, Hyphen or Insight, said so, and nothing in your browser could check it. Radar names the source beside each figure, with its age. Core data is read from DAPI nodes and is not proof-checked."
+msgstr "其余一切都只是单一节点的说法：某个 DAPI 节点，或某项服务（如 Platform Explorer、Radar 的爬虫、Hyphen 或 Insight）这样说，而你的浏览器无法检查。Radar 会在每个数据旁标明数据源及其时效。Core 数据读取自 DAPI 节点，未经过证明验证。"
 
 msgid "Example"
 msgstr "示例"
 
 msgid "Export all ({count})"
-msgstr ""
+msgstr "全部导出（{count}）"
 
 msgid "Export evidence"
-msgstr ""
+msgstr "导出证据"
 
 msgid "Failed"
 msgstr "失败"
 
 msgid "Failures only"
-msgstr ""
+msgstr "仅显示失败"
 
-msgid ""
-"Forgets every answer the Platform SDK gave, here and in this browser’s "
-"storage, and the proofs held for the inspector. Pages read it again as you "
-"open them."
-msgstr ""
+msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
+msgstr "清除 Platform SDK 给出的所有回答（包括此处和此浏览器存储中的），以及为检查器保留的证明。页面在你打开时会重新读取。"
 
 msgid "Give it a name."
-msgstr ""
+msgstr "请为它命名。"
 
 msgid "Governance"
 msgstr "治理"
 
-msgid ""
-"How Radar talks to Dash Platform. A change restarts the Platform SDK; "
-"nothing here leaves this browser."
-msgstr ""
+msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
+msgstr "Radar 如何与 Dash Platform 通信。更改会重启 Platform SDK；此处的内容不会离开此浏览器。"
 
 #. placeholder {0}: networkName(net)
 msgid "ID on {0}"
-msgstr ""
+msgstr "{0} 上的 ID"
 
-msgid ""
-"Identities, contracts and tokens you saved. They stay only in this browser, "
-"on this device: Radar has no accounts, so they don’t follow you to another "
-"browser, and clearing this site’s data removes them."
-msgstr ""
+msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
+msgstr "你保存的身份、合约和代币。它们只保留在此设备的此浏览器中：Radar 没有账户，因此不会跟随你到其他浏览器，清除本站数据也会将其移除。"
 
 msgid "Kind"
-msgstr ""
+msgstr "类型"
 
 msgid "Language"
 msgstr "语言"
@@ -281,31 +251,23 @@ msgstr "语言"
 msgid "Link copied"
 msgstr "链接已复制"
 
-msgid ""
-"Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar "
-"reads the rows from the index and then checks each row’s facts with proofs "
-"where it can; the checked value wins over the index’s. Without an index, you"
-" can still open anything whose ID you know. Decentralized only mode switches"
-" the indexes off to show exactly that: only what DAPI nodes and the Platform"
-" SDK can answer."
-msgstr ""
+msgid "Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar reads the rows from the index and then checks each row’s facts with proofs where it can; the checked value wins over the index’s. Without an index, you can still open anything whose ID you know. Decentralized only mode switches the indexes off to show exactly that: only what DAPI nodes and the Platform SDK can answer."
+msgstr "列表来自索引：Platform Explorer 和 Radar 自己的爬虫。Radar 从索引读取各行，然后尽可能用证明检查每一行的事实；经检查的值优先于索引的值。没有索引时，你仍可打开任何已知 ID 的内容。“仅去中心化”模式会关闭索引来展示这一点：只显示 DAPI 节点和 Platform SDK 能回答的内容。"
 
 msgid "Log copied"
-msgstr ""
+msgstr "日志已复制"
 
 msgid "Name"
 msgstr "名称"
 
-msgid ""
-"Name an identity, contract or token. The name shows wherever Radar shows "
-"that ID, on this device only, and wins over Radar’s own names."
-msgstr ""
+msgid "Name an identity, contract or token. The name shows wherever Radar shows that ID, on this device only, and wins over Radar’s own names."
+msgstr "为身份、合约或代币命名。该名称会显示在 Radar 显示该 ID 的所有位置，仅限此设备，并优先于 Radar 自己的名称。"
 
 msgid "Network"
 msgstr "网络"
 
 msgid "Networks"
-msgstr ""
+msgstr "网络"
 
 msgid "No"
 msgstr "否"
@@ -314,125 +276,118 @@ msgid "No devnets saved."
 msgstr "尚未保存开发网。"
 
 msgid "No names of your own yet"
-msgstr ""
+msgstr "还没有你自己的名称"
 
 msgid "No proofs yet"
-msgstr ""
+msgstr "暂无证明"
 
 msgid "No requests match"
-msgstr ""
+msgstr "没有匹配的请求"
 
 msgid "No requests yet"
-msgstr ""
+msgstr "暂无请求"
 
 msgid "Node"
-msgstr ""
+msgstr "节点"
 
 msgid "not connected yet"
-msgstr ""
+msgstr "尚未连接"
 
 msgid "not reported"
-msgstr ""
+msgstr "未报告"
 
 msgid "Nothing matches on this network. Try All networks, or another kind."
-msgstr ""
+msgstr "此网络上没有匹配项。请尝试“所有网络”或其他类型。"
 
 msgid "Nothing matches this kind."
-msgstr ""
+msgstr "没有匹配此类型的项目。"
 
 msgid "Nothing saved here"
-msgstr ""
+msgstr "此处没有已保存项目"
 
 msgid "Nothing saved yet"
-msgstr ""
+msgstr "暂无已保存项目"
 
-msgid ""
-"Off by default. When on, this browser remembers the identities you open, up "
-"to 50 per network."
-msgstr ""
+msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
+msgstr "默认关闭。开启后，此浏览器会记住你打开的身份，每个网络最多 50 个。"
 
 msgid "OK"
-msgstr ""
+msgstr "确定"
 
 msgid "One figure’s proof, as Radar received it."
-msgstr ""
+msgstr "Radar 收到的某一个数据的证明。"
 
 msgid "Open"
 msgstr "打开"
 
-msgid ""
-"Open a page with a proof-checked figure. Radar keeps the last 300 proofs in "
-"memory until you close the tab."
-msgstr ""
+msgid "Open a page with a proof-checked figure. Radar keeps the last 300 proofs in memory until you close the tab."
+msgstr "请打开含有已通过证明验证数据的页面。Radar 会在内存中保留最近 300 个证明，直到你关闭标签页。"
 
-msgid ""
-"Open an identity, a contract or a token and press Save. It appears here."
-msgstr ""
+msgid "Open an identity, a contract or a token and press Save. It appears here."
+msgstr "打开身份、合约或代币并点击“保存”，它就会出现在这里。"
 
 msgid "Open diagnostics"
-msgstr ""
+msgstr "打开诊断"
 
 msgid "Open diagnostics with the keyboard"
-msgstr ""
+msgstr "用键盘打开诊断"
 
 msgid "Open settings"
-msgstr ""
+msgstr "打开设置"
 
 msgid "Open the proof inspector"
-msgstr ""
+msgstr "打开证明检查器"
 
 msgid "Open the proof inspector with the keyboard"
-msgstr ""
+msgstr "用键盘打开证明检查器"
 
 msgid "optional"
 msgstr "可选"
 
-msgid ""
-"Otherwise times follow this device’s time zone. Hovering a time always shows"
-" UTC."
+msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "否则时间将按此设备的时区显示。悬停在时间上始终会显示 UTC。"
 
 msgid "Platform height"
 msgstr "Platform 高度"
 
 msgid "Platform protocol version"
-msgstr ""
+msgstr "Platform 协议版本"
 
 msgid "Platform SDK cache"
-msgstr ""
+msgstr "Platform SDK 缓存"
 
 msgid "Platform SDK cache cleared"
-msgstr ""
+msgstr "Platform SDK 缓存已清除"
 
 msgid "Platform SDK in the worker"
-msgstr ""
+msgstr "Worker 中的 Platform SDK"
 
 msgid "Platform SDK in this page"
-msgstr ""
+msgstr "此页面中的 Platform SDK"
 
 msgid "Platform time"
-msgstr ""
+msgstr "Platform 时间"
 
 msgid "Privacy"
-msgstr ""
+msgstr "隐私"
 
 msgid "Proof bytes"
-msgstr ""
+msgstr "证明字节"
 
 msgid "Proof copied"
-msgstr ""
+msgstr "证明已复制"
 
 msgid "Proof inspector"
-msgstr ""
+msgstr "证明检查器"
 
 msgid "Proof-checked"
 msgstr "已通过证明验证"
 
 msgid "Proofs held"
-msgstr ""
+msgstr "已持有的证明"
 
 msgid "Proofs that did not verify"
-msgstr ""
+msgstr "未通过验证的证明"
 
 msgid "Protocol version"
 msgstr "协议版本"
@@ -444,10 +399,10 @@ msgid "Quorum list URL"
 msgstr "Quorum 列表 URL"
 
 msgid "Quorum list URL, Mainnet"
-msgstr ""
+msgstr "Quorum 列表 URL，Mainnet"
 
 msgid "Quorum list URL, Testnet"
-msgstr ""
+msgstr "Quorum 列表 URL，Testnet"
 
 msgid "Quorum type"
 msgstr "Quorum 类型"
@@ -455,38 +410,23 @@ msgstr "Quorum 类型"
 msgid "Radar"
 msgstr "Radar"
 
-msgid ""
-"Radar has no analytics, no cookies, no accounts and no advertising. Your "
-"choices and anything you save stay in this browser: your saved items, the "
-"identities you viewed (off unless you turn it on), the names you gave, your "
-"settings and devnets, and a cache of recent answers so pages open quickly. A"
-" service worker keeps Radar’s own files so it can open offline."
-msgstr ""
+msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
+msgstr "Radar 没有分析、Cookie、账户和广告。你的选择和所保存的内容都留在此浏览器中：已保存的项目、浏览过的身份（除非开启，否则为关闭）、你起的名称、你的设置和开发网，以及用于让页面快速打开的近期回答缓存。Service Worker 会保存 Radar 自己的文件，使其可以离线打开。"
 
-msgid ""
-"Radar is a read-only explorer for Dash Core, Dash Platform and the network "
-"under both. It never signs, never broadcasts and never asks for a key."
-msgstr ""
+msgid "Radar is a read-only explorer for Dash Core, Dash Platform and the network under both. It never signs, never broadcasts and never asks for a key."
+msgstr "Radar 是 Dash Core、Dash Platform 以及两者底层网络的只读浏览器。它从不签名、从不广播，也从不索要密钥。"
 
-msgid ""
-"Radar keeps the last 300 proofs. Load the figure again to get its proof."
-msgstr ""
+msgid "Radar keeps the last 300 proofs. Load the figure again to get its proof."
+msgstr "Radar 保留最近 300 个证明。重新加载该数据即可获取其证明。"
 
 msgid "Radar on GitHub"
-msgstr ""
+msgstr "GitHub 上的 Radar"
 
-msgid ""
-"Radar only reads. To top up an identity, register a name, or work with a "
-"token, a contract or a Platform address, use Bridge. To vote on a proposal "
-"or as a masternode, use Governance. Each link opens in a new tab and carries"
-" the network you were looking at."
-msgstr ""
+msgid "Radar only reads. To top up an identity, register a name, or work with a token, a contract or a Platform address, use Bridge. To vote on a proposal or as a masternode, use Governance. Each link opens in a new tab and carries the network you were looking at."
+msgstr "Radar 只读。要为身份充值、注册名称，或操作代币、合约或 Platform 地址，请使用 Bridge。要对提案投票或以主节点身份投票，请使用 Governance。每个链接都会在新标签页中打开，并带上你当前查看的网络。"
 
-msgid ""
-"Radar’s code is open source under the MIT licence. Where it adapts code or "
-"data from another project, that project is listed here and in the file it "
-"lives in. Libraries installed through npm and cargo keep their own licences."
-msgstr ""
+msgid "Radar’s code is open source under the MIT licence. Where it adapts code or data from another project, that project is listed here and in the file it lives in. Libraries installed through npm and cargo keep their own licences."
+msgstr "Radar 的代码以 MIT 许可证开源。凡是改编自其他项目的代码或数据，该项目都会列在这里以及它所在的文件中。通过 npm 和 cargo 安装的库保留各自的许可证。"
 
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, rate.data.data.usd)
 #. placeholder {1}: rate.data.data.provider
@@ -494,13 +434,13 @@ msgid "Rate: {0} per DASH, from {1}."
 msgstr "汇率：每 DASH {0}，来自 {1}。"
 
 msgid "Refused by mode"
-msgstr ""
+msgstr "被模式拒绝"
 
 msgid "Reload"
-msgstr ""
+msgstr "重新加载"
 
 msgid "Remember the identities I view"
-msgstr ""
+msgstr "记住我浏览过的身份"
 
 msgid "Remove"
 msgstr "移除"
@@ -509,37 +449,37 @@ msgid "Remove {devnet}"
 msgstr "移除 {devnet}"
 
 msgid "Remove {name} from saved"
-msgstr ""
+msgstr "从已保存中移除 {name}"
 
 msgid "Remove the label {name}"
-msgstr ""
+msgstr "移除标签 {name}"
 
 msgid "Removed from saved"
 msgstr "已从已保存中移除"
 
 msgid "Request"
-msgstr ""
+msgstr "请求"
 
 msgid "Request timeout (ms)"
-msgstr ""
+msgstr "请求超时（毫秒）"
 
 msgid "Requests appear here as pages load."
-msgstr ""
+msgstr "页面加载时，请求会显示在这里。"
 
 msgid "Requests this tab made, newest first"
-msgstr ""
+msgstr "此标签页发出的请求，最新的在前"
 
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 msgid "Result"
 msgstr "结果"
 
 msgid "Retries"
-msgstr ""
+msgstr "重试次数"
 
 msgid "Round"
-msgstr ""
+msgstr "轮次"
 
 msgid "Save changes"
 msgstr "保存更改"
@@ -550,31 +490,29 @@ msgstr "已保存"
 msgid "Saved devnets"
 msgstr "已保存的开发网"
 
-msgid ""
-"Saved in this browser. A devnet with a name Radar doesn’t know asks for its "
-"addresses."
+msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
 msgstr "保存在此浏览器中。如果开发网的名称 Radar 不认识，则需要填写其地址。"
 
 msgid "Saved item"
-msgstr ""
+msgstr "已保存项目"
 
 msgid "Saved items"
-msgstr ""
+msgstr "已保存项目"
 
 msgid "Saved items cleared"
-msgstr ""
+msgstr "已清除已保存项目"
 
 msgid "SDK default"
-msgstr ""
+msgstr "SDK 默认值"
 
 msgid "SDK log level"
-msgstr ""
+msgstr "SDK 日志级别"
 
 msgid "See every source"
 msgstr "查看所有数据源"
 
 msgid "See every source and the switch"
-msgstr ""
+msgstr "查看所有数据源和开关"
 
 msgid "Settings"
 msgstr "设置"
@@ -586,83 +524,65 @@ msgid "Show times in UTC"
 msgstr "以 UTC 显示时间"
 
 msgid "Source"
-msgstr ""
+msgstr "数据源"
 
 msgid "Sources"
 msgstr "数据源"
 
 msgid "Sources and licences"
-msgstr ""
+msgstr "数据源和许可证"
 
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "测试币没有价值，因此测试网和开发网从不显示美元。"
 
-msgid ""
-"Text that isn’t translated yet appears in English. Hashes, IDs and amounts "
-"are never translated."
+msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "尚未翻译的文字将以英文显示。哈希、ID 和金额永远不会被翻译。"
 
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
-msgstr ""
+msgstr "此标签页最近发出的 {0} 个请求。此处内容不会发送到任何地方。"
 
-msgid ""
-"The last 100 requests this tab made, with the source, the node, how long "
-"each took and whether Decentralized only mode refused it."
-msgstr ""
+msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
+msgstr "此标签页最近发出的 100 个请求，包括数据源、节点、每个请求的耗时，以及“仅去中心化”模式是否拒绝了它。"
 
 msgid "The quorum list address must start with https://."
-msgstr ""
+msgstr "Quorum 列表地址必须以 https:// 开头。"
 
 msgid "The quorum list URL must start with https://."
 msgstr "Quorum 列表 URL 必须以 https:// 开头。"
 
-msgid ""
-"The SDK checked this proof against the trusted quorum keys before Radar "
-"showed the figure."
-msgstr ""
+msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
+msgstr "在 Radar 显示该数据之前，SDK 已用受信任的 Quorum 密钥检查了此证明。"
 
-msgid ""
-"The worker runs SDK {workerVersion} but this page was built with "
-"{PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
-msgstr ""
+msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
+msgstr "Worker 运行的是 SDK {workerVersion}，但此页面是用 {PAGE_SDK_VERSION} 构建的。请重新加载页面；如果仍然如此，请清除本站数据。"
 
 msgid "These choices stay in this browser. Radar never sends them anywhere."
 msgstr "这些选项只保存在此浏览器中，Radar 绝不会将它们发送到任何地方。"
 
-msgid ""
-"They feed the seed list for token holders: no index can list every holder of"
-" a token, so a token’s Holders tab starts from the identities you have "
-"opened. The list never leaves this browser, and turning this off erases it."
-msgstr ""
+msgid "They feed the seed list for token holders: no index can list every holder of a token, so a token’s Holders tab starts from the identities you have opened. The list never leaves this browser, and turning this off erases it."
+msgstr "它们用于生成代币持有者的种子列表：没有任何索引能列出某个代币的所有持有者，因此代币的“持有者”标签页从你打开过的身份开始。该列表不会离开此浏览器，关闭此项会将其清除。"
 
 msgid "This network"
-msgstr ""
+msgstr "本网络"
 
 msgid "This proof is no longer held"
-msgstr ""
+msgstr "不再持有此证明"
 
 msgid "Times"
 msgstr "时间"
 
-msgid ""
-"To clear it: the buttons on Settings and Saved remove each list, “Clear the "
-"SDK cache” removes the cached answers, and your browser’s “clear site data” "
-"removes everything, including the service worker."
-msgstr ""
+msgid "To clear it: the buttons on Settings and Saved remove each list, “Clear the SDK cache” removes the cached answers, and your browser’s “clear site data” removes everything, including the service worker."
+msgstr "清除方法：设置和已保存页面上的按钮会移除各自的列表，“清除 SDK 缓存”会移除缓存的回答，而浏览器的“清除站点数据”会移除所有内容，包括 Service Worker。"
 
-msgid ""
-"To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes "
-"and quorum list, and, unless you turn them off, Platform Explorer, Radar’s "
-"crawler, Hyphen, Insight and a price feed. Each one sees your IP address and"
-" what you asked it, like any web server."
-msgstr ""
+msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
+msgstr "为了读取网络，你的浏览器会询问 DAPI 节点、Platform SDK 的节点和 Quorum 列表，并且（除非你关闭）还会询问 Platform Explorer、Radar 的爬虫、Hyphen、Insight 和价格数据源。与任何网络服务器一样，它们每一个都能看到你的 IP 地址和你询问的内容。"
 
 msgid "Took"
-msgstr ""
+msgstr "耗时"
 
 msgid "Tools for checking what Radar asked and what it was told."
-msgstr ""
+msgstr "用于检查 Radar 问了什么、得到了什么回答的工具。"
 
 msgid "Unit for amounts"
 msgstr "金额单位"
@@ -673,60 +593,56 @@ msgstr "USD 排在前面，获取到汇率后，后面附上 DASH 数值。"
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "美元仅适用于主网：测试币没有价值。"
 
-msgid ""
-"USD is rounded to three significant figures and follows the amount in "
-"{unitName}."
+msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
 msgstr "USD 四舍五入到三位有效数字，并跟随以 {unitName} 显示的金额。"
 
-msgid ""
-"USD is rounded to three significant figures. This choice doesn’t apply while"
-" USD comes first."
+msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 msgstr "USD 四舍五入到三位有效数字。USD 排在前面时，此选项不适用。"
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "请使用小写字母、数字和连字符，例如“ruby”。"
 
 msgid "Verified"
-msgstr ""
+msgstr "已验证"
 
 msgid "Version mismatch"
-msgstr ""
+msgstr "版本不匹配"
 
 msgid "Viewed identities"
-msgstr ""
+msgstr "浏览过的身份"
 
 msgid "Viewed identities cleared"
-msgstr ""
+msgstr "已清除浏览过的身份"
 
 msgid "Wasm bindings"
-msgstr ""
+msgstr "Wasm 绑定"
 
 msgid "What “proof-checked” means"
-msgstr ""
+msgstr "“已通过证明验证”是什么意思"
 
 msgid "What can’t be listed without an index"
-msgstr ""
+msgstr "没有索引就无法列出的内容"
 
 msgid "When"
 msgstr "时间"
 
 msgid "Where to act"
-msgstr ""
+msgstr "在哪里操作"
 
 msgid "Whole number from {min} to {max}."
-msgstr ""
+msgstr "从 {min} 到 {max} 的整数。"
 
 msgid "Yes"
 msgstr "是"
 
 msgid "Yes, remove"
-msgstr ""
+msgstr "是，移除"
 
 msgid "You"
 msgstr "我的"
 
 msgid "Your names"
-msgstr ""
+msgstr "你的名称"
 
 msgid "Your own names"
-msgstr ""
+msgstr "你自己的名称"

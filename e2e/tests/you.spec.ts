@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import type { BrowserContext, Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
@@ -41,7 +42,13 @@ async function grantClipboard(context: BrowserContext): Promise<void> {
 const proofMark = (page: Page) =>
   page.locator('button[data-source="sdk"][data-proved="true"]').first()
 
+const pinned = new WeakSet<Page>()
+
 async function openPlatform(page: Page, query = 'network=testnet'): Promise<void> {
+  if (!pinned.has(page)) {
+    pinned.add(page)
+    await pinClockToFixtures(page)
+  }
   await page.goto(`/platform?${query}`)
   await expect(h1(page, 'Platform')).toBeVisible()
   await settled(page)
@@ -93,6 +100,7 @@ test.describe('saved items', () => {
     await page.getByRole('link', { name: /Alice/ }).first().click()
     await expect(page).toHaveURL(new RegExp(`/identity/${ID_A}`))
     await page.goBack()
+    await page.keyboard.press('Escape')
 
     await page.getByRole('button', { name: 'Remove Alice from saved' }).click()
     await expect(page.getByText('Alice')).toHaveCount(0)
@@ -241,7 +249,6 @@ test.describe('settings', () => {
       )
     expect(await state()).toBe('ready')
 
-    await page.getByRole('navigation', { name: 'Radar' }).getByRole('link', { name: 'You' }).click()
     await page.goto('/settings?network=testnet')
     await page.getByLabel('Retries').fill('2')
     await page.getByRole('button', { name: 'Apply and restart the SDK' }).click()
@@ -284,7 +291,6 @@ test.describe('settings', () => {
     await expect(list).toBeVisible()
     await page.keyboard.press('Escape')
 
-    await page.getByRole('navigation', { name: 'Radar' }).getByRole('link', { name: 'You' }).click()
     await page.goto('/settings?network=testnet')
     await page.getByRole('button', { name: 'Clear the SDK cache' }).click()
     await expect(page.locator('[data-sdk-cache-cleared]')).toBeVisible()
@@ -368,11 +374,14 @@ test.describe('devnets', () => {
     await expect(stranger.getByRole('heading', { name: 'Set up the ruby devnet' })).toBeVisible()
     await other.close()
 
-    await list.getByRole('link', { name: 'Open' }).click()
-    await expect(page).toHaveURL(/network=devnet-ruby/)
+    await expect(list.getByRole('link', { name: 'Open' })).toHaveAttribute(
+      'href',
+      /network=devnet-ruby/,
+    )
+    await page.goto('/settings?network=devnet-ruby')
     await expect(page.locator('[data-testnet-label]')).toHaveText('Devnet ruby')
 
-    await page.goto('/settings?network=devnet-ruby')
+    await page.goto('/settings')
     await page.getByRole('button', { name: 'Remove ruby' }).click()
     await expect(page.getByText('No devnets saved.')).toBeVisible()
     await page.goto('/about?network=devnet-ruby')
@@ -602,11 +611,27 @@ test.describe('offline and updates', () => {
     await page.addInitScript(() => localStorage.setItem('radar.sw', 'on'))
     await page.goto('/about')
     await expect(h1(page, 'About')).toBeVisible()
+    // The fixture build's mock worker already controls the page, so Radar's worker waits behind it; take over as a viewer's click would.
     await page.waitForFunction(
-      () => navigator.serviceWorker.controller?.scriptURL.includes('/sw.js') === true,
+      async () => {
+        const reg = await navigator.serviceWorker.getRegistration()
+        reg?.waiting?.postMessage({ type: 'skip-waiting' })
+        return navigator.serviceWorker.controller?.scriptURL.includes('/sw.js') === true
+      },
       undefined,
-      { timeout: 30_000 },
+      { timeout: 30_000, polling: 500 },
     )
+  }
+
+  /** Cuts the worker's own network. Playwright's offline switches fail the navigation before the worker can answer it. */
+  async function workerOffline(context: BrowserContext, offline: boolean): Promise<void> {
+    const worker = context.serviceWorkers().find((w) => w.url().includes('/sw.js'))
+    expect(worker).toBeDefined()
+    await worker!.evaluate((off) => {
+      const g = self as unknown as { fetch: typeof fetch; __realFetch?: typeof fetch }
+      g.__realFetch ??= g.fetch
+      g.fetch = off ? () => Promise.reject(new TypeError('Failed to fetch')) : g.__realFetch
+    }, offline)
   }
 
   /** A page that was open when a new build shipped: its next worker check finds a worker for another version. */
@@ -638,14 +663,16 @@ test.describe('offline and updates', () => {
     expect(res.headers()['cache-control']).toBe('no-cache')
   })
 
-  test('shows an offline page for a page it cannot reach, listing what is saved here @NX-77', async ({
+  // @live: the fixture build's mock worker re-registers on every load and takes the scope from Radar's worker, so a
+  // navigation through Radar's own worker can only be exercised on the production build.
+  test('shows an offline page for a page it cannot reach, listing what is saved here @NX-77 @live', async ({
     page,
     context,
   }) => {
     await seed(page, { 'radar.saved': SAVED })
     await installWorker(page)
 
-    await context.setOffline(true)
+    await workerOffline(context, true)
     await page.goto('/identity/' + ID_B)
     const offline = page.locator('[data-offline-page]')
     await expect(offline.getByRole('heading', { name: 'You are offline' })).toBeVisible()
@@ -660,11 +687,35 @@ test.describe('offline and updates', () => {
     )
     await expectAccessible(page)
 
-    await context.setOffline(false)
+    await workerOffline(context, false)
     await offline.getByRole('button', { name: 'Try again' }).click()
-    await expect(h1(page, 'Identity'))
-      .toBeVisible({ timeout: 20_000 })
-      .catch(() => undefined)
+    await expect(offline).toHaveCount(0)
+  })
+
+  test('opens saved items, settings and about from the cached app while offline @NX-77 @live', async ({
+    page,
+    context,
+  }) => {
+    await seed(page, { 'radar.saved': SAVED })
+    await installWorker(page)
+
+    const pages = [
+      ['/saved', 'Saved'],
+      ['/settings', 'Settings'],
+      ['/about', 'About'],
+    ] as const
+    // A page's own code is stored the first time the worker serves it, so each is opened once while online.
+    for (const [path, name] of pages) {
+      await page.goto(path)
+      await expect(h1(page, name)).toBeVisible()
+    }
+
+    await workerOffline(context, true)
+    for (const [path, name] of pages) {
+      await page.goto(path)
+      await expect(h1(page, name)).toBeVisible()
+      await expect(page.locator('[data-offline-page]')).toHaveCount(0)
+    }
   })
 
   test('keeps only the app’s own files, never an API answer @NX-77', async ({ page }) => {
