@@ -118,6 +118,17 @@ describe('hover cards on a touch screen @X-06', () => {
     expect(screen.queryByText(/card for/)).toBeNull()
   })
 
+  it('stays open when the finger lifts and the chip takes focus', async () => {
+    setTouchScreen(true)
+    const link = await chip()
+    fireEvent.pointerDown(link, finger())
+    act(() => void vi.advanceTimersByTime(500))
+    await screen.findByText(`card for ${OTHER}`)
+    act(() => link.focus())
+    fireEvent.pointerUp(link, finger())
+    expect(screen.getByText(`card for ${OTHER}`)).toBeInTheDocument()
+  })
+
   it('closes on Escape and on a tap outside', async () => {
     setTouchScreen(true)
     const link = await chip()

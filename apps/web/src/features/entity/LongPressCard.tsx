@@ -21,7 +21,7 @@ interface Measurable {
 
 /**
  * Gives a chip on a touch screen the card a mouse gets by hovering: a long press opens it, a tap outside closes it, and
- * the tap that opens the page stays a tap. Focus never opens it here, so a chip that regains focus after going back
+ * the tap that opens the page stays a tap. The finger lifting focuses the chip, which must not count as leaving the card. Focus never opens it here, so a chip that regains focus after going back
  * leaves nothing over its neighbours.
  */
 export function LongPressCard({
@@ -97,6 +97,7 @@ export function LongPressCard({
           sideOffset={8}
           collisionPadding={12}
           align="start"
+          onFocusOutside={(e) => e.preventDefault()}
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
