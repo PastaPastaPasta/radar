@@ -1,14 +1,458 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: tr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: formatInt(towards)
+#. placeholder {1}: formatInt(state.abstainVotes ?? 0)
+#. placeholder {2}: formatInt(state.lockVotes ?? 0)
+msgid "{0} towards · {1} abstain · {2} lock"
+msgstr "{0} lehine · {1} çekimser · {2} kilit"
+
+#. placeholder {0}: formatInt(c.voteTally ?? 0)
+msgid "{0} votes"
+msgstr "{0} oy"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: colored.map((s) => `${formatInt(s.votes)}`).join(', ')
+msgid "{0} votes: {1}"
+msgstr "{0} oy: {1}"
+
+msgid "{label} can’t be a DPNS name."
+msgstr "{label} bir DPNS adı olamaz."
+
+msgid "24 hours"
+msgstr "24 saat"
+
+msgid "30 days"
+msgstr "30 gün"
+
+msgid "7 days"
+msgstr "7 gün"
+
+msgid "90 days"
+msgstr "90 gün"
+
+msgid "A name can be at most 63 characters."
+msgstr "Bir ad en fazla 63 karakter olabilir."
+
+msgid "A name can’t start or end with a hyphen."
+msgstr "Bir ad kısa çizgiyle başlayamaz veya bitemez."
+
+msgid "A name may hold only the letters a–z, the digits 0–9 and hyphens."
+msgstr "Bir ad yalnızca a–z harflerini, 0–9 rakamlarını ve kısa çizgileri içerebilir."
+
+msgid "A name needs at least 3 characters."
+msgstr "Bir ad en az 3 karakter olmalıdır."
+
+msgid "Abstain"
+msgstr "Çekimser"
+
+msgid "Active"
+msgstr "Etkin"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "Süren çekişmeli adlar: bitiş zamanı, oylar ve durum."
+
+msgid "All"
+msgstr "Tümü"
+
+msgid "All contests"
+msgstr "Tüm çekişmeler"
+
+msgid "All name contests"
+msgstr "Tüm ad çekişmeleri"
+
+msgid "All upcoming"
+msgstr "Tüm yaklaşanlar"
+
+msgid "Apply"
+msgstr "Uygula"
+
+msgid "Available"
+msgstr "Uygun"
+
+msgid "Check the name"
+msgstr "Adı denetle"
+
+msgid "Choice"
+msgstr "Seçim"
+
+#. placeholder {0}: search.choice
+msgid "Choice: {0}"
+msgstr "Seçim: {0}"
+
+msgid "Contender"
+msgstr "Aday"
+
+msgid "Contenders"
+msgstr "Adaylar"
+
+msgid "Contest"
+msgstr "Yarışma"
+
+msgid "Contest data"
+msgstr "Çekişme verileri"
+
+msgid "Contested"
+msgstr "Çekişmeli"
+
+msgid "Contested: decided"
+msgstr "Çekişmeli: karara bağlandı"
+
+msgid "Contested: locked"
+msgstr "Çekişmeli: kilitlendi"
+
+msgid "Contests"
+msgstr "Çekişmeler"
+
+msgid "Contests at a glance"
+msgstr "Çekişmelere genel bakış"
+
+msgid "Contract"
+msgstr "Sözleşme"
+
+msgid "Contract ID"
+msgstr "Sözleşme kimliği"
+
+#. placeholder {0}: search.contract
+msgid "Contract: {0}"
+msgstr "Sözleşme: {0}"
+
+msgid "Created"
+msgstr "Oluşturuldu"
+
+msgid "Custom"
+msgstr "Özel"
+
+msgid "Decided"
+msgstr "Karara bağlandı"
+
+msgid "Document"
+msgstr "Belge"
+
+msgid "Document type"
+msgstr "Belge türü"
+
+msgid "DPNS names"
+msgstr "DPNS adları"
+
+msgid "DPNS stores this name as {safe}: o is kept as 0, and i and l as 1, so look-alike names can’t be registered."
+msgstr "DPNS bu adı {safe} olarak saklar: o 0 olarak, i ve l ise 1 olarak tutulur; böylece birbirine benzeyen adlar kaydedilemez."
+
+msgid "Ends"
+msgstr "Bitiş"
+
+msgid "Ends between"
+msgstr "Bitiş aralığı"
+
+msgid "Ends within"
+msgstr "Bitiş süresi"
+
+msgid "Enter a name such as alice.dash."
+msgstr "alice.dash gibi bir ad girin."
+
+msgid "Every contest Platform still holds, in name order. A contest’s end time is shown while it is open."
+msgstr "Platform’un hâlâ tuttuğu tüm çekişmeler, ad sırasıyla. Bir çekişme açıkken bitiş zamanı gösterilir."
+
+msgid "Every masternode vote on this contest, from Platform Explorer’s index."
+msgstr "Bu çekişmedeki her masternode oyu, Platform Explorer dizininden."
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "Her masternode oyu: oy veren, seçim, kaynak ve zaman."
+
+msgid "Finished"
+msgstr "Bitti"
+
+msgid "From Platform Explorer’s index: every contest that has been held, with its vote count."
+msgstr "Platform Explorer dizininden: yapılmış her çekişme ve oy sayısı."
+
+msgid "Index"
+msgstr "Dizin"
+
+msgid "Invalid"
+msgstr "Geçersiz"
+
+msgid "Latest first"
+msgstr "Önce en geç"
+
+msgid "Leading"
+msgstr "Önde"
+
+msgid "Loading…"
+msgstr "Yükleniyor…"
+
+msgid "Lock"
+msgstr "Kilitle"
+
+msgid "Locked"
+msgstr "Kilitli"
+
+msgid "Manage in Bridge"
+msgstr "Bridge’de yönet"
+
+msgid "Masternode votes"
+msgstr "Masternode oyları"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Name contest"
+msgstr "Ad çekişmesi"
+
+msgid "Name contests"
+msgstr "Ad çekişmeleri"
+
+msgid "Name starts with"
+msgstr "Ad şununla başlar"
+
+msgid "Names"
+msgstr "Adlar"
+
+msgid "Newest first"
+msgstr "Önce en yeni"
+
+#. placeholder {0}: ref.label
+msgid "No contest for {0} on {net}."
+msgstr "{net} üzerinde {0} için çekişme yok."
+
+msgid "No contest is open."
+msgstr "Açık çekişme yok."
+
+msgid "No contests match."
+msgstr "Eşleşen çekişme yok."
+
+msgid "No contests on record."
+msgstr "Kayıtlı çekişme yok."
+
+msgid "No name starts with {safe}."
+msgstr "{safe} ile başlayan ad yok."
+
+msgid "No names yet."
+msgstr "Henüz ad yok."
+
+msgid "No vote polls end in this range."
+msgstr "Bu aralıkta biten oylama yok."
+
+msgid "No votes for this contender."
+msgstr "Bu aday için oy yok."
+
+msgid "No votes match."
+msgstr "Eşleşen oy yok."
+
+msgid "No votes on record."
+msgstr "Kayıtlı oy yok."
+
+msgid "No votes yet"
+msgstr "Henüz oy yok"
+
+msgid "Nobody owns {label}.dash and no contest is open for it. Registering it starts a contest that masternodes vote on."
+msgstr "{label}.dash kimseye ait değil ve bunun için açık bir çekişme yok. Kaydetmek, masternode’ların oy kullandığı bir çekişme başlatır."
+
+msgid "Nobody owns {label}.dash yet; it can be registered directly."
+msgstr "{label}.dash henüz kimseye ait değil; doğrudan kaydedilebilir."
+
+msgid "Oldest first"
+msgstr "Önce en eski"
+
+msgid "Open contests"
+msgstr "Açık çekişmeler"
+
+msgid "Open now"
+msgstr "Şu an açık"
+
+msgid "Open the contest for {label}.dash"
+msgstr "{label}.dash çekişmesini aç"
+
+msgid "Order"
+msgstr "Sıralama"
+
+msgid "Owner"
+msgstr "Sahip"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer’s totals, full list and date filters need its index"
+msgstr "Platform Explorer’ın toplamları, tam listesi ve tarih filtreleri onun dizinini gerektirir"
+
+msgid "Platform holds no contest for this name: it was never contested, or it isn’t a contested name."
+msgstr "Platform bu ad için bir çekişme tutmuyor: hiç çekişmeye girmedi ya da çekişmeli bir ad değil."
+
+msgid "Power"
+msgstr "Ağırlık"
+
+msgid "Prefunded"
+msgstr "Ön finanse edildi"
+
+msgid "Raw"
+msgstr "Ham"
+
+msgid "Read from Platform and proof-checked: the contests still open, with their current tallies."
+msgstr "Platform’dan okundu ve kanıtla doğrulandı: hâlâ açık olan çekişmeler ve güncel sayımları."
+
+msgid "Records"
+msgstr "Kayıtlar"
+
+msgid "Records of {label}.dash"
+msgstr "{label}.dash kayıtları"
+
+msgid "Registered"
+msgstr "Kaydedildi"
+
+msgid "Resource"
+msgstr "Kaynak"
+
+msgid "Search"
+msgstr "Ara"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "DPNS adlarını önek ile arayın veya hepsine alfabetik sırayla göz atın."
+
+msgid "Search names"
+msgstr "Ad ara"
+
+msgid "Searching names that start with {safe}."
+msgstr "{safe} ile başlayan adlar aranıyor."
+
+msgid "Searching the homograph-safe form {safe}: DPNS stores o as 0, and i and l as 1."
+msgstr "Homograf güvenli {safe} biçimi aranıyor: DPNS, o’yu 0 olarak, i ve l’yi 1 olarak saklar."
+
+msgid "See the open contests, with their tallies"
+msgstr "Açık çekişmeleri sayımlarıyla gör"
+
+msgid "Share"
+msgstr "Pay"
+
+#. placeholder {0}: formatInt(POLL_BUCKETS)
+msgid "Showing the first {0} end dates Platform returned."
+msgstr "Platform’un döndürdüğü ilk {0} bitiş tarihi gösteriliyor."
+
+msgid "Soonest first"
+msgstr "Önce en yakın"
+
+msgid "Started"
+msgstr "Başlangıç"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Started {0}–{1}"
+msgstr "Başlangıç {0}–{1}"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Status: Active"
+msgstr "Durum: Etkin"
+
+msgid "Status: Finished"
+msgstr "Durum: Bitti"
+
+msgid "Tally"
+msgstr "Sayım"
+
+msgid "The list of masternode votes needs Platform Explorer’s index"
+msgstr "Masternode oyları listesi Platform Explorer dizinini gerektirir"
+
+msgid "The masternode voting identities that voted for one contender."
+msgstr "Bir adaya oy veren masternode oylama kimlikleri."
+
+msgid "The prefunded voting balance comes from Platform Explorer’s index"
+msgstr "Ön finanse edilen oylama bakiyesi Platform Explorer dizininden gelir"
+
+msgid "This contest has no contenders."
+msgstr "Bu çekişmenin adayı yok."
+
+msgid "This name has no records."
+msgstr "Bu adın kaydı yok."
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "Towards"
+msgstr "Lehine"
+
+msgid "Towards identity"
+msgstr "Lehine oy verilen kimlik"
+
+#. placeholder {0}: search.towards
+msgid "Towards: {0}"
+msgstr "Lehine: {0}"
+
+msgid "Type"
+msgstr "Tür"
+
+#. placeholder {0}: search.type
+msgid "Type: {0}"
+msgstr "Tür: {0}"
+
+msgid "Unavailable"
+msgstr "Kullanılamıyor"
+
+msgid "Upcoming vote polls by end date."
+msgstr "Yaklaşan oylamalar, bitiş tarihine göre."
+
+msgid "Updated"
+msgstr "Güncellendi"
+
+msgid "Value"
+msgstr "Değer"
+
+msgid "Vote in Governance"
+msgstr "Governance’ta oy ver"
+
+msgid "Vote polls"
+msgstr "Oylamalar"
+
+msgid "Voted"
+msgstr "Oy verdi"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Voted {0}–{1}"
+msgstr "Oy verildi {0}–{1}"
+
+msgid "Voter"
+msgstr "Oy veren"
+
+msgid "Voter identity"
+msgstr "Oy verenin kimliği"
+
+#. placeholder {0}: search.voter
+msgid "Voter: {0}"
+msgstr "Oy veren: {0}"
+
+msgid "Voters"
+msgstr "Oy verenler"
+
+msgid "Votes"
+msgstr "Oylar"
+
+msgid "Votes by choice"
+msgstr "Seçime göre oylar"
+
+msgid "Votes cast"
+msgstr "Kullanılan oylar"
+
+msgid "Voting ends"
+msgstr "Oylama bitişi"
+
+msgid "Who voted, and when, comes from Platform Explorer’s index"
+msgstr "Kimin ne zaman oy verdiği Platform Explorer dizininden gelir"
+
+msgid "Winner"
+msgstr "Kazanan"
+
+msgid "Won"
+msgstr "Kazanıldı"

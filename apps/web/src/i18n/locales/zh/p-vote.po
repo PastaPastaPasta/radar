@@ -1,14 +1,458 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: formatInt(towards)
+#. placeholder {1}: formatInt(state.abstainVotes ?? 0)
+#. placeholder {2}: formatInt(state.lockVotes ?? 0)
+msgid "{0} towards · {1} abstain · {2} lock"
+msgstr "{0} 投给 · {1} 弃权 · {2} 锁定"
+
+#. placeholder {0}: formatInt(c.voteTally ?? 0)
+msgid "{0} votes"
+msgstr "{0} 票"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: colored.map((s) => `${formatInt(s.votes)}`).join(', ')
+msgid "{0} votes: {1}"
+msgstr "{0} 票：{1}"
+
+msgid "{label} can’t be a DPNS name."
+msgstr "{label} 不能作为 DPNS 名称。"
+
+msgid "24 hours"
+msgstr "24 小时"
+
+msgid "30 days"
+msgstr "30 天"
+
+msgid "7 days"
+msgstr "7 天"
+
+msgid "90 days"
+msgstr "90 天"
+
+msgid "A name can be at most 63 characters."
+msgstr "名称最多 63 个字符。"
+
+msgid "A name can’t start or end with a hyphen."
+msgstr "名称不能以连字符开头或结尾。"
+
+msgid "A name may hold only the letters a–z, the digits 0–9 and hyphens."
+msgstr "名称只能包含字母 a–z、数字 0–9 和连字符。"
+
+msgid "A name needs at least 3 characters."
+msgstr "名称至少需要 3 个字符。"
+
+msgid "Abstain"
+msgstr "弃权"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "进行中的争议名称，含结束时间、票数和状态。"
+
+msgid "All"
+msgstr "全部"
+
+msgid "All contests"
+msgstr "所有争议"
+
+msgid "All name contests"
+msgstr "所有名称争议"
+
+msgid "All upcoming"
+msgstr "所有即将到来的"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Available"
+msgstr "可注册"
+
+msgid "Check the name"
+msgstr "查看名称"
+
+msgid "Choice"
+msgstr "选择"
+
+#. placeholder {0}: search.choice
+msgid "Choice: {0}"
+msgstr "选择：{0}"
+
+msgid "Contender"
+msgstr "竞争者"
+
+msgid "Contenders"
+msgstr "竞争者"
+
+msgid "Contest"
+msgstr "争议"
+
+msgid "Contest data"
+msgstr "争议数据"
+
+msgid "Contested"
+msgstr "有争议"
+
+msgid "Contested: decided"
+msgstr "有争议：已裁定"
+
+msgid "Contested: locked"
+msgstr "有争议：已锁定"
+
+msgid "Contests"
+msgstr "争议"
+
+msgid "Contests at a glance"
+msgstr "争议一览"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract ID"
+msgstr "合约 ID"
+
+#. placeholder {0}: search.contract
+msgid "Contract: {0}"
+msgstr "合约：{0}"
+
+msgid "Created"
+msgstr "创建时间"
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "Decided"
+msgstr "已裁定"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "Document type"
+msgstr "文档类型"
+
+msgid "DPNS names"
+msgstr "DPNS 名称"
+
+msgid "DPNS stores this name as {safe}: o is kept as 0, and i and l as 1, so look-alike names can’t be registered."
+msgstr "DPNS 将此名称存为 {safe}：o 记作 0，i 和 l 记作 1，因此外观相近的名称无法注册。"
+
+msgid "Ends"
+msgstr "结束时间"
+
+msgid "Ends between"
+msgstr "结束时间介于"
+
+msgid "Ends within"
+msgstr "结束于"
+
+msgid "Enter a name such as alice.dash."
+msgstr "请输入名称，例如 alice.dash。"
+
+msgid "Every contest Platform still holds, in name order. A contest’s end time is shown while it is open."
+msgstr "按名称顺序列出 Platform 仍保留的所有争议。争议进行期间会显示其结束时间。"
+
+msgid "Every masternode vote on this contest, from Platform Explorer’s index."
+msgstr "此争议的每一张主节点投票，来自 Platform Explorer 的索引。"
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "每一张主节点投票，含投票者、选择、资源和时间。"
+
+msgid "Finished"
+msgstr "已结束"
+
+msgid "From Platform Explorer’s index: every contest that has been held, with its vote count."
+msgstr "来自 Platform Explorer 的索引：已举行的每场争议及其票数。"
+
+msgid "Index"
+msgstr "索引"
+
+msgid "Invalid"
+msgstr "无效"
+
+msgid "Latest first"
+msgstr "最晚的在前"
+
+msgid "Leading"
+msgstr "领先"
+
+msgid "Loading…"
+msgstr "正在加载…"
+
+msgid "Lock"
+msgstr "锁定"
+
+msgid "Locked"
+msgstr "已锁定"
+
+msgid "Manage in Bridge"
+msgstr "在 Bridge 中管理"
+
+msgid "Masternode votes"
+msgstr "主节点投票"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Name contest"
+msgstr "名称争议"
+
+msgid "Name contests"
+msgstr "名称争议"
+
+msgid "Name starts with"
+msgstr "名称开头为"
+
+msgid "Names"
+msgstr "名称"
+
+msgid "Newest first"
+msgstr "最新的在前"
+
+#. placeholder {0}: ref.label
+msgid "No contest for {0} on {net}."
+msgstr "{net} 上没有 {0} 的争议。"
+
+msgid "No contest is open."
+msgstr "当前没有进行中的争议。"
+
+msgid "No contests match."
+msgstr "没有匹配的争议。"
+
+msgid "No contests on record."
+msgstr "暂无争议记录。"
+
+msgid "No name starts with {safe}."
+msgstr "没有以 {safe} 开头的名称。"
+
+msgid "No names yet."
+msgstr "暂无名称。"
+
+msgid "No vote polls end in this range."
+msgstr "此时间范围内没有结束的投票。"
+
+msgid "No votes for this contender."
+msgstr "该竞争者没有票数。"
+
+msgid "No votes match."
+msgstr "没有匹配的投票。"
+
+msgid "No votes on record."
+msgstr "暂无投票记录。"
+
+msgid "No votes yet"
+msgstr "暂无投票"
+
+msgid "Nobody owns {label}.dash and no contest is open for it. Registering it starts a contest that masternodes vote on."
+msgstr "无人拥有 {label}.dash，也没有针对它的进行中的争议。注册该名称将发起一场由主节点投票的争议。"
+
+msgid "Nobody owns {label}.dash yet; it can be registered directly."
+msgstr "目前无人拥有 {label}.dash，可直接注册。"
+
+msgid "Oldest first"
+msgstr "最早的在前"
+
+msgid "Open contests"
+msgstr "进行中的争议"
+
+msgid "Open now"
+msgstr "当前进行中"
+
+msgid "Open the contest for {label}.dash"
+msgstr "打开 {label}.dash 的争议"
+
+msgid "Order"
+msgstr "排序"
+
+msgid "Owner"
+msgstr "所有者"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer’s totals, full list and date filters need its index"
+msgstr "Platform Explorer 的总数、完整列表和日期筛选需要其索引"
+
+msgid "Platform holds no contest for this name: it was never contested, or it isn’t a contested name."
+msgstr "Platform 上没有此名称的争议：它从未被争议过，或不属于会引发争议的名称。"
+
+msgid "Power"
+msgstr "权重"
+
+msgid "Prefunded"
+msgstr "预付资金"
+
+msgid "Raw"
+msgstr "原始数据"
+
+msgid "Read from Platform and proof-checked: the contests still open, with their current tallies."
+msgstr "从 Platform 读取并经证明验证：仍在进行的争议及其当前计票。"
+
+msgid "Records"
+msgstr "记录"
+
+msgid "Records of {label}.dash"
+msgstr "{label}.dash 的记录"
+
+msgid "Registered"
+msgstr "注册"
+
+msgid "Resource"
+msgstr "资源"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "按前缀搜索 DPNS 名称，或按字母顺序浏览全部名称。"
+
+msgid "Search names"
+msgstr "搜索名称"
+
+msgid "Searching names that start with {safe}."
+msgstr "正在搜索以 {safe} 开头的名称。"
+
+msgid "Searching the homograph-safe form {safe}: DPNS stores o as 0, and i and l as 1."
+msgstr "正在搜索防同形字形式 {safe}：DPNS 将 o 存为 0，将 i 和 l 存为 1。"
+
+msgid "See the open contests, with their tallies"
+msgstr "查看进行中的争议及其计票"
+
+msgid "Share"
+msgstr "占比"
+
+#. placeholder {0}: formatInt(POLL_BUCKETS)
+msgid "Showing the first {0} end dates Platform returned."
+msgstr "显示 Platform 返回的前 {0} 个结束日期。"
+
+msgid "Soonest first"
+msgstr "最早的在前"
+
+msgid "Started"
+msgstr "开始时间"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Started {0}–{1}"
+msgstr "开始于 {0}–{1}"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Status: Active"
+msgstr "状态：活跃"
+
+msgid "Status: Finished"
+msgstr "状态：已结束"
+
+msgid "Tally"
+msgstr "计票"
+
+msgid "The list of masternode votes needs Platform Explorer’s index"
+msgstr "主节点投票列表需要 Platform Explorer 的索引"
+
+msgid "The masternode voting identities that voted for one contender."
+msgstr "为某一竞争者投票的主节点投票身份。"
+
+msgid "The prefunded voting balance comes from Platform Explorer’s index"
+msgstr "预付的投票余额来自 Platform Explorer 的索引"
+
+msgid "This contest has no contenders."
+msgstr "此争议没有竞争者。"
+
+msgid "This name has no records."
+msgstr "此名称没有记录。"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "Towards"
+msgstr "投给"
+
+msgid "Towards identity"
+msgstr "投给的身份"
+
+#. placeholder {0}: search.towards
+msgid "Towards: {0}"
+msgstr "投给：{0}"
+
+msgid "Type"
+msgstr "类型"
+
+#. placeholder {0}: search.type
+msgid "Type: {0}"
+msgstr "类型：{0}"
+
+msgid "Unavailable"
+msgstr "不可用"
+
+msgid "Upcoming vote polls by end date."
+msgstr "即将开始的投票，按结束日期排列。"
+
+msgid "Updated"
+msgstr "更新时间"
+
+msgid "Value"
+msgstr "数值"
+
+msgid "Vote in Governance"
+msgstr "前往 Governance 投票"
+
+msgid "Vote polls"
+msgstr "投票"
+
+msgid "Voted"
+msgstr "投票时间"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Voted {0}–{1}"
+msgstr "投票于 {0}–{1}"
+
+msgid "Voter"
+msgstr "投票者"
+
+msgid "Voter identity"
+msgstr "投票者身份"
+
+#. placeholder {0}: search.voter
+msgid "Voter: {0}"
+msgstr "投票者：{0}"
+
+msgid "Voters"
+msgstr "投票者"
+
+msgid "Votes"
+msgstr "票数"
+
+msgid "Votes by choice"
+msgstr "按选择统计的票数"
+
+msgid "Votes cast"
+msgstr "已投票数"
+
+msgid "Voting ends"
+msgstr "投票结束"
+
+msgid "Who voted, and when, comes from Platform Explorer’s index"
+msgstr "谁在何时投票来自 Platform Explorer 的索引"
+
+msgid "Winner"
+msgstr "获胜者"
+
+msgid "Won"
+msgstr "已获胜"
