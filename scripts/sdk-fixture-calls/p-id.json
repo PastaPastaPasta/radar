@@ -358,6 +358,83 @@
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+        "identityIds": ["{identity}"]
+      }
     ]
   ],
   "testnet": [
@@ -745,6 +822,102 @@
         ],
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3G6e2uxNTAZ8eQnsFPvKH7BCHLKQC19A1ANxR56DEcsT",
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{pkh}",
+        "startAfter": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
       }
     ]
   ]

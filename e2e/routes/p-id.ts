@@ -3,7 +3,12 @@ import type { RouteCase } from './types'
 
 export const pId: RouteCase[] = [
   { path: '/identities', h1: 'Identities', built: true, decentralized: 'unavailable' },
-  { path: '/identities?sort=-balance', h1: 'Identities', built: true, decentralized: 'unavailable' },
+  {
+    path: '/identities?sort=-balance',
+    h1: 'Identities',
+    built: true,
+    decentralized: 'unavailable',
+  },
   ...perNet(({ id, net }) => [
     {
       // The mainnet hash belongs to one identity, so the page opens it; the testnet hash is shared and stays a list.

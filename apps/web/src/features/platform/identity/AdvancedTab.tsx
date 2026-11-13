@@ -9,7 +9,10 @@ import { loadState, useSetSearch, type IdentityTabProps } from './common'
 import { ContractInput } from './GroupsTab'
 import { useKeyColumns } from './KeysTab'
 
-export function AdvancedTab({ id, contract }: IdentityTabProps & { contract?: string | undefined }) {
+export function AdvancedTab({
+  id,
+  contract,
+}: IdentityTabProps & { contract?: string | undefined }) {
   const { t } = useLingui()
   const net = useNetwork()
   const setSearch = useSetSearch()
@@ -67,7 +70,12 @@ export function AdvancedTab({ id, contract }: IdentityTabProps & { contract?: st
             error={keys.error}
             onRetry={() => void keys.refetch()}
             source={keys.data ? stampOf(keys.data) : undefined}
-            empty={<Empty kind="none-yet" title={t`No keys of this identity are bound to that contract.`} />}
+            empty={
+              <Empty
+                kind="none-yet"
+                title={t`No keys of this identity are bound to that contract.`}
+              />
+            }
           />
         </>
       )}

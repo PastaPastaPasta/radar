@@ -108,7 +108,12 @@ export function GroupsTab({ id, contract }: IdentityTabProps & { contract?: stri
         cell: ({ row }) => <Entity kind="contract" id={row.original.contractId} />,
         meta: { phone: 'secondary' },
       },
-      { id: 'position', header: t`Position`, accessorFn: (g) => g.position, meta: { numeric: true, phone: 'secondary' } },
+      {
+        id: 'position',
+        header: t`Position`,
+        accessorFn: (g) => g.position,
+        meta: { numeric: true, phone: 'secondary' },
+      },
       { id: 'role', header: t`Role`, accessorFn: (g) => g.role, meta: { phone: 'secondary' } },
       {
         id: 'power',
@@ -147,7 +152,12 @@ export function GroupsTab({ id, contract }: IdentityTabProps & { contract?: stri
           state={waiting ? 'loading' : loadState(groups)}
           error={groups.error}
           onRetry={() => void groups.refetch()}
-          empty={<Empty kind="none-yet" title={t`This identity is not a member of any group in those contracts.`} />}
+          empty={
+            <Empty
+              kind="none-yet"
+              title={t`This identity is not a member of any group in those contracts.`}
+            />
+          }
         />
       )}
     </Card>

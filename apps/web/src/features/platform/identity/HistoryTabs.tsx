@@ -16,7 +16,10 @@ type Tab = 'transactions' | 'contracts' | 'documents' | 'transfers'
 const pageTo = (n: number): LinkProps =>
   ({
     to: '.',
-    search: ((prev: Record<string, unknown>) => ({ ...prev, page: n === 1 ? undefined : n })) as never,
+    search: ((prev: Record<string, unknown>) => ({
+      ...prev,
+      page: n === 1 ? undefined : n,
+    })) as never,
   }) as LinkProps
 
 export function HistoryTab({
@@ -52,7 +55,12 @@ function Transactions({ id, page }: { id: string; page: number }) {
   const net = useNetwork()
   const q = useQuery(peQueries.identityTransactions(net, id, peChildQuery(page)))
   return (
-    <Card title={t`Transitions`} layer="platform" id="identity-transactions" source={q.data ? stampOf(q.data) : undefined}>
+    <Card
+      title={t`Transitions`}
+      layer="platform"
+      id="identity-transactions"
+      source={q.data ? stampOf(q.data) : undefined}
+    >
       <TransitionTable
         rows={q.data?.data.items ?? []}
         state={loadState(q)}
@@ -76,22 +84,44 @@ function Contracts({ id, page }: { id: string; page: number }) {
       {
         id: 'contract',
         header: t`Contract`,
-        cell: ({ row }) => <Entity kind="contract" id={row.original.identifier} label={row.original.name ?? undefined} />,
+        cell: ({ row }) => (
+          <Entity
+            kind="contract"
+            id={row.original.identifier}
+            label={row.original.name ?? undefined}
+          />
+        ),
         meta: { phone: 'title' },
       },
-      { id: 'version', header: t`Version`, accessorFn: (c) => c.version ?? '—', meta: { numeric: true, phone: 'secondary' } },
-      { id: 'docs', header: t`Documents`, accessorFn: (c) => c.documentsCount ?? '—', meta: { numeric: true, phone: 'secondary' } },
+      {
+        id: 'version',
+        header: t`Version`,
+        accessorFn: (c) => c.version ?? '—',
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'docs',
+        header: t`Documents`,
+        accessorFn: (c) => c.documentsCount ?? '—',
+        meta: { numeric: true, phone: 'secondary' },
+      },
       {
         id: 'time',
         header: t`Created`,
-        cell: ({ row }) => (row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—'),
+        cell: ({ row }) =>
+          row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—',
         meta: { phone: 'primary' },
       },
     ],
     [t],
   )
   return (
-    <Card title={t`Contracts`} layer="platform" id="identity-contracts" source={q.data ? stampOf(q.data) : undefined}>
+    <Card
+      title={t`Contracts`}
+      layer="platform"
+      id="identity-contracts"
+      source={q.data ? stampOf(q.data) : undefined}
+    >
       <DataTable
         caption={t`Contracts`}
         columns={columns}
@@ -112,7 +142,9 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
   const net = useNetwork()
   const setSearch = useSetSearch()
   const [draft, setDraft] = useState(type ?? '')
-  const q = useQuery(peQueries.identityDocuments(net, id, peChildQuery(page, { document_type_name: type })))
+  const q = useQuery(
+    peQueries.identityDocuments(net, id, peChildQuery(page, { document_type_name: type })),
+  )
   const columns = useMemo<ColumnDef<PeDocument>[]>(
     () => [
       {
@@ -121,7 +153,10 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
         cell: ({ row }) => {
           const d = row.original
           return d.dataContractIdentifier && d.documentTypeName ? (
-            <Entity kind="document" id={`${d.dataContractIdentifier}/${d.documentTypeName}/${d.identifier}`} />
+            <Entity
+              kind="document"
+              id={`${d.dataContractIdentifier}/${d.documentTypeName}/${d.identifier}`}
+            />
           ) : (
             d.identifier
           )
@@ -131,28 +166,44 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
       {
         id: 'type',
         header: t`Type`,
-        cell: ({ row }) => (row.original.documentTypeName ? <Badge>{row.original.documentTypeName}</Badge> : '—'),
+        cell: ({ row }) =>
+          row.original.documentTypeName ? <Badge>{row.original.documentTypeName}</Badge> : '—',
         meta: { phone: 'secondary' },
       },
       {
         id: 'contract',
         header: t`Contract`,
         cell: ({ row }) =>
-          row.original.dataContractIdentifier ? <Entity kind="contract" id={row.original.dataContractIdentifier} /> : '—',
+          row.original.dataContractIdentifier ? (
+            <Entity kind="contract" id={row.original.dataContractIdentifier} />
+          ) : (
+            '—'
+          ),
         meta: { phone: 'secondary' },
       },
-      { id: 'revision', header: t`Revision`, accessorFn: (d) => d.revision ?? '—', meta: { numeric: true, phone: 'hidden' } },
+      {
+        id: 'revision',
+        header: t`Revision`,
+        accessorFn: (d) => d.revision ?? '—',
+        meta: { numeric: true, phone: 'hidden' },
+      },
       {
         id: 'time',
         header: t`Time`,
-        cell: ({ row }) => (row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—'),
+        cell: ({ row }) =>
+          row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—',
         meta: { phone: 'primary' },
       },
     ],
     [t],
   )
   return (
-    <Card title={t`Documents`} layer="platform" id="identity-documents" source={q.data ? stampOf(q.data) : undefined}>
+    <Card
+      title={t`Documents`}
+      layer="platform"
+      id="identity-documents"
+      source={q.data ? stampOf(q.data) : undefined}
+    >
       <form
         className="flex flex-wrap items-center gap-2"
         onSubmit={(e) => {
@@ -163,11 +214,26 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
       >
         <label className="flex flex-wrap items-center gap-2">
           <span>{t`Document type`}</span>
-          <input className="dh-input dh-input--sm" value={draft} spellCheck={false} autoComplete="off" onChange={(e) => { setDraft(e.target.value) }} />
+          <input
+            className="dh-input dh-input--sm"
+            value={draft}
+            spellCheck={false}
+            autoComplete="off"
+            onChange={(e) => {
+              setDraft(e.target.value)
+            }}
+          />
         </label>
         <button type="submit" className="dh-btn dh-btn--sm">{t`Filter`}</button>
         {type ? (
-          <button type="button" className="dh-btn dh-btn--sm" onClick={() => { setDraft(''); setSearch({ type: undefined, page: undefined }) }}>
+          <button
+            type="button"
+            className="dh-btn dh-btn--sm"
+            onClick={() => {
+              setDraft('')
+              setSearch({ type: undefined, page: undefined })
+            }}
+          >
             {t`Clear`}
           </button>
         ) : null}
@@ -181,7 +247,16 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
         error={q.error}
         onRetry={() => void q.refetch()}
         paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
-        empty={<Empty kind="none-yet" title={type ? t`No ${type} documents from this identity.` : t`This identity has created no documents.`} />}
+        empty={
+          <Empty
+            kind="none-yet"
+            title={
+              type
+                ? t`No ${type} documents from this identity.`
+                : t`This identity has created no documents.`
+            }
+          />
+        }
       />
     </Card>
   )
@@ -208,7 +283,8 @@ function Transfers({ id, page }: { id: string; page: number }) {
       {
         id: 'to',
         header: t`To`,
-        cell: ({ row }) => (row.original.recipient ? <IdentityRef id={row.original.recipient} /> : '—'),
+        cell: ({ row }) =>
+          row.original.recipient ? <IdentityRef id={row.original.recipient} /> : '—',
         meta: { phone: 'secondary' },
       },
       {
@@ -217,12 +293,22 @@ function Transfers({ id, page }: { id: string; page: number }) {
         cell: ({ row }) => <Entity kind="transition" id={row.original.txHash} />,
         meta: { phone: 'title' },
       },
-      { id: 'time', header: t`Time`, cell: ({ row }) => <Time ms={row.original.timestamp} mode="absolute" />, meta: { phone: 'secondary' } },
+      {
+        id: 'time',
+        header: t`Time`,
+        cell: ({ row }) => <Time ms={row.original.timestamp} mode="absolute" />,
+        meta: { phone: 'secondary' },
+      },
     ],
     [t],
   )
   return (
-    <Card title={t`Credit transfers`} layer="platform" id="identity-transfers" source={q.data ? stampOf(q.data) : undefined}>
+    <Card
+      title={t`Credit transfers`}
+      layer="platform"
+      id="identity-transfers"
+      source={q.data ? stampOf(q.data) : undefined}
+    >
       <DataTable
         caption={t`Credit transfers`}
         columns={columns}

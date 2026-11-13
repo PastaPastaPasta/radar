@@ -2,7 +2,11 @@ import { useNavigate } from '@tanstack/react-router'
 import type { LoadState } from '@/ui'
 
 /** A card's load state for a plain query. */
-export function loadState(query: { isPending: boolean; isError: boolean; fetchStatus?: string }): LoadState {
+export function loadState(query: {
+  isPending: boolean
+  isError: boolean
+  fetchStatus?: string
+}): LoadState {
   return query.isPending ? 'loading' : query.isError ? 'error' : 'ready'
 }
 

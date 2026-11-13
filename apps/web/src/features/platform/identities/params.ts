@@ -19,7 +19,11 @@ export function rangeText(range: NumericRange | undefined): string | undefined {
 const DAY = 86_400_000
 
 /** PE has no creation-date filter for identities, so the dates narrow the rows of the page being shown. */
-export function inDateRange(row: PeIdentity, from: string | undefined, to: string | undefined): boolean {
+export function inDateRange(
+  row: PeIdentity,
+  from: string | undefined,
+  to: string | undefined,
+): boolean {
   if (!from && !to) return true
   const at = row.timestamp
   if (at === null || at === undefined) return false

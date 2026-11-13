@@ -39,16 +39,22 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
       added: false,
     }))
     for (const tokenId of tokens) {
-      if (isPlatformId(tokenId) && !out.some((r) => r.id === tokenId)) out.push({ id: tokenId, added: true })
+      if (isPlatformId(tokenId) && !out.some((r) => r.id === tokenId))
+        out.push({ id: tokenId, added: true })
     }
     return out
   }, [net, tokens])
 
   const balances = useQueries({
-    queries: rows.map((r) => sdkBatchers.tokenBalance.queryOptions(net, { tokenId: r.id, identityId: id })),
+    queries: rows.map((r) =>
+      sdkBatchers.tokenBalance.queryOptions(net, { tokenId: r.id, identityId: id }),
+    ),
   })
   const infos = useQuery({
-    ...sdkQueries['tokens.identityTokenInfos'](net, { identityId: id, tokenIds: rows.map((r) => r.id) }),
+    ...sdkQueries['tokens.identityTokenInfos'](net, {
+      identityId: id,
+      tokenIds: rows.map((r) => r.id),
+    }),
     enabled: rows.length > 0,
   })
   const indexed = useQuery({
@@ -103,7 +109,11 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
           if (infos.isPending) return t`Loading…`
           if (infos.isError) return <span className="text-bad">{t`Not available`}</span>
           const info = infos.data?.data.get(row.original.id)
-          return info?.frozen ? <Badge tone="danger">{t`Frozen`}</Badge> : <Badge tone="success">{t`Not frozen`}</Badge>
+          return info?.frozen ? (
+            <Badge tone="danger">{t`Frozen`}</Badge>
+          ) : (
+            <Badge tone="success">{t`Not frozen`}</Badge>
+          )
         },
         meta: { phone: 'secondary' },
       },
@@ -114,7 +124,7 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
           row.original.added ? (
             <button
               type="button"
-              className="dh-btn dh-btn--sm"
+              className="dh-btn dh-btn--sm relative z-[1]"
               aria-label={t`Remove token ${row.original.id}`}
               onClick={() => {
                 const next = tokens.filter((x) => x !== row.original.id)
@@ -124,7 +134,7 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
               {t`Remove`}
             </button>
           ) : null,
-        meta: { phone: 'hidden' },
+        meta: { phone: 'secondary' },
       },
     ],
     [t, rows, balances, infos.isPending, infos.isError, infos.data, tokens, setSearch],
@@ -186,7 +196,9 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
         </form>
       </Card>
       {decentralized ? (
-        <Unavailable title={t`The tokens Platform Explorer has indexed for this identity need an indexer`} />
+        <Unavailable
+          title={t`The tokens Platform Explorer has indexed for this identity need an indexer`}
+        />
       ) : (
         <Card
           title={t`Indexed tokens`}
@@ -222,7 +234,7 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
                   rows.some((r) => r.id === row.original.identifier) ? null : (
                     <button
                       type="button"
-                      className="dh-btn dh-btn--sm"
+                      className="dh-btn dh-btn--sm relative z-[1]"
                       onClick={() => {
                         setSearch({ tokens: [...tokens, row.original.identifier].sort() })
                       }}
@@ -238,7 +250,12 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
             state={loadState(indexed)}
             error={indexed.error}
             onRetry={() => void indexed.refetch()}
-            empty={<Empty kind="none-yet" title={t`Platform Explorer has no tokens for this identity.`} />}
+            empty={
+              <Empty
+                kind="none-yet"
+                title={t`Platform Explorer has no tokens for this identity.`}
+              />
+            }
           />
         </Card>
       )}

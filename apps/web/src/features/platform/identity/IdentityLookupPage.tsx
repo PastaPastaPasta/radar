@@ -11,11 +11,26 @@ import { loadState, useSetSearch } from './common'
 import { readKeyHash } from './ids'
 import { keyHashMatchesQuery } from './queries'
 
-export function IdentityLookupPage({ pkh, after }: { pkh?: string | undefined; after?: string | undefined }) {
+export function IdentityLookupPage({
+  pkh,
+  after,
+}: {
+  pkh?: string | undefined
+  after?: string | undefined
+}) {
   const { t } = useLingui()
   const setSearch = useSetSearch()
   const [draft, setDraft] = useState(pkh ?? '')
   const [problem, setProblem] = useState<string>()
+
+  const explain = (read: ReturnType<typeof readKeyHash>): string | undefined =>
+    read.ok
+      ? undefined
+      : read.reason === 'empty'
+        ? t`Enter a public key hash: 40 hexadecimal characters.`
+        : read.reason === 'length'
+          ? t`A public key hash is exactly 40 hexadecimal characters (20 bytes).`
+          : t`A public key hash holds only the characters 0–9 and a–f.`
 
   const submit = (value: string) => {
     const read = readKeyHash(value)
@@ -24,13 +39,7 @@ export function IdentityLookupPage({ pkh, after }: { pkh?: string | undefined; a
       setSearch({ pkh: read.pkh, after: undefined })
       return
     }
-    setProblem(
-      read.reason === 'empty'
-        ? t`Enter a public key hash: 40 hexadecimal characters.`
-        : read.reason === 'length'
-          ? t`A public key hash is exactly 40 hexadecimal characters (20 bytes).`
-          : t`A public key hash holds only the characters 0–9 and a–f.`,
-    )
+    setProblem(explain(read))
   }
 
   return (
@@ -88,7 +97,11 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
     void navigate({
       to: '/identity/$id',
       params: { id: found },
-      search: ((prev: Record<string, unknown>) => ({ ...prev, pkh: undefined, after: undefined })) as never,
+      search: ((prev: Record<string, unknown>) => ({
+        ...prev,
+        pkh: undefined,
+        after: undefined,
+      })) as never,
       replace: true,
     })
   }, [found, navigate])
@@ -114,12 +127,18 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
       id="identity-key-matches"
       subtitle={t`No single identity owns this hash; these identities share it.`}
       source={first ? stampOf(first) : undefined}
-      state={rows.length === 0 && !shared.isPending && !shared.isError ? 'ready' : loadState(shared)}
+      state={
+        rows.length === 0 && !shared.isPending && !shared.isError ? 'ready' : loadState(shared)
+      }
       error={shared.error}
       onRetry={() => void shared.refetch()}
     >
       {rows.length === 0 ? (
-        <Empty kind="no-match" title={t`No identity holds this key hash.`} body={t`Check that it is the HASH160 of the public key, on this network.`} />
+        <Empty
+          kind="no-match"
+          title={t`No identity holds this key hash.`}
+          body={t`Check that it is the HASH160 of the public key, on this network.`}
+        />
       ) : (
         <>
           <ul className="grid gap-2" data-matches>

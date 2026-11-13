@@ -23,7 +23,12 @@ export interface IdentitiesFilters {
   to?: string | undefined
 }
 
-export const IDENTITY_TYPES = ['regular', 'masternode', 'masternode_voting', 'masternode_operator'] as const
+export const IDENTITY_TYPES = [
+  'regular',
+  'masternode',
+  'masternode_voting',
+  'masternode_operator',
+] as const
 
 /** Sorts the page offers: PE sorts by creation (its default), balance and transaction count. */
 export const SORTS = ['created', 'balance', 'txs'] as const
@@ -67,7 +72,6 @@ export function peIdentitiesQuery(f: IdentitiesFilters, page = f.page): PeQuery 
   return q
 }
 
-
 export interface IdentitiesSearch extends RouteSearch, IdentitiesFilters {}
 
 export const identitiesPrefetch: Prefetch<NoParams, IdentitiesSearch> = (net, _params, search) => [
@@ -106,5 +110,11 @@ export interface IdentityLookupSearch extends RouteSearch {
   after?: string | undefined
 }
 
-export const identityLookupPrefetch: Prefetch<NoParams, IdentityLookupSearch> = (net, _params, search) =>
-  search.pkh ? [prefetchItem('sdk', sdkQueries['identities.byPublicKeyHash'](net, { pkh: search.pkh }))] : []
+export const identityLookupPrefetch: Prefetch<NoParams, IdentityLookupSearch> = (
+  net,
+  _params,
+  search,
+) =>
+  search.pkh
+    ? [prefetchItem('sdk', sdkQueries['identities.byPublicKeyHash'](net, { pkh: search.pkh }))]
+    : []

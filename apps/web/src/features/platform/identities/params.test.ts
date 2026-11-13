@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import type { PeIdentity } from '@/data/pe/schemas'
-import { dashToCredits, inDateRange, parseIdentitySort, peIdentitiesQuery, rangeText } from './params'
+import {
+  dashToCredits,
+  inDateRange,
+  parseIdentitySort,
+  peIdentitiesQuery,
+  rangeText,
+} from './params'
 
 const base = { page: 1, limit: 25, sort: '-created' }
 
@@ -10,8 +16,16 @@ describe('peIdentitiesQuery', () => {
   })
 
   it('maps balance and transaction sorts to PE’s order_by', () => {
-    expect(peIdentitiesQuery({ ...base, sort: '-balance' })).toEqual({ limit: 25, order: 'desc', order_by: 'balance' })
-    expect(peIdentitiesQuery({ ...base, sort: 'txs' })).toEqual({ limit: 25, order: 'asc', order_by: 'tx_count' })
+    expect(peIdentitiesQuery({ ...base, sort: '-balance' })).toEqual({
+      limit: 25,
+      order: 'desc',
+      order_by: 'balance',
+    })
+    expect(peIdentitiesQuery({ ...base, sort: 'txs' })).toEqual({
+      limit: 25,
+      order: 'asc',
+      order_by: 'tx_count',
+    })
   })
 
   it('turns filters into PE’s min and max, with the balance in credits', () => {

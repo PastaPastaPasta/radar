@@ -1,0 +1,122 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/identity/2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+  },
+  "recordedAt": "2026-11-13T10:45:39.166Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identifier": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4",
+    "revision": "0",
+    "balance": "2743502860",
+    "timestamp": "2026-11-13T09:24:49.661Z",
+    "txHash": "AA3B024E133CA2448A92FC1EAB831F8D443736ABAC90E7B15C709BA36B6192A0",
+    "totalTxs": 3,
+    "totalTransfers": 1,
+    "totalDocuments": 2,
+    "totalDataContracts": 0,
+    "isSystem": false,
+    "aliases": [
+      {
+        "alias": "qa45t1transparent.dash",
+        "status": "ok",
+        "contested": false,
+        "timestamp": "2026-11-13T09:24:54.088Z",
+        "txHash": "AFA6489493AFCF44B2A962B5CCEF5B193B027F5E78D475F0E2E2531571C38243"
+      }
+    ],
+    "totalGasSpent": 256497140,
+    "averageGasSpent": 85499047,
+    "totalTopUpsAmount": 3000000000,
+    "totalWithdrawalsAmount": 0,
+    "lastWithdrawalHash": null,
+    "publicKeys": [
+      {
+        "keyId": 0,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "0000000000000021020d51551e7bbadfc5e52bf48b201be4581e0d13954d9b4bd6e77bacfd14a2eee900",
+        "data": "020d51551e7bbadfc5e52bf48b201be4581e0d13954d9b4bd6e77bacfd14a2eee9",
+        "purpose": "AUTHENTICATION",
+        "securityLevel": "MASTER",
+        "readOnly": false,
+        "publicKeyHash": "859c3f6ea05c202d26450f9b32d5f9df77ac7044",
+        "contractBounds": null,
+        "disabledAt": null
+      },
+      {
+        "keyId": 1,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "000100010000002102d67d11d041985caa059fc740b8499147288034db7e5cca90d6cccaa921cd72a300",
+        "data": "02d67d11d041985caa059fc740b8499147288034db7e5cca90d6cccaa921cd72a3",
+        "purpose": "AUTHENTICATION",
+        "securityLevel": "CRITICAL",
+        "readOnly": false,
+        "publicKeyHash": "a68aa395979f49e1d86c579b74b6b2a427cdcc51",
+        "contractBounds": null,
+        "disabledAt": null
+      },
+      {
+        "keyId": 2,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "00020002000000210373bb529e4dc64c16f668d54c40298cf46e5e65ce3956f9f91fc5c65b939770df00",
+        "data": "0373bb529e4dc64c16f668d54c40298cf46e5e65ce3956f9f91fc5c65b939770df",
+        "purpose": "AUTHENTICATION",
+        "securityLevel": "HIGH",
+        "readOnly": false,
+        "publicKeyHash": "25086dcc672e6cb7db04b66b420bad83a523f2c2",
+        "contractBounds": null,
+        "disabledAt": null
+      },
+      {
+        "keyId": 3,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "000303010000002103f312d31777d866571ca23e839d6221ed685b8613c2e7dbaeb75bd0ac1537b9e200",
+        "data": "03f312d31777d866571ca23e839d6221ed685b8613c2e7dbaeb75bd0ac1537b9e2",
+        "purpose": "TRANSFER",
+        "securityLevel": "CRITICAL",
+        "readOnly": false,
+        "publicKeyHash": "37a048abb8c826f075d670051f3f2b0f72037fd9",
+        "contractBounds": null,
+        "disabledAt": null
+      },
+      {
+        "keyId": 4,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "000401030101a2a1b4ac6fef22ea2a1a68e8123644b357875f6b412c18109281c146e7b271bc0e636f6e7461637452657175657374000021038a7514755d7d4183bb56a61190df86f4cad83e6f6778b9d905cd07f18ccd1fe000",
+        "data": "038a7514755d7d4183bb56a61190df86f4cad83e6f6778b9d905cd07f18ccd1fe0",
+        "purpose": "ENCRYPTION",
+        "securityLevel": "MEDIUM",
+        "readOnly": false,
+        "publicKeyHash": "6fa27a03392ff9dd3622430cbb085019e293a2ac",
+        "contractBounds": {
+          "identifier": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+          "documentTypeName": "contactRequest"
+        },
+        "disabledAt": null
+      },
+      {
+        "keyId": 5,
+        "keyType": "ECDSA_SECP256K1",
+        "raw": "000502030101a2a1b4ac6fef22ea2a1a68e8123644b357875f6b412c18109281c146e7b271bc0e636f6e74616374526571756573740000210251560672d9ffe45dc2589e6795998d2550301a549ee5b5062f7142bc11307a9500",
+        "data": "0251560672d9ffe45dc2589e6795998d2550301a549ee5b5062f7142bc11307a95",
+        "purpose": "DECRYPTION",
+        "securityLevel": "MEDIUM",
+        "readOnly": false,
+        "publicKeyHash": "69a87ea92855bb5c38a8f1b0b70536d47d86aa7c",
+        "contractBounds": {
+          "identifier": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+          "documentTypeName": "contactRequest"
+        },
+        "disabledAt": null
+      }
+    ],
+    "fundingCoreTx": "255066440757a7e267038497237c98c9eb469d2061e24f768560acf68adf83b8",
+    "totalTopUps": 0,
+    "totalWithdrawals": 0,
+    "lastWithdrawalTimestamp": null,
+    "nonce": "0",
+    "type": "regular",
+    "owner": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+  }
+}

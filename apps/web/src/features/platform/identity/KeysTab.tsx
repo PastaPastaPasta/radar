@@ -41,16 +41,36 @@ export function useKeyColumns(): ColumnDef<IdentityKeyDetailDto>[] {
   return useMemo<ColumnDef<IdentityKeyDetailDto>[]>(
     () => [
       { id: 'id', header: t`ID`, accessorFn: (k) => k.id, meta: { phone: 'title', numeric: true } },
-      { id: 'purpose', header: t`Purpose`, accessorFn: (k) => keyPurposeName(k.purpose), meta: { phone: 'primary' } },
-      { id: 'type', header: t`Type`, accessorFn: (k) => keyTypeName(k.type), meta: { phone: 'secondary' } },
+      {
+        id: 'purpose',
+        header: t`Purpose`,
+        accessorFn: (k) => keyPurposeName(k.purpose),
+        meta: { phone: 'primary' },
+      },
+      {
+        id: 'type',
+        header: t`Type`,
+        accessorFn: (k) => keyTypeName(k.type),
+        meta: { phone: 'secondary' },
+      },
       {
         id: 'level',
         header: t`Security level`,
         accessorFn: (k) => securityLevelName(k.securityLevel),
         meta: { phone: 'secondary' },
       },
-      { id: 'data', header: t`Data`, cell: ({ row }) => <KeyDataCell keyDto={row.original} />, meta: { phone: 'secondary' } },
-      { id: 'bounds', header: t`Contract bounds`, cell: ({ row }) => <KeyBounds keyDto={row.original} />, meta: { phone: 'secondary' } },
+      {
+        id: 'data',
+        header: t`Data`,
+        cell: ({ row }) => <KeyDataCell keyDto={row.original} />,
+        meta: { phone: 'secondary' },
+      },
+      {
+        id: 'bounds',
+        header: t`Contract bounds`,
+        cell: ({ row }) => <KeyBounds keyDto={row.original} />,
+        meta: { phone: 'secondary' },
+      },
       {
         id: 'state',
         header: t`State`,

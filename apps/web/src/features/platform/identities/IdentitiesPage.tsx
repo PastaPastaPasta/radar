@@ -61,7 +61,11 @@ function useSetFilters() {
   return (patch: Record<string, unknown>) =>
     void navigate({
       to: '.',
-      search: ((prev: Record<string, unknown>) => ({ ...prev, page: undefined, ...patch })) as never,
+      search: ((prev: Record<string, unknown>) => ({
+        ...prev,
+        page: undefined,
+        ...patch,
+      })) as never,
       replace: true,
       resetScroll: false,
     })
@@ -95,10 +99,7 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
   })
   const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
   const rows = useMemo(
-    () =>
-      pages
-        .flatMap((p) => p.data.items)
-        .filter((r) => inDateRange(r, search.from, search.to)),
+    () => pages.flatMap((p) => p.data.items).filter((r) => inDateRange(r, search.from, search.to)),
     [pages, search.from, search.to],
   )
   const first = queries[0]
@@ -118,7 +119,8 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
       {
         id: 'type',
         header: t`Type`,
-        cell: ({ row }) => (row.original.type ? <Badge>{typeLabel(row.original.type)}</Badge> : '—'),
+        cell: ({ row }) =>
+          row.original.type ? <Badge>{typeLabel(row.original.type)}</Badge> : '—',
         enableSorting: false,
         meta: { phone: 'secondary' },
       },
@@ -161,7 +163,8 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
         id: 'created',
         header: t`Created`,
         accessorFn: (r) => r.timestamp ?? 0,
-        cell: ({ row }) => (row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—'),
+        cell: ({ row }) =>
+          row.original.timestamp ? <Time ms={row.original.timestamp} mode="absolute" /> : '—',
         meta: { phone: 'secondary' },
       },
     ],
@@ -174,7 +177,9 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
     ...(search.bal ? [{ id: 'bal', label: t`Balance ${rangeText(search.bal) ?? ''} DASH` }] : []),
     ...(search.txs ? [{ id: 'txs', label: t`Transitions ${rangeText(search.txs) ?? ''}` }] : []),
     ...(search.docs ? [{ id: 'docs', label: t`Documents ${rangeText(search.docs) ?? ''}` }] : []),
-    ...(search.contracts ? [{ id: 'contracts', label: t`Contracts ${rangeText(search.contracts) ?? ''}` }] : []),
+    ...(search.contracts
+      ? [{ id: 'contracts', label: t`Contracts ${rangeText(search.contracts) ?? ''}` }]
+      : []),
     ...(search.from || search.to
       ? [{ id: 'dates', label: t`Created ${search.from ?? ''}–${search.to ?? ''}` }]
       : []),
@@ -186,7 +191,10 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
   const pageTo = (n: number): LinkProps =>
     ({
       to: '.',
-      search: ((prev: Record<string, unknown>) => ({ ...prev, page: n === 1 ? undefined : n })) as never,
+      search: ((prev: Record<string, unknown>) => ({
+        ...prev,
+        page: n === 1 ? undefined : n,
+      })) as never,
     }) as LinkProps
 
   return (
@@ -203,10 +211,34 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
             ...IDENTITY_TYPES.map((x) => ({ id: x, label: typeLabel(x) })),
           ]}
         />
-        <RangeFilter label={t`Balance (DASH)`} value={rangeText(search.bal)} onChange={(v) => { setFilters({ bal: v }) }} />
-        <RangeFilter label={t`Transitions`} value={rangeText(search.txs)} onChange={(v) => { setFilters({ txs: v }) }} />
-        <RangeFilter label={t`Documents`} value={rangeText(search.docs)} onChange={(v) => { setFilters({ docs: v }) }} />
-        <RangeFilter label={t`Contracts`} value={rangeText(search.contracts)} onChange={(v) => { setFilters({ contracts: v }) }} />
+        <RangeFilter
+          label={t`Balance (DASH)`}
+          value={rangeText(search.bal)}
+          onChange={(v) => {
+            setFilters({ bal: v })
+          }}
+        />
+        <RangeFilter
+          label={t`Transitions`}
+          value={rangeText(search.txs)}
+          onChange={(v) => {
+            setFilters({ txs: v })
+          }}
+        />
+        <RangeFilter
+          label={t`Documents`}
+          value={rangeText(search.docs)}
+          onChange={(v) => {
+            setFilters({ docs: v })
+          }}
+        />
+        <RangeFilter
+          label={t`Contracts`}
+          value={rangeText(search.contracts)}
+          onChange={(v) => {
+            setFilters({ contracts: v })
+          }}
+        />
         <DateRangeFilter
           label={t`Created`}
           from={search.from}
@@ -223,10 +255,20 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
           tokens={tokens}
           onRemove={clear}
           onClear={() => {
-            setFilters({ type: undefined, bal: undefined, txs: undefined, docs: undefined, contracts: undefined, from: undefined, to: undefined })
+            setFilters({
+              type: undefined,
+              bal: undefined,
+              txs: undefined,
+              docs: undefined,
+              contracts: undefined,
+              from: undefined,
+              to: undefined,
+            })
           }}
         >
-          {search.from || search.to ? t`The dates narrow the identities on the page being shown.` : null}
+          {search.from || search.to
+            ? t`The dates narrow the identities on the page being shown.`
+            : null}
         </ActiveFilters>
       ) : null}
       <Card layer="platform" id="identities-list" source={stamps.length > 0 ? stamps : undefined}>
@@ -275,7 +317,10 @@ function FindIdentity() {
     void navigate({
       to: '/identity/$id',
       params: { id },
-      search: ((prev: Record<string, unknown>) => ({ network: prev.network, sources: prev.sources })) as never,
+      search: ((prev: Record<string, unknown>) => ({
+        network: prev.network,
+        sources: prev.sources,
+      })) as never,
     })
   return (
     <div className="grid gap-4">

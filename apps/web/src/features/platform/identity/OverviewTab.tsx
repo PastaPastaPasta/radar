@@ -64,7 +64,11 @@ export function OverviewTab({ id }: IdentityTabProps) {
           },
           {
             label: t`Nonce`,
-            value: nonce.isPending ? t`Loading…` : nonce.data ? formatInt(nonce.data.data ?? 0n) : '—',
+            value: nonce.isPending
+              ? t`Loading…`
+              : nonce.data
+                ? formatInt(nonce.data.data ?? 0n)
+                : '—',
             source: nonce.data ? stampOf(nonce.data) : undefined,
           },
           {

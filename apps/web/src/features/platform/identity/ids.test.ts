@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { base58Encode } from '@/lib/base58'
-import { isHashKeyType, keyPurposeName, keyTypeName, readIdentityInput, readKeyHash, securityLevelName } from './ids'
+import {
+  isHashKeyType,
+  keyPurposeName,
+  keyTypeName,
+  readIdentityInput,
+  readKeyHash,
+  securityLevelName,
+} from './ids'
 
 const ID = '5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk'
 

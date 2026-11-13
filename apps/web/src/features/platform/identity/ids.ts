@@ -2,9 +2,7 @@ import { base58Encode, isPlatformId } from '@/lib/base58'
 import { hexToBytes } from '@/lib/hex'
 
 export type IdentityInput =
-  | { kind: 'id'; id: string }
-  | { kind: 'hex'; id: string }
-  | { kind: 'invalid' }
+  { kind: 'id'; id: string } | { kind: 'hex'; id: string } | { kind: 'invalid' }
 
 const HEX64 = /^[0-9a-fA-F]{64}$/
 
@@ -17,7 +15,8 @@ export function readIdentityInput(raw: string): IdentityInput {
 
 const HASH160 = /^[0-9a-fA-F]{40}$/
 
-export type KeyHashInput = { ok: true; pkh: string } | { ok: false; reason: 'empty' | 'length' | 'chars' }
+export type KeyHashInput =
+  { ok: true; pkh: string } | { ok: false; reason: 'empty' | 'length' | 'chars' }
 
 /** A public key hash is the 20 bytes of HASH160 as 40 hex characters. */
 export function readKeyHash(raw: string): KeyHashInput {
@@ -27,8 +26,22 @@ export function readKeyHash(raw: string): KeyHashInput {
   return { ok: false, reason: /^[0-9a-fA-F]*$/.test(text) ? 'length' : 'chars' }
 }
 
-export const KEY_TYPES = ['ECDSA_SECP256K1', 'BLS12_381', 'ECDSA_HASH160', 'BIP13_SCRIPT_HASH', 'EDDSA_25519_HASH160'] as const
-export const KEY_PURPOSES = ['AUTHENTICATION', 'ENCRYPTION', 'DECRYPTION', 'TRANSFER', 'SYSTEM', 'VOTING', 'OWNER'] as const
+export const KEY_TYPES = [
+  'ECDSA_SECP256K1',
+  'BLS12_381',
+  'ECDSA_HASH160',
+  'BIP13_SCRIPT_HASH',
+  'EDDSA_25519_HASH160',
+] as const
+export const KEY_PURPOSES = [
+  'AUTHENTICATION',
+  'ENCRYPTION',
+  'DECRYPTION',
+  'TRANSFER',
+  'SYSTEM',
+  'VOTING',
+  'OWNER',
+] as const
 export const SECURITY_LEVELS = ['MASTER', 'CRITICAL', 'HIGH', 'MEDIUM'] as const
 
 /** Key types whose data is already a 20-byte hash. */
@@ -54,4 +67,9 @@ export const IDENTITY_TABS = [
 export type IdentityTab = (typeof IDENTITY_TABS)[number]
 
 /** The tabs read from PE's index. */
-export const INDEXED_TABS: readonly IdentityTab[] = ['transactions', 'contracts', 'documents', 'transfers']
+export const INDEXED_TABS: readonly IdentityTab[] = [
+  'transactions',
+  'contracts',
+  'documents',
+  'transfers',
+]
