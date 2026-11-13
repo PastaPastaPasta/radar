@@ -89,6 +89,9 @@ describe('withdrawalOf', () => {
       data: { amount: 5_000_000, status: 3 },
     })
     expect(w).toMatchObject({ amount: 5_000_000n, status: 'complete', createdAt: 1 })
+    expect(
+      withdrawalOf({ id: 'b', createdAt: 1, updatedAt: 2, data: { amount: 7n, status: 4n } }),
+    ).toMatchObject({ amount: 7n, status: 'expired' })
     expect(withdrawalOf({ id: 'y', createdAt: null, updatedAt: null, data: {} }).status).toBe(
       'unknown',
     )

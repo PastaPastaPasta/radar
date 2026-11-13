@@ -345,6 +345,7 @@ test.describe('masternode page', () => {
     await expect(live.locator('[data-combined]')).toContainText('Combined from')
     await expect(live.locator('[data-epoch-comparison]')).toBeVisible()
     await expect(live.locator('[data-withdrawals]')).toBeVisible()
+    await expect(live.locator('[data-withdrawals]')).not.toContainText('Unknown')
   })
 
   test('picks an epoch and turns a base58 ProTx into hex @NX-53', async ({ page }) => {

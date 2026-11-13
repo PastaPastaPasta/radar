@@ -120,10 +120,11 @@ export function withdrawalOf(doc: {
   data: Record<string, unknown>
 }): Withdrawal {
   const s = doc.data.status
+  const code = typeof s === 'bigint' || typeof s === 'number' ? Number(s) : undefined
   return {
     id: doc.id,
     amount: toBigint(doc.data.amount),
-    status: typeof s === 'number' ? (WITHDRAWAL_STATUS[s] ?? 'unknown') : 'unknown',
+    status: code === undefined ? 'unknown' : (WITHDRAWAL_STATUS[code] ?? 'unknown'),
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
   }
