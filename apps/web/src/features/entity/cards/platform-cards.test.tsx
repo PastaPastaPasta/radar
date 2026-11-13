@@ -10,7 +10,7 @@ import { systemContract } from '@/lib/well-known'
 import type { EntityKind } from '@/ui/base'
 import { renderInApp } from '../test-utils'
 
-const rows = vi.hoisted(() => ({ value: [] as unknown[] }))
+const rows = vi.hoisted(() => ({ value: [] as unknown }))
 vi.mock('@/data/masternodes/rows', () => ({
   mnRowsQuery: () => ({
     queryKey: ['mn-rows-test'],
@@ -29,7 +29,18 @@ const DPNS = systemContract('dpns').id
 type Handler = (method: string, args: Record<string, unknown>) => unknown
 
 /** Answers SDK calls from a table of method to value; a method not in the table fails the test. */
-function sdkAnswers(answers: Record<string, unknown | Handler>) {
+type Answer =
+  | Handler
+  | Record<string, unknown>
+  | readonly unknown[]
+  | Map<unknown, unknown>
+  | string
+  | number
+  | bigint
+  | boolean
+  | null
+
+function sdkAnswers(answers: Record<string, Answer>) {
   return vi.spyOn(sdk, 'call').mockImplementation((_net, method, args) => {
     if (!(method in answers)) return Promise.reject(new Error(`unexpected SDK call ${method}`))
     const a = answers[method]

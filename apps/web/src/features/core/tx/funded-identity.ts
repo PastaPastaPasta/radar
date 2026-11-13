@@ -7,7 +7,7 @@ import { hexToBytes } from '@/lib/hex'
 /** An asset lock funds at most this many identities Radar looks for, so a crafted payload cannot start a hundred reads. */
 const MAX_OUTPUTS = 8
 
-async function sha256(bytes: Uint8Array): Promise<Uint8Array> {
+async function sha256(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
   return new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))
 }
 

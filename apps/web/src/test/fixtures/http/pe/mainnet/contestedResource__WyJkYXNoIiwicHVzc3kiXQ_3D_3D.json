@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/contestedResource/WyJkYXNoIiwicHVzc3kiXQ%3D%3D"
+  },
+  "recordedAt": "2026-11-13T21:48:33.525Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "contenders": [
+      {
+        "identifier": "GRMHDRfmf6cv3xksmheL4gzCnYA3kWsAhvw9BF7XpBpN",
+        "timestamp": "2026-11-02T15:14:44.620Z",
+        "documentIdentifier": "2oMCE9UyZLhZc4Zr7U2thS56ZsJ3H8BDi2tbuqdt8hNu",
+        "documentStateTransition": "E5F7104D41548B8305551B8BA09E21B730B2568B387CD629B8F902488A82C90B",
+        "aliases": [
+          {
+            "alias": "Boston.dash",
+            "status": "ok",
+            "timestamp": "2026-10-20T16:22:16.882Z",
+            "documentId": "vFjuT4orP6ms6kBScFXEd8pLU6zwaYGZ7iXMtJeeUqz",
+            "contested": true
+          }
+        ],
+        "towardsIdentityVotes": 52,
+        "abstainVotes": 8,
+        "lockVotes": 0
+      }
+    ],
+    "indexName": "parentNameAndLabel",
+    "resourceValue": ["dash", "pussy"],
+    "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "prefundedVotingBalance": { "parentNameAndLabel": 20000000000 },
+    "documentTypeName": "domain",
+    "timestamp": "2026-11-02T15:14:44.620Z",
+    "totalGasUsed": 243881000,
+    "totalDocumentsGasUsed": 81881000,
+    "totalVotesGasUsed": 162000000,
+    "totalCountVotes": 60,
+    "totalCountLock": 0,
+    "totalCountAbstain": 8,
+    "totalCountTowardsIdentity": 52,
+    "status": "pending",
+    "endTimestamp": "2026-11-16T15:14:44.620Z",
+    "finished": false,
+    "towardsIdentity": "GRMHDRfmf6cv3xksmheL4gzCnYA3kWsAhvw9BF7XpBpN"
+  }
+}

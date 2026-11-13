@@ -1,4 +1,37 @@
 {
-  "mainnet": [["identities.balances", { "ids": ["E8WLTskzWewrcViHLyLJSAP2Q8X2BxMWZgWW6U78DpbT"] }]],
+  "mainnet": [
+    [
+      "identities.balances",
+      {
+        "ids": ["E8WLTskzWewrcViHLyLJSAP2Q8X2BxMWZgWW6U78DpbT"]
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD"]
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "0-0.dash"
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": 88,
+        "count": 2,
+        "ascending": true
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"]
+      }
+    ]
+  ],
   "testnet": []
 }
