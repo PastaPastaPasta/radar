@@ -1,25 +1,44 @@
 {
   "method": "system.status",
   "args": {},
-  "recordedAt": "2026-11-10T19:11:13.884Z",
+  "recordedAt": "2026-11-13T09:00:01.372Z",
   "result": {
     "ok": true,
     "data": {
       "chainId": "evo1",
       "version": "5.0.3",
-      "height": 469065,
-      "timeMs": 1794337718422,
-      "catchingUp": false
+      "height": 470577,
+      "timeMs": 1794560302564,
+      "catchingUp": false,
+      "peers": 260,
+      "isListening": true,
+      "latestBlockHash": "11a95d349199151465eadb0fa5e9bd89a828aff9be34f747a548049e5f9675f0",
+      "latestAppHash": "b0abd03d436fcd5ea415c7fcb2a0050fbb4e7ca5b33520ab6946569ed1225fb4",
+      "earliestBlockHeight": 1,
+      "maxPeerBlockHeight": 470577,
+      "coreChainLockedHeight": 2571514,
+      "nodeProTxHash": "46cd6cf9d2b8faee6ec2328211a343ced91d813880ec3fe2b60be5e3454780a1",
+      "nodeId": "c08be66fd4e357de23b5c392d98b2e2e45e6a4fd",
+      "dapiVersion": "5.0.3",
+      "tenderdashVersion": "1.8.2",
+      "tenderdashProtocol": {
+        "p2p": 10,
+        "block": 14
+      },
+      "driveProtocol": {
+        "latest": 14,
+        "current": 14
+      }
     },
     "proved": false,
     "meta": {
-      "height": 469065,
-      "coreChainLockedHeight": 2570099,
+      "height": 470577,
+      "coreChainLockedHeight": 2571514,
       "epoch": 88,
-      "timeMs": 1794337718422,
+      "timeMs": 1794560302564,
       "protocolVersion": 14,
       "chainId": "evo1"
     },
-    "tookMs": 442.881308
+    "tookMs": 324.78650899999997
   }
 }

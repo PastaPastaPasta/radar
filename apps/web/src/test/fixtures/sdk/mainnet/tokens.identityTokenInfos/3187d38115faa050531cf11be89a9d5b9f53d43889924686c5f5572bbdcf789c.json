@@ -1,0 +1,43 @@
+{
+  "method": "tokens.identityTokenInfos",
+  "args": {
+    "identityId": "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh",
+    "tokenIds": ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB", "11111111111111111111111111111111"]
+  },
+  "recordedAt": "2026-11-13T09:00:04.397Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB", null],
+        ["11111111111111111111111111111111", null]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 470577,
+      "coreChainLockedHeight": 2571514,
+      "epoch": 88,
+      "timeMs": 1794560302564,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQD2AYRTnD+jxRz4Hv6XlyFfB5VTxqKOfFbT2oawpK1IMzIABAEQAAUCAQGAAFvqIgoBE72+ChOu2pX1qPHGPiG4BDq6fHyTJ+fSZo5VEAHvwJYXxVI9MANwG1fVfvumROzIm0medpg3Qc4lvl9V9RECXkwBXVuYEqDw2UOQ/hkBgHHysi4i1p6t19Bpg8aZ8hwQARcflkEoaDfHh0Y4q7L5s97Ta3JKZvbIwFWWSgi+wehcEQIZxrtUUZqZpLhes4h84az26CaNB3uga3Hkuii4pz8UIxABaOOb7QXdB9scxHfVcHl87V/JtIM0YYNyF8LlO5av/WIRAQEQANEBpGJx2AAkK0K5dnDAU5WCNn7r26mqSTMoua+eMBlpZVACtMGzXHa3KbAFgAenHGCfhTFH7qFi/PRwj/KW+krOM7kQAXfu+hX20SOBC2InNmvz5/bIjr01wq1KYIFgdBf04a+UBAHAACQCASC6dJkicUKzuMlMXmagvHocCobtBHdKdWG6xz/hAN2lbADEH6oahyeYjx+U1iudmXGIAoPnsabDfN8T7Xa7I2bKgxABQShLFQLZlKqn34ajq6ptXTqOKjbA3A6Mg+dm8HQoJbMREQEBwADPBCCT2urm33z0Ojy9zHDLMYSnzO+m6Ceo0/8nx0Ibn6QqIgADAgAAZRkp4XRzgaFhV1FeVEdiVQLzp5hDhZoKkp0kxgXAsjoCJroNv5fPa2S0ZjmFZhsZXtXLFcDeNErhqhRLz2INJPEQAemkdFY9khqmAWF4fXm5jdBl9C0hIUKJEJzBGlCFSoD2EQK2i3u8TRYrhUHEs5+Ve7x7BQJxaokRmQbQ+wvzkSxy8RABcY9/rJVfA7Tz0cl/Wfq1FMHiNyU4TibyRQv0zIKvX5gRAA=="
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABHg5fz1dU/xVeoMZC4PoRoTr9VkiayhtN0="
+      },
+      "signature": {
+        "$u8": "pPsKLMm5+Hjbsw5OJNPJYTADDj60nhGcCLosN+xGH9A4f95R/exd8I/BSX4wxcYoA1Og8WA6f6rT2hXEFIUFgQcZmaBkm9XXbl638AEs0GAInXjQ1jN2BaD3/GtQ1PZt"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "yXX4wur0ezGAddH0X5V9ufZcaU+wRNo6fGXUVcng6LE="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 123.734148
+  }
+}

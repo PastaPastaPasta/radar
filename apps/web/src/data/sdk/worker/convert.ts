@@ -20,7 +20,7 @@ import type {
   VotePollDto,
   VotePollsByEndDateDto,
 } from '../methods'
-import { base58Decode } from '@/lib/base58'
+import { base58Decode, base58Encode } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { bytesToHex } from '@/lib/hex'
 import type { Freeable } from './impl/types'
@@ -179,6 +179,14 @@ export function chainIdText(bytes: Uint8Array): string {
 
 type IdLike = { toString(): string } | string
 
+type IdBytes = Uint8Array | readonly number[]
+
+/** An identifier as base58 text: the SDK hands some of them over as raw bytes (a plain array of numbers). */
+export function idText(id: IdLike | IdBytes): string {
+  if (id instanceof Uint8Array) return base58Encode(id)
+  return Array.isArray(id) ? base58Encode(Uint8Array.from(id as readonly number[])) : String(id)
+}
+
 export interface DocumentLike extends Freeable {
   id: IdLike
   ownerId: IdLike
@@ -225,15 +233,15 @@ export function documentDto(doc: DocumentLike): DocumentDto {
 
 export interface DpnsUsernameLike extends Freeable {
   username: string
-  identityId: IdLike
-  documentId: IdLike
+  identityId: IdLike | IdBytes
+  documentId: IdLike | IdBytes
 }
 
 export function dpnsUsernameDto(info: DpnsUsernameLike): DpnsUsernameDto {
   return {
     username: info.username,
-    identityId: String(info.identityId),
-    documentId: String(info.documentId),
+    identityId: idText(info.identityId),
+    documentId: idText(info.documentId),
   }
 }
 

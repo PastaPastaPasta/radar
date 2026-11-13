@@ -1,25 +1,44 @@
 {
   "method": "system.status",
   "args": {},
-  "recordedAt": "2026-11-10T19:11:16.536Z",
+  "recordedAt": "2026-11-13T09:00:05.018Z",
   "result": {
     "ok": true,
     "data": {
       "chainId": "dash-testnet-51",
       "version": "5.0.0-rc.8",
-      "height": 668393,
-      "timeMs": 1794337693803,
-      "catchingUp": false
+      "height": 673837,
+      "timeMs": 1794560296777,
+      "catchingUp": false,
+      "peers": 189,
+      "isListening": true,
+      "latestBlockHash": "5afbf51279cc36941c3ba38b3ce41b2f7d203b35b6624b6525b8eedeb13119a8",
+      "latestAppHash": "119e0f34797e950ce33aa736cc47ed46531da7ed6832d473cec923eb1a658c4c",
+      "earliestBlockHeight": 1,
+      "maxPeerBlockHeight": 673837,
+      "coreChainLockedHeight": 1590823,
+      "nodeProTxHash": "9b653e767b978c10346d938c08dc8c5acd03c495f9d913e6fc652bfcae11a348",
+      "nodeId": "0785881ea118c05df7bb9dd2195a78f10cdde0bb",
+      "dapiVersion": "5.0.0-rc.8",
+      "tenderdashVersion": "unreleased-v1.8-dev-be7e73cbb9a15917c1e8f9eccd9b63abdf8ee6b3",
+      "tenderdashProtocol": {
+        "p2p": 10,
+        "block": 14
+      },
+      "driveProtocol": {
+        "latest": 14,
+        "current": 14
+      }
     },
     "proved": false,
     "meta": {
-      "height": 668393,
-      "coreChainLockedHeight": 1589251,
-      "epoch": 20273,
-      "timeMs": 1794337693803,
+      "height": 673837,
+      "coreChainLockedHeight": 1590823,
+      "epoch": 20335,
+      "timeMs": 1794560296777,
       "protocolVersion": 14,
       "chainId": "dash-testnet-51"
     },
-    "tookMs": 453.559428
+    "tookMs": 181.857145
   }
 }

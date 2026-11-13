@@ -69,6 +69,29 @@ describe('identities and names', () => {
     expect(out.data).toMatchObject({ username: 'Pshenmic.dash', identityId: ID })
   })
 
+  it('writes the identifiers the SDK hands over as bytes in base58', async () => {
+    const info = {
+      username: 'pshenm1c.dash',
+      identityId: new Uint8Array(32).fill(7),
+      documentId: Array.from({ length: 32 }, () => 9),
+      free: vi.fn(),
+    }
+    const out = await sharedImpl['dpns.getUsernameByName'](
+      reads({
+        dpns: {
+          getUsernameByNameWithProof: () => Promise.resolve(proved(info)),
+          convertToHomographSafe: safe,
+        },
+      }),
+      { name: 'pshenmic.dash' },
+    )
+    expect(out.data).toEqual({
+      username: 'pshenmic.dash',
+      identityId: base58Encode(new Uint8Array(32).fill(7)),
+      documentId: base58Encode(new Uint8Array(32).fill(9)),
+    })
+  })
+
   it('maps a name to its owner and document, or null', async () => {
     const free = vi.fn()
     const info = { username: 'alice.dash', identityId: ID, documentId: 'doc1', free }
