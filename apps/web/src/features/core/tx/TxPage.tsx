@@ -22,6 +22,7 @@ import {
   Stat,
   Time,
   TypeBadge,
+  Unavailable,
   useUnits,
   ChainLockBadge,
   InstantSendBadge,
@@ -444,6 +445,12 @@ function TxView({
             ...(insightSpends && ins.data ? [stampOf(ins.data)] : []),
           ]}
         >
+          {index.off && mined ? (
+            <Unavailable
+              compact
+              title={t`Whether an output is spent, and by which transaction, needs an indexer`}
+            />
+          ) : null}
           <IoTables
             tx={tx}
             prevouts={prev}

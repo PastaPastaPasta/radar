@@ -40,7 +40,7 @@ export function GovernancePage() {
       title={t`Governance`}
       lede={t`Budget proposals and where their votes stand. Voting happens in Governance.`}
     >
-      <HyphenGate>
+      <HyphenGate unavailable={t`Governance proposals need an indexer`}>
         <GovernanceContent />
       </HyphenGate>
     </PageFrame>

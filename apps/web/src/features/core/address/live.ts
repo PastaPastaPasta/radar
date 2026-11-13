@@ -51,8 +51,11 @@ export interface WatchOptions {
     status(): LiveTxStatus
     subscribe(onChange: () => void): () => void
   }
-  /** The newest transactions of the address from Hyphen: read only while DAPI's feed has given up. */
-  recent(signal: AbortSignal): Promise<Sourced<HyAddressTx[]>>
+  /**
+   * The newest transactions of the address from an index: read only while DAPI's feed has given up. Left out when no
+   * index may be asked (Decentralized only mode): the feed is then all there is, and its state is reported as it is.
+   */
+  recent?: (signal: AbortSignal) => Promise<Sourced<HyAddressTx[]>>
   /** Outputs of the address known to the page (its UTXOs). */
   spendable: Spendable
   /** `paused`: the tab is in the background, so nothing is followed. */
@@ -141,11 +144,14 @@ export function watchAddress(opts: WatchOptions): void {
     }
   }
 
-  async function followHistory(ctrl: AbortController): Promise<void> {
+  async function followHistory(
+    recent: NonNullable<WatchOptions['recent']>,
+    ctrl: AbortController,
+  ): Promise<void> {
     let known: Set<string> | undefined
     while (!ctrl.signal.aborted) {
       try {
-        const page = await opts.recent(ctrl.signal)
+        const page = await recent(ctrl.signal)
         if (ctrl.signal.aborted) return
         const ids = new Set(page.data.map((t) => t.txHash))
         if (known) {
@@ -182,14 +188,15 @@ export function watchAddress(opts: WatchOptions): void {
     }
     release ??= dapi.transactions(onEvent)
     const status = dapi.status()
-    if (!status.fallbackHint) {
+    const fallsBack = status.fallbackHint && opts.recent !== undefined
+    if (!fallsBack) {
       stopFallback()
-    } else if (!fallback) {
+    } else if (!fallback && opts.recent) {
       fallback = new AbortController()
-      void followHistory(fallback)
+      void followHistory(opts.recent, fallback)
     }
     report(
-      status.fallbackHint || status.state === 'live'
+      fallsBack || status.state === 'live'
         ? 'live'
         : status.state === 'reconnecting'
           ? 'reconnecting'

@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { coreLive } from '@/data/core/live'
+import { coreQueries } from '@/data/core/queries'
 import { mapSourced } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
 import { insQueries } from '@/data/insight/queries'
@@ -59,13 +60,14 @@ const current = (s: Scoped, scope: string): Scoped => (s.scope === scope ? s : f
 /**
  * Follows new transactions of the address while its page is on screen (§5.5): DAPI's live transaction feed, and
  * the history of the address (Hyphen's, or Insight's while Hyphen's index is stale) only while that feed has
- * given up.
+ * given up. With `from` null no index is asked for anything (Decentralized only mode): the feed alone is followed, a
+ * spend is recognized only for coins this page saw arrive, and DAPI says whether a pending transaction was mined.
  */
 export function useAddressActivity(
   net: NetworkId,
   address: string,
   enabled: boolean,
-  from: IndexSource = 'hyphen',
+  from: IndexSource | null = 'hyphen',
 ): AddressActivity {
   const queryClient = useQueryClient()
   const scope = `${net}:${address}`
@@ -89,20 +91,24 @@ export function useAddressActivity(
         status: () => coreLive.txStatus(net),
         subscribe: (onChange) => coreLive.subscribe(onChange),
       },
-      recent: (signal) =>
-        from === 'insight'
-          ? untilAborted(
-              queryClient.fetchQuery({ ...insQueries.addressTxs(net, address, 0), ...FRESH }),
-              signal,
-            ).then((page) => mapSourced(page, (p) => txRows(address, p)))
-          : untilAborted(
-              queryClient.fetchQuery({
-                ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),
-                ...FRESH,
-              }),
-              signal,
-            ).then((page) => mapSourced(page, (p) => p.items)),
-      spendable: (outpoint) => knownOutputValue(queryClient, net, address, from, outpoint),
+      recent:
+        from === null
+          ? undefined
+          : (signal) =>
+              from === 'insight'
+                ? untilAborted(
+                    queryClient.fetchQuery({ ...insQueries.addressTxs(net, address, 0), ...FRESH }),
+                    signal,
+                  ).then((page) => mapSourced(page, (p) => txRows(address, p)))
+                : untilAborted(
+                    queryClient.fetchQuery({
+                      ...hyQueries.addressTxs(net, address, { limit: RECENT_LIMIT }),
+                      ...FRESH,
+                    }),
+                    signal,
+                  ).then((page) => mapSourced(page, (p) => p.items)),
+      spendable: (outpoint) =>
+        from === null ? undefined : knownOutputValue(queryClient, net, address, from, outpoint),
       every: POLL_MS.addressFallback,
       visibility: pageVisibility,
       onStatus: (status) => {
@@ -116,26 +122,32 @@ export function useAddressActivity(
         })
       },
       onBlock: (mined) => {
-        const keys = addressKeys(net, address, from)
-        void queryClient.invalidateQueries({ queryKey: keys.summary })
-        void queryClient.invalidateQueries({ queryKey: keys.txs })
-        void queryClient.invalidateQueries({
-          queryKey: keys.utxos,
-          predicate: utxosWorthRefreshing,
-        })
+        if (from !== null) {
+          const keys = addressKeys(net, address, from)
+          void queryClient.invalidateQueries({ queryKey: keys.summary })
+          void queryClient.invalidateQueries({ queryKey: keys.txs })
+          void queryClient.invalidateQueries({
+            queryKey: keys.utxos,
+            predicate: utxosWorthRefreshing,
+          })
+        }
         if (mined) {
           keep(pendingRef.current.filter((p) => !mined.has(p.txid)))
           return
         }
         for (const p of pendingRef.current) {
           const mined =
-            from === 'insight'
+            from === null
               ? queryClient
-                  .fetchQuery({ ...insQueries.tx(net, p.txid), ...FRESH })
-                  .then((tx) => (tx.data?.blockheight ?? -1) >= 0)
-              : queryClient
-                  .fetchQuery({ ...hyQueries.tx(net, p.txid), ...FRESH })
-                  .then((tx) => tx.data?.blockHeight != null)
+                  .fetchQuery({ ...coreQueries.tx(net, p.txid), ...FRESH })
+                  .then((tx) => tx.data?.height !== undefined)
+              : from === 'insight'
+                ? queryClient
+                    .fetchQuery({ ...insQueries.tx(net, p.txid), ...FRESH })
+                    .then((tx) => (tx.data?.blockheight ?? -1) >= 0)
+                : queryClient
+                    .fetchQuery({ ...hyQueries.tx(net, p.txid), ...FRESH })
+                    .then((tx) => tx.data?.blockHeight != null)
           void mined
             .then((isMined) => {
               if (controller.signal.aborted || !isMined) return

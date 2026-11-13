@@ -1,15 +1,34 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
 import { useIndexHealth } from '@/data/index-health'
 import { isDevnet } from '@/lib/network'
 import { PageLink, useNetwork } from '@/features/entity'
-import { Empty, useHyphenLagSentence, useInsightLagSentence } from '@/ui'
+import { Empty, Unavailable, useHyphenLagSentence, useInsightLagSentence } from '@/ui'
 
-/** Hyphen indexes mainnet and testnet only. A devnet gets a plain explanation instead of a failed request. */
-export function HyphenGate({ children }: { children: ReactNode }) {
+/**
+ * Wraps a page that reads an index. Hyphen indexes mainnet and testnet only, so a devnet gets a plain explanation
+ * instead of a failed request. In Decentralized only mode the page shows the mode's unavailable state once, in place
+ * of its content; `unavailable` names what is missing, and `false` leaves the mode to a page that still has
+ * something to show from DAPI.
+ */
+export function HyphenGate({
+  children,
+  unavailable,
+}: {
+  children: ReactNode
+  unavailable?: string | false
+}) {
   const { t } = useLingui()
   const net = useNetwork()
-  if (!isDevnet(net)) return <>{children}</>
+  const off = useDecentralizedOnly()
+  if (!isDevnet(net)) {
+    return off && unavailable !== false ? (
+      <Unavailable title={unavailable ?? t`This page needs an indexer`} />
+    ) : (
+      <>{children}</>
+    )
+  }
   return (
     <Empty
       kind="unsupported-network"
@@ -22,16 +41,6 @@ export function HyphenGate({ children }: { children: ReactNode }) {
       }
     />
   )
-}
-
-/**
- * Hyphen's freshness for a page that shows Hyphen-only figures: `lag` is set only once the index has been
- * measured against DAPI's best height and found stale (`useIndexHealth`), a statement about the index and never a guess.
- */
-export function useHyphenFreshness(): { stale: boolean; lag: string | undefined } {
-  const index = useIndexHealth(useNetwork())
-  const stale = index.state === 'stale'
-  return { stale, lag: stale ? index.lag : undefined }
 }
 
 /**

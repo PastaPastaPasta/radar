@@ -3,6 +3,7 @@ import { type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState, type ReactNode } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
+import { useDecentralizedOnly } from '@/data/health'
 import type { HyAddress, HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { classify } from '@/features/search'
@@ -20,6 +21,7 @@ import {
   SourceLine,
   Stat,
   Time,
+  Unavailable,
   useMediaQuery,
 } from '@/ui'
 import { deferred } from '@/ui/deferred'
@@ -50,6 +52,7 @@ export function AddressPage({ address }: { address: string }) {
   const checked = useMemo(() => classify(address, net), [address, net])
   const elsewhere = checked.networkHint !== undefined && checked.networkHint !== net
   const valid = checked.classes.includes('core-address') && !elsewhere
+  const decentralized = useDecentralizedOnly()
 
   return (
     <PageFrame path="/address/$address" title={t`Address`}>
@@ -58,9 +61,13 @@ export function AddressPage({ address }: { address: string }) {
           <p className="grid gap-1">
             <Hash value={address} display="wrap" />
           </p>
-          <HyphenGate>
-            <AddressContent net={net} address={address} />
-          </HyphenGate>
+          {decentralized ? (
+            <DecentralizedAddress net={net} address={address} />
+          ) : (
+            <HyphenGate>
+              <AddressContent net={net} address={address} />
+            </HyphenGate>
+          )}
         </>
       ) : checked.networkHint ? (
         <OtherNetwork address={address} hint={checked.networkHint} />
@@ -89,6 +96,44 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
         </PageLink>
       }
     />
+  )
+}
+
+/**
+ * The address page with no index to ask: what DAPI's live feed shows from now on, and the QR code. Balance, history and
+ * unspent outputs exist only in an index, and scanning the chain for one address over DAPI would spend the whole
+ * request budget, so they are named once as unavailable.
+ */
+function DecentralizedAddress({ net, address }: { net: NetworkId; address: string }) {
+  const { t } = useLingui()
+  const live = useAddressActivity(net, address, true, null)
+  return (
+    <>
+      <Unavailable title={t`This address's balance, history and unspent outputs need an indexer`} />
+      <LiveNotice status={live.status} arrived={live.arrived} feedOnly />
+      <PendingCard pending={live.pending} />
+      <Card title={t`QR code`} layer="core" className="justify-self-start">
+        <AddressQr address={address} />
+      </Card>
+    </>
+  )
+}
+
+function PendingCard({ pending }: { pending: PendingTx[] }) {
+  const { t } = useLingui()
+  if (pending.length === 0) return null
+  return (
+    <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed">
+      <ul className="grid gap-2" data-pending>
+        {pending.map((p) => (
+          <li key={p.txid} className="flex flex-wrap items-center gap-3">
+            <Entity kind="tx" id={p.txid} />
+            <Amount value={p.net} kind="duffs" signed />
+            <Badge tone="warning">{t`Unconfirmed`}</Badge>
+          </li>
+        ))}
+      </ul>
+    </Card>
   )
 }
 
@@ -263,19 +308,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
         )}
       </div>
 
-      {pending.length > 0 ? (
-        <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed">
-          <ul className="grid gap-2" data-pending>
-            {pending.map((p) => (
-              <li key={p.txid} className="flex flex-wrap items-center gap-3">
-                <Entity kind="tx" id={p.txid} />
-                <Amount value={p.net} kind="duffs" signed />
-                <Badge tone="warning">{t`Unconfirmed`}</Badge>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      ) : null}
+      <PendingCard pending={pending} />
 
       <Card
         title={t`Transactions`}
@@ -406,7 +439,16 @@ function SeenStat({
   )
 }
 
-function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number }) {
+function LiveNotice({
+  status,
+  arrived,
+  feedOnly = false,
+}: {
+  status: WatchStatus
+  arrived: number
+  /** No index backs the feed: only payments to the address, and spends of coins seen arriving, can be recognized. */
+  feedOnly?: boolean
+}) {
   const { t } = useLingui()
   return (
     <div
@@ -418,7 +460,9 @@ function LiveNotice({ status, arrived }: { status: WatchStatus; arrived: number 
         <LiveDot state={status === 'live' ? 'live' : 'unknown'} />
         <span className="min-w-0">
           {status === 'live'
-            ? t`Watching for new transactions on this address.`
+            ? feedOnly
+              ? t`Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized.`
+              : t`Watching for new transactions on this address.`
             : status === 'connecting'
               ? t`Connecting to the live feed…`
               : status === 'paused'

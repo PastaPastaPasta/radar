@@ -32,6 +32,23 @@ export function AddressHoverCard({ id }: { id: string }) {
   } as const
   const short = `${id.slice(0, 8)}…${id.slice(-6)}`
 
+  if (index.off) {
+    return (
+      <div data-hover-card="address" data-unavailable="mode">
+        <HoverCardLayout
+          {...common}
+          title={short}
+          id={id}
+          rows={[
+            {
+              label: t`Balance`,
+              value: t`Needs an indexer: off in Decentralized only mode`,
+            },
+          ]}
+        />
+      </div>
+    )
+  }
   if (query.isPending || index.pending) return <CardLoading />
   if (query.isError)
     return <ErrorState error={query.error} source={insight ? 'insight' : 'hyphen'} compact />

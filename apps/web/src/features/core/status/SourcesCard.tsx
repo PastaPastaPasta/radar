@@ -60,7 +60,8 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
       subtitle={t`How each source is answering, and how far behind its data is.`}
     >
       <ul className="grid gap-0" aria-label={t`Sources`}>
-        {rows.map(({ source, offered, health }) => {
+        {rows.map(({ source, offered: onNetwork, off, health }) => {
+          const offered = onNetwork && !off
           const { name, role } = SOURCE_ROLE[source]()
           const facts = probeFacts(source, probes, net, now, health.state === 'stale')
           const probeError =
@@ -74,7 +75,9 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
           const state = offered ? (
             <LiveDot state={health.state} />
           ) : (
-            <span className="text-[var(--dh-ink-2)]">{t`Not offered`}</span>
+            <span className="text-[var(--dh-ink-2)]">
+              {onNetwork ? t`Off in this mode` : t`Not offered`}
+            </span>
           )
           const checking = source === 'sdk' && probes.sdk.isPending
           const lag = (
@@ -95,7 +98,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
             health.p50LatencyMs !== undefined ? medianText(health.p50LatencyMs) : undefined
           const rowProps = {
             'data-source-row': source,
-            'data-state': offered ? health.state : 'unsupported',
+            'data-state': offered ? health.state : onNetwork ? 'off' : 'unsupported',
           }
           if (phone) {
             return (
@@ -147,7 +150,9 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
                   </>
                 ) : (
                   <p className="text-[var(--dh-ink-2)]">
-                    {t`This network doesn’t have this source.`}
+                    {onNetwork
+                      ? t`Decentralized only mode doesn’t contact this source.`
+                      : t`This network doesn’t have this source.`}
                   </p>
                 )}
               </div>

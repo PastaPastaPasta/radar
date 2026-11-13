@@ -33,7 +33,7 @@ export function ProposalPage({ hash }: { hash: string }) {
   const { t } = useLingui()
   return (
     <PageFrame path="/governance/$hash" title={t`Proposal`} eyebrow={t`Governance`}>
-      <HyphenGate>
+      <HyphenGate unavailable={t`Governance proposals need an indexer`}>
         <ProposalContent hash={hash} />
       </HyphenGate>
     </PageFrame>

@@ -32,7 +32,7 @@ export function ChartsPage({ range = DEFAULT_RANGE }: { range?: Range }) {
       title={t`Charts`}
       lede={t`How the Core chain is doing: mining, transactions, supply and the state it carries.`}
     >
-      <HyphenGate>
+      <HyphenGate unavailable={t`Charts need an indexer`}>
         <StaleIndexNotice />
         <ChartGrid range={range} />
       </HyphenGate>

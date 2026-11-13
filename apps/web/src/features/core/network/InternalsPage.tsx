@@ -11,7 +11,7 @@ export function InternalsPage() {
       title={t`Network internals`}
       lede={t`The chain’s size, its node versions and the peers Hyphen reads from.`}
     >
-      <HyphenGate>
+      <HyphenGate unavailable={t`Network internals need an indexer`}>
         <StaleIndexNotice />
         <NetworkInternals />
       </HyphenGate>

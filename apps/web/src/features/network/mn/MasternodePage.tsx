@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
+import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 import { Entity, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
@@ -21,6 +22,7 @@ import {
   Stat,
   Stats,
   Time,
+  Unavailable,
 } from '@/ui'
 import { PaymentsCard } from './PaymentsCard'
 import { PlatformCard } from './PlatformCard'
@@ -42,6 +44,7 @@ export function MasternodePage({ protx }: { protx: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const id = protx.toLowerCase()
+  const off = useDecentralizedOnly()
   useDocumentTitle(t`Masternode ${id.slice(0, 8)}`)
 
   return (
@@ -55,6 +58,10 @@ export function MasternodePage({ protx }: { protx: string }) {
             title={t`Radar doesn’t crawl devnets.`}
             body={t`Masternode records come from Radar’s crawl of mainnet and testnet.`}
           />
+        </PlainTitle>
+      ) : off ? (
+        <PlainTitle>
+          <Unavailable title={t`Masternode records need Radar's crawler`} />
         </PlainTitle>
       ) : (
         <Record net={net} protx={id} />

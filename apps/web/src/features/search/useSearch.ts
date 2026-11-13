@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { isSourceError, SourceError } from '@/data/errors'
+import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
+import { decentralizedOnly } from '@/lib/source-mode'
 import { classify, type Classified, type Tip } from './classify'
 import { searchEnv } from './env'
 import { networkHintHit } from './network-hint'
@@ -38,8 +40,10 @@ export function useDebounced<T>(value: T, ms: number): T {
 function allowed(r: Resolver, net: NetworkId, mode: SearchMode): boolean {
   switch (r.cost) {
     case 'local':
-    case 'index':
       return true
+    case 'index':
+      // Every index lookup goes to a hosted service, which Decentralized only mode never asks.
+      return !decentralizedOnly()
     case 'dapi':
       return searchEnv.canAffordDapi(net)
     case 'sdk':
@@ -92,6 +96,8 @@ function whenAborted(signal: AbortSignal): Promise<never> {
 export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const { mode } = opts
   const net = useNetwork()
+  // Read so a change of mode plans the lookups again.
+  const indexOff = useDecentralizedOnly()
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
   const tipKey = JSON.stringify(searchEnv.tip(net) ?? null)
   const tip = useMemo(() => (JSON.parse(tipKey) as Tip | null) ?? undefined, [tipKey])
@@ -138,5 +144,13 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const failed = Object.entries(settled).flatMap(([id, s]) =>
     s.error ? [{ id, error: s.error }] : [],
   )
-  return { hits, pending, pendingLocal, failed, classified }
+  const skipped =
+    indexOff && !classified.networkHint && !classified.warning
+      ? registry
+          .filter(
+            (r) => r.cost === 'index' && r.accepts.some((k) => classified.classes.includes(k)),
+          )
+          .map((r) => r.id)
+      : []
+  return { hits, pending, pendingLocal, failed, skipped, classified }
 }

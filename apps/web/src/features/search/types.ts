@@ -29,6 +29,7 @@ export interface Resolver {
   /** 'dapi-block', 'dapi-tx', 'pe-search', 'hy-search', 'sdk-identity', 'mn-join', 'dpns-prefix', … */
   id: string
   accepts: InputClass[]
+  /** `index` is a lookup in a hosted index or crawl (Hyphen, Radar): never planned in Decentralized only mode. */
   cost: 'local' | 'index' | 'dapi' | 'sdk'
   resolve(c: Classified, ctx: ResolverContext): Promise<SearchHit[]>
 }
@@ -41,6 +42,8 @@ export interface SearchResult {
   /** The pending resolvers that run on the device, which never wait on a network. */
   pendingLocal: string[]
   failed: { id: string; error: SourceError }[]
+  /** Index lookups that fit the input and were not run, because Decentralized only mode asks no hosted service. */
+  skipped: string[]
   classified: Classified
 }
 

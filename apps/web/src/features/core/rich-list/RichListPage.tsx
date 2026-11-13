@@ -84,7 +84,7 @@ export function RichListPage() {
   const { t } = useLingui()
   return (
     <PageFrame path="/rich-list" title={t`Rich list`} lede={t`The largest Core balances, ranked.`}>
-      <HyphenGate>
+      <HyphenGate unavailable={t`The rich list needs an indexer`}>
         <RichListContent />
       </HyphenGate>
     </PageFrame>

@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { entityLabel, PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { Badge, Card, Empty, ErrorState, Skeleton } from '@/ui'
+import { Badge, Card, Empty, ErrorState, Skeleton, Unavailable } from '@/ui'
 import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { groupHits, groupLabel } from './groups'
@@ -48,7 +48,7 @@ export function SearchPage({ q }: { q?: string }) {
   const navigate = useNavigate()
   const query = (q ?? '').trim()
   const [draft, setDraft] = useState(() => (classify(query, net).warning ? '' : query))
-  const { hits, pending, failed, classified } = useSearch(query, { mode: 'page' })
+  const { hits, pending, failed, skipped, classified } = useSearch(query, { mode: 'page' })
   const secret = classified.warning
   const wordsReady = useWordlistLoaded()
   // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
@@ -169,6 +169,13 @@ export function SearchPage({ q }: { q?: string }) {
           {failed.map((f) => (
             <ErrorState key={f.id} error={f.error} source={f.error.source} compact />
           ))}
+
+          {skipped.length > 0 ? (
+            <Unavailable
+              compact
+              title={t`Lookups in an index were skipped, so some matches may be missing`}
+            />
+          ) : null}
 
           {noMatch ? (
             <Empty

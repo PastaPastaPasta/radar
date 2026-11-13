@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { useAllSourceHealth } from '@/data/health'
+import { useAllSourceHealth, useDecentralizedOnly } from '@/data/health'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { LiveDot } from '@/ui'
 import { BudgetCard } from './BudgetCard'
@@ -22,7 +22,8 @@ export function StatusPage() {
   const chain = useQuery(statusQueries.chain(net))
   const probes = useProbes(net)
 
-  const rows = sourceRows(net, health)
+  const decentralized = useDecentralizedOnly()
+  const rows = sourceRows(net, health, decentralized)
   const overall = overallState(rows)
 
   return (
@@ -34,7 +35,11 @@ export function StatusPage() {
         <h1 className="text-3xl font-semibold">{t`Status`}</h1>
         <p role="status" data-overall={overall} className="flex items-center gap-2">
           {overall === 'ok' ? <LiveDot state="ok" bare /> : null}
-          {overall === 'ok' ? t`Every source is answering.` : null}
+          {overall === 'ok'
+            ? decentralized
+              ? t`DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode.`
+              : t`Every source is answering.`
+            : null}
           {overall === 'attention'
             ? t`Some sources are slow or behind. The rest still work.`
             : null}
