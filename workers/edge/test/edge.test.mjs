@@ -626,6 +626,27 @@ describe('per-entity title and OG', () => {
     assert.match(html, /<title>Masternode · Radar<\/title>/)
   })
 
+  it('reads no hosted backend for a Decentralized only link, and keeps the parameter in the canonical address', async () => {
+    reset(() => Response.json({ blockHeight: 1, txCount: 1 }))
+    for (const [route, title] of [
+      [`/mn/${protx}`, 'Masternode'],
+      ['/block/1234567', 'Block'],
+      [`/tx/${'a'.repeat(64)}`, 'Transaction'],
+      [`/identity/${identity}`, 'Identity'],
+    ]) {
+      const html = await (await getAsBot(`${route}?network=testnet&sources=decentralized`)).text()
+      assert.match(html, new RegExp(`<title>${title} · Radar</title>`), route)
+      assert.match(
+        html,
+        new RegExp(`og:url" content="http://radar\\.localhost${route}\\?network=testnet&amp;sources=decentralized"`),
+        route,
+      )
+    }
+    const html = await (await getAsBot('/block/1234567?sources=decentralized')).text()
+    assert.match(html, /og:url" content="http:\/\/radar\.localhost\/block\/1234567\?sources=decentralized"/)
+    assert.equal(upstreamCalls.length, 0)
+  })
+
   it('makes no backend call for devnets or other routes', async () => {
     reset()
     await getAsBot(`/mn/${protx}?network=devnet-x`)

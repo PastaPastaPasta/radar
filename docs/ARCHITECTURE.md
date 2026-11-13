@@ -398,6 +398,8 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 - Every proxy response carries `content-security-policy: default-src 'none'; sandbox` and `cross-origin-resource-policy: same-origin`. The Worker's global CSP is applied only to responses that have none.
 - `vite dev` and `vite preview` use the same `resolveHyphenRequest` (from `workers/edge/src/hyphen-path.ts`), so they refuse what production refuses. They don't check the upstream content type.
 
+**Link previews and Decentralized only links (§4.11).** For a link-preview crawler the Worker reads the entity from Radar, Hyphen or Platform Explorer to fill `<title>` and the OG tags. A request with `?sources=decentralized` gets the generic text for its kind and no backend read, whoever asks; `og:url` and the canonical link keep `sources` (and `network`), so the preview points at the same mode. People always get the generic text.
+
 **Content-Security-Policy (`workers/edge/src/headers.ts`).** `worker-src 'self'`: every worker loads from the origin, so there is no `blob:` grant. `img-src` keeps `blob:` (and `data:`, `https:`) for the address QR. `require-trusted-types-for 'script'` is sent report-only: ECharts' HTML tooltip writes `innerHTML`, and enforcing needs `tooltip.renderMode: 'richText'` or a policy.
 
 **Redirects (`workers/edge/src/redirects.ts`).** The old dashhq pages map to Radar's URLs with their filters translated; a URL already in the new form is a fixed point, never redirected again.
@@ -826,7 +828,7 @@ The DAPI budget (§4.3) is unchanged: no page replaces an index list with a DAPI
 | `quorums.<network>.networks.dash.org` (a devnet: its configured `quorumUrl`) | Two things. DAPI node discovery, `GET /masternodes` at most once an hour (§4.2). And the SDK's trusted context: the quorum public keys it checks proofs against. One operator (Dash Core Group) serves it. | Discovery could run from the cached list and the bundled seeds alone (`seed.<net>.json`, 30 nodes), at the price of a node set that ages between releases; it is kept because a stale node list is the likelier failure. The quorum keys cannot be dropped without a light client that derives them from Core headers and masternode-list diffs (M8, §4.4a). |
 | DAPI evonodes, `https://<ip>:<port>` | Core gRPC-web (§4) and every Platform read through the SDK (§3). Many independent operators; 8 active at a time. | No: this is the decentralized source. |
 
-Nothing else is contacted: no analytics, no third-party font, script or image host. `e2e/tests/decentralized-mode.spec.ts` walks every built page on both networks in the mode and fails on a request to a hosted backend or to any host outside this table.
+Nothing else is contacted by the app: no analytics, no third-party font, script or image host. The site's edge Worker reads no hosted backend for a request with `?sources=decentralized`, so a link preview of a Decentralized only link is generic (§2.7). `e2e/tests/decentralized-mode.spec.ts` walks every built page on both networks in the mode and fails on a request to a hosted backend or to any host outside this table.
 
 ---
 

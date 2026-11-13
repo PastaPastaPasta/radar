@@ -60,9 +60,14 @@ async function handle(request: Request, env: Env): Promise<Response> {
     const out = new Response(res.body, res)
     out.headers.append('vary', 'user-agent')
     const network = url.searchParams.get('network')
-    const preview = isLinkPreviewAgent(request.headers.get('user-agent'))
+    const decentralized = url.searchParams.get('sources') === 'decentralized'
+    const preview = isLinkPreviewAgent(request.headers.get('user-agent')) && !decentralized
     const meta = preview ? await resolveOg(og.kind, og.id, network) : genericOg(og.kind)
-    const canonical = `${url.origin}${url.pathname}${network ? `?network=${encodeURIComponent(network)}` : ''}`
+    const query = [
+      network && `network=${encodeURIComponent(network)}`,
+      decentralized && 'sources=decentralized',
+    ].filter(Boolean)
+    const canonical = `${url.origin}${url.pathname}${query.length ? `?${query.join('&')}` : ''}`
     return rewriteHead(out, meta, canonical)
   }
   return res
