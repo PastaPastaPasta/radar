@@ -22,8 +22,6 @@ export function LabelsCard() {
   const [text, setText] = useState('')
   const [error, setError] = useState<'id' | 'label'>()
 
-  const kindNames = (k: LabelKind) => entityLabel(k)
-
   const submit = (e: FormEvent) => {
     e.preventDefault()
     const trimmedId = id.trim()
@@ -40,8 +38,6 @@ export function LabelsCard() {
     setId('')
     setText('')
   }
-
-  const remove = (name: string) => t`Remove the label ${name}`
 
   return (
     <Card
@@ -62,7 +58,7 @@ export function LabelsCard() {
           >
             {LABEL_KINDS.map((k) => (
               <option key={k} value={k}>
-                {kindNames(k)}
+                {entityLabel(k)}
               </option>
             ))}
           </select>
@@ -122,14 +118,14 @@ export function LabelsCard() {
                 className="flex flex-wrap items-center gap-3 border-b border-[var(--dh-line)] pb-2"
               >
                 <span className="text-[var(--dh-ink-2)]">
-                  {networkName(l.net)} · {kindNames(l.kind)}
+                  {networkName(l.net)} · {entityLabel(l.kind)}
                 </span>
                 <strong>{l.label}</strong>
                 <Hash value={l.id} display="short" />
                 <button
                   type="button"
                   className="dh-btn dh-btn--quiet dh-btn--sm ms-auto"
-                  aria-label={remove(l.label)}
+                  aria-label={t`Remove the label ${l.label}`}
                   onClick={() => {
                     removeLabel(l)
                   }}

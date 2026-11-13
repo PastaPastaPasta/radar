@@ -125,14 +125,14 @@ export function ConnectionCard() {
     setDraft(draftOf(result.settings))
   }
 
-  const reset = (patch: Partial<Draft>, clear: (s: SdkSettings) => SdkSettings) => {
-    setDraft((d) => ({ ...d, ...patch }))
+  const defaults = draftOf({ quorumUrls: {} })
+  const reset = (field: Field, clear: (s: SdkSettings) => SdkSettings) => {
+    setDraft((d) => ({ ...d, [field]: defaults[field] }))
     setErrors({})
     apply(clear(saved))
   }
 
   const dirty = JSON.stringify(draft) !== JSON.stringify(base)
-  const defaults = draftOf({ quorumUrls: {} })
   const resetButton = (field: Field, onReset: () => void) => (
     <button
       type="button"
@@ -173,7 +173,7 @@ export function ConnectionCard() {
                 }}
               />
               {resetButton(net, () => {
-                reset({ [net]: '' }, (s) => ({
+                reset(net, (s) => ({
                   ...s,
                   quorumUrls: { ...s.quorumUrls, [net]: undefined },
                 }))
@@ -202,7 +202,7 @@ export function ConnectionCard() {
               }}
             />
             {resetButton('timeout', () => {
-              reset({ timeout: '' }, (s) => omit(s, 'requestTimeoutMs'))
+              reset('timeout', (s) => omit(s, 'requestTimeoutMs'))
             })}
           </div>
           {errors.timeout ? (
@@ -227,7 +227,7 @@ export function ConnectionCard() {
               }}
             />
             {resetButton('retries', () => {
-              reset({ retries: '' }, (s) => omit(s, 'retries'))
+              reset('retries', (s) => omit(s, 'retries'))
             })}
           </div>
           {errors.retries ? (
@@ -253,7 +253,7 @@ export function ConnectionCard() {
               <option value="off">{t`No`}</option>
             </select>
             {resetButton('ban', () => {
-              reset({ ban: 'default' }, (s) => omit(s, 'banFailedAddress'))
+              reset('ban', (s) => omit(s, 'banFailedAddress'))
             })}
           </div>
         </div>
@@ -276,7 +276,7 @@ export function ConnectionCard() {
               ))}
             </select>
             {resetButton('logs', () => {
-              reset({ logs: DEFAULT_LOG_LEVEL }, (s) => omit(s, 'logLevel'))
+              reset('logs', (s) => omit(s, 'logLevel'))
             })}
           </div>
         </div>
