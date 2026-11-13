@@ -10,12 +10,13 @@ import type {
 } from './methods/shared'
 import { isPlatformId } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
+import { systemContract } from '@/lib/well-known'
 import type { NetworkId } from '@/lib/network'
 
 /** Drive's cap on the values of one `in` clause, and on the rows of one query. */
 const DRIVE_MAX = 100
 /** The DPNS data contract has the same id on every network. */
-export const DPNS_CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
+export const DPNS_CONTRACT = systemContract('dpns').id
 /** Most SDK calls one batch has in flight at a time. */
 const FANOUT = 4
 
