@@ -109,6 +109,17 @@ describe('Block page', () => {
     expect(document.querySelector('[data-source="dapi"]')).not.toBeNull()
   })
 
+  it('states the page’s DAPI source once, in the header, instead of on every section @IN-03', async () => {
+    renderAt(`/block/${TIP}`)
+    await screen.findByRole('table', { name: /Transactions in block 2,570,085/ })
+    const article = document.querySelector('article')!
+    expect(article.querySelectorAll('[data-source="dapi"]')).toHaveLength(1)
+    expect(article.querySelector('.rx-rec [data-source="dapi"]')).not.toBeNull()
+    for (const id of ['header', 'coinbase', 'transactions']) {
+      expect(document.querySelector(`#${id} .rx-sec__actions [data-source="dapi"]`)).toBeNull()
+    }
+  })
+
   it('names the reward, the pool slot and the confirmations @IN-03', async () => {
     renderAt(`/block/${TIP}`)
     expect(await screen.findByText('Block reward')).toBeInTheDocument()

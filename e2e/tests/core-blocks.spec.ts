@@ -89,6 +89,40 @@ test.describe('Block page', () => {
     await expectAccessible(page)
   })
 
+  test('states the page’s one source once and keeps copy controls quiet until hovered @IN-03', async ({
+    page,
+  }) => {
+    const touch = (page.viewportSize()?.width ?? 1000) <= 640
+    await page.goto(`/block/${TIP}`)
+    await expect(page.getByRole('heading', { level: 1, name: /Block 2,570,085/ })).toBeVisible()
+    await expect(
+      page.locator('article [data-source="dapi"]'),
+      'one DAPI line for the page',
+    ).toHaveCount(1)
+    await expect(
+      page.locator('#header [data-source="insight"], #header [data-source="hyphen"]').first(),
+      'a different source keeps its own line',
+    ).toBeVisible()
+    const opacity = (loc: ReturnType<typeof page.locator>) =>
+      loc.evaluate((el) => getComputedStyle(el).opacity)
+    const own = page.locator('.rx-rec__meta .rx-copy').first()
+    expect(await opacity(own), 'the block’s own hash keeps its control').toBe('1')
+    const row = page.locator('#header .rx-kv', { hasText: 'Merkle root' })
+    const copy = row.locator('.rx-copy').first()
+    if (touch) {
+      expect(await opacity(copy), 'touch screens always show it').toBe('1')
+      return
+    }
+    expect(await opacity(copy)).toBe('0')
+    await row.hover()
+    await expect.poll(() => opacity(copy)).toBe('1')
+    await page.mouse.move(0, 0)
+    await copy.focus()
+    await page.keyboard.press('Shift+Tab')
+    await page.keyboard.press('Tab')
+    expect(await opacity(copy), 'keyboard focus shows it').toBe('1')
+  })
+
   test('cuts the header hashes in the middle on a phone and keeps the block’s own hash whole @IN-03', async ({
     page,
   }) => {

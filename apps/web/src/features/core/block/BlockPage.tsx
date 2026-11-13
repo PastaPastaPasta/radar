@@ -183,7 +183,7 @@ function BlockView({
       : undefined
 
   return (
-    <article data-page="/block/$id" data-layer="core">
+    <article data-page="/block/$id" data-quiet-copy data-layer="core">
       <CoreBand
         crumbs={[
           { label: t`Core`, to: <Link to="/blocks">{t`Core`}</Link> },
@@ -289,7 +289,7 @@ function BlockView({
       </CoreBand>
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
-        <Section id="header" title={t`Header`} source={stamp}>
+        <Section id="header" title={t`Header`}>
           <Card layer="core">
             <KeyValue
               columns={2}
@@ -346,7 +346,6 @@ function BlockView({
             id="coinbase"
             title={t`Coinbase payload`}
             description={t`Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock.`}
-            source={stamp}
           >
             <Card layer="core">
               <div data-payload="cbTx">
@@ -368,7 +367,6 @@ function BlockView({
           id="transactions"
           title={t`Transactions`}
           description={plural(block.txs.length, { one: '# transaction', other: '# transactions' })}
-          source={stamp}
         >
           <Card layer="core" padding="flush">
             {phone ? (
