@@ -38,6 +38,13 @@ export interface PathElementDto {
   referenceTarget: string[] | null
 }
 
+/** A contract's serialized form, which decoding a document against it needs, and the types it declares. */
+export interface ContractBytesDto {
+  id: string
+  bytes: Uint8Array
+  documentTypes: string[]
+}
+
 /** SDK methods only this package calls: add entries here, never in a shared file. */
 export interface ToolsMethods {
   'documents.count': { args: DocumentsAggregateArgs; result: CountGroupDto[] }
@@ -46,6 +53,8 @@ export interface ToolsMethods {
     args: DocumentsAggregateArgs & { property: string }
     result: AverageGroupDto[]
   }
+  /** The contract as the protocol serializes it (for the document decoder), proof-checked. */
+  'contracts.serialized': { args: { id: string }; result: ContractBytesDto | null }
   /** A batched point read of GroveDB: `path` is the tree (hex segments), `keys` the entries asked for. */
   'system.pathElements': {
     args: { path: string[]; keys: string[] }
@@ -57,5 +66,6 @@ export const TOOLS_CLASSES = {
   'documents.count': 'live',
   'documents.sum': 'live',
   'documents.average': 'live',
+  'contracts.serialized': 'structural',
   'system.pathElements': 'live',
 } as const satisfies Record<keyof ToolsMethods, DataClass>

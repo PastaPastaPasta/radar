@@ -570,3 +570,27 @@ describe('documentPageCursor', () => {
     expect(documentPageCursor(undefined)).toEqual({ count: 0 })
   })
 })
+
+describe('toSdkParams', () => {
+  it('spells our query arguments the way the SDK does and drops what is absent', () => {
+    expect(
+      toSdkParams({
+        contractId: 'c',
+        type: 'domain',
+        where: [['a', '==', 1]],
+        limit: 5,
+        groupBy: ['a'],
+      }),
+    ).toEqual({
+      dataContractId: 'c',
+      documentTypeName: 'domain',
+      where: [['a', '==', 1]],
+      limit: 5,
+      groupBy: ['a'],
+    })
+    expect(toSdkParams({ contractId: 'c', type: 'domain' })).toEqual({
+      dataContractId: 'c',
+      documentTypeName: 'domain',
+    })
+  })
+})

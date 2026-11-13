@@ -72,6 +72,40 @@ describe('aggregates', () => {
   })
 })
 
+describe('contracts.serialized', () => {
+  it('serializes at the protocol version of the proof and lists the document types', async () => {
+    const toBytes = vi.fn(() => new Uint8Array([9, 8, 7]))
+    const free = vi.fn()
+    const contract = {
+      toBytes,
+      toJSON: () => ({ documentSchemas: { domain: {}, preorder: {} } }),
+      free,
+    }
+    const fetchWithProof = vi.fn(() => Promise.resolve(proved(contract, { protocolVersion: 14 })))
+    const out = await toolsImpl['contracts.serialized'](reads({ contracts: { fetchWithProof } }), {
+      id: CONTRACT,
+    })
+    expect(toBytes).toHaveBeenCalledWith(14)
+    expect(out.data).toEqual({
+      id: CONTRACT,
+      bytes: new Uint8Array([9, 8, 7]),
+      documentTypes: ['domain', 'preorder'],
+    })
+    expect(free).toHaveBeenCalled()
+  })
+
+  it('answers null for a contract that is not there, unproved', async () => {
+    const fetchWithProof = vi.fn(() =>
+      Promise.reject(Object.assign(new Error('x'), { name: 'NotFound' })),
+    )
+    const out = await toolsImpl['contracts.serialized'](reads({ contracts: { fetchWithProof } }), {
+      id: CONTRACT,
+    })
+    expect(out.data).toBeNull()
+    expect(out.response).toBeUndefined()
+  })
+})
+
 describe('system.pathElements', () => {
   it('sends hex segments as bytes and answers every byte string in hex', async () => {
     const free = vi.fn()

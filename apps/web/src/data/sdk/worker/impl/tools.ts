@@ -1,6 +1,7 @@
 import { bytesToHex, hexToBytes, isHex } from '@/lib/hex'
 import type { DocumentsAggregateArgs, PathElementDto, ToolsMethods } from '../../methods/tools'
-import type { ImplOf, ProvedResponse } from './types'
+import { isNotFound, messageOf } from '../errors'
+import type { Freeable, ImplOf, ProvedResponse } from './types'
 
 interface AggregateQuery {
   dataContractId: string
@@ -22,8 +23,17 @@ export interface PathElementLike {
   free?: () => void
 }
 
+/** A contract the SDK handed back, with the two reads the decoder needs. */
+export interface SerializableContract extends Freeable {
+  toBytes(platformVersion: number): Uint8Array
+  toJSON(): { documentSchemas?: Record<string, unknown> }
+}
+
 /** The part of `EvoSDK` this package's methods read. */
 export interface ToolsReads {
+  contracts: {
+    fetchWithProof(id: string): Promise<ProvedResponse<SerializableContract | null | undefined>>
+  }
   documents: {
     countWithProof(query: AggregateQuery): Promise<ProvedResponse<Map<string, bigint>>>
     sumWithProof(
@@ -96,6 +106,25 @@ export const toolsImpl: { [M in keyof ToolsMethods]: Impl<M> } = {
     return {
       data: [...response.data].map(([key, v]) => ({ key, count: v.count, sum: v.sum })),
       response,
+    }
+  },
+
+  async 'contracts.serialized'(sdk, { id }) {
+    let response: ProvedResponse<SerializableContract | null | undefined>
+    try {
+      response = await sdk.contracts.fetchWithProof(id)
+    } catch (e) {
+      if (isNotFound(e) || /contract not found/i.test(messageOf(e))) return { data: null }
+      throw e
+    }
+    const contract = response.data
+    if (!contract) return { data: null, response }
+    try {
+      const bytes = contract.toBytes(Number(response.metadata.protocolVersion))
+      const documentTypes = Object.keys(contract.toJSON().documentSchemas ?? {})
+      return { data: { id, bytes, documentTypes }, response }
+    } finally {
+      contract.free?.()
     }
   },
 
