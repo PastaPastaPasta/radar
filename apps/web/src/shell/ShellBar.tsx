@@ -19,6 +19,7 @@ import { networkName } from '@/ui/base'
 import { adoptBarOverlay } from './bar-overlay'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
+import { SourceModeMark } from './SourceModeMark'
 import { routerLocation } from './spa-links'
 import { UnitSwitch } from './UnitSwitch'
 
@@ -103,6 +104,7 @@ export function ShellBar() {
         ))}
       </nav>
       <div slot="actions">
+        <SourceModeMark place="bar" />
         <UnitSwitch className="rx-unit--bar" />
         <HeaderTip />
         <SearchTrigger className="rx-hdr-search" />

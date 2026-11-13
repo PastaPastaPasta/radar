@@ -1,4 +1,5 @@
 import { useState, useSyncExternalStore, type ReactNode } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
 import { denomination, getUnitPrefs, subscribeUnitPrefs } from '@/lib/units'
 import { UnitsProvider } from '@/ui/base'
@@ -16,7 +17,9 @@ export function UnitsMount({ children }: { children: ReactNode }) {
   const prefs = useSyncExternalStore(subscribeUnitPrefs, getUnitPrefs, getUnitPrefs)
   const [rate, setRate] = useState<FiatRateValue>()
   const testnet = net !== 'mainnet'
-  const wantsFiat = (prefs.fiat || prefs.unit === 'USD') && !testnet
+  // The price comes from a hosted feed, so Decentralized only mode shows amounts in DASH alone.
+  const noFeed = useDecentralizedOnly()
+  const wantsFiat = (prefs.fiat || prefs.unit === 'USD') && !testnet && !noFeed
   const live = wantsFiat ? rate : undefined
   return (
     <UnitsProvider

@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSyncExternalStore } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/search'
 import {
   DISPLAY_UNITS,
@@ -15,8 +16,9 @@ export function UnitSwitch({ className }: { className?: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const prefs = useSyncExternalStore(subscribeUnitPrefs, getUnitPrefs, getUnitPrefs)
-  const mainnet = net === 'mainnet'
-  const value = prefs.unit === 'USD' && !mainnet ? 'DASH' : prefs.unit
+  const noFeed = useDecentralizedOnly()
+  const priced = net === 'mainnet' && !noFeed
+  const value = prefs.unit === 'USD' && !priced ? 'DASH' : prefs.unit
   return (
     <label className={`rx-unit ${className ?? ''}`.trim()} data-unit-switch>
       <span className="dh-sr">{t`Unit for amounts`}</span>
@@ -32,7 +34,7 @@ export function UnitSwitch({ className }: { className?: string }) {
             {unitLabel(u)}
           </option>
         ))}
-        <option value="USD" disabled={!mainnet}>
+        <option value="USD" disabled={!priced}>
           USD
         </option>
       </select>

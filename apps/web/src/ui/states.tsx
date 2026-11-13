@@ -8,6 +8,7 @@ import { useNow } from './hooks'
 import { useLiveView } from './live-connection'
 import { openProofInspector } from './proof'
 import { sourceName, sourceView } from './source-labels'
+import { Unavailable } from './source-mode'
 import { distinctSources } from './source-scope'
 
 export interface SourceLineProps {
@@ -320,6 +321,10 @@ export function describeError(error: unknown, source?: SourceId): { title: strin
 }
 
 export function ErrorState({ error, source, onRetry, compact }: ErrorStateProps) {
+  const shape: ErrorShape = typeof error === 'object' && error !== null ? error : {}
+  if (shape.kind === 'disabled-by-mode') {
+    return <Unavailable source={shape.source ?? source} compact={compact} />
+  }
   const { title, body } = describeError(error, source)
   const detail = error instanceof Error ? error.message : undefined
   const retry = onRetry ? (

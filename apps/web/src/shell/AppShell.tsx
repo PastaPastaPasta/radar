@@ -10,6 +10,7 @@ import { CommandPalette, CommandPaletteProvider } from '@/features/search'
 import { I18nProvider, i18n, useLocale } from '@/i18n'
 import { SectionNav } from './SectionNav'
 import { ShellBar } from './ShellBar'
+import { SourceModeMark } from './SourceModeMark'
 import { ShellFooter } from './ShellFooter'
 import { ShortcutsProvider } from './shortcuts'
 import { useSpaLinks } from './spa-links'
@@ -47,6 +48,7 @@ export function AppShell() {
             </a>
             <TestnetKeyline />
             <ShellBar />
+            <SourceModeMark place="strip" />
             <RouteAnnouncer />
             <main key={locale} id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
               <SectionNav />

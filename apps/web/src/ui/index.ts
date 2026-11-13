@@ -16,6 +16,9 @@ export type { HashProps, CopyProps } from './hash'
 export { EntityChip } from './entities'
 export type { EntityChipProps } from './entities'
 export { SourceLine, Empty, ErrorState, Skeleton, LiveDot, LiveControl } from './states'
+export { Unavailable, useSetSourceMode, useSourceMode } from './source-mode'
+export type { UnavailableProps } from './source-mode'
+export { SourceModeSwitch } from './source-mode-switch'
 export type {
   SourceLineProps,
   EmptyProps,

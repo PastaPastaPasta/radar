@@ -212,6 +212,61 @@
 .rx-hdrtip[data-connection='stopped'] .rx-hdrtip__short {
   color: var(--dh-bad);
 }
+/* the mark that Decentralized only mode is on. In the bar it is a glyph alone: the bar has no room for a word beside
+   the section links at any width. Below 412 px the bar has no room for the glyph either (the product name would be
+   cut), so a strip under the bar stands in, and there the word fits. */
+.rx-srcmode {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 6px;
+  padding: 4px;
+  border: 1px solid var(--dh-line-2);
+  border-radius: var(--dh-r2);
+  color: var(--dh-ink-2);
+  text-decoration: none;
+}
+.rx-srcmode:hover {
+  background: var(--dh-hover);
+  color: var(--dh-ink);
+}
+.rx-srcmode:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 1px;
+}
+.rx-srcmode:not(.rx-srcmode--strip) .rx-srcmode__word {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.rx-srcmode--strip {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .rx-srcmode {
+    margin-right: 2px;
+    border-color: transparent;
+  }
+}
+@media (max-width: 411px) {
+  dashhq-bar .rx-srcmode {
+    display: none;
+  }
+  .rx-srcmode--strip {
+    display: flex;
+    gap: 6px;
+    min-height: 28px;
+    margin: 0;
+    padding: 4px var(--dh-gutter, 16px);
+    border: 0;
+    border-bottom: 1px solid var(--dh-line);
+    border-radius: 0;
+    background: var(--dh-sunken);
+    font-size: var(--dh-fs-sm);
+  }
+}
 @media (max-width: 599px) {
   dashhq-bar .rx-hdr-search {
     display: none;
@@ -411,6 +466,33 @@ dashhq-footer .rx-ratenote {
   color: var(--dh-bad);
 }
 .rx-errrow .dh-btn {
+  margin-left: auto;
+}
+.rx-unavail__act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 14px;
+  margin: 8px 0 0;
+  font-size: var(--dh-fs-ui);
+}
+.rx-unavail .dh-btn {
+  margin-top: 0;
+}
+.rx-unavail--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  min-height: 40px;
+  color: var(--dh-ink-2);
+  font-size: var(--dh-fs-ui);
+}
+.rx-unavail--row .rx-ico {
+  flex: none;
+}
+.rx-unavail--row .dh-btn {
   margin-left: auto;
 }
 

@@ -1313,6 +1313,10 @@
     font-size: var(--dh-fs-sm);
     line-height: 1.35;
   }
+  .rx-activity__grid .rx-unavail__act {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
   .rx-activity__grid .rx-card__head {
     padding: 8px 16px 6px;
     gap: 2px 10px;
