@@ -718,6 +718,34 @@
 .rx-life li:last-child::after {
   display: none;
 }
+/* A step shows green only if it happened: a claim, a wait and a step that did not occur each read differently. */
+.rx-life li[data-state='claimed']::before {
+  background: var(--dh-warn-soft);
+  border: 2px solid var(--dh-warn);
+  box-shadow: none;
+}
+.rx-life li[data-state='pending']::before {
+  background: var(--dh-surface);
+  border: 2px solid var(--dh-warn);
+  box-shadow: 0 0 0 4px var(--dh-warn-soft);
+}
+.rx-life li[data-state='future']::before,
+.rx-life li[data-state='skipped']::before {
+  background: var(--dh-surface);
+  border: 2px solid var(--dh-line-2);
+  box-shadow: none;
+}
+.rx-life li::after {
+  background: var(--dh-line-2);
+  opacity: 1;
+}
+.rx-life li[data-state='done']:has(+ li[data-state='done'])::after {
+  background: var(--dh-good);
+  opacity: 0.5;
+}
+.rx-life li[data-state='skipped'] b {
+  color: var(--dh-ink-2);
+}
 .rx-life b {
   color: var(--dh-ink);
   font-weight: var(--dh-w-strong);

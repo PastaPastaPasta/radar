@@ -59,3 +59,39 @@ describe('Settlement received time @HY-07', () => {
     expect(screen.queryByText(/aren’t kept once/)).toBeNull()
   })
 })
+
+describe('Settlement step states @HY-07', () => {
+  const state = (name: string) =>
+    document.querySelector(`[data-step="${name}"]`)?.getAttribute('data-state')
+
+  it('marks an InstantSend step that never happened as skipped, not done', async () => {
+    await renderSettlement(tx())
+    expect(state('instantsend')).toBe('skipped')
+    expect(state('mined')).toBe('done')
+    expect(state('chainlocked')).toBe('pending')
+    expect(screen.getByText('No InstantSend lock was seen')).toBeVisible()
+  })
+
+  it('marks a lock one node reports as a claim and a confirmed one as done', async () => {
+    await renderSettlement(tx({ isInstantLocked: true, instantLockClaim: 'one-node' }))
+    expect(state('instantsend')).toBe('claimed')
+  })
+
+  it('marks every confirmed step done', async () => {
+    await renderSettlement(tx({ isInstantLocked: true, isChainLocked: true }))
+    expect(state('instantsend')).toBe('done')
+    expect(state('chainlocked')).toBe('done')
+  })
+
+  it('marks a ChainLock one node reports as a claim', async () => {
+    await renderSettlement(tx({ chainLockClaim: 'one-node' }))
+    expect(state('chainlocked')).toBe('claimed')
+  })
+
+  it('leaves the steps after an unmined transaction as pending or future', async () => {
+    await renderSettlement(tx({ height: undefined, time: undefined }))
+    expect(state('instantsend')).toBe('pending')
+    expect(state('mined')).toBe('future')
+    expect(state('chainlocked')).toBe('future')
+  })
+})

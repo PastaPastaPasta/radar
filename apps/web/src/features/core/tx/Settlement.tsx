@@ -5,7 +5,7 @@ import { formatInt } from '@/lib/format'
 import { Icon, Time } from '@/ui'
 import type { FirstSeen } from './useFirstSeen'
 
-type State = 'done' | 'pending' | 'future'
+type State = 'done' | 'claimed' | 'pending' | 'skipped' | 'future'
 
 function Step({
   state,
@@ -71,7 +71,9 @@ export function Settlement({
         {coinbase ? null : (
           <Step
             name="instantsend"
-            state={instant ? 'done' : mined ? 'future' : 'pending'}
+            state={
+              instant ? (tx.instantLockClaim ? 'claimed' : 'done') : mined ? 'skipped' : 'pending'
+            }
             title={
               <>
                 <Icon name="is" size="sm" />
@@ -117,7 +119,7 @@ export function Settlement({
         />
         <Step
           name="chainlocked"
-          state={locked ? 'done' : mined ? 'pending' : 'future'}
+          state={locked ? 'done' : tx.chainLockClaim ? 'claimed' : mined ? 'pending' : 'future'}
           title={
             <>
               <Icon name="cl" size="sm" />
