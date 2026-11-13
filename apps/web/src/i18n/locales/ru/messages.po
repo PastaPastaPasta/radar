@@ -13,19 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "· change"
-msgstr "· изменить"
-
-msgid "“{query}” · Search"
-msgstr "«{query}» · Поиск"
-
-msgid "“{query}” isn’t something Radar can look up."
-msgstr "Radar не может найти «{query}»."
-
-#. placeholder {0}: description.join(' · ')
-msgid "“{query}” looks like {0}."
-msgstr "«{query}» похоже на {0}."
-
 msgid "(opens in a new tab)"
 msgstr "(откроется в новой вкладке)"
 
@@ -41,14 +28,6 @@ msgstr "(этот сайт передаёт запрос в {0})"
 
 msgid "[circular]"
 msgstr "[циклическая ссылка]"
-
-#. placeholder {0}: tx.inputs.length
-msgid "{0, plural, one {# input} other {# inputs}}"
-msgstr "{0, plural, one {# вход} few {# входа} many {# входов} other {# входа}}"
-
-#. placeholder {0}: tx.outputs.length
-msgid "{0, plural, one {# output} other {# outputs}}"
-msgstr "{0, plural, one {# выход} few {# выхода} many {# выходов} other {# выхода}}"
 
 #. placeholder {0}: block.txs.length
 msgid "{0, plural, one {# transaction} other {# transactions}}"
@@ -80,31 +59,9 @@ msgstr "Соединений: {0} · {1} · протокол {2}"
 msgid "{0} credits"
 msgstr "{0} кредитов"
 
-#. placeholder {0}: daily.length
-msgid "{0} days checked"
-msgstr "Проверено дней: {0}"
-
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} не охватывает devnet."
-
-#. placeholder {0}: formatInt(n.value)
-msgid "{0} duffs"
-msgstr "{0} даффов"
-
 #. placeholder {0}: formatInt(total)
 msgid "{0} in the mempool"
 msgstr "{0} в мемпуле"
-
-#. placeholder {0}: formatInt(inCount)
-#. placeholder {0}: formatInt(inputs.length)
-#. placeholder {0}: formatInt(tx.inputs.length)
-msgid "{0} inputs"
-msgstr "Входов: {0}"
-
-#. placeholder {0}: formatInt(unloaded)
-msgid "{0} inputs not loaded"
-msgstr "Входов не загружено: {0}"
 
 #. placeholder {0}: sourceName(stamp.source)
 msgid "{0} isn't answering"
@@ -120,24 +77,6 @@ msgstr "{0} не отвечает · показаны данные от {1}"
 msgid "{0} loaded"
 msgstr "загружено: {0}"
 
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {0}: formatInt(p.masternodes)
-msgid "{0} masternodes"
-msgstr "Мастернод: {0}"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
-msgid "{0} masternodes in {1} places"
-msgstr "Мастернод: {0}, мест: {1}"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "Мастернод: {0}, больше, чем в любом другом месте"
-
-#. placeholder {0}: formatInt(d.latency_ms)
-msgid "{0} ms from Radar’s crawler"
-msgstr "{0} мс от краулера Radar"
-
 #. placeholder {0}: formatInt(p.fundingThreshold)
 #. placeholder {1}: formatInt(totalVotes(p))
 msgid "{0} needed · {1} cast"
@@ -151,12 +90,12 @@ msgstr "Чистых голосов: {0}"
 msgid "{0} new {noun} · show"
 msgstr "новых {noun}: {0} · показать"
 
-#. placeholder {0}: formatInt(budget.usedLastMinute)
-#. placeholder {0}: formatInt(crawl.mn_reachable)
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatNumber(meter.value)
+#. placeholder {0}: formatPercent(usage, 2)
 #. placeholder {1}: formatBytes(m.maxBytes)
-#. placeholder {1}: formatInt(budget.capacity)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {1}: formatInt(total)
+#. placeholder {1}: formatNumber(meter.max)
 msgid "{0} of {1}"
 msgstr "{0} из {1}"
 
@@ -169,18 +108,6 @@ msgstr "{0} из {1} пиров"
 #. placeholder {1}: formatInt(all.length)
 msgid "{0} of {1} proposals match"
 msgstr "Подходит предложений: {0} из {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "Выходов: {0}"
-
-#. placeholder {0}: sectionLabel(section)
-msgid "{0} pages"
-msgstr "Страницы раздела «{0}»"
-
-#. placeholder {0}: formatInt(d.payments_summary.count)
-msgid "{0} payments indexed in total"
-msgstr "Всего проиндексировано выплат: {0}"
 
 #. placeholder {0}: values.length
 #. placeholder {1}: formatNumber(values[0] ?? 0)
@@ -196,17 +123,6 @@ msgstr "точек: {0}, от {1} до {2}, минимум {3}, максимум
 msgid "{0} proposals"
 msgstr "Предложений: {0}"
 
-#. placeholder {0}: formatInt(list(shared.shares).length)
-#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
-msgid "{0} shares, {1} blocks of early-leave penalty"
-msgstr "Долей: {0}, штрафных блоков за ранний выход: {1}"
-
-#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
-msgid "{0} to other addresses"
-msgstr "{0} на другие адреса"
-
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
 #. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} тх"
@@ -224,36 +140,17 @@ msgstr "{0} за · {1} против · {2} воздержались · итог
 msgid "{0}–{1} of {2}"
 msgstr "{0}–{1} из {2}"
 
-#. placeholder {0}: d.day
-#. placeholder {1}: d.ok
-#. placeholder {2}: d.attempts
-msgid "{0}: answered {1} of {2} checks"
-msgstr "{0}: ответил на {1} из {2} проверок"
-
-#. placeholder {0}: secretNotice(secret).title
-msgid "{0}. Radar never sends it anywhere."
-msgstr "{0}. Radar никуда его не отправляет."
-
 msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
 msgstr "{arrived, plural, one {С момента открытия страницы замечена # транзакция} few {С момента открытия страницы замечены # транзакции} many {С момента открытия страницы замечено # транзакций} other {С момента открытия страницы замечено # транзакции}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
 
-msgid "{behind} blocks behind the tip"
-msgstr "Отставание от вершины: {behind} блоков"
-
 msgid "{blockCount} blocks so far"
 msgstr "Пока блоков: {blockCount}"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
-
-msgid "{count, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{count, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
-
-msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
-msgstr "{count, plural, one {# адрес DAPI} few {# адреса DAPI} many {# адресов DAPI} other {# адреса DAPI}}"
 
 msgid "{d} d"
 msgstr "{d} д"
@@ -264,12 +161,6 @@ msgstr "{d} д {h} ч"
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, one {# день} few {# дня} many {# дней} other {# дня}}"
 
-msgid "{feeRate} duffs a byte"
-msgstr "{feeRate} дафф за байт"
-
-msgid "{feeRate} duffs a byte: it spends no coins"
-msgstr "{feeRate} дафф за байт: она не тратит монеты"
-
 msgid "{h} h"
 msgstr "{h} ч"
 
@@ -278,9 +169,6 @@ msgstr "{h} ч {m} мин"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# час} few {# часа} many {# часов} other {# часа}}"
-
-msgid "{indexName} has not seen this address on this network."
-msgstr "{indexName} не видел этот адрес в этой сети."
 
 msgid "{label} from"
 msgstr "{label}: от"
@@ -315,17 +203,8 @@ msgstr "{n} ч назад"
 msgid "{n} min ago"
 msgstr "{n} мин назад"
 
-msgid "{n} more inputs"
-msgstr "Ещё входов: {n}"
-
-msgid "{n} more outputs"
-msgstr "Ещё выходов: {n}"
-
 msgid "{n} s ago"
 msgstr "{n} с назад"
-
-msgid "{name} (reason {reason})"
-msgstr "{name} (причина {reason})"
 
 msgid "{name} couldn’t be reached"
 msgstr "{name} недоступен"
@@ -400,89 +279,23 @@ msgstr "1 нед"
 msgid "1 y"
 msgstr "1 г"
 
-msgid "a 40-character hash: a public-key hash"
-msgstr "40-символьный хеш: хеш открытого ключа"
-
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "64-символьный хеш: блок, транзакция, ProTx или переход"
-
-msgid "A contract’s groups with position, threshold and members."
-msgstr "Группы контракта: позиция, порог и участники."
-
-msgid "a Core address"
-msgstr "адрес Core"
-
-msgid "A Core address’s balance, history and unspent outputs, with new-activity notices."
-msgstr "Баланс, история и непотраченные выходы адреса Core с уведомлениями о новой активности."
-
 msgid "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
 msgstr "Адрес Dash состоит из 34 символов и в основной сети начинается с X или 7, в тестовой — с y или 8."
-
-msgid "a date: the Core blocks of that UTC day"
-msgstr "дата: блоки Core за этот день по UTC"
-
-msgid "A guess"
-msgstr "Предположение"
-
-msgid "A guess, not a result"
-msgstr "Предположение, а не результат"
-
-msgid "A guess: Radar has not checked that this name exists"
-msgstr "Предположение: Radar не проверял, существует ли это имя"
-
-msgid "a name"
-msgstr "имя"
-
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "число: высота Core, высота Platform или эпоха"
-
-msgid "a Platform address"
-msgstr "адрес Platform"
-
-msgid "A Platform address’s balance and nonce, proof-checked, and its transitions."
-msgstr "Баланс и nonce адреса Platform, проверенные по доказательству, и его переходы."
 
 msgid "A proof didn't verify"
 msgstr "Доказательство не прошло проверку"
 
-msgid "A ProTx hash is 64 hexadecimal characters."
-msgstr "Хеш ProTx состоит из 64 шестнадцатеричных символов."
-
-msgid "A quorum signals that masternodes are ready for a protocol upgrade."
-msgstr "Кворум сообщает, что мастерноды готовы к обновлению протокола."
-
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "Адрес скрипта (начинается с 7 или 8) не может подписывать сообщения."
 
-msgid "A second index for addresses, spent outputs, chainwork and governance"
-msgstr "Второй индекс для адресов, потраченных выходов, chainwork и управления"
-
-msgid "A shareholder of a shared masternode changes where their reward is paid."
-msgstr "Совладелец общей мастерноды меняет адрес, на который выплачивается его награда."
-
 msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
 msgstr "Подпись — это 88 символов base64, заканчивающихся на «=», в том виде, в каком её выводит signmessage в Dash Core."
-
-msgid "About"
-msgstr "О проекте"
 
 msgid "About sources"
 msgstr "Об источниках"
 
 msgid "Abstain"
 msgstr "Воздержаться"
-
-msgid "Active contested names with end time, votes and status."
-msgstr "Активные спорные имена со временем окончания, голосами и статусом."
-
-msgid "Add a devnet"
-msgstr "Добавить devnet"
-
-msgid "Add devnet"
-msgstr "Добавить devnet"
-
-msgid "address"
-msgstr "адрес"
 
 msgid "Address"
 msgstr "Адрес"
@@ -496,9 +309,6 @@ msgstr "Пополнение адреса"
 msgid "Address transfer"
 msgstr "Перевод между адресами"
 
-msgid "Address type"
-msgstr "Тип адреса"
-
 msgid "Address withdrawal"
 msgstr "Вывод с адреса"
 
@@ -511,17 +321,8 @@ msgstr "Адреса по размеру баланса"
 msgid "Addresses with a balance"
 msgstr "Адреса с балансом"
 
-msgid "after it is mined"
-msgstr "после добычи"
-
-msgid "Age"
-msgstr "Возраст"
-
 msgid "All"
 msgstr "Все"
-
-msgid "All blocks"
-msgstr "Все блоки"
 
 msgid "All proposals"
 msgstr "Все предложения"
@@ -538,50 +339,9 @@ msgstr "Сумма"
 msgid "Amount per cycle"
 msgstr "Сумма за цикл"
 
-msgid "Amounts"
-msgstr "Суммы"
-
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "Суммы загружаются для первых {0} входов. Каждая предыдущая транзакция — это отдельный запрос."
-
-msgid "Amounts loaded"
-msgstr "Загружено сумм"
-
-msgid "Amounts show in {unitName}."
-msgstr "Суммы показываются в {unitName}."
-
-msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
-msgstr "Суммы показываются в {unitName}. Выберите USD, чтобы сначала показывать сумму в долларах."
-
-msgid "an ID: an identity, contract, token or document"
-msgstr "идентификатор: идентичность, контракт, токен или документ"
-
-msgid "an IP address: a masternode’s service address"
-msgstr "IP-адрес: служебный адрес мастерноды"
-
-#. placeholder {0}: formatInt(up.ok)
-#. placeholder {1}: formatInt(up.attempts)
-#. placeholder {2}: up.days
-msgid "answered {0} of {1} checks in {2} days"
-msgstr "ответил на {0} из {1} проверок за {2} дн."
-
 #. placeholder {0}: stamp.node
 msgid "Answered by {0}"
 msgstr "Ответил: {0}"
-
-msgid "Answered every check"
-msgstr "Ответил на все проверки"
-
-#. placeholder {0}: daily.length
-msgid "Answered every check on each of the {0} days Radar has checked this node"
-msgstr "Ответил на все проверки в каждый из {0} дн., когда Radar проверял этот узел"
-
-msgid "Answering"
-msgstr "Отвечает"
-
-msgid "Answers on its Core port"
-msgstr "Отвечает на порту Core"
 
 msgid "Any moment now"
 msgstr "С минуты на минуту"
@@ -590,24 +350,11 @@ msgstr "С минуты на минуту"
 msgid "As of {0}"
 msgstr "По состоянию на {0}"
 
-#. placeholder {0}: formatInt(spend.asOf)
-msgid "as of block {0}"
-msgstr "на момент блока {0}"
-
-msgid "Asking Hyphen."
-msgstr "Запрашиваем Hyphen."
-
-msgid "Asking Platform for its latest block…"
-msgstr "Запрашиваем у Platform последний блок…"
-
 msgid "Asset lock"
 msgstr "Блокировка активов"
 
 msgid "Asset unlock"
 msgstr "Разблокировка активов"
-
-msgid "Asset unlocks root"
-msgstr "Корень разблокировок активов"
 
 msgid "Back to Mainnet"
 msgstr "Назад к основной сети"
@@ -624,45 +371,18 @@ msgstr "Бэкенды"
 msgid "Balance"
 msgstr "Баланс"
 
-msgid "Balances for the identities you choose, and the holders Platform Explorer has indexed."
-msgstr "Балансы выбранных вами идентичностей и держателей, которых проиндексировал Platform Explorer."
-
-msgid "Banned"
-msgstr "В бане"
-
-#. placeholder {0}: formatInt(d.pose_ban_height)
-msgid "banned at block {0}"
-msgstr "забанен на блоке {0}"
-
-#. placeholder {0}: formatInt(d.pose_ban_height)
-msgid "Banned at block {0}"
-msgstr "Забанен на блоке {0}"
-
-msgid "Banned on Platform"
-msgstr "Забанен на Platform"
-
 msgid "Behind"
 msgstr "Отстаёт"
-
-msgid "Best ChainLock"
-msgstr "Лучший ChainLock"
 
 msgid "Bits"
 msgstr "Bits"
 
-msgid "block"
-msgstr "блок"
-
 msgid "Block"
 msgstr "Блок"
 
-#. placeholder {0}: formatInt(tx.height)
-msgid "block {0}"
-msgstr "блок {0}"
-
 #. placeholder {0}: formatInt(block.height - 1)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(d.registered_height)
+#. placeholder {0}: formatInt(ref.height)
 msgid "Block {0}"
 msgstr "Блок {0}"
 
@@ -671,15 +391,6 @@ msgstr "Высота блока"
 
 msgid "Block reward"
 msgstr "Награда за блок"
-
-msgid "Block reward, masternode and fee payments"
-msgstr "Награда за блок, выплаты мастернодам и комиссии"
-
-msgid "block updates"
-msgstr "обновления блоков"
-
-msgid "Blockchain size"
-msgstr "Размер блокчейна"
 
 msgid "Blocks"
 msgstr "Блоки"
@@ -705,9 +416,6 @@ msgstr "Блоков на странице"
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Блоки, транзакции и адреса в остальных разделах Radar актуальны."
 
-msgid "Browse a contract’s documents of one type, filtered by its indices."
-msgstr "Просмотр документов одного типа из контракта с фильтрацией по его индексам."
-
 msgid "Browse by date"
 msgstr "Просмотр по дате"
 
@@ -719,9 +427,6 @@ msgstr "Бюджетные предложения"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Бюджетные предложения и ход голосования по ним. Голосуют в Governance."
-
-msgid "Budget proposals with vote counts, status and the next superblock."
-msgstr "Бюджетные предложения с числом голосов, статусом и ближайшим суперблоком."
 
 msgid "bytes"
 msgstr "байт"
@@ -738,70 +443,26 @@ msgstr "Не удаётся проверить"
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid "Catching up"
-msgstr "Догоняет"
-
-#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
-msgid "Catching up, {0}"
-msgstr "Синхронизация, {0}"
-
 msgid "Chain size"
 msgstr "Размер цепочки"
-
-msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
-msgstr "Размер цепи, нагрузка мемпула, скорость транзакций, версии узлов, число мастернод и пиры, у которых читает Hyphen."
 
 msgid "Chain state"
 msgstr "Состояние цепочки"
 
-msgid "ChainLock"
-msgstr "ChainLock"
-
-#. placeholder {0}: formatInt(best.height)
-msgid "ChainLock at {0}, reported by one node"
-msgstr "ChainLock на {0}, сообщён одним узлом"
-
-msgid "ChainLock block hash, reported by one node"
-msgstr "Хеш блока с ChainLock, сообщён одним узлом"
-
 msgid "ChainLock reported by one node"
 msgstr "ChainLock сообщён одним узлом"
-
-msgid "ChainLock signature"
-msgstr "Подпись ChainLock"
 
 msgid "ChainLocked"
 msgstr "ChainLocked"
 
-msgid "ChainLocked block hash"
-msgstr "Хеш блока с ChainLock"
-
 msgid "Chainwork"
 msgstr "Chainwork"
-
-msgid "change"
-msgstr "сдача"
-
-msgid "Change"
-msgstr "Сдача"
-
-msgid "Change of keys"
-msgstr "Смена ключей"
-
-msgid "Change to sender"
-msgstr "Сдача отправителю"
-
-msgid "Changes"
-msgstr "Изменения"
 
 msgid "Charts"
 msgstr "Графики"
 
 msgid "Charts need an indexer"
 msgstr "Графикам нужен индексатор"
-
-msgid "Check a signed message against a Core address, in your browser."
-msgstr "Проверьте подписанное сообщение по адресу Core прямо в браузере."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Проверьте, подписал ли адрес Dash сообщение. Проверка выполняется в этом браузере: ничего из введённого здесь никуда не отправляется, а Radar никогда не запрашивает ключ."
@@ -811,12 +472,6 @@ msgstr "Проверка"
 
 msgid "Checking every 30 s"
 msgstr "Проверка каждые 30 с"
-
-msgid "Checking Hyphen…"
-msgstr "Проверяем Hyphen…"
-
-msgid "Checking the sources…"
-msgstr "Проверяем источники…"
 
 msgid "Choose a picture with a QR code"
 msgstr "Выбрать изображение с QR-кодом"
@@ -836,12 +491,6 @@ msgstr "Очистить: {label}"
 msgid "close"
 msgstr "закрыть"
 
-msgid "Close"
-msgstr "Закрыть"
-
-msgid "Close a dialog or the search"
-msgstr "Закрыть диалог или поиск"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -851,20 +500,11 @@ msgstr "Полезная нагрузка coinbase"
 msgid "Coinbase tag says"
 msgstr "Тег coinbase гласит"
 
-msgid "Coinbase transactions pay none"
-msgstr "Транзакции coinbase их не платят"
-
 msgid "Collapse all"
 msgstr "Свернуть все"
 
 msgid "Collateral"
 msgstr "Залог"
-
-msgid "Commits the block to the masternode list and the latest ChainLock."
-msgstr "Привязывает блок к списку мастернод и последнему ChainLock."
-
-msgid "Compromised keys"
-msgstr "Скомпрометированные ключи"
 
 msgid "Computed in your browser"
 msgstr "Вычислено в вашем браузере"
@@ -875,17 +515,8 @@ msgstr "Подключение к живой ленте…"
 msgid "Connecting…"
 msgstr "Подключение…"
 
-msgid "contest"
-msgstr "спор"
-
 msgid "Contested name"
 msgstr "Спорное имя"
-
-msgid "contract"
-msgstr "контракт"
-
-msgid "Contract"
-msgstr "Контракт"
 
 msgid "Contract create"
 msgstr "Создание контракта"
@@ -898,9 +529,6 @@ msgstr "Модерация контракта"
 
 msgid "Contract update"
 msgstr "Обновление контракта"
-
-msgid "Contracts"
-msgstr "Контракты"
 
 msgid "Copied"
 msgstr "Скопировано"
@@ -921,96 +549,29 @@ msgstr "Копировать ID"
 msgid "Copy JSON"
 msgstr "Копировать JSON"
 
-msgid "Copy link"
-msgstr "Копировать ссылку"
-
 msgid "Copy link to this section"
 msgstr "Копировать ссылку на этот раздел"
 
 msgid "Core"
 msgstr "Core"
 
-msgid "Core 24"
-msgstr "Core 24"
-
-msgid "Core 24 activation"
-msgstr "Активация Core 24"
-
 msgid "Core address"
 msgstr "Адрес Core"
-
-#. placeholder {0}: balance ?? ''
-#. placeholder {1}: a.txCount
-msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
-msgstr "Адрес Core · {0} · {1, plural, one {# транзакция} few {# транзакции} many {# транзакций} other {# транзакции}}"
-
-msgid "Core address · no activity seen"
-msgstr "Адрес Core · активности не обнаружено"
-
-msgid "Core addresses, mempool, governance and block lists"
-msgstr "Адреса Core, мемпул, управление и списки блоков"
 
 msgid "Core block"
 msgstr "Блок Core"
 
-#. placeholder {0}: formatInt(block.height)
-msgid "Core block {0}"
-msgstr "Блок Core {0}"
-
-msgid "Core block {label}"
-msgstr "Блок Core {label}"
-
-msgid "Core block height"
-msgstr "Высота блока Core"
-
-msgid "Core block heights and hashes, transaction IDs and addresses"
-msgstr "Высоты и хеши блоков Core, ID транзакций и адреса"
-
 msgid "Core blocks"
 msgstr "Блоки Core"
 
-msgid "Core blocks on {label}"
-msgstr "Блоки Core за {label}"
-
-msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
-msgstr "Блоки Core, мастерноды и записи Platform в одном месте. Каждая цифра указывает, откуда она взята и насколько свежая."
-
-msgid "Core figures"
-msgstr "Показатели Core"
-
-msgid "Core height"
-msgstr "Высота Core"
-
-msgid "Core network metrics over time: transactions, fees, difficulty, supply and mining."
-msgstr "Показатели сети Core во времени: транзакции, комиссии, сложность, предложение и майнинг."
-
-msgid "Core tip"
-msgstr "Вершина Core"
-
-msgid "Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status."
-msgstr "Вершина Core и ChainLock, высота и эпоха Platform, карта узлов и сводка переписи, свежие блоки и переходы, статус обновлений."
-
-msgid "Core tip, blocks and transactions, straight from evonodes"
-msgstr "Вершина Core, блоки и транзакции — напрямую от evonode"
-
 msgid "Core transaction"
 msgstr "Транзакция Core"
-
-#. placeholder {0}: formatInt(height)
-msgid "Core transaction in block {0}"
-msgstr "Транзакция Core в блоке {0}"
-
-msgid "Core transaction, unconfirmed"
-msgstr "Транзакция Core, не подтверждена"
 
 msgid "Core version"
 msgstr "Версия Core"
 
 msgid "Core versions"
 msgstr "Версии Core"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core, Platform и сеть мастернод"
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Вершина Core, блоки, транзакции, ChainLock и живые потоки. Radar распределяет запросы между многими узлами и сверяет каждый блок с его заголовком."
@@ -1021,23 +582,14 @@ msgstr "Не удалось прочитать"
 msgid "Counted as valid"
 msgstr "Засчитано как действительное"
 
-msgid "crawled"
-msgstr "опрошено"
-
 msgid "Crawled by Radar"
 msgstr "Опрошено Radar"
 
 msgid "Created"
 msgstr "Создано"
 
-msgid "Credit outputs"
-msgstr "Кредитные выходы"
-
 msgid "Credit pool"
 msgstr "Пул кредитов"
-
-msgid "Credit pool balance"
-msgstr "Баланс пула кредитов"
 
 msgid "Credit transfer"
 msgstr "Перевод кредитов"
@@ -1045,53 +597,11 @@ msgstr "Перевод кредитов"
 msgid "Credit withdrawal"
 msgstr "Вывод кредитов"
 
-msgid "Credited on Platform"
-msgstr "Зачислено на Platform"
-
-msgid "Credits"
-msgstr "Кредиты"
-
-msgid "Current Platform quorums with size, members and the last proposer."
-msgstr "Текущие кворумы Platform: размер, участники и последний предлагающий."
-
-msgid "Custom devnets"
-msgstr "Пользовательские devnet"
-
-msgid "Daily health"
-msgstr "Состояние по дням"
-
-msgid "DAPI"
-msgstr "DAPI"
-
 msgid "DAPI addresses"
 msgstr "Адреса DAPI"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI и Platform SDK отвечают. Размещённые источники отключены в режиме «Только децентрализованно»."
-
-msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
-msgstr "DAPI занят, поэтому списки блоков берутся из Hyphen, пока восстанавливается лимит запросов. Подробности по-прежнему идут через DAPI."
-
-msgid "DAPI is busy. Open this page to load them."
-msgstr "DAPI занят. Откройте эту страницу, чтобы загрузить их."
-
-msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
-msgstr "DAPI не отвечает, поэтому сведения о блоках и транзакциях берутся из Hyphen, и это указано."
-
-msgid "DAPI request budget"
-msgstr "Лимит запросов к DAPI"
-
 msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
 msgstr "Dash добавляет в coinbase полезную нагрузку, которая фиксирует список мастернод и последний ChainLock."
-
-msgid "Dash Core"
-msgstr "Dash Core"
-
-msgid "data"
-msgstr "данные"
-
-msgid "Data (OP_RETURN)"
-msgstr "Данные (OP_RETURN)"
 
 msgid "Data contract"
 msgstr "Контракт данных"
@@ -1108,35 +618,14 @@ msgstr "Децентрализованно"
 msgid "Decentralized only"
 msgstr "Только децентрализованно"
 
-msgid "Decentralized only mode doesn’t contact this source."
-msgstr "Режим «Только децентрализованно» не обращается к этому источнику."
-
 msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
 msgstr "Режим «Только децентрализованно» читает только узлы DAPI и Platform SDK."
-
-msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
-msgstr "Только децентрализованно: Radar читает только узлы DAPI и Platform SDK и не обращается к размещённым сервисам. Откройте «Источники», чтобы увидеть, что при этом недоступно, или чтобы отключить режим."
-
-msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
-msgstr "Расшифровка сырых байтов офлайн: транзакция, блок, идентичность, контракт, документ или доказательство."
-
-msgid "decoder"
-msgstr "декодер"
-
-msgid "Decoder"
-msgstr "Декодер"
-
-msgid "Decoders"
-msgstr "Декодеры"
 
 msgid "Destroy frozen funds"
 msgstr "Уничтожение замороженных средств"
 
 msgid "Details"
 msgstr "Подробности"
-
-msgid "Devnet name"
-msgstr "Название devnet"
 
 msgid "Difficulty"
 msgstr "Сложность"
@@ -1147,9 +636,6 @@ msgstr "Сложность за последние {0} блоков"
 
 msgid "Direction"
 msgstr "Направление"
-
-msgid "document"
-msgstr "документ"
 
 msgid "Document"
 msgstr "Документ"
@@ -1178,20 +664,8 @@ msgstr "Замена документа"
 msgid "Document transfer"
 msgstr "Передача документа"
 
-msgid "document type"
-msgstr "тип документа"
-
-msgid "Documents"
-msgstr "Документы"
-
 msgid "Down"
 msgstr "Не работает"
-
-msgid "Drive protocol"
-msgstr "Протокол Drive"
-
-msgid "Each Platform block is locked to a Core block."
-msgstr "Каждый блок Platform привязан к блоку Core."
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "Более ранние предложения ниже взяты из индекса Hyphen на момент этого блока, не в реальном времени."
@@ -1201,28 +675,6 @@ msgstr "Не удалось прочитать более ранние пред�
 
 msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
 msgstr "Более ранние предложения из индекса Hyphen (отстаёт от цепочки)"
-
-msgid "Early-leave penalty"
-msgstr "Штраф за ранний выход"
-
-msgid "Earned on Core, {window} days"
-msgstr "Заработано в Core за {window} дн."
-
-msgid "Edit"
-msgstr "Изменить"
-
-msgid "Edit {editName}"
-msgstr "Изменить {editName}"
-
-msgid "Enabled"
-msgstr "Включена"
-
-msgid "Enabled, no PoSe penalty"
-msgstr "Включена, штрафа PoSe нет"
-
-#. placeholder {0}: d.pose_penalty
-msgid "Enabled, PoSe penalty {0}"
-msgstr "Включена, штраф PoSe {0}"
 
 msgid "End time not known yet"
 msgstr "Время окончания пока неизвестно"
@@ -1257,16 +709,8 @@ msgstr "Введите хотя бы один адрес DAPI в формате 
 msgid "Enter plain numbers, like 100 or 2.5."
 msgstr "Введите обычные числа, например 100 или 2.5."
 
-msgid "epoch"
-msgstr "эпоха"
-
 msgid "Epoch"
 msgstr "Эпоха"
-
-#. placeholder {0}: formatInt(data.epoch.number)
-#. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
-msgid "Epoch {0} · {1} blocks in"
-msgstr "Эпоха {0} · прошло блоков: {1}"
 
 msgid "Epoch {epoch}"
 msgstr "Эпоха {epoch}"
@@ -1277,12 +721,6 @@ msgstr "Прогресс эпохи {epoch}"
 msgid "Epoch {id}"
 msgstr "Эпоха {id}"
 
-msgid "Epoch {label}"
-msgstr "Эпоха {label}"
-
-msgid "Epochs"
-msgstr "Эпохи"
-
 msgid "Esc"
 msgstr "Esc"
 
@@ -1292,44 +730,11 @@ msgstr "Оценка"
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Все бэкенды, к которым может обращаться Radar, кто их обслуживает и используются ли они в сети {network}. Каждая цифра в Radar указывает, откуда она взята."
 
-msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
-msgstr "Все бэкенды, к которым может обращаться Radar, кто их обслуживает, и переключатель режима «Только децентрализованно»."
-
-msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
-msgstr "Все источники данных, которые читает Radar, их состояние и свежесть в этой сети, а также бюджет запросов к DAPI."
-
-msgid "Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link."
-msgstr "Все мастерноды и эвоноды: статус, версия, расположение, аптайм и выплаты. Фильтры, сортировка и страницы хранятся в ссылке."
-
-msgid "Every masternode vote with voter, choice, resource and time."
-msgstr "Каждый голос мастерноды: голосующий, выбор, ресурс и время."
-
-msgid "Every Platform block with epoch, proposer, transactions and time, filterable."
-msgstr "Каждый блок Platform: эпоха, предлагающий, транзакции и время; есть фильтры."
-
-msgid "Every source is answering."
-msgstr "Все источники отвечают."
-
-msgid "Every state transition with type, status, block, gas and owner, filterable."
-msgstr "Каждый переход состояния: тип, статус, блок, газ и владелец; есть фильтры."
-
-msgid "Everything Core shows comes from DAPI."
-msgstr "Всё, что показывает Core, берётся из DAPI."
-
 msgid "Everything the coinbase pays out"
 msgstr "Всё, что выплачивает coinbase"
 
 msgid "Evonode"
 msgstr "Эвонода"
-
-msgid "Evonode (high-performance)"
-msgstr "Evonode (высокопроизводительная)"
-
-msgid "Evonode {where}"
-msgstr "Эвонода {where}"
-
-msgid "Evonode collateral"
-msgstr "Залог эвоноды"
 
 msgid "Evonodes"
 msgstr "Evonode"
@@ -1337,35 +742,14 @@ msgstr "Evonode"
 msgid "Evonodes from the node list, as https://address:port"
 msgstr "Evonode из списка узлов, в виде https://address:port"
 
-msgid "Example"
-msgstr "Пример"
-
 msgid "Expand all"
 msgstr "Развернуть все"
 
 msgid "Expected to end any moment now"
 msgstr "Должно закончиться с минуты на минуту"
 
-msgid "Expires"
-msgstr "Истекает"
-
-msgid "Facts"
-msgstr "Сведения"
-
-msgid "fail"
-msgstr "сбой"
-
-msgid "Featured and indexed data contracts with owner, documents and tokens."
-msgstr "Избранные и проиндексированные контракты данных: владелец, документы и токены."
-
-msgid "Fee"
-msgstr "Комиссия"
-
 msgid "Fetched from Radar"
 msgstr "Получено из Radar"
-
-msgid "Figures computed on your device"
-msgstr "Значения, вычисленные на вашем устройстве"
 
 msgid "Figures on this page are as of that block, not live."
 msgstr "Цифры на этой странице — на момент этого блока, не в реальном времени."
@@ -1382,17 +766,8 @@ msgstr "Фильтр предложений по имени или хешу"
 msgid "Filter proposals by status"
 msgstr "Фильтр предложений по статусу"
 
-msgid "Finality"
-msgstr "Финальность"
-
-msgid "Find the identity that holds a public key, from its 40-character key hash."
-msgstr "Найдите идентичность, которой принадлежит открытый ключ, по его 40-символьному хешу."
-
 msgid "Finding this day's blocks"
 msgstr "Поиск блоков за этот день"
-
-msgid "finding where…"
-msgstr "ищем, где…"
 
 msgid "First"
 msgstr "Первая"
@@ -1411,20 +786,11 @@ msgstr "Впервые и в последний раз замечено"
 msgid "First seen"
 msgstr "Впервые замечено"
 
-msgid "first seen in the mempool"
-msgstr "впервые замечено в мемпуле"
-
 msgid "First: not available"
 msgstr "Первая: недоступно"
 
-msgid "From"
-msgstr "От"
-
 msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
 msgstr "Из живого потока DAPI: транзакции, поступление которых эта страница увидела, за вычетом уже добытых. Это не весь мемпул."
-
-msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
-msgstr "Полные результаты по любой высоте, хешу, адресу, ProTx, IP, идентичности, контракту, токену, имени или эпохе с группировкой по типу."
 
 msgid "function"
 msgstr "функция"
@@ -1435,12 +801,6 @@ msgstr "Профинансировано"
 msgid "Funding threshold"
 msgstr "Порог финансирования"
 
-msgid "Getting tight"
-msgstr "Запас сокращается"
-
-msgid "Go to"
-msgstr "Перейти"
-
 msgid "Governance"
 msgstr "Управление"
 
@@ -1450,20 +810,8 @@ msgstr "Предложение по управлению"
 msgid "Governance proposals need an indexer"
 msgstr "Предложениям по управлению нужен индексатор"
 
-msgid "group"
-msgstr "группа"
-
 msgid "Group"
 msgstr "Группа"
-
-msgid "Groups"
-msgstr "Группы"
-
-msgid "Guess"
-msgstr "Предположение"
-
-msgid "Hard-fork signal"
-msgstr "Сигнал хардфорка"
 
 msgid "Hash"
 msgstr "Хеш"
@@ -1478,23 +826,11 @@ msgstr "Хешрейт за последние {0} блоков"
 msgid "Header"
 msgstr "Заголовок"
 
-msgid "Headers and blocks"
-msgstr "Заголовки и блоки"
-
-msgid "Headroom"
-msgstr "Запас"
-
-msgid "Healthy"
-msgstr "В порядке"
-
 msgid "Height"
 msgstr "Высота"
 
 msgid "Height when connected"
 msgstr "Высота при подключении"
-
-msgid "Height, hash, address, ProTx, IP, ID, name…"
-msgstr "Высота, хеш, адрес, ProTx, IP, ID, имя…"
 
 #. placeholder {0}: formatInt(lowest)
 #. placeholder {1}: formatInt(Math.max(...heights))
@@ -1513,75 +849,20 @@ msgstr "Скрыть QR-код"
 msgid "Hide table"
 msgstr "Скрыть таблицу"
 
-msgid "Hide the table"
-msgstr "Скрыть таблицу"
-
-msgid "Home"
-msgstr "Главная"
-
 msgid "Hosted by one operator"
 msgstr "Размещён у одного оператора"
-
-msgid "Hosting"
-msgstr "Хостинг"
-
-msgid "How each source is answering, and how far behind its data is."
-msgstr "Как отвечает каждый источник и насколько отстают его данные."
-
-msgid "How it settled"
-msgstr "Чем закончилось"
 
 msgid "How the Core chain is doing: mining, transactions, supply and the state it carries."
 msgstr "Как себя чувствует цепочка Core: майнинг, транзакции, предложение и состояние, которое она хранит."
 
-msgid "HTTPS (DAPI)"
-msgstr "HTTPS (DAPI)"
-
-msgid "Hyphen"
-msgstr "Hyphen"
-
-msgid "Hyphen doesn't index devnets"
-msgstr "Hyphen не индексирует devnet"
-
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen не индексирует devnet."
-
-msgid "Hyphen says it is spent but its history does not show which transaction spent it."
-msgstr "Hyphen сообщает, что она потрачена, но в истории не видно, какая транзакция её потратила."
 
 msgid "Hyphen’s {name} index is behind the chain: {lag}."
 msgstr "Индекс {name} у Hyphen отстаёт от цепочки: {lag}."
 
-#. placeholder {0}: formatInt(spend.behind ?? 0)
-msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
-msgstr "Индекс Hyphen отстаёт от цепочки на {0} блоков, поэтому не может сказать, потрачен ли этот выход с тех пор."
-
-msgid "Hyphen's index is still being checked."
-msgstr "Индекс Hyphen ещё проверяется."
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Identities"
-msgstr "Идентичности"
-
-msgid "Identities with balance, transactions and creation time; sort by balance or activity."
-msgstr "Идентичности с балансом, транзакциями и временем создания; сортировка по балансу или активности."
-
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "Идентичности, контракты, токены и документы по ID, а также идентичность по хешу её открытого ключа"
-
-msgid "Identities, contracts, tokens and masternodes you saved. They stay in this browser."
-msgstr "Сохранённые вами идентичности, контракты, токены и мастерноды. Они остаются в этом браузере."
-
-msgid "identity"
-msgstr "идентичность"
-
 msgid "Identity"
 msgstr "Идентичность"
-
-msgid "Identity by key hash"
-msgstr "Идентичность по хешу ключа"
 
 msgid "Identity create"
 msgstr "Создание идентичности"
@@ -1604,13 +885,6 @@ msgstr "Пополнение идентичности из пула"
 msgid "Identity update"
 msgstr "Обновление идентичности"
 
-msgid "Identity with this public-key hash"
-msgstr "Идентичность с этим хешем открытого ключа"
-
-#. placeholder {0}: short(spend.by.txid)
-msgid "in {0}"
-msgstr "в {0}"
-
 msgid "in {n} h"
 msgstr "через {n} ч"
 
@@ -1619,16 +893,6 @@ msgstr "через {n} мин"
 
 msgid "in {n} s"
 msgstr "через {n} с"
-
-#. placeholder {0}: formatInt(tx.height)
-msgid "In block {0}"
-msgstr "В блоке {0}"
-
-msgid "in the mempool"
-msgstr "в мемпуле"
-
-msgid "In the mempool"
-msgstr "В мемпуле"
 
 msgid "In use"
 msgstr "Используется"
@@ -1672,29 +936,8 @@ msgstr "проиндексировано до блока {block} (отстава
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "проиндексировано до блока {block} (отставание: {0} блоков)"
 
-msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
-msgstr "Проиндексировано до блока Core {indexed} из {chain}. Hyphen называет свою синхронизацию «{sync}», но её индекс отстаёт от цепочки."
-
-msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
-msgstr "Проиндексировано до блока Core {indexed} из {chain}. Синхронизация: {sync}."
-
-msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
-msgstr "Проиндексировано до блока Platform {indexed} из {chain}. Индексатор: {state}."
-
-msgid "Inputs"
-msgstr "Входы"
-
 msgid "Inputs → outputs"
 msgstr "Входы → выходы"
-
-msgid "Inputs and outputs"
-msgstr "Входы и выходы"
-
-msgid "Inputs hash"
-msgstr "Хеш входов"
-
-msgid "Insight"
-msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight не смог вернуть самые старые транзакции этого адреса."
@@ -1714,12 +957,6 @@ msgstr "Insight не сообщает о финансировании. «Про�
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Индекс {name} у Insight тоже отстаёт: {lag}."
 
-msgid "InstantSend"
-msgstr "InstantSend"
-
-msgid "InstantSend lock"
-msgstr "Блокировка InstantSend"
-
 msgid "InstantSend lock recorded by Hyphen"
 msgstr "Блокировка InstantSend записана Hyphen"
 
@@ -1735,33 +972,6 @@ msgstr "Недействительно"
 msgid "invalid date"
 msgstr "недействительная дата"
 
-msgid "It answered with an error."
-msgstr "Он ответил ошибкой."
-
-msgid "It hasn’t answered yet."
-msgstr "Он пока не ответил."
-
-msgid "It is rate limiting this browser."
-msgstr "Он ограничивает запросы из этого браузера."
-
-msgid "It sent an answer Radar can’t read."
-msgstr "Он прислал ответ, который Radar не может прочитать."
-
-msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
-msgstr "Она не тратит монеты и не создаёт выходов, поэтому рисовать нечего. То, что она записывает, находится в её полезной нагрузке."
-
-msgid "It took too long to answer."
-msgstr "Он слишком долго не отвечал."
-
-msgid "Its data is behind."
-msgstr "Его данные отстают."
-
-msgid "Its tip is Core block {tip}, behind the chain."
-msgstr "Его вершина — блок Core {tip}, он отстаёт от цепочки."
-
-msgid "Its tip is Core block {tip}."
-msgstr "Его вершина — блок Core {tip}."
-
 msgid "JSON"
 msgstr "JSON"
 
@@ -1770,15 +980,6 @@ msgstr "Перейти к дате"
 
 msgid "Key limits update"
 msgstr "Обновление лимитов ключей"
-
-msgid "Keyboard shortcuts"
-msgstr "Горячие клавиши"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid "Language, units, time zone, connection options and custom devnets."
-msgstr "Язык, единицы, часовой пояс, параметры подключения и собственные devnet."
 
 msgid "Largest balances"
 msgstr "Крупнейшие балансы"
@@ -1790,64 +991,19 @@ msgstr "Последняя"
 msgid "Last {0} blocks"
 msgstr "Последние {0} блоков"
 
-msgid "Last block"
-msgstr "Последний блок"
-
 #. placeholder {0}: humanizeSpan(ms)
 msgid "last crawl finished {0} ago"
 msgstr "последний обход завершён {0} назад"
-
-#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
-#. placeholder {1}: formatInt(status.chain.blocks)
-msgid "Last crawl finished {0}. Its Core node is at block {1}."
-msgstr "Последний обход завершён {0}. Его узел Core находится на блоке {1}."
-
-msgid "Last error"
-msgstr "Последняя ошибка"
 
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "последний успех {0}"
 
-#. placeholder {0}: ago(health.lastOkAt)
-msgid "Last good {0}."
-msgstr "Последний успех: {0}."
-
-msgid "Last paid"
-msgstr "Последняя выплата"
-
-msgid "Last reached"
-msgstr "Последний ответ"
-
-msgid "Last seen"
-msgstr "Последний раз замечено"
-
-msgid "Latency"
-msgstr "Задержка"
-
-msgid "Latest activity"
-msgstr "Последняя активность"
-
 msgid "Latest blocks"
 msgstr "Последние блоки"
 
-msgid "Latest Core blocks"
-msgstr "Последние блоки Core"
-
-msgid "Latest Core blocks, oldest first"
-msgstr "Последние блоки Core, сначала старые"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "Последние блоки Platform, сначала старые"
-
-msgid "Latest Platform transitions"
-msgstr "Последние переходы Platform"
-
 msgid "Link copied"
 msgstr "Ссылка скопирована"
-
-msgid "Link to one with"
-msgstr "Ссылка на один из них:"
 
 msgid "List view"
 msgstr "Вид списком"
@@ -1864,118 +1020,26 @@ msgstr "Обновления в реальном времени приостан
 msgid "Live updates have stopped."
 msgstr "Обновления в реальном времени остановлены."
 
-msgid "Live updates have stopped. The chain shown is as of {since}."
-msgstr "Обновления в реальном времени остановлены. Показана цепочка по состоянию на {since}."
-
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Обновления в реальном времени остановлены. Последнее обновление пришло в {since}."
-
-#. placeholder {0}: formatInt(inCount - partial.loaded)
-msgid "Load the other {0} amounts"
-msgstr "Загрузить остальные суммы: {0}"
-
-#. placeholder {0}: formatInt(partial.loaded)
-#. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
-msgstr "Загрузка сумм: {0} из {1} входов. Каждая предыдущая транзакция — это отдельный запрос."
-
-msgid "Loading inputs…"
-msgstr "Загрузка входов…"
-
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Привязан к блоку Core {0}"
-
-msgid "Locks Dash on Core to create credits on Platform."
-msgstr "Блокирует Dash в Core, чтобы создать кредиты на Platform."
-
-#. placeholder {0}: description.join(' · ')
-msgid "Looks like {0}"
-msgstr "Похоже на {0}"
-
-msgid "Lookups in an index were skipped, so some matches may be missing"
-msgstr "Поиск по индексу был пропущен, поэтому некоторые совпадения могут отсутствовать"
 
 msgid "mainnet"
 msgstr "основная сеть"
 
-msgid "Map"
-msgstr "Карта"
-
-msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
-msgstr "Карта мира с кружком в каждом месте, где Radar нашёл мастерноды. {summary}."
-
-msgid "masternode"
-msgstr "мастернода"
-
 msgid "Masternode"
 msgstr "Мастернода"
-
-#. placeholder {0}: d.protx.slice(0, 8)
-#. placeholder {0}: id.slice(0, 8)
-#. placeholder {0}: short(hash)
-msgid "Masternode {0}"
-msgstr "Мастернода {0}"
-
-msgid "Masternode {where}"
-msgstr "Мастернода {where}"
-
-msgid "Masternode collateral"
-msgstr "Залог мастерноды"
-
-msgid "Masternode list root"
-msgstr "Корень списка мастернод"
-
-msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
-msgstr "Данные о мастернодах получены из обхода mainnet и testnet краулером Radar."
-
-msgid "Masternode records need Radar's crawler"
-msgstr "Записям о мастернодах нужен краулер Radar"
-
-msgid "Masternode registrar update"
-msgstr "Обновление регистратора мастерноды"
-
-msgid "Masternode registration"
-msgstr "Регистрация мастерноды"
-
-msgid "Masternode revocation"
-msgstr "Отзыв мастерноды"
-
-msgid "Masternode service update"
-msgstr "Обновление службы мастерноды"
 
 msgid "Masternode vote"
 msgstr "Голос мастерноды"
 
-msgid "Masternode votes"
-msgstr "Голоса мастернод"
-
 msgid "Masternode votes on this proposal, newest first"
 msgstr "Голоса мастернод по этому предложению, сначала новые"
-
-msgid "Masternodes"
-msgstr "Мастерноды"
-
-msgid "Masternodes and other nodes on a world map, coloured by reachability, version or type."
-msgstr "Мастерноды и другие узлы на карте мира, окрашенные по доступности, версии или типу."
-
-msgid "Masternodes answering"
-msgstr "Отвечающие мастерноды"
-
-msgid "Masternodes by ProTx hash or IP address"
-msgstr "Мастерноды по хешу ProTx или IP-адресу"
 
 msgid "Masternodes by status"
 msgstr "Мастерноды по статусу"
 
-msgid "masternodes locked its inputs; final from here"
-msgstr "Мастерноды заблокировали его входы; с этого момента окончательно"
-
 msgid "Max"
 msgstr "Макс."
-
-msgid "Median answer {rounded} ms"
-msgstr "Медианное время ответа {rounded} мс"
 
 msgid "Memory in use"
 msgstr "Используемая память"
@@ -1984,14 +1048,8 @@ msgstr "Используемая память"
 msgid "Memory in use of {0}"
 msgstr "Используется памяти из {0}"
 
-msgid "mempool"
-msgstr "мемпул"
-
 msgid "Mempool"
 msgstr "Мемпул"
-
-msgid "Mempool arrival times aren’t kept once a transaction is mined."
-msgstr "Время поступления в мемпул не сохраняется после майнинга транзакции."
 
 msgid "Mempool pressure"
 msgstr "Нагрузка мемпула"
@@ -2008,70 +1066,14 @@ msgstr "История метрик"
 msgid "Min"
 msgstr "Мин."
 
-msgid "Mined"
-msgstr "Добыт"
-
-msgid "Mined by"
-msgstr "Добыл"
-
-msgid "Mined for height"
-msgstr "Добыт для высоты"
-
-msgid "Missed most"
-msgstr "Пропущено большинство"
-
-msgid "Missed some"
-msgstr "Пропущены некоторые"
-
-#. placeholder {0}: missed.length
-#. placeholder {1}: daily.length
-msgid "Missed some checks on {0} of {1} days"
-msgstr "Пропущены некоторые проверки в {0} из {1} дн."
-
 msgid "MnHF signal"
 msgstr "Сигнал MnHF"
 
 msgid "move"
 msgstr "перемещение"
 
-msgid "Move through search results"
-msgstr "Перемещаться по результатам поиска"
-
-msgid "Move through table rows"
-msgstr "Перемещаться по строкам таблицы"
-
-msgid "Moved"
-msgstr "Перемещено"
-
-msgid "name"
-msgstr "имя"
-
-msgid "Name"
-msgstr "Имя"
-
-msgid "Name contest"
-msgstr "Спор за имя"
-
-msgid "Name contests"
-msgstr "Споры за имена"
-
 msgid "Name or hash"
 msgstr "Имя или хеш"
-
-msgid "Names"
-msgstr "Имена"
-
-msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
-msgstr "Имена, оканчивающиеся на .dash, эпохи и даты (блоки Core за сутки)"
-
-msgid "Names follow Dash Core’s definitions of the revocation reason codes."
-msgstr "Названия соответствуют определениям Dash Core для кодов причин отзыва."
-
-msgid "Needs an indexer: off in Decentralized only mode"
-msgstr "Нужен индексатор: отключено в режиме «Только децентрализованно»"
-
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Нужен краулер Radar: отключено в режиме «Только децентрализованно»"
 
 msgid "Net value"
 msgstr "Чистая стоимость"
@@ -2079,41 +1081,14 @@ msgstr "Чистая стоимость"
 msgid "Net votes"
 msgstr "Чистые голоса"
 
-msgid "Network"
-msgstr "Сеть"
-
-msgid "Network census"
-msgstr "Перепись сети"
-
 msgid "Network internals"
 msgstr "Внутреннее устройство сети"
 
 msgid "Network internals need an indexer"
 msgstr "Внутреннему устройству сети нужен индексатор"
 
-msgid "Network internals: peers, mempool pressure, versions and history"
-msgstr "Внутреннее устройство сети: пиры, нагрузка мемпула, версии и история"
-
-msgid "Network pulse"
-msgstr "Пульс сети"
-
-msgid "never banned"
-msgstr "ни разу не банился"
-
 msgid "New blocks reach this page as they happen."
 msgstr "Новые блоки появляются на этой странице сразу, как только возникают."
-
-msgid "New operator key"
-msgstr "Новый ключ оператора"
-
-msgid "New reward payout"
-msgstr "Новая выплата награды"
-
-msgid "New rows appear at the top."
-msgstr "Новые строки появляются сверху."
-
-msgid "New service address"
-msgstr "Новый служебный адрес"
 
 msgid "new tab"
 msgstr "новая вкладка"
@@ -2121,14 +1096,8 @@ msgstr "новая вкладка"
 msgid "New transaction"
 msgstr "Новая транзакция"
 
-msgid "New voting key"
-msgstr "Новый ключ голосования"
-
 msgid "Newer"
 msgstr "Новее"
-
-msgid "Newly generated coins"
-msgstr "Вновь созданные монеты"
 
 msgid "Next"
 msgstr "Далее"
@@ -2145,21 +1114,11 @@ msgstr "Следующий день"
 msgid "Next day →"
 msgstr "Следующий день →"
 
-#. placeholder {0}: formatInt(protocol.next_epoch)
-msgid "Next epoch {0}"
-msgstr "Следующая эпоха {0}"
-
 msgid "No"
 msgstr "Нет"
 
-msgid "No address"
-msgstr "Нет адреса"
-
 msgid "No balances indexed yet."
 msgstr "Балансы пока не проиндексированы."
-
-msgid "No block with this ID on this network."
-msgstr "В этой сети нет блока с таким ID."
 
 msgid "No blocks came back for this page"
 msgstr "Для этой страницы не пришло ни одного блока"
@@ -2170,32 +1129,8 @@ msgstr "В эту дату блоков нет"
 msgid "No camera could be opened here. Choose a picture instead."
 msgstr "Здесь не удалось открыть камеру. Выберите изображение."
 
-msgid "No crawl has finished yet."
-msgstr "Ни один обход ещё не завершён."
-
-msgid "No DAPI requests have been made on this network yet."
-msgstr "В этой сети ещё не было запросов к DAPI."
-
-msgid "No devnets saved."
-msgstr "Сохранённых devnet нет."
-
-msgid "No InstantSend lock was seen"
-msgstr "Блокировка InstantSend не обнаружена"
-
 msgid "No known pool"
 msgstr "Известный пул не найден"
-
-msgid "No masternode with this ProTx on {here}."
-msgstr "В сети {here} нет мастерноды с таким ProTx."
-
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "Нет совпадений для «{query}» среди записей Core в сети {network}"
-
-msgid "No payments indexed for this masternode yet."
-msgstr "Для этой мастерноды выплаты пока не проиндексированы."
-
-msgid "No penalty"
-msgstr "Штрафа нет"
 
 msgid "No proposal with this hash on this network."
 msgstr "В этой сети нет предложения с таким хешем."
@@ -2209,17 +1144,8 @@ msgstr "В этой сети нет предложений."
 msgid "No QR code found in that picture."
 msgstr "На этом изображении QR-код не найден."
 
-msgid "No source can say whether this output is spent."
-msgstr "Ни один источник не может сказать, потрачен ли этот выход."
-
 msgid "No tag in the coinbase"
 msgstr "В coinbase нет тега"
-
-msgid "No transaction with this ID on this network."
-msgstr "В этой сети нет транзакции с таким ID."
-
-msgid "No transactions in the mempool right now"
-msgstr "Сейчас в мемпуле нет транзакций"
 
 msgid "No transactions in the mempool right now."
 msgstr "Сейчас в мемпуле нет транзакций."
@@ -2230,105 +1156,39 @@ msgstr "Для этого адреса в этой сети транзакций
 msgid "No unspent outputs."
 msgstr "Непотраченных выходов нет."
 
-msgid "No value moves in this transaction"
-msgstr "В этой транзакции не перемещаются средства"
-
 msgid "No votes recorded for this proposal."
 msgstr "По этому предложению голосов не зафиксировано."
 
 msgid "Node list and quorum keys"
 msgstr "Список узлов и ключи кворума"
 
-msgid "Node sync"
-msgstr "Синхронизация узла"
-
-msgid "Nodes"
-msgstr "Узлы"
-
-msgid "Nodes resting"
-msgstr "Простаивающие узлы"
-
 msgid "Nonce"
 msgstr "Nonce"
-
-msgid "None"
-msgstr "Нет"
-
-msgid "Not answering"
-msgstr "Не отвечает"
 
 msgid "Not available for this record"
 msgstr "Недоступно для этой записи"
 
-msgid "Not available right now"
-msgstr "Сейчас недоступно"
-
-msgid "Not banned on Platform"
-msgstr "Не забанен на Platform"
-
 msgid "Not ChainLocked yet"
 msgstr "Пока без ChainLock"
-
-msgid "Not checked yet"
-msgstr "Ещё не проверялось"
 
 #. placeholder {0}: networkName(net)
 msgid "Not found on {0}"
 msgstr "Не найдено в сети {0}"
 
-msgid "not in a block yet"
-msgstr "ещё не в блоке"
-
 msgid "Not in DAPI"
 msgstr "Нет в DAPI"
-
-msgid "Not in this version"
-msgstr "Нет в этой версии"
-
-msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
-msgstr "неизвестно по этому источнику: Hyphen сообщает только о блокировках, которые его узел передал, пока Hyphen следил за сетью"
-
-msgid "Not loaded"
-msgstr "Не загружено"
-
-msgid "Not mined yet"
-msgstr "Ещё не добыт"
-
-msgid "Not offered"
-msgstr "Не предлагается"
 
 msgid "Not on {net}"
 msgstr "Нет в сети {net}"
 
-msgid "not paid yet"
-msgstr "выплат ещё не было"
-
 msgid "Not passing"
 msgstr "Не проходит"
-
-msgid "Not ready"
-msgstr "Не готов"
 
 msgid "Not seen yet"
 msgstr "Ещё не замечено"
 
-msgid "Not specified"
-msgstr "Не указана"
-
-msgid "Nothing above confirms this. It is only one way to read what you typed."
-msgstr "Ничто выше этого не подтверждает. Это лишь один из способов прочитать ваш ввод."
-
 msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
 msgstr "С момента открытия страницы ничего не поступило. Новые транзакции появятся здесь по мере их получения от DAPI."
-
-msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
-msgstr "С момента открытия страницы ничего не поступило. Для полного списка мемпула нужен индексатор, который режим «Только децентрализованно» не использует."
-
-msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
-msgstr "С момента открытия страницы ничего не поступило. Для полного списка мемпула нужен индекс Hyphen, который отстаёт от цепочки."
-
-msgid "Nothing has asked it yet on this network."
-msgstr "В этой сети к нему ещё никто не обращался."
 
 msgid "Nothing seen yet"
 msgstr "Пока ничего не замечено"
@@ -2342,9 +1202,6 @@ msgstr "Пока нечего показывать"
 msgid "Now"
 msgstr "Сейчас"
 
-msgid "Number"
-msgstr "Номер"
-
 msgid "Off in this mode"
 msgstr "В этом режиме отключено"
 
@@ -2357,68 +1214,14 @@ msgstr "Более старые блоки до этой даты"
 msgid "On this page"
 msgstr "На этой странице"
 
-msgid "One contest: status, tally, contenders with prefunded balance and who voted."
-msgstr "Один спор: статус, подсчёт, претенденты с предоплаченным балансом и кто голосовал."
-
-msgid "One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions."
-msgstr "Один блок Core по высоте или хешу: заголовок, данные coinbase, распределение награды, ChainLock и его транзакции."
-
-msgid "One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded."
-msgstr "Одна транзакция Core: входы, выходы, специальные данные, состояние InstantSend и ChainLock, а также идентичность Platform, которую она пополнила."
-
-msgid "One data contract: owner, version, document types, schema, tokens and groups."
-msgstr "Один контракт данных: владелец, версия, типы документов, схема, токены и группы."
-
-msgid "One document with its data, metadata, revision history and the transition that wrote it."
-msgstr "Один документ: данные, метаданные, история ревизий и переход, который его записал."
-
-msgid "One DPNS name: whether it is available, registered or contested, and who owns it."
-msgstr "Одно имя DPNS: свободно ли оно, зарегистрировано или оспаривается, и кому принадлежит."
-
-msgid "One finalized Platform epoch: totals, proposers and the neighbouring epochs."
-msgstr "Одна завершённая эпоха Platform: итоги, предлагающие и соседние эпохи."
-
-msgid "One governance proposal: payment, timeline, vote history and a link to vote."
-msgstr "Одно предложение управления: выплата, сроки, история голосов и ссылка для голосования."
-
-msgid "One group: members by power and its active and closed actions with signers."
-msgstr "Одна группа: участники по весу голоса, активные и закрытые действия с подписантами."
-
-msgid "One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked."
-msgstr "Одна идентичность: баланс, ключи, имена, токены, контракты, документы и транзакция пополнения; всё проверено по доказательствам."
-
-msgid "One masternode: overview, network reachability, Platform record, history and payments."
-msgstr "Одна мастернода: обзор, сетевая доступность, запись Platform, история и выплаты."
-
-msgid "One Platform block: digest, the Core block it is locked to, its transitions and quorum."
-msgstr "Один блок Platform: дайджест, привязанный блок Core, его переходы и кворум."
-
-msgid "One state transition: status, fees, signature, raw bytes and a panel for its type."
-msgstr "Один переход состояния: статус, комиссии, подпись, сырые байты и панель для его типа."
-
-msgid "One token: supply, price, pause state, definition, activity and a balance lookup."
-msgstr "Один токен: предложение, цена, состояние паузы, определение, активность и поиск баланса."
-
 msgid "open"
 msgstr "открыть"
-
-msgid "Open"
-msgstr "Открыть"
 
 msgid "Open it on {name}"
 msgstr "Открыть в {name}"
 
-msgid "Open it on {otherName}"
-msgstr "Открыть в сети {otherName}"
-
-msgid "Open on {where}"
-msgstr "Открыть в сети {where}"
-
 msgid "Open proposals by what their payment would be"
 msgstr "Открыть предложения по размеру выплаты"
-
-msgid "Open the map"
-msgstr "Открыть карту"
 
 msgid "Open the proof for this figure"
 msgstr "Открыть доказательство для этой цифры"
@@ -2430,91 +1233,14 @@ msgstr "Открыть доказательство для этой цифры �
 msgid "Open the proposal"
 msgstr "Открыть предложение"
 
-msgid "Open the result, or all results"
-msgstr "Открыть результат или все результаты"
-
-msgid "Open the selected table row"
-msgstr "Открыть выбранную строку таблицы"
-
 msgid "Opening the live connection."
 msgstr "Открываем живое соединение."
-
-msgid "Operator key"
-msgstr "Ключ оператора"
-
-msgid "Operator payout"
-msgstr "Выплата оператору"
-
-msgid "Operator public key"
-msgstr "Открытый ключ оператора"
-
-msgid "Operator reward"
-msgstr "Награда оператора"
-
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "Вознаграждение оператора {0}"
-
-msgid "Operator signature"
-msgstr "Подпись оператора"
-
-msgid "optional"
-msgstr "необязательно"
-
-msgid "or"
-msgstr "или"
-
-msgid "Other nodes"
-msgstr "Другие узлы"
-
-msgid "Other reachable nodes"
-msgstr "Другие доступные узлы"
-
-msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
-msgstr "Иначе время показывается в часовом поясе этого устройства. При наведении на время всегда отображается UTC."
 
 msgid "Outbound"
 msgstr "Исходящие"
 
 msgid "Output"
 msgstr "Выход"
-
-#. placeholder {0}: num(collateral?.vout) ?? 0
-msgid "Output {0} of this transaction"
-msgstr "Выход {0} этой транзакции"
-
-#. placeholder {0}: spend.by.vin
-msgid "Output {index} is spent by input {0} of this transaction"
-msgstr "Выход {index} потрачен входом {0} этой транзакции"
-
-msgid "Output this input spends"
-msgstr "Выход, который тратит этот вход"
-
-msgid "Outputs"
-msgstr "Выходы"
-
-msgid "Overview"
-msgstr "Обзор"
-
-msgid "Owner"
-msgstr "Владелец"
-
-msgid "Owner key"
-msgstr "Ключ владельца"
-
-msgid "Owner signature"
-msgstr "Подпись владельца"
-
-msgid "P2P (Tenderdash)"
-msgstr "P2P (Tenderdash)"
-
-#. placeholder {0}: num(p.platformP2pPort) ?? '—'
-#. placeholder {1}: num(p.platformHttpPort) ?? '—'
-msgid "P2P {0}, HTTPS {1}"
-msgstr "P2P {0}, HTTPS {1}"
-
-msgid "Page not found"
-msgstr "Страница не найдена"
 
 msgid "Pages"
 msgstr "Страницы"
@@ -2530,23 +1256,14 @@ msgstr "Для страниц по {0} нужен индексатор, кото
 msgid "Pagination"
 msgstr "Постраничная навигация"
 
-msgid "Paid"
-msgstr "Выплачено"
-
 msgid "Paid to"
 msgstr "Выплачено"
-
-msgid "pass"
-msgstr "пройдено"
 
 msgid "Passing"
 msgstr "Проходит"
 
 msgid "Passing, not yet funded"
 msgstr "Проходит, ещё не профинансировано"
-
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Вставьте переход состояния в hex или base64, чтобы расшифровать и проверить его. Ничего не подписывается и не отправляется."
 
 msgid "Pause {noun}"
 msgstr "Приостановить: {noun}"
@@ -2560,20 +1277,8 @@ msgstr "Приостановлено"
 msgid "Paused · {newCount} new"
 msgstr "Приостановлено · новых: {newCount}"
 
-msgid "Payload"
-msgstr "Полезная нагрузка"
-
-msgid "Payload version"
-msgstr "Версия полезной нагрузки"
-
 msgid "Payment"
 msgstr "Платёж"
-
-msgid "Payout"
-msgstr "Выплата"
-
-msgid "Pays out a Platform withdrawal from the credit pool."
-msgstr "Выплачивает вывод средств с Platform из пула кредитов."
 
 msgid "Peer"
 msgstr "Пир"
@@ -2584,10 +1289,6 @@ msgstr "Пиры индексирующего узла"
 msgid "Peers of the node Hyphen indexes from"
 msgstr "Пиры узла, с которого индексирует Hyphen"
 
-#. placeholder {0}: formatInt(d.pose_penalty)
-msgid "Penalty {0}"
-msgstr "Штраф {0}"
-
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -2596,12 +1297,6 @@ msgstr "Ожидающие выходы ещё не включены в блок
 
 msgid "Pending transactions"
 msgstr "Ожидающие транзакции"
-
-msgid "Pending transactions are unavailable"
-msgstr "Ожидающие транзакции недоступны"
-
-msgid "Pending transactions seen since you opened this page"
-msgstr "Неподтверждённые транзакции, замеченные с момента открытия страницы"
 
 msgid "Pending transactions seen since you opened this page, newest first"
 msgstr "Ожидающие транзакции, замеченные с момента открытия страницы, сначала новые"
@@ -2612,54 +1307,11 @@ msgstr "Ожидающие транзакции, сначала новые"
 msgid "Picture"
 msgstr "Изображение"
 
-msgid "Place"
-msgstr "Место"
-
-msgid "Places with the most masternodes"
-msgstr "Места с наибольшим числом мастернод"
-
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform address"
 msgstr "Адрес Platform"
 
 msgid "Platform block"
 msgstr "Блок Platform"
-
-msgid "Platform block {label}"
-msgstr "Блок Platform {label}"
-
-msgid "Platform block height"
-msgstr "Высота блока Platform"
-
-msgid "Platform blocks"
-msgstr "Блоки Platform"
-
-msgid "Platform blocks, state transitions and Platform addresses"
-msgstr "Блоки Platform, переходы состояния и адреса Platform"
-
-#. placeholder {0}: daily.length
-msgid "Platform endpoint checks answered, day by day, over {0} days"
-msgstr "Ответы на проверки конечных точек Platform по дням за {0} дн."
-
-msgid "Platform endpoints"
-msgstr "Конечные точки Platform"
-
-msgid "Platform epoch"
-msgstr "Эпоха Platform"
-
-msgid "Platform Explorer"
-msgstr "Platform Explorer"
-
-msgid "Platform Explorer doesn't index devnets"
-msgstr "Platform Explorer не индексирует devnet"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer не индексирует devnet."
-
-msgid "Platform Explorer isn't answering"
-msgstr "Platform Explorer не отвечает"
 
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "Platform Explorer сообщает, что его индексатор работает неисправно (проиндексировано до блока {block})"
@@ -2667,65 +1319,14 @@ msgstr "Platform Explorer сообщает, что его индексатор �
 msgid "Platform Explorer's API documentation"
 msgstr "Документация API Platform Explorer"
 
-msgid "Platform height"
-msgstr "Высота Platform"
-
-msgid "Platform lists and counts"
-msgstr "Списки и счётчики Platform"
-
-msgid "Platform locks to Core"
-msgstr "Platform привязан к Core"
-
-msgid "Platform node"
-msgstr "Узел Platform"
-
-msgid "Platform node ID"
-msgstr "ID узла Platform"
-
-msgid "Platform ports"
-msgstr "Порты Platform"
-
-msgid "Platform protocol version voting: the current and next version and each evonode’s vote."
-msgstr "Голосование за версию протокола Platform: текущая и следующая версии и голос каждой эвоноды."
-
 msgid "Platform SDK"
 msgstr "Platform SDK"
-
-msgid "Platform transitions"
-msgstr "Переходы Platform"
-
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Для последних блоков Platform нужен Platform Explorer, который режим «Только децентрализованно» не использует."
-
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Для последних переходов Platform нужен Platform Explorer"
-
-msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
-msgstr "Пульс Platform: высота, эпоха, графики активности, лидеры, новейшие блоки и переходы состояния."
 
 msgid "Platform's state, each answer with a proof that Radar checks in this browser."
 msgstr "Состояние Platform: каждый ответ сопровождается доказательством, которое Radar проверяет в этом браузере."
 
-msgid "Plenty of room"
-msgstr "Большой запас"
-
 msgid "Point the camera at a QR code."
 msgstr "Наведите камеру на QR-код."
-
-msgid "PoSe"
-msgstr "PoSe"
-
-msgid "PoSe banned"
-msgstr "Забанена по PoSe"
-
-msgid "PoSe penalty"
-msgstr "Штраф PoSe"
-
-msgid "Position"
-msgstr "Позиция"
-
-msgid "Pressure"
-msgstr "Нагрузка"
 
 msgid "Preview"
 msgstr "Предпросмотр"
@@ -2745,45 +1346,17 @@ msgstr "Источник цен"
 msgid "Price via Platform Explorer"
 msgstr "Цена через Platform Explorer"
 
-msgid "Probe failing"
-msgstr "Проверка не проходит"
-
-msgid "Probed"
-msgstr "Проверено"
-
 msgid "Proof-checked"
 msgstr "Подтверждено доказательством"
 
-msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
-msgstr "Подтверждено доказательством на блоке Platform {block}, эпоха {epoch}. Этому блоку {age}."
-
-msgid "Proof-checked Platform state, verified in this browser"
-msgstr "Состояние Platform, подтверждённое доказательством и проверенное в этом браузере"
-
-msgid "proposal"
-msgstr "предложение"
-
 msgid "Proposal"
 msgstr "Предложение"
-
-#. placeholder {0}: short(found.hash)
-msgid "Proposal {0}"
-msgstr "Предложение {0}"
 
 msgid "Proposals"
 msgstr "Предложения"
 
 msgid "ProRegTx"
 msgstr "ProRegTx"
-
-msgid "Protocol"
-msgstr "Протокол"
-
-msgid "ProTx"
-msgstr "ProTx"
-
-msgid "ProTx hash"
-msgstr "Хеш ProTx"
 
 msgid "ProUpRegTx"
 msgstr "ProUpRegTx"
@@ -2803,47 +1376,14 @@ msgstr "QR-код адреса {address}"
 msgid "QR reader"
 msgstr "Считыватель QR"
 
-msgid "Query"
-msgstr "Запрос"
-
 msgid "Quorum"
 msgstr "Кворум"
 
 msgid "Quorum commitment"
 msgstr "Коммитмент кворума"
 
-msgid "Quorum hash"
-msgstr "Хеш кворума"
-
-msgid "Quorum index"
-msgstr "Индекс кворума"
-
-msgid "Quorum list URL"
-msgstr "URL списка кворумов"
-
 msgid "Quorum list URL (optional)"
 msgstr "URL списка кворумов (необязательно)"
-
-msgid "Quorum public key"
-msgstr "Открытый ключ кворума"
-
-msgid "Quorum readiness"
-msgstr "Готовность кворума"
-
-msgid "Quorum signature"
-msgstr "Подпись кворума"
-
-msgid "Quorum type"
-msgstr "Тип кворума"
-
-msgid "Quorums"
-msgstr "Кворумы"
-
-msgid "Quorums root"
-msgstr "Корень кворумов"
-
-msgid "Radar"
-msgstr "Radar"
 
 msgid "Radar API"
 msgstr "API Radar"
@@ -2851,56 +1391,14 @@ msgstr "API Radar"
 msgid "Radar census API"
 msgstr "API переписи Radar"
 
-msgid "Radar checked every source that can answer this kind of input."
-msgstr "Radar проверил все источники, которые могут ответить на такой ввод."
-
-msgid "Radar crawler"
-msgstr "Обходчик Radar"
-
 msgid "Radar didn’t keep it, show it or search for it. Radar never needs a key: if this one is yours, treat it as exposed."
 msgstr "Radar его не сохранил, не показал и не искал. Radar никогда не нуждается в ключе: если этот ключ ваш, считайте его скомпрометированным."
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar не обходит devnet"
-
-msgid "Radar doesn't crawl devnets, so there is nothing to map."
-msgstr "Radar не обходит devnet, поэтому отображать на карте нечего."
-
-msgid "Radar doesn’t crawl devnets."
-msgstr "Radar не обходит devnet."
 
 msgid "Radar doesn’t know this devnet yet. Add the addresses of a few of its DAPI nodes and it will read the network from them. This stays in this browser."
 msgstr "Radar ещё не знает этот devnet. Добавьте адреса нескольких его узлов DAPI, и он прочитает сеть через них. Это хранится только в этом браузере."
 
-msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
-msgstr "Radar не нашёл для этого ни блока, ни транзакции, ни адреса, ни мастерноды, ни другой записи. Попробуйте высоту, хеш, адрес, ID или имя."
-
-msgid "Radar has no checks for this node yet"
-msgstr "У Radar пока нет проверок этого узла"
-
-msgid "Radar has no uptime checks for this node yet."
-msgstr "У Radar пока нет проверок доступности этого узла."
-
-msgid "Radar hasn’t located this node."
-msgstr "Radar не определил местоположение этого узла."
-
-msgid "Radar hasn’t probed this node’s Platform endpoints yet."
-msgstr "Radar пока не проверял конечные точки Platform этого узла."
-
-msgid "Radar isn't answering, so the map shows no nodes."
-msgstr "Radar не отвечает, поэтому на карте нет узлов."
-
-msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
-msgstr "Radar держит нагрузку на каждую evonode заметно ниже её лимита запросов, чтобы один посетитель не вытеснял другого."
-
 msgid "Radar looks up addresses, blocks, transactions, names, masternodes and the like."
 msgstr "Radar ищет адреса, блоки, транзакции, имена, мастерноды и многое другое."
-
-msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
-msgstr "Radar никогда не нуждается в фразе восстановления, поэтому такие слова никуда не отправляются и не попадают в адресную строку и историю. Лучше ищите имя, ID или число."
-
-msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
-msgstr "Radar никогда в нём не нуждается, поэтому он никуда не отправляется и не попадает в адресную строку и историю."
 
 msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
 msgstr "Radar сначала читает DAPI и Platform SDK, а к размещённым сервисам обращается за тем, на что те ответить не могут: история адресов, список богатейших, графики, управление, перепись узлов и цены в USD."
@@ -2908,23 +1406,8 @@ msgstr "Radar сначала читает DAPI и Platform SDK, а к разме
 msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
 msgstr "Radar читает только узлы DAPI и Platform SDK. Страница, которой нужен индексатор, краулер или цена, сообщает об этом, а не обращается к ним."
 
-msgid "Radar shows this payload type as raw data."
-msgstr "Radar показывает этот тип полезной нагрузки как необработанные данные."
-
 msgid "Radar won't show the figure as proof-checked. {rest}"
 msgstr "Radar не будет показывать эту цифру как проверенную по доказательству. {rest}"
-
-msgid "Radar:"
-msgstr "Radar:"
-
-msgid "Radar’s crawl"
-msgstr "Обход Radar"
-
-msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
-msgstr "В обходе Radar его нет. Возможно, он новый, удалён или введён с ошибкой."
-
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "В обходе {here} краулером Radar его нет."
 
 msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload. For a link with ?sources=decentralized, its link previews ask no hosted backend either."
 msgstr "Собственный код Radar, шапка dashhq, шрифты и контуры карты. Он также видит адрес страницы, которую вы открываете напрямую или перезагружаете. Для ссылки с ?sources=decentralized её предпросмотры тоже не обращаются к размещённым бэкендам."
@@ -2938,22 +1421,8 @@ msgstr "Место"
 msgid "Rank band"
 msgstr "Диапазон мест"
 
-#. placeholder {0}: formatFiat(DUFFS_PER_DASH, rate.data.data.usd)
-#. placeholder {1}: rate.data.data.provider
-msgid "Rate: {0} per DASH, from {1}."
-msgstr "Курс: {0} за DASH, источник — {1}."
-
-msgid "Raw data"
-msgstr "Необработанные данные"
-
-msgid "Raw payload"
-msgstr "Необработанная полезная нагрузка"
-
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "Считайте QR-код камерой или с изображения и найдите то, что в нём содержится. Изображение читается в этом браузере и не загружается."
-
-msgid "Read from"
-msgstr "Источники"
 
 msgid "Reading the chain tip…"
 msgstr "Читаем вершину цепочки…"
@@ -2961,97 +1430,31 @@ msgstr "Читаем вершину цепочки…"
 msgid "Reading the picture…"
 msgstr "Чтение изображения…"
 
-msgid "Ready"
-msgstr "Готов"
-
-msgid "Reason"
-msgstr "Причина"
-
 msgid "Received"
 msgstr "Получено"
 
-msgid "Recent Core blocks with height, size, transactions, miner and ChainLock state, and a date picker that lists a day’s blocks."
-msgstr "Свежие блоки Core: высота, размер, транзакции, майнер и состояние ChainLock, а также выбор даты со списком блоков за день."
-
-msgid "Recent payments"
-msgstr "Последние выплаты"
-
-msgid "Recent payments to this masternode"
-msgstr "Последние выплаты этой мастерноде"
-
 msgid "Reconnecting…"
 msgstr "Переподключение…"
-
-msgid "recorded by Hyphen; no second source has confirmed it"
-msgstr "записано Hyphen; второй источник не подтвердил"
-
-msgid "Records that a quorum finished its key generation and who signed."
-msgstr "Фиксирует, что кворум завершил генерацию ключей, и кто подписал."
 
 #. placeholder {0}: POLL_MS.mempool / 1000
 msgid "Refreshes every {0} seconds."
 msgstr "Обновляется каждые {0} с."
 
-msgid "Registered"
-msgstr "Зарегистрирована"
-
-msgid "Registers a masternode or evonode and sets the keys that run it."
-msgstr "Регистрирует мастерноду или evonode и задаёт ключи, которые ею управляют."
-
-msgid "Registration"
-msgstr "Регистрация"
-
-msgid "Registrations, updates, bans and removals across the masternode list, newest first."
-msgstr "Регистрации, обновления, бани й удаления в списке мастернод, сначала новые."
-
-msgid "Regular masternode"
-msgstr "Обычная мастернода"
-
 msgid "Regular masternodes"
 msgstr "Обычные мастерноды"
-
-msgid "Relays transactions"
-msgstr "Ретранслирует транзакции"
-
-msgid "Remove"
-msgstr "Удалить"
-
-msgid "Remove {devnet}"
-msgstr "Удалить {devnet}"
 
 #. placeholder {0}: tok.label
 msgid "Remove filter {0}"
 msgstr "Убрать фильтр {0}"
 
-msgid "Removed from saved"
-msgstr "Убрано из сохранённого"
-
-msgid "reported by one node; no second source has confirmed it"
-msgstr "сообщено одним узлом; второй источник не подтвердил"
-
-msgid "reported by one node; waiting for a second source to agree"
-msgstr "сообщено одним узлом; ждём подтверждения от второго источника"
-
 msgid "Requested"
 msgstr "Запрошено"
-
-msgid "Requested at height"
-msgstr "Запрошено на высоте"
 
 msgid "Requested payments"
 msgstr "Запрошенные выплаты"
 
 msgid "Requested payments of open proposals: funded, passing and not passing"
 msgstr "Запрошенные выплаты по открытым предложениям: профинансированные, проходящие и не проходящие"
-
-msgid "Requests in the last minute"
-msgstr "Запросов за последнюю минуту"
-
-msgid "Result"
-msgstr "Результат"
-
-msgid "Results"
-msgstr "Результаты"
 
 msgid "Resume {noun}"
 msgstr "Возобновить: {noun}"
@@ -3065,13 +1468,6 @@ msgstr "Повторить"
 msgid "Retrying"
 msgstr "Повтор"
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
-msgid "Revived at block {0}"
-msgstr "Восстановлена на блоке {0}"
-
-msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
-msgstr "Ширина ленты — это сумма. Серый — сдача отправителю, оранжевый — комиссия."
-
 msgid "Rich list"
 msgstr "Список богатейших"
 
@@ -3081,61 +1477,15 @@ msgstr "Строк за загрузку"
 msgid "Rows per page"
 msgstr "Строк на странице"
 
-msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
-msgstr "Запросы SQL только для чтения к документам контракта: шаблоны, сохранённые запросы и ссылки, которыми можно поделиться."
-
-msgid "Runs a current protocol version"
-msgstr "Использует актуальную версию протокола"
-
-msgid "Same as the owner address"
-msgstr "Совпадает с адресом владельца"
-
-msgid "Save"
-msgstr "Сохранить"
-
-msgid "Save changes"
-msgstr "Сохранить изменения"
-
-msgid "Saved"
-msgstr "Сохранённое"
-
-msgid "Saved devnets"
-msgstr "Сохранённые devnet"
-
-msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
-msgstr "Сохранено в этом браузере. Для devnet с неизвестным Radar названием потребуются его адреса."
-
-msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
-msgstr "Отсканируйте или загрузите QR-код и откройте то, что в нём: адрес, платёжную ссылку или хеш ключа."
-
 msgid "Scroll"
 msgstr "Прокрутка"
 
-msgid "SDK reference"
-msgstr "Справочник SDK"
-
-msgid "Search"
-msgstr "Поиск"
-
 #. placeholder {0}: networkName(other)
-#. placeholder {0}: networkName(otherNetwork(net))
 msgid "Search {0}"
 msgstr "Искать в сети {0}"
 
-msgid "Search blocks, transactions, masternodes, names…"
-msgstr "Поиск блоков, транзакций, мастернод, имён…"
-
-msgid "Search blocks, txs, masternodes, names"
-msgstr "Поиск блоков, тх, мастернод, имён"
-
-msgid "Search DPNS names by prefix, or browse all of them alphabetically."
-msgstr "Ищите имена DPNS по префиксу или просматривайте все по алфавиту."
-
 msgid "Search Radar"
 msgstr "Поиск по Radar"
-
-msgid "Search Radar (⌘K on a Mac)"
-msgstr "Поиск по Radar (⌘K на Mac)"
 
 #. placeholder {0}: formatInt(range.found)
 msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
@@ -3146,15 +1496,6 @@ msgstr "Поиск…"
 
 msgid "Sections"
 msgstr "Разделы"
-
-msgid "See all results for “{trimmed}”"
-msgstr "Все результаты по запросу «{trimmed}»"
-
-msgid "See all results for “{trimmed}” on {net}"
-msgstr "Все результаты по запросу «{trimmed}» в сети {net}"
-
-msgid "See every source"
-msgstr "Посмотреть все источники"
 
 msgid "See the sources"
 msgstr "Посмотреть источники"
@@ -3180,23 +1521,8 @@ msgstr "Получено от DAPI"
 msgid "Served by DAPI · not proved"
 msgstr "Получено от DAPI · без доказательства"
 
-msgid "Serves compact block filters"
-msgstr "Отдаёт компактные фильтры блоков"
-
-msgid "Service address"
-msgstr "Служебный адрес"
-
 msgid "Set up the {name} devnet"
 msgstr "Настройка devnet {name}"
-
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "Settlement"
-msgstr "Подтверждение"
-
-msgid "Share index"
-msgstr "Индекс доли"
 
 msgid "Share of address balances"
 msgstr "Доля от остатков на адресах"
@@ -3216,18 +1542,6 @@ msgstr "Доля предложения у каждого диапазона м�
 msgid "Share of the supply held by the top addresses, by rank band"
 msgstr "Доля предложения у крупнейших адресов по диапазонам мест"
 
-msgid "Share payout update"
-msgstr "Обновление выплат по долям"
-
-msgid "Shared collateral"
-msgstr "Общий залог"
-
-msgid "Shared masternode dissolved"
-msgstr "Общая мастернода распущена"
-
-msgid "Shared masternode registrar update"
-msgstr "Обновление регистратора общей мастерноды"
-
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "Доли считаются от объёма в обращении, <0/>, — это та же цифра, что показывает страница «Графики»."
 
@@ -3243,9 +1557,6 @@ msgstr "Перевод в защищённый пул из идентичнос�
 msgid "Shielded"
 msgstr "Защищённая"
 
-msgid "Shielded pool"
-msgstr "Защищённый пул"
-
 msgid "Shielded transfer"
 msgstr "Защищённый перевод"
 
@@ -3254,21 +1565,6 @@ msgstr "Защищённый вывод"
 
 msgid "Show {step} more of {hidden}"
 msgstr "Показать ещё {step} из {hidden}"
-
-#. placeholder {0}: formatInt(inCount)
-msgid "Show all {0} inputs"
-msgstr "Показать все входы: {0}"
-
-#. placeholder {0}: formatInt(inCount)
-msgid "Show all {0} inputs with their amounts"
-msgstr "Показать все входы с суммами: {0}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "Show all {0} outputs"
-msgstr "Показать все выходы: {0}"
-
-msgid "Show all inputs to work it out"
-msgstr "Покажите все входы, чтобы рассчитать"
 
 msgid "Show as a table"
 msgstr "Показать таблицей"
@@ -3279,29 +1575,11 @@ msgstr "Показать ещё"
 msgid "Show QR code"
 msgstr "Показать QR-код"
 
-msgid "Show the USD value next to DASH amounts"
-msgstr "Показывать стоимость в USD рядом с суммами в DASH"
-
-msgid "Show these shortcuts"
-msgstr "Показать эти сочетания клавиш"
-
-msgid "Show times in UTC"
-msgstr "Показывать время в UTC"
-
 msgid "Signature"
 msgstr "Подпись"
 
-msgid "Signatures"
-msgstr "Подписи"
-
 msgid "Signed message"
 msgstr "Подписанное сообщение"
-
-msgid "Signers"
-msgstr "Подписанты"
-
-msgid "Signing quorum"
-msgstr "Подписывающий кворум"
 
 msgid "Since you opened this page"
 msgstr "С момента открытия страницы"
@@ -3309,33 +1587,8 @@ msgstr "С момента открытия страницы"
 msgid "Size"
 msgstr "Размер"
 
-msgid "Skip to content"
-msgstr "Перейти к содержимому"
-
 msgid "Slow"
 msgstr "Медленно"
-
-msgid "Small amounts are drawn at a minimum height."
-msgstr "Малые суммы рисуются с минимальной высотой."
-
-msgid "Software"
-msgstr "Программное обеспечение"
-
-msgid "Some amounts could not be loaded."
-msgstr "Некоторые суммы не удалось загрузить."
-
-msgid "Some requests are failing."
-msgstr "Часть запросов завершается ошибкой."
-
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Некоторые источники медленные или отстают. Остальные работают."
-
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Некоторые источники не отвечают. Остальные работают."
-
-#. placeholder {0}: failed.map((f) => f.id).join(', ')
-msgid "Some sources didn’t answer: {0}."
-msgstr "Некоторые источники не ответили: {0}."
 
 msgid "Something in the page broke. The rest of Radar still works."
 msgstr "На странице что-то сломалось. Остальные части Radar работают."
@@ -3359,9 +1612,6 @@ msgstr "Источники"
 msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
 msgstr "Пробелы и переносы строк в сообщении учитываются: оно должно в точности совпадать с подписанным."
 
-msgid "Special transaction payload"
-msgstr "Полезная нагрузка специальной транзакции"
-
 msgid "Spendable outputs"
 msgstr "Доступные для траты выходы"
 
@@ -3369,29 +1619,11 @@ msgstr "Доступные для траты выходы"
 msgid "Spendable outputs over the last {0} blocks"
 msgstr "Доступные для траты выходы за последние {0} блоков"
 
-msgid "spender not found"
-msgstr "потративший не найден"
-
-msgid "Spends"
-msgstr "Траты"
-
-msgid "Spent"
-msgstr "Потрачен"
-
 msgid "Started {startedText}"
 msgstr "Начато {startedText}"
 
-msgid "State"
-msgstr "Состояние"
-
-msgid "state transition"
-msgstr "переход состояния"
-
 msgid "State transition"
 msgstr "Переход состояния"
-
-msgid "State transitions"
-msgstr "Переходы состояния"
 
 msgid "Status"
 msgstr "Статус"
@@ -3411,9 +1643,6 @@ msgstr "Остановлено с {since}"
 msgid "Summary"
 msgstr "Сводка"
 
-msgid "Supply and blockchain size are not shown until it catches up."
-msgstr "Предложение монет и размер блокчейна не показываются, пока индекс не догонит цепочку."
-
 msgid "Supply concentration"
 msgstr "Концентрация предложения"
 
@@ -3423,32 +1652,14 @@ msgstr "Переключиться на основную сеть"
 msgid "Switch to testnet"
 msgstr "Переключиться на тестовую сеть"
 
-msgid "Synced"
-msgstr "Синхронизировано"
-
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "Тег: {tag}. Его пишет майнер, поэтому это не доказательство."
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Нажмите на транзакцию, чтобы увидеть входы, выходы и размер"
 
-msgid "Termination of service"
-msgstr "Прекращение работы сервиса"
-
-msgid "Test coins have no value, so Testnet and devnets never show USD."
-msgstr "У тестовых монет нет стоимости, поэтому в тестовой сети и devnet USD не показывается."
-
 msgid "testnet"
 msgstr "тестовая сеть"
-
-msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
-msgstr "Текст, который ещё не переведён, отображается на английском. Хеши, ID и суммы никогда не переводятся."
-
-msgid "text: a contract or token name"
-msgstr "текст: название контракта или токена"
-
-msgid "That could be part of a recovery phrase"
-msgstr "Это может быть частью фразы восстановления"
 
 msgid "That isn’t a Dash address Radar can check."
 msgstr "Это не адрес Dash, который Radar может проверить."
@@ -3458,12 +1669,6 @@ msgstr "Это не адрес Dash."
 
 msgid "That isn’t a Dash signature."
 msgstr "Это не подпись Dash."
-
-msgid "That isn’t a ProTx hash."
-msgstr "Это не хеш ProTx."
-
-msgid "That looks like a private key or recovery phrase"
-msgstr "Похоже на закрытый ключ или фразу восстановления"
 
 msgid "That picture couldn’t be read."
 msgstr "Не удалось прочитать это изображение."
@@ -3477,14 +1682,8 @@ msgstr "Radar не может найти этот QR-код."
 msgid "The <0/> held in positive address balances at block {block}."
 msgstr "<0/> на адресах с положительным остатком на блоке {block}."
 
-msgid "the block can't be reorganised"
-msgstr "блок нельзя реорганизовать"
-
 msgid "The browser didn’t give Radar the camera. Allow it in the site settings, or choose a picture instead."
 msgstr "Браузер не предоставил Radar доступ к камере. Разрешите его в настройках сайта или выберите изображение."
-
-msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
-msgstr "Перепись: сколько узлов ответили при последнем обходе, версии, хостинг, страны и доступность."
 
 msgid "The chain’s size, its node versions and the peers Hyphen reads from."
 msgstr "Размер цепи, версии узлов и пиры, у которых читает Hyphen."
@@ -3501,15 +1700,6 @@ msgstr "Объём в обращении недоступен, поэтому д
 msgid "The circulating supply isn’t current, so shares are of address balances."
 msgstr "Объём в обращении не актуален, поэтому доли считаются от остатков на адресах."
 
-msgid "The connection failed."
-msgstr "Не удалось подключиться."
-
-msgid "The current Platform epoch, who proposes next and what evonodes earned in past epochs."
-msgstr "Текущая эпоха Platform, кто предлагает следующим и сколько эвоноды заработали в прошлых эпохах."
-
-msgid "The Dash network, now"
-msgstr "Сеть Dash сейчас"
-
 msgid "The end time is an estimate."
 msgstr "Время окончания — оценка."
 
@@ -3521,17 +1711,6 @@ msgstr "Для полного списка мемпула и его итогов
 
 msgid "The largest Core balances, ranked."
 msgstr "Крупнейшие балансы Core по местам."
-
-msgid "The largest Core balances, with share of supply and the labels Radar knows."
-msgstr "Крупнейшие балансы Core с долей от предложения и известными Radar метками."
-
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Последние {0} из {1} выплат, проиндексированных Radar"
-
-msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
-msgstr "Ссылка может быть устаревшей или набрана с ошибкой. Найдите то, что вам нужно, или начните с одного из разделов."
 
 msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
 msgstr "Эта ссылка включила «Только децентрализованно» на этот визит. Если выбрать его здесь, режим останется включённым в этом браузере."
@@ -3545,12 +1724,6 @@ msgstr "Живое соединение постоянно обрывается,
 msgid "The masternode and node census, the map and client versions, from Radar's crawler."
 msgstr "Перепись мастернод и узлов, карта и версии клиентов — от краулера Radar."
 
-msgid "The masternode census and network history"
-msgstr "Перепись мастернод и история сети"
-
-msgid "The median answer takes {seconds} s."
-msgstr "Медианное время ответа — {seconds} с."
-
 msgid "The minimum is above the maximum."
 msgstr "Минимум больше максимума."
 
@@ -3560,50 +1733,17 @@ msgstr "Новейшие {shown} из {total}, замеченных с моме�
 msgid "The next transactions could not be loaded."
 msgstr "Не удалось загрузить следующие транзакции."
 
-msgid "The node map"
-msgstr "Карта узлов"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "Для карты узлов нужен краулер Radar, который режим «Только децентрализованно» не использует."
-
-msgid "The operator announces a new network address for a masternode."
-msgstr "Оператор объявляет новый сетевой адрес мастерноды."
-
-msgid "The operator ends a masternode's service; it must be registered again to return."
-msgstr "Оператор прекращает работу мастерноды; чтобы вернуться, её нужно зарегистрировать заново."
-
-msgid "The owner changes a masternode's operator key, voting key or payout."
-msgstr "Владелец меняет ключ оператора, ключ голосования или выплату мастерноды."
-
-msgid "the Platform Explorer price feed"
-msgstr "ценовой фид Platform Explorer"
-
 msgid "The Platform SDK"
 msgstr "Platform SDK"
 
-msgid "The Platform SDK isn't answering"
-msgstr "Platform SDK не отвечает"
-
-msgid "the Platform SDK, proof-checked"
-msgstr "SDK Platform, проверка по доказательствам"
-
-msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
-msgstr "Набор валидаторов Platform: эвоноды с их записью Platform, показываются в списке мастернод."
-
 msgid "The price feed"
 msgstr "Источник цен"
-
-msgid "The public API behind the node census and masternode pages, with examples."
-msgstr "Публичный API, на котором работают перепись узлов и страницы мастернод, с примерами."
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "Не удалось нарисовать QR-код. Адрес выше — тот же."
 
 msgid "The quorum list URL must start with https://."
 msgstr "URL списка кворумов должен начинаться с https://."
-
-msgid "The request budget is nearly used."
-msgstr "Лимит запросов почти исчерпан."
 
 msgid "The request was cancelled"
 msgstr "Запрос отменён"
@@ -3613,15 +1753,6 @@ msgstr "Остальная часть этой страницы работает
 
 msgid "The rich list needs an indexer"
 msgstr "Для списка богатейших нужен индексатор"
-
-msgid "The shareholders change a shared masternode's operator key or voting key."
-msgstr "Совладельцы меняют ключ оператора или ключ голосования общей мастерноды."
-
-msgid "The shareholders end a shared masternode and take their collateral back."
-msgstr "Совладельцы распускают общую мастерноду и забирают свой залог."
-
-msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
-msgstr "Состояние защищённого пула, якоря, зашифрованные заметки и поиск нуллификаторов."
 
 msgid "The signature is well formed, but it was made by a different key. It matches this address:"
 msgstr "Подпись составлена верно, но создана другим ключом. Она соответствует этому адресу:"
@@ -3648,35 +1779,14 @@ msgstr "Дата начала позже даты окончания."
 msgid "The supply is as of block {0}, the list as of block {1}."
 msgstr "Объём в обращении указан на блоке {0}, список — на блоке {1}."
 
-msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
-msgstr "Транзакция в том виде, в каком Radar декодировал её из байтов DAPI. Суммы указаны в даффах."
-
-msgid "The transaction is not in a block yet."
-msgstr "Транзакция ещё не в блоке."
-
 msgid "The USD rate shown next to DASH amounts. Mainnet only."
 msgstr "Курс USD рядом с суммами в DASH. Только mainnet."
-
-msgid "The USD rate, through Platform Explorer"
-msgstr "Курс USD через Platform Explorer"
 
 msgid "Their size"
 msgstr "Их размер"
 
 msgid "There is no block with this height or hash on this network."
 msgstr "В этой сети нет блока с такой высотой или хешем."
-
-msgid "There is no page at {pathname}"
-msgstr "По адресу {pathname} нет страницы"
-
-msgid "There is no transaction with this ID on this network. It may be too new, or on another network."
-msgstr "В этой сети нет транзакции с таким ID. Возможно, она слишком новая или находится в другой сети."
-
-msgid "These choices stay in this browser. Radar never sends them anywhere."
-msgstr "Эти настройки хранятся в этом браузере. Radar никогда никуда их не отправляет."
-
-msgid "This {record} is on {network}."
-msgstr "Этот {record} находится в сети {network}."
 
 msgid "This address did not sign this message."
 msgstr "Этот адрес не подписывал это сообщение."
@@ -3693,32 +1803,17 @@ msgstr "Этот браузер"
 msgid "This is a {name} address."
 msgstr "Это адрес {name}."
 
-msgid "This is a mainnet address"
-msgstr "Это адрес основной сети"
-
 msgid "This is a mainnet address."
 msgstr "Это адрес основной сети."
-
-msgid "This is a mainnet Platform address"
-msgstr "Это адрес Platform основной сети"
 
 msgid "This is a Radar bug, not your connection. {rest}"
 msgstr "Это ошибка Radar, а не проблема с вашим подключением. {rest}"
 
-msgid "This is a testnet address"
-msgstr "Это адрес тестовой сети"
-
 msgid "This is a testnet address."
 msgstr "Это адрес тестовой сети."
 
-msgid "This is a testnet Platform address"
-msgstr "Это адрес Platform тестовой сети"
-
 msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
 msgstr "Это похоже на закрытый ключ или фразу восстановления. Radar они никогда не нужны, поэтому проверять это он не будет. Очистите поле и вставьте вместо этого подписанное сообщение."
-
-msgid "This masternode is on {otherName}."
-msgstr "Эта мастернода находится в сети {otherName}."
 
 msgid "This needs an indexer"
 msgstr "Для этого нужен индексатор"
@@ -3729,24 +1824,14 @@ msgstr "Для этого нужен Platform Explorer"
 msgid "This needs Radar's crawler"
 msgstr "Для этого нужен краулер Radar"
 
-msgid "This network doesn’t have this source."
-msgstr "В этой сети нет такого источника."
-
 msgid "This network has no blocks in this day, or the day has not happened yet."
 msgstr "В этой сети в этот день нет блоков, либо этот день ещё не наступил."
 
 msgid "This page couldn’t be shown"
 msgstr "Не удалось показать эту страницу"
 
-msgid "This page is on its way"
-msgstr "Эта страница скоро появится"
-
 msgid "This page needs an indexer"
 msgstr "Для этой страницы нужен индексатор"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Эта страница читает данные из: {0}. Переключитесь на Mainnet или Testnet, чтобы увидеть её."
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "Эта страница читает данные из Hyphen. Переключитесь на основную или тестовую сеть, чтобы её увидеть."
@@ -3763,26 +1848,8 @@ msgstr "Этот источник относится только к этой с
 msgid "This source isn't available here"
 msgstr "Этот источник здесь недоступен"
 
-msgid "Threshold signature"
-msgstr "Пороговая подпись"
-
 msgid "Time"
 msgstr "Время"
-
-msgid "Times"
-msgstr "Время"
-
-msgid "Tip hash"
-msgstr "Хеш вершины"
-
-msgid "TLS certificate"
-msgstr "Сертификат TLS"
-
-msgid "To"
-msgstr "Кому"
-
-msgid "token"
-msgstr "токен"
 
 msgid "Token"
 msgstr "Токен"
@@ -3807,9 +1874,6 @@ msgstr "Экстренное действие с токеном"
 
 msgid "Token freeze"
 msgstr "Заморозка токенов"
-
-msgid "Token holders"
-msgstr "Держатели токена"
 
 msgid "Token mint"
 msgstr "Выпуск токенов"
@@ -3844,21 +1908,12 @@ msgstr "Разморозка токенов"
 msgid "Token unshield"
 msgstr "Вывод токенов из защищённого пула"
 
-msgid "Tokens"
-msgstr "Токены"
-
-msgid "Tokens with supply, price and contract, and the trending ones."
-msgstr "Токены с предложением, ценой и контрактом, а также популярные."
-
 msgid "Tools"
 msgstr "Инструменты"
 
 #. placeholder {0}: b.id
 msgid "Top {0}"
 msgstr "Топ-{0}"
-
-msgid "Total credits in Platform, with a fiat estimate, and prefunded specialised balances."
-msgstr "Все кредиты в Platform с оценкой в фиатных деньгах и предоплаченные специализированные балансы."
 
 msgid "Total out"
 msgstr "Всего выведено"
@@ -3869,27 +1924,8 @@ msgstr "Всего получено"
 msgid "Total sent"
 msgstr "Всего отправлено"
 
-msgid "transaction"
-msgstr "транзакция"
-
 msgid "Transaction"
 msgstr "Транзакция"
-
-#. placeholder {0}: short(hash)
-msgid "Transaction {0}"
-msgstr "Транзакция {0}"
-
-#. placeholder {0}: txid.slice(0, 8)
-msgid "Transaction {0}…"
-msgstr "Транзакция {0}…"
-
-#. placeholder {0}: tx.txid.slice(0, 10)
-#. placeholder {1}: tx.txid.slice(-6)
-msgid "Transaction {0}…{1}"
-msgstr "Транзакция {0}…{1}"
-
-msgid "Transaction ID"
-msgstr "ID транзакции"
 
 msgid "Transaction velocity"
 msgstr "Скорость транзакций"
@@ -3926,20 +1962,8 @@ msgstr "Транзакции за всё время"
 msgid "Transfer to address"
 msgstr "Перевод на адрес"
 
-msgid "Transition"
-msgstr "Переход"
-
-msgid "Transition decoder"
-msgstr "Декодер переходов"
-
-msgid "Transitions"
-msgstr "Переходы"
-
 msgid "Trend"
 msgstr "Динамика"
-
-msgid "Try"
-msgstr "Попробуйте"
 
 msgid "Try a sharper picture, with the whole code in view."
 msgstr "Попробуйте более чёткое изображение, на котором виден весь код."
@@ -3956,9 +1980,6 @@ msgstr "Попробуйте другое имя или хеш или выбер
 msgid "tx"
 msgstr "тх"
 
-msgid "Txid"
-msgstr "Txid"
-
 msgid "Txs"
 msgstr "Тх"
 
@@ -3974,32 +1995,11 @@ msgstr "Неподтверждённая активность"
 msgid "Unconfirmed transaction"
 msgstr "Неподтверждённая транзакция"
 
-msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
-msgstr "Неподтверждённые транзакции по мере поступления: размер, ставка комиссии и блокировки InstantSend."
-
-msgid "Unit for amounts"
-msgstr "Единица для сумм"
-
-msgid "Unknown"
-msgstr "Неизвестно"
-
-msgid "Unknown reason {reason}"
-msgstr "Неизвестная причина {reason}"
-
-msgid "Unknown: index behind"
-msgstr "Неизвестно: индекс отстаёт"
-
 msgid "Unshield"
 msgstr "Вывод из защищённого пула"
 
-msgid "Unspendable"
-msgstr "Не может быть потрачен"
-
 msgid "Unspendable outputs"
 msgstr "Выходы, которые нельзя потратить"
-
-msgid "Unspent"
-msgstr "Не потрачен"
 
 msgid "Unspent outputs"
 msgstr "Непотраченные выходы"
@@ -4007,43 +2007,14 @@ msgstr "Непотраченные выходы"
 msgid "Unspent outputs of this address"
 msgstr "Непотраченные выходы этого адреса"
 
-msgid "Upcoming vote polls by end date."
-msgstr "Предстоящие голосования по дате окончания."
-
 msgid "Updated"
 msgstr "Обновлено"
-
-msgid "Uptime"
-msgstr "Доступность"
-
-msgid "Uptime, 30 days"
-msgstr "Доступность за 30 дней"
-
-#. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
-#. placeholder {1}: rate.provider
-msgid "USD at {0} per DASH, from {1}."
-msgstr "USD по курсу {0} за DASH, источник — {1}."
-
-msgid "USD comes first, with the DASH figure after it once the rate is in."
-msgstr "Сначала показывается USD, затем сумма в DASH, когда курс получен."
-
-msgid "USD is for mainnet only: test coins have no value."
-msgstr "USD доступен только в mainnet: тестовые монеты ничего не стоят."
-
-msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
-msgstr "USD округляется до трёх значащих цифр и следует за суммой в {unitName}."
-
-msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
-msgstr "USD округляется до трёх значащих цифр. Этот выбор не действует, пока USD показывается первым."
 
 msgid "USD prices need a price feed"
 msgstr "Ценам в USD нужен источник цен"
 
 msgid "Use all sources"
 msgstr "Использовать все источники"
-
-msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
-msgstr "Используйте строчные буквы, цифры и дефисы, например «ruby»."
 
 msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
 msgstr "Используйте адрес, который подписал сообщение; в основной сети он начинается с X, в тестовой — с y."
@@ -4054,31 +2025,14 @@ msgstr "Использовать камеру"
 msgid "Use this devnet"
 msgstr "Использовать этот devnet"
 
-msgid "Used up for now"
-msgstr "Пока исчерпан"
-
 msgid "Username"
 msgstr "Имя пользователя"
-
-msgid "UTC day"
-msgstr "День по UTC"
 
 msgid "Valid"
 msgstr "Действительно"
 
-msgid "Valid members"
-msgstr "Действительные участники"
-
-msgid "Validators"
-msgstr "Валидаторы"
-
 msgid "Value"
 msgstr "Значение"
-
-#. placeholder {0}: formatInt(tx.inputs.length)
-#. placeholder {1}: formatInt(tx.outputs.length)
-msgid "Value flow: {0} inputs into {1} outputs"
-msgstr "Поток стоимости: входов {0} → выходов {1}"
 
 msgid "Verify"
 msgstr "Проверить"
@@ -4090,18 +2044,8 @@ msgid "Version"
 msgstr "Версия"
 
 #. placeholder {0}: block.version.toString(16)
-#. placeholder {0}: tx.version
 msgid "Version {0}"
 msgstr "Версия {0}"
-
-msgid "Version bit"
-msgstr "Бит версии"
-
-msgid "View all"
-msgstr "Показать все"
-
-msgid "View all transitions"
-msgstr "Показать все переходы"
 
 msgid "Vote"
 msgstr "Голос"
@@ -4112,32 +2056,14 @@ msgstr "История голосов"
 msgid "Vote in Governance"
 msgstr "Голосовать в Governance"
 
-msgid "Vote polls"
-msgstr "Голосования"
-
 msgid "Votes"
 msgstr "Голоса"
-
-msgid "Voting"
-msgstr "Голосование"
-
-msgid "Voting key"
-msgstr "Ключ голосования"
 
 msgid "Voting window"
 msgstr "Окно голосования"
 
 msgid "Waiting for the camera…"
 msgstr "Ожидание камеры…"
-
-msgid "waiting for the masternodes to ChainLock the block"
-msgstr "ожидание, пока мастерноды зафиксируют блок через ChainLock"
-
-msgid "waiting for the masternodes to lock it"
-msgstr "ожидание, пока мастерноды её заблокируют"
-
-msgid "Waiting to be mined."
-msgstr "Ожидает добычи."
 
 msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
 msgstr "Слежение за живым потоком DAPI: платежи на этот адрес. Без индексатора нельзя распознать трату монет, которые на нём уже были."
@@ -4148,65 +2074,26 @@ msgstr "Отслеживаем новые транзакции этого адр
 msgid "Watching since"
 msgstr "Наблюдение с"
 
-msgid "What is waiting to be mined."
-msgstr "Что ожидает добычи."
-
-msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
-msgstr "Что Radar может и не может доказать, где действовать на основе увиденного и что он запоминает."
-
-msgid "What the evonodes report about the chain right now."
-msgstr "Что сейчас сообщают о цепочке evonode."
-
-msgid "What you can search for"
-msgstr "Что можно искать"
-
 msgid "When"
 msgstr "Когда"
-
-msgid "Where it is"
-msgstr "Расположение"
 
 msgid "Where requests go on {network}, and what each one is for."
 msgstr "Куда идут запросы в сети {network} и для чего нужен каждый."
 
-msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
-msgstr "Как продвигается активация Core 24: порог, сигналы майнеров по окнам и готовность мастернод."
-
-msgid "Where the data comes from"
-msgstr "Откуда берутся данные"
-
-msgid "Where the value went"
-msgstr "Куда ушла стоимость"
-
 msgid "Where this is"
 msgstr "Где это находится"
-
-msgid "Whether an output is spent, and by which transaction, needs an indexer"
-msgstr "Чтобы узнать, потрачен ли выход и какой транзакцией, нужен индексатор"
 
 msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
 msgstr "Какие существуют evonode: список читается примерно раз в час (если прочитать его не удалось, используется сохранённый или встроенный), а также публичные ключи кворума, по которым SDK проверяет доказательства. Режим «Только децентрализованно» всё равно его использует: без него Radar не смог бы находить узлы и проверять доказательства."
 
-msgid "Which Platform SDK call backs each Radar page, with its arguments."
-msgstr "Какой вызов SDK Platform обслуживает каждую страницу Radar, с аргументами."
-
 msgid "Which sources Radar may use"
 msgstr "Какие источники может использовать Radar"
-
-msgid "Withdrawal index"
-msgstr "Индекс вывода"
 
 msgid "Yes"
 msgstr "Да"
 
 msgid "yesterday"
 msgstr "вчера"
-
-msgid "You"
-msgstr "Вы"
-
-msgid "your browser"
-msgstr "ваш браузер"
 
 msgid "Your browser"
 msgstr "Ваш браузер"

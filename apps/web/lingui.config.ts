@@ -71,7 +71,9 @@ const BELONGS_ELSEWHERE: Partial<Record<keyof typeof PACKAGES, readonly string[]
 
 const NOT_SOURCE = ['**/*.test.*', '**/test/**', '**/node_modules/**', '**/routeTree.gen.ts']
 const at = (path: string) => `<rootDir>/src/${path}`
-const claimed = Object.values(PACKAGES).flatMap((paths) => paths.map(at))
+const claimed = Object.values(PACKAGES).flatMap((paths) =>
+  paths.flatMap((p) => [at(p), `${at(p)}/**`]),
+)
 
 export default defineConfig({
   sourceLocale: SOURCE_LOCALE,

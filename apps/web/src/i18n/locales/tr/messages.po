@@ -13,19 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid "· change"
-msgstr "· değiştir"
-
-msgid "“{query}” · Search"
-msgstr "“{query}” · Arama"
-
-msgid "“{query}” isn’t something Radar can look up."
-msgstr "Radar “{query}” için arama yapamıyor."
-
-#. placeholder {0}: description.join(' · ')
-msgid "“{query}” looks like {0}."
-msgstr "“{query}” şuna benziyor: {0}."
-
 msgid "(opens in a new tab)"
 msgstr "(yeni sekmede açılır)"
 
@@ -41,14 +28,6 @@ msgstr "(bu site isteği şuraya iletir: {0})"
 
 msgid "[circular]"
 msgstr "[döngüsel]"
-
-#. placeholder {0}: tx.inputs.length
-msgid "{0, plural, one {# input} other {# inputs}}"
-msgstr "{0, plural, one {# girdi} other {# girdi}}"
-
-#. placeholder {0}: tx.outputs.length
-msgid "{0, plural, one {# output} other {# outputs}}"
-msgstr "{0, plural, one {# çıktı} other {# çıktı}}"
 
 #. placeholder {0}: block.txs.length
 msgid "{0, plural, one {# transaction} other {# transactions}}"
@@ -80,31 +59,9 @@ msgstr "{0} bağlantı · {1} · protokol {2}"
 msgid "{0} credits"
 msgstr "{0} kredi"
 
-#. placeholder {0}: daily.length
-msgid "{0} days checked"
-msgstr "{0} gün kontrol edildi"
-
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} devnet’leri kapsamaz."
-
-#. placeholder {0}: formatInt(n.value)
-msgid "{0} duffs"
-msgstr "{0} duff"
-
 #. placeholder {0}: formatInt(total)
 msgid "{0} in the mempool"
 msgstr "Mempool’da {0}"
-
-#. placeholder {0}: formatInt(inCount)
-#. placeholder {0}: formatInt(inputs.length)
-#. placeholder {0}: formatInt(tx.inputs.length)
-msgid "{0} inputs"
-msgstr "{0} girdi"
-
-#. placeholder {0}: formatInt(unloaded)
-msgid "{0} inputs not loaded"
-msgstr "{0} girdi yüklenmedi"
 
 #. placeholder {0}: sourceName(stamp.source)
 msgid "{0} isn't answering"
@@ -120,24 +77,6 @@ msgstr "{0} yanıt vermiyor · {1} tarihli veriler gösteriliyor"
 msgid "{0} loaded"
 msgstr "{0} yüklendi"
 
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {0}: formatInt(p.masternodes)
-msgid "{0} masternodes"
-msgstr "{0} masternode"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
-msgid "{0} masternodes in {1} places"
-msgstr "{1} yerde {0} masternode"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "{0} masternode, tüm yerler arasında en çok"
-
-#. placeholder {0}: formatInt(d.latency_ms)
-msgid "{0} ms from Radar’s crawler"
-msgstr "Radar tarayıcısından {0} ms"
-
 #. placeholder {0}: formatInt(p.fundingThreshold)
 #. placeholder {1}: formatInt(totalVotes(p))
 msgid "{0} needed · {1} cast"
@@ -151,12 +90,12 @@ msgstr "{0} net oy"
 msgid "{0} new {noun} · show"
 msgstr "{0} yeni {noun} · göster"
 
-#. placeholder {0}: formatInt(budget.usedLastMinute)
-#. placeholder {0}: formatInt(crawl.mn_reachable)
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatNumber(meter.value)
+#. placeholder {0}: formatPercent(usage, 2)
 #. placeholder {1}: formatBytes(m.maxBytes)
-#. placeholder {1}: formatInt(budget.capacity)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {1}: formatInt(total)
+#. placeholder {1}: formatNumber(meter.max)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
@@ -169,18 +108,6 @@ msgstr "{1} eşten {0}"
 #. placeholder {1}: formatInt(all.length)
 msgid "{0} of {1} proposals match"
 msgstr "{1} tekliften {0} tanesi eşleşiyor"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "{0} çıktı"
-
-#. placeholder {0}: sectionLabel(section)
-msgid "{0} pages"
-msgstr "{0} sayfaları"
-
-#. placeholder {0}: formatInt(d.payments_summary.count)
-msgid "{0} payments indexed in total"
-msgstr "Toplam {0} ödeme dizinlendi"
 
 #. placeholder {0}: values.length
 #. placeholder {1}: formatNumber(values[0] ?? 0)
@@ -196,17 +123,6 @@ msgstr "{0} nokta, {1} ile {2} arası, en düşük {3}, en yüksek {4}"
 msgid "{0} proposals"
 msgstr "{0} teklif"
 
-#. placeholder {0}: formatInt(list(shared.shares).length)
-#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
-msgid "{0} shares, {1} blocks of early-leave penalty"
-msgstr "{0} pay, erken ayrılma cezası için {1} blok"
-
-#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
-msgid "{0} to other addresses"
-msgstr "Diğer adreslere {0}"
-
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
 #. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} işlem"
@@ -224,36 +140,17 @@ msgstr "{0} evet · {1} hayır · {2} çekimser · net {3}"
 msgid "{0}–{1} of {2}"
 msgstr "{0}–{1} / {2}"
 
-#. placeholder {0}: d.day
-#. placeholder {1}: d.ok
-#. placeholder {2}: d.attempts
-msgid "{0}: answered {1} of {2} checks"
-msgstr "{0}: {2} kontrolün {1} tanesine yanıt verdi"
-
-#. placeholder {0}: secretNotice(secret).title
-msgid "{0}. Radar never sends it anywhere."
-msgstr "{0}. Radar bunu hiçbir yere göndermez."
-
 msgid "{arrived, plural, one {# transaction seen since you opened this page} other {# transactions seen since you opened this page}}"
 msgstr "{arrived, plural, one {Bu sayfayı açtığınızdan beri # işlem görüldü} other {Bu sayfayı açtığınızdan beri # işlem görüldü}}"
 
 msgid "{base} ({detail})"
 msgstr "{base} ({detail})"
 
-msgid "{behind} blocks behind the tip"
-msgstr "Uçtan {behind} blok geride"
-
 msgid "{blockCount} blocks so far"
 msgstr "Şimdiye kadar {blockCount} blok"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# onay} other {# onay}}"
-
-msgid "{count, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{count, plural, one {# onay} other {# onay}}"
-
-msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
-msgstr "{count, plural, one {# DAPI adresi} other {# DAPI adresi}}"
 
 msgid "{d} d"
 msgstr "{d} g"
@@ -264,12 +161,6 @@ msgstr "{d} g {h} sa"
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, one {# gün} other {# gün}}"
 
-msgid "{feeRate} duffs a byte"
-msgstr "Bayt başına {feeRate} duff"
-
-msgid "{feeRate} duffs a byte: it spends no coins"
-msgstr "Bayt başına {feeRate} duff: hiç coin harcamaz"
-
 msgid "{h} h"
 msgstr "{h} sa"
 
@@ -278,9 +169,6 @@ msgstr "{h} sa {m} dk"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# saat} other {# saat}}"
-
-msgid "{indexName} has not seen this address on this network."
-msgstr "{indexName} bu adresi bu ağda henüz görmedi."
 
 msgid "{label} from"
 msgstr "{label} başlangıcı"
@@ -315,17 +203,8 @@ msgstr "{n} sa önce"
 msgid "{n} min ago"
 msgstr "{n} dk önce"
 
-msgid "{n} more inputs"
-msgstr "{n} girdi daha"
-
-msgid "{n} more outputs"
-msgstr "{n} çıktı daha"
-
 msgid "{n} s ago"
 msgstr "{n} sn önce"
-
-msgid "{name} (reason {reason})"
-msgstr "{name} (neden {reason})"
 
 msgid "{name} couldn’t be reached"
 msgstr "{name} erişilemiyor"
@@ -400,89 +279,23 @@ msgstr "1 hf"
 msgid "1 y"
 msgstr "1 yıl"
 
-msgid "a 40-character hash: a public-key hash"
-msgstr "40 karakterlik bir hash: bir açık anahtar hash’i"
-
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "64 karakterlik bir hash: bir blok, işlem, ProTx veya geçiş"
-
-msgid "A contract’s groups with position, threshold and members."
-msgstr "Bir sözleşmenin grupları: konum, eşik ve üyeler."
-
-msgid "a Core address"
-msgstr "bir Core adresi"
-
-msgid "A Core address’s balance, history and unspent outputs, with new-activity notices."
-msgstr "Bir Core adresinin bakiyesi, geçmişi ve harcanmamış çıktıları; yeni hareket bildirimleriyle."
-
 msgid "A Dash address is 34 characters and starts with X or 7 on mainnet, y or 8 on testnet."
 msgstr "Bir Dash adresi 34 karakterdir; mainnet’te X veya 7, testnet’te y veya 8 ile başlar."
-
-msgid "a date: the Core blocks of that UTC day"
-msgstr "bir tarih: o UTC gününün Core blokları"
-
-msgid "A guess"
-msgstr "Bir tahmin"
-
-msgid "A guess, not a result"
-msgstr "Bir tahmin, sonuç değil"
-
-msgid "A guess: Radar has not checked that this name exists"
-msgstr "Bir tahmin: Radar bu adın var olup olmadığını denetlemedi"
-
-msgid "a name"
-msgstr "bir ad"
-
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "bir sayı: bir Core yüksekliği, Platform yüksekliği veya epoch"
-
-msgid "a Platform address"
-msgstr "bir Platform adresi"
-
-msgid "A Platform address’s balance and nonce, proof-checked, and its transitions."
-msgstr "Bir Platform adresinin bakiyesi ve nonce değeri (kanıtla doğrulanır) ile geçişleri."
 
 msgid "A proof didn't verify"
 msgstr "Bir kanıt doğrulanamadı"
 
-msgid "A ProTx hash is 64 hexadecimal characters."
-msgstr "ProTx karması 64 onaltılık karakterden oluşur."
-
-msgid "A quorum signals that masternodes are ready for a protocol upgrade."
-msgstr "Bir quorum, masternode’ların bir protokol yükseltmesine hazır olduğunu bildirir."
-
 msgid "A script address (starting with 7 or 8) can’t sign a message."
 msgstr "Bir betik adresi (7 veya 8 ile başlayan) mesaj imzalayamaz."
 
-msgid "A second index for addresses, spent outputs, chainwork and governance"
-msgstr "Adresler, harcanmış çıktılar, chainwork ve yönetişim için ikinci bir dizin"
-
-msgid "A shareholder of a shared masternode changes where their reward is paid."
-msgstr "Paylaşımlı bir masternode’un pay sahibi, ödülünün ödendiği yeri değiştirir."
-
 msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
 msgstr "Bir imza, 88 base64 karakterinden oluşur ve Dash Core’un signmessage komutunun çıktısı gibi “=” ile biter."
-
-msgid "About"
-msgstr "Hakkında"
 
 msgid "About sources"
 msgstr "Kaynaklar hakkında"
 
 msgid "Abstain"
 msgstr "Çekimser"
-
-msgid "Active contested names with end time, votes and status."
-msgstr "Süren çekişmeli adlar: bitiş zamanı, oylar ve durum."
-
-msgid "Add a devnet"
-msgstr "Devnet ekle"
-
-msgid "Add devnet"
-msgstr "Devnet ekle"
-
-msgid "address"
-msgstr "adres"
 
 msgid "Address"
 msgstr "Adres"
@@ -496,9 +309,6 @@ msgstr "Adres fonlama"
 msgid "Address transfer"
 msgstr "Adres transferi"
 
-msgid "Address type"
-msgstr "Adres türü"
-
 msgid "Address withdrawal"
 msgstr "Adres çekimi"
 
@@ -511,17 +321,8 @@ msgstr "Bakiyeye göre sıralanmış adresler"
 msgid "Addresses with a balance"
 msgstr "Bakiyesi olan adresler"
 
-msgid "after it is mined"
-msgstr "madenciliği yapıldıktan sonra"
-
-msgid "Age"
-msgstr "Yaş"
-
 msgid "All"
 msgstr "Tümü"
-
-msgid "All blocks"
-msgstr "Tüm bloklar"
 
 msgid "All proposals"
 msgstr "Tüm teklifler"
@@ -538,50 +339,9 @@ msgstr "Tutar"
 msgid "Amount per cycle"
 msgstr "Döngü başına tutar"
 
-msgid "Amounts"
-msgstr "Tutarlar"
-
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "Tutarlar ilk {0} girdi için yüklenir. Her önceki işlem ayrı bir istektir."
-
-msgid "Amounts loaded"
-msgstr "Yüklenen tutarlar"
-
-msgid "Amounts show in {unitName}."
-msgstr "Tutarlar {unitName} cinsinden gösterilir."
-
-msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
-msgstr "Tutarlar {unitName} cinsinden gösterilir. Dolar değerinin önce gelmesi için USD’yi seçin."
-
-msgid "an ID: an identity, contract, token or document"
-msgstr "bir kimlik numarası: bir kimlik, sözleşme, token veya belge"
-
-msgid "an IP address: a masternode’s service address"
-msgstr "bir IP adresi: bir masternode’un hizmet adresi"
-
-#. placeholder {0}: formatInt(up.ok)
-#. placeholder {1}: formatInt(up.attempts)
-#. placeholder {2}: up.days
-msgid "answered {0} of {1} checks in {2} days"
-msgstr "{2} günde {1} kontrolün {0} tanesine yanıt verdi"
-
 #. placeholder {0}: stamp.node
 msgid "Answered by {0}"
 msgstr "Yanıtlayan: {0}"
-
-msgid "Answered every check"
-msgstr "Her kontrole yanıt verdi"
-
-#. placeholder {0}: daily.length
-msgid "Answered every check on each of the {0} days Radar has checked this node"
-msgstr "Radar’ın bu düğümü kontrol ettiği {0} günün her birinde tüm kontrollere yanıt verdi"
-
-msgid "Answering"
-msgstr "Yanıt veriyor"
-
-msgid "Answers on its Core port"
-msgstr "Core portunda yanıt veriyor"
 
 msgid "Any moment now"
 msgstr "Her an"
@@ -590,24 +350,11 @@ msgstr "Her an"
 msgid "As of {0}"
 msgstr "{0} itibarıyla"
 
-#. placeholder {0}: formatInt(spend.asOf)
-msgid "as of block {0}"
-msgstr "{0}. bloktan itibaren"
-
-msgid "Asking Hyphen."
-msgstr "Hyphen’e soruluyor."
-
-msgid "Asking Platform for its latest block…"
-msgstr "Platform’a son bloğu soruluyor…"
-
 msgid "Asset lock"
 msgstr "Varlık kilidi"
 
 msgid "Asset unlock"
 msgstr "Varlık kilidi açma"
-
-msgid "Asset unlocks root"
-msgstr "Varlık kilidi açma kökü"
 
 msgid "Back to Mainnet"
 msgstr "Mainnet’e dön"
@@ -624,45 +371,18 @@ msgstr "Arka uçlar"
 msgid "Balance"
 msgstr "Bakiye"
 
-msgid "Balances for the identities you choose, and the holders Platform Explorer has indexed."
-msgstr "Seçtiğiniz kimliklerin bakiyeleri ve Platform Explorer’ın indekslediği hesap sahipleri."
-
-msgid "Banned"
-msgstr "Yasaklı"
-
-#. placeholder {0}: formatInt(d.pose_ban_height)
-msgid "banned at block {0}"
-msgstr "{0}. blokta yasaklandı"
-
-#. placeholder {0}: formatInt(d.pose_ban_height)
-msgid "Banned at block {0}"
-msgstr "{0}. blokta yasaklandı"
-
-msgid "Banned on Platform"
-msgstr "Platform’da yasaklı"
-
 msgid "Behind"
 msgstr "Geride"
-
-msgid "Best ChainLock"
-msgstr "En iyi ChainLock"
 
 msgid "Bits"
 msgstr "Bits"
 
-msgid "block"
-msgstr "blok"
-
 msgid "Block"
 msgstr "Blok"
 
-#. placeholder {0}: formatInt(tx.height)
-msgid "block {0}"
-msgstr "blok {0}"
-
 #. placeholder {0}: formatInt(block.height - 1)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(d.registered_height)
+#. placeholder {0}: formatInt(ref.height)
 msgid "Block {0}"
 msgstr "Blok {0}"
 
@@ -671,15 +391,6 @@ msgstr "Blok yüksekliği"
 
 msgid "Block reward"
 msgstr "Blok ödülü"
-
-msgid "Block reward, masternode and fee payments"
-msgstr "Blok ödülü, masternode ve ücret ödemeleri"
-
-msgid "block updates"
-msgstr "blok güncellemeleri"
-
-msgid "Blockchain size"
-msgstr "Blok zinciri boyutu"
 
 msgid "Blocks"
 msgstr "Bloklar"
@@ -705,9 +416,6 @@ msgstr "Sayfa başına blok"
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Radar’ın diğer bölümlerindeki bloklar, işlemler ve adresler günceldir."
 
-msgid "Browse a contract’s documents of one type, filtered by its indices."
-msgstr "Bir sözleşmenin tek türdeki belgelerine göz atın; dizinlerine göre süzülür."
-
 msgid "Browse by date"
 msgstr "Tarihe göre gözat"
 
@@ -719,9 +427,6 @@ msgstr "Bütçe teklifleri"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Bütçe teklifleri ve oylarının durumu. Oylama Governance’ta yapılır."
-
-msgid "Budget proposals with vote counts, status and the next superblock."
-msgstr "Bütçe teklifleri: oy sayıları, durum ve sonraki süperblok."
 
 msgid "bytes"
 msgstr "bayt"
@@ -738,70 +443,26 @@ msgstr "Doğrulanamıyor"
 msgid "Cancel"
 msgstr "İptal"
 
-msgid "Catching up"
-msgstr "Yetişiyor"
-
-#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
-msgid "Catching up, {0}"
-msgstr "Senkronize ediliyor, {0}"
-
 msgid "Chain size"
 msgstr "Zincir boyutu"
-
-msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
-msgstr "Zincir boyutu, mempool yoğunluğu, işlem hızı, düğüm sürümleri, masternode sayıları ve Hyphen'in okuduğu eşler."
 
 msgid "Chain state"
 msgstr "Zincir durumu"
 
-msgid "ChainLock"
-msgstr "ChainLock"
-
-#. placeholder {0}: formatInt(best.height)
-msgid "ChainLock at {0}, reported by one node"
-msgstr "{0} yüksekliğinde ChainLock, tek bir düğüm bildirdi"
-
-msgid "ChainLock block hash, reported by one node"
-msgstr "ChainLock blok karması, tek bir düğüm bildirdi"
-
 msgid "ChainLock reported by one node"
 msgstr "Tek bir düğümün bildirdiği ChainLock"
-
-msgid "ChainLock signature"
-msgstr "ChainLock imzası"
 
 msgid "ChainLocked"
 msgstr "ChainLocked"
 
-msgid "ChainLocked block hash"
-msgstr "ChainLocked blokunun hash’i"
-
 msgid "Chainwork"
 msgstr "Chainwork"
-
-msgid "change"
-msgstr "para üstü"
-
-msgid "Change"
-msgstr "Para üstü"
-
-msgid "Change of keys"
-msgstr "Anahtar değişikliği"
-
-msgid "Change to sender"
-msgstr "Göndericiye para üstü"
-
-msgid "Changes"
-msgstr "Değişiklikler"
 
 msgid "Charts"
 msgstr "Grafikler"
 
 msgid "Charts need an indexer"
 msgstr "Grafikler bir dizinleyici gerektirir"
-
-msgid "Check a signed message against a Core address, in your browser."
-msgstr "İmzalı bir mesajı bir Core adresiyle tarayıcınızda doğrulayın."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Bir Dash adresinin bir mesajı imzalayıp imzalamadığını denetleyin. Denetim bu tarayıcıda yapılır: burada yazdığınız hiçbir şey herhangi bir yere gönderilmez ve Radar asla anahtar istemez."
@@ -811,12 +472,6 @@ msgstr "Denetleniyor"
 
 msgid "Checking every 30 s"
 msgstr "Her 30 sn’de bir denetlenir"
-
-msgid "Checking Hyphen…"
-msgstr "Hyphen denetleniyor…"
-
-msgid "Checking the sources…"
-msgstr "Kaynaklar denetleniyor…"
 
 msgid "Choose a picture with a QR code"
 msgstr "QR kodlu bir resim seçin"
@@ -836,12 +491,6 @@ msgstr "{label} temizle"
 msgid "close"
 msgstr "kapat"
 
-msgid "Close"
-msgstr "Kapat"
-
-msgid "Close a dialog or the search"
-msgstr "Bir iletişim kutusunu veya aramayı kapat"
-
 msgid "Coinbase"
 msgstr "Coinbase"
 
@@ -851,20 +500,11 @@ msgstr "Coinbase yükü"
 msgid "Coinbase tag says"
 msgstr "Coinbase etiketi şunu söylüyor"
 
-msgid "Coinbase transactions pay none"
-msgstr "Coinbase işlemleri ödemez"
-
 msgid "Collapse all"
 msgstr "Tümünü daralt"
 
 msgid "Collateral"
 msgstr "Teminat"
-
-msgid "Commits the block to the masternode list and the latest ChainLock."
-msgstr "Bloğu masternode listesine ve en son ChainLock’a bağlar."
-
-msgid "Compromised keys"
-msgstr "Ele geçirilmiş anahtarlar"
 
 msgid "Computed in your browser"
 msgstr "Tarayıcınızda hesaplandı"
@@ -875,17 +515,8 @@ msgstr "Canlı akışa bağlanılıyor…"
 msgid "Connecting…"
 msgstr "Bağlanılıyor…"
 
-msgid "contest"
-msgstr "çekişme"
-
 msgid "Contested name"
 msgstr "Çekişmeli ad"
-
-msgid "contract"
-msgstr "sözleşme"
-
-msgid "Contract"
-msgstr "Sözleşme"
 
 msgid "Contract create"
 msgstr "Sözleşme oluşturma"
@@ -898,9 +529,6 @@ msgstr "Sözleşme moderasyonu"
 
 msgid "Contract update"
 msgstr "Sözleşme güncelleme"
-
-msgid "Contracts"
-msgstr "Sözleşmeler"
 
 msgid "Copied"
 msgstr "Kopyalandı"
@@ -921,96 +549,29 @@ msgstr "Kimliği kopyala"
 msgid "Copy JSON"
 msgstr "JSON’u kopyala"
 
-msgid "Copy link"
-msgstr "Bağlantıyı kopyala"
-
 msgid "Copy link to this section"
 msgstr "Bu bölümün bağlantısını kopyala"
 
 msgid "Core"
 msgstr "Core"
 
-msgid "Core 24"
-msgstr "Core 24"
-
-msgid "Core 24 activation"
-msgstr "Core 24 etkinleştirmesi"
-
 msgid "Core address"
 msgstr "Core adresi"
-
-#. placeholder {0}: balance ?? ''
-#. placeholder {1}: a.txCount
-msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
-msgstr "Core adresi · {0} · {1, plural, one {# işlem} other {# işlem}}"
-
-msgid "Core address · no activity seen"
-msgstr "Core adresi · hareket görülmedi"
-
-msgid "Core addresses, mempool, governance and block lists"
-msgstr "Core adresleri, mempool, yönetişim ve blok listeleri"
 
 msgid "Core block"
 msgstr "Core bloğu"
 
-#. placeholder {0}: formatInt(block.height)
-msgid "Core block {0}"
-msgstr "Core bloğu {0}"
-
-msgid "Core block {label}"
-msgstr "Core bloğu {label}"
-
-msgid "Core block height"
-msgstr "Core blok yüksekliği"
-
-msgid "Core block heights and hashes, transaction IDs and addresses"
-msgstr "Core blok yükseklikleri ve hash’leri, işlem kimlikleri ve adresler"
-
 msgid "Core blocks"
 msgstr "Core blokları"
 
-msgid "Core blocks on {label}"
-msgstr "{label} tarihli Core blokları"
-
-msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
-msgstr "Core blokları, masternode’lar ve Platform kayıtları tek yerde. Her rakam nereden geldiğini ve ne kadar güncel olduğunu belirtir."
-
-msgid "Core figures"
-msgstr "Core rakamları"
-
-msgid "Core height"
-msgstr "Core yüksekliği"
-
-msgid "Core network metrics over time: transactions, fees, difficulty, supply and mining."
-msgstr "Core ağ metriklerinin zaman içindeki seyri: işlemler, ücretler, zorluk, arz ve madencilik."
-
-msgid "Core tip"
-msgstr "Core ucu"
-
-msgid "Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status."
-msgstr "Core ucu ve ChainLock, Platform yüksekliği ve epoch, düğüm haritası ve sayım özeti, en yeni bloklar ve geçişler, yükseltme durumu."
-
-msgid "Core tip, blocks and transactions, straight from evonodes"
-msgstr "Core ucu, bloklar ve işlemler, doğrudan evonode’lardan"
-
 msgid "Core transaction"
 msgstr "Core işlemi"
-
-#. placeholder {0}: formatInt(height)
-msgid "Core transaction in block {0}"
-msgstr "{0}. blokta Core işlemi"
-
-msgid "Core transaction, unconfirmed"
-msgstr "Core işlemi, onaylanmamış"
 
 msgid "Core version"
 msgstr "Core sürümü"
 
 msgid "Core versions"
 msgstr "Core sürümleri"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core, Platform ve masternode ağı"
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core ucu, bloklar, işlemler, ChainLock’lar ve canlı akışlar. Radar isteklerini çok sayıda düğüme dağıtır ve her bloğu blok başlığıyla karşılaştırarak doğrular."
@@ -1021,23 +582,14 @@ msgstr "Okunamadı"
 msgid "Counted as valid"
 msgstr "Geçerli sayıldı"
 
-msgid "crawled"
-msgstr "taranmış"
-
 msgid "Crawled by Radar"
 msgstr "Radar tarafından tarandı"
 
 msgid "Created"
 msgstr "Oluşturuldu"
 
-msgid "Credit outputs"
-msgstr "Kredi çıktıları"
-
 msgid "Credit pool"
 msgstr "Kredi havuzu"
-
-msgid "Credit pool balance"
-msgstr "Kredi havuzu bakiyesi"
 
 msgid "Credit transfer"
 msgstr "Kredi transferi"
@@ -1045,53 +597,11 @@ msgstr "Kredi transferi"
 msgid "Credit withdrawal"
 msgstr "Kredi çekimi"
 
-msgid "Credited on Platform"
-msgstr "Platform’da hesaba geçti"
-
-msgid "Credits"
-msgstr "Krediler"
-
-msgid "Current Platform quorums with size, members and the last proposer."
-msgstr "Güncel Platform quorum’ları: boyut, üyeler ve son önerici."
-
-msgid "Custom devnets"
-msgstr "Özel devnet’ler"
-
-msgid "Daily health"
-msgstr "Günlük sağlık durumu"
-
-msgid "DAPI"
-msgstr "DAPI"
-
 msgid "DAPI addresses"
 msgstr "DAPI adresleri"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI ve Platform SDK yanıt veriyor. Barındırılan kaynaklar “Yalnızca merkeziyetsiz” modunda kapalıdır."
-
-msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
-msgstr "DAPI meşgul, bu yüzden bütçe toparlanana kadar blok listeleri Hyphen’den gelir. Ayrıntılar yine DAPI’yi kullanır."
-
-msgid "DAPI is busy. Open this page to load them."
-msgstr "DAPI meşgul. Yüklemek için bu sayfayı açın."
-
-msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
-msgstr "DAPI yanıt vermiyor, bu yüzden blok ve işlem ayrıntıları Hyphen’den gelir ve bu belirtilir."
-
-msgid "DAPI request budget"
-msgstr "DAPI istek bütçesi"
-
 msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
 msgstr "Dash, coinbase’e masternode listesini ve en son ChainLock’u taahhüt eden bir yük ekler."
-
-msgid "Dash Core"
-msgstr "Dash Core"
-
-msgid "data"
-msgstr "veri"
-
-msgid "Data (OP_RETURN)"
-msgstr "Veri (OP_RETURN)"
 
 msgid "Data contract"
 msgstr "Veri sözleşmesi"
@@ -1108,35 +618,14 @@ msgstr "Merkeziyetsiz"
 msgid "Decentralized only"
 msgstr "Yalnızca merkeziyetsiz"
 
-msgid "Decentralized only mode doesn’t contact this source."
-msgstr "“Yalnızca merkeziyetsiz” modu bu kaynağa bağlanmaz."
-
 msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
 msgstr "“Yalnızca merkeziyetsiz” modu yalnızca DAPI düğümlerini ve Platform SDK’yı okur."
-
-msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
-msgstr "Yalnızca merkeziyetsiz: Radar yalnızca DAPI düğümlerini ve Platform SDK’yı okur, barındırılan hiçbir hizmete sormaz. Nelerin dışarıda kaldığını görmek veya modu kapatmak için Kaynaklar’ı açın."
-
-msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
-msgstr "Ham baytları çevrimdışı çözün: işlem, blok, kimlik, sözleşme, belge veya kanıt."
-
-msgid "decoder"
-msgstr "çözücü"
-
-msgid "Decoder"
-msgstr "Çözücü"
-
-msgid "Decoders"
-msgstr "Çözücüler"
 
 msgid "Destroy frozen funds"
 msgstr "Dondurulmuş fonları yok etme"
 
 msgid "Details"
 msgstr "Ayrıntılar"
-
-msgid "Devnet name"
-msgstr "Devnet adı"
 
 msgid "Difficulty"
 msgstr "Zorluk"
@@ -1147,9 +636,6 @@ msgstr "Son {0} blok boyunca zorluk"
 
 msgid "Direction"
 msgstr "Yön"
-
-msgid "document"
-msgstr "belge"
 
 msgid "Document"
 msgstr "Belge"
@@ -1178,20 +664,8 @@ msgstr "Belge değiştirme"
 msgid "Document transfer"
 msgstr "Belge aktarımı"
 
-msgid "document type"
-msgstr "belge türü"
-
-msgid "Documents"
-msgstr "Belgeler"
-
 msgid "Down"
 msgstr "Çalışmıyor"
-
-msgid "Drive protocol"
-msgstr "Drive protokolü"
-
-msgid "Each Platform block is locked to a Core block."
-msgstr "Her Platform bloğu bir Core bloğuna bağlıdır."
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "Aşağıdaki eski teklifler Hyphen’in indeksinden, o blok itibarıyla alınmıştır; canlı değildir."
@@ -1201,28 +675,6 @@ msgstr "Eski teklifler Hyphen’den okunamadı."
 
 msgid "Earlier proposals, from Hyphen’s index (behind the chain)"
 msgstr "Eski teklifler, Hyphen’in indeksinden (zincirin gerisinde)"
-
-msgid "Early-leave penalty"
-msgstr "Erken ayrılma cezası"
-
-msgid "Earned on Core, {window} days"
-msgstr "Core’da kazanılan, {window} gün"
-
-msgid "Edit"
-msgstr "Düzenle"
-
-msgid "Edit {editName}"
-msgstr "{editName} düzenle"
-
-msgid "Enabled"
-msgstr "Etkin"
-
-msgid "Enabled, no PoSe penalty"
-msgstr "Etkin, PoSe cezası yok"
-
-#. placeholder {0}: d.pose_penalty
-msgid "Enabled, PoSe penalty {0}"
-msgstr "Etkin, PoSe cezası {0}"
 
 msgid "End time not known yet"
 msgstr "Bitiş zamanı henüz bilinmiyor"
@@ -1257,16 +709,8 @@ msgstr "En az bir DAPI adresini host:port biçiminde, her satıra bir tane olaca
 msgid "Enter plain numbers, like 100 or 2.5."
 msgstr "Düz sayılar girin, örneğin 100 veya 2.5."
 
-msgid "epoch"
-msgstr "epoch"
-
 msgid "Epoch"
 msgstr "Epoch"
-
-#. placeholder {0}: formatInt(data.epoch.number)
-#. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
-msgid "Epoch {0} · {1} blocks in"
-msgstr "Epoch {0} · {1} blok geçti"
 
 msgid "Epoch {epoch}"
 msgstr "Epoch {epoch}"
@@ -1277,12 +721,6 @@ msgstr "Epoch {epoch} ilerlemesi"
 msgid "Epoch {id}"
 msgstr "Epoch {id}"
 
-msgid "Epoch {label}"
-msgstr "Epoch {label}"
-
-msgid "Epochs"
-msgstr "Epoch’lar"
-
 msgid "Esc"
 msgstr "Esc"
 
@@ -1292,44 +730,11 @@ msgstr "Tahmin"
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Radar’ın bağlanabileceği tüm arka uçlar, bunları kimin işlettiği ve {network} üzerinde kullanılıp kullanılmadığı. Radar’daki her rakam hangisinden geldiğini belirtir."
 
-msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
-msgstr "Radar’ın bağlanabileceği tüm arka uçlar, bunları kimin işlettiği ve “Yalnızca merkeziyetsiz” modunun anahtarı."
-
-msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
-msgstr "Radar’ın okuduğu her veri kaynağı, bu ağdaki sağlığı ve güncelliği ile DAPI istek bütçesi."
-
-msgid "Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link."
-msgstr "Tüm masternode ve evonode’lar: durum, sürüm, konum, çalışma süresi ve ödemeler. Filtreler, sıralama ve sayfalama bağlantıda tutulur."
-
-msgid "Every masternode vote with voter, choice, resource and time."
-msgstr "Her masternode oyu: oy veren, seçim, kaynak ve zaman."
-
-msgid "Every Platform block with epoch, proposer, transactions and time, filterable."
-msgstr "Her Platform bloğu: epoch, önerici, işlemler ve zaman; süzülebilir."
-
-msgid "Every source is answering."
-msgstr "Tüm kaynaklar yanıt veriyor."
-
-msgid "Every state transition with type, status, block, gas and owner, filterable."
-msgstr "Her durum geçişi: tür, durum, blok, gas ve sahip; süzülebilir."
-
-msgid "Everything Core shows comes from DAPI."
-msgstr "Core’un gösterdiği her şey DAPI’den gelir."
-
 msgid "Everything the coinbase pays out"
 msgstr "Coinbase’in ödediği her şey"
 
 msgid "Evonode"
 msgstr "Evonode"
-
-msgid "Evonode (high-performance)"
-msgstr "Evonode (yüksek performanslı)"
-
-msgid "Evonode {where}"
-msgstr "Evonode {where}"
-
-msgid "Evonode collateral"
-msgstr "Evonode teminatı"
 
 msgid "Evonodes"
 msgstr "Evonode’lar"
@@ -1337,35 +742,14 @@ msgstr "Evonode’lar"
 msgid "Evonodes from the node list, as https://address:port"
 msgstr "Düğüm listesindeki evonode’lar, https://address:port biçiminde"
 
-msgid "Example"
-msgstr "Örnek"
-
 msgid "Expand all"
 msgstr "Tümünü genişlet"
 
 msgid "Expected to end any moment now"
 msgstr "Her an bitmesi bekleniyor"
 
-msgid "Expires"
-msgstr "Sona erer"
-
-msgid "Facts"
-msgstr "Bilgiler"
-
-msgid "fail"
-msgstr "başarısız"
-
-msgid "Featured and indexed data contracts with owner, documents and tokens."
-msgstr "Öne çıkan ve indekslenmiş veri sözleşmeleri: sahip, belgeler ve token’lar."
-
-msgid "Fee"
-msgstr "Ücret"
-
 msgid "Fetched from Radar"
 msgstr "Radar’dan alındı"
-
-msgid "Figures computed on your device"
-msgstr "Cihazınızda hesaplanan rakamlar"
 
 msgid "Figures on this page are as of that block, not live."
 msgstr "Bu sayfadaki rakamlar o blok itibarıyladır, canlı değildir."
@@ -1382,17 +766,8 @@ msgstr "Teklifleri ada veya hash’e göre süz"
 msgid "Filter proposals by status"
 msgstr "Teklifleri duruma göre süz"
 
-msgid "Finality"
-msgstr "Kesinlik"
-
-msgid "Find the identity that holds a public key, from its 40-character key hash."
-msgstr "40 karakterlik anahtar hash’inden, bir açık anahtarı tutan kimliği bulun."
-
 msgid "Finding this day's blocks"
 msgstr "Bu günün blokları aranıyor"
-
-msgid "finding where…"
-msgstr "nerede olduğu bulunuyor…"
 
 msgid "First"
 msgstr "İlk"
@@ -1411,20 +786,11 @@ msgstr "İlk ve son görülme"
 msgid "First seen"
 msgstr "İlk görülme"
 
-msgid "first seen in the mempool"
-msgstr "mempool’da ilk görüldü"
-
 msgid "First: not available"
 msgstr "İlk: kullanılamıyor"
 
-msgid "From"
-msgstr "Gönderen"
-
 msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
 msgstr "DAPI’nin canlı akışından: bu sayfanın geldiğini gördüğü işlemler, sonradan madenciliği yapılanlar hariç. Mempool’un tamamı değildir."
-
-msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
-msgstr "Herhangi bir yükseklik, hash, adres, ProTx, IP, kimlik, sözleşme, token, ad veya epoch için türlerine göre gruplanmış tüm sonuçlar."
 
 msgid "function"
 msgstr "fonksiyon"
@@ -1435,12 +801,6 @@ msgstr "Finanse edildi"
 msgid "Funding threshold"
 msgstr "Finansman eşiği"
 
-msgid "Getting tight"
-msgstr "Daralıyor"
-
-msgid "Go to"
-msgstr "Git"
-
 msgid "Governance"
 msgstr "Yönetişim"
 
@@ -1450,20 +810,8 @@ msgstr "Yönetişim teklifi"
 msgid "Governance proposals need an indexer"
 msgstr "Yönetişim teklifleri bir dizinleyici gerektirir"
 
-msgid "group"
-msgstr "grup"
-
 msgid "Group"
 msgstr "Grup"
-
-msgid "Groups"
-msgstr "Gruplar"
-
-msgid "Guess"
-msgstr "Tahmin"
-
-msgid "Hard-fork signal"
-msgstr "Hard fork sinyali"
 
 msgid "Hash"
 msgstr "Hash"
@@ -1478,23 +826,11 @@ msgstr "Son {0} blok boyunca hash oranı"
 msgid "Header"
 msgstr "Başlık"
 
-msgid "Headers and blocks"
-msgstr "Başlıklar ve bloklar"
-
-msgid "Headroom"
-msgstr "Pay"
-
-msgid "Healthy"
-msgstr "Sağlıklı"
-
 msgid "Height"
 msgstr "Yükseklik"
 
 msgid "Height when connected"
 msgstr "Bağlanıldığındaki yükseklik"
-
-msgid "Height, hash, address, ProTx, IP, ID, name…"
-msgstr "Yükseklik, hash, adres, ProTx, IP, kimlik, ad…"
 
 #. placeholder {0}: formatInt(lowest)
 #. placeholder {1}: formatInt(Math.max(...heights))
@@ -1513,75 +849,20 @@ msgstr "QR kodunu gizle"
 msgid "Hide table"
 msgstr "Tabloyu gizle"
 
-msgid "Hide the table"
-msgstr "Tabloyu gizle"
-
-msgid "Home"
-msgstr "Ana sayfa"
-
 msgid "Hosted by one operator"
 msgstr "Tek bir operatör tarafından barındırılıyor"
-
-msgid "Hosting"
-msgstr "Barındırma"
-
-msgid "How each source is answering, and how far behind its data is."
-msgstr "Her kaynağın nasıl yanıt verdiği ve verisinin ne kadar geride olduğu."
-
-msgid "How it settled"
-msgstr "Nasıl sonuçlandı"
 
 msgid "How the Core chain is doing: mining, transactions, supply and the state it carries."
 msgstr "Core zincirinin durumu: madencilik, işlemler, arz ve taşıdığı durum."
 
-msgid "HTTPS (DAPI)"
-msgstr "HTTPS (DAPI)"
-
-msgid "Hyphen"
-msgstr "Hyphen"
-
-msgid "Hyphen doesn't index devnets"
-msgstr "Hyphen devnet’leri dizinlemez"
-
 msgid "Hyphen doesn’t index devnets."
 msgstr "Hyphen devnet’leri dizinlemez."
-
-msgid "Hyphen says it is spent but its history does not show which transaction spent it."
-msgstr "Hyphen harcandığını söylüyor ancak geçmişinde hangi işlemin harcadığı görünmüyor."
 
 msgid "Hyphen’s {name} index is behind the chain: {lag}."
 msgstr "Hyphen’in {name} indeksi zincirin gerisinde: {lag}."
 
-#. placeholder {0}: formatInt(spend.behind ?? 0)
-msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
-msgstr "Hyphen’in dizini zincirin {0} blok gerisinde, bu yüzden bu çıktının sonradan harcanıp harcanmadığını söyleyemez."
-
-msgid "Hyphen's index is still being checked."
-msgstr "Hyphen’in dizini hâlâ denetleniyor."
-
-msgid "ID"
-msgstr "Kimlik"
-
-msgid "Identities"
-msgstr "Kimlikler"
-
-msgid "Identities with balance, transactions and creation time; sort by balance or activity."
-msgstr "Bakiye, işlem ve oluşturma zamanıyla kimlikler; bakiyeye veya etkinliğe göre sıralanır."
-
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "Kimlikler, sözleşmeler, token’lar ve belgeler kimlik numarasıyla; bir kimlik ise açık anahtar hash’iyle"
-
-msgid "Identities, contracts, tokens and masternodes you saved. They stay in this browser."
-msgstr "Kaydettiğiniz kimlikler, sözleşmeler, token’lar ve masternode’lar. Bu tarayıcıda kalırlar."
-
-msgid "identity"
-msgstr "kimlik"
-
 msgid "Identity"
 msgstr "Kimlik"
-
-msgid "Identity by key hash"
-msgstr "Anahtar hash’ine göre kimlik"
 
 msgid "Identity create"
 msgstr "Kimlik oluşturma"
@@ -1604,13 +885,6 @@ msgstr "Havuzdan kimlik bakiye yükleme"
 msgid "Identity update"
 msgstr "Kimlik güncelleme"
 
-msgid "Identity with this public-key hash"
-msgstr "Bu açık anahtar hash’ine sahip kimlik"
-
-#. placeholder {0}: short(spend.by.txid)
-msgid "in {0}"
-msgstr "{0} içinde"
-
 msgid "in {n} h"
 msgstr "{n} sa sonra"
 
@@ -1619,16 +893,6 @@ msgstr "{n} dk sonra"
 
 msgid "in {n} s"
 msgstr "{n} sn sonra"
-
-#. placeholder {0}: formatInt(tx.height)
-msgid "In block {0}"
-msgstr "{0}. blokta"
-
-msgid "in the mempool"
-msgstr "mempool’da"
-
-msgid "In the mempool"
-msgstr "Mempool’da"
 
 msgid "In use"
 msgstr "Kullanımda"
@@ -1672,29 +936,8 @@ msgstr "{block}. bloğa kadar indekslendi ({0} geride)"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "{block}. bloğa kadar indekslendi ({0} blok geride)"
 
-msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
-msgstr "{indexed}. Core bloğuna kadar indekslendi (zincir: {chain}). Hyphen senkronizasyonuna “{sync}” diyor, ancak indeksi zincirin gerisinde."
-
-msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
-msgstr "Core bloğu {indexed}/{chain} dizinlendi. Eşitleme: {sync}."
-
-msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
-msgstr "Platform bloğu {indexed}/{chain} dizinlendi. Dizinleyici: {state}."
-
-msgid "Inputs"
-msgstr "Girdiler"
-
 msgid "Inputs → outputs"
 msgstr "Girdiler → çıktılar"
-
-msgid "Inputs and outputs"
-msgstr "Girdiler ve çıktılar"
-
-msgid "Inputs hash"
-msgstr "Girdi hash’i"
-
-msgid "Insight"
-msgstr "Insight"
 
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight bu adresin en eski işlemlerini getiremedi."
@@ -1714,12 +957,6 @@ msgstr "Insight finansmanı bildirmez. “Finanse edildi” ve “Geçiyor” du
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight’ın {name} indeksi de geride: {lag}."
 
-msgid "InstantSend"
-msgstr "InstantSend"
-
-msgid "InstantSend lock"
-msgstr "InstantSend kilidi"
-
 msgid "InstantSend lock recorded by Hyphen"
 msgstr "InstantSend kilidi Hyphen tarafından kaydedildi"
 
@@ -1735,33 +972,6 @@ msgstr "Geçersiz"
 msgid "invalid date"
 msgstr "geçersiz tarih"
 
-msgid "It answered with an error."
-msgstr "Bir hatayla yanıt verdi."
-
-msgid "It hasn’t answered yet."
-msgstr "Henüz yanıt vermedi."
-
-msgid "It is rate limiting this browser."
-msgstr "Bu tarayıcının isteklerini sınırlıyor."
-
-msgid "It sent an answer Radar can’t read."
-msgstr "Radar’ın okuyamadığı bir yanıt gönderdi."
-
-msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
-msgstr "Hiç coin harcamaz ve çıktı oluşturmaz, bu yüzden çizilecek bir akış yoktur. Kaydettiği şey yükünün içindedir."
-
-msgid "It took too long to answer."
-msgstr "Yanıt vermesi çok uzun sürdü."
-
-msgid "Its data is behind."
-msgstr "Verileri geride kalıyor."
-
-msgid "Its tip is Core block {tip}, behind the chain."
-msgstr "Ucu Core’un {tip} numaralı bloğu; zincirin gerisinde."
-
-msgid "Its tip is Core block {tip}."
-msgstr "Ucu Core’un {tip} numaralı bloğu."
-
 msgid "JSON"
 msgstr "JSON"
 
@@ -1770,15 +980,6 @@ msgstr "Bir tarihe git"
 
 msgid "Key limits update"
 msgstr "Anahtar sınırlarını güncelleme"
-
-msgid "Keyboard shortcuts"
-msgstr "Klavye kısayolları"
-
-msgid "Language"
-msgstr "Dil"
-
-msgid "Language, units, time zone, connection options and custom devnets."
-msgstr "Dil, birimler, saat dilimi, bağlantı seçenekleri ve özel devnet’ler."
 
 msgid "Largest balances"
 msgstr "En büyük bakiyeler"
@@ -1790,64 +991,19 @@ msgstr "Son"
 msgid "Last {0} blocks"
 msgstr "Son {0} blok"
 
-msgid "Last block"
-msgstr "Son blok"
-
 #. placeholder {0}: humanizeSpan(ms)
 msgid "last crawl finished {0} ago"
 msgstr "son tarama {0} önce tamamlandı"
-
-#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
-#. placeholder {1}: formatInt(status.chain.blocks)
-msgid "Last crawl finished {0}. Its Core node is at block {1}."
-msgstr "Son tarama {0} bitti. Core düğümü {1}. blokta."
-
-msgid "Last error"
-msgstr "Son hata"
 
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "son başarılı {0}"
 
-#. placeholder {0}: ago(health.lastOkAt)
-msgid "Last good {0}."
-msgstr "Son başarılı yanıt {0}."
-
-msgid "Last paid"
-msgstr "Son ödeme"
-
-msgid "Last reached"
-msgstr "Son erişim"
-
-msgid "Last seen"
-msgstr "Son görülme"
-
-msgid "Latency"
-msgstr "Gecikme"
-
-msgid "Latest activity"
-msgstr "Son etkinlik"
-
 msgid "Latest blocks"
 msgstr "Son bloklar"
 
-msgid "Latest Core blocks"
-msgstr "Son Core blokları"
-
-msgid "Latest Core blocks, oldest first"
-msgstr "Son Core blokları, en eskiden yeniye"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "Son Platform blokları, en eskiden yeniye"
-
-msgid "Latest Platform transitions"
-msgstr "Son Platform geçişleri"
-
 msgid "Link copied"
 msgstr "Bağlantı kopyalandı"
-
-msgid "Link to one with"
-msgstr "Birine bağlantı için"
 
 msgid "List view"
 msgstr "Liste görünümü"
@@ -1864,118 +1020,26 @@ msgstr "Bu sekme arka plandayken canlı güncellemeler duraklatılır."
 msgid "Live updates have stopped."
 msgstr "Canlı güncellemeler durdu."
 
-msgid "Live updates have stopped. The chain shown is as of {since}."
-msgstr "Canlı güncellemeler durdu. Gösterilen zincir {since} itibarıyladır."
-
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Canlı güncellemeler durdu. Son güncelleme {since} saatinde geldi."
-
-#. placeholder {0}: formatInt(inCount - partial.loaded)
-msgid "Load the other {0} amounts"
-msgstr "Diğer {0} tutarı yükle"
-
-#. placeholder {0}: formatInt(partial.loaded)
-#. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
-msgstr "Tutarlar yükleniyor: {1} girdinin {0} tanesi. Her önceki işlem ayrı bir istektir."
-
-msgid "Loading inputs…"
-msgstr "Girdiler yükleniyor…"
-
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Core bloğu {0}’a bağlı"
-
-msgid "Locks Dash on Core to create credits on Platform."
-msgstr "Platform’da kredi oluşturmak için Core’daki Dash’i kilitler."
-
-#. placeholder {0}: description.join(' · ')
-msgid "Looks like {0}"
-msgstr "Şuna benziyor: {0}"
-
-msgid "Lookups in an index were skipped, so some matches may be missing"
-msgstr "Bir dizindeki aramalar atlandı, bu yüzden bazı eşleşmeler eksik olabilir"
 
 msgid "mainnet"
 msgstr "Mainnet"
 
-msgid "Map"
-msgstr "Harita"
-
-msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
-msgstr "Radar’ın masternode bulduğu her yer için bir daire içeren dünya haritası. {summary}."
-
-msgid "masternode"
-msgstr "masternode"
-
 msgid "Masternode"
 msgstr "Masternode"
-
-#. placeholder {0}: d.protx.slice(0, 8)
-#. placeholder {0}: id.slice(0, 8)
-#. placeholder {0}: short(hash)
-msgid "Masternode {0}"
-msgstr "Masternode {0}"
-
-msgid "Masternode {where}"
-msgstr "Masternode {where}"
-
-msgid "Masternode collateral"
-msgstr "Masternode teminatı"
-
-msgid "Masternode list root"
-msgstr "Masternode listesi kökü"
-
-msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
-msgstr "Masternode kayıtları Radar’ın mainnet ve testnet taramasından gelir."
-
-msgid "Masternode records need Radar's crawler"
-msgstr "Masternode kayıtları Radar’ın tarayıcısını gerektirir"
-
-msgid "Masternode registrar update"
-msgstr "Masternode kaydedici güncellemesi"
-
-msgid "Masternode registration"
-msgstr "Masternode kaydı"
-
-msgid "Masternode revocation"
-msgstr "Masternode iptali"
-
-msgid "Masternode service update"
-msgstr "Masternode hizmet güncellemesi"
 
 msgid "Masternode vote"
 msgstr "Masternode oyu"
 
-msgid "Masternode votes"
-msgstr "Masternode oyları"
-
 msgid "Masternode votes on this proposal, newest first"
 msgstr "Bu teklife verilen masternode oyları, en yeniden eskiye"
-
-msgid "Masternodes"
-msgstr "Masternode’lar"
-
-msgid "Masternodes and other nodes on a world map, coloured by reachability, version or type."
-msgstr "Masternode’lar ve diğer düğümler dünya haritasında; erişilebilirliğe, sürüme veya türe göre renklendirilir."
-
-msgid "Masternodes answering"
-msgstr "Yanıt veren masternode’lar"
-
-msgid "Masternodes by ProTx hash or IP address"
-msgstr "ProTx hash’i veya IP adresine göre masternode’lar"
 
 msgid "Masternodes by status"
 msgstr "Duruma göre masternode’lar"
 
-msgid "masternodes locked its inputs; final from here"
-msgstr "Masternode’lar girdilerini kilitledi; buradan itibaren kesin"
-
 msgid "Max"
 msgstr "Maks."
-
-msgid "Median answer {rounded} ms"
-msgstr "Ortanca yanıt {rounded} ms"
 
 msgid "Memory in use"
 msgstr "Kullanılan bellek"
@@ -1984,14 +1048,8 @@ msgstr "Kullanılan bellek"
 msgid "Memory in use of {0}"
 msgstr "{0} içinden kullanılan bellek"
 
-msgid "mempool"
-msgstr "mempool"
-
 msgid "Mempool"
 msgstr "Mempool"
-
-msgid "Mempool arrival times aren’t kept once a transaction is mined."
-msgstr "Bir işlem madenciliği yapıldıktan sonra mempool varış zamanları tutulmaz."
 
 msgid "Mempool pressure"
 msgstr "Mempool baskısı"
@@ -2008,70 +1066,14 @@ msgstr "Metrik geçmişi"
 msgid "Min"
 msgstr "Min."
 
-msgid "Mined"
-msgstr "Madenciliği yapıldı"
-
-msgid "Mined by"
-msgstr "Madenciliği yapan"
-
-msgid "Mined for height"
-msgstr "Madenciliği yapılan yükseklik"
-
-msgid "Missed most"
-msgstr "Çoğunu kaçırdı"
-
-msgid "Missed some"
-msgstr "Bazılarını kaçırdı"
-
-#. placeholder {0}: missed.length
-#. placeholder {1}: daily.length
-msgid "Missed some checks on {0} of {1} days"
-msgstr "{1} günün {0} tanesinde bazı kontroller kaçırıldı"
-
 msgid "MnHF signal"
 msgstr "MnHF sinyali"
 
 msgid "move"
 msgstr "gezin"
 
-msgid "Move through search results"
-msgstr "Arama sonuçlarında gezin"
-
-msgid "Move through table rows"
-msgstr "Tablo satırlarında gezin"
-
-msgid "Moved"
-msgstr "Taşındı"
-
-msgid "name"
-msgstr "ad"
-
-msgid "Name"
-msgstr "Ad"
-
-msgid "Name contest"
-msgstr "Ad çekişmesi"
-
-msgid "Name contests"
-msgstr "Ad çekişmeleri"
-
 msgid "Name or hash"
 msgstr "Ad veya hash"
-
-msgid "Names"
-msgstr "Adlar"
-
-msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
-msgstr ".dash ile biten adlar, epoch’lar ve tarihler (bir günün Core blokları)"
-
-msgid "Names follow Dash Core’s definitions of the revocation reason codes."
-msgstr "Adlar, iptal nedeni kodları için Dash Core’un tanımlarını izler."
-
-msgid "Needs an indexer: off in Decentralized only mode"
-msgstr "Dizinleyici gerekir: “Yalnızca merkeziyetsiz” modunda kapalı"
-
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Radar’ın tarayıcısı gerekir: “Yalnızca merkeziyetsiz” modunda kapalı"
 
 msgid "Net value"
 msgstr "Net değer"
@@ -2079,41 +1081,14 @@ msgstr "Net değer"
 msgid "Net votes"
 msgstr "Net oylar"
 
-msgid "Network"
-msgstr "Ağ"
-
-msgid "Network census"
-msgstr "Ağ sayımı"
-
 msgid "Network internals"
 msgstr "Ağın iç işleyişi"
 
 msgid "Network internals need an indexer"
 msgstr "Ağın iç işleyişi bir dizinleyici gerektirir"
 
-msgid "Network internals: peers, mempool pressure, versions and history"
-msgstr "Ağın iç işleyişi: eşler, mempool baskısı, sürümler ve geçmiş"
-
-msgid "Network pulse"
-msgstr "Ağ nabzı"
-
-msgid "never banned"
-msgstr "hiç yasaklanmadı"
-
 msgid "New blocks reach this page as they happen."
 msgstr "Yeni bloklar oluştukça bu sayfaya gelir."
-
-msgid "New operator key"
-msgstr "Yeni operatör anahtarı"
-
-msgid "New reward payout"
-msgstr "Yeni ödül ödemesi"
-
-msgid "New rows appear at the top."
-msgstr "Yeni satırlar en üstte görünür."
-
-msgid "New service address"
-msgstr "Yeni hizmet adresi"
 
 msgid "new tab"
 msgstr "yeni sekme"
@@ -2121,14 +1096,8 @@ msgstr "yeni sekme"
 msgid "New transaction"
 msgstr "Yeni işlem"
 
-msgid "New voting key"
-msgstr "Yeni oylama anahtarı"
-
 msgid "Newer"
 msgstr "Yeniler"
-
-msgid "Newly generated coins"
-msgstr "Yeni üretilen coin’ler"
 
 msgid "Next"
 msgstr "Sonraki"
@@ -2145,21 +1114,11 @@ msgstr "Sonraki gün"
 msgid "Next day →"
 msgstr "Sonraki gün →"
 
-#. placeholder {0}: formatInt(protocol.next_epoch)
-msgid "Next epoch {0}"
-msgstr "Sonraki epoch {0}"
-
 msgid "No"
 msgstr "Hayır"
 
-msgid "No address"
-msgstr "Adres yok"
-
 msgid "No balances indexed yet."
 msgstr "Henüz dizinlenmiş bakiye yok."
-
-msgid "No block with this ID on this network."
-msgstr "Bu ağda bu kimliğe sahip bir blok yok."
 
 msgid "No blocks came back for this page"
 msgstr "Bu sayfa için hiç blok gelmedi"
@@ -2170,32 +1129,8 @@ msgstr "Bu tarihte blok yok"
 msgid "No camera could be opened here. Choose a picture instead."
 msgstr "Burada kamera açılamadı. Bunun yerine bir resim seçin."
 
-msgid "No crawl has finished yet."
-msgstr "Henüz tamamlanmış bir tarama yok."
-
-msgid "No DAPI requests have been made on this network yet."
-msgstr "Bu ağda henüz DAPI isteği yapılmadı."
-
-msgid "No devnets saved."
-msgstr "Kayıtlı devnet yok."
-
-msgid "No InstantSend lock was seen"
-msgstr "InstantSend kilidi görülmedi"
-
 msgid "No known pool"
 msgstr "Bilinen havuz yok"
-
-msgid "No masternode with this ProTx on {here}."
-msgstr "{here} üzerinde bu ProTx’e sahip masternode yok."
-
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "{network} üzerinde “{query}” için eşleşen bir Core kaydı yok"
-
-msgid "No payments indexed for this masternode yet."
-msgstr "Bu masternode için henüz dizinlenmiş ödeme yok."
-
-msgid "No penalty"
-msgstr "Ceza yok"
 
 msgid "No proposal with this hash on this network."
 msgstr "Bu ağda bu hash’e sahip bir teklif yok."
@@ -2209,17 +1144,8 @@ msgstr "Bu ağda teklif yok."
 msgid "No QR code found in that picture."
 msgstr "Bu resimde QR kodu bulunamadı."
 
-msgid "No source can say whether this output is spent."
-msgstr "Hiçbir kaynak bu çıktının harcanıp harcanmadığını söyleyemiyor."
-
 msgid "No tag in the coinbase"
 msgstr "Coinbase’te etiket yok"
-
-msgid "No transaction with this ID on this network."
-msgstr "Bu ağda bu kimliğe sahip bir işlem yok."
-
-msgid "No transactions in the mempool right now"
-msgstr "Şu anda mempool’da işlem yok"
 
 msgid "No transactions in the mempool right now."
 msgstr "Şu anda mempool’da işlem yok."
@@ -2230,105 +1156,39 @@ msgstr "Bu ağda bu adres için işlem görülmedi."
 msgid "No unspent outputs."
 msgstr "Harcanmamış çıktı yok."
 
-msgid "No value moves in this transaction"
-msgstr "Bu işlemde hiçbir değer hareket etmiyor"
-
 msgid "No votes recorded for this proposal."
 msgstr "Bu teklif için kayıtlı oy yok."
 
 msgid "Node list and quorum keys"
 msgstr "Düğüm listesi ve quorum anahtarları"
 
-msgid "Node sync"
-msgstr "Düğüm eşitlemesi"
-
-msgid "Nodes"
-msgstr "Düğümler"
-
-msgid "Nodes resting"
-msgstr "Boşta bekleyen düğümler"
-
 msgid "Nonce"
 msgstr "Nonce"
-
-msgid "None"
-msgstr "Yok"
-
-msgid "Not answering"
-msgstr "Yanıt vermiyor"
 
 msgid "Not available for this record"
 msgstr "Bu kayıt için kullanılamıyor"
 
-msgid "Not available right now"
-msgstr "Şu anda kullanılamıyor"
-
-msgid "Not banned on Platform"
-msgstr "Platform’da yasaklı değil"
-
 msgid "Not ChainLocked yet"
 msgstr "Henüz ChainLocked değil"
-
-msgid "Not checked yet"
-msgstr "Henüz kontrol edilmedi"
 
 #. placeholder {0}: networkName(net)
 msgid "Not found on {0}"
 msgstr "{0} üzerinde bulunamadı"
 
-msgid "not in a block yet"
-msgstr "henüz bir blokta değil"
-
 msgid "Not in DAPI"
 msgstr "DAPI’de yok"
-
-msgid "Not in this version"
-msgstr "Bu sürümde yok"
-
-msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
-msgstr "bu kaynaktan bilinmiyor: Hyphen yalnızca düğümünün izleme sırasında ilettiği kilitleri bildirir"
-
-msgid "Not loaded"
-msgstr "Yüklenmedi"
-
-msgid "Not mined yet"
-msgstr "Henüz madenciliği yapılmadı"
-
-msgid "Not offered"
-msgstr "Sunulmuyor"
 
 msgid "Not on {net}"
 msgstr "{net} üzerinde yok"
 
-msgid "not paid yet"
-msgstr "henüz ödeme alınmadı"
-
 msgid "Not passing"
 msgstr "Geçmiyor"
-
-msgid "Not ready"
-msgstr "Hazır değil"
 
 msgid "Not seen yet"
 msgstr "Henüz görülmedi"
 
-msgid "Not specified"
-msgstr "Belirtilmedi"
-
-msgid "Nothing above confirms this. It is only one way to read what you typed."
-msgstr "Yukarıdakilerin hiçbiri bunu doğrulamıyor. Yazdığınızı okumanın yalnızca bir yolu."
-
 msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
 msgstr "Bu sayfayı açtığınızdan beri hiçbir şey gelmedi. Yeni işlemler DAPI ilettikçe burada görünür."
-
-msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
-msgstr "Bu sayfayı açtığınızdan beri hiçbir şey gelmedi. Tam mempool listesi bir dizinleyici gerektirir; “Yalnızca merkeziyetsiz” modu bunu kullanmaz."
-
-msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
-msgstr "Bu sayfayı açtığınızdan beri hiçbir şey gelmedi. Mempool’un tam listesi için Hyphen’in dizini gerekir; bu dizin zincirin gerisinde."
-
-msgid "Nothing has asked it yet on this network."
-msgstr "Bu ağda henüz kimse ona sormadı."
 
 msgid "Nothing seen yet"
 msgstr "Henüz bir şey görülmedi"
@@ -2342,9 +1202,6 @@ msgstr "Henüz gösterilecek bir şey yok"
 msgid "Now"
 msgstr "Şimdi"
 
-msgid "Number"
-msgstr "Numara"
-
 msgid "Off in this mode"
 msgstr "Bu modda kapalı"
 
@@ -2357,68 +1214,14 @@ msgstr "Bu tarihten önceki eski bloklar"
 msgid "On this page"
 msgstr "Bu sayfada"
 
-msgid "One contest: status, tally, contenders with prefunded balance and who voted."
-msgstr "Tek bir çekişme: durum, sayım, ön finanse edilmiş bakiyeli adaylar ve oy verenler."
-
-msgid "One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions."
-msgstr "Yüksekliğe veya hash’e göre tek bir Core bloğu: başlık, coinbase verisi, ödül paylaşımı, ChainLock ve işlemleri."
-
-msgid "One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded."
-msgstr "Tek bir Core işlemi: girdiler, çıktılar, özel veri, InstantSend ve ChainLock durumu ve fonladığı Platform kimliği."
-
-msgid "One data contract: owner, version, document types, schema, tokens and groups."
-msgstr "Tek bir veri sözleşmesi: sahip, sürüm, belge türleri, şema, token’lar ve gruplar."
-
-msgid "One document with its data, metadata, revision history and the transition that wrote it."
-msgstr "Tek bir belge: verileri, meta verileri, revizyon geçmişi ve onu yazan geçiş."
-
-msgid "One DPNS name: whether it is available, registered or contested, and who owns it."
-msgstr "Tek bir DPNS adı: müsait, kayıtlı veya çekişmeli olup olmadığı ve sahibi."
-
-msgid "One finalized Platform epoch: totals, proposers and the neighbouring epochs."
-msgstr "Tamamlanmış tek bir Platform epoch’u: toplamlar, önericiler ve komşu epoch’lar."
-
-msgid "One governance proposal: payment, timeline, vote history and a link to vote."
-msgstr "Tek bir yönetişim teklifi: ödeme, zaman çizelgesi, oy geçmişi ve oy vermek için bir bağlantı."
-
-msgid "One group: members by power and its active and closed actions with signers."
-msgstr "Tek bir grup: güce göre üyeler ile imzacılarıyla etkin ve kapanmış eylemler."
-
-msgid "One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked."
-msgstr "Tek bir kimlik: bakiye, anahtarlar, adlar, token’lar, sözleşmeler, belgeler ve fonlama işlemi; hepsi kanıtla doğrulanır."
-
-msgid "One masternode: overview, network reachability, Platform record, history and payments."
-msgstr "Tek bir masternode: genel bakış, ağ erişilebilirliği, Platform kaydı, geçmiş ve ödemeler."
-
-msgid "One Platform block: digest, the Core block it is locked to, its transitions and quorum."
-msgstr "Tek bir Platform bloğu: özet, kilitlendiği Core bloğu, geçişleri ve quorum’u."
-
-msgid "One state transition: status, fees, signature, raw bytes and a panel for its type."
-msgstr "Tek bir durum geçişi: durum, ücretler, imza, ham baytlar ve türüne özel bir panel."
-
-msgid "One token: supply, price, pause state, definition, activity and a balance lookup."
-msgstr "Tek bir token: arz, fiyat, duraklatma durumu, tanım, etkinlik ve bakiye sorgusu."
-
 msgid "open"
 msgstr "aç"
-
-msgid "Open"
-msgstr "Aç"
 
 msgid "Open it on {name}"
 msgstr "{name} üzerinde aç"
 
-msgid "Open it on {otherName}"
-msgstr "{otherName} üzerinde aç"
-
-msgid "Open on {where}"
-msgstr "{where} üzerinde aç"
-
 msgid "Open proposals by what their payment would be"
 msgstr "Teklifleri ödeme tutarına göre aç"
-
-msgid "Open the map"
-msgstr "Haritayı aç"
 
 msgid "Open the proof for this figure"
 msgstr "Bu rakamın kanıtını aç"
@@ -2430,91 +1233,14 @@ msgstr "Bu rakamın kanıtını aç · {0}"
 msgid "Open the proposal"
 msgstr "Teklifi aç"
 
-msgid "Open the result, or all results"
-msgstr "Sonucu veya tüm sonuçları aç"
-
-msgid "Open the selected table row"
-msgstr "Seçili tablo satırını aç"
-
 msgid "Opening the live connection."
 msgstr "Canlı bağlantı açılıyor."
-
-msgid "Operator key"
-msgstr "Operatör anahtarı"
-
-msgid "Operator payout"
-msgstr "Operatör ödemesi"
-
-msgid "Operator public key"
-msgstr "Operatör açık anahtarı"
-
-msgid "Operator reward"
-msgstr "Operatör ödülü"
-
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "Operatör ödülü {0}"
-
-msgid "Operator signature"
-msgstr "Operatör imzası"
-
-msgid "optional"
-msgstr "isteğe bağlı"
-
-msgid "or"
-msgstr "veya"
-
-msgid "Other nodes"
-msgstr "Diğer düğümler"
-
-msgid "Other reachable nodes"
-msgstr "Erişilebilen diğer düğümler"
-
-msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
-msgstr "Aksi halde saatler bu cihazın saat dilimine göre gösterilir. Bir saatin üzerine gelindiğinde her zaman UTC gösterilir."
 
 msgid "Outbound"
 msgstr "Giden"
 
 msgid "Output"
 msgstr "Çıktı"
-
-#. placeholder {0}: num(collateral?.vout) ?? 0
-msgid "Output {0} of this transaction"
-msgstr "Bu işlemin {0}. çıktısı"
-
-#. placeholder {0}: spend.by.vin
-msgid "Output {index} is spent by input {0} of this transaction"
-msgstr "{index}. çıktı, bu işlemin {0}. girdisi tarafından harcanıyor"
-
-msgid "Output this input spends"
-msgstr "Bu girdinin harcadığı çıktı"
-
-msgid "Outputs"
-msgstr "Çıktılar"
-
-msgid "Overview"
-msgstr "Genel bakış"
-
-msgid "Owner"
-msgstr "Sahip"
-
-msgid "Owner key"
-msgstr "Sahip anahtarı"
-
-msgid "Owner signature"
-msgstr "Sahip imzası"
-
-msgid "P2P (Tenderdash)"
-msgstr "P2P (Tenderdash)"
-
-#. placeholder {0}: num(p.platformP2pPort) ?? '—'
-#. placeholder {1}: num(p.platformHttpPort) ?? '—'
-msgid "P2P {0}, HTTPS {1}"
-msgstr "P2P {0}, HTTPS {1}"
-
-msgid "Page not found"
-msgstr "Sayfa bulunamadı"
 
 msgid "Pages"
 msgstr "Sayfalar"
@@ -2530,23 +1256,14 @@ msgstr "{0} bloklu sayfalar bir dizinleyici gerektirir; “Yalnızca merkeziyets
 msgid "Pagination"
 msgstr "Sayfalama"
 
-msgid "Paid"
-msgstr "Ödendi"
-
 msgid "Paid to"
 msgstr "Ödenen"
-
-msgid "pass"
-msgstr "başarılı"
 
 msgid "Passing"
 msgstr "Geçiyor"
 
 msgid "Passing, not yet funded"
 msgstr "Geçiyor, henüz finanse edilmedi"
-
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Bir durum geçişini hex veya base64 olarak yapıştırarak çözün ve denetleyin. Hiçbir şey imzalanmaz veya gönderilmez."
 
 msgid "Pause {noun}"
 msgstr "{noun} güncellemesini duraklat"
@@ -2560,20 +1277,8 @@ msgstr "Duraklatıldı"
 msgid "Paused · {newCount} new"
 msgstr "Duraklatıldı · {newCount} yeni"
 
-msgid "Payload"
-msgstr "Yük"
-
-msgid "Payload version"
-msgstr "Yük sürümü"
-
 msgid "Payment"
 msgstr "Ödeme"
-
-msgid "Payout"
-msgstr "Ödeme"
-
-msgid "Pays out a Platform withdrawal from the credit pool."
-msgstr "Kredi havuzundan bir Platform çekimini öder."
 
 msgid "Peer"
 msgstr "Eş"
@@ -2584,10 +1289,6 @@ msgstr "Dizin oluşturan düğümün eşleri"
 msgid "Peers of the node Hyphen indexes from"
 msgstr "Hyphen’in dizinlediği düğümün eşleri"
 
-#. placeholder {0}: formatInt(d.pose_penalty)
-msgid "Penalty {0}"
-msgstr "Ceza {0}"
-
 msgid "Pending"
 msgstr "Beklemede"
 
@@ -2596,12 +1297,6 @@ msgstr "Bekleyen çıktılar henüz bir bloğa girmedi, bu yüzden yukarıdaki b
 
 msgid "Pending transactions"
 msgstr "Bekleyen işlemler"
-
-msgid "Pending transactions are unavailable"
-msgstr "Bekleyen işlemler kullanılamıyor"
-
-msgid "Pending transactions seen since you opened this page"
-msgstr "Bu sayfayı açtığınızdan beri görülen bekleyen işlemler"
 
 msgid "Pending transactions seen since you opened this page, newest first"
 msgstr "Bu sayfayı açtığınızdan beri görülen bekleyen işlemler, en yeniler önce"
@@ -2612,54 +1307,11 @@ msgstr "Bekleyen işlemler, en yeniden eskiye"
 msgid "Picture"
 msgstr "Resim"
 
-msgid "Place"
-msgstr "Konum"
-
-msgid "Places with the most masternodes"
-msgstr "En çok masternode bulunan yerler"
-
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform address"
 msgstr "Platform adresi"
 
 msgid "Platform block"
 msgstr "Platform bloğu"
-
-msgid "Platform block {label}"
-msgstr "Platform bloğu {label}"
-
-msgid "Platform block height"
-msgstr "Platform blok yüksekliği"
-
-msgid "Platform blocks"
-msgstr "Platform blokları"
-
-msgid "Platform blocks, state transitions and Platform addresses"
-msgstr "Platform blokları, durum geçişleri ve Platform adresleri"
-
-#. placeholder {0}: daily.length
-msgid "Platform endpoint checks answered, day by day, over {0} days"
-msgstr "Platform uç noktası kontrollerine verilen yanıtlar, {0} gün boyunca gün gün"
-
-msgid "Platform endpoints"
-msgstr "Platform uç noktaları"
-
-msgid "Platform epoch"
-msgstr "Platform epoch’u"
-
-msgid "Platform Explorer"
-msgstr "Platform Explorer"
-
-msgid "Platform Explorer doesn't index devnets"
-msgstr "Platform Explorer devnet’leri dizinlemez"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer devnet’leri dizinlemez."
-
-msgid "Platform Explorer isn't answering"
-msgstr "Platform Explorer yanıt vermiyor"
 
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "Platform Explorer indeksleyicisinin sağlıksız olduğunu bildiriyor ({block}. bloğa kadar indekslendi)"
@@ -2667,65 +1319,14 @@ msgstr "Platform Explorer indeksleyicisinin sağlıksız olduğunu bildiriyor ({
 msgid "Platform Explorer's API documentation"
 msgstr "Platform Explorer API belgeleri"
 
-msgid "Platform height"
-msgstr "Platform yüksekliği"
-
-msgid "Platform lists and counts"
-msgstr "Platform listeleri ve sayıları"
-
-msgid "Platform locks to Core"
-msgstr "Platform, Core’a kilitlenir"
-
-msgid "Platform node"
-msgstr "Platform düğümü"
-
-msgid "Platform node ID"
-msgstr "Platform düğüm kimliği"
-
-msgid "Platform ports"
-msgstr "Platform portları"
-
-msgid "Platform protocol version voting: the current and next version and each evonode’s vote."
-msgstr "Platform protokol sürümü oylaması: mevcut ve sonraki sürüm ile her evonode’un oyu."
-
 msgid "Platform SDK"
 msgstr "Platform SDK"
-
-msgid "Platform transitions"
-msgstr "Platform geçişleri"
-
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Platform’un son blokları Platform Explorer gerektirir; “Yalnızca merkeziyetsiz” modu bunu kullanmaz."
-
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Platform’un son geçişleri Platform Explorer gerektirir"
-
-msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
-msgstr "Platform’un nabzı: yükseklik, epoch, etkinlik grafikleri, liderler ve en yeni bloklar ile durum geçişleri."
 
 msgid "Platform's state, each answer with a proof that Radar checks in this browser."
 msgstr "Platform’un durumu; her yanıt, Radar’ın bu tarayıcıda doğruladığı bir kanıtla gelir."
 
-msgid "Plenty of room"
-msgstr "Bol miktarda pay"
-
 msgid "Point the camera at a QR code."
 msgstr "Kamerayı bir QR koduna doğrultun."
-
-msgid "PoSe"
-msgstr "PoSe"
-
-msgid "PoSe banned"
-msgstr "PoSe ile yasaklı"
-
-msgid "PoSe penalty"
-msgstr "PoSe cezası"
-
-msgid "Position"
-msgstr "Konum"
-
-msgid "Pressure"
-msgstr "Baskı"
 
 msgid "Preview"
 msgstr "Önizleme"
@@ -2745,45 +1346,17 @@ msgstr "Fiyat akışı"
 msgid "Price via Platform Explorer"
 msgstr "Platform Explorer üzerinden fiyat"
 
-msgid "Probe failing"
-msgstr "Yoklama başarısız"
-
-msgid "Probed"
-msgstr "Yoklandı"
-
 msgid "Proof-checked"
 msgstr "Kanıtla doğrulandı"
 
-msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
-msgstr "Platform’un {block} numaralı bloğunda, {epoch}. dönemde kanıtla doğrulandı. Bu blok {age}."
-
-msgid "Proof-checked Platform state, verified in this browser"
-msgstr "Kanıtla doğrulanmış Platform durumu, bu tarayıcıda doğrulandı"
-
-msgid "proposal"
-msgstr "teklif"
-
 msgid "Proposal"
 msgstr "Teklif"
-
-#. placeholder {0}: short(found.hash)
-msgid "Proposal {0}"
-msgstr "Teklif {0}"
 
 msgid "Proposals"
 msgstr "Teklifler"
 
 msgid "ProRegTx"
 msgstr "ProRegTx"
-
-msgid "Protocol"
-msgstr "Protokol"
-
-msgid "ProTx"
-msgstr "ProTx"
-
-msgid "ProTx hash"
-msgstr "ProTx hash’i"
 
 msgid "ProUpRegTx"
 msgstr "ProUpRegTx"
@@ -2803,47 +1376,14 @@ msgstr "{address} adresinin QR kodu"
 msgid "QR reader"
 msgstr "QR okuyucu"
 
-msgid "Query"
-msgstr "Sorgu"
-
 msgid "Quorum"
 msgstr "Quorum"
 
 msgid "Quorum commitment"
 msgstr "Quorum taahhüdü"
 
-msgid "Quorum hash"
-msgstr "Quorum hash’i"
-
-msgid "Quorum index"
-msgstr "Quorum dizini"
-
-msgid "Quorum list URL"
-msgstr "Quorum listesi URL’si"
-
 msgid "Quorum list URL (optional)"
 msgstr "Quorum listesi URL’si (isteğe bağlı)"
-
-msgid "Quorum public key"
-msgstr "Quorum açık anahtarı"
-
-msgid "Quorum readiness"
-msgstr "Quorum hazırlığı"
-
-msgid "Quorum signature"
-msgstr "Quorum imzası"
-
-msgid "Quorum type"
-msgstr "Quorum türü"
-
-msgid "Quorums"
-msgstr "Quorum’lar"
-
-msgid "Quorums root"
-msgstr "Quorum kökü"
-
-msgid "Radar"
-msgstr "Radar"
 
 msgid "Radar API"
 msgstr "Radar API"
@@ -2851,56 +1391,14 @@ msgstr "Radar API"
 msgid "Radar census API"
 msgstr "Radar sayım API’si"
 
-msgid "Radar checked every source that can answer this kind of input."
-msgstr "Radar, bu tür girdiyi yanıtlayabilecek her kaynağı denetledi."
-
-msgid "Radar crawler"
-msgstr "Radar tarayıcısı"
-
 msgid "Radar didn’t keep it, show it or search for it. Radar never needs a key: if this one is yours, treat it as exposed."
 msgstr "Radar bunu saklamadı, göstermedi ve aramadı. Radar hiçbir zaman anahtara ihtiyaç duymaz: bu sizinse, ele geçirilmiş sayın."
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar devnet’leri taramaz"
-
-msgid "Radar doesn't crawl devnets, so there is nothing to map."
-msgstr "Radar devnet’leri taramadığı için haritalanacak bir şey yok."
-
-msgid "Radar doesn’t crawl devnets."
-msgstr "Radar devnet’leri taramaz."
 
 msgid "Radar doesn’t know this devnet yet. Add the addresses of a few of its DAPI nodes and it will read the network from them. This stays in this browser."
 msgstr "Radar bu devnet’i henüz tanımıyor. DAPI düğümlerinden birkaçının adresini ekleyin; ağı onlardan okuyacak. Bu bilgi yalnızca bu tarayıcıda kalır."
 
-msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
-msgstr "Radar bunun için herhangi bir blok, işlem, adres, masternode veya başka bir kayıt bulamadı. Bir yükseklik, hash, adres, kimlik numarası veya ad deneyin."
-
-msgid "Radar has no checks for this node yet"
-msgstr "Radar’ın bu düğüm için henüz kontrolü yok"
-
-msgid "Radar has no uptime checks for this node yet."
-msgstr "Radar’ın bu düğüm için henüz çalışma süresi kontrolü yok."
-
-msgid "Radar hasn’t located this node."
-msgstr "Radar bu düğümün konumunu belirleyemedi."
-
-msgid "Radar hasn’t probed this node’s Platform endpoints yet."
-msgstr "Radar bu düğümün Platform uç noktalarını henüz yoklamadı."
-
-msgid "Radar isn't answering, so the map shows no nodes."
-msgstr "Radar yanıt vermediği için harita hiç düğüm göstermiyor."
-
-msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
-msgstr "Radar her evonode’u hız sınırının çok altında tutar, böylece bir ziyaretçi diğerini dışarıda bırakmaz."
-
 msgid "Radar looks up addresses, blocks, transactions, names, masternodes and the like."
 msgstr "Radar adresleri, blokları, işlemleri, adları, masternode’ları ve benzerlerini arar."
-
-msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
-msgstr "Radar hiçbir zaman bir kurtarma ifadesine ihtiyaç duymaz; bu yüzden bu tür sözcükler hiçbir yere gönderilmez ve adres çubuğundan ve geçmişinizden uzak tutulur. Bunun yerine bir ad, kimlik numarası veya sayı arayın."
-
-msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
-msgstr "Radar buna hiçbir zaman ihtiyaç duymaz; bu yüzden hiçbir yere gönderilmez ve adres çubuğundan ve geçmişinizden uzak tutulur."
 
 msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
 msgstr "Radar önce DAPI’yi ve Platform SDK’yı okur; bunların yanıtlayamadığı şeyler için barındırılan hizmetlere sorar: adres geçmişi, zenginler listesi, grafikler, yönetişim, düğüm sayımı ve USD fiyatları."
@@ -2908,23 +1406,8 @@ msgstr "Radar önce DAPI’yi ve Platform SDK’yı okur; bunların yanıtlayama
 msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
 msgstr "Radar yalnızca DAPI düğümlerini ve Platform SDK’yı okur. Bir dizinleyiciye, tarayıcıya veya fiyata ihtiyaç duyan sayfa, bunlara sormak yerine bunu belirtir."
 
-msgid "Radar shows this payload type as raw data."
-msgstr "Radar bu yük türünü ham veri olarak gösterir."
-
 msgid "Radar won't show the figure as proof-checked. {rest}"
 msgstr "Radar bu rakamı kanıtla doğrulanmış olarak göstermeyecek. {rest}"
-
-msgid "Radar:"
-msgstr "Radar:"
-
-msgid "Radar’s crawl"
-msgstr "Radar’ın taraması"
-
-msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
-msgstr "Radar’ın taraması bunu listelemiyor. Yeni, kaldırılmış ya da yanlış yazılmış olabilir."
-
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "Radar’ın {here} taraması bunu listelemiyor."
 
 msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload. For a link with ?sources=decentralized, its link previews ask no hosted backend either."
 msgstr "Radar’ın kendi kodu, dashhq üst bilgisi, yazı tipleri ve haritanın şekilleri. Doğrudan açtığınız veya yeniden yüklediğiniz bir sayfanın adresini de görür. ?sources=decentralized içeren bir bağlantıda, bağlantı önizlemeleri de barındırılan hiçbir arka uca sormaz."
@@ -2938,22 +1421,8 @@ msgstr "Sıra"
 msgid "Rank band"
 msgstr "Sıra bandı"
 
-#. placeholder {0}: formatFiat(DUFFS_PER_DASH, rate.data.data.usd)
-#. placeholder {1}: rate.data.data.provider
-msgid "Rate: {0} per DASH, from {1}."
-msgstr "Kur: DASH başına {0}, kaynak {1}."
-
-msgid "Raw data"
-msgstr "Ham veri"
-
-msgid "Raw payload"
-msgstr "Ham yük"
-
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "Bir QR kodunu kamerayla veya bir resimden okuyun ve içindekini arayın. Resim bu tarayıcıda okunur ve yüklenmez."
-
-msgid "Read from"
-msgstr "Okunan kaynak"
 
 msgid "Reading the chain tip…"
 msgstr "Zincir ucu okunuyor…"
@@ -2961,97 +1430,31 @@ msgstr "Zincir ucu okunuyor…"
 msgid "Reading the picture…"
 msgstr "Resim okunuyor…"
 
-msgid "Ready"
-msgstr "Hazır"
-
-msgid "Reason"
-msgstr "Neden"
-
 msgid "Received"
 msgstr "Alındı"
 
-msgid "Recent Core blocks with height, size, transactions, miner and ChainLock state, and a date picker that lists a day’s blocks."
-msgstr "Son Core blokları: yükseklik, boyut, işlemler, madenci ve ChainLock durumu; bir günün bloklarını listeleyen tarih seçici."
-
-msgid "Recent payments"
-msgstr "Son ödemeler"
-
-msgid "Recent payments to this masternode"
-msgstr "Bu masternode’a yapılan son ödemeler"
-
 msgid "Reconnecting…"
 msgstr "Yeniden bağlanılıyor…"
-
-msgid "recorded by Hyphen; no second source has confirmed it"
-msgstr "Hyphen tarafından kaydedildi; ikinci bir kaynak doğrulamadı"
-
-msgid "Records that a quorum finished its key generation and who signed."
-msgstr "Bir quorum’un anahtar üretimini tamamladığını ve kimlerin imzaladığını kaydeder."
 
 #. placeholder {0}: POLL_MS.mempool / 1000
 msgid "Refreshes every {0} seconds."
 msgstr "Her {0} saniyede bir yenilenir."
 
-msgid "Registered"
-msgstr "Kaydedildi"
-
-msgid "Registers a masternode or evonode and sets the keys that run it."
-msgstr "Bir masternode veya evonode kaydeder ve onu çalıştıran anahtarları belirler."
-
-msgid "Registration"
-msgstr "Kayıt"
-
-msgid "Registrations, updates, bans and removals across the masternode list, newest first."
-msgstr "Masternode listesindeki kayıtlar, güncellemeler, yasaklamalar ve kaldırmalar; en yeniler önce."
-
-msgid "Regular masternode"
-msgstr "Normal masternode"
-
 msgid "Regular masternodes"
 msgstr "Normal masternode’lar"
-
-msgid "Relays transactions"
-msgstr "İşlemleri iletir"
-
-msgid "Remove"
-msgstr "Kaldır"
-
-msgid "Remove {devnet}"
-msgstr "{devnet} kaldır"
 
 #. placeholder {0}: tok.label
 msgid "Remove filter {0}"
 msgstr "{0} filtresini kaldır"
 
-msgid "Removed from saved"
-msgstr "Kaydedilenlerden kaldırıldı"
-
-msgid "reported by one node; no second source has confirmed it"
-msgstr "tek bir düğüm bildirdi; ikinci bir kaynak doğrulamadı"
-
-msgid "reported by one node; waiting for a second source to agree"
-msgstr "tek bir düğüm bildirdi; ikinci bir kaynağın onaylaması bekleniyor"
-
 msgid "Requested"
 msgstr "İstendi"
-
-msgid "Requested at height"
-msgstr "İstendiği yükseklik"
 
 msgid "Requested payments"
 msgstr "İstenen ödemeler"
 
 msgid "Requested payments of open proposals: funded, passing and not passing"
 msgstr "Açık tekliflerin istenen ödemeleri: finanse edilen, geçen ve geçmeyen"
-
-msgid "Requests in the last minute"
-msgstr "Son dakikadaki istekler"
-
-msgid "Result"
-msgstr "Sonuç"
-
-msgid "Results"
-msgstr "Sonuçlar"
 
 msgid "Resume {noun}"
 msgstr "{noun} güncellemesini sürdür"
@@ -3065,13 +1468,6 @@ msgstr "Yeniden dene"
 msgid "Retrying"
 msgstr "Yeniden deneniyor"
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
-msgid "Revived at block {0}"
-msgstr "{0}. blokta yeniden etkinleşti"
-
-msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
-msgstr "Şerit genişliği tutarı gösterir. Gri, göndericiye para üstüdür; turuncu ise ücrettir."
-
 msgid "Rich list"
 msgstr "Zenginler listesi"
 
@@ -3081,61 +1477,15 @@ msgstr "Yükleme başına satır"
 msgid "Rows per page"
 msgstr "Sayfa başına satır"
 
-msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
-msgstr "Bir sözleşmenin belgeleri üzerinde salt okunur SQL; hazır şablonlar, kayıtlı sorgular ve paylaşılabilir bağlantılarla."
-
-msgid "Runs a current protocol version"
-msgstr "Güncel bir protokol sürümü çalıştırır"
-
-msgid "Same as the owner address"
-msgstr "Sahip adresiyle aynı"
-
-msgid "Save"
-msgstr "Kaydet"
-
-msgid "Save changes"
-msgstr "Değişiklikleri kaydet"
-
-msgid "Saved"
-msgstr "Kaydedilenler"
-
-msgid "Saved devnets"
-msgstr "Kayıtlı devnet’ler"
-
-msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
-msgstr "Bu tarayıcıda kayıtlıdır. Radar’ın tanımadığı adlı bir devnet için adresleri istenir."
-
-msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
-msgstr "Bir QR kodunu tarayın veya yükleyin ve içeriğini açın: bir adres, ödeme bağlantısı veya anahtar hash’i."
-
 msgid "Scroll"
 msgstr "Kaydır"
 
-msgid "SDK reference"
-msgstr "SDK başvurusu"
-
-msgid "Search"
-msgstr "Ara"
-
 #. placeholder {0}: networkName(other)
-#. placeholder {0}: networkName(otherNetwork(net))
 msgid "Search {0}"
 msgstr "{0} üzerinde ara"
 
-msgid "Search blocks, transactions, masternodes, names…"
-msgstr "Blok, işlem, masternode, ad ara…"
-
-msgid "Search blocks, txs, masternodes, names"
-msgstr "Blok, işlem, masternode, ad ara"
-
-msgid "Search DPNS names by prefix, or browse all of them alphabetically."
-msgstr "DPNS adlarını önek ile arayın veya hepsine alfabetik sırayla göz atın."
-
 msgid "Search Radar"
 msgstr "Radar’da ara"
-
-msgid "Search Radar (⌘K on a Mac)"
-msgstr "Radar’da ara (Mac’te ⌘K)"
 
 #. placeholder {0}: formatInt(range.found)
 msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
@@ -3146,15 +1496,6 @@ msgstr "Aranıyor…"
 
 msgid "Sections"
 msgstr "Bölümler"
-
-msgid "See all results for “{trimmed}”"
-msgstr "“{trimmed}” için tüm sonuçları gör"
-
-msgid "See all results for “{trimmed}” on {net}"
-msgstr "{net} üzerinde “{trimmed}” için tüm sonuçları gör"
-
-msgid "See every source"
-msgstr "Tüm kaynakları gör"
 
 msgid "See the sources"
 msgstr "Kaynaklara bak"
@@ -3180,23 +1521,8 @@ msgstr "DAPI tarafından sağlandı"
 msgid "Served by DAPI · not proved"
 msgstr "DAPI tarafından sağlandı · kanıtlanmadı"
 
-msgid "Serves compact block filters"
-msgstr "Kompakt blok filtreleri sunar"
-
-msgid "Service address"
-msgstr "Hizmet adresi"
-
 msgid "Set up the {name} devnet"
 msgstr "{name} devnet’ini kur"
-
-msgid "Settings"
-msgstr "Ayarlar"
-
-msgid "Settlement"
-msgstr "Kesinleşme"
-
-msgid "Share index"
-msgstr "Pay dizini"
 
 msgid "Share of address balances"
 msgstr "Adres bakiyelerindeki pay"
@@ -3216,18 +1542,6 @@ msgstr "Her sıra bandının elindeki arz payı"
 msgid "Share of the supply held by the top addresses, by rank band"
 msgstr "En büyük adreslerin elindeki arz payı, sıra bandına göre"
 
-msgid "Share payout update"
-msgstr "Pay ödemesi güncellemesi"
-
-msgid "Shared collateral"
-msgstr "Paylaşımlı teminat"
-
-msgid "Shared masternode dissolved"
-msgstr "Paylaşımlı masternode feshedildi"
-
-msgid "Shared masternode registrar update"
-msgstr "Paylaşımlı masternode kaydedici güncellemesi"
-
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "Paylar, Grafikler sayfasında gösterilen rakam olan <0/> dolaşımdaki arz üzerinden hesaplanır."
 
@@ -3243,9 +1557,6 @@ msgstr "Kimlikten gizleme"
 msgid "Shielded"
 msgstr "Gizlenmiş"
 
-msgid "Shielded pool"
-msgstr "Gizli havuz"
-
 msgid "Shielded transfer"
 msgstr "Gizli transfer"
 
@@ -3254,21 +1565,6 @@ msgstr "Gizli çekim"
 
 msgid "Show {step} more of {hidden}"
 msgstr "{hidden} içinden {step} tane daha göster"
-
-#. placeholder {0}: formatInt(inCount)
-msgid "Show all {0} inputs"
-msgstr "{0} girdinin tümünü göster"
-
-#. placeholder {0}: formatInt(inCount)
-msgid "Show all {0} inputs with their amounts"
-msgstr "{0} girdinin tümünü tutarlarıyla göster"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "Show all {0} outputs"
-msgstr "{0} çıktının tümünü göster"
-
-msgid "Show all inputs to work it out"
-msgstr "Hesaplamak için tüm girdileri göster"
 
 msgid "Show as a table"
 msgstr "Tablo olarak göster"
@@ -3279,29 +1575,11 @@ msgstr "Daha fazla göster"
 msgid "Show QR code"
 msgstr "QR kodunu göster"
 
-msgid "Show the USD value next to DASH amounts"
-msgstr "DASH tutarlarının yanında USD değerini göster"
-
-msgid "Show these shortcuts"
-msgstr "Bu kısayolları göster"
-
-msgid "Show times in UTC"
-msgstr "Saatleri UTC olarak göster"
-
 msgid "Signature"
 msgstr "İmza"
 
-msgid "Signatures"
-msgstr "İmzalar"
-
 msgid "Signed message"
 msgstr "İmzalı mesaj"
-
-msgid "Signers"
-msgstr "İmzalayanlar"
-
-msgid "Signing quorum"
-msgstr "İmzalayan quorum"
 
 msgid "Since you opened this page"
 msgstr "Bu sayfayı açtığınızdan beri"
@@ -3309,33 +1587,8 @@ msgstr "Bu sayfayı açtığınızdan beri"
 msgid "Size"
 msgstr "Boyut"
 
-msgid "Skip to content"
-msgstr "İçeriğe geç"
-
 msgid "Slow"
 msgstr "Yavaş"
-
-msgid "Small amounts are drawn at a minimum height."
-msgstr "Küçük tutarlar en düşük yükseklikte çizilir."
-
-msgid "Software"
-msgstr "Yazılım"
-
-msgid "Some amounts could not be loaded."
-msgstr "Bazı tutarlar yüklenemedi."
-
-msgid "Some requests are failing."
-msgstr "Bazı istekler başarısız oluyor."
-
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Bazı kaynaklar yavaş veya geride. Diğerleri çalışmaya devam ediyor."
-
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Bazı kaynaklar yanıt vermiyor. Diğerleri çalışmaya devam ediyor."
-
-#. placeholder {0}: failed.map((f) => f.id).join(', ')
-msgid "Some sources didn’t answer: {0}."
-msgstr "Bazı kaynaklar yanıt vermedi: {0}."
 
 msgid "Something in the page broke. The rest of Radar still works."
 msgstr "Sayfada bir şey bozuldu. Radar’ın geri kalanı çalışmaya devam ediyor."
@@ -3359,9 +1612,6 @@ msgstr "Kaynaklar"
 msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
 msgstr "Mesajdaki boşluklar ve satır sonları sayılır: imzalananla tam olarak aynı olmalıdır."
 
-msgid "Special transaction payload"
-msgstr "Özel işlem yükü"
-
 msgid "Spendable outputs"
 msgstr "Harcanabilir çıktılar"
 
@@ -3369,29 +1619,11 @@ msgstr "Harcanabilir çıktılar"
 msgid "Spendable outputs over the last {0} blocks"
 msgstr "Son {0} blok boyunca harcanabilir çıktılar"
 
-msgid "spender not found"
-msgstr "harcayan bulunamadı"
-
-msgid "Spends"
-msgstr "Harcamalar"
-
-msgid "Spent"
-msgstr "Harcandı"
-
 msgid "Started {startedText}"
 msgstr "{startedText} başladı"
 
-msgid "State"
-msgstr "Durum"
-
-msgid "state transition"
-msgstr "durum geçişi"
-
 msgid "State transition"
 msgstr "Durum geçişi"
-
-msgid "State transitions"
-msgstr "Durum geçişleri"
 
 msgid "Status"
 msgstr "Durum"
@@ -3411,9 +1643,6 @@ msgstr "{since} tarihinden beri durdu"
 msgid "Summary"
 msgstr "Özet"
 
-msgid "Supply and blockchain size are not shown until it catches up."
-msgstr "İndeks yetişene kadar dolaşımdaki arz ve blokzincir boyutu gösterilmez."
-
 msgid "Supply concentration"
 msgstr "Arz yoğunlaşması"
 
@@ -3423,32 +1652,14 @@ msgstr "Mainnet’e geç"
 msgid "Switch to testnet"
 msgstr "Testnet’e geç"
 
-msgid "Synced"
-msgstr "Eşitlendi"
-
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "Etiket: {tag}. Madenci yazar, bu yüzden kanıt değildir."
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Girdileri, çıktıları ve boyutu görmek için bir işleme dokunun"
 
-msgid "Termination of service"
-msgstr "Hizmetin sonlandırılması"
-
-msgid "Test coins have no value, so Testnet and devnets never show USD."
-msgstr "Test coin’lerin değeri yoktur; bu yüzden Testnet ve devnet’lerde USD hiç gösterilmez."
-
 msgid "testnet"
 msgstr "Testnet"
-
-msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
-msgstr "Henüz çevrilmemiş metinler İngilizce görünür. Hash’ler, kimlik numaraları ve tutarlar asla çevrilmez."
-
-msgid "text: a contract or token name"
-msgstr "metin: bir sözleşme veya token adı"
-
-msgid "That could be part of a recovery phrase"
-msgstr "Bu, bir kurtarma ifadesinin parçası olabilir"
 
 msgid "That isn’t a Dash address Radar can check."
 msgstr "Bu, Radar’ın denetleyebileceği bir Dash adresi değil."
@@ -3458,12 +1669,6 @@ msgstr "Bu bir Dash adresi değil."
 
 msgid "That isn’t a Dash signature."
 msgstr "Bu bir Dash imzası değil."
-
-msgid "That isn’t a ProTx hash."
-msgstr "Bu bir ProTx karması değil."
-
-msgid "That looks like a private key or recovery phrase"
-msgstr "Bu, bir özel anahtara veya kurtarma ifadesine benziyor"
 
 msgid "That picture couldn’t be read."
 msgstr "Bu resim okunamadı."
@@ -3477,14 +1682,8 @@ msgstr "Radar bu QR kodunu arayamıyor."
 msgid "The <0/> held in positive address balances at block {block}."
 msgstr "{block} numaralı blokta pozitif bakiyeli adreslerde tutulan <0/>."
 
-msgid "the block can't be reorganised"
-msgstr "blok yeniden düzenlenemez"
-
 msgid "The browser didn’t give Radar the camera. Allow it in the site settings, or choose a picture instead."
 msgstr "Tarayıcı, Radar’a kamera erişimi vermedi. Site ayarlarından izin verin veya bunun yerine bir resim seçin."
-
-msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
-msgstr "Sayım: son taramada kaç düğümün yanıt verdiği, sürümler, barındırma, ülkeler ve erişilebilirlik."
 
 msgid "The chain’s size, its node versions and the peers Hyphen reads from."
 msgstr "Zincirin boyutu, düğüm sürümleri ve Hyphen'in okuduğu eşler."
@@ -3501,15 +1700,6 @@ msgstr "Dolaşımdaki arz şu an alınamıyor, bu yüzden paylar adres bakiyeler
 msgid "The circulating supply isn’t current, so shares are of address balances."
 msgstr "Dolaşımdaki arz güncel değil, bu yüzden paylar adres bakiyeleri üzerinden hesaplanıyor."
 
-msgid "The connection failed."
-msgstr "Bağlantı başarısız oldu."
-
-msgid "The current Platform epoch, who proposes next and what evonodes earned in past epochs."
-msgstr "Geçerli Platform epoch’u, sıradaki önerici ve evonode’ların geçmiş epoch’larda kazandıkları."
-
-msgid "The Dash network, now"
-msgstr "Dash ağı, şimdi"
-
 msgid "The end time is an estimate."
 msgstr "Bitiş zamanı bir tahmindir."
 
@@ -3521,17 +1711,6 @@ msgstr "Tam mempool listesi ve toplamları bir dizinleyici gerektirir"
 
 msgid "The largest Core balances, ranked."
 msgstr "En büyük Core bakiyeleri, sıralı."
-
-msgid "The largest Core balances, with share of supply and the labels Radar knows."
-msgstr "En büyük Core bakiyeleri; arzdaki payları ve Radar’ın bildiği etiketlerle."
-
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Radar’ın dizinlediği {1} ödemenin son {0} tanesi"
-
-msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
-msgstr "Bağlantı eski ya da yanlış yazılmış olabilir. Aradığınızı arayın veya bölümlerden birinden başlayın."
 
 msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
 msgstr "Bu bağlantı “Yalnızca merkeziyetsiz” seçeneğini bu ziyaret için açtı. Burada seçerseniz bu tarayıcıda açık kalır."
@@ -3545,12 +1724,6 @@ msgstr "Canlı bağlantı sürekli başarısız oluyor, bu yüzden Radar en son 
 msgid "The masternode and node census, the map and client versions, from Radar's crawler."
 msgstr "Masternode ve düğüm sayımı, harita ve istemci sürümleri, Radar’ın tarayıcısından."
 
-msgid "The masternode census and network history"
-msgstr "Masternode sayımı ve ağ geçmişi"
-
-msgid "The median answer takes {seconds} s."
-msgstr "Ortanca yanıt süresi {seconds} sn."
-
 msgid "The minimum is above the maximum."
 msgstr "Minimum, maksimumdan büyük."
 
@@ -3560,50 +1733,17 @@ msgstr "Bu sayfayı açtığınızdan beri görülen {total} işlemin en yeni {s
 msgid "The next transactions could not be loaded."
 msgstr "Sonraki işlemler yüklenemedi."
 
-msgid "The node map"
-msgstr "Düğüm haritası"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "Düğüm haritası Radar’ın tarayıcısını gerektirir; “Yalnızca merkeziyetsiz” modu bunu kullanmaz."
-
-msgid "The operator announces a new network address for a masternode."
-msgstr "Operatör, bir masternode için yeni bir ağ adresi duyurur."
-
-msgid "The operator ends a masternode's service; it must be registered again to return."
-msgstr "Operatör bir masternode’un hizmetini sonlandırır; geri dönmesi için yeniden kaydedilmesi gerekir."
-
-msgid "The owner changes a masternode's operator key, voting key or payout."
-msgstr "Sahip, bir masternode’un operatör anahtarını, oylama anahtarını veya ödemesini değiştirir."
-
-msgid "the Platform Explorer price feed"
-msgstr "Platform Explorer fiyat akışı"
-
 msgid "The Platform SDK"
 msgstr "Platform SDK"
 
-msgid "The Platform SDK isn't answering"
-msgstr "Platform SDK yanıt vermiyor"
-
-msgid "the Platform SDK, proof-checked"
-msgstr "Platform SDK (kanıtlarla doğrulanır)"
-
-msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
-msgstr "Platform doğrulayıcı kümesi: Platform kayıtlarıyla evonode’lar; masternode listesinde gösterilir."
-
 msgid "The price feed"
 msgstr "Fiyat akışı"
-
-msgid "The public API behind the node census and masternode pages, with examples."
-msgstr "Düğüm sayımı ve masternode sayfalarının arkasındaki herkese açık API, örneklerle."
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "QR kodu burada çizilemedi. Yukarıdaki adres aynıdır."
 
 msgid "The quorum list URL must start with https://."
 msgstr "Quorum listesi URL’si https:// ile başlamalıdır."
-
-msgid "The request budget is nearly used."
-msgstr "İstek bütçesi neredeyse tükendi."
 
 msgid "The request was cancelled"
 msgstr "İstek iptal edildi"
@@ -3613,15 +1753,6 @@ msgstr "Bu sayfanın geri kalanı çalışmaya devam ediyor."
 
 msgid "The rich list needs an indexer"
 msgstr "Zenginler listesi bir dizinleyici gerektirir"
-
-msgid "The shareholders change a shared masternode's operator key or voting key."
-msgstr "Pay sahipleri, paylaşımlı bir masternode’un operatör veya oylama anahtarını değiştirir."
-
-msgid "The shareholders end a shared masternode and take their collateral back."
-msgstr "Pay sahipleri paylaşımlı bir masternode’u sonlandırır ve teminatlarını geri alır."
-
-msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
-msgstr "Gizli havuzun durumu, çıpalar, şifreli notlar ve nullifier sorgusu."
 
 msgid "The signature is well formed, but it was made by a different key. It matches this address:"
 msgstr "İmza düzgün biçimlendirilmiş ancak farklı bir anahtarla oluşturulmuş. Şu adresle eşleşiyor:"
@@ -3648,35 +1779,14 @@ msgstr "Başlangıç tarihi bitiş tarihinden sonra."
 msgid "The supply is as of block {0}, the list as of block {1}."
 msgstr "Arz {0}. bloğa, liste {1}. bloğa göre."
 
-msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
-msgstr "Radar’ın DAPI’nin baytlarından çözdüğü haliyle işlem. Tutarlar duff cinsindendir."
-
-msgid "The transaction is not in a block yet."
-msgstr "İşlem henüz bir blokta değil."
-
 msgid "The USD rate shown next to DASH amounts. Mainnet only."
 msgstr "DASH tutarlarının yanında gösterilen USD kuru. Yalnızca mainnet."
-
-msgid "The USD rate, through Platform Explorer"
-msgstr "Platform Explorer üzerinden USD kuru"
 
 msgid "Their size"
 msgstr "Boyutları"
 
 msgid "There is no block with this height or hash on this network."
 msgstr "Bu ağda bu yüksekliğe veya hash’e sahip bir blok yok."
-
-msgid "There is no page at {pathname}"
-msgstr "{pathname} adresinde bir sayfa yok"
-
-msgid "There is no transaction with this ID on this network. It may be too new, or on another network."
-msgstr "Bu ağda bu kimliğe sahip bir işlem yok. Çok yeni olabilir veya başka bir ağda olabilir."
-
-msgid "These choices stay in this browser. Radar never sends them anywhere."
-msgstr "Bu tercihler bu tarayıcıda kalır. Radar bunları hiçbir yere göndermez."
-
-msgid "This {record} is on {network}."
-msgstr "Bu {record}, {network} üzerinde."
 
 msgid "This address did not sign this message."
 msgstr "Bu adres bu mesajı imzalamadı."
@@ -3693,32 +1803,17 @@ msgstr "Bu tarayıcı"
 msgid "This is a {name} address."
 msgstr "Bu bir {name} adresidir."
 
-msgid "This is a mainnet address"
-msgstr "Bu bir mainnet adresi"
-
 msgid "This is a mainnet address."
 msgstr "Bu bir mainnet adresi."
-
-msgid "This is a mainnet Platform address"
-msgstr "Bu bir mainnet Platform adresi"
 
 msgid "This is a Radar bug, not your connection. {rest}"
 msgstr "Bu, bağlantınızın değil Radar’ın hatasıdır. {rest}"
 
-msgid "This is a testnet address"
-msgstr "Bu bir testnet adresi"
-
 msgid "This is a testnet address."
 msgstr "Bu bir testnet adresi."
 
-msgid "This is a testnet Platform address"
-msgstr "Bu bir testnet Platform adresi"
-
 msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
 msgstr "Bu bir özel anahtara veya kurtarma ifadesine benziyor. Radar buna hiçbir zaman ihtiyaç duymaz, bu yüzden denetlemez. Alanı temizleyin ve bunun yerine imzalı mesajı yapıştırın."
-
-msgid "This masternode is on {otherName}."
-msgstr "Bu masternode {otherName} üzerinde."
 
 msgid "This needs an indexer"
 msgstr "Bunun için bir dizinleyici gerekir"
@@ -3729,24 +1824,14 @@ msgstr "Bunun için Platform Explorer gerekir"
 msgid "This needs Radar's crawler"
 msgstr "Bunun için Radar’ın tarayıcısı gerekir"
 
-msgid "This network doesn’t have this source."
-msgstr "Bu ağda bu kaynak yok."
-
 msgid "This network has no blocks in this day, or the day has not happened yet."
 msgstr "Bu ağda bu günde blok yok ya da bu gün henüz gelmedi."
 
 msgid "This page couldn’t be shown"
 msgstr "Bu sayfa gösterilemedi"
 
-msgid "This page is on its way"
-msgstr "Bu sayfa yolda"
-
 msgid "This page needs an indexer"
 msgstr "Bu sayfa bir dizinleyici gerektirir"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Bu sayfa {0} kaynaklarından okur. Görmek için Mainnet’e veya Testnet’e geçin."
 
 msgid "This page reads from Hyphen. Switch to Mainnet or Testnet to see it."
 msgstr "Bu sayfa Hyphen’den okur. Görmek için Mainnet’e veya Testnet’e geçin."
@@ -3763,26 +1848,8 @@ msgstr "Bu kaynak yalnızca bu satırı kapsar"
 msgid "This source isn't available here"
 msgstr "Bu kaynak burada kullanılamıyor"
 
-msgid "Threshold signature"
-msgstr "Eşik imzası"
-
 msgid "Time"
 msgstr "Zaman"
-
-msgid "Times"
-msgstr "Zamanlar"
-
-msgid "Tip hash"
-msgstr "Uç hash’i"
-
-msgid "TLS certificate"
-msgstr "TLS sertifikası"
-
-msgid "To"
-msgstr "Alıcı"
-
-msgid "token"
-msgstr "token"
 
 msgid "Token"
 msgstr "Token"
@@ -3807,9 +1874,6 @@ msgstr "Token acil durum eylemi"
 
 msgid "Token freeze"
 msgstr "Token dondurma"
-
-msgid "Token holders"
-msgstr "Token sahipleri"
 
 msgid "Token mint"
 msgstr "Token basımı"
@@ -3844,21 +1908,12 @@ msgstr "Token dondurmayı kaldırma"
 msgid "Token unshield"
 msgstr "Token gizlemeyi kaldırma"
 
-msgid "Tokens"
-msgstr "Token’lar"
-
-msgid "Tokens with supply, price and contract, and the trending ones."
-msgstr "Arz, fiyat ve sözleşmesiyle token’lar ve öne çıkanlar."
-
 msgid "Tools"
 msgstr "Araçlar"
 
 #. placeholder {0}: b.id
 msgid "Top {0}"
 msgstr "İlk {0}"
-
-msgid "Total credits in Platform, with a fiat estimate, and prefunded specialised balances."
-msgstr "Platform’daki toplam kredi, itibari para karşılığı tahminiyle birlikte, ve ön finanse edilmiş özel bakiyeler."
 
 msgid "Total out"
 msgstr "Toplam çıkış"
@@ -3869,27 +1924,8 @@ msgstr "Toplam alınan"
 msgid "Total sent"
 msgstr "Toplam gönderilen"
 
-msgid "transaction"
-msgstr "işlem"
-
 msgid "Transaction"
 msgstr "İşlem"
-
-#. placeholder {0}: short(hash)
-msgid "Transaction {0}"
-msgstr "İşlem {0}"
-
-#. placeholder {0}: txid.slice(0, 8)
-msgid "Transaction {0}…"
-msgstr "İşlem {0}…"
-
-#. placeholder {0}: tx.txid.slice(0, 10)
-#. placeholder {1}: tx.txid.slice(-6)
-msgid "Transaction {0}…{1}"
-msgstr "İşlem {0}…{1}"
-
-msgid "Transaction ID"
-msgstr "İşlem kimliği"
 
 msgid "Transaction velocity"
 msgstr "İşlem hızı"
@@ -3926,20 +1962,8 @@ msgstr "İşlemler, tüm zamanlar"
 msgid "Transfer to address"
 msgstr "Adrese transfer"
 
-msgid "Transition"
-msgstr "Geçiş"
-
-msgid "Transition decoder"
-msgstr "Geçiş çözücü"
-
-msgid "Transitions"
-msgstr "Geçişler"
-
 msgid "Trend"
 msgstr "Eğilim"
-
-msgid "Try"
-msgstr "Deneyin"
 
 msgid "Try a sharper picture, with the whole code in view."
 msgstr "Kodun tamamının göründüğü daha net bir resim deneyin."
@@ -3956,9 +1980,6 @@ msgstr "Başka bir ad veya hash deneyin ya da Tümü’nü seçin."
 msgid "tx"
 msgstr "işlem"
 
-msgid "Txid"
-msgstr "Txid"
-
 msgid "Txs"
 msgstr "İşlem"
 
@@ -3974,32 +1995,11 @@ msgstr "Onaylanmamış etkinlik"
 msgid "Unconfirmed transaction"
 msgstr "Onaylanmamış işlem"
 
-msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
-msgstr "Gelen onaysız işlemler; boyut, ücret oranı ve InstantSend kilitleriyle."
-
-msgid "Unit for amounts"
-msgstr "Tutarlar için birim"
-
-msgid "Unknown"
-msgstr "Bilinmiyor"
-
-msgid "Unknown reason {reason}"
-msgstr "Bilinmeyen neden {reason}"
-
-msgid "Unknown: index behind"
-msgstr "Bilinmiyor: dizin geride"
-
 msgid "Unshield"
 msgstr "Gizlemeyi kaldırma"
 
-msgid "Unspendable"
-msgstr "Harcanamaz"
-
 msgid "Unspendable outputs"
 msgstr "Harcanamaz çıktılar"
-
-msgid "Unspent"
-msgstr "Harcanmamış"
 
 msgid "Unspent outputs"
 msgstr "Harcanmamış çıktılar"
@@ -4007,43 +2007,14 @@ msgstr "Harcanmamış çıktılar"
 msgid "Unspent outputs of this address"
 msgstr "Bu adresin harcanmamış çıktıları"
 
-msgid "Upcoming vote polls by end date."
-msgstr "Yaklaşan oylamalar, bitiş tarihine göre."
-
 msgid "Updated"
 msgstr "Güncellendi"
-
-msgid "Uptime"
-msgstr "Çalışma süresi"
-
-msgid "Uptime, 30 days"
-msgstr "Çalışma süresi, 30 gün"
-
-#. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
-#. placeholder {1}: rate.provider
-msgid "USD at {0} per DASH, from {1}."
-msgstr "USD, DASH başına {0} kurundan, kaynak {1}."
-
-msgid "USD comes first, with the DASH figure after it once the rate is in."
-msgstr "Önce USD gelir, kur geldiğinde ardından DASH değeri gösterilir."
-
-msgid "USD is for mainnet only: test coins have no value."
-msgstr "USD yalnızca mainnet için geçerlidir: test coinlerinin değeri yoktur."
-
-msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
-msgstr "USD üç anlamlı basamağa yuvarlanır ve {unitName} cinsinden tutarı izler."
-
-msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
-msgstr "USD üç anlamlı basamağa yuvarlanır. USD önce gösterildiği sürece bu seçim geçerli değildir."
 
 msgid "USD prices need a price feed"
 msgstr "USD fiyatları bir fiyat akışı gerektirir"
 
 msgid "Use all sources"
 msgstr "Tüm kaynakları kullan"
-
-msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
-msgstr "Küçük harf, rakam ve tire kullanın, örneğin “ruby”."
 
 msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
 msgstr "İmzalayan adresi kullanın; mainnet’te X, testnet’te y ile başlar."
@@ -4054,31 +2025,14 @@ msgstr "Kamerayı kullan"
 msgid "Use this devnet"
 msgstr "Bu devnet’i kullan"
 
-msgid "Used up for now"
-msgstr "Şimdilik tükendi"
-
 msgid "Username"
 msgstr "Kullanıcı adı"
-
-msgid "UTC day"
-msgstr "UTC günü"
 
 msgid "Valid"
 msgstr "Geçerli"
 
-msgid "Valid members"
-msgstr "Geçerli üyeler"
-
-msgid "Validators"
-msgstr "Doğrulayıcılar"
-
 msgid "Value"
 msgstr "Değer"
-
-#. placeholder {0}: formatInt(tx.inputs.length)
-#. placeholder {1}: formatInt(tx.outputs.length)
-msgid "Value flow: {0} inputs into {1} outputs"
-msgstr "Değer akışı: {0} girdi, {1} çıktıya"
 
 msgid "Verify"
 msgstr "Doğrula"
@@ -4090,18 +2044,8 @@ msgid "Version"
 msgstr "Sürüm"
 
 #. placeholder {0}: block.version.toString(16)
-#. placeholder {0}: tx.version
 msgid "Version {0}"
 msgstr "Sürüm {0}"
-
-msgid "Version bit"
-msgstr "Sürüm biti"
-
-msgid "View all"
-msgstr "Tümünü gör"
-
-msgid "View all transitions"
-msgstr "Tüm geçişleri gör"
 
 msgid "Vote"
 msgstr "Oy"
@@ -4112,32 +2056,14 @@ msgstr "Oy geçmişi"
 msgid "Vote in Governance"
 msgstr "Governance’ta oy ver"
 
-msgid "Vote polls"
-msgstr "Oylamalar"
-
 msgid "Votes"
 msgstr "Oylar"
-
-msgid "Voting"
-msgstr "Oylama"
-
-msgid "Voting key"
-msgstr "Oylama anahtarı"
 
 msgid "Voting window"
 msgstr "Oylama penceresi"
 
 msgid "Waiting for the camera…"
 msgstr "Kamera bekleniyor…"
-
-msgid "waiting for the masternodes to ChainLock the block"
-msgstr "masternode’ların bloğu ChainLock ile kilitlemesi bekleniyor"
-
-msgid "waiting for the masternodes to lock it"
-msgstr "masternode’ların kilitlemesi bekleniyor"
-
-msgid "Waiting to be mined."
-msgstr "Madenciliği yapılmayı bekliyor."
 
 msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
 msgstr "DAPI’nin canlı akışı bu adrese yapılan ödemeler için izleniyor. Dizinleyici olmadan, adresin zaten tuttuğu coin’lerin harcanması fark edilemez."
@@ -4148,65 +2074,26 @@ msgstr "Bu adresin yeni işlemleri izleniyor."
 msgid "Watching since"
 msgstr "İzleme başlangıcı"
 
-msgid "What is waiting to be mined."
-msgstr "Madenciliği bekleyenler."
-
-msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
-msgstr "Radar’ın neyi kanıtlayıp neyi kanıtlayamadığı, gördüklerinize nerede göre harekete geçebileceğiniz ve neyi hatırladığı."
-
-msgid "What the evonodes report about the chain right now."
-msgstr "Evonode’ların şu anda zincir hakkında bildirdikleri."
-
-msgid "What you can search for"
-msgstr "Neleri arayabilirsiniz"
-
 msgid "When"
 msgstr "Ne zaman"
-
-msgid "Where it is"
-msgstr "Konum"
 
 msgid "Where requests go on {network}, and what each one is for."
 msgstr "{network} üzerinde isteklerin nereye gittiği ve her birinin ne işe yaradığı."
 
-msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
-msgstr "Core 24 etkinleştirmesinin durumu: eşik, madencilerin pencere pencere sinyali ve masternode hazırlığı."
-
-msgid "Where the data comes from"
-msgstr "Verilerin kaynağı"
-
-msgid "Where the value went"
-msgstr "Değerin gittiği yer"
-
 msgid "Where this is"
 msgstr "Bunun bulunduğu yer"
-
-msgid "Whether an output is spent, and by which transaction, needs an indexer"
-msgstr "Bir çıktının harcanıp harcanmadığını ve hangi işlemle harcandığını öğrenmek için bir dizinleyici gerekir"
 
 msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
 msgstr "Hangi evonode’ların var olduğu, yaklaşık saatte bir okunur (okunamazsa kaydedilmiş veya yerleşik bir liste devreye girer) ve SDK’nın kanıtları doğruladığı quorum açık anahtarları. “Yalnızca merkeziyetsiz” modu bunu yine de kullanır: bu olmadan Radar düğümleri bulamaz veya bir kanıtı doğrulayamazdı."
 
-msgid "Which Platform SDK call backs each Radar page, with its arguments."
-msgstr "Hangi Platform SDK çağrısının hangi Radar sayfasını beslediği, argümanlarıyla."
-
 msgid "Which sources Radar may use"
 msgstr "Radar’ın hangi kaynakları kullanabileceği"
-
-msgid "Withdrawal index"
-msgstr "Çekim dizini"
 
 msgid "Yes"
 msgstr "Evet"
 
 msgid "yesterday"
 msgstr "dün"
-
-msgid "You"
-msgstr "Siz"
-
-msgid "your browser"
-msgstr "tarayıcınız"
 
 msgid "Your browser"
 msgstr "Tarayıcınız"
