@@ -1,14 +1,660 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: tr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "(estimated)"
+msgstr "(tahmini)"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, one {# evonode bildirdi} other {# evonode bildirdi}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "Havuzun bir harcamayı kabul ettiği {0} çıpa."
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} kredi"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "Epoch’un {1} bloğunu {0} evonode önerdi."
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{1} evonode’dan {0} ({2})"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "{1} evonode’dan {0} tanesi gerekli"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform yüksekliği {1}’de {0} quorum. Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Kanıtla doğrulanan # yanıttan birleştirildi.} other {Kanıtla doğrulanan # yanıttan birleştirildi.}}"
+
+msgid "1 m"
+msgstr "1 ay"
+
+msgid "1 w"
+msgstr "1 hf"
+
+msgid "24 h"
+msgstr "24 sa"
+
+msgid "3 d"
+msgstr "3 g"
+
+msgid "64 hex characters"
+msgstr "64 onaltılık karakter"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "Bir nullifier 32 bayttır ve 64 onaltılık karakter olarak yazılır."
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "Gizlenmiş bir not harcandığında nullifier yayımlanır. Havuzda olup olmadığını görmek için birini yapıştırın."
+
+msgid "A year, on the collateral"
+msgstr "Bir yıl, teminata göre"
+
+msgid "Activation threshold"
+msgstr "Etkinleştirme eşiği"
+
+msgid "All epochs"
+msgstr "Tüm epoch’lar"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "Epoch bir tam sayıdır, örneğin 88."
+
+msgid "An estimate from the epoch’s length"
+msgstr "Epoch süresinden bir tahmin"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "Bir ID 32 bayttır: 43 veya 44 karakterlik bir base58 dizesi ya da 64 onaltılık karakter."
+
+msgid "Anchors"
+msgstr "Çıpalar"
+
+msgid "Balance"
+msgstr "Bakiye"
+
+msgid "Balance ID"
+msgstr "Bakiye ID’si"
+
+msgid "Balance in the pool"
+msgstr "Havuzdaki bakiye"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 veya 64 onaltılık karakter"
+
+msgid "blocks"
+msgstr "bloklar"
+
+msgid "Blocks"
+msgstr "Bloklar"
+
+msgid "Blocks so far"
+msgstr "Şu ana kadarki bloklar"
+
+msgid "Candidate version"
+msgstr "Aday sürüm"
+
+msgid "Choose a range of epochs"
+msgstr "Bir epoch aralığı seçin"
+
+msgid "Chunks of notes"
+msgstr "Not parçaları"
+
+msgid "Commitment"
+msgstr "Taahhüt"
+
+msgid "Copy encrypted note"
+msgstr "Şifreli notu kopyala"
+
+msgid "Copy ID"
+msgstr "Kimliği kopyala"
+
+msgid "Core block rewards"
+msgstr "Core blok ödülleri"
+
+msgid "Credits"
+msgstr "Krediler"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "Tartışmalı bir ad için yapılan oylama gibi tek bir amaç için ayrılmış krediler. Birini ID’siyle arayın."
+
+msgid "Current epoch"
+msgstr "Geçerli epoch"
+
+msgid "Current Platform quorums"
+msgstr "Güncel Platform quorum’ları"
+
+msgid "Current quorums"
+msgstr "Güncel quorum’lar"
+
+msgid "Current version"
+msgstr "Geçerli sürüm"
+
+msgid "Each evonode’s vote"
+msgstr "Her evonode’un oyu"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "Son {0} epoch’un her birinde evonode başına kazanç, DASH cinsinden"
+
+msgid "Encrypted note"
+msgstr "Şifreli not"
+
+msgid "Encrypted notes"
+msgstr "Şifreli notlar"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "Gizli havuzun şifreli notları"
+
+msgid "End"
+msgstr "Bitiş"
+
+msgid "Ended"
+msgstr "Sona erdi"
+
+msgid "Epoch"
+msgstr "Epoch"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Dönem {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "Epoch {0} için kesinleşmiş toplam yok"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "Epoch {0} henüz başlamadı"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Epoch {0}. Evonode’lar: {1}. Önerilen bloklar: {2}."
+
+msgid "Epoch history"
+msgstr "Epoch geçmişi"
+
+msgid "Epoch rewards"
+msgstr "Epoch ödülleri"
+
+msgid "Epochs"
+msgstr "Epoch’lar"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "Epoch {0}–{1}."
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "Başlangıcı, bitişi ve ücret çarpanıyla epoch’lar"
+
+msgid "Estimated end"
+msgstr "Tahmini bitiş"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Platform’daki tüm krediler: kimlik bakiyeleri, ön finanse edilmiş bakiyeler ve henüz ödenmemiş ücretler."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Evonodes"
+msgstr "Evonode’lar"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "Oy verdikleri protokol sürümüne göre evonode’lar"
+
+msgid "Evonodes not yet voting for it"
+msgstr "Henüz bunun için oy vermeyen evonode’lar"
+
+msgid "Fee multiplier"
+msgstr "Ücret çarpanı"
+
+msgid "Final once the epoch ended."
+msgstr "Epoch bittiğinde kesinleşir."
+
+msgid "First block"
+msgstr "İlk blok"
+
+msgid "From epoch"
+msgstr "Başlangıç epoch’u"
+
+msgid "Hash prefix"
+msgstr "Hash öneki"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "Her protokol sürümü için kaç evonode oy veriyor."
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "DASH cinsinden, son {0}."
+
+msgid "In Platform"
+msgstr "Platform’da"
+
+msgid "Last pool"
+msgstr "Önceki havuz"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "Son {0}"
+
+msgid "Look up"
+msgstr "Ara"
+
+msgid "Median (DASH)"
+msgstr "Medyan (DASH)"
+
+msgid "Median monthly earnings"
+msgstr "Medyan aylık kazanç"
+
+msgid "Median yield"
+msgstr "Medyan getiri"
+
+msgid "Members"
+msgstr "Üyeler"
+
+msgid "Most recent anchor"
+msgstr "En son çıpa"
+
+msgid "Neighbouring epochs"
+msgstr "Komşu epoch’lar"
+
+msgid "Network"
+msgstr "Ağ"
+
+msgid "Next chunk"
+msgstr "Sonraki parça"
+
+msgid "Next epoch"
+msgstr "Sonraki epoch"
+
+msgid "Next epoch’s version"
+msgstr "Sonraki epoch’un sürümü"
+
+msgid "Next version"
+msgstr "Sonraki sürüm"
+
+msgid "No epochs in this range."
+msgstr "Bu aralıkta epoch yok."
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "Bu epoch’ta henüz hiçbir evonode blok önermedi."
+
+msgid "No evonode has voted."
+msgstr "Hiçbir evonode oy vermedi."
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "Bu epoch’ta hiçbir evonode blok önermedi."
+
+msgid "No prefunded balance"
+msgstr "Ön finanse edilmiş bakiye yok"
+
+msgid "No quorum matches this filter."
+msgstr "Bu filtreyle eşleşen quorum yok."
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "Daha yeni bir protokol sürümüne yükseltme için oylama yapılmıyor."
+
+msgid "None"
+msgstr "Yok"
+
+msgid "None proposed"
+msgstr "Önerilen yok"
+
+msgid "Not known"
+msgstr "Bilinmiyor"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
+
+msgid "Not spent"
+msgstr "Harcanmadı"
+
+msgid "Not verified"
+msgstr "Doğrulanmadı"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "Bu aralıkta hiçbir şey gizlenmedi veya gizlilikten çıkarılmadı."
+
+msgid "Nullifier"
+msgstr "Nullifier"
+
+msgid "Nullifier lookup"
+msgstr "Nullifier sorgusu"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "Tamamlanmış tek bir Platform epoch’u: toplamları, bloklarını kimin önerdiği ve iki yanındaki epoch’lar."
+
+msgid "p10 (DASH)"
+msgstr "p10 (DASH)"
+
+msgid "p90 (DASH)"
+msgstr "p90 (DASH)"
+
+msgid "Pending votes"
+msgstr "Bekleyen oylar"
+
+msgid "Per block"
+msgstr "Blok başına"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Evonode başına, {0} gün boyunca"
+
+msgid "Phase"
+msgstr "Aşama"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer devnet’leri dizinlemez"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "Platform’da bu ID altında ön finanse edilmiş özel bakiye yok."
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform yalnızca kesinleşmiş epoch’ların toplamlarını tutar ve bu ağda bu numara için toplam yok."
+
+msgid "Platform reports no credits."
+msgstr "Platform hiç kredi bildirmiyor."
+
+msgid "Pool so far"
+msgstr "Şu ana kadarki havuz"
+
+msgid "Pool state"
+msgstr "Havuz durumu"
+
+msgid "Prefunded specialised balance"
+msgstr "Ön finanse edilmiş özel bakiye"
+
+msgid "Previous chunk"
+msgstr "Önceki parça"
+
+msgid "Previous epoch"
+msgstr "Önceki epoch"
+
+msgid "Processing fees"
+msgstr "İşlem ücretleri"
+
+msgid "Proposers"
+msgstr "Önericiler"
+
+msgid "Proposers of this epoch"
+msgstr "Bu epoch’un önericileri"
+
+msgid "Proposes around"
+msgstr "Yaklaşık şu zamanda önerir"
+
+msgid "Protocol"
+msgstr "Protokol"
+
+msgid "Protocol version"
+msgstr "Protokol sürümü"
+
+msgid "Quorum hash"
+msgstr "Quorum hash’i"
+
+msgid "Quorum hash starts with"
+msgstr "Quorum hash’i şununla başlar"
+
+msgid "Quorum type"
+msgstr "Quorum türü"
+
+msgid "Quorums"
+msgstr "Quorum’lar"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar devnet’leri taramaz"
+
+msgid "Radar has no epoch history yet."
+msgstr "Radar’ın henüz epoch geçmişi yok."
+
+msgid "Radar has no proposer schedule right now."
+msgstr "Radar’ın şu anda önerici takvimi yok."
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Radar’ın kesin eşiği, aşaması ve aday başına sayıları için Radar’ın taraması gerekir"
+
+msgid "Range"
+msgstr "Aralık"
+
+msgid "Rewards and schedule"
+msgstr "Ödüller ve takvim"
+
+msgid "Share"
+msgstr "Pay"
+
+msgid "Shield and unshield history"
+msgstr "Gizleme ve gizlilikten çıkarma geçmişi"
+
+msgid "Shielded"
+msgstr "Gizlenmiş"
+
+msgid "Shielded and unshielded"
+msgstr "Gizlenmiş ve gizlenmemiş"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Gizlenmiş ve gizlenmemiş tutarlar, son {0}"
+
+msgid "Shielded pool"
+msgstr "Gizli havuz"
+
+msgid "Show"
+msgstr "Göster"
+
+msgid "Show more"
+msgstr "Daha fazla göster"
+
+msgid "Slots"
+msgstr "Slotlar"
+
+msgid "Spent"
+msgstr "Harcandı"
+
+msgid "Start"
+msgstr "Başlangıç"
+
+msgid "Started"
+msgstr "Başlangıç"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "Protokolün, oy veren evonode’ların üçte ikisi kuralından hesaplanmıştır; şu anda {0}."
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "Protokolün, oy veren evonode’ların üçte ikisi kuralından hesaplanmıştır."
+
+msgid "Still needed"
+msgstr "Hâlâ gerekli"
+
+msgid "Storage fees created"
+msgstr "Oluşturulan depolama ücretleri"
+
+msgid "Storage fees distributed"
+msgstr "Dağıtılan depolama ücretleri"
+
+msgid "That is not a nullifier"
+msgstr "Bu bir nullifier değil"
+
+msgid "That is not a valid ID"
+msgstr "Bu geçerli bir ID değil"
+
+msgid "That is not an epoch number"
+msgstr "Bu bir epoch numarası değil"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "Platform’da tutulan krediler ve ID ile ön finanse edilmiş özel bakiye sorgusu."
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "Geçerli epoch {0}."
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "Epoch’un havuzu, kazancı, getirisi, önerici takvimi ve geçmişi için Radar’ın taraması gerekir"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "Bu epoch’ta en çok blok öneren evonode’lar."
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "Gizleme ve gizlilikten çıkarma geçmişi için Platform Explorer’ın dizini gerekir"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "Son {0} epoch."
+
+msgid "The next proposers"
+msgstr "Sıradaki önericiler"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "Takvimdeki sıradaki on iki önerici ve her birinin art arda kaç bloğu olduğu."
+
+msgid "The node reported no quorums."
+msgstr "Düğüm hiç quorum bildirmedi."
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "Yürürlükteki Platform protokol sürümü ve evonode’ların bir sonrakine nasıl oy verdiği."
+
+msgid "The pool has no anchor yet."
+msgstr "Havuzun henüz çıpası yok."
+
+msgid "The pool has no anchors yet."
+msgstr "Havuzun henüz çıpaları yok."
+
+msgid "The pool has no notes at this position."
+msgstr "Havuzun bu konumda notu yok."
+
+msgid "The pool has no such nullifier."
+msgstr "Havuzda böyle bir nullifier yok."
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "Havuzda bu nullifier var: notu harcanmış."
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "Havuzda {0} not var; {1}’lik parçalar hâlinde sunuluyor. {2}. nottan başlayan parçanın ilk {NOTES_SHOWN} notu gösteriliyor."
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "Gizlenmiş kredilerin havuzu: bakiyesi, kabul ettiği çıpalar, şifreli notları ve bir nullifier’ın harcanıp harcanmadığı."
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "Havuz notlarını {0}’lık parçalar hâlinde sunar. {1}. nottan başlayan parçanın ilk {NOTES_SHOWN} notu gösteriliyor."
+
+msgid "The protocol version each evonode votes for"
+msgstr "Her evonode’un oy verdiği protokol sürümü"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "Platform düğümlerinin şu anda bildiği quorum’lar; boyutları ve imza eşikleriyle."
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "Bir harcamanın karşısında kanıtlanabileceği not ağacının kökleri."
+
+msgid "Threshold"
+msgstr "Eşik"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "Eşik {0}"
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "To epoch"
+msgstr "Bitiş epoch’u"
+
+msgid "Top proposers"
+msgstr "En iyi önericiler"
+
+msgid "Top proposers this epoch"
+msgstr "Bu epoch’un en iyi önericileri"
+
+msgid "Total credits"
+msgstr "Toplam kredi"
+
+msgid "Totals"
+msgstr "Toplamlar"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Unshielded"
+msgstr "Gizlenmemiş"
+
+msgid "Upgrade vote"
+msgstr "Yükseltme oyu"
+
+msgid "Verified"
+msgstr "Doğrulandı"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Votes by version"
+msgstr "Sürüme göre oylar"
+
+msgid "Votes for"
+msgstr "Oy verilen"
+
+msgid "Votes for a newer version"
+msgstr "Daha yeni bir sürüm için oylar"
+
+msgid "Votes for it"
+msgstr "Lehte oylar"
+
+msgid "Votes for v{next}"
+msgstr "v{next} için oylar"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "Bir evonode’un epoch başına kazancı: evonode’ların ortadaki %80’i ve medyan, son {0} epoch boyunca."
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "Evonode’ların neyden ödeme aldığı ve bunun toplamı."
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "Geçerli Platform epoch’unun durumu, içinde kimlerin blok önerdiği ve öncesindeki epoch’lar."
+
+msgid "Who proposes next"
+msgstr "Sıradaki kim öneriyor"

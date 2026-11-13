@@ -160,7 +160,9 @@ function Threshold({
                 : t`${formatInt(needed)} of ${formatInt(total)} evonodes (${formatPercent(share, 0)})`,
             hint: upgrade
               ? undefined
-              : t`Stated from the protocol’s rule of two thirds of the evonodes that vote${voters === undefined ? '' : `, ${formatInt(voters)} now`}.`,
+              : voters === undefined
+                ? t`Stated from the protocol’s rule of two thirds of the evonodes that vote.`
+                : t`Stated from the protocol’s rule of two thirds of the evonodes that vote, ${formatInt(voters)} now.`,
           },
           {
             label: t`Pending votes`,

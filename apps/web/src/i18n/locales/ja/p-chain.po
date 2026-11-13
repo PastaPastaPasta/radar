@@ -1,14 +1,660 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "(estimated)"
+msgstr "（推定）"
+
+#. placeholder {0}: upgrade.next_epoch_reported_by
+msgid "{0, plural, one {Reported by # evonode} other {Reported by # evonodes}}"
+msgstr "{0, plural, other {# 件のエボノードが報告}}"
+
+#. placeholder {0}: formatInt(list.length)
+msgid "{0} anchors the pool accepts a spend against."
+msgstr "プールが支払いの検証に受け付けるアンカー：{0} 個。"
+
+#. placeholder {0}: total.data.data.toLocaleString()
+msgid "{0} credits"
+msgstr "{0} クレジット"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(info.totalBlocks)
+msgid "{0} evonodes proposed the epoch’s {1} blocks."
+msgstr "{0} 件のエボノードがこのエポックの {1} ブロックを提案しました。"
+
+#. placeholder {0}: formatInt(v)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatPercent(share, 0)
+msgid "{0} of {1} evonodes ({2})"
+msgstr "{1} 件中 {0} 件のエボノード（{2}）"
+
+#. placeholder {0}: formatInt(needed)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} evonodes are needed"
+msgstr "{1} 件中 {0} 件のエボノードが必要"
+
+#. placeholder {0}: formatInt(all.length)
+#. placeholder {1}: formatInt(query.data.data.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform の高さ {1} で {0} 件のクォーラム。証明では未検証：この一覧には SDK の証明がありません。"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, other {証明で検証済みの回答 # 件を統合しています。}}"
+
+msgid "1 m"
+msgstr "1か月"
+
+msgid "1 w"
+msgstr "1週間"
+
+msgid "24 h"
+msgstr "24時間"
+
+msgid "3 d"
+msgstr "3日"
+
+msgid "64 hex characters"
+msgstr "16 進数 64 文字"
+
+msgid "A nullifier is 32 bytes, written as 64 hex characters."
+msgstr "ヌリファイアは 32 バイトで、16 進数 64 文字で表します。"
+
+msgid "A nullifier is published when a shielded note is spent. Paste one to see whether the pool has it."
+msgstr "シールドされたノートが使われると、ヌリファイアが公開されます。貼り付けると、プールにあるかどうかを確認できます。"
+
+msgid "A year, on the collateral"
+msgstr "1 年あたり、担保に対して"
+
+msgid "Activation threshold"
+msgstr "有効化のしきい値"
+
+msgid "All epochs"
+msgstr "すべてのエポック"
+
+msgid "An epoch is a whole number, such as 88."
+msgstr "エポックは 88 のような整数です。"
+
+msgid "An estimate from the epoch’s length"
+msgstr "エポックの長さからの推定"
+
+msgid "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex characters."
+msgstr "ID は 32 バイトです。43 または 44 文字の base58 文字列、または 16 進数 64 文字で表します。"
+
+msgid "Anchors"
+msgstr "アンカー"
+
+msgid "Balance"
+msgstr "残高"
+
+msgid "Balance ID"
+msgstr "残高 ID"
+
+msgid "Balance in the pool"
+msgstr "プールの残高"
+
+msgid "Base58 or 64 hex characters"
+msgstr "Base58 または 16 進数 64 文字"
+
+msgid "blocks"
+msgstr "ブロック"
+
+msgid "Blocks"
+msgstr "ブロック"
+
+msgid "Blocks so far"
+msgstr "ここまでのブロック"
+
+msgid "Candidate version"
+msgstr "候補バージョン"
+
+msgid "Choose a range of epochs"
+msgstr "エポックの範囲を選択"
+
+msgid "Chunks of notes"
+msgstr "ノートのまとまり"
+
+msgid "Commitment"
+msgstr "コミットメント"
+
+msgid "Copy encrypted note"
+msgstr "暗号化ノートをコピー"
+
+msgid "Copy ID"
+msgstr "ID をコピー"
+
+msgid "Core block rewards"
+msgstr "Core のブロック報酬"
+
+msgid "Credits"
+msgstr "クレジット"
+
+msgid "Credits set aside for one purpose, such as the vote on a contested name. Look one up by its ID."
+msgstr "争いのある名前への投票など、ひとつの目的のために取り置かれたクレジット。ID で検索できます。"
+
+msgid "Current epoch"
+msgstr "現在のエポック"
+
+msgid "Current Platform quorums"
+msgstr "現在の Platform クォーラム"
+
+msgid "Current quorums"
+msgstr "現在のクォーラム"
+
+msgid "Current version"
+msgstr "現在のバージョン"
+
+msgid "Each evonode’s vote"
+msgstr "各エボノードの投票"
+
+#. placeholder {0}: epochs.length
+msgid "Earnings per evonode in each of the last {0} epochs, in DASH"
+msgstr "直近 {0} エポックそれぞれの、エボノードあたりの収益（DASH）"
+
+msgid "Encrypted note"
+msgstr "暗号化ノート"
+
+msgid "Encrypted notes"
+msgstr "暗号化ノート"
+
+msgid "Encrypted notes of the shielded pool"
+msgstr "シールドプールの暗号化ノート"
+
+msgid "End"
+msgstr "終了"
+
+msgid "Ended"
+msgstr "終了"
+
+msgid "Epoch"
+msgstr "エポック"
+
+#. placeholder {0}: formatInt(index)
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "エポック {0}"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has no finalized totals"
+msgstr "エポック {0} には確定した合計がありません"
+
+#. placeholder {0}: formatInt(index)
+msgid "Epoch {0} has not started"
+msgstr "エポック {0} はまだ始まっていません"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "エポック {0}。Evonode: {1}。提案されたブロック: {2}。"
+
+msgid "Epoch history"
+msgstr "エポックの履歴"
+
+msgid "Epoch rewards"
+msgstr "エポック報酬"
+
+msgid "Epochs"
+msgstr "エポック"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
+msgid "Epochs {0} to {1}."
+msgstr "エポック {0}〜{1}。"
+
+msgid "Epochs with their start, end and fee multiplier"
+msgstr "エポックの開始、終了、手数料倍率"
+
+msgid "Estimated end"
+msgstr "終了予定"
+
+msgid "Every credit in Platform: identity balances, prefunded balances and fees yet to be paid out."
+msgstr "Platform 内のすべてのクレジット：アイデンティティ残高、事前積立残高、未払いの手数料。"
+
+msgid "Evonode"
+msgstr "エボノード"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes by the protocol version they vote for"
+msgstr "投票先のプロトコルバージョン別のエボノード"
+
+msgid "Evonodes not yet voting for it"
+msgstr "まだ投票していないエボノード"
+
+msgid "Fee multiplier"
+msgstr "手数料倍率"
+
+msgid "Final once the epoch ended."
+msgstr "エポックの終了後に確定します。"
+
+msgid "First block"
+msgstr "最初のブロック"
+
+msgid "From epoch"
+msgstr "開始エポック"
+
+msgid "Hash prefix"
+msgstr "ハッシュの先頭部分"
+
+msgid "How many evonodes vote for each protocol version."
+msgstr "各プロトコルバージョンに投票しているエボノードの数。"
+
+#. placeholder {0}: names[range]
+msgid "In DASH, over the last {0}."
+msgstr "DASH 建て、直近 {0}。"
+
+msgid "In Platform"
+msgstr "Platform 内"
+
+msgid "Last pool"
+msgstr "前回のプール"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "Latest {0}"
+msgstr "直近 {0}"
+
+msgid "Look up"
+msgstr "検索"
+
+msgid "Median (DASH)"
+msgstr "中央値（DASH）"
+
+msgid "Median monthly earnings"
+msgstr "月間収益の中央値"
+
+msgid "Median yield"
+msgstr "利回りの中央値"
+
+msgid "Members"
+msgstr "メンバー"
+
+msgid "Most recent anchor"
+msgstr "最新のアンカー"
+
+msgid "Neighbouring epochs"
+msgstr "前後のエポック"
+
+msgid "Network"
+msgstr "ネットワーク"
+
+msgid "Next chunk"
+msgstr "次のまとまり"
+
+msgid "Next epoch"
+msgstr "次のエポック"
+
+msgid "Next epoch’s version"
+msgstr "次のエポックのバージョン"
+
+msgid "Next version"
+msgstr "次のバージョン"
+
+msgid "No epochs in this range."
+msgstr "この範囲にエポックはありません。"
+
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "このエポックでブロックを提案した Evonode はまだありません。"
+
+msgid "No evonode has voted."
+msgstr "投票したエボノードはありません。"
+
+msgid "No evonode proposed a block in this epoch."
+msgstr "このエポックでブロックを提案したエボノードはありません。"
+
+msgid "No prefunded balance"
+msgstr "事前積立残高なし"
+
+msgid "No quorum matches this filter."
+msgstr "このフィルターに一致するクォーラムはありません。"
+
+msgid "No upgrade to a newer protocol version is being voted on."
+msgstr "新しいプロトコルバージョンへのアップグレード投票は行われていません。"
+
+msgid "None"
+msgstr "なし"
+
+msgid "None proposed"
+msgstr "提案なし"
+
+msgid "Not known"
+msgstr "不明"
+
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "証明では未検証：この一覧には SDK の証明がありません。"
+
+msgid "Not spent"
+msgstr "未使用"
+
+msgid "Not verified"
+msgstr "未検証"
+
+msgid "Nothing was shielded or unshielded in this range."
+msgstr "この範囲でシールドもアンシールドも行われていません。"
+
+msgid "Nullifier"
+msgstr "ヌリファイア"
+
+msgid "Nullifier lookup"
+msgstr "ヌリファイア照会"
+
+msgid "One finalized Platform epoch: its totals, who proposed its blocks, and the epochs on either side."
+msgstr "確定済みの Platform エポック 1 つ：その合計、ブロックの提案者、前後のエポック。"
+
+msgid "p10 (DASH)"
+msgstr "p10（DASH）"
+
+msgid "p90 (DASH)"
+msgstr "p90（DASH）"
+
+msgid "Pending votes"
+msgstr "保留中の投票"
+
+msgid "Per block"
+msgstr "ブロックあたり"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "エボノードあたり、{0} 日間"
+
+msgid "Phase"
+msgstr "フェーズ"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t index devnets"
+msgstr "Platform Explorer は devnet をインデックスしません"
+
+msgid "Platform holds no prefunded specialised balance under this ID."
+msgstr "Platform には、この ID の事前積立された専用残高はありません。"
+
+msgid "Platform keeps totals only for epochs that have been finalized, and this network has none for this number."
+msgstr "Platform は確定済みのエポックの合計のみを保持しており、このネットワークにはこの番号の合計がありません。"
+
+msgid "Platform reports no credits."
+msgstr "Platform はクレジットを報告していません。"
+
+msgid "Pool so far"
+msgstr "ここまでのプール"
+
+msgid "Pool state"
+msgstr "プールの状態"
+
+msgid "Prefunded specialised balance"
+msgstr "事前積立された専用残高"
+
+msgid "Previous chunk"
+msgstr "前のまとまり"
+
+msgid "Previous epoch"
+msgstr "前のエポック"
+
+msgid "Processing fees"
+msgstr "処理手数料"
+
+msgid "Proposers"
+msgstr "プロポーザー"
+
+msgid "Proposers of this epoch"
+msgstr "このエポックのプロポーザー"
+
+msgid "Proposes around"
+msgstr "提案の目安"
+
+msgid "Protocol"
+msgstr "プロトコル"
+
+msgid "Protocol version"
+msgstr "プロトコルバージョン"
+
+msgid "Quorum hash"
+msgstr "クォーラムのハッシュ"
+
+msgid "Quorum hash starts with"
+msgstr "クォーラムのハッシュの先頭"
+
+msgid "Quorum type"
+msgstr "クォーラムの種類"
+
+msgid "Quorums"
+msgstr "クォーラム"
+
+msgid "Radar doesn’t crawl devnets"
+msgstr "Radar は devnet をクロールしません"
+
+msgid "Radar has no epoch history yet."
+msgstr "Radar にはまだエポックの履歴がありません。"
+
+msgid "Radar has no proposer schedule right now."
+msgstr "Radar には現在プロポーザーのスケジュールがありません。"
+
+msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
+msgstr "Radar の正確なしきい値、フェーズ、候補ごとの件数には Radar のクロールが必要です"
+
+msgid "Range"
+msgstr "範囲"
+
+msgid "Rewards and schedule"
+msgstr "報酬とスケジュール"
+
+msgid "Share"
+msgstr "割合"
+
+msgid "Shield and unshield history"
+msgstr "シールドとアンシールドの履歴"
+
+msgid "Shielded"
+msgstr "シールド"
+
+msgid "Shielded and unshielded"
+msgstr "シールドとアンシールド"
+
+#. placeholder {0}: names[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "シールド・アンシールドの金額（直近 {0}）"
+
+msgid "Shielded pool"
+msgstr "シールドプール"
+
+msgid "Show"
+msgstr "表示"
+
+msgid "Show more"
+msgstr "もっと見る"
+
+msgid "Slots"
+msgstr "スロット"
+
+msgid "Spent"
+msgstr "使用済み"
+
+msgid "Start"
+msgstr "開始"
+
+msgid "Started"
+msgstr "開始"
+
+#. placeholder {0}: formatInt(voters)
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote, {0} now."
+msgstr "プロトコルの規則（投票するエボノードの 3 分の 2）から算出しています。現在 {0} 件。"
+
+msgid "Stated from the protocol’s rule of two thirds of the evonodes that vote."
+msgstr "プロトコルの規則（投票するエボノードの 3 分の 2）から算出しています。"
+
+msgid "Still needed"
+msgstr "不足分"
+
+msgid "Storage fees created"
+msgstr "発生したストレージ手数料"
+
+msgid "Storage fees distributed"
+msgstr "分配されたストレージ手数料"
+
+msgid "That is not a nullifier"
+msgstr "ヌリファイアではありません"
+
+msgid "That is not a valid ID"
+msgstr "有効な ID ではありません"
+
+msgid "That is not an epoch number"
+msgstr "エポック番号ではありません"
+
+msgid "The credits held in Platform, and a lookup of a prefunded specialised balance by its ID."
+msgstr "Platform が保有するクレジットと、ID による事前積立された専用残高の照会。"
+
+#. placeholder {0}: formatInt(current)
+msgid "The current epoch is {0}."
+msgstr "現在のエポックは {0} です。"
+
+msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
+msgstr "エポックのプール、収益、利回り、プロポーザーのスケジュール、履歴には Radar のクロールが必要です"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "このエポックで最も多くのブロックを提案した Evonode。"
+
+msgid "The history of shielding and unshielding needs Platform Explorer’s index"
+msgstr "シールドとアンシールドの履歴には Platform Explorer のインデックスが必要です"
+
+#. placeholder {0}: formatInt(DEFAULT_COUNT)
+msgid "The latest {0} epochs."
+msgstr "直近 {0} エポック。"
+
+msgid "The next proposers"
+msgstr "次のプロポーザー"
+
+msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgstr "スケジュール上の次の 12 人のプロポーザーと、それぞれの連続ブロック数。"
+
+msgid "The node reported no quorums."
+msgstr "ノードはクォーラムを報告しませんでした。"
+
+msgid "The Platform protocol version in force, and how the evonodes are voting on the next one."
+msgstr "現行の Platform プロトコルバージョンと、次のバージョンへのエボノードの投票状況。"
+
+msgid "The pool has no anchor yet."
+msgstr "プールにはまだアンカーがありません。"
+
+msgid "The pool has no anchors yet."
+msgstr "プールにはまだアンカーがありません。"
+
+msgid "The pool has no notes at this position."
+msgstr "プールのこの位置にノートはありません。"
+
+msgid "The pool has no such nullifier."
+msgstr "プールにこのヌリファイアはありません。"
+
+msgid "The pool has this nullifier: its note was spent."
+msgstr "プールにこのヌリファイアがあります。対応するノートは使用済みです。"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: formatInt(NOTES_CHUNK)
+#. placeholder {2}: formatInt(start)
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
+msgstr "プールには {0} 件のノートがあり、{1} 件ずつのまとまりで提供されます。ノート {2} から始まるまとまりの先頭 {NOTES_SHOWN} 件を表示しています。"
+
+msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
+msgstr "シールドされたクレジットのプール：残高、受け付けるアンカー、暗号化ノート、ヌリファイアが使用済みかどうか。"
+
+#. placeholder {0}: formatInt(NOTES_CHUNK)
+#. placeholder {1}: formatInt(start)
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
+msgstr "プールはノートを {0} 件ずつのまとまりで提供します。ノート {1} から始まるまとまりの先頭 {NOTES_SHOWN} 件を表示しています。"
+
+msgid "The protocol version each evonode votes for"
+msgstr "各エボノードが投票しているプロトコルバージョン"
+
+msgid "The quorums Platform’s nodes currently know, with their size and signing threshold."
+msgstr "Platform のノードが現在把握しているクォーラム（サイズと署名のしきい値つき）。"
+
+msgid "The roots of the note tree that a spend may be proved against."
+msgstr "支払いの証明に使える、ノートツリーのルート。"
+
+msgid "Threshold"
+msgstr "しきい値"
+
+#. placeholder {0}: formatInt(needed)
+msgid "Threshold {0}"
+msgstr "しきい値 {0}"
+
+msgid "Time"
+msgstr "時刻"
+
+msgid "To epoch"
+msgstr "終了エポック"
+
+msgid "Top proposers"
+msgstr "上位プロポーザー"
+
+msgid "Top proposers this epoch"
+msgstr "今エポックの上位プロポーザー"
+
+msgid "Total credits"
+msgstr "クレジット合計"
+
+msgid "Totals"
+msgstr "合計"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Unshielded"
+msgstr "アンシールド"
+
+msgid "Upgrade vote"
+msgstr "アップグレード投票"
+
+msgid "Verified"
+msgstr "検証済み"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Votes by version"
+msgstr "バージョン別の投票"
+
+msgid "Votes for"
+msgstr "投票先"
+
+msgid "Votes for a newer version"
+msgstr "新しいバージョンへの投票"
+
+msgid "Votes for it"
+msgstr "賛成票"
+
+msgid "Votes for v{next}"
+msgstr "v{next} への投票"
+
+#. placeholder {0}: epochs.length
+msgid "What an evonode earned per epoch: the middle 80% of evonodes and the median, over the last {0} epochs."
+msgstr "エボノードのエポックごとの収益：中央 80% のエボノードと中央値（直近 {0} エポック）。"
+
+msgid "What the evonodes are paid from, and what that comes to."
+msgstr "エボノードへの支払いの原資と、その合計額。"
+
+msgid "Where the current Platform epoch stands, who proposes blocks in it, and the epochs before it."
+msgstr "現在の Platform エポックの進み具合、そのブロックの提案者、過去のエポック。"
+
+msgid "Who proposes next"
+msgstr "次の提案者"
