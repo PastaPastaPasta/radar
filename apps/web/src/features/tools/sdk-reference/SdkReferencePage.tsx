@@ -80,7 +80,7 @@ export function SdkReferencePage() {
               {shown.map((row) => (
                 <li
                   key={row.path}
-                  className="grid gap-2 border-b border-[var(--dh-line)] pb-4"
+                  className="grid min-w-0 gap-2 border-b border-[var(--dh-line)] pb-4"
                   data-sdk-page={row.path}
                 >
                   <div className="flex flex-wrap items-baseline gap-2">
@@ -103,8 +103,10 @@ export function SdkReferencePage() {
                     <dl className="grid gap-1 text-sm">
                       {row.calls.map((c) => (
                         <div key={c.method} className="grid gap-0.5">
-                          <dt className="rx-mono font-medium">{c.method}</dt>
-                          <dd className="rx-mono break-words text-[var(--dh-ink-2)]">
+                          <dt className="rx-mono font-medium [overflow-wrap:anywhere]">
+                            {c.method}
+                          </dt>
+                          <dd className="rx-mono text-[var(--dh-ink-2)] [overflow-wrap:anywhere]">
                             sdk.{c.call}
                           </dd>
                         </div>
