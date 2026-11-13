@@ -112,6 +112,8 @@ export interface DateOptions {
   date?: boolean
   seconds?: boolean
   zone?: boolean
+  /** Leave the year out of the date: "12 Dec, 14:05 UTC". */
+  year?: boolean
 }
 
 function dateLocale(): string {
@@ -134,11 +136,12 @@ export function formatDate(ms: number, options: DateOptions = {}): string {
     date = true,
     seconds = false,
     zone = true,
+    year = true,
   } = options
   const parts: Intl.DateTimeFormatOptions = {
     hourCycle: 'h23',
     ...(utc ? { timeZone: 'UTC' } : {}),
-    ...(date ? { day: 'numeric', month: 'short', year: 'numeric' } : {}),
+    ...(date ? { day: 'numeric', month: 'short', ...(year ? { year: 'numeric' } : {}) } : {}),
     ...(time
       ? { hour: '2-digit', minute: '2-digit', ...(seconds ? { second: '2-digit' } : {}) }
       : {}),

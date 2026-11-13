@@ -14,6 +14,7 @@ import {
   Chart,
   Empty,
   ErrorState,
+  Icon,
   KeyValue,
   SearchField,
   SegFilter,
@@ -280,6 +281,10 @@ function ProposalList({
   )
 }
 
+/** The year is left out of a deadline in the current year, so the column stays short. */
+const sameYear = (ms: number, now: number) =>
+  new Date(ms).getUTCFullYear() !== new Date(now).getUTCFullYear()
+
 function ProposalTable({
   proposals,
   earlier,
@@ -310,7 +315,8 @@ function ProposalTable({
                 setOpen(expanded ? undefined : p.hash)
               }}
             >
-              {p.name}
+              <span className="rx-propname__label">{p.name}</span>
+              <Icon name="chevron" size="sm" className="rx-propname__chevron" />
             </button>
             <span className="rx-prophash rx-mono" data-proposal-hash title={p.hash}>
               {p.hash.slice(0, 8)}…{p.hash.slice(-6)}
@@ -336,7 +342,7 @@ function ProposalTable({
           </td>
           <td className="rx-propends">
             <time dateTime={formatIsoUtc(p.endTime)} title={formatIsoUtc(p.endTime)}>
-              {formatDate(p.endTime, { time: false, zone: false })}
+              {formatDate(p.endTime, { year: sameYear(p.endTime, now) })}
             </time>
           </td>
         </tr>

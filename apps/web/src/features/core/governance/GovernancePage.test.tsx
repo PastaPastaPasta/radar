@@ -152,6 +152,29 @@ describe('Governance page', () => {
     expect(document.querySelector('[data-proposal-details]')).toBeNull()
   })
 
+  it('gives each proposal name a chevron that says it expands, and keeps it a real button @HY-13', async () => {
+    const user = userEvent.setup()
+    renderAt('/governance')
+    const button = await screen.findByRole('button', { name: 'DashDaoGrowthEngine' })
+    expect(button.tagName).toBe('BUTTON')
+    expect(button.querySelector('svg.rx-propname__chevron')).not.toBeNull()
+    expect(button).toHaveAttribute('aria-controls')
+    await user.click(button)
+    expect(button).toHaveAttribute('aria-expanded', 'true')
+    expect(button.querySelector('svg.rx-propname__chevron')).not.toBeNull()
+  })
+
+  it('shows when each proposal ends to the minute, not only the day @HY-13', async () => {
+    renderAt('/governance')
+    await screen.findByRole('table', { name: 'Budget proposals' })
+    const ends = [...document.querySelectorAll('td.rx-propends time')]
+    expect(ends.length).toBeGreaterThan(5)
+    for (const time of ends) {
+      expect(time.textContent).toMatch(/^\d{1,2} [A-Z][a-z]{2,4}( \d{4})?,? \d{2}:\d{2} \S+$/)
+      expect(time).toHaveAttribute('title', expect.stringMatching(/T\d{2}:\d{2}:\d{2}Z$/))
+    }
+  })
+
   it('sizes the proposal expander to at least 24px in both directions, as an inline style the component CSS cannot override @HY-13', async () => {
     renderAt('/governance')
     const row = await screen.findByRole('button', { name: 'DashDaoGrowthEngine' })

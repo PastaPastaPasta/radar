@@ -612,6 +612,36 @@ test.describe('governance', () => {
     await expectNoSideScroll(page)
   })
 
+  test('shows a chevron on each proposal name that turns when it opens, with a hover and focus style @HY-13', async ({
+    page,
+  }) => {
+    await page.goto('/governance')
+    const name = page.locator('tbody[data-proposal] .rx-propname').first()
+    const chevron = name.locator('.rx-propname__chevron')
+    await expect(chevron).toBeVisible()
+    const turn = () => chevron.evaluate((el) => getComputedStyle(el).transform)
+    const closed = await turn()
+    await name.click()
+    await expect(name).toHaveAttribute('aria-expanded', 'true')
+    await expect.poll(turn).not.toBe(closed)
+    await page.mouse.move(0, 0)
+    const rest = await name.evaluate((el) => getComputedStyle(el).color)
+    await name.focus()
+    await page.keyboard.press('Tab')
+    await name.focus()
+    expect(
+      await name.evaluate((el) => getComputedStyle(el).color),
+      'focus colours the name',
+    ).not.toBe(rest)
+  })
+
+  test('shows each proposal’s end date and time on a desktop @HY-13', async ({ page }) => {
+    test.skip((page.viewportSize()?.width ?? 0) <= 640, 'the phone vote line keeps the date')
+    await page.goto('/governance')
+    const first = page.locator('tbody[data-proposal] td.rx-propends time').first()
+    await expect(first).toHaveText(/\d{2}:\d{2}/)
+  })
+
   test('leads each row with the proposal name and colours its leading edge by status @HY-13', async ({
     page,
   }) => {

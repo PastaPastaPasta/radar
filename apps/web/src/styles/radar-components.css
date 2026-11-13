@@ -2350,7 +2350,10 @@ html[data-scroll-gutter] {
   --rx-edge: var(--dh-line-2);
 }
 .rx-propname {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-inline-size: 100%;
   padding: 0;
   border: 0;
   background: none;
@@ -2361,9 +2364,30 @@ html[data-scroll-gutter] {
   cursor: pointer;
   min-block-size: 24px;
 }
-.rx-propname:hover {
+.rx-propname__chevron {
+  flex: none;
+  color: var(--dh-ink-2);
+  transition: transform 160ms ease;
+}
+.rx-propname[aria-expanded='true'] .rx-propname__chevron {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rx-propname__chevron {
+    transition: none;
+  }
+}
+.rx-propname:hover,
+.rx-propname:focus-visible {
+  color: var(--dh-brand-ink, var(--dh-brand));
+}
+.rx-propname:hover .rx-propname__label {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+.rx-propname:hover .rx-propname__chevron,
+.rx-propname:focus-visible .rx-propname__chevron {
+  color: currentColor;
 }
 .rx-propname:focus-visible {
   outline: 2px solid var(--dh-focus, currentColor);
