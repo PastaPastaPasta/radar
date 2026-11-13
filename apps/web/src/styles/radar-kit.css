@@ -1033,7 +1033,7 @@ button.rx-srcline:hover {
 
 /* Block page: copy controls stay out of the way until the row or value is hovered or focused; touch screens keep them. The hero's hash is the page's own identifier and keeps its control. */
 @media (hover: hover) and (pointer: fine) {
-  [data-quiet-copy] .rx-copy:not(.rx-rec__meta .rx-copy):not(:focus-visible) {
+  [data-quiet-copy] .rx-copy:where(:not(.rx-rec__meta .rx-copy, :focus-visible)) {
     opacity: 0;
   }
   [data-quiet-copy] :is(tr, .rx-kv, .rx-hash):is(:hover, :focus-within) .rx-copy {

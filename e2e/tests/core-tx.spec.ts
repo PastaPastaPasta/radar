@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { expectAccessible } from '../helpers/a11y'
 import { expect as baseExpect, test } from '../helpers/test'
 
@@ -61,6 +59,8 @@ const PAYLOADS: { name: string; txid: string; kind: string; shows: string }[] = 
   },
 ]
 
+/** A ProUpRegTx whose block is ChainLocked, with no lock in DAPI's answer or in Hyphen's record. */
+const NEVER_LOCKED = '188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9fb11b7'
 const REVOCATION = '9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4'
 const COINBASE = 'ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328'
 const PROREG = 'af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251'
@@ -254,7 +254,9 @@ test.describe('Transaction page', () => {
         'data-state',
         'claimed',
       )
-      await expect(page.getByText('InstantSend lock recorded by Hyphen')).toBeVisible()
+      await expect(
+        page.getByText(/InstantSend lock recorded by (a DAPI node and )?Hyphen/),
+      ).toBeVisible()
       await expect(page.getByText('No InstantSend lock was seen')).toHaveCount(0)
     }
   })
@@ -262,20 +264,7 @@ test.describe('Transaction page', () => {
   test('says the lock state is not known, in the neutral style, once no source reports one @IN-05 @HY-07', async ({
     page,
   }) => {
-    const recorded = JSON.parse(
-      readFileSync(
-        resolve(
-          process.cwd(),
-          `../apps/web/src/test/fixtures/http/hyphen/mainnet/tx__${REVOCATION}.json`,
-        ),
-        'utf8',
-      ),
-    ) as { body: { live: { tags: { islock: boolean } } } }
-    recorded.body.live.tags.islock = false
-    await page.route(`**/x/hy/mainnet/tx/${REVOCATION}`, (route) =>
-      route.fulfill({ json: recorded.body }),
-    )
-    await page.goto(`/tx/${REVOCATION}`)
+    await page.goto(`/tx/${NEVER_LOCKED}`)
     const step = page.locator('#settlement [data-step="instantsend"]')
     await expect(step).toHaveAttribute('data-state', 'unknown')
     await expect(step).toContainText('not known: nodes drop InstantSend locks')

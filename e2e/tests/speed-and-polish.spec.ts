@@ -258,12 +258,12 @@ test.describe('section rail', () => {
       await page.goto('/blocks')
       const rail = page.locator('nav[data-section-nav="core"]')
       await expect(rail).toBeVisible()
-      const governance = page.getByRole('link', { name: 'Governance', exact: true }).first()
+      const last = rail.getByRole('link').last()
       const inside = () =>
-        governance.evaluate((el) => {
+        last.evaluate((el) => {
           const a = el.getBoundingClientRect()
           const r = el.closest('nav')!.getBoundingClientRect()
-          return a.left >= r.left - 1 && a.right <= r.right - 1
+          return a.left >= r.left - 1 && a.right <= r.right + 1
         })
       const overflows = await rail.evaluate((el) => el.scrollWidth > el.clientWidth + 1)
       const endHint = page.locator('[data-rail-hint="end"]')
