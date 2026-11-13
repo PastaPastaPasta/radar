@@ -58,7 +58,7 @@ function useWords(): Record<BackendId, Words> {
     },
     site: {
       name: t`This site`,
-      use: t`Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload.`,
+      use: t`Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload. For a link with ?sources=decentralized, its link previews ask no hosted backend either.`,
     },
   }
 }

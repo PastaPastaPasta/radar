@@ -60,6 +60,8 @@ function SeenMempool({
   const { t } = useLingui()
   const [since] = useState(() => Date.now())
   const live = seen.stamp !== undefined
+  const shown = formatInt(seen.rows.length)
+  const total = formatInt(seen.count)
   const columns = useMemo<ColumnDef<SeenTx>[]>(
     () => [
       {
@@ -126,7 +128,7 @@ function SeenMempool({
         title={t`Pending transactions`}
         subtitle={
           seen.count > seen.rows.length
-            ? t`The newest ${formatInt(seen.rows.length)} of ${formatInt(seen.count)} seen since you opened this page`
+            ? t`The newest ${shown} of ${total} seen since you opened this page`
             : t`Seen since you opened this page`
         }
         layer="core"
