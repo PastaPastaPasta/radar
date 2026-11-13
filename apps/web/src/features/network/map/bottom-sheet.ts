@@ -276,8 +276,8 @@ export function bottomSheet(o: BottomSheetOptions): BottomSheet {
     attributes: true,
     attributeFilter: ['hidden', 'data-mode', 'data-layer'],
   })
-  const sizes = new ResizeObserver(refresh)
-  if (panel.parentElement) sizes.observe(panel.parentElement)
+  const sizes = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(refresh)
+  if (panel.parentElement) sizes?.observe(panel.parentElement)
   refresh()
 
   return {
@@ -289,7 +289,7 @@ export function bottomSheet(o: BottomSheetOptions): BottomSheet {
       cancelGesture?.()
       cancelAnimationFrame(queued)
       mutations.disconnect()
-      sizes.disconnect()
+      sizes?.disconnect()
       unset()
     },
   }
