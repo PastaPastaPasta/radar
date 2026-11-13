@@ -13,17 +13,114 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: combined.vantages
+msgid "(average of {0, plural, one {# location} other {# locations}})"
+msgstr "（{0, plural, other {# 个位置}}的平均值）"
+
+#. placeholder {0}: current.blocks
+#. placeholder {0}: lastEpoch.blocks
+msgid "{0, plural, one {# block} other {# blocks}}"
+msgstr "{0, plural, other {# 个区块}}"
+
+#. placeholder {0}: lastEpoch.blocks
+#. placeholder {1}: formatInt(lastEpoch.rank)
+#. placeholder {2}: formatInt(lastEpoch.of ?? 0)
+msgid "{0, plural, one {# block} other {# blocks}}, {1} of {2} evonodes"
+msgstr "{0, plural, other {# 个区块}}，在 {2} 个 evonode 中排第 {1}"
+
+#. placeholder {0}: totals.epochs_paid ?? 0
+msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
+msgstr "已支付 {0, plural, other {# 个纪元}}"
+
+#. placeholder {0}: history.length
+msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
+msgstr "Hyphen 记录中有 {0, plural, other {# 笔特殊交易}}"
+
+#. placeholder {0}: docs.length
+#. placeholder {1}: docs.length >= 100 ? '+' : ''
+msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
+msgstr "{0, plural, other {# 笔提现}}{1}，"
+
+#. placeholder {0}: secs(h.seconds)
+msgid "{0} (incomplete)"
+msgstr "{0}（不完整）"
+
 #. placeholder {0}: daily.length
 msgid "{0} days checked"
 msgstr "已检查 {0} 天"
+
+#. placeholder {0}: formatInt(values.length)
+#. placeholder {1}: formatNumber(dash(sorted[0] ?? 0n), { maximumFractionDigits: 2 })
+#. placeholder {2}: formatNumber(dash(max), { maximumFractionDigits: 2 })
+#. placeholder {3}: formatNumber(dash(mine), { maximumFractionDigits: 2 })
+msgid "{0} evonodes’ rewards last epoch, from {1} to {2} DASH; this one {3} DASH"
+msgstr "上一纪元 {0} 个 evonode 的奖励从 {1} 到 {2} DASH；此节点为 {3} DASH"
+
+#. placeholder {0}: formatInt(Number(mine ?? 0n))
+#. placeholder {1}: formatInt(current.data.data.index)
+msgid "{0} in epoch {1}"
+msgstr "纪元 {1} 中为 {0}"
+
+#. placeholder {0}: formatInt(current.blocks)
+#. placeholder {0}: formatInt(watched.actual)
+#. placeholder {1}: formatNumber(current.turns.expected_blocks)
+#. placeholder {1}: formatNumber(watched.expected ?? 0)
+msgid "{0} made, about {1} expected"
+msgstr "已出 {0} 个，预计约 {1} 个"
+
+#. placeholder {0}: formatInt(watched.missed)
+msgid "{0} missed turns seen"
+msgstr "已发现 {0} 次错过轮次"
+
+#. placeholder {0}: formatInt(Math.round(v))
+msgid "{0} ms"
+msgstr "{0} ms"
 
 #. placeholder {0}: formatInt(d.latency_ms)
 msgid "{0} ms from Radar’s crawler"
 msgstr "距 Radar 抓取器 {0} 毫秒"
 
+#. placeholder {0}: formatInt(rank.rank)
+#. placeholder {1}: formatInt(rank.of)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} shown"
+msgstr "显示 {0} / {1}"
+
+#. placeholder {0}: formatInt(p.turns_30d.missed)
+#. placeholder {1}: formatInt(p.turns_30d.turns)
+msgid "{0} of {1} turns, last 30 days"
+msgstr "近 30 天 {1} 次轮次中错过 {0} 次"
+
+#. placeholder {0}: formatPercent(yearly, 1)
+msgid "{0} on 4,000 DASH"
+msgstr "4,000 DASH 的收益为 {0}"
+
+#. placeholder {0}: score1(combined.score)
+msgid "{0} out of 100"
+msgstr "{0} / 100"
+
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "共索引 {0} 笔付款"
+
+#. placeholder {0}: formatInt(summary.count)
+#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
+#. placeholder {2}: formatInt(summary.indexed.from)
+#. placeholder {3}: formatInt(summary.indexed.to)
+msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
+msgstr "共 {0} 笔付款，合计 {1} DASH；已索引区块 {2} 至 {3}"
+
+#. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
+msgid "{0} s"
+msgstr "{0} 秒"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "{0} shown"
+msgstr "显示 {0} 项"
 
 #. placeholder {0}: d.day
 #. placeholder {1}: d.ok
@@ -31,14 +128,53 @@ msgstr "共索引 {0} 笔付款"
 msgid "{0}: answered {1} of {2} checks"
 msgstr "{0}：{2} 次检查中应答 {1} 次"
 
+#. placeholder {0}: show(c.old)
+msgid "{name} (was at {0})"
+msgstr "{name}（原为 {0}）"
+
+#. placeholder {0}: show(c.new)
+msgid "{name} at {0}"
+msgstr "{name} 为 {0}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0} → {1}"
+msgstr "{name}：{0} → {1}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0}% → {1}%"
+msgstr "{name}：{0}% → {1}%"
+
+msgid "1 week"
+msgstr "1 周"
+
+msgid "24 hours"
+msgstr "24 小时"
+
+msgid "50k headers"
+msgstr "5 万个区块头"
+
 msgid "A ProTx hash is 64 hexadecimal characters."
 msgstr "ProTx 哈希为 64 个十六进制字符。"
+
+msgid "About every two weeks, from each test location"
+msgstr "约每两周一次，来自每个测试位置"
 
 msgid "Address type"
 msgstr "地址类型"
 
+msgid "Addresses, keys and PoSe status, as Radar recorded them"
+msgstr "地址、密钥和 PoSe 状态，以 Radar 的记录为准"
+
+msgid "among the evonodes that proposed blocks"
+msgstr "在提议过区块的 evonode 中"
+
 msgid "Amount"
 msgstr "金额"
+
+msgid "Answered"
+msgstr "有应答"
 
 #. placeholder {0}: formatInt(up.ok)
 #. placeholder {1}: formatInt(up.attempts)
@@ -53,11 +189,32 @@ msgstr "所有检查均有应答"
 msgid "Answered every check on each of the {0} days Radar has checked this node"
 msgstr "Radar 检查过此节点的 {0} 天里，每天所有检查均有应答"
 
+#. placeholder {0}: formatInt(d.latency_ms)
+#. placeholder {0}: formatInt(p.ms ?? 0)
+msgid "answered in {0} ms"
+msgstr "{0} ms 内应答"
+
+#. placeholder {0}: Math.round((r.connect_ms ?? 0) + (r.handshake_ms ?? 0))
+#. placeholder {0}: formatInt(p.ms)
+msgid "Answered in {0} ms"
+msgstr "{0} ms 内应答"
+
+msgid "Answered Radar’s latest port check."
+msgstr "已应答 Radar 最近一次端口检查。"
+
 msgid "Answering"
 msgstr "有应答"
 
-msgid "Answers on its Core port"
-msgstr "其 Core 端口有应答"
+#. placeholder {0}: d.asn
+msgid "AS{0}"
+msgstr "AS{0}"
+
+#. placeholder {0}: formatInt(p.monthly_basis_days)
+msgid "at its pace of the last {0} days"
+msgstr "按其最近 {0} 天的速度"
+
+msgid "Back in the list"
+msgstr "已回到列表"
 
 msgid "Banned"
 msgstr "已封禁"
@@ -66,12 +223,20 @@ msgstr "已封禁"
 msgid "banned at block {0}"
 msgstr "于区块 {0} 被封禁"
 
-#. placeholder {0}: formatInt(d.pose_ban_height)
+#. placeholder {0}: formatInt(banned)
 msgid "Banned at block {0}"
 msgstr "于区块 {0} 被封禁"
 
 msgid "Banned on Platform"
 msgstr "在 Platform 上被封禁"
+
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "达到 {0} 时封禁"
+
+#. placeholder {0}: formatPercent(rank, 0)
+msgid "Better than {0} of masternodes tested from the same location."
+msgstr "优于在同一位置测试的 {0} 的主节点。"
 
 msgid "block"
 msgstr "区块"
@@ -83,11 +248,96 @@ msgstr "区块"
 msgid "Block {0}"
 msgstr "区块 {0}"
 
+msgid "Blocks"
+msgstr "区块"
+
+msgid "Blocks (proofs)"
+msgstr "区块（证明）"
+
+msgid "Blocks and rewards of the last 12 finalized epochs, from Platform’s proofs"
+msgstr "最近 12 个已完结纪元的区块和奖励，来自 Platform 的证明"
+
+msgid "Blocks proposed"
+msgstr "已提议区块"
+
+msgid "Blocks this epoch"
+msgstr "本纪元区块"
+
+msgid "Blocks this evonode proposed in one epoch, from Platform"
+msgstr "此 evonode 在一个纪元内提议的区块，来自 Platform"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Blocks this evonode proposed, over the last {0}"
+msgstr "此 evonode 在过去{0}内提议的区块"
+
+msgid "Both, a month"
+msgstr "两者，一个月"
+
+msgid "Both, a year"
+msgstr "两者，一年"
+
+#. placeholder {0}: breakdownFrom.location || breakdownFrom.vantage
+msgid "Breakdown from {0}."
+msgstr "明细来自 {0}。"
+
+msgid "Broadcast"
+msgstr "广播"
+
 msgid "Catching up"
 msgstr "正在追赶"
 
+msgid "Change"
+msgstr "找零"
+
+msgid "Chart range"
+msgstr "图表范围"
+
+msgid "Check now"
+msgstr "立即检查"
+
+msgid "Checking whether Hyphen’s index is current…"
+msgstr "正在检查 Hyphen 的索引是否为最新…"
+
+msgid "Checking…"
+msgstr "正在检查…"
+
+msgid "Claimable now"
+msgstr "现在可领取"
+
 msgid "Collateral"
 msgstr "抵押品"
+
+msgid "Combined from {answers, plural, one {# proof-checked answer} other {# proof-checked answers}}: the finalized epochs, the current epoch and this evonode’s proposed blocks."
+msgstr "综合自 {answers, plural, other {# 个经证明验证的应答}}：已完结的纪元、当前纪元以及此 evonode 提议的区块。"
+
+msgid "Compact block filters"
+msgstr "紧凑区块过滤器"
+
+msgid "Complete"
+msgstr "完整"
+
+msgid "Connect"
+msgstr "连接"
+
+msgid "Connect and handshake"
+msgstr "连接与握手"
+
+msgid "Core P2P"
+msgstr "Core P2P"
+
+msgid "Core P2P address"
+msgstr "Core P2P 地址"
+
+msgid "Core, a month"
+msgstr "Core，一个月"
+
+#. placeholder {0}: message(e)
+msgid "couldn’t check: {0}"
+msgstr "无法检查：{0}"
+
+#. placeholder {0}: message(withdrawals.error)
+msgid "Couldn’t list withdrawals: {0}"
+msgstr "无法列出提现：{0}"
 
 msgid "Crawled by Radar"
 msgstr "由 Radar 抓取"
@@ -95,11 +345,40 @@ msgstr "由 Radar 抓取"
 msgid "Daily health"
 msgstr "每日健康状况"
 
+msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
+msgstr "DAPI 的列表中没有它。它可能是新节点、已被移除，或输入有误。"
+
+msgid "DAPI’s list wins where Radar’s last crawl differs."
+msgstr "Radar 上次抓取的结果与之不同时，以 DAPI 的列表为准。"
+
+msgid "differ"
+msgstr "不一致"
+
+#. placeholder {0}: differing.map((r) => r.epoch).join(', ')
+msgid "differ in {0}"
+msgstr "在 {0} 中不一致"
+
+msgid "Doesn’t serve compact block filters ({bit})."
+msgstr "不提供紧凑区块过滤器（{bit}）。"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Drive keeps per-evonode records only from epoch {0} on, so rewards before it can’t be checked. Rewards are gross: reward shares are not deducted."
+msgstr "Drive 仅保留纪元 {0} 起每个 evonode 的记录，因此此前的奖励无法验证。奖励为税前总额：未扣除奖励分成。"
+
 msgid "Drive protocol"
 msgstr "Drive 协议"
 
+msgid "Each test downloads the latest 50,000 block headers and the masternode list from this node and checks them against Radar’s own node."
+msgstr "每次测试都会从此节点下载最新的 50,000 个区块头和主节点列表，并与 Radar 自己的节点比对。"
+
+msgid "Earned (DASH)"
+msgstr "收益（DASH）"
+
 msgid "Earned on Core, {window} days"
 msgstr "Core 上的收益，{window} 天"
+
+msgid "Earned on Platform"
+msgstr "Platform 上的收益"
 
 msgid "Enabled, no PoSe penalty"
 msgstr "已启用，无 PoSe 罚分"
@@ -108,11 +387,45 @@ msgstr "已启用，无 PoSe 罚分"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "已启用，PoSe 罚分 {0}"
 
+msgid "Epoch"
+msgstr "纪元"
+
+#. placeholder {0}: formatInt(selected)
+#. placeholder {1}: infos.length
+msgid "Epoch {0} is outside the {1, plural, one {# recent epoch} other {# recent epochs}} read here, or not final yet."
+msgstr "纪元 {0} 不在此处读取的最近 {1, plural, other {# 个纪元}}之内，或尚未完结。"
+
+#. placeholder {0}: formatInt(watched.epoch)
+msgid "Epoch {0}, blocks"
+msgstr "纪元 {0}，区块"
+
+#. placeholder {0}: info.protocolVersion
+msgid "Epoch ran protocol {0}"
+msgstr "该纪元运行协议 {0}"
+
+msgid "Epoch record"
+msgstr "纪元记录"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Estimates"
+msgstr "估算"
+
+msgid "Every epoch, in DASH"
+msgstr "每个纪元，单位 DASH"
+
+msgid "Every ProRegTx and ProUp… transaction that changed this masternode"
+msgstr "所有更改过此主节点的 ProRegTx 和 ProUp… 交易"
+
 msgid "Evonode"
 msgstr "Evonode"
 
 msgid "Evonode collateral"
 msgstr "Evonode 抵押品"
+
+msgid "Expired (refunded)"
+msgstr "已过期（已退款）"
 
 msgid "Expires"
 msgstr "到期"
@@ -120,14 +433,71 @@ msgstr "到期"
 msgid "Facts"
 msgstr "要点"
 
-msgid "fail"
+msgid "Fail"
 msgstr "未通过"
+
+msgid "Failed"
+msgstr "失败"
+
+#. placeholder {0}: p.error
+msgid "Failed: {0}"
+msgstr "失败：{0}"
+
+#. placeholder {0}: rows.length
+msgid "Fails {failing} of {0} checks. Quorum members vote against masternodes that fail these in DKGs, which costs PoSe score."
+msgstr "{0} 项检查中有 {failing} 项未通过。Quorum 成员会在 DKG 中投票反对未通过这些检查的主节点，这会扣除 PoSe 分数。"
 
 msgid "First seen"
 msgstr "首次出现"
 
+msgid "Fix"
+msgstr "修复"
+
+msgid "Fix its Platform services, then send a ProUpServTx (protx update_service) to lift the ban."
+msgstr "修复其 Platform 服务，然后发送 ProUpServTx（protx update_service）以解除封禁。"
+
+#. placeholder {0}: r.from
+msgid "from {0}"
+msgstr "来自 {0}"
+
+#. placeholder {0}: returns?.window_days ?? 90
+msgid "from its payments over {0} days"
+msgstr "根据其 {0} 天内的付款"
+
+msgid "from Radar’s count"
+msgstr "来自 Radar 的统计"
+
+msgid "Grade"
+msgstr "评级"
+
+#. placeholder {0}: combined.letter
+msgid "Grade {0}"
+msgstr "评级 {0}"
+
+msgid "gRPC (HTTPS)"
+msgstr "gRPC (HTTPS)"
+
+msgid "Header throughput"
+msgstr "区块头吞吐量"
+
+msgid "Headers/s"
+msgstr "区块头/秒"
+
 msgid "Healthy"
 msgstr "健康"
+
+#. placeholder {0}: r.height
+msgid "height {0}"
+msgstr "高度 {0}"
+
+msgid "Height it reported"
+msgstr "其报告的高度"
+
+msgid "History"
+msgstr "历史"
+
+msgid "History needs Radar’s crawl and Hyphen’s index of special transactions"
+msgstr "历史需要 Radar 的抓取和 Hyphen 的特殊交易索引"
 
 msgid "Hosting"
 msgstr "托管"
@@ -135,17 +505,101 @@ msgstr "托管"
 msgid "HTTPS (DAPI)"
 msgstr "HTTPS (DAPI)"
 
-msgid "Last error"
-msgstr "最近错误"
+#. placeholder {0}: f.platformHttpPort
+msgid "HTTPS {0}"
+msgstr "HTTPS {0}"
+
+msgid "Hyphen has no special transactions for this ProTx."
+msgstr "Hyphen 中没有此 ProTx 的特殊交易。"
+
+msgid "Hyphen’s index is behind the chain, so this list is not read."
+msgstr "Hyphen 的索引落后于区块链，因此不读取此列表。"
+
+msgid "if it ended now (an estimate)"
+msgstr "如果现在结束（估算）"
+
+msgid "In a validator set"
+msgstr "在验证者集合中"
+
+msgid "in total (not counting expired ones)."
+msgstr "合计（不含已过期的）。"
+
+#. placeholder {0}: formatPercent(below / values.length, 0)
+#. placeholder {1}: formatInt(values.length)
+#. placeholder {2}: formatNumber(dash(spread.p50), { maximumFractionDigits: 2 })
+msgid "It earned more than {0} of the {1} evonodes that proposed blocks last epoch; the median is {2} DASH."
+msgstr "其收益超过上一纪元提议过区块的 {1} 个 evonode 中的 {0}；中位数为 {2} DASH。"
+
+msgid "It hasn’t proposed a block in a finished epoch yet."
+msgstr "它在已完结的纪元中尚未提议过区块。"
+
+msgid "it proposed no blocks"
+msgstr "它没有提议区块"
+
+msgid "It proposed no blocks last epoch."
+msgstr "它在上一纪元没有提议区块。"
+
+msgid "its identity’s balance, read"
+msgstr "其身份的余额，已读取"
+
+#. placeholder {0}: formatInt(p.next.slots ?? 0)
+msgid "its turn is {0} blocks away; an estimate"
+msgstr "还有 {0} 个区块轮到它；估算值"
+
+msgid "its turn is next; an estimate"
+msgstr "下一个轮到它；估算值"
+
+msgid "Keep the node online and its port open to inbound connections."
+msgstr "保持节点在线，并使其端口对入站连接开放。"
+
+msgid "last"
+msgstr "上一个"
+
+msgid "Last 30 days"
+msgstr "最近 30 天"
+
+msgid "Last 365 days"
+msgstr "最近 365 天"
+
+msgid "Last 90 days"
+msgstr "最近 90 天"
+
+msgid "Last answered"
+msgstr "上次应答"
+
+msgid "Last block"
+msgstr "最新区块"
+
+#. placeholder {0}: totals.last_epoch_index ?? '—'
+msgid "Last epoch ({0})"
+msgstr "上一纪元（{0}）"
 
 msgid "Last paid"
 msgstr "最近付款"
 
-msgid "Last reached"
-msgstr "最近连通"
-
 msgid "Latency"
 msgstr "延迟"
+
+msgid "Latest port check"
+msgstr "最近一次端口检查"
+
+msgid "Left the list"
+msgstr "已离开列表"
+
+msgid "Listed by DAPI"
+msgstr "DAPI 已列出"
+
+msgid "Live from Platform"
+msgstr "实时来自 Platform"
+
+msgid "Loading the Platform SDK (once per visit)…"
+msgstr "正在加载 Platform SDK（每次访问一次）…"
+
+msgid "Loading…"
+msgstr "正在加载…"
+
+msgid "Location"
+msgstr "位置"
 
 msgid "mainnet"
 msgstr "主网"
@@ -153,8 +607,8 @@ msgstr "主网"
 msgid "Masternode"
 msgstr "主节点"
 
-#. placeholder {0}: d.protx.slice(0, 8)
 #. placeholder {0}: id.slice(0, 8)
+#. placeholder {0}: protx.slice(0, 8)
 msgid "Masternode {0}"
 msgstr "主节点 {0}"
 
@@ -164,11 +618,39 @@ msgstr "主节点抵押品"
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "主节点记录来自 Radar 对主网和测试网的抓取。"
 
-msgid "Masternode records need Radar's crawler"
-msgstr "主节点记录需要 Radar 爬虫"
+msgid "Masternode records need an indexer"
+msgstr "主节点记录需要索引器"
+
+msgid "Masternodes on this network"
+msgstr "此网络上的主节点"
+
+msgid "match"
+msgstr "一致"
+
+#. placeholder {0}: checked.length
+msgid "match for {0, plural, one {# epoch} other {# epochs}}"
+msgstr "{0, plural, other {# 个纪元}}均一致"
+
+msgid "Middle 80 % (DASH)"
+msgstr "中间 80 %（DASH）"
+
+msgid "Middle 80 % ends"
+msgstr "中间 80 % 上限"
+
+msgid "Middle 80 % starts"
+msgstr "中间 80 % 下限"
+
+#. placeholder {0}: rules.reachFailures
+#. placeholder {1}: rules.maxFailedOutbound
+msgid "Missed {0} or more of Radar’s port checks in a row. Members vote against a masternode they fail to connect to more than {1} times."
+msgstr "连续错过 Radar 的端口检查达 {0} 次或更多。成员连接某主节点失败超过 {1} 次时，会投票反对该主节点。"
 
 msgid "Missed most"
 msgstr "大多未应答"
+
+#. placeholder {0}: rules.reachFailures
+msgid "Missed Radar’s latest port check, but not {0} in a row. Core judges repeated failures, not one."
+msgstr "错过了 Radar 最近一次端口检查，但未连续达 {0} 次。Core 判定的是反复失败，而非一次失败。"
 
 msgid "Missed some"
 msgstr "部分未应答"
@@ -178,15 +660,51 @@ msgstr "部分未应答"
 msgid "Missed some checks on {0} of {1} days"
 msgstr "{1} 天中有 {0} 天漏掉了部分检查"
 
+msgid "Missed turns Radar saw"
+msgstr "Radar 发现的错过轮次"
+
+msgid "MN list"
+msgstr "主节点列表"
+
+msgid "more than Radar’s total, for epochs before Radar’s record"
+msgstr "多于 Radar 的合计，针对 Radar 记录之前的纪元"
+
 msgid "Network"
 msgstr "网络"
+
+msgid "never"
+msgstr "从未"
 
 msgid "never banned"
 msgstr "从未被封禁"
 
+msgid "Next block"
+msgstr "下一个区块"
+
 #. placeholder {0}: formatInt(protocol.next_epoch)
 msgid "Next epoch {0}"
 msgstr "下一纪元 {0}"
+
+msgid "No answer"
+msgstr "无应答"
+
+msgid "No changes since Radar started recording them."
+msgstr "自 Radar 开始记录以来没有变更。"
+
+msgid "no epochs to compare yet"
+msgstr "暂无可比较的纪元"
+
+msgid "No finalized epochs came back to compare."
+msgstr "没有返回可供比较的已完结纪元。"
+
+msgid "No grade"
+msgstr "无评级"
+
+msgid "No handshake with Radar’s crawler in the past week."
+msgstr "过去一周与 Radar 爬虫没有握手。"
+
+msgid "no identity"
+msgstr "无身份"
 
 msgid "No masternode with this ProTx on {here}."
 msgstr "{here} 上没有此 ProTx 对应的主节点。"
@@ -197,23 +715,96 @@ msgstr "尚未索引到此主节点的付款。"
 msgid "No penalty"
 msgstr "无罚分"
 
+msgid "No Platform ban"
+msgstr "无 Platform 封禁"
+
+msgid "No stalls or bad data"
+msgstr "无停滞或错误数据"
+
+msgid "No versions recorded yet."
+msgstr "尚未记录任何版本。"
+
+msgid "No vote seen"
+msgstr "未见投票"
+
+msgid "none"
+msgstr "无"
+
+msgid "none yet this epoch: it votes with the blocks it proposes"
+msgstr "本纪元尚无：它通过提议的区块来投票"
+
+msgid "None yet: everything it earned is still claimable."
+msgstr "暂无：它赚取的全部收益仍可领取。"
+
 msgid "Not answering"
 msgstr "无应答"
 
-msgid "Not banned on Platform"
-msgstr "在 Platform 上未被封禁"
+msgid "Not checked in Radar’s latest crawl."
+msgstr "Radar 最近一次抓取中未检查。"
+
+msgid "not checked in the latest crawl"
+msgstr "最近一次抓取中未检查"
 
 msgid "Not checked yet"
 msgstr "尚未检查"
 
+msgid "not compared: Radar’s record is not in use"
+msgstr "未比较：未使用 Radar 的记录"
+
+msgid "Not in a validator set"
+msgstr "不在验证者集合中"
+
+msgid "not in a validator set that takes turns now"
+msgstr "不在当前轮流出块的验证者集合中"
+
 msgid "not paid yet"
 msgstr "尚未收到付款"
+
+msgid "not probed"
+msgstr "未探测"
+
+msgid "not read yet"
+msgstr "尚未读取"
 
 msgid "Not ready"
 msgstr "未就绪"
 
+msgid "Not recorded yet; the next crawl will tell."
+msgstr "尚未记录；下次抓取后即可得知。"
+
+msgid "Not tested yet. Radar tests every enabled masternode about every two weeks."
+msgstr "尚未测试。Radar 约每两周测试一次所有已启用的主节点。"
+
+msgid "Not valid"
+msgstr "无效"
+
+msgid "Nothing fails, but Radar can’t see every check yet."
+msgstr "没有未通过的项，但 Radar 目前还无法看到所有检查项。"
+
+msgid "nothing yet"
+msgstr "暂无"
+
+msgid "now"
+msgstr "现在"
+
+#. placeholder {0}: formatInt(total)
+msgid "of {0}"
+msgstr "/ {0}"
+
+msgid "On protocol {voted}"
+msgstr "使用协议 {voted}"
+
+msgid "On the list"
+msgstr "在列表中"
+
+msgid "once six epochs have finished"
+msgstr "六个纪元结束后"
+
 msgid "Open it on {otherName}"
 msgstr "在 {otherName} 上打开"
+
+msgid "Open port {port} to inbound connections and keep the node online."
+msgstr "对入站连接开放端口 {port}，并保持节点在线。"
 
 msgid "Operator key"
 msgstr "运营者密钥"
@@ -221,34 +812,77 @@ msgstr "运营者密钥"
 msgid "Operator payout"
 msgstr "运营者付款"
 
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "运营者奖励 {0}"
+msgid "Operator payout address"
+msgstr "运营者付款地址"
+
+msgid "Operator reward"
+msgstr "运营者奖励"
+
+#. placeholder {0}: formatPercent(p.d30_percentile, 0)
+#. placeholder {1}: formatInt(p.d30_of)
+msgid "Over the last 30 days, more than {0} of all {1} enabled evonodes."
+msgstr "最近 30 天内，超过全部 {1} 个已启用 evonode 中的 {0}。"
+
+msgid "Overview"
+msgstr "概览"
 
 msgid "Owner"
 msgstr "所有者"
 
+msgid "Owner address"
+msgstr "所有者地址"
+
 msgid "P2P (Tenderdash)"
 msgstr "P2P (Tenderdash)"
+
+#. placeholder {0}: f.platformP2pPort
+msgid "P2P {0}"
+msgstr "P2P {0}"
 
 msgid "Paid"
 msgstr "已付款"
 
+msgid "Paid (proofs)"
+msgstr "已支付（证明）"
+
 msgid "Paid to"
 msgstr "支付给"
 
-msgid "pass"
+msgid "Pass"
 msgstr "通过"
+
+msgid "Passes every check Radar can see."
+msgstr "通过 Radar 能看到的所有检查。"
+
+msgid "Payments"
+msgstr "付款"
+
+msgid "Payments need Radar’s index of this node’s block rewards"
+msgstr "付款需要 Radar 对此节点区块奖励的索引"
 
 msgid "Payout"
 msgstr "付款"
 
+msgid "Payout address"
+msgstr "付款地址"
+
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "罚分 {0}"
 
+#. placeholder {0}: formatInt(p.first_epoch)
+msgid "Per finished epoch since epoch {0}, worked out the way Drive pays them"
+msgstr "自纪元 {0} 起每个已完结纪元，按 Drive 的支付方式计算"
+
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Place"
 msgstr "位置"
+
+msgid "Platform"
+msgstr "Platform"
 
 #. placeholder {0}: daily.length
 msgid "Platform endpoint checks answered, day by day, over {0} days"
@@ -257,11 +891,65 @@ msgstr "{0} 天内 Platform 端点检查的应答情况，按天显示"
 msgid "Platform endpoints"
 msgstr "Platform 端点"
 
+msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
+msgstr "Platform Explorer 没有应答，因此缺少它对此验证者的记录。"
+
+msgid "Platform Explorer has no validator record for this ProTx."
+msgstr "Platform Explorer 中没有此 ProTx 的验证者记录。"
+
+msgid "Platform Explorer is a third party; Radar has not verified it"
+msgstr "Platform Explorer 是第三方；Radar 未对其进行验证"
+
+msgid "Platform Explorer says"
+msgstr "Platform Explorer 显示"
+
+msgid "Platform has PoSe-banned this evonode."
+msgstr "Platform 已对此 evonode 实施 PoSe 封禁。"
+
 msgid "Platform height"
 msgstr "Platform 高度"
 
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS 地址"
+
+msgid "Platform keeps each masternode’s latest vote"
+msgstr "Platform 保留每个主节点的最新一次投票"
+
 msgid "Platform node"
 msgstr "Platform 节点"
+
+msgid "Platform node ID"
+msgstr "Platform 节点 ID"
+
+msgid "Platform P2P"
+msgstr "Platform P2P"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P 地址"
+
+msgid "Platform ports"
+msgstr "Platform 端口"
+
+msgid "Platform rewards"
+msgstr "Platform 奖励"
+
+#. placeholder {0}: first ?? 0
+#. placeholder {1}: last ?? 0
+msgid "Platform rewards per epoch, epochs {0} to {1}, against the middle 80 % of evonodes"
+msgstr "每个纪元的 Platform 奖励，纪元 {0} 至 {1}，对比 evonode 中间 80 % 的范围"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Platform rewards this evonode earned, over the last {0}"
+msgstr "此 evonode 在过去{0}内赚取的 Platform 奖励"
+
+msgid "Platform, a month"
+msgstr "Platform，一个月"
+
+msgid "Pooled"
+msgstr "合并"
+
+msgid "Port check"
+msgstr "端口检查"
 
 msgid "PoSe"
 msgstr "PoSe"
@@ -272,23 +960,63 @@ msgstr "PoSe 封禁"
 msgid "PoSe penalty"
 msgstr "PoSe 罚分"
 
+msgid "PoSe status"
+msgstr "PoSe 状态"
+
 msgid "Probe failing"
 msgstr "探测失败"
 
 msgid "Probed"
 msgstr "探测时间"
 
+msgid "proof checked"
+msgstr "已验证证明"
+
+msgid "ProRegTx"
+msgstr "ProRegTx"
+
+msgid "Protocol"
+msgstr "协议"
+
+#. placeholder {0}: p.vote.version
+msgid "protocol {0}"
+msgstr "协议 {0}"
+
+#. placeholder {0}: rules.minProtocol
+msgid "Protocol {protocol}, at least {0}."
+msgstr "协议 {protocol}，至少需要 {0}。"
+
+#. placeholder {0}: rules.release
+#. placeholder {1}: rules.minProtocol
+msgid "Protocol {protocol}. Masternodes running {0} vote nodes below protocol {1} bad in DKGs."
+msgstr "协议 {protocol}。运行 {0} 的主节点会在 DKG 中判定低于协议 {1} 的节点为不良节点。"
+
+msgid "Protocol version"
+msgstr "协议版本"
+
 msgid "ProTx"
 msgstr "ProTx"
 
-msgid "Quorum readiness"
-msgstr "Quorum 就绪情况"
+msgid "ProTx (base58, its identity)"
+msgstr "ProTx（base58，其标识）"
+
+msgid "ProTx (hex)"
+msgstr "ProTx（十六进制）"
+
+msgid "Queued"
+msgstr "排队中"
+
+msgid "Quorum readiness checks"
+msgstr "Quorum 就绪检查"
 
 msgid "Radar doesn’t crawl devnets."
 msgstr "Radar 不抓取开发网。"
 
 msgid "Radar has no checks for this node yet"
 msgstr "Radar 尚无此节点的检查记录"
+
+msgid "Radar has no reward record for this evonode yet."
+msgstr "Radar 尚无此 evonode 的奖励记录。"
 
 msgid "Radar has no uptime checks for this node yet."
 msgstr "Radar 尚无此节点的在线检查记录。"
@@ -302,14 +1030,48 @@ msgstr "Radar 尚未探测此节点的 Platform 端点。"
 msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
 msgstr "Radar 的抓取结果中没有它。可能是新节点、已被移除，或输入有误。"
 
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "Radar 对 {here} 的抓取结果中没有它。"
+msgid "Radar’s crawl has no record of this masternode."
+msgstr "Radar 的抓取中没有此主节点的记录。"
+
+msgid "Radar’s crawl, which also lists nodes missing from DAPI’s list, is off"
+msgstr "Radar 的抓取（也会列出 DAPI 列表中缺失的节点）已关闭"
+
+msgid "Radar’s epoch numbers"
+msgstr "Radar 的纪元数据"
+
+msgid "Radar’s last crawl differs"
+msgstr "Radar 上次抓取的结果不同"
+
+msgid "Radar’s node hasn’t said yet."
+msgstr "Radar 的节点尚未给出结果。"
+
+msgid "Radar’s node knows of no Platform ban. Bans arrive over P2P, so it could miss one."
+msgstr "Radar 的节点未发现任何 Platform 封禁。封禁信息通过 P2P 传来，因此可能有遗漏。"
+
+msgid "Radar’s payment index has not started for this node"
+msgstr "Radar 尚未开始为此节点建立付款索引"
+
+msgid "Radar’s record"
+msgstr "Radar 的记录"
+
+msgid "Rank"
+msgstr "排名"
+
+msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
+msgstr "可达性来自 Radar 的抓取；区块、奖励和密钥来自 Platform Explorer"
+
+msgid "Reachable"
+msgstr "可达"
+
+msgid "Read from Platform with proofs, checked in your browser"
+msgstr "附带证明从 Platform 读取，并在你的浏览器中验证"
 
 msgid "Ready"
 msgstr "已就绪"
 
-msgid "Recent payments"
-msgstr "近期付款"
+#. placeholder {0}: rules.release
+msgid "Ready for {0} quorums?"
+msgstr "已为 {0} 的 Quorum 做好准备？"
 
 msgid "Recent payments to this masternode"
 msgstr "此主节点的近期付款"
@@ -317,21 +1079,61 @@ msgstr "此主节点的近期付款"
 msgid "Registered"
 msgstr "注册"
 
+msgid "Registered at block"
+msgstr "注册于区块"
+
 msgid "Registration"
 msgstr "注册信息"
+
+msgid "Registration changes"
+msgstr "注册变更"
+
+msgid "Registration changes of this masternode"
+msgstr "此主节点的注册变更"
 
 msgid "Regular masternode"
 msgstr "普通主节点"
 
-msgid "Relays transactions"
-msgstr "转发交易"
+msgid "Relay is off, so it won’t have the transactions it must sign InstantSend locks for."
+msgstr "转发已关闭，因此它不会拥有需要为其签署 InstantSend 锁的交易。"
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
+msgid "Relays transactions."
+msgstr "转发交易。"
+
+#. placeholder {0}: rules.release
+msgid "Remove blocksonly=1 from dash.conf. {0} won’t start a masternode with it."
+msgstr "从 dash.conf 中移除 blocksonly=1。带有它时，{0} 不会启动主节点。"
+
+msgid "Requested"
+msgstr "已请求"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "reused from"
+msgstr "沿用自"
+
+#. placeholder {0}: formatInt(revived)
 msgid "Revived at block {0}"
 msgstr "于区块 {0} 恢复"
 
-msgid "Runs a current protocol version"
-msgstr "运行最新协议版本"
+msgid "Reward estimates, endpoint health and Platform Explorer’s record need indexers"
+msgstr "奖励估算、端点健康状况和 Platform Explorer 的记录需要索引器"
+
+msgid "Rewards"
+msgstr "奖励"
+
+msgid "Rewards (DASH)"
+msgstr "奖励（DASH）"
+
+msgid "Rewards appear after it has proposed a block in a finished epoch."
+msgstr "它在已完结的纪元中提议过区块后，奖励才会显示。"
+
+msgid "Rewards in total"
+msgstr "奖励合计"
+
+msgid "Rewards this epoch"
+msgstr "本纪元奖励"
 
 msgid "Same as the owner address"
 msgstr "与所有者地址相同"
@@ -339,11 +1141,71 @@ msgstr "与所有者地址相同"
 msgid "Search Radar"
 msgstr "搜索 Radar"
 
-msgid "Serves compact block filters"
-msgstr "提供紧凑区块过滤器"
+msgid "See the sources"
+msgstr "查看数据源"
+
+msgid "Served everything asked"
+msgstr "所有请求均已提供"
+
+msgid "Serves compact block filters ({bit})."
+msgstr "提供紧凑区块过滤器（{bit}）。"
+
+msgid "Service"
+msgstr "服务"
+
+#. placeholder {0}: rules.filtersBit
+msgid "service bit {0}"
+msgstr "服务位 {0}"
+
+msgid "Services"
+msgstr "服务"
+
+#. placeholder {0}: rules.release
+msgid "Set peerblockfilters=1 and blockfilterindex=1, or remove a =0 for either. {0} won’t start a masternode without them."
+msgstr "设置 peerblockfilters=1 和 blockfilterindex=1，或移除其中任一项的 =0。没有它们时，{0} 不会启动主节点。"
+
+msgid "Share of blocks"
+msgstr "区块占比"
+
+msgid "Show more"
+msgstr "显示更多"
+
+msgid "Show on map"
+msgstr "在地图上显示"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Since epoch {0}"
+msgstr "自纪元 {0} 起"
+
+msgid "so far this epoch"
+msgstr "本纪元至今"
 
 msgid "Software"
 msgstr "软件"
+
+msgid "Special transactions"
+msgstr "特殊交易"
+
+msgid "Special transactions after that block are not in this list. Everything else on this page is current."
+msgstr "该区块之后的特殊交易不在此列表中。此页面的其他内容均为最新。"
+
+msgid "Special transactions of this masternode"
+msgstr "此主节点的特殊交易"
+
+msgid "Speed test"
+msgstr "速度测试"
+
+msgid "Speed test results by location"
+msgstr "按位置显示的速度测试结果"
+
+msgid "started"
+msgstr "已开始"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Tested"
+msgstr "已测试"
 
 msgid "testnet"
 msgstr "测试网"
@@ -351,28 +1213,167 @@ msgstr "测试网"
 msgid "That isn’t a ProTx hash."
 msgstr "这不是 ProTx 哈希。"
 
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Radar 已索引的 {1} 笔付款中最近的 {0} 笔"
+#. placeholder {0}: error instanceof Error ? error.message : String(error)
+msgid "The check failed: {0}"
+msgstr "检查失败：{0}"
+
+msgid "the evonode’s identity balance"
+msgstr "该 evonode 身份的余额"
+
+msgid "The last 12 epochs"
+msgstr "最近 12 个纪元"
+
+msgid "The latest test failed; Radar retries within a day."
+msgstr "最近一次测试失败；Radar 会在一天内重试。"
+
+msgid "The masternode list of {here} doesn’t include it."
+msgstr "{here}的主节点列表中没有它。"
+
+msgid "The node answered."
+msgstr "节点已应答。"
+
+msgid "The node did not answer."
+msgstr "节点没有应答。"
+
+msgid "The port check, location, speed test and endpoint health need Radar’s crawl"
+msgstr "端口检查、位置、速度测试和端点健康状况需要 Radar 的抓取"
+
+msgid "The registration transaction is the ProTx hash itself."
+msgstr "注册交易就是 ProTx 哈希本身。"
+
+#. placeholder {0}: rules.coreCommit
+msgid "The rule in Dash Core {0}"
+msgstr "Dash Core {0} 中的规则"
+
+msgid "the same as Radar’s total"
+msgstr "与 Radar 的合计相同"
+
+msgid "This epoch so far"
+msgstr "本纪元至今"
+
+msgid "This epoch, blocks"
+msgstr "本纪元，区块"
+
+msgid "This evonode"
+msgstr "此 evonode"
 
 msgid "This masternode is on {otherName}."
 msgstr "此主节点位于 {otherName}。"
 
+msgid "Time (UTC)"
+msgstr "时间（UTC）"
+
 msgid "TLS certificate"
 msgstr "TLS 证书"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in {wait} s."
+msgstr "检查过于频繁：Radar 对每个客户端和每个节点每分钟允许 5 次。请在 {wait} 秒后重试。"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in a minute."
+msgstr "检查过于频繁：Radar 对每个客户端和每个节点每分钟允许 5 次。请一分钟后重试。"
+
+msgid "too new to tell"
+msgstr "太新，尚无法判断"
+
+msgid "Transaction"
+msgstr "交易"
+
+msgid "Transaction relay"
+msgstr "交易转发"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "unknown: the validator sets haven’t been read lately"
+msgstr "未知：近期未读取验证者集合"
+
+msgid "Updated"
+msgstr "更新时间"
+
+#. placeholder {0}: rules.release
+msgid "Upgrade to {0}."
+msgstr "升级到 {0}。"
+
+msgid "Upgrade vote"
+msgstr "升级投票"
 
 msgid "Uptime"
 msgstr "在线率"
 
+msgid "Uptime and versions need Radar’s crawl"
+msgstr "在线率和版本需要 Radar 的抓取"
+
 msgid "Uptime, 30 days"
 msgstr "在线率，30 天"
+
+msgid "Uptime, payments and readiness need Radar’s crawl of this node"
+msgstr "在线率、付款和就绪状态需要 Radar 对此节点的抓取"
+
+msgid "User agent"
+msgstr "User agent"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Valid on DAPI’s list"
+msgstr "在 DAPI 列表中有效"
+
+msgid "Validator record"
+msgstr "验证者记录"
+
+msgid "Verdict"
+msgstr "结论"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Version history"
+msgstr "版本历史"
+
+msgid "Versions this masternode has announced"
+msgstr "此主节点公布过的版本"
 
 msgid "Vote in Governance"
 msgstr "前往 Governance 投票"
 
+msgid "votes are not kept per epoch"
+msgstr "投票不按纪元保留"
+
+msgid "Votes for protocol {voted}"
+msgstr "投票支持协议 {voted}"
+
 msgid "Voting"
 msgstr "投票"
 
+msgid "Voting address"
+msgstr "投票地址"
+
+msgid "week"
+msgstr "周"
+
+msgid "What the node announced, newest first"
+msgstr "节点公布的内容，最新的在前"
+
+msgid "When"
+msgstr "时间"
+
+msgid "When a DKG starts, each quorum member votes against members it can’t reach or that fail these checks. A node is left out only once about three quarters of a quorum vote it bad."
+msgstr "DKG 开始时，每个 Quorum 成员都会投票反对它无法连接或未通过这些检查的成员。只有当大约四分之三的 Quorum 成员判定某节点为不良节点时，该节点才会被排除。"
+
 msgid "Where it is"
 msgstr "所在位置"
+
+msgid "Where it sits"
+msgstr "所处位置"
+
+msgid "Withdrawals"
+msgstr "提现"
+
+msgid "Withdrawals from this evonode’s identity"
+msgstr "此 evonode 身份的提现"
+
+msgid "worked out from the epoch’s proven fees"
+msgstr "根据该纪元经证明的手续费计算得出"
