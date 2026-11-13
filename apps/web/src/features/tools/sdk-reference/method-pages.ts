@@ -168,4 +168,55 @@ export const METHOD_PAGES: Record<string, MethodRow> = {
     call: 'voting.votePollsByEndDateWithProof({ startTimeInfo, endTimeInfo, limit })',
     pages: ['/polls', '/contests', '/contest/$label'],
   },
+  'contracts.getHistory': {
+    call: 'contracts.getHistoryWithProof({ dataContractId, limit, startAtMs })',
+    pages: ['/contract/$id'],
+  },
+  'documents.history': {
+    call: 'documents.historyWithProof({ dataContractId, documentTypeName, documentId, limit, startAtMs })',
+    pages: ['/document/$contract/$type/$id'],
+  },
+  'group.actionSigners': {
+    call: 'group.actionSignersWithProof({ dataContractId, groupContractPosition, status, actionId })',
+    pages: ['/group/$contract/$pos'],
+  },
+  'group.actions': {
+    call: 'group.actionsWithProof({ dataContractId, groupContractPosition, status, startAt, limit })',
+    pages: ['/group/$contract/$pos'],
+  },
+  'group.info': {
+    call: 'group.infoWithProof(dataContractId, groupContractPosition)',
+    pages: ['/groups/$contract', '/group/$contract/$pos'],
+  },
+  'group.infos': {
+    call: 'group.infosWithProof({ dataContractId, startAt, limit })',
+    pages: ['/groups/$contract'],
+  },
+  'group.members': {
+    call: 'group.membersWithProof({ dataContractId, groupContractPosition, startAtMemberId, limit })',
+    pages: ['/group/$contract/$pos'],
+  },
+  'shielded.anchors': { call: 'shielded.anchorsWithProof()', pages: ['/shielded'] },
+  'shielded.encryptedNotes': {
+    call: 'shielded.encryptedNotesWithProof(startIndex, count)',
+    pages: ['/shielded'],
+  },
+  'shielded.mostRecentAnchor': {
+    call: 'shielded.mostRecentAnchorWithProof()',
+    pages: ['/shielded'],
+  },
+  'shielded.nullifiers': { call: 'shielded.nullifiersWithProof(nullifiers)', pages: ['/shielded'] },
+  'shielded.poolState': { call: 'shielded.poolStateWithProof()', pages: ['/shielded'] },
+  'stateTransitions.decode': {
+    call: 'StateTransition.fromBytes(bytes), decoded locally without a request',
+    pages: ['/platform/tx/$hash'],
+  },
+  'stateTransitions.waitForStateTransitionResult': {
+    call: 'stateTransitions.waitForStateTransitionResult(hash)',
+    pages: ['/platform/tx/$hash'],
+  },
+  'system.prefundedSpecializedBalance': {
+    call: 'system.prefundedSpecializedBalanceWithProof(id)',
+    pages: ['/credits'],
+  },
 }
