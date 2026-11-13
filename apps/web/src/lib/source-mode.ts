@@ -38,7 +38,6 @@ let link: boolean | undefined
 /** The one copy of the remembered choice: the gate and the React snapshot both read it. */
 let remembered: SourceMode | undefined
 let snapshot: SourceModeState | undefined
-let watchingStorage = false
 
 function onStorage(e: StorageEvent): void {
   if (e.key !== null && e.key !== SOURCE_MODE_KEY) return
@@ -52,10 +51,7 @@ export function getSourceModeState(): SourceModeState {
   link ??= readLink()
   if (remembered === undefined) {
     remembered = readStored()
-    if (!watchingStorage) {
-      watchingStorage = true
-      globalThis.addEventListener?.('storage', onStorage)
-    }
+    globalThis.addEventListener?.('storage', onStorage)
   }
   const mode: SourceMode = link || remembered === 'decentralized' ? 'decentralized' : 'all'
   if (snapshot?.mode !== mode || snapshot.remembered !== remembered || snapshot.fromLink !== link) {

@@ -62,6 +62,7 @@ function SeenMempool({
   const live = seen.stamp !== undefined
   const shown = formatInt(seen.rows.length)
   const total = formatInt(seen.count)
+  const more = seen.capped ? '+' : ''
   const columns = useMemo<ColumnDef<SeenTx>[]>(
     () => [
       {
@@ -112,15 +113,8 @@ function SeenMempool({
       </p>
       <Card title={t`Since you opened this page`} layer="core" source={seen.stamp}>
         <div className="grid gap-4 sm:grid-cols-3" data-mempool-summary="seen">
-          <Stat
-            size="lg"
-            label={t`Seen and still pending`}
-            value={`${formatInt(seen.count)}${seen.capped ? '+' : ''}`}
-          />
-          <Stat
-            label={t`Their size`}
-            value={`${formatBytes(seen.bytes)}${seen.capped ? '+' : ''}`}
-          />
+          <Stat size="lg" label={t`Seen and still pending`} value={`${total}${more}`} />
+          <Stat label={t`Their size`} value={`${formatBytes(seen.bytes)}${more}`} />
           <Stat label={t`Watching since`} value={<Time ms={since} mode="absolute" />} />
         </div>
       </Card>

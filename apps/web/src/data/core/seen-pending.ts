@@ -78,11 +78,7 @@ export function useLiveFeedStamp(net: NetworkId, enabled: boolean): SourceStamp 
  * Transactions DAPI's live feed has delivered since the page opened, newest first, minus those a block has since
  * confirmed. It stands in for the mempool list while Hyphen's index is behind or Decentralized only mode keeps Hyphen
  * off, and says only what this page saw. `rows` are the newest `limit`; `count` and `bytes` cover everything kept,
- * up to `SEEN_STORE_LIMIT` (`capped` says the oldest were dropped).
- *
- * The stamp is the feed's, not a transaction's: it is as of now while the stream is connected, however quiet it is,
- * and as of the moment the stream last was connected once it is not. A transaction's arrival time is an event,
- * and says nothing about how current the list is.
+ * up to `SEEN_STORE_LIMIT` (`capped` says the oldest were dropped). The stamp is the feed's (`useLiveFeedStamp`).
  */
 export function useSeenPending(
   net: NetworkId,
