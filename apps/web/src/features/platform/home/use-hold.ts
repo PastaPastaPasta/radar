@@ -1,4 +1,4 @@
-import { useState, type FocusEvent } from 'react'
+import { useEffect, useRef, useState, type FocusEvent } from 'react'
 
 /** A value that stops following its source while `held`. */
 function useFrozen<T>(value: T, held: boolean): T {
@@ -15,7 +15,7 @@ export interface Hold<T> {
   props: {
     onPointerEnter: () => void
     onPointerLeave: () => void
-    onFocus: () => void
+    onFocus: (e: FocusEvent<HTMLElement>) => void
     onBlur: (e: FocusEvent<HTMLElement>) => void
   }
 }
@@ -25,13 +25,25 @@ export function useHold<T>(value: T): Hold<T> {
   const [pointer, setPointer] = useState(false)
   const [focus, setFocus] = useState(false)
   const held = pointer || focus
+  const wrapper = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    if (!focus) return
+    // A focused row that is removed fires no blur, so look again rather than hold for good.
+    const timer = setInterval(() => {
+      if (!wrapper.current?.contains(document.activeElement)) setFocus(false)
+    }, 500)
+    return () => clearInterval(timer)
+  }, [focus])
   return {
     shown: useFrozen(value, held),
     held,
     props: {
       onPointerEnter: () => setPointer(true),
       onPointerLeave: () => setPointer(false),
-      onFocus: () => setFocus(true),
+      onFocus: (e) => {
+        wrapper.current = e.currentTarget
+        setFocus(true)
+      },
       onBlur: (e) => {
         if (!e.currentTarget.contains(e.relatedTarget)) setFocus(false)
       },

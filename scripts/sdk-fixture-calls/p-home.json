@@ -278,6 +278,52 @@
         "identityId": "HAiRAKyEx5hqm2vkPjWSMRo92PA5QGyPmuYfXj6RdJUf",
         "limit": 1
       }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+              "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "7ch5LxSPhBeaWNK1vnkR75bfADTKUgRb2o2Vu9TszDqS",
+              "EWSqsaghuwHRjtutbXK3nR11KbRkg9a12PNAAkJWRTpY",
+              "6Eb4tQdp24cuPuffJyGfyNKkKhNJUfyupUdJcj1m87sj",
+              "HVfqSPfdmiHsrajx7EmErGnV597uYdH3JGhvwpVDcdAT",
+              "5gSUS2D4vozbwVMqQoE3wRXCoR3T6svMTgWyHJ4aojc1",
+              "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+              "4a4513NbhHHFMP2wDVyLfyvSNtDc92TXnZpeFTm19vhi",
+              "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+              "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
     ]
   ],
   "testnet": [
@@ -352,6 +398,139 @@
         ],
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "9CVk5ytx8oD7WQq3R2s3PxDbpT5Skg13Xjbh2tTdmnbv",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "Gcv7zYGAiUpdULhahezTTPuatyT2BwYuYEN5qVDd5Csm",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "AFbpKXNhiNHg7eBsnobNo7wZ9U8qWi1kvcACR6t84G6p",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "5q83TWrs45553fB92DPY9n3Rs6cDPa434EbP1LUf8nFY",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "8hJmcHWTsdvkHyCrk4UgjbyugDAmE7QfuCTQXpXAc7nB",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "36SxvpAKXeBJByUdJ364Hnhp2NfVDe6Gkj7xtTRZj6hh",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "BH3zGkUewGZQJ9tzdrBn3FJRjhTkfQmvewo6t1LNnnG5",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "AVGaxbN1apFAM4aWtkjUJvPhT1Nr3AeKzgb22sqWvKNe",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "Ei6jtCbzGVaoJqXPhocdFgeYeBgoVBFtP676aMFBn3E4",
+        "limit": 1
       }
     ]
   ]

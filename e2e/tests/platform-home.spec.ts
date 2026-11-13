@@ -38,7 +38,7 @@ test.describe('Platform overview', () => {
     await open(page)
     const proposers = card(page, 'proposers')
     await proposers.scrollIntoViewIfNeeded()
-    await expect(proposers.getByRole('row')).toHaveCount(11)
+    await expect(proposers.getByRole('row')).toHaveCount(isPhone(page) ? 10 : 11)
     await expect(proposers).toContainText(/Combined from \d+ proof-checked answers/)
     const first = proposers.locator('a[href^="/mn/"]').first()
     const href = await first.getAttribute('href')
@@ -96,7 +96,7 @@ test.describe('Platform overview', () => {
     const pulse = card(page, 'pulse')
     await expect(pulse.locator('[data-pulse="indexer"]')).toContainText('In sync')
     await expect(pulse.locator('[data-pulse="height"]')).toBeVisible()
-    await expect(card(page, 'newest-blocks').getByRole('row')).toHaveCount(6)
+    await expect(card(page, 'newest-blocks').getByRole('row')).toHaveCount(isPhone(page) ? 5 : 6)
     await expect(
       card(page, 'newest-transitions').locator('[data-list="transitions"]'),
     ).toBeVisible()
@@ -116,14 +116,12 @@ test.describe('Platform overview', () => {
       await page.mouse.move(0, 0)
       await expect(list).toHaveAttribute('data-held', 'false')
     }
-    await list.getByRole('link').first().focus()
+    await blocks.getByRole('link', { name: 'All blocks' }).focus()
+    await expect(list).toHaveAttribute('data-held', 'false')
+    await page.keyboard.press('Tab')
     await expect(list).toHaveAttribute('data-held', 'true')
     await expect(blocks.getByRole('status')).toContainText('Held still while you look')
-    await page.getByRole('heading', { level: 1, name: 'Platform' }).evaluate((el) => {
-      ;(document.activeElement as HTMLElement | null)?.blur()
-      el.setAttribute('tabindex', '-1')
-      el.focus()
-    })
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
     await expect(list).toHaveAttribute('data-held', 'false')
   })
 
@@ -239,7 +237,7 @@ test.describe('Platform overview in Decentralized only mode', () => {
     await settled(page)
     await expect(card(page, 'vitals')).toContainText('Platform height')
     await card(page, 'proposers').scrollIntoViewIfNeeded()
-    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(11)
+    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 10 : 11)
     await expect(card(page, 'contracts')).toContainText('DPNS')
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(card(page, 'pulse')).toHaveCount(0)
