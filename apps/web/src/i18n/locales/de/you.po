@@ -1,26 +1,81 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: de\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: record.proof.grovedbProof.length
+msgid ""
+"{0, plural, one {# byte of GroveDB proof} other {# bytes of GroveDB proof}}"
+msgstr ""
+
+#. placeholder {0}: shown.length
+msgid "{0, plural, one {Remove # saved item?} other {Remove # saved items?}}"
+msgstr ""
 
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, one {# DAPI-Adresse} other {# DAPI-Adressen}}"
 
+msgid ""
+"{count, plural, one {# identity remembered on this network} other {# "
+"identities remembered on this network}}"
+msgstr ""
+
+msgid "A devnet with this name is already saved. Edit it instead."
+msgstr ""
+
+msgid ""
+"A figure Radar adds up from several proof-checked answers, such as a tally "
+"over a range of blocks, is not itself proved. It says “Combined from N "
+"proof-checked answers”."
+msgstr ""
+
+msgid "A new version is available."
+msgstr ""
+
+msgid ""
+"A proof answers a question about a key: this identity’s balance, this "
+"contract, this document. Dash Platform can’t prove a list of everything, so "
+"there is no “all identities”, “every holder of this token” or “all documents"
+" about X” to ask a node."
+msgstr ""
+
+msgid "About"
+msgstr "Über"
+
+msgid "Adapted code and data"
+msgstr ""
+
 msgid "Add a devnet"
 msgstr "Devnet hinzufügen"
 
+msgid "Add a name"
+msgstr ""
+
 msgid "Add devnet"
 msgstr "Devnet hinzufügen"
+
+msgid "Add name"
+msgstr ""
+
+msgid "All"
+msgstr "Alle"
+
+msgid "All networks"
+msgstr ""
+
+msgid "All proofs"
+msgstr ""
 
 msgid "Amounts"
 msgstr "Beträge"
@@ -29,10 +84,93 @@ msgid "Amounts show in {unitName}."
 msgstr "Beträge werden in {unitName} angezeigt."
 
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
-msgstr "Beträge werden in {unitName} angezeigt. Wähle USD, damit der Dollarwert vorne steht."
+msgstr ""
+"Beträge werden in {unitName} angezeigt. Wähle USD, damit der Dollarwert "
+"vorne steht."
+
+msgid "Answered by"
+msgstr ""
+
+msgid "Applied. The Platform SDK restarted."
+msgstr ""
+
+msgid "Apply and restart the SDK"
+msgstr ""
+
+msgid "Arguments"
+msgstr ""
+
+msgid "Asked"
+msgstr ""
+
+msgid "Ban nodes that fail"
+msgstr ""
+
+msgid "Bridge"
+msgstr ""
+
+msgid "Browse identities"
+msgstr ""
+
+msgid "Build"
+msgstr ""
+
+msgid "Call"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Abbrechen"
+
+msgid "Chain"
+msgstr ""
+
+msgid "Change the source or the failures filter."
+msgstr ""
+
+msgid "Clear"
+msgstr "Leeren"
+
+msgid "Clear shown"
+msgstr ""
+
+msgid "Clear the SDK cache"
+msgstr ""
+
+msgid "Clear viewed identities"
+msgstr ""
+
+msgid "Cleared."
+msgstr ""
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Confirm clearing"
+msgstr ""
+
+msgid "Connection"
+msgstr ""
+
+msgid "Connection settings"
+msgstr ""
+
+msgid "Connection settings applied. The Platform SDK restarted."
+msgstr ""
+
+msgid "Copy a link to {devnet}"
+msgstr ""
+
+msgid "Copy as JSON"
+msgstr ""
+
+msgid "Copy link"
+msgstr "Link kopieren"
+
+msgid "Copy proof as hex"
+msgstr ""
+
+msgid "Core chain-locked height"
+msgstr "Per ChainLock bestätigte Core-Höhe"
 
 msgid "Custom devnets"
 msgstr "Eigene Devnets"
@@ -40,8 +178,25 @@ msgstr "Eigene Devnets"
 msgid "DAPI addresses"
 msgstr "DAPI-Adressen"
 
+msgid ""
+"Dash Platform answers carry a cryptographic proof. The Platform SDK in your "
+"browser checks it against the public key of the validator quorum that signed"
+" it, before Radar shows the figure. A node that answered can’t make a value "
+"up: the check fails and Radar says so. Those figures are marked “Proof-"
+"checked”, and the mark opens the proof inspector."
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
 msgid "Devnet name"
 msgstr "Devnet-Name"
+
+msgid "Diagnostics"
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -49,34 +204,307 @@ msgstr "Bearbeiten"
 msgid "Edit {editName}"
 msgstr "{editName} bearbeiten"
 
+msgid "Enter a full address such as https://quorums.example.org."
+msgstr ""
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "Gib mindestens eine DAPI-Adresse als Host:Port ein, eine pro Zeile."
+
+msgid "Enter the ID as Base58 text, 32 to 44 characters."
+msgstr ""
+
+msgid "Epoch"
+msgstr "Epoche"
+
+msgid ""
+"Every “Proof-checked” mark opens it. It shows the call, the node, the "
+"Platform height, the quorum and the proof bytes, and exports them as "
+"evidence."
+msgstr ""
+
+msgid "Every proof this tab holds, newest first."
+msgstr ""
+
+msgid ""
+"Everything else is a one-node claim: one DAPI node, or one service such as "
+"Platform Explorer, Radar’s crawler, Hyphen or Insight, said so, and nothing "
+"in your browser could check it. Radar names the source beside each figure, "
+"with its age. Core data is read from DAPI nodes and is not proof-checked."
+msgstr ""
 
 msgid "Example"
 msgstr "Beispiel"
 
+msgid "Export all ({count})"
+msgstr ""
+
+msgid "Export evidence"
+msgstr ""
+
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+msgid "Failures only"
+msgstr ""
+
+msgid ""
+"Forgets every answer the Platform SDK gave, here and in this browser’s "
+"storage, and the proofs held for the inspector. Pages read it again as you "
+"open them."
+msgstr ""
+
+msgid "Give it a name."
+msgstr ""
+
+msgid "Governance"
+msgstr "Governance"
+
+msgid ""
+"How Radar talks to Dash Platform. A change restarts the Platform SDK; "
+"nothing here leaves this browser."
+msgstr ""
+
+#. placeholder {0}: networkName(net)
+msgid "ID on {0}"
+msgstr ""
+
+msgid ""
+"Identities, contracts and tokens you saved. They stay only in this browser, "
+"on this device: Radar has no accounts, so they don’t follow you to another "
+"browser, and clearing this site’s data removes them."
+msgstr ""
+
+msgid "Kind"
+msgstr ""
+
 msgid "Language"
 msgstr "Sprache"
+
+msgid "Link copied"
+msgstr "Link kopiert"
+
+msgid ""
+"Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar "
+"reads the rows from the index and then checks each row’s facts with proofs "
+"where it can; the checked value wins over the index’s. Without an index, you"
+" can still open anything whose ID you know. Decentralized only mode switches"
+" the indexes off to show exactly that: only what DAPI nodes and the Platform"
+" SDK can answer."
+msgstr ""
+
+msgid "Log copied"
+msgstr ""
+
+msgid "Name"
+msgstr "Name"
+
+msgid ""
+"Name an identity, contract or token. The name shows wherever Radar shows "
+"that ID, on this device only, and wins over Radar’s own names."
+msgstr ""
+
+msgid "Network"
+msgstr "Netzwerk"
+
+msgid "Networks"
+msgstr ""
+
+msgid "No"
+msgstr "Nein"
 
 msgid "No devnets saved."
 msgstr "Keine Devnets gespeichert."
 
+msgid "No names of your own yet"
+msgstr ""
+
+msgid "No proofs yet"
+msgstr ""
+
+msgid "No requests match"
+msgstr ""
+
+msgid "No requests yet"
+msgstr ""
+
+msgid "Node"
+msgstr ""
+
+msgid "not connected yet"
+msgstr ""
+
+msgid "not reported"
+msgstr ""
+
+msgid "Nothing matches on this network. Try All networks, or another kind."
+msgstr ""
+
+msgid "Nothing matches this kind."
+msgstr ""
+
+msgid "Nothing saved here"
+msgstr ""
+
+msgid "Nothing saved yet"
+msgstr ""
+
+msgid ""
+"Off by default. When on, this browser remembers the identities you open, up "
+"to 50 per network."
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "One figure’s proof, as Radar received it."
+msgstr ""
+
 msgid "Open"
 msgstr "Öffnen"
+
+msgid ""
+"Open a page with a proof-checked figure. Radar keeps the last 300 proofs in "
+"memory until you close the tab."
+msgstr ""
+
+msgid ""
+"Open an identity, a contract or a token and press Save. It appears here."
+msgstr ""
+
+msgid "Open diagnostics"
+msgstr ""
+
+msgid "Open diagnostics with the keyboard"
+msgstr ""
+
+msgid "Open settings"
+msgstr ""
+
+msgid "Open the proof inspector"
+msgstr ""
+
+msgid "Open the proof inspector with the keyboard"
+msgstr ""
 
 msgid "optional"
 msgstr "optional"
 
-msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
-msgstr "Andernfalls richten sich die Zeiten nach der Zeitzone dieses Geräts. Beim Überfahren einer Zeit wird immer UTC angezeigt."
+msgid ""
+"Otherwise times follow this device’s time zone. Hovering a time always shows"
+" UTC."
+msgstr ""
+"Andernfalls richten sich die Zeiten nach der Zeitzone dieses Geräts. Beim "
+"Überfahren einer Zeit wird immer UTC angezeigt."
+
+msgid "Platform height"
+msgstr "Platform-Höhe"
+
+msgid "Platform protocol version"
+msgstr ""
+
+msgid "Platform SDK cache"
+msgstr ""
+
+msgid "Platform SDK cache cleared"
+msgstr ""
+
+msgid "Platform SDK in the worker"
+msgstr ""
+
+msgid "Platform SDK in this page"
+msgstr ""
+
+msgid "Platform time"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Proof bytes"
+msgstr ""
+
+msgid "Proof copied"
+msgstr ""
+
+msgid "Proof inspector"
+msgstr ""
+
+msgid "Proof-checked"
+msgstr "Beweisgeprüft"
+
+msgid "Proofs held"
+msgstr ""
+
+msgid "Proofs that did not verify"
+msgstr ""
+
+msgid "Protocol version"
+msgstr "Protokollversion"
+
+msgid "Quorum"
+msgstr "Quorum"
 
 msgid "Quorum list URL"
 msgstr "URL der Quorum-Liste"
+
+msgid "Quorum list URL, Mainnet"
+msgstr ""
+
+msgid "Quorum list URL, Testnet"
+msgstr ""
+
+msgid "Quorum type"
+msgstr "Quorum-Typ"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid ""
+"Radar has no analytics, no cookies, no accounts and no advertising. Your "
+"choices and anything you save stay in this browser: your saved items, the "
+"identities you viewed (off unless you turn it on), the names you gave, your "
+"settings and devnets, and a cache of recent answers so pages open quickly. A"
+" service worker keeps Radar’s own files so it can open offline."
+msgstr ""
+
+msgid ""
+"Radar is a read-only explorer for Dash Core, Dash Platform and the network "
+"under both. It never signs, never broadcasts and never asks for a key."
+msgstr ""
+
+msgid ""
+"Radar keeps the last 300 proofs. Load the figure again to get its proof."
+msgstr ""
+
+msgid "Radar on GitHub"
+msgstr ""
+
+msgid ""
+"Radar only reads. To top up an identity, register a name, or work with a "
+"token, a contract or a Platform address, use Bridge. To vote on a proposal "
+"or as a masternode, use Governance. Each link opens in a new tab and carries"
+" the network you were looking at."
+msgstr ""
+
+msgid ""
+"Radar’s code is open source under the MIT licence. Where it adapts code or "
+"data from another project, that project is listed here and in the file it "
+"lives in. Libraries installed through npm and cargo keep their own licences."
+msgstr ""
 
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, rate.data.data.usd)
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "Kurs: {0} pro DASH, von {1}."
+
+msgid "Refused by mode"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Remember the identities I view"
+msgstr ""
 
 msgid "Remove"
 msgstr "Entfernen"
@@ -84,17 +512,75 @@ msgstr "Entfernen"
 msgid "Remove {devnet}"
 msgstr "{devnet} entfernen"
 
+msgid "Remove {name} from saved"
+msgstr ""
+
+msgid "Remove the label {name}"
+msgstr ""
+
+msgid "Removed from saved"
+msgstr "Aus Gespeichert entfernt"
+
+msgid "Request"
+msgstr ""
+
+msgid "Request timeout (ms)"
+msgstr ""
+
+msgid "Requests appear here as pages load."
+msgstr ""
+
+msgid "Requests this tab made, newest first"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Result"
+msgstr "Ergebnis"
+
+msgid "Retries"
+msgstr ""
+
+msgid "Round"
+msgstr ""
+
 msgid "Save changes"
 msgstr "Änderungen speichern"
+
+msgid "Saved"
+msgstr "Gespeichert"
 
 msgid "Saved devnets"
 msgstr "Gespeicherte Devnets"
 
-msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
-msgstr "In diesem Browser gespeichert. Ein Devnet mit einem Namen, den Radar nicht kennt, verlangt seine Adressen."
+msgid ""
+"Saved in this browser. A devnet with a name Radar doesn’t know asks for its "
+"addresses."
+msgstr ""
+"In diesem Browser gespeichert. Ein Devnet mit einem Namen, den Radar nicht "
+"kennt, verlangt seine Adressen."
+
+msgid "Saved item"
+msgstr ""
+
+msgid "Saved items"
+msgstr ""
+
+msgid "Saved items cleared"
+msgstr ""
+
+msgid "SDK default"
+msgstr ""
+
+msgid "SDK log level"
+msgstr ""
 
 msgid "See every source"
 msgstr "Alle Quellen ansehen"
+
+msgid "See every source and the switch"
+msgstr ""
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -105,41 +591,159 @@ msgstr "USD-Wert neben DASH-Beträgen anzeigen"
 msgid "Show times in UTC"
 msgstr "Zeiten in UTC anzeigen"
 
+msgid "Source"
+msgstr ""
+
 msgid "Sources"
 msgstr "Quellen"
 
-msgid "Test coins have no value, so Testnet and devnets never show USD."
-msgstr "Testcoins haben keinen Wert, daher zeigen Testnet und Devnets nie USD an."
+msgid "Sources and licences"
+msgstr ""
 
-msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
-msgstr "Was noch nicht übersetzt ist, erscheint auf Englisch. Hashes, IDs und Beträge werden nie übersetzt."
+msgid "Test coins have no value, so Testnet and devnets never show USD."
+msgstr ""
+"Testcoins haben keinen Wert, daher zeigen Testnet und Devnets nie USD an."
+
+msgid ""
+"Text that isn’t translated yet appears in English. Hashes, IDs and amounts "
+"are never translated."
+msgstr ""
+"Was noch nicht übersetzt ist, erscheint auf Englisch. Hashes, IDs und "
+"Beträge werden nie übersetzt."
+
+#. placeholder {0}: formatInt(log.length)
+msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
+msgstr ""
+
+msgid ""
+"The last 100 requests this tab made, with the source, the node, how long "
+"each took and whether Decentralized only mode refused it."
+msgstr ""
+
+msgid "The quorum list address must start with https://."
+msgstr ""
 
 msgid "The quorum list URL must start with https://."
 msgstr "Die URL der Quorum-Liste muss mit https:// beginnen."
 
+msgid ""
+"The SDK checked this proof against the trusted quorum keys before Radar "
+"showed the figure."
+msgstr ""
+
+msgid ""
+"The worker runs SDK {workerVersion} but this page was built with "
+"{PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
+msgstr ""
+
 msgid "These choices stay in this browser. Radar never sends them anywhere."
-msgstr "Diese Einstellungen bleiben in diesem Browser. Radar sendet sie nirgendwohin."
+msgstr ""
+"Diese Einstellungen bleiben in diesem Browser. Radar sendet sie "
+"nirgendwohin."
+
+msgid ""
+"They feed the seed list for token holders: no index can list every holder of"
+" a token, so a token’s Holders tab starts from the identities you have "
+"opened. The list never leaves this browser, and turning this off erases it."
+msgstr ""
+
+msgid "This network"
+msgstr ""
+
+msgid "This proof is no longer held"
+msgstr ""
 
 msgid "Times"
 msgstr "Zeiten"
+
+msgid ""
+"To clear it: the buttons on Settings and Saved remove each list, “Clear the "
+"SDK cache” removes the cached answers, and your browser’s “clear site data” "
+"removes everything, including the service worker."
+msgstr ""
+
+msgid ""
+"To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes "
+"and quorum list, and, unless you turn them off, Platform Explorer, Radar’s "
+"crawler, Hyphen, Insight and a price feed. Each one sees your IP address and"
+" what you asked it, like any web server."
+msgstr ""
+
+msgid "Took"
+msgstr ""
+
+msgid "Tools for checking what Radar asked and what it was told."
+msgstr ""
 
 msgid "Unit for amounts"
 msgstr "Einheit für Beträge"
 
 msgid "USD comes first, with the DASH figure after it once the rate is in."
-msgstr "USD steht zuerst, der DASH-Wert folgt dahinter, sobald der Kurs vorliegt."
+msgstr ""
+"USD steht zuerst, der DASH-Wert folgt dahinter, sobald der Kurs vorliegt."
 
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD gibt es nur im Mainnet: Testcoins haben keinen Wert."
 
-msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
-msgstr "USD wird auf drei signifikante Stellen gerundet und folgt dem Betrag in {unitName}."
+msgid ""
+"USD is rounded to three significant figures and follows the amount in "
+"{unitName}."
+msgstr ""
+"USD wird auf drei signifikante Stellen gerundet und folgt dem Betrag in "
+"{unitName}."
 
-msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
-msgstr "USD wird auf drei signifikante Stellen gerundet. Diese Auswahl gilt nicht, solange USD zuerst steht."
+msgid ""
+"USD is rounded to three significant figures. This choice doesn’t apply while"
+" USD comes first."
+msgstr ""
+"USD wird auf drei signifikante Stellen gerundet. Diese Auswahl gilt nicht, "
+"solange USD zuerst steht."
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
-msgstr "Verwende Kleinbuchstaben, Ziffern und Bindestriche, zum Beispiel „ruby“."
+msgstr ""
+"Verwende Kleinbuchstaben, Ziffern und Bindestriche, zum Beispiel „ruby“."
+
+msgid "Verified"
+msgstr ""
+
+msgid "Version mismatch"
+msgstr ""
+
+msgid "Viewed identities"
+msgstr ""
+
+msgid "Viewed identities cleared"
+msgstr ""
+
+msgid "Wasm bindings"
+msgstr ""
+
+msgid "What “proof-checked” means"
+msgstr ""
+
+msgid "What can’t be listed without an index"
+msgstr ""
+
+msgid "When"
+msgstr "Wann"
+
+msgid "Where to act"
+msgstr ""
+
+msgid "Whole number from {min} to {max}."
+msgstr ""
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yes, remove"
+msgstr ""
 
 msgid "You"
 msgstr "Du"
+
+msgid "Your names"
+msgstr ""
+
+msgid "Your own names"
+msgstr ""

@@ -1,26 +1,81 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: record.proof.grovedbProof.length
+msgid ""
+"{0, plural, one {# byte of GroveDB proof} other {# bytes of GroveDB proof}}"
+msgstr ""
+
+#. placeholder {0}: shown.length
+msgid "{0, plural, one {Remove # saved item?} other {Remove # saved items?}}"
+msgstr ""
 
 msgid "{count, plural, one {# DAPI address} other {# DAPI addresses}}"
 msgstr "{count, plural, other {DAPI アドレス #件}}"
 
+msgid ""
+"{count, plural, one {# identity remembered on this network} other {# "
+"identities remembered on this network}}"
+msgstr ""
+
+msgid "A devnet with this name is already saved. Edit it instead."
+msgstr ""
+
+msgid ""
+"A figure Radar adds up from several proof-checked answers, such as a tally "
+"over a range of blocks, is not itself proved. It says “Combined from N "
+"proof-checked answers”."
+msgstr ""
+
+msgid "A new version is available."
+msgstr ""
+
+msgid ""
+"A proof answers a question about a key: this identity’s balance, this "
+"contract, this document. Dash Platform can’t prove a list of everything, so "
+"there is no “all identities”, “every holder of this token” or “all documents"
+" about X” to ask a node."
+msgstr ""
+
+msgid "About"
+msgstr "概要"
+
+msgid "Adapted code and data"
+msgstr ""
+
 msgid "Add a devnet"
 msgstr "devnet を追加"
 
+msgid "Add a name"
+msgstr ""
+
 msgid "Add devnet"
 msgstr "devnet を追加"
+
+msgid "Add name"
+msgstr ""
+
+msgid "All"
+msgstr "すべて"
+
+msgid "All networks"
+msgstr ""
+
+msgid "All proofs"
+msgstr ""
 
 msgid "Amounts"
 msgstr "金額"
@@ -31,8 +86,89 @@ msgstr "金額は {unitName} で表示されます。"
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金額は {unitName} で表示されます。USD を選ぶと、ドルの金額が先頭に表示されます。"
 
+msgid "Answered by"
+msgstr ""
+
+msgid "Applied. The Platform SDK restarted."
+msgstr ""
+
+msgid "Apply and restart the SDK"
+msgstr ""
+
+msgid "Arguments"
+msgstr ""
+
+msgid "Asked"
+msgstr ""
+
+msgid "Ban nodes that fail"
+msgstr ""
+
+msgid "Bridge"
+msgstr ""
+
+msgid "Browse identities"
+msgstr ""
+
+msgid "Build"
+msgstr ""
+
+msgid "Call"
+msgstr ""
+
 msgid "Cancel"
 msgstr "キャンセル"
+
+msgid "Chain"
+msgstr ""
+
+msgid "Change the source or the failures filter."
+msgstr ""
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "Clear shown"
+msgstr ""
+
+msgid "Clear the SDK cache"
+msgstr ""
+
+msgid "Clear viewed identities"
+msgstr ""
+
+msgid "Cleared."
+msgstr ""
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Confirm clearing"
+msgstr ""
+
+msgid "Connection"
+msgstr ""
+
+msgid "Connection settings"
+msgstr ""
+
+msgid "Connection settings applied. The Platform SDK restarted."
+msgstr ""
+
+msgid "Copy a link to {devnet}"
+msgstr ""
+
+msgid "Copy as JSON"
+msgstr ""
+
+msgid "Copy link"
+msgstr "リンクをコピー"
+
+msgid "Copy proof as hex"
+msgstr ""
+
+msgid "Core chain-locked height"
+msgstr "Core の ChainLock 済みの高さ"
 
 msgid "Custom devnets"
 msgstr "カスタム devnet"
@@ -40,8 +176,25 @@ msgstr "カスタム devnet"
 msgid "DAPI addresses"
 msgstr "DAPI アドレス"
 
+msgid ""
+"Dash Platform answers carry a cryptographic proof. The Platform SDK in your "
+"browser checks it against the public key of the validator quorum that signed"
+" it, before Radar shows the figure. A node that answered can’t make a value "
+"up: the check fails and Radar says so. Those figures are marked “Proof-"
+"checked”, and the mark opens the proof inspector."
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
 msgid "Devnet name"
 msgstr "devnet 名"
+
+msgid "Diagnostics"
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
 
 msgid "Edit"
 msgstr "編集"
@@ -49,34 +202,305 @@ msgstr "編集"
 msgid "Edit {editName}"
 msgstr "{editName} を編集"
 
+msgid "Enter a full address such as https://quorums.example.org."
+msgstr ""
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "DAPI アドレスを host:port 形式で1行に1つ、少なくとも1つ入力してください。"
+
+msgid "Enter the ID as Base58 text, 32 to 44 characters."
+msgstr ""
+
+msgid "Epoch"
+msgstr "エポック"
+
+msgid ""
+"Every “Proof-checked” mark opens it. It shows the call, the node, the "
+"Platform height, the quorum and the proof bytes, and exports them as "
+"evidence."
+msgstr ""
+
+msgid "Every proof this tab holds, newest first."
+msgstr ""
+
+msgid ""
+"Everything else is a one-node claim: one DAPI node, or one service such as "
+"Platform Explorer, Radar’s crawler, Hyphen or Insight, said so, and nothing "
+"in your browser could check it. Radar names the source beside each figure, "
+"with its age. Core data is read from DAPI nodes and is not proof-checked."
+msgstr ""
 
 msgid "Example"
 msgstr "例"
 
+msgid "Export all ({count})"
+msgstr ""
+
+msgid "Export evidence"
+msgstr ""
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "Failures only"
+msgstr ""
+
+msgid ""
+"Forgets every answer the Platform SDK gave, here and in this browser’s "
+"storage, and the proofs held for the inspector. Pages read it again as you "
+"open them."
+msgstr ""
+
+msgid "Give it a name."
+msgstr ""
+
+msgid "Governance"
+msgstr "ガバナンス"
+
+msgid ""
+"How Radar talks to Dash Platform. A change restarts the Platform SDK; "
+"nothing here leaves this browser."
+msgstr ""
+
+#. placeholder {0}: networkName(net)
+msgid "ID on {0}"
+msgstr ""
+
+msgid ""
+"Identities, contracts and tokens you saved. They stay only in this browser, "
+"on this device: Radar has no accounts, so they don’t follow you to another "
+"browser, and clearing this site’s data removes them."
+msgstr ""
+
+msgid "Kind"
+msgstr ""
+
 msgid "Language"
 msgstr "言語"
+
+msgid "Link copied"
+msgstr "リンクをコピーしました"
+
+msgid ""
+"Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar "
+"reads the rows from the index and then checks each row’s facts with proofs "
+"where it can; the checked value wins over the index’s. Without an index, you"
+" can still open anything whose ID you know. Decentralized only mode switches"
+" the indexes off to show exactly that: only what DAPI nodes and the Platform"
+" SDK can answer."
+msgstr ""
+
+msgid "Log copied"
+msgstr ""
+
+msgid "Name"
+msgstr "名前"
+
+msgid ""
+"Name an identity, contract or token. The name shows wherever Radar shows "
+"that ID, on this device only, and wins over Radar’s own names."
+msgstr ""
+
+msgid "Network"
+msgstr "ネットワーク"
+
+msgid "Networks"
+msgstr ""
+
+msgid "No"
+msgstr "いいえ"
 
 msgid "No devnets saved."
 msgstr "保存された devnet はありません。"
 
+msgid "No names of your own yet"
+msgstr ""
+
+msgid "No proofs yet"
+msgstr ""
+
+msgid "No requests match"
+msgstr ""
+
+msgid "No requests yet"
+msgstr ""
+
+msgid "Node"
+msgstr ""
+
+msgid "not connected yet"
+msgstr ""
+
+msgid "not reported"
+msgstr ""
+
+msgid "Nothing matches on this network. Try All networks, or another kind."
+msgstr ""
+
+msgid "Nothing matches this kind."
+msgstr ""
+
+msgid "Nothing saved here"
+msgstr ""
+
+msgid "Nothing saved yet"
+msgstr ""
+
+msgid ""
+"Off by default. When on, this browser remembers the identities you open, up "
+"to 50 per network."
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "One figure’s proof, as Radar received it."
+msgstr ""
+
 msgid "Open"
 msgstr "開く"
+
+msgid ""
+"Open a page with a proof-checked figure. Radar keeps the last 300 proofs in "
+"memory until you close the tab."
+msgstr ""
+
+msgid ""
+"Open an identity, a contract or a token and press Save. It appears here."
+msgstr ""
+
+msgid "Open diagnostics"
+msgstr ""
+
+msgid "Open diagnostics with the keyboard"
+msgstr ""
+
+msgid "Open settings"
+msgstr ""
+
+msgid "Open the proof inspector"
+msgstr ""
+
+msgid "Open the proof inspector with the keyboard"
+msgstr ""
 
 msgid "optional"
 msgstr "任意"
 
-msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
+msgid ""
+"Otherwise times follow this device’s time zone. Hovering a time always shows"
+" UTC."
 msgstr "オフの場合、時刻はこの端末のタイムゾーンに従います。時刻にカーソルを合わせると常に UTC が表示されます。"
+
+msgid "Platform height"
+msgstr "Platform の高さ"
+
+msgid "Platform protocol version"
+msgstr ""
+
+msgid "Platform SDK cache"
+msgstr ""
+
+msgid "Platform SDK cache cleared"
+msgstr ""
+
+msgid "Platform SDK in the worker"
+msgstr ""
+
+msgid "Platform SDK in this page"
+msgstr ""
+
+msgid "Platform time"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Proof bytes"
+msgstr ""
+
+msgid "Proof copied"
+msgstr ""
+
+msgid "Proof inspector"
+msgstr ""
+
+msgid "Proof-checked"
+msgstr "証明で検証済み"
+
+msgid "Proofs held"
+msgstr ""
+
+msgid "Proofs that did not verify"
+msgstr ""
+
+msgid "Protocol version"
+msgstr "プロトコルバージョン"
+
+msgid "Quorum"
+msgstr "クォーラム"
 
 msgid "Quorum list URL"
 msgstr "クォーラム一覧の URL"
+
+msgid "Quorum list URL, Mainnet"
+msgstr ""
+
+msgid "Quorum list URL, Testnet"
+msgstr ""
+
+msgid "Quorum type"
+msgstr "クォーラムの種類"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid ""
+"Radar has no analytics, no cookies, no accounts and no advertising. Your "
+"choices and anything you save stay in this browser: your saved items, the "
+"identities you viewed (off unless you turn it on), the names you gave, your "
+"settings and devnets, and a cache of recent answers so pages open quickly. A"
+" service worker keeps Radar’s own files so it can open offline."
+msgstr ""
+
+msgid ""
+"Radar is a read-only explorer for Dash Core, Dash Platform and the network "
+"under both. It never signs, never broadcasts and never asks for a key."
+msgstr ""
+
+msgid ""
+"Radar keeps the last 300 proofs. Load the figure again to get its proof."
+msgstr ""
+
+msgid "Radar on GitHub"
+msgstr ""
+
+msgid ""
+"Radar only reads. To top up an identity, register a name, or work with a "
+"token, a contract or a Platform address, use Bridge. To vote on a proposal "
+"or as a masternode, use Governance. Each link opens in a new tab and carries"
+" the network you were looking at."
+msgstr ""
+
+msgid ""
+"Radar’s code is open source under the MIT licence. Where it adapts code or "
+"data from another project, that project is listed here and in the file it "
+"lives in. Libraries installed through npm and cargo keep their own licences."
+msgstr ""
 
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, rate.data.data.usd)
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "レート: 1 DASH あたり {0}（{1}）。"
+
+msgid "Refused by mode"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Remember the identities I view"
+msgstr ""
 
 msgid "Remove"
 msgstr "削除"
@@ -84,17 +508,73 @@ msgstr "削除"
 msgid "Remove {devnet}"
 msgstr "{devnet} を削除"
 
+msgid "Remove {name} from saved"
+msgstr ""
+
+msgid "Remove the label {name}"
+msgstr ""
+
+msgid "Removed from saved"
+msgstr "保存済みから削除しました"
+
+msgid "Request"
+msgstr ""
+
+msgid "Request timeout (ms)"
+msgstr ""
+
+msgid "Requests appear here as pages load."
+msgstr ""
+
+msgid "Requests this tab made, newest first"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Result"
+msgstr "結果"
+
+msgid "Retries"
+msgstr ""
+
+msgid "Round"
+msgstr ""
+
 msgid "Save changes"
 msgstr "変更を保存"
+
+msgid "Saved"
+msgstr "保存済み"
 
 msgid "Saved devnets"
 msgstr "保存済みの devnet"
 
-msgid "Saved in this browser. A devnet with a name Radar doesn’t know asks for its addresses."
+msgid ""
+"Saved in this browser. A devnet with a name Radar doesn’t know asks for its "
+"addresses."
 msgstr "このブラウザに保存されます。Radar が知らない名前の devnet では、そのアドレスの入力が求められます。"
+
+msgid "Saved item"
+msgstr ""
+
+msgid "Saved items"
+msgstr ""
+
+msgid "Saved items cleared"
+msgstr ""
+
+msgid "SDK default"
+msgstr ""
+
+msgid "SDK log level"
+msgstr ""
 
 msgid "See every source"
 msgstr "すべてのソースを見る"
+
+msgid "See every source and the switch"
+msgstr ""
 
 msgid "Settings"
 msgstr "設定"
@@ -105,23 +585,84 @@ msgstr "DASH の金額の横に USD 換算額を表示"
 msgid "Show times in UTC"
 msgstr "時刻を UTC で表示"
 
+msgid "Source"
+msgstr ""
+
 msgid "Sources"
 msgstr "ソース"
+
+msgid "Sources and licences"
+msgstr ""
 
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "テストコインに価値はないため、テストネットと devnet では USD は表示されません。"
 
-msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
+msgid ""
+"Text that isn’t translated yet appears in English. Hashes, IDs and amounts "
+"are never translated."
 msgstr "まだ翻訳されていないテキストは英語で表示されます。ハッシュ、ID、金額は翻訳されません。"
+
+#. placeholder {0}: formatInt(log.length)
+msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
+msgstr ""
+
+msgid ""
+"The last 100 requests this tab made, with the source, the node, how long "
+"each took and whether Decentralized only mode refused it."
+msgstr ""
+
+msgid "The quorum list address must start with https://."
+msgstr ""
 
 msgid "The quorum list URL must start with https://."
 msgstr "クォーラム一覧の URL は https:// で始まる必要があります。"
 
+msgid ""
+"The SDK checked this proof against the trusted quorum keys before Radar "
+"showed the figure."
+msgstr ""
+
+msgid ""
+"The worker runs SDK {workerVersion} but this page was built with "
+"{PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
+msgstr ""
+
 msgid "These choices stay in this browser. Radar never sends them anywhere."
 msgstr "これらの設定はこのブラウザ内に保存されます。Radar がどこかへ送信することはありません。"
 
+msgid ""
+"They feed the seed list for token holders: no index can list every holder of"
+" a token, so a token’s Holders tab starts from the identities you have "
+"opened. The list never leaves this browser, and turning this off erases it."
+msgstr ""
+
+msgid "This network"
+msgstr ""
+
+msgid "This proof is no longer held"
+msgstr ""
+
 msgid "Times"
 msgstr "時刻"
+
+msgid ""
+"To clear it: the buttons on Settings and Saved remove each list, “Clear the "
+"SDK cache” removes the cached answers, and your browser’s “clear site data” "
+"removes everything, including the service worker."
+msgstr ""
+
+msgid ""
+"To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes "
+"and quorum list, and, unless you turn them off, Platform Explorer, Radar’s "
+"crawler, Hyphen, Insight and a price feed. Each one sees your IP address and"
+" what you asked it, like any web server."
+msgstr ""
+
+msgid "Took"
+msgstr ""
+
+msgid "Tools for checking what Radar asked and what it was told."
+msgstr ""
 
 msgid "Unit for amounts"
 msgstr "金額の単位"
@@ -132,14 +673,60 @@ msgstr "USD が先頭になり、レートが取得できると、その後ろ�
 msgid "USD is for mainnet only: test coins have no value."
 msgstr "USD はメインネット専用です。テストコインに価値はありません。"
 
-msgid "USD is rounded to three significant figures and follows the amount in {unitName}."
+msgid ""
+"USD is rounded to three significant figures and follows the amount in "
+"{unitName}."
 msgstr "USD は有効数字3桁に丸められ、{unitName} の金額に連動します。"
 
-msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
+msgid ""
+"USD is rounded to three significant figures. This choice doesn’t apply while"
+" USD comes first."
 msgstr "USD は有効数字3桁に丸められます。USD が先頭のときは、この選択は適用されません。"
 
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "小文字、数字、ハイフンを使用してください（例：「ruby」）。"
 
+msgid "Verified"
+msgstr ""
+
+msgid "Version mismatch"
+msgstr ""
+
+msgid "Viewed identities"
+msgstr ""
+
+msgid "Viewed identities cleared"
+msgstr ""
+
+msgid "Wasm bindings"
+msgstr ""
+
+msgid "What “proof-checked” means"
+msgstr ""
+
+msgid "What can’t be listed without an index"
+msgstr ""
+
+msgid "When"
+msgstr "日時"
+
+msgid "Where to act"
+msgstr ""
+
+msgid "Whole number from {min} to {max}."
+msgstr ""
+
+msgid "Yes"
+msgstr "はい"
+
+msgid "Yes, remove"
+msgstr ""
+
 msgid "You"
 msgstr "あなた"
+
+msgid "Your names"
+msgstr ""
+
+msgid "Your own names"
+msgstr ""
