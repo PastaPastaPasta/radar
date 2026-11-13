@@ -180,7 +180,7 @@ export function AddressTable({
       caption={caption}
       columns={columns}
       rows={rows}
-      getRowId={(r, ) => `${str(r.address) ?? ''}:${String(num(r.nonce) ?? '')}:${String(r.amount)}`}
+      getRowId={(r) => `${str(r.address) ?? ''}:${String(num(r.nonce) ?? '')}:${String(r.amount)}`}
       state={rows.length === 0 ? 'empty' : 'ready'}
     />
   )
@@ -194,9 +194,7 @@ export function Funding({ proof }: { proof: unknown }) {
   return (
     <span className="inline-flex flex-wrap items-center gap-2">
       <Badge>{f.kind === 'instant' ? t`InstantSend lock` : t`ChainLock`}</Badge>
-      {f.txid ? (
-        <Entity kind="tx" id={f.txid} />
-      ) : null}
+      {f.txid ? <Entity kind="tx" id={f.txid} /> : null}
       {f.vout === undefined ? null : <span className="rx-dim">{t`output ${f.vout}`}</span>}
     </span>
   )

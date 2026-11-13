@@ -21,80 +21,81 @@ export function LiveResult({ hash, indexed }: { hash: string; indexed: PeStatus 
   })
   const result = live.data?.data
   return (
-    <Card
-      layer="platform"
-      title={t`Result from a node`}
-      source={live.data ? stampOf(live.data) : undefined}
-      actions={
-        <button
-          type="button"
-          className="dh-btn dh-btn--sm"
-          disabled={live.isFetching}
-          onClick={() => {
-            void live.refetch()
-          }}
-        >
-          {t`Check again`}
-        </button>
-      }
-      data-live-result
-    >
-      {result ? (
-        <>
-          <KeyValue
-            columns={2}
-            items={[
-              {
-                label: t`Status`,
-                value:
-                  result.status === 'executed' ? (
-                    <Badge tone="success">{t`Executed`}</Badge>
-                  ) : result.status === 'failed' ? (
-                    <Badge tone="danger">{t`Failed`}</Badge>
-                  ) : (
-                    <Badge>{t`No result yet`}</Badge>
-                  ),
-              },
-              ...(result.error ? [{ label: t`Error`, value: result.error }] : []),
-              ...(result.ownerBalance === undefined
-                ? []
-                : [
-                    {
-                      label: t`Owner balance after`,
-                      value: <Credits value={result.ownerBalance} />,
-                    },
-                  ]),
-            ]}
+    <div data-live-result>
+      <Card
+        layer="platform"
+        title={t`Result from a node`}
+        source={live.data ? stampOf(live.data) : undefined}
+        actions={
+          <button
+            type="button"
+            className="dh-btn dh-btn--sm"
+            disabled={live.isFetching}
+            onClick={() => {
+              void live.refetch()
+            }}
+          >
+            {t`Check again`}
+          </button>
+        }
+      >
+        {result ? (
+          <>
+            <KeyValue
+              columns={2}
+              items={[
+                {
+                  label: t`Status`,
+                  value:
+                    result.status === 'executed' ? (
+                      <Badge tone="success">{t`Executed`}</Badge>
+                    ) : result.status === 'failed' ? (
+                      <Badge tone="danger">{t`Failed`}</Badge>
+                    ) : (
+                      <Badge>{t`No result yet`}</Badge>
+                    ),
+                },
+                ...(result.error ? [{ label: t`Error`, value: result.error }] : []),
+                ...(result.ownerBalance === undefined
+                  ? []
+                  : [
+                      {
+                        label: t`Owner balance after`,
+                        value: <Credits value={result.ownerBalance} />,
+                      },
+                    ]),
+              ]}
+            />
+            {result.status === 'pending' ? (
+              <p className="rx-note" data-live-note="pending">
+                {indexed
+                  ? t`The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none.`
+                  : t`The node reported no result within a few seconds: this transition has not executed yet, or no node knows it.`}
+              </p>
+            ) : null}
+            {(result.status === 'executed' && indexed === 'failed') ||
+            (result.status === 'failed' && indexed === 'success') ? (
+              <p className="rx-note" role="status" data-live-note="disagree">
+                {t`The node and Platform Explorer disagree about this transition. Each is shown with its own source.`}
+              </p>
+            ) : null}
+          </>
+        ) : live.isError ? (
+          <ErrorState
+            compact
+            error={live.error}
+            source="dapi"
+            onRetry={() => {
+              void live.refetch()
+            }}
           />
-          {result.status === 'pending' ? (
-            <p className="rx-note" data-live-note="pending">
-              {indexed
-                ? t`The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none.`
-                : t`The node reported no result within a few seconds: this transition has not executed yet, or no node knows it.`}
-            </p>
-          ) : null}
-          {(result.status === 'executed' && indexed === 'failed') ||
-          (result.status === 'failed' && indexed === 'success') ? (
-            <p className="rx-note" role="status" data-live-note="disagree">
-              {t`The node and Platform Explorer disagree about this transition. Each is shown with its own source.`}
-            </p>
-          ) : null}
-        </>
-      ) : live.isError ? (
-        <ErrorState
-          compact
-          error={live.error}
-          source="dapi"
-          onRetry={() => {
-            void live.refetch()
-          }}
-        />
-      ) : (
-        <div aria-busy="true">
-          <Skeleton shape="line" />
-          <p className="rx-note">{t`Asking a node for the result. This can take a few seconds.`}</p>
-        </div>
-      )}
-    </Card>
+        ) : (
+          <div aria-busy="true">
+            <Skeleton shape="line" />
+            <p className="rx-note">{t`Asking a node for the result. This can take a few seconds.`}</p>
+          </div>
+        )}
+      </Card>
+    </div>
   )
 }

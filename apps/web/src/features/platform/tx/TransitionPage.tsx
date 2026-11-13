@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useDecentralizedOnly } from '@/data/health'
-import { stampOf, type Sourced } from '@/data/envelope'
+import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
 import type { StateTransitionDecodedDto } from '@/data/sdk/methods/p-blocks'
@@ -73,7 +73,11 @@ export function TransitionPage({ hash }: { hash: string }) {
 
 const statusOf = (tx: PeTransaction | undefined): PeStatus => {
   const s = tx?.status.toUpperCase()
-  return s === 'SUCCESS' ? 'success' : s === 'FAIL' || s === 'FAILED' || s === 'ERROR' ? 'failed' : undefined
+  return s === 'SUCCESS'
+    ? 'success'
+    : s === 'FAIL' || s === 'FAILED' || s === 'ERROR'
+      ? 'failed'
+      : undefined
 }
 
 function Record({ hash }: { hash: string }) {
@@ -124,12 +128,19 @@ function Record({ hash }: { hash: string }) {
       <LiveResult hash={hash} indexed={statusOf(tx)} />
       {tx && pe.data ? (
         <>
-          <Details query={decodedQuery} net={net} />
+          <Details
+            query={decodedQuery}
+            net={net}
+            hasBytes={Boolean(tx.data)}
+            stamp={stampOf(pe.data)}
+          />
           <Duplicates tx={tx} stamp={stampOf(pe.data)} />
           <RawCard
             tx={tx}
             decoded={decoded}
-            source={decodedQuery.data ? [stampOf(pe.data), stampOf(decodedQuery.data)] : stampOf(pe.data)}
+            source={
+              decodedQuery.data ? [stampOf(pe.data), stampOf(decodedQuery.data)] : stampOf(pe.data)
+            }
           />
         </>
       ) : null}
@@ -151,7 +162,10 @@ function Summary({
   const status = statusOf(tx)
   const owner = tx.owner?.identifier
   const items: Fact[] = [
-    { label: t`Type`, value: badge ? <TypeBadge type={badge} /> : <Badge>{humanize(tx.type)}</Badge> },
+    {
+      label: t`Type`,
+      value: badge ? <TypeBadge type={badge} /> : <Badge>{humanize(tx.type)}</Badge>,
+    },
     {
       label: t`Status`,
       value:
@@ -169,8 +183,14 @@ function Summary({
     {
       label: t`Block`,
       value:
-        tx.blockHeight == null ? '—' : (
-          <Entity kind="platform-block" id={String(tx.blockHeight)} label={formatInt(tx.blockHeight)} />
+        tx.blockHeight == null ? (
+          '—'
+        ) : (
+          <Entity
+            kind="platform-block"
+            id={String(tx.blockHeight)}
+            label={formatInt(tx.blockHeight)}
+          />
         ),
     },
     { label: t`Position in block`, value: tx.index == null ? '—' : formatInt(tx.index + 1) },
@@ -193,7 +213,10 @@ function Summary({
   if (tx.shielded)
     items.push({
       label: t`Shielded`,
-      value: [tx.shielded.direction, tx.shielded.amount == null ? undefined : formatInt(tx.shielded.amount)]
+      value: [
+        tx.shielded.direction,
+        tx.shielded.amount == null ? undefined : formatInt(tx.shielded.amount),
+      ]
         .filter(Boolean)
         .join(' · '),
     })
@@ -207,80 +230,85 @@ function Summary({
 function Details({
   query,
   net,
+  hasBytes,
+  stamp,
 }: {
   query: { data?: Sourced<StateTransitionDecodedDto>; isError: boolean; isPending: boolean }
   net: NetworkId
+  hasBytes: boolean
+  stamp: SourceStamp | SourceStamp[]
 }) {
   const { t } = useLingui()
   const decoded = query.data?.data
   return (
-    <Card
-      layer="platform"
-      title={t`What it does`}
-      source={query.data ? stampOf(query.data) : undefined}
-      data-details
-    >
-      {decoded ? (
-        <>
-          <Facts
-            items={[
-              { label: t`SDK action`, value: decoded.actionType },
-              {
-                label: t`Identity nonce`,
-                value:
-                  decoded.identityNonce === undefined ? undefined : formatInt(decoded.identityNonce),
-              },
-              {
-                label: t`Contract nonce`,
-                value:
-                  decoded.identityContractNonce === undefined
-                    ? undefined
-                    : formatInt(decoded.identityContractNonce),
-              },
-              {
-                label: t`Signed with key`,
-                value:
-                  decoded.signaturePublicKeyId === undefined
-                    ? undefined
-                    : `#${String(decoded.signaturePublicKeyId)}`,
-              },
-              {
-                label: t`Signature`,
-                value: decoded.signature ? <Hash value={bytesToHex(decoded.signature)} /> : undefined,
-              },
-            ]}
-          />
-          <TypePanel decoded={decoded} net={net} />
-        </>
-      ) : query.isError ? (
-        <p className="rx-note" data-decode-failed>
-          {t`Radar could not read this transition's fields from its bytes. Its raw data is below.`}
-        </p>
-      ) : (
-        <Skeleton shape="block" height={140} />
-      )}
-    </Card>
+    <div data-details>
+      <Card layer="platform" title={t`What it does`} source={stamp}>
+        {decoded ? (
+          <>
+            <Facts
+              items={[
+                { label: t`SDK action`, value: decoded.actionType },
+                {
+                  label: t`Identity nonce`,
+                  value:
+                    decoded.identityNonce === undefined
+                      ? undefined
+                      : formatInt(decoded.identityNonce),
+                },
+                {
+                  label: t`Contract nonce`,
+                  value:
+                    decoded.identityContractNonce === undefined
+                      ? undefined
+                      : formatInt(decoded.identityContractNonce),
+                },
+                {
+                  label: t`Signed with key`,
+                  value:
+                    decoded.signaturePublicKeyId === undefined
+                      ? undefined
+                      : `#${String(decoded.signaturePublicKeyId)}`,
+                },
+                {
+                  label: t`Signature`,
+                  value: decoded.signature ? (
+                    <Hash value={bytesToHex(decoded.signature)} />
+                  ) : undefined,
+                },
+              ]}
+            />
+            <TypePanel decoded={decoded} net={net} />
+          </>
+        ) : !hasBytes ? (
+          <p className="rx-note" data-no-bytes>
+            {t`Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here.`}
+          </p>
+        ) : query.isError ? (
+          <p className="rx-note" data-decode-failed>
+            {t`Radar could not read this transition's fields from its bytes. Its raw data is below.`}
+          </p>
+        ) : (
+          <Skeleton shape="block" height={140} />
+        )}
+      </Card>
+    </div>
   )
 }
 
-function Duplicates({
-  tx,
-  stamp,
-}: {
-  tx: PeTransaction
-  stamp: ReturnType<typeof stampOf>
-}) {
+function Duplicates({ tx, stamp }: { tx: PeTransaction; stamp: ReturnType<typeof stampOf> }) {
   const { t } = useLingui()
   const rows = tx.duplicates ?? []
   if (rows.length === 0) return null
   return (
-    <Card layer="platform" padding="flush" title={t`Sent again in later blocks`} source={stamp} data-duplicates>
-      <TransitionTable
-        rows={rows}
-        state="ready"
-        columns={['status', 'hash', 'block', 'time']}
-        caption={t`The same transition seen again in later blocks`}
-      />
-    </Card>
+    <div data-duplicates>
+      <Card layer="platform" padding="flush" title={t`Sent again in later blocks`} source={stamp}>
+        <TransitionTable
+          rows={rows}
+          state="ready"
+          columns={['status', 'hash', 'block', 'time']}
+          caption={t`The same transition seen again in later blocks`}
+        />
+      </Card>
+    </div>
   )
 }

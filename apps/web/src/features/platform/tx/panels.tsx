@@ -5,16 +5,7 @@ import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
 import { Badge, Hash } from '@/ui'
-import {
-  humanize,
-  isRecord,
-  list,
-  num,
-  proTxHashHex,
-  records,
-  str,
-  type Json,
-} from './decoded'
+import { humanize, isRecord, list, num, proTxHashHex, records, str, type Json } from './decoded'
 import {
   Address,
   AddressTable,
@@ -134,7 +125,15 @@ function IdentityWithdrawalPanel({ body, net }: PanelProps) {
         items={[
           { label: t`Identity`, value: <Who id={body.identityId} /> },
           { label: t`Amount`, value: <Credits value={body.amount} /> },
-          { label: t`Pays out to`, value: body.outputScript == null ? t`The identity's withdrawal address` : <Script base64={body.outputScript} net={net} /> },
+          {
+            label: t`Pays out to`,
+            value:
+              body.outputScript == null ? (
+                t`The identity's withdrawal address`
+              ) : (
+                <Script base64={body.outputScript} net={net} />
+              ),
+          },
           { label: t`Core fee per byte`, value: num(body.coreFeePerByte) ?? '—' },
           { label: t`Pooling`, value: str(body.pooling) ?? '—' },
         ]}
@@ -266,7 +265,8 @@ function ShieldedPanel({ body, net }: PanelProps) {
   const { t } = useLingui()
   const facts: Fact[] = [{ label: t`Shielded actions`, value: count(body.actions) }]
   const amount = body.amount ?? body.unshieldingAmount ?? body.valueBalance
-  if (amount !== undefined) facts.push({ label: t`Amount across the pool`, value: <Credits value={amount} /> })
+  if (amount !== undefined)
+    facts.push({ label: t`Amount across the pool`, value: <Credits value={amount} /> })
   if (body.denomination !== undefined)
     facts.push({ label: t`Denomination`, value: <Credits value={body.denomination} /> })
   if (body.outputAddress !== undefined)
@@ -311,10 +311,10 @@ function BatchEntry({ entry, index }: { entry: Json; index: number }) {
       label: t`Document`,
       value: <Entity kind="document" id={`${contract}/${type}/${id}`} />,
     })
-  if (contract)
-    facts.push({ label: t`Contract`, value: <ContractRef id={contract} /> })
+  if (contract) facts.push({ label: t`Contract`, value: <ContractRef id={contract} /> })
   if (type) facts.push({ label: t`Document type`, value: type })
-  if (entry.$revision !== undefined) facts.push({ label: t`Revision`, value: num(entry.$revision) ?? '—' })
+  if (entry.$revision !== undefined)
+    facts.push({ label: t`Revision`, value: num(entry.$revision) ?? '—' })
   if (amount !== undefined) facts.push({ label: t`Amount`, value: formatInt(num(amount) ?? 0) })
   if (price !== undefined) facts.push({ label: t`Price`, value: <Credits value={price} /> })
   if (recipient != null) facts.push({ label: t`Recipient`, value: <Who id={recipient} /> })
@@ -342,7 +342,11 @@ function BatchPanel({ body }: PanelProps) {
         ]}
       />
       {entries.map((entry, i) => (
-        <BatchEntry key={`${i}:${str(entry.$id) ?? str(entry.$tokenId) ?? ''}`} entry={entry} index={i} />
+        <BatchEntry
+          key={`${i}:${str(entry.$id) ?? str(entry.$tokenId) ?? ''}`}
+          entry={entry}
+          index={i}
+        />
       ))}
       <Fields value={body} label={t`Fields as sent`} />
     </>
@@ -385,9 +389,5 @@ export function TypePanel({
   const body = isRecord(decoded.body) ? decoded.body : undefined
   if (!body) return null
   const Panel = PANELS[decoded.typeNumber]
-  return Panel ? (
-    <Panel body={body} net={net} />
-  ) : (
-    <Fields value={body} label={t`Fields as sent`} />
-  )
+  return Panel ? <Panel body={body} net={net} /> : <Fields value={body} label={t`Fields as sent`} />
 }

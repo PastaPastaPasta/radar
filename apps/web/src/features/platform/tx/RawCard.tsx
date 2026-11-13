@@ -82,7 +82,12 @@ export function RawCard({
       ) : (
         <pre
           className="rx-mono"
-          style={{ overflow: 'auto', maxHeight: 420, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
+          style={{
+            overflow: 'auto',
+            maxHeight: 420,
+            whiteSpace: 'pre-wrap',
+            overflowWrap: 'anywhere',
+          }}
           data-raw={raw}
         >
           {raw === 'hex' ? bytesToHex(bytes) : tx.data}
