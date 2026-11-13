@@ -35,6 +35,10 @@ msgstr "(застаріло)"
 msgid "(source down)"
 msgstr "(джерело недоступне)"
 
+#. placeholder {0}: backend.upstream
+msgid "(this site passes the request on to {0})"
+msgstr "(цей сайт передає запит до {0})"
+
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, one {# вхід} few {# входи} many {# входів} other {# входу}}"
@@ -200,6 +204,7 @@ msgstr "{0} на інші адреси"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
+#. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} тх"
 
@@ -297,6 +302,9 @@ msgstr "{name} (причина {reason})"
 
 msgid "{name} couldn’t be reached"
 msgstr "{name} недоступний"
+
+msgid "{name} is a hosted service, which Decentralized only mode does not use"
+msgstr "{name} — це розміщений сервіс, який режим «Лише децентралізовано» не використовує"
 
 msgid "{name} is busy"
 msgstr "{name} перевантажений"
@@ -428,6 +436,9 @@ msgstr "Підпис — це 88 символів base64, що закінчую�
 msgid "About"
 msgstr "Про проєкт"
 
+msgid "About sources"
+msgstr "Про джерела"
+
 msgid "Abstain"
 msgstr "Утриматися"
 
@@ -446,6 +457,9 @@ msgstr "адреса"
 msgid "Address"
 msgstr "Адреса"
 
+msgid "Address balances and history, spent outputs, the rich list, charts, the mempool, governance and network internals."
+msgstr "Баланси й історія адрес, витрачені виходи, список найбагатших, графіки, мемпул, управління та внутрішня будова мережі."
+
 msgid "Address funding"
 msgstr "Поповнення адреси"
 
@@ -457,6 +471,9 @@ msgstr "Тип адреси"
 
 msgid "Address withdrawal"
 msgstr "Виведення з адреси"
+
+msgid "Address, spent-output and governance reads while Hyphen's index is behind the chain."
+msgstr "Читання адрес, витрачених виходів і управління, поки індекс Hyphen відстає від ланцюга."
 
 msgid "Addresses ranked by balance"
 msgstr "Адреси за розміром балансу"
@@ -479,6 +496,9 @@ msgstr "Усі блоки"
 msgid "All proposals"
 msgstr "Усі пропозиції"
 
+msgid "All sources"
+msgstr "Усі джерела"
+
 msgid "Among the peers of the indexing node"
 msgstr "Серед пірів індексувального вузла"
 
@@ -497,6 +517,9 @@ msgstr "Суми завантажуються для перших {0} вході
 
 msgid "Amounts loaded"
 msgstr "Завантажено сум"
+
+msgid "Amounts show in {unitName}."
+msgstr "Суми показуються в {unitName}."
 
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Суми показуються в {unitName}. Виберіть USD, щоб спершу показувати суму в доларах."
@@ -561,6 +584,9 @@ msgstr "Назад до зведення"
 
 msgid "Back to top"
 msgstr "Нагору"
+
+msgid "Backends"
+msgstr "Бекенди"
 
 msgid "Balance"
 msgstr "Баланс"
@@ -689,6 +715,9 @@ msgstr "Синхронізація, {0}"
 msgid "Chain size"
 msgstr "Розмір ланцюга"
 
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "Розмір ланцюга, навантаження мемпулу, швидкість транзакцій, версії вузлів, кількість мастернод і піри, з яких читає Hyphen."
+
 msgid "Chain state"
 msgstr "Стан ланцюга"
 
@@ -735,18 +764,14 @@ msgstr "Зміни"
 msgid "Charts"
 msgstr "Графіки"
 
+msgid "Charts need an indexer"
+msgstr "Графікам потрібен індексатор"
+
 msgid "Check a signed message against a Core address, in your browser."
 msgstr "Перевірте підписане повідомлення за адресою Core прямо в браузері."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Перевірте, чи підписала адреса Dash повідомлення. Перевірка виконується в цьому браузері: нічого з уведеного тут нікуди не надсилається, а Radar ніколи не просить ключ."
-
-msgid "Checked"
-msgstr "Перевірено"
-
-#. placeholder {0}: POLL_MS.mempool / 1000
-msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
-msgstr "Перевіряється кожні {0} с, але індекс відстає від ланцюга, тож це не наживо."
 
 msgid "Checking"
 msgstr "Перевірка"
@@ -933,6 +958,9 @@ msgstr "Версії Core"
 msgid "Core, Platform and the masternode network"
 msgstr "Core, Platform і мережа мастернод"
 
+msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
+msgstr "Вершина Core, блоки, транзакції, ChainLock і живі потоки. Radar розподіляє запити між багатьма вузлами та звіряє кожен блок з його заголовком."
+
 msgid "Could not be read"
 msgstr "Не вдалося прочитати"
 
@@ -984,6 +1012,9 @@ msgstr "DAPI"
 msgid "DAPI addresses"
 msgstr "Адреси DAPI"
 
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI і Platform SDK відповідають. Розміщені джерела вимкнені в режимі «Лише децентралізовано»."
+
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI зайнятий, тому списки блоків беруться з Hyphen, поки відновлюється ліміт запитів. Подробиці, як і раніше, йдуть через DAPI."
 
@@ -1016,6 +1047,21 @@ msgstr "Джерела даних"
 
 msgid "Days run from 00:00 to 24:00 UTC."
 msgstr "Доба триває з 00:00 до 24:00 за UTC."
+
+msgid "Decentralized"
+msgstr "Децентралізовано"
+
+msgid "Decentralized only"
+msgstr "Лише децентралізовано"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "Режим «Лише децентралізовано» не звертається до цього джерела."
+
+msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
+msgstr "Режим «Лише децентралізовано» читає лише вузли DAPI і Platform SDK."
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "Лише децентралізовано: Radar читає лише вузли DAPI і Platform SDK і не звертається до розміщених сервісів. Відкрийте «Джерела», щоб побачити, що при цьому недоступне, або щоб вимкнути режим."
 
 msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
 msgstr "Розшифровка сирих байтів офлайн: транзакція, блок, ідентичність, контракт, документ або доказ."
@@ -1129,6 +1175,12 @@ msgstr "Епохи"
 msgid "Esc"
 msgstr "Esc"
 
+msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
+msgstr "Усі бекенди, до яких може звертатися Radar, хто їх підтримує і чи використовуються вони в мережі {network}. Кожна цифра в Radar вказує, звідки вона взята."
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Усі бекенди, до яких може звертатися Radar, хто їх підтримує, і перемикач режиму «Лише децентралізовано»."
+
 msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
 msgstr "Усі джерела даних, які читає Radar, їхній стан і свіжість у цій мережі, а також бюджет запитів до DAPI."
 
@@ -1167,6 +1219,9 @@ msgstr "Застава евоноди"
 
 msgid "Evonodes"
 msgstr "Evonode"
+
+msgid "Evonodes from the node list, as https://address:port"
+msgstr "Evonode зі списку вузлів у вигляді https://address:port"
 
 msgid "Example"
 msgstr "Приклад"
@@ -1213,6 +1268,9 @@ msgstr "Фінальність"
 msgid "Find the identity that holds a public key, from its 40-character key hash."
 msgstr "Знайдіть ідентичність, якій належить відкритий ключ, за його 40-символьним хешем."
 
+msgid "Finding this day's blocks"
+msgstr "Пошук блоків за цей день"
+
 msgid "finding where…"
 msgstr "шукаємо, де…"
 
@@ -1242,6 +1300,9 @@ msgstr "Перша: недоступно"
 msgid "From"
 msgstr "Від"
 
+msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
+msgstr "Із живого потоку DAPI: транзакції, надходження яких бачила ця сторінка, за вирахуванням уже видобутих. Це не весь мемпул."
+
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "Повні результати за будь-якою висотою, хешем, адресою, ProTx, IP, ідентичністю, контрактом, токеном, іменем чи епохою, згруповані за типом."
 
@@ -1262,6 +1323,9 @@ msgstr "Управління"
 
 msgid "Governance proposal"
 msgstr "Пропозиція щодо управління"
+
+msgid "Governance proposals need an indexer"
+msgstr "Пропозиціям щодо управління потрібен індексатор"
 
 msgid "group"
 msgstr "група"
@@ -1331,6 +1395,9 @@ msgstr "Сховати таблицю"
 
 msgid "Home"
 msgstr "Головна"
+
+msgid "Hosted by one operator"
+msgstr "Розміщено в одного оператора"
 
 msgid "Hosting"
 msgstr "Хостинг"
@@ -1428,6 +1495,9 @@ msgstr "у мемпулі"
 msgid "In the mempool"
 msgstr "У мемпулі"
 
+msgid "In use"
+msgstr "Використовується"
+
 msgid "Inbound"
 msgstr "Вхідні"
 
@@ -1451,6 +1521,9 @@ msgstr "Проіндексовано Platform Explorer · перевірка…"
 
 msgid "Indexed by Platform Explorer · proofs unavailable"
 msgstr "Проіндексовано Platform Explorer · докази недоступні"
+
+msgid "Indexed Platform lists and search, and Platform's height until the SDK has answered."
+msgstr "Проіндексовані списки Platform і пошук, а також висота Platform, доки не відповість SDK."
 
 msgid "indexed to block {block}"
 msgstr "проіндексовано до блоку {block}"
@@ -1673,6 +1746,9 @@ msgstr "Блокує Dash у Core, щоб створити кредити на P
 msgid "Looks like {0}"
 msgstr "Схоже на {0}"
 
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "Пошук в індексі було пропущено, тому деякі збіги можуть бути відсутні"
+
 msgid "mainnet"
 msgstr "основна мережа"
 
@@ -1705,6 +1781,9 @@ msgstr "Корінь списку мастернод"
 
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "Дані про мастерноди отримано з обходу mainnet і testnet краулером Radar."
+
+msgid "Masternode records need Radar's crawler"
+msgstr "Записам про мастерноди потрібен краулер Radar"
 
 msgid "Masternode registrar update"
 msgstr "Оновлення реєстратора мастерноди"
@@ -1835,6 +1914,12 @@ msgstr "Імена, що закінчуються на .dash, епохи та д
 msgid "Names follow Dash Core’s definitions of the revocation reason codes."
 msgstr "Назви відповідають визначенням Dash Core для кодів причин відкликання."
 
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "Потрібен індексатор: вимкнено в режимі «Лише децентралізовано»"
+
+msgid "Needs Radar's crawler: off in Decentralized only mode"
+msgstr "Потрібен краулер Radar: вимкнено в режимі «Лише децентралізовано»"
+
 msgid "Net value"
 msgstr "Чиста вартість"
 
@@ -1849,6 +1934,9 @@ msgstr "Перепис мережі"
 
 msgid "Network internals"
 msgstr "Внутрішня будова мережі"
+
+msgid "Network internals need an indexer"
+msgstr "Внутрішній будові мережі потрібен індексатор"
 
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "Внутрішня будова мережі: піри, навантаження мемпулу, версії та історія"
@@ -1995,6 +2083,9 @@ msgstr "У цій транзакції не переміщуються кошт�
 msgid "No votes recorded for this proposal."
 msgstr "За цією пропозицією голосів не зафіксовано."
 
+msgid "Node list and quorum keys"
+msgstr "Список вузлів і ключі кворуму"
+
 msgid "Node sync"
 msgstr "Синхронізація вузла"
 
@@ -2053,6 +2144,9 @@ msgstr "Ще не видобуто"
 msgid "Not offered"
 msgstr "Не пропонується"
 
+msgid "Not on {net}"
+msgstr "Немає в мережі {net}"
+
 msgid "not paid yet"
 msgstr "виплат ще не було"
 
@@ -2070,6 +2164,12 @@ msgstr "Не вказано"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Ніщо вище цього не підтверджує. Це лише один зі способів прочитати ваш ввід."
+
+msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
+msgstr "Відколи ви відкрили сторінку, нічого не надійшло. Нові транзакції з’являтимуться тут, щойно їх передасть DAPI."
+
+msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
+msgstr "Відколи ви відкрили сторінку, нічого не надійшло. Для повного списку мемпулу потрібен індексатор, який режим «Лише децентралізовано» не використовує."
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
 msgstr "Відколи ви відкрили сторінку, нічого не надійшло. Для повного списку мемпулу потрібен індекс Hyphen, який відстає від ланцюга."
@@ -2092,11 +2192,17 @@ msgstr "Зараз"
 msgid "Number"
 msgstr "Номер"
 
+msgid "Off in this mode"
+msgstr "У цьому режимі вимкнено"
+
 msgid "Older"
 msgstr "Старіші"
 
 msgid "Older blocks from before this date"
 msgstr "Старіші блоки до цієї дати"
+
+msgid "On this page"
+msgstr "На цій сторінці"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "Одна суперечка: статус, підрахунок, претенденти з попередньо поповненим балансом і хто голосував."
@@ -2261,6 +2367,10 @@ msgstr "Сторінки"
 msgid "Pages of {0} need an index that is up to date, and none is right now."
 msgstr "Для сторінок по {0} потрібен актуальний індекс, а зараз такого немає."
 
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "Для сторінок по {0} потрібен індексатор, який режим «Лише децентралізовано» не використовує."
+
 msgid "Pagination"
 msgstr "Посторінкова навігація"
 
@@ -2337,6 +2447,9 @@ msgstr "Транзакції в очікуванні недоступні"
 msgid "Pending transactions seen since you opened this page"
 msgstr "Непідтверджені транзакції, помічені відколи ви відкрили сторінку"
 
+msgid "Pending transactions seen since you opened this page, newest first"
+msgstr "Транзакції в очікуванні, помічені відколи ви відкрили сторінку, спочатку найновіші"
+
 msgid "Pending transactions, newest first"
 msgstr "Транзакції в очікуванні, спочатку нові"
 
@@ -2395,6 +2508,9 @@ msgstr "Platform Explorer не відповідає"
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "Platform Explorer повідомляє, що його індексатор працює несправно (проіндексовано до блоку {block})"
 
+msgid "Platform Explorer's API documentation"
+msgstr "Документація API Platform Explorer"
+
 msgid "Platform height"
 msgstr "Висота Platform"
 
@@ -2422,8 +2538,17 @@ msgstr "Platform SDK"
 msgid "Platform transitions"
 msgstr "Переходи Platform"
 
+msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
+msgstr "Для останніх блоків Platform потрібен Platform Explorer, який режим «Лише децентралізовано» не використовує."
+
+msgid "Platform's latest transitions need Platform Explorer"
+msgstr "Для останніх переходів Platform потрібен Platform Explorer"
+
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Пульс Platform: висота, епоха, графіки активності, лідери, найновіші блоки та переходи стану."
+
+msgid "Platform's state, each answer with a proof that Radar checks in this browser."
+msgstr "Стан Platform: кожна відповідь супроводжується доказом, який Radar перевіряє в цьому браузері."
 
 msgid "Plenty of room"
 msgstr "Великий запас"
@@ -2567,6 +2692,9 @@ msgstr "Radar"
 msgid "Radar API"
 msgstr "API Radar"
 
+msgid "Radar census API"
+msgstr "API перепису Radar"
+
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar перевірив усі джерела, які можуть відповісти на такий ввід."
 
@@ -2618,6 +2746,12 @@ msgstr "Radar ніколи не потребує фрази відновленн
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar ніколи цього не потребує, тому це нікуди не надсилається і не потрапляє в адресний рядок та історію."
 
+msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
+msgstr "Radar спершу читає DAPI і Platform SDK, а до розміщених сервісів звертається лише по те, на що ті відповісти не можуть: історія адрес, список найбагатших, графіки, управління, перепис вузлів і ціни в USD."
+
+msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
+msgstr "Radar читає лише вузли DAPI і Platform SDK. Сторінка, якій потрібен індексатор, краулер або ціна, повідомляє про це замість того, щоб звертатися до них."
+
 msgid "Radar shows this payload type as raw data."
 msgstr "Radar показує цей тип корисного навантаження як необроблені дані."
 
@@ -2635,6 +2769,9 @@ msgstr "В обході Radar його немає. Можливо, він нов
 
 msgid "Radar’s crawl of {here} doesn’t list it."
 msgstr "В обході {here} краулером Radar його немає."
+
+msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload."
+msgstr "Власний код Radar, шапка dashhq, шрифти та контури мапи. Він також бачить адресу сторінки, яку ви відкриваєте напряму або перезавантажуєте."
 
 msgid "Range"
 msgstr "Діапазон"
@@ -2661,6 +2798,9 @@ msgstr "Зчитайте QR-код камерою або із зображенн
 
 msgid "Read from"
 msgstr "Джерела"
+
+msgid "Reading the chain tip…"
+msgstr "Читаємо вершину ланцюга…"
 
 msgid "Reading the picture…"
 msgstr "Читання зображення…"
@@ -2826,6 +2966,10 @@ msgstr "Пошук у Radar"
 msgid "Search Radar (⌘K on a Mac)"
 msgstr "Пошук у Radar (⌘K на Mac)"
 
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "Пошук у заголовках блоків початку й кінця цього дня: знайдено {0} із 2."
+
 msgid "Searching…"
 msgstr "Пошук…"
 
@@ -2838,6 +2982,9 @@ msgstr "Усі результати за запитом «{trimmed}»"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "Усі результати за запитом «{trimmed}» у мережі {net}"
 
+msgid "See every source"
+msgstr "Переглянути всі джерела"
+
 msgid "See the sources"
 msgstr "Переглянути джерела"
 
@@ -2846,6 +2993,9 @@ msgstr "Переглянути непідтверджену активність
 
 msgid "Seen"
 msgstr "Помічено"
+
+msgid "Seen and still pending"
+msgstr "Помічено й досі в очікуванні"
 
 msgid "Seen since you opened this page"
 msgstr "Помічено відколи ви відкрили сторінку"
@@ -2870,6 +3020,9 @@ msgstr "Налаштування devnet {name}"
 
 msgid "Settings"
 msgstr "Налаштування"
+
+msgid "Settlement"
+msgstr "Підтвердження"
 
 msgid "Share index"
 msgstr "Індекс частки"
@@ -2961,6 +3114,9 @@ msgstr "Підписанти"
 msgid "Signing quorum"
 msgstr "Підписувальний кворум"
 
+msgid "Since you opened this page"
+msgstr "Відколи ви відкрили сторінку"
+
 msgid "Size"
 msgstr "Розмір"
 
@@ -3048,6 +3204,9 @@ msgstr "Переходи стану"
 msgid "Status"
 msgstr "Статус"
 
+msgid "Status: how each source is answering right now"
+msgstr "Статус: як зараз відповідає кожне джерело"
+
 msgid "Stop the camera"
 msgstr "Зупинити камеру"
 
@@ -3077,9 +3236,6 @@ msgstr "Синхронізовано"
 
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "Тег: {tag}. Його пише майнер, тому це не доказ."
-
-msgid "Tap a row for received, sent and transactions"
-msgstr "Торкніться рядка: отримано, надіслано та транзакції"
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Торкніться транзакції, щоб побачити входи, виходи та розмір"
@@ -3138,8 +3294,14 @@ msgstr "Браузер не надав Radar доступ до камери. Д�
 msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
 msgstr "Перепис: скільки вузлів відповіли під час останнього обходу, версії, хостинг, країни та доступність."
 
+msgid "The chain’s size, its node versions and the peers Hyphen reads from."
+msgstr "Розмір ланцюга, версії вузлів і піри, з яких читає Hyphen."
+
 msgid "The chart data didn’t load."
 msgstr "Дані графіка не завантажилися."
+
+msgid "The choice stays in this browser. A link ending in ?sources=decentralized turns the mode on for one visit."
+msgstr "Вибір зберігається в цьому браузері. Посилання, що закінчується на ?sources=decentralized, вмикає режим на один візит."
 
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "Обсяг в обігу недоступний, тому частки обчислюються від залишків на адресах."
@@ -3156,6 +3318,12 @@ msgstr "Поточна епоха Platform, хто пропонує наступ
 msgid "The Dash network, now"
 msgstr "Мережа Dash зараз"
 
+msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
+msgstr "Для повного мемпулу та його підсумків потрібен цей індекс, тому сторінка показує те, що живий потік DAPI доставив відтоді, як ви її відкрили."
+
+msgid "The full mempool list and its totals need an indexer"
+msgstr "Для повного списку мемпулу та його підсумків потрібен індексатор"
+
 msgid "The largest Core balances, ranked."
 msgstr "Найбільші баланси Core за місцями."
 
@@ -3170,11 +3338,17 @@ msgstr "Останні {0} із {1} виплат, проіндексованих
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "Посилання може бути застарілим або з помилкою. Знайдіть те, що вам потрібно, або почніть з одного з розділів."
 
+msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
+msgstr "Це посилання ввімкнуло «Лише децентралізовано» на цей візит. Якщо вибрати його тут, режим залишиться ввімкненим у цьому браузері."
+
 msgid "The live connection dropped. Radar is opening it again."
 msgstr "Живе з’єднання розірвалося. Radar відкриває його знову."
 
 msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
 msgstr "Живе з’єднання постійно обривається, тому Radar запитує останній блок кожні 30 секунд."
+
+msgid "The masternode and node census, the map and client versions, from Radar's crawler."
+msgstr "Перепис мастернод і вузлів, мапа та версії клієнтів — від краулера Radar."
 
 msgid "The masternode census and network history"
 msgstr "Перепис мастернод та історія мережі"
@@ -3187,6 +3361,9 @@ msgstr "Не вдалося завантажити наступні транза
 
 msgid "The node map"
 msgstr "Карта вузлів"
+
+msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
+msgstr "Для мапи вузлів потрібен краулер Radar, який режим «Лише децентралізовано» не використовує."
 
 msgid "The operator announces a new network address for a masternode."
 msgstr "Оператор оголошує нову мережеву адресу мастерноди."
@@ -3202,6 +3379,9 @@ msgstr "цінова стрічка Platform Explorer"
 
 msgid "The Platform SDK"
 msgstr "Platform SDK"
+
+msgid "The Platform SDK isn't answering"
+msgstr "Platform SDK не відповідає"
 
 msgid "the Platform SDK, proof-checked"
 msgstr "SDK Platform, перевірка за доказами"
@@ -3229,6 +3409,9 @@ msgstr "Запит скасовано"
 
 msgid "The rest of this page still works."
 msgstr "Решта цієї сторінки працює."
+
+msgid "The rich list needs an indexer"
+msgstr "Для списку найбагатших потрібен індексатор"
 
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "Співвласники змінюють ключ оператора або ключ голосування спільної мастерноди."
@@ -3267,6 +3450,9 @@ msgstr "Транзакція в тому вигляді, в якому Radar д�
 msgid "The transaction is not in a block yet."
 msgstr "Транзакції ще немає в блоці."
 
+msgid "The USD rate shown next to DASH amounts. Mainnet only."
+msgstr "Курс USD поруч із сумами в DASH. Лише mainnet."
+
 msgid "The USD rate, through Platform Explorer"
 msgstr "Курс USD через Platform Explorer"
 
@@ -3293,6 +3479,9 @@ msgstr "Ця адреса не підписувала це повідомлен�
 
 msgid "This address signed this message."
 msgstr "Ця адреса підписала це повідомлення."
+
+msgid "This address's balance, history and unspent outputs need an indexer"
+msgstr "Для балансу, історії та невитрачених виходів цієї адреси потрібен індексатор"
 
 msgid "This browser"
 msgstr "Цей браузер"
@@ -3327,6 +3516,15 @@ msgstr "Це схоже на закритий ключ або фразу від�
 msgid "This masternode is on {otherName}."
 msgstr "Ця мастернода перебуває в мережі {otherName}."
 
+msgid "This needs an indexer"
+msgstr "Для цього потрібен індексатор"
+
+msgid "This needs Platform Explorer"
+msgstr "Для цього потрібен Platform Explorer"
+
+msgid "This needs Radar's crawler"
+msgstr "Для цього потрібен краулер Radar"
+
 msgid "This network doesn’t have this source."
 msgstr "У цій мережі немає такого джерела."
 
@@ -3339,6 +3537,9 @@ msgstr "Не вдалося показати цю сторінку"
 msgid "This page is on its way"
 msgstr "Ця сторінка скоро з’явиться"
 
+msgid "This page needs an indexer"
+msgstr "Для цієї сторінки потрібен індексатор"
+
 #. placeholder {0}: listSources(page.sources)
 msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
 msgstr "Ця сторінка читає дані з: {0}. Перемкніться на Mainnet або Testnet, щоб побачити її."
@@ -3348,6 +3549,9 @@ msgstr "Ця сторінка читає дані з Hyphen. Перемкніт�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Ця пропозиція та історія голосування взяті з індексу Hyphen станом на цей блок, не наживо."
+
+msgid "This site"
+msgstr "Цей сайт"
 
 msgid "This source covers this row only"
 msgstr "Це джерело стосується лише цього рядка"
@@ -3565,6 +3769,12 @@ msgstr "USD округлюється до трьох значущих цифр �
 msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 msgstr "USD округлюється до трьох значущих цифр. Цей вибір не діє, поки USD показується першим."
 
+msgid "USD prices need a price feed"
+msgstr "Цінам у USD потрібне джерело цін"
+
+msgid "Use all sources"
+msgstr "Використовувати всі джерела"
+
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Використовуйте малі літери, цифри та дефіси, наприклад «ruby»."
 
@@ -3662,8 +3872,14 @@ msgstr "очікування, поки мастерноди її заблоку�
 msgid "Waiting to be mined."
 msgstr "Очікує на видобуток."
 
+msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
+msgstr "Стеження за живим потоком DAPI: платежі на цю адресу. Без індексатора неможливо розпізнати витрату монет, які вже були на ній."
+
 msgid "Watching for new transactions on this address."
 msgstr "Стежимо за новими транзакціями цієї адреси."
+
+msgid "Watching since"
+msgstr "Спостереження з"
 
 msgid "What is waiting to be mined."
 msgstr "Що очікує на видобуток."
@@ -3680,11 +3896,11 @@ msgstr "Що можна шукати"
 msgid "When"
 msgstr "Коли"
 
-msgid "Where every figure comes from, how each source is checked and what each can’t tell you."
-msgstr "Звідки взято кожну цифру, як перевіряється кожне джерело і про що воно не може сказати."
-
 msgid "Where it is"
 msgstr "Розташування"
+
+msgid "Where requests go on {network}, and what each one is for."
+msgstr "Куди йдуть запити в мережі {network} і для чого потрібен кожен."
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Як просувається активація Core 24: поріг, сигнали майнерів по вікнах і готовність мастернод."
@@ -3698,8 +3914,17 @@ msgstr "Куди пішла вартість"
 msgid "Where this is"
 msgstr "Де це розташовано"
 
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "Щоб дізнатися, чи витрачено вихід і якою транзакцією, потрібен індексатор"
+
+msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
+msgstr "Які існують evonode: список читається приблизно раз на годину (якщо прочитати його не вдалося, використовується збережений або вбудований), а також публічні ключі кворуму, за якими SDK перевіряє докази. Режим «Лише децентралізовано» усе одно його використовує: без нього Radar не зміг би знаходити вузли й перевіряти докази."
+
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Який виклик SDK Platform забезпечує кожну сторінку Radar, з аргументами."
+
+msgid "Which sources Radar may use"
+msgstr "Які джерела може використовувати Radar"
 
 msgid "Withdrawal index"
 msgstr "Індекс виведення"

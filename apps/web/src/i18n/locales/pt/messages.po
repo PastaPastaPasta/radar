@@ -35,6 +35,10 @@ msgstr "(desatualizado)"
 msgid "(source down)"
 msgstr "(fonte fora do ar)"
 
+#. placeholder {0}: backend.upstream
+msgid "(this site passes the request on to {0})"
+msgstr "(este site reencaminha o pedido para {0})"
+
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, one {# entrada} many {# de entradas} other {# entradas}}"
@@ -200,6 +204,7 @@ msgstr "{0} para outros endereços"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
+#. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} tx"
 
@@ -297,6 +302,9 @@ msgstr "{name} (motivo {reason})"
 
 msgid "{name} couldn’t be reached"
 msgstr "Não foi possível contactar {name}"
+
+msgid "{name} is a hosted service, which Decentralized only mode does not use"
+msgstr "{name} é um serviço alojado, que o modo «Apenas descentralizado» não utiliza"
 
 msgid "{name} is busy"
 msgstr "{name} está ocupado"
@@ -428,6 +436,9 @@ msgstr "Uma assinatura tem 88 caracteres em base64 e termina em “=”, tal com
 msgid "About"
 msgstr "Sobre"
 
+msgid "About sources"
+msgstr "Sobre as fontes"
+
 msgid "Abstain"
 msgstr "Abstenção"
 
@@ -446,6 +457,9 @@ msgstr "endereço"
 msgid "Address"
 msgstr "Endereço"
 
+msgid "Address balances and history, spent outputs, the rich list, charts, the mempool, governance and network internals."
+msgstr "Saldos e histórico de endereços, saídas gastas, a lista dos mais ricos, gráficos, o mempool, a governança e o funcionamento interno da rede."
+
 msgid "Address funding"
 msgstr "Financiamento de endereço"
 
@@ -457,6 +471,9 @@ msgstr "Tipo de endereço"
 
 msgid "Address withdrawal"
 msgstr "Saque de endereço"
+
+msgid "Address, spent-output and governance reads while Hyphen's index is behind the chain."
+msgstr "Leituras de endereços, saídas gastas e governança enquanto o índice do Hyphen está atrasado em relação à cadeia."
 
 msgid "Addresses ranked by balance"
 msgstr "Endereços classificados por saldo"
@@ -479,6 +496,9 @@ msgstr "Todos os blocos"
 msgid "All proposals"
 msgstr "Todas as propostas"
 
+msgid "All sources"
+msgstr "Todas as fontes"
+
 msgid "Among the peers of the indexing node"
 msgstr "Entre os pares do nó indexador"
 
@@ -497,6 +517,9 @@ msgstr "Os valores são carregados para as primeiras {0} entradas. Cada transaç
 
 msgid "Amounts loaded"
 msgstr "Valores carregados"
+
+msgid "Amounts show in {unitName}."
+msgstr "Os valores são mostrados em {unitName}."
 
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Os valores são mostrados em {unitName}. Escolha USD para pôr o valor em dólares primeiro."
@@ -561,6 +584,9 @@ msgstr "Voltar ao resumo"
 
 msgid "Back to top"
 msgstr "Voltar ao topo"
+
+msgid "Backends"
+msgstr "Backends"
 
 msgid "Balance"
 msgstr "Saldo"
@@ -689,6 +715,9 @@ msgstr "A atualizar, {0}"
 msgid "Chain size"
 msgstr "Tamanho da cadeia"
 
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "Tamanho da cadeia, pressão do mempool, velocidade das transações, versões dos nós, contagem de masternodes e os pares de que o Hyphen lê."
+
 msgid "Chain state"
 msgstr "Estado da cadeia"
 
@@ -735,18 +764,14 @@ msgstr "Mudanças"
 msgid "Charts"
 msgstr "Gráficos"
 
+msgid "Charts need an indexer"
+msgstr "Os gráficos precisam de um indexador"
+
 msgid "Check a signed message against a Core address, in your browser."
 msgstr "Verifique uma mensagem assinada com um endereço Core, no seu navegador."
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Verifique se um endereço Dash assinou uma mensagem. A verificação é feita neste navegador: nada do que escrever aqui é enviado para lado nenhum, e o Radar nunca pede uma chave."
-
-msgid "Checked"
-msgstr "Verificado"
-
-#. placeholder {0}: POLL_MS.mempool / 1000
-msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
-msgstr "Verificado a cada {0} segundos, mas o índice está atrasado em relação à cadeia, por isso esta não é uma vista em direto."
 
 msgid "Checking"
 msgstr "Verificando"
@@ -933,6 +958,9 @@ msgstr "Versões do Core"
 msgid "Core, Platform and the masternode network"
 msgstr "Core, Platform e a rede de masternodes"
 
+msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
+msgstr "A ponta do Core, blocos, transações, ChainLocks e feeds em direto. O Radar distribui os pedidos por muitos nós e verifica cada bloco com o respetivo cabeçalho."
+
 msgid "Could not be read"
 msgstr "Não foi possível ler"
 
@@ -984,6 +1012,9 @@ msgstr "DAPI"
 msgid "DAPI addresses"
 msgstr "Endereços DAPI"
 
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI e o SDK da Platform estão a responder. As fontes alojadas estão desativadas no modo «Apenas descentralizado»."
+
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "O DAPI está ocupado, por isso as listas de blocos vêm do Hyphen enquanto o orçamento recupera. Os detalhes continuam a usar o DAPI."
 
@@ -1016,6 +1047,21 @@ msgstr "Fontes de dados"
 
 msgid "Days run from 00:00 to 24:00 UTC."
 msgstr "Os dias vão das 00:00 às 24:00 UTC."
+
+msgid "Decentralized"
+msgstr "Descentralizado"
+
+msgid "Decentralized only"
+msgstr "Apenas descentralizado"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "O modo «Apenas descentralizado» não contacta esta fonte."
+
+msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
+msgstr "O modo «Apenas descentralizado» lê apenas nós DAPI e o SDK da Platform."
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "Apenas descentralizado: o Radar lê apenas nós DAPI e o SDK da Platform, e não consulta nenhum serviço alojado. Abra Fontes para ver o que fica de fora ou para o desativar."
 
 msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
 msgstr "Decodifique bytes brutos offline: uma transação, bloco, identidade, contrato, documento ou prova."
@@ -1129,6 +1175,12 @@ msgstr "Épocas"
 msgid "Esc"
 msgstr "Esc"
 
+msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
+msgstr "Todos os backends que o Radar pode contactar, quem os opera e se estão em uso em {network}. Cada valor no Radar indica de qual provém."
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Todos os backends que o Radar pode contactar, quem os opera e o interruptor do modo «Apenas descentralizado»."
+
 msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
 msgstr "Cada fonte de dados que o Radar lê, sua saúde e atualização nesta rede, e o orçamento de pedidos do DAPI."
 
@@ -1167,6 +1219,9 @@ msgstr "Colateral de evonode"
 
 msgid "Evonodes"
 msgstr "Evonodes"
+
+msgid "Evonodes from the node list, as https://address:port"
+msgstr "Evonodes da lista de nós, como https://address:port"
 
 msgid "Example"
 msgstr "Exemplo"
@@ -1213,6 +1268,9 @@ msgstr "Finalidade"
 msgid "Find the identity that holds a public key, from its 40-character key hash."
 msgstr "Encontre a identidade que detém uma chave pública, a partir do hash da chave de 40 caracteres."
 
+msgid "Finding this day's blocks"
+msgstr "A procurar os blocos deste dia"
+
 msgid "finding where…"
 msgstr "a procurar onde…"
 
@@ -1242,6 +1300,9 @@ msgstr "Primeira: indisponível"
 msgid "From"
 msgstr "De"
 
+msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
+msgstr "Do feed em direto da DAPI: as transações que esta página viu chegar, menos as entretanto mineradas. Não é o mempool completo."
+
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "Resultados completos para qualquer altura, hash, endereço, ProTx, IP, identidade, contrato, token, nome ou época, agrupados por tipo."
 
@@ -1262,6 +1323,9 @@ msgstr "Governança"
 
 msgid "Governance proposal"
 msgstr "Proposta de governança"
+
+msgid "Governance proposals need an indexer"
+msgstr "As propostas de governança precisam de um indexador"
 
 msgid "group"
 msgstr "grupo"
@@ -1331,6 +1395,9 @@ msgstr "Ocultar a tabela"
 
 msgid "Home"
 msgstr "Início"
+
+msgid "Hosted by one operator"
+msgstr "Alojado por um único operador"
 
 msgid "Hosting"
 msgstr "Hospedagem"
@@ -1428,6 +1495,9 @@ msgstr "no mempool"
 msgid "In the mempool"
 msgstr "No mempool"
 
+msgid "In use"
+msgstr "Em uso"
+
 msgid "Inbound"
 msgstr "Recebido"
 
@@ -1451,6 +1521,9 @@ msgstr "Indexado pelo Platform Explorer · a verificar…"
 
 msgid "Indexed by Platform Explorer · proofs unavailable"
 msgstr "Indexado pelo Platform Explorer · provas indisponíveis"
+
+msgid "Indexed Platform lists and search, and Platform's height until the SDK has answered."
+msgstr "Listas indexadas da Platform e pesquisa, e a altura da Platform até o SDK responder."
 
 msgid "indexed to block {block}"
 msgstr "indexado até o bloco {block}"
@@ -1673,6 +1746,9 @@ msgstr "Bloqueia Dash no Core para criar créditos na Platform."
 msgid "Looks like {0}"
 msgstr "Parece {0}"
 
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "Foram ignoradas pesquisas num índice, por isso podem faltar algumas correspondências"
+
 msgid "mainnet"
 msgstr "Mainnet"
 
@@ -1705,6 +1781,9 @@ msgstr "Raiz da lista de masternodes"
 
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "Os registros de masternodes vêm do rastreamento de mainnet e testnet do Radar."
+
+msgid "Masternode records need Radar's crawler"
+msgstr "Os registos de masternodes precisam do rastreador do Radar"
 
 msgid "Masternode registrar update"
 msgstr "Atualização do registrador do masternode"
@@ -1835,6 +1914,12 @@ msgstr "Nomes terminados em .dash, épocas e datas (os blocos Core de um dia)"
 msgid "Names follow Dash Core’s definitions of the revocation reason codes."
 msgstr "Os nomes seguem as definições do Dash Core para os códigos de motivo de revogação."
 
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "Precisa de um indexador: desativado no modo «Apenas descentralizado»"
+
+msgid "Needs Radar's crawler: off in Decentralized only mode"
+msgstr "Precisa do rastreador do Radar: desativado no modo «Apenas descentralizado»"
+
 msgid "Net value"
 msgstr "Valor líquido"
 
@@ -1849,6 +1934,9 @@ msgstr "Censo da rede"
 
 msgid "Network internals"
 msgstr "Funcionamento interno da rede"
+
+msgid "Network internals need an indexer"
+msgstr "O funcionamento interno da rede precisa de um indexador"
 
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "Funcionamento interno da rede: pares, pressão do mempool, versões e histórico"
@@ -1995,6 +2083,9 @@ msgstr "Nenhum valor se move nesta transação"
 msgid "No votes recorded for this proposal."
 msgstr "Não foram registados votos para esta proposta."
 
+msgid "Node list and quorum keys"
+msgstr "Lista de nós e chaves do quórum"
+
 msgid "Node sync"
 msgstr "Sincronização do nó"
 
@@ -2053,6 +2144,9 @@ msgstr "Ainda não minerado"
 msgid "Not offered"
 msgstr "Não oferecido"
 
+msgid "Not on {net}"
+msgstr "Não em {net}"
+
 msgid "not paid yet"
 msgstr "ainda não pago"
 
@@ -2070,6 +2164,12 @@ msgstr "Não especificado"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Nada acima o confirma. É apenas uma forma de interpretar o que escreveu."
+
+msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
+msgstr "Nada chegou desde que abriu esta página. As novas transações aparecem aqui à medida que a DAPI as entrega."
+
+msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
+msgstr "Nada chegou desde que abriu esta página. A lista completa do mempool precisa de um indexador, que o modo «Apenas descentralizado» não utiliza."
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
 msgstr "Nada chegou desde que abriu esta página. A lista completa do mempool precisa do índice do Hyphen, que está atrás da cadeia."
@@ -2092,11 +2192,17 @@ msgstr "Agora"
 msgid "Number"
 msgstr "Número"
 
+msgid "Off in this mode"
+msgstr "Desativado neste modo"
+
 msgid "Older"
 msgstr "Mais antigos"
 
 msgid "Older blocks from before this date"
 msgstr "Blocos mais antigos, anteriores a esta data"
+
+msgid "On this page"
+msgstr "Nesta página"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "Uma disputa: estado, contagem, concorrentes com saldo pré-financiado e quem votou."
@@ -2261,6 +2367,10 @@ msgstr "Páginas"
 msgid "Pages of {0} need an index that is up to date, and none is right now."
 msgstr "Páginas de {0} precisam de um índice atualizado, e nenhum está agora."
 
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "Páginas de {0} precisam de um indexador, que o modo «Apenas descentralizado» não utiliza."
+
 msgid "Pagination"
 msgstr "Paginação"
 
@@ -2337,6 +2447,9 @@ msgstr "As transações pendentes não estão disponíveis"
 msgid "Pending transactions seen since you opened this page"
 msgstr "Transações pendentes vistas desde que abriu esta página"
 
+msgid "Pending transactions seen since you opened this page, newest first"
+msgstr "Transações pendentes vistas desde que abriu esta página, as mais recentes primeiro"
+
 msgid "Pending transactions, newest first"
 msgstr "Transações pendentes, as mais recentes primeiro"
 
@@ -2395,6 +2508,9 @@ msgstr "O Platform Explorer não responde"
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "O Platform Explorer informa que o seu indexador não está saudável (indexado até ao bloco {block})"
 
+msgid "Platform Explorer's API documentation"
+msgstr "Documentação da API do Platform Explorer"
+
 msgid "Platform height"
 msgstr "Altura da Platform"
 
@@ -2422,8 +2538,17 @@ msgstr "SDK da Platform"
 msgid "Platform transitions"
 msgstr "Transições da Platform"
 
+msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
+msgstr "Os blocos mais recentes da Platform precisam do Platform Explorer, que o modo «Apenas descentralizado» não utiliza."
+
+msgid "Platform's latest transitions need Platform Explorer"
+msgstr "As transições mais recentes da Platform precisam do Platform Explorer"
+
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "O pulso da Platform: altura, época, gráficos de atividade, líderes e os blocos e transições de estado mais recentes."
+
+msgid "Platform's state, each answer with a proof that Radar checks in this browser."
+msgstr "O estado da Platform, cada resposta com uma prova que o Radar verifica neste navegador."
 
 msgid "Plenty of room"
 msgstr "Muita margem"
@@ -2567,6 +2692,9 @@ msgstr "Radar"
 msgid "Radar API"
 msgstr "API do Radar"
 
+msgid "Radar census API"
+msgstr "API de censo do Radar"
+
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "O Radar verificou todas as fontes que podem responder a este tipo de entrada."
 
@@ -2618,6 +2746,12 @@ msgstr "O Radar nunca precisa de uma frase de recuperação, por isso palavras c
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "O Radar nunca precisa de uma, por isso não é enviada para lado nenhum e fica fora da barra de endereços e do histórico."
 
+msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
+msgstr "O Radar lê primeiro a DAPI e o SDK da Platform, e pede aos serviços alojados o que estes não conseguem responder: histórico de endereços, lista dos mais ricos, gráficos, governança, censo de nós e preços em USD."
+
+msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
+msgstr "O Radar lê apenas nós DAPI e o SDK da Platform. Uma página que precisa de um indexador, do rastreador ou de um preço indica-o em vez de os consultar."
+
 msgid "Radar shows this payload type as raw data."
 msgstr "O Radar mostra este tipo de payload como dados em bruto."
 
@@ -2635,6 +2769,9 @@ msgstr "O rastreamento do Radar não o lista. Pode ser novo, ter sido removido o
 
 msgid "Radar’s crawl of {here} doesn’t list it."
 msgstr "O rastreamento de {here} do Radar não o lista."
+
+msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload."
+msgstr "O código do próprio Radar, o cabeçalho do dashhq, os tipos de letra e as formas do mapa. Também vê o endereço de uma página que abre diretamente ou recarrega."
 
 msgid "Range"
 msgstr "Intervalo"
@@ -2661,6 +2798,9 @@ msgstr "Leia um código QR com a câmara ou a partir de uma imagem e consulte o 
 
 msgid "Read from"
 msgstr "Lido de"
+
+msgid "Reading the chain tip…"
+msgstr "A ler a ponta da cadeia…"
 
 msgid "Reading the picture…"
 msgstr "A ler a imagem…"
@@ -2826,6 +2966,10 @@ msgstr "Pesquisar no Radar"
 msgid "Search Radar (⌘K on a Mac)"
 msgstr "Pesquisar no Radar (⌘K no Mac)"
 
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "A pesquisar nos cabeçalhos de bloco onde este dia começa e termina: {0} de 2 encontrados."
+
 msgid "Searching…"
 msgstr "A pesquisar…"
 
@@ -2838,6 +2982,9 @@ msgstr "Ver todos os resultados de “{trimmed}”"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "Ver todos os resultados de “{trimmed}” na {net}"
 
+msgid "See every source"
+msgstr "Ver todas as fontes"
+
 msgid "See the sources"
 msgstr "Ver as fontes"
 
@@ -2846,6 +2993,9 @@ msgstr "Ver a atividade não confirmada"
 
 msgid "Seen"
 msgstr "Visto"
+
+msgid "Seen and still pending"
+msgstr "Vistas e ainda pendentes"
 
 msgid "Seen since you opened this page"
 msgstr "Visto desde que abriu esta página"
@@ -2870,6 +3020,9 @@ msgstr "Configurar a devnet {name}"
 
 msgid "Settings"
 msgstr "Definições"
+
+msgid "Settlement"
+msgstr "Liquidação"
 
 msgid "Share index"
 msgstr "Índice da participação"
@@ -2961,6 +3114,9 @@ msgstr "Signatários"
 msgid "Signing quorum"
 msgstr "Quórum de assinatura"
 
+msgid "Since you opened this page"
+msgstr "Desde que abriu esta página"
+
 msgid "Size"
 msgstr "Tamanho"
 
@@ -3048,6 +3204,9 @@ msgstr "Transições de estado"
 msgid "Status"
 msgstr "Estado"
 
+msgid "Status: how each source is answering right now"
+msgstr "Estado: como cada fonte está a responder agora"
+
 msgid "Stop the camera"
 msgstr "Parar a câmara"
 
@@ -3077,9 +3236,6 @@ msgstr "Sincronizado"
 
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "Etiqueta: {tag}. É o minerador que a escreve, por isso não é prova."
-
-msgid "Tap a row for received, sent and transactions"
-msgstr "Toque numa linha para ver recebido, enviado e transações"
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "Toque numa transação para ver as entradas, saídas e o tamanho"
@@ -3138,8 +3294,14 @@ msgstr "O navegador não deu ao Radar acesso à câmara. Permita-o nas definiç�
 msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
 msgstr "O censo: quantos nós responderam ao último rastreamento, versões, alojamento, países e acessibilidade."
 
+msgid "The chain’s size, its node versions and the peers Hyphen reads from."
+msgstr "O tamanho da cadeia, as versões dos nós e os pares de que o Hyphen lê."
+
 msgid "The chart data didn’t load."
 msgstr "Os dados do gráfico não foram carregados."
+
+msgid "The choice stays in this browser. A link ending in ?sources=decentralized turns the mode on for one visit."
+msgstr "A escolha fica guardada neste navegador. Um link que termine em ?sources=decentralized ativa o modo durante uma visita."
 
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "A oferta em circulação não está disponível, por isso as partes são dos saldos dos endereços."
@@ -3156,6 +3318,12 @@ msgstr "A época atual da Platform, quem propõe a seguir e o que os evonodes ga
 msgid "The Dash network, now"
 msgstr "A rede Dash, agora"
 
+msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
+msgstr "O mempool completo e os respetivos totais precisam desse índice, por isso esta página mostra o que o feed em direto da DAPI entregou desde que a abriu."
+
+msgid "The full mempool list and its totals need an indexer"
+msgstr "A lista completa do mempool e os respetivos totais precisam de um indexador"
+
 msgid "The largest Core balances, ranked."
 msgstr "Os maiores saldos do Core, por ordem de classificação."
 
@@ -3170,11 +3338,17 @@ msgstr "Os últimos {0} dos {1} pagamentos que o Radar indexou"
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "O link pode ser antigo ou estar mal escrito. Pesquise o que procurava ou comece por uma das secções."
 
+msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
+msgstr "Este link ativou «Apenas descentralizado» para esta visita. Se o escolher aqui, fica ativo neste navegador."
+
 msgid "The live connection dropped. Radar is opening it again."
 msgstr "A ligação em direto caiu. O Radar está a abri-la novamente."
 
 msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
 msgstr "A ligação em direto continua a falhar, por isso o Radar pede o último bloco a cada 30 segundos."
+
+msgid "The masternode and node census, the map and client versions, from Radar's crawler."
+msgstr "O censo de masternodes e nós, o mapa e as versões de cliente, do rastreador do Radar."
 
 msgid "The masternode census and network history"
 msgstr "O censo de masternodes e o histórico da rede"
@@ -3187,6 +3361,9 @@ msgstr "Não foi possível carregar as próximas transações."
 
 msgid "The node map"
 msgstr "O mapa de nós"
+
+msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
+msgstr "O mapa de nós precisa do rastreador do Radar, que o modo «Apenas descentralizado» não utiliza."
 
 msgid "The operator announces a new network address for a masternode."
 msgstr "O operador anuncia um novo endereço de rede para um masternode."
@@ -3202,6 +3379,9 @@ msgstr "o feed de preços do Platform Explorer"
 
 msgid "The Platform SDK"
 msgstr "O SDK da Platform"
+
+msgid "The Platform SDK isn't answering"
+msgstr "O SDK da Platform não responde"
 
 msgid "the Platform SDK, proof-checked"
 msgstr "o SDK da Platform, verificado por provas"
@@ -3229,6 +3409,9 @@ msgstr "O pedido foi cancelado"
 
 msgid "The rest of this page still works."
 msgstr "O resto desta página continua a funcionar."
+
+msgid "The rich list needs an indexer"
+msgstr "A lista dos mais ricos precisa de um indexador"
 
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "Os participantes alteram a chave de operador ou a chave de voto de um masternode partilhado."
@@ -3267,6 +3450,9 @@ msgstr "A transação tal como o Radar a descodificou a partir dos bytes do DAPI
 msgid "The transaction is not in a block yet."
 msgstr "A transação ainda não está num bloco."
 
+msgid "The USD rate shown next to DASH amounts. Mainnet only."
+msgstr "A cotação em USD mostrada junto aos montantes em DASH. Apenas na mainnet."
+
 msgid "The USD rate, through Platform Explorer"
 msgstr "A cotação em USD através do Platform Explorer"
 
@@ -3293,6 +3479,9 @@ msgstr "Este endereço não assinou esta mensagem."
 
 msgid "This address signed this message."
 msgstr "Este endereço assinou esta mensagem."
+
+msgid "This address's balance, history and unspent outputs need an indexer"
+msgstr "O saldo, o histórico e as saídas por gastar deste endereço precisam de um indexador"
 
 msgid "This browser"
 msgstr "Este navegador"
@@ -3327,6 +3516,15 @@ msgstr "Isto parece uma chave privada ou uma frase de recuperação. O Radar nun
 msgid "This masternode is on {otherName}."
 msgstr "Este masternode está na {otherName}."
 
+msgid "This needs an indexer"
+msgstr "Isto precisa de um indexador"
+
+msgid "This needs Platform Explorer"
+msgstr "Isto precisa do Platform Explorer"
+
+msgid "This needs Radar's crawler"
+msgstr "Isto precisa do rastreador do Radar"
+
 msgid "This network doesn’t have this source."
 msgstr "Esta rede não tem esta fonte."
 
@@ -3339,6 +3537,9 @@ msgstr "Não foi possível mostrar esta página"
 msgid "This page is on its way"
 msgstr "Esta página está a caminho"
 
+msgid "This page needs an indexer"
+msgstr "Esta página precisa de um indexador"
+
 #. placeholder {0}: listSources(page.sources)
 msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
 msgstr "Esta página lê de {0}. Mude para a Mainnet ou a Testnet para a ver."
@@ -3348,6 +3549,9 @@ msgstr "Esta página lê do Hyphen. Mude para a mainnet ou a testnet para a ver.
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Esta proposta e o seu histórico de votos vêm do índice do Hyphen, a esse bloco, não em direto."
+
+msgid "This site"
+msgstr "Este site"
 
 msgid "This source covers this row only"
 msgstr "Esta fonte cobre apenas esta linha"
@@ -3565,6 +3769,12 @@ msgstr "USD é arredondado a três algarismos significativos e acompanha o valor
 msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 msgstr "USD é arredondado a três algarismos significativos. Esta escolha não se aplica enquanto USD vem primeiro."
 
+msgid "USD prices need a price feed"
+msgstr "Os preços em USD precisam de um feed de preços"
+
+msgid "Use all sources"
+msgstr "Usar todas as fontes"
+
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "Use letras minúsculas, dígitos e hífenes, por exemplo “ruby”."
 
@@ -3662,8 +3872,14 @@ msgstr "a aguardar que os masternodes a bloqueiem"
 msgid "Waiting to be mined."
 msgstr "A aguardar mineração."
 
+msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
+msgstr "A vigiar o feed em direto da DAPI à procura de pagamentos para este endereço. Sem um indexador, não é possível reconhecer um gasto de moedas que já detinha."
+
 msgid "Watching for new transactions on this address."
 msgstr "A vigiar novas transações deste endereço."
+
+msgid "Watching since"
+msgstr "A vigiar desde"
 
 msgid "What is waiting to be mined."
 msgstr "O que aguarda mineração."
@@ -3680,11 +3896,11 @@ msgstr "O que pode pesquisar"
 msgid "When"
 msgstr "Quando"
 
-msgid "Where every figure comes from, how each source is checked and what each can’t tell you."
-msgstr "De onde vem cada valor, como cada fonte é verificada e o que ela não consegue dizer."
-
 msgid "Where it is"
 msgstr "Localização"
+
+msgid "Where requests go on {network}, and what each one is for."
+msgstr "Para onde vão os pedidos em {network} e para que serve cada um."
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Em que ponto está a ativação do Core 24: limiar, sinalização dos mineiros janela a janela e preparação dos masternodes."
@@ -3698,8 +3914,17 @@ msgstr "Para onde foi o valor"
 msgid "Where this is"
 msgstr "Onde isto está"
 
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "Saber se uma saída foi gasta, e por que transação, precisa de um indexador"
+
+msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
+msgstr "Quais evonodes existem, lido cerca de uma vez por hora (uma lista guardada ou a integrada serve de substituta quando não pode ser lida), e as chaves públicas do quórum com que o SDK verifica as provas. O modo «Apenas descentralizado» continua a usá-lo: sem ele, o Radar não conseguiria encontrar nós nem verificar uma prova."
+
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Que chamada do SDK da Platform sustenta cada página do Radar, com os seus argumentos."
+
+msgid "Which sources Radar may use"
+msgstr "Que fontes o Radar pode usar"
 
 msgid "Withdrawal index"
 msgstr "Índice de levantamento"

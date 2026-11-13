@@ -35,6 +35,10 @@ msgstr "（已过时）"
 msgid "(source down)"
 msgstr "（数据源已中断）"
 
+#. placeholder {0}: backend.upstream
+msgid "(this site passes the request on to {0})"
+msgstr "（本站会把请求转发给 {0}）"
+
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, other {# 个输入}}"
@@ -200,6 +204,7 @@ msgstr "转给其他地址 {0}"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
+#. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} 笔交易"
 
@@ -297,6 +302,9 @@ msgstr "{name}（原因 {reason}）"
 
 msgid "{name} couldn’t be reached"
 msgstr "无法连接 {name}"
+
+msgid "{name} is a hosted service, which Decentralized only mode does not use"
+msgstr "{name} 是托管服务，“仅去中心化”模式不会使用它"
 
 msgid "{name} is busy"
 msgstr "{name} 繁忙"
@@ -428,6 +436,9 @@ msgstr "签名为 88 个 base64 字符，以“=”结尾，与 Dash Core 的 si
 msgid "About"
 msgstr "关于"
 
+msgid "About sources"
+msgstr "关于数据源"
+
 msgid "Abstain"
 msgstr "弃权"
 
@@ -446,6 +457,9 @@ msgstr "地址"
 msgid "Address"
 msgstr "地址"
 
+msgid "Address balances and history, spent outputs, the rich list, charts, the mempool, governance and network internals."
+msgstr "地址余额和历史、已花费输出、富豪榜、图表、内存池、治理和网络内部信息。"
+
 msgid "Address funding"
 msgstr "地址充值"
 
@@ -457,6 +471,9 @@ msgstr "地址类型"
 
 msgid "Address withdrawal"
 msgstr "地址提现"
+
+msgid "Address, spent-output and governance reads while Hyphen's index is behind the chain."
+msgstr "Hyphen 的索引落后于区块链时，用于读取地址、已花费输出和治理数据。"
 
 msgid "Addresses ranked by balance"
 msgstr "按余额排名的地址"
@@ -479,6 +496,9 @@ msgstr "所有区块"
 msgid "All proposals"
 msgstr "所有提案"
 
+msgid "All sources"
+msgstr "所有数据源"
+
 msgid "Among the peers of the indexing node"
 msgstr "在索引节点的对等节点中"
 
@@ -497,6 +517,9 @@ msgstr "仅加载前 {0} 个输入的金额，每个前序交易对应一次单�
 
 msgid "Amounts loaded"
 msgstr "已加载的金额"
+
+msgid "Amounts show in {unitName}."
+msgstr "金额以 {unitName} 显示。"
 
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金额以 {unitName} 显示。选择 USD 可让美元金额排在前面。"
@@ -561,6 +584,9 @@ msgstr "返回摘要"
 
 msgid "Back to top"
 msgstr "返回顶部"
+
+msgid "Backends"
+msgstr "后端"
 
 msgid "Balance"
 msgstr "余额"
@@ -689,6 +715,9 @@ msgstr "正在追赶，{0}"
 msgid "Chain size"
 msgstr "链大小"
 
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "链大小、内存池压力、交易速度、节点版本、主节点数量，以及 Hyphen 读取的对等节点。"
+
 msgid "Chain state"
 msgstr "链状态"
 
@@ -735,18 +764,14 @@ msgstr "变更"
 msgid "Charts"
 msgstr "图表"
 
+msgid "Charts need an indexer"
+msgstr "图表需要索引器"
+
 msgid "Check a signed message against a Core address, in your browser."
 msgstr "在浏览器中用 Core 地址验证已签名的消息。"
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "检查某个 Dash 地址是否签署了一条消息。检查在此浏览器中完成：你在这里输入的任何内容都不会被发送到别处，Radar 也绝不会索要密钥。"
-
-msgid "Checked"
-msgstr "检查时间"
-
-#. placeholder {0}: POLL_MS.mempool / 1000
-msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
-msgstr "每 {0} 秒检查一次，但索引落后于区块链，因此这不是实时视图。"
 
 msgid "Checking"
 msgstr "检查中"
@@ -933,6 +958,9 @@ msgstr "Core 版本"
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform 和主节点网络"
 
+msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
+msgstr "Core 链顶、区块、交易、ChainLock 和实时数据流。Radar 把请求分散到许多节点，并对照区块头检查每个区块。"
+
 msgid "Could not be read"
 msgstr "无法读取"
 
@@ -984,6 +1012,9 @@ msgstr "DAPI"
 msgid "DAPI addresses"
 msgstr "DAPI 地址"
 
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI 和 Platform SDK 正在响应。托管数据源在“仅去中心化”模式下已关闭。"
+
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI 繁忙，在配额恢复之前，区块列表改由 Hyphen 提供。详情仍使用 DAPI。"
 
@@ -1016,6 +1047,21 @@ msgstr "数据来源"
 
 msgid "Days run from 00:00 to 24:00 UTC."
 msgstr "每天按 UTC 00:00 至 24:00 计算。"
+
+msgid "Decentralized"
+msgstr "去中心化"
+
+msgid "Decentralized only"
+msgstr "仅去中心化"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "“仅去中心化”模式不会连接此数据源。"
+
+msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
+msgstr "“仅去中心化”模式只读取 DAPI 节点和 Platform SDK。"
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "仅去中心化：Radar 只读取 DAPI 节点和 Platform SDK，不向任何托管服务发出请求。打开“数据源”可查看因此缺少哪些内容，或将其关闭。"
 
 msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
 msgstr "离线解码原始字节：交易、区块、身份、合约、文档或证明。"
@@ -1129,6 +1175,12 @@ msgstr "纪元"
 msgid "Esc"
 msgstr "Esc"
 
+msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
+msgstr "Radar 可以连接的所有后端、运营方，以及它们在 {network} 上是否在使用。Radar 中的每个数字都会注明其来源。"
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Radar 可以连接的所有后端、运营方，以及“仅去中心化”模式的开关。"
+
 msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
 msgstr "Radar 读取的每个数据源，其在此网络上的健康状况与新鲜度，以及 DAPI 请求预算。"
 
@@ -1167,6 +1219,9 @@ msgstr "Evonode 抵押品"
 
 msgid "Evonodes"
 msgstr "Evonode"
+
+msgid "Evonodes from the node list, as https://address:port"
+msgstr "节点列表中的 evonode，格式为 https://address:port"
 
 msgid "Example"
 msgstr "示例"
@@ -1213,6 +1268,9 @@ msgstr "最终性"
 msgid "Find the identity that holds a public key, from its 40-character key hash."
 msgstr "通过 40 个字符的密钥哈希，找到持有该公钥的身份。"
 
+msgid "Finding this day's blocks"
+msgstr "正在查找当天的区块"
+
 msgid "finding where…"
 msgstr "正在查找位置…"
 
@@ -1242,6 +1300,9 @@ msgstr "首次：不可用"
 msgid "From"
 msgstr "来自"
 
+msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
+msgstr "来自 DAPI 实时数据流：本页面已看到到达的交易，减去此后已被打包的交易。这不是完整的内存池。"
+
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "任意高度、哈希、地址、ProTx、IP、身份、合约、代币、名称或纪元的完整结果，按类型分组。"
 
@@ -1262,6 +1323,9 @@ msgstr "治理"
 
 msgid "Governance proposal"
 msgstr "治理提案"
+
+msgid "Governance proposals need an indexer"
+msgstr "治理提案需要索引器"
 
 msgid "group"
 msgstr "群组"
@@ -1331,6 +1395,9 @@ msgstr "隐藏表格"
 
 msgid "Home"
 msgstr "首页"
+
+msgid "Hosted by one operator"
+msgstr "由单一运营方托管"
 
 msgid "Hosting"
 msgstr "托管"
@@ -1428,6 +1495,9 @@ msgstr "在内存池中"
 msgid "In the mempool"
 msgstr "在内存池中"
 
+msgid "In use"
+msgstr "使用中"
+
 msgid "Inbound"
 msgstr "入站"
 
@@ -1451,6 +1521,9 @@ msgstr "由 Platform Explorer 索引 · 检查中…"
 
 msgid "Indexed by Platform Explorer · proofs unavailable"
 msgstr "由 Platform Explorer 索引 · 证明不可用"
+
+msgid "Indexed Platform lists and search, and Platform's height until the SDK has answered."
+msgstr "已索引的 Platform 列表和搜索，以及 SDK 响应前的 Platform 高度。"
 
 msgid "indexed to block {block}"
 msgstr "已索引至区块 {block}"
@@ -1673,6 +1746,9 @@ msgstr "在 Core 上锁定 Dash，以在 Platform 上生成积分。"
 msgid "Looks like {0}"
 msgstr "看起来像{0}"
 
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "已跳过对索引的查询，因此可能缺少部分匹配项"
+
 msgid "mainnet"
 msgstr "主网"
 
@@ -1705,6 +1781,9 @@ msgstr "主节点列表根"
 
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "主节点记录来自 Radar 对主网和测试网的抓取。"
+
+msgid "Masternode records need Radar's crawler"
+msgstr "主节点记录需要 Radar 爬虫"
 
 msgid "Masternode registrar update"
 msgstr "主节点注册方更新"
@@ -1835,6 +1914,12 @@ msgstr "以 .dash 结尾的名称、纪元和日期（某一天的 Core 区块�
 msgid "Names follow Dash Core’s definitions of the revocation reason codes."
 msgstr "名称遵循 Dash Core 对撤销原因代码的定义。"
 
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "需要索引器：在“仅去中心化”模式下已关闭"
+
+msgid "Needs Radar's crawler: off in Decentralized only mode"
+msgstr "需要 Radar 爬虫：在“仅去中心化”模式下已关闭"
+
 msgid "Net value"
 msgstr "净值"
 
@@ -1849,6 +1934,9 @@ msgstr "网络普查"
 
 msgid "Network internals"
 msgstr "网络内部信息"
+
+msgid "Network internals need an indexer"
+msgstr "网络内部信息需要索引器"
 
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "网络内部信息：对等节点、内存池压力、版本和历史"
@@ -1995,6 +2083,9 @@ msgstr "这笔交易没有价值转移"
 msgid "No votes recorded for this proposal."
 msgstr "此提案没有投票记录。"
 
+msgid "Node list and quorum keys"
+msgstr "节点列表和 Quorum 密钥"
+
 msgid "Node sync"
 msgstr "节点同步"
 
@@ -2053,6 +2144,9 @@ msgstr "尚未被挖出"
 msgid "Not offered"
 msgstr "未提供"
 
+msgid "Not on {net}"
+msgstr "{net} 上不可用"
+
 msgid "not paid yet"
 msgstr "尚未收到付款"
 
@@ -2070,6 +2164,12 @@ msgstr "未指定"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上面没有任何结果能证实这一点，这只是对你输入内容的一种解读。"
+
+msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
+msgstr "自你打开此页面以来还没有新内容到达。DAPI 传来的新交易会显示在这里。"
+
+msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
+msgstr "自你打开此页面以来还没有新内容到达。完整的内存池列表需要索引器，而“仅去中心化”模式不使用索引器。"
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
 msgstr "打开此页面后尚未收到任何交易。完整的内存池列表需要 Hyphen 的索引，而它落后于链。"
@@ -2092,11 +2192,17 @@ msgstr "现在"
 msgid "Number"
 msgstr "编号"
 
+msgid "Off in this mode"
+msgstr "此模式下已关闭"
+
 msgid "Older"
 msgstr "较早"
 
 msgid "Older blocks from before this date"
 msgstr "此日期之前的较早区块"
+
+msgid "On this page"
+msgstr "本页内容"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "单个争议：状态、计票、带预存余额的竞争者以及投票者。"
@@ -2261,6 +2367,10 @@ msgstr "页面"
 msgid "Pages of {0} need an index that is up to date, and none is right now."
 msgstr "每页 {0} 个区块需要最新的索引，而目前没有可用的。"
 
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "每页 {0} 个区块需要索引器，而“仅去中心化”模式不使用索引器。"
+
 msgid "Pagination"
 msgstr "分页"
 
@@ -2337,6 +2447,9 @@ msgstr "无法获取待处理交易"
 msgid "Pending transactions seen since you opened this page"
 msgstr "打开此页面后看到的待处理交易"
 
+msgid "Pending transactions seen since you opened this page, newest first"
+msgstr "自打开此页面以来看到的待处理交易，最新的在前"
+
 msgid "Pending transactions, newest first"
 msgstr "待处理交易，最新的在前"
 
@@ -2395,6 +2508,9 @@ msgstr "Platform Explorer 没有响应"
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "Platform Explorer 报告其索引器状态异常（已索引至区块 {block}）"
 
+msgid "Platform Explorer's API documentation"
+msgstr "Platform Explorer 的 API 文档"
+
 msgid "Platform height"
 msgstr "Platform 高度"
 
@@ -2422,8 +2538,17 @@ msgstr "Platform SDK"
 msgid "Platform transitions"
 msgstr "Platform 状态转换"
 
+msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
+msgstr "Platform 的最新区块需要 Platform Explorer，而“仅去中心化”模式不使用它。"
+
+msgid "Platform's latest transitions need Platform Explorer"
+msgstr "Platform 的最新转换需要 Platform Explorer"
+
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Platform 的脉搏：高度、纪元、活动图表、领导者以及最新区块和状态转换。"
+
+msgid "Platform's state, each answer with a proof that Radar checks in this browser."
+msgstr "Platform 的状态，每个响应都附带一项证明，由 Radar 在此浏览器中验证。"
 
 msgid "Plenty of room"
 msgstr "余量充足"
@@ -2567,6 +2692,9 @@ msgstr "Radar"
 msgid "Radar API"
 msgstr "Radar API"
 
+msgid "Radar census API"
+msgstr "Radar 普查 API"
+
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar 已检查了所有能够回答此类输入的数据源。"
 
@@ -2618,6 +2746,12 @@ msgstr "Radar 从不需要助记词，因此这类词语不会被发送到任何
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar 从不需要它，因此它不会被发送到任何地方，也不会出现在地址栏和历史记录中。"
 
+msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
+msgstr "Radar 先读取 DAPI 和 Platform SDK，只在它们无法回答时才请求托管服务：地址历史、富豪榜、图表、治理、节点普查和 USD 价格。"
+
+msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
+msgstr "Radar 只读取 DAPI 节点和 Platform SDK。需要索引器、爬虫或价格的页面会直接说明，而不会去请求它们。"
+
 msgid "Radar shows this payload type as raw data."
 msgstr "Radar 以原始数据显示此类载荷。"
 
@@ -2635,6 +2769,9 @@ msgstr "Radar 的抓取结果中没有它。可能是新节点、已被移除，
 
 msgid "Radar’s crawl of {here} doesn’t list it."
 msgstr "Radar 对 {here} 的抓取结果中没有它。"
+
+msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload."
+msgstr "Radar 自己的代码、dashhq 页眉、字体和地图形状。你直接打开或刷新的页面地址，它也能看到。"
 
 msgid "Range"
 msgstr "范围"
@@ -2661,6 +2798,9 @@ msgstr "用摄像头或图片读取二维码，并查询其中的内容。图片
 
 msgid "Read from"
 msgstr "读取自"
+
+msgid "Reading the chain tip…"
+msgstr "正在读取链顶…"
 
 msgid "Reading the picture…"
 msgstr "正在读取图片…"
@@ -2826,6 +2966,10 @@ msgstr "搜索 Radar"
 msgid "Search Radar (⌘K on a Mac)"
 msgstr "搜索 Radar（Mac 上按 ⌘K）"
 
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "正在搜索区块头，以确定这一天的起止位置：已找到 {0}/2。"
+
 msgid "Searching…"
 msgstr "正在搜索…"
 
@@ -2838,6 +2982,9 @@ msgstr "查看“{trimmed}”的全部结果"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "在 {net} 上查看“{trimmed}”的全部结果"
 
+msgid "See every source"
+msgstr "查看所有数据源"
+
 msgid "See the sources"
 msgstr "查看数据源"
 
@@ -2846,6 +2993,9 @@ msgstr "查看未确认的活动"
 
 msgid "Seen"
 msgstr "发现时间"
+
+msgid "Seen and still pending"
+msgstr "已看到且仍待处理"
 
 msgid "Seen since you opened this page"
 msgstr "打开此页面后看到"
@@ -2870,6 +3020,9 @@ msgstr "设置开发网 {name}"
 
 msgid "Settings"
 msgstr "设置"
+
+msgid "Settlement"
+msgstr "结算"
 
 msgid "Share index"
 msgstr "份额索引"
@@ -2961,6 +3114,9 @@ msgstr "签名者"
 msgid "Signing quorum"
 msgstr "签名 Quorum"
 
+msgid "Since you opened this page"
+msgstr "自你打开此页面以来"
+
 msgid "Size"
 msgstr "大小"
 
@@ -3048,6 +3204,9 @@ msgstr "状态转换"
 msgid "Status"
 msgstr "状态"
 
+msgid "Status: how each source is answering right now"
+msgstr "状态：各数据源当前的响应情况"
+
 msgid "Stop the camera"
 msgstr "停止摄像头"
 
@@ -3077,9 +3236,6 @@ msgstr "已同步"
 
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "标签：{tag}。该标签由矿工写入，因此不能作为证明。"
-
-msgid "Tap a row for received, sent and transactions"
-msgstr "点按一行查看收到、发出和交易数"
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "点按交易可查看其输入、输出和大小"
@@ -3138,8 +3294,14 @@ msgstr "浏览器未向 Radar 授予摄像头权限。请在网站设置中允�
 msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
 msgstr "节点普查：上次抓取有多少节点响应，以及版本、托管、国家和可达性。"
 
+msgid "The chain’s size, its node versions and the peers Hyphen reads from."
+msgstr "链的大小、节点版本，以及 Hyphen 读取的对等节点。"
+
 msgid "The chart data didn’t load."
 msgstr "图表数据未能加载。"
+
+msgid "The choice stays in this browser. A link ending in ?sources=decentralized turns the mode on for one visit."
+msgstr "此选择会保存在这个浏览器中。以 ?sources=decentralized 结尾的链接只会在一次访问中开启该模式。"
 
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "流通量暂不可用，因此占比以地址余额为基数。"
@@ -3156,6 +3318,12 @@ msgstr "当前的 Platform 纪元、下一个提议者，以及 Evonode 在过�
 msgid "The Dash network, now"
 msgstr "Dash 网络现状"
 
+msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
+msgstr "完整的内存池及其总计需要该索引，因此本页显示的是你打开页面后 DAPI 实时数据流送来的内容。"
+
+msgid "The full mempool list and its totals need an indexer"
+msgstr "完整的内存池列表及其总计需要索引器"
+
 msgid "The largest Core balances, ranked."
 msgstr "按排名列出的 Core 最大余额。"
 
@@ -3170,11 +3338,17 @@ msgstr "Radar 已索引的 {1} 笔付款中最近的 {0} 笔"
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "链接可能已过期或拼写有误。请搜索你想找的内容，或从某个板块开始。"
 
+msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
+msgstr "此链接已为本次访问开启“仅去中心化”。在这里选择它，就会在此浏览器中保持开启。"
+
 msgid "The live connection dropped. Radar is opening it again."
 msgstr "实时连接已断开，Radar 正在重新建立。"
 
 msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
 msgstr "实时连接持续失败，因此 Radar 每 30 秒请求一次最新区块。"
+
+msgid "The masternode and node census, the map and client versions, from Radar's crawler."
+msgstr "主节点和节点普查、地图以及客户端版本，来自 Radar 爬虫。"
 
 msgid "The masternode census and network history"
 msgstr "主节点普查与网络历史"
@@ -3187,6 +3361,9 @@ msgstr "无法加载后续交易。"
 
 msgid "The node map"
 msgstr "节点地图"
+
+msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
+msgstr "节点地图需要 Radar 爬虫，而“仅去中心化”模式不使用它。"
 
 msgid "The operator announces a new network address for a masternode."
 msgstr "运营者为主节点公布新的网络地址。"
@@ -3202,6 +3379,9 @@ msgstr "Platform Explorer 价格数据源"
 
 msgid "The Platform SDK"
 msgstr "Platform SDK"
+
+msgid "The Platform SDK isn't answering"
+msgstr "Platform SDK 没有响应"
 
 msgid "the Platform SDK, proof-checked"
 msgstr "Platform SDK（已通过证明验证）"
@@ -3229,6 +3409,9 @@ msgstr "请求已取消"
 
 msgid "The rest of this page still works."
 msgstr "此页面的其余部分仍可使用。"
+
+msgid "The rich list needs an indexer"
+msgstr "富豪榜需要索引器"
 
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "份额持有者更改共享主节点的运营者密钥或投票密钥。"
@@ -3267,6 +3450,9 @@ msgstr "Radar 从 DAPI 返回的字节解码出的交易。金额以 duff 为单
 msgid "The transaction is not in a block yet."
 msgstr "该交易尚未进入区块。"
 
+msgid "The USD rate shown next to DASH amounts. Mainnet only."
+msgstr "显示在 DASH 金额旁的 USD 汇率。仅限主网。"
+
 msgid "The USD rate, through Platform Explorer"
 msgstr "经由 Platform Explorer 的美元汇率"
 
@@ -3293,6 +3479,9 @@ msgstr "该地址没有签署此消息。"
 
 msgid "This address signed this message."
 msgstr "该地址签署了此消息。"
+
+msgid "This address's balance, history and unspent outputs need an indexer"
+msgstr "此地址的余额、历史和未花费的输出需要索引器"
 
 msgid "This browser"
 msgstr "此浏览器"
@@ -3327,6 +3516,15 @@ msgstr "这看起来像私钥或助记词。Radar 从不需要它们，因此不
 msgid "This masternode is on {otherName}."
 msgstr "此主节点位于 {otherName}。"
 
+msgid "This needs an indexer"
+msgstr "这需要索引器"
+
+msgid "This needs Platform Explorer"
+msgstr "这需要 Platform Explorer"
+
+msgid "This needs Radar's crawler"
+msgstr "这需要 Radar 爬虫"
+
 msgid "This network doesn’t have this source."
 msgstr "此网络没有该数据源。"
 
@@ -3339,6 +3537,9 @@ msgstr "无法显示此页面"
 msgid "This page is on its way"
 msgstr "此页面即将上线"
 
+msgid "This page needs an indexer"
+msgstr "此页面需要索引器"
+
 #. placeholder {0}: listSources(page.sources)
 msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
 msgstr "此页面读取自{0}。请切换到 Mainnet 或 Testnet 查看。"
@@ -3348,6 +3549,9 @@ msgstr "此页面的数据来自 Hyphen。请切换到主网或测试网查看�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "此提案及其投票记录来自 Hyphen 的索引,截至该区块,并非实时。"
+
+msgid "This site"
+msgstr "本站"
 
 msgid "This source covers this row only"
 msgstr "此来源仅涵盖这一行"
@@ -3565,6 +3769,12 @@ msgstr "USD 四舍五入到三位有效数字，并跟随以 {unitName} 显示�
 msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 msgstr "USD 四舍五入到三位有效数字。USD 排在前面时，此选项不适用。"
 
+msgid "USD prices need a price feed"
+msgstr "USD 价格需要价格数据"
+
+msgid "Use all sources"
+msgstr "使用所有数据源"
+
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "请使用小写字母、数字和连字符，例如“ruby”。"
 
@@ -3662,8 +3872,14 @@ msgstr "等待主节点将其锁定"
 msgid "Waiting to be mined."
 msgstr "等待被挖出。"
 
+msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
+msgstr "正在通过 DAPI 实时数据流监视发往此地址的付款。没有索引器时，无法识别该地址原有币的花费。"
+
 msgid "Watching for new transactions on this address."
 msgstr "正在监视此地址的新交易。"
+
+msgid "Watching since"
+msgstr "监视起始时间"
 
 msgid "What is waiting to be mined."
 msgstr "等待被挖出的内容。"
@@ -3680,11 +3896,11 @@ msgstr "你可以搜索的内容"
 msgid "When"
 msgstr "时间"
 
-msgid "Where every figure comes from, how each source is checked and what each can’t tell you."
-msgstr "每个数据从哪里来，每个数据源如何验证，以及各自无法告诉你什么。"
-
 msgid "Where it is"
 msgstr "所在位置"
+
+msgid "Where requests go on {network}, and what each one is for."
+msgstr "{network} 上的请求会发往哪里，以及各自的用途。"
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Core 24 激活进度：阈值、矿工逐个窗口的信号以及主节点就绪情况。"
@@ -3698,8 +3914,17 @@ msgstr "价值的去向"
 msgid "Where this is"
 msgstr "所在位置"
 
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "要知道某个输出是否已被花费以及由哪笔交易花费，需要索引器"
+
+msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
+msgstr "有哪些 evonode，大约每小时读取一次（读取失败时，会改用已保存的列表或内置列表），以及 SDK 用来验证证明的 Quorum 公钥。“仅去中心化”模式仍会使用它：没有它，Radar 就无法找到节点或验证证明。"
+
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "每个 Radar 页面由哪个 Platform SDK 调用支撑，含参数。"
+
+msgid "Which sources Radar may use"
+msgstr "Radar 可以使用哪些数据源"
 
 msgid "Withdrawal index"
 msgstr "提现索引"

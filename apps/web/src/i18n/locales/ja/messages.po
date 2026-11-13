@@ -35,6 +35,10 @@ msgstr "（古い情報）"
 msgid "(source down)"
 msgstr "（ソース停止中）"
 
+#. placeholder {0}: backend.upstream
+msgid "(this site passes the request on to {0})"
+msgstr "（このサイトはリクエストを {0} に転送します）"
+
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
 msgstr "{0, plural, other {入力 #件}}"
@@ -200,6 +204,7 @@ msgstr "他のアドレスへ {0}"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
+#. placeholder {0}: formatInt(r.txCount)
 msgid "{0} tx"
 msgstr "{0} tx"
 
@@ -297,6 +302,9 @@ msgstr "{name}（理由 {reason}）"
 
 msgid "{name} couldn’t be reached"
 msgstr "{name} に接続できません"
+
+msgid "{name} is a hosted service, which Decentralized only mode does not use"
+msgstr "{name} はホスト型サービスで、「分散型のみ」モードでは使用されません"
 
 msgid "{name} is busy"
 msgstr "{name} は混雑しています"
@@ -428,6 +436,9 @@ msgstr "署名は base64 で88文字、末尾は「=」で、Dash Core の signm
 msgid "About"
 msgstr "概要"
 
+msgid "About sources"
+msgstr "ソースについて"
+
 msgid "Abstain"
 msgstr "棄権"
 
@@ -446,6 +457,9 @@ msgstr "アドレス"
 msgid "Address"
 msgstr "アドレス"
 
+msgid "Address balances and history, spent outputs, the rich list, charts, the mempool, governance and network internals."
+msgstr "アドレスの残高と履歴、使用済み出力、長者番付、チャート、メモリプール、ガバナンス、ネットワークの内部情報。"
+
 msgid "Address funding"
 msgstr "アドレスへの入金"
 
@@ -457,6 +471,9 @@ msgstr "アドレスの種類"
 
 msgid "Address withdrawal"
 msgstr "アドレスからの出金"
+
+msgid "Address, spent-output and governance reads while Hyphen's index is behind the chain."
+msgstr "Hyphen のインデックスがチェーンに遅れている間の、アドレス、使用済み出力、ガバナンスの読み取り。"
 
 msgid "Addresses ranked by balance"
 msgstr "残高順のアドレス"
@@ -479,6 +496,9 @@ msgstr "すべてのブロック"
 msgid "All proposals"
 msgstr "すべての提案"
 
+msgid "All sources"
+msgstr "すべてのソース"
+
 msgid "Among the peers of the indexing node"
 msgstr "インデックス作成ノードのピアの中"
 
@@ -497,6 +517,9 @@ msgstr "最初の {0} 件の入力について金額を読み込みます。前�
 
 msgid "Amounts loaded"
 msgstr "読み込み済みの金額"
+
+msgid "Amounts show in {unitName}."
+msgstr "金額は {unitName} で表示されます。"
 
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金額は {unitName} で表示されます。USD を選ぶと、ドルの金額が先頭に表示されます。"
@@ -561,6 +584,9 @@ msgstr "概要に戻る"
 
 msgid "Back to top"
 msgstr "トップへ戻る"
+
+msgid "Backends"
+msgstr "バックエンド"
 
 msgid "Balance"
 msgstr "残高"
@@ -689,6 +715,9 @@ msgstr "同期中、{0}"
 msgid "Chain size"
 msgstr "チェーンサイズ"
 
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "チェーンサイズ、メモリプールの混雑度、トランザクション速度、ノードのバージョン、マスターノード数、Hyphen が読み取るピア。"
+
 msgid "Chain state"
 msgstr "チェーンの状態"
 
@@ -735,18 +764,14 @@ msgstr "変更"
 msgid "Charts"
 msgstr "チャート"
 
+msgid "Charts need an indexer"
+msgstr "チャートにはインデクサーが必要です"
+
 msgid "Check a signed message against a Core address, in your browser."
 msgstr "署名済みメッセージを Core アドレスに対してブラウザ内で検証します。"
 
 msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 msgstr "Dash アドレスがメッセージに署名したかを確認します。確認はこのブラウザ内で行われ、ここに入力した内容はどこにも送信されません。Radar が鍵を求めることもありません。"
-
-msgid "Checked"
-msgstr "確認"
-
-#. placeholder {0}: POLL_MS.mempool / 1000
-msgid "Checked every {0} seconds, but the index is behind the chain, so this is not a live view."
-msgstr "{0} 秒ごとに確認していますが、インデックスがチェーンに遅れているため、ライブ表示ではありません。"
 
 msgid "Checking"
 msgstr "確認中"
@@ -933,6 +958,9 @@ msgstr "Core のバージョン"
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform、マスターノードネットワーク"
 
+msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
+msgstr "Core の先頭、ブロック、トランザクション、ChainLock、ライブフィード。Radar は多数のノードにリクエストを分散し、各ブロックをそのブロックヘッダーと照合します。"
+
 msgid "Could not be read"
 msgstr "読み取れませんでした"
 
@@ -984,6 +1012,9 @@ msgstr "DAPI"
 msgid "DAPI addresses"
 msgstr "DAPI アドレス"
 
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI と Platform SDK が応答しています。ホスト型のソースは「分散型のみ」モードではオフです。"
+
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI が混み合っているため、予算が回復するまでブロック一覧は Hyphen から取得します。詳細は引き続き DAPI を使います。"
 
@@ -1016,6 +1047,21 @@ msgstr "データソース"
 
 msgid "Days run from 00:00 to 24:00 UTC."
 msgstr "1日は UTC の 00:00 から 24:00 です。"
+
+msgid "Decentralized"
+msgstr "分散型"
+
+msgid "Decentralized only"
+msgstr "分散型のみ"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "「分散型のみ」モードではこのソースに接続しません。"
+
+msgid "Decentralized only mode reads only DAPI nodes and the Platform SDK."
+msgstr "「分散型のみ」モードは DAPI ノードと Platform SDK だけを読み取ります。"
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "分散型のみ: Radar は DAPI ノードと Platform SDK だけを読み取り、ホスト型サービスには問い合わせません。「ソース」を開くと、対象外になるものの確認やモードの解除ができます。"
 
 msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
 msgstr "生のバイト列をオフラインでデコードします：トランザクション、ブロック、アイデンティティ、コントラクト、ドキュメント、証明。"
@@ -1129,6 +1175,12 @@ msgstr "エポック"
 msgid "Esc"
 msgstr "Esc"
 
+msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
+msgstr "Radar が接続できるすべてのバックエンド、その運営者、{network} で使われているかどうか。Radar 内の各数値には、取得元が明記されています。"
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Radar が接続できるすべてのバックエンド、その運営者、そして「分散型のみ」モードの切り替え。"
+
 msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
 msgstr "Radar が読み取るすべてのデータソースの、このネットワークでの状態と鮮度、および DAPI のリクエスト予算。"
 
@@ -1167,6 +1219,9 @@ msgstr "エボノードの担保"
 
 msgid "Evonodes"
 msgstr "Evonode"
+
+msgid "Evonodes from the node list, as https://address:port"
+msgstr "ノードリストの evonode。https://address:port の形式"
 
 msgid "Example"
 msgstr "例"
@@ -1213,6 +1268,9 @@ msgstr "ファイナリティ"
 msgid "Find the identity that holds a public key, from its 40-character key hash."
 msgstr "40 文字のキーハッシュから、その公開鍵を持つアイデンティティを探します。"
 
+msgid "Finding this day's blocks"
+msgstr "この日のブロックを検索中"
+
 msgid "finding where…"
 msgstr "場所を特定中…"
 
@@ -1242,6 +1300,9 @@ msgstr "最初：取得できません"
 msgid "From"
 msgstr "送信元"
 
+msgid "From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool."
+msgstr "DAPI のライブフィードより。このページに届いたのを確認したトランザクションから、その後マイニングされたものを除いたものです。メモリプール全体ではありません。"
+
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "高さ、ハッシュ、アドレス、ProTx、IP、アイデンティティ、コントラクト、トークン、名前、エポックの全結果を、種類別にまとめて表示します。"
 
@@ -1262,6 +1323,9 @@ msgstr "ガバナンス"
 
 msgid "Governance proposal"
 msgstr "ガバナンス提案"
+
+msgid "Governance proposals need an indexer"
+msgstr "ガバナンス提案にはインデクサーが必要です"
 
 msgid "group"
 msgstr "グループ"
@@ -1331,6 +1395,9 @@ msgstr "表を隠す"
 
 msgid "Home"
 msgstr "ホーム"
+
+msgid "Hosted by one operator"
+msgstr "単一の運営者がホスト"
 
 msgid "Hosting"
 msgstr "ホスティング"
@@ -1428,6 +1495,9 @@ msgstr "メモリプール内"
 msgid "In the mempool"
 msgstr "メモリプール内"
 
+msgid "In use"
+msgstr "使用中"
+
 msgid "Inbound"
 msgstr "受信"
 
@@ -1451,6 +1521,9 @@ msgstr "Platform Explorer がインデックス化・確認中…"
 
 msgid "Indexed by Platform Explorer · proofs unavailable"
 msgstr "Platform Explorer がインデックス化・証明は利用不可"
+
+msgid "Indexed Platform lists and search, and Platform's height until the SDK has answered."
+msgstr "インデックス化された Platform のリストと検索、および SDK が応答するまでの Platform の高さ。"
 
 msgid "indexed to block {block}"
 msgstr "ブロック {block} までインデックス済み"
@@ -1673,6 +1746,9 @@ msgstr "Core 上の Dash をロックして、Platform 上にクレジットを�
 msgid "Looks like {0}"
 msgstr "{0} のようです"
 
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "インデックスでの検索が省略されたため、一致するものが一部表示されない場合があります"
+
 msgid "mainnet"
 msgstr "メインネット"
 
@@ -1705,6 +1781,9 @@ msgstr "マスターノードリストのルート"
 
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "マスターノードの情報は、Radar によるメインネットとテストネットのクロール結果です。"
+
+msgid "Masternode records need Radar's crawler"
+msgstr "マスターノードの記録には Radar のクローラーが必要です"
 
 msgid "Masternode registrar update"
 msgstr "マスターノードのレジストラー更新"
@@ -1835,6 +1914,12 @@ msgstr ".dash で終わる名前、エポック、日付（1日分の Core ブ�
 msgid "Names follow Dash Core’s definitions of the revocation reason codes."
 msgstr "名称は、失効理由コードに関する Dash Core の定義に従っています。"
 
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "インデクサーが必要: 「分散型のみ」モードではオフ"
+
+msgid "Needs Radar's crawler: off in Decentralized only mode"
+msgstr "Radar のクローラーが必要: 「分散型のみ」モードではオフ"
+
 msgid "Net value"
 msgstr "純額"
 
@@ -1849,6 +1934,9 @@ msgstr "ネットワーク調査"
 
 msgid "Network internals"
 msgstr "ネットワークの内部情報"
+
+msgid "Network internals need an indexer"
+msgstr "ネットワークの内部情報にはインデクサーが必要です"
 
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "ネットワークの内部情報：ピア、メモリプールの負荷、バージョン、履歴"
@@ -1995,6 +2083,9 @@ msgstr "このトランザクションでは価値が移動しません"
 msgid "No votes recorded for this proposal."
 msgstr "この提案への投票は記録されていません。"
 
+msgid "Node list and quorum keys"
+msgstr "ノードリストとクォーラムキー"
+
 msgid "Node sync"
 msgstr "ノードの同期"
 
@@ -2053,6 +2144,9 @@ msgstr "まだマイニングされていません"
 msgid "Not offered"
 msgstr "提供なし"
 
+msgid "Not on {net}"
+msgstr "{net} にはありません"
+
 msgid "not paid yet"
 msgstr "まだ支払いなし"
 
@@ -2070,6 +2164,12 @@ msgstr "未指定"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上の結果には裏付けがありません。入力内容の読み方のひとつにすぎません。"
+
+msgid "Nothing has arrived since you opened this page. New transactions appear here as DAPI delivers them."
+msgstr "このページを開いてから、まだ何も届いていません。新しいトランザクションは、DAPI から届き次第ここに表示されます。"
+
+msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
+msgstr "このページを開いてから、まだ何も届いていません。メモリプールの完全なリストにはインデクサーが必要ですが、「分散型のみ」モードでは使用しません。"
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain."
 msgstr "このページを開いてから何も届いていません。メモリプールの全リストには Hyphen のインデックスが必要ですが、チェーンより遅れています。"
@@ -2092,11 +2192,17 @@ msgstr "現在"
 msgid "Number"
 msgstr "番号"
 
+msgid "Off in this mode"
+msgstr "このモードではオフ"
+
 msgid "Older"
 msgstr "古い方へ"
 
 msgid "Older blocks from before this date"
 msgstr "この日付より前の古いブロック"
+
+msgid "On this page"
+msgstr "このページの内容"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "1 件の争奪：状態、集計、事前積立残高を持つ候補、投票者。"
@@ -2261,6 +2367,10 @@ msgstr "ページ"
 msgid "Pages of {0} need an index that is up to date, and none is right now."
 msgstr "{0} 件のページには最新のインデックスが必要ですが、現在は該当するものがありません。"
 
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "{0} 件のページにはインデクサーが必要ですが、「分散型のみ」モードでは使用しません。"
+
 msgid "Pagination"
 msgstr "ページ送り"
 
@@ -2337,6 +2447,9 @@ msgstr "保留中のトランザクションは利用できません"
 msgid "Pending transactions seen since you opened this page"
 msgstr "このページを開いてから確認した保留中のトランザクション"
 
+msgid "Pending transactions seen since you opened this page, newest first"
+msgstr "このページを開いてから確認した保留中のトランザクション（新しい順）"
+
 msgid "Pending transactions, newest first"
 msgstr "保留中のトランザクション（新しい順）"
 
@@ -2395,6 +2508,9 @@ msgstr "Platform Explorer が応答していません"
 msgid "Platform Explorer reports its indexer as unhealthy (indexed to block {block})"
 msgstr "Platform Explorer はインデクサーが異常と報告しています（ブロック {block} までインデックス済み）"
 
+msgid "Platform Explorer's API documentation"
+msgstr "Platform Explorer の API ドキュメント"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
 
@@ -2422,8 +2538,17 @@ msgstr "Platform SDK"
 msgid "Platform transitions"
 msgstr "Platform トランジション"
 
+msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
+msgstr "Platform の最新のブロックには Platform Explorer が必要ですが、「分散型のみ」モードでは使用しません。"
+
+msgid "Platform's latest transitions need Platform Explorer"
+msgstr "Platform の最新のトランジションには Platform Explorer が必要です"
+
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Platform の鼓動：高さ、エポック、アクティビティのチャート、リーダー、最新のブロックとステートトランジション。"
+
+msgid "Platform's state, each answer with a proof that Radar checks in this browser."
+msgstr "Platform の状態。各回答には、Radar がこのブラウザ内で検証する証明が付いています。"
 
 msgid "Plenty of room"
 msgstr "十分な余裕"
@@ -2567,6 +2692,9 @@ msgstr "Radar"
 msgid "Radar API"
 msgstr "Radar API"
 
+msgid "Radar census API"
+msgstr "Radar 調査 API"
+
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar は、この種の入力に答えられるすべてのソースを確認しました。"
 
@@ -2618,6 +2746,12 @@ msgstr "Radar がリカバリーフレーズを必要とすることはないた
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar がこれを必要とすることはないため、どこにも送信されず、アドレスバーや履歴にも残りません。"
 
+msgid "Radar reads DAPI and the Platform SDK first, and asks hosted services for what they can't answer: address history, the rich list, charts, governance, the node census and USD prices."
+msgstr "Radar はまず DAPI と Platform SDK を読み取り、それらでは答えられないものだけをホスト型サービスに問い合わせます。アドレスの履歴、長者番付、チャート、ガバナンス、ノード調査、USD 価格です。"
+
+msgid "Radar reads only DAPI nodes and the Platform SDK. A page that needs an indexer, the crawler or a price says so instead of asking one."
+msgstr "Radar は DAPI ノードと Platform SDK だけを読み取ります。インデクサー、クローラー、価格が必要なページは、それらに問い合わせる代わりにその旨を表示します。"
+
 msgid "Radar shows this payload type as raw data."
 msgstr "Radar はこの種類のペイロードを生データで表示します。"
 
@@ -2635,6 +2769,9 @@ msgstr "Radar のクロール結果にありません。新しい、削除され
 
 msgid "Radar’s crawl of {here} doesn’t list it."
 msgstr "Radar による {here} のクロール結果にはありません。"
+
+msgid "Radar's own code, the dashhq header, fonts and the map's shapes. It also sees which page you open directly or reload."
+msgstr "Radar 自身のコード、dashhq のヘッダー、フォント、マップの形状。直接開いたり再読み込みしたりしたページのアドレスも確認できます。"
 
 msgid "Range"
 msgstr "範囲"
@@ -2661,6 +2798,9 @@ msgstr "カメラまたは画像から QR コードを読み取り、その内�
 
 msgid "Read from"
 msgstr "読み取り元"
+
+msgid "Reading the chain tip…"
+msgstr "チェーンの先頭を読み取り中…"
 
 msgid "Reading the picture…"
 msgstr "画像を読み取り中…"
@@ -2826,6 +2966,10 @@ msgstr "Radar を検索"
 msgid "Search Radar (⌘K on a Mac)"
 msgstr "Radar を検索（Mac では ⌘K）"
 
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "ブロックヘッダーを検索して、この日の開始と終了の位置を探しています: 2 件中 {0} 件見つかりました。"
+
 msgid "Searching…"
 msgstr "検索中…"
 
@@ -2838,6 +2982,9 @@ msgstr "「{trimmed}」のすべての結果を見る"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "{net} で「{trimmed}」のすべての結果を見る"
 
+msgid "See every source"
+msgstr "すべてのソースを見る"
+
 msgid "See the sources"
 msgstr "ソースを見る"
 
@@ -2846,6 +2993,9 @@ msgstr "未承認のアクティビティを見る"
 
 msgid "Seen"
 msgstr "確認"
+
+msgid "Seen and still pending"
+msgstr "確認済みで保留中"
 
 msgid "Seen since you opened this page"
 msgstr "このページを開いてから確認"
@@ -2870,6 +3020,9 @@ msgstr "devnet「{name}」を設定"
 
 msgid "Settings"
 msgstr "設定"
+
+msgid "Settlement"
+msgstr "確定状況"
 
 msgid "Share index"
 msgstr "シェアのインデックス"
@@ -2961,6 +3114,9 @@ msgstr "署名者"
 msgid "Signing quorum"
 msgstr "署名クォーラム"
 
+msgid "Since you opened this page"
+msgstr "このページを開いてから"
+
 msgid "Size"
 msgstr "サイズ"
 
@@ -3048,6 +3204,9 @@ msgstr "ステートトランジション"
 msgid "Status"
 msgstr "ステータス"
 
+msgid "Status: how each source is answering right now"
+msgstr "ステータス: 各ソースの現在の応答状況"
+
 msgid "Stop the camera"
 msgstr "カメラを停止"
 
@@ -3077,9 +3236,6 @@ msgstr "同期済み"
 
 msgid "Tag: {tag}. The miner writes it, so it is not proof."
 msgstr "タグ: {tag}。マイナーが書き込むため、証拠にはなりません。"
-
-msgid "Tap a row for received, sent and transactions"
-msgstr "行をタップすると受取額・送金額・取引数を表示"
 
 msgid "Tap a transaction for its inputs, outputs and size"
 msgstr "トランザクションをタップすると入力、出力、サイズを表示します"
@@ -3138,8 +3294,14 @@ msgstr "ブラウザが Radar にカメラへのアクセスを許可しませ�
 msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
 msgstr "センサス：最後のクロールに応答したノード数、バージョン、ホスティング、国、到達性。"
 
+msgid "The chain’s size, its node versions and the peers Hyphen reads from."
+msgstr "チェーンのサイズ、ノードのバージョン、Hyphen が読み取るピア。"
+
 msgid "The chart data didn’t load."
 msgstr "チャートのデータを読み込めませんでした。"
+
+msgid "The choice stays in this browser. A link ending in ?sources=decentralized turns the mode on for one visit."
+msgstr "選択はこのブラウザに保存されます。?sources=decentralized で終わるリンクを開くと、1 回の訪問に限りモードがオンになります。"
 
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "流通供給量を取得できないため、割合はアドレス残高に対するものです。"
@@ -3156,6 +3318,12 @@ msgstr "現在の Platform エポック、次に提案するノード、過去�
 msgid "The Dash network, now"
 msgstr "Dash ネットワークの現在"
 
+msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
+msgstr "メモリプール全体とその合計にはそのインデックスが必要なため、このページでは、開いてから DAPI のライブフィードが届けた内容を表示します。"
+
+msgid "The full mempool list and its totals need an indexer"
+msgstr "メモリプールの完全なリストと合計にはインデクサーが必要です"
+
 msgid "The largest Core balances, ranked."
 msgstr "Core の最大残高を順位順に表示します。"
 
@@ -3170,11 +3338,17 @@ msgstr "Radar が索引した {1} 件の支払いのうち最新の {0} 件"
 msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
 msgstr "リンクが古いか、入力ミスの可能性があります。探しているものを検索するか、いずれかのセクションから始めてください。"
 
+msgid "The link you followed turned Decentralized only on for this visit. Choosing it here keeps it on in this browser."
+msgstr "このリンクにより、この訪問では「分散型のみ」がオンになっています。ここで選択すると、このブラウザでオンのままになります。"
+
 msgid "The live connection dropped. Radar is opening it again."
 msgstr "ライブ接続が切断されました。Radar が再度接続しています。"
 
 msgid "The live connection keeps failing, so Radar asks for the latest block every 30 seconds."
 msgstr "ライブ接続が失敗し続けているため、Radar は30秒ごとに最新ブロックを取得します。"
+
+msgid "The masternode and node census, the map and client versions, from Radar's crawler."
+msgstr "マスターノードとノードの調査、マップ、クライアントバージョン。Radar のクローラーによるものです。"
 
 msgid "The masternode census and network history"
 msgstr "マスターノードの調査とネットワークの履歴"
@@ -3187,6 +3361,9 @@ msgstr "次のトランザクションを読み込めませんでした。"
 
 msgid "The node map"
 msgstr "ノードマップ"
+
+msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
+msgstr "ノードのマップには Radar のクローラーが必要ですが、「分散型のみ」モードでは使用しません。"
 
 msgid "The operator announces a new network address for a masternode."
 msgstr "オペレーターがマスターノードの新しいネットワークアドレスを通知します。"
@@ -3202,6 +3379,9 @@ msgstr "Platform Explorer の価格フィード"
 
 msgid "The Platform SDK"
 msgstr "Platform SDK"
+
+msgid "The Platform SDK isn't answering"
+msgstr "Platform SDK が応答していません"
 
 msgid "the Platform SDK, proof-checked"
 msgstr "Platform SDK（証明で検証）"
@@ -3229,6 +3409,9 @@ msgstr "リクエストはキャンセルされました"
 
 msgid "The rest of this page still works."
 msgstr "このページのほかの部分は引き続き使えます。"
+
+msgid "The rich list needs an indexer"
+msgstr "長者番付にはインデクサーが必要です"
 
 msgid "The shareholders change a shared masternode's operator key or voting key."
 msgstr "持分保有者が共有マスターノードのオペレーターキーまたは投票キーを変更します。"
@@ -3267,6 +3450,9 @@ msgstr "DAPI のバイト列から Radar がデコードしたトランザクシ
 msgid "The transaction is not in a block yet."
 msgstr "このトランザクションはまだブロックに含まれていません。"
 
+msgid "The USD rate shown next to DASH amounts. Mainnet only."
+msgstr "DASH の金額の横に表示される USD レート。メインネットのみ。"
+
 msgid "The USD rate, through Platform Explorer"
 msgstr "Platform Explorer 経由の USD レート"
 
@@ -3293,6 +3479,9 @@ msgstr "このアドレスはこのメッセージに署名していません。
 
 msgid "This address signed this message."
 msgstr "このアドレスはこのメッセージに署名しました。"
+
+msgid "This address's balance, history and unspent outputs need an indexer"
+msgstr "このアドレスの残高、履歴、未使用の出力にはインデクサーが必要です"
 
 msgid "This browser"
 msgstr "このブラウザ"
@@ -3327,6 +3516,15 @@ msgstr "秘密鍵またはリカバリーフレーズのようです。Radar が
 msgid "This masternode is on {otherName}."
 msgstr "このマスターノードは {otherName} にあります。"
 
+msgid "This needs an indexer"
+msgstr "これにはインデクサーが必要です"
+
+msgid "This needs Platform Explorer"
+msgstr "これには Platform Explorer が必要です"
+
+msgid "This needs Radar's crawler"
+msgstr "これには Radar のクローラーが必要です"
+
 msgid "This network doesn’t have this source."
 msgstr "このネットワークにはこのソースがありません。"
 
@@ -3339,6 +3537,9 @@ msgstr "このページを表示できませんでした"
 msgid "This page is on its way"
 msgstr "このページは準備中です"
 
+msgid "This page needs an indexer"
+msgstr "このページにはインデクサーが必要です"
+
 #. placeholder {0}: listSources(page.sources)
 msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
 msgstr "このページは {0} から読み取ります。表示するには Mainnet または Testnet に切り替えてください。"
@@ -3348,6 +3549,9 @@ msgstr "このページは Hyphen から読み込みます。表示するには�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "この提案と投票履歴は Hyphen のインデックスのもので、そのブロック時点の内容であり、ライブではありません。"
+
+msgid "This site"
+msgstr "このサイト"
 
 msgid "This source covers this row only"
 msgstr "このソースはこの行のみを対象とします"
@@ -3565,6 +3769,12 @@ msgstr "USD は有効数字3桁に丸められ、{unitName} の金額に連動�
 msgid "USD is rounded to three significant figures. This choice doesn’t apply while USD comes first."
 msgstr "USD は有効数字3桁に丸められます。USD が先頭のときは、この選択は適用されません。"
 
+msgid "USD prices need a price feed"
+msgstr "USD 価格には価格フィードが必要です"
+
+msgid "Use all sources"
+msgstr "すべてのソースを使用"
+
 msgid "Use lowercase letters, digits and hyphens, for example \"ruby\"."
 msgstr "小文字、数字、ハイフンを使用してください（例：「ruby」）。"
 
@@ -3662,8 +3872,14 @@ msgstr "マスターノードがロックするのを待機中"
 msgid "Waiting to be mined."
 msgstr "マイニング待ちです。"
 
+msgid "Watching DAPI's live feed for payments to this address. Without an indexer, a spend of coins it already held can't be recognized."
+msgstr "DAPI のライブフィードで、このアドレスへの支払いを監視しています。インデクサーがないと、すでに保有していたコインの使用は検知できません。"
+
 msgid "Watching for new transactions on this address."
 msgstr "このアドレスの新しいトランザクションを監視中です。"
+
+msgid "Watching since"
+msgstr "監視開始"
 
 msgid "What is waiting to be mined."
 msgstr "マイニング待ちのもの。"
@@ -3680,11 +3896,11 @@ msgstr "検索できるもの"
 msgid "When"
 msgstr "日時"
 
-msgid "Where every figure comes from, how each source is checked and what each can’t tell you."
-msgstr "各数値の出所、各ソースの検証方法、各ソースでは分からないこと。"
-
 msgid "Where it is"
 msgstr "所在地"
+
+msgid "Where requests go on {network}, and what each one is for."
+msgstr "{network} でリクエストがどこへ送られ、それぞれ何のためのものか。"
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Core 24 有効化の進捗：しきい値、マイナーのシグナルをウィンドウごとに、マスターノードの準備状況。"
@@ -3698,8 +3914,17 @@ msgstr "価値の行き先"
 msgid "Where this is"
 msgstr "所在地"
 
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "出力が使用済みかどうか、またどのトランザクションで使用されたかを知るにはインデクサーが必要です"
+
+msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
+msgstr "どの evonode が存在するか。約 1 時間に 1 回読み取ります（読み取れない場合は、保存済みのリストか内蔵のリストで代用します）。あわせて、SDK が証明を検証する際の基準となるクォーラム公開鍵も含みます。「分散型のみ」モードでもこれは使用します。これがないと、Radar はノードを見つけることも証明を検証することもできません。"
+
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "どの Platform SDK 呼び出しがどの Radar ページを支えているか（引数付き）。"
+
+msgid "Which sources Radar may use"
+msgstr "Radar が使用できるソース"
 
 msgid "Withdrawal index"
 msgstr "出金インデックス"
