@@ -15,6 +15,7 @@ const BASE58_ID = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
 
 export function LabelsCard() {
   const { t } = useLingui()
+  const removeLabelName = (name: string) => t`Remove the label ${name}`
   const net = useNetwork()
   const labels = useLocalLabels()
   const [kind, setKind] = useState<LabelKind>('identity')
@@ -125,7 +126,7 @@ export function LabelsCard() {
                 <button
                   type="button"
                   className="dh-btn dh-btn--quiet dh-btn--sm ms-auto"
-                  aria-label={t`Remove the label ${l.label}`}
+                  aria-label={removeLabelName(l.label)}
                   onClick={() => {
                     removeLabel(l)
                   }}
