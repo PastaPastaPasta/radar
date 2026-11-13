@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { BrowserContext, Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
-import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
@@ -44,13 +43,21 @@ const proofMark = (page: Page) =>
 
 const pinned = new WeakSet<Page>()
 
+/**
+ * Opens Platform's overview with the clock pinned to when its first proof-checked figure was recorded, so that figure's
+ * mark is fresh and opens the inspector. Fixtures are recorded at different times, so the newest one is no guide.
+ */
 async function openPlatform(page: Page, query = 'network=testnet'): Promise<void> {
-  if (!pinned.has(page)) {
-    pinned.add(page)
-    await pinClockToFixtures(page)
-  }
   await page.goto(`/platform?${query}`)
   await expect(h1(page, 'Platform')).toBeVisible()
+  if (!pinned.has(page)) {
+    pinned.add(page)
+    const stamped = page.locator('[data-source="sdk"][data-proved="true"][title^="As of "]')
+    const title = (await stamped.first().getAttribute('title')) ?? ''
+    await page.clock.install({ time: new Date(title.slice('As of '.length)) })
+    await page.reload()
+    await expect(h1(page, 'Platform')).toBeVisible()
+  }
   await settled(page)
 }
 
