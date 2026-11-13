@@ -13,7 +13,8 @@ describe('update offer', () => {
     const load = vi.fn()
     setUpdateLoader(load)
     expect(load).toHaveBeenCalledTimes(1)
-    expect(updateOffer()?.apply).toBe(apply)
+    updateOffer()?.apply()
+    expect(apply).toHaveBeenCalledTimes(1)
   })
 
   it('loads nothing when no offer is waiting', () => {
