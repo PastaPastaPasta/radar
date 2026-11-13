@@ -18,7 +18,7 @@ export interface SourceModeState {
   fromLink: boolean
 }
 
-function readRemembered(): SourceMode {
+function readStored(): SourceMode {
   try {
     return globalThis.localStorage?.getItem(SOURCE_MODE_KEY) === DECENTRALIZED_PARAM
       ? 'decentralized'
@@ -35,12 +35,28 @@ function readLink(): boolean {
 
 const listeners = new Set<() => void>()
 let link: boolean | undefined
+/** The one copy of the remembered choice: the gate and the React snapshot both read it. */
+let remembered: SourceMode | undefined
 let snapshot: SourceModeState | undefined
+let watchingStorage = false
+
+function onStorage(e: StorageEvent): void {
+  if (e.key !== null && e.key !== SOURCE_MODE_KEY) return
+  const before = getSourceModeState()
+  remembered = readStored()
+  emitIfChanged(before)
+}
 
 /** A stable object until the mode changes, for `useSyncExternalStore`. */
 export function getSourceModeState(): SourceModeState {
   link ??= readLink()
-  const remembered = readRemembered()
+  if (remembered === undefined) {
+    remembered = readStored()
+    if (!watchingStorage) {
+      watchingStorage = true
+      globalThis.addEventListener?.('storage', onStorage)
+    }
+  }
   const mode: SourceMode = link || remembered === 'decentralized' ? 'decentralized' : 'all'
   if (snapshot?.mode !== mode || snapshot.remembered !== remembered || snapshot.fromLink !== link) {
     snapshot = { mode, remembered, fromLink: link }
@@ -63,8 +79,9 @@ export function writeSourceMode(mode: SourceMode): void {
     if (mode === 'decentralized') globalThis.localStorage?.setItem(SOURCE_MODE_KEY, mode)
     else globalThis.localStorage?.removeItem(SOURCE_MODE_KEY)
   } catch {
-    // storage unavailable: the choice cannot be kept, and the link form still works
+    // storage unavailable: the choice holds for this tab only, and the link form still works
   }
+  remembered = mode
   emitIfChanged(before)
 }
 

@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import type * as ClientModule from '@/data/core/client'
 import { coreLive } from '@/data/core/live'
-import { SOURCE_MODE_KEY } from '@/lib/source-mode'
+import { SOURCE_MODE_KEY, writeSourceMode } from '@/lib/source-mode'
 import { server } from '@/test/server'
 
 vi.mock('@/data/core/client', async (original) => {
@@ -49,6 +49,7 @@ beforeEach(() => {
 afterEach(() => {
   server.events.removeAllListeners()
   localStorage.clear()
+  writeSourceMode('all')
   vi.restoreAllMocks()
 })
 
@@ -91,7 +92,7 @@ describe('Decentralized only mode: the switch @X-05 @X-09 @PE-28', () => {
   })
 
   it('is on when remembered, with nothing in the address', async () => {
-    localStorage.setItem(SOURCE_MODE_KEY, 'decentralized')
+    writeSourceMode('decentralized')
     const requests = hostedRequests()
     const history = renderAt('/rich-list')
     await page('/rich-list')

@@ -8,14 +8,19 @@ import {
   writeSourceMode,
 } from './source-mode'
 
-beforeEach(() => {
+const reset = () => {
   localStorage.clear()
+  window.dispatchEvent(new StorageEvent('storage', { key: null }))
   setSourceModeFromLink(undefined)
-})
-afterEach(() => {
-  localStorage.clear()
-  setSourceModeFromLink(undefined)
-})
+}
+beforeEach(reset)
+afterEach(reset)
+
+const otherTab = (value: string | null) => {
+  if (value === null) localStorage.removeItem(SOURCE_MODE_KEY)
+  else localStorage.setItem(SOURCE_MODE_KEY, value)
+  window.dispatchEvent(new StorageEvent('storage', { key: SOURCE_MODE_KEY, newValue: value }))
+}
 
 describe('the Decentralized only setting @X-05 @X-09', () => {
   it('is off until chosen', () => {
@@ -38,8 +43,33 @@ describe('the Decentralized only setting @X-05 @X-09', () => {
   })
 
   it('reads any stored value other than "decentralized" as all sources', () => {
-    localStorage.setItem(SOURCE_MODE_KEY, 'nonsense')
+    otherTab('nonsense')
     expect(decentralizedOnly()).toBe(false)
+  })
+
+  it('follows a change another tab makes: the gate and the snapshot move together, with one notification', () => {
+    const cb = vi.fn()
+    const off = subscribeSourceMode(cb)
+    otherTab('decentralized')
+    expect(decentralizedOnly()).toBe(true)
+    expect(getSourceModeState().remembered).toBe('decentralized')
+    expect(cb).toHaveBeenCalledTimes(1)
+    otherTab('decentralized')
+    expect(cb).toHaveBeenCalledTimes(1)
+    otherTab(null)
+    expect(decentralizedOnly()).toBe(false)
+    expect(cb).toHaveBeenCalledTimes(2)
+    off()
+  })
+
+  it('ignores storage events for other keys', () => {
+    const cb = vi.fn()
+    const off = subscribeSourceMode(cb)
+    localStorage.setItem(SOURCE_MODE_KEY, 'decentralized')
+    window.dispatchEvent(new StorageEvent('storage', { key: 'radar.unit', newValue: 'USD' }))
+    expect(decentralizedOnly()).toBe(false)
+    expect(cb).not.toHaveBeenCalled()
+    off()
   })
 
   it('tells subscribers once per change, and not when nothing changed', () => {
