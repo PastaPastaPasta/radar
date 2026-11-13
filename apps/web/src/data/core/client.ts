@@ -26,6 +26,7 @@ import { poolOfCoinbase } from '@/lib/core/pools'
 import { merkleRootOf, meetsProofOfWork, txidOfBytes } from '@/lib/core/verify'
 import { NO_HEIGHT } from './convert'
 import { coreDecoder, type createCoreDecoder } from './decode'
+import { masternodeList } from './mn-list'
 import type {
   BlockRef,
   BlockRow,
@@ -1076,15 +1077,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       return dapi(data, { node: nodeUrl.replace(/^https?:\/\//, ''), height: data.height })
     },
 
-    masternodeList() {
-      return Promise.reject(
-        new SourceError({
-          source: 'dapi',
-          kind: 'unavailable',
-          message: 'The masternode list stream is not wired up yet',
-        }),
-      )
-    },
+    masternodeList,
 
     observeTip(net: NetworkId, tip: { height: number; hash: string; time: number }): void {
       rememberTip(net, tip)
