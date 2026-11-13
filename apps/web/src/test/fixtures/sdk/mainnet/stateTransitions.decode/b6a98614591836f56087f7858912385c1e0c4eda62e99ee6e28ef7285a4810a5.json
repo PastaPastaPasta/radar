@@ -1,0 +1,52 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgFKremXGDfMaB1ln5TKJ6PKusCb79cx9K8UPfh4wxyXmwEAAQABt2YrPAPtuprnBwSaAFKYYR5ssVvB6DcpLGdIJZIfFFEGB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAAEBRFhdmF0YXJGaW5nZXJwcmludAoIACEpEFBUAQAKYXZhdGFySGFzaAxzFUCqKaVFSDSLOfOworDjTeTygaLX9Y6o0fC+XLDM7wlhdmF0YXJVcmwSXmh0dHBzOi8vZHJpdmUudXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9leHBvcnQ9dmlldyZpZD0xYjJOajBQUHVfUFh4T192TThlemVJYll3RUFKODFNbXILZGlzcGxheU5hbWUSE0ZyYW5jZXNjbyBHaWFtYnV6emkNcHVibGljTWVzc2FnZRIJY29udGFkaW5vAAFBILVzFi4but1zwxD/3r9zDkTP88g+PnQomxV91MitgSHjHjutL5QDnaDVIYUfNi7skFqUStbBEbmn/QZqRw2cF6o="
+  },
+  "recordedAt": "2026-11-13T13:05:36.591Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Replace])",
+      "typeNumber": 1,
+      "ownerId": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx",
+      "identityContractNonce": {
+        "$bigint": "6"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "ILVzFi4but1zwxD/3r9zDkTP88g+PnQomxV91MitgSHjHjutL5QDnaDVIYUfNi7skFqUStbBEbmn/QZqRw2cF6o="
+      },
+      "hash": "6963a9535dbd3d47229bbe419dfc2e3011dc786d958f72a4b7beee3f24fbe097",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "replace",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "1",
+            "$id": "DLuy7ESNuze3JY2BuX6dBX5FnLV537HRU3NtktKFq2wJ",
+            "$identityContractNonce": 6,
+            "$type": "profile",
+            "$dataContractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "$tokenPaymentInfo": null,
+            "$revision": 4,
+            "avatarFingerprint": "ACEpEFBUAQA=",
+            "avatarHash": "cxVAqimlRUg0iznzsKKw403k8oGi1/WOqNHwvlywzO8=",
+            "avatarUrl": "https://drive.usercontent.google.com/download?export=view&id=1b2Nj0PPu_PXxO_vM8ezeIbYwEAJ81Mmr",
+            "displayName": "Francesco Giambuzzi",
+            "publicMessage": "contadino"
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "ILVzFi4but1zwxD/3r9zDkTP88g+PnQomxV91MitgSHjHjutL5QDnaDVIYUfNi7skFqUStbBEbmn/QZqRw2cF6o="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.14303800000016054
+  }
+}

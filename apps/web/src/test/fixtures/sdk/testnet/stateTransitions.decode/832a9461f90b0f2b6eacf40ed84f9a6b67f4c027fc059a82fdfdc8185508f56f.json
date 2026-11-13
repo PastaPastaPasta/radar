@@ -1,0 +1,51 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgAC7azbjOx1RT0nvMVLypOidAh+FmMYUQCehpz+Z12oEQEBAAIQpGC/oA5mi0L2JE17zoC4z0tB4uj97fyzLweuFEQ6mPsMdgRwYWdlHRUXgbh1w4kXbkdAOhmILXItRDnnPxQmsINTaqyYuc4AAAMEBHNsdWcSDC9ubC9mYXN0cGFzcwlzdG9yYWdlSWQSK1dDMVBQMmE1Tk0tY1NuWWlSODFGMnB6R3pUbmVrTHVoUVRQSkpRQTczcU0Pc3RvcmFnZVByb3ZpZGVyEgdhcndlYXZlBXRpdGxlEjlNYWFrIGdlYnJ1aWsgdmFuIGRlIHNuZWxoZWlkIHZhbiBEYXNoIG1ldCBGYXN0UGFzcyB8IERhc2gAAUEf2sbqME7OPiqWvRMB5fb0g7u62nA+LVyf/I+ODULrrQwqxdeuP80/M7cgNdDvPTeihK+QKU3pSYzSaX9CDBSGDg=="
+  },
+  "recordedAt": "2026-11-13T13:05:38.673Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Replace])",
+      "typeNumber": 1,
+      "ownerId": "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t",
+      "identityContractNonce": {
+        "$bigint": "3190"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "H9rG6jBOzj4qlr0TAeX29IO7utpwPi1cn/yPjg1C660MKsXXrj/NPzO3IDXQ7z03ooSvkClN6UmM0ml/QgwUhg4="
+      },
+      "hash": "1db15201c79703e889bb1c17b254138d5bb1f48a351cc31bbab140e180524a53",
+      "body": {
+        "$formatVersion": "0",
+        "ownerId": "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t",
+        "transitions": [
+          {
+            "$action": "replace",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "2",
+            "$id": "27xuC3JSFMmoNc1LZqdeXXTL8Zv71yHtfR1QcipxdYcX",
+            "$identityContractNonce": 3190,
+            "$type": "page",
+            "$dataContractId": "2xXUfTjzdZe8dhWw6LaCDbNZDc26k7oX5hPQZ4EhekGu",
+            "$tokenPaymentInfo": null,
+            "$actionFeeAgreement": null,
+            "$revision": 3,
+            "slug": "/nl/fastpass",
+            "storageId": "WC1PP2a5NM-cSnYiR81F2pzGzTnekLuhQTPJJQA73qM",
+            "storageProvider": "arweave",
+            "title": "Maak gebruik van de snelheid van Dash met FastPass | Dash"
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "H9rG6jBOzj4qlr0TAeX29IO7utpwPi1cn/yPjg1C660MKsXXrj/NPzO3IDXQ7z03ooSvkClN6UmM0ml/QgwUhg4="
+      }
+    },
+    "proved": false,
+    "tookMs": 4.782221999999933
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "DgABABt6U71IWbdo8cD4KVxD4Lz7vgk9A/zuaygAAAEAAAEAGXapFFM0/D1hOA/6exN8UUumaWknc+XDiKwAAQBBH/JjJ+oNJAdtC1pHXUNOM53OQ/SDxJ2fQIjOcgo+ypAdBf78mdaE80fT0MRB8HzdIIPmLh/znCBeFbN3bI3LImM="
+  },
+  "recordedAt": "2026-11-13T13:05:36.568Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "AddressCreditWithdrawal",
+      "typeNumber": 14,
+      "userFeeIncrease": 0,
+      "hash": "6132d9a0686a8e4d4806776bf17d22a137b639be436b3ae552687fe570325db9",
+      "body": {
+        "$formatVersion": "0",
+        "inputs": [
+          {
+            "address": "001b7a53bd4859b768f1c0f8295c43e0bcfbbe093d",
+            "nonce": 3,
+            "amount": 4000000000
+          }
+        ],
+        "output": null,
+        "feeStrategy": [
+          {
+            "$type": "deductFromInput",
+            "index": 0
+          }
+        ],
+        "coreFeePerByte": 1,
+        "pooling": "never",
+        "outputScript": "dqkUUzT8PWE4D/p7E3xRS6ZpaSdz5cOIrA==",
+        "userFeeIncrease": 0,
+        "inputWitnesses": [
+          {
+            "$type": "p2pkh",
+            "signature": "H/JjJ+oNJAdtC1pHXUNOM53OQ/SDxJ2fQIjOcgo+ypAdBf78mdaE80fT0MRB8HzdIIPmLh/znCBeFbN3bI3LImM="
+          }
+        ]
+      }
+    },
+    "proved": false,
+    "tookMs": 0.42841499999940424
+  }
+}

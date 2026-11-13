@@ -1,0 +1,38 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "BQEoXWrDWFfLc7t5UqUoh9x6/M3gBDo0S5c+x2Ia4C8qT/0AAABzYUKctQEAACkAAUEfgUWsMo8lxo6galM1VQHH6a5fT9E9C8jLcBLf7KtP0YUppIKgh3NLBRwLQyb1kvSOt+AMRkJQH6DLZ1YtbKr54w=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.555Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "IdentityCreditWithdrawal",
+      "typeNumber": 6,
+      "ownerId": "3iZvjU5pqRUb3Wmb652mAt8AumK7vbVThknxhVc4extn",
+      "identityNonce": {
+        "$bigint": "41"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "H4FFrDKPJcaOoGpTNVUBx+muX0/RPQvIy3AS3+yrT9GFKaSCoIdzSwUcC0Mm9ZL0jrfgDEZCUB+gy2dWLWyq+eM="
+      },
+      "hash": "27845bc7054a7aa6f107c57035444278da06df14077d1bf5f47005ce56b378c7",
+      "body": {
+        "$formatVersion": "1",
+        "identityId": "3iZvjU5pqRUb3Wmb652mAt8AumK7vbVThknxhVc4extn",
+        "amount": 495552994485,
+        "coreFeePerByte": 1,
+        "pooling": "never",
+        "outputScript": null,
+        "nonce": 41,
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "H4FFrDKPJcaOoGpTNVUBx+muX0/RPQvIy3AS3+yrT9GFKaSCoIdzSwUcC0Mm9ZL0jrfgDEZCUB+gy2dWLWyq+eM="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.7147729999996955
+  }
+}

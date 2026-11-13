@@ -1,0 +1,102 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "where": [["records.identity", "in", ["62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx"]]],
+    "orderBy": [["records.identity", "asc"]],
+    "limit": 100
+  },
+  "recordedAt": "2026-11-13T13:45:26.463Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "pu19GpCPZnenu6qSkgaUSdrbvmHdv8ArBmvCX6oCvnm",
+        "ownerId": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1771686765928,
+        "updatedAt": 1771686765928,
+        "transferredAt": 1771686765928,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "KemetAgriculture",
+          "normalizedLabel": "kemetagr1cu1ture",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "9GGvnwESYP1tAwZRoFyxCzRkBTZv7noPChQhRRVQER53",
+        "ownerId": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1771686624423,
+        "updatedAt": 1771686624423,
+        "transferredAt": 1771686624423,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "KemetAgriculture9",
+          "normalizedLabel": "kemetagr1cu1ture9",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "62WymLZPfSkk1w9dmrJXDcgy4haGTo1i45GFFtENvJMx"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 470687,
+      "coreChainLockedHeight": 2571624,
+      "epoch": 88,
+      "timeMs": 1794577364778,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAByPjN+/5pKB548HBTVZCocGa4o4oXVPcUw="
+      },
+      "signature": {
+        "$u8": "tuBm3z1pvdlJ/RuqZ4u27xnYG4kk9VNznoozzkU1pivmrDD72jp1+H/rp0EjGXIpFhcIqc8K3YgkvA+c0of9DtB942hMLC9fnYlH4Goid5y2DmaGw6dvze3W7GF9mX/y"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "UxWsSpj8NuEfDS5C6UdYpaDF5+Sk5WxmULu847afbgQ="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 965.4890880000003
+  }
+}

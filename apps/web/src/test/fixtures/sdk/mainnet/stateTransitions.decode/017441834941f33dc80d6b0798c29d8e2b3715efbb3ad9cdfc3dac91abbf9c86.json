@@ -1,0 +1,48 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgEqnALll+8izOiA1E4+zjyNGvY6bAxxYquPrjbmjB93+wEBAQAACABrBIDMUdc69TASV+H4yHZQ3ZYzMqG4/Cb6mZccWMwQ/bp0mSJxQrO4yUxeZqC8ehwKhu0Ed0p1YbrHP+EA3aVsAAD8stBeAAEuTWludGluZyBmb3IgV2VlayAjMSBvZiBTYW5zYmFuayBCb290c3RyYXAgMjAyNQABQSCJUlZ6SiHX+Sg8Wr558PFcasNYopmlXu7j72kHKzXvxS3Ak+ORNLgSrdLdwljts6MwEGNxh42ZqBAS+FLtDmJF"
+  },
+  "recordedAt": "2026-11-13T13:05:36.588Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([TokenMint])",
+      "typeNumber": 1,
+      "ownerId": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE",
+      "identityContractNonce": {
+        "$bigint": "8"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "IIlSVnpKIdf5KDxavnnw8Vxqw1iimaVe7uPvaQcrNe/FLcCT45E0uBKt0t3CWO2zozAQY3GHjZmoEBL4Uu0OYkU="
+      },
+      "hash": "71be6d6681760930021e06a14da924ae78ffea315303fc38985794824253a1e2",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE",
+        "transitions": [
+          {
+            "$transition": "token",
+            "$action": "mint",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "0",
+            "$identity-contract-nonce": 8,
+            "$tokenContractPosition": 0,
+            "$dataContractId": "8CkcAPokwFdxEu2tUu2VdLTjgK3eeR1wUGJcxhjsWaDz",
+            "$tokenId": "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+            "issuedToIdentityId": null,
+            "amount": 3000000000,
+            "publicNote": "Minting for Week #1 of Sansbank Bootstrap 2025"
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "IIlSVnpKIdf5KDxavnnw8Vxqw1iimaVe7uPvaQcrNe/FLcCT45E0uBKt0t3CWO2zozAQY3GHjZmoEBL4Uu0OYkU="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.2680529999997816
+  }
+}

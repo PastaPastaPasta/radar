@@ -13,41 +13,629 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "Учасників: {0}"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} з {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 шістнадцяткові символи"
+
+msgid "A batch type shows batches only."
+msgstr "Тип пакета показує лише пакети."
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "Вузол повідомляє, чи виконано перехід, а в разі збою — його помилку."
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Блок Platform задається висотою або хешем із 64 шістнадцяткових символів."
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "ProTxHash складається з 64 шістнадцяткових символів."
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "Хеш переходу стану складається з 64 шістнадцяткових символів."
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "Перехід стану задається хешем із 64 шістнадцяткових символів."
+
+msgid "Abstain"
+msgstr "Утриматися"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "Дія {0}"
+
+msgid "Actions"
+msgstr "Дії"
+
+msgid "Address"
+msgstr "Адреса"
+
+msgid "Addresses that pay"
+msgstr "Адреси-платники"
+
+msgid "Addresses that receive"
+msgstr "Адреси-отримувачі"
+
+msgid "All"
+msgstr "Усі"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "Amount across the pool"
+msgstr "Сума, що проходить через пул"
+
+msgid "Anchor"
+msgstr "Якір"
+
+msgid "App hash"
+msgstr "Хеш застосунку"
+
+msgid "App version"
+msgstr "Версія застосунку"
+
+msgid "Ascending. Switch to descending"
+msgstr "За зростанням. Перемкнути на спадання"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "Вузол опитується про результат. Це може тривати кілька секунд."
+
+msgid "Authentication"
+msgstr "Автентифікація"
+
+msgid "Batch type"
+msgstr "Тип пакета"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "Пакет: {0}"
+
+msgid "BIP13 script hash"
+msgstr "Хеш скрипту BIP13"
+
 msgid "Block"
 msgstr "Блок"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Block height"
+msgstr "Висота блока"
+
+msgid "Block height or hash"
+msgstr "Висота або хеш блока"
+
+msgid "Block metadata"
+msgstr "Метадані блока"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "Сторінкам блоків потрібен індекс Platform Explorer"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "Сторінкам блоків потрібен індекс Platform Explorer, а режим «Лише децентралізовано» його вимикає."
+
+msgid "Block version"
+msgstr "Версія блока"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "Перевірити знову"
+
+msgid "Choice"
+msgstr "Вибір"
+
+msgid "Clear"
+msgstr "Очистити"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract as sent"
+msgstr "Контракт у тому вигляді, як надіслано"
+
+msgid "Contract nonce"
+msgstr "Nonce контракту"
+
+msgid "Core block hash"
+msgstr "Хеш блока Core"
+
+msgid "Core fee per byte"
+msgstr "Комісія Core за байт"
+
+msgid "Created at Core block"
+msgstr "Створено в блоці Core"
+
+msgid "Critical"
+msgstr "Критичний"
+
+msgid "Date"
+msgstr "Дата"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "Дата: {0} – {1}"
+
+msgid "Decryption"
+msgstr "Розшифрування"
+
+msgid "deduct from input {index}"
+msgstr "відняти від входу {index}"
+
+msgid "Denomination"
+msgstr "Номінал"
+
+msgid "Descending. Switch to ascending"
+msgstr "За спаданням. Перемкнути на зростання"
+
+msgid "Details"
+msgstr "Подробиці"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Document types"
+msgstr "Типи документів"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "Шифрування"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "Введіть висоту блока або хеш із 64 шістнадцяткових символів."
 
 msgid "Epoch"
 msgstr "Епоха"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "Епоха: {0}"
+
+msgid "Error"
+msgstr "Помилка"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "Кожен блок Platform з епохою, пропонувачем, переходами та часом."
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "Кожен перехід стану з типом, статусом, блоком, газом і власником."
+
+msgid "Evonode"
+msgstr "Евонода"
+
+msgid "Executed"
+msgstr "Виконано"
+
 msgid "Failed"
 msgstr "Помилка"
+
+msgid "Failed only"
+msgstr "Лише невдалі"
+
+msgid "Fee multiplier"
+msgstr "Множник комісії"
+
+msgid "Fee paid from"
+msgstr "Комісія списується з"
+
+msgid "Fields as sent"
+msgstr "Поля у тому вигляді, як надіслано"
+
+msgid "Filters"
+msgstr "Фільтри"
+
+msgid "Format"
+msgstr "Формат"
+
+msgid "From"
+msgstr "Від"
+
+msgid "Funded by"
+msgstr "Джерело коштів"
 
 msgid "Gas"
 msgstr "Газ"
 
+msgid "Gas used"
+msgstr "Використано газу"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Газ: {0}"
+
 msgid "Hash"
 msgstr "Хеш"
+
+msgid "Health"
+msgstr "Стан"
+
+msgid "Height"
+msgstr "Висота"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "Висота: {0}"
+
+msgid "High"
+msgstr "Високий"
+
+msgid "Identity"
+msgstr "Ідентичність"
+
+msgid "Identity ID"
+msgstr "ID ідентичності"
+
+msgid "Identity nonce"
+msgstr "Nonce ідентичності"
+
+msgid "Index"
+msgstr "Індекс"
+
+msgid "Inputs"
+msgstr "Входи"
+
+msgid "InstantSend lock"
+msgstr "Блокування InstantSend"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "Можливо, він новіший за індекс, або висоту чи хеш введено з помилкою."
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Keys"
+msgstr "Ключі"
+
+msgid "Keys added"
+msgstr "Додані ключі"
+
+msgid "Keys added by this update"
+msgstr "Ключі, додані цим оновленням"
+
+msgid "Keys disabled"
+msgstr "Вимкнені ключі"
+
+msgid "Keys of the new identity"
+msgstr "Ключі нової ідентичності"
+
+msgid "Keywords"
+msgstr "Ключові слова"
+
+msgid "Lock"
+msgstr "Заблокувати"
+
+msgid "Locked to Core block"
+msgstr "Прив’язаний до блока Core"
+
+msgid "Look up"
+msgstr "Знайти"
+
+msgid "Look up a block by its height"
+msgstr "Знайти блок за висотою"
+
+msgid "Master"
+msgstr "Майстер"
+
+msgid "Medium"
+msgstr "Середній"
+
+msgid "Member"
+msgstr "Учасник"
+
+msgid "Mined in Core block"
+msgstr "Видобутий у блоці Core"
+
+msgid "Newest first"
+msgstr "Спочатку нові"
+
+msgid "Next block"
+msgstr "Наступний блок"
+
+msgid "No"
+msgstr "Ні"
+
+msgid "No block matches these filters"
+msgstr "Жоден блок не відповідає цим фільтрам"
+
+msgid "No result yet"
+msgstr "Результату ще немає"
+
+msgid "No state transition matches these filters"
+msgstr "Жоден перехід стану не відповідає цим фільтрам"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Немає в індексі Platform Explorer"
+
+msgid "Not valid"
+msgstr "Недійсно"
+
+msgid "Note"
+msgstr "Примітка"
+
+msgid "Oldest first"
+msgstr "Спочатку старі"
+
+msgid "Only an index knows which block holds a height."
+msgstr "Лише індекс знає, який блок має певну висоту."
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open a state transition by its hash"
+msgstr "Відкрити перехід стану за хешем"
+
+msgid "Open block"
+msgstr "Відкрити блок"
+
+msgid "Order"
+msgstr "Порядок"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "вихід {0}"
+
+msgid "Output address"
+msgstr "Адреса виводу"
+
+msgid "Outputs"
+msgstr "Виходи"
 
 msgid "Owner"
 msgstr "Власник"
 
+msgid "Owner balance after"
+msgstr "Баланс власника після"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Власник: {0}…"
+
+msgid "Pays out to"
+msgstr "Виплата на"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адреса Platform"
+
+msgid "Platform block"
+msgstr "Блок Platform"
+
 msgid "Platform blocks"
 msgstr "Блоки Platform"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer не індексує devnet"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "У Platform Explorer немає блока {0}"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "У Platform Explorer ще немає блоків"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "У Platform Explorer немає байтів цього переходу."
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "У Platform Explorer немає кворуму для цього блока"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "У Platform Explorer немає запису про цей перехід. Можливо, він новіший за індекс або ніколи не надсилався. Відповідь вузла нижче."
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "У Platform Explorer ще немає переходів стану"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer не зберігає байти цього переходу, як і в невиконаного, тому його поля тут прочитати неможливо."
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer не перелічує учасників"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform не веде списку блоків чи переходів; для цього потрібен індекс Platform Explorer"
 
 msgid "Platform state transitions"
 msgstr "Переходи стану Platform"
 
+msgid "Poll"
+msgstr "Голосування"
+
+msgid "Pooling"
+msgstr "Пулінг"
+
+msgid "Position in block"
+msgstr "Позиція в блоці"
+
+msgid "Previous block"
+msgstr "Попередній блок"
+
+msgid "Price"
+msgstr "Ціна"
+
 msgid "Proposer"
 msgstr "Пропонувач"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "Пропонувач: {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "ProTxHash евоноди"
+
+msgid "Public key"
+msgstr "Відкритий ключ"
+
+msgid "Purpose"
+msgstr "Призначення"
+
+msgid "Quorum"
+msgstr "Кворум"
+
+msgid "Quorum hash"
+msgstr "Хеш кворуму"
+
+msgid "Quorum members"
+msgstr "Учасники кворуму"
+
+msgid "Quorum that signed this block"
+msgstr "Кворум, що підписав цей блок"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar не зміг прочитати поля цього переходу з його байтів. Вихідні дані нижче."
+
+msgid "Raw data"
+msgstr "Необроблені дані"
+
+msgid "Read-only"
+msgstr "Лише читання"
+
+msgid "Recipient"
+msgstr "Отримувач"
+
+msgid "reduce output {index}"
+msgstr "зменшити вихід {index}"
+
+msgid "Result from a node"
+msgstr "Результат від вузла"
+
+msgid "Revision"
+msgstr "Ревізія"
+
+msgid "SDK action"
+msgstr "Дія SDK"
+
+msgid "Search Radar"
+msgstr "Пошук у Radar"
+
+msgid "Security level"
+msgstr "Рівень безпеки"
+
+msgid "Sent again in later blocks"
+msgstr "Надіслано повторно в пізніших блоках"
+
+msgid "Sent by"
+msgstr "Відправник"
+
+msgid "Service"
+msgstr "Служба"
+
+msgid "Shielded"
+msgstr "Захищена"
+
+msgid "Shielded actions"
+msgstr "Екрановані дії"
+
+msgid "Signature"
+msgstr "Підпис"
+
+msgid "Signed with key"
+msgstr "Підписано ключем"
+
+msgid "Sort by"
+msgstr "Сортувати за"
+
+msgid "State transition"
+msgstr "Перехід стану"
+
+msgid "State transition as JSON"
+msgstr "Перехід стану у вигляді JSON"
+
+msgid "State transitions"
+msgstr "Переходи стану"
+
+msgid "State transitions in this block"
+msgstr "Переходи стану в цьому блоці"
 
 msgid "Status"
 msgstr "Статус"
 
+msgid "Succeeded"
+msgstr "Успішні"
+
+msgid "Succeeded only"
+msgstr "Лише успішні"
+
 msgid "Success"
 msgstr "Успішно"
 
+msgid "System"
+msgstr "Система"
+
+msgid "That isn't a block height or hash."
+msgstr "Це не висота блока й не хеш."
+
+msgid "That isn't a state transition hash."
+msgstr "Це не хеш переходу стану."
+
+msgid "That isn’t an identity ID."
+msgstr "Це не ID ідентичності."
+
+msgid "The identity's withdrawal address"
+msgstr "Адреса виведення ідентичності"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "Індексовані відомості про перехід потребують індексу Platform Explorer"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "Вузол і Platform Explorer розходяться щодо цього переходу. Кожен показаний зі своїм джерелом."
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "Вузол не повідомив результату за кілька секунд: цей перехід ще не виконано або жоден вузол про нього не знає."
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "Вузол не повідомив результату за кілька секунд. Вузли зберігають лише недавні результати, тому для старого переходу результату може не бути."
+
+msgid "The same transition seen again in later blocks"
+msgstr "Той самий перехід, знову помічений у пізніших блоках"
+
+msgid "This block holds no state transitions"
+msgstr "У цьому блоці немає переходів стану"
+
 msgid "Time"
 msgstr "Час"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Tokens"
+msgstr "Токени"
+
+msgid "Transfer"
+msgstr "Переказ"
 
 msgid "Transition"
 msgstr "Перехід"
@@ -55,5 +643,37 @@ msgstr "Перехід"
 msgid "Transitions"
 msgstr "Переходи"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "Переходи: {0}"
+
 msgid "Type"
 msgstr "Тип"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "Тип: {0}"
+
+msgid "Valid"
+msgstr "Дійсно"
+
+msgid "Valid members"
+msgstr "Дійсні учасники"
+
+msgid "Version"
+msgstr "Версія"
+
+msgid "Voter identity"
+msgstr "Ідентичність виборця"
+
+msgid "Voting"
+msgstr "Голосування"
+
+msgid "What a node can still answer"
+msgstr "На що вузол усе ще може відповісти"
+
+msgid "What it does"
+msgstr "Що він робить"
+
+msgid "Yes"
+msgstr "Так"

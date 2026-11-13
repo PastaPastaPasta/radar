@@ -13,41 +13,629 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "{0} members"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} of {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 hexadecimal characters"
+
+msgid "A batch type shows batches only."
+msgstr "A batch type shows batches only."
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "A node reports whether a transition executed, and its error if it failed."
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "A ProTxHash is 64 hexadecimal characters."
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "A state transition hash is 64 hexadecimal characters."
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "A state transition is named by a hash of 64 hexadecimal characters."
+
+msgid "Abstain"
+msgstr "Abstain"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "Action {0}"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "Addresses that pay"
+msgstr "Addresses that pay"
+
+msgid "Addresses that receive"
+msgstr "Addresses that receive"
+
+msgid "All"
+msgstr "All"
+
+msgid "Amount"
+msgstr "Amount"
+
+msgid "Amount across the pool"
+msgstr "Amount across the pool"
+
+msgid "Anchor"
+msgstr "Anchor"
+
+msgid "App hash"
+msgstr "App hash"
+
+msgid "App version"
+msgstr "App version"
+
+msgid "Ascending. Switch to descending"
+msgstr "Ascending. Switch to descending"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "Asking a node for the result. This can take a few seconds."
+
+msgid "Authentication"
+msgstr "Authentication"
+
+msgid "Batch type"
+msgstr "Batch type"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "Batch: {0}"
+
+msgid "BIP13 script hash"
+msgstr "BIP13 script hash"
+
 msgid "Block"
 msgstr "Block"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "Block {0}"
+
+msgid "Block height"
+msgstr "Block height"
+
+msgid "Block height or hash"
+msgstr "Block height or hash"
+
+msgid "Block metadata"
+msgstr "Block metadata"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "Block pages need Platform Explorer's index"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+
+msgid "Block version"
+msgstr "Block version"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "Check again"
+
+msgid "Choice"
+msgstr "Choice"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Contract"
+msgstr "Contract"
+
+msgid "Contract as sent"
+msgstr "Contract as sent"
+
+msgid "Contract nonce"
+msgstr "Contract nonce"
+
+msgid "Core block hash"
+msgstr "Core block hash"
+
+msgid "Core fee per byte"
+msgstr "Core fee per byte"
+
+msgid "Created at Core block"
+msgstr "Created at Core block"
+
+msgid "Critical"
+msgstr "Critical"
+
+msgid "Date"
+msgstr "Date"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "Date: {0} – {1}"
+
+msgid "Decryption"
+msgstr "Decryption"
+
+msgid "deduct from input {index}"
+msgstr "deduct from input {index}"
+
+msgid "Denomination"
+msgstr "Denomination"
+
+msgid "Descending. Switch to ascending"
+msgstr "Descending. Switch to ascending"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Document type"
+msgstr "Document type"
+
+msgid "Document types"
+msgstr "Document types"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "Encryption"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "Enter a block height, or a hash of 64 hexadecimal characters."
 
 msgid "Epoch"
 msgstr "Epoch"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "Epoch: {0}"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "Every Platform block with its epoch, proposer, transitions and time."
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "Every state transition with its type, status, block, gas and owner."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Executed"
+msgstr "Executed"
+
 msgid "Failed"
 msgstr "Failed"
+
+msgid "Failed only"
+msgstr "Failed only"
+
+msgid "Fee multiplier"
+msgstr "Fee multiplier"
+
+msgid "Fee paid from"
+msgstr "Fee paid from"
+
+msgid "Fields as sent"
+msgstr "Fields as sent"
+
+msgid "Filters"
+msgstr "Filters"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "From"
+msgstr "From"
+
+msgid "Funded by"
+msgstr "Funded by"
 
 msgid "Gas"
 msgstr "Gas"
 
+msgid "Gas used"
+msgstr "Gas used"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Gas: {0}"
+
 msgid "Hash"
 msgstr "Hash"
+
+msgid "Health"
+msgstr "Health"
+
+msgid "Height"
+msgstr "Height"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "Height: {0}"
+
+msgid "High"
+msgstr "High"
+
+msgid "Identity"
+msgstr "Identity"
+
+msgid "Identity ID"
+msgstr "Identity ID"
+
+msgid "Identity nonce"
+msgstr "Identity nonce"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Inputs"
+msgstr "Inputs"
+
+msgid "InstantSend lock"
+msgstr "InstantSend lock"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "It may be newer than the index, or the height or hash may be mistyped."
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Keys"
+msgstr "Keys"
+
+msgid "Keys added"
+msgstr "Keys added"
+
+msgid "Keys added by this update"
+msgstr "Keys added by this update"
+
+msgid "Keys disabled"
+msgstr "Keys disabled"
+
+msgid "Keys of the new identity"
+msgstr "Keys of the new identity"
+
+msgid "Keywords"
+msgstr "Keywords"
+
+msgid "Lock"
+msgstr "Lock"
+
+msgid "Locked to Core block"
+msgstr "Locked to Core block"
+
+msgid "Look up"
+msgstr "Look up"
+
+msgid "Look up a block by its height"
+msgstr "Look up a block by its height"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Medium"
+msgstr "Medium"
+
+msgid "Member"
+msgstr "Member"
+
+msgid "Mined in Core block"
+msgstr "Mined in Core block"
+
+msgid "Newest first"
+msgstr "Newest first"
+
+msgid "Next block"
+msgstr "Next block"
+
+msgid "No"
+msgstr "No"
+
+msgid "No block matches these filters"
+msgstr "No block matches these filters"
+
+msgid "No result yet"
+msgstr "No result yet"
+
+msgid "No state transition matches these filters"
+msgstr "No state transition matches these filters"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Not in Platform Explorer's index"
+
+msgid "Not valid"
+msgstr "Not valid"
+
+msgid "Note"
+msgstr "Note"
+
+msgid "Oldest first"
+msgstr "Oldest first"
+
+msgid "Only an index knows which block holds a height."
+msgstr "Only an index knows which block holds a height."
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Open a state transition by its hash"
+msgstr "Open a state transition by its hash"
+
+msgid "Open block"
+msgstr "Open block"
+
+msgid "Order"
+msgstr "Order"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "output {0}"
+
+msgid "Output address"
+msgstr "Output address"
+
+msgid "Outputs"
+msgstr "Outputs"
 
 msgid "Owner"
 msgstr "Owner"
 
+msgid "Owner balance after"
+msgstr "Owner balance after"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Owner: {0}…"
+
+msgid "Pays out to"
+msgstr "Pays out to"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform address"
+
+msgid "Platform block"
+msgstr "Platform block"
+
 msgid "Platform blocks"
 msgstr "Platform blocks"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer doesn't index devnets"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "Platform Explorer has no block {0}"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "Platform Explorer has no blocks yet"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "Platform Explorer has no bytes for this transition."
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "Platform Explorer has no quorum for this block"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "Platform Explorer has no state transitions yet"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer lists no members"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
 
 msgid "Platform state transitions"
 msgstr "Platform state transitions"
 
+msgid "Poll"
+msgstr "Poll"
+
+msgid "Pooling"
+msgstr "Pooling"
+
+msgid "Position in block"
+msgstr "Position in block"
+
+msgid "Previous block"
+msgstr "Previous block"
+
+msgid "Price"
+msgstr "Price"
+
 msgid "Proposer"
 msgstr "Proposer"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "Proposer: {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "ProTxHash of an evonode"
+
+msgid "Public key"
+msgstr "Public key"
+
+msgid "Purpose"
+msgstr "Purpose"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorum hash"
+msgstr "Quorum hash"
+
+msgid "Quorum members"
+msgstr "Quorum members"
+
+msgid "Quorum that signed this block"
+msgstr "Quorum that signed this block"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar could not read this transition's fields from its bytes. Its raw data is below."
+
+msgid "Raw data"
+msgstr "Raw data"
+
+msgid "Read-only"
+msgstr "Read-only"
+
+msgid "Recipient"
+msgstr "Recipient"
+
+msgid "reduce output {index}"
+msgstr "reduce output {index}"
+
+msgid "Result from a node"
+msgstr "Result from a node"
+
+msgid "Revision"
+msgstr "Revision"
+
+msgid "SDK action"
+msgstr "SDK action"
+
+msgid "Search Radar"
+msgstr "Search Radar"
+
+msgid "Security level"
+msgstr "Security level"
+
+msgid "Sent again in later blocks"
+msgstr "Sent again in later blocks"
+
+msgid "Sent by"
+msgstr "Sent by"
+
+msgid "Service"
+msgstr "Service"
+
+msgid "Shielded"
+msgstr "Shielded"
+
+msgid "Shielded actions"
+msgstr "Shielded actions"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Signed with key"
+msgstr "Signed with key"
+
+msgid "Sort by"
+msgstr "Sort by"
+
+msgid "State transition"
+msgstr "State transition"
+
+msgid "State transition as JSON"
+msgstr "State transition as JSON"
+
+msgid "State transitions"
+msgstr "State transitions"
+
+msgid "State transitions in this block"
+msgstr "State transitions in this block"
 
 msgid "Status"
 msgstr "Status"
 
+msgid "Succeeded"
+msgstr "Succeeded"
+
+msgid "Succeeded only"
+msgstr "Succeeded only"
+
 msgid "Success"
 msgstr "Success"
 
+msgid "System"
+msgstr "System"
+
+msgid "That isn't a block height or hash."
+msgstr "That isn't a block height or hash."
+
+msgid "That isn't a state transition hash."
+msgstr "That isn't a state transition hash."
+
+msgid "That isn’t an identity ID."
+msgstr "That isn’t an identity ID."
+
+msgid "The identity's withdrawal address"
+msgstr "The identity's withdrawal address"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "The indexed details of a transition need Platform Explorer's index"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+
+msgid "The same transition seen again in later blocks"
+msgstr "The same transition seen again in later blocks"
+
+msgid "This block holds no state transitions"
+msgstr "This block holds no state transitions"
+
 msgid "Time"
 msgstr "Time"
+
+msgid "To"
+msgstr "To"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Tokens"
+msgstr "Tokens"
+
+msgid "Transfer"
+msgstr "Transfer"
 
 msgid "Transition"
 msgstr "Transition"
@@ -55,5 +643,37 @@ msgstr "Transition"
 msgid "Transitions"
 msgstr "Transitions"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "Transitions: {0}"
+
 msgid "Type"
 msgstr "Type"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "Type: {0}"
+
+msgid "Valid"
+msgstr "Valid"
+
+msgid "Valid members"
+msgstr "Valid members"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Voter identity"
+msgstr "Voter identity"
+
+msgid "Voting"
+msgstr "Voting"
+
+msgid "What a node can still answer"
+msgstr "What a node can still answer"
+
+msgid "What it does"
+msgstr "What it does"
+
+msgid "Yes"
+msgstr "Yes"

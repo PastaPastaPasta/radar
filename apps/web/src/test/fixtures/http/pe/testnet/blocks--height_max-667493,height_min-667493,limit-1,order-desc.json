@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/blocks?height_min=667493&height_max=667493&limit=1&order=desc"
+  },
+  "recordedAt": "2026-11-13T13:04:03.959Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "header": {
+          "hash": "5134573BC60E35112FF79BFC53C808DD9C3DF784B9FEE59C3CA11E93E51E18AB",
+          "height": 667493,
+          "timestamp": "2026-11-10T15:13:59.688Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 1589147,
+          "validator": "8917BB546318F3410D1A7901C7B846A73446311B5164B45A03F0E613F208F234",
+          "totalGasUsed": 4168160,
+          "appHash": "F4CB98E4E987ED854A258830B23D7272F4A6C1829A76736DB6014A606EC7A434",
+          "quorumHash": "00000116043273AF2430DF374C9FD61F2E12F9ECB71F01A62182AA9DD20377BB"
+        },
+        "txs": ["DD60BC6D50AD5BDE2B4C843CF45B161812B3100DA0A5EDCAA36AF604B0418BBC"]
+      }
+    ],
+    "pagination": { "page": 1, "limit": 1, "total": 1 }
+  }
+}

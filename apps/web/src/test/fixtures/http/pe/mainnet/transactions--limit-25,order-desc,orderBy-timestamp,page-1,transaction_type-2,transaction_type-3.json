@@ -1,0 +1,618 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/transactions?order=desc&orderBy=timestamp&transaction_type=2&transaction_type=3&page=1&limit=25"
+  },
+  "recordedAt": "2026-11-13T13:46:25.537Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "hash": "BE54D68DC10FF8118838023D151424AA27E2E3E66059C2C2DFC62B9FA919BC0B",
+        "index": 0,
+        "blockHash": "00A189279778705F04A7C5488467E544FCD1EC6C5E6BBD04DA997D6718B2A732",
+        "blockHeight": 470669,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBnzN/swaal+C+0gj6oRCQIk6vkS8r/JYUn83MWbHHj60AAAAAKtxjvWJ7Q3AC2NU5T7Gaz5nys1KeB8q9+Vro56c0w0JhQcXEsvuoAdxbvngonqWmcVMzOwpx4vIEAAAAAAAAAIF9MGMQi0P6xrD7JjSZ8W+HHuC4hzuWTnPszt6TSRy2K+EUPCuRzbwWqejYXDazsxh/gGhVsd+XfFUk0xnyDlyWLWxK6dZ0C5iiOqkAChmBr+RjLRhidp9Wy6IowPa6Lc4DAAgAAZ8zf7MGmpfgvtII+qEQkCJOr5EvK/yWFJ/NzFmxx4+tAAAAAGtIMEUCIQD/rPWMzGfzVjtujXmVJhXSVGiU1eyF7LN0B05AkByzmwIgQBZI8HHhKkr0h6/U/teQAPZtZPW4j9dTpAviDgw3bXkBIQIQEbt2wcEQBwTRiSaXxQuuFTMANAahl2s6J0IX9bRIQf////8BsoMeAAAAAAACagAAAAAAJAEBsoMeAAAAAAAZdqkUxM7beMwBYh5kd4CEGpFi6pt163mIrADU7d1aJatD/lonV8iU9kbkd9w6O76RFR0mwUjaTN6v/gBBILG/1IZN8h4TUk99smVQ38RpcmHfxexriD2yfzAIroT8LDF5TkZ3I8Xk0qKpBKLBikjYRsyOiJ2WdlKJ6Lah+Uc=",
+        "timestamp": "2026-11-13T12:53:44.548Z",
+        "gasUsed": 8035340,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "FLBoSLEkmS8GcrqLHH4SGJzf7cVCpbDMNyegExsFjFvM", "aliases": [] },
+        "incoming": null,
+        "amount": "1999794000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "A11F85421FEAE352487CA056496ED3EB1EC98EFBBD6F33E07BDFEBF9D73404D9",
+        "index": 0,
+        "blockHash": "8FBB4F37764DDB4247AD91CCE040B034CE1CCCA7CABDEE332790E44F8CB8F3DD",
+        "blockHeight": 470645,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwADAAAAAAAAACECXXDWWXL70ORUaaxGjbP3F84scmvloL4CAkEesJcD3rRBIGybVp6Vh36Wqa+bp632OLonevLlo+3mZAHNOHH/5T3VFyjzYWWqD3S5ittK4T7DmUBOwF3UYxAlruev86T3JjcAAQAAAQAAIQJ1H8CwF6fydylVejusVzi1shqdw4vznEfsCC2jRDtnb0EfZz2upH/8CBT08O7jblfVBQnMUMT1+dncBUQk/uWRX4o0OOX8HUOR7pWZi5FoFu+k23BMdFR8RqvLQj+8768+cQACAAACAAAhAxHPR853kye/aOrH3/wobKhTbJPbKH7X1XG0WBud6YeLQR/9ZXzPt8T9eI5WTpi2YCFB7K1AC2gos+6FZxxbELY7O0J0Hz5+n1AiVT/mqVFz3xcBLcXnwaHDXIzznIYBsmiIAMYBAfh8NdcmshWDtuMp928GS9LG+TisKzJs5RxnIXO9pFpZAAAAALMln5wy4gpKdODdpvdHuvVCgYq9TIosmydVWCBhVJV/3bShrIlk1a8TGqEPLmQM6lXxT3X1/OXgEQAAAAAAAAC1JSyCCJ4ITbjBvilbQuXDSRUcJYe7j0jeS+HJvS2dgUtzs7b0l/WosLKguDPVhTUJhUON0kQAy/y+2SdeccKfDfpmigIr32hF+ptsyQ6PM9jF12CVWfj2DKCcKRGUE7fNAwAIAAH4fDXXJrIVg7bjKfdvBkvSxvk4rCsybOUcZyFzvaRaWQAAAABqRzBEAiB6EVvNlRrqOBkPQDsfGeeTbaCCinK83Wjrx3C+pF9YUwIgUgbBczhwfJFYF6lzaBPT30z6p9NylRqUYhIiKUeQyU0BIQNSHArSE7Egn359ibFaDuPuGD+JE4mc5P4X1eStvfUuk/////8BUqAHAAAAAAACagAAAAAAJAEBUqAHAAAAAAAZdqkUFBlWDCO7DhKVJvdKGMcKADZWwmaIrAAAQSBjE5v5dsuJN9gb7ZZEgS7ESh0SPOLwV/lOa8PeZHPgRU28Dq6haK8h2eoeg8uI/zTrGPakGOI1pN/jFqKI1Gje1O3dWiWrQ/5aJ1fIlPZG5HfcOju+kRUdJsFI2kzer/4=",
+        "timestamp": "2026-11-13T11:56:20.377Z",
+        "gasUsed": 105719040,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "FLBoSLEkmS8GcrqLHH4SGJzf7cVCpbDMNyegExsFjFvM", "aliases": [] },
+        "incoming": null,
+        "amount": "499794000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "3E0A9AB29C97DBC2DF13EA86A58793D37FF3E71D6F23DC73C6211632C4FA4542",
+        "index": 0,
+        "blockHash": "CD3CB4FA650668BB26D5C5DA7A024610BFFFCCBEC4BCBA4BC474A851F30BCA07",
+        "blockHeight": 470262,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAEAAAAAAAAACECCMwbf2hGtTeMyCHe5G6M3pL0TzyBdi0Wgu9Xx8GUumxBHwuzsC+BOfAFTTOenIooPnuwdSiw+sOQ+LESR2tlVVKwFYBs8tBL0V1bl125o8JEAwXQZ96aCf22ZLj92Tfben8AAQAAAgAAIQN7q0cC31ToQ4w6C8hyEV/eeCQ4aYhUczEQ2KLZURsXlEEgOZzoFqrZ/r11jHOGobGdMZkhd6yRMW1gXTLJzjf0XFFKzcIXIjq52ZRpeeHsZVmuythWKFD3Ax+2/KZcFU0bxwACAAABAAAhAw4Bca+kN2M/DWcOtDe2OuuiaxWW+lA0DOWRMTnlOiUnQSAmaZs2fAjFi3RNlBlMM3HniA1844ppftvz46Cb41Vn/16yZjRL27fHo0UnGEPWZCETlJ/5RS+Kld/SSroEVEW4AAMAAwEAACECmOJWE4z31v++WyaU9DDeeTAJcVwsxeemVM5nyyeN44ZBIMWs9xBi8Z3x2wzaK5KJhsE2skZsbT/Ww/Xz71eKzkHNS3D4EGeR0Q4VYc4baJP1cIV14y10BSmc8kgZA/3g/5QB/AAnO98gDhg6xkMSQanjDh3UTvs7O0Faary4K2nhzOnzSW/nXfIAAEEfG+9I3qv+YkiSmz+p/WoUmpsQoZ7czseUR5SRwdWEMEQOZQlvl/ruftQodFJLrL9MYX5BFItiAOXzS+XY96NaAvhI2OUcobb0dLNNElJtF4rkl3/Fp6E4NY8EHhkdA/F4",
+        "timestamp": "2026-11-12T20:35:59.713Z",
+        "gasUsed": 121326620,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "HiCY4V51B8ruaiBPWcfLmGpZreWp9hbtVzvWcCWiJbK5",
+          "aliases": [
+            {
+              "alias": "midasmulligan2.dash",
+              "status": "ok",
+              "timestamp": "2026-11-12T20:36:11.060Z",
+              "documentId": "HzZLBRysDWArdc1vFeAzi1uDnX5rKMRHC9VQwReagryP",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "1000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "A97A86984F078EEDFA76DF248841A2C8EA8019804041D1B418D3B4E5745C169F",
+        "index": 0,
+        "blockHash": "87E0CF3B2CE3AE17A6666C275E3ADC49AE47AC311DFBA7B6C8E31B30BE848115",
+        "blockHeight": 470114,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBb9RdOz5+2cLo5SIHpMaOMz5ENw93XWW6MketYmHoiZwBAAAAHBeMMqJLx9kVZK/NcmJeKy3bFbnpCJeclKqRrfsDDSWOUnyYu3aA9/ufK3fb6KtBxBYHSSb27jQMAAAAAAAAAIMKFla2ln4xNCPlOzZxfI75eMApZN1it8yZBRTMnhxZ5SoMJbuwGHizo20AQM5m9RBkzKl6BwCayI1y8++xDgb15Bg3Zt5Qz+9+U3Mm6gbvV7pFht5Pekops6dZf26s7vADAAgAAW/UXTs+ftnC6OUiB6TGjjM+RDcPd11lujJHrWJh6ImcAQAAAGtIMEUCIQC1vf6WX5mOrpMnsjqJ+3YkubsI5DR7c/CKKR44WhZ0wAIgfcsYHyNzb5z3JVfDVsu11VYuNo78UN6xmTkdFNuhGa0BIQKI63/SkPTDkfdK8OJ6Gm3Bpcktw9jHEMzurFtWPRbD9/////8CEw5JAAAAAAACagA+sGoAAAAAABl2qRQBlrqZj9v+CS7XE0d28Ec4vCob34isAAAAACQBARMOSQAAAAAAGXapFBwKv4F6O9DGD93/zW5a67esPfOjiKwA76I9tORzZyRtmhRgoJmreQcB1vYSeB0OVg9tG6i1yR8AQSAM5Vao9vf/AbOHeoRTE4f3V753PEUnKsROFP8ExkPY1Hpx48zTamcorshOhXT72WN1kLVn3FtWpUJZmpEpKJkg",
+        "timestamp": "2026-11-12T13:56:25.380Z",
+        "gasUsed": 8048760,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G", "aliases": [] },
+        "incoming": null,
+        "amount": "4787731000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "F242423888ABB0FA44FFFFC17992069467A5E0EF782158066A1DDC9E26C335BE",
+        "index": 0,
+        "blockHash": "05BE655930625ED39D002269FA5D5AA7DA609940ED02EABC336DC593C6FFBD2E",
+        "blockHeight": 470105,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACECXRsMOuO5O/A4dzg7cOUFGp9yBB/saHtkHuuGWqvqi55BH9I0Xx56R79ONfSlQb0r6Bi61dzmdkPxtwdL5b91iq72S3I6p496Hpnelwr+VzXEq2jckrEgFFFGCNnhVB+5oWYAAQAAAQAAIQMegukLGJ02DIMadPGCLCIKv+ZxKfkPCZ/2ky6Vnl61LUEf2s/HC8oTQCH7JEAEjyRGMpDQ+LZzy2aaJvMoLT0+vhgglcY/RBpotGl9Gr48Cu+016VoJl0o7TeQcM1/a/Sz4QACAAACAAAhApgYEvMg+vWBqe65lT+535k22CntpOG4JDAoG4KdLKUlQSB8iNp3zDCW6LCvkx2WIrZDoPwXR+zm+B8R1s38mr/jECLwQM9FXnOh7He//rCiBxOCZcejJXSm1DT8xPbMEK5MAAMAAQMBAaKhtKxv7yLqKhpo6BI2RLNXh19rQSwYEJKBwUbnsnG8DmNvbnRhY3RSZXF1ZXN0ACED4LVpX52Z6DiE6fTvG6SdZ30UIiI40Sf8zGppvyxHzEJBIEtvXuzsQraR0xxovxJpmAnQEwDJZ85DM0BewLvPhPz4VCNWGVxM5i7tTcoPIP3OwC6BeRozGD71+1crDV+u0s4ABAACAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQJiaQYBgdgoityDB+WY/aTSPp3ZHrdykgodZyOPWXY9zkEgHfTVo61AlKIAeXieFNdncEME9vk55akx4TnHt13Fyr0f4PBio9TOs0hghE5wIYSgbpMjQdNduw9pV34M1CYVDQAFAAMBAAAhArmx5IHHeNBQIqrOSQWctPLvHfeLBw51HO1Drip7PhQrQR85wdTOKQMOND8LEq94f0WFQHAG5k/gqHsnGdxu3eNz7lviuN+saUZMir4rbBt0jdO9hgZ1WtJttoGalL00YV9dAMYBAfNfaPzf4K5fA183sHy6mVQL/vO2+xqdI/lWFetVZwS2AAAAAG/UXTs+ftnC6OUiB6TGjjM+RDcPd11lujJHrWJh6ImcjlJ8mLt2gPf7nyt32+irQcQWB0km9u40DAAAAAAAAACR0PNrhrhkUO+hAo0jhCEBSBDTtyj/3DMNogZhDQIUmMNT0P/dUbbsrGmc1g1ksEwJ5oOyaGA2GtSAsdAiKGbVRJQ5+ZROgd916nzy9CLGqxl+F+bH5f3cVdpq2TrTo3LwAwAIAAHzX2j83+CuXwNfN7B8uplUC/7ztvsanSP5VhXrVWcEtgAAAABrSDBFAiEAzR0Bx583M03n/00LflEVVSXvqe6Awy1ZpKBEXfiQqCcCIFljjDePb1Kguoaoj8Bb/3HycSQF1fpna6d0bUrplJIyASEDRFmM6oMUfw7ADOMuslxkH0uh6Ca08YVNsgiUjzLBpmr/////AnEnMAEAAAAAAmoA/L+zAAAAAAAZdqkU4O97xuia5qW32H/EHXqi3MR2hZCIrAAAAAAkAQFxJzABAAAAABl2qRQjtceLDVu8+loJuy6geQdElxAUAYisAABBINghAMYiTDy3/c9c7kiN0MnuJvzM4sZ1hK8bEAyTa5JQaGcnf0i5FJqIiwqvKW0sIV48y3YwFHYcICzBRq0FJmzvoj205HNnJG2aFGCgmat5BwHW9hJ4HQ5WD20bqLXJHw==",
+        "timestamp": "2026-11-12T13:33:33.248Z",
+        "gasUsed": 181443720,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G", "aliases": [] },
+        "incoming": null,
+        "amount": "19933041000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "EAA68CA972EB70422393448848B39EAC1989F6BB7841C2CA3018D224F4F9B281",
+        "index": 0,
+        "blockHash": "849D48204AD2E66105623EF8A16A8DE6D6B4136BC364CC0F70E7B1420D40F3DE",
+        "blockHeight": 469703,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEDgouBJjB0k3Hwx2LfBW7zOr3N9EY7NMm0vZGT8Y2PPUlBIG6H0cA5VJsAj/Kebj+IT1ZdzXCbe9XQUS8BiCCxE1QwMnKL6+dP8lffDjigUuyQndkP+wFIn9txraOcEwBp5JAAAQAAAQAAIQI0pr8mmjMRti6Zb2KiTLjlE/5V75DSApBDwOSTQZzKtUEgZKA0oCP7iddtUwTiWRU0LmON3779qDsutU8o7UUc8wIyI6eSN9Py97oGImxrGfdtNdkuT4iu5A8VfqOv3AzPPgACAAACAAAhAv5NWiP0Z2QZiwJ0mEeFLSpCFHDwjZwCShW39uw3a3zrQSBy+G4xtcHzEtMC109h4v8BenowpF3kOaPRDEAK1KwRqE2izymj3jHfnknUnhr/iAtnLBPThiB0lm4abVccjzSaAAMAAwEAACECtE25iLYKUPexgf9uW0MalvSjhMxlQnnDczeVHB9KD+JBIPl+pNqyZ8XMvaTE72zncQ5ObJpTsXGfsogcZpGKkxA4coIz+fNO1SNC7IdRcSOPuk48iC1bzkz8Y0qPE288I84ABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQMk0shK7XDxWWJLDOD5ziP2pVc/n/LnGYxMm7iEJEC+/EEfX7eMpW2q1UFGt4lKofDAakWnOU3kwe9Vi/kl6yQDJ9Ner27hrAdft9OAowjyYW4gKOWgia9NQasQsw34wmAMigAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhA4QDLZIVQaYxDHPlw5tX7R+wUR3W094oNgTMmFnctXmhQSB1l9qlllzlqG18DwSLEagZdg/AvyD00djbgzF+JEDPq2xtGqxFAZ5cBKiMTeb69VeqtMOsOdCHqtCLIAg9tfQtAMYBAUrmu3bSccHUD2+obtDIhx8wlzixytbXthotUNzxKE+sAAAAAHrybu/3EpYKXLPC2Np8w7gWIT0W+cKcIBHphQVipwMN2rm9ML8uPqcUTdcBXBuUhaDCDqfNjOyVIQAAAAAAAACEFwnlNiqlFgRUuPonAJpY2PJFU+EdgdzTFJMl8oCFExHU2RqGQOWS3rl3E/15aqML4qBHBkFOQqhqXKdeL3PvHBcVLx88qcJCbu9GbEnGqT5PMlEAxIP+nCOcV0+0CM3wAwAIAAFK5rt20nHB1A9vqG7QyIcfMJc4scrW17YaLVDc8ShPrAAAAABrSDBFAiEAsRPZTrtmX1DItSD+RbXWq8hDMvC19e3ubs68aPGF3nUCICp8+NaTwGfFi3kOn3XahATWhCihe+9jiSRh+uwvfBBYASECbCMHfqEKj8aXRQ1o1ZhcksaswdJRMxgN0bDqYsiqlEv/////AsDGLQAAAAAAAmoA+ey6CwAAAAAZdqkUqIbF3NYfkIKYYaWTvMA7Y+vRO+aIrAAAAAAkAQHAxi0AAAAAABl2qRRNF5NOEQwVKwhlRuipx3x88BFbcIisAABBIEmVXKrOsKBJ2msUfDHkrMnY3kdJHv6OAKZqvuwIBA3VSd3cmxqqEMyl84Qxm2Hbfd7MB0k0PLIvp2Rvr2yQKClvQ027l9cl+zOYaVw04x3nfDGRp7mqYPZDw1Bsn/HRGg==",
+        "timestamp": "2026-11-11T21:38:29.456Z",
+        "gasUsed": 180725040,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "8VKn8eWXjh47hikDSek6Zaz1wuD68DuGEto87R5rNwHB",
+          "aliases": [
+            {
+              "alias": "evgheni369.dash",
+              "status": "ok",
+              "timestamp": "2026-11-11T21:38:37.348Z",
+              "documentId": "GJrYbbQeStYneC32FKv5i72FNUGLWuzEGxfnbWiuj3LW",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "0494E43D64EB7C6E0F11EA9DD0FA1BC68D9E359B2954546642FF7849D4B6D524",
+        "index": 0,
+        "blockHash": "422A03C5725A839B2B2240949160F92E60899E97F320714E041E3D4EBA858CB9",
+        "blockHeight": 469566,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBBtEd4jTEKqxTSuNuLwQ8t6hNf/daxefRz+IQB2fM/mEAAAAAEhugzDKcuhqfEQ431EU9CTskJrTT0VYj1cJNlLQVA7zaub0wvy4+pxRN1wFcG5SFoMIOp82M7JUhAAAAAAAAALSrhdjGfhjIdmSItt1xDze5oeDZ607qU74ukqEo83gSgnYpfLyEAS16I9M+0NiKkAt3KCsjU1kiydNE/5dxdZ/lcOmVf/yNOpB2DHa14almd95e0M556phcBafYsxagu+8DAAgAAQbRHeI0xCqsU0rjbi8EPLeoTX/3WsXn0c/iEAdnzP5hAAAAAGpHMEQCIHL6EZR++OpPV1ohjLhyJO7ysgzvkOCg9RdUFr2RZF1ZAiAsNP9fqW5svBANErSteu2CtfWtCG3fnMU0h9ZvUYtokgEhAkRb2/cBVlPkLKxwRGrLqfK6ZjICwa4nVUwlfFa7RVer/////wJAQg8AAAAAAAJqAA/3FwkAAAAAGXapFFDTDq14q8eMItkIPsNclAY9iYMfiKwAAAAAJAEBQEIPAAAAAAAZdqkUlZNRK0JB/7I5nguIN6lv2nA7+IGIrAAGhLOfzE4YBjIo1Fa0VZ3afooiNNVrXKht2uXCwip60ABBH79+WPHD+eiCwmdRrpAU1J+T3+5NO1/qhfGOR+5V34/HOjFY4t9b9A5ajvtAa9vITx83DBpCpWZS/3BtwECnkig=",
+        "timestamp": "2026-11-11T16:46:41.306Z",
+        "gasUsed": 8042080,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "SSosoTPEBRa7V3ZmeMh8cxZg999W6tHSR4U4oxdjU95",
+          "aliases": [
+            {
+              "alias": "ulurum7n.dash",
+              "status": "ok",
+              "timestamp": "2026-11-11T17:07:37.902Z",
+              "documentId": "5W1LxENxTZiFaNpX88RKXpBWKEgxWecJc652BZTWfjXp",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "1000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "8B37B81CA103EDBA095D4475AD6D16E11ACF4A3EB3BE21567AAA1A7184DBE838",
+        "index": 0,
+        "blockHash": "C9A6F0F24CBCAEC68C396EBB3BB32926383218ED99CE0A848719F1BE3A0EB49A",
+        "blockHeight": 469030,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEDpCGwKWxZ6/xgThw593cdawv4VrgGfBK4tqg9NbMBkl1BICL27MiIlIjjdlqqlDiJt8q83nMsoBCW/luma2itjX9kN1dkYX/lrTyI+fInmk+jV5OF3phtlZVvJ36t5l41lY0AAQAAAQAAIQL01Nzex0JwSgCjVj0TA8UI6v6oUAKt1uHjkysn5xn+KUEfL1KyfHQkOzMn8DyOyxY/6mTa1YenOiYFtytreYfn0FdiaZMN0zTBd5yete8m0y/Wd2nGBK8Fwj74vxXrsmrWxgACAAACAAAhAvvxPNPlscZ4KswPS3ITjXvrbXeGE8HCpTQRUabh7ouoQR9+rz0UuNUDNPxl6O8ktRQYdrRLh6g3fqa115bzcfBNgXFVbRRxJLjtAEjmKIxYUC6gHRnNZIiF/q7tf9hTneRnAAMAAwEAACED9PfniyljXVq7Fwce2Tt3ywE1qEXRP2UaxtIkbeq2NA1BH3TiiawHpPI7pbFB/UkOixwLb0wKbXAECRg0h5brocv6Uw3qo0GjqAHLt3XruqqOM79BQSZuTKcmZMjT2cLEqXYABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQKyqgEEzvjh6naZU2R2ZuZIYNUYVtJ83mKMQr02hJLCjUEg2Fcs34UHXz7a+zP8krkin+8/sLEXnCGOGLg1EmxLb7hl/X78Z/1B8lLbDOVvCzuFPx7aylw9sOe6vBp7EQ3DpAAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhAjxG+rlUQob8+IMwU3AeMq5UzaQJ3p9RPpmXWzf9Q6flQR8RObgL7lFM0uVlM7swiktco83h3QHXjSsdXl2w5/qaPHUIILswj0BJvU49y1NIyCYaXEn7fV3pdeafE79hU00DAMYBAWaKovIp6AfzIDaFet6cV1//4Yzi+ZTJ/YmxUSC/uF7WAAAAAK/Cd1VB8kOl2rVif+x8v6dh9owZQYpETjzvSOwE+W3kb2cGZuneBv9dRu/GMEads464sLbQYyrLAQAAAAAAAACZw354QKq4mdRoe1rvs12r7eVVBS1nntGIJRlBQ6yz99LHMjaDTdblVZ1EoEIQTaUBJR14uA6PjU7cAe/10HxotWwry+057qHadEcVurPPbfo8UO8vZmunOfEVTxSYNvbwAwAIAAFmiqLyKegH8yA2hXrenFdf/+GM4vmUyf2JsVEgv7he1gAAAABrSDBFAiEArVHw/vic5ZmHI6G2DAj6/eW9i7tMHYkXRtwtwwuTOyMCICVcBDffsxZgxvwhkIANIFJbKuAfjKN3VjMhIksmRQNMASEDo43xLWVS2VlBi5oo6sUMj7zIwoe0XhZkNsSQQ2iRpHP/////AsDGLQAAAAAAAmoA5FCQAgAAAAAZdqkURzAgismjeAOR+JCAT43nx2v9OE2IrAAAAAAkAQHAxi0AAAAAABl2qRSFas8ottbDNCJ3rJ1hRYQ6v/3/wYisAABBH6dnMTbnAjztpzFwuqxrVfAmCUvqU/FWOam1pvJy/U19eBQChurA5JDx7fREiEDk9sss+KZ3zz9lqq3VCh91HZdoQB8IeUYenVRT5wEIwuJHxd97+8rUezuQ2fShJZdKAA==",
+        "timestamp": "2026-11-10T17:49:30.331Z",
+        "gasUsed": 180830360,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "81x7N39zKLhYDpYg6vk9AUjapc8VMxuDDZGHSMxPna5m",
+          "aliases": [
+            {
+              "alias": "satsguy8251.dash",
+              "status": "ok",
+              "timestamp": "2026-11-10T17:58:42.549Z",
+              "documentId": "DLRfxmpB5vYspyoLXmgfvMR8aV1MyVKdyY9jgs4ZR6KQ",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "A054E67E2AD4CFFFEB909DFC19C14CDC81B7E92CEE496AA5D2650AE700B0197E",
+        "index": 0,
+        "blockHash": "4A97B0D41BE833A9957A975B5DED96AFDCE2DFA5EED49F97D153218B21205EFD",
+        "blockHeight": 469012,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBDc6Zj3l8O0oq76IwgnN5n0/B/X+XYv2U1hmkgzLNVToBAAAAs2qJ6mPgl79Phy1sgcqZFinfSzz689kBO02K369S1L9vZwZm6d4G/11G78YwRp2zjriwttBjKssBAAAAAAAAAK7st0h0aeCgD19rgY7WL2r2hZBjjpe01gVt6AhUFcoFpbp5IRgLXsMe9L1yWQ9RDhi5GdZSd4k6DamH/BmlCFrxThwU0EvN2HPuC+6nf1xzRcYG55Zrmyd1HAo9Eu7Mu/ADAAgAAQ3OmY95fDtKKu+iMIJzeZ9Pwf1/l2L9lNYZpIMyzVU6AQAAAGtIMEUCIQD2AjODia03JodAR7XDIkJegbfRCnHhrokgxtF8r1/pzwIgANER+iJu2gMKSkM3Z4Vc4eLzBkUCZGUuFAqw/t9U7sMBIQOMNxFj5OzBT2b3eA/qcZTPnmqxyTbddbzIOd6F4TdFmP////8CgJaYAAAAAAACagCMCu6OAAAAABl2qRSruxu0qSS3J5lSyeUJ7/J1IjBc0oisAAAAACQBAYCWmAAAAAAAGXapFOwOil4glUWBZcp0OH8FAzQw4x17iKwAh6QMsphUs4M2ZLlQ5tYbK78Qiwl/n1TOSshIPJLhbLIAQSBBA4rj1q9lJ4JR2mkMSQ8QRHpSeoBhOiIwBlMkdQughC9erhMvch9sYKIpz6opspraW30Na6zuZRoMVzkdP7XY",
+        "timestamp": "2026-11-10T16:56:22.133Z",
+        "gasUsed": 8039060,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "A8V8HAjLAA5wC4eqSqbLhnkt9cUgvEVPKBBHQdDLMixh",
+          "aliases": [
+            {
+              "alias": "Nal.dash",
+              "status": "ok",
+              "timestamp": "2026-08-25T15:42:55.412Z",
+              "documentId": "GGTtYWbAhDa22ppijWRyNV3AYeH3tCqNmUkdrZm5c6ke",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "10000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "2A16ADBFF95CBB3645D51F34324D903C220170E1914C8813C122A312108291D0",
+        "index": 0,
+        "blockHash": "3B4FBE52DD557A744E5F76F5744304C596562F003C134DDBAA1B97C45A4210E6",
+        "blockHeight": 469009,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBEOTg8Ov1VkTfaO4boxzq3t8f3BMXSVqR6Snz5pQdU4sBAAAADc6Zj3l8O0oq76IwgnN5n0/B/X+XYv2U1hmkgzLNVTqmxI2e5vZzCLRoPsZCq32mdmDNXT/XpC4DAAAAAAAAAKLt7DICCgtyaVSopRj3Q4Yr+D9+H/heACJnFGH1bu2ug5putjz7wrjJpNiU3wxVshUTFa7cS1nb+UMmWYKahZkiyY4APToNqLvR8VWVGLalqDUFNBewuNX+CjzcvikmVPADAAgAARDk4PDr9VZE32juG6Mc6t7fH9wTF0lakekp8+aUHVOLAQAAAGtIMEUCIQCA8z+LTm/gCkAU2g/RPasTUoVhWPiK9OKBUR9aIP3w7AIgZW9wRA/OnY62HAiJiNwVIfXRB2tinZQFg+ALJWSb7RsBIQOl+OqAUuWAJxMvpjuTOgwPy0VHozGJHy73O2cVvCQfAP////8CgJaYAAAAAAACagATooaPAAAAABl2qRQ/vLw//4OuuJgS1h9ePt0bveLf1IisAAAAACQBAYCWmAAAAAAAGXapFBZc8a/FZBvIU6G31wCX4sDdMMFPiKwAh6QMsphUs4M2ZLlQ5tYbK78Qiwl/n1TOSshIPJLhbLIAQR+EpnelYTyDovEOwxrEDmXx5JK+50X73AO1lX6CFtYmVgh75WfCqLv3DGm00tfaQ+OAiYj/2NbzYEWb2IDNpSBK",
+        "timestamp": "2026-11-10T16:54:18.214Z",
+        "gasUsed": 8103100,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "A8V8HAjLAA5wC4eqSqbLhnkt9cUgvEVPKBBHQdDLMixh",
+          "aliases": [
+            {
+              "alias": "Nal.dash",
+              "status": "ok",
+              "timestamp": "2026-08-25T15:42:55.412Z",
+              "documentId": "GGTtYWbAhDa22ppijWRyNV3AYeH3tCqNmUkdrZm5c6ke",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "10000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "ACBE02118991E1EC3E6A950E08C89E02395F020C98ECB6FD6D213209F2D1D6AC",
+        "index": 0,
+        "blockHash": "DEB842C24932E1DBBE0FDF17BDBFE7E251952876B9DFB48F4391F53AB1E1A560",
+        "blockHeight": 468473,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAFAAAAAAAAACED5FkbWVnVdHZIsorlnwiw8ZxhC41qfD5gAq56thFwf+1BH5IiuHbzbpYsYsqTibI+CeUFZxEY3bnfoYqZJwKih79/daSST3LmOlOetdJQ0LbJyf0HV+hfyXsucZiGLvLsnWUAAQAAAgAAIQOtxI04a2UkjY6rRhXYQRt9OCpQ39C/woNl+T6+hJK4FUEgtV3AXnasmrAPcvsHVsmbXP6OnChL3S+jGTJlpkIdLnw6SHQXHfgGv/1MkAeP2lC4d1o1OLuBCjilu47bx+AzgAACAAEDAAAhAlreBDYGGDNlz7h6aNZDDkJMJijZS7gSNVPffb+ZR0Z7QSApUbmP2vNO9vV1Klwb3vg46UWBHRSJ3lUSllXG75U1+V2V7XBhcfkBIyt0voftb1r/B5T55IFbVVNa3qsO9Z9gAAMAAwEAACEDOYoeiNOChvzFcgzewfh+R9AIh9u0jmQXWxYN2k0s3+FBIO9Qti2ORwotV5QENRCoatYz0NELMc4hQ7/v1LrxpO1HbJBR/ye/xpsziKf8EekdK9PcbRT7XdvLjMOPSGN8fRUABAAAAQAAIQMaJ+lUdxFtXA+X6fgxIn421iGY3bglUBybhT5L/SkqVEEf1hHHeHj8WDamu71gomGKhuDK5jjhGgSw5+BKEQjmY0MlixYF9IJcSqNgqjpD+QTIas6pJUPB2snA4laIz3vfJQDGAQFf+0zPHnpPKXkeCOjYOCnVc9wjQPN5nsSfrnNNkDMkXAAAAADsW2frb7B1aiJ531M9ttgkDq0r61mWxMdKMDVz+1X8HabEjZ7m9nMItGg+xkKrfaZ2YM1dP9ekLgMAAAAAAAAAqjQqlvXnis2SipQPeDvTEHB+LAiZVITuzbdhLeG6xJ3pywTpkkc/ZN5BrQoRxA7cAXNuHeSZ3pf+h6MpNen1UdA42DLZV+7NfadJjgir/wZ8miLWyPUR025CNWEf203B8AMACAABX/tMzx56Tyl5Hgjo2Dgp1XPcI0DzeZ7En65zTZAzJFwAAAAAa0gwRQIhAIGV6VKD3AzwyVsaN5y//q5p5tgS/TsmEaXtJBtjs8k+AiB7Qj0oPPrxBKjWUsQhtdTqC3oQuI2QtqxAf/5mTbea+QEhAzNlQY4CeltvHCQlZ64YWI1aCAeQ/9D/o/KOUHFg6GP3/////wLAxi0AAAAAAAJqAN8ZhjkAAAAAGXapFHeFdLsHJbmf+5BSsm+uG3gS4bA3iKwAAAAAJAEBwMYtAAAAAAAZdqkUOF/gEhCkvpHENc1i/UPWHAY/1VyIrAAAQR8B5AGFU8U6um7qnMhUVLt06VrsQ/U/FPZcZ4AUjrjn+ggUC8JV2OL/8w7secbrZzQdWwSFllSYe9m7mxhZLYxBKkGUibmQcbl5WP2p5zYWKjyaCw/GrZtpoNxdJKhq4Qc=",
+        "timestamp": "2026-11-09T19:25:12.913Z",
+        "gasUsed": 132837200,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "3qx884x4ne2NmYDFVCANw5q2yABSfyLD4pETm5TavEGv",
+          "aliases": [
+            {
+              "alias": "Aymenhs81.dash",
+              "status": "ok",
+              "timestamp": "2026-11-09T19:25:25.488Z",
+              "documentId": "EezAW562zipA7jUQ5ac8XxdVepssLFbg6QTtbWAbiUS6",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "6EACBE35350981CC464752F5CB647F39CC228783B93C63CD79063D74B44EAABB",
+        "index": 0,
+        "blockHash": "46380E3B55510C41E72B3D84E3072B063ACE72377327BA1621E2A068D328C361",
+        "blockHeight": 468220,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEB5Y1whXz/QAzgFYBzKBcV3CCRZx1xldt6P8/CEbvluq8AAAAAINRwGlgbGCZqaCDTPK7hp8vkCVecDqaLRl83j3VQTRumxI2e5vZzCLRoPsZCq32mdmDNXT/XpC4DAAAAAAAAAKJZgAOnK4Huzz6IL41umqlJ/8qTwAfd28vO7wrjPTuZPaFzVTxlK7Z/tbE7/uGQWg4MpAp3PYeE0pwYODifAHQbkyl71tRtm/7QCOtEmxet4XgBNZ+r++tutqpW17hiAs4DAAgAAeWNcIV8/0AM4BWAcygXFdwgkWcdcZXbej/PwhG75bqvAAAAAGtIMEUCIQC8vBLc5R8SiF8SoIvLQ6tZgbp0thXm8vSr6IxZrAGBqwIgY+BV578+Un1NEI0r0cwfS+XGZQv5sD4odcUyHp7nFmcBIQPFg+WInNZuBOQAknSgdQMhhO3ETQ1X0sYAkw2p3e4vUv////8BjcJIAAAAAAACagAAAAAAJAEBjcJIAAAAAAAZdqkUU1jxIsENcm3DII2gE0hvq3HWfaCIrABN7sienk2rljXWlt6+2RAB3RRq8dzGs6dNPMSeYx3B/QBBHzeb4XtXSnnpfAeYQ8Am02qUwApu3tbkaV6VDWy5RtmgZWMyQ7k3WQzUXJK06FLsH7SLb68kmkN7V/DPvjWjYcE=",
+        "timestamp": "2026-11-09T08:51:38.258Z",
+        "gasUsed": 7971600,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "6FDaJfTcC3qr5vcEXc4onVoozC9rKFh66bapbnu2Ubd6", "aliases": [] },
+        "incoming": null,
+        "amount": "4768397000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "7E8BD5FF8E784CCDB635FB68782AF94DE6AD41B348EC5185B9207F840789DE3B",
+        "index": 0,
+        "blockHash": "1FE9B0B8F5E063CF62B4448115201EF5BAE15CEB6F9ADB9B6746F603853AE15E",
+        "blockHeight": 468215,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAACAAAAABRhSmnEX8W/rDnyAXkScN2+vYJCSAAAAQIAAQAAFKcePTSuKHCQQRHUTtYhx7vpHOikAAACAgACAAAUhjBlrPXI3faha+8ZsWCu8zCDAq8AAAMCAwEAABQEosmMIzh18JAXCZ5Jtqs9xmwCTQAABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQMAbzlFOKB7CMBr+fosbLdyAhLyKv26wPPWdxocG/Zig0Egl4MofcsogvR9UuFzodYZjP4Gh20bIxkIfSaOA1xKhR0Ll9XAF5CbbKZIk2XDKjsSaMVF9Kk6UBjfZrrLhR8TtgAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhAxOZ+9mGlfDkVx8nko6PdZI/43ujA6QDVPTdubZDCyk3QR8e0yrKffzccKYdNt7nICGDkPjCOElQ6bOz+oFDN5AswVco1P08i41idAGerxzfuF6pZUkiVgwJx5WvGKWdGriPAMYBATkJJVLk7yIR6oPeT6rAFk3ajaN7oj9Yt1LBElY8AUKlAAAAADUHd/G/9SUtjen3fCJRV0gKlDlXzyvpshk9jw1OzF7CpsSNnub2cwi0aD7GQqt9pnZgzV0/16QuAwAAAAAAAACOFFvSebSg/7Nn3C/N9CWUv9uBSWax39C2R2pTWg1cDrJ9bS/72EtqRWroEwGPwgETugssRLVcBF5X5THrodAJLCXtC+Q26LDqSKEPgIr6EoM1TWcmeoRtiLP5aD0TDuDvAwAIAAE5CSVS5O8iEeqD3k+qwBZN2o2je6I/WLdSwRJWPAFCpQAAAABqRzBEAiAL4VMISDEws+564CIp6ZveznTqjUioC+F8Pb03Yth3awIgYwaEehJKjBf7wxZ9fj9r90mbkTkgtxA2jJtns+G90KsBIQKJTTsuV8zYv+PbCTPBg6E64RA5iZAsmrmZpYIWy+lCu/////8Ce+aUAAAAAAACagBGrQMAAAAAABl2qRTjwuBldiLf7bRD2f+7hNE3DHYRYYisAAAAACQBAXvmlAAAAAAAGXapFFmSQskncJaDQTVdl8qlzgS+nlw9iKwAAEEfM+bRZmOB/sTx0v3LOZOrbcY+b4wVnjgBt81g1BWNBVhQy4Xo7jL8toBL76kynGIfQ2fTTUbayehg8KxvtgVXO9Uf1dXlG73s4QfvZlbWFZhaQFvDbPJyWPgv0ae1zZ67",
+        "timestamp": "2026-11-09T08:35:50.928Z",
+        "gasUsed": 193883520,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "FLwzhuj295oLjkFKAo6e1EbUJQ1RmAj4UWuemSqnsEqg", "aliases": [] },
+        "incoming": null,
+        "amount": "9758331000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "0C6C4A26358B3A027BAB73A0977E04490877078AAD5433878A378B17F082878A",
+        "index": 0,
+        "blockHash": "FE610D80F5177289C9CBFFA6D89E44495F52C9A8502C58E96E98A39141116B66",
+        "blockHeight": 467716,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEDwHLFWaOzrQlM8puL+b2fGbmO5aciVRkQYUHbnKC42R9BIAz64m/+XgZsxq2vsXw3AZkJWi2U2ZpCK1Eu8oAGveugUq2JnP1avkBuxiXOY0Uxkylwrj8H8z/8snsmklfMv58AAQAAAQAAIQMn/hsgmTg/kY+ZZ5z0SBKIYLJ1ov+epOfSOvUtq1yWvkEfiS0yN/jpxtEcVqEVXTzTriPu/RjHboscFOKnS47H/JYc8ZtuPISBFZYwglpA57FAHPApVI2MgPLLTSADTcHEJgACAAACAAAhAm69qOFpkSFaxHQJ+akKmvM9E+IwhWupmr1x4WixJUtYQR9e5z4wRZkYQsPSvfxywQyGKEW/r9h9Um2FGiAP0HoQbUYuQQpPVbN6CJbR6HywIHniw2EvRQ2Bf/xQNDaoye2jAAMAAQMBAaKhtKxv7yLqKhpo6BI2RLNXh19rQSwYEJKBwUbnsnG8DmNvbnRhY3RSZXF1ZXN0ACEDfHiqHa+66THci5Ki4uMcKmzxEAcnwK/Ty8jxC9HXPvBBIJ/QyWAPxS1XYl0rSKpK2Pz5OiKN3rAF5qIBZctKDuxjapyer1jJkdOidLOgRX2cLVsFLoI0hEr5ujHn/eBnCEgABAACAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQLsmIk3zGMa0/mZdvwFcgbBj4fghH6EwqdvzJm3o6GOF0EgF+U5sg5ACppULmjkvIf2GmeDUBRIE6lArsowRf0hFRUsBB1OfuesYQkeDterYwpXaSwnY7wOvbha+iR78Z/g4wAFAAMBAAAhA8Zj/RS12D32mLJmkaLQZDPzTaY/N6sqI6qSZvuo413TQSBbi3Cnp+ZNkhbG79HV38nvqEbN34gFGjnGAgUDMzVEQSkL2PRbr/FvrjFHW94e/q7JHVNIH1gna3h8ajcGhIt0AMYBAZTWD2w0gX9nEVbY9KJJNNm5IRzS+zrdCH5jcv4LL/qmAAAAAP7GoLlDAZ9gi/+Q1rzD0cma7r0JuijPi8OlTFVKZV6L4JPGuG3+YcKwiI/fslUj+66CuGnPeRRkGgAAAAAAAAC0G0P4vWKCB2xiSPBFp8Na0RBF13p8XJnxs8YTLH0UVkYgvZJf2BJvctAiH2l9N1sSGbTGeSDoHUnWvXMbKJFzvQ9Bfev/0KWFBAkdu1fFbNkxLYG105ExxO7SY3lp8JjwAwAIAAGU1g9sNIF/ZxFW2PSiSTTZuSEc0vs63Qh+Y3L+Cy/6pgAAAABrSDBFAiEA+AkswHa+mAGJ8eHlZtmOJCWpJWAigtm87i8RcOs/yhwCIGoUXUIpZ0ZFPFlCg9NNkAONEBXh5GLcwIwKc42hw0MqASECyVE0rpqC/UOROHQ8b5XsM3311hXRG5wzDWEpPghyqWD/////AoCWmAAAAAAAAmoAy30dAAAAAAAZdqkUkUS/laY7Gkk0lNqQdkahmiOg8TmIrAAAAAAkAQGAlpgAAAAAABl2qRSVqyu+PZMuXYN34zLFXwVVuDF6AYisAABBIOU95WwRsKJJGrMaMSqXHOPPS2E5AVrpW62WG5Gljfz1GES6P6F0ITd86W7Y9PjT1vkms+vQLtpXGbuEkoBoUGi2aX0TsmD89muXGiK9REr1jTBusxCDyNQWTy7EebZ2Fw==",
+        "timestamp": "2026-11-08T15:26:33.166Z",
+        "gasUsed": 180382300,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "DH4VkJBBkiL4yrpUzyLJU72b8S5cHxTrSu8ACb4VXe7x",
+          "aliases": [
+            {
+              "alias": "Bazinga-86.dash",
+              "status": "ok",
+              "timestamp": "2026-11-08T15:29:00.680Z",
+              "documentId": "Cs8HTjaTs166VbfzU9gpQb5tF3rFceMqEFN4Ai9pWPyW",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "10000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "325986824E77EFD9FE6B8A419E9BE25CC81CC3D511881039AA62FF95A5C61914",
+        "index": 0,
+        "blockHash": "074A8CF896FA7B25A85890FA6F24905B35492687C02CD046B58CC5865BD3AADE",
+        "blockHeight": 465867,
+        "type": "IDENTITY_TOP_UP",
+        "batchType": null,
+        "data": "BAAAxgEBGmZxECQf4xmmE5ipkk8B80orjzOxNlsfWwRPl091QacBAAAAr4GzP95XEGm9/ZoYv54/bkNUatrehIBzbWacPDOb6ffCuh6dUXYxHr6TKKDxTjGbTlGyoUqG8DkVAAAAAAAAAJCbWhpEsHXhyGQlNWuY48Mi+Vi3VTPO8FplGbSyuL4KakfNeN358Fz9ntaV2L0lrg68JoRmPDn8a3nk2caLAN8f9ICoj9y3OS8yOWkhWMHjmYRwGyuJwjDjtUNFNsE9rPADAAgAARpmcRAkH+MZphOYqZJPAfNKK48zsTZbH1sET5dPdUGnAQAAAGtIMEUCIQCH707AmoIyEWEPsMMmkfrWWVSYCVUrpljTH+x4uw7jgAIgdLCANQ399E9Oye148rzc9fchkEtuY7flv1/ljgaj12QBIQPF5C0CBEg5NwtRoWZNaPvPdGoe5xG4KV8M9nKV8WojEP////8CQEIPAAAAAAACagBMP24FAAAAABl2qRRo268tLFTtR9lJjDNBN+SemSlEHoisAAAAACQBAUBCDwAAAAAAGXapFPs0uHdfwLiO8/YtaJVrjNpdHNMviKwA9DHpnCR20W63tskrWa30Y4zkLp8DZSj6+d+8UCYdQgUAQR8W2sHvvAGlhnsIxcwQJ+5as33B4/L0k2CC0sRO9OjPq2wW4xGQjtnL2EfNtlZx+XzoXWrP0myBmv9yqh2X+3EG",
+        "timestamp": "2026-11-05T22:10:48.063Z",
+        "gasUsed": 8176500,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "HSEd2a1J8ufDbi384K2EASTCSFh3jpYHEzbXN1HGK9ja",
+          "aliases": [
+            {
+              "alias": "SP500.dash",
+              "status": "ok",
+              "timestamp": "2026-11-05T20:19:59.528Z",
+              "documentId": "22yJc5Rcro7kwspzddg31VLL2nHYL4j9YJUt5jry39ZX",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "1000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "0B343062C58129F72AA5D3851D6C9C155B14CCF66EA344E298B60BBA53930DAC",
+        "index": 0,
+        "blockHash": "E868619639F7739509AE67DB5DE040C6D0CFC3720D7CEE1484A0C8BF39D28031",
+        "blockHeight": 464432,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAEAAAAAAAAACECh0gSQKgZ6uXaBZfUNViG2hQCVBE1+SbLNE4MmUyxLGpBIP/1myE8NKBbVhaMGXXWOuGiu9BvObyWMqB3YuiWiZADSxaCdKLHI/QCmu/zVqqRPlD4uxkYxXcBwqQu+OtRSP8AAQAAAgAAIQKNKFpFTEi9PNdgYiUp1CfEc40aoh4vcbydtqWvFytlvkEg8Ak1w1y2+p/vEh2wz+Y+JJb9kwxDMTFXybcHDDyRnZQpggKoPH4N8s5p9/p+vB24J3H9SXZ5aP6Y2eh4humM+wACAAEDAAAhA4WEZtEyLcwB0Br9ZLbW8Ut4CtV2RwNKCQOULhL43HWNQR92RErZaARf67AqVE2sgcqmU4dCmHFmlqcE9Br/kRg6aACjBKCc3CJUtR2igGiqzaOlwJXkqtmN/qgBebWL31gUAAMAAwEAACECHGHHASGF6NOjWZz8gQAZxb1QWgUi60/BITjefJwA+q9BIDe4CC0J5rFuOhfE//FjpZAPjOw3GM9BBJy1SdPdikPZflXjALMPoQ7riIEQsaAvpZbIeAfip6gpy1MJeYN2RaQB/AAnJGQgeewBSdqbTw0mokJizh+Or5xx8/muAogu1bV88wE9xYAAAEEfJ0BgHB9GzFHjMfKFlVRc+YiHu1uGpxf9mFgLFlPx9mJueOrysSEwv0YL8p4hwGlKTS0kWEpAhg7pBH01Ib11f7oawObx6y4Hwd10y3m9KXmdKZaiQ0l4T8PQce6wfpk/",
+        "timestamp": "2026-11-03T16:48:31.532Z",
+        "gasUsed": 117492880,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "DXUVaZfbAYgXZKmUwMi31JJKnBSB7xvDWSfwkf1uMTAn",
+          "aliases": [
+            {
+              "alias": "GRAF2036.dash",
+              "status": "ok",
+              "timestamp": "2026-11-03T16:48:43.288Z",
+              "documentId": "GKp9VTzXsDsA7fnka614nVzkV7vGD5wVaHc4ABamnA2P",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "670312000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "2675715840C9AA41BF8D8F14F2030D62A17CB213E117C069D187FE17B45FC19A",
+        "index": 0,
+        "blockHash": "54ACBD520826D97AC8A724B2856CA7D0E38FEB9A43782910D4A699932F3D5F82",
+        "blockHeight": 464296,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEC/I24IUmLZO9YChpJbH/loFDXLY9q/M08QDT/6NPwDeBBIOnMOZJREXwoVdUVHwv4jlzAvvoe/GdAtMsCY9poyWTRCHosdcA9Pql60JjBAcI4/LCEwxsMnWgsxXQb5BELea4AAQAAAQAAIQO6TR7IibwwsuGRzSCVhc6fZE/ld+/SSNQ2Rw0fD0PTX0EfhgXpLsiOhYfgSu2vSz6aWINyZ2SimgSpvaGQj7gAmycJrtb3QWswUdOZHkR/JWHKjLNZNp7ob8zwASaN0hzWLwACAAACAAAhAtAkanRFNtvYWtFAWUTwvwwpP/5G6NqP11Z0cAGLVOnRQR+Pkp0AnR3lRABZJTlFVWU3/uVsarOpVVGeeQhRIx9bWUkCVPPVvyMS0v6OR7ToRLJmweTTU0s4fajnhIbREEsXAAMAAwEAACED7kUSkLlLfJrudBNH0UuWTP8sQWR5RXXn6sfL0QWLDG9BH246QaBGj/C9HtCm3rzZEMTquP+AV6uSXqWAJpUioaeEQw2XrLlcMhOrPqkNxWiJhqIUcXybhW6iOdYWW+Rhoi4ABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQMuQIOHPYbgsOZsCqUXU5867IpSbW3QVVTJ9MEdVshzfUEfH6a9dwaajUgo+rYO6StvP2v4b9utC+4aOCl+y2mn1CxQeDzilfp+P16cqLQvgukjaBAD139/Gj73qHplWiw51AAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhA3HCn0zW35x9mMycaNXANVS0PaPxfOruPYq8byWLZDhDQR94vJHfzg2r7/mlio9fMOWdGo0+WyDWlPL27F/APpQRXmI1WNmscyJ5wW3mq5GpPD7Umf+mB0+tnOP+Djy9So98AMYBATeHIAzo5yTky4HZuKi/VaTMPkxmUO/QNpDnvVCvsMEXAQAAAC49E/Pn2+N9eGzmasvxv0wpVknWcZKFylGRK1AQ1ew8YqWMtIa5YDnd/e6WHvfRrZJuALb9Gj+aEAAAAAAAAACxHhT3avqSnaL5zmaC6l+WZHe8MB6IWZoToOlsB0+sfi/hipuWFznLAf9udjrx/koGJEMu2fd+zCrmrDRNK/DMnFiwONeV7yJKHh5wk/upk9tU1ds4oHRqJzu+eOQ893bwAwAIAAE3hyAM6Ock5MuB2biov1WkzD5MZlDv0DaQ571Qr7DBFwEAAABrSDBFAiEArVFw9LmD9sXWWAB653M6zE7RgFYnodEyFBAUOM+9Kn0CIDJT3WteyeZz38W5VrLDKfqxL/yRk6z4Mb+U9qWcO9FIASEDfgEYE6JqRwfVN/dsQITp6vBm5p9gyhXbeWLtWIVdBpP/////AkB4fQEAAAAAAmoA/ZvVAwAAAAAZdqkUHO/AC0iRnZlQI/Br3ZFcj9fBB3yIrAAAAAAkAQFAeH0BAAAAABl2qRTCmjt2D/ALfp6UQlX9ZBvzUrknhYisAABBICr4asbaLDP+hoj2eXzFxjOlWvzH3KQd/3cZ+9yDjYwTFw2RG5isRJpdXLcAIlSbVlgN/jnjR7Y250gaH48q7cNjtx4lztcFdUNtLOnOy9M/eATeOiYJuDJrNlSEldCUmg==",
+        "timestamp": "2026-11-03T11:42:10.420Z",
+        "gasUsed": 180993380,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "7iFK7mhMRAfoM5NaCag6J7i4UsXQ4gysDdgomAzi5rRw", "aliases": [] },
+        "incoming": null,
+        "amount": "25000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "6C5B133286DBCFAE1DC883AC299913C48E65BB2BB805E5B37B18387046FA714A",
+        "index": 0,
+        "blockHash": "7C28EB5A40B2539A60E9EF496C9C4E68894ACC28F77D18D54025DDD519E97AEB",
+        "blockHeight": 464255,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEDy4AMxiTqQT/5qa507AhxEqK/Xz0AIZcyym30tBu3R6NBH3kYBKTHKtKyllX7cn5K9GB/0Ukq+1JOnlIkVkpA70wlTfTcXW3mOnw1QGLW5BR8gQdlOp6ZIs8FoWmPuXNAqKAAAQAAAQAAIQN8Vy++hbllk/WPFE8q02Eio7RqSdO3YZMENpOAIQHSEUEfUjnJYdo6JS8YajvRPiygoRTurAevArn9nuM9HshC/1Vlr7pU2H6Uv50U4JEPRez9SVV37sCtWtsBvJsDfBq4wgACAAACAAAhA8vLnUEutW5zap1b1cJby0smI9CdMY494r+1QyNOhkcUQSA/CidHvt2GRWFhNee4TObGKnfjW0c2GI++FrrRX1hWIlxjDjfrhHHAhbt2CXOAmsKmxXsORhY2CWBveohbUBg2AAMAAwEAACEDfxp73GOWc3gnIl+wvPxZSI+GeELMZBJaRvc6vk3VYVpBINjHbWOI3BQ7oomKxcOWjY0XmRI63/xY5fLVc0Xbk4GkCYJnRUGlIBVD2s/8y3tHICqC2rzXoMbf9PVjVqEIMw8ABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQKtEDH4xH+INokrljxbQi5t/DaF+R1fFxlEEqXaCkfk7UEfUG5yKSZVtgs7KpMaBZuTGaYxupI60XU8EtbqBXZxSOZ72EdixhreWbbNmBbgh+YJXxzm66wcLnh4ggnp47ECZwAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhA8AcFV54C4U83EH65CZW8XuOAQ0r9Q4H7T3jyRY+ph6mQSBiCIG8ZiwCqu4wc32lI843nuOEFNhH15THqpPOhtkdRidUbWTNcwB/3XAVz0lxNnTBX7EzmnsUWKOoJLjEJ5zDAOoBAlJY8Uhm6SH1JAIFXW2pV8JBvjvcZcqnXEQ/Y7vZjpvDAAAAAPUOwQeKwF4O7FR0Rt5MwT4WWBFsUXS7WhRYj+5TEq4HAAAAAF9iq2zuFOqHz1Scmg+MIFhJ9tfNgQiUGYvPpmJd5vhGYqWMtIa5YDnd/e6WHvfRrZJuALb9Gj+aEAAAAAAAAACZsJjQlFOgOgNyMaN7ixyJr1CtK9NzHWTNYdj7EbASzGtoGn+C6wc1RCH5w/+deJ4USTiHQrxWXUYk9e9qhAsbl5nMsQXHSFJTkqUrv/cLwyblS+T1V9zoX10FHQsVr7/7AYMDAAgAAlJY8Uhm6SH1JAIFXW2pV8JBvjvcZcqnXEQ/Y7vZjpvDAAAAAGtIMEUCIQDZAGGoJJ+GpcyZGv9Rn7Ue8eVQtrvkYOC36FT1XE/8JgIgNc2Qe/FzcJa+4ddHyo0Me/RMYYndFA4usOCEUEuj1K8BIQOofjOrwh++1mL7H8MOCFUv51AQMsme6sZQ9IeKZB8oh//////1DsEHisBeDuxUdEbeTME+FlgRbFF0u1oUWI/uUxKuBwAAAABqRzBEAiAcNfEhAgqozp7sH+Y4AQODdb475SLBb/NZrMYILYpL4AIgN7gwtfej0b531uqdR34NTppwCUz2zvF4NyLrzB6cAksBIQOGcjK6VIJOABNNJyPUy8KqMkEqaet7varD9r8s89hsev////8CQHh9AQAAAAACagDllJgAAAAAABl2qRRQT3Vg2Cs55DW9nVrlztgLtVSeSIisAAAAACQBAUB4fQEAAAAAGXapFGPBDObKrzFTwuUGIeHvs8EqS3W4iKwAAEEffyt+mmBzE8Vek2ag1yDfajR0hvkAzU8SkIVZ+rE72mwQbITSAKWK2M5BCzezhZMMHr9Xbf0rvLLYKSUywt1YKGYjCDRlwZieyaPClvx2Er5iECSNkVgyRKth+vjvQBVu",
+        "timestamp": "2026-11-03T10:19:19.234Z",
+        "gasUsed": 180895660,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "7shZvit25iytew9VqJEbGwj6GdcJHUKipLXiYwn2VFXT",
+          "aliases": [
+            {
+              "alias": "will2.dash",
+              "status": "ok",
+              "timestamp": "2026-11-03T10:19:36.721Z",
+              "documentId": "2y72mJhyqQJrDeSbkmggxM4a2o5JdRDaaZ6VDfW532zC",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "25000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "5FA20A2B6DB142887B1C4BE5318F1AC52E96DF3236FE90E8B8E9427C227AE3FC",
+        "index": 0,
+        "blockHash": "F72171E533401C88DB86C2941EA045A543737A60F73D4433F31140F9620089CE",
+        "blockHeight": 463232,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAGAAAAAAAAACEDgX/NRZUMDE2mniB1nwnSlKQQgQUU4QqMlAZW2/9XmZZBHyin3w5ms9aLOMkAR6G7nCJ5smaDDmR+6uwPiquOC0MlBmcnHiVTm6KnYKC4FK1jr/y6cJ60NORDY1q6YkFvGvIAAQAAAQAAIQObw7lRzc9yALuOQq//ghJ2Od/6P9ZtSqJeF542XFnLHkEfc4XZ5ZcSggDrB/snb8NtE2u9MfXbYnVRUCxqCZioS4FyFdpl0AWtBP17brqckNz0g0CI7RU5Bvt5Ut9lsCYvGgACAAACAAAhAiDYK4pscidO+QxVwTARzH1kwShNRurA0S+Ajj3BY57AQR+bPFMkZvOJk4ugGUkoIMSuXL79Wlx31cCw+TXZCbOsL3qll2B/8H76KNKpDX1CYmqgAqszG8fULcPZUcr1E6NkAAMAAwEAACEDKExusbr80+huR1wEfxYesFC7i7oeIJwMIp4ZVzmXw+FBH8Qpz/PYTN6jljI7rezS3Qt2UGWia7nDedrbGLx1uPYOcvGmd1zggEulWbyGn0GMohYdqD40vbYfMQJL8NOLIg8ABAABAwEBoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwOY29udGFjdFJlcXVlc3QAIQKj1focWsI3CZLEfsbQ3rp9TXJOOghsvTGX0Zz48DWJXUEf+utK/LUJvoVhGU1CdnTrKAmhOeUu5cOkBxvh937pHWZJPdsJDankJMghQqhr05Cl7l077NvFpCGizGaqH3XrpQAFAAIDAQGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvA5jb250YWN0UmVxdWVzdAAhAi1IVUPWU716rlUhz7gSZnxfqJ0I5ENhbrWvjgpRMUhFQSB9NOpMT4s/18NuhJvvASnsxSfERV9/MrUKvZQevjLqSmt5TxWH4e1uEev1OLNg6MSFGkjodCvqU6xbIxB3lv8/AfwAJqT2IOGpsQ2Hrh1obfa5vO5JKi0ce64cEetCGNTxZ/6rf9XdAABBHwMJ9vsNh/Kn84lS0iltRfTRGqatd8wPZ/KgKpAYR98MDA0P+A3vX6eMwPLJoCL4khgK+UJZ57dFJgcVNaJpGb3veX3HS53nMwsCY1KMCShjx57ZpTzYEPHV6ZU0/5MSKw==",
+        "timestamp": "2026-11-01T17:16:28.199Z",
+        "gasUsed": 180681740,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "H7otTu6NbBoxHhLrxPmPGnv8YUN6kcjy3hr8U8pquRES",
+          "aliases": [
+            {
+              "alias": "dashpaydesktopfirstname.dash",
+              "status": "ok",
+              "timestamp": "2026-11-01T17:16:35.835Z",
+              "documentId": "H8q9H6DhH3ySyiLfW2WhJcmVvNTgRHirNYjWQ7oqVqyK",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "8F39907705491B1798BAE63D575EBED06EB91138C2EB9FC3FA24961ABD56B34E",
+        "index": 0,
+        "blockHash": "AB7A05CBC01D96018BB7CE077BCD3CF71FEE79A8F761BD59DF330F25A27B5E9D",
+        "blockHeight": 461449,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAEAAAAAAAAACECDHSATksQVlEXkik6AERBmhSMQDJ/qUz21HvO/wVxD/xBH1oJdhZq/JFZAz3+e6zIFueC0+Co8YsLwHCjPYVuN4jBTaMWU19+L+PswFusBmnZtJ+jTvXk85x+NiFvCktSi8EAAQAAAgAAIQKgHEMHcDqijxsvUNFfgCeUFmZIhojo6GInuoU2OHo3vUEg5LLzj+5UuHVZrDRA/2lNyZ0EvrkAlqPigaNKkSnWuAoDglf5fvv74pGvGvlaUcaEr1pH6fjz6/iza7k6tx+xGwACAAEDAAAhAuLdja3NSGzWL1xV7qJDN5h0bBVo5oxGmirzsjwRTcTxQSDdX1t6KpYnnA28bGAIu1NVYcGhZ0ub3KEGKQoHVYQP0Clu+n/w7xC4hkJL4mMrMOBH5fPBiCBaDCnry+qUzM70AAMAAwEAACECxzcPEYHFmZbC781zXChZOor/1vZqgBKCYEigniQ4pJBBH6IlHXj9CTHy6Y17eUzJG7dmt1Cpq9dRTxGOHOAXnKcJBBKAdfXGZBJNL2WnnQl29l183zcKV5dz9kCu1WgL5TYAxgEBwkvz5fGL2a+c+v/Lm6r+hlPIPYx+wouCQNCh7uXoVA8AAAAAEvndpz7qjPnxCwSD9uuSb4lOQJRTSQ8kwOj0U8GRBdqe4hPdW2hEQ6ICyILNojfZsbdPfRl7fasJAAAAAAAAAISeWZ+sKoow926kn3Tl/x3PK0X1lXRZFIyzEU+fFoUNr8y/fwJpletcTR9RY8EHPQ5CPgHOGPDA+z+piY8kZf+1WvKDpUj9ddQVy5nruB6PIBlS+7pGN0RAzJMBaH58P+8DAAgAAcJL8+Xxi9mvnPr/y5uq/oZTyD2MfsKLgkDQoe7l6FQPAAAAAGpHMEQCIDH8h62bhsVfEPvYZu8VxUzPR+9BkDuzbPWFj3cJKZuRAiB5ONXpANLpduQ3tVvyfcvU2t+Jb3Ujj719jmv3JI/KrQEhAtDn/xZrUAMWYsXQtY2vl7+mnga8H6te2dgp+HWFIbdm/////wLAxi0AAAAAAAJqAE8ZyAUAAAAAGXapFBk1z5Qw1JewcJ7ByP9a771YO28WiKwAAAAAJAEBwMYtAAAAAAAZdqkUfRWKxIrX/Jae6iOg8cjdsCwqsPOIrAAAQSDDGFIvnz5i4b+2uhJBw2Ju+6j0q7PE4O5zjNxe8rk84GNbhqCVPRehDTr6s7z1g2WWQFX+svC0JLSaxt2W1iP+QHy4sgecoBhWc50jkg5BwU05GAqEEy/7pIRYJq4hF1s=",
+        "timestamp": "2026-10-30T07:39:35.042Z",
+        "gasUsed": 117724880,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5LjQ2MV1AGVJ42BpFJZ5EhF9p2BopjWC1Koipg68GqBp",
+          "aliases": [
+            {
+              "alias": "Lagoon73.dash",
+              "status": "ok",
+              "timestamp": "2026-10-30T07:40:19.192Z",
+              "documentId": "5n3BtoEkxJNBzwbJvnfQvzGY8EeBtMeb993ViqtrRa7",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "50DEE6A1372C0BF18A72497EFB7F030BECA53380E96DD672402244321B054B94",
+        "index": 0,
+        "blockHash": "BA87C1E3318D9CED64D49ED2C21CB972988855EC5E4C38B74F7817C4E6D339C6",
+        "blockHeight": 460991,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwADAAAAAAAAACECRAsS2C2l6MU3B4447YrK8fGnYIjMIKLuZ2dCdx2L6gBBH+BoDsZTQbnP8+tEYAovO1miDU8lO0ophvNU2/Fx+QwaW+hbP5WwitIJ8EChF1DNPIo8FDzF/OUSNguyL+0BBycAAQAAAQAAIQN7Gex3LuCcayaxCSgHBltuRI0ske42c7IhiRKew/vimkEgpsgK+FRFMzhwL62+/jB8S0TCSSBZiDuNo8QfcTxsbQtZRx0tUPJ70DIdkLu338Qj7ed2adzzi7CaCo2HzBDZmwACAAACAAAhAjBWTFtgbtmS1lkNTbjw0npSjZ5Cy89Hqt3pSk/DSGfbQSCGqNx672T+/xmiRwxnopdlG2mJviUgv3QfTI1M7prv8UAXcrQdoGi0LieST2NEL3BYbRPO2L1lVekxmsV2ufDfAMYBAXwaD6o5YiDL+ugS7h9YlGL9HQPwhGCYfPXnZP7aLa0CAAAAADsMxRIwEf6NO/N4iyq4xLxASXejSBhRmse5TtIjhpX6p72VChRHXE4s3BXF6BBGdjOlXQ+e2BZ3EwAAAAAAAACiHCrlJ3ZEs9dHTNewO6/MSxoacxgarLi72mSjwEjWdUo49xLNRbM6Ye8e0ykr36YOn5IfXqgzq//2cwWWz1oJsY6ek1KpzumJiGjblWdCV5z4p6tyOEA6j2jtByArHYrNAwAIAAF8Gg+qOWIgy/roEu4fWJRi/R0D8IRgmHz152T+2i2tAgAAAABqRzBEAiAde13rGxqO1k3dG+soscwgzRkX8x0qQTuvDSBcscvfmAIgGeytPp5+Sw9PTcna01nr/bhTnJI7i6icydBpwnLR1C4BIQKSvEC1CIH0So9b06CdyB4hw+28l4Tb2MkekindhZyQO/////8BUqAHAAAAAAACagAAAAAAJAEBUqAHAAAAAAAZdqkUWfkjIZC7xrSCJR0j4jN75paJenyIrAAAQSCYbXUZX0BMHk8m98kOc6M8nc9Ht1fiUIz6osjkBmiblzrRaVjpHUrVrCt7uhnLQSj7e5/N90xIWgmRimGbc6WfTe7Inp5Nq5Y11pbevtkQAd0UavHcxrOnTTzEnmMdwf0=",
+        "timestamp": "2026-10-29T14:10:10.924Z",
+        "gasUsed": 106370560,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "6FDaJfTcC3qr5vcEXc4onVoozC9rKFh66bapbnu2Ubd6", "aliases": [] },
+        "incoming": null,
+        "amount": "499794000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "0D02DEBFC0E4A55F3DCD474CF14A7C61AAF679822D2F4145CB29A665B8339369",
+        "index": 0,
+        "blockHash": "03A55F2956EF671F738DB7C56FCE853D59B7F3FC4F62A6D00458D1B39C811EB1",
+        "blockHeight": 459654,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwADAAAAAAAAACECIb8XZVnUYEoudyLx0JzdAjfMaqGwR4VjMfpR7tmHy59BIJUVdU1dzKmakWj33o3YrQP2OBTqICRXNDpti5FeemHzIvSfbXpHu0pKeWpsIbS0akiEeiWmnA8kfDmz6fHHPzAAAQAAAQAAIQIMrsQKdDjwOI1JzjQNIyxYfmtqy5EzZyw5WPzuz18rakEggVTu+TYTEZIsYSq3TjBao+oibYLRpI8fTX3TH9Ku6G9oJeL5jqaK3Vf5kESMoz03zEZnI0lO4/V8uLGTBthMLgACAAACAAAhA8misT7SkPykht+JV/jPnqGdED3bTgPs29UUwk3roAj2QR+WbBm2wogfMcFF90UBjKIj0V090Hz0vfDuyCSVybsjXnVyaDDdDcPsq1R3V8z7GSs6PIsPMpQgSN26s6hs2URwAMYBAf8wSaqkNgI4XPs2YuM4+BNqZNWwXaWfxWvGzr6K4WGPAAAAAGsiTtXEP/bq5o/FqTLOYUb0O7hqB9dWPpbIpqYJs7j601gdEfSsp+R86lmpWVsEGhiTCuBThXFlGQAAAAAAAACuQHWPNMVFssjbZLcIrWj8DCUXfOBH97RrqKujg6M0IiNF1kZQZv3TGSPqQ+fu+3YCmE9yhc57ZeW7+8PPSYyxRsmkYNOiVaOwiyk1eAg5e9egABe7tzWnqdj4TaJgTqDNAwAIAAH/MEmqpDYCOFz7NmLjOPgTamTVsF2ln8Vrxs6+iuFhjwAAAABqRzBEAiBTZsaw4Rk+NteR++8xoi3BZgStaLIlfauXene2FTzgBwIgHXmN0KW/ekC0uB3mhKDlCXaNCtP559DufpTUqAIv3CMBIQJ9SeC5BdedGVD2svyOa3Rusjo+sONAO+YzeIpXmlIwtv////8BUqAHAAAAAAACagAAAAAAJAEBUqAHAAAAAAAZdqkUVNvQjBIzxqM7Do1E87azRFEpAoeIrAAAQR+dK81J6cSK0/jh8W1q/pSFixDmTKRYf4oBhiNWDGoYVWAhyqBGhN60SgLFSc0mkrmNOWNbS2xk9wJ8GTEDOWkwWhwtBrKgQT8URntzuHylWv+EVKSe7dtyWQ0mw15j2nA=",
+        "timestamp": "2026-10-27T11:56:44.605Z",
+        "gasUsed": 106169920,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "74kcUjaeZBhUsUX4FmaaM8Ga7fkJAYQDdr4k8JDEbm4s", "aliases": [] },
+        "incoming": null,
+        "amount": "499794000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "C4D3058364078C7A0A4CE1947737DB0C4A5E4797E22A567410022664AA2E23DC",
+        "index": 0,
+        "blockHash": "B312627AFA8793F5DA636D4DE7F55882A053C24AE8281ABF0CC3B5BE8529CFD7",
+        "blockHeight": 459605,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwADAAAAAAAAACECf3BBzN8WMdSwFMVLo42M/OvSEvEssQOzAWyVsnG+ikRBHxtQbXXu18l5E11mnx8eDD4l2HfzyiSBJqQCDDyw6/ODA3YI9okS7A1Ldg2u9QWwRLw/fRfRPTCWhZMpJAghFFwAAQAAAQAAIQNXdqFLJCxEEzFVT1oH9yfktb0EaZ1BSpoMjVraFqhbPEEf6eIquLOrm+TY9tfojn5Jp89EB9NFxzdBJw7aL+prasc4gRRnOaWQMcaS1Z/16XW1ZJhagzQ5KDYp4IHK3ZvrYQACAAACAAAhAoAdJ456v+z/yQmjJS6+K37jMsypT6s4xowCpBjtPtqzQR/s4dhqmAPtXjwc3hRe7JiRTw6dZ1nomiEKF4o3mLiO6BmPc2YpWeUf/BZ8NgLp8Sy/qC5Lxqwd+JdstYM8uevyAMYBAT0+zFS1AgnMGxXJn8FwLZe1P4xHSLV/e8JB4uWc9XvCAAAAABLPCtYYMqoPCDXUfA9nONoPfeB0wk33oHq8HxioDWSY01gdEfSsp+R86lmpWVsEGhiTCuBThXFlGQAAAAAAAACY2AkxJKnet9gFRY90S924lZJDyVjsVXrYKfZobixd1/Six8qj82gkDnbcUMI5uRoST95zxXwQJ6fPkWUXmRaO7pcMbmzzCXoYJoVAnBC12jsLrHme5TSAdxDOxY2rMZfNAwAIAAE9PsxUtQIJzBsVyZ/BcC2XtT+MR0i1f3vCQeLlnPV7wgAAAABqRzBEAiBxOxa983UrxWpmkg7T+v42d+gAuP0vXRULpjibirTYZgIgN/BnRdYVeG+hD5BQHpdjwB6mItoQrbmih/BJQ7amBxUBIQL8zC+PWtIf+SuVrdU5p78tdJH1HBQJ4Sq4RHI8+lQnRf////8BUqAHAAAAAAACagAAAAAAJAEBUqAHAAAAAAAZdqkUONKcnQ7YC4N1T1078lRHQ9moLDWIrAAAQSDBB9lLMVRtDsu4q6wBb44oF7+RBCRE+sXuSr1XHeP6imfeTONyJJlzMY0GqczHKZqknQIQ0rxIRyDl8hdQfcbefmAC3DYAKdamq/Q559jIc5n4aL+NFXcm7DS6tOcw2e8=",
+        "timestamp": "2026-10-27T10:00:26.507Z",
+        "gasUsed": 105828280,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "9WKHPxNuqCKen93WT4U68qvLxE7RaBfhGBCNtEdKtewg", "aliases": [] },
+        "incoming": null,
+        "amount": "499794000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "8C7D9F7EF13441489A440F65516AE4CC8A4523D7274D466D86545FE268B9507F",
+        "index": 0,
+        "blockHash": "80088C6CAB8C3F42C28D7B030A673658B6F027F93BD12255D2ECEA67C65E25D8",
+        "blockHeight": 459495,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwAEAAAAAAAAACECzlZF0hVYQcqefNbZpznH2GGe/5usiF32j3vkPgZ4qD5BHzuINte3UJGwR+yaLy7oavG32DnLoATkvoK/dGuRJ2YIUcVHAovmCS62yysKOKVRdJnKrZ5RG4OGrfLJfkwwOdMAAQAAAgAAIQIRtZGh0fdQ5/JFmDM0I2vE7RO3gyUl19eifLYx4cRjGUEgXkLsbJhVBW00YpnwdIsw/kdyVthH97WGW4NGRMZouQws4Zp23lFiQaOzUvPj6aa1QQWUL3GjcnkRgQEfqgRyqgACAAEDAAAhA+icMQK/Zr+Wum8g5ADGt8nEtr8kzndtnCqKm/5Ij5JDQR9hcMUoGN4TRDlWVLMJyWAkWgy6pc7dIZATAcFodn7sQW3v0PBskUQpECslkw26P5FYyAc9qrrImZhFs0JRj6j9AAMAAwEAACECRzmAIUVcQW3f/I4P8p7Mq1vS9QRMlqUaztiRDWPd97hBIAxkwpcQB1nNZl7HbbNIIiOpSQLxPju/xBl4v6ztNGzqG4Xt0fijhMHPur3WrrxwB0M0o0/onMdUWJw/iEHmjAYAxgEBce3Upx79o83f8/JnByqKICvbmE228n34fV6Z9XJxCGsAAAAAMDPdXYO7dOEKzyc6P+qGWl/J/jugRPP88hQYqYDLagbTWB0R9Kyn5HzqWalZWwQaGJMK4FOFcWUZAAAAAAAAAKYw2kPSgNaecwmQy5iA+NhVLt4uL6WJNXXJMM7noaydWwFAnT1wvlOCqkp5W4Zw+Apdwgf1zVWKzue0uqHK+tPOZ9VczbFUrySrK7GWze0pMxr6v673+DJHboYX4Fx2DPADAAgAAXHt1Kce/aPN3/PyZwcqiiAr25hNtvJ9+H1emfVycQhrAAAAAGtIMEUCIQCzmAAvS6iahWOgpU6fRPTAB4TGSzxojAaWlZQgKLjDcwIgbdlRPpaIAjaIXvwQbh8kVVXWF6PKc6pWcjtJDonEq3EBIQL1sKDJDpZoqWfYJ39gGAR5u95mjvi560EbFdsW+cZX3/////8CwMYtAAAAAAACagDM8z/sAgAAABl2qRQosP5P9R12b9hYYuhouxn9j6JJu4isAAAAACQBAcDGLQAAAAAAGXapFD4P7/rB2dTdq2TH/zIh/yCwm2eGiKwAAEEgGLE/sayfu/itCl/09N1KNsr3EwyC9kIQMrde3uULgSMwbhvq7m2AcnNJFMg6LqWw50yXYNlK8VQPtCG+HCkmZ/mG13+Kh6pTcwRdtCFdCmphWQYGyNSDIi5msI/ubPn4",
+        "timestamp": "2026-10-27T05:23:45.828Z",
+        "gasUsed": 117503800,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "Ho3mkLu981oYJ8BmYWeW37KXzW7a1VutfN2VPPhqcxQF",
+          "aliases": [
+            {
+              "alias": "rainbowsandunicorns017.dash",
+              "status": "ok",
+              "timestamp": "2026-10-27T05:24:01.202Z",
+              "documentId": "GGyhcK71d4dQiLCSowd7t9rTcy1KvNM5v6yZhay3nY1a",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": "3000000000",
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "85836C6048A0071C4D97981EFFECA85C9B91C3554CBE01E66E7876D07A7ED541",
+        "index": 0,
+        "blockHash": "B1EEB341C39D47C515F615CC81405489BCE568805F9AA22102BAD4A67CF6F32D",
+        "blockHeight": 459329,
+        "type": "IDENTITY_CREATE",
+        "batchType": null,
+        "data": "AwADAAAAAAAAACECw4HdqF2yMUnSPy+nj7RU/0XJeUAYlvQvG2iF9HLBkHtBIAz49FKhPpJzKy79CvMHZC6wQaMdCoQA5jhVYgwjUQpDaZcY7EbDvkODp0EVQJ4Y4l+oxrDUd2QgFnullxK2qDgAAQAAAQAAIQNSSDqxdZOQN2mGDhnKE62iDG91hD9oKh4pFA6tWle+L0EfYe/+ZKqfHGwkoFtzo5WCI311HRGfodZ68G2dT/jLIvNOeU8Gm7pu8HPlTzY4nYETBW/TvnwCoU5wdhNIgqNcnwACAAACAAAhAuCO+K0xaD6djhQBTRrIGxolYUOQWSVdbPPXeUXYMo3VQSDyYeMe/uazWs1h8qger0RccFmlBxtBNm1x9a1+lDEKRWRgQ+cKfpPudoq23qwgZ6AlFZ0kfwntEJrgs09K5LF8AMYBAUpxLQn/G4t4I45mT39uJ7zTUxzi0SBzqzLcA4yp5IbVAAAAAIv3zFV8GkxslqerX1bBlj1yFPTW7J01878tzEUXmrEyhqgFuxAkFJXSouptQqQepRXwLln0Gs6cDQAAAAAAAACYwG0NvYfEbQqj+cc5oIlxHT1xIV4yrtI1fzCEB7kYrJ1mJKEIS7hwgFEBovNV+D8BmFVdhXTiIVqmwIVl6SR2LZGIAhXK4KVoZc7uEj8yUrk9xjfcXI9AWEb5U0l1rR/NAwAIAAFKcS0J/xuLeCOOZk9/bie801Mc4tEgc6sy3AOMqeSG1QAAAABqRzBEAiBvx+D5orCyxRbLUQZ1biH7P4dAW+i6NBqD1V3KNulrYwIgKmImYREGQGGGk7eAZl78sqWEkvlNXJt5yHFZdHrRy20BIQPZtfeZqZWl+2MZB8lJ0pjMcvDb5G6Llxm6j4m0OafQTv////8BvUAPAAAAAAACagAAAAAAJAEBvUAPAAAAAAAZdqkUNqcZGcyXTz4jyGjSLyiIpjL3mrqIrAAAQR/FWJMVTTptPcEsHZasVEw0atp3BsA1Ka+aOjVVwVC5xzjw5MzSmB2XdBpyy3Q6z/roqbsCe3A/qVMFshX2zVfoaRXVwBiRe8+T/6kSfL8CeHRIYePckrsIawasfsmCDuQ=",
+        "timestamp": "2026-10-26T21:50:18.599Z",
+        "gasUsed": 106090860,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": { "identifier": "85D7v3YZf4Y5z3cPkCV3hcDe1nXmo71Tcz9giqgBfhHu", "aliases": [] },
+        "incoming": null,
+        "amount": "999613000",
+        "base58Address": null,
+        "bech32mAddress": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 2689 }
+  }
+}

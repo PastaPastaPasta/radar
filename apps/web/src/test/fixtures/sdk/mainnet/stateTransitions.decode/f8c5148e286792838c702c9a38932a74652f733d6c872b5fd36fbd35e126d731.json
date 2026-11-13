@@ -1,0 +1,44 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgDVMG1r2PCv9V9CVZ41DSFxmEBWhPB/IrV6Dqj4PFBhbAECAAABM4Ti1iSsuaCBYtvvUeaiUGjejnBnMPGIBX3iG2t2SBMEbm90Zebwzvt4/IFxwzn0jhnbUtMNuW6cjxvsHL2Y684CXg6ZAAFBH3vYrwob1Q2geTJW0oR1r/H0DLjUYEKBT7HpSCMt/hNrcNXhBZEUrXUyigtyGw4t4pkywZsw9Z8cBq3trU8dT8U="
+  },
+  "recordedAt": "2026-11-13T13:05:36.585Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Delete])",
+      "typeNumber": 1,
+      "ownerId": "FMCfooWMuApRmihp2b9fBBu6futLgpppcLbecf1t4mxX",
+      "identityContractNonce": {
+        "$bigint": "19"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "H3vYrwob1Q2geTJW0oR1r/H0DLjUYEKBT7HpSCMt/hNrcNXhBZEUrXUyigtyGw4t4pkywZsw9Z8cBq3trU8dT8U="
+      },
+      "hash": "495bd0b22f15c4d674dbe6da9e912e91228941f327e0aaba13427c5cb721a930",
+      "body": {
+        "$formatVersion": "0",
+        "ownerId": "FMCfooWMuApRmihp2b9fBBu6futLgpppcLbecf1t4mxX",
+        "transitions": [
+          {
+            "$action": "delete",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "0",
+            "$id": "5gyLvNRAb18CUrK9qhnJ9fKLqmTGES19PZRpHBb2tcf",
+            "$identityContractNonce": 19,
+            "$type": "note",
+            "$dataContractId": "GYVk5fNkTmFQK7668bhRGhg5YyiV56UiWMC3YGHGt73e"
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "H3vYrwob1Q2geTJW0oR1r/H0DLjUYEKBT7HpSCMt/hNrcNXhBZEUrXUyigtyGw4t4pkywZsw9Z8cBq3trU8dT8U="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.15110399999957735
+  }
+}

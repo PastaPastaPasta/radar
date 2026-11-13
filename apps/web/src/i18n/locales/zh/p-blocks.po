@@ -13,41 +13,629 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "{0} 个成员"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 个十六进制字符"
+
+msgid "A batch type shows batches only."
+msgstr "选择批处理类型后只显示批处理。"
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "节点会报告状态转换是否已执行，失败时还会给出错误。"
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Platform 区块由其高度或 64 个十六进制字符的哈希指定。"
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "ProTxHash 为 64 个十六进制字符。"
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "状态转换哈希为 64 个十六进制字符。"
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "状态转换由 64 个十六进制字符的哈希指定。"
+
+msgid "Abstain"
+msgstr "弃权"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "操作 {0}"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Addresses that pay"
+msgstr "付款地址"
+
+msgid "Addresses that receive"
+msgstr "收款地址"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Amount"
+msgstr "金额"
+
+msgid "Amount across the pool"
+msgstr "跨池金额"
+
+msgid "Anchor"
+msgstr "锚点"
+
+msgid "App hash"
+msgstr "应用哈希"
+
+msgid "App version"
+msgstr "应用版本"
+
+msgid "Ascending. Switch to descending"
+msgstr "升序。切换为降序"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "正在向节点查询结果，可能需要几秒钟。"
+
+msgid "Authentication"
+msgstr "身份验证"
+
+msgid "Batch type"
+msgstr "批处理类型"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "批处理：{0}"
+
+msgid "BIP13 script hash"
+msgstr "BIP13 脚本哈希"
+
 msgid "Block"
 msgstr "区块"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "区块 {0}"
+
+msgid "Block height"
+msgstr "区块高度"
+
+msgid "Block height or hash"
+msgstr "区块高度或哈希"
+
+msgid "Block metadata"
+msgstr "区块元数据"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "区块页面需要 Platform Explorer 的索引"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "区块页面需要 Platform Explorer 的索引，而“仅去中心化”模式会将其关闭。"
+
+msgid "Block version"
+msgstr "区块版本"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "再次检查"
+
+msgid "Choice"
+msgstr "选择"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract as sent"
+msgstr "发送时的合约"
+
+msgid "Contract nonce"
+msgstr "合约 nonce"
+
+msgid "Core block hash"
+msgstr "Core 区块哈希"
+
+msgid "Core fee per byte"
+msgstr "每字节 Core 费用"
+
+msgid "Created at Core block"
+msgstr "创建于 Core 区块"
+
+msgid "Critical"
+msgstr "关键"
+
+msgid "Date"
+msgstr "日期"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "日期：{0} – {1}"
+
+msgid "Decryption"
+msgstr "解密"
+
+msgid "deduct from input {index}"
+msgstr "从输入 {index} 扣除"
+
+msgid "Denomination"
+msgstr "面额"
+
+msgid "Descending. Switch to ascending"
+msgstr "降序。切换为升序"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "Document type"
+msgstr "文档类型"
+
+msgid "Document types"
+msgstr "文档类型"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "加密"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "请输入区块高度或 64 个十六进制字符的哈希。"
 
 msgid "Epoch"
 msgstr "纪元"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "纪元：{0}"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "每个 Platform 区块的纪元、提议者、状态转换和时间。"
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "每个状态转换的类型、状态、区块、Gas 和所有者。"
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Executed"
+msgstr "已执行"
+
 msgid "Failed"
 msgstr "失败"
+
+msgid "Failed only"
+msgstr "仅失败"
+
+msgid "Fee multiplier"
+msgstr "费用倍数"
+
+msgid "Fee paid from"
+msgstr "费用扣自"
+
+msgid "Fields as sent"
+msgstr "发送时的字段"
+
+msgid "Filters"
+msgstr "筛选"
+
+msgid "Format"
+msgstr "格式"
+
+msgid "From"
+msgstr "来自"
+
+msgid "Funded by"
+msgstr "资金来源"
 
 msgid "Gas"
 msgstr "Gas"
 
+msgid "Gas used"
+msgstr "已用 Gas"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Gas：{0}"
+
 msgid "Hash"
 msgstr "哈希"
+
+msgid "Health"
+msgstr "健康状况"
+
+msgid "Height"
+msgstr "高度"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "高度：{0}"
+
+msgid "High"
+msgstr "高"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity ID"
+msgstr "身份 ID"
+
+msgid "Identity nonce"
+msgstr "身份 nonce"
+
+msgid "Index"
+msgstr "索引"
+
+msgid "Inputs"
+msgstr "输入"
+
+msgid "InstantSend lock"
+msgstr "InstantSend 锁"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "它可能比索引更新，或者高度或哈希输入有误。"
+
+msgid "Key"
+msgstr "密钥"
+
+msgid "Keys"
+msgstr "密钥"
+
+msgid "Keys added"
+msgstr "新增的密钥"
+
+msgid "Keys added by this update"
+msgstr "此次更新新增的密钥"
+
+msgid "Keys disabled"
+msgstr "已停用的密钥"
+
+msgid "Keys of the new identity"
+msgstr "新身份的密钥"
+
+msgid "Keywords"
+msgstr "关键词"
+
+msgid "Lock"
+msgstr "锁定"
+
+msgid "Locked to Core block"
+msgstr "锁定至 Core 区块"
+
+msgid "Look up"
+msgstr "查找"
+
+msgid "Look up a block by its height"
+msgstr "按高度查找区块"
+
+msgid "Master"
+msgstr "主密钥"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "Member"
+msgstr "成员"
+
+msgid "Mined in Core block"
+msgstr "打包于 Core 区块"
+
+msgid "Newest first"
+msgstr "最新优先"
+
+msgid "Next block"
+msgstr "下一个区块"
+
+msgid "No"
+msgstr "否"
+
+msgid "No block matches these filters"
+msgstr "没有区块符合这些筛选条件"
+
+msgid "No result yet"
+msgstr "暂无结果"
+
+msgid "No state transition matches these filters"
+msgstr "没有状态转换符合这些筛选条件"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "不在 Platform Explorer 的索引中"
+
+msgid "Not valid"
+msgstr "无效"
+
+msgid "Note"
+msgstr "备注"
+
+msgid "Oldest first"
+msgstr "最早优先"
+
+msgid "Only an index knows which block holds a height."
+msgstr "只有索引才知道哪个区块对应某个高度。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open a state transition by its hash"
+msgstr "按哈希打开状态转换"
+
+msgid "Open block"
+msgstr "打开区块"
+
+msgid "Order"
+msgstr "排序"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "输出 {0}"
+
+msgid "Output address"
+msgstr "输出地址"
+
+msgid "Outputs"
+msgstr "输出"
 
 msgid "Owner"
 msgstr "所有者"
 
+msgid "Owner balance after"
+msgstr "执行后所有者余额"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "所有者：{0}…"
+
+msgid "Pays out to"
+msgstr "支付至"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform 地址"
+
+msgid "Platform block"
+msgstr "Platform 区块"
+
 msgid "Platform blocks"
 msgstr "Platform 区块"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer 不索引开发网"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "Platform Explorer 中没有区块 {0}"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "Platform Explorer 中还没有区块"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "Platform Explorer 没有此状态转换的字节。"
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "Platform Explorer 中没有此区块的法定人数"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "Platform Explorer 没有此状态转换的记录。它可能比索引更新，或者从未发送过。节点的回答见下方。"
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "Platform Explorer 中还没有状态转换"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer 不保存此状态转换的字节（与未执行的转换相同），因此这里无法读取其字段。"
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer 未列出成员"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform 本身不保存区块或状态转换的列表，这需要 Platform Explorer 的索引"
 
 msgid "Platform state transitions"
 msgstr "Platform 状态转换"
 
+msgid "Poll"
+msgstr "投票"
+
+msgid "Pooling"
+msgstr "池化"
+
+msgid "Position in block"
+msgstr "区块内位置"
+
+msgid "Previous block"
+msgstr "上一个区块"
+
+msgid "Price"
+msgstr "价格"
+
 msgid "Proposer"
 msgstr "提议者"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "提议者：{0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "Evonode 的 ProTxHash"
+
+msgid "Public key"
+msgstr "公钥"
+
+msgid "Purpose"
+msgstr "用途"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorum hash"
+msgstr "Quorum 哈希"
+
+msgid "Quorum members"
+msgstr "法定人数成员"
+
+msgid "Quorum that signed this block"
+msgstr "为此区块签名的法定人数"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar 无法从字节中读取此状态转换的字段。原始数据见下方。"
+
+msgid "Raw data"
+msgstr "原始数据"
+
+msgid "Read-only"
+msgstr "只读"
+
+msgid "Recipient"
+msgstr "接收方"
+
+msgid "reduce output {index}"
+msgstr "减少输出 {index}"
+
+msgid "Result from a node"
+msgstr "来自节点的结果"
+
+msgid "Revision"
+msgstr "修订"
+
+msgid "SDK action"
+msgstr "SDK 操作"
+
+msgid "Search Radar"
+msgstr "搜索 Radar"
+
+msgid "Security level"
+msgstr "安全级别"
+
+msgid "Sent again in later blocks"
+msgstr "在之后的区块中再次发送"
+
+msgid "Sent by"
+msgstr "发送者"
+
+msgid "Service"
+msgstr "服务"
+
+msgid "Shielded"
+msgstr "隐私保护"
+
+msgid "Shielded actions"
+msgstr "屏蔽操作"
+
+msgid "Signature"
+msgstr "签名"
+
+msgid "Signed with key"
+msgstr "签名密钥"
+
+msgid "Sort by"
+msgstr "排序依据"
+
+msgid "State transition"
+msgstr "状态转换"
+
+msgid "State transition as JSON"
+msgstr "JSON 格式的状态转换"
+
+msgid "State transitions"
+msgstr "状态转换"
+
+msgid "State transitions in this block"
+msgstr "此区块中的状态转换"
 
 msgid "Status"
 msgstr "状态"
 
+msgid "Succeeded"
+msgstr "成功"
+
+msgid "Succeeded only"
+msgstr "仅成功"
+
 msgid "Success"
 msgstr "成功"
 
+msgid "System"
+msgstr "系统"
+
+msgid "That isn't a block height or hash."
+msgstr "这不是区块高度或哈希。"
+
+msgid "That isn't a state transition hash."
+msgstr "这不是状态转换哈希。"
+
+msgid "That isn’t an identity ID."
+msgstr "这不是身份 ID。"
+
+msgid "The identity's withdrawal address"
+msgstr "该身份的提现地址"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "状态转换的索引详情需要 Platform Explorer 的索引"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "节点与 Platform Explorer 对此状态转换的说法不一致，分别显示各自的来源。"
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "节点在几秒内没有返回结果：此状态转换尚未执行，或没有节点知道它。"
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "节点在几秒内没有返回结果。节点只保留近期结果，因此较早的状态转换可能没有结果。"
+
+msgid "The same transition seen again in later blocks"
+msgstr "在之后的区块中再次出现的同一状态转换"
+
+msgid "This block holds no state transitions"
+msgstr "此区块不含状态转换"
+
 msgid "Time"
 msgstr "时间"
+
+msgid "To"
+msgstr "发往"
+
+msgid "Token"
+msgstr "代币"
+
+msgid "Tokens"
+msgstr "代币"
+
+msgid "Transfer"
+msgstr "转账"
 
 msgid "Transition"
 msgstr "状态转换"
@@ -55,5 +643,37 @@ msgstr "状态转换"
 msgid "Transitions"
 msgstr "状态转换"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "状态转换：{0}"
+
 msgid "Type"
 msgstr "类型"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "类型：{0}"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Valid members"
+msgstr "有效成员"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Voter identity"
+msgstr "投票者身份"
+
+msgid "Voting"
+msgstr "投票"
+
+msgid "What a node can still answer"
+msgstr "节点仍能回答的内容"
+
+msgid "What it does"
+msgstr "它的作用"
+
+msgid "Yes"
+msgstr "是"

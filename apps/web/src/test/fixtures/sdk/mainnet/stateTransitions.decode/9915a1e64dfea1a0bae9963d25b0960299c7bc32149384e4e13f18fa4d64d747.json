@@ -1,0 +1,40 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "CQA9zh7KkoIz2/Thm/bHNJ7Pp78agiyQhJg2Vhi8aM74cAEAVfaX/25vWPZQvZcWytU4wIGhBKf8Hc1lAAEAA0EffRorRRfGbl+WZfnK5/QcCddyv/6Z5UvxCSJ9on9uKrVSReenQlHKeBK1wJhk+aEj7o/+81IL0Q5x4ylfr+tHNg=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.560Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "IdentityCreditTransferToAddresses",
+      "typeNumber": 9,
+      "ownerId": "5AGAUcv7VXg5AgSwHdmqwfAYkUp8MnBsjEUTWMGe1GAT",
+      "identityNonce": {
+        "$bigint": "1"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 3,
+      "signature": {
+        "$u8": "H30aK0UXxm5flmX5yuf0HAnXcr/+meVL8QkifaJ/biq1UkXnp0JRyngStcCYZPmhI+6P/vNSC9EOceMpX6/rRzY="
+      },
+      "hash": "2cda30b593403429839b9c76fba1745f5d8477ed3b3a99c864680e2654b6de94",
+      "body": {
+        "$formatVersion": "0",
+        "identityId": "5AGAUcv7VXg5AgSwHdmqwfAYkUp8MnBsjEUTWMGe1GAT",
+        "recipientAddresses": [
+          {
+            "address": "0055f697ff6e6f58f650bd9716cad538c081a104a7",
+            "amount": 500000000
+          }
+        ],
+        "nonce": 1,
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 3,
+        "signature": "H30aK0UXxm5flmX5yuf0HAnXcr/+meVL8QkifaJ/biq1UkXnp0JRyngStcCYZPmhI+6P/vNSC9EOceMpX6/rRzY="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.9241860000001907
+  }
+}

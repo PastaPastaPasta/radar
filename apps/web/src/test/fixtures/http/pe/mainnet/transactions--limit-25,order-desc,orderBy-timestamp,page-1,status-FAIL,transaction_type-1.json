@@ -1,0 +1,651 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/transactions?order=desc&orderBy=timestamp&transaction_type=1&status=FAIL&page=1&limit=25"
+  },
+  "recordedAt": "2026-11-13T13:28:25.786Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "hash": "F55F4E8A71BC403ED0246E071EC4421589516636196A7C1101C66BC04AE30CA5",
+        "index": 0,
+        "blockHash": "471822F4E5F233C36AC6DA4EC3652A904B9074FB508E5E533A6CEEA9DEB55900",
+        "blockHeight": 470666,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "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",
+        "timestamp": "2026-11-13T12:49:04.036Z",
+        "gasUsed": 1257520,
+        "status": "FAIL",
+        "error": "Document umQ4VcasiNWumyhUYoU9ajLjieuqEWdmThmkrUidoTH has invalid revision Some(173). The desired revision is 173",
+        "owner": { "identifier": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "AB8B7CBB2C2C85D6E7140C54CE184ABE8C5EABCE24F9B8BBC65DAD3F300A33DB",
+        "index": 0,
+        "blockHash": "6DA91804C00D65AD007FB6C2F204666705EDCE09BC4F55CE5DC35A9C6CB61C61",
+        "blockHeight": 470161,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "AgEBomkOD+PxfA1tJpjNo5VG21vEclf5FVBkNy0hMncaxQEAAQACqf41RfdhbigFtPihzBDe+tULf5tjKPuNjXCwEzBfJn/7AR0FY3ljbGWhGmbHrRpnJ2FTqMOPTSwMI1ZsmOHf+O7IfoEwWVLujAAAPQcJYWxsb2NhdGVkAv0AAAB90lmcAAZidWRnZXQC/QAAAJ77n6uwB2VzdFRpbWUC/GsAVU8EcGFpZAIAEHN1cGVyYmxvY2tIZWlnaHQE/AAnTHgNdmFsaWRXZWlnaHRlZAT7DCcUdm90aW5nRGVhZGxpbmVIZWlnaHQE/AAnRfoAAkEgPu+Aay6O1lq+PhiyNtVgqvs99JABlK27GAuJUzIxoQ0BQSIg3bnUpuP+NZd+jt/7WgIH6Iy3jCW2lz+3Gsay5g==",
+        "timestamp": "2026-11-12T15:54:36.231Z",
+        "gasUsed": 1192860,
+        "status": "FAIL",
+        "error": "Document CSaiz3Q3VJirgGScDn41ynJHYUosRimGq1eQGYcSXuX4 has invalid revision Some(61). The desired revision is 61",
+        "owner": { "identifier": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "3915D1085884EC566F2A0825FEDD1FB9C6748B7E0C83D8760329C75AE5B69E79",
+        "index": 0,
+        "blockHash": "639E6C30839A266E069282CB6ED75664775811C0BD4BD428307E86B617ED91D9",
+        "blockHeight": 469799,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgGMIK4723uPh3V35SJC3RUmyZ8gwZDK4zTcO45psLawKAEAAAACG+7GTwSxSQGvojmglQRbf4N5Q76INhHwpgEthugSZ9QmDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwAABg8wINE/nv8zIs51823IBRwhOgwdF6znbEPFfoZEhugBhBhY2NvdW50UmVmZXJlbmNlA/wU/DEgFWVuY3J5cHRlZEFjY291bnRMYWJlbAow69m1SuUqjb3TO+jRQDdWotdeDFfW6WFO7cYTovlnXUaiEbrNkOHi+LP/MVV4hK0VEmVuY3J5cHRlZFB1YmxpY0tleQpgie6YDV3apiYiALX9C0V4wSPzFZURAC3Xxw7PBDVWx6cqqJ0+/cuQn8iI9+m2DdWn7ncZ0LN53QXyGRqUGa1MPwkw2143aKKXHlgawsgLfmUQksFO0lNluIRCR5kdEgLIEXJlY2lwaWVudEtleUluZGV4AwgOc2VuZGVyS2V5SW5kZXgDBAh0b1VzZXJJZBDsUGUwu0f1enAzoBmtI76g4+04EqJbIhXYUTLjfvmkSQAAAUEfh6Rj1SnGmUhvX3Y2FH5X+R0eU2SZhfq94niST62hC1s+ULS1X0VRPj41fWTpTNPalX20mzYBtvnmp2r7mtFyUA==",
+        "timestamp": "2026-11-12T01:11:14.007Z",
+        "gasUsed": 1228240,
+        "status": "FAIL",
+        "error": "Document 2t3BX3UrvonP7gB8G5QveBtb7FaaPBHi2NtAQ8ouRj9V has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "ARzysf5HEByfm9iYihAgUivUS736GHHpwTJA8By4cRvX",
+          "aliases": [
+            {
+              "alias": "max.dash",
+              "status": "ok",
+              "timestamp": "2024-11-28T03:28:24.858Z",
+              "documentId": "jSvqUqiHxESYcmyuTDH7BsoYoDepa91gH7eWm2VCUbB",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "27FB9F45B62C32AB5D02CF4448FFFBD202C82136FB5A68E7C2AF0A421382D224",
+        "index": 0,
+        "blockHash": "DEAF023E4D1C58891677EBF0949731FC5F8F92A135074F70B7423BD6DCCA78B7",
+        "blockHeight": 469524,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "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",
+        "timestamp": "2026-11-11T15:14:46.644Z",
+        "gasUsed": 1248020,
+        "status": "FAIL",
+        "error": "Document umQ4VcasiNWumyhUYoU9ajLjieuqEWdmThmkrUidoTH has invalid revision Some(142). The desired revision is 142",
+        "owner": { "identifier": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "6EAC6E2B73C6D4099E1412CADEDB806F04AADB8FAB97E0F69FCFB269E84F95BD",
+        "index": 0,
+        "blockHash": "C757F3DCEF1A7DD2CCDFBAA13BC527B21CD4717E34FACE6DCF0CF918194BD338",
+        "blockHeight": 466322,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_DELETE",
+        "data": "AgHOrxLc05QoC3bbrBAeu5Zd646Dhvn2wxhlRl9rInMOEAEAAgABaPEyXVY964E1QYfQKYe/uvlV+5Z8hJKWeeX895kpcIQDDmlkZW50aXR5VmVyaWZ5yGjwrsNcpz8DuXPx2Sn8V/yE7qB3HnyQwA5RESwJ5UwAAAFBH09KiY0BprDL8wdz94rqfJ1zDwmcX7g0OlrVxlWegBtRDk1s3wka9eSksAWkddxiNPNPoMbE9+WsgoN83MHIPcQ=",
+        "timestamp": "2026-11-06T13:16:17.001Z",
+        "gasUsed": 1211040,
+        "status": "FAIL",
+        "error": "84eiYF4UKKpg85H3vKMqBvyeyHYChHACbhQLXW9MMQtT document not found",
+        "owner": {
+          "identifier": "EuopfWEY7r4p8rKpcPsW7ZF2ytAbw4VGpZJwAuLHMdC3",
+          "aliases": [
+            {
+              "alias": "z-identity-verify-admin.dash",
+              "status": "ok",
+              "timestamp": "2024-10-03T17:59:41.318Z",
+              "documentId": "D7inLyrqWfE4xh86ByD79Mjcbh8oVGrevEWxkFTYV2Uu",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "22A01C2D21AD7BB78FDEF6C4490632A3791F3DEF6DA50859C628407739BA024E",
+        "index": 0,
+        "blockHash": "A9406884010FD96E75355B35C1B9D47A745F4E5DEE03BDBC7DAB1A4FDE3F5969",
+        "blockHeight": 460468,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgHpjkVd0Y8TKJNDTWJFMyhyX8QjUvhDoaInPjyfc4xeuAEAAAAB02xVcBsaCfpYtiRyFmKkh2iCy4MENddR/oNKFMh5r+cLDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwA0RojAT1T4+166oGu0+txWDOwtT/x/PMzGK3AAL8XD+wGEGFjY291bnRSZWZlcmVuY2UD/AVeDyQVZW5jcnlwdGVkQWNjb3VudExhYmVsCjDyUMweIu46DQ59tBxeNlm1MXXzph8R/b1L9eHiZhxWZVauZbIINvW/IZrJo2nc6aQSZW5jcnlwdGVkUHVibGljS2V5CmBZ4Hibj+W60RxMv4zP5I7dGdZ1jANOZoF4d6WBe/xfr2AloXdT88TeKkaelF19RABpWSHf6j9p27dDyko+oZkNgDQPtsaNm3ZQRB2wgfJMAOa0FmaTvdw2oPl6+2np1AkRcmVjaXBpZW50S2V5SW5kZXgDCA5zZW5kZXJLZXlJbmRleAMECHRvVXNlcklkEL8Pa2VgwKIStf326FFdnNfBE1urKGyTbL0XmUqp1VdvAAABQSArM2yFXRvjGItD5y9aWwsFUeoEDctppKusi+DMPfdyznjP76x/N+SRoplQCRVJUMC/sH3MP9eURIBuO5h2BxFJ",
+        "timestamp": "2026-10-28T17:49:12.073Z",
+        "gasUsed": 1128620,
+        "status": "FAIL",
+        "error": "Document FEJqSQTyHEu3PYq9JPmJ1veC5AdkxzfUaZZWaF13ofdQ has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "GihpVEpo38BHadL8ob3R5L5hMvtHwW9gUiapQ746scfq",
+          "aliases": [
+            {
+              "alias": "Mik33.dash",
+              "status": "ok",
+              "timestamp": "2024-11-23T03:10:50.329Z",
+              "documentId": "H5Ckcspnd7U4c7c6QKGtAMcvkJL4zy5nLxccyMmgYmNU",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "8ED62EA8F4651D46FDE9509290D677EBB98CB40400C437DB975009F3289BA96D",
+        "index": 0,
+        "blockHash": "9777EF67B67AFA0130D92146E489C0062EF60147FE7D9B8768B16ED69109ECE3",
+        "blockHeight": 460467,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgHpjkVd0Y8TKJNDTWJFMyhyX8QjUvhDoaInPjyfc4xeuAEAAAABNb/YuwlAILK339ADdmkCC1lLoROC2fH86CniISlgG/kKDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwASOO93DL/KcJ4Wrh7BRm/RGyUiT6udbahuDQYImag4KQGEGFjY291bnRSZWZlcmVuY2UD/BMujPwVZW5jcnlwdGVkQWNjb3VudExhYmVsCjCrSpOszdlYjjq+VkpVDbXk0Mq6QS2MYl80bg/z8FwXA3SW7XLQH9IbXtXrQ2he1TcSZW5jcnlwdGVkUHVibGljS2V5CmD7NCH3nkG/HTs+6WSBSrbTSZ6jV7mgfgkwuvBj7lPqt7WQYdSunI1vTEHvlYcBNYSyElHFbbiNGRRpx4X13KJHlaTo5pq01qSqWsZFKXACYitlX/rpFokF0uqCyvrsuoQRcmVjaXBpZW50S2V5SW5kZXgDCA5zZW5kZXJLZXlJbmRleAMECHRvVXNlcklkEAI3SkWlDnS+E6FlMPrETgq/P2qn4z+cKzfk1o2H06KRAAABQSAOxGEUgLfZzwxfmiXoHBtlISqblfXe7UgHfle2eyHhVXrRyJSRqSBQK7FxM0xoW3LCXo4tLgJs2fgBv5xBbOX4",
+        "timestamp": "2026-10-28T17:49:09.098Z",
+        "gasUsed": 1128620,
+        "status": "FAIL",
+        "error": "Document 4cpH8Vn7D7Sc9BfJ6AqDLG7YZxhMU9AD9SiJ8MJaKDFW has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "GihpVEpo38BHadL8ob3R5L5hMvtHwW9gUiapQ746scfq",
+          "aliases": [
+            {
+              "alias": "Mik33.dash",
+              "status": "ok",
+              "timestamp": "2024-11-23T03:10:50.329Z",
+              "documentId": "H5Ckcspnd7U4c7c6QKGtAMcvkJL4zy5nLxccyMmgYmNU",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "3C1770BAF349D0ADE503FF566A567EA2EF792499F533BE798568195681855CDF",
+        "index": 0,
+        "blockHash": "4870B579D56B03E8AE9D92E3800CFEB9092930BD4C6AEE5593D6321C3E84FA55",
+        "blockHeight": 457638,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgFFr1Hi4kGlYYGpLJHlMKAfwc+WJ9ktNj2S7qoCW4IM0AEAAAABkd6sqeyYlebuOWzH2S808By5+S0OmZ+jCwt1MGl6acQLB21uQmFkZ2VPeaqpC8vulviA4bALazkWI8t990Iy22+gytOmCV9F6QBn/yWRsNtgtqWeFTh+vQ0LWeqnla1l31Ge2OahgFtyTgUFZXBvY2gE+wEsCGlzc3VlcklkCiBFr1Hi4kGlYYGpLJHlMKAfwc+WJ9ktNj2S7qoCW4IM0AVrZXlJZAogYJK4hBehRzvBTOvlGlysrzHgOa690wm6MZOGFFCPAiAJbXNnUHJlZml4CiD8iUIB1bRdibZ68rO4jZAEk2nBsLrgZxHFhnTNUwHBaANzaWcK+wEAH1RaiN24tumIJoo+oF5wTM/hrSGpGaiHb0XbZYXp23mn07DLuOWJPycrHhjIKgOSEBMXeLRpUBkvpUIlXF0PpV/LFezui+2W8QwKkGv5MaO/sl/34pazev7EHdabSGZDmrqjCdxfhY4pE/83Lg2nFwYspAnrTOgP41tTShhuK+feauuPDJ7dM3mlasbcDvTn7VNFoCrSDKoy4ohShdqpQFFO81ccCUPz2w9I0zABxwBqZhcdxiAzrQ5MvbIndZp/WETfY3BFtyYMxmHn36QtrD+1OQewmg3X4lk/pxqp0XFy9fMxDlzcbHbg9P7JgMkppOEEQN1F1IDfdrglORqpnQAAAkEgvWNpUhx4vhVVMxk3sG8+Itf6RCctNC814XwN8jK6csUE2ilrsp/e02WY4z4Nw+j83z9ASv/u/MF3X0vN5VmV1Q==",
+        "timestamp": "2026-10-24T03:10:11.544Z",
+        "gasUsed": 1275320,
+        "status": "FAIL",
+        "error": "Document ApR3wEMxnYWAZCwVb4uuBgfndPCWt2nHgMh7SxHCTamh has duplicate unique properties [\"issuerId\", \"epoch\", \"$ownerId\"] with other documents",
+        "owner": { "identifier": "5h2Bj6ETFQ6BxgtCLTeMna5RvGX8eHj3oFh5abNSy82j", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "50D857142CA309037A93C5C2FFC00A5C26E3FCE1754BE53AA5AE249858F0300D",
+        "index": 0,
+        "blockHash": "CA0CDE97FBC9CEF6CB05D84771852B9E96D279C7ECABC1F2DB3D357E08F14469",
+        "blockHeight": 456078,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgGFBg7KA6VcLyGLW0Sdloen7EQJLm8ZU/oVDOiKnP3VGQEAAAABYjmF1UOxu1dvjojSrb/z4+MYNlKVKicmRmZ8fwDH+fsDBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAGeuIr5SxIkEHgDWg2TtlH4rzCtMU4T+rDvrJR2miU13BwVsYWJlbBIIVGhydXNoNzgPbm9ybWFsaXplZExhYmVsEgh0aHJ1c2g3OBpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIEZGFzaBBwYXJlbnREb21haW5OYW1lEgRkYXNoDHByZW9yZGVyU2FsdAygJw56lAUlB6Tob98Qw6/zkIKLM5oa5csrciCmGH2tlgdyZWNvcmRzFgESCGlkZW50aXR5EIUGDsoDpVwvIYtbRJ2Wh6fsRAkubxlT+hUM6Iqc/dUZDnN1YmRvbWFpblJ1bGVzFgESD2FsbG93U3ViZG9tYWlucxMAAAABQR+Bf12nxjuEwqHT8FngxxerJgWzpW/H8dVRIygPa6PNv1GEZHcuRD/XXCt+isdGHj/pPrWajN28O3ZVs5KH/R8z",
+        "timestamp": "2026-10-21T10:18:12.009Z",
+        "gasUsed": 1215520,
+        "status": "FAIL",
+        "error": "Document 7cRq1oKhR9ku4m4pGLBkRubnmF1Qns1jCmHN7LiVLa26 has duplicate unique properties [\"normalizedParentDomainName\", \"normalizedLabel\"] with other documents",
+        "owner": {
+          "identifier": "9xGaiaS4LhHjwY3VWGC6uFpbMwsu9JkP3o4ccZLN2Hqa",
+          "aliases": [
+            {
+              "alias": "Thrush78.dash",
+              "status": "ok",
+              "timestamp": "2026-10-21T10:08:26.821Z",
+              "documentId": "38Me7YbuwjjEc2xUvtGJzVBrchjGAYNSWv5AANufM5D7",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "988019C7AFA461B7E1625187E34EE3DF49F006A3B3BE5517794F5FC49C89416C",
+        "index": 0,
+        "blockHash": "A7BE66F398B8B04B983C40E6E00FA797921CD1A3AC08A16550B9FEF91C64860F",
+        "blockHeight": 446091,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "AgGMIK4723uPh3V35SJC3RUmyZ8gwZDK4zTcO45psLawKAEAAQAB8S4Tkj1zcaa763lcNfhVitlltQ2KJSEHVHZDx6R6l9gkB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAALAgtkaXNwbGF5TmFtZRINTWF4IEhvdGNoa2lzcw1wdWJsaWNNZXNzYWdlEj1vbiBYIEB0aGVmbG9hdHRhbmtndXkgCgp3ZSBmZWVkIGtpZHMgaW4gQWZyaWNhIHVzaW5nIERhc2jwn4yNAAFBILLqnpWsOq9O4/+4z1+025ny/WkU/O1i/f64iEznWpm8La3nUpc2eprZJn6DOG9RubIdZbw4VfRzKBPSzK/YhFY=",
+        "timestamp": "2026-10-03T22:03:52.460Z",
+        "gasUsed": 1211300,
+        "status": "FAIL",
+        "error": "Document HEU1KBth1veT6PfKLGNwrekmzx5UXRMqMBxumhyKMeVD has invalid revision Some(13). The desired revision is 11",
+        "owner": {
+          "identifier": "ARzysf5HEByfm9iYihAgUivUS736GHHpwTJA8By4cRvX",
+          "aliases": [
+            {
+              "alias": "max.dash",
+              "status": "ok",
+              "timestamp": "2024-11-28T03:28:24.858Z",
+              "documentId": "jSvqUqiHxESYcmyuTDH7BsoYoDepa91gH7eWm2VCUbB",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "1C724CAC000D126CE73FC3E693AADF50AC8945F5D5281E432020E26F3B656634",
+        "index": 0,
+        "blockHash": "B7796C12325D6582D083EC9CD316AC75B8DFA783564EC77295E052CE97D74775",
+        "blockHeight": 446087,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "AgGMIK4723uPh3V35SJC3RUmyZ8gwZDK4zTcO45psLawKAEAAQAB8S4Tkj1zcaa763lcNfhVitlltQ2KJSEHVHZDx6R6l9giB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAANAgtkaXNwbGF5TmFtZRINTWF4IEhvdGNoa2lzcw1wdWJsaWNNZXNzYWdlEj1vbiBYIEB0aGVmbG9hdHRhbmtndXkgCgp3ZSBmZWVkIGtpZHMgaW4gQWZyaWNhIHVzaW5nIERhc2jwn4yNAAFBIJtPV0Phsh4gmOKFsyqQe0AxZyW9DCrRDanYOB16573ISxNsWerljtpBUoFS5zyOEj1oVnFTtgirBh9DI84MaW8=",
+        "timestamp": "2026-10-03T21:52:18.972Z",
+        "gasUsed": 1211300,
+        "status": "FAIL",
+        "error": "Document HEU1KBth1veT6PfKLGNwrekmzx5UXRMqMBxumhyKMeVD has invalid revision Some(13). The desired revision is 13",
+        "owner": {
+          "identifier": "ARzysf5HEByfm9iYihAgUivUS736GHHpwTJA8By4cRvX",
+          "aliases": [
+            {
+              "alias": "max.dash",
+              "status": "ok",
+              "timestamp": "2024-11-28T03:28:24.858Z",
+              "documentId": "jSvqUqiHxESYcmyuTDH7BsoYoDepa91gH7eWm2VCUbB",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "C60D6DDF1980F56435A72F007481C8698CBE19D3ADA250FE10F6428CDA42DB52",
+        "index": 3,
+        "blockHash": "DD9E01E32BD9557C3999D455815EFE6A73A0BCE991E821DFB49D2D4EF34B99F0",
+        "blockHeight": 441694,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABIDZbwdP1rOH7vzoA3eUKcwLsCgxRJvFbPTPBsKuhKKcXDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwAgMmzyw4AjHu1Xwe4k4H5ySAMXoAb9KcJwt7HHAO1Fn8FEGFjY291bnRSZWZlcmVuY2UE/AjbZKISZW5jcnlwdGVkUHVibGljS2V5CmBieQWyEMpGtVqAkz6f4uRp16rdeGDqlljZ6Dh4khJdn7zZkPHiK/QVY5QU2mLv1n/UrYUks/Gq18tlfN+6Z4zPGx9aItlEr8zFcTcQXcNUQNWEjTtmIRRTPG7pjMeSlc4RcmVjaXBpZW50S2V5SW5kZXgEAg5zZW5kZXJLZXlJbmRleAQECHRvVXNlcklkEIworL2cTy4rXUuzJUN9TsWdjcpfIkiWz5LWl8N+Uj2oAAABQSD/yiM0KSqVJBFnkmzFAJvbq85B2jMS6ZwxXzea7GNrJiwk6kjR1sWqju63vB4lz7d0LibNvuJYRgzunvzjzm4q",
+        "timestamp": "2026-09-25T21:40:16.356Z",
+        "gasUsed": 1232980,
+        "status": "FAIL",
+        "error": "Document 3Ak82hpyHUcWpsKniNVSeZSGf1NKTW1ebMy4QA2RtKnN has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "9F0D049D5071438B3316FA43323A6CB788F7FB475C087A9D5EFBF18757941679",
+        "index": 2,
+        "blockHash": "DD9E01E32BD9557C3999D455815EFE6A73A0BCE991E821DFB49D2D4EF34B99F0",
+        "blockHeight": 441694,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABeh9m8QA10bpzT0AhQqBQYk2TFgXPEB07L4xHwu8G48sWDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwANdNh5tK6Cusxob+5nLwlUv0LgqNBFIkS/YQSZofC1joFEGFjY291bnRSZWZlcmVuY2UE/A8m5WwSZW5jcnlwdGVkUHVibGljS2V5CmAnKqGXGfkG1eUC/Uv6w85sIt/DFWaWuvt7TI6tQbg4CvfomOt/SZKhRY2R6ttXWc+kJLqqoWqj1qHyVXY6n1sc2VasFa2uS0nmdrm14KvyIHR880WZNxIyjHNbLsiIDBcRcmVjaXBpZW50S2V5SW5kZXgEAg5zZW5kZXJLZXlJbmRleAQECHRvVXNlcklkEAYQNlS6+WQEPwqUmeNUcM6OFfN7MlWHnnTdIpWSEVTCAAABQSB4o5s8ss9+9GpoIXhNmRiDbfXRv23+Y89wwbenQvhYHj5EaoHWCVqJW0AYrxgfh3fvjmYxdRrZ4vn0gyNGrVZC",
+        "timestamp": "2026-09-25T21:40:16.356Z",
+        "gasUsed": 1232980,
+        "status": "FAIL",
+        "error": "Document 9DiWf4yhSLQSWYqZ2MqRonUXirW7ioMdc2sDivCLwqyU has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "3E3D93D5ECE53BBC515981FF486A03402AE2BFF03C258109C65BF9EDBB00837F",
+        "index": 0,
+        "blockHash": "2591FE9E9344DB2CB3D5D51CFD37D88AD1A0962D5458574F8B16C788BC533E97",
+        "blockHeight": 441018,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgBAsuqdp3y31FSMMMH7vAm86sxX9/OneS4keu4tUO3pnwEAAAHDbGsnrOD1kZxIlHWdtlOJwuXPuNsqDsjUK3BWAX2IrvsEywRwYWdlNt82dGusluBTaqM/79eaG0A1sjx6Waxb27KfwPGgX/oAF9SmArIu9fjfs4EZMbSeO+HEND9Rth/trKVSUzXO0h0EBHNsdWcSDC92aS9kY2cvam9icwlzdG9yYWdlSWQSK1hnZGVGNExjUklkT2lFbGJ3ZzN1angxYmNyVUJzQ2kwNVJGVzFhQXFkS1EPc3RvcmFnZVByb3ZpZGVyEgdhcndlYXZlBXRpdGxlEixDxqEgSOG7mWkgVmnhu4djIEzDoG0gRGFzaCBDb3JlIEdyb3VwIHwgRGFzaAAAAUEfmhEsslCuCzurLQWiRAtYeIW3ftDx99nZUzC3py7K3BEa4b76qYc9mi6oY0lc4EtNPZloWwKuantImaryDHRGag==",
+        "timestamp": "2026-09-25T02:04:14.836Z",
+        "gasUsed": 1364740,
+        "status": "FAIL",
+        "error": "Document E9rPSsMLb1n23mtL232dgd8LWWjho2HfVpkoNAyUVnM3 has duplicate unique properties [\"slug\"] with other documents",
+        "owner": { "identifier": "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "47AC780BBAD6A4512E2024B035210CF37A54140E518BF9D8B5039B6C526122EA",
+        "index": 0,
+        "blockHash": "D1DA0E3895FE93819B7D878BE13FDF7310A33B755118B7137A722FA97698CB94",
+        "blockHeight": 441008,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgBAsuqdp3y31FSMMMH7vAm86sxX9/OneS4keu4tUO3pnwEAAAFCg+vrU7AWn0WSOI1CwSW7CC3GSzdb8ZIoeaKZ3n/e+vsEwwRwYWdlNt82dGusluBTaqM/79eaG0A1sjx6Waxb27KfwPGgX/oAmZoOG91oenOnxu37LlYCLk1NswCOUuEjyJ2Z6orJC8oEBHNsdWcSGi92aS9kYXNocGF5LXByaXZhY3ktcG9saWN5CXN0b3JhZ2VJZBIrWGdkZUY0TGNSSWRPaUVsYndnM3VqeDFiY3JVQnNDaTA1UkZXMWFBcWRLUQ9zdG9yYWdlUHJvdmlkZXISB2Fyd2VhdmUFdGl0bGUSLkNow61uaCBTw6FjaCBRdXnhu4FuIFJpw6puZyBUxrAgRGFzaFBheSAtIERhc2gAAAFBH76oIxMMlfsjgiBW8MnbmjjISBLBWO8cf92w/fbWJ4W3Ubu7GTnnHFTCFNtkdMwZrxIjKYV0mQWL4+uLKcVsDiE=",
+        "timestamp": "2026-09-25T02:03:18.591Z",
+        "gasUsed": 1364740,
+        "status": "FAIL",
+        "error": "Document 5UeaectbqTq6Citos57fkqavdXvkRmr6Qey1bdxJKSn5 has duplicate unique properties [\"slug\"] with other documents",
+        "owner": { "identifier": "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "18991E7D832FDF41D8600B57FCB4FB21740B236629CFE6B5599B70D5B8B9522D",
+        "index": 0,
+        "blockHash": "3E292C1C01377511BE8E727DC1373FAA8203060BD3653478BE3C8D3B7A78FF63",
+        "blockHeight": 441007,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgBAsuqdp3y31FSMMMH7vAm86sxX9/OneS4keu4tUO3pnwEAAAG4pqSh3zbUesS1WK40at6ty+BS60lbbG6VjLdvsqk3M/sEwgRwYWdlNt82dGusluBTaqM/79eaG0A1sjx6Waxb27KfwPGgX/oA/EIaqsRypR2m7owGi2M1AuX7AgH0qHxg5d9L1e+CUpMEBHNsdWcSGi92aS9kYXNocGF5LXByaXZhY3ktcG9saWN5CXN0b3JhZ2VJZBIrWGdkZUY0TGNSSWRPaUVsYndnM3VqeDFiY3JVQnNDaTA1UkZXMWFBcWRLUQ9zdG9yYWdlUHJvdmlkZXISB2Fyd2VhdmUFdGl0bGUSLkNow61uaCBTw6FjaCBRdXnhu4FuIFJpw6puZyBUxrAgRGFzaFBheSAtIERhc2gAAAFBH1uIu0UoekaFk7oKMo4ERxpyfb992v5KsXsZ7PE+Vc5iAybjdhVHRpKb4N/nhcyoX9ilgU2UcP3dCQvIHBFcK6Y=",
+        "timestamp": "2026-09-25T02:03:07.058Z",
+        "gasUsed": 1364740,
+        "status": "FAIL",
+        "error": "Document DRoPzSg1mW4fNF4SpAkA5moLCrFXwTUpZ1oM3UDDc56A has duplicate unique properties [\"slug\"] with other documents",
+        "owner": { "identifier": "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "689BA43E96DC3E6AED3C69ECF0B2A0DAEF4F69FADB283F423A28EC92A88D5F25",
+        "index": 0,
+        "blockHash": "5A701AEB3FFE016DB304B7BA22209D7047E569EB174B9B243E81ED66BF3D74B3",
+        "blockHeight": 439370,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgFfIeWTXYlKtImvfOA8x9i63sEgjKmoHcopzBJ7VU5hxgEAAAABBy7ztv71h+VjYVqqe1neJAzZzpsi42QjYsa/g7Am7CECDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwA0aEmSXhblu1lSnM7hiPygDi2aGrjB5zfbO62+tE1TIMFEGFjY291bnRSZWZlcmVuY2UE/AMqRewSZW5jcnlwdGVkUHVibGljS2V5CmBBo9Mor384O2ccsGBvyRe/f6X5LvhzBG5ZSVF9ofjTHOP9x35D/lpuoqYBCFcEOlrHtV/qsMNnRqof0fntfmFcgXrjcT+fD3zvXlcH7xKYk2Ql4y0gRODusN1ETwssMKcRcmVjaXBpZW50S2V5SW5kZXgEBQ5zZW5kZXJLZXlJbmRleAQECHRvVXNlcklkEAsBRqLEsFBmT/ntPESLvM/ojEykVCBUHTJCfKZdipdWAAABQR95NSUG+zzkg0zxr2JBECzNLcfJwWQn02sELd3QOt/IFF/sXDlyYgHSMNh0816Qn/qb8WViRb0e300Vmuq4Gxn1",
+        "timestamp": "2026-09-24T08:11:11.175Z",
+        "gasUsed": 1279220,
+        "status": "FAIL",
+        "error": "Document V3NxDAmb8PGdh2LkqqRHHugo1y2kGq7xsSXG65XFnsi has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "7QMiAftizhZ4GjgeiyjYu1YCkWBubXuL8Rwa1sdQrGW1",
+          "aliases": [
+            {
+              "alias": "PT003.dash",
+              "status": "ok",
+              "timestamp": "2026-09-24T08:01:47.160Z",
+              "documentId": "w737xzVbk1djYMNmnyxRDqqeZpxQdV7au6ih3d6aSWm",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "CC150423217145FEB8D27A460277514A4AABD006432C3C853048D7CDD3E21733",
+        "index": 0,
+        "blockHash": "F641AD85E5065455B374013A520208A1C2123CD91DEE3B85F782E1E81FE7114E",
+        "blockHeight": 438602,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgFjfFstLI8+SXAtGV04xnaSgsnUqpWuzCbbMgcaN1S3bAEAAAABLlarAG/wGsBhpfkFN+sSgnBniJANTK7HN0mLw6fo/ugDBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAAQa9l2G4RqGkl0VS4ydzENfdRR6kwrIUEQu+TzVWH6rBwVsYWJlbBIWcmV6YS10YWdoaXphZGVoLXRhYnJpeg9ub3JtYWxpemVkTGFiZWwSFnJlemEtdGFnaDF6YWRlaC10YWJyMXoabm9ybWFsaXplZFBhcmVudERvbWFpbk5hbWUSBGRhc2gQcGFyZW50RG9tYWluTmFtZRIEZGFzaAxwcmVvcmRlclNhbHQMeIkHRHN70ZSyQJXQWXKrlwtJUlvVUrFFF23R5sJ9cHsHcmVjb3JkcxYBEghpZGVudGl0eRBjfFstLI8+SXAtGV04xnaSgsnUqpWuzCbbMgcaN1S3bA5zdWJkb21haW5SdWxlcxYBEg9hbGxvd1N1YmRvbWFpbnMTAAAAAUEg6C1U1GDmKjTQBaWiqyZ2ES/OejAztA3ULlgoKY8cPj8YgZdJLo9nen7O9mr96MFuR1Z3qsm5HtV1CYWAQB7HEQ==",
+        "timestamp": "2026-09-22T21:40:37.443Z",
+        "gasUsed": 1162480,
+        "status": "FAIL",
+        "error": "Document 47tQR2Wer4TadmuxREPGB3t5FfT2kCCGFuGFAn12SDoM has duplicate unique properties [\"normalizedParentDomainName\", \"normalizedLabel\"] with other documents",
+        "owner": {
+          "identifier": "7hMLuqxxkepmaJyH1KZSZjfTnEaeCy4W51wwyX9BVDKh",
+          "aliases": [
+            {
+              "alias": "reza-taghizadeh-tabriz.dash",
+              "status": "ok",
+              "timestamp": "2026-09-22T21:37:02.180Z",
+              "documentId": "5ckPaSf8YxNW7uDoBNUQoqXqv8zN2DXLdvhFJECNKDGx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "41312EED07DE515147FA6269F8180D6F69769DD8B9E4E940D1847813E9FBD6D1",
+        "index": 0,
+        "blockHash": "02399454619C38ECD02CDDFB83917B17AF2AE0207563136AAA53AC044A6755AC",
+        "blockHeight": 438143,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgHsUGUwu0f1enAzoBmtI76g4+04EqJbIhXYUTLjfvmkSQEAAAABaBWU8rQsRGSKwPmywUEGHPRCydPvHOWWJoEU20NtUqUKBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAOofFc0gr0FOBGeR7y37sSjkL+mQJr5KzpSVM1oLKkuABwVsYWJlbBIFZGFyaWEPbm9ybWFsaXplZExhYmVsEgVkYXIxYRpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIEZGFzaBBwYXJlbnREb21haW5OYW1lEgRkYXNoDHByZW9yZGVyU2FsdAy6cJpqpudPhtUi6JKnS/WivBrVsnjT/U/UT24xe2m6pwdyZWNvcmRzFgESCGlkZW50aXR5EOxQZTC7R/V6cDOgGa0jvqDj7TgSolsiFdhRMuN++aRJDnN1YmRvbWFpblJ1bGVzFgESD2FsbG93U3ViZG9tYWlucxMAARJwYXJlbnROYW1lQW5kTGFiZWz9AAAABKgXyAAAAUEf1a6oMl2uU6vW8hdXBfVMZ1brW5PuaDc1c4VXUSZb0Gx6p86H8l8C5Md9Yb8+D+UnB7ypQBiXDBbTFCxcoKRMUg==",
+        "timestamp": "2026-09-21T23:49:25.963Z",
+        "gasUsed": 1311440,
+        "status": "FAIL",
+        "error": "Document Contest for vote_poll ContestedDocumentResourceVotePoll { contract_id: GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec, document_type_name: domain, index_name: parentNameAndLabel, index_values: [string dash, string dar1a] } is not joinable V0(ContestedDocumentVotePollStoredInfoV0 { finalized_events: [], vote_poll_status: Started(BlockInfo { time_ms: 1789149501533, height: 432585, core_height: 2537179, epoch: 81 }), locked_count: 0 }), it started 1789149501533 and it is now 1790034565963, and you can only join for 604800000",
+        "owner": {
+          "identifier": "GuUKUyShbmYbFZGtqo1vJqpmzTX9PMcDRFNZPWTaSfse",
+          "aliases": [
+            {
+              "alias": "dasha.dash",
+              "status": "ok",
+              "timestamp": "2026-09-14T06:32:59.002Z",
+              "documentId": "Bhd1wcayqZaz7Jvjo4wUMHfhsyMAmVKVE1M9LABwGor3",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "C48558FBD04D5E11E6D0E117AAD7C5C4C92A8D5B581DDF8CCCE14A5576916FC1",
+        "index": 0,
+        "blockHash": "0BF1FFC7E41C026974DCAE1703AFA664EE6FD1854511D09072831CD4D48E918E",
+        "blockHeight": 429358,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgHsUGUwu0f1enAzoBmtI76g4+04EqJbIhXYUTLjfvmkSQEAAAABL3qFJFsL/iblsiUzQ9bn94R7ncj8/j5Gxu4I3HUG/fEEBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAAxDXkLjIw5/82B437s5cXZrvwWma0wJgDA+u8imrQJSBwVsYWJlbBIJd2ViM2RhcmlhD25vcm1hbGl6ZWRMYWJlbBIJd2ViM2RhcjFhGm5vcm1hbGl6ZWRQYXJlbnREb21haW5OYW1lEgRkYXNoEHBhcmVudERvbWFpbk5hbWUSBGRhc2gMcHJlb3JkZXJTYWx0DNFqhL+GOGI2dUztv06BBQWtd2j/UujphLkhiSXlKqbkB3JlY29yZHMWARIIaWRlbnRpdHkQ7FBlMLtH9XpwM6AZrSO+oOPtOBKiWyIV2FEy4375pEkOc3ViZG9tYWluUnVsZXMWARIPYWxsb3dTdWJkb21haW5zEwAAAAFBIOxwmaCFMjSSljtMtxLpiLjKpPBktJUYFtM6K3LMBVMHVsQfFPYa1n2zewIo8KIF9EgsOwJa45JXTOYrG2Vu5NM=",
+        "timestamp": "2026-09-07T04:07:51.309Z",
+        "gasUsed": 1276760,
+        "status": "FAIL",
+        "error": "Document 4CLX7XEd8fVP1uHsHhSTRKqqdHkoSaJpY3RpqgggyAsA has duplicate unique properties [\"normalizedParentDomainName\", \"normalizedLabel\"] with other documents",
+        "owner": {
+          "identifier": "GuUKUyShbmYbFZGtqo1vJqpmzTX9PMcDRFNZPWTaSfse",
+          "aliases": [
+            {
+              "alias": "dasha.dash",
+              "status": "ok",
+              "timestamp": "2026-09-14T06:32:59.002Z",
+              "documentId": "Bhd1wcayqZaz7Jvjo4wUMHfhsyMAmVKVE1M9LABwGor3",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "24D25F108DAF36D0EADF7517DFB41A2178D455B564A02637BC6076FFC3B62F8F",
+        "index": 0,
+        "blockHash": "36316CB6F648533478C789E9D729FFB18AD6E350058200A4AD456E448C4E9A54",
+        "blockHeight": 428414,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABEXJlnr9g0UZCjkgvrGKfcgDAPZWW4ITCEKkPuNIxm8oJDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwAliKiGLW5TbHsSa7b1X6ZJTO22NVnqTAJhg4eb3LMknIFEGFjY291bnRSZWZlcmVuY2UE/AWOBUwSZW5jcnlwdGVkUHVibGljS2V5CmCrHdAoits7t0NfmxU4aXuwVtvnggsyLaHA93LYtYkB4Yc1SdmIuCaP0LfZ7lX3jU6f03GtJCwnn2O2h8JsRJrw3o7R/dvf8AJRx3zDpK9OM8kRzYgKyAm2ZrJesotfRg0RcmVjaXBpZW50S2V5SW5kZXgEAg5zZW5kZXJLZXlJbmRleAQECHRvVXNlcklkENk1qw1u3vg77hDLSB1bffYMblQLd0X7s6pyQc14T5yGAAABQR+mjpFs8JVcG59NTxDu7p40+anq4MAMdbd2rMO3g1ICCD4br97OFn5m6r2CIGkcIuYK66nR/5g1Zvd1xZ2w3qcy",
+        "timestamp": "2026-09-05T18:20:43.944Z",
+        "gasUsed": 1232980,
+        "status": "FAIL",
+        "error": "Document 2B773DdzrDE2QbxCfmh43U1xaMU9RPkhUqcrdQBzehNH has duplicate unique properties [\"$ownerId\", \"toUserId\", \"accountReference\"] with other documents",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "C4F5E5FBD204B4E76399EAF664F82F66B856C4A9F847F6DE03E02ABA7A013EC2",
+        "index": 0,
+        "blockHash": "8ED9ECB5E75BC5AC449C1A9C52DEC641FFCA4EA9B99F38D53A96DFE4F8EC0697",
+        "blockHeight": 427832,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABZpf11P2SY1mVgvVHo9xv1WP14+aqJqntZYSe/+WsHpsQBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAOU5iGtesq2HpCL6/CNFCPGxamgRZVf6oV/DtGiSPV5PBwVsYWJlbBIOQ3J5cHRvRW1wcmVzc1gPbm9ybWFsaXplZExhYmVsEg5jcnlwdDBlbXByZXNzeBpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIEZGFzaBBwYXJlbnREb21haW5OYW1lEgRkYXNoDHByZW9yZGVyU2FsdAy54e9FudPe6+ySbzmD1B5ZCsr57iWNG2ZvPzTO6cuQkQdyZWNvcmRzFgESCGlkZW50aXR5EAsBRqLEsFBmT/ntPESLvM/ojEykVCBUHTJCfKZdipdWDnN1YmRvbWFpblJ1bGVzFgESD2FsbG93U3ViZG9tYWlucxMAARJwYXJlbnROYW1lQW5kTGFiZWz9AAAABKgXyAAAAUEgkUaFEJIb0dEtuctL78N6ZdID1Vv7wk2JDVxK7XwQF8QAWPVk3FQuzXk7cJAH3QWw86TTGDIa956BP8vgukPfUg==",
+        "timestamp": "2026-09-04T18:19:56.642Z",
+        "gasUsed": 1264180,
+        "status": "FAIL",
+        "error": "Document Contest for vote_poll ContestedDocumentResourceVotePoll { contract_id: GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec, document_type_name: domain, index_name: parentNameAndLabel, index_values: [string dash, string crypt0empressx] } is not joinable V0(ContestedDocumentVotePollStoredInfoV0 { finalized_events: [], vote_poll_status: Started(BlockInfo { time_ms: 1787350283442, height: 419511, core_height: 2525765, epoch: 79 }), locked_count: 0 }), it started 1787350283442 and it is now 1788545996642, and you can only join for 604800000",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "F6F6FD0CA8EE2303665B35A7114373979A9FAAEEEE7B73CFB6834A41B5860F66",
+        "index": 0,
+        "blockHash": "AF0C812EAFD5FCDF5AD0ABFC2A37E2FB6FB32332370AB45C24A31E6AC0DB0072",
+        "blockHeight": 427336,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgGIId4dvV6tYZCQqZL2wrzyGv8sXWINoBh/j/8ODQE9RgEAAAABljchCfrk5aU4YYyULRXtw1ntcOWCovk6x6sS2Z6iDpQCBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAEPrS5mwQKDvuxoCtyPZ9Rei7UI47SoVCw5X1dSqQ3eVBwVsYWJlbBIHaXJrdXRzaw9ub3JtYWxpemVkTGFiZWwSBzFya3V0c2sabm9ybWFsaXplZFBhcmVudERvbWFpbk5hbWUSBGRhc2gQcGFyZW50RG9tYWluTmFtZRIEZGFzaAxwcmVvcmRlclNhbHQMJbRt6SBNw9gxCn2dpBeAQEEoxjQxRlYVDTNjCJB/GAYHcmVjb3JkcxYBEghpZGVudGl0eRCIId4dvV6tYZCQqZL2wrzyGv8sXWINoBh/j/8ODQE9Rg5zdWJkb21haW5SdWxlcxYBEg9hbGxvd1N1YmRvbWFpbnMTAAEScGFyZW50TmFtZUFuZExhYmVs/QAAAASoF8gAAAFBIBNrKrvcqH5awgqVhCvI1CQ2+cZtZDugrovs9ipyTf18Ilik1wdBaVKdIV6mqUifEZeCXhGFDB/anv0raz1lyyY=",
+        "timestamp": "2026-09-03T21:38:44.632Z",
+        "gasUsed": 1267740,
+        "status": "FAIL",
+        "error": "Document Contest for vote_poll ContestedDocumentResourceVotePoll { contract_id: GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec, document_type_name: domain, index_name: parentNameAndLabel, index_values: [string dash, string 1rkutsk] } is currently already locked V0(ContestedDocumentVotePollStoredInfoV0 { finalized_events: [ContestedDocumentVotePollStoredInfoVoteEventV0 { resource_vote_choices: [FinalizedResourceVoteChoicesWithVoterInfo { resource_vote_choice: TowardsIdentity(FdPKKkvc4VMGKBq4kmPpaZESi2AMsvuDDm6Vcc4SM5y9), voters: [YbpNzBqBpJynBzumwQGgPvzoGqGjvdouXCKPwU67ihC:4, 2NFNNTUFvJVQimFbiRjJ67bXKZhiGBgxxwHKz5KFM9B5:4, 2gpV9QCRWhrX82jqBWU4rKKvAhgePqmty6uU235474Xn:4, 531iv8FZto9KBcE6AfaHcKsAura5Y57kUGNPVhAgYP7y:4, 54xWkQHGx7sbTbnmKr1fTEZgnZP4ZotpFf1cfUCGcsJ2:4, 58brfoUCdvNNXLLnbiDgEWJKGBaabmpSe9MVobnt8ype:4, 5TUsdFrqw2RhsAQtRpDFticefaZuiH3Y7jKqsZrD3tVx:4, 8vop4TFv7PaxnaC3mt9VdXccr4VJ55sHvy75KbAmWaXU:4, ADiBc6MsAgMysyhQjz9muVQpx3GCABJG2WBzTy7SuvwM:4, BbNiWGAjLYzejrJosJpW9Lw6m7P5wbrf6xwzpTzJzcuM:4, C62e6YL5RnQV5hUAcsvmffaXZFhF3uioU3eciGeNf1Cn:4, CfWiJmj5UnFxjMuHUCpVJU27LkjJMPTA1zNANQKbix6e:1, FhkdWmmMRLjJqFyfHV2Yx9oC9Qe7s4Voz2KNP6kvcfr7:4, FxrgPwJ3exA3TLHXV29pn6ZdFuyMKTVcy9dPMdAZy239:4, GujHwyWN5a5bwLxd4fmc5yYZvMKnFyJKva3h8zXB9JSB:4, HQSmxtgNCDjGQToyvop7H2QKhQfK2juKgfLTaPJe9CZk:4, HRme3SxQngYp16CS2JpjZ6tQwVd3PRDTX4LwZPWA1yB1:1, HWrrtpVFkUnMGfRf1fNPRvPe2LB82W55mLCPxYzgPTyH:4] }, FinalizedResourceVoteChoicesWithVoterInfo { resource_vote_choice: Lock, voters: [26c2p3B3EfUEvrX9a5YmXAx9cHgv8A1Echfdqiq3LU8v:4, 2SevjRyvfdjbL7yCWGBx36LbF7XD2b2gruq9Q6N9YvvJ:4, 33Lw4zdr3w1mvh3xnyqbFHctptwQ4WbQMKHVmPnJe7fh:4, 376neLp6VAHDRvEFUG5ZR1tuevHynCGB3Scjaa8BodG7:4, 4Wayg7zinmKgUJmWT6rxG6fAy2Gx2RML51R4DxJSzTad:4, 5RxnTxQLFYk9m1GzDD4SirpfpdXrx4YyXHbcbTwKhnGQ:4, 5bUBRrCyr5FXfmxKYESFbhjpf58pBFZdBCeerYA7X72D:4, 66BiicvAQojiBmC6z8NKF8nekDYW7L1eHyNTDZjNDg1w:4, AcwPu18V67wtikCfYWctDsYHuaUGLRVwRCAY1b2D6Gzs:4, B89nVk75oBMur5XUb3APAUHhbZ2XhipzYSEADAaPHKxo:4, CT4Puwmpi5yCXiaAA9DACxW2JS25yUBkYT4DmQQ6qarZ:4, F9VyCXbvW7YixAKrtnTQeko5X1y9xNGd9xyUiGT5S6sP:4, Ff1vWqSqAxhb6Vcg6kDujBByeDZYs46toH9bi3XAPQjm:4, FjTtNVhHehRZT8zun5ywGH1T6VokTH5gqGJ8tfYULFZD:4, FmJdvnTcAxuQn7tnd1Z9yGvv3ysQohfL8nyG1NZFx6T4:4, H1rsqQTcTksMwrq1ZK6M8Rs8tLQnz92nPg4w5JEN2RFu:4, HVfzVUyUUfy7v4wEh4bRawHadb6eMzk2vvF6Fjq6fkbt:4] }], start_block: BlockInfo { time_ms: 1732114971631, height: 45415, core_height: 2175342, epoch: 9 }, finalization_block: BlockInfo { time_ms: 1733324661787, height: 61130, core_height: 2183022, epoch: 10 }, winner: Locked }], vote_poll_status: Locked, locked_count: 1 }), unlocking is possible by paying 400000000000 credits",
+        "owner": { "identifier": "AAQQBHYeZsnZRVbNFegRSRA8dBRHiiTxN4sgCsaU9VWu", "aliases": [] },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "E3A7E24321CB5A440F85DB072B99984F4CB29746DDB0DEDD243695520EF78FDE",
+        "index": 0,
+        "blockHash": "A9C30118076BEAAA06760BA42FF3C312988A829DB6E18F62954FFB80B9F85F88",
+        "blockHeight": 426795,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABtdvL+TFEKUBLsmIxtGg9aJ3dwTye8vjcNenzlXUgpkQOBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAEVxHAe8x64Nitu4Al53bVw3Gh2NZwJoa+GeefolG5DgBwVsYWJlbBIOQ3J5cHRvRW1wcmVzc1gPbm9ybWFsaXplZExhYmVsEg5jcnlwdDBlbXByZXNzeBpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIEZGFzaBBwYXJlbnREb21haW5OYW1lEgRkYXNoDHByZW9yZGVyU2FsdAyRFcLvmUvlbIUV9rAyRG5doDLRAmrIkX46O+jtoCwuJQdyZWNvcmRzFgESCGlkZW50aXR5EAsBRqLEsFBmT/ntPESLvM/ojEykVCBUHTJCfKZdipdWDnN1YmRvbWFpblJ1bGVzFgESD2FsbG93U3ViZG9tYWlucxMAARJwYXJlbnROYW1lQW5kTGFiZWz9AAAABKgXyAAAAUEg2xcj7MYkkk5qPj36YXKyWsId41ryTofM2mROpH/dhfUaymdu7diXSZGcfio0g9fEN7mD4oR2z6djZNmUklIwsQ==",
+        "timestamp": "2026-09-02T21:13:18.277Z",
+        "gasUsed": 1264180,
+        "status": "FAIL",
+        "error": "Document Contest for vote_poll ContestedDocumentResourceVotePoll { contract_id: GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec, document_type_name: domain, index_name: parentNameAndLabel, index_values: [string dash, string crypt0empressx] } is not joinable V0(ContestedDocumentVotePollStoredInfoV0 { finalized_events: [], vote_poll_status: Started(BlockInfo { time_ms: 1787350283442, height: 419511, core_height: 2525765, epoch: 79 }), locked_count: 0 }), it started 1787350283442 and it is now 1788383598277, and you can only join for 604800000",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "984D8D6F293D8C13F4C13DAF6027BF716B3E5773B871738AEDAC81B2BDC469BF",
+        "index": 0,
+        "blockHash": "FFE4025ABDF5BD387C70E9826D4C55266B794B66CC55F68CEF1CF9EC30E05593",
+        "blockHeight": 426792,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgELAUaixLBQZk/57TxEi7zP6IxMpFQgVB0yQnymXYqXVgEAAAABaVZuUQz/cpQKVpgKpOahFas3egcghC/dUYH7Sdi4sEEMBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAKmMBKvdt2AeA7seSoxAp54g+B8+GD7s3F57tMODjqsRBwVsYWJlbBIOQ3J5cHRvRW1wcmVzc1gPbm9ybWFsaXplZExhYmVsEg5jcnlwdDBlbXByZXNzeBpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIEZGFzaBBwYXJlbnREb21haW5OYW1lEgRkYXNoDHByZW9yZGVyU2FsdAzZc2CjSEI2UFBtDdT65mdjBNIgaldLIaF9pikzR8pNCwdyZWNvcmRzFgESCGlkZW50aXR5EAsBRqLEsFBmT/ntPESLvM/ojEykVCBUHTJCfKZdipdWDnN1YmRvbWFpblJ1bGVzFgESD2FsbG93U3ViZG9tYWlucxMAARJwYXJlbnROYW1lQW5kTGFiZWz9AAAABKgXyAAAAUEfLtyu+j/NHMivLEZ7OS/iXckZzu8Q41HeP/QRGh90CllsY3weP2g1h4Usw4OfNeeS6/dnO3iiHdhwOqIfCkeSMg==",
+        "timestamp": "2026-09-02T21:09:57.900Z",
+        "gasUsed": 1264180,
+        "status": "FAIL",
+        "error": "Document Contest for vote_poll ContestedDocumentResourceVotePoll { contract_id: GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec, document_type_name: domain, index_name: parentNameAndLabel, index_values: [string dash, string crypt0empressx] } is not joinable V0(ContestedDocumentVotePollStoredInfoV0 { finalized_events: [], vote_poll_status: Started(BlockInfo { time_ms: 1787350283442, height: 419511, core_height: 2525765, epoch: 79 }), locked_count: 0 }), it started 1787350283442 and it is now 1788383397900, and you can only join for 604800000",
+        "owner": {
+          "identifier": "jxcZVSJomUwsmKwvaWmpeS4Cn6dCrmrXWVToZ72uPUq",
+          "aliases": [
+            {
+              "alias": "CryptoEmpressX33.dash",
+              "status": "ok",
+              "timestamp": "2026-08-29T20:23:22.317Z",
+              "documentId": "AGnSFWKgBm1hTi6adbTv6cEKRuKr8NWPNLYBQtjAFfYx",
+              "contested": false
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 712 }
+  }
+}
