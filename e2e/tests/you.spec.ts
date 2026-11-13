@@ -4,7 +4,8 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 
-const ID_A = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
+// A recorded mainnet identity (platform-identity.spec), so opening it from a saved item needs no unrecorded call.
+const ID_A = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 const ID_B = '4EfA9Jrvv3nnCFdSf7fad59851iiTRZ6Wcu6YVJ4iSeF'
 const ID_C = 'HgRABLHCCFMCSzpbvBUiqbqaVMPqnqBMpoSRm2ZyUJF7'
 
