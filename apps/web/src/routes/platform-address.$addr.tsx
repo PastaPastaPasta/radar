@@ -14,10 +14,7 @@ export const Route = createFileRoute('/platform-address/$addr')({
   validateSearch: platformAddressSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-token'),
-    (m) => m.platformAddressPrefetch,
-  ),
+  loader: routePrefetch('p-token', 'platformAddressPrefetch'),
   component: PlatformAddressPageRoute,
 })
 

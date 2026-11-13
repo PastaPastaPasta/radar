@@ -23,9 +23,6 @@ export const Route = createFileRoute('/platform/blocks')({
   validateSearch: platformBlocksSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-blocks'),
-    (m) => m.platformBlocksPrefetch,
-  ),
+  loader: routePrefetch('p-blocks', 'platformBlocksPrefetch'),
   component: PlatformBlocksPage,
 })

@@ -94,6 +94,10 @@ export const peQueries = {
       queryKey: peKeys(net, 'transaction-verify', { base64 }),
       queryFn: ({ signal }) => pe.verifyTransaction(net, base64, signal),
       ...dataClass('live'),
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
     }),
   identities: list('identities', (n, q, sig) => pe.identities(n, q, sig)),
   identity: (net: NetworkId, id: string) =>

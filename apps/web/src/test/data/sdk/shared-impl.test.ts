@@ -1,10 +1,16 @@
 import { describe, expect, it, vi } from 'vitest'
 import { sharedImpl, type SharedReads } from '@/data/sdk/worker/impl/shared'
+import { base58Encode } from '@/lib/base58'
+import { hexToBytes } from '@/lib/hex'
 import { fakeIdentity, proved } from './fakes'
 
 const ID = '5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk'
 const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const ABSENT = '11111111111111111111111111111111'
+const PROTX_HEX = '001cb9381b08d784f4c1e1e220906874ea9e88f7124ebdf8baf0782007afad4f'
+const PROTX_ID = base58Encode(hexToBytes(PROTX_HEX))
+const safe = (name: string) =>
+  Promise.resolve(name.toLowerCase().replace(/o/g, '0').replace(/[il]/g, '1'))
 
 /** A facade where only the named group exists: any other call is a bug in the implementation under test. */
 const reads = (over: Partial<Record<keyof SharedReads, unknown>>) => over as unknown as SharedReads
@@ -50,11 +56,48 @@ describe('identities and names', () => {
     expect(out.data).toEqual(['alice.dash', 'al.dash'])
   })
 
+  it('looks a name up by its homograph-safe form and answers with the name as asked', async () => {
+    const info = { username: 'pshenm1c.dash', identityId: ID, documentId: 'doc1', free: vi.fn() }
+    const lookup = vi.fn((name: string) =>
+      Promise.resolve(proved(name === 'pshenm1c.dash' ? info : null)),
+    )
+    const out = await sharedImpl['dpns.getUsernameByName'](
+      reads({ dpns: { getUsernameByNameWithProof: lookup, convertToHomographSafe: safe } }),
+      { name: 'Pshenmic.dash' },
+    )
+    expect(lookup).toHaveBeenCalledWith('pshenm1c.dash')
+    expect(out.data).toMatchObject({ username: 'Pshenmic.dash', identityId: ID })
+  })
+
+  it('writes the identifiers the SDK hands over as bytes in base58', async () => {
+    const info = {
+      username: 'pshenm1c.dash',
+      identityId: new Uint8Array(32).fill(7),
+      documentId: Array.from({ length: 32 }, () => 9),
+      free: vi.fn(),
+    }
+    const out = await sharedImpl['dpns.getUsernameByName'](
+      reads({
+        dpns: {
+          getUsernameByNameWithProof: () => Promise.resolve(proved(info)),
+          convertToHomographSafe: safe,
+        },
+      }),
+      { name: 'pshenmic.dash' },
+    )
+    expect(out.data).toEqual({
+      username: 'pshenmic.dash',
+      identityId: base58Encode(new Uint8Array(32).fill(7)),
+      documentId: base58Encode(new Uint8Array(32).fill(9)),
+    })
+  })
+
   it('maps a name to its owner and document, or null', async () => {
     const free = vi.fn()
     const info = { username: 'alice.dash', identityId: ID, documentId: 'doc1', free }
+    const lookup = vi.fn(() => Promise.resolve(proved(info)))
     const hit = reads({
-      dpns: { getUsernameByNameWithProof: () => Promise.resolve(proved(info)) },
+      dpns: { getUsernameByNameWithProof: lookup, convertToHomographSafe: safe },
     })
     expect((await sharedImpl['dpns.getUsernameByName'](hit, { name: 'alice.dash' })).data).toEqual({
       username: 'alice.dash',
@@ -63,7 +106,10 @@ describe('identities and names', () => {
     })
     expect(free).toHaveBeenCalled()
     const miss = reads({
-      dpns: { getUsernameByNameWithProof: () => Promise.resolve(proved(undefined)) },
+      dpns: {
+        getUsernameByNameWithProof: () => Promise.resolve(proved(undefined)),
+        convertToHomographSafe: safe,
+      },
     })
     expect((await sharedImpl['dpns.getUsernameByName'](miss, { name: 'nobody.dash' })).data).toBe(
       null,
@@ -413,7 +459,8 @@ describe('epochs and protocol', () => {
       totalDistributedStorageFees: 13n,
       totalCreatedStorageFees: 14n,
       nextEpochStartCoreBlockHeight: 600,
-      blockProposers: new Map([['aa', 3n]]),
+      // The SDK keys a finalized epoch's proposers by their base58 identifier.
+      blockProposers: new Map([[PROTX_ID, 3n]]),
       free: vi.fn(),
     }
     const out = await sharedImpl['epoch.finalizedInfos'](
@@ -436,14 +483,14 @@ describe('epochs and protocol', () => {
         totalDistributedStorageFees: 13n,
         totalCreatedStorageFees: 14n,
         nextEpochStartCoreBlockHeight: 600,
-        blockProposers: new Map([['aa', 3n]]),
+        blockProposers: new Map([[PROTX_HEX, 3n]]),
       },
     ])
   })
 
   it('counts proposed blocks by ids and by range', async () => {
-    const byIds = vi.fn(() => Promise.resolve(proved(new Map([['aa', 2n]]))))
-    const byRange = vi.fn(() => Promise.resolve(proved(new Map([['bb', 1n]]))))
+    const byIds = vi.fn(() => Promise.resolve(proved(new Map([[PROTX_HEX.toUpperCase(), 2n]]))))
+    const byRange = vi.fn(() => Promise.resolve(proved(new Map([[PROTX_ID, 1n]]))))
     const e = reads({
       epoch: {
         evonodesProposedBlocksByIdsWithProof: byIds,
@@ -451,13 +498,17 @@ describe('epochs and protocol', () => {
       },
     })
     expect(
-      (await sharedImpl['epoch.evonodesProposedBlocksByIds'](e, { epoch: 7, proTxHashes: ['aa'] }))
-        .data,
-    ).toEqual(new Map([['aa', 2n]]))
-    expect(byIds).toHaveBeenCalledWith(7, ['aa'])
+      (
+        await sharedImpl['epoch.evonodesProposedBlocksByIds'](e, {
+          epoch: 7,
+          proTxHashes: [PROTX_HEX],
+        })
+      ).data,
+    ).toEqual(new Map([[PROTX_HEX, 2n]]))
+    expect(byIds).toHaveBeenCalledWith(7, [PROTX_HEX])
     expect(
       (await sharedImpl['epoch.evonodesProposedBlocksByRange'](e, { epoch: 7, limit: 10 })).data,
-    ).toEqual(new Map([['bb', 1n]]))
+    ).toEqual(new Map([[PROTX_HEX, 1n]]))
     expect(byRange).toHaveBeenCalledWith({ epoch: 7, limit: 10 })
   })
 
@@ -583,12 +634,14 @@ describe('quorums, polls and addresses', () => {
 
   it('reads Platform addresses one or many, keyed by the address asked about', async () => {
     const A = 'dash1kpn8c0q9rpz09k8cy6pgzyqhln7yy00cdue3kgjx'
-    const B = 'dash1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq'
+    const A_KEY = '00667c3c051844f2d8f82682811017fcfc423df86f'
+    const B = 'dash1kqg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zy22lqa3'
     const info = { balance: 5n, nonce: 2, free: vi.fn() }
     const a = reads({
       addresses: {
         getWithProof: () => Promise.resolve(proved(info)),
-        getManyWithProof: () => Promise.resolve(proved(new Map([[A, info]]))),
+        // The SDK keys its answer by the address in hex (type byte, then the hash), not by the text asked.
+        getManyWithProof: () => Promise.resolve(proved(new Map([[A_KEY, info]]))),
       },
     })
     expect((await sharedImpl['addresses.get'](a, { address: A })).data).toEqual({

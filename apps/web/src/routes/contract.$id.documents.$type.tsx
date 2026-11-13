@@ -1,27 +1,24 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { z } from 'zod'
 import { routePrefetch } from '@/app/route-loader'
-import { zCsv, zDefault, zLimitOf, zOpt, zWhere } from '@/app/search'
+import { zDefault, zLimitOf, zList, zOpt, zWhere } from '@/app/search'
 import { DocumentsPage } from '@/features/platform'
 
 const defaults = { limit: 25 } as const
 
 const contractDocumentsSearch = z.object({
   where: zOpt(zWhere),
-  order: zOpt(zCsv),
+  order: zOpt(zList),
   limit: zDefault(zLimitOf([10, 25, 50, 100]), defaults.limit),
   after: zOpt(z.string()),
-  prev: zOpt(zCsv),
+  prev: zOpt(zList),
 })
 
 export const Route = createFileRoute('/contract/$id/documents/$type')({
   validateSearch: contractDocumentsSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.contractDocumentsPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'contractDocumentsPrefetch'),
   component: DocumentsPageRoute,
 })
 

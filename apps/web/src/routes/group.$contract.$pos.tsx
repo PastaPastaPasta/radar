@@ -15,10 +15,7 @@ export const Route = createFileRoute('/group/$contract/$pos')({
   validateSearch: groupSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.groupPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'groupPrefetch'),
   component: GroupPageRoute,
 })
 

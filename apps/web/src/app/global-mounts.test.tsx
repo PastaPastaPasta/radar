@@ -4,21 +4,25 @@ import type { ProofMeta } from '@/data/envelope'
 import { openProofInspector, registerProofInspector } from '@/ui/proof'
 import { GlobalMounts, requestGlobalMount, resetGlobalMounts } from './global-mounts'
 
-const loaded = vi.hoisted(() => ({ count: 0, opened: [] as string[] }))
+const loaded = vi.hoisted(() => ({ count: 0, opened: [] as string[], fail: false }))
 
-vi.mock('@/features/you', async () => {
+vi.mock('@/features/you/proof/ProofInspector', async () => {
   const { useEffect: effect } = await import('react')
   const { registerProofInspector: register } = await import('@/ui/proof')
   loaded.count += 1
   return {
-    ProofInspectorMount: function ProofInspectorMount() {
-      effect(() => {
-        register((p) => loaded.opened.push(p.id))
-        return () => register(undefined)
-      }, [])
+    ProofInspector: function ProofInspector() {
+      effect(() => register((p) => loaded.opened.push(p.id)), [])
       return <p>proof inspector</p>
     },
-    DiagnosticsMount: function DiagnosticsMount() {
+  }
+})
+
+vi.mock('@/features/you/diagnostics/Diagnostics', () => {
+  loaded.count += 1
+  return {
+    Diagnostics: function Diagnostics() {
+      if (loaded.fail) throw new Error('the panel broke')
       return <p>diagnostics</p>
     },
   }
@@ -28,6 +32,7 @@ const proof = { id: 'p1' } as ProofMeta
 
 beforeEach(() => {
   loaded.opened.length = 0
+  loaded.fail = false
 })
 afterEach(() => {
   resetGlobalMounts()
@@ -58,6 +63,37 @@ describe('GlobalMounts', () => {
 
     openProofInspector({ ...proof, id: 'p2' })
     expect(loaded.opened).toEqual(['p1', 'p2'])
+  })
+
+  it('keeps the app when a panel breaks, and lets a later request start it afresh', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    loaded.fail = true
+    render(<GlobalMounts />)
+    act(() => {
+      requestGlobalMount('diagnostics')
+    })
+    await vi.waitFor(() => {
+      expect(error).toHaveBeenCalled()
+    })
+    expect(screen.queryByText('diagnostics')).not.toBeInTheDocument()
+
+    loaded.fail = false
+    act(() => {
+      requestGlobalMount('diagnostics')
+    })
+    expect(await screen.findByText('diagnostics')).toBeInTheDocument()
+    error.mockRestore()
+  })
+
+  it('does not let a stale inspector unregister a newer one', () => {
+    const first = vi.fn()
+    const second = vi.fn()
+    const unregisterFirst = registerProofInspector(first)
+    registerProofInspector(second)
+    unregisterFirst()
+    openProofInspector(proof)
+    expect(second).toHaveBeenCalledWith(proof)
+    expect(first).not.toHaveBeenCalled()
   })
 
   it('does nothing for a proof mark when the shell is not mounted', () => {

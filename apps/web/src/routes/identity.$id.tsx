@@ -33,10 +33,7 @@ export const Route = createFileRoute('/identity/$id')({
   validateSearch: identitySearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-id'),
-    (m) => m.identityPrefetch,
-  ),
+  loader: routePrefetch('p-id', 'identityPrefetch'),
   component: IdentityPageRoute,
 })
 

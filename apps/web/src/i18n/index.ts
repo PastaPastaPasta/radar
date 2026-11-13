@@ -44,9 +44,16 @@ function apply(code: LocaleCode): void {
   if (typeof document !== 'undefined') document.documentElement.lang = code
 }
 
-/** Loads a locale's catalog and switches to it. With `remember`, the choice is kept for next visit. */
+let latestRequest = 0
+
+/**
+ * Loads a locale's catalog and switches to it; when switches overlap, only the last one asked for applies. With
+ * `remember`, the choice is kept for next visit.
+ */
 export async function activateLocale(code: LocaleCode, remember = false): Promise<void> {
+  const request = ++latestRequest
   await load(code)
+  if (request !== latestRequest) return
   apply(code)
   if (!remember) return
   try {

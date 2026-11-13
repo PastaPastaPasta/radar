@@ -3,7 +3,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DapiMnEntry } from '@/data/core/types'
 import type { Sourced } from '@/data/envelope'
 import { disabledByMode, SourceError } from '@/data/errors'
-import { filterMnRows, mnFilterFacets } from '@/data/masternodes/filter'
+import {
+  filterMnRows,
+  mnFilterFacets,
+  mnFilterSearch,
+  mnHostLabels,
+} from '@/data/masternodes/filter'
 import { joinMnRows, mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
 import type { RadarMasternode } from '@/data/radar/schemas'
 
@@ -60,7 +65,7 @@ const crawled = (n: number, over: Partial<RadarMasternode> = {}): RadarMasternod
   city: 'Berlin',
   lat: null,
   lon: null,
-  asn: null,
+  asn: 24940,
   as_org: 'Hetzner',
   dkg_readiness: { overall: 'ready', checks: {} },
   ...over,
@@ -197,7 +202,10 @@ describe('filterMnRows and mnFilterFacets', () => {
         type: 'Evo',
         country: 'US',
         version: '23.1.0',
-        as_org: 'AWS',
+        asn: 16509,
+        as_org: 'Amazon.com, Inc.',
+        user_agent: '/Dash Core:23.1.0/',
+        platform_node_id: 'ab12cd',
         reachable: false,
         dkg_readiness: { overall: 'behind', checks: {} },
       }),
@@ -224,19 +232,35 @@ describe('filterMnRows and mnFilterFacets', () => {
     expect(ids(filterMnRows(rows, { country: ['DE', 'US'] }))).toEqual([1, 2, 3])
     expect(ids(filterMnRows(rows, { country: ['DE'], status: ['enabled'] }))).toEqual([1])
     expect(ids(filterMnRows(rows, { reach: 'unreachable' }))).toEqual([2])
-    expect(ids(filterMnRows(rows, { dkg: ['behind'], host: ['AWS'] }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { dkg: ['behind'], host: ['16509'] }))).toEqual([2])
     expect(ids(filterMnRows(rows, { version: ['23.1.0'] }))).toEqual([2])
   })
 
   it('never matches a row the crawl did not see on a crawl field', () => {
     expect(ids(filterMnRows(rows, { country: ['DE', 'US'], reach: 'reachable' }))).toEqual([1])
-    expect(ids(filterMnRows(rows, { host: ['Hetzner'] }))).toEqual([1, 3])
+    expect(ids(filterMnRows(rows, { host: ['24940'] }))).toEqual([1, 3])
+  })
+
+  it('filters hosting by AS number, so a name with a comma in it never splits', () => {
+    expect(mnFilterSearch.parse({ host: '16509,24940' }).host).toEqual(['16509', '24940'])
+    expect(mnHostLabels(rows)).toEqual({ '24940': 'Hetzner', '16509': 'Amazon.com, Inc.' })
+    expect(mnFilterFacets(rows).host).toEqual({ '24940': 2, '16509': 1 })
+  })
+
+  it('ignores the crawl facets while no row has a crawl', () => {
+    const dapiOnly = joinMnRows(undefined, sourced('dapi', new Map([[hex(1), entry()]])))!.data.rows
+    expect(
+      filterMnRows(dapiOnly, { country: ['DE'], host: ['24940'], reach: 'reachable' }),
+    ).toHaveLength(1)
+    expect(filterMnRows(dapiOnly, { type: ['evo'] })).toHaveLength(0)
   })
 
   it('searches ProTx, service, place, version and hosting case-insensitively', () => {
     expect(ids(filterMnRows(rows, { q: ' 5.6.7.8 ' }))).toEqual([2])
     expect(ids(filterMnRows(rows, { q: 'berlin' }))).toEqual([1, 2, 3])
-    expect(ids(filterMnRows(rows, { q: 'aws' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: 'amazon' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: 'dash core:23.1' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: 'ab12cd' }))).toEqual([2])
     expect(ids(filterMnRows(rows, { q: hex(3).slice(0, 62) + '03' }))).toEqual([3])
     expect(filterMnRows(rows, { q: 'nothing like this' })).toEqual([])
   })
@@ -248,7 +272,7 @@ describe('filterMnRows and mnFilterFacets', () => {
       reach: { reachable: 1, unreachable: 1 },
       country: { DE: 2, US: 1 },
       version: { '23.0.2': 2, '23.1.0': 1 },
-      host: { Hetzner: 2, AWS: 1 },
+      host: { '24940': 2, '16509': 1 },
       dkg: { ready: 2, behind: 1 },
     })
   })

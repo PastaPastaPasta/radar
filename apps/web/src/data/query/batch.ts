@@ -17,7 +17,11 @@ export interface BatcherOptions<K, V> {
   maxBatch: number
   /** Default 15. */
   windowMs?: number
-  run: (net: NetworkId, keys: K[]) => Promise<Sourced<Map<K, V | null>>>
+  /**
+   * Answers every key. A key mapped to an `Error` rejects only its own askers; a `run` that throws rejects the whole
+   * chunk, so a `run` isolates what it can.
+   */
+  run: (net: NetworkId, keys: K[]) => Promise<Sourced<Map<K, V | null | Error>>>
   /** Name of the query-key param that carries the key. Default 'id'. */
   keyParam?: string
   /** Data class of each per-key query. Default 'live'. */
@@ -41,10 +45,19 @@ interface Waiter<V> {
   reject: (e: unknown) => void
 }
 
-function keyId(key: unknown): string {
+const byName = ([a]: [string, unknown], [b]: [string, unknown]) => (a < b ? -1 : a > b ? 1 : 0)
+
+/** The identity of a key: a string as it is, anything else as JSON with its property names sorted. */
+export function keyId(key: unknown): string {
   return typeof key === 'string'
     ? key
-    : JSON.stringify(key, (_k, v: unknown) => (typeof v === 'bigint' ? `${v}n` : v))
+    : JSON.stringify(key, (_k, v: unknown) =>
+        typeof v === 'bigint'
+          ? `${v}n`
+          : v && typeof v === 'object' && !Array.isArray(v)
+            ? Object.fromEntries(Object.entries(v).sort(byName))
+            : v,
+      )
 }
 
 const DEFAULT_WINDOW_MS = 15
@@ -81,7 +94,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
     net: NetworkId,
     chunk: { key: K; waiters: Waiter<V>[] }[],
   ): Promise<void> {
-    let result: Sourced<Map<K, V | null>>
+    let result: Sourced<Map<K, V | null | Error>>
     const started = performance.now()
     try {
       result = await opts.run(
@@ -93,7 +106,7 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
       return
     }
     const latencyMs = performance.now() - started
-    const byId = new Map<string, V | null>()
+    const byId = new Map<string, V | null | Error>()
     for (const [k, v] of result.data) byId.set(keyId(k), v)
     const stamp = stampOf(result)
     const missing: string[] = []
@@ -110,6 +123,10 @@ export function createBatcher<K, V>(opts: BatcherOptions<K, V>): Batcher<K, V> {
         continue
       }
       const value = byId.get(id) ?? null
+      if (value instanceof Error) {
+        for (const w of e.waiters) w.reject(value)
+        continue
+      }
       for (const w of e.waiters) w.resolve({ ...stamp, data: value })
     }
     if (missing.length > 0) {

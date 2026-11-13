@@ -2,7 +2,12 @@ import { retainSearchParams, type SearchMiddleware } from '@tanstack/react-route
 import { z } from 'zod'
 import { setActiveNetwork } from '@/data/active-network'
 import { parseNetworkParam } from '@/lib/network'
-import { encodeWhere, type NumericRange, type WhereClause } from '@/lib/search-schemas'
+import {
+  encodeWhere,
+  escapeListItem,
+  type NumericRange,
+  type WhereClause,
+} from '@/lib/search-schemas'
 import { DECENTRALIZED_PARAM, setSourceModeFromLink } from '@/lib/source-mode'
 
 export * from '@/lib/search-schemas'
@@ -27,7 +32,7 @@ function scalar(value: unknown): string | undefined {
   if (Array.isArray(value)) {
     if (value.every(isWhereClause) && value.length > 0) return encodeWhere(value)
     const parts = value.map(String).filter((v) => v !== '')
-    return parts.length === 0 ? undefined : [...new Set(parts)].sort().join(',')
+    return parts.length === 0 ? undefined : parts.map(escapeListItem).join(',')
   }
   if (typeof value === 'object') {
     const { min, max } = value as NumericRange

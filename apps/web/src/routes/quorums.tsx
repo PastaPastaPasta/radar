@@ -12,9 +12,6 @@ const quorumsSearch = z.object({
 export const Route = createFileRoute('/quorums')({
   validateSearch: quorumsSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.quorumsPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'quorumsPrefetch'),
   component: QuorumsPage,
 })

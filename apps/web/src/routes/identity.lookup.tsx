@@ -12,9 +12,6 @@ const identityLookupSearch = z.object({
 export const Route = createFileRoute('/identity/lookup')({
   validateSearch: identityLookupSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-id'),
-    (m) => m.identityLookupPrefetch,
-  ),
+  loader: routePrefetch('p-id', 'identityLookupPrefetch'),
   component: IdentityLookupPage,
 })

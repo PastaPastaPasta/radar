@@ -4,10 +4,7 @@ import { NamePage } from '@/features/platform'
 
 export const Route = createFileRoute('/name/$label')({
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-vote'),
-    (m) => m.namePrefetch,
-  ),
+  loader: routePrefetch('p-vote', 'namePrefetch'),
   component: NamePageRoute,
 })
 

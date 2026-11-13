@@ -14,9 +14,6 @@ export const Route = createFileRoute('/changes')({
   validateSearch: changesSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/net-d'),
-    (m) => m.changesPrefetch,
-  ),
+  loader: routePrefetch('net-d', 'changesPrefetch'),
   component: ChangesPage,
 })

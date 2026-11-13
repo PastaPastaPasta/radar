@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { i18n } from '@lingui/core'
 import { railEntries, SITE_GROUPS, SITE_MAP, findPage, type SiteSection } from './site-map'
+import { PAGE_STORIES } from './site-map-stories'
 
 const labels = (section: SiteSection) =>
   railEntries(section).map((e) => ({ to: e.href ?? e.to, title: i18n._(e.title) }))
@@ -70,5 +71,11 @@ describe('page groups', () => {
         .flatMap((g) => g.pages)
         .sort(),
     )
+  })
+})
+
+describe('page stories', () => {
+  it('names the stories of every page, by route pattern', () => {
+    expect(Object.keys(PAGE_STORIES).sort()).toEqual(SITE_MAP.map((p) => p.path).sort())
   })
 })

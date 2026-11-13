@@ -18,9 +18,6 @@ export const Route = createFileRoute('/polls')({
   validateSearch: pollsSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-vote'),
-    (m) => m.pollsPrefetch,
-  ),
+  loader: routePrefetch('p-vote', 'pollsPrefetch'),
   component: PollsPage,
 })

@@ -15,9 +15,6 @@ export const Route = createFileRoute('/shielded')({
   validateSearch: shieldedSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.shieldedPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'shieldedPrefetch'),
   component: ShieldedPage,
 })

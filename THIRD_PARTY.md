@@ -1,0 +1,10 @@
+# Third-party code and data
+
+Code ported or adapted from another project, and data copied from one, is listed here with its source and licence. A
+file that holds ported code also names its origin in a header comment. Dependencies installed through npm or cargo are
+not listed: their licences travel with the lockfiles.
+
+Add one row per origin at the end of the table; never reorder or edit another row.
+
+| Component | Source | Licence | Where it is used |
+| --------- | ------ | ------- | ---------------- |

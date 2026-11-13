@@ -24,12 +24,29 @@ export interface ContractDto {
   documentSchemas: Record<string, unknown>
 }
 
+/** What the answering node reports about itself and the chain (unproved). An absent field is `''` or `0`. */
 export interface PlatformStatusDto {
   chainId: string
+  /** Drive's software version. */
   version: string
   height: number
   timeMs: number
   catchingUp: boolean
+  /** Peers the answering node is connected to. */
+  peers: number
+  isListening: boolean
+  latestBlockHash: string
+  latestAppHash: string
+  earliestBlockHeight: number
+  maxPeerBlockHeight: number
+  coreChainLockedHeight: number
+  /** The answering node's ProTxHash and Tenderdash node ID, in hex. */
+  nodeProTxHash: string
+  nodeId: string
+  dapiVersion: string
+  tenderdashVersion: string
+  tenderdashProtocol: { p2p: number; block: number }
+  driveProtocol: { latest: number; current: number }
 }
 
 export interface EpochDto {

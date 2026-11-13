@@ -21,9 +21,6 @@ export const Route = createFileRoute('/contests')({
   validateSearch: contestsSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-vote'),
-    (m) => m.contestsPrefetch,
-  ),
+  loader: routePrefetch('p-vote', 'contestsPrefetch'),
   component: ContestsPage,
 })

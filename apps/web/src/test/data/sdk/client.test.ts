@@ -228,6 +228,31 @@ describe('SdkClient state', () => {
     expect(client.state('mainnet')).toBe('ready')
   })
 
+  it('logs a call that never got an answer, and one that could not connect', async () => {
+    queryLog.clear()
+    const stalled = setup(connectOnly({ call: () => new Promise(() => undefined) }))
+    const timedOut = stalled.client.call('mainnet', 'epoch.current', {}).catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(60_000)
+    expect(await timedOut).toMatchObject({ source: 'sdk', kind: 'timeout' })
+    expect(queryLog.snapshot().at(-1)).toMatchObject({
+      what: 'epoch.current',
+      ok: false,
+      kind: 'timeout',
+    })
+
+    queryLog.clear()
+    const down = setup(
+      connectOnly({
+        connect: () => Promise.resolve({ ok: false, error: { kind: 'network', message: 'no' } }),
+      }),
+    )
+    await expect(down.client.call('mainnet', 'epoch.current', {})).rejects.toMatchObject({
+      kind: 'network',
+    })
+    expect(queryLog.snapshot()).toHaveLength(1)
+    expect(queryLog.snapshot()[0]).toMatchObject({ ok: false, kind: 'network' })
+  })
+
   it('drops a late answer when the caller aborted', async () => {
     let answer!: (r: WireResult<bigint>) => void
     const { client, proofs } = setup(

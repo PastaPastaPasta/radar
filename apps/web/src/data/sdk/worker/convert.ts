@@ -20,6 +20,9 @@ import type {
   VotePollDto,
   VotePollsByEndDateDto,
 } from '../methods'
+import { base58Decode, base58Encode } from '@/lib/base58'
+import { decodePlatformAddress } from '@/lib/bech32'
+import { bytesToHex } from '@/lib/hex'
 import type { Freeable } from './impl/types'
 
 interface IdentityKeyLike extends Freeable {
@@ -59,13 +62,24 @@ export interface EpochLike extends Freeable {
 
 export interface StatusLike {
   toJSON(): {
-    version?: { software?: { drive?: string }; protocol?: { drive?: { current?: number } } }
+    version?: {
+      software?: { dapi?: string; drive?: string; tenderdash?: string }
+      protocol?: {
+        tenderdash?: { p2p?: number; block?: number }
+        drive?: { latest?: number; current?: number }
+      }
+    }
+    node?: { id?: string; proTxHash?: string }
     chain?: {
       isCatchingUp?: boolean
+      latestBlockHash?: string
+      latestAppHash?: string
       latestBlockHeight?: string | number
+      earliestBlockHeight?: string | number
+      maxPeerBlockHeight?: string | number
       coreChainLockedHeight?: number
     }
-    network?: { chainId?: string }
+    network?: { chainId?: string; peersCount?: number; isListening?: boolean }
     time?: { block?: string | number; epoch?: number }
   }
 }
@@ -127,10 +141,29 @@ export function statusDto(status: StatusLike): StatusDto {
     height: Number(j.chain?.latestBlockHeight ?? 0),
     timeMs: Number(j.time?.block ?? 0),
     catchingUp: j.chain?.isCatchingUp === true,
+    peers: j.network?.peersCount ?? 0,
+    isListening: j.network?.isListening === true,
+    latestBlockHash: j.chain?.latestBlockHash ?? '',
+    latestAppHash: j.chain?.latestAppHash ?? '',
+    earliestBlockHeight: Number(j.chain?.earliestBlockHeight ?? 0),
+    maxPeerBlockHeight: Number(j.chain?.maxPeerBlockHeight ?? 0),
+    coreChainLockedHeight: j.chain?.coreChainLockedHeight ?? 0,
+    nodeProTxHash: j.node?.proTxHash ?? '',
+    nodeId: j.node?.id ?? '',
+    dapiVersion: j.version?.software?.dapi ?? '',
+    tenderdashVersion: j.version?.software?.tenderdash ?? '',
+    tenderdashProtocol: {
+      p2p: j.version?.protocol?.tenderdash?.p2p ?? 0,
+      block: j.version?.protocol?.tenderdash?.block ?? 0,
+    },
+    driveProtocol: {
+      latest: j.version?.protocol?.drive?.latest ?? 0,
+      current: j.version?.protocol?.drive?.current ?? 0,
+    },
   }
   return {
     dto,
-    coreChainLockedHeight: j.chain?.coreChainLockedHeight ?? 0,
+    coreChainLockedHeight: dto.coreChainLockedHeight,
     epoch: j.time?.epoch ?? 0,
     protocolVersion: j.version?.protocol?.drive?.current ?? 0,
   }
@@ -145,6 +178,14 @@ export function chainIdText(bytes: Uint8Array): string {
 }
 
 type IdLike = { toString(): string } | string
+
+type IdBytes = Uint8Array | readonly number[]
+
+/** An identifier as base58 text: the SDK hands some of them over as raw bytes (a plain array of numbers). */
+export function idText(id: IdLike | IdBytes): string {
+  if (id instanceof Uint8Array) return base58Encode(id)
+  return Array.isArray(id) ? base58Encode(Uint8Array.from(id as readonly number[])) : String(id)
+}
 
 export interface DocumentLike extends Freeable {
   id: IdLike
@@ -192,15 +233,15 @@ export function documentDto(doc: DocumentLike): DocumentDto {
 
 export interface DpnsUsernameLike extends Freeable {
   username: string
-  identityId: IdLike
-  documentId: IdLike
+  identityId: IdLike | IdBytes
+  documentId: IdLike | IdBytes
 }
 
 export function dpnsUsernameDto(info: DpnsUsernameLike): DpnsUsernameDto {
   return {
     username: info.username,
-    identityId: String(info.identityId),
-    documentId: String(info.documentId),
+    identityId: idText(info.identityId),
+    documentId: idText(info.documentId),
   }
 }
 
@@ -326,7 +367,7 @@ export function finalizedEpochDto(index: number, epoch: FinalizedEpochLike): Fin
     totalDistributedStorageFees: epoch.totalDistributedStorageFees,
     totalCreatedStorageFees: epoch.totalCreatedStorageFees,
     nextEpochStartCoreBlockHeight: epoch.nextEpochStartCoreBlockHeight,
-    blockProposers: new Map(epoch.blockProposers),
+    blockProposers: hexKeyed(epoch.blockProposers),
   }
 }
 
@@ -404,3 +445,26 @@ export const platformAddressInfoDto = (
   address: string,
   info: PlatformAddressInfoLike,
 ): PlatformAddressInfoDto => ({ address, balance: info.balance, nonce: BigInt(info.nonce) })
+
+const HEX64 = /^[0-9a-f]{64}$/i
+
+/** A proposer's ProTxHash as 64 lower-case hex characters, whichever form the SDK keyed it in (base58 identifier or hex). */
+export function proTxHashHex(key: string): string {
+  if (HEX64.test(key)) return key.toLowerCase()
+  try {
+    const bytes = base58Decode(key)
+    return bytes.length === 32 ? bytesToHex(bytes) : key
+  } catch {
+    return key
+  }
+}
+
+export function hexKeyed<V>(entries: Iterable<[string, V]>): Map<string, V> {
+  return new Map([...entries].map(([k, v]) => [proTxHashHex(k), v]))
+}
+
+/** The key the SDK answers a Platform address under: a type byte (0 for P2PKH, 1 for P2SH) and the 20-byte hash, in hex. */
+export function platformAddressKey(address: string): string {
+  const parts = decodePlatformAddress(address)
+  return parts ? `${parts.type === 'p2pkh' ? '00' : '01'}${bytesToHex(parts.hash)}` : address
+}

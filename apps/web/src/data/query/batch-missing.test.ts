@@ -89,3 +89,27 @@ describe('createBatcher with keys missing from the result', () => {
     expect(healthRegistry.get('mainnet', 'sdk').state).toBe('unknown')
   })
 })
+
+describe('createBatcher with a key the run answered with an error', () => {
+  it('rejects only that key’s askers and resolves the rest', async () => {
+    const batcher = createBatcher<string, number>({
+      name: 'identity-balance',
+      source: 'sdk',
+      maxBatch: 100,
+      run: () =>
+        Promise.resolve(
+          proved(
+            new Map<string, number | Error | null>([
+              ['ok', 5],
+              ['bad', new Error('malformed')],
+            ]),
+          ),
+        ),
+    })
+    const ok = batcher.fetch('mainnet', 'ok')
+    const bad = batcher.fetch('mainnet', 'bad').catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(15)
+    expect((await ok).data).toBe(5)
+    expect(await bad).toMatchObject({ message: 'malformed' })
+  })
+})

@@ -1,26 +1,49 @@
-import { useEffect, useSyncExternalStore } from 'react'
+import { useEffect, useSyncExternalStore, type ComponentType } from 'react'
+import { ErrorBoundary } from '@/app/error-boundary'
 import { deferred } from '@/ui/deferred'
 import { onProofInspectorNeeded } from '@/ui/proof'
 
 export type GlobalMount = 'proof' | 'diagnostics'
 
-const ProofInspectorMount = deferred(() =>
-  import('@/features/you').then((m) => m.ProofInspectorMount),
-)
-const DiagnosticsMount = deferred(() => import('@/features/you').then((m) => m.DiagnosticsMount))
+const LOADERS: Record<GlobalMount, () => Promise<ComponentType>> = {
+  proof: () => import('@/features/you/proof/ProofInspector').then((m) => m.ProofInspector),
+  diagnostics: () => import('@/features/you/diagnostics/Diagnostics').then((m) => m.Diagnostics),
+}
 
-type Requested = Readonly<Record<GlobalMount, boolean>>
+type Requested = Readonly<Record<GlobalMount, ComponentType | null>>
 
-const NONE: Requested = { proof: false, diagnostics: false }
+const NONE: Requested = { proof: null, diagnostics: null }
 
-let requested = NONE
+let requested: Requested = NONE
 const listeners = new Set<() => void>()
 
 /** Mounts a panel for the rest of the session; its code loads the first time this is called. */
 export function requestGlobalMount(which: GlobalMount): void {
   if (requested[which]) return
-  requested = { ...requested, [which]: true }
+  requested = { ...requested, [which]: deferred(LOADERS[which]) }
   for (const cb of [...listeners]) cb()
+}
+
+/** A panel whose code failed to load or render is dropped, so a later request starts it afresh. */
+function forget(which: GlobalMount): void {
+  if (!requested[which]) return
+  requested = { ...requested, [which]: null }
+  for (const cb of [...listeners]) cb()
+}
+
+function Forget({ which }: { which: GlobalMount }) {
+  useEffect(() => {
+    forget(which)
+  }, [which])
+  return null
+}
+
+function Mount({ which, Panel }: { which: GlobalMount; Panel: ComponentType }) {
+  return (
+    <ErrorBoundary fallback={() => <Forget which={which} />}>
+      <Panel />
+    </ErrorBoundary>
+  )
 }
 
 /** Forgets every request; tests use it between cases. */
@@ -49,8 +72,8 @@ export function GlobalMounts() {
   }, [])
   return (
     <>
-      {open.proof ? <ProofInspectorMount /> : null}
-      {open.diagnostics ? <DiagnosticsMount /> : null}
+      {open.proof ? <Mount which="proof" Panel={open.proof} /> : null}
+      {open.diagnostics ? <Mount which="diagnostics" Panel={open.diagnostics} /> : null}
     </>
   )
 }

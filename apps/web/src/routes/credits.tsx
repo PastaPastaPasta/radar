@@ -11,9 +11,6 @@ const creditsSearch = z.object({
 export const Route = createFileRoute('/credits')({
   validateSearch: creditsSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.creditsPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'creditsPrefetch'),
   component: CreditsPage,
 })

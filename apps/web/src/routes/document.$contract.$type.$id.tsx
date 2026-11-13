@@ -15,10 +15,7 @@ export const Route = createFileRoute('/document/$contract/$type/$id')({
   validateSearch: documentSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.documentPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'documentPrefetch'),
   component: DocumentPageRoute,
 })
 

@@ -28,9 +28,6 @@ export const Route = createFileRoute('/platform/')({
     if (to) throwRedirect({ to }, search)
   },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-home'),
-    (m) => m.platformHomePrefetch,
-  ),
+  loader: routePrefetch('p-home', 'platformHomePrefetch'),
   component: PlatformHomePage,
 })

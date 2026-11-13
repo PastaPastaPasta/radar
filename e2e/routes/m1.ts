@@ -48,23 +48,6 @@ function m1(net: RouteNet): RouteCase[] {
   const built = true as const
   return [
     { path: '/', h1: 'Radar', nets, built, decentralized: 'partial', data: '[data-headline]' },
-    { path: '/search', h1: 'Search', nets, built, decentralized: 'data' },
-    {
-      path: `/search?q=${r.height}`,
-      h1: 'Search',
-      nets,
-      built,
-      decentralized: 'partial',
-      data: 'a[href^="/block/"]',
-    },
-    {
-      path: `/search?q=${r.address}`,
-      h1: 'Search',
-      nets,
-      built,
-      decentralized: 'partial',
-      data: 'a[href^="/address/"]',
-    },
     {
       path: '/blocks',
       h1: 'Blocks',
@@ -131,31 +114,6 @@ function m1(net: RouteNet): RouteCase[] {
       nets,
       built,
       decentralized: 'unavailable',
-    },
-    { path: `/mn/${r.protx}`, h1: masternodeH1(net), nets, built, decentralized: 'unavailable' },
-    {
-      path: `/mn/${r.protx}?tab=payments`,
-      h1: masternodeH1(net),
-      nets,
-      built,
-      decentralized: 'unavailable',
-    },
-    {
-      path: '/status',
-      h1: 'Status',
-      nets,
-      built,
-      decentralized: 'data',
-      data: '[data-state="off"]',
-    },
-    {
-      path: '/settings',
-      h1: 'Settings',
-      nets,
-      built,
-      // The price feed is offered on mainnet only, so only there does the unit card have something to say.
-      decentralized: net === 'mainnet' ? 'partial' : 'data',
-      data: '#sources',
     },
     {
       path: '/sources',

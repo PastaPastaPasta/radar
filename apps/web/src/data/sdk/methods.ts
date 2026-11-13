@@ -41,6 +41,21 @@ export interface SdkNetworkConfig {
   devnetName?: string
   quorumUrl?: string
   addresses?: string[]
+  /** Connection tuning (settings NX-74); each field absent keeps the SDK's or the worker's default. */
+  settings?: SdkConnectionSettings
+}
+
+export interface SdkConnectionSettings {
+  /** The worker's limit for one call, in ms (default 8000). */
+  timeoutMs?: number
+  /** The worker's limit for connecting, in ms (default 20000). */
+  connectTimeoutMs?: number
+  /** Passed to `EvoSDK` as `settings.retries`. */
+  retries?: number
+  /** Passed to `EvoSDK` as `settings.banFailedAddress`. */
+  banFailedAddress?: boolean
+  /** Passed to `EvoSDK` as `logs`. */
+  logs?: string
 }
 
 export interface WireMeta {
@@ -92,6 +107,14 @@ export interface SdkConnectInfo {
   requests?: NodeUse[]
 }
 
+export type SdkDecodeKind = 'stateTransition' | 'dataContract' | 'document' | 'identity'
+
+/** A document is decoded against its contract: the contract's serialized bytes and the document type's name. */
+export interface SdkDecodeOptions {
+  contract?: Uint8Array
+  type?: string
+}
+
 export interface SdkWorkerApi {
   /** Idempotent. Resolves when the SDK for that network is connected and its trusted context is prefetched. */
   connect(cfg: SdkNetworkConfig): Promise<SdkConnectInfo | WireError>
@@ -102,7 +125,8 @@ export interface SdkWorkerApi {
   ): Promise<WireResult<SdkMethods[M]['result']> | WireError>
   /** Local wasm decoders for tools (NX-71, PE-13, PE-34): no network. */
   decode(
-    kind: 'stateTransition' | 'dataContract' | 'document' | 'identity',
+    kind: SdkDecodeKind,
     bytes: Uint8Array,
+    opts?: SdkDecodeOptions,
   ): Promise<WireResult<unknown> | WireError>
 }

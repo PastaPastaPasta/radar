@@ -13,10 +13,7 @@ const decoderSearch = z.object({
 export const Route = createFileRoute('/tools/$decoder')({
   validateSearch: decoderSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/tools'),
-    (m) => m.decoderPrefetch,
-  ),
+  loader: routePrefetch('tools', 'decoderPrefetch'),
   component: DecoderPageRoute,
 })
 

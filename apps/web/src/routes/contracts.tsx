@@ -22,9 +22,6 @@ export const Route = createFileRoute('/contracts')({
   validateSearch: contractsSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.contractsPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'contractsPrefetch'),
   component: ContractsPage,
 })

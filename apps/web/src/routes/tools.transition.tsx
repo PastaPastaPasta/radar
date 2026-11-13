@@ -4,9 +4,6 @@ import { TransitionToolPage } from '@/features/tools'
 
 export const Route = createFileRoute('/tools/transition')({
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/tools'),
-    (m) => m.transitionToolPrefetch,
-  ),
+  loader: routePrefetch('tools', 'transitionToolPrefetch'),
   component: TransitionToolPage,
 })

@@ -14,10 +14,7 @@ export const Route = createFileRoute('/platform/tx/$hash')({
   validateSearch: platformTxSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-blocks'),
-    (m) => m.platformTxPrefetch,
-  ),
+  loader: routePrefetch('p-blocks', 'platformTxPrefetch'),
   component: TransitionPageRoute,
 })
 

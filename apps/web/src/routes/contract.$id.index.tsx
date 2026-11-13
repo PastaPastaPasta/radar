@@ -32,10 +32,7 @@ export const Route = createFileRoute('/contract/$id/')({
   validateSearch: contractSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.contractPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'contractPrefetch'),
   component: ContractPageRoute,
 })
 

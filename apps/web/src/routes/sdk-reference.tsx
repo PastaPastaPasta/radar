@@ -11,9 +11,6 @@ const sdkReferenceSearch = z.object({
 export const Route = createFileRoute('/sdk-reference')({
   validateSearch: sdkReferenceSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/tools'),
-    (m) => m.sdkReferencePrefetch,
-  ),
+  loader: routePrefetch('tools', 'sdkReferencePrefetch'),
   component: SdkReferencePage,
 })

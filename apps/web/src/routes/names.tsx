@@ -12,9 +12,6 @@ const namesSearch = z.object({
 export const Route = createFileRoute('/names')({
   validateSearch: namesSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-vote'),
-    (m) => m.namesPrefetch,
-  ),
+  loader: routePrefetch('p-vote', 'namesPrefetch'),
   component: NamesPage,
 })
