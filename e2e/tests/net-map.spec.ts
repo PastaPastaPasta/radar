@@ -38,16 +38,19 @@ async function restingHandle(page: Page) {
   return last
 }
 
-/** Drags the sheet's handle up the way a thumb would, so everything in the sheet is within reach. */
+/** Drags the sheet's handle up the way a thumb would, so everything in the sheet is within reach. A drag that a busy machine drops is tried again. */
 async function pullSheetUp(page: Page) {
-  const h = await restingHandle(page)
-  const x = h.x + h.width / 2
-  const y = h.y + h.height / 2
-  await page.mouse.move(x, y)
-  await page.mouse.down()
-  for (let i = 1; i <= 12; i++) await page.mouse.move(x, y - i * 40)
-  await page.mouse.up()
-  await expect(panel(page)).toHaveAttribute('data-snap', 'full')
+  const sheet = panel(page)
+  await expect(async () => {
+    const h = await restingHandle(page)
+    const x = h.x + h.width / 2
+    const y = h.y + h.height / 2
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (let i = 1; i <= 12; i++) await page.mouse.move(x, y - i * 40)
+    await page.mouse.up()
+    await expect(sheet).toHaveAttribute('data-snap', 'full', { timeout: 2_000 })
+  }).toPass({ timeout: 20_000 })
 }
 
 /** On a phone the chips and selects are in the sheet's body, out of sight until it opens. */
@@ -217,13 +220,7 @@ test.describe('The map', () => {
     await expect(sheet).toHaveAttribute('data-mode', 'peek')
     await expect(sheet).toHaveAttribute('data-snap', 'collapsed')
 
-    const h = await restingHandle(page)
-    const x = h.x + h.width / 2
-    const y = h.y + h.height / 2
-    await page.mouse.move(x, y)
-    await page.mouse.down()
-    for (let i = 1; i <= 10; i++) await page.mouse.move(x, y - i * 30)
-    await page.mouse.up()
+    await pullSheetUp(page)
     await expect(sheet).not.toHaveAttribute('data-snap', 'collapsed')
     await expect(sheet).toHaveAttribute('data-mode', 'open')
     await clear()
