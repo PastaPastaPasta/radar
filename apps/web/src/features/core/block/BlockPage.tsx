@@ -192,6 +192,7 @@ function BlockView({
       >
         <RecordHeader
           icon="block"
+          share
           kicker={
             <>
               <span className="rx-type" data-layer="core">

@@ -55,7 +55,7 @@ export function AddressPage({ address }: { address: string }) {
   const decentralized = useDecentralizedOnly()
 
   return (
-    <PageFrame path="/address/$address" title={t`Address`}>
+    <PageFrame path="/address/$address" title={t`Address`} share>
       {valid ? (
         <>
           <p className="grid gap-1">

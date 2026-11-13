@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
-import { useDocumentTitle, networkName, PageLink } from '@/features/entity'
+import { CopyLinkButton, useDocumentTitle, networkName, PageLink } from '@/features/entity'
 import { type NetworkId } from '@/lib/network'
 import { Empty, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
 
@@ -49,6 +49,7 @@ export function RecordHeader({
   kicker,
   title,
   actions,
+  share = false,
   meta,
   children,
 }: {
@@ -56,6 +57,8 @@ export function RecordHeader({
   kicker: ReactNode
   title: ReactNode
   actions?: ReactNode
+  /** Adds the copy-link control to the actions. */
+  share?: boolean
   meta?: ReactNode
   children?: ReactNode
 }) {
@@ -68,7 +71,12 @@ export function RecordHeader({
       <h1 className="rx-rec__title" id="h-page">
         {title}
       </h1>
-      {actions ? <div className="rx-rec__actions">{actions}</div> : null}
+      {actions || share ? (
+        <div className="rx-rec__actions">
+          {actions}
+          {share ? <CopyLinkButton /> : null}
+        </div>
+      ) : null}
       {meta}
       {children}
     </div>
