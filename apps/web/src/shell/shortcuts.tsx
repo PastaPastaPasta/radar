@@ -28,7 +28,11 @@ const ROWS: { keys: string[]; does: MessageDescriptor; flag?: keyof DevFlags }[]
   { keys: ['j', 'k'], does: msg`Move through table rows` },
   { keys: ['Enter'], does: msg`Open the selected table row` },
   { keys: ['Alt', 'Shift', 'P'], does: msg`Open the proof inspector`, flag: 'proofShortcut' },
-  { keys: ['Alt', 'Shift', 'D'], does: msg`Open the diagnostics drawer`, flag: 'diagnosticsShortcut' },
+  {
+    keys: ['Alt', 'Shift', 'D'],
+    does: msg`Open the diagnostics drawer`,
+    flag: 'diagnosticsShortcut',
+  },
 ]
 
 export function ShortcutsProvider({ children }: { children: ReactNode }) {
