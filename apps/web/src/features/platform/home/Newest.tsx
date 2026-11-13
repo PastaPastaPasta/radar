@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeBlockSummary, PeTransaction } from '@/data/pe/schemas'
@@ -33,7 +34,7 @@ export function NewestBlocks() {
   const { t } = useLingui()
   const net = useNetwork()
   const query = useQuery(peQueries.latestBlocks(net, SHOWN))
-  const live = query.data?.data.items.slice(0, SHOWN) ?? []
+  const live = useMemo(() => query.data?.data.items.slice(0, SHOWN) ?? [], [query.data])
   const hold = useHold<PeBlockSummary[]>(live)
   return (
     <Card
@@ -68,7 +69,7 @@ export function NewestTransitions() {
   const { t } = useLingui()
   const net = useNetwork()
   const query = useQuery(peQueries.latestTransactions(net, SHOWN))
-  const live = query.data?.data.items.slice(0, SHOWN) ?? []
+  const live = useMemo(() => query.data?.data.items.slice(0, SHOWN) ?? [], [query.data])
   const hold = useHold<PeTransaction[]>(live)
   return (
     <Card

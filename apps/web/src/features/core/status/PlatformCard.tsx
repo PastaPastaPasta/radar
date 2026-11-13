@@ -13,23 +13,22 @@ export interface PlatformCardProps {
   coreTip: UseQueryResult<Sourced<{ height: number }>>
 }
 
-function reasonText(reason: PlatformReason, t: ReturnType<typeof useLingui>['t']): string {
-  switch (reason.kind) {
-    case 'no-block':
-      return t`No new Platform block for ${formatDuration(reason.ageMs)}.`
-    case 'catching-up':
-      return t`The node is still catching up with the chain.`
-    case 'no-peers':
-      return t`The node has no peers.`
-    case 'core-behind':
-      return t`Platform's Core ChainLock is ${formatInt(reason.blocks)} blocks behind Core's tip.`
-  }
-}
-
 /** NX-54: what the node that answered says about Platform, with a verdict on whether blocks are arriving. */
 export function PlatformCard({ status, coreTip }: PlatformCardProps) {
   const { t } = useLingui()
   const now = useNow()
+  const reasonText = (reason: PlatformReason): string => {
+    switch (reason.kind) {
+      case 'no-block':
+        return t`No new Platform block for ${formatDuration(reason.ageMs)}.`
+      case 'catching-up':
+        return t`The node is still catching up with the chain.`
+      case 'no-peers':
+        return t`The node has no peers.`
+      case 'core-behind':
+        return t`Platform's Core ChainLock is ${formatInt(reason.blocks)} blocks behind Core's tip.`
+    }
+  }
   const s = status.data?.data
   const tip = coreTip.data?.data.height
   const verdict = s
@@ -59,7 +58,6 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
     >
       {verdict ? (
         <div
-          role="status"
           data-platform-state={verdict.state}
           className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1"
         >
@@ -83,7 +81,7 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
           ) : (
             <ul className="flex flex-wrap gap-x-4" data-platform-reasons>
               {verdict.reasons.map((r) => (
-                <li key={r.kind}>{reasonText(r, t)}</li>
+                <li key={r.kind}>{reasonText(r)}</li>
               ))}
             </ul>
           )}
