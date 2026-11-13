@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query'
-import { createQueryClientConfig, createPersister } from '@/data/query'
+import { createQueryClientConfig, createPersister, watchSourceMode } from '@/data/query'
 
 function openPersister() {
   if (typeof indexedDB === 'undefined') return undefined
@@ -13,7 +13,7 @@ function openPersister() {
 export function createQueryClient(): QueryClient {
   const config = createQueryClientConfig()
   const persister = openPersister()
-  return new QueryClient({
+  const client = new QueryClient({
     ...config,
     defaultOptions: {
       ...config.defaultOptions,
@@ -23,4 +23,6 @@ export function createQueryClient(): QueryClient {
       },
     },
   })
+  watchSourceMode(client)
+  return client
 }

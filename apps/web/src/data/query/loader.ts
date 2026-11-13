@@ -1,6 +1,8 @@
 import type { FetchQueryOptions, QueryClient, QueryKey } from '@tanstack/query-core'
 import { parseNetworkParam, type NetworkId } from '@/lib/network'
 import { budget } from '../dapi-core/budget'
+import { sourceOff } from '../endpoints'
+import { hostedSourceOfKey } from './persister'
 
 /**
  * What a prefetch costs, which decides whether a loader may start it (§4.7, §6.3):
@@ -24,7 +26,15 @@ export function prefetchItem<TData, TKey extends QueryKey>(
   query: FetchQueryOptions<TData, Error, TData, TKey>,
   flags: { wait?: boolean; detail?: boolean } = {},
 ): PrefetchItem {
-  return { cost, ...flags, start: (client) => client.prefetchQuery(query) }
+  return {
+    cost,
+    ...flags,
+    start(client) {
+      // Nothing even starts a read of a hosted source while Decentralized only mode is on.
+      const hosted = hostedSourceOfKey(query.queryKey)
+      return hosted && sourceOff(hosted) ? Promise.resolve() : client.prefetchQuery(query)
+    },
+  }
 }
 
 export interface PrefetchGates {

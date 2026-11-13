@@ -8,6 +8,7 @@ export type SourceErrorKind =
   | 'invalid-response' // zod or protobuf decode failure
   | 'proof-failed' // SDK returned a proof that did not verify
   | 'unavailable' // source not offered on this network (devnet), or health is 'down' and the call was skipped
+  | 'disabled-by-mode' // a hosted source, refused before any request because Decentralized only mode is on
   | 'aborted'
 
 export interface SourceErrorInit {
@@ -47,4 +48,17 @@ export function isSourceError(e: unknown): e is SourceError {
 
 export function abortedError(source: SourceId): SourceError {
   return new SourceError({ source, kind: 'aborted', message: 'The request was aborted' })
+}
+
+/** A hosted source refused before any network I/O because Decentralized only mode is on. Not an outage. */
+export function disabledByMode(source: SourceId): SourceError {
+  return new SourceError({
+    source,
+    kind: 'disabled-by-mode',
+    message: `${source} is a hosted service; Decentralized only mode reads only DAPI and the Platform SDK`,
+  })
+}
+
+export function isDisabledByMode(e: unknown): boolean {
+  return isSourceError(e) && e.kind === 'disabled-by-mode'
 }

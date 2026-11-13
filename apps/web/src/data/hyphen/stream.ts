@@ -1,5 +1,6 @@
 import type { NetworkId } from '@/lib/network'
-import { SourceError } from '../errors'
+import { sourceOff } from '../endpoints'
+import { SourceError, disabledByMode } from '../errors'
 import { healthRegistry } from '../health'
 import { cancelled, describeFailure, requireEndpoint } from '../http'
 import { HyStreamEventSchema, type HyStreamEvent } from './schemas'
@@ -12,6 +13,7 @@ export async function openHyphenStream(
   net: NetworkId,
   signal?: AbortSignal,
 ): Promise<AsyncIterable<HyStreamEvent>> {
+  if (sourceOff('hyphen')) throw disabledByMode('hyphen')
   const url = `${requireEndpoint(net, 'hyphen', 'hyphen')}/stream`
   const started = performance.now()
   let res: Response

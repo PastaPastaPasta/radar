@@ -1,9 +1,9 @@
 import { t } from '@lingui/core/macro'
 import type { z } from 'zod'
 import { getActiveNetwork } from './active-network'
-import { endpoint, type EndpointSource } from './endpoints'
+import { endpoint, sourceOff, type EndpointSource } from './endpoints'
 import type { SourceId, Sourced } from './envelope'
-import { SourceError, type SourceErrorKind } from './errors'
+import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { healthRegistry } from './health'
 import type { NetworkId } from '@/lib/network'
 
@@ -73,6 +73,8 @@ function failureText(name: string, kind: SourceErrorKind): string {
       return t`${name} sent an answer that could not be read`
     case 'unavailable':
       return t`${name} is not available on this network`
+    case 'disabled-by-mode':
+      return t`${name} is a hosted service, which Decentralized only mode does not use`
     default:
       return t`${name} returned an error`
   }
@@ -140,6 +142,9 @@ export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'nul
   req: FetchSourcedRequest<S, N>,
 ): Promise<Sourced<N extends 'null' ? z.output<S> | null : z.output<S>>> {
   type Out = N extends 'null' ? z.output<S> | null : z.output<S>
+  // The one gate of Decentralized only mode for every HTTP client: refused before the URL is built, before any
+  // network I/O, and without a health report, because a source that is off is not a source that failed.
+  if (sourceOff(req.source)) throw disabledByMode(req.source)
   const net = req.net ?? getActiveNetwork()
   const report = (r: Parameters<typeof healthRegistry.report>[2]) =>
     healthRegistry.report(net, source, r)

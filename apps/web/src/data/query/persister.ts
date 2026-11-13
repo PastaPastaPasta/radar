@@ -2,7 +2,9 @@ import type { Query, QueryFunction, QueryFunctionContext } from '@tanstack/query
 import { experimental_createQueryPersister } from '@tanstack/query-persist-client-core'
 import { createStore, del, entries, get, set, type UseStore } from 'idb-keyval'
 import type { NetworkId } from '@/lib/network'
+import { isHostedSource, sourceOff, type HostedSource } from '../endpoints'
 import type { SourceStamp } from '../envelope'
+import { disabledByMode } from '../errors'
 import { staleAfterMs, type DataClass } from './stale'
 
 /** Bump when any DTO or schema changes shape; it is part of the persister's buster. */
@@ -36,12 +38,22 @@ function isStamped(value: unknown): value is SourceStamp {
   )
 }
 
+/** The hosted source a query key reads: `[net, source, …]`, or `[net, 'health', source]` for a freshness probe. */
+export function hostedSourceOfKey(key: readonly unknown[]): HostedSource | undefined {
+  const source = key[1] === 'health' ? key[2] : key[1]
+  return typeof source === 'string' && isHostedSource(source) ? source : undefined
+}
+
 /**
  * Wraps a query's persister so each stamped answer carries its data class's stale age. Restored
  * answers pass through it too. Queries without a class in `meta.dataClass` are left alone.
  */
 export function withDataClass(inner?: PersisterFn): PersisterFn {
   return async (queryFn, ctx, query) => {
+    // A hosted source's query never runs in Decentralized only mode, so an answer kept in IndexedDB from before the
+    // mode was switched on is not restored either. A probe (`health`) is keyed by the source it would ask.
+    const hosted = hostedSourceOfKey(query.queryKey)
+    if (hosted && sourceOff(hosted)) throw disabledByMode(hosted)
     const data = await (inner ? inner(queryFn, ctx, query) : queryFn(ctx))
     const cls = query.meta?.dataClass as DataClass | undefined
     if (!cls || !isStamped(data)) return data

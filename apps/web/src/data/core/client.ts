@@ -10,7 +10,8 @@ import {
 import type { DapiRpc } from '../dapi-core'
 import type { CoreCache } from '../dapi-core/cache'
 import { stampOf, type FallbackReason, type Sourced } from '../envelope'
-import { abortedError, isSourceError, SourceError } from '../errors'
+import { sourceOff } from '../endpoints'
+import { abortedError, disabledByMode, isSourceError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
 import { hyphen } from '../hyphen/client'
 import type { HyBlockSummary } from '../hyphen/schemas'
@@ -203,9 +204,12 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  /** Rule 3: Hyphen serves only while its index is current, and only on networks it covers. */
+  /**
+   * Rule 3: Hyphen serves only while its index is current, and only on networks it covers. In Decentralized only mode
+   * it never serves, so no fallback below starts a request the gate would refuse.
+   */
   function hyphenFit(net: NetworkId, opts: { unknownIsFit: boolean } = { unknownIsFit: true }) {
-    if (isDevnet(net)) return false
+    if (isDevnet(net) || sourceOff('hyphen')) return false
     const state = deps.health.get(net, 'hyphen').state
     if (state === 'unknown') return opts.unknownIsFit
     return state !== 'stale' && state !== 'down'
@@ -236,8 +240,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
   /** `claimed`: the highest height any one source reports. `corroborated`: the highest a second source also reaches. */
   function lockView(net: NetworkId): { claimed: number; corroborated: number } {
-    const heights = [...(claims.get(net)?.values() ?? [])]
-      .map((c) => c.height)
+    const hyphenOff = sourceOff('hyphen')
+    const heights = [...(claims.get(net)?.entries() ?? [])]
+      .filter(([claimant]) => !(hyphenOff && claimant === 'hyphen'))
+      .map(([, c]) => c.height)
       .sort((a, b) => b - a)
     return { claimed: heights[0] ?? -1, corroborated: heights[1] ?? -1 }
   }
@@ -930,6 +936,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       const fromHeight = Math.floor(q.fromHeight)
       if (count === 0 || fromHeight < 0) return dapi([])
       if (q.via === 'index') {
+        if (sourceOff('hyphen')) throw disabledByMode('hyphen')
         if (!hyphenFit(net, { unknownIsFit: false })) {
           throw invalid('Hyphen is not fit to serve a long block list')
         }

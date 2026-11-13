@@ -1,4 +1,5 @@
 import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
+import { decentralizedOnly } from '@/lib/source-mode'
 
 export type EndpointSource = 'quorums' | 'radar' | 'pe' | 'hyphen' | 'insight' | 'rate'
 
@@ -57,3 +58,23 @@ export function dapiDefaultPort(net: NetworkId): number | null {
 
 /** Radar's network-independent endpoints (`/status`, `/health`, `/releases`). */
 export const RADAR_GLOBAL_BASE = RADAR_BASE
+
+/**
+ * Sources served by one operator's hosted backend. Decentralized only mode contacts none of them: Hyphen (through the
+ * edge's `/x/hy/*` pass-through), Insight, Platform Explorer and its `/rate` price, and the Radar census API.
+ */
+export const HOSTED_SOURCES = ['radar', 'pe', 'hyphen', 'insight', 'rate'] as const
+export type HostedSource = (typeof HOSTED_SOURCES)[number]
+
+export const isHostedSource = (source: string): source is HostedSource =>
+  (HOSTED_SOURCES as readonly string[]).includes(source)
+
+/** True while Decentralized only mode forbids every request to `source`. */
+export const sourceOff = (source: string): boolean => isHostedSource(source) && decentralizedOnly()
+
+/**
+ * Whether `source` may be asked on `net` right now: it has an endpoint there and the mode allows it. Probes,
+ * prefetches and loaders ask this before they start anything, so nothing even tries a source that is off.
+ */
+export const sourceInUse = (net: NetworkId, source: HostedSource): boolean =>
+  endpoint(net, source) !== null && !sourceOff(source)

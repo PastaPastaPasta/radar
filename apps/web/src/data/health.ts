@@ -5,6 +5,7 @@ import type { SourceErrorKind } from './errors'
 import type { SourceId } from './envelope'
 import type { NetworkId } from '@/lib/network'
 import { INDEX_SOURCES, nextIndexState, type IndexState } from './index-state'
+import { decentralizedOnly, subscribeSourceMode } from '@/lib/source-mode'
 
 export type HealthState = 'unknown' | 'ok' | 'slow' | 'stale' | 'degraded' | 'down'
 
@@ -185,6 +186,7 @@ function compute(net: NetworkId, source: SourceId, rec: Tally | undefined, now: 
 export function createHealthRegistry(now: () => number = () => Date.now()): HealthRegistry & {
   setBudget(net: NetworkId, snapshot: BudgetSnapshot | undefined): void
   reset(): void
+  forget(sources: readonly SourceId[]): void
 } {
   const records = new Map<string, Tally>()
   const cache = new Map<string, SourceHealth>()
@@ -286,6 +288,15 @@ export function createHealthRegistry(now: () => number = () => Date.now()): Heal
       cache.clear()
       changed()
     },
+    forget(sources: readonly SourceId[]) {
+      for (const key of [...records.keys()]) {
+        if (sources.some((s) => key.endsWith(`\u0000${s}`))) {
+          records.delete(key)
+          cache.delete(key)
+        }
+      }
+      changed()
+    },
   }
 }
 
@@ -307,6 +318,8 @@ export const healthRegistry: HealthRegistry = registry
 export const setBudgetSnapshot = (net: NetworkId, snapshot: BudgetSnapshot | undefined): void =>
   registry.setBudget(net, snapshot)
 export const resetHealthRegistry = (): void => registry.reset()
+/** Drops everything known about these sources on every network, so they read `unknown` again. */
+export const forgetSourceHealth = (sources: readonly SourceId[]): void => registry.forget(sources)
 
 /** An index's last decided state, so a route loader can pick the source to prefetch before any probe has run. */
 export const rememberedIndexState = (net: NetworkId) => registry.get(net, 'hyphen').index
@@ -345,4 +358,9 @@ export function useAllSourceHealth(): SourceHealth[] {
     },
     () => allCache?.items ?? [],
   )
+}
+
+/** True while Decentralized only mode is on. A component that reads it draws again when the mode changes. */
+export function useDecentralizedOnly(): boolean {
+  return useSyncExternalStore(subscribeSourceMode, decentralizedOnly, () => false)
 }

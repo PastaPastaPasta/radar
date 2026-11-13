@@ -3,7 +3,7 @@ import { isDevnet } from '@/lib/network'
 import { parseBlockRef } from '@/lib/core/block-ref'
 import { coreQueries } from '../core/queries'
 import type { CoreCallOptions } from '../core/types'
-import { endpoint } from '../endpoints'
+import { sourceInUse } from '../endpoints'
 import { healthQueries } from '../health-queries'
 import { hyQueries } from '../hyphen/queries'
 import { rememberedIndexState } from '../health'
@@ -16,7 +16,7 @@ const TXID = /^[0-9a-f]{64}$/i
 
 /** Core pages ask whether Hyphen is fit (§4.7) before every Hyphen request, so its probe is the one thing worth starting early. */
 function hyphenProbe(net: NetworkId): PrefetchItem[] {
-  return !isDevnet(net) && endpoint(net, 'hyphen')
+  return !isDevnet(net) && sourceInUse(net, 'hyphen')
     ? [prefetchItem('http', healthQueries.hyphen(net))]
     : []
 }
@@ -29,6 +29,14 @@ export function homePrefetch(net: NetworkId): PrefetchItem[] {
     prefetchItem('http', peQueries.status(net)),
     ...hyphenProbe(net),
   ]
+}
+
+/** `/mempool`: Hyphen's summary, unless its index is known to be stale: the page then shows DAPI's live feed and asks Hyphen nothing. */
+export function mempoolPrefetch(net: NetworkId): PrefetchItem[] {
+  if (isDevnet(net)) return []
+  return rememberedIndexState(net) === 'stale'
+    ? hyphenProbe(net)
+    : [...hyphenProbe(net), prefetchItem('http', hyQueries.mempool(net), { wait: true })]
 }
 
 /** `/blocks`: the day's rows are a DAPI list, which a loader never starts (§4.7). */
@@ -66,7 +74,7 @@ export function txPrefetch(net: NetworkId, txid: string, preload = false): Prefe
 
 /** Insight reads the index when Hyphen's was found stale; until a probe has decided, nothing is known and Hyphen's is read. */
 const readsInsight = (net: NetworkId): boolean =>
-  rememberedIndexState(net) === 'stale' && endpoint(net, 'insight') !== null
+  rememberedIndexState(net) === 'stale' && sourceInUse(net, 'insight')
 
 /**
  * A read the stale rule routes (§4.7a). On a first visit the probe has not decided yet, so the loader waits for it (within
@@ -81,7 +89,7 @@ function indexRead(
     cost: 'http',
     wait: true,
     async start(client) {
-      if (rememberedIndexState(net) === undefined && endpoint(net, 'hyphen')) {
+      if (rememberedIndexState(net) === undefined && sourceInUse(net, 'hyphen')) {
         await client.prefetchQuery(healthQueries.hyphen(net))
       }
       await pick(readsInsight(net) ? 'insight' : 'hyphen').start(client)

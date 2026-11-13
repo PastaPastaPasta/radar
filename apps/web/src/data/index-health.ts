@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { endpoint } from './endpoints'
-import { useNetworkSourceHealth, type SourceHealth } from './health'
+import { useDecentralizedOnly, useNetworkSourceHealth, type SourceHealth } from './health'
 import { indexedLagDetail } from './health-lag'
 import { healthQueries } from './health-queries'
 import type { IndexState } from './index-state'
@@ -24,6 +24,8 @@ export interface IndexHealth extends IndexFacts {
   probed: boolean
   /** Insight's own standing, measured once a page reads from it (`insight: true`, or while it is the source in use). */
   insight: IndexFacts
+  /** Decentralized only mode is on: no index is probed or read, and a page shows its unavailable state instead. */
+  off: boolean
 }
 
 function factsOf(indexedHeight: number | undefined, health: SourceHealth): IndexFacts {
@@ -44,10 +46,11 @@ function factsOf(indexedHeight: number | undefined, health: SourceHealth): Index
  * leaves the earlier answer standing.
  *
  * `insight: true` also probes Insight, for a page that may read it while Hyphen is fresh; Insight is probed
- * whenever it is the source in use.
+ * whenever it is the source in use. In Decentralized only mode neither index is probed and nothing is known of either.
  */
 export function useIndexHealth(net: NetworkId, opts: { insight?: boolean } = {}): IndexHealth {
-  const enabled = !isDevnet(net)
+  const off = useDecentralizedOnly()
+  const enabled = !isDevnet(net) && !off
   const probe = useQuery({ ...healthQueries.hyphen(net), enabled })
   const health = useNetworkSourceHealth(net, 'hyphen')
   const hyphen = factsOf(probe.data?.height, health)
@@ -62,7 +65,8 @@ export function useIndexHealth(net: NetworkId, opts: { insight?: boolean } = {})
     ...hyphen,
     pending: enabled && probe.isPending,
     readFrom,
-    probed: probe.isSuccess,
+    probed: enabled && probe.isSuccess,
     insight,
+    off,
   }
 }

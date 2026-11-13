@@ -3,6 +3,7 @@ import { cleanup, configure } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { resetHealthRegistry } from '@/data/health'
 import { i18nReady } from '@/i18n'
+import { setSourceModeFromLink, writeSourceMode } from '@/lib/source-mode'
 import { installFixtureSdk } from './msw/sdk-transport'
 import { takeFixtureMisses } from './msw/handlers'
 import { server } from './server'
@@ -21,6 +22,9 @@ beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
 beforeEach(() => {
   takeFixtureMisses()
   resetHealthRegistry()
+  // A test that switched Decentralized only mode on must not leave it on for the next one.
+  writeSourceMode('all')
+  setSourceModeFromLink(undefined)
 })
 afterEach(() => {
   cleanup()
