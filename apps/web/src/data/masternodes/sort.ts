@@ -31,11 +31,10 @@ export function statusRank(row: MnRow): number {
 }
 
 export type SortValue = number | string | null
-type Value = SortValue
 
 const positive = (n: number | null | undefined): number | null => (n != null && n > 0 ? n : null)
 
-const valueOf: Record<MnSortKey, (r: MnRow) => Value> = {
+const valueOf: Record<MnSortKey, (r: MnRow) => SortValue> = {
   protx: (r) => r.protx,
   type: (r) => r.type,
   address: (r) => r.service,
@@ -55,7 +54,7 @@ const valueOf: Record<MnSortKey, (r: MnRow) => Value> = {
 
 const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 
-function compare(a: Value, b: Value): number {
+function compare(a: SortValue, b: SortValue): number {
   if (typeof a === 'number' && typeof b === 'number') return a - b
   return collator.compare(String(a), String(b))
 }
@@ -78,7 +77,7 @@ export function parseSort<K extends string>(
 export function sortItems<T>(
   items: readonly T[],
   desc: boolean,
-  read: (item: T) => Value,
+  read: (item: T) => SortValue,
   id: (item: T) => string,
 ): T[] {
   const keyed = items.map((item) => ({ item, value: read(item), id: id(item) }))

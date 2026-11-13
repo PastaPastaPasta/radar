@@ -140,7 +140,7 @@ export function filterEvoRows(rows: readonly EvoRow[], filter: EvoFilter): EvoRo
   const lower = q?.toLowerCase()
   const identity = q ? protxOfIdentity(q) : undefined
   return rows.filter((e) => {
-    if (filter.pf === 'proposed' && !((e.blocks ?? 0) > 0)) return false
+    if (filter.pf === 'proposed' && !hasProposed(e)) return false
     if (filter.pf === 'not-in-set' && !notInSet(e)) return false
     if (filter.pf === 'vote-not-counted' && !voteNotCounted(e, filter.candidate)) return false
     if (!lower) return true
@@ -152,6 +152,10 @@ export function filterEvoRows(rows: readonly EvoRow[], filter: EvoFilter): EvoRo
       (e.validator?.identity ?? '').toLowerCase().includes(lower)
     )
   })
+}
+
+function hasProposed(e: EvoRow): boolean {
+  return (e.blocks ?? 0) > 0
 }
 
 /** Enabled, and either Platform Explorer lists it as queued or Radar sees no turn coming for it. */
@@ -173,7 +177,7 @@ function voteNotCounted(e: EvoRow, candidate: number | null | undefined): boolea
 export function evoFilterCounts(rows: readonly EvoRow[], candidate?: number | null) {
   return {
     all: rows.length,
-    proposed: rows.filter((e) => (e.blocks ?? 0) > 0).length,
+    proposed: rows.filter(hasProposed).length,
     'not-in-set': rows.filter(notInSet).length,
     'vote-not-counted': rows.filter((e) => voteNotCounted(e, candidate)).length,
   } satisfies Record<PlatformFilter, number>
