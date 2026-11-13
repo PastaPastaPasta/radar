@@ -142,7 +142,8 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
     e.preventDefault()
     const data = new FormData(e.currentTarget)
     const num = (name: string): number | undefined => {
-      const raw = String(data.get(name) ?? '').trim()
+      const value = data.get(name)
+      const raw = typeof value === 'string' ? value.trim() : ''
       return /^\d+$/.test(raw) ? Number(raw) : undefined
     }
     setLoaded(1)

@@ -27,6 +27,7 @@ export interface PChainMethods {
   /** Every anchor the pool still accepts, as 32-byte hex. */
   'shielded.anchors': { args: Record<string, never>; result: string[] }
   'shielded.mostRecentAnchor': { args: Record<string, never>; result: string | null }
+  /** The pool serves notes from a `startIndex` that is a multiple of 2048; any other start is refused. */
   'shielded.encryptedNotes': {
     args: { startIndex: number; count: number }
     result: ShieldedNoteDto[]

@@ -1,4 +1,4 @@
-import type { PChainMethods, PrefundedBalanceDto, ShieldedNoteDto } from '../../methods/p-chain'
+import type { PChainMethods } from '../../methods'
 import { bytesToHex, hexToBytes } from '@/lib/hex'
 import { isNotFound } from '../errors'
 import type { Freeable, ImplOf, ProvedResponse } from './types'
@@ -37,6 +37,11 @@ export interface PChainReads {
     nullifiersWithProof(nullifiers: Uint8Array[]): Promise<ProvedResponse<NullifierStatusLike[]>>
   }
 }
+
+type PrefundedBalanceDto = NonNullable<
+  PChainMethods['system.prefundedSpecializedBalance']['result']
+>
+type ShieldedNoteDto = PChainMethods['shielded.encryptedNotes']['result'][number]
 
 type Impl<M extends keyof PChainMethods> = ImplOf<PChainReads, M>
 

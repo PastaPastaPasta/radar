@@ -220,7 +220,10 @@ describe('/search page', () => {
       'href',
       '/block/2569992',
     )
-    expect(screen.queryByRole('link', { name: /Epoch 2,569,992/ })).toBeNull()
+    expect(screen.getByRole('link', { name: /Epoch 2,569,992/ })).toHaveAttribute(
+      'href',
+      '/epoch/2569992',
+    )
   })
 
   it('keeps the network on result links', async () => {
