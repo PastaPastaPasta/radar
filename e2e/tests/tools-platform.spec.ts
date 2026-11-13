@@ -91,7 +91,7 @@ async function stubVerify(page: Page, answer: unknown): Promise<void> {
     window.fetch = (input, init) => {
       const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
       if (url.includes('/transaction/verify') && init?.method === 'POST') {
-        w.__verify.push({ url, body: String(init.body) })
+        w.__verify.push({ url, body: typeof init.body === 'string' ? init.body : '' })
         return Promise.resolve(
           new Response(JSON.stringify(body), {
             status: 200,
