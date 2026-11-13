@@ -3,7 +3,7 @@ import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
 import type { EntityKind } from '@/ui'
 import type { NetworkId } from '@/lib/network'
-import { withNetwork } from './network'
+import { withNetwork, withSourceMode } from './network'
 
 const seg = encodeURIComponent
 
@@ -50,7 +50,7 @@ export function entityPath(kind: EntityKind, id: string): string {
 }
 
 export function entityHref(kind: EntityKind, id: string, net: NetworkId): string {
-  return withNetwork(entityPath(kind, id), net)
+  return withSourceMode(withNetwork(entityPath(kind, id), net))
 }
 
 export const ENTITY_LABELS: Record<EntityKind, MessageDescriptor> = {

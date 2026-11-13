@@ -2,6 +2,7 @@ import { retainSearchParams, type SearchMiddleware } from '@tanstack/react-route
 import { z } from 'zod'
 import { setActiveNetwork } from '@/data/active-network'
 import { parseNetworkParam } from '@/lib/network'
+import { DECENTRALIZED_PARAM, setSourceModeFromLink } from '@/lib/source-mode'
 
 export const parseSearch = (s: string): Record<string, string> =>
   Object.fromEntries(new URLSearchParams(s))
@@ -104,6 +105,7 @@ export const zBool01 = z
 export const rootSearch = z.object({
   network: z.string().optional().catch(undefined),
   net: z.string().optional().catch(undefined),
+  sources: z.string().optional().catch(undefined),
 })
 
 export type RootSearch = z.output<typeof rootSearch>
@@ -114,16 +116,25 @@ const canonicalize: SearchMiddleware<RootSearch> = ({ search, next }) => {
   delete result.net
   if (net === 'mainnet') delete result.network
   else result.network = net
+  if (result.sources !== DECENTRALIZED_PARAM) delete result.sources
   return result
 }
 
-/** Keeps `network` on every link and rewrites the legacy `net`, an explicit mainnet or a bad value to the canonical form. */
+/**
+ * Keeps `network` and `sources` on every link, and rewrites the legacy `net`, an explicit mainnet or a bad value to the
+ * canonical form.
+ */
 export const networkMiddlewares: SearchMiddleware<RootSearch>[] = [
   canonicalize,
-  retainSearchParams(['network']),
+  retainSearchParams(['network', 'sources']),
 ]
 
 /** Tells the data layer which network the route names, before the route's loaders and queries run. */
 export function activateNetwork(search: RootSearch): void {
   setActiveNetwork(parseNetworkParam(search.network, search.net).net)
+}
+
+/** Tells the data layer whether the address asks for Decentralized only mode, before anything is read for the route. */
+export function activateSourceMode(search: RootSearch): void {
+  setSourceModeFromLink(search.sources)
 }
