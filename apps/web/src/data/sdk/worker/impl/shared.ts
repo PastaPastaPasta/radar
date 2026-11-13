@@ -29,6 +29,7 @@ import {
   type VersionUpgradeStateLike,
   type VotePollsEntryLike,
 } from '../convert'
+import { isNotFound, messageOf } from '../errors'
 import type { Freeable, ImplOf, ProvedResponse } from './types'
 
 /** Drive's most rows for one document query. */
@@ -198,7 +199,14 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   },
 
   async 'contracts.fetch'(sdk, { id }) {
-    const response = await sdk.contracts.fetchWithProof(id)
+    let response: ProvedResponse<FullContractLike | null | undefined>
+    try {
+      response = await sdk.contracts.fetchWithProof(id)
+    } catch (e) {
+      // The SDK throws, rather than proving it, for a contract that is not there: the absence comes back unproved.
+      if (isNotFound(e) || /contract not found/i.test(messageOf(e))) return { data: null }
+      throw e
+    }
     const contract = response.data
     const data = contract ? contractFullDto(contract) : null
     contract?.free?.()

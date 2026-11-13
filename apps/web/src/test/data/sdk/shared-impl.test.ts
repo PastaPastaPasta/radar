@@ -225,6 +225,30 @@ describe('contracts.fetch', () => {
     expect(out.data).toBe(null)
   })
 
+  it('answers null, unproved, when the SDK throws that the contract is not found', async () => {
+    const out = await sharedImpl['contracts.fetch'](
+      reads({
+        contracts: {
+          fetchWithProof: () =>
+            Promise.reject(
+              Object.assign(new Error('Data contract not found'), { name: 'Generic' }),
+            ),
+        },
+      }),
+      { id: ABSENT },
+    )
+    expect(out).toEqual({ data: null })
+  })
+
+  it('does not hide other failures', async () => {
+    await expect(
+      sharedImpl['contracts.fetch'](
+        reads({ contracts: { fetchWithProof: () => Promise.reject(new Error('boom')) } }),
+        { id: CONTRACT },
+      ),
+    ).rejects.toThrow('boom')
+  })
+
   it('has no tokens, groups or history when the contract states none', async () => {
     const bare = { ...contract, toJSON: () => ({ documentSchemas: {} }) }
     const out = await sharedImpl['contracts.fetch'](

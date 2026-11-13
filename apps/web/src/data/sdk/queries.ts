@@ -3,6 +3,7 @@ import type { NetworkId } from '@/lib/network'
 import { mapSourced, type Sourced } from '../envelope'
 import { sdkKeys } from '../query/keys'
 import { dataClass, type DataClass } from '../query/stale'
+import { sdkBatchers } from './batchers'
 import { sdk } from './client'
 import type { EpochDto, SdkMethodName, SdkMethods } from './methods'
 import { NET_C_CLASSES } from './methods/net-c'
@@ -66,3 +67,5 @@ export const platformTipQuery = (net: NetworkId) =>
     ...sdkQueries['epoch.current'](net, {}),
     select: platformTipOf,
   })
+
+export { sdkBatchers }
