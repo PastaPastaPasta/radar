@@ -80,7 +80,7 @@ export function readCbor(bytes: Uint8Array): Cbor {
       case 5: {
         const n = argument(info)
         need(n * 2)
-        const out: { [k: string]: Cbor } = Object.create(null) as { [k: string]: Cbor }
+        const out: Record<string, Cbor> = Object.create(null) as Record<string, Cbor>
         for (let i = 0; i < n; i++) {
           const key = item(depth + 1)
           if (typeof key !== 'string') throw new ReadError('A map key is not text')

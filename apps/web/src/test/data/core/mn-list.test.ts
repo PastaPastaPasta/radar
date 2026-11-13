@@ -161,7 +161,7 @@ function setup(
   })
   const list = createMasternodeList({
     transport: () => transport,
-    headers: opts.headers ?? core.headers,
+    headers: opts.headers ?? ((...args) => core.headers(...args)),
     now: opts.now ?? Date.now,
   })
   return { transport, list, net }
