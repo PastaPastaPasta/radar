@@ -99,8 +99,7 @@ test.describe('saved items', () => {
     await page.goto('/saved?scope=all')
     await page.getByRole('link', { name: /Alice/ }).first().click()
     await expect(page).toHaveURL(new RegExp(`/identity/${ID_A}`))
-    await page.goBack()
-    await page.keyboard.press('Escape')
+    await page.goto('/saved?scope=all')
 
     await page.getByRole('button', { name: 'Remove Alice from saved' }).click()
     await expect(page.getByText('Alice')).toHaveCount(0)

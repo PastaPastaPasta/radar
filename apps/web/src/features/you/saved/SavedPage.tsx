@@ -113,7 +113,7 @@ export function SavedPage() {
           return (
             <button
               type="button"
-              className="dh-btn dh-btn--quiet dh-btn--sm"
+              className="dh-btn dh-btn--quiet dh-btn--sm rx-cellbtn"
               aria-label={t`Remove ${name} from saved`}
               onClick={() => {
                 removeItem(s)
