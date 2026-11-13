@@ -1,14 +1,646 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: tr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "“{part}” is neither an identity ID nor a name."
+msgstr "“{part}” ne bir kimlik ID’si ne de bir ad."
+
+#. placeholder {0}: formatInt(found.balance)
+msgid "{0} credits"
+msgstr "{0} kredi"
+
+#. placeholder {0}: formatInt(totals.incomingTxs ?? 0)
+msgid "{0} incoming"
+msgstr "{0} gelen"
+
+#. placeholder {0}: formatInt(totals.outgoingTxs ?? 0)
+msgid "{0} outgoing"
+msgstr "{0} giden"
+
+#. placeholder {0}: formatInt(view.preProgrammedMoments)
+msgid "{0} scheduled releases"
+msgstr "{0} planlı dağıtım"
+
+#. placeholder {0}: formatInt(r.transitionCount)
+msgid "{0} transitions"
+msgstr "{0} geçiş"
+
+msgid "A contract ID is 43 or 44 base58 characters."
+msgstr "Bir sözleşme ID’si 43 veya 44 base58 karakterdir."
+
+msgid "A Platform address is written in bech32m and starts with dash1 on mainnet or tdash1 on testnet. It is not a Core address, which starts with X, 7 or y."
+msgstr "Bir Platform adresi bech32m ile yazılır; ana ağda dash1, test ağında tdash1 ile başlar. X, 7 veya y ile başlayan bir Core adresi değildir."
+
+msgid "A token ID is 43 or 44 base58 characters. To open a token from its contract, give the contract and the token's position in it."
+msgstr "Bir token ID’si 43 veya 44 base58 karakterdir. Bir token’ı sözleşmesinden açmak için sözleşmeyi ve token’ın içindeki konumunu girin."
+
+msgid "Action"
+msgstr "Eylem"
+
+msgid "Active"
+msgstr "Etkin"
+
+msgid "Activity"
+msgstr "Etkinlik"
+
+msgid "Add"
+msgstr "Ekle"
+
+#. placeholder {0}: k.name
+msgid "Add {0}"
+msgstr "{0} ekle"
+
+msgid "Add identity IDs or DPNS names above to see their balances of this token."
+msgstr "Bu token’daki bakiyelerini görmek için yukarıya kimlik ID’leri veya DPNS adları ekleyin."
+
+msgid "Add the identities I viewed"
+msgstr "Görüntülediğim kimlikleri ekle"
+
+msgid "Allowed"
+msgstr "İzinli"
+
+msgid "Amount"
+msgstr "Tutar"
+
+msgid "An address’s transitions need an indexer; Platform keeps no history per address"
+msgstr "Bir adresin geçişleri için dizinleyici gerekir; Platform adres başına geçmiş tutmaz"
+
+msgid "An identity ID is 43 or 44 base58 characters."
+msgstr "Bir kimlik ID’si 43 veya 44 base58 karakterdir."
+
+msgid "Balance"
+msgstr "Bakiye"
+
+msgid "Balance and nonce"
+msgstr "Bakiye ve nonce"
+
+msgid "Balances"
+msgstr "Bakiyeler"
+
+msgid "Balances of the chosen identities"
+msgstr "Seçilen kimliklerin bakiyeleri"
+
+msgid "Balances of the identities you choose. Platform keeps no list of a token’s holders, so this asks the node about each one."
+msgstr "Seçtiğiniz kimliklerin bakiyeleri. Platform bir token’ın sahiplerinin listesini tutmaz, bu yüzden düğüme her biri için ayrı sorulur."
+
+#. placeholder {0}: formatInt(priceOf.basePrice)
+msgid "Base price {0} credits"
+msgstr "Temel fiyat {0} kredi"
+
+msgid "Base supply"
+msgstr "Temel arz"
+
+msgid "Burn"
+msgstr "Yakma"
+
+msgid "Burning"
+msgstr "Yakma"
+
+msgid "Change names and decimals"
+msgstr "Adları ve ondalıkları değiştir"
+
+msgid "Change the direct purchase price"
+msgstr "Doğrudan satın alma fiyatını değiştir"
+
+msgid "Change the maximum supply"
+msgstr "Azami arzı değiştir"
+
+msgid "Change the perpetual distribution"
+msgstr "Sürekli dağıtımı değiştir"
+
+msgid "Change the trade mode"
+msgstr "İşlem modunu değiştir"
+
+msgid "Change where new tokens go"
+msgstr "Yeni token’ların gideceği yeri değiştir"
+
+msgid "Change whether minting may choose a recipient"
+msgstr "Basımda alıcı seçilip seçilemeyeceğini değiştir"
+
+msgid "Choose identities"
+msgstr "Kimlik seç"
+
+msgid "Clear"
+msgstr "Temizle"
+
+msgid "Configuration"
+msgstr "Yapılandırma"
+
+msgid "Configured"
+msgstr "Yapılandırıldı"
+
+msgid "Contract"
+msgstr "Sözleşme"
+
+msgid "Contract ID"
+msgstr "Sözleşme kimliği"
+
+msgid "Contract owner"
+msgstr "Sözleşme sahibi"
+
+#. placeholder {0}: search.contract.slice(0, 8)
+msgid "Contract: {0}…"
+msgstr "Sözleşme: {0}…"
+
+msgid "Decimals"
+msgstr "Ondalıklar"
+
+msgid "Defined by contract"
+msgstr "Sözleşme tarafından tanımlanır"
+
+msgid "Definition"
+msgstr "Tanım"
+
+msgid "Description"
+msgstr "Açıklama"
+
+msgid "Destroy frozen funds"
+msgstr "Dondurulmuş fonları yok etme"
+
+msgid "Direct purchase price"
+msgstr "Doğrudan satın alma fiyatı"
+
+msgid "Direct purchases"
+msgstr "Doğrudan satın almalar"
+
+msgid "Distribution"
+msgstr "Dağıtım"
+
+msgid "Enter an identity ID or a DPNS name to see its balance of this token."
+msgstr "Bu token’daki bakiyesini görmek için bir kimlik ID’si veya DPNS adı girin."
+
+msgid "Enter an identity to see when it last claimed."
+msgstr "Son ne zaman talep ettiğini görmek için bir kimlik girin."
+
+msgid "Every token Platform Explorer has indexed, with its supply, price and contract."
+msgstr "Platform Explorer’ın dizinlediği tüm token’lar; arzı, fiyatı ve sözleşmesiyle."
+
+msgid "Freeze a balance"
+msgstr "Bir bakiyeyi dondur"
+
+msgid "Freezing"
+msgstr "Dondurma"
+
+msgid "From"
+msgstr "Gönderen"
+
+msgid "Frozen"
+msgstr "Dondurulmuş"
+
+#. placeholder {0}: taker.position
+msgid "Group {0}"
+msgstr "Grup {0}"
+
+msgid "Group {group}"
+msgstr "Grup {group}"
+
+msgid "History kept for"
+msgstr "Geçmişi tutulanlar"
+
+msgid "Holder"
+msgstr "Sahip"
+
+msgid "Holders"
+msgstr "Sahipler"
+
+msgid "Holders and activity"
+msgstr "Sahipler ve etkinlik"
+
+msgid "Identity"
+msgstr "Kimlik"
+
+msgid "Identity ({name})"
+msgstr "Kimlik ({name})"
+
+msgid "Identity ID of the contract owner"
+msgstr "Sözleşme sahibinin kimlik ID’si"
+
+msgid "Identity ID or name"
+msgstr "Kimlik ID’si veya ad"
+
+msgid "Identity IDs or names"
+msgstr "Kimlik ID’leri veya adlar"
+
+msgid "Its prefix belongs to {other}, so it cannot exist on this network."
+msgstr "Öneki {other} ağına ait, bu yüzden bu ağda var olamaz."
+
+msgid "Language"
+msgstr "Dil"
+
+msgid "Last claim"
+msgstr "Son talep"
+
+msgid "Last claimed"
+msgstr "Son talep"
+
+#. placeholder {0}: m.label
+msgid "Last claimed at Platform block {0}."
+msgstr "Son talep Platform blok {0}’da yapıldı."
+
+#. placeholder {0}: m.label
+msgid "Last claimed in epoch {0}."
+msgstr "Son talep {0}. dönemde yapıldı."
+
+msgid "Loading…"
+msgstr "Yükleniyor…"
+
+msgid "Look up"
+msgstr "Ara"
+
+msgid "Main control group"
+msgstr "Ana kontrol grubu"
+
+msgid "Manage in Bridge"
+msgstr "Bridge’de yönet"
+
+msgid "Maximum"
+msgstr "Azami"
+
+msgid "Maximum supply"
+msgstr "Azami arz"
+
+msgid "Mint"
+msgstr "Basım"
+
+msgid "Minting"
+msgstr "Basım"
+
+msgid "Minting may choose a recipient"
+msgstr "Basımda alıcı seçilebilir"
+
+#. placeholder {0}: search.q
+msgid "Name or ID: {0}"
+msgstr "Ad veya ID: {0}"
+
+msgid "Name or token ID"
+msgstr "Ad veya token ID’si"
+
+msgid "Names"
+msgstr "Adlar"
+
+msgid "New tokens go to"
+msgstr "Yeni token’lar şuraya gider"
+
+msgid "Newest first"
+msgstr "Önce en yeni"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "No identities chosen yet"
+msgstr "Henüz kimlik seçilmedi"
+
+msgid "No identity has the name {name}."
+msgstr "Hiçbir kimliğin adı {name} değil."
+
+msgid "No maximum"
+msgstr "Azami yok"
+
+msgid "No one"
+msgstr "Hiç kimse"
+
+msgid "No token has recent activity."
+msgstr "Hiçbir token’ın yakın zamanda etkinliği yok."
+
+msgid "No token matches these filters"
+msgstr "Bu filtrelerle eşleşen token yok"
+
+msgid "No token with this ID on {net}."
+msgstr "{net} ağında bu ID’ye sahip token yok."
+
+msgid "No transitions have touched this token yet."
+msgstr "Bu token’a henüz hiçbir geçiş dokunmadı."
+
+msgid "No transitions involve this address."
+msgstr "Bu adresi içeren geçiş yok."
+
+msgid "Nobody holds this token yet."
+msgstr "Bu token’ı henüz kimse tutmuyor."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Yok"
+
+msgid "Not allowed"
+msgstr "İzin verilmez"
+
+msgid "Not available right now"
+msgstr "Şu anda kullanılamıyor"
+
+msgid "Not for sale"
+msgstr "Satılık değil"
+
+msgid "Not frozen"
+msgstr "Dondurulmamış"
+
+msgid "Not stated"
+msgstr "Belirtilmemiş"
+
+msgid "Nothing"
+msgstr "Hiçbir şey"
+
+msgid "Oldest first"
+msgstr "Önce en eski"
+
+msgid "Only a token with a perpetual distribution has claims to look up."
+msgstr "Yalnızca sürekli dağıtımı olan bir token’ın sorgulanacak talepleri vardır."
+
+msgid "Open"
+msgstr "Aç"
+
+msgid "Open a token"
+msgstr "Token aç"
+
+msgid "Open a token by contract and position"
+msgstr "Token’ı sözleşme ve konumla aç"
+
+msgid "Open another token by contract and position"
+msgstr "Başka bir token’ı sözleşme ve konumla aç"
+
+msgid "Open it on {other}"
+msgstr "{other} ağında aç"
+
+msgid "Open Settings"
+msgstr "Ayarları aç"
+
+msgid "Open token"
+msgstr "Token’ı aç"
+
+msgid "Or from its contract and position"
+msgstr "Veya sözleşmesinden ve konumundan"
+
+msgid "Order"
+msgstr "Sıra"
+
+msgid "Overview"
+msgstr "Genel bakış"
+
+msgid "Owner"
+msgstr "Sahip"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Sahip: {0}…"
+
+msgid "Pause and resume"
+msgstr "Duraklat ve sürdür"
+
+msgid "Paused"
+msgstr "Duraklatıldı"
+
+msgid "Perpetual distribution"
+msgstr "Sürekli dağıtım"
+
+msgid "Perpetual distribution rules"
+msgstr "Sürekli dağıtım kuralları"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform adresi"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer devnet’leri dizinlemez"
+
+msgid "Platform Explorer has no tokens yet"
+msgstr "Platform Explorer’da henüz token yok"
+
+msgid "Platform has no balance for it. An address appears when someone sends it credits."
+msgstr "Platform’da bunun için bakiye yok. Biri kredi gönderdiğinde bir adres görünür."
+
+msgid "Platform has no holder index, so Radar cannot list every holder. Platform Explorer keeps one: "
+msgstr "Platform’un sahip dizini yok, bu yüzden Radar tüm sahipleri listeleyemez. Platform Explorer bir tane tutar: "
+
+msgid "Platform has no token with this ID on this network. A token's ID comes from its contract and position."
+msgstr "Platform’da bu ağda bu ID’ye sahip bir token yok. Bir token’ın ID’si sözleşmesinden ve konumundan gelir."
+
+msgid "Platform keeps no holder index; this needs Platform Explorer's index"
+msgstr "Platform sahip dizini tutmaz; bunun için Platform Explorer’ın dizini gerekir"
+
+msgid "Platform keeps no list of a token's holders or transfers; this needs Platform Explorer's index"
+msgstr "Platform bir token’ın sahiplerinin veya transferlerinin listesini tutmaz; bunun için Platform Explorer’ın dizini gerekir"
+
+msgid "Platform keeps no list of a token's transfers; this needs Platform Explorer's index"
+msgstr "Platform bir token’ın transferlerinin listesini tutmaz; bunun için Platform Explorer’ın dizini gerekir"
+
+msgid "Platform keeps no list of tokens; this needs Platform Explorer's index. Open a token by its ID, or by its contract and position, above."
+msgstr "Platform token listesi tutmaz; bunun için Platform Explorer’ın dizini gerekir. Yukarıdan bir token’ı ID’siyle veya sözleşmesi ve konumuyla açın."
+
+msgid "Plural"
+msgstr "Çoğul"
+
+msgid "Position"
+msgstr "Konum"
+
+msgid "Position in the contract"
+msgstr "Sözleşmedeki konum"
+
+msgid "Pre-programmed distribution"
+msgstr "Önceden programlanmış dağıtım"
+
+msgid "Pre-programmed releases"
+msgstr "Önceden programlanmış dağıtımlar"
+
+msgid "Price"
+msgstr "Fiyat"
+
+msgid "Price changes"
+msgstr "Fiyat değişiklikleri"
+
+msgid "Radar can remember the identities you open in this browser, and add them here. That is off until you turn it on in Settings."
+msgstr "Radar bu tarayıcıda açtığınız kimlikleri hatırlayıp buraya ekleyebilir. Ayarlardan açana kadar kapalıdır."
+
+msgid "Raw configuration"
+msgstr "Ham yapılandırma"
+
+msgid "Received"
+msgstr "Alındı"
+
+msgid "Remove"
+msgstr "Kaldır"
+
+msgid "Remove {id} from the list"
+msgstr "{id} öğesini listeden kaldır"
+
+msgid "Search on {other}"
+msgstr "{other} üzerinde ara"
+
+msgid "See the activity"
+msgstr "Etkinliği gör"
+
+msgid "See the holder list on Platform Explorer"
+msgstr "Sahip listesini Platform Explorer’da gör"
+
+msgid "See the holders"
+msgstr "Sahipleri gör"
+
+msgid "Sent"
+msgstr "Gönderildi"
+
+msgid "Separate several with spaces or commas"
+msgstr "Birden fazlasını boşluk veya virgülle ayırın"
+
+msgid "Singular"
+msgstr "Tekil"
+
+msgid "Start of a name, or a token ID"
+msgstr "Bir adın başı veya bir token ID’si"
+
+msgid "Starts paused"
+msgstr "Duraklatılmış başlar"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Summary"
+msgstr "Özet"
+
+msgid "Supply"
+msgstr "Arz"
+
+msgid "That is neither an identity ID nor a DPNS name."
+msgstr "Bu ne bir kimlik ID’si ne de bir DPNS adı."
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "Bu bir sözleşme kimliği değil: 43 veya 44 base58 karakterdir."
+
+msgid "That isn’t a Platform address."
+msgstr "Bu bir Platform adresi değil."
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "Bu bir token kimliği değil: 43 veya 44 base58 karakterdir."
+
+msgid "That isn’t a token ID."
+msgstr "Bu bir token ID’si değil."
+
+msgid "The configuration lists no rules."
+msgstr "Yapılandırmada kural yok."
+
+msgid "The contract does not list this token."
+msgstr "Sözleşme bu token’ı listelemiyor."
+
+msgid "The contract gives this token no names."
+msgstr "Sözleşme bu token’a ad vermiyor."
+
+msgid "The identity that mints them"
+msgstr "Onları basan kimlik"
+
+msgid "The name {name} could not be looked up."
+msgstr "{name} adı sorgulanamadı."
+
+msgid "The node did not answer for this identity."
+msgstr "Düğüm bu kimlik için yanıt vermedi."
+
+msgid "The position is a whole number from 0 to 65535."
+msgstr "Konum 0 ile 65535 arasında bir tam sayıdır."
+
+msgid "The token ID could not be worked out."
+msgstr "Token ID’si hesaplanamadı."
+
+msgid "The token's configuration is read from the contract that defines it."
+msgstr "Token’ın yapılandırması, onu tanımlayan sözleşmeden okunur."
+
+msgid "This address holds nothing on {net}."
+msgstr "Bu adres {net} ağında hiçbir şey tutmuyor."
+
+msgid "This identity has not claimed from this token yet."
+msgstr "Bu kimlik bu token’dan henüz talepte bulunmadı."
+
+msgid "This identity holds none of this token."
+msgstr "Bu kimlik bu token’dan hiç tutmuyor."
+
+msgid "This is a {other} address."
+msgstr "Bu bir {other} adresi."
+
+msgid "This token has no perpetual distribution."
+msgstr "Bu token’ın sürekli dağıtımı yok."
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "To"
+msgstr "Alıcı"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Token configuration"
+msgstr "Token yapılandırması"
+
+msgid "Token holders"
+msgstr "Token sahipleri"
+
+msgid "Token ID"
+msgstr "Token ID’si"
+
+msgid "Token transitions"
+msgstr "Token geçişleri"
+
+msgid "Tokens"
+msgstr "Token’lar"
+
+msgid "Tokens with the most recent transitions"
+msgstr "En son geçişlere sahip token’lar"
+
+msgid "Total supply"
+msgstr "Toplam arz"
+
+msgid "Transfers"
+msgstr "Transferler"
+
+msgid "Transfers to a frozen balance"
+msgstr "Dondurulmuş bakiyeye transferler"
+
+msgid "Transition"
+msgstr "Geçiş"
+
+msgid "Transitions"
+msgstr "Geçişler"
+
+msgid "Transitions of this address"
+msgstr "Bu adresin geçişleri"
+
+msgid "Transitions recorded"
+msgstr "Kaydedilen geçişler"
+
+msgid "Trending"
+msgstr "Trend"
+
+msgid "Try again"
+msgstr "Tekrar dene"
+
+msgid "Unfreeze a balance"
+msgstr "Bir bakiyenin dondurulmasını kaldır"
+
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+msgid "Use up to 25 letters, digits or hyphens, or a token ID."
+msgstr "En fazla 25 harf, rakam veya tire ya da bir token ID’si kullanın."
+
+msgid "Who may change the rule"
+msgstr "Kuralı kimler değiştirebilir"
+
+msgid "Who may do it"
+msgstr "Bunu kimler yapabilir"
+
+msgid "Who may do what"
+msgstr "Kim ne yapabilir"
+
+msgid "Yes"
+msgstr "Evet"
