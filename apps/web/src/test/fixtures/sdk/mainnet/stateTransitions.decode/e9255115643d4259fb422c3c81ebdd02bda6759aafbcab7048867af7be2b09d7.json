@@ -1,0 +1,43 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "CwABAEgpDivViCwhzsiO1BT6dZGxeeI/AfwOv7nwAL4o5x0FBA6cIUIK2+rhY9vhJBaCq2M28XQ8kSIQ2glWAQAAAAEAQR9RWXhNaTTuSUnD+xP27sUULRjpNLLx8qTzo/eR2c3zOBRc9tN1Vdcml83llTARdr/6xBy7GFhDkVqThC7yE8W7"
+  },
+  "recordedAt": "2026-11-13T13:05:36.564Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "IdentityTopUpFromAddresses",
+      "typeNumber": 11,
+      "userFeeIncrease": 0,
+      "hash": "c0119a6f58866d61fb96e70eb02aaadc9457081a6587f530acf3c924bb2cf185",
+      "body": {
+        "$formatVersion": "0",
+        "inputs": [
+          {
+            "address": "0048290e2bd5882c21cec88ed414fa7591b179e23f",
+            "nonce": 1,
+            "amount": 247446000
+          }
+        ],
+        "output": null,
+        "identityId": "DoJdxZcsWfBD7fTjSPUUJ2agZ7KiVnzob1x132XSGV3B",
+        "feeStrategy": [
+          {
+            "$type": "deductFromInput",
+            "index": 0
+          }
+        ],
+        "userFeeIncrease": 0,
+        "inputWitnesses": [
+          {
+            "$type": "p2pkh",
+            "signature": "H1FZeE1pNO5JScP7E/buxRQtGOk0svHypPOj95HZzfM4FFz203VV1yaXzeWVMBF2v/rEHLsYWEORWpOELvITxbs="
+          }
+        ]
+      }
+    },
+    "proved": false,
+    "tookMs": 0.3398090000000593
+  }
+}

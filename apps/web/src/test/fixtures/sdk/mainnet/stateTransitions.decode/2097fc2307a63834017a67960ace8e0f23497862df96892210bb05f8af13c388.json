@@ -1,0 +1,49 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "BgCu2zopnoe1P+wghbpAMvsKjX6qJJ6uEe3v1AQirBQTvAEBAQADAAMBAAAhAlSRIaEv1/MLweaohWDv0iXtpXtvmlUHsdkAnnDoJzz3QR/vD1xR/PHlCMr7pcfMyo7xnuDUm/RWDLiWXCRK+pEeygPIkBG3vsXLDka463I3tGPFFY+DgjV27e6Cne/LNQohAAAAQSBUtlwvULwuYK+WgEYGsyjmBCTxogUJHoVDxy98y6PsuTj65iCbowwUJnWkDh3Ec/YKb3N4a/TRDR1p3IFhMNV6"
+  },
+  "recordedAt": "2026-11-13T13:05:36.553Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "IdentityUpdate",
+      "typeNumber": 5,
+      "ownerId": "CmZprVCHNQpL3g7qNybwHqW8skkW8xdacCDqMaMgu5NT",
+      "identityNonce": {
+        "$bigint": "1"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 0,
+      "signature": {
+        "$u8": "IFS2XC9QvC5gr5aARgazKOYEJPGiBQkehUPHL3zLo+y5OPrmIJujDBQmdaQOHcRz9gpvc3hr9NENHWncgWEw1Xo="
+      },
+      "hash": "126c1dd09dda5eaa11b478c00232efc55d14123d15fc4a082202db000faeecbf",
+      "body": {
+        "$formatVersion": "0",
+        "identityId": "CmZprVCHNQpL3g7qNybwHqW8skkW8xdacCDqMaMgu5NT",
+        "revision": 1,
+        "nonce": 1,
+        "addPublicKeys": [
+          {
+            "$formatVersion": "0",
+            "id": 3,
+            "type": 0,
+            "purpose": 3,
+            "securityLevel": 1,
+            "contractBounds": null,
+            "readOnly": false,
+            "data": "AlSRIaEv1/MLweaohWDv0iXtpXtvmlUHsdkAnnDoJzz3",
+            "signature": "H+8PXFH88eUIyvulx8zKjvGe4NSb9FYMuJZcJEr6kR7KA8iQEbe+xcsORrjrcje0Y8UVj4OCNXbt7oKd78s1CiE="
+          }
+        ],
+        "disablePublicKeys": [],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 0,
+        "signature": "IFS2XC9QvC5gr5aARgazKOYEJPGiBQkehUPHL3zLo+y5OPrmIJujDBQmdaQOHcRz9gpvc3hr9NENHWncgWEw1Xo="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.6481969999995272
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AQADAAlVAZfGgLsybzl9V7vPKlAF1oz2c0pH/O7hk46FqncxAAAAAAABAQAAAyj+fLksRsQidDbOM1gGlYam9hkWlYmgY835HLI6FUqTAAEEbm90ZRYDEgR0eXBlEgZvYmplY3QSCnByb3BlcnRpZXMWAxIHbWVzc2FnZRYCEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAgASBmF1dGhvchYCEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAgESC2Rlc2NyaXB0aW9uFgISBHR5cGUSBnN0cmluZxIIcG9zaXRpb24CAhIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAACQR+Xb5gZCQauFz4aeblnLA3cg+gZNpTkcBUWX2LTks9iT01bVgnZLiWMy1v3XiXrkG8nfx6DVLPLKAjP1Tln6iXj"
+  },
+  "recordedAt": "2026-11-13T13:05:36.550Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DataContractUpdate",
+      "typeNumber": 4,
+      "ownerId": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+      "identityContractNonce": {
+        "$bigint": "3"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 2,
+      "signature": {
+        "$u8": "H5dvmBkJBq4XPhp5uWcsDdyD6Bk2lORwFRZfYtOSz2JPTVtWCdkuJYzLW/deJeuQbyd/HoNUs8soCM/VOWfqJeM="
+      },
+      "hash": "341847fce19e11e517c2c41f2fd780ba6964140e8117997c5506406f48269e06",
+      "body": {
+        "$formatVersion": "0",
+        "$identity-contract-nonce": 3,
+        "dataContract": {
+          "$formatVersion": "0",
+          "id": "dRrFkmxUd7ZSJxNBPN31E7LWML6KqoAYrtCU6qjR2JL",
+          "config": {
+            "$formatVersion": "0",
+            "canBeDeleted": false,
+            "readonly": false,
+            "keepsHistory": false,
+            "documentsKeepHistoryContractDefault": false,
+            "documentsMutableContractDefault": true,
+            "documentsCanBeDeletedContractDefault": true,
+            "requiresIdentityEncryptionBoundedKey": null,
+            "requiresIdentityDecryptionBoundedKey": null
+          },
+          "version": 3,
+          "ownerId": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "schemaDefs": null,
+          "documentSchemas": {
+            "note": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "position": 0
+                },
+                "author": {
+                  "type": "string",
+                  "position": 1
+                },
+                "description": {
+                  "type": "string",
+                  "position": 2
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 2,
+        "signature": "H5dvmBkJBq4XPhp5uWcsDdyD6Bk2lORwFRZfYtOSz2JPTVtWCdkuJYzLW/deJeuQbyd/HoNUs8soCM/VOWfqJeM="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.4470400000000154
+  }
+}

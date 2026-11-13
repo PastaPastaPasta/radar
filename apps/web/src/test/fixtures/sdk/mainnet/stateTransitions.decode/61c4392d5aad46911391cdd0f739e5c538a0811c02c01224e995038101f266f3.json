@@ -1,0 +1,107 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AAAB9cw3eqsBxJpEMD72hu9s/dZKZThZn0CHboewil9oPWQBAAAAAAEBAAABAUCy6p2nfLfUVIwwwfu8CbzqzFf386d5LiR67i1Q7emfAAEEcGFnZRYHEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTARIMY2FuQmVEZWxldGVkEwESCnByb3BlcnRpZXMWBBIEc2x1ZxYDEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAwASCW1heExlbmd0aAN+EgV0aXRsZRYDEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAwISCW1heExlbmd0aAP7AgASD3N0b3JhZ2VQcm92aWRlchYEEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAwQSC2Rlc2NyaXB0aW9uEjFTdG9yYWdlIHByb3ZpZGVyIGlkZW50aWZpZXIgKGxpZ2h0aG91c2UsIGFyd2VhdmUpEgltYXhMZW5ndGgDKBIJc3RvcmFnZUlkFgQSBHR5cGUSBnN0cmluZxIIcG9zaXRpb24DBhILZGVzY3JpcHRpb24SP1Byb3ZpZGVyLXNwZWNpZmljIGNvbnRlbnQgaWRlbnRpZmllciAoQ0lELCBtYW5pZmVzdCB0eElkLCBldGMuKRIJbWF4TGVuZ3RoA/sBABIHaW5kaWNlcxUBFgQSBG5hbWUSBmJ5U2x1ZxIKcHJvcGVydGllcxUBFgESBHNsdWcSA2FzYxIGdW5pcXVlEwESDm51bGxTZWFyY2hhYmxlEwASCHJlcXVpcmVkFQISBHNsdWcSBXRpdGxlEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAAAAAAAAAAAAAAAMAAUEghC8n07ncBsPVVD2zvD5qE512dyWD0hefxB3XEWh+dLIt6xDfYYUgUEMmFaycOfA+IItahy69dOmvxN+oNk/7VA=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.541Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DataContractCreate",
+      "typeNumber": 0,
+      "ownerId": "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+      "identityNonce": {
+        "$bigint": "3"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "IIQvJ9O53AbD1VQ9s7w+ahOddnclg9IXn8Qd1xFofnSyLesQ32GFIFBDJhWsnDnwPiCLWocuvXTpr8TfqDZP+1Q="
+      },
+      "hash": "4ee59198d60c50a0277ef813247bc1d7f902e72ad1ca0f7df65e8ef9c658ceeb",
+      "body": {
+        "$formatVersion": "0",
+        "dataContract": {
+          "$formatVersion": "1",
+          "id": "HYVVnPKgWSio6fadt7Z7z7fHCtkb6khrkvtySJuPDMTq",
+          "config": {
+            "$formatVersion": "1",
+            "canBeDeleted": false,
+            "readonly": false,
+            "keepsHistory": false,
+            "documentsKeepHistoryContractDefault": false,
+            "documentsMutableContractDefault": true,
+            "documentsCanBeDeletedContractDefault": true,
+            "requiresIdentityEncryptionBoundedKey": null,
+            "requiresIdentityDecryptionBoundedKey": null,
+            "sizedIntegerTypes": true
+          },
+          "version": 1,
+          "ownerId": "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+          "schemaDefs": null,
+          "documentSchemas": {
+            "page": {
+              "type": "object",
+              "documentsMutable": true,
+              "canBeDeleted": true,
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "position": 0,
+                  "maxLength": 63
+                },
+                "title": {
+                  "type": "string",
+                  "position": 1,
+                  "maxLength": 256
+                },
+                "storageProvider": {
+                  "type": "string",
+                  "position": 2,
+                  "description": "Storage provider identifier (lighthouse, arweave)",
+                  "maxLength": 20
+                },
+                "storageId": {
+                  "type": "string",
+                  "position": 3,
+                  "description": "Provider-specific content identifier (CID, manifest txId, etc.)",
+                  "maxLength": 128
+                }
+              },
+              "indices": [
+                {
+                  "name": "bySlug",
+                  "properties": [
+                    {
+                      "slug": "asc"
+                    }
+                  ],
+                  "unique": true,
+                  "nullSearchable": false
+                }
+              ],
+              "required": ["slug", "title"],
+              "additionalProperties": false
+            }
+          },
+          "createdAt": null,
+          "updatedAt": null,
+          "createdAtBlockHeight": null,
+          "updatedAtBlockHeight": null,
+          "createdAtEpoch": null,
+          "updatedAtEpoch": null,
+          "groups": {},
+          "tokens": {},
+          "keywords": [],
+          "description": null
+        },
+        "identityNonce": 3,
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "IIQvJ9O53AbD1VQ9s7w+ahOddnclg9IXn8Qd1xFofnSyLesQ32GFIFBDJhWsnDnwPiCLWocuvXTpr8TfqDZP+1Q="
+      }
+    },
+    "proved": false,
+    "tookMs": 5.368283000000702
+  }
+}

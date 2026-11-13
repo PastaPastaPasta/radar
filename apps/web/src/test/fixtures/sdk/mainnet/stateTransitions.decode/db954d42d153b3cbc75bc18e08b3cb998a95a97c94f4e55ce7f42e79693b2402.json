@@ -1,0 +1,49 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgHU7d1aJatD/lonV8iU9kbkd9w6O76RFR0mwUjaTN6v/gEAAAABAT+v2AUenS2ce4P26rWOIU8Tw7i48AVbWg/WIXnssXsBB3Byb2ZpbGUwD87G+D1AFiWK+YnpHMcU58XtJNktP9Sc6ALmxiepYgCCGB7E77U3+tOrVeoldD7mO3IWnV20vKlAmY3K36fY2QELZGlzcGxheU5hbWUSBVZPTk5ZAAACQR+WLJYRn2VZvlUbTITGjGIHD+cSF5y3iN+JWRqLntKTllnnd/qy8CDPlzSYN7ruOIp2vcLeM3Pe5zAIYq2G1LOl"
+  },
+  "recordedAt": "2026-11-13T13:05:36.583Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Create])",
+      "typeNumber": 1,
+      "ownerId": "FLBoSLEkmS8GcrqLHH4SGJzf7cVCpbDMNyegExsFjFvM",
+      "identityContractNonce": {
+        "$bigint": "1"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 2,
+      "signature": {
+        "$u8": "H5YslhGfZVm+VRtMhMaMYgcP5xIXnLeI34lZGoue0pOWWed3+rLwIM+XNJg3uu44ina9wt4zc97nMAhirYbUs6U="
+      },
+      "hash": "37da9bf42f8492587aa49ae324b3eb9abcee375795a405d07bf6153279876980",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "FLBoSLEkmS8GcrqLHH4SGJzf7cVCpbDMNyegExsFjFvM",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "create",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "1",
+            "$id": "5sjVpkXdQUeAsEs2ja6tLEdEarpiMKszyTLCseY466W",
+            "$identityContractNonce": 1,
+            "$type": "profile",
+            "$dataContractId": "4EcYtwedNjTm4iGmx47GkLX2uNkCUWS4tt1KHhgGkjR3",
+            "$tokenPaymentInfo": null,
+            "$entropy": "ghgexO+1N/rTq1XqJXQ+5jtyFp1dtLypQJmNyt+n2Nk=",
+            "displayName": "VONNY",
+            "$prefundedVotingBalance": null
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 2,
+        "signature": "H5YslhGfZVm+VRtMhMaMYgcP5xIXnLeI34lZGoue0pOWWed3+rLwIM+XNJg3uu44ina9wt4zc97nMAhirYbUs6U="
+      }
+    },
+    "proved": false,
+    "tookMs": 2.4306159999996453
+  }
+}

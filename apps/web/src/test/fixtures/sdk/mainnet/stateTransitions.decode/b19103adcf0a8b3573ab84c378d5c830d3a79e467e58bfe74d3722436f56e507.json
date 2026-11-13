@@ -1,0 +1,36 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "BwALMqKXed0oEMgRJo511GBXj45uAW1lAoS67OnrzC9DuhjjB4EGTdlv6wETWt6egPkPczsYU4ZMPHb4ScChHdAg/AAPQkALAARBH8Rp/vnA5zo9MIr3W2NkJ772lc+MB4hxX2TVfWA/N8aCFtA9ubULFTU6bGZV7q5SUCmtPJrm/WGz2FqX5Yp0Z5I="
+  },
+  "recordedAt": "2026-11-13T13:05:36.556Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "IdentityCreditTransfer",
+      "typeNumber": 7,
+      "ownerId": "kiGTxoZFwdS51eX5VmGLyYZqHq1kXDFk5RMTmfQbKtd",
+      "identityNonce": {
+        "$bigint": "11"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 4,
+      "signature": {
+        "$u8": "H8Rp/vnA5zo9MIr3W2NkJ772lc+MB4hxX2TVfWA/N8aCFtA9ubULFTU6bGZV7q5SUCmtPJrm/WGz2FqX5Yp0Z5I="
+      },
+      "hash": "0ff5654c37374bd9c89abb40087ea399b3e6658aa973e4d96b6488ade421b60f",
+      "body": {
+        "$formatVersion": "0",
+        "identityId": "kiGTxoZFwdS51eX5VmGLyYZqHq1kXDFk5RMTmfQbKtd",
+        "recipientId": "2g9a6a2ya6YUnn7Ly4eNBvCHBFKWZJP5VYE76cFF1opb",
+        "amount": 1000000,
+        "nonce": 11,
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 4,
+        "signature": "H8Rp/vnA5zo9MIr3W2NkJ772lc+MB4hxX2TVfWA/N8aCFtA9ubULFTU6bGZV7q5SUCmtPJrm/WGz2FqX5Yp0Z5I="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.3341179999997621
+  }
+}

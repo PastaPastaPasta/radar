@@ -1,0 +1,48 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgE18mU9hOcv192406/7UpSh96zhrQcEVJ/VhM7NkDo02QEABQABJix7AUY3Ltm21JPmPD2F9iPFQlxcXOoA+xNjqH+9Ts8FBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAAP8AA9CQAABQR8O4JMvQ3vrH94YsmP4DS9lOPgg632Brc29DeTgdtIU4Txcl2psTmG1H0nDfAvpHIEYFdODwdBxH0dvG8MYt8RV"
+  },
+  "recordedAt": "2026-11-13T13:05:36.587Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Purchase])",
+      "typeNumber": 1,
+      "ownerId": "4daz4P7nZFCuymJRVDELL6aAh3RpauSeoAscBgZ6PeAU",
+      "identityContractNonce": {
+        "$bigint": "5"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "Hw7gky9De+sf3hiyY/gNL2U4+CDrfYGtzb0N5OB20hThPFyXamxOYbUfScN8C+kcgRgV04PB0HEfR28bwxi3xFU="
+      },
+      "hash": "264167b2e01f516750b0cb5df26be72686581be30816e5068aad17db87c3dd34",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "4daz4P7nZFCuymJRVDELL6aAh3RpauSeoAscBgZ6PeAU",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "purchase",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "1",
+            "$id": "3a1qDSX3B1ufFdvmVJ9uzKT1W2RPf8tZPbifaMRAN9LA",
+            "$identityContractNonce": 5,
+            "$type": "domain",
+            "$dataContractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+            "$tokenPaymentInfo": null,
+            "$revision": 3,
+            "price": 1000000
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "Hw7gky9De+sf3hiyY/gNL2U4+CDrfYGtzb0N5OB20hThPFyXamxOYbUfScN8C+kcgRgV04PB0HEfR28bwxi3xFU="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.12405299999954877
+  }
+}

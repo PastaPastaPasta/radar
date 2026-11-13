@@ -1,0 +1,50 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "DQAAxgEBPIkcInwQO9McBZi3+/dvgwCgIymJZGzJBRA7/8KNK/8AAAAA+RxRGr+rDgUFa5TUAZ3nVSHeDAjaf8FWcwV1AU/ZOAbDbHpaQkF1jDQrATgPMA7PFok2FmrRvOgKAAAAAAAAAIcFHWNSnrmx0eg7NnIiZhz42FXSHQ3U4/YOee9LTXIYnsc28Z1I0/Mg8EYHyQhECxJ0ewIZhEt6hJzNodo5SCUSajbYcAarjmEmu/Lw7SUk2JJzPEa7H1r7n/SjtamScc0DAAgAATyJHCJ8EDvTHAWYt/v3b4MAoCMpiWRsyQUQO//CjSv/AAAAAGpHMEQCIBLCdfZBI0h93v5Z4GiEKA1inyapE0wRp0OWQvXKRXXNAiB5bzuFxzqJ+Q77AxQykNOYxJsu7q3wBIYcIP56e6AMSAEhA1oz5VZO5LEvTk6KZ/Vdj/kADS0RuuxoGVopu97Ea/f8/////wFrfrMBAAAAAAJqAAAAAAAkAQFrfrMBAAAAABl2qRTdlcD6HjeXtbj8NJgnwunKBlLxz4isAAACAITfjpbEkl29RXttiaQPnGLpCe4+Af0AAAAGoXPGeADdJYJAq3kp3T1B2fgIw3wNhV/6OQABAQEAQSDg5WumwXobevx8eMpMBpnHzNGtq2H2/hXoVr/kjfNKc1XBvC1du1sbBSx2chdBLmQRgebZNB9kK+kIn8T9fTgcAA=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.567Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "AddressFundingFromAssetLock",
+      "typeNumber": 13,
+      "userFeeIncrease": 0,
+      "signature": {
+        "$u8": "IODla6bBeht6/Hx4ykwGmcfM0a2rYfb+FehWv+SN80pzVcG8LV27WxsFLHZyF0EuZBGB5tk0H2Qr6QifxP19OBw="
+      },
+      "hash": "05485be7fc91df705654392db3c3e30287341a8588ae1e7844bb0eaf90b3f453",
+      "body": {
+        "$formatVersion": "0",
+        "assetLockProof": {
+          "$type": "instant",
+          "instantLock": "AQE8iRwifBA70xwFmLf792+DAKAjKYlkbMkFEDv/wo0r/wAAAAD5HFEav6sOBQVrlNQBnedVId4MCNp/wVZzBXUBT9k4BsNselpCQXWMNCsBOA8wDs8WiTYWatG86AoAAAAAAAAAhwUdY1KeubHR6Ds2ciJmHPjYVdIdDdTj9g5570tNchiexzbxnUjT8yDwRgfJCEQLEnR7AhmES3qEnM2h2jlIJRJqNthwBquOYSa78vDtJSTYknM8RrsfWvuf9KO1qZJx",
+          "transaction": "AwAIAAE8iRwifBA70xwFmLf792+DAKAjKYlkbMkFEDv/wo0r/wAAAABqRzBEAiASwnX2QSNIfd7+WeBohCgNYp8mqRNMEadDlkL1ykV1zQIgeW87hcc6ifkO+wMUMpDTmMSbLu6t8ASGHCD+enugDEgBIQNaM+VWTuSxL05Oimf1XY/5AA0tEbrsaBlaKbvexGv3/P////8Ba36zAQAAAAACagAAAAAAJAEBa36zAQAAAAAZdqkU3ZXA+h43l7W4/DSYJ8LpygZS8c+IrA==",
+          "outputIndex": 0
+        },
+        "inputs": [],
+        "outputs": [
+          {
+            "address": "0084df8e96c4925dbd457b6d89a40f9c62e909ee3e",
+            "amount": 28478523000
+          },
+          {
+            "address": "00dd258240ab7929dd3d41d9f808c37c0d855ffa39",
+            "amount": null
+          }
+        ],
+        "feeStrategy": [
+          {
+            "$type": "reduceOutput",
+            "index": 1
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signature": "IODla6bBeht6/Hx4ykwGmcfM0a2rYfb+FehWv+SN80pzVcG8LV27WxsFLHZyF0EuZBGB5tk0H2Qr6QifxP19OBw=",
+        "inputWitnesses": []
+      }
+    },
+    "proved": false,
+    "tookMs": 0.8146000000006097
+  }
+}

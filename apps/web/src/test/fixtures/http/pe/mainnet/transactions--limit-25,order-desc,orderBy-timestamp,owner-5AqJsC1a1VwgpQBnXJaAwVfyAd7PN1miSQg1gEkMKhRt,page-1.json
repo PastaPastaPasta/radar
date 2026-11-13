@@ -1,0 +1,159 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/transactions?order=desc&orderBy=timestamp&owner=5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt&page=1&limit=25"
+  },
+  "recordedAt": "2026-11-13T13:28:27.232Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "hash": "5711C785CBC88A13D5404979D2FC811CF09B24AEB37F5667127231176A0A0765",
+        "index": 0,
+        "blockHash": "6FDE21203D191980FDA69A8F00BB6C835D69F9905C1A4A3ECD879965999EE96E",
+        "blockHeight": 468960,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAAC51f9Tm2nEow9ujlmeKQYWAM3++gT97yUwydHwfmREr8BDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwAAMAY0eZIxSGmEbGpwdhGJXXqoygnZ9ownZ7+6s8DXSuiBRBhY2NvdW50UmVmZXJlbmNlBPwKbKHWEmVuY3J5cHRlZFB1YmxpY0tleQpgAtjybslCgJ4p4oh1IQBr3JFl+eaLJVli6sw9l8F01EbY90CiI6U+Xjf/WNX7tizBc1aYspRR6Ai4dKhqfaHIe9Pk6JaYgW2VFHSWIl2OaEJCHY9mXPmXT2tgYVxztOtGEXJlY2lwaWVudEtleUluZGV4BAIOc2VuZGVyS2V5SW5kZXgEBAh0b1VzZXJJZBBhLXhASCOTIDJioKk8oWKh09hjskW5Wg9CZWoO8e3bjQAAAUEfg8KgjbBuo2m0BaBxh4pOgeLfXybDTJVBpZARgODCqWlbkgFMwfQwfJcgn9reAXcqKpMktw4VvrDJ3hT0hx0OMQ==",
+        "timestamp": "2026-11-10T14:50:22.103Z",
+        "gasUsed": 94949800,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+          "aliases": [
+            {
+              "alias": "Iva.dash",
+              "status": "ok",
+              "timestamp": "2026-09-09T13:53:34.911Z",
+              "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "37690E809A293C5C9E1A2C1C34C13ACD37B0CBD6360607314F25D48111DA92BB",
+        "index": 0,
+        "blockHash": "CF1271B0D00822B462DC363AC5874E4D5F9B052FE229E6963CE6144144D9EBFC",
+        "blockHeight": 431337,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAABcUPNdoNVd+8DhzYHY3Wi391KeTzoJsYcJNSAwAWGZtUEBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAEv1fXt07IVtQx2mQ+SezAYU7qkHBewPOndCuQ78xsMtBwVsYWJlbBIESXZhMg9ub3JtYWxpemVkTGFiZWwSBDF2YTIabm9ybWFsaXplZFBhcmVudERvbWFpbk5hbWUSBGRhc2gQcGFyZW50RG9tYWluTmFtZRIEZGFzaAxwcmVvcmRlclNhbHQMWL6Qx3eJ477PytNwIUEXGkdwRaQOha25PCizSwbakDYHcmVjb3JkcxYBEghpZGVudGl0eRA985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8w5zdWJkb21haW5SdWxlcxYBEg9hbGxvd1N1YmRvbWFpbnMTAAAAAUEfhcpYDW5/h1xp0gd4Xui4mxbJipoq5YAXhisJ2IqjFOUVMD3sELyP2gBxzE09n9gop1mUJok+tkfp4zA0KW5zBA==",
+        "timestamp": "2026-09-09T13:53:53.528Z",
+        "gasUsed": 40831100,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+          "aliases": [
+            {
+              "alias": "Iva.dash",
+              "status": "ok",
+              "timestamp": "2026-09-09T13:53:34.911Z",
+              "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "6652727CED1775088D2662C921B26507124C4E66DA0250CB5F8E1D042B7429D9",
+        "index": 0,
+        "blockHash": "DBFEE473794E1F29944BE0E8527D8A0BC2A2A650571E09AE56904FAEE4F8387A",
+        "blockHeight": 431335,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAABUg0LPTURcUBx81qY3H3t49s6sq9cjOV/hG09Px5ZhHUDCHByZW9yZGVy5mjGWa9mruHnLBht3ntbfgodcSoJxA1XIfYiv1PFMVUAS/V9e3TshW1DHaZD5J7MBhTuqQcF7A86d0K5DvzGwy0BEHNhbHRlZERvbWFpbkhhc2gMZVq7xxx23OQVvpBllRjb9OgA6GwOUM+D9Zv2YqA+C6YAAAFBH0XkngvffDdav6PCvgbXlYAvyqXkUh5T/dGcWpOWPAvgeJ6SUDvOxOKlTA1uZn2pj1vZvmD4KbnBxS1pi4CujDU=",
+        "timestamp": "2026-09-09T13:53:47.935Z",
+        "gasUsed": 23636400,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+          "aliases": [
+            {
+              "alias": "Iva.dash",
+              "status": "ok",
+              "timestamp": "2026-09-09T13:53:34.911Z",
+              "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "B56E6356AF8308458C11935E1A6217BBFB0BC5225DEA08905C0740BA21AB5EEE",
+        "index": 0,
+        "blockHash": "202EF773AD63F297D8B09B359B92957D0A5AC49A95D5EB1BDEDEF9395C91C716",
+        "blockHeight": 431334,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAABClBiztpel+Ypn1YdRHrFWVrXeW0+NGdf9JAMvr+Oo78CBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAFQAGaHMWVKXY96bL8uoGTAYisBOsQ32W3sDPrXK46wwBwVsYWJlbBIDSXZhD25vcm1hbGl6ZWRMYWJlbBIDMXZhGm5vcm1hbGl6ZWRQYXJlbnREb21haW5OYW1lEgRkYXNoEHBhcmVudERvbWFpbk5hbWUSBGRhc2gMcHJlb3JkZXJTYWx0DJiEvia5vIzCjkAhYD2PmvXBvD6pWfBoFDQOnt6iC+X5B3JlY29yZHMWARIIaWRlbnRpdHkQPfOY188NnODqyRfndGOYHms28C1adjTCeZih8o255fMOc3ViZG9tYWluUnVsZXMWARIPYWxsb3dTdWJkb21haW5zEwABEnBhcmVudE5hbWVBbmRMYWJlbP0AAAAEqBfIAAABQR8gTyzNEkrQ7nG+VEM99hYbDjYvwLj4UrCWHdVyo1NQ3kp2KNE+yOL7i96JyIebmjjcZ0oggC0M68PL5U0/Q80e",
+        "timestamp": "2026-09-09T13:53:34.911Z",
+        "gasUsed": 82100560,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+          "aliases": [
+            {
+              "alias": "Iva.dash",
+              "status": "ok",
+              "timestamp": "2026-09-09T13:53:34.911Z",
+              "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      },
+      {
+        "hash": "E1EE27619148AF422BC9F5F63649E4FCE62D702A46DBB6150B156DDEDC30A46E",
+        "index": 0,
+        "blockHash": "D8C48AC3664F2653C682B0B3FBA06B3E8DDB01A9152A3D97644A2CC53321A3D3",
+        "blockHeight": 431333,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_CREATE",
+        "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAABrSN67NI23GuNQMpwVm6H0hQCYLqtjeOPMK3hGMj+m0QBCHByZW9yZGVy5mjGWa9mruHnLBht3ntbfgodcSoJxA1XIfYiv1PFMVUAVAAZocxZUpdj3psvy6gZMBiKwE6xDfZbewM+tcrjrDABEHNhbHRlZERvbWFpbkhhc2gM8i2Ei9JMPX7bV2pSPJhCDdS7L5W8smhrZs8ANX0mT1QAAAFBH+wWlqKVv5UOsTUElnJjKilQEvaTd4n1XUn9/GTYDPJxGBcwtZrWLQGR+Ma4jnpa23MrPHr8/QYfKCOuFaNYrvQ=",
+        "timestamp": "2026-09-09T13:53:30.768Z",
+        "gasUsed": 32385020,
+        "status": "SUCCESS",
+        "error": null,
+        "owner": {
+          "identifier": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+          "aliases": [
+            {
+              "alias": "Iva.dash",
+              "status": "ok",
+              "timestamp": "2026-09-09T13:53:34.911Z",
+              "documentId": "hGAuMdh2aYYf1u3DJ4aNYH1xwXc3feBxWWnwafQFLii",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 5 }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "DAABAHdfjQqFyt7y2lpHbkxQvbqz+8yjAfyy0F4AAQBps0GFX44gmx9LkUb2F0eqqIO+A/yy0F4AAQAAAAEAQR/cd4qdC9Wxv5copN2sajR+g8luEGh7Cm1J0eDda0AgmyUSpKw+XwYkff0fQGO/XE4bNzR2E5rjJzD7f+aU283O"
+  },
+  "recordedAt": "2026-11-13T13:05:36.565Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "AddressFundsTransfer",
+      "typeNumber": 12,
+      "userFeeIncrease": 0,
+      "hash": "7d2a009499fdf09c1849a552e46be79b30026ab48741a2561fc8436bf78942e1",
+      "body": {
+        "$formatVersion": "0",
+        "inputs": [
+          {
+            "address": "00775f8d0a85cadef2da5a476e4c50bdbab3fbcca3",
+            "nonce": 1,
+            "amount": 3000000000
+          }
+        ],
+        "outputs": [
+          {
+            "address": "0069b341855f8e209b1f4b9146f61747aaa883be03",
+            "amount": 3000000000
+          }
+        ],
+        "feeStrategy": [
+          {
+            "$type": "deductFromInput",
+            "index": 0
+          }
+        ],
+        "userFeeIncrease": 0,
+        "inputWitnesses": [
+          {
+            "$type": "p2pkh",
+            "signature": "H9x3ip0L1bG/lyik3axqNH6DyW4QaHsKbUnR4N1rQCCbJRKkrD5fBiR9/R9AY79cThs3NHYTmuMnMPt/5pTbzc4="
+          }
+        ]
+      }
+    },
+    "proved": false,
+    "tookMs": 0.37626600000021426
+  }
+}

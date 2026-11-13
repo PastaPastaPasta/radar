@@ -1,0 +1,54 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgE985jXzw2c4OrJF+d0Y5geazbwLVp2NMJ5mKHyjbnl8wEAAAAC51f9Tm2nEow9ujlmeKQYWAM3++gT97yUwydHwfmREr8BDmNvbnRhY3RSZXF1ZXN0oqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwAAMAY0eZIxSGmEbGpwdhGJXXqoygnZ9ownZ7+6s8DXSuiBRBhY2NvdW50UmVmZXJlbmNlBPwKbKHWEmVuY3J5cHRlZFB1YmxpY0tleQpgAtjybslCgJ4p4oh1IQBr3JFl+eaLJVli6sw9l8F01EbY90CiI6U+Xjf/WNX7tizBc1aYspRR6Ai4dKhqfaHIe9Pk6JaYgW2VFHSWIl2OaEJCHY9mXPmXT2tgYVxztOtGEXJlY2lwaWVudEtleUluZGV4BAIOc2VuZGVyS2V5SW5kZXgEBAh0b1VzZXJJZBBhLXhASCOTIDJioKk8oWKh09hjskW5Wg9CZWoO8e3bjQAAAUEfg8KgjbBuo2m0BaBxh4pOgeLfXybDTJVBpZARgODCqWlbkgFMwfQwfJcgn9reAXcqKpMktw4VvrDJ3hT0hx0OMQ=="
+  },
+  "recordedAt": "2026-11-13T13:31:37.919Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Create])",
+      "typeNumber": 1,
+      "ownerId": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+      "identityContractNonce": {
+        "$bigint": "1"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "H4PCoI2wbqNptAWgcYeKToHi318mw0yVQaWQEYDgwqlpW5IBTMH0MHyXIJ/a3gF3KiqTJLcOFb6wyd4U9IcdDjE="
+      },
+      "hash": "5711c785cbc88a13d5404979d2fc811cf09b24aeb37f5667127231176a0a0765",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "create",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "2",
+            "$id": "Ga4zoJe1oErvc6DLBmXaHWed3XQqVPPutt9cqEYCFXv6",
+            "$identityContractNonce": 1,
+            "$type": "contactRequest",
+            "$dataContractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "$tokenPaymentInfo": null,
+            "$actionFeeAgreement": null,
+            "$entropy": "wBjR5kjFIaYRsanB2EYldeqjKCdn2jCdnv7qzwNdK6I=",
+            "accountReference": 174891478,
+            "encryptedPublicKey": "AtjybslCgJ4p4oh1IQBr3JFl+eaLJVli6sw9l8F01EbY90CiI6U+Xjf/WNX7tizBc1aYspRR6Ai4dKhqfaHIe9Pk6JaYgW2VFHSWIl2OaEJCHY9mXPmXT2tgYVxztOtG",
+            "recipientKeyIndex": 2,
+            "senderKeyIndex": 4,
+            "toUserId": "7YLm6o78TpqiauC9oQTGeXHwAeafzzkcxBGddjbRFL2x",
+            "$prefundedVotingBalance": null
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "H4PCoI2wbqNptAWgcYeKToHi318mw0yVQaWQEYDgwqlpW5IBTMH0MHyXIJ/a3gF3KiqTJLcOFb6wyd4U9IcdDjE="
+      }
+    },
+    "proved": false,
+    "tookMs": 5.018868999999995
+  }
+}

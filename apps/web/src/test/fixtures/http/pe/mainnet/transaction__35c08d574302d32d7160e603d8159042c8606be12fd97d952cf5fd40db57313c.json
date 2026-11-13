@@ -1,0 +1,101 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/transaction/35c08d574302d32d7160e603d8159042c8606be12fd97d952cf5fd40db57313c"
+  },
+  "recordedAt": "2026-11-13T13:03:49.050Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "hash": "35C08D574302D32D7160E603D8159042C8606BE12FD97D952CF5FD40DB57313C",
+    "index": 1,
+    "blockHash": "5BB06CF931EC1045C3B282F88F9AACEFC386453353526801D917682E292C0740",
+    "blockHeight": 361774,
+    "type": "BATCH",
+    "batchType": 1,
+    "data": "AgFQIl0YZ/WZdYW/CHCAmWvwN9FYctxuUS35L5Pf73IMTgEAAQABFSmQcqs+Yj0mrj560+00qfu+k75VeNPWWC4fDlzbpAwDB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAADAQtkaXNwbGF5TmFtZRIKdGVjaGF3YW5rYQABQSA7dB/FyiyS6BBNBLc4x+vVMVLuy5JWjuOzOuj/4fAaLgPrC7+nQDhl4LvPx+LZ4heDNq0dQA6LF97pjACbSO0a",
+    "timestamp": "2026-05-04T16:07:02.790Z",
+    "gasUsed": 41880,
+    "status": "FAIL",
+    "error": "Document 2RcKdonFKsrpoGkXZp6PxYprFYo9Xce2evwxpFaRBT8X has invalid revision Some(3). The desired revision is 3",
+    "owner": {
+      "identifier": "6Pp1RFqRnpStnY8vmp5k3ypE6rFBvzPwcoguwDXbRA7F",
+      "aliases": [
+        {
+          "alias": "Techawanka.dash",
+          "status": "ok",
+          "timestamp": "2025-11-09T21:16:58.795Z",
+          "documentId": "8dG2L56FSMykGD45Mb1QvndFE3HLHsyCHk1hd9Xpi7Jh",
+          "contested": true
+        }
+      ]
+    },
+    "incoming": null,
+    "amount": null,
+    "base58Address": null,
+    "bech32mAddress": null,
+    "duplicates": [
+      {
+        "hash": "35C08D574302D32D7160E603D8159042C8606BE12FD97D952CF5FD40DB57313C",
+        "index": 1,
+        "blockHash": "67DF4322B8062C17326414BC4D2D0FDDA60C44C44EF08592DFB01A3F125A0F25",
+        "blockHeight": 361782,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "AgFQIl0YZ/WZdYW/CHCAmWvwN9FYctxuUS35L5Pf73IMTgEAAQABFSmQcqs+Yj0mrj560+00qfu+k75VeNPWWC4fDlzbpAwDB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAADAQtkaXNwbGF5TmFtZRIKdGVjaGF3YW5rYQABQSA7dB/FyiyS6BBNBLc4x+vVMVLuy5JWjuOzOuj/4fAaLgPrC7+nQDhl4LvPx+LZ4heDNq0dQA6LF97pjACbSO0a",
+        "timestamp": "2026-05-04T16:25:02.708Z",
+        "gasUsed": 41880,
+        "status": "FAIL",
+        "error": "Document 2RcKdonFKsrpoGkXZp6PxYprFYo9Xce2evwxpFaRBT8X has invalid revision Some(3). The desired revision is 3",
+        "owner": {
+          "identifier": "6Pp1RFqRnpStnY8vmp5k3ypE6rFBvzPwcoguwDXbRA7F",
+          "aliases": [
+            {
+              "alias": "Techawanka.dash",
+              "status": "ok",
+              "timestamp": "2025-11-09T21:16:58.795Z",
+              "documentId": "8dG2L56FSMykGD45Mb1QvndFE3HLHsyCHk1hd9Xpi7Jh",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null,
+        "duplicates": null
+      },
+      {
+        "hash": "35C08D574302D32D7160E603D8159042C8606BE12FD97D952CF5FD40DB57313C",
+        "index": 1,
+        "blockHash": "67DF4322B8062C17326414BC4D2D0FDDA60C44C44EF08592DFB01A3F125A0F25",
+        "blockHeight": 361782,
+        "type": "BATCH",
+        "batchType": "DOCUMENT_REPLACE",
+        "data": "AgFQIl0YZ/WZdYW/CHCAmWvwN9FYctxuUS35L5Pf73IMTgEAAQABFSmQcqs+Yj0mrj560+00qfu+k75VeNPWWC4fDlzbpAwDB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAADAQtkaXNwbGF5TmFtZRIKdGVjaGF3YW5rYQABQSA7dB/FyiyS6BBNBLc4x+vVMVLuy5JWjuOzOuj/4fAaLgPrC7+nQDhl4LvPx+LZ4heDNq0dQA6LF97pjACbSO0a",
+        "timestamp": "2026-05-04T16:25:02.708Z",
+        "gasUsed": 41880,
+        "status": "FAIL",
+        "error": "Document 2RcKdonFKsrpoGkXZp6PxYprFYo9Xce2evwxpFaRBT8X has invalid revision Some(3). The desired revision is 3",
+        "owner": {
+          "identifier": "6Pp1RFqRnpStnY8vmp5k3ypE6rFBvzPwcoguwDXbRA7F",
+          "aliases": [
+            {
+              "alias": "Techawanka.dash",
+              "status": "ok",
+              "timestamp": "2025-11-09T21:16:58.795Z",
+              "documentId": "8dG2L56FSMykGD45Mb1QvndFE3HLHsyCHk1hd9Xpi7Jh",
+              "contested": true
+            }
+          ]
+        },
+        "incoming": null,
+        "amount": null,
+        "base58Address": null,
+        "bech32mAddress": null,
+        "duplicates": null
+      }
+    ],
+    "shielded": null
+  }
+}

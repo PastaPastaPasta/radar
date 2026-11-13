@@ -1,0 +1,50 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgF/8ZvpV9T61IHKa2MjlCzO1lPUxiVYjR8KmVY5sU7gwAEBAgAABgAsw0zYWYxnPv2T28OSnv3RpeIktROUKl6RNLnOd2QSeqVfq1cTgJPe1fqG81fHJfTNGYGv+bd9NPq03XRGkqmrAMhN0WOky97cWydFYkk6Vc2I2CncDOrXiH39HTuqS6VZtgAAAAEEQSBbRbd6XiA3lffOY2GR/rqejE5CxHi7FIYqCy0GjYe3VlO28Uai7hTcCl97+0NXVejM8yGDVSQpPwjgICm1ZT60"
+  },
+  "recordedAt": "2026-11-13T13:05:36.589Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([TokenTransfer])",
+      "typeNumber": 1,
+      "ownerId": "9cSTZG9ahW3uVryussA9H1nfrDk6oSM2z7MVsawKe711",
+      "identityContractNonce": {
+        "$bigint": "6"
+      },
+      "userFeeIncrease": 1,
+      "signaturePublicKeyId": 4,
+      "signature": {
+        "$u8": "IFtFt3peIDeV985jYZH+up6MTkLEeLsUhioLLQaNh7dWU7bxRqLuFNwKX3v7Q1dV6MzzIYNVJCk/COAgKbVlPrQ="
+      },
+      "hash": "ec791b87737c7ccab27551150f42f776e206de55d14fabd6bc9bbf1700e4f0a8",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "9cSTZG9ahW3uVryussA9H1nfrDk6oSM2z7MVsawKe711",
+        "transitions": [
+          {
+            "$transition": "token",
+            "$action": "transfer",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "0",
+            "$identity-contract-nonce": 6,
+            "$tokenContractPosition": 0,
+            "$dataContractId": "41jfTtvL4jV5WW7CxLv2Ftn7zjkESL1mxmokQSKwG7bw",
+            "$tokenId": "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz",
+            "$amount": 200,
+            "recipientId": "6EmaW8yJ56E6MXmpLKFxouYUdMqXDHfMTq8mxZNGhAah",
+            "publicNote": null,
+            "sharedEncryptedNote": null,
+            "privateEncryptedNote": null
+          }
+        ],
+        "userFeeIncrease": 1,
+        "signaturePublicKeyId": 4,
+        "signature": "IFtFt3peIDeV985jYZH+up6MTkLEeLsUhioLLQaNh7dWU7bxRqLuFNwKX3v7Q1dV6MzzIYNVJCk/COAgKbVlPrQ="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.3565290000005916
+  }
+}

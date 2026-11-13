@@ -1,0 +1,55 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgEBomkOD+PxfA1tJpjNo5VG21vEclf5FVBkNy0hMncaxQEAAQACqf41RfdhbigFtPihzBDe+tULf5tjKPuNjXCwEzBfJn/7ASsFY3ljbGWhGmbHrRpnJ2FTqMOPTSwMI1ZsmOHf+O7IfoEwWVLujAAAQQcJYWxsb2NhdGVkAv0AAAB+hSn6AAZidWRnZXQC/QAAAJ77n6uwB2VzdFRpbWUC/GsAVrEEcGFpZAIAEHN1cGVyYmxvY2tIZWlnaHQE/AAnTHgNdmFsaWRXZWlnaHRlZAT7DCkUdm90aW5nRGVhZGxpbmVIZWlnaHQE/AAnRfoAAkEgo29g9OvaCNUj1NBEadr8Q7T2kW2VywN0Gon/ANlGNnRrIjFn4+MASbw2Gz4lFmaLlQD7EZsKUCIlcb9WX1FJlQ=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.584Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Replace])",
+      "typeNumber": 1,
+      "ownerId": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+      "identityContractNonce": {
+        "$bigint": "299"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 2,
+      "signature": {
+        "$u8": "IKNvYPTr2gjVI9TQRGna/EO09pFtlcsDdBqJ/wDZRjZ0ayIxZ+PjAEm8Nhs+JRZmi5UA+xGbClAiJXG/Vl9RSZU="
+      },
+      "hash": "1c5dd8c2b21c83005fababf11278977a5fb23cd2203dcace52d81903337785bd",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "replace",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "2",
+            "$id": "CSaiz3Q3VJirgGScDn41ynJHYUosRimGq1eQGYcSXuX4",
+            "$identityContractNonce": 299,
+            "$type": "cycle",
+            "$dataContractId": "BqszMpFvXm11jWeUYRqQu2yREZi7EzgkFfDKZR9dqamq",
+            "$tokenPaymentInfo": null,
+            "$actionFeeAgreement": null,
+            "$revision": 65,
+            "allocated": 543400000000,
+            "budget": 682826378160,
+            "estTime": 1795184305,
+            "paid": 0,
+            "superblockHeight": 2575480,
+            "validWeighted": 3113,
+            "votingDeadlineHeight": 2573818
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 2,
+        "signature": "IKNvYPTr2gjVI9TQRGna/EO09pFtlcsDdBqJ/wDZRjZ0ayIxZ+PjAEm8Nhs+JRZmi5UA+xGbClAiJXG/Vl9RSZU="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.19187999999940075
+  }
+}

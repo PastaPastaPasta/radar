@@ -1,0 +1,48 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgEqCEKNjYX4hzBRfsnRM3JniMA8dMRqguXaD/GBpSzKAwEABAABvxIaAd3D8eXmCYIwIPMRoV0ex0QaI4Cs1SAGVdgyAGkGBmRvbWFpbuZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAAP9AAAB0alKIAAAAUEgltP6LM0xP76sqa8FfcBYn5NEd9azj3le2BjlhUrB7Pofe9mvxAWYyOikol2eYZEPmp2rbxbt1xD1kxiBWH9t5A=="
+  },
+  "recordedAt": "2026-11-13T13:05:36.586Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([UpdatePrice])",
+      "typeNumber": 1,
+      "ownerId": "3q5RrN9Gn5GxSGissZr3QzCMpjgf7bCtm1EqTZHFRYEN",
+      "identityContractNonce": {
+        "$bigint": "6"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "IJbT+izNMT++rKmvBX3AWJ+TRHfWs495XtgY5YVKwez6H3vZr8QFmMjopKJdnmGRD5qdq28W7dcQ9ZMYgVh/beQ="
+      },
+      "hash": "2609289ee2c9ba319e2f69ab960baec35da17619b6cec8c36e7f348dcc8bd563",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "3q5RrN9Gn5GxSGissZr3QzCMpjgf7bCtm1EqTZHFRYEN",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "updatePrice",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "1",
+            "$id": "Drrt1LgaeDiFeh7gg8ehabXbFCK2yuiQg8XZydqYGY4Q",
+            "$identityContractNonce": 6,
+            "$type": "domain",
+            "$dataContractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+            "$tokenPaymentInfo": null,
+            "$revision": 3,
+            "$price": 2000000000000
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "IJbT+izNMT++rKmvBX3AWJ+TRHfWs495XtgY5YVKwez6H3vZr8QFmMjopKJdnmGRD5qdq28W7dcQ9ZMYgVh/beQ="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.17898599999989528
+  }
+}

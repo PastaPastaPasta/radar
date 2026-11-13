@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/blocks?height_min=468967&height_max=468967&limit=1&order=desc"
+  },
+  "recordedAt": "2026-11-13T13:03:57.402Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "header": {
+          "hash": "4F714D46D5FF9D219BE0776FB02DB4BAD11E003450D30093A4CC21A33AFBBCFE",
+          "height": 468967,
+          "timestamp": "2026-11-10T15:11:44.344Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 2570010,
+          "validator": "2632413E35C56B1B0E5181B3D266550B5A4CCB6A7E4B7212BC2C7D2BE3D37450",
+          "totalGasUsed": 0,
+          "appHash": "970E2E9ED92A2E71CF96CAFB446DA95FCA5E86CD5E9C826040D9BF4EE601533A",
+          "quorumHash": "0000000000000009D4409D0B92695B1881E9D6CC511127CAB915CA05FF21D17C"
+        },
+        "txs": []
+      }
+    ],
+    "pagination": { "page": 1, "limit": 1, "total": 1 }
+  }
+}

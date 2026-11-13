@@ -1,0 +1,48 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgFQIl0YZ/WZdYW/CHCAmWvwN9FYctxuUS35L5Pf73IMTgEAAQABFSmQcqs+Yj0mrj560+00qfu+k75VeNPWWC4fDlzbpAwDB3Byb2ZpbGWiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAADAQtkaXNwbGF5TmFtZRIKdGVjaGF3YW5rYQABQSA7dB/FyiyS6BBNBLc4x+vVMVLuy5JWjuOzOuj/4fAaLgPrC7+nQDhl4LvPx+LZ4heDNq0dQA6LF97pjACbSO0a"
+  },
+  "recordedAt": "2026-11-13T13:05:36.592Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([Replace])",
+      "typeNumber": 1,
+      "ownerId": "6Pp1RFqRnpStnY8vmp5k3ypE6rFBvzPwcoguwDXbRA7F",
+      "identityContractNonce": {
+        "$bigint": "3"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 1,
+      "signature": {
+        "$u8": "IDt0H8XKLJLoEE0EtzjH69UxUu7LklaO47M66P/h8BouA+sLv6dAOGXgu8/H4tniF4M2rR1ADosX3umMAJtI7Ro="
+      },
+      "hash": "35c08d574302d32d7160e603d8159042c8606be12fd97d952cf5fd40db57313c",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "6Pp1RFqRnpStnY8vmp5k3ypE6rFBvzPwcoguwDXbRA7F",
+        "transitions": [
+          {
+            "$transition": "document",
+            "$action": "replace",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "1",
+            "$id": "2RcKdonFKsrpoGkXZp6PxYprFYo9Xce2evwxpFaRBT8X",
+            "$identityContractNonce": 3,
+            "$type": "profile",
+            "$dataContractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "$tokenPaymentInfo": null,
+            "$revision": 3,
+            "displayName": "techawanka"
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 1,
+        "signature": "IDt0H8XKLJLoEE0EtzjH69UxUu7LklaO47M66P/h8BouA+sLv6dAOGXgu8/H4tniF4M2rR1ADosX3umMAJtI7Ro="
+      }
+    },
+    "proved": false,
+    "tookMs": 0.11008700000002136
+  }
+}
