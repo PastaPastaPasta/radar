@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: zh\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "落后链顶 {behind} 个区块"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "用于地址、已花费输出、链工作量和治理的第二个索引"
+
+msgid "Asking Platform for its latest block…"
+msgstr "正在向 Platform 询问最新区块…"
+
+msgid "Best ChainLock"
+msgstr "最新 ChainLock"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "正在追赶，{0}"
+
+msgid "ChainLock block hash, reported by one node"
+msgstr "ChainLock 区块哈希(由一个节点报告)"
+
+msgid "ChainLock reported by one node"
+msgstr "由一个节点报告的 ChainLock"
+
+msgid "ChainLocked block hash"
+msgstr "ChainLocked 区块哈希"
+
+msgid "Checking the sources…"
+msgstr "正在检查数据源…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Core 地址、内存池、治理和区块列表"
+
+msgid "Core tip"
+msgstr "Core 链顶"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Core 链顶、区块和交易，直接来自 evonode"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI 和 Platform SDK 正在响应。托管数据源在“仅去中心化”模式下已关闭。"
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI 繁忙，在配额恢复之前，区块列表改由 Hyphen 提供。详情仍使用 DAPI。"
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI 没有响应，因此区块和交易详情改由 Hyphen 提供，并会明确标注。"
+
+msgid "DAPI request budget"
+msgstr "DAPI 请求配额"
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "“仅去中心化”模式不会连接此数据源。"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "Every source is answering."
+msgstr "所有数据源均正常响应。"
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Core 中显示的所有内容均来自 DAPI。"
+
+msgid "Figures computed on your device"
+msgstr "在你的设备上计算的数据"
+
+msgid "Getting tight"
+msgstr "余量吃紧"
+
+msgid "Headers and blocks"
+msgstr "区块头和区块"
+
+msgid "Headroom"
+msgstr "余量"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "各数据源的响应情况以及数据落后的程度。"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "已索引至 Core 区块 {indexed}（链上为 {chain}）。它称同步状态为“{sync}”，但索引落后于区块链。"
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "已索引至 Core 区块 {indexed}（链上共 {chain}）。同步：{sync}。"
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "已索引至 Platform 区块 {indexed}（链上共 {chain}）。索引器：{state}。"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "It answered with an error."
+msgstr "它返回了错误。"
+
+msgid "It hasn’t answered yet."
+msgstr "它尚未响应。"
+
+msgid "It is rate limiting this browser."
+msgstr "它正在限制此浏览器的请求频率。"
+
+msgid "It sent an answer Radar can’t read."
+msgstr "它发送了 Radar 无法读取的响应。"
+
+msgid "It took too long to answer."
+msgstr "它响应超时。"
+
+msgid "Its data is behind."
+msgstr "它的数据已落后。"
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "其最新区块是 Core 区块 {tip}，落后于链。"
+
+msgid "Its tip is Core block {tip}."
+msgstr "其最新区块是 Core 区块 {tip}。"
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "上次抓取于 {0} 完成，其 Core 节点位于区块 {1}。"
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "上次正常为 {0}。"
+
+msgid "Median answer {rounded} ms"
+msgstr "响应时间中位数 {rounded} ms"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "网络内部信息：对等节点、内存池压力、版本和历史"
+
+msgid "No crawl has finished yet."
+msgstr "尚无已完成的抓取。"
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "此网络上尚未发出任何 DAPI 请求。"
+
+msgid "Node sync"
+msgstr "节点同步"
+
+msgid "Nodes resting"
+msgstr "空闲节点"
+
+msgid "Not available right now"
+msgstr "暂不可用"
+
+msgid "Not offered"
+msgstr "未提供"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "此网络上还没有人向它发出请求。"
+
+msgid "Off in this mode"
+msgstr "此模式下已关闭"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Platform 列表和计数"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Plenty of room"
+msgstr "余量充足"
+
+msgid "Pressure"
+msgstr "压力"
+
+msgid "Price feed"
+msgstr "价格数据"
+
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "已在 Platform 区块 {block}（第 {epoch} 个纪元）通过证明验证。该区块为 {age}。"
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "已通过证明验证的 Platform 状态，在此浏览器中验证"
+
+msgid "Radar crawler"
+msgstr "Radar 爬虫"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar 会让每个 evonode 的请求量远低于其速率上限，这样一位访客就不会挤占其他访客。"
+
+msgid "Requests in the last minute"
+msgstr "最近一分钟的请求"
+
+msgid "Some requests are failing."
+msgstr "部分请求失败。"
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "部分数据源响应缓慢或数据落后，其余仍正常工作。"
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "部分数据源没有响应，其余仍正常工作。"
+
+msgid "Sources"
+msgstr "数据源"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Synced"
+msgstr "已同步"
+
+msgid "The connection failed."
+msgstr "连接失败。"
+
+msgid "The masternode census and network history"
+msgstr "主节点普查与网络历史"
+
+msgid "The median answer takes {seconds} s."
+msgstr "响应时间中位数为 {seconds} 秒。"
+
+msgid "The request budget is nearly used."
+msgstr "请求配额即将用尽。"
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "经由 Platform Explorer 的美元汇率"
+
+msgid "This browser"
+msgstr "此浏览器"
+
+msgid "This network doesn’t have this source."
+msgstr "此网络没有该数据源。"
+
+msgid "Tip hash"
+msgstr "链顶哈希"
+
+msgid "Used up for now"
+msgstr "暂时用尽"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "evonode 当前报告的区块链状态。"

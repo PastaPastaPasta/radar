@@ -1,5 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
+import { z } from 'zod'
 import { throwRedirect } from '@/app/redirect'
+import { routePrefetch } from '@/app/route-loader'
+import { zDefault } from '@/app/search'
 import { PlatformHomePage } from '@/features/platform'
 
 const LEGACY_ANCHORS: Record<string, '/epochs' | '/protocol' | '/validators'> = {
@@ -10,10 +13,24 @@ const LEGACY_ANCHORS: Record<string, '/epochs' | '/protocol' | '/validators'> = 
   all: '/validators',
 }
 
+const defaults = { range: '24h', rich: 'balance' } as const
+
+const platformSearch = z.object({
+  range: zDefault(z.enum(['24h', '3d', '1w', '1m']), defaults.range),
+  rich: zDefault(z.enum(['balance', 'txs']), defaults.rich),
+})
+
 export const Route = createFileRoute('/platform/')({
+  validateSearch: platformSearch,
+  search: { middlewares: [stripSearchParams(defaults)] },
   beforeLoad: ({ location, search }) => {
     const to = LEGACY_ANCHORS[location.hash]
     if (to) throwRedirect({ to }, search)
   },
+  loaderDeps: ({ search }) => search,
+  loader: routePrefetch(
+    () => import('@/data/query/prefetch/p-home'),
+    (m) => m.platformHomePrefetch,
+  ),
   component: PlatformHomePage,
 })

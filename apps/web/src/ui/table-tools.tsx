@@ -1,7 +1,8 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import type { ReactNode } from 'react'
+import { useId, useState, type FocusEvent, type ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
+import { zIsoDate, zRange } from '@/lib/search-schemas'
 import { cx } from './cx'
 import { Icon } from './icon'
 
@@ -140,6 +141,212 @@ export function ActiveFilters({
         </button>
       ) : null}
       {children ? <span className="rx-activef__note rx-hide-sm">{children}</span> : null}
+    </div>
+  )
+}
+
+const FIELD_GROUP =
+  'inline-flex min-h-[var(--dh-ctl-h-sm)] flex-wrap items-center gap-x-2 gap-y-1 rounded-2 border px-2.5 py-1 text-[length:var(--dh-fs-sm)]'
+const FIELD_GROUP_OFF = 'border-line-2 bg-surface'
+const FIELD_GROUP_ON = 'border-select bg-select-soft shadow-[inset_0_0_0_1px_var(--dh-select)]'
+
+function leaveGroup(e: FocusEvent<HTMLElement>, commit: () => void) {
+  if (!e.currentTarget.contains(e.relatedTarget)) commit()
+}
+
+function ClearButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className="inline-flex size-6 items-center justify-center rounded-1 border-0 bg-transparent p-0 text-ink-2 hover:bg-hover"
+      aria-label={label}
+      onClick={onClick}
+    >
+      <Icon name="x" size="sm" />
+    </button>
+  )
+}
+
+function FieldError({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <span id={id} role="alert" className="basis-full text-bad">
+      {children}
+    </span>
+  )
+}
+
+function splitRange(value: string | undefined): [string, string] {
+  if (value === undefined || !zRange.safeParse(value).success) return ['', '']
+  const [lo = '', hi = ''] = value.split('..')
+  return [lo, hi]
+}
+
+export interface RangeFilterProps {
+  label: string
+  /** The `min..max` form of the `zRange` search field; either side may be empty. */
+  value?: string
+  onChange: (value: string | undefined) => void
+}
+
+/** Two number boxes for a `zRange` field. A change is sent on Enter or when focus leaves the pair. */
+export function RangeFilter({ label, value, onChange }: RangeFilterProps) {
+  const errorId = useId()
+  const [seen, setSeen] = useState(value)
+  const [[lo, hi], setDraft] = useState(() => splitRange(value))
+  const [error, setError] = useState<string>()
+  if (seen !== value) {
+    setSeen(value)
+    setDraft(splitRange(value))
+    setError(undefined)
+  }
+
+  const commit = () => {
+    const a = lo.trim()
+    const b = hi.trim()
+    if (!a && !b) {
+      setError(undefined)
+      if (value !== undefined) onChange(undefined)
+      return
+    }
+    const next = `${a}..${b}`
+    const parsed = zRange.safeParse(next)
+    if (!parsed.success) {
+      setError(t`Enter plain numbers, like 100 or 2.5.`)
+      return
+    }
+    const { min, max } = parsed.data
+    if (min !== undefined && max !== undefined && min > max) {
+      setError(t`The minimum is above the maximum.`)
+      return
+    }
+    setError(undefined)
+    if (next !== value) onChange(next)
+  }
+  const field = (side: 'min' | 'max', text: string) => (
+    <input
+      type="text"
+      inputMode="decimal"
+      autoComplete="off"
+      className="dh-input dh-input--sm"
+      style={{ width: 84 }}
+      value={side === 'min' ? lo : hi}
+      placeholder={side === 'min' ? t`Min` : t`Max`}
+      aria-label={text}
+      aria-invalid={error ? true : undefined}
+      aria-describedby={error ? errorId : undefined}
+      onChange={(e) => {
+        const v = e.target.value
+        setDraft(side === 'min' ? [v, hi] : [lo, v])
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') commit()
+      }}
+    />
+  )
+  const active = value !== undefined && zRange.safeParse(value).success
+  return (
+    <div
+      className={cx(FIELD_GROUP, active ? FIELD_GROUP_ON : FIELD_GROUP_OFF)}
+      role="group"
+      aria-label={label}
+      onBlur={(e) => {
+        leaveGroup(e, commit)
+      }}
+    >
+      <span className="font-[var(--dh-w-ui)]">{label}</span>
+      {field('min', t`${label} minimum`)}
+      <span aria-hidden="true">–</span>
+      {field('max', t`${label} maximum`)}
+      {active || lo || hi ? (
+        <ClearButton
+          label={t`Clear ${label}`}
+          onClick={() => {
+            setDraft(['', ''])
+            setError(undefined)
+            onChange(undefined)
+          }}
+        />
+      ) : null}
+      {error ? <FieldError id={errorId}>{error}</FieldError> : null}
+    </div>
+  )
+}
+
+export interface DateRangeValue {
+  from?: string
+  to?: string
+}
+
+export interface DateRangeFilterProps {
+  label: string
+  /** `zIsoDate` forms (`2026-10-31`), the two search fields `from` and `to`. */
+  from?: string
+  to?: string
+  onChange: (range: DateRangeValue) => void
+}
+
+const validDate = (v: string | undefined) => v !== undefined && zIsoDate.safeParse(v).success
+
+/** Two date boxes for a `from` and a `to` field; each change is sent as soon as the date is whole. */
+export function DateRangeFilter({ label, from, to, onChange }: DateRangeFilterProps) {
+  const errorId = useId()
+  const [seen, setSeen] = useState({ from, to })
+  const [draft, setDraft] = useState({ from: from ?? '', to: to ?? '' })
+  const [error, setError] = useState<string>()
+  if (seen.from !== from || seen.to !== to) {
+    setSeen({ from, to })
+    setDraft({ from: from ?? '', to: to ?? '' })
+    setError(undefined)
+  }
+
+  const change = (side: 'from' | 'to', raw: string) => {
+    setDraft((d) => ({ ...d, [side]: raw }))
+    const next = { from: draft.from, to: draft.to, [side]: raw }
+    if (raw !== '' && !validDate(raw)) return
+    if (next.from && next.to && next.from > next.to) {
+      setError(t`The start date is after the end date.`)
+      return
+    }
+    setError(undefined)
+    onChange({ ...(next.from ? { from: next.from } : {}), ...(next.to ? { to: next.to } : {}) })
+  }
+  const field = (side: 'from' | 'to', text: string) => (
+    <input
+      type="date"
+      className="dh-input dh-input--sm"
+      value={draft[side]}
+      min={side === 'to' && validDate(draft.from) ? draft.from : undefined}
+      max={side === 'from' && validDate(draft.to) ? draft.to : undefined}
+      aria-label={text}
+      aria-invalid={error ? true : undefined}
+      aria-describedby={error ? errorId : undefined}
+      onChange={(e) => {
+        change(side, e.target.value)
+      }}
+    />
+  )
+  const active = validDate(from) || validDate(to)
+  return (
+    <div
+      className={cx(FIELD_GROUP, active ? FIELD_GROUP_ON : FIELD_GROUP_OFF)}
+      role="group"
+      aria-label={label}
+    >
+      <span className="font-[var(--dh-w-ui)]">{label}</span>
+      {field('from', t`${label} from`)}
+      <span aria-hidden="true">–</span>
+      {field('to', t`${label} to`)}
+      {active || draft.from || draft.to ? (
+        <ClearButton
+          label={t`Clear ${label}`}
+          onClick={() => {
+            setDraft({ from: '', to: '' })
+            setError(undefined)
+            onChange({})
+          }}
+        />
+      ) : null}
+      {error ? <FieldError id={errorId}>{error}</FieldError> : null}
     </div>
   )
 }

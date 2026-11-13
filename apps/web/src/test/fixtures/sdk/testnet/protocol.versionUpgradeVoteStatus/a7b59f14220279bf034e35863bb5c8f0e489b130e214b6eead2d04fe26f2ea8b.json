@@ -1,0 +1,45 @@
+{
+  "method": "protocol.versionUpgradeVoteStatus",
+  "args": {
+    "count": 5
+  },
+  "recordedAt": "2026-11-13T07:59:53.015Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        ["05b687978344fa2433b2aa99d41f643e2d8581a789cdc23084889ceca5244ea8", 14],
+        ["143dcd6a6b7684fde01e88a10e5d65de9a29244c5ecd586d14a342657025f113", 14],
+        ["20107ec50e81880dca18178bb7e53e2d0449c0734106a607253b9af2ffea006c", 14],
+        ["2770d2493755b59b3426474b2a18eb5c34df636530ae8059aa1fe4b22ce47c3c", 14],
+        ["2fb3d30b3ef097122dc057e3132438e4b48883f4a5ec239977b3a3ae3e0f766f", 14]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 673764,
+      "coreChainLockedHeight": 1590793,
+      "epoch": 20334,
+      "timeMs": 1794556677181,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQD7ARgBk/cNhBWHa4NVjNQLQp2rhKs5HPM9m5UhbNr/DWMb26wC70ZYxkbCpiezNzlIpWsFmt4xLg15DTqgRuL2LNA8AsYQAS797Pcknmq5vVAZoX+c+gPY2OzylsvLSzXYV+f62oNZAs/aZ2Hw+hca4zTG18sMmo5jL5n9x0B4qXh+w5GzSZTbEAE+Gf6dccYKuKo8dZZPcnVcfZb9jxOdgUnLBQw4mkDlvQJrCy98vrvxvaXjZG3pI58vL15dTtllxtqhoh82rg3vEBAEAXgABQIBAQEAm8/L98xKN8Trd0tz312MsMielQcNbeSYr3eHSC5Ze6QBmIXm/7KZJ6Rf9jOSPcewEnM3v6/RCdJM3z9u1wH2ekYRERERAQF4AGsBW3jHFFdbJzZUjO57GUNZkaejzGLCO60Qfp84UslC8y8EAQEAJAIBIHoa4E3nWCJi2d6j9NcrwkpHTG9xmIBmt0pB8XvlVSZSALruKsNVRpyvaRbK+ApJbFxHOQS8mkGqke0+R893yK1iEAEBAQD7AVQDIAW2h5eDRPokM7KqmdQfZD4thYGnic3CMISInOylJE6oAAQAAQ4AAyAUPc1qa3aE/eAeiKEOXWXemikkTF7NWG0Uo0JlcCXxEwAEAAEOABADICAQfsUOgYgNyhgXi7flPi0EScBzQQamByU7mvL/6gBsAAQAAQ4AEQMgJ3DSSTdVtZs0JkdLKhjrXDTfY2UwroBZqh/ksizkfDwABAABDgAQAyAvs9MLPvCXEi3AV+MTJDjktIiD9KXsI5l3s6OuPg92bwAEAAEOABECwX9vAT1zxs4zRlkUgjW5syYmd4JmaahQnmLIyU9nvW4QAVQWlPS7+kr5qniVPTL+P5eBor7k9uoeIeV9eWyOgtpBEQJpUWd4xBgx9MDWePoOHK+bZaht2YqlSQ9RjWtJSN6kFhABqny8Gyk4c86zKJDXBuB8lM8Fi7pLjK6kQqyfRiFhZh8RAA=="
+      },
+      "quorumHash": {
+        "$u8": "AAAAkFgkWXFbNL1Yvf2u1kroXxzs3lHXMbKYsLqfSEQ="
+      },
+      "signature": {
+        "$u8": "taB5DewZzrF0TkGUxl7bVfdbafX3HtaKLYUNR3aSrpIkrrKGSXTXa6piEoWNrwzFFo0qRVqx34wwwrsIZjIJl3+w64WGz4t+I6j+L623pLkBwEC1hEEKCW0lWY01hzYM"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "gyW4/1Kw20BMoDCUCoT+RtzNJMAiuK7nSpQMjde/8hE="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 133.84245100000044
+  }
+}

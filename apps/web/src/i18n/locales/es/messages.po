@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-11 08:01+0000\n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,6 +38,9 @@ msgstr "(fuente caída)"
 #. placeholder {0}: backend.upstream
 msgid "(this site passes the request on to {0})"
 msgstr "(este sitio reenvía la solicitud a {0})"
+
+msgid "[circular]"
+msgstr "[circular]"
 
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
@@ -240,6 +243,9 @@ msgstr "{base} ({detail})"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} bloques por detrás de la punta"
 
+msgid "{blockCount} blocks so far"
+msgstr "{blockCount} bloques hasta ahora"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# confirmación} many {# de confirmaciones} other {# confirmaciones}}"
 
@@ -276,11 +282,32 @@ msgstr "{hours, plural, one {# hora} other {# horas}}"
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} no ha visto esta dirección en esta red."
 
+msgid "{label} from"
+msgstr "{label} desde"
+
+msgid "{label} maximum"
+msgstr "{label} máximo"
+
+msgid "{label} minimum"
+msgstr "{label} mínimo"
+
+msgid "{label} to"
+msgstr "{label} hasta"
+
 msgid "{m} min"
 msgstr "{m} min"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# minuto} other {# minutos}}"
+
+msgid "{n, plural, one {(# byte)} other {(# bytes)}}"
+msgstr "{n, plural, one {(# byte)} other {(# bytes)}}"
+
+msgid "{n, plural, one {# item} other {# items}}"
+msgstr "{n, plural, one {# elemento} other {# elementos}}"
+
+msgid "{n, plural, one {# key} other {# keys}}"
+msgstr "{n, plural, one {# clave} other {# claves}}"
 
 msgid "{n} h ago"
 msgstr "hace {n} h"
@@ -332,6 +359,9 @@ msgstr "{name} envió algo que Radar no pudo leer"
 
 msgid "{name} took too long to answer"
 msgstr "{name} tardó demasiado en responder"
+
+msgid "{percent} through"
+msgstr "{percent} completado"
 
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, one {# compromiso de quórum en este bloque} many {# de compromisos de quórum en este bloque} other {# compromisos de quórum en este bloque}}"
@@ -552,6 +582,9 @@ msgstr "Responde"
 
 msgid "Answers on its Core port"
 msgstr "Responde en su puerto de Core"
+
+msgid "Any moment now"
+msgstr "En cualquier momento"
 
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
@@ -797,6 +830,9 @@ msgstr "Suministro circulante"
 msgid "Clear"
 msgstr "Borrar"
 
+msgid "Clear {label}"
+msgstr "Borrar {label}"
+
 msgid "close"
 msgstr "cerrar"
 
@@ -817,6 +853,9 @@ msgstr "La etiqueta de coinbase dice"
 
 msgid "Coinbase transactions pay none"
 msgstr "Las transacciones coinbase no pagan ninguna"
+
+msgid "Collapse all"
+msgstr "Contraer todo"
 
 msgid "Collateral"
 msgstr "Colateral"
@@ -851,6 +890,12 @@ msgstr "Contrato"
 msgid "Contract create"
 msgstr "Creación de contrato"
 
+msgid "Contract fee claim"
+msgstr "Reclamación de comisiones de contrato"
+
+msgid "Contract moderation"
+msgstr "Moderación de contrato"
+
 msgid "Contract update"
 msgstr "Actualización de contrato"
 
@@ -873,11 +918,20 @@ msgstr "Copiar el valor completo"
 msgid "Copy ID"
 msgstr "Copiar ID"
 
+msgid "Copy JSON"
+msgstr "Copiar JSON"
+
+msgid "Copy link"
+msgstr "Copiar enlace"
+
 msgid "Copy link to this section"
 msgstr "Copiar el enlace a esta sección"
 
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
 
 msgid "Core 24 activation"
 msgstr "Activación de Core 24"
@@ -1072,6 +1126,12 @@ msgstr "decodificador"
 msgid "Decoder"
 msgstr "Decodificador"
 
+msgid "Decoders"
+msgstr "Decodificadores"
+
+msgid "Destroy frozen funds"
+msgstr "Destrucción de fondos congelados"
+
 msgid "Details"
 msgstr "Detalles"
 
@@ -1096,6 +1156,27 @@ msgstr "Documento"
 
 msgid "Document batch"
 msgstr "Lote de documentos"
+
+msgid "Document create"
+msgstr "Creación de documento"
+
+msgid "Document delete"
+msgstr "Eliminación de documento"
+
+msgid "Document index delete"
+msgstr "Eliminación de índice de documento"
+
+msgid "Document price"
+msgstr "Precio de documento"
+
+msgid "Document purchase"
+msgstr "Compra de documento"
+
+msgid "Document replace"
+msgstr "Reemplazo de documento"
+
+msgid "Document transfer"
+msgstr "Transferencia de documento"
 
 msgid "document type"
 msgstr "tipo de documento"
@@ -1143,14 +1224,38 @@ msgstr "Habilitado, sin penalización PoSe"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "Habilitado, penalización PoSe {0}"
 
+msgid "End time not known yet"
+msgstr "Hora de finalización aún no conocida"
+
 msgid "Ended"
 msgstr "Finalizó"
+
+msgid "Ended {ago}"
+msgstr "Finalizó {ago}"
+
+msgid "Ended <0>{ago}</0>"
+msgstr "Finalizó <0>{ago}</0>"
 
 msgid "Ends"
 msgstr "Termina"
 
+msgid "Ends in {left}"
+msgstr "Termina en {left}"
+
+msgid "Ends in <0>{left}</0>"
+msgstr "Termina en <0>{left}</0>"
+
+msgid "Ends in about {left}"
+msgstr "Termina en unos {left}"
+
+msgid "Ends in about <0>{left}</0>"
+msgstr "Termina en unos <0>{left}</0>"
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "Introduce al menos una dirección DAPI como host:puerto, una por línea."
+
+msgid "Enter plain numbers, like 100 or 2.5."
+msgstr "Introduce números simples, como 100 o 2.5."
 
 msgid "epoch"
 msgstr "época"
@@ -1163,6 +1268,12 @@ msgstr "Época"
 msgid "Epoch {0} · {1} blocks in"
 msgstr "Época {0} · {1} bloques transcurridos"
 
+msgid "Epoch {epoch}"
+msgstr "Época {epoch}"
+
+msgid "Epoch {epoch} progress"
+msgstr "Progreso de la época {epoch}"
+
 msgid "Epoch {id}"
 msgstr "Época {id}"
 
@@ -1174,6 +1285,9 @@ msgstr "Épocas"
 
 msgid "Esc"
 msgstr "Esc"
+
+msgid "Estimate"
+msgstr "Estimación"
 
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Cada backend con el que Radar puede contactar, quién lo opera y si se usa en {network}. Cada cifra de Radar indica de cuál procede."
@@ -1225,6 +1339,12 @@ msgstr "Evonodes de la lista de nodos, como https://address:port"
 
 msgid "Example"
 msgstr "Ejemplo"
+
+msgid "Expand all"
+msgstr "Expandir todo"
+
+msgid "Expected to end any moment now"
+msgstr "Se espera que termine en cualquier momento"
 
 msgid "Expires"
 msgstr "Caduca"
@@ -1305,6 +1425,9 @@ msgstr "Del feed en vivo de DAPI: las transacciones que esta página ha visto ll
 
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "Resultados completos para cualquier altura, hash, dirección, ProTx, IP, identidad, contrato, token, nombre o época, agrupados por tipo."
+
+msgid "function"
+msgstr "función"
 
 msgid "Funded"
 msgstr "Financiada"
@@ -1463,8 +1586,20 @@ msgstr "Identidad por hash de clave"
 msgid "Identity create"
 msgstr "Creación de identidad"
 
+msgid "Identity create from addresses"
+msgstr "Creación de identidad desde direcciones"
+
+msgid "Identity create from pool"
+msgstr "Creación de identidad desde el pool"
+
 msgid "Identity top-up"
 msgstr "Recarga de identidad"
+
+msgid "Identity top-up from addresses"
+msgstr "Recarga de identidad desde direcciones"
+
+msgid "Identity top-up from pool"
+msgstr "Recarga de identidad desde el pool"
 
 msgid "Identity update"
 msgstr "Actualización de identidad"
@@ -1597,6 +1732,9 @@ msgstr "Bloqueada por InstantSend"
 msgid "Invalid"
 msgstr "No válido"
 
+msgid "invalid date"
+msgstr "fecha no válida"
+
 msgid "It answered with an error."
 msgstr "Respondió con un error."
 
@@ -1624,8 +1762,14 @@ msgstr "Su punta es el bloque {tip} de Core, por detrás de la cadena."
 msgid "Its tip is Core block {tip}."
 msgstr "Su punta es el bloque {tip} de Core."
 
+msgid "JSON"
+msgstr "JSON"
+
 msgid "Jump to a date"
 msgstr "Ir a una fecha"
+
+msgid "Key limits update"
+msgstr "Actualización de límites de claves"
 
 msgid "Keyboard shortcuts"
 msgstr "Atajos de teclado"
@@ -1704,6 +1848,9 @@ msgstr "Enlace copiado"
 
 msgid "Link to one with"
 msgstr "Enlazar a uno con"
+
+msgid "List view"
+msgstr "Vista de lista"
 
 msgid "Live"
 msgstr "En vivo"
@@ -1824,6 +1971,9 @@ msgstr "Masternodes por estado"
 msgid "masternodes locked its inputs; final from here"
 msgstr "Los masternodes bloquearon sus entradas; definitivo desde aquí"
 
+msgid "Max"
+msgstr "Máx."
+
 msgid "Median answer {rounded} ms"
 msgstr "Respuesta mediana {rounded} ms"
 
@@ -1854,6 +2004,9 @@ msgstr "Mensaje"
 
 msgid "Metrics history"
 msgstr "Historial de métricas"
+
+msgid "Min"
+msgstr "Mín."
 
 msgid "Mined"
 msgstr "Minado"
@@ -2339,6 +2492,9 @@ msgstr "Salida que gasta esta entrada"
 
 msgid "Outputs"
 msgstr "Salidas"
+
+msgid "Overview"
+msgstr "Resumen"
 
 msgid "Owner"
 msgstr "Propietario"
@@ -2867,6 +3023,9 @@ msgstr "Quitar {devnet}"
 msgid "Remove filter {0}"
 msgstr "Quitar el filtro {0}"
 
+msgid "Removed from saved"
+msgstr "Quitado de guardados"
+
 msgid "reported by one node; no second source has confirmed it"
 msgstr "informado por un solo nodo; ninguna segunda fuente lo ha confirmado"
 
@@ -2916,6 +3075,12 @@ msgstr "El ancho de la cinta es el importe. El gris es el cambio devuelto al rem
 msgid "Rich list"
 msgstr "Lista de los más ricos"
 
+msgid "Rows per load"
+msgstr "Filas por carga"
+
+msgid "Rows per page"
+msgstr "Filas por página"
+
 msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 msgstr "Consultas SQL de solo lectura sobre los documentos de un contrato, con plantillas, consultas guardadas y enlaces para compartir."
 
@@ -2924,6 +3089,9 @@ msgstr "Usa una versión de protocolo actual"
 
 msgid "Same as the owner address"
 msgstr "Igual que la dirección del propietario"
+
+msgid "Save"
+msgstr "Guardar"
 
 msgid "Save changes"
 msgstr "Guardar cambios"
@@ -2939,6 +3107,9 @@ msgstr "Guardado en este navegador. Una devnet con un nombre que Radar no conoce
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Escanea o sube un código QR y abre lo que contiene: una dirección, un enlace de pago o un hash de clave."
+
+msgid "Scroll"
+msgstr "Desplazar"
 
 msgid "SDK reference"
 msgstr "Referencia del SDK"
@@ -3060,11 +3231,29 @@ msgstr "Actualización del registrador de un masternode compartido"
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "Las proporciones son del suministro circulante, <0/>, la cifra que muestra la página Gráficos."
 
+msgid "Shield"
+msgstr "Blindaje"
+
+msgid "Shield from asset lock"
+msgstr "Blindaje desde bloqueo de activos"
+
+msgid "Shield from identity"
+msgstr "Blindaje desde identidad"
+
 msgid "Shielded"
 msgstr "Blindado"
 
 msgid "Shielded pool"
 msgstr "Pool blindado"
+
+msgid "Shielded transfer"
+msgstr "Transferencia blindada"
+
+msgid "Shielded withdrawal"
+msgstr "Retiro blindado"
+
+msgid "Show {step} more of {hidden}"
+msgstr "Mostrar {step} más de {hidden}"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -3188,6 +3377,9 @@ msgstr "Gastos"
 
 msgid "Spent"
 msgstr "Gastado"
+
+msgid "Started {startedText}"
+msgstr "Comenzó {startedText}"
 
 msgid "State"
 msgstr "Estado"
@@ -3318,6 +3510,9 @@ msgstr "La época actual de Platform, quién propone a continuación y lo que ga
 msgid "The Dash network, now"
 msgstr "La red Dash, ahora"
 
+msgid "The end time is an estimate."
+msgstr "La hora de finalización es una estimación."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "El mempool completo y sus totales necesitan ese índice, así que esta página muestra lo que el feed en vivo de DAPI ha entregado desde que la abriste."
 
@@ -3355,6 +3550,9 @@ msgstr "El censo de masternodes y el historial de la red"
 
 msgid "The median answer takes {seconds} s."
 msgstr "La respuesta mediana tarda {seconds} s."
+
+msgid "The minimum is above the maximum."
+msgstr "El mínimo es mayor que el máximo."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Las {shown} más recientes de {total} vistas desde que abriste esta página"
@@ -3441,6 +3639,9 @@ msgstr "La fuente no devolvió bloques para las alturas {0} a {1}. Prueba la pá
 
 msgid "The source sent something Radar couldn't read"
 msgstr "La fuente envió algo que Radar no pudo leer"
+
+msgid "The start date is after the end date."
+msgstr "La fecha de inicio es posterior a la de fin."
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -3586,8 +3787,62 @@ msgstr "token"
 msgid "Token"
 msgstr "Token"
 
+msgid "Token burn"
+msgstr "Quema de tokens"
+
+msgid "Token burn from pool"
+msgstr "Quema de tokens desde el pool"
+
+msgid "Token claim"
+msgstr "Reclamación de tokens"
+
+msgid "Token claim to pool"
+msgstr "Reclamación de tokens hacia el pool"
+
+msgid "Token config update"
+msgstr "Actualización de configuración del token"
+
+msgid "Token emergency action"
+msgstr "Acción de emergencia del token"
+
+msgid "Token freeze"
+msgstr "Congelación de tokens"
+
 msgid "Token holders"
 msgstr "Titulares del token"
+
+msgid "Token mint"
+msgstr "Acuñación de tokens"
+
+msgid "Token mint to pool"
+msgstr "Acuñación de tokens hacia el pool"
+
+msgid "Token price"
+msgstr "Precio del token"
+
+msgid "Token purchase"
+msgstr "Compra de tokens"
+
+msgid "Token purchase from pool"
+msgstr "Compra de tokens desde el pool"
+
+msgid "Token purchase to pool"
+msgstr "Compra de tokens hacia el pool"
+
+msgid "Token shield"
+msgstr "Blindaje de tokens"
+
+msgid "Token shielded transfer"
+msgstr "Transferencia blindada de tokens"
+
+msgid "Token transfer"
+msgstr "Transferencia de tokens"
+
+msgid "Token unfreeze"
+msgstr "Descongelación de tokens"
+
+msgid "Token unshield"
+msgstr "Desblindaje de tokens"
 
 msgid "Tokens"
 msgstr "Tokens"
@@ -3668,11 +3923,17 @@ msgstr "Transacciones en espera"
 msgid "Transactions, all time"
 msgstr "Transacciones, histórico total"
 
+msgid "Transfer to address"
+msgstr "Transferencia a dirección"
+
 msgid "Transition"
 msgstr "Transición"
 
 msgid "Transition decoder"
 msgstr "Decodificador de transiciones"
+
+msgid "Transitions"
+msgstr "Transiciones"
 
 msgid "Trend"
 msgstr "Tendencia"
@@ -3727,6 +3988,9 @@ msgstr "Motivo desconocido {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Desconocido: el índice va retrasado"
+
+msgid "Unshield"
+msgstr "Desblindaje"
 
 msgid "Unspendable"
 msgstr "No gastable"

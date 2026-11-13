@@ -5,10 +5,17 @@ import {
   zBool01,
   zCsv,
   zCsvEnum,
+  decodeWhere,
+  encodeWhere,
+  zHex40,
+  zHex64,
+  zInt,
   zIsoDate,
   zLimit,
+  zWhere,
   zPage,
   zRange,
+  type WhereClause,
 } from './search'
 
 describe('parseSearch and stringifySearch', () => {
@@ -83,5 +90,55 @@ describe('search schema helpers', () => {
     expect(zLimit.safeParse('30').success).toBe(false)
     expect(zBool01.parse('1')).toBe(true)
     expect(zBool01.safeParse('0').success).toBe(false)
+  })
+})
+
+describe('F0 search helpers', () => {
+  it('accepts 75 as a page length', () => {
+    expect(zLimit.parse('75')).toBe(75)
+    expect(zLimit.safeParse('30').success).toBe(false)
+  })
+
+  it('reads non-negative integers only', () => {
+    expect(zInt.parse('0')).toBe(0)
+    expect(zInt.parse('2569992')).toBe(2569992)
+    for (const bad of ['-1', '1.5', 'x', '']) expect(zInt.safeParse(bad).success, bad).toBe(false)
+  })
+
+  it('reads fixed-length hex and lower-cases it', () => {
+    expect(zHex64.parse('AB'.repeat(32))).toBe('ab'.repeat(32))
+    expect(zHex40.parse('ab'.repeat(20))).toBe('ab'.repeat(20))
+    expect(zHex64.safeParse('ab'.repeat(20)).success).toBe(false)
+    expect(zHex40.safeParse('zz'.repeat(20)).success).toBe(false)
+  })
+
+  const clauses: WhereClause[] = [
+    { field: 'normalizedLabel', op: 'sw', value: 'ali ce' },
+    { field: '$ownerId', op: 'in', value: ['a,b', 'c|d', 'e~f'] },
+    { field: 'age', op: 'gte', value: '18' },
+  ]
+
+  it('round-trips documents filters, however awkward the values', () => {
+    const text = encodeWhere(clauses)
+    expect(text.split(',')).toHaveLength(3)
+    expect(decodeWhere(text)).toEqual(clauses)
+    expect(zWhere.parse(text)).toEqual(clauses)
+    expect(zWhere.parse(zWhere.parse(text))).toEqual(clauses)
+  })
+
+  it('drops malformed clauses and keeps the rest', () => {
+    expect(decodeWhere('')).toEqual([])
+    expect(decodeWhere('a~eq~1,b~nope~2,c~eq,~eq~3,d~eq~%E0,e~eq~1~2,f~lt~9')).toEqual([
+      { field: 'a', op: 'eq', value: '1' },
+      { field: 'f', op: 'lt', value: '9' },
+    ])
+  })
+
+  it('writes the filter into the URL through stringifySearch', () => {
+    const search = stringifySearch({ where: [{ field: 'a', op: 'eq', value: 'x' }] })
+    expect(search).toBe('?where=a~eq~x')
+    expect(decodeWhere(parseSearch(search).where ?? '')).toEqual([
+      { field: 'a', op: 'eq', value: 'x' },
+    ])
   })
 })

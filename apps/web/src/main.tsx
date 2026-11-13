@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from './app'
 import { loadDevnets } from './app/devnets'
 import { enableLiveTip } from './app/live-tip'
+import { registerServiceWorker } from './app/sw-register'
 import { setSdkDevnets } from './data/sdk/devnets'
 import { i18nReady } from './i18n'
 import './styles.css'
@@ -28,6 +29,9 @@ async function start(container: HTMLElement) {
       <App />
     </StrictMode>,
   )
+  requestAnimationFrame(() => {
+    window.setTimeout(registerServiceWorker, 0)
+  })
 }
 
 void start(root)

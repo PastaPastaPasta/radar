@@ -1,5 +1,6 @@
-export type DataClass =
-  'immutable' | 'structural' | 'live' | 'tip' | 'crawl' | 'index' | 'latest' | 'rate'
+import type { DataClass } from '@/lib/data-class'
+
+export type { DataClass }
 
 /** Narrower than the committed `Pick<QueryObserverOptions, …>`, so it spreads into any `queryOptions` call. */
 export interface ClassOptions {

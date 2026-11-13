@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
+import { GlobalMounts } from '@/app/global-mounts'
 import { NetworkGate } from '@/app/network-context'
 import { useLiveTip } from '@/app/live-tip'
 import { UnitsMount } from '@/app/units-mount'
@@ -60,6 +61,7 @@ export function AppShell() {
             </main>
             <ShellFooter />
             <CommandPalette />
+            <GlobalMounts />
           </ShortcutsProvider>
         </CommandPaletteProvider>
       </UnitsMount>

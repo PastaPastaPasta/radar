@@ -4,6 +4,7 @@ import type { WireError, WireResult } from '@/data/sdk/methods'
 import { createProofStore } from '@/data/sdk/proof-store'
 import { platformTipOf, platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { SourceError } from '@/data/errors'
+import { queryLog } from '@/data/query-log'
 import { takeFixtureMisses } from '../../msw/handlers'
 import { FixtureSdkTransport } from '../../msw/sdk-transport'
 
@@ -48,6 +49,19 @@ describe('SdkClient over the recorded fixtures', () => {
       'sdk',
       expect.objectContaining({ ok: true }),
     )
+  })
+
+  it('logs each call, with whether its answer was proof-checked', async () => {
+    queryLog.clear()
+    const { client } = setup(new FixtureSdkTransport())
+    await client.call('testnet', 'identities.fetch', { id: ID })
+    expect(queryLog.snapshot().at(-1)).toMatchObject({
+      net: 'testnet',
+      source: 'sdk',
+      what: 'identities.fetch',
+      ok: true,
+      proved: true,
+    })
   })
 
   it('answers null with a proof for an identity that does not exist', async () => {
@@ -175,6 +189,11 @@ describe('SdkClient state', () => {
       'sdk',
       expect.objectContaining({ ok: false, kind: 'rate-limited' }),
     )
+    expect(queryLog.snapshot().at(-1)).toMatchObject({
+      what: 'epoch.current',
+      ok: false,
+      kind: 'rate-limited',
+    })
   })
 
   it('marks the network failed when it cannot connect, and tries again after 5 s', async () => {

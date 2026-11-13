@@ -3,6 +3,9 @@ export const ICON_PATHS = {
   alert: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.5h.01"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   block: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
+  bookmark: '<path d="M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1z"/>',
+  bookmarkOn:
+    '<path d="M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1z"/><path d="M9.2 10l2 2 3.6-3.8"/>',
   bridge:
     '<path d="M3 17.5h18M5.5 17.5v-6M18.5 17.5v-6M3 11.5c3.5-4.5 14.5-4.5 18 0M9.5 17.5v-5M14.5 17.5v-5"/>',
   chart: '<path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/>',

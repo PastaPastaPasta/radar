@@ -40,7 +40,22 @@ export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
 export { DataTable, NewRowsPill, Pager } from './data-table'
 export type { DataTableProps } from './data-table'
-export { TableTools, SegFilter, SearchField, FilterButton, ActiveFilters } from './table-tools'
+export {
+  TableTools,
+  SegFilter,
+  SearchField,
+  FilterButton,
+  ActiveFilters,
+  RangeFilter,
+  DateRangeFilter,
+} from './table-tools'
+export type { RangeFilterProps, DateRangeFilterProps, DateRangeValue } from './table-tools'
+export { JsonView } from './json-view'
+export type { JsonViewProps, JsonBytes } from './json-view'
+export { ListModeToggle, useListMode } from './list-mode'
+export type { ListMode, ListModeKind, ListModeState, ListModeToggleProps } from './list-mode'
+export { EpochClock } from './epoch-clock'
+export type { EpochClockProps } from './epoch-clock'
 export { LinkOut, LinkOutCard } from './link-out'
 export type { LinkOutProps, LinkOutCardProps } from './link-out'
 export { PaletteShell, PalettePreview } from './palette'
@@ -70,6 +85,7 @@ export type { ChartTokens } from './chart-theme'
 export { RADAR_MAP_STYLE } from './map-style'
 export type {
   AmountUnit,
+  BatchType,
   CoreTxType,
   EntityKind,
   Layer,

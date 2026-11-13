@@ -48,7 +48,34 @@ export const peKeys: KeyFactory<'pe'> = factory('pe')
 export const hyKeys: KeyFactory<'hyphen'> = factory('hyphen')
 export const insKeys: KeyFactory<'insight'> = factory('insight')
 export const dapiKeys: KeyFactory<'dapi'> = factory('dapi')
+/**
+ * The resource-name prefixes of `viewKeys` each M2-M6 package may use (§5.1), so two packages never write one cache
+ * entry. `mn-rows` is the shared masternode list join; no other package uses a name that starts with one of these.
+ */
+export const VIEW_KEY_PREFIXES = {
+  F0: ['mn-rows'],
+  'NET-A': ['census-'],
+  'NET-B': ['mn-list-'],
+  'NET-C': ['mn-page-'],
+  'NET-D': ['map-', 'changes-'],
+  'P-HOME': ['phome-'],
+  'P-CHAIN': ['chain-'],
+  'P-BLOCKS': ['pblock-', 'ptx-'],
+  'P-ID': ['identity-'],
+  'P-DATA': ['contract-', 'document-', 'group-'],
+  'P-TOKEN': ['token-', 'paddr-'],
+  'P-VOTE': ['vote-', 'name-'],
+  TOOLS: ['tools-'],
+  YOU: ['you-'],
+  'UNI-S': ['search-'],
+  'UNI-L': ['entity-'],
+} as const satisfies Record<string, readonly string[]>
+
 export const viewKeys: KeyFactory<'view'> = factory('view')
+
+/** The key of one identity's DPNS name: the per-key query of the `dpnsName` batcher, which `useIdentityName` reads without loading the batcher. */
+export const dpnsNameKey = (net: NetworkId, identityId: string) =>
+  queryKey(net, 'sdk', 'dpns-name', { identityId })
 export const rateKeys: KeyFactory<'rate'> = factory('rate')
 export const healthKeys: KeyFactory<'health'> = factory('health')
 

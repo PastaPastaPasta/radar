@@ -57,3 +57,5 @@ export function isNotFound(e: unknown): boolean {
     (name === 'Proof' && message.toLowerCase().includes('most likely does not exist'))
   )
 }
+
+export const messageOf = (e: unknown): string => text(e).message ?? ''

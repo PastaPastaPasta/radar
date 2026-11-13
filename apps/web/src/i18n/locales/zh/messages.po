@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-11 08:01+0000\n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,6 +38,9 @@ msgstr "（数据源已中断）"
 #. placeholder {0}: backend.upstream
 msgid "(this site passes the request on to {0})"
 msgstr "（本站会把请求转发给 {0}）"
+
+msgid "[circular]"
+msgstr "[循环]"
 
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
@@ -240,6 +243,9 @@ msgstr "{base}（{detail}）"
 msgid "{behind} blocks behind the tip"
 msgstr "落后链顶 {behind} 个区块"
 
+msgid "{blockCount} blocks so far"
+msgstr "目前已有 {blockCount} 个区块"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 次确认}}"
 
@@ -276,11 +282,32 @@ msgstr "{hours, plural, other {# 小时}}"
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} 尚未在此网络上见过该地址。"
 
+msgid "{label} from"
+msgstr "{label}从"
+
+msgid "{label} maximum"
+msgstr "{label}最大值"
+
+msgid "{label} minimum"
+msgstr "{label}最小值"
+
+msgid "{label} to"
+msgstr "{label}至"
+
 msgid "{m} min"
 msgstr "{m}分钟"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, other {# 分钟}}"
+
+msgid "{n, plural, one {(# byte)} other {(# bytes)}}"
+msgstr "{n, plural, other {(# 字节)}}"
+
+msgid "{n, plural, one {# item} other {# items}}"
+msgstr "{n, plural, other {# 项}}"
+
+msgid "{n, plural, one {# key} other {# keys}}"
+msgstr "{n, plural, other {# 个键}}"
 
 msgid "{n} h ago"
 msgstr "{n}小时前"
@@ -332,6 +359,9 @@ msgstr "{name} 返回了 Radar 无法读取的内容"
 
 msgid "{name} took too long to answer"
 msgstr "{name} 响应超时"
+
+msgid "{percent} through"
+msgstr "已过 {percent}"
 
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}"
@@ -552,6 +582,9 @@ msgstr "有应答"
 
 msgid "Answers on its Core port"
 msgstr "其 Core 端口有应答"
+
+msgid "Any moment now"
+msgstr "随时"
 
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
@@ -797,6 +830,9 @@ msgstr "流通量"
 msgid "Clear"
 msgstr "清除"
 
+msgid "Clear {label}"
+msgstr "清除{label}"
+
 msgid "close"
 msgstr "关闭"
 
@@ -817,6 +853,9 @@ msgstr "Coinbase 标签内容"
 
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase 交易不支付"
+
+msgid "Collapse all"
+msgstr "全部收起"
 
 msgid "Collateral"
 msgstr "抵押品"
@@ -851,6 +890,12 @@ msgstr "合约"
 msgid "Contract create"
 msgstr "创建合约"
 
+msgid "Contract fee claim"
+msgstr "领取合约手续费"
+
+msgid "Contract moderation"
+msgstr "合约审核"
+
 msgid "Contract update"
 msgstr "更新合约"
 
@@ -873,11 +918,20 @@ msgstr "复制完整值"
 msgid "Copy ID"
 msgstr "复制 ID"
 
+msgid "Copy JSON"
+msgstr "复制 JSON"
+
+msgid "Copy link"
+msgstr "复制链接"
+
 msgid "Copy link to this section"
 msgstr "复制此部分的链接"
 
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
 
 msgid "Core 24 activation"
 msgstr "Core 24 激活"
@@ -1072,6 +1126,12 @@ msgstr "解码器"
 msgid "Decoder"
 msgstr "解码器"
 
+msgid "Decoders"
+msgstr "解码器"
+
+msgid "Destroy frozen funds"
+msgstr "销毁冻结资金"
+
 msgid "Details"
 msgstr "详情"
 
@@ -1096,6 +1156,27 @@ msgstr "文档"
 
 msgid "Document batch"
 msgstr "文档批次"
+
+msgid "Document create"
+msgstr "创建文档"
+
+msgid "Document delete"
+msgstr "删除文档"
+
+msgid "Document index delete"
+msgstr "删除文档索引"
+
+msgid "Document price"
+msgstr "文档定价"
+
+msgid "Document purchase"
+msgstr "购买文档"
+
+msgid "Document replace"
+msgstr "替换文档"
+
+msgid "Document transfer"
+msgstr "转移文档"
 
 msgid "document type"
 msgstr "文档类型"
@@ -1143,14 +1224,38 @@ msgstr "已启用，无 PoSe 罚分"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "已启用，PoSe 罚分 {0}"
 
+msgid "End time not known yet"
+msgstr "结束时间尚未确定"
+
 msgid "Ended"
 msgstr "已结束"
+
+msgid "Ended {ago}"
+msgstr "{ago}结束"
+
+msgid "Ended <0>{ago}</0>"
+msgstr "<0>{ago}</0>结束"
 
 msgid "Ends"
 msgstr "结束时间"
 
+msgid "Ends in {left}"
+msgstr "{left}后结束"
+
+msgid "Ends in <0>{left}</0>"
+msgstr "<0>{left}</0>后结束"
+
+msgid "Ends in about {left}"
+msgstr "约{left}后结束"
+
+msgid "Ends in about <0>{left}</0>"
+msgstr "约<0>{left}</0>后结束"
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "请至少输入一个 host:port 格式的 DAPI 地址，每行一个。"
+
+msgid "Enter plain numbers, like 100 or 2.5."
+msgstr "请输入纯数字，例如 100 或 2.5。"
 
 msgid "epoch"
 msgstr "纪元"
@@ -1163,6 +1268,12 @@ msgstr "纪元"
 msgid "Epoch {0} · {1} blocks in"
 msgstr "纪元 {0} · 已过 {1} 个区块"
 
+msgid "Epoch {epoch}"
+msgstr "纪元 {epoch}"
+
+msgid "Epoch {epoch} progress"
+msgstr "纪元 {epoch} 进度"
+
 msgid "Epoch {id}"
 msgstr "纪元 {id}"
 
@@ -1174,6 +1285,9 @@ msgstr "纪元"
 
 msgid "Esc"
 msgstr "Esc"
+
+msgid "Estimate"
+msgstr "估算"
 
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Radar 可以连接的所有后端、运营方，以及它们在 {network} 上是否在使用。Radar 中的每个数字都会注明其来源。"
@@ -1225,6 +1339,12 @@ msgstr "节点列表中的 evonode，格式为 https://address:port"
 
 msgid "Example"
 msgstr "示例"
+
+msgid "Expand all"
+msgstr "全部展开"
+
+msgid "Expected to end any moment now"
+msgstr "预计随时结束"
 
 msgid "Expires"
 msgstr "到期"
@@ -1305,6 +1425,9 @@ msgstr "来自 DAPI 实时数据流：本页面已看到到达的交易，减去
 
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "任意高度、哈希、地址、ProTx、IP、身份、合约、代币、名称或纪元的完整结果，按类型分组。"
+
+msgid "function"
+msgstr "函数"
 
 msgid "Funded"
 msgstr "已获资助"
@@ -1463,8 +1586,20 @@ msgstr "按密钥哈希查找身份"
 msgid "Identity create"
 msgstr "创建身份"
 
+msgid "Identity create from addresses"
+msgstr "从地址创建身份"
+
+msgid "Identity create from pool"
+msgstr "从隐私池创建身份"
+
 msgid "Identity top-up"
 msgstr "身份充值"
+
+msgid "Identity top-up from addresses"
+msgstr "从地址为身份充值"
+
+msgid "Identity top-up from pool"
+msgstr "从隐私池为身份充值"
 
 msgid "Identity update"
 msgstr "更新身份"
@@ -1597,6 +1732,9 @@ msgstr "已被 InstantSend 锁定"
 msgid "Invalid"
 msgstr "无效"
 
+msgid "invalid date"
+msgstr "日期无效"
+
 msgid "It answered with an error."
 msgstr "它返回了错误。"
 
@@ -1624,8 +1762,14 @@ msgstr "其最新区块是 Core 区块 {tip}，落后于链。"
 msgid "Its tip is Core block {tip}."
 msgstr "其最新区块是 Core 区块 {tip}。"
 
+msgid "JSON"
+msgstr "JSON"
+
 msgid "Jump to a date"
 msgstr "跳转到日期"
+
+msgid "Key limits update"
+msgstr "密钥上限更新"
 
 msgid "Keyboard shortcuts"
 msgstr "键盘快捷键"
@@ -1704,6 +1848,9 @@ msgstr "链接已复制"
 
 msgid "Link to one with"
 msgstr "链接到其中之一："
+
+msgid "List view"
+msgstr "列表视图"
 
 msgid "Live"
 msgstr "实时"
@@ -1824,6 +1971,9 @@ msgstr "按状态划分的主节点"
 msgid "masternodes locked its inputs; final from here"
 msgstr "主节点已锁定其输入；从此处起即为最终状态"
 
+msgid "Max"
+msgstr "最大"
+
 msgid "Median answer {rounded} ms"
 msgstr "响应时间中位数 {rounded} ms"
 
@@ -1854,6 +2004,9 @@ msgstr "消息"
 
 msgid "Metrics history"
 msgstr "指标历史"
+
+msgid "Min"
+msgstr "最小"
 
 msgid "Mined"
 msgstr "已挖出"
@@ -2339,6 +2492,9 @@ msgstr "此输入所花费的输出"
 
 msgid "Outputs"
 msgstr "输出"
+
+msgid "Overview"
+msgstr "概览"
 
 msgid "Owner"
 msgstr "所有者"
@@ -2867,6 +3023,9 @@ msgstr "移除 {devnet}"
 msgid "Remove filter {0}"
 msgstr "移除筛选条件 {0}"
 
+msgid "Removed from saved"
+msgstr "已从已保存中移除"
+
 msgid "reported by one node; no second source has confirmed it"
 msgstr "由一个节点报告；尚无第二个来源确认"
 
@@ -2916,6 +3075,12 @@ msgstr "色带宽度代表金额。灰色是找零给发送方，橙色是手续
 msgid "Rich list"
 msgstr "富豪榜"
 
+msgid "Rows per load"
+msgstr "每次加载行数"
+
+msgid "Rows per page"
+msgstr "每页行数"
+
 msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 msgstr "对合约文档运行只读 SQL，支持预设、已保存的查询和可分享的链接。"
 
@@ -2924,6 +3089,9 @@ msgstr "运行最新协议版本"
 
 msgid "Same as the owner address"
 msgstr "与所有者地址相同"
+
+msgid "Save"
+msgstr "保存"
 
 msgid "Save changes"
 msgstr "保存更改"
@@ -2939,6 +3107,9 @@ msgstr "保存在此浏览器中。如果开发网的名称 Radar 不认识，�
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "扫描或上传二维码，并打开其中的内容：地址、付款链接或密钥哈希。"
+
+msgid "Scroll"
+msgstr "滚动"
 
 msgid "SDK reference"
 msgstr "SDK 参考"
@@ -3060,11 +3231,29 @@ msgstr "共享主节点注册方更新"
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "占比以流通量 <0/> 为基数，与图表页面显示的数字一致。"
 
+msgid "Shield"
+msgstr "转入隐私池"
+
+msgid "Shield from asset lock"
+msgstr "从资产锁定转入隐私池"
+
+msgid "Shield from identity"
+msgstr "从身份转入隐私池"
+
 msgid "Shielded"
 msgstr "隐私保护"
 
 msgid "Shielded pool"
 msgstr "隐私池"
+
+msgid "Shielded transfer"
+msgstr "隐私转账"
+
+msgid "Shielded withdrawal"
+msgstr "隐私提现"
+
+msgid "Show {step} more of {hidden}"
+msgstr "再显示 {step} 项，共 {hidden} 项"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -3188,6 +3377,9 @@ msgstr "花费"
 
 msgid "Spent"
 msgstr "已花费"
+
+msgid "Started {startedText}"
+msgstr "{startedText}开始"
 
 msgid "State"
 msgstr "状态"
@@ -3318,6 +3510,9 @@ msgstr "当前的 Platform 纪元、下一个提议者，以及 Evonode 在过�
 msgid "The Dash network, now"
 msgstr "Dash 网络现状"
 
+msgid "The end time is an estimate."
+msgstr "结束时间为估算值。"
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "完整的内存池及其总计需要该索引，因此本页显示的是你打开页面后 DAPI 实时数据流送来的内容。"
 
@@ -3355,6 +3550,9 @@ msgstr "主节点普查与网络历史"
 
 msgid "The median answer takes {seconds} s."
 msgstr "响应时间中位数为 {seconds} 秒。"
+
+msgid "The minimum is above the maximum."
+msgstr "最小值大于最大值。"
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "自你打开此页面以来看到的 {total} 笔中最新的 {shown} 笔"
@@ -3441,6 +3639,9 @@ msgstr "数据源没有返回高度 {0} 到 {1} 的区块。请尝试相邻的�
 
 msgid "The source sent something Radar couldn't read"
 msgstr "数据源返回了 Radar 无法读取的内容"
+
+msgid "The start date is after the end date."
+msgstr "开始日期晚于结束日期。"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -3586,8 +3787,62 @@ msgstr "代币"
 msgid "Token"
 msgstr "代币"
 
+msgid "Token burn"
+msgstr "销毁代币"
+
+msgid "Token burn from pool"
+msgstr "从隐私池销毁代币"
+
+msgid "Token claim"
+msgstr "领取代币"
+
+msgid "Token claim to pool"
+msgstr "领取代币到隐私池"
+
+msgid "Token config update"
+msgstr "更新代币配置"
+
+msgid "Token emergency action"
+msgstr "代币紧急操作"
+
+msgid "Token freeze"
+msgstr "冻结代币"
+
 msgid "Token holders"
 msgstr "代币持有者"
+
+msgid "Token mint"
+msgstr "铸造代币"
+
+msgid "Token mint to pool"
+msgstr "铸造代币到隐私池"
+
+msgid "Token price"
+msgstr "代币价格"
+
+msgid "Token purchase"
+msgstr "购买代币"
+
+msgid "Token purchase from pool"
+msgstr "从隐私池购买代币"
+
+msgid "Token purchase to pool"
+msgstr "购买代币到隐私池"
+
+msgid "Token shield"
+msgstr "代币转入隐私池"
+
+msgid "Token shielded transfer"
+msgstr "代币隐私转账"
+
+msgid "Token transfer"
+msgstr "代币转账"
+
+msgid "Token unfreeze"
+msgstr "解冻代币"
+
+msgid "Token unshield"
+msgstr "代币转出隐私池"
 
 msgid "Tokens"
 msgstr "代币"
@@ -3668,11 +3923,17 @@ msgstr "等待中的交易"
 msgid "Transactions, all time"
 msgstr "交易总数（历史累计）"
 
+msgid "Transfer to address"
+msgstr "转账到地址"
+
 msgid "Transition"
 msgstr "状态转换"
 
 msgid "Transition decoder"
 msgstr "状态转换解码器"
+
+msgid "Transitions"
+msgstr "状态转换"
 
 msgid "Trend"
 msgstr "趋势"
@@ -3727,6 +3988,9 @@ msgstr "未知原因 {reason}"
 
 msgid "Unknown: index behind"
 msgstr "未知：索引落后"
+
+msgid "Unshield"
+msgstr "转出隐私池"
 
 msgid "Unspendable"
 msgstr "不可花费"

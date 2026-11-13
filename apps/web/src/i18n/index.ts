@@ -10,10 +10,10 @@ export type { LocaleCode } from './locales'
 
 const LOCALE_KEY = 'radar.locale'
 
-const loaders = import.meta.glob<{ messages: Messages }>('./locales/*/messages.po')
+const loaders = import.meta.glob<{ messages: Messages }>('./locales/*/index.ts')
 
 /** The locales whose catalogs are built into this version of Radar. */
-export const AVAILABLE_LOCALES = LOCALES.filter((l) => `./locales/${l.code}/messages.po` in loaders)
+export const AVAILABLE_LOCALES = LOCALES.filter((l) => `./locales/${l.code}/index.ts` in loaders)
 
 function storedLocale(): LocaleCode | undefined {
   try {
@@ -33,7 +33,7 @@ export function detectLocale(): LocaleCode {
 }
 
 async function load(code: LocaleCode): Promise<void> {
-  const loader = loaders[`./locales/${code}/messages.po`]
+  const loader = loaders[`./locales/${code}/index.ts`]
   if (!loader) throw new Error(`No catalog for locale ${code}`)
   i18n.load(code, (await loader()).messages)
 }

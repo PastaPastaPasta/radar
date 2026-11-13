@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { CoreTxType, TransitionType } from '@/lib/tx-types'
+import type { BatchType, CoreTxType, TransitionType } from '@/lib/tx-types'
 import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
 import { labelOf, typeMeta } from './kinds'
@@ -33,7 +33,7 @@ export function Badge({ tone = 'neutral', icon, children, size = 'md' }: BadgePr
 }
 
 export interface TypeBadgeProps {
-  type: CoreTxType | TransitionType
+  type: CoreTxType | TransitionType | BatchType
 }
 
 export function TypeBadge({ type }: TypeBadgeProps) {

@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { dapiKeys, hyKeys, netKey, peKeys, queryKey, radarKeys, sdkKeys, viewKeys } from './keys'
+import {
+  VIEW_KEY_PREFIXES,
+  dapiKeys,
+  hyKeys,
+  netKey,
+  peKeys,
+  queryKey,
+  radarKeys,
+  sdkKeys,
+  viewKeys,
+} from './keys'
 
 describe('query keys', () => {
   it('put net first, then source, resource, params', () => {
@@ -53,5 +63,26 @@ describe('query keys', () => {
     const k2 = sdkKeys('mainnet', 'identities.balances', { ids })
     expect(k2).toEqual(['mainnet', 'sdk', 'identities.balances', { ids: '["b","a"]' }])
     expect(sdkKeys('mainnet', 'system.status', {})).toEqual(['mainnet', 'sdk', 'system.status'])
+  })
+})
+
+describe('view key prefixes', () => {
+  const all = Object.entries(VIEW_KEY_PREFIXES).flatMap(([pkg, prefixes]) =>
+    prefixes.map((prefix) => ({ pkg, prefix })),
+  )
+
+  it('never lets one prefix start with another', () => {
+    const clashes = all.flatMap((a) =>
+      all
+        .filter((b) => a !== b && a.prefix.startsWith(b.prefix))
+        .map((b) => `${a.pkg} ${a.prefix} / ${b.pkg} ${b.prefix}`),
+    )
+    expect(clashes).toEqual([])
+  })
+
+  it('leaves the names M1 already uses alone', () => {
+    for (const name of ['block-rows', 'latest-blocks', 'tx-prevouts']) {
+      expect(all.filter(({ prefix }) => name.startsWith(prefix))).toEqual([])
+    }
   })
 })

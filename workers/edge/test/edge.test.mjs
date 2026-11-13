@@ -114,6 +114,17 @@ describe('static assets and SPA fallback', () => {
     assert.match(await res.text(), /console\.log/)
   })
 
+  it('serves the service worker as JavaScript that is always rechecked', async () => {
+    for (const method of ['GET', 'HEAD']) {
+      const res = await get('/sw.js', { method })
+      assert.equal(res.status, 200, method)
+      assert.match(res.headers.get('content-type'), /^text\/javascript/, method)
+      assert.equal(res.headers.get('cache-control'), 'no-cache', method)
+      assert.ok(res.headers.get('content-security-policy'), method)
+    }
+    assert.match(await (await get('/sw.js')).text(), /skipWaiting/)
+  })
+
   it('falls back to index.html for app routes', async () => {
     for (const p of ['/masternodes', '/mn/abc', '/platform/block/12', '/some/deep/route?x=1']) {
       reset()

@@ -10,6 +10,7 @@ describe('check-bundle', () => {
     const clean = mkdtempSync(path.join(tmpdir(), 'bundle-'))
     mkdirSync(path.join(clean, 'assets'))
     writeFileSync(path.join(clean, 'assets', 'index.js'), 'console.log("app")')
+    writeFileSync(path.join(clean, 'sw.js'), 'self.addEventListener("install",()=>{})')
     assert.deepEqual(findDevOnlyCode(clean), [])
 
     const dirty = mkdtempSync(path.join(tmpdir(), 'bundle-'))

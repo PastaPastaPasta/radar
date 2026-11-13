@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-11 08:01+0000\n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,6 +38,9 @@ msgstr "(источник недоступен)"
 #. placeholder {0}: backend.upstream
 msgid "(this site passes the request on to {0})"
 msgstr "(этот сайт передаёт запрос в {0})"
+
+msgid "[circular]"
+msgstr "[циклическая ссылка]"
 
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
@@ -240,6 +243,9 @@ msgstr "{base} ({detail})"
 msgid "{behind} blocks behind the tip"
 msgstr "Отставание от вершины: {behind} блоков"
 
+msgid "{blockCount} blocks so far"
+msgstr "Пока блоков: {blockCount}"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
 
@@ -276,11 +282,32 @@ msgstr "{hours, plural, one {# час} few {# часа} many {# часов} othe
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} не видел этот адрес в этой сети."
 
+msgid "{label} from"
+msgstr "{label}: от"
+
+msgid "{label} maximum"
+msgstr "{label}: максимум"
+
+msgid "{label} minimum"
+msgstr "{label}: минимум"
+
+msgid "{label} to"
+msgstr "{label}: до"
+
 msgid "{m} min"
 msgstr "{m} мин"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# минута} few {# минуты} many {# минут} other {# минуты}}"
+
+msgid "{n, plural, one {(# byte)} other {(# bytes)}}"
+msgstr "{n, plural, one {(# байт)} few {(# байта)} many {(# байт)} other {(# байта)}}"
+
+msgid "{n, plural, one {# item} other {# items}}"
+msgstr "{n, plural, one {# элемент} few {# элемента} many {# элементов} other {# элемента}}"
+
+msgid "{n, plural, one {# key} other {# keys}}"
+msgstr "{n, plural, one {# ключ} few {# ключа} many {# ключей} other {# ключа}}"
 
 msgid "{n} h ago"
 msgstr "{n} ч назад"
@@ -332,6 +359,9 @@ msgstr "{name} прислал данные, которые Radar не смог �
 
 msgid "{name} took too long to answer"
 msgstr "{name} слишком долго не отвечал"
+
+msgid "{percent} through"
+msgstr "Пройдено {percent}"
 
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, one {# коммитмент кворума в этом блоке} few {# коммитмента кворума в этом блоке} many {# коммитментов кворума в этом блоке} other {# коммитмента кворума в этом блоке}}"
@@ -552,6 +582,9 @@ msgstr "Отвечает"
 
 msgid "Answers on its Core port"
 msgstr "Отвечает на порту Core"
+
+msgid "Any moment now"
+msgstr "С минуты на минуту"
 
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
@@ -797,6 +830,9 @@ msgstr "Объём в обращении"
 msgid "Clear"
 msgstr "Очистить"
 
+msgid "Clear {label}"
+msgstr "Очистить: {label}"
+
 msgid "close"
 msgstr "закрыть"
 
@@ -817,6 +853,9 @@ msgstr "Тег coinbase гласит"
 
 msgid "Coinbase transactions pay none"
 msgstr "Транзакции coinbase их не платят"
+
+msgid "Collapse all"
+msgstr "Свернуть все"
 
 msgid "Collateral"
 msgstr "Залог"
@@ -851,6 +890,12 @@ msgstr "Контракт"
 msgid "Contract create"
 msgstr "Создание контракта"
 
+msgid "Contract fee claim"
+msgstr "Получение комиссий контракта"
+
+msgid "Contract moderation"
+msgstr "Модерация контракта"
+
 msgid "Contract update"
 msgstr "Обновление контракта"
 
@@ -873,11 +918,20 @@ msgstr "Копировать полное значение"
 msgid "Copy ID"
 msgstr "Копировать ID"
 
+msgid "Copy JSON"
+msgstr "Копировать JSON"
+
+msgid "Copy link"
+msgstr "Копировать ссылку"
+
 msgid "Copy link to this section"
 msgstr "Копировать ссылку на этот раздел"
 
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
 
 msgid "Core 24 activation"
 msgstr "Активация Core 24"
@@ -1072,6 +1126,12 @@ msgstr "декодер"
 msgid "Decoder"
 msgstr "Декодер"
 
+msgid "Decoders"
+msgstr "Декодеры"
+
+msgid "Destroy frozen funds"
+msgstr "Уничтожение замороженных средств"
+
 msgid "Details"
 msgstr "Подробности"
 
@@ -1096,6 +1156,27 @@ msgstr "Документ"
 
 msgid "Document batch"
 msgstr "Пакет документов"
+
+msgid "Document create"
+msgstr "Создание документа"
+
+msgid "Document delete"
+msgstr "Удаление документа"
+
+msgid "Document index delete"
+msgstr "Удаление индекса документа"
+
+msgid "Document price"
+msgstr "Цена документа"
+
+msgid "Document purchase"
+msgstr "Покупка документа"
+
+msgid "Document replace"
+msgstr "Замена документа"
+
+msgid "Document transfer"
+msgstr "Передача документа"
 
 msgid "document type"
 msgstr "тип документа"
@@ -1143,14 +1224,38 @@ msgstr "Включена, штрафа PoSe нет"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "Включена, штраф PoSe {0}"
 
+msgid "End time not known yet"
+msgstr "Время окончания пока неизвестно"
+
 msgid "Ended"
 msgstr "Завершено"
+
+msgid "Ended {ago}"
+msgstr "Завершено {ago}"
+
+msgid "Ended <0>{ago}</0>"
+msgstr "Завершено <0>{ago}</0>"
 
 msgid "Ends"
 msgstr "Заканчивается"
 
+msgid "Ends in {left}"
+msgstr "Закончится через {left}"
+
+msgid "Ends in <0>{left}</0>"
+msgstr "Закончится через <0>{left}</0>"
+
+msgid "Ends in about {left}"
+msgstr "Закончится примерно через {left}"
+
+msgid "Ends in about <0>{left}</0>"
+msgstr "Закончится примерно через <0>{left}</0>"
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "Введите хотя бы один адрес DAPI в формате хост:порт, по одному в строке."
+
+msgid "Enter plain numbers, like 100 or 2.5."
+msgstr "Введите обычные числа, например 100 или 2.5."
 
 msgid "epoch"
 msgstr "эпоха"
@@ -1163,6 +1268,12 @@ msgstr "Эпоха"
 msgid "Epoch {0} · {1} blocks in"
 msgstr "Эпоха {0} · прошло блоков: {1}"
 
+msgid "Epoch {epoch}"
+msgstr "Эпоха {epoch}"
+
+msgid "Epoch {epoch} progress"
+msgstr "Прогресс эпохи {epoch}"
+
 msgid "Epoch {id}"
 msgstr "Эпоха {id}"
 
@@ -1174,6 +1285,9 @@ msgstr "Эпохи"
 
 msgid "Esc"
 msgstr "Esc"
+
+msgid "Estimate"
+msgstr "Оценка"
 
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Все бэкенды, к которым может обращаться Radar, кто их обслуживает и используются ли они в сети {network}. Каждая цифра в Radar указывает, откуда она взята."
@@ -1225,6 +1339,12 @@ msgstr "Evonode из списка узлов, в виде https://address:port"
 
 msgid "Example"
 msgstr "Пример"
+
+msgid "Expand all"
+msgstr "Развернуть все"
+
+msgid "Expected to end any moment now"
+msgstr "Должно закончиться с минуты на минуту"
 
 msgid "Expires"
 msgstr "Истекает"
@@ -1305,6 +1425,9 @@ msgstr "Из живого потока DAPI: транзакции, поступ�
 
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "Полные результаты по любой высоте, хешу, адресу, ProTx, IP, идентичности, контракту, токену, имени или эпохе с группировкой по типу."
+
+msgid "function"
+msgstr "функция"
 
 msgid "Funded"
 msgstr "Профинансировано"
@@ -1463,8 +1586,20 @@ msgstr "Идентичность по хешу ключа"
 msgid "Identity create"
 msgstr "Создание идентичности"
 
+msgid "Identity create from addresses"
+msgstr "Создание идентичности из адресов"
+
+msgid "Identity create from pool"
+msgstr "Создание идентичности из пула"
+
 msgid "Identity top-up"
 msgstr "Пополнение идентичности"
+
+msgid "Identity top-up from addresses"
+msgstr "Пополнение идентичности с адресов"
+
+msgid "Identity top-up from pool"
+msgstr "Пополнение идентичности из пула"
 
 msgid "Identity update"
 msgstr "Обновление идентичности"
@@ -1597,6 +1732,9 @@ msgstr "Заблокировано InstantSend"
 msgid "Invalid"
 msgstr "Недействительно"
 
+msgid "invalid date"
+msgstr "недействительная дата"
+
 msgid "It answered with an error."
 msgstr "Он ответил ошибкой."
 
@@ -1624,8 +1762,14 @@ msgstr "Его вершина — блок Core {tip}, он отстаёт от 
 msgid "Its tip is Core block {tip}."
 msgstr "Его вершина — блок Core {tip}."
 
+msgid "JSON"
+msgstr "JSON"
+
 msgid "Jump to a date"
 msgstr "Перейти к дате"
+
+msgid "Key limits update"
+msgstr "Обновление лимитов ключей"
 
 msgid "Keyboard shortcuts"
 msgstr "Горячие клавиши"
@@ -1704,6 +1848,9 @@ msgstr "Ссылка скопирована"
 
 msgid "Link to one with"
 msgstr "Ссылка на один из них:"
+
+msgid "List view"
+msgstr "Вид списком"
 
 msgid "Live"
 msgstr "Онлайн"
@@ -1824,6 +1971,9 @@ msgstr "Мастерноды по статусу"
 msgid "masternodes locked its inputs; final from here"
 msgstr "Мастерноды заблокировали его входы; с этого момента окончательно"
 
+msgid "Max"
+msgstr "Макс."
+
 msgid "Median answer {rounded} ms"
 msgstr "Медианное время ответа {rounded} мс"
 
@@ -1854,6 +2004,9 @@ msgstr "Сообщение"
 
 msgid "Metrics history"
 msgstr "История метрик"
+
+msgid "Min"
+msgstr "Мин."
 
 msgid "Mined"
 msgstr "Добыт"
@@ -2339,6 +2492,9 @@ msgstr "Выход, который тратит этот вход"
 
 msgid "Outputs"
 msgstr "Выходы"
+
+msgid "Overview"
+msgstr "Обзор"
 
 msgid "Owner"
 msgstr "Владелец"
@@ -2867,6 +3023,9 @@ msgstr "Удалить {devnet}"
 msgid "Remove filter {0}"
 msgstr "Убрать фильтр {0}"
 
+msgid "Removed from saved"
+msgstr "Убрано из сохранённого"
+
 msgid "reported by one node; no second source has confirmed it"
 msgstr "сообщено одним узлом; второй источник не подтвердил"
 
@@ -2916,6 +3075,12 @@ msgstr "Ширина ленты — это сумма. Серый — сдача
 msgid "Rich list"
 msgstr "Список богатейших"
 
+msgid "Rows per load"
+msgstr "Строк за загрузку"
+
+msgid "Rows per page"
+msgstr "Строк на странице"
+
 msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 msgstr "Запросы SQL только для чтения к документам контракта: шаблоны, сохранённые запросы и ссылки, которыми можно поделиться."
 
@@ -2924,6 +3089,9 @@ msgstr "Использует актуальную версию протокол�
 
 msgid "Same as the owner address"
 msgstr "Совпадает с адресом владельца"
+
+msgid "Save"
+msgstr "Сохранить"
 
 msgid "Save changes"
 msgstr "Сохранить изменения"
@@ -2939,6 +3107,9 @@ msgstr "Сохранено в этом браузере. Для devnet с неи
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Отсканируйте или загрузите QR-код и откройте то, что в нём: адрес, платёжную ссылку или хеш ключа."
+
+msgid "Scroll"
+msgstr "Прокрутка"
 
 msgid "SDK reference"
 msgstr "Справочник SDK"
@@ -3060,11 +3231,29 @@ msgstr "Обновление регистратора общей мастерн�
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "Доли считаются от объёма в обращении, <0/>, — это та же цифра, что показывает страница «Графики»."
 
+msgid "Shield"
+msgstr "Перевод в защищённый пул"
+
+msgid "Shield from asset lock"
+msgstr "Перевод в защищённый пул из блокировки активов"
+
+msgid "Shield from identity"
+msgstr "Перевод в защищённый пул из идентичности"
+
 msgid "Shielded"
 msgstr "Защищённая"
 
 msgid "Shielded pool"
 msgstr "Защищённый пул"
+
+msgid "Shielded transfer"
+msgstr "Защищённый перевод"
+
+msgid "Shielded withdrawal"
+msgstr "Защищённый вывод"
+
+msgid "Show {step} more of {hidden}"
+msgstr "Показать ещё {step} из {hidden}"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -3188,6 +3377,9 @@ msgstr "Траты"
 
 msgid "Spent"
 msgstr "Потрачен"
+
+msgid "Started {startedText}"
+msgstr "Начато {startedText}"
 
 msgid "State"
 msgstr "Состояние"
@@ -3318,6 +3510,9 @@ msgstr "Текущая эпоха Platform, кто предлагает след
 msgid "The Dash network, now"
 msgstr "Сеть Dash сейчас"
 
+msgid "The end time is an estimate."
+msgstr "Время окончания — оценка."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "Для полного мемпула и его итогов нужен этот индекс, поэтому страница показывает то, что живой поток DAPI доставил с момента её открытия."
 
@@ -3355,6 +3550,9 @@ msgstr "Перепись мастернод и история сети"
 
 msgid "The median answer takes {seconds} s."
 msgstr "Медианное время ответа — {seconds} с."
+
+msgid "The minimum is above the maximum."
+msgstr "Минимум больше максимума."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Новейшие {shown} из {total}, замеченных с момента открытия этой страницы"
@@ -3441,6 +3639,9 @@ msgstr "Источник не вернул блоки для высот с {0} �
 
 msgid "The source sent something Radar couldn't read"
 msgstr "Источник прислал данные, которые Radar не смог прочитать"
+
+msgid "The start date is after the end date."
+msgstr "Дата начала позже даты окончания."
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -3586,8 +3787,62 @@ msgstr "токен"
 msgid "Token"
 msgstr "Токен"
 
+msgid "Token burn"
+msgstr "Сжигание токенов"
+
+msgid "Token burn from pool"
+msgstr "Сжигание токенов из пула"
+
+msgid "Token claim"
+msgstr "Получение токенов"
+
+msgid "Token claim to pool"
+msgstr "Получение токенов в пул"
+
+msgid "Token config update"
+msgstr "Обновление конфигурации токена"
+
+msgid "Token emergency action"
+msgstr "Экстренное действие с токеном"
+
+msgid "Token freeze"
+msgstr "Заморозка токенов"
+
 msgid "Token holders"
 msgstr "Держатели токена"
+
+msgid "Token mint"
+msgstr "Выпуск токенов"
+
+msgid "Token mint to pool"
+msgstr "Выпуск токенов в пул"
+
+msgid "Token price"
+msgstr "Цена токена"
+
+msgid "Token purchase"
+msgstr "Покупка токенов"
+
+msgid "Token purchase from pool"
+msgstr "Покупка токенов из пула"
+
+msgid "Token purchase to pool"
+msgstr "Покупка токенов в пул"
+
+msgid "Token shield"
+msgstr "Перевод токенов в защищённый пул"
+
+msgid "Token shielded transfer"
+msgstr "Защищённый перевод токенов"
+
+msgid "Token transfer"
+msgstr "Перевод токенов"
+
+msgid "Token unfreeze"
+msgstr "Разморозка токенов"
+
+msgid "Token unshield"
+msgstr "Вывод токенов из защищённого пула"
 
 msgid "Tokens"
 msgstr "Токены"
@@ -3668,11 +3923,17 @@ msgstr "Ожидающие транзакции"
 msgid "Transactions, all time"
 msgstr "Транзакции за всё время"
 
+msgid "Transfer to address"
+msgstr "Перевод на адрес"
+
 msgid "Transition"
 msgstr "Переход"
 
 msgid "Transition decoder"
 msgstr "Декодер переходов"
+
+msgid "Transitions"
+msgstr "Переходы"
 
 msgid "Trend"
 msgstr "Динамика"
@@ -3727,6 +3988,9 @@ msgstr "Неизвестная причина {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Неизвестно: индекс отстаёт"
+
+msgid "Unshield"
+msgstr "Вывод из защищённого пула"
 
 msgid "Unspendable"
 msgstr "Не может быть потрачен"

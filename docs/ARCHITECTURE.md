@@ -16,7 +16,9 @@ Code style follows the scaffold: TypeScript strict, Prettier (no semicolons, sin
 main.tsx, app.tsx, router.tsx        bootstrap, providers, router factory (exists)
 app/
   query-client.ts                    QueryClient factory, defaults, persister (§5)
-  search.ts                          parseSearch/stringifySearch, network middleware (§6)
+  search.ts                          parseSearch/stringifySearch, network middleware (§6); re-exports lib/search-schemas.ts
+  route-loader.ts                    routePrefetch: the loader every route uses to start its package's prefetch (§6.3)
+  global-mounts.tsx, sw-register.ts  deferred proof inspector and diagnostics mounts; service worker registration (§11.5)
   network-context.tsx                useNetwork(), NetworkGate (unknown devnet, unsupported source)
   error-boundary.tsx
 routes/                              TanStack file routes: search schema, loader prefetch, page component import. No markup beyond <XPage/>
@@ -24,12 +26,13 @@ shell/                               dashhq shell bar and footer, NetworkSwitch,
 features/
   home/                              `/` network pulse
   core/                              blocks, block, tx, address, mempool, rich-list, charts, governance, status
-  network/                           nodes, masternodes, mn, map, epochs, protocol, v24, changes, validators
+  network/                           nodes, masternodes, mn, map, epochs, epoch, protocol, v24, changes
   platform/                          platform home, identity, contract, document, token, names, contests, groups, credits, shielded, …
   tools/                             query (SQL), decoders, transition, verify-message, qr, sdk-reference, api, sources
-  you/                               saved, settings, about
+  you/                               saved, settings, about, proof inspector and diagnostics mounts
   search/                            classify.ts, resolvers/, useSearch, CommandPalette (loaded by CommandPalette.lazy.tsx), /search page
-  entity/                            <Entity> (chip + link + hover card), hover-card registry, cross-layer links (X-02)
+  entity/                            <Entity> (chip + link + hover card), hover-card registry, cross-layer links (X-02), site-map.ts,
+                                     PageFrame, PageGroupTabs, saved and viewed stores, platform/ (IdentityRef, TransitionTable, PlatformBlockTable)
   <feature>/<page>/                  XPage.tsx, queries.ts (feature hooks and joins), components/, *.test.ts(x)
 data/
   envelope.ts                        Sourced<T>, SourceStamp, Fact<T> (§2.1)  ← contract file
@@ -46,7 +49,10 @@ data/
     persister.ts, network-cache.ts   IndexedDB persister and its GC; resetNetworkCache (§5.3)
     loader.ts                        prefetchForRoute, the gates, registerSdkReadyProbe (§6.3)
     health-probes.ts, route-prefetch.ts   the prefetch items loaders import on demand (§6.3)
-  radar/ pe/ rate/                   client.ts, schemas.ts, queries.ts (queryOptions factories), *.test.ts
+    prefetch/<pkg>.ts                one prefetch module per M2–M6 package, one function per route (§6.3, §11.5)
+  query-log.ts                       the last 100 source calls, for diagnostics (§11.5)
+  masternodes/                       rows.ts (DAPI + Radar join), filter.ts (shared filter schema, filterMnRows, facets)
+  radar/ pe/ rate/                   client.ts, schemas.ts (a schemas/ directory split by owner in radar and pe, §11.5), queries.ts (queryOptions factories), *.test.ts
   hyphen/                            the same, plus pages.ts (infinite lists), lookups.ts (resolvers), fit.ts (useHyphenFit) (§5.6)
   dapi-core/                         transport.ts (the seam, §4.1), rpc.ts, grpc-web.ts, discovery.ts, nodes.ts, budget.ts, pool.ts,
                                      streams.ts, cache.ts, lazy.ts + production.ts (loads the pool on first use), client.ts, gen/ (protoc output)
@@ -57,10 +63,13 @@ data/
   sdk/
     methods.ts                       SdkMethods map: method name → args/result DTO types  ← contract file
     client.ts                        main-thread SdkClient (worker or inline transport), registers the SDK-ready probe
-    queries.ts                       sdkQueries factories, platformTipQuery
+    methods/<pkg>.ts, shared.ts      the method map's parts: args/result DTOs and data classes, one file per package (§11.5)
+    queries.ts                       sdkQueries factories, sdkBatchers, platformTipQuery
+    batchers.ts                      the six rule-4 batchers (§5.4)
     proof-store.ts                   LRU of full proofs for the inspector (NX-61)
     worker/sdk.worker.ts             Comlink endpoint
-    worker/impl.ts                   method implementations + DTO mapping (runs in worker or inline)
+    worker/impl.ts, worker/impl/     method implementations + DTO mapping, merged from one file per package (runs in worker or inline)
+    worker/decode.ts                 decodeWithWasm
     worker/wasm-split.ts             stands in for the SDK's wasm loader: fetches the wasm parts (§12c)
   trusted-worker.ts                  Trusted Types policy for `new Worker(url)`
 ui/                                  design-system components (§7); index.ts is the only import path
@@ -68,12 +77,12 @@ ui/                                  design-system components (§7); index.ts is
   hash.tsx                           Hash and Copy (kept apart from EntityChip so they stay in the entry chunk)
   types.ts                           Layer, Tone, EntityKind, AmountUnit  ← contract file
 lib/                                 pure, framework-free: network.ts, units.ts, format.ts, hex.ts, base58.ts, bech32.ts,
-                                     core/{header,chainlock,pools,block-ref}.ts, linkouts.ts, time.ts
-i18n/                                Lingui setup, locales/<locale>/messages.po, useLocale
+                                     core/{header,chainlock,pools,block-ref}.ts, linkouts.ts, time.ts, search-schemas.ts, data-class.ts, json-store.ts, tx-types.ts
+i18n/                                Lingui setup, locales/<locale>/{messages,<pkg>}.po, useLocale
 test/                                setup.ts, server.ts (exist), msw/handlers/*, fixtures loader, sdk and dapi fixture transports
 ```
 
-Outside `apps/web`: `packages/core-decode` (Rust → wasm), `workers/edge` (radar-web Worker), `e2e/tests` (Playwright), `review/` (harness), `scripts/` (fixture recorder, seed-node list, size budget).
+Outside `apps/web`: `packages/core-decode` (Rust → wasm), `workers/edge` (radar-web Worker), `e2e/tests` and `e2e/routes` (Playwright specs and the route cases they iterate), `review/` (harness), `scripts/` (fixture recorders and their call lists, seed-node list, size budget). `apps/web/src/sw/sw.ts` is the service worker stub, emitted as `/sw.js` (§11.5).
 
 ### 1.2 Dependency rules
 
@@ -83,10 +92,10 @@ Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by
 |---|---|---|
 | `lib/**` | nothing internal; small pure deps (`@noble/*`) | React, `data`, `ui`, `features` |
 | `data/**` | `lib`, `data/**` | React (except `data/health.ts`, `data/index-health.ts`, `data/hyphen/fit.ts`, `data/query/batch.ts` and `data/core/seen-pending.ts`, which export hooks), `ui`, `features`, `routes` |
-| `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts`, `@dashevo/evo-sdk`, `comlink` | anything else (no React, no DOM) |
+| `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts` (and `data/sdk/methods/*.ts` through it), `@dashevo/evo-sdk`, `comlink` | anything else (no React, no DOM) |
 | `ui/**` | `lib`, `i18n`, type-only `data/envelope.ts`, `data/health.ts` (`useSourceHealth`) | `features`, `routes`, other `data` |
 | `features/<x>/**` | `ui`, `data`, `lib`, `i18n`, `features/entity`, `features/search` (their `index.ts` only) | other features' internals |
-| `routes/**` | `features/*/index.ts`, `app/*`, `data/query/*`, `data/*/queries.ts` (for loaders) | `ui` internals, clients directly |
+| `routes/**` | `features/*/index.ts`, `app/*`, `data/query/*`, `data/*/queries.ts` (for loaders), `data/masternodes/filter.ts` (the shared filter schema) | `ui` internals, clients directly |
 | `shell/**` | `ui`, `lib`, `i18n`, `app`, `features/search` (palette) | `data` clients |
 
 `eslint.boundaries.js` also rejects:
@@ -844,6 +853,7 @@ Nothing else is contacted by the app: no analytics, no third-party font, script 
 - `source` is a `SourceId` for single-source reads, or `'view'` for feature-level joins (`[net, 'view', 'mn-rows']`).
 - `resource` is a kebab-case noun matching the client method (`'block'`, `'identity-balance'`, `'summary'`).
 - `params` is one plain object with primitive values (TanStack hashes it stably). Omit it when there are none. Hashes are lower-case hex; IDs base58 as given.
+- **View-key prefixes (§11.5).** Each M2–M6 package names its `viewKeys` resources with its own prefixes, listed in `VIEW_KEY_PREFIXES` (`data/query/keys.ts`) and tested to be disjoint: `census-` (NET-A), `mn-list-` (NET-B), `mn-page-` (NET-C), `map-` and `changes-` (NET-D), `phome-` (P-HOME), `chain-` (P-CHAIN), `pblock-` and `ptx-` (P-BLOCKS), `identity-` (P-ID), `contract-`, `document-` and `group-` (P-DATA), `token-` and `paddr-` (P-TOKEN), `vote-` and `name-` (P-VOTE), `tools-` (TOOLS), `you-` (YOU), `search-` (UNI-S), `entity-` (UNI-L), and `mn-rows` (the shared masternode join). Two packages never write one cache entry.
 - Keys are built only by factories: `radarKeys`, `peKeys`, `hyKeys`, `dapiKeys`, `sdkKeys(method, args)`, plus each feature's `viewKeys`. Inline array keys fail lint (`no-restricted-syntax` on `queryKey: [`) outside `data/**/queries.ts` and `features/**/queries.ts`.
 
 ### 5.2 Data classes (`data/query/stale.ts`)
@@ -892,7 +902,7 @@ export function useHydratedFact<K, V>(batcher: Batcher<K, V>, key: K, backend: F
 
 - Every row calls `useHydratedFact(identityBalance, row.id, { value: row.balance, stamp: pageStamp })`. Calls within the window coalesce into one `identities.balances` call per page (chunks of 100). Each key's result is written to its own query (`[net, 'sdk', 'identity-balance', { id }]`), so the entity page reuses it.
 - Hydration runs only for rows that are rendered (virtualised tables hydrate the visible window plus 20 rows).
-- The batchers to build are the six from rule 4: `identities.balances`, `tokens.balances`, `tokens.statuses`, `contracts.getMany`, `addresses.getMany`, and DPNS names via `documents.query` with `in` on `records.identity`.
+- The six batchers of rule 4 are in `data/sdk/batchers.ts` (also `sdkBatchers`, exported from `data/sdk/queries.ts`): `identityBalance` (`identities.balances`), `tokenBalance` (`tokens.balances`, key `{ tokenId, identityId }`, one call per token in a batch), `tokenStatus` (`tokens.statuses`), `contractMeta` (`contracts.getMany`), `platformAddressInfo` (`addresses.getMany`) and `dpnsName`. `dpnsName` reads one `documents.query` on DPNS's `domain` type with `records.identity in [...]` (that index exists on mainnet and testnet), batches of 25 so a page of names fits Drive's 100-row cap, and gives an identity with several names its oldest. An identity missing from a full (100-row) page falls back to `dpns.usernames` with at most four calls in flight. `useIdentityName(id)` (`features/entity`) is the hook the identity chip reads, so every `IdentityRef` shows the name once it lands.
 - When the SDK value differs from the backend's, the SDK value wins and the cell shows the SDK's stamp. No warning; the backend lag is normal.
 
 ### 5.5 Live updates
@@ -973,7 +983,7 @@ export const Route = createFileRoute('/masternodes')({
 })
 ```
 
-Helpers in `app/search.ts`: `zCsv`, `zCsvEnum`, `zRange`, `zIsoDate`, `zPage`, `zLimit`, `zBool01`. Filter changes call `navigate({ search: (s) => ({ ...s, …, page: undefined }), replace: true })`: they replace history and reset paging. Paging and tab changes push.
+Helpers in `lib/search-schemas.ts` (re-exported from `app/search.ts`, so `data` can use them too): `zCsv`, `zCsvEnum`, `zRange`, `zIsoDate`, `zPage`, `zLimit` (10, 25, 50, 75 or 100), `zInt`, `zHex64`, `zHex40`, `zBool01`, `zOpt`, `zDefault`, and the documents filter codec `encodeWhere`, `decodeWhere`, `zWhere` (§11.5). The route schemas below the example are all final (§11.5); a package fills the route's prefetch module and its page, never its schema. Filter changes call `navigate({ search: (s) => ({ ...s, …, page: undefined }), replace: true })`: they replace history and reset paging. Paging and tab changes push.
 
 **Loaders** prefetch; they never block a page for long and never throw. No route may block first paint on DAPI or the SDK: on the first load of the router, a loader starts its prefetch and returns at once (`loadBehindFirstPaint`, `app/first-load.ts`) and the shell and the page's own pending state paint immediately. Later in-app navigations keep the short await below. Use `prefetchForRoute` from `@/data/query` (`data/query/loader.ts`):
 
@@ -993,6 +1003,7 @@ export const Route = createFileRoute('/status')({
 - Gates (§4.7), enforced in `allowedItems` and failing closed if a gate throws: HTTP items always run; at most `MAX_DAPI_PREFETCH` (1) DAPI item, only for a detail route and only when `budget.canAfford`; an SDK item only when `registerSdkReadyProbe`'s probe says that network's SDK is ready (§3.3). A preload (`preload: true`, hover or intent) starts the same allowed items but awaits nothing.
 - The loader waits at most `DEFAULT_LOADER_DEADLINE_MS` (1500 ms) for the `wait` items, and on the first load (above) for none. `blockPrefetch` and `txPrefetch` take the loader's `preload` flag and pass `{ priority: 'prefetch' }` to the Core read on a preload (§4.7). A failed or late prefetch leaves the query to the page, which shows its own loading and error states.
 - Loaders stay in the entry chunk under `autoCodeSplitting`, so a loader imports its query factories with `await import(...)`, never at module level (a static import pulled the HTTP clients and the Core façade into the entry chunk). The item lists live in `data/query/health-probes.ts` and `data/query/route-prefetch.ts` for that reason (`homePrefetch`, `blocksPrefetch`, `blockPrefetch`, `txPrefetch`).
+- Every unbuilt M2–M6 route's loader is `routePrefetch(() => import('@/data/query/prefetch/<pkg>'), (m) => m.<route>Prefetch)` (`app/route-loader.ts`): it does the `routeNetwork` / `await import` / `prefetchForRoute` / `loadBehindFirstPaint` dance above for a package's route, with the whole validated search as `loaderDeps`. The prefetch module, `data/query/prefetch/<pkg>.ts`, exports one `Prefetch<Params, Search>` per route that lists the items to read; it returns `[]` until the package fills it.
 - The loader reads the network from `routeNetwork(deps)`, not from `getActiveNetwork()`, and puts `network` and `net` in `loaderDeps` so a network switch re-runs it.
 - `routes` may not import `data/health-queries.ts`; the status route reaches the probes through `data/query/health-probes.ts`.
 
@@ -1254,7 +1265,7 @@ export function useSearch(q: string, opts: { mode: 'palette' | 'page' }): {
 - **Enter.** Enter acts only after every `local` resolver has settled; remote resolvers get at most 300 ms (`ENTER_GRACE_MS`) after Enter. Then: the best hit if its rank is 100 or more; otherwise, for a typed height, the Core block; otherwise `/search?q=`. A typed height, hash, txid or address therefore always opens its page. Arrow keys cancel a pending Enter.
 - **Speculative hits.** A hit may be `speculative`: a reading of the input that no source confirmed (today the local ".dash name" guess). The search page and the palette list confirmed hits by group and show speculative ones apart, under "A guess, not a result", with a "Guess" badge; when nothing is confirmed the page says "No match for “…” as a Core record on …". A confirmed hit for the same entity replaces the guess.
 - **No dead ends.** `features/search/offered.ts` holds `UNFINISHED_ROUTES`, the route patterns whose page still renders `RoutePlaceholder`. `useSearch` drops hits that lead to one and the palette's page list leaves them out. A test compares the set with the pages that still render the placeholder, so finishing a page means deleting its route from the set.
-- **Ownership.** The resolver set is in `features/search/resolvers/index.ts`. Each feature package adds resolvers for its own entity kinds there (one file per resolver).
+- **Ownership.** The resolver set is in `features/search/resolvers/index.ts`, append-only, and `UNFINISHED_ROUTES` is delete-only; both belong to UNI-S from F0 on (§11.5), so a feature package adds no resolver and no entry. UNI-S writes a resolver for each package's entity kind, one file per resolver, and deletes a route from the set when its page is built.
 
 ### 8.3 Secrets in the search box
 
@@ -1285,8 +1296,9 @@ The English wordlist (6 kB gzipped, `features/search/bip39-words.ts`) loads in i
 ### 9.1 i18n (Lingui 5)
 
 - `@lingui/vite-plugin` + `@lingui/babel-plugin-lingui-macro` (through `@vitejs/plugin-react`'s babel option). Source strings are marked with the macros `t` and `plural` (from `@lingui/core/macro`), `useLingui` (from `@lingui/react/macro`), `<Trans>`, and `msg` for module-level constants (rendered with `i18n._(descriptor)`), with ICU syntax. No string concatenation of translatable text.
-- Source locale `en`. Ten locales ship, the union of Insight's and Hyphen's: `en, de, fr, es, pt, ja, zh, ru, tr, uk`; `LOCALES` in `src/i18n/locales.ts` is the list and the language menu shows each in its own script. Catalogues: `src/i18n/locales/<locale>/messages.po`, compiled at build. **No catalogue is in the entry chunk**: every one, `en` included, loads as its own chunk through `import.meta.glob`, and `main.tsx` waits for `i18nReady` (the visitor's locale, falling back to `en`) before it renders, so message ids never flash.
-- `pnpm i18n:extract` rewrites `apps/web/src/i18n/locales/*/messages.po`; commit the result. `pnpm i18n:check` (`scripts/check-i18n.mjs`, CI, after lint) runs `lingui extract --clean` and fails if any catalogue changed, a locale has no catalogue, any message has no translation or a fuzzy flag, a translation's placeholders or tags differ from the source, or a plural message lacks a category its locale needs (`one`/`other` for en, de, fr, es, pt, tr; `other` only for ja and zh; `one`/`few`/`many`/`other` for ru and uk). Adding a locale is data only: add `{ code, name }` to `LOCALES`, run `pnpm i18n:extract`, translate `locales/<code>/messages.po`, commit; the language menu lists a locale only when its catalogue exists in the build. Hashes, IDs and amounts are never translated; the number and date locale follows the language. A change that adds a string needs all nine translations in the same commit (workflow in `CONTRIBUTING.md`).
+- Source locale `en`. Ten locales ship, the union of Insight's and Hyphen's: `en, de, fr, es, pt, ja, zh, ru, tr, uk`; `LOCALES` in `src/i18n/locales.ts` is the list and the language menu shows each in its own script. Catalogues: `src/i18n/locales/<locale>/<catalog>.po`, compiled at build: one per M2–M6 package named for its lower-case id (`net-a.po`, `p-blocks.po`, `uni-l.po`, …) and the base `messages.po`. **No catalogue is in the entry chunk**: every one, `en` included, loads as its own chunk as one chunk per locale: `locales/<code>/index.ts` eagerly imports that locale's `*.po` files and exports them merged, `i18n/index.ts` loads it through `import.meta.glob('./locales/*/index.ts')`, and `AVAILABLE_LOCALES` lists the locales that have one, and `main.tsx` waits for `i18nReady` (the visitor's locale, falling back to `en`) before it renders, so message ids never flash.
+- **Per-package catalogs.** `lingui.config.ts` has a `PACKAGES` table: the directories (or files) whose strings go to each package's catalog, as in the ownership table of §11.5. The base `messages.po` takes everything else (`include: ['<rootDir>/src']` less every claimed path). **A package's strings live in its own directories and so in its own catalogs; the base `messages.po` is frozen until INT.** A string used by two packages belongs to the one whose directory holds the code, and one in a shared directory goes to the base catalog, which INT may edit. A message that appears in two catalogs must read the same in both. A package edits only its own `<pkg>.po` files: that is what keeps the ten locale files from conflicting on every merge.
+- `pnpm i18n:extract` rewrites `apps/web/src/i18n/locales/*/*.po`; commit the result. `pnpm i18n:check` (`scripts/check-i18n.mjs`, CI, after lint) runs `lingui extract --clean` and fails if any catalogue changed, a locale has no catalogue or lacks one of `en`'s, a message reads differently in two catalogues, any message has no translation or a fuzzy flag, a translation's placeholders or tags differ from the source, or a plural message lacks a category its locale needs (`one`/`other` for en, de, fr, es, pt, tr; `other` only for ja and zh; `one`/`few`/`many`/`other` for ru and uk). Adding a locale is data only: add `{ code, name }` to `LOCALES`, copy another locale's `index.ts` into `locales/<code>/`, run `pnpm i18n:extract`, translate `locales/<code>/*.po`, commit; the language menu lists a locale only when its catalogue exists in the build. Hashes, IDs and amounts are never translated; the number and date locale follows the language. A change that adds a string needs all nine translations in the same commit (workflow in `CONTRIBUTING.md`).
 - **Marking rules.** In `src/ui` use the global `t` from `@lingui/core/macro`, because the ui tests render without an `I18nProvider`; elsewhere in components `useLingui()` from `@lingui/react/macro`. Tables of labels at module level (`ENTITY_LABELS`, the site map, section labels) hold `msg` descriptors and are rendered through helpers (`entityLabel()`, `pageTitle()`, `pageSummary()`, `sectionLabel()`, `sourceLabel()`, `recordLabel()`, `labelOf()`) that call `i18n._()` at render time; `matchPages` in `features/search/pages.ts` still matches the English titles and keywords. Lists of names use `Intl.ListFormat`.
 - **Switching language.** `LanguageSelect` (a native `<select>`) sits in the shell footer (`ShellFooter.tsx`) and in Settings. It saves the choice and sets `<html lang>`. `AppShell` renders the routed `<main>` with `key={locale}`, so a switch remounts the page; without it a component that read the global `t` during render would keep its old text until some other re-render. Text computed outside React, such as the `lag.detail` of a health probe, is translated when it is produced and does not change on a switch until the next probe.
 - **Not translated:** the kit page (`/__kit`) and dev-only text.
@@ -1335,7 +1347,7 @@ No page-level error unless the route itself can't render (bad route param after 
 - `scripts/record-fixtures.mjs --net mainnet|testnet` reads `review/fixtures/<net>.json` (the picked entities, §5.4 of the plan) and records:
   - HTTP sources as `apps/web/src/test/fixtures/http/<source>/<net>/<slug>.json`: `{ request: { method, url }, recordedAt, status, headers, body }`. MSW handlers in `src/test/msw/handlers/<source>.ts` serve them by URL (query string normalised).
   - DAPI by `scripts/record-dapi-fixtures.mjs --net mainnet|testnet`, which runs the Core façade against live seed nodes (`data/dapi-core/seed.<net>.json`, from `scripts/seed-nodes.mjs`) through a recording transport, so each request is stored exactly as the façade makes it. Entities come from `scripts/dapi-fixture-picks.<net>.json` (`--discover` finds new ones); `--rows <from:count,…>` adds only those `blockRows` pages without touching the rest. The recorder keeps each node under 40 requests a minute and 4 in flight. Output is `…/dapi/<net>/<method>/<sha256(request bytes)>.json`, one file per exchange: `{ request, recordedAt, node, response | messages + ended | error }`, all base64 protobuf, with NOT_FOUND answers recorded too, plus `<net>/manifest.json`: `{ net, recordedAt, tip, entries: [{ id, purpose, call, … tags }], gaps }`. `FixtureDapiTransport` (`test/msw/dapi-transport.ts`) serves them. One JSON per exchange rather than `.bin` and `.ndjson` lets `import.meta.glob` load it the same way in Vitest and in the browser.
-  - SDK as `…/sdk/<net>/<method>/<sha256(stable-json(args))>.json`, holding the `WireResult` with proof bytes base64-encoded. Served by `FixtureSdkTransport`, so the worker isn't involved and proof verification isn't rerun.
+  - SDK as `…/sdk/<net>/<method>/<sha256(stable-json(args))>.json`, holding the `WireResult` with proof bytes base64-encoded. Served by `FixtureSdkTransport`, so the worker isn't involved and proof verification isn't rerun. `scripts/record-sdk-fixtures.mjs --net <net> --calls <pkg> [--skip-existing]` records the calls listed in `scripts/sdk-fixture-calls/<pkg>.json`, with entity placeholders resolved from `review/fixtures/<net>.json` (§11.5); `shared.json` is F0's.
 - Fixture mode is the build flag `VITE_DATA_MODE=fixtures`, set by `build:e2e`. `main.tsx` then starts an MSW browser worker (`src/test/msw/browser.ts`) over the same handlers and slug scheme as the Vitest server, before the app renders, and swaps the two transports. `build/fixture-worker.ts` emits `mockServiceWorker.js` into that build only.
 - `record-fixtures.mjs --extra <source>:<path> --only-extra` records just the listed app paths (repeatable) and skips any that already have a file. A spec that visits an entity the pick list doesn't cover adds it this way: for a Core record page that means its Hyphen page as well, because a fit Hyphen is asked for chainwork and spent flags. A transaction page with spent outputs also needs the spender lookups (§4.8): `--extra hyphen:/address/<a>/txs?limit=100 --extra hyphen:/tx/<spender> --only-extra` for each output address and each spender. A spec that waits for a spender lookup to finish needs every page and candidate the lookup opens (up to 3 history pages and 8 transactions), or the run fails on the first request with no recording. The recordings cover the mainnet transactions the specs visit (`5d0c5900:0`, `9f827f91:0`, `e63d8538:3,4,6`, and the coinbase `out-0`). The mempool's second page can't be recorded (the mempool is nearly empty on both networks), so its paging is tested with an MSW override.
 - Insight fixtures live under `http/insight/<net>/` (the `/insight-api` prefix is dropped from the slug). `record-fixtures.mjs` reads Insight through `curl`, because Cloudflare challenges Node's `fetch` on `insight.dash.org`; `--skip-existing` records only what is missing. The recorded mainnet Hyphen `status.json` has an indexed height at or just above the DAPI fixture tip, so mainnet is fresh under the §4.7a rule; testnet's Hyphen index (1,577,999) is behind the DAPI fixture tip (1,589,232), so testnet pages read from Insight in every fixture test.
@@ -1355,7 +1367,8 @@ No page-level error unless the route itself can't render (bad route param after 
 **Story tags.**
 - Every Playwright test title carries its story IDs as tags: `test('block page shows header, cbTx, reward and pool @IN-03 @HY-05', …)`.
 - `pnpm check:stories` (`scripts/check-stories.mjs`, in CI) fails on a tag that names no story in `review/stories.yaml`. Stories with no test are only reported; `--strict` fails on both.
-- Spec files are grouped by area: `core.spec.ts`, `network.spec.ts`, `platform-state.spec.ts`, `platform-history.spec.ts`, `tools.spec.ts`, `unification.spec.ts`. Per-page files can split them (`core-tx.spec.ts`) when they pass 400 lines.
+- Spec files are per package from F0 on (§11.5): NET-A `net-census`, `net-v24`; NET-B `net-masternodes`; NET-C `masternode`; NET-D `net-map`, `net-changes-api`; P-HOME `platform-home`; P-CHAIN `platform-chain`; P-BLOCKS `platform-blocks`; P-ID `platform-identity`; P-DATA `platform-data`; P-TOKEN `platform-tokens`; P-VOTE `platform-voting`; TOOLS `tools-platform`; YOU `you`; UNI-S `search`, `search-secrets`, `search-platform`; UNI-L `unification`; INT `cross-layer` (each `e2e/tests/<name>.spec.ts`). Every other existing spec is frozen until INT. `pnpm check:stories -- --only <ids>` reports which of a package's story ids have no test and exits 1 if any (the default run is unchanged).
+- **Route cases.** `e2e/routes/types.ts` defines `RouteCase { path, h1, nets?, built, decentralized: 'data' | 'partial' | 'unavailable', data? }`; `e2e/routes/<pkg>.ts` holds each package's routes (`built: false` while the page renders `RoutePlaceholder`), `m1.ts` today's built routes with their real mode expectations, and `index.ts` concatenates them into `ROUTE_CASES`. `app-shell.spec.ts`'s route sweep and `decentralized-mode.spec.ts`'s mode walk iterate it, so a package adds its routes there and no spec keeps a route list. `e2e/routes/fixtures.ts` resolves fixture entities (`netIds(net)`, `paddr()`, `group()`, `perNet`). `E2E_PORT` sets the port of both the fixture and live servers.
 - Projects: `desktop-light`, `desktop-dark` (1440×900), `phone-light` and `phone-dark` (390×844, Pixel 7 profile) for fixtures, each with its colour scheme; `live` for `@live`. A test that is only meaningful on one form skips itself with `test.skip(…)`.
 - **First paint** (`app-shell.spec.ts`, "first paint"): a cold deep link to a block and to a transaction must show the shell header while the DAPI read is still held. An init script wraps `__radarCore.block` and `__radarCore.tx` so the test controls when each fixture response is released, and records when the first Core call started (`__coreCallAt`) and when `#root dashhq-bar` appeared (`__shellAt`, a `MutationObserver`). The test asserts the shell appeared before the held call could have finished (`shellAt - callAt` under half of `LOADER_DEADLINE_MS`), then releases the response and expects the page's `h1`. It measures what the loader rule (§6.3) promises, not a wall-clock budget, so machine load does not move it.
 - Layout and error checks wait on `settled(page)` (`e2e/helpers/settled.ts`: no `[data-skeleton]` and no `aria-busy="true"` left) before they measure, so they look at a page's data and not its placeholders. The route sweep in `app-shell.spec.ts` checks every registered route for a level-1 heading, no error alert and no sideways scroll; a route that is still a designed empty state is checked for its "what will be here" text instead.
@@ -1456,6 +1469,155 @@ Accepted from the M0 data and build work:
 - **Two Core chart metrics use `--dh-accent-forge-select` and `--dh-good` (§4.8),** outside the blue and teal family of design §4.3, so six chart colours stay apart.
 - **The rich list is a compact list on phones (§4.8).**
 - **The Hyphen client types its query names from the Worker's allowlist (§2.7).** `HYPHEN_PARAMS` in `workers/edge/src/hyphen-path.ts` is the one list; `data/hyphen/params.ts` imports its type, so a call can't send a name the Worker drops.
+
+### 11.5 M2–M6 contracts (F0)
+
+F0 settled the shared foundations so fifteen packages can build in parallel, each in its own worktree, without editing a shared file. This section is what every package reads first. **After F0 these files are frozen: a package changes none of them.** If a package needs a change in one, it stops and tells the orchestrator.
+
+#### Packages
+
+The ids give file names; a catalog's name is the lower-case id. Every package fills its own prefetch module, SDK method and impl files, schema files, route-case file and catalog, and appends to nothing else.
+
+| Id | Scope | Directories it owns (besides the files named in the later columns) | Route files (`apps/web/src/routes/`) | View-key prefix | Specs (`e2e/tests/`) |
+|---|---|---|---|---|---|
+| `NET-A` | census and activation | `features/network/{nodes,v24}`, `features/home` (RA-11 and the census headline) | `nodes`, `v24` | `census-` | `net-census`, `net-v24` |
+| `NET-B` | masternode list and DAPI list | `features/network/masternodes`, `data/masternodes`, `data/core/mn-list.ts`, `data/core/decode.ts` (`mnListDiff` only), `packages/core-decode`, `scripts/record-dapi-fixtures.mjs`, `scripts/dapi-fixture-picks.*.json`, `apps/web/src/test/fixtures/dapi` | `masternodes` | `mn-list-` | `net-masternodes` |
+| `NET-C` | masternode page | `features/network/mn` | `mn.$protx` | `mn-page-` | `masternode` |
+| `NET-D` | map, changes, API page | `features/network/{map,changes}`, `features/tools/api`, `apps/web/public/map` | `map`, `changes`, `api` | `map-`, `changes-` | `net-map`, `net-changes-api` |
+| `P-HOME` | Platform home and status | `features/platform/home`, `features/core/status` | `platform.index` | `phome-` | `platform-home` |
+| `P-CHAIN` | epochs, protocol, quorums, credits, shielded | `features/network/{epochs,epoch,protocol}`, `features/platform/{quorums,credits,shielded}` | `epochs`, `epoch.$n`, `protocol`, `quorums`, `credits`, `shielded` | `chain-` | `platform-chain` |
+| `P-BLOCKS` | Platform blocks and transitions | `features/platform/{blocks,block,txs,tx}`, `features/entity/platform/{transition-table,block-table}.tsx` | `platform.blocks`, `platform.block.$id`, `platform.txs`, `platform.tx.$hash` | `pblock-`, `ptx-` | `platform-blocks` |
+| `P-ID` | identities | `features/platform/{identities,identity}` | `identities`, `identity.$id`, `identity.lookup` | `identity-` | `platform-identity` |
+| `P-DATA` | contracts, documents, groups | `features/platform/{contracts,contract,document,groups,group}` | `contracts`, `contract.$id.index`, `contract.$id.documents.$type`, `document.$contract.$type.$id`, `groups.$contract`, `group.$contract.$pos` | `contract-`, `document-`, `group-` | `platform-data` |
+| `P-TOKEN` | tokens, Platform addresses | `features/platform/{tokens,token,platform-address}` | `tokens`, `token.$id.index`, `token.$id.holders`, `platform-address.$addr` | `token-`, `paddr-` | `platform-tokens` |
+| `P-VOTE` | names, contests, votes, polls | `features/platform/{names,name,contests,contest,votes,polls}` | `names`, `name.$label`, `contests`, `contest.$label`, `votes`, `polls` | `vote-`, `name-` | `platform-voting` |
+| `TOOLS` | query and decoders | `features/tools/{query,decoders,transition,sdk-reference}`, `data/sdk/worker/decode.ts` | `query`, `tools.$decoder`, `tools.transition`, `sdk-reference` | `tools-` | `tools-platform` |
+| `YOU` | saved, settings, about, proof inspector, diagnostics, offline | `features/you`, `app/global-mounts.tsx`, `app/sw-register.ts`, `src/sw`, `data/sdk/{settings.ts,client.ts,proof-store.ts}`, `data/sdk/worker/sdk-factory.ts` | `saved`, `about`, `settings` | `you-` | `you` |
+| `UNI-S` | search | `features/search` | — | `search-` | `search`, `search-secrets`, `search-platform` |
+| `UNI-L` | hover cards, cross-layer links, keyboard, redirects, OG | `features/entity` (except the P-BLOCKS files), `shell`, `workers/edge`, `features/core/tx` (the asset-lock link only) | — | `entity-` | `unification` |
+| `INT` | integration | what no one owns; the base catalog | — | — | `cross-layer` |
+
+Per package, by name (`<pkg>` is the lower-case id; `net-a`, `p-home`, `tools`, …):
+- **Prefetch module** `data/query/prefetch/<pkg>.ts`: one `<route>Prefetch: Prefetch<Params, Search>` per route and the route's `Search` interface. Each returns `[]` until the package fills it.
+- **SDK methods** `data/sdk/methods/<pkg>.ts` (`<Pkg>Methods` interface and `<PKG>_CLASSES`, the data class of each method) and `data/sdk/worker/impl/<pkg>.ts` (`<Pkg>Reads`, the part of `EvoSDK` it reads, and `<pkg>Impl`). `NET-A`, `NET-B`, `P-HOME`, `UNI-S`, `UNI-L`, `YOU` and `INT` have no method files of their own.
+- **Schemas**: `data/pe/schemas/*.ts` and `data/radar/schemas/*.ts`, split by owner (below).
+- **Catalog** `src/i18n/locales/<locale>/<pkg>.po`.
+- **Route cases** `e2e/routes/<pkg>.ts`.
+- **Stories**: a page's `stories` in the site map are final; do not edit them.
+
+#### Decentralized only mode (WP-X)
+
+- Reading: `decentralizedOnly()` (`lib/source-mode.ts`) outside React (loaders, resolvers, clients); `useDecentralizedOnly()` (`data/health.ts`) in a component that must draw again on a change; `useSourceMode()` and `useSetSourceMode()` (`ui/source-mode.tsx`) for the state (`{ mode, fromLink }`) and its setter.
+- Which sources are off: `HOSTED_SOURCES` (`radar`, `pe`, `hyphen`, `insight`, `rate`), `isHostedSource`, `sourceOff(source)` and `sourceInUse(net, source)` (`data/endpoints.ts`). `quorums`, DAPI and the SDK are never off. Give `enabled: false` to every query of a refused source while the mode is on.
+- The error: `SourceError` kind `'disabled-by-mode'`, built by `disabledByMode(source)` and tested with `isDisabledByMode(e)` (`data/errors.ts`). It is thrown before any I/O and is not an outage: it never turns a health dot red and is not retried.
+- The component: `Unavailable({ title?, source?, compact? })` (`ui/source-mode.tsx`), once per section that needs an indexer, with its way back to all sources. `HyphenGate` (`features/core/hy-shared/HyphenGate.tsx`) is the Core pages' wrapper.
+- Turning it on in a spec: add `sources=decentralized` to the address (`withQuery(path, 'sources=decentralized')` from `e2e/routes`) or set `localStorage['radar.sources'] = 'decentralized'`. There is no other helper. The mode walk is `e2e/tests/decentralized-mode.spec.ts`; it iterates the route cases.
+
+#### Route contracts (B)
+
+Every route file has its final `validateSearch`. A package changes none of them; what the page reads goes in the page and the prefetch module.
+
+- **Helpers** (`lib/search-schemas.ts`, re-exported from `app/search.ts`, so routes import either): `zCsv`, `zCsvEnum(values)`, `zRange` (`min..max`), `zIsoDate`, `zPage`, `LIMITS` (10, 25, 50, 75, 100) with `zLimit` and `zLimitOf(values)`, `zInt` (a non-negative integer from a number or a digit string), `zHex64`, `zHex40` (lower-cased), `zBool01` (`1` is `true`), `zOpt(schema)` (optional, falls back to absent), `zDefault(schema, value)`, `zWhere`.
+- **Documents filter codec**: `type WhereOp = 'eq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'sw'`, `interface WhereClause { field: string; op: WhereOp; value: string | string[] }`, `encodeWhere(clauses): string`, `decodeWhere(s): WhereClause[]`. A clause is `field~op~value`, clauses are joined by `,`, `in` values by `|`, every part is percent-encoded (`~` as `%7E`), and a malformed clause is dropped.
+- **Loaders**: `routePrefetch(() => import('@/data/query/prefetch/<pkg>'), (m) => m.<route>Prefetch)` (`app/route-loader.ts`) is the whole loader of every unbuilt route. It reads `routeNetwork(deps)`, loads the module on demand, runs the items through `prefetchForRoute` behind `loadBehindFirstPaint`, and keeps the module out of the entry chunk. `loaderDeps` is the whole validated search, so anything the prefetch reads is a dep. Absent `page` is 1 and absent `limit` is 25.
+- **`/masternodes` and `/map` share one filter**: `mnFilterSearch` (`data/masternodes/filter.ts`: `q`, `type`, `status`, `reach`, `country`, `version`, `host`, `dkg`) and the `MnFilter` type; `/masternodes` extends it with `sort`, `view`, `pf`, `page`.
+- **`/validators`** stays a redirect to `/masternodes?type=evo&view=platform`. `/platform` keeps its legacy-anchor `beforeLoad`. `/mn/$protx` keeps its loader and gains `epoch` and `before`.
+- `/platform/txs` filters `type` with `zCsvEnum(TRANSITION_TYPES)`.
+- The edge redirects (`workers/edge/src/redirects.ts`) still land on registered routes with params the schemas accept (`build/redirect-targets.test.ts`).
+
+#### Navigation (C)
+
+All in `features/entity/site-map.ts`; nobody edits it after F0.
+- `SitePage` gains `group?: 'voting' | 'chain'`, `navHref?` (a concrete URL for a nav entry whose route has params), `railTitle?` (the rail's label when it differs from the title) and `rail?: false` (in the palette, not in the rail). `SITE_GROUPS` maps `voting` (`/contests`, `/votes`, `/polls`) and `chain` (`/quorums`, `/credits`, `/shielded`) to a title and its pages. `railEntries(section)` is what `shell/SectionNav.tsx` draws: one entry per group at the place of its first page, current when any page of the group is open.
+- Final rails:
+  - Core: unchanged.
+  - Network: Nodes `/nodes`, Masternodes `/masternodes`, Map `/map`, Epochs `/epochs`, Protocol `/protocol`, Core 24 `/v24`, Changes `/changes`.
+  - Platform: Overview `/platform`, Blocks `/platform/blocks`, Transitions `/platform/txs`, Identities `/identities`, Contracts `/contracts`, Tokens `/tokens`, Names `/names`, Voting (group), Chain state (group).
+  - Tools: Query `/query`, Transition `/tools/transition`, Decoders (`navHref` `/tools/contract`), Verify message, QR reader, SDK reference, Radar API, Data sources.
+  - You: Saved, Settings, About.
+  - `/validators` is in the palette (keywords validators, evonodes) and not in the rail.
+- `PageGroupTabs({ group })` (`features/entity`) draws link tabs to a group's pages; each page of a group places it under its `h1`.
+- Every page's title, summary, `sources` (as built, including what remains in Decentralized only mode), `stories`, `keywords` and `record` are final.
+
+#### Types and keys (D)
+
+- `VIEW_KEY_PREFIXES` (`data/query/keys.ts`) lists the resource-name prefixes each package may use in `viewKeys` (§5.1): a test asserts that no prefix starts with another. F0's own is `mn-rows`.
+- `lib/tx-types.ts` has `TRANSITION_TYPES` (30 names, from Platform Explorer's transition types and the SDK's `StateTransition` variants, including `shielded`) and `BATCH_TYPES` (25 batch sub-types), with the types `TransitionType` and `BatchType`. `ui/kinds.ts` `TYPE_META` covers `CoreTxType | TransitionType | BatchType`, so `TypeBadge` draws every one.
+- `DataClass` lives in `lib/data-class.ts` (the SDK worker's graph may import `lib`); `data/query/stale.ts` re-exports it.
+
+#### Data layer (E)
+
+- **SDK method map, split by owner.** `data/sdk/methods.ts` (contract file) declares `SdkMethods extends SharedMethods, NetCMethods, PChainMethods, PBlocksMethods, PIdMethods, PDataMethods, PTokenMethods, PVoteMethods, ToolsMethods`. `data/sdk/worker/impl.ts` merges `impl/shared.ts` and `impl/<pkg>.ts`; `SdkReads` is the intersection of each file's `Reads`; `data/sdk/queries.ts` builds `CLASS_OF` from the class tables. `decodeWithWasm` is in `data/sdk/worker/decode.ts`. To add a method, a package adds it to its own methods interface and class table and implements it in its own impl file. The unit-test fake is `fakeReads` (`test/data/sdk/fakes.ts`).
+- **Shared SDK methods** (`data/sdk/methods/shared.ts`, `worker/impl/shared.ts`), each the `*WithProof` variant where one exists, so the answer is proof-checked; a wasm class never crosses the worker. `documents.query` clamps `limit` to 100. A map result has an entry for every key asked, `null` when absent.
+
+  | Method | Args | Result (DTO) |
+  |---|---|---|
+  | `identities.fetch` | `{ id }` | `IdentityDto \| null` (`id`, `balance`, `revision`, `keys: IdentityKeyDto[]`) |
+  | `identities.balances` | `{ ids }` | `Map<id, bigint \| null>` |
+  | `identities.byPublicKeyHash` | `{ pkh }` | `IdentityDto \| null` |
+  | `contracts.getMany` | `{ ids }` | `Map<id, ContractDto \| null>` (`id`, `ownerId`, `version`, `documentSchemas`) |
+  | `contracts.fetch` | `{ id }` | `ContractFullDto \| null`: `ContractDto` plus `keepsHistory`, `config`, `indices: Record<type, ContractIndexDto[]>`, `tokens: ContractTokenDto[]`, `groups: ContractGroupDto[]`. A contract the SDK reports as not found answers `null` unproved |
+  | `dpns.usernames` | `{ identityId, limit? }` | `string[]` |
+  | `dpns.getUsernameByName` | `{ name }` | `DpnsUsernameDto \| null` (`username`, `identityId`, `documentId`) |
+  | `documents.query` | `{ contractId, type, where?, orderBy?, limit?, startAfter?, startAt? }` | `DocumentDto[]` (ids, owner, `type`, `revision`, created/updated/transferred times and heights, `data`) |
+  | `documents.get` | `{ contractId, type, id }` | `DocumentDto \| null` |
+  | `tokens.contractInfo` | `{ tokenId }` | `TokenContractInfoDto \| null` (`contractId`, `position`) |
+  | `tokens.totalSupply` | `{ tokenId }` | `bigint \| null` |
+  | `tokens.statuses` | `{ tokenIds }` | `Map<id, TokenStatusDto \| null>` (`paused`) |
+  | `tokens.balances` | `{ tokenId, identityIds }` | `Map<identityId, bigint \| null>` |
+  | `tokens.identityBalances` | `{ identityId, tokenIds }` | `Map<tokenId, bigint \| null>` |
+  | `tokens.identityTokenInfos` | `{ identityId, tokenIds }` | `Map<tokenId, IdentityTokenInfoDto \| null>` (`frozen`) |
+  | `tokens.calculateId` | `{ contractId, position }` | `string` (computed locally, **unproved**) |
+  | `system.status` | — | `PlatformStatusDto` |
+  | `system.totalCredits` | — | `bigint \| null` |
+  | `system.currentQuorumsInfo` | — | `CurrentQuorumsDto` (`height`, `quorums: QuorumDto[]`; **unproved**: the SDK has no proof variant) |
+  | `epoch.current` | — | `EpochDto` |
+  | `epoch.epochsInfo` | `{ startEpoch?, count?, ascending? }` | `EpochDto[]` |
+  | `epoch.finalizedInfos` | `{ startEpoch, count?, ascending? }` | `FinalizedEpochDto[]` (an `EpochDto` plus `totalBlocks`, the fee totals and `blockProposers: Map<proTxHash, bigint>`; the index comes from the map key) |
+  | `epoch.evonodesProposedBlocksByIds` | `{ epoch, proTxHashes }` | `Map<proTxHash, bigint>` |
+  | `epoch.evonodesProposedBlocksByRange` | `{ epoch, limit?, startAfter? }` | `Map<proTxHash, bigint>` |
+  | `protocol.versionUpgradeState` | — | `VersionUpgradeStateDto` (`currentProtocolVersion`, `nextProtocolVersion`, `voteCount`) |
+  | `protocol.versionUpgradeVoteStatus` | `{ startProTxHash?, count }` | `Map<proTxHash, number>` |
+  | `voting.votePollsByEndDate` | `{ startTimeMs?, startTimeIncluded?, endTimeMs?, endTimeIncluded?, limit?, offset?, orderAscending? }` | `VotePollsByEndDateDto[]` (`timestampMs`, `polls: VotePollDto[]`) |
+  | `addresses.get` | `{ address }` | `PlatformAddressInfoDto \| null` (`address`, `balance`, `nonce`) |
+  | `addresses.getMany` | `{ addresses }` | `Map<address, PlatformAddressInfoDto \| null>` |
+
+- **Batchers** (`data/sdk/batchers.ts`, also `sdkBatchers` from `data/sdk/queries.ts`), built with `createBatcher` (§5.4): `identityBalance` (`identities.balances`), `contractMeta` (`contracts.getMany`), `tokenStatus` (`tokens.statuses`), `tokenBalance` (`tokens.balances`, key `{ tokenId, identityId }`, one call per token), `platformAddressInfo` (`addresses.getMany`) and `dpnsName` (see §5.4). Each writes its per-key queries as `[net, 'sdk', <name>, { <key> }]`. `useIdentityName(id)` (`features/entity`) reads `dpnsName`, so `IdentityRef` shows names.
+- **Masternode rows** (`data/masternodes/rows.ts`): `MnRow` (`protx`, `type`, `status`, `service`, `host`, `registration` from DAPI, `crawl` from Radar, `dapi` and `radar` stamps, `crawlDiffers`), `joinMnRows(crawl, list)`, `mnRowsQuery(net)` (key `viewKeys(net, 'mn-rows')`) and `MnRows { rows, dapi, radar }`. DAPI wins on type, status, service, keys, Platform ports and node ID. Radar refused by the mode leaves DAPI-only rows, and DAPI down leaves Radar-only rows. `filterMnRows(rows, filter)` and `mnFilterFacets(rows)` are in `data/masternodes/filter.ts`. NET-B owns both files and `data/core/mn-list.ts`, whose `masternodeList` rejects with `unavailable` until NET-B writes it (`core.masternodeList` delegates to it).
+- **Schemas split by owner.** `data/pe/schemas/` and `data/radar/schemas/` are directories whose `index.ts` re-exports everything, so `@/data/pe/schemas` still resolves. PE: `status`, `stats`, `search`, `rate`, `quorums` (P-HOME); `blocks`, `transactions` (P-BLOCKS); `identities` (P-ID); `contracts`, `documents` (P-DATA); `tokens`, `addresses` (P-TOKEN); `contested` (P-VOTE); `validators` (NET-C); `common` (shared, frozen). Radar: `status`, `summary`, `history`, `releases`, `bench`, `activation` (NET-A); `masternodes` (NET-B); `masternode`, `payments`, `mn-bench`, `check` (NET-C); `geo`, `changes` (NET-D); `platform` (P-CHAIN); `common` (frozen). `peQueries.verifyTransaction(net, base64)` is for TOOLS.
+- **Query log** (`data/query-log.ts`, diagnostics NX-62): `QueryLogEntry { id, at, net, source, what, ok, kind?, tookMs, node?, proved?, refusedByMode? }`, `queryLog.push`, `.snapshot()` (the newest 100), `.subscribe(cb)`, `.clear()`. `fetchSourced`, `SdkClient.call` and the DAPI pool each push one entry per call, including mode refusals. `what` is `METHOD /path` without the query string. YOU builds the panel.
+- **SDK fixtures.** `scripts/record-sdk-fixtures.mjs --net mainnet|testnet [--calls <pkg>[,<pkg>]] [--skip-existing] [--dry]` reads `scripts/sdk-fixture-calls/<pkg>.json` (`{ "mainnet": [[method, args], …], "testnet": […] }`). In the args, `"{name}"` is the id of that entity in `review/fixtures/<net>.json`, `"{name.field}"` one of its fields, `"{name:n}"` the same as a number, and `{absent}`, `{absent_pkh}` and `{absent_paddr}` ids that exist nowhere. `shared.json` holds F0's calls: every shared method, plus an absent case where it has one. A package adds `<pkg>.json`, runs the recorder under the build lock with `--skip-existing` and commits only its new files. Fixtures are keyed by the stable JSON of the args, so a changed argument needs a new recording.
+
+#### Entity and search extension points (F)
+
+- **Links.** `entityPath(kind, id, search?)` and `entityHref(kind, id, net, search?)` (`features/entity/hrefs.ts`) give a valid URL for every `EntityKind` under the schemas above: contest `/contest/<label>` with `contract`, `type`, `index` in `search` when it is not a DPNS contest; group `/group/<contract>/<pos>`; document `/document/<contract>/<type>/<id>`; quorum `/quorums?q=`; evonode `/mn/<protx>`; epoch `/epoch/<n>`; platform block `/platform/block/<height|hash>`. `<Entity>` takes the same `search`. A test covers each kind against the route tree.
+- **Hover cards**: `features/entity/register.ts` stays the registry (append-only, UNI-L); `GenericHoverCard` is the fallback.
+- **Search**: `features/search/resolvers/index.ts` is append-only (UNI-S); `UNFINISHED_ROUTES` (`features/search/offered.ts`) is delete-only: a package does not touch either, UNI-S removes a route from the set when its page is built.
+- **Stores** (`features/entity`, localStorage with `storage`-event sync and a try/catch on every access): `saved.ts` (key `radar.saved`: `SavedItem { net, kind: 'identity' | 'contract' | 'token', id, label?, savedAt }`, `useSaved`, `saveItem`, `removeItem`, `clearSaved(scope)`, `isSaved`, `useIsSaved`) with `SaveButton({ kind, id, label? })`; `viewed.ts` (key `radar.viewed`: `recordViewedIdentity(net, id)`, which does nothing unless on, `useViewedIdentities(net)`, `useViewedEnabled`, `setViewedEnabled`, `clearViewed`; off by default, 50 per network). `createJsonStore` (`lib/json-store.ts`, wrapped by `useJsonStore` in `features/entity/local-store.ts`) is the helper; `useListMode` uses it too.
+- **Platform components** (`features/entity/platform/`, exported from `features/entity`): `IdentityRef({ id, label?, size? })`; `TransitionTable({ rows, state, error, onRetry, paging, columns?, caption?, empty?, source? })` over `PeTransaction` (columns `type | hash | status | block | gas | owner | time`, phone cards, rows link to `/platform/tx/$hash`) and `transitionBadgeType(type, batchType)`; `PlatformBlockTable({ rows, …, epochOf? })` over `PeBlockSummary` (its epoch column appears only with `epochOf`). P-BLOCKS owns the two tables after F0.
+- **`PageFrame`** moved to `features/entity/PageFrame.tsx` with a `layer` prop (default `'core'`; non-Core pages also pass `eyebrow`) and `share` (default `false`), which draws `CopyLinkButton({ label? })` beside `actions`. Every entity page (one identity, contract, token, name, contest, document, block, transition, epoch, masternode, address) passes `share` (X-10). Act-elsewhere links use `LinkOut` (`ui/link-out.tsx`). UNI-L owns both after F0.
+- **Mount points.** `app/global-mounts.tsx` renders, deferred and only on first use, `ProofInspectorMount` and `DiagnosticsMount` (`features/you/index.ts`; stubs in `features/you/proof/ProofInspector.tsx` and `features/you/diagnostics/Diagnostics.tsx`), mounted once from `AppShell`. Open them with `requestGlobalMount('proof' | 'diagnostics')`; `ui/proof.ts` gained `onProofInspectorNeeded(load)`, and `openProofInspector` queues its proof until the inspector registers.
+- **Service worker seam (NX-77).** `src/sw/sw.ts` is a stub (an `install` handler that calls `skipWaiting`, no fetch handler) that `build/service-worker.ts` emits as an unhashed `/sw.js` outside the entry chunk. The edge Worker serves it as `text/javascript` with `cache-control: no-cache`. `size` and `check:bundle` ignore it. `app/sw-register.ts` `registerServiceWorker()` does nothing yet; `main.tsx` calls it once after first paint. Registering needs the Trusted Types worker-URL pattern and, in the fixture build, care for MSW's own worker, which already holds the root scope. YOU fills both.
+
+#### Shared UI (G)
+
+Exported from `@/ui` (not `@/ui/base`), with a `/__kit` section "Shared tools":
+- `JsonView({ value, collapsedDepth = 1, copy = true, maxHeight?, bytes?: 'hex' | 'base64', label? })`: a collapsible tree; `bigint` shows as digits with an `n`, `Uint8Array` as `0x…` or `base64:…`, cut in the middle past 64 bytes; 100 entries at a time; cycles and `Map` handled.
+- `RangeFilter({ label, value?: string, onChange(value | undefined) })` (`min..max`, validated with `zRange`) and `DateRangeFilter({ label, from?, to?, onChange({ from?, to? }) })` in `ui/table-tools.tsx`. The date filter takes the two fields the schemas use (`from`, `to`) rather than one string.
+- `ListModeToggle({ listId })` and `useListMode(listId): { mode: 'pages' | 'scroll'; limit: 10 | 25 | 50 | 75 | 100; setMode; setLimit }`, kept per list in `localStorage` `radar.list.<listId>` (PE-38).
+- `EpochClock({ index, startedAt, blocksSoFar?, expectedEndAt?, estimated, size?: 'md' | 'lg' })`: the epoch signature of RADAR-DESIGN §1.2, with a text equivalent (`role="meter"`). It renders `Trans`, so a test needs `I18nProvider`.
+
+#### i18n catalogs (I) and the e2e layout (J)
+
+See §9.1 and §10. A package's strings extract into its own `<pkg>.po`; the base `messages.po` is frozen until INT. A package's route cases are in `e2e/routes/<pkg>.ts` (`RouteCase { path, h1, nets?, built, decentralized, data?: string }`); set `built: true` when the page lands.
+
+#### Stories (K)
+
+`review/stories.yaml` changed in one place: `radar_start` of RA-02…RA-10 and RA-13 is now `/nodes` (the census overview page; the home keeps the headline, RA-01, RA-11 and RA-12). The owner should be told.
+
+#### Frozen after F0
+
+`app/search.ts`, `app/route-loader.ts`, every `routes/*.tsx` search schema and `loaderDeps`, `features/entity/site-map.ts`, `data/sdk/methods.ts`, `methods/shared.ts`, `impl/shared.ts`, `impl.ts`, `data/sdk/batchers.ts`, `data/query/keys.ts`, `data/query-log.ts`, `data/{pe,radar}/schemas/common.ts` and `index.ts`, `lingui.config.ts`, `scripts/check-i18n.mjs`, `scripts/record-sdk-fixtures.mjs`, `scripts/sdk-fixture-calls/shared.json`, `e2e/routes/{index,types,fixtures,m1}.ts`, `ui/` (the four components above and the rest), `eslint.boundaries.js` and `review/fixtures`. F0 itself changed one frozen file for the packages' sake: `eslint.boundaries.js` lets `routes` import `data/masternodes/filter.ts`.
 
 ---
 

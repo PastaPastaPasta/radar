@@ -1,11 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { routePrefetch } from '@/app/route-loader'
 import { NamePage } from '@/features/platform'
 
 export const Route = createFileRoute('/name/$label')({
-  component: NameRoute,
+  loaderDeps: ({ search }) => search,
+  loader: routePrefetch(
+    () => import('@/data/query/prefetch/p-vote'),
+    (m) => m.namePrefetch,
+  ),
+  component: NamePageRoute,
 })
 
-function NameRoute() {
+function NamePageRoute() {
   const { label } = Route.useParams()
   return <NamePage label={label} />
 }

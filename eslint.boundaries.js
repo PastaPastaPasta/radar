@@ -60,6 +60,7 @@ const zones = [
     './data/errors.ts',
     './data/health.ts',
     './data/query',
+    './data/masternodes/filter.ts',
     './data/dapi-core/budget.ts',
     ...['core', 'sdk', ...HTTP_SOURCES].map((s) => `./data/${s}/queries.ts`),
     ...FEATURES.map((f) => `./features/${f}/index.ts`),

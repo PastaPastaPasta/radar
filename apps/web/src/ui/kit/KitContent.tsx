@@ -12,6 +12,7 @@ import {
   StateSection,
   TokensSection,
 } from './sections'
+import { SharedToolsSection } from './shared-section'
 import { PaletteSection, TableSection, TabsSection } from './table-section'
 
 const SECTIONS: [string, string][] = [
@@ -26,6 +27,7 @@ const SECTIONS: [string, string][] = [
   ['states', 'States'],
   ['tabs', 'Tabs'],
   ['table', 'DataTable'],
+  ['shared', 'Shared tools'],
   ['linkouts', 'Link-outs'],
   ['palette', 'Palette'],
 ]
@@ -100,6 +102,7 @@ function KitBody() {
         <StateSection />
         <TabsSection />
         <TableSection />
+        <SharedToolsSection />
         <LinkOutSection />
         <PaletteSection />
       </div>

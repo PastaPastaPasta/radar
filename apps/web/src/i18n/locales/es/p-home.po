@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: es\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} de {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "{behind} bloques por detrás de la punta"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Un segundo índice para direcciones, salidas gastadas, chainwork y gobernanza"
+
+msgid "Asking Platform for its latest block…"
+msgstr "Preguntando a Platform por su último bloque…"
+
+msgid "Best ChainLock"
+msgstr "Mejor ChainLock"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "Poniéndose al día, {0}"
+
+msgid "ChainLock block hash, reported by one node"
+msgstr "Hash del bloque con ChainLock, informado por un nodo"
+
+msgid "ChainLock reported by one node"
+msgstr "ChainLock informado por un solo nodo"
+
+msgid "ChainLocked block hash"
+msgstr "Hash del bloque ChainLocked"
+
+msgid "Checking the sources…"
+msgstr "Comprobando las fuentes…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Direcciones Core, mempool, gobernanza y listas de bloques"
+
+msgid "Core tip"
+msgstr "Punta de Core"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Punta de Core, bloques y transacciones, directamente de los evonodes"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI y el SDK de Platform responden. Las fuentes alojadas están desactivadas en el modo «Solo descentralizado»."
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI está ocupado, así que las listas de bloques vienen de Hyphen mientras se recupera el presupuesto. Los detalles siguen usando DAPI."
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI no responde, así que los detalles de bloques y transacciones vienen de Hyphen y se indica así."
+
+msgid "DAPI request budget"
+msgstr "Presupuesto de solicitudes a DAPI"
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "El modo «Solo descentralizado» no contacta con esta fuente."
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Every source is answering."
+msgstr "Todas las fuentes responden."
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Todo lo que muestra Core procede de DAPI."
+
+msgid "Figures computed on your device"
+msgstr "Cifras calculadas en tu dispositivo"
+
+msgid "Getting tight"
+msgstr "Se está agotando"
+
+msgid "Headers and blocks"
+msgstr "Encabezados y bloques"
+
+msgid "Headroom"
+msgstr "Margen"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "Cómo responde cada fuente y cuánto se retrasan sus datos."
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Indexado hasta el bloque {indexed} de {chain} de Core. Hyphen dice que su sincronización es «{sync}», pero su índice va por detrás de la cadena."
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Indexado hasta el bloque Core {indexed} de {chain}. Sincronización: {sync}."
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Indexado hasta el bloque Platform {indexed} de {chain}. Indexador: {state}."
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "It answered with an error."
+msgstr "Respondió con un error."
+
+msgid "It hasn’t answered yet."
+msgstr "Todavía no ha respondido."
+
+msgid "It is rate limiting this browser."
+msgstr "Está limitando las solicitudes de este navegador."
+
+msgid "It sent an answer Radar can’t read."
+msgstr "Envió una respuesta que Radar no puede leer."
+
+msgid "It took too long to answer."
+msgstr "Tardó demasiado en responder."
+
+msgid "Its data is behind."
+msgstr "Sus datos van retrasados."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Su punta es el bloque {tip} de Core, por detrás de la cadena."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Su punta es el bloque {tip} de Core."
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "El último rastreo terminó {0}. Su nodo Core está en el bloque {1}."
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "Última respuesta correcta {0}."
+
+msgid "Median answer {rounded} ms"
+msgstr "Respuesta mediana {rounded} ms"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "Funcionamiento interno de la red: pares, presión del mempool, versiones e historial"
+
+msgid "No crawl has finished yet."
+msgstr "Todavía no ha terminado ningún rastreo."
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "Todavía no se ha hecho ninguna solicitud a DAPI en esta red."
+
+msgid "Node sync"
+msgstr "Sincronización del nodo"
+
+msgid "Nodes resting"
+msgstr "Nodos en reposo"
+
+msgid "Not available right now"
+msgstr "No disponible por ahora"
+
+msgid "Not offered"
+msgstr "No ofrecido"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "Nadie le ha preguntado todavía en esta red."
+
+msgid "Off in this mode"
+msgstr "Desactivado en este modo"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Listas y recuentos de Platform"
+
+msgid "Platform SDK"
+msgstr "SDK de Platform"
+
+msgid "Plenty of room"
+msgstr "Mucho margen"
+
+msgid "Pressure"
+msgstr "Presión"
+
+msgid "Price feed"
+msgstr "Fuente de precios"
+
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Verificado con pruebas en el bloque {block} de Platform, época {epoch}. Ese bloque es de {age}."
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "Estado de Platform verificado con pruebas, comprobado en este navegador"
+
+msgid "Radar crawler"
+msgstr "Rastreador de Radar"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar mantiene cada evonode muy por debajo de su límite de solicitudes, para que un visitante no desplace a otro."
+
+msgid "Requests in the last minute"
+msgstr "Solicitudes del último minuto"
+
+msgid "Some requests are failing."
+msgstr "Algunas solicitudes están fallando."
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "Algunas fuentes van lentas o retrasadas. El resto sigue funcionando."
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "Algunas fuentes no responden. El resto sigue funcionando."
+
+msgid "Sources"
+msgstr "Fuentes"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Synced"
+msgstr "Sincronizado"
+
+msgid "The connection failed."
+msgstr "La conexión falló."
+
+msgid "The masternode census and network history"
+msgstr "El censo de masternodes y el historial de la red"
+
+msgid "The median answer takes {seconds} s."
+msgstr "La respuesta mediana tarda {seconds} s."
+
+msgid "The request budget is nearly used."
+msgstr "El presupuesto de solicitudes está casi agotado."
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "La cotización en USD a través de Platform Explorer"
+
+msgid "This browser"
+msgstr "Este navegador"
+
+msgid "This network doesn’t have this source."
+msgstr "Esta red no tiene esta fuente."
+
+msgid "Tip hash"
+msgstr "Hash de la punta"
+
+msgid "Used up for now"
+msgstr "Agotado por ahora"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "Lo que informan ahora los evonodes sobre la cadena."

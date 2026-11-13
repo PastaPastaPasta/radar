@@ -10,6 +10,7 @@ import { dashhqAssets } from './build/dashhq-assets'
 import { fixtureWorker } from './build/fixture-worker'
 import { sdkSplit } from './build/sdk-split'
 import { securityHeaders } from './build/security-headers'
+import { serviceWorker } from './build/service-worker'
 import { hyphenProxy } from './src/data/hyphen/dev-proxy'
 
 function appVersion(): string {
@@ -35,6 +36,7 @@ export default defineConfig(({ mode }) => {
       securityHeaders(),
       fixtureWorker(fixtures),
       sdkSplit({ fixtures }),
+      serviceWorker(),
     ],
     resolve: {
       alias: [

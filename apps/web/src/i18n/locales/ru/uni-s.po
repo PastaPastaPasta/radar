@@ -1,0 +1,285 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ru\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+msgid "“{query}” · Search"
+msgstr "«{query}» · Поиск"
+
+msgid "“{query}” isn’t something Radar can look up."
+msgstr "Radar не может найти «{query}»."
+
+#. placeholder {0}: description.join(' · ')
+msgid "“{query}” looks like {0}."
+msgstr "«{query}» похоже на {0}."
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, one {# транзакция} few {# транзакции} many {# транзакций} other {# транзакции}}"
+
+#. placeholder {0}: secretNotice(secret).title
+msgid "{0}. Radar never sends it anywhere."
+msgstr "{0}. Radar никуда его не отправляет."
+
+msgid "a 40-character hash: a public-key hash"
+msgstr "40-символьный хеш: хеш открытого ключа"
+
+msgid "a 64-character hash: a block, transaction, ProTx or transition"
+msgstr "64-символьный хеш: блок, транзакция, ProTx или переход"
+
+msgid "a Core address"
+msgstr "адрес Core"
+
+msgid "a date: the Core blocks of that UTC day"
+msgstr "дата: блоки Core за этот день по UTC"
+
+msgid "A guess"
+msgstr "Предположение"
+
+msgid "A guess, not a result"
+msgstr "Предположение, а не результат"
+
+msgid "A guess: Radar has not checked that this name exists"
+msgstr "Предположение: Radar не проверял, существует ли это имя"
+
+msgid "a name"
+msgstr "имя"
+
+msgid "a number: a Core height, Platform height or epoch"
+msgstr "число: высота Core, высота Platform или эпоха"
+
+msgid "a Platform address"
+msgstr "адрес Platform"
+
+msgid "an ID: an identity, contract, token or document"
+msgstr "идентификатор: идентичность, контракт, токен или документ"
+
+msgid "an IP address: a masternode’s service address"
+msgstr "IP-адрес: служебный адрес мастерноды"
+
+#. placeholder {0}: short(hash)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core address"
+msgstr "Адрес Core"
+
+#. placeholder {0}: balance ?? ''
+#. placeholder {1}: a.txCount
+msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
+msgstr "Адрес Core · {0} · {1, plural, one {# транзакция} few {# транзакции} many {# транзакций} other {# транзакции}}"
+
+msgid "Core address · no activity seen"
+msgstr "Адрес Core · активности не обнаружено"
+
+msgid "Core block"
+msgstr "Блок Core"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Core block {0}"
+msgstr "Блок Core {0}"
+
+msgid "Core block {label}"
+msgstr "Блок Core {label}"
+
+msgid "Core block heights and hashes, transaction IDs and addresses"
+msgstr "Высоты и хеши блоков Core, ID транзакций и адреса"
+
+msgid "Core blocks on {label}"
+msgstr "Блоки Core за {label}"
+
+msgid "Core height"
+msgstr "Высота Core"
+
+msgid "Core transaction"
+msgstr "Транзакция Core"
+
+#. placeholder {0}: formatInt(height)
+msgid "Core transaction in block {0}"
+msgstr "Транзакция Core в блоке {0}"
+
+msgid "Core transaction, unconfirmed"
+msgstr "Транзакция Core, не подтверждена"
+
+msgid "Enabled"
+msgstr "Включена"
+
+msgid "Epoch {label}"
+msgstr "Эпоха {label}"
+
+msgid "Evonode {where}"
+msgstr "Эвонода {where}"
+
+msgid "Go to"
+msgstr "Перейти"
+
+msgid "Governance proposal"
+msgstr "Предложение по управлению"
+
+msgid "Guess"
+msgstr "Предположение"
+
+msgid "Height, hash, address, ProTx, IP, ID, name…"
+msgstr "Высота, хеш, адрес, ProTx, IP, ID, имя…"
+
+msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
+msgstr "Идентичности, контракты, токены и документы по ID, а также идентичность по хешу её открытого ключа"
+
+msgid "Identity with this public-key hash"
+msgstr "Идентичность с этим хешем открытого ключа"
+
+#. placeholder {0}: description.join(' · ')
+msgid "Looks like {0}"
+msgstr "Похоже на {0}"
+
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "Поиск по индексу был пропущен, поэтому некоторые совпадения могут отсутствовать"
+
+msgid "Masternode"
+msgstr "Мастернода"
+
+#. placeholder {0}: short(hash)
+msgid "Masternode {0}"
+msgstr "Мастернода {0}"
+
+msgid "Masternode {where}"
+msgstr "Мастернода {where}"
+
+msgid "Masternodes by ProTx hash or IP address"
+msgstr "Мастерноды по хешу ProTx или IP-адресу"
+
+msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
+msgstr "Имена, оканчивающиеся на .dash, эпохи и даты (блоки Core за сутки)"
+
+msgid "Network"
+msgstr "Сеть"
+
+msgid "No match for “{query}” as a Core record on {network}"
+msgstr "Нет совпадений для «{query}» среди записей Core в сети {network}"
+
+msgid "Nothing above confirms this. It is only one way to read what you typed."
+msgstr "Ничто выше этого не подтверждает. Это лишь один из способов прочитать ваш ввод."
+
+msgid "Open on {where}"
+msgstr "Открыть в сети {where}"
+
+msgid "Pages"
+msgstr "Страницы"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адрес Platform"
+
+msgid "Platform block {label}"
+msgstr "Блок Platform {label}"
+
+msgid "Platform blocks, state transitions and Platform addresses"
+msgstr "Блоки Platform, переходы состояния и адреса Platform"
+
+msgid "Platform epoch"
+msgstr "Эпоха Platform"
+
+msgid "Platform height"
+msgstr "Высота Platform"
+
+msgid "PoSe banned"
+msgstr "Забанена по PoSe"
+
+#. placeholder {0}: short(found.hash)
+msgid "Proposal {0}"
+msgstr "Предложение {0}"
+
+msgid "Radar checked every source that can answer this kind of input."
+msgstr "Radar проверил все источники, которые могут ответить на такой ввод."
+
+msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
+msgstr "Radar не нашёл для этого ни блока, ни транзакции, ни адреса, ни мастерноды, ни другой записи. Попробуйте высоту, хеш, адрес, ID или имя."
+
+msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
+msgstr "Radar никогда не нуждается в фразе восстановления, поэтому такие слова никуда не отправляются и не попадают в адресную строку и историю. Лучше ищите имя, ID или число."
+
+msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
+msgstr "Radar никогда в нём не нуждается, поэтому он никуда не отправляется и не попадает в адресную строку и историю."
+
+msgid "Results"
+msgstr "Результаты"
+
+msgid "Search"
+msgstr "Поиск"
+
+#. placeholder {0}: networkName(otherNetwork(net))
+msgid "Search {0}"
+msgstr "Искать в сети {0}"
+
+msgid "Search blocks, transactions, masternodes, names…"
+msgstr "Поиск блоков, транзакций, мастернод, имён…"
+
+msgid "Search Radar"
+msgstr "Поиск по Radar"
+
+msgid "Searching…"
+msgstr "Поиск…"
+
+msgid "See all results for “{trimmed}”"
+msgstr "Все результаты по запросу «{trimmed}»"
+
+msgid "See all results for “{trimmed}” on {net}"
+msgstr "Все результаты по запросу «{trimmed}» в сети {net}"
+
+#. placeholder {0}: failed.map((f) => f.id).join(', ')
+msgid "Some sources didn’t answer: {0}."
+msgstr "Некоторые источники не ответили: {0}."
+
+msgid "text: a contract or token name"
+msgstr "текст: название контракта или токена"
+
+msgid "That could be part of a recovery phrase"
+msgstr "Это может быть частью фразы восстановления"
+
+msgid "That looks like a private key or recovery phrase"
+msgstr "Похоже на закрытый ключ или фразу восстановления"
+
+msgid "This is a mainnet address"
+msgstr "Это адрес основной сети"
+
+msgid "This is a mainnet Platform address"
+msgstr "Это адрес Platform основной сети"
+
+msgid "This is a testnet address"
+msgstr "Это адрес тестовой сети"
+
+msgid "This is a testnet Platform address"
+msgstr "Это адрес Platform тестовой сети"
+
+#. placeholder {0}: short(hash)
+msgid "Transaction {0}"
+msgstr "Транзакция {0}"
+
+#. placeholder {0}: tx.txid.slice(0, 10)
+#. placeholder {1}: tx.txid.slice(-6)
+msgid "Transaction {0}…{1}"
+msgstr "Транзакция {0}…{1}"
+
+msgid "Try"
+msgstr "Попробуйте"
+
+msgid "UTC day"
+msgstr "День по UTC"
+
+msgid "What you can search for"
+msgstr "Что можно искать"

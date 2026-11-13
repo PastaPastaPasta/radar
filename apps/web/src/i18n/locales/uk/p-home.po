@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: uk\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} з {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "Відставання від вершини: {behind} блоків"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Другий індекс для адрес, витрачених виходів, chainwork і управління"
+
+msgid "Asking Platform for its latest block…"
+msgstr "Запитуємо в Platform останній блок…"
+
+msgid "Best ChainLock"
+msgstr "Найкращий ChainLock"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "Синхронізація, {0}"
+
+msgid "ChainLock block hash, reported by one node"
+msgstr "Хеш блока з ChainLock, повідомлений одним вузлом"
+
+msgid "ChainLock reported by one node"
+msgstr "ChainLock повідомлено одним вузлом"
+
+msgid "ChainLocked block hash"
+msgstr "Хеш блока з ChainLock"
+
+msgid "Checking the sources…"
+msgstr "Перевіряємо джерела…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Адреси Core, мемпул, управління та списки блоків"
+
+msgid "Core tip"
+msgstr "Вершина Core"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Вершина Core, блоки й транзакції — безпосередньо від evonode"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI і Platform SDK відповідають. Розміщені джерела вимкнені в режимі «Лише децентралізовано»."
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI зайнятий, тому списки блоків беруться з Hyphen, поки відновлюється ліміт запитів. Подробиці, як і раніше, йдуть через DAPI."
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI не відповідає, тому подробиці про блоки й транзакції беруться з Hyphen, і це зазначено."
+
+msgid "DAPI request budget"
+msgstr "Ліміт запитів до DAPI"
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "Режим «Лише децентралізовано» не звертається до цього джерела."
+
+msgid "Details"
+msgstr "Подробиці"
+
+msgid "Every source is answering."
+msgstr "Усі джерела відповідають."
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Усе, що показує Core, береться з DAPI."
+
+msgid "Figures computed on your device"
+msgstr "Значення, обчислені на вашому пристрої"
+
+msgid "Getting tight"
+msgstr "Запас скорочується"
+
+msgid "Headers and blocks"
+msgstr "Заголовки та блоки"
+
+msgid "Headroom"
+msgstr "Запас"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "Як відповідає кожне джерело і наскільки відстають його дані."
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Проіндексовано до блоку Core {indexed} із {chain}. Hyphen називає свою синхронізацію «{sync}», але її індекс відстає від ланцюга."
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Проіндексовано до блока Core {indexed} із {chain}. Синхронізація: {sync}."
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Проіндексовано до блока Platform {indexed} із {chain}. Індексатор: {state}."
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "It answered with an error."
+msgstr "Він відповів помилкою."
+
+msgid "It hasn’t answered yet."
+msgstr "Він ще не відповів."
+
+msgid "It is rate limiting this browser."
+msgstr "Він обмежує запити з цього браузера."
+
+msgid "It sent an answer Radar can’t read."
+msgstr "Він надіслав відповідь, яку Radar не може прочитати."
+
+msgid "It took too long to answer."
+msgstr "Він надто довго відповідав."
+
+msgid "Its data is behind."
+msgstr "Його дані відстають."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Його вершина — блок Core {tip}, він відстає від ланцюга."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Його вершина — блок Core {tip}."
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "Останнє опитування завершилося {0}. Його вузол Core на блоці {1}."
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "Остання успішна відповідь: {0}."
+
+msgid "Median answer {rounded} ms"
+msgstr "Медіанний час відповіді {rounded} мс"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "Внутрішня будова мережі: піри, навантаження мемпулу, версії та історія"
+
+msgid "No crawl has finished yet."
+msgstr "Жодне опитування ще не завершилося."
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "У цій мережі ще не було запитів до DAPI."
+
+msgid "Node sync"
+msgstr "Синхронізація вузла"
+
+msgid "Nodes resting"
+msgstr "Вузли в простої"
+
+msgid "Not available right now"
+msgstr "Зараз недоступно"
+
+msgid "Not offered"
+msgstr "Не пропонується"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "У цій мережі до нього ще ніхто не звертався."
+
+msgid "Off in this mode"
+msgstr "У цьому режимі вимкнено"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Списки та лічильники Platform"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Plenty of room"
+msgstr "Великий запас"
+
+msgid "Pressure"
+msgstr "Навантаження"
+
+msgid "Price feed"
+msgstr "Джерело цін"
+
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Підтверджено доказом на блоці Platform {block}, епоха {epoch}. Цьому блоку {age}."
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "Стан Platform, підтверджений доказом і перевірений у цьому браузері"
+
+msgid "Radar crawler"
+msgstr "Обходчик Radar"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar тримає навантаження на кожну evonode значно нижче її ліміту запитів, щоб один відвідувач не витісняв іншого."
+
+msgid "Requests in the last minute"
+msgstr "Запитів за останню хвилину"
+
+msgid "Some requests are failing."
+msgstr "Частина запитів завершується помилкою."
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "Деякі джерела повільні або відстають. Решта працює."
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "Деякі джерела не відповідають. Решта працює."
+
+msgid "Sources"
+msgstr "Джерела"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Synced"
+msgstr "Синхронізовано"
+
+msgid "The connection failed."
+msgstr "Не вдалося підключитися."
+
+msgid "The masternode census and network history"
+msgstr "Перепис мастернод та історія мережі"
+
+msgid "The median answer takes {seconds} s."
+msgstr "Медіанний час відповіді — {seconds} с."
+
+msgid "The request budget is nearly used."
+msgstr "Ліміт запитів майже вичерпано."
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "Курс USD через Platform Explorer"
+
+msgid "This browser"
+msgstr "Цей браузер"
+
+msgid "This network doesn’t have this source."
+msgstr "У цій мережі немає такого джерела."
+
+msgid "Tip hash"
+msgstr "Хеш вершини"
+
+msgid "Used up for now"
+msgstr "Наразі вичерпано"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "Що зараз повідомляють про ланцюг evonode."

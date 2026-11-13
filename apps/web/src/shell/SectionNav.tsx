@@ -1,14 +1,8 @@
+import { i18n } from '@lingui/core'
 import { t } from '@lingui/core/macro'
 import { useRouterState } from '@tanstack/react-router'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import {
-  PageLink,
-  pageTitle,
-  sectionLabel,
-  findPage,
-  pagesInSection,
-  sectionOfPath,
-} from '@/features/search'
+import { PageLink, sectionLabel, findPage, railEntries, sectionOfPath } from '@/features/search'
 import { Icon } from '@/ui'
 import { UnitSwitch } from './UnitSwitch'
 
@@ -52,7 +46,7 @@ export function SectionNav() {
   }, [section, update])
 
   if (section === 'home' || section === 'search') return null
-  const pages = pagesInSection(section)
+  const entries = railEntries(section)
   return (
     <>
       <div className="rx-secrail">
@@ -63,14 +57,14 @@ export function SectionNav() {
           onScroll={update}
         >
           <ul className="flex gap-x-4 gap-y-1 whitespace-nowrap sm:gap-x-5">
-            {pages.map((p) => (
-              <li key={p.path}>
+            {entries.map((entry) => (
+              <li key={entry.key}>
                 <PageLink
-                  to={p.path}
-                  aria-current={current?.path === p.path ? 'page' : undefined}
+                  to={entry.href ?? entry.to}
+                  aria-current={current && entry.pages.includes(current.path) ? 'page' : undefined}
                   className="inline-block py-2"
                 >
-                  {pageTitle(p)}
+                  {i18n._(entry.title)}
                 </PageLink>
               </li>
             ))}

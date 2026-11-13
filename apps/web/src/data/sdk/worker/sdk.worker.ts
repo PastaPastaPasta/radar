@@ -2,7 +2,8 @@ import * as Comlink from 'comlink'
 import type { SdkWorkerApi, WireError, WireResult } from '../methods'
 import { createSdkWorkerApi } from './api'
 import { createFetchGuard } from './fetch-guard'
-import { createEvoSdk, decodeWithWasm } from './sdk-factory'
+import { decodeWithWasm } from './decode'
+import { createEvoSdk } from './sdk-factory'
 
 const guard = createFetchGuard(globalThis.fetch.bind(globalThis))
 globalThis.fetch = guard.fetch

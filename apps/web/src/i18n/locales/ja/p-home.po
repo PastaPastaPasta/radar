@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ja\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "先頭から {behind} ブロック遅れ"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "アドレス、使用済み出力、チェーンワーク、ガバナンスのための第2のインデックス"
+
+msgid "Asking Platform for its latest block…"
+msgstr "Platform に最新ブロックを問い合わせ中…"
+
+msgid "Best ChainLock"
+msgstr "最新の ChainLock"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "同期中、{0}"
+
+msgid "ChainLock block hash, reported by one node"
+msgstr "ChainLock のブロックハッシュ(1 ノードの報告)"
+
+msgid "ChainLock reported by one node"
+msgstr "1つのノードが報告した ChainLock"
+
+msgid "ChainLocked block hash"
+msgstr "ChainLocked ブロックのハッシュ"
+
+msgid "Checking the sources…"
+msgstr "ソースを確認中…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Core のアドレス、メモリプール、ガバナンス、ブロック一覧"
+
+msgid "Core tip"
+msgstr "Core の先頭"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Core の先頭、ブロック、トランザクションを evonode から直接取得"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI と Platform SDK が応答しています。ホスト型のソースは「分散型のみ」モードではオフです。"
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI が混み合っているため、予算が回復するまでブロック一覧は Hyphen から取得します。詳細は引き続き DAPI を使います。"
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI が応答していないため、ブロックとトランザクションの詳細は Hyphen から取得し、その旨を表示します。"
+
+msgid "DAPI request budget"
+msgstr "DAPI リクエスト予算"
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "「分散型のみ」モードではこのソースに接続しません。"
+
+msgid "Details"
+msgstr "詳細"
+
+msgid "Every source is answering."
+msgstr "すべてのソースが応答しています。"
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Core に表示されるものはすべて DAPI から取得しています。"
+
+msgid "Figures computed on your device"
+msgstr "お使いの端末で計算した数値"
+
+msgid "Getting tight"
+msgstr "余裕が少なくなっています"
+
+msgid "Headers and blocks"
+msgstr "ヘッダーとブロック"
+
+msgid "Headroom"
+msgstr "余裕"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "各ソースの応答状況と、データがどれだけ遅れているか。"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "Core ブロック {indexed}（チェーンは {chain}）までインデックス済みです。同期は「{sync}」と表示されていますが、インデックスはチェーンに遅れています。"
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Core ブロック {indexed}/{chain} までインデックス済み。同期: {sync}。"
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Platform ブロック {indexed}/{chain} までインデックス済み。インデクサー: {state}。"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "It answered with an error."
+msgstr "エラーを返しました。"
+
+msgid "It hasn’t answered yet."
+msgstr "まだ応答がありません。"
+
+msgid "It is rate limiting this browser."
+msgstr "このブラウザのリクエストを制限しています。"
+
+msgid "It sent an answer Radar can’t read."
+msgstr "Radar が読み取れない応答を返しました。"
+
+msgid "It took too long to answer."
+msgstr "応答に時間がかかりすぎました。"
+
+msgid "Its data is behind."
+msgstr "データが遅れています。"
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "先端は Core のブロック {tip} で、チェーンより遅れています。"
+
+msgid "Its tip is Core block {tip}."
+msgstr "先端は Core のブロック {tip} です。"
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "直近のクロールは {0} に完了しました。その Core ノードはブロック {1} にあります。"
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "最後に正常だったのは {0} です。"
+
+msgid "Median answer {rounded} ms"
+msgstr "応答時間の中央値 {rounded} ms"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "ネットワークの内部情報：ピア、メモリプールの負荷、バージョン、履歴"
+
+msgid "No crawl has finished yet."
+msgstr "完了したクロールはまだありません。"
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "このネットワークではまだ DAPI リクエストが行われていません。"
+
+msgid "Node sync"
+msgstr "ノードの同期"
+
+msgid "Nodes resting"
+msgstr "待機中のノード"
+
+msgid "Not available right now"
+msgstr "現在利用できません"
+
+msgid "Not offered"
+msgstr "提供なし"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "このネットワークではまだ誰も問い合わせていません。"
+
+msgid "Off in this mode"
+msgstr "このモードではオフ"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Platform の一覧と件数"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Plenty of room"
+msgstr "十分な余裕"
+
+msgid "Pressure"
+msgstr "負荷"
+
+msgid "Price feed"
+msgstr "価格フィード"
+
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Platform ブロック {block}（エポック {epoch}）で証明により検証済み。このブロックは {age} です。"
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "証明で検証済みの Platform の状態（このブラウザで検証）"
+
+msgid "Radar crawler"
+msgstr "Radar クローラー"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar は各 evonode をレート制限よりずっと低く保つため、一人の訪問者が他の訪問者を押し出すことはありません。"
+
+msgid "Requests in the last minute"
+msgstr "直近1分間のリクエスト"
+
+msgid "Some requests are failing."
+msgstr "一部のリクエストが失敗しています。"
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "一部のソースが遅いか、遅れています。ほかは引き続き動作しています。"
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "一部のソースが応答していません。ほかは引き続き動作しています。"
+
+msgid "Sources"
+msgstr "ソース"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "Synced"
+msgstr "同期済み"
+
+msgid "The connection failed."
+msgstr "接続に失敗しました。"
+
+msgid "The masternode census and network history"
+msgstr "マスターノードの調査とネットワークの履歴"
+
+msgid "The median answer takes {seconds} s."
+msgstr "応答時間の中央値は {seconds} 秒です。"
+
+msgid "The request budget is nearly used."
+msgstr "リクエスト予算がほぼ尽きています。"
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "Platform Explorer 経由の USD レート"
+
+msgid "This browser"
+msgstr "このブラウザ"
+
+msgid "This network doesn’t have this source."
+msgstr "このネットワークにはこのソースがありません。"
+
+msgid "Tip hash"
+msgstr "先頭のハッシュ"
+
+msgid "Used up for now"
+msgstr "現在は使い切りました"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "evonode が現在チェーンについて報告している内容。"

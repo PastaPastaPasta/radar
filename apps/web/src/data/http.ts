@@ -5,6 +5,7 @@ import { endpoint, sourceOff, type EndpointSource } from './endpoints'
 import type { SourceId, Sourced } from './envelope'
 import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { healthRegistry } from './health'
+import { queryLog } from './query-log'
 import type { NetworkId } from '@/lib/network'
 
 type HttpSource = Exclude<SourceId, 'sdk' | 'dapi' | 'local'>
@@ -138,7 +139,48 @@ function issuePath(path: readonly PropertyKey[]): string {
   return path.map((p) => String(p)).join('.') || '(root)'
 }
 
+function logWhat(req: FetchSourcedRequest<z.ZodType, 'throw' | 'null'>): string {
+  const method = req.method ?? 'GET'
+  try {
+    const url = typeof req.url === 'function' ? req.url() : req.url
+    return `${method} ${new URL(url, 'http://radar.invalid').pathname}`
+  } catch {
+    return `${method} ${req.source}`
+  }
+}
+
+/** Reads one answer from a hosted source and records the call for Tools → Diagnostics (§11.5). */
 export async function fetchSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'throw'>(
+  req: FetchSourcedRequest<S, N>,
+): Promise<Sourced<N extends 'null' ? z.output<S> | null : z.output<S>>> {
+  const net = req.net ?? getActiveNetwork()
+  const started = performance.now()
+  const log = (extra: { ok: boolean; kind?: SourceErrorKind; refusedByMode?: boolean }) => {
+    queryLog.push({
+      net,
+      source: req.source,
+      what: extra.refusedByMode ? `${req.method ?? 'GET'} ${req.source}` : logWhat(req),
+      tookMs: Math.round(performance.now() - started),
+      ...extra,
+    })
+  }
+  try {
+    const out = await readSourced(req)
+    log({ ok: true })
+    return out
+  } catch (e) {
+    if (e instanceof SourceError) {
+      log(
+        e.kind === 'disabled-by-mode'
+          ? { ok: false, kind: e.kind, refusedByMode: true }
+          : { ok: false, kind: e.kind },
+      )
+    } else log({ ok: false, kind: 'network' })
+    throw e
+  }
+}
+
+async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'throw'>(
   req: FetchSourcedRequest<S, N>,
 ): Promise<Sourced<N extends 'null' ? z.output<S> | null : z.output<S>>> {
   type Out = N extends 'null' ? z.output<S> | null : z.output<S>

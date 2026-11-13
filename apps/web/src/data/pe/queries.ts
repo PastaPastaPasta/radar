@@ -88,6 +88,13 @@ export const peQueries = {
       queryFn: ({ signal }) => pe.transaction(net, hash, signal),
       ...dataClass('index'),
     }),
+  /** A dry run (Tenderdash CheckTx), not a broadcast. */
+  verifyTransaction: (net: NetworkId, base64: string) =>
+    queryOptions({
+      queryKey: peKeys(net, 'transaction-verify', { base64 }),
+      queryFn: ({ signal }) => pe.verifyTransaction(net, base64, signal),
+      ...dataClass('live'),
+    }),
   identities: list('identities', (n, q, sig) => pe.identities(n, q, sig)),
   identity: (net: NetworkId, id: string) =>
     queryOptions({

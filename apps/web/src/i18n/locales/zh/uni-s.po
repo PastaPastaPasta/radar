@@ -1,0 +1,285 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: zh\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+msgid "“{query}” · Search"
+msgstr "“{query}” · 搜索"
+
+msgid "“{query}” isn’t something Radar can look up."
+msgstr "Radar 无法查询“{query}”。"
+
+#. placeholder {0}: description.join(' · ')
+msgid "“{query}” looks like {0}."
+msgstr "“{query}”看起来像{0}。"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, other {# 笔交易}}"
+
+#. placeholder {0}: secretNotice(secret).title
+msgid "{0}. Radar never sends it anywhere."
+msgstr "{0}。Radar 不会将其发送到任何地方。"
+
+msgid "a 40-character hash: a public-key hash"
+msgstr "40 位哈希：公钥哈希"
+
+msgid "a 64-character hash: a block, transaction, ProTx or transition"
+msgstr "64 位哈希：区块、交易、ProTx 或状态转换"
+
+msgid "a Core address"
+msgstr "Core 地址"
+
+msgid "a date: the Core blocks of that UTC day"
+msgstr "日期：该 UTC 日的 Core 区块"
+
+msgid "A guess"
+msgstr "猜测"
+
+msgid "A guess, not a result"
+msgstr "这是猜测，不是结果"
+
+msgid "A guess: Radar has not checked that this name exists"
+msgstr "猜测：Radar 尚未确认此名称是否存在"
+
+msgid "a name"
+msgstr "名称"
+
+msgid "a number: a Core height, Platform height or epoch"
+msgstr "数字：Core 高度、Platform 高度或纪元"
+
+msgid "a Platform address"
+msgstr "Platform 地址"
+
+msgid "an ID: an identity, contract, token or document"
+msgstr "ID：身份、合约、代币或文档"
+
+msgid "an IP address: a masternode’s service address"
+msgstr "IP 地址：主节点的服务地址"
+
+#. placeholder {0}: short(hash)
+msgid "Block {0}"
+msgstr "区块 {0}"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core address"
+msgstr "Core 地址"
+
+#. placeholder {0}: balance ?? ''
+#. placeholder {1}: a.txCount
+msgid "Core address · {0} · {1, plural, one {# transaction} other {# transactions}}"
+msgstr "Core 地址 · {0} · {1, plural, other {# 笔交易}}"
+
+msgid "Core address · no activity seen"
+msgstr "Core 地址 · 未发现活动"
+
+msgid "Core block"
+msgstr "Core 区块"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Core block {0}"
+msgstr "Core 区块 {0}"
+
+msgid "Core block {label}"
+msgstr "Core 区块 {label}"
+
+msgid "Core block heights and hashes, transaction IDs and addresses"
+msgstr "Core 区块高度和哈希、交易 ID 和地址"
+
+msgid "Core blocks on {label}"
+msgstr "{label} 的 Core 区块"
+
+msgid "Core height"
+msgstr "Core 高度"
+
+msgid "Core transaction"
+msgstr "Core 交易"
+
+#. placeholder {0}: formatInt(height)
+msgid "Core transaction in block {0}"
+msgstr "区块 {0} 中的 Core 交易"
+
+msgid "Core transaction, unconfirmed"
+msgstr "Core 交易，未确认"
+
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Epoch {label}"
+msgstr "纪元 {label}"
+
+msgid "Evonode {where}"
+msgstr "Evonode {where}"
+
+msgid "Go to"
+msgstr "前往"
+
+msgid "Governance proposal"
+msgstr "治理提案"
+
+msgid "Guess"
+msgstr "猜测"
+
+msgid "Height, hash, address, ProTx, IP, ID, name…"
+msgstr "高度、哈希、地址、ProTx、IP、ID、名称…"
+
+msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
+msgstr "通过 ID 查找身份、合约、代币和文档，或通过公钥哈希查找身份"
+
+msgid "Identity with this public-key hash"
+msgstr "具有此公钥哈希的身份"
+
+#. placeholder {0}: description.join(' · ')
+msgid "Looks like {0}"
+msgstr "看起来像{0}"
+
+msgid "Lookups in an index were skipped, so some matches may be missing"
+msgstr "已跳过对索引的查询，因此可能缺少部分匹配项"
+
+msgid "Masternode"
+msgstr "主节点"
+
+#. placeholder {0}: short(hash)
+msgid "Masternode {0}"
+msgstr "主节点 {0}"
+
+msgid "Masternode {where}"
+msgstr "主节点 {where}"
+
+msgid "Masternodes by ProTx hash or IP address"
+msgstr "按 ProTx 哈希或 IP 地址查找主节点"
+
+msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
+msgstr "以 .dash 结尾的名称、纪元和日期（某一天的 Core 区块）"
+
+msgid "Network"
+msgstr "网络"
+
+msgid "No match for “{query}” as a Core record on {network}"
+msgstr "在 {network} 上没有与“{query}”匹配的 Core 记录"
+
+msgid "Nothing above confirms this. It is only one way to read what you typed."
+msgstr "上面没有任何结果能证实这一点，这只是对你输入内容的一种解读。"
+
+msgid "Open on {where}"
+msgstr "在 {where} 上打开"
+
+msgid "Pages"
+msgstr "页面"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform 地址"
+
+msgid "Platform block {label}"
+msgstr "Platform 区块 {label}"
+
+msgid "Platform blocks, state transitions and Platform addresses"
+msgstr "Platform 区块、状态转换和 Platform 地址"
+
+msgid "Platform epoch"
+msgstr "Platform 纪元"
+
+msgid "Platform height"
+msgstr "Platform 高度"
+
+msgid "PoSe banned"
+msgstr "PoSe 封禁"
+
+#. placeholder {0}: short(found.hash)
+msgid "Proposal {0}"
+msgstr "提案 {0}"
+
+msgid "Radar checked every source that can answer this kind of input."
+msgstr "Radar 已检查了所有能够回答此类输入的数据源。"
+
+msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
+msgstr "Radar 没有找到与此对应的区块、交易、地址、主节点或其他记录。请尝试输入高度、哈希、地址、ID 或名称。"
+
+msgid "Radar never needs a recovery phrase, so words like these aren’t sent anywhere, and they’re kept out of the address bar and your history. Search for a name, an ID or a number instead."
+msgstr "Radar 从不需要助记词，因此这类词语不会被发送到任何地方，也不会出现在地址栏和历史记录中。请改为搜索名称、ID 或数字。"
+
+msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
+msgstr "Radar 从不需要它，因此它不会被发送到任何地方，也不会出现在地址栏和历史记录中。"
+
+msgid "Results"
+msgstr "结果"
+
+msgid "Search"
+msgstr "搜索"
+
+#. placeholder {0}: networkName(otherNetwork(net))
+msgid "Search {0}"
+msgstr "在 {0} 中搜索"
+
+msgid "Search blocks, transactions, masternodes, names…"
+msgstr "搜索区块、交易、主节点、名称…"
+
+msgid "Search Radar"
+msgstr "搜索 Radar"
+
+msgid "Searching…"
+msgstr "正在搜索…"
+
+msgid "See all results for “{trimmed}”"
+msgstr "查看“{trimmed}”的全部结果"
+
+msgid "See all results for “{trimmed}” on {net}"
+msgstr "在 {net} 上查看“{trimmed}”的全部结果"
+
+#. placeholder {0}: failed.map((f) => f.id).join(', ')
+msgid "Some sources didn’t answer: {0}."
+msgstr "部分数据源没有响应：{0}。"
+
+msgid "text: a contract or token name"
+msgstr "文本：合约或代币名称"
+
+msgid "That could be part of a recovery phrase"
+msgstr "这可能是助记词的一部分"
+
+msgid "That looks like a private key or recovery phrase"
+msgstr "这看起来像私钥或助记词"
+
+msgid "This is a mainnet address"
+msgstr "这是主网地址"
+
+msgid "This is a mainnet Platform address"
+msgstr "这是主网 Platform 地址"
+
+msgid "This is a testnet address"
+msgstr "这是测试网地址"
+
+msgid "This is a testnet Platform address"
+msgstr "这是测试网 Platform 地址"
+
+#. placeholder {0}: short(hash)
+msgid "Transaction {0}"
+msgstr "交易 {0}"
+
+#. placeholder {0}: tx.txid.slice(0, 10)
+#. placeholder {1}: tx.txid.slice(-6)
+msgid "Transaction {0}…{1}"
+msgstr "交易 {0}…{1}"
+
+msgid "Try"
+msgstr "试试"
+
+msgid "UTC day"
+msgstr "UTC 日"
+
+msgid "What you can search for"
+msgstr "你可以搜索的内容"

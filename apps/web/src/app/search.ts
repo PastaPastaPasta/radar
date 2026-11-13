@@ -2,7 +2,10 @@ import { retainSearchParams, type SearchMiddleware } from '@tanstack/react-route
 import { z } from 'zod'
 import { setActiveNetwork } from '@/data/active-network'
 import { parseNetworkParam } from '@/lib/network'
+import { encodeWhere, type NumericRange, type WhereClause } from '@/lib/search-schemas'
 import { DECENTRALIZED_PARAM, setSourceModeFromLink } from '@/lib/source-mode'
+
+export * from '@/lib/search-schemas'
 
 export const parseSearch = (s: string): Record<string, string> =>
   Object.fromEntries(new URLSearchParams(s))
@@ -15,10 +18,14 @@ function encode(value: string): string {
     .replace(/%40/g, '@')
 }
 
+const isWhereClause = (v: unknown): v is WhereClause =>
+  typeof v === 'object' && v !== null && 'field' in v && 'op' in v && 'value' in v
+
 function scalar(value: unknown): string | undefined {
   if (value === undefined || value === null || value === false || value === '') return undefined
   if (value === true) return '1'
   if (Array.isArray(value)) {
+    if (value.every(isWhereClause) && value.length > 0) return encodeWhere(value)
     const parts = value.map(String).filter((v) => v !== '')
     return parts.length === 0 ? undefined : [...new Set(parts)].sort().join(',')
   }
@@ -42,65 +49,6 @@ export const stringifySearch = (o: Record<string, unknown>): string => {
     })
   return pairs.length === 0 ? '' : `?${pairs.join('&')}`
 }
-
-const csvInput = z.preprocess((v) => (Array.isArray(v) ? v.map(String).join(',') : v), z.string())
-
-export const zCsv = csvInput.transform((s) => [...new Set(s.split(',').filter(Boolean))].sort())
-
-export const zCsvEnum = <const T extends readonly [string, ...string[]]>(values: T) =>
-  csvInput.transform((s) =>
-    [...new Set(s.split(','))]
-      .filter((v): v is T[number] => (values as readonly string[]).includes(v))
-      .sort(),
-  )
-
-const NUMBER = /^-?\d+(?:\.\d+)?$/
-
-export interface NumericRange {
-  min?: number
-  max?: number
-}
-
-const rangeObject = z.object({ min: z.number().optional(), max: z.number().optional() })
-
-/** `min..max`, either side optional. Accepts its own output so a validated search can be validated again. */
-export const zRange = z.union([
-  rangeObject,
-  z.string().transform((s, ctx): NumericRange => {
-    const parts = s.split('..')
-    const [lo, hi] = parts
-    const ok =
-      parts.length === 2 &&
-      (lo === '' || NUMBER.test(lo ?? '')) &&
-      (hi === '' || NUMBER.test(hi ?? '')) &&
-      s !== '..'
-    if (!ok) {
-      ctx.issues.push({ code: 'custom', message: 'Not a range', input: s })
-      return z.NEVER
-    }
-    return {
-      ...(lo ? { min: Number(lo) } : {}),
-      ...(hi ? { max: Number(hi) } : {}),
-    }
-  }),
-])
-
-export const zIsoDate = z.string().refine((s) => {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false
-  const d = new Date(`${s}T00:00:00Z`)
-  return !Number.isNaN(d.getTime()) && d.toISOString().startsWith(s)
-}, 'Not a date')
-
-export const zPage = z.coerce.number().int().min(1)
-
-export const LIMITS = [10, 25, 50, 100] as const
-export const zLimit = z.coerce
-  .number()
-  .pipe(z.union([z.literal(10), z.literal(25), z.literal(50), z.literal(100)]))
-
-export const zBool01 = z
-  .union([z.literal('1'), z.literal(1), z.literal(true)])
-  .transform(() => true)
 
 export const rootSearch = z.object({
   network: z.string().optional().catch(undefined),

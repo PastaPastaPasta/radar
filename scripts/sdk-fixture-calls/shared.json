@@ -1,0 +1,532 @@
+{
+  "mainnet": [
+    ["epoch.current", {}],
+    ["system.status", {}],
+    ["system.totalCredits", {}],
+    [
+      "identities.fetch",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["{identity}", "{otherIdentity}"]
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["{identity}", "{absent}"]
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}"]
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}", "{absent}"]
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "{pkh}"
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "{absent_pkh}"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{identity}",
+        "limit": 10
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{absent}",
+        "limit": 10
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "{name_registered}.dash"
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "{name_available}.dash"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "id": "{doc.id}"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "id": "{absent}"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "{name_registered}"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{contract}"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "tokens.calculateId",
+      {
+        "contractId": "{token.contract}",
+        "position": "{token.position:n}"
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{absent}"
+      }
+    ],
+    [
+      "tokens.totalSupply",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.identityBalances",
+      {
+        "identityId": "{identity}",
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    ["system.currentQuorumsInfo", {}],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 3
+      }
+    ],
+    [
+      "epoch.finalizedInfos",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 1
+      }
+    ],
+    [
+      "epoch.evonodesProposedBlocksByIds",
+      {
+        "epoch": "{epoch_final:n}",
+        "proTxHashes": ["{mn_evo}"]
+      }
+    ],
+    [
+      "epoch.evonodesProposedBlocksByRange",
+      {
+        "epoch": "{epoch_final:n}",
+        "limit": 5
+      }
+    ],
+    ["protocol.versionUpgradeState", {}],
+    [
+      "protocol.versionUpgradeVoteStatus",
+      {
+        "count": 5
+      }
+    ],
+    [
+      "voting.votePollsByEndDate",
+      {
+        "limit": 5,
+        "orderAscending": true
+      }
+    ],
+    [
+      "addresses.get",
+      {
+        "address": "{paddr}"
+      }
+    ],
+    [
+      "addresses.get",
+      {
+        "address": "{absent_paddr}"
+      }
+    ],
+    [
+      "addresses.getMany",
+      {
+        "addresses": ["{paddr}", "{absent_paddr}"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [["records.identity", "in", ["{identity}", "{absent}"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [["records.identity", "in", ["{identity}"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ],
+  "testnet": [
+    ["epoch.current", {}],
+    ["system.status", {}],
+    ["system.totalCredits", {}],
+    [
+      "identities.fetch",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["{identity}", "{otherIdentity}"]
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["{identity}", "{absent}"]
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}"]
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}", "{absent}"]
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "{pkh}"
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "{absent_pkh}"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{identity}",
+        "limit": 10
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{absent}",
+        "limit": 10
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "{name_registered}.dash"
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "{name_available}.dash"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "id": "{doc.id}"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "id": "{absent}"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "{name_registered}"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{contract}"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "tokens.calculateId",
+      {
+        "contractId": "{token.contract}",
+        "position": "{token.position:n}"
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{absent}"
+      }
+    ],
+    [
+      "tokens.totalSupply",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.identityBalances",
+      {
+        "identityId": "{identity}",
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": ["{token}", "{absent}"]
+      }
+    ],
+    ["system.currentQuorumsInfo", {}],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 3
+      }
+    ],
+    [
+      "epoch.finalizedInfos",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 1
+      }
+    ],
+    [
+      "epoch.evonodesProposedBlocksByIds",
+      {
+        "epoch": "{epoch_final:n}",
+        "proTxHashes": ["{mn_evo}"]
+      }
+    ],
+    [
+      "epoch.evonodesProposedBlocksByRange",
+      {
+        "epoch": "{epoch_final:n}",
+        "limit": 5
+      }
+    ],
+    ["protocol.versionUpgradeState", {}],
+    [
+      "protocol.versionUpgradeVoteStatus",
+      {
+        "count": 5
+      }
+    ],
+    [
+      "voting.votePollsByEndDate",
+      {
+        "limit": 5,
+        "orderAscending": true
+      }
+    ],
+    [
+      "addresses.get",
+      {
+        "address": "{paddr}"
+      }
+    ],
+    [
+      "addresses.get",
+      {
+        "address": "{absent_paddr}"
+      }
+    ],
+    [
+      "addresses.getMany",
+      {
+        "addresses": ["{paddr}", "{absent_paddr}"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [["records.identity", "in", ["{identity}", "{absent}"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{group.contract}"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "{doc.contract}",
+        "type": "{doc.type}",
+        "where": [["records.identity", "in", ["{identity}"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ]
+}

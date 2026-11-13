@@ -3,16 +3,29 @@ import type { NetworkId } from '@/lib/network'
 import { mapSourced, type Sourced } from '../envelope'
 import { sdkKeys } from '../query/keys'
 import { dataClass, type DataClass } from '../query/stale'
+import { sdkBatchers } from './batchers'
 import { sdk } from './client'
 import type { EpochDto, SdkMethodName, SdkMethods } from './methods'
+import { NET_C_CLASSES } from './methods/net-c'
+import { P_BLOCKS_CLASSES } from './methods/p-blocks'
+import { P_CHAIN_CLASSES } from './methods/p-chain'
+import { P_DATA_CLASSES } from './methods/p-data'
+import { P_ID_CLASSES } from './methods/p-id'
+import { P_TOKEN_CLASSES } from './methods/p-token'
+import { P_VOTE_CLASSES } from './methods/p-vote'
+import { SHARED_CLASSES } from './methods/shared'
+import { TOOLS_CLASSES } from './methods/tools'
 
 const CLASS_OF: Record<SdkMethodName, DataClass> = {
-  'identities.fetch': 'live',
-  'identities.balances': 'live',
-  'contracts.getMany': 'structural',
-  'system.status': 'live',
-  'system.totalCredits': 'live',
-  'epoch.current': 'live',
+  ...SHARED_CLASSES,
+  ...NET_C_CLASSES,
+  ...P_CHAIN_CLASSES,
+  ...P_BLOCKS_CLASSES,
+  ...P_ID_CLASSES,
+  ...P_DATA_CLASSES,
+  ...P_TOKEN_CLASSES,
+  ...P_VOTE_CLASSES,
+  ...TOOLS_CLASSES,
 }
 
 function factory<M extends SdkMethodName>(method: M) {
@@ -54,3 +67,5 @@ export const platformTipQuery = (net: NetworkId) =>
     ...sdkQueries['epoch.current'](net, {}),
     select: platformTipOf,
   })
+
+export { sdkBatchers }
