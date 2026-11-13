@@ -28,7 +28,7 @@ const exposed: SdkWorkerApi = {
     const result = { ...(await api.call(net, method, args)), requests: guard.drain() }
     return Comlink.transfer(result, proofBuffers(result))
   },
-  decode: (kind, bytes) => api.decode(kind, bytes),
+  decode: (kind, bytes, opts) => api.decode(kind, bytes, opts),
 }
 
 Comlink.expose(exposed)

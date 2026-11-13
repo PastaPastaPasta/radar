@@ -287,9 +287,9 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
       }
     },
 
-    decode: async (kind, bytes) => {
+    decode: async (kind, bytes, opts) => {
       const transport = await deps.transport()
-      return transport.decode(kind, bytes)
+      return transport.decode(kind, bytes, opts)
     },
 
     subscribe(cb) {

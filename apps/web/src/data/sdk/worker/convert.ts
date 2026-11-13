@@ -62,13 +62,24 @@ export interface EpochLike extends Freeable {
 
 export interface StatusLike {
   toJSON(): {
-    version?: { software?: { drive?: string }; protocol?: { drive?: { current?: number } } }
+    version?: {
+      software?: { dapi?: string; drive?: string; tenderdash?: string }
+      protocol?: {
+        tenderdash?: { p2p?: number; block?: number }
+        drive?: { latest?: number; current?: number }
+      }
+    }
+    node?: { id?: string; proTxHash?: string }
     chain?: {
       isCatchingUp?: boolean
+      latestBlockHash?: string
+      latestAppHash?: string
       latestBlockHeight?: string | number
+      earliestBlockHeight?: string | number
+      maxPeerBlockHeight?: string | number
       coreChainLockedHeight?: number
     }
-    network?: { chainId?: string }
+    network?: { chainId?: string; peersCount?: number; isListening?: boolean }
     time?: { block?: string | number; epoch?: number }
   }
 }
@@ -130,10 +141,29 @@ export function statusDto(status: StatusLike): StatusDto {
     height: Number(j.chain?.latestBlockHeight ?? 0),
     timeMs: Number(j.time?.block ?? 0),
     catchingUp: j.chain?.isCatchingUp === true,
+    peers: j.network?.peersCount ?? 0,
+    isListening: j.network?.isListening === true,
+    latestBlockHash: j.chain?.latestBlockHash ?? '',
+    latestAppHash: j.chain?.latestAppHash ?? '',
+    earliestBlockHeight: Number(j.chain?.earliestBlockHeight ?? 0),
+    maxPeerBlockHeight: Number(j.chain?.maxPeerBlockHeight ?? 0),
+    coreChainLockedHeight: j.chain?.coreChainLockedHeight ?? 0,
+    nodeProTxHash: j.node?.proTxHash ?? '',
+    nodeId: j.node?.id ?? '',
+    dapiVersion: j.version?.software?.dapi ?? '',
+    tenderdashVersion: j.version?.software?.tenderdash ?? '',
+    tenderdashProtocol: {
+      p2p: j.version?.protocol?.tenderdash?.p2p ?? 0,
+      block: j.version?.protocol?.tenderdash?.block ?? 0,
+    },
+    driveProtocol: {
+      latest: j.version?.protocol?.drive?.latest ?? 0,
+      current: j.version?.protocol?.drive?.current ?? 0,
+    },
   }
   return {
     dto,
-    coreChainLockedHeight: j.chain?.coreChainLockedHeight ?? 0,
+    coreChainLockedHeight: dto.coreChainLockedHeight,
     epoch: j.time?.epoch ?? 0,
     protocolVersion: j.version?.protocol?.drive?.current ?? 0,
   }

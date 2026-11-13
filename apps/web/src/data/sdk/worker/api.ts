@@ -1,4 +1,6 @@
 import type {
+  SdkDecodeKind,
+  SdkDecodeOptions,
   SdkMethodName,
   SdkMethods,
   SdkNetworkConfig,
@@ -26,7 +28,7 @@ export interface SdkHandle {
 
 export interface SdkWorkerDeps {
   createSdk(cfg: SdkNetworkConfig): Promise<SdkHandle>
-  decode(kind: Parameters<SdkWorkerApi['decode']>[0], bytes: Uint8Array): Promise<unknown>
+  decode(kind: SdkDecodeKind, bytes: Uint8Array, opts?: SdkDecodeOptions): Promise<unknown>
   now?: () => number
 }
 
@@ -92,7 +94,7 @@ export function toWire<R>(out: ImplOutput<R>, tookMs: number): WireResult<R> {
 
 /**
  * The worker's logic, free of Comlink and of the wasm so it can be tested with fakes (§3.2): connects one SDK per
- * network (two alive at most), runs at most six calls at a time, gives every call 8 s and one more try, and turns every
+ * network (two alive at most), runs at most six calls at a time, gives every call 8 s (or `settings.timeoutMs`) and one more try, and turns every
  * failure into a `WireError` instead of throwing.
  */
 export function createSdkWorkerApi(deps: SdkWorkerDeps) {
@@ -134,7 +136,10 @@ export function createSdkWorkerApi(deps: SdkWorkerDeps) {
     }
     const cfg = configs.get(net)
     if (!cfg) return Promise.reject(new Error(`The SDK for ${net} was never connected`))
-    const created = withTimeout(() => deps.createSdk(cfg), CONNECT_TIMEOUT_MS)
+    const created = withTimeout(
+      () => deps.createSdk(cfg),
+      cfg.settings?.connectTimeoutMs ?? CONNECT_TIMEOUT_MS,
+    )
     created.catch(() => {
       if (sessions.get(net) === created) sessions.delete(net)
     })
@@ -148,7 +153,10 @@ export function createSdkWorkerApi(deps: SdkWorkerDeps) {
     args: SdkMethods[M]['args'],
   ): Promise<ImplOutput<SdkMethods[M]['result']>> {
     const handle = await session(net)
-    return withTimeout(() => impl[method](handle.reads, args), CALL_TIMEOUT_MS)
+    return withTimeout(
+      () => impl[method](handle.reads, args),
+      configs.get(net)?.settings?.timeoutMs ?? CALL_TIMEOUT_MS,
+    )
   }
 
   const api = {
@@ -198,10 +206,10 @@ export function createSdkWorkerApi(deps: SdkWorkerDeps) {
       })
     },
 
-    async decode(kind: Parameters<SdkWorkerApi['decode']>[0], bytes: Uint8Array) {
+    async decode(kind: SdkDecodeKind, bytes: Uint8Array, opts?: SdkDecodeOptions) {
       const started = now()
       try {
-        const data = await deps.decode(kind, bytes)
+        const data = await deps.decode(kind, bytes, opts)
         return { ok: true as const, data, proved: false, tookMs: now() - started }
       } catch (e) {
         return failure(e)

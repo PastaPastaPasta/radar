@@ -22,7 +22,8 @@ export function createWorkerTransport(): SdkTransport {
     connect: (cfg) => alive(proxy.connect(cfg) as ReturnType<SdkTransport['connect']>),
     call: (net, method, args) =>
       alive(proxy.call(net, method, args) as ReturnType<SdkTransport['call']>),
-    decode: (kind, bytes) => alive(proxy.decode(kind, bytes) as ReturnType<SdkTransport['decode']>),
+    decode: (kind, bytes, opts) =>
+      alive(proxy.decode(kind, bytes, opts) as ReturnType<SdkTransport['decode']>),
     dispose: () => worker.terminate(),
   }
 }

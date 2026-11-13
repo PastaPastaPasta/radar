@@ -145,9 +145,21 @@ describe('createSdkWorkerApi', () => {
   it('marks system.status unproved and gives it no proof bytes', async () => {
     const status = {
       toJSON: () => ({
-        version: { software: { drive: '5.0.0' }, protocol: { drive: { current: 14 } } },
-        chain: { isCatchingUp: false, latestBlockHeight: '668392', coreChainLockedHeight: 1589249 },
-        network: { chainId: 'dash-testnet-51' },
+        version: {
+          software: { dapi: '5.0.1', drive: '5.0.0', tenderdash: '1.8' },
+          protocol: { tenderdash: { p2p: 10, block: 14 }, drive: { latest: 15, current: 14 } },
+        },
+        node: { id: 'b5f2', proTxHash: '143d' },
+        chain: {
+          isCatchingUp: false,
+          latestBlockHash: '1473',
+          latestAppHash: '2b8f',
+          latestBlockHeight: '668392',
+          earliestBlockHeight: '1',
+          maxPeerBlockHeight: '668393',
+          coreChainLockedHeight: 1589249,
+        },
+        network: { chainId: 'dash-testnet-51', peersCount: 217, isListening: true },
         time: { block: '1794337512523', epoch: 20273 },
       }),
     }
@@ -169,6 +181,19 @@ describe('createSdkWorkerApi', () => {
       height: 668392,
       timeMs: 1794337512523,
       catchingUp: false,
+      peers: 217,
+      isListening: true,
+      latestBlockHash: '1473',
+      latestAppHash: '2b8f',
+      earliestBlockHeight: 1,
+      maxPeerBlockHeight: 668393,
+      coreChainLockedHeight: 1589249,
+      nodeProTxHash: '143d',
+      nodeId: 'b5f2',
+      dapiVersion: '5.0.1',
+      tenderdashVersion: '1.8',
+      tenderdashProtocol: { p2p: 10, block: 14 },
+      driveProtocol: { latest: 15, current: 14 },
     })
     expect(r.meta).toMatchObject({ height: 668392, epoch: 20273, coreChainLockedHeight: 1589249 })
   })
@@ -342,5 +367,38 @@ describe('createSdkWorkerApi', () => {
         Promise.reject(Object.assign(new Error('bad bytes'), { name: 'InvalidArgument' })),
     })
     expect(await api.decode('identity', new Uint8Array(1))).toMatchObject({ ok: false })
+  })
+
+  it('hands the contract and type of a document to the decoder', async () => {
+    const decode = vi.fn(() => Promise.resolve({ ok: 1 }))
+    const api = createSdkWorkerApi({
+      createSdk: () => Promise.resolve(fakeHandle(fakeReads())),
+      decode,
+    })
+    const contract = new Uint8Array([1, 2])
+    const r = await api.decode('document', new Uint8Array(1), { contract, type: 'domain' })
+    expect(r).toMatchObject({ ok: true, data: { ok: 1 } })
+    expect(decode).toHaveBeenCalledWith('document', new Uint8Array(1), { contract, type: 'domain' })
+  })
+
+  it('gives a call the timeout from the connection settings', async () => {
+    let calls = 0
+    const { api } = setup(
+      fakeReads({
+        epoch: {
+          currentWithProof: () => {
+            calls++
+            return new Promise(() => undefined)
+          },
+        },
+      }),
+    )
+    await api.connect({ ...cfg('mainnet'), settings: { timeoutMs: 30_000 } })
+    const pending = api.call('mainnet', 'epoch.current', {})
+    await settle(CALL_TIMEOUT_MS + 100)
+    expect(calls).toBe(1)
+    await settle(60_000)
+    expect(await pending).toMatchObject({ ok: false, error: { kind: 'timeout' } })
+    expect(calls).toBe(2)
   })
 })
