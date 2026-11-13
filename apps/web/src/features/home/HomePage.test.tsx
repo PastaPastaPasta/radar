@@ -217,6 +217,15 @@ describe('Home page', () => {
     expect(document.getElementById('core-figures')).not.toBeNull()
   })
 
+  it('offers a jump to the latest blocks beside the one to the Core figures @HY-01', async () => {
+    renderAt('/')
+    const core = await screen.findByRole('link', { name: 'Core figures' })
+    const latest = screen.getByRole('link', { name: 'Latest blocks' })
+    expect(latest).toHaveAttribute('href', '#h-latest')
+    expect(latest.parentElement).toBe(core.parentElement)
+    await waitFor(() => expect(document.getElementById('h-latest')).not.toBeNull())
+  })
+
   it('shows the Core headline figures inside the hero plate, ahead of the lanes @HY-01 @HY-03', async () => {
     renderAt('/')
     const headline = await waitFor(() => {

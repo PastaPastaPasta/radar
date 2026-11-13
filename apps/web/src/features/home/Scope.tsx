@@ -402,6 +402,9 @@ export function Scope() {
               <a href="#core-figures" className="rx-go rx-jump-core">
                 {t`Core figures`}
               </a>
+              <a href="#h-latest" className="rx-go rx-jump-core" data-jump="latest">
+                {t`Latest blocks`}
+              </a>
             </div>
           </div>
           <HomeMap />

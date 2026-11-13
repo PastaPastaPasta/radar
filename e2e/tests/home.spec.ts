@@ -84,6 +84,27 @@ test.describe('Home', () => {
     await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)
   })
 
+  for (const width of [320, 390, 430]) {
+    test(`a phone jumps to the latest blocks, on one line with the Core figures link, at ${width} px @HY-01`, async ({
+      page,
+      viewport,
+    }) => {
+      test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('/')
+      const core = page.getByRole('link', { name: 'Core figures' })
+      const latest = page.getByRole('link', { name: 'Latest blocks' })
+      const [a, b] = await Promise.all([core.boundingBox(), latest.boundingBox()])
+      expect(Math.abs(a!.y - b!.y), 'beside it, on the same line').toBeLessThan(4)
+      expect(b!.x + b!.width).toBeLessThanOrEqual(width)
+      await latest.click()
+      await expect(page).toHaveURL(/#h-latest$/)
+      const top = async () => (await page.locator('#h-latest').boundingBox())?.y ?? -1
+      await expect.poll(top).toBeGreaterThanOrEqual(0)
+      await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)
+    })
+  }
+
   test('opens a block from search by height @IN-10', async ({ page }) => {
     await page.goto('/')
     await page.locator('[data-palette-trigger]:visible').first().click()
