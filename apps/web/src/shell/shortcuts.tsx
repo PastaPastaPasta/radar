@@ -5,6 +5,8 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { isEditableTarget } from '@/features/search'
+import { useDevFlags } from '@/features/you/dev-flags'
+import type { DevFlags } from '@/features/you/dev-flags'
 
 interface ShortcutsApi {
   open(): void
@@ -16,7 +18,7 @@ export function useShortcuts(): ShortcutsApi {
   return useContext(Context)
 }
 
-const ROWS: { keys: string[]; does: MessageDescriptor }[] = [
+const ROWS: { keys: string[]; does: MessageDescriptor; flag?: keyof DevFlags }[] = [
   { keys: ['/'], does: msg`Search Radar` },
   { keys: ['Ctrl', 'K'], does: msg`Search Radar (⌘K on a Mac)` },
   { keys: ['?'], does: msg`Show these shortcuts` },
@@ -25,11 +27,14 @@ const ROWS: { keys: string[]; does: MessageDescriptor }[] = [
   { keys: ['Enter'], does: msg`Open the result, or all results` },
   { keys: ['j', 'k'], does: msg`Move through table rows` },
   { keys: ['Enter'], does: msg`Open the selected table row` },
+  { keys: ['Alt', 'Shift', 'P'], does: msg`Open the proof inspector`, flag: 'proofShortcut' },
+  { keys: ['Alt', 'Shift', 'D'], does: msg`Open the diagnostics drawer`, flag: 'diagnosticsShortcut' },
 ]
 
 export function ShortcutsProvider({ children }: { children: ReactNode }) {
   const { t, i18n } = useLingui()
   const [isOpen, setOpen] = useState(false)
+  const devFlags = useDevFlags()
   const open = useCallback(() => setOpen(true), [])
   const api = useMemo(() => ({ open }), [open])
 
@@ -57,7 +62,7 @@ export function ShortcutsProvider({ children }: { children: ReactNode }) {
           >
             <Dialog.Title className="mb-3 text-lg font-semibold">{t`Keyboard shortcuts`}</Dialog.Title>
             <dl className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2">
-              {ROWS.map((row) => (
+              {ROWS.filter((row) => !row.flag || devFlags[row.flag]).map((row) => (
                 <div key={row.keys.join('+') + row.does.id} className="contents">
                   <dt className="flex gap-1">
                     {row.keys.map((k) => (
