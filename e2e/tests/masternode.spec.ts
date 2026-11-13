@@ -451,10 +451,11 @@ test.describe('masternode page, in Decentralized only mode', () => {
     page,
   }) => {
     await page.goto(`/mn/${MAINNET.listedEvo}?tab=platform&${MODE}`)
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    const noRecord = page.getByText('Masternode records need an indexer')
+    await expect(noRecord.or(page.locator('[data-masternode-header]'))).toBeVisible()
     await settled(page)
     test.skip(
-      await page.getByText('Masternode records need an indexer').isVisible(),
+      await noRecord.isVisible(),
       'needs NET-B’s recording of the DAPI masternode list: until it lands the mode has no record to show',
     )
 
