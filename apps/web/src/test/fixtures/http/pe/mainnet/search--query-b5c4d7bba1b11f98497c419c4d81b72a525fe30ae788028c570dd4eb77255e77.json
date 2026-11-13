@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/search?query=b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77"
+  },
+  "recordedAt": "2026-11-13T17:32:12.817Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "validators": [
+      {
+        "proTxHash": "B5C4D7BBA1B11F98497C419C4D81B72A525FE30AE788028C570DD4EB77255E77",
+        "isActive": null,
+        "proposedBlocksAmount": 1583,
+        "lastProposedBlockHeader": {
+          "hash": "F7BE786AF0111C6B3D9F426152EADD036C249E5B6724B00131DD5F71C74514BF",
+          "height": 470761,
+          "timestamp": "2026-11-13T17:02:30.151Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 2571697,
+          "validator": "B5C4D7BBA1B11F98497C419C4D81B72A525FE30AE788028C570DD4EB77255E77",
+          "totalGasUsed": 0,
+          "appHash": "544E1E97EC3D97EDFFA59716CCEA609E8F342C6ED12B093792FBBF1B71E8E8C4",
+          "quorumHash": "000000000000001C8F8CDFBFE69281E78F070535590A87066B8A38A1754F714C"
+        },
+        "proTxInfo": null,
+        "identity": null,
+        "identityBalance": null,
+        "epochInfo": null,
+        "totalReward": 39662134483644,
+        "epochReward": 0,
+        "withdrawalsCount": 81,
+        "lastWithdrawal": "0330CC5E4B539C80D107AAF975FC60725A9E51CE7D8A8A53790E59D3EC7C4B91",
+        "lastWithdrawalTime": "2026-11-09T08:28:49.455Z",
+        "endpoints": null,
+        "geoIpInfo": null,
+        "registeredAt": null,
+        "votingIdentity": null,
+        "votingIdentityBalance": null,
+        "poseScoreMax": null,
+        "blocksUntilCorePayment": null,
+        "registeredCoreBlockHash": null,
+        "lastPaidCoreBlockHash": null,
+        "poseRevivedCoreBlockHash": null,
+        "poseBanCoreBlockHash": null,
+        "coreYieldPerYear": null,
+        "coreTipTime": null,
+        "coreBlockIntervalMs": null
+      }
+    ]
+  },
+  "trimmed": ""
+}

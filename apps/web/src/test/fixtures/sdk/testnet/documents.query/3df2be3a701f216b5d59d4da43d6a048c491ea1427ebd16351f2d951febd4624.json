@@ -1,0 +1,168 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "where": [
+      ["normalizedParentDomainName", "==", "dash"],
+      ["normalizedLabel", "startsWith", "dashpay"]
+    ],
+    "orderBy": [
+      ["normalizedParentDomainName", "asc"],
+      ["normalizedLabel", "asc"]
+    ],
+    "limit": 5
+  },
+  "recordedAt": "2026-11-13T17:39:26.325Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "Ft94grWchnfAVnpayCm92n7ikHi9dAMewG41KQmTT6Mz",
+        "ownerId": "554ZQe9kCWBLEBD6sBdUBGB1KMvHgEnhbXVZBkS5UvRd",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768390101126,
+        "updatedAt": 1768390101126,
+        "transferredAt": 1768390101126,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "dashpay",
+          "normalizedLabel": "dashpay",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "554ZQe9kCWBLEBD6sBdUBGB1KMvHgEnhbXVZBkS5UvRd"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "3SR8G3eRkTwizRyjcoixgS6N569B4CicErpBbxfWEGLS",
+        "ownerId": "F9P6s2TRHW6BdSjwTknmKQzEiY44F23rNeastgkgiRwe",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1747688033647,
+        "updatedAt": 1747688033647,
+        "transferredAt": 1747688033647,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "Dashpay-det-fromdashpay",
+          "normalizedLabel": "dashpay-det-fr0mdashpay",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "F9P6s2TRHW6BdSjwTknmKQzEiY44F23rNeastgkgiRwe"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "EwptTefgCXUxZ7DG8ys8iTXzBCuK7JjqnxTXwkWWPePV",
+        "ownerId": "EDkzgY5wXo9mBdSs971CEtFQKVqCXeBeYvBnYkisd8AY",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1780501998434,
+        "updatedAt": 1780501998434,
+        "transferredAt": 1780501998434,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "dashpay-mpy8jh4p",
+          "normalizedLabel": "dashpay-mpy8jh4p",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "EDkzgY5wXo9mBdSs971CEtFQKVqCXeBeYvBnYkisd8AY"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "E3nUCqrr84bPx1cUAeHwvR2XNYoHUoxY5eSqhfzQqZaE",
+        "ownerId": "9wqWSh9FR66h6penk7LJ3aEZhBYghfp6Zeb91HVtKCka",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1780502581232,
+        "updatedAt": 1780502581232,
+        "transferredAt": 1780502581232,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "dashpay-mpy92ei6",
+          "normalizedLabel": "dashpay-mpy92e16",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "9wqWSh9FR66h6penk7LJ3aEZhBYghfp6Zeb91HVtKCka"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 674301,
+      "coreChainLockedHeight": 1591054,
+      "epoch": 20343,
+      "timeMs": 1794591387586,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAPe9SDzBUmemfbbH01fKdFtfgIuUwVLHCOGHCcF8="
+      },
+      "signature": {
+        "$u8": "padv6ZaWSaQSbdFgsB8Z+jMduceXPGiuYUBNMMj2Uqyzn7t/5ekqyOFYswUB18UwBWQBaCYB/fAuNWv4mSWdKkJyj4/R78rQP9hTgsg0aJN7sjus5NDiM1GTdFGE9NsA"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "c/PrjyXL7yRPSwJ1voODxz2mxiTLUjyPDGBQygw9TdA="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 82.26960299999973
+  }
+}

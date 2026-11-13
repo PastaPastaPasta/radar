@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/search?query=5c6542766615387183715d958a925552472f93335fa1612880423e4bbdaef436"
+  },
+  "recordedAt": "2026-11-13T17:35:59.788Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "validators": [
+      {
+        "proTxHash": "5C6542766615387183715D958A925552472F93335FA1612880423E4BBDAEF436",
+        "isActive": null,
+        "proposedBlocksAmount": 23193,
+        "lastProposedBlockHeader": {
+          "hash": "E41641898DCF38F1AA3BFFBB26608637509AEA4322A38CAA780615502C775700",
+          "height": 674297,
+          "timestamp": "2026-11-13T17:30:18.297Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 1591051,
+          "validator": "5C6542766615387183715D958A925552472F93335FA1612880423E4BBDAEF436",
+          "totalGasUsed": 0,
+          "appHash": "49BAC3E21BE0ED6FF2D7E3CFC8048248C99CA828E50C939E6D1E0BBC771619D7",
+          "quorumHash": "0000003DEF520F305499E99F6DB1F4D5F29D16D7E022E53054B1C23861C2705F"
+        },
+        "proTxInfo": null,
+        "identity": null,
+        "identityBalance": null,
+        "epochInfo": null,
+        "totalReward": 830247442252925,
+        "epochReward": 0,
+        "withdrawalsCount": 0,
+        "lastWithdrawal": null,
+        "lastWithdrawalTime": null,
+        "endpoints": null,
+        "geoIpInfo": null,
+        "registeredAt": null,
+        "votingIdentity": null,
+        "votingIdentityBalance": null,
+        "poseScoreMax": null,
+        "blocksUntilCorePayment": null,
+        "registeredCoreBlockHash": null,
+        "lastPaidCoreBlockHash": null,
+        "poseRevivedCoreBlockHash": null,
+        "poseBanCoreBlockHash": null,
+        "coreYieldPerYear": null,
+        "coreTipTime": null,
+        "coreBlockIntervalMs": null
+      }
+    ]
+  },
+  "trimmed": ""
+}

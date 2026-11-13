@@ -1,0 +1,818 @@
+{
+  "mainnet": [
+    [
+      "identities.fetch",
+      {
+        "id": "CZ8YUVdk7znjrUmnb5n7kgySk9yRAsQDYmyCxzfSky9t"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "ErNbLjU6E8tSbZH3REsMeTDP3Z8G52k6YedWwvBpAJ7v"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "7EbVLZpjbj5gqJtu84N3VfPT4vMFgGYdpynb2w8p6yEu"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "114Cptsfe7CYaycWx8aFAh9szNvWoRmVDtikS8QYyQy"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "6M7QwsnyLAZMSTNqfyetVC1iXJuBC3pRJMMkJ5wF2PMP"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "6rtCFE3UgtsdFcvCjsyKq4NBnRAdiLfou5B2XSPcHpma"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "BXX2aQ8emMKaJVf3j2miPd2yU8oTkTaqV7Z8VuPQq8DH"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{identity}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{identity}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{contract}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{token}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{token}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{doc.contract}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{absent}"]
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "zzzz-not-a-real-core-thing-12345.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "zzzz-n0t-a-rea1-c0re-th1ng-12345"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "mempo.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "memp0"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "dashpay.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "dashpay"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "sans.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "sans"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "quantum.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "quantum"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "radarfx44661899"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 1
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": 60000,
+        "count": 1
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "5711c785cbc88a13d5404979d2fc811cf09b24aeb37f5667127231176a0a0765"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "id": "CZ8YUVdk7znjrUmnb5n7kgySk9yRAsQDYmyCxzfSky9t"
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "9f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb03"
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "4f714d46d5ff9d219be0776fb02db4bad11e003450d30093a4cc21a33afbbcfe"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "DEYt9zNpCuA1GPrRNbSKqWFdBzE4t4sSkMd36cQxKk7p"
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77"
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "foo.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "f00"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "game-zone-arena.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "game-z0ne-arena"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["DEYt9zNpCuA1GPrRNbSKqWFdBzE4t4sSkMd36cQxKk7p"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ],
+  "testnet": [
+    [
+      "identities.fetch",
+      {
+        "id": "CZ8YUVdk7znjrUmnb5n7kgySk9yRAsQDYmyCxzfSky9t"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "ErNbLjU6E8tSbZH3REsMeTDP3Z8G52k6YedWwvBpAJ7v"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "7EbVLZpjbj5gqJtu84N3VfPT4vMFgGYdpynb2w8p6yEu"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "113LpKiPd5MhCbBcaCU7RUHmPbJJBz6cosyhzbJ6PWj"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "6TzKD87LmTufWYp22rASka4AWvM5DeKKb6QN797ZobE2"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "2zueUxeDHxozJexySK38k7CQDE1NcJqMgdfxwidMUdza"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "2xNSKif7ZpX5Kt1Dt4eGLxYnXnSuSVif7E4ZhJYAJCf3"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{identity}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{identity}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{contract}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{contract}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{token}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{token}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{token}"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{doc.contract}"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "{doc.contract}"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["{absent}"]
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "zzzz-not-a-real-core-thing-12345.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "zzzz-n0t-a-rea1-c0re-th1ng-12345"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "mempo.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "memp0"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "dashpay.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "dashpay"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "sans.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "sans"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "quantum.dash"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "quantum"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "radarfx98080126"]
+        ],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": "{epoch_final:n}",
+        "count": 1
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": 60000,
+        "count": 1
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "1db15201c79703e889bb1c17b254138d5bb1f48a351cc31bbab140e180524a53"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx"
+      }
+    ],
+    [
+      "identities.fetch",
+      {
+        "id": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": ["9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"
+      }
+    ],
+    [
+      "documents.get",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "id": "CZ8YUVdk7znjrUmnb5n7kgySk9yRAsQDYmyCxzfSky9t"
+      }
+    ],
+    [
+      "stateTransitions.waitForStateTransitionResult",
+      {
+        "hash": "5134573bc60e35112ff79bfc53c808dd9c3df784b9fee59c3ca11e93e51e18ab"
+      }
+    ]
+  ]
+}
