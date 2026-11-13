@@ -27,6 +27,10 @@ msgstr "{0, plural, other {# 个输入}}"
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, other {# 个输出}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} 基本单位"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} 不支持开发网。"
@@ -68,6 +72,10 @@ msgstr "{0} 份份额，{1} 个区块的提前退出惩罚期"
 msgid "{0} to other addresses"
 msgstr "转给其他地址 {0}"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} 票"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 次确认}}"
 
@@ -92,6 +100,9 @@ msgstr "另有 {n} 个输出"
 msgid "{name} (reason {reason})"
 msgstr "{name}（原因 {reason}）"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, other {# 种类型}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "合约的群组，含位置、阈值和成员。"
 
@@ -109,6 +120,9 @@ msgstr "共享主节点的份额持有者更改其奖励的支付地址。"
 
 msgid "About"
 msgstr "关于"
+
+msgid "Active"
+msgstr "活跃"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "进行中的争议名称，含结束时间、票数和状态。"
@@ -170,8 +184,9 @@ msgstr "区块"
 msgid "block {0}"
 msgstr "区块 {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "区块 {0}"
 
@@ -253,8 +268,14 @@ msgstr "将区块绑定到主节点列表和最新的 ChainLock。"
 msgid "Compromised keys"
 msgstr "密钥泄露"
 
+msgid "Contenders"
+msgstr "竞争者"
+
 msgid "contest"
 msgstr "争议"
+
+msgid "Contested name"
+msgstr "争议名称"
 
 msgid "contract"
 msgstr "合约"
@@ -298,6 +319,9 @@ msgstr "Core 链顶端与 ChainLock、Platform 高度与纪元、节点地图与
 msgid "Core transaction"
 msgstr "Core 交易"
 
+msgid "Could not read names."
+msgstr "无法读取名称。"
+
 msgid "Created"
 msgstr "创建时间"
 
@@ -330,6 +354,9 @@ msgstr "数据"
 
 msgid "Data (OP_RETURN)"
 msgstr "数据 (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "数据合约"
 
 msgid "Data sources"
 msgstr "数据来源"
@@ -364,17 +391,32 @@ msgstr "文档"
 msgid "document type"
 msgstr "文档类型"
 
+msgid "Document types"
+msgstr "文档类型"
+
 msgid "Documents"
 msgstr "文档"
 
 msgid "Early-leave penalty"
 msgstr "提前退出惩罚"
 
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Ended"
+msgstr "已结束"
+
+msgid "Ends"
+msgstr "结束时间"
+
 msgid "epoch"
 msgstr "纪元"
 
 msgid "Epoch"
 msgstr "纪元"
+
+msgid "Epoch {id}"
+msgstr "纪元 {id}"
 
 msgid "Epochs"
 msgstr "纪元"
@@ -403,6 +445,9 @@ msgstr "Evonode"
 msgid "Evonode (high-performance)"
 msgstr "Evonode（高性能）"
 
+msgid "Failed"
+msgstr "失败"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "精选和已索引的数据合约，含所有者、文档和代币。"
 
@@ -417,6 +462,12 @@ msgstr "通过 40 个字符的密钥哈希，找到持有该公钥的身份。"
 
 msgid "finding where…"
 msgstr "正在查找位置…"
+
+msgid "Finished"
+msgstr "已结束"
+
+msgid "First block"
+msgstr "首个区块"
 
 msgid "First seen"
 msgstr "首次出现"
@@ -488,6 +539,9 @@ msgstr "身份"
 msgid "Identity by key hash"
 msgstr "按密钥哈希查找身份"
 
+msgid "Identity created"
+msgstr "创建的身份"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "在 {0} 中"
@@ -495,6 +549,9 @@ msgstr "在 {0} 中"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "在区块 {0} 中"
+
+msgid "In progress"
+msgstr "进行中"
 
 msgid "in the mempool"
 msgstr "在内存池中"
@@ -535,8 +592,14 @@ msgstr "语言"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "语言、单位、时区、连接选项和自定义开发网。"
 
+msgid "Last paid"
+msgstr "最近付款"
+
 msgid "Last seen"
 msgstr "最近出现"
+
+msgid "Leading"
+msgstr "领先"
 
 msgid "Link copied"
 msgstr "链接已复制"
@@ -555,6 +618,9 @@ msgstr "正在加载金额：{0} / {1} 个输入。每个前序交易对应一�
 
 msgid "Loading inputs…"
 msgstr "正在加载输入…"
+
+msgid "Locked"
+msgstr "已锁定"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "在 Core 上锁定 Dash，以在 Platform 上生成积分。"
@@ -667,11 +733,38 @@ msgstr "无地址"
 msgid "No block with this ID on this network."
 msgstr "此网络上没有该 ID 的区块。"
 
+msgid "No contest for this name on this network."
+msgstr "此网络上没有该名称的争夺。"
+
+msgid "No contract with this ID on this network."
+msgstr "此网络上没有该 ID 的合约。"
+
+msgid "No document with this ID on this network."
+msgstr "此网络上没有该 ID 的文档。"
+
+msgid "No epoch with this number yet."
+msgstr "尚无此编号的纪元。"
+
+msgid "No identity with this ID on this network."
+msgstr "此网络上没有该 ID 的身份。"
+
+msgid "No indexer covers this network."
+msgstr "没有索引器覆盖此网络。"
+
 msgid "No InstantSend lock was seen"
 msgstr "未发现 InstantSend 锁"
 
+msgid "No Platform block with this ID on this network."
+msgstr "此网络上没有该 ID 的 Platform 区块。"
+
 msgid "No source can say whether this output is spent."
 msgstr "没有任何数据源能判断此输出是否已被花费。"
+
+msgid "No state transition with this hash on this network."
+msgstr "此网络上没有该哈希的状态转换。"
+
+msgid "No token with this ID on this network."
+msgstr "此网络上没有该 ID 的代币。"
 
 msgid "No transaction with this ID on this network."
 msgstr "此网络上没有该 ID 的交易。"
@@ -682,14 +775,26 @@ msgstr "这笔交易没有价值转移"
 msgid "Nodes"
 msgstr "节点"
 
+msgid "Nonce"
+msgstr "Nonce"
+
 msgid "None"
 msgstr "无"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "无。充值是向已存在的身份增加积分。"
+
+msgid "Not available"
+msgstr "不可用"
 
 msgid "Not ChainLocked yet"
 msgstr "尚未 ChainLocked"
 
 msgid "not in a block yet"
 msgstr "尚未进入区块"
+
+msgid "Not in this network's masternode list."
+msgstr "不在此网络的主节点列表中。"
 
 msgid "Not in this version"
 msgstr "不在此版本中"
@@ -703,11 +808,17 @@ msgstr "未加载"
 msgid "Not mined yet"
 msgstr "尚未被挖出"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "未注册。可能尚未被占用，或仍在争夺中。"
+
 msgid "Not specified"
 msgstr "未指定"
 
 msgid "Number"
 msgstr "编号"
+
+msgid "On Platform"
+msgstr "在 Platform 上"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "单个争议：状态、计票、带预存余额的竞争者以及投票者。"
@@ -754,6 +865,12 @@ msgstr "单个代币：供应量、价格、暂停状态、定义、活动以及
 msgid "Open"
 msgstr "打开"
 
+msgid "Open the diagnostics drawer"
+msgstr "打开诊断面板"
+
+msgid "Open the proof inspector"
+msgstr "打开证明检查器"
+
 msgid "Open the result, or all results"
 msgstr "打开结果或全部结果"
 
@@ -792,6 +909,9 @@ msgstr "输出"
 msgid "Overview"
 msgstr "概览"
 
+msgid "Owner"
+msgstr "所有者"
+
 msgid "Owner key"
 msgstr "所有者密钥"
 
@@ -808,6 +928,9 @@ msgstr "找不到页面"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "粘贴十六进制或 base64 格式的状态转换，即可解码并检查。不会签名，也不会发送任何内容。"
+
+msgid "Paused"
+msgstr "已暂停"
 
 msgid "Payload"
 msgstr "载荷"
@@ -848,6 +971,9 @@ msgstr "Platform 协议版本投票：当前版本、下一版本以及每个 Ev
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Platform 的脉搏：高度、纪元、活动图表、领导者以及最新区块和状态转换。"
 
+msgid "PoSe-banned"
+msgstr "已被 PoSe 封禁"
+
 msgid "Position"
 msgstr "位置"
 
@@ -856,6 +982,9 @@ msgstr "提案"
 
 msgid "Proposal"
 msgstr "提案"
+
+msgid "Proposer"
+msgstr "提议者"
 
 msgid "Protocol"
 msgstr "协议"
@@ -932,6 +1061,9 @@ msgstr "由 Hyphen 记录；尚无第二个来源确认"
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "记录某个 Quorum 已完成密钥生成以及签名者。"
 
+msgid "Registered"
+msgstr "注册"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "注册主节点或 evonode，并设置运行它的密钥。"
 
@@ -955,6 +1087,9 @@ msgstr "请求时的高度"
 
 msgid "Result"
 msgstr "结果"
+
+msgid "Revision"
+msgstr "修订版本"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "色带宽度代表金额。灰色是找零给发送方，橙色是手续费。"
@@ -1073,6 +1208,9 @@ msgstr "花费"
 msgid "Spent"
 msgstr "已花费"
 
+msgid "Started"
+msgstr "开始时间"
+
 msgid "State"
 msgstr "状态"
 
@@ -1087,6 +1225,12 @@ msgstr "状态转换"
 
 msgid "Status"
 msgstr "状态"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Supply"
+msgstr "供应量"
 
 msgid "Termination of service"
 msgstr "服务终止"
@@ -1157,8 +1301,29 @@ msgstr "此网络上没有该 ID 的交易。可能太新，或在另一个网�
 msgid "This {record} is on {network}."
 msgstr "此 {record} 位于 {network}。"
 
+msgid "This address holds nothing on Platform."
+msgstr "此地址在 Platform 上没有任何资产。"
+
 msgid "This browser"
 msgstr "此浏览器"
+
+msgid "This is not a contract ID."
+msgstr "这不是合约 ID。"
+
+msgid "This is not a document address."
+msgstr "这不是文档地址。"
+
+msgid "This is not a Platform address."
+msgstr "这不是 Platform 地址。"
+
+msgid "This is not a token ID."
+msgstr "这不是代币 ID。"
+
+msgid "This is not an epoch number."
+msgstr "这不是纪元编号。"
+
+msgid "This is not an identity ID."
+msgstr "这不是身份 ID。"
 
 msgid "This page is on its way"
 msgstr "此页面即将上线"
@@ -1258,10 +1423,16 @@ msgstr "未花费"
 msgid "Upcoming vote polls by end date."
 msgstr "即将开始的投票，按结束日期排列。"
 
+msgid "Updated"
+msgstr "更新时间"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "美元按每 DASH {0} 计，来自 {1}。"
+
+msgid "Username"
+msgstr "用户名"
 
 msgid "Valid members"
 msgstr "有效成员"
@@ -1279,6 +1450,9 @@ msgstr "价值流向：{0} 个输入流向 {1} 个输出"
 
 msgid "Verify message"
 msgstr "验证消息"
+
+msgid "Version"
+msgstr "版本"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1497,17 @@ msgstr "要知道某个输出是否已被花费以及由哪笔交易花费，需
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "每个 Radar 页面由哪个 Platform SDK 调用支撑，含参数。"
 
+msgid "Winner"
+msgstr "获胜者"
+
 msgid "Withdrawal index"
 msgstr "提现索引"
+
+msgid "Withdrawals on Platform"
+msgstr "Platform 上的提现"
+
+msgid "Won"
+msgstr "已获胜"
 
 msgid "You"
 msgstr "我的"

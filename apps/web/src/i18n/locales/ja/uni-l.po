@@ -27,6 +27,10 @@ msgstr "{0, plural, other {入力 #件}}"
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, other {出力 #件}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} 基本単位"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} は devnet に対応していません。"
@@ -68,6 +72,10 @@ msgstr "シェア {0} 件、早期離脱ペナルティ {1} ブロック"
 msgid "{0} to other addresses"
 msgstr "他のアドレスへ {0}"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} 票"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 承認}}"
 
@@ -92,6 +100,9 @@ msgstr "ほか {n} 件の出力"
 msgid "{name} (reason {reason})"
 msgstr "{name}（理由 {reason}）"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, other {# 種類}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "コントラクトのグループ（位置、しきい値、メンバー）。"
 
@@ -109,6 +120,9 @@ msgstr "共有マスターノードの持分保有者が、報酬の支払先を
 
 msgid "About"
 msgstr "概要"
+
+msgid "Active"
+msgstr "アクティブ"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "進行中の争奪中の名前（終了時刻、投票数、状態）。"
@@ -170,8 +184,9 @@ msgstr "ブロック"
 msgid "block {0}"
 msgstr "ブロック {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "ブロック {0}"
 
@@ -253,8 +268,14 @@ msgstr "ブロックをマスターノードリストと最新の ChainLock に�
 msgid "Compromised keys"
 msgstr "鍵の漏えい"
 
+msgid "Contenders"
+msgstr "候補者"
+
 msgid "contest"
 msgstr "争奪"
+
+msgid "Contested name"
+msgstr "争奪中の名前"
 
 msgid "contract"
 msgstr "コントラクト"
@@ -298,6 +319,9 @@ msgstr "Core の先頭と ChainLock、Platform の高さとエポック、ノー
 msgid "Core transaction"
 msgstr "Core トランザクション"
 
+msgid "Could not read names."
+msgstr "名前を読み込めませんでした。"
+
 msgid "Created"
 msgstr "作成"
 
@@ -330,6 +354,9 @@ msgstr "データ"
 
 msgid "Data (OP_RETURN)"
 msgstr "データ (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "データコントラクト"
 
 msgid "Data sources"
 msgstr "データソース"
@@ -364,17 +391,32 @@ msgstr "ドキュメント"
 msgid "document type"
 msgstr "ドキュメントタイプ"
 
+msgid "Document types"
+msgstr "ドキュメントの種類"
+
 msgid "Documents"
 msgstr "ドキュメント"
 
 msgid "Early-leave penalty"
 msgstr "早期離脱ペナルティ"
 
+msgid "Enabled"
+msgstr "有効"
+
+msgid "Ended"
+msgstr "終了"
+
+msgid "Ends"
+msgstr "終了予定"
+
 msgid "epoch"
 msgstr "エポック"
 
 msgid "Epoch"
 msgstr "エポック"
+
+msgid "Epoch {id}"
+msgstr "エポック {id}"
 
 msgid "Epochs"
 msgstr "エポック"
@@ -403,6 +445,9 @@ msgstr "エボノード"
 msgid "Evonode (high-performance)"
 msgstr "Evonode（高性能）"
 
+msgid "Failed"
+msgstr "失敗"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "注目およびインデックス済みのデータコントラクト（所有者、ドキュメント、トークン）。"
 
@@ -417,6 +462,12 @@ msgstr "40 文字のキーハッシュから、その公開鍵を持つアイデ
 
 msgid "finding where…"
 msgstr "場所を特定中…"
+
+msgid "Finished"
+msgstr "終了"
+
+msgid "First block"
+msgstr "最初のブロック"
 
 msgid "First seen"
 msgstr "初回確認"
@@ -488,6 +539,9 @@ msgstr "アイデンティティ"
 msgid "Identity by key hash"
 msgstr "キーハッシュからアイデンティティを検索"
 
+msgid "Identity created"
+msgstr "作成されたアイデンティティ"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "{0} 内"
@@ -495,6 +549,9 @@ msgstr "{0} 内"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "ブロック {0} 内"
+
+msgid "In progress"
+msgstr "進行中"
 
 msgid "in the mempool"
 msgstr "メモリプール内"
@@ -535,8 +592,14 @@ msgstr "言語"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "言語、単位、タイムゾーン、接続オプション、カスタム devnet。"
 
+msgid "Last paid"
+msgstr "最終支払い"
+
 msgid "Last seen"
 msgstr "最終確認"
+
+msgid "Leading"
+msgstr "リード中"
 
 msgid "Link copied"
 msgstr "リンクをコピーしました"
@@ -555,6 +618,9 @@ msgstr "金額を読み込み中: {1} 件中 {0} 件。前のトランザクシ�
 
 msgid "Loading inputs…"
 msgstr "入力を読み込み中…"
+
+msgid "Locked"
+msgstr "ロック済み"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Core 上の Dash をロックして、Platform 上にクレジットを作成します。"
@@ -667,11 +733,38 @@ msgstr "アドレスなし"
 msgid "No block with this ID on this network."
 msgstr "このネットワークにこの ID のブロックはありません。"
 
+msgid "No contest for this name on this network."
+msgstr "このネットワークには、この名前の争奪はありません。"
+
+msgid "No contract with this ID on this network."
+msgstr "このネットワークにこの ID のコントラクトはありません。"
+
+msgid "No document with this ID on this network."
+msgstr "このネットワークには、このIDのドキュメントはありません。"
+
+msgid "No epoch with this number yet."
+msgstr "この番号のエポックはまだありません。"
+
+msgid "No identity with this ID on this network."
+msgstr "このネットワークには、このIDのアイデンティティはありません。"
+
+msgid "No indexer covers this network."
+msgstr "このネットワークを扱うインデクサーはありません。"
+
 msgid "No InstantSend lock was seen"
 msgstr "InstantSend ロックは確認されていません"
 
+msgid "No Platform block with this ID on this network."
+msgstr "このネットワークには、このIDのPlatformブロックはありません。"
+
 msgid "No source can say whether this output is spent."
 msgstr "このアウトプットが使用済みかどうかを判断できるソースはありません。"
+
+msgid "No state transition with this hash on this network."
+msgstr "このネットワークには、このハッシュのステート遷移はありません。"
+
+msgid "No token with this ID on this network."
+msgstr "このネットワークには、このIDのトークンはありません。"
 
 msgid "No transaction with this ID on this network."
 msgstr "このネットワークにこの ID のトランザクションはありません。"
@@ -682,14 +775,26 @@ msgstr "このトランザクションでは価値が移動しません"
 msgid "Nodes"
 msgstr "ノード"
 
+msgid "Nonce"
+msgstr "ノンス"
+
 msgid "None"
 msgstr "なし"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "なし。チャージは、すでに存在するアイデンティティにクレジットを加えます。"
+
+msgid "Not available"
+msgstr "利用不可"
 
 msgid "Not ChainLocked yet"
 msgstr "まだ ChainLocked ではありません"
 
 msgid "not in a block yet"
 msgstr "まだブロックに含まれていません"
+
+msgid "Not in this network's masternode list."
+msgstr "このネットワークのマスターノード一覧にありません。"
 
 msgid "Not in this version"
 msgstr "このバージョンにはありません"
@@ -703,11 +808,17 @@ msgstr "未読み込み"
 msgid "Not mined yet"
 msgstr "まだマイニングされていません"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "未登録です。空いているか、まだ争奪中の可能性があります。"
+
 msgid "Not specified"
 msgstr "未指定"
 
 msgid "Number"
 msgstr "番号"
+
+msgid "On Platform"
+msgstr "Platform上"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "1 件の争奪：状態、集計、事前積立残高を持つ候補、投票者。"
@@ -754,6 +865,12 @@ msgstr "1 つのトークン：供給量、価格、一時停止の状態、定�
 msgid "Open"
 msgstr "開く"
 
+msgid "Open the diagnostics drawer"
+msgstr "診断パネルを開く"
+
+msgid "Open the proof inspector"
+msgstr "証明インスペクターを開く"
+
 msgid "Open the result, or all results"
 msgstr "結果または全結果を開く"
 
@@ -792,6 +909,9 @@ msgstr "出力"
 msgid "Overview"
 msgstr "概要"
 
+msgid "Owner"
+msgstr "オーナー"
+
 msgid "Owner key"
 msgstr "オーナーキー"
 
@@ -808,6 +928,9 @@ msgstr "ページが見つかりません"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードして検証できます。署名も送信も行いません。"
+
+msgid "Paused"
+msgstr "一時停止中"
 
 msgid "Payload"
 msgstr "ペイロード"
@@ -848,6 +971,9 @@ msgstr "Platform プロトコルバージョンの投票：現行版と次期版
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Platform の鼓動：高さ、エポック、アクティビティのチャート、リーダー、最新のブロックとステートトランジション。"
 
+msgid "PoSe-banned"
+msgstr "PoSe で停止"
+
 msgid "Position"
 msgstr "位置"
 
@@ -856,6 +982,9 @@ msgstr "提案"
 
 msgid "Proposal"
 msgstr "提案"
+
+msgid "Proposer"
+msgstr "プロポーザー"
 
 msgid "Protocol"
 msgstr "プロトコル"
@@ -932,6 +1061,9 @@ msgstr "Hyphen が記録。2 つ目の情報源による確認はまだありま
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "クォーラムが鍵生成を完了したことと、誰が署名したかを記録します。"
 
+msgid "Registered"
+msgstr "登録"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "マスターノードまたは evonode を登録し、それを運用する鍵を設定します。"
 
@@ -955,6 +1087,9 @@ msgstr "リクエスト時の高さ"
 
 msgid "Result"
 msgstr "結果"
+
+msgid "Revision"
+msgstr "リビジョン"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "リボンの幅が金額です。灰色は送信者へのおつり、オレンジは手数料です。"
@@ -1073,6 +1208,9 @@ msgstr "使用"
 msgid "Spent"
 msgstr "使用済み"
 
+msgid "Started"
+msgstr "開始"
+
 msgid "State"
 msgstr "状態"
 
@@ -1087,6 +1225,12 @@ msgstr "ステートトランジション"
 
 msgid "Status"
 msgstr "ステータス"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Supply"
+msgstr "供給量"
 
 msgid "Termination of service"
 msgstr "サービスの終了"
@@ -1157,8 +1301,29 @@ msgstr "このネットワークにこの ID のトランザクションはあ�
 msgid "This {record} is on {network}."
 msgstr "この {record} は {network} にあります。"
 
+msgid "This address holds nothing on Platform."
+msgstr "このアドレスはPlatform上に何も保有していません。"
+
 msgid "This browser"
 msgstr "このブラウザ"
+
+msgid "This is not a contract ID."
+msgstr "これはコントラクトIDではありません。"
+
+msgid "This is not a document address."
+msgstr "これはドキュメントのアドレスではありません。"
+
+msgid "This is not a Platform address."
+msgstr "これはPlatformのアドレスではありません。"
+
+msgid "This is not a token ID."
+msgstr "これはトークンIDではありません。"
+
+msgid "This is not an epoch number."
+msgstr "これはエポック番号ではありません。"
+
+msgid "This is not an identity ID."
+msgstr "これはアイデンティティIDではありません。"
 
 msgid "This page is on its way"
 msgstr "このページは準備中です"
@@ -1258,10 +1423,16 @@ msgstr "未使用"
 msgid "Upcoming vote polls by end date."
 msgstr "今後の投票を終了日順に表示。"
 
+msgid "Updated"
+msgstr "更新"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD は 1 DASH あたり {0}（{1}）。"
+
+msgid "Username"
+msgstr "ユーザー名"
 
 msgid "Valid members"
 msgstr "有効なメンバー"
@@ -1279,6 +1450,9 @@ msgstr "価値の流れ：入力 {0} 件から出力 {1} 件へ"
 
 msgid "Verify message"
 msgstr "メッセージを検証"
+
+msgid "Version"
+msgstr "バージョン"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1497,17 @@ msgstr "出力が使用済みかどうか、またどのトランザクション
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "どの Platform SDK 呼び出しがどの Radar ページを支えているか（引数付き）。"
 
+msgid "Winner"
+msgstr "勝者"
+
 msgid "Withdrawal index"
 msgstr "出金インデックス"
+
+msgid "Withdrawals on Platform"
+msgstr "Platform上の引き出し"
+
+msgid "Won"
+msgstr "勝利"
 
 msgid "You"
 msgstr "あなた"

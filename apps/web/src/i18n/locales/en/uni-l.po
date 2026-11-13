@@ -27,6 +27,10 @@ msgstr "{0, plural, one {# input} other {# inputs}}"
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, one {# output} other {# outputs}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} base units"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} doesn’t cover devnets."
@@ -68,6 +72,10 @@ msgstr "{0} shares, {1} blocks of early-leave penalty"
 msgid "{0} to other addresses"
 msgstr "{0} to other addresses"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} votes"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 
@@ -92,6 +100,9 @@ msgstr "{n} more outputs"
 msgid "{name} (reason {reason})"
 msgstr "{name} (reason {reason})"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, one {# type} other {# types}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "A contract’s groups with position, threshold and members."
 
@@ -109,6 +120,9 @@ msgstr "A shareholder of a shared masternode changes where their reward is paid.
 
 msgid "About"
 msgstr "About"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Active contested names with end time, votes and status."
@@ -170,8 +184,9 @@ msgstr "Block"
 msgid "block {0}"
 msgstr "block {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "Block {0}"
 
@@ -253,8 +268,14 @@ msgstr "Commits the block to the masternode list and the latest ChainLock."
 msgid "Compromised keys"
 msgstr "Compromised keys"
 
+msgid "Contenders"
+msgstr "Contenders"
+
 msgid "contest"
 msgstr "contest"
+
+msgid "Contested name"
+msgstr "Contested name"
 
 msgid "contract"
 msgstr "contract"
@@ -298,6 +319,9 @@ msgstr "Core tip and ChainLock, Platform height and epoch, the node map and cens
 msgid "Core transaction"
 msgstr "Core transaction"
 
+msgid "Could not read names."
+msgstr "Could not read names."
+
 msgid "Created"
 msgstr "Created"
 
@@ -330,6 +354,9 @@ msgstr "data"
 
 msgid "Data (OP_RETURN)"
 msgstr "Data (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "Data contract"
 
 msgid "Data sources"
 msgstr "Data sources"
@@ -364,17 +391,32 @@ msgstr "Document"
 msgid "document type"
 msgstr "document type"
 
+msgid "Document types"
+msgstr "Document types"
+
 msgid "Documents"
 msgstr "Documents"
 
 msgid "Early-leave penalty"
 msgstr "Early-leave penalty"
 
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Ended"
+msgstr "Ended"
+
+msgid "Ends"
+msgstr "Ends"
+
 msgid "epoch"
 msgstr "epoch"
 
 msgid "Epoch"
 msgstr "Epoch"
+
+msgid "Epoch {id}"
+msgstr "Epoch {id}"
 
 msgid "Epochs"
 msgstr "Epochs"
@@ -403,6 +445,9 @@ msgstr "Evonode"
 msgid "Evonode (high-performance)"
 msgstr "Evonode (high-performance)"
 
+msgid "Failed"
+msgstr "Failed"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "Featured and indexed data contracts with owner, documents and tokens."
 
@@ -417,6 +462,12 @@ msgstr "Find the identity that holds a public key, from its 40-character key has
 
 msgid "finding where…"
 msgstr "finding where…"
+
+msgid "Finished"
+msgstr "Finished"
+
+msgid "First block"
+msgstr "First block"
 
 msgid "First seen"
 msgstr "First seen"
@@ -488,6 +539,9 @@ msgstr "Identity"
 msgid "Identity by key hash"
 msgstr "Identity by key hash"
 
+msgid "Identity created"
+msgstr "Identity created"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "in {0}"
@@ -495,6 +549,9 @@ msgstr "in {0}"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "In block {0}"
+
+msgid "In progress"
+msgstr "In progress"
 
 msgid "in the mempool"
 msgstr "in the mempool"
@@ -535,8 +592,14 @@ msgstr "Language"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "Language, units, time zone, connection options and custom devnets."
 
+msgid "Last paid"
+msgstr "Last paid"
+
 msgid "Last seen"
 msgstr "Last seen"
+
+msgid "Leading"
+msgstr "Leading"
 
 msgid "Link copied"
 msgstr "Link copied"
@@ -555,6 +618,9 @@ msgstr "Loading amounts: {0} of {1} inputs. Each previous transaction is a separ
 
 msgid "Loading inputs…"
 msgstr "Loading inputs…"
+
+msgid "Locked"
+msgstr "Locked"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Locks Dash on Core to create credits on Platform."
@@ -667,11 +733,38 @@ msgstr "No address"
 msgid "No block with this ID on this network."
 msgstr "No block with this ID on this network."
 
+msgid "No contest for this name on this network."
+msgstr "No contest for this name on this network."
+
+msgid "No contract with this ID on this network."
+msgstr "No contract with this ID on this network."
+
+msgid "No document with this ID on this network."
+msgstr "No document with this ID on this network."
+
+msgid "No epoch with this number yet."
+msgstr "No epoch with this number yet."
+
+msgid "No identity with this ID on this network."
+msgstr "No identity with this ID on this network."
+
+msgid "No indexer covers this network."
+msgstr "No indexer covers this network."
+
 msgid "No InstantSend lock was seen"
 msgstr "No InstantSend lock was seen"
 
+msgid "No Platform block with this ID on this network."
+msgstr "No Platform block with this ID on this network."
+
 msgid "No source can say whether this output is spent."
 msgstr "No source can say whether this output is spent."
+
+msgid "No state transition with this hash on this network."
+msgstr "No state transition with this hash on this network."
+
+msgid "No token with this ID on this network."
+msgstr "No token with this ID on this network."
 
 msgid "No transaction with this ID on this network."
 msgstr "No transaction with this ID on this network."
@@ -682,14 +775,26 @@ msgstr "No value moves in this transaction"
 msgid "Nodes"
 msgstr "Nodes"
 
+msgid "Nonce"
+msgstr "Nonce"
+
 msgid "None"
 msgstr "None"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "None. A top-up credits an identity that already existed."
+
+msgid "Not available"
+msgstr "Not available"
 
 msgid "Not ChainLocked yet"
 msgstr "Not ChainLocked yet"
 
 msgid "not in a block yet"
 msgstr "not in a block yet"
+
+msgid "Not in this network's masternode list."
+msgstr "Not in this network's masternode list."
 
 msgid "Not in this version"
 msgstr "Not in this version"
@@ -703,11 +808,17 @@ msgstr "Not loaded"
 msgid "Not mined yet"
 msgstr "Not mined yet"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "Not registered. It may be free or still contested."
+
 msgid "Not specified"
 msgstr "Not specified"
 
 msgid "Number"
 msgstr "Number"
+
+msgid "On Platform"
+msgstr "On Platform"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "One contest: status, tally, contenders with prefunded balance and who voted."
@@ -754,6 +865,12 @@ msgstr "One token: supply, price, pause state, definition, activity and a balanc
 msgid "Open"
 msgstr "Open"
 
+msgid "Open the diagnostics drawer"
+msgstr "Open the diagnostics drawer"
+
+msgid "Open the proof inspector"
+msgstr "Open the proof inspector"
+
 msgid "Open the result, or all results"
 msgstr "Open the result, or all results"
 
@@ -792,6 +909,9 @@ msgstr "Outputs"
 msgid "Overview"
 msgstr "Overview"
 
+msgid "Owner"
+msgstr "Owner"
+
 msgid "Owner key"
 msgstr "Owner key"
 
@@ -808,6 +928,9 @@ msgstr "Page not found"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+
+msgid "Paused"
+msgstr "Paused"
 
 msgid "Payload"
 msgstr "Payload"
@@ -848,6 +971,9 @@ msgstr "Platform protocol version voting: the current and next version and each 
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 
+msgid "PoSe-banned"
+msgstr "PoSe-banned"
+
 msgid "Position"
 msgstr "Position"
 
@@ -856,6 +982,9 @@ msgstr "proposal"
 
 msgid "Proposal"
 msgstr "Proposal"
+
+msgid "Proposer"
+msgstr "Proposer"
 
 msgid "Protocol"
 msgstr "Protocol"
@@ -932,6 +1061,9 @@ msgstr "recorded by Hyphen; no second source has confirmed it"
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "Records that a quorum finished its key generation and who signed."
 
+msgid "Registered"
+msgstr "Registered"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "Registers a masternode or evonode and sets the keys that run it."
 
@@ -955,6 +1087,9 @@ msgstr "Requested at height"
 
 msgid "Result"
 msgstr "Result"
+
+msgid "Revision"
+msgstr "Revision"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
@@ -1073,6 +1208,9 @@ msgstr "Spends"
 msgid "Spent"
 msgstr "Spent"
 
+msgid "Started"
+msgstr "Started"
+
 msgid "State"
 msgstr "State"
 
@@ -1087,6 +1225,12 @@ msgstr "State transitions"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Supply"
+msgstr "Supply"
 
 msgid "Termination of service"
 msgstr "Termination of service"
@@ -1157,8 +1301,29 @@ msgstr "There is no transaction with this ID on this network. It may be too new,
 msgid "This {record} is on {network}."
 msgstr "This {record} is on {network}."
 
+msgid "This address holds nothing on Platform."
+msgstr "This address holds nothing on Platform."
+
 msgid "This browser"
 msgstr "This browser"
+
+msgid "This is not a contract ID."
+msgstr "This is not a contract ID."
+
+msgid "This is not a document address."
+msgstr "This is not a document address."
+
+msgid "This is not a Platform address."
+msgstr "This is not a Platform address."
+
+msgid "This is not a token ID."
+msgstr "This is not a token ID."
+
+msgid "This is not an epoch number."
+msgstr "This is not an epoch number."
+
+msgid "This is not an identity ID."
+msgstr "This is not an identity ID."
 
 msgid "This page is on its way"
 msgstr "This page is on its way"
@@ -1258,10 +1423,16 @@ msgstr "Unspent"
 msgid "Upcoming vote polls by end date."
 msgstr "Upcoming vote polls by end date."
 
+msgid "Updated"
+msgstr "Updated"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD at {0} per DASH, from {1}."
+
+msgid "Username"
+msgstr "Username"
 
 msgid "Valid members"
 msgstr "Valid members"
@@ -1279,6 +1450,9 @@ msgstr "Value flow: {0} inputs into {1} outputs"
 
 msgid "Verify message"
 msgstr "Verify message"
+
+msgid "Version"
+msgstr "Version"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1497,17 @@ msgstr "Whether an output is spent, and by which transaction, needs an indexer"
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Which Platform SDK call backs each Radar page, with its arguments."
 
+msgid "Winner"
+msgstr "Winner"
+
 msgid "Withdrawal index"
 msgstr "Withdrawal index"
+
+msgid "Withdrawals on Platform"
+msgstr "Withdrawals on Platform"
+
+msgid "Won"
+msgstr "Won"
 
 msgid "You"
 msgstr "You"
