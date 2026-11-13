@@ -1,4 +1,4 @@
-import type { PChainMethods, PrefundedBalanceDto, ShieldedNoteDto } from '../../methods'
+import type { PChainMethods, PrefundedBalanceDto, ShieldedNoteDto } from '../../methods/p-chain'
 import { bytesToHex, hexToBytes } from '@/lib/hex'
 import { isNotFound } from '../errors'
 import type { Freeable, ImplOf, ProvedResponse } from './types'
