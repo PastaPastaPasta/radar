@@ -28,16 +28,18 @@ export function RawCard({
   const json = useMemo(
     () =>
       decoded
-        ? {
-            type: decoded.actionType,
-            hash: decoded.hash,
-            ownerId: decoded.ownerId,
-            identityNonce: decoded.identityNonce,
-            identityContractNonce: decoded.identityContractNonce,
-            userFeeIncrease: decoded.userFeeIncrease,
-            signaturePublicKeyId: decoded.signaturePublicKeyId,
-            body: decoded.body,
-          }
+        ? Object.fromEntries(
+            Object.entries({
+              type: decoded.actionType,
+              hash: decoded.hash,
+              ownerId: decoded.ownerId,
+              identityNonce: decoded.identityNonce,
+              identityContractNonce: decoded.identityContractNonce,
+              userFeeIncrease: decoded.userFeeIncrease,
+              signaturePublicKeyId: decoded.signaturePublicKeyId,
+              body: decoded.body,
+            }).filter(([, v]) => v !== undefined),
+          )
         : tx,
     [decoded, tx],
   )

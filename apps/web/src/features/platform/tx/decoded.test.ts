@@ -2,13 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { base58Encode } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { bytesToHex } from '@/lib/hex'
-import {
-  bigintOf,
-  fundingOf,
-  platformAddressOf,
-  proTxHashHex,
-  scriptAddressOf,
-} from './decoded'
+import { bigintOf, fundingOf, platformAddressOf, proTxHashHex, scriptAddressOf } from './decoded'
 
 const ADDRESS = 'dash1krma5z3ttj75la4m93xcndna9ullamq9y5e9n5rs'
 const TESTNET_ADDRESS = 'tdash1krma5z3ttj75la4m93xcndna9ullamq9y5fzq2j7'

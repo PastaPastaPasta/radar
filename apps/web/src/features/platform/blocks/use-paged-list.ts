@@ -45,8 +45,7 @@ export interface PagedList<Row> {
   /** The stamp of the first page. */
   source: SourceStamp | undefined
   paging:
-    | { kind: 'infinite'; hasNext: boolean; fetchNext: () => void; fetching: boolean }
-    | undefined
+    { kind: 'infinite'; hasNext: boolean; fetchNext: () => void; fetching: boolean } | undefined
   fetching: boolean
 }
 
@@ -80,9 +79,7 @@ export function usePagedList<Row>(input: PagedListInput<Row>): PagedList<Row> {
     getNextPageParam: (last, all) => {
       const loaded = all.reduce((n, p) => n + p.data.items.length, 0)
       const more =
-        last.data.total === undefined
-          ? last.data.items.length >= limit
-          : loaded < last.data.total
+        last.data.total === undefined ? last.data.items.length >= limit : loaded < last.data.total
       return more ? all.length + 1 : undefined
     },
     enabled: enabled && mode === 'scroll',

@@ -25,8 +25,10 @@ const UNKNOWN = 'deadbeef'.repeat(8)
 
 /** On a phone the filters sit behind a "Filters" button. */
 async function openFilters(page: Page): Promise<void> {
+  if ((page.viewportSize()?.width ?? 1000) > 640) return
   const button = page.getByRole('button', { name: /^Filters/ })
-  if (await button.isVisible()) await button.click()
+  await button.click()
+  await expect(button).toHaveAttribute('aria-pressed', 'true')
 }
 
 const rows = (page: Page, prefix: string) => page.locator(`table tbody a[href^="${prefix}"]`)

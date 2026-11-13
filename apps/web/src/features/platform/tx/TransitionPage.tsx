@@ -130,11 +130,7 @@ function Record({ hash }: { hash: string }) {
         <>
           <Details query={decodedQuery} net={net} hasBytes={Boolean(tx.data)} stamp={stamp} />
           <Duplicates tx={tx} stamp={stamp} />
-          <RawCard
-            tx={tx}
-            decoded={decoded}
-            source={decodedQuery.data ? [stamp, stampOf(decodedQuery.data)] : stamp}
-          />
+          <RawCard tx={tx} decoded={decoded} source={stamp} />
         </>
       ) : null}
     </div>

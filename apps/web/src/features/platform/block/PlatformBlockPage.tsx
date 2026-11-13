@@ -32,10 +32,7 @@ export function PlatformBlockPage({ id }: { id: string }) {
       share
     >
       {off ? (
-        <Unavailable
-          source="pe"
-          title={t`Block pages need Platform Explorer's index`}
-        />
+        <Unavailable source="pe" title={t`Block pages need Platform Explorer's index`} />
       ) : isDevnet(net) ? (
         <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
       ) : ref === undefined ? (

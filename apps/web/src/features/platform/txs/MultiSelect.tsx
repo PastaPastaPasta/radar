@@ -53,9 +53,7 @@ export function MultiSelect({
                 checked={chosen.has(o.id)}
                 aria-label={o.text}
                 onChange={() => {
-                  onChange(
-                    chosen.has(o.id) ? value.filter((v) => v !== o.id) : [...value, o.id],
-                  )
+                  onChange(chosen.has(o.id) ? value.filter((v) => v !== o.id) : [...value, o.id])
                 }}
               />
               {o.node}

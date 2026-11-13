@@ -147,14 +147,18 @@ function TransitionsList() {
         <button
           type="button"
           className="dh-btn dh-btn--sm"
-          aria-label={desc ? t`Descending. Switch to ascending` : t`Ascending. Switch to descending`}
+          aria-label={
+            desc ? t`Descending. Switch to ascending` : t`Ascending. Switch to descending`
+          }
           onClick={() => {
             controls.filter({ sort: desc ? sortField : `-${sortField}` })
           }}
         >
           {desc ? '↓' : '↑'}
         </button>
-        <ListModeToggle listId={LIST_ID} />
+        <span className="inline-flex items-center gap-2 whitespace-nowrap">
+          <ListModeToggle listId={LIST_ID} />
+        </span>
       </TableTools>
       <FilterPanel count={active.length}>
         <MultiSelect
@@ -188,14 +192,16 @@ function TransitionsList() {
             controls.filter({ gas })
           }}
         />
-        <DateRangeFilter
-          label={t`Date`}
-          from={search.from}
-          to={search.to}
-          onChange={({ from, to }) => {
-            controls.filter({ from, to })
-          }}
-        />
+        <div className="[&_input[type=date]]:w-[9.5rem]">
+          <DateRangeFilter
+            label={t`Date`}
+            from={search.from}
+            to={search.to}
+            onChange={({ from, to }) => {
+              controls.filter({ from, to })
+            }}
+          />
+        </div>
         <TextFilter
           label={t`Owner`}
           placeholder={t`Identity ID`}

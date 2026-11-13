@@ -3,13 +3,7 @@ import { useId, useState, type ReactNode } from 'react'
 import { FilterButton } from '@/ui'
 
 /** The filter controls: always in view on a wide screen, behind a "Filters" button on a phone. */
-export function FilterPanel({
-  count,
-  children,
-}: {
-  count: number
-  children: ReactNode
-}) {
+export function FilterPanel({ count, children }: { count: number; children: ReactNode }) {
   const { t } = useLingui()
   const [open, setOpen] = useState(false)
   return (

@@ -12,10 +12,7 @@ interface EpochStart {
 }
 
 /** The epoch a block belongs to: the last epoch that started at or before its height; `undefined` before the first one listed. */
-export function epochForHeight(
-  epochs: readonly EpochStart[],
-  height: number,
-): number | undefined {
+export function epochForHeight(epochs: readonly EpochStart[], height: number): number | undefined {
   let found: number | undefined
   let start = -1
   for (const e of epochs) {

@@ -61,7 +61,8 @@ function BlocksList() {
     }),
     enabled: both && search.to !== undefined,
   })
-  const upperHeight = both && upper.isSuccess ? (upper.data.data.items[0]?.header.height ?? 0) : undefined
+  const upperHeight =
+    both && upper.isSuccess ? (upper.data.data.items[0]?.header.height ?? 0) : undefined
   const query = useMemo(() => blocksQuery(search, upperHeight), [search, upperHeight])
 
   const list = usePagedList<PeBlockSummary>({
@@ -86,7 +87,9 @@ function BlocksList() {
     ...(search.epoch ? [{ id: 'epoch', label: t`Epoch: ${rangeText(search.epoch)}` }] : []),
     ...(search.gas ? [{ id: 'gas', label: t`Gas: ${rangeText(search.gas)}` }] : []),
     ...(search.txs ? [{ id: 'txs', label: t`Transitions: ${rangeText(search.txs)}` }] : []),
-    ...(search.proposer ? [{ id: 'proposer', label: t`Proposer: ${search.proposer.slice(0, 8)}…` }] : []),
+    ...(search.proposer
+      ? [{ id: 'proposer', label: t`Proposer: ${search.proposer.slice(0, 8)}…` }]
+      : []),
     ...(search.from || search.to
       ? [{ id: 'date', label: t`Date: ${search.from ?? '…'} – ${search.to ?? '…'}` }]
       : []),
@@ -96,7 +99,10 @@ function BlocksList() {
   }
   const desc = search.sort !== 'height'
 
-  const stamps = [...(list.source ? [list.source] : []), ...(epochByHeight && epochStamp ? [epochStamp] : [])]
+  const stamps = [
+    ...(list.source ? [list.source] : []),
+    ...(epochByHeight && epochStamp ? [epochStamp] : []),
+  ]
   const phrase = list.total ?? list.rows.length
 
   return (
@@ -113,7 +119,9 @@ function BlocksList() {
             { id: 'old', label: t`Oldest first` },
           ]}
         />
-        <ListModeToggle listId={LIST_ID} />
+        <span className="inline-flex items-center gap-2 whitespace-nowrap">
+          <ListModeToggle listId={LIST_ID} />
+        </span>
       </TableTools>
       <FilterPanel count={active.length}>
         <RangeFilter
@@ -144,14 +152,16 @@ function BlocksList() {
             controls.filter({ txs })
           }}
         />
-        <DateRangeFilter
-          label={t`Date`}
-          from={search.from}
-          to={search.to}
-          onChange={({ from, to }) => {
-            controls.filter({ from, to })
-          }}
-        />
+        <div className="[&_input[type=date]]:w-[9.5rem]">
+          <DateRangeFilter
+            label={t`Date`}
+            from={search.from}
+            to={search.to}
+            onChange={({ from, to }) => {
+              controls.filter({ from, to })
+            }}
+          />
+        </div>
         <TextFilter
           label={t`Proposer`}
           placeholder={t`ProTxHash of an evonode`}
