@@ -1,8 +1,8 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { stampOf } from '@/data/envelope'
-import { platformTipQuery } from '@/data/sdk/queries'
-import { sdkQueries } from '@/data/sdk/queries'
+import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, Card, EpochClock, Stat, Stats } from '@/ui'
@@ -31,11 +31,10 @@ export function Vitals() {
   const epoch = tip.data?.data.epoch
   const height = tip.data?.data.height
   const length = epochLengthMs(net)
-  const missing = (failed: boolean) => (failed ? t`Not available right now` : undefined)
+  const missing = (failed: boolean) => (failed ? t`Not available right now` : '…')
   const next = upgrade.data?.data.nextProtocolVersion
   const votes = upgrade.data?.data.voteCount
   const quorumCount = quorums.data?.data.quorums.length
-  const stamps = stampsOf(tip.data, credits.data, upgrade.data, quorums.data)
 
   return (
     <Card
@@ -43,7 +42,7 @@ export function Vitals() {
       layer="platform"
       title={t`Vital signs`}
       subtitle={t`Read from the Platform nodes and checked against their proofs.`}
-      source={stamps}
+      source={stampsOf(tip.data, credits.data, upgrade.data, quorums.data)}
     >
       <div className="grid gap-4" data-vitals>
         {epoch ? (
@@ -60,26 +59,23 @@ export function Vitals() {
         ) : null}
         <Stats>
           <Stat
-            key="height"
             label={t`Platform height`}
-            value={height === undefined ? (missing(tip.isError) ?? '…') : formatInt(height)}
+            value={height === undefined ? missing(tip.isError) : formatInt(height)}
             loading={height === undefined && !tip.isError}
             source={tip.data ? stampOf(tip.data) : undefined}
             layer="platform"
           />
           <Stat
-            key="epoch"
             label={t`Epoch`}
-            value={epoch ? formatInt(epoch.number) : (missing(tip.isError) ?? '…')}
+            value={epoch ? formatInt(epoch.number) : missing(tip.isError)}
             loading={!epoch && !tip.isError}
             layer="platform"
           />
           <Stat
-            key="credits"
             label={t`Total credits`}
             value={
               credits.data?.data == null ? (
-                (missing(credits.isError) ?? '…')
+                missing(credits.isError)
               ) : (
                 <Amount value={credits.data.data} kind="credits" fiat compact />
               )
@@ -89,17 +85,19 @@ export function Vitals() {
             layer="platform"
           />
           <Stat
-            key="protocol"
             label={t`Protocol version`}
             value={
               upgrade.data
                 ? `v${upgrade.data.data.currentProtocolVersion}`
-                : (missing(upgrade.isError) ?? '…')
+                : missing(upgrade.isError)
             }
             note={
               next != null
                 ? votes != null
-                  ? t`Upgrade to v${next}: ${formatInt(Number(votes))} votes so far`
+                  ? plural(Number(votes), {
+                      one: `Upgrade to v${next}: # vote so far`,
+                      other: `Upgrade to v${next}: # votes so far`,
+                    })
                   : t`Upgrade to v${next} is being voted on`
                 : upgrade.data
                   ? t`No upgrade pending`
@@ -110,11 +108,8 @@ export function Vitals() {
             layer="platform"
           />
           <Stat
-            key="quorums"
             label={t`Active quorums`}
-            value={
-              quorumCount === undefined ? (missing(quorums.isError) ?? '…') : formatInt(quorumCount)
-            }
+            value={quorumCount === undefined ? missing(quorums.isError) : formatInt(quorumCount)}
             note={quorumCount === undefined ? undefined : t`Not proof-checked`}
             loading={!quorums.data && !quorums.isError}
             source={quorums.data ? stampOf(quorums.data) : undefined}

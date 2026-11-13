@@ -1,14 +1,14 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { stampOf } from '@/data/envelope'
 import { platformTipQuery } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, DataTable } from '@/ui'
-import { homeQueries, type Proposer } from './queries'
-import { cardState } from './state'
+import { homeQueries, type EpochProposers, type Proposer } from './queries'
+import { queryView, stampsOf } from './state'
 
 const TOP = 10
 
@@ -67,6 +67,8 @@ export function Proposers({ active }: { active: boolean }) {
     [t],
   )
   const pages = answer?.pages ?? 0
+  const base = (a: EpochProposers) =>
+    t`Epoch ${formatInt(a.epoch)}. Evonodes: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
   return (
     <Card
       id="proposers"
@@ -75,12 +77,15 @@ export function Proposers({ active }: { active: boolean }) {
       subtitle={
         answer
           ? pages > 1
-            ? t`Epoch ${formatInt(answer.epoch)}: ${formatInt(answer.proposers.length)} evonodes proposed ${formatInt(Number(answer.total))} blocks. Combined from ${pages} proof-checked answers.`
-            : t`Epoch ${formatInt(answer.epoch)}: ${formatInt(answer.proposers.length)} evonodes proposed ${formatInt(Number(answer.total))} blocks.`
+            ? `${base(answer)} ${plural(pages, {
+                one: 'Combined from # proof-checked answer.',
+                other: 'Combined from # proof-checked answers.',
+              })}`
+            : base(answer)
           : t`The evonodes that proposed the most blocks this epoch.`
       }
       padding="flush"
-      source={query.data ? stampOf(query.data) : undefined}
+      source={stampsOf(query.data)}
       actions={
         <PageLink to="/masternodes" search={{ view: 'platform' }} className="rx-go">
           {t`All evonodes`}
@@ -92,9 +97,7 @@ export function Proposers({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => r.proTxHash}
-        state={cardState(query)}
-        error={query.error}
-        onRetry={() => void query.refetch()}
+        {...queryView(query)}
         empty={t`No evonode has proposed a block in this epoch yet.`}
       />
     </Card>

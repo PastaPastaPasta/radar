@@ -11,7 +11,7 @@ const PROPOSERS_PAGE = 100
 /** More pages than any network has proposers for; a runaway answer stops here. */
 const MAX_PROPOSER_PAGES = 8
 
-export const POLL_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
+const POLL_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
 const POLLS_LIMIT = 100
 
 export interface Proposer {

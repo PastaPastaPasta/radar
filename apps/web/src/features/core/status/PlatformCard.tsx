@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { stampOf, type Sourced } from '@/data/envelope'
@@ -26,7 +27,10 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
       case 'no-peers':
         return t`The node has no peers.`
       case 'core-behind':
-        return t`Platform's Core ChainLock is ${formatInt(reason.blocks)} blocks behind Core's tip.`
+        return plural(reason.blocks, {
+          one: "Platform's Core ChainLock is # block behind Core's tip.",
+          other: "Platform's Core ChainLock is # blocks behind Core's tip.",
+        })
     }
   }
   const s = status.data?.data
@@ -41,6 +45,11 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
         now,
       })
     : undefined
+  const badge = {
+    live: { tone: 'success', label: t`Live` },
+    lagging: { tone: 'warning', label: t`Lagging` },
+    stalled: { tone: 'danger', label: t`Stalled` },
+  } as const
   const missing = status.isError ? t`Not available right now` : '…'
   const dash = (v: string) => (v === '' ? '—' : v)
   const stamps = [status.data, coreTip.data].flatMap((d) => (d ? [stampOf(d)] : []))
@@ -61,21 +70,7 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
           data-platform-state={verdict.state}
           className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1"
         >
-          <Badge
-            tone={
-              verdict.state === 'live'
-                ? 'success'
-                : verdict.state === 'lagging'
-                  ? 'warning'
-                  : 'danger'
-            }
-          >
-            {verdict.state === 'live'
-              ? t`Live`
-              : verdict.state === 'lagging'
-                ? t`Lagging`
-                : t`Stalled`}
-          </Badge>
+          <Badge tone={badge[verdict.state].tone}>{badge[verdict.state].label}</Badge>
           {verdict.reasons.length === 0 ? (
             <span>{t`Blocks are arriving and Platform is locked to Core.`}</span>
           ) : (

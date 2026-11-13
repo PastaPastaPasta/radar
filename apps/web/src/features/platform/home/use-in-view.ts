@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 
 /**
- * True once the element has come within `margin` of the viewport, and stays true. Without `IntersectionObserver`
- * (old browsers, jsdom) it is true at once, so nothing is held back for good.
+ * True once the element has come within `margin` of the viewport, or `lateMs` after mount, and stays true: a zone
+ * nobody scrolled to still fills in once the page has had time to itself. Without `IntersectionObserver` (old
+ * browsers, jsdom) it is true at once, so nothing is held back for good.
  */
-export function useInView<T extends Element>(margin = '400px'): [RefObject<T | null>, boolean] {
+export function useInView<T extends Element>(
+  lateMs: number,
+  margin = '400px',
+): [RefObject<T | null>, boolean] {
   const ref = useRef<T | null>(null)
   const [seen, setSeen] = useState(() => typeof IntersectionObserver === 'undefined')
   useEffect(() => {
@@ -17,8 +21,12 @@ export function useInView<T extends Element>(margin = '400px'): [RefObject<T | n
       { rootMargin: margin },
     )
     observer.observe(el)
-    return () => observer.disconnect()
-  }, [seen, margin])
+    const late = setTimeout(() => setSeen(true), lateMs)
+    return () => {
+      observer.disconnect()
+      clearTimeout(late)
+    }
+  }, [seen, margin, lateMs])
   return [ref, seen]
 }
 

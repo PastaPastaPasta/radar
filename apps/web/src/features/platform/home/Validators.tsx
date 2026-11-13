@@ -5,7 +5,7 @@ import type { PeQuorum } from '@/data/pe/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Badge, Card, Empty, Stat, Stats } from '@/ui'
-import { cardState, stampsOf } from './state'
+import { queryView, stampsOf } from './state'
 
 const QUORUMS_SHOWN = 6
 
@@ -38,7 +38,6 @@ export function Validators({ active }: { active: boolean }) {
       : Math.max(0, all - up - down)
   const lastProposer = latest.data?.data.items[0]?.header.validator
   const list = quorums.data?.data ?? []
-  const stamps = stampsOf(total.data, live.data, banned.data)
   const count = (n: number | undefined, failed: boolean) =>
     n === undefined ? (failed ? t`Not available right now` : '…') : formatInt(n)
 
@@ -49,7 +48,7 @@ export function Validators({ active }: { active: boolean }) {
         layer="platform"
         title={t`Validators`}
         subtitle={t`Every evonode Platform Explorer has seen validate.`}
-        source={stamps.length > 0 ? stamps : undefined}
+        source={stampsOf(total.data, live.data, banned.data)}
         actions={
           <PageLink to="/masternodes" search={{ view: 'platform' }} className="rx-go">
             {t`All evonodes`}
@@ -57,16 +56,10 @@ export function Validators({ active }: { active: boolean }) {
         }
       >
         <Stats>
-          <Stat key="total" label={t`Total`} value={count(all, total.isError)} layer="platform" />
-          <Stat key="active" label={t`Active`} value={count(up, live.isError)} layer="platform" />
+          <Stat label={t`Total`} value={count(all, total.isError)} layer="platform" />
+          <Stat label={t`Active`} value={count(up, live.isError)} layer="platform" />
+          <Stat label={t`Banned`} value={count(down, banned.isError)} layer="platform" />
           <Stat
-            key="banned"
-            label={t`Banned`}
-            value={count(down, banned.isError)}
-            layer="platform"
-          />
-          <Stat
-            key="inactive"
             label={t`Inactive`}
             value={count(inactive, total.isError || live.isError || banned.isError)}
             layer="platform"
@@ -81,9 +74,7 @@ export function Validators({ active }: { active: boolean }) {
         id="quorum-list"
         layer="platform"
         title={t`Quorums`}
-        state={cardState(quorums)}
-        error={quorums.error}
-        onRetry={() => void quorums.refetch()}
+        {...queryView(quorums)}
         source={stampsOf(quorums.data, current.data)}
         actions={
           <PageLink to="/quorums" className="rx-go">

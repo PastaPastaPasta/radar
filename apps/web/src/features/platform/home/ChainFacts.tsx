@@ -1,14 +1,14 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { stampOf } from '@/data/envelope'
 import { sdkBatchers, sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { wellKnownContracts } from '@/lib/well-known'
 import { Card, Empty, Time } from '@/ui'
 import { homeQueries } from './queries'
-import { cardState } from './state'
+import { queryView, stampsOf } from './state'
 
 const NONE = {} as const
 const POLLS_SHOWN = 5
@@ -44,10 +44,8 @@ export function QuorumsCard({ active }: { active: boolean }) {
       layer="platform"
       title={t`Quorums by size`}
       subtitle={t`The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list.`}
-      state={cardState(query)}
-      error={query.error}
-      onRetry={() => void query.refetch()}
-      source={query.data ? stampOf(query.data) : undefined}
+      {...queryView(query)}
+      source={stampsOf(query.data)}
       actions={
         <PageLink to="/quorums" className="rx-go">
           {t`All quorums`}
@@ -85,10 +83,8 @@ export function PollsCard({ active }: { active: boolean }) {
       layer="platform"
       title={t`Polls ending soon`}
       subtitle={t`Vote polls that end in the next 30 days.`}
-      state={cardState(query)}
-      error={query.error}
-      onRetry={() => void query.refetch()}
-      source={query.data ? stampOf(query.data) : undefined}
+      {...queryView(query)}
+      source={stampsOf(query.data)}
       actions={
         <PageLink to="/polls" className="rx-go">
           {t`All polls`}
@@ -100,7 +96,10 @@ export function PollsCard({ active }: { active: boolean }) {
       ) : (
         <>
           <p className="mb-2" data-poll-count>
-            {t`${formatInt(polls.length)} polls end in the next 30 days.`}
+            {plural(polls.length, {
+              one: '# poll ends in the next 30 days.',
+              other: '# polls end in the next 30 days.',
+            })}
             {query.data?.data.truncated ? ` ${t`Later ones may be missing.`}` : null}
           </p>
           <ul className="grid gap-2">
@@ -139,14 +138,13 @@ export function ContractsCard({ active }: { active: boolean }) {
       enabled: active,
     })),
   })
-  const stamps = metas.flatMap((m) => (m.data ? [stampOf(m.data)] : []))
   return (
     <Card
       id="contracts"
       layer="platform"
       title={t`Well-known contracts`}
       subtitle={t`The system contracts every network ships with.`}
-      source={stamps.length > 0 ? stamps : undefined}
+      source={stampsOf(...metas.map((m) => m.data))}
       actions={
         <PageLink to="/contracts" className="rx-go">
           {t`All contracts`}

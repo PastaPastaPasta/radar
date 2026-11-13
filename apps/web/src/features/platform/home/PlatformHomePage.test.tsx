@@ -1,10 +1,11 @@
-import { act, screen, waitFor, within } from '@testing-library/react'
+import { createMemoryHistory } from '@tanstack/react-router'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
 import { server } from '@/test/server'
-import { renderAt } from '@/features/home/test-utils'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
 
@@ -17,6 +18,10 @@ vi.mock('@/data/core/client', async (original) => {
   const { fixtureCore } = await import('@/test/core-client')
   return { ...actual, core: fixtureCore().core }
 })
+
+function renderAt(url: string) {
+  render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
+}
 
 const card = (id: string) =>
   waitFor(() => {

@@ -6,7 +6,7 @@ import { Entity, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Card, KeyValue, LiveDot, Time, useNow } from '@/ui'
 import { epochLengthMs } from './epoch-length'
-import { cardState, stampsOf } from './state'
+import { queryView, stampsOf } from './state'
 
 /** PE-01: what the indexer says about the chain right now. The height follows the indexer's poll. */
 export function Pulse() {
@@ -32,9 +32,7 @@ export function Pulse() {
       layer="platform"
       title={t`Live pulse`}
       subtitle={t`What Platform Explorer has indexed, a few seconds behind the chain.`}
-      state={cardState(status)}
-      error={status.error}
-      onRetry={() => void status.refetch()}
+      {...queryView(status)}
       source={stampsOf(status.data, detail.data)}
     >
       <KeyValue

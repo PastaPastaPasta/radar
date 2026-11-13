@@ -1,14 +1,14 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { stampOf } from '@/data/envelope'
+import type { SourceStamp } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTxStatistic } from '@/data/pe/schemas'
 import { transitionBadgeType, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber } from '@/lib/format'
-import { Card, Chart, Empty, SegFilter, TYPE_META } from '@/ui'
+import { Card, Chart, Empty, SegFilter, TYPE_META, type ChartProps } from '@/ui'
 import { barsOption, bucketLabel, HOME_RANGES, timeOption, type HomeRange } from './chart-options'
-import { cardState } from './state'
+import { stampsOf, queryView, type QueryView } from './state'
 
 const CREDITS_PER_DASH = 1e11
 const TYPES_SHOWN = 8
@@ -42,6 +42,35 @@ function typeRows(stat: PeTxStatistic, label: (key: string) => string): [string,
       : [[label(s.transactionType), s.count] as [string, number]],
   )
   return rows.sort((a, b) => b[1] - a[1]).slice(0, TYPES_SHOWN)
+}
+
+/** A chart in its card, or the card's empty note when there is nothing to draw. */
+function ChartCard({
+  id,
+  title,
+  subtitle,
+  view,
+  source,
+  empty,
+  ...chart
+}: Omit<ChartProps, 'height'> & {
+  id: string
+  title: string
+  subtitle?: string
+  view: QueryView
+  source: SourceStamp[]
+  /** The note to show instead of the chart; undefined when there is data. */
+  empty: string | undefined
+}) {
+  return (
+    <Card id={id} layer="platform" title={title} subtitle={subtitle} {...view} source={source}>
+      {empty === undefined ? (
+        <Chart height={220} {...chart} />
+      ) : (
+        <Empty kind="none-yet" title={empty} />
+      )}
+    </Card>
+  )
 }
 
 /** PE-04: four charts. The range is in the URL; the type split is all-time because the index has no ranged form. */
@@ -92,132 +121,93 @@ export function PlatformCharts({ range, active }: { range: HomeRange; active: bo
         />
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card
+        <ChartCard
           id="chart-transitions"
-          layer="platform"
           title={t`Transition activity`}
-          state={cardState(txs)}
-          error={txs.error}
-          onRetry={() => void txs.refetch()}
-          source={txs.data ? stampOf(txs.data) : undefined}
-        >
-          {txData.length === 0 ? (
-            <Empty kind="none-yet" title={t`No transitions in this range`} />
-          ) : (
-            <Chart
-              height={220}
-              label={t`Transitions per interval, last ${labels[range]}`}
-              option={timeOption(
-                txData.map((p) => p.t),
-                range,
-                [{ name: t`Transitions`, values: txData.map((p) => p.txs) }],
-                'bar',
-              )}
-              table={{
-                columns: [t`Time`, t`Transitions`],
-                rows: txData.map((p) => [bucketLabel(p.t, range), formatInt(p.txs)]),
-              }}
-            />
+          view={queryView(txs)}
+          source={stampsOf(txs.data)}
+          empty={txData.length === 0 ? t`No transitions in this range` : undefined}
+          label={t`Transitions per interval, last ${labels[range]}`}
+          option={timeOption(
+            txData.map((p) => p.t),
+            range,
+            [{ name: t`Transitions`, values: txData.map((p) => p.txs) }],
+            'bar',
           )}
-        </Card>
-        <Card
+          table={{
+            columns: [t`Time`, t`Transitions`],
+            rows: txData.map((p) => [bucketLabel(p.t, range), formatInt(p.txs)]),
+          }}
+        />
+        <ChartCard
           id="chart-identities"
-          layer="platform"
           title={t`Identity growth`}
-          state={cardState(identities)}
-          error={identities.error}
-          onRetry={() => void identities.refetch()}
-          source={identities.data ? stampOf(identities.data) : undefined}
-        >
-          {idData.length === 0 ? (
-            <Empty kind="none-yet" title={t`No identity history in this range`} />
-          ) : (
-            <Chart
-              height={220}
-              label={t`Registered identities, last ${labels[range]}`}
-              option={timeOption(
-                idData.map((p) => p.t),
-                range,
-                [{ name: t`Identities`, values: idData.map((p) => p.registeredIdentities) }],
-                'line',
-              )}
-              table={{
-                columns: [t`Time`, t`Registered identities`],
-                rows: idData.map((p) => [
-                  bucketLabel(p.t, range),
-                  formatInt(p.registeredIdentities),
-                ]),
-              }}
-            />
+          view={queryView(identities)}
+          source={stampsOf(identities.data)}
+          empty={idData.length === 0 ? t`No identity history in this range` : undefined}
+          label={t`Registered identities, last ${labels[range]}`}
+          option={timeOption(
+            idData.map((p) => p.t),
+            range,
+            [{ name: t`Identities`, values: idData.map((p) => p.registeredIdentities) }],
+            'line',
           )}
-        </Card>
-        <Card
+          table={{
+            columns: [t`Time`, t`Registered identities`],
+            rows: idData.map((p) => [bucketLabel(p.t, range), formatInt(p.registeredIdentities)]),
+          }}
+        />
+        <ChartCard
           id="chart-types"
-          layer="platform"
           title={t`Transition types`}
           subtitle={t`All time`}
-          state={cardState(types)}
-          error={types.error}
-          onRetry={() => void types.refetch()}
-          source={types.data ? stampOf(types.data) : undefined}
-        >
-          {typeData.length === 0 ? (
-            <Empty kind="none-yet" title={t`No transitions yet`} />
-          ) : (
-            <Chart
-              height={220}
-              label={t`Transitions by type, all time`}
-              option={barsOption(
-                typeData.map((r) => r[0]),
-                typeData.map((r) => r[1]),
-              )}
-              table={{
-                columns: [t`Type`, t`Transitions`],
-                rows: typeData.map(([name, count]) => [name, formatInt(count)]),
-              }}
-            />
+          view={queryView(types)}
+          source={stampsOf(types.data)}
+          empty={typeData.length === 0 ? t`No transitions yet` : undefined}
+          label={t`Transitions by type, all time`}
+          option={barsOption(
+            typeData.map((r) => r[0]),
+            typeData.map((r) => r[1]),
           )}
-        </Card>
-        <Card
+          table={{
+            columns: [t`Type`, t`Transitions`],
+            rows: typeData.map(([name, count]) => [name, formatInt(count)]),
+          }}
+        />
+        <ChartCard
           id="chart-shielded"
-          layer="platform"
           title={t`Shielded pool`}
           subtitle={t`Shielded and unshielded, in DASH`}
-          state={cardState(shield)}
-          error={shield.error ?? unshield.error}
-          onRetry={() => {
-            void shield.refetch()
-            void unshield.refetch()
+          view={{
+            ...queryView(shield),
+            error: shield.error ?? unshield.error,
+            onRetry: () => {
+              void shield.refetch()
+              void unshield.refetch()
+            },
           }}
-          source={[shield.data, unshield.data].flatMap((d) => (d ? [stampOf(d)] : []))}
-        >
-          {pool.times.length === 0 ? (
-            <Empty kind="none-yet" title={t`Nothing shielded in this range`} />
-          ) : (
-            <Chart
-              height={220}
-              label={t`Shielded and unshielded amounts, last ${labels[range]}`}
-              option={timeOption(
-                pool.times,
-                range,
-                [
-                  { name: t`Shielded`, values: pool.shielded },
-                  { name: t`Unshielded`, values: pool.unshielded },
-                ],
-                'bar',
-                (v) => dashText(v),
-              )}
-              table={{
-                columns: [t`Time`, t`Shielded`, t`Unshielded`],
-                rows: pool.times.map((ms, i) => [
-                  bucketLabel(ms, range),
-                  dashText(pool.shielded[i] ?? 0),
-                  dashText(pool.unshielded[i] ?? 0),
-                ]),
-              }}
-            />
+          source={stampsOf(shield.data, unshield.data)}
+          empty={pool.times.length === 0 ? t`Nothing shielded in this range` : undefined}
+          label={t`Shielded and unshielded amounts, last ${labels[range]}`}
+          option={timeOption(
+            pool.times,
+            range,
+            [
+              { name: t`Shielded`, values: pool.shielded },
+              { name: t`Unshielded`, values: pool.unshielded },
+            ],
+            'bar',
+            dashText,
           )}
-        </Card>
+          table={{
+            columns: [t`Time`, t`Shielded`, t`Unshielded`],
+            rows: pool.times.map((ms, i) => [
+              bucketLabel(ms, range),
+              dashText(pool.shielded[i] ?? 0),
+              dashText(pool.unshielded[i] ?? 0),
+            ]),
+          }}
+        />
       </div>
     </div>
   )

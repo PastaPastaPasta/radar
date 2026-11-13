@@ -3,12 +3,12 @@
  * not seen one for twice that is behind; five times that, it has stopped.
  */
 export const EXPECTED_BLOCK_MS = 3 * 60_000
-export const LAGGING_AFTER = 2
-export const STALLED_AFTER = 5
+const LAGGING_AFTER = 2
+const STALLED_AFTER = 5
 
 /** Core finds a block every 2.6 minutes and ChainLocks it within moments; Platform follows the lock. */
-export const LAGGING_CORE_BLOCKS = 6
-export const STALLED_CORE_BLOCKS = 24
+const LAGGING_CORE_BLOCKS = 6
+const STALLED_CORE_BLOCKS = 24
 
 export type PlatformHealthState = 'live' | 'lagging' | 'stalled'
 

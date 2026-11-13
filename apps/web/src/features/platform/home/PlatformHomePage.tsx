@@ -55,8 +55,8 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
   const devnet = isDevnet(net)
   const indexed = !off && !devnet
   const idle = useAfterIdle()
-  const [chainRef, chainSeen] = useInView<HTMLElement>()
-  const [historyRef, historySeen] = useInView<HTMLElement>()
+  const [chainRef, chainSeen] = useInView<HTMLElement>(2_000)
+  const [historyRef, historySeen] = useInView<HTMLElement>(4_000)
   const chain = idle && chainSeen
 
   const notice = off ? (

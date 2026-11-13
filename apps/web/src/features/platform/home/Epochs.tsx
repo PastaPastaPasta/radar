@@ -2,7 +2,6 @@ import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeEpochDetail } from '@/data/pe/schemas'
@@ -12,7 +11,7 @@ import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Amount, Card, DataTable, Time } from '@/ui'
-import { cardState } from './state'
+import { queryView, stampsOf } from './state'
 
 const RECENT = 4
 
@@ -111,10 +110,6 @@ export function RecentEpochs({ active }: { active: boolean }) {
     ],
     [t, indexed],
   )
-  const stamps: SourceStamp[] = [
-    ...(infos.data ? [stampOf(infos.data)] : []),
-    ...details.flatMap((d) => (d.data ? [stampOf(d.data)] : [])),
-  ]
   return (
     <Card
       id="recent-epochs"
@@ -126,7 +121,7 @@ export function RecentEpochs({ active }: { active: boolean }) {
           : t`Start times and block counts are proof-checked.`
       }
       padding="flush"
-      source={stamps.length > 0 ? stamps : undefined}
+      source={stampsOf(infos.data, ...details.map((d) => d.data))}
       actions={
         <PageLink to="/epochs" className="rx-go">
           {t`All epochs`}
@@ -138,9 +133,7 @@ export function RecentEpochs({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => String(r.epoch.index)}
-        state={cardState(infos)}
-        error={infos.error}
-        onRetry={() => void infos.refetch()}
+        {...queryView(infos)}
         rowLink={(r) => ({ to: '/epoch/$n', params: { n: String(r.epoch.index) } })}
       />
     </Card>

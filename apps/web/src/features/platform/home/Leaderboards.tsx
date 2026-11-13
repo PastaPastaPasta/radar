@@ -2,12 +2,12 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { stampOf, type Sourced } from '@/data/envelope'
+import type { Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import { Entity, IdentityRef, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, Card, Empty, SegFilter } from '@/ui'
-import { cardState } from './state'
+import { queryView, stampsOf } from './state'
 
 const TOP = 10
 
@@ -22,7 +22,6 @@ function Board<T>({
   title,
   query,
   rows,
-  more,
   unit,
   actions,
 }: {
@@ -30,7 +29,6 @@ function Board<T>({
   title: string
   query: UseQueryResult<Sourced<T>>
   rows: (data: T) => BoardRow[]
-  more?: ReactNode
   unit: string
   actions?: ReactNode
 }) {
@@ -42,11 +40,9 @@ function Board<T>({
       layer="platform"
       title={title}
       subtitle={unit}
-      state={cardState(query)}
-      error={query.error}
-      onRetry={() => void query.refetch()}
-      source={query.data ? stampOf(query.data) : undefined}
-      actions={actions ?? more}
+      {...queryView(query)}
+      source={stampsOf(query.data)}
+      actions={actions}
     >
       {list.length === 0 ? (
         <Empty kind="none-yet" title={t`Nothing ranked yet`} />
