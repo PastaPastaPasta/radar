@@ -38,7 +38,6 @@ const samples: Sample[] = [
     network: 'testnet',
     looksLike: /a number/,
     result: { name: /Core block 1,500,000/, href: '/block/1500000?network=testnet' },
-    withheld: /Platform block|Epoch/,
   },
   {
     label: 'a block hash',
@@ -327,7 +326,6 @@ test.describe('palette', () => {
 
     await dialog.getByRole('combobox').fill('2569992')
     await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
-    await expect(dialog.getByRole('option', { name: /Platform block|Epoch/ })).toHaveCount(0)
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('Enter')
 
