@@ -6,7 +6,6 @@ import type { SearchHit } from './types'
  * this list with the pages that still render `RoutePlaceholder`, so the two cannot drift apart.
  */
 export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
-  '/about',
   '/api',
   '/changes',
   '/contest/$label',
@@ -36,7 +35,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/protocol',
   '/query',
   '/quorums',
-  '/saved',
   '/sdk-reference',
   '/shielded',
   '/token/$id',

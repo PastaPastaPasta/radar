@@ -65,7 +65,6 @@ describe('Search offers no dead ends @HY-14', () => {
       '/name/$label',
       '/platform-address/$addr',
       '/identity/lookup',
-      '/about',
     ]) {
       expect(offered({ href: { to } as never })).toBe(false)
     }
@@ -86,7 +85,6 @@ describe('Search offers no dead ends @HY-14', () => {
   it('lists only finished pages in the palette', () => {
     const titles = matchPages('').map((p) => p.path)
     for (const path of titles) expect(isFinishedRoute(path)).toBe(true)
-    expect(titles).not.toContain('/about')
-    expect(matchPages('about').map((p) => p.path)).not.toContain('/about')
+    for (const path of UNFINISHED_ROUTES) expect(titles).not.toContain(path)
   })
 })
