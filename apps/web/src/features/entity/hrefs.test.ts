@@ -1,6 +1,6 @@
+import { QueryClient } from '@tanstack/react-query'
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
-import { createQueryClient } from '@/app/query-client'
 import { createAppRouter } from '@/router'
 import { KIND_META, type EntityKind } from '@/ui'
 import { setSourceModeFromLink, writeSourceMode } from '@/lib/source-mode'
@@ -39,10 +39,7 @@ const CASES: Record<EntityKind, { id: string; path: string; route: string }> = {
 }
 
 function lastRouteId(href: string): string | undefined {
-  const router = createAppRouter(
-    createQueryClient(),
-    createMemoryHistory({ initialEntries: [href] }),
-  )
+  const router = createAppRouter(new QueryClient(), createMemoryHistory({ initialEntries: [href] }))
   const matches = router.matchRoutes(
     router.history.location.pathname,
     router.history.location.search,
