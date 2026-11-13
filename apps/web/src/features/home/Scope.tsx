@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { coreQueries } from '@/data/core/queries'
+import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import { radarQueries } from '@/data/radar/queries'
 import { stampOf } from '@/data/envelope'
@@ -178,7 +179,11 @@ function PlatformPulse() {
         ) : isDevnet(net) ? (
           <span>{t`Platform Explorer doesn't index devnets`}</span>
         ) : tip.isError ? (
-          <span>{t`Platform Explorer isn't answering`}</span>
+          <span>
+            {tip.sdkOnly
+              ? t`The Platform SDK isn't answering`
+              : t`Platform Explorer isn't answering`}
+          </span>
         ) : null}
       </span>
     </Link>
@@ -188,11 +193,18 @@ function PlatformPulse() {
 function CensusPulse() {
   const { t } = useLingui()
   const net = useNetwork()
-  const summary = useQuery({ ...radarQueries.summary(net), enabled: !isDevnet(net) })
+  const off = useDecentralizedOnly()
+  const summary = useQuery({ ...radarQueries.summary(net), enabled: !isDevnet(net) && !off })
   const crawl = summary.data?.data.crawl
   const share = crawl && crawl.mn_total > 0 ? crawl.mn_reachable / crawl.mn_total : undefined
   return (
-    <Link className="rx-pulse__row" data-layer="network" data-pulse="census" to="/masternodes">
+    <Link
+      className="rx-pulse__row"
+      data-layer="network"
+      data-pulse="census"
+      data-unavailable={off ? 'mode' : undefined}
+      to="/masternodes"
+    >
       <span className="rx-tile">
         <Icon name="radar" />
       </span>
@@ -203,7 +215,7 @@ function CensusPulse() {
       <span className="rx-pulse__value" style={{ color: 'var(--dh-good)' }}>
         {share !== undefined ? (
           formatPercent(share, 1)
-        ) : isDevnet(net) || summary.isError ? (
+        ) : isDevnet(net) || off || summary.isError ? (
           '—'
         ) : (
           <Skeleton shape="line" width="6ch" />
@@ -219,6 +231,8 @@ function CensusPulse() {
           </>
         ) : isDevnet(net) ? (
           <span>{t`Radar doesn't crawl devnets`}</span>
+        ) : off ? (
+          <span>{t`Needs Radar's crawler: off in Decentralized only mode`}</span>
         ) : null}
       </span>
     </Link>
@@ -249,9 +263,11 @@ function Lanes() {
     enabled: from !== undefined,
     placeholderData: keepPreviousOnNetwork(net),
   })
+  const off = useDecentralizedOnly()
+  const indexed = !isDevnet(net) && !off
   const platform = useQuery({
     ...peQueries.latestBlocks(net, LANE_PLATFORM),
-    enabled: !isDevnet(net),
+    enabled: indexed,
   })
   const coreRows = useFrozen(rows.data, paused)
   const platRows = useFrozen(platform.data, paused)
@@ -331,8 +347,12 @@ function Lanes() {
         >
           {isDevnet(net) ? (
             <span className="rx-note">{t`Platform Explorer doesn't index devnets.`}</span>
+          ) : off ? (
+            <span className="rx-note" data-unavailable="mode">
+              {t`Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use.`}
+            </span>
           ) : null}
-          {!isDevnet(net) && plat.length === 0 ? <Skeleton shape="chip" count={4} /> : null}
+          {indexed && plat.length === 0 ? <Skeleton shape="chip" count={4} /> : null}
           {plat.map((b, i) => (
             <Link
               key={b.header.hash}

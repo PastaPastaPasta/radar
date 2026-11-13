@@ -168,6 +168,7 @@ export function boundaryConfigs({ importX, createTypeScriptImportResolver }) {
     {
       files: [
         `${rel}/data/health.ts`,
+        `${rel}/data/core/seen-pending.ts`,
         `${rel}/data/hyphen/fit.ts`,
         `${rel}/data/index-health.ts`,
         `${rel}/data/query/batch.ts`,

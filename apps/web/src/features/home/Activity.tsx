@@ -5,12 +5,13 @@ import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
+import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
 import { Entity, PageLink, useNetwork, keepPreviousOnNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Card, DataTable, Empty, Icon, LockMark, Time, TYPE_META } from '@/ui'
+import { Card, DataTable, Empty, Icon, LockMark, Time, TYPE_META, Unavailable } from '@/ui'
 import { PendingCard } from './CoreZone'
 import { useHomeWidth, type HomeWidth } from './home-width'
 import { CORE_ROWS } from './Scope'
@@ -103,7 +104,11 @@ function BlocksCard({ phone }: { phone: boolean }) {
 function TransitionsCard() {
   const { t } = useLingui()
   const net = useNetwork()
-  const query = useQuery({ ...peQueries.latestTransactions(net, 10), enabled: !isDevnet(net) })
+  const off = useDecentralizedOnly()
+  const query = useQuery({
+    ...peQueries.latestTransactions(net, 10),
+    enabled: !isDevnet(net) && !off,
+  })
   const columns = useMemo<ColumnDef<PeTransaction>[]>(
     () => [
       {
@@ -151,6 +156,8 @@ function TransitionsCard() {
     >
       {isDevnet(net) ? (
         <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
+      ) : off ? (
+        <Unavailable title={t`Platform's latest transitions need Platform Explorer`} />
       ) : (
         <DataTable
           caption={t`Latest Platform transitions`}

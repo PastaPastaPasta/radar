@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
-import { useSeenPending } from './seen-pending'
+import { useSeenPending } from '@/data/core/seen-pending'
 
 const feed = vi.hoisted(() => ({
   listeners: new Set<(e: unknown) => void>(),

@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
+import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarGeo } from '@/data/radar/schemas'
 import { useNetwork } from '@/features/entity'
@@ -63,7 +64,8 @@ export function HomeMap() {
   const { t } = useLingui()
   const net = useNetwork()
   const devnet = isDevnet(net)
-  const geo = useQuery({ ...radarQueries.geo(net), enabled: !devnet })
+  const off = useDecentralizedOnly()
+  const geo = useQuery({ ...radarQueries.geo(net), enabled: !devnet && !off })
   const land = useLand()
   const points = useMemo(
     () =>
@@ -148,6 +150,10 @@ export function HomeMap() {
           </>
         ) : devnet ? (
           <span>{t`Radar doesn't crawl devnets, so there is nothing to map.`}</span>
+        ) : off ? (
+          <span data-unavailable="mode">
+            {t`The node map needs Radar's crawler, which Decentralized only mode doesn't use.`}
+          </span>
         ) : geo.isError ? (
           <span>{t`Radar isn't answering, so the map shows no nodes.`}</span>
         ) : null}

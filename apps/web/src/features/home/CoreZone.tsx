@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
+import { useSeenPending } from '@/data/core/seen-pending'
 import { stampOf } from '@/data/envelope'
 import { dapiKeys } from '@/data/query'
 import { useIndexHealth } from '@/data/index-health'
@@ -22,7 +23,6 @@ import {
   useHyphenLagSentence,
 } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
-import { useSeenPending } from './seen-pending'
 
 const PENDING = 8
 
@@ -43,15 +43,18 @@ function useHyphenBlocked() {
     lag: index.lag,
     devnet: isDevnet(net),
     stale: index.state === 'stale',
+    /** Decentralized only mode: Hyphen is not asked, so the DAPI-only figures and the seen list show, as on a stale network. */
+    off: index.off,
   }
 }
 
 function Headline() {
   const { t } = useLingui()
-  const { net, fit, lag, devnet, stale } = useHyphenBlocked()
+  const { net, fit, lag, devnet, stale, off } = useHyphenBlocked()
+  const dapiOnly = stale || off
   const tip = useQuery(coreQueries.tip(net))
   const status = useQuery(coreQueries.status(net))
-  const chainLock = useQuery({ ...coreQueries.chainLock(net), enabled: stale })
+  const chainLock = useQuery({ ...coreQueries.chainLock(net), enabled: dapiOnly })
   const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: fit })
   useRefetchOnRise(net, tip.data?.data.height, { keys: [dapiKeys(net, 'status')] })
   useCatchUpToTip(net, {
@@ -81,7 +84,7 @@ function Headline() {
         loading={status.isPending}
         source={status.data ? stampOf(status.data) : undefined}
       />
-      {stale
+      {dapiOnly
         ? [
             <Stat
               key="lock"
@@ -151,9 +154,9 @@ export function CoreFigures() {
 /** The pending list: a table in the full-width tablet row, row cards in the phone band and, as a feed, in a desktop column. */
 export function PendingCard({ feed = false }: { feed?: boolean }) {
   const { t } = useLingui()
-  const { net, fit, devnet, stale } = useHyphenBlocked()
+  const { net, fit, devnet, stale, off } = useHyphenBlocked()
   const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
-  const seenOnly = stale && !devnet
+  const seenOnly = (stale || off) && !devnet
   const seen = useSeenPending(net, seenOnly)
   const columns = useMemo<ColumnDef<PendingRow>[]>(() => {
     return [
@@ -196,9 +199,9 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
       layer="core"
       className={feed ? 'rx-card--feed' : undefined}
       title={t`Pending transactions`}
-      subtitle={stale && seen.rows.length > 0 ? t`Seen since you opened this page` : undefined}
+      subtitle={seenOnly && seen.rows.length > 0 ? t`Seen since you opened this page` : undefined}
       padding="flush"
-      source={stale ? seen.stamp : query.data ? stampOf(query.data) : undefined}
+      source={seenOnly ? seen.stamp : query.data ? stampOf(query.data) : undefined}
       actions={
         <PageLink to="/mempool" className="rx-go">
           {t`Mempool`}
@@ -209,7 +212,11 @@ export function PendingCard({ feed = false }: { feed?: boolean }) {
         <Empty
           kind="none-yet"
           title={t`Nothing seen yet`}
-          body={t`Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain.`}
+          body={
+            off
+              ? t`Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use.`
+              : t`Nothing has arrived since you opened this page. The full mempool list needs Hyphen’s index, which is behind the chain.`
+          }
         />
       ) : seenOnly ? (
         <DataTable
