@@ -13,41 +13,632 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "{0} membres"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} sur {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 caractères hexadécimaux"
+
+msgid "A batch type shows batches only."
+msgstr "Un type de lot n’affiche que des lots."
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "Un nœud indique si une transition a été exécutée et, en cas d’échec, l’erreur."
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Un bloc Platform se désigne par sa hauteur ou par un hash de 64 caractères hexadécimaux."
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "Un ProTxHash compte 64 caractères hexadécimaux."
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "Un hash de transition d’état compte 64 caractères hexadécimaux."
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "Une transition d’état se désigne par un hash de 64 caractères hexadécimaux."
+
+msgid "Abstain"
+msgstr "Abstention"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "Action {0}"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Addresses that pay"
+msgstr "Adresses payeuses"
+
+msgid "Addresses that receive"
+msgstr "Adresses destinataires"
+
+msgid "All"
+msgstr "Tous"
+
+msgid "Amount"
+msgstr "Montant"
+
+msgid "Amount across the pool"
+msgstr "Montant traversant le pool"
+
+msgid "Anchor"
+msgstr "Ancre"
+
+msgid "App hash"
+msgstr "Hash de l’application"
+
+msgid "App version"
+msgstr "Version de l’application"
+
+msgid "Ascending. Switch to descending"
+msgstr "Croissant. Passer en décroissant"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "On interroge un nœud sur le résultat. Cela peut prendre quelques secondes."
+
+msgid "Authentication"
+msgstr "Authentification"
+
+msgid "Batch type"
+msgstr "Type de lot"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "Lot : {0}"
+
+msgid "BIP13 script hash"
+msgstr "Hash de script BIP13"
+
 msgid "Block"
 msgstr "Bloc"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "Bloc {0}"
+
+msgid "Block height"
+msgstr "Hauteur du bloc"
+
+msgid "Block height or hash"
+msgstr "Hauteur ou hash du bloc"
+
+msgid "Block metadata"
+msgstr "Métadonnées du bloc"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "Les pages de bloc ont besoin de l’index de Platform Explorer"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "Les pages de bloc ont besoin de l’index de Platform Explorer, que le mode « Décentralisé uniquement » laisse désactivé."
+
+msgid "Block version"
+msgstr "Version du bloc"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "Vérifier à nouveau"
+
+msgid "Choice"
+msgstr "Choix"
+
+msgid "Clear"
+msgstr "Effacer"
+
+msgid "Contract"
+msgstr "Contrat"
+
+msgid "Contract as sent"
+msgstr "Contrat tel qu’envoyé"
+
+msgid "Contract nonce"
+msgstr "Nonce du contrat"
+
+msgid "Core block hash"
+msgstr "Hash du bloc Core"
+
+msgid "Core fee per byte"
+msgstr "Frais Core par octet"
+
+msgid "Created at Core block"
+msgstr "Créé au bloc Core"
+
+msgid "Critical"
+msgstr "Critique"
+
+msgid "Date"
+msgstr "Date"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "Date : {0} – {1}"
+
+msgid "Decryption"
+msgstr "Déchiffrement"
+
+msgid "deduct from input {index}"
+msgstr "déduire de l’entrée {index}"
+
+msgid "Denomination"
+msgstr "Dénomination"
+
+msgid "Descending. Switch to ascending"
+msgstr "Décroissant. Passer en croissant"
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Document type"
+msgstr "Type de document"
+
+msgid "Document types"
+msgstr "Types de document"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "Chiffrement"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "Saisissez une hauteur de bloc ou un hash de 64 caractères hexadécimaux."
 
 msgid "Epoch"
 msgstr "Époque"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "Époque : {0}"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "Chaque bloc Platform avec son époque, son proposeur, ses transitions et son heure."
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "Chaque transition d’état avec son type, son statut, son bloc, son gaz et son propriétaire."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Executed"
+msgstr "Exécutée"
+
 msgid "Failed"
 msgstr "Échec"
+
+msgid "Failed only"
+msgstr "Échecs seulement"
+
+msgid "Fee multiplier"
+msgstr "Multiplicateur de frais"
+
+msgid "Fee paid from"
+msgstr "Frais prélevés sur"
+
+msgid "Fields as sent"
+msgstr "Champs tels qu’envoyés"
+
+msgid "Filters"
+msgstr "Filtres"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "From"
+msgstr "De"
+
+msgid "Funded by"
+msgstr "Financé par"
 
 msgid "Gas"
 msgstr "Gaz"
 
+msgid "Gas used"
+msgstr "Gaz utilisé"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Gaz : {0}"
+
 msgid "Hash"
 msgstr "Hash"
+
+msgid "Health"
+msgstr "Santé"
+
+msgid "Height"
+msgstr "Hauteur"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "Hauteur : {0}"
+
+msgid "High"
+msgstr "Élevé"
+
+msgid "Identity"
+msgstr "Identité"
+
+msgid "Identity ID"
+msgstr "ID d’identité"
+
+msgid "Identity nonce"
+msgstr "Nonce de l’identité"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Inputs"
+msgstr "Entrées"
+
+msgid "InstantSend lock"
+msgstr "Verrou InstantSend"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "Il est peut-être plus récent que l’index, ou la hauteur ou le hash est mal saisi."
+
+msgid "Key"
+msgstr "Clé"
+
+msgid "Keys"
+msgstr "Clés"
+
+msgid "Keys added"
+msgstr "Clés ajoutées"
+
+msgid "Keys added by this update"
+msgstr "Clés ajoutées par cette mise à jour"
+
+msgid "Keys disabled"
+msgstr "Clés désactivées"
+
+msgid "Keys of the new identity"
+msgstr "Clés de la nouvelle identité"
+
+msgid "Keywords"
+msgstr "Mots-clés"
+
+msgid "Lock"
+msgstr "Verrouiller"
+
+msgid "Locked to Core block"
+msgstr "Verrouillé au bloc Core"
+
+msgid "Look up"
+msgstr "Rechercher"
+
+msgid "Look up a block by its height"
+msgstr "Rechercher un bloc par sa hauteur"
+
+msgid "Master"
+msgstr "Maître"
+
+msgid "Medium"
+msgstr "Moyen"
+
+msgid "Member"
+msgstr "Membre"
+
+msgid "Mined in Core block"
+msgstr "Miné au bloc Core"
+
+msgid "Newest first"
+msgstr "Plus récents d’abord"
+
+msgid "Next block"
+msgstr "Bloc suivant"
+
+msgid "No"
+msgstr "Non"
+
+msgid "No block matches these filters"
+msgstr "Aucun bloc ne correspond à ces filtres"
+
+msgid "No result yet"
+msgstr "Pas encore de résultat"
+
+msgid "No state transition matches these filters"
+msgstr "Aucune transition d’état ne correspond à ces filtres"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Absente de l’index de Platform Explorer"
+
+msgid "Not valid"
+msgstr "Non valide"
+
+msgid "Note"
+msgstr "Note"
+
+msgid "Oldest first"
+msgstr "Plus anciens d’abord"
+
+msgid "Only an index knows which block holds a height."
+msgstr "Seul un index sait quel bloc correspond à une hauteur."
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Open a state transition by its hash"
+msgstr "Ouvrir une transition d’état par son hash"
+
+msgid "Open block"
+msgstr "Ouvrir le bloc"
+
+msgid "Order"
+msgstr "Ordre"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "sortie {0}"
+
+msgid "Output address"
+msgstr "Adresse de sortie"
+
+msgid "Outputs"
+msgstr "Sorties"
 
 msgid "Owner"
 msgstr "Propriétaire"
 
+msgid "Owner balance after"
+msgstr "Solde du propriétaire après"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Propriétaire : {0}…"
+
+msgid "Pays out to"
+msgstr "Verse à"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Adresse Platform"
+
+msgid "Platform block"
+msgstr "Bloc Platform"
+
 msgid "Platform blocks"
 msgstr "Blocs Platform"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer n’indexe pas les devnets"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "Platform Explorer n’a pas de bloc {0}"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "Platform Explorer n’a pas encore de blocs"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "Platform Explorer n’a pas d’octets pour cette transition."
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "Platform Explorer n’a pas de quorum pour ce bloc"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "Platform Explorer n’a aucune trace de cette transition. Elle est peut-être plus récente que l’index, ou n’a jamais été envoyée. La réponse du nœud est ci-dessous."
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "Platform Explorer n’a pas encore de transitions d’état"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer ne conserve pas d’octets pour cette transition, comme pour une transition non exécutée ; ses champs ne peuvent donc pas être lus ici."
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer ne liste aucun membre"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform ne tient aucune liste des blocs ou des transitions ; il faut pour cela l’index de Platform Explorer"
+
+msgid "Platform state transition"
+msgstr "Transition d’état Platform"
 
 msgid "Platform state transitions"
 msgstr "Transitions d’état Platform"
 
+msgid "Poll"
+msgstr "Scrutin"
+
+msgid "Pooling"
+msgstr "Mise en pool"
+
+msgid "Position in block"
+msgstr "Position dans le bloc"
+
+msgid "Previous block"
+msgstr "Bloc précédent"
+
+msgid "Price"
+msgstr "Prix"
+
 msgid "Proposer"
 msgstr "Proposeur"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "Proposeur : {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "ProTxHash d’un evonode"
+
+msgid "Public key"
+msgstr "Clé publique"
+
+msgid "Purpose"
+msgstr "Usage"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorum hash"
+msgstr "Hash du quorum"
+
+msgid "Quorum members"
+msgstr "Membres du quorum"
+
+msgid "Quorum that signed this block"
+msgstr "Quorum qui a signé ce bloc"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar n’a pas pu lire les champs de cette transition à partir de ses octets. Ses données brutes sont ci-dessous."
+
+msgid "Raw data"
+msgstr "Données brutes"
+
+msgid "Read-only"
+msgstr "Lecture seule"
+
+msgid "Recipient"
+msgstr "Destinataire"
+
+msgid "reduce output {index}"
+msgstr "réduire la sortie {index}"
+
+msgid "Result from a node"
+msgstr "Résultat d’un nœud"
+
+msgid "Revision"
+msgstr "Révision"
+
+msgid "SDK action"
+msgstr "Action du SDK"
+
+msgid "Search Radar"
+msgstr "Rechercher dans Radar"
+
+msgid "Security level"
+msgstr "Niveau de sécurité"
+
+msgid "Sent again in later blocks"
+msgstr "Renvoyée dans des blocs ultérieurs"
+
+msgid "Sent by"
+msgstr "Envoyée par"
+
+msgid "Service"
+msgstr "Service"
+
+msgid "Shielded"
+msgstr "Blindé"
+
+msgid "Shielded actions"
+msgstr "Actions blindées"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Signed with key"
+msgstr "Signée avec la clé"
+
+msgid "Sort by"
+msgstr "Trier par"
+
+msgid "State transition"
+msgstr "Transition d’état"
+
+msgid "State transition as JSON"
+msgstr "Transition d’état en JSON"
+
+msgid "State transitions"
+msgstr "Transitions d’état"
+
+msgid "State transitions in this block"
+msgstr "Transitions d’état de ce bloc"
 
 msgid "Status"
 msgstr "Statut"
 
+msgid "Succeeded"
+msgstr "Réussies"
+
+msgid "Succeeded only"
+msgstr "Réussites seulement"
+
 msgid "Success"
 msgstr "Succès"
 
+msgid "System"
+msgstr "Système"
+
+msgid "That isn't a block height or hash."
+msgstr "Ce n’est ni une hauteur de bloc ni un hash."
+
+msgid "That isn't a state transition hash."
+msgstr "Ce n’est pas un hash de transition d’état."
+
+msgid "That isn’t an identity ID."
+msgstr "Ce n’est pas un ID d’identité."
+
+msgid "The identity's withdrawal address"
+msgstr "L’adresse de retrait de l’identité"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "Les détails indexés d’une transition ont besoin de l’index de Platform Explorer"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "Le nœud et Platform Explorer ne sont pas d’accord sur cette transition. Chacun est affiché avec sa propre source."
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "Le nœud n’a signalé aucun résultat en quelques secondes : cette transition n’a pas encore été exécutée, ou aucun nœud ne la connaît."
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "Le nœud n’a signalé aucun résultat en quelques secondes. Les nœuds ne gardent que les résultats récents ; une transition plus ancienne peut donc n’en montrer aucun."
+
+msgid "The same transition seen again in later blocks"
+msgstr "La même transition revue dans des blocs ultérieurs"
+
+msgid "This block holds no state transitions"
+msgstr "Ce bloc ne contient aucune transition d’état"
+
 msgid "Time"
 msgstr "Heure"
+
+msgid "To"
+msgstr "À"
+
+msgid "Token"
+msgstr "Jeton"
+
+msgid "Tokens"
+msgstr "Jetons"
+
+msgid "Transfer"
+msgstr "Transfert"
 
 msgid "Transition"
 msgstr "Transition"
@@ -55,5 +646,37 @@ msgstr "Transition"
 msgid "Transitions"
 msgstr "Transitions"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "Transitions : {0}"
+
 msgid "Type"
 msgstr "Type"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "Type : {0}"
+
+msgid "Valid"
+msgstr "Valide"
+
+msgid "Valid members"
+msgstr "Membres valides"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Voter identity"
+msgstr "Identité votante"
+
+msgid "Voting"
+msgstr "Vote"
+
+msgid "What a node can still answer"
+msgstr "Ce qu’un nœud peut encore répondre"
+
+msgid "What it does"
+msgstr "Ce qu’elle fait"
+
+msgid "Yes"
+msgstr "Oui"

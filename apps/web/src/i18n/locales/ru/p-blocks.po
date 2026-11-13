@@ -13,41 +13,632 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "Участников: {0}"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} из {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 шестнадцатеричных символа"
+
+msgid "A batch type shows batches only."
+msgstr "Тип пакета показывает только пакеты."
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "Узел сообщает, выполнен ли переход, а при сбое — его ошибку."
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Блок Platform задаётся высотой или хешем из 64 шестнадцатеричных символов."
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "ProTxHash состоит из 64 шестнадцатеричных символов."
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "Хеш перехода состояния состоит из 64 шестнадцатеричных символов."
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "Переход состояния задаётся хешем из 64 шестнадцатеричных символов."
+
+msgid "Abstain"
+msgstr "Воздержаться"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "Действие {0}"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Address"
+msgstr "Адрес"
+
+msgid "Addresses that pay"
+msgstr "Адреса-плательщики"
+
+msgid "Addresses that receive"
+msgstr "Адреса-получатели"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Amount"
+msgstr "Сумма"
+
+msgid "Amount across the pool"
+msgstr "Сумма, проходящая через пул"
+
+msgid "Anchor"
+msgstr "Якорь"
+
+msgid "App hash"
+msgstr "Хеш приложения"
+
+msgid "App version"
+msgstr "Версия приложения"
+
+msgid "Ascending. Switch to descending"
+msgstr "По возрастанию. Переключить на убывание"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "Узел опрашивается о результате. Это может занять несколько секунд."
+
+msgid "Authentication"
+msgstr "Аутентификация"
+
+msgid "Batch type"
+msgstr "Тип пакета"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "Пакет: {0}"
+
+msgid "BIP13 script hash"
+msgstr "Хеш скрипта BIP13"
+
 msgid "Block"
 msgstr "Блок"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Block height"
+msgstr "Высота блока"
+
+msgid "Block height or hash"
+msgstr "Высота или хеш блока"
+
+msgid "Block metadata"
+msgstr "Метаданные блока"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "Страницам блоков нужен индекс Platform Explorer"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "Страницам блоков нужен индекс Platform Explorer, а режим «Только децентрализованно» его отключает."
+
+msgid "Block version"
+msgstr "Версия блока"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "Проверить снова"
+
+msgid "Choice"
+msgstr "Выбор"
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract as sent"
+msgstr "Контракт в том виде, как отправлен"
+
+msgid "Contract nonce"
+msgstr "Nonce контракта"
+
+msgid "Core block hash"
+msgstr "Хеш блока Core"
+
+msgid "Core fee per byte"
+msgstr "Комиссия Core за байт"
+
+msgid "Created at Core block"
+msgstr "Создан в блоке Core"
+
+msgid "Critical"
+msgstr "Критический"
+
+msgid "Date"
+msgstr "Дата"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "Дата: {0} – {1}"
+
+msgid "Decryption"
+msgstr "Расшифровка"
+
+msgid "deduct from input {index}"
+msgstr "вычесть из входа {index}"
+
+msgid "Denomination"
+msgstr "Номинал"
+
+msgid "Descending. Switch to ascending"
+msgstr "По убыванию. Переключить на возрастание"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Document types"
+msgstr "Типы документов"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "Шифрование"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "Введите высоту блока или хеш из 64 шестнадцатеричных символов."
 
 msgid "Epoch"
 msgstr "Эпоха"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "Эпоха: {0}"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "Каждый блок Platform с эпохой, предлагающим, переходами и временем."
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "Каждый переход состояния с типом, статусом, блоком, газом и владельцем."
+
+msgid "Evonode"
+msgstr "Эвонода"
+
+msgid "Executed"
+msgstr "Выполнен"
+
 msgid "Failed"
 msgstr "Ошибка"
+
+msgid "Failed only"
+msgstr "Только неудачные"
+
+msgid "Fee multiplier"
+msgstr "Множитель комиссии"
+
+msgid "Fee paid from"
+msgstr "Комиссия списывается с"
+
+msgid "Fields as sent"
+msgstr "Поля в том виде, как отправлены"
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "Format"
+msgstr "Формат"
+
+msgid "From"
+msgstr "От"
+
+msgid "Funded by"
+msgstr "Источник средств"
 
 msgid "Gas"
 msgstr "Газ"
 
+msgid "Gas used"
+msgstr "Использовано газа"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Газ: {0}"
+
 msgid "Hash"
 msgstr "Хеш"
+
+msgid "Health"
+msgstr "Состояние"
+
+msgid "Height"
+msgstr "Высота"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "Высота: {0}"
+
+msgid "High"
+msgstr "Высокий"
+
+msgid "Identity"
+msgstr "Идентичность"
+
+msgid "Identity ID"
+msgstr "ID идентичности"
+
+msgid "Identity nonce"
+msgstr "Nonce идентичности"
+
+msgid "Index"
+msgstr "Индекс"
+
+msgid "Inputs"
+msgstr "Входы"
+
+msgid "InstantSend lock"
+msgstr "Блокировка InstantSend"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "Возможно, он новее индекса, либо высота или хеш введены с ошибкой."
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Keys"
+msgstr "Ключи"
+
+msgid "Keys added"
+msgstr "Добавленные ключи"
+
+msgid "Keys added by this update"
+msgstr "Ключи, добавленные этим обновлением"
+
+msgid "Keys disabled"
+msgstr "Отключённые ключи"
+
+msgid "Keys of the new identity"
+msgstr "Ключи новой идентичности"
+
+msgid "Keywords"
+msgstr "Ключевые слова"
+
+msgid "Lock"
+msgstr "Заблокировать"
+
+msgid "Locked to Core block"
+msgstr "Привязан к блоку Core"
+
+msgid "Look up"
+msgstr "Найти"
+
+msgid "Look up a block by its height"
+msgstr "Найти блок по высоте"
+
+msgid "Master"
+msgstr "Мастер"
+
+msgid "Medium"
+msgstr "Средний"
+
+msgid "Member"
+msgstr "Участник"
+
+msgid "Mined in Core block"
+msgstr "Добыт в блоке Core"
+
+msgid "Newest first"
+msgstr "Сначала новые"
+
+msgid "Next block"
+msgstr "Следующий блок"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No block matches these filters"
+msgstr "Ни один блок не подходит под эти фильтры"
+
+msgid "No result yet"
+msgstr "Результата пока нет"
+
+msgid "No state transition matches these filters"
+msgstr "Ни один переход состояния не подходит под эти фильтры"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Нет в индексе Platform Explorer"
+
+msgid "Not valid"
+msgstr "Недействительно"
+
+msgid "Note"
+msgstr "Примечание"
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "Only an index knows which block holds a height."
+msgstr "Только индекс знает, какой блок имеет данную высоту."
+
+msgid "Open"
+msgstr "Открыть"
+
+msgid "Open a state transition by its hash"
+msgstr "Открыть переход состояния по хешу"
+
+msgid "Open block"
+msgstr "Открыть блок"
+
+msgid "Order"
+msgstr "Порядок"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "выход {0}"
+
+msgid "Output address"
+msgstr "Адрес вывода"
+
+msgid "Outputs"
+msgstr "Выходы"
 
 msgid "Owner"
 msgstr "Владелец"
 
+msgid "Owner balance after"
+msgstr "Баланс владельца после"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Владелец: {0}…"
+
+msgid "Pays out to"
+msgstr "Выплата на"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адрес Platform"
+
+msgid "Platform block"
+msgstr "Блок Platform"
+
 msgid "Platform blocks"
 msgstr "Блоки Platform"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer не индексирует devnet"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "В Platform Explorer нет блока {0}"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "В Platform Explorer пока нет блоков"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "У Platform Explorer нет байтов этого перехода."
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "В Platform Explorer нет кворума для этого блока"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "В Platform Explorer нет записи об этом переходе. Возможно, он новее индекса или никогда не отправлялся. Ответ узла ниже."
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "В Platform Explorer пока нет переходов состояния"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer не хранит байты этого перехода, как и у невыполненного, поэтому его поля здесь прочитать нельзя."
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer не перечисляет участников"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform не хранит списка блоков или переходов; для этого нужен индекс Platform Explorer"
+
+msgid "Platform state transition"
+msgstr "Переход состояния Platform"
 
 msgid "Platform state transitions"
 msgstr "Переходы состояния Platform"
 
+msgid "Poll"
+msgstr "Голосование"
+
+msgid "Pooling"
+msgstr "Пулинг"
+
+msgid "Position in block"
+msgstr "Позиция в блоке"
+
+msgid "Previous block"
+msgstr "Предыдущий блок"
+
+msgid "Price"
+msgstr "Цена"
+
 msgid "Proposer"
 msgstr "Предлагающий"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "Предлагающий: {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "ProTxHash эвоноды"
+
+msgid "Public key"
+msgstr "Открытый ключ"
+
+msgid "Purpose"
+msgstr "Назначение"
+
+msgid "Quorum"
+msgstr "Кворум"
+
+msgid "Quorum hash"
+msgstr "Хеш кворума"
+
+msgid "Quorum members"
+msgstr "Участники кворума"
+
+msgid "Quorum that signed this block"
+msgstr "Кворум, подписавший этот блок"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar не смог прочитать поля этого перехода из его байтов. Исходные данные ниже."
+
+msgid "Raw data"
+msgstr "Необработанные данные"
+
+msgid "Read-only"
+msgstr "Только чтение"
+
+msgid "Recipient"
+msgstr "Получатель"
+
+msgid "reduce output {index}"
+msgstr "уменьшить выход {index}"
+
+msgid "Result from a node"
+msgstr "Результат от узла"
+
+msgid "Revision"
+msgstr "Ревизия"
+
+msgid "SDK action"
+msgstr "Действие SDK"
+
+msgid "Search Radar"
+msgstr "Поиск по Radar"
+
+msgid "Security level"
+msgstr "Уровень безопасности"
+
+msgid "Sent again in later blocks"
+msgstr "Отправлен повторно в более поздних блоках"
+
+msgid "Sent by"
+msgstr "Отправитель"
+
+msgid "Service"
+msgstr "Сервис"
+
+msgid "Shielded"
+msgstr "Защищённая"
+
+msgid "Shielded actions"
+msgstr "Экранированные действия"
+
+msgid "Signature"
+msgstr "Подпись"
+
+msgid "Signed with key"
+msgstr "Подписано ключом"
+
+msgid "Sort by"
+msgstr "Сортировать по"
+
+msgid "State transition"
+msgstr "Переход состояния"
+
+msgid "State transition as JSON"
+msgstr "Переход состояния в виде JSON"
+
+msgid "State transitions"
+msgstr "Переходы состояния"
+
+msgid "State transitions in this block"
+msgstr "Переходы состояния в этом блоке"
 
 msgid "Status"
 msgstr "Статус"
 
+msgid "Succeeded"
+msgstr "Успешные"
+
+msgid "Succeeded only"
+msgstr "Только успешные"
+
 msgid "Success"
 msgstr "Успешно"
 
+msgid "System"
+msgstr "Система"
+
+msgid "That isn't a block height or hash."
+msgstr "Это не высота блока и не хеш."
+
+msgid "That isn't a state transition hash."
+msgstr "Это не хеш перехода состояния."
+
+msgid "That isn’t an identity ID."
+msgstr "Это не ID идентичности."
+
+msgid "The identity's withdrawal address"
+msgstr "Адрес вывода идентичности"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "Индексированные сведения о переходе требуют индекса Platform Explorer"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "Узел и Platform Explorer расходятся в оценке этого перехода. Каждый показан со своим источником."
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "Узел не сообщил результата за несколько секунд: этот переход ещё не выполнен либо ни один узел о нём не знает."
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "Узел не сообщил результата за несколько секунд. Узлы хранят только недавние результаты, поэтому у старого перехода результата может не быть."
+
+msgid "The same transition seen again in later blocks"
+msgstr "Тот же переход, снова замеченный в более поздних блоках"
+
+msgid "This block holds no state transitions"
+msgstr "В этом блоке нет переходов состояния"
+
 msgid "Time"
 msgstr "Время"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Tokens"
+msgstr "Токены"
+
+msgid "Transfer"
+msgstr "Перевод"
 
 msgid "Transition"
 msgstr "Переход"
@@ -55,5 +646,37 @@ msgstr "Переход"
 msgid "Transitions"
 msgstr "Переходы"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "Переходы: {0}"
+
 msgid "Type"
 msgstr "Тип"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "Тип: {0}"
+
+msgid "Valid"
+msgstr "Действительно"
+
+msgid "Valid members"
+msgstr "Действительные участники"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Voter identity"
+msgstr "Идентичность избирателя"
+
+msgid "Voting"
+msgstr "Голосование"
+
+msgid "What a node can still answer"
+msgstr "На что узел всё ещё может ответить"
+
+msgid "What it does"
+msgstr "Что он делает"
+
+msgid "Yes"
+msgstr "Да"

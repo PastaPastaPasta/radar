@@ -13,41 +13,632 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "{0} üye"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "64 onaltılık karakter"
+
+msgid "A batch type shows batches only."
+msgstr "Bir toplu iş türü yalnızca toplu işleri gösterir."
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "Bir düğüm, geçişin yürütülüp yürütülmediğini ve başarısız olduysa hatasını bildirir."
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Bir Platform bloğu yüksekliği veya 64 onaltılık karakterlik bir hash ile belirtilir."
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "ProTxHash 64 onaltılık karakterdir."
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "Bir durum geçişi hash’i 64 onaltılık karakterdir."
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "Bir durum geçişi, 64 onaltılık karakterlik bir hash ile belirtilir."
+
+msgid "Abstain"
+msgstr "Çekimser"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "Eylem {0}"
+
+msgid "Actions"
+msgstr "Eylemler"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Addresses that pay"
+msgstr "Ödeme yapan adresler"
+
+msgid "Addresses that receive"
+msgstr "Alan adresler"
+
+msgid "All"
+msgstr "Tümü"
+
+msgid "Amount"
+msgstr "Tutar"
+
+msgid "Amount across the pool"
+msgstr "Havuzdan geçen tutar"
+
+msgid "Anchor"
+msgstr "Çapa"
+
+msgid "App hash"
+msgstr "Uygulama hash’i"
+
+msgid "App version"
+msgstr "Uygulama sürümü"
+
+msgid "Ascending. Switch to descending"
+msgstr "Artan. Azalana geç"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "Sonuç için bir düğüme soruluyor. Bu birkaç saniye sürebilir."
+
+msgid "Authentication"
+msgstr "Kimlik doğrulama"
+
+msgid "Batch type"
+msgstr "Toplu iş türü"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "Toplu iş: {0}"
+
+msgid "BIP13 script hash"
+msgstr "BIP13 betik hash’i"
+
 msgid "Block"
 msgstr "Blok"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "Blok {0}"
+
+msgid "Block height"
+msgstr "Blok yüksekliği"
+
+msgid "Block height or hash"
+msgstr "Blok yüksekliği veya hash’i"
+
+msgid "Block metadata"
+msgstr "Blok meta verisi"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "Blok sayfaları Platform Explorer’ın dizinini gerektirir"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "Blok sayfaları Platform Explorer’ın dizinini gerektirir; “Yalnızca merkeziyetsiz” modu onu kapalı tutar."
+
+msgid "Block version"
+msgstr "Blok sürümü"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "Yeniden kontrol et"
+
+msgid "Choice"
+msgstr "Seçim"
+
+msgid "Clear"
+msgstr "Temizle"
+
+msgid "Contract"
+msgstr "Sözleşme"
+
+msgid "Contract as sent"
+msgstr "Gönderildiği haliyle sözleşme"
+
+msgid "Contract nonce"
+msgstr "Sözleşme nonce’u"
+
+msgid "Core block hash"
+msgstr "Core blok hash’i"
+
+msgid "Core fee per byte"
+msgstr "Bayt başına Core ücreti"
+
+msgid "Created at Core block"
+msgstr "Oluşturulduğu Core bloğu"
+
+msgid "Critical"
+msgstr "Kritik"
+
+msgid "Date"
+msgstr "Tarih"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "Tarih: {0} – {1}"
+
+msgid "Decryption"
+msgstr "Şifre çözme"
+
+msgid "deduct from input {index}"
+msgstr "{index}. girdiden düş"
+
+msgid "Denomination"
+msgstr "Birim değer"
+
+msgid "Descending. Switch to ascending"
+msgstr "Azalan. Artana geç"
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Document"
+msgstr "Belge"
+
+msgid "Document type"
+msgstr "Belge türü"
+
+msgid "Document types"
+msgstr "Belge türleri"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "Şifreleme"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "Bir blok yüksekliği veya 64 onaltılık karakterlik bir hash girin."
 
 msgid "Epoch"
 msgstr "Epoch"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "Epoch: {0}"
+
+msgid "Error"
+msgstr "Hata"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "Her Platform bloğu; epoch, önerici, geçişler ve zamanıyla."
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "Her durum geçişi; tür, durum, blok, gas ve sahibiyle."
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Executed"
+msgstr "Yürütüldü"
+
 msgid "Failed"
 msgstr "Başarısız"
+
+msgid "Failed only"
+msgstr "Yalnızca başarısızlar"
+
+msgid "Fee multiplier"
+msgstr "Ücret çarpanı"
+
+msgid "Fee paid from"
+msgstr "Ücretin ödendiği yer"
+
+msgid "Fields as sent"
+msgstr "Gönderildiği haliyle alanlar"
+
+msgid "Filters"
+msgstr "Filtreler"
+
+msgid "Format"
+msgstr "Biçim"
+
+msgid "From"
+msgstr "Gönderen"
+
+msgid "Funded by"
+msgstr "Fonlayan"
 
 msgid "Gas"
 msgstr "Gas"
 
+msgid "Gas used"
+msgstr "Kullanılan gas"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "Gas: {0}"
+
 msgid "Hash"
 msgstr "Hash"
+
+msgid "Health"
+msgstr "Sağlık"
+
+msgid "Height"
+msgstr "Yükseklik"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "Yükseklik: {0}"
+
+msgid "High"
+msgstr "Yüksek"
+
+msgid "Identity"
+msgstr "Kimlik"
+
+msgid "Identity ID"
+msgstr "Kimlik ID’si"
+
+msgid "Identity nonce"
+msgstr "Kimlik nonce’u"
+
+msgid "Index"
+msgstr "Dizin"
+
+msgid "Inputs"
+msgstr "Girdiler"
+
+msgid "InstantSend lock"
+msgstr "InstantSend kilidi"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "Dizinden daha yeni olabilir veya yükseklik ya da hash yanlış yazılmış olabilir."
+
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Keys"
+msgstr "Anahtarlar"
+
+msgid "Keys added"
+msgstr "Eklenen anahtarlar"
+
+msgid "Keys added by this update"
+msgstr "Bu güncellemeyle eklenen anahtarlar"
+
+msgid "Keys disabled"
+msgstr "Devre dışı bırakılan anahtarlar"
+
+msgid "Keys of the new identity"
+msgstr "Yeni kimliğin anahtarları"
+
+msgid "Keywords"
+msgstr "Anahtar kelimeler"
+
+msgid "Lock"
+msgstr "Kilitle"
+
+msgid "Locked to Core block"
+msgstr "Kilitlendiği Core bloğu"
+
+msgid "Look up"
+msgstr "Ara"
+
+msgid "Look up a block by its height"
+msgstr "Bir bloğu yüksekliğine göre ara"
+
+msgid "Master"
+msgstr "Ana"
+
+msgid "Medium"
+msgstr "Orta"
+
+msgid "Member"
+msgstr "Üye"
+
+msgid "Mined in Core block"
+msgstr "Core bloğunda madenlendi"
+
+msgid "Newest first"
+msgstr "Önce en yeni"
+
+msgid "Next block"
+msgstr "Sonraki blok"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "No block matches these filters"
+msgstr "Bu filtrelere uyan blok yok"
+
+msgid "No result yet"
+msgstr "Henüz sonuç yok"
+
+msgid "No state transition matches these filters"
+msgstr "Bu filtrelere uyan durum geçişi yok"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Platform Explorer dizininde yok"
+
+msgid "Not valid"
+msgstr "Geçerli değil"
+
+msgid "Note"
+msgstr "Not"
+
+msgid "Oldest first"
+msgstr "Önce en eski"
+
+msgid "Only an index knows which block holds a height."
+msgstr "Hangi bloğun hangi yüksekliğe sahip olduğunu yalnızca bir dizin bilir."
+
+msgid "Open"
+msgstr "Aç"
+
+msgid "Open a state transition by its hash"
+msgstr "Bir durum geçişini hash’iyle aç"
+
+msgid "Open block"
+msgstr "Bloğu aç"
+
+msgid "Order"
+msgstr "Sıra"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "çıktı {0}"
+
+msgid "Output address"
+msgstr "Çıktı adresi"
+
+msgid "Outputs"
+msgstr "Çıktılar"
 
 msgid "Owner"
 msgstr "Sahip"
 
+msgid "Owner balance after"
+msgstr "Sonrasında sahibin bakiyesi"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Sahip: {0}…"
+
+msgid "Pays out to"
+msgstr "Ödenen adres"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform adresi"
+
+msgid "Platform block"
+msgstr "Platform bloğu"
+
 msgid "Platform blocks"
 msgstr "Platform blokları"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer devnet’leri dizinlemez"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "Platform Explorer’da {0} bloğu yok"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "Platform Explorer’da henüz blok yok"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "Platform Explorer’da bu geçişin baytları yok."
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "Platform Explorer’da bu blok için kurul yok"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "Platform Explorer’da bu geçişe ait kayıt yok. Dizinden daha yeni olabilir veya hiç gönderilmemiş olabilir. Düğümün yanıtı aşağıda."
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "Platform Explorer’da henüz durum geçişi yok"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer bu geçişin baytlarını, yürütülmemiş bir geçişte olduğu gibi saklamıyor; bu yüzden alanları burada okunamıyor."
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer üye listelemiyor"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform blok veya geçiş listesi tutmaz; bunun için Platform Explorer’ın dizini gerekir"
+
+msgid "Platform state transition"
+msgstr "Platform durum geçişi"
 
 msgid "Platform state transitions"
 msgstr "Platform durum geçişleri"
 
+msgid "Poll"
+msgstr "Oylama"
+
+msgid "Pooling"
+msgstr "Havuzlama"
+
+msgid "Position in block"
+msgstr "Bloktaki konum"
+
+msgid "Previous block"
+msgstr "Önceki blok"
+
+msgid "Price"
+msgstr "Fiyat"
+
 msgid "Proposer"
 msgstr "Önerici"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "Önerici: {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "Bir evonode’un ProTxHash’i"
+
+msgid "Public key"
+msgstr "Genel anahtar"
+
+msgid "Purpose"
+msgstr "Amaç"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorum hash"
+msgstr "Quorum hash’i"
+
+msgid "Quorum members"
+msgstr "Kurul üyeleri"
+
+msgid "Quorum that signed this block"
+msgstr "Bu bloğu imzalayan kurul"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar bu geçişin alanlarını baytlarından okuyamadı. Ham verisi aşağıda."
+
+msgid "Raw data"
+msgstr "Ham veri"
+
+msgid "Read-only"
+msgstr "Salt okunur"
+
+msgid "Recipient"
+msgstr "Alıcı"
+
+msgid "reduce output {index}"
+msgstr "{index}. çıktıyı azalt"
+
+msgid "Result from a node"
+msgstr "Bir düğümden sonuç"
+
+msgid "Revision"
+msgstr "Revizyon"
+
+msgid "SDK action"
+msgstr "SDK eylemi"
+
+msgid "Search Radar"
+msgstr "Radar’da ara"
+
+msgid "Security level"
+msgstr "Güvenlik düzeyi"
+
+msgid "Sent again in later blocks"
+msgstr "Sonraki bloklarda yeniden gönderildi"
+
+msgid "Sent by"
+msgstr "Gönderen"
+
+msgid "Service"
+msgstr "Hizmet"
+
+msgid "Shielded"
+msgstr "Gizlenmiş"
+
+msgid "Shielded actions"
+msgstr "Gizli eylemler"
+
+msgid "Signature"
+msgstr "İmza"
+
+msgid "Signed with key"
+msgstr "İmzalayan anahtar"
+
+msgid "Sort by"
+msgstr "Sırala"
+
+msgid "State transition"
+msgstr "Durum geçişi"
+
+msgid "State transition as JSON"
+msgstr "JSON olarak durum geçişi"
+
+msgid "State transitions"
+msgstr "Durum geçişleri"
+
+msgid "State transitions in this block"
+msgstr "Bu bloktaki durum geçişleri"
 
 msgid "Status"
 msgstr "Durum"
 
+msgid "Succeeded"
+msgstr "Başarılı"
+
+msgid "Succeeded only"
+msgstr "Yalnızca başarılılar"
+
 msgid "Success"
 msgstr "Başarılı"
 
+msgid "System"
+msgstr "Sistem"
+
+msgid "That isn't a block height or hash."
+msgstr "Bu bir blok yüksekliği ya da hash değil."
+
+msgid "That isn't a state transition hash."
+msgstr "Bu bir durum geçişi hash’i değil."
+
+msgid "That isn’t an identity ID."
+msgstr "Bu bir kimlik ID’si değil."
+
+msgid "The identity's withdrawal address"
+msgstr "Kimliğin çekim adresi"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "Bir geçişin dizinlenmiş ayrıntıları Platform Explorer’ın dizinini gerektirir"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "Düğüm ile Platform Explorer bu geçiş konusunda çelişiyor. Her biri kendi kaynağıyla gösterilir."
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "Düğüm birkaç saniye içinde sonuç bildirmedi: bu geçiş henüz yürütülmedi veya hiçbir düğüm onu bilmiyor."
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "Düğüm birkaç saniye içinde sonuç bildirmedi. Düğümler yalnızca yakın tarihli sonuçları tutar; bu yüzden eski bir geçişte sonuç görünmeyebilir."
+
+msgid "The same transition seen again in later blocks"
+msgstr "Aynı geçişin sonraki bloklarda yeniden görülmesi"
+
+msgid "This block holds no state transitions"
+msgstr "Bu blokta durum geçişi yok"
+
 msgid "Time"
 msgstr "Zaman"
+
+msgid "To"
+msgstr "Alıcı"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Tokens"
+msgstr "Token’lar"
+
+msgid "Transfer"
+msgstr "Transfer"
 
 msgid "Transition"
 msgstr "Geçiş"
@@ -55,5 +646,37 @@ msgstr "Geçiş"
 msgid "Transitions"
 msgstr "Geçişler"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "Geçişler: {0}"
+
 msgid "Type"
 msgstr "Tür"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "Tür: {0}"
+
+msgid "Valid"
+msgstr "Geçerli"
+
+msgid "Valid members"
+msgstr "Geçerli üyeler"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Voter identity"
+msgstr "Oy veren kimlik"
+
+msgid "Voting"
+msgstr "Oylama"
+
+msgid "What a node can still answer"
+msgstr "Bir düğümün hâlâ yanıtlayabilecekleri"
+
+msgid "What it does"
+msgstr "Ne yaptığı"
+
+msgid "Yes"
+msgstr "Evet"

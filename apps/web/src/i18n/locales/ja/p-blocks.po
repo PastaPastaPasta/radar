@@ -13,41 +13,632 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(members.length)
+msgid "{0} members"
+msgstr "{0} メンバー"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+#. placeholder {1}: formatInt(members.length)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "64 hexadecimal characters"
+msgstr "16進数64文字"
+
+msgid "A batch type shows batches only."
+msgstr "バッチの種類を選ぶとバッチのみ表示されます。"
+
+msgid "A node reports whether a transition executed, and its error if it failed."
+msgstr "ノードは、トランジションが実行されたかどうかと、失敗した場合はそのエラーを返します。"
+
+msgid "A Platform block is named by its height or by a hash of 64 hexadecimal characters."
+msgstr "Platform ブロックは、高さまたは16進数64文字のハッシュで指定します。"
+
+msgid "A ProTxHash is 64 hexadecimal characters."
+msgstr "ProTxHash は16進数64文字です。"
+
+msgid "A state transition hash is 64 hexadecimal characters."
+msgstr "ステートトランジションのハッシュは16進数64文字です。"
+
+msgid "A state transition is named by a hash of 64 hexadecimal characters."
+msgstr "ステートトランジションは、16進数64文字のハッシュで指定します。"
+
+msgid "Abstain"
+msgstr "棄権"
+
+#. placeholder {0}: index + 1
+msgid "Action {0}"
+msgstr "アクション {0}"
+
+msgid "Actions"
+msgstr "アクション"
+
+msgid "Address"
+msgstr "アドレス"
+
+msgid "Addresses that pay"
+msgstr "支払う側のアドレス"
+
+msgid "Addresses that receive"
+msgstr "受け取る側のアドレス"
+
+msgid "All"
+msgstr "すべて"
+
+msgid "Amount"
+msgstr "金額"
+
+msgid "Amount across the pool"
+msgstr "プールを越える金額"
+
+msgid "Anchor"
+msgstr "アンカー"
+
+msgid "App hash"
+msgstr "アプリハッシュ"
+
+msgid "App version"
+msgstr "アプリのバージョン"
+
+msgid "Ascending. Switch to descending"
+msgstr "昇順。降順に切り替え"
+
+msgid "Asking a node for the result. This can take a few seconds."
+msgstr "ノードに結果を問い合わせています。数秒かかることがあります。"
+
+msgid "Authentication"
+msgstr "認証"
+
+msgid "Batch type"
+msgstr "バッチの種類"
+
+#. placeholder {0}: typeText(v as BatchType)
+msgid "Batch: {0}"
+msgstr "バッチ: {0}"
+
+msgid "BIP13 script hash"
+msgstr "BIP13 スクリプトハッシュ"
+
 msgid "Block"
 msgstr "ブロック"
+
+#. placeholder {0}: formatInt(h.height)
+msgid "Block {0}"
+msgstr "ブロック {0}"
+
+msgid "Block height"
+msgstr "ブロック高"
+
+msgid "Block height or hash"
+msgstr "ブロックの高さまたはハッシュ"
+
+msgid "Block metadata"
+msgstr "ブロックのメタデータ"
+
+msgid "Block pages need Platform Explorer's index"
+msgstr "ブロックページには Platform Explorer のインデックスが必要です"
+
+msgid "Block pages need Platform Explorer's index, which Decentralized only mode keeps off."
+msgstr "ブロックページには Platform Explorer のインデックスが必要ですが、「分散のみ」モードではオフになっています。"
+
+msgid "Block version"
+msgstr "ブロックのバージョン"
+
+msgid "BLS12-381"
+msgstr "BLS12-381"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "Check again"
+msgstr "再確認"
+
+msgid "Choice"
+msgstr "選択"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract as sent"
+msgstr "送信されたコントラクト"
+
+msgid "Contract nonce"
+msgstr "コントラクトのナンス"
+
+msgid "Core block hash"
+msgstr "Core ブロックハッシュ"
+
+msgid "Core fee per byte"
+msgstr "1バイトあたりの Core 手数料"
+
+msgid "Created at Core block"
+msgstr "作成された Core ブロック"
+
+msgid "Critical"
+msgstr "クリティカル"
+
+msgid "Date"
+msgstr "日付"
+
+#. placeholder {0}: search.from ?? '…'
+#. placeholder {1}: search.to ?? '…'
+msgid "Date: {0} – {1}"
+msgstr "日付: {0} – {1}"
+
+msgid "Decryption"
+msgstr "復号"
+
+msgid "deduct from input {index}"
+msgstr "入力 {index} から差し引く"
+
+msgid "Denomination"
+msgstr "額面"
+
+msgid "Descending. Switch to ascending"
+msgstr "降順。昇順に切り替え"
+
+msgid "Details"
+msgstr "詳細"
+
+msgid "Document"
+msgstr "ドキュメント"
+
+msgid "Document type"
+msgstr "ドキュメントの種類"
+
+msgid "Document types"
+msgstr "ドキュメントの種類"
+
+msgid "ECDSA hash160"
+msgstr "ECDSA hash160"
+
+msgid "ECDSA secp256k1"
+msgstr "ECDSA secp256k1"
+
+msgid "EdDSA 25519 hash160"
+msgstr "EdDSA 25519 hash160"
+
+msgid "Encryption"
+msgstr "暗号化"
+
+msgid "Enter a block height, or a hash of 64 hexadecimal characters."
+msgstr "ブロックの高さか、16進数64文字のハッシュを入力してください。"
 
 msgid "Epoch"
 msgstr "エポック"
 
+#. placeholder {0}: rangeText(search.epoch)
+msgid "Epoch: {0}"
+msgstr "エポック: {0}"
+
+msgid "Error"
+msgstr "エラー"
+
+msgid "Every Platform block with its epoch, proposer, transitions and time."
+msgstr "すべての Platform ブロックを、エポック、プロポーザー、トランジション、時刻とともに表示します。"
+
+msgid "Every state transition with its type, status, block, gas and owner."
+msgstr "すべてのステートトランジションを、種類、ステータス、ブロック、ガス、オーナーとともに表示します。"
+
+msgid "Evonode"
+msgstr "エボノード"
+
+msgid "Executed"
+msgstr "実行済み"
+
 msgid "Failed"
 msgstr "失敗"
+
+msgid "Failed only"
+msgstr "失敗のみ"
+
+msgid "Fee multiplier"
+msgstr "手数料の倍率"
+
+msgid "Fee paid from"
+msgstr "手数料の支払元"
+
+msgid "Fields as sent"
+msgstr "送信されたフィールド"
+
+msgid "Filters"
+msgstr "フィルター"
+
+msgid "Format"
+msgstr "形式"
+
+msgid "From"
+msgstr "送信元"
+
+msgid "Funded by"
+msgstr "資金元"
 
 msgid "Gas"
 msgstr "ガス"
 
+msgid "Gas used"
+msgstr "使用ガス"
+
+#. placeholder {0}: rangeText(search.gas)
+msgid "Gas: {0}"
+msgstr "ガス: {0}"
+
 msgid "Hash"
 msgstr "ハッシュ"
+
+msgid "Health"
+msgstr "状態"
+
+msgid "Height"
+msgstr "高さ"
+
+#. placeholder {0}: rangeText(search.height)
+msgid "Height: {0}"
+msgstr "高さ: {0}"
+
+msgid "High"
+msgstr "高"
+
+msgid "Identity"
+msgstr "アイデンティティ"
+
+msgid "Identity ID"
+msgstr "アイデンティティ ID"
+
+msgid "Identity nonce"
+msgstr "アイデンティティのナンス"
+
+msgid "Index"
+msgstr "インデックス"
+
+msgid "Inputs"
+msgstr "入力"
+
+msgid "InstantSend lock"
+msgstr "InstantSend ロック"
+
+msgid "It may be newer than the index, or the height or hash may be mistyped."
+msgstr "インデックスより新しいか、高さまたはハッシュの入力が間違っている可能性があります。"
+
+msgid "Key"
+msgstr "キー"
+
+msgid "Keys"
+msgstr "キー"
+
+msgid "Keys added"
+msgstr "追加されたキー"
+
+msgid "Keys added by this update"
+msgstr "この更新で追加されたキー"
+
+msgid "Keys disabled"
+msgstr "無効化されたキー"
+
+msgid "Keys of the new identity"
+msgstr "新しいアイデンティティのキー"
+
+msgid "Keywords"
+msgstr "キーワード"
+
+msgid "Lock"
+msgstr "ロック"
+
+msgid "Locked to Core block"
+msgstr "ロック先の Core ブロック"
+
+msgid "Look up"
+msgstr "検索"
+
+msgid "Look up a block by its height"
+msgstr "高さでブロックを検索"
+
+msgid "Master"
+msgstr "マスター"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "Member"
+msgstr "メンバー"
+
+msgid "Mined in Core block"
+msgstr "採掘された Core ブロック"
+
+msgid "Newest first"
+msgstr "新しい順"
+
+msgid "Next block"
+msgstr "次のブロック"
+
+msgid "No"
+msgstr "いいえ"
+
+msgid "No block matches these filters"
+msgstr "これらのフィルターに一致するブロックはありません"
+
+msgid "No result yet"
+msgstr "まだ結果なし"
+
+msgid "No state transition matches these filters"
+msgstr "これらのフィルターに一致するステートトランジションはありません"
+
+msgid "Nonce"
+msgstr "ノンス"
+
+msgid "Not in Platform Explorer's index"
+msgstr "Platform Explorer のインデックスにありません"
+
+msgid "Not valid"
+msgstr "無効"
+
+msgid "Note"
+msgstr "メモ"
+
+msgid "Oldest first"
+msgstr "古い順"
+
+msgid "Only an index knows which block holds a height."
+msgstr "どのブロックがその高さかを知っているのはインデックスだけです。"
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Open a state transition by its hash"
+msgstr "ハッシュでステートトランジションを開く"
+
+msgid "Open block"
+msgstr "ブロックを開く"
+
+msgid "Order"
+msgstr "並び順"
+
+#. placeholder {0}: f.vout
+msgid "output {0}"
+msgstr "出力 {0}"
+
+msgid "Output address"
+msgstr "出力アドレス"
+
+msgid "Outputs"
+msgstr "出力"
 
 msgid "Owner"
 msgstr "オーナー"
 
+msgid "Owner balance after"
+msgstr "実行後のオーナー残高"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "オーナー: {0}…"
+
+msgid "Pays out to"
+msgstr "支払先"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform アドレス"
+
+msgid "Platform block"
+msgstr "Platform ブロック"
+
 msgid "Platform blocks"
 msgstr "Platform ブロック"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer は devnet をインデックスしません"
+
+#. placeholder {0}: id.length > 12 ? `${id.slice(0, 8)}…` : id
+msgid "Platform Explorer has no block {0}"
+msgstr "Platform Explorer にブロック {0} はありません"
+
+msgid "Platform Explorer has no blocks yet"
+msgstr "Platform Explorer にはまだブロックがありません"
+
+msgid "Platform Explorer has no bytes for this transition."
+msgstr "Platform Explorer にはこのトランジションのバイト列がありません。"
+
+msgid "Platform Explorer has no quorum for this block"
+msgstr "Platform Explorer にはこのブロックのクォーラムがありません"
+
+msgid "Platform Explorer has no record of this transition. It may be newer than the index, or it may never have been sent. The node's answer is below."
+msgstr "Platform Explorer にはこのトランジションの記録がありません。インデックスより新しいか、送信されていない可能性があります。ノードの回答は下にあります。"
+
+msgid "Platform Explorer has no state transitions yet"
+msgstr "Platform Explorer にはまだステートトランジションがありません"
+
+msgid "Platform Explorer keeps no bytes for this transition, as it does for one that did not execute, so its fields can't be read here."
+msgstr "Platform Explorer は、実行されなかったトランジションと同様にこのトランジションのバイト列を保持していないため、ここではフィールドを読み取れません。"
+
+msgid "Platform Explorer lists no members"
+msgstr "Platform Explorer はメンバーを一覧にしていません"
+
+msgid "Platform HTTPS"
+msgstr "Platform HTTPS"
+
+msgid "Platform keeps no list of blocks or transitions; this needs Platform Explorer's index"
+msgstr "Platform はブロックやトランジションの一覧を保持していません。これには Platform Explorer のインデックスが必要です"
+
+msgid "Platform state transition"
+msgstr "Platform ステートトランジション"
 
 msgid "Platform state transitions"
 msgstr "Platform のステートトランジション"
 
+msgid "Poll"
+msgstr "投票"
+
+msgid "Pooling"
+msgstr "プーリング"
+
+msgid "Position in block"
+msgstr "ブロック内の位置"
+
+msgid "Previous block"
+msgstr "前のブロック"
+
+msgid "Price"
+msgstr "価格"
+
 msgid "Proposer"
 msgstr "プロポーザー"
+
+#. placeholder {0}: search.proposer.slice(0, 8)
+msgid "Proposer: {0}…"
+msgstr "プロポーザー: {0}…"
+
+msgid "ProTxHash of an evonode"
+msgstr "Evonode の ProTxHash"
+
+msgid "Public key"
+msgstr "公開鍵"
+
+msgid "Purpose"
+msgstr "用途"
+
+msgid "Quorum"
+msgstr "クォーラム"
+
+msgid "Quorum hash"
+msgstr "クォーラムのハッシュ"
+
+msgid "Quorum members"
+msgstr "クォーラムのメンバー"
+
+msgid "Quorum that signed this block"
+msgstr "このブロックに署名したクォーラム"
+
+msgid "Radar could not read this transition's fields from its bytes. Its raw data is below."
+msgstr "Radar はこのトランジションのフィールドをバイト列から読み取れませんでした。生データは下にあります。"
+
+msgid "Raw data"
+msgstr "生データ"
+
+msgid "Read-only"
+msgstr "読み取り専用"
+
+msgid "Recipient"
+msgstr "受取人"
+
+msgid "reduce output {index}"
+msgstr "出力 {index} を減額"
+
+msgid "Result from a node"
+msgstr "ノードからの結果"
+
+msgid "Revision"
+msgstr "リビジョン"
+
+msgid "SDK action"
+msgstr "SDK のアクション"
+
+msgid "Search Radar"
+msgstr "Radar を検索"
+
+msgid "Security level"
+msgstr "セキュリティレベル"
+
+msgid "Sent again in later blocks"
+msgstr "後のブロックで再送"
+
+msgid "Sent by"
+msgstr "送信者"
+
+msgid "Service"
+msgstr "サービス"
+
+msgid "Shielded"
+msgstr "シールド"
+
+msgid "Shielded actions"
+msgstr "シールドアクション"
+
+msgid "Signature"
+msgstr "署名"
+
+msgid "Signed with key"
+msgstr "署名に使用したキー"
+
+msgid "Sort by"
+msgstr "並べ替え"
+
+msgid "State transition"
+msgstr "ステートトランジション"
+
+msgid "State transition as JSON"
+msgstr "JSON 形式のステートトランジション"
+
+msgid "State transitions"
+msgstr "ステートトランジション"
+
+msgid "State transitions in this block"
+msgstr "このブロック内のステートトランジション"
 
 msgid "Status"
 msgstr "ステータス"
 
+msgid "Succeeded"
+msgstr "成功"
+
+msgid "Succeeded only"
+msgstr "成功のみ"
+
 msgid "Success"
 msgstr "成功"
 
+msgid "System"
+msgstr "システム"
+
+msgid "That isn't a block height or hash."
+msgstr "ブロックの高さでもハッシュでもありません。"
+
+msgid "That isn't a state transition hash."
+msgstr "ステートトランジションのハッシュではありません。"
+
+msgid "That isn’t an identity ID."
+msgstr "アイデンティティ ID ではありません。"
+
+msgid "The identity's withdrawal address"
+msgstr "アイデンティティの出金アドレス"
+
+msgid "The indexed details of a transition need Platform Explorer's index"
+msgstr "トランジションのインデックス済みの詳細には Platform Explorer のインデックスが必要です"
+
+msgid "The node and Platform Explorer disagree about this transition. Each is shown with its own source."
+msgstr "ノードと Platform Explorer でこのトランジションの内容が食い違っています。それぞれの出典とともに表示しています。"
+
+msgid "The node reported no result within a few seconds: this transition has not executed yet, or no node knows it."
+msgstr "ノードは数秒以内に結果を返しませんでした。このトランジションはまだ実行されていないか、どのノードも把握していません。"
+
+msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
+msgstr "ノードは数秒以内に結果を返しませんでした。ノードは最近の結果しか保持しないため、古いトランジションでは結果が表示されないことがあります。"
+
+msgid "The same transition seen again in later blocks"
+msgstr "後のブロックで再び現れた同じトランジション"
+
+msgid "This block holds no state transitions"
+msgstr "このブロックにはステートトランジションがありません"
+
 msgid "Time"
 msgstr "時刻"
+
+msgid "To"
+msgstr "送信先"
+
+msgid "Token"
+msgstr "トークン"
+
+msgid "Tokens"
+msgstr "トークン"
+
+msgid "Transfer"
+msgstr "転送"
 
 msgid "Transition"
 msgstr "トランジション"
@@ -55,5 +646,37 @@ msgstr "トランジション"
 msgid "Transitions"
 msgstr "トランジション"
 
+#. placeholder {0}: rangeText(search.txs)
+msgid "Transitions: {0}"
+msgstr "トランジション: {0}"
+
 msgid "Type"
 msgstr "種類"
+
+#. placeholder {0}: typeText(v)
+msgid "Type: {0}"
+msgstr "種類: {0}"
+
+msgid "Valid"
+msgstr "有効"
+
+msgid "Valid members"
+msgstr "有効なメンバー"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Voter identity"
+msgstr "投票者のアイデンティティ"
+
+msgid "Voting"
+msgstr "投票"
+
+msgid "What a node can still answer"
+msgstr "ノードがまだ答えられること"
+
+msgid "What it does"
+msgstr "その内容"
+
+msgid "Yes"
+msgstr "はい"
