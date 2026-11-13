@@ -1,6 +1,7 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { instantLockView } from '@/data/core/lock-state'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatInt } from '@/lib/format'
@@ -71,7 +72,11 @@ export function TxHoverCard({ id }: { id: string }) {
                       size="sm"
                     />
                   ) : tx.isInstantLocked ? (
-                    <InstantSendBadge claim={tx.instantLockClaim} size="sm" />
+                    <InstantSendBadge
+                      claim={tx.instantLockClaim}
+                      sources={instantLockView(tx).sources}
+                      size="sm"
+                    />
                   ) : (
                     <span>{confirmationsText(confirmations)}</span>
                   )}

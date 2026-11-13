@@ -1,12 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { instantLockState } from '@/data/core/lock-state'
+import { instantLockView } from '@/data/core/lock-state'
 import type { DecodedTx } from '@/data/core/types'
 import { formatInt } from '@/lib/format'
 import { Icon, Time } from '@/ui'
 import type { FirstSeen } from './useFirstSeen'
 
-type State = 'done' | 'claimed' | 'pending' | 'skipped' | 'future'
+type State = 'done' | 'claimed' | 'pending' | 'skipped' | 'unknown' | 'future'
 
 function Step({
   state,
@@ -40,15 +40,21 @@ export function Settlement({
   tx,
   coinbase,
   firstSeen,
+  hyphenLock,
 }: {
   tx: DecodedTx
   coinbase: boolean
   firstSeen?: FirstSeen
+  /** Hyphen's persistent record of an InstantSend lock; undefined while it is unasked or unanswered. */
+  hyphenLock?: boolean
 }) {
   const { t } = useLingui()
   const mined = tx.height !== undefined
   const locked = tx.isChainLocked === true
-  const instant = instantLockState(tx)
+  const lock = instantLockView(tx, hyphenLock)
+  const instant = lock.state
+  const hyphen = lock.sources.includes('hyphen')
+  const dapi = lock.sources.includes('dapi')
   const received = !coinbase && (firstSeen !== undefined || !mined)
   return (
     <>
@@ -77,9 +83,11 @@ export function Settlement({
                 ? 'done'
                 : instant === 'claimed'
                   ? 'claimed'
-                  : mined
-                    ? 'skipped'
-                    : 'pending'
+                  : instant === 'unknown'
+                    ? 'unknown'
+                    : mined
+                      ? 'skipped'
+                      : 'pending'
             }
             title={
               <>
@@ -95,10 +103,16 @@ export function Settlement({
               instant === 'corroborated'
                 ? t`masternodes locked its inputs; final from here`
                 : instant === 'claimed'
-                  ? t`reported by one node; no second source has confirmed it`
-                  : mined
-                    ? t`No InstantSend lock was seen`
-                    : t`waiting for the masternodes to lock it`
+                  ? hyphen && dapi
+                    ? t`recorded by a DAPI node and Hyphen; neither is independently confirmed`
+                    : hyphen
+                      ? t`recorded by Hyphen; no second source has confirmed it`
+                      : t`reported by one node; no second source has confirmed it`
+                  : instant === 'unknown'
+                    ? t`not known: nodes drop InstantSend locks once a block is ChainLocked`
+                    : mined
+                      ? t`No InstantSend lock was seen`
+                      : t`waiting for the masternodes to lock it`
             }
           />
         )}

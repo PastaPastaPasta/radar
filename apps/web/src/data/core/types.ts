@@ -60,7 +60,11 @@ export interface DecodedTx {
   chainLockClaim?: 'one-node'
   /** Whoever reports an InstantSend lock is the node that answered; no second source is asked. */
   instantLockClaim?: 'one-node'
+  /** Who reported the lock. Absent means a DAPI node. */
+  instantLockSource?: InstantLockSource
 }
+
+export type InstantLockSource = 'dapi' | 'hyphen'
 
 export interface DecodedBlock {
   hash: string

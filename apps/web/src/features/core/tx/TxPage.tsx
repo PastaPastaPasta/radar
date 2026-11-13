@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
+import { instantLockView } from '@/data/core/lock-state'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
@@ -139,6 +140,8 @@ function TxView({
   const sums = totals(tx, prev)
   const firstSeen = useFirstSeen(net, tx.txid, { enabled: hyphenFit && !mined })
   const hyFee = hy.data?.data?.fee ?? undefined
+  const hyphenLock = hy.data?.data ? hy.data.data.live?.tags?.islock === true : undefined
+  const instant = instantLockView(tx, hyphenLock)
   const fee = sums.fee ?? hyFee
   const outTotal = sumOutputs(tx)
   const toOthers = tx.outputs.reduce(
@@ -288,7 +291,12 @@ function TxView({
                 <Hash value={tx.txid} display="full" />
               </div>
               <div className="rx-rec__meta">
-                {tx.isInstantLocked ? <InstantSendBadge claim={tx.instantLockClaim} /> : null}
+                {instant.state === 'claimed' || instant.state === 'corroborated' ? (
+                  <InstantSendBadge
+                    claim={instant.state === 'claimed' ? 'one-node' : undefined}
+                    sources={instant.sources}
+                  />
+                ) : null}
                 <ChainLockBadge locked={tx.isChainLocked === true} claim={tx.chainLockClaim} />
                 {mined ? null : <Badge tone="warning">{t`Unconfirmed`}</Badge>}
                 {confirmations === undefined || !mined ? null : (
@@ -392,10 +400,14 @@ function TxView({
           id="settlement"
           title={t`How it settled`}
           description={mined ? undefined : t`Waiting to be mined.`}
-          source={firstSeen ? [stamp, firstSeen.stamp] : stamp}
+          source={[
+            stamp,
+            ...(firstSeen ? [firstSeen.stamp] : []),
+            ...(hy.data && instant.historical ? [stampOf(hy.data)] : []),
+          ]}
         >
           <Card layer="core">
-            <Settlement tx={tx} coinbase={coinbase} firstSeen={firstSeen} />
+            <Settlement tx={tx} coinbase={coinbase} firstSeen={firstSeen} hyphenLock={hyphenLock} />
           </Card>
         </Section>
 

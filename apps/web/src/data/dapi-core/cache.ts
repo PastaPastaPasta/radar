@@ -16,6 +16,8 @@ export interface CachedBlock {
 export interface CachedTx {
   txid: string
   bytes: Uint8Array
+  /** A DAPI node once reported an InstantSend lock for it. Nodes drop locks once a block is ChainLocked, so this is kept. */
+  instantLock?: true
 }
 export interface CachedHeader {
   height: number
@@ -37,7 +39,7 @@ interface LruEntry {
 interface RadarCoreDb extends DBSchema {
   blocks: { key: string; value: { bytes: Uint8Array; height: number } }
   heights: { key: string; value: { hash: string } }
-  txs: { key: string; value: { bytes: Uint8Array } }
+  txs: { key: string; value: { bytes: Uint8Array; instantLock?: true } }
   headers: { key: string; value: { header: Uint8Array; hash: string } }
   meta: { key: string; value: { nodes: NodeInfo[]; at: number } }
   lru: { key: string; value: LruEntry; indexes: { lastRead: number } }
@@ -212,7 +214,9 @@ export class CoreCache implements NodeListStore {
 
   async getTx(net: NetworkId, txid: string): Promise<CachedTx | undefined> {
     const row = await this.read(net, 'txs', txid)
-    return row && { txid, bytes: row.bytes }
+    return (
+      row && { txid, bytes: row.bytes, ...(row.instantLock ? { instantLock: true as const } : {}) }
+    )
   }
 
   putTx(net: NetworkId, tx: CachedTx): Promise<void> {
@@ -220,7 +224,7 @@ export class CoreCache implements NodeListStore {
       {
         store: 'txs',
         key: tx.txid,
-        value: { bytes: tx.bytes },
+        value: { bytes: tx.bytes, ...(tx.instantLock ? { instantLock: true as const } : {}) },
         size: tx.bytes.length + 128,
       },
     ])

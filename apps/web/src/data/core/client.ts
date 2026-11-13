@@ -596,18 +596,20 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     node?: string
   }
 
+  /** A lock a DAPI node reported once stays visible if the next node has already dropped it. */
+  const seenLocks = new Set<string>()
+
   async function dapiTx(
     net: NetworkId,
     txid: string,
     o: { signal?: AbortSignal; priority?: CoreCallOptions['priority']; placement: boolean },
   ): Promise<RawTx | null> {
     const cache = await getCache()
-    if (!o.placement) {
-      const hit = await cache?.getTx(net, txid)
-      if (hit) {
-        return { tx: await decoder.tx(hit.bytes, net), isInstantLocked: false, lock: 'none' }
-      }
+    const hit = await cache?.getTx(net, txid)
+    if (!o.placement && hit) {
+      return { tx: await decoder.tx(hit.bytes, net), isInstantLocked: false, lock: 'none' }
     }
+    const remembered = hit?.instantLock === true || seenLocks.has(`${net}:${txid}`)
     let result
     try {
       result = await verified(
@@ -653,7 +655,15 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       throw e
     }
     const { m, tx, mined, time } = result.value
-    if (cache && mined) void cache.putTx(net, { txid: tx.txid, bytes: m.transaction })
+    const lockSeen = o.placement && (m.isInstantLocked || remembered)
+    if (o.placement && m.isInstantLocked) seenLocks.add(`${net}:${txid}`)
+    if (cache && (mined || lockSeen)) {
+      void cache.putTx(net, {
+        txid: tx.txid,
+        bytes: m.transaction,
+        ...(lockSeen ? { instantLock: true as const } : {}),
+      })
+    }
     if (!o.placement) {
       return { tx, isInstantLocked: false, lock: 'none', node: result.node }
     }
@@ -667,7 +677,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       height: mined ? m.height : undefined,
       time,
       confirmations: m.confirmations,
-      isInstantLocked: m.isInstantLocked,
+      isInstantLocked: lockSeen,
       lock: mined ? await lockStatus(net, m.height, o.signal, o.priority) : 'none',
       node: result.node,
     }
@@ -831,7 +841,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
             height,
             ...(time !== undefined ? { time } : {}),
             confirmations,
-            ...instantLockFields(isInstantLocked),
+            ...instantLockFields(isInstantLocked, 'hyphen'),
             isChainLocked,
           },
           'dapi-down',

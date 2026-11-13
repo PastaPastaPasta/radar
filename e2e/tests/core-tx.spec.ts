@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { expectAccessible } from '../helpers/a11y'
 import { expect as baseExpect, test } from '../helpers/test'
 
@@ -221,7 +223,7 @@ test.describe('Transaction page', () => {
     await page.goto(`/tx/${REVOCATION}`)
     const settled = page.locator('#settlement')
     await expect(settled.locator('[data-step="instantsend"]')).toContainText(
-      'No InstantSend lock was seen',
+      'recorded by Hyphen; no second source has confirmed it',
     )
     const look = (name: string) =>
       settled.locator(`[data-step="${name}"]`).evaluate((el) => {
@@ -236,11 +238,52 @@ test.describe('Transaction page', () => {
       })
     const instant = await look('instantsend')
     const mined = await look('mined')
-    expect(instant.state).toBe('skipped')
+    expect(instant.state).toBe('claimed')
     expect(mined.state).toBe('done')
-    expect(instant.dot, 'a step that did not happen has no green dot').not.toBe(mined.dot)
+    expect(instant.dot, 'a claim has no green dot').not.toBe(mined.dot)
     expect(instant.line, 'nor a green line').not.toBe(mined.line)
     expect(instant.ring).not.toBe(mined.dot)
+  })
+
+  test('keeps the lock Hyphen recorded on every surface of an old transaction @IN-05 @HY-07', async ({
+    page,
+  }) => {
+    for (const txid of [REVOCATION, ASSET_LOCK, TRANSFER]) {
+      await page.goto(`/tx/${txid}`)
+      await expect(page.locator('#settlement [data-step="instantsend"]')).toHaveAttribute(
+        'data-state',
+        'claimed',
+      )
+      await expect(page.getByText('InstantSend lock recorded by Hyphen')).toBeVisible()
+      await expect(page.getByText('No InstantSend lock was seen')).toHaveCount(0)
+    }
+  })
+
+  test('says the lock state is not known, in the neutral style, once no source reports one @IN-05 @HY-07', async ({
+    page,
+  }) => {
+    const recorded = JSON.parse(
+      readFileSync(
+        resolve(
+          process.cwd(),
+          `../apps/web/src/test/fixtures/http/hyphen/mainnet/tx__${REVOCATION}.json`,
+        ),
+        'utf8',
+      ),
+    ) as { body: { live: { tags: { islock: boolean } } } }
+    recorded.body.live.tags.islock = false
+    await page.route(`**/x/hy/mainnet/tx/${REVOCATION}`, (route) =>
+      route.fulfill({ json: recorded.body }),
+    )
+    await page.goto(`/tx/${REVOCATION}`)
+    const step = page.locator('#settlement [data-step="instantsend"]')
+    await expect(step).toHaveAttribute('data-state', 'unknown')
+    await expect(step).toContainText('not known: nodes drop InstantSend locks')
+    await expect(page.getByText('No InstantSend lock was seen')).toHaveCount(0)
+    await expect(page.getByText(/InstantSend lock (recorded|reported)/)).toHaveCount(0)
+    const ring = await step.evaluate((el) => getComputedStyle(el, '::before').borderTopStyle)
+    expect(ring, 'not-known has its own dashed marker, not the skipped one').toBe('dashed')
+    await expectAccessible(page)
   })
 
   test('shows the numeric code beside a revocation reason and says whose names they are @HY-07', async ({

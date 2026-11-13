@@ -735,6 +735,11 @@
   border: 2px solid var(--dh-line-2);
   box-shadow: none;
 }
+.rx-life li[data-state='unknown']::before {
+  background: var(--dh-surface);
+  border: 2px dashed var(--dh-ink-3);
+  box-shadow: none;
+}
 .rx-life li::after {
   background: var(--dh-line-2);
   opacity: 1;
@@ -743,7 +748,8 @@
   background: var(--dh-good);
   opacity: 0.5;
 }
-.rx-life li[data-state='skipped'] b {
+.rx-life li[data-state='skipped'] b,
+.rx-life li[data-state='unknown'] b {
   color: var(--dh-ink-2);
 }
 .rx-life b {

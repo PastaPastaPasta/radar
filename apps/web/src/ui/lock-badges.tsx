@@ -42,18 +42,38 @@ export function ChainLockBadge({
   ) : null
 }
 
-/** An InstantSend lock is reported by the node that answered; no second source is asked. */
-export function InstantSendBadge({ claim, size }: { claim: 'one-node' | undefined; size?: 'sm' }) {
-  return claim ? (
-    <span data-claim="one-node">
+/**
+ * An InstantSend lock is one source's claim: the DAPI node that answered, or Hyphen's persistent record. `sources`
+ * names who, so a lock recorded after nodes dropped theirs does not read as "reported by one node".
+ */
+export function InstantSendBadge({
+  claim,
+  sources = ['dapi'],
+  size,
+}: {
+  claim: 'one-node' | undefined
+  sources?: readonly ('dapi' | 'hyphen')[]
+  size?: 'sm'
+}) {
+  if (!claim) {
+    return (
+      <Badge tone="success" size={size} icon={<Icon name="is" size="sm" />}>
+        {t`InstantSend locked`}
+      </Badge>
+    )
+  }
+  const hyphen = sources.includes('hyphen')
+  const dapi = sources.includes('dapi') || !hyphen
+  return (
+    <span data-claim="one-node" data-sources={sources.join(' ')}>
       <Badge tone="warning" size={size} icon={<Icon name="is" size="sm" />}>
-        {t`InstantSend lock reported by one node`}
+        {hyphen && dapi
+          ? t`InstantSend lock recorded by a DAPI node and Hyphen`
+          : hyphen
+            ? t`InstantSend lock recorded by Hyphen`
+            : t`InstantSend lock reported by one node`}
       </Badge>
     </span>
-  ) : (
-    <Badge tone="success" size={size} icon={<Icon name="is" size="sm" />}>
-      {t`InstantSend locked`}
-    </Badge>
   )
 }
 
