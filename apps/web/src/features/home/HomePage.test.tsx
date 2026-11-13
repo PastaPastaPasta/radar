@@ -321,6 +321,31 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="radar"]')).not.toBeNull()
   })
 
+  it('adds the answered-node count and its change on yesterday to the census row @RA-01', async () => {
+    renderAt('/')
+    const nodes = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-pulse="census"] [data-census-nodes]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(nodes).toHaveTextContent('2,581 nodes (\u22121)')
+    expect(
+      nodes.closest('[data-pulse="census"]')!.querySelector('.rx-pulse__meta'),
+    ).toHaveTextContent(/crawled/)
+  })
+
+  it('links the census row to the Core 24 tracker while it is pending @RA-11', async () => {
+    renderAt('/')
+    const link = await waitFor(() => {
+      const el = document.querySelector<HTMLAnchorElement>('[data-pulse="census"] [data-v24-link]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(link).toHaveAttribute('href', '/v24')
+    expect(link).toHaveTextContent('Core 24')
+    expect(link).toHaveAccessibleName('Core 24 activation')
+  })
+
   it('draws the masternode map from the crawl, with the busiest place called out @IN-01', async () => {
     renderAt('/')
     const map = await waitFor(() => {

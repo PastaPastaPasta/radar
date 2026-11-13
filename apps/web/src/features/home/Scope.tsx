@@ -9,8 +9,9 @@ import { radarQueries } from '@/data/radar/queries'
 import { stampOf } from '@/data/envelope'
 import { networkName, PageLink, useNetwork, keepPreviousOnNetwork } from '@/features/entity'
 import { useCommandPalette } from '@/features/search'
-import { formatInt, formatPercent } from '@/lib/format'
+import { formatInt, formatPercent, MINUS } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
+import { v24Pending } from '@/data/radar/schemas'
 import {
   Icon,
   LiveControl,
@@ -20,6 +21,7 @@ import {
   SourceLine,
   Time,
   useLiveView,
+  useNow,
   usePausedFeed,
 } from '@/ui'
 import { CoreFigures } from './CoreZone'
@@ -194,22 +196,41 @@ function CensusPulse() {
   const { t } = useLingui()
   const net = useNetwork()
   const off = useDecentralizedOnly()
-  const summary = useQuery({ ...radarQueries.summary(net), enabled: !isDevnet(net) && !off })
+  const radarOn = !isDevnet(net) && !off
+  const summary = useQuery({ ...radarQueries.summary(net), enabled: radarOn })
+  const activation = useQuery({ ...radarQueries.activation(net), enabled: radarOn })
+  const now = useNow()
   const crawl = summary.data?.data.crawl
+  const dayAgo = summary.data?.data.day_ago
   const share = crawl && crawl.mn_total > 0 ? crawl.mn_reachable / crawl.mn_total : undefined
+  const change = crawl && dayAgo ? crawl.reachable - dayAgo.reachable : undefined
+  const v24 = v24Pending(activation.data?.data, now)
   return (
-    <Link
-      className="rx-pulse__row"
+    <div
+      className="rx-pulse__row has-[a:focus-visible]:outline has-[a:focus-visible]:outline-[length:var(--dh-ring-w)] has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-[var(--dh-focus)]"
       data-layer="network"
       data-pulse="census"
       data-unavailable={off ? 'mode' : undefined}
-      to="/masternodes"
     >
       <span className="rx-tile">
         <Icon name="radar" />
       </span>
       <span className="rx-pulse__label">
-        {t`Masternodes answering`}{' '}
+        <Link to="/masternodes" className="after:absolute after:inset-0 after:rounded-[inherit]">
+          {t`Masternodes answering`}
+        </Link>{' '}
+        {crawl ? (
+          <span data-census-nodes>
+            {t`${formatInt(crawl.reachable)} nodes`}
+            {change === undefined || change === 0 ? null : (
+              <>
+                {' '}
+                ({change > 0 ? '+' : MINUS}
+                {formatInt(Math.abs(change))})
+              </>
+            )}
+          </span>
+        ) : null}
         {summary.data ? <SourceLine stamp={stampOf(summary.data)} compact /> : null}
       </span>
       <span className="rx-pulse__value" style={{ color: 'var(--dh-good)' }}>
@@ -224,7 +245,19 @@ function CensusPulse() {
       <span className="rx-pulse__meta">
         {crawl ? (
           <>
-            <span>{t`${formatInt(crawl.mn_reachable)} of ${formatInt(crawl.mn_total)}`}</span>
+            <span className="inline-flex items-baseline gap-2">
+              {v24 ? (
+                <Link
+                  to="/v24"
+                  className="relative z-10 underline"
+                  aria-label={t`Core 24 activation`}
+                  data-v24-link
+                >
+                  {t`Core 24`}
+                </Link>
+              ) : null}
+              <span>{t`${formatInt(crawl.mn_reachable)} of ${formatInt(crawl.mn_total)}`}</span>
+            </span>
             <span>
               {t`crawled`} <Time ms={crawl.finished} mode="relative" live />
             </span>
@@ -235,7 +268,7 @@ function CensusPulse() {
           <span>{t`Needs Radar's crawler: off in Decentralized only mode`}</span>
         ) : null}
       </span>
-    </Link>
+    </div>
   )
 }
 

@@ -1,12 +1,26 @@
 import type { RouteCase } from './types'
 
 export const netA: RouteCase[] = [
-  { path: '/nodes', h1: 'Nodes', built: false, decentralized: 'unavailable' },
   {
-    path: '/nodes?scope=evo&versions=time&days=90',
+    path: '/nodes',
     h1: 'Nodes',
-    built: false,
-    decentralized: 'unavailable',
+    built: true,
+    decentralized: 'partial',
+    data: '[data-dapi-census]',
   },
-  { path: '/v24', h1: 'Core 24 activation', built: false, decentralized: 'partial' },
+  {
+    path: '/nodes?scope=evo',
+    h1: 'Nodes',
+    built: true,
+    decentralized: 'partial',
+    data: '[data-dapi-census]',
+  },
+  {
+    path: '/nodes?versions=time&days=7',
+    h1: 'Nodes',
+    built: true,
+    decentralized: 'partial',
+    data: '[data-dapi-census]',
+  },
+  { path: '/v24', h1: 'Core 24 activation', built: true, decentralized: 'unavailable' },
 ]

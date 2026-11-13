@@ -13,6 +13,56 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: formatInt(c.unknown)
+#. placeholder {0}: formatInt(d.overall.unknown)
+msgid ", {0} unknown"
+msgstr "，{0} 个未知"
+
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid ", at block {0}"
+msgstr "，位于区块 {0}"
+
+msgid ", so the figures below may be out of date."
+msgstr "，因此下方数据可能已过时。"
+
+#. placeholder {0}: String(g.min_protocol)
+msgid "\"Announce 24\" counts valid members whose latest handshake with our crawler, in the past week, gave protocol {0} or newer. That's an estimate of who can sign, not the trigger itself: the signal needs that many actual signatures from one quorum, and members we couldn't reach may still sign. It can also count too many: release candidates 1 to 4 announce the same version and protocol but never sign Core 24 on mainnet, so a masternode still on one should upgrade."
+msgstr "\"Announce 24\" 统计的是过去一周内与我们的爬虫最近一次握手时报告协议 {0} 或更高版本的有效成员。这只是对谁能够签名的估算，而不是触发条件本身：信号需要同一个 Quorum 中足够多的实际签名，而我们未能连上的成员仍可能签名。它也可能统计偏多：候选版本 1 至 4 公布相同的版本和协议，但在主网上从不为 Core 24 签名，因此仍运行这些版本的主节点应当升级。"
+
+msgid "(empty)"
+msgstr "（空）"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
+msgstr "{0, plural, other {比一天前少 # 个节点}}"
+
+#. placeholder {0}: formatPercent(v, 1)
+msgid "{0} a year"
+msgstr "每年 {0}"
+
+#. placeholder {0}: countryName(c0[0])
+#. placeholder {1}: share(c0[1], sumCountries)
+msgid "{0} alone has {1}."
+msgstr "仅 {0} 就占 {1}。"
+
+#. placeholder {0}: formatInt(c.fail)
+msgid "{0} fail"
+msgstr "{0} 个未通过"
+
+#. placeholder {0}: formatInt(d.beyond_version)
+msgid "{0} fail another check that needs a fix."
+msgstr "{0} 个未通过另一项需要修复的检查。"
+
+#. placeholder {0}: formatInt(d.version_only)
+msgid "{0} fail only the version check and need just the upgrade. "
+msgstr "{0} 个仅未通过版本检查，只需升级。 "
+
+#. placeholder {0}: o0.org
+#. placeholder {1}: share(o0.n, sumOrgs)
+#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
+msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
+msgstr "{0} 托管了{noun}的 {1}，前三大提供商共托管 {2}。"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -27,15 +77,186 @@ msgstr "{1} 个地点共 {0} 个主节点"
 msgid "{0} masternodes, the most of any place"
 msgstr "{0} 个主节点，所有地点中最多"
 
+#. placeholder {0}: formatInt(o.needed)
+#. placeholder {1}: formatInt(o.remaining ?? 0)
+msgid "{0} more needed in {1} blocks"
+msgstr "{1} 个区块内还需 {0} 个"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} more versions"
+msgstr "另有 {0} 个版本"
+
+#. placeholder {0}: formatInt(threshold)
+msgid "{0} must sign"
+msgstr "需 {0} 个签名"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+msgid "{0} nodes"
+msgstr "{0} 个节点"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
+msgstr "在尝试的 {1} 个地址中，有 {0} 个节点做出响应。统计的是本周至少响应过一次的节点，加上所有已启用的主节点。"
+
 #. placeholder {0}: formatInt(crawl.mn_reachable)
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(q.valid)
 #. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(p.window)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(threshold ?? 0)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: share(p.threshold_min, p.window)
+msgid "{0} of {1} blocks in the first window, falling to {2}"
+msgstr "首个窗口 {1} 个区块中需 {0} 个，逐步降至 {2}"
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(progress.mined)
+#. placeholder {2}: formatInt(w.threshold ?? 0)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: formatInt(progress.projected)
+msgid "{0} of {1} blocks so far signalled; the window needs {2} of {3}; at this pace it ends with about {4}"
+msgstr "目前已挖出 {1} 个区块，其中 {0} 个发出信号；窗口需要 {3} 个中的 {2} 个；按此速度，结束时约为 {4}"
+
+#. placeholder {0}: formatInt(threshold)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: String(w.attempt + 1)
+msgid "{0} of {1} blocks, on attempt {2}"
+msgstr "{1} 个区块中的 {0} 个，第 {2} 次尝试"
+
+#. placeholder {0}: formatPercent(p.healthy / p.checked, 1)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
+msgstr "{1} 个已启用的 evonode 中，{0} 通过了我们最近一次 Platform 检查：其 Tenderdash P2P 端口已开放，且 DAPI 通过有效 TLS 做出了响应。"
+
+#. placeholder {0}: ready(d.overall.pass)
+#. placeholder {1}: formatInt(d.masternodes)
+msgid "{0} of {1} enabled masternodes pass every check."
+msgstr "{1} 个已启用的主节点中，{0} 个通过所有检查。"
+
+#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {1}: formatInt(reach.no)
+msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
+msgstr "已启用的{noun}中，{0} 在其注册地址上响应了我们的握手；{1} 个未响应。"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "{0} of enabled answered"
+msgstr "已启用的 {0} 有响应"
+
+#. placeholder {0}: formatInt(evo)
+msgid "{0} of them evonodes"
+msgstr "其中 {0} 个为 evonode"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other clients"
+msgstr "另有 {0} 个其他客户端"
+
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
+msgstr "另有 {0} 个其他全节点接受连接。仅向外连接的节点无法从外部看到，因此实际数量更高。"
+
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} other releases"
+msgstr "另有 {0} 个其他发布版本"
+
+#. placeholder {0}: formatInt(d.overall.pass)
+msgid "{0} ready"
+msgstr "{0} 个就绪"
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+#. placeholder {2}: second[0]
+#. placeholder {3}: share(second[1], sum)
+msgid "{0} runs on {1} of {noun} and {2} on {3}."
+msgstr "在{noun}中，{0} 占 {1}，{2} 占 {3}。"
+
+#. placeholder {0}: top[0]
+#. placeholder {1}: share(top[1], sum)
+msgid "{0} runs on {1} of {noun}."
+msgstr "在{noun}中，{0} 占 {1}。"
+
+#. placeholder {0}: formatInt(v.tested)
+#. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
+#. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
+msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
+msgstr "本周期已测试 {0} 个。中位数 {1} 个区块头/秒，ping {2} ms。"
 
 #. placeholder {0}: formatInt(b.txCount)
 #. placeholder {0}: formatInt(b.txs.length)
 msgid "{0} tx"
 msgstr "{0} 笔交易"
+
+#. placeholder {0}: block(b)
+#. placeholder {1}: b.estimated ? t`about` + ' ' : ''
+#. placeholder {2}: when(blockMs(b))
+msgid "{0}, {1}{2}"
+msgstr "{0}，{1}{2}"
+
+msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
+msgstr "{diff, plural, other {比一天前多 # 个节点}}"
+
+msgid "<0.1%"
+msgstr "<0.1%"
+
+msgid "0 ready"
+msgstr "0 个就绪"
+
+msgid "1 y"
+msgstr "1年"
+
+msgid "24 h"
+msgstr "24 小时"
+
+msgid "30 d"
+msgstr "30 天"
+
+msgid "7 d"
+msgstr "7 天"
+
+msgid "90 d"
+msgstr "90 天"
+
+#. placeholder {0}: String(evo.params.bit)
+msgid "A second deployment, evo_shares (bit {0}), has the same window and thresholds, but Dash Core 24.0.0 doesn't sign its masternode signal, so it can't start until a later release does."
+msgstr "第二个部署 evo_shares（位 {0}）具有相同的窗口和阈值，但 Dash Core 24.0.0 不会为其主节点信号签名，因此要等到后续版本才能启动。"
+
+#. placeholder {0}: when(p.timeout)
+msgid "A window that doesn't lock in and whose last block's median time is at or past {0} fails it."
+msgstr "若某个窗口未能锁定，且其最后一个区块的中位时间达到或超过 {0}，则判定失败。"
+
+msgid "about"
+msgstr "约"
+
+#. placeholder {0}: when(blockMs(o.activation))
+#. placeholder {0}: when(blockMs(o.activation_if_reached))
+#. placeholder {0}: when(blockMs(o.earliest_activation))
+msgid "about {0}"
+msgstr "约 {0}"
+
+msgid "Activation"
+msgstr "激活"
+
+msgid "Activation if this window locks in"
+msgstr "此窗口锁定后的激活"
+
+msgid "Activation, at the earliest"
+msgstr "激活，最早"
+
+msgid "Activation, if this window locks in"
+msgstr "激活，若此窗口锁定"
+
+msgid "Active"
+msgstr "已激活"
+
+msgid "Address networks"
+msgstr "地址网络"
+
+msgid "Addresses tried"
+msgstr "已尝试的地址"
 
 msgid "Age"
 msgstr "时间"
@@ -43,17 +264,64 @@ msgstr "时间"
 msgid "All blocks"
 msgstr "所有区块"
 
+msgid "all nodes"
+msgstr "所有节点"
+
+msgid "All nodes"
+msgstr "所有节点"
+
+msgid "Announce 24"
+msgstr "Announce 24"
+
+msgid "Answered"
+msgstr "有应答"
+
+msgid "at the earliest"
+msgstr "最早"
+
+msgid "At this pace"
+msgstr "按此速度"
+
+#. placeholder {0}: g.llmq
+#. placeholder {1}: formatInt(size)
+#. placeholder {2}: formatInt(threshold)
+msgid "Before miners' votes count, one {0} quorum ({1} masternodes) must sign the Core 24 signal: {2} of its members, running Dash Core 24. A miner then puts it in a block."
+msgstr "矿工的投票生效之前，必须有一个 {0} Quorum（{1} 个主节点）对 Core 24 信号签名：需其中 {2} 个成员签名，且这些成员运行 Dash Core 24。随后由矿工将其放入区块。"
+
 msgid "Best ChainLock"
 msgstr "最新 ChainLock"
 
 msgid "Block"
 msgstr "区块"
 
+#. placeholder {0}: formatInt(b.height)
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {0}: formatInt(q.height)
+msgid "block {0}"
+msgstr "区块 {0}"
+
+msgid "Block in the window"
+msgstr "窗口内的区块"
+
 msgid "block updates"
 msgstr "区块更新"
 
 msgid "Blockchain size"
 msgstr "区块链大小"
+
+#. placeholder {0}: formatInt(w.start.height)
+#. placeholder {1}: formatInt(w.end.height)
+msgid "blocks {0}–{1}"
+msgstr "区块 {0}–{1}"
+
+msgid "Builds that aren't releases"
+msgstr "非正式发布的构建"
+
+msgid "Can they be reached"
+msgstr "是否可达"
+
+msgid "can't reach it any more"
+msgstr "无法再触及它"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -68,14 +336,56 @@ msgstr "ChainLocked"
 msgid "Charts"
 msgstr "图表"
 
+msgid "Checked every 15 minutes, last"
+msgstr "每 15 分钟检查一次，最近一次"
+
 msgid "Checking Hyphen…"
 msgstr "正在检查 Hyphen…"
 
 msgid "Circulating supply"
 msgstr "流通量"
 
+msgid "CJDNS"
+msgstr "CJDNS"
+
+msgid "Client"
+msgstr "客户端"
+
+msgid "Compact block filters"
+msgstr "紧凑区块过滤器"
+
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
+
+msgid "Core 24 activation"
+msgstr "Core 24 激活"
+
+#. placeholder {0}: when(p.start_time)
+msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
+msgstr "Core 24 在 {0}（链的中位时间）之前无法启动。之后主节点发出信号，矿工逐个窗口投票。"
+
+msgid "Core 24 failed: it reached its timeout without locking in."
+msgstr "Core 24 激活失败：已达超时仍未锁定。"
+
+#. placeholder {0}: String(p.bit)
+#. placeholder {1}: when(p.start_time)
+#. placeholder {2}: doc.mnhf ?? 'masternode'
+msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
+msgstr "Core 24 是一次硬分叉（部署位 {0}），有两道关口。首先是主节点：在 {1}（按链的过去中位时间）之后，由 {2} Quorum 对激活请求签名，再由矿工将该签名放入区块。这就是 DIP-0023 的增强型硬分叉信号（EHF）。在它被挖出之前，无论有多少矿工发出信号，其区块都不计入。"
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is active since {0}."
+msgstr "Core 24 自 {0} 起已激活。"
+
+#. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
+msgid "Core 24 is locked in. It activates at {0}."
+msgstr "Core 24 已锁定，将在 {0} 激活。"
+
+msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
+msgstr "在主节点的信号被挖出之前，Core 24 的超时已过，因此无法再启动。"
 
 msgid "Core block height"
 msgstr "Core 区块高度"
@@ -89,37 +399,174 @@ msgstr "Core 区块、主节点和 Platform 记录，一站式查看。每个数
 msgid "Core figures"
 msgstr "Core 数据"
 
+msgid "Core height"
+msgstr "Core 高度"
+
+msgid "Core tip"
+msgstr "Core 链顶"
+
 msgid "Core, Platform and the masternode network"
 msgstr "Core、Platform 和主节点网络"
+
+msgid "countries"
+msgstr "国家/地区"
+
+msgid "Countries"
+msgstr "国家/地区"
 
 msgid "crawled"
 msgstr "已抓取"
 
+msgid "DAPI answered"
+msgstr "DAPI 已响应"
+
+msgid "DAPI's masternode list isn't available right now."
+msgstr "DAPI 的主节点列表目前不可用。"
+
 msgid "Dash Core"
 msgstr "Dash Core"
+
+msgid "Dash Core 24 activation is under way."
+msgstr "Dash Core 24 激活正在进行中。"
+
+msgid "Dash nodes answered the last crawl"
+msgstr "Dash 节点在上次抓取中有响应"
+
+msgid "Dates of windows to come are estimates."
+msgstr "未来窗口的日期为估算值。"
+
+msgid "Describing"
+msgstr "统计对象"
+
+msgid "Didn't answer"
+msgstr "未响应"
 
 msgid "Difficulty"
 msgstr "难度"
 
+msgid "Drive versions"
+msgstr "Drive 版本"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(d.recent.blocks)
+#. placeholder {3}: formatInt(d.recent.count)
+msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
+msgstr "在每个 {0} 个区块的窗口中，设置了第 {1} 位（高位版本位为 001）的区块计为发出信号。达到阈值数量的窗口会将 Core 24 锁定。最近 {2} 个区块中，有 {3} 个发出了信号。"
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "每个 Platform 区块都与一个 Core 区块绑定。"
+
+msgid "Earliest activation"
+msgstr "最早激活"
+
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Enabled masternodes"
+msgstr "已启用的主节点"
 
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
 msgstr "纪元 {0} · 已过 {1} 个区块"
 
+msgid "estimate"
+msgstr "估算"
+
+msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
+msgstr "所有响应抓取的 Dash 节点：运行什么、托管在哪里，以及能否访问。"
+
+msgid "Every version and user agent"
+msgstr "所有版本和 user agent"
+
+msgid "Everything else"
+msgstr "其他所有"
+
+msgid "Evonode Platform health"
+msgstr "Evonode Platform 健康状况"
+
+msgid "evonodes"
+msgstr "evonode"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "evonodes only"
+msgstr "仅 evonode"
+
+msgid "Evonodes, Core payments"
+msgstr "Evonode，Core 付款"
+
+msgid "Evonodes, Platform rewards"
+msgstr "Evonode，Platform 奖励"
+
+msgid "Failed"
+msgstr "失败"
+
 msgid "First seen"
 msgstr "首次出现"
 
+msgid "First window that can count opens"
+msgstr "首个可计入的窗口开启于"
+
+msgid "First window that can count opens, at the earliest"
+msgstr "首个可计入的窗口开启，最早于"
+
+msgid "Focus the chart and press the arrow keys to read a point."
+msgstr "聚焦图表并按方向键读取数据点。"
+
+msgid "Follow it on the activation tracker"
+msgstr "在激活跟踪器中关注"
+
+msgid "Formed at"
+msgstr "形成于"
+
+msgid "From block"
+msgstr "起始区块"
+
+msgid "Grade {g}"
+msgstr "等级 {g}"
+
+msgid "Healthy"
+msgstr "健康"
+
 msgid "Height"
 msgstr "高度"
+
+msgid "highest seen"
+msgstr "历史最高"
+
+msgid "Hosting providers"
+msgstr "托管提供商"
+
+msgid "How activation works"
+msgstr "激活机制"
+
+msgid "How fast they serve"
+msgstr "服务速度"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen 不索引开发网"
 
 msgid "Hyphen's index is still being checked."
 msgstr "仍在检查 Hyphen 的索引。"
+
+msgid "I2P"
+msgstr "I2P"
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "IPv6"
+msgstr "IPv6"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "It's from block {0}; our dashd or the crawler host may be down."
+msgstr "这是区块 {0} 的数据；我们的 dashd 或爬虫主机可能已宕机。"
+
+msgid "Known addresses"
+msgstr "已知地址"
 
 msgid "Last block"
 msgstr "最新区块"
@@ -142,11 +589,29 @@ msgstr "最新 Platform 区块，最早的在前"
 msgid "Latest Platform transitions"
 msgstr "最新 Platform 状态转换"
 
+msgid "latest release"
+msgstr "最新发布版"
+
 msgid "Live updates have stopped."
 msgstr "实时更新已停止。"
 
 msgid "Live updates have stopped. The chain shown is as of {since}."
 msgstr "实时更新已停止。所示区块链截至 {since}。"
+
+msgid "Lock-in threshold"
+msgstr "锁定阈值"
+
+msgid "Lock-in threshold of each window"
+msgstr "各窗口的锁定阈值"
+
+msgid "Lock-in, if it reaches the threshold"
+msgstr "锁定，若达到阈值"
+
+msgid "Lock-in, if that window reaches the threshold"
+msgstr "锁定，若该窗口达到阈值"
+
+msgid "Locked in"
+msgstr "已锁定"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -155,11 +620,51 @@ msgstr "绑定到 Core 区块 {0}"
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "世界地图，Radar 发现主节点的每个地点用一个圆点表示。{summary}。"
 
+msgid "Masternode list from DAPI"
+msgstr "来自 DAPI 的主节点列表"
+
+msgid "Masternode signal"
+msgstr "主节点信号"
+
+msgid "masternodes"
+msgstr "主节点"
+
 msgid "Masternodes"
 msgstr "主节点"
 
 msgid "Masternodes answering"
 msgstr "响应中的主节点"
+
+msgid "Masternodes reachable"
+msgstr "可达的主节点"
+
+msgid "Masternodes' signal mined"
+msgstr "主节点信号已挖出"
+
+#. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
+msgid "median of {0}, on 1,000 DASH"
+msgstr "{0} 个主节点的中位数，按 1,000 DASH 计"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
+msgstr "{0} 个 evonode 的中位数，按 4,000 DASH 计，Core 付款与 Platform 奖励合计"
+
+#. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
+msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
+msgstr "{0} 个 evonode 的中位数，按 4,000 DASH 计；仅含 Core 付款，不计 Platform 奖励"
+
+msgid "Median time reaches the start time"
+msgstr "中位时间达到开始时间"
+
+msgid "median, from the Core blocks that paid them"
+msgstr "中位数，来自支付给它们的 Core 区块"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
+msgid "median, from the Platform epochs of the last {0} days"
+msgstr "中位数，来自最近 {0} 天的 Platform 纪元"
+
+msgid "Members of the quorum that would sign now that announce Dash Core 24"
+msgstr "将要签名的 Quorum 成员中，已公布 Dash Core 24 的成员"
 
 msgid "mempool"
 msgstr "内存池"
@@ -170,17 +675,120 @@ msgstr "内存池"
 msgid "Mined by"
 msgstr "挖出者"
 
+#. placeholder {0}: formatInt(w?.count ?? 0)
+#. placeholder {1}: formatInt(w?.threshold ?? 0)
+#. placeholder {2}: formatInt(o.remaining ?? 0)
+msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
+msgstr "矿工正在发出信号：本窗口需要 {1} 个区块，已有 {0} 个，还剩 {2} 个区块。"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: String(p.bit)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatPercent(p.threshold_start / p.window, 1)
+#. placeholder {4}: formatInt(p.threshold_min)
+#. placeholder {5}: formatInt(d.recent.blocks)
+#. placeholder {6}: formatInt(d.recent.count)
+#. placeholder {7}: String(p.bit)
+msgid "Miners can't vote yet. From the first window that counts, each {0}-block window's blocks that set bit {1} (with the top version bits 001) count; {2} of them ({3}) lock Core 24 in, and each window that falls short lowers the bar for the next, down to {4}. In the last {5} blocks, {6} already set bit {7}."
+msgstr "矿工暂时还不能投票。从首个计入的窗口起，每个 {0} 个区块的窗口中，设置了第 {1} 位（高位版本位为 001）的区块都会计入；其中 {2} 个（{3}）即可锁定 Core 24，每个未达标的窗口都会降低下一窗口的门槛，最低降至 {4}。最近 {5} 个区块中，已有 {6} 个设置了第 {7} 位。"
+
+msgid "Miners' signalling"
+msgstr "矿工的信号"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "needed before any window counts"
+msgstr "任何窗口计入之前所需"
+
+#. placeholder {0}: String(minProtocol)
+msgid "needs {0}+"
+msgstr "需要 {0}+"
+
 msgid "Needs Radar's crawler: off in Decentralized only mode"
 msgstr "需要 Radar 爬虫：在“仅去中心化”模式下已关闭"
+
+msgid "Network"
+msgstr "网络"
 
 msgid "Network census"
 msgstr "网络普查"
 
+msgid "Network size"
+msgstr "网络规模"
+
+msgid "Network size over time"
+msgstr "网络规模变化"
+
+msgid "Network size. Use the left and right arrow keys to step through the points."
+msgstr "网络规模。使用左右方向键逐点查看。"
+
 msgid "New rows appear at the top."
 msgstr "新行会出现在顶部。"
 
+msgid "Next window that counts"
+msgstr "下一个计入的窗口"
+
+msgid "No {noun} have told us their version yet."
+msgstr "尚无{noun}告知我们其版本。"
+
+msgid "No answer"
+msgstr "无应答"
+
+msgid "no answer this week"
+msgstr "本周无响应"
+
+msgid "No answer this week"
+msgstr "本周无响应"
+
+msgid "No Core 24 deployment in the data."
+msgstr "数据中没有 Core 24 部署。"
+
+msgid "No data yet."
+msgstr "暂无数据。"
+
+msgid "No hosting data yet."
+msgstr "暂无托管数据。"
+
+msgid "No location data yet."
+msgstr "暂无位置数据。"
+
+msgid "No Platform ban"
+msgstr "无 Platform 封禁"
+
 msgid "No transactions in the mempool right now"
 msgstr "内存池中目前没有交易"
+
+msgid "No window to show yet."
+msgstr "暂无可显示的窗口。"
+
+msgid "nodes"
+msgstr "节点"
+
+msgid "Nodes"
+msgstr "节点"
+
+msgid "none fail"
+msgstr "无未通过项"
+
+msgid "not a release"
+msgstr "非正式版本"
+
+msgid "Not checked"
+msgstr "未检查"
+
+msgid "not crawled"
+msgstr "未抓取"
+
+#. placeholder {0}: n.reason
+msgid "not crawled: {0}"
+msgstr "未抓取：{0}"
+
+msgid "not mined yet"
+msgstr "尚未挖出"
+
+msgid "Not started"
+msgstr "未开始"
 
 msgid "Nothing has arrived since you opened this page. The full mempool list needs an indexer, which Decentralized only mode doesn't use."
 msgstr "自你打开此页面以来还没有新内容到达。完整的内存池列表需要索引器，而“仅去中心化”模式不使用索引器。"
@@ -191,14 +799,59 @@ msgstr "打开此页面后尚未收到任何交易。完整的内存池列表需
 msgid "Nothing seen yet"
 msgstr "暂未看到任何交易"
 
+msgid "now"
+msgstr "现在"
+
+msgid "Now"
+msgstr "现在"
+
+#. placeholder {0}: formatInt(r.mined)
+msgid "of {0} so far"
+msgstr "目前共 {0}"
+
+msgid "Older"
+msgstr "较早"
+
+msgid "on"
+msgstr "占"
+
+#. placeholder {0}: formatPercent(good / runs, 0)
+msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
+msgstr "每两周一次，我们会从每个已启用的主节点下载最新的 50,000 个区块头和主节点列表。在最近的测试中，{0} 获得了 A 或 B。"
+
 msgid "Open the map"
 msgstr "打开地图"
+
+msgid "Other"
+msgstr "其他"
+
+msgid "Other clients"
+msgstr "其他客户端"
+
+msgid "other full nodes"
+msgstr "其他全节点"
+
+msgid "Other full nodes"
+msgstr "其他全节点"
 
 msgid "Other nodes"
 msgstr "其他节点"
 
 msgid "Other reachable nodes"
 msgstr "其他可达节点"
+
+#. placeholder {0}: dayMonthYear(history.t[0]!)
+msgid "Our history starts {0}, so this range shows less than it asks for."
+msgstr "我们的历史记录始于{0}，因此此范围显示的内容少于所请求的。"
+
+msgid "Our reading disagrees with our dashd's."
+msgstr "我们的读数与 dashd 的不一致。"
+
+msgid "Over time"
+msgstr "随时间变化"
+
+msgid "Pass every check"
+msgstr "通过所有检查"
 
 msgid "Pending transactions"
 msgstr "待处理交易"
@@ -227,6 +880,9 @@ msgstr "Platform Explorer 不索引开发网。"
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer 没有响应"
 
+msgid "Platform height"
+msgstr "Platform 高度"
+
 msgid "Platform locks to Core"
 msgstr "Platform 锁定到 Core"
 
@@ -239,17 +895,97 @@ msgstr "Platform 的最新区块需要 Platform Explorer，而“仅去中心化
 msgid "Platform's latest transitions need Platform Explorer"
 msgstr "Platform 的最新转换需要 Platform Explorer"
 
+msgid "PoSe-banned"
+msgstr "PoSe 封禁"
+
+msgid "Protocol"
+msgstr "协议"
+
+msgid "Protocol version"
+msgstr "协议版本"
+
+msgid "providers"
+msgstr "提供商"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorums that would sign the Core 24 signal"
+msgstr "将要对 Core 24 信号签名的 Quorum"
+
 msgid "Radar doesn't crawl devnets"
 msgstr "Radar 不抓取开发网"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar 不抓取开发网，因此没有可绘制的内容。"
 
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar 不抓取开发网。"
+
 msgid "Radar isn't answering, so the map shows no nodes."
 msgstr "Radar 没有响应，因此地图上不显示节点。"
 
+msgid "Radar reads every block header, counts the signals with Core's rules, and checks the states against its dashd's getdeploymentinfo."
+msgstr "Radar 读取每个区块头，按 Core 的规则统计信号，并与其 dashd 的 getdeploymentinfo 核对状态。"
+
 msgid "Radar:"
 msgstr "Radar："
+
+msgid "Radar's activation document doesn't list it."
+msgstr "Radar 的激活文档中没有列出它。"
+
+msgid "Radar's last crawl finished"
+msgstr "Radar 上次抓取完成于"
+
+msgid "Reachability"
+msgstr "可达性"
+
+msgid "Reachable"
+msgstr "可达"
+
+msgid "Reachable masternodes"
+msgstr "可达的主节点"
+
+msgid "Reachable nodes"
+msgstr "可达节点"
+
+msgid "Reachable now"
+msgstr "当前可达"
+
+#. placeholder {0}: doc.dashd || t`unknown version`
+#. placeholder {1}: formatInt(doc.tip.height)
+#. placeholder {2}: when(doc.updated)
+#. placeholder {3}: formatInt(doc.pace_blocks)
+#. placeholder {4}: String(Math.round(doc.block_seconds))
+msgid "Read from our dashd ({0}) at block {1}, {2}. Times to come are estimates at the last {3} blocks' pace, {4} s a block; a slower or faster chain moves them, and the masternode signal can come later than its earliest block."
+msgstr "读取自我们的 dashd（{0}），区块 {1}，{2}。未来的时间为按最近 {3} 个区块的速度（每个区块 {4} 秒）得出的估算值；链变慢或变快都会使其改变，且主节点信号可能晚于其最早区块出现。"
+
+msgid "Ready for {release} quorums"
+msgstr "已为 {release} 的 Quorum 做好准备"
+
+msgid "Registered"
+msgstr "注册"
+
+msgid "Regular · evonodes"
+msgstr "普通 · evonode"
+
+msgid "Regular masternodes"
+msgstr "普通主节点"
+
+msgid "release candidate"
+msgstr "候选版本"
+
+msgid "Release candidates"
+msgstr "候选版本"
+
+msgid "Release ladder"
+msgstr "发布阶梯"
+
+msgid "Releases"
+msgstr "发布版本"
+
+msgid "Request id"
+msgstr "请求 ID"
 
 msgid "Search blocks, txs, masternodes, names"
 msgstr "搜索区块、交易、主节点、名称"
@@ -257,20 +993,134 @@ msgstr "搜索区块、交易、主节点、名称"
 msgid "See the sources"
 msgstr "查看数据源"
 
+msgid "See which"
+msgstr "查看是哪些"
+
 msgid "Seen"
 msgstr "发现时间"
 
 msgid "Seen since you opened this page"
 msgstr "打开此页面后看到"
 
+msgid "Series"
+msgstr "系列"
+
+msgid "Share"
+msgstr "占比"
+
+msgid "Share of {noun} by country"
+msgstr "各国家/地区的{noun}占比"
+
+msgid "Share of {noun} by hosting provider"
+msgstr "各托管提供商的{noun}占比"
+
+msgid "Share of {noun} by version"
+msgstr "各版本的{noun}占比"
+
+msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
+msgstr "各窗口区块的占比，标出阈值。未来窗口的日期为估算。"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "Show all {0}"
+msgstr "显示全部 {0} 项"
+
+msgid "Show fewer"
+msgstr "显示更少"
+
+#. placeholder {0}: String(doc.tip.height)
+msgid "Showing the one from block {0}: {failed}"
+msgstr "显示区块 {0} 的数据：{failed}"
+
+msgid "Signalled"
+msgstr "已发出信号"
+
+msgid "Signalled / threshold"
+msgstr "已发出信号 / 阈值"
+
+msgid "Signalling"
+msgstr "发出信号"
+
+msgid "Signalling and threshold, window by window"
+msgstr "逐窗口的信号与阈值"
+
+msgid "Signalling blocks so far"
+msgstr "目前发出信号的区块"
+
+#. placeholder {0}: String(slots.length)
+msgid "Signalling share and threshold for {0} windows"
+msgstr "{0} 个窗口的信号占比和阈值"
+
+#. placeholder {0}: formatInt(d.since)
+msgid "since block {0}"
+msgstr "自区块 {0} 起"
+
 msgid "Size"
 msgstr "大小"
+
+msgid "Sources, Dash Core v24.0.0:"
+msgstr "来源，Dash Core v24.0.0："
+
+#. placeholder {0}: when(p.start_time)
+msgid "start time {0}"
+msgstr "开始时间 {0}"
+
+msgid "Starts"
+msgstr "开始"
+
+msgid "Status"
+msgstr "状态"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "在索引追上之前,不显示流通量和区块链大小。"
 
+msgid "Tenderdash P2P open"
+msgstr "Tenderdash P2P 已开放"
+
+msgid "Tenderdash versions"
+msgstr "Tenderdash 版本"
+
+msgid "The activation tracker needs Radar's crawl"
+msgstr "激活跟踪器需要 Radar 的抓取"
+
+msgid "The activation tracker reads Radar's view of mainnet and testnet."
+msgstr "激活跟踪器读取 Radar 对主网和测试网的视图。"
+
+msgid "The census comes from Radar's crawl of mainnet and testnet."
+msgstr "普查数据来自 Radar 对主网和测试网的抓取。"
+
+msgid "The crawl is stale."
+msgstr "抓取数据已过期。"
+
 msgid "The Dash network, now"
 msgstr "Dash 网络现状"
+
+msgid "The latest reading failed."
+msgstr "最近一次读取失败。"
+
+msgid "The masternode signal"
+msgstr "主节点信号"
+
+#. placeholder {0}: formatInt(d.ehf.height)
+#. placeholder {1}: d.ehf.block?.time != null ? `, ${when(blockMs(d.ehf.block))}` : ''
+msgid "The masternodes' signal for Core 24 is in block {0}{1}. From the first window after it, miners' blocks decide."
+msgstr "主节点对 Core 24 的信号位于区块 {0}{1}。从其后的第一个窗口起，由矿工的区块决定。"
+
+#. placeholder {0}: formatInt(d.ehf.height ?? 0)
+#. placeholder {1}: formatInt(o.earliest_start?.height ?? 0)
+msgid "The masternodes' signal is in block {0}; miners start signalling at block {1}."
+msgstr "主节点的信号位于区块 {0}；矿工从区块 {1} 开始发出信号。"
+
+msgid "The network right now"
+msgstr "网络现状"
+
+msgid "The network size history didn't load."
+msgstr "网络规模历史未能加载。"
+
+msgid "The node census needs Radar's crawl"
+msgstr "节点普查需要 Radar 的抓取"
+
+msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
+msgstr "缺失的是节点普查部分，它需要 Radar 的抓取。上方的 Core 链顶来自 DAPI。"
 
 msgid "The node map"
 msgstr "节点地图"
@@ -281,8 +1131,78 @@ msgstr "节点地图需要 Radar 爬虫，而“仅去中心化”模式不使�
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK 没有响应"
 
+msgid "the same as a day ago"
+msgstr "与一天前相同"
+
+msgid "The share of all masternodes on Core 24 is on the node census."
+msgstr "所有主节点中使用 Core 24 的占比见节点普查。"
+
+msgid "The start time has passed; Core 24 is waiting for the masternodes' signal to be mined."
+msgstr "开始时间已过；Core 24 正在等待主节点的信号被挖出。"
+
+#. placeholder {0}: formatInt(p.threshold_start)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: formatInt(p.threshold_start)
+#. placeholder {3}: formatInt(p.window)
+#. placeholder {4}: String(p.falloff_coeff)
+#. placeholder {5}: formatInt(p.threshold_min)
+#. placeholder {6}: isDecided(d) ? '' : ` ${t`Dates of windows to come are estimates.`}`
+msgid "The threshold starts at {0} of {1} blocks and drops after each window that misses it: {2} − attempt² × {3} ÷ 100 ÷ {4}, rounded down at each step, never below {5}.{6}"
+msgstr "阈值起始为 {1} 个区块中的 {0} 个，每个未达标的窗口之后都会下降：{2} − 尝试次数² × {3} ÷ 100 ÷ {4}，每一步向下取整，且不低于 {5}。{6}"
+
+msgid "The timeout passed without the signal: masternodes no longer sign it, and no block may carry it."
+msgstr "超时已过而信号未出现：主节点不再对其签名，任何区块都不得携带它。"
+
+msgid "The version history didn't load."
+msgstr "版本历史未能加载。"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: formatInt(p.window)
+msgid "Then the miners: the chain is cut into {0}-block windows, starting at heights that are multiples of {1}. The first window whose previous block is at or past both the start time and the signal's block is the first that counts. A window in which at least the threshold of blocks signal locks Core 24 in; the next window is locked in, and Core 24 is active from the one after."
+msgstr "然后是矿工：链被切分为每 {0} 个区块一个窗口，起始于 {1} 的倍数的高度。第一个其前一区块同时达到或超过开始时间和信号所在区块的窗口，即第一个计入的窗口。窗口内发出信号的区块数至少达到阈值时，Core 24 即被锁定；下一个窗口为已锁定状态，再下一个窗口起 Core 24 生效。"
+
+msgid "There's no timeout on this network."
+msgstr "此网络没有超时。"
+
+msgid "This reading is stale."
+msgstr "此读数已过期。"
+
+msgid "This window"
+msgstr "本窗口"
+
+#. placeholder {0}: String((w.attempt ?? 0) + 1)
+msgid "This window (attempt {0}), block by block"
+msgstr "本窗口（第 {0} 次尝试），逐区块"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0})"
+msgstr "本窗口结束（第 {0} 次尝试）"
+
+msgid "Threshold"
+msgstr "阈值"
+
+#. placeholder {0}: formatInt(w.threshold ?? 0)
+#. placeholder {1}: formatInt(progress.projected)
+msgid "Threshold {0}; at this pace the window ends with {1}."
+msgstr "阈值 {0}；按此速度，窗口结束时为 {1}。"
+
+msgid "threshold reached"
+msgstr "已达阈值"
+
+msgid "Thresholds by window"
+msgstr "各窗口阈值"
+
+msgid "Time range"
+msgstr "时间范围"
+
+msgid "Tor"
+msgstr "Tor"
+
 msgid "Transaction"
 msgstr "交易"
+
+msgid "Transaction relay"
+msgstr "交易转发"
 
 msgid "Transition"
 msgstr "状态转换"
@@ -302,8 +1222,35 @@ msgstr "交易"
 msgid "Type"
 msgstr "类型"
 
+msgid "Unknown"
+msgstr "未知"
+
+msgid "unknown version"
+msgstr "未知版本"
+
+msgid "Updated"
+msgstr "更新时间"
+
+msgid "User agent"
+msgstr "User agent"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Valid members"
+msgstr "有效成员"
+
 msgid "Value"
 msgstr "数值"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Version share over time"
+msgstr "版本占比变化"
+
+msgid "Versions view"
+msgstr "版本视图"
 
 msgid "View all"
 msgstr "查看全部"
@@ -311,5 +1258,41 @@ msgstr "查看全部"
 msgid "View all transitions"
 msgstr "查看所有状态转换"
 
+#. placeholder {0}: g.error
+msgid "We couldn't read the signing quorum from our dashd: {0}"
+msgstr "无法从我们的 dashd 读取签名 Quorum：{0}"
+
+msgid "What happens next"
+msgstr "接下来会发生什么"
+
 msgid "What is waiting to be mined."
 msgstr "等待被挖出的内容。"
+
+#. placeholder {0}: String(r.window_days)
+msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
+msgstr "过去 {0} 天内主节点实际获得的付款相对其抵押品的比例，统计所有已注册至少这么久的已启用主节点。"
+
+msgid "What they earn"
+msgstr "收益"
+
+msgid "What they run"
+msgstr "运行内容"
+
+msgid "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
+msgstr "Dash Core 24 激活的进展：主节点信号、矿工逐窗口的信号、锁定阈值，以及下一个窗口何时开启。"
+
+msgid "Where it stands"
+msgstr "当前进展"
+
+msgid "Which nodes"
+msgstr "哪些节点"
+
+#. placeholder {0}: formatInt(g.quorums.length)
+msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
+msgstr "具体由哪个 Quorum 签名，取决于请求以及届时哪些 Quorum 处于活动状态（约每天形成一个新的），因此这里列出当前活动的 {0} 个，将要签名的排在最前。"
+
+msgid "Window"
+msgstr "窗口"
+
+msgid "would sign now"
+msgstr "将要签名"
