@@ -101,4 +101,14 @@ export const radarQueries = {
       queryFn: ({ signal }) => radar.changes(net, signal),
       ...dataClass('crawl'),
     }),
+  /** A live handshake with one masternode (a reachability probe, not a write). The caller fetches it on a click. */
+  check: (net: NetworkId, protx: string) =>
+    queryOptions({
+      queryKey: radarKeys(net, 'check', { protx: protx.toLowerCase() }),
+      queryFn: ({ signal }) => radar.check(net, protx, signal),
+      ...dataClass('live'),
+      staleTime: 0,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }),
 }

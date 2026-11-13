@@ -1,46 +1,51 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
-import { useMemo, type ReactNode } from 'react'
-import type { SourceStamp } from '@/data/envelope'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import type { LinkProps } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
+import { coreQueries } from '@/data/core/queries'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
-import type { RadarMasternodeDetail } from '@/data/radar/schemas'
-import { Entity, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
-import { formatInt, formatPercent } from '@/lib/format'
+import { CopyLinkButton, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import {
-  Amount,
-  Card,
   Empty,
+  ErrorState,
   Hash,
   Icon,
-  KeyValue,
   LinkOut,
   Nodeprint,
-  QueryView,
   Skeleton,
-  Stat,
-  Stats,
+  SourceLine,
+  Tabs,
   Time,
   Unavailable,
 } from '@/ui'
-import { PaymentsCard } from './PaymentsCard'
-import { PlatformCard } from './PlatformCard'
-import { ReadinessCard } from './ReadinessCard'
-import { UptimeCard } from './UptimeCard'
+import { HistoryTab } from './HistoryTab'
+import type { MnContext } from './mn-context'
+import { useDapiFacts, useRadarRecord } from './mn-data'
 import {
-  heightOrNull,
   isEvonode,
   otherNetwork,
-  parseOutpoint,
   placeOf,
   poseState,
   PROTX,
   splitService,
-  uptimeSummary,
+  type MnTab,
 } from './mn-info'
+import { NetworkTab } from './NetworkTab'
+import { OverviewTab } from './OverviewTab'
+import { PaymentsTab } from './PaymentsTab'
+import { PlatformTab } from './PlatformTab'
 
-export function MasternodePage({ protx }: { protx: string }) {
+export interface MasternodePageProps {
+  protx: string
+  tab?: MnTab | undefined
+  epoch?: number | undefined
+  before?: number | undefined
+}
+
+export function MasternodePage({ protx, tab, epoch, before }: MasternodePageProps) {
   const { t } = useLingui()
   const net = useNetwork()
   const id = protx.toLowerCase()
@@ -59,12 +64,8 @@ export function MasternodePage({ protx }: { protx: string }) {
             body={t`Masternode records come from Radar’s crawl of mainnet and testnet.`}
           />
         </PlainTitle>
-      ) : off ? (
-        <PlainTitle>
-          <Unavailable title={t`Masternode records need Radar's crawler`} />
-        </PlainTitle>
       ) : (
-        <Record net={net} protx={id} />
+        <Record net={net} protx={id} off={off} tab={tab} epoch={epoch} before={before} />
       )}
     </article>
   )
@@ -105,53 +106,113 @@ function NotAProtx({ value }: { value: string }) {
   )
 }
 
-function Record({ net, protx }: { net: NetworkId; protx: string }) {
+interface RecordProps {
+  net: NetworkId
+  protx: string
+  off: boolean
+  tab: MnTab | undefined
+  epoch: number | undefined
+  before: number | undefined
+}
+
+function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
   const { t } = useLingui()
-  const query = useQuery(radarQueries.masternode(net, protx))
+  const radar = useRadarRecord(net, protx)
+  const dapi = useDapiFacts(net, protx)
   const plain = (node: ReactNode) => <PlainTitle>{node}</PlainTitle>
+
+  const d = radar.data?.data ?? null
+  const f = dapi.data?.data ?? null
+  const waitingOnRadar = !off && radar.isPending
+  const waitingOnDapi = off && dapi.isPending
+  if (waitingOnRadar || waitingOnDapi) return plain(<Skeleton shape="block" height={220} />)
+  if (!d && !f) {
+    if (!off && radar.isError) {
+      return plain(
+        <ErrorState
+          error={radar.error}
+          source="radar"
+          onRetry={() => {
+            void radar.refetch()
+          }}
+        />,
+      )
+    }
+    if (off && dapi.isError) {
+      return plain(<Unavailable title={t`Masternode records need an indexer`} />)
+    }
+    return plain(<Unknown net={net} protx={protx} off={off} />)
+  }
+
+  const evo = f ? f.type === 'Evo' : d ? isEvonode(d) : false
+  const ctx: MnContext = {
+    net,
+    protx,
+    d,
+    radar: radar.data ? stampOf(radar.data) : null,
+    f,
+    dapi: dapi.data ? stampOf(dapi.data) : null,
+    evo,
+    off,
+  }
+  const current: MnTab = tab === 'platform' && !evo ? 'overview' : (tab ?? 'overview')
   return (
     <>
-      {query.isError && query.data === undefined ? plain(null) : null}
-      <QueryView
-        query={query}
-        skeleton={plain(<Skeleton shape="block" height={220} />)}
-        isEmpty={(d) => d === null}
-        empty={plain(<Unknown net={net} protx={protx} />)}
-      >
-        {(d, stamp) =>
-          d === null ? null : (
-            <>
-              <Header d={d} net={net} stamp={stamp} />
-              <Kpis d={d} stamp={stamp} />
-              <div className="rx-split">
-                <div className="grid gap-5">
-                  <UptimeCard daily={d.uptime_daily} stamp={stamp} />
-                  {isEvonode(d) ? <PlatformCard d={d} stamp={stamp} /> : null}
-                  <PaymentsCard d={d} stamp={stamp} />
-                </div>
-                <aside className="grid gap-5" aria-label={t`Facts`}>
-                  <LocationCard d={d} stamp={stamp} />
-                  <RegistrationCard d={d} stamp={stamp} />
-                  <ReadinessCard d={d} stamp={stamp} />
-                </aside>
-              </div>
-            </>
-          )
-        }
-      </QueryView>
+      <Header ctx={ctx} />
+      <PageTabs protx={protx} evo={evo} value={current} />
+      {current === 'overview' ? <OverviewTab ctx={ctx} /> : null}
+      {current === 'network' ? <NetworkTab ctx={ctx} /> : null}
+      {current === 'platform' ? <PlatformTab ctx={ctx} epoch={epoch} /> : null}
+      {current === 'history' ? <HistoryTab ctx={ctx} /> : null}
+      {current === 'payments' ? <PaymentsTab ctx={ctx} before={before} /> : null}
     </>
   )
 }
 
-/** A ProTx Radar doesn't know here may be registered on the other network. */
-function Unknown({ net, protx }: { net: NetworkId; protx: string }) {
+function PageTabs({ protx, evo, value }: { protx: string; evo: boolean; value: MnTab }) {
   const { t } = useLingui()
+  const tabs: { id: MnTab; label: string }[] = [
+    { id: 'overview', label: t`Overview` },
+    { id: 'network', label: t`Network` },
+    ...(evo ? [{ id: 'platform' as const, label: t`Platform` }] : []),
+    { id: 'history', label: t`History` },
+    { id: 'payments', label: t`Payments` },
+  ]
+  return (
+    <Tabs
+      tabs={tabs}
+      value={value}
+      layer="network"
+      to={(id) =>
+        ({
+          to: '/mn/$protx',
+          params: { protx },
+          search: (s: Record<string, unknown>) => ({
+            ...s,
+            tab: id === 'overview' ? undefined : id,
+            epoch: undefined,
+            before: undefined,
+          }),
+        }) as LinkProps
+      }
+    />
+  )
+}
+
+/** A ProTx Radar doesn't know here may be registered on the other network. */
+function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: boolean }) {
+  const { t } = useLingui()
+  const client = useQueryClient()
   const other = otherNetwork(net)
   const there = useQuery({
     ...radarQueries.masternode(other ?? 'mainnet', protx),
-    enabled: !!other,
+    enabled: !!other && !off,
   })
-  const found = !!other && there.data?.data !== null && there.data?.data !== undefined
+  const cached =
+    other && off ? client.getQueryData(coreQueries.masternodeList(other).queryKey) : undefined
+  const found = off
+    ? !!cached && (cached.data.has(protx) || cached.data.has(protx.toUpperCase()))
+    : !!other && there.data?.data !== null && there.data?.data !== undefined
   const otherName = other === 'mainnet' ? t`mainnet` : t`testnet`
   const here = net === 'mainnet' ? t`mainnet` : t`testnet`
   return (
@@ -167,8 +228,10 @@ function Unknown({ net, protx }: { net: NetworkId; protx: string }) {
           <Hash value={protx} display="wrap" />
           <span className="block">
             {found
-              ? t`Radar’s crawl of ${here} doesn’t list it.`
-              : t`Radar’s crawl doesn’t list it. It may be new, removed, or mistyped.`}
+              ? t`The masternode list of ${here} doesn’t include it.`
+              : off
+                ? t`DAPI’s list doesn’t include it. It may be new, removed, or mistyped.`
+                : t`Radar’s crawl doesn’t list it. It may be new, removed, or mistyped.`}
           </span>
         </>
       }
@@ -187,27 +250,25 @@ function Unknown({ net, protx }: { net: NetworkId; protx: string }) {
   )
 }
 
-function Header({
-  d,
-  net,
-  stamp,
-}: {
-  d: RadarMasternodeDetail
-  net: NetworkId
-  stamp: SourceStamp
-}) {
+function Header({ ctx }: { ctx: MnContext }) {
   const { t } = useLingui()
-  const evo = isEvonode(d)
-  const service = d.service ? splitService(d.service) : null
-  const pose = poseState(d)
-  const place = placeOf(d)
+  const { d, f, evo, net, protx } = ctx
+  const serviceText = f?.service ?? d?.service ?? null
+  const service = serviceText ? splitService(serviceText) : null
+  const banned = f ? !f.valid : d ? poseState(d) === 'banned' : false
+  const penalised = d ? poseState(d) === 'penalised' : false
+  const place = d ? placeOf(d) : ''
   return (
     <header className="rx-rec" data-masternode-header>
       <span className="rx-rec__glyph">
-        <Nodeprint id={d.protx} evonode={evo} size={60} />
+        <Nodeprint id={protx} evonode={evo} size={60} />
       </span>
       <p className="rx-rec__kicker">
-        <span className="rx-type" data-layer={evo ? 'platform' : 'network'} data-type={d.type}>
+        <span
+          className="rx-type"
+          data-layer={evo ? 'platform' : 'network'}
+          data-type={evo ? 'Evo' : 'Regular'}
+        >
           {evo ? t`Evonode` : t`Regular masternode`}
         </span>
         {place ? <span>{place}</span> : null}
@@ -219,37 +280,43 @@ function Header({
             {service.port ? <span className="rx-tld">:{service.port}</span> : null}
           </>
         ) : (
-          t`Masternode ${d.protx.slice(0, 8)}`
+          t`Masternode ${protx.slice(0, 8)}`
         )}
       </h1>
       <div className="rx-rec__actions">
         <LinkOut to={{ app: 'gov', action: 'masternodes', net }}>{t`Vote in Governance`}</LinkOut>
+        <CopyLinkButton />
       </div>
       <div className="rx-rec__meta">
         <span className="rx-dim">{t`ProTx`}</span>
-        <Hash value={d.protx} display="full" />
+        <Hash value={protx} display="full" />
       </div>
       <div className="rx-rec__meta" data-status>
+        {d ? (
+          <span
+            className={`rx-st ${d.reachable ? 'rx-st--good' : d.reachable === false ? 'rx-st--bad' : ''}`}
+          >
+            {d.reachable
+              ? t`Answering`
+              : d.reachable === false
+                ? t`Not answering`
+                : t`Not checked yet`}
+          </span>
+        ) : null}
         <span
-          className={`rx-st ${d.reachable ? 'rx-st--good' : d.reachable === false ? 'rx-st--bad' : ''}`}
+          className={`rx-st ${banned ? 'rx-st--bad' : penalised ? 'rx-st--warn' : 'rx-st--good'}`}
         >
-          {d.reachable
-            ? t`Answering`
-            : d.reachable === false
-              ? t`Not answering`
-              : t`Not checked yet`}
-        </span>
-        <span
-          className={`rx-st ${pose === 'clear' ? 'rx-st--good' : pose === 'banned' ? 'rx-st--bad' : 'rx-st--warn'}`}
-        >
-          {pose === 'banned'
+          {banned
             ? t`PoSe banned`
-            : pose === 'penalised'
-              ? t`Enabled, PoSe penalty ${d.pose_penalty}`
-              : t`Enabled, no PoSe penalty`}
+            : d
+              ? penalised
+                ? t`Enabled, PoSe penalty ${d.pose_penalty}`
+                : t`Enabled, no PoSe penalty`
+              : t`Valid on DAPI’s list`}
         </span>
-        {d.version ? <span className="rx-ver">{d.version}</span> : null}
-        <CrawlLine stamp={stamp} />
+        {d?.version ? <span className="rx-ver">{d.version}</span> : null}
+        {ctx.radar && d ? <CrawlLine stamp={ctx.radar} /> : null}
+        {ctx.dapi && f ? <SourceLine stamp={ctx.dapi} compact /> : null}
       </div>
     </header>
   )
@@ -263,184 +330,5 @@ function CrawlLine({ stamp }: { stamp: SourceStamp }) {
       {t`Crawled by Radar`}
       <Time ms={stamp.fetchedAt} />
     </span>
-  )
-}
-
-function Kpis({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
-  const { t } = useLingui()
-  const up = useMemo(() => uptimeSummary(d.uptime_daily, 30), [d.uptime_daily])
-  const lastPaid = d.payments.find((p) => p.height === d.last_paid_height)
-  const paid90 = d.returns?.paid_90d
-  const window = d.returns?.window_days ?? 90
-  return (
-    <Stats data-masternode-kpis>
-      <Stat
-        label={t`Uptime, 30 days`}
-        value={up ? formatPercent(up.ratio, up.ratio === 1 ? 0 : 1) : '—'}
-        note={
-          up
-            ? t`answered ${formatInt(up.ok)} of ${formatInt(up.attempts)} checks in ${up.days} days`
-            : t`Radar has no checks for this node yet`
-        }
-        layer="network"
-        source={stamp}
-      />
-      <Stat
-        label={t`Last paid`}
-        value={lastPaid ? <Time ms={lastPaid.time} /> : '—'}
-        note={
-          heightOrNull(d.last_paid_height) === null ? (
-            t`not paid yet`
-          ) : (
-            <>
-              {t`block`}{' '}
-              <Entity
-                kind="block"
-                id={String(d.last_paid_height)}
-                label={formatInt(d.last_paid_height)}
-              />
-            </>
-          )
-        }
-        layer="core"
-        source={stamp}
-      />
-      <Stat
-        label={t`Earned on Core, ${window} days`}
-        value={
-          paid90 === undefined || paid90 === null ? (
-            '—'
-          ) : (
-            <Amount value={paid90} kind="duffs" fiat />
-          )
-        }
-        note={
-          d.payments_summary
-            ? t`${formatInt(d.payments_summary.count)} payments indexed in total`
-            : undefined
-        }
-        layer="core"
-        source={stamp}
-      />
-      <Stat
-        label={t`PoSe penalty`}
-        value={formatInt(d.pose_penalty)}
-        note={
-          heightOrNull(d.pose_ban_height) === null
-            ? t`never banned`
-            : t`banned at block ${formatInt(d.pose_ban_height)}`
-        }
-        layer="network"
-        source={stamp}
-      />
-    </Stats>
-  )
-}
-
-function LocationCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
-  const { t } = useLingui()
-  const items = [
-    d.city || d.country ? { label: t`Place`, value: placeOf(d) } : null,
-    d.as_org ? { label: t`Hosting`, value: d.asn ? `${d.as_org} · AS${d.asn}` : d.as_org } : null,
-    d.latency_ms === null
-      ? null
-      : { label: t`Latency`, value: t`${formatInt(d.latency_ms)} ms from Radar’s crawler` },
-    d.network ? { label: t`Address type`, value: d.network } : null,
-    d.last_seen === null
-      ? null
-      : { label: t`Last reached`, value: <Time ms={d.last_seen} mode="both" /> },
-    d.first_seen === null
-      ? null
-      : { label: t`First seen`, value: <Time ms={d.first_seen} mode="absolute" /> },
-    d.last_error ? { label: t`Last error`, value: d.last_error } : null,
-  ].filter((x) => x !== null)
-  return (
-    <Card title={t`Where it is`} layer="network" source={stamp} id="location">
-      {items.length > 0 ? <KeyValue items={items} /> : <p>{t`Radar hasn’t located this node.`}</p>}
-    </Card>
-  )
-}
-
-function RegistrationCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
-  const { t } = useLingui()
-  const collateral = parseOutpoint(d.collateral)
-  const votingSame = d.voting_address !== null && d.voting_address === d.owner_address
-  const operatorPayout = d.operator_payout_address
-  const items = [
-    { label: t`Payout`, value: <Entity kind="address" id={d.payout_address} /> },
-    { label: t`Owner`, value: <Entity kind="address" id={d.owner_address} /> },
-    {
-      label: t`Voting`,
-      value: d.voting_address ? <Entity kind="address" id={d.voting_address} /> : '—',
-      hint: votingSame ? t`Same as the owner address` : undefined,
-    },
-    {
-      label: t`Operator key`,
-      value: <Hash value={d.pubkey_operator} display="short" head={10} tail={6} />,
-      hint:
-        d.operator_reward > 0
-          ? t`Operator reward ${formatPercent(d.operator_reward / 10000, 2)}`
-          : undefined,
-    },
-    ...(operatorPayout
-      ? [{ label: t`Operator payout`, value: <Entity kind="address" id={operatorPayout} /> }]
-      : []),
-    {
-      label: t`Collateral`,
-      value: collateral ? (
-        <Entity
-          kind="tx"
-          id={collateral.txid}
-          label={`${collateral.txid.slice(0, 8)}…:${collateral.index}`}
-        />
-      ) : (
-        <Hash value={d.collateral} display="short" />
-      ),
-      hint: isEvonode(d) ? t`Evonode collateral` : t`Masternode collateral`,
-    },
-    {
-      label: t`Registered`,
-      value: (
-        <Entity
-          kind="block"
-          id={String(d.registered_height)}
-          label={formatInt(d.registered_height)}
-        />
-      ),
-      hint: t`Block ${formatInt(d.registered_height)}`,
-    },
-    {
-      label: t`PoSe`,
-      value:
-        poseState(d) === 'banned'
-          ? t`Banned`
-          : d.pose_penalty > 0
-            ? t`Penalty ${formatInt(d.pose_penalty)}`
-            : t`No penalty`,
-      hint:
-        [
-          heightOrNull(d.pose_ban_height) === null
-            ? null
-            : t`Banned at block ${formatInt(d.pose_ban_height)}`,
-          heightOrNull(d.pose_revived_height) === null
-            ? null
-            : t`Revived at block ${formatInt(d.pose_revived_height ?? 0)}`,
-        ]
-          .filter(Boolean)
-          .join(' · ') || undefined,
-    },
-    ...(d.platform_node_id
-      ? [
-          {
-            label: t`Platform node`,
-            value: <Hash value={d.platform_node_id} display="short" head={8} tail={6} />,
-          },
-        ]
-      : []),
-  ]
-  return (
-    <Card title={t`Registration`} layer="network" source={stamp} id="registration">
-      <KeyValue items={items} />
-    </Card>
   )
 }

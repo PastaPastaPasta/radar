@@ -1,4 +1,7 @@
+import type { DapiMnEntry } from '@/data/core/types'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
+import { base58Decode, base58Encode, isBase58 } from '@/lib/base58'
+import { bytesToHex, hexToBytes } from '@/lib/hex'
 import type { NetworkId } from '@/lib/network'
 
 export const PROTX = /^[0-9a-f]{64}$/i
@@ -80,4 +83,118 @@ export type CheckState = 'pass' | 'fail' | 'unknown'
 export function checkState(value: string): CheckState {
   const v = value.toLowerCase()
   return v === 'pass' ? 'pass' : v === 'fail' ? 'fail' : 'unknown'
+}
+
+/** A ProTx hash is a Platform identity id once written in base58. */
+export const protxToBase58 = (hex: string): string => base58Encode(hexToBytes(hex.toLowerCase()))
+
+/** The hex of a 32-byte base58 id, or null when `value` isn't one. */
+export function protxFromBase58(value: string): string | null {
+  if (value.length < 40 || value.length > 46 || !isBase58(value)) return null
+  const bytes = base58Decode(value)
+  return bytes.length === 32 ? bytesToHex(bytes) : null
+}
+
+export const MN_TABS = ['overview', 'network', 'platform', 'history', 'payments'] as const
+export type MnTab = (typeof MN_TABS)[number]
+
+/** What DAPI's masternode list says about a ProTx, in the page's own terms. */
+export interface DapiFacts {
+  type: 'Regular' | 'Evo'
+  valid: boolean
+  service: string
+  votingAddress: string
+  pubKeyOperator: string
+  platformHttpPort: number | null
+  platformP2pPort: number | null
+  platformNodeId: string | null
+}
+
+export function dapiFacts(entry: DapiMnEntry): DapiFacts {
+  return {
+    type: entry.type === 1 ? 'Evo' : 'Regular',
+    valid: entry.isValid,
+    service: entry.service,
+    votingAddress: entry.votingAddress,
+    pubKeyOperator: entry.pubKeyOperator,
+    platformHttpPort: entry.platformHttpPort ?? null,
+    platformP2pPort: entry.platformP2pPort ?? null,
+    platformNodeId: entry.platformNodeId ?? null,
+  }
+}
+
+export interface Differing {
+  service: boolean
+  type: boolean
+  voting: boolean
+  operator: boolean
+  nodeId: boolean
+  valid: boolean
+}
+
+/** Where Radar's last crawl disagrees with DAPI's list (DAPI wins; the page says so). */
+export function crawlDiffers(d: RadarMasternodeDetail, f: DapiFacts): Differing {
+  return {
+    service: d.service !== null && d.service !== f.service,
+    type: (d.type === 'Evo' ? 'Evo' : 'Regular') !== f.type,
+    voting: d.voting_address !== null && d.voting_address !== f.votingAddress,
+    operator: d.pubkey_operator.toLowerCase() !== f.pubKeyOperator.toLowerCase(),
+    nodeId:
+      f.platformNodeId !== null &&
+      d.platform_node_id !== null &&
+      d.platform_node_id.toLowerCase() !== f.platformNodeId.toLowerCase(),
+    valid: (d.status === 'enabled') !== f.valid,
+  }
+}
+
+export const anyDiffers = (x: Differing): boolean => Object.values(x).some(Boolean)
+
+export const DKG_CHECK_ORDER = [
+  'protocol',
+  'relay',
+  'filters',
+  'reachable',
+  'platform_ban',
+] as const
+export type DkgCheckId = (typeof DKG_CHECK_ORDER)[number]
+
+export interface DkgRules {
+  release: string
+  minProtocol: number
+  filtersBit: number
+  reachFailures: number
+  maxFailedOutbound: number
+  coreCommit: string
+  protocolCheck: boolean
+}
+
+const num = (v: unknown, fallback: number): number => (typeof v === 'number' ? v : fallback)
+
+/** The thresholds Radar applied, with the numbers of the Dash Core 24 rules where it sent none. */
+export function dkgRules(raw: Record<string, unknown> | undefined): DkgRules {
+  const r = raw ?? {}
+  return {
+    release: typeof r.release === 'string' ? r.release : 'Dash Core 24',
+    minProtocol: num(r.min_protocol, 70242),
+    filtersBit: num(r.compact_filters_bit, 6),
+    reachFailures: num(r.reach_failures, 3),
+    maxFailedOutbound: num(r.core_max_failed_outbound, 5),
+    coreCommit: typeof r.core_commit === 'string' ? r.core_commit : 'v24.0.0',
+    protocolCheck: r.protocol_check !== false,
+  }
+}
+
+/** Where the rule lives in Dash Core, at the commit or tag Radar read it from. */
+export const dkgRuleUrl = (rules: DkgRules): string =>
+  `https://github.com/dashpay/dash/blob/${encodeURIComponent(rules.coreCommit)}/src/active/dkgsession.cpp`
+
+export const isDkgCheck = (id: string): id is DkgCheckId =>
+  (DKG_CHECK_ORDER as readonly string[]).includes(id)
+
+/** The newest epochs first; `epoch` picks one, otherwise the newest. */
+export function pickEpoch<T extends { epoch: number }>(
+  epochs: readonly T[],
+  epoch: number | undefined,
+): T | undefined {
+  return epoch === undefined ? epochs[0] : epochs.find((e) => e.epoch === epoch)
 }

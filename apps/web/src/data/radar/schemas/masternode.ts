@@ -95,6 +95,26 @@ const PlatformRewardsSchema = z.object({
     })
     .nullish(),
   vote: z.object({ version: z.number(), ts: seconds }).nullish(),
+  explorer: z
+    .object({
+      total_reward: zBigint.nullish(),
+      before_ours: zBigint.nullish(),
+      ours_to_then: zBigint.nullish(),
+      epoch: z.number().nullish(),
+      fetched: seconds.nullish(),
+    })
+    .nullish(),
+  watched: z
+    .array(
+      z.object({
+        epoch: z.number(),
+        coverage: z.number(),
+        expected: z.number().nullish(),
+        actual: z.number(),
+        missed: z.number().nullish(),
+      }),
+    )
+    .nullish(),
 })
 
 export const RadarMasternodeDetailSchema = RadarMasternodeSchema.omit({

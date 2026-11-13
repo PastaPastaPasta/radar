@@ -10,17 +10,13 @@ interface Probe {
   error?: string | null
 }
 
-function probeText(
-  p: Probe | null | undefined,
-  t: (s: TemplateStringsArray, ...v: unknown[]) => string,
-) {
-  if (!p) return '—'
-  if (p.error) return t`Failed: ${p.error}`
-  return p.ms === null || p.ms === undefined ? '—' : t`Answered in ${formatInt(p.ms)} ms`
-}
-
 export function PlatformCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
   const { t } = useLingui()
+  const probeText = (p: Probe | null | undefined): string => {
+    if (!p) return '—'
+    if (p.error) return t`Failed: ${p.error}`
+    return p.ms === null || p.ms === undefined ? '—' : t`Answered in ${formatInt(p.ms)} ms`
+  }
   const latest = d.platform?.latest
   const daily = d.platform?.daily ?? []
   const sw = latest?.software
@@ -54,8 +50,8 @@ export function PlatformCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: So
           <KeyValue
             columns={2}
             items={[
-              { label: t`HTTPS (DAPI)`, value: probeText(latest.https, t), hint: d.platform_https },
-              { label: t`P2P (Tenderdash)`, value: probeText(latest.p2p, t), hint: d.platform_p2p },
+              { label: t`HTTPS (DAPI)`, value: probeText(latest.https), hint: d.platform_https },
+              { label: t`P2P (Tenderdash)`, value: probeText(latest.p2p), hint: d.platform_p2p },
               {
                 label: t`TLS certificate`,
                 value: latest.cert?.expires ? (
