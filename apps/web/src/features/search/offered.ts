@@ -30,16 +30,12 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/platform/txs',
   '/polls',
   '/protocol',
-  '/query',
   '/quorums',
   '/saved',
-  '/sdk-reference',
   '/shielded',
   '/token/$id',
   '/token/$id/holders',
   '/tokens',
-  '/tools/$decoder',
-  '/tools/transition',
   '/votes',
 ])
 
