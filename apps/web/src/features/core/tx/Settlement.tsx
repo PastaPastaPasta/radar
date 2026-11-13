@@ -45,7 +45,7 @@ export function Settlement({
   tx: DecodedTx
   coinbase: boolean
   firstSeen?: FirstSeen
-  /** Hyphen's persistent record of an InstantSend lock; undefined while it is unasked or unanswered. */
+  /** Hyphen's live lock tag read next to a DAPI answer: `true` means its node relayed a lock; undefined while unasked or unanswered. */
   hyphenLock?: boolean
 }) {
   const { t } = useLingui()
@@ -109,7 +109,9 @@ export function Settlement({
                       ? t`recorded by Hyphen; no second source has confirmed it`
                       : t`reported by one node; no second source has confirmed it`
                   : instant === 'unknown'
-                    ? t`not known: nodes drop InstantSend locks once a block is ChainLocked`
+                    ? lock.unknownBy === 'source'
+                      ? t`not known from this source: Hyphen only reports locks its node relayed while it was watching`
+                      : t`not known: nodes drop InstantSend locks once a block is ChainLocked`
                     : mined
                       ? t`No InstantSend lock was seen`
                       : t`waiting for the masternodes to lock it`

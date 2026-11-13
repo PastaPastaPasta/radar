@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "Tutarlar"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "Tutarlar ilk {0} girdi için yüklenir. Her biri bir DAPI isteğidir."
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Tutarlar ilk {0} girdi için yüklenir. Her önceki işlem ayrı bir istektir."
 
 msgid "Amounts loaded"
 msgstr "Yüklenen tutarlar"
@@ -1659,8 +1659,8 @@ msgstr "Diğer {0} tutarı yükle"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "Tutarlar yükleniyor: {1} girdinin {0} tanesi. Her biri bir DAPI isteğidir."
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "Tutarlar yükleniyor: {1} girdinin {0} tanesi. Her önceki işlem ayrı bir istektir."
 
 msgid "Loading inputs…"
 msgstr "Girdiler yükleniyor…"
@@ -2043,6 +2043,9 @@ msgstr "DAPI’de yok"
 
 msgid "Not in this version"
 msgstr "Bu sürümde yok"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "bu kaynaktan bilinmiyor: Hyphen yalnızca düğümünün izleme sırasında ilettiği kilitleri bildirir"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "bilinmiyor: bir blok ChainLocked olduğunda düğümler InstantSend kilitlerini siler"
@@ -3354,6 +3357,9 @@ msgstr "Bu sayfa Hyphen’den okur. Görmek için Mainnet’e veya Testnet’e g
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Bu teklif ve oy geçmişi Hyphen’in indeksinden, o blok itibarıyla alınmıştır; canlı değildir."
+
+msgid "This source covers this row only"
+msgstr "Bu kaynak yalnızca bu satırı kapsar"
 
 msgid "This source isn't available here"
 msgstr "Bu kaynak burada kullanılamıyor"

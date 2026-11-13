@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "Valores"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "Os valores são carregados para as primeiras {0} entradas. Cada uma é um pedido ao DAPI."
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Os valores são carregados para as primeiras {0} entradas. Cada transação anterior é um pedido separado."
 
 msgid "Amounts loaded"
 msgstr "Valores carregados"
@@ -1659,8 +1659,8 @@ msgstr "Carregar os outros {0} valores"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "A carregar valores: {0} de {1} entradas. Cada uma é um pedido ao DAPI."
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "A carregar valores: {0} de {1} entradas. Cada transação anterior é um pedido separado."
 
 msgid "Loading inputs…"
 msgstr "A carregar entradas…"
@@ -2043,6 +2043,9 @@ msgstr "Não está no DAPI"
 
 msgid "Not in this version"
 msgstr "Não está nesta versão"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "desconhecido a partir desta fonte: o Hyphen só indica os bloqueios que o seu nó retransmitiu enquanto observava"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "desconhecido: os nós descartam os bloqueios InstantSend quando um bloco fica ChainLocked"
@@ -3354,6 +3357,9 @@ msgstr "Esta página lê do Hyphen. Mude para a mainnet ou a testnet para a ver.
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Esta proposta e o seu histórico de votos vêm do índice do Hyphen, a esse bloco, não em direto."
+
+msgid "This source covers this row only"
+msgstr "Esta fonte cobre apenas esta linha"
 
 msgid "This source isn't available here"
 msgstr "Esta fonte não está disponível aqui"

@@ -1,7 +1,12 @@
 import 'fake-indexeddb/auto'
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { CACHE_MAX_BYTES, CACHE_TRIM_TO_BYTES, CoreCache } from '@/data/dapi-core/cache'
+import {
+  CACHE_MAX_BYTES,
+  CACHE_TRIM_TO_BYTES,
+  CoreCache,
+  INSTANT_LOCK_KEEP_MS,
+} from '@/data/dapi-core/cache'
 
 const bytes = (n: number, fill = 1) => new Uint8Array(n).fill(fill)
 
@@ -39,6 +44,39 @@ describe('CoreCache', () => {
     await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) })
     expect(await cache.getTx('mainnet', 'tt')).toMatchObject({ txid: 'tt' })
     expect(await cache.getTx('mainnet', 'zz')).toBeUndefined()
+  })
+
+  it('never lets a write without a lock clear one a node reported', async () => {
+    const cache = new CoreCache()
+    await cache.putTx('mainnet', {
+      txid: 'tt',
+      bytes: bytes(200),
+      instantLock: true,
+      instantLockAt: Date.now(),
+    })
+    await Promise.all([
+      cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) }),
+      cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) }),
+    ])
+    expect(await cache.getTx('mainnet', 'tt')).toMatchObject({ instantLock: true })
+  })
+
+  it('lets a lock lapse after 30 days, and trusts none written without a time', async () => {
+    let now = 1_000_000
+    const cache = new CoreCache(() => now)
+    await cache.putTx('mainnet', {
+      txid: 'tt',
+      bytes: bytes(10),
+      instantLock: true,
+      instantLockAt: now,
+    })
+    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBe(true)
+    now += INSTANT_LOCK_KEEP_MS + 1
+    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBeUndefined()
+    await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(10) })
+    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBeUndefined()
+    await cache.putTx('mainnet', { txid: 'uu', bytes: bytes(10), instantLock: true })
+    expect((await cache.getTx('mainnet', 'uu'))?.instantLock).toBeUndefined()
   })
 
   it('returns a header range only when every header is there', async () => {

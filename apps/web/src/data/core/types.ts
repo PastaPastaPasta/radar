@@ -60,8 +60,15 @@ export interface DecodedTx {
   chainLockClaim?: 'one-node'
   /** Whoever reports an InstantSend lock is the node that answered; no second source is asked. */
   instantLockClaim?: 'one-node'
-  /** Who reported the lock. Absent means a DAPI node. */
+  /**
+   * Who answered about the lock. Absent means a DAPI node. `hyphen` with no lock means Hyphen does not know: its lock
+   * map is live state, not a record.
+   */
   instantLockSource?: InstantLockSource
+  /** A DAPI node reported a lock for this transaction on an earlier visit. It counts only once the transaction is historical. */
+  instantLockRemembered?: true
+  /** Set only on a network where no ChainLock is known: blocks of confirmations after which Core has pruned the lock. */
+  instantLockKeepDepth?: number
 }
 
 export type InstantLockSource = 'dapi' | 'hyphen'

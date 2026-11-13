@@ -43,7 +43,7 @@ export function ChainLockBadge({
 }
 
 /**
- * An InstantSend lock is one source's claim: the DAPI node that answered, or Hyphen's persistent record. `sources`
+ * An InstantSend lock is one source's claim: the DAPI node that answered, or Hyphen's lock tag, which is live state and reports only locks its node relayed. `sources`
  * names who, so a lock recorded after nodes dropped theirs does not read as "reported by one node".
  */
 export function InstantSendBadge({

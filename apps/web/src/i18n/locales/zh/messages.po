@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "金额"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "仅加载前 {0} 个输入的金额，每个输入对应一次 DAPI 请求。"
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "仅加载前 {0} 个输入的金额，每个前序交易对应一次单独请求。"
 
 msgid "Amounts loaded"
 msgstr "已加载的金额"
@@ -1659,8 +1659,8 @@ msgstr "加载其余 {0} 个金额"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "正在加载金额：{0} / {1} 个输入。每个输入对应一次 DAPI 请求。"
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "正在加载金额：{0} / {1} 个输入。每个前序交易对应一次单独请求。"
 
 msgid "Loading inputs…"
 msgstr "正在加载输入…"
@@ -2043,6 +2043,9 @@ msgstr "不在 DAPI 中"
 
 msgid "Not in this version"
 msgstr "不在此版本中"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "此来源无法确定：Hyphen 只报告其节点在 Hyphen 监听期间转发的锁"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "未知：区块一旦 ChainLocked，节点就会丢弃 InstantSend 锁"
@@ -3354,6 +3357,9 @@ msgstr "此页面的数据来自 Hyphen。请切换到主网或测试网查看�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "此提案及其投票记录来自 Hyphen 的索引,截至该区块,并非实时。"
+
+msgid "This source covers this row only"
+msgstr "此来源仅涵盖这一行"
 
 msgid "This source isn't available here"
 msgstr "此数据源在此不可用"

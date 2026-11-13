@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "Суммы"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "Суммы загружаются для первых {0} входов. Каждый из них — это запрос к DAPI."
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Суммы загружаются для первых {0} входов. Каждая предыдущая транзакция — это отдельный запрос."
 
 msgid "Amounts loaded"
 msgstr "Загружено сумм"
@@ -1659,8 +1659,8 @@ msgstr "Загрузить остальные суммы: {0}"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "Загрузка сумм: {0} из {1} входов. Каждый из них — это запрос к DAPI."
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "Загрузка сумм: {0} из {1} входов. Каждая предыдущая транзакция — это отдельный запрос."
 
 msgid "Loading inputs…"
 msgstr "Загрузка входов…"
@@ -2043,6 +2043,9 @@ msgstr "Нет в DAPI"
 
 msgid "Not in this version"
 msgstr "Нет в этой версии"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "неизвестно по этому источнику: Hyphen сообщает только о блокировках, которые его узел передал, пока Hyphen следил за сетью"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "неизвестно: узлы удаляют блокировки InstantSend, как только блок получает ChainLock"
@@ -3354,6 +3357,9 @@ msgstr "Эта страница читает данные из Hyphen. Пере�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Это предложение и история голосования взяты из индекса Hyphen на момент этого блока, не в реальном времени."
+
+msgid "This source covers this row only"
+msgstr "Этот источник относится только к этой строке"
 
 msgid "This source isn't available here"
 msgstr "Этот источник здесь недоступен"

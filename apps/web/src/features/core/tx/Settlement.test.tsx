@@ -148,3 +148,19 @@ describe('Settlement InstantSend step in a ChainLocked block @IN-05 @HY-07', () 
     expect(step()).toHaveTextContent('No InstantSend lock was seen')
   })
 })
+
+describe('Settlement InstantSend step when Hyphen answered @IN-05 @HY-07', () => {
+  const step = () => document.querySelector('[data-step="instantsend"]')!
+
+  it.each([
+    ['a pending transaction', { height: undefined, time: undefined }],
+    ['a mined one', {}],
+    ['a ChainLocked one', { isChainLocked: true }],
+  ])('says the lock is not known from this source for %s', async (_name, over) => {
+    await renderSettlement(tx({ ...instantLockFields(false, 'hyphen'), ...over }))
+    expect(step()).toHaveAttribute('data-state', 'unknown')
+    expect(step()).toHaveTextContent('not known from this source')
+    expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
+    expect(screen.queryByText('waiting for the masternodes to lock it')).toBeNull()
+  })
+})

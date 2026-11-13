@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { instantLockFields, instantLockView } from './lock-state'
+import { instantLockFields, instantLockKeepDepth, instantLockView } from './lock-state'
 import type { DecodedTx } from './types'
 
 const pending: Partial<DecodedTx> = {}
@@ -59,6 +59,7 @@ describe('InstantSend lock state @IN-05 @HY-07', () => {
         state: 'unknown',
         sources: [],
         historical: true,
+        unknownBy: 'pruned',
       })
     }
   })
@@ -73,5 +74,92 @@ describe('InstantSend lock state @IN-05 @HY-07', () => {
     expect(instantLockView({ ...chainLocked, ...instantLockFields(true, 'hyphen') })).toMatchObject(
       { state: 'claimed', sources: ['hyphen'] },
     )
+  })
+})
+
+describe('Hyphen’s answer is silence, not "no lock" @IN-05 @HY-07', () => {
+  it.each([
+    ['pending', pending],
+    ['mined', mined],
+    ['ChainLocked', chainLocked],
+  ])('reads Hyphen’s false for a %s transaction as not known', (_name, base) => {
+    expect(instantLockView({ ...base, ...instantLockFields(false, 'hyphen') })).toMatchObject({
+      state: 'unknown',
+      sources: [],
+      unknownBy: 'source',
+    })
+  })
+
+  it('still reads a lock Hyphen reports as one source’s claim', () => {
+    expect(instantLockView({ ...pending, ...instantLockFields(true, 'hyphen') })).toMatchObject({
+      state: 'claimed',
+      sources: ['hyphen'],
+    })
+  })
+
+  it('keeps a DAPI node’s false as a real answer for a pending transaction', () => {
+    expect(instantLockView({ ...pending, ...instantLockFields(false, 'dapi') }).state).toBe('none')
+  })
+})
+
+describe('a lock remembered from an earlier visit @IN-05 @DATA-02', () => {
+  const remembered = { ...instantLockFields(false), instantLockRemembered: true as const }
+
+  it('is ignored for a pending transaction', () => {
+    expect(instantLockView({ ...pending, ...remembered }).state).toBe('none')
+  })
+
+  it('is ignored for a mined transaction that is not historical', () => {
+    expect(instantLockView({ ...mined, ...remembered }).state).toBe('none')
+  })
+
+  it('applies to a transaction in a ChainLocked block, as a DAPI node’s claim', () => {
+    expect(instantLockView({ ...chainLocked, ...remembered })).toMatchObject({
+      state: 'claimed',
+      sources: ['dapi'],
+      historical: true,
+    })
+  })
+})
+
+describe('a network without ChainLocks @IN-05', () => {
+  const deep = (confirmations: number): Partial<DecodedTx> => ({
+    height: 100,
+    confirmations,
+    instantLockKeepDepth: instantLockKeepDepth('devnet-x'),
+    ...instantLockFields(false),
+  })
+
+  it('keeps locks 24 blocks on mainnet and 6 elsewhere', () => {
+    expect(instantLockKeepDepth('mainnet')).toBe(24)
+    expect(instantLockKeepDepth('testnet')).toBe(6)
+    expect(instantLockKeepDepth('devnet-x')).toBe(6)
+  })
+
+  it('reads a transaction above the keep depth as its node says', () => {
+    expect(instantLockView(deep(5))).toMatchObject({ state: 'none', historical: false })
+  })
+
+  it('treats a transaction at the keep depth as historical, and its silence as unknown', () => {
+    expect(instantLockView(deep(6))).toMatchObject({
+      state: 'unknown',
+      historical: true,
+      unknownBy: 'pruned',
+    })
+  })
+
+  it('applies a remembered lock once it is that deep', () => {
+    const view = instantLockView({ ...deep(7), instantLockRemembered: true })
+    expect(view).toMatchObject({ state: 'claimed', sources: ['dapi'] })
+    expect(instantLockView({ ...deep(2), instantLockRemembered: true }).state).toBe('none')
+  })
+
+  it('does not apply the depth when a ChainLock is known on the network', () => {
+    const known: Partial<DecodedTx> = {
+      height: 100,
+      confirmations: 50,
+      ...instantLockFields(false),
+    }
+    expect(instantLockView(known)).toMatchObject({ state: 'none', historical: false })
   })
 })

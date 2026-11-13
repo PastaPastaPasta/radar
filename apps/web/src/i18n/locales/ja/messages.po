@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "金額"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "最初の {0} 件の入力について金額を読み込みます。1件ごとに DAPI リクエストが1回発生します。"
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "最初の {0} 件の入力について金額を読み込みます。前のトランザクションごとに別のリクエストが発生します。"
 
 msgid "Amounts loaded"
 msgstr "読み込み済みの金額"
@@ -1659,8 +1659,8 @@ msgstr "残りの {0} 件の金額を読み込む"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "金額を読み込み中: {1} 件中 {0} 件。1件ごとに DAPI リクエストが1回発生します。"
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "金額を読み込み中: {1} 件中 {0} 件。前のトランザクションごとに別のリクエストが発生します。"
 
 msgid "Loading inputs…"
 msgstr "入力を読み込み中…"
@@ -2043,6 +2043,9 @@ msgstr "DAPI にありません"
 
 msgid "Not in this version"
 msgstr "このバージョンにはありません"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "このソースからは不明: Hyphen が報告するのは、監視中に自社ノードが中継したロックだけです"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "不明: ブロックが ChainLocked になると、ノードは InstantSend ロックを破棄します"
@@ -3354,6 +3357,9 @@ msgstr "このページは Hyphen から読み込みます。表示するには�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "この提案と投票履歴は Hyphen のインデックスのもので、そのブロック時点の内容であり、ライブではありません。"
+
+msgid "This source covers this row only"
+msgstr "このソースはこの行のみを対象とします"
 
 msgid "This source isn't available here"
 msgstr "このソースはここでは利用できません"

@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "Суми"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "Суми завантажуються для перших {0} входів. Кожен із них — це запит до DAPI."
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Суми завантажуються для перших {0} входів. Кожна попередня транзакція — це окремий запит."
 
 msgid "Amounts loaded"
 msgstr "Завантажено сум"
@@ -1659,8 +1659,8 @@ msgstr "Завантажити решту сум: {0}"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "Завантаження сум: {0} із {1} входів. Кожен із них — це запит до DAPI."
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "Завантаження сум: {0} із {1} входів. Кожна попередня транзакція — це окремий запит."
 
 msgid "Loading inputs…"
 msgstr "Завантаження входів…"
@@ -2043,6 +2043,9 @@ msgstr "Немає в DAPI"
 
 msgid "Not in this version"
 msgstr "Немає в цій версії"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "невідомо за цим джерелом: Hyphen повідомляє лише про блокування, які його вузол передав, поки Hyphen стежив за мережею"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "невідомо: вузли видаляють блокування InstantSend, щойно блок отримує ChainLock"
@@ -3354,6 +3357,9 @@ msgstr "Ця сторінка читає дані з Hyphen. Перемкніт�
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Ця пропозиція та історія голосування взяті з індексу Hyphen станом на цей блок, не наживо."
+
+msgid "This source covers this row only"
+msgstr "Це джерело стосується лише цього рядка"
 
 msgid "This source isn't available here"
 msgstr "Це джерело тут недоступне"

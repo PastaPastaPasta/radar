@@ -492,8 +492,8 @@ msgid "Amounts"
 msgstr "Montants"
 
 #. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
-msgstr "Les montants sont chargés pour les {0} premières entrées. Chacune est une requête DAPI."
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Les montants sont chargés pour les {0} premières entrées. Chaque transaction précédente est une requête distincte."
 
 msgid "Amounts loaded"
 msgstr "Montants chargés"
@@ -1659,8 +1659,8 @@ msgstr "Charger les {0} autres montants"
 
 #. placeholder {0}: formatInt(partial.loaded)
 #. placeholder {1}: formatInt(inCount)
-msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
-msgstr "Chargement des montants : {0} entrées sur {1}. Chacune est une requête DAPI."
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "Chargement des montants : {0} entrées sur {1}. Chaque transaction précédente est une requête distincte."
 
 msgid "Loading inputs…"
 msgstr "Chargement des entrées…"
@@ -2043,6 +2043,9 @@ msgstr "Absent de DAPI"
 
 msgid "Not in this version"
 msgstr "Absent de cette version"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "inconnu d’après cette source : Hyphen ne signale que les verrous que son nœud a relayés pendant qu’il surveillait"
 
 msgid "not known: nodes drop InstantSend locks once a block is ChainLocked"
 msgstr "inconnu : les nœuds suppriment les verrous InstantSend dès qu’un bloc est ChainLocked"
@@ -3354,6 +3357,9 @@ msgstr "Cette page lit les données de Hyphen. Passez au mainnet ou au testnet p
 
 msgid "This proposal and its vote history are from Hyphen’s index, as of that block, not live."
 msgstr "Cette proposition et son historique de votes viennent de l’index de Hyphen, à ce bloc, pas en direct."
+
+msgid "This source covers this row only"
+msgstr "Cette source ne couvre que cette ligne"
 
 msgid "This source isn't available here"
 msgstr "Cette source n’est pas disponible ici"

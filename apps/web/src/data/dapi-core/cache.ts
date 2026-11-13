@@ -16,9 +16,15 @@ export interface CachedBlock {
 export interface CachedTx {
   txid: string
   bytes: Uint8Array
-  /** A DAPI node once reported an InstantSend lock for it. Nodes drop locks once a block is ChainLocked, so this is kept. */
+  /**
+   * A DAPI node reported an InstantSend lock for it after it was historical. Nodes drop locks around then, so it is
+   * kept; `instantLockAt` is when a node last said so, and the flag lapses {@link INSTANT_LOCK_KEEP_MS} after that.
+   */
   instantLock?: true
+  instantLockAt?: number
 }
+
+export const INSTANT_LOCK_KEEP_MS = 30 * 24 * 60 * 60 * 1000
 export interface CachedHeader {
   height: number
   /** The 80-byte header. */
@@ -27,6 +33,12 @@ export interface CachedHeader {
 }
 
 type StoreName = 'blocks' | 'heights' | 'txs' | 'headers'
+
+type Put = { store: StoreName; key: string; size: number } & (
+  | { value: unknown }
+  /** Builds the stored value from the one already there, inside the same transaction. */
+  | { merge: (existing: never) => unknown }
+)
 
 interface LruEntry {
   id: string
@@ -39,7 +51,7 @@ interface LruEntry {
 interface RadarCoreDb extends DBSchema {
   blocks: { key: string; value: { bytes: Uint8Array; height: number } }
   heights: { key: string; value: { hash: string } }
-  txs: { key: string; value: { bytes: Uint8Array; instantLock?: true } }
+  txs: { key: string; value: { bytes: Uint8Array; instantLock?: true; instantLockAt?: number } }
   headers: { key: string; value: { header: Uint8Array; hash: string } }
   meta: { key: string; value: { nodes: NodeInfo[]; at: number } }
   lru: { key: string; value: LruEntry; indexes: { lastRead: number } }
@@ -157,10 +169,7 @@ export class CoreCache implements NodeListStore {
     }
   }
 
-  private async write(
-    net: NetworkId,
-    puts: { store: StoreName; key: string; value: unknown; size: number }[],
-  ): Promise<void> {
+  private async write(net: NetworkId, puts: Put[]): Promise<void> {
     if (!this.enabled(net) || this.writesOff || puts.length === 0) return
     const db = await this.handle()
     if (!db || this.writesOff) return
@@ -171,7 +180,9 @@ export class CoreCache implements NodeListStore {
         const key = `${net}:${p.key}`
         const id = `${p.store}|${key}`
         const known = await tx.objectStore('lru').get(id)
-        await tx.objectStore(p.store).put(p.value as never, key)
+        const value =
+          'merge' in p ? p.merge((await tx.objectStore(p.store).get(key)) as never) : p.value
+        await tx.objectStore(p.store).put(value as never, key)
         await tx
           .objectStore('lru')
           .put({ id, store: p.store, key, size: p.size, lastRead: this.now() })
@@ -214,17 +225,33 @@ export class CoreCache implements NodeListStore {
 
   async getTx(net: NetworkId, txid: string): Promise<CachedTx | undefined> {
     const row = await this.read(net, 'txs', txid)
-    return (
-      row && { txid, bytes: row.bytes, ...(row.instantLock ? { instantLock: true as const } : {}) }
-    )
+    if (!row) return undefined
+    return { txid, bytes: row.bytes, ...this.heldLock(row) }
   }
 
+  /** A lock without a time was written before locks lapsed; it is not trusted. */
+  private heldLock(row: RadarCoreDb['txs']['value'] | undefined) {
+    return row?.instantLock === true &&
+      row.instantLockAt !== undefined &&
+      this.now() - row.instantLockAt < INSTANT_LOCK_KEEP_MS
+      ? { instantLock: true as const, instantLockAt: row.instantLockAt }
+      : undefined
+  }
+
+  /** A write without a lock never clears one a node reported, so two reads of the same transaction cannot race it away. */
   putTx(net: NetworkId, tx: CachedTx): Promise<void> {
+    const merge = (existing: RadarCoreDb['txs']['value'] | undefined) => {
+      const lock =
+        tx.instantLock && tx.instantLockAt !== undefined
+          ? { instantLock: true as const, instantLockAt: tx.instantLockAt }
+          : this.heldLock(existing)
+      return { bytes: tx.bytes, ...lock }
+    }
     return this.write(net, [
       {
         store: 'txs',
         key: tx.txid,
-        value: { bytes: tx.bytes, ...(tx.instantLock ? { instantLock: true as const } : {}) },
+        merge,
         size: tx.bytes.length + 128,
       },
     ])

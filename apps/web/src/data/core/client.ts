@@ -19,7 +19,7 @@ import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 import { bytesToHex, hexToBytes, isHex } from '@/lib/hex'
 import { parseChainLock } from '@/lib/core/chainlock'
-import { instantLockFields } from './lock-state'
+import { instantLockFields, instantLockKeepDepth } from './lock-state'
 import { parseHeader } from '@/lib/core/header'
 import { poolOfCoinbase } from '@/lib/core/pools'
 import { merkleRootOf, meetsProofOfWork, txidOfBytes } from '@/lib/core/verify'
@@ -592,11 +592,15 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     time?: number
     confirmations?: number
     isInstantLocked: boolean
+    /** A node reported a lock earlier and has since dropped it; it counts only once the transaction is historical. */
+    remembered?: boolean
+    /** Blocks after which Core prunes the lock, set only on a network where no ChainLock is known. */
+    keepDepth?: number
     lock: LockStatus
     node?: string
   }
 
-  /** A lock a DAPI node reported once stays visible if the next node has already dropped it. */
+  /** A lock a DAPI node reported for a historical transaction stays visible if the next node has already dropped it. */
   const seenLocks = new Set<string>()
 
   async function dapiTx(
@@ -655,21 +659,27 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       throw e
     }
     const { m, tx, mined, time } = result.value
-    const lockSeen = o.placement && (m.isInstantLocked || remembered)
-    if (o.placement && m.isInstantLocked) seenLocks.add(`${net}:${txid}`)
-    if (cache && (mined || lockSeen)) {
-      void cache.putTx(net, {
-        txid: tx.txid,
-        bytes: m.transaction,
-        ...(lockSeen ? { instantLock: true as const } : {}),
-      })
-    }
     if (!o.placement) {
+      if (cache && mined) void cache.putTx(net, { txid: tx.txid, bytes: m.transaction })
       return { tx, isInstantLocked: false, lock: 'none', node: result.node }
     }
     const blockHash = mined ? bytesToHex(m.blockHash) : undefined
     if (mined && m.isChainLocked) {
       claimLock(net, result.node ?? 'unknown', { height: m.height, hash: blockHash! })
+    }
+    const lock = mined ? await lockStatus(net, m.height, o.signal, o.priority) : 'none'
+    const keepDepth =
+      mined && lock === 'none' && lockView(net).claimed < 0 ? instantLockKeepDepth(net) : undefined
+    const historical =
+      mined && (lock !== 'none' || (keepDepth !== undefined && m.confirmations >= keepDepth))
+    const lockKept = historical && m.isInstantLocked
+    if (lockKept) seenLocks.add(`${net}:${txid}`)
+    if (cache && mined) {
+      void cache.putTx(net, {
+        txid: tx.txid,
+        bytes: m.transaction,
+        ...(lockKept ? { instantLock: true as const, instantLockAt: deps.now() } : {}),
+      })
     }
     return {
       tx,
@@ -677,8 +687,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       height: mined ? m.height : undefined,
       time,
       confirmations: m.confirmations,
-      isInstantLocked: lockSeen,
-      lock: mined ? await lockStatus(net, m.height, o.signal, o.priority) : 'none',
+      isInstantLocked: m.isInstantLocked,
+      remembered: remembered && !m.isInstantLocked,
+      ...(keepDepth !== undefined ? { keepDepth } : {}),
+      lock,
       node: result.node,
     }
   }
@@ -857,6 +869,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         ...(raw.time !== undefined ? { time: raw.time } : {}),
         ...(raw.height !== undefined ? { confirmations: raw.confirmations } : {}),
         ...instantLockFields(raw.isInstantLocked),
+        ...(raw.remembered ? { instantLockRemembered: true as const } : {}),
+        ...(raw.keepDepth !== undefined ? { instantLockKeepDepth: raw.keepDepth } : {}),
         isChainLocked: raw.lock === 'locked',
         ...(raw.lock === 'claimed' ? { chainLockClaim: 'one-node' as const } : {}),
       }
