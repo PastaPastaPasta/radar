@@ -3123,6 +3123,9 @@ msgstr "チャートのデータを読み込めませんでした。"
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "流通供給量を取得できないため、割合はアドレス残高に対するものです。"
 
+msgid "The circulating supply isn’t current, so shares are of address balances."
+msgstr "流通供給量が最新ではないため、割合はアドレス残高に対するものです。"
+
 msgid "The connection failed."
 msgstr "接続に失敗しました。"
 
@@ -3231,6 +3234,11 @@ msgstr "高さ {0} から {1} のブロックは取得元から返されませ�
 
 msgid "The source sent something Radar couldn't read"
 msgstr "ソースが Radar で読み取れないデータを返しました"
+
+#. placeholder {0}: formatInt(basis.height)
+#. placeholder {1}: formatInt(height)
+msgid "The supply is as of block {0}, the list as of block {1}."
+msgstr "供給量はブロック {0} 時点、リストはブロック {1} 時点のものです。"
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "DAPI のバイト列から Radar がデコードしたトランザクションです。金額の単位は duff です。"

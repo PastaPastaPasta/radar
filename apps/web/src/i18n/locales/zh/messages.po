@@ -3123,6 +3123,9 @@ msgstr "图表数据未能加载。"
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "流通量暂不可用，因此占比以地址余额为基数。"
 
+msgid "The circulating supply isn’t current, so shares are of address balances."
+msgstr "流通量不是最新的，因此占比以地址余额为基数。"
+
 msgid "The connection failed."
 msgstr "连接失败。"
 
@@ -3231,6 +3234,11 @@ msgstr "数据源没有返回高度 {0} 到 {1} 的区块。请尝试相邻的�
 
 msgid "The source sent something Radar couldn't read"
 msgstr "数据源返回了 Radar 无法读取的内容"
+
+#. placeholder {0}: formatInt(basis.height)
+#. placeholder {1}: formatInt(height)
+msgid "The supply is as of block {0}, the list as of block {1}."
+msgstr "供应量截至区块 {0}，列表截至区块 {1}。"
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "Radar 从 DAPI 返回的字节解码出的交易。金额以 duff 为单位。"

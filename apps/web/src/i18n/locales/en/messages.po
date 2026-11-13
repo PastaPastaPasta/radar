@@ -3123,6 +3123,9 @@ msgstr "The chart data didn’t load."
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "The circulating supply isn’t available, so shares are of address balances."
 
+msgid "The circulating supply isn’t current, so shares are of address balances."
+msgstr "The circulating supply isn’t current, so shares are of address balances."
+
 msgid "The connection failed."
 msgstr "The connection failed."
 
@@ -3231,6 +3234,11 @@ msgstr "The source returned no blocks for heights {0} to {1}. Try the page eithe
 
 msgid "The source sent something Radar couldn't read"
 msgstr "The source sent something Radar couldn't read"
+
+#. placeholder {0}: formatInt(basis.height)
+#. placeholder {1}: formatInt(height)
+msgid "The supply is as of block {0}, the list as of block {1}."
+msgstr "The supply is as of block {0}, the list as of block {1}."
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."

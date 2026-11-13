@@ -3123,6 +3123,9 @@ msgstr "Les données du graphique n’ont pas été chargées."
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "L’offre en circulation n’est pas disponible : les parts sont donc calculées sur les soldes d’adresses."
 
+msgid "The circulating supply isn’t current, so shares are of address balances."
+msgstr "L’offre en circulation n’est pas à jour : les parts sont donc calculées sur les soldes d’adresses."
+
 msgid "The connection failed."
 msgstr "La connexion a échoué."
 
@@ -3231,6 +3234,11 @@ msgstr "La source n’a renvoyé aucun bloc pour les hauteurs {0} à {1}. Essaye
 
 msgid "The source sent something Radar couldn't read"
 msgstr "La source a envoyé quelque chose que Radar n’a pas pu lire"
+
+#. placeholder {0}: formatInt(basis.height)
+#. placeholder {1}: formatInt(height)
+msgid "The supply is as of block {0}, the list as of block {1}."
+msgstr "L’offre date du bloc {0}, la liste du bloc {1}."
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "La transaction telle que Radar l’a décodée à partir des octets de DAPI. Les montants sont en duffs."

@@ -41,11 +41,24 @@ function ShareBasis({
       Shares are of the circulating supply, <Amount value={total} kind="duffs" compact />, the
       figure the Charts page shows.
     </Trans>
+  ) : basis.stale ? (
+    <Trans>The circulating supply isn’t current, so shares are of address balances.</Trans>
   ) : (
     <Trans>The circulating supply isn’t available, so shares are of address balances.</Trans>
   )
   const detail = circulating ? (
-    <SourceLine stamp={basis.stamp} compact />
+    <>
+      <SourceLine stamp={basis.stamp} compact />
+      {basis.height !== undefined && height !== undefined && basis.height !== height ? (
+        <>
+          {' '}
+          <Trans>
+            The supply is as of block {formatInt(basis.height)}, the list as of block{' '}
+            {formatInt(height)}.
+          </Trans>
+        </>
+      ) : null}
+    </>
   ) : (
     <Trans>
       The <Amount value={total} kind="duffs" compact /> held in positive address balances at block{' '}

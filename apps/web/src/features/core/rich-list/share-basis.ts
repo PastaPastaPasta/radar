@@ -5,24 +5,27 @@ import { useIndexHealth } from '@/data/index-health'
 import type { NetworkId } from '@/lib/network'
 
 /**
- * The total each share on the page is of: the circulating supply the Charts page shows, or, when that isn't available,
- * the positive address balances the list itself was ranked against, named as such.
+ * The total each share on the page is of: the circulating supply the Charts page shows, or, when that isn't current
+ * or isn't available, the positive address balances the list itself was ranked against, named as such.
  */
 export type ShareBasis =
   | { kind: 'loading' }
-  | { kind: 'circulating'; total: bigint; stamp: SourceStamp }
-  | { kind: 'balances'; total: bigint | undefined }
+  | { kind: 'circulating'; total: bigint; stamp: SourceStamp; height: number | undefined }
+  | { kind: 'balances'; total: bigint | undefined; stale: boolean }
 
 export function useShareBasis(net: NetworkId, balancesTotal: bigint | undefined): ShareBasis {
-  const metrics = useQuery(hyQueries.metricsLatest(net))
   const index = useIndexHealth(net)
-  if (index.state !== 'stale' && metrics.data) {
+  const stale = index.state === 'stale'
+  const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: !index.pending && !stale })
+  if (index.pending) return { kind: 'loading' }
+  if (!stale && metrics.data) {
     return {
       kind: 'circulating',
       total: metrics.data.data.circulatingSupply,
       stamp: stampOf(metrics.data),
+      height: metrics.data.height,
     }
   }
-  if (metrics.isPending && index.state !== 'stale') return { kind: 'loading' }
-  return { kind: 'balances', total: balancesTotal }
+  if (!stale && metrics.isPending) return { kind: 'loading' }
+  return { kind: 'balances', total: balancesTotal, stale }
 }

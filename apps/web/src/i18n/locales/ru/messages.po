@@ -3123,6 +3123,9 @@ msgstr "Данные графика не загрузились."
 msgid "The circulating supply isn’t available, so shares are of address balances."
 msgstr "Объём в обращении недоступен, поэтому доли считаются от остатков на адресах."
 
+msgid "The circulating supply isn’t current, so shares are of address balances."
+msgstr "Объём в обращении не актуален, поэтому доли считаются от остатков на адресах."
+
 msgid "The connection failed."
 msgstr "Не удалось подключиться."
 
@@ -3231,6 +3234,11 @@ msgstr "Источник не вернул блоки для высот с {0} �
 
 msgid "The source sent something Radar couldn't read"
 msgstr "Источник прислал данные, которые Radar не смог прочитать"
+
+#. placeholder {0}: formatInt(basis.height)
+#. placeholder {1}: formatInt(height)
+msgid "The supply is as of block {0}, the list as of block {1}."
+msgstr "Объём в обращении указан на блоке {0}, список — на блоке {1}."
 
 msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
 msgstr "Транзакция в том виде, в каком Radar декодировал её из байтов DAPI. Суммы указаны в даффах."

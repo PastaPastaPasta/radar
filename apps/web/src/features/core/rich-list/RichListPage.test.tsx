@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import recorded from '@/test/fixtures/http/hyphen/mainnet/balances--limit-25.json'
+import status from '@/test/fixtures/http/hyphen/mainnet/status.json'
 import metrics from '@/test/fixtures/http/hyphen/mainnet/metrics__latest.json'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
@@ -116,6 +117,62 @@ describe('Rich list page', () => {
     renderAt('/rich-list?network=testnet')
     const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
     await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+  })
+
+  it('says the supply is not current, without asking for it, while the index is stale @HY-09', async () => {
+    const asked = vi.fn()
+    server.use(
+      http.get('*/x/hy/testnet/metrics/latest', () => {
+        asked()
+        return new HttpResponse(null, { status: 503 })
+      }),
+    )
+    renderAt('/rich-list?network=testnet')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    const note = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[data-share-basis="balances"]')
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(note).toHaveTextContent(/circulating supply isn’t current/)
+    expect(note).not.toHaveTextContent(/isn’t available/)
+    expect(asked).not.toHaveBeenCalled()
+  })
+
+  it('names both heights when the supply and the list are as of different blocks @HY-09', async () => {
+    server.use(
+      http.get('*/x/hy/mainnet/metrics/latest', () =>
+        HttpResponse.json({ ...metrics.body, height: metrics.body.height - 2 }),
+      ),
+    )
+    renderAt('/rich-list')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    const note = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[data-share-basis="circulating"]')
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(note).toHaveTextContent(
+      /supply is as of block 2,570,011, the list as of block 2,570,\d{3}\./,
+    )
+  })
+
+  it('does not name a basis before Hyphen’s index has been probed @HY-09', async () => {
+    let release: () => void = () => undefined
+    const gate = new Promise<void>((resolve) => (release = resolve))
+    server.use(
+      http.get('*/x/hy/mainnet/status', async () => {
+        await gate
+        return HttpResponse.json(status.body)
+      }),
+    )
+    renderAt('/rich-list')
+    const table = await screen.findByRole('table', { name: /Addresses ranked by balance/ })
+    await waitFor(() => expect(within(table).getAllByRole('row')).toHaveLength(26))
+    expect(document.querySelector('[data-share-basis]')).toBeNull()
+    release()
   })
 
   describe('on a phone @HY-09', () => {
