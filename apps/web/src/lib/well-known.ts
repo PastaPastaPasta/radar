@@ -130,6 +130,8 @@ const IDENTITIES: readonly WellKnownIdentity[] = [
 ]
 
 /** A devnet has the protocol's own contracts and no tokens we know of. */
+// The network is part of the signature so a network-specific entry needs no change at the call sites.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function wellKnownContracts(_net: NetworkId): readonly WellKnownContract[] {
   return SYSTEM_CONTRACTS
 }
@@ -138,6 +140,8 @@ export function wellKnownTokens(net: NetworkId): readonly WellKnownToken[] {
   return net === 'mainnet' || net === 'testnet' ? (TOKENS[net] ?? []) : []
 }
 
+// The network is part of the signature so a network-specific entry needs no change at the call sites.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function wellKnownIdentities(_net: NetworkId): readonly WellKnownIdentity[] {
   return IDENTITIES
 }

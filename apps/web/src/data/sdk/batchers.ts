@@ -167,7 +167,11 @@ export const tokenBalance = createBatcher<TokenBalanceKey, bigint>({
           }
           if (outcome.status === 'fulfilled') stamps.push(outcome.value)
         })
-        if (stamps.length === 0) throw [...balances.values()].find((v) => v instanceof Error)
+        if (stamps.length === 0)
+          throw (
+            [...balances.values()].find((v): v is Error => v instanceof Error) ??
+            new Error('No token balance call answered')
+          )
         const oldest = stamps.reduce((a, b) => (b.asOf < a.asOf ? b : a))
         const { data, ...stamp } = oldest
         void data
