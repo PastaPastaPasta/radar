@@ -39,6 +39,15 @@ describe('the network switch @X-03 @RA-91', () => {
     expect(at('/epochs?network=testnet&from=3&to=9', '/epochs').url.search).toBe('?network=testnet')
   })
 
+  it('drops a masternode voter and a block height cursor, which belong to the old network', () => {
+    expect(at(`/votes?network=testnet&voter=${HEX}&choice=yes`, '/votes').url.search).toBe(
+      '?network=testnet&choice=yes',
+    )
+    expect(at('/blocks?network=testnet&from=2500000&size=50', '/blocks').url.search).toBe(
+      '?network=testnet&size=50',
+    )
+  })
+
   it.each([
     ['/identity/$id', `/identity/${ID}?network=testnet&tab=names&contract=${ID}&page=3`],
     ['/contract/$id/', `/contract/${ID}?network=testnet&tab=schema&rev=2`],

@@ -79,6 +79,20 @@ describe('the identity an asset lock creates @X-02', () => {
       ),
     ).toBeInTheDocument()
   })
+
+  it('does not call a failed read "none" @X-02', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) =>
+      method === 'identities.balances'
+        ? Promise.reject(new Error('DAPI is down'))
+        : real(net, method, args, signal),
+    )
+    renderAt(`/tx/${LOCK}`)
+    expect(
+      await screen.findByText('Could not check this right now.', {}, { timeout: 8000 }),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/A top-up credits an identity/)).toBeNull()
+  })
 })
 
 describe('the Platform side of an asset unlock @X-02', () => {

@@ -41,6 +41,8 @@ const LIST_DROPS: Record<string, readonly string[]> = {
   '/epochs': ['from', 'to'],
   '/shielded': ['nf'],
   '/quorums': ['q'],
+  '/votes': ['voter'],
+  '/blocks': ['from'],
 }
 
 /** Cursors and entity-scoped fields no page keeps across networks. */

@@ -35,8 +35,8 @@ function parseJson(raw: string): unknown {
 
 /** The native explorer's tab names, where the new pages call them something else; an unknown tab is dropped. */
 function tabSet(p: URLSearchParams, names: Record<string, string>): Record<string, string> {
-  const tab = names[(p.get('tab') ?? '').toLowerCase()]
-  return tab ? { tab } : {}
+  const key = (p.get('tab') ?? '').toLowerCase()
+  return Object.hasOwn(names, key) ? { tab: names[key]! } : {}
 }
 
 const IDENTITY_TABS = {
@@ -219,10 +219,9 @@ const NATIVE: Record<string, Rule> = {
     return label ? { path: `/contest/${seg(label)}`, drop } : { path: '/contests', drop }
   },
   '/governance/polls': (p) => {
-    const range = POLL_WINDOWS[p.get('window') ?? '']
-    const set: Record<string, string> = {}
-    if (range) set.range = range
-    return { path: '/polls', drop: ['window'], set }
+    const window = p.get('window') ?? ''
+    const range = Object.hasOwn(POLL_WINDOWS, window) ? POLL_WINDOWS[window]! : 'upcoming'
+    return { path: '/polls', drop: ['window'], set: { range } }
   },
   '/groups': (p) =>
     p.get('contractId')

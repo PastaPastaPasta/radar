@@ -194,6 +194,7 @@ describe('redirect targets', () => {
       ['/dpns', { name: 'alice.dash' }, '/name/alice', {}],
       ['/dpns/search', { q: 'al', after: 'x,y' }, '/names', { q: 'al', after: 'y' }],
       ['/governance/polls', { window: 'all-upcoming' }, '/polls', { range: 'upcoming' }],
+      ['/governance/polls', {}, '/polls', { range: 'upcoming' }],
       ['/governance/polls', { window: '7d', page: '2' }, '/polls', { range: '7d', page: 2 }],
       ['/epoch/detail', { index: '7' }, '/epoch/7', {}],
       ['/epoch/history', { from: '3', to: '9' }, '/epochs', { from: 3, to: 9 }],

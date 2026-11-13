@@ -19,6 +19,8 @@ export interface OgMatch {
   kind: OgKind
   id: string
   plain?: boolean
+  /** Query parameters that name the entity beyond its id, kept in the canonical address. */
+  search?: Record<string, string>
 }
 
 export interface OgMeta {
@@ -346,13 +348,19 @@ export function matchOgRoute(url: URL): OgMatch | null {
     if (id === null) return null
     // A contest outside DPNS names its contract, type and index, which no backend read here covers.
     if (kind === 'contest' && ['contract', 'type', 'index'].some((k) => url.searchParams.has(k))) {
-      return { kind, id, plain: true }
+      const search = Object.fromEntries(
+        ['contract', 'type', 'index'].flatMap((k) => {
+          const v = url.searchParams.get(k)
+          return v === null ? [] : [[k, v]]
+        }),
+      )
+      return { kind, id, plain: true, search }
     }
     return { kind, id }
   }
   if (url.pathname.replace(/\/$/, '') === '/quorums') {
     const q = url.searchParams.get('q')
-    if (q !== null && HEX64.test(q)) return { kind: 'quorum', id: q.toLowerCase() }
+    if (q !== null && HEX64.test(q)) return { kind: 'quorum', id: q.toLowerCase(), search: { q } }
   }
   return null
 }

@@ -75,6 +75,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
     const preview = isLinkPreviewAgent(request.headers.get('user-agent')) && !decentralized
     const meta = preview ? await resolveOg(og, network) : genericOg(og.kind)
     const query = [
+      ...Object.entries(og.search ?? {}).map(([k, v]) => `${k}=${encodeURIComponent(v)}`),
       network && `network=${encodeURIComponent(network)}`,
       decentralized && 'sources=decentralized',
     ].filter(Boolean)

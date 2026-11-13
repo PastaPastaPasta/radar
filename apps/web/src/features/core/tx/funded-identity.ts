@@ -32,7 +32,7 @@ export interface FundedIdentity {
 /**
  * The identities an asset lock created, found by deriving each credit output's identity id and asking Platform's SDK
  * (proof-checked) whether it exists. A lock that tops up an identity that already existed derives an id nothing
- * holds, so it lists none. `ready` is false until every credit output has been asked.
+ * holds, so it lists none. `ready` is false until every credit output has been asked; `failed` is true when a read errored, so an empty list is not read as "none".
  */
 export function useFundedIdentities(txid: string, outputCount: number) {
   const net = useNetwork()
@@ -51,5 +51,6 @@ export function useFundedIdentities(txid: string, outputCount: number) {
     balances[index]?.data?.data == null ? [] : [{ index, id }],
   )
   const ready = count === 0 || (derived.isSuccess && balances.every((b) => !b.isPending))
-  return { found, ready, source: balances.find((b) => b.data)?.data }
+  const failed = derived.isError || balances.some((b) => b.isError)
+  return { found, ready, failed, source: balances.find((b) => b.data)?.data }
 }

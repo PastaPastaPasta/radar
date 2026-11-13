@@ -473,7 +473,7 @@ describe('redirects', () => {
     await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
     await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
     await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?tab=tokens&network=testnet')
-    await check(h, '/governance/polls/?network=mainnet', '/polls')
+    await check(h, '/governance/polls/?network=mainnet', '/polls?range=upcoming')
     await check(h, '/search/?q=alice', '/search?q=alice')
   })
 
@@ -527,6 +527,8 @@ describe('redirects', () => {
       '/polls?range=upcoming',
     )
     await check(h, '/governance/polls/?window=7d&page=2&network=mainnet', '/polls?page=2&range=7d')
+    await check(h, '/governance/polls/?network=mainnet', '/polls?range=upcoming')
+    await check(h, '/governance/polls/?window=__proto__&network=mainnet', '/polls?range=upcoming')
     await check(h, '/dpns/search/?q=al&after=x%2Cy&network=mainnet', '/names?q=al&after=y')
   })
 
@@ -746,6 +748,22 @@ describe('per-entity title and OG', () => {
       assert.equal(r.url, 'https://api.pe.dashhq.org/epoch/42')
       assert.match(r.html, /<title>Epoch 42 · Radar<\/title>/)
       assert.match(r.html, /og:description" content="starts 2026-10-01 · 1,234 transactions"/)
+    })
+
+    it('keeps what names a quorum or a custom contest in the canonical address', async () => {
+      reset(() => Response.json({}))
+      let html = await (await getAsBot(`/quorums?q=${hash}`)).text()
+      assert.match(
+        html,
+        new RegExp(`og:url" content="http://radar\\.localhost/quorums\\?q=${hash}"`),
+      )
+      html = await (
+        await getAsBot(`/contest/x?contract=${contract}&type=widget&index=byName`)
+      ).text()
+      assert.match(
+        html,
+        /og:url" content="[^"]*\/contest\/x\?contract=D+&amp;type=widget&amp;index=byName"/,
+      )
     })
 
     it('names a name from its address without asking a backend', async () => {

@@ -20,17 +20,18 @@ export function Entity({ kind, id, href, search, label, hover = true, ...rest }:
   useSourceModeLink()
   useSyncExternalStore(subscribeLabels, labelsVersion, labelsVersion)
   const touch = useMediaQuery(TOUCH_ONLY)
+  const card = hover && !(kind === 'contest' && search?.contract)
   const chip = (
     <EntityChip
       kind={kind}
       id={id}
       label={label ?? wellKnownLabel(net, kind, id)}
       href={href ?? entityHref(kind, id, net, search)}
-      hover={hover && !touch}
+      hover={card && !touch}
       {...rest}
     />
   )
-  return hover && touch ? (
+  return card && touch ? (
     <LongPressCard kind={kind} id={id}>
       {chip}
     </LongPressCard>

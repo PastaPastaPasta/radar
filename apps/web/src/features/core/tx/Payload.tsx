@@ -313,6 +313,8 @@ function AssetLockRows({ p, txid }: { p: Obj; txid: string }) {
                 </div>
               ))}
             </div>
+          ) : funded.failed ? (
+            t`Could not check this right now.`
           ) : (
             t`None. A top-up credits an identity that already existed.`
           ),

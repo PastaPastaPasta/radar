@@ -129,6 +129,22 @@ describe('hover cards on a touch screen @X-06', () => {
     expect(screen.getByText(`card for ${OTHER}`)).toBeInTheDocument()
   })
 
+  it('opens no card for a contest outside DPNS, which the card cannot tell from a name contest', async () => {
+    registerHoverCard('contest', ({ id }) => <div data-hover-card="contest">card for {id}</div>)
+    setTouchScreen(true)
+    await renderInApp(
+      <Entity
+        kind="contest"
+        id="alice"
+        search={{ contract: OTHER, type: 'widget', index: 'byName' }}
+      />,
+    )
+    const link = screen.getByRole('link', { name: /alice/ })
+    fireEvent.pointerDown(link, finger())
+    act(() => void vi.advanceTimersByTime(600))
+    expect(screen.queryByText(/card for/)).toBeNull()
+  })
+
   it('closes on Escape and on a tap outside', async () => {
     setTouchScreen(true)
     const link = await chip()
