@@ -44,8 +44,8 @@ export function HyphenGate({
 }
 
 /**
- * The page's one notice that what it reads is behind: what is behind and by how much, what that leaves current,
- * and where to see the sources. Sections keep their own source line and say nothing more. `scope` replaces the
+ * The page's one notice that what it reads is behind: what is behind and by how much, what that leaves current
+ * (left out on a phone, where the notice has to stay short), and where to see the sources. Sections keep their own source line and say nothing more. `scope` replaces the
  * sentence about the figures when only part of the page is behind.
  *
  * A page that reads Insight while Hyphen's index is stale passes `reads="insight"`: it is quiet while Insight is
@@ -70,13 +70,15 @@ export function StaleIndexNotice({ scope, reads }: { scope?: string; reads?: 'in
     <p
       role="status"
       data-stale-index
-      className="rx-note rounded border border-[var(--dh-warn,#b45309)] p-3"
+      className="rx-note rounded border border-[var(--dh-warn,#b45309)] p-3 max-sm:px-2.5 max-sm:py-2"
     >
       {hyphen} {insight ? `${insight} ` : null}
       {figures}{' '}
-      {insightStale
-        ? t`Blocks and transactions elsewhere in Radar are current.`
-        : t`Blocks, transactions and addresses elsewhere in Radar are current.`}{' '}
+      <span className="max-sm:hidden" data-stale-elsewhere>
+        {insightStale
+          ? t`Blocks and transactions elsewhere in Radar are current.`
+          : t`Blocks, transactions and addresses elsewhere in Radar are current.`}{' '}
+      </span>
       <PageLink to="/status">{t`See the sources`}</PageLink>
     </p>
   )

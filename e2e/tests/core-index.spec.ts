@@ -268,12 +268,22 @@ test.describe('address page', () => {
   test('shows one notice on a stale analytics page and no per-section warning @IN-03 @HY-19', async ({
     page,
   }) => {
+    const phone = (page.viewportSize()?.width ?? 1000) <= 640
     for (const path of ['/rich-list', '/charts', '/mempool']) {
       await page.goto(`${path}?network=testnet`)
       await expect(page.locator('[data-stale-index]')).toHaveCount(1, { timeout: 15_000 })
-      await expect(page.locator('[data-stale-index]')).toContainText(
-        'Blocks, transactions and addresses elsewhere in Radar are current.',
-      )
+      const notice = page.locator('[data-stale-index]')
+      if (phone) {
+        await expect(notice.locator('[data-stale-elsewhere]')).toBeHidden()
+        const box = (await notice.boundingBox())!
+        expect(box.height, `${path}: the notice stays compact on a phone`).toBeLessThan(
+          path === '/mempool' ? 120 : 100,
+        )
+      } else {
+        await expect(notice.locator('[data-stale-elsewhere]')).toHaveText(
+          /Blocks, transactions and addresses elsewhere in Radar are current\./,
+        )
+      }
       await expect(
         page.locator('[data-stale-index]').getByRole('link', { name: 'See the sources' }),
       ).toHaveAttribute('href', /\/status/)
