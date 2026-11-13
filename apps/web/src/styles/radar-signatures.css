@@ -277,7 +277,6 @@
   margin: 0;
 }
 .rx-home__sec .rx-figs {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   max-width: 760px;
   margin-top: 22px;
 }
@@ -322,8 +321,7 @@
     margin-top: 12px;
     font-size: 16px;
   }
-  .rx-figs,
-  .rx-home__sec .rx-figs {
+  .rx-figs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px 20px;
     margin-top: 22px;

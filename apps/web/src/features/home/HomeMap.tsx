@@ -68,9 +68,7 @@ export function HomeMap() {
   const land = useLand()
   const points = useMemo(
     () =>
-      [...(geo.data?.data.points ?? [])]
-        .filter((p) => p.nodes > 0)
-        .sort((a, b) => b.nodes - a.nodes),
+      (geo.data?.data.points ?? []).filter((p) => p.nodes > 0).sort((a, b) => b.nodes - a.nodes),
     [geo.data],
   )
   const masternodes = points.reduce((n, p) => n + p.masternodes, 0)

@@ -4,7 +4,7 @@ import { Skeleton, SourceLine } from '@/ui'
 import { SourceScope, sourceKey } from '@/ui/source-scope'
 import { useLeadSources } from '@/ui/stat'
 
-export interface FigureProps {
+interface FigureProps {
   /** The figure's name; pass a link with `rx-fig__link` to make the whole figure open it. */
   label: ReactNode
   value: ReactNode

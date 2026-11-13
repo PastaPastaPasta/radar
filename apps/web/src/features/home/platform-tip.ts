@@ -7,8 +7,6 @@ import { platformTipQuery, type PlatformTip } from '@/data/sdk/queries'
 import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 
-export type { PlatformTip }
-
 /** Nothing pushes the Platform tip, so the page reads it again while it is open: a figure on screen must not drift into looking out of date. */
 export const TIP_POLL_MS = 60_000
 

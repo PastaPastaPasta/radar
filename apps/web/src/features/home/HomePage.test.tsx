@@ -527,6 +527,7 @@ describe('Home page', () => {
     vi.spyOn(coreLive, 'txStatus').mockReturnValue({ state: 'live', fallbackHint: false })
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
+    await waitFor(() => expect(section('core')).toHaveTextContent('Nothing seen yet'))
     const tx = { ...(await core.tx('testnet', TESTNET_TX)).data!, height: undefined }
     act(() => {
       for (let i = 0; i < 25; i++) {

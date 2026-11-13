@@ -29,6 +29,12 @@ const BLOCKS = 8
 
 type Listed<T> = (SourceStamp & { data: { items: T[] } }) | undefined
 
+interface ListQuery {
+  error: unknown
+  isError: boolean
+  refetch: () => unknown
+}
+
 /** What the list needs of a Platform block row. */
 interface PlatformBlockRow {
   header: { hash: string; height: number; timestamp: number; l1LockedHeight?: number | null }
@@ -39,13 +45,7 @@ function loadState(error: boolean, shown: unknown) {
   return error && !shown ? 'error' : shown ? 'ready' : 'loading'
 }
 
-function TransitionsCard({
-  query,
-  shown,
-}: {
-  query: { error: unknown; isError: boolean; refetch: () => unknown }
-  shown: Listed<PeTransaction>
-}) {
+function TransitionsCard({ query, shown }: { query: ListQuery; shown: Listed<PeTransaction> }) {
   const { t } = useLingui()
   const columns = useMemo<ColumnDef<PeTransaction>[]>(
     () => [
@@ -104,13 +104,7 @@ function TransitionsCard({
   )
 }
 
-function BlocksCard({
-  query,
-  shown,
-}: {
-  query: { error: unknown; isError: boolean; refetch: () => unknown }
-  shown: Listed<PlatformBlockRow>
-}) {
+function BlocksCard({ query, shown }: { query: ListQuery; shown: Listed<PlatformBlockRow> }) {
   const { t } = useLingui()
   const columns = useMemo<ColumnDef<PlatformBlockRow>[]>(
     () => [
