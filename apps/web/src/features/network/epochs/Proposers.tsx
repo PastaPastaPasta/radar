@@ -1,22 +1,22 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, useNetwork } from '@/features/entity'
-import { formatInt, formatPercent } from '@/lib/format'
+import { useNetwork } from '@/features/entity'
+import { formatInt } from '@/lib/format'
 import { Card, DataTable } from '@/ui'
-import { epochsQueries, type EpochProposers, type Proposer } from './queries'
+import {
+  PROPOSER_SORT_KEYS,
+  rankProposers,
+  useProposerColumns,
+  type ProposerRow,
+} from './proposer-table'
+import { epochsQueries, type EpochProposers } from './queries'
 import { queryView, sortRows, stampsOf, useAfterIdle } from './state'
 
 const TOP = 20
 const NONE = {} as const
-
-interface Row extends Proposer {
-  rank: number
-  share: number
-}
 
 /** NX-50: the twenty evonodes that proposed the most blocks this epoch, re-sortable. */
 export function Proposers() {
@@ -31,51 +31,12 @@ export function Proposers() {
     enabled: ready && epoch !== undefined,
   })
   const answer = query.data?.data
-  const rows = useMemo<Row[]>(() => {
+  const rows = useMemo<ProposerRow[]>(() => {
     if (!answer) return []
-    const total = Number(answer.total)
-    const top = answer.proposers.slice(0, TOP).map((p, i) => ({
-      ...p,
-      rank: i + 1,
-      share: total === 0 ? 0 : Number(p.blocks) / total,
-    }))
-    return sortRows(top, sort, {
-      rank: (r) => r.rank,
-      node: (r) => r.proTxHash,
-      blocks: (r) => r.blocks,
-      share: (r) => r.share,
-    })
+    const top = rankProposers(answer.proposers.slice(0, TOP), Number(answer.total))
+    return sortRows(top, sort, PROPOSER_SORT_KEYS)
   }, [answer, sort])
-  const columns = useMemo<ColumnDef<Row>[]>(
-    () => [
-      {
-        id: 'rank',
-        header: '#',
-        accessorFn: (r) => r.rank,
-        meta: { numeric: true, phone: 'hidden' },
-      },
-      {
-        id: 'node',
-        header: t`Evonode`,
-        accessorFn: (r) => r.proTxHash,
-        cell: ({ row }) => <Entity kind="evonode" id={row.original.proTxHash} />,
-        meta: { phone: 'title' },
-      },
-      {
-        id: 'blocks',
-        header: t`Blocks`,
-        accessorFn: (r) => formatInt(Number(r.blocks)),
-        meta: { numeric: true, phone: 'primary', phoneUnit: t`blocks` },
-      },
-      {
-        id: 'share',
-        header: t`Share`,
-        accessorFn: (r) => formatPercent(r.share, 1),
-        meta: { numeric: true, phone: 'secondary' },
-      },
-    ],
-    [t],
-  )
+  const columns = useProposerColumns()
   const base = (a: EpochProposers) =>
     t`Epoch ${formatInt(a.epoch)}. Evonodes: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
   const pages = answer?.pages ?? 0

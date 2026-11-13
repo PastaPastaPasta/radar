@@ -8,16 +8,14 @@ import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarPlatform } from '@/data/radar/schemas'
 import { Entity, useNetwork } from '@/features/entity'
+import { dash } from '@/features/network/mn/platform-math'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { CREDITS_PER_DASH } from '@/lib/units'
 import { Amount, Card, Chart, DataTable, Empty, Stat, Stats, Time, Unavailable } from '@/ui'
 import { queryView, stampsOf } from './state'
 
 const UPCOMING = 12
 const HISTORY = 60
-
-const dash = (credits: bigint): number => Number(credits) / Number(CREDITS_PER_DASH)
 
 /** RA-60, RA-62, RA-63: what Radar's crawl adds to the epoch: the pool, the schedule and the history band. */
 export function RadarZone() {

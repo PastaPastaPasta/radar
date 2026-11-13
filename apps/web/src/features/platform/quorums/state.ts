@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { LoadState } from '@/ui'
 
-export interface QueryView {
+interface QueryView {
   state: LoadState
   error: unknown
   onRetry: () => void
@@ -25,23 +25,6 @@ export function queryView(query: {
 /** The stamps of the answers that have arrived. */
 export function stampsOf(...answers: (Sourced<unknown> | undefined)[]): SourceStamp[] {
   return answers.flatMap((a) => (a ? [stampOf(a)] : []))
-}
-
-/** Sorts a copy of `rows` by a sort value (`-id` descending): ties keep their order, so a re-sort is stable. */
-export function sortRows<Row>(
-  rows: readonly Row[],
-  sort: string,
-  keys: Record<string, (row: Row) => number | bigint | string>,
-): Row[] {
-  const desc = sort.startsWith('-')
-  const key = keys[desc ? sort.slice(1) : sort]
-  if (!key) return [...rows]
-  const sign = desc ? -1 : 1
-  return [...rows].sort((a, b) => {
-    const x = key(a)
-    const y = key(b)
-    return x === y ? 0 : x < y ? -sign : sign
-  })
 }
 
 /** True once the browser has had an idle moment after first paint, so loading the SDK never competes with it (§3.3). */

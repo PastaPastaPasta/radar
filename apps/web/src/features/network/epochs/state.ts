@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { LoadState } from '@/ui'
@@ -59,4 +60,34 @@ export function useAfterIdle(): boolean {
     return () => cancel?.(id)
   }, [])
   return idle
+}
+
+/**
+ * Show-more paging for a table sorted through the page's `sort` search param: `shown` rows of `rowCount`, with the
+ * table's `sort.onChange` (which starts over at the first page) and `paging` props.
+ */
+export function useSortedPaging(pageSize: number, rowCount: number) {
+  const navigate = useNavigate()
+  const [shown, setShown] = useState(pageSize)
+  return {
+    shown,
+    onSort: (next: string) => {
+      setShown(pageSize)
+      void navigate({
+        to: '.',
+        search: ((prev: Record<string, unknown>) => ({ ...prev, sort: next })) as never,
+      })
+    },
+    paging:
+      shown < rowCount
+        ? {
+            kind: 'infinite' as const,
+            hasNext: true,
+            fetching: false,
+            fetchNext: () => {
+              setShown((n) => n + pageSize)
+            },
+          }
+        : undefined,
+  }
 }

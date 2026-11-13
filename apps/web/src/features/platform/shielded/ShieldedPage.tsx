@@ -1,8 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { ShieldedNoteDto } from '@/data/sdk/methods/p-chain'
@@ -24,6 +24,7 @@ import {
   Stat,
   Stats,
 } from '@/ui'
+import { useLookupForm } from '../quorums/lookup-form'
 import { queryView, stampsOf, useAfterIdle } from '../quorums/state'
 import { ShieldedChart } from './ShieldedChart'
 
@@ -113,25 +114,13 @@ function PoolState() {
 function Nullifier({ nf }: { nf: string | undefined }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
-  const [draft, setDraft] = useState(nf ?? '')
+  const { draft, setDraft, submit } = useLookupForm('/shielded', 'nf', nf)
   const parsed = nf === undefined ? undefined : parseNullifier(nf)
   const invalid = nf !== undefined && parsed === undefined
   const status = useQuery({
     ...sdkQueries['shielded.nullifiers'](net, { nullifiers: [parsed ?? ''] }),
     enabled: parsed !== undefined,
   })
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const value = draft.trim()
-    void navigate({
-      to: '/shielded',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        nf: value === '' ? undefined : value,
-      })) as never,
-    })
-  }
   const spent = parsed === undefined ? undefined : status.data?.data.get(parsed)
   return (
     <Card

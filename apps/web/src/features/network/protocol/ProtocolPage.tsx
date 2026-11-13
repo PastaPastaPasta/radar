@@ -1,16 +1,22 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import type { Sourced } from '@/data/envelope'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarPlatform } from '@/data/radar/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
-import { queryView, sortRows, stampsOf, useAfterIdle } from '@/features/network/epochs/state'
+import {
+  queryView,
+  sortRows,
+  stampsOf,
+  useAfterIdle,
+  useSortedPaging,
+} from '@/features/network/epochs/state'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, KeyValue, Meter, Stat, Stats, Unavailable } from '@/ui'
@@ -262,8 +268,6 @@ function Tally({ votes }: { votes: VotesQuery }) {
 function VoteTable({ votes }: { votes: VotesQuery }) {
   const { t } = useLingui()
   const { sort } = useSearch({ from: '/protocol' })
-  const navigate = useNavigate()
-  const [shown, setShown] = useState(PAGE)
   const rows = useMemo(
     () =>
       sortRows(votes.data?.data.rows ?? [], sort, {
@@ -290,6 +294,7 @@ function VoteTable({ votes }: { votes: VotesQuery }) {
     ],
     [t],
   )
+  const { shown, onSort, paging } = useSortedPaging(PAGE, rows.length)
   const pages = votes.data?.data.pages ?? 0
   return (
     <Card
@@ -312,30 +317,10 @@ function VoteTable({ votes }: { votes: VotesQuery }) {
         columns={columns}
         rows={rows.slice(0, shown)}
         getRowId={(r) => r.proTxHash}
-        sort={{
-          value: sort,
-          onChange: (next) => {
-            setShown(PAGE)
-            void navigate({
-              to: '.',
-              search: ((prev: Record<string, unknown>) => ({ ...prev, sort: next })) as never,
-            })
-          },
-        }}
+        sort={{ value: sort, onChange: onSort }}
         {...queryView(votes)}
         empty={t`No evonode has voted.`}
-        paging={
-          shown < rows.length
-            ? {
-                kind: 'infinite',
-                hasNext: true,
-                fetching: false,
-                fetchNext: () => {
-                  setShown((n) => n + PAGE)
-                },
-              }
-            : undefined
-        }
+        paging={paging}
       />
     </Card>
   )

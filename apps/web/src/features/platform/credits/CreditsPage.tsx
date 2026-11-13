@@ -1,13 +1,13 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { useSearch } from '@tanstack/react-router'
 import { useDecentralizedOnly } from '@/data/health'
 import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { base58Encode, isPlatformId } from '@/lib/base58'
 import { hexToBytes, isHex, normalizeHex } from '@/lib/hex'
 import { Amount, Card, Copy, Empty, ErrorState, Skeleton, Stat, Stats } from '@/ui'
+import { useLookupForm } from '../quorums/lookup-form'
 import { queryView, stampsOf, useAfterIdle } from '../quorums/state'
 
 const NONE = {} as const
@@ -69,25 +69,13 @@ export function CreditsPage() {
 function Lookup({ id, off }: { id: string | undefined; off: boolean }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
-  const [draft, setDraft] = useState(id ?? '')
+  const { draft, setDraft, submit } = useLookupForm('/credits', 'id', id)
   const parsed = id === undefined ? undefined : parseCreditId(id)
   const balance = useQuery({
     ...sdkQueries['system.prefundedSpecializedBalance'](net, { id: parsed ?? '' }),
     enabled: parsed !== undefined,
   })
   const invalid = id !== undefined && parsed === undefined
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const value = draft.trim()
-    void navigate({
-      to: '/credits',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        id: value === '' ? undefined : value,
-      })) as never,
-    })
-  }
   return (
     <Card
       id="prefunded"

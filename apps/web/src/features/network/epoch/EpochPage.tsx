@@ -1,25 +1,31 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { Link, Navigate, useNavigate, useSearch } from '@tanstack/react-router'
-import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { Link, Navigate, useSearch } from '@tanstack/react-router'
+import { useMemo } from 'react'
+import type { SourceStamp } from '@/data/envelope'
 import type { FinalizedEpochDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { formatMultiplier } from '@/features/network/epochs/CurrentEpoch'
-import { queryView, sortRows, stampsOf, useAfterIdle } from '@/features/network/epochs/state'
-import { formatInt, formatPercent } from '@/lib/format'
+import {
+  PROPOSER_SORT_KEYS,
+  rankProposers,
+  useProposerColumns,
+  type ProposerRow,
+} from '@/features/network/epochs/proposer-table'
+import {
+  queryView,
+  sortRows,
+  stampsOf,
+  useAfterIdle,
+  useSortedPaging,
+  type QueryView,
+} from '@/features/network/epochs/state'
+import { formatInt } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, KeyValue, Time } from '@/ui'
 
 const NONE = {} as const
 const PAGE = 50
-
-interface Row {
-  proTxHash: string
-  blocks: bigint
-  rank: number
-  share: number
-}
 
 const parseEpoch = (n: string): number | undefined => (/^\d{1,9}$/.test(n) ? Number(n) : undefined)
 
@@ -205,61 +211,21 @@ function EpochProposers({
   state,
 }: {
   info: FinalizedEpochDto | undefined
-  source: ReturnType<typeof stampsOf>
-  state: ReturnType<typeof queryView>
+  source: SourceStamp[]
+  state: QueryView
 }) {
   const { t } = useLingui()
   const { sort } = useSearch({ from: '/epoch/$n' })
-  const navigate = useNavigate()
-  const [shown, setShown] = useState(PAGE)
-  const all = useMemo<Row[]>(() => {
+  const all = useMemo<ProposerRow[]>(() => {
     if (!info) return []
-    const total = Number(info.totalBlocks)
-    return [...info.blockProposers]
+    const ranked = [...info.blockProposers]
       .map(([proTxHash, blocks]) => ({ proTxHash, blocks }))
       .sort((a, b) => (a.blocks === b.blocks ? 0 : a.blocks > b.blocks ? -1 : 1))
-      .map((p, i) => ({ ...p, rank: i + 1, share: total === 0 ? 0 : Number(p.blocks) / total }))
+    return rankProposers(ranked, Number(info.totalBlocks))
   }, [info])
-  const sorted = useMemo(
-    () =>
-      sortRows(all, sort, {
-        rank: (r) => r.rank,
-        node: (r) => r.proTxHash,
-        blocks: (r) => r.blocks,
-        share: (r) => r.share,
-      }),
-    [all, sort],
-  )
-  const columns = useMemo<ColumnDef<Row>[]>(
-    () => [
-      {
-        id: 'rank',
-        header: '#',
-        accessorFn: (r) => r.rank,
-        meta: { numeric: true, phone: 'hidden' },
-      },
-      {
-        id: 'node',
-        header: t`Evonode`,
-        accessorFn: (r) => r.proTxHash,
-        cell: ({ row }) => <Entity kind="evonode" id={row.original.proTxHash} />,
-        meta: { phone: 'title' },
-      },
-      {
-        id: 'blocks',
-        header: t`Blocks`,
-        accessorFn: (r) => formatInt(Number(r.blocks)),
-        meta: { numeric: true, phone: 'primary', phoneUnit: t`blocks` },
-      },
-      {
-        id: 'share',
-        header: t`Share`,
-        accessorFn: (r) => formatPercent(r.share, 1),
-        meta: { numeric: true, phone: 'secondary' },
-      },
-    ],
-    [t],
-  )
+  const sorted = useMemo(() => sortRows(all, sort, PROPOSER_SORT_KEYS), [all, sort])
+  const columns = useProposerColumns()
+  const { shown, onSort, paging } = useSortedPaging(PAGE, sorted.length)
   return (
     <Card
       id="epoch-proposers"
@@ -278,30 +244,10 @@ function EpochProposers({
         columns={columns}
         rows={sorted.slice(0, shown)}
         getRowId={(r) => r.proTxHash}
-        sort={{
-          value: sort,
-          onChange: (next) => {
-            setShown(PAGE)
-            void navigate({
-              to: '.',
-              search: ((prev: Record<string, unknown>) => ({ ...prev, sort: next })) as never,
-            })
-          },
-        }}
+        sort={{ value: sort, onChange: onSort }}
         {...state}
         empty={t`No evonode proposed a block in this epoch.`}
-        paging={
-          shown < sorted.length
-            ? {
-                kind: 'infinite',
-                hasNext: true,
-                fetching: false,
-                fetchNext: () => {
-                  setShown((n) => n + PAGE)
-                },
-              }
-            : undefined
-        }
+        paging={paging}
       />
     </Card>
   )
