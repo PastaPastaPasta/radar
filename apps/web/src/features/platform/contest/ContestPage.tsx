@@ -234,10 +234,10 @@ function TallyTab({
 }) {
   const { t } = useLingui()
   const decentralized = useDecentralizedOnly()
-  const slices = useTallySlices(state)
   const aliasOf = new Map(
     (indexed?.contenders ?? []).map((c) => [c.identifier, c.aliases[0]?.alias] as const),
   )
+  const slices = useTallySlices(state, aliasOf)
   const fund = prefunded(indexed, ref_.index)
   const picked = search.towards ?? state.contenders[0]?.identityId
   return (

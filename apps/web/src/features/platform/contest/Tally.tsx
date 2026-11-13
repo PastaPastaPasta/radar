@@ -21,14 +21,17 @@ const ABSTAIN = 'var(--dh-warn)'
 const LOCK = 'var(--dh-bad)'
 
 /** One slice per contender, then abstain and lock: the same rows the bar and its table draw. */
-export function useTallySlices(state: ContestVoteStateDto): TallySlice[] {
+export function useTallySlices(
+  state: ContestVoteStateDto,
+  aliasOf?: ReadonlyMap<string, string | undefined>,
+): TallySlice[] {
   const { t } = useLingui()
   return [
     ...state.contenders.map((c) => ({
       id: c.identityId,
       kind: 'contender' as const,
       votes: c.voteTally ?? 0,
-      label: <IdentityRef id={c.identityId} />,
+      label: <IdentityRef id={c.identityId} label={aliasOf?.get(c.identityId)} />,
     })),
     { id: 'abstain', kind: 'abstain' as const, votes: state.abstainVotes ?? 0, label: t`Abstain` },
     { id: 'lock', kind: 'lock' as const, votes: state.lockVotes ?? 0, label: t`Lock` },
