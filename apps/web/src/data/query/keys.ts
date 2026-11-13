@@ -72,6 +72,10 @@ export const VIEW_KEY_PREFIXES = {
 } as const satisfies Record<string, readonly string[]>
 
 export const viewKeys: KeyFactory<'view'> = factory('view')
+
+/** The key of one identity's DPNS name: the per-key query of the `dpnsName` batcher, which `useIdentityName` reads without loading the batcher. */
+export const dpnsNameKey = (net: NetworkId, identityId: string) =>
+  queryKey(net, 'sdk', 'dpns-name', { identityId })
 export const rateKeys: KeyFactory<'rate'> = factory('rate')
 export const healthKeys: KeyFactory<'health'> = factory('health')
 

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Sourced } from '@/data/envelope'
+import { dpnsNameKey } from '@/data/query'
 import {
   DPNS_CONTRACT,
   dpnsName,
@@ -45,6 +46,10 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers())
 
 describe('SDK batchers', () => {
+  it('keeps the dpnsName query under the key useIdentityName reads', () => {
+    expect(dpnsName.queryOptions('testnet', 'i1').queryKey).toEqual(dpnsNameKey('testnet', 'i1'))
+  })
+
   it('reads many identity balances in one call and gives each asker its own', async () => {
     call.mockResolvedValue(sourced(new Map([['a', 5n]])))
     const a = identityBalance.fetch('mainnet', 'a')
