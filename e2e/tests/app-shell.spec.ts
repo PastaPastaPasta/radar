@@ -2,127 +2,34 @@ import { expectAccessible } from '../helpers/a11y'
 import { lowContrastText } from '../helpers/contrast'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
 
 const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
 const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
-const ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
-const PROPOSAL = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
-const PROTX = '0'.repeat(64)
-const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
-
-const ROUTES: [path: string, heading: string][] = [
-  ['/', 'Radar'],
-  ['/search', 'Search'],
-  ['/blocks', 'Blocks'],
-  ['/blocks?date=2026-11-03', 'Blocks'],
-  [`/block/${BLOCK_HASH}`, 'Block'],
-  ['/block/2569992', 'Block'],
-  [`/tx/${TXID}`, 'Transaction'],
-  [`/address/${ADDRESS}`, 'Address'],
-  ['/mempool', 'Mempool'],
-  ['/rich-list', 'Rich list'],
-  ['/charts', 'Charts'],
-  ['/internals', 'Network internals'],
-  ['/governance', 'Governance'],
-  [`/governance/${PROPOSAL}`, 'Proposal'],
-  ['/status', 'Status'],
-  ['/nodes', 'Nodes'],
-  ['/masternodes', 'Masternodes'],
-  ['/masternodes?type=evo&view=platform', 'Masternodes'],
-  [`/mn/${PROTX}`, 'Masternode'],
-  [`/mn/${PROTX}?tab=payments`, 'Masternode'],
-  ['/map', 'Map'],
-  ['/epochs', 'Epochs'],
-  ['/epoch/1234', 'Epoch'],
-  ['/protocol', 'Protocol'],
-  ['/v24', 'Core 24 activation'],
-  ['/changes', 'Changes'],
-  ['/platform', 'Platform'],
-  ['/platform/blocks', 'Platform blocks'],
-  ['/platform/block/1234', 'Platform block'],
-  ['/platform/txs', 'State transitions'],
-  [`/platform/tx/${TXID}`, 'State transition'],
-  ['/identities', 'Identities'],
-  ['/identity/lookup?pkh=62e907b15cbf27d5425399ebf6f0fb50ebb88f18', 'Identity by key hash'],
-  [`/identity/${CONTRACT}`, 'Identity'],
-  ['/contracts', 'Contracts'],
-  [`/contract/${CONTRACT}`, 'Contract'],
-  [`/contract/${CONTRACT}/documents/domain`, 'Documents'],
-  [`/document/${CONTRACT}/domain/${CONTRACT}`, 'Document'],
-  ['/tokens', 'Tokens'],
-  [`/token/${CONTRACT}`, 'Token'],
-  [`/token/${CONTRACT}/holders`, 'Token holders'],
-  ['/names', 'Names'],
-  ['/name/alice', 'Name'],
-  ['/contests', 'Name contests'],
-  ['/contest/alice', 'Name contest'],
-  ['/votes', 'Masternode votes'],
-  ['/polls', 'Vote polls'],
-  [`/groups/${CONTRACT}`, 'Groups'],
-  [`/group/${CONTRACT}/0`, 'Group'],
-  ['/credits', 'Credits'],
-  ['/shielded', 'Shielded pool'],
-  ['/platform-address/dash1krma5z3ttj75la4m93xcndna9ullamq9y5e9n5rs', 'Platform address'],
-  ['/quorums', 'Quorums'],
-  ['/query', 'Query'],
-  ['/tools/transition', 'Transition decoder'],
-  ['/tools/verify-message', 'Verify message'],
-  ['/tools/qr', 'QR reader'],
-  ['/tools/tx', 'Decoder'],
-  ['/sdk-reference', 'SDK reference'],
-  ['/api', 'Radar API'],
-  ['/sources', 'Data sources'],
-  ['/saved', 'Saved'],
-  ['/settings', 'Settings'],
-  ['/about', 'About'],
-]
-
-/** The pages that are built: they show their own content, never the placeholder. */
-const BUILT = new Set([
-  '/',
-  '/search',
-  '/blocks',
-  '/blocks?date=2026-11-03',
-  `/block/${BLOCK_HASH}`,
-  '/block/2569992',
-  `/tx/${TXID}`,
-  `/address/${ADDRESS}`,
-  '/mempool',
-  '/rich-list',
-  '/charts',
-  '/internals',
-  '/governance',
-  `/governance/${PROPOSAL}`,
-  `/mn/${PROTX}`,
-  `/mn/${PROTX}?tab=payments`,
-  '/status',
-  '/settings',
-  '/sources',
-  '/tools/verify-message',
-  '/tools/qr',
-])
 
 test.describe('routes', () => {
-  for (const [path, heading] of ROUTES) {
-    const built = BUILT.has(path)
-    test(`${path} ${built ? 'shows its page, with no error' : 'says what will be here and where the data comes from'} and fits the width @X-08 @X-09`, async ({
-      page,
-    }) => {
-      await page.goto(path)
+  for (const route of ROUTE_CASES) {
+    for (const net of casesNets(route)) {
+      const what = route.built
+        ? 'shows its page, with no error'
+        : 'says what will be here and where the data comes from'
+      test(`${net} ${route.path} ${what} and fits the width @X-08 @X-09`, async ({ page }) => {
+        await page.goto(withQuery(route.path, networkQuery(net)))
 
-      await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible()
-      await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
-      await settled(page)
+        await expect(page.getByRole('heading', { level: 1, name: route.h1 })).toBeVisible()
+        await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
+        await settled(page)
 
-      if (built) {
-        await expect(page.getByText('This page is on its way')).toHaveCount(0)
-        await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
-      } else {
-        await expect(page.getByText('This page is on its way')).toBeVisible()
-        await expect(page.getByText('Read from')).toBeVisible()
-      }
-      expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
-    })
+        if (route.built) {
+          await expect(page.getByText('This page is on its way')).toHaveCount(0)
+          await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
+        } else {
+          await expect(page.getByText('This page is on its way')).toBeVisible()
+          await expect(page.getByText('Read from')).toBeVisible()
+        }
+        expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
+      })
+    }
   }
 
   test('a route has no serious accessibility violations @X-08', async ({ page }) => {

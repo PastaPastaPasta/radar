@@ -1,5 +1,5 @@
 /**
- * Decentralized only mode, end to end: every built page on both networks, and the switch itself.
+ * Decentralized only mode, end to end: every route in `e2e/routes` on the networks it names, and the switch itself.
  *
  * What it can and cannot see. A page's requests (including a worker's, which Chromium reports to the page) are
  * recorded from before the page loads. Fixture builds replace the SDK's transport with one on the main thread
@@ -16,84 +16,15 @@ import { expectAccessible } from '../helpers/a11y'
 import { answerAsUnmined } from '../helpers/fixtures'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
-
-const MAINNET = {
-  query: '',
-  blockHash: '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6',
-  height: '2569992',
-  date: '2026-11-03',
-  tx: '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90',
-  address: 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14',
-  proposal: '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c',
-  protx: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
-}
-const TESTNET = {
-  query: 'network=testnet',
-  blockHash: '00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c',
-  height: '1589232',
-  date: '2026-11-03',
-  tx: '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6',
-  address: 'yX6ZaQMNNaMvNEYrpuwYV7BnMJpZaMQpZa',
-  proposal: '01934d6d5c25ade531176a0283148b3d6aeaef2c0b6d599552e43c2199d2f8cd',
-  protx: '51238bb9e2b68fc822e8eb15d415e97ebc86f769a72c15e0a6e25d9ea8d38475',
-}
-
-/** A block's transactions: a table of links on desktop, a list of rows that open on a phone. */
-const BLOCK_TXS = 'a[href^="/tx/"], [aria-label^="Transactions in block"] button'
+import { casesNets, networkQuery, ROUTE_CASES, withQuery, type RouteCase } from '../routes'
+import { M1_RECORDS } from '../routes/m1'
 
 /** What the page must show in the mode: its own data, the mode's unavailable state, or both. */
-type Shows = 'data' | 'unavailable' | 'both'
-
-interface Walk {
-  path: string
-  heading: string
-  shows: Shows
-  /** Something the page reads over DAPI or the SDK and must still show. */
-  data?: string
-  pending?: boolean
-}
-
-const pages = (n: typeof MAINNET): Walk[] => [
-  { path: '/', heading: 'Radar', shows: 'both', data: '[data-headline]' },
-  { path: '/search', heading: 'Search', shows: 'data' },
-  { path: `/search?q=${n.height}`, heading: 'Search', shows: 'both', data: `a[href^="/block/"]` },
-  {
-    path: `/search?q=${n.address}`,
-    heading: 'Search',
-    shows: 'both',
-    data: `a[href^="/address/"]`,
-  },
-  { path: '/blocks', heading: 'Blocks', shows: 'data', data: 'a[href^="/block/"]' },
-  {
-    path: `/blocks?date=${n.date}`,
-    heading: 'Blocks',
-    shows: 'data',
-    data: 'a[href^="/block/"]',
-  },
-  { path: `/block/${n.blockHash}`, heading: 'Block', shows: 'data', data: BLOCK_TXS },
-  { path: `/block/${n.height}`, heading: 'Block', shows: 'data', data: BLOCK_TXS },
-  { path: `/tx/${n.tx}`, heading: 'Transaction', shows: 'both', data: '#io' },
-  { path: `/tx/${n.tx}`, heading: 'Transaction', shows: 'data', data: '#io', pending: true },
-  { path: `/address/${n.address}`, heading: 'Address', shows: 'both', data: '[data-live]' },
-  { path: '/mempool', heading: 'Mempool', shows: 'both', data: '[data-mempool-view="seen"]' },
-  { path: '/rich-list', heading: 'Rich list', shows: 'unavailable' },
-  { path: '/charts', heading: 'Charts', shows: 'unavailable' },
-  { path: '/internals', heading: 'Network internals', shows: 'unavailable' },
-  { path: '/governance', heading: 'Governance', shows: 'unavailable' },
-  { path: `/governance/${n.proposal}`, heading: 'Proposal', shows: 'unavailable' },
-  { path: `/mn/${n.protx}`, heading: 'Masternode', shows: 'unavailable' },
-  { path: '/status', heading: 'Status', shows: 'data', data: '[data-state="off"]' },
-  // The price feed is offered on mainnet only, so only there does the unit card have something to say.
-  {
-    path: '/settings',
-    heading: 'Settings',
-    shows: n === MAINNET ? 'both' : 'data',
-    data: '#sources',
-  },
-  { path: '/sources', heading: 'Data sources', shows: 'data', data: '[data-backend="dapi"]' },
-  { path: '/tools/verify-message', heading: 'Verify message', shows: 'data' },
-  { path: '/tools/qr', heading: 'QR reader', shows: 'data' },
-]
+const SHOWS = {
+  data: 'its data',
+  partial: 'data and the unavailable state',
+  unavailable: 'the unavailable state',
+} as const satisfies Record<RouteCase['decentralized'], string>
 
 /** Pages with no unavailable state whose new parts are checked for accessibility too. */
 const A11Y = new Set(['/status', '/sources', '/settings'])
@@ -129,11 +60,6 @@ function watchRequests(page: Page): Watch {
   return seen
 }
 
-const withQuery = (path: string, ...params: string[]) => {
-  const extra = params.filter(Boolean).join('&')
-  return extra ? `${path}${path.includes('?') ? '&' : '?'}${extra}` : path
-}
-
 /** The mode's mark that is on screen: the glyph in the bar, or the strip under it on a narrow phone. */
 const mark = (page: Page) =>
   page.locator('[data-source-mode="decentralized"]').locator('visible=true')
@@ -157,43 +83,70 @@ async function pastEveryPoll(page: Page): Promise<void> {
   await page.waitForTimeout(QUIET_MS)
 }
 
-test.describe('Decentralized only mode: every built page', () => {
-  for (const [network, ids] of [
-    ['mainnet', MAINNET],
-    ['testnet', TESTNET],
-  ] as const) {
-    for (const walk of pages(ids)) {
-      const name = `${walk.path}${walk.pending ? ' (pending)' : ''}`
-      test(`${network} ${name} asks no hosted backend and shows ${walk.shows === 'both' ? 'data and the unavailable state' : walk.shows === 'data' ? 'its data' : 'the unavailable state'} @X-05 @X-09 @PE-28 @HY-19`, async ({
-        page,
-      }) => {
-        if (walk.pending) await answerAsUnmined(page, ids.tx, { instantLocked: false })
+test.describe('Decentralized only mode: every route', () => {
+  for (const route of ROUTE_CASES) {
+    for (const net of casesNets(route)) {
+      const title = route.built
+        ? `asks no hosted backend and shows ${SHOWS[route.decentralized]}`
+        : 'asks no hosted backend and says what will be here'
+      test(`${net} ${route.path} ${title} @X-05 @X-09 @PE-28 @HY-19`, async ({ page }) => {
         await page.clock.install()
         const requests = watchRequests(page)
-        await page.goto(withQuery(walk.path, ids.query, 'sources=decentralized'))
+        await page.goto(withQuery(route.path, networkQuery(net), 'sources=decentralized'))
 
-        await expect(page.getByRole('heading', { level: 1, name: walk.heading })).toBeVisible()
+        await expect(page.getByRole('heading', { level: 1, name: route.h1 })).toBeVisible()
         await expect(mark(page)).toBeVisible()
         await settled(page)
         await page.waitForTimeout(QUIET_MS)
         await settled(page)
 
         await expect(failures(page)).toHaveCount(0)
-        await expect(page.getByText('This page is on its way')).toHaveCount(0)
         await expect(hostedStamps(page)).toHaveCount(0)
-        if (walk.data)
-          await expect(page.locator(walk.data).locator('visible=true').first()).toBeVisible()
-        if (walk.shows === 'data') await expect(unavailable(page)).toHaveCount(0)
-        else await expect(unavailable(page).first()).toBeVisible()
-        if (walk.shows === 'unavailable') await expect(unavailable(page)).toHaveCount(1)
-
         expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
-        if (walk.shows !== 'data' || A11Y.has(walk.path)) await expectAccessible(page)
-        await pastEveryPoll(page)
+
+        if (route.built) {
+          await expect(page.getByText('This page is on its way')).toHaveCount(0)
+          if (route.data)
+            await expect(page.locator(route.data).locator('visible=true').first()).toBeVisible()
+          if (route.decentralized === 'data') await expect(unavailable(page)).toHaveCount(0)
+          else await expect(unavailable(page).first()).toBeVisible()
+          if (route.decentralized === 'unavailable') await expect(unavailable(page)).toHaveCount(1)
+          if (route.decentralized !== 'data' || A11Y.has(route.path)) await expectAccessible(page)
+          await pastEveryPoll(page)
+        } else {
+          await expect(page.getByText('This page is on its way')).toBeVisible()
+        }
         expect(requests.hosted, 'requests to a hosted backend').toEqual([])
         expect(requests.elsewhere, 'requests to a host the mode does not list').toEqual([])
       })
     }
+  }
+
+  for (const net of ['mainnet', 'testnet'] as const) {
+    test(`${net} a transaction still in the mempool asks no hosted backend and shows its data @X-05 @X-09 @PE-28 @HY-19`, async ({
+      page,
+    }) => {
+      const { tx } = M1_RECORDS[net]
+      await answerAsUnmined(page, tx, { instantLocked: false })
+      await page.clock.install()
+      const requests = watchRequests(page)
+      await page.goto(withQuery(`/tx/${tx}`, networkQuery(net), 'sources=decentralized'))
+
+      await expect(page.getByRole('heading', { level: 1, name: 'Transaction' })).toBeVisible()
+      await expect(mark(page)).toBeVisible()
+      await settled(page)
+      await page.waitForTimeout(QUIET_MS)
+      await settled(page)
+
+      await expect(failures(page)).toHaveCount(0)
+      await expect(hostedStamps(page)).toHaveCount(0)
+      await expect(page.locator('#io').locator('visible=true').first()).toBeVisible()
+      await expect(unavailable(page)).toHaveCount(0)
+      expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
+      await pastEveryPoll(page)
+      expect(requests.hosted, 'requests to a hosted backend').toEqual([])
+      expect(requests.elsewhere, 'requests to a host the mode does not list').toEqual([])
+    })
   }
 })
 
