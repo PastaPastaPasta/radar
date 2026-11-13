@@ -3,7 +3,12 @@ import { delay, http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { core } from '@/data/core'
 import { healthRegistry, resetHealthRegistry } from '@/data/health'
-import { addressPrefetch, proposalPrefetch, proposalsPrefetch } from '@/data/query/route-prefetch'
+import {
+  addressPrefetch,
+  mempoolPrefetch,
+  proposalPrefetch,
+  proposalsPrefetch,
+} from '@/data/query/route-prefetch'
 import { server } from '@/test/server'
 
 describe('prefetch for a page that reads one index or the other', () => {
@@ -78,5 +83,32 @@ describe('prefetch for a page that reads one index or the other', () => {
     await wait[0]!.start(new QueryClient())
     expect(insightReads('/gobject/list')).toHaveLength(1)
     expect(hyphenReads('/proposals')).toEqual([])
+  })
+
+  it('waits for the probe before the mempool read, and reads none on a stale network', async () => {
+    vi.spyOn(core, 'tip').mockResolvedValue({
+      source: 'dapi',
+      asOf: 0,
+      fetchedAt: 0,
+      proved: false,
+      data: { height: 1_589_232, hash: '00', time: 0 },
+    })
+    const items = mempoolPrefetch('testnet')
+    expect(items.filter((i) => i.wait)).toHaveLength(1)
+    await run(items)
+    expect(hyphenReads('/status')).not.toHaveLength(0)
+    expect(hyphenReads('/mempool')).toEqual([])
+  })
+
+  it('reads the mempool summary once the probe finds a fresh index', async () => {
+    vi.spyOn(core, 'tip').mockResolvedValue({
+      source: 'dapi',
+      asOf: 0,
+      fetchedAt: 0,
+      proved: false,
+      data: { height: 2_571_151, hash: '00', time: 0 },
+    })
+    await run(mempoolPrefetch('mainnet'))
+    expect(hyphenReads('/mempool')).not.toHaveLength(0)
   })
 })

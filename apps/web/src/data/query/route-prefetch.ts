@@ -1,3 +1,4 @@
+import type { QueryClient } from '@tanstack/query-core'
 import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 import { parseBlockRef } from '@/lib/core/block-ref'
@@ -29,14 +30,6 @@ export function homePrefetch(net: NetworkId): PrefetchItem[] {
     prefetchItem('http', peQueries.status(net)),
     ...hyphenProbe(net),
   ]
-}
-
-/** `/mempool`: Hyphen's summary, unless its index is known to be stale: the page then shows DAPI's live feed and asks Hyphen nothing. */
-export function mempoolPrefetch(net: NetworkId): PrefetchItem[] {
-  if (isDevnet(net)) return []
-  return rememberedIndexState(net) === 'stale'
-    ? hyphenProbe(net)
-    : [...hyphenProbe(net), prefetchItem('http', hyQueries.mempool(net), { wait: true })]
 }
 
 /** `/blocks`: the day's rows are a DAPI list, which a loader never starts (§4.7). */
@@ -76,6 +69,13 @@ export function txPrefetch(net: NetworkId, txid: string, preload = false): Prefe
 const readsInsight = (net: NetworkId): boolean =>
   rememberedIndexState(net) === 'stale' && sourceInUse(net, 'insight')
 
+/** On a first visit the probe has not decided yet: wait for it (the loader's deadline bounds the wait). */
+async function awaitFirstProbe(net: NetworkId, client: QueryClient): Promise<void> {
+  if (rememberedIndexState(net) === undefined && sourceInUse(net, 'hyphen')) {
+    await client.prefetchQuery(healthQueries.hyphen(net))
+  }
+}
+
 /**
  * A read the stale rule routes (§4.7a). On a first visit the probe has not decided yet, so the loader waits for it (within
  * its deadline) before starting either read: a stale network never pays for a Hyphen read the page then throws away,
@@ -89,12 +89,26 @@ function indexRead(
     cost: 'http',
     wait: true,
     async start(client) {
-      if (rememberedIndexState(net) === undefined && sourceInUse(net, 'hyphen')) {
-        await client.prefetchQuery(healthQueries.hyphen(net))
-      }
+      await awaitFirstProbe(net, client)
       await pick(readsInsight(net) ? 'insight' : 'hyphen').start(client)
     },
   }
+}
+
+/** `/mempool`: Hyphen's summary once its index is known to be fresh. A stale index shows DAPI's live feed and asks Hyphen nothing. */
+export function mempoolPrefetch(net: NetworkId): PrefetchItem[] {
+  if (isDevnet(net)) return []
+  return [
+    {
+      cost: 'http',
+      wait: true,
+      async start(client) {
+        await awaitFirstProbe(net, client)
+        if (rememberedIndexState(net) === 'stale') return
+        await prefetchItem('http', hyQueries.mempool(net)).start(client)
+      },
+    },
+  ]
 }
 
 /** `/address/$address`: the summary, from whichever index the page will read. */
