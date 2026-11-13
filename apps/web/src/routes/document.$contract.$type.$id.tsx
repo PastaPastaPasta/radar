@@ -21,5 +21,5 @@ export const Route = createFileRoute('/document/$contract/$type/$id')({
 
 function DocumentPageRoute() {
   const { contract, type, id } = Route.useParams()
-  return <DocumentPage contract={contract} type={type} id={id} />
+  return <DocumentPage contract={contract} type={type} id={id} search={Route.useSearch()} />
 }

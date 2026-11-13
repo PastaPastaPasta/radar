@@ -23,5 +23,9 @@ export const Route = createFileRoute('/contracts')({
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
   loader: routePrefetch('p-data', 'contractsPrefetch'),
-  component: ContractsPage,
+  component: ContractsPageRoute,
 })
+
+function ContractsPageRoute() {
+  return <ContractsPage search={Route.useSearch()} />
+}

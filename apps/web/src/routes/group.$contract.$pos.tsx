@@ -21,5 +21,5 @@ export const Route = createFileRoute('/group/$contract/$pos')({
 
 function GroupPageRoute() {
   const { contract, pos } = Route.useParams()
-  return <GroupPage contract={contract} pos={pos} />
+  return <GroupPage contract={contract} pos={pos} search={Route.useSearch()} />
 }
