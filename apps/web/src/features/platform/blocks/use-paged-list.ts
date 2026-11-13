@@ -16,7 +16,7 @@ import type { NetworkId } from '@/lib/network'
 import type { LoadState } from '@/ui'
 
 /** A page of rows is read this many times at most when an address names a later page in infinite mode. */
-export const MAX_CATCH_UP_PAGES = 20
+const MAX_CATCH_UP_PAGES = 20
 
 export interface PagedListInput<Row> {
   net: NetworkId

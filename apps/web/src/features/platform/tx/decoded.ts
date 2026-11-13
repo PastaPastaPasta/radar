@@ -13,6 +13,14 @@ export const num = (v: unknown): number | undefined => (typeof v === 'number' ? 
 export const list = (v: unknown): unknown[] => (Array.isArray(v) ? v : [])
 export const records = (v: unknown): Json[] => list(v).filter(isRecord)
 
+export function fromBase64(value: string): Uint8Array | undefined {
+  try {
+    return Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
+  } catch {
+    return undefined
+  }
+}
+
 /** A credit amount from the SDK's JSON, where it is a number or a numeric string. */
 export function bigintOf(v: unknown): bigint | undefined {
   if (typeof v === 'bigint') return v
@@ -38,12 +46,8 @@ const CORE_VERSION = {
 
 /** The Core address a standard output script pays, from the script as base64; `undefined` for any other script. */
 export function scriptAddressOf(base64: string, net: NetworkId): string | undefined {
-  let script: Uint8Array
-  try {
-    script = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
-  } catch {
-    return undefined
-  }
+  const script = fromBase64(base64)
+  if (!script) return undefined
   const v = net === 'mainnet' ? CORE_VERSION.mainnet : CORE_VERSION.testnet
   if (
     script.length === 25 &&
@@ -99,15 +103,8 @@ export function fundingOf(proof: unknown): FundingRef | undefined {
   }
   if (type === 'instant') {
     const raw = str(proof.transaction)
-    let txid: string | undefined
-    if (raw) {
-      try {
-        const bytes = Uint8Array.from(atob(raw), (c) => c.charCodeAt(0))
-        txid = bytesToHex(sha256(sha256(bytes)).reverse())
-      } catch {
-        txid = undefined
-      }
-    }
+    const bytes = raw ? fromBase64(raw) : undefined
+    const txid = bytes ? bytesToHex(sha256(sha256(bytes)).reverse()) : undefined
     return {
       kind: 'instant',
       ...(txid ? { txid } : {}),

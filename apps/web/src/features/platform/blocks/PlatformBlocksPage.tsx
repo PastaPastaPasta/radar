@@ -1,11 +1,9 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
-import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeBlockSummary } from '@/data/pe/schemas'
 import { PageFrame, PlatformBlockTable, useNetwork } from '@/features/entity'
-import { isDevnet } from '@/lib/network'
 import {
   ActiveFilters,
   Card,
@@ -19,12 +17,12 @@ import {
 import {
   blocksQuery,
   dayEnd,
+  HASH,
   needsUpperHeight,
-  PROPOSER,
   rangeText,
   type BlocksSearch,
 } from '@/data/pe/blocks-query'
-import { IndexNeeded } from './IndexNeeded'
+import { IndexedList } from './IndexNeeded'
 import { FilterPanel, TextFilter } from './list-chrome'
 import { useEpochOf } from './use-epoch-of'
 import { useListControls } from './use-list-controls'
@@ -33,8 +31,6 @@ import { usePagedList } from './use-paged-list'
 const LIST_ID = 'platform-blocks'
 export function PlatformBlocksPage() {
   const { t } = useLingui()
-  const net = useNetwork()
-  const off = useDecentralizedOnly()
   return (
     <PageFrame
       path="/platform/blocks"
@@ -43,13 +39,9 @@ export function PlatformBlocksPage() {
       layer="platform"
       lede={t`Every Platform block with its epoch, proposer, transitions and time.`}
     >
-      {off ? (
-        <IndexNeeded />
-      ) : isDevnet(net) ? (
-        <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
-      ) : (
+      <IndexedList>
         <BlocksList />
-      )}
+      </IndexedList>
     </PageFrame>
   )
 }
@@ -69,7 +61,7 @@ function BlocksList() {
     }),
     enabled: both && search.to !== undefined,
   })
-  const upperHeight = both ? (upper.isSuccess ? (upper.data.data.items[0]?.header.height ?? 0) : undefined) : undefined
+  const upperHeight = both && upper.isSuccess ? (upper.data.data.items[0]?.header.height ?? 0) : undefined
   const query = useMemo(() => blocksQuery(search, upperHeight), [search, upperHeight])
 
   const list = usePagedList<PeBlockSummary>({
@@ -164,7 +156,7 @@ function BlocksList() {
           label={t`Proposer`}
           placeholder={t`ProTxHash of an evonode`}
           value={search.proposer}
-          check={(v) => (PROPOSER.test(v) ? undefined : t`A ProTxHash is 64 hexadecimal characters.`)}
+          check={(v) => (HASH.test(v) ? undefined : t`A ProTxHash is 64 hexadecimal characters.`)}
           normalise={(v) => v.toLowerCase()}
           onChange={(proposer) => {
             controls.filter({ proposer })

@@ -4,7 +4,7 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { useNetwork } from '@/features/entity'
 
 /** Epochs asked for, newest first, to name the epoch of each block shown. */
-export const EPOCH_WINDOW = 100
+const EPOCH_WINDOW = 100
 
 interface EpochStart {
   index: number

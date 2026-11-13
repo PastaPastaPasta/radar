@@ -2,7 +2,8 @@ import { useLingui } from '@lingui/react/macro'
 import type { LinkProps } from '@tanstack/react-router'
 import { useSearch } from '@tanstack/react-router'
 import { useDecentralizedOnly } from '@/data/health'
-import { stampOf } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
+import { parseBlockRef, type BlockRef } from '@/data/pe/blocks-query'
 import type { PeBlock } from '@/data/pe/schemas'
 import { Entity, PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
@@ -13,7 +14,7 @@ import { BlockInfoTab } from './BlockInfoTab'
 import { BlockLookup } from './BlockLookup'
 import { QuorumTab } from './QuorumTab'
 import { TransitionsTab } from './TransitionsTab'
-import { parseBlockRef, usePlatformBlock } from './use-platform-block'
+import { usePlatformBlock } from './use-platform-block'
 
 type Tab = 'transitions' | 'quorum' | 'info'
 
@@ -40,7 +41,7 @@ export function PlatformBlockPage({ id }: { id: string }) {
       ) : ref === undefined ? (
         <NotABlock value={id} />
       ) : (
-        <Record id={id} />
+        <Record id={id} blockRef={ref} />
       )}
     </PageFrame>
   )
@@ -63,11 +64,10 @@ function NotABlock({ value }: { value: string }) {
   )
 }
 
-function Record({ id }: { id: string }) {
+function Record({ id, blockRef }: { id: string; blockRef: BlockRef }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const ref = parseBlockRef(id)
-  const state = usePlatformBlock(net, ref, true)
+  const state = usePlatformBlock(net, blockRef)
   const search: { tab?: Tab; page?: number } = useSearch({ strict: false })
   const tab: Tab = search.tab ?? 'transitions'
 
@@ -120,13 +120,7 @@ function Record({ id }: { id: string }) {
   )
 }
 
-function Summary({
-  block,
-  stamp,
-}: {
-  block: PeBlock
-  stamp: ReturnType<typeof stampOf>
-}) {
+function Summary({ block, stamp }: { block: PeBlock; stamp: SourceStamp }) {
   const { t } = useLingui()
   const h = block.header
   const { epochOf, stamp: epochStamp } = useEpochOf()

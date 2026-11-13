@@ -1,5 +1,5 @@
 // P-BLOCKS: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import { blocksQuery, HASH, HEIGHT, needsUpperHeight } from '../../pe/blocks-query'
+import { blocksQuery, HASH, heightLookup, needsUpperHeight, parseBlockRef } from '../../pe/blocks-query'
 import { txsQuery } from '../../pe/transitions-query'
 import { peQueries } from '../../pe/queries'
 import type { NumericRange } from '@/lib/search-schemas'
@@ -38,16 +38,9 @@ export interface PlatformBlockSearch extends RouteSearch {
 
 /** A block by its hash; a height is turned into a hash by the page, so its list lookup is started instead. */
 export const platformBlockPrefetch: Prefetch<{ id: string }, PlatformBlockSearch> = (net, { id }) => {
-  if (HASH.test(id)) return [prefetchItem('http', peQueries.block(net, id.toLowerCase()))]
-  if (HEIGHT.test(id)) {
-    const height = Number(id)
-    return [
-      prefetchItem(
-        'http',
-        peQueries.blocks(net, { height_min: height, height_max: height, limit: 1, order: 'desc' }),
-      ),
-    ]
-  }
+  const ref = parseBlockRef(id)
+  if (ref?.kind === 'hash') return [prefetchItem('http', peQueries.block(net, ref.hash))]
+  if (ref?.kind === 'height') return [prefetchItem('http', peQueries.blocks(net, heightLookup(ref.height)))]
   return []
 }
 

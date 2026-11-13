@@ -6,16 +6,9 @@ import type { PeTransaction } from '@/data/pe/schemas'
 import type { StateTransitionDecodedDto } from '@/data/sdk/methods/p-blocks'
 import { bytesToHex } from '@/lib/hex'
 import { Card, JsonView, SegFilter } from '@/ui'
+import { fromBase64 } from './decoded'
 
 type Raw = 'json' | 'hex' | 'base64'
-
-function fromBase64(value: string): Uint8Array | undefined {
-  try {
-    return Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
-  } catch {
-    return undefined
-  }
-}
 
 /** The transition's bytes as hex or base64, or its fields as JSON: the decoded fields when the SDK read them, else Explorer's record. */
 export function RawCard({
@@ -77,7 +70,7 @@ export function RawCard({
     >
       {raw === 'json' ? (
         <JsonView value={json} collapsedDepth={1} label={t`State transition as JSON`} />
-      ) : !tx.data || !bytes ? (
+      ) : !bytes ? (
         <p className="rx-note">{t`Platform Explorer has no bytes for this transition.`}</p>
       ) : (
         <pre

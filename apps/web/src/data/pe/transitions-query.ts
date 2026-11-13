@@ -1,6 +1,6 @@
 import type { PeQuery } from './params'
 import type { NumericRange } from '@/lib/search-schemas'
-import { BATCH_TYPES, TRANSITION_TYPES, type TransitionType } from '@/lib/tx-types'
+import { TRANSITION_TYPES, type TransitionType } from '@/lib/tx-types'
 import { dayEnd, dayStart } from './blocks-query'
 
 export interface TxsSearch {
@@ -92,7 +92,6 @@ export const peBatchNumber = (type: string): number | undefined => {
 export const FILTER_TYPES: readonly TransitionType[] = TRANSITION_TYPES.filter(
   (t) => peTypeNumber(t) !== undefined,
 )
-export const FILTER_BATCH_TYPES = BATCH_TYPES
 
 const SORT_FIELD: Record<string, string> = { time: 'timestamp', gas: 'gas_used', owner: 'owner' }
 

@@ -1,8 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import { useNavigate } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
+import { parseBlockRef } from '@/data/pe/blocks-query'
 import { PageLink } from '@/features/entity'
-import { parseBlockRef } from './use-platform-block'
 
 /** A box that opens another block by its height or hash, with the way to the search page. */
 export function BlockLookup() {

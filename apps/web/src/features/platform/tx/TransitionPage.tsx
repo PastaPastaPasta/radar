@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useDecentralizedOnly } from '@/data/health'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
+import { HASH } from '@/data/pe/blocks-query'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
 import type { StateTransitionDecodedDto } from '@/data/sdk/methods/p-blocks'
@@ -35,8 +36,6 @@ import { humanize } from './decoded'
 import { Credits, Facts, type Fact } from './panel-parts'
 import { RawCard } from './RawCard'
 import { TypePanel } from './panels'
-
-const HASH = /^[0-9a-f]{64}$/i
 
 export function TransitionPage({ hash }: { hash: string }) {
   const { t } = useLingui()
@@ -86,6 +85,7 @@ function Record({ hash }: { hash: string }) {
   const off = useDecentralizedOnly()
   const pe = useQuery({ ...peQueries.transaction(net, hash), enabled: !off })
   const tx = pe.data?.data ?? undefined
+  const stamp = pe.data ? stampOf(pe.data) : undefined
   const decodedQuery = useQuery({
     ...sdkQueries['stateTransitions.decode'](net, { data: tx?.data ?? '' }),
     enabled: !off && Boolean(tx?.data),
@@ -116,8 +116,8 @@ function Record({ hash }: { hash: string }) {
         />
       ) : pe.isPending ? (
         <Skeleton shape="block" height={220} />
-      ) : tx && pe.data ? (
-        <Summary tx={tx} stamp={stampOf(pe.data)} feeIncrease={decoded?.userFeeIncrease} />
+      ) : tx && stamp ? (
+        <Summary tx={tx} stamp={stamp} feeIncrease={decoded?.userFeeIncrease} />
       ) : (
         <Card layer="platform" title={t`Not in Platform Explorer's index`}>
           <p className="rx-note" data-not-indexed>
@@ -126,21 +126,14 @@ function Record({ hash }: { hash: string }) {
         </Card>
       )}
       <LiveResult hash={hash} indexed={statusOf(tx)} />
-      {tx && pe.data ? (
+      {tx && stamp ? (
         <>
-          <Details
-            query={decodedQuery}
-            net={net}
-            hasBytes={Boolean(tx.data)}
-            stamp={stampOf(pe.data)}
-          />
-          <Duplicates tx={tx} stamp={stampOf(pe.data)} />
+          <Details query={decodedQuery} net={net} hasBytes={Boolean(tx.data)} stamp={stamp} />
+          <Duplicates tx={tx} stamp={stamp} />
           <RawCard
             tx={tx}
             decoded={decoded}
-            source={
-              decodedQuery.data ? [stampOf(pe.data), stampOf(decodedQuery.data)] : stampOf(pe.data)
-            }
+            source={decodedQuery.data ? [stamp, stampOf(decodedQuery.data)] : stamp}
           />
         </>
       ) : null}
@@ -154,7 +147,7 @@ function Summary({
   feeIncrease,
 }: {
   tx: PeTransaction
-  stamp: ReturnType<typeof stampOf>
+  stamp: SourceStamp
   feeIncrease?: number
 }) {
   const { t } = useLingui()
@@ -295,7 +288,7 @@ function Details({
   )
 }
 
-function Duplicates({ tx, stamp }: { tx: PeTransaction; stamp: ReturnType<typeof stampOf> }) {
+function Duplicates({ tx, stamp }: { tx: PeTransaction; stamp: SourceStamp }) {
   const { t } = useLingui()
   const rows = tx.duplicates ?? []
   if (rows.length === 0) return null

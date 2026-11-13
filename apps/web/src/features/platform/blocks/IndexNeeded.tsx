@@ -1,16 +1,29 @@
 import { useLingui } from '@lingui/react/macro'
 import { useNavigate } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
-import { Card, Unavailable } from '@/ui'
+import { useState, type FormEvent, type ReactNode } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
+import { HASH, HEIGHT } from '@/data/pe/blocks-query'
+import { useNetwork } from '@/features/entity'
+import { isDevnet } from '@/lib/network'
+import { Card, Empty, Unavailable } from '@/ui'
 
-const HASH = /^[0-9a-f]{64}$/i
-const HEIGHT = /^\d{1,10}$/
+/** A list read from Platform Explorer's index, or why it can't be: Decentralized only mode, or a devnet. */
+export function IndexedList({ children }: { children: ReactNode }) {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const off = useDecentralizedOnly()
+  if (off) return <IndexNeeded />
+  if (isDevnet(net)) {
+    return <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
+  }
+  return children
+}
 
 /**
  * What a page that lists Platform's blocks or state transitions shows while Decentralized only mode is on: Platform
  * keeps no list of either, so it says so once, and offers the two lookups a node can still answer.
  */
-export function IndexNeeded() {
+function IndexNeeded() {
   const { t } = useLingui()
   const navigate = useNavigate()
   const [hash, setHash] = useState('')

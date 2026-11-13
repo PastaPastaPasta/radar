@@ -1,11 +1,9 @@
 import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
-import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
 import { PageFrame, TransitionTable, useNetwork } from '@/features/entity'
-import { isDevnet } from '@/lib/network'
 import { BATCH_TYPES, type BatchType, type TransitionType } from '@/lib/tx-types'
 import {
   ActiveFilters,
@@ -20,7 +18,7 @@ import {
   TypeBadge,
 } from '@/ui'
 import { rangeText } from '@/data/pe/blocks-query'
-import { IndexNeeded } from '../blocks/IndexNeeded'
+import { IndexedList } from '../blocks/IndexNeeded'
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
 import { useListControls } from '../blocks/use-list-controls'
 import { usePagedList } from '../blocks/use-paged-list'
@@ -44,8 +42,6 @@ const typeOptions = (types: readonly (TransitionType | BatchType)[]): MultiSelec
 
 export function TransitionsPage() {
   const { t } = useLingui()
-  const net = useNetwork()
-  const off = useDecentralizedOnly()
   return (
     <PageFrame
       path="/platform/txs"
@@ -54,13 +50,9 @@ export function TransitionsPage() {
       layer="platform"
       lede={t`Every state transition with its type, status, block, gas and owner.`}
     >
-      {off ? (
-        <IndexNeeded />
-      ) : isDevnet(net) ? (
-        <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
-      ) : (
+      <IndexedList>
         <TransitionsList />
-      )}
+      </IndexedList>
     </PageFrame>
   )
 }
