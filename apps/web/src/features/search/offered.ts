@@ -7,8 +7,6 @@ import type { SearchHit } from './types'
  */
 export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/about',
-  '/api',
-  '/changes',
   '/contest/$label',
   '/contests',
   '/contract/$id',
@@ -17,7 +15,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/document/$contract/$type/$id',
   '/group/$contract/$pos',
   '/groups/$contract',
-  '/map',
   '/name/$label',
   '/names',
   '/platform-address/$addr',
