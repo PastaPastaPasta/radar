@@ -6,6 +6,8 @@ import { healthRegistry } from '@/data/health'
 import { fetchSourced, lastModifiedMs } from '@/data/http'
 import type { SourceError } from '@/data/errors'
 import { isSourceError } from '@/data/errors'
+import { queryLog } from '@/data/query-log'
+import { setSourceModeFromLink } from '@/lib/source-mode'
 
 const URL_ = 'https://example.test/thing'
 const schema = z.object({ n: z.number(), at: z.number().optional() })
@@ -181,5 +183,35 @@ describe('lastModifiedMs', () => {
       ),
     ).toBe(Date.parse('Tue, 10 Nov 2026 14:00:00 GMT'))
     expect(lastModifiedMs(new Response(''))).toBeUndefined()
+  })
+})
+
+describe('fetchSourced and the query log', () => {
+  it('records one entry per call, with the path and no query', async () => {
+    queryLog.clear()
+    server.use(http.get(URL_, () => HttpResponse.json({ n: 1 })))
+    await call({ url: `${URL_}?secret=1` })
+    server.use(http.get(URL_, () => HttpResponse.json({ nope: true })))
+    await failure(call({ url: `${URL_}?secret=1` }))
+    const [ok, bad] = queryLog.snapshot()
+    expect(ok).toMatchObject({ net: 'mainnet', source: 'pe', what: 'GET /thing', ok: true })
+    expect(bad).toMatchObject({ what: 'GET /thing', ok: false, kind: 'invalid-response' })
+    expect(JSON.stringify(queryLog.snapshot())).not.toContain('secret')
+  })
+
+  it('records a refusal by the mode as such', async () => {
+    queryLog.clear()
+    setSourceModeFromLink('decentralized')
+    try {
+      await failure(call())
+      expect(queryLog.snapshot()[0]).toMatchObject({
+        source: 'pe',
+        ok: false,
+        kind: 'disabled-by-mode',
+        refusedByMode: true,
+      })
+    } finally {
+      setSourceModeFromLink(undefined)
+    }
   })
 })

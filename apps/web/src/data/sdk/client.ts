@@ -2,6 +2,7 @@ import { bytesToHex } from '@/lib/hex'
 import { isDevnet, type DevnetConfig, type NetworkId } from '@/lib/network'
 import { abortedError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
+import { queryLog } from '../query-log'
 import type { ProofMeta, Sourced } from '../envelope'
 import { getDapiTransport } from '../dapi-core/client'
 import { registerSdkReadyProbe } from '../query/loader'
@@ -203,6 +204,7 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
       if (signal?.aborted) throw abortedError('sdk')
       const transport = await ensure(net)
       if (signal?.aborted) throw abortedError('sdk')
+      const started = performance.now()
       const wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
       if (wire.requests) deps.noteRequests?.(net, wire.requests)
       // A wasm call can't be cancelled; its late answer is dropped here.
@@ -210,9 +212,26 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
       if (!wire.ok) {
         const error = toSourceError(wire.error)
         deps.health.report(net, 'sdk', { ok: false, kind: error.kind, message: error.message })
+        queryLog.push({
+          net,
+          source: 'sdk',
+          what: method,
+          ok: false,
+          kind: error.kind,
+          tookMs: Math.round(performance.now() - started),
+        })
         throw error
       }
       deps.health.report(net, 'sdk', { ok: true, latencyMs: wire.tookMs })
+      queryLog.push({
+        net,
+        source: 'sdk',
+        what: method,
+        ok: true,
+        tookMs: Math.round(wire.tookMs),
+        proved: wire.proved,
+        ...(wire.node ? { node: wire.node } : {}),
+      })
       const fetchedAt = deps.now()
       const { meta } = wire
       let proof: ProofMeta | undefined

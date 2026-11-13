@@ -1,6 +1,7 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { SourceError, abortedError, isSourceError, type SourceErrorKind } from '../errors'
 import { healthRegistry, setBudgetSnapshot } from '../health'
+import { queryLog } from '../query-log'
 import type { DevnetConfig, NetworkId } from '@/lib/network'
 import type { Budget, BudgetSnapshot } from './budget'
 import { discoverNodes, nodeFromHost, type NodeListStore } from './discovery'
@@ -424,6 +425,14 @@ export class PoolDapiTransport implements DapiTransport {
         onHeaders: opts.onHeaders,
       })
       const latency = this.deps.now() - started
+      queryLog.push({
+        net,
+        source: 'dapi',
+        what: method,
+        ok: true,
+        tookMs: Math.round(latency),
+        node: slot.host,
+      })
       pool.succeeded(slot, latency, rate)
       if (!opts.pinned) {
         this.learnTip(pool, slot, method, response)
@@ -431,6 +440,15 @@ export class PoolDapiTransport implements DapiTransport {
       }
       return { response, node: slot.host }
     } catch (e) {
+      queryLog.push({
+        net,
+        source: 'dapi',
+        what: method,
+        ok: false,
+        kind: isSourceError(e) ? e.kind : 'network',
+        tookMs: Math.round(this.deps.now() - started),
+        node: slot.host,
+      })
       this.failed(net, pool, slot, e, this.deps.now() - started, opts.pinned)
       throw e
     } finally {

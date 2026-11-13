@@ -1,3 +1,4 @@
+import { queryLog } from '@/data/query-log'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SourceError } from '@/data/errors'
 import {
@@ -59,6 +60,21 @@ describe('PoolDapiTransport unary', () => {
     expect(reply.node).toMatch(/^10\.1\.0\.\d+:443$/)
     expect(reply.response.length).toBeGreaterThan(0)
     expect(health.report).toHaveBeenCalledWith(NET, 'dapi', expect.objectContaining({ ok: true }))
+  })
+
+  it('logs the call with the node that answered', async () => {
+    queryLog.clear()
+    const { transport } = setup({ handler: ok })
+    const reply = await transport.unary(NET, 'getBestBlockHeight', request)
+    expect(queryLog.snapshot()).toEqual([
+      expect.objectContaining({
+        net: NET,
+        source: 'dapi',
+        what: 'getBestBlockHeight',
+        ok: true,
+        node: reply.node,
+      }),
+    ])
   })
 
   it('sends the same request to a node a second time only within its 50-a-minute budget', async () => {
