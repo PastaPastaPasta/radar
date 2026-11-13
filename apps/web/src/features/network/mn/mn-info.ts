@@ -1,7 +1,7 @@
 import type { DapiMnEntry } from '@/data/core/types'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
-import { base58Decode, base58Encode, isBase58 } from '@/lib/base58'
-import { bytesToHex, hexToBytes } from '@/lib/hex'
+import { base58Encode } from '@/lib/base58'
+import { hexToBytes } from '@/lib/hex'
 import type { NetworkId } from '@/lib/network'
 
 export const PROTX = /^[0-9a-f]{64}$/i
@@ -87,13 +87,6 @@ export function checkState(value: string): CheckState {
 
 /** A ProTx hash is a Platform identity id once written in base58. */
 export const protxToBase58 = (hex: string): string => base58Encode(hexToBytes(hex.toLowerCase()))
-
-/** The hex of a 32-byte base58 id, or null when `value` isn't one. */
-export function protxFromBase58(value: string): string | null {
-  if (value.length < 40 || value.length > 46 || !isBase58(value)) return null
-  const bytes = base58Decode(value)
-  return bytes.length === 32 ? bytesToHex(bytes) : null
-}
 
 export const MN_TABS = ['overview', 'network', 'platform', 'history', 'payments'] as const
 export type MnTab = (typeof MN_TABS)[number]

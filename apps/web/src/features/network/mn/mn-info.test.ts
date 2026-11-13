@@ -1,24 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import {
-  crawlDiffers,
-  dapiFacts,
-  dkgRules,
-  dkgRuleUrl,
-  protxFromBase58,
-  protxToBase58,
-} from './mn-info'
+import { crawlDiffers, dapiFacts, dkgRules, dkgRuleUrl, protxToBase58 } from './mn-info'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 
 const PROTX = 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff'
 
 describe('ProTx base58', () => {
-  it('round-trips and rejects anything else', () => {
-    const b58 = protxToBase58(PROTX)
-    expect(b58).toHaveLength(44)
-    expect(protxFromBase58(b58)).toBe(PROTX)
-    expect(protxFromBase58('short')).toBeNull()
-    expect(protxFromBase58('0'.repeat(44))).toBeNull()
-    expect(protxFromBase58(PROTX)).toBeNull()
+  it('writes the 32 bytes as the Platform identity id', () => {
+    expect(protxToBase58(PROTX)).toHaveLength(44)
   })
 })
 
