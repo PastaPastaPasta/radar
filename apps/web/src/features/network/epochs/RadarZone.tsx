@@ -122,7 +122,7 @@ function Upcoming({ query }: { query: PlatformQuery }) {
       (query.data?.data.schedule.next ?? []).slice(0, UPCOMING).map((n) => ({
         protx: n.protx,
         slots: n.slots,
-        eta: n.eta * 1000,
+        eta: n.eta,
       })),
     [query.data],
   )

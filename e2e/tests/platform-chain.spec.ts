@@ -86,6 +86,7 @@ test.describe('Epochs', () => {
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     await expect(upcoming.locator('a[href^="/mn/"]').first()).toBeVisible()
     await expect(upcoming.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(upcoming.locator('tbody tr').first()).toContainText(/\b20\d\d\b/)
     if (!isPhone(page)) {
       await expect(upcoming.getByRole('columnheader', { name: 'Slots' })).toBeVisible()
       await expect(upcoming.getByRole('columnheader', { name: 'Proposes around' })).toBeVisible()
