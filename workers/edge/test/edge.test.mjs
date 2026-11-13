@@ -445,14 +445,14 @@ describe('redirects', () => {
     await check(h, '/token/?id=T1&network=mainnet', '/token/T1')
     await check(h, '/token/holders/?id=T1', '/token/T1/holders?network=testnet')
     await check(h, '/dpns/?name=alice.dash', '/name/alice?network=testnet')
-    await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12')
+    await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12?tab=platform')
     await check(h, '/epoch/detail/?index=5', '/epoch/5?network=testnet')
     await check(h, '/network/status/?network=mainnet', '/status')
     await check(h, '/address/?addr=dash1x', '/platform-address/dash1x?network=testnet')
     await check(h, '/state-transition/?hash=AB', '/platform/tx/AB?network=testnet')
     await check(h, '/tools/?tool=state-transition', '/tools/transition?network=testnet')
     await check(h, '/tools/?tool=proof', '/tools/proof?network=testnet')
-    await check(h, '/tools/?tool=path-elements', '/tools/transition?network=testnet')
+    await check(h, '/tools/?tool=path-elements', '/tools/path?network=testnet')
     await check(
       h,
       '/governance/contested/detail/?contract=C1&docType=domain&indexName=parentNameAndLabel&indexValues=%5B%22dash%22%2C%22al1ce%22%5D',
@@ -472,9 +472,66 @@ describe('redirects', () => {
     await check(h, '/tools/?tool=constructor', '/tools/transition?network=testnet')
     await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
     await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
-    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?network=testnet')
+    await check(
+      h,
+      '/contract/token/?id=C1&position=0',
+      '/contract/C1?tab=tokens&network=testnet',
+    )
     await check(h, '/governance/polls/?network=mainnet', '/polls')
     await check(h, '/search/?q=alice', '/search?q=alice')
+  })
+
+  it('renames the native explorer tabs and keeps only the tabs the pages have', async () => {
+    const h = 'explorer.dashhq.org'
+    await check(h, '/identity/?id=ABC&tab=dpns&network=mainnet', '/identity/ABC?tab=names')
+    await check(h, '/identity/?id=ABC&tab=bogus&network=mainnet', '/identity/ABC')
+    await check(h, '/contract/?id=C1&tab=internal&network=mainnet', '/contract/C1?tab=config')
+    await check(h, '/contract/?id=C1&tab=documents&network=mainnet', '/contract/C1?tab=types')
+    await check(
+      h,
+      '/contract/document/?id=C1&type=note&docId=D1&tab=metadata&network=mainnet',
+      '/document/C1/note/D1?tab=meta',
+    )
+    await check(
+      h,
+      '/contract/document/?id=C1&type=note&docId=D1&tab=history&network=mainnet',
+      '/document/C1/note/D1?tab=revisions',
+    )
+    await check(h, '/token/?id=T1&tab=holders&network=mainnet', '/token/T1?tab=holders')
+    await check(h, '/token/?id=T1&tab=status&network=mainnet', '/token/T1')
+  })
+
+  it('turns the documents browser filter, order and page cursors into the page address', async () => {
+    const h = 'explorer.dashhq.org'
+    const where = encodeURIComponent(
+      JSON.stringify([
+        ['normalizedLabel', 'startsWith', 'ali'],
+        ['$ownerId', 'in', 'A, B'],
+        ['age', '>=', '18'],
+        ['bad', '!=', '1'],
+      ]),
+    )
+    await check(
+      h,
+      `/contract/documents/?id=C1&type=domain&network=mainnet&where=${where}&order=%24createdAt%3Adesc&after=c1%2Cc2%2Cc3&limit=50`,
+      '/contract/C1/documents/domain?limit=50&where=normalizedLabel%7Esw%7Eali%2C%2524ownerId%7Ein%7EA%7CB%2Cage%7Egte%7E18&order=-%24createdAt&after=c3&prev=c1%2Cc2',
+    )
+    await check(
+      h,
+      '/contract/documents/?id=C1&type=note&network=mainnet&where=%7Bnot-json&order=title%3Aasc',
+      '/contract/C1/documents/note?order=title',
+    )
+  })
+
+  it('maps the native polls window and name search cursors', async () => {
+    const h = 'explorer.dashhq.org'
+    await check(
+      h,
+      '/governance/polls/?window=all-upcoming&network=mainnet',
+      '/polls?range=upcoming',
+    )
+    await check(h, '/governance/polls/?window=7d&page=2&network=mainnet', '/polls?page=2&range=7d')
+    await check(h, '/dpns/search/?q=al&after=x%2Cy&network=mainnet', '/names?q=al&after=y')
   })
 
   it('sends write paths to the entity page and drops signing parameters', async () => {
