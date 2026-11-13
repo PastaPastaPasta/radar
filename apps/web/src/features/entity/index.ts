@@ -16,9 +16,13 @@ export {
   sectionLabel,
   findPage,
   pagesInSection,
+  railEntries,
+  SITE_GROUPS,
   sectionOfPath,
 } from './site-map'
-export type { SitePage, SiteSection } from './site-map'
+export type { RailEntry, SiteGroup, SitePage, SiteSection } from './site-map'
+export { PageGroupTabs } from './PageGroupTabs'
+export type { PageGroupTabsProps } from './PageGroupTabs'
 export { keepPreviousOnNetwork } from './keep-previous'
 export { useCatchUpToTip, useRefetchOnRise } from './tip-refetch'
 export { HeaderTip } from './HeaderTip.lazy'

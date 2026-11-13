@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { loadBehindFirstPaint } from '@/app/first-load'
+import { zInt, zOpt } from '@/app/search'
 import { prefetchForRoute, prefetchItem, routeNetwork } from '@/data/query'
 import { radarQueries } from '@/data/radar/queries'
 import { MasternodePage } from '@/features/network'
@@ -9,7 +10,9 @@ import { isDevnet } from '@/lib/network'
 const MN_TABS = ['overview', 'network', 'platform', 'history', 'payments'] as const
 
 const masternodeSearch = z.object({
-  tab: z.enum(MN_TABS).optional().catch(undefined),
+  tab: zOpt(z.enum(MN_TABS)),
+  epoch: zOpt(zInt),
+  before: zOpt(zInt),
 })
 
 const PROTX = /^[0-9a-f]{64}$/i

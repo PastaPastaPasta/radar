@@ -1,11 +1,32 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
+import { z } from 'zod'
+import { routePrefetch } from '@/app/route-loader'
+import { zDefault, zOpt, zPage } from '@/app/search'
 import { ContestPage } from '@/features/platform'
 
-export const Route = createFileRoute('/contest/$label')({
-  component: ContestRoute,
+const defaults = { tab: 'tally', page: 1 } as const
+
+const contestSearch = z.object({
+  contract: zOpt(z.string()),
+  type: zOpt(z.string()),
+  index: zOpt(z.string()),
+  tab: zDefault(z.enum(['tally', 'votes', 'raw']), defaults.tab),
+  towards: zOpt(z.string()),
+  page: zDefault(zPage, defaults.page),
 })
 
-function ContestRoute() {
+export const Route = createFileRoute('/contest/$label')({
+  validateSearch: contestSearch,
+  search: { middlewares: [stripSearchParams(defaults)] },
+  loaderDeps: ({ search }) => search,
+  loader: routePrefetch(
+    () => import('@/data/query/prefetch/p-vote'),
+    (m) => m.contestPrefetch,
+  ),
+  component: ContestPageRoute,
+})
+
+function ContestPageRoute() {
   const { label } = Route.useParams()
   return <ContestPage label={label} />
 }

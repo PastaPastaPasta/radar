@@ -21,6 +21,7 @@ export {
   sectionLabel,
   findPage,
   pagesInSection,
+  railEntries,
   sectionOfPath,
   useDocumentTitle,
   useNetwork,

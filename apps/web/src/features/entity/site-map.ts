@@ -4,6 +4,8 @@ import type { MessageDescriptor } from '@lingui/core'
 import type { SourceId } from '@/data/envelope'
 import type { Layer } from '@/ui'
 
+export type SiteGroup = 'voting' | 'chain'
+
 export type SiteSection = 'home' | 'search' | 'core' | 'network' | 'platform' | 'tools' | 'you'
 
 export interface SitePage {
@@ -18,6 +20,14 @@ export interface SitePage {
   stories: string[]
   /** Listed in the section's page navigation and the palette. Only for routes without params. */
   nav?: boolean
+  /** The page is one of a group that shares one rail entry and a row of tabs (`SITE_GROUPS`). */
+  group?: SiteGroup
+  /** A concrete URL for a rail entry whose route has params. The entry is in the rail but not in the palette. */
+  navHref?: string
+  /** The rail's short label when it differs from the page's title. */
+  railTitle?: MessageDescriptor
+  /** False for an alias that redirects to another rail page. */
+  rail?: boolean
   keywords?: string[]
   /** The thing a record page shows, for titles and the other-network notice: "block", "masternode". */
   record?: MessageDescriptor
@@ -61,7 +71,23 @@ export const SITE_MAP: SitePage[] = [
     layer: 'neutral',
     summary: msg`Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status.`,
     sources: ['dapi', 'sdk', 'radar', 'pe'],
-    stories: ['RA-01', 'PE-01', 'IN-01'],
+    stories: [
+      'RA-01',
+      'PE-01',
+      'IN-01',
+      'X-03',
+      'X-07',
+      'X-08',
+      'NX-77',
+      'RA-91',
+      'RA-92',
+      'X-04',
+      'X-10',
+      'X-11',
+      'NX-61',
+      'HY-15',
+      'IN-13',
+    ],
   }),
   page({
     path: '/search',
@@ -92,7 +118,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'core',
     summary: msg`One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions.`,
     sources: ['dapi', 'hyphen'],
-    stories: ['IN-03', 'HY-05'],
+    stories: ['IN-03', 'HY-05', 'X-06'],
     record: msg`block`,
   }),
   page({
@@ -102,7 +128,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'core',
     summary: msg`One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded.`,
     sources: ['dapi', 'hyphen'],
-    stories: ['IN-05', 'HY-07'],
+    stories: ['IN-05', 'HY-07', 'X-02'],
     record: msg`transaction`,
   }),
   page({
@@ -187,7 +213,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'core',
     summary: msg`Every data source Radar reads, its health and freshness on this network, and the DAPI request budget.`,
     sources: ['radar', 'pe', 'hyphen', 'dapi', 'sdk'],
-    stories: ['IN-09', 'X-09'],
+    stories: ['IN-09', 'X-09', 'NX-54'],
     nav: true,
     keywords: ['health', 'sources', 'budget'],
   }),
@@ -199,7 +225,21 @@ export const SITE_MAP: SitePage[] = [
     layer: 'network',
     summary: msg`The census: how many nodes answered the last crawl, versions, hosting, countries and reachability.`,
     sources: ['radar'],
-    stories: ['RA-01', 'RA-02', 'RA-03', 'RA-04', 'RA-05', 'RA-06'],
+    stories: [
+      'RA-01',
+      'RA-02',
+      'RA-03',
+      'RA-04',
+      'RA-05',
+      'RA-06',
+      'RA-07',
+      'RA-08',
+      'RA-09',
+      'RA-10',
+      'RA-11',
+      'RA-12',
+      'RA-13',
+    ],
     nav: true,
     keywords: ['census', 'versions', 'hosting', 'countries'],
   }),
@@ -210,7 +250,18 @@ export const SITE_MAP: SitePage[] = [
     layer: 'network',
     summary: msg`Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link.`,
     sources: ['radar', 'dapi'],
-    stories: ['RA-20', 'RA-21', 'RA-22', 'RA-23', 'RA-24'],
+    stories: [
+      'RA-20',
+      'RA-21',
+      'RA-22',
+      'RA-23',
+      'RA-24',
+      'RA-25',
+      'RA-26',
+      'RA-64',
+      'HY-10',
+      'PE-22',
+    ],
     nav: true,
     keywords: ['evonodes', 'protx', 'operators'],
   }),
@@ -221,7 +272,23 @@ export const SITE_MAP: SitePage[] = [
     layer: 'network',
     summary: msg`One masternode: overview, network reachability, Platform record, history and payments.`,
     sources: ['radar', 'dapi', 'sdk', 'pe'],
-    stories: ['RA-30', 'RA-31', 'RA-32', 'RA-38'],
+    stories: [
+      'RA-30',
+      'RA-31',
+      'RA-32',
+      'RA-33',
+      'RA-34',
+      'RA-35',
+      'RA-36',
+      'RA-37',
+      'RA-38',
+      'RA-39',
+      'RA-40',
+      'RA-41',
+      'NX-53',
+      'PE-23',
+      'HY-11',
+    ],
     record: msg`masternode`,
   }),
   page({
@@ -277,6 +344,7 @@ export const SITE_MAP: SitePage[] = [
     stories: ['RA-70', 'RA-71', 'RA-72'],
     nav: true,
     keywords: ['activation', 'v24', 'signalling'],
+    railTitle: msg`Core 24`,
   }),
   page({
     path: '/changes',
@@ -296,9 +364,10 @@ export const SITE_MAP: SitePage[] = [
     layer: 'network',
     summary: msg`The Platform validator set: evonodes with their Platform record, shown on the masternode list.`,
     sources: ['radar', 'pe'],
-    stories: ['PE-22', 'RA-64'],
+    stories: [],
     nav: true,
-    keywords: ['evonodes', 'platform'],
+    keywords: ['validators', 'evonodes', 'platform'],
+    rail: false,
   }),
 
   page({
@@ -308,9 +377,22 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions.`,
     sources: ['sdk', 'pe'],
-    stories: ['NX-01', 'NX-54', 'PE-01', 'PE-02', 'PE-04', 'PE-05'],
+    stories: [
+      'NX-01',
+      'NX-02',
+      'NX-03',
+      'NX-04',
+      'PE-01',
+      'PE-02',
+      'PE-03',
+      'PE-04',
+      'PE-05',
+      'PE-06',
+      'PE-36',
+    ],
     nav: true,
     keywords: ['pulse', 'height', 'leaders'],
+    railTitle: msg`Overview`,
   }),
   page({
     path: '/platform/blocks',
@@ -319,8 +401,9 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`Every Platform block with epoch, proposer, transactions and time, filterable.`,
     sources: ['pe'],
-    stories: ['PE-10'],
+    stories: ['PE-10', 'PE-38'],
     nav: true,
+    railTitle: msg`Blocks`,
   }),
   page({
     path: '/platform/block/$id',
@@ -329,7 +412,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`One Platform block: digest, the Core block it is locked to, its transitions and quorum.`,
     sources: ['pe', 'sdk'],
-    stories: ['PE-11', 'X-02'],
+    stories: ['PE-11'],
     record: msg`Platform block`,
   }),
   page({
@@ -342,6 +425,7 @@ export const SITE_MAP: SitePage[] = [
     stories: ['PE-12'],
     nav: true,
     keywords: ['transitions', 'transactions'],
+    railTitle: msg`Transitions`,
   }),
   page({
     path: '/platform/tx/$hash',
@@ -360,7 +444,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`Identities with balance, transactions and creation time; sort by balance or activity.`,
     sources: ['pe', 'sdk'],
-    stories: ['PE-14'],
+    stories: ['PE-14', 'PE-37'],
     nav: true,
   }),
   page({
@@ -380,7 +464,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked.`,
     sources: ['sdk', 'pe'],
-    stories: ['NX-10', 'NX-11', 'NX-12', 'PE-15'],
+    stories: ['NX-10', 'NX-11', 'NX-12', 'NX-13', 'NX-14', 'NX-15', 'NX-16', 'PE-15'],
     record: msg`identity`,
   }),
   page({
@@ -451,7 +535,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`Balances for the identities you choose, and the holders Platform Explorer has indexed.`,
     sources: ['sdk', 'pe'],
-    stories: ['NX-31', 'PE-25'],
+    stories: ['NX-31'],
     record: msg`token`,
   }),
   page({
@@ -472,7 +556,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`One DPNS name: whether it is available, registered or contested, and who owns it.`,
     sources: ['sdk'],
-    stories: ['NX-40', 'X-11'],
+    stories: ['NX-40'],
     record: msg`name`,
   }),
   page({
@@ -485,6 +569,7 @@ export const SITE_MAP: SitePage[] = [
     stories: ['NX-42', 'PE-19'],
     nav: true,
     keywords: ['vote', 'dpns'],
+    group: 'voting',
   }),
   page({
     path: '/contest/$label',
@@ -493,7 +578,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`One contest: status, tally, contenders with prefunded balance and who voted.`,
     sources: ['sdk', 'pe'],
-    stories: ['NX-43', 'PE-20', 'X-11'],
+    stories: ['NX-43', 'PE-20'],
     record: msg`contest`,
   }),
   page({
@@ -505,6 +590,7 @@ export const SITE_MAP: SitePage[] = [
     sources: ['pe'],
     stories: ['PE-21'],
     nav: true,
+    group: 'voting',
   }),
   page({
     path: '/polls',
@@ -515,6 +601,7 @@ export const SITE_MAP: SitePage[] = [
     sources: ['sdk'],
     stories: ['NX-44'],
     nav: true,
+    group: 'voting',
   }),
   page({
     path: '/groups/$contract',
@@ -533,8 +620,19 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`One group: members by power and its active and closed actions with signers.`,
     sources: ['sdk'],
-    stories: ['NX-45'],
+    stories: [],
     record: msg`group`,
+  }),
+  page({
+    path: '/quorums',
+    title: msg`Quorums`,
+    section: 'platform',
+    layer: 'platform',
+    summary: msg`Current Platform quorums with size, members and the last proposer.`,
+    sources: ['sdk', 'pe'],
+    stories: ['NX-55'],
+    nav: true,
+    group: 'chain',
   }),
   page({
     path: '/credits',
@@ -545,6 +643,7 @@ export const SITE_MAP: SitePage[] = [
     sources: ['sdk', 'rate'],
     stories: ['NX-57'],
     nav: true,
+    group: 'chain',
   }),
   page({
     path: '/shielded',
@@ -553,9 +652,10 @@ export const SITE_MAP: SitePage[] = [
     layer: 'platform',
     summary: msg`The shielded pool’s state, anchors, encrypted notes and a nullifier lookup.`,
     sources: ['sdk'],
-    stories: ['NX-58', 'PE-04'],
+    stories: ['NX-58'],
     nav: true,
     keywords: ['privacy', 'orchard'],
+    group: 'chain',
   }),
   page({
     path: '/platform-address/$addr',
@@ -566,16 +666,6 @@ export const SITE_MAP: SitePage[] = [
     sources: ['sdk', 'pe'],
     stories: ['NX-59', 'PE-26'],
     record: msg`Platform address`,
-  }),
-  page({
-    path: '/quorums',
-    title: msg`Quorums`,
-    section: 'platform',
-    layer: 'platform',
-    summary: msg`Current Platform quorums with size, members and the last proposer.`,
-    sources: ['sdk', 'pe'],
-    stories: ['NX-55', 'PE-06'],
-    nav: true,
   }),
 
   page({
@@ -596,9 +686,22 @@ export const SITE_MAP: SitePage[] = [
     layer: 'neutral',
     summary: msg`Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent.`,
     sources: ['local', 'sdk'],
-    stories: ['PE-34', 'NX-71'],
+    stories: ['NX-71', 'NX-72', 'PE-34'],
     nav: true,
     keywords: ['decode', 'dry-run'],
+    railTitle: msg`Transition`,
+  }),
+  page({
+    path: '/tools/$decoder',
+    title: msg`Decoder`,
+    section: 'tools',
+    layer: 'neutral',
+    summary: msg`Decode raw bytes offline: a transaction, block, identity, contract, document or proof.`,
+    sources: ['local'],
+    stories: [],
+    record: msg`decoder`,
+    navHref: '/tools/contract',
+    railTitle: msg`Decoders`,
   }),
   page({
     path: '/tools/verify-message',
@@ -621,16 +724,6 @@ export const SITE_MAP: SitePage[] = [
     stories: ['IN-11'],
     nav: true,
     keywords: ['scan'],
-  }),
-  page({
-    path: '/tools/$decoder',
-    title: msg`Decoder`,
-    section: 'tools',
-    layer: 'neutral',
-    summary: msg`Decode raw bytes offline: a transaction, block, identity, contract, document or proof.`,
-    sources: ['local'],
-    stories: ['NX-71', 'NX-72'],
-    record: msg`decoder`,
   }),
   page({
     path: '/sdk-reference',
@@ -683,7 +776,7 @@ export const SITE_MAP: SitePage[] = [
     layer: 'neutral',
     summary: msg`Language, units, time zone, connection options and custom devnets.`,
     sources: ['local'],
-    stories: ['IN-13', 'NX-74', 'NX-75'],
+    stories: ['NX-18', 'NX-62', 'NX-74', 'NX-75'],
     nav: true,
     keywords: ['language', 'units', 'devnet'],
   }),
@@ -694,11 +787,16 @@ export const SITE_MAP: SitePage[] = [
     layer: 'neutral',
     summary: msg`What Radar can and can’t prove, where to act on what you see, and what it remembers.`,
     sources: ['local'],
-    stories: ['NX-76', 'X-11'],
+    stories: ['NX-76'],
     nav: true,
     keywords: ['privacy', 'proofs'],
   }),
 ]
+
+export const SITE_GROUPS: Record<SiteGroup, { title: MessageDescriptor; pages: string[] }> = {
+  voting: { title: msg`Voting`, pages: ['/contests', '/votes', '/polls'] },
+  chain: { title: msg`Chain state`, pages: ['/quorums', '/credits', '/shielded'] },
+}
 
 const BY_PATH = new Map(SITE_MAP.map((p) => [p.path, p]))
 
@@ -712,6 +810,42 @@ export function findPage(routeId: string): SitePage | undefined {
 
 export function pagesInSection(section: SiteSection): SitePage[] {
   return SITE_MAP.filter((p) => p.section === section && p.nav)
+}
+
+/** One link in a section's rail: a page, or a group of pages under one link. */
+export interface RailEntry {
+  key: string
+  title: MessageDescriptor
+  /** The route id to link to (a group's first page). */
+  to: string
+  /** The URL to link to when the route has params. */
+  href?: string
+  /** Every page that makes the entry current. */
+  pages: string[]
+}
+
+/** The section rail: one entry per page, one per group (at its first page's place), no aliases. */
+export function railEntries(section: SiteSection): RailEntry[] {
+  const seen = new Set<SiteGroup>()
+  const entries: RailEntry[] = []
+  for (const p of SITE_MAP) {
+    if (p.section !== section || p.rail === false || !(p.nav || p.navHref)) continue
+    if (p.group) {
+      if (seen.has(p.group)) continue
+      seen.add(p.group)
+      const { title, pages } = SITE_GROUPS[p.group]
+      entries.push({ key: `group:${p.group}`, title, to: pages[0]!, pages })
+    } else {
+      entries.push({
+        key: p.path,
+        title: p.railTitle ?? p.title,
+        to: p.path,
+        ...(p.navHref ? { href: p.navHref } : {}),
+        pages: [p.path],
+      })
+    }
+  }
+  return entries
 }
 
 /** The section's entry page: the first listed page, or the section's own route. */
