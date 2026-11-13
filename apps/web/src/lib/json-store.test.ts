@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createJsonStore } from './local-store'
+import { createJsonStore } from './json-store'
 
 const KEY = 'radar.test-store'
 const parse = (raw: unknown): string[] => (Array.isArray(raw) ? raw.map(String) : [])

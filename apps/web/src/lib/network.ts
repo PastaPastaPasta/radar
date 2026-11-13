@@ -7,7 +7,7 @@ export interface DevnetConfig {
 
 const DEVNET_PATTERN = /^devnet-[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/
 
-function asNetworkId(value: string): NetworkId | undefined {
+export function asNetworkId(value: string): NetworkId | undefined {
   if (value === 'mainnet' || value === 'testnet') return value
   return DEVNET_PATTERN.test(value) ? (value as NetworkId) : undefined
 }

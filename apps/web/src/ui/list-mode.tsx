@@ -1,5 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { useCallback, useId, useSyncExternalStore } from 'react'
+import { createJsonStore, type JsonStore } from '@/lib/json-store'
 import { LIMITS, type Limit } from '@/lib/search-schemas'
 import { SegFilter } from './table-tools'
 
@@ -18,89 +19,41 @@ export interface ListModeState extends ListMode {
 const DEFAULT: ListMode = { mode: 'pages', limit: 25 }
 const KEY_PREFIX = 'radar.list.'
 
-const listeners = new Set<() => void>()
-// Where a choice lives when storage is blocked: it then lasts until the page closes.
-const memory = new Map<string, string>()
-const parsed = new Map<string, { raw: string | null; value: ListMode }>()
+const stores = new Map<string, JsonStore<ListMode>>()
 
-function readRaw(key: string): string | null {
-  const kept = memory.get(key)
-  if (kept !== undefined) return kept
-  try {
-    return globalThis.localStorage.getItem(key)
-  } catch {
-    return null
+function parse(raw: unknown): ListMode {
+  const v =
+    typeof raw === 'object' && raw !== null ? (raw as { mode?: unknown; limit?: unknown }) : {}
+  return {
+    mode: v.mode === 'scroll' ? 'scroll' : 'pages',
+    limit: LIMITS.find((l) => l === v.limit) ?? DEFAULT.limit,
   }
 }
 
-function writeRaw(key: string, raw: string): void {
-  try {
-    globalThis.localStorage.setItem(key, raw)
-    memory.delete(key)
-  } catch {
-    memory.set(key, raw)
+function storeOf(listId: string): JsonStore<ListMode> {
+  let store = stores.get(listId)
+  if (!store) {
+    store = createJsonStore(KEY_PREFIX + listId, parse)
+    stores.set(listId, store)
   }
-}
-
-function parse(raw: string | null): ListMode {
-  if (raw === null) return DEFAULT
-  try {
-    const v = JSON.parse(raw) as { mode?: unknown; limit?: unknown }
-    return {
-      mode: v.mode === 'scroll' ? 'scroll' : 'pages',
-      limit: LIMITS.find((l) => l === v.limit) ?? DEFAULT.limit,
-    }
-  } catch {
-    return DEFAULT
-  }
-}
-
-// useSyncExternalStore needs the same object back while the stored text is unchanged.
-function snapshot(listId: string): ListMode {
-  const key = KEY_PREFIX + listId
-  const raw = readRaw(key)
-  const hit = parsed.get(key)
-  if (hit?.raw === raw) return hit.value
-  const value = parse(raw)
-  parsed.set(key, { raw, value })
-  return value
-}
-
-function subscribe(cb: () => void): () => void {
-  listeners.add(cb)
-  const onStorage = (e: StorageEvent) => {
-    if (e.key === null || e.key.startsWith(KEY_PREFIX)) cb()
-  }
-  window.addEventListener('storage', onStorage)
-  return () => {
-    listeners.delete(cb)
-    window.removeEventListener('storage', onStorage)
-  }
-}
-
-function update(listId: string, patch: Partial<ListMode>): void {
-  writeRaw(KEY_PREFIX + listId, JSON.stringify({ ...snapshot(listId), ...patch }))
-  for (const l of listeners) l()
+  return store
 }
 
 /** How one list is shown, remembered per list in `localStorage` (`radar.list.<listId>`) and shared across tabs. */
 export function useListMode(listId: string): ListModeState {
-  const value = useSyncExternalStore(
-    subscribe,
-    () => snapshot(listId),
-    () => DEFAULT,
-  )
+  const store = storeOf(listId)
+  const value = useSyncExternalStore(store.subscribe, store.get, store.get)
   const setMode = useCallback(
     (mode: ListModeKind) => {
-      update(listId, { mode })
+      store.set({ ...store.get(), mode })
     },
-    [listId],
+    [store],
   )
   const setLimit = useCallback(
     (limit: Limit) => {
-      update(listId, { limit })
+      store.set({ ...store.get(), limit })
     },
-    [listId],
+    [store],
   )
   return { ...value, setMode, setLimit }
 }

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { NetworkId } from '@/lib/network'
-import { asNetworkId, createJsonStore, useJsonStore, type JsonStore } from './local-store'
+import { createJsonStore, type JsonStore } from '@/lib/json-store'
+import { asNetworkId, useJsonStore } from './local-store'
 
 export const VIEWED_KEY = 'radar.viewed'
 export const VIEWED_LIMIT = 50

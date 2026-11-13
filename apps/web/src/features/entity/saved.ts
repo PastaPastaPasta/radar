@@ -1,5 +1,6 @@
 import type { NetworkId } from '@/lib/network'
-import { asNetworkId, createJsonStore, useJsonStore, type JsonStore } from './local-store'
+import { createJsonStore, type JsonStore } from '@/lib/json-store'
+import { asNetworkId, useJsonStore } from './local-store'
 
 export const SAVED_KEY = 'radar.saved'
 
