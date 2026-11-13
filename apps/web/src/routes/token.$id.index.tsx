@@ -19,10 +19,7 @@ export const Route = createFileRoute('/token/$id/')({
   validateSearch: tokenSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-token'),
-    (m) => m.tokenPrefetch,
-  ),
+  loader: routePrefetch('p-token', 'tokenPrefetch'),
   component: TokenPageRoute,
 })
 

@@ -12,9 +12,6 @@ const querySearch = z.object({
 export const Route = createFileRoute('/query')({
   validateSearch: querySearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/tools'),
-    (m) => m.queryPrefetch,
-  ),
+  loader: routePrefetch('tools', 'queryPrefetch'),
   component: QueryPage,
 })

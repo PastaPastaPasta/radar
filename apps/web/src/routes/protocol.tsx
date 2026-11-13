@@ -14,9 +14,6 @@ export const Route = createFileRoute('/protocol')({
   validateSearch: protocolSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.protocolPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'protocolPrefetch'),
   component: ProtocolPage,
 })

@@ -18,9 +18,6 @@ export const Route = createFileRoute('/map')({
   validateSearch: mapSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/net-d'),
-    (m) => m.mapPrefetch,
-  ),
+  loader: routePrefetch('net-d', 'mapPrefetch'),
   component: MapPage,
 })

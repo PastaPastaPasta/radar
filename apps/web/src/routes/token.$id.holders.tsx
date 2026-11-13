@@ -15,10 +15,7 @@ export const Route = createFileRoute('/token/$id/holders')({
   validateSearch: tokenHoldersSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-token'),
-    (m) => m.tokenHoldersPrefetch,
-  ),
+  loader: routePrefetch('p-token', 'tokenHoldersPrefetch'),
   component: TokenHoldersPageRoute,
 })
 

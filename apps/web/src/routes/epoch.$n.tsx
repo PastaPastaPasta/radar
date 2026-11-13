@@ -14,10 +14,7 @@ export const Route = createFileRoute('/epoch/$n')({
   validateSearch: epochSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.epochPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'epochPrefetch'),
   component: EpochPageRoute,
 })
 

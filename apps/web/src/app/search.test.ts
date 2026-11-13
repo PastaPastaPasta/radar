@@ -92,8 +92,7 @@ describe('search schema helpers', () => {
     expect(zRange.parse('100..')).toEqual({ min: 100 })
     expect(zRange.parse('..2.5')).toEqual({ max: 2.5 })
     expect(zRange.parse('1..9')).toEqual({ min: 1, max: 9 })
-    expect(zRange.parse('5..1')).toEqual({ min: 1, max: 5 })
-    for (const bad of ['..', '5', 'a..b', '1..2..3']) {
+    for (const bad of ['..', '5', 'a..b', '1..2..3', '5..1']) {
       expect(zRange.safeParse(bad).success).toBe(false)
     }
   })

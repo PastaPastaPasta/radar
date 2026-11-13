@@ -19,10 +19,7 @@ export const Route = createFileRoute('/contest/$label')({
   validateSearch: contestSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-vote'),
-    (m) => m.contestPrefetch,
-  ),
+  loader: routePrefetch('p-vote', 'contestPrefetch'),
   component: ContestPageRoute,
 })
 

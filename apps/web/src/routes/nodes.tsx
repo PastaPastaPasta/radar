@@ -16,9 +16,6 @@ export const Route = createFileRoute('/nodes')({
   validateSearch: nodesSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/net-a'),
-    (m) => m.nodesPrefetch,
-  ),
+  loader: routePrefetch('net-a', 'nodesPrefetch'),
   component: NodesPage,
 })

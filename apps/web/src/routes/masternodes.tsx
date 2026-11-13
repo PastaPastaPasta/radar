@@ -18,9 +18,6 @@ export const Route = createFileRoute('/masternodes')({
   validateSearch: masternodesSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/net-b'),
-    (m) => m.masternodesPrefetch,
-  ),
+  loader: routePrefetch('net-b', 'masternodesPrefetch'),
   component: MasternodesPage,
 })

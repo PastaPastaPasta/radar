@@ -12,9 +12,6 @@ const epochsSearch = z.object({
 export const Route = createFileRoute('/epochs')({
   validateSearch: epochsSearch,
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-chain'),
-    (m) => m.epochsPrefetch,
-  ),
+  loader: routePrefetch('p-chain', 'epochsPrefetch'),
   component: EpochsPage,
 })

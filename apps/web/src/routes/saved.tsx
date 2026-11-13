@@ -15,9 +15,6 @@ export const Route = createFileRoute('/saved')({
   validateSearch: savedSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/you'),
-    (m) => m.savedPrefetch,
-  ),
+  loader: routePrefetch('you', 'savedPrefetch'),
   component: SavedPage,
 })

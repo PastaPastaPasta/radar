@@ -4,10 +4,7 @@ import { GroupsPage } from '@/features/platform'
 
 export const Route = createFileRoute('/groups/$contract')({
   loaderDeps: ({ search }) => search,
-  loader: routePrefetch(
-    () => import('@/data/query/prefetch/p-data'),
-    (m) => m.groupsPrefetch,
-  ),
+  loader: routePrefetch('p-data', 'groupsPrefetch'),
   component: GroupsPageRoute,
 })
 
