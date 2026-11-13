@@ -495,6 +495,9 @@ msgstr "金额"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "仅加载前 {0} 个输入的金额，每个输入对应一次 DAPI 请求。"
 
+msgid "Amounts loaded"
+msgstr "已加载的金额"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金额以 {unitName} 显示。选择 USD 可让美元金额排在前面。"
 
@@ -1650,18 +1653,17 @@ msgstr "实时更新已停止。所示区块链截至 {since}。"
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "实时更新已停止。最近一次更新于 {since} 到达。"
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "加载全部 {0} 个输入"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "加载其余 {0} 个金额"
 
-msgid "Load all inputs to work it out"
-msgstr "加载所有输入后才能得出结果"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "正在加载金额：{0} / {1} 个输入。每个输入对应一次 DAPI 请求。"
 
 msgid "Loading inputs…"
 msgstr "正在加载输入…"
-
-msgid "Loading…"
-msgstr "加载中…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "隐私池"
 msgid "Show all {0} inputs"
 msgstr "显示全部 {0} 个输入"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "显示全部 {0} 个输入及其金额"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "显示全部 {0} 个输出"
+
+msgid "Show all inputs to work it out"
+msgstr "显示全部输入即可算出"
 
 msgid "Show as a table"
 msgstr "以表格显示"
@@ -2972,6 +2981,9 @@ msgstr "较小的金额会以最小高度绘制。"
 
 msgid "Software"
 msgstr "软件"
+
+msgid "Some amounts could not be loaded."
+msgstr "部分金额无法加载。"
 
 msgid "Some requests are failing."
 msgstr "部分请求失败。"

@@ -495,6 +495,9 @@ msgstr "Amounts"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 
+msgid "Amounts loaded"
+msgstr "Amounts loaded"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 
@@ -1650,18 +1653,17 @@ msgstr "Live updates have stopped. The chain shown is as of {since}."
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Live updates have stopped. The last update arrived at {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Load all {0} inputs"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Load the other {0} amounts"
 
-msgid "Load all inputs to work it out"
-msgstr "Load all inputs to work it out"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
 
 msgid "Loading inputs…"
 msgstr "Loading inputs…"
-
-msgid "Loading…"
-msgstr "Loading…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Shielded pool"
 msgid "Show all {0} inputs"
 msgstr "Show all {0} inputs"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Show all {0} inputs with their amounts"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Show all {0} outputs"
+
+msgid "Show all inputs to work it out"
+msgstr "Show all inputs to work it out"
 
 msgid "Show as a table"
 msgstr "Show as a table"
@@ -2972,6 +2981,9 @@ msgstr "Small amounts are drawn at a minimum height."
 
 msgid "Software"
 msgstr "Software"
+
+msgid "Some amounts could not be loaded."
+msgstr "Some amounts could not be loaded."
 
 msgid "Some requests are failing."
 msgstr "Some requests are failing."

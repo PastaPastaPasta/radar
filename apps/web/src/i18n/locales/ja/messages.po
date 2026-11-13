@@ -495,6 +495,9 @@ msgstr "金額"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "最初の {0} 件の入力について金額を読み込みます。1件ごとに DAPI リクエストが1回発生します。"
 
+msgid "Amounts loaded"
+msgstr "読み込み済みの金額"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金額は {unitName} で表示されます。USD を選ぶと、ドルの金額が先頭に表示されます。"
 
@@ -1650,18 +1653,17 @@ msgstr "ライブ更新が停止しました。表示中のチェーンは {sinc
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "ライブ更新が停止しました。最後の更新は {since} に届きました。"
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "{0} 件の入力をすべて読み込む"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "残りの {0} 件の金額を読み込む"
 
-msgid "Load all inputs to work it out"
-msgstr "すべての入力を読み込むと分かります"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "金額を読み込み中: {1} 件中 {0} 件。1件ごとに DAPI リクエストが1回発生します。"
 
 msgid "Loading inputs…"
 msgstr "入力を読み込み中…"
-
-msgid "Loading…"
-msgstr "読み込み中…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "シールドプール"
 msgid "Show all {0} inputs"
 msgstr "{0} 件の入力をすべて表示"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "{0} 件の入力をすべて金額付きで表示"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "{0} 件の出力をすべて表示"
+
+msgid "Show all inputs to work it out"
+msgstr "すべての入力を表示すると算出できます"
 
 msgid "Show as a table"
 msgstr "表として表示"
@@ -2972,6 +2981,9 @@ msgstr "小さな金額は最小の高さで描画されます。"
 
 msgid "Software"
 msgstr "ソフトウェア"
+
+msgid "Some amounts could not be loaded."
+msgstr "一部の金額を読み込めませんでした。"
 
 msgid "Some requests are failing."
 msgstr "一部のリクエストが失敗しています。"

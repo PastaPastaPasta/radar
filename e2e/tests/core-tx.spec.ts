@@ -140,7 +140,7 @@ test.describe('Transaction page', () => {
       await page.goto(url)
       const fee = page.locator('.rx-stat').filter({ hasText: /^Fee/ })
       await expect(fee).toContainText('0 duffs a byte')
-      await expect(fee).not.toContainText('Load all inputs')
+      await expect(fee).not.toContainText('Show all inputs')
       const flow = page.locator('#flow')
       await expect(flow).toContainText('No value moves in this transaction')
       await expect(flow.locator('svg.rx-flow')).toHaveCount(0)

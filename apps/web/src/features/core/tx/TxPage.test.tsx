@@ -206,8 +206,8 @@ describe('Transaction page', () => {
       await payload(url, kind)
       await waitFor(() => expect(feeCard()).toHaveTextContent('0 duffs a byte'))
       expect(feeCard()).toHaveTextContent('it spends no coins')
-      expect(feeCard()).not.toHaveTextContent('Load all inputs')
-      expect(document.body).not.toHaveTextContent('Load all inputs to work it out')
+      expect(feeCard()).not.toHaveTextContent('Show all inputs')
+      expect(document.body).not.toHaveTextContent('Show all inputs to work it out')
       expect(flowOf()).toHaveTextContent('No value moves in this transaction')
       expect(flowOf().querySelector('svg.rx-flow')).toBeNull()
       expect(flowOf()).not.toHaveTextContent('Credit pool')
@@ -476,6 +476,125 @@ describe('Transaction page', () => {
         ),
       ).toBeVisible()
       expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
+    })
+  })
+
+  describe('a long input list @IN-05', () => {
+    const TOTAL = 120
+    const prevTx = (n: number) => `${n.toString(16).padStart(4, '0')}`.repeat(16)
+    let open: { resolve: () => void; inputs: number }[]
+    let inFlight: number
+    let maxInFlight: number
+    let failNext: boolean
+
+    beforeEach(() => {
+      vi.restoreAllMocks()
+      open = []
+      inFlight = 0
+      maxInFlight = 0
+      failNext = false
+      const original = core.tx.bind(core)
+      vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
+        const found = await original(net, txid, signal)
+        return found.data
+          ? {
+              ...found,
+              data: {
+                ...found.data,
+                inputs: Array.from({ length: TOTAL }, (_, n) => ({
+                  txid: prevTx(n + 1),
+                  vout: 0,
+                  scriptSig: '',
+                  sequence: 0,
+                })),
+              },
+            }
+          : found
+      })
+      vi.spyOn(core, 'prevouts').mockImplementation(async (_net, tx) => {
+        inFlight += 1
+        maxInFlight = Math.max(maxInFlight, inFlight)
+        await new Promise<void>((resolve) => open.push({ resolve, inputs: tx.inputs.length }))
+        inFlight -= 1
+        if (failNext) {
+          failNext = false
+          throw new Error('boom')
+        }
+        const map = new Map(
+          tx.inputs.map((i) => [
+            `${i.txid}:${i.vout}`,
+            { value: 100_000_000n, scriptPubKey: '76a914', address: undefined },
+          ]),
+        )
+        return { source: 'dapi', asOf: 1, fetchedAt: 1, proved: false, data: map } as never
+      })
+    })
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    const release = async () => {
+      await waitFor(() => expect(open.length).toBeGreaterThan(0))
+      open.shift()!.resolve()
+    }
+
+    it('reveals every input with its amount from one action, and shows the progress', async () => {
+      const user = userEvent.setup()
+      renderAt(`/tx/${MAINNET.transfer}`)
+      await release()
+      const show = await screen.findByRole(
+        'button',
+        { name: `Show all ${TOTAL} inputs with their amounts` },
+        { timeout: 4000 },
+      )
+      expect(screen.queryByRole('button', { name: /Load (all|the other)/ })).toBeNull()
+      expect(document.querySelectorAll('#io tbody tr[id^="in-"]')).toHaveLength(10)
+      await user.click(show)
+      expect(document.querySelectorAll('#io tbody tr[id^="in-"]')).toHaveLength(TOTAL)
+      await release()
+      await waitFor(() =>
+        expect(screen.getByRole('status')).toHaveTextContent(
+          `Loading amounts: 30 of ${TOTAL} inputs`,
+        ),
+      )
+      expect(screen.getByRole('progressbar', { name: 'Amounts loaded' })).toHaveAttribute(
+        'value',
+        '30',
+      )
+      for (let step = 0; step < 5; step += 1) await release()
+      await waitFor(() => expect(document.querySelector('[data-prevout-progress]')).toBeNull())
+      expect(screen.queryByText('Not loaded')).toBeNull()
+      expect(maxInFlight, 'one step at a time').toBe(1)
+    })
+
+    it('reads the other 110 in steps of at most 20 inputs, never all at once', async () => {
+      const user = userEvent.setup()
+      renderAt(`/tx/${MAINNET.transfer}`)
+      await release()
+      await user.click(
+        await screen.findByRole('button', { name: /Show all 120 inputs with their amounts/ }),
+      )
+      const sizes: number[] = []
+      for (let step = 0; step < 6; step += 1) {
+        await waitFor(() => expect(open.length).toBe(1))
+        sizes.push(open[0]!.inputs)
+        await release()
+      }
+      expect(sizes).toEqual([20, 20, 20, 20, 20, 10])
+      expect(maxInFlight).toBe(1)
+    })
+
+    it('offers to try again when a step fails', async () => {
+      const user = userEvent.setup()
+      renderAt(`/tx/${MAINNET.transfer}`)
+      await release()
+      await user.click(
+        await screen.findByRole('button', { name: /Show all 120 inputs with their amounts/ }),
+      )
+      failNext = true
+      await release()
+      expect(await screen.findByText('Some amounts could not be loaded.')).toBeVisible()
+      expect(screen.getByRole('button', { name: 'Try again' })).toBeVisible()
     })
   })
 

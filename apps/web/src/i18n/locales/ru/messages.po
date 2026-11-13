@@ -495,6 +495,9 @@ msgstr "Суммы"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Суммы загружаются для первых {0} входов. Каждый из них — это запрос к DAPI."
 
+msgid "Amounts loaded"
+msgstr "Загружено сумм"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Суммы показываются в {unitName}. Выберите USD, чтобы сначала показывать сумму в долларах."
 
@@ -1650,18 +1653,17 @@ msgstr "Обновления в реальном времени остановл
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Обновления в реальном времени остановлены. Последнее обновление пришло в {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Загрузить все входы: {0}"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Загрузить остальные суммы: {0}"
 
-msgid "Load all inputs to work it out"
-msgstr "Загрузите все входы, чтобы узнать"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Загрузка сумм: {0} из {1} входов. Каждый из них — это запрос к DAPI."
 
 msgid "Loading inputs…"
 msgstr "Загрузка входов…"
-
-msgid "Loading…"
-msgstr "Загрузка…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Защищённый пул"
 msgid "Show all {0} inputs"
 msgstr "Показать все входы: {0}"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Показать все входы с суммами: {0}"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Показать все выходы: {0}"
+
+msgid "Show all inputs to work it out"
+msgstr "Покажите все входы, чтобы рассчитать"
 
 msgid "Show as a table"
 msgstr "Показать таблицей"
@@ -2972,6 +2981,9 @@ msgstr "Малые суммы рисуются с минимальной выс�
 
 msgid "Software"
 msgstr "Программное обеспечение"
+
+msgid "Some amounts could not be loaded."
+msgstr "Некоторые суммы не удалось загрузить."
 
 msgid "Some requests are failing."
 msgstr "Часть запросов завершается ошибкой."

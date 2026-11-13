@@ -2424,3 +2424,12 @@ html[data-scroll-gutter] {
     overflow-x: auto;
   }
 }
+
+/* A native progress bar for a read that takes many requests. */
+.rx-progress {
+  inline-size: 120px;
+  max-inline-size: 40%;
+  block-size: 6px;
+  vertical-align: middle;
+  accent-color: var(--dh-brand);
+}

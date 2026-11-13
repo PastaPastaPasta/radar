@@ -495,6 +495,9 @@ msgstr "Суми"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Суми завантажуються для перших {0} входів. Кожен із них — це запит до DAPI."
 
+msgid "Amounts loaded"
+msgstr "Завантажено сум"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Суми показуються в {unitName}. Виберіть USD, щоб спершу показувати суму в доларах."
 
@@ -1650,18 +1653,17 @@ msgstr "Оновлення наживо зупинено. Показано ла�
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Оновлення наживо зупинено. Останнє оновлення надійшло о {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Завантажити всі входи: {0}"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Завантажити решту сум: {0}"
 
-msgid "Load all inputs to work it out"
-msgstr "Завантажте всі входи, щоб дізнатися"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Завантаження сум: {0} із {1} входів. Кожен із них — це запит до DAPI."
 
 msgid "Loading inputs…"
 msgstr "Завантаження входів…"
-
-msgid "Loading…"
-msgstr "Завантаження…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Захищений пул"
 msgid "Show all {0} inputs"
 msgstr "Показати всі входи: {0}"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Показати всі входи із сумами: {0}"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Показати всі виходи: {0}"
+
+msgid "Show all inputs to work it out"
+msgstr "Покажіть усі входи, щоб обчислити"
 
 msgid "Show as a table"
 msgstr "Показати таблицею"
@@ -2972,6 +2981,9 @@ msgstr "Малі суми малюються з мінімальною висо�
 
 msgid "Software"
 msgstr "Програмне забезпечення"
+
+msgid "Some amounts could not be loaded."
+msgstr "Деякі суми не вдалося завантажити."
 
 msgid "Some requests are failing."
 msgstr "Частина запитів завершується помилкою."

@@ -495,6 +495,9 @@ msgstr "Beträge"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Beträge werden für die ersten {0} Inputs geladen. Jeder ist eine DAPI-Anfrage."
 
+msgid "Amounts loaded"
+msgstr "Geladene Beträge"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Beträge werden in {unitName} angezeigt. Wähle USD, damit der Dollarwert vorne steht."
 
@@ -1650,18 +1653,17 @@ msgstr "Live-Updates wurden gestoppt. Die angezeigte Chain entspricht dem Stand 
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Live-Updates wurden gestoppt. Das letzte Update kam um {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Alle {0} Inputs laden"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Die übrigen {0} Beträge laden"
 
-msgid "Load all inputs to work it out"
-msgstr "Lade alle Inputs, um es zu ermitteln"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Beträge werden geladen: {0} von {1} Inputs. Jeder ist eine DAPI-Anfrage."
 
 msgid "Loading inputs…"
 msgstr "Inputs werden geladen …"
-
-msgid "Loading…"
-msgstr "Wird geladen …"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Shielded-Pool"
 msgid "Show all {0} inputs"
 msgstr "Alle {0} Inputs anzeigen"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Alle {0} Inputs mit ihren Beträgen anzeigen"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Alle {0} Outputs anzeigen"
+
+msgid "Show all inputs to work it out"
+msgstr "Alle Inputs anzeigen, um es zu ermitteln"
 
 msgid "Show as a table"
 msgstr "Als Tabelle anzeigen"
@@ -2972,6 +2981,9 @@ msgstr "Kleine Beträge werden mit einer Mindesthöhe gezeichnet."
 
 msgid "Software"
 msgstr "Software"
+
+msgid "Some amounts could not be loaded."
+msgstr "Einige Beträge konnten nicht geladen werden."
 
 msgid "Some requests are failing."
 msgstr "Einige Anfragen schlagen fehl."

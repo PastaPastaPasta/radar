@@ -125,8 +125,8 @@ export function IoTables({
   prevouts: ReadonlyMap<string, PrevOut> | undefined
   senders: Set<string>
   spendContext: SpendContext
-  /** Inputs beyond this index are not loaded; offer to load them. */
-  partial?: { loaded: number; loading: boolean }
+  /** Inputs beyond `loaded` have no amounts yet. `requested` once the reader asked for all of them. */
+  partial?: { loaded: number; loading: boolean; requested: boolean; failed: boolean }
   onLoadAll?: () => void
 }) {
   const { t } = useLingui()
@@ -136,6 +136,10 @@ export function IoTables({
   const anchor = useAnchor()
   const [showAllIn, setShowAllIn] = useState(false)
   const [showAllOut, setShowAllOut] = useState(false)
+  const showAllInputs = () => {
+    setShowAllIn(true)
+    onLoadAll?.()
+  }
   const inCount = tx.inputs.length
   const outCount = tx.outputs.length
   const inLimit = showAllIn || (anchor.in ?? -1) >= INITIAL ? inCount : INITIAL
@@ -214,24 +218,44 @@ export function IoTables({
               <button
                 type="button"
                 className="dh-btn dh-btn--link"
-                onClick={() => setShowAllIn(true)}
+                onClick={partial && !partial.requested ? showAllInputs : () => setShowAllIn(true)}
               >
-                {t`Show all ${formatInt(inCount)} inputs`}
+                {partial && !partial.requested
+                  ? t`Show all ${formatInt(inCount)} inputs with their amounts`
+                  : t`Show all ${formatInt(inCount)} inputs`}
               </button>
             </p>
           ) : null}
           {partial && partial.loaded < inCount ? (
-            <p className="rx-note" style={{ padding: '10px 14px' }}>
-              {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`}{' '}
-              <button
-                type="button"
-                className="dh-btn dh-btn--link"
-                disabled={partial.loading}
-                onClick={onLoadAll}
-              >
-                {partial.loading ? t`Loading…` : t`Load all ${formatInt(inCount)} inputs`}
-              </button>
-            </p>
+            <div className="rx-note" style={{ padding: '10px 14px' }} data-prevout-progress>
+              {partial.failed ? (
+                <>
+                  {t`Some amounts could not be loaded.`}{' '}
+                  <button type="button" className="dh-btn dh-btn--link" onClick={onLoadAll}>
+                    {t`Try again`}
+                  </button>
+                </>
+              ) : partial.requested ? (
+                <span role="status">
+                  <progress
+                    className="rx-progress"
+                    max={inCount}
+                    value={partial.loaded}
+                    aria-label={t`Amounts loaded`}
+                  />{' '}
+                  {t`Loading amounts: ${formatInt(partial.loaded)} of ${formatInt(inCount)} inputs. Each one is a DAPI request.`}
+                </span>
+              ) : inCount > inLimit ? (
+                t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`
+              ) : (
+                <>
+                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`}{' '}
+                  <button type="button" className="dh-btn dh-btn--link" onClick={onLoadAll}>
+                    {t`Load the other ${formatInt(inCount - partial.loaded)} amounts`}
+                  </button>
+                </>
+              )}
+            </div>
           ) : null}
         </Card>
         <div className="rx-io__arrow" aria-hidden="true">

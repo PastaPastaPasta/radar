@@ -495,6 +495,9 @@ msgstr "Tutarlar"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Tutarlar ilk {0} girdi için yüklenir. Her biri bir DAPI isteğidir."
 
+msgid "Amounts loaded"
+msgstr "Yüklenen tutarlar"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Tutarlar {unitName} cinsinden gösterilir. Dolar değerinin önce gelmesi için USD’yi seçin."
 
@@ -1650,18 +1653,17 @@ msgstr "Canlı güncellemeler durdu. Gösterilen zincir {since} itibarıyladır.
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Canlı güncellemeler durdu. Son güncelleme {since} saatinde geldi."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "{0} girdinin tümünü yükle"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Diğer {0} tutarı yükle"
 
-msgid "Load all inputs to work it out"
-msgstr "Bunu öğrenmek için tüm girdileri yükleyin"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Tutarlar yükleniyor: {1} girdinin {0} tanesi. Her biri bir DAPI isteğidir."
 
 msgid "Loading inputs…"
 msgstr "Girdiler yükleniyor…"
-
-msgid "Loading…"
-msgstr "Yükleniyor…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Gizli havuz"
 msgid "Show all {0} inputs"
 msgstr "{0} girdinin tümünü göster"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "{0} girdinin tümünü tutarlarıyla göster"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "{0} çıktının tümünü göster"
+
+msgid "Show all inputs to work it out"
+msgstr "Hesaplamak için tüm girdileri göster"
 
 msgid "Show as a table"
 msgstr "Tablo olarak göster"
@@ -2972,6 +2981,9 @@ msgstr "Küçük tutarlar en düşük yükseklikte çizilir."
 
 msgid "Software"
 msgstr "Yazılım"
+
+msgid "Some amounts could not be loaded."
+msgstr "Bazı tutarlar yüklenemedi."
 
 msgid "Some requests are failing."
 msgstr "Bazı istekler başarısız oluyor."

@@ -495,6 +495,9 @@ msgstr "Montants"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Les montants sont chargés pour les {0} premières entrées. Chacune est une requête DAPI."
 
+msgid "Amounts loaded"
+msgstr "Montants chargés"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Les montants s’affichent en {unitName}. Choisissez USD pour mettre la valeur en dollars en premier."
 
@@ -1650,18 +1653,17 @@ msgstr "Les mises à jour en direct se sont arrêtées. La chaîne affichée dat
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "Les mises à jour en direct se sont arrêtées. La dernière mise à jour est arrivée à {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Charger les {0} entrées"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Charger les {0} autres montants"
 
-msgid "Load all inputs to work it out"
-msgstr "Chargez toutes les entrées pour le déterminer"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "Chargement des montants : {0} entrées sur {1}. Chacune est une requête DAPI."
 
 msgid "Loading inputs…"
 msgstr "Chargement des entrées…"
-
-msgid "Loading…"
-msgstr "Chargement…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Pool blindé"
 msgid "Show all {0} inputs"
 msgstr "Afficher les {0} entrées"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Afficher les {0} entrées avec leurs montants"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Afficher les {0} sorties"
+
+msgid "Show all inputs to work it out"
+msgstr "Afficher toutes les entrées pour le calculer"
 
 msgid "Show as a table"
 msgstr "Afficher sous forme de tableau"
@@ -2972,6 +2981,9 @@ msgstr "Les petits montants sont dessinés avec une hauteur minimale."
 
 msgid "Software"
 msgstr "Logiciel"
+
+msgid "Some amounts could not be loaded."
+msgstr "Certains montants n’ont pas pu être chargés."
 
 msgid "Some requests are failing."
 msgstr "Certaines requêtes échouent."

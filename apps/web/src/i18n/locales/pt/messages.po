@@ -495,6 +495,9 @@ msgstr "Valores"
 msgid "Amounts are loaded for the first {0} inputs. Each one is a DAPI request."
 msgstr "Os valores são carregados para as primeiras {0} entradas. Cada uma é um pedido ao DAPI."
 
+msgid "Amounts loaded"
+msgstr "Valores carregados"
+
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Os valores são mostrados em {unitName}. Escolha USD para pôr o valor em dólares primeiro."
 
@@ -1650,18 +1653,17 @@ msgstr "As atualizações em direto pararam. A cadeia apresentada é de {since}.
 msgid "Live updates have stopped. The last update arrived at {since}."
 msgstr "As atualizações em direto pararam. A última chegou às {since}."
 
-#. placeholder {0}: formatInt(inCount)
-msgid "Load all {0} inputs"
-msgstr "Carregar as {0} entradas"
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Carregar os outros {0} valores"
 
-msgid "Load all inputs to work it out"
-msgstr "Carregue todas as entradas para o apurar"
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each one is a DAPI request."
+msgstr "A carregar valores: {0} de {1} entradas. Cada uma é um pedido ao DAPI."
 
 msgid "Loading inputs…"
 msgstr "A carregar entradas…"
-
-msgid "Loading…"
-msgstr "A carregar…"
 
 #. placeholder {0}: formatInt(b.header.l1LockedHeight)
 msgid "Locked to Core block {0}"
@@ -2921,9 +2923,16 @@ msgstr "Pool blindado"
 msgid "Show all {0} inputs"
 msgstr "Mostrar as {0} entradas"
 
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Mostrar as {0} entradas com os seus valores"
+
 #. placeholder {0}: formatInt(outCount)
 msgid "Show all {0} outputs"
 msgstr "Mostrar as {0} saídas"
+
+msgid "Show all inputs to work it out"
+msgstr "Mostre todas as entradas para o calcular"
 
 msgid "Show as a table"
 msgstr "Mostrar como tabela"
@@ -2972,6 +2981,9 @@ msgstr "Os valores pequenos são desenhados com uma altura mínima."
 
 msgid "Software"
 msgstr "Software"
+
+msgid "Some amounts could not be loaded."
+msgstr "Não foi possível carregar alguns valores."
 
 msgid "Some requests are failing."
 msgstr "Alguns pedidos estão a falhar."

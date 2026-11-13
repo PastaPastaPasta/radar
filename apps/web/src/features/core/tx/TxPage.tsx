@@ -37,6 +37,7 @@ import { PayloadRows, usePayloadInfo } from './Payload'
 import { txQueries } from './queries'
 import { Settlement } from './Settlement'
 import { useFirstSeen } from './useFirstSeen'
+import { usePrevoutSteps } from './usePrevoutSteps'
 import {
   inputValues,
   isCoinbaseTx,
@@ -122,11 +123,11 @@ function TxView({
         : Math.max(1, tipHeight - tx.height + 1)
   const coinbase = isCoinbaseTx(tx)
   const mined = tx.height !== undefined
-  const [count, setCount] = useState(
-    tx.inputs.length <= PREVOUT_EAGER ? tx.inputs.length : PREVOUT_FIRST,
-  )
+  const count = tx.inputs.length <= PREVOUT_EAGER ? tx.inputs.length : PREVOUT_FIRST
   const needsPrevouts = !coinbase && tx.inputs.length > 0
+  const [loadAll, setLoadAll] = useState(false)
   const prevouts = useQuery({ ...txQueries.prevouts(net, tx, count), enabled: needsPrevouts })
+  const rest = usePrevoutSteps(net, tx, count, loadAll && needsPrevouts && !prevouts.isPending)
   const hyphenFit = useHyphenFit(net)
   const hy = useQuery({ ...hyQueries.tx(net, tx.txid), enabled: hyphenFit && mined })
   const index = useIndexHealth(net)
@@ -134,7 +135,11 @@ function TxView({
   // The spend state's own reads decide whether Insight is asked; this only watches the answer for its source line.
   const ins = useQuery({ ...insQueries.tx(net, tx.txid), enabled: false })
   const insightSpends = useMemo(() => insightSpendsOf(ins.data?.data), [ins.data])
-  const prev = prevouts.data?.data
+  const prev = useMemo(() => {
+    const first = prevouts.data?.data
+    if (!first || rest.map.size === 0) return first
+    return new Map([...first, ...rest.map])
+  }, [prevouts.data, rest.map])
   const values = useMemo(() => inputValues(tx, prev), [tx, prev])
   const senders = useMemo(() => senderAddresses(values), [values])
   const sums = totals(tx, prev)
@@ -241,7 +246,7 @@ function TxView({
   } else if ((prevouts.isPending || prevouts.isPlaceholderData) && needsPrevouts) {
     feeNote = t`Loading inputs…`
   } else {
-    feeNote = t`Load all inputs to work it out`
+    feeNote = t`Show all inputs to work it out`
   }
 
   return (
@@ -374,7 +379,7 @@ function TxView({
               ? undefined
               : t`Ribbon width is the amount. Grey is change back to the sender, orange is the fee.`
           }
-          source={prevouts.data ? [stamp, stampOf(prevouts.data)] : stamp}
+          source={prevouts.data ? [stamp, stampOf(prevouts.data), ...rest.stamps] : stamp}
         >
           <Card layer="core">
             {noValue ? (
@@ -422,7 +427,7 @@ function TxView({
           }
           source={[
             stamp,
-            ...(prevouts.data ? [stampOf(prevouts.data)] : []),
+            ...(prevouts.data ? [stampOf(prevouts.data), ...rest.stamps] : []),
             ...(hy.data ? [stampOf(hy.data)] : []),
             ...(insightSpends && ins.data ? [stampOf(ins.data)] : []),
           ]}
@@ -438,8 +443,20 @@ function TxView({
               insightFirst,
               tipHeight,
             }}
-            partial={needsPrevouts ? { loaded: count, loading: prevouts.isFetching } : undefined}
-            onLoadAll={() => setCount(tx.inputs.length)}
+            partial={
+              needsPrevouts && count < tx.inputs.length
+                ? {
+                    loaded: rest.loaded,
+                    loading: prevouts.isFetching || (loadAll && rest.loading),
+                    requested: loadAll,
+                    failed: rest.failed,
+                  }
+                : undefined
+            }
+            onLoadAll={() => {
+              setLoadAll(true)
+              rest.retry()
+            }}
           />
         </Section>
 
