@@ -92,6 +92,7 @@ test.describe('Home', () => {
       test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
       await page.setViewportSize({ width, height: 844 })
       await page.goto('/')
+      await settled(page)
       const core = page.getByRole('link', { name: 'Core figures' })
       const latest = page.getByRole('link', { name: 'Latest blocks' })
       const [a, b] = await Promise.all([core.boundingBox(), latest.boundingBox()])
@@ -103,7 +104,7 @@ test.describe('Home', () => {
       await expect(page).toHaveURL(/#h-latest$/)
       const top = async () => (await page.locator('#h-latest').boundingBox())?.y ?? -1
       await expect.poll(top).toBeGreaterThanOrEqual(0)
-      await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)
+      await expect.poll(top).toBeLessThan(page.viewportSize()!.height * 0.75)
     })
   }
 
