@@ -9,6 +9,8 @@ export interface ProofRecord {
   method: string
   args: unknown
   recordedAt: number
+  /** The evonode that answered, when the worker knew it. */
+  node?: string
   meta: WireMeta
   proof: WireProof
 }

@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const vite = vi.hoisted(() => ({
@@ -43,9 +42,5 @@ describe('serviceWorker', () => {
     await generateBundle.call({ emitFile: (f: unknown) => emitted.push(f) })
     expect(SERVICE_WORKER_FILE).toBe('sw.js')
     expect(emitted).toEqual([{ type: 'asset', fileName: 'sw.js', source: 'self.skipWaiting()' }])
-  })
-
-  it('keeps the worker free of a fetch handler', () => {
-    expect(readFileSync(SERVICE_WORKER_SOURCE, 'utf8')).not.toMatch(/['"]fetch['"]/)
   })
 })

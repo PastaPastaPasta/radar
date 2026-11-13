@@ -59,7 +59,7 @@ describe('Search offers no dead ends @HY-14', () => {
   })
 
   it('withholds the kinds whose page is not built yet', () => {
-    for (const to of ['/name/$label', '/platform-address/$addr', '/about']) {
+    for (const to of ['/name/$label', '/platform-address/$addr']) {
       expect(offered({ href: { to } as never })).toBe(false)
     }
   })
@@ -79,7 +79,6 @@ describe('Search offers no dead ends @HY-14', () => {
   it('lists only finished pages in the palette', () => {
     const titles = matchPages('').map((p) => p.path)
     for (const path of titles) expect(isFinishedRoute(path)).toBe(true)
-    expect(titles).not.toContain('/about')
-    expect(matchPages('about').map((p) => p.path)).not.toContain('/about')
+    for (const path of UNFINISHED_ROUTES) expect(titles).not.toContain(path)
   })
 })

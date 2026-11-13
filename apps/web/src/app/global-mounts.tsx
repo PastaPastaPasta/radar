@@ -1,18 +1,20 @@
 import { useEffect, useSyncExternalStore, type ComponentType } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
+import { installYou } from '@/features/you/boot'
 import { deferred } from '@/ui/deferred'
 import { onProofInspectorNeeded } from '@/ui/proof'
 
-export type GlobalMount = 'proof' | 'diagnostics'
+export type GlobalMount = 'proof' | 'diagnostics' | 'update'
 
 const LOADERS: Record<GlobalMount, () => Promise<ComponentType>> = {
   proof: () => import('@/features/you/proof/ProofInspector').then((m) => m.ProofInspector),
   diagnostics: () => import('@/features/you/diagnostics/Diagnostics').then((m) => m.Diagnostics),
+  update: () => import('@/features/you/update/UpdateNotice').then((m) => m.UpdateNotice),
 }
 
 type Requested = Readonly<Record<GlobalMount, ComponentType | null>>
 
-const NONE: Requested = { proof: null, diagnostics: null }
+const NONE: Requested = { proof: null, diagnostics: null, update: null }
 
 let requested: Requested = NONE
 const listeners = new Set<() => void>()
@@ -63,17 +65,25 @@ const snapshot = (): Requested => requested
 export function GlobalMounts() {
   const open = useSyncExternalStore(subscribe, snapshot, snapshot)
   useEffect(() => {
-    onProofInspectorNeeded(() => {
-      requestGlobalMount('proof')
+    const load = (which: GlobalMount) => () => {
+      requestGlobalMount(which)
+    }
+    onProofInspectorNeeded(load('proof'))
+    const removeYou = installYou({
+      proof: load('proof'),
+      diagnostics: load('diagnostics'),
+      update: load('update'),
     })
     return () => {
       onProofInspectorNeeded(undefined)
+      removeYou()
     }
   }, [])
   return (
     <>
       {open.proof ? <Mount which="proof" Panel={open.proof} /> : null}
       {open.diagnostics ? <Mount which="diagnostics" Panel={open.diagnostics} /> : null}
+      {open.update ? <Mount which="update" Panel={open.update} /> : null}
     </>
   )
 }
