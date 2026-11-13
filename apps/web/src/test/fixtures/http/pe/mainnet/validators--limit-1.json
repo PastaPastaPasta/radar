@@ -1,0 +1,100 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/validators?limit=1" },
+  "recordedAt": "2026-11-13T09:39:56.594Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "pagination": { "page": 1, "limit": 1, "total": 681 },
+    "resultSet": [
+      {
+        "proTxHash": "06A9EE248111BF6D6D5B123CC40B3A9C9C9C3C84A58E5A2ED9DF97AD7C4E7289",
+        "isActive": false,
+        "proposedBlocksAmount": 1311,
+        "lastProposedBlockHeader": {
+          "hash": "554AED1C479873EBC2E05EB4C5B1C33CA5E00B57F030FBB780D760B03BCF7234",
+          "height": 384330,
+          "timestamp": "2026-06-16T13:43:32.583Z",
+          "blockVersion": 14,
+          "appVersion": 11,
+          "l1LockedHeight": 2489405,
+          "validator": "06A9EE248111BF6D6D5B123CC40B3A9C9C9C3C84A58E5A2ED9DF97AD7C4E7289",
+          "totalGasUsed": 0,
+          "appHash": "9D3455BEFB92E37A37E3DB1AD9644011B20DD8803435F220A41C20BF0A575515",
+          "quorumHash": "000000000000002C2122FF36C5523FF3AD1D4F8DF64626A7605C904665C5A0C3"
+        },
+        "proTxInfo": {
+          "type": "Evo",
+          "collateralHash": "c3f094fc0d05abb4d5aafe7961e1d517f8af44199e8dfc85e81e7c9e0ee3e740",
+          "collateralIndex": 1,
+          "collateralAddress": "Xuj2VkV3Gi8d6Cn1EU6n5QotHpZGcCjvHv",
+          "operatorReward": 0,
+          "confirmations": 5,
+          "state": {
+            "version": 2,
+            "service": "5.189.186.78:9999",
+            "addresses": {
+              "core_p2p": ["5.189.186.78:9999"],
+              "platform_https": ["5.189.186.78:443"],
+              "platform_p2p": ["5.189.186.78:26656"]
+            },
+            "registeredHeight": 1910920,
+            "lastPaidHeight": 0,
+            "consecutivePayments": 0,
+            "PoSePenalty": 0,
+            "PoSeRevivedHeight": -1,
+            "PoSeBanHeight": -1,
+            "revocationReason": 0,
+            "ownerAddress": "XoBGUqdNneLNCbPWnYhmxgB4pPys3dADQb",
+            "votingAddress": "XdPYT1KCFQdP27tpseVGse8grGZ9XwpkhD",
+            "platformNodeID": "e66636675a37df7275a548d6a824b8d75054c94c",
+            "platformP2PPort": 26656,
+            "platformHTTPPort": 443,
+            "payoutAddress": "XjbaGWaGnvEtuQAUoBgDxJWe8ZNv45upG2",
+            "pubKeyOperator": "8873348f84327aabe2920d571f51d4a39da2c8c5ac1315c9d0776f3e8af256504d5b52472c2e24bfe1aeba3572f230f4"
+          }
+        },
+        "identity": "T1jY1c6ojfhYe5w8TV7eNwWXvGRhkcqHJPHfdC54RVz",
+        "identityBalance": "195483340",
+        "epochInfo": {
+          "number": 88,
+          "firstBlockHeight": "467862",
+          "firstCoreBlockHeight": 2569070,
+          "startTime": 1794174796794,
+          "feeMultiplier": "1000",
+          "endTime": 1794178396794,
+          "totalBlocksInEpoch": null,
+          "totalProcessingFees": null,
+          "totalDistributedStorageFees": null,
+          "totalCreatedStorageFees": null,
+          "coreBlockRewards": null,
+          "blockProposers": null
+        },
+        "totalReward": null,
+        "epochReward": null,
+        "withdrawalsCount": null,
+        "lastWithdrawal": null,
+        "lastWithdrawalTime": null,
+        "endpoints": null,
+        "geoIpInfo": {
+          "ipv4": "5.189.186.78",
+          "countryCode": "DE",
+          "city": "Munich (Ramersdorf-Perlach)",
+          "latitude": 48.10459899902344,
+          "longitude": 11.600199699401855
+        },
+        "registeredAt": null,
+        "votingIdentity": null,
+        "votingIdentityBalance": null,
+        "poseScoreMax": null,
+        "blocksUntilCorePayment": null,
+        "registeredCoreBlockHash": null,
+        "lastPaidCoreBlockHash": null,
+        "poseRevivedCoreBlockHash": null,
+        "poseBanCoreBlockHash": null,
+        "coreYieldPerYear": null,
+        "coreTipTime": null,
+        "coreBlockIntervalMs": null
+      }
+    ]
+  }
+}

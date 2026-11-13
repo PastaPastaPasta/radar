@@ -13,26 +13,161 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: polls.length
+msgid "{0, plural, one {# poll ends in the next 30 days.} other {# polls end in the next 30 days.}}"
+msgstr "{0, plural, other {未来 30 天内有 # 个投票结束。}}"
+
+#. placeholder {0}: reason.blocks
+msgid "{0, plural, one {Platform's Core ChainLock is # block behind Core's tip.} other {Platform's Core ChainLock is # blocks behind Core's tip.}}"
+msgstr "{0, plural, other {Platform 的 Core ChainLock 落后于 Core 链尖 # 个区块。}}"
+
+#. placeholder {0}: Number(votes)
+msgid "{0, plural, one {Upgrade to v{next}: # vote so far} other {Upgrade to v{next}: # votes so far}}"
+msgstr "{0, plural, other {升级至 v{next}：目前 # 票}}"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(s.threshold)
+msgid "{0} members, {1} to sign"
+msgstr "{0} 名成员，需 {1} 个签名"
+
 #. placeholder {0}: formatInt(budget.usedLastMinute)
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
+#. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
+msgid "{0} s"
+msgstr "{0}秒"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+msgid "{0} valid"
+msgstr "{0} 个有效"
+
 msgid "{behind} blocks behind the tip"
 msgstr "落后链顶 {behind} 个区块"
+
+msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
+msgstr "{fresh, plural, other {查看时保持不动 · 有 # 条更新。移开即可查看。}}"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, other {由 # 个已通过证明验证的应答合并而成。}}"
+
+msgid "1 m"
+msgstr "1个月"
+
+msgid "1 w"
+msgstr "1周"
+
+msgid "24 h"
+msgstr "24小时"
+
+msgid "3 d"
+msgstr "3天"
 
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "用于地址、已花费输出、链工作量和治理的第二个索引"
 
+msgid "Active"
+msgstr "活跃"
+
+msgid "Active quorums"
+msgstr "活跃的 Quorum"
+
+msgid "All blocks"
+msgstr "所有区块"
+
+msgid "All contracts"
+msgstr "所有合约"
+
+msgid "All epochs"
+msgstr "所有纪元"
+
+msgid "All evonodes"
+msgstr "所有 evonode"
+
+msgid "All identities"
+msgstr "所有身份"
+
+msgid "All polls"
+msgstr "所有投票"
+
+msgid "All quorums"
+msgstr "所有 Quorum"
+
+msgid "All time"
+msgstr "全部时间"
+
+msgid "All tokens"
+msgstr "所有代币"
+
+msgid "All transitions"
+msgstr "所有状态转换"
+
+msgid "An identity ID, a name, a token ID or an epoch number."
+msgstr "身份 ID、名称、代币 ID 或纪元编号。"
+
+msgid "Answering node"
+msgstr "应答节点"
+
 msgid "Asking Platform for its latest block…"
 msgstr "正在向 Platform 询问最新区块…"
+
+msgid "Average block time"
+msgstr "平均出块时间"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "Banned"
+msgstr "已封禁"
 
 msgid "Best ChainLock"
 msgstr "最新 ChainLock"
 
+msgid "blocks"
+msgstr "区块"
+
+msgid "Blocks"
+msgstr "区块"
+
+msgid "Blocks are arriving and Platform is locked to Core."
+msgstr "区块正常产生，且 Platform 已锁定到 Core。"
+
+msgid "Busiest identities"
+msgstr "最活跃的身份"
+
+msgid "By credit balance"
+msgstr "按积分余额"
+
+msgid "By recent token transitions"
+msgstr "按近期代币状态转换"
+
+msgid "By recent transitions"
+msgstr "按近期状态转换"
+
+msgid "By transition count"
+msgstr "按状态转换数量"
+
+msgid "By transitions"
+msgstr "按状态转换"
+
+msgid "By transitions sent"
+msgstr "按已发送状态转换"
+
+msgid "Catching up"
+msgstr "正在追赶"
+
 #. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+#. placeholder {0}: formatPercent(s.indexer.syncProgress / 100, 0)
 msgid "Catching up, {0}"
 msgstr "正在追赶，{0}"
+
+msgid "Chain ID"
+msgstr "链 ID"
 
 msgid "ChainLock block hash, reported by one node"
 msgstr "ChainLock 区块哈希(由一个节点报告)"
@@ -52,14 +187,27 @@ msgstr "Core"
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Core 地址、内存池、治理和区块列表"
 
+msgid "Core chain-locked height"
+msgstr "Core 已 ChainLock 高度"
+
 msgid "Core tip"
 msgstr "Core 链顶"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Core 链顶、区块和交易，直接来自 evonode"
 
+msgid "Credits"
+msgstr "积分"
+
+msgid "Current"
+msgstr "当前"
+
 msgid "DAPI"
 msgstr "DAPI"
+
+#. placeholder {0}: s.dapiVersion
+msgid "DAPI {0}"
+msgstr "DAPI {0}"
 
 msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
 msgstr "DAPI 和 Platform SDK 正在响应。托管数据源在“仅去中心化”模式下已关闭。"
@@ -76,11 +224,36 @@ msgstr "DAPI 请求配额"
 msgid "Dash Core"
 msgstr "Dash Core"
 
+msgid "Dash Platform"
+msgstr "Dash Platform"
+
 msgid "Decentralized only mode doesn’t contact this source."
 msgstr "“仅去中心化”模式不会连接此数据源。"
 
 msgid "Details"
 msgstr "详情"
+
+#. placeholder {0}: s.version
+msgid "Drive {0}"
+msgstr "Drive {0}"
+
+msgid "ends"
+msgstr "结束"
+
+msgid "Epoch"
+msgstr "纪元"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "纪元 {0}。Evonode：{1}。已提议区块：{2}。"
+
+msgid "Epochs"
+msgstr "纪元"
+
+msgid "Every evonode Platform Explorer has seen validate."
+msgstr "Platform Explorer 见过参与验证的每个 evonode。"
 
 msgid "Every source is answering."
 msgstr "所有数据源均正常响应。"
@@ -88,11 +261,26 @@ msgstr "所有数据源均正常响应。"
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core 中显示的所有内容均来自 DAPI。"
 
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Fees"
+msgstr "费用"
+
 msgid "Figures computed on your device"
 msgstr "在你的设备上计算的数据"
 
+msgid "Find on Platform"
+msgstr "在 Platform 上查找"
+
 msgid "Getting tight"
 msgstr "余量吃紧"
+
+msgid "Go"
+msgstr "前往"
+
+msgid "Go straight to"
+msgstr "直接前往"
 
 msgid "Headers and blocks"
 msgstr "区块头和区块"
@@ -100,11 +288,38 @@ msgstr "区块头和区块"
 msgid "Headroom"
 msgstr "余量"
 
+msgid "Held still while you look. New ones appear when you move away."
+msgstr "查看时列表保持不动。移开后会显示新内容。"
+
+msgid "History and leaders"
+msgstr "历史与领先者"
+
+msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
+msgstr "Dash Platform 运行状况：高度、纪元和积分，谁在提议区块，以及其上正在发生的事。"
+
 msgid "How each source is answering, and how far behind its data is."
 msgstr "各数据源的响应情况以及数据落后的程度。"
 
 msgid "Hyphen"
 msgstr "Hyphen"
+
+msgid "Identities"
+msgstr "身份"
+
+msgid "Identity growth"
+msgstr "身份增长"
+
+msgid "Identity ID, name.dash, token ID or epoch"
+msgstr "身份 ID、name.dash、代币 ID 或纪元"
+
+msgid "Identity ID, name.dash, token ID or epoch number"
+msgstr "身份 ID、name.dash、代币 ID 或纪元编号"
+
+msgid "In sync"
+msgstr "已同步"
+
+msgid "Inactive"
+msgstr "不活跃"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "已索引至 Core 区块 {indexed}（链上为 {chain}）。它称同步状态为“{sync}”，但索引落后于区块链。"
@@ -114,6 +329,9 @@ msgstr "已索引至 Core 区块 {indexed}（链上共 {chain}）。同步：{sy
 
 msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
 msgstr "已索引至 Platform 区块 {indexed}（链上共 {chain}）。索引器：{state}。"
+
+msgid "Indexer"
+msgstr "索引器"
 
 msgid "Insight"
 msgstr "Insight"
@@ -142,6 +360,15 @@ msgstr "其最新区块是 Core 区块 {tip}，落后于链。"
 msgid "Its tip is Core block {tip}."
 msgstr "其最新区块是 Core 区块 {tip}。"
 
+msgid "Lagging"
+msgstr "落后"
+
+msgid "Last block"
+msgstr "最新区块"
+
+msgid "Last block proposed by"
+msgstr "最近区块的提议者"
+
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -151,11 +378,53 @@ msgstr "上次抓取于 {0} 完成，其 Core 节点位于区块 {1}。"
 msgid "Last good {0}."
 msgstr "上次正常为 {0}。"
 
+msgid "Later ones may be missing."
+msgstr "之后的内容可能缺失。"
+
+msgid "Latest block hash"
+msgstr "最新区块哈希"
+
+msgid "Live"
+msgstr "实时"
+
+msgid "Live activity"
+msgstr "实时动态"
+
+msgid "Live activity, charts and leaderboards need Platform Explorer's index"
+msgstr "实时动态、图表和排行榜需要 Platform Explorer 的索引"
+
+msgid "Live pulse"
+msgstr "实时脉搏"
+
+msgid "Looking…"
+msgstr "正在查找…"
+
 msgid "Median answer {rounded} ms"
 msgstr "响应时间中位数 {rounded} ms"
 
+msgid "Most active contracts"
+msgstr "最活跃的合约"
+
+msgid "Most active identities"
+msgstr "最活跃的身份"
+
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "网络内部信息：对等节点、内存池压力、版本和历史"
+
+msgid "Newest blocks"
+msgstr "最新区块"
+
+msgid "Newest Platform blocks"
+msgstr "最新 Platform 区块"
+
+msgid "Newest Platform transitions"
+msgstr "最新 Platform 状态转换"
+
+msgid "Newest transitions"
+msgstr "最新状态转换"
+
+msgid "No active quorums"
+msgstr "没有活跃的 Quorum"
 
 msgid "No crawl has finished yet."
 msgstr "尚无已完成的抓取。"
@@ -163,11 +432,39 @@ msgstr "尚无已完成的抓取。"
 msgid "No DAPI requests have been made on this network yet."
 msgstr "此网络上尚未发出任何 DAPI 请求。"
 
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "本纪元尚无 evonode 提议过区块。"
+
+msgid "No identity history in this range"
+msgstr "此范围内没有身份历史"
+
+#. placeholder {0}: formatDuration(reason.ageMs)
+msgid "No new Platform block for {0}."
+msgstr "{0} 内没有新的 Platform 区块。"
+
+msgid "No quorums listed"
+msgstr "Quorum 列表为空"
+
+msgid "No transitions in this range"
+msgstr "此范围内没有状态转换"
+
+msgid "No transitions yet"
+msgstr "暂无状态转换"
+
+msgid "No upgrade pending"
+msgstr "没有待处理的升级"
+
+msgid "No vote polls end in the next 30 days"
+msgstr "未来 30 天内没有投票结束"
+
 msgid "Node sync"
 msgstr "节点同步"
 
 msgid "Nodes resting"
 msgstr "空闲节点"
+
+msgid "Not an evonode"
+msgstr "不是 evonode"
 
 msgid "Not available right now"
 msgstr "暂不可用"
@@ -175,14 +472,38 @@ msgstr "暂不可用"
 msgid "Not offered"
 msgstr "未提供"
 
+msgid "Not proof-checked"
+msgstr "未通过证明验证"
+
 msgid "Nothing has asked it yet on this network."
 msgstr "此网络上还没有人向它发出请求。"
+
+msgid "Nothing ranked yet"
+msgstr "暂无排名"
+
+msgid "Nothing shielded in this range"
+msgstr "此范围内没有隐私保护的内容"
 
 msgid "Off in this mode"
 msgstr "此模式下已关闭"
 
+msgid "On the chain"
+msgstr "链上"
+
+msgid "Peers"
+msgstr "对等节点"
+
+msgid "Platform"
+msgstr "Platform"
+
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer 不索引开发网"
+
+msgid "Platform height"
+msgstr "Platform 高度"
 
 msgid "Platform lists and counts"
 msgstr "Platform 列表和计数"
@@ -192,6 +513,9 @@ msgstr "Platform SDK"
 
 msgid "Plenty of room"
 msgstr "余量充足"
+
+msgid "Polls ending soon"
+msgstr "即将结束的投票"
 
 msgid "Pressure"
 msgstr "压力"
@@ -205,14 +529,77 @@ msgstr "已在 Platform 区块 {block}（第 {epoch} 个纪元）通过证明验
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "已通过证明验证的 Platform 状态，在此浏览器中验证"
 
+msgid "Protocol"
+msgstr "协议"
+
+msgid "Protocol version"
+msgstr "协议版本"
+
+#. placeholder {0}: s.driveProtocol.current
+#. placeholder {1}: s.driveProtocol.latest
+#. placeholder {2}: s.tenderdashProtocol.block
+#. placeholder {3}: s.tenderdashProtocol.p2p
+msgid "Protocol: Drive {0} of {1}, block {2}, p2p {3}"
+msgstr "协议：Drive {0}（共 {1}），区块 {2}，p2p {3}"
+
+msgid "Quorums"
+msgstr "Quorum"
+
+msgid "Quorums by size"
+msgstr "按规模划分的 Quorum"
+
 msgid "Radar crawler"
 msgstr "Radar 爬虫"
 
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar 会让每个 evonode 的请求量远低于其速率上限，这样一位访客就不会挤占其他访客。"
 
+msgid "Range"
+msgstr "范围"
+
+msgid "Read from the Platform nodes and checked against their proofs."
+msgstr "读取自 Platform 节点，并已对照其证明验证。"
+
+msgid "Recent epochs"
+msgstr "近期纪元"
+
+msgid "Registered identities"
+msgstr "已注册身份"
+
+#. placeholder {0}: labels[range]
+msgid "Registered identities, last {0}"
+msgstr "已注册身份，最近 {0}"
+
 msgid "Requests in the last minute"
 msgstr "最近一分钟的请求"
+
+msgid "Richest identities"
+msgstr "最富有的身份"
+
+msgid "Richest identities by"
+msgstr "最富有的身份，排序依据"
+
+msgid "Share"
+msgstr "占比"
+
+msgid "Shielded"
+msgstr "隐私保护"
+
+#. placeholder {0}: labels[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "最近 {0} 的隐私保护与未隐私保护金额"
+
+msgid "Shielded and unshielded, in DASH"
+msgstr "隐私保护与未隐私保护，以 DASH 计"
+
+msgid "Shielded pool"
+msgstr "隐私池"
+
+msgid "should have ended"
+msgstr "应已结束"
+
+msgid "Software"
+msgstr "软件"
 
 msgid "Some requests are failing."
 msgstr "部分请求失败。"
@@ -226,14 +613,42 @@ msgstr "部分数据源没有响应，其余仍正常工作。"
 msgid "Sources"
 msgstr "数据源"
 
+msgid "Stalled"
+msgstr "停滞"
+
+msgid "Start times and block counts are proof-checked; transitions and fees come from Platform Explorer."
+msgstr "开始时间和区块数已通过证明验证；状态转换和费用来自 Platform Explorer。"
+
+msgid "Start times and block counts are proof-checked."
+msgstr "开始时间和区块数已通过证明验证。"
+
+msgid "Started"
+msgstr "开始时间"
+
 msgid "Status"
 msgstr "状态"
+
+msgid "Sync state"
+msgstr "同步状态"
 
 msgid "Synced"
 msgstr "已同步"
 
+#. placeholder {0}: s.tenderdashVersion
+msgid "Tenderdash {0}"
+msgstr "Tenderdash {0}"
+
+msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
+msgstr "这看起来像助记词或私钥。它没有被发送到任何地方。"
+
 msgid "The connection failed."
 msgstr "连接失败。"
+
+msgid "The current epoch and the three before it"
+msgstr "当前纪元及其之前的三个纪元"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "本纪元提议区块最多的 evonode。"
 
 msgid "The masternode census and network history"
 msgstr "主节点普查与网络历史"
@@ -241,8 +656,20 @@ msgstr "主节点普查与网络历史"
 msgid "The median answer takes {seconds} s."
 msgstr "响应时间中位数为 {seconds} 秒。"
 
+msgid "The node has no peers."
+msgstr "该节点没有对等节点。"
+
+msgid "The node is still catching up with the chain."
+msgstr "该节点仍在追赶链。"
+
+msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform 当前用于签名的 Quorum。未通过证明验证：SDK 没有为此列表提供证明。"
+
 msgid "The request budget is nearly used."
 msgstr "请求配额即将用尽。"
+
+msgid "The system contracts every network ships with."
+msgstr "每个网络都自带的系统合约。"
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "经由 Platform Explorer 的美元汇率"
@@ -253,11 +680,85 @@ msgstr "此浏览器"
 msgid "This network doesn’t have this source."
 msgstr "此网络没有该数据源。"
 
+msgid "Time"
+msgstr "时间"
+
 msgid "Tip hash"
 msgstr "链顶哈希"
 
+msgid "Top proposers"
+msgstr "提议者排行"
+
+msgid "Top proposers this epoch"
+msgstr "本纪元提议者排行"
+
+msgid "Top-rated contracts"
+msgstr "评分最高的合约"
+
+msgid "Total"
+msgstr "总计"
+
+msgid "Total credits"
+msgstr "积分总量"
+
+msgid "Transition activity"
+msgstr "状态转换活动"
+
+msgid "Transition types"
+msgstr "状态转换类型"
+
+msgid "transitions"
+msgstr "状态转换"
+
+msgid "Transitions"
+msgstr "状态转换"
+
+msgid "Transitions by type, all time"
+msgstr "按类型统计的状态转换（全部时间）"
+
+#. placeholder {0}: labels[range]
+msgid "Transitions per interval, last {0}"
+msgstr "每个区间的状态转换，最近 {0}"
+
+msgid "Trending tokens"
+msgstr "热门代币"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Unshielded"
+msgstr "未隐私保护"
+
+msgid "Updates every few seconds. A list holds still while you point at it."
+msgstr "每隔几秒更新一次。鼠标指向列表时，列表会保持不动。"
+
+msgid "Upgrade to v{next} is being voted on"
+msgstr "正在对升级至 v{next} 进行投票"
+
 msgid "Used up for now"
 msgstr "暂时用尽"
+
+msgid "Validators"
+msgstr "验证者"
+
+#. placeholder {0}: formatInt(version)
+msgid "version {0}"
+msgstr "版本 {0}"
+
+msgid "Vital signs"
+msgstr "关键指标"
+
+msgid "Vote polls that end in the next 30 days."
+msgstr "未来 30 天内结束的投票。"
+
+msgid "Well-known contracts"
+msgstr "知名合约"
+
+msgid "What Platform Explorer has indexed, a few seconds behind the chain."
+msgstr "Platform Explorer 已索引的内容，比链晚几秒。"
+
+msgid "What the evonode that answered says about Platform right now."
+msgstr "应答的 evonode 当前对 Platform 的报告。"
 
 msgid "What the evonodes report about the chain right now."
 msgstr "evonode 当前报告的区块链状态。"

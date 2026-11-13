@@ -1,0 +1,642 @@
+{
+  "method": "epoch.evonodesProposedBlocksByRange",
+  "args": {
+    "epoch": 88,
+    "limit": 100,
+    "startAfter": "3b08c9c6b92d3258d0f6fb93bdc593dd9a930b9bdc76bebe8c076338a060b30b"
+  },
+  "recordedAt": "2026-11-13T09:38:53.799Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        [
+          "3cbc7d2a9108dda83c0db4bf225ea049d1607b6232b21c36622f1225e3829b5a",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "3cf6632b0ad1b41f82b704c794b3ea63ad0ab775efb6ca81002e97d6922dfc32",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "3d1babd752d50c51084b8ab7f719b391d482e7417e162970ccdd06f49d9512b0",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "3e596421618da23ec6700771c2f4cf819fd9ddec753f7889c96f7d1ecb6f9c40",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "3ee1ba80075c803eaf8ca2d44b2215c95285c8bc73a8ea7bc697a802b5ff9e85",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "4177c31f6ee93416be5fb46529ac283daf9bbbcfe39ff1ecd8fc3d22d1450b42",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "43db44334de4ffcd6be84ca21542a3a0353d80f7af86908207a0ce46cc1a62c5",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "455d20d96055d79c1755458f855b698308cf27703a8a9c75b2baf6daf394100a",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "45f0e3d72844c0e3b7ae29fd76a016a50ece618b25c82996244cc3341b049b93",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "4625244116f046068ead56d61d994fe5fef076826c439a6015b57689a238b8ad",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "46cd6cf9d2b8faee6ec2328211a343ced91d813880ec3fe2b60be5e3454780a1",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "47676550eca46ed65b0565da7239c3439b1d6900a0c4562effd551a094bbbe5f",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "47fe744ef930c3fd4b835bd1c585d355d51015306cc6b390ae08587c73388aa4",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "482b588af45443d15ce41c5fe7e9c317738e0d600768ca5a3f7ecdbcff919ab2",
+          {
+            "$bigint": "4"
+          }
+        ],
+        [
+          "4a570f1b8e1eaae5a8a2409dfbfb52508c6c50ed083e1045eeeba12f9f0528e5",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "4c2e231fe2732724651d0fd8c5db6a37e2f689c47170cffc52eabb8318d227ef",
+          {
+            "$bigint": "12"
+          }
+        ],
+        [
+          "4cad1ff2de67738075929f52b57ff947d1ba6ede541086f306747589c1b38028",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "4d40028fb24a5e42c629052d04b85bbb84e3b519e307197c42b32ce317eae4dd",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "4eba7299acd923212f9ff9faefda1c8268ff2366faf4099cc36fd0db403703b3",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "52882407701dbd3b1b73e37c05225908938785da21470c67f61897c62dd4509a",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "5348f5464e85cfea9cb003c41c07fcd20a138310d77fc97a3a98119570d89df6",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "5422f2847c2884ca2594f29c54f8fbef2c8f542e128f726f6ec8efa18fdc512b",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "5428fd626581c92448ab190c4d21f1fa66c3199f7b95c51215f7bbce99fa7477",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "54e5fde28ec4ff8fbc1874e7caec7ade49873343ea42ff4a09509241a3aa958b",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "556e946fa496c13cc78d1f3f4c07c44dec0adc8bb333e3ef879070c6188d60d1",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "55a7851e0476155e96f2a094c9cd3d5f5e4bb2559b8934e40f9e820e4896c6a8",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "56a079a856094c2e5ab4e7004dd984a56b56941f56bed303a045d347ebd0b9b3",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "57f2e758bdf8c592062dbb7b9b13bb1515092eb4856aca8f405fb3e1b098a9dd",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "5814092a082e060480bd9916ffe1a53f27db8db06552750fac146bb766c3684e",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "595b5f42176b7f62116c633b024256200aff7c54387dee9b6711c93f2491a286",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "5aa947b01c55a57e3115886eae08d5e23fe50e2edc8142003f4d0329d9c4a9f1",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "5af8c6c6245c9baf263cee89d45fe93c3ed57a7763b7b17fddfa9a60ebd7cd9d",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "5b4d3a92efc402ec5e51b977f9c3cb50afc10e23d72866233a7539014e77a37c",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "5b89d9c2a619f878bb92d83e72d8d1513ca5acda62b0c6c7c3b2810d412bbbcf",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "5c8b0881a67c1d164ed343095554c73b986d37004f941d476889f5a0c3c0e0a6",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "5cc59ab240c03b6ffb86e844abcffac7f107273b53898a7e9e40e88317080b0f",
+          {
+            "$bigint": "4"
+          }
+        ],
+        [
+          "5d2a7d92b81ce02cd948b6be31f13536694a9fbf5d7c76b4eea4f428ed31babe",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "5d7c80f9c8a3a2d428e9b6758178c2ce5a48c207fedf3a7ff96b946511dd28cb",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "5e20d3df9deed8bc6a93168822c715902e4d87e6463937d51ffe8c0e07c515ee",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "5efc91e1cd8404df92d0497aebe47ea4211fa8d6ccfae9e8346bb356f9be3342",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "5f50e838fd27c401e4ada214c47b665608436b90d0db705d28d938d92a64b7bc",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "5fb692835408714a5ec9f72348970c5a60a6f378d234633eda56e636059fcd76",
+          {
+            "$bigint": "2"
+          }
+        ],
+        [
+          "602630fc16fe27d7a86684b3b7de698ed9d93cdc4a43129ee45ef32aa7b014f1",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "60358617b98e1d9358744db9b1631d5a629e67dbc334d93fcc3af8824bbb9160",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "60869d88c31ba5f5869f2e3b072288f5523a90b7b276f595d2d067c15bb33e91",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "60e8034e6b5d4a79b009f7e68c93527a68a86fd9de1cead747c204f5b87d5a98",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "62472f43d140786abf3ea0a02f5d9879604ffe7f9552529015bff335c3382159",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "635d089a4d768e3f4397da4ad00c63c2c1a0125d5f79ce612f5fe1a19e6b0ec4",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "637af197cef40b503bbd9be6bfd81218ae15a36d2028ba6d9a6433d981ce1da8",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "63d0e84d82f3c909890372ca37f5b2dd0d4fc594d9fb30fff566cc2ca3b58c88",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "64a668ed2b93e5857e7e6f5a74a4487bbe78c99a092ecedab57e51c77dcca390",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "64fe8c60e2e4e47f6ab6f34368f2a297174e79074de25c7a3222b05d7502a36d",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "676a3806ca8ab3f231ac8164c47b2e0ab384ea9e964abf03d9457dd959680369",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "67e8e38c72c8d5440010c55c04b83d8050fdfc4ce9e9c4ed6898c8ff74da23fe",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "6a21976aa2bb752d4032d707672803683cebf28b551a7bab81579497de08b7a6",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "6a5e47919c5c07843b21095b5ccb7402537fbb921dde01437e56d03a3b382b37",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "6a66d10f33489ee415d3ca93834b31c5612e3821d1a17d15e45e55015800c5f1",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "6c19e428d2d97f2ffd05cf6b272a7c3ddb750d0bb7213b6c8072a505670c44c7",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "6ca3cc74373e2549d1d9244dcd2666854c5b9b0102ab8879ac1803be2fdcef11",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "6e704158d80b77c9fd898229e887c4949c9b7778251d06319a4877c60a0f6f44",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "6ede4eeabd1e11b4e90142237b992ead732f7a0c4ad39a607bae6d502b453864",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "6f31f11bb532a69b3b120743396aa2695b427ae6741170f91dbad554832b94f0",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "6fc59664f3757335c05185970d7d93dc195e3a0e864ec446dc60a295834c77df",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "7022347a136bea5260e6a5da5c935d00fb6019d70ce55bfcac42bda8305028de",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "7047304ce4d6d2a79e8e27cc482aeedbd8a554e10d7f64fabfa14458b154baaa",
+          {
+            "$bigint": "13"
+          }
+        ],
+        [
+          "706b871255d45be704983d89207ff0844c281e34f8e87e45f8ae173270deb354",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "70a7a081ad478e42e0a701bf16efc802b2796b137032b30b9cabf5038afe963e",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "71113a092bd4a1aab6ed171831444d7be833718b05136a55129d3c2773fbf642",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "717ee8e9302a9a53feee91d1ec846b0b860203c370650b618bab2689ef471f59",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "72588ea84f79b1fa4e84380a50507c614a58532fbee889e1d49c069e86945209",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "7284febed5466dbc53852ef3765b6a97762cadc380b9dc9b74234e189f396eee",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "7399537154f6587cbedceda381a75b1aa053733a07b3e04a89b8cb660ac276b0",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "750580758e7226cff218e1abc4b8aaf577173773136c5b9757ee53191e79bd8b",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "755cc40d5a42dd829cf95c9735815606c871ec9e7b8d5c62ec1f7c3cf19707ed",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "788707b373dab06acf548194b0ec81486370abfde06e6462732b58ecbd4e80f4",
+          {
+            "$bigint": "10"
+          }
+        ],
+        [
+          "79f6b7508b8982b883ea1a6e6657e005fc751729bd6ebefae6d5b012c3661323",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "7a1cf3c4f01d67b3c32755155d7e908ac93eb45e2ab7459bc08da91b98335050",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "7afccfe4be5bca95906efd36c2e887dc64b74cc7548c3f3478c9656ef39d3b11",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "7b98a0f48d7b1b9565ec604709d1059a25d5c3962ed7e664ba31ced59604634d",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "7bc39fd97fa0e4ab9c36ce553be151232c3343cafb366769b85bceea98eaeb0e",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "7c117fd39d453ed398cd0c24234c6741603e3c27aeac606abb14fe9dc97794c0",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "7c94b44269902d920351a0c869c9981b79ced8e1d8425b17ab8a27fdb28671e5",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "7daa17e48ae605dff4ef652567bbdd13ed717136af8c13e450364693c1172019",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "80312fe8eb90479b7504ae4313fc50d03653a98c811a151608c0b7b7abdcbfe7",
+          {
+            "$bigint": "3"
+          }
+        ],
+        [
+          "8051ff446c7d5bb3c2c73d40274eee304eb5d487c7305ff57a9bd0ae8edf499b",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "8086924697391fabc142792b6d654b39fec5289c2bf3c293578ec7353fa6b92f",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "80e1526cbaa7bbb3d3f7976276267521443741ac579d17f75ac77f560472d505",
+          {
+            "$bigint": "4"
+          }
+        ],
+        [
+          "810792d7c10cd60b0aadff85afae5c2542cf39e9dad26cefe31088736bd1de80",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "814b632dd1c8d6330c8cc2b9627986cf79be7918581c620a483b431a4bf69942",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "8185dd58f231dd9e26491667f29b0438a94849f0883b88d518a7b00588312bac",
+          {
+            "$bigint": "6"
+          }
+        ],
+        [
+          "822c235ffde3d95cb72e8822913b0b057d266a0e2e909f4b112cdaba0b07fb9e",
+          {
+            "$bigint": "5"
+          }
+        ],
+        [
+          "8239cf70aba2791020c2af741476da624445be6c6d27055875be19c79018b92e",
+          {
+            "$bigint": "13"
+          }
+        ],
+        [
+          "8267056edee9883c7c7ec937958752a4fdbe256bfd03536ae7f708188c530e55",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "8342d0e1e74d1a111bcd86cb23a194aa347bd6941d72ea400d34fd0b979d27dd",
+          {
+            "$bigint": "14"
+          }
+        ],
+        [
+          "836f4819b82e0c9f8c9851ff98989799a45d554b42108cd881e154c8706c9e90",
+          {
+            "$bigint": "9"
+          }
+        ],
+        [
+          "8398c81f62d24c8349615a9f805dd716800427ff5872c15f67da053712f21e4f",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "876b7fdfc60b90fd2d549c55cf52df787b1bbd80c1932c886711609fbb3ba404",
+          {
+            "$bigint": "7"
+          }
+        ],
+        [
+          "88d16464e26420fab8eefe4c6be4771ab2ada126c111bec9d8787a8ede65977b",
+          {
+            "$bigint": "11"
+          }
+        ],
+        [
+          "88f021c8a3d7b4997c8947eb921f23b8d4e293664cf680e1807c34047a0a5a8d",
+          {
+            "$bigint": "8"
+          }
+        ],
+        [
+          "8935aa7e62f160da45664e5dc02a9c3e01e8a577ed791685dcd2ee7ec449d769",
+          {
+            "$bigint": "11"
+          }
+        ]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 470591,
+      "coreChainLockedHeight": 2571529,
+      "epoch": 88,
+      "timeMs": 1794562593134,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABbQVpn23fft6efOOglJ3xTU341aiB5oPc4="
+      },
+      "signature": {
+        "$u8": "g9A/2P+2AXMIGcp0xRcdrsX8y7L3oyQbUmoWDNT5aVPiykBDsk/k0X/OUDcR9f4hCV1VCElbFo3WGhRYF0y2jfd/SvdwHIRnwhIU/C9jK8TFYbSG39m1yvD4A9Go0zgV"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "UUnTVbf9SgKQLWKYKDPsorM2mldKKRWk0kDQF8t8u+c="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 109.46384999999998
+  }
+}

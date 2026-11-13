@@ -1,0 +1,103 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/validators?limit=1&isActive=true"
+  },
+  "recordedAt": "2026-11-13T09:39:56.824Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "pagination": { "page": 1, "limit": 1, "total": 99 },
+    "resultSet": [
+      {
+        "proTxHash": "07BFFAA884F78CFB549D6557065D01A5C537B39434B2B2767A6114E5D9D73CCB",
+        "isActive": true,
+        "proposedBlocksAmount": 1607,
+        "lastProposedBlockHeader": {
+          "hash": "3F9764334CAAA2FE4079DCD82241BA2A100C208BF53FCA59DFDB63B743E1F361",
+          "height": 470590,
+          "timestamp": "2026-11-13T09:33:30.849Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 2571528,
+          "validator": "07BFFAA884F78CFB549D6557065D01A5C537B39434B2B2767A6114E5D9D73CCB",
+          "totalGasUsed": 0,
+          "appHash": "713236EE51CEE77BE50172EF88887E5A2F9255623B253DE52D3F4CE66397BE6F",
+          "quorumHash": "0000000000000016D05699F6DDF7EDE9E7CE3A0949DF14D4DF8D5A881E683DCE"
+        },
+        "proTxInfo": {
+          "type": "Evo",
+          "collateralHash": "51173e39f43f370123e081d24308ccf743065cad67f7f2b574dd7c8b460f754c",
+          "collateralIndex": 1,
+          "collateralAddress": "XsX1yMuyEwd3gYce8QD3m1v5G8X4MSCty4",
+          "operatorReward": 0,
+          "confirmations": 447384,
+          "state": {
+            "version": 2,
+            "service": "37.27.67.159:9999",
+            "addresses": {
+              "core_p2p": ["37.27.67.159:9999"],
+              "platform_https": ["37.27.67.159:443"],
+              "platform_p2p": ["37.27.67.159:26656"]
+            },
+            "registeredHeight": 2124162,
+            "lastPaidHeight": 2570916,
+            "consecutivePayments": 0,
+            "PoSePenalty": 0,
+            "PoSeRevivedHeight": -1,
+            "PoSeBanHeight": -1,
+            "revocationReason": 0,
+            "ownerAddress": "XdEQhMb99ddVp7qE4TGfdm2ZxWs7iGCCyz",
+            "votingAddress": "XbM4euo5ucQe2NmevBUvV59fW5W5RpyzGq",
+            "platformNodeID": "50d847734406592420320c864eb572fb900e5c36",
+            "platformP2PPort": 26656,
+            "platformHTTPPort": 443,
+            "payoutAddress": "XsX1yMuyEwd3gYce8QD3m1v5G8X4MSCty4",
+            "pubKeyOperator": "89717a29aa87fbee26a8e1ff647350f3d950129adb49adc386a042984821d823d3d6b39e9b6669c243051a86fc87edaa"
+          }
+        },
+        "identity": "XFeC1WbkzcEif47cyeN3zjYU6K72kcMpkq7HUmRzAbk",
+        "identityBalance": "1476621191802",
+        "epochInfo": {
+          "number": 88,
+          "firstBlockHeight": "467862",
+          "firstCoreBlockHeight": 2569070,
+          "startTime": 1794174796794,
+          "feeMultiplier": "1000",
+          "endTime": 1794178396794,
+          "totalBlocksInEpoch": null,
+          "totalProcessingFees": null,
+          "totalDistributedStorageFees": null,
+          "totalCreatedStorageFees": null,
+          "coreBlockRewards": null,
+          "blockProposers": null
+        },
+        "totalReward": null,
+        "epochReward": null,
+        "withdrawalsCount": null,
+        "lastWithdrawal": null,
+        "lastWithdrawalTime": null,
+        "endpoints": null,
+        "geoIpInfo": {
+          "ipv4": "37.27.67.159",
+          "countryCode": "FI",
+          "city": "Helsinki",
+          "latitude": 60.169898986816406,
+          "longitude": 24.938400268554688
+        },
+        "registeredAt": null,
+        "votingIdentity": null,
+        "votingIdentityBalance": null,
+        "poseScoreMax": null,
+        "blocksUntilCorePayment": null,
+        "registeredCoreBlockHash": null,
+        "lastPaidCoreBlockHash": null,
+        "poseRevivedCoreBlockHash": null,
+        "poseBanCoreBlockHash": null,
+        "coreYieldPerYear": null,
+        "coreTipTime": null,
+        "coreBlockIntervalMs": null
+      }
+    ]
+  }
+}

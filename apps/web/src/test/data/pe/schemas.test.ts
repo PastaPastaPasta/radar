@@ -6,7 +6,7 @@ import * as S from '@/data/pe/schemas'
 const rules: [RegExp, z.ZodType][] = [
   [/^status$/, S.PeStatusSchema],
   [/^rate$/, S.PeRateSchema],
-  [/^epoch$/, S.PeEpochDetailSchema],
+  [/^epoch(__\d+)?$/, S.PeEpochDetailSchema],
   [/^blocks--/, S.peList(S.PeBlockSummarySchema)],
   [/^block__/, S.PeBlockSchema],
   [/^transactions--/, S.peList(S.PeTransactionSchema)],

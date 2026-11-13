@@ -1,0 +1,1813 @@
+{
+  "method": "contracts.getMany",
+  "args": {
+    "ids": [
+      "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+      "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+      "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+      "rUnsWrFu3PKyRMGk2mxmZVBPbQuZx2qtHeFjURoQevX",
+      "HY1keaRK5bcDmujNCQq5pxNyvAiHHpoHQgLN5ppiu4kh",
+      "7CSFGeF4WNzgDmx94zwvHkYaG3Dx4XEe5LFsFgJswLbm",
+      "43gujrzZgXqcKBiScLa4T8XTDnRhenR9BLx8GWVHjPxF",
+      "BsjE6tQxG47wffZCRQCovFx5rYrAYYC3rTVRWKro27LA"
+    ]
+  },
+  "recordedAt": "2026-11-13T09:38:10.270Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        [
+          "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+          {
+            "id": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 2,
+            "documentSchemas": {
+              "domain": {
+                "documentsMutable": false,
+                "canBeDeleted": true,
+                "transferable": 1,
+                "tradeMode": 1,
+                "keepsTransferHistory": true,
+                "keepsPurchaseHistory": true,
+                "keepsPricingHistory": true,
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "parentNameAndLabel",
+                    "properties": [
+                      {
+                        "normalizedParentDomainName": "asc"
+                      },
+                      {
+                        "normalizedLabel": "asc"
+                      }
+                    ],
+                    "unique": true,
+                    "contested": {
+                      "fieldMatches": [
+                        {
+                          "field": "normalizedLabel",
+                          "regexPattern": "^[a-zA-Z01-]{3,19}$"
+                        }
+                      ],
+                      "resolution": 0,
+                      "description": "If the normalized label part of this index is less than 20 characters (all alphabet a-z, A-Z, 0, 1, and -) then a masternode vote contest takes place to give out the name"
+                    }
+                  },
+                  {
+                    "name": "identityId",
+                    "nullSearchable": false,
+                    "properties": [
+                      {
+                        "records.identity": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$",
+                    "minLength": 3,
+                    "maxLength": 63,
+                    "position": 0,
+                    "description": "Domain label. e.g. 'Bob'."
+                  },
+                  "normalizedLabel": {
+                    "type": "string",
+                    "pattern": "^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-]{0,61}[a-hj-km-np-z0-9]$",
+                    "maxLength": 63,
+                    "position": 1,
+                    "description": "Domain label converted to lowercase for case-insensitive uniqueness validation. \"o\", \"i\" and \"l\" replaced with \"0\" and \"1\" to mitigate homograph attack. e.g. 'b0b'",
+                    "$comment": "Must be equal to the label in lowercase. \"o\", \"i\" and \"l\" must be replaced with \"0\" and \"1\"."
+                  },
+                  "parentDomainName": {
+                    "type": "string",
+                    "pattern": "^$|^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$",
+                    "minLength": 0,
+                    "maxLength": 63,
+                    "position": 2,
+                    "description": "A full parent domain name. e.g. 'dash'."
+                  },
+                  "normalizedParentDomainName": {
+                    "type": "string",
+                    "pattern": "^$|^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-\\.]{0,61}[a-hj-km-np-z0-9]$",
+                    "minLength": 0,
+                    "maxLength": 63,
+                    "position": 3,
+                    "description": "A parent domain name in lowercase for case-insensitive uniqueness validation. \"o\", \"i\" and \"l\" replaced with \"0\" and \"1\" to mitigate homograph attack. e.g. 'dash'",
+                    "$comment": "Must either be equal to an existing domain or empty to create a top level domain. \"o\", \"i\" and \"l\" must be replaced with \"0\" and \"1\". Only the data contract owner can create top level domains."
+                  },
+                  "preorderSalt": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 4,
+                    "description": "Salt used in the preorder document"
+                  },
+                  "records": {
+                    "type": "object",
+                    "properties": {
+                      "identity": {
+                        "type": "array",
+                        "byteArray": true,
+                        "minItems": 32,
+                        "maxItems": 32,
+                        "position": 1,
+                        "contentMediaType": "application/x.dash.dpp.identifier",
+                        "description": "Identifier name record that refers to an Identity"
+                      }
+                    },
+                    "minProperties": 1,
+                    "position": 5,
+                    "additionalProperties": false
+                  },
+                  "subdomainRules": {
+                    "type": "object",
+                    "properties": {
+                      "allowSubdomains": {
+                        "type": "boolean",
+                        "description": "This option defines who can create subdomains: true - anyone; false - only the domain owner",
+                        "$comment": "Only the domain owner is allowed to create subdomains for non top-level domains",
+                        "position": 0
+                      }
+                    },
+                    "position": 6,
+                    "description": "Subdomain rules allow domain owners to define rules for subdomains",
+                    "additionalProperties": false,
+                    "required": ["allowSubdomains"]
+                  }
+                },
+                "required": [
+                  "$createdAt",
+                  "$updatedAt",
+                  "$transferredAt",
+                  "label",
+                  "normalizedLabel",
+                  "normalizedParentDomainName",
+                  "preorderSalt",
+                  "records",
+                  "subdomainRules"
+                ],
+                "transient": ["preorderSalt"],
+                "additionalProperties": false,
+                "$comment": "In order to register a domain you need to create a preorder. The preorder step is needed to prevent man-in-the-middle attacks. normalizedLabel + '.' + normalizedParentDomain must not be longer than 253 chars length as defined by RFC 1035. Domain documents are immutable: modification and deletion are restricted"
+              },
+              "preorder": {
+                "documentsMutable": false,
+                "canBeDeleted": true,
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "saltedHash",
+                    "properties": [
+                      {
+                        "saltedDomainHash": "asc"
+                      }
+                    ],
+                    "unique": true
+                  }
+                ],
+                "properties": {
+                  "saltedDomainHash": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 0,
+                    "description": "Double sha-256 of the concatenation of a 32 byte random salt and a normalized domain name"
+                  }
+                },
+                "required": ["saltedDomainHash"],
+                "additionalProperties": false,
+                "$comment": "Preorder documents are immutable: modification and deletion are restricted"
+              }
+            }
+          }
+        ],
+        [
+          "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+          {
+            "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 2,
+            "documentSchemas": {
+              "contactInfo": {
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "ownerIdAndKeys",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "rootEncryptionKeyIndex": "asc"
+                      },
+                      {
+                        "derivationEncryptionKeyIndex": "asc"
+                      }
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "name": "ownerIdAndUpdatedAt",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$updatedAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "encToUserId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 0
+                  },
+                  "rootEncryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "position": 1
+                  },
+                  "derivationEncryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "position": 2
+                  },
+                  "privateData": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 48,
+                    "maxItems": 2048,
+                    "position": 3,
+                    "description": "This is the encrypted values of aliasName + note + displayHidden encoded as an array in cbor"
+                  }
+                },
+                "required": [
+                  "$createdAt",
+                  "$updatedAt",
+                  "encToUserId",
+                  "privateData",
+                  "rootEncryptionKeyIndex",
+                  "derivationEncryptionKeyIndex"
+                ],
+                "additionalProperties": false
+              },
+              "contactRequest": {
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "requiresIdentityEncryptionBoundedKey": 2,
+                "requiresIdentityDecryptionBoundedKey": 2,
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "ownerIdUserIdAndAccountRef",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "toUserId": "asc"
+                      },
+                      {
+                        "accountReference": "asc"
+                      }
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "name": "ownerIdUserId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "toUserId": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "userIdCreatedAt",
+                    "properties": [
+                      {
+                        "toUserId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ownerIdCreatedAt",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "toUserId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "encryptedPublicKey": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 96,
+                    "maxItems": 96,
+                    "position": 1
+                  },
+                  "senderKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "position": 2
+                  },
+                  "recipientKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "position": 3
+                  },
+                  "accountReference": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "position": 4
+                  },
+                  "encryptedAccountLabel": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 48,
+                    "maxItems": 80,
+                    "position": 5
+                  },
+                  "autoAcceptProof": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 38,
+                    "maxItems": 102,
+                    "position": 6
+                  }
+                },
+                "required": [
+                  "$createdAt",
+                  "$createdAtCoreBlockHeight",
+                  "toUserId",
+                  "encryptedPublicKey",
+                  "senderKeyIndex",
+                  "recipientKeyIndex",
+                  "accountReference"
+                ],
+                "additionalProperties": false
+              },
+              "profile": {
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "ownerId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      }
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "name": "ownerIdAndUpdatedAt",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$updatedAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "minLength": 1,
+                    "maxLength": 2048,
+                    "position": 0
+                  },
+                  "avatarHash": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "SHA256 hash of the bytes of the image specified by avatarUrl",
+                    "position": 1
+                  },
+                  "avatarFingerprint": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 8,
+                    "maxItems": 8,
+                    "description": "dHash the image specified by avatarUrl",
+                    "position": 2
+                  },
+                  "publicMessage": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 140,
+                    "position": 3
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 25,
+                    "position": 4
+                  },
+                  "corePaymentAddress": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 21,
+                    "maxItems": 21,
+                    "description": "Core chain address in storage form (type byte 0x00 P2PKH / 0x01 P2SH followed by the 20-byte HASH160, i.e. RIPEMD160 of SHA256, of the public key or redeem script) for public payments. The type byte is consensus-enforced by a data trigger; clients render the address as Base58Check for the network they are on. Payments to it are publicly linkable to this profile.",
+                    "position": 5
+                  },
+                  "platformPaymentAddress": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 21,
+                    "maxItems": 21,
+                    "description": "Platform address in storage form (type byte 0x00 P2PKH / 0x01 P2SH followed by the 20-byte HASH160, i.e. RIPEMD160 of SHA256, of the public key or redeem script) for public payments. The type byte is consensus-enforced by a data trigger.",
+                    "position": 6
+                  },
+                  "shieldedAddress": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 43,
+                    "maxItems": 43,
+                    "description": "Raw Orchard receiving address: 11-byte diversifier followed by 32-byte diversified transmission key. Clients validate before payment; wallets should use a dedicated tip account.",
+                    "position": 7
+                  }
+                },
+                "minProperties": 1,
+                "dependentRequired": {
+                  "avatarUrl": ["avatarHash", "avatarFingerprint"],
+                  "avatarHash": ["avatarUrl", "avatarFingerprint"],
+                  "avatarFingerprint": ["avatarUrl", "avatarHash"]
+                },
+                "required": ["$createdAt", "$updatedAt"],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        [
+          "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+          {
+            "id": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 2,
+            "documentSchemas": {
+              "withdrawal": {
+                "description": "Withdrawal document to track underlying withdrawal transactions. Withdrawals should be created with IdentityWithdrawalTransition",
+                "creationRestrictionMode": 2,
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "identityStatus",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "status": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ],
+                    "unique": false
+                  },
+                  {
+                    "name": "identityRecent",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$updatedAt": "asc"
+                      },
+                      {
+                        "status": "asc"
+                      }
+                    ],
+                    "unique": false
+                  },
+                  {
+                    "name": "pooling",
+                    "properties": [
+                      {
+                        "status": "asc"
+                      },
+                      {
+                        "pooling": "asc"
+                      },
+                      {
+                        "coreFeePerByte": "asc"
+                      },
+                      {
+                        "$updatedAt": "asc"
+                      }
+                    ],
+                    "unique": false
+                  },
+                  {
+                    "name": "transaction",
+                    "properties": [
+                      {
+                        "status": "asc"
+                      },
+                      {
+                        "transactionIndex": "asc"
+                      }
+                    ],
+                    "unique": false
+                  }
+                ],
+                "properties": {
+                  "transactionIndex": {
+                    "type": "integer",
+                    "description": "Sequential index of asset unlock (withdrawal) transaction. Populated when a withdrawal pooled into withdrawal transaction",
+                    "minimum": 1,
+                    "position": 0
+                  },
+                  "transactionSignHeight": {
+                    "type": "integer",
+                    "description": "The Core height on which transaction was signed",
+                    "minimum": 1,
+                    "position": 1
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "description": "The amount to be withdrawn",
+                    "minimum": 1000,
+                    "position": 2
+                  },
+                  "coreFeePerByte": {
+                    "type": "integer",
+                    "description": "This is the fee that you are willing to spend for this transaction in Duffs/Byte",
+                    "minimum": 1,
+                    "maximum": 4294967295,
+                    "position": 3
+                  },
+                  "pooling": {
+                    "type": "integer",
+                    "description": "This indicated the level at which Platform should try to pool this transaction",
+                    "enum": [0, 1, 2],
+                    "position": 4
+                  },
+                  "outputScript": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 23,
+                    "maxItems": 25,
+                    "position": 5
+                  },
+                  "status": {
+                    "type": "integer",
+                    "enum": [0, 1, 2, 3, 4, 5],
+                    "description": "0 - Pending, 1 - Signed, 2 - Broadcasted, 3 - Complete, 4 - Expired, 5 - Failed",
+                    "position": 6
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "$createdAt",
+                  "$updatedAt",
+                  "amount",
+                  "coreFeePerByte",
+                  "pooling",
+                  "outputScript",
+                  "status"
+                ]
+              }
+            }
+          }
+        ],
+        [
+          "rUnsWrFu3PKyRMGk2mxmZVBPbQuZx2qtHeFjURoQevX",
+          {
+            "id": "rUnsWrFu3PKyRMGk2mxmZVBPbQuZx2qtHeFjURoQevX",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 1,
+            "documentSchemas": {
+              "rewardShare": {
+                "description": "Share specified percentage of masternode rewards with identities",
+                "type": "object",
+                "indices": [
+                  {
+                    "name": "ownerIdAndPayToId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "payToId": "asc"
+                      }
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "name": "ownerId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "payToId": {
+                    "description": "Identifier to share reward with",
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "contentMediaType": "application/x.dash.dpp.identifier",
+                    "position": 0
+                  },
+                  "percentage": {
+                    "description": "Reward percentage to share",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000,
+                    "position": 1
+                  }
+                },
+                "required": ["payToId", "percentage"],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        ["HY1keaRK5bcDmujNCQq5pxNyvAiHHpoHQgLN5ppiu4kh", null],
+        [
+          "7CSFGeF4WNzgDmx94zwvHkYaG3Dx4XEe5LFsFgJswLbm",
+          {
+            "id": "7CSFGeF4WNzgDmx94zwvHkYaG3Dx4XEe5LFsFgJswLbm",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 1,
+            "documentSchemas": {
+              "txMetadata": {
+                "type": "object",
+                "documentsMutable": true,
+                "canBeDeleted": true,
+                "indices": [
+                  {
+                    "name": "updated",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$updatedAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "keyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The derivation index used to create the encryption key.",
+                    "position": 0
+                  },
+                  "encryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The secondary index used to derive the encryption key that is used to encrypt and decrypt encryptedData.",
+                    "position": 1
+                  },
+                  "encryptedMetadata": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 4096,
+                    "description": "encrypted metadata using AES-CBC-256",
+                    "position": 2
+                  }
+                },
+                "required": ["keyIndex", "encryptionKeyIndex", "encryptedMetadata", "$updatedAt"],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        [
+          "43gujrzZgXqcKBiScLa4T8XTDnRhenR9BLx8GWVHjPxF",
+          {
+            "id": "43gujrzZgXqcKBiScLa4T8XTDnRhenR9BLx8GWVHjPxF",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 2,
+            "documentSchemas": {
+              "burn": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "amount": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byBurnFromId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "burnFromId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "burnFromId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The identifier of the identity from which tokens will be burned",
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The amount that was burned",
+                    "position": 2
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation of why this burn took place",
+                    "position": 3
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "burnFromId",
+                  "amount",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "claim": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byRecipient",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "recipientId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "amount": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "recipientType": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2,
+                    "description": "Recipient type: 0 = ContractOwner, 1 = Identity, 2 = EvonodesByParticipation. A once-per-identity claim records 1 = Identity with the claimant as recipientId.",
+                    "position": 1
+                  },
+                  "recipientId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "An identity ID for direct recipient distributions",
+                    "contentMediaType": "application/x.dash.dpp.identifier",
+                    "position": 2
+                  },
+                  "distributionType": {
+                    "type": "integer",
+                    "enum": [0, 1, 2],
+                    "description": "The type of distribution (0: PreProgrammed, 1: Perpetual, 2: OncePerIdentity)",
+                    "position": 3
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The amount of tokens released",
+                    "position": 4
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for this release",
+                    "position": 5
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "recipientType",
+                  "recipientId",
+                  "distributionType",
+                  "amount",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "configUpdate": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "changeItemType": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byChangeItemType",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "changeItemType": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "changeItemType": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The action we are performing",
+                    "position": 1
+                  },
+                  "changeItem": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 1,
+                    "description": "The change item in serialized form",
+                    "position": 2
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for this config update",
+                    "position": 3
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "changeItemType",
+                  "changeItem",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "destroyFrozenFunds": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "destroyedAmount": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byFrozenIdentityId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "frozenIdentityId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "frozenIdentityId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The identity Id of the frozen token account",
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "destroyedAmount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The amount that was frost burned",
+                    "position": 2
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for destroying these frozen funds",
+                    "position": 3
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "frozenIdentityId",
+                  "destroyedAmount",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "directPricing": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "priceSchedule": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 1,
+                    "maxItems": 2048,
+                    "description": "The serialized price schedule for direct token purchases",
+                    "position": 1
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for the pricing change",
+                    "position": 2
+                  }
+                },
+                "required": ["tokenId", "$createdAt", "$createdAtBlockHeight"],
+                "additionalProperties": false
+              },
+              "directPurchase": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byOwnerIdForToken",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byPurchaseCost",
+                    "properties": [
+                      {
+                        "purchaseCost": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byTokenAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "tokenAmount": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "tokenAmount": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "The number of tokens purchased",
+                    "position": 1
+                  },
+                  "purchaseCost": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The cost paid for the tokens in credits",
+                    "position": 2
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "tokenAmount",
+                  "purchaseCost",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "emergencyAction": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "action": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAction",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "action": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "action": {
+                    "type": "integer",
+                    "enum": [0, 1],
+                    "description": "The action we are performing (0: Pause, 1: Resume)",
+                    "position": 1
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for this emergency action",
+                    "position": 2
+                  }
+                },
+                "required": ["tokenId", "action", "$createdAt", "$createdAtBlockHeight"],
+                "additionalProperties": false
+              },
+              "freeze": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byFrozenIdentityId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "frozenIdentityId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "frozenIdentityId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The identity Id of the frozen token account",
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for this identity freeze",
+                    "position": 2
+                  }
+                },
+                "required": ["tokenId", "frozenIdentityId", "$createdAt", "$createdAtBlockHeight"],
+                "additionalProperties": false
+              },
+              "mint": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "amount": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byRecipientId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "recipientId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "recipientId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The recipient ID",
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The amount that was minted",
+                    "position": 2
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation of why this mint took place",
+                    "position": 3
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "amount",
+                  "recipientId",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "transfer": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byDate",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byAmount",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "amount": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "from",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "to",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "toIdentityId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The amount that was burned",
+                    "position": 1
+                  },
+                  "toIdentityId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The identity or the group Id",
+                    "position": 2,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "encryptedPersonalNote": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 2048,
+                    "description": "An optional encrypted explanation of why this transfer took place only meant for the sender",
+                    "position": 3
+                  },
+                  "encryptedSharedNote": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 2048,
+                    "description": "An optional encrypted explanation of why this transfer took place shared between the sender and the receiver",
+                    "position": 4
+                  },
+                  "publicNote": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional public explanation of why this transfer took place",
+                    "position": 5
+                  },
+                  "senderKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Used with the encrypted shared note",
+                    "position": 6
+                  },
+                  "recipientKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Used with the encrypted shared note",
+                    "position": 7
+                  },
+                  "rootEncryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Used with the encrypted private note",
+                    "position": 8
+                  },
+                  "derivationEncryptionKeyIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Used with the encrypted private note",
+                    "position": 9
+                  }
+                },
+                "required": [
+                  "tokenId",
+                  "amount",
+                  "toIdentityId",
+                  "$createdAt",
+                  "$createdAtBlockHeight"
+                ],
+                "additionalProperties": false
+              },
+              "unfreeze": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byOwnerId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "$ownerId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byFrozenIdentityId",
+                    "properties": [
+                      {
+                        "tokenId": "asc"
+                      },
+                      {
+                        "frozenIdentityId": "asc"
+                      },
+                      {
+                        "$createdAt": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "tokenId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The token ID",
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "frozenIdentityId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "description": "The identity Id of the frozen token account",
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "description": "An optional explanation for this identity unfreeze",
+                    "position": 2
+                  }
+                },
+                "required": ["tokenId", "frozenIdentityId", "$createdAt", "$createdAtBlockHeight"],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        [
+          "BsjE6tQxG47wffZCRQCovFx5rYrAYYC3rTVRWKro27LA",
+          {
+            "id": "BsjE6tQxG47wffZCRQCovFx5rYrAYYC3rTVRWKro27LA",
+            "ownerId": "11111111111111111111111111111111",
+            "version": 1,
+            "documentSchemas": {
+              "contractKeywords": {
+                "type": "object",
+                "documentsMutable": false,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byKeyword",
+                    "properties": [
+                      {
+                        "keyword": "asc"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "byContractId",
+                    "properties": [
+                      {
+                        "contractId": "asc"
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "keyword": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 50,
+                    "position": 0
+                  },
+                  "contractId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 1,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  }
+                },
+                "required": ["contractId", "keyword"],
+                "description": "Keywords associated with the contract allowing for better searchability. This document type can be deleted but not manually created nor updated. Creation occurs automatically internally on DataContractCreate and mirrors the contract's keywords field. It can be updated with DataContractUpdate.",
+                "additionalProperties": false
+              },
+              "fullDescription": {
+                "type": "object",
+                "documentsMutable": true,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byContractId",
+                    "properties": [
+                      {
+                        "contractId": "asc"
+                      }
+                    ],
+                    "unique": true
+                  }
+                ],
+                "properties": {
+                  "contractId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 10000,
+                    "position": 1
+                  }
+                },
+                "required": ["contractId", "description"],
+                "description": "Full description of the contract. This document type is mutable but creation is not allowed. Creation occurs automatically internally on DataContractCreate and mirrors the contract's description field initially.",
+                "additionalProperties": false
+              },
+              "shortDescription": {
+                "type": "object",
+                "documentsMutable": true,
+                "canBeDeleted": false,
+                "creationRestrictionMode": 2,
+                "indices": [
+                  {
+                    "name": "byContractId",
+                    "properties": [
+                      {
+                        "contractId": "asc"
+                      }
+                    ],
+                    "unique": true
+                  }
+                ],
+                "properties": {
+                  "contractId": {
+                    "type": "array",
+                    "byteArray": true,
+                    "minItems": 32,
+                    "maxItems": 32,
+                    "position": 0,
+                    "contentMediaType": "application/x.dash.dpp.identifier"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100,
+                    "position": 1
+                  }
+                },
+                "required": ["contractId", "description"],
+                "description": "Short description of the contract. This document type is mutable but creation is not allowed. Creation occurs automatically internally on DataContractCreate and mirrors the contract's description field initially.",
+                "additionalProperties": false
+              }
+            }
+          }
+        ]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 673892,
+      "coreChainLockedHeight": 1590842,
+      "epoch": 20335,
+      "timeMs": 1794562652253,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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ZGVzY3JpcHRpb24SQFNoYXJlIHNwZWNpZmllZCBwZXJjZW50YWdlIG9mIG1hc3Rlcm5vZGUgcmV3YXJkcyB3aXRoIGlkZW50aXRpZXMSBHR5cGUSBm9iamVjdBIHaW5kaWNlcxUCFgMSBG5hbWUSEW93bmVySWRBbmRQYXlUb0lkEgpwcm9wZXJ0aWVzFQIWARIIJG93bmVySWQSA2FzYxYBEgdwYXlUb0lkEgNhc2MSBnVuaXF1ZRMBFgISBG5hbWUSB293bmVySWQSCnByb3BlcnRpZXMVARYBEggkb3duZXJJZBIDYXNjEgpwcm9wZXJ0aWVzFgISB3BheVRvSWQWBxILZGVzY3JpcHRpb24SH0lkZW50aWZpZXIgdG8gc2hhcmUgcmV3YXJkIHdpdGgSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEghwb3NpdGlvbgIAEgpwZXJjZW50YWdlFgUSC2Rlc2NyaXB0aW9uEhpSZXdhcmQgcGVyY2VudGFnZSB0byBzaGFyZRIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIBEgdtYXhpbXVtAvsnEBIIcG9zaXRpb24CARIIcmVxdWlyZWQVAhIHcGF5VG9JZBIKcGVyY2VudGFnZRIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAACig6MW35FrzwR1tEqnATx5NcZYnAfhhy/LVUh/Sk8jV8QARIP2bOUp5+vquvwtCWQh2D5mnPGrPm317XCn+XZW5ojEQAgLUNZFSLYkU6c8xE6yr4NXD0oeslUY7tu6YA/MKwd0mwA+y3GAwEALX0A+y1RAS1DWRUi2JFOnPMROsq+DVw9KHrJVGO7bumAPzCsHdJsAgAAAAABAQAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwRidXJuFggSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUEFgISBG5hbWUSBmJ5RGF0ZRIKcHJvcGVydGllcxUCFgESB3Rva2VuSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRIIYnlBbW91bnQSCnByb3BlcnRpZXMVAhYBEgd0b2tlbklkEgNhc2MWARIGYW1vdW50EgNhc2MWAhIEbmFtZRIJYnlPd25lcklkEgpwcm9wZXJ0aWVzFQMWARIHdG9rZW5JZBIDYXNjFgESCCRvd25lcklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSDGJ5QnVybkZyb21JZBIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEgpidXJuRnJvbUlkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgQSB3Rva2VuSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIMVGhlIHRva2VuIElEEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISCmJ1cm5Gcm9tSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhI/VGhlIGlkZW50aWZpZXIgb2YgdGhlIGlkZW50aXR5IGZyb20gd2hpY2ggdG9rZW5zIHdpbGwgYmUgYnVybmVkEghwb3NpdGlvbgIBEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISBmFtb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEhpUaGUgYW1vdW50IHRoYXQgd2FzIGJ1cm5lZBIIcG9zaXRpb24CAhIEbm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEjNBbiBvcHRpb25hbCBleHBsYW5hdGlvbiBvZiB3aHkgdGhpcyBidXJuIHRvb2sgcGxhY2USCHBvc2l0aW9uAgMSCHJlcXVpcmVkFQUSB3Rva2VuSWQSCmJ1cm5Gcm9tSWQSBmFtb3VudBIKJGNyZWF0ZWRBdBIVJGNyZWF0ZWRBdEJsb2NrSGVpZ2h0EhRhZGRpdGlvbmFsUHJvcGVydGllcxMABWNsYWltFggSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUDFgISBG5hbWUSBmJ5RGF0ZRIKcHJvcGVydGllcxUCFgESB3Rva2VuSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRILYnlSZWNpcGllbnQSCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARILcmVjaXBpZW50SWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRIIYnlBbW91bnQSCnByb3BlcnRpZXMVAhYBEgd0b2tlbklkEgNhc2MWARIGYW1vdW50EgNhc2MSCnByb3BlcnRpZXMWBhIHdG9rZW5JZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEgxUaGUgdG9rZW4gSUQSCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchINcmVjaXBpZW50VHlwZRYFEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0CAhILZGVzY3JpcHRpb24SnlJlY2lwaWVudCB0eXBlOiAwID0gQ29udHJhY3RPd25lciwgMSA9IElkZW50aXR5LCAyID0gRXZvbm9kZXNCeVBhcnRpY2lwYXRpb24uIEEgb25jZS1wZXItaWRlbnRpdHkgY2xhaW0gcmVjb3JkcyAxID0gSWRlbnRpdHkgd2l0aCB0aGUgY2xhaW1hbnQgYXMgcmVjaXBpZW50SWQuEghwb3NpdGlvbgIBEgtyZWNpcGllbnRJZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEjFBbiBpZGVudGl0eSBJRCBmb3IgZGlyZWN0IHJlY2lwaWVudCBkaXN0cmlidXRpb25zEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISCHBvc2l0aW9uAgISEGRpc3RyaWJ1dGlvblR5cGUWBBIEdHlwZRIHaW50ZWdlchIEZW51bRUDAgACAQICEgtkZXNjcmlwdGlvbhJNVGhlIHR5cGUgb2YgZGlzdHJpYnV0aW9uICgwOiBQcmVQcm9ncmFtbWVkLCAxOiBQZXJwZXR1YWwsIDI6IE9uY2VQZXJJZGVudGl0eSkSCHBvc2l0aW9uAgMSBmFtb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEh1UaGUgYW1vdW50IG9mIHRva2VucyByZWxlYXNlZBIIcG9zaXRpb24CBBIEbm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEihBbiBvcHRpb25hbCBleHBsYW5hdGlvbiBmb3IgdGhpcyByZWxlYXNlEghwb3NpdGlvbgIFEghyZXF1aXJlZBUHEgd0b2tlbklkEg1yZWNpcGllbnRUeXBlEgtyZWNpcGllbnRJZBIQZGlzdHJpYnV0aW9uVHlwZRIGYW1vdW50EgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAMY29uZmlnVXBkYXRlFggSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUCFgISBG5hbWUSCWJ5T3duZXJJZBIKcHJvcGVydGllcxUEFgESB3Rva2VuSWQSA2FzYxYBEggkb3duZXJJZBIDYXNjFgESDmNoYW5nZUl0ZW1UeXBlEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSEGJ5Q2hhbmdlSXRlbVR5cGUSCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARIOY2hhbmdlSXRlbVR5cGUSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWBBIHdG9rZW5JZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEgxUaGUgdG9rZW4gSUQSCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchIOY2hhbmdlSXRlbVR5cGUWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgtkZXNjcmlwdGlvbhIcVGhlIGFjdGlvbiB3ZSBhcmUgcGVyZm9ybWluZxIIcG9zaXRpb24CARIKY2hhbmdlSXRlbRYFEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAgESC2Rlc2NyaXB0aW9uEiJUaGUgY2hhbmdlIGl0ZW0gaW4gc2VyaWFsaXplZCBmb3JtEghwb3NpdGlvbgICEgRub3RlFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAvsIABILZGVzY3JpcHRpb24SLkFuIG9wdGlvbmFsIGV4cGxhbmF0aW9uIGZvciB0aGlzIGNvbmZpZyB1cGRhdGUSCHBvc2l0aW9uAgMSCHJlcXVpcmVkFQUSB3Rva2VuSWQSDmNoYW5nZUl0ZW1UeXBlEgpjaGFuZ2VJdGVtEgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASZGVzdHJveUZyb3plbkZ1bmRzFggSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUDFgISBG5hbWUSCWJ5T3duZXJJZBIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEggkb3duZXJJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEghieUFtb3VudBIKcHJvcGVydGllcxUCFgESB3Rva2VuSWQSA2FzYxYBEg9kZXN0cm95ZWRBbW91bnQSA2FzYxYCEgRuYW1lEhJieUZyb3plbklkZW50aXR5SWQSCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARIQZnJvemVuSWRlbnRpdHlJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxIKcHJvcGVydGllcxYEEgd0b2tlbklkFgcSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBILZGVzY3JpcHRpb24SDFRoZSB0b2tlbiBJRBIIcG9zaXRpb24CABIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEhBmcm96ZW5JZGVudGl0eUlkFgcSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBILZGVzY3JpcHRpb24SK1RoZSBpZGVudGl0eSBJZCBvZiB0aGUgZnJvemVuIHRva2VuIGFjY291bnQSCHBvc2l0aW9uAgESEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchIPZGVzdHJveWVkQW1vdW50FgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABILZGVzY3JpcHRpb24SIFRoZSBhbW91bnQgdGhhdCB3YXMgZnJvc3QgYnVybmVkEghwb3NpdGlvbgICEgRub3RlFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAvsIABILZGVzY3JpcHRpb24SOUFuIG9wdGlvbmFsIGV4cGxhbmF0aW9uIGZvciBkZXN0cm95aW5nIHRoZXNlIGZyb3plbiBmdW5kcxIIcG9zaXRpb24CAxIIcmVxdWlyZWQVBRIHdG9rZW5JZBIQZnJvemVuSWRlbnRpdHlJZBIPZGVzdHJveWVkQW1vdW50EgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwANZGlyZWN0UHJpY2luZxYIEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASF2NyZWF0aW9uUmVzdHJpY3Rpb25Nb2RlAgISB2luZGljZXMVARYCEgRuYW1lEgZieURhdGUSCnByb3BlcnRpZXMVAhYBEgd0b2tlbklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgMSB3Rva2VuSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIMVGhlIHRva2VuIElEEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISDXByaWNlU2NoZWR1bGUWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIBEghtYXhJdGVtcwL7CAASC2Rlc2NyaXB0aW9uEjhUaGUgc2VyaWFsaXplZCBwcmljZSBzY2hlZHVsZSBmb3IgZGlyZWN0IHRva2VuIHB1cmNoYXNlcxIIcG9zaXRpb24CARIEbm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEi5BbiBvcHRpb25hbCBleHBsYW5hdGlvbiBmb3IgdGhlIHByaWNpbmcgY2hhbmdlEghwb3NpdGlvbgICEghyZXF1aXJlZBUDEgd0b2tlbklkEgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAOZGlyZWN0UHVyY2hhc2UWCBIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEhdjcmVhdGlvblJlc3RyaWN0aW9uTW9kZQICEgdpbmRpY2VzFQUWAhIEbmFtZRIGYnlEYXRlEgpwcm9wZXJ0aWVzFQIWARIHdG9rZW5JZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEhFieU93bmVySWRGb3JUb2tlbhIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEggkb3duZXJJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEglieU93bmVySWQSCnByb3BlcnRpZXMVAhYBEggkb3duZXJJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEg5ieVB1cmNoYXNlQ29zdBIKcHJvcGVydGllcxUBFgESDHB1cmNoYXNlQ29zdBIDYXNjFgISBG5hbWUSDWJ5VG9rZW5BbW91bnQSCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARILdG9rZW5BbW91bnQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWAxIHdG9rZW5JZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEgxUaGUgdG9rZW4gSUQSCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchILdG9rZW5BbW91bnQWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIBEgtkZXNjcmlwdGlvbhIeVGhlIG51bWJlciBvZiB0b2tlbnMgcHVyY2hhc2VkEghwb3NpdGlvbgIBEgxwdXJjaGFzZUNvc3QWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgtkZXNjcmlwdGlvbhInVGhlIGNvc3QgcGFpZCBmb3IgdGhlIHRva2VucyBpbiBjcmVkaXRzEghwb3NpdGlvbgICEghyZXF1aXJlZBUFEgd0b2tlbklkEgt0b2tlbkFtb3VudBIMcHVyY2hhc2VDb3N0EgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAPZW1lcmdlbmN5QWN0aW9uFggSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUCFgISBG5hbWUSCWJ5T3duZXJJZBIKcHJvcGVydGllcxUEFgESB3Rva2VuSWQSA2FzYxYBEggkb3duZXJJZBIDYXNjFgESBmFjdGlvbhIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEghieUFjdGlvbhIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEgZhY3Rpb24SA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWAxIHdG9rZW5JZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEgxUaGUgdG9rZW4gSUQSCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchIGYWN0aW9uFgQSBHR5cGUSB2ludGVnZXISBGVudW0VAgIAAgESC2Rlc2NyaXB0aW9uEjJUaGUgYWN0aW9uIHdlIGFyZSBwZXJmb3JtaW5nICgwOiBQYXVzZSwgMTogUmVzdW1lKRIIcG9zaXRpb24CARIEbm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEjFBbiBvcHRpb25hbCBleHBsYW5hdGlvbiBmb3IgdGhpcyBlbWVyZ2VuY3kgYWN0aW9uEghwb3NpdGlvbgICEghyZXF1aXJlZBUEEgd0b2tlbklkEgZhY3Rpb24SCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAZmcmVlemUWCBIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEhdjcmVhdGlvblJlc3RyaWN0aW9uTW9kZQICEgdpbmRpY2VzFQIWAhIEbmFtZRIJYnlPd25lcklkEgpwcm9wZXJ0aWVzFQMWARIHdG9rZW5JZBIDYXNjFgESCCRvd25lcklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSEmJ5RnJvemVuSWRlbnRpdHlJZBIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEhBmcm96ZW5JZGVudGl0eUlkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgMSB3Rva2VuSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIMVGhlIHRva2VuIElEEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISEGZyb3plbklkZW50aXR5SWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIrVGhlIGlkZW50aXR5IElkIG9mIHRoZSBmcm96ZW4gdG9rZW4gYWNjb3VudBIIcG9zaXRpb24CARIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEgRub3RlFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAvsIABILZGVzY3JpcHRpb24SMEFuIG9wdGlvbmFsIGV4cGxhbmF0aW9uIGZvciB0aGlzIGlkZW50aXR5IGZyZWV6ZRIIcG9zaXRpb24CAhIIcmVxdWlyZWQVBBIHdG9rZW5JZBIQZnJvemVuSWRlbnRpdHlJZBIKJGNyZWF0ZWRBdBIVJGNyZWF0ZWRBdEJsb2NrSGVpZ2h0EhRhZGRpdGlvbmFsUHJvcGVydGllcxMABG1pbnQWCBIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEhdjcmVhdGlvblJlc3RyaWN0aW9uTW9kZQICEgdpbmRpY2VzFQQWAhIEbmFtZRIGYnlEYXRlEgpwcm9wZXJ0aWVzFQIWARIHdG9rZW5JZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEghieUFtb3VudBIKcHJvcGVydGllcxUCFgESB3Rva2VuSWQSA2FzYxYBEgZhbW91bnQSA2FzYxYCEgRuYW1lEglieU93bmVySWQSCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRINYnlSZWNpcGllbnRJZBIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEgtyZWNpcGllbnRJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxIKcHJvcGVydGllcxYEEgd0b2tlbklkFgcSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBILZGVzY3JpcHRpb24SDFRoZSB0b2tlbiBJRBIIcG9zaXRpb24CABIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEgtyZWNpcGllbnRJZBYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEhBUaGUgcmVjaXBpZW50IElEEghwb3NpdGlvbgIBEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISBmFtb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEhpUaGUgYW1vdW50IHRoYXQgd2FzIG1pbnRlZBIIcG9zaXRpb24CAhIEbm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEjNBbiBvcHRpb25hbCBleHBsYW5hdGlvbiBvZiB3aHkgdGhpcyBtaW50IHRvb2sgcGxhY2USCHBvc2l0aW9uAgMSCHJlcXVpcmVkFQUSB3Rva2VuSWQSBmFtb3VudBILcmVjaXBpZW50SWQSCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAh0cmFuc2ZlchYIEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASF2NyZWF0aW9uUmVzdHJpY3Rpb25Nb2RlAgISB2luZGljZXMVBBYCEgRuYW1lEgZieURhdGUSCnByb3BlcnRpZXMVAhYBEgd0b2tlbklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSCGJ5QW1vdW50Egpwcm9wZXJ0aWVzFQIWARIHdG9rZW5JZBIDYXNjFgESBmFtb3VudBIDYXNjFgISBG5hbWUSBGZyb20SCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRICdG8SCnByb3BlcnRpZXMVAxYBEgd0b2tlbklkEgNhc2MWARIMdG9JZGVudGl0eUlkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgoSB3Rva2VuSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIMVGhlIHRva2VuIElEEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISBmFtb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEhpUaGUgYW1vdW50IHRoYXQgd2FzIGJ1cm5lZBIIcG9zaXRpb24CARIMdG9JZGVudGl0eUlkFgcSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBILZGVzY3JpcHRpb24SHFRoZSBpZGVudGl0eSBvciB0aGUgZ3JvdXAgSWQSCHBvc2l0aW9uAgISEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchIVZW5jcnlwdGVkUGVyc29uYWxOb3RlFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMC+wgAEgtkZXNjcmlwdGlvbhJbQW4gb3B0aW9uYWwgZW5jcnlwdGVkIGV4cGxhbmF0aW9uIG9mIHdoeSB0aGlzIHRyYW5zZmVyIHRvb2sgcGxhY2Ugb25seSBtZWFudCBmb3IgdGhlIHNlbmRlchIIcG9zaXRpb24CAxITZW5jcnlwdGVkU2hhcmVkTm90ZRYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAvsIABILZGVzY3JpcHRpb24SbEFuIG9wdGlvbmFsIGVuY3J5cHRlZCBleHBsYW5hdGlvbiBvZiB3aHkgdGhpcyB0cmFuc2ZlciB0b29rIHBsYWNlIHNoYXJlZCBiZXR3ZWVuIHRoZSBzZW5kZXIgYW5kIHRoZSByZWNlaXZlchIIcG9zaXRpb24CBBIKcHVibGljTm90ZRYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7CAASC2Rlc2NyaXB0aW9uEj5BbiBvcHRpb25hbCBwdWJsaWMgZXhwbGFuYXRpb24gb2Ygd2h5IHRoaXMgdHJhbnNmZXIgdG9vayBwbGFjZRIIcG9zaXRpb24CBRIOc2VuZGVyS2V5SW5kZXgWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgtkZXNjcmlwdGlvbhIjVXNlZCB3aXRoIHRoZSBlbmNyeXB0ZWQgc2hhcmVkIG5vdGUSCHBvc2l0aW9uAgYSEXJlY2lwaWVudEtleUluZGV4FgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABILZGVzY3JpcHRpb24SI1VzZWQgd2l0aCB0aGUgZW5jcnlwdGVkIHNoYXJlZCBub3RlEghwb3NpdGlvbgIHEhZyb290RW5jcnlwdGlvbktleUluZGV4FgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABILZGVzY3JpcHRpb24SJFVzZWQgd2l0aCB0aGUgZW5jcnlwdGVkIHByaXZhdGUgbm90ZRIIcG9zaXRpb24CCBIcZGVyaXZhdGlvbkVuY3J5cHRpb25LZXlJbmRleBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEiRVc2VkIHdpdGggdGhlIGVuY3J5cHRlZCBwcml2YXRlIG5vdGUSCHBvc2l0aW9uAgkSCHJlcXVpcmVkFQUSB3Rva2VuSWQSBmFtb3VudBIMdG9JZGVudGl0eUlkEgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAIdW5mcmVlemUWCBIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEhdjcmVhdGlvblJlc3RyaWN0aW9uTW9kZQICEgdpbmRpY2VzFQIWAhIEbmFtZRIJYnlPd25lcklkEgpwcm9wZXJ0aWVzFQMWARIHdG9rZW5JZBIDYXNjFgESCCRvd25lcklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSEmJ5RnJvemVuSWRlbnRpdHlJZBIKcHJvcGVydGllcxUDFgESB3Rva2VuSWQSA2FzYxYBEhBmcm96ZW5JZGVudGl0eUlkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgMSB3Rva2VuSWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIMVGhlIHRva2VuIElEEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISEGZyb3plbklkZW50aXR5SWQWBxIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhIrVGhlIGlkZW50aXR5IElkIG9mIHRoZSBmcm96ZW4gdG9rZW4gYWNjb3VudBIIcG9zaXRpb24CARIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEgRub3RlFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAvsIABILZGVzY3JpcHRpb24SMkFuIG9wdGlvbmFsIGV4cGxhbmF0aW9uIGZvciB0aGlzIGlkZW50aXR5IHVuZnJlZXplEghwb3NpdGlvbgICEghyZXF1aXJlZBUEEgd0b2tlbklkEhBmcm96ZW5JZGVudGl0eUlkEgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAAAAAAAAAAAAAAASYDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhkEzEbAKGwcECCtmBzo9GqN3VOsL7cq2BGUOcpGOriAtwAlNwdRABtuNiuu7H9SpWhUHd9h0a3QVmQ2P4X8H0pSZ1VJYTugARACA2Yrth4X+uPqKUz2Axl/sKq21RGAvYthBMSUSmL+LZfwD7BzsDAQAG8gD7Bu0BNmK7YeF/rj6ilM9gMZf7CqttURgL2LYQTElEpi/i2X8CAAAAAAEBAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCndpdGhkcmF3YWwWBxILZGVzY3JpcHRpb24SgFdpdGhkcmF3YWwgZG9jdW1lbnQgdG8gdHJhY2sgdW5kZXJseWluZyB3aXRoZHJhd2FsIHRyYW5zYWN0aW9ucy4gV2l0aGRyYXdhbHMgc2hvdWxkIGJlIGNyZWF0ZWQgd2l0aCBJZGVudGl0eVdpdGhkcmF3YWxUcmFuc2l0aW9uEhdjcmVhdGlvblJlc3RyaWN0aW9uTW9kZQICEgR0eXBlEgZvYmplY3QSB2luZGljZXMVBBYDEgRuYW1lEg5pZGVudGl0eVN0YXR1cxIKcHJvcGVydGllcxUDFgESCCRvd25lcklkEgNhc2MWARIGc3RhdHVzEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEgZ1bmlxdWUTABYDEgRuYW1lEg5pZGVudGl0eVJlY2VudBIKcHJvcGVydGllcxUDFgESCCRvd25lcklkEgNhc2MWARIKJHVwZGF0ZWRBdBIDYXNjFgESBnN0YXR1cxIDYXNjEgZ1bmlxdWUTABYDEgRuYW1lEgdwb29saW5nEgpwcm9wZXJ0aWVzFQQWARIGc3RhdHVzEgNhc2MWARIHcG9vbGluZxIDYXNjFgESDmNvcmVGZWVQZXJCeXRlEgNhc2MWARIKJHVwZGF0ZWRBdBIDYXNjEgZ1bmlxdWUTABYDEgRuYW1lEgt0cmFuc2FjdGlvbhIKcHJvcGVydGllcxUCFgESBnN0YXR1cxIDYXNjFgESEHRyYW5zYWN0aW9uSW5kZXgSA2FzYxIGdW5pcXVlEwASCnByb3BlcnRpZXMWBxIQdHJhbnNhY3Rpb25JbmRleBYEEgR0eXBlEgdpbnRlZ2VyEgtkZXNjcmlwdGlvbhJ5U2VxdWVudGlhbCBpbmRleCBvZiBhc3NldCB1bmxvY2sgKHdpdGhkcmF3YWwpIHRyYW5zYWN0aW9uLiBQb3B1bGF0ZWQgd2hlbiBhIHdpdGhkcmF3YWwgcG9vbGVkIGludG8gd2l0aGRyYXdhbCB0cmFuc2FjdGlvbhIHbWluaW11bQIBEghwb3NpdGlvbgIAEhV0cmFuc2FjdGlvblNpZ25IZWlnaHQWBBIEdHlwZRIHaW50ZWdlchILZGVzY3JpcHRpb24SL1RoZSBDb3JlIGhlaWdodCBvbiB3aGljaCB0cmFuc2FjdGlvbiB3YXMgc2lnbmVkEgdtaW5pbXVtAgESCHBvc2l0aW9uAgESBmFtb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgtkZXNjcmlwdGlvbhIaVGhlIGFtb3VudCB0byBiZSB3aXRoZHJhd24SB21pbmltdW0C+wPoEghwb3NpdGlvbgICEg5jb3JlRmVlUGVyQnl0ZRYFEgR0eXBlEgdpbnRlZ2VyEgtkZXNjcmlwdGlvbhJQVGhpcyBpcyB0aGUgZmVlIHRoYXQgeW91IGFyZSB3aWxsaW5nIHRvIHNwZW5kIGZvciB0aGlzIHRyYW5zYWN0aW9uIGluIER1ZmZzL0J5dGUSB21pbmltdW0CARIHbWF4aW11bQL8/////xIIcG9zaXRpb24CAxIHcG9vbGluZxYEEgR0eXBlEgdpbnRlZ2VyEgtkZXNjcmlwdGlvbhJOVGhpcyBpbmRpY2F0ZWQgdGhlIGxldmVsIGF0IHdoaWNoIFBsYXRmb3JtIHNob3VsZCB0cnkgdG8gcG9vbCB0aGlzIHRyYW5zYWN0aW9uEgRlbnVtFQMCAAIBAgISCHBvc2l0aW9uAgQSDG91dHB1dFNjcmlwdBYFEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAhcSCG1heEl0ZW1zAhkSCHBvc2l0aW9uAgUSBnN0YXR1cxYEEgR0eXBlEgdpbnRlZ2VyEgRlbnVtFQYCAAIBAgICAwIEAgUSC2Rlc2NyaXB0aW9uEk8wIC0gUGVuZGluZywgMSAtIFNpZ25lZCwgMiAtIEJyb2FkY2FzdGVkLCAzIC0gQ29tcGxldGUsIDQgLSBFeHBpcmVkLCA1IC0gRmFpbGVkEghwb3NpdGlvbgIGEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEghyZXF1aXJlZBUHEgokY3JlYXRlZEF0EgokdXBkYXRlZEF0EgZhbW91bnQSDmNvcmVGZWVQZXJCeXRlEgdwb29saW5nEgxvdXRwdXRTY3JpcHQSBnN0YXR1cwAAAAAAAAAAAAAAAugzoLqSwIer+I9w9enSb9MNbugDtvOanWfen6IJ9VKqEAGNaJQG8QFmaUu58Auvw79wXRGNrED4HfElJE+g0paatREAIFwUDmVcAmW7wqgIcW3hhHmFE1kYrVHN/Qt2ZkupW6N8APsDbgMBAAMlAPsC/ABcFA5lXAJlu8KoCHFt4YR5hRNZGK1Rzf0LdmZLqVujfAAAAAAAAQEAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCnR4TWV0YWRhdGEWBxIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwESDGNhbkJlRGVsZXRlZBMBEgdpbmRpY2VzFQEWAhIEbmFtZRIHdXBkYXRlZBIKcHJvcGVydGllcxUCFgESCCRvd25lcklkEgNhc2MWARIKJHVwZGF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFgMSCGtleUluZGV4FgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABILZGVzY3JpcHRpb24SN1RoZSBkZXJpdmF0aW9uIGluZGV4IHVzZWQgdG8gY3JlYXRlIHRoZSBlbmNyeXB0aW9uIGtleS4SCHBvc2l0aW9uAgASEmVuY3J5cHRpb25LZXlJbmRleBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASC2Rlc2NyaXB0aW9uEmhUaGUgc2Vjb25kYXJ5IGluZGV4IHVzZWQgdG8gZGVyaXZlIHRoZSBlbmNyeXB0aW9uIGtleSB0aGF0IGlzIHVzZWQgdG8gZW5jcnlwdCBhbmQgZGVjcnlwdCBlbmNyeXB0ZWREYXRhLhIIcG9zaXRpb24CARIRZW5jcnlwdGVkTWV0YWRhdGEWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwL7EAASC2Rlc2NyaXB0aW9uEiRlbmNyeXB0ZWQgbWV0YWRhdGEgdXNpbmcgQUVTLUNCQy0yNTYSCHBvc2l0aW9uAgISCHJlcXVpcmVkFQQSCGtleUluZGV4EhJlbmNyeXB0aW9uS2V5SW5kZXgSEWVuY3J5cHRlZE1ldGFkYXRhEgokdXBkYXRlZEF0EhRhZGRpdGlvbmFsUHJvcGVydGllcxMAASMCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANngInfqeDkHPl4aHMcMMPLWRHkzBNyAwfnHuwD4RpwHJtixABF6ZLJrKY9R3HILpDBAvoAnebZjxlHwBlCCRXHrwPByoRACChk6eZKOHbZTKcHJKWNHLVOJpqD09CEpxekthojF2q1wD7CRYDAQAIzQD7CKQBoZOnmSjh22UynBySljRy1Tiaag9PQhKcXpLYaIxdqtcBAAAAAAEBAAABAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMQY29udHJhY3RLZXl3b3JkcxYJEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASF2NyZWF0aW9uUmVzdHJpY3Rpb25Nb2RlAgISB2luZGljZXMVAhYCEgRuYW1lEglieUtleXdvcmQSCnByb3BlcnRpZXMVARYBEgdrZXl3b3JkEgNhc2MWAhIEbmFtZRIMYnlDb250cmFjdElkEgpwcm9wZXJ0aWVzFQEWARIKY29udHJhY3RJZBIDYXNjEgpwcm9wZXJ0aWVzFgISB2tleXdvcmQWBBIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCAxIJbWF4TGVuZ3RoAjISCHBvc2l0aW9uAgASCmNvbnRyYWN0SWQWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEghwb3NpdGlvbgIBEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISCHJlcXVpcmVkFQISCmNvbnRyYWN0SWQSB2tleXdvcmQSC2Rlc2NyaXB0aW9uEvsBJUtleXdvcmRzIGFzc29jaWF0ZWQgd2l0aCB0aGUgY29udHJhY3QgYWxsb3dpbmcgZm9yIGJldHRlciBzZWFyY2hhYmlsaXR5LiBUaGlzIGRvY3VtZW50IHR5cGUgY2FuIGJlIGRlbGV0ZWQgYnV0IG5vdCBtYW51YWxseSBjcmVhdGVkIG5vciB1cGRhdGVkLiBDcmVhdGlvbiBvY2N1cnMgYXV0b21hdGljYWxseSBpbnRlcm5hbGx5IG9uIERhdGFDb250cmFjdENyZWF0ZSBhbmQgbWlycm9ycyB0aGUgY29udHJhY3QncyBrZXl3b3JkcyBmaWVsZC4gSXQgY2FuIGJlIHVwZGF0ZWQgd2l0aCBEYXRhQ29udHJhY3RVcGRhdGUuEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAD2Z1bGxEZXNjcmlwdGlvbhYJEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTARIMY2FuQmVEZWxldGVkEwASF2NyZWF0aW9uUmVzdHJpY3Rpb25Nb2RlAgISB2luZGljZXMVARYDEgRuYW1lEgxieUNvbnRyYWN0SWQSCnByb3BlcnRpZXMVARYBEgpjb250cmFjdElkEgNhc2MSBnVuaXF1ZRMBEgpwcm9wZXJ0aWVzFgISCmNvbnRyYWN0SWQWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISC2Rlc2NyaXB0aW9uFgQSBHR5cGUSBnN0cmluZxIJbWluTGVuZ3RoAgMSCW1heExlbmd0aAL7JxASCHBvc2l0aW9uAgESCHJlcXVpcmVkFQISCmNvbnRyYWN0SWQSC2Rlc2NyaXB0aW9uEgtkZXNjcmlwdGlvbhLTRnVsbCBkZXNjcmlwdGlvbiBvZiB0aGUgY29udHJhY3QuIFRoaXMgZG9jdW1lbnQgdHlwZSBpcyBtdXRhYmxlIGJ1dCBjcmVhdGlvbiBpcyBub3QgYWxsb3dlZC4gQ3JlYXRpb24gb2NjdXJzIGF1dG9tYXRpY2FsbHkgaW50ZXJuYWxseSBvbiBEYXRhQ29udHJhY3RDcmVhdGUgYW5kIG1pcnJvcnMgdGhlIGNvbnRyYWN0J3MgZGVzY3JpcHRpb24gZmllbGQgaW5pdGlhbGx5LhIUYWRkaXRpb25hbFByb3BlcnRpZXMTABBzaG9ydERlc2NyaXB0aW9uFgkSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMBEgxjYW5CZURlbGV0ZWQTABIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUCAhIHaW5kaWNlcxUBFgMSBG5hbWUSDGJ5Q29udHJhY3RJZBIKcHJvcGVydGllcxUBFgESCmNvbnRyYWN0SWQSA2FzYxIGdW5pcXVlEwESCnByb3BlcnRpZXMWAhIKY29udHJhY3RJZBYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchILZGVzY3JpcHRpb24WBBIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCAxIJbWF4TGVuZ3RoAmQSCHBvc2l0aW9uAgESCHJlcXVpcmVkFQISCmNvbnRyYWN0SWQSC2Rlc2NyaXB0aW9uEgtkZXNjcmlwdGlvbhLUU2hvcnQgZGVzY3JpcHRpb24gb2YgdGhlIGNvbnRyYWN0LiBUaGlzIGRvY3VtZW50IHR5cGUgaXMgbXV0YWJsZSBidXQgY3JlYXRpb24gaXMgbm90IGFsbG93ZWQuIENyZWF0aW9uIG9jY3VycyBhdXRvbWF0aWNhbGx5IGludGVybmFsbHkgb24gRGF0YUNvbnRyYWN0Q3JlYXRlIGFuZCBtaXJyb3JzIHRoZSBjb250cmFjdCdzIGRlc2NyaXB0aW9uIGZpZWxkIGluaXRpYWxseS4SFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAAAAAAAAAAAAAAASMCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhkAIUGHHaL0z4TYL30AZqeWJkdjGBY82l9jLKftt8WwfBlxABFjXRWUg3RR5NWwY3COUROgPPgJ8V78BBcKZVpYpxrkwRACCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAD7EF0DAQAQFAD7EA8BoqG0rG/vIuoqGmjoEjZEs1eHX2tBLBgQkoHBRueycbwCAAAAAAEBAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADC2NvbnRhY3RJbmZvFgUSBHR5cGUSBm9iamVjdBIHaW5kaWNlcxUCFgMSBG5hbWUSDm93bmVySWRBbmRLZXlzEgpwcm9wZXJ0aWVzFQMWARIIJG93bmVySWQSA2FzYxYBEhZyb290RW5jcnlwdGlvbktleUluZGV4EgNhc2MWARIcZGVyaXZhdGlvbkVuY3J5cHRpb25LZXlJbmRleBIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEhNvd25lcklkQW5kVXBkYXRlZEF0Egpwcm9wZXJ0aWVzFQIWARIIJG93bmVySWQSA2FzYxYBEgokdXBkYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWBBILZW5jVG9Vc2VySWQWBRIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEghwb3NpdGlvbgIAEhZyb290RW5jcnlwdGlvbktleUluZGV4FgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIIcG9zaXRpb24CARIcZGVyaXZhdGlvbkVuY3J5cHRpb25LZXlJbmRleBYDEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASCHBvc2l0aW9uAgISC3ByaXZhdGVEYXRhFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCMBIIbWF4SXRlbXMC+wgAEghwb3NpdGlvbgIDEgtkZXNjcmlwdGlvbhJcVGhpcyBpcyB0aGUgZW5jcnlwdGVkIHZhbHVlcyBvZiBhbGlhc05hbWUgKyBub3RlICsgZGlzcGxheUhpZGRlbiBlbmNvZGVkIGFzIGFuIGFycmF5IGluIGNib3ISCHJlcXVpcmVkFQYSCiRjcmVhdGVkQXQSCiR1cGRhdGVkQXQSC2VuY1RvVXNlcklkEgtwcml2YXRlRGF0YRIWcm9vdEVuY3J5cHRpb25LZXlJbmRleBIcZGVyaXZhdGlvbkVuY3J5cHRpb25LZXlJbmRleBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAA5jb250YWN0UmVxdWVzdBYJEhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEiRyZXF1aXJlc0lkZW50aXR5RW5jcnlwdGlvbkJvdW5kZWRLZXkCAhIkcmVxdWlyZXNJZGVudGl0eURlY3J5cHRpb25Cb3VuZGVkS2V5AgISBHR5cGUSBm9iamVjdBIHaW5kaWNlcxUEFgMSBG5hbWUSGm93bmVySWRVc2VySWRBbmRBY2NvdW50UmVmEgpwcm9wZXJ0aWVzFQMWARIIJG93bmVySWQSA2FzYxYBEgh0b1VzZXJJZBIDYXNjFgESEGFjY291bnRSZWZlcmVuY2USA2FzYxIGdW5pcXVlEwEWAhIEbmFtZRINb3duZXJJZFVzZXJJZBIKcHJvcGVydGllcxUCFgESCCRvd25lcklkEgNhc2MWARIIdG9Vc2VySWQSA2FzYxYCEgRuYW1lEg91c2VySWRDcmVhdGVkQXQSCnByb3BlcnRpZXMVAhYBEgh0b1VzZXJJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEhBvd25lcklkQ3JlYXRlZEF0Egpwcm9wZXJ0aWVzFQIWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCnByb3BlcnRpZXMWBxIIdG9Vc2VySWQWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEghwb3NpdGlvbgIAEhBjb250ZW50TWVkaWFUeXBlEiFhcHBsaWNhdGlvbi94LmRhc2guZHBwLmlkZW50aWZpZXISEmVuY3J5cHRlZFB1YmxpY0tleRYFEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAmASCG1heEl0ZW1zAmASCHBvc2l0aW9uAgESDnNlbmRlcktleUluZGV4FgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIIcG9zaXRpb24CAhIRcmVjaXBpZW50S2V5SW5kZXgWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgIDEhBhY2NvdW50UmVmZXJlbmNlFgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIIcG9zaXRpb24CBBIVZW5jcnlwdGVkQWNjb3VudExhYmVsFgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCMBIIbWF4SXRlbXMCUBIIcG9zaXRpb24CBRIPYXV0b0FjY2VwdFByb29mFgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCJhIIbWF4SXRlbXMCZhIIcG9zaXRpb24CBhIIcmVxdWlyZWQVBxIKJGNyZWF0ZWRBdBIZJGNyZWF0ZWRBdENvcmVCbG9ja0hlaWdodBIIdG9Vc2VySWQSEmVuY3J5cHRlZFB1YmxpY0tleRIOc2VuZGVyS2V5SW5kZXgSEXJlY2lwaWVudEtleUluZGV4EhBhY2NvdW50UmVmZXJlbmNlEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAB3Byb2ZpbGUWBxIEdHlwZRIGb2JqZWN0EgdpbmRpY2VzFQIWAxIEbmFtZRIHb3duZXJJZBIKcHJvcGVydGllcxUBFgESCCRvd25lcklkEgNhc2MSBnVuaXF1ZRMBFgISBG5hbWUSE293bmVySWRBbmRVcGRhdGVkQXQSCnByb3BlcnRpZXMVAhYBEggkb3duZXJJZBIDYXNjFgESCiR1cGRhdGVkQXQSA2FzYxIKcHJvcGVydGllcxYIEglhdmF0YXJVcmwWBRIEdHlwZRIGc3RyaW5nEgZmb3JtYXQSA3VyaRIJbWluTGVuZ3RoAgESCW1heExlbmd0aAL7CAASCHBvc2l0aW9uAgASCmF2YXRhckhhc2gWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIgEghtYXhJdGVtcwIgEgtkZXNjcmlwdGlvbhI8U0hBMjU2IGhhc2ggb2YgdGhlIGJ5dGVzIG9mIHRoZSBpbWFnZSBzcGVjaWZpZWQgYnkgYXZhdGFyVXJsEghwb3NpdGlvbgIBEhFhdmF0YXJGaW5nZXJwcmludBYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAggSCG1heEl0ZW1zAggSC2Rlc2NyaXB0aW9uEiZkSGFzaCB0aGUgaW1hZ2Ugc3BlY2lmaWVkIGJ5IGF2YXRhclVybBIIcG9zaXRpb24CAhINcHVibGljTWVzc2FnZRYEEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgCjBIIcG9zaXRpb24CAxILZGlzcGxheU5hbWUWBBIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAhkSCHBvc2l0aW9uAgQSEmNvcmVQYXltZW50QWRkcmVzcxYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAhUSCG1heEl0ZW1zAhUSC2Rlc2NyaXB0aW9uEvsBbENvcmUgY2hhaW4gYWRkcmVzcyBpbiBzdG9yYWdlIGZvcm0gKHR5cGUgYnl0ZSAweDAwIFAyUEtIIC8gMHgwMSBQMlNIIGZvbGxvd2VkIGJ5IHRoZSAyMC1ieXRlIEhBU0gxNjAsIGkuZS4gUklQRU1EMTYwIG9mIFNIQTI1Niwgb2YgdGhlIHB1YmxpYyBrZXkgb3IgcmVkZWVtIHNjcmlwdCkgZm9yIHB1YmxpYyBwYXltZW50cy4gVGhlIHR5cGUgYnl0ZSBpcyBjb25zZW5zdXMtZW5mb3JjZWQgYnkgYSBkYXRhIHRyaWdnZXI7IGNsaWVudHMgcmVuZGVyIHRoZSBhZGRyZXNzIGFzIEJhc2U1OENoZWNrIGZvciB0aGUgbmV0d29yayB0aGV5IGFyZSBvbi4gUGF5bWVudHMgdG8gaXQgYXJlIHB1YmxpY2x5IGxpbmthYmxlIHRvIHRoaXMgcHJvZmlsZS4SCHBvc2l0aW9uAgUSFnBsYXRmb3JtUGF5bWVudEFkZHJlc3MWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIVEghtYXhJdGVtcwIVEgtkZXNjcmlwdGlvbhLtUGxhdGZvcm0gYWRkcmVzcyBpbiBzdG9yYWdlIGZvcm0gKHR5cGUgYnl0ZSAweDAwIFAyUEtIIC8gMHgwMSBQMlNIIGZvbGxvd2VkIGJ5IHRoZSAyMC1ieXRlIEhBU0gxNjAsIGkuZS4gUklQRU1EMTYwIG9mIFNIQTI1Niwgb2YgdGhlIHB1YmxpYyBrZXkgb3IgcmVkZWVtIHNjcmlwdCkgZm9yIHB1YmxpYyBwYXltZW50cy4gVGhlIHR5cGUgYnl0ZSBpcyBjb25zZW5zdXMtZW5mb3JjZWQgYnkgYSBkYXRhIHRyaWdnZXIuEghwb3NpdGlvbgIGEg9zaGllbGRlZEFkZHJlc3MWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIrEghtYXhJdGVtcwIrEgtkZXNjcmlwdGlvbhKxUmF3IE9yY2hhcmQgcmVjZWl2aW5nIGFkZHJlc3M6IDExLWJ5dGUgZGl2ZXJzaWZpZXIgZm9sbG93ZWQgYnkgMzItYnl0ZSBkaXZlcnNpZmllZCB0cmFuc21pc3Npb24ga2V5LiBDbGllbnRzIHZhbGlkYXRlIGJlZm9yZSBwYXltZW50OyB3YWxsZXRzIHNob3VsZCB1c2UgYSBkZWRpY2F0ZWQgdGlwIGFjY291bnQuEghwb3NpdGlvbgIHEg1taW5Qcm9wZXJ0aWVzAgESEWRlcGVuZGVudFJlcXVpcmVkFgMSCWF2YXRhclVybBUCEgphdmF0YXJIYXNoEhFhdmF0YXJGaW5nZXJwcmludBIKYXZhdGFySGFzaBUCEglhdmF0YXJVcmwSEWF2YXRhckZpbmdlcnByaW50EhFhdmF0YXJGaW5nZXJwcmludBUCEglhdmF0YXJVcmwSCmF2YXRhckhhc2gSCHJlcXVpcmVkFQISCiRjcmVhdGVkQXQSCiR1cGRhdGVkQXQSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAAAAAAAAAAAAAAAAK4K902WfXMjjCAMiul/Src/dEKiqx5KqtT4V2q1xaE6BABjWiUBvEBZmlLufALr8O/cF0RjaxA+B3xJSRPoNKWmrURACDmaMZZr2au4ecsGG3ee1t+Ch1xKgnEDVch9iK/U8UxVQD7D3YDAQAPLQD7DygB5mjGWa9mruHnLBht3ntbfgodcSoJxA1XIfYiv1PFMVUBAAAAAAEBAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGZG9tYWluFg4SEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwESDHRyYW5zZmVyYWJsZQIBEgl0cmFkZU1vZGUCARIUa2VlcHNUcmFuc2Zlckhpc3RvcnkTARIUa2VlcHNQdXJjaGFzZUhpc3RvcnkTARITa2VlcHNQcmljaW5nSGlzdG9yeRMBEgR0eXBlEgZvYmplY3QSB2luZGljZXMVAhYEEgRuYW1lEhJwYXJlbnROYW1lQW5kTGFiZWwSCnByb3BlcnRpZXMVAhYBEhpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRIDYXNjFgESD25vcm1hbGl6ZWRMYWJlbBIDYXNjEgZ1bmlxdWUTARIJY29udGVzdGVkFgMSDGZpZWxkTWF0Y2hlcxUBFgISBWZpZWxkEg9ub3JtYWxpemVkTGFiZWwSDHJlZ2V4UGF0dGVybhITXlthLXpBLVowMS1dezMsMTl9JBIKcmVzb2x1dGlvbgIAEgtkZXNjcmlwdGlvbhKqSWYgdGhlIG5vcm1hbGl6ZWQgbGFiZWwgcGFydCBvZiB0aGlzIGluZGV4IGlzIGxlc3MgdGhhbiAyMCBjaGFyYWN0ZXJzIChhbGwgYWxwaGFiZXQgYS16LCBBLVosIDAsIDEsIGFuZCAtKSB0aGVuIGEgbWFzdGVybm9kZSB2b3RlIGNvbnRlc3QgdGFrZXMgcGxhY2UgdG8gZ2l2ZSBvdXQgdGhlIG5hbWUWAxIEbmFtZRIKaWRlbnRpdHlJZBIObnVsbFNlYXJjaGFibGUTABIKcHJvcGVydGllcxUBFgESEHJlY29yZHMuaWRlbnRpdHkSA2FzYxIKcHJvcGVydGllcxYHEgVsYWJlbBYGEgR0eXBlEgZzdHJpbmcSB3BhdHRlcm4SKl5bYS16QS1aMC05XVthLXpBLVowLTktXXswLDYxfVthLXpBLVowLTldJBIJbWluTGVuZ3RoAgMSCW1heExlbmd0aAI/Eghwb3NpdGlvbgIAEgtkZXNjcmlwdGlvbhIZRG9tYWluIGxhYmVsLiBlLmcuICdCb2InLhIPbm9ybWFsaXplZExhYmVsFgYSBHR5cGUSBnN0cmluZxIHcGF0dGVybhI8XlthLWhqLWttLW5wLXowLTldW2EtaGota20tbnAtejAtOS1dezAsNjF9W2EtaGota20tbnAtejAtOV0kEgltYXhMZW5ndGgCPxIIcG9zaXRpb24CARILZGVzY3JpcHRpb24So0RvbWFpbiBsYWJlbCBjb252ZXJ0ZWQgdG8gbG93ZXJjYXNlIGZvciBjYXNlLWluc2Vuc2l0aXZlIHVuaXF1ZW5lc3MgdmFsaWRhdGlvbi4gIm8iLCAiaSIgYW5kICJsIiByZXBsYWNlZCB3aXRoICIwIiBhbmQgIjEiIHRvIG1pdGlnYXRlIGhvbW9ncmFwaCBhdHRhY2suIGUuZy4gJ2IwYicSCCRjb21tZW50ElxNdXN0IGJlIGVxdWFsIHRvIHRoZSBsYWJlbCBpbiBsb3dlcmNhc2UuICJvIiwgImkiIGFuZCAibCIgbXVzdCBiZSByZXBsYWNlZCB3aXRoICIwIiBhbmQgIjEiLhIQcGFyZW50RG9tYWluTmFtZRYGEgR0eXBlEgZzdHJpbmcSB3BhdHRlcm4SLV4kfF5bYS16QS1aMC05XVthLXpBLVowLTktXXswLDYxfVthLXpBLVowLTldJBIJbWluTGVuZ3RoAgASCW1heExlbmd0aAI/Eghwb3NpdGlvbgICEgtkZXNjcmlwdGlvbhInQSBmdWxsIHBhcmVudCBkb21haW4gbmFtZS4gZS5nLiAnZGFzaCcuEhpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZRYHEgR0eXBlEgZzdHJpbmcSB3BhdHRlcm4SQV4kfF5bYS1oai1rbS1ucC16MC05XVthLWhqLWttLW5wLXowLTktXC5dezAsNjF9W2EtaGota20tbnAtejAtOV0kEgltaW5MZW5ndGgCABIJbWF4TGVuZ3RoAj8SCHBvc2l0aW9uAgMSC2Rlc2NyaXB0aW9uEqJBIHBhcmVudCBkb21haW4gbmFtZSBpbiBsb3dlcmNhc2UgZm9yIGNhc2UtaW5zZW5zaXRpdmUgdW5pcXVlbmVzcyB2YWxpZGF0aW9uLiAibyIsICJpIiBhbmQgImwiIHJlcGxhY2VkIHdpdGggIjAiIGFuZCAiMSIgdG8gbWl0aWdhdGUgaG9tb2dyYXBoIGF0dGFjay4gZS5nLiAnZGFzaCcSCCRjb21tZW50EsBNdXN0IGVpdGhlciBiZSBlcXVhbCB0byBhbiBleGlzdGluZyBkb21haW4gb3IgZW1wdHkgdG8gY3JlYXRlIGEgdG9wIGxldmVsIGRvbWFpbi4gIm8iLCAiaSIgYW5kICJsIiBtdXN0IGJlIHJlcGxhY2VkIHdpdGggIjAiIGFuZCAiMSIuIE9ubHkgdGhlIGRhdGEgY29udHJhY3Qgb3duZXIgY2FuIGNyZWF0ZSB0b3AgbGV2ZWwgZG9tYWlucy4SDHByZW9yZGVyU2FsdBYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASCHBvc2l0aW9uAgQSC2Rlc2NyaXB0aW9uEiJTYWx0IHVzZWQgaW4gdGhlIHByZW9yZGVyIGRvY3VtZW50EgdyZWNvcmRzFgUSBHR5cGUSBm9iamVjdBIKcHJvcGVydGllcxYBEghpZGVudGl0eRYHEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASCHBvc2l0aW9uAgESEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchILZGVzY3JpcHRpb24SMUlkZW50aWZpZXIgbmFtZSByZWNvcmQgdGhhdCByZWZlcnMgdG8gYW4gSWRlbnRpdHkSDW1pblByb3BlcnRpZXMCARIIcG9zaXRpb24CBRIUYWRkaXRpb25hbFByb3BlcnRpZXMTABIOc3ViZG9tYWluUnVsZXMWBhIEdHlwZRIGb2JqZWN0Egpwcm9wZXJ0aWVzFgESD2FsbG93U3ViZG9tYWlucxYEEgR0eXBlEgdib29sZWFuEgtkZXNjcmlwdGlvbhJbVGhpcyBvcHRpb24gZGVmaW5lcyB3aG8gY2FuIGNyZWF0ZSBzdWJkb21haW5zOiB0cnVlIC0gYW55b25lOyBmYWxzZSAtIG9ubHkgdGhlIGRvbWFpbiBvd25lchIIJGNvbW1lbnQST09ubHkgdGhlIGRvbWFpbiBvd25lciBpcyBhbGxvd2VkIHRvIGNyZWF0ZSBzdWJkb21haW5zIGZvciBub24gdG9wLWxldmVsIGRvbWFpbnMSCHBvc2l0aW9uAgASCHBvc2l0aW9uAgYSC2Rlc2NyaXB0aW9uEkJTdWJkb21haW4gcnVsZXMgYWxsb3cgZG9tYWluIG93bmVycyB0byBkZWZpbmUgcnVsZXMgZm9yIHN1YmRvbWFpbnMSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASCHJlcXVpcmVkFQESD2FsbG93U3ViZG9tYWlucxIIcmVxdWlyZWQVCRIKJGNyZWF0ZWRBdBIKJHVwZGF0ZWRBdBIOJHRyYW5zZmVycmVkQXQSBWxhYmVsEg9ub3JtYWxpemVkTGFiZWwSGm5vcm1hbGl6ZWRQYXJlbnREb21haW5OYW1lEgxwcmVvcmRlclNhbHQSB3JlY29yZHMSDnN1YmRvbWFpblJ1bGVzEgl0cmFuc2llbnQVARIMcHJlb3JkZXJTYWx0EhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEggkY29tbWVudBL7ATdJbiBvcmRlciB0byByZWdpc3RlciBhIGRvbWFpbiB5b3UgbmVlZCB0byBjcmVhdGUgYSBwcmVvcmRlci4gVGhlIHByZW9yZGVyIHN0ZXAgaXMgbmVlZGVkIHRvIHByZXZlbnQgbWFuLWluLXRoZS1taWRkbGUgYXR0YWNrcy4gbm9ybWFsaXplZExhYmVsICsgJy4nICsgbm9ybWFsaXplZFBhcmVudERvbWFpbiBtdXN0IG5vdCBiZSBsb25nZXIgdGhhbiAyNTMgY2hhcnMgbGVuZ3RoIGFzIGRlZmluZWQgYnkgUkZDIDEwMzUuIERvbWFpbiBkb2N1bWVudHMgYXJlIGltbXV0YWJsZTogbW9kaWZpY2F0aW9uIGFuZCBkZWxldGlvbiBhcmUgcmVzdHJpY3RlZAhwcmVvcmRlchYIEhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMBEgR0eXBlEgZvYmplY3QSB2luZGljZXMVARYDEgRuYW1lEgpzYWx0ZWRIYXNoEgpwcm9wZXJ0aWVzFQEWARIQc2FsdGVkRG9tYWluSGFzaBIDYXNjEgZ1bmlxdWUTARIKcHJvcGVydGllcxYBEhBzYWx0ZWREb21haW5IYXNoFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCIBIIbWF4SXRlbXMCIBIIcG9zaXRpb24CABILZGVzY3JpcHRpb24SWURvdWJsZSBzaGEtMjU2IG9mIHRoZSBjb25jYXRlbmF0aW9uIG9mIGEgMzIgYnl0ZSByYW5kb20gc2FsdCBhbmQgYSBub3JtYWxpemVkIGRvbWFpbiBuYW1lEghyZXF1aXJlZBUBEhBzYWx0ZWREb21haW5IYXNoEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEggkY29tbWVudBJKUHJlb3JkZXIgZG9jdW1lbnRzIGFyZSBpbW11dGFibGU6IG1vZGlmaWNhdGlvbiBhbmQgZGVsZXRpb24gYXJlIHJlc3RyaWN0ZWQAAAAAAAAAAAAAAAJA1ckffU15DWVhQ/dM7PAU/Al8GxSrq1Qo11+6lHKnOhABjWiUBvEBZmlLufALr8O/cF0RjaxA+B3xJSRPoNKWmrURAA=="
+      },
+      "quorumHash": {
+        "$u8": "AAAAL9zefYJMQuIF0zf36VAbWLb/pGBgilcsvCR1wGE="
+      },
+      "signature": {
+        "$u8": "k1/15AUk/J9W5yFEg8GqqWyQTRwBoq1nR1mobMJMBmJ5dhAsXXm1eUwbAenkY1YdBsFJOXOt0NhqLUTsqwuq2AjR3kpkRBMoZ/5sDezELUkXTRTXbpAqdd91Ajgh31Sb"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "BwnAxSg2HbCRcVsHZoIMsAN+vNL9CyJZqHRFael88C0="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 551.8802579999999
+  }
+}

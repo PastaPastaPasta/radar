@@ -114,6 +114,31 @@ describe('Status page', () => {
     expect(card.querySelectorAll('[data-source="dapi"]')).toHaveLength(1)
   })
 
+  it('shows what the answering evonode says about Platform, with a verdict @NX-54', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#platform')
+      expect(el).not.toBeNull()
+      expect(el!.querySelector('[data-platform="height"]')).not.toBeNull()
+      return el!
+    })
+    expect(within(card).getByRole('heading', { name: 'Dash Platform' })).toBeInTheDocument()
+    for (const key of ['sync', 'height', 'chainlocked', 'core-tip', 'last-block', 'versions']) {
+      expect(card.querySelector(`[data-platform="${key}"]`)).not.toBeNull()
+    }
+    expect(card.querySelector('[data-platform-state]')).not.toBeNull()
+  })
+
+  it('calls Platform stalled when the last block it saw is long gone @NX-54', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    await waitFor(() =>
+      expect(document.querySelector('#platform [data-platform-state="stalled"]')).not.toBeNull(),
+    )
+    expect(document.querySelector('#platform')).toHaveTextContent(/No new Platform block for/)
+  })
+
   it('links to the network internals on its own page @HY-12', async () => {
     setCoreClient(core())
     renderAt('/status')
@@ -211,7 +236,7 @@ describe('Status page', () => {
     await waitFor(() => expect(row.getAttribute('data-state')).toBe('down'))
     expect(row).toHaveTextContent('The connection failed.')
     expect(row).toHaveTextContent(/Last good/)
-    expect(screen.getByRole('status')).toHaveTextContent('The rest still work')
+    expect(document.querySelector('[data-overall]')).toHaveTextContent('The rest still work')
   })
 
   it('shows the Hyphen lag on testnet instead of pretending it is fine @IN-16', async () => {

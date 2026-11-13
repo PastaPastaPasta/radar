@@ -13,26 +13,161 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: polls.length
+msgid "{0, plural, one {# poll ends in the next 30 days.} other {# polls end in the next 30 days.}}"
+msgstr "{0, plural, one {# oylama önümüzdeki 30 gün içinde sona eriyor.} other {# oylama önümüzdeki 30 gün içinde sona eriyor.}}"
+
+#. placeholder {0}: reason.blocks
+msgid "{0, plural, one {Platform's Core ChainLock is # block behind Core's tip.} other {Platform's Core ChainLock is # blocks behind Core's tip.}}"
+msgstr "{0, plural, one {Platform’un Core ChainLock’u, Core’un ucunun # blok gerisinde.} other {Platform’un Core ChainLock’u, Core’un ucunun # blok gerisinde.}}"
+
+#. placeholder {0}: Number(votes)
+msgid "{0, plural, one {Upgrade to v{next}: # vote so far} other {Upgrade to v{next}: # votes so far}}"
+msgstr "{0, plural, one {v{next} sürümüne yükseltme: şu ana kadar # oy} other {v{next} sürümüne yükseltme: şu ana kadar # oy}}"
+
+#. placeholder {0}: formatNumber(v, { maximumFractionDigits: 2 })
+msgid "{0} DASH"
+msgstr "{0} DASH"
+
+#. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(s.threshold)
+msgid "{0} members, {1} to sign"
+msgstr "{0} üye, imzalamak için {1}"
+
 #. placeholder {0}: formatInt(budget.usedLastMinute)
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
+#. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
+msgid "{0} s"
+msgstr "{0} sn"
+
+#. placeholder {0}: formatInt(q.numValidMembers)
+msgid "{0} valid"
+msgstr "{0} geçerli"
+
 msgid "{behind} blocks behind the tip"
 msgstr "Uçtan {behind} blok geride"
+
+msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
+msgstr "{fresh, plural, one {Siz bakarken sabit tutuluyor · # yeni. Görmek için uzaklaşın.} other {Siz bakarken sabit tutuluyor · # yeni. Görmek için uzaklaşın.}}"
+
+msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+msgstr "{pages, plural, one {Kanıtla doğrulanan # yanıttan birleştirildi.} other {Kanıtla doğrulanan # yanıttan birleştirildi.}}"
+
+msgid "1 m"
+msgstr "1 ay"
+
+msgid "1 w"
+msgstr "1 hf"
+
+msgid "24 h"
+msgstr "24 sa"
+
+msgid "3 d"
+msgstr "3 g"
 
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "Adresler, harcanmış çıktılar, chainwork ve yönetişim için ikinci bir dizin"
 
+msgid "Active"
+msgstr "Etkin"
+
+msgid "Active quorums"
+msgstr "Etkin quorum’lar"
+
+msgid "All blocks"
+msgstr "Tüm bloklar"
+
+msgid "All contracts"
+msgstr "Tüm sözleşmeler"
+
+msgid "All epochs"
+msgstr "Tüm epoch’lar"
+
+msgid "All evonodes"
+msgstr "Tüm evonode’lar"
+
+msgid "All identities"
+msgstr "Tüm kimlikler"
+
+msgid "All polls"
+msgstr "Tüm oylamalar"
+
+msgid "All quorums"
+msgstr "Tüm quorum’lar"
+
+msgid "All time"
+msgstr "Tüm zamanlar"
+
+msgid "All tokens"
+msgstr "Tüm token’lar"
+
+msgid "All transitions"
+msgstr "Tüm geçişler"
+
+msgid "An identity ID, a name, a token ID or an epoch number."
+msgstr "Bir kimlik ID’si, bir ad, bir token ID’si veya bir epoch numarası."
+
+msgid "Answering node"
+msgstr "Yanıt veren düğüm"
+
 msgid "Asking Platform for its latest block…"
 msgstr "Platform’a son bloğu soruluyor…"
+
+msgid "Average block time"
+msgstr "Ortalama blok süresi"
+
+msgid "Balance"
+msgstr "Bakiye"
+
+msgid "Banned"
+msgstr "Yasaklı"
 
 msgid "Best ChainLock"
 msgstr "En iyi ChainLock"
 
+msgid "blocks"
+msgstr "bloklar"
+
+msgid "Blocks"
+msgstr "Bloklar"
+
+msgid "Blocks are arriving and Platform is locked to Core."
+msgstr "Bloklar geliyor ve Platform, Core’a kilitli."
+
+msgid "Busiest identities"
+msgstr "En yoğun kimlikler"
+
+msgid "By credit balance"
+msgstr "Kredi bakiyesine göre"
+
+msgid "By recent token transitions"
+msgstr "Son token geçişlerine göre"
+
+msgid "By recent transitions"
+msgstr "Son geçişlere göre"
+
+msgid "By transition count"
+msgstr "Geçiş sayısına göre"
+
+msgid "By transitions"
+msgstr "Geçişlere göre"
+
+msgid "By transitions sent"
+msgstr "Gönderilen geçişlere göre"
+
+msgid "Catching up"
+msgstr "Yetişiyor"
+
 #. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+#. placeholder {0}: formatPercent(s.indexer.syncProgress / 100, 0)
 msgid "Catching up, {0}"
 msgstr "Senkronize ediliyor, {0}"
+
+msgid "Chain ID"
+msgstr "Zincir ID’si"
 
 msgid "ChainLock block hash, reported by one node"
 msgstr "ChainLock blok karması, tek bir düğüm bildirdi"
@@ -52,14 +187,27 @@ msgstr "Core"
 msgid "Core addresses, mempool, governance and block lists"
 msgstr "Core adresleri, mempool, yönetişim ve blok listeleri"
 
+msgid "Core chain-locked height"
+msgstr "Core’un ChainLock’lu yüksekliği"
+
 msgid "Core tip"
 msgstr "Core ucu"
 
 msgid "Core tip, blocks and transactions, straight from evonodes"
 msgstr "Core ucu, bloklar ve işlemler, doğrudan evonode’lardan"
 
+msgid "Credits"
+msgstr "Krediler"
+
+msgid "Current"
+msgstr "Güncel"
+
 msgid "DAPI"
 msgstr "DAPI"
+
+#. placeholder {0}: s.dapiVersion
+msgid "DAPI {0}"
+msgstr "DAPI {0}"
 
 msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
 msgstr "DAPI ve Platform SDK yanıt veriyor. Barındırılan kaynaklar “Yalnızca merkeziyetsiz” modunda kapalıdır."
@@ -76,11 +224,36 @@ msgstr "DAPI istek bütçesi"
 msgid "Dash Core"
 msgstr "Dash Core"
 
+msgid "Dash Platform"
+msgstr "Dash Platform"
+
 msgid "Decentralized only mode doesn’t contact this source."
 msgstr "“Yalnızca merkeziyetsiz” modu bu kaynağa bağlanmaz."
 
 msgid "Details"
 msgstr "Ayrıntılar"
+
+#. placeholder {0}: s.version
+msgid "Drive {0}"
+msgstr "Drive {0}"
+
+msgid "ends"
+msgstr "sona erer"
+
+msgid "Epoch"
+msgstr "Epoch"
+
+#. placeholder {0}: formatInt(a.epoch)
+#. placeholder {1}: formatInt(a.proposers.length)
+#. placeholder {2}: formatInt(Number(a.total))
+msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgstr "Epoch {0}. Evonode’lar: {1}. Önerilen bloklar: {2}."
+
+msgid "Epochs"
+msgstr "Epoch’lar"
+
+msgid "Every evonode Platform Explorer has seen validate."
+msgstr "Platform Explorer’ın doğrulama yaparken gördüğü tüm evonode’lar."
 
 msgid "Every source is answering."
 msgstr "Tüm kaynaklar yanıt veriyor."
@@ -88,11 +261,26 @@ msgstr "Tüm kaynaklar yanıt veriyor."
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core’un gösterdiği her şey DAPI’den gelir."
 
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Fees"
+msgstr "Ücretler"
+
 msgid "Figures computed on your device"
 msgstr "Cihazınızda hesaplanan rakamlar"
 
+msgid "Find on Platform"
+msgstr "Platform’da bul"
+
 msgid "Getting tight"
 msgstr "Daralıyor"
+
+msgid "Go"
+msgstr "Git"
+
+msgid "Go straight to"
+msgstr "Doğrudan şuraya git"
 
 msgid "Headers and blocks"
 msgstr "Başlıklar ve bloklar"
@@ -100,11 +288,38 @@ msgstr "Başlıklar ve bloklar"
 msgid "Headroom"
 msgstr "Pay"
 
+msgid "Held still while you look. New ones appear when you move away."
+msgstr "Siz bakarken sabit tutulur. Uzaklaştığınızda yenileri görünür."
+
+msgid "History and leaders"
+msgstr "Geçmiş ve liderler"
+
+msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
+msgstr "Dash Platform’un durumu: yüksekliği, epoch’u ve kredileri, blokları kimin önerdiği ve üzerinde neler olduğu."
+
 msgid "How each source is answering, and how far behind its data is."
 msgstr "Her kaynağın nasıl yanıt verdiği ve verisinin ne kadar geride olduğu."
 
 msgid "Hyphen"
 msgstr "Hyphen"
+
+msgid "Identities"
+msgstr "Kimlikler"
+
+msgid "Identity growth"
+msgstr "Kimlik artışı"
+
+msgid "Identity ID, name.dash, token ID or epoch"
+msgstr "Kimlik ID’si, name.dash, token ID’si veya epoch"
+
+msgid "Identity ID, name.dash, token ID or epoch number"
+msgstr "Kimlik ID’si, name.dash, token ID’si veya epoch numarası"
+
+msgid "In sync"
+msgstr "Eşitlendi"
+
+msgid "Inactive"
+msgstr "Etkin değil"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "{indexed}. Core bloğuna kadar indekslendi (zincir: {chain}). Hyphen senkronizasyonuna “{sync}” diyor, ancak indeksi zincirin gerisinde."
@@ -114,6 +329,9 @@ msgstr "Core bloğu {indexed}/{chain} dizinlendi. Eşitleme: {sync}."
 
 msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
 msgstr "Platform bloğu {indexed}/{chain} dizinlendi. Dizinleyici: {state}."
+
+msgid "Indexer"
+msgstr "Dizinleyici"
 
 msgid "Insight"
 msgstr "Insight"
@@ -142,6 +360,15 @@ msgstr "Ucu Core’un {tip} numaralı bloğu; zincirin gerisinde."
 msgid "Its tip is Core block {tip}."
 msgstr "Ucu Core’un {tip} numaralı bloğu."
 
+msgid "Lagging"
+msgstr "Geride"
+
+msgid "Last block"
+msgstr "Son blok"
+
+msgid "Last block proposed by"
+msgstr "Son bloğu öneren"
+
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -151,11 +378,53 @@ msgstr "Son tarama {0} bitti. Core düğümü {1}. blokta."
 msgid "Last good {0}."
 msgstr "Son başarılı yanıt {0}."
 
+msgid "Later ones may be missing."
+msgstr "Sonrakiler eksik olabilir."
+
+msgid "Latest block hash"
+msgstr "En son blok hash’i"
+
+msgid "Live"
+msgstr "Canlı"
+
+msgid "Live activity"
+msgstr "Canlı etkinlik"
+
+msgid "Live activity, charts and leaderboards need Platform Explorer's index"
+msgstr "Canlı etkinlik, grafikler ve sıralamalar Platform Explorer’ın dizinini gerektirir"
+
+msgid "Live pulse"
+msgstr "Canlı nabız"
+
+msgid "Looking…"
+msgstr "Aranıyor…"
+
 msgid "Median answer {rounded} ms"
 msgstr "Ortanca yanıt {rounded} ms"
 
+msgid "Most active contracts"
+msgstr "En aktif sözleşmeler"
+
+msgid "Most active identities"
+msgstr "En aktif kimlikler"
+
 msgid "Network internals: peers, mempool pressure, versions and history"
 msgstr "Ağın iç işleyişi: eşler, mempool baskısı, sürümler ve geçmiş"
+
+msgid "Newest blocks"
+msgstr "En yeni bloklar"
+
+msgid "Newest Platform blocks"
+msgstr "En yeni Platform blokları"
+
+msgid "Newest Platform transitions"
+msgstr "En yeni Platform geçişleri"
+
+msgid "Newest transitions"
+msgstr "En yeni geçişler"
+
+msgid "No active quorums"
+msgstr "Etkin quorum yok"
 
 msgid "No crawl has finished yet."
 msgstr "Henüz tamamlanmış bir tarama yok."
@@ -163,11 +432,39 @@ msgstr "Henüz tamamlanmış bir tarama yok."
 msgid "No DAPI requests have been made on this network yet."
 msgstr "Bu ağda henüz DAPI isteği yapılmadı."
 
+msgid "No evonode has proposed a block in this epoch yet."
+msgstr "Bu epoch’ta henüz hiçbir evonode blok önermedi."
+
+msgid "No identity history in this range"
+msgstr "Bu aralıkta kimlik geçmişi yok"
+
+#. placeholder {0}: formatDuration(reason.ageMs)
+msgid "No new Platform block for {0}."
+msgstr "{0} boyunca yeni Platform bloğu yok."
+
+msgid "No quorums listed"
+msgstr "Listelenen quorum yok"
+
+msgid "No transitions in this range"
+msgstr "Bu aralıkta geçiş yok"
+
+msgid "No transitions yet"
+msgstr "Henüz geçiş yok"
+
+msgid "No upgrade pending"
+msgstr "Bekleyen yükseltme yok"
+
+msgid "No vote polls end in the next 30 days"
+msgstr "Önümüzdeki 30 gün içinde sona erecek oylama yok"
+
 msgid "Node sync"
 msgstr "Düğüm eşitlemesi"
 
 msgid "Nodes resting"
 msgstr "Boşta bekleyen düğümler"
+
+msgid "Not an evonode"
+msgstr "Evonode değil"
 
 msgid "Not available right now"
 msgstr "Şu anda kullanılamıyor"
@@ -175,14 +472,38 @@ msgstr "Şu anda kullanılamıyor"
 msgid "Not offered"
 msgstr "Sunulmuyor"
 
+msgid "Not proof-checked"
+msgstr "Kanıtla doğrulanmadı"
+
 msgid "Nothing has asked it yet on this network."
 msgstr "Bu ağda henüz kimse ona sormadı."
+
+msgid "Nothing ranked yet"
+msgstr "Henüz sıralanan yok"
+
+msgid "Nothing shielded in this range"
+msgstr "Bu aralıkta gizlenen bir şey yok"
 
 msgid "Off in this mode"
 msgstr "Bu modda kapalı"
 
+msgid "On the chain"
+msgstr "Zincirde"
+
+msgid "Peers"
+msgstr "Eşler"
+
+msgid "Platform"
+msgstr "Platform"
+
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer devnet’leri dizinlemez"
+
+msgid "Platform height"
+msgstr "Platform yüksekliği"
 
 msgid "Platform lists and counts"
 msgstr "Platform listeleri ve sayıları"
@@ -192,6 +513,9 @@ msgstr "Platform SDK"
 
 msgid "Plenty of room"
 msgstr "Bol miktarda pay"
+
+msgid "Polls ending soon"
+msgstr "Yakında sona erecek oylamalar"
 
 msgid "Pressure"
 msgstr "Baskı"
@@ -205,14 +529,77 @@ msgstr "Platform’un {block} numaralı bloğunda, {epoch}. dönemde kanıtla do
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Kanıtla doğrulanmış Platform durumu, bu tarayıcıda doğrulandı"
 
+msgid "Protocol"
+msgstr "Protokol"
+
+msgid "Protocol version"
+msgstr "Protokol sürümü"
+
+#. placeholder {0}: s.driveProtocol.current
+#. placeholder {1}: s.driveProtocol.latest
+#. placeholder {2}: s.tenderdashProtocol.block
+#. placeholder {3}: s.tenderdashProtocol.p2p
+msgid "Protocol: Drive {0} of {1}, block {2}, p2p {3}"
+msgstr "Protokol: Drive {0} / {1}, blok {2}, p2p {3}"
+
+msgid "Quorums"
+msgstr "Quorum’lar"
+
+msgid "Quorums by size"
+msgstr "Boyuta göre quorum’lar"
+
 msgid "Radar crawler"
 msgstr "Radar tarayıcısı"
 
 msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
 msgstr "Radar her evonode’u hız sınırının çok altında tutar, böylece bir ziyaretçi diğerini dışarıda bırakmaz."
 
+msgid "Range"
+msgstr "Aralık"
+
+msgid "Read from the Platform nodes and checked against their proofs."
+msgstr "Platform düğümlerinden okunur ve kanıtlarına göre doğrulanır."
+
+msgid "Recent epochs"
+msgstr "Son epoch’lar"
+
+msgid "Registered identities"
+msgstr "Kayıtlı kimlikler"
+
+#. placeholder {0}: labels[range]
+msgid "Registered identities, last {0}"
+msgstr "Kayıtlı kimlikler, son {0}"
+
 msgid "Requests in the last minute"
 msgstr "Son dakikadaki istekler"
+
+msgid "Richest identities"
+msgstr "En zengin kimlikler"
+
+msgid "Richest identities by"
+msgstr "En zengin kimlikler, şuna göre"
+
+msgid "Share"
+msgstr "Pay"
+
+msgid "Shielded"
+msgstr "Gizlenmiş"
+
+#. placeholder {0}: labels[range]
+msgid "Shielded and unshielded amounts, last {0}"
+msgstr "Gizlenmiş ve gizlenmemiş tutarlar, son {0}"
+
+msgid "Shielded and unshielded, in DASH"
+msgstr "Gizlenmiş ve gizlenmemiş, DASH cinsinden"
+
+msgid "Shielded pool"
+msgstr "Gizli havuz"
+
+msgid "should have ended"
+msgstr "sona ermiş olmalıydı"
+
+msgid "Software"
+msgstr "Yazılım"
 
 msgid "Some requests are failing."
 msgstr "Bazı istekler başarısız oluyor."
@@ -226,14 +613,42 @@ msgstr "Bazı kaynaklar yanıt vermiyor. Diğerleri çalışmaya devam ediyor."
 msgid "Sources"
 msgstr "Kaynaklar"
 
+msgid "Stalled"
+msgstr "Durdu"
+
+msgid "Start times and block counts are proof-checked; transitions and fees come from Platform Explorer."
+msgstr "Başlangıç zamanları ve blok sayıları kanıtlarla doğrulanır; geçişler ve ücretler Platform Explorer’dan gelir."
+
+msgid "Start times and block counts are proof-checked."
+msgstr "Başlangıç zamanları ve blok sayıları kanıtlarla doğrulanır."
+
+msgid "Started"
+msgstr "Başlangıç"
+
 msgid "Status"
 msgstr "Durum"
+
+msgid "Sync state"
+msgstr "Eşitleme durumu"
 
 msgid "Synced"
 msgstr "Eşitlendi"
 
+#. placeholder {0}: s.tenderdashVersion
+msgid "Tenderdash {0}"
+msgstr "Tenderdash {0}"
+
+msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
+msgstr "Bu bir kurtarma ifadesine veya özel anahtara benziyor. Hiçbir yere gönderilmedi."
+
 msgid "The connection failed."
 msgstr "Bağlantı başarısız oldu."
+
+msgid "The current epoch and the three before it"
+msgstr "Geçerli epoch ve ondan önceki üç epoch"
+
+msgid "The evonodes that proposed the most blocks this epoch."
+msgstr "Bu epoch’ta en çok blok öneren evonode’lar."
 
 msgid "The masternode census and network history"
 msgstr "Masternode sayımı ve ağ geçmişi"
@@ -241,8 +656,20 @@ msgstr "Masternode sayımı ve ağ geçmişi"
 msgid "The median answer takes {seconds} s."
 msgstr "Ortanca yanıt süresi {seconds} sn."
 
+msgid "The node has no peers."
+msgstr "Düğümün eşi yok."
+
+msgid "The node is still catching up with the chain."
+msgstr "Düğüm hâlâ zincire yetişiyor."
+
+msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
+msgstr "Platform’un şu anda imzaladığı quorum’lar. Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
+
 msgid "The request budget is nearly used."
 msgstr "İstek bütçesi neredeyse tükendi."
+
+msgid "The system contracts every network ships with."
+msgstr "Her ağın birlikte geldiği sistem sözleşmeleri."
 
 msgid "The USD rate, through Platform Explorer"
 msgstr "Platform Explorer üzerinden USD kuru"
@@ -253,11 +680,85 @@ msgstr "Bu tarayıcı"
 msgid "This network doesn’t have this source."
 msgstr "Bu ağda bu kaynak yok."
 
+msgid "Time"
+msgstr "Zaman"
+
 msgid "Tip hash"
 msgstr "Uç hash’i"
 
+msgid "Top proposers"
+msgstr "En iyi önericiler"
+
+msgid "Top proposers this epoch"
+msgstr "Bu epoch’un en iyi önericileri"
+
+msgid "Top-rated contracts"
+msgstr "En yüksek puanlı sözleşmeler"
+
+msgid "Total"
+msgstr "Toplam"
+
+msgid "Total credits"
+msgstr "Toplam kredi"
+
+msgid "Transition activity"
+msgstr "Geçiş etkinliği"
+
+msgid "Transition types"
+msgstr "Geçiş türleri"
+
+msgid "transitions"
+msgstr "geçiş"
+
+msgid "Transitions"
+msgstr "Geçişler"
+
+msgid "Transitions by type, all time"
+msgstr "Türe göre geçişler, tüm zamanlar"
+
+#. placeholder {0}: labels[range]
+msgid "Transitions per interval, last {0}"
+msgstr "Aralık başına geçişler, son {0}"
+
+msgid "Trending tokens"
+msgstr "Yükselen token’lar"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Unshielded"
+msgstr "Gizlenmemiş"
+
+msgid "Updates every few seconds. A list holds still while you point at it."
+msgstr "Birkaç saniyede bir güncellenir. Bir liste, üzerine geldiğinizde sabit kalır."
+
+msgid "Upgrade to v{next} is being voted on"
+msgstr "v{next} sürümüne yükseltme oylanıyor"
+
 msgid "Used up for now"
 msgstr "Şimdilik tükendi"
+
+msgid "Validators"
+msgstr "Doğrulayıcılar"
+
+#. placeholder {0}: formatInt(version)
+msgid "version {0}"
+msgstr "sürüm {0}"
+
+msgid "Vital signs"
+msgstr "Hayati belirtiler"
+
+msgid "Vote polls that end in the next 30 days."
+msgstr "Önümüzdeki 30 gün içinde sona eren oylamalar."
+
+msgid "Well-known contracts"
+msgstr "Bilinen sözleşmeler"
+
+msgid "What Platform Explorer has indexed, a few seconds behind the chain."
+msgstr "Platform Explorer’ın dizinlediği veriler; zincirin birkaç saniye gerisinde."
+
+msgid "What the evonode that answered says about Platform right now."
+msgstr "Yanıt veren evonode’un Platform hakkında şu anda söyledikleri."
 
 msgid "What the evonodes report about the chain right now."
 msgstr "Evonode’ların şu anda zincir hakkında bildirdikleri."

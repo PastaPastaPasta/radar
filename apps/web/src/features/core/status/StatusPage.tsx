@@ -6,6 +6,7 @@ import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { LiveDot } from '@/ui'
 import { BudgetCard } from './BudgetCard'
 import { CoreCard } from './CoreCard'
+import { PlatformCard } from './PlatformCard'
 import { useProbes } from './probes'
 import { overallState, sourceRows } from './source-rows'
 import { SourcesCard } from './SourcesCard'
@@ -20,6 +21,7 @@ export function StatusPage() {
   const tip = useQuery(statusQueries.tip(net))
   const chainLock = useQuery(statusQueries.chainLock(net))
   const chain = useQuery(statusQueries.chain(net))
+  const platform = useQuery(statusQueries.platform(net))
   const probes = useProbes(net)
 
   const decentralized = useDecentralizedOnly()
@@ -55,6 +57,7 @@ export function StatusPage() {
       </p>
 
       <CoreCard tip={tip} chainLock={chainLock} chain={chain} />
+      <PlatformCard status={platform} coreTip={tip} />
       <SourcesCard rows={rows} probes={probes} />
       <BudgetCard health={rows.find((r) => r.source === 'dapi')?.health} />
     </article>

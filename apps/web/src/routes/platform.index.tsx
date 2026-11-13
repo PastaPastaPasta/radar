@@ -29,5 +29,10 @@ export const Route = createFileRoute('/platform/')({
   },
   loaderDeps: ({ search }) => search,
   loader: routePrefetch('p-home', 'platformHomePrefetch'),
-  component: PlatformHomePage,
+  component: PlatformHomeRoute,
 })
+
+function PlatformHomeRoute() {
+  const { range, rich } = Route.useSearch()
+  return <PlatformHomePage range={range} rich={rich} />
+}
