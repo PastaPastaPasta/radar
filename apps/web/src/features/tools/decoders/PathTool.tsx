@@ -110,7 +110,9 @@ export function PathTool({ preset }: { preset: string | undefined }) {
                 </option>
               ))}
             </select>
-            {chosen ? <p className="text-sm text-[var(--dh-ink-2)]">{i18n._(chosen.about)}</p> : null}
+            {chosen ? (
+              <p className="text-sm text-[var(--dh-ink-2)]">{i18n._(chosen.about)}</p>
+            ) : null}
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="grid gap-1">

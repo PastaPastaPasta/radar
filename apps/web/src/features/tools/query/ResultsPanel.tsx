@@ -214,7 +214,9 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
         ) : null}
         {result.kind === 'avg' ? (
           <p className="sr-only">
-            {result.groups.map((g) => `${g.key || t`All documents`}: ${formatAverage(g.sum, g.count)}`).join('; ')}
+            {result.groups
+              .map((g) => `${g.key || t`All documents`}: ${formatAverage(g.sum, g.count)}`)
+              .join('; ')}
           </p>
         ) : null}
         <details>
