@@ -122,10 +122,10 @@ const samples: Sample[] = [
     result: { name: /Core blocks on October 1, 2026/, href: '/blocks?date=2026-10-01' },
   },
   {
-    label: 'a name, not offered as a guess while its page is unfinished',
+    label: 'a name typed with capitals, offered as its name page',
     q: 'Pshenmic.dash',
     looksLike: /text: a contract or token name/,
-    withheld: /pshenmic\.dash/,
+    result: { name: /pshenmic\.dash/, href: '/name/pshenmic' },
   },
 ]
 
