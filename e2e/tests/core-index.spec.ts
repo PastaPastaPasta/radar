@@ -571,12 +571,9 @@ test.describe('charts', () => {
   test('network internals: chain state, mempool pressure, versions and peers @HY-12', async ({
     page,
   }) => {
-    await page.goto('/charts')
-    await page
-      .getByRole('navigation', { name: 'Sections' })
-      .getByRole('link', { name: 'Network internals' })
-      .click()
-    await expect(page).toHaveURL(/tab=internals/)
+    await page.goto('/status')
+    await page.getByRole('link', { name: /^Network internals: peers/ }).click()
+    await expect(page).toHaveURL(/\/internals$/)
     await expect(page.locator('[data-internals-chain]')).toContainText('Chain size')
     if ((page.viewportSize()?.width ?? 1000) <= 640) {
       await settled(page)
@@ -729,7 +726,7 @@ test.describe('phone layout', () => {
     '/mempool',
     '/rich-list',
     '/charts',
-    '/charts?tab=internals',
+    '/internals',
     '/governance',
     `/governance/${PROPOSAL}`,
   ]) {

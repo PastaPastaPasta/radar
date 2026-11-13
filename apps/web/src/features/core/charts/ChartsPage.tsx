@@ -6,8 +6,7 @@ import { stampOf } from '@/data/envelope'
 import { useNavigate } from '@tanstack/react-router'
 import { useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, Chart, Empty, SegFilter, Stat, Tabs, useUnits } from '@/ui'
-import { NetworkInternals } from '../network/NetworkInternals'
+import { Amount, Card, Chart, Empty, SegFilter, Stat, useUnits } from '@/ui'
 import { Difficulty } from '../hy-shared/Difficulty'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState } from '../hy-shared/infinite-list'
@@ -15,8 +14,6 @@ import { PageFrame } from '../hy-shared/PageFrame'
 import { chartQueries } from './queries'
 import { buildOption, formatHashrate, METRICS, points, type MetricId } from './options'
 import { DEFAULT_RANGE, RANGES, type Range } from './ranges'
-
-export type ChartsTab = 'charts' | 'internals'
 
 const ORDER: MetricId[] = [
   'hashrate',
@@ -27,13 +24,7 @@ const ORDER: MetricId[] = [
   'credit-pool',
 ]
 
-export function ChartsPage({
-  range = DEFAULT_RANGE,
-  tab = 'charts',
-}: {
-  range?: Range
-  tab?: ChartsTab
-}) {
+export function ChartsPage({ range = DEFAULT_RANGE }: { range?: Range }) {
   const { t } = useLingui()
   return (
     <PageFrame
@@ -42,23 +33,8 @@ export function ChartsPage({
       lede={t`How the Core chain is doing: mining, transactions, supply and the state it carries.`}
     >
       <HyphenGate>
-        <Tabs
-          layer="core"
-          tabs={[
-            { id: 'charts', label: t`Charts` },
-            { id: 'internals', label: t`Network internals` },
-          ]}
-          value={tab}
-          to={(id) => ({
-            to: '/charts',
-            search: ((prev: Record<string, unknown>) => ({
-              ...prev,
-              tab: id === 'charts' ? undefined : id,
-            })) as never,
-          })}
-        />
         <StaleIndexNotice />
-        {tab === 'internals' ? <NetworkInternals /> : <ChartGrid range={range} />}
+        <ChartGrid range={range} />
       </HyphenGate>
     </PageFrame>
   )

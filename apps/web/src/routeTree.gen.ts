@@ -21,6 +21,7 @@ import { Route as ContractsRouteImport } from './routes/contracts'
 import { Route as CreditsRouteImport } from './routes/credits'
 import { Route as EpochsRouteImport } from './routes/epochs'
 import { Route as IdentitiesRouteImport } from './routes/identities'
+import { Route as InternalsRouteImport } from './routes/internals'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as MasternodesRouteImport } from './routes/masternodes'
 import { Route as MempoolRouteImport } from './routes/mempool'
@@ -131,6 +132,11 @@ const EpochsRoute = EpochsRouteImport.update({
 const IdentitiesRoute = IdentitiesRouteImport.update({
   id: '/identities',
   path: '/identities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalsRoute = InternalsRouteImport.update({
+  id: '/internals',
+  path: '/internals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -402,6 +408,7 @@ export interface FileRoutesByFullPath {
   '/credits': typeof CreditsRoute
   '/epochs': typeof EpochsRoute
   '/identities': typeof IdentitiesRoute
+  '/internals': typeof InternalsRoute
   '/map': typeof MapRoute
   '/masternodes': typeof MasternodesRoute
   '/mempool': typeof MempoolRoute
@@ -467,6 +474,7 @@ export interface FileRoutesByTo {
   '/credits': typeof CreditsRoute
   '/epochs': typeof EpochsRoute
   '/identities': typeof IdentitiesRoute
+  '/internals': typeof InternalsRoute
   '/map': typeof MapRoute
   '/masternodes': typeof MasternodesRoute
   '/mempool': typeof MempoolRoute
@@ -533,6 +541,7 @@ export interface FileRoutesById {
   '/credits': typeof CreditsRoute
   '/epochs': typeof EpochsRoute
   '/identities': typeof IdentitiesRoute
+  '/internals': typeof InternalsRoute
   '/map': typeof MapRoute
   '/masternodes': typeof MasternodesRoute
   '/mempool': typeof MempoolRoute
@@ -600,6 +609,7 @@ export interface FileRouteTypes {
     | '/credits'
     | '/epochs'
     | '/identities'
+    | '/internals'
     | '/map'
     | '/masternodes'
     | '/mempool'
@@ -665,6 +675,7 @@ export interface FileRouteTypes {
     | '/credits'
     | '/epochs'
     | '/identities'
+    | '/internals'
     | '/map'
     | '/masternodes'
     | '/mempool'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/credits'
     | '/epochs'
     | '/identities'
+    | '/internals'
     | '/map'
     | '/masternodes'
     | '/mempool'
@@ -796,6 +808,7 @@ export interface RootRouteChildren {
   CreditsRoute: typeof CreditsRoute
   EpochsRoute: typeof EpochsRoute
   IdentitiesRoute: typeof IdentitiesRoute
+  InternalsRoute: typeof InternalsRoute
   MapRoute: typeof MapRoute
   MasternodesRoute: typeof MasternodesRoute
   MempoolRoute: typeof MempoolRoute
@@ -933,6 +946,13 @@ declare module '@tanstack/react-router' {
       path: '/identities'
       fullPath: '/identities'
       preLoaderRoute: typeof IdentitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internals': {
+      id: '/internals'
+      path: '/internals'
+      fullPath: '/internals'
+      preLoaderRoute: typeof InternalsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -1308,6 +1328,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreditsRoute: CreditsRoute,
   EpochsRoute: EpochsRoute,
   IdentitiesRoute: IdentitiesRoute,
+  InternalsRoute: InternalsRoute,
   MapRoute: MapRoute,
   MasternodesRoute: MasternodesRoute,
   MempoolRoute: MempoolRoute,

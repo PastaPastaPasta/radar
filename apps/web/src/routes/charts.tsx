@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
+import { throwRedirect } from '@/app/redirect'
 import { prefetchForRoute, prefetchItem, routeNetwork } from '@/data/query'
 import { ChartsPage } from '@/features/core'
 import { isDevnet } from '@/lib/network'
@@ -11,6 +12,10 @@ const chartsSearch = z.object({
 
 export const Route = createFileRoute('/charts')({
   validateSearch: chartsSearch,
+  beforeLoad: ({ search }) => {
+    if (search.tab !== 'internals') return
+    throwRedirect({ to: '/internals', search: { range: search.range } }, search)
+  },
   loaderDeps: ({ search }) => ({ network: search.network, net: search.net }),
   loader: async ({ context, deps, preload }) => {
     const net = routeNetwork(deps)
@@ -27,6 +32,6 @@ export const Route = createFileRoute('/charts')({
 })
 
 function ChartsRoute() {
-  const { range, tab } = Route.useSearch()
-  return <ChartsPage range={range} tab={tab} />
+  const { range } = Route.useSearch()
+  return <ChartsPage range={range} />
 }
