@@ -7,10 +7,10 @@ import { coreQueries } from '@/data/core/queries'
 import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { hyQueries } from '@/data/hyphen/queries'
-import { useDocumentTitle, useFollowTip, useNetwork } from '@/features/entity'
+import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
-
+import { useFollowTip } from '../follow-tip'
 import {
   Amount,
   Badge,

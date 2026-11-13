@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedBlock, DecodedTx } from '@/data/core/types'
 import { stampOf, type Sourced } from '@/data/envelope'
-import { Entity, useDocumentTitle, useFollowTip, useNetwork } from '@/features/entity'
+import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
 import { formatBytes, formatInt, withUnit } from '@/lib/format'
 import {
@@ -28,7 +28,7 @@ import {
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { Difficulty } from '../hy-shared/Difficulty'
 import { CbTxRows } from '../tx/Payload'
-
+import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
 import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section } from './frame'

@@ -21,4 +21,3 @@ export {
 export type { SitePage, SiteSection } from './site-map'
 export { keepPreviousOnNetwork } from './keep-previous'
 export { HeaderTip } from './HeaderTip.lazy'
-export { useFollowTip } from './follow-tip'
