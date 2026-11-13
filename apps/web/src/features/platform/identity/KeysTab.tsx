@@ -11,7 +11,7 @@ import { Badge, Card, DataTable, Empty, Hash, Time } from '@/ui'
 import { loadState, type IdentityTabProps } from './common'
 import { isHashKeyType, keyPurposeName, keyTypeName, securityLevelName } from './ids'
 
-export function KeyDataCell({ keyDto }: { keyDto: IdentityKeyDetailDto }) {
+function KeyDataCell({ keyDto }: { keyDto: IdentityKeyDetailDto }) {
   const { t } = useLingui()
   const hex = bytesToHex(keyDto.data)
   return (
@@ -22,7 +22,7 @@ export function KeyDataCell({ keyDto }: { keyDto: IdentityKeyDetailDto }) {
   )
 }
 
-export function KeyBounds({ keyDto }: { keyDto: IdentityKeyDetailDto }) {
+function KeyBounds({ keyDto }: { keyDto: IdentityKeyDetailDto }) {
   const { t } = useLingui()
   const bounds = keyDto.contractBounds
   if (!bounds) return <span className="rx-dim">{t`None`}</span>

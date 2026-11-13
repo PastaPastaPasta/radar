@@ -11,6 +11,7 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeIdentity } from '@/data/pe/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
 import { IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import { nameLabel, pageTo } from '../identity/common'
 import { readIdentityInput } from '../identity/ids'
 import { formatInt } from '@/lib/format'
 import {
@@ -29,7 +30,6 @@ import {
   Unavailable,
   useListMode,
 } from '@/ui'
-import type { LinkProps } from '@tanstack/react-router'
 import {
   IDENTITY_TYPES,
   inDateRange,
@@ -188,15 +188,6 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
     if (id === 'dates') setFilters({ from: undefined, to: undefined })
     else setFilters({ [id]: undefined })
   }
-  const pageTo = (n: number): LinkProps =>
-    ({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        page: n === 1 ? undefined : n,
-      })) as never,
-    }) as LinkProps
-
   return (
     <div className="grid gap-4">
       <TableTools>
@@ -336,7 +327,7 @@ function FindIdentity() {
               open(input.id)
               return
             }
-            const name = value.replace(/\.dash$/i, '')
+            const name = nameLabel(value)
             if (!/^[A-Za-z0-9-]{3,63}$/.test(name)) {
               setProblem(t`Enter an identity ID or a name such as alice.dash.`)
               return

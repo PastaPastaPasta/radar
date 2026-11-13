@@ -3,7 +3,7 @@ import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { sdkQueries } from '@/data/sdk/queries'
 import {
   IdentityRef,
@@ -14,7 +14,7 @@ import {
   useIdentityName,
   useNetwork,
 } from '@/features/entity'
-import { isDevnet, type NetworkId } from '@/lib/network'
+import { isDevnet } from '@/lib/network'
 import { Empty, ErrorState, Hash, LinkOut, Skeleton, Tabs } from '@/ui'
 import { AdvancedTab } from './AdvancedTab'
 import { GroupsTab } from './GroupsTab'
@@ -34,8 +34,6 @@ export interface IdentityPageSearch {
   tokens?: string[] | undefined
 }
 
-const otherNetwork = (net: NetworkId): NetworkId => (net === 'mainnet' ? 'testnet' : 'mainnet')
-
 export function IdentityPage({ id: raw, search }: { id: string; search: IdentityPageSearch }) {
   const { t } = useLingui()
   const input = readIdentityInput(raw)
@@ -51,37 +49,28 @@ export function IdentityPage({ id: raw, search }: { id: string; search: Identity
     })
   }, [hexTarget, navigate])
 
+  const frame = (body: ReactNode) => (
+    <PageFrame
+      path="/identity/$id"
+      title={t`Identity`}
+      eyebrow={t`Platform`}
+      layer="platform"
+      share
+    >
+      {body}
+    </PageFrame>
+  )
   if (input.kind === 'invalid') {
-    return (
-      <PageFrame
-        path="/identity/$id"
-        title={t`Identity`}
-        eyebrow={t`Platform`}
-        layer="platform"
-        share
-      >
-        <Empty
-          kind="not-found"
-          title={t`That isn’t an identity ID.`}
-          body={t`An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters.`}
-          action={<PageLink to="/identity/lookup">{t`Find an identity by key hash`}</PageLink>}
-        />
-      </PageFrame>
+    return frame(
+      <Empty
+        kind="not-found"
+        title={t`That isn’t an identity ID.`}
+        body={t`An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters.`}
+        action={<PageLink to="/identity/lookup">{t`Find an identity by key hash`}</PageLink>}
+      />,
     )
   }
-  if (input.kind === 'hex') {
-    return (
-      <PageFrame
-        path="/identity/$id"
-        title={t`Identity`}
-        eyebrow={t`Platform`}
-        layer="platform"
-        share
-      >
-        <Skeleton shape="block" />
-      </PageFrame>
-    )
-  }
+  if (input.kind === 'hex') return frame(<Skeleton shape="block" />)
   return <IdentityView id={input.id} search={search} />
 }
 
@@ -95,7 +84,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
   }, [net, id])
 
   const missing = exists.data !== undefined && exists.data.data === null
-  const other = otherNetwork(net)
+  const other = net === 'mainnet' ? 'testnet' : 'mainnet'
 
   return (
     <PageFrame

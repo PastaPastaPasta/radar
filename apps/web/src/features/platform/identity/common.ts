@@ -1,12 +1,8 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { LoadState } from '@/ui'
 
 /** A card's load state for a plain query. */
-export function loadState(query: {
-  isPending: boolean
-  isError: boolean
-  fetchStatus?: string
-}): LoadState {
+export function loadState(query: { isPending: boolean; isError: boolean }): LoadState {
   return query.isPending ? 'loading' : query.isError ? 'error' : 'ready'
 }
 
@@ -29,6 +25,16 @@ export function peChildQuery(page: number, extra: Record<string, string | undefi
   for (const [k, v] of Object.entries(extra)) if (v) q[k] = v
   return q
 }
+
+/** A pager link to page `n` of this page's list, keeping the other search parameters. */
+export const pageTo = (n: number): LinkProps =>
+  ({
+    to: '.',
+    search: ((prev: Record<string, unknown>) => ({
+      ...prev,
+      page: n === 1 ? undefined : n,
+    })) as never,
+  }) as LinkProps
 
 /** Changes this page's search parameters, keeping the others (and the network and mode). */
 export function useSetSearch() {

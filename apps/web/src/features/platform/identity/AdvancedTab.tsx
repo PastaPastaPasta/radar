@@ -5,8 +5,8 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, DataTable, Empty, KeyValue } from '@/ui'
-import { loadState, useSetSearch, type IdentityTabProps } from './common'
-import { ContractInput } from './GroupsTab'
+import { loadState, type IdentityTabProps } from './common'
+import { ContractForm } from './IdForm'
 import { useKeyColumns } from './KeysTab'
 
 export function AdvancedTab({
@@ -15,7 +15,6 @@ export function AdvancedTab({
 }: IdentityTabProps & { contract?: string | undefined }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const setSearch = useSetSearch()
   const columns = useKeyColumns()
   const args = { id, contractId: contract ?? '' }
   const nonce = useQuery({
@@ -33,14 +32,7 @@ export function AdvancedTab({
       id="identity-advanced"
       subtitle={t`This identity’s nonce for a contract and the keys bound to it.`}
     >
-      <ContractInput
-        key={contract ?? ''}
-        initial={contract}
-        label={t`Contract ID`}
-        onSubmit={(c) => {
-          setSearch({ contract: c })
-        }}
-      />
+      <ContractForm contract={contract} />
       {contract === undefined ? (
         <Empty kind="none-yet" title={t`Enter a contract ID to see its nonce and keys.`} />
       ) : (

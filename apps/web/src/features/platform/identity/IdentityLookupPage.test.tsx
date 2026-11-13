@@ -10,7 +10,7 @@ const TESTNET_PKH = '7dc0c939f8dcc2775a4069776774c1b623eb1498'
 
 afterEach(() => vi.restoreAllMocks())
 
-const asked = (call: ReturnType<typeof vi.spyOn>) => call.mock.calls.map((c) => c[1])
+const asked = (call: { mock: { calls: unknown[][] } }) => call.mock.calls.map((c) => c[1])
 
 describe('Identity lookup by key hash @NX-17', () => {
   it('explains an empty, short and non-hex hash before asking Platform @NX-17', async () => {

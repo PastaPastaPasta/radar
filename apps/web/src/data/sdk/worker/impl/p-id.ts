@@ -102,9 +102,13 @@ const hexOf = (data: string | Uint8Array): Uint8Array => {
   return bytes
 }
 
-const BOUNDS = new Set<ContractBoundsDto['type']>(['singleContract', 'documentType', 'contractGroup'])
+const BOUNDS = new Set<ContractBoundsDto['type']>([
+  'singleContract',
+  'documentType',
+  'contractGroup',
+])
 
-export function keyDetailDto(key: KeyLike): IdentityKeyDetailDto {
+function keyDetailDto(key: KeyLike): IdentityKeyDetailDto {
   const out: IdentityKeyDetailDto = {
     id: key.keyId,
     type: key.keyTypeNumber,
@@ -113,7 +117,8 @@ export function keyDetailDto(key: KeyLike): IdentityKeyDetailDto {
     readOnly: key.isReadOnly,
     data: hexOf(key.data),
   }
-  if (key.disabledAt !== undefined && key.disabledAt !== null) out.disabledAt = Number(key.disabledAt)
+  if (key.disabledAt !== undefined && key.disabledAt !== null)
+    out.disabledAt = Number(key.disabledAt)
   if (key.expiresAt !== undefined && key.expiresAt !== null) out.expiresAt = Number(key.expiresAt)
   const bounds = key.contractBounds?.toJSON()
   if (bounds && BOUNDS.has(bounds.$type as ContractBoundsDto['type'])) {
@@ -126,7 +131,7 @@ export function keyDetailDto(key: KeyLike): IdentityKeyDetailDto {
   return out
 }
 
-export function identityGroupDto(group: IdentityGroupLike): IdentityGroupDto {
+function identityGroupDto(group: IdentityGroupLike): IdentityGroupDto {
   return {
     contractId: group.dataContractId,
     position: group.groupContractPosition,
@@ -142,7 +147,7 @@ function choiceDto(raw: { $type?: string; identity?: string } | undefined): Vote
   return raw?.$type === 'lock' ? { type: 'lock' } : { type: 'abstain' }
 }
 
-export function identityVoteDto(voteId: IdLike, vote: ResourceVoteLike): IdentityVoteDto {
+function identityVoteDto(voteId: IdLike, vote: ResourceVoteLike): IdentityVoteDto {
   const json = vote.toJSON()
   const poll = json.votePoll ?? {}
   return {

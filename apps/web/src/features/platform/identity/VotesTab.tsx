@@ -11,7 +11,7 @@ import { loadState, type IdentityTabProps } from './common'
 import { identityVotesQuery } from './queries'
 
 /** A DPNS contest is named by its label; any other contested resource by its last index value, with where to look it up. */
-export function contestOf(v: IdentityVoteDto): { id: string; search?: Record<string, string> } {
+function contestOf(v: IdentityVoteDto): { id: string; search?: Record<string, string> } {
   const last = String(v.indexValues[v.indexValues.length - 1] ?? '')
   const dpns = v.contractId === systemContract('dpns').id && v.documentTypeName === 'domain'
   return dpns

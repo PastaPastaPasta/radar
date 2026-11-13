@@ -26,14 +26,14 @@ export function readKeyHash(raw: string): KeyHashInput {
   return { ok: false, reason: /^[0-9a-fA-F]*$/.test(text) ? 'length' : 'chars' }
 }
 
-export const KEY_TYPES = [
+const KEY_TYPES = [
   'ECDSA_SECP256K1',
   'BLS12_381',
   'ECDSA_HASH160',
   'BIP13_SCRIPT_HASH',
   'EDDSA_25519_HASH160',
 ] as const
-export const KEY_PURPOSES = [
+const KEY_PURPOSES = [
   'AUTHENTICATION',
   'ENCRYPTION',
   'DECRYPTION',
@@ -42,7 +42,7 @@ export const KEY_PURPOSES = [
   'VOTING',
   'OWNER',
 ] as const
-export const SECURITY_LEVELS = ['MASTER', 'CRITICAL', 'HIGH', 'MEDIUM'] as const
+const SECURITY_LEVELS = ['MASTER', 'CRITICAL', 'HIGH', 'MEDIUM'] as const
 
 /** Key types whose data is already a 20-byte hash. */
 export const isHashKeyType = (type: number): boolean => type === 2 || type === 4
@@ -65,11 +65,3 @@ export const IDENTITY_TABS = [
   'transfers',
 ] as const
 export type IdentityTab = (typeof IDENTITY_TABS)[number]
-
-/** The tabs read from PE's index. */
-export const INDEXED_TABS: readonly IdentityTab[] = [
-  'transactions',
-  'contracts',
-  'documents',
-  'transfers',
-]

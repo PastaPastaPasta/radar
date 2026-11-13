@@ -3,7 +3,7 @@ import { dataClass, viewKeys } from '@/data/query'
 import { sdk } from '@/data/sdk'
 import type { NetworkId } from '@/lib/network'
 
-export const VOTES_PAGE = 25
+const VOTES_PAGE = 25
 
 /** Contested-resource votes the identity cast, a page at a time; each page starts after the last vote of the one before. */
 export const identityVotesQuery = (net: NetworkId, identityId: string) =>

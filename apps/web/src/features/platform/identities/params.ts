@@ -4,10 +4,8 @@ export {
   IDENTITY_TYPES,
   parseIdentitySort,
   peIdentitiesQuery,
-  SORTS,
   type IdentitiesFilters,
   type NumericRange,
-  type SortId,
 } from '@/data/query/prefetch/p-id'
 import type { NumericRange } from '@/data/query/prefetch/p-id'
 

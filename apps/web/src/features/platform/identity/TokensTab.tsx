@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
@@ -12,6 +12,7 @@ import { formatAmountText } from '@/lib/units'
 import { wellKnownTokens } from '@/lib/well-known'
 import { Amount, Badge, Card, DataTable, Empty, Unavailable } from '@/ui'
 import { loadState, peChildQuery, useSetSearch, type IdentityTabProps } from './common'
+import { IdForm } from './IdForm'
 
 interface TokenRow {
   id: string
@@ -26,8 +27,6 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
   const net = useNetwork()
   const decentralized = useDecentralizedOnly()
   const setSearch = useSetSearch()
-  const [draft, setDraft] = useState('')
-  const [problem, setProblem] = useState<string>()
 
   const rows = useMemo<TokenRow[]>(() => {
     const known = wellKnownTokens(net)
@@ -158,42 +157,15 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
           state="ready"
           empty={<Empty kind="none-yet" title={t`No tokens to check.`} />}
         />
-        <form
-          className="flex flex-wrap items-center gap-2"
-          onSubmit={(e) => {
-            e.preventDefault()
-            const value = draft.trim()
-            if (!isPlatformId(value)) {
-              setProblem(t`That isn’t a token ID: it is 43 or 44 base58 characters.`)
-              return
-            }
-            setProblem(undefined)
-            setDraft('')
+        <IdForm
+          label={t`Add a token ID`}
+          submit={t`Add`}
+          invalid={t`That isn’t a token ID: it is 43 or 44 base58 characters.`}
+          clearOnSubmit
+          onSubmit={(value) => {
             if (!rows.some((r) => r.id === value)) setSearch({ tokens: [...tokens, value].sort() })
           }}
-        >
-          <label className="flex flex-wrap items-center gap-2">
-            <span>{t`Add a token ID`}</span>
-            <input
-              className="dh-input dh-input--sm"
-              value={draft}
-              spellCheck={false}
-              autoComplete="off"
-              aria-invalid={problem ? true : undefined}
-              onChange={(e) => {
-                setDraft(e.target.value)
-              }}
-            />
-          </label>
-          <button type="submit" className="dh-btn dh-btn--sm">
-            {t`Add`}
-          </button>
-          {problem ? (
-            <span role="alert" className="text-bad">
-              {problem}
-            </span>
-          ) : null}
-        </form>
+        />
       </Card>
       {decentralized ? (
         <Unavailable

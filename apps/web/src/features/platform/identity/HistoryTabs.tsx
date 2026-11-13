@@ -1,6 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import type { LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
@@ -9,18 +8,19 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract, PeDocument, PeTransfer } from '@/data/pe/schemas'
 import { Entity, IdentityRef, TransitionTable, useNetwork } from '@/features/entity'
 import { Amount, Badge, Card, DataTable, Empty, Time, Unavailable } from '@/ui'
-import { loadState, PE_PAGE, peChildQuery, useSetSearch, type IdentityTabProps } from './common'
+import {
+  loadState,
+  PE_PAGE,
+  pageTo,
+  peChildQuery,
+  useSetSearch,
+  type IdentityTabProps,
+} from './common'
 
 type Tab = 'transactions' | 'contracts' | 'documents' | 'transfers'
 
-const pageTo = (n: number): LinkProps =>
-  ({
-    to: '.',
-    search: ((prev: Record<string, unknown>) => ({
-      ...prev,
-      page: n === 1 ? undefined : n,
-    })) as never,
-  }) as LinkProps
+const pePaging = (page: number, total: number | undefined) =>
+  ({ kind: 'page', page, limit: PE_PAGE, total, to: pageTo }) as const
 
 export function HistoryTab({
   id,
@@ -68,7 +68,7 @@ function Transactions({ id, page }: { id: string; page: number }) {
         onRetry={() => void q.refetch()}
         caption={t`Transitions`}
         columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
-        paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
+        paging={pePaging(page, q.data?.data.total)}
         empty={<Empty kind="none-yet" title={t`This identity has sent no transitions.`} />}
       />
     </Card>
@@ -130,7 +130,7 @@ function Contracts({ id, page }: { id: string; page: number }) {
         state={loadState(q)}
         error={q.error}
         onRetry={() => void q.refetch()}
-        paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
+        paging={pePaging(page, q.data?.data.total)}
         empty={<Empty kind="none-yet" title={t`This identity has created no contracts.`} />}
       />
     </Card>
@@ -246,7 +246,7 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
         state={loadState(q)}
         error={q.error}
         onRetry={() => void q.refetch()}
-        paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
+        paging={pePaging(page, q.data?.data.total)}
         empty={
           <Empty
             kind="none-yet"
@@ -317,7 +317,7 @@ function Transfers({ id, page }: { id: string; page: number }) {
         state={loadState(q)}
         error={q.error}
         onRetry={() => void q.refetch()}
-        paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
+        paging={pePaging(page, q.data?.data.total)}
         empty={<Empty kind="none-yet" title={t`This identity has made no credit transfers.`} />}
       />
     </Card>

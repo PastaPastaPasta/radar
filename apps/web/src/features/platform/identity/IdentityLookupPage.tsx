@@ -23,15 +23,6 @@ export function IdentityLookupPage({
   const [draft, setDraft] = useState(pkh ?? '')
   const [problem, setProblem] = useState<string>()
 
-  const explain = (read: ReturnType<typeof readKeyHash>): string | undefined =>
-    read.ok
-      ? undefined
-      : read.reason === 'empty'
-        ? t`Enter a public key hash: 40 hexadecimal characters.`
-        : read.reason === 'length'
-          ? t`A public key hash is exactly 40 hexadecimal characters (20 bytes).`
-          : t`A public key hash holds only the characters 0–9 and a–f.`
-
   const submit = (value: string) => {
     const read = readKeyHash(value)
     if (read.ok) {
@@ -39,7 +30,13 @@ export function IdentityLookupPage({
       setSearch({ pkh: read.pkh, after: undefined })
       return
     }
-    setProblem(explain(read))
+    setProblem(
+      read.reason === 'empty'
+        ? t`Enter a public key hash: 40 hexadecimal characters.`
+        : read.reason === 'length'
+          ? t`A public key hash is exactly 40 hexadecimal characters (20 bytes).`
+          : t`A public key hash holds only the characters 0–9 and a–f.`,
+    )
   }
 
   return (
