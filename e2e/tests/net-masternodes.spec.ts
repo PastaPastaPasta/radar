@@ -170,7 +170,7 @@ test.describe('masternode list', () => {
     await expect(page).toHaveURL(/country=DE/)
     await expect(matches(page)).toContainText(`${MAINNET.germany} match`)
     await expect(matches(page)).toContainText('Country: DE')
-    await toggle(page, phone ? 'Filters' : 'Reachability')
+    if (!phone) await toggle(page, 'Reachability')
     await panel.getByRole('radio', { name: /^No answer/ }).click()
     await expect(page).toHaveURL(/reach=unreachable/)
     await expect(matches(page)).not.toContainText(`${MAINNET.germany} match`)
