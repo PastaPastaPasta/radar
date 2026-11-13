@@ -282,10 +282,10 @@ const SOURCES: Record<OgKind, Source> = {
   quorum: {
     id: HEX64,
     fetchUrl: (net) => `${PE[net]}/quorums`,
-    pick: (id, b) => {
-      const list: unknown[] = Array.isArray(b) ? b : resultSet(b)
-      return list.map(rec).find((q) => str(q.quorumHash)?.toLowerCase() === id.toLowerCase())
-    },
+    pick: (id, b) =>
+      resultSet(b)
+        .map(rec)
+        .find((q) => str(q.quorumHash)?.toLowerCase() === id.toLowerCase()),
     describe: (id, b) => ({
       title: `Quorum ${short(id)}`,
       description:

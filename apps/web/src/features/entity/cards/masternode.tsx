@@ -15,11 +15,12 @@ export function MasternodeHoverCard({ id }: { id: string }) {
   const protx = id.toLowerCase()
   const query = useQuery({ ...mnRowsQuery(net), enabled: allowed })
   const row = query.data?.data.rows.find((r) => r.protx === protx)
+  const kind = row?.type === 'evo' ? 'evonode' : 'masternode'
   const common = {
     layer: 'network',
     glyph: <LayerGlyph layer="network" icon="node" />,
-    kind: row?.type === 'evo' ? t`Evonode` : t`Masternode`,
-    href: entityHref(row?.type === 'evo' ? 'evonode' : 'masternode', protx, net),
+    kind: kind === 'evonode' ? t`Evonode` : t`Masternode`,
+    href: entityHref(kind, protx, net),
   } as const
 
   if (!query.data && !allowed) return <BusyCard {...common} title={shortId(protx)} />
@@ -37,7 +38,7 @@ export function MasternodeHoverCard({ id }: { id: string }) {
   const crawl = row.crawl
   const stamps = [row.dapi, row.radar].filter((s): s is SourceStamp => s !== null)
   return (
-    <div data-hover-card={row.type === 'evo' ? 'evonode' : 'masternode'}>
+    <div data-hover-card={kind}>
       <HoverCardLayout
         {...common}
         title={shortId(protx)}

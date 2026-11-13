@@ -27,8 +27,6 @@ export async function fundedIdentityId(txid: string, index: number): Promise<str
 export interface FundedIdentity {
   index: number
   id: string
-  /** Whether Platform answered that this identity exists. */
-  exists: boolean
 }
 
 /**
@@ -50,7 +48,7 @@ export function useFundedIdentities(txid: string, outputCount: number) {
     queries: ids.map((id) => sdkBatchers.identityBalance.queryOptions(net, id)),
   })
   const found: FundedIdentity[] = ids.flatMap((id, index) =>
-    balances[index]?.data?.data == null ? [] : [{ index, id, exists: true }],
+    balances[index]?.data?.data == null ? [] : [{ index, id }],
   )
   const ready = count === 0 || (derived.isSuccess && balances.every((b) => !b.isPending))
   return { found, ready, source: balances.find((b) => b.data)?.data }

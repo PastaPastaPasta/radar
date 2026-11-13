@@ -41,14 +41,9 @@ export function registerEntityHoverCards(): void {
     'address',
     lazyCard(() => import('./cards/address').then((m) => m.AddressHoverCard)),
   )
-  registerHoverCard(
-    'masternode',
-    lazyCard(() => import('./cards/masternode').then((m) => m.MasternodeHoverCard)),
-  )
-  registerHoverCard(
-    'evonode',
-    lazyCard(() => import('./cards/masternode').then((m) => m.MasternodeHoverCard)),
-  )
+  const masternode = lazyCard(() => import('./cards/masternode').then((m) => m.MasternodeHoverCard))
+  registerHoverCard('masternode', masternode)
+  registerHoverCard('evonode', masternode)
   registerHoverCard(
     'identity',
     lazyCard(() => import('./cards/identity').then((m) => m.IdentityHoverCard)),
