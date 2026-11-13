@@ -1,0 +1,1330 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: uk\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+msgid "· change"
+msgstr "· змінити"
+
+#. placeholder {0}: tx.inputs.length
+msgid "{0, plural, one {# input} other {# inputs}}"
+msgstr "{0, plural, one {# вхід} few {# входи} many {# входів} other {# входу}}"
+
+#. placeholder {0}: tx.outputs.length
+msgid "{0, plural, one {# output} other {# outputs}}"
+msgstr "{0, plural, one {# вихід} few {# виходи} many {# виходів} other {# виходу}}"
+
+#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
+msgid "{0} doesn’t cover devnets."
+msgstr "{0} не охоплює devnet."
+
+#. placeholder {0}: formatInt(n.value)
+msgid "{0} duffs"
+msgstr "{0} даффів"
+
+#. placeholder {0}: formatInt(inCount)
+#. placeholder {0}: formatInt(inputs.length)
+#. placeholder {0}: formatInt(tx.inputs.length)
+msgid "{0} inputs"
+msgstr "Входів: {0}"
+
+#. placeholder {0}: formatInt(unloaded)
+msgid "{0} inputs not loaded"
+msgstr "Входів не завантажено: {0}"
+
+#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
+#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {1}: formatInt(members)
+msgid "{0} of {1}"
+msgstr "{0} з {1}"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "{0} outputs"
+msgstr "Виходів: {0}"
+
+#. placeholder {0}: sectionLabel(section)
+msgid "{0} pages"
+msgstr "Сторінки розділу «{0}»"
+
+#. placeholder {0}: formatInt(list(shared.shares).length)
+#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
+msgid "{0} shares, {1} blocks of early-leave penalty"
+msgstr "Часток: {0}, штрафних блоків за ранній вихід: {1}"
+
+#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} to other addresses"
+msgstr "{0} на інші адреси"
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
+
+msgid "{count, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{count, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
+
+msgid "{feeRate} duffs a byte"
+msgstr "{feeRate} дафф за байт"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "{feeRate} дафф за байт: вона не витрачає монет"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} не бачив цю адресу в цій мережі."
+
+msgid "{n} more inputs"
+msgstr "Ще входів: {n}"
+
+msgid "{n} more outputs"
+msgstr "Ще виходів: {n}"
+
+msgid "{name} (reason {reason})"
+msgstr "{name} (причина {reason})"
+
+msgid "A contract’s groups with position, threshold and members."
+msgstr "Групи контракту: позиція, поріг і учасники."
+
+msgid "A Core address’s balance, history and unspent outputs, with new-activity notices."
+msgstr "Баланс, історія та невитрачені виходи адреси Core зі сповіщеннями про нову активність."
+
+msgid "A Platform address’s balance and nonce, proof-checked, and its transitions."
+msgstr "Баланс і nonce адреси Platform, перевірені за доказом, та її переходи."
+
+msgid "A quorum signals that masternodes are ready for a protocol upgrade."
+msgstr "Кворум сигналізує, що мастерноди готові до оновлення протоколу."
+
+msgid "A shareholder of a shared masternode changes where their reward is paid."
+msgstr "Співвласник спільної мастерноди змінює адресу, на яку виплачується його винагорода."
+
+msgid "About"
+msgstr "Про проєкт"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "Активні спірні імена з часом завершення, голосами та статусом."
+
+msgid "address"
+msgstr "адреса"
+
+msgid "Address"
+msgstr "Адреса"
+
+msgid "after it is mined"
+msgstr "після видобутку"
+
+msgid "Amount"
+msgstr "Сума"
+
+#. placeholder {0}: formatInt(partial.loaded)
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "Суми завантажуються для перших {0} входів. Кожна попередня транзакція — це окремий запит."
+
+msgid "Amounts loaded"
+msgstr "Завантажено сум"
+
+#. placeholder {0}: formatInt(spend.asOf)
+msgid "as of block {0}"
+msgstr "станом на блок {0}"
+
+msgid "Asking Hyphen."
+msgstr "Запитуємо Hyphen."
+
+msgid "Asset lock"
+msgstr "Блокування активів"
+
+msgid "Asset unlock"
+msgstr "Розблокування активів"
+
+msgid "Asset unlocks root"
+msgstr "Корінь розблокувань активів"
+
+msgid "Back to Mainnet"
+msgstr "Назад до основної мережі"
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "Balances for the identities you choose, and the holders Platform Explorer has indexed."
+msgstr "Баланси вибраних вами ідентичностей і власників, яких проіндексував Platform Explorer."
+
+msgid "Best ChainLock"
+msgstr "Найкращий ChainLock"
+
+msgid "block"
+msgstr "блок"
+
+msgid "Block"
+msgstr "Блок"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "block {0}"
+msgstr "блок {0}"
+
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(tx.height)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Block height"
+msgstr "Висота блока"
+
+msgid "Block reward, masternode and fee payments"
+msgstr "Нагорода за блок, виплати мастернодам і комісії"
+
+msgid "Blocks"
+msgstr "Блоки"
+
+msgid "Browse a contract’s documents of one type, filtered by its indices."
+msgstr "Перегляд документів одного типу з контракту з фільтрацією за його індексами."
+
+msgid "Budget proposals with vote counts, status and the next superblock."
+msgstr "Бюджетні пропозиції з кількістю голосів, статусом і найближчим суперблоком."
+
+msgid "bytes"
+msgstr "байт"
+
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "Розмір ланцюга, навантаження мемпулу, швидкість транзакцій, версії вузлів, кількість мастернод і піри, з яких читає Hyphen."
+
+msgid "Chain state"
+msgstr "Стан ланцюга"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "ChainLock reported by one node"
+msgstr "ChainLock повідомлено одним вузлом"
+
+msgid "ChainLock signature"
+msgstr "Підпис ChainLock"
+
+msgid "ChainLocked"
+msgstr "ChainLocked"
+
+msgid "change"
+msgstr "решта"
+
+msgid "Change"
+msgstr "Решта"
+
+msgid "Change of keys"
+msgstr "Зміна ключів"
+
+msgid "Change to sender"
+msgstr "Решта відправнику"
+
+msgid "Changes"
+msgstr "Зміни"
+
+msgid "Charts"
+msgstr "Графіки"
+
+msgid "Check a signed message against a Core address, in your browser."
+msgstr "Перевірте підписане повідомлення за адресою Core прямо в браузері."
+
+msgid "Close"
+msgstr "Закрити"
+
+msgid "Close a dialog or the search"
+msgstr "Закрити діалог або пошук"
+
+msgid "Coinbase payload"
+msgstr "Корисне навантаження coinbase"
+
+msgid "Coinbase transactions pay none"
+msgstr "Транзакції coinbase їх не сплачують"
+
+msgid "Collateral"
+msgstr "Застава"
+
+msgid "Commits the block to the masternode list and the latest ChainLock."
+msgstr "Прив’язує блок до списку мастернод і останнього ChainLock."
+
+msgid "Compromised keys"
+msgstr "Скомпрометовані ключі"
+
+msgid "contest"
+msgstr "суперечка"
+
+msgid "contract"
+msgstr "контракт"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contracts"
+msgstr "Контракти"
+
+msgid "Copy link"
+msgstr "Копіювати посилання"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
+
+msgid "Core 24 activation"
+msgstr "Активація Core 24"
+
+msgid "Core address"
+msgstr "Адреса Core"
+
+msgid "Core block"
+msgstr "Блок Core"
+
+msgid "Core block height"
+msgstr "Висота блока Core"
+
+msgid "Core blocks"
+msgstr "Блоки Core"
+
+msgid "Core network metrics over time: transactions, fees, difficulty, supply and mining."
+msgstr "Показники мережі Core в часі: транзакції, комісії, складність, пропозиція та майнінг."
+
+msgid "Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status."
+msgstr "Вершина Core і ChainLock, висота та епоха Platform, мапа вузлів і підсумок перепису, найновіші блоки та переходи, стан оновлень."
+
+msgid "Core transaction"
+msgstr "Транзакція Core"
+
+msgid "Created"
+msgstr "Створено"
+
+msgid "Credit outputs"
+msgstr "Кредитні виходи"
+
+msgid "Credit pool"
+msgstr "Пул кредитів"
+
+msgid "Credit pool balance"
+msgstr "Баланс пулу кредитів"
+
+msgid "Credited on Platform"
+msgstr "Зараховано на Platform"
+
+msgid "Credits"
+msgstr "Кредити"
+
+msgid "Current Platform quorums with size, members and the last proposer."
+msgstr "Поточні кворуми Platform: розмір, учасники та останній пропонувач."
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI is busy. Open this page to load them."
+msgstr "DAPI зайнятий. Відкрийте цю сторінку, щоб їх завантажити."
+
+msgid "data"
+msgstr "дані"
+
+msgid "Data (OP_RETURN)"
+msgstr "Дані (OP_RETURN)"
+
+msgid "Data sources"
+msgstr "Джерела даних"
+
+msgid "Decentralized only"
+msgstr "Лише децентралізовано"
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "Лише децентралізовано: Radar читає лише вузли DAPI і Platform SDK і не звертається до розміщених сервісів. Відкрийте «Джерела», щоб побачити, що при цьому недоступне, або щоб вимкнути режим."
+
+msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
+msgstr "Розшифровка сирих байтів офлайн: транзакція, блок, ідентичність, контракт, документ або доказ."
+
+msgid "decoder"
+msgstr "декодер"
+
+msgid "Decoder"
+msgstr "Декодер"
+
+msgid "Decoders"
+msgstr "Декодери"
+
+msgid "Details"
+msgstr "Подробиці"
+
+msgid "document"
+msgstr "документ"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "document type"
+msgstr "тип документа"
+
+msgid "Documents"
+msgstr "Документи"
+
+msgid "Early-leave penalty"
+msgstr "Штраф за ранній вихід"
+
+msgid "epoch"
+msgstr "епоха"
+
+msgid "Epoch"
+msgstr "Епоха"
+
+msgid "Epochs"
+msgstr "Епохи"
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Усі бекенди, до яких може звертатися Radar, хто їх підтримує, і перемикач режиму «Лише децентралізовано»."
+
+msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
+msgstr "Усі джерела даних, які читає Radar, їхній стан і свіжість у цій мережі, а також бюджет запитів до DAPI."
+
+msgid "Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link."
+msgstr "Усі мастерноди та евоноди: статус, версія, розташування, аптайм і виплати. Фільтри, сортування та сторінки зберігаються в посиланні."
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "Кожен голос мастерноди: голосуючий, вибір, ресурс і час."
+
+msgid "Every Platform block with epoch, proposer, transactions and time, filterable."
+msgstr "Кожен блок Platform: епоха, пропонувач, транзакції та час; є фільтри."
+
+msgid "Every state transition with type, status, block, gas and owner, filterable."
+msgstr "Кожен перехід стану: тип, статус, блок, газ і власник; є фільтри."
+
+msgid "Evonode"
+msgstr "Евонода"
+
+msgid "Evonode (high-performance)"
+msgstr "Evonode (високопродуктивна)"
+
+msgid "Featured and indexed data contracts with owner, documents and tokens."
+msgstr "Вибрані та проіндексовані контракти даних: власник, документи й токени."
+
+msgid "Fee"
+msgstr "Комісія"
+
+msgid "Finality"
+msgstr "Фінальність"
+
+msgid "Find the identity that holds a public key, from its 40-character key hash."
+msgstr "Знайдіть ідентичність, якій належить відкритий ключ, за його 40-символьним хешем."
+
+msgid "finding where…"
+msgstr "шукаємо, де…"
+
+msgid "First seen"
+msgstr "Уперше помічено"
+
+msgid "first seen in the mempool"
+msgstr "уперше помічено в мемпулі"
+
+msgid "From"
+msgstr "Від"
+
+msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
+msgstr "Повні результати за будь-якою висотою, хешем, адресою, ProTx, IP, ідентичністю, контрактом, токеном, іменем чи епохою, згруповані за типом."
+
+msgid "Governance"
+msgstr "Управління"
+
+msgid "group"
+msgstr "група"
+
+msgid "Group"
+msgstr "Група"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "Hard-fork signal"
+msgstr "Сигнал хардфорку"
+
+msgid "Hash"
+msgstr "Хеш"
+
+msgid "Hide the table"
+msgstr "Сховати таблицю"
+
+msgid "Home"
+msgstr "Головна"
+
+msgid "How it settled"
+msgstr "Чим закінчилося"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Hyphen says it is spent but its history does not show which transaction spent it."
+msgstr "Hyphen повідомляє, що її витрачено, але в історії не видно, яка транзакція її витратила."
+
+#. placeholder {0}: formatInt(spend.behind ?? 0)
+msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
+msgstr "Індекс Hyphen відстає від ланцюга на {0} блоків, тому не може сказати, чи витрачено цей вихід відтоді."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "Ідентичності"
+
+msgid "Identities with balance, transactions and creation time; sort by balance or activity."
+msgstr "Ідентичності з балансом, транзакціями та часом створення; сортування за балансом або активністю."
+
+msgid "Identities, contracts, tokens and masternodes you saved. They stay in this browser."
+msgstr "Збережені вами ідентичності, контракти, токени та мастерноди. Вони залишаються в цьому браузері."
+
+msgid "identity"
+msgstr "ідентичність"
+
+msgid "Identity"
+msgstr "Ідентичність"
+
+msgid "Identity by key hash"
+msgstr "Ідентичність за хешем ключа"
+
+#. placeholder {0}: short(spend.by.txid)
+msgid "in {0}"
+msgstr "у {0}"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "In block {0}"
+msgstr "У блоці {0}"
+
+msgid "in the mempool"
+msgstr "у мемпулі"
+
+msgid "In the mempool"
+msgstr "У мемпулі"
+
+msgid "Inputs"
+msgstr "Входи"
+
+msgid "Inputs and outputs"
+msgstr "Входи та виходи"
+
+msgid "Inputs hash"
+msgstr "Хеш входів"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "InstantSend"
+msgstr "InstantSend"
+
+msgid "InstantSend lock"
+msgstr "Блокування InstantSend"
+
+msgid "InstantSend locked"
+msgstr "Заблоковано InstantSend"
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "Вона не витрачає монет і не створює виходів, тож малювати нічого. Те, що вона записує, міститься в її корисному навантаженні."
+
+msgid "Keyboard shortcuts"
+msgstr "Гарячі клавіші"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Language, units, time zone, connection options and custom devnets."
+msgstr "Мова, одиниці, часовий пояс, параметри підключення та власні devnet."
+
+msgid "Last seen"
+msgstr "Востаннє помічено"
+
+msgid "Link copied"
+msgstr "Посилання скопійовано"
+
+msgid "Link to one with"
+msgstr "Посилання на один із них:"
+
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "Завантажити решту сум: {0}"
+
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "Завантаження сум: {0} із {1} входів. Кожна попередня транзакція — це окремий запит."
+
+msgid "Loading inputs…"
+msgstr "Завантаження входів…"
+
+msgid "Locks Dash on Core to create credits on Platform."
+msgstr "Блокує Dash у Core, щоб створити кредити на Platform."
+
+msgid "Map"
+msgstr "Мапа"
+
+msgid "masternode"
+msgstr "мастернода"
+
+msgid "Masternode"
+msgstr "Мастернода"
+
+msgid "Masternode list root"
+msgstr "Корінь списку мастернод"
+
+msgid "Masternode registrar update"
+msgstr "Оновлення реєстратора мастерноди"
+
+msgid "Masternode registration"
+msgstr "Реєстрація мастерноди"
+
+msgid "Masternode revocation"
+msgstr "Відкликання мастерноди"
+
+msgid "Masternode service update"
+msgstr "Оновлення служби мастерноди"
+
+msgid "Masternode votes"
+msgstr "Голоси мастернод"
+
+msgid "Masternodes"
+msgstr "Мастерноди"
+
+msgid "Masternodes and other nodes on a world map, coloured by reachability, version or type."
+msgstr "Мастерноди й інші вузли на мапі світу, розфарбовані за доступністю, версією чи типом."
+
+msgid "masternodes locked its inputs; final from here"
+msgstr "Мастерноди заблокували його входи; відтепер остаточно"
+
+msgid "Mempool"
+msgstr "Мемпул"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "Час надходження до мемпулу не зберігається після майнінгу транзакції."
+
+msgid "Mined"
+msgstr "Видобуто"
+
+msgid "Mined for height"
+msgstr "Видобуто для висоти"
+
+msgid "Move through search results"
+msgstr "Переходити за результатами пошуку"
+
+msgid "Move through table rows"
+msgstr "Переходити за рядками таблиці"
+
+msgid "Moved"
+msgstr "Переміщено"
+
+msgid "name"
+msgstr "ім’я"
+
+msgid "Name"
+msgstr "Ім’я"
+
+msgid "Name contest"
+msgstr "Суперечка за ім’я"
+
+msgid "Name contests"
+msgstr "Суперечки за імена"
+
+msgid "Names"
+msgstr "Імена"
+
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "Назви відповідають визначенням Dash Core для кодів причин відкликання."
+
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "Потрібен індексатор: вимкнено в режимі «Лише децентралізовано»"
+
+msgid "Network"
+msgstr "Мережа"
+
+msgid "Network internals"
+msgstr "Внутрішня будова мережі"
+
+msgid "Network pulse"
+msgstr "Пульс мережі"
+
+msgid "New operator key"
+msgstr "Новий ключ оператора"
+
+msgid "New reward payout"
+msgstr "Нова виплата нагороди"
+
+msgid "New service address"
+msgstr "Нова службова адреса"
+
+msgid "New voting key"
+msgstr "Новий ключ голосування"
+
+msgid "Newly generated coins"
+msgstr "Щойно створені монети"
+
+msgid "No address"
+msgstr "Немає адреси"
+
+msgid "No block with this ID on this network."
+msgstr "У цій мережі немає блока з таким ID."
+
+msgid "No InstantSend lock was seen"
+msgstr "Блокування InstantSend не виявлено"
+
+msgid "No source can say whether this output is spent."
+msgstr "Жодне джерело не може сказати, чи витрачено цей вихід."
+
+msgid "No transaction with this ID on this network."
+msgstr "У цій мережі немає транзакції з таким ID."
+
+msgid "No value moves in this transaction"
+msgstr "У цій транзакції не переміщуються кошти"
+
+msgid "Nodes"
+msgstr "Вузли"
+
+msgid "None"
+msgstr "Немає"
+
+msgid "Not ChainLocked yet"
+msgstr "Ще без ChainLock"
+
+msgid "not in a block yet"
+msgstr "ще не в блоці"
+
+msgid "Not in this version"
+msgstr "Немає в цій версії"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "невідомо за цим джерелом: Hyphen повідомляє лише про блокування, які його вузол передав, поки Hyphen стежив за мережею"
+
+msgid "Not loaded"
+msgstr "Не завантажено"
+
+msgid "Not mined yet"
+msgstr "Ще не видобуто"
+
+msgid "Not specified"
+msgstr "Не вказано"
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "One contest: status, tally, contenders with prefunded balance and who voted."
+msgstr "Одна суперечка: статус, підрахунок, претенденти з попередньо поповненим балансом і хто голосував."
+
+msgid "One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions."
+msgstr "Один блок Core за висотою або хешем: заголовок, дані coinbase, розподіл винагороди, ChainLock і його транзакції."
+
+msgid "One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded."
+msgstr "Одна транзакція Core: входи, виходи, спеціальні дані, стан InstantSend і ChainLock та ідентичність Platform, яку вона поповнила."
+
+msgid "One data contract: owner, version, document types, schema, tokens and groups."
+msgstr "Один контракт даних: власник, версія, типи документів, схема, токени й групи."
+
+msgid "One document with its data, metadata, revision history and the transition that wrote it."
+msgstr "Один документ: дані, метадані, історія ревізій і перехід, який його записав."
+
+msgid "One DPNS name: whether it is available, registered or contested, and who owns it."
+msgstr "Одне ім’я DPNS: чи воно вільне, зареєстроване чи оспорюється, і кому належить."
+
+msgid "One finalized Platform epoch: totals, proposers and the neighbouring epochs."
+msgstr "Одна завершена епоха Platform: підсумки, пропонувачі та сусідні епохи."
+
+msgid "One governance proposal: payment, timeline, vote history and a link to vote."
+msgstr "Одна пропозиція управління: виплата, терміни, історія голосів і посилання для голосування."
+
+msgid "One group: members by power and its active and closed actions with signers."
+msgstr "Одна група: учасники за вагою голосу, активні та закриті дії з підписантами."
+
+msgid "One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked."
+msgstr "Одна ідентичність: баланс, ключі, імена, токени, контракти, документи та транзакція поповнення; усе перевірене за доказами."
+
+msgid "One masternode: overview, network reachability, Platform record, history and payments."
+msgstr "Одна мастернода: огляд, мережева доступність, запис Platform, історія та виплати."
+
+msgid "One Platform block: digest, the Core block it is locked to, its transitions and quorum."
+msgstr "Один блок Platform: дайджест, прив’язаний блок Core, його переходи та кворум."
+
+msgid "One state transition: status, fees, signature, raw bytes and a panel for its type."
+msgstr "Один перехід стану: статус, комісії, підпис, сирі байти та панель для його типу."
+
+msgid "One token: supply, price, pause state, definition, activity and a balance lookup."
+msgstr "Один токен: пропозиція, ціна, стан паузи, визначення, активність і пошук балансу."
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open the result, or all results"
+msgstr "Відкрити результат або всі результати"
+
+msgid "Open the selected table row"
+msgstr "Відкрити вибраний рядок таблиці"
+
+msgid "Operator payout"
+msgstr "Виплата оператору"
+
+msgid "Operator public key"
+msgstr "Відкритий ключ оператора"
+
+msgid "Operator reward"
+msgstr "Нагорода оператора"
+
+msgid "Operator signature"
+msgstr "Підпис оператора"
+
+msgid "or"
+msgstr "або"
+
+#. placeholder {0}: num(collateral?.vout) ?? 0
+msgid "Output {0} of this transaction"
+msgstr "Вихід {0} цієї транзакції"
+
+#. placeholder {0}: spend.by.vin
+msgid "Output {index} is spent by input {0} of this transaction"
+msgstr "Вихід {index} витрачено входом {0} цієї транзакції"
+
+msgid "Output this input spends"
+msgstr "Вихід, який витрачає цей вхід"
+
+msgid "Outputs"
+msgstr "Виходи"
+
+msgid "Overview"
+msgstr "Огляд"
+
+msgid "Owner key"
+msgstr "Ключ власника"
+
+msgid "Owner signature"
+msgstr "Підпис власника"
+
+#. placeholder {0}: num(p.platformP2pPort) ?? '—'
+#. placeholder {1}: num(p.platformHttpPort) ?? '—'
+msgid "P2P {0}, HTTPS {1}"
+msgstr "P2P {0}, HTTPS {1}"
+
+msgid "Page not found"
+msgstr "Сторінку не знайдено"
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "Вставте перехід стану у hex або base64, щоб розшифрувати та перевірити його. Нічого не підписується й не надсилається."
+
+msgid "Payload"
+msgstr "Корисне навантаження"
+
+msgid "Payload version"
+msgstr "Версія корисного навантаження"
+
+msgid "Payout"
+msgstr "Виплата"
+
+msgid "Pays out a Platform withdrawal from the credit pool."
+msgstr "Виплачує виведення коштів з Platform із пулу кредитів."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адреса Platform"
+
+msgid "Platform block"
+msgstr "Блок Platform"
+
+msgid "Platform blocks"
+msgstr "Блоки Platform"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform node ID"
+msgstr "ID вузла Platform"
+
+msgid "Platform ports"
+msgstr "Порти Platform"
+
+msgid "Platform protocol version voting: the current and next version and each evonode’s vote."
+msgstr "Голосування за версію протоколу Platform: поточна та наступна версії й голос кожної евоноди."
+
+msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
+msgstr "Пульс Platform: висота, епоха, графіки активності, лідери, найновіші блоки та переходи стану."
+
+msgid "Position"
+msgstr "Позиція"
+
+msgid "proposal"
+msgstr "пропозиція"
+
+msgid "Proposal"
+msgstr "Пропозиція"
+
+msgid "Protocol"
+msgstr "Протокол"
+
+msgid "ProTx hash"
+msgstr "Хеш ProTx"
+
+msgid "QR reader"
+msgstr "Зчитувач QR"
+
+msgid "Query"
+msgstr "Запит"
+
+msgid "Quorum"
+msgstr "Кворум"
+
+msgid "Quorum commitment"
+msgstr "Коммітмент кворуму"
+
+msgid "Quorum hash"
+msgstr "Хеш кворуму"
+
+msgid "Quorum index"
+msgstr "Індекс кворуму"
+
+msgid "Quorum public key"
+msgstr "Відкритий ключ кворуму"
+
+msgid "Quorum signature"
+msgstr "Підпис кворуму"
+
+msgid "Quorum type"
+msgstr "Тип кворуму"
+
+msgid "Quorums"
+msgstr "Кворуми"
+
+msgid "Quorums root"
+msgstr "Корінь кворумів"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar API"
+msgstr "API Radar"
+
+msgid "Radar shows this payload type as raw data."
+msgstr "Radar показує цей тип корисного навантаження як необроблені дані."
+
+msgid "Radar’s crawl"
+msgstr "Обхід Radar"
+
+msgid "Raw data"
+msgstr "Необроблені дані"
+
+msgid "Raw payload"
+msgstr "Необроблене корисне навантаження"
+
+msgid "Read from"
+msgstr "Джерела"
+
+msgid "Reason"
+msgstr "Причина"
+
+msgid "Received"
+msgstr "Отримано"
+
+msgid "Recent Core blocks with height, size, transactions, miner and ChainLock state, and a date picker that lists a day’s blocks."
+msgstr "Останні блоки Core: висота, розмір, транзакції, майнер і стан ChainLock, а також вибір дати зі списком блоків за день."
+
+msgid "recorded by Hyphen; no second source has confirmed it"
+msgstr "записано Hyphen; другого підтвердження немає"
+
+msgid "Records that a quorum finished its key generation and who signed."
+msgstr "Фіксує, що кворум завершив генерацію ключів, і хто підписав."
+
+msgid "Registers a masternode or evonode and sets the keys that run it."
+msgstr "Реєструє мастерноду або evonode і задає ключі, які нею керують."
+
+msgid "Registrations, updates, bans and removals across the masternode list, newest first."
+msgstr "Реєстрації, оновлення, баны та вилучення в списку мастернод, спочатку нові."
+
+msgid "Regular masternode"
+msgstr "Звичайна мастернода"
+
+msgid "Removed from saved"
+msgstr "Прибрано зі збереженого"
+
+msgid "reported by one node; no second source has confirmed it"
+msgstr "повідомлено одним вузлом; друге джерело не підтвердило"
+
+msgid "reported by one node; waiting for a second source to agree"
+msgstr "повідомлено одним вузлом; чекаємо на підтвердження від другого джерела"
+
+msgid "Requested at height"
+msgstr "Запитано на висоті"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
+msgstr "Ширина стрічки — це сума. Сірий — решта відправнику, помаранчевий — комісія."
+
+msgid "Rich list"
+msgstr "Список найбагатших"
+
+msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
+msgstr "Запити SQL лише для читання до документів контракту: шаблони, збережені запити та посилання, якими можна поділитися."
+
+msgid "Save"
+msgstr "Зберегти"
+
+msgid "Saved"
+msgstr "Збережене"
+
+msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
+msgstr "Відскануйте або завантажте QR-код і відкрийте його вміст: адресу, платіжне посилання чи хеш ключа."
+
+msgid "SDK reference"
+msgstr "Довідник SDK"
+
+msgid "Search"
+msgstr "Пошук"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "Шукайте імена DPNS за префіксом або переглядайте всі за алфавітом."
+
+msgid "Search Radar"
+msgstr "Пошук у Radar"
+
+msgid "Search Radar (⌘K on a Mac)"
+msgstr "Пошук у Radar (⌘K на Mac)"
+
+msgid "Service address"
+msgstr "Службова адреса"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Settlement"
+msgstr "Підтвердження"
+
+msgid "Share index"
+msgstr "Індекс частки"
+
+msgid "Share payout update"
+msgstr "Оновлення виплат за частками"
+
+msgid "Shared collateral"
+msgstr "Спільна застава"
+
+msgid "Shared masternode dissolved"
+msgstr "Спільну мастерноду розпущено"
+
+msgid "Shared masternode registrar update"
+msgstr "Оновлення реєстратора спільної мастерноди"
+
+msgid "Shielded pool"
+msgstr "Захищений пул"
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs"
+msgstr "Показати всі входи: {0}"
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "Показати всі входи із сумами: {0}"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "Show all {0} outputs"
+msgstr "Показати всі виходи: {0}"
+
+msgid "Show all inputs to work it out"
+msgstr "Покажіть усі входи, щоб обчислити"
+
+msgid "Show as a table"
+msgstr "Показати таблицею"
+
+msgid "Show these shortcuts"
+msgstr "Показати ці сполучення клавіш"
+
+msgid "Signature"
+msgstr "Підпис"
+
+msgid "Signatures"
+msgstr "Підписи"
+
+msgid "Signers"
+msgstr "Підписанти"
+
+msgid "Signing quorum"
+msgstr "Підписувальний кворум"
+
+msgid "Size"
+msgstr "Розмір"
+
+msgid "Skip to content"
+msgstr "Перейти до вмісту"
+
+msgid "Small amounts are drawn at a minimum height."
+msgstr "Малі суми малюються з мінімальною висотою."
+
+msgid "Some amounts could not be loaded."
+msgstr "Деякі суми не вдалося завантажити."
+
+msgid "Special transaction payload"
+msgstr "Корисне навантаження спеціальної транзакції"
+
+msgid "spender not found"
+msgstr "витратника не знайдено"
+
+msgid "Spends"
+msgstr "Витрати"
+
+msgid "Spent"
+msgstr "Витрачено"
+
+msgid "State"
+msgstr "Стан"
+
+msgid "state transition"
+msgstr "перехід стану"
+
+msgid "State transition"
+msgstr "Перехід стану"
+
+msgid "State transitions"
+msgstr "Переходи стану"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Termination of service"
+msgstr "Припинення роботи сервісу"
+
+msgid "the block can't be reorganised"
+msgstr "блок не може бути реорганізований"
+
+msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
+msgstr "Перепис: скільки вузлів відповіли під час останнього обходу, версії, хостинг, країни та доступність."
+
+msgid "The current Platform epoch, who proposes next and what evonodes earned in past epochs."
+msgstr "Поточна епоха Platform, хто пропонує наступним і скільки евоноди заробили в минулих епохах."
+
+msgid "The largest Core balances, with share of supply and the labels Radar knows."
+msgstr "Найбільші баланси Core з часткою від пропозиції та відомими Radar мітками."
+
+msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
+msgstr "Посилання може бути застарілим або з помилкою. Знайдіть те, що вам потрібно, або почніть з одного з розділів."
+
+msgid "The operator announces a new network address for a masternode."
+msgstr "Оператор оголошує нову мережеву адресу мастерноди."
+
+msgid "The operator ends a masternode's service; it must be registered again to return."
+msgstr "Оператор припиняє роботу мастерноди; щоб повернутися, її потрібно зареєструвати заново."
+
+msgid "The owner changes a masternode's operator key, voting key or payout."
+msgstr "Власник змінює ключ оператора, ключ голосування або виплату мастерноди."
+
+msgid "the Platform Explorer price feed"
+msgstr "цінова стрічка Platform Explorer"
+
+msgid "The Platform SDK"
+msgstr "Platform SDK"
+
+msgid "the Platform SDK, proof-checked"
+msgstr "SDK Platform, перевірка за доказами"
+
+msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
+msgstr "Набір валідаторів Platform: евоноди з їхнім записом Platform, показуються в списку мастернод."
+
+msgid "The price feed"
+msgstr "Джерело цін"
+
+msgid "The public API behind the node census and masternode pages, with examples."
+msgstr "Публічний API, на якому працюють перепис вузлів і сторінки мастернод, з прикладами."
+
+msgid "The shareholders change a shared masternode's operator key or voting key."
+msgstr "Співвласники змінюють ключ оператора або ключ голосування спільної мастерноди."
+
+msgid "The shareholders end a shared masternode and take their collateral back."
+msgstr "Співвласники розпускають спільну мастерноду й забирають свою заставу."
+
+msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
+msgstr "Стан захищеного пулу, якорі, зашифровані нотатки та пошук нуліфікаторів."
+
+msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
+msgstr "Транзакція в тому вигляді, в якому Radar декодував її з байтів DAPI. Суми вказано в даффах."
+
+msgid "The transaction is not in a block yet."
+msgstr "Транзакції ще немає в блоці."
+
+msgid "There is no page at {pathname}"
+msgstr "За адресою {pathname} немає сторінки"
+
+msgid "There is no transaction with this ID on this network. It may be too new, or on another network."
+msgstr "У цій мережі немає транзакції з таким ID. Можливо, вона надто нова або в іншій мережі."
+
+msgid "This {record} is on {network}."
+msgstr "Цей {record} розташований у мережі {network}."
+
+msgid "This browser"
+msgstr "Цей браузер"
+
+msgid "This page is on its way"
+msgstr "Ця сторінка скоро з’явиться"
+
+#. placeholder {0}: listSources(page.sources)
+msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
+msgstr "Ця сторінка читає дані з: {0}. Перемкніться на Mainnet або Testnet, щоб побачити її."
+
+msgid "Threshold signature"
+msgstr "Порогальний підпис"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "token"
+msgstr "токен"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Token holders"
+msgstr "Власники токена"
+
+msgid "Tokens"
+msgstr "Токени"
+
+msgid "Tokens with supply, price and contract, and the trending ones."
+msgstr "Токени з пропозицією, ціною та контрактом, а також популярні."
+
+msgid "Tools"
+msgstr "Інструменти"
+
+msgid "Total credits in Platform, with a fiat estimate, and prefunded specialised balances."
+msgstr "Усі кредити в Platform з оцінкою у фіаті та попередньо поповнені спеціалізовані баланси."
+
+msgid "transaction"
+msgstr "транзакція"
+
+msgid "Transaction"
+msgstr "Транзакція"
+
+#. placeholder {0}: txid.slice(0, 8)
+msgid "Transaction {0}…"
+msgstr "Транзакція {0}…"
+
+msgid "Transaction ID"
+msgstr "ID транзакції"
+
+msgid "Transactions"
+msgstr "Транзакції"
+
+msgid "Transition"
+msgstr "Перехід"
+
+msgid "Transition decoder"
+msgstr "Декодер переходів"
+
+msgid "Transitions"
+msgstr "Переходи"
+
+msgid "Try again"
+msgstr "Спробувати знову"
+
+msgid "Txid"
+msgstr "Txid"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unconfirmed"
+msgstr "Непідтверджено"
+
+msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
+msgstr "Непідтверджені транзакції в міру надходження: розмір, ставка комісії та блокування InstantSend."
+
+msgid "Unit for amounts"
+msgstr "Одиниця для сум"
+
+msgid "Unknown"
+msgstr "Невідомо"
+
+msgid "Unknown reason {reason}"
+msgstr "Невідома причина {reason}"
+
+msgid "Unknown: index behind"
+msgstr "Невідомо: індекс відстає"
+
+msgid "Unspendable"
+msgstr "Не може бути витрачений"
+
+msgid "Unspent"
+msgstr "Не витрачено"
+
+msgid "Upcoming vote polls by end date."
+msgstr "Майбутні голосування за датою завершення."
+
+#. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
+#. placeholder {1}: rate.provider
+msgid "USD at {0} per DASH, from {1}."
+msgstr "USD за курсом {0} за DASH, джерело — {1}."
+
+msgid "Valid members"
+msgstr "Дійсні учасники"
+
+msgid "Validators"
+msgstr "Валідатори"
+
+msgid "Value"
+msgstr "Значення"
+
+#. placeholder {0}: formatInt(tx.inputs.length)
+#. placeholder {1}: formatInt(tx.outputs.length)
+msgid "Value flow: {0} inputs into {1} outputs"
+msgstr "Потік вартості: входів {0} → виходів {1}"
+
+msgid "Verify message"
+msgstr "Перевірка повідомлення"
+
+#. placeholder {0}: tx.version
+msgid "Version {0}"
+msgstr "Версія {0}"
+
+msgid "Version bit"
+msgstr "Біт версії"
+
+msgid "Vote polls"
+msgstr "Голосування"
+
+msgid "Voting"
+msgstr "Голосування"
+
+msgid "Voting key"
+msgstr "Ключ голосування"
+
+msgid "waiting for the masternodes to ChainLock the block"
+msgstr "очікування, поки мастерноди зафіксують блок через ChainLock"
+
+msgid "waiting for the masternodes to lock it"
+msgstr "очікування, поки мастерноди її заблокують"
+
+msgid "Waiting to be mined."
+msgstr "Очікує на видобуток."
+
+msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
+msgstr "Що Radar може й не може довести, де діяти на основі побаченого та що він запам’ятовує."
+
+msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
+msgstr "Як просувається активація Core 24: поріг, сигнали майнерів по вікнах і готовність мастернод."
+
+msgid "Where the data comes from"
+msgstr "Звідки беруться дані"
+
+msgid "Where the value went"
+msgstr "Куди пішла вартість"
+
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "Щоб дізнатися, чи витрачено вихід і якою транзакцією, потрібен індексатор"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "Який виклик SDK Platform забезпечує кожну сторінку Radar, з аргументами."
+
+msgid "Withdrawal index"
+msgstr "Індекс виведення"
+
+msgid "You"
+msgstr "Ви"
+
+msgid "your browser"
+msgstr "ваш браузер"

@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -13,14 +13,18 @@ function shippedLocales() {
   return [...source.matchAll(/\{ code: '([^']+)'/g)].map((m) => m[1])
 }
 
+/** Every catalog of every locale, keyed `<locale>/<catalog>.po`: `messages.po` and one per package. */
 function snapshot() {
   const files = new Map()
   for (const code of readdirSync(locales)) {
-    const file = join(locales, code, 'messages.po')
-    if (existsSync(file)) files.set(code, readFileSync(file, 'utf8'))
+    for (const name of readdirSync(join(locales, code)).filter((f) => f.endsWith('.po'))) {
+      files.set(`${code}/${name}`, readFileSync(join(locales, code, name), 'utf8'))
+    }
   }
   return files
 }
+
+const localeOf = (key) => key.split('/')[0]
 
 function lingui(...args) {
   return spawnSync('pnpm', ['exec', 'lingui', ...args], { cwd: web, encoding: 'utf8' })
@@ -84,7 +88,7 @@ if (extract.status !== 0) {
 const after = snapshot()
 
 const stale = [...new Set([...before.keys(), ...after.keys()])].filter(
-  (code) => before.get(code) !== after.get(code),
+  (key) => before.get(key) !== after.get(key),
 )
 if (stale.length > 0) {
   console.error(`Message catalogs out of date: ${stale.join(', ')}.`)
@@ -92,21 +96,44 @@ if (stale.length > 0) {
   process.exit(1)
 }
 
-for (const code of shipped) if (!after.has(code)) problems.push(`${code}: no catalog`)
-for (const code of after.keys()) {
+const files = (code) => [...after.keys()].filter((key) => localeOf(key) === code)
+const catalogNames = (code) => files(code).map((key) => key.slice(code.length + 1))
+const present = new Set([...after.keys()].map(localeOf))
+
+for (const code of shipped) if (!present.has(code)) problems.push(`${code}: no catalog`)
+for (const code of present) {
   if (!shipped.includes(code)) problems.push(`${code}: a catalog for a locale that is not listed`)
+}
+const catalogsOfEnglish = catalogNames('en')
+for (const code of shipped) {
+  for (const name of catalogsOfEnglish) {
+    if (present.has(code) && !after.has(`${code}/${name}`)) problems.push(`${code}: no ${name}`)
+  }
 }
 
 const { formatter } = require('@lingui/format-po')
 const po = formatter({ lineNumbers: false, origins: false })
-const parse = (code) =>
-  po.parse(after.get(code) ?? '', { locale: code, sourceLocale: 'en', filename: `${code}.po` })
+/** All of a locale's catalogs as one: a message in two catalogs must read the same in both. */
+const parse = (code) => {
+  const merged = {}
+  for (const key of files(code)) {
+    const catalog = po.parse(after.get(key), { locale: code, sourceLocale: 'en', filename: key })
+    for (const [id, entry] of Object.entries(catalog)) {
+      const held = merged[id]
+      if (held && held.translation !== entry.translation) {
+        problems.push(`${code}: "${id}" reads differently in two catalogs`)
+      }
+      merged[id] = entry
+    }
+  }
+  return merged
+}
 
-const english = after.has('en') ? parse('en') : {}
+const english = present.has('en') ? parse('en') : {}
 for (const code of shipped) {
-  if (!after.has(code)) continue
-  const text = after.get(code)
-  if (/^#~ /m.test(text)) problems.push(`${code}: obsolete messages`)
+  if (!present.has(code)) continue
+  if (files(code).some((key) => /^#~ /m.test(after.get(key))))
+    problems.push(`${code}: obsolete messages`)
   const catalog = parse(code)
   const missing = []
   const broken = []

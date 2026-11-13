@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-10 18:17+0000\n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,6 +38,9 @@ msgstr "(source down)"
 #. placeholder {0}: backend.upstream
 msgid "(this site passes the request on to {0})"
 msgstr "(this site passes the request on to {0})"
+
+msgid "[circular]"
+msgstr "[circular]"
 
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
@@ -240,6 +243,9 @@ msgstr "{base} ({detail})"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocks behind the tip"
 
+msgid "{blockCount} blocks so far"
+msgstr "{blockCount} blocks so far"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 
@@ -276,11 +282,32 @@ msgstr "{hours, plural, one {# hour} other {# hours}}"
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} has not seen this address on this network."
 
+msgid "{label} from"
+msgstr "{label} from"
+
+msgid "{label} maximum"
+msgstr "{label} maximum"
+
+msgid "{label} minimum"
+msgstr "{label} minimum"
+
+msgid "{label} to"
+msgstr "{label} to"
+
 msgid "{m} min"
 msgstr "{m} min"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# minute} other {# minutes}}"
+
+msgid "{n, plural, one {(# byte)} other {(# bytes)}}"
+msgstr "{n, plural, one {(# byte)} other {(# bytes)}}"
+
+msgid "{n, plural, one {# item} other {# items}}"
+msgstr "{n, plural, one {# item} other {# items}}"
+
+msgid "{n, plural, one {# key} other {# keys}}"
+msgstr "{n, plural, one {# key} other {# keys}}"
 
 msgid "{n} h ago"
 msgstr "{n} h ago"
@@ -332,6 +359,9 @@ msgstr "{name} sent something Radar couldn't read"
 
 msgid "{name} took too long to answer"
 msgstr "{name} took too long to answer"
+
+msgid "{percent} through"
+msgstr "{percent} through"
 
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
@@ -552,6 +582,9 @@ msgstr "Answering"
 
 msgid "Answers on its Core port"
 msgstr "Answers on its Core port"
+
+msgid "Any moment now"
+msgstr "Any moment now"
 
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
@@ -797,6 +830,9 @@ msgstr "Circulating supply"
 msgid "Clear"
 msgstr "Clear"
 
+msgid "Clear {label}"
+msgstr "Clear {label}"
+
 msgid "close"
 msgstr "close"
 
@@ -817,6 +853,9 @@ msgstr "Coinbase tag says"
 
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase transactions pay none"
+
+msgid "Collapse all"
+msgstr "Collapse all"
 
 msgid "Collateral"
 msgstr "Collateral"
@@ -851,6 +890,12 @@ msgstr "Contract"
 msgid "Contract create"
 msgstr "Contract create"
 
+msgid "Contract fee claim"
+msgstr "Contract fee claim"
+
+msgid "Contract moderation"
+msgstr "Contract moderation"
+
 msgid "Contract update"
 msgstr "Contract update"
 
@@ -873,11 +918,20 @@ msgstr "Copy full value"
 msgid "Copy ID"
 msgstr "Copy ID"
 
+msgid "Copy JSON"
+msgstr "Copy JSON"
+
+msgid "Copy link"
+msgstr "Copy link"
+
 msgid "Copy link to this section"
 msgstr "Copy link to this section"
 
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
 
 msgid "Core 24 activation"
 msgstr "Core 24 activation"
@@ -1072,6 +1126,12 @@ msgstr "decoder"
 msgid "Decoder"
 msgstr "Decoder"
 
+msgid "Decoders"
+msgstr "Decoders"
+
+msgid "Destroy frozen funds"
+msgstr "Destroy frozen funds"
+
 msgid "Details"
 msgstr "Details"
 
@@ -1096,6 +1156,27 @@ msgstr "Document"
 
 msgid "Document batch"
 msgstr "Document batch"
+
+msgid "Document create"
+msgstr "Document create"
+
+msgid "Document delete"
+msgstr "Document delete"
+
+msgid "Document index delete"
+msgstr "Document index delete"
+
+msgid "Document price"
+msgstr "Document price"
+
+msgid "Document purchase"
+msgstr "Document purchase"
+
+msgid "Document replace"
+msgstr "Document replace"
+
+msgid "Document transfer"
+msgstr "Document transfer"
 
 msgid "document type"
 msgstr "document type"
@@ -1143,14 +1224,38 @@ msgstr "Enabled, no PoSe penalty"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "Enabled, PoSe penalty {0}"
 
+msgid "End time not known yet"
+msgstr "End time not known yet"
+
 msgid "Ended"
 msgstr "Ended"
+
+msgid "Ended {ago}"
+msgstr "Ended {ago}"
+
+msgid "Ended <0>{ago}</0>"
+msgstr "Ended <0>{ago}</0>"
 
 msgid "Ends"
 msgstr "Ends"
 
+msgid "Ends in {left}"
+msgstr "Ends in {left}"
+
+msgid "Ends in <0>{left}</0>"
+msgstr "Ends in <0>{left}</0>"
+
+msgid "Ends in about {left}"
+msgstr "Ends in about {left}"
+
+msgid "Ends in about <0>{left}</0>"
+msgstr "Ends in about <0>{left}</0>"
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "Enter at least one DAPI address as host:port, one per line."
+
+msgid "Enter plain numbers, like 100 or 2.5."
+msgstr "Enter plain numbers, like 100 or 2.5."
 
 msgid "epoch"
 msgstr "epoch"
@@ -1163,6 +1268,12 @@ msgstr "Epoch"
 msgid "Epoch {0} · {1} blocks in"
 msgstr "Epoch {0} · {1} blocks in"
 
+msgid "Epoch {epoch}"
+msgstr "Epoch {epoch}"
+
+msgid "Epoch {epoch} progress"
+msgstr "Epoch {epoch} progress"
+
 msgid "Epoch {id}"
 msgstr "Epoch {id}"
 
@@ -1174,6 +1285,9 @@ msgstr "Epochs"
 
 msgid "Esc"
 msgstr "Esc"
+
+msgid "Estimate"
+msgstr "Estimate"
 
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
@@ -1225,6 +1339,12 @@ msgstr "Evonodes from the node list, as https://address:port"
 
 msgid "Example"
 msgstr "Example"
+
+msgid "Expand all"
+msgstr "Expand all"
+
+msgid "Expected to end any moment now"
+msgstr "Expected to end any moment now"
 
 msgid "Expires"
 msgstr "Expires"
@@ -1305,6 +1425,9 @@ msgstr "From DAPI's live feed: transactions this page has seen arrive, minus tho
 
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
+
+msgid "function"
+msgstr "function"
 
 msgid "Funded"
 msgstr "Funded"
@@ -1463,8 +1586,20 @@ msgstr "Identity by key hash"
 msgid "Identity create"
 msgstr "Identity create"
 
+msgid "Identity create from addresses"
+msgstr "Identity create from addresses"
+
+msgid "Identity create from pool"
+msgstr "Identity create from pool"
+
 msgid "Identity top-up"
 msgstr "Identity top-up"
+
+msgid "Identity top-up from addresses"
+msgstr "Identity top-up from addresses"
+
+msgid "Identity top-up from pool"
+msgstr "Identity top-up from pool"
 
 msgid "Identity update"
 msgstr "Identity update"
@@ -1597,6 +1732,9 @@ msgstr "InstantSend locked"
 msgid "Invalid"
 msgstr "Invalid"
 
+msgid "invalid date"
+msgstr "invalid date"
+
 msgid "It answered with an error."
 msgstr "It answered with an error."
 
@@ -1624,8 +1762,14 @@ msgstr "Its tip is Core block {tip}, behind the chain."
 msgid "Its tip is Core block {tip}."
 msgstr "Its tip is Core block {tip}."
 
+msgid "JSON"
+msgstr "JSON"
+
 msgid "Jump to a date"
 msgstr "Jump to a date"
+
+msgid "Key limits update"
+msgstr "Key limits update"
 
 msgid "Keyboard shortcuts"
 msgstr "Keyboard shortcuts"
@@ -1704,6 +1848,9 @@ msgstr "Link copied"
 
 msgid "Link to one with"
 msgstr "Link to one with"
+
+msgid "List view"
+msgstr "List view"
 
 msgid "Live"
 msgstr "Live"
@@ -1824,6 +1971,9 @@ msgstr "Masternodes by status"
 msgid "masternodes locked its inputs; final from here"
 msgstr "masternodes locked its inputs; final from here"
 
+msgid "Max"
+msgstr "Max"
+
 msgid "Median answer {rounded} ms"
 msgstr "Median answer {rounded} ms"
 
@@ -1854,6 +2004,9 @@ msgstr "Message"
 
 msgid "Metrics history"
 msgstr "Metrics history"
+
+msgid "Min"
+msgstr "Min"
 
 msgid "Mined"
 msgstr "Mined"
@@ -2339,6 +2492,9 @@ msgstr "Output this input spends"
 
 msgid "Outputs"
 msgstr "Outputs"
+
+msgid "Overview"
+msgstr "Overview"
 
 msgid "Owner"
 msgstr "Owner"
@@ -2867,6 +3023,9 @@ msgstr "Remove {devnet}"
 msgid "Remove filter {0}"
 msgstr "Remove filter {0}"
 
+msgid "Removed from saved"
+msgstr "Removed from saved"
+
 msgid "reported by one node; no second source has confirmed it"
 msgstr "reported by one node; no second source has confirmed it"
 
@@ -2916,6 +3075,12 @@ msgstr "Ribbon width is the amount. Grey is change back to the sender, orange is
 msgid "Rich list"
 msgstr "Rich list"
 
+msgid "Rows per load"
+msgstr "Rows per load"
+
+msgid "Rows per page"
+msgstr "Rows per page"
+
 msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 msgstr "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 
@@ -2924,6 +3089,9 @@ msgstr "Runs a current protocol version"
 
 msgid "Same as the owner address"
 msgstr "Same as the owner address"
+
+msgid "Save"
+msgstr "Save"
 
 msgid "Save changes"
 msgstr "Save changes"
@@ -2939,6 +3107,9 @@ msgstr "Saved in this browser. A devnet with a name Radar doesn’t know asks fo
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
+
+msgid "Scroll"
+msgstr "Scroll"
 
 msgid "SDK reference"
 msgstr "SDK reference"
@@ -3060,11 +3231,29 @@ msgstr "Shared masternode registrar update"
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 
+msgid "Shield"
+msgstr "Shield"
+
+msgid "Shield from asset lock"
+msgstr "Shield from asset lock"
+
+msgid "Shield from identity"
+msgstr "Shield from identity"
+
 msgid "Shielded"
 msgstr "Shielded"
 
 msgid "Shielded pool"
 msgstr "Shielded pool"
+
+msgid "Shielded transfer"
+msgstr "Shielded transfer"
+
+msgid "Shielded withdrawal"
+msgstr "Shielded withdrawal"
+
+msgid "Show {step} more of {hidden}"
+msgstr "Show {step} more of {hidden}"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -3188,6 +3377,9 @@ msgstr "Spends"
 
 msgid "Spent"
 msgstr "Spent"
+
+msgid "Started {startedText}"
+msgstr "Started {startedText}"
 
 msgid "State"
 msgstr "State"
@@ -3318,6 +3510,9 @@ msgstr "The current Platform epoch, who proposes next and what evonodes earned i
 msgid "The Dash network, now"
 msgstr "The Dash network, now"
 
+msgid "The end time is an estimate."
+msgstr "The end time is an estimate."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 
@@ -3355,6 +3550,9 @@ msgstr "The masternode census and network history"
 
 msgid "The median answer takes {seconds} s."
 msgstr "The median answer takes {seconds} s."
+
+msgid "The minimum is above the maximum."
+msgstr "The minimum is above the maximum."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "The newest {shown} of {total} seen since you opened this page"
@@ -3441,6 +3639,9 @@ msgstr "The source returned no blocks for heights {0} to {1}. Try the page eithe
 
 msgid "The source sent something Radar couldn't read"
 msgstr "The source sent something Radar couldn't read"
+
+msgid "The start date is after the end date."
+msgstr "The start date is after the end date."
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -3586,8 +3787,62 @@ msgstr "token"
 msgid "Token"
 msgstr "Token"
 
+msgid "Token burn"
+msgstr "Token burn"
+
+msgid "Token burn from pool"
+msgstr "Token burn from pool"
+
+msgid "Token claim"
+msgstr "Token claim"
+
+msgid "Token claim to pool"
+msgstr "Token claim to pool"
+
+msgid "Token config update"
+msgstr "Token config update"
+
+msgid "Token emergency action"
+msgstr "Token emergency action"
+
+msgid "Token freeze"
+msgstr "Token freeze"
+
 msgid "Token holders"
 msgstr "Token holders"
+
+msgid "Token mint"
+msgstr "Token mint"
+
+msgid "Token mint to pool"
+msgstr "Token mint to pool"
+
+msgid "Token price"
+msgstr "Token price"
+
+msgid "Token purchase"
+msgstr "Token purchase"
+
+msgid "Token purchase from pool"
+msgstr "Token purchase from pool"
+
+msgid "Token purchase to pool"
+msgstr "Token purchase to pool"
+
+msgid "Token shield"
+msgstr "Token shield"
+
+msgid "Token shielded transfer"
+msgstr "Token shielded transfer"
+
+msgid "Token transfer"
+msgstr "Token transfer"
+
+msgid "Token unfreeze"
+msgstr "Token unfreeze"
+
+msgid "Token unshield"
+msgstr "Token unshield"
 
 msgid "Tokens"
 msgstr "Tokens"
@@ -3668,11 +3923,17 @@ msgstr "Transactions waiting"
 msgid "Transactions, all time"
 msgstr "Transactions, all time"
 
+msgid "Transfer to address"
+msgstr "Transfer to address"
+
 msgid "Transition"
 msgstr "Transition"
 
 msgid "Transition decoder"
 msgstr "Transition decoder"
+
+msgid "Transitions"
+msgstr "Transitions"
 
 msgid "Trend"
 msgstr "Trend"
@@ -3727,6 +3988,9 @@ msgstr "Unknown reason {reason}"
 
 msgid "Unknown: index behind"
 msgstr "Unknown: index behind"
+
+msgid "Unshield"
+msgstr "Unshield"
 
 msgid "Unspendable"
 msgstr "Unspendable"

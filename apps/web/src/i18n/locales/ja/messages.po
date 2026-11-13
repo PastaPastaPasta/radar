@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-11 08:01+0000\n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,6 +38,9 @@ msgstr "（ソース停止中）"
 #. placeholder {0}: backend.upstream
 msgid "(this site passes the request on to {0})"
 msgstr "（このサイトはリクエストを {0} に転送します）"
+
+msgid "[circular]"
+msgstr "[循環]"
 
 #. placeholder {0}: tx.inputs.length
 msgid "{0, plural, one {# input} other {# inputs}}"
@@ -240,6 +243,9 @@ msgstr "{base}（{detail}）"
 msgid "{behind} blocks behind the tip"
 msgstr "先頭から {behind} ブロック遅れ"
 
+msgid "{blockCount} blocks so far"
+msgstr "これまでに {blockCount} ブロック"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 承認}}"
 
@@ -276,11 +282,32 @@ msgstr "{hours, plural, other {#時間}}"
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} はこのネットワークでこのアドレスをまだ確認していません。"
 
+msgid "{label} from"
+msgstr "{label}の開始"
+
+msgid "{label} maximum"
+msgstr "{label}の最大値"
+
+msgid "{label} minimum"
+msgstr "{label}の最小値"
+
+msgid "{label} to"
+msgstr "{label}の終了"
+
 msgid "{m} min"
 msgstr "{m}分"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, other {#分}}"
+
+msgid "{n, plural, one {(# byte)} other {(# bytes)}}"
+msgstr "{n, plural, other {(#バイト)}}"
+
+msgid "{n, plural, one {# item} other {# items}}"
+msgstr "{n, plural, other {#件}}"
+
+msgid "{n, plural, one {# key} other {# keys}}"
+msgstr "{n, plural, other {#個のキー}}"
 
 msgid "{n} h ago"
 msgstr "{n}時間前"
@@ -332,6 +359,9 @@ msgstr "{name} が Radar で読み取れないデータを返しました"
 
 msgid "{name} took too long to answer"
 msgstr "{name} の応答に時間がかかりすぎました"
+
+msgid "{percent} through"
+msgstr "{percent} 経過"
 
 msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
 msgstr "{quorumCommitments, plural, other {このブロック内のクォーラムコミットメント #件}}"
@@ -552,6 +582,9 @@ msgstr "応答あり"
 
 msgid "Answers on its Core port"
 msgstr "Core ポートで応答"
+
+msgid "Any moment now"
+msgstr "まもなく"
 
 #. placeholder {0}: formatIsoUtc(stamp.asOf)
 msgid "As of {0}"
@@ -797,6 +830,9 @@ msgstr "流通供給量"
 msgid "Clear"
 msgstr "クリア"
 
+msgid "Clear {label}"
+msgstr "{label} をクリア"
+
 msgid "close"
 msgstr "閉じる"
 
@@ -817,6 +853,9 @@ msgstr "Coinbase タグの内容"
 
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase トランザクションは支払いません"
+
+msgid "Collapse all"
+msgstr "すべて折りたたむ"
 
 msgid "Collateral"
 msgstr "担保"
@@ -851,6 +890,12 @@ msgstr "コントラクト"
 msgid "Contract create"
 msgstr "コントラクト作成"
 
+msgid "Contract fee claim"
+msgstr "コントラクト手数料の請求"
+
+msgid "Contract moderation"
+msgstr "コントラクトのモデレーション"
+
 msgid "Contract update"
 msgstr "コントラクト更新"
 
@@ -873,11 +918,20 @@ msgstr "完全な値をコピー"
 msgid "Copy ID"
 msgstr "ID をコピー"
 
+msgid "Copy JSON"
+msgstr "JSON をコピー"
+
+msgid "Copy link"
+msgstr "リンクをコピー"
+
 msgid "Copy link to this section"
 msgstr "このセクションへのリンクをコピー"
 
 msgid "Core"
 msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
 
 msgid "Core 24 activation"
 msgstr "Core 24 の有効化"
@@ -1072,6 +1126,12 @@ msgstr "デコーダー"
 msgid "Decoder"
 msgstr "デコーダー"
 
+msgid "Decoders"
+msgstr "デコーダー"
+
+msgid "Destroy frozen funds"
+msgstr "凍結資金の破棄"
+
 msgid "Details"
 msgstr "詳細"
 
@@ -1096,6 +1156,27 @@ msgstr "ドキュメント"
 
 msgid "Document batch"
 msgstr "ドキュメントバッチ"
+
+msgid "Document create"
+msgstr "ドキュメント作成"
+
+msgid "Document delete"
+msgstr "ドキュメント削除"
+
+msgid "Document index delete"
+msgstr "ドキュメントインデックス削除"
+
+msgid "Document price"
+msgstr "ドキュメント価格設定"
+
+msgid "Document purchase"
+msgstr "ドキュメント購入"
+
+msgid "Document replace"
+msgstr "ドキュメント置換"
+
+msgid "Document transfer"
+msgstr "ドキュメント転送"
 
 msgid "document type"
 msgstr "ドキュメントタイプ"
@@ -1143,14 +1224,38 @@ msgstr "有効、PoSe ペナルティなし"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "有効、PoSe ペナルティ {0}"
 
+msgid "End time not known yet"
+msgstr "終了時刻はまだ不明です"
+
 msgid "Ended"
 msgstr "終了"
+
+msgid "Ended {ago}"
+msgstr "{ago}に終了"
+
+msgid "Ended <0>{ago}</0>"
+msgstr "<0>{ago}</0>に終了"
 
 msgid "Ends"
 msgstr "終了予定"
 
+msgid "Ends in {left}"
+msgstr "終了まで {left}"
+
+msgid "Ends in <0>{left}</0>"
+msgstr "終了まで <0>{left}</0>"
+
+msgid "Ends in about {left}"
+msgstr "終了まで約 {left}"
+
+msgid "Ends in about <0>{left}</0>"
+msgstr "終了まで約 <0>{left}</0>"
+
 msgid "Enter at least one DAPI address as host:port, one per line."
 msgstr "DAPI アドレスを host:port 形式で1行に1つ、少なくとも1つ入力してください。"
+
+msgid "Enter plain numbers, like 100 or 2.5."
+msgstr "100 や 2.5 のような数字だけを入力してください。"
 
 msgid "epoch"
 msgstr "エポック"
@@ -1163,6 +1268,12 @@ msgstr "エポック"
 msgid "Epoch {0} · {1} blocks in"
 msgstr "エポック {0}・{1} ブロック経過"
 
+msgid "Epoch {epoch}"
+msgstr "エポック {epoch}"
+
+msgid "Epoch {epoch} progress"
+msgstr "エポック {epoch} の進行状況"
+
 msgid "Epoch {id}"
 msgstr "エポック {id}"
 
@@ -1174,6 +1285,9 @@ msgstr "エポック"
 
 msgid "Esc"
 msgstr "Esc"
+
+msgid "Estimate"
+msgstr "推定"
 
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Radar が接続できるすべてのバックエンド、その運営者、{network} で使われているかどうか。Radar 内の各数値には、取得元が明記されています。"
@@ -1225,6 +1339,12 @@ msgstr "ノードリストの evonode。https://address:port の形式"
 
 msgid "Example"
 msgstr "例"
+
+msgid "Expand all"
+msgstr "すべて展開"
+
+msgid "Expected to end any moment now"
+msgstr "まもなく終了する見込みです"
 
 msgid "Expires"
 msgstr "有効期限"
@@ -1305,6 +1425,9 @@ msgstr "DAPI のライブフィードより。このページに届いたのを�
 
 msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
 msgstr "高さ、ハッシュ、アドレス、ProTx、IP、アイデンティティ、コントラクト、トークン、名前、エポックの全結果を、種類別にまとめて表示します。"
+
+msgid "function"
+msgstr "関数"
 
 msgid "Funded"
 msgstr "資金確保済み"
@@ -1463,8 +1586,20 @@ msgstr "キーハッシュからアイデンティティを検索"
 msgid "Identity create"
 msgstr "アイデンティティ作成"
 
+msgid "Identity create from addresses"
+msgstr "アドレスからのアイデンティティ作成"
+
+msgid "Identity create from pool"
+msgstr "プールからのアイデンティティ作成"
+
 msgid "Identity top-up"
 msgstr "アイデンティティへの追加入金"
+
+msgid "Identity top-up from addresses"
+msgstr "アドレスからのアイデンティティ追加入金"
+
+msgid "Identity top-up from pool"
+msgstr "プールからのアイデンティティ追加入金"
 
 msgid "Identity update"
 msgstr "アイデンティティ更新"
@@ -1597,6 +1732,9 @@ msgstr "InstantSend ロック済み"
 msgid "Invalid"
 msgstr "無効"
 
+msgid "invalid date"
+msgstr "無効な日付"
+
 msgid "It answered with an error."
 msgstr "エラーを返しました。"
 
@@ -1624,8 +1762,14 @@ msgstr "先端は Core のブロック {tip} で、チェーンより遅れて�
 msgid "Its tip is Core block {tip}."
 msgstr "先端は Core のブロック {tip} です。"
 
+msgid "JSON"
+msgstr "JSON"
+
 msgid "Jump to a date"
 msgstr "日付へ移動"
+
+msgid "Key limits update"
+msgstr "キー上限の更新"
 
 msgid "Keyboard shortcuts"
 msgstr "キーボードショートカット"
@@ -1704,6 +1848,9 @@ msgstr "リンクをコピーしました"
 
 msgid "Link to one with"
 msgstr "次の形式でリンク"
+
+msgid "List view"
+msgstr "リスト表示"
 
 msgid "Live"
 msgstr "ライブ"
@@ -1824,6 +1971,9 @@ msgstr "ステータス別のマスターノード"
 msgid "masternodes locked its inputs; final from here"
 msgstr "マスターノードが入力をロックしました。ここから確定です"
 
+msgid "Max"
+msgstr "最大"
+
 msgid "Median answer {rounded} ms"
 msgstr "応答時間の中央値 {rounded} ms"
 
@@ -1854,6 +2004,9 @@ msgstr "メッセージ"
 
 msgid "Metrics history"
 msgstr "メトリクスの履歴"
+
+msgid "Min"
+msgstr "最小"
 
 msgid "Mined"
 msgstr "マイニング済み"
@@ -2339,6 +2492,9 @@ msgstr "この入力が使用する出力"
 
 msgid "Outputs"
 msgstr "出力"
+
+msgid "Overview"
+msgstr "概要"
 
 msgid "Owner"
 msgstr "オーナー"
@@ -2867,6 +3023,9 @@ msgstr "{devnet} を削除"
 msgid "Remove filter {0}"
 msgstr "フィルター {0} を削除"
 
+msgid "Removed from saved"
+msgstr "保存済みから削除しました"
+
 msgid "reported by one node; no second source has confirmed it"
 msgstr "1つのノードが報告。2つ目のソースによる確認はありません"
 
@@ -2916,6 +3075,12 @@ msgstr "リボンの幅が金額です。灰色は送信者へのおつり、オ
 msgid "Rich list"
 msgstr "長者番付"
 
+msgid "Rows per load"
+msgstr "1回の読み込み行数"
+
+msgid "Rows per page"
+msgstr "1ページあたりの行数"
+
 msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
 msgstr "コントラクトのドキュメントに対する読み取り専用 SQL。プリセット、保存済みクエリ、共有リンク付き。"
 
@@ -2924,6 +3089,9 @@ msgstr "最新のプロトコルバージョンで動作"
 
 msgid "Same as the owner address"
 msgstr "オーナーアドレスと同じ"
+
+msgid "Save"
+msgstr "保存"
 
 msgid "Save changes"
 msgstr "変更を保存"
@@ -2939,6 +3107,9 @@ msgstr "このブラウザに保存されます。Radar が知らない名前の
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "QR コードを読み取るかアップロードして、中身（アドレス、支払いリンク、キーハッシュ）を開きます。"
+
+msgid "Scroll"
+msgstr "スクロール"
 
 msgid "SDK reference"
 msgstr "SDK リファレンス"
@@ -3060,11 +3231,29 @@ msgstr "共有マスターノードのレジストラー更新"
 msgid "Shares are of the circulating supply, <0/>, the figure the Charts page shows."
 msgstr "割合は流通供給量 <0/> に対するもので、チャートのページに表示される数値と同じです。"
 
+msgid "Shield"
+msgstr "シールド"
+
+msgid "Shield from asset lock"
+msgstr "アセットロックからのシールド"
+
+msgid "Shield from identity"
+msgstr "アイデンティティからのシールド"
+
 msgid "Shielded"
 msgstr "シールド"
 
 msgid "Shielded pool"
 msgstr "シールドプール"
+
+msgid "Shielded transfer"
+msgstr "シールド送金"
+
+msgid "Shielded withdrawal"
+msgstr "シールド出金"
+
+msgid "Show {step} more of {hidden}"
+msgstr "{hidden} 件中さらに {step} 件を表示"
 
 #. placeholder {0}: formatInt(inCount)
 msgid "Show all {0} inputs"
@@ -3188,6 +3377,9 @@ msgstr "使用"
 
 msgid "Spent"
 msgstr "使用済み"
+
+msgid "Started {startedText}"
+msgstr "{startedText}に開始"
 
 msgid "State"
 msgstr "状態"
@@ -3318,6 +3510,9 @@ msgstr "現在の Platform エポック、次に提案するノード、過去�
 msgid "The Dash network, now"
 msgstr "Dash ネットワークの現在"
 
+msgid "The end time is an estimate."
+msgstr "終了時刻は推定です。"
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "メモリプール全体とその合計にはそのインデックスが必要なため、このページでは、開いてから DAPI のライブフィードが届けた内容を表示します。"
 
@@ -3355,6 +3550,9 @@ msgstr "マスターノードの調査とネットワークの履歴"
 
 msgid "The median answer takes {seconds} s."
 msgstr "応答時間の中央値は {seconds} 秒です。"
+
+msgid "The minimum is above the maximum."
+msgstr "最小値が最大値を上回っています。"
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "このページを開いてから見た {total} 件のうち、新しい {shown} 件"
@@ -3441,6 +3639,9 @@ msgstr "高さ {0} から {1} のブロックは取得元から返されませ�
 
 msgid "The source sent something Radar couldn't read"
 msgstr "ソースが Radar で読み取れないデータを返しました"
+
+msgid "The start date is after the end date."
+msgstr "開始日が終了日より後になっています。"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -3586,8 +3787,62 @@ msgstr "トークン"
 msgid "Token"
 msgstr "トークン"
 
+msgid "Token burn"
+msgstr "トークンのバーン"
+
+msgid "Token burn from pool"
+msgstr "プールからのトークンバーン"
+
+msgid "Token claim"
+msgstr "トークンの請求"
+
+msgid "Token claim to pool"
+msgstr "プールへのトークン請求"
+
+msgid "Token config update"
+msgstr "トークン設定の更新"
+
+msgid "Token emergency action"
+msgstr "トークン緊急アクション"
+
+msgid "Token freeze"
+msgstr "トークンの凍結"
+
 msgid "Token holders"
 msgstr "トークン保有者"
+
+msgid "Token mint"
+msgstr "トークンのミント"
+
+msgid "Token mint to pool"
+msgstr "プールへのトークンミント"
+
+msgid "Token price"
+msgstr "トークン価格"
+
+msgid "Token purchase"
+msgstr "トークンの購入"
+
+msgid "Token purchase from pool"
+msgstr "プールからのトークン購入"
+
+msgid "Token purchase to pool"
+msgstr "プールへのトークン購入"
+
+msgid "Token shield"
+msgstr "トークンのシールド"
+
+msgid "Token shielded transfer"
+msgstr "トークンのシールド送金"
+
+msgid "Token transfer"
+msgstr "トークン送金"
+
+msgid "Token unfreeze"
+msgstr "トークンの凍結解除"
+
+msgid "Token unshield"
+msgstr "トークンのアンシールド"
 
 msgid "Tokens"
 msgstr "トークン"
@@ -3668,11 +3923,17 @@ msgstr "待機中のトランザクション"
 msgid "Transactions, all time"
 msgstr "トランザクション（累計）"
 
+msgid "Transfer to address"
+msgstr "アドレスへの送金"
+
 msgid "Transition"
 msgstr "トランジション"
 
 msgid "Transition decoder"
 msgstr "トランジションデコーダー"
+
+msgid "Transitions"
+msgstr "トランジション"
 
 msgid "Trend"
 msgstr "推移"
@@ -3727,6 +3988,9 @@ msgstr "不明な理由 {reason}"
 
 msgid "Unknown: index behind"
 msgstr "不明：インデックスが遅れています"
+
+msgid "Unshield"
+msgstr "アンシールド"
 
 msgid "Unspendable"
 msgstr "使用不可"

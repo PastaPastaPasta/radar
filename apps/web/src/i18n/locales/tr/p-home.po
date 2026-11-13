@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: tr\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(budget.usedLastMinute)
+#. placeholder {1}: formatInt(budget.capacity)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+msgid "{behind} blocks behind the tip"
+msgstr "Uçtan {behind} blok geride"
+
+msgid "A second index for addresses, spent outputs, chainwork and governance"
+msgstr "Adresler, harcanmış çıktılar, chainwork ve yönetişim için ikinci bir dizin"
+
+msgid "Asking Platform for its latest block…"
+msgstr "Platform’a son bloğu soruluyor…"
+
+msgid "Best ChainLock"
+msgstr "En iyi ChainLock"
+
+#. placeholder {0}: formatPercent(chain.data.data.syncProgress, 1)
+msgid "Catching up, {0}"
+msgstr "Senkronize ediliyor, {0}"
+
+msgid "ChainLock block hash, reported by one node"
+msgstr "ChainLock blok karması, tek bir düğüm bildirdi"
+
+msgid "ChainLock reported by one node"
+msgstr "Tek bir düğümün bildirdiği ChainLock"
+
+msgid "ChainLocked block hash"
+msgstr "ChainLocked blokunun hash’i"
+
+msgid "Checking the sources…"
+msgstr "Kaynaklar denetleniyor…"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core addresses, mempool, governance and block lists"
+msgstr "Core adresleri, mempool, yönetişim ve blok listeleri"
+
+msgid "Core tip"
+msgstr "Core ucu"
+
+msgid "Core tip, blocks and transactions, straight from evonodes"
+msgstr "Core ucu, bloklar ve işlemler, doğrudan evonode’lardan"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgstr "DAPI ve Platform SDK yanıt veriyor. Barındırılan kaynaklar “Yalnızca merkeziyetsiz” modunda kapalıdır."
+
+msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
+msgstr "DAPI meşgul, bu yüzden bütçe toparlanana kadar blok listeleri Hyphen’den gelir. Ayrıntılar yine DAPI’yi kullanır."
+
+msgid "DAPI isn’t answering, so block and transaction details come from Hyphen and say so."
+msgstr "DAPI yanıt vermiyor, bu yüzden blok ve işlem ayrıntıları Hyphen’den gelir ve bu belirtilir."
+
+msgid "DAPI request budget"
+msgstr "DAPI istek bütçesi"
+
+msgid "Dash Core"
+msgstr "Dash Core"
+
+msgid "Decentralized only mode doesn’t contact this source."
+msgstr "“Yalnızca merkeziyetsiz” modu bu kaynağa bağlanmaz."
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Every source is answering."
+msgstr "Tüm kaynaklar yanıt veriyor."
+
+msgid "Everything Core shows comes from DAPI."
+msgstr "Core’un gösterdiği her şey DAPI’den gelir."
+
+msgid "Figures computed on your device"
+msgstr "Cihazınızda hesaplanan rakamlar"
+
+msgid "Getting tight"
+msgstr "Daralıyor"
+
+msgid "Headers and blocks"
+msgstr "Başlıklar ve bloklar"
+
+msgid "Headroom"
+msgstr "Pay"
+
+msgid "How each source is answering, and how far behind its data is."
+msgstr "Her kaynağın nasıl yanıt verdiği ve verisinin ne kadar geride olduğu."
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
+msgstr "{indexed}. Core bloğuna kadar indekslendi (zincir: {chain}). Hyphen senkronizasyonuna “{sync}” diyor, ancak indeksi zincirin gerisinde."
+
+msgid "Indexed to Core block {indexed} of {chain}. Sync: {sync}."
+msgstr "Core bloğu {indexed}/{chain} dizinlendi. Eşitleme: {sync}."
+
+msgid "Indexed to Platform block {indexed} of {chain}. Indexer: {state}."
+msgstr "Platform bloğu {indexed}/{chain} dizinlendi. Dizinleyici: {state}."
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "It answered with an error."
+msgstr "Bir hatayla yanıt verdi."
+
+msgid "It hasn’t answered yet."
+msgstr "Henüz yanıt vermedi."
+
+msgid "It is rate limiting this browser."
+msgstr "Bu tarayıcının isteklerini sınırlıyor."
+
+msgid "It sent an answer Radar can’t read."
+msgstr "Radar’ın okuyamadığı bir yanıt gönderdi."
+
+msgid "It took too long to answer."
+msgstr "Yanıt vermesi çok uzun sürdü."
+
+msgid "Its data is behind."
+msgstr "Verileri geride kalıyor."
+
+msgid "Its tip is Core block {tip}, behind the chain."
+msgstr "Ucu Core’un {tip} numaralı bloğu; zincirin gerisinde."
+
+msgid "Its tip is Core block {tip}."
+msgstr "Ucu Core’un {tip} numaralı bloğu."
+
+#. placeholder {0}: formatRelative(clampSkew(finished, now), now)
+#. placeholder {1}: formatInt(status.chain.blocks)
+msgid "Last crawl finished {0}. Its Core node is at block {1}."
+msgstr "Son tarama {0} bitti. Core düğümü {1}. blokta."
+
+#. placeholder {0}: ago(health.lastOkAt)
+msgid "Last good {0}."
+msgstr "Son başarılı yanıt {0}."
+
+msgid "Median answer {rounded} ms"
+msgstr "Ortanca yanıt {rounded} ms"
+
+msgid "Network internals: peers, mempool pressure, versions and history"
+msgstr "Ağın iç işleyişi: eşler, mempool baskısı, sürümler ve geçmiş"
+
+msgid "No crawl has finished yet."
+msgstr "Henüz tamamlanmış bir tarama yok."
+
+msgid "No DAPI requests have been made on this network yet."
+msgstr "Bu ağda henüz DAPI isteği yapılmadı."
+
+msgid "Node sync"
+msgstr "Düğüm eşitlemesi"
+
+msgid "Nodes resting"
+msgstr "Boşta bekleyen düğümler"
+
+msgid "Not available right now"
+msgstr "Şu anda kullanılamıyor"
+
+msgid "Not offered"
+msgstr "Sunulmuyor"
+
+msgid "Nothing has asked it yet on this network."
+msgstr "Bu ağda henüz kimse ona sormadı."
+
+msgid "Off in this mode"
+msgstr "Bu modda kapalı"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform lists and counts"
+msgstr "Platform listeleri ve sayıları"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Plenty of room"
+msgstr "Bol miktarda pay"
+
+msgid "Pressure"
+msgstr "Baskı"
+
+msgid "Price feed"
+msgstr "Fiyat akışı"
+
+msgid "Proof-checked at Platform block {block}, epoch {epoch}. That block is {age}."
+msgstr "Platform’un {block} numaralı bloğunda, {epoch}. dönemde kanıtla doğrulandı. Bu blok {age}."
+
+msgid "Proof-checked Platform state, verified in this browser"
+msgstr "Kanıtla doğrulanmış Platform durumu, bu tarayıcıda doğrulandı"
+
+msgid "Radar crawler"
+msgstr "Radar tarayıcısı"
+
+msgid "Radar keeps each evonode well under its rate limit, so one visitor can’t crowd out another."
+msgstr "Radar her evonode’u hız sınırının çok altında tutar, böylece bir ziyaretçi diğerini dışarıda bırakmaz."
+
+msgid "Requests in the last minute"
+msgstr "Son dakikadaki istekler"
+
+msgid "Some requests are failing."
+msgstr "Bazı istekler başarısız oluyor."
+
+msgid "Some sources are slow or behind. The rest still work."
+msgstr "Bazı kaynaklar yavaş veya geride. Diğerleri çalışmaya devam ediyor."
+
+msgid "Some sources aren’t answering. The rest still work."
+msgstr "Bazı kaynaklar yanıt vermiyor. Diğerleri çalışmaya devam ediyor."
+
+msgid "Sources"
+msgstr "Kaynaklar"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Synced"
+msgstr "Eşitlendi"
+
+msgid "The connection failed."
+msgstr "Bağlantı başarısız oldu."
+
+msgid "The masternode census and network history"
+msgstr "Masternode sayımı ve ağ geçmişi"
+
+msgid "The median answer takes {seconds} s."
+msgstr "Ortanca yanıt süresi {seconds} sn."
+
+msgid "The request budget is nearly used."
+msgstr "İstek bütçesi neredeyse tükendi."
+
+msgid "The USD rate, through Platform Explorer"
+msgstr "Platform Explorer üzerinden USD kuru"
+
+msgid "This browser"
+msgstr "Bu tarayıcı"
+
+msgid "This network doesn’t have this source."
+msgstr "Bu ağda bu kaynak yok."
+
+msgid "Tip hash"
+msgstr "Uç hash’i"
+
+msgid "Used up for now"
+msgstr "Şimdilik tükendi"
+
+msgid "What the evonodes report about the chain right now."
+msgstr "Evonode’ların şu anda zincir hakkında bildirdikleri."

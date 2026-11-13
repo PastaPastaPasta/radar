@@ -1,0 +1,1330 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: zh\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+msgid "· change"
+msgstr "· 更改"
+
+#. placeholder {0}: tx.inputs.length
+msgid "{0, plural, one {# input} other {# inputs}}"
+msgstr "{0, plural, other {# 个输入}}"
+
+#. placeholder {0}: tx.outputs.length
+msgid "{0, plural, one {# output} other {# outputs}}"
+msgstr "{0, plural, other {# 个输出}}"
+
+#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
+msgid "{0} doesn’t cover devnets."
+msgstr "{0} 不支持开发网。"
+
+#. placeholder {0}: formatInt(n.value)
+msgid "{0} duffs"
+msgstr "{0} duff"
+
+#. placeholder {0}: formatInt(inCount)
+#. placeholder {0}: formatInt(inputs.length)
+#. placeholder {0}: formatInt(tx.inputs.length)
+msgid "{0} inputs"
+msgstr "{0} 个输入"
+
+#. placeholder {0}: formatInt(unloaded)
+msgid "{0} inputs not loaded"
+msgstr "{0} 个输入未加载"
+
+#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
+#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {1}: formatInt(members)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "{0} outputs"
+msgstr "{0} 个输出"
+
+#. placeholder {0}: sectionLabel(section)
+msgid "{0} pages"
+msgstr "{0}页面"
+
+#. placeholder {0}: formatInt(list(shared.shares).length)
+#. placeholder {1}: formatInt(num(shared.earlyPeriodBlocks) ?? 0)
+msgid "{0} shares, {1} blocks of early-leave penalty"
+msgstr "{0} 份份额，{1} 个区块的提前退出惩罚期"
+
+#. placeholder {0}: formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} to other addresses"
+msgstr "转给其他地址 {0}"
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, other {# 次确认}}"
+
+msgid "{count, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{count, plural, other {# 次确认}}"
+
+msgid "{feeRate} duffs a byte"
+msgstr "每字节 {feeRate} duff"
+
+msgid "{feeRate} duffs a byte: it spends no coins"
+msgstr "每字节 {feeRate} duff：它不花费任何币"
+
+msgid "{indexName} has not seen this address on this network."
+msgstr "{indexName} 尚未在此网络上见过该地址。"
+
+msgid "{n} more inputs"
+msgstr "另有 {n} 个输入"
+
+msgid "{n} more outputs"
+msgstr "另有 {n} 个输出"
+
+msgid "{name} (reason {reason})"
+msgstr "{name}（原因 {reason}）"
+
+msgid "A contract’s groups with position, threshold and members."
+msgstr "合约的群组，含位置、阈值和成员。"
+
+msgid "A Core address’s balance, history and unspent outputs, with new-activity notices."
+msgstr "Core 地址的余额、历史记录和未花费输出，并提示新活动。"
+
+msgid "A Platform address’s balance and nonce, proof-checked, and its transitions."
+msgstr "Platform 地址的余额和 nonce（已通过证明验证）及其转换。"
+
+msgid "A quorum signals that masternodes are ready for a protocol upgrade."
+msgstr "Quorum 表示主节点已准备好进行协议升级。"
+
+msgid "A shareholder of a shared masternode changes where their reward is paid."
+msgstr "共享主节点的份额持有者更改其奖励的支付地址。"
+
+msgid "About"
+msgstr "关于"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "进行中的争议名称，含结束时间、票数和状态。"
+
+msgid "address"
+msgstr "地址"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "after it is mined"
+msgstr "在被挖出之后"
+
+msgid "Amount"
+msgstr "金额"
+
+#. placeholder {0}: formatInt(partial.loaded)
+msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+msgstr "仅加载前 {0} 个输入的金额，每个前序交易对应一次单独请求。"
+
+msgid "Amounts loaded"
+msgstr "已加载的金额"
+
+#. placeholder {0}: formatInt(spend.asOf)
+msgid "as of block {0}"
+msgstr "截至区块 {0}"
+
+msgid "Asking Hyphen."
+msgstr "正在向 Hyphen 查询。"
+
+msgid "Asset lock"
+msgstr "资产锁定"
+
+msgid "Asset unlock"
+msgstr "资产解锁"
+
+msgid "Asset unlocks root"
+msgstr "资产解锁根"
+
+msgid "Back to Mainnet"
+msgstr "返回主网"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "Balances for the identities you choose, and the holders Platform Explorer has indexed."
+msgstr "你选择的身份的余额，以及 Platform Explorer 已索引的持有者。"
+
+msgid "Best ChainLock"
+msgstr "最新 ChainLock"
+
+msgid "block"
+msgstr "区块"
+
+msgid "Block"
+msgstr "区块"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "block {0}"
+msgstr "区块 {0}"
+
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(tx.height)
+msgid "Block {0}"
+msgstr "区块 {0}"
+
+msgid "Block height"
+msgstr "区块高度"
+
+msgid "Block reward, masternode and fee payments"
+msgstr "区块奖励、主节点和手续费支付"
+
+msgid "Blocks"
+msgstr "区块"
+
+msgid "Browse a contract’s documents of one type, filtered by its indices."
+msgstr "按索引筛选，浏览合约中某一类型的文档。"
+
+msgid "Budget proposals with vote counts, status and the next superblock."
+msgstr "预算提案，含票数、状态和下一个超级区块。"
+
+msgid "bytes"
+msgstr "字节"
+
+msgid "Chain size, mempool pressure, transaction velocity, node versions, masternode counts and the peers Hyphen reads from."
+msgstr "链大小、内存池压力、交易速度、节点版本、主节点数量，以及 Hyphen 读取的对等节点。"
+
+msgid "Chain state"
+msgstr "链状态"
+
+msgid "ChainLock"
+msgstr "ChainLock"
+
+msgid "ChainLock reported by one node"
+msgstr "由一个节点报告的 ChainLock"
+
+msgid "ChainLock signature"
+msgstr "ChainLock 签名"
+
+msgid "ChainLocked"
+msgstr "ChainLocked"
+
+msgid "change"
+msgstr "找零"
+
+msgid "Change"
+msgstr "找零"
+
+msgid "Change of keys"
+msgstr "更换密钥"
+
+msgid "Change to sender"
+msgstr "找零至发送方"
+
+msgid "Changes"
+msgstr "变更"
+
+msgid "Charts"
+msgstr "图表"
+
+msgid "Check a signed message against a Core address, in your browser."
+msgstr "在浏览器中用 Core 地址验证已签名的消息。"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Close a dialog or the search"
+msgstr "关闭对话框或搜索"
+
+msgid "Coinbase payload"
+msgstr "Coinbase 载荷"
+
+msgid "Coinbase transactions pay none"
+msgstr "Coinbase 交易不支付"
+
+msgid "Collateral"
+msgstr "抵押品"
+
+msgid "Commits the block to the masternode list and the latest ChainLock."
+msgstr "将区块绑定到主节点列表和最新的 ChainLock。"
+
+msgid "Compromised keys"
+msgstr "密钥泄露"
+
+msgid "contest"
+msgstr "争议"
+
+msgid "contract"
+msgstr "合约"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contracts"
+msgstr "合约"
+
+msgid "Copy link"
+msgstr "复制链接"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core 24"
+msgstr "Core 24"
+
+msgid "Core 24 activation"
+msgstr "Core 24 激活"
+
+msgid "Core address"
+msgstr "Core 地址"
+
+msgid "Core block"
+msgstr "Core 区块"
+
+msgid "Core block height"
+msgstr "Core 区块高度"
+
+msgid "Core blocks"
+msgstr "Core 区块"
+
+msgid "Core network metrics over time: transactions, fees, difficulty, supply and mining."
+msgstr "Core 网络指标随时间的变化：交易、手续费、难度、供应量和挖矿。"
+
+msgid "Core tip and ChainLock, Platform height and epoch, the node map and census headline, the latest blocks and transitions, and upgrade status."
+msgstr "Core 链顶端与 ChainLock、Platform 高度与纪元、节点地图与普查概览、最新区块与状态转换，以及升级状态。"
+
+msgid "Core transaction"
+msgstr "Core 交易"
+
+msgid "Created"
+msgstr "创建时间"
+
+msgid "Credit outputs"
+msgstr "信用输出"
+
+msgid "Credit pool"
+msgstr "信用池"
+
+msgid "Credit pool balance"
+msgstr "信用池余额"
+
+msgid "Credited on Platform"
+msgstr "已记入 Platform"
+
+msgid "Credits"
+msgstr "积分"
+
+msgid "Current Platform quorums with size, members and the last proposer."
+msgstr "当前的 Platform Quorum，含规模、成员和最近一次提议者。"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DAPI is busy. Open this page to load them."
+msgstr "DAPI 繁忙。请打开此页面以加载。"
+
+msgid "data"
+msgstr "数据"
+
+msgid "Data (OP_RETURN)"
+msgstr "数据 (OP_RETURN)"
+
+msgid "Data sources"
+msgstr "数据来源"
+
+msgid "Decentralized only"
+msgstr "仅去中心化"
+
+msgid "Decentralized only: Radar reads only DAPI nodes and the Platform SDK, and asks no hosted service. Open Sources to see what that leaves out or to switch it off."
+msgstr "仅去中心化：Radar 只读取 DAPI 节点和 Platform SDK，不向任何托管服务发出请求。打开“数据源”可查看因此缺少哪些内容，或将其关闭。"
+
+msgid "Decode raw bytes offline: a transaction, block, identity, contract, document or proof."
+msgstr "离线解码原始字节：交易、区块、身份、合约、文档或证明。"
+
+msgid "decoder"
+msgstr "解码器"
+
+msgid "Decoder"
+msgstr "解码器"
+
+msgid "Decoders"
+msgstr "解码器"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "document"
+msgstr "文档"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "document type"
+msgstr "文档类型"
+
+msgid "Documents"
+msgstr "文档"
+
+msgid "Early-leave penalty"
+msgstr "提前退出惩罚"
+
+msgid "epoch"
+msgstr "纪元"
+
+msgid "Epoch"
+msgstr "纪元"
+
+msgid "Epochs"
+msgstr "纪元"
+
+msgid "Every backend Radar can contact, who runs it, and the switch for Decentralized only mode."
+msgstr "Radar 可以连接的所有后端、运营方，以及“仅去中心化”模式的开关。"
+
+msgid "Every data source Radar reads, its health and freshness on this network, and the DAPI request budget."
+msgstr "Radar 读取的每个数据源，其在此网络上的健康状况与新鲜度，以及 DAPI 请求预算。"
+
+msgid "Every masternode and evonode with status, version, location, uptime and payments. Filters, sorting and paging live in the link."
+msgstr "所有主节点和 Evonode，含状态、版本、位置、在线率和付款。筛选、排序和分页都保存在链接中。"
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "每一张主节点投票，含投票者、选择、资源和时间。"
+
+msgid "Every Platform block with epoch, proposer, transactions and time, filterable."
+msgstr "每个 Platform 区块，含纪元、提议者、交易和时间，可筛选。"
+
+msgid "Every state transition with type, status, block, gas and owner, filterable."
+msgstr "每个状态转换，含类型、状态、区块、Gas 和所有者，可筛选。"
+
+msgid "Evonode"
+msgstr "Evonode"
+
+msgid "Evonode (high-performance)"
+msgstr "Evonode（高性能）"
+
+msgid "Featured and indexed data contracts with owner, documents and tokens."
+msgstr "精选和已索引的数据合约，含所有者、文档和代币。"
+
+msgid "Fee"
+msgstr "手续费"
+
+msgid "Finality"
+msgstr "最终性"
+
+msgid "Find the identity that holds a public key, from its 40-character key hash."
+msgstr "通过 40 个字符的密钥哈希，找到持有该公钥的身份。"
+
+msgid "finding where…"
+msgstr "正在查找位置…"
+
+msgid "First seen"
+msgstr "首次出现"
+
+msgid "first seen in the mempool"
+msgstr "首次出现在内存池中"
+
+msgid "From"
+msgstr "来自"
+
+msgid "Full results for any height, hash, address, ProTx, IP, identity, contract, token, name or epoch, grouped by what each one is."
+msgstr "任意高度、哈希、地址、ProTx、IP、身份、合约、代币、名称或纪元的完整结果，按类型分组。"
+
+msgid "Governance"
+msgstr "治理"
+
+msgid "group"
+msgstr "群组"
+
+msgid "Group"
+msgstr "群组"
+
+msgid "Groups"
+msgstr "群组"
+
+msgid "Hard-fork signal"
+msgstr "硬分叉信号"
+
+msgid "Hash"
+msgstr "哈希"
+
+msgid "Hide the table"
+msgstr "隐藏表格"
+
+msgid "Home"
+msgstr "首页"
+
+msgid "How it settled"
+msgstr "结算情况"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "Hyphen says it is spent but its history does not show which transaction spent it."
+msgstr "Hyphen 显示已花费，但其历史记录没有显示是哪笔交易花费的。"
+
+#. placeholder {0}: formatInt(spend.behind ?? 0)
+msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
+msgstr "Hyphen 的索引落后链 {0} 个区块，因此无法判断该输出之后是否已被花费。"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "身份"
+
+msgid "Identities with balance, transactions and creation time; sort by balance or activity."
+msgstr "身份及其余额、交易和创建时间；可按余额或活跃度排序。"
+
+msgid "Identities, contracts, tokens and masternodes you saved. They stay in this browser."
+msgstr "你保存的身份、合约、代币和主节点。它们只保存在此浏览器中。"
+
+msgid "identity"
+msgstr "身份"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity by key hash"
+msgstr "按密钥哈希查找身份"
+
+#. placeholder {0}: short(spend.by.txid)
+msgid "in {0}"
+msgstr "在 {0} 中"
+
+#. placeholder {0}: formatInt(tx.height)
+msgid "In block {0}"
+msgstr "在区块 {0} 中"
+
+msgid "in the mempool"
+msgstr "在内存池中"
+
+msgid "In the mempool"
+msgstr "在内存池中"
+
+msgid "Inputs"
+msgstr "输入"
+
+msgid "Inputs and outputs"
+msgstr "输入和输出"
+
+msgid "Inputs hash"
+msgstr "输入哈希"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "InstantSend"
+msgstr "InstantSend"
+
+msgid "InstantSend lock"
+msgstr "InstantSend 锁"
+
+msgid "InstantSend locked"
+msgstr "已被 InstantSend 锁定"
+
+msgid "It spends no coins and creates no outputs, so there is no flow to draw. What it records is in its payload."
+msgstr "它不花费任何币，也不产生输出，因此没有可绘制的资金流。它记录的内容在载荷中。"
+
+msgid "Keyboard shortcuts"
+msgstr "键盘快捷键"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Language, units, time zone, connection options and custom devnets."
+msgstr "语言、单位、时区、连接选项和自定义开发网。"
+
+msgid "Last seen"
+msgstr "最近出现"
+
+msgid "Link copied"
+msgstr "链接已复制"
+
+msgid "Link to one with"
+msgstr "链接到其中之一："
+
+#. placeholder {0}: formatInt(inCount - partial.loaded)
+msgid "Load the other {0} amounts"
+msgstr "加载其余 {0} 个金额"
+
+#. placeholder {0}: formatInt(partial.loaded)
+#. placeholder {1}: formatInt(inCount)
+msgid "Loading amounts: {0} of {1} inputs. Each previous transaction is a separate request."
+msgstr "正在加载金额：{0} / {1} 个输入。每个前序交易对应一次单独请求。"
+
+msgid "Loading inputs…"
+msgstr "正在加载输入…"
+
+msgid "Locks Dash on Core to create credits on Platform."
+msgstr "在 Core 上锁定 Dash，以在 Platform 上生成积分。"
+
+msgid "Map"
+msgstr "地图"
+
+msgid "masternode"
+msgstr "主节点"
+
+msgid "Masternode"
+msgstr "主节点"
+
+msgid "Masternode list root"
+msgstr "主节点列表根"
+
+msgid "Masternode registrar update"
+msgstr "主节点注册方更新"
+
+msgid "Masternode registration"
+msgstr "主节点注册"
+
+msgid "Masternode revocation"
+msgstr "主节点撤销"
+
+msgid "Masternode service update"
+msgstr "主节点服务更新"
+
+msgid "Masternode votes"
+msgstr "主节点投票"
+
+msgid "Masternodes"
+msgstr "主节点"
+
+msgid "Masternodes and other nodes on a world map, coloured by reachability, version or type."
+msgstr "在世界地图上显示主节点和其他节点，按可达性、版本或类型着色。"
+
+msgid "masternodes locked its inputs; final from here"
+msgstr "主节点已锁定其输入；从此处起即为最终状态"
+
+msgid "Mempool"
+msgstr "内存池"
+
+msgid "Mempool arrival times aren’t kept once a transaction is mined."
+msgstr "交易被打包后，不再保留其进入内存池的时间。"
+
+msgid "Mined"
+msgstr "已挖出"
+
+msgid "Mined for height"
+msgstr "所挖高度"
+
+msgid "Move through search results"
+msgstr "在搜索结果中移动"
+
+msgid "Move through table rows"
+msgstr "在表格行间移动"
+
+msgid "Moved"
+msgstr "已移动"
+
+msgid "name"
+msgstr "名称"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Name contest"
+msgstr "名称争议"
+
+msgid "Name contests"
+msgstr "名称争议"
+
+msgid "Names"
+msgstr "名称"
+
+msgid "Names follow Dash Core’s definitions of the revocation reason codes."
+msgstr "名称遵循 Dash Core 对撤销原因代码的定义。"
+
+msgid "Needs an indexer: off in Decentralized only mode"
+msgstr "需要索引器：在“仅去中心化”模式下已关闭"
+
+msgid "Network"
+msgstr "网络"
+
+msgid "Network internals"
+msgstr "网络内部信息"
+
+msgid "Network pulse"
+msgstr "网络脉搏"
+
+msgid "New operator key"
+msgstr "新运营者密钥"
+
+msgid "New reward payout"
+msgstr "新的奖励支付地址"
+
+msgid "New service address"
+msgstr "新服务地址"
+
+msgid "New voting key"
+msgstr "新投票密钥"
+
+msgid "Newly generated coins"
+msgstr "新生成的币"
+
+msgid "No address"
+msgstr "无地址"
+
+msgid "No block with this ID on this network."
+msgstr "此网络上没有该 ID 的区块。"
+
+msgid "No InstantSend lock was seen"
+msgstr "未发现 InstantSend 锁"
+
+msgid "No source can say whether this output is spent."
+msgstr "没有任何数据源能判断此输出是否已被花费。"
+
+msgid "No transaction with this ID on this network."
+msgstr "此网络上没有该 ID 的交易。"
+
+msgid "No value moves in this transaction"
+msgstr "这笔交易没有价值转移"
+
+msgid "Nodes"
+msgstr "节点"
+
+msgid "None"
+msgstr "无"
+
+msgid "Not ChainLocked yet"
+msgstr "尚未 ChainLocked"
+
+msgid "not in a block yet"
+msgstr "尚未进入区块"
+
+msgid "Not in this version"
+msgstr "不在此版本中"
+
+msgid "not known from this source: Hyphen only reports locks its node relayed while it was watching"
+msgstr "此来源无法确定：Hyphen 只报告其节点在 Hyphen 监听期间转发的锁"
+
+msgid "Not loaded"
+msgstr "未加载"
+
+msgid "Not mined yet"
+msgstr "尚未被挖出"
+
+msgid "Not specified"
+msgstr "未指定"
+
+msgid "Number"
+msgstr "编号"
+
+msgid "One contest: status, tally, contenders with prefunded balance and who voted."
+msgstr "单个争议：状态、计票、带预存余额的竞争者以及投票者。"
+
+msgid "One Core block by height or hash: header, coinbase payload, reward split, ChainLock and its transactions."
+msgstr "按高度或哈希查看单个 Core 区块：区块头、Coinbase 载荷、奖励分配、ChainLock 及其交易。"
+
+msgid "One Core transaction: inputs, outputs, special payload, InstantSend and ChainLock state, and the Platform identity it funded."
+msgstr "单笔 Core 交易：输入、输出、特殊载荷、InstantSend 和 ChainLock 状态，以及它所充值的 Platform 身份。"
+
+msgid "One data contract: owner, version, document types, schema, tokens and groups."
+msgstr "单个数据合约：所有者、版本、文档类型、模式、代币和群组。"
+
+msgid "One document with its data, metadata, revision history and the transition that wrote it."
+msgstr "单个文档：数据、元数据、修订历史以及写入它的状态转换。"
+
+msgid "One DPNS name: whether it is available, registered or contested, and who owns it."
+msgstr "单个 DPNS 名称：是否可用、已注册或有争议，以及所有者是谁。"
+
+msgid "One finalized Platform epoch: totals, proposers and the neighbouring epochs."
+msgstr "单个已完结的 Platform 纪元：汇总、提议者及相邻纪元。"
+
+msgid "One governance proposal: payment, timeline, vote history and a link to vote."
+msgstr "单个治理提案：付款、时间线、投票历史和投票链接。"
+
+msgid "One group: members by power and its active and closed actions with signers."
+msgstr "单个群组：按权重排列的成员，以及进行中和已关闭的操作及签署者。"
+
+msgid "One identity: balance, keys, names, tokens, contracts, documents and funding transaction, each proof-checked."
+msgstr "单个身份：余额、密钥、名称、代币、合约、文档和充值交易，均经证明验证。"
+
+msgid "One masternode: overview, network reachability, Platform record, history and payments."
+msgstr "单个主节点：概览、网络可达性、Platform 记录、历史和付款。"
+
+msgid "One Platform block: digest, the Core block it is locked to, its transitions and quorum."
+msgstr "单个 Platform 区块：摘要、其锁定的 Core 区块、其中的状态转换和 Quorum。"
+
+msgid "One state transition: status, fees, signature, raw bytes and a panel for its type."
+msgstr "单个状态转换：状态、费用、签名、原始字节以及按类型显示的面板。"
+
+msgid "One token: supply, price, pause state, definition, activity and a balance lookup."
+msgstr "单个代币：供应量、价格、暂停状态、定义、活动以及余额查询。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open the result, or all results"
+msgstr "打开结果或全部结果"
+
+msgid "Open the selected table row"
+msgstr "打开所选表格行"
+
+msgid "Operator payout"
+msgstr "运营者付款"
+
+msgid "Operator public key"
+msgstr "运营者公钥"
+
+msgid "Operator reward"
+msgstr "运营者奖励"
+
+msgid "Operator signature"
+msgstr "运营者签名"
+
+msgid "or"
+msgstr "或"
+
+#. placeholder {0}: num(collateral?.vout) ?? 0
+msgid "Output {0} of this transaction"
+msgstr "此交易的输出 {0}"
+
+#. placeholder {0}: spend.by.vin
+msgid "Output {index} is spent by input {0} of this transaction"
+msgstr "输出 {index} 被此交易的输入 {0} 花费"
+
+msgid "Output this input spends"
+msgstr "此输入所花费的输出"
+
+msgid "Outputs"
+msgstr "输出"
+
+msgid "Overview"
+msgstr "概览"
+
+msgid "Owner key"
+msgstr "所有者密钥"
+
+msgid "Owner signature"
+msgstr "所有者签名"
+
+#. placeholder {0}: num(p.platformP2pPort) ?? '—'
+#. placeholder {1}: num(p.platformHttpPort) ?? '—'
+msgid "P2P {0}, HTTPS {1}"
+msgstr "P2P {0}，HTTPS {1}"
+
+msgid "Page not found"
+msgstr "找不到页面"
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "粘贴十六进制或 base64 格式的状态转换，即可解码并检查。不会签名，也不会发送任何内容。"
+
+msgid "Payload"
+msgstr "载荷"
+
+msgid "Payload version"
+msgstr "载荷版本"
+
+msgid "Payout"
+msgstr "付款"
+
+msgid "Pays out a Platform withdrawal from the credit pool."
+msgstr "从信用池支付一笔 Platform 提现。"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform 地址"
+
+msgid "Platform block"
+msgstr "Platform 区块"
+
+msgid "Platform blocks"
+msgstr "Platform 区块"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform node ID"
+msgstr "Platform 节点 ID"
+
+msgid "Platform ports"
+msgstr "Platform 端口"
+
+msgid "Platform protocol version voting: the current and next version and each evonode’s vote."
+msgstr "Platform 协议版本投票：当前版本、下一版本以及每个 Evonode 的投票。"
+
+msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
+msgstr "Platform 的脉搏：高度、纪元、活动图表、领导者以及最新区块和状态转换。"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "proposal"
+msgstr "提案"
+
+msgid "Proposal"
+msgstr "提案"
+
+msgid "Protocol"
+msgstr "协议"
+
+msgid "ProTx hash"
+msgstr "ProTx 哈希"
+
+msgid "QR reader"
+msgstr "二维码读取器"
+
+msgid "Query"
+msgstr "查询"
+
+msgid "Quorum"
+msgstr "Quorum"
+
+msgid "Quorum commitment"
+msgstr "Quorum 承诺"
+
+msgid "Quorum hash"
+msgstr "Quorum 哈希"
+
+msgid "Quorum index"
+msgstr "Quorum 索引"
+
+msgid "Quorum public key"
+msgstr "Quorum 公钥"
+
+msgid "Quorum signature"
+msgstr "Quorum 签名"
+
+msgid "Quorum type"
+msgstr "Quorum 类型"
+
+msgid "Quorums"
+msgstr "Quorum"
+
+msgid "Quorums root"
+msgstr "Quorum 根"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar API"
+msgstr "Radar API"
+
+msgid "Radar shows this payload type as raw data."
+msgstr "Radar 以原始数据显示此类载荷。"
+
+msgid "Radar’s crawl"
+msgstr "Radar 的抓取"
+
+msgid "Raw data"
+msgstr "原始数据"
+
+msgid "Raw payload"
+msgstr "原始载荷"
+
+msgid "Read from"
+msgstr "读取自"
+
+msgid "Reason"
+msgstr "原因"
+
+msgid "Received"
+msgstr "已接收"
+
+msgid "Recent Core blocks with height, size, transactions, miner and ChainLock state, and a date picker that lists a day’s blocks."
+msgstr "最近的 Core 区块，含高度、大小、交易、矿工和 ChainLock 状态，并提供按日期列出当天区块的日期选择器。"
+
+msgid "recorded by Hyphen; no second source has confirmed it"
+msgstr "由 Hyphen 记录；尚无第二个来源确认"
+
+msgid "Records that a quorum finished its key generation and who signed."
+msgstr "记录某个 Quorum 已完成密钥生成以及签名者。"
+
+msgid "Registers a masternode or evonode and sets the keys that run it."
+msgstr "注册主节点或 evonode，并设置运行它的密钥。"
+
+msgid "Registrations, updates, bans and removals across the masternode list, newest first."
+msgstr "主节点列表中的注册、更新、封禁和移除，按时间从新到旧排列。"
+
+msgid "Regular masternode"
+msgstr "普通主节点"
+
+msgid "Removed from saved"
+msgstr "已从已保存中移除"
+
+msgid "reported by one node; no second source has confirmed it"
+msgstr "由一个节点报告；尚无第二个来源确认"
+
+msgid "reported by one node; waiting for a second source to agree"
+msgstr "由一个节点报告；等待第二个来源确认一致"
+
+msgid "Requested at height"
+msgstr "请求时的高度"
+
+msgid "Result"
+msgstr "结果"
+
+msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
+msgstr "色带宽度代表金额。灰色是找零给发送方，橙色是手续费。"
+
+msgid "Rich list"
+msgstr "富豪榜"
+
+msgid "Run read-only SQL over a contract’s documents, with presets, saved queries and shareable links."
+msgstr "对合约文档运行只读 SQL，支持预设、已保存的查询和可分享的链接。"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Saved"
+msgstr "已保存"
+
+msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
+msgstr "扫描或上传二维码，并打开其中的内容：地址、付款链接或密钥哈希。"
+
+msgid "SDK reference"
+msgstr "SDK 参考"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "按前缀搜索 DPNS 名称，或按字母顺序浏览全部名称。"
+
+msgid "Search Radar"
+msgstr "搜索 Radar"
+
+msgid "Search Radar (⌘K on a Mac)"
+msgstr "搜索 Radar（Mac 上按 ⌘K）"
+
+msgid "Service address"
+msgstr "服务地址"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Settlement"
+msgstr "结算"
+
+msgid "Share index"
+msgstr "份额索引"
+
+msgid "Share payout update"
+msgstr "份额收益地址更新"
+
+msgid "Shared collateral"
+msgstr "共享抵押品"
+
+msgid "Shared masternode dissolved"
+msgstr "共享主节点已解散"
+
+msgid "Shared masternode registrar update"
+msgstr "共享主节点注册方更新"
+
+msgid "Shielded pool"
+msgstr "隐私池"
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs"
+msgstr "显示全部 {0} 个输入"
+
+#. placeholder {0}: formatInt(inCount)
+msgid "Show all {0} inputs with their amounts"
+msgstr "显示全部 {0} 个输入及其金额"
+
+#. placeholder {0}: formatInt(outCount)
+msgid "Show all {0} outputs"
+msgstr "显示全部 {0} 个输出"
+
+msgid "Show all inputs to work it out"
+msgstr "显示全部输入即可算出"
+
+msgid "Show as a table"
+msgstr "以表格显示"
+
+msgid "Show these shortcuts"
+msgstr "显示这些快捷键"
+
+msgid "Signature"
+msgstr "签名"
+
+msgid "Signatures"
+msgstr "签名"
+
+msgid "Signers"
+msgstr "签名者"
+
+msgid "Signing quorum"
+msgstr "签名 Quorum"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Skip to content"
+msgstr "跳到内容"
+
+msgid "Small amounts are drawn at a minimum height."
+msgstr "较小的金额会以最小高度绘制。"
+
+msgid "Some amounts could not be loaded."
+msgstr "部分金额无法加载。"
+
+msgid "Special transaction payload"
+msgstr "特殊交易载荷"
+
+msgid "spender not found"
+msgstr "未找到花费方"
+
+msgid "Spends"
+msgstr "花费"
+
+msgid "Spent"
+msgstr "已花费"
+
+msgid "State"
+msgstr "状态"
+
+msgid "state transition"
+msgstr "状态转换"
+
+msgid "State transition"
+msgstr "状态转换"
+
+msgid "State transitions"
+msgstr "状态转换"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Termination of service"
+msgstr "服务终止"
+
+msgid "the block can't be reorganised"
+msgstr "区块不会被重组"
+
+msgid "The census: how many nodes answered the last crawl, versions, hosting, countries and reachability."
+msgstr "节点普查：上次抓取有多少节点响应，以及版本、托管、国家和可达性。"
+
+msgid "The current Platform epoch, who proposes next and what evonodes earned in past epochs."
+msgstr "当前的 Platform 纪元、下一个提议者，以及 Evonode 在过去纪元中的收益。"
+
+msgid "The largest Core balances, with share of supply and the labels Radar knows."
+msgstr "最大的 Core 余额，含占供应量的比例以及 Radar 已知的标签。"
+
+msgid "The link may be old or mistyped. Search for what you were after, or start from one of the sections."
+msgstr "链接可能已过期或拼写有误。请搜索你想找的内容，或从某个板块开始。"
+
+msgid "The operator announces a new network address for a masternode."
+msgstr "运营者为主节点公布新的网络地址。"
+
+msgid "The operator ends a masternode's service; it must be registered again to return."
+msgstr "运营者终止主节点的服务；必须重新注册才能恢复。"
+
+msgid "The owner changes a masternode's operator key, voting key or payout."
+msgstr "所有者更改主节点的运营者密钥、投票密钥或付款地址。"
+
+msgid "the Platform Explorer price feed"
+msgstr "Platform Explorer 价格数据源"
+
+msgid "The Platform SDK"
+msgstr "Platform SDK"
+
+msgid "the Platform SDK, proof-checked"
+msgstr "Platform SDK（已通过证明验证）"
+
+msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
+msgstr "Platform 验证者集合：带有 Platform 记录的 Evonode，显示在主节点列表中。"
+
+msgid "The price feed"
+msgstr "价格数据"
+
+msgid "The public API behind the node census and masternode pages, with examples."
+msgstr "节点普查和主节点页面背后的公共 API，附示例。"
+
+msgid "The shareholders change a shared masternode's operator key or voting key."
+msgstr "份额持有者更改共享主节点的运营者密钥或投票密钥。"
+
+msgid "The shareholders end a shared masternode and take their collateral back."
+msgstr "份额持有者终止共享主节点并收回其抵押品。"
+
+msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
+msgstr "隐私池的状态、锚点、加密票据以及 nullifier 查询。"
+
+msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
+msgstr "Radar 从 DAPI 返回的字节解码出的交易。金额以 duff 为单位。"
+
+msgid "The transaction is not in a block yet."
+msgstr "该交易尚未进入区块。"
+
+msgid "There is no page at {pathname}"
+msgstr "{pathname} 处没有页面"
+
+msgid "There is no transaction with this ID on this network. It may be too new, or on another network."
+msgstr "此网络上没有该 ID 的交易。可能太新，或在另一个网络上。"
+
+msgid "This {record} is on {network}."
+msgstr "此 {record} 位于 {network}。"
+
+msgid "This browser"
+msgstr "此浏览器"
+
+msgid "This page is on its way"
+msgstr "此页面即将上线"
+
+#. placeholder {0}: listSources(page.sources)
+msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
+msgstr "此页面读取自{0}。请切换到 Mainnet 或 Testnet 查看。"
+
+msgid "Threshold signature"
+msgstr "门限签名"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "To"
+msgstr "发往"
+
+msgid "token"
+msgstr "代币"
+
+msgid "Token"
+msgstr "代币"
+
+msgid "Token holders"
+msgstr "代币持有者"
+
+msgid "Tokens"
+msgstr "代币"
+
+msgid "Tokens with supply, price and contract, and the trending ones."
+msgstr "含供应量、价格和合约的代币，以及热门代币。"
+
+msgid "Tools"
+msgstr "工具"
+
+msgid "Total credits in Platform, with a fiat estimate, and prefunded specialised balances."
+msgstr "Platform 中的积分总量（含法币估值）以及预存的专用余额。"
+
+msgid "transaction"
+msgstr "交易"
+
+msgid "Transaction"
+msgstr "交易"
+
+#. placeholder {0}: txid.slice(0, 8)
+msgid "Transaction {0}…"
+msgstr "交易 {0}…"
+
+msgid "Transaction ID"
+msgstr "交易 ID"
+
+msgid "Transactions"
+msgstr "交易"
+
+msgid "Transition"
+msgstr "状态转换"
+
+msgid "Transition decoder"
+msgstr "状态转换解码器"
+
+msgid "Transitions"
+msgstr "状态转换"
+
+msgid "Try again"
+msgstr "重试"
+
+msgid "Txid"
+msgstr "Txid"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Unconfirmed"
+msgstr "未确认"
+
+msgid "Unconfirmed transactions as they arrive, with size, fee rate and InstantSend locks."
+msgstr "实时显示未确认交易，含大小、费率和 InstantSend 锁。"
+
+msgid "Unit for amounts"
+msgstr "金额单位"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Unknown reason {reason}"
+msgstr "未知原因 {reason}"
+
+msgid "Unknown: index behind"
+msgstr "未知：索引落后"
+
+msgid "Unspendable"
+msgstr "不可花费"
+
+msgid "Unspent"
+msgstr "未花费"
+
+msgid "Upcoming vote polls by end date."
+msgstr "即将开始的投票，按结束日期排列。"
+
+#. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
+#. placeholder {1}: rate.provider
+msgid "USD at {0} per DASH, from {1}."
+msgstr "美元按每 DASH {0} 计，来自 {1}。"
+
+msgid "Valid members"
+msgstr "有效成员"
+
+msgid "Validators"
+msgstr "验证者"
+
+msgid "Value"
+msgstr "数值"
+
+#. placeholder {0}: formatInt(tx.inputs.length)
+#. placeholder {1}: formatInt(tx.outputs.length)
+msgid "Value flow: {0} inputs into {1} outputs"
+msgstr "价值流向：{0} 个输入流向 {1} 个输出"
+
+msgid "Verify message"
+msgstr "验证消息"
+
+#. placeholder {0}: tx.version
+msgid "Version {0}"
+msgstr "版本 {0}"
+
+msgid "Version bit"
+msgstr "版本位"
+
+msgid "Vote polls"
+msgstr "投票"
+
+msgid "Voting"
+msgstr "投票"
+
+msgid "Voting key"
+msgstr "投票密钥"
+
+msgid "waiting for the masternodes to ChainLock the block"
+msgstr "等待主节点通过 ChainLock 锁定该区块"
+
+msgid "waiting for the masternodes to lock it"
+msgstr "等待主节点将其锁定"
+
+msgid "Waiting to be mined."
+msgstr "等待被挖出。"
+
+msgid "What Radar can and can’t prove, where to act on what you see, and what it remembers."
+msgstr "Radar 能证明什么、不能证明什么，在哪里可以对所见内容采取行动，以及它会记住什么。"
+
+msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
+msgstr "Core 24 激活进度：阈值、矿工逐个窗口的信号以及主节点就绪情况。"
+
+msgid "Where the data comes from"
+msgstr "数据来源"
+
+msgid "Where the value went"
+msgstr "价值的去向"
+
+msgid "Whether an output is spent, and by which transaction, needs an indexer"
+msgstr "要知道某个输出是否已被花费以及由哪笔交易花费，需要索引器"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "每个 Radar 页面由哪个 Platform SDK 调用支撑，含参数。"
+
+msgid "Withdrawal index"
+msgstr "提现索引"
+
+msgid "You"
+msgstr "我的"
+
+msgid "your browser"
+msgstr "你的浏览器"
