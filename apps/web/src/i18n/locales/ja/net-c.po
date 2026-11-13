@@ -13,17 +13,114 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: combined.vantages
+msgid "(average of {0, plural, one {# location} other {# locations}})"
+msgstr "（{0, plural, other {# か所}}の平均）"
+
+#. placeholder {0}: current.blocks
+#. placeholder {0}: lastEpoch.blocks
+msgid "{0, plural, one {# block} other {# blocks}}"
+msgstr "{0, plural, other {# ブロック}}"
+
+#. placeholder {0}: lastEpoch.blocks
+#. placeholder {1}: formatInt(lastEpoch.rank)
+#. placeholder {2}: formatInt(lastEpoch.of ?? 0)
+msgid "{0, plural, one {# block} other {# blocks}}, {1} of {2} evonodes"
+msgstr "{0, plural, other {# ブロック}}、エボノード {2} 件中 {1} 位"
+
+#. placeholder {0}: totals.epochs_paid ?? 0
+msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
+msgstr "{0, plural, other {# エポック分を支払い}}"
+
+#. placeholder {0}: history.length
+msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
+msgstr "{0, plural, other {Hyphen の記録に特殊トランザクション # 件}}"
+
+#. placeholder {0}: docs.length
+#. placeholder {1}: docs.length >= 100 ? '+' : ''
+msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
+msgstr "{0, plural, other {出金 # 件}}{1}, "
+
+#. placeholder {0}: secs(h.seconds)
+msgid "{0} (incomplete)"
+msgstr "{0}（未完了）"
+
 #. placeholder {0}: daily.length
 msgid "{0} days checked"
 msgstr "{0} 日分を確認"
+
+#. placeholder {0}: formatInt(values.length)
+#. placeholder {1}: formatNumber(dash(sorted[0] ?? 0n), { maximumFractionDigits: 2 })
+#. placeholder {2}: formatNumber(dash(max), { maximumFractionDigits: 2 })
+#. placeholder {3}: formatNumber(dash(mine), { maximumFractionDigits: 2 })
+msgid "{0} evonodes’ rewards last epoch, from {1} to {2} DASH; this one {3} DASH"
+msgstr "前エポックの {0} エボノードの報酬は {1} ～ {2} DASH、このノードは {3} DASH"
+
+#. placeholder {0}: formatInt(Number(mine ?? 0n))
+#. placeholder {1}: formatInt(current.data.data.index)
+msgid "{0} in epoch {1}"
+msgstr "エポック {1} で {0}"
+
+#. placeholder {0}: formatInt(current.blocks)
+#. placeholder {0}: formatInt(watched.actual)
+#. placeholder {1}: formatNumber(current.turns.expected_blocks)
+#. placeholder {1}: formatNumber(watched.expected ?? 0)
+msgid "{0} made, about {1} expected"
+msgstr "{0} 件作成、想定は約 {1} 件"
+
+#. placeholder {0}: formatInt(watched.missed)
+msgid "{0} missed turns seen"
+msgstr "不在のターンを {0} 回確認"
+
+#. placeholder {0}: formatInt(Math.round(v))
+msgid "{0} ms"
+msgstr "{0} ms"
 
 #. placeholder {0}: formatInt(d.latency_ms)
 msgid "{0} ms from Radar’s crawler"
 msgstr "Radar のクローラーから {0} ms"
 
+#. placeholder {0}: formatInt(rank.rank)
+#. placeholder {1}: formatInt(rank.of)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} shown"
+msgstr "{1} 件中 {0} 件を表示"
+
+#. placeholder {0}: formatInt(p.turns_30d.missed)
+#. placeholder {1}: formatInt(p.turns_30d.turns)
+msgid "{0} of {1} turns, last 30 days"
+msgstr "直近 30 日で {1} ターン中 {0} ターン"
+
+#. placeholder {0}: formatPercent(yearly, 1)
+msgid "{0} on 4,000 DASH"
+msgstr "4,000 DASH で {0}"
+
+#. placeholder {0}: score1(combined.score)
+msgid "{0} out of 100"
+msgstr "100 点中 {0} 点"
+
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "合計 {0} 件の支払いを索引済み"
+
+#. placeholder {0}: formatInt(summary.count)
+#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
+#. placeholder {2}: formatInt(summary.indexed.from)
+#. placeholder {3}: formatInt(summary.indexed.to)
+msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
+msgstr "支払い {0} 件、合計 {1} DASH、インデックス済みブロック {2}～{3}"
+
+#. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
+msgid "{0} s"
+msgstr "{0} 秒"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "{0} shown"
+msgstr "{0} 件を表示"
 
 #. placeholder {0}: d.day
 #. placeholder {1}: d.ok
@@ -31,14 +128,53 @@ msgstr "合計 {0} 件の支払いを索引済み"
 msgid "{0}: answered {1} of {2} checks"
 msgstr "{0}: {2} 回中 {1} 回応答"
 
+#. placeholder {0}: show(c.old)
+msgid "{name} (was at {0})"
+msgstr "{name}（以前は {0}）"
+
+#. placeholder {0}: show(c.new)
+msgid "{name} at {0}"
+msgstr "{name}は {0}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0} → {1}"
+msgstr "{name}: {0} → {1}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0}% → {1}%"
+msgstr "{name}: {0}% → {1}%"
+
+msgid "1 week"
+msgstr "1 週間"
+
+msgid "24 hours"
+msgstr "24 時間"
+
+msgid "50k headers"
+msgstr "5 万ヘッダー"
+
 msgid "A ProTx hash is 64 hexadecimal characters."
 msgstr "ProTx ハッシュは 16 進数 64 文字です。"
+
+msgid "About every two weeks, from each test location"
+msgstr "各テスト拠点から約 2 週間ごと"
 
 msgid "Address type"
 msgstr "アドレスの種類"
 
+msgid "Addresses, keys and PoSe status, as Radar recorded them"
+msgstr "Radar が記録したアドレス、鍵、PoSe ステータス"
+
+msgid "among the evonodes that proposed blocks"
+msgstr "ブロックを提案した evonode のうち"
+
 msgid "Amount"
 msgstr "金額"
+
+msgid "Answered"
+msgstr "応答あり"
 
 #. placeholder {0}: formatInt(up.ok)
 #. placeholder {1}: formatInt(up.attempts)
@@ -53,11 +189,32 @@ msgstr "すべての確認に応答"
 msgid "Answered every check on each of the {0} days Radar has checked this node"
 msgstr "Radar がこのノードを確認した {0} 日間のすべてで、全確認に応答"
 
+#. placeholder {0}: formatInt(d.latency_ms)
+#. placeholder {0}: formatInt(p.ms ?? 0)
+msgid "answered in {0} ms"
+msgstr "{0} ms で応答"
+
+#. placeholder {0}: Math.round((r.connect_ms ?? 0) + (r.handshake_ms ?? 0))
+#. placeholder {0}: formatInt(p.ms)
+msgid "Answered in {0} ms"
+msgstr "{0} ms で応答"
+
+msgid "Answered Radar’s latest port check."
+msgstr "Radar の直近のポート確認に応答しました。"
+
 msgid "Answering"
 msgstr "応答あり"
 
-msgid "Answers on its Core port"
-msgstr "Core ポートで応答"
+#. placeholder {0}: d.asn
+msgid "AS{0}"
+msgstr "AS{0}"
+
+#. placeholder {0}: formatInt(p.monthly_basis_days)
+msgid "at its pace of the last {0} days"
+msgstr "直近 {0} 日間のペースで"
+
+msgid "Back in the list"
+msgstr "リストに復帰"
 
 msgid "Banned"
 msgstr "BAN 済み"
@@ -66,12 +223,20 @@ msgstr "BAN 済み"
 msgid "banned at block {0}"
 msgstr "ブロック {0} で BAN"
 
-#. placeholder {0}: formatInt(d.pose_ban_height)
+#. placeholder {0}: formatInt(banned)
 msgid "Banned at block {0}"
 msgstr "ブロック {0} で BAN"
 
 msgid "Banned on Platform"
 msgstr "Platform で BAN 済み"
+
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "{0} で BAN"
+
+#. placeholder {0}: formatPercent(rank, 0)
+msgid "Better than {0} of masternodes tested from the same location."
+msgstr "同じ拠点でテストしたマスターノードの {0} より良好です。"
 
 msgid "block"
 msgstr "ブロック"
@@ -83,11 +248,96 @@ msgstr "ブロック"
 msgid "Block {0}"
 msgstr "ブロック {0}"
 
+msgid "Blocks"
+msgstr "ブロック"
+
+msgid "Blocks (proofs)"
+msgstr "ブロック（証明済み）"
+
+msgid "Blocks and rewards of the last 12 finalized epochs, from Platform’s proofs"
+msgstr "Platform の証明に基づく、確定済み直近 12 エポックのブロックと報酬"
+
+msgid "Blocks proposed"
+msgstr "提案したブロック"
+
+msgid "Blocks this epoch"
+msgstr "このエポックのブロック"
+
+msgid "Blocks this evonode proposed in one epoch, from Platform"
+msgstr "この evonode が 1 エポックで提案したブロック（Platform より）"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Blocks this evonode proposed, over the last {0}"
+msgstr "この evonode が直近 {0} に提案したブロック"
+
+msgid "Both, a month"
+msgstr "両方、1 か月"
+
+msgid "Both, a year"
+msgstr "両方、1 年"
+
+#. placeholder {0}: breakdownFrom.location || breakdownFrom.vantage
+msgid "Breakdown from {0}."
+msgstr "{0} からの内訳。"
+
+msgid "Broadcast"
+msgstr "ブロードキャスト"
+
 msgid "Catching up"
 msgstr "追いついています"
 
+msgid "Change"
+msgstr "おつり"
+
+msgid "Chart range"
+msgstr "グラフの期間"
+
+msgid "Check now"
+msgstr "今すぐ確認"
+
+msgid "Checking whether Hyphen’s index is current…"
+msgstr "Hyphen のインデックスが最新か確認中…"
+
+msgid "Checking…"
+msgstr "確認中…"
+
+msgid "Claimable now"
+msgstr "今すぐ請求可能"
+
 msgid "Collateral"
 msgstr "担保"
+
+msgid "Combined from {answers, plural, one {# proof-checked answer} other {# proof-checked answers}}: the finalized epochs, the current epoch and this evonode’s proposed blocks."
+msgstr "{answers, plural, other {証明で検証済みの応答 # 件}}を統合: 確定済みエポック、現在のエポック、この evonode が提案したブロック。"
+
+msgid "Compact block filters"
+msgstr "コンパクトブロックフィルター"
+
+msgid "Complete"
+msgstr "完了"
+
+msgid "Connect"
+msgstr "接続"
+
+msgid "Connect and handshake"
+msgstr "接続とハンドシェイク"
+
+msgid "Core P2P"
+msgstr "Core P2P"
+
+msgid "Core P2P address"
+msgstr "Core P2P アドレス"
+
+msgid "Core, a month"
+msgstr "Core、1 か月"
+
+#. placeholder {0}: message(e)
+msgid "couldn’t check: {0}"
+msgstr "確認できませんでした: {0}"
+
+#. placeholder {0}: message(withdrawals.error)
+msgid "Couldn’t list withdrawals: {0}"
+msgstr "出金を一覧できませんでした: {0}"
 
 msgid "Crawled by Radar"
 msgstr "Radar がクロール"
@@ -95,11 +345,40 @@ msgstr "Radar がクロール"
 msgid "Daily health"
 msgstr "日ごとの稼働状況"
 
+msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
+msgstr "DAPI の一覧にありません。新しい、削除された、または入力ミスの可能性があります。"
+
+msgid "DAPI’s list wins where Radar’s last crawl differs."
+msgstr "Radar の直近のクロールと異なる場合は DAPI の一覧が優先されます。"
+
+msgid "differ"
+msgstr "相違あり"
+
+#. placeholder {0}: differing.map((r) => r.epoch).join(', ')
+msgid "differ in {0}"
+msgstr "{0} に相違あり"
+
+msgid "Doesn’t serve compact block filters ({bit})."
+msgstr "コンパクトブロックフィルターを提供していません（{bit}）。"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Drive keeps per-evonode records only from epoch {0} on, so rewards before it can’t be checked. Rewards are gross: reward shares are not deducted."
+msgstr "Drive はエポック {0} 以降のみ evonode ごとの記録を保持するため、それ以前の報酬は確認できません。報酬はグロスで、報酬シェアは差し引かれていません。"
+
 msgid "Drive protocol"
 msgstr "Drive プロトコル"
 
+msgid "Each test downloads the latest 50,000 block headers and the masternode list from this node and checks them against Radar’s own node."
+msgstr "各テストでは、このノードから最新の 50,000 ブロックヘッダーとマスターノードリストをダウンロードし、Radar 自身のノードと照合します。"
+
+msgid "Earned (DASH)"
+msgstr "獲得額（DASH）"
+
 msgid "Earned on Core, {window} days"
 msgstr "Core での獲得額、{window} 日間"
+
+msgid "Earned on Platform"
+msgstr "Platform での獲得額"
 
 msgid "Enabled, no PoSe penalty"
 msgstr "有効、PoSe ペナルティなし"
@@ -108,11 +387,45 @@ msgstr "有効、PoSe ペナルティなし"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "有効、PoSe ペナルティ {0}"
 
+msgid "Epoch"
+msgstr "エポック"
+
+#. placeholder {0}: formatInt(selected)
+#. placeholder {1}: infos.length
+msgid "Epoch {0} is outside the {1, plural, one {# recent epoch} other {# recent epochs}} read here, or not final yet."
+msgstr "エポック {0} は、ここで読み込む直近 {1, plural, other {# エポック}}の範囲外か、まだ確定していません。"
+
+#. placeholder {0}: formatInt(watched.epoch)
+msgid "Epoch {0}, blocks"
+msgstr "エポック {0}、ブロック"
+
+#. placeholder {0}: info.protocolVersion
+msgid "Epoch ran protocol {0}"
+msgstr "エポックはプロトコル {0} で実行"
+
+msgid "Epoch record"
+msgstr "エポック記録"
+
+msgid "Error"
+msgstr "エラー"
+
+msgid "Estimates"
+msgstr "推定"
+
+msgid "Every epoch, in DASH"
+msgstr "全エポック（DASH）"
+
+msgid "Every ProRegTx and ProUp… transaction that changed this masternode"
+msgstr "このマスターノードを変更したすべての ProRegTx と ProUp… トランザクション"
+
 msgid "Evonode"
 msgstr "エボノード"
 
 msgid "Evonode collateral"
 msgstr "エボノードの担保"
+
+msgid "Expired (refunded)"
+msgstr "期限切れ（返金済み）"
 
 msgid "Expires"
 msgstr "有効期限"
@@ -120,14 +433,71 @@ msgstr "有効期限"
 msgid "Facts"
 msgstr "主な情報"
 
-msgid "fail"
+msgid "Fail"
+msgstr "不合格"
+
+msgid "Failed"
 msgstr "失敗"
+
+#. placeholder {0}: p.error
+msgid "Failed: {0}"
+msgstr "失敗: {0}"
+
+#. placeholder {0}: rows.length
+msgid "Fails {failing} of {0} checks. Quorum members vote against masternodes that fail these in DKGs, which costs PoSe score."
+msgstr "{0} 件の確認のうち {failing} 件に不合格です。クォーラムメンバーは DKG でこれらに不合格のマスターノードに反対票を投じ、PoSe スコアが加算されます。"
 
 msgid "First seen"
 msgstr "初回確認"
 
+msgid "Fix"
+msgstr "対処"
+
+msgid "Fix its Platform services, then send a ProUpServTx (protx update_service) to lift the ban."
+msgstr "Platform サービスを修復し、ProUpServTx（protx update_service）を送信して BAN を解除してください。"
+
+#. placeholder {0}: r.from
+msgid "from {0}"
+msgstr "{0} から"
+
+#. placeholder {0}: returns?.window_days ?? 90
+msgid "from its payments over {0} days"
+msgstr "{0} 日間の支払いから"
+
+msgid "from Radar’s count"
+msgstr "Radar の集計から"
+
+msgid "Grade"
+msgstr "評価"
+
+#. placeholder {0}: combined.letter
+msgid "Grade {0}"
+msgstr "評価 {0}"
+
+msgid "gRPC (HTTPS)"
+msgstr "gRPC (HTTPS)"
+
+msgid "Header throughput"
+msgstr "ヘッダー処理速度"
+
+msgid "Headers/s"
+msgstr "ヘッダー/秒"
+
 msgid "Healthy"
 msgstr "正常"
+
+#. placeholder {0}: r.height
+msgid "height {0}"
+msgstr "高さ {0}"
+
+msgid "Height it reported"
+msgstr "報告された高さ"
+
+msgid "History"
+msgstr "履歴"
+
+msgid "History needs Radar’s crawl and Hyphen’s index of special transactions"
+msgstr "履歴の表示には、Radar のクロールと Hyphen の特殊トランザクションのインデックスが必要です"
 
 msgid "Hosting"
 msgstr "ホスティング"
@@ -135,17 +505,101 @@ msgstr "ホスティング"
 msgid "HTTPS (DAPI)"
 msgstr "HTTPS (DAPI)"
 
-msgid "Last error"
-msgstr "直近のエラー"
+#. placeholder {0}: f.platformHttpPort
+msgid "HTTPS {0}"
+msgstr "HTTPS {0}"
+
+msgid "Hyphen has no special transactions for this ProTx."
+msgstr "Hyphen にはこの ProTx の特殊トランザクションがありません。"
+
+msgid "Hyphen’s index is behind the chain, so this list is not read."
+msgstr "Hyphen のインデックスがチェーンに追いついていないため、この一覧は読み込まれません。"
+
+msgid "if it ended now (an estimate)"
+msgstr "今終了した場合（推定）"
+
+msgid "In a validator set"
+msgstr "バリデーターセットに所属"
+
+msgid "in total (not counting expired ones)."
+msgstr "合計（期限切れを除く）。"
+
+#. placeholder {0}: formatPercent(below / values.length, 0)
+#. placeholder {1}: formatInt(values.length)
+#. placeholder {2}: formatNumber(dash(spread.p50), { maximumFractionDigits: 2 })
+msgid "It earned more than {0} of the {1} evonodes that proposed blocks last epoch; the median is {2} DASH."
+msgstr "前エポックでブロックを提案した {1} evonode のうち、{0} より多く獲得しました。中央値は {2} DASH です。"
+
+msgid "It hasn’t proposed a block in a finished epoch yet."
+msgstr "終了したエポックでまだブロックを提案していません。"
+
+msgid "it proposed no blocks"
+msgstr "ブロックの提案なし"
+
+msgid "It proposed no blocks last epoch."
+msgstr "前エポックはブロックを提案していません。"
+
+msgid "its identity’s balance, read"
+msgstr "アイデンティティの残高、読み取り済み"
+
+#. placeholder {0}: formatInt(p.next.slots ?? 0)
+msgid "its turn is {0} blocks away; an estimate"
+msgstr "{0} ブロック先に順番が回ります（推定）"
+
+msgid "its turn is next; an estimate"
+msgstr "次に順番が回ります（推定）"
+
+msgid "Keep the node online and its port open to inbound connections."
+msgstr "ノードをオンラインに保ち、ポートを外部からの接続に開放してください。"
+
+msgid "last"
+msgstr "最新"
+
+msgid "Last 30 days"
+msgstr "過去 30 日間"
+
+msgid "Last 365 days"
+msgstr "過去 365 日間"
+
+msgid "Last 90 days"
+msgstr "過去 90 日間"
+
+msgid "Last answered"
+msgstr "最終応答"
+
+msgid "Last block"
+msgstr "最新ブロック"
+
+#. placeholder {0}: totals.last_epoch_index ?? '—'
+msgid "Last epoch ({0})"
+msgstr "前エポック（{0}）"
 
 msgid "Last paid"
 msgstr "最終支払い"
 
-msgid "Last reached"
-msgstr "最終到達"
-
 msgid "Latency"
 msgstr "レイテンシ"
+
+msgid "Latest port check"
+msgstr "直近のポート確認"
+
+msgid "Left the list"
+msgstr "リストから外れた"
+
+msgid "Listed by DAPI"
+msgstr "DAPI の一覧に掲載"
+
+msgid "Live from Platform"
+msgstr "Platform から取得"
+
+msgid "Loading the Platform SDK (once per visit)…"
+msgstr "Platform SDK を読み込み中（訪問ごとに 1 回）…"
+
+msgid "Loading…"
+msgstr "読み込み中…"
+
+msgid "Location"
+msgstr "所在地"
 
 msgid "mainnet"
 msgstr "メインネット"
@@ -153,8 +607,8 @@ msgstr "メインネット"
 msgid "Masternode"
 msgstr "マスターノード"
 
-#. placeholder {0}: d.protx.slice(0, 8)
 #. placeholder {0}: id.slice(0, 8)
+#. placeholder {0}: protx.slice(0, 8)
 msgid "Masternode {0}"
 msgstr "マスターノード {0}"
 
@@ -164,11 +618,39 @@ msgstr "マスターノードの担保"
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "マスターノードの情報は、Radar によるメインネットとテストネットのクロール結果です。"
 
-msgid "Masternode records need Radar's crawler"
-msgstr "マスターノードの記録には Radar のクローラーが必要です"
+msgid "Masternode records need an indexer"
+msgstr "マスターノードの記録にはインデクサーが必要です"
+
+msgid "Masternodes on this network"
+msgstr "このネットワークのマスターノード"
+
+msgid "match"
+msgstr "一致"
+
+#. placeholder {0}: checked.length
+msgid "match for {0, plural, one {# epoch} other {# epochs}}"
+msgstr "{0, plural, other {# エポック}}にわたり一致"
+
+msgid "Middle 80 % (DASH)"
+msgstr "中央 80 %（DASH）"
+
+msgid "Middle 80 % ends"
+msgstr "中央 80 %の上限"
+
+msgid "Middle 80 % starts"
+msgstr "中央 80 %の下限"
+
+#. placeholder {0}: rules.reachFailures
+#. placeholder {1}: rules.maxFailedOutbound
+msgid "Missed {0} or more of Radar’s port checks in a row. Members vote against a masternode they fail to connect to more than {1} times."
+msgstr "Radar のポート確認に {0} 回以上連続で不応答でした。メンバーは、{1} 回を超えて接続できなかったマスターノードに反対票を投じます。"
 
 msgid "Missed most"
 msgstr "ほとんど不応答"
+
+#. placeholder {0}: rules.reachFailures
+msgid "Missed Radar’s latest port check, but not {0} in a row. Core judges repeated failures, not one."
+msgstr "Radar の直近のポート確認には不応答でしたが、{0} 回連続ではありません。Core は 1 回ではなく、繰り返しの失敗で判断します。"
 
 msgid "Missed some"
 msgstr "一部不応答"
@@ -178,15 +660,51 @@ msgstr "一部不応答"
 msgid "Missed some checks on {0} of {1} days"
 msgstr "{1} 日中 {0} 日で一部の確認に不応答"
 
+msgid "Missed turns Radar saw"
+msgstr "Radar が確認した不在ターン"
+
+msgid "MN list"
+msgstr "MN リスト"
+
+msgid "more than Radar’s total, for epochs before Radar’s record"
+msgstr "Radar の合計より多い（Radar の記録以前のエポック分）"
+
 msgid "Network"
 msgstr "ネットワーク"
+
+msgid "never"
+msgstr "なし"
 
 msgid "never banned"
 msgstr "BAN 歴なし"
 
+msgid "Next block"
+msgstr "次のブロック"
+
 #. placeholder {0}: formatInt(protocol.next_epoch)
 msgid "Next epoch {0}"
 msgstr "次のエポック {0}"
+
+msgid "No answer"
+msgstr "応答なし"
+
+msgid "No changes since Radar started recording them."
+msgstr "Radar が記録を始めてから変更はありません。"
+
+msgid "no epochs to compare yet"
+msgstr "比較できるエポックはまだありません"
+
+msgid "No finalized epochs came back to compare."
+msgstr "比較できる確定済みエポックがありませんでした。"
+
+msgid "No grade"
+msgstr "評価なし"
+
+msgid "No handshake with Radar’s crawler in the past week."
+msgstr "過去 1 週間、Radar のクローラーとのハンドシェイクはありません。"
+
+msgid "no identity"
+msgstr "アイデンティティなし"
 
 msgid "No masternode with this ProTx on {here}."
 msgstr "{here} にこの ProTx のマスターノードはありません。"
@@ -197,23 +715,96 @@ msgstr "このマスターノードの支払いはまだ索引されていませ
 msgid "No penalty"
 msgstr "ペナルティなし"
 
+msgid "No Platform ban"
+msgstr "Platform での BAN なし"
+
+msgid "No stalls or bad data"
+msgstr "停止や不正なデータなし"
+
+msgid "No versions recorded yet."
+msgstr "記録されたバージョンはまだありません。"
+
+msgid "No vote seen"
+msgstr "投票を確認できず"
+
+msgid "none"
+msgstr "なし"
+
+msgid "none yet this epoch: it votes with the blocks it proposes"
+msgstr "このエポックではまだなし: 提案するブロックとともに投票します"
+
+msgid "None yet: everything it earned is still claimable."
+msgstr "まだなし: 獲得した分はすべて請求可能です。"
+
 msgid "Not answering"
 msgstr "応答なし"
 
-msgid "Not banned on Platform"
-msgstr "Platform で BAN されていません"
+msgid "Not checked in Radar’s latest crawl."
+msgstr "Radar の直近のクロールでは未確認です。"
+
+msgid "not checked in the latest crawl"
+msgstr "直近のクロールでは未確認"
 
 msgid "Not checked yet"
 msgstr "未確認"
 
+msgid "not compared: Radar’s record is not in use"
+msgstr "比較なし: Radar の記録は使用されていません"
+
+msgid "Not in a validator set"
+msgstr "バリデーターセットに未所属"
+
+msgid "not in a validator set that takes turns now"
+msgstr "現在ターン制のバリデーターセットに入っていません"
+
 msgid "not paid yet"
 msgstr "まだ支払いなし"
+
+msgid "not probed"
+msgstr "未プローブ"
+
+msgid "not read yet"
+msgstr "未読み込み"
 
 msgid "Not ready"
 msgstr "準備未完了"
 
+msgid "Not recorded yet; the next crawl will tell."
+msgstr "まだ記録されていません。次回のクロールで分かります。"
+
+msgid "Not tested yet. Radar tests every enabled masternode about every two weeks."
+msgstr "まだテストされていません。Radar は有効な全マスターノードを約 2 週間ごとにテストします。"
+
+msgid "Not valid"
+msgstr "無効"
+
+msgid "Nothing fails, but Radar can’t see every check yet."
+msgstr "不合格のものはありませんが、Radar はまだすべての確認を見られるわけではありません。"
+
+msgid "nothing yet"
+msgstr "まだなし"
+
+msgid "now"
+msgstr "今"
+
+#. placeholder {0}: formatInt(total)
+msgid "of {0}"
+msgstr "{0} 中"
+
+msgid "On protocol {voted}"
+msgstr "プロトコル {voted} を使用中"
+
+msgid "On the list"
+msgstr "リストに掲載"
+
+msgid "once six epochs have finished"
+msgstr "6 エポックが終了したら"
+
 msgid "Open it on {otherName}"
 msgstr "{otherName} で開く"
+
+msgid "Open port {port} to inbound connections and keep the node online."
+msgstr "ポート {port} を外部からの接続に開放し、ノードをオンラインに保ってください。"
 
 msgid "Operator key"
 msgstr "オペレーター鍵"
@@ -221,34 +812,77 @@ msgstr "オペレーター鍵"
 msgid "Operator payout"
 msgstr "オペレーターへの支払い"
 
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "オペレーター報酬 {0}"
+msgid "Operator payout address"
+msgstr "オペレーターへの支払先アドレス"
+
+msgid "Operator reward"
+msgstr "オペレーター報酬"
+
+#. placeholder {0}: formatPercent(p.d30_percentile, 0)
+#. placeholder {1}: formatInt(p.d30_of)
+msgid "Over the last 30 days, more than {0} of all {1} enabled evonodes."
+msgstr "過去 30 日間で、有効な全 {1} evonode のうち {0} 超。"
+
+msgid "Overview"
+msgstr "概要"
 
 msgid "Owner"
 msgstr "オーナー"
 
+msgid "Owner address"
+msgstr "オーナーアドレス"
+
 msgid "P2P (Tenderdash)"
 msgstr "P2P (Tenderdash)"
+
+#. placeholder {0}: f.platformP2pPort
+msgid "P2P {0}"
+msgstr "P2P {0}"
 
 msgid "Paid"
 msgstr "支払済み"
 
+msgid "Paid (proofs)"
+msgstr "支払い済み（証明済み）"
+
 msgid "Paid to"
 msgstr "支払先"
 
-msgid "pass"
+msgid "Pass"
 msgstr "合格"
+
+msgid "Passes every check Radar can see."
+msgstr "Radar が確認できるすべての項目に合格しています。"
+
+msgid "Payments"
+msgstr "支払い"
+
+msgid "Payments need Radar’s index of this node’s block rewards"
+msgstr "支払いの表示には、このノードのブロック報酬の Radar インデックスが必要です"
 
 msgid "Payout"
 msgstr "支払い"
 
+msgid "Payout address"
+msgstr "支払先アドレス"
+
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "ペナルティ {0}"
 
+#. placeholder {0}: formatInt(p.first_epoch)
+msgid "Per finished epoch since epoch {0}, worked out the way Drive pays them"
+msgstr "エポック {0} 以降の終了した各エポックについて、Drive の支払い方式で算出"
+
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Place"
 msgstr "場所"
+
+msgid "Platform"
+msgstr "Platform"
 
 #. placeholder {0}: daily.length
 msgid "Platform endpoint checks answered, day by day, over {0} days"
@@ -257,11 +891,65 @@ msgstr "Platform エンドポイントの確認への応答を日ごとに表示
 msgid "Platform endpoints"
 msgstr "Platform エンドポイント"
 
+msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
+msgstr "Platform Explorer が応答しなかったため、このバリデーターの記録がありません。"
+
+msgid "Platform Explorer has no validator record for this ProTx."
+msgstr "Platform Explorer にはこの ProTx のバリデーター記録がありません。"
+
+msgid "Platform Explorer is a third party; Radar has not verified it"
+msgstr "Platform Explorer はサードパーティであり、Radar は検証していません"
+
+msgid "Platform Explorer says"
+msgstr "Platform Explorer の情報"
+
+msgid "Platform has PoSe-banned this evonode."
+msgstr "Platform がこの evonode を PoSe で BAN しています。"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
 
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS アドレス"
+
+msgid "Platform keeps each masternode’s latest vote"
+msgstr "Platform は各マスターノードの最新の投票を保持します"
+
 msgid "Platform node"
 msgstr "Platform ノード"
+
+msgid "Platform node ID"
+msgstr "Platform ノード ID"
+
+msgid "Platform P2P"
+msgstr "Platform P2P"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P アドレス"
+
+msgid "Platform ports"
+msgstr "Platform のポート"
+
+msgid "Platform rewards"
+msgstr "Platform の報酬"
+
+#. placeholder {0}: first ?? 0
+#. placeholder {1}: last ?? 0
+msgid "Platform rewards per epoch, epochs {0} to {1}, against the middle 80 % of evonodes"
+msgstr "エポック {0}～{1} の Platform 報酬（evonode の中央 80 %との比較）"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Platform rewards this evonode earned, over the last {0}"
+msgstr "この evonode が直近 {0} に獲得した Platform 報酬"
+
+msgid "Platform, a month"
+msgstr "Platform、1 か月"
+
+msgid "Pooled"
+msgstr "合算"
+
+msgid "Port check"
+msgstr "ポート確認"
 
 msgid "PoSe"
 msgstr "PoSe"
@@ -272,23 +960,63 @@ msgstr "PoSe で BAN"
 msgid "PoSe penalty"
 msgstr "PoSe ペナルティ"
 
+msgid "PoSe status"
+msgstr "PoSe ステータス"
+
 msgid "Probe failing"
 msgstr "プローブ失敗中"
 
 msgid "Probed"
 msgstr "プローブ日時"
 
+msgid "proof checked"
+msgstr "証明で検証済み"
+
+msgid "ProRegTx"
+msgstr "ProRegTx"
+
+msgid "Protocol"
+msgstr "プロトコル"
+
+#. placeholder {0}: p.vote.version
+msgid "protocol {0}"
+msgstr "プロトコル {0}"
+
+#. placeholder {0}: rules.minProtocol
+msgid "Protocol {protocol}, at least {0}."
+msgstr "プロトコル {protocol}、最低 {0}。"
+
+#. placeholder {0}: rules.release
+#. placeholder {1}: rules.minProtocol
+msgid "Protocol {protocol}. Masternodes running {0} vote nodes below protocol {1} bad in DKGs."
+msgstr "プロトコル {protocol}。{0} を実行するマスターノードは、プロトコル {1} 未満のノードを DKG で不良と投票します。"
+
+msgid "Protocol version"
+msgstr "プロトコルバージョン"
+
 msgid "ProTx"
 msgstr "ProTx"
 
-msgid "Quorum readiness"
-msgstr "クォーラムの準備状況"
+msgid "ProTx (base58, its identity)"
+msgstr "ProTx（base58、そのアイデンティティ）"
+
+msgid "ProTx (hex)"
+msgstr "ProTx（hex）"
+
+msgid "Queued"
+msgstr "待機中"
+
+msgid "Quorum readiness checks"
+msgstr "クォーラム対応の確認"
 
 msgid "Radar doesn’t crawl devnets."
 msgstr "Radar は devnet をクロールしません。"
 
 msgid "Radar has no checks for this node yet"
 msgstr "Radar にはこのノードの確認結果がまだありません"
+
+msgid "Radar has no reward record for this evonode yet."
+msgstr "Radar にはこの evonode の報酬記録がまだありません。"
 
 msgid "Radar has no uptime checks for this node yet."
 msgstr "Radar にはこのノードの稼働確認がまだありません。"
@@ -302,14 +1030,48 @@ msgstr "Radar はこのノードの Platform エンドポイントをまだプ�
 msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
 msgstr "Radar のクロール結果にありません。新しい、削除された、または入力ミスの可能性があります。"
 
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "Radar による {here} のクロール結果にはありません。"
+msgid "Radar’s crawl has no record of this masternode."
+msgstr "Radar のクロール結果にこのマスターノードの記録はありません。"
+
+msgid "Radar’s crawl, which also lists nodes missing from DAPI’s list, is off"
+msgstr "DAPI の一覧にないノードも載せる Radar のクロールはオフです"
+
+msgid "Radar’s epoch numbers"
+msgstr "Radar のエポック番号"
+
+msgid "Radar’s last crawl differs"
+msgstr "Radar の直近のクロールと異なる"
+
+msgid "Radar’s node hasn’t said yet."
+msgstr "Radar のノードはまだ報告していません。"
+
+msgid "Radar’s node knows of no Platform ban. Bans arrive over P2P, so it could miss one."
+msgstr "Radar のノードは Platform の BAN を把握していません。BAN は P2P で届くため、見逃すことがあります。"
+
+msgid "Radar’s payment index has not started for this node"
+msgstr "Radar の支払いインデックスはこのノードでまだ開始されていません"
+
+msgid "Radar’s record"
+msgstr "Radar の記録"
+
+msgid "Rank"
+msgstr "順位"
+
+msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
+msgstr "到達性は Radar のクロール、ブロック・報酬・鍵は Platform Explorer による"
+
+msgid "Reachable"
+msgstr "到達可能"
+
+msgid "Read from Platform with proofs, checked in your browser"
+msgstr "Platform から証明付きで読み取り、ブラウザで検証済み"
 
 msgid "Ready"
 msgstr "準備完了"
 
-msgid "Recent payments"
-msgstr "最近の支払い"
+#. placeholder {0}: rules.release
+msgid "Ready for {0} quorums?"
+msgstr "{0} 個のクォーラムに対応済みですか?"
 
 msgid "Recent payments to this masternode"
 msgstr "このマスターノードへの最近の支払い"
@@ -317,21 +1079,61 @@ msgstr "このマスターノードへの最近の支払い"
 msgid "Registered"
 msgstr "登録"
 
+msgid "Registered at block"
+msgstr "登録ブロック"
+
 msgid "Registration"
 msgstr "登録情報"
+
+msgid "Registration changes"
+msgstr "登録の変更"
+
+msgid "Registration changes of this masternode"
+msgstr "このマスターノードの登録の変更"
 
 msgid "Regular masternode"
 msgstr "通常のマスターノード"
 
-msgid "Relays transactions"
-msgstr "トランザクションを中継"
+msgid "Relay is off, so it won’t have the transactions it must sign InstantSend locks for."
+msgstr "リレーがオフのため、InstantSend ロックに署名するために必要なトランザクションを受け取れません。"
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
+msgid "Relays transactions."
+msgstr "トランザクションをリレーします。"
+
+#. placeholder {0}: rules.release
+msgid "Remove blocksonly=1 from dash.conf. {0} won’t start a masternode with it."
+msgstr "dash.conf から blocksonly=1 を削除してください。{0} は blocksonly=1 のままではマスターノードを起動しません。"
+
+msgid "Requested"
+msgstr "リクエスト済み"
+
+msgid "Retry"
+msgstr "再試行"
+
+msgid "reused from"
+msgstr "再利用元"
+
+#. placeholder {0}: formatInt(revived)
 msgid "Revived at block {0}"
 msgstr "ブロック {0} で復帰"
 
-msgid "Runs a current protocol version"
-msgstr "最新のプロトコルバージョンで動作"
+msgid "Reward estimates, endpoint health and Platform Explorer’s record need indexers"
+msgstr "報酬の推定、エンドポイントの稼働状況、Platform Explorer の記録にはインデクサーが必要です"
+
+msgid "Rewards"
+msgstr "報酬"
+
+msgid "Rewards (DASH)"
+msgstr "報酬（DASH）"
+
+msgid "Rewards appear after it has proposed a block in a finished epoch."
+msgstr "終了したエポックでブロックを提案すると、報酬が表示されます。"
+
+msgid "Rewards in total"
+msgstr "報酬の合計"
+
+msgid "Rewards this epoch"
+msgstr "このエポックの報酬"
 
 msgid "Same as the owner address"
 msgstr "オーナーアドレスと同じ"
@@ -339,11 +1141,71 @@ msgstr "オーナーアドレスと同じ"
 msgid "Search Radar"
 msgstr "Radar を検索"
 
-msgid "Serves compact block filters"
-msgstr "コンパクトブロックフィルターを提供"
+msgid "See the sources"
+msgstr "ソースを見る"
+
+msgid "Served everything asked"
+msgstr "要求されたものをすべて提供"
+
+msgid "Serves compact block filters ({bit})."
+msgstr "コンパクトブロックフィルターを提供しています（{bit}）。"
+
+msgid "Service"
+msgstr "サービス"
+
+#. placeholder {0}: rules.filtersBit
+msgid "service bit {0}"
+msgstr "サービスビット {0}"
+
+msgid "Services"
+msgstr "サービス"
+
+#. placeholder {0}: rules.release
+msgid "Set peerblockfilters=1 and blockfilterindex=1, or remove a =0 for either. {0} won’t start a masternode without them."
+msgstr "peerblockfilters=1 と blockfilterindex=1 を設定するか、どちらかの =0 を削除してください。{0} はこれらがないとマスターノードを起動しません。"
+
+msgid "Share of blocks"
+msgstr "ブロック割合"
+
+msgid "Show more"
+msgstr "もっと見る"
+
+msgid "Show on map"
+msgstr "地図で表示"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Since epoch {0}"
+msgstr "エポック {0} 以降"
+
+msgid "so far this epoch"
+msgstr "このエポックのここまで"
 
 msgid "Software"
 msgstr "ソフトウェア"
+
+msgid "Special transactions"
+msgstr "特殊トランザクション"
+
+msgid "Special transactions after that block are not in this list. Everything else on this page is current."
+msgstr "そのブロック以降の特殊トランザクションはこの一覧に含まれません。このページのそれ以外はすべて最新です。"
+
+msgid "Special transactions of this masternode"
+msgstr "このマスターノードの特殊トランザクション"
+
+msgid "Speed test"
+msgstr "速度テスト"
+
+msgid "Speed test results by location"
+msgstr "拠点別の速度テスト結果"
+
+msgid "started"
+msgstr "開始"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "Tested"
+msgstr "テスト済み"
 
 msgid "testnet"
 msgstr "テストネット"
@@ -351,28 +1213,167 @@ msgstr "テストネット"
 msgid "That isn’t a ProTx hash."
 msgstr "ProTx ハッシュではありません。"
 
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Radar が索引した {1} 件の支払いのうち最新の {0} 件"
+#. placeholder {0}: error instanceof Error ? error.message : String(error)
+msgid "The check failed: {0}"
+msgstr "確認に失敗しました: {0}"
+
+msgid "the evonode’s identity balance"
+msgstr "evonode のアイデンティティ残高"
+
+msgid "The last 12 epochs"
+msgstr "直近 12 エポック"
+
+msgid "The latest test failed; Radar retries within a day."
+msgstr "直近のテストに失敗しました。Radar は 1 日以内に再試行します。"
+
+msgid "The masternode list of {here} doesn’t include it."
+msgstr "{here} のマスターノードリストにはありません。"
+
+msgid "The node answered."
+msgstr "ノードが応答しました。"
+
+msgid "The node did not answer."
+msgstr "ノードが応答しませんでした。"
+
+msgid "The port check, location, speed test and endpoint health need Radar’s crawl"
+msgstr "ポート確認、所在地、速度テスト、エンドポイントの稼働状況には Radar のクロールが必要です"
+
+msgid "The registration transaction is the ProTx hash itself."
+msgstr "登録トランザクションは ProTx ハッシュそのものです。"
+
+#. placeholder {0}: rules.coreCommit
+msgid "The rule in Dash Core {0}"
+msgstr "Dash Core {0} のルール"
+
+msgid "the same as Radar’s total"
+msgstr "Radar の合計と同じ"
+
+msgid "This epoch so far"
+msgstr "このエポックのここまで"
+
+msgid "This epoch, blocks"
+msgstr "このエポック、ブロック"
+
+msgid "This evonode"
+msgstr "この evonode"
 
 msgid "This masternode is on {otherName}."
 msgstr "このマスターノードは {otherName} にあります。"
 
+msgid "Time (UTC)"
+msgstr "時刻 (UTC)"
+
 msgid "TLS certificate"
 msgstr "TLS 証明書"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in {wait} s."
+msgstr "確認回数が多すぎます。Radar はクライアントとノードごとに 1 分あたり 5 回までです。{wait} 秒後に再試行してください。"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in a minute."
+msgstr "確認回数が多すぎます。Radar はクライアントとノードごとに 1 分あたり 5 回までです。1 分後に再試行してください。"
+
+msgid "too new to tell"
+msgstr "判断するには新しすぎます"
+
+msgid "Transaction"
+msgstr "トランザクション"
+
+msgid "Transaction relay"
+msgstr "トランザクションリレー"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Unknown"
+msgstr "不明"
+
+msgid "unknown: the validator sets haven’t been read lately"
+msgstr "不明: バリデーターセットが最近読み込まれていません"
+
+msgid "Updated"
+msgstr "更新"
+
+#. placeholder {0}: rules.release
+msgid "Upgrade to {0}."
+msgstr "{0} にアップグレードしてください。"
+
+msgid "Upgrade vote"
+msgstr "アップグレード投票"
 
 msgid "Uptime"
 msgstr "稼働率"
 
+msgid "Uptime and versions need Radar’s crawl"
+msgstr "稼働率とバージョンには Radar のクロールが必要です"
+
 msgid "Uptime, 30 days"
 msgstr "稼働率（30 日間）"
+
+msgid "Uptime, payments and readiness need Radar’s crawl of this node"
+msgstr "稼働率、支払い、対応状況には、このノードの Radar のクロールが必要です"
+
+msgid "User agent"
+msgstr "ユーザーエージェント"
+
+msgid "Valid"
+msgstr "有効"
+
+msgid "Valid on DAPI’s list"
+msgstr "DAPI の一覧で有効"
+
+msgid "Validator record"
+msgstr "バリデーター記録"
+
+msgid "Verdict"
+msgstr "判定"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Version history"
+msgstr "バージョン履歴"
+
+msgid "Versions this masternode has announced"
+msgstr "このマスターノードが通知したバージョン"
 
 msgid "Vote in Governance"
 msgstr "Governance で投票"
 
+msgid "votes are not kept per epoch"
+msgstr "投票はエポックごとには保持されません"
+
+msgid "Votes for protocol {voted}"
+msgstr "プロトコル {voted} に投票"
+
 msgid "Voting"
 msgstr "投票"
 
+msgid "Voting address"
+msgstr "投票アドレス"
+
+msgid "week"
+msgstr "週"
+
+msgid "What the node announced, newest first"
+msgstr "ノードが通知した内容（新しい順）"
+
+msgid "When"
+msgstr "日時"
+
+msgid "When a DKG starts, each quorum member votes against members it can’t reach or that fail these checks. A node is left out only once about three quarters of a quorum vote it bad."
+msgstr "DKG が始まると、各クォーラムメンバーは接続できない、またはこれらの確認に不合格のメンバーに反対票を投じます。クォーラムの約 4 分の 3 が不良と投票して初めて、ノードは除外されます。"
+
 msgid "Where it is"
 msgstr "所在地"
+
+msgid "Where it sits"
+msgstr "現在の位置"
+
+msgid "Withdrawals"
+msgstr "出金"
+
+msgid "Withdrawals from this evonode’s identity"
+msgstr "この evonode のアイデンティティからの出金"
+
+msgid "worked out from the epoch’s proven fees"
+msgstr "そのエポックの検証済み手数料から算出"

@@ -13,17 +13,114 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: combined.vantages
+msgid "(average of {0, plural, one {# location} other {# locations}})"
+msgstr "(ortalama: {0, plural, one {# konum} other {# konum}})"
+
+#. placeholder {0}: current.blocks
+#. placeholder {0}: lastEpoch.blocks
+msgid "{0, plural, one {# block} other {# blocks}}"
+msgstr "{0, plural, one {# blok} other {# blok}}"
+
+#. placeholder {0}: lastEpoch.blocks
+#. placeholder {1}: formatInt(lastEpoch.rank)
+#. placeholder {2}: formatInt(lastEpoch.of ?? 0)
+msgid "{0, plural, one {# block} other {# blocks}}, {1} of {2} evonodes"
+msgstr "{0, plural, one {# blok} other {# blok}}, {2} evonode içinde {1}. sırada"
+
+#. placeholder {0}: totals.epochs_paid ?? 0
+msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
+msgstr "{0, plural, one {# epoch ödendi} other {# epoch ödendi}}"
+
+#. placeholder {0}: history.length
+msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
+msgstr "{0, plural, one {Hyphen’in kaydında # özel işlem} other {Hyphen’in kaydında # özel işlem}}"
+
+#. placeholder {0}: docs.length
+#. placeholder {1}: docs.length >= 100 ? '+' : ''
+msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
+msgstr "{0, plural, one {# çekim} other {# çekim}}{1}, "
+
+#. placeholder {0}: secs(h.seconds)
+msgid "{0} (incomplete)"
+msgstr "{0} (eksik)"
+
 #. placeholder {0}: daily.length
 msgid "{0} days checked"
 msgstr "{0} gün kontrol edildi"
+
+#. placeholder {0}: formatInt(values.length)
+#. placeholder {1}: formatNumber(dash(sorted[0] ?? 0n), { maximumFractionDigits: 2 })
+#. placeholder {2}: formatNumber(dash(max), { maximumFractionDigits: 2 })
+#. placeholder {3}: formatNumber(dash(mine), { maximumFractionDigits: 2 })
+msgid "{0} evonodes’ rewards last epoch, from {1} to {2} DASH; this one {3} DASH"
+msgstr "Geçen epoch’ta {0} evonode’un ödülleri {1} ile {2} DASH arasında; bu evonode {3} DASH"
+
+#. placeholder {0}: formatInt(Number(mine ?? 0n))
+#. placeholder {1}: formatInt(current.data.data.index)
+msgid "{0} in epoch {1}"
+msgstr "{1}. epoch’ta {0}"
+
+#. placeholder {0}: formatInt(current.blocks)
+#. placeholder {0}: formatInt(watched.actual)
+#. placeholder {1}: formatNumber(current.turns.expected_blocks)
+#. placeholder {1}: formatNumber(watched.expected ?? 0)
+msgid "{0} made, about {1} expected"
+msgstr "{0} yapıldı, yaklaşık {1} bekleniyordu"
+
+#. placeholder {0}: formatInt(watched.missed)
+msgid "{0} missed turns seen"
+msgstr "{0} kaçırılan sıra görüldü"
+
+#. placeholder {0}: formatInt(Math.round(v))
+msgid "{0} ms"
+msgstr "{0} ms"
 
 #. placeholder {0}: formatInt(d.latency_ms)
 msgid "{0} ms from Radar’s crawler"
 msgstr "Radar tarayıcısından {0} ms"
 
+#. placeholder {0}: formatInt(rank.rank)
+#. placeholder {1}: formatInt(rank.of)
+msgid "{0} of {1}"
+msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} shown"
+msgstr "{1} içinden {0} gösteriliyor"
+
+#. placeholder {0}: formatInt(p.turns_30d.missed)
+#. placeholder {1}: formatInt(p.turns_30d.turns)
+msgid "{0} of {1} turns, last 30 days"
+msgstr "Son 30 günde {1} sıranın {0} tanesi"
+
+#. placeholder {0}: formatPercent(yearly, 1)
+msgid "{0} on 4,000 DASH"
+msgstr "4.000 DASH için {0}"
+
+#. placeholder {0}: score1(combined.score)
+msgid "{0} out of 100"
+msgstr "100 üzerinden {0}"
+
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "Toplam {0} ödeme dizinlendi"
+
+#. placeholder {0}: formatInt(summary.count)
+#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
+#. placeholder {2}: formatInt(summary.indexed.from)
+#. placeholder {3}: formatInt(summary.indexed.to)
+msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
+msgstr "{0} ödeme, toplam {1} DASH; dizinlenen bloklar {2} ile {3} arası"
+
+#. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
+msgid "{0} s"
+msgstr "{0} sn"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "{0} shown"
+msgstr "{0} gösteriliyor"
 
 #. placeholder {0}: d.day
 #. placeholder {1}: d.ok
@@ -31,14 +128,53 @@ msgstr "Toplam {0} ödeme dizinlendi"
 msgid "{0}: answered {1} of {2} checks"
 msgstr "{0}: {2} kontrolün {1} tanesine yanıt verdi"
 
+#. placeholder {0}: show(c.old)
+msgid "{name} (was at {0})"
+msgstr "{name} (önceki: {0})"
+
+#. placeholder {0}: show(c.new)
+msgid "{name} at {0}"
+msgstr "{name}: {0}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0} → {1}"
+msgstr "{name}: {0} → {1}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0}% → {1}%"
+msgstr "{name}: %{0} → %{1}"
+
+msgid "1 week"
+msgstr "1 hafta"
+
+msgid "24 hours"
+msgstr "24 saat"
+
+msgid "50k headers"
+msgstr "50 bin başlık"
+
 msgid "A ProTx hash is 64 hexadecimal characters."
 msgstr "ProTx karması 64 onaltılık karakterden oluşur."
+
+msgid "About every two weeks, from each test location"
+msgstr "Her test konumundan yaklaşık iki haftada bir"
 
 msgid "Address type"
 msgstr "Adres türü"
 
+msgid "Addresses, keys and PoSe status, as Radar recorded them"
+msgstr "Adresler, anahtarlar ve PoSe durumu, Radar’ın kaydettiği şekliyle"
+
+msgid "among the evonodes that proposed blocks"
+msgstr "blok öneren evonode’lar arasında"
+
 msgid "Amount"
 msgstr "Tutar"
+
+msgid "Answered"
+msgstr "Yanıt verdi"
 
 #. placeholder {0}: formatInt(up.ok)
 #. placeholder {1}: formatInt(up.attempts)
@@ -53,11 +189,32 @@ msgstr "Her kontrole yanıt verdi"
 msgid "Answered every check on each of the {0} days Radar has checked this node"
 msgstr "Radar’ın bu düğümü kontrol ettiği {0} günün her birinde tüm kontrollere yanıt verdi"
 
+#. placeholder {0}: formatInt(d.latency_ms)
+#. placeholder {0}: formatInt(p.ms ?? 0)
+msgid "answered in {0} ms"
+msgstr "{0} ms’de yanıt verdi"
+
+#. placeholder {0}: Math.round((r.connect_ms ?? 0) + (r.handshake_ms ?? 0))
+#. placeholder {0}: formatInt(p.ms)
+msgid "Answered in {0} ms"
+msgstr "{0} ms’de yanıt verdi"
+
+msgid "Answered Radar’s latest port check."
+msgstr "Radar’ın son port kontrolüne yanıt verdi."
+
 msgid "Answering"
 msgstr "Yanıt veriyor"
 
-msgid "Answers on its Core port"
-msgstr "Core portunda yanıt veriyor"
+#. placeholder {0}: d.asn
+msgid "AS{0}"
+msgstr "AS{0}"
+
+#. placeholder {0}: formatInt(p.monthly_basis_days)
+msgid "at its pace of the last {0} days"
+msgstr "son {0} günlük hızıyla"
+
+msgid "Back in the list"
+msgstr "Listeye geri döndü"
 
 msgid "Banned"
 msgstr "Yasaklı"
@@ -66,12 +223,20 @@ msgstr "Yasaklı"
 msgid "banned at block {0}"
 msgstr "{0}. blokta yasaklandı"
 
-#. placeholder {0}: formatInt(d.pose_ban_height)
+#. placeholder {0}: formatInt(banned)
 msgid "Banned at block {0}"
 msgstr "{0}. blokta yasaklandı"
 
 msgid "Banned on Platform"
 msgstr "Platform’da yasaklı"
+
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "{0} değerinde yasaklanır"
+
+#. placeholder {0}: formatPercent(rank, 0)
+msgid "Better than {0} of masternodes tested from the same location."
+msgstr "Aynı konumdan test edilen masternode’ların {0} oranından daha iyi."
 
 msgid "block"
 msgstr "blok"
@@ -83,11 +248,96 @@ msgstr "Blok"
 msgid "Block {0}"
 msgstr "Blok {0}"
 
+msgid "Blocks"
+msgstr "Bloklar"
+
+msgid "Blocks (proofs)"
+msgstr "Bloklar (kanıtlar)"
+
+msgid "Blocks and rewards of the last 12 finalized epochs, from Platform’s proofs"
+msgstr "Son 12 kesinleşmiş epoch’un blokları ve ödülleri, Platform’un kanıtlarından"
+
+msgid "Blocks proposed"
+msgstr "Önerilen bloklar"
+
+msgid "Blocks this epoch"
+msgstr "Bu epoch’taki bloklar"
+
+msgid "Blocks this evonode proposed in one epoch, from Platform"
+msgstr "Bu evonode’un bir epoch’ta önerdiği bloklar, Platform’dan"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Blocks this evonode proposed, over the last {0}"
+msgstr "Bu evonode’un son {0} içinde önerdiği bloklar"
+
+msgid "Both, a month"
+msgstr "İkisi birlikte, bir ay"
+
+msgid "Both, a year"
+msgstr "İkisi birlikte, bir yıl"
+
+#. placeholder {0}: breakdownFrom.location || breakdownFrom.vantage
+msgid "Breakdown from {0}."
+msgstr "{0} konumundan döküm."
+
+msgid "Broadcast"
+msgstr "Yayın"
+
 msgid "Catching up"
 msgstr "Yetişiyor"
 
+msgid "Change"
+msgstr "Para üstü"
+
+msgid "Chart range"
+msgstr "Grafik aralığı"
+
+msgid "Check now"
+msgstr "Şimdi kontrol et"
+
+msgid "Checking whether Hyphen’s index is current…"
+msgstr "Hyphen’in dizininin güncel olup olmadığı denetleniyor…"
+
+msgid "Checking…"
+msgstr "Denetleniyor…"
+
+msgid "Claimable now"
+msgstr "Şimdi talep edilebilir"
+
 msgid "Collateral"
 msgstr "Teminat"
+
+msgid "Combined from {answers, plural, one {# proof-checked answer} other {# proof-checked answers}}: the finalized epochs, the current epoch and this evonode’s proposed blocks."
+msgstr "{answers, plural, one {# kanıtla doğrulanmış yanıttan} other {# kanıtla doğrulanmış yanıttan}} birleştirildi: kesinleşmiş epoch’lar, güncel epoch ve bu evonode’un önerdiği bloklar."
+
+msgid "Compact block filters"
+msgstr "Kompakt blok filtreleri"
+
+msgid "Complete"
+msgstr "Tamamlandı"
+
+msgid "Connect"
+msgstr "Bağlan"
+
+msgid "Connect and handshake"
+msgstr "Bağlantı ve el sıkışma"
+
+msgid "Core P2P"
+msgstr "Core P2P"
+
+msgid "Core P2P address"
+msgstr "Core P2P adresi"
+
+msgid "Core, a month"
+msgstr "Core, bir ay"
+
+#. placeholder {0}: message(e)
+msgid "couldn’t check: {0}"
+msgstr "kontrol edilemedi: {0}"
+
+#. placeholder {0}: message(withdrawals.error)
+msgid "Couldn’t list withdrawals: {0}"
+msgstr "Çekimler listelenemedi: {0}"
 
 msgid "Crawled by Radar"
 msgstr "Radar tarafından tarandı"
@@ -95,11 +345,40 @@ msgstr "Radar tarafından tarandı"
 msgid "Daily health"
 msgstr "Günlük sağlık durumu"
 
+msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
+msgstr "DAPI’nin listesinde yok. Yeni, kaldırılmış ya da yanlış yazılmış olabilir."
+
+msgid "DAPI’s list wins where Radar’s last crawl differs."
+msgstr "Radar’ın son taramasıyla farklı olduğunda DAPI’nin listesi geçerlidir."
+
+msgid "differ"
+msgstr "farklı"
+
+#. placeholder {0}: differing.map((r) => r.epoch).join(', ')
+msgid "differ in {0}"
+msgstr "{0} içinde farklı"
+
+msgid "Doesn’t serve compact block filters ({bit})."
+msgstr "Kompakt blok filtreleri sunmuyor ({bit})."
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Drive keeps per-evonode records only from epoch {0} on, so rewards before it can’t be checked. Rewards are gross: reward shares are not deducted."
+msgstr "Drive, evonode başına kayıtları yalnızca {0}. epoch’tan itibaren tutar; bu yüzden öncesindeki ödüller doğrulanamaz. Ödüller brüttür: ödül payları düşülmez."
+
 msgid "Drive protocol"
 msgstr "Drive protokolü"
 
+msgid "Each test downloads the latest 50,000 block headers and the masternode list from this node and checks them against Radar’s own node."
+msgstr "Her test bu düğümden son 50.000 blok başlığını ve masternode listesini indirir ve bunları Radar’ın kendi düğümüyle karşılaştırır."
+
+msgid "Earned (DASH)"
+msgstr "Kazanılan (DASH)"
+
 msgid "Earned on Core, {window} days"
 msgstr "Core’da kazanılan, {window} gün"
+
+msgid "Earned on Platform"
+msgstr "Platform’da kazanılan"
 
 msgid "Enabled, no PoSe penalty"
 msgstr "Etkin, PoSe cezası yok"
@@ -108,11 +387,45 @@ msgstr "Etkin, PoSe cezası yok"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "Etkin, PoSe cezası {0}"
 
+msgid "Epoch"
+msgstr "Epoch"
+
+#. placeholder {0}: formatInt(selected)
+#. placeholder {1}: infos.length
+msgid "Epoch {0} is outside the {1, plural, one {# recent epoch} other {# recent epochs}} read here, or not final yet."
+msgstr "{0}. epoch, burada okunan {1, plural, one {# son epoch} other {# son epoch}} dışında ya da henüz kesinleşmedi."
+
+#. placeholder {0}: formatInt(watched.epoch)
+msgid "Epoch {0}, blocks"
+msgstr "Epoch {0}, bloklar"
+
+#. placeholder {0}: info.protocolVersion
+msgid "Epoch ran protocol {0}"
+msgstr "Epoch {0} protokolüyle çalıştı"
+
+msgid "Epoch record"
+msgstr "Epoch kaydı"
+
+msgid "Error"
+msgstr "Hata"
+
+msgid "Estimates"
+msgstr "Tahminler"
+
+msgid "Every epoch, in DASH"
+msgstr "Her epoch, DASH cinsinden"
+
+msgid "Every ProRegTx and ProUp… transaction that changed this masternode"
+msgstr "Bu masternode’u değiştiren her ProRegTx ve ProUp… işlemi"
+
 msgid "Evonode"
 msgstr "Evonode"
 
 msgid "Evonode collateral"
 msgstr "Evonode teminatı"
+
+msgid "Expired (refunded)"
+msgstr "Süresi doldu (iade edildi)"
 
 msgid "Expires"
 msgstr "Sona erer"
@@ -120,14 +433,71 @@ msgstr "Sona erer"
 msgid "Facts"
 msgstr "Bilgiler"
 
-msgid "fail"
-msgstr "başarısız"
+msgid "Fail"
+msgstr "Başarısız"
+
+msgid "Failed"
+msgstr "Başarısız"
+
+#. placeholder {0}: p.error
+msgid "Failed: {0}"
+msgstr "Başarısız: {0}"
+
+#. placeholder {0}: rows.length
+msgid "Fails {failing} of {0} checks. Quorum members vote against masternodes that fail these in DKGs, which costs PoSe score."
+msgstr "{0} kontrolden {failing} tanesinde başarısız. Quorum üyeleri, bunlarda başarısız olan masternode’lara DKG’lerde karşı oy verir; bu da PoSe puanına mal olur."
 
 msgid "First seen"
 msgstr "İlk görülme"
 
+msgid "Fix"
+msgstr "Düzelt"
+
+msgid "Fix its Platform services, then send a ProUpServTx (protx update_service) to lift the ban."
+msgstr "Platform hizmetlerini düzeltin, ardından yasağı kaldırmak için bir ProUpServTx (protx update_service) gönderin."
+
+#. placeholder {0}: r.from
+msgid "from {0}"
+msgstr "{0} konumundan"
+
+#. placeholder {0}: returns?.window_days ?? 90
+msgid "from its payments over {0} days"
+msgstr "{0} günlük ödemelerinden"
+
+msgid "from Radar’s count"
+msgstr "Radar’ın sayımından"
+
+msgid "Grade"
+msgstr "Not"
+
+#. placeholder {0}: combined.letter
+msgid "Grade {0}"
+msgstr "Not {0}"
+
+msgid "gRPC (HTTPS)"
+msgstr "gRPC (HTTPS)"
+
+msgid "Header throughput"
+msgstr "Başlık aktarım hızı"
+
+msgid "Headers/s"
+msgstr "Başlık/sn"
+
 msgid "Healthy"
 msgstr "Sağlıklı"
+
+#. placeholder {0}: r.height
+msgid "height {0}"
+msgstr "yükseklik {0}"
+
+msgid "Height it reported"
+msgstr "Bildirdiği yükseklik"
+
+msgid "History"
+msgstr "Geçmiş"
+
+msgid "History needs Radar’s crawl and Hyphen’s index of special transactions"
+msgstr "Geçmiş için Radar’ın taraması ve Hyphen’in özel işlem dizini gerekir"
 
 msgid "Hosting"
 msgstr "Barındırma"
@@ -135,17 +505,101 @@ msgstr "Barındırma"
 msgid "HTTPS (DAPI)"
 msgstr "HTTPS (DAPI)"
 
-msgid "Last error"
-msgstr "Son hata"
+#. placeholder {0}: f.platformHttpPort
+msgid "HTTPS {0}"
+msgstr "HTTPS {0}"
+
+msgid "Hyphen has no special transactions for this ProTx."
+msgstr "Hyphen’in bu ProTx için özel işlemi yok."
+
+msgid "Hyphen’s index is behind the chain, so this list is not read."
+msgstr "Hyphen’in dizini zincirin gerisinde olduğundan bu liste okunmuyor."
+
+msgid "if it ended now (an estimate)"
+msgstr "şimdi bitseydi (bir tahmin)"
+
+msgid "In a validator set"
+msgstr "Bir doğrulayıcı kümesinde"
+
+msgid "in total (not counting expired ones)."
+msgstr "toplam (süresi dolanlar hariç)."
+
+#. placeholder {0}: formatPercent(below / values.length, 0)
+#. placeholder {1}: formatInt(values.length)
+#. placeholder {2}: formatNumber(dash(spread.p50), { maximumFractionDigits: 2 })
+msgid "It earned more than {0} of the {1} evonodes that proposed blocks last epoch; the median is {2} DASH."
+msgstr "Geçen epoch’ta blok öneren {1} evonode’un {0} oranından fazla kazandı; ortanca {2} DASH."
+
+msgid "It hasn’t proposed a block in a finished epoch yet."
+msgstr "Henüz biten bir epoch’ta blok önermedi."
+
+msgid "it proposed no blocks"
+msgstr "hiç blok önermedi"
+
+msgid "It proposed no blocks last epoch."
+msgstr "Geçen epoch’ta hiç blok önermedi."
+
+msgid "its identity’s balance, read"
+msgstr "kimliğinin bakiyesi, okundu"
+
+#. placeholder {0}: formatInt(p.next.slots ?? 0)
+msgid "its turn is {0} blocks away; an estimate"
+msgstr "sırası {0} blok sonra; bir tahmin"
+
+msgid "its turn is next; an estimate"
+msgstr "sırası bir sonraki; bir tahmin"
+
+msgid "Keep the node online and its port open to inbound connections."
+msgstr "Düğümü çevrimiçi tutun ve portunu gelen bağlantılara açık bırakın."
+
+msgid "last"
+msgstr "son"
+
+msgid "Last 30 days"
+msgstr "Son 30 gün"
+
+msgid "Last 365 days"
+msgstr "Son 365 gün"
+
+msgid "Last 90 days"
+msgstr "Son 90 gün"
+
+msgid "Last answered"
+msgstr "Son yanıt"
+
+msgid "Last block"
+msgstr "Son blok"
+
+#. placeholder {0}: totals.last_epoch_index ?? '—'
+msgid "Last epoch ({0})"
+msgstr "Geçen epoch ({0})"
 
 msgid "Last paid"
 msgstr "Son ödeme"
 
-msgid "Last reached"
-msgstr "Son erişim"
-
 msgid "Latency"
 msgstr "Gecikme"
+
+msgid "Latest port check"
+msgstr "Son port kontrolü"
+
+msgid "Left the list"
+msgstr "Listeden çıktı"
+
+msgid "Listed by DAPI"
+msgstr "DAPI tarafından listelendi"
+
+msgid "Live from Platform"
+msgstr "Platform’dan canlı"
+
+msgid "Loading the Platform SDK (once per visit)…"
+msgstr "Platform SDK yükleniyor (ziyaret başına bir kez)…"
+
+msgid "Loading…"
+msgstr "Yükleniyor…"
+
+msgid "Location"
+msgstr "Konum"
 
 msgid "mainnet"
 msgstr "Mainnet"
@@ -153,8 +607,8 @@ msgstr "Mainnet"
 msgid "Masternode"
 msgstr "Masternode"
 
-#. placeholder {0}: d.protx.slice(0, 8)
 #. placeholder {0}: id.slice(0, 8)
+#. placeholder {0}: protx.slice(0, 8)
 msgid "Masternode {0}"
 msgstr "Masternode {0}"
 
@@ -164,11 +618,39 @@ msgstr "Masternode teminatı"
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "Masternode kayıtları Radar’ın mainnet ve testnet taramasından gelir."
 
-msgid "Masternode records need Radar's crawler"
-msgstr "Masternode kayıtları Radar’ın tarayıcısını gerektirir"
+msgid "Masternode records need an indexer"
+msgstr "Masternode kayıtları bir dizinleyici gerektirir"
+
+msgid "Masternodes on this network"
+msgstr "Bu ağdaki masternode’lar"
+
+msgid "match"
+msgstr "eşleşiyor"
+
+#. placeholder {0}: checked.length
+msgid "match for {0, plural, one {# epoch} other {# epochs}}"
+msgstr "{0, plural, one {# epoch} other {# epoch}} için eşleşiyor"
+
+msgid "Middle 80 % (DASH)"
+msgstr "Orta %80 (DASH)"
+
+msgid "Middle 80 % ends"
+msgstr "Orta %80 bitişi"
+
+msgid "Middle 80 % starts"
+msgstr "Orta %80 başlangıcı"
+
+#. placeholder {0}: rules.reachFailures
+#. placeholder {1}: rules.maxFailedOutbound
+msgid "Missed {0} or more of Radar’s port checks in a row. Members vote against a masternode they fail to connect to more than {1} times."
+msgstr "Radar’ın port kontrollerinden art arda {0} veya daha fazlasını kaçırdı. Üyeler, {1} defadan fazla bağlanamadıkları bir masternode’a karşı oy verir."
 
 msgid "Missed most"
 msgstr "Çoğunu kaçırdı"
+
+#. placeholder {0}: rules.reachFailures
+msgid "Missed Radar’s latest port check, but not {0} in a row. Core judges repeated failures, not one."
+msgstr "Radar’ın son port kontrolünü kaçırdı, ancak art arda {0} kez değil. Core tek bir başarısızlığı değil, tekrarlananları değerlendirir."
 
 msgid "Missed some"
 msgstr "Bazılarını kaçırdı"
@@ -178,15 +660,51 @@ msgstr "Bazılarını kaçırdı"
 msgid "Missed some checks on {0} of {1} days"
 msgstr "{1} günün {0} tanesinde bazı kontroller kaçırıldı"
 
+msgid "Missed turns Radar saw"
+msgstr "Radar’ın gördüğü kaçırılan sıralar"
+
+msgid "MN list"
+msgstr "MN listesi"
+
+msgid "more than Radar’s total, for epochs before Radar’s record"
+msgstr "Radar’ın toplamından fazla, Radar’ın kaydından önceki epoch’lar için"
+
 msgid "Network"
 msgstr "Ağ"
+
+msgid "never"
+msgstr "hiç"
 
 msgid "never banned"
 msgstr "hiç yasaklanmadı"
 
+msgid "Next block"
+msgstr "Sonraki blok"
+
 #. placeholder {0}: formatInt(protocol.next_epoch)
 msgid "Next epoch {0}"
 msgstr "Sonraki epoch {0}"
+
+msgid "No answer"
+msgstr "Yanıt yok"
+
+msgid "No changes since Radar started recording them."
+msgstr "Radar kaydetmeye başladığından beri değişiklik yok."
+
+msgid "no epochs to compare yet"
+msgstr "karşılaştırılacak epoch henüz yok"
+
+msgid "No finalized epochs came back to compare."
+msgstr "Karşılaştırılacak kesinleşmiş epoch gelmedi."
+
+msgid "No grade"
+msgstr "Not yok"
+
+msgid "No handshake with Radar’s crawler in the past week."
+msgstr "Geçen hafta Radar’ın tarayıcısıyla el sıkışma olmadı."
+
+msgid "no identity"
+msgstr "kimlik yok"
 
 msgid "No masternode with this ProTx on {here}."
 msgstr "{here} üzerinde bu ProTx’e sahip masternode yok."
@@ -197,23 +715,96 @@ msgstr "Bu masternode için henüz dizinlenmiş ödeme yok."
 msgid "No penalty"
 msgstr "Ceza yok"
 
+msgid "No Platform ban"
+msgstr "Platform yasağı yok"
+
+msgid "No stalls or bad data"
+msgstr "Takılma veya hatalı veri yok"
+
+msgid "No versions recorded yet."
+msgstr "Henüz kaydedilmiş sürüm yok."
+
+msgid "No vote seen"
+msgstr "Oy görülmedi"
+
+msgid "none"
+msgstr "yok"
+
+msgid "none yet this epoch: it votes with the blocks it proposes"
+msgstr "bu epoch’ta henüz yok: önerdiği bloklarla oy verir"
+
+msgid "None yet: everything it earned is still claimable."
+msgstr "Henüz yok: kazandığı her şey hâlâ talep edilebilir."
+
 msgid "Not answering"
 msgstr "Yanıt vermiyor"
 
-msgid "Not banned on Platform"
-msgstr "Platform’da yasaklı değil"
+msgid "Not checked in Radar’s latest crawl."
+msgstr "Radar’ın son taramasında kontrol edilmedi."
+
+msgid "not checked in the latest crawl"
+msgstr "son taramada kontrol edilmedi"
 
 msgid "Not checked yet"
 msgstr "Henüz kontrol edilmedi"
 
+msgid "not compared: Radar’s record is not in use"
+msgstr "karşılaştırılmadı: Radar’ın kaydı kullanımda değil"
+
+msgid "Not in a validator set"
+msgstr "Bir doğrulayıcı kümesinde değil"
+
+msgid "not in a validator set that takes turns now"
+msgstr "şu anda sırayla çalışan bir doğrulayıcı kümesinde değil"
+
 msgid "not paid yet"
 msgstr "henüz ödeme alınmadı"
+
+msgid "not probed"
+msgstr "yoklanmadı"
+
+msgid "not read yet"
+msgstr "henüz okunmadı"
 
 msgid "Not ready"
 msgstr "Hazır değil"
 
+msgid "Not recorded yet; the next crawl will tell."
+msgstr "Henüz kaydedilmedi; sonraki tarama gösterecek."
+
+msgid "Not tested yet. Radar tests every enabled masternode about every two weeks."
+msgstr "Henüz test edilmedi. Radar, etkin her masternode’u yaklaşık iki haftada bir test eder."
+
+msgid "Not valid"
+msgstr "Geçerli değil"
+
+msgid "Nothing fails, but Radar can’t see every check yet."
+msgstr "Hiçbir şey başarısız değil, ancak Radar henüz her kontrolü göremiyor."
+
+msgid "nothing yet"
+msgstr "henüz hiçbir şey"
+
+msgid "now"
+msgstr "şimdi"
+
+#. placeholder {0}: formatInt(total)
+msgid "of {0}"
+msgstr "/ {0}"
+
+msgid "On protocol {voted}"
+msgstr "{voted} protokolünde"
+
+msgid "On the list"
+msgstr "Listede"
+
+msgid "once six epochs have finished"
+msgstr "altı epoch bittiğinde"
+
 msgid "Open it on {otherName}"
 msgstr "{otherName} üzerinde aç"
+
+msgid "Open port {port} to inbound connections and keep the node online."
+msgstr "{port} portunu gelen bağlantılara açın ve düğümü çevrimiçi tutun."
 
 msgid "Operator key"
 msgstr "Operatör anahtarı"
@@ -221,34 +812,77 @@ msgstr "Operatör anahtarı"
 msgid "Operator payout"
 msgstr "Operatör ödemesi"
 
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "Operatör ödülü {0}"
+msgid "Operator payout address"
+msgstr "Operatör ödeme adresi"
+
+msgid "Operator reward"
+msgstr "Operatör ödülü"
+
+#. placeholder {0}: formatPercent(p.d30_percentile, 0)
+#. placeholder {1}: formatInt(p.d30_of)
+msgid "Over the last 30 days, more than {0} of all {1} enabled evonodes."
+msgstr "Son 30 günde, etkin {1} evonode’un {0} oranından fazla."
+
+msgid "Overview"
+msgstr "Genel bakış"
 
 msgid "Owner"
 msgstr "Sahip"
 
+msgid "Owner address"
+msgstr "Sahip adresi"
+
 msgid "P2P (Tenderdash)"
 msgstr "P2P (Tenderdash)"
+
+#. placeholder {0}: f.platformP2pPort
+msgid "P2P {0}"
+msgstr "P2P {0}"
 
 msgid "Paid"
 msgstr "Ödendi"
 
+msgid "Paid (proofs)"
+msgstr "Ödenen (kanıtlar)"
+
 msgid "Paid to"
 msgstr "Ödenen"
 
-msgid "pass"
-msgstr "başarılı"
+msgid "Pass"
+msgstr "Geçti"
+
+msgid "Passes every check Radar can see."
+msgstr "Radar’ın görebildiği her kontrolü geçiyor."
+
+msgid "Payments"
+msgstr "Ödemeler"
+
+msgid "Payments need Radar’s index of this node’s block rewards"
+msgstr "Ödemeler için Radar’ın bu düğümün blok ödüllerine ait dizini gerekir"
 
 msgid "Payout"
 msgstr "Ödeme"
 
+msgid "Payout address"
+msgstr "Ödeme adresi"
+
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Ceza {0}"
 
+#. placeholder {0}: formatInt(p.first_epoch)
+msgid "Per finished epoch since epoch {0}, worked out the way Drive pays them"
+msgstr "{0}. epoch’tan beri biten her epoch için, Drive’ın ödediği şekilde hesaplandı"
+
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Place"
 msgstr "Konum"
+
+msgid "Platform"
+msgstr "Platform"
 
 #. placeholder {0}: daily.length
 msgid "Platform endpoint checks answered, day by day, over {0} days"
@@ -257,11 +891,65 @@ msgstr "Platform uç noktası kontrollerine verilen yanıtlar, {0} gün boyunca 
 msgid "Platform endpoints"
 msgstr "Platform uç noktaları"
 
+msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
+msgstr "Platform Explorer yanıt vermedi, bu yüzden bu doğrulayıcıya ait kaydı eksik."
+
+msgid "Platform Explorer has no validator record for this ProTx."
+msgstr "Platform Explorer’ın bu ProTx için doğrulayıcı kaydı yok."
+
+msgid "Platform Explorer is a third party; Radar has not verified it"
+msgstr "Platform Explorer üçüncü bir taraftır; Radar onu doğrulamadı"
+
+msgid "Platform Explorer says"
+msgstr "Platform Explorer diyor ki"
+
+msgid "Platform has PoSe-banned this evonode."
+msgstr "Platform bu evonode’u PoSe ile yasakladı."
+
 msgid "Platform height"
 msgstr "Platform yüksekliği"
 
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS adresi"
+
+msgid "Platform keeps each masternode’s latest vote"
+msgstr "Platform her masternode’un son oyunu tutar"
+
 msgid "Platform node"
 msgstr "Platform düğümü"
+
+msgid "Platform node ID"
+msgstr "Platform düğüm kimliği"
+
+msgid "Platform P2P"
+msgstr "Platform P2P"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P adresi"
+
+msgid "Platform ports"
+msgstr "Platform portları"
+
+msgid "Platform rewards"
+msgstr "Platform ödülleri"
+
+#. placeholder {0}: first ?? 0
+#. placeholder {1}: last ?? 0
+msgid "Platform rewards per epoch, epochs {0} to {1}, against the middle 80 % of evonodes"
+msgstr "Epoch başına Platform ödülleri, {0} ile {1} arası epoch’lar, evonode’ların orta %80’ine karşı"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Platform rewards this evonode earned, over the last {0}"
+msgstr "Bu evonode’un son {0} içinde kazandığı Platform ödülleri"
+
+msgid "Platform, a month"
+msgstr "Platform, bir ay"
+
+msgid "Pooled"
+msgstr "Havuzlanmış"
+
+msgid "Port check"
+msgstr "Port kontrolü"
 
 msgid "PoSe"
 msgstr "PoSe"
@@ -272,23 +960,63 @@ msgstr "PoSe ile yasaklı"
 msgid "PoSe penalty"
 msgstr "PoSe cezası"
 
+msgid "PoSe status"
+msgstr "PoSe durumu"
+
 msgid "Probe failing"
 msgstr "Yoklama başarısız"
 
 msgid "Probed"
 msgstr "Yoklandı"
 
+msgid "proof checked"
+msgstr "kanıtla doğrulandı"
+
+msgid "ProRegTx"
+msgstr "ProRegTx"
+
+msgid "Protocol"
+msgstr "Protokol"
+
+#. placeholder {0}: p.vote.version
+msgid "protocol {0}"
+msgstr "protokol {0}"
+
+#. placeholder {0}: rules.minProtocol
+msgid "Protocol {protocol}, at least {0}."
+msgstr "Protokol {protocol}, en az {0}."
+
+#. placeholder {0}: rules.release
+#. placeholder {1}: rules.minProtocol
+msgid "Protocol {protocol}. Masternodes running {0} vote nodes below protocol {1} bad in DKGs."
+msgstr "Protokol {protocol}. {0} çalıştıran masternode’lar, {1} protokolünün altındaki düğümleri DKG’lerde kötü olarak oylar."
+
+msgid "Protocol version"
+msgstr "Protokol sürümü"
+
 msgid "ProTx"
 msgstr "ProTx"
 
-msgid "Quorum readiness"
-msgstr "Quorum hazırlığı"
+msgid "ProTx (base58, its identity)"
+msgstr "ProTx (base58, kimliği)"
+
+msgid "ProTx (hex)"
+msgstr "ProTx (hex)"
+
+msgid "Queued"
+msgstr "Kuyrukta"
+
+msgid "Quorum readiness checks"
+msgstr "Quorum hazırlık kontrolleri"
 
 msgid "Radar doesn’t crawl devnets."
 msgstr "Radar devnet’leri taramaz."
 
 msgid "Radar has no checks for this node yet"
 msgstr "Radar’ın bu düğüm için henüz kontrolü yok"
+
+msgid "Radar has no reward record for this evonode yet."
+msgstr "Radar’ın bu evonode için henüz ödül kaydı yok."
 
 msgid "Radar has no uptime checks for this node yet."
 msgstr "Radar’ın bu düğüm için henüz çalışma süresi kontrolü yok."
@@ -302,14 +1030,48 @@ msgstr "Radar bu düğümün Platform uç noktalarını henüz yoklamadı."
 msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
 msgstr "Radar’ın taraması bunu listelemiyor. Yeni, kaldırılmış ya da yanlış yazılmış olabilir."
 
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "Radar’ın {here} taraması bunu listelemiyor."
+msgid "Radar’s crawl has no record of this masternode."
+msgstr "Radar’ın taramasında bu masternode’a ait kayıt yok."
+
+msgid "Radar’s crawl, which also lists nodes missing from DAPI’s list, is off"
+msgstr "DAPI’nin listesinde olmayan düğümleri de listeleyen Radar taraması kapalı"
+
+msgid "Radar’s epoch numbers"
+msgstr "Radar’ın epoch sayıları"
+
+msgid "Radar’s last crawl differs"
+msgstr "Radar’ın son taraması farklı"
+
+msgid "Radar’s node hasn’t said yet."
+msgstr "Radar’ın düğümü henüz bir şey söylemedi."
+
+msgid "Radar’s node knows of no Platform ban. Bans arrive over P2P, so it could miss one."
+msgstr "Radar’ın düğümü hiçbir Platform yasağından haberdar değil. Yasaklar P2P üzerinden gelir, bu yüzden birini kaçırmış olabilir."
+
+msgid "Radar’s payment index has not started for this node"
+msgstr "Radar’ın ödeme dizini bu düğüm için başlamadı"
+
+msgid "Radar’s record"
+msgstr "Radar’ın kaydı"
+
+msgid "Rank"
+msgstr "Sıra"
+
+msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
+msgstr "Erişilebilirlik Radar’ın taramasından; bloklar, ödüller ve anahtarlar Platform Explorer’dan"
+
+msgid "Reachable"
+msgstr "Erişilebilir"
+
+msgid "Read from Platform with proofs, checked in your browser"
+msgstr "Platform’dan kanıtlarla okundu, tarayıcınızda doğrulandı"
 
 msgid "Ready"
 msgstr "Hazır"
 
-msgid "Recent payments"
-msgstr "Son ödemeler"
+#. placeholder {0}: rules.release
+msgid "Ready for {0} quorums?"
+msgstr "{0} quorum’larına hazır mı?"
 
 msgid "Recent payments to this masternode"
 msgstr "Bu masternode’a yapılan son ödemeler"
@@ -317,21 +1079,61 @@ msgstr "Bu masternode’a yapılan son ödemeler"
 msgid "Registered"
 msgstr "Kaydedildi"
 
+msgid "Registered at block"
+msgstr "Kayıt bloğu"
+
 msgid "Registration"
 msgstr "Kayıt"
+
+msgid "Registration changes"
+msgstr "Kayıt değişiklikleri"
+
+msgid "Registration changes of this masternode"
+msgstr "Bu masternode’un kayıt değişiklikleri"
 
 msgid "Regular masternode"
 msgstr "Normal masternode"
 
-msgid "Relays transactions"
-msgstr "İşlemleri iletir"
+msgid "Relay is off, so it won’t have the transactions it must sign InstantSend locks for."
+msgstr "İletim kapalı, bu yüzden InstantSend kilitlerini imzalaması gereken işlemlere sahip olmayacak."
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
+msgid "Relays transactions."
+msgstr "İşlemleri iletir."
+
+#. placeholder {0}: rules.release
+msgid "Remove blocksonly=1 from dash.conf. {0} won’t start a masternode with it."
+msgstr "dash.conf dosyasından blocksonly=1 satırını kaldırın. {0}, bununla bir masternode başlatmaz."
+
+msgid "Requested"
+msgstr "İstendi"
+
+msgid "Retry"
+msgstr "Yeniden dene"
+
+msgid "reused from"
+msgstr "şuradan yeniden kullanıldı:"
+
+#. placeholder {0}: formatInt(revived)
 msgid "Revived at block {0}"
 msgstr "{0}. blokta yeniden etkinleşti"
 
-msgid "Runs a current protocol version"
-msgstr "Güncel bir protokol sürümü çalıştırır"
+msgid "Reward estimates, endpoint health and Platform Explorer’s record need indexers"
+msgstr "Ödül tahminleri, uç nokta sağlığı ve Platform Explorer’ın kaydı dizinleyiciler gerektirir"
+
+msgid "Rewards"
+msgstr "Ödüller"
+
+msgid "Rewards (DASH)"
+msgstr "Ödüller (DASH)"
+
+msgid "Rewards appear after it has proposed a block in a finished epoch."
+msgstr "Ödüller, biten bir epoch’ta bir blok önerdikten sonra görünür."
+
+msgid "Rewards in total"
+msgstr "Toplam ödüller"
+
+msgid "Rewards this epoch"
+msgstr "Bu epoch’taki ödüller"
 
 msgid "Same as the owner address"
 msgstr "Sahip adresiyle aynı"
@@ -339,11 +1141,71 @@ msgstr "Sahip adresiyle aynı"
 msgid "Search Radar"
 msgstr "Radar’da ara"
 
-msgid "Serves compact block filters"
-msgstr "Kompakt blok filtreleri sunar"
+msgid "See the sources"
+msgstr "Kaynaklara bak"
+
+msgid "Served everything asked"
+msgstr "İstenen her şeyi sundu"
+
+msgid "Serves compact block filters ({bit})."
+msgstr "Kompakt blok filtreleri sunuyor ({bit})."
+
+msgid "Service"
+msgstr "Hizmet"
+
+#. placeholder {0}: rules.filtersBit
+msgid "service bit {0}"
+msgstr "hizmet biti {0}"
+
+msgid "Services"
+msgstr "Hizmetler"
+
+#. placeholder {0}: rules.release
+msgid "Set peerblockfilters=1 and blockfilterindex=1, or remove a =0 for either. {0} won’t start a masternode without them."
+msgstr "peerblockfilters=1 ve blockfilterindex=1 ayarlayın ya da ikisinden birindeki =0 değerini kaldırın. {0}, bunlar olmadan bir masternode başlatmaz."
+
+msgid "Share of blocks"
+msgstr "Blok payı"
+
+msgid "Show more"
+msgstr "Daha fazla göster"
+
+msgid "Show on map"
+msgstr "Haritada göster"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Since epoch {0}"
+msgstr "{0}. epoch’tan beri"
+
+msgid "so far this epoch"
+msgstr "bu epoch’ta şimdiye kadar"
 
 msgid "Software"
 msgstr "Yazılım"
+
+msgid "Special transactions"
+msgstr "Özel işlemler"
+
+msgid "Special transactions after that block are not in this list. Everything else on this page is current."
+msgstr "Bu bloktan sonraki özel işlemler bu listede yok. Bu sayfadaki diğer her şey günceldir."
+
+msgid "Special transactions of this masternode"
+msgstr "Bu masternode’un özel işlemleri"
+
+msgid "Speed test"
+msgstr "Hız testi"
+
+msgid "Speed test results by location"
+msgstr "Konuma göre hız testi sonuçları"
+
+msgid "started"
+msgstr "başladı"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Tested"
+msgstr "Test edildi"
 
 msgid "testnet"
 msgstr "Testnet"
@@ -351,28 +1213,167 @@ msgstr "Testnet"
 msgid "That isn’t a ProTx hash."
 msgstr "Bu bir ProTx karması değil."
 
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Radar’ın dizinlediği {1} ödemenin son {0} tanesi"
+#. placeholder {0}: error instanceof Error ? error.message : String(error)
+msgid "The check failed: {0}"
+msgstr "Kontrol başarısız oldu: {0}"
+
+msgid "the evonode’s identity balance"
+msgstr "evonode’un kimlik bakiyesi"
+
+msgid "The last 12 epochs"
+msgstr "Son 12 epoch"
+
+msgid "The latest test failed; Radar retries within a day."
+msgstr "Son test başarısız oldu; Radar bir gün içinde yeniden dener."
+
+msgid "The masternode list of {here} doesn’t include it."
+msgstr "{here} masternode listesinde yok."
+
+msgid "The node answered."
+msgstr "Düğüm yanıt verdi."
+
+msgid "The node did not answer."
+msgstr "Düğüm yanıt vermedi."
+
+msgid "The port check, location, speed test and endpoint health need Radar’s crawl"
+msgstr "Port kontrolü, konum, hız testi ve uç nokta sağlığı için Radar’ın taraması gerekir"
+
+msgid "The registration transaction is the ProTx hash itself."
+msgstr "Kayıt işlemi, ProTx hash’inin kendisidir."
+
+#. placeholder {0}: rules.coreCommit
+msgid "The rule in Dash Core {0}"
+msgstr "Dash Core {0} içindeki kural"
+
+msgid "the same as Radar’s total"
+msgstr "Radar’ın toplamıyla aynı"
+
+msgid "This epoch so far"
+msgstr "Bu epoch şimdiye kadar"
+
+msgid "This epoch, blocks"
+msgstr "Bu epoch, bloklar"
+
+msgid "This evonode"
+msgstr "Bu evonode"
 
 msgid "This masternode is on {otherName}."
 msgstr "Bu masternode {otherName} üzerinde."
 
+msgid "Time (UTC)"
+msgstr "Zaman (UTC)"
+
 msgid "TLS certificate"
 msgstr "TLS sertifikası"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in {wait} s."
+msgstr "Çok fazla kontrol: Radar her istemci ve her düğüm için dakikada 5 kontrole izin verir. {wait} sn sonra yeniden deneyin."
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in a minute."
+msgstr "Çok fazla kontrol: Radar her istemci ve her düğüm için dakikada 5 kontrole izin verir. Bir dakika sonra yeniden deneyin."
+
+msgid "too new to tell"
+msgstr "söylemek için çok yeni"
+
+msgid "Transaction"
+msgstr "İşlem"
+
+msgid "Transaction relay"
+msgstr "İşlem iletimi"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+msgid "unknown: the validator sets haven’t been read lately"
+msgstr "bilinmiyor: doğrulayıcı kümeleri son zamanlarda okunmadı"
+
+msgid "Updated"
+msgstr "Güncellendi"
+
+#. placeholder {0}: rules.release
+msgid "Upgrade to {0}."
+msgstr "{0} sürümüne yükseltin."
+
+msgid "Upgrade vote"
+msgstr "Yükseltme oyu"
 
 msgid "Uptime"
 msgstr "Çalışma süresi"
 
+msgid "Uptime and versions need Radar’s crawl"
+msgstr "Çalışma süresi ve sürümler için Radar’ın taraması gerekir"
+
 msgid "Uptime, 30 days"
 msgstr "Çalışma süresi, 30 gün"
+
+msgid "Uptime, payments and readiness need Radar’s crawl of this node"
+msgstr "Çalışma süresi, ödemeler ve hazırlık için Radar’ın bu düğümü taraması gerekir"
+
+msgid "User agent"
+msgstr "Kullanıcı aracısı"
+
+msgid "Valid"
+msgstr "Geçerli"
+
+msgid "Valid on DAPI’s list"
+msgstr "DAPI’nin listesinde geçerli"
+
+msgid "Validator record"
+msgstr "Doğrulayıcı kaydı"
+
+msgid "Verdict"
+msgstr "Karar"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Version history"
+msgstr "Sürüm geçmişi"
+
+msgid "Versions this masternode has announced"
+msgstr "Bu masternode’un duyurduğu sürümler"
 
 msgid "Vote in Governance"
 msgstr "Governance’ta oy ver"
 
+msgid "votes are not kept per epoch"
+msgstr "oylar epoch başına tutulmaz"
+
+msgid "Votes for protocol {voted}"
+msgstr "{voted} protokolü için oy veriyor"
+
 msgid "Voting"
 msgstr "Oylama"
 
+msgid "Voting address"
+msgstr "Oylama adresi"
+
+msgid "week"
+msgstr "hafta"
+
+msgid "What the node announced, newest first"
+msgstr "Düğümün duyurduğu, en yeniden eskiye"
+
+msgid "When"
+msgstr "Ne zaman"
+
+msgid "When a DKG starts, each quorum member votes against members it can’t reach or that fail these checks. A node is left out only once about three quarters of a quorum vote it bad."
+msgstr "Bir DKG başladığında her quorum üyesi, ulaşamadığı veya bu kontrollerde başarısız olan üyelere karşı oy verir. Bir düğüm, ancak bir quorum’un yaklaşık dörtte üçü onu kötü olarak oyladığında dışarıda bırakılır."
+
 msgid "Where it is"
 msgstr "Konum"
+
+msgid "Where it sits"
+msgstr "Nerede bulunuyor"
+
+msgid "Withdrawals"
+msgstr "Çekimler"
+
+msgid "Withdrawals from this evonode’s identity"
+msgstr "Bu evonode’un kimliğinden yapılan çekimler"
+
+msgid "worked out from the epoch’s proven fees"
+msgstr "epoch’un kanıtlanmış ücretlerinden hesaplandı"

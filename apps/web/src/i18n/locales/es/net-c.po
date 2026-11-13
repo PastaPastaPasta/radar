@@ -13,17 +13,114 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: combined.vantages
+msgid "(average of {0, plural, one {# location} other {# locations}})"
+msgstr "(promedio de {0, plural, one {# ubicación} other {# ubicaciones}})"
+
+#. placeholder {0}: current.blocks
+#. placeholder {0}: lastEpoch.blocks
+msgid "{0, plural, one {# block} other {# blocks}}"
+msgstr "{0, plural, one {# bloque} other {# bloques}}"
+
+#. placeholder {0}: lastEpoch.blocks
+#. placeholder {1}: formatInt(lastEpoch.rank)
+#. placeholder {2}: formatInt(lastEpoch.of ?? 0)
+msgid "{0, plural, one {# block} other {# blocks}}, {1} of {2} evonodes"
+msgstr "{0, plural, one {# bloque} other {# bloques}}, {1} de {2} evonodes"
+
+#. placeholder {0}: totals.epochs_paid ?? 0
+msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
+msgstr "{0, plural, one {# época pagada} other {# épocas pagadas}}"
+
+#. placeholder {0}: history.length
+msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
+msgstr "{0, plural, one {# transacción especial en el registro de Hyphen} other {# transacciones especiales en el registro de Hyphen}}"
+
+#. placeholder {0}: docs.length
+#. placeholder {1}: docs.length >= 100 ? '+' : ''
+msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
+msgstr "{0, plural, one {# retiro} other {# retiros}}{1}, "
+
+#. placeholder {0}: secs(h.seconds)
+msgid "{0} (incomplete)"
+msgstr "{0} (incompleto)"
+
 #. placeholder {0}: daily.length
 msgid "{0} days checked"
 msgstr "{0} días comprobados"
+
+#. placeholder {0}: formatInt(values.length)
+#. placeholder {1}: formatNumber(dash(sorted[0] ?? 0n), { maximumFractionDigits: 2 })
+#. placeholder {2}: formatNumber(dash(max), { maximumFractionDigits: 2 })
+#. placeholder {3}: formatNumber(dash(mine), { maximumFractionDigits: 2 })
+msgid "{0} evonodes’ rewards last epoch, from {1} to {2} DASH; this one {3} DASH"
+msgstr "Recompensas de {0} evonodes en la última época, de {1} a {2} DASH; este, {3} DASH"
+
+#. placeholder {0}: formatInt(Number(mine ?? 0n))
+#. placeholder {1}: formatInt(current.data.data.index)
+msgid "{0} in epoch {1}"
+msgstr "{0} en la época {1}"
+
+#. placeholder {0}: formatInt(current.blocks)
+#. placeholder {0}: formatInt(watched.actual)
+#. placeholder {1}: formatNumber(current.turns.expected_blocks)
+#. placeholder {1}: formatNumber(watched.expected ?? 0)
+msgid "{0} made, about {1} expected"
+msgstr "{0} logrados, unos {1} esperados"
+
+#. placeholder {0}: formatInt(watched.missed)
+msgid "{0} missed turns seen"
+msgstr "{0} turnos perdidos vistos"
+
+#. placeholder {0}: formatInt(Math.round(v))
+msgid "{0} ms"
+msgstr "{0} ms"
 
 #. placeholder {0}: formatInt(d.latency_ms)
 msgid "{0} ms from Radar’s crawler"
 msgstr "{0} ms desde el rastreador de Radar"
 
+#. placeholder {0}: formatInt(rank.rank)
+#. placeholder {1}: formatInt(rank.of)
+msgid "{0} of {1}"
+msgstr "{0} de {1}"
+
+#. placeholder {0}: formatInt(rows.length)
+#. placeholder {1}: formatInt(total)
+msgid "{0} of {1} shown"
+msgstr "{0} de {1} mostrados"
+
+#. placeholder {0}: formatInt(p.turns_30d.missed)
+#. placeholder {1}: formatInt(p.turns_30d.turns)
+msgid "{0} of {1} turns, last 30 days"
+msgstr "{0} de {1} turnos, últimos 30 días"
+
+#. placeholder {0}: formatPercent(yearly, 1)
+msgid "{0} on 4,000 DASH"
+msgstr "{0} sobre 4.000 DASH"
+
+#. placeholder {0}: score1(combined.score)
+msgid "{0} out of 100"
+msgstr "{0} sobre 100"
+
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "{0} pagos indexados en total"
+
+#. placeholder {0}: formatInt(summary.count)
+#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
+#. placeholder {2}: formatInt(summary.indexed.from)
+#. placeholder {3}: formatInt(summary.indexed.to)
+msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
+msgstr "{0} pagos, {1} DASH en total; bloques indexados del {2} al {3}"
+
+#. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
+msgid "{0} s"
+msgstr "{0} s"
+
+#. placeholder {0}: formatInt(rows.length)
+msgid "{0} shown"
+msgstr "{0} mostrados"
 
 #. placeholder {0}: d.day
 #. placeholder {1}: d.ok
@@ -31,14 +128,53 @@ msgstr "{0} pagos indexados en total"
 msgid "{0}: answered {1} of {2} checks"
 msgstr "{0}: respondió a {1} de {2} comprobaciones"
 
+#. placeholder {0}: show(c.old)
+msgid "{name} (was at {0})"
+msgstr "{name} (estaba en {0})"
+
+#. placeholder {0}: show(c.new)
+msgid "{name} at {0}"
+msgstr "{name} en {0}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0} → {1}"
+msgstr "{name}: {0} → {1}"
+
+#. placeholder {0}: show(c.old)
+#. placeholder {1}: show(c.new)
+msgid "{name}: {0}% → {1}%"
+msgstr "{name}: {0} % → {1} %"
+
+msgid "1 week"
+msgstr "1 semana"
+
+msgid "24 hours"
+msgstr "24 horas"
+
+msgid "50k headers"
+msgstr "50 k encabezados"
+
 msgid "A ProTx hash is 64 hexadecimal characters."
 msgstr "Un hash ProTx tiene 64 caracteres hexadecimales."
+
+msgid "About every two weeks, from each test location"
+msgstr "Cada dos semanas aproximadamente, desde cada ubicación de prueba"
 
 msgid "Address type"
 msgstr "Tipo de dirección"
 
+msgid "Addresses, keys and PoSe status, as Radar recorded them"
+msgstr "Direcciones, claves y estado de PoSe, tal como los registró Radar"
+
+msgid "among the evonodes that proposed blocks"
+msgstr "entre los evonodes que propusieron bloques"
+
 msgid "Amount"
 msgstr "Importe"
+
+msgid "Answered"
+msgstr "Respondió"
 
 #. placeholder {0}: formatInt(up.ok)
 #. placeholder {1}: formatInt(up.attempts)
@@ -53,11 +189,32 @@ msgstr "Respondió a todas las comprobaciones"
 msgid "Answered every check on each of the {0} days Radar has checked this node"
 msgstr "Respondió a todas las comprobaciones en cada uno de los {0} días que Radar ha comprobado este nodo"
 
+#. placeholder {0}: formatInt(d.latency_ms)
+#. placeholder {0}: formatInt(p.ms ?? 0)
+msgid "answered in {0} ms"
+msgstr "respondió en {0} ms"
+
+#. placeholder {0}: Math.round((r.connect_ms ?? 0) + (r.handshake_ms ?? 0))
+#. placeholder {0}: formatInt(p.ms)
+msgid "Answered in {0} ms"
+msgstr "Respondió en {0} ms"
+
+msgid "Answered Radar’s latest port check."
+msgstr "Respondió a la última comprobación de puertos de Radar."
+
 msgid "Answering"
 msgstr "Responde"
 
-msgid "Answers on its Core port"
-msgstr "Responde en su puerto de Core"
+#. placeholder {0}: d.asn
+msgid "AS{0}"
+msgstr "AS{0}"
+
+#. placeholder {0}: formatInt(p.monthly_basis_days)
+msgid "at its pace of the last {0} days"
+msgstr "al ritmo de los últimos {0} días"
+
+msgid "Back in the list"
+msgstr "De vuelta en la lista"
 
 msgid "Banned"
 msgstr "Expulsado"
@@ -66,12 +223,20 @@ msgstr "Expulsado"
 msgid "banned at block {0}"
 msgstr "expulsado en el bloque {0}"
 
-#. placeholder {0}: formatInt(d.pose_ban_height)
+#. placeholder {0}: formatInt(banned)
 msgid "Banned at block {0}"
 msgstr "Expulsado en el bloque {0}"
 
 msgid "Banned on Platform"
 msgstr "Expulsado en Platform"
+
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "expulsión en {0}"
+
+#. placeholder {0}: formatPercent(rank, 0)
+msgid "Better than {0} of masternodes tested from the same location."
+msgstr "Mejor que el {0} de los masternodes probados desde la misma ubicación."
 
 msgid "block"
 msgstr "bloque"
@@ -83,11 +248,96 @@ msgstr "Bloque"
 msgid "Block {0}"
 msgstr "Bloque {0}"
 
+msgid "Blocks"
+msgstr "Bloques"
+
+msgid "Blocks (proofs)"
+msgstr "Bloques (pruebas)"
+
+msgid "Blocks and rewards of the last 12 finalized epochs, from Platform’s proofs"
+msgstr "Bloques y recompensas de las últimas 12 épocas finalizadas, a partir de las pruebas de Platform"
+
+msgid "Blocks proposed"
+msgstr "Bloques propuestos"
+
+msgid "Blocks this epoch"
+msgstr "Bloques en esta época"
+
+msgid "Blocks this evonode proposed in one epoch, from Platform"
+msgstr "Bloques que este evonode propuso en una época, según Platform"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Blocks this evonode proposed, over the last {0}"
+msgstr "Bloques que este evonode propuso, periodo: {0}"
+
+msgid "Both, a month"
+msgstr "Ambos, un mes"
+
+msgid "Both, a year"
+msgstr "Ambos, un año"
+
+#. placeholder {0}: breakdownFrom.location || breakdownFrom.vantage
+msgid "Breakdown from {0}."
+msgstr "Desglose desde {0}."
+
+msgid "Broadcast"
+msgstr "Difundir"
+
 msgid "Catching up"
 msgstr "Poniéndose al día"
 
+msgid "Change"
+msgstr "Cambio"
+
+msgid "Chart range"
+msgstr "Rango del gráfico"
+
+msgid "Check now"
+msgstr "Comprobar ahora"
+
+msgid "Checking whether Hyphen’s index is current…"
+msgstr "Comprobando si el índice de Hyphen está al día…"
+
+msgid "Checking…"
+msgstr "Comprobando…"
+
+msgid "Claimable now"
+msgstr "Reclamable ahora"
+
 msgid "Collateral"
 msgstr "Colateral"
+
+msgid "Combined from {answers, plural, one {# proof-checked answer} other {# proof-checked answers}}: the finalized epochs, the current epoch and this evonode’s proposed blocks."
+msgstr "Combinado a partir de {answers, plural, one {# respuesta verificada con prueba} other {# respuestas verificadas con prueba}}: las épocas finalizadas, la época actual y los bloques propuestos por este evonode."
+
+msgid "Compact block filters"
+msgstr "Filtros de bloques compactos"
+
+msgid "Complete"
+msgstr "Completo"
+
+msgid "Connect"
+msgstr "Conexión"
+
+msgid "Connect and handshake"
+msgstr "Conexión y handshake"
+
+msgid "Core P2P"
+msgstr "Core P2P"
+
+msgid "Core P2P address"
+msgstr "Dirección Core P2P"
+
+msgid "Core, a month"
+msgstr "Core, un mes"
+
+#. placeholder {0}: message(e)
+msgid "couldn’t check: {0}"
+msgstr "no se pudo comprobar: {0}"
+
+#. placeholder {0}: message(withdrawals.error)
+msgid "Couldn’t list withdrawals: {0}"
+msgstr "No se pudieron listar los retiros: {0}"
 
 msgid "Crawled by Radar"
 msgstr "Rastreado por Radar"
@@ -95,11 +345,40 @@ msgstr "Rastreado por Radar"
 msgid "Daily health"
 msgstr "Estado diario"
 
+msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
+msgstr "La lista de DAPI no lo incluye. Puede ser nuevo, haber sido eliminado o estar mal escrito."
+
+msgid "DAPI’s list wins where Radar’s last crawl differs."
+msgstr "Donde el último rastreo de Radar difiere, prevalece la lista de DAPI."
+
+msgid "differ"
+msgstr "difieren"
+
+#. placeholder {0}: differing.map((r) => r.epoch).join(', ')
+msgid "differ in {0}"
+msgstr "difieren en {0}"
+
+msgid "Doesn’t serve compact block filters ({bit})."
+msgstr "No ofrece filtros de bloques compactos ({bit})."
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Drive keeps per-evonode records only from epoch {0} on, so rewards before it can’t be checked. Rewards are gross: reward shares are not deducted."
+msgstr "Drive guarda registros por evonode solo a partir de la época {0}, así que las recompensas anteriores no se pueden comprobar. Las recompensas son brutas: no se descuentan las participaciones de recompensa."
+
 msgid "Drive protocol"
 msgstr "Protocolo de Drive"
 
+msgid "Each test downloads the latest 50,000 block headers and the masternode list from this node and checks them against Radar’s own node."
+msgstr "Cada prueba descarga de este nodo los últimos 50.000 encabezados de bloque y la lista de masternodes, y los contrasta con el propio nodo de Radar."
+
+msgid "Earned (DASH)"
+msgstr "Ganado (DASH)"
+
 msgid "Earned on Core, {window} days"
 msgstr "Ganado en Core, {window} días"
+
+msgid "Earned on Platform"
+msgstr "Ganado en Platform"
 
 msgid "Enabled, no PoSe penalty"
 msgstr "Habilitado, sin penalización PoSe"
@@ -108,11 +387,45 @@ msgstr "Habilitado, sin penalización PoSe"
 msgid "Enabled, PoSe penalty {0}"
 msgstr "Habilitado, penalización PoSe {0}"
 
+msgid "Epoch"
+msgstr "Época"
+
+#. placeholder {0}: formatInt(selected)
+#. placeholder {1}: infos.length
+msgid "Epoch {0} is outside the {1, plural, one {# recent epoch} other {# recent epochs}} read here, or not final yet."
+msgstr "La época {0} está fuera de {1, plural, one {la # época reciente leída} other {las # épocas recientes leídas}} aquí, o aún no es definitiva."
+
+#. placeholder {0}: formatInt(watched.epoch)
+msgid "Epoch {0}, blocks"
+msgstr "Época {0}, bloques"
+
+#. placeholder {0}: info.protocolVersion
+msgid "Epoch ran protocol {0}"
+msgstr "La época funcionó con el protocolo {0}"
+
+msgid "Epoch record"
+msgstr "Registro de la época"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Estimates"
+msgstr "Estimaciones"
+
+msgid "Every epoch, in DASH"
+msgstr "Cada época, en DASH"
+
+msgid "Every ProRegTx and ProUp… transaction that changed this masternode"
+msgstr "Cada transacción ProRegTx y ProUp… que cambió este masternode"
+
 msgid "Evonode"
 msgstr "Evonode"
 
 msgid "Evonode collateral"
 msgstr "Colateral de evonode"
+
+msgid "Expired (refunded)"
+msgstr "Caducado (reembolsado)"
 
 msgid "Expires"
 msgstr "Caduca"
@@ -120,14 +433,71 @@ msgstr "Caduca"
 msgid "Facts"
 msgstr "Datos"
 
-msgid "fail"
-msgstr "fallo"
+msgid "Fail"
+msgstr "Fallo"
+
+msgid "Failed"
+msgstr "Fallida"
+
+#. placeholder {0}: p.error
+msgid "Failed: {0}"
+msgstr "Fallo: {0}"
+
+#. placeholder {0}: rows.length
+msgid "Fails {failing} of {0} checks. Quorum members vote against masternodes that fail these in DKGs, which costs PoSe score."
+msgstr "Falla {failing} de {0} comprobaciones. Los miembros del quórum votan en contra de los masternodes que fallan en ellas durante los DKG, lo que resta puntuación PoSe."
 
 msgid "First seen"
 msgstr "Visto por primera vez"
 
+msgid "Fix"
+msgstr "Corregir"
+
+msgid "Fix its Platform services, then send a ProUpServTx (protx update_service) to lift the ban."
+msgstr "Corrige sus servicios de Platform y envía después una ProUpServTx (protx update_service) para levantar la expulsión."
+
+#. placeholder {0}: r.from
+msgid "from {0}"
+msgstr "desde {0}"
+
+#. placeholder {0}: returns?.window_days ?? 90
+msgid "from its payments over {0} days"
+msgstr "a partir de sus pagos en {0} días"
+
+msgid "from Radar’s count"
+msgstr "según el recuento de Radar"
+
+msgid "Grade"
+msgstr "Nota"
+
+#. placeholder {0}: combined.letter
+msgid "Grade {0}"
+msgstr "Nota {0}"
+
+msgid "gRPC (HTTPS)"
+msgstr "gRPC (HTTPS)"
+
+msgid "Header throughput"
+msgstr "Rendimiento de encabezados"
+
+msgid "Headers/s"
+msgstr "Encabezados/s"
+
 msgid "Healthy"
 msgstr "Sano"
+
+#. placeholder {0}: r.height
+msgid "height {0}"
+msgstr "altura {0}"
+
+msgid "Height it reported"
+msgstr "Altura que informó"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "History needs Radar’s crawl and Hyphen’s index of special transactions"
+msgstr "El historial necesita el rastreo de Radar y el índice de transacciones especiales de Hyphen"
 
 msgid "Hosting"
 msgstr "Alojamiento"
@@ -135,17 +505,101 @@ msgstr "Alojamiento"
 msgid "HTTPS (DAPI)"
 msgstr "HTTPS (DAPI)"
 
-msgid "Last error"
-msgstr "Último error"
+#. placeholder {0}: f.platformHttpPort
+msgid "HTTPS {0}"
+msgstr "HTTPS {0}"
+
+msgid "Hyphen has no special transactions for this ProTx."
+msgstr "Hyphen no tiene transacciones especiales de este ProTx."
+
+msgid "Hyphen’s index is behind the chain, so this list is not read."
+msgstr "El índice de Hyphen va por detrás de la cadena, así que esta lista no se lee."
+
+msgid "if it ended now (an estimate)"
+msgstr "si terminara ahora (una estimación)"
+
+msgid "In a validator set"
+msgstr "En un conjunto de validadores"
+
+msgid "in total (not counting expired ones)."
+msgstr "en total (sin contar los caducados)."
+
+#. placeholder {0}: formatPercent(below / values.length, 0)
+#. placeholder {1}: formatInt(values.length)
+#. placeholder {2}: formatNumber(dash(spread.p50), { maximumFractionDigits: 2 })
+msgid "It earned more than {0} of the {1} evonodes that proposed blocks last epoch; the median is {2} DASH."
+msgstr "Ganó más que el {0} de los {1} evonodes que propusieron bloques en la última época; la mediana es {2} DASH."
+
+msgid "It hasn’t proposed a block in a finished epoch yet."
+msgstr "Aún no ha propuesto ningún bloque en una época terminada."
+
+msgid "it proposed no blocks"
+msgstr "no propuso ningún bloque"
+
+msgid "It proposed no blocks last epoch."
+msgstr "No propuso ningún bloque en la última época."
+
+msgid "its identity’s balance, read"
+msgstr "el saldo de su identidad, leído"
+
+#. placeholder {0}: formatInt(p.next.slots ?? 0)
+msgid "its turn is {0} blocks away; an estimate"
+msgstr "su turno está a {0} bloques; una estimación"
+
+msgid "its turn is next; an estimate"
+msgstr "su turno es el siguiente; una estimación"
+
+msgid "Keep the node online and its port open to inbound connections."
+msgstr "Mantén el nodo en línea y su puerto abierto a conexiones entrantes."
+
+msgid "last"
+msgstr "último"
+
+msgid "Last 30 days"
+msgstr "Últimos 30 días"
+
+msgid "Last 365 days"
+msgstr "Últimos 365 días"
+
+msgid "Last 90 days"
+msgstr "Últimos 90 días"
+
+msgid "Last answered"
+msgstr "Última respuesta"
+
+msgid "Last block"
+msgstr "Último bloque"
+
+#. placeholder {0}: totals.last_epoch_index ?? '—'
+msgid "Last epoch ({0})"
+msgstr "Última época ({0})"
 
 msgid "Last paid"
 msgstr "Último pago"
 
-msgid "Last reached"
-msgstr "Última conexión"
-
 msgid "Latency"
 msgstr "Latencia"
+
+msgid "Latest port check"
+msgstr "Última comprobación de puertos"
+
+msgid "Left the list"
+msgstr "Salió de la lista"
+
+msgid "Listed by DAPI"
+msgstr "En la lista de DAPI"
+
+msgid "Live from Platform"
+msgstr "En directo desde Platform"
+
+msgid "Loading the Platform SDK (once per visit)…"
+msgstr "Cargando el SDK de Platform (una vez por visita)…"
+
+msgid "Loading…"
+msgstr "Cargando…"
+
+msgid "Location"
+msgstr "Ubicación"
 
 msgid "mainnet"
 msgstr "Mainnet"
@@ -153,8 +607,8 @@ msgstr "Mainnet"
 msgid "Masternode"
 msgstr "Masternode"
 
-#. placeholder {0}: d.protx.slice(0, 8)
 #. placeholder {0}: id.slice(0, 8)
+#. placeholder {0}: protx.slice(0, 8)
 msgid "Masternode {0}"
 msgstr "Masternode {0}"
 
@@ -164,11 +618,39 @@ msgstr "Colateral de masternode"
 msgid "Masternode records come from Radar’s crawl of mainnet and testnet."
 msgstr "Los datos de los masternodes proceden del rastreo de mainnet y testnet de Radar."
 
-msgid "Masternode records need Radar's crawler"
-msgstr "Los registros de masternodes necesitan el rastreador de Radar"
+msgid "Masternode records need an indexer"
+msgstr "Los registros de masternodes necesitan un indexador"
+
+msgid "Masternodes on this network"
+msgstr "Masternodes en esta red"
+
+msgid "match"
+msgstr "coinciden"
+
+#. placeholder {0}: checked.length
+msgid "match for {0, plural, one {# epoch} other {# epochs}}"
+msgstr "coinciden en {0, plural, one {# época} other {# épocas}}"
+
+msgid "Middle 80 % (DASH)"
+msgstr "80 % central (DASH)"
+
+msgid "Middle 80 % ends"
+msgstr "Fin del 80 % central"
+
+msgid "Middle 80 % starts"
+msgstr "Inicio del 80 % central"
+
+#. placeholder {0}: rules.reachFailures
+#. placeholder {1}: rules.maxFailedOutbound
+msgid "Missed {0} or more of Radar’s port checks in a row. Members vote against a masternode they fail to connect to more than {1} times."
+msgstr "Perdió {0} o más comprobaciones de puertos de Radar seguidas. Los miembros votan en contra de un masternode al que no logran conectarse más de {1} veces."
 
 msgid "Missed most"
 msgstr "Falló la mayoría"
+
+#. placeholder {0}: rules.reachFailures
+msgid "Missed Radar’s latest port check, but not {0} in a row. Core judges repeated failures, not one."
+msgstr "Perdió la última comprobación de puertos de Radar, pero no {0} seguidas. Core juzga los fallos repetidos, no uno solo."
 
 msgid "Missed some"
 msgstr "Falló alguna"
@@ -178,15 +660,51 @@ msgstr "Falló alguna"
 msgid "Missed some checks on {0} of {1} days"
 msgstr "Faltaron algunas comprobaciones en {0} de {1} días"
 
+msgid "Missed turns Radar saw"
+msgstr "Turnos perdidos que vio Radar"
+
+msgid "MN list"
+msgstr "Lista de MN"
+
+msgid "more than Radar’s total, for epochs before Radar’s record"
+msgstr "más que el total de Radar, en las épocas anteriores al registro de Radar"
+
 msgid "Network"
 msgstr "Red"
+
+msgid "never"
+msgstr "nunca"
 
 msgid "never banned"
 msgstr "nunca expulsado"
 
+msgid "Next block"
+msgstr "Siguiente bloque"
+
 #. placeholder {0}: formatInt(protocol.next_epoch)
 msgid "Next epoch {0}"
 msgstr "Próxima época {0}"
+
+msgid "No answer"
+msgstr "Sin respuesta"
+
+msgid "No changes since Radar started recording them."
+msgstr "Sin cambios desde que Radar empezó a registrarlos."
+
+msgid "no epochs to compare yet"
+msgstr "aún no hay épocas que comparar"
+
+msgid "No finalized epochs came back to compare."
+msgstr "No se obtuvo ninguna época finalizada que comparar."
+
+msgid "No grade"
+msgstr "Sin nota"
+
+msgid "No handshake with Radar’s crawler in the past week."
+msgstr "Sin handshake con el rastreador de Radar en la última semana."
+
+msgid "no identity"
+msgstr "sin identidad"
 
 msgid "No masternode with this ProTx on {here}."
 msgstr "No hay ningún masternode con este ProTx en {here}."
@@ -197,23 +715,96 @@ msgstr "Aún no hay pagos indexados para este masternode."
 msgid "No penalty"
 msgstr "Sin penalización"
 
+msgid "No Platform ban"
+msgstr "Sin expulsión de Platform"
+
+msgid "No stalls or bad data"
+msgstr "Sin bloqueos ni datos erróneos"
+
+msgid "No versions recorded yet."
+msgstr "Aún no hay versiones registradas."
+
+msgid "No vote seen"
+msgstr "No se vio ningún voto"
+
+msgid "none"
+msgstr "ninguno"
+
+msgid "none yet this epoch: it votes with the blocks it proposes"
+msgstr "ninguno aún en esta época: vota con los bloques que propone"
+
+msgid "None yet: everything it earned is still claimable."
+msgstr "Ninguno aún: todo lo que ganó sigue siendo reclamable."
+
 msgid "Not answering"
 msgstr "No responde"
 
-msgid "Not banned on Platform"
-msgstr "No expulsado en Platform"
+msgid "Not checked in Radar’s latest crawl."
+msgstr "No comprobado en el último rastreo de Radar."
+
+msgid "not checked in the latest crawl"
+msgstr "no comprobado en el último rastreo"
 
 msgid "Not checked yet"
 msgstr "Aún sin comprobar"
 
+msgid "not compared: Radar’s record is not in use"
+msgstr "no comparado: el registro de Radar no está en uso"
+
+msgid "Not in a validator set"
+msgstr "No está en un conjunto de validadores"
+
+msgid "not in a validator set that takes turns now"
+msgstr "no está en un conjunto de validadores que se turne ahora"
+
 msgid "not paid yet"
 msgstr "aún sin pagar"
+
+msgid "not probed"
+msgstr "no sondeado"
+
+msgid "not read yet"
+msgstr "aún no leído"
 
 msgid "Not ready"
 msgstr "No está listo"
 
+msgid "Not recorded yet; the next crawl will tell."
+msgstr "Aún no registrado; el próximo rastreo lo dirá."
+
+msgid "Not tested yet. Radar tests every enabled masternode about every two weeks."
+msgstr "Aún no probado. Radar prueba cada masternode habilitado aproximadamente cada dos semanas."
+
+msgid "Not valid"
+msgstr "No válido"
+
+msgid "Nothing fails, but Radar can’t see every check yet."
+msgstr "Nada falla, pero Radar aún no puede ver todas las comprobaciones."
+
+msgid "nothing yet"
+msgstr "nada aún"
+
+msgid "now"
+msgstr "ahora"
+
+#. placeholder {0}: formatInt(total)
+msgid "of {0}"
+msgstr "de {0}"
+
+msgid "On protocol {voted}"
+msgstr "En el protocolo {voted}"
+
+msgid "On the list"
+msgstr "En la lista"
+
+msgid "once six epochs have finished"
+msgstr "cuando hayan terminado seis épocas"
+
 msgid "Open it on {otherName}"
 msgstr "Abrirlo en {otherName}"
+
+msgid "Open port {port} to inbound connections and keep the node online."
+msgstr "Abre el puerto {port} a conexiones entrantes y mantén el nodo en línea."
 
 msgid "Operator key"
 msgstr "Clave del operador"
@@ -221,34 +812,77 @@ msgstr "Clave del operador"
 msgid "Operator payout"
 msgstr "Pago al operador"
 
-#. placeholder {0}: formatPercent(d.operator_reward / 10000, 2)
-msgid "Operator reward {0}"
-msgstr "Recompensa del operador {0}"
+msgid "Operator payout address"
+msgstr "Dirección de pago al operador"
+
+msgid "Operator reward"
+msgstr "Recompensa del operador"
+
+#. placeholder {0}: formatPercent(p.d30_percentile, 0)
+#. placeholder {1}: formatInt(p.d30_of)
+msgid "Over the last 30 days, more than {0} of all {1} enabled evonodes."
+msgstr "En los últimos 30 días, más que el {0} de los {1} evonodes habilitados."
+
+msgid "Overview"
+msgstr "Resumen"
 
 msgid "Owner"
 msgstr "Propietario"
 
+msgid "Owner address"
+msgstr "Dirección del propietario"
+
 msgid "P2P (Tenderdash)"
 msgstr "P2P (Tenderdash)"
+
+#. placeholder {0}: f.platformP2pPort
+msgid "P2P {0}"
+msgstr "P2P {0}"
 
 msgid "Paid"
 msgstr "Pagado"
 
+msgid "Paid (proofs)"
+msgstr "Pagado (pruebas)"
+
 msgid "Paid to"
 msgstr "Pagado a"
 
-msgid "pass"
-msgstr "correcto"
+msgid "Pass"
+msgstr "Correcto"
+
+msgid "Passes every check Radar can see."
+msgstr "Supera todas las comprobaciones que Radar puede ver."
+
+msgid "Payments"
+msgstr "Pagos"
+
+msgid "Payments need Radar’s index of this node’s block rewards"
+msgstr "Los pagos necesitan el índice de Radar de las recompensas de bloque de este nodo"
 
 msgid "Payout"
 msgstr "Pago"
 
+msgid "Payout address"
+msgstr "Dirección de pago"
+
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Penalización {0}"
 
+#. placeholder {0}: formatInt(p.first_epoch)
+msgid "Per finished epoch since epoch {0}, worked out the way Drive pays them"
+msgstr "Por época terminada desde la época {0}, calculado como los paga Drive"
+
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Place"
 msgstr "Lugar"
+
+msgid "Platform"
+msgstr "Platform"
 
 #. placeholder {0}: daily.length
 msgid "Platform endpoint checks answered, day by day, over {0} days"
@@ -257,11 +891,65 @@ msgstr "Comprobaciones de los endpoints de Platform con respuesta, día a día, 
 msgid "Platform endpoints"
 msgstr "Endpoints de Platform"
 
+msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
+msgstr "Platform Explorer no respondió, así que falta su registro de este validador."
+
+msgid "Platform Explorer has no validator record for this ProTx."
+msgstr "Platform Explorer no tiene ningún registro de validador de este ProTx."
+
+msgid "Platform Explorer is a third party; Radar has not verified it"
+msgstr "Platform Explorer es un tercero; Radar no lo ha verificado"
+
+msgid "Platform Explorer says"
+msgstr "Platform Explorer indica"
+
+msgid "Platform has PoSe-banned this evonode."
+msgstr "Platform ha expulsado a este evonode por PoSe."
+
 msgid "Platform height"
 msgstr "Altura de Platform"
 
+msgid "Platform HTTPS address"
+msgstr "Dirección HTTPS de Platform"
+
+msgid "Platform keeps each masternode’s latest vote"
+msgstr "Platform guarda el último voto de cada masternode"
+
 msgid "Platform node"
 msgstr "Nodo de Platform"
+
+msgid "Platform node ID"
+msgstr "ID del nodo de Platform"
+
+msgid "Platform P2P"
+msgstr "Platform P2P"
+
+msgid "Platform P2P address"
+msgstr "Dirección P2P de Platform"
+
+msgid "Platform ports"
+msgstr "Puertos de Platform"
+
+msgid "Platform rewards"
+msgstr "Recompensas de Platform"
+
+#. placeholder {0}: first ?? 0
+#. placeholder {1}: last ?? 0
+msgid "Platform rewards per epoch, epochs {0} to {1}, against the middle 80 % of evonodes"
+msgstr "Recompensas de Platform por época, épocas {0} a {1}, frente al 80 % central de los evonodes"
+
+#. placeholder {0}: timeframe === '24h' ? t`24 hours` : t`week`
+msgid "Platform rewards this evonode earned, over the last {0}"
+msgstr "Recompensas de Platform que ganó este evonode, periodo: {0}"
+
+msgid "Platform, a month"
+msgstr "Platform, un mes"
+
+msgid "Pooled"
+msgstr "Agrupado"
+
+msgid "Port check"
+msgstr "Comprobación de puertos"
 
 msgid "PoSe"
 msgstr "PoSe"
@@ -272,23 +960,63 @@ msgstr "Expulsado por PoSe"
 msgid "PoSe penalty"
 msgstr "Penalización PoSe"
 
+msgid "PoSe status"
+msgstr "Estado de PoSe"
+
 msgid "Probe failing"
 msgstr "La sonda falla"
 
 msgid "Probed"
 msgstr "Sondeado"
 
+msgid "proof checked"
+msgstr "verificado con prueba"
+
+msgid "ProRegTx"
+msgstr "ProRegTx"
+
+msgid "Protocol"
+msgstr "Protocolo"
+
+#. placeholder {0}: p.vote.version
+msgid "protocol {0}"
+msgstr "protocolo {0}"
+
+#. placeholder {0}: rules.minProtocol
+msgid "Protocol {protocol}, at least {0}."
+msgstr "Protocolo {protocol}, como mínimo {0}."
+
+#. placeholder {0}: rules.release
+#. placeholder {1}: rules.minProtocol
+msgid "Protocol {protocol}. Masternodes running {0} vote nodes below protocol {1} bad in DKGs."
+msgstr "Protocolo {protocol}. Los masternodes que ejecutan {0} votan como malos en los DKG a los nodos con protocolo inferior a {1}."
+
+msgid "Protocol version"
+msgstr "Versión del protocolo"
+
 msgid "ProTx"
 msgstr "ProTx"
 
-msgid "Quorum readiness"
-msgstr "Preparación del quórum"
+msgid "ProTx (base58, its identity)"
+msgstr "ProTx (base58, su identidad)"
+
+msgid "ProTx (hex)"
+msgstr "ProTx (hex)"
+
+msgid "Queued"
+msgstr "En cola"
+
+msgid "Quorum readiness checks"
+msgstr "Comprobaciones de preparación para quórums"
 
 msgid "Radar doesn’t crawl devnets."
 msgstr "Radar no rastrea las devnets."
 
 msgid "Radar has no checks for this node yet"
 msgstr "Radar aún no tiene comprobaciones de este nodo"
+
+msgid "Radar has no reward record for this evonode yet."
+msgstr "Radar aún no tiene registro de recompensas de este evonode."
 
 msgid "Radar has no uptime checks for this node yet."
 msgstr "Radar aún no tiene comprobaciones de disponibilidad de este nodo."
@@ -302,14 +1030,48 @@ msgstr "Radar aún no ha sondeado los endpoints de Platform de este nodo."
 msgid "Radar’s crawl doesn’t list it. It may be new, removed, or mistyped."
 msgstr "El rastreo de Radar no lo lista. Puede ser nuevo, haber sido eliminado o estar mal escrito."
 
-msgid "Radar’s crawl of {here} doesn’t list it."
-msgstr "El rastreo de {here} de Radar no lo lista."
+msgid "Radar’s crawl has no record of this masternode."
+msgstr "El rastreo de Radar no tiene registro de este masternode."
+
+msgid "Radar’s crawl, which also lists nodes missing from DAPI’s list, is off"
+msgstr "El rastreo de Radar, que también lista nodos ausentes de la lista de DAPI, está desactivado"
+
+msgid "Radar’s epoch numbers"
+msgstr "Números de época de Radar"
+
+msgid "Radar’s last crawl differs"
+msgstr "El último rastreo de Radar difiere"
+
+msgid "Radar’s node hasn’t said yet."
+msgstr "El nodo de Radar aún no se ha pronunciado."
+
+msgid "Radar’s node knows of no Platform ban. Bans arrive over P2P, so it could miss one."
+msgstr "El nodo de Radar no conoce ninguna expulsión de Platform. Las expulsiones llegan por P2P, así que podría perderse alguna."
+
+msgid "Radar’s payment index has not started for this node"
+msgstr "El índice de pagos de Radar no ha empezado para este nodo"
+
+msgid "Radar’s record"
+msgstr "Registro de Radar"
+
+msgid "Rank"
+msgstr "Posición"
+
+msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
+msgstr "Accesibilidad según el rastreo de Radar; bloques, recompensas y claves según Platform Explorer"
+
+msgid "Reachable"
+msgstr "Accesible"
+
+msgid "Read from Platform with proofs, checked in your browser"
+msgstr "Leído de Platform con pruebas, verificadas en tu navegador"
 
 msgid "Ready"
 msgstr "Listo"
 
-msgid "Recent payments"
-msgstr "Pagos recientes"
+#. placeholder {0}: rules.release
+msgid "Ready for {0} quorums?"
+msgstr "¿Listo para los quórums de {0}?"
 
 msgid "Recent payments to this masternode"
 msgstr "Pagos recientes a este masternode"
@@ -317,21 +1079,61 @@ msgstr "Pagos recientes a este masternode"
 msgid "Registered"
 msgstr "Registrado"
 
+msgid "Registered at block"
+msgstr "Registrado en el bloque"
+
 msgid "Registration"
 msgstr "Registro"
+
+msgid "Registration changes"
+msgstr "Cambios de registro"
+
+msgid "Registration changes of this masternode"
+msgstr "Cambios de registro de este masternode"
 
 msgid "Regular masternode"
 msgstr "Masternode normal"
 
-msgid "Relays transactions"
-msgstr "Retransmite transacciones"
+msgid "Relay is off, so it won’t have the transactions it must sign InstantSend locks for."
+msgstr "La retransmisión está desactivada, así que no tendrá las transacciones para las que debe firmar bloqueos InstantSend."
 
-#. placeholder {0}: formatInt(d.pose_revived_height ?? 0)
+msgid "Relays transactions."
+msgstr "Retransmite transacciones."
+
+#. placeholder {0}: rules.release
+msgid "Remove blocksonly=1 from dash.conf. {0} won’t start a masternode with it."
+msgstr "Quita blocksonly=1 de dash.conf. {0} no iniciará un masternode con esa opción."
+
+msgid "Requested"
+msgstr "Solicitado"
+
+msgid "Retry"
+msgstr "Reintentar"
+
+msgid "reused from"
+msgstr "reutilizado de"
+
+#. placeholder {0}: formatInt(revived)
 msgid "Revived at block {0}"
 msgstr "Reactivado en el bloque {0}"
 
-msgid "Runs a current protocol version"
-msgstr "Usa una versión de protocolo actual"
+msgid "Reward estimates, endpoint health and Platform Explorer’s record need indexers"
+msgstr "Las estimaciones de recompensas, el estado de los endpoints y el registro de Platform Explorer necesitan indexadores"
+
+msgid "Rewards"
+msgstr "Recompensas"
+
+msgid "Rewards (DASH)"
+msgstr "Recompensas (DASH)"
+
+msgid "Rewards appear after it has proposed a block in a finished epoch."
+msgstr "Las recompensas aparecen después de que proponga un bloque en una época terminada."
+
+msgid "Rewards in total"
+msgstr "Recompensas en total"
+
+msgid "Rewards this epoch"
+msgstr "Recompensas en esta época"
 
 msgid "Same as the owner address"
 msgstr "Igual que la dirección del propietario"
@@ -339,11 +1141,71 @@ msgstr "Igual que la dirección del propietario"
 msgid "Search Radar"
 msgstr "Buscar en Radar"
 
-msgid "Serves compact block filters"
-msgstr "Ofrece filtros de bloques compactos"
+msgid "See the sources"
+msgstr "Ver las fuentes"
+
+msgid "Served everything asked"
+msgstr "Sirvió todo lo pedido"
+
+msgid "Serves compact block filters ({bit})."
+msgstr "Ofrece filtros de bloques compactos ({bit})."
+
+msgid "Service"
+msgstr "Servicio"
+
+#. placeholder {0}: rules.filtersBit
+msgid "service bit {0}"
+msgstr "bit de servicio {0}"
+
+msgid "Services"
+msgstr "Servicios"
+
+#. placeholder {0}: rules.release
+msgid "Set peerblockfilters=1 and blockfilterindex=1, or remove a =0 for either. {0} won’t start a masternode without them."
+msgstr "Establece peerblockfilters=1 y blockfilterindex=1, o quita un =0 de cualquiera de los dos. {0} no iniciará un masternode sin ellos."
+
+msgid "Share of blocks"
+msgstr "Proporción de bloques"
+
+msgid "Show more"
+msgstr "Mostrar más"
+
+msgid "Show on map"
+msgstr "Mostrar en el mapa"
+
+#. placeholder {0}: formatInt(p.first_epoch ?? 0)
+msgid "Since epoch {0}"
+msgstr "Desde la época {0}"
+
+msgid "so far this epoch"
+msgstr "hasta ahora en esta época"
 
 msgid "Software"
 msgstr "Software"
+
+msgid "Special transactions"
+msgstr "Transacciones especiales"
+
+msgid "Special transactions after that block are not in this list. Everything else on this page is current."
+msgstr "Las transacciones especiales posteriores a ese bloque no están en esta lista. Todo lo demás de esta página está al día."
+
+msgid "Special transactions of this masternode"
+msgstr "Transacciones especiales de este masternode"
+
+msgid "Speed test"
+msgstr "Prueba de velocidad"
+
+msgid "Speed test results by location"
+msgstr "Resultados de la prueba de velocidad por ubicación"
+
+msgid "started"
+msgstr "iniciado"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Tested"
+msgstr "Probado"
 
 msgid "testnet"
 msgstr "Testnet"
@@ -351,28 +1213,167 @@ msgstr "Testnet"
 msgid "That isn’t a ProTx hash."
 msgstr "Eso no es un hash ProTx."
 
-#. placeholder {0}: formatInt(d.payments.length)
-#. placeholder {1}: formatInt(total)
-msgid "The latest {0} of {1} payments Radar has indexed"
-msgstr "Los últimos {0} de los {1} pagos que Radar ha indexado"
+#. placeholder {0}: error instanceof Error ? error.message : String(error)
+msgid "The check failed: {0}"
+msgstr "La comprobación falló: {0}"
+
+msgid "the evonode’s identity balance"
+msgstr "el saldo de la identidad del evonode"
+
+msgid "The last 12 epochs"
+msgstr "Las últimas 12 épocas"
+
+msgid "The latest test failed; Radar retries within a day."
+msgstr "La última prueba falló; Radar reintenta en un día."
+
+msgid "The masternode list of {here} doesn’t include it."
+msgstr "La lista de masternodes de {here} no lo incluye."
+
+msgid "The node answered."
+msgstr "El nodo respondió."
+
+msgid "The node did not answer."
+msgstr "El nodo no respondió."
+
+msgid "The port check, location, speed test and endpoint health need Radar’s crawl"
+msgstr "La comprobación de puertos, la ubicación, la prueba de velocidad y el estado de los endpoints necesitan el rastreo de Radar"
+
+msgid "The registration transaction is the ProTx hash itself."
+msgstr "La transacción de registro es el propio hash del ProTx."
+
+#. placeholder {0}: rules.coreCommit
+msgid "The rule in Dash Core {0}"
+msgstr "La regla en Dash Core {0}"
+
+msgid "the same as Radar’s total"
+msgstr "igual que el total de Radar"
+
+msgid "This epoch so far"
+msgstr "Esta época hasta ahora"
+
+msgid "This epoch, blocks"
+msgstr "Esta época, bloques"
+
+msgid "This evonode"
+msgstr "Este evonode"
 
 msgid "This masternode is on {otherName}."
 msgstr "Este masternode está en {otherName}."
 
+msgid "Time (UTC)"
+msgstr "Hora (UTC)"
+
 msgid "TLS certificate"
 msgstr "Certificado TLS"
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in {wait} s."
+msgstr "Demasiadas comprobaciones: Radar permite 5 por minuto para cada cliente y cada nodo. Vuelve a intentarlo en {wait} s."
+
+msgid "Too many checks: Radar allows 5 a minute for each client and each node. Try again in a minute."
+msgstr "Demasiadas comprobaciones: Radar permite 5 por minuto para cada cliente y cada nodo. Vuelve a intentarlo en un minuto."
+
+msgid "too new to tell"
+msgstr "demasiado reciente para saberlo"
+
+msgid "Transaction"
+msgstr "Transacción"
+
+msgid "Transaction relay"
+msgstr "Retransmisión de transacciones"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Unknown"
+msgstr "Desconocido"
+
+msgid "unknown: the validator sets haven’t been read lately"
+msgstr "desconocido: los conjuntos de validadores no se han leído últimamente"
+
+msgid "Updated"
+msgstr "Actualizado"
+
+#. placeholder {0}: rules.release
+msgid "Upgrade to {0}."
+msgstr "Actualiza a {0}."
+
+msgid "Upgrade vote"
+msgstr "Voto de actualización"
 
 msgid "Uptime"
 msgstr "Disponibilidad"
 
+msgid "Uptime and versions need Radar’s crawl"
+msgstr "La disponibilidad y las versiones necesitan el rastreo de Radar"
+
 msgid "Uptime, 30 days"
 msgstr "Disponibilidad, 30 días"
+
+msgid "Uptime, payments and readiness need Radar’s crawl of this node"
+msgstr "La disponibilidad, los pagos y la preparación necesitan el rastreo de Radar de este nodo"
+
+msgid "User agent"
+msgstr "User agent"
+
+msgid "Valid"
+msgstr "Válido"
+
+msgid "Valid on DAPI’s list"
+msgstr "Válido en la lista de DAPI"
+
+msgid "Validator record"
+msgstr "Registro del validador"
+
+msgid "Verdict"
+msgstr "Veredicto"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Version history"
+msgstr "Historial de versiones"
+
+msgid "Versions this masternode has announced"
+msgstr "Versiones que este masternode ha anunciado"
 
 msgid "Vote in Governance"
 msgstr "Votar en Governance"
 
+msgid "votes are not kept per epoch"
+msgstr "los votos no se guardan por época"
+
+msgid "Votes for protocol {voted}"
+msgstr "Vota por el protocolo {voted}"
+
 msgid "Voting"
 msgstr "Votación"
 
+msgid "Voting address"
+msgstr "Dirección de voto"
+
+msgid "week"
+msgstr "semana"
+
+msgid "What the node announced, newest first"
+msgstr "Lo que el nodo anunció, de más reciente a más antiguo"
+
+msgid "When"
+msgstr "Cuándo"
+
+msgid "When a DKG starts, each quorum member votes against members it can’t reach or that fail these checks. A node is left out only once about three quarters of a quorum vote it bad."
+msgstr "Cuando empieza un DKG, cada miembro del quórum vota en contra de los miembros a los que no puede llegar o que fallan estas comprobaciones. Un nodo queda fuera solo cuando unas tres cuartas partes de un quórum lo votan como malo."
+
 msgid "Where it is"
 msgstr "Ubicación"
+
+msgid "Where it sits"
+msgstr "Dónde se sitúa"
+
+msgid "Withdrawals"
+msgstr "Retiros"
+
+msgid "Withdrawals from this evonode’s identity"
+msgstr "Retiros de la identidad de este evonode"
+
+msgid "worked out from the epoch’s proven fees"
+msgstr "calculado a partir de las comisiones probadas de la época"

@@ -69,6 +69,13 @@ export const PeValidatorSchema = z.object({
   poseScoreMax: z.number().nullish(),
   blocksUntilCorePayment: z.number().nullish(),
   coreYieldPerYear: z.number().nullish(),
+  epochInfo: z
+    .object({
+      number: z.number(),
+      startTime: z.number().nullish(),
+      endTime: z.number().nullish(),
+    })
+    .nullish(),
 })
 
 export type PeValidator = z.output<typeof PeValidatorSchema>

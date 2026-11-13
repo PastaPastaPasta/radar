@@ -1,0 +1,111 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/validator/9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874"
+  },
+  "recordedAt": "2026-11-13T09:44:18.432Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=15, s-maxage=30"
+  },
+  "body": {
+    "asOfHeight": 2571530,
+    "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+    "collateralHash": "69671a6f82c4aec27bc1f1c54361eb2b0637208a7d38f18c590f931c35134891",
+    "collateralIndex": 0,
+    "addresses": {
+      "owner": "XqAJRzPEQ82BwEfs41cpkMSAvrcfB1FWTc",
+      "voting": "XqAJRzPEQ82BwEfs41cpkMSAvrcfB1FWTc",
+      "payout": "Xeg8pgJqfZHsx9GQRoSFpnjwsdzzAtj5z2"
+    },
+    "live": {
+      "type": "Regular",
+      "valid": true,
+      "status": "valid",
+      "lastPaidHeight": 2569729,
+      "lastPaidAt": "2026-11-10T03:07:29Z",
+      "consecutivePayments": 0,
+      "pose": { "banScore": 27, "revivedHeight": 2374098, "banHeight": -1 },
+      "revocationReason": 0
+    },
+    "operatorPubKey": "0505cffc69beb642ff54726ff52139cc18014c6cbc603d46a706ecaf9668db058e7532a96aae6d476ce474c7b122aa71",
+    "operatorReward": 0,
+    "type": "regular",
+    "status": "registered",
+    "services": { "coreP2p": ["146.190.33.135:9999"], "platformP2p": [], "platformHttps": [] },
+    "registeredHeight": 1028171,
+    "lastUpdatedHeight": 2374098,
+    "history": [
+      {
+        "txHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+        "txType": "provider_register",
+        "payload": {
+          "collateralHash": "69671a6f82c4aec27bc1f1c54361eb2b0637208a7d38f18c590f931c35134891",
+          "collateralIndex": 0,
+          "mnType": "Regular",
+          "operatorPubKey": "0505cffc69beb642ff54726ff52139cc18014c6cbc603d46a706ecaf9668db058e7532a96aae6d476ce474c7b122aa71",
+          "operatorReward": 0,
+          "ownerKeyId": "9ec3321255cbf92c8c3f62085f0fad9e4b18b8b5",
+          "version": 1,
+          "votingKeyId": "9ec3321255cbf92c8c3f62085f0fad9e4b18b8b5"
+        },
+        "blockHeight": 1028171
+      },
+      {
+        "txHash": "73305572bbf668319d280e6ecc69eecc13b0f693614b01a98c19abe594073835",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 1265520
+      },
+      {
+        "txHash": "ae5d14fcc8077bad45cc2b864b20fed03d372ad43ff19eb2187e30f56c445bd3",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 1624851
+      },
+      {
+        "txHash": "9f166d938449a2c007ed16c0c7f63656834d8b721b5a1f70baf9cada1a91493a",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 1667602
+      },
+      {
+        "txHash": "2c4567fd91c2b5b67347e351b3067c324017029e2090740b2a22812e5c90d374",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 1973178
+      },
+      {
+        "txHash": "9766ce33a441ac52da62062f2135e5380a3c8b79d54fbb3b53d5610dbc3b3f87",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 2115135
+      },
+      {
+        "txHash": "8ec471a9b2c383ac5f02192044315e13221c4dc8f71f6d2f13bc853383dceced",
+        "txType": "provider_update_service",
+        "payload": {
+          "proTxHash": "9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874",
+          "version": 1
+        },
+        "blockHeight": 2374098
+      }
+    ]
+  }
+}

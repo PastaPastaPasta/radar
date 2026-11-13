@@ -71,13 +71,13 @@ describe('Masternode page', () => {
   it('gives every card a source line from Radar’s crawl @RA-30', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     await waitFor(() => expect(document.querySelector('#registration')).not.toBeNull())
-    for (const id of ['uptime', 'payments', 'registration', 'location']) {
+    for (const id of ['uptime', 'registration']) {
       const card = document.getElementById(id)!
       expect(card.querySelector('[data-source="radar"]')).not.toBeNull()
     }
   })
 
-  it('draws the uptime strip with a tone for each day and lists recent payments', async () => {
+  it('draws the uptime strip with a tone for each day', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     const strip = await waitFor(() => {
       const el = document.querySelector('[data-uptime-strip]')
@@ -85,12 +85,16 @@ describe('Masternode page', () => {
       return el!
     })
     expect(strip.querySelectorAll('i').length).toBe(13)
+  })
+
+  it('lists recent payments on the payments tab @RA-35', async () => {
+    renderAt(`/mn/${MAINNET.regular}?tab=payments`)
     const table = await screen.findByRole('table', { name: 'Recent payments to this masternode' })
     expect(within(table).getAllByRole('row').length).toBeGreaterThan(5)
   })
 
   it('shows an evonode’s Platform endpoints with certificate, height, versions and daily health @RA-40', async () => {
-    renderAt(`/mn/${MAINNET.evo}`)
+    renderAt(`/mn/${MAINNET.evo}?tab=network`)
     const card = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('#platform')
       expect(el).not.toBeNull()
@@ -107,10 +111,54 @@ describe('Masternode page', () => {
     expect(card.querySelector('[data-platform-daily] [data-uptime-strip]')).not.toBeNull()
   })
 
-  it('has no Platform card for a regular masternode', async () => {
-    renderAt(`/mn/${MAINNET.regular}`)
-    await waitFor(() => expect(document.querySelector('#registration')).not.toBeNull())
+  it('has no Platform card or tab for a regular masternode', async () => {
+    renderAt(`/mn/${MAINNET.regular}?tab=network`)
+    await waitFor(() => expect(document.querySelector('#port-check')).not.toBeNull())
     expect(document.querySelector('#platform')).toBeNull()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Sections' })).queryByRole('link', {
+        name: 'Platform',
+      }),
+    ).toBeNull()
+  })
+
+  it('shows the Platform tab for an evonode only', async () => {
+    renderAt(`/mn/${MAINNET.evo}`)
+    const tabs = await screen.findByRole('navigation', { name: 'Sections' })
+    expect(within(tabs).getByRole('link', { name: 'Platform' })).toBeInTheDocument()
+  })
+
+  it('lists the DKG checks with fix text and a link to the rule @RA-36', async () => {
+    renderAt(`/mn/${MAINNET.regular}`)
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#readiness')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(card).toHaveTextContent('Ready')
+    for (const id of ['protocol', 'relay', 'filters', 'reachable']) {
+      await waitFor(() => expect(card.querySelector(`[data-check="${id}"]`)).not.toBeNull())
+    }
+    expect(card.querySelector('a[data-rule]')).toHaveAttribute(
+      'href',
+      expect.stringContaining('dkgsession.cpp'),
+    )
+  })
+
+  it('shows the port check and links the location to the map and the host to its list @RA-32 @RA-33', async () => {
+    renderAt(`/mn/${MAINNET.regular}?tab=network`)
+    const check = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#port-check')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    for (const label of ['Latest port check', 'User agent', 'Protocol', 'Latency']) {
+      expect(check).toHaveTextContent(label)
+    }
+    expect(within(check).getByRole('button', { name: 'Check now' })).toBeInTheDocument()
+    const map = await screen.findByRole('link', { name: 'Show on map' })
+    expect(map.getAttribute('href')).toContain(`protx=${MAINNET.regular}`)
+    expect(document.querySelector('a[data-host-filter]')?.getAttribute('href')).toMatch(/host=\d+/)
   })
 
   it('marks a PoSe-banned masternode as banned', async () => {
