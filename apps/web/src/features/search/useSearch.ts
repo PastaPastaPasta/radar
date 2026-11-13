@@ -4,8 +4,9 @@ import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 import { decentralizedOnly } from '@/lib/source-mode'
-import { classify, type Classified, type Tip } from './classify'
+import { classify, type Classified } from './classify'
 import { searchEnv } from './env'
+import { useSdkState, useSearchTip } from './tip'
 import { networkHintHit } from './network-hint'
 import { offered } from './offered'
 import { useWordlistLoaded } from './wordlist'
@@ -51,11 +52,17 @@ function allowed(r: Resolver, net: NetworkId, mode: SearchMode): boolean {
   }
 }
 
-export function planResolvers(c: Classified, net: NetworkId, mode: SearchMode): Resolver[] {
+export function planResolvers(
+  c: Classified,
+  net: NetworkId,
+  mode: SearchMode,
+  tipReading = false,
+): Resolver[] {
   if (c.networkHint || c.classes.length === 0) return []
   return registry.filter(
     (r) =>
       (!c.warning || r.cost === 'local') &&
+      !(r.waitsForTip && tipReading) &&
       r.accepts.some((k) => c.classes.includes(k)) &&
       allowed(r, net, mode),
   )
@@ -64,10 +71,15 @@ export function planResolvers(c: Classified, net: NetworkId, mode: SearchMode): 
 export function mergeHits(lists: SearchHit[][]): SearchHit[] {
   const best = new Map<string, SearchHit>()
   for (const hit of lists.flat()) {
-    const key = `${hit.kind}:${hit.id}`
+    // One node, one hit: an evonode is a masternode with a Platform role, and both land on the same page.
+    const key = `${hit.kind === 'evonode' ? 'masternode' : hit.kind}:${hit.id}`
     const current = best.get(key)
     const confirms = current?.speculative && !hit.speculative
-    if (!current || hit.rank > current.rank || confirms) best.set(key, hit)
+    const specific =
+      hit.kind === 'evonode' && current?.kind === 'masternode' && hit.rank === current.rank
+    // At equal rank the proof-checked answer is the one to show: a hit Platform Explorer and the SDK both found.
+    const proves = hit.rank === current?.rank && hit.stamp.proved && !current.stamp.proved
+    if (!current || hit.rank > current.rank || confirms || proves || specific) best.set(key, hit)
   }
   return [...best.values()].sort((a, b) => b.rank - a.rank)
 }
@@ -99,12 +111,13 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   // Read so a change of mode plans the lookups again.
   const indexOff = useDecentralizedOnly()
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
-  const tipKey = JSON.stringify(searchEnv.tip(net) ?? null)
-  const tip = useMemo(() => (JSON.parse(tipKey) as Tip | null) ?? undefined, [tipKey])
+  const { tip, reading: tipReading } = useSearchTip(net, mode, q.trim() !== '')
+  // Read so the SDK reaching 'ready' plans its lookups in the palette.
+  useSdkState(net)
   const wordsReady = useWordlistLoaded()
   // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
   const classified = useMemo(() => classify(input, net, tip), [input, net, tip, wordsReady])
-  const planned = planResolvers(classified, net, mode)
+  const planned = planResolvers(classified, net, mode, tipReading)
   const plannedIds = planned.map((r) => r.id).join(',')
   const key = `${net}|${mode}|${classified.normalized}|${plannedIds}`
   const [state, setState] = useState<RunState>(EMPTY)

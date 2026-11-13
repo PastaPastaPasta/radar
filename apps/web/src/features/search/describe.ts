@@ -3,16 +3,17 @@ import { msg } from '@lingui/core/macro'
 import type { Classified, InputClass, SecretWarning } from './classify'
 
 const NAMES = {
-  int: msg`a number: a Core height, Platform height or epoch`,
-  hex64: msg`a 64-character hash: a block, transaction, ProTx or transition`,
+  int: msg`a number: could be a Core height, a Platform height or an epoch`,
+  hex64: msg`a 64-character hash: could be a Core block, a transaction, a Platform block, a state transition or an identity`,
   hex40: msg`a 40-character hash: a public-key hash`,
-  'base58-id': msg`an ID: an identity, contract, token or document`,
+  'base58-id': msg`an ID: could be an identity, a contract or a token`,
+  'document-path': msg`a document path: a contract, a document type and a document ID`,
   'core-address': msg`a Core address`,
   'platform-address': msg`a Platform address`,
   ip: msg`an IP address: a masternode’s service address`,
   date: msg`a date: the Core blocks of that UTC day`,
   dpns: msg`a name`,
-  text: msg`text: a contract or token name`,
+  text: msg`text: could be a name, a contract or a token`,
 } satisfies Record<InputClass, ReturnType<typeof msg>>
 
 export function describeInput(c: Classified): string[] {

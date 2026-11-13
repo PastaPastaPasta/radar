@@ -217,12 +217,14 @@ describe('classify', () => {
     if (normalized !== undefined) expect(result.normalized).toBe(normalized)
   })
 
-  it('drops int when it exceeds every known tip', () => {
+  it('drops int only when it exceeds all three tips, because a tip not read yet could cover it', () => {
     const tip = { core: 2_000_000, platform: 5000, epoch: 90 }
     expect(classify('90', 'mainnet', tip).classes).toEqual(['int'])
     expect(classify('2000000', 'mainnet', tip).classes).toEqual(['int', 'dpns'])
     expect(classify('2000001', 'mainnet', tip).classes).toEqual(['dpns'])
-    expect(classify('99', 'mainnet', { epoch: 90 }).classes).toEqual([])
+    expect(classify('99', 'mainnet', { epoch: 90 }).classes).toEqual(['int'])
+    expect(classify('99', 'mainnet', { epoch: 90, platform: 50 }).classes).toEqual(['int'])
+    expect(classify('99', 'mainnet', { epoch: 90, platform: 50, core: 80 }).classes).toEqual([])
   })
 
   it('does not search private keys or recovery phrases', () => {
@@ -401,5 +403,32 @@ describe('classify possible phrases', () => {
     const result = classify('abandon ability able about above', 'mainnet')
     expect(result.classes).toEqual(['text'])
     expect(classify(PHRASE, 'mainnet').classes).toEqual([])
+  })
+})
+
+describe('classify: a document path', () => {
+  const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
+  const DOC = 'FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS'
+
+  it('reads contract/type/ID as one document and nothing else @NX-05', () => {
+    const result = classify(` ${CONTRACT}/domain/${DOC} `, 'mainnet')
+    expect(result.classes).toEqual(['document-path'])
+    expect(result.normalized).toBe(`${CONTRACT}/domain/${DOC}`)
+  })
+
+  it('needs two IDs and a type name @NX-05', () => {
+    for (const input of [
+      `${CONTRACT}/domain`,
+      `${CONTRACT}/${DOC}`,
+      `${CONTRACT}/9bad/${DOC}`,
+      `${CONTRACT}/domain/${DOC}/more`,
+      `short/domain/${DOC}`,
+    ]) {
+      expect(classify(input, 'mainnet').classes).not.toContain('document-path')
+    }
+  })
+
+  it('leaves a bare ID an ID @NX-05', () => {
+    expect(classify(DOC, 'mainnet').classes).toEqual(['base58-id'])
   })
 })
