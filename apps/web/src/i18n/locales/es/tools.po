@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "“{arg}” no tiene comodín."
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” no es un número."
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}” no es un operador que Platform conozca."
+
+msgid "“{arg}” isn't supported here."
+msgstr "“{arg}” no se admite aquí."
+
+msgid "“{arg}” isn't supported."
+msgstr "“{arg}” no se admite."
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” necesita comillas."
+
+msgid "(opens in a new tab)"
+msgstr "(se abre en una pestaña nueva)"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, one {# documento} other {# documentos}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, one {# grupo} other {# grupos}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} campos, {1} índices"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "No se pudieron leer {0} líneas de esta capa."
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "{0} pasos"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}, {1}. Decodificado aquí: los bytes no se envían a ningún sitio."
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "Los bytes de un documento solo tienen sentido junto a su contrato. Radar obtiene el contrato una vez, comprueba su prueba aquí y lo conserva para decodificar."
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "A un nombre de campo entre acentos graves le falta el acento grave de cierre."
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "Se esperaba un nombre de campo, pero llegó “{arg}”."
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "Un filtro sigue un índice: los campos que nombra deben ser los primeros campos de un índice, comparados con == o IN, y el último puede usar un rango (<, <=, >, >=, BETWEEN) o STARTS WITH. Añade ORDER BY para cada campo que filtres con un rango o IN."
+
+msgid "A name by its label"
+msgstr "Un nombre por su etiqueta"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "Se esperaba un número, pero llegó “{arg}”."
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "Una consulta es SELECT … FROM … WHERE con condiciones unidas por AND, y después GROUP BY, ORDER BY y LIMIT. JOIN, OR, OFFSET y las subconsultas no están disponibles porque Platform responde desde un solo índice."
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "Una sentencia puede nombrar el propio contrato, como en FROM dpns.domain."
+
+msgid "A string is missing its closing quote."
+msgstr "A una cadena le falta la comilla de cierre."
+
+msgid "A sum over a range"
+msgstr "Una suma sobre un rango"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "Se esperaba un valor, pero llegó “{arg}”."
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "Se esperaba un número entero, pero llegó “{arg}”."
+
+msgid "Action"
+msgstr "Acción"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "Añade ORDER BY para cada campo filtrado con un rango (<, >, BETWEEN, STARTS WITH) o IN."
+
+msgid "All documents"
+msgstr "Todos los documentos"
+
+msgid "Amount (credits)"
+msgstr "Importe (créditos)"
+
+msgid "An average per group"
+msgstr "Un promedio por grupo"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "Se esperaba un operador, pero llegó “{arg}”."
+
+msgid "Another contract…"
+msgstr "Otro contrato…"
+
+msgid "Average"
+msgstr "Promedio"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "Promedio de {0}"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "Lista de bytes"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "Comprueba el ID o elige uno de los contratos de la lista."
+
+msgid "Check this transition"
+msgstr "Comprobar esta transición"
+
+msgid "Check with Platform"
+msgstr "Comprobar con Platform"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "Comprobar una transición requiere Platform Explorer"
+
+msgid "Checking is not available on this network."
+msgstr "La comprobación no está disponible en esta red."
+
+msgid "Choose a decoder"
+msgstr "Elige un decodificador"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "Elige arriba el contrato y el tipo de documento para decodificar este documento."
+
+msgid "Clear the filter"
+msgstr "Borrar el filtro"
+
+msgid "contested"
+msgstr "en disputa"
+
+msgid "Contested name"
+msgstr "Nombre en disputa"
+
+msgid "Contract"
+msgstr "Contrato"
+
+msgid "Contract and type"
+msgstr "Contrato y tipo"
+
+msgid "Contract decoder"
+msgstr "Decodificador de contratos"
+
+msgid "Contract ID"
+msgstr "ID del contrato"
+
+msgid "Contract version"
+msgstr "Versión del contrato"
+
+msgid "Copy query link"
+msgstr "Copiar el enlace de la consulta"
+
+msgid "Copy the raw reading"
+msgstr "Copiar la lectura sin procesar"
+
+msgid "Copy the SDK example"
+msgstr "Copiar el ejemplo del SDK"
+
+msgid "Core fee per byte"
+msgstr "Comisión de Core por byte"
+
+msgid "Count and sum"
+msgstr "Recuento y suma"
+
+msgid "Credit transfer"
+msgstr "Transferencia de créditos"
+
+msgid "Credit withdrawal"
+msgstr "Retiro de créditos"
+
+msgid "Credits in"
+msgstr "Créditos entrantes"
+
+msgid "Credits out"
+msgstr "Créditos salientes"
+
+msgid "Custom"
+msgstr "Personalizado"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "Perfiles de DashPay de un propietario"
+
+msgid "Data contract create"
+msgstr "Creación de contrato de datos"
+
+msgid "Data contract update"
+msgstr "Actualización de contrato de datos"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "Decodifica una transición de estado firmada y pregunta a Platform si sería aceptada."
+
+msgid "Decoded"
+msgstr "Decodificado"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "Decodificado aquí: los bytes no se envían a ningún sitio."
+
+msgid "Decoded JSON"
+msgstr "JSON decodificado"
+
+msgid "Decoders"
+msgstr "Decodificadores"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "La decodificación de arriba funciona en todas las redes. Platform Explorer cubre mainnet y testnet."
+
+msgid "Delete"
+msgstr "Eliminar"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "Eliminar {0}"
+
+msgid "Detect"
+msgstr "Detectar"
+
+msgid "Document decoder"
+msgstr "Decodificador de documentos"
+
+msgid "Document type"
+msgstr "Tipo de documento"
+
+msgid "Document types"
+msgstr "Tipos de documento"
+
+msgid "Documents"
+msgstr "Documentos"
+
+msgid "Documents and tokens batch"
+msgstr "Lote de documentos y tokens"
+
+msgid "DPNS contract"
+msgstr "Contrato DPNS"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive devuelve como máximo 100 documentos (o 100 grupos) por consulta."
+
+msgid "Element"
+msgstr "Elemento"
+
+msgid "Elements"
+msgstr "Elementos"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "Código de error {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "Todas las condiciones deben cumplirse (AND): un índice no puede atender dos alternativas a la vez. Ejecuta dos sentencias en su lugar."
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "Cada segmento y cada clave está en hex, con dos dígitos por byte."
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "Se esperaba {label}, pero llegó “{arg}”."
+
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+msgid "Export JSON"
+msgstr "Exportar JSON"
+
+msgid "Fee multiplier"
+msgstr "Multiplicador de comisión"
+
+msgid "Fields"
+msgstr "Campos"
+
+msgid "Filter by page, source or call"
+msgstr "Filtrar por página, fuente o llamada"
+
+msgid "Group"
+msgstr "Grupo"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY necesita COUNT(*), SUM(campo) o AVG(campo)."
+
+msgid "GroveDB path"
+msgstr "Ruta de GroveDB"
+
+msgid "GroveDB proof"
+msgstr "Prueba de GroveDB"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Hashes standing in for the rest"
+msgstr "Hashes que representan el resto"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identity"
+msgstr "Identidad"
+
+msgid "Identity create"
+msgstr "Creación de identidad"
+
+msgid "Identity create from addresses"
+msgstr "Creación de identidad desde direcciones"
+
+msgid "Identity decoder"
+msgstr "Decodificador de identidades"
+
+msgid "Identity top-up"
+msgstr "Recarga de identidad"
+
+msgid "Identity top-up from addresses"
+msgstr "Recarga de identidad desde direcciones"
+
+msgid "Identity update"
+msgstr "Actualización de identidad"
+
+msgid "indexed"
+msgstr "indexado"
+
+msgid "Indexes"
+msgstr "Índices"
+
+msgid "Input"
+msgstr "Entrada"
+
+msgid "Inputs"
+msgstr "Entradas"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "Clave"
+
+msgid "Keys"
+msgstr "Claves"
+
+msgid "Keys added"
+msgstr "Claves añadidas"
+
+msgid "Keys disabled"
+msgstr "Claves desactivadas"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "Capa {0}"
+
+msgid "Layers"
+msgstr "Capas"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE necesita un patrón entre comillas, como 'abc%'."
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT debe estar entre 1 y 100."
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "Línea {0}, columna {1}."
+
+msgid "Load the next page"
+msgstr "Cargar la página siguiente"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Masternode vote"
+msgstr "Voto de masternode"
+
+msgid "Name at least one key to read."
+msgstr "Indica al menos una clave que leer."
+
+msgid "Name for this query"
+msgstr "Nombre de esta consulta"
+
+msgid "No contract with this ID on this network."
+msgstr "No hay ningún contrato con este ID en esta red."
+
+msgid "No documents match."
+msgstr "Ningún documento coincide."
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "Ningún índice cubre esta combinación de campos de WHERE y ORDER BY. Los filtros y la ordenación deben seguir el orden de propiedades de un índice; el esquema de abajo lista los índices."
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "Sin índices: los documentos de este tipo solo se pueden leer por su ID."
+
+msgid "No page or call matches this filter."
+msgstr "Ninguna página ni llamada coincide con este filtro."
+
+msgid "No saved queries yet."
+msgstr "Aún no hay consultas guardadas."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "NOT isn't supported."
+msgstr "NOT no se admite."
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "Nada de esta prueba se pudo leer como capas."
+
+msgid "nothing stored"
+msgstr "nada almacenado"
+
+msgid "Nothing was returned for these keys."
+msgstr "No se devolvió nada para estas claves."
+
+msgid "Nothing was sent."
+msgstr "No se envió nada."
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "Los números son dígitos enteros o decimales con un signo menos opcional. Escribe los ID y el resto del texto entre comillas simples."
+
+msgid "One hex key per line."
+msgstr "Una clave hex por línea."
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "Un segmento hex por línea, desde la raíz. Vacío lee el árbol raíz."
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "Con LIKE solo funcionan los patrones de prefijo."
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "Solo se admiten SELECT *, COUNT(*), SUM(campo) y AVG(campo)."
+
+msgid "Operations in this batch"
+msgstr "Operaciones de este lote"
+
+msgid "OR isn't supported."
+msgstr "OR no se admite."
+
+msgid "or, as the last field you filter"
+msgstr "o, como último campo del filtro"
+
+msgid "Outputs"
+msgstr "Salidas"
+
+msgid "Pages"
+msgstr "Páginas"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "Pega una prueba de una respuesta de Platform para ver las capas, las claves que prueba y los hashes que representan el resto."
+
+msgid "Paste a proof."
+msgstr "Pega una prueba."
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "Pega una transición de estado en hex o base64 para decodificarla y comprobarla. No se firma ni se envía nada."
+
+msgid "Paste some bytes."
+msgstr "Pega algunos bytes."
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "Pega los bytes serializados de un contrato de datos para leer sus tipos de documento, tokens y grupos."
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "Pega los bytes serializados de un documento e indica su contrato y tipo para leer sus campos."
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "Pega los bytes serializados de una identidad para leer sus claves, su saldo y su revisión."
+
+msgid "Path"
+msgstr "Ruta"
+
+msgid "Path decoder"
+msgstr "Decodificador de rutas"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "Elige un contrato arriba o escribe su nombre antes del tipo, como en FROM dpns.domain."
+
+msgid "Pick a type"
+msgstr "Elige un tipo"
+
+msgid "Platform address funding"
+msgstr "Fondeo de dirección de Platform"
+
+msgid "Platform address transfer"
+msgstr "Transferencia de dirección de Platform"
+
+msgid "Platform address withdrawal"
+msgstr "Retiro de dirección de Platform"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform puede comparar valores, rangos, listas IN y prefijos, pero no puede excluir un valor."
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform puede comparar valores, rangos, listas IN y prefijos, pero no puede excluir un valor. Filtra por lo que quieres, no por lo que no quieres."
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer pregunta a un nodo de Platform si aceptaría esta transición (una prueba en seco). No se difunde nada y nada cambia."
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform solo agrupa respuestas agregadas. Una lista de documentos no se puede agrupar."
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform rechazó el LIMIT para esta forma de consulta. Prueba con un LIMIT menor."
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform devuelve documentos completos o un único agregado, por lo que las proyecciones de campos y DISTINCT no están disponibles."
+
+msgid "Platform SDK"
+msgstr "SDK de Platform"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform recorre un índice en orden, así que una consulta es una serie de coincidencias en los primeros campos del índice y, como mucho, un rango después."
+
+msgid "Platform would accept this transition."
+msgstr "Platform aceptaría esta transición."
+
+msgid "Platform would reject this transition."
+msgstr "Platform rechazaría esta transición."
+
+msgid "Points to"
+msgstr "Apunta a"
+
+msgid "Pooling"
+msgstr "Pooling"
+
+msgid "Preset"
+msgstr "Plantilla"
+
+msgid "Presets"
+msgstr "Plantillas"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "Pulsa ⌘ o Ctrl y Intro para ejecutar. Hasta dos sentencias, separadas por punto y coma."
+
+msgid "Price feed"
+msgstr "Fuente de precios"
+
+msgid "Proof bytes"
+msgstr "Bytes de la prueba"
+
+msgid "Proof decoder"
+msgstr "Decodificador de pruebas"
+
+msgid "Proven items"
+msgstr "Elementos probados"
+
+msgid "Query"
+msgstr "Consulta"
+
+msgid "Query link copied"
+msgstr "Enlace de la consulta copiado"
+
+msgid "Query saved"
+msgstr "Consulta guardada"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar mantiene los números dentro del rango exacto de JavaScript. Usa el SDK directamente para un valor exacto mayor."
+
+msgid "Raw reading"
+msgstr "Lectura sin procesar"
+
+msgid "Raw result"
+msgstr "Resultado sin procesar"
+
+msgid "Read as"
+msgstr "Leer como"
+
+msgid "Read elements"
+msgstr "Leer elementos"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "Lee los formatos propios de Platform en este navegador: contratos, identidades, documentos, pruebas y rutas. Nada de lo que pegues se envía a ningún sitio."
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "Lee los elementos almacenados en una ruta de GroveDB, con una prueba comprobada en este navegador."
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "Lee hasta {MAX_KEYS} claves a la vez."
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "Resultado de la sentencia {0}"
+
+msgid "Results"
+msgstr "Resultados"
+
+msgid "Revision"
+msgstr "Revisión"
+
+msgid "Run"
+msgstr "Ejecutar"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "Ejecuta SQL de solo lectura sobre los documentos de un contrato. Cada respuesta se comprueba con una prueba en este navegador."
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "Guardado solo en este navegador, para esta red y este contrato."
+
+msgid "Saved queries"
+msgstr "Consultas guardadas"
+
+msgid "Schema"
+msgstr "Esquema"
+
+msgid "SDK documentation"
+msgstr "Documentación del SDK"
+
+msgid "SDK example"
+msgstr "Ejemplo del SDK"
+
+msgid "SDK reference"
+msgstr "Referencia del SDK"
+
+msgid "Send transitions with Bridge"
+msgstr "Enviar transiciones con Bridge"
+
+msgid "Sender"
+msgstr "Remitente"
+
+msgid "Serialized data contract"
+msgstr "Contrato de datos serializado"
+
+msgid "Serialized document"
+msgstr "Documento serializado"
+
+msgid "Serialized identity"
+msgstr "Identidad serializada"
+
+msgid "Shield"
+msgstr "Blindaje"
+
+msgid "Shield from asset lock"
+msgstr "Blindaje desde bloqueo de activos"
+
+msgid "Shield from identity"
+msgstr "Blindaje desde identidad"
+
+msgid "Shielded actions"
+msgstr "Acciones blindadas"
+
+msgid "Shielded transfer"
+msgstr "Transferencia blindada"
+
+msgid "Shielded withdrawal"
+msgstr "Retiro blindado"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "Mostrar los {0} pasos"
+
+msgid "Signed state transition"
+msgstr "Transición de estado firmada"
+
+msgid "Signing key"
+msgstr "Clave de firma"
+
+msgid "Size (bytes)"
+msgstr "Tamaño (bytes)"
+
+msgid "SQL query"
+msgstr "Consulta SQL"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "Empezar una consulta sobre {0}"
+
+msgid "State transition"
+msgstr "Transición de estado"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "La sentencia {0} nombra el contrato “{1}”, que Radar no conoce. Usa dpns, dashpay u otro contrato del sistema, o elige un contrato arriba y omite el nombre."
+
+msgid "Step"
+msgstr "Paso"
+
+msgid "Steps"
+msgstr "Pasos"
+
+msgid "Subtrees entered"
+msgstr "Subárboles recorridos"
+
+msgid "Sum"
+msgstr "Suma"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "Suma de {0}"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "Eso supera 1 MB, más de lo que ocupa cualquiera de estos objetos."
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "Eso no es una lista de números del 0 al 255."
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "Eso no es hex, base64 ni una lista de números."
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "Eso no es hex: usa los dígitos del 0 al 9 y de la a a la f, dos por byte."
+
+msgid "The first DashPay profiles"
+msgstr "Los primeros perfiles de DashPay"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "El grovedbProof de una respuesta de Platform. Radar lo lee aquí y muestra qué prueba cada capa."
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "El nodo que respondió no admite esta solicitud; puede que ejecute una versión anterior de Platform. Vuelve a ejecutarla para llegar a otro nodo."
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "No se pudo cargar el lector de pruebas. Comprueba la conexión e inténtalo de nuevo."
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "El lector de pruebas se detuvo con esta entrada: es más grande o más profunda de lo que puede leer."
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "La consulta se ejecutó y Platform respondió con nada, prueba incluida."
+
+msgid "The raw reading is below."
+msgstr "La lectura sin procesar está debajo."
+
+msgid "The root tree"
+msgstr "El árbol raíz"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "El SDK solo lee la envoltura de este tipo de transición; sus campos no se muestran."
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "Los subárboles del árbol de votos: recursos en disputa, decisiones, fechas de fin y votos de identidades."
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "Las dos entradas del subárbol del contrato DPNS: su definición y sus documentos."
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "Los subárboles conocidos que Platform mantiene en la cima de su estado."
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "Estos bytes no son una prueba de GroveDB."
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "Estos bytes no se pudieron decodificar como transición de estado."
+
+msgid "These bytes could not be decoded."
+msgstr "Estos bytes no se pudieron decodificar."
+
+msgid "This browser won't store the query."
+msgstr "Este navegador no guardará la consulta."
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "Este tipo de documento no tiene ningún índice que admita este agregado. COUNT necesita un índice contable cuyas propiedades sean los campos de WHERE; SUM y AVG necesitan un índice sumable coincidente. El esquema de abajo lista los indicadores de cada índice."
+
+msgid "This number is too large to write safely here."
+msgstr "Este número es demasiado grande para escribirlo aquí con seguridad."
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "Esta prueba termina antes de lo debido: faltan algunos de sus bytes."
+
+msgid "This statement was stopped before it answered."
+msgstr "Esta sentencia se detuvo antes de responder."
+
+msgid "token"
+msgstr "token"
+
+msgid "Tools"
+msgstr "Herramientas"
+
+msgid "Transition decoder"
+msgstr "Decodificador de transiciones"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "unique"
+msgstr "único"
+
+msgid "Unshield"
+msgstr "Desblindaje"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "Se ejecutan hasta {MAX_STATEMENTS} sentencias a la vez; esta tiene {0}."
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "Usa == para una coincidencia exacta. LIKE aquí es solo una coincidencia de prefijo."
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "Usa ==, >, >=, <, <=, BETWEEN … AND …, IN (…) o STARTS WITH."
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "Vote"
+msgstr "Voto"
+
+msgid "Voting state"
+msgstr "Estado de votación"
+
+msgid "What the proof contains"
+msgstr "Qué contiene la prueba"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "Qué llamada del SDK de Platform respalda cada página de Radar, con sus argumentos."
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "Escribe un prefijo literal y un solo % al final, como en LIKE 'abc%', o usa STARTS WITH para un prefijo que contenga % o _."
+
+msgid "Write a query to run."
+msgstr "Escribe una consulta para ejecutar."
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "Escribe el texto entre comillas simples y duplica una comilla dentro del texto."
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "Escribe los valores de texto, incluidos los ID, entre comillas simples."
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "Aquí puedes guardar hasta 20 consultas. Elimina una primero."
+
+msgid "Your browser"
+msgstr "Tu navegador"

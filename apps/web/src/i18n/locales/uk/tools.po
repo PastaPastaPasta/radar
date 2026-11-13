@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "У “{arg}” немає підстановного знака."
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” — не число."
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}” — не оператор, відомий Platform."
+
+msgid "“{arg}” isn't supported here."
+msgstr "“{arg}” тут не підтримується."
+
+msgid "“{arg}” isn't supported."
+msgstr "“{arg}” не підтримується."
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” потрібно взяти в лапки."
+
+msgid "(opens in a new tab)"
+msgstr "(відкриється в новій вкладці)"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, one {# документ} few {# документи} many {# документів} other {# документа}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, one {# група} few {# групи} many {# груп} other {# групи}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} полів, {1} індексів"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "Не вдалося прочитати рядки цього шару: {0}."
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "Кроків: {0}"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}, {1}. Розшифровано тут: байти нікуди не надсилаються."
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "Байти документа мають сенс лише відносно його контракту. Radar один раз отримує контракт, перевіряє його доказ тут і зберігає для розшифрування."
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "В імені поля у зворотних лапках бракує закривної зворотної лапки."
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "Очікувалася назва поля, але трапилося “{arg}”."
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "Фільтр іде за одним індексом: названі в ньому поля мають бути провідними полями індексу й зіставлятися через == або IN, а останнє з них може приймати діапазон (<, <=, >, >=, BETWEEN) або STARTS WITH. Додайте ORDER BY для кожного поля, яке ви фільтруєте за діапазоном або IN."
+
+msgid "A name by its label"
+msgstr "Ім’я за його міткою"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "Очікувалося число, але трапилося “{arg}”."
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "Запит — це SELECT … FROM … WHERE з умовами, з’єднаними через AND, потім GROUP BY, ORDER BY і LIMIT. JOIN, OR, OFFSET і підзапити недоступні, бо Platform відповідає за одним індексом."
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "Інструкція може сама назвати контракт, як у FROM dpns.domain."
+
+msgid "A string is missing its closing quote."
+msgstr "У рядку бракує закривної лапки."
+
+msgid "A sum over a range"
+msgstr "Сума за діапазоном"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "Очікувалося значення, але трапилося “{arg}”."
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "Очікувалося ціле число, але трапилося “{arg}”."
+
+msgid "Action"
+msgstr "Дія"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "Додайте ORDER BY для кожного поля, яке фільтрується за діапазоном (<, >, BETWEEN, STARTS WITH) або IN."
+
+msgid "All documents"
+msgstr "Усі документи"
+
+msgid "Amount (credits)"
+msgstr "Сума (кредити)"
+
+msgid "An average per group"
+msgstr "Середнє за групами"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "Очікувався оператор, але трапилося “{arg}”."
+
+msgid "Another contract…"
+msgstr "Інший контракт…"
+
+msgid "Average"
+msgstr "Середнє"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "Середнє {0}"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "Список байтів"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgid "Cancelled"
+msgstr "Скасовано"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "Перевірте ID або виберіть один із контрактів у списку."
+
+msgid "Check this transition"
+msgstr "Перевірити цей перехід"
+
+msgid "Check with Platform"
+msgstr "Перевірити через Platform"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "Для перевірки переходу потрібен Platform Explorer"
+
+msgid "Checking is not available on this network."
+msgstr "Перевірка недоступна в цій мережі."
+
+msgid "Choose a decoder"
+msgstr "Виберіть декодер"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "Виберіть контракт і тип документа вище, щоб розшифрувати цей документ."
+
+msgid "Clear the filter"
+msgstr "Скинути фільтр"
+
+msgid "contested"
+msgstr "спірний"
+
+msgid "Contested name"
+msgstr "Спірне ім’я"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract and type"
+msgstr "Контракт і тип"
+
+msgid "Contract decoder"
+msgstr "Декодер контрактів"
+
+msgid "Contract ID"
+msgstr "ID контракту"
+
+msgid "Contract version"
+msgstr "Версія контракту"
+
+msgid "Copy query link"
+msgstr "Копіювати посилання на запит"
+
+msgid "Copy the raw reading"
+msgstr "Копіювати вихідний розбір"
+
+msgid "Copy the SDK example"
+msgstr "Копіювати приклад SDK"
+
+msgid "Core fee per byte"
+msgstr "Комісія Core за байт"
+
+msgid "Count and sum"
+msgstr "Кількість і сума"
+
+msgid "Credit transfer"
+msgstr "Переказ кредитів"
+
+msgid "Credit withdrawal"
+msgstr "Виведення кредитів"
+
+msgid "Credits in"
+msgstr "Вхідні кредити"
+
+msgid "Credits out"
+msgstr "Вихідні кредити"
+
+msgid "Custom"
+msgstr "Довільний"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "Профілі DashPay одного власника"
+
+msgid "Data contract create"
+msgstr "Створення контракту даних"
+
+msgid "Data contract update"
+msgstr "Оновлення контракту даних"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "Розшифруйте підписаний перехід стану й запитайте в Platform, чи буде він прийнятий."
+
+msgid "Decoded"
+msgstr "Розшифровано"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "Розшифровано тут: байти нікуди не надсилаються."
+
+msgid "Decoded JSON"
+msgstr "Розшифрований JSON"
+
+msgid "Decoders"
+msgstr "Декодери"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "Розшифрування вище працює в будь-якій мережі. Platform Explorer охоплює mainnet і testnet."
+
+msgid "Delete"
+msgstr "Видалити"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "Видалити {0}"
+
+msgid "Detect"
+msgstr "Визначити"
+
+msgid "Document decoder"
+msgstr "Декодер документів"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Document types"
+msgstr "Типи документів"
+
+msgid "Documents"
+msgstr "Документи"
+
+msgid "Documents and tokens batch"
+msgstr "Пакет документів і токенів"
+
+msgid "DPNS contract"
+msgstr "Контракт DPNS"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive повертає не більше 100 документів (або 100 груп) за запит."
+
+msgid "Element"
+msgstr "Елемент"
+
+msgid "Elements"
+msgstr "Елементи"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "Код помилки {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "Мають виконуватися всі умови (AND): індекс не може обслужити дві альтернативи одночасно. Виконайте замість цього дві інструкції."
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "Кожен сегмент і ключ — hex, по дві цифри на байт."
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "Очікувалося {label}, але трапилося “{arg}”."
+
+msgid "Export CSV"
+msgstr "Експортувати CSV"
+
+msgid "Export JSON"
+msgstr "Експортувати JSON"
+
+msgid "Fee multiplier"
+msgstr "Множник комісії"
+
+msgid "Fields"
+msgstr "Поля"
+
+msgid "Filter by page, source or call"
+msgstr "Фільтр за сторінкою, джерелом або викликом"
+
+msgid "Group"
+msgstr "Група"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY потребує COUNT(*), SUM(field) або AVG(field)."
+
+msgid "GroveDB path"
+msgstr "Шлях GroveDB"
+
+msgid "GroveDB proof"
+msgstr "Доказ GroveDB"
+
+msgid "Hash"
+msgstr "Хеш"
+
+msgid "Hashes standing in for the rest"
+msgstr "Хеші, що замінюють решту"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identity"
+msgstr "Ідентичність"
+
+msgid "Identity create"
+msgstr "Створення ідентичності"
+
+msgid "Identity create from addresses"
+msgstr "Створення ідентичності з адрес"
+
+msgid "Identity decoder"
+msgstr "Декодер ідентичностей"
+
+msgid "Identity top-up"
+msgstr "Поповнення ідентичності"
+
+msgid "Identity top-up from addresses"
+msgstr "Поповнення ідентичності з адрес"
+
+msgid "Identity update"
+msgstr "Оновлення ідентичності"
+
+msgid "indexed"
+msgstr "в індексі"
+
+msgid "Indexes"
+msgstr "Індекси"
+
+msgid "Input"
+msgstr "Введення"
+
+msgid "Inputs"
+msgstr "Входи"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Keys"
+msgstr "Ключі"
+
+msgid "Keys added"
+msgstr "Додані ключі"
+
+msgid "Keys disabled"
+msgstr "Вимкнені ключі"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "Шар {0}"
+
+msgid "Layers"
+msgstr "Шари"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE потребує шаблон у лапках, наприклад 'abc%'."
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT має бути від 1 до 100."
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "Рядок {0}, стовпець {1}."
+
+msgid "Load the next page"
+msgstr "Завантажити наступну сторінку"
+
+msgid "Masternode"
+msgstr "Мастернода"
+
+msgid "Masternode vote"
+msgstr "Голос мастерноди"
+
+msgid "Name at least one key to read."
+msgstr "Вкажіть хоча б один ключ для читання."
+
+msgid "Name for this query"
+msgstr "Назва цього запиту"
+
+msgid "No contract with this ID on this network."
+msgstr "У цій мережі немає контракту з таким ID."
+
+msgid "No documents match."
+msgstr "Відповідних документів немає."
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "Жоден індекс не покриває цю комбінацію полів WHERE і ORDER BY. Фільтри та сортування мають іти за порядком властивостей одного індексу; схема нижче перелічує індекси."
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "Індексів немає: документи цього типу можна читати лише за ID."
+
+msgid "No page or call matches this filter."
+msgstr "Жодна сторінка чи виклик не підходять під цей фільтр."
+
+msgid "No saved queries yet."
+msgstr "Збережених запитів поки немає."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "NOT isn't supported."
+msgstr "NOT не підтримується."
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "Нічого з цього доказу не вдалося прочитати як шари."
+
+msgid "nothing stored"
+msgstr "нічого не зберігається"
+
+msgid "Nothing was returned for these keys."
+msgstr "За цими ключами нічого не повернуто."
+
+msgid "Nothing was sent."
+msgstr "Нічого не надіслано."
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "Числа — це цілі або десяткові цифри з необов’язковим знаком мінус. ID та інший текст пишіть в одинарних лапках."
+
+msgid "One hex key per line."
+msgstr "Один hex-ключ на рядок."
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "Один hex-сегмент на рядок, від кореня. Порожньо — читається кореневе дерево."
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "З LIKE працюють лише шаблони-префікси."
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "Підтримуються лише SELECT *, COUNT(*), SUM(field) і AVG(field)."
+
+msgid "Operations in this batch"
+msgstr "Операції в цьому пакеті"
+
+msgid "OR isn't supported."
+msgstr "OR не підтримується."
+
+msgid "or, as the last field you filter"
+msgstr "або, як останнє поле фільтра"
+
+msgid "Outputs"
+msgstr "Виходи"
+
+msgid "Pages"
+msgstr "Сторінки"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "Вставте доказ із відповіді Platform, щоб побачити шари, ключі, які він підтверджує, і хеші, що замінюють решту."
+
+msgid "Paste a proof."
+msgstr "Вставте доказ."
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "Вставте перехід стану у hex або base64, щоб розшифрувати та перевірити його. Нічого не підписується й не надсилається."
+
+msgid "Paste some bytes."
+msgstr "Вставте байти."
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "Вставте серіалізовані байти контракту даних, щоб прочитати його типи документів, токени та групи."
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "Вставте серіалізовані байти документа та вкажіть його контракт і тип, щоб прочитати поля."
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "Вставте серіалізовані байти ідентичності, щоб прочитати її ключі, баланс і ревізію."
+
+msgid "Path"
+msgstr "Шлях"
+
+msgid "Path decoder"
+msgstr "Декодер шляхів"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "Виберіть контракт вище або вкажіть його назву перед типом, як у FROM dpns.domain."
+
+msgid "Pick a type"
+msgstr "Виберіть тип"
+
+msgid "Platform address funding"
+msgstr "Поповнення адреси Platform"
+
+msgid "Platform address transfer"
+msgstr "Переказ між адресами Platform"
+
+msgid "Platform address withdrawal"
+msgstr "Виведення з адреси Platform"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform вміє зіставляти значення, діапазони, списки IN і префікси, але не вміє виключати значення."
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform вміє зіставляти значення, діапазони, списки IN і префікси, але не вміє виключати значення. Фільтруйте за тим, що потрібно, а не за тим, що не потрібно."
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer запитує вузол Platform, чи прийме він цей перехід (пробний запуск). Нічого не поширюється й нічого не змінюється."
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform групує лише агрегатні відповіді. Список документів згрупувати не можна."
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform відхилив LIMIT для запиту такої форми. Спробуйте менший LIMIT."
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform повертає цілі документи або один агрегат, тому вибірка окремих полів і DISTINCT недоступні."
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform проходить індекс по порядку, тому запит — це серія збігів за провідними полями індексу та щонайбільше один діапазон після них."
+
+msgid "Platform would accept this transition."
+msgstr "Platform прийме цей перехід."
+
+msgid "Platform would reject this transition."
+msgstr "Platform відхилить цей перехід."
+
+msgid "Points to"
+msgstr "Вказує на"
+
+msgid "Pooling"
+msgstr "Пулінг"
+
+msgid "Preset"
+msgstr "Шаблон"
+
+msgid "Presets"
+msgstr "Шаблони"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "Натисніть ⌘ або Ctrl і Enter, щоб запустити. До двох інструкцій через крапку з комою."
+
+msgid "Price feed"
+msgstr "Джерело цін"
+
+msgid "Proof bytes"
+msgstr "Байти доказу"
+
+msgid "Proof decoder"
+msgstr "Декодер доказів"
+
+msgid "Proven items"
+msgstr "Підтверджені елементи"
+
+msgid "Query"
+msgstr "Запит"
+
+msgid "Query link copied"
+msgstr "Посилання на запит скопійовано"
+
+msgid "Query saved"
+msgstr "Запит збережено"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar тримає числа в межах точного діапазону JavaScript. Для більшого точного значення використовуйте SDK безпосередньо."
+
+msgid "Raw reading"
+msgstr "Вихідний розбір"
+
+msgid "Raw result"
+msgstr "Необроблений результат"
+
+msgid "Read as"
+msgstr "Прочитати як"
+
+msgid "Read elements"
+msgstr "Прочитати елементи"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "Читайте власні формати Platform у цьому браузері: контракти, ідентичності, документи, докази та шляхи. Нічого з вставленого нікуди не надсилається."
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "Прочитайте елементи, що зберігаються за шляхом GroveDB, з доказом, перевіреним у цьому браузері."
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "За раз можна прочитати до {MAX_KEYS} ключів."
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "Результат інструкції {0}"
+
+msgid "Results"
+msgstr "Результати"
+
+msgid "Revision"
+msgstr "Ревізія"
+
+msgid "Run"
+msgstr "Виконати"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "Виконуйте SQL-запити лише для читання над документами контракту. Кожна відповідь перевіряється за доказом у цьому браузері."
+
+msgid "Save"
+msgstr "Зберегти"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "Зберігається лише в цьому браузері, для цієї мережі та контракту."
+
+msgid "Saved queries"
+msgstr "Збережені запити"
+
+msgid "Schema"
+msgstr "Схема"
+
+msgid "SDK documentation"
+msgstr "Документація SDK"
+
+msgid "SDK example"
+msgstr "Приклад SDK"
+
+msgid "SDK reference"
+msgstr "Довідник SDK"
+
+msgid "Send transitions with Bridge"
+msgstr "Надсилайте переходи через Bridge"
+
+msgid "Sender"
+msgstr "Відправник"
+
+msgid "Serialized data contract"
+msgstr "Серіалізований контракт даних"
+
+msgid "Serialized document"
+msgstr "Серіалізований документ"
+
+msgid "Serialized identity"
+msgstr "Серіалізована ідентичність"
+
+msgid "Shield"
+msgstr "Переказ до захищеного пулу"
+
+msgid "Shield from asset lock"
+msgstr "Переказ до захищеного пулу з блокування активів"
+
+msgid "Shield from identity"
+msgstr "Переказ до захищеного пулу з ідентичності"
+
+msgid "Shielded actions"
+msgstr "Захищені дії"
+
+msgid "Shielded transfer"
+msgstr "Захищений переказ"
+
+msgid "Shielded withdrawal"
+msgstr "Захищене виведення"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "Показати всі кроки ({0})"
+
+msgid "Signed state transition"
+msgstr "Підписаний перехід стану"
+
+msgid "Signing key"
+msgstr "Ключ підпису"
+
+msgid "Size (bytes)"
+msgstr "Розмір (байти)"
+
+msgid "SQL query"
+msgstr "SQL-запит"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "Почати запит до {0}"
+
+msgid "State transition"
+msgstr "Перехід стану"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "В інструкції {0} названо контракт “{1}”, якого Radar не знає. Використайте dpns, dashpay або інший системний контракт чи виберіть контракт вище й опустіть назву."
+
+msgid "Step"
+msgstr "Крок"
+
+msgid "Steps"
+msgstr "Кроки"
+
+msgid "Subtrees entered"
+msgstr "Пройдені піддерева"
+
+msgid "Sum"
+msgstr "Сума"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "Сума {0}"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "Це більше за 1 МБ — більше, ніж будь-який із цих об’єктів."
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "Це не список чисел від 0 до 255."
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "Це не hex, не base64 і не список чисел."
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "Це не hex: використовуйте цифри від 0 до 9 і літери від a до f, по дві на байт."
+
+msgid "The first DashPay profiles"
+msgstr "Перші профілі DashPay"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "grovedbProof із відповіді Platform. Radar читає його тут і показує, що підтверджує кожен шар."
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "Вузол, що відповів, не підтримує цей запит; можливо, на ньому стара версія Platform. Виконайте його знову, щоб звернутися до іншого вузла."
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "Не вдалося завантажити засіб читання доказів. Перевірте з’єднання й повторіть спробу."
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "Засіб читання доказів зупинився на цих даних: вони більші або глибші, ніж він може прочитати."
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "Запит виконано, і Platform відповів порожнім результатом, включно з доказом."
+
+msgid "The raw reading is below."
+msgstr "Вихідний розбір нижче."
+
+msgid "The root tree"
+msgstr "Кореневе дерево"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "SDK читає лише оболонку цього типу переходу; його поля не показуються."
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "Піддерева дерева голосів: спірні ресурси, рішення, дати завершення та голоси ідентичностей."
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "Два записи всередині піддерева контракту DPNS: його визначення та його документи."
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "Відомі піддерева, які Platform тримає на вершині свого стану."
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "Ці байти — не доказ GroveDB."
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "Ці байти не вдалося розшифрувати як перехід стану."
+
+msgid "These bytes could not be decoded."
+msgstr "Ці байти не вдалося розшифрувати."
+
+msgid "This browser won't store the query."
+msgstr "Цей браузер не збереже запит."
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "Цей тип документів не має індексу, що підтримує цей агрегат. COUNT потребує індекс з підтримкою підрахунку, властивості якого — це поля WHERE; SUM і AVG потребують відповідний індекс з підтримкою суми. Схема нижче перелічує прапорці кожного індексу."
+
+msgid "This number is too large to write safely here."
+msgstr "Це число завелике, щоб безпечно записати його тут."
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "Цей доказ обривається раніше, ніж має: бракує частини байтів."
+
+msgid "This statement was stopped before it answered."
+msgstr "Цю інструкцію було зупинено до відповіді."
+
+msgid "token"
+msgstr "токен"
+
+msgid "Tools"
+msgstr "Інструменти"
+
+msgid "Transition decoder"
+msgstr "Декодер переходів"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "unique"
+msgstr "унікальний"
+
+msgid "Unshield"
+msgstr "Виведення із захищеного пулу"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "За раз виконується до {MAX_STATEMENTS} інструкцій; тут їх {0}."
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "Використовуйте == для точного збігу. LIKE тут — лише збіг за префіксом."
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "Використовуйте ==, >, >=, <, <=, BETWEEN … AND …, IN (…) або STARTS WITH."
+
+msgid "Value"
+msgstr "Значення"
+
+msgid "Vote"
+msgstr "Голос"
+
+msgid "Voting state"
+msgstr "Стан голосування"
+
+msgid "What the proof contains"
+msgstr "Що містить доказ"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "Який виклик SDK Platform забезпечує кожну сторінку Radar, з аргументами."
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "Напишіть буквальний префікс і один % наприкінці, як у LIKE 'abc%', або використовуйте STARTS WITH для префікса, що містить % або _."
+
+msgid "Write a query to run."
+msgstr "Напишіть запит для виконання."
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "Пишіть текст в одинарних лапках, а лапку всередині тексту подвоюйте."
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "Текстові значення, зокрема ID, пишіть в одинарних лапках."
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "Тут можна зберігати до 20 запитів. Спочатку видаліть один."
+
+msgid "Your browser"
+msgstr "Ваш браузер"

@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "“{arg}” にワイルドカードがありません。"
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” は数値ではありません。"
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}” は Platform が認識する演算子ではありません。"
+
+msgid "“{arg}” isn't supported here."
+msgstr "“{arg}” はここではサポートされていません。"
+
+msgid "“{arg}” isn't supported."
+msgstr "“{arg}” はサポートされていません。"
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” は引用符で囲む必要があります。"
+
+msgid "(opens in a new tab)"
+msgstr "(新しいタブで開きます)"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, other {# 件のドキュメント}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, other {# 個のグループ}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} フィールド、{1} インデックス"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "このレイヤーの {0} 行を読み取れませんでした。"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "{0} ステップ"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}、{1}。ここでデコードしています。バイト列はどこにも送信されません。"
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "ドキュメントのバイト列は、そのコントラクトと照らして初めて意味を持ちます。Radar はコントラクトを一度取得し、その証明をここで検証して、デコード用に保持します。"
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "バッククォートで囲んだフィールド名に、閉じのバッククォートがありません。"
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "フィールド名が必要ですが、“{arg}” が指定されました。"
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "フィルターは 1 つのインデックスに従います。指定するフィールドはインデックスの先頭のフィールドで、== または IN で照合する必要があり、最後のフィールドには範囲（<, <=, >, >=, BETWEEN）または STARTS WITH を使えます。範囲または IN でフィルターするフィールドごとに ORDER BY を追加してください。"
+
+msgid "A name by its label"
+msgstr "ラベルによる名前"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "数値が必要ですが、“{arg}” が指定されました。"
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "クエリは SELECT … FROM … WHERE の後に AND で結んだ条件を置き、続けて GROUP BY、ORDER BY、LIMIT を指定します。Platform は 1 つのインデックスから応答するため、JOIN、OR、OFFSET、サブクエリは使えません。"
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "ステートメント内でコントラクトを直接指定できます（例: FROM dpns.domain）。"
+
+msgid "A string is missing its closing quote."
+msgstr "文字列の閉じ引用符がありません。"
+
+msgid "A sum over a range"
+msgstr "範囲の合計"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "値が必要ですが、“{arg}” が指定されました。"
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "整数が必要ですが、“{arg}” が指定されました。"
+
+msgid "Action"
+msgstr "アクション"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "範囲（<, >, BETWEEN, STARTS WITH）または IN でフィルターするフィールドごとに ORDER BY を追加してください。"
+
+msgid "All documents"
+msgstr "すべてのドキュメント"
+
+msgid "Amount (credits)"
+msgstr "金額（クレジット）"
+
+msgid "An average per group"
+msgstr "グループごとの平均"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "演算子が必要ですが、“{arg}” が指定されました。"
+
+msgid "Another contract…"
+msgstr "別のコントラクト…"
+
+msgid "Average"
+msgstr "平均"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "{0} の平均"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "バイトリスト"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Cancelled"
+msgstr "キャンセルしました"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "ID を確認するか、一覧のコントラクトから選んでください。"
+
+msgid "Check this transition"
+msgstr "このトランジションを検証"
+
+msgid "Check with Platform"
+msgstr "Platform で検証"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "トランジションの検証には Platform Explorer が必要です"
+
+msgid "Checking is not available on this network."
+msgstr "このネットワークでは検証できません。"
+
+msgid "Choose a decoder"
+msgstr "デコーダーを選択"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "このドキュメントをデコードするには、上でコントラクトとドキュメントの種類を選択してください。"
+
+msgid "Clear the filter"
+msgstr "フィルターをクリア"
+
+msgid "contested"
+msgstr "争奪中"
+
+msgid "Contested name"
+msgstr "争奪中の名前"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract and type"
+msgstr "コントラクトと種類"
+
+msgid "Contract decoder"
+msgstr "コントラクトデコーダー"
+
+msgid "Contract ID"
+msgstr "コントラクト ID"
+
+msgid "Contract version"
+msgstr "コントラクトのバージョン"
+
+msgid "Copy query link"
+msgstr "クエリのリンクをコピー"
+
+msgid "Copy the raw reading"
+msgstr "生の読み取り結果をコピー"
+
+msgid "Copy the SDK example"
+msgstr "SDK の例をコピー"
+
+msgid "Core fee per byte"
+msgstr "バイトあたりの Core 手数料"
+
+msgid "Count and sum"
+msgstr "件数と合計"
+
+msgid "Credit transfer"
+msgstr "クレジット送金"
+
+msgid "Credit withdrawal"
+msgstr "クレジット出金"
+
+msgid "Credits in"
+msgstr "流入クレジット"
+
+msgid "Credits out"
+msgstr "流出クレジット"
+
+msgid "Custom"
+msgstr "カスタム"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "1 人の所有者の DashPay プロフィール"
+
+msgid "Data contract create"
+msgstr "データコントラクト作成"
+
+msgid "Data contract update"
+msgstr "データコントラクト更新"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "署名済みステートトランジションをデコードし、受理されるかどうかを Platform に問い合わせます。"
+
+msgid "Decoded"
+msgstr "デコード結果"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "ここでデコードしています。バイト列はどこにも送信されません。"
+
+msgid "Decoded JSON"
+msgstr "デコードした JSON"
+
+msgid "Decoders"
+msgstr "デコーダー"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "上のデコードはすべてのネットワークで動作します。Platform Explorer が対応するのはメインネットとテストネットです。"
+
+msgid "Delete"
+msgstr "削除"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "{0} を削除"
+
+msgid "Detect"
+msgstr "検出"
+
+msgid "Document decoder"
+msgstr "ドキュメントデコーダー"
+
+msgid "Document type"
+msgstr "ドキュメントの種類"
+
+msgid "Document types"
+msgstr "ドキュメントの種類"
+
+msgid "Documents"
+msgstr "ドキュメント"
+
+msgid "Documents and tokens batch"
+msgstr "ドキュメントとトークンのバッチ"
+
+msgid "DPNS contract"
+msgstr "DPNS コントラクト"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive が 1 回のクエリで返すのは最大 100 件のドキュメント（または 100 個のグループ）です。"
+
+msgid "Element"
+msgstr "要素"
+
+msgid "Elements"
+msgstr "要素"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "エラーコード {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "すべての条件が成り立つ必要があります（AND）。インデックスは 2 つの選択肢を同時に処理できません。代わりに 2 つのステートメントを実行してください。"
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "すべてのセグメントとキーは 16 進で、1 バイトにつき 2 桁です。"
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "{label} が必要ですが、“{arg}” が指定されました。"
+
+msgid "Export CSV"
+msgstr "CSV をエクスポート"
+
+msgid "Export JSON"
+msgstr "JSON をエクスポート"
+
+msgid "Fee multiplier"
+msgstr "手数料乗数"
+
+msgid "Fields"
+msgstr "フィールド"
+
+msgid "Filter by page, source or call"
+msgstr "ページ、ソース、呼び出しで絞り込み"
+
+msgid "Group"
+msgstr "グループ"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY には COUNT(*)、SUM(field)、AVG(field) が必要です。"
+
+msgid "GroveDB path"
+msgstr "GroveDB パス"
+
+msgid "GroveDB proof"
+msgstr "GroveDB 証明"
+
+msgid "Hash"
+msgstr "ハッシュ"
+
+msgid "Hashes standing in for the rest"
+msgstr "残りの部分の代わりとなるハッシュ"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identity"
+msgstr "アイデンティティ"
+
+msgid "Identity create"
+msgstr "アイデンティティ作成"
+
+msgid "Identity create from addresses"
+msgstr "アドレスからのアイデンティティ作成"
+
+msgid "Identity decoder"
+msgstr "アイデンティティデコーダー"
+
+msgid "Identity top-up"
+msgstr "アイデンティティへの追加入金"
+
+msgid "Identity top-up from addresses"
+msgstr "アドレスからのアイデンティティ追加入金"
+
+msgid "Identity update"
+msgstr "アイデンティティ更新"
+
+msgid "indexed"
+msgstr "インデックス済み"
+
+msgid "Indexes"
+msgstr "インデックス"
+
+msgid "Input"
+msgstr "入力"
+
+msgid "Inputs"
+msgstr "入力"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "キー"
+
+msgid "Keys"
+msgstr "キー"
+
+msgid "Keys added"
+msgstr "追加されたキー"
+
+msgid "Keys disabled"
+msgstr "無効化されたキー"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "レイヤー {0}"
+
+msgid "Layers"
+msgstr "レイヤー"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE には 'abc%' のように引用符で囲んだパターンが必要です。"
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT は 1 から 100 の間で指定してください。"
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "{0} 行目、{1} 列目。"
+
+msgid "Load the next page"
+msgstr "次のページを読み込む"
+
+msgid "Masternode"
+msgstr "マスターノード"
+
+msgid "Masternode vote"
+msgstr "マスターノード投票"
+
+msgid "Name at least one key to read."
+msgstr "読み取るキーを少なくとも 1 つ指定してください。"
+
+msgid "Name for this query"
+msgstr "このクエリの名前"
+
+msgid "No contract with this ID on this network."
+msgstr "このネットワークにこの ID のコントラクトはありません。"
+
+msgid "No documents match."
+msgstr "一致するドキュメントはありません。"
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "WHERE と ORDER BY のフィールドのこの組み合わせをカバーするインデックスがありません。フィルターと並べ替えは 1 つのインデックスのプロパティ順に従う必要があります。インデックスは下のスキーマに一覧があります。"
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "インデックスなし: この種類のドキュメントは ID でのみ読み取れます。"
+
+msgid "No page or call matches this filter."
+msgstr "このフィルターに一致するページや呼び出しはありません。"
+
+msgid "No saved queries yet."
+msgstr "保存したクエリはまだありません。"
+
+msgid "Nonce"
+msgstr "ノンス"
+
+msgid "NOT isn't supported."
+msgstr "NOT はサポートされていません。"
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "この証明にはレイヤーとして読み取れるものがありませんでした。"
+
+msgid "nothing stored"
+msgstr "保存なし"
+
+msgid "Nothing was returned for these keys."
+msgstr "これらのキーに対して何も返されませんでした。"
+
+msgid "Nothing was sent."
+msgstr "何も送信されていません。"
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "数値は整数または小数の数字で、先頭にマイナス記号を付けられます。ID などのテキストは単一引用符で囲んでください。"
+
+msgid "One hex key per line."
+msgstr "16 進キーを 1 行に 1 つ。"
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "ルートから、16 進セグメントを 1 行に 1 つ。空欄ならルートツリーを読み取ります。"
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "LIKE で使えるのは前方一致パターンだけです。"
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "サポートされているのは SELECT *、COUNT(*)、SUM(field)、AVG(field) だけです。"
+
+msgid "Operations in this batch"
+msgstr "このバッチの操作"
+
+msgid "OR isn't supported."
+msgstr "OR はサポートされていません。"
+
+msgid "or, as the last field you filter"
+msgstr "または、フィルターする最後のフィールドとして"
+
+msgid "Outputs"
+msgstr "出力"
+
+msgid "Pages"
+msgstr "ページ"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "Platform の応答から証明を貼り付けると、レイヤー、証明されるキー、残りの部分の代わりとなるハッシュを確認できます。"
+
+msgid "Paste a proof."
+msgstr "証明を貼り付けてください。"
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードして検証できます。署名も送信も行いません。"
+
+msgid "Paste some bytes."
+msgstr "バイト列を貼り付けてください。"
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "データコントラクトのシリアライズ済みバイト列を貼り付けると、ドキュメントの種類、トークン、グループを読み取れます。"
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "ドキュメントのシリアライズ済みバイト列を貼り付け、そのコントラクトと種類を指定すると、フィールドを読み取れます。"
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "アイデンティティのシリアライズ済みバイト列を貼り付けると、キー、残高、リビジョンを読み取れます。"
+
+msgid "Path"
+msgstr "パス"
+
+msgid "Path decoder"
+msgstr "パスデコーダー"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "上でコントラクトを選ぶか、FROM dpns.domain のように種類の前に名前を書いてください。"
+
+msgid "Pick a type"
+msgstr "種類を選択"
+
+msgid "Platform address funding"
+msgstr "Platform アドレスへの入金"
+
+msgid "Platform address transfer"
+msgstr "Platform アドレス間の送金"
+
+msgid "Platform address withdrawal"
+msgstr "Platform アドレスからの出金"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform は値、範囲、IN リスト、前方一致を照合できますが、値を除外することはできません。"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform は値、範囲、IN リスト、前方一致を照合できますが、値を除外することはできません。欲しいものでフィルターし、欲しくないものでは絞り込まないでください。"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer は Platform ノードに、このトランジションを受理するか問い合わせます（ドライラン）。ブロードキャストは行われず、何も変更されません。"
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform のグループは集計結果にしか使えません。ドキュメントの一覧はグループ化できません。"
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform がこのクエリ形式の LIMIT を拒否しました。より小さい LIMIT を試してください。"
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform が返すのはドキュメント全体か 1 つの集計値なので、フィールドの射影と DISTINCT は使えません。"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform はインデックスを順に辿るため、クエリはインデックスの先頭フィールドへの一致の連なりと、その後に続く最大 1 つの範囲になります。"
+
+msgid "Platform would accept this transition."
+msgstr "Platform はこのトランジションを受理します。"
+
+msgid "Platform would reject this transition."
+msgstr "Platform はこのトランジションを拒否します。"
+
+msgid "Points to"
+msgstr "参照先"
+
+msgid "Pooling"
+msgstr "プーリング"
+
+msgid "Preset"
+msgstr "プリセット"
+
+msgid "Presets"
+msgstr "プリセット"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "⌘ または Ctrl と Enter を押すと実行します。ステートメントは最大 2 つで、セミコロンで区切ります。"
+
+msgid "Price feed"
+msgstr "価格フィード"
+
+msgid "Proof bytes"
+msgstr "証明のバイト列"
+
+msgid "Proof decoder"
+msgstr "証明デコーダー"
+
+msgid "Proven items"
+msgstr "証明された項目"
+
+msgid "Query"
+msgstr "クエリ"
+
+msgid "Query link copied"
+msgstr "クエリのリンクをコピーしました"
+
+msgid "Query saved"
+msgstr "クエリを保存しました"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar は数値を JavaScript が正確に扱える範囲に制限しています。それより大きい値を正確に扱うには SDK を直接使用してください。"
+
+msgid "Raw reading"
+msgstr "生の読み取り結果"
+
+msgid "Raw result"
+msgstr "生の結果"
+
+msgid "Read as"
+msgstr "読み取り形式"
+
+msgid "Read elements"
+msgstr "要素を読み取る"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "Platform 独自の形式（コントラクト、アイデンティティ、ドキュメント、証明、パス）をこのブラウザで読み取ります。貼り付けた内容はどこにも送信されません。"
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "GroveDB パスに保存されている要素を、このブラウザで検証した証明付きで読み取ります。"
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "一度に読み取れるキーは最大 {MAX_KEYS} 個です。"
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "ステートメント {0} の結果"
+
+msgid "Results"
+msgstr "結果"
+
+msgid "Revision"
+msgstr "リビジョン"
+
+msgid "Run"
+msgstr "実行"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "コントラクトのドキュメントに対して読み取り専用の SQL を実行します。すべての回答はこのブラウザで証明と照合されます。"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "このブラウザにのみ、このネットワークとコントラクト用に保存されます。"
+
+msgid "Saved queries"
+msgstr "保存したクエリ"
+
+msgid "Schema"
+msgstr "スキーマ"
+
+msgid "SDK documentation"
+msgstr "SDK ドキュメント"
+
+msgid "SDK example"
+msgstr "SDK の例"
+
+msgid "SDK reference"
+msgstr "SDK リファレンス"
+
+msgid "Send transitions with Bridge"
+msgstr "Bridge でトランジションを送信"
+
+msgid "Sender"
+msgstr "送信者"
+
+msgid "Serialized data contract"
+msgstr "シリアライズ済みデータコントラクト"
+
+msgid "Serialized document"
+msgstr "シリアライズ済みドキュメント"
+
+msgid "Serialized identity"
+msgstr "シリアライズ済みアイデンティティ"
+
+msgid "Shield"
+msgstr "シールド"
+
+msgid "Shield from asset lock"
+msgstr "アセットロックからのシールド"
+
+msgid "Shield from identity"
+msgstr "アイデンティティからのシールド"
+
+msgid "Shielded actions"
+msgstr "シールドアクション"
+
+msgid "Shielded transfer"
+msgstr "シールド送金"
+
+msgid "Shielded withdrawal"
+msgstr "シールド出金"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "{0} 個のステップをすべて表示"
+
+msgid "Signed state transition"
+msgstr "署名済みステートトランジション"
+
+msgid "Signing key"
+msgstr "署名キー"
+
+msgid "Size (bytes)"
+msgstr "サイズ（バイト）"
+
+msgid "SQL query"
+msgstr "SQL クエリ"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "{0} でクエリを開始"
+
+msgid "State transition"
+msgstr "ステートトランジション"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "ステートメント {0} は、Radar が認識しないコントラクト “{1}” を指定しています。dpns、dashpay などのシステムコントラクトを使うか、上でコントラクトを選んで名前を省略してください。"
+
+msgid "Step"
+msgstr "ステップ"
+
+msgid "Steps"
+msgstr "ステップ"
+
+msgid "Subtrees entered"
+msgstr "入ったサブツリー"
+
+msgid "Sum"
+msgstr "合計"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "{0} の合計"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "1 MB を超えており、これらのどのオブジェクトよりも大きいサイズです。"
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "0〜255 の数値のリストではありません。"
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "16 進、base64、数値のリストのいずれでもありません。"
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "16 進ではありません。0〜9 と a〜f の数字を、1 バイトにつき 2 桁で使ってください。"
+
+msgid "The first DashPay profiles"
+msgstr "先頭の DashPay プロフィール"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "Platform の応答に含まれる grovedbProof です。Radar がここで読み取り、各レイヤーが何を証明しているかを表示します。"
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "応答したノードはこのリクエストをサポートしていません。古い Platform バージョンで動作している可能性があります。再実行すると別のノードに接続されます。"
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "証明リーダーを読み込めませんでした。接続を確認して、もう一度お試しください。"
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "証明リーダーはこの入力で停止しました。読み取れる範囲より大きいか深い構造です。"
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "クエリは実行され、Platform は証明を含めて何も返しませんでした。"
+
+msgid "The raw reading is below."
+msgstr "生の読み取り結果は下にあります。"
+
+msgid "The root tree"
+msgstr "ルートツリー"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "SDK はこのトランジションタイプのエンベロープしか読み取らないため、フィールドは表示されません。"
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "投票ツリーのサブツリー: 争奪中のリソース、決定、終了日、アイデンティティの投票。"
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "DPNS コントラクトのサブツリー内の 2 つのエントリー: 定義とドキュメント。"
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "Platform がステートの最上位に保持している既知のサブツリー。"
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "このバイト列は GroveDB 証明ではありません。"
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "このバイト列をステートトランジションとしてデコードできませんでした。"
+
+msgid "These bytes could not be decoded."
+msgstr "このバイト列をデコードできませんでした。"
+
+msgid "This browser won't store the query."
+msgstr "このブラウザはクエリを保存できません。"
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "このドキュメントの種類には、この集計に対応するインデックスがありません。COUNT には、プロパティが WHERE のフィールドと一致するカウント可能なインデックスが必要で、SUM と AVG には対応する合計可能なインデックスが必要です。各インデックスのフラグは下のスキーマに一覧があります。"
+
+msgid "This number is too large to write safely here."
+msgstr "この数値は大きすぎて、ここで安全に書き込めません。"
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "この証明は途中で終わっています。一部のバイトが欠けています。"
+
+msgid "This statement was stopped before it answered."
+msgstr "このステートメントは回答の前に停止されました。"
+
+msgid "token"
+msgstr "トークン"
+
+msgid "Tools"
+msgstr "ツール"
+
+msgid "Transition decoder"
+msgstr "トランジションデコーダー"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "unique"
+msgstr "一意"
+
+msgid "Unshield"
+msgstr "アンシールド"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "一度に実行できるステートメントは最大 {MAX_STATEMENTS} 個です。今回は {0} 個あります。"
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "完全一致には == を使ってください。ここでの LIKE は前方一致のみです。"
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "==、>、>=、<、<=、BETWEEN … AND …、IN (…)、STARTS WITH を使ってください。"
+
+msgid "Value"
+msgstr "値"
+
+msgid "Vote"
+msgstr "投票"
+
+msgid "Voting state"
+msgstr "投票の状態"
+
+msgid "What the proof contains"
+msgstr "証明に含まれるもの"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "どの Platform SDK 呼び出しがどの Radar ページを支えているか（引数付き）。"
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "リテラルの接頭辞と末尾の % を 1 つ書いてください（例: LIKE 'abc%'）。% や _ を含む接頭辞には STARTS WITH を使ってください。"
+
+msgid "Write a query to run."
+msgstr "実行するクエリを書いてください。"
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "テキストは単一引用符で囲み、テキスト内の引用符は 2 つ重ねて書いてください。"
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "ID を含むテキスト値は単一引用符で囲んで書いてください。"
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "ここに保存できるクエリは最大 20 個です。先に 1 つ削除してください。"
+
+msgid "Your browser"
+msgstr "お使いのブラウザ"

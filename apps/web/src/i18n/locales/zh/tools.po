@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "“{arg}” 中没有通配符。"
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” 不是数字。"
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}” 不是 Platform 识别的运算符。"
+
+msgid "“{arg}” isn't supported here."
+msgstr "此处不支持 “{arg}”。"
+
+msgid "“{arg}” isn't supported."
+msgstr "不支持 “{arg}”。"
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” 需要加引号。"
+
+msgid "(opens in a new tab)"
+msgstr "（在新标签页中打开）"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, other {# 个文档}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, other {# 个群组}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} 个字段，{1} 个索引"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "此层有 {0} 行无法读取。"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "{0} 个步骤"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}，{1}。在此解码：字节不会发送到任何地方。"
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "文档的字节只有结合其合约才有意义。Radar 会获取一次合约，在此验证其证明，并保留下来用于解码。"
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "用反引号包裹的字段名缺少结尾的反引号。"
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "此处应为字段名，但出现的是 “{arg}”。"
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "过滤条件遵循一个索引：其中的字段必须是某个索引的前导字段，使用 == 或 IN 匹配，最后一个字段可以使用范围（<、<=、>、>=、BETWEEN）或 STARTS WITH。对每个用范围或 IN 过滤的字段，请添加 ORDER BY。"
+
+msgid "A name by its label"
+msgstr "按标签查名称"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "此处应为数字，但出现的是 “{arg}”。"
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "查询由 SELECT … FROM … WHERE 加上以 AND 连接的条件构成，之后可跟 GROUP BY、ORDER BY 和 LIMIT。JOIN、OR、OFFSET 和子查询不可用，因为 Platform 只从一个索引作答。"
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "语句可以直接指定合约，例如 FROM dpns.domain。"
+
+msgid "A string is missing its closing quote."
+msgstr "字符串缺少结尾引号。"
+
+msgid "A sum over a range"
+msgstr "某个范围内的总和"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "此处应为值，但出现的是 “{arg}”。"
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "此处应为整数，但出现的是 “{arg}”。"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "对每个用范围（<、>、BETWEEN、STARTS WITH）或 IN 过滤的字段，请添加 ORDER BY。"
+
+msgid "All documents"
+msgstr "所有文档"
+
+msgid "Amount (credits)"
+msgstr "金额（积分）"
+
+msgid "An average per group"
+msgstr "每组的平均值"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "此处应为运算符，但出现的是 “{arg}”。"
+
+msgid "Another contract…"
+msgstr "其他合约…"
+
+msgid "Average"
+msgstr "平均值"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "{0} 的平均值"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "字节列表"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Cancelled"
+msgstr "已取消"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "请检查 ID，或从列表中选择一个合约。"
+
+msgid "Check this transition"
+msgstr "检查此状态转换"
+
+msgid "Check with Platform"
+msgstr "向 Platform 检查"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "检查状态转换需要 Platform Explorer"
+
+msgid "Checking is not available on this network."
+msgstr "此网络不支持检查。"
+
+msgid "Choose a decoder"
+msgstr "选择解码器"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "请在上方选择合约和文档类型，以解码此文档。"
+
+msgid "Clear the filter"
+msgstr "清除过滤条件"
+
+msgid "contested"
+msgstr "争议中"
+
+msgid "Contested name"
+msgstr "争议名称"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract and type"
+msgstr "合约和类型"
+
+msgid "Contract decoder"
+msgstr "合约解码器"
+
+msgid "Contract ID"
+msgstr "合约 ID"
+
+msgid "Contract version"
+msgstr "合约版本"
+
+msgid "Copy query link"
+msgstr "复制查询链接"
+
+msgid "Copy the raw reading"
+msgstr "复制原始读取结果"
+
+msgid "Copy the SDK example"
+msgstr "复制 SDK 示例"
+
+msgid "Core fee per byte"
+msgstr "每字节 Core 手续费"
+
+msgid "Count and sum"
+msgstr "计数与求和"
+
+msgid "Credit transfer"
+msgstr "积分转账"
+
+msgid "Credit withdrawal"
+msgstr "积分提现"
+
+msgid "Credits in"
+msgstr "转入积分"
+
+msgid "Credits out"
+msgstr "转出积分"
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "某个所有者的 DashPay 资料"
+
+msgid "Data contract create"
+msgstr "创建数据合约"
+
+msgid "Data contract update"
+msgstr "更新数据合约"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "解码已签名的状态转换，并询问 Platform 是否会接受它。"
+
+msgid "Decoded"
+msgstr "解码结果"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "在此解码：字节不会发送到任何地方。"
+
+msgid "Decoded JSON"
+msgstr "解码后的 JSON"
+
+msgid "Decoders"
+msgstr "解码器"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "上方的解码适用于所有网络。Platform Explorer 涵盖主网和测试网。"
+
+msgid "Delete"
+msgstr "删除"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "删除 {0}"
+
+msgid "Detect"
+msgstr "检测"
+
+msgid "Document decoder"
+msgstr "文档解码器"
+
+msgid "Document type"
+msgstr "文档类型"
+
+msgid "Document types"
+msgstr "文档类型"
+
+msgid "Documents"
+msgstr "文档"
+
+msgid "Documents and tokens batch"
+msgstr "文档与代币批处理"
+
+msgid "DPNS contract"
+msgstr "DPNS 合约"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive 每次查询最多返回 100 个文档（或 100 个群组）。"
+
+msgid "Element"
+msgstr "元素"
+
+msgid "Elements"
+msgstr "元素"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "错误代码 {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "所有条件必须同时成立（AND）：一个索引无法同时满足两个备选条件。请改为运行两条语句。"
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "每个段和键都是十六进制，每字节两位数字。"
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "此处应为 {label}，但出现的是 “{arg}”。"
+
+msgid "Export CSV"
+msgstr "导出 CSV"
+
+msgid "Export JSON"
+msgstr "导出 JSON"
+
+msgid "Fee multiplier"
+msgstr "手续费乘数"
+
+msgid "Fields"
+msgstr "字段"
+
+msgid "Filter by page, source or call"
+msgstr "按页面、来源或调用过滤"
+
+msgid "Group"
+msgstr "群组"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY 需要 COUNT(*)、SUM(field) 或 AVG(field)。"
+
+msgid "GroveDB path"
+msgstr "GroveDB 路径"
+
+msgid "GroveDB proof"
+msgstr "GroveDB 证明"
+
+msgid "Hash"
+msgstr "哈希"
+
+msgid "Hashes standing in for the rest"
+msgstr "代替其余部分的哈希"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity create"
+msgstr "创建身份"
+
+msgid "Identity create from addresses"
+msgstr "从地址创建身份"
+
+msgid "Identity decoder"
+msgstr "身份解码器"
+
+msgid "Identity top-up"
+msgstr "身份充值"
+
+msgid "Identity top-up from addresses"
+msgstr "从地址为身份充值"
+
+msgid "Identity update"
+msgstr "更新身份"
+
+msgid "indexed"
+msgstr "已索引"
+
+msgid "Indexes"
+msgstr "索引"
+
+msgid "Input"
+msgstr "输入"
+
+msgid "Inputs"
+msgstr "输入"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "键"
+
+msgid "Keys"
+msgstr "密钥"
+
+msgid "Keys added"
+msgstr "新增的密钥"
+
+msgid "Keys disabled"
+msgstr "已禁用的密钥"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "第 {0} 层"
+
+msgid "Layers"
+msgstr "层"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE 需要带引号的模式，例如 'abc%'。"
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT 必须在 1 到 100 之间。"
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "第 {0} 行，第 {1} 列。"
+
+msgid "Load the next page"
+msgstr "加载下一页"
+
+msgid "Masternode"
+msgstr "主节点"
+
+msgid "Masternode vote"
+msgstr "主节点投票"
+
+msgid "Name at least one key to read."
+msgstr "请至少指定一个要读取的键。"
+
+msgid "Name for this query"
+msgstr "此查询的名称"
+
+msgid "No contract with this ID on this network."
+msgstr "此网络上没有该 ID 的合约。"
+
+msgid "No documents match."
+msgstr "没有匹配的文档。"
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "没有索引涵盖此 WHERE 与 ORDER BY 字段的组合。过滤和排序必须遵循某一个索引的属性顺序；下方的模式列出了这些索引。"
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "没有索引：这种类型的文档只能按其 ID 读取。"
+
+msgid "No page or call matches this filter."
+msgstr "没有页面或调用匹配此过滤条件。"
+
+msgid "No saved queries yet."
+msgstr "还没有已保存的查询。"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "NOT isn't supported."
+msgstr "不支持 NOT。"
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "此证明中没有任何内容可作为层读取。"
+
+msgid "nothing stored"
+msgstr "未存储任何内容"
+
+msgid "Nothing was returned for these keys."
+msgstr "这些键没有返回任何内容。"
+
+msgid "Nothing was sent."
+msgstr "未发送任何内容。"
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "数字是整数或小数数字，可带可选的负号。ID 和其他文本请用单引号括起来。"
+
+msgid "One hex key per line."
+msgstr "每行一个十六进制键。"
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "每行一个十六进制段，从根开始。留空则读取根树。"
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "LIKE 只支持前缀模式。"
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "仅支持 SELECT *、COUNT(*)、SUM(field) 和 AVG(field)。"
+
+msgid "Operations in this batch"
+msgstr "此批处理中的操作"
+
+msgid "OR isn't supported."
+msgstr "不支持 OR。"
+
+msgid "or, as the last field you filter"
+msgstr "或者，作为最后一个过滤字段"
+
+msgid "Outputs"
+msgstr "输出"
+
+msgid "Pages"
+msgstr "页面"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "粘贴 Platform 答复中的证明，即可查看各层、它所证明的键，以及代替其余部分的哈希。"
+
+msgid "Paste a proof."
+msgstr "请粘贴证明。"
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "粘贴十六进制或 base64 格式的状态转换，即可解码并检查。不会签名，也不会发送任何内容。"
+
+msgid "Paste some bytes."
+msgstr "请粘贴一些字节。"
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "粘贴数据合约的序列化字节，以读取其文档类型、代币和群组。"
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "粘贴文档的序列化字节并指明其合约和类型，以读取其字段。"
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "粘贴身份的序列化字节，以读取其密钥、余额和修订版本。"
+
+msgid "Path"
+msgstr "路径"
+
+msgid "Path decoder"
+msgstr "路径解码器"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "请在上方选择合约，或在类型前写上合约名称，例如 FROM dpns.domain。"
+
+msgid "Pick a type"
+msgstr "选择类型"
+
+msgid "Platform address funding"
+msgstr "Platform 地址充值"
+
+msgid "Platform address transfer"
+msgstr "Platform 地址转账"
+
+msgid "Platform address withdrawal"
+msgstr "Platform 地址提现"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform 可以匹配值、范围、IN 列表和前缀，但无法排除某个值。"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform 可以匹配值、范围、IN 列表和前缀，但无法排除某个值。请按你想要的内容过滤，而不是按你不想要的。"
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer 会询问 Platform 节点是否会接受此状态转换（试运行）。不会广播，也不会改变任何内容。"
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform 的分组只聚合答复。文档列表无法分组。"
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform 拒绝了此查询形态的 LIMIT。请尝试更小的 LIMIT。"
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform 返回完整文档或单个聚合值，因此不支持字段投影和 DISTINCT。"
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform 按顺序遍历索引，因此查询是对索引前导字段的一系列匹配，其后最多再跟一个范围。"
+
+msgid "Platform would accept this transition."
+msgstr "Platform 会接受此状态转换。"
+
+msgid "Platform would reject this transition."
+msgstr "Platform 会拒绝此状态转换。"
+
+msgid "Points to"
+msgstr "指向"
+
+msgid "Pooling"
+msgstr "池化"
+
+msgid "Preset"
+msgstr "预设"
+
+msgid "Presets"
+msgstr "预设"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "按 ⌘ 或 Ctrl 加 Enter 运行。最多两条语句，以分号分隔。"
+
+msgid "Price feed"
+msgstr "价格数据"
+
+msgid "Proof bytes"
+msgstr "证明字节"
+
+msgid "Proof decoder"
+msgstr "证明解码器"
+
+msgid "Proven items"
+msgstr "已证明的项"
+
+msgid "Query"
+msgstr "查询"
+
+msgid "Query link copied"
+msgstr "查询链接已复制"
+
+msgid "Query saved"
+msgstr "查询已保存"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar 将数字限制在 JavaScript 的精确范围内。如需更大的精确值，请直接使用 SDK。"
+
+msgid "Raw reading"
+msgstr "原始读取结果"
+
+msgid "Raw result"
+msgstr "原始结果"
+
+msgid "Read as"
+msgstr "读取为"
+
+msgid "Read elements"
+msgstr "读取元素"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "在此浏览器中读取 Platform 自有格式：合约、身份、文档、证明和路径。你粘贴的内容不会发送到任何地方。"
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "读取存储在 GroveDB 路径上的元素，证明在此浏览器中验证。"
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "一次最多读取 {MAX_KEYS} 个键。"
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "第 {0} 条语句的结果"
+
+msgid "Results"
+msgstr "结果"
+
+msgid "Revision"
+msgstr "修订版本"
+
+msgid "Run"
+msgstr "运行"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "对合约的文档运行只读 SQL。每个答复都会在此浏览器中对照证明进行验证。"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "仅保存在此浏览器中，仅限此网络和合约。"
+
+msgid "Saved queries"
+msgstr "已保存的查询"
+
+msgid "Schema"
+msgstr "模式"
+
+msgid "SDK documentation"
+msgstr "SDK 文档"
+
+msgid "SDK example"
+msgstr "SDK 示例"
+
+msgid "SDK reference"
+msgstr "SDK 参考"
+
+msgid "Send transitions with Bridge"
+msgstr "通过 Bridge 发送状态转换"
+
+msgid "Sender"
+msgstr "发送方"
+
+msgid "Serialized data contract"
+msgstr "序列化的数据合约"
+
+msgid "Serialized document"
+msgstr "序列化的文档"
+
+msgid "Serialized identity"
+msgstr "序列化的身份"
+
+msgid "Shield"
+msgstr "转入隐私池"
+
+msgid "Shield from asset lock"
+msgstr "从资产锁定转入隐私池"
+
+msgid "Shield from identity"
+msgstr "从身份转入隐私池"
+
+msgid "Shielded actions"
+msgstr "隐私操作"
+
+msgid "Shielded transfer"
+msgstr "隐私转账"
+
+msgid "Shielded withdrawal"
+msgstr "隐私提现"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "显示全部 {0} 个步骤"
+
+msgid "Signed state transition"
+msgstr "已签名的状态转换"
+
+msgid "Signing key"
+msgstr "签名密钥"
+
+msgid "Size (bytes)"
+msgstr "大小（字节）"
+
+msgid "SQL query"
+msgstr "SQL 查询"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "在 {0} 上开始查询"
+
+msgid "State transition"
+msgstr "状态转换"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "语句 {0} 指定的合约 “{1}” Radar 无法识别。请使用 dpns、dashpay 或其他系统合约，或在上方选择合约并省略名称。"
+
+msgid "Step"
+msgstr "步骤"
+
+msgid "Steps"
+msgstr "步骤"
+
+msgid "Subtrees entered"
+msgstr "进入的子树"
+
+msgid "Sum"
+msgstr "总和"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "{0} 的总和"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "这超过了 1 MB，比这些对象中的任何一个都大。"
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "这不是由 0 到 255 的数字组成的列表。"
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "这不是十六进制、base64 或数字列表。"
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "这不是十六进制：请使用数字 0 到 9 和字母 a 到 f，每字节两位。"
+
+msgid "The first DashPay profiles"
+msgstr "最早的 DashPay 资料"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "Platform 答复中的 grovedbProof。Radar 在此读取它，并显示每一层所证明的内容。"
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "作答的节点不支持此请求；它可能运行的是较旧的 Platform 版本。再次运行以连接到其他节点。"
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "无法加载证明读取器。请检查连接后重试。"
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "证明读取器在此输入上停止：它比可读取的范围更大或更深。"
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "查询已运行，Platform 的答复为空（包括证明）。"
+
+msgid "The raw reading is below."
+msgstr "原始读取结果见下方。"
+
+msgid "The root tree"
+msgstr "根树"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "SDK 只读取此状态转换类型的外层信封；不显示其字段。"
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "投票树的子树：争议资源、裁决、结束日期和身份投票。"
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "DPNS 合约子树内的两个条目：其定义和其文档。"
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "Platform 在其状态顶层保存的知名子树。"
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "这些字节不是 GroveDB 证明。"
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "无法将这些字节解码为状态转换。"
+
+msgid "These bytes could not be decoded."
+msgstr "无法解码这些字节。"
+
+msgid "This browser won't store the query."
+msgstr "此浏览器不会保存该查询。"
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "此文档类型没有支持此聚合的索引。COUNT 需要一个可计数的索引，其属性为 WHERE 中的字段；SUM 和 AVG 需要匹配的可求和索引。下方的模式列出了每个索引的标志。"
+
+msgid "This number is too large to write safely here."
+msgstr "此数字太大，无法在此安全写入。"
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "此证明提前结束：缺少部分字节。"
+
+msgid "This statement was stopped before it answered."
+msgstr "此语句在作答前已被停止。"
+
+msgid "token"
+msgstr "代币"
+
+msgid "Tools"
+msgstr "工具"
+
+msgid "Transition decoder"
+msgstr "状态转换解码器"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "unique"
+msgstr "唯一"
+
+msgid "Unshield"
+msgstr "转出隐私池"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "最多同时运行 {MAX_STATEMENTS} 条语句；当前有 {0} 条。"
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "精确匹配请使用 ==。此处的 LIKE 仅为前缀匹配。"
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "请使用 ==、>、>=、<、<=、BETWEEN … AND …、IN (…) 或 STARTS WITH。"
+
+msgid "Value"
+msgstr "数值"
+
+msgid "Vote"
+msgstr "投票"
+
+msgid "Voting state"
+msgstr "投票状态"
+
+msgid "What the proof contains"
+msgstr "证明包含的内容"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "每个 Radar 页面由哪个 Platform SDK 调用支撑，含参数。"
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "写出字面前缀和末尾一个 %，如 LIKE 'abc%'；若前缀包含 % 或 _，请使用 STARTS WITH。"
+
+msgid "Write a query to run."
+msgstr "请写一条要运行的查询。"
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "文本请写在单引号之间，文本内的引号需写两次。"
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "文本值（包括 ID）请写在单引号之间。"
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "这里最多可保存 20 条查询。请先删除一条。"
+
+msgid "Your browser"
+msgstr "你的浏览器"
