@@ -109,23 +109,6 @@ function VersionsCard({ versions, stamp }: { versions: Version[]; stamp: SourceS
   )
 }
 
-const CHANGE_LABEL_ORDER = [
-  'registered',
-  'removed',
-  'returned',
-  'service',
-  'platform_p2p',
-  'platform_https',
-  'platform_node_id',
-  'payout_address',
-  'operator_payout_address',
-  'owner_address',
-  'voting_address',
-  'pubkey_operator',
-  'operator_reward',
-  'pose',
-] as const
-
 function ChangesCard({ changes, stamp }: { changes: Change[]; stamp: SourceStamp }) {
   const { t } = useLingui()
   const label = (field: string): string => {
@@ -166,8 +149,7 @@ function ChangesCard({ changes, stamp }: { changes: Change[]; stamp: SourceStamp
     v === null || v === undefined || v === '' ? '—' : typeof v === 'string' ? v : JSON.stringify(v)
   const text = (c: Change): string => {
     const field = c.field ?? ''
-    const known = (CHANGE_LABEL_ORDER as readonly string[]).includes(field)
-    const name = known ? label(field) : field
+    const name = label(field)
     if (field === 'registered' || field === 'returned') {
       return c.new ? t`${name} at ${show(c.new)}` : name
     }

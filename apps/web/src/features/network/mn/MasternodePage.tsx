@@ -216,7 +216,7 @@ function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: bool
     other && off ? client.getQueryData(coreQueries.masternodeList(other).queryKey) : undefined
   const found = off
     ? !!cached && (cached.data.has(protx) || cached.data.has(protx.toUpperCase()))
-    : !!other && there.data?.data !== null && there.data?.data !== undefined
+    : !!other && there.data?.data != null
   const otherName = other === 'mainnet' ? t`mainnet` : t`testnet`
   const here = net === 'mainnet' ? t`mainnet` : t`testnet`
   const empty = (

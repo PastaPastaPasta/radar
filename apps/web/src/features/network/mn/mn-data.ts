@@ -28,16 +28,12 @@ export function useRadarRecord(net: NetworkId, protx: string) {
   return useQuery({ ...radarQueries.masternode(net, protx), enabled: !off && !isDevnet(net) })
 }
 
-/** The identity an evonode keeps its Platform balance in: its ProTx written in base58. */
-export const evonodeIdentity = protxToBase58
-
-export const WITHDRAWALS_CONTRACT = () => systemContract('withdrawals').id
-
 /** The recent epochs the epoch record and the comparison look at. */
-export const EPOCH_WINDOW = 12
+const EPOCH_WINDOW = 12
 
 export function usePlatformLive(net: NetworkId, protx: string) {
-  const id = evonodeIdentity(protx)
+  /** The identity an evonode keeps its Platform balance in: its ProTx written in base58. */
+  const id = protxToBase58(protx)
   const current = useQuery(sdkQueries['epoch.current'](net, {}))
   const epoch = current.data?.data.index
   const balance = useQuery(sdkQueries['identities.balances'](net, { ids: [id] }))
@@ -61,7 +57,7 @@ export function usePlatformLive(net: NetworkId, protx: string) {
   )
   const withdrawals = useQuery(
     sdkQueries['documents.query'](net, {
-      contractId: WITHDRAWALS_CONTRACT(),
+      contractId: systemContract('withdrawals').id,
       type: 'withdrawal',
       where: [['$ownerId', '==', id]],
       orderBy: [

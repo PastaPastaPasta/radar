@@ -3,15 +3,16 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from '@tanstack/react-router'
 import { useQueries } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
+import type { SourceStamp } from '@/data/envelope'
 import { radarQueries } from '@/data/radar/queries'
-import type { RadarPayment } from '@/data/radar/schemas'
+import type { RadarMasternodeDetail, RadarPayment } from '@/data/radar/schemas'
 import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, Hash, Time } from '@/ui'
 import type { MnContext } from './mn-context'
 import { RadarOnly } from './RadarOnly'
 
-export const PAYMENTS_PAGE = 25
+const PAYMENTS_PAGE = 25
 
 /** The payments of one masternode: the newest page comes with its record, older ones page back by block height. */
 export function PaymentsTab({ ctx, before }: { ctx: MnContext; before: number | undefined }) {
@@ -22,14 +23,22 @@ export function PaymentsTab({ ctx, before }: { ctx: MnContext; before: number | 
       <RadarOnly ctx={ctx} what={t`Payments need Radar’s index of this node’s block rewards`} />
     )
   }
-  return <Payments ctx={ctx} before={before} />
+  return <Payments ctx={ctx} d={d} radar={radar} before={before} />
 }
 
-function Payments({ ctx, before }: { ctx: MnContext; before: number | undefined }) {
+function Payments({
+  ctx,
+  d,
+  radar,
+  before,
+}: {
+  ctx: MnContext
+  d: RadarMasternodeDetail
+  radar: SourceStamp
+  before: number | undefined
+}) {
   const { t } = useLingui()
   const navigate = useNavigate()
-  const d = ctx.d
-  const radar = ctx.radar
   const [cursors, setCursors] = useState<(number | undefined)[]>(
     before === undefined ? [undefined] : [undefined, before],
   )
@@ -40,13 +49,13 @@ function Payments({ ctx, before }: { ctx: MnContext; before: number | undefined 
     ),
   })
   const pageRows: (RadarPayment[] | undefined)[] = cursors.map((cursor) =>
-    cursor === undefined ? d?.payments : pages[older.indexOf(cursor)]?.data?.data,
+    cursor === undefined ? d.payments : pages[older.indexOf(cursor)]?.data?.data,
   )
   const rows = pageRows.flatMap((p) => p ?? [])
   const lastPage = pageRows[pageRows.length - 1]
   const loadingMore = cursors.length > 1 && lastPage === undefined
   const failed = pages.at(-1)?.isError === true
-  const total = d?.payments_summary?.count
+  const total = d.payments_summary?.count
   const last = rows.at(-1)
   const more =
     last !== undefined &&
@@ -84,7 +93,6 @@ function Payments({ ctx, before }: { ctx: MnContext; before: number | undefined 
     [t],
   )
 
-  if (!d || !radar) return null
   const summary = d.payments_summary
   return (
     <Card

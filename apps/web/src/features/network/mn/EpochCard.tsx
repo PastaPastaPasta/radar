@@ -17,7 +17,7 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
   const selected = epoch ?? now?.index
   const info = infos.find((i) => i.index === selected)
   const isCurrent = now !== undefined && selected === now.index
-  const choices = now ? [now.index, ...[...infos].map((i) => i.index).sort((a, b) => b - a)] : []
+  const choices = now ? [now.index, ...infos.map((i) => i.index).sort((a, b) => b - a)] : []
   const protx = ctx.protx.toLowerCase()
   const radarNow = ctx.d?.platform_rewards?.current
 
@@ -38,6 +38,7 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
   const voted = vote.data?.data.get(protx)
   const stamps = stampsOf(current.data, thisEpoch.data, finalized.data, vote.data)
 
+  const started = isCurrent ? now.firstBlockTimeMs : info?.firstBlockTimeMs
   const ready = now !== undefined
   return (
     <Card
@@ -87,15 +88,12 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
               {
                 label: t`Epoch`,
                 value: <Entity kind="epoch" id={String(selected)} label={formatInt(selected)} />,
-                hint: isCurrent ? (
-                  <>
-                    {t`started`} <Time ms={now.firstBlockTimeMs} mode="absolute" />
-                  </>
-                ) : info ? (
-                  <>
-                    {t`started`} <Time ms={info.firstBlockTimeMs} mode="absolute" />
-                  </>
-                ) : undefined,
+                hint:
+                  started === undefined ? undefined : (
+                    <>
+                      {t`started`} <Time ms={started} mode="absolute" />
+                    </>
+                  ),
               },
               {
                 label: t`Blocks proposed`,

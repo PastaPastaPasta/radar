@@ -9,14 +9,11 @@ import { peQueries } from '@/data/pe/queries'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarMasternodeDetail, RadarPlatform } from '@/data/radar/schemas'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
-import { CREDITS_PER_DASH } from '@/lib/units'
 import { Amount, Card, Chart, Empty, KeyValue, Stat, Stats, Time } from '@/ui'
 import type { MnContext } from './mn-context'
-import { spreadOf } from './platform-math'
+import { dash, spreadOf } from './platform-math'
 
 type Rewards = NonNullable<RadarMasternodeDetail['platform_rewards']>
-
-const dash = (credits: bigint): number => Number(credits) / Number(CREDITS_PER_DASH)
 
 export function RewardsCard({
   ctx,
@@ -144,7 +141,10 @@ export function RewardsCard({
                 {
                   label: t`Since epoch ${formatInt(p.first_epoch ?? 0)}`,
                   value: <Amount value={totals.lifetime} kind="credits" />,
-                  hint: t`${plural(totals.epochs_paid ?? 0, { one: '# epoch paid', other: '# epochs paid' })}`,
+                  hint: plural(totals.epochs_paid ?? 0, {
+                    one: '# epoch paid',
+                    other: '# epochs paid',
+                  }),
                 },
                 ...(peTotal !== null
                   ? [

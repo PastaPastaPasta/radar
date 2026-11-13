@@ -6,9 +6,9 @@ import { peQueries } from '@/data/pe/queries'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 import { Entity } from '@/features/entity'
 import { formatInt, formatNumber } from '@/lib/format'
-import { CREDITS_PER_DASH } from '@/lib/units'
 import { Amount, Badge, Card, Chart, Empty, KeyValue, Stat, Stats, Time } from '@/ui'
 import type { MnContext } from './mn-context'
+import { dash } from './platform-math'
 
 const TIMEFRAMES = ['24h', '1w'] as const
 type Timeframe = (typeof TIMEFRAMES)[number]
@@ -40,29 +40,31 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
 
   const fmt = (n: number) => formatNumber(n, { maximumFractionDigits: 2 })
   const day = (ms: number) => new Date(ms).toISOString().slice(0, 16).replace('T', ' ')
+  const blockPoints = blocks.data?.data ?? []
+  const rewardPoints = rewards.data?.data ?? []
   const blockOption: EChartsOption = {
     tooltip: { trigger: 'axis' },
     grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
-    xAxis: { type: 'category', data: (blocks.data?.data ?? []).map((p) => day(p.t)) },
+    xAxis: { type: 'category', data: blockPoints.map((p) => day(p.t)) },
     yAxis: { type: 'value', minInterval: 1 },
     series: [
       {
         type: 'bar',
         name: t`Blocks proposed`,
-        data: (blocks.data?.data ?? []).map((p) => p.blocksCount),
+        data: blockPoints.map((p) => p.blocksCount),
       },
     ],
   }
   const rewardOption: EChartsOption = {
     tooltip: { trigger: 'axis', valueFormatter: (x) => `${fmt(Number(x))} DASH` },
     grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
-    xAxis: { type: 'category', data: (rewards.data?.data ?? []).map((p) => day(p.t)) },
+    xAxis: { type: 'category', data: rewardPoints.map((p) => day(p.t)) },
     yAxis: { type: 'value', axisLabel: { formatter: (x: number) => fmt(x) } },
     series: [
       {
         type: 'bar',
         name: t`Rewards`,
-        data: (rewards.data?.data ?? []).map((p) => Number(p.reward) / Number(CREDITS_PER_DASH)),
+        data: rewardPoints.map((p) => dash(p.reward)),
       },
     ],
   }
@@ -231,7 +233,7 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
                 label={t`Blocks this evonode proposed, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
                 table={{
                   columns: [t`Time (UTC)`, t`Blocks`],
-                  rows: (blocks.data?.data ?? []).map((p) => [day(p.t), p.blocksCount]),
+                  rows: blockPoints.map((p) => [day(p.t), p.blocksCount]),
                 }}
               />
               <Chart
@@ -241,10 +243,7 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
                 label={t`Platform rewards this evonode earned, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
                 table={{
                   columns: [t`Time (UTC)`, t`Rewards (DASH)`],
-                  rows: (rewards.data?.data ?? []).map((p) => [
-                    day(p.t),
-                    fmt(Number(p.reward) / Number(CREDITS_PER_DASH)),
-                  ]),
+                  rows: rewardPoints.map((p) => [day(p.t), fmt(dash(p.reward))]),
                 }}
               />
             </div>

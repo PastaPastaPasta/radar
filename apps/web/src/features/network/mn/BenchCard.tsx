@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useQuery } from '@tanstack/react-query'
@@ -161,7 +162,7 @@ export function BenchCard({ ctx }: { ctx: MnContext }) {
                 ? t`${score1(combined.score)} out of 100`
                 : t`The latest test failed; Radar retries within a day.`}
               {combined && combined.vantages > 1
-                ? ` ${t`(average of ${combined.vantages} locations)`}`
+                ? ` ${t`(average of ${plural(combined.vantages, { one: '# location', other: '# locations' })})`}`
                 : ''}
             </p>
             {rank !== null ? (

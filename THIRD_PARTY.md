@@ -6,5 +6,6 @@ not listed: their licences travel with the lockfiles.
 
 Add one row per origin at the end of the table; never reorder or edit another row.
 
-| Component | Source | Licence | Where it is used |
-| --------- | ------ | ------- | ---------------- |
+| Component                                                              | Source                                                                      | Licence | Where it is used                                                              |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------- |
+| Masternode readiness checks, payout rule and Platform rewards sections | [dash-nodes](https://github.com/PastaPastaPasta/dash-nodes) masternode page | MIT     | `features/network/mn/` (`ReadinessCard.tsx`, `mn-info.ts`, `RewardsCard.tsx`) |
