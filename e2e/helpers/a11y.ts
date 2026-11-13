@@ -66,7 +66,12 @@ export async function expectAccessible(page: Page, options: AccessibleOptions = 
   for (const selector of options.exclude ?? []) axe = axe.exclude(selector)
   if (options.disableRules?.length) axe = axe.disableRules(options.disableRules)
 
-  const { violations } = await axe.analyze()
+  // A value that changes during the audit starts a fresh highlight; measure contrast at rest, not
+  // mid-fade. The app's reduced-motion rule ends every animation at once, and the CSP forbids injecting one.
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  const { violations } = await axe
+    .analyze()
+    .finally(() => page.emulateMedia({ reducedMotion: null }))
   const blocking = violations
     .filter((v) => v.impact && BLOCKING.has(v.impact))
     .map((v) => ({ ...v, nodes: v.nodes.filter((n) => !isAccepted(v.id, n.target)) }))
