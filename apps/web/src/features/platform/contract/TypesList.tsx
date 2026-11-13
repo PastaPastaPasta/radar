@@ -27,40 +27,25 @@ function IndexTable({
     return <p className="text-ink-2">{t`No indices: documents can be fetched by ID only.`}</p>
   }
   return (
-    <div>
-      <table
-        className="rx-table w-full [overflow-wrap:anywhere]"
-        aria-label={t`Indices of ${type}`}
-        data-indices={id}
-      >
-        <thead>
-          <tr>
-            <th scope="col">{t`Index`}</th>
-            <th scope="col">{t`Properties, in order`}</th>
-            <th scope="col">{t`Kind`}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {indices.map((index) => (
-            <tr key={index.name}>
-              <th scope="row" className="font-mono">
-                {index.name}
-              </th>
-              <td className="font-mono">
-                {index.properties
-                  .map((p) => `${p.field}${p.order === 'desc' ? ' ↓' : ''}`)
-                  .join(', ')}
-              </td>
-              <td className="flex flex-wrap gap-1">
-                {index.unique ? <Badge size="sm">{t`Unique`}</Badge> : null}
-                {index.contested ? <Badge size="sm" tone="warning">{t`Contested`}</Badge> : null}
-                {!index.unique && !index.contested ? '—' : null}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ul className="grid gap-3" aria-label={t`Indices of ${type}`} data-indices={id}>
+      {indices.map((index) => (
+        <li key={index.name} className="grid gap-1 border-t border-line pt-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-mono [overflow-wrap:anywhere]">{index.name}</span>
+            {index.unique ? <Badge size="sm">{t`Unique`}</Badge> : null}
+            {index.contested ? <Badge size="sm" tone="warning">{t`Contested`}</Badge> : null}
+          </div>
+          <p className="text-ink-2">
+            {t`Properties, in order`}:{' '}
+            <span className="font-mono [overflow-wrap:anywhere]">
+              {index.properties
+                .map((p) => `${p.field}${p.order === 'desc' ? ' ↓' : ''}`)
+                .join(', ')}
+            </span>
+          </p>
+        </li>
+      ))}
+    </ul>
   )
 }
 

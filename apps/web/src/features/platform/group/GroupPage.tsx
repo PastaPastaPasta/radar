@@ -2,14 +2,26 @@ import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { useState } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
-import type { GroupActionDto, GroupActionStatus } from '@/data/sdk/methods/p-data'
+import type { GroupActionDto, GroupActionStatus, GroupMemberDto } from '@/data/sdk/methods/p-data'
 import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, ErrorState, Hash, JsonView, KeyValue, Skeleton, Tabs } from '@/ui'
+import {
+  Badge,
+  Card,
+  DataTable,
+  Empty,
+  ErrorState,
+  Hash,
+  JsonView,
+  KeyValue,
+  Skeleton,
+  Tabs,
+} from '@/ui'
 import { SdkGate } from '../contract/SdkGate'
 
 export interface GroupPageProps {
@@ -124,6 +136,30 @@ function Members({
   const members = useQuery(
     sdkQueries['group.members'](net, { contractId: contract, position, limit: GROUP_PAGE }),
   )
+  const columns = useMemo<ColumnDef<GroupMemberDto>[]>(
+    () => [
+      {
+        id: 'member',
+        header: t`Member`,
+        cell: ({ row }) => <IdentityRef id={row.original.id} />,
+        meta: { phone: 'title' },
+      },
+      {
+        id: 'power',
+        header: t`Power`,
+        cell: ({ row }) => formatInt(row.original.power),
+        meta: { numeric: true, phone: 'primary' },
+      },
+      {
+        id: 'share',
+        header: t`Of the required`,
+        cell: ({ row }) =>
+          required > 0 ? `${formatInt(row.original.power)} / ${formatInt(required)}` : '—',
+        meta: { numeric: true, phone: 'secondary' },
+      },
+    ],
+    [t, required],
+  )
   return (
     <Card
       title={t`Members`}
@@ -135,37 +171,13 @@ function Members({
         {(members.data?.data.length ?? 0) === 0 ? (
           <Empty kind="none-yet" title={t`This group has no members.`} />
         ) : (
-          <div>
-            <table
-              className="rx-table w-full [overflow-wrap:anywhere]"
-              aria-label={t`Members by power`}
-            >
-              <thead>
-                <tr>
-                  <th scope="col">{t`Member`}</th>
-                  <th scope="col" className="text-right">
-                    {t`Power`}
-                  </th>
-                  <th scope="col" className="text-right">
-                    {t`Of the required`}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {members.data?.data.map((m) => (
-                  <tr key={m.id} data-member={m.id}>
-                    <td>
-                      <IdentityRef id={m.id} />
-                    </td>
-                    <td className="text-right">{formatInt(m.power)}</td>
-                    <td className="text-right">
-                      {required > 0 ? `${formatInt(m.power)} / ${formatInt(required)}` : '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption={t`Members by power`}
+            columns={columns}
+            rows={members.data?.data ?? []}
+            getRowId={(m) => m.id}
+            state="ready"
+          />
         )}
       </SdkGate>
     </Card>

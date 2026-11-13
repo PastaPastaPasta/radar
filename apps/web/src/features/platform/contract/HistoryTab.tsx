@@ -2,13 +2,14 @@ import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
 import { useQueries } from '@tanstack/react-query'
-import { useState } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { ContractFullDto } from '@/data/sdk/methods'
 import type { ContractVersionDto } from '@/data/sdk/methods/p-data'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, Skeleton, Time } from '@/ui'
+import { Badge, Card, DataTable, Empty, Skeleton, Time } from '@/ui'
 import type { ContractContext } from './contract-context'
 import { schemaLink } from './SchemaTab'
 import { diffJson, pointerOf, type Change } from './version-diff'
@@ -182,6 +183,51 @@ function Versions({ ctx }: { ctx: ContractContext }) {
   ]
   const failed = queries.find((q) => q.isError && !q.data)
   const wantedVersion = search.rev
+  const currentVersion = ctx.contract.version
+  const columns = useMemo<ColumnDef<ContractVersionDto>[]>(
+    () => [
+      {
+        id: 'version',
+        header: t`Version`,
+        cell: ({ row }) => {
+          const version = row.original.contract.version
+          return (
+            <span className="inline-flex items-center gap-2">
+              {version}
+              {version === currentVersion ? (
+                <Badge size="sm" tone="info">
+                  {t`Current`}
+                </Badge>
+              ) : null}
+            </span>
+          )
+        },
+        meta: { numeric: true, phone: 'title' },
+      },
+      {
+        id: 'recorded',
+        header: t`Recorded`,
+        cell: ({ row }) => <Time ms={row.original.atMs} mode="both" />,
+        meta: { phone: 'primary' },
+      },
+      {
+        id: 'types',
+        header: t`Document types`,
+        cell: ({ row }) => formatInt(Object.keys(row.original.contract.documentSchemas).length),
+        meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'compare',
+        header: t`Compare`,
+        cell: ({ row }) => (
+          <Link className="dh-btn dh-btn--sm" {...versionLink(row.original.contract.version)}>
+            {t`See changes`}
+          </Link>
+        ),
+      },
+    ],
+    [t, currentVersion],
+  )
   return (
     <Card
       title={t`Version history`}
@@ -198,46 +244,13 @@ function Versions({ ctx }: { ctx: ContractContext }) {
         <Skeleton shape="row" count={3} />
       ) : (
         <div className="grid gap-4">
-          <div>
-            <table
-              className="rx-table w-full [overflow-wrap:anywhere]"
-              aria-label={t`Versions of this contract`}
-            >
-              <thead>
-                <tr>
-                  <th scope="col">{t`Version`}</th>
-                  <th scope="col">{t`Recorded`}</th>
-                  <th scope="col">{t`Document types`}</th>
-                  <th scope="col">
-                    <span className="sr-only">{t`Compare`}</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {versions.map((v) => (
-                  <tr key={v.atMs} data-version={v.contract.version}>
-                    <th scope="row">
-                      {v.contract.version}
-                      {v.contract.version === ctx.contract.version ? (
-                        <Badge size="sm" tone="info">
-                          {t`Current`}
-                        </Badge>
-                      ) : null}
-                    </th>
-                    <td>
-                      <Time ms={v.atMs} mode="both" />
-                    </td>
-                    <td>{formatInt(Object.keys(v.contract.documentSchemas).length)}</td>
-                    <td>
-                      <Link className="dh-btn dh-btn--sm" {...versionLink(v.contract.version)}>
-                        {t`See changes`}
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption={t`Versions of this contract`}
+            columns={columns}
+            rows={versions}
+            getRowId={(v) => String(v.atMs)}
+            state="ready"
+          />
           {more ? (
             <button
               type="button"
