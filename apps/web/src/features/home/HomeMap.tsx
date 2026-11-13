@@ -63,9 +63,8 @@ function place(p: Point): string {
 export function HomeMap() {
   const { t } = useLingui()
   const net = useNetwork()
-  const devnet = isDevnet(net)
   const off = useDecentralizedOnly()
-  const geo = useQuery({ ...radarQueries.geo(net), enabled: !devnet && !off })
+  const geo = useQuery({ ...radarQueries.geo(net), enabled: !isDevnet(net) && !off })
   const land = useLand()
   const points = useMemo(
     () =>
@@ -75,16 +74,13 @@ export function HomeMap() {
     [geo.data],
   )
   const masternodes = points.reduce((n, p) => n + p.masternodes, 0)
-  const top = points.find((p) => p.masternodes > 0)
-  const [tx, ty] = top ? project(top.lon, top.lat) : [0, 0]
-  const txShare = tx / WIDTH
   const summary =
     points.length > 0
       ? t`${formatInt(masternodes)} masternodes in ${formatInt(points.length)} places`
       : t`The node map`
 
   return (
-    <div className="rx-scope__map" data-map={points.length > 0 ? 'nodes' : 'land'}>
+    <div className="rx-hero__map" data-map={points.length > 0 ? 'nodes' : 'land'}>
       <svg
         className="rx-map"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -97,6 +93,9 @@ export function HomeMap() {
             const [x, y] = project(p.lon, p.lat)
             return (
               <g key={`${p.lat},${p.lon}`}>
+                <title>
+                  {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
+                </title>
                 <circle
                   className="mn mn--all"
                   cx={x.toFixed(1)}
@@ -116,57 +115,32 @@ export function HomeMap() {
           })}
         </g>
       </svg>
-      {top ? (
-        <div
-          className="rx-callout"
-          data-layer="network"
-          style={{
-            left: `${txShare * 100}%`,
-            top: `${(ty / HEIGHT) * 100}%`,
-            transform:
-              txShare < 0.4 ? 'translate(12px, -50%)' : 'translate(calc(-100% - 12px), -50%)',
-          }}
-        >
-          <b>{place(top)}</b>
-          <span>{t`${formatInt(top.masternodes)} masternodes, the most of any place`}</span>
-        </div>
-      ) : null}
-      <div className="rx-maplegend">
-        {points.length > 0 ? (
-          <>
+      {points.length > 0 ? (
+        <>
+          <div className="rx-maplegend" data-src-hover>
             <span className="rx-maplegend__key">
               <i className="d" aria-hidden="true" />
-              <span className="rx-maplegend__long">{t`Masternodes`}</span>
+              <span className="rx-maplegend__sum">{summary}</span>
             </span>
             <span className="rx-maplegend__key rx-maplegend__key--other">
               <i className="d d--all" aria-hidden="true" />
               <span className="rx-maplegend__long">{t`Other reachable nodes`}</span>
               <span className="rx-maplegend__short">{t`Other nodes`}</span>
             </span>
-            <span className="rx-maplegend__sum">
-              <span className="rx-maplegend__full">{summary}</span>
-              <span className="rx-maplegend__brief">{t`${formatInt(masternodes)} masternodes`}</span>
-            </span>
-          </>
-        ) : devnet ? (
-          <span>{t`Radar doesn't crawl devnets, so there is nothing to map.`}</span>
-        ) : off ? (
-          <span data-unavailable="mode">
-            {t`The node map needs Radar's crawler, which Decentralized only mode doesn't use.`}
-          </span>
-        ) : geo.isError ? (
-          <span>{t`Radar isn't answering, so the map shows no nodes.`}</span>
-        ) : null}
-        {geo.data ? <SourceLine stamp={stampOf(geo.data)} compact /> : null}
-      </div>
-      {points.length > 0 ? (
-        <ul className="dh-sr" aria-label={t`Places with the most masternodes`}>
-          {points.slice(0, 8).map((p) => (
-            <li key={`${p.lat},${p.lon}`}>
-              {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
-            </li>
-          ))}
-        </ul>
+            {geo.data ? (
+              <span className="rx-fig__src">
+                <SourceLine stamp={stampOf(geo.data)} compact />
+              </span>
+            ) : null}
+          </div>
+          <ul className="dh-sr" aria-label={t`Places with the most masternodes`}>
+            {points.slice(0, 8).map((p) => (
+              <li key={`${p.lat},${p.lon}`}>
+                {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
+              </li>
+            ))}
+          </ul>
+        </>
       ) : null}
     </div>
   )

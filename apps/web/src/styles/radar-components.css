@@ -384,17 +384,6 @@ kbd,
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.rx-jump-core {
-  display: none;
-}
-.rx-jump-core::after {
-  content: ' \2193';
-}
-@media (max-width: 640px) {
-  .rx-jump-core {
-    display: inline;
-  }
-}
 
 /* ============================================================ 7. tiles, glyphs, identicons, nodeprints */
 .rx-tile {
@@ -2157,12 +2146,6 @@ button.rx-src--proof:hover {
     animation-duration: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0ms !important;
-  }
-  .rx-map .ping {
-    animation: none !important;
-    transform: none !important;
-    opacity: 0.9;
-    r: 6;
   }
   .rx-enter {
     animation: none !important;

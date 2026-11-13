@@ -1,340 +1,211 @@
-/* Radar page signatures: scope, value flow, record header, uptime, epoch clock, activity calendar. */
-/* ============================================================ 17. home: the scope */
-.rx-scope {
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid var(--rx-plate-0);
+/* Radar page signatures: home, value flow, record header, uptime, epoch clock, activity calendar. */
+/* ============================================================ 17. home: one claim and the node map, then the layers */
+.rx-home {
+  /* The space beside the container, less a classic scrollbar's width, so the map never causes a sideways scroll. */
+  --rx-bleed: max(0px, (100vw - min(100vw, var(--dh-max))) / 2 + var(--dh-gutter) - 12px);
+  --rx-map-land: color-mix(in srgb, var(--dh-ink) 24%, transparent);
 }
-.rx-scope__grid {
-  position: relative;
-  z-index: 2;
+.rx-hero {
   display: grid;
-  grid-template-columns: 400px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 540px) minmax(0, 1fr);
+  column-gap: 16px;
   align-items: center;
-  gap: 24px;
-  padding-top: 22px;
+  padding: 28px 0 44px;
+  border-bottom: 1px solid var(--dh-line);
 }
-.rx-scope__lede {
-  margin: 0;
-  font-size: 15.5px;
-  line-height: 1.5;
-  color: var(--dh-ink-2);
-  max-width: 40ch;
-}
-.rx-scope__left {
-  display: grid;
-  align-content: start;
-  gap: 16px;
+.rx-hero__copy {
+  position: relative;
+  z-index: 1;
   min-width: 0;
 }
-.rx-scope__kicker {
+.rx-hero__kicker {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  margin: 0;
+  gap: 8px;
+  margin: 0 0 14px;
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
-.rx-scope__kicker b {
+.rx-hero__kicker b {
   color: var(--dh-ink);
   font-weight: var(--dh-w-strong);
 }
-.rx-scope h1 {
+.rx-hero h1 {
   margin: 0;
-  font: 680 40px/1.05 var(--dh-font);
-  font-stretch: 116%;
+  font: 680 clamp(30px, 4.2vw, 48px) / 1.06 var(--dh-font);
+  font-stretch: 118%;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
-.rx-omni {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 50px;
-  padding: 0 10px 0 44px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  background: var(--dh-surface);
-  border: 1px solid var(--rx-plate-ctl);
+.rx-hero__n {
+  font-variant-numeric: tabular-nums;
+}
+.rx-hero__n .rx-skel {
+  display: inline-block;
+  height: 0.7em;
+}
+.rx-hero__lede {
+  margin: 16px 0 0;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.5;
   color: var(--dh-ink-2);
-  font-size: 15px;
-  cursor: text;
-  text-decoration: none;
+  text-wrap: pretty;
 }
-.rx-omni:hover {
-  border-color: var(--dh-ink-2);
+.rx-hero .rx-unavail,
+.rx-hero .rx-note {
+  margin: 20px 0 0;
 }
-.rx-omni > .rx-ico {
-  position: absolute;
-  left: 15px;
-  width: 18px;
-  height: 18px;
-  color: var(--dh-ink-2);
-}
-.rx-omni kbd {
-  margin-left: auto;
-  background: var(--rx-plate-3);
-  border-color: var(--rx-plate-edge);
-  color: var(--dh-ink);
-}
-.rx-omni:focus-visible {
-  outline: var(--dh-ring-w) solid var(--dh-focus);
-  outline-offset: 2px;
-}
-.rx-try {
+.rx-hero__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 8px;
-  margin: -6px 0 0;
+  gap: 10px 14px;
+  margin-top: 26px;
+}
+/* The page's link colour is declared in a later layer than the shell's buttons, so a link styled as a button says its own. */
+.rx-hero__actions .dh-btn {
+  color: var(--dh-ink);
+}
+.rx-hero__actions .dh-btn--primary {
+  color: var(--dh-act-ink);
+}
+.rx-hero__search kbd {
+  margin-left: 2px;
+}
+
+/* a figure: label, value and at most one note, with a rule on its left and no box */
+.rx-figs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin: 28px 0 0;
+}
+.rx-fig {
+  position: relative;
+  min-width: 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--dh-line);
+}
+.rx-fig[data-tone] {
+  padding-left: 10px;
+  border-left-width: 4px;
+}
+.rx-fig[data-tone='good'] {
+  border-left-color: var(--dh-good);
+}
+.rx-fig[data-tone='warn'] {
+  border-left-color: var(--dh-warn);
+}
+.rx-fig[data-tone='bad'] {
+  border-left-color: var(--dh-bad);
+}
+.rx-fig__label,
+.rx-fig__value,
+.rx-fig__note {
+  margin: 0;
+}
+.rx-fig__label {
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
-.rx-try a {
-  display: inline-flex;
-  align-items: center;
-  height: 24px;
-  padding: 0 8px;
-  border-radius: 4px;
-  background: var(--rx-plate-3);
-  color: var(--dh-ink);
-  text-decoration: none;
-  font-family: var(--dh-mono);
-  font-size: 12px;
-}
-.rx-try a:hover {
-  background: var(--rx-plate-4);
-}
-.rx-pulse {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-  position: relative;
-  z-index: 2;
-}
-.rx-pulse__row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 40px max-content minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-items: center;
-  gap: 4px 14px;
-  padding: 12px 16px 12px 14px;
-  border-radius: var(--dh-r3);
-  background: color-mix(in srgb, var(--rx-plate-2) 90%, transparent);
-  border: 1px solid var(--rx-plate-line);
+.rx-fig__link {
   color: inherit;
   text-decoration: none;
 }
-.rx-pulse__row::before {
+.rx-fig__link::after {
   content: '';
   position: absolute;
-  left: -1px;
-  top: 12px;
-  bottom: 12px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: var(--rx-l);
+  inset: -4px -6px -4px -4px;
+  border-radius: var(--dh-r1);
 }
-.rx-pulse__row:hover {
-  border-color: var(--rx-plate-edge);
+.rx-fig__link:focus-visible {
+  outline: none;
 }
-.rx-pulse__row:focus-visible {
+.rx-fig__link:focus-visible::after {
   outline: var(--dh-ring-w) solid var(--dh-focus);
-  outline-offset: 2px;
 }
-.rx-pulse__row .rx-tile {
-  --s: 40px;
-  grid-row: span 2;
-}
-.rx-pulse__label {
-  grid-column: 2 / -1;
-  font-size: var(--dh-fs-sm);
-  color: var(--dh-ink-2);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 8px;
-}
-.rx-pulse__value {
-  font: 680 28px/1.05 var(--dh-font);
-  font-stretch: 108%;
-  letter-spacing: -0.015em;
+.rx-fig__value {
+  margin-top: 2px;
+  font: 650 24px/1.2 var(--dh-font);
+  font-stretch: 110%;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
-.rx-pulse__value small {
-  font-size: 13px;
-  font-weight: var(--dh-w-ui);
-  font-stretch: 100%;
-  color: var(--dh-ink-2);
-  margin-left: 4px;
-  letter-spacing: 0;
+.rx-fig:has(.rx-fig__link:hover) .rx-fig__value {
+  color: var(--dh-brand-ink);
 }
-.rx-pulse__meta {
-  grid-column: 3;
-  grid-row: 2;
-  display: grid;
-  justify-items: end;
-  gap: 4px;
-  font-size: var(--dh-fs-sm);
-  color: var(--dh-ink-2);
-  text-align: right;
-}
-.rx-pulse__meta .rx-ok {
+.rx-fig[data-tone='good'] .rx-fig__value {
   color: var(--dh-good);
+}
+.rx-fig[data-tone='warn'] .rx-fig__value {
+  color: var(--dh-warn);
+}
+.rx-fig[data-tone='bad'] .rx-fig__value {
+  color: var(--dh-bad);
+}
+.rx-fig__value .rx-skel {
+  display: inline-block;
+  height: 0.75em;
+  vertical-align: baseline;
+}
+.rx-fig__value .rx-fiat {
+  display: block;
+  margin: 2px 0 0;
+  font: 450 12.5px/1.4 var(--dh-font);
+  font-stretch: 100%;
+  letter-spacing: 0;
+  color: var(--dh-ink-2);
+}
+.rx-fig__note {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--dh-ink-2);
+}
+.rx-fig__note .rx-ok {
   display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: var(--dh-w-ui);
+  align-items: baseline;
+  gap: 4px;
 }
-.rx-pulse .rx-meter {
-  width: 120px;
-  height: 6px;
-  background: var(--rx-plate-3);
+.rx-fig__note .rx-ok .rx-ico {
+  flex: none;
+  color: var(--dh-good);
+  transform: translateY(2px);
 }
-/* The Core headline figures under the hero, as plate tiles */
-.rx-corefig {
-  position: relative;
-  z-index: 2;
-  margin-top: 12px;
+/* a figure's own source and age: under it on hover and focus, over the page and not in its flow */
+.rx-fig__src {
+  position: absolute;
+  left: 8px;
+  top: calc(100% + 2px);
+  z-index: 6;
+  margin: 0;
+  padding: 3px 6px;
+  border-radius: var(--dh-r2);
+  background: var(--dh-surface);
+  box-shadow: var(--dh-shadow-pop);
+  white-space: nowrap;
+  /* not merely invisible: a hidden box would still widen the page on a phone */
+  display: none;
 }
-.rx-corefig .rx-stats {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+[data-src-hover]:hover > .rx-fig__src,
+[data-src-hover]:focus-within > .rx-fig__src {
+  display: block;
 }
-.rx-corefig .rx-stat {
-  gap: 2px;
-  padding: 10px 14px 10px 16px;
-  background: color-mix(in srgb, var(--rx-plate-2) 90%, transparent);
-  border-color: var(--rx-plate-line);
-  color: var(--dh-ink);
+.rx-home__src {
+  margin: 18px 0 0;
 }
-.rx-corefig .rx-stat__value {
-  font-size: 22px;
+.rx-home__src .rx-sources {
+  gap: 2px 12px;
 }
-.rx-corefig .rx-note {
-  margin: 10px 0 0;
-}
-.rx-home__activity {
-  padding-top: 40px;
-}
-/* One tree per width: the pending list follows the two block lists in the page and on screen. */
-.rx-activity__grid {
-  display: grid;
-  gap: 16px;
-  align-items: start;
-  grid-template-columns: minmax(0, 1fr);
-}
-@media (min-width: 641px) {
-  .rx-activity__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .rx-activity__grid > :nth-child(3) {
-    grid-column: 1 / -1;
-  }
-}
-@media (min-width: 1024px) {
-  .rx-activity__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .rx-activity__grid > :nth-child(3) {
-    grid-column: auto;
-  }
-}
-/* A block row: height and age, then its transaction count, reported pool and size on one line. */
-@media (min-width: 641px) {
-  .rx-activity__grid .rx-card--feed .rx-table--cards td {
-    padding-inline: 0;
-  }
-  .rx-activity__grid .rx-card--blocks .rx-table--cards tr {
-    grid-template-columns: 4em minmax(0, 1fr) auto;
-  }
-  .rx-activity__grid .rx-card--blocks .rx-table--cards td.t {
-    grid-column: 1 / 3;
-  }
-  .rx-activity__grid .rx-card--blocks .rx-table--cards td.e {
-    grid-column: 3;
-  }
-  .rx-activity__grid .rx-card--blocks .rx-table--cards td.f {
-    grid-column: 2;
-    grid-row: 2;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .rx-activity__grid .rx-card--blocks .rx-table--cards td.s {
-    grid-column: 3;
-  }
-}
-/* A wide hero gives the left column room to set the title on one line and the lede on two, which keeps the home's latest activity on the first screen. */
-@media (min-width: 1200px) {
-  .rx-scope__grid {
-    grid-template-columns: 560px minmax(0, 1fr);
-  }
-  .rx-scope__lede {
-    max-width: 52ch;
-  }
-}
-/* From 1024 px the four figures are one strip, so the latest activity stays on the first screen. */
-@media (min-width: 1024px) {
-  .rx-home__activity {
-    padding-top: 24px;
-  }
-  .rx-corefig {
-    margin-top: 10px;
-  }
-  .rx-corefig .rx-stats {
-    grid-template-columns: repeat(4, auto);
-    gap: 0;
-    border: 1px solid var(--rx-plate-line);
-    border-radius: var(--dh-r3);
-    background: color-mix(in srgb, var(--rx-plate-2) 90%, transparent);
-  }
-  .rx-corefig .rx-stat {
-    container-type: normal;
-    gap: 0;
-    padding: 7px 14px 7px 16px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-  }
-  .rx-corefig .rx-stat + .rx-stat {
-    border-left: 1px solid var(--rx-plate-line);
-  }
-  .rx-corefig .rx-stat::before {
-    top: 8px;
-    bottom: 8px;
-    left: 0;
-  }
-  .rx-corefig .rx-stat__label,
-  .rx-corefig .rx-stat .rx-src,
-  .rx-corefig .rx-stat__value .rx-fiat {
-    flex-wrap: nowrap;
-    white-space: nowrap;
-  }
-  .rx-corefig .rx-stat__value {
-    font-size: 20px;
-    line-height: 1.2;
-  }
-  .rx-corefig .rx-stat__value .rx-amt {
-    flex-wrap: nowrap;
-    align-items: baseline;
-  }
-  .rx-corefig .rx-stat__value .rx-fiat {
-    flex-basis: auto;
-    margin: 0 0 0 8px;
-    font-size: var(--dh-fs-sm);
-  }
-  .rx-corefig .rx-note {
-    margin: 8px 0 0;
-  }
-}
-.rx-scope__map {
+
+/* the node map: on the page ground, bleeding past the container, with nothing floating over it */
+.rx-hero__map {
   position: relative;
   min-width: 0;
-  margin-right: calc(-1 * ((100vw - min(100vw, var(--dh-max))) / 2 + var(--dh-gutter)));
+  max-width: 920px;
+  margin-left: -40px;
+  margin-right: calc(-1 * var(--rx-bleed));
 }
 .rx-map {
   display: block;
@@ -344,282 +215,148 @@
 }
 .rx-map .land {
   fill: none;
-  stroke: var(--rx-plate-dot);
+  stroke: var(--rx-map-land);
   stroke-width: 2.6;
   stroke-linecap: round;
 }
 .rx-map .mn {
-  fill: #a6d8f7;
-  fill-opacity: 0.85;
-  stroke: var(--rx-plate);
-  stroke-width: 0.9;
+  fill: var(--dh-brand);
+  fill-opacity: 0.55;
+  stroke: var(--dh-brand);
+  stroke-width: 0.8;
 }
 .rx-map .mn--all {
   fill: none;
-  stroke: #a6d8f7;
-  stroke-opacity: 0.55;
-  stroke-width: 1.2;
-}
-.rx-map .evo {
-  fill: #25b8a6;
-}
-.rx-map .ping {
-  fill: none;
-  stroke-width: 1.6;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.rx-map .ping--core {
-  stroke: #5ec2f6;
-}
-.rx-map .ping--plat {
-  stroke: #25b8a6;
-}
-.rx-map .ping.is-live {
-  animation: rx-mapping 2.4s var(--rx-ease-out) forwards;
-}
-.rx-map .hit {
-  fill: #5ec2f6;
-}
-.rx-map .hit--plat {
-  fill: #5fd9c7;
-}
-@keyframes rx-mapping {
-  0% {
-    transform: scale(0.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
-.rx-callout {
-  position: absolute;
-  z-index: 3;
-  display: grid;
-  gap: 1px;
-  padding: 7px 10px 7px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  line-height: 1.3;
-  background: var(--rx-callout);
-  border: 1px solid var(--rx-plate-edge);
-  color: var(--dh-ink-2);
-  white-space: nowrap;
-  pointer-events: none;
-}
-.rx-callout b {
-  color: var(--dh-ink);
-  font-weight: var(--dh-w-strong);
-  font-size: 13px;
-}
-.rx-callout::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: var(--rx-l);
+  stroke-opacity: 0.5;
+  stroke-width: 1;
 }
 .rx-maplegend {
-  position: absolute;
-  left: 4%;
-  bottom: 2px;
-  max-width: 62%;
-  z-index: 3;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
-  gap: 6px 16px;
+  gap: 4px 16px;
+  margin: 6px 0 0 96px;
   font-size: 12.5px;
   color: var(--dh-ink-2);
 }
-.rx-maplegend span {
+.rx-maplegend > span:not(.rx-fig__src) {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-.rx-maplegend .rx-maplegend__short,
-.rx-maplegend .rx-maplegend__brief {
+.rx-maplegend .rx-maplegend__short {
   display: none;
 }
 .rx-maplegend .d {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #a6d8f7;
+  background: color-mix(in srgb, var(--dh-brand) 62%, transparent);
+  box-shadow: inset 0 0 0 1px var(--dh-brand);
 }
 .rx-maplegend .d.d--all {
   background: none;
-  border: 1.4px solid #a6d8f7;
-  box-sizing: border-box;
-}
-.rx-maplegend .d.evo {
-  background: #25b8a6;
-}
-.rx-maplegend .r {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.6px solid #5ec2f6;
-  box-sizing: border-box;
-}
-.rx-maplegend .r.plat {
-  border-color: #25b8a6;
+  box-shadow: inset 0 0 0 1.4px color-mix(in srgb, var(--dh-brand) 60%, transparent);
 }
 
-/* the two-lane chain: Core blocks above, Platform blocks below, each Platform block tied to the Core block it is locked to */
-.rx-lanes {
-  position: relative;
-  z-index: 2;
-  margin-top: 20px;
-  padding: 14px 0 18px;
-  border-top: 1px solid var(--rx-plate-line);
+/* the layer sections under the hero: on the page ground, a rule between them */
+.rx-home__sec {
+  padding: 34px 0 38px;
+  border-bottom: 1px solid var(--dh-line);
+  scroll-margin-top: 8px;
 }
-.rx-lanes__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 18px;
-  margin-bottom: 10px;
-  font-size: var(--dh-fs-sm);
-  color: var(--dh-ink-2);
+.rx-home__sec:last-child {
+  padding-bottom: 8px;
+  border-bottom: 0;
 }
-.rx-lanes__head h2 {
+.rx-home__sec > .rx-sec__head {
+  margin-bottom: 6px;
+}
+.rx-home__sec > .rx-home__src {
   margin: 0;
-  font: var(--dh-w-strong) 15px/1.2 var(--dh-font);
-  color: var(--dh-ink);
 }
-.rx-lanes__head .rx-live {
-  margin-left: auto;
+.rx-home__sec .rx-figs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 760px;
+  margin-top: 22px;
 }
-.rx-lanes__short {
-  display: none;
+.rx-home__sec .rx-note,
+.rx-home__sec > .rx-unavail,
+.rx-home__sec > .rx-empty {
+  margin: 16px 0 0;
 }
-.rx-lanes__body {
-  position: relative;
+.rx-home__lists {
   display: grid;
-  grid-template-columns: 74px minmax(0, 1fr);
-  row-gap: 26px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+  margin-top: 26px;
 }
-.rx-lane__label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12.5px;
-  color: var(--dh-ink-2);
-  font-weight: var(--dh-w-ui);
-}
-.rx-lane {
-  position: relative;
-  display: flex;
-  gap: 6px;
-  min-width: 0;
-}
-.rx-blk {
-  position: relative;
-  box-sizing: border-box;
-  flex: 1 1 0;
-  min-width: 0;
-  display: grid;
-  gap: 1px;
-  padding: 6px 8px 6px 9px;
-  border-radius: 6px;
-  background: var(--rx-plate-2);
-  border: 1px solid var(--rx-plate-line);
-  color: var(--dh-ink);
-  text-decoration: none;
-  font-size: 11.5px;
-  line-height: 1.25;
-}
-.rx-blk::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 6px;
-  bottom: 6px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: var(--rx-l);
-}
-.rx-blk b {
-  font-size: 13px;
-  font-weight: var(--dh-w-strong);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.rx-blk span {
-  color: var(--dh-ink-2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.rx-blk .rx-lock {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  width: 12px;
-  height: 12px;
-  color: #4cc38a;
-}
-.rx-blk:hover {
-  border-color: var(--rx-plate-ctl);
-  background: var(--rx-plate-3);
-}
-.rx-blk:focus-visible {
-  outline: var(--dh-ring-w) solid var(--dh-focus);
-  outline-offset: 2px;
-}
-.rx-blk.is-tip {
-  background: var(--rx-tip-core);
-  border-color: var(--rx-tip-core-line);
-}
-.rx-blk.is-tip[data-layer='platform'] {
-  background: var(--rx-tip-plat);
-  border-color: var(--rx-tip-plat-line);
-}
-.rx-blk.is-new {
-  animation: rx-blkin 520ms var(--rx-ease-out);
-}
-@keyframes rx-blkin {
-  from {
-    transform: translateX(24px);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
+@media (min-width: 900px) {
+  .rx-home__lists {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-.rx-blk--empty b {
-  color: var(--dh-ink-2);
+@media (max-width: 1023px) {
+  .rx-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px 0 28px;
+  }
+  .rx-hero__copy {
+    max-width: 640px;
+  }
+  .rx-hero__map {
+    max-width: none;
+    margin: 24px 0 0;
+  }
+  .rx-maplegend {
+    margin-left: 0;
+  }
 }
-.rx-ties {
-  position: absolute;
-  left: 74px;
-  top: 0;
-  width: calc(100% - 74px);
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-  z-index: 1;
-}
-.rx-ties path {
-  fill: none;
-  stroke: #25b8a6;
-  stroke-opacity: 0.7;
-  stroke-width: 1.4;
-}
-.rx-now {
-  position: absolute;
-  right: -10px;
-  top: -16px;
-  font-size: 11px;
-  color: var(--dh-ink-2);
+@media (max-width: 640px) {
+  .rx-hero {
+    padding-top: 4px;
+  }
+  .rx-hero__lede {
+    margin-top: 12px;
+    font-size: 16px;
+  }
+  .rx-figs,
+  .rx-home__sec .rx-figs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 20px;
+    margin-top: 22px;
+  }
+  /* a difficulty or a supply is wider than a count: these go one to a row before they would run into each other */
+  .rx-home__sec .rx-figs {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .rx-fig__value {
+    font-size: 22px;
+  }
+  .rx-figs > .rx-fig:nth-child(2n) > .rx-fig__src {
+    left: auto;
+    right: 0;
+  }
+  .rx-hero__actions {
+    margin-top: 22px;
+  }
+  .rx-hero__map {
+    margin-top: 20px;
+  }
+  .rx-maplegend {
+    gap: 2px 12px;
+  }
+  .rx-maplegend .rx-maplegend__long {
+    display: none;
+  }
+  .rx-maplegend .rx-maplegend__short {
+    display: inline;
+  }
+  .rx-home__sec {
+    padding: 26px 0 30px;
+  }
 }
 
 /* ============================================================ 18. Core tx: value flow and lifecycle */
@@ -1241,256 +978,6 @@
   }
 }
 
-/* home scope on tablet and phone: after the base rules above, which would otherwise win at equal specificity */
-@media (min-width: 641px) and (max-width: 1023px) {
-  .rx-pulse {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .rx-scope__grid {
-    grid-template-columns: 340px minmax(0, 1fr);
-  }
-}
-@media (max-width: 1023px) {
-  .rx-corefig .rx-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-/* From 1024 px the three activity columns and their first rows fit the first screen: tighter plate spacing, and column heads that stand in for table heads. */
-@media (min-width: 1024px) {
-  .rx-lanes {
-    margin-top: 10px;
-    padding: 8px 0 6px;
-  }
-  .rx-lanes__body {
-    row-gap: 8px;
-  }
-  .rx-pulse {
-    margin-top: 10px;
-  }
-  .rx-pulse__row {
-    padding-block: 8px;
-  }
-  .rx-scope__left {
-    gap: 12px;
-  }
-  .rx-scope__grid {
-    padding-top: 8px;
-  }
-  .rx-corefig .rx-note {
-    margin-top: 6px;
-  }
-  .rx-activity__grid .rx-table td {
-    padding-inline: 10px;
-  }
-  .rx-home {
-    margin-top: -16px;
-  }
-  .rx-lanes__head {
-    margin-bottom: 4px;
-  }
-  .rx-home__activity {
-    padding-top: 8px;
-  }
-  .rx-activity .rx-sec__head {
-    margin-bottom: 6px;
-  }
-  .rx-activity {
-    margin-bottom: 40px;
-  }
-  .rx-activity__grid .rx-empty {
-    grid-template-columns: auto minmax(0, 1fr);
-    justify-items: start;
-    column-gap: 12px;
-    padding: 10px 16px 12px;
-    text-align: left;
-  }
-  .rx-activity__grid .rx-empty__tile {
-    grid-row: span 2;
-    margin: 0;
-  }
-  .rx-activity__grid .rx-empty__b {
-    grid-column: 2;
-    font-size: var(--dh-fs-sm);
-    line-height: 1.35;
-  }
-  .rx-activity__grid .rx-unavail__act {
-    grid-column: 2;
-    justify-content: flex-start;
-  }
-  .rx-activity__grid .rx-card__head {
-    padding: 8px 16px 6px;
-    gap: 2px 10px;
-  }
-  .rx-activity__grid .rx-card__aside {
-    gap: 2px 8px;
-  }
-  .rx-activity__grid .rx-table thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-}
-/* A card narrower than its head wraps the source line under the link. */
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .rx-activity__grid .rx-card__aside {
-    flex-wrap: wrap;
-  }
-}
-@media (max-width: 640px) {
-  .rx-corefig {
-    margin-top: 0;
-  }
-  .rx-corefig .rx-stats {
-    gap: 8px;
-  }
-  .rx-corefig .rx-stat {
-    padding: 8px 10px 8px 12px;
-  }
-  .rx-corefig .rx-stat__value {
-    font-size: 18px;
-  }
-  .rx-scope__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    padding-top: 18px;
-  }
-  .rx-pulse {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-  .rx-scope h1 {
-    font-size: 28px;
-  }
-  .rx-scope__map {
-    margin: 0 -16px;
-    order: -1;
-  }
-  .rx-scope__left {
-    order: 0;
-    gap: 10px;
-  }
-  .rx-scope__tail {
-    display: none;
-  }
-  .rx-scope__lede,
-  .rx-try {
-    display: none;
-  }
-  .rx-scope__map .rx-map {
-    width: 82%;
-    margin-inline: auto;
-  }
-  .rx-scope > .dh-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .rx-scope .rx-pulse {
-    display: contents;
-  }
-  .rx-scope .rx-lanes {
-    order: 1;
-  }
-  .rx-scope .rx-corefig {
-    order: 2;
-  }
-  .rx-lanes__head {
-    flex-wrap: nowrap;
-    gap: 6px 12px;
-  }
-  .rx-lanes__head > span:not([class]) {
-    display: none;
-  }
-  .rx-lanes__head > .rx-lanes__short {
-    display: block;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 12px;
-  }
-  .rx-scope [data-pulse='platform'],
-  .rx-scope [data-pulse='census'] {
-    order: 3;
-  }
-  .rx-home > .rx-home__activity {
-    overflow-anchor: none;
-  }
-  .rx-maplegend {
-    position: static;
-    justify-content: flex-start;
-    max-width: none;
-    padding: 4px 16px 0;
-    gap: 2px 12px;
-  }
-  .rx-maplegend .rx-maplegend__long {
-    display: none;
-  }
-  .rx-maplegend .rx-maplegend__short {
-    display: inline-flex;
-  }
-  .rx-maplegend__key--other {
-    order: 2;
-  }
-  .rx-maplegend__sum {
-    order: 1;
-  }
-  .rx-maplegend > :not(.rx-maplegend__key, .rx-maplegend__sum) {
-    order: 3;
-  }
-  .rx-callout {
-    display: none;
-  }
-  .rx-pulse__row {
-    grid-template-columns: 34px minmax(0, 1fr) auto;
-    padding: 10px 12px;
-  }
-  .rx-pulse__row .rx-tile {
-    --s: 34px;
-  }
-  .rx-pulse__value {
-    font-size: 22px;
-  }
-  .rx-pulse .rx-meter {
-    width: 84px;
-  }
-  .rx-lanes__body {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 6px;
-  }
-  .rx-lane {
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    padding-bottom: 6px;
-  }
-  .rx-lane .rx-blk {
-    flex: 0 0 104px;
-  }
-  .rx-ties {
-    display: none;
-  }
-  .rx-lane__label {
-    margin-top: 2px;
-  }
-  .rx-lanes {
-    margin-top: 10px;
-    padding: 10px 0 12px;
-  }
-}
-
-@media (max-width: 380px) {
-  .rx-maplegend .rx-maplegend__full {
-    display: none;
-  }
-  .rx-maplegend .rx-maplegend__brief {
-    display: inline-flex;
-  }
-}
-
 /* on a phone the header's search is an icon: the label stays for screen readers, and the tab bar has Search too */
 @media (max-width: 640px) {
   .rx-hdr-search {
@@ -1528,12 +1015,4 @@
 }
 .rx-lockmark[data-claim='one-node'] {
   color: var(--dh-warn);
-}
-.rx-blk .rx-lockmark {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-}
-.rx-blk .rx-lockmark .rx-lock {
-  position: static;
 }

@@ -63,7 +63,6 @@ msgstr "{0} 个仅未通过版本检查，只需升级。 "
 msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgstr "{0} 托管了{noun}的 {1}，前三大提供商共托管 {2}。"
 
-#. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} 个主节点"
@@ -72,10 +71,6 @@ msgstr "{0} 个主节点"
 #. placeholder {1}: formatInt(points.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} 个地点共 {0} 个主节点"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "{0} 个主节点，所有地点中最多"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -91,20 +86,16 @@ msgid "{0} must sign"
 msgstr "需 {0} 个签名"
 
 #. placeholder {0}: formatInt(crawl.reachable)
-msgid "{0} nodes"
-msgstr "{0} 个节点"
-
-#. placeholder {0}: formatInt(crawl.reachable)
 #. placeholder {1}: formatInt(crawl.tried)
 msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
 msgstr "在尝试的 {1} 个地址中，有 {0} 个节点做出响应。统计的是本周至少响应过一次的节点，加上所有已启用的主节点。"
 
-#. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {0}: formatInt(r.threshold)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
+#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
@@ -185,11 +176,6 @@ msgstr "在{noun}中，{0} 占 {1}。"
 msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 msgstr "本周期已测试 {0} 个。中位数 {1} 个区块头/秒，ping {2} ms。"
 
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
-msgid "{0} tx"
-msgstr "{0} 笔交易"
-
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
 #. placeholder {2}: when(blockMs(b))
@@ -199,8 +185,14 @@ msgstr "{0}，{1}{2}"
 msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
 msgstr "{diff, plural, other {比一天前多 # 个节点}}"
 
+msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
+msgstr "{silent, plural, other {# 个未响应}}"
+
 msgid "<0.1%"
 msgstr "<0.1%"
+
+msgid "<0>{count}</0> Dash nodes answered the last crawl"
+msgstr "上次抓取中有 <0>{count}</0> 个 Dash 节点响应"
 
 msgid "0 ready"
 msgstr "0 个就绪"
@@ -269,6 +261,15 @@ msgstr "所有节点"
 
 msgid "All nodes"
 msgstr "所有节点"
+
+msgid "All Platform blocks"
+msgstr "所有 Platform 区块"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
+msgstr "其中包括 {enabled} 个已启用主节点中的 {answering} 个，{change}。"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes."
+msgstr "其中包括 {enabled} 个已启用主节点中的 {answering} 个。"
 
 msgid "Announce 24"
 msgstr "Announce 24"
@@ -354,9 +355,6 @@ msgstr "客户端"
 msgid "Compact block filters"
 msgstr "紧凑区块过滤器"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core 24"
 msgstr "Core 24"
 
@@ -396,17 +394,11 @@ msgstr "Core 区块"
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Core 区块、主节点和 Platform 记录，一站式查看。每个数据都会注明来源及其时效。"
 
-msgid "Core figures"
-msgstr "Core 数据"
-
 msgid "Core height"
 msgstr "Core 高度"
 
 msgid "Core tip"
 msgstr "Core 链顶"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core、Platform 和主节点网络"
 
 msgid "countries"
 msgstr "国家/地区"
@@ -431,6 +423,9 @@ msgstr "Dash Core 24 激活正在进行中。"
 
 msgid "Dash nodes answered the last crawl"
 msgstr "Dash 节点在上次抓取中有响应"
+
+msgid "Dash Platform"
+msgstr "Dash Platform"
 
 msgid "Dates of windows to come are estimates."
 msgstr "未来窗口的日期为估算值。"
@@ -531,9 +526,6 @@ msgstr "等级 {g}"
 msgid "Healthy"
 msgstr "健康"
 
-msgid "Height"
-msgstr "高度"
-
 msgid "highest seen"
 msgstr "历史最高"
 
@@ -568,23 +560,11 @@ msgstr "这是区块 {0} 的数据；我们的 dashd 或爬虫主机可能已宕
 msgid "Known addresses"
 msgstr "已知地址"
 
-msgid "Last block"
-msgstr "最新区块"
-
-msgid "Latest activity"
-msgstr "最新活动"
-
-msgid "Latest blocks"
-msgstr "最新区块"
-
 msgid "Latest Core blocks"
 msgstr "最新 Core 区块"
 
-msgid "Latest Core blocks, oldest first"
-msgstr "最新 Core 区块，最早的在前"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "最新 Platform 区块，最早的在前"
+msgid "Latest Platform blocks"
+msgstr "最新 Platform 区块"
 
 msgid "Latest Platform transitions"
 msgstr "最新 Platform 状态转换"
@@ -613,9 +593,8 @@ msgstr "锁定，若该窗口达到阈值"
 msgid "Locked in"
 msgstr "已锁定"
 
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "绑定到 Core 区块 {0}"
+msgid "Locked to Core block"
+msgstr "锁定至 Core 区块"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "世界地图，Radar 发现主节点的每个地点用一个圆点表示。{summary}。"
@@ -666,9 +645,6 @@ msgstr "中位数，来自最近 {0} 天的 Platform 纪元"
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "将要签名的 Quorum 成员中，已公布 Dash Core 24 的成员"
 
-msgid "mempool"
-msgstr "内存池"
-
 msgid "Mempool"
 msgstr "内存池"
 
@@ -705,14 +681,8 @@ msgstr "任何窗口计入之前所需"
 msgid "needs {0}+"
 msgstr "需要 {0}+"
 
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "需要 Radar 爬虫：在“仅去中心化”模式下已关闭"
-
 msgid "Network"
 msgstr "网络"
-
-msgid "Network census"
-msgstr "网络普查"
 
 msgid "Network size"
 msgstr "网络规模"
@@ -722,9 +692,6 @@ msgstr "网络规模变化"
 
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "网络规模。使用左右方向键逐点查看。"
-
-msgid "New rows appear at the top."
-msgstr "新行会出现在顶部。"
 
 msgid "Next window that counts"
 msgstr "下一个计入的窗口"
@@ -865,17 +832,14 @@ msgstr "打开此页面后看到的待处理交易"
 msgid "Places with the most masternodes"
 msgstr "主节点最多的地点"
 
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform block height"
 msgstr "Platform 区块高度"
 
+msgid "Platform blocks"
+msgstr "Platform 区块"
+
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer 不索引开发网"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer 不索引开发网。"
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer 没有响应"
@@ -883,17 +847,14 @@ msgstr "Platform Explorer 没有响应"
 msgid "Platform height"
 msgstr "Platform 高度"
 
-msgid "Platform locks to Core"
-msgstr "Platform 锁定到 Core"
-
 msgid "Platform transitions"
 msgstr "Platform 状态转换"
 
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Platform 的最新区块需要 Platform Explorer，而“仅去中心化”模式不使用它。"
+msgid "Platform updates"
+msgstr "Platform 更新"
 
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Platform 的最新转换需要 Platform Explorer"
+msgid "Platform's latest transitions and blocks need Platform Explorer"
+msgstr "Platform 的最新转换和区块需要 Platform Explorer"
 
 msgid "PoSe-banned"
 msgstr "已被 PoSe 封禁"
@@ -912,9 +873,6 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "将要对 Core 24 信号签名的 Quorum"
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar 不抓取开发网"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar 不抓取开发网，因此没有可绘制的内容。"
@@ -987,8 +945,8 @@ msgstr "发布版本"
 msgid "Request id"
 msgstr "请求 ID"
 
-msgid "Search blocks, txs, masternodes, names"
-msgstr "搜索区块、交易、主节点、名称"
+msgid "Search Radar"
+msgstr "搜索 Radar"
 
 msgid "See the sources"
 msgstr "查看数据源"
@@ -1122,11 +1080,11 @@ msgstr "节点普查需要 Radar 的抓取"
 msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 msgstr "缺失的是节点普查部分，它需要 Radar 的抓取。上方的 Core 链顶来自 DAPI。"
 
+msgid "The node count and map need Radar's crawler"
+msgstr "节点数量和地图需要 Radar 爬虫"
+
 msgid "The node map"
 msgstr "节点地图"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "节点地图需要 Radar 爬虫，而“仅去中心化”模式不使用它。"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK 没有响应"
@@ -1207,9 +1165,6 @@ msgstr "交易转发"
 msgid "Transition"
 msgstr "状态转换"
 
-msgid "Try"
-msgstr "试试"
-
 msgid "Try again"
 msgstr "重试"
 
@@ -1264,9 +1219,6 @@ msgstr "无法从我们的 dashd 读取签名 Quorum：{0}"
 
 msgid "What happens next"
 msgstr "接下来会发生什么"
-
-msgid "What is waiting to be mined."
-msgstr "等待被挖出的内容。"
 
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."

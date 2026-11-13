@@ -5,6 +5,7 @@ import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
 import { coreLive, type LiveTxEvent } from '@/data/core/live'
 import { healthRegistry } from '@/data/health'
+import { writeSourceMode } from '@/lib/source-mode'
 import { resetLiveConnection, setLiveConnection } from '@/ui'
 import { renderAt } from './test-utils'
 
@@ -22,8 +23,14 @@ function coreRow(height: string): Promise<HTMLElement> {
   })
 }
 
-const gridTitles = (activity: Element) =>
-  [...activity.querySelectorAll('.rx-activity__grid h3')].map((h) => h.textContent)
+const cardTitles = (section: Element) =>
+  [...section.querySelectorAll('.rx-home__lists h3')].map((h) => h.textContent)
+
+const section = (id: 'core' | 'platform') => document.querySelector<HTMLElement>(`#${id}`)!
+
+/** The marks in a section's one source line. */
+const lineMarks = (within: string, source: string) =>
+  document.querySelectorAll(`${within} [data-home-sources] [data-source="${source}"]`)
 
 const TESTNET_TX = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
 
@@ -33,166 +40,151 @@ describe('Home page', () => {
   afterEach(() => {
     vi.restoreAllMocks()
     resetLiveConnection()
+    writeSourceMode('all')
   })
 
-  it('shows the Core tip with its ChainLock and a source line @IN-01', async () => {
+  it("shows the Core tip with its ChainLock, its own source mark and the hero's source line @IN-01", async () => {
     renderAt('/')
     const row = await coreRow('2,570,085')
     await waitFor(() => expect(row).toHaveTextContent('ChainLocked'))
-    expect(row.querySelector('[data-source="dapi"]')).not.toBeNull()
+    expect(row.querySelector('.rx-fig__src [data-source="dapi"]')).not.toBeNull()
+    expect(lineMarks('.rx-hero', 'dapi')).toHaveLength(1)
   })
 
-  it('lists the pending transactions beside the block lists, in the same section and after them in reading order @IN-01 @HY-03', async () => {
+  it('opens on one claim built from the crawl, with the day-over-day change @RA-01 @IN-01', async () => {
+    renderAt('/')
+    const claim = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('h1 [data-census-claim]')
+      expect(el).toHaveTextContent('2,581 Dash nodes answered the last crawl')
+      return el!
+    })
+    expect(claim.closest('h1')).toHaveTextContent(/^Radar:/)
+    expect(document.querySelector('[data-census-lede]')).toHaveTextContent(
+      /Among them [\d,]+ of the [\d,]+ enabled masternodes, 1 node fewer than a day ago\./,
+    )
+    expect(document.querySelectorAll('h1')).toHaveLength(1)
+  })
+
+  it('names each source once per section, and no card repeats it @IN-09', async () => {
     renderAt('/')
     await coreRow('2,570,085')
-    const activity = document.querySelector<HTMLElement>('.rx-home__activity')!
-    expect(document.querySelector('#core')).toBeNull()
-    expect(gridTitles(activity)).toEqual([
-      'Core blocks',
-      'Platform transitions',
-      'Pending transactions',
-    ])
-    const pending = await within(activity).findByRole('table', { name: 'Pending transactions' })
-    await waitFor(() => expect(within(pending).getAllByRole('row').length).toBeGreaterThan(1))
-    expect(within(pending).getAllByRole('row').length).toBeLessThanOrEqual(9)
-    expect(within(activity).getByRole('link', { name: 'Mempool' })).toHaveAttribute(
-      'href',
-      '/mempool',
-    )
+    await screen.findByRole('table', { name: 'Pending transactions' })
+    await screen.findByRole('table', { name: /Latest Platform transitions/ })
+    await waitFor(() => expect(lineMarks('#core', 'hyphen')).toHaveLength(1))
+    for (const [where, source] of [
+      ['.rx-hero', 'radar'],
+      ['.rx-hero', 'dapi'],
+      ['#core', 'dapi'],
+      ['#platform', 'pe'],
+    ] as const) {
+      expect(lineMarks(where, source), `${source} in ${where}`).toHaveLength(1)
+    }
+    await waitFor(() => expect(lineMarks('.rx-hero', 'sdk')).toHaveLength(1))
+    for (const scope of ['.rx-hero', '#core', '#platform']) {
+      expect(document.querySelectorAll(`${scope} [data-home-sources]`), scope).toHaveLength(1)
+    }
+    expect(document.querySelector('.rx-home .rx-card__head [data-source]')).toBeNull()
   })
 
-  describe('by width @IN-01 @HY-03', () => {
-    afterEach(() => vi.unstubAllGlobals())
-    const width = (matching: readonly string[]) =>
-      vi.stubGlobal(
-        'matchMedia',
-        (query: string): MediaQueryList =>
-          ({
-            matches: matching.includes(query),
-            media: query,
-            addEventListener: () => undefined,
-            removeEventListener: () => undefined,
-            addListener: () => undefined,
-            removeListener: () => undefined,
-            dispatchEvent: () => false,
-            onchange: null,
-          }) as MediaQueryList,
-      )
+  it("states each figure once: the Core height is the hero's, not a Core figure @HY-01", async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
+    const headline = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#core [data-headline]')
+      expect(el).toHaveTextContent('Blockchain size')
+      return el!
+    })
+    for (const label of ['Difficulty', 'Circulating supply', 'Blockchain size']) {
+      expect(headline).toHaveTextContent(label)
+    }
+    expect(headline).not.toHaveTextContent('Height')
+    expect(headline).not.toHaveTextContent('2,570,085')
+    expect(document.querySelectorAll('[data-headline]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-pulse="core"]')).toHaveLength(1)
+  })
+
+  it('draws the hero, Dash Core and Dash Platform in that order in the page @IN-01 @HY-18', async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
     const follows = (a: Element, b: Element) =>
       Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING)
+    const hero = document.querySelector('.rx-hero')!
+    expect(follows(hero, section('core'))).toBe(true)
+    expect(follows(section('core'), section('platform'))).toBe(true)
+    expect([...document.querySelectorAll('.rx-home h2')].map((h) => h.textContent)).toEqual([
+      'Dash Core',
+      'Dash Platform',
+    ])
+  })
 
-    it('puts the pending band between the hero and the block lists on a phone, in the page and not by CSS', async () => {
-      width(['(max-width: 640px)'])
-      renderAt('/')
-      await coreRow('2,570,085')
-      const activity = document.querySelector('.rx-home__activity')!
-      const band = document.querySelector('#core')!
-      expect(follows(document.querySelector('.rx-scope')!, band)).toBe(true)
-      expect(follows(band, activity)).toBe(true)
-      expect(gridTitles(activity)).toEqual(['Core blocks', 'Platform transitions'])
-      expect(band).toHaveTextContent('Pending transactions')
+  it('lists the Core blocks, then the pending transactions, in the Dash Core section @IN-01 @HY-03', async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
+    const core = section('core')
+    expect(cardTitles(core)).toEqual(['Core blocks', 'Pending transactions'])
+    const pending = await within(core).findByRole('table', { name: 'Pending transactions' })
+    await waitFor(() => expect(within(pending).getAllByRole('row').length).toBeGreaterThan(1))
+    expect(within(pending).getAllByRole('row').length).toBeLessThanOrEqual(9)
+    expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
+    expect(within(core).getByRole('link', { name: 'Mempool' })).toHaveAttribute('href', '/mempool')
+    expect(within(core).getByRole('link', { name: 'Charts' })).toHaveAttribute('href', '/charts')
+  })
+
+  it("carries each Core block row's detail: transactions, size and the reported pool @IN-01 @HY-03", async () => {
+    renderAt('/')
+    await coreRow('2,570,085')
+    const blocks = await screen.findByRole('table', { name: 'Latest Core blocks' })
+    await waitFor(() => expect(within(blocks).getAllByRole('row').length).toBeGreaterThan(1))
+    for (const name of ['Txs', 'Size', 'Mined by']) {
+      expect(within(blocks).getByRole('columnheader', { name })).toBeInTheDocument()
+    }
+    const first = within(blocks).getAllByRole('row')[1]!
+    expect(first.querySelector('td[data-u="tx"]')).toHaveTextContent('9')
+    expect(first.querySelector('td[data-l="Mined by"]')).toHaveTextContent(/\S/)
+    expect(first).toHaveTextContent(/\d(\.\d)? kB/)
+  })
+
+  it('lists the Platform transitions beside the Platform blocks, each block with the Core block it is locked to @IN-01', async () => {
+    renderAt('/')
+    const platform = await waitFor(() => {
+      expect(section('platform')).not.toBeNull()
+      return section('platform')
     })
+    expect(cardTitles(platform)).toEqual(['Platform transitions', 'Platform blocks'])
+    expect(platform).toHaveTextContent('Each Platform block is locked to a Core block.')
+    const blocks = await within(platform).findByRole('table', { name: 'Latest Platform blocks' })
+    await waitFor(() => expect(within(blocks).getAllByRole('row').length).toBeGreaterThan(1))
+    expect(
+      within(blocks).getByRole('columnheader', { name: 'Locked to Core block' }),
+    ).toBeInTheDocument()
+    const first = within(blocks).getAllByRole('row')[1]!
+    expect(first.querySelector('a[href^="/platform/block/"]')).not.toBeNull()
+    expect(first.querySelector('a[href^="/block/"]')).not.toBeNull()
+  })
 
-    it('shows the newest Core height once on a phone: in the card, not again as the first chip @IN-01 @HY-01', async () => {
-      width(['(max-width: 640px)'])
-      renderAt('/')
-      await coreRow('2,570,085')
-      const lane = document.querySelector('#lane-core')!
-      await waitFor(() => expect(lane.querySelectorAll('a.rx-blk').length).toBeGreaterThan(0))
-      const heights = [...lane.querySelectorAll<HTMLElement>('a.rx-blk')].map((a) =>
-        Number(a.dataset.h),
-      )
-      expect(heights).not.toContain(2570085)
-      expect(Math.max(...heights)).toBe(2570084)
-      expect(heights).toHaveLength(8)
-    })
-
-    it('keeps the first chip when the rows on show are the previous tip’s, so no block is on the page twice or not at all on a phone @IN-01', async () => {
-      width(['(max-width: 640px)'])
-      const original = core.blockRows.bind(core)
-      vi.spyOn(core, 'blockRows').mockImplementation(async (n, q, signal) => {
-        const rows = await original(n, q, signal)
-        return { ...rows, data: rows.data.map((r) => ({ ...r, height: r.height - 1 })) }
-      })
-      renderAt('/')
-      await coreRow('2,570,085')
-      const lane = document.querySelector('#lane-core')!
-      await waitFor(() => expect(lane.querySelectorAll('a.rx-blk').length).toBeGreaterThan(0))
-      const heights = [...lane.querySelectorAll<HTMLElement>('a.rx-blk')].map((a) =>
-        Number(a.dataset.h),
-      )
-      expect(heights).toContain(2570084)
-      expect(heights).not.toContain(2570085)
-      expect(heights).toHaveLength(8)
-    })
-
-    it.each(['(min-width: 1024px)', null] as const)(
-      'keeps the newest Core block as the last chip beyond a phone (%s) @IN-01',
-      async (query) => {
-        width(query ? [query] : [])
-        renderAt('/')
-        await coreRow('2,570,085')
-        const lane = document.querySelector('#lane-core')!
-        await waitFor(() => expect(lane.querySelector('a.rx-blk.is-tip')).not.toBeNull())
-        expect(lane.querySelector<HTMLElement>('a.rx-blk.is-tip')!.dataset.h).toBe('2570085')
-      },
-    )
-
-    it('keeps the four pending columns when the pending list sits full width on a tablet', async () => {
-      width([])
-      renderAt('/')
-      await coreRow('2,570,085')
-      expect(document.querySelector('#core')).toBeNull()
-      const pending = await screen.findByRole('table', { name: 'Pending transactions' })
-      expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
-    })
-
-    it('mounts the three-column tree from 1024 px, each row carrying its detail', async () => {
-      width(['(min-width: 1024px)'])
-      renderAt('/')
-      await coreRow('2,570,085')
-      expect(document.querySelector('#core')).toBeNull()
-      const pending = await screen.findByRole('table', { name: 'Pending transactions' })
-      expect(within(pending).getByRole('columnheader', { name: 'Size' })).toBeInTheDocument()
-      const blocks = await screen.findByRole('table', { name: 'Latest Core blocks' })
-      await waitFor(() => expect(within(blocks).getAllByRole('row').length).toBeGreaterThan(1))
-      for (const name of ['Txs', 'Size', 'Mined by']) {
-        expect(within(blocks).getByRole('columnheader', { name })).toBeInTheDocument()
-      }
-      const first = within(blocks).getAllByRole('row')[1]!
-      expect(first.querySelector('td[data-u="tx"]')).toHaveTextContent('9')
-      expect(first.querySelector('td[data-l="Mined by"]')).toHaveTextContent(/\S/)
-      expect(first).toHaveTextContent(/\d(\.\d)? kB/)
-    })
-
-    it('links the charts from the activity header beyond a phone', async () => {
-      width(['(min-width: 1024px)'])
-      renderAt('/')
-      await coreRow('2,570,085')
-      const head = document.querySelector<HTMLElement>('.rx-activity .rx-sec__head')!
-      expect(within(head).getByRole('link', { name: 'Charts' })).toHaveAttribute('href', '/charts')
-    })
-
-    it('keeps the charts link in the Dash Core band on a phone and out of the activity header', async () => {
-      width(['(max-width: 640px)'])
-      renderAt('/')
-      await coreRow('2,570,085')
-      expect(document.querySelector('.rx-activity .rx-sec__head a')).toBeNull()
-      const band = document.querySelector<HTMLElement>('#core')!
-      expect(within(band).getByRole('link', { name: 'Charts' })).toBeInTheDocument()
-    })
+  it('pauses the Core lists and counts what arrived meanwhile @IN-01', async () => {
+    const user = userEvent.setup()
+    renderAt('/')
+    await coreRow('2,570,085')
+    const control = () => document.querySelector<HTMLElement>('#core .rx-live')!
+    await user.click(within(control()).getByRole('button', { name: 'Pause block updates' }))
+    expect(control()).toHaveTextContent('Paused')
+    await user.click(within(control()).getByRole('button', { name: 'Resume block updates' }))
+    expect(control()).toHaveTextContent('Live')
   })
 
   it('shows the Core height and difficulty as soon as the status answers, without the tip @HY-01 @IN-01', async () => {
     vi.spyOn(core, 'tip').mockImplementation(() => new Promise(() => undefined))
     renderAt('/')
+    const height = await coreRow('2,570,085')
+    expect(height.querySelector('[data-source="dapi"]')).not.toBeNull()
     const headline = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('[data-headline]')
-      expect(el).toHaveTextContent(/Height.*2,570,085/)
+      expect(el).toHaveTextContent(/Difficulty.*106,426,839\.80/)
       return el!
     })
-    expect(headline).toHaveTextContent(/Difficulty.*106,426,839\.80/)
     expect(headline.querySelector('[data-source="dapi"]')).not.toBeNull()
+    expect(lineMarks('#core', 'dapi')).toHaveLength(1)
   })
 
   it('keeps the digits of a difficulty below one @IN-16', async () => {
@@ -208,51 +200,6 @@ describe('Home page', () => {
       return el!
     })
     expect(headline).not.toHaveTextContent(/Difficulty\s*0(?!\.)/)
-  })
-
-  it('offers a jump to the Core figures from the top of the page @HY-01', async () => {
-    renderAt('/')
-    const link = await screen.findByRole('link', { name: 'Core figures' })
-    expect(link).toHaveAttribute('href', '#core-figures')
-    expect(document.getElementById('core-figures')).not.toBeNull()
-  })
-
-  it('offers a jump to the latest blocks beside the one to the Core figures @HY-01', async () => {
-    renderAt('/')
-    const core = await screen.findByRole('link', { name: 'Core figures' })
-    const latest = screen.getByRole('link', { name: 'Latest blocks' })
-    expect(latest).toHaveAttribute('href', '#h-latest')
-    expect(latest.parentElement).toBe(core.parentElement)
-    await waitFor(() => expect(document.getElementById('h-latest')).not.toBeNull())
-  })
-
-  it('shows the Core headline figures inside the hero plate, ahead of the lanes @HY-01 @HY-03', async () => {
-    renderAt('/')
-    const headline = await waitFor(() => {
-      const el = document.querySelector<HTMLElement>('.rx-scope [data-headline]')
-      expect(el).not.toBeNull()
-      return el!
-    })
-    for (const label of ['Height', 'Difficulty', 'Circulating supply', 'Blockchain size']) {
-      expect(headline).toHaveTextContent(label)
-    }
-    const lanes = document.querySelector('.rx-scope .rx-lanes')!
-    expect(
-      headline.compareDocumentPosition(lanes) & Node.DOCUMENT_POSITION_FOLLOWING,
-      'headline precedes the lanes',
-    ).toBeTruthy()
-    expect(document.querySelectorAll('[data-headline]')).toHaveLength(1)
-    expect(
-      document.querySelector('.rx-home__activity [data-headline]'),
-      'no second headline in the activity',
-    ).toBeNull()
-  })
-
-  it('keeps the Platform-locked-to-Core line on the lane title for phones @IN-01', async () => {
-    renderAt('/')
-    const title = await screen.findByRole('heading', { name: 'Latest blocks' })
-    expect(title).toHaveAttribute('title', 'Each Platform block is locked to a Core block.')
-    expect(document.querySelector('.rx-lanes__short')).toHaveTextContent('Platform locks to Core')
   })
 
   it('says one node reported a ChainLock on the home lists instead of drawing a lock @IN-01', async () => {
@@ -283,11 +230,7 @@ describe('Home page', () => {
         5,
       ),
     )
-    const lane = document.querySelector('#lane-core')!
-    await waitFor(() =>
-      expect(lane.querySelectorAll('[data-claim="one-node"]').length).toBeGreaterThan(3),
-    )
-    expect(lane.querySelector('.rx-lock')).toBeNull()
+    expect(blocks.querySelector('.rx-lock')).toBeNull()
     vi.restoreAllMocks()
   })
 
@@ -311,42 +254,31 @@ describe('Home page', () => {
     expect(row.querySelector('[data-source="pe"]')).toBeNull()
   })
 
-  it('shows the census headline from Radar @IN-01', async () => {
+  it('shows the share of masternodes answering from Radar, toned by how many answered @IN-01', async () => {
     renderAt('/')
     const row = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('[data-pulse="census"]')
-      expect(el).toHaveTextContent(/\d[\d,]* of \d[\d,]*/)
+      expect(el).toHaveTextContent(/\d+(\.\d)?%/)
       return el!
     })
+    expect(row).toHaveAttribute('data-tone', 'good')
+    expect(row).toHaveTextContent(/[\d,]+ didn't answer/)
     expect(row.querySelector('[data-source="radar"]')).not.toBeNull()
+    expect(lineMarks('.rx-hero', 'radar')).toHaveLength(1)
   })
 
-  it('adds the answered-node count and its change on yesterday to the census row @RA-01', async () => {
-    renderAt('/')
-    const nodes = await waitFor(() => {
-      const el = document.querySelector<HTMLElement>('[data-pulse="census"] [data-census-nodes]')
-      expect(el).not.toBeNull()
-      return el!
-    })
-    expect(nodes).toHaveTextContent('2,581 nodes (\u22121)')
-    expect(
-      nodes.closest('[data-pulse="census"]')!.querySelector('.rx-pulse__meta'),
-    ).toHaveTextContent(/crawled/)
-  })
-
-  it('links the census row to the Core 24 tracker while it is pending @RA-11', async () => {
+  it('links to the Core 24 tracker while it is pending @RA-11', async () => {
     renderAt('/')
     const link = await waitFor(() => {
-      const el = document.querySelector<HTMLAnchorElement>('[data-pulse="census"] [data-v24-link]')
+      const el = document.querySelector<HTMLAnchorElement>('.rx-hero [data-v24-link]')
       expect(el).not.toBeNull()
       return el!
     })
     expect(link).toHaveAttribute('href', '/v24')
-    expect(link).toHaveTextContent('Core 24')
     expect(link).toHaveAccessibleName('Core 24 activation')
   })
 
-  it('draws the masternode map from the crawl, with the busiest place called out @IN-01', async () => {
+  it('draws the masternode map from the crawl, with each place named in its tooltip and nothing over the map @IN-01', async () => {
     renderAt('/')
     const map = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('[data-map="nodes"]')
@@ -354,7 +286,8 @@ describe('Home page', () => {
       return el!
     })
     expect(map.querySelectorAll('circle.mn').length).toBeGreaterThan(10)
-    expect(map.querySelector('.rx-callout')).toHaveTextContent(/masternodes/)
+    expect(map.querySelector('.rx-callout')).toBeNull()
+    expect(map.querySelector('svg title')).toHaveTextContent(/\S: [\d,]+ masternodes/)
     expect(map.querySelector('[data-source="radar"]')).not.toBeNull()
     expect(screen.queryByText(/not loaded yet|Arrives with/)).toBeNull()
   })
@@ -364,27 +297,28 @@ describe('Home page', () => {
     const legend = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('.rx-maplegend .rx-maplegend__sum')
       expect(el).not.toBeNull()
-      return el!.parentElement!
+      return el!.closest<HTMLElement>('.rx-maplegend')!
     })
     const keys = legend.querySelectorAll('.rx-maplegend__key')
     expect(keys).toHaveLength(2)
     expect(keys[0]!.querySelector('i.d')).not.toBeNull()
     expect(keys[0]!.querySelector('i.d--all')).toBeNull()
     expect(keys[1]!.querySelector('i.d.d--all')).not.toBeNull()
-    expect(keys[0]).toHaveTextContent('Masternodes')
+    expect(keys[0]).toHaveTextContent(/masternodes in/)
     expect(keys[1]).toHaveTextContent('Other reachable nodes')
     expect(legend.querySelector('.rx-maplegend__sum')).toHaveTextContent(/masternodes in/)
   })
 
   it('dates the crawl in the present, not centuries ahead @IN-01', async () => {
     renderAt('/')
-    const row = await waitFor(() => {
-      const el = document.querySelector<HTMLElement>('[data-pulse="census"]')
+    const crawled = await waitFor(() => {
+      const el = document.querySelector<HTMLTimeElement>(
+        '.rx-hero [data-home-sources] [data-source="radar"] time',
+      )
       expect(el).not.toBeNull()
-      expect(el!.querySelector('.rx-pulse__meta time')).not.toBeNull()
       return el!
     })
-    const crawled = row.querySelector<HTMLTimeElement>('.rx-pulse__meta time')!
+    expect(crawled.closest('[data-source]')).toHaveTextContent(/Crawled by Radar/)
     const years = Math.abs(Date.now() - Date.parse(crawled.dateTime)) / (365 * 86_400_000)
     expect(years).toBeLessThan(5)
     expect(crawled.title).not.toMatch(/\d{5}/)
@@ -482,7 +416,7 @@ describe('Home page', () => {
     renderAt('/')
     await coreRow('2,570,085')
     const kicker = () => document.querySelector<HTMLElement>('[data-live-word]')!
-    const lanes = () => document.querySelector<HTMLElement>('.rx-lanes .rx-live')!
+    const lanes = () => document.querySelector<HTMLElement>('#core .rx-live')!
     const tip = () => document.querySelector<HTMLElement>('[data-header-tip]')!
     expect(kicker()).toHaveTextContent('Live')
     act(() => setLiveConnection({ state: 'reconnecting', lastEventAt: Date.now() }))
@@ -524,15 +458,17 @@ describe('Home page', () => {
       expect(el).toHaveTextContent('Best ChainLock')
       return el!
     })
-    expect(headline).toHaveTextContent('Last block')
+    expect(headline).toHaveTextContent('Difficulty')
     expect(headline).not.toHaveTextContent('Circulating supply')
+    expect(document.querySelector('[data-pulse="core"] time')).not.toBeNull()
     const note = await screen.findByRole('note')
     expect(note).toHaveTextContent(/Supply and blockchain size are not shown until it catches up/)
     expect(note).toHaveTextContent(/See the sources/)
     expect(note).toHaveTextContent(
       /Testnet index is behind the chain: indexed to block [\d,]+ \(.+ behind\)/,
     )
-    expect(headline.querySelectorAll('[data-source="dapi"]').length).toBe(1)
+    expect(lineMarks('#core', 'dapi')).toHaveLength(1)
+    expect(lineMarks('#core', 'hyphen')).toHaveLength(0)
   })
 
   it('words a one-node best ChainLock as a claim on the stale-Hyphen headline @IN-16', async () => {
@@ -561,7 +497,7 @@ describe('Home page', () => {
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
     const find = () =>
-      [...document.querySelectorAll('.rx-activity__grid .rx-card')].find((c) =>
+      [...document.querySelectorAll('#core .rx-home__lists .rx-card')].find((c) =>
         c.textContent?.includes('Pending transactions'),
       ) as HTMLElement
     const column = await waitFor(() => {
@@ -576,14 +512,61 @@ describe('Home page', () => {
     })
     expect(within(table).getAllByRole('row')).toHaveLength(2)
     expect(find()).toHaveTextContent('Seen since you opened this page')
-    expect(find().querySelector('[data-source="dapi"]')).not.toBeNull()
+    expect(lineMarks('#core', 'dapi')).toHaveLength(1)
+    expect(lineMarks('#core', 'hyphen')).toHaveLength(0)
     act(() => deliver?.({ kind: 'block', txids: [tx.txid] }))
     await waitFor(() => expect(find()).toHaveTextContent('Nothing seen yet'))
+  })
+
+  it('lists the newest eight once the feed has delivered more transactions than the seen list hands out @HY-19 @HY-03', async () => {
+    let deliver: ((e: LiveTxEvent) => void) | undefined
+    vi.spyOn(coreLive, 'transactions').mockImplementation((_net, listener) => {
+      deliver = listener
+      return () => undefined
+    })
+    vi.spyOn(coreLive, 'txStatus').mockReturnValue({ state: 'live', fallbackHint: false })
+    renderAt('/?network=testnet')
+    await coreRow('1,589,232')
+    const tx = { ...(await core.tx('testnet', TESTNET_TX)).data!, height: undefined }
+    act(() => {
+      for (let i = 0; i < 25; i++) {
+        deliver?.({ kind: 'tx', tx: { ...tx, txid: i.toString(16).padStart(64, '0') } })
+      }
+    })
+    const table = await screen.findByRole('table', {
+      name: 'Pending transactions seen since you opened this page',
+    })
+    expect(within(table).getAllByRole('row')).toHaveLength(9)
   })
 
   it('works on testnet and names the network @IN-16 @HY-19', async () => {
     renderAt('/?network=testnet')
     await coreRow('1,589,232')
     expect(document.querySelector('[data-net]')).toHaveTextContent(/testnet/i)
+  })
+
+  it('keeps its shape in Decentralized only mode: the chain figures, one note per section and no empty cells @X-05', async () => {
+    renderAt('/?sources=decentralized')
+    await coreRow('2,570,085')
+    const hero = document.querySelector<HTMLElement>('.rx-hero')!
+    expect(within(hero).getByRole('heading', { level: 1 })).toHaveTextContent(
+      'The Dash network, now',
+    )
+    expect(hero.querySelector('[data-pulse="census"]')).toBeNull()
+    expect(hero.querySelectorAll('.rx-fig')).toHaveLength(2)
+    expect(hero.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1)
+    expect(hero.querySelector('[data-map="land"]')).not.toBeNull()
+    expect(lineMarks('.rx-hero', 'radar')).toHaveLength(0)
+    await waitFor(() => expect(lineMarks('.rx-hero', 'sdk')).toHaveLength(1))
+    const platform = section('platform')
+    expect(platform.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1)
+    expect(platform.querySelector('.rx-card')).toBeNull()
+    const core = section('core')
+    expect(core.querySelector('[data-headline]')).toHaveTextContent('Best ChainLock')
+    expect(lineMarks('#core', 'hyphen')).toHaveLength(0)
+    await within(core).findByRole('table', { name: 'Latest Core blocks' })
+    for (const fig of document.querySelectorAll('.rx-home .rx-fig__value')) {
+      expect(fig.textContent, 'no figure is an empty cell').toMatch(/\d/)
+    }
   })
 })
