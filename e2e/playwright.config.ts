@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const live = process.env.E2E_LIVE === '1'
 const fixturePort = Number(process.env.E2E_PORT ?? 4173)
-const livePort = 4174
+const livePort = Number(process.env.E2E_PORT ?? 4174)
 const port = live ? livePort : fixturePort
 
 const profiles = {
