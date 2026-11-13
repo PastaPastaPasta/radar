@@ -5,6 +5,7 @@ import { trustedWorkerUrl } from '../trusted-worker'
 import workerUrl from './decode.worker.ts?worker&url'
 import type { NetworkId } from '@/lib/network'
 import { HEADER_BYTES, headerAsEmptyBlock } from '@/lib/core/header'
+import { parseMnListDiff } from './mn-list-decode'
 import { bip34Height, blockHeightOf, mapBlock, mapTx, NO_HEIGHT, wasmNetwork } from './convert'
 import type { CoreDecoder, DapiMnListDiff, DecodedBlock, DecodedIsLock, DecodedTx } from './types'
 
@@ -67,14 +68,8 @@ export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & 
         throw invalid('header', cause)
       }
     },
-    mnListDiff(): Promise<DapiMnListDiff> {
-      return Promise.reject(
-        new SourceError({
-          source: 'local',
-          kind: 'unavailable',
-          message: 'Masternode list diffs are not decoded yet',
-        }),
-      )
+    mnListDiff(bytes): Promise<DapiMnListDiff> {
+      return Promise.resolve().then(() => parseMnListDiff(bytes).diff)
     },
     isLock(bytes): Promise<DecodedIsLock> {
       return Promise.resolve().then(() => parseIsLock(bytes))
