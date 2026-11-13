@@ -959,6 +959,26 @@
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "9L8AAfpUpzfZ8UHdJatYP2FuqqmBHfzvkbfAvB5aFXzm",
+              "3ej3CDoGGSwypWrMFvhpyVCrwL4rXY2G9m8bkARsv395",
+              "HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
     ]
   ],
   "testnet": [
@@ -1138,6 +1158,29 @@
               "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
               "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
               "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "9m1QYXVRyUpg99PyVD6DcdffuMhsJfgwLDxTeAg6PxDj",
+              "EXHftJ1DQ9SsLFSJgv8p2GiVNC4qtCbKdmNmub9ktGNu",
+              "G1SAVd3dfdjNHJo2YmaNmhKThEa9kPVcwefCpeinC8ce",
+              "6FXtcgNdvAkS4kiVWJVDAsoDRyPhWbhifWsG5uZdPKsh",
+              "5Bxsq9Q9VXsfBTV6kE9MfJXKwW9DRNeFEXDPYabJVvhe",
+              "DAW7oCjjStehuoR257gzNbx3s8eiV8vZWAet4ZxsTMtF"
             ]
           ]
         ],
