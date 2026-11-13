@@ -8,14 +8,16 @@ const CLAIM_BEARING = new Set(['tx', 'block', 'block-rows'])
 
 /** True for a query no hosted source could have answered: the SDK's, and DAPI's that carry no claim. */
 function ownAnswer(query: Query): boolean {
-  const [, source, resource] = query.queryKey as readonly unknown[]
+  const [, source, resource] = query.queryKey
   if (source === 'sdk') return true
-  if (source !== 'dapi' || (typeof resource === 'string' && CLAIM_BEARING.has(resource))) return false
+  if (source !== 'dapi' || (typeof resource === 'string' && CLAIM_BEARING.has(resource)))
+    return false
   const data = query.state.data as { source?: unknown; fallback?: unknown } | undefined
   return !(
     data &&
     typeof data === 'object' &&
-    ((typeof data.source === 'string' && isHostedSource(data.source)) || data.fallback !== undefined)
+    ((typeof data.source === 'string' && isHostedSource(data.source)) ||
+      data.fallback !== undefined)
   )
 }
 
