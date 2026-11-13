@@ -190,11 +190,3 @@ export const dkgRuleUrl = (rules: DkgRules): string =>
 
 export const isDkgCheck = (id: string): id is DkgCheckId =>
   (DKG_CHECK_ORDER as readonly string[]).includes(id)
-
-/** The newest epochs first; `epoch` picks one, otherwise the newest. */
-export function pickEpoch<T extends { epoch: number }>(
-  epochs: readonly T[],
-  epoch: number | undefined,
-): T | undefined {
-  return epoch === undefined ? epochs[0] : epochs.find((e) => e.epoch === epoch)
-}

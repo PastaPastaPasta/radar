@@ -1,0 +1,260 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://radar.dashhq.org/api/v1/testnet/masternodes/1d0adeaf787ed8f6f73fa936c6313ddfa2dd33ea693a2de22bc346c1b73a4a02"
+  },
+  "recordedAt": "2026-11-13T09:44:32.682Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"0a7dfc636987d1d16091ba5a2fcd5e71\"",
+    "cache-control": "no-cache"
+  },
+  "body": {
+    "as_org": "Amazon.com, Inc.",
+    "asn": 16509,
+    "changes": [],
+    "city": "Mesa",
+    "collateral": "4ee3ff5074723d995f4cb957a954587c6c637a42655ada8f4054037b28d1e7a8-60",
+    "collateral_address": null,
+    "consecutive_payments": 0,
+    "continent": "NA",
+    "core_p2p": [{ "address": "68.67.122.54:19999", "network": "ipv4" }],
+    "country": "US",
+    "dkg_readiness": {
+      "checks": { "filters": "pass", "protocol": "pass", "reachable": "pass", "relay": "pass" },
+      "overall": "pass",
+      "rules": {
+        "compact_filters_bit": 6,
+        "core_commit": "v24.0.0",
+        "core_max_failed_outbound": 5,
+        "min_protocol": 70242,
+        "protocol_check": true,
+        "reach_failures": 3,
+        "release": "Dash Core 24"
+      }
+    },
+    "first_seen": 1793305672,
+    "last_error": null,
+    "last_paid_height": 1590752,
+    "last_seen": 1794562162,
+    "lat": 33.42,
+    "latency_ms": 168,
+    "lon": -111.83,
+    "network": "ipv4",
+    "operator_payout_address": null,
+    "operator_reward": 0,
+    "owner_address": "yVrmRrt41RphydKEErNYWguQEvjNHqwFSw",
+    "payments": [
+      {
+        "amount_duffs": 111614333,
+        "block_hash": "00000010fee2c90061c06d9d7d61301982e4d55a4d56b73b7d2a3a0273d29542",
+        "height": 1590752,
+        "time": 1794551120
+      },
+      {
+        "amount_duffs": 111612776,
+        "block_hash": "0000005638d4b2795abf022ff7a6ef7aa3ca2be297f863aad8717bec83f23c16",
+        "height": 1590642,
+        "time": 1794535497
+      },
+      {
+        "amount_duffs": 111643123,
+        "block_hash": "0000003e5c3ae9d2c22d1b29dc86c406d562a8f4b90a674a5b0e1ed484b9e619",
+        "height": 1590532,
+        "time": 1794520240
+      },
+      {
+        "amount_duffs": 111750545,
+        "block_hash": "000000044301f7b6c39801883297cd9cdcc8a4b50c2960fd0f584a3ee9ab26fe",
+        "height": 1590422,
+        "time": 1794504904
+      },
+      {
+        "amount_duffs": 111719806,
+        "block_hash": "000000149778d5245154c5d87038013a332c44b6786b79e50fbd113282db2a35",
+        "height": 1590313,
+        "time": 1794488210
+      },
+      {
+        "amount_duffs": 111613766,
+        "block_hash": "00000081c04a1c63ee24461b00db9dd98fc50859b20acc5e983aebe46d0a3191",
+        "height": 1590204,
+        "time": 1794471386
+      },
+      {
+        "amount_duffs": 111666183,
+        "block_hash": "0000002a2c524b50c48149ccbfc4bc0ad195b8490f66b3ca398fb0c0b62c8c4b",
+        "height": 1590095,
+        "time": 1794455941
+      },
+      {
+        "amount_duffs": 111656933,
+        "block_hash": "000000adcddf5ddc8e5c92474fe420445f1be3baff33af05249a682ed82f61d4",
+        "height": 1589986,
+        "time": 1794441491
+      },
+      {
+        "amount_duffs": 111704918,
+        "block_hash": "000000f565e4d95bdc490021c8883e76d60c61bf3405ecc828d5668996dc28af",
+        "height": 1589878,
+        "time": 1794425086
+      },
+      {
+        "amount_duffs": 111650164,
+        "block_hash": "000000873c6d70d24933ba4a627c3280f8b30d8d9c067610ddcd3d46cfdd8100",
+        "height": 1589770,
+        "time": 1794409897
+      },
+      {
+        "amount_duffs": 111618605,
+        "block_hash": "0000009381f9e2e9d9c8c31bfc673c864b0353dce8d6fcd216319958070534d9",
+        "height": 1589662,
+        "time": 1794395326
+      },
+      {
+        "amount_duffs": 111620990,
+        "block_hash": "00000068b298b4cdb7be9af519d2620eee76510ea6cc8d35a38e3e93870e4fb0",
+        "height": 1589554,
+        "time": 1794379853
+      },
+      {
+        "amount_duffs": 111613300,
+        "block_hash": "0000004af0d69c31a6aeba12e15e88785ee85588677039d3ef8a1956fd07f531",
+        "height": 1589446,
+        "time": 1794364816
+      },
+      {
+        "amount_duffs": 111619713,
+        "block_hash": "000000efce1c1fceb2a980d0d2b7660cad8ba0f2464ce9f6c86ae06dbfc7d684",
+        "height": 1589338,
+        "time": 1794349732
+      },
+      {
+        "amount_duffs": 111618884,
+        "block_hash": "0000007e7995a6359314637e8b2398da0663b3fe315e6c5e98406aec5b895af3",
+        "height": 1589230,
+        "time": 1794335223
+      },
+      {
+        "amount_duffs": 111618884,
+        "block_hash": "000000e200d7c1f99f9042b256266567aa11b3fdf4235d09607149d776c95870",
+        "height": 1589123,
+        "time": 1794321204
+      },
+      {
+        "amount_duffs": 111634775,
+        "block_hash": "00000031f4b9f88e6936c8e2fad066afc85e0b367692ab656809178fbc14d96b",
+        "height": 1589016,
+        "time": 1794306084
+      },
+      {
+        "amount_duffs": 111705225,
+        "block_hash": "0000080924874cc5c65a2934b7a964c2fbc4880e196cfe0018fda40ad235428c",
+        "height": 1588909,
+        "time": 1794292082
+      },
+      {
+        "amount_duffs": 111618884,
+        "block_hash": "000000566e902beed259de2e564aa45aa38bfe98fb273eab4613234cb253040f",
+        "height": 1588802,
+        "time": 1794277417
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "000001148992d3d76ce1d74903076a35d4db05eaf7d1364dbf5161e787a5077d",
+        "height": 1588695,
+        "time": 1794262393
+      },
+      {
+        "amount_duffs": 111619578,
+        "block_hash": "0000002bc1429e04c362417c692bbe32e9f37edf7a87fb461a31a37a6171af41",
+        "height": 1588588,
+        "time": 1794246017
+      },
+      {
+        "amount_duffs": 111612112,
+        "block_hash": "0000009589b263b2ca7b7bba6c70a6cc95702995d35b552ff9bf337a1569162b",
+        "height": 1588481,
+        "time": 1794231076
+      },
+      {
+        "amount_duffs": 111611384,
+        "block_hash": "0000012cc6eb98f6d1bd7336d928c600df0fd4f66c9f1971e66e731318e51830",
+        "height": 1588374,
+        "time": 1794216528
+      },
+      {
+        "amount_duffs": 111626553,
+        "block_hash": "000000354ab91c7c71a70be4c65cf8a90a69b91e5a2369ddeaafc53c1ddfe112",
+        "height": 1588267,
+        "time": 1794203973
+      },
+      {
+        "amount_duffs": 111633884,
+        "block_hash": "0000003b2a93790e914572fce61c049e8e15e1a4a72a118d69d09e6ea279eb6b",
+        "height": 1588160,
+        "time": 1794188056
+      }
+    ],
+    "payments_summary": {
+      "count": 7279,
+      "first_height": 838373,
+      "indexed": { "from": 7300, "to": 1590840 },
+      "total_duffs": 1231205503002
+    },
+    "payout_address": "yVXDAM73Tg6A44Bm3qduXsMCYxzuqBCT48",
+    "platform_banned": false,
+    "platform_https": null,
+    "platform_node_id": null,
+    "platform_p2p": null,
+    "pose_ban_height": -1,
+    "pose_penalty": 0,
+    "pose_revived_height": 1542889,
+    "protocol": 70242,
+    "protx": "1d0adeaf787ed8f6f73fa936c6313ddfa2dd33ea693a2de22bc346c1b73a4a02",
+    "pubkey_operator": "8b7c76ec03f7ae0dc9be41fb9168906ef0d0d4de74f0ad8c5cf0a30483879b5203ae5d7c6aeee5b92998444bc10f68ec",
+    "reachable": true,
+    "registered_height": 838365,
+    "relay": true,
+    "removed": null,
+    "returns": {
+      "annual_yield": 2.7342,
+      "indexed_since": 1545127296,
+      "paid_30d": 20204770433,
+      "paid_365d": 316522685791,
+      "paid_90d": 67417578903,
+      "window_days": 90
+    },
+    "revocation_reason": 0,
+    "service": "68.67.122.54:19999",
+    "services": 7237,
+    "start_height": 1590839,
+    "status": "enabled",
+    "type": "Regular",
+    "uptime_daily": [
+      { "attempts": 17, "day": "2026-10-29", "ok": 17 },
+      { "attempts": 64, "day": "2026-10-30", "ok": 64 },
+      { "attempts": 99, "day": "2026-10-31", "ok": 99 },
+      { "attempts": 97, "day": "2026-11-01", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-02", "ok": 96 },
+      { "attempts": 97, "day": "2026-11-03", "ok": 97 },
+      { "attempts": 96, "day": "2026-11-04", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-05", "ok": 96 },
+      { "attempts": 98, "day": "2026-11-06", "ok": 98 },
+      { "attempts": 96, "day": "2026-11-07", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-08", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-09", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-10", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-11", "ok": 96 },
+      { "attempts": 96, "day": "2026-11-12", "ok": 96 },
+      { "attempts": 38, "day": "2026-11-13", "ok": 38 }
+    ],
+    "user_agent": "/Dash Core:24.0.0(dcg-masternode-25)/",
+    "version": "24.0.0",
+    "versions": [
+      { "protocol": 70242, "ts": 1793305680, "user_agent": "/Dash Core:24.0.0(dcg-masternode-25)/" }
+    ],
+    "voting_address": "yVrmRrt41RphydKEErNYWguQEvjNHqwFSw"
+  }
+}
