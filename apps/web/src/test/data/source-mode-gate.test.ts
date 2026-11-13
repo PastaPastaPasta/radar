@@ -187,7 +187,56 @@ describe('Decentralized only mode: queries, prefetches and the cache @X-05 @X-09
     stop()
   })
 
-  it('resets every query, since a hosted answer can sit under any key', () => {
+  it('resets once per change of the mode in force, not per change of the remembered choice or the link', () => {
+    writeSourceMode('all')
+    const c = client()
+    const reset = vi.spyOn(c, 'resetQueries')
+    const stop = watchSourceMode(c)
+    writeSourceMode('decentralized')
+    expect(reset).toHaveBeenCalledTimes(1)
+    writeSourceMode('decentralized')
+    setSourceModeFromLink('decentralized')
+    setSourceModeFromLink(undefined)
+    writeSourceMode('decentralized')
+    expect(reset).toHaveBeenCalledTimes(1)
+    setSourceModeFromLink('decentralized')
+    writeSourceMode('all')
+    expect(reset).toHaveBeenCalledTimes(1)
+    setSourceModeFromLink(undefined)
+    expect(reset).toHaveBeenCalledTimes(2)
+    stop()
+  })
+
+  it('keeps DAPI and SDK answers, and drops everything a hosted source could have answered', () => {
+    writeSourceMode('all')
+    const c = client()
+    const own = { source: 'dapi', data: 1 }
+    c.setQueryData(['mainnet', 'sdk', 'platform-status'], { source: 'sdk', data: 1 })
+    c.setQueryData(['mainnet', 'dapi', 'tip'], own)
+    c.setQueryData(['mainnet', 'dapi', 'headers', { from: 1, count: 2 }], own)
+    c.setQueryData(['mainnet', 'dapi', 'tx', { txid: 'a' }], own)
+    c.setQueryData(['mainnet', 'dapi', 'block', 'h1'], own)
+    c.setQueryData(['mainnet', 'dapi', 'status'], { source: 'dapi', data: 1, fallback: 'budget' })
+    c.setQueryData(['mainnet', 'dapi', 'chainlock'], { source: 'hyphen', data: 1 })
+    c.setQueryData(['mainnet', 'view', 'tx-utxos'], { found: 1 })
+    c.setQueryData(['mainnet', 'hyphen', 'mempool'], { source: 'hyphen', data: 1 })
+    resetForSourceMode(c)
+    const kept = (...key: unknown[]) => c.getQueryData(key)
+    expect(kept('mainnet', 'sdk', 'platform-status')).toBeDefined()
+    expect(kept('mainnet', 'dapi', 'tip')).toBeDefined()
+    expect(kept('mainnet', 'dapi', 'headers', { from: 1, count: 2 })).toBeDefined()
+    for (const key of [
+      ['mainnet', 'dapi', 'tx', { txid: 'a' }],
+      ['mainnet', 'dapi', 'block', 'h1'],
+      ['mainnet', 'dapi', 'status'],
+      ['mainnet', 'dapi', 'chainlock'],
+      ['mainnet', 'view', 'tx-utxos'],
+      ['mainnet', 'hyphen', 'mempool'],
+    ])
+      expect(kept(...key)).toBeUndefined()
+  })
+
+  it('resets every query a hosted answer could sit under', () => {
     writeSourceMode('all')
     const c = client()
     c.setQueryData(['mainnet', 'view', 'tx-utxos'], { found: 1 })
