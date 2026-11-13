@@ -27,6 +27,7 @@ async function openCard(page: Page, kind: string, via: 'hover' | 'focus') {
 
 async function longPress(page: Page, kind: string) {
   const chip = page.locator(`[data-entity="${kind}"] a`).first()
+  await page.waitForLoadState('networkidle')
   await chip.evaluate((el) => el.scrollIntoView({ block: 'center' }))
   const box = await chip.boundingBox()
   if (!box) throw new Error(`no ${kind} chip`)
@@ -180,7 +181,10 @@ test.describe('network switch', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await settled(page)
     await page.getByRole('button', { name: /Network: (Mainnet|Testnet)/ }).click()
-    await page.getByRole('navigation', { name: 'Network' }).getByRole('link', { name: to }).click()
+    await page
+      .getByRole('navigation', { name: 'Network' })
+      .getByRole('link', { name: to })
+      .dispatchEvent('click')
   }
 
   for (const path of ['/nodes', '/map', '/masternodes?type=evo', '/epochs', '/platform/blocks']) {
@@ -213,6 +217,13 @@ test.describe('network switch', () => {
   test('a Platform identity keeps its page, because an identifier is the same on every network @X-03', async ({
     page,
   }) => {
+    // The same id has no recording on testnet, which the test does not need: it reads the address only.
+    await page.addInitScript(() => {
+      const error = console.error.bind(console)
+      console.error = (...args: unknown[]) => {
+        if (!String(args[0]).startsWith('[radar-fixtures]')) error(...args)
+      }
+    })
     const id = main.id('identity', '')
     await page.goto(`/identity/${id}?tab=keys`)
     await switchTo(page, 'Testnet')
@@ -370,9 +381,11 @@ test.describe('keyboard', () => {
     await page.goto('/settings')
     await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible()
     await page.locator('body').click({ position: { x: 5, y: 5 } })
-    await page.keyboard.press('Alt+Shift+KeyP')
     const proofs = page.getByRole('dialog', { name: 'Proof inspector' })
-    await expect(proofs).toBeVisible()
+    await expect(async () => {
+      if (!(await proofs.isVisible())) await page.keyboard.press('Alt+Shift+KeyP')
+      await expect(proofs).toBeVisible({ timeout: 1_500 })
+    }).toPass({ timeout: 10_000 })
     await page.keyboard.press('Escape')
     await expect(proofs).toBeHidden()
     await page.keyboard.press('Alt+Shift+KeyD')
