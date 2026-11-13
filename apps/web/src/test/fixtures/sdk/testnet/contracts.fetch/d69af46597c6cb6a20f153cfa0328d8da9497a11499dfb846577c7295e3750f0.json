@@ -1,0 +1,465 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "Y189uedQG3CJCuu83P3DqnG7ngQaRKz69x3gY8uDzQe"
+  },
+  "recordedAt": "2026-11-13T17:08:47.560Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "Y189uedQG3CJCuu83P3DqnG7ngQaRKz69x3gY8uDzQe",
+      "ownerId": "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc",
+      "version": 1,
+      "documentSchemas": {
+        "withdrawal": {
+          "description": "Withdrawal document to track underlying withdrawal transactions. Withdrawals should be created with IdentityWithdrawalTransition",
+          "creationRestrictionMode": 2,
+          "type": "object",
+          "indices": [
+            {
+              "name": "identityStatus",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "status": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "identityRecent",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                },
+                {
+                  "status": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "pooling",
+              "properties": [
+                {
+                  "status": "asc"
+                },
+                {
+                  "pooling": "asc"
+                },
+                {
+                  "coreFeePerByte": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "transaction",
+              "properties": [
+                {
+                  "status": "asc"
+                },
+                {
+                  "transactionIndex": "asc"
+                }
+              ],
+              "unique": false
+            }
+          ],
+          "properties": {
+            "transactionIndex": {
+              "type": "integer",
+              "description": "Sequential index of asset unlock (withdrawal) transaction. Populated when a withdrawal pooled into withdrawal transaction",
+              "minimum": 1,
+              "position": 0
+            },
+            "transactionSignHeight": {
+              "type": "integer",
+              "description": "The Core height on which transaction was signed",
+              "minimum": 1,
+              "position": 1
+            },
+            "amount": {
+              "type": "integer",
+              "description": "The amount to be withdrawn",
+              "minimum": 1000,
+              "position": 2
+            },
+            "coreFeePerByte": {
+              "type": "integer",
+              "description": "This is the fee that you are willing to spend for this transaction in Duffs/Byte",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 3
+            },
+            "pooling": {
+              "type": "integer",
+              "description": "This indicated the level at which Platform should try to pool this transaction",
+              "enum": [0, 1, 2],
+              "position": 4
+            },
+            "outputScript": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 23,
+              "maxItems": 25,
+              "position": 5
+            },
+            "status": {
+              "type": "integer",
+              "enum": [0, 1, 2, 3, 4],
+              "description": "0 - Pending, 1 - Signed, 2 - Broadcasted, 3 - Complete, 4 - Expired",
+              "position": 6
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "amount",
+            "coreFeePerByte",
+            "pooling",
+            "outputScript",
+            "status"
+          ]
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "1",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": true
+      },
+      "indices": {
+        "withdrawal": [
+          {
+            "name": "identityStatus",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "identityRecent",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              },
+              {
+                "field": "status",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "pooling",
+            "properties": [
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "pooling",
+                "order": "asc"
+              },
+              {
+                "field": "coreFeePerByte",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "transaction",
+            "properties": [
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "transactionIndex",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [
+        {
+          "position": 0,
+          "config": {
+            "$formatVersion": "0",
+            "conventions": {
+              "$formatVersion": "0",
+              "localizations": {
+                "en": {
+                  "$formatVersion": "0",
+                  "shouldCapitalize": true,
+                  "singularForm": "token",
+                  "pluralForm": "tokens"
+                }
+              },
+              "decimals": 1
+            },
+            "conventionsChangeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "baseSupply": 1,
+            "maxSupply": null,
+            "keepsHistory": {
+              "$formatVersion": "0",
+              "keepsTransferHistory": true,
+              "keepsFreezingHistory": true,
+              "keepsMintingHistory": true,
+              "keepsBurningHistory": true,
+              "keepsDirectPricingHistory": true,
+              "keepsDirectPurchaseHistory": true
+            },
+            "startAsPaused": false,
+            "allowTransferToFrozenBalance": false,
+            "maxSupplyChangeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "distributionRules": {
+              "$formatVersion": "0",
+              "perpetualDistribution": null,
+              "perpetualDistributionRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "noOne"
+                },
+                "adminActionTakers": {
+                  "$type": "noOne"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "preProgrammedDistribution": null,
+              "newTokensDestinationIdentity": null,
+              "newTokensDestinationIdentityRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "noOne"
+                },
+                "adminActionTakers": {
+                  "$type": "noOne"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "mintingAllowChoosingDestination": true,
+              "mintingAllowChoosingDestinationRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "noOne"
+                },
+                "adminActionTakers": {
+                  "$type": "noOne"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "changeDirectPurchasePricingRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "noOne"
+                },
+                "adminActionTakers": {
+                  "$type": "noOne"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              }
+            },
+            "marketplaceRules": {
+              "$formatVersion": "0",
+              "tradeMode": "NotTradeable",
+              "tradeModeChangeRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "noOne"
+                },
+                "adminActionTakers": {
+                  "$type": "noOne"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              }
+            },
+            "manualMintingRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "manualBurningRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "freezeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "unfreezeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "destroyFrozenFundsRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "emergencyActionRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "noOne"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "mainControlGroup": null,
+            "mainControlGroupCanBeModified": {
+              "$type": "noOne"
+            },
+            "description": "note"
+          }
+        }
+      ],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 674283,
+      "coreChainLockedHeight": 1591036,
+      "epoch": 20343,
+      "timeMs": 1794589555496,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAaPZ6MUqvmXOH3yxLcZuuUYMIv8hffAE0sWPNdvV3GXOBAFAACQCASBbtAdymcNfPSWCO6wkd5q+QOPg/012EEtbagdGhxQqSAAnbJEAAS1mVECmVPRvfgS45s57yuyZOHkPBQCFCttuuhABNhudk4QORtnCkq/V+WGmq4mKS0c/aYHaJpbpRO7dOBcRAQFAAPsCrQF29eAPoqe8MTQaEGjbcAl7mFusvn9A9W49MY3MmjNCjwILXp/Vrisbfrebmg7md24WlMaRTc13VEriAe/NObPf5xABxftBLDrAMe6A1Pt9bf0TEIKIty1wdWwMyQL+RKL6ec0CwhfiOKXeR6cGovNQ/7rlB6Pzm55H9WpEgBI7sXdCfvcQATr19yPb9SmXoMbgGfqicTlkt/U9uYLugSzCCGvHKw/dBCAH8SUAjEuCjFjNz4pdV7v7HDeaXebXVGjO/vN/PiqWHwAFAgEBAQAb976ed3XgM9T0cqfzYMBirElvhWUu9koRNlZJ+dTbRxAB1UHqrgHcIjTnMAF+/6hQAc+m1UakENQA7HlrVXp3X8sRAv1PxTpU0gm4y6PDNO6T5THRuGSoI5ibOjbVJa0w8R9hEAFe4XT7vQkbXF6zOKKpATXvRikWXOK3phcwMckSkftctxERAkYMzzX+QU9C2ideXzh91kRqcDPG98PzM2OqOVsIFxr3EAFVYmZhH2kqxxpjR0+R2I4WRbBK6AzO1xwUSvfXMAl5txERAi7db6d14Quh+WOKszlo8in/NHKpYUY7AKPNxbYnl2fgEAGKhYJhQceoa1orZET7O2EAvzk4Zo+A5DkHQ9cDxXlv+BECSYDxfLVEDEz/leHgj3LFs1XUBEs4cDZNO6K1l+G/2YMQASXaXdkRBr+Q3gWAvGiixJHO0zbqcxGN5wm5TcALagGKEQJW84YlHq1udcBJ7EgQGbjPvDckcC1zhr5x8CiEqCYpRRAB0EwmLIox+Z5eCl//LP/n6raft8tLQtLLexwfguFvccARApnoHpTWSOt+JKJ0IFuKWzWR9+b8pkQktqQdoX0EAOEdEAHwedfKXDtkBgYunkmfMEEA6SxQX17WslYs8V0NpCGOHhEBIAfxJQCMS4KMWM3Pil1Xu/scN5pd5tdUaM7+838+KpYfAPsHwAMBAAd3APsHcgEH8SUAjEuCjFjNz4pdV7v7HDeaXebXVGjO/vN/PiqWHwEAAAAAAQEAAAEBcZnx9oQEyG7PYNnLk67zGPoPKwjln/0Xa970MVT/3msAAQp3aXRoZHJhd2FsFgcSC2Rlc2NyaXB0aW9uEoBXaXRoZHJhd2FsIGRvY3VtZW50IHRvIHRyYWNrIHVuZGVybHlpbmcgd2l0aGRyYXdhbCB0cmFuc2FjdGlvbnMuIFdpdGhkcmF3YWxzIHNob3VsZCBiZSBjcmVhdGVkIHdpdGggSWRlbnRpdHlXaXRoZHJhd2FsVHJhbnNpdGlvbhIXY3JlYXRpb25SZXN0cmljdGlvbk1vZGUDBBIEdHlwZRIGb2JqZWN0EgdpbmRpY2VzFQQWAxIEbmFtZRIOaWRlbnRpdHlTdGF0dXMSCnByb3BlcnRpZXMVAxYBEggkb3duZXJJZBIDYXNjFgESBnN0YXR1cxIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxIGdW5pcXVlEwAWAxIEbmFtZRIOaWRlbnRpdHlSZWNlbnQSCnByb3BlcnRpZXMVAxYBEggkb3duZXJJZBIDYXNjFgESCiR1cGRhdGVkQXQSA2FzYxYBEgZzdGF0dXMSA2FzYxIGdW5pcXVlEwAWAxIEbmFtZRIHcG9vbGluZxIKcHJvcGVydGllcxUEFgESBnN0YXR1cxIDYXNjFgESB3Bvb2xpbmcSA2FzYxYBEg5jb3JlRmVlUGVyQnl0ZRIDYXNjFgESCiR1cGRhdGVkQXQSA2FzYxIGdW5pcXVlEwAWAxIEbmFtZRILdHJhbnNhY3Rpb24SCnByb3BlcnRpZXMVAhYBEgZzdGF0dXMSA2FzYxYBEhB0cmFuc2FjdGlvbkluZGV4EgNhc2MSBnVuaXF1ZRMAEgpwcm9wZXJ0aWVzFgcSEHRyYW5zYWN0aW9uSW5kZXgWBBIEdHlwZRIHaW50ZWdlchILZGVzY3JpcHRpb24SeVNlcXVlbnRpYWwgaW5kZXggb2YgYXNzZXQgdW5sb2NrICh3aXRoZHJhd2FsKSB0cmFuc2FjdGlvbi4gUG9wdWxhdGVkIHdoZW4gYSB3aXRoZHJhd2FsIHBvb2xlZCBpbnRvIHdpdGhkcmF3YWwgdHJhbnNhY3Rpb24SB21pbmltdW0DAhIIcG9zaXRpb24DABIVdHJhbnNhY3Rpb25TaWduSGVpZ2h0FgQSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uEi9UaGUgQ29yZSBoZWlnaHQgb24gd2hpY2ggdHJhbnNhY3Rpb24gd2FzIHNpZ25lZBIHbWluaW11bQMCEghwb3NpdGlvbgMCEgZhbW91bnQWBBIEdHlwZRIHaW50ZWdlchILZGVzY3JpcHRpb24SGlRoZSBhbW91bnQgdG8gYmUgd2l0aGRyYXduEgdtaW5pbXVtA/sH0BIIcG9zaXRpb24DBBIOY29yZUZlZVBlckJ5dGUWBRIEdHlwZRIHaW50ZWdlchILZGVzY3JpcHRpb24SUFRoaXMgaXMgdGhlIGZlZSB0aGF0IHlvdSBhcmUgd2lsbGluZyB0byBzcGVuZCBmb3IgdGhpcyB0cmFuc2FjdGlvbiBpbiBEdWZmcy9CeXRlEgdtaW5pbXVtAwISB21heGltdW0D/QAAAAH////+Eghwb3NpdGlvbgMGEgdwb29saW5nFgQSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uEk5UaGlzIGluZGljYXRlZCB0aGUgbGV2ZWwgYXQgd2hpY2ggUGxhdGZvcm0gc2hvdWxkIHRyeSB0byBwb29sIHRoaXMgdHJhbnNhY3Rpb24SBGVudW0VAwMAAwIDBBIIcG9zaXRpb24DCBIMb3V0cHV0U2NyaXB0FgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMDLhIIbWF4SXRlbXMDMhIIcG9zaXRpb24DChIGc3RhdHVzFgQSBHR5cGUSB2ludGVnZXISBGVudW0VBQMAAwIDBAMGAwgSC2Rlc2NyaXB0aW9uEkMwIC0gUGVuZGluZywgMSAtIFNpZ25lZCwgMiAtIEJyb2FkY2FzdGVkLCAzIC0gQ29tcGxldGUsIDQgLSBFeHBpcmVkEghwb3NpdGlvbgMMEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEghyZXF1aXJlZBUHEgokY3JlYXRlZEF0EgokdXBkYXRlZEF0EgZhbW91bnQSDmNvcmVGZWVQZXJCeXRlEgdwb29saW5nEgxvdXRwdXRTY3JpcHQSBnN0YXR1cwH9AAABmACdPmMAAfwAAlPrAAH7IaQAAAEAAAABAmVuAAEFdG9rZW4GdG9rZW5zAQAAAAEBAQEAAAEBAQEBAQAAAAAAAQEBAAAAAAABAQEAAAAAAAEBAQEAAAABAQEAAAABAQEAAAAAAAEBAQAAAAEBAQAAAAEBAQAAAAEBAQAAAAEBAQAAAAEBAQAAAAEBAQAAAQRub3RlAAAAAjmcCC2A6jJsR80NFcoTMJ0RaJCfkYV0nXKIoRVzpPdMEAESD9mzlKefr6rr8LQlkIdg+Zpzxqz5t9e1wp/l2VuaIxEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAN8QFGqvSi1pPjRIqpz9YrcVCvaSvnIBP6e3NzR0="
+      },
+      "signature": {
+        "$u8": "pXB03dcpx+y3+kTmfM7N6iDreDEv8jMHRAlRLuFfQJWg/BCiVUz4Ev5ILxzwzjDvEj4k5PwbUCSnY8yyMnRa4LH7G/mXpK7uEebu809fYFCVlr9jBoaqFIFEadeWdfFG"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "AoUs9JgcJkfIh+1JuDpTonJJUf1EUr2C9MGWX+7flXc="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 610.600964
+  }
+}

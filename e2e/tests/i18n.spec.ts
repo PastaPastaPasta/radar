@@ -65,16 +65,13 @@ test.describe('language', () => {
     await expect(page.locator('[data-section-nav]')).toBeVisible()
   })
 
-  test('translates the placeholder pages and their site-map titles @IN-13 @HY-15', async ({
-    page,
-  }) => {
+  test('translates a page and its site-map title @IN-13 @HY-15', async ({ page }) => {
     await page.goto('/settings')
     await page.getByRole('main').getByLabel('Language', { exact: true }).selectOption('ru')
     await expect(page.locator('html')).toHaveAttribute('lang', 'ru')
     await page.goto('/tokens')
     await expect(page.getByRole('heading', { level: 1, name: 'Токены' })).toBeVisible()
-    await expect(page.getByText('Эта страница скоро появится')).toBeVisible()
-    await expect(page.getByText('Откуда берутся данные')).toBeVisible()
+    await expect(page).toHaveTitle(/Токены/)
     await expectAccessible(page)
   })
 

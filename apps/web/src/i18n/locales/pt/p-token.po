@@ -1,14 +1,646 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: pt\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "“{part}” is neither an identity ID nor a name."
+msgstr "“{part}” não é nem um ID de identidade nem um nome."
+
+#. placeholder {0}: formatInt(found.balance)
+msgid "{0} credits"
+msgstr "{0} créditos"
+
+#. placeholder {0}: formatInt(totals.incomingTxs ?? 0)
+msgid "{0} incoming"
+msgstr "{0} recebidas"
+
+#. placeholder {0}: formatInt(totals.outgoingTxs ?? 0)
+msgid "{0} outgoing"
+msgstr "{0} enviadas"
+
+#. placeholder {0}: formatInt(view.preProgrammedMoments)
+msgid "{0} scheduled releases"
+msgstr "{0} liberações programadas"
+
+#. placeholder {0}: formatInt(r.transitionCount)
+msgid "{0} transitions"
+msgstr "{0} transições"
+
+msgid "A contract ID is 43 or 44 base58 characters."
+msgstr "Um ID de contrato tem 43 ou 44 caracteres base58."
+
+msgid "A Platform address is written in bech32m and starts with dash1 on mainnet or tdash1 on testnet. It is not a Core address, which starts with X, 7 or y."
+msgstr "Um endereço Platform é escrito em bech32m e começa com dash1 na mainnet ou tdash1 na testnet. Não é um endereço Core, que começa com X, 7 ou y."
+
+msgid "A token ID is 43 or 44 base58 characters. To open a token from its contract, give the contract and the token's position in it."
+msgstr "Um ID de token tem 43 ou 44 caracteres base58. Para abrir um token a partir do contrato, indique o contrato e a posição do token nele."
+
+msgid "Action"
+msgstr "Ação"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Activity"
+msgstr "Atividade"
+
+msgid "Add"
+msgstr "Adicionar"
+
+#. placeholder {0}: k.name
+msgid "Add {0}"
+msgstr "Adicionar {0}"
+
+msgid "Add identity IDs or DPNS names above to see their balances of this token."
+msgstr "Adicione acima IDs de identidade ou nomes DPNS para ver o saldo deles deste token."
+
+msgid "Add the identities I viewed"
+msgstr "Adicionar as identidades que vi"
+
+msgid "Allowed"
+msgstr "Permitido"
+
+msgid "Amount"
+msgstr "Valor"
+
+msgid "An address’s transitions need an indexer; Platform keeps no history per address"
+msgstr "As transições de um endereço precisam de um indexador; a Platform não guarda histórico por endereço"
+
+msgid "An identity ID is 43 or 44 base58 characters."
+msgstr "Um ID de identidade tem 43 ou 44 caracteres base58."
+
+msgid "Balance"
+msgstr "Saldo"
+
+msgid "Balance and nonce"
+msgstr "Saldo e nonce"
+
+msgid "Balances"
+msgstr "Saldos"
+
+msgid "Balances of the chosen identities"
+msgstr "Saldos das identidades escolhidas"
+
+msgid "Balances of the identities you choose. Platform keeps no list of a token’s holders, so this asks the node about each one."
+msgstr "Saldos das identidades que você escolher. A Platform não guarda uma lista dos detentores de um token, então o nó é consultado sobre cada uma."
+
+#. placeholder {0}: formatInt(priceOf.basePrice)
+msgid "Base price {0} credits"
+msgstr "Preço base {0} créditos"
+
+msgid "Base supply"
+msgstr "Suprimento base"
+
+msgid "Burn"
+msgstr "Queimar"
+
+msgid "Burning"
+msgstr "Queima"
+
+msgid "Change names and decimals"
+msgstr "Alterar nomes e casas decimais"
+
+msgid "Change the direct purchase price"
+msgstr "Alterar o preço de compra direta"
+
+msgid "Change the maximum supply"
+msgstr "Alterar o suprimento máximo"
+
+msgid "Change the perpetual distribution"
+msgstr "Alterar a distribuição perpétua"
+
+msgid "Change the trade mode"
+msgstr "Alterar o modo de negociação"
+
+msgid "Change where new tokens go"
+msgstr "Alterar o destino dos novos tokens"
+
+msgid "Change whether minting may choose a recipient"
+msgstr "Alterar se a emissão pode escolher um destinatário"
+
+msgid "Choose identities"
+msgstr "Escolher identidades"
+
+msgid "Clear"
+msgstr "Limpar"
+
+msgid "Configuration"
+msgstr "Configuração"
+
+msgid "Configured"
+msgstr "Configurado"
+
+msgid "Contract"
+msgstr "Contrato"
+
+msgid "Contract ID"
+msgstr "ID do contrato"
+
+msgid "Contract owner"
+msgstr "Proprietário do contrato"
+
+#. placeholder {0}: search.contract.slice(0, 8)
+msgid "Contract: {0}…"
+msgstr "Contrato: {0}…"
+
+msgid "Decimals"
+msgstr "Casas decimais"
+
+msgid "Defined by contract"
+msgstr "Definido pelo contrato"
+
+msgid "Definition"
+msgstr "Definição"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Destroy frozen funds"
+msgstr "Destruição de fundos congelados"
+
+msgid "Direct purchase price"
+msgstr "Preço de compra direta"
+
+msgid "Direct purchases"
+msgstr "Compras diretas"
+
+msgid "Distribution"
+msgstr "Distribuição"
+
+msgid "Enter an identity ID or a DPNS name to see its balance of this token."
+msgstr "Digite um ID de identidade ou um nome DPNS para ver o saldo dela deste token."
+
+msgid "Enter an identity to see when it last claimed."
+msgstr "Digite uma identidade para ver quando ela reivindicou pela última vez."
+
+msgid "Every token Platform Explorer has indexed, with its supply, price and contract."
+msgstr "Todos os tokens que o Platform Explorer indexou, com suprimento, preço e contrato."
+
+msgid "Freeze a balance"
+msgstr "Congelar um saldo"
+
+msgid "Freezing"
+msgstr "Congelamento"
+
+msgid "From"
+msgstr "De"
+
+msgid "Frozen"
+msgstr "Congelado"
+
+#. placeholder {0}: taker.position
+msgid "Group {0}"
+msgstr "Grupo {0}"
+
+msgid "Group {group}"
+msgstr "Grupo {group}"
+
+msgid "History kept for"
+msgstr "Histórico mantido para"
+
+msgid "Holder"
+msgstr "Detentor"
+
+msgid "Holders"
+msgstr "Detentores"
+
+msgid "Holders and activity"
+msgstr "Detentores e atividade"
+
+msgid "Identity"
+msgstr "Identidade"
+
+msgid "Identity ({name})"
+msgstr "Identidade ({name})"
+
+msgid "Identity ID of the contract owner"
+msgstr "ID de identidade do proprietário do contrato"
+
+msgid "Identity ID or name"
+msgstr "ID de identidade ou nome"
+
+msgid "Identity IDs or names"
+msgstr "IDs de identidade ou nomes"
+
+msgid "Its prefix belongs to {other}, so it cannot exist on this network."
+msgstr "O prefixo pertence à {other}, então ele não pode existir nesta rede."
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Last claim"
+msgstr "Última reivindicação"
+
+msgid "Last claimed"
+msgstr "Última reivindicação"
+
+#. placeholder {0}: formatInt(moment.blockHeight)
+msgid "Last claimed at Platform block {0}."
+msgstr "Última reivindicação no bloco Platform {0}."
+
+#. placeholder {0}: formatInt(moment.epochIndex)
+msgid "Last claimed in epoch {0}."
+msgstr "Última reivindicação na época {0}."
+
+msgid "Loading…"
+msgstr "A carregar…"
+
+msgid "Look up"
+msgstr "Procurar"
+
+msgid "Main control group"
+msgstr "Grupo de controle principal"
+
+msgid "Manage in Bridge"
+msgstr "Gerenciar no Bridge"
+
+msgid "Maximum"
+msgstr "Máximo"
+
+msgid "Maximum supply"
+msgstr "Suprimento máximo"
+
+msgid "Mint"
+msgstr "Emitir"
+
+msgid "Minting"
+msgstr "Emissão"
+
+msgid "Minting may choose a recipient"
+msgstr "A emissão pode escolher um destinatário"
+
+#. placeholder {0}: search.q
+msgid "Name or ID: {0}"
+msgstr "Nome ou ID: {0}"
+
+msgid "Name or token ID"
+msgstr "Nome ou ID do token"
+
+msgid "Names"
+msgstr "Nomes"
+
+msgid "New tokens go to"
+msgstr "Os novos tokens vão para"
+
+msgid "Newest first"
+msgstr "Mais recentes primeiro"
+
+msgid "No"
+msgstr "Não"
+
+msgid "No identities chosen yet"
+msgstr "Nenhuma identidade escolhida ainda"
+
+msgid "No identity has the name {name}."
+msgstr "Nenhuma identidade tem o nome {name}."
+
+msgid "No maximum"
+msgstr "Sem máximo"
+
+msgid "No one"
+msgstr "Ninguém"
+
+msgid "No token has recent activity."
+msgstr "Nenhum token tem atividade recente."
+
+msgid "No token matches these filters"
+msgstr "Nenhum token corresponde a estes filtros"
+
+msgid "No token with this ID on {net}."
+msgstr "Nenhum token com este ID na {net}."
+
+msgid "No transitions have touched this token yet."
+msgstr "Nenhuma transição tocou este token ainda."
+
+msgid "No transitions involve this address."
+msgstr "Nenhuma transição envolve este endereço."
+
+msgid "Nobody holds this token yet."
+msgstr "Ninguém detém este token ainda."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Not allowed"
+msgstr "Não permitido"
+
+msgid "Not available right now"
+msgstr "Indisponível de momento"
+
+msgid "Not for sale"
+msgstr "Não está à venda"
+
+msgid "Not frozen"
+msgstr "Não congelado"
+
+msgid "Not stated"
+msgstr "Não informado"
+
+msgid "Nothing"
+msgstr "Nada"
+
+msgid "Oldest first"
+msgstr "Mais antigos primeiro"
+
+msgid "Only a token with a perpetual distribution has claims to look up."
+msgstr "Só um token com distribuição perpétua tem reivindicações para consultar."
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Open a token"
+msgstr "Abrir um token"
+
+msgid "Open a token by contract and position"
+msgstr "Abrir um token por contrato e posição"
+
+msgid "Open another token by contract and position"
+msgstr "Abrir outro token por contrato e posição"
+
+msgid "Open it on {other}"
+msgstr "Abrir na {other}"
+
+msgid "Open Settings"
+msgstr "Abrir configurações"
+
+msgid "Open token"
+msgstr "Abrir token"
+
+msgid "Or from its contract and position"
+msgstr "Ou a partir do contrato e da posição"
+
+msgid "Order"
+msgstr "Ordem"
+
+msgid "Overview"
+msgstr "Visão geral"
+
+msgid "Owner"
+msgstr "Proprietário"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Proprietário: {0}…"
+
+msgid "Pause and resume"
+msgstr "Pausar e retomar"
+
+msgid "Paused"
+msgstr "Em pausa"
+
+msgid "Perpetual distribution"
+msgstr "Distribuição perpétua"
+
+msgid "Perpetual distribution rules"
+msgstr "Regras da distribuição perpétua"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Endereço Platform"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "O Platform Explorer não indexa devnets"
+
+msgid "Platform Explorer has no tokens yet"
+msgstr "O Platform Explorer ainda não tem tokens"
+
+msgid "Platform has no balance for it. An address appears when someone sends it credits."
+msgstr "A Platform não tem saldo para ele. Um endereço aparece quando alguém lhe envia créditos."
+
+msgid "Platform has no holder index, so Radar cannot list every holder. Platform Explorer keeps one: "
+msgstr "A Platform não tem um índice de detentores, então o Radar não consegue listar todos. O Platform Explorer mantém um: "
+
+msgid "Platform has no token with this ID on this network. A token's ID comes from its contract and position."
+msgstr "A Platform não tem nenhum token com este ID nesta rede. O ID de um token vem do seu contrato e posição."
+
+msgid "Platform keeps no holder index; this needs Platform Explorer's index"
+msgstr "A Platform não mantém um índice de detentores; isso precisa do índice do Platform Explorer"
+
+msgid "Platform keeps no list of a token's holders or transfers; this needs Platform Explorer's index"
+msgstr "A Platform não guarda uma lista de detentores ou transferências de um token; isso precisa do índice do Platform Explorer"
+
+msgid "Platform keeps no list of a token's transfers; this needs Platform Explorer's index"
+msgstr "A Platform não guarda uma lista de transferências de um token; isso precisa do índice do Platform Explorer"
+
+msgid "Platform keeps no list of tokens; this needs Platform Explorer's index. Open a token by its ID, or by its contract and position, above."
+msgstr "A Platform não guarda uma lista de tokens; isso precisa do índice do Platform Explorer. Abra acima um token pelo ID, ou pelo contrato e posição."
+
+msgid "Plural"
+msgstr "Plural"
+
+msgid "Position"
+msgstr "Posição"
+
+msgid "Position in the contract"
+msgstr "Posição no contrato"
+
+msgid "Pre-programmed distribution"
+msgstr "Distribuição pré-programada"
+
+msgid "Pre-programmed releases"
+msgstr "Liberações pré-programadas"
+
+msgid "Price"
+msgstr "Preço"
+
+msgid "Price changes"
+msgstr "Alterações de preço"
+
+msgid "Radar can remember the identities you open in this browser, and add them here. That is off until you turn it on in Settings."
+msgstr "O Radar pode lembrar as identidades que você abre neste navegador e adicioná-las aqui. Isso fica desativado até você ativar nas configurações."
+
+msgid "Raw configuration"
+msgstr "Configuração bruta"
+
+msgid "Received"
+msgstr "Recebido"
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Remove {id} from the list"
+msgstr "Remover {id} da lista"
+
+msgid "Search on {other}"
+msgstr "Pesquisar em {other}"
+
+msgid "See the activity"
+msgstr "Ver a atividade"
+
+msgid "See the holder list on Platform Explorer"
+msgstr "Ver a lista de detentores no Platform Explorer"
+
+msgid "See the holders"
+msgstr "Ver os detentores"
+
+msgid "Sent"
+msgstr "Enviado"
+
+msgid "Separate several with spaces or commas"
+msgstr "Separe vários com espaços ou vírgulas"
+
+msgid "Singular"
+msgstr "Singular"
+
+msgid "Start of a name, or a token ID"
+msgstr "Início de um nome, ou um ID de token"
+
+msgid "Starts paused"
+msgstr "Começa pausado"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Summary"
+msgstr "Resumo"
+
+msgid "Supply"
+msgstr "Suprimento"
+
+msgid "That is neither an identity ID nor a DPNS name."
+msgstr "Isso não é nem um ID de identidade nem um nome DPNS."
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "Isso não é um ID de contrato: ele tem 43 ou 44 caracteres base58."
+
+msgid "That isn’t a Platform address."
+msgstr "Isso não é um endereço Platform."
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "Isso não é um ID de token: ele tem 43 ou 44 caracteres base58."
+
+msgid "That isn’t a token ID."
+msgstr "Isso não é um ID de token."
+
+msgid "The configuration lists no rules."
+msgstr "A configuração não lista regras."
+
+msgid "The contract does not list this token."
+msgstr "O contrato não lista este token."
+
+msgid "The contract gives this token no names."
+msgstr "O contrato não dá nomes a este token."
+
+msgid "The identity that mints them"
+msgstr "A identidade que os emite"
+
+msgid "The name {name} could not be looked up."
+msgstr "Não foi possível consultar o nome {name}."
+
+msgid "The node did not answer for this identity."
+msgstr "O nó não respondeu para esta identidade."
+
+msgid "The position is a whole number from 0 to 65535."
+msgstr "A posição é um número inteiro de 0 a 65535."
+
+msgid "The token ID could not be worked out."
+msgstr "Não foi possível calcular o ID do token."
+
+msgid "The token's configuration is read from the contract that defines it."
+msgstr "A configuração do token é lida do contrato que o define."
+
+msgid "This address holds nothing on {net}."
+msgstr "Este endereço não tem nada na {net}."
+
+msgid "This identity has not claimed from this token yet."
+msgstr "Esta identidade ainda não reivindicou deste token."
+
+msgid "This identity holds none of this token."
+msgstr "Esta identidade não detém nada deste token."
+
+msgid "This is a {other} address."
+msgstr "Este é um endereço da {other}."
+
+msgid "This token has no perpetual distribution."
+msgstr "Este token não tem distribuição perpétua."
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "To"
+msgstr "Para"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Token configuration"
+msgstr "Configuração do token"
+
+msgid "Token holders"
+msgstr "Detentores do token"
+
+msgid "Token ID"
+msgstr "ID do token"
+
+msgid "Token transitions"
+msgstr "Transições do token"
+
+msgid "Tokens"
+msgstr "Tokens"
+
+msgid "Tokens with the most recent transitions"
+msgstr "Tokens com as transições mais recentes"
+
+msgid "Total supply"
+msgstr "Suprimento total"
+
+msgid "Transfers"
+msgstr "Transferências"
+
+msgid "Transfers to a frozen balance"
+msgstr "Transferências para um saldo congelado"
+
+msgid "Transition"
+msgstr "Transição"
+
+msgid "Transitions"
+msgstr "Transições"
+
+msgid "Transitions of this address"
+msgstr "Transições deste endereço"
+
+msgid "Transitions recorded"
+msgstr "Transições registradas"
+
+msgid "Trending"
+msgstr "Em alta"
+
+msgid "Try again"
+msgstr "Tentar novamente"
+
+msgid "Unfreeze a balance"
+msgstr "Descongelar um saldo"
+
+msgid "Unknown"
+msgstr "Desconhecido"
+
+msgid "Use up to 25 letters, digits or hyphens, or a token ID."
+msgstr "Use até 25 letras, dígitos ou hifens, ou um ID de token."
+
+msgid "Who may change the rule"
+msgstr "Quem pode alterar a regra"
+
+msgid "Who may do it"
+msgstr "Quem pode fazer isso"
+
+msgid "Who may do what"
+msgstr "Quem pode fazer o quê"
+
+msgid "Yes"
+msgstr "Sim"

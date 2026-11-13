@@ -1,14 +1,646 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "“{part}” is neither an identity ID nor a name."
+msgstr "「{part}」はアイデンティティ ID でも名前でもありません。"
+
+#. placeholder {0}: formatInt(found.balance)
+msgid "{0} credits"
+msgstr "{0} クレジット"
+
+#. placeholder {0}: formatInt(totals.incomingTxs ?? 0)
+msgid "{0} incoming"
+msgstr "受信 {0} 件"
+
+#. placeholder {0}: formatInt(totals.outgoingTxs ?? 0)
+msgid "{0} outgoing"
+msgstr "送信 {0} 件"
+
+#. placeholder {0}: formatInt(view.preProgrammedMoments)
+msgid "{0} scheduled releases"
+msgstr "予定されたリリース {0} 件"
+
+#. placeholder {0}: formatInt(r.transitionCount)
+msgid "{0} transitions"
+msgstr "トランジション {0} 件"
+
+msgid "A contract ID is 43 or 44 base58 characters."
+msgstr "コントラクト ID は base58 の 43 または 44 文字です。"
+
+msgid "A Platform address is written in bech32m and starts with dash1 on mainnet or tdash1 on testnet. It is not a Core address, which starts with X, 7 or y."
+msgstr "Platform アドレスは bech32m 形式で、メインネットでは dash1、テストネットでは tdash1 で始まります。X、7、y で始まる Core アドレスではありません。"
+
+msgid "A token ID is 43 or 44 base58 characters. To open a token from its contract, give the contract and the token's position in it."
+msgstr "トークン ID は base58 の 43 または 44 文字です。コントラクトからトークンを開くには、コントラクトとその中でのトークンの位置を指定してください。"
+
+msgid "Action"
+msgstr "アクション"
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "Activity"
+msgstr "アクティビティ"
+
+msgid "Add"
+msgstr "追加"
+
+#. placeholder {0}: k.name
+msgid "Add {0}"
+msgstr "{0} を追加"
+
+msgid "Add identity IDs or DPNS names above to see their balances of this token."
+msgstr "上にアイデンティティ ID または DPNS 名を追加すると、このトークンの残高が表示されます。"
+
+msgid "Add the identities I viewed"
+msgstr "閲覧したアイデンティティを追加"
+
+msgid "Allowed"
+msgstr "許可"
+
+msgid "Amount"
+msgstr "金額"
+
+msgid "An address’s transitions need an indexer; Platform keeps no history per address"
+msgstr "アドレスのトランジションにはインデクサーが必要です。Platform はアドレスごとの履歴を保持しません"
+
+msgid "An identity ID is 43 or 44 base58 characters."
+msgstr "アイデンティティ ID は base58 の 43 または 44 文字です。"
+
+msgid "Balance"
+msgstr "残高"
+
+msgid "Balance and nonce"
+msgstr "残高とナンス"
+
+msgid "Balances"
+msgstr "残高"
+
+msgid "Balances of the chosen identities"
+msgstr "選択したアイデンティティの残高"
+
+msgid "Balances of the identities you choose. Platform keeps no list of a token’s holders, so this asks the node about each one."
+msgstr "選択したアイデンティティの残高です。Platform にはトークン保有者の一覧がないため、ノードに個別に問い合わせます。"
+
+#. placeholder {0}: formatInt(priceOf.basePrice)
+msgid "Base price {0} credits"
+msgstr "基本価格 {0} クレジット"
+
+msgid "Base supply"
+msgstr "基本供給量"
+
+msgid "Burn"
+msgstr "バーン"
+
+msgid "Burning"
+msgstr "バーン"
+
+msgid "Change names and decimals"
+msgstr "名前と小数桁数を変更"
+
+msgid "Change the direct purchase price"
+msgstr "直接購入価格を変更"
+
+msgid "Change the maximum supply"
+msgstr "最大供給量を変更"
+
+msgid "Change the perpetual distribution"
+msgstr "継続的な配布を変更"
+
+msgid "Change the trade mode"
+msgstr "取引モードを変更"
+
+msgid "Change where new tokens go"
+msgstr "新しいトークンの送り先を変更"
+
+msgid "Change whether minting may choose a recipient"
+msgstr "ミント時に受取先を選べるかどうかを変更"
+
+msgid "Choose identities"
+msgstr "アイデンティティを選択"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "Configuration"
+msgstr "設定"
+
+msgid "Configured"
+msgstr "設定済み"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract ID"
+msgstr "コントラクト ID"
+
+msgid "Contract owner"
+msgstr "コントラクトのオーナー"
+
+#. placeholder {0}: search.contract.slice(0, 8)
+msgid "Contract: {0}…"
+msgstr "コントラクト: {0}…"
+
+msgid "Decimals"
+msgstr "小数桁数"
+
+msgid "Defined by contract"
+msgstr "コントラクトで定義"
+
+msgid "Definition"
+msgstr "定義"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Destroy frozen funds"
+msgstr "凍結資金の破棄"
+
+msgid "Direct purchase price"
+msgstr "直接購入価格"
+
+msgid "Direct purchases"
+msgstr "直接購入"
+
+msgid "Distribution"
+msgstr "配布"
+
+msgid "Enter an identity ID or a DPNS name to see its balance of this token."
+msgstr "アイデンティティ ID または DPNS 名を入力すると、このトークンの残高が表示されます。"
+
+msgid "Enter an identity to see when it last claimed."
+msgstr "アイデンティティを入力すると、最後に請求した時期が表示されます。"
+
+msgid "Every token Platform Explorer has indexed, with its supply, price and contract."
+msgstr "Platform Explorer がインデックスしたすべてのトークンを、供給量・価格・コントラクトとともに表示します。"
+
+msgid "Freeze a balance"
+msgstr "残高を凍結"
+
+msgid "Freezing"
+msgstr "凍結"
+
+msgid "From"
+msgstr "送信元"
+
+msgid "Frozen"
+msgstr "凍結"
+
+#. placeholder {0}: taker.position
+msgid "Group {0}"
+msgstr "グループ {0}"
+
+msgid "Group {group}"
+msgstr "グループ {group}"
+
+msgid "History kept for"
+msgstr "履歴を保持する対象"
+
+msgid "Holder"
+msgstr "保有者"
+
+msgid "Holders"
+msgstr "保有者"
+
+msgid "Holders and activity"
+msgstr "保有者とアクティビティ"
+
+msgid "Identity"
+msgstr "アイデンティティ"
+
+msgid "Identity ({name})"
+msgstr "アイデンティティ ({name})"
+
+msgid "Identity ID of the contract owner"
+msgstr "コントラクトのオーナーのアイデンティティ ID"
+
+msgid "Identity ID or name"
+msgstr "アイデンティティ ID または名前"
+
+msgid "Identity IDs or names"
+msgstr "アイデンティティ ID または名前"
+
+msgid "Its prefix belongs to {other}, so it cannot exist on this network."
+msgstr "プレフィックスが {other} のものなので、このネットワークには存在できません。"
+
+msgid "Language"
+msgstr "言語"
+
+msgid "Last claim"
+msgstr "最後の請求"
+
+msgid "Last claimed"
+msgstr "最終請求"
+
+#. placeholder {0}: formatInt(moment.blockHeight)
+msgid "Last claimed at Platform block {0}."
+msgstr "最後に請求したのは Platform ブロック {0} です。"
+
+#. placeholder {0}: formatInt(moment.epochIndex)
+msgid "Last claimed in epoch {0}."
+msgstr "最後に請求したのはエポック {0} です。"
+
+msgid "Loading…"
+msgstr "読み込み中…"
+
+msgid "Look up"
+msgstr "検索"
+
+msgid "Main control group"
+msgstr "メインコントロールグループ"
+
+msgid "Manage in Bridge"
+msgstr "Bridge で管理"
+
+msgid "Maximum"
+msgstr "最大"
+
+msgid "Maximum supply"
+msgstr "最大供給量"
+
+msgid "Mint"
+msgstr "ミント"
+
+msgid "Minting"
+msgstr "ミント"
+
+msgid "Minting may choose a recipient"
+msgstr "ミント時に受取先を選べる"
+
+#. placeholder {0}: search.q
+msgid "Name or ID: {0}"
+msgstr "名前または ID: {0}"
+
+msgid "Name or token ID"
+msgstr "名前またはトークン ID"
+
+msgid "Names"
+msgstr "名前"
+
+msgid "New tokens go to"
+msgstr "新しいトークンの送り先"
+
+msgid "Newest first"
+msgstr "新しい順"
+
+msgid "No"
+msgstr "いいえ"
+
+msgid "No identities chosen yet"
+msgstr "まだアイデンティティが選択されていません"
+
+msgid "No identity has the name {name}."
+msgstr "{name} という名前のアイデンティティはありません。"
+
+msgid "No maximum"
+msgstr "上限なし"
+
+msgid "No one"
+msgstr "誰もいない"
+
+msgid "No token has recent activity."
+msgstr "最近のアクティビティがあるトークンはありません。"
+
+msgid "No token matches these filters"
+msgstr "これらのフィルターに一致するトークンはありません"
+
+msgid "No token with this ID on {net}."
+msgstr "{net} にこの ID のトークンはありません。"
+
+msgid "No transitions have touched this token yet."
+msgstr "このトークンに関わるトランジションはまだありません。"
+
+msgid "No transitions involve this address."
+msgstr "このアドレスに関わるトランジションはありません。"
+
+msgid "Nobody holds this token yet."
+msgstr "このトークンを保有している人はまだいません。"
+
+msgid "Nonce"
+msgstr "ノンス"
+
+msgid "None"
+msgstr "なし"
+
+msgid "Not allowed"
+msgstr "許可されていません"
+
+msgid "Not available right now"
+msgstr "現在利用できません"
+
+msgid "Not for sale"
+msgstr "販売されていません"
+
+msgid "Not frozen"
+msgstr "凍結なし"
+
+msgid "Not stated"
+msgstr "記載なし"
+
+msgid "Nothing"
+msgstr "なし"
+
+msgid "Oldest first"
+msgstr "古い順"
+
+msgid "Only a token with a perpetual distribution has claims to look up."
+msgstr "請求を調べられるのは、継続的な配布があるトークンだけです。"
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Open a token"
+msgstr "トークンを開く"
+
+msgid "Open a token by contract and position"
+msgstr "コントラクトと位置でトークンを開く"
+
+msgid "Open another token by contract and position"
+msgstr "別のトークンをコントラクトと位置で開く"
+
+msgid "Open it on {other}"
+msgstr "{other} で開く"
+
+msgid "Open Settings"
+msgstr "設定を開く"
+
+msgid "Open token"
+msgstr "トークンを開く"
+
+msgid "Or from its contract and position"
+msgstr "またはコントラクトと位置から"
+
+msgid "Order"
+msgstr "並び順"
+
+msgid "Overview"
+msgstr "概要"
+
+msgid "Owner"
+msgstr "オーナー"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "オーナー: {0}…"
+
+msgid "Pause and resume"
+msgstr "一時停止と再開"
+
+msgid "Paused"
+msgstr "一時停止中"
+
+msgid "Perpetual distribution"
+msgstr "継続的な配布"
+
+msgid "Perpetual distribution rules"
+msgstr "継続的な配布のルール"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform アドレス"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer は devnet をインデックスしません"
+
+msgid "Platform Explorer has no tokens yet"
+msgstr "Platform Explorer にはまだトークンがありません"
+
+msgid "Platform has no balance for it. An address appears when someone sends it credits."
+msgstr "Platform にはこのアドレスの残高がありません。誰かがクレジットを送ると表示されます。"
+
+msgid "Platform has no holder index, so Radar cannot list every holder. Platform Explorer keeps one: "
+msgstr "Platform には保有者インデックスがないため、Radar はすべての保有者を一覧できません。Platform Explorer にはあります: "
+
+msgid "Platform has no token with this ID on this network. A token's ID comes from its contract and position."
+msgstr "この ID のトークンは、このネットワークの Platform には存在しません。トークン ID はコントラクトと位置から決まります。"
+
+msgid "Platform keeps no holder index; this needs Platform Explorer's index"
+msgstr "Platform には保有者インデックスがありません。これには Platform Explorer のインデックスが必要です"
+
+msgid "Platform keeps no list of a token's holders or transfers; this needs Platform Explorer's index"
+msgstr "Platform にはトークンの保有者や転送の一覧がありません。これには Platform Explorer のインデックスが必要です"
+
+msgid "Platform keeps no list of a token's transfers; this needs Platform Explorer's index"
+msgstr "Platform にはトークンの転送の一覧がありません。これには Platform Explorer のインデックスが必要です"
+
+msgid "Platform keeps no list of tokens; this needs Platform Explorer's index. Open a token by its ID, or by its contract and position, above."
+msgstr "Platform にはトークンの一覧がありません。これには Platform Explorer のインデックスが必要です。上で ID、またはコントラクトと位置を指定してトークンを開いてください。"
+
+msgid "Plural"
+msgstr "複数形"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Position in the contract"
+msgstr "コントラクト内の位置"
+
+msgid "Pre-programmed distribution"
+msgstr "事前にプログラムされた配布"
+
+msgid "Pre-programmed releases"
+msgstr "事前にプログラムされたリリース"
+
+msgid "Price"
+msgstr "価格"
+
+msgid "Price changes"
+msgstr "価格変更"
+
+msgid "Radar can remember the identities you open in this browser, and add them here. That is off until you turn it on in Settings."
+msgstr "Radar はこのブラウザーで開いたアイデンティティを記憶し、ここに追加できます。設定でオンにするまで無効です。"
+
+msgid "Raw configuration"
+msgstr "生の設定"
+
+msgid "Received"
+msgstr "受信"
+
+msgid "Remove"
+msgstr "削除"
+
+msgid "Remove {id} from the list"
+msgstr "{id} をリストから削除"
+
+msgid "Search on {other}"
+msgstr "{other} で検索"
+
+msgid "See the activity"
+msgstr "アクティビティを見る"
+
+msgid "See the holder list on Platform Explorer"
+msgstr "Platform Explorer で保有者一覧を見る"
+
+msgid "See the holders"
+msgstr "保有者を見る"
+
+msgid "Sent"
+msgstr "送信済み"
+
+msgid "Separate several with spaces or commas"
+msgstr "複数ある場合はスペースまたはカンマで区切ります"
+
+msgid "Singular"
+msgstr "単数形"
+
+msgid "Start of a name, or a token ID"
+msgstr "名前の先頭、またはトークン ID"
+
+msgid "Starts paused"
+msgstr "一時停止で開始"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "Summary"
+msgstr "概要"
+
+msgid "Supply"
+msgstr "供給量"
+
+msgid "That is neither an identity ID nor a DPNS name."
+msgstr "アイデンティティ ID でも DPNS 名でもありません。"
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "コントラクト ID ではありません。base58 の 43 または 44 文字です。"
+
+msgid "That isn’t a Platform address."
+msgstr "Platform アドレスではありません。"
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "トークン ID ではありません。base58 の 43 または 44 文字です。"
+
+msgid "That isn’t a token ID."
+msgstr "トークン ID ではありません。"
+
+msgid "The configuration lists no rules."
+msgstr "設定にルールは記載されていません。"
+
+msgid "The contract does not list this token."
+msgstr "コントラクトにこのトークンは記載されていません。"
+
+msgid "The contract gives this token no names."
+msgstr "コントラクトはこのトークンに名前を定義していません。"
+
+msgid "The identity that mints them"
+msgstr "それらをミントするアイデンティティ"
+
+msgid "The name {name} could not be looked up."
+msgstr "名前 {name} を検索できませんでした。"
+
+msgid "The node did not answer for this identity."
+msgstr "このアイデンティティについてノードから応答がありませんでした。"
+
+msgid "The position is a whole number from 0 to 65535."
+msgstr "位置は 0 から 65535 までの整数です。"
+
+msgid "The token ID could not be worked out."
+msgstr "トークン ID を算出できませんでした。"
+
+msgid "The token's configuration is read from the contract that defines it."
+msgstr "トークンの設定は、それを定義するコントラクトから読み取られます。"
+
+msgid "This address holds nothing on {net}."
+msgstr "このアドレスは {net} で何も保有していません。"
+
+msgid "This identity has not claimed from this token yet."
+msgstr "このアイデンティティはまだこのトークンから請求していません。"
+
+msgid "This identity holds none of this token."
+msgstr "このアイデンティティはこのトークンを保有していません。"
+
+msgid "This is a {other} address."
+msgstr "これは {other} のアドレスです。"
+
+msgid "This token has no perpetual distribution."
+msgstr "このトークンには継続的な配布がありません。"
+
+msgid "Time"
+msgstr "時刻"
+
+msgid "To"
+msgstr "送信先"
+
+msgid "Token"
+msgstr "トークン"
+
+msgid "Token configuration"
+msgstr "トークンの設定"
+
+msgid "Token holders"
+msgstr "トークン保有者"
+
+msgid "Token ID"
+msgstr "トークン ID"
+
+msgid "Token transitions"
+msgstr "トークンのトランジション"
+
+msgid "Tokens"
+msgstr "トークン"
+
+msgid "Tokens with the most recent transitions"
+msgstr "最新のトランジションがあるトークン"
+
+msgid "Total supply"
+msgstr "総供給量"
+
+msgid "Transfers"
+msgstr "送金"
+
+msgid "Transfers to a frozen balance"
+msgstr "凍結された残高への転送"
+
+msgid "Transition"
+msgstr "トランジション"
+
+msgid "Transitions"
+msgstr "トランジション"
+
+msgid "Transitions of this address"
+msgstr "このアドレスのトランジション"
+
+msgid "Transitions recorded"
+msgstr "記録されたトランジション"
+
+msgid "Trending"
+msgstr "トレンド"
+
+msgid "Try again"
+msgstr "再試行"
+
+msgid "Unfreeze a balance"
+msgstr "残高の凍結を解除"
+
+msgid "Unknown"
+msgstr "不明"
+
+msgid "Use up to 25 letters, digits or hyphens, or a token ID."
+msgstr "25 文字までの英字・数字・ハイフン、またはトークン ID を使用してください。"
+
+msgid "Who may change the rule"
+msgstr "ルールを変更できる人"
+
+msgid "Who may do it"
+msgstr "実行できる人"
+
+msgid "Who may do what"
+msgstr "誰が何をできるか"
+
+msgid "Yes"
+msgstr "はい"

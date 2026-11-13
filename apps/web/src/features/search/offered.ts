@@ -5,12 +5,7 @@ import type { SearchHit } from './types'
  * with nothing on it is a dead end. When a page is finished, remove its route here; a test compares
  * this list with the pages that still render `RoutePlaceholder`, so the two cannot drift apart.
  */
-export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
-  '/platform-address/$addr',
-  '/token/$id',
-  '/token/$id/holders',
-  '/tokens',
-])
+export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([])
 
 export function isFinishedRoute(path: string): boolean {
   return !UNFINISHED_ROUTES.has(path)

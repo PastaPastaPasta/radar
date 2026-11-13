@@ -1,0 +1,1013 @@
+{
+  "request": { "method": "GET", "url": "https://api.testnet.pe.dashhq.org/tokens?limit=25&page=1" },
+  "recordedAt": "2026-11-13T17:08:42.917Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+        "position": 0,
+        "timestamp": null,
+        "description": "note",
+        "localizations": {
+          "en": { "pluralForm": "tokens", "singularForm": "token", "shouldCapitalize": true }
+        },
+        "baseSupply": "1",
+        "totalSupply": "1",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc",
+          "aliases": [
+            {
+              "alias": "canusieethat7.dash",
+              "status": "ok",
+              "timestamp": "2024-10-10T19:40:05.824Z",
+              "documentId": "Qwb2FuwfnexmxxYoJUsMhM9pd192NVDvaEVFyjkSXAa",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "Y189uedQG3CJCuu83P3DqnG7ngQaRKz69x3gY8uDzQe",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 1,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "Hqyu8WcRwXCTwbNxdga4CN5gsVEGc67wng4TFzceyLUv",
+        "position": 0,
+        "timestamp": null,
+        "description": "The flurgon contract on testnet",
+        "localizations": {
+          "en": { "pluralForm": "Flurgons", "singularForm": "Flurgon", "shouldCapitalize": true }
+        },
+        "baseSupply": "10000",
+        "totalSupply": "10110",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "ALybvzfcCwMs7sinDwmtumw17NneuW7RgFtFHgjKmF3A",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": {
+          "type": "TimeBasedDistribution",
+          "recipientType": "EvonodesByParticipation",
+          "recipientValue": null,
+          "interval": 3600000,
+          "functionName": "FixedAmount",
+          "functionValue": { "amount": "300" }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "2i9vANbiyPLFxGErMViXukqcBECXxg9ft7NUyqRgJetL",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "googles", "singularForm": "google", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "5WP9TadYzCYrnutkYdMHM1wpfFt5eLTZQsXYDkytb7Cf", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "3oFpgT5oVGxaANZMVukLZ9SwiozY2Ua7jWpEQ88GzZzZ",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "5rxTbUXNcDgkxkJCVQRT5gCK9ttik1oCzvHHsKoWdxXM",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "tests", "singularForm": "test", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "5WP9TadYzCYrnutkYdMHM1wpfFt5eLTZQsXYDkytb7Cf", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "Goawj4JmBhNGa4mfa229hdhkobPjX23VGgm76U9226L9",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "EETVvWgohFDKtbB3ejEzBcDRMNYkc9TtgXY6y8hzP3Ta",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "GroupTokens",
+            "singularForm": "GroupToken",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100001",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": {
+          "type": "BlockBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 40,
+          "functionName": "Linear",
+          "functionValue": {
+            "a": "1",
+            "d": "1",
+            "startStep": null,
+            "startingAmount": "0",
+            "minValue": null,
+            "maxValue": null
+          }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "H7FRpZJqZK933r9CzZMsCuf1BM34NT5P2wSJyjDkprqy",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "PausedTokens",
+            "singularForm": "PausedToken",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "EBioSoFFTDf346ndCMHGmYF8QzgwM8972jG5fL4ndBL7",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "5F4Q7PNmdxBP7ULbfUwKP6gNxdgZKygQaQ6m79LPQBd4",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "T1-decimals",
+            "singularForm": "T1-decimal",
+            "shouldCapitalize": true
+          },
+          "pl": {
+            "pluralForm": "T1-dziesiętne",
+            "singularForm": "T1-dziesiętny",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "AZxWLXYXxQ8cJJhZGXdDqYsH8kQT7ksccB3gnfQ2o353",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 3,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "6p86udGakFcMxG2yJdZaWavcs6RbFeV3bmx4EGwBKkyN",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "T1-mint-1s",
+            "singularForm": "T1-mint-1",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100100",
+        "maxSupply": null,
+        "owner": { "identifier": "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "3J8WVdMqwbaCWyvUYCDEFakXcoT6vwHMjFRjCcTBezqn",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "4xd9usiX6WCPE4h1AFPQBJ4Rje6TfZw8kiBzkSAzvmCL",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "A1-preprog-1",
+            "singularForm": "A1-preprog-1",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "101310",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "BU9B9aoh54Y8aXqRnrD6zmerxivw1ePLeARSmqGm52eN",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": [
+          {
+            "timestamp": "2025-07-15T09:24:40.493Z",
+            "out": [
+              {
+                "identifier": "AQV2G2Egvqk8jwDBAcpngjKYcwAkck8Cecs5AjYJxfvW",
+                "tokenAmount": "1000"
+              },
+              {
+                "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD",
+                "tokenAmount": "1000"
+              }
+            ]
+          },
+          {
+            "timestamp": "2025-07-15T09:29:40.493Z",
+            "out": [
+              {
+                "identifier": "AQV2G2Egvqk8jwDBAcpngjKYcwAkck8Cecs5AjYJxfvW",
+                "tokenAmount": "200"
+              },
+              { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "tokenAmount": "100" }
+            ]
+          },
+          {
+            "timestamp": "2025-07-15T09:34:40.493Z",
+            "out": [
+              { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "tokenAmount": "10" }
+            ]
+          },
+          {
+            "timestamp": "2025-07-15T09:39:40.493Z",
+            "out": [
+              { "identifier": "AQV2G2Egvqk8jwDBAcpngjKYcwAkck8Cecs5AjYJxfvW", "tokenAmount": "20" }
+            ]
+          }
+        ],
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "xwWhSsvSytJZMsHjiRSZhHxy4smdvcJQVYyjKi7Kw5e",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "A1-no-dest",
+            "singularForm": "A1-no-dest",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100012",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "6DtwZjRbJ9uPEvvmwYpkhj4b7iqvhQDZjFcEeyH9Tiv2",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": {
+          "type": "TimeBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 600000,
+          "functionName": "StepDecreasingAmount",
+          "functionValue": {
+            "stepCount": 1,
+            "decreasePerIntervalNumerator": 1,
+            "decreasePerIntervalDenominator": 100,
+            "startDecreasingOffset": null,
+            "maxIntervalCount": null,
+            "distributionStartAmount": "100000000",
+            "trailingDistributionIntervalAmount": "1",
+            "minValue": null
+          }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "FWuCZYmNo2qWfLcYsNUnu1LdqBWbzvWBUcGQHRFE2mVt",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "A1-keyword",
+            "singularForm": "A1-keyword",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "BMPYcvLrpcMmovv2otVPrjRboyhqcKnG23yitHwsaYjq",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "8RsBCPSDUwWMnvLTDooh7ZcfZmnRb5tecsagsrdAFrrd",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "A1-token-group-setprice",
+            "singularForm": "A1-token-group-setprice",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100013",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "EJ3pTnDkFJ7gWqY1H2fy7i81kKvfxg3pgFdM4u8cRFtv",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "3cjzLAPy9x6Js1TQ7odU2YRshZuoYweVq4SUsrMe3oMB",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "aaas", "singularForm": "aaa", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "DemU6ZT5EG6B3FiFAenT2BRxnn76eQih6uUhLdZjr6mN", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "3QZsokukb9PXzoF3jvqbQHivSWQT8A9seutyxx9Sjk2x",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "8Uv6WJEf7pyw17AtcJpGdURkU3wrmz86RkXxUdNNx575",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "aaa", "singularForm": "aaa", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "5rHrJCKxHEtnx7nN1XtKMFNQ9BPLY8Ch4JEXGd6Bvw3E", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "ETVNjJELWWRuVL1YToU6DtGooWtgWmb5BRibcBNbwYrq",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "3yiTkpe1SKoEyBJmoxb7CzeHizhRrTDbSkszNW3GtHfz",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "B1-REWARDS",
+            "singularForm": "B1-REWARD",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000000",
+        "totalSupply": "100000000",
+        "maxSupply": null,
+        "owner": { "identifier": "AQV2G2Egvqk8jwDBAcpngjKYcwAkck8Cecs5AjYJxfvW", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "6JjXZckQLDbPJMdEQGmPnM7zPBosAxdfZ37xjVEsD5wV",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 4,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "2AbRXUKNhajnAdcjemLzfTtEdAf6zZnCs3b4NPHQWkZD",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "A1-DISTS", "singularForm": "A1-DIST", "shouldCapitalize": true }
+        },
+        "baseSupply": "1000000000",
+        "totalSupply": "1000000000",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "E1tzzg4bvmR5SR73jMBF2VPwUazAtgw993qwMdpde2g3",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "76HAP8UMczsohFApQiGtGfhkUscUceq28jWJDYa3Ghzn",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "A1-DISTS", "singularForm": "A1-DIST", "shouldCapitalize": true }
+        },
+        "baseSupply": "10000000000000",
+        "totalSupply": "10000020280000",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "HMx6XgczJQaMU67WGPM3TJkz5YptJFnge5ac8yErZ7Ce",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": {
+          "type": "BlockBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 100,
+          "functionName": "FixedAmount",
+          "functionValue": { "amount": "10000" }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "9NpHWTPH77ADT42p5TacMcnuNgDfCHTrc66oZGaraprL",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "A1-MINTs", "singularForm": "A1-MINT", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "10010500000",
+        "maxSupply": null,
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "Hrahxj5ayfiks1neDYfiD9raUzPARxj2g3EbdH46Z32v",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "Eg49SNkMVgo84vGhj89bEK53X2mURGuVSERzteaT1brr",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "A1-test-1", "singularForm": "A1-test-1", "shouldCapitalize": true }
+        },
+        "baseSupply": "10000000",
+        "totalSupply": "10000001",
+        "maxSupply": "20000051",
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "9rLBu51vpcPyzPZYYvcV7Wgryy63msHje7YoHY33QjJd",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 2,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "5NQx4JX1bDxPzj2KQwHK4zbGUDbq7GJWMEHumKDKVhVY",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "A1-t2", "singularForm": "A1-t2", "shouldCapitalize": true }
+        },
+        "baseSupply": "50000",
+        "totalSupply": "50000",
+        "maxSupply": "300000000000",
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "DyVBHHocgxDEFDnuZjnYYtXsQLJtvdzTYL6JGe8rv7qz",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 5,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "HEv1AYWQfwCffXQgmuzmzyzUo9untRTmVr67n4e4PSWa",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "sdk-01", "singularForm": "sdk-01", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100190",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5RG84o6KsTaZudDqS8ytbaRB8QP4YYQ2uwzb6Hj8cfjX",
+          "aliases": [
+            {
+              "alias": "wasm-sdk-test-user-0.dash",
+              "status": "ok",
+              "timestamp": "2025-07-30T19:13:06.222Z",
+              "documentId": "5rzvxYHyhha1o6FBaXcZg4zRCPHwySJ2RrHnwbYv6aqy",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "9Ym12d4RakMRvqFgBcqMubPsBB8SHPUmM7F4uDrA1EcB",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": {
+          "type": "BlockBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 100,
+          "functionName": "FixedAmount",
+          "functionValue": { "amount": "5" }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "5F6WdFnTHr41m5Ez3WPPfxbJyap9hueGm5xy36hw7e3M",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "basic-tokens",
+            "singularForm": "basic-token",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100000",
+        "maxSupply": null,
+        "owner": { "identifier": "ChbnM8RFgmXuY5xi2yB6JMY6k88mBXktCGBWwLYgqcaF", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "7syYmjDcRajZAaCVxiYrP6fqzwKT15gnY2HkBA3u9CpS",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "4tyvbA2ZGFLvjXLnJRCacSoMbFfpmBwGRrAZsVwnfYri",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "sdk-02", "singularForm": "sdk-02", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100149",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5RG84o6KsTaZudDqS8ytbaRB8QP4YYQ2uwzb6Hj8cfjX",
+          "aliases": [
+            {
+              "alias": "wasm-sdk-test-user-0.dash",
+              "status": "ok",
+              "timestamp": "2025-07-30T19:13:06.222Z",
+              "documentId": "5rzvxYHyhha1o6FBaXcZg4zRCPHwySJ2RrHnwbYv6aqy",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "GZSQWeXohuc4YRPR54XFo56AC9XafmjyWpAKaMWKLBG8",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": {
+          "type": "BlockBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 100,
+          "functionName": "FixedAmount",
+          "functionValue": { "amount": "5" }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "9itsUTJYiiroLNSyr3Nrmiyd9gdk7X9HH22bSew9dmrF",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "A1-mint-grps",
+            "singularForm": "A1-mint-grp",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "1000000000",
+        "totalSupply": "1000102300",
+        "maxSupply": "20000000000",
+        "owner": { "identifier": "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "HzMke6E5SnSqLdCX1u3WdwpWx1hFFkSnFQpahTPdYUSF",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 4,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "6niNoQpsT9zyVDJtXcbpV3tR3qEGi6BC6xoDdJyx1u7C",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": { "pluralForm": "PSHM", "singularForm": "PSHM", "shouldCapitalize": true }
+        },
+        "baseSupply": "1337",
+        "totalSupply": "1348",
+        "maxSupply": "13370",
+        "owner": {
+          "identifier": "HT3pUBM1Uv2mKgdPEN1gxa7A4PdsvNY89aJbdSKQb5wR",
+          "aliases": [
+            {
+              "alias": "sometest.dash",
+              "status": "ok",
+              "timestamp": "2025-10-01T06:17:43.416Z",
+              "documentId": "7AkKM7CmVJTLV15BFyat5ENWE6g2nQtMdTMFCxkbhuWM",
+              "contested": true
+            }
+          ]
+        },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "dfaPU4HsMpUX7NMF2TR5oeAC4cZvLwYrSU6WT4884bq",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 2,
+        "perpetualDistribution": {
+          "type": "TimeBasedDistribution",
+          "recipientType": "ContractOwner",
+          "recipientValue": null,
+          "interval": 14515200000,
+          "functionName": "FixedAmount",
+          "functionValue": { "amount": "1337" }
+        },
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 1327 }
+  }
+}

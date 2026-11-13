@@ -2,11 +2,12 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it, onTestFinished } from 'vitest'
 import { App } from '@/app'
 import { server } from '@/test/server'
 import { resolvers } from './resolvers'
 import { ensureWordlist } from './wordlist'
+import { UNFINISHED_ROUTES } from './offered'
 import { localStamp } from './resolvers/helpers'
 import type { Resolver, SearchHit } from './types'
 
@@ -258,6 +259,11 @@ describe('/search page', () => {
   })
 
   it('shows a confirmed hit as a result, not a guess, and drops one whose page is unfinished', async () => {
+    const unfinished = UNFINISHED_ROUTES as Set<string>
+    unfinished.add('/token/$id')
+    onTestFinished(() => {
+      unfinished.delete('/token/$id')
+    })
     addResolver({
       id: 'confirmed-hits',
       accepts: ['dpns'],

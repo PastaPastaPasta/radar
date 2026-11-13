@@ -1,14 +1,646 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "“{part}” is neither an identity ID nor a name."
+msgstr "“{part}”既不是身份 ID，也不是名称。"
+
+#. placeholder {0}: formatInt(found.balance)
+msgid "{0} credits"
+msgstr "{0} 积分"
+
+#. placeholder {0}: formatInt(totals.incomingTxs ?? 0)
+msgid "{0} incoming"
+msgstr "传入 {0} 条"
+
+#. placeholder {0}: formatInt(totals.outgoingTxs ?? 0)
+msgid "{0} outgoing"
+msgstr "传出 {0} 条"
+
+#. placeholder {0}: formatInt(view.preProgrammedMoments)
+msgid "{0} scheduled releases"
+msgstr "{0} 次计划发放"
+
+#. placeholder {0}: formatInt(r.transitionCount)
+msgid "{0} transitions"
+msgstr "{0} 次状态转换"
+
+msgid "A contract ID is 43 or 44 base58 characters."
+msgstr "合约 ID 由 43 或 44 个 base58 字符组成。"
+
+msgid "A Platform address is written in bech32m and starts with dash1 on mainnet or tdash1 on testnet. It is not a Core address, which starts with X, 7 or y."
+msgstr "Platform 地址采用 bech32m 编码，主网以 dash1 开头，测试网以 tdash1 开头。它不是以 X、7 或 y 开头的 Core 地址。"
+
+msgid "A token ID is 43 or 44 base58 characters. To open a token from its contract, give the contract and the token's position in it."
+msgstr "代币 ID 由 43 或 44 个 base58 字符组成。要通过合约打开代币，请提供合约及代币在其中的位置。"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Activity"
+msgstr "活动"
+
+msgid "Add"
+msgstr "添加"
+
+#. placeholder {0}: k.name
+msgid "Add {0}"
+msgstr "添加 {0}"
+
+msgid "Add identity IDs or DPNS names above to see their balances of this token."
+msgstr "请在上方添加身份 ID 或 DPNS 名称，以查看它们持有的该代币余额。"
+
+msgid "Add the identities I viewed"
+msgstr "添加我查看过的身份"
+
+msgid "Allowed"
+msgstr "允许"
+
+msgid "Amount"
+msgstr "金额"
+
+msgid "An address’s transitions need an indexer; Platform keeps no history per address"
+msgstr "地址的状态转换需要索引器；Platform 不按地址保存历史记录"
+
+msgid "An identity ID is 43 or 44 base58 characters."
+msgstr "身份 ID 由 43 或 44 个 base58 字符组成。"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "Balance and nonce"
+msgstr "余额和 nonce"
+
+msgid "Balances"
+msgstr "余额"
+
+msgid "Balances of the chosen identities"
+msgstr "所选身份的余额"
+
+msgid "Balances of the identities you choose. Platform keeps no list of a token’s holders, so this asks the node about each one."
+msgstr "你所选身份的余额。Platform 不保存代币持有者列表，因此会逐个向节点查询。"
+
+#. placeholder {0}: formatInt(priceOf.basePrice)
+msgid "Base price {0} credits"
+msgstr "基础价格 {0} 积分"
+
+msgid "Base supply"
+msgstr "基础供应量"
+
+msgid "Burn"
+msgstr "销毁"
+
+msgid "Burning"
+msgstr "销毁"
+
+msgid "Change names and decimals"
+msgstr "更改名称和小数位数"
+
+msgid "Change the direct purchase price"
+msgstr "更改直接购买价格"
+
+msgid "Change the maximum supply"
+msgstr "更改最大供应量"
+
+msgid "Change the perpetual distribution"
+msgstr "更改持续分发"
+
+msgid "Change the trade mode"
+msgstr "更改交易模式"
+
+msgid "Change where new tokens go"
+msgstr "更改新代币的去向"
+
+msgid "Change whether minting may choose a recipient"
+msgstr "更改铸造时是否可以选择接收方"
+
+msgid "Choose identities"
+msgstr "选择身份"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Configuration"
+msgstr "配置"
+
+msgid "Configured"
+msgstr "已配置"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract ID"
+msgstr "合约 ID"
+
+msgid "Contract owner"
+msgstr "合约所有者"
+
+#. placeholder {0}: search.contract.slice(0, 8)
+msgid "Contract: {0}…"
+msgstr "合约：{0}…"
+
+msgid "Decimals"
+msgstr "小数位数"
+
+msgid "Defined by contract"
+msgstr "由合约定义"
+
+msgid "Definition"
+msgstr "定义"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Destroy frozen funds"
+msgstr "销毁冻结资金"
+
+msgid "Direct purchase price"
+msgstr "直接购买价格"
+
+msgid "Direct purchases"
+msgstr "直接购买"
+
+msgid "Distribution"
+msgstr "分发"
+
+msgid "Enter an identity ID or a DPNS name to see its balance of this token."
+msgstr "输入身份 ID 或 DPNS 名称，即可查看其持有的该代币余额。"
+
+msgid "Enter an identity to see when it last claimed."
+msgstr "输入身份即可查看其上次领取的时间。"
+
+msgid "Every token Platform Explorer has indexed, with its supply, price and contract."
+msgstr "Platform Explorer 已索引的所有代币，含供应量、价格和合约。"
+
+msgid "Freeze a balance"
+msgstr "冻结余额"
+
+msgid "Freezing"
+msgstr "冻结"
+
+msgid "From"
+msgstr "来自"
+
+msgid "Frozen"
+msgstr "已冻结"
+
+#. placeholder {0}: taker.position
+msgid "Group {0}"
+msgstr "群组 {0}"
+
+msgid "Group {group}"
+msgstr "组 {group}"
+
+msgid "History kept for"
+msgstr "保留历史记录的项目"
+
+msgid "Holder"
+msgstr "持有者"
+
+msgid "Holders"
+msgstr "持有者"
+
+msgid "Holders and activity"
+msgstr "持有者和活动"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity ({name})"
+msgstr "身份（{name}）"
+
+msgid "Identity ID of the contract owner"
+msgstr "合约所有者的身份 ID"
+
+msgid "Identity ID or name"
+msgstr "身份 ID 或名称"
+
+msgid "Identity IDs or names"
+msgstr "身份 ID 或名称"
+
+msgid "Its prefix belongs to {other}, so it cannot exist on this network."
+msgstr "其前缀属于 {other}，因此不可能存在于此网络。"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Last claim"
+msgstr "上次领取"
+
+msgid "Last claimed"
+msgstr "上次领取"
+
+#. placeholder {0}: formatInt(moment.blockHeight)
+msgid "Last claimed at Platform block {0}."
+msgstr "上次领取发生在 Platform 区块 {0}。"
+
+#. placeholder {0}: formatInt(moment.epochIndex)
+msgid "Last claimed in epoch {0}."
+msgstr "上次领取发生在纪元 {0}。"
+
+msgid "Loading…"
+msgstr "正在加载…"
+
+msgid "Look up"
+msgstr "查找"
+
+msgid "Main control group"
+msgstr "主控制组"
+
+msgid "Manage in Bridge"
+msgstr "在 Bridge 中管理"
+
+msgid "Maximum"
+msgstr "最大值"
+
+msgid "Maximum supply"
+msgstr "最大供应量"
+
+msgid "Mint"
+msgstr "铸造"
+
+msgid "Minting"
+msgstr "铸造"
+
+msgid "Minting may choose a recipient"
+msgstr "铸造时可以选择接收方"
+
+#. placeholder {0}: search.q
+msgid "Name or ID: {0}"
+msgstr "名称或 ID：{0}"
+
+msgid "Name or token ID"
+msgstr "名称或代币 ID"
+
+msgid "Names"
+msgstr "名称"
+
+msgid "New tokens go to"
+msgstr "新代币的去向"
+
+msgid "Newest first"
+msgstr "最新优先"
+
+msgid "No"
+msgstr "否"
+
+msgid "No identities chosen yet"
+msgstr "尚未选择身份"
+
+msgid "No identity has the name {name}."
+msgstr "没有身份使用名称 {name}。"
+
+msgid "No maximum"
+msgstr "无上限"
+
+msgid "No one"
+msgstr "无人"
+
+msgid "No token has recent activity."
+msgstr "没有代币有近期活动。"
+
+msgid "No token matches these filters"
+msgstr "没有代币符合这些筛选条件"
+
+msgid "No token with this ID on {net}."
+msgstr "{net} 上没有此 ID 的代币。"
+
+msgid "No transitions have touched this token yet."
+msgstr "尚无状态转换涉及此代币。"
+
+msgid "No transitions involve this address."
+msgstr "没有状态转换涉及此地址。"
+
+msgid "Nobody holds this token yet."
+msgstr "目前还没有人持有此代币。"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "无"
+
+msgid "Not allowed"
+msgstr "不允许"
+
+msgid "Not available right now"
+msgstr "暂不可用"
+
+msgid "Not for sale"
+msgstr "非卖品"
+
+msgid "Not frozen"
+msgstr "未冻结"
+
+msgid "Not stated"
+msgstr "未说明"
+
+msgid "Nothing"
+msgstr "无"
+
+msgid "Oldest first"
+msgstr "最早优先"
+
+msgid "Only a token with a perpetual distribution has claims to look up."
+msgstr "只有设有持续分发的代币才有可查询的领取记录。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open a token"
+msgstr "打开代币"
+
+msgid "Open a token by contract and position"
+msgstr "按合约和位置打开代币"
+
+msgid "Open another token by contract and position"
+msgstr "按合约和位置打开另一个代币"
+
+msgid "Open it on {other}"
+msgstr "在 {other} 上打开"
+
+msgid "Open Settings"
+msgstr "打开设置"
+
+msgid "Open token"
+msgstr "打开代币"
+
+msgid "Or from its contract and position"
+msgstr "或通过其合约和位置"
+
+msgid "Order"
+msgstr "排序"
+
+msgid "Overview"
+msgstr "概览"
+
+msgid "Owner"
+msgstr "所有者"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "所有者：{0}…"
+
+msgid "Pause and resume"
+msgstr "暂停和恢复"
+
+msgid "Paused"
+msgstr "已暂停"
+
+msgid "Perpetual distribution"
+msgstr "持续分发"
+
+msgid "Perpetual distribution rules"
+msgstr "持续分发规则"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Platform 地址"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer 不索引开发网"
+
+msgid "Platform Explorer has no tokens yet"
+msgstr "Platform Explorer 尚无代币"
+
+msgid "Platform has no balance for it. An address appears when someone sends it credits."
+msgstr "Platform 没有它的余额。有人向地址发送积分后它才会出现。"
+
+msgid "Platform has no holder index, so Radar cannot list every holder. Platform Explorer keeps one: "
+msgstr "Platform 没有持有者索引，因此 Radar 无法列出所有持有者。Platform Explorer 有一个："
+
+msgid "Platform has no token with this ID on this network. A token's ID comes from its contract and position."
+msgstr "Platform 在此网络上没有此 ID 的代币。代币 ID 由其合约和位置得出。"
+
+msgid "Platform keeps no holder index; this needs Platform Explorer's index"
+msgstr "Platform 不保存持有者索引；这需要 Platform Explorer 的索引"
+
+msgid "Platform keeps no list of a token's holders or transfers; this needs Platform Explorer's index"
+msgstr "Platform 不保存代币的持有者或转账列表；这需要 Platform Explorer 的索引"
+
+msgid "Platform keeps no list of a token's transfers; this needs Platform Explorer's index"
+msgstr "Platform 不保存代币的转账列表；这需要 Platform Explorer 的索引"
+
+msgid "Platform keeps no list of tokens; this needs Platform Explorer's index. Open a token by its ID, or by its contract and position, above."
+msgstr "Platform 不保存代币列表；这需要 Platform Explorer 的索引。请在上方通过 ID 或合约和位置打开代币。"
+
+msgid "Plural"
+msgstr "复数"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Position in the contract"
+msgstr "在合约中的位置"
+
+msgid "Pre-programmed distribution"
+msgstr "预设分发"
+
+msgid "Pre-programmed releases"
+msgstr "预设发放"
+
+msgid "Price"
+msgstr "价格"
+
+msgid "Price changes"
+msgstr "价格变更"
+
+msgid "Radar can remember the identities you open in this browser, and add them here. That is off until you turn it on in Settings."
+msgstr "Radar 可以记住你在此浏览器中打开过的身份，并将其添加到这里。在设置中开启之前，此功能处于关闭状态。"
+
+msgid "Raw configuration"
+msgstr "原始配置"
+
+msgid "Received"
+msgstr "已接收"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Remove {id} from the list"
+msgstr "从列表中移除 {id}"
+
+msgid "Search on {other}"
+msgstr "在 {other} 上搜索"
+
+msgid "See the activity"
+msgstr "查看活动"
+
+msgid "See the holder list on Platform Explorer"
+msgstr "在 Platform Explorer 上查看持有者列表"
+
+msgid "See the holders"
+msgstr "查看持有者"
+
+msgid "Sent"
+msgstr "已发送"
+
+msgid "Separate several with spaces or commas"
+msgstr "多个请用空格或逗号分隔"
+
+msgid "Singular"
+msgstr "单数"
+
+msgid "Start of a name, or a token ID"
+msgstr "名称开头，或代币 ID"
+
+msgid "Starts paused"
+msgstr "初始为暂停"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Summary"
+msgstr "摘要"
+
+msgid "Supply"
+msgstr "供应量"
+
+msgid "That is neither an identity ID nor a DPNS name."
+msgstr "这既不是身份 ID，也不是 DPNS 名称。"
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "这不是合约 ID：合约 ID 为 43 或 44 个 base58 字符。"
+
+msgid "That isn’t a Platform address."
+msgstr "这不是 Platform 地址。"
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "这不是代币 ID：代币 ID 为 43 或 44 个 base58 字符。"
+
+msgid "That isn’t a token ID."
+msgstr "这不是代币 ID。"
+
+msgid "The configuration lists no rules."
+msgstr "配置中没有列出规则。"
+
+msgid "The contract does not list this token."
+msgstr "合约中没有列出此代币。"
+
+msgid "The contract gives this token no names."
+msgstr "合约没有为此代币提供名称。"
+
+msgid "The identity that mints them"
+msgstr "铸造它们的身份"
+
+msgid "The name {name} could not be looked up."
+msgstr "无法查询名称 {name}。"
+
+msgid "The node did not answer for this identity."
+msgstr "节点没有返回此身份的结果。"
+
+msgid "The position is a whole number from 0 to 65535."
+msgstr "位置是 0 到 65535 之间的整数。"
+
+msgid "The token ID could not be worked out."
+msgstr "无法计算出代币 ID。"
+
+msgid "The token's configuration is read from the contract that defines it."
+msgstr "代币的配置读取自定义它的合约。"
+
+msgid "This address holds nothing on {net}."
+msgstr "此地址在 {net} 上没有任何资产。"
+
+msgid "This identity has not claimed from this token yet."
+msgstr "此身份尚未领取过此代币。"
+
+msgid "This identity holds none of this token."
+msgstr "此身份不持有该代币。"
+
+msgid "This is a {other} address."
+msgstr "这是一个 {other} 地址。"
+
+msgid "This token has no perpetual distribution."
+msgstr "此代币没有持续分发。"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "To"
+msgstr "发往"
+
+msgid "Token"
+msgstr "代币"
+
+msgid "Token configuration"
+msgstr "代币配置"
+
+msgid "Token holders"
+msgstr "代币持有者"
+
+msgid "Token ID"
+msgstr "代币 ID"
+
+msgid "Token transitions"
+msgstr "代币状态转换"
+
+msgid "Tokens"
+msgstr "代币"
+
+msgid "Tokens with the most recent transitions"
+msgstr "状态转换最新的代币"
+
+msgid "Total supply"
+msgstr "总供应量"
+
+msgid "Transfers"
+msgstr "转账"
+
+msgid "Transfers to a frozen balance"
+msgstr "向已冻结余额转账"
+
+msgid "Transition"
+msgstr "状态转换"
+
+msgid "Transitions"
+msgstr "状态转换"
+
+msgid "Transitions of this address"
+msgstr "此地址的状态转换"
+
+msgid "Transitions recorded"
+msgstr "已记录的状态转换"
+
+msgid "Trending"
+msgstr "热门"
+
+msgid "Try again"
+msgstr "重试"
+
+msgid "Unfreeze a balance"
+msgstr "解冻余额"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Use up to 25 letters, digits or hyphens, or a token ID."
+msgstr "最多使用 25 个字母、数字或连字符，或使用代币 ID。"
+
+msgid "Who may change the rule"
+msgstr "谁可以更改规则"
+
+msgid "Who may do it"
+msgstr "谁可以执行"
+
+msgid "Who may do what"
+msgstr "谁可以做什么"
+
+msgid "Yes"
+msgstr "是"

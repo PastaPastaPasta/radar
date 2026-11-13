@@ -1,14 +1,646 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: uk\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+msgid "“{part}” is neither an identity ID nor a name."
+msgstr "«{part}» — це не ID ідентичності й не ім’я."
+
+#. placeholder {0}: formatInt(found.balance)
+msgid "{0} credits"
+msgstr "{0} кредитів"
+
+#. placeholder {0}: formatInt(totals.incomingTxs ?? 0)
+msgid "{0} incoming"
+msgstr "вхідних: {0}"
+
+#. placeholder {0}: formatInt(totals.outgoingTxs ?? 0)
+msgid "{0} outgoing"
+msgstr "вихідних: {0}"
+
+#. placeholder {0}: formatInt(view.preProgrammedMoments)
+msgid "{0} scheduled releases"
+msgstr "запланованих виплат: {0}"
+
+#. placeholder {0}: formatInt(r.transitionCount)
+msgid "{0} transitions"
+msgstr "переходів: {0}"
+
+msgid "A contract ID is 43 or 44 base58 characters."
+msgstr "ID контракту складається з 43 або 44 символів base58."
+
+msgid "A Platform address is written in bech32m and starts with dash1 on mainnet or tdash1 on testnet. It is not a Core address, which starts with X, 7 or y."
+msgstr "Адреса Platform записується у bech32m і починається з dash1 у mainnet або tdash1 у testnet. Це не адреса Core, яка починається з X, 7 або y."
+
+msgid "A token ID is 43 or 44 base58 characters. To open a token from its contract, give the contract and the token's position in it."
+msgstr "ID токена складається з 43 або 44 символів base58. Щоб відкрити токен за його контрактом, вкажіть контракт і позицію токена в ньому."
+
+msgid "Action"
+msgstr "Дія"
+
+msgid "Active"
+msgstr "Активна"
+
+msgid "Activity"
+msgstr "Активність"
+
+msgid "Add"
+msgstr "Додати"
+
+#. placeholder {0}: k.name
+msgid "Add {0}"
+msgstr "Додати {0}"
+
+msgid "Add identity IDs or DPNS names above to see their balances of this token."
+msgstr "Додайте вище ID ідентичностей або імена DPNS, щоб побачити їхній баланс цього токена."
+
+msgid "Add the identities I viewed"
+msgstr "Додати переглянуті мною ідентичності"
+
+msgid "Allowed"
+msgstr "Дозволено"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "An address’s transitions need an indexer; Platform keeps no history per address"
+msgstr "Для переходів адреси потрібен індексатор; Platform не зберігає історію за адресами"
+
+msgid "An identity ID is 43 or 44 base58 characters."
+msgstr "ID ідентичності складається з 43 або 44 символів base58."
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "Balance and nonce"
+msgstr "Баланс і nonce"
+
+msgid "Balances"
+msgstr "Баланси"
+
+msgid "Balances of the chosen identities"
+msgstr "Баланси вибраних ідентичностей"
+
+msgid "Balances of the identities you choose. Platform keeps no list of a token’s holders, so this asks the node about each one."
+msgstr "Баланси вибраних вами ідентичностей. Platform не зберігає список власників токена, тому вузол опитується щодо кожної окремо."
+
+#. placeholder {0}: formatInt(priceOf.basePrice)
+msgid "Base price {0} credits"
+msgstr "Базова ціна {0} кредитів"
+
+msgid "Base supply"
+msgstr "Базова пропозиція"
+
+msgid "Burn"
+msgstr "Спалювання"
+
+msgid "Burning"
+msgstr "Спалювання"
+
+msgid "Change names and decimals"
+msgstr "Змінити назви та десяткові знаки"
+
+msgid "Change the direct purchase price"
+msgstr "Змінити ціну прямої купівлі"
+
+msgid "Change the maximum supply"
+msgstr "Змінити максимальну пропозицію"
+
+msgid "Change the perpetual distribution"
+msgstr "Змінити безстрокову дистрибуцію"
+
+msgid "Change the trade mode"
+msgstr "Змінити режим торгівлі"
+
+msgid "Change where new tokens go"
+msgstr "Змінити, куди потрапляють нові токени"
+
+msgid "Change whether minting may choose a recipient"
+msgstr "Змінити, чи може карбування обирати отримувача"
+
+msgid "Choose identities"
+msgstr "Обрати ідентичності"
+
+msgid "Clear"
+msgstr "Очистити"
+
+msgid "Configuration"
+msgstr "Конфігурація"
+
+msgid "Configured"
+msgstr "Налаштовано"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract ID"
+msgstr "ID контракту"
+
+msgid "Contract owner"
+msgstr "Власник контракту"
+
+#. placeholder {0}: search.contract.slice(0, 8)
+msgid "Contract: {0}…"
+msgstr "Контракт: {0}…"
+
+msgid "Decimals"
+msgstr "Десяткові знаки"
+
+msgid "Defined by contract"
+msgstr "Визначено контрактом"
+
+msgid "Definition"
+msgstr "Визначення"
+
+msgid "Description"
+msgstr "Опис"
+
+msgid "Destroy frozen funds"
+msgstr "Знищення заморожених коштів"
+
+msgid "Direct purchase price"
+msgstr "Ціна прямої купівлі"
+
+msgid "Direct purchases"
+msgstr "Прямі купівлі"
+
+msgid "Distribution"
+msgstr "Дистрибуція"
+
+msgid "Enter an identity ID or a DPNS name to see its balance of this token."
+msgstr "Введіть ID ідентичності або ім’я DPNS, щоб побачити її баланс цього токена."
+
+msgid "Enter an identity to see when it last claimed."
+msgstr "Введіть ідентичність, щоб побачити, коли вона востаннє отримувала виплату."
+
+msgid "Every token Platform Explorer has indexed, with its supply, price and contract."
+msgstr "Усі токени, проіндексовані Platform Explorer, з їхньою пропозицією, ціною та контрактом."
+
+msgid "Freeze a balance"
+msgstr "Заморозити баланс"
+
+msgid "Freezing"
+msgstr "Заморожування"
+
+msgid "From"
+msgstr "Від"
+
+msgid "Frozen"
+msgstr "Заморожений"
+
+#. placeholder {0}: taker.position
+msgid "Group {0}"
+msgstr "Група {0}"
+
+msgid "Group {group}"
+msgstr "Група {group}"
+
+msgid "History kept for"
+msgstr "Історія ведеться для"
+
+msgid "Holder"
+msgstr "Власник"
+
+msgid "Holders"
+msgstr "Власники"
+
+msgid "Holders and activity"
+msgstr "Власники та активність"
+
+msgid "Identity"
+msgstr "Ідентичність"
+
+msgid "Identity ({name})"
+msgstr "Ідентичність ({name})"
+
+msgid "Identity ID of the contract owner"
+msgstr "ID ідентичності власника контракту"
+
+msgid "Identity ID or name"
+msgstr "ID ідентичності або ім’я"
+
+msgid "Identity IDs or names"
+msgstr "ID ідентичностей або імена"
+
+msgid "Its prefix belongs to {other}, so it cannot exist on this network."
+msgstr "Її префікс належить мережі {other}, тож у цій мережі вона існувати не може."
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Last claim"
+msgstr "Остання виплата"
+
+msgid "Last claimed"
+msgstr "Остання виплата"
+
+#. placeholder {0}: formatInt(moment.blockHeight)
+msgid "Last claimed at Platform block {0}."
+msgstr "Остання виплата — у блоці Platform {0}."
+
+#. placeholder {0}: formatInt(moment.epochIndex)
+msgid "Last claimed in epoch {0}."
+msgstr "Остання виплата — в епосі {0}."
+
+msgid "Loading…"
+msgstr "Завантаження…"
+
+msgid "Look up"
+msgstr "Знайти"
+
+msgid "Main control group"
+msgstr "Основна контрольна група"
+
+msgid "Manage in Bridge"
+msgstr "Керувати в Bridge"
+
+msgid "Maximum"
+msgstr "Максимум"
+
+msgid "Maximum supply"
+msgstr "Максимальна пропозиція"
+
+msgid "Mint"
+msgstr "Карбування"
+
+msgid "Minting"
+msgstr "Карбування"
+
+msgid "Minting may choose a recipient"
+msgstr "Карбування може обирати отримувача"
+
+#. placeholder {0}: search.q
+msgid "Name or ID: {0}"
+msgstr "Ім’я або ID: {0}"
+
+msgid "Name or token ID"
+msgstr "Ім’я або ID токена"
+
+msgid "Names"
+msgstr "Імена"
+
+msgid "New tokens go to"
+msgstr "Нові токени надходять до"
+
+msgid "Newest first"
+msgstr "Спочатку нові"
+
+msgid "No"
+msgstr "Ні"
+
+msgid "No identities chosen yet"
+msgstr "Ідентичності ще не вибрано"
+
+msgid "No identity has the name {name}."
+msgstr "Жодна ідентичність не має імені {name}."
+
+msgid "No maximum"
+msgstr "Без максимуму"
+
+msgid "No one"
+msgstr "Ніхто"
+
+msgid "No token has recent activity."
+msgstr "Жоден токен не має недавньої активності."
+
+msgid "No token matches these filters"
+msgstr "Жоден токен не відповідає цим фільтрам"
+
+msgid "No token with this ID on {net}."
+msgstr "У мережі {net} немає токена з таким ID."
+
+msgid "No transitions have touched this token yet."
+msgstr "Поки жоден перехід не торкався цього токена."
+
+msgid "No transitions involve this address."
+msgstr "Жоден перехід не стосується цієї адреси."
+
+msgid "Nobody holds this token yet."
+msgstr "Цей токен поки ніхто не тримає."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Немає"
+
+msgid "Not allowed"
+msgstr "Заборонено"
+
+msgid "Not available right now"
+msgstr "Зараз недоступно"
+
+msgid "Not for sale"
+msgstr "Не продається"
+
+msgid "Not frozen"
+msgstr "Не заморожений"
+
+msgid "Not stated"
+msgstr "Не вказано"
+
+msgid "Nothing"
+msgstr "Нічого"
+
+msgid "Oldest first"
+msgstr "Спочатку старі"
+
+msgid "Only a token with a perpetual distribution has claims to look up."
+msgstr "Запити виплат є лише в токена з безстроковою дистрибуцією."
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open a token"
+msgstr "Відкрити токен"
+
+msgid "Open a token by contract and position"
+msgstr "Відкрити токен за контрактом і позицією"
+
+msgid "Open another token by contract and position"
+msgstr "Відкрити інший токен за контрактом і позицією"
+
+msgid "Open it on {other}"
+msgstr "Відкрити в мережі {other}"
+
+msgid "Open Settings"
+msgstr "Відкрити налаштування"
+
+msgid "Open token"
+msgstr "Відкрити токен"
+
+msgid "Or from its contract and position"
+msgstr "Або за контрактом і позицією"
+
+msgid "Order"
+msgstr "Порядок"
+
+msgid "Overview"
+msgstr "Огляд"
+
+msgid "Owner"
+msgstr "Власник"
+
+#. placeholder {0}: search.owner.slice(0, 8)
+msgid "Owner: {0}…"
+msgstr "Власник: {0}…"
+
+msgid "Pause and resume"
+msgstr "Призупинення та відновлення"
+
+msgid "Paused"
+msgstr "Призупинено"
+
+msgid "Perpetual distribution"
+msgstr "Безстрокова дистрибуція"
+
+msgid "Perpetual distribution rules"
+msgstr "Правила безстрокової дистрибуції"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform address"
+msgstr "Адреса Platform"
+
+msgid "Platform Explorer doesn't index devnets"
+msgstr "Platform Explorer не індексує devnet"
+
+msgid "Platform Explorer has no tokens yet"
+msgstr "У Platform Explorer поки немає токенів"
+
+msgid "Platform has no balance for it. An address appears when someone sends it credits."
+msgstr "У Platform немає балансу для неї. Адреса з’являється, коли хтось надсилає їй кредити."
+
+msgid "Platform has no holder index, so Radar cannot list every holder. Platform Explorer keeps one: "
+msgstr "У Platform немає індексу власників, тому Radar не може перелічити всіх. Platform Explorer його веде: "
+
+msgid "Platform has no token with this ID on this network. A token's ID comes from its contract and position."
+msgstr "У цій мережі Platform не має токена з таким ID. ID токена походить від його контракту й позиції."
+
+msgid "Platform keeps no holder index; this needs Platform Explorer's index"
+msgstr "Platform не веде індекс власників; для цього потрібен індекс Platform Explorer"
+
+msgid "Platform keeps no list of a token's holders or transfers; this needs Platform Explorer's index"
+msgstr "Platform не зберігає список власників або переказів токена; для цього потрібен індекс Platform Explorer"
+
+msgid "Platform keeps no list of a token's transfers; this needs Platform Explorer's index"
+msgstr "Platform не зберігає список переказів токена; для цього потрібен індекс Platform Explorer"
+
+msgid "Platform keeps no list of tokens; this needs Platform Explorer's index. Open a token by its ID, or by its contract and position, above."
+msgstr "Platform не зберігає список токенів; для цього потрібен індекс Platform Explorer. Відкрийте токен вище за ID або за контрактом і позицією."
+
+msgid "Plural"
+msgstr "Множина"
+
+msgid "Position"
+msgstr "Позиція"
+
+msgid "Position in the contract"
+msgstr "Позиція в контракті"
+
+msgid "Pre-programmed distribution"
+msgstr "Запрограмована дистрибуція"
+
+msgid "Pre-programmed releases"
+msgstr "Запрограмовані виплати"
+
+msgid "Price"
+msgstr "Ціна"
+
+msgid "Price changes"
+msgstr "Зміни ціни"
+
+msgid "Radar can remember the identities you open in this browser, and add them here. That is off until you turn it on in Settings."
+msgstr "Radar може запам’ятовувати ідентичності, які ви відкриваєте в цьому браузері, і додавати їх сюди. Це вимкнено, доки ви не ввімкнете в налаштуваннях."
+
+msgid "Raw configuration"
+msgstr "Вихідна конфігурація"
+
+msgid "Received"
+msgstr "Отримано"
+
+msgid "Remove"
+msgstr "Видалити"
+
+msgid "Remove {id} from the list"
+msgstr "Вилучити {id} зі списку"
+
+msgid "Search on {other}"
+msgstr "Шукати в {other}"
+
+msgid "See the activity"
+msgstr "Переглянути активність"
+
+msgid "See the holder list on Platform Explorer"
+msgstr "Переглянути список власників у Platform Explorer"
+
+msgid "See the holders"
+msgstr "Переглянути власників"
+
+msgid "Sent"
+msgstr "Надіслано"
+
+msgid "Separate several with spaces or commas"
+msgstr "Кілька розділяйте пробілами або комами"
+
+msgid "Singular"
+msgstr "Однина"
+
+msgid "Start of a name, or a token ID"
+msgstr "Початок імені або ID токена"
+
+msgid "Starts paused"
+msgstr "Починається на паузі"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Summary"
+msgstr "Підсумок"
+
+msgid "Supply"
+msgstr "Пропозиція"
+
+msgid "That is neither an identity ID nor a DPNS name."
+msgstr "Це не ID ідентичності й не ім’я DPNS."
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "Це не ID контракту: він складається з 43 або 44 символів base58."
+
+msgid "That isn’t a Platform address."
+msgstr "Це не адреса Platform."
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "Це не ID токена: він складається з 43 або 44 символів base58."
+
+msgid "That isn’t a token ID."
+msgstr "Це не ID токена."
+
+msgid "The configuration lists no rules."
+msgstr "У конфігурації немає правил."
+
+msgid "The contract does not list this token."
+msgstr "Контракт не містить цей токен."
+
+msgid "The contract gives this token no names."
+msgstr "Контракт не задає цьому токену назв."
+
+msgid "The identity that mints them"
+msgstr "Ідентичність, яка їх карбує"
+
+msgid "The name {name} could not be looked up."
+msgstr "Не вдалося знайти ім’я {name}."
+
+msgid "The node did not answer for this identity."
+msgstr "Вузол не відповів щодо цієї ідентичності."
+
+msgid "The position is a whole number from 0 to 65535."
+msgstr "Позиція — ціле число від 0 до 65535."
+
+msgid "The token ID could not be worked out."
+msgstr "Не вдалося обчислити ID токена."
+
+msgid "The token's configuration is read from the contract that defines it."
+msgstr "Конфігурація токена читається з контракту, що його визначає."
+
+msgid "This address holds nothing on {net}."
+msgstr "Ця адреса нічого не тримає в мережі {net}."
+
+msgid "This identity has not claimed from this token yet."
+msgstr "Ця ідентичність ще не отримувала виплат за цим токеном."
+
+msgid "This identity holds none of this token."
+msgstr "Ця ідентичність не тримає цей токен."
+
+msgid "This is a {other} address."
+msgstr "Це адреса мережі {other}."
+
+msgid "This token has no perpetual distribution."
+msgstr "Цей токен не має безстрокової дистрибуції."
+
+msgid "Time"
+msgstr "Час"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Token configuration"
+msgstr "Конфігурація токена"
+
+msgid "Token holders"
+msgstr "Власники токена"
+
+msgid "Token ID"
+msgstr "ID токена"
+
+msgid "Token transitions"
+msgstr "Переходи токена"
+
+msgid "Tokens"
+msgstr "Токени"
+
+msgid "Tokens with the most recent transitions"
+msgstr "Токени з найсвіжішими переходами"
+
+msgid "Total supply"
+msgstr "Загальна пропозиція"
+
+msgid "Transfers"
+msgstr "Перекази"
+
+msgid "Transfers to a frozen balance"
+msgstr "Перекази на заморожений баланс"
+
+msgid "Transition"
+msgstr "Перехід"
+
+msgid "Transitions"
+msgstr "Переходи"
+
+msgid "Transitions of this address"
+msgstr "Переходи цієї адреси"
+
+msgid "Transitions recorded"
+msgstr "Записані переходи"
+
+msgid "Trending"
+msgstr "У тренді"
+
+msgid "Try again"
+msgstr "Спробувати знову"
+
+msgid "Unfreeze a balance"
+msgstr "Розморозити баланс"
+
+msgid "Unknown"
+msgstr "Невідомо"
+
+msgid "Use up to 25 letters, digits or hyphens, or a token ID."
+msgstr "Використовуйте до 25 літер, цифр або дефісів чи ID токена."
+
+msgid "Who may change the rule"
+msgstr "Хто може змінити правило"
+
+msgid "Who may do it"
+msgstr "Хто може це зробити"
+
+msgid "Who may do what"
+msgstr "Хто що може робити"
+
+msgid "Yes"
+msgstr "Так"
