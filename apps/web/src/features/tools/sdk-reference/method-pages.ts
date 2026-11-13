@@ -219,4 +219,16 @@ export const METHOD_PAGES: Record<string, MethodRow> = {
     call: 'system.prefundedSpecializedBalanceWithProof(id)',
     pages: ['/credits'],
   },
+  'group.contestedResources': {
+    call: 'group.contestedResourcesWithProof({ dataContractId, documentTypeName, indexName, startIndexValues, startAtValue, limit })',
+    pages: ['/contests'],
+  },
+  'voting.contestedResourceVoteState': {
+    call: "voting.contestedResourceVoteStateWithProof({ dataContractId, documentTypeName, indexName, indexValues, resultType: 'documentsAndVoteTally' })",
+    pages: ['/contests', '/contest/$label', '/name/$label'],
+  },
+  'voting.contestedResourceVotersForIdentity': {
+    call: 'group.contestedResourceVotersForIdentityWithProof({ dataContractId, documentTypeName, indexName, indexValues, contestantId, limit })',
+    pages: ['/contest/$label'],
+  },
 }

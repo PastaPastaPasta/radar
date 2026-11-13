@@ -273,10 +273,10 @@ describe('/search page', () => {
             rank: 80,
           },
           {
-            kind: 'contract',
+            kind: 'token',
             id: 'c'.repeat(44),
-            title: 'Unbuilt contract',
-            href: { to: '/contract/$id', params: { id: 'c'.repeat(44) } },
+            title: 'Unbuilt token',
+            href: { to: '/token/$id', params: { id: 'c'.repeat(44) } },
             stamp: localStamp(),
             rank: 80,
           },
@@ -287,7 +287,7 @@ describe('/search page', () => {
 
     expect(await screen.findByRole('heading', { name: 'Network' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Masternode 1.2.3.4/ })).toBeInTheDocument()
-    expect(screen.queryByText('Unbuilt contract')).toBeNull()
+    expect(screen.queryByText('Unbuilt token')).toBeNull()
     expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
     expect(screen.queryByText(/No match for/)).toBeNull()
   })
