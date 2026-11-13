@@ -106,13 +106,13 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
       <Zone id="chain" title={t`On the chain`} zoneRef={chainRef}>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Proposers active={chain} />
-          <RecentEpochs active={chain} />
+          <div className="grid grid-cols-1 content-start gap-4">
+            <QuorumsCard active={chain} />
+            <PollsCard active={chain} />
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <QuorumsCard active={chain} />
-          <PollsCard active={chain} />
-          <ContractsCard active={chain} />
-        </div>
+        <RecentEpochs active={chain} />
+        <ContractsCard active={chain} />
       </Zone>
 
       {indexed ? (

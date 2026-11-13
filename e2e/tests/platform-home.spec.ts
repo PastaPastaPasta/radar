@@ -86,6 +86,7 @@ test.describe('Platform overview', () => {
     await expect(card(page, 'polls').locator('[data-poll-count]')).toBeVisible()
     await expect(card(page, 'contracts')).toContainText('DPNS')
     await expect(card(page, 'contracts')).toContainText(/version \d/)
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
     await expectAccessible(page)
   })
 

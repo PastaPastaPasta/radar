@@ -65,12 +65,14 @@ export function Vitals() {
             source={tip.data ? stampOf(tip.data) : undefined}
             layer="platform"
           />
-          <Stat
-            label={t`Epoch`}
-            value={epoch ? formatInt(epoch.number) : missing(tip.isError)}
-            loading={!epoch && !tip.isError}
-            layer="platform"
-          />
+          {epoch ? null : (
+            <Stat
+              label={t`Epoch`}
+              value={missing(tip.isError)}
+              loading={!tip.isError}
+              layer="platform"
+            />
+          )}
           <Stat
             label={t`Total credits`}
             value={
