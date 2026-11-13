@@ -35,6 +35,8 @@ export interface StatementRun {
   /** Null while the statement is waiting or running. */
   result?: StatementResult
   error?: unknown
+  /** The reader stopped it before it answered. */
+  cancelled?: boolean
 }
 
 export type PlanResult =

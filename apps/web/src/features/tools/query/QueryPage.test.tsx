@@ -5,7 +5,8 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
 import { App } from '@/app'
 import { renderAt } from '../test-utils'
-import { stubSdkCalls } from '../test-sdk'
+import { sdk } from '@/data/sdk'
+import { sourced, stubSdkCalls } from '../test-sdk'
 
 const DPNS = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const DOMAIN = {
@@ -59,6 +60,33 @@ describe('Query page', () => {
     await user.click(screen.getByRole('textbox', { name: 'SQL query' }))
     await user.keyboard('{Control>}{Enter}{/Control}')
     await waitFor(() => expect(queries()).toBe(2))
+  })
+
+  it('stops a statement that is still waiting when Cancel is pressed @NX-70', async () => {
+    const waiting = vi.fn()
+    vi.spyOn(sdk, 'call').mockImplementation(((
+      _net: string,
+      method: string,
+      _args: unknown,
+      signal?: AbortSignal,
+    ) => {
+      if (method === 'contracts.fetch') return Promise.resolve(sourced(CONTRACT))
+      waiting()
+      return new Promise((_resolve, reject) => {
+        signal?.addEventListener('abort', () => {
+          reject(new DOMException('Aborted', 'AbortError'))
+        })
+      })
+    }) as never)
+    const user = userEvent.setup()
+    renderAt('/query')
+    await user.click(await screen.findByRole('button', { name: 'Run' }))
+    await waitFor(() => expect(waiting).toHaveBeenCalled())
+    const cancel = screen.getByRole('button', { name: 'Cancel' })
+    expect(cancel).toBeEnabled()
+    await user.click(cancel)
+    expect(await screen.findByText('Cancelled')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Run' })).toBeEnabled()
   })
 
   it('explains syntax it does not support and sends nothing @NX-70', async () => {

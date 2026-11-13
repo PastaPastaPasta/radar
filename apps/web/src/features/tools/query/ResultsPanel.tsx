@@ -113,7 +113,7 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
   if (error) {
     const kind = classifyQueryError(error instanceof Error ? error.message : undefined)
     const hint = kind ? QUERY_ERROR_HINTS[kind] : undefined
-    const cancelled = isSourceError(error) && error.kind === 'aborted'
+    const cancelled = run.cancelled === true || (isSourceError(error) && error.kind === 'aborted')
     return (
       <Card title={title} layer="platform">
         {cancelled ? (
