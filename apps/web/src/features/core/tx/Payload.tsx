@@ -1,10 +1,11 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
-import { Entity } from '@/features/entity'
+import { Entity, IdentityRef, PageLink } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Amount, Hash, KeyValue } from '@/ui'
+import { useFundedIdentities } from './funded-identity'
 import { REVOKE_REASONS } from './revoke-reason'
-import type { SourceStamp } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 
 interface Item {
   label: ReactNode
@@ -287,10 +288,11 @@ function MnhfRows({ p }: { p: Obj }) {
   )
 }
 
-function AssetLockRows({ p }: { p: Obj }) {
+function AssetLockRows({ p, txid }: { p: Obj; txid: string }) {
   const { t } = useLingui()
   const outputs = list(p.creditOutputs)
   const total = big(p.totalCredit)
+  const funded = useFundedIdentities(txid, outputs.length)
   return (
     <KeyValue
       columns={2}
@@ -298,6 +300,23 @@ function AssetLockRows({ p }: { p: Obj }) {
         {
           label: t`Credited on Platform`,
           value: total === undefined ? '—' : <Amount value={total} kind="duffs" />,
+        },
+        {
+          label: t`Identity created`,
+          value: !funded.ready ? (
+            '…'
+          ) : funded.found.length > 0 ? (
+            <div>
+              {funded.found.map((f) => (
+                <div key={f.id}>
+                  <IdentityRef id={f.id} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            t`None. A top-up credits an identity that already existed.`
+          ),
+          ...(funded.source ? { source: stampOf(funded.source) } : {}),
         },
         {
           label: t`Credit outputs`,
@@ -335,6 +354,17 @@ function AssetUnlockRows({ p }: { p: Obj }) {
         {
           label: t`Requested at height`,
           value: height === undefined ? '—' : <Entity kind="block" id={String(height)} />,
+        },
+        {
+          label: t`On Platform`,
+          value: (
+            <PageLink
+              to="/platform/txs"
+              search={{ type: 'identity-credit-withdrawal,address-credit-withdrawal' }}
+            >
+              {t`Withdrawals on Platform`}
+            </PageLink>
+          ),
         },
         { label: t`Signing quorum`, value: fullHash(p.quorumHash) },
         { label: t`Quorum signature`, value: hashValue(p.quorumSig) },
@@ -523,7 +553,7 @@ export function PayloadRows({ payload, txid }: { payload: Obj; txid: string }) {
     case 'mnhfTx':
       return <MnhfRows p={payload} />
     case 'assetLockTx':
-      return <AssetLockRows p={payload} />
+      return <AssetLockRows p={payload} txid={txid} />
     case 'assetUnlockTx':
       return <AssetUnlockRows p={payload} />
     default:
