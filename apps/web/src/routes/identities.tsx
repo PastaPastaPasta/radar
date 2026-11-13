@@ -24,5 +24,9 @@ export const Route = createFileRoute('/identities')({
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
   loader: routePrefetch('p-id', 'identitiesPrefetch'),
-  component: IdentitiesPage,
+  component: IdentitiesRoute,
 })
+
+function IdentitiesRoute() {
+  return <IdentitiesPage search={Route.useSearch()} />
+}

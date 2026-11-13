@@ -1,0 +1,46 @@
+{
+  "method": "tokens.identityTokenInfos",
+  "args": {
+    "identityId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+    "tokenIds": [
+      "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+      "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd"
+    ]
+  },
+  "recordedAt": "2026-11-13T09:54:26.865Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [
+        ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB", null],
+        ["DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd", null]
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 470597,
+      "coreChainLockedHeight": 2571533,
+      "epoch": 88,
+      "timeMs": 1794563618517,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQD2AYRTnD+jxRz4Hv6XlyFfB5VTxqKOfFbT2oawpK1IMzIABAEQAAUCAQGAAFvqIgoBE72+ChOu2pX1qPHGPiG4BDq6fHyTJ+fSZo5VEAHvwJYXxVI9MANwG1fVfvumROzIm0medpg3Qc4lvl9V9REC2/yk0oEEhdf+/Qbca9OeBlHd52CVtmGu8VGZnhHzny0QAdKgSlNawRci5imh9dfnlht67pq7D5+3+kbq7k5/Krg5EQIgU+kPGzvcil3CYK2BJXlZE1I0jeza/FQ68wIgTpo4bxABMzTpykInfJ8u3hk5dU+Icidi85apeSqIMejEL3izJ/oRAQEQANEBpGJx2AAkK0K5dnDAU5WCNn7r26mqSTMoua+eMBlpZVACtMGzXHa3KbAFgAenHGCfhTFH7qFi/PRwj/KW+krOM7kQAXfu+hX20SOBC2InNmvz5/bIjr01wq1KYIFgdBf04a+UBAHAACQCASC6dJkicUKzuMlMXmagvHocCobtBHdKdWG6xz/hAN2lbADEH6oahyeYjx+U1iudmXGIAoPnsabDfN8T7Xa7I2bKgxABQShLFQLZlKqn34ajq6ptXTqOKjbA3A6Mg+dm8HQoJbMREQEBwAD1BCCT2urm33z0Ojy9zHDLMYSnzO+m6Ceo0/8nx0Ibn6QqIgADAgAAZRkp4XRzgaFhV1FeVEdiVQLzp5hDhZoKkp0kxgXAsjoCJroNv5fPa2S0ZjmFZhsZXtXLFcDeNErhqhRLz2INJPEQAemkdFY9khqmAWF4fXm5jdBl9C0hIUKJEJzBGlCFSoD2EQQgunSZInFCs7jJTF5moLx6HAqG7QR3SnVhusc/4QDdpWwAAwIAAGUZKeF0c4GhYVdRXlRHYlUC86eYQ4WaCpKdJMYFwLI6EAFxj3+slV8DtPPRyX9Z+rUUweI3JThOJvJFC/TMgq9fmBEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABbQVpn23fft6efOOglJ3xTU341aiB5oPc4="
+      },
+      "signature": {
+        "$u8": "s/IscnQDWQ1YzvRvuF2KT8QH6Ay9OzIVd+hN8FJzMQbdY7rlWEdilgcnaPAJ20rcA6TIKaP+cvJPzmmDyb9h368jC5CU9+cDKBpIcouwr58wuIePwATMglqwxxwaECSx"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "NpRF5mxdLTA9zQuQSnFim9FmixZED8wpUA3aE8FjN48="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 560.7898149999999
+  }
+}

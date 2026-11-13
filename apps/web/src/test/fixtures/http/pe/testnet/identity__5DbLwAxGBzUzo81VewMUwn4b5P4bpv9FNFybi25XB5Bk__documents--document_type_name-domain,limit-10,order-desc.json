@@ -1,0 +1,72 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/identity/5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk/documents?document_type_name=domain&limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-13T09:55:59.713Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "H4Ah3teQjxTwuW34W32YxUjrFTkLsMeTDcqxEDFJiGSW",
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "revision": 1,
+        "txHash": "0BBB870D045A5A302219D684B44686C4959471BD80C3ECB72EA3B97DA9516DD9",
+        "deleted": false,
+        "data": null,
+        "timestamp": "2025-08-13T14:33:10.803Z",
+        "system": false,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": "domain",
+        "transitionType": null,
+        "identityContractNonce": null,
+        "gasUsed": null,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        }
+      },
+      {
+        "identifier": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "revision": 1,
+        "txHash": "177A501453A1B6A91708D79376FBF9BD6CD5A2E533B1ECC1B75F615BCB6478B1",
+        "deleted": false,
+        "data": null,
+        "timestamp": "2025-07-13T07:55:36.840Z",
+        "system": false,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": "domain",
+        "transitionType": null,
+        "identityContractNonce": null,
+        "gasUsed": null,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        }
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 2 }
+  }
+}
