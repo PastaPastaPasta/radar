@@ -24,6 +24,7 @@ export function subscribeUpdate(cb: () => void): () => void {
 
 export function setUpdateLoader(next: (() => void) | undefined): void {
   load = next
+  if (offer && !dismissed) load?.()
 }
 
 /** A new version is waiting. The notice loads on first use and is shown until the viewer reloads or dismisses it. */

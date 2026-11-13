@@ -1,6 +1,5 @@
 import { useEffect, useSyncExternalStore, type ComponentType } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
-import { installYou } from '@/features/you/boot'
 import { deferred } from '@/ui/deferred'
 import { onProofInspectorNeeded } from '@/ui/proof'
 
@@ -69,14 +68,20 @@ export function GlobalMounts() {
       requestGlobalMount(which)
     }
     onProofInspectorNeeded(load('proof'))
-    const removeYou = installYou({
-      proof: load('proof'),
-      diagnostics: load('diagnostics'),
-      update: load('update'),
+    let removeYou: (() => void) | undefined
+    let unmounted = false
+    void import('@/features/you/boot').then(({ installYou }) => {
+      if (unmounted) return
+      removeYou = installYou({
+        proof: load('proof'),
+        diagnostics: load('diagnostics'),
+        update: load('update'),
+      })
     })
     return () => {
+      unmounted = true
       onProofInspectorNeeded(undefined)
-      removeYou()
+      removeYou?.()
     }
   }, [])
   return (
