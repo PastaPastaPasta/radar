@@ -23,9 +23,7 @@ const PeTransactionRowSchema = z.object({
 })
 
 export const PeTransactionSchema = PeTransactionRowSchema.extend({
-  shielded: z
-    .object({ amount: zBigint.nullish(), direction: z.string().nullish() })
-    .nullish(),
+  shielded: z.object({ amount: zBigint.nullish(), direction: z.string().nullish() }).nullish(),
   /** The same transition seen again in later blocks, as Explorer lists them (the later ones failed). */
   duplicates: z.array(PeTransactionRowSchema).nullish(),
 })

@@ -20,7 +20,9 @@ describe('stateTransitions.waitForStateTransitionResult', () => {
 
   it('reports a failed transition with the error the node wrote, and the balance when it has one', async () => {
     const out = await wait(
-      reads(() => Promise.resolve({ status: 'ERROR', error: 'invalid revision', ownerBalance: 5n })),
+      reads(() =>
+        Promise.resolve({ status: 'ERROR', error: 'invalid revision', ownerBalance: 5n }),
+      ),
     )
     expect(out.data).toEqual({
       hash: HASH,
@@ -42,7 +44,9 @@ describe('stateTransitions.waitForStateTransitionResult', () => {
     const out = await wait(reads(() => Promise.resolve({ status: 'SOMETHING' })))
     expect(out.data.status).toBe('pending')
     vi.useFakeTimers()
-    const late = new Promise<never>((_, reject) => setTimeout(reject, RESULT_WAIT_MS + 10, new Error('late')))
+    const late = new Promise<never>((_, reject) =>
+      setTimeout(reject, RESULT_WAIT_MS + 10, new Error('late')),
+    )
     const answer = wait(reads(() => late))
     await vi.advanceTimersByTimeAsync(RESULT_WAIT_MS + 20)
     expect((await answer).data.status).toBe('pending')

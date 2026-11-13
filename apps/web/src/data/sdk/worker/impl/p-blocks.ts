@@ -87,7 +87,9 @@ export const pBlocksImpl: { [M in keyof PBlocksMethods]: Impl<M> } = {
   async 'stateTransitions.waitForStateTransitionResult'(sdk, { hash }) {
     const call = sdk.stateTransitions.waitForStateTransitionResult(hash)
     call.catch(() => undefined)
-    const wait = new Promise<typeof PENDING>((resolve) => setTimeout(resolve, RESULT_WAIT_MS, PENDING))
+    const wait = new Promise<typeof PENDING>((resolve) =>
+      setTimeout(resolve, RESULT_WAIT_MS, PENDING),
+    )
     const answered = await Promise.race([call, wait])
     if (answered === PENDING) return { data: { hash, status: 'pending' } }
     const status = answered.status.toUpperCase()

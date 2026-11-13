@@ -87,7 +87,9 @@ test.describe('Platform blocks list', () => {
     await page.goto(`/platform/blocks?proposer=${PROPOSER.toLowerCase()}`)
     await expect(rows(page, '/platform/block/').first()).toBeVisible()
     await openFilters(page)
-    await expect(page.getByRole('textbox', { name: 'Proposer' })).toHaveValue(PROPOSER.toLowerCase())
+    await expect(page.getByRole('textbox', { name: 'Proposer' })).toHaveValue(
+      PROPOSER.toLowerCase(),
+    )
     await page.goto('/platform/blocks?from=2026-11-10&to=2026-11-11')
     await expect(rows(page, '/platform/block/').first()).toBeVisible()
     await openFilters(page)
@@ -136,7 +138,9 @@ test.describe('Platform block', () => {
       'href',
       new RegExp(`/platform/block/${HEIGHT + 1}`),
     )
-    await expect(page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: /Transitions/ })).toBeVisible()
+    await expect(
+      page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: /Transitions/ }),
+    ).toBeVisible()
     await expectAccessible(page)
   })
 
@@ -152,10 +156,16 @@ test.describe('Platform block', () => {
     await page.goto(`/platform/block/${T_PBLOCK}?network=testnet`)
     await expect(page.getByText(`Block ${T_HEIGHT.toLocaleString('en-US')}`)).toBeVisible()
     await expect(rows(page, '/platform/tx/').first()).toBeVisible()
-    await page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'Quorum' }).click()
+    await page
+      .getByRole('navigation', { name: 'Sections' })
+      .getByRole('link', { name: 'Quorum' })
+      .click()
     await expect(page).toHaveURL(/tab=quorum/)
     await expect(page.getByText('Quorum hash').first()).toBeVisible()
-    await page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'Details' }).click()
+    await page
+      .getByRole('navigation', { name: 'Sections' })
+      .getByRole('link', { name: 'Details' })
+      .click()
     await expect(page).toHaveURL(/tab=info/)
     await expect(page.locator('[data-json-view], .rx-json').first()).toBeVisible()
   })
@@ -295,7 +305,10 @@ test.describe('State transition', () => {
     await page.getByRole('group', { name: 'Format' }).getByRole('button', { name: 'Hex' }).click()
     await expect(page).toHaveURL(/raw=hex/)
     await expect(page.locator('[data-raw="hex"]')).toContainText('0201')
-    await page.getByRole('group', { name: 'Format' }).getByRole('button', { name: 'Base64' }).click()
+    await page
+      .getByRole('group', { name: 'Format' })
+      .getByRole('button', { name: 'Base64' })
+      .click()
     await expect(page).toHaveURL(/raw=base64/)
     await expect(page.locator('[data-raw="base64"]')).toContainText('AgE985jXzw2c')
     await page.getByRole('group', { name: 'Format' }).getByRole('button', { name: 'JSON' }).click()

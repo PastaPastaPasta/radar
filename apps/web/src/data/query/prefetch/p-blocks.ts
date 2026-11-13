@@ -1,5 +1,11 @@
 // P-BLOCKS: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import { blocksQuery, HASH, heightLookup, needsUpperHeight, parseBlockRef } from '../../pe/blocks-query'
+import {
+  blocksQuery,
+  HASH,
+  heightLookup,
+  needsUpperHeight,
+  parseBlockRef,
+} from '../../pe/blocks-query'
 import { txsQuery } from '../../pe/transitions-query'
 import { peQueries } from '../../pe/queries'
 import type { NumericRange } from '@/lib/search-schemas'
@@ -21,13 +27,21 @@ export interface PlatformBlocksSearch extends RouteSearch {
 }
 
 /** The first page of the list as the page will ask for it; a date range needs a height the page works out first, so it waits. */
-export const platformBlocksPrefetch: Prefetch<NoParams, PlatformBlocksSearch> = (net, _p, search) =>
+export const platformBlocksPrefetch: Prefetch<NoParams, PlatformBlocksSearch> = (
+  net,
+  _p,
+  search,
+) =>
   needsUpperHeight(search)
     ? []
     : [
         prefetchItem(
           'http',
-          peQueries.blocks(net, { ...blocksQuery(search, undefined), page: search.page, limit: search.limit }),
+          peQueries.blocks(net, {
+            ...blocksQuery(search, undefined),
+            page: search.page,
+            limit: search.limit,
+          }),
         ),
       ]
 
@@ -37,10 +51,14 @@ export interface PlatformBlockSearch extends RouteSearch {
 }
 
 /** A block by its hash; a height is turned into a hash by the page, so its list lookup is started instead. */
-export const platformBlockPrefetch: Prefetch<{ id: string }, PlatformBlockSearch> = (net, { id }) => {
+export const platformBlockPrefetch: Prefetch<{ id: string }, PlatformBlockSearch> = (
+  net,
+  { id },
+) => {
   const ref = parseBlockRef(id)
   if (ref?.kind === 'hash') return [prefetchItem('http', peQueries.block(net, ref.hash))]
-  if (ref?.kind === 'height') return [prefetchItem('http', peQueries.blocks(net, heightLookup(ref.height)))]
+  if (ref?.kind === 'height')
+    return [prefetchItem('http', peQueries.blocks(net, heightLookup(ref.height)))]
   return []
 }
 
