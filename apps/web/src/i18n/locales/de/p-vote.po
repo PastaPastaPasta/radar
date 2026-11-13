@@ -1,14 +1,467 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: de\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: formatInt(towards)
+#. placeholder {1}: formatInt(state.abstainVotes ?? 0)
+#. placeholder {2}: formatInt(state.lockVotes ?? 0)
+msgid "{0} towards · {1} abstain · {2} lock"
+msgstr "{0} dafür · {1} Enthaltung · {2} Sperren"
+
+#. placeholder {0}: formatInt(c.voteTally ?? 0)
+msgid "{0} votes"
+msgstr "{0} Stimmen"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: colored.map((s) => `${formatInt(s.votes)}`).join(', ')
+msgid "{0} votes: {1}"
+msgstr "{0} Stimmen: {1}"
+
+msgid "{label} can’t be a DPNS name."
+msgstr "{label} kann kein DPNS-Name sein."
+
+msgid "24h"
+msgstr "24 Std."
+
+msgid "30d"
+msgstr "30 T."
+
+msgid "7d"
+msgstr "7 T."
+
+msgid "90d"
+msgstr "90 T."
+
+msgid "A name can be at most 63 characters."
+msgstr "Ein Name darf höchstens 63 Zeichen lang sein."
+
+msgid "A name can’t start or end with a hyphen."
+msgstr "Ein Name darf nicht mit einem Bindestrich beginnen oder enden."
+
+msgid "A name may hold only the letters a–z, the digits 0–9 and hyphens."
+msgstr "Ein Name darf nur die Buchstaben a–z, die Ziffern 0–9 und Bindestriche enthalten."
+
+msgid "A name needs at least 3 characters."
+msgstr "Ein Name braucht mindestens 3 Zeichen."
+
+msgid "Abstain"
+msgstr "Enthaltung"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "Aktive umstrittene Namen mit Endzeit, Stimmen und Status."
+
+msgid "All"
+msgstr "Alle"
+
+msgid "All contests"
+msgstr "Alle Streitigkeiten"
+
+msgid "All name contests"
+msgstr "Alle Namensstreitigkeiten"
+
+msgid "Apply"
+msgstr "Anwenden"
+
+msgid "Available"
+msgstr "Verfügbar"
+
+msgid "Back to Mainnet"
+msgstr "Zurück zum Mainnet"
+
+msgid "Check the name"
+msgstr "Namen prüfen"
+
+msgid "Choice"
+msgstr "Wahl"
+
+#. placeholder {0}: search.choice
+msgid "Choice: {0}"
+msgstr "Wahl: {0}"
+
+msgid "Contender"
+msgstr "Bewerber"
+
+msgid "Contenders"
+msgstr "Bewerber"
+
+msgid "Contest"
+msgstr "Wettbewerb"
+
+msgid "Contest data"
+msgstr "Streitdaten"
+
+msgid "Contested"
+msgstr "Umstritten"
+
+msgid "Contested: decided"
+msgstr "Umstritten: entschieden"
+
+msgid "Contested: locked"
+msgstr "Umstritten: gesperrt"
+
+msgid "Contests"
+msgstr "Streitigkeiten"
+
+msgid "Contests at a glance"
+msgstr "Streitigkeiten im Überblick"
+
+msgid "Contract"
+msgstr "Vertrag"
+
+msgid "Contract ID"
+msgstr "Vertrags-ID"
+
+#. placeholder {0}: search.contract
+msgid "Contract: {0}"
+msgstr "Vertrag: {0}"
+
+msgid "Created"
+msgstr "Erstellt"
+
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+msgid "Decided"
+msgstr "Entschieden"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Document type"
+msgstr "Dokumenttyp"
+
+msgid "DPNS names"
+msgstr "DPNS-Namen"
+
+msgid "DPNS stores this name as {safe}: o is kept as 0, and i and l as 1, so look-alike names can’t be registered."
+msgstr "DPNS speichert diesen Namen als {safe}: o wird als 0, i und l werden als 1 abgelegt, damit zum Verwechseln ähnliche Namen nicht registriert werden können."
+
+msgid "Ends"
+msgstr "Endet"
+
+msgid "Ends between"
+msgstr "Endet zwischen"
+
+msgid "Ends within"
+msgstr "Endet innerhalb von"
+
+msgid "Enter a name such as alice.dash."
+msgstr "Gib einen Namen wie alice.dash ein."
+
+msgid "Every contest Platform still holds, in name order. A contest’s end time is shown while it is open."
+msgstr "Jede Streitigkeit, die Platform noch führt, in Namensreihenfolge. Das Ende einer Streitigkeit wird angezeigt, solange sie offen ist."
+
+msgid "Every masternode vote on this contest, from Platform Explorer’s index."
+msgstr "Jede Masternode-Stimme in dieser Streitigkeit, aus dem Index von Platform Explorer."
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "Jede Masternode-Stimme mit Wähler, Wahl, Ressource und Zeit."
+
+msgid "Finished"
+msgstr "Beendet"
+
+msgid "From Platform Explorer’s index: every contest that has been held, with its vote count."
+msgstr "Aus dem Index von Platform Explorer: jede bisherige Streitigkeit mit ihrer Stimmenzahl."
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Invalid"
+msgstr "Ungültig"
+
+msgid "Latest first"
+msgstr "Späteste zuerst"
+
+msgid "Leading"
+msgstr "Führend"
+
+msgid "Loading…"
+msgstr "Wird geladen …"
+
+msgid "Lock"
+msgstr "Sperren"
+
+msgid "Locked"
+msgstr "Gesperrt"
+
+msgid "Manage in Bridge"
+msgstr "In Bridge verwalten"
+
+msgid "Masternode votes"
+msgstr "Masternode-Stimmen"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Name contest"
+msgstr "Namensstreit"
+
+msgid "Name contests"
+msgstr "Namensstreitigkeiten"
+
+msgid "Name starts with"
+msgstr "Name beginnt mit"
+
+msgid "Names"
+msgstr "Namen"
+
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+#. placeholder {0}: ref.label
+msgid "No contest for {0} on {net}."
+msgstr "Keine Streitigkeit für {0} auf {net}."
+
+msgid "No contest is open."
+msgstr "Keine Streitigkeit ist offen."
+
+msgid "No contests match."
+msgstr "Keine passenden Streitigkeiten."
+
+msgid "No contests on record."
+msgstr "Keine Streitigkeiten verzeichnet."
+
+msgid "No name starts with {safe}."
+msgstr "Kein Name beginnt mit {safe}."
+
+msgid "No names yet."
+msgstr "Noch keine Namen."
+
+msgid "No vote polls end in this range."
+msgstr "In diesem Zeitraum endet keine Abstimmung."
+
+msgid "No votes for this contender."
+msgstr "Keine Stimmen für diesen Bewerber."
+
+msgid "No votes match."
+msgstr "Keine passenden Stimmen."
+
+msgid "No votes on record."
+msgstr "Keine Stimmen verzeichnet."
+
+msgid "No votes yet"
+msgstr "Noch keine Stimmen"
+
+msgid "Nobody owns {label}.dash and no contest is open for it. Registering it starts a contest that masternodes vote on."
+msgstr "Niemand besitzt {label}.dash und es läuft keine Streitigkeit dafür. Wer den Namen registriert, startet eine Streitigkeit, über die Masternodes abstimmen."
+
+msgid "Nobody owns {label}.dash yet; it can be registered directly."
+msgstr "Niemand besitzt {label}.dash bisher; es kann direkt registriert werden."
+
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+msgid "Open contests"
+msgstr "Offene Streitigkeiten"
+
+msgid "Open now"
+msgstr "Jetzt offen"
+
+msgid "Open the contest for {label}.dash"
+msgstr "Streitigkeit für {label}.dash öffnen"
+
+msgid "Order"
+msgstr "Reihenfolge"
+
+msgid "Owner"
+msgstr "Eigentümer"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer deckt keine Devnets ab."
+
+msgid "Platform Explorer’s totals, full list and date filters need its index"
+msgstr "Die Summen, die vollständige Liste und die Datumsfilter von Platform Explorer brauchen dessen Index"
+
+msgid "Platform holds no contest for this name: it was never contested, or it isn’t a contested name."
+msgstr "Platform führt für diesen Namen keine Streitigkeit: Er war nie umstritten oder ist kein umstrittener Name."
+
+msgid "Power"
+msgstr "Gewicht"
+
+msgid "Prefunded"
+msgstr "Vorfinanziert"
+
+msgid "Raw"
+msgstr "Rohdaten"
+
+msgid "Read from Platform and proof-checked: the contests still open, with their current tallies."
+msgstr "Von Platform gelesen und per Beweis geprüft: die noch offenen Streitigkeiten mit ihren aktuellen Zwischenständen."
+
+msgid "Records"
+msgstr "Einträge"
+
+msgid "Records of {label}.dash"
+msgstr "Einträge von {label}.dash"
+
+msgid "Registered"
+msgstr "Registriert"
+
+msgid "Resource"
+msgstr "Ressource"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "DPNS-Namen nach Präfix suchen oder alle alphabetisch durchblättern."
+
+msgid "Search names"
+msgstr "Namen suchen"
+
+msgid "Searching names that start with {safe}."
+msgstr "Suche nach Namen, die mit {safe} beginnen."
+
+msgid "Searching the homograph-safe form {safe}: DPNS stores o as 0, and i and l as 1."
+msgstr "Gesucht wird die homographensichere Form {safe}: DPNS speichert o als 0 sowie i und l als 1."
+
+msgid "See the open contests, with their tallies"
+msgstr "Offene Streitigkeiten mit ihren Zwischenständen ansehen"
+
+msgid "Share"
+msgstr "Anteil"
+
+#. placeholder {0}: formatInt(POLL_BUCKETS)
+msgid "Showing the first {0} end dates Platform returned."
+msgstr "Angezeigt werden die ersten {0} Enddaten, die Platform zurückgab."
+
+msgid "Soonest first"
+msgstr "Früheste zuerst"
+
+msgid "Started"
+msgstr "Beginn"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Started {0}–{1}"
+msgstr "Begonnen {0}–{1}"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Status: Active"
+msgstr "Status: Aktiv"
+
+msgid "Status: Finished"
+msgstr "Status: Beendet"
+
+msgid "Tally"
+msgstr "Zwischenstand"
+
+msgid "The list of masternode votes needs Platform Explorer’s index"
+msgstr "Die Liste der Masternode-Stimmen braucht den Index von Platform Explorer"
+
+msgid "The masternode voting identities that voted for one contender."
+msgstr "Die Masternode-Abstimmungsidentitäten, die für einen Bewerber gestimmt haben."
+
+msgid "The prefunded voting balance comes from Platform Explorer’s index"
+msgstr "Das vorfinanzierte Abstimmungsguthaben stammt aus dem Index von Platform Explorer"
+
+msgid "This contest has no contenders."
+msgstr "Diese Streitigkeit hat keine Bewerber."
+
+msgid "This name has no records."
+msgstr "Dieser Name hat keine Einträge."
+
+msgid "This page reads from Platform Explorer. Switch to Mainnet or Testnet to see it."
+msgstr "Diese Seite liest aus Platform Explorer. Wechsle zu Mainnet oder Testnet, um sie zu sehen."
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "Towards"
+msgstr "Für"
+
+msgid "Towards identity"
+msgstr "Zugunsten der Identität"
+
+#. placeholder {0}: search.towards
+msgid "Towards: {0}"
+msgstr "Für: {0}"
+
+msgid "Type"
+msgstr "Typ"
+
+#. placeholder {0}: search.type
+msgid "Type: {0}"
+msgstr "Typ: {0}"
+
+msgid "Unavailable"
+msgstr "Nicht verfügbar"
+
+msgid "Upcoming"
+msgstr "Bevorstehend"
+
+msgid "Upcoming vote polls by end date."
+msgstr "Kommende Abstimmungen nach Enddatum."
+
+msgid "Updated"
+msgstr "Aktualisiert"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Vote in Governance"
+msgstr "In Governance abstimmen"
+
+msgid "Vote polls"
+msgstr "Abstimmungen"
+
+msgid "Voted"
+msgstr "Abgestimmt"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Voted {0}–{1}"
+msgstr "Abgestimmt {0}–{1}"
+
+msgid "Voter"
+msgstr "Abstimmender"
+
+msgid "Voter identity"
+msgstr "Identität des Abstimmenden"
+
+#. placeholder {0}: search.voter
+msgid "Voter: {0}"
+msgstr "Abstimmender: {0}"
+
+msgid "Voters"
+msgstr "Abstimmende"
+
+msgid "Votes"
+msgstr "Stimmen"
+
+msgid "Votes by choice"
+msgstr "Stimmen nach Wahl"
+
+msgid "Votes cast"
+msgstr "Abgegebene Stimmen"
+
+msgid "Voting ends"
+msgstr "Abstimmung endet"
+
+msgid "Who voted, and when, comes from Platform Explorer’s index"
+msgstr "Wer wann abgestimmt hat, stammt aus dem Index von Platform Explorer"
+
+msgid "Winner"
+msgstr "Gewinner"
+
+msgid "Won"
+msgstr "Gewonnen"

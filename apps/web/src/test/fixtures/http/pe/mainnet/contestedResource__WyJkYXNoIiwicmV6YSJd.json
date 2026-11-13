@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/contestedResource/WyJkYXNoIiwicmV6YSJd"
+  },
+  "recordedAt": "2026-11-13T16:09:27.753Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "contenders": [
+      {
+        "identifier": "CUaJuBYgwXBCLarN2Gfnnve7SvaM8zvqiQ5PEUztHh4H",
+        "timestamp": "2026-11-09T08:31:29.975Z",
+        "documentIdentifier": "E8KxZLNhCyL73RcfGrv2r4WTVw13pY7rcNcfZT7sV78R",
+        "documentStateTransition": "23A064E5001C23268DA16B596C52E390DC8D34FBB86F2A6EC9B47B6D199642CF",
+        "aliases": [
+          {
+            "alias": "vampyren.dash",
+            "status": "ok",
+            "timestamp": "2024-12-31T00:07:49.371Z",
+            "documentId": "75L6nCdXV2djkfrJjF2Wyu5kuPJKzCdvpGEScZcaudmb",
+            "contested": true
+          }
+        ],
+        "towardsIdentityVotes": 20,
+        "abstainVotes": 0,
+        "lockVotes": 0
+      }
+    ],
+    "indexName": "parentNameAndLabel",
+    "resourceValue": ["dash", "reza"],
+    "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "prefundedVotingBalance": { "parentNameAndLabel": 10000000000 },
+    "documentTypeName": "domain",
+    "timestamp": "2026-11-09T08:31:29.975Z",
+    "totalGasUsed": 111605220,
+    "totalDocumentsGasUsed": 83605220,
+    "totalVotesGasUsed": 28000000,
+    "totalCountVotes": 20,
+    "totalCountLock": 0,
+    "totalCountAbstain": 0,
+    "totalCountTowardsIdentity": 20,
+    "status": "pending",
+    "endTimestamp": "2026-11-23T08:31:29.975Z",
+    "finished": false,
+    "towardsIdentity": "CUaJuBYgwXBCLarN2Gfnnve7SvaM8zvqiQ5PEUztHh4H"
+  }
+}

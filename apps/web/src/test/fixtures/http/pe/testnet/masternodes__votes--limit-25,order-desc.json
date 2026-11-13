@@ -1,0 +1,485 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/masternodes/votes?limit=25&order=desc"
+  },
+  "recordedAt": "2026-11-13T16:09:51.845Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "proTxHash": "9CB04F271BA050132C00CC5838FB69E77BC55B5689F9D2D850DC528935F8145C",
+        "txHash": "AF34FC95B8BB8A87DD66558202A7AED12678BD3F09A808EDB75E269197550AA2",
+        "voterIdentifier": "CGdDaiN1nYHxSzBHUwTriYtaQYYgJ1y9gd4NWbzFi2AZ",
+        "choice": 0,
+        "timestamp": "2026-11-12T15:49:00.847Z",
+        "towardsIdentity": "Be9qUCS8Td79jcFz9pM4aauh6jsDpRKwz7zG8jGraerB",
+        "identityAliases": [
+          {
+            "alias": "voting1.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T15:45:03.694Z",
+            "documentId": "3bt9zdo5r3FPGZqeDwhpf249LTFsjrjgAkwb8FdVAHqg",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "v0t1ng1"],
+        "power": 4
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "782C0DC15558571C7D38C5A98671BFDC77BD8CBB49658EC78E5C30F672EF84AF",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-12T15:48:59.084Z",
+        "towardsIdentity": "Be9qUCS8Td79jcFz9pM4aauh6jsDpRKwz7zG8jGraerB",
+        "identityAliases": [
+          {
+            "alias": "voting1.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T15:45:03.694Z",
+            "documentId": "3bt9zdo5r3FPGZqeDwhpf249LTFsjrjgAkwb8FdVAHqg",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "v0t1ng1"],
+        "power": 1
+      },
+      {
+        "proTxHash": "9CB04F271BA050132C00CC5838FB69E77BC55B5689F9D2D850DC528935F8145C",
+        "txHash": "74665CB47E5998A7D774C8E664BC9F331CFB2C5371A7E91C28C307F60C0DB824",
+        "voterIdentifier": "CGdDaiN1nYHxSzBHUwTriYtaQYYgJ1y9gd4NWbzFi2AZ",
+        "choice": 1,
+        "timestamp": "2026-11-12T15:44:03.277Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 4
+      },
+      {
+        "proTxHash": "9CB04F271BA050132C00CC5838FB69E77BC55B5689F9D2D850DC528935F8145C",
+        "txHash": "D0F52446F78BA008FC14CB287A37614A270BD2C644AA83B62B4DD49D8EE7DA36",
+        "voterIdentifier": "CGdDaiN1nYHxSzBHUwTriYtaQYYgJ1y9gd4NWbzFi2AZ",
+        "choice": 2,
+        "timestamp": "2026-11-12T14:47:43.626Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 4
+      },
+      {
+        "proTxHash": "9CB04F271BA050132C00CC5838FB69E77BC55B5689F9D2D850DC528935F8145C",
+        "txHash": "40643D671BB97073A8C29A1EDBCEED7E5DDC34BF715B79604F206822B14E6783",
+        "voterIdentifier": "CGdDaiN1nYHxSzBHUwTriYtaQYYgJ1y9gd4NWbzFi2AZ",
+        "choice": 0,
+        "timestamp": "2026-11-12T14:47:08.536Z",
+        "towardsIdentity": "Dzy1vh18Xp4HYhuruCibPhh43Cin8wfW7UXtqNSJp1Cr",
+        "identityAliases": [
+          {
+            "alias": "fbznbv4.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T14:43:18.341Z",
+            "documentId": "Cuy5z3EmbuGi9bmFCBECGWBuPM3SQdAvBMAYTbqTBoVJ",
+            "contested": false
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 4
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "CDC182D7E21D386756D89469FAA1D78BE39514554F7395AA219B35E7CDA28F35",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-12T14:47:05.464Z",
+        "towardsIdentity": "Dzy1vh18Xp4HYhuruCibPhh43Cin8wfW7UXtqNSJp1Cr",
+        "identityAliases": [
+          {
+            "alias": "fbznbv4.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T14:43:18.341Z",
+            "documentId": "Cuy5z3EmbuGi9bmFCBECGWBuPM3SQdAvBMAYTbqTBoVJ",
+            "contested": false
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "9D8B26B54E9253DD6EB2E639E2260241CE9EAA41AD2ACE9C7504E710A02F330F",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 1,
+        "timestamp": "2026-11-12T14:46:56.433Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "43F278E3AD1C97A02DB130E9662E3970F2CC41B05F9C8737CE7152ADABE0DDDC",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-12T14:46:05.393Z",
+        "towardsIdentity": "Dzy1vh18Xp4HYhuruCibPhh43Cin8wfW7UXtqNSJp1Cr",
+        "identityAliases": [
+          {
+            "alias": "fbznbv4.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T14:43:18.341Z",
+            "documentId": "Cuy5z3EmbuGi9bmFCBECGWBuPM3SQdAvBMAYTbqTBoVJ",
+            "contested": false
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "85C22EE7CFD7D06D9E104085C6FCFF3D3477BCCABAEF9E5A3C041AF005FDEEA8",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 1,
+        "timestamp": "2026-11-12T14:45:52.388Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "A200FB8B65A74DB1FBD6D4C2F67F29AD48B916CFD0DAE60C88DC3BB4805618E7",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-12T14:44:58.330Z",
+        "towardsIdentity": "Dzy1vh18Xp4HYhuruCibPhh43Cin8wfW7UXtqNSJp1Cr",
+        "identityAliases": [
+          {
+            "alias": "fbznbv4.dash",
+            "status": "ok",
+            "timestamp": "2026-11-12T14:43:18.341Z",
+            "documentId": "Cuy5z3EmbuGi9bmFCBECGWBuPM3SQdAvBMAYTbqTBoVJ",
+            "contested": false
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "fbznbv"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "6EFA92744F82AF8ED818344191EDEF5DE3FE8C3E7786C99C15F59BE8830B5593",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T13:01:02.213Z",
+        "towardsIdentity": "4xf5B2n1nMxNL5kDZCH6DuiSwAugnzX1A1K9Y9ovNzUP",
+        "identityAliases": [
+          {
+            "alias": "pcwvbazcczqy.dash",
+            "status": "ok",
+            "timestamp": "2026-11-11T12:30:10.714Z",
+            "documentId": "RCzSTeSawi1HRvCWkkpajKpHA4w2e8WbyBkWe8F99gs",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbazcczqy"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "A9AA7948D3DB068CAFCE64A71DAFC60DC2C8A38F32CE3245E3E84ED8683971B0",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T13:00:59.409Z",
+        "towardsIdentity": "BMCsARRt4pUSkXDv8TG4szEAaPYYH8RZRxRKkEUNDg6z",
+        "identityAliases": [
+          {
+            "alias": "pcwvbprnkhpt.dash",
+            "status": "ok",
+            "timestamp": "2026-11-11T12:26:56.637Z",
+            "documentId": "HWMwHYNgEiWamKr2uhbuN63m1DiH4MwJ3K4PPTwVXSHL",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbprnkhpt"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "7645D9D6DCD5F2FEFA06952BCE9528AF2BE8A2619F6557FE699CDF48CF69D415",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T13:00:57.170Z",
+        "towardsIdentity": "GkurwK8yYJCusKJXMHVXiRFVn8zkoX5kkmzP5paLYXNN",
+        "identityAliases": [
+          {
+            "alias": "pcwvbxjyzwjz.dash",
+            "status": "ok",
+            "timestamp": "2026-11-11T12:24:34.711Z",
+            "documentId": "qBp641LHKcpDws4PqHdqEpE3zUnfkoS7RPCD8k4D2uY",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbxjyzwjz"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "E6C3A7B041A9C266E0FAB3EB71A901F4F59B91F6878248D5D03601ED75A7954C",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T13:00:54.134Z",
+        "towardsIdentity": "MiQ3U4QnRk6xnsAwfJ9nEEFTuuU1yNbpgjBgHzrBrmL",
+        "identityAliases": [
+          {
+            "alias": "pcwvbzuajycm.dash",
+            "status": "ok",
+            "timestamp": "2026-11-11T12:22:32.982Z",
+            "documentId": "DX3YLBFtf1moVxbonEg4sP9oRrKroiea9dNGimZMxUUv",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbzuajycm"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "C94E6BB6346E9BFE65D8FAAC58F662A46EF5FB00A0FFC214BF9E9B05E7BF82B0",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T12:59:47.448Z",
+        "towardsIdentity": "B5eEmKvius2iaYMeGTvah8bHy8kXQGL13nKKCwL1WZqo",
+        "identityAliases": [
+          {
+            "alias": "pcwvbchtyncw.dash",
+            "status": "ok",
+            "timestamp": "2026-11-11T12:29:04.629Z",
+            "documentId": "bmpEnWQqZ3M69aLFj4aD1MFStWNZN6k3wvoXJzetYUh",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbchtyncw"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "1E18A907D6676DCB05E5B25444474F0C131E5751E88C647828F2EB7A1BDED5D8",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 2,
+        "timestamp": "2026-11-11T12:57:10.385Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbfhkdswp"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "EB7FC653C374BD635AC6CD339C86DE7CF072F67A8FFC77AEA6463B26C44CB6E7",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-11T12:46:37.308Z",
+        "towardsIdentity": "6o5oJ53vbW1vXqnZq7tcBUS2FDD6pC6XunbQjpx8jX4k",
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwvbfhkdswp"],
+        "power": 1
+      },
+      {
+        "proTxHash": "BC77A5A2CEC455C79FB92FB683DBD87A2A92B663C9A46D0C50D11889B4AEB121",
+        "txHash": "8E5CE2142526676C63AEF9831FA5F20E9F8DE10013B66E2356683D591309993F",
+        "voterIdentifier": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "choice": 0,
+        "timestamp": "2026-11-07T16:04:53.987Z",
+        "towardsIdentity": "39NaLMkWJ6WfpcQjq9dDtarc2fBPhghVkbygrgvayDBD",
+        "identityAliases": [
+          {
+            "alias": "pcwdupqnmxdbs.dash",
+            "status": "ok",
+            "timestamp": "2026-11-07T15:50:24.021Z",
+            "documentId": "37LMpRQLp8R1831PvAkAwQi4yLEmdrMYBucD7aLkJ33w",
+            "contested": true
+          }
+        ],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "pcwdupqnmxdbs"],
+        "power": 1
+      },
+      {
+        "proTxHash": "0E5ED7D2E33F2E0B221648C3F99735AFD6762270FF6A35978DF389A7F82976D9",
+        "txHash": "1A5F9800536BC838C0E54750F9C39DEDF533808B215D56153A8FF82CA355A15B",
+        "voterIdentifier": "397LTZugipEc6L6ZcW8vMPuE3mDXsNpRGHM8aFkNnHpx",
+        "choice": 1,
+        "timestamp": "2026-10-27T14:25:25.679Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "g0vhubqa-qymbcq"],
+        "power": 1
+      },
+      {
+        "proTxHash": "6CCA50B04C9816B07A8A831EBEC34866F1F0FE836047890DCE4F1C46F9E8A3C0",
+        "txHash": "116C6601A535682D101D4C6E105C187F60644FCFB8FBF609163696A212EBD7CD",
+        "voterIdentifier": "DDusvNDaMJQ4Jg3RW4qAA9iwipLFpWTHfJfdnti7yedZ",
+        "choice": 2,
+        "timestamp": "2026-10-27T14:20:02.198Z",
+        "towardsIdentity": null,
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "g0vhubqa-qymbcq"],
+        "power": 1
+      },
+      {
+        "proTxHash": "6CCA50B04C9816B07A8A831EBEC34866F1F0FE836047890DCE4F1C46F9E8A3C0",
+        "txHash": "03245FF45B294EA0B21B89BE226C9FBD4B6A7A140C1329014C652A6A8094D871",
+        "voterIdentifier": "DDusvNDaMJQ4Jg3RW4qAA9iwipLFpWTHfJfdnti7yedZ",
+        "choice": 0,
+        "timestamp": "2026-10-27T14:19:17.503Z",
+        "towardsIdentity": "HTaFBYvWRR7mMmBktgsAWsuwsZircUKJk75XrDXRV9aJ",
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "g0vhubqa-qymbcq"],
+        "power": 1
+      },
+      {
+        "proTxHash": "0E5ED7D2E33F2E0B221648C3F99735AFD6762270FF6A35978DF389A7F82976D9",
+        "txHash": "5F541576785F3F71DD15CAD570E3305C4B9A8A64C1B9FF35D793BB1138440A7C",
+        "voterIdentifier": "397LTZugipEc6L6ZcW8vMPuE3mDXsNpRGHM8aFkNnHpx",
+        "choice": 0,
+        "timestamp": "2026-10-27T14:19:15.921Z",
+        "towardsIdentity": "HTaFBYvWRR7mMmBktgsAWsuwsZircUKJk75XrDXRV9aJ",
+        "identityAliases": [],
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "documentTypeName": "domain",
+        "documentIdentifier": null,
+        "indexName": "parentNameAndLabel",
+        "indexValues": ["dash", "g0vhubqa-qymbcq"],
+        "power": 1
+      },
+      {
+        "proTxHash": "9B653E767B978C10346D938C08DC8C5ACD03C495F9D913E6FC652BFCAE11A348",
+        "txHash": "DE45E72143C973DCCF78D53A8556A96DF57944484CB4B20CC684F56A13AB6391",
+        "voterIdentifier": "5WwnEtAyKhGAmRuNHGEDY3jNSMntUobw2LLhv5DHUSE5",
+        "choice": 0,
+        "timestamp": "2026-10-19T04:50:07.137Z",
+        "towardsIdentity": "CbcdFn5gTa961Gp1YeizVkrcGuVcMgzJavwVryA4bkYH",
+        "identityAliases": [],
+        "dataContractIdentifier": "EG7RGfV8fDTayC2FyVr8HwdpJh3fXDbVztcfE94UmN88",
+        "documentTypeName": "electedCharter",
+        "documentIdentifier": null,
+        "indexName": "byTargetContract",
+        "indexValues": ["EFyPZPsEDLHtN1R38CgzeAGfWr23DrgthPpTgbCW8zAt"],
+        "power": 4
+      },
+      {
+        "proTxHash": "9B653E767B978C10346D938C08DC8C5ACD03C495F9D913E6FC652BFCAE11A348",
+        "txHash": "88B4385A812BBE92343ED1BAC877A1650F2073496CE0EE6396E9E5527F0E1118",
+        "voterIdentifier": "5WwnEtAyKhGAmRuNHGEDY3jNSMntUobw2LLhv5DHUSE5",
+        "choice": 0,
+        "timestamp": "2026-10-19T04:49:45.431Z",
+        "towardsIdentity": "Dn2H33Z1LCKC2ZSvhrrAUYaSrHs82AN1Zt5ifjzGGmPX",
+        "identityAliases": [],
+        "dataContractIdentifier": "EG7RGfV8fDTayC2FyVr8HwdpJh3fXDbVztcfE94UmN88",
+        "documentTypeName": "electedCharter",
+        "documentIdentifier": null,
+        "indexName": "byTargetContract",
+        "indexValues": ["EFyPZPsEDLHtN1R38CgzeAGfWr23DrgthPpTgbCW8zAt"],
+        "power": 4
+      },
+      {
+        "proTxHash": "7A1AE04DE7582262D9DEA3F4D72BC24A474C6F71988066B74A41F17BE5552652",
+        "txHash": "ADE4FF80BF1B8E2E7AC0CCCA818136AA867EA74E49871046B05F72AA96768079",
+        "voterIdentifier": "Et11inB62tL6TYPnuxxL8aXgifN5rKQt3n6sJ2S1BATv",
+        "choice": 0,
+        "timestamp": "2026-10-19T04:49:30.482Z",
+        "towardsIdentity": "Dn2H33Z1LCKC2ZSvhrrAUYaSrHs82AN1Zt5ifjzGGmPX",
+        "identityAliases": [],
+        "dataContractIdentifier": "EG7RGfV8fDTayC2FyVr8HwdpJh3fXDbVztcfE94UmN88",
+        "documentTypeName": "electedCharter",
+        "documentIdentifier": null,
+        "indexName": "byTargetContract",
+        "indexValues": ["EFyPZPsEDLHtN1R38CgzeAGfWr23DrgthPpTgbCW8zAt"],
+        "power": 4
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 733 }
+  }
+}

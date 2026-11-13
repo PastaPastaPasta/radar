@@ -21,5 +21,9 @@ export const Route = createFileRoute('/votes')({
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => search,
   loader: routePrefetch('p-vote', 'votesPrefetch'),
-  component: VotesPage,
+  component: VotesRoute,
 })
+
+function VotesRoute() {
+  return <VotesPage search={Route.useSearch()} />
+}

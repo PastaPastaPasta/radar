@@ -1,14 +1,467 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ru\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: formatInt(towards)
+#. placeholder {1}: formatInt(state.abstainVotes ?? 0)
+#. placeholder {2}: formatInt(state.lockVotes ?? 0)
+msgid "{0} towards · {1} abstain · {2} lock"
+msgstr "{0} за · {1} воздержались · {2} блокировка"
+
+#. placeholder {0}: formatInt(c.voteTally ?? 0)
+msgid "{0} votes"
+msgstr "{0} голосов"
+
+#. placeholder {0}: formatInt(total)
+#. placeholder {1}: colored.map((s) => `${formatInt(s.votes)}`).join(', ')
+msgid "{0} votes: {1}"
+msgstr "{0} голосов: {1}"
+
+msgid "{label} can’t be a DPNS name."
+msgstr "{label} не может быть именем DPNS."
+
+msgid "24h"
+msgstr "24 ч"
+
+msgid "30d"
+msgstr "30 дн."
+
+msgid "7d"
+msgstr "7 дн."
+
+msgid "90d"
+msgstr "90 дн."
+
+msgid "A name can be at most 63 characters."
+msgstr "Имя может содержать не более 63 символов."
+
+msgid "A name can’t start or end with a hyphen."
+msgstr "Имя не может начинаться или заканчиваться дефисом."
+
+msgid "A name may hold only the letters a–z, the digits 0–9 and hyphens."
+msgstr "Имя может содержать только буквы a–z, цифры 0–9 и дефисы."
+
+msgid "A name needs at least 3 characters."
+msgstr "Имя должно содержать не менее 3 символов."
+
+msgid "Abstain"
+msgstr "Воздержаться"
+
+msgid "Active"
+msgstr "Активна"
+
+msgid "Active contested names with end time, votes and status."
+msgstr "Активные спорные имена со временем окончания, голосами и статусом."
+
+msgid "All"
+msgstr "Все"
+
+msgid "All contests"
+msgstr "Все споры"
+
+msgid "All name contests"
+msgstr "Все споры за имена"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Available"
+msgstr "Свободно"
+
+msgid "Back to Mainnet"
+msgstr "Назад к основной сети"
+
+msgid "Check the name"
+msgstr "Проверить имя"
+
+msgid "Choice"
+msgstr "Выбор"
+
+#. placeholder {0}: search.choice
+msgid "Choice: {0}"
+msgstr "Выбор: {0}"
+
+msgid "Contender"
+msgstr "Претендент"
+
+msgid "Contenders"
+msgstr "Претенденты"
+
+msgid "Contest"
+msgstr "Спор"
+
+msgid "Contest data"
+msgstr "Данные спора"
+
+msgid "Contested"
+msgstr "Оспаривается"
+
+msgid "Contested: decided"
+msgstr "Оспаривалось: решено"
+
+msgid "Contested: locked"
+msgstr "Оспаривалось: заблокировано"
+
+msgid "Contests"
+msgstr "Споры"
+
+msgid "Contests at a glance"
+msgstr "Споры вкратце"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract ID"
+msgstr "ID контракта"
+
+#. placeholder {0}: search.contract
+msgid "Contract: {0}"
+msgstr "Контракт: {0}"
+
+msgid "Created"
+msgstr "Создано"
+
+msgid "Custom"
+msgstr "Свой период"
+
+msgid "Decided"
+msgstr "Решено"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "DPNS names"
+msgstr "Имена DPNS"
+
+msgid "DPNS stores this name as {safe}: o is kept as 0, and i and l as 1, so look-alike names can’t be registered."
+msgstr "DPNS хранит это имя как {safe}: o сохраняется как 0, а i и l — как 1, поэтому похожие имена зарегистрировать нельзя."
+
+msgid "Ends"
+msgstr "Заканчивается"
+
+msgid "Ends between"
+msgstr "Заканчивается между"
+
+msgid "Ends within"
+msgstr "Заканчивается в течение"
+
+msgid "Enter a name such as alice.dash."
+msgstr "Введите имя, например alice.dash."
+
+msgid "Every contest Platform still holds, in name order. A contest’s end time is shown while it is open."
+msgstr "Все споры, которые Platform ещё хранит, в порядке имён. Пока спор открыт, показывается время его окончания."
+
+msgid "Every masternode vote on this contest, from Platform Explorer’s index."
+msgstr "Каждый голос мастерноды в этом споре — из индекса Platform Explorer."
+
+msgid "Every masternode vote with voter, choice, resource and time."
+msgstr "Каждый голос мастерноды: голосующий, выбор, ресурс и время."
+
+msgid "Finished"
+msgstr "Завершён"
+
+msgid "From Platform Explorer’s index: every contest that has been held, with its vote count."
+msgstr "Из индекса Platform Explorer: все когда-либо проводившиеся споры с числом голосов."
+
+msgid "Index"
+msgstr "Индекс"
+
+msgid "Invalid"
+msgstr "Недействительно"
+
+msgid "Latest first"
+msgstr "Сначала поздние"
+
+msgid "Leading"
+msgstr "Лидирует"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "Lock"
+msgstr "Заблокировать"
+
+msgid "Locked"
+msgstr "Заблокировано"
+
+msgid "Manage in Bridge"
+msgstr "Управлять в Bridge"
+
+msgid "Masternode votes"
+msgstr "Голоса мастернод"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Name contest"
+msgstr "Спор за имя"
+
+msgid "Name contests"
+msgstr "Споры за имена"
+
+msgid "Name starts with"
+msgstr "Имя начинается с"
+
+msgid "Names"
+msgstr "Имена"
+
+msgid "Newest first"
+msgstr "Сначала новые"
+
+#. placeholder {0}: ref.label
+msgid "No contest for {0} on {net}."
+msgstr "Для {0} в сети {net} нет спора."
+
+msgid "No contest is open."
+msgstr "Открытых споров нет."
+
+msgid "No contests match."
+msgstr "Подходящих споров нет."
+
+msgid "No contests on record."
+msgstr "Споров в записи нет."
+
+msgid "No name starts with {safe}."
+msgstr "Нет имён, начинающихся с {safe}."
+
+msgid "No names yet."
+msgstr "Имён пока нет."
+
+msgid "No vote polls end in this range."
+msgstr "В этом интервале не заканчивается ни одно голосование."
+
+msgid "No votes for this contender."
+msgstr "За этого претендента нет голосов."
+
+msgid "No votes match."
+msgstr "Подходящих голосов нет."
+
+msgid "No votes on record."
+msgstr "Голосов в записи нет."
+
+msgid "No votes yet"
+msgstr "Голосов пока нет"
+
+msgid "Nobody owns {label}.dash and no contest is open for it. Registering it starts a contest that masternodes vote on."
+msgstr "У {label}.dash нет владельца, и спор по нему не открыт. Регистрация запускает спор, в котором голосуют мастерноды."
+
+msgid "Nobody owns {label}.dash yet; it can be registered directly."
+msgstr "У {label}.dash пока нет владельца; его можно зарегистрировать напрямую."
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "Open contests"
+msgstr "Открытые споры"
+
+msgid "Open now"
+msgstr "Открыты сейчас"
+
+msgid "Open the contest for {label}.dash"
+msgstr "Открыть спор за {label}.dash"
+
+msgid "Order"
+msgstr "Порядок"
+
+msgid "Owner"
+msgstr "Владелец"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer не охватывает девнеты."
+
+msgid "Platform Explorer’s totals, full list and date filters need its index"
+msgstr "Итоги, полный список и фильтры по датам Platform Explorer требуют его индекса"
+
+msgid "Platform holds no contest for this name: it was never contested, or it isn’t a contested name."
+msgstr "В Platform нет спора за это имя: его никогда не оспаривали, либо оно не относится к оспариваемым."
+
+msgid "Power"
+msgstr "Вес"
+
+msgid "Prefunded"
+msgstr "Предоплачено"
+
+msgid "Raw"
+msgstr "Сырые данные"
+
+msgid "Read from Platform and proof-checked: the contests still open, with their current tallies."
+msgstr "Прочитано из Platform и проверено по доказательству: ещё открытые споры с текущим подсчётом."
+
+msgid "Records"
+msgstr "Записи"
+
+msgid "Records of {label}.dash"
+msgstr "Записи {label}.dash"
+
+msgid "Registered"
+msgstr "Зарегистрирована"
+
+msgid "Resource"
+msgstr "Ресурс"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Search DPNS names by prefix, or browse all of them alphabetically."
+msgstr "Ищите имена DPNS по префиксу или просматривайте все по алфавиту."
+
+msgid "Search names"
+msgstr "Поиск имён"
+
+msgid "Searching names that start with {safe}."
+msgstr "Поиск имён, начинающихся с {safe}."
+
+msgid "Searching the homograph-safe form {safe}: DPNS stores o as 0, and i and l as 1."
+msgstr "Поиск по защищённой от омографов форме {safe}: DPNS хранит o как 0, а i и l — как 1."
+
+msgid "See the open contests, with their tallies"
+msgstr "Посмотреть открытые споры с подсчётом"
+
+msgid "Share"
+msgstr "Доля"
+
+#. placeholder {0}: formatInt(POLL_BUCKETS)
+msgid "Showing the first {0} end dates Platform returned."
+msgstr "Показаны первые {0} дат окончания, возвращённых Platform."
+
+msgid "Soonest first"
+msgstr "Сначала ближайшие"
+
+msgid "Started"
+msgstr "Начало"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Started {0}–{1}"
+msgstr "Начало {0}–{1}"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Status: Active"
+msgstr "Статус: Активна"
+
+msgid "Status: Finished"
+msgstr "Статус: Завершён"
+
+msgid "Tally"
+msgstr "Подсчёт"
+
+msgid "The list of masternode votes needs Platform Explorer’s index"
+msgstr "Список голосов мастернод требует индекса Platform Explorer"
+
+msgid "The masternode voting identities that voted for one contender."
+msgstr "Идентичности голосования мастернод, проголосовавшие за одного претендента."
+
+msgid "The prefunded voting balance comes from Platform Explorer’s index"
+msgstr "Предоплаченный баланс голосования берётся из индекса Platform Explorer"
+
+msgid "This contest has no contenders."
+msgstr "В этом споре нет претендентов."
+
+msgid "This name has no records."
+msgstr "У этого имени нет записей."
+
+msgid "This page reads from Platform Explorer. Switch to Mainnet or Testnet to see it."
+msgstr "Эта страница читает данные из Platform Explorer. Переключитесь на Mainnet или Testnet, чтобы её увидеть."
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Towards"
+msgstr "За"
+
+msgid "Towards identity"
+msgstr "Идентичность, за которую голос"
+
+#. placeholder {0}: search.towards
+msgid "Towards: {0}"
+msgstr "За: {0}"
+
+msgid "Type"
+msgstr "Тип"
+
+#. placeholder {0}: search.type
+msgid "Type: {0}"
+msgstr "Тип: {0}"
+
+msgid "Unavailable"
+msgstr "Недоступно"
+
+msgid "Upcoming"
+msgstr "Предстоящие"
+
+msgid "Upcoming vote polls by end date."
+msgstr "Предстоящие голосования по дате окончания."
+
+msgid "Updated"
+msgstr "Обновлено"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Vote in Governance"
+msgstr "Голосовать в Governance"
+
+msgid "Vote polls"
+msgstr "Голосования"
+
+msgid "Voted"
+msgstr "Проголосовал"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Voted {0}–{1}"
+msgstr "Голосовал {0}–{1}"
+
+msgid "Voter"
+msgstr "Голосующий"
+
+msgid "Voter identity"
+msgstr "Идентичность голосующего"
+
+#. placeholder {0}: search.voter
+msgid "Voter: {0}"
+msgstr "Голосующий: {0}"
+
+msgid "Voters"
+msgstr "Голосующие"
+
+msgid "Votes"
+msgstr "Голоса"
+
+msgid "Votes by choice"
+msgstr "Голоса по выбору"
+
+msgid "Votes cast"
+msgstr "Подано голосов"
+
+msgid "Voting ends"
+msgstr "Голосование заканчивается"
+
+msgid "Who voted, and when, comes from Platform Explorer’s index"
+msgstr "Кто и когда голосовал — берётся из индекса Platform Explorer"
+
+msgid "Winner"
+msgstr "Победитель"
+
+msgid "Won"
+msgstr "Выиграно"

@@ -8,17 +8,11 @@ import type { SearchHit } from './types'
 export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/api',
   '/changes',
-  '/contest/$label',
-  '/contests',
   '/map',
-  '/name/$label',
-  '/names',
   '/platform-address/$addr',
-  '/polls',
   '/token/$id',
   '/token/$id/holders',
   '/tokens',
-  '/votes',
 ])
 
 export function isFinishedRoute(path: string): boolean {

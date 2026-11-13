@@ -243,7 +243,7 @@ describe('/search page', () => {
     expect(await screen.findByText(/isn’t something Radar can look up/)).toBeInTheDocument()
   })
 
-  it('says nothing matched a Core record and offers no name guess while the name page is unfinished @IN-10 @HY-14', async () => {
+  it('says nothing matched a Core record and offers a name guess once the name page exists @IN-10 @HY-14', async () => {
     server.use(http.get('*/x/hy/mainnet/search', () => HttpResponse.json({ value: [] })))
     const history = createMemoryHistory({
       initialEntries: ['/search?q=zzzz-not-a-real-core-thing-12345'],
@@ -253,9 +253,8 @@ describe('/search page', () => {
     expect(
       await screen.findByText(/No match for “zzzz-not-a-real-core-thing-12345” as a Core record/),
     ).toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
-    expect(screen.queryByText('zzzz-not-a-real-core-thing-12345.dash')).toBeNull()
-    expect(screen.queryByRole('heading', { name: 'Platform' })).toBeNull()
+    expect(await screen.findByRole('region', { name: 'A guess' })).toBeInTheDocument()
+    expect(screen.getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeInTheDocument()
   })
 
   it('shows a confirmed hit as a result, not a guess, and drops one whose page is unfinished', async () => {
@@ -274,10 +273,10 @@ describe('/search page', () => {
             rank: 80,
           },
           {
-            kind: 'name',
-            id: 'pshenmic',
-            title: 'pshenmic.dash',
-            href: { to: '/name/$label', params: { label: 'pshenmic' } },
+            kind: 'contract',
+            id: 'c'.repeat(44),
+            title: 'Unbuilt contract',
+            href: { to: '/contract/$id', params: { id: 'c'.repeat(44) } },
             stamp: localStamp(),
             rank: 80,
           },
@@ -288,7 +287,7 @@ describe('/search page', () => {
 
     expect(await screen.findByRole('heading', { name: 'Network' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Masternode 1.2.3.4/ })).toBeInTheDocument()
-    expect(screen.queryByText('pshenmic.dash')).toBeNull()
+    expect(screen.queryByText('Unbuilt contract')).toBeNull()
     expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
     expect(screen.queryByText(/No match for/)).toBeNull()
   })

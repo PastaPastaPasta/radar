@@ -17,7 +17,7 @@ export const PeContestantSchema = z.object({
 })
 
 export const PeContestedResourceSchema = z.object({
-  resourceValue: z.array(z.string()).nullish(),
+  resourceValue: z.array(z.string().nullable()).nullish(),
   indexName: z.string().nullish(),
   dataContractIdentifier: z.string().nullish(),
   documentTypeName: z.string().nullish(),
