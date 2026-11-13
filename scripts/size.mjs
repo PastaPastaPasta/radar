@@ -7,7 +7,10 @@ const BUDGET_BYTES = 220 * 1000
 const distDir = resolve(process.argv[2] ?? 'apps/web/dist')
 const manifest = JSON.parse(readFileSync(join(distDir, '.vite', 'manifest.json'), 'utf8'))
 
-const entryKey = Object.keys(manifest).find((key) => manifest[key].isEntry)
+// The service worker is its own script at /sw.js, loaded after first paint; it is never the app's entry.
+const entryKey = Object.keys(manifest).find(
+  (key) => manifest[key].isEntry && manifest[key].file !== 'sw.js',
+)
 if (!entryKey) {
   console.error(`No entry chunk found in ${distDir}/.vite/manifest.json`)
   process.exit(1)

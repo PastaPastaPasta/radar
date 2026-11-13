@@ -18,6 +18,16 @@ async function serveAssets(request: Request, env: Env, url: URL): Promise<Respon
   return env.ASSETS.fetch(new Request(new URL('/', url), request))
 }
 
+const SERVICE_WORKER_PATH = '/sw.js'
+
+/** A worker script must be served as JavaScript, and browsers must be able to check it for a new version on every visit. */
+function asServiceWorker(res: Response): Response {
+  const out = new Response(res.body, res)
+  out.headers.set('content-type', 'text/javascript; charset=utf-8')
+  out.headers.set('cache-control', 'no-cache')
+  return out
+}
+
 async function handle(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url)
 
@@ -53,6 +63,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
   }
 
   const res = await serveAssets(request, env, url)
+  if (url.pathname === SERVICE_WORKER_PATH && res.ok) return asServiceWorker(res)
 
   const og = matchOgRoute(url.pathname)
   const isHtml = res.headers.get('content-type')?.startsWith('text/html') === true
