@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { describe, it } from 'node:test'
-import { checkStories, collectTags, failed } from '../../scripts/check-stories.mjs'
+import { checkOnly, checkStories, collectTags, failed } from '../../scripts/check-stories.mjs'
 
 describe('check-stories', () => {
   it('reports untagged stories and tags that name no story', () => {
@@ -28,5 +28,20 @@ describe('check-stories', () => {
     assert.equal(failed(missing, true), true)
     const unknown = { ...base, unknown: ['RA-99'] }
     assert.equal(failed(unknown, false), true)
+  })
+
+  it('names the stories of one package that have no test, and typos', () => {
+    const tags = new Map([['NX-10', new Set(['a.spec.ts'])]])
+    const ids = ['NX-10', 'NX-11', 'NX-12']
+    assert.deepEqual(checkOnly(ids, ['NX-10', 'NX-11'], tags), {
+      covered: 1,
+      missing: ['NX-11'],
+      unknown: [],
+    })
+    assert.deepEqual(checkOnly(ids, ['NX-10', 'NX-99'], tags), {
+      covered: 1,
+      missing: [],
+      unknown: ['NX-99'],
+    })
   })
 })
