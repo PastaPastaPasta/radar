@@ -15,6 +15,9 @@ import {
   tokenStatusDto,
   versionUpgradeStateDto,
   votePollsByEndDateDto,
+  hexKeyed,
+  platformAddressKey,
+  proTxHashHex,
   type ContractLike,
   type CurrentQuorumsLike,
   type DocumentLike,
@@ -54,6 +57,7 @@ export interface SharedReads {
     getUsernameByNameWithProof(
       name: string,
     ): Promise<ProvedResponse<DpnsUsernameLike | null | undefined>>
+    convertToHomographSafe(input: string): Promise<string>
   }
   documents: {
     queryWithProof(query: {
@@ -217,9 +221,16 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
   },
 
   async 'dpns.getUsernameByName'(sdk, { name }) {
-    const response = await sdk.dpns.getUsernameByNameWithProof(name)
+    const asked = name.trim()
+    // DPNS looks a name up by its homograph-safe form (o→0, i and l→1); the plain form finds nothing.
+    const response = await sdk.dpns.getUsernameByNameWithProof(
+      await sdk.dpns.convertToHomographSafe(asked),
+    )
     const info = response.data
-    return { data: info ? toDto(info, dpnsUsernameDto) : null, response }
+    return {
+      data: info ? { ...toDto(info, dpnsUsernameDto), username: asked } : null,
+      response,
+    }
   },
 
   async 'documents.query'(sdk, args) {
@@ -337,12 +348,12 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'epoch.evonodesProposedBlocksByIds'(sdk, { epoch, proTxHashes }) {
     const response = await sdk.epoch.evonodesProposedBlocksByIdsWithProof(epoch, proTxHashes)
-    return { data: new Map(response.data), response }
+    return { data: hexKeyed(response.data), response }
   },
 
   async 'epoch.evonodesProposedBlocksByRange'(sdk, args) {
     const response = await sdk.epoch.evonodesProposedBlocksByRangeWithProof(args)
-    return { data: new Map(response.data), response }
+    return { data: hexKeyed(response.data), response }
   },
 
   async 'protocol.versionUpgradeState'(sdk) {
@@ -354,7 +365,7 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
     const response = await sdk.protocol.versionUpgradeVoteStatusWithProof(startProTxHash, count)
     const data = new Map<string, number>()
     for (const [proTxHash, status] of response.data) {
-      data.set(proTxHash, status.version)
+      data.set(proTxHashHex(proTxHash), status.version)
       status.free?.()
     }
     return { data, response }
@@ -373,9 +384,16 @@ export const sharedImpl: { [M in keyof SharedMethods]: Impl<M> } = {
 
   async 'addresses.getMany'(sdk, { addresses }) {
     const response = await sdk.addresses.getManyWithProof(addresses)
-    const data = allKeys(addresses, response.data, (info, address) =>
+    // The SDK keys its answer by the address in hex, not in the text form that was asked.
+    const found = new Map<string, PlatformAddressInfoLike | undefined>(
+      addresses.map((a) => [a, response.data.get(platformAddressKey(a)) ?? response.data.get(a)]),
+    )
+    const data = allKeys(addresses, found, (info, address) =>
       toDto(info, (i) => platformAddressInfoDto(address, i)),
     )
+    for (const [key, info] of response.data) {
+      if (!addresses.some((a) => platformAddressKey(a) === key || a === key)) info?.free?.()
+    }
     return { data, response }
   },
 }

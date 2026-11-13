@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  isPlatformId,
   base58CheckDecode,
   base58CheckEncode,
   base58Decode,
@@ -35,5 +36,15 @@ describe('base58', () => {
     expect(base58CheckEncode(0, decoded?.payload ?? new Uint8Array())).toBe(genesis)
     expect(base58CheckDecode('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb')).toBeNull()
     expect(base58CheckDecode('abc')).toBeNull()
+  })
+})
+
+describe('isPlatformId', () => {
+  it('accepts 32 bytes in base58, including the all-zero id, and nothing else', () => {
+    expect(isPlatformId('5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk')).toBe(true)
+    expect(isPlatformId('11111111111111111111111111111111')).toBe(true)
+    for (const bad of ['', 'notbase58', '0OIl'.repeat(11), '5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFy']) {
+      expect(isPlatformId(bad), bad).toBe(false)
+    }
   })
 })

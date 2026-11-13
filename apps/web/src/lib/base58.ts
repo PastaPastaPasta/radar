@@ -77,3 +77,9 @@ export function base58CheckDecode(value: string): { version: number; payload: Ui
   for (let i = 0; i < 4; i++) if (sum[i] !== expected[i]) return null
   return { version: data[0] ?? 0, payload: data.slice(1) }
 }
+
+/** A Platform identifier (identity, contract, token, document id): 32 bytes in base58, up to 44 characters (leading zero bytes are `1`s). */
+export function isPlatformId(value: string): boolean {
+  if (value.length < 32 || value.length > 44 || !isBase58(value)) return false
+  return base58Decode(value).length === 32
+}

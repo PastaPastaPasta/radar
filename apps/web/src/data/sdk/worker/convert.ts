@@ -20,6 +20,9 @@ import type {
   VotePollDto,
   VotePollsByEndDateDto,
 } from '../methods'
+import { base58Decode } from '@/lib/base58'
+import { decodePlatformAddress } from '@/lib/bech32'
+import { bytesToHex } from '@/lib/hex'
 import type { Freeable } from './impl/types'
 
 interface IdentityKeyLike extends Freeable {
@@ -326,7 +329,7 @@ export function finalizedEpochDto(index: number, epoch: FinalizedEpochLike): Fin
     totalDistributedStorageFees: epoch.totalDistributedStorageFees,
     totalCreatedStorageFees: epoch.totalCreatedStorageFees,
     nextEpochStartCoreBlockHeight: epoch.nextEpochStartCoreBlockHeight,
-    blockProposers: new Map(epoch.blockProposers),
+    blockProposers: new Map([...epoch.blockProposers].map(([k, v]) => [proTxHashHex(k), v])),
   }
 }
 
@@ -404,3 +407,26 @@ export const platformAddressInfoDto = (
   address: string,
   info: PlatformAddressInfoLike,
 ): PlatformAddressInfoDto => ({ address, balance: info.balance, nonce: BigInt(info.nonce) })
+
+const HEX64 = /^[0-9a-f]{64}$/i
+
+/** A proposer's ProTxHash as 64 lower-case hex characters, whichever form the SDK keyed it in (base58 identifier or hex). */
+export function proTxHashHex(key: string): string {
+  if (HEX64.test(key)) return key.toLowerCase()
+  try {
+    const bytes = base58Decode(key)
+    return bytes.length === 32 ? bytesToHex(bytes) : key
+  } catch {
+    return key
+  }
+}
+
+export function hexKeyed<V>(entries: Iterable<[string, V]>): Map<string, V> {
+  return new Map([...entries].map(([k, v]) => [proTxHashHex(k), v]))
+}
+
+/** The key the SDK answers a Platform address under: a type byte (0 for P2PKH, 1 for P2SH) and the 20-byte hash, in hex. */
+export function platformAddressKey(address: string): string {
+  const parts = decodePlatformAddress(address)
+  return parts ? `${parts.type === 'p2pkh' ? '00' : '01'}${bytesToHex(parts.hash)}` : address
+}
