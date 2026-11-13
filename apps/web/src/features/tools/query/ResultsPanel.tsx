@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
@@ -73,8 +74,13 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
     return columnsFor.map(([key, header], i) => ({
       id: key,
       header,
-      accessorFn: (row) =>
-        key === 'groupKey' && row[key] === '' ? t`All documents` : cellText(row[key]),
+      accessorFn: (row) => {
+        const cell = row[key]
+        if (key === 'groupKey') return cell === '' ? t`All documents` : cellText(cell)
+        return typeof cell === 'bigint' || typeof cell === 'number'
+          ? formatInt(cell)
+          : cellText(cell)
+      },
       meta: {
         phone: i === 0 ? 'title' : 'primary',
         numeric: i > 0,
@@ -161,9 +167,9 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
       <div className="grid gap-3" data-result-kind={result.kind}>
         <p className="text-sm text-[var(--dh-ink-2)]" data-result-count>
           {result.kind === 'documents'
-            ? t`${formatInt(result.rows.length)} documents`
+            ? plural(result.rows.length, { one: '# document', other: '# documents' })
             : result.kind === 'count'
-              ? t`${formatInt(result.groups.length)} groups`
+              ? plural(result.groups.length, { one: '# group', other: '# groups' })
               : result.kind === 'sum'
                 ? t`Sum of ${result.field}`
                 : t`Average of ${result.field}`}

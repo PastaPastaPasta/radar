@@ -1,7 +1,10 @@
 import { bytesToHex, hexToBytes, isHex } from '@/lib/hex'
-import type { DocumentsAggregateArgs, PathElementDto, ToolsMethods } from '../../methods/tools'
+import type { ToolsMethods } from '../../methods'
 import { isNotFound, messageOf } from '../errors'
 import type { Freeable, ImplOf, ProvedResponse } from './types'
+
+type DocumentsAggregateArgs = ToolsMethods['documents.count']['args']
+type PathElementDto = ToolsMethods['system.pathElements']['result'][number]
 
 interface AggregateQuery {
   dataContractId: string
@@ -80,9 +83,12 @@ function segments(hex: string[]): Uint8Array[] {
 }
 
 function pathElementDto(e: PathElementLike): PathElementDto {
+  const key = bytesToHex(e.key)
+  const full = e.pathBytes.map(bytesToHex)
   return {
-    path: e.pathBytes.map(bytesToHex),
-    key: bytesToHex(e.key),
+    // The SDK hands back the path with the key as its last segment.
+    path: full.at(-1) === key ? full.slice(0, -1) : full,
+    key,
     elementType: e.elementType ?? null,
     value: e.valueBytes ? bytesToHex(e.valueBytes) : null,
     sum: e.sum ?? null,

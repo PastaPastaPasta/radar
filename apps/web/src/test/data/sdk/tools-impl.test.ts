@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { proved } from '@/test/data/sdk/fakes'
-import { toolsImpl, type ToolsReads } from './tools'
+import { toolsImpl, type ToolsReads } from '@/data/sdk/worker/impl/tools'
+import { proved } from './fakes'
 
 const CONTRACT = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const reads = (over: Partial<Record<keyof ToolsReads, unknown>>) => over as unknown as ToolsReads
@@ -107,14 +107,14 @@ describe('contracts.serialized', () => {
 })
 
 describe('system.pathElements', () => {
-  it('sends hex segments as bytes and answers every byte string in hex', async () => {
+  it('sends hex segments as bytes, answers every byte string in hex and takes the key off the path', async () => {
     const free = vi.fn()
     const pathElementsWithProof = vi.fn(() =>
       Promise.resolve(
         proved([
           {
             key: new Uint8Array([0x44]),
-            pathBytes: [new Uint8Array([0x68])],
+            pathBytes: [new Uint8Array([0x68]), new Uint8Array([0x44])],
             elementType: 'item',
             valueBytes: new Uint8Array([1, 2]),
             sum: undefined,
@@ -123,7 +123,7 @@ describe('system.pathElements', () => {
           },
           {
             key: new Uint8Array([0x20]),
-            pathBytes: [],
+            pathBytes: [new Uint8Array([0x20])],
             elementType: 'tree',
             valueBytes: undefined,
             sum: 5n,
