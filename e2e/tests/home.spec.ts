@@ -171,8 +171,8 @@ test.describe('Home', () => {
       })
     })
 
-    await expect(difficulty.locator('.rx-stat__value')).toHaveText('123,456,789.5')
-    expect(shown).not.toBe('123,456,789.5')
+    await expect(difficulty.locator('.rx-stat__value')).toHaveText('123,456,789.50')
+    expect(shown).not.toBe('123,456,789.50')
     await expect(difficulty.locator('[data-source]')).toHaveCount(0)
   })
 
