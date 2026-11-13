@@ -96,6 +96,30 @@ describe('shared masternode payloads', () => {
     expect(within(el).getByText(label)).toBeInTheDocument()
     expect(within(el).queryByText('Raw payload')).toBeNull()
   })
+
+  it.each([
+    [{}, '—'],
+    [{ reason: 'x' }, '—'],
+    [{ reason: 0 }, 'Not specified (reason 0)'],
+  ])('shows a revocation payload %j with its reason as %s @IN-05', async (fields, shown) => {
+    const original = core.tx.bind(core)
+    vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
+      const found = await original(net, txid, signal)
+      return found.data
+        ? {
+            ...found,
+            data: {
+              ...found.data,
+              payload: { kind: 'proUpRevTx', version: 1, proTxHash: HASH, ...fields },
+            },
+          }
+        : found
+    })
+    const el = await payload(`/tx/${MAINNET.uprevtx}`, 'proUpRevTx')
+    const row = within(el).getByText('Reason').closest('div')!
+    expect(row).toHaveTextContent(shown)
+    if (shown === '—') expect(row).not.toHaveTextContent(/\(reason|Unknown reason/)
+  })
 })
 
 describe('Transaction page', () => {

@@ -218,8 +218,8 @@ function ProUpRegRows({ p }: { p: Obj }) {
 
 function ProUpRevRows({ p }: { p: Obj }) {
   const { t, i18n } = useLingui()
-  const reason = num(p.reason) ?? 0
-  const named = REVOKE_REASONS[reason]
+  const reason = num(p.reason)
+  const named = reason === undefined ? undefined : REVOKE_REASONS[reason]
   const name = named ? i18n._(named) : undefined
   return (
     <KeyValue
@@ -228,11 +228,14 @@ function ProUpRevRows({ p }: { p: Obj }) {
         { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
         {
           label: t`Reason`,
-          value: (
-            <span data-reason={reason}>
-              {name ? t`${name} (reason ${reason})` : t`Unknown reason ${reason}`}
-            </span>
-          ),
+          value:
+            reason === undefined ? (
+              '—'
+            ) : (
+              <span data-reason={reason}>
+                {name ? t`${name} (reason ${reason})` : t`Unknown reason ${reason}`}
+              </span>
+            ),
           hint: t`Names follow Dash Core’s definitions of the revocation reason codes.`,
         },
         { label: t`Operator signature`, value: hashValue(p.payloadSig) },

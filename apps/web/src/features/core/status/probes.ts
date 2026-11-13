@@ -28,6 +28,7 @@ export function useProbes(net: NetworkId): Probes {
     sdk: useQuery({
       ...platformTipQuery(net),
       refetchInterval: HEALTH_PROBE_INTERVAL_MS,
+      retry: false,
       enabled: offers(net, 'sdk'),
     }),
   }
