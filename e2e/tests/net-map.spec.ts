@@ -23,9 +23,24 @@ async function openMap(page: Page, query = '') {
   await settled(page)
 }
 
+/** The handle's box once the sheet has stopped moving, so a drag starts on it rather than where it was. */
+async function restingHandle(page: Page) {
+  const handle = page.locator('.rx-map-handle')
+  let last = (await handle.boundingBox())!
+  await expect
+    .poll(async () => {
+      const now = (await handle.boundingBox())!
+      const still = now.y === last.y
+      last = now
+      return still
+    })
+    .toBe(true)
+  return last
+}
+
 /** Drags the sheet's handle up the way a thumb would, so everything in the sheet is within reach. */
 async function pullSheetUp(page: Page) {
-  const h = (await page.locator('.rx-map-handle').boundingBox())!
+  const h = await restingHandle(page)
   const x = h.x + h.width / 2
   const y = h.y + h.height / 2
   await page.mouse.move(x, y)
@@ -202,7 +217,7 @@ test.describe('The map', () => {
     await expect(sheet).toHaveAttribute('data-mode', 'peek')
     await expect(sheet).toHaveAttribute('data-snap', 'collapsed')
 
-    const h = (await handle.boundingBox())!
+    const h = await restingHandle(page)
     const x = h.x + h.width / 2
     const y = h.y + h.height / 2
     await page.mouse.move(x, y)
