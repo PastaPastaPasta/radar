@@ -2,6 +2,7 @@ import { Plural, useLingui } from '@lingui/react/macro'
 import { type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState, type ReactNode } from 'react'
+import { useLiveFeedStamp } from '@/data/core/seen-pending'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import type { HyAddress, HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
@@ -107,11 +108,12 @@ function OtherNetwork({ address, hint }: { address: string; hint: NetworkId }) {
 function DecentralizedAddress({ net, address }: { net: NetworkId; address: string }) {
   const { t } = useLingui()
   const live = useAddressActivity(net, address, true, null)
+  const stamp = useLiveFeedStamp(net, true)
   return (
     <>
       <Unavailable title={t`This address's balance, history and unspent outputs need an indexer`} />
       <LiveNotice status={live.status} arrived={live.arrived} feedOnly />
-      <PendingCard pending={live.pending} />
+      <PendingCard pending={live.pending} stamp={stamp} />
       <Card title={t`QR code`} layer="core" className="justify-self-start">
         <AddressQr address={address} />
       </Card>
@@ -119,11 +121,11 @@ function DecentralizedAddress({ net, address }: { net: NetworkId; address: strin
   )
 }
 
-function PendingCard({ pending }: { pending: PendingTx[] }) {
+function PendingCard({ pending, stamp }: { pending: PendingTx[]; stamp?: SourceStamp }) {
   const { t } = useLingui()
   if (pending.length === 0) return null
   return (
-    <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed">
+    <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed" source={stamp}>
       <ul className="grid gap-2" data-pending>
         {pending.map((p) => (
           <li key={p.txid} className="flex flex-wrap items-center gap-3">

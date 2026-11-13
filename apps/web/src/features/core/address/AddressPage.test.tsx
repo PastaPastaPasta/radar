@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
 import { formatIsoUtc } from '@/lib/format'
+import { writeSourceMode } from '@/lib/source-mode'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
@@ -818,5 +819,35 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
         document.querySelector('#history [data-source="insight"]')?.getAttribute('data-state'),
       ).toBe('stale'),
     )
+  })
+})
+
+describe('Address page in Decentralized only mode @X-05 @IN-06', () => {
+  afterEach(() => writeSourceMode('all'))
+
+  it("stamps the pending card with DAPI's live feed", async () => {
+    writeSourceMode('decentralized')
+    renderAt(`/address/${ADDRESS}`)
+    await screen.findByText(/Watching DAPI's live feed/)
+    emit({
+      kind: 'tx',
+      tx: {
+        txid: 'cd'.repeat(32),
+        type: 'transfer',
+        version: 3,
+        lockTime: 0,
+        size: 226,
+        inputs: [],
+        outputs: [{ value: 123_000_000n, address: ADDRESS, scriptPubKey: '' }],
+      },
+    })
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#unconfirmed')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const line = card.querySelector('[data-source="dapi"]')
+    expect(line).not.toBeNull()
+    expect(card.querySelector('[data-source="hyphen"]')).toBeNull()
   })
 })

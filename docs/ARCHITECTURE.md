@@ -810,7 +810,7 @@ The error is `SourceError` kind `disabled-by-mode` (§2.3). It is not an outage:
 | Blocks, blocks by date | 20 a page from DAPI; the day's height search (IN-02) | pages of 50 and 100 (a note) |
 | Block | header, transactions, coinbase, ChainLock | chainwork says "Not in DAPI" |
 | Transaction | everything decoded, fee and input values (`prevouts`), settlement (§4.7) | spent flags and spending transactions (one compact state in the inputs and outputs section, only for a mined transaction); first-seen time |
-| Address | the live feed (`watchAddress`, §4.8), a "pending" card of what arrived while the page was open, checked against DAPI for having been mined, and the QR code | balance, totals and history (one state for the page) |
+| Address | the live feed (`watchAddress`, §4.8), a "pending" card of what arrived while the page was open (stamped by the feed, `useLiveFeedStamp`: as of now while its stream is connected, never by a transaction's arrival), checked against DAPI for having been mined, and the QR code | balance, totals and history (one state for the page) |
 | Mempool | the seen list (§4.8) | the full list and totals (compact) |
 | Rich list, Charts, Network internals, Governance, Proposal | — | the whole page, once (`HyphenGate`) |
 | Masternode | — | the whole page, once (Radar's crawler) |

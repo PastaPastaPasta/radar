@@ -54,6 +54,27 @@ function useTick(active: boolean): number {
 }
 
 /**
+ * The provenance stamp of DAPI's live transaction feed: as of now while the stream is connected, however quiet it is,
+ * and as of the moment it was last connected once it is not. A transaction's arrival time is an event, and says
+ * nothing about how current the feed is, so it is never used. Undefined for a feed that was never connected.
+ */
+export function useLiveFeedStamp(net: NetworkId, enabled: boolean): SourceStamp | undefined {
+  const connected = useSyncExternalStore(
+    (onChange) => coreLive.subscribe(onChange),
+    () => enabled && coreLive.txStatus(net).state === 'live',
+    () => false,
+  )
+  const now = useTick(connected)
+  const [lastConnectedAt, setLastConnectedAt] = useState<{ net: NetworkId; at: number }>()
+  useEffect(() => {
+    if (!connected) return
+    return () => setLastConnectedAt({ net, at: Date.now() })
+  }, [connected, net])
+  const asOf = connected ? now : lastConnectedAt?.net === net ? lastConnectedAt.at : undefined
+  return asOf === undefined ? undefined : { source: 'dapi', asOf, fetchedAt: asOf, proved: false }
+}
+
+/**
  * Transactions DAPI's live feed has delivered since the page opened, newest first, minus those a block has since
  * confirmed. It stands in for the mempool list while Hyphen's index is behind or Decentralized only mode keeps Hyphen
  * off, and says only what this page saw. `rows` are the newest `limit`; `count` and `bytes` cover everything kept,
@@ -75,18 +96,7 @@ export function useSeenPending(
   stamp: SourceStamp | undefined
 } {
   const [state, setState] = useState<Scoped>({ net, rows: [] })
-  const connected = useSyncExternalStore(
-    (onChange) => coreLive.subscribe(onChange),
-    () => enabled && coreLive.txStatus(net).state === 'live',
-    () => false,
-  )
-  const now = useTick(connected)
-  const [lastConnectedAt, setLastConnectedAt] = useState<{ net: NetworkId; at: number }>()
-  useEffect(() => {
-    if (!connected) return
-    return () => setLastConnectedAt({ net, at: Date.now() })
-  }, [connected, net])
-
+  const stamp = useLiveFeedStamp(net, enabled)
   useEffect(() => {
     if (!enabled) return
     return coreLive.transactions(net, (event) => {
@@ -114,13 +124,11 @@ export function useSeenPending(
 
   const kept = useMemo(() => (state.net === net ? state.rows : []), [state, net])
   const bytes = useMemo(() => kept.reduce((n, r) => n + r.size, 0), [kept])
-  const asOf = connected ? now : lastConnectedAt?.net === net ? lastConnectedAt.at : undefined
   return {
     rows: kept.length > limit ? kept.slice(0, limit) : kept,
     count: kept.length,
     bytes,
     capped: kept.length >= SEEN_STORE_LIMIT,
-    stamp:
-      asOf === undefined ? undefined : { source: 'dapi', asOf, fetchedAt: asOf, proved: false },
+    stamp,
   }
 }
