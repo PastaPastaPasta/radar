@@ -115,7 +115,11 @@ describe('Masternode page', () => {
     renderAt(`/mn/${MAINNET.regular}?tab=network`)
     await waitFor(() => expect(document.querySelector('#port-check')).not.toBeNull())
     expect(document.querySelector('#platform')).toBeNull()
-    expect(within(screen.getByRole('navigation', { name: 'Sections' })).queryByRole('link', { name: 'Platform' })).toBeNull()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Sections' })).queryByRole('link', {
+        name: 'Platform',
+      }),
+    ).toBeNull()
   })
 
   it('shows the Platform tab for an evonode only', async () => {
@@ -154,9 +158,7 @@ describe('Masternode page', () => {
     expect(within(check).getByRole('button', { name: 'Check now' })).toBeInTheDocument()
     const map = await screen.findByRole('link', { name: 'Show on map' })
     expect(map.getAttribute('href')).toContain(`protx=${MAINNET.regular}`)
-    expect(document.querySelector('a[data-host-filter]')?.getAttribute('href')).toMatch(
-      /host=\d+/,
-    )
+    expect(document.querySelector('a[data-host-filter]')?.getAttribute('href')).toMatch(/host=\d+/)
   })
 
   it('marks a PoSe-banned masternode as banned', async () => {

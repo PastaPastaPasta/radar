@@ -62,7 +62,9 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
                     aria-current={e === selected ? 'true' : undefined}
                     replace
                     className={
-                      e === selected ? 'dh-btn dh-btn--sm dh-btn--primary' : 'dh-btn dh-btn--sm'
+                      e === selected
+                        ? 'dh-btn dh-btn--sm font-bold underline underline-offset-4'
+                        : 'dh-btn dh-btn--sm'
                     }
                   >
                     {formatInt(e)}

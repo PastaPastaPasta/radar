@@ -30,7 +30,9 @@ function Payments({ ctx, before }: { ctx: MnContext; before: number | undefined 
   const navigate = useNavigate()
   const d = ctx.d
   const radar = ctx.radar
-  const [cursors, setCursors] = useState<(number | undefined)[]>([before])
+  const [cursors, setCursors] = useState<(number | undefined)[]>(
+    before === undefined ? [undefined] : [undefined, before],
+  )
   const older = cursors.filter((c): c is number => c !== undefined)
   const pages = useQueries({
     queries: older.map((cursor) =>

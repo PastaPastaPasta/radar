@@ -53,7 +53,11 @@ export function MasternodePage({ protx, tab, epoch, before }: MasternodePageProp
   useDocumentTitle(t`Masternode ${id.slice(0, 8)}`)
 
   return (
-    <article data-page="/mn/$protx" data-layer="network" className="grid gap-6">
+    <article
+      data-page="/mn/$protx"
+      data-layer="network"
+      className="grid grid-cols-[minmax(0,1fr)] gap-6"
+    >
       {!PROTX.test(protx) ? (
         <NotAProtx value={protx} />
       ) : isDevnet(net) ? (
@@ -215,7 +219,7 @@ function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: bool
     : !!other && there.data?.data !== null && there.data?.data !== undefined
   const otherName = other === 'mainnet' ? t`mainnet` : t`testnet`
   const here = net === 'mainnet' ? t`mainnet` : t`testnet`
-  return (
+  const empty = (
     <Empty
       kind="not-found"
       title={
@@ -247,6 +251,17 @@ function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: bool
         )
       }
     />
+  )
+  return off ? (
+    <>
+      {empty}
+      <Unavailable
+        compact
+        title={t`Radar’s crawl, which also lists nodes missing from DAPI’s list, is off`}
+      />
+    </>
+  ) : (
+    empty
   )
 }
 

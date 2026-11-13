@@ -1,10 +1,9 @@
 // The readiness texts and thresholds follow dash-nodes' masternode page (MIT, github.com/PastaPastaPasta/dash-nodes).
 import { useLingui } from '@lingui/react/macro'
-import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
-import { Badge, Card, DataTable } from '@/ui'
+import { Badge, Card } from '@/ui'
 import {
   checkState,
   DKG_CHECK_ORDER,
@@ -128,49 +127,6 @@ export function ReadinessCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: S
   )
   const extra = Object.entries(r?.checks ?? {}).filter(([id]) => !isDkgCheck(id))
 
-  const columns = useMemo<ColumnDef<Row>[]>(
-    () => [
-      {
-        id: 'check',
-        header: t`Check`,
-        cell: ({ row }) => row.original.label,
-        meta: { phone: 'title' },
-      },
-      {
-        id: 'result',
-        header: t`Result`,
-        cell: ({ row }) => (
-          <span data-check={row.original.id} data-state={row.original.state}>
-            <Badge
-              tone={
-                row.original.state === 'pass'
-                  ? 'success'
-                  : row.original.state === 'fail'
-                    ? 'danger'
-                    : 'neutral'
-              }
-            >
-              {row.original.state === 'pass'
-                ? t`Pass`
-                : row.original.state === 'fail'
-                  ? t`Fail`
-                  : t`Unknown`}
-            </Badge>{' '}
-            <span className="rx-dim rx-sm">{row.original.said}</span>
-          </span>
-        ),
-        meta: { phone: 'primary' },
-      },
-      {
-        id: 'fix',
-        header: t`Fix`,
-        cell: ({ row }) => row.original.fix ?? '—',
-        meta: { phone: 'secondary' },
-      },
-    ],
-    [t],
-  )
-
   if (!r) return null
   const overall = checkState(r.overall)
   const failing = rows.filter((x) => x.state === 'fail').length
@@ -194,15 +150,33 @@ export function ReadinessCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: S
       }
       padding="flush"
     >
-      <div data-readiness>
-        <DataTable
-          caption={t`Quorum readiness checks`}
-          columns={columns}
-          rows={rows}
-          getRowId={(x) => x.id}
-          state="ready"
-        />
-      </div>
+      <ul aria-label={t`Quorum readiness checks`} className="grid" data-readiness>
+        {rows.map((row) => (
+          <li
+            key={row.id}
+            data-check={row.id}
+            data-state={row.state}
+            className="grid gap-1 border-b border-[var(--dh-line)] px-4 py-3 last:border-b-0"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-medium">{row.label}</span>
+              <Badge
+                tone={
+                  row.state === 'pass' ? 'success' : row.state === 'fail' ? 'danger' : 'neutral'
+                }
+              >
+                {row.state === 'pass' ? t`Pass` : row.state === 'fail' ? t`Fail` : t`Unknown`}
+              </Badge>
+            </div>
+            <p className="rx-dim rx-sm">{row.said}</p>
+            {row.fix ? (
+              <p className="rx-sm">
+                <span className="rx-dim">{t`Fix`}:</span> {row.fix}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
       {extra.length > 0 ? (
         <ul className="rx-checks px-4 pt-2">
           {extra.map(([id, value]) => (

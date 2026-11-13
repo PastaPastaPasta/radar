@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { blocksIn, compareEpochs, payoutIn, rankIn, spreadOf, withdrawalOf, type Finalized } from './platform-math'
+import {
+  blocksIn,
+  compareEpochs,
+  payoutIn,
+  rankIn,
+  spreadOf,
+  withdrawalOf,
+  type Finalized,
+} from './platform-math'
 
 const A = 'aa'.repeat(32)
 const B = 'bb'.repeat(32)
@@ -81,6 +89,8 @@ describe('withdrawalOf', () => {
       data: { amount: 5_000_000, status: 3 },
     })
     expect(w).toMatchObject({ amount: 5_000_000n, status: 'complete', createdAt: 1 })
-    expect(withdrawalOf({ id: 'y', createdAt: null, updatedAt: null, data: {} }).status).toBe('unknown')
+    expect(withdrawalOf({ id: 'y', createdAt: null, updatedAt: null, data: {} }).status).toBe(
+      'unknown',
+    )
   })
 })

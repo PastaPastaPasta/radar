@@ -56,7 +56,9 @@ describe('crawlDiffers', () => {
 
 describe('dkgRules', () => {
   it('reads what Radar sent and falls back to the Dash Core 24 numbers', () => {
-    expect(dkgRules({ release: 'Dash Core 25', min_protocol: 70250, core_commit: 'abc1234' })).toMatchObject({
+    expect(
+      dkgRules({ release: 'Dash Core 25', min_protocol: 70250, core_commit: 'abc1234' }),
+    ).toMatchObject({
       release: 'Dash Core 25',
       minProtocol: 70250,
       reachFailures: 3,
