@@ -1,8 +1,20 @@
 import { screen, within } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import type { StateTransitionDecodedDto } from '@/data/sdk/methods/p-blocks'
-import { renderInApp } from '@/features/entity/test-utils'
+import { I18nProvider, i18n } from '@/i18n'
+import { renderInRouter } from '@/ui/test-utils'
 import { TypePanel } from './panels'
+
+const renderInApp = (node: ReactNode) =>
+  renderInRouter(
+    <QueryClientProvider
+      client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+    >
+      <I18nProvider i18n={i18n}>{node}</I18nProvider>
+    </QueryClientProvider>,
+  )
 
 const ID = '5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt'
 const OTHER = '7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J'

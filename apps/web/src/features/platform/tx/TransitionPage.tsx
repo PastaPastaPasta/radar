@@ -44,7 +44,7 @@ export function TransitionPage({ hash }: { hash: string }) {
   return (
     <PageFrame
       path="/platform/tx/$hash"
-      title={t`Platform state transition`}
+      title={t`State transition`}
       eyebrow={t`Platform`}
       layer="platform"
       share
