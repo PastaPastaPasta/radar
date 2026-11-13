@@ -1,9 +1,9 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { bytesToHex } from '@/lib/hex'
 import { renderAt } from '../test-utils'
 import type * as GroveProof from './grove-proof'
-import { toHex } from './bytes'
 import { proofBytes, proofText } from './proof-fixtures'
 
 const parser = vi.hoisted(() => ({ parse: vi.fn<(bytes: Uint8Array) => Promise<string>>() }))
@@ -22,7 +22,7 @@ describe('proof decoder', () => {
     const user = userEvent.setup()
     renderAt('/tools/proof')
     await user.click(await screen.findByLabelText('Proof bytes'))
-    await user.paste(toHex(proofBytes('testnet-dpns-domain-asc')))
+    await user.paste(bytesToHex(proofBytes('testnet-dpns-domain-asc')))
     const summary = await screen.findByText('What the proof contains')
     expect(summary).toBeInTheDocument()
     const layers = document.querySelector('[data-proof-layers]')!

@@ -41,12 +41,12 @@ export function PathTool({ preset }: { preset: string | undefined }) {
   const net = useNetwork()
   const navigate = useNavigate()
   const ids = { preset: useId(), path: useId(), keys: useId() }
-  const start = presetById(preset)
-  const [pathText, setPathText] = useState((start?.path ?? []).join('\n'))
-  const [keysText, setKeysText] = useState((start?.keys ?? []).join('\n'))
-  const [context, setContext] = useState<GroveContext>(start?.context ?? 'root')
+  const chosen = presetById(preset)
+  const [pathText, setPathText] = useState((chosen?.path ?? []).join('\n'))
+  const [keysText, setKeysText] = useState((chosen?.keys ?? []).join('\n'))
+  const [context, setContext] = useState<GroveContext>(chosen?.context ?? 'root')
   const [request, setRequest] = useState<{ path: string[]; keys: string[] } | undefined>(
-    start ? { path: start.path, keys: start.keys } : undefined,
+    chosen ? { path: chosen.path, keys: chosen.keys } : undefined,
   )
 
   const path = lines(pathText)
@@ -98,7 +98,7 @@ export function PathTool({ preset }: { preset: string | undefined }) {
             <select
               id={ids.preset}
               className="dh-input"
-              value={presetById(preset)?.id ?? ''}
+              value={chosen?.id ?? ''}
               onChange={(e) => {
                 choose(e.target.value)
               }}
@@ -110,9 +110,7 @@ export function PathTool({ preset }: { preset: string | undefined }) {
                 </option>
               ))}
             </select>
-            {presetById(preset) ? (
-              <p className="text-sm text-[var(--dh-ink-2)]">{i18n._(presetById(preset)!.about)}</p>
-            ) : null}
+            {chosen ? <p className="text-sm text-[var(--dh-ink-2)]">{i18n._(chosen.about)}</p> : null}
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="grid gap-1">

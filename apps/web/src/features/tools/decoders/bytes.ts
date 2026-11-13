@@ -85,9 +85,6 @@ export function parseBytes(text: string, choice: ByteFormatChoice = 'auto'): Par
   return { ok: false, reason: choice === 'auto' ? 'base64' : choice }
 }
 
-export const toHex = (bytes: Uint8Array): string =>
-  Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
-
 export function toBase64(bytes: Uint8Array): string {
   let binary = ''
   for (let i = 0; i < bytes.length; i += 0x8000) {

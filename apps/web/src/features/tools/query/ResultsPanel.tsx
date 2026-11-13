@@ -5,10 +5,11 @@ import { useMemo } from 'react'
 import { Card, Copy, DataTable, Empty, ErrorState, JsonView, Skeleton } from '@/ui'
 import { isSourceError } from '@/data/errors'
 import { formatInt } from '@/lib/format'
+import { bytesToHex } from '@/lib/hex'
 import { download } from './download'
-import { averageText, resultCsv, resultJson, resultRows } from './export'
+import { resultCsv, resultJson, resultRows } from './export'
 import { QUERY_ERROR_HINTS } from './parse-messages'
-import { buildSdkExample, classifyQueryError, toSdkParams } from './query-workspace'
+import { buildSdkExample, classifyQueryError, formatAverage, toSdkParams } from './query-workspace'
 import type { StatementRun } from './run'
 import { toDocumentsQuery } from './sql-parser'
 
@@ -20,8 +21,7 @@ function cellText(value: unknown): string {
   if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
     return String(value)
   }
-  if (value instanceof Uint8Array)
-    return `0x${[...value].map((b) => b.toString(16).padStart(2, '0')).join('')}`
+  if (value instanceof Uint8Array) return `0x${bytesToHex(value)}`
   const text = JSON.stringify(value, (_k, v: unknown) => (typeof v === 'bigint' ? v.toString() : v))
   return text.length > 80 ? `${text.slice(0, 79)}…` : text
 }
@@ -214,7 +214,7 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
         ) : null}
         {result.kind === 'avg' ? (
           <p className="sr-only">
-            {result.groups.map((g) => `${g.key || t`All documents`}: ${averageText(g)}`).join('; ')}
+            {result.groups.map((g) => `${g.key || t`All documents`}: ${formatAverage(g.sum, g.count)}`).join('; ')}
           </p>
         ) : null}
         <details>

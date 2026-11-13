@@ -1,4 +1,4 @@
-import type { SourceStamp, Sourced } from '@/data/envelope'
+import type { SourceStamp } from '@/data/envelope'
 import { stampOf } from '@/data/envelope'
 import { sdk } from '@/data/sdk'
 import type { DocumentDto } from '@/data/sdk/methods'
@@ -85,8 +85,6 @@ export function planQuery(sql: string, pickerContract: string | undefined): Plan
   return { ok: true, statements }
 }
 
-const stampFor = <T>(s: Sourced<T>): SourceStamp => stampOf(s)
-
 /** One statement against the SDK. `startAfter` pages a document list. */
 export async function runStatement(
   net: NetworkId,
@@ -102,7 +100,7 @@ export async function runStatement(
       kind: 'documents',
       rows: answer.data,
       more: answer.data.length >= (args.limit ?? 25),
-      stamp: stampFor(answer),
+      stamp: stampOf(answer),
     }
   }
   const { startAfter: _skip, ...aggregate } = args
@@ -110,13 +108,13 @@ export async function runStatement(
   const base = { ...aggregate, ...(groupBy ? { groupBy } : {}) }
   if (parsed.select === 'count') {
     const answer = await sdk.call(net, 'documents.count', base, signal)
-    return { kind: 'count', groups: answer.data, stamp: stampFor(answer) }
+    return { kind: 'count', groups: answer.data, stamp: stampOf(answer) }
   }
   const property = parsed.aggregateField ?? ''
   if (parsed.select === 'sum') {
     const answer = await sdk.call(net, 'documents.sum', { ...base, property }, signal)
-    return { kind: 'sum', field: property, groups: answer.data, stamp: stampFor(answer) }
+    return { kind: 'sum', field: property, groups: answer.data, stamp: stampOf(answer) }
   }
   const answer = await sdk.call(net, 'documents.average', { ...base, property }, signal)
-  return { kind: 'avg', field: property, groups: answer.data, stamp: stampFor(answer) }
+  return { kind: 'avg', field: property, groups: answer.data, stamp: stampOf(answer) }
 }

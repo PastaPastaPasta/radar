@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parseBytes, toBase64, toHex } from './bytes'
+import { bytesToHex } from '@/lib/hex'
+import { parseBytes, toBase64 } from './bytes'
 
 const bytes = (r: ReturnType<typeof parseBytes>) => (r.ok ? [...r.bytes] : r)
 
@@ -42,7 +43,7 @@ describe('parseBytes', () => {
 
   it('round-trips through hex and base64', () => {
     const data = Uint8Array.from({ length: 300 }, (_, i) => i % 256)
-    expect(bytes(parseBytes(toHex(data), 'hex'))).toEqual([...data])
+    expect(bytes(parseBytes(bytesToHex(data), 'hex'))).toEqual([...data])
     expect(bytes(parseBytes(toBase64(data), 'base64'))).toEqual([...data])
   })
 })

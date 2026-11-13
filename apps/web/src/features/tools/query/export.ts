@@ -1,10 +1,5 @@
 import type { DocumentDto } from '@/data/sdk/methods'
-import {
-  aggregateExportRows,
-  formatAverage,
-  serializeQueryCsv,
-  serializeQueryJson,
-} from './query-workspace'
+import { aggregateExportRows, serializeQueryCsv, serializeQueryJson } from './query-workspace'
 import type { StatementResult } from './run'
 
 /** A document as one flat row: its system fields, then its own properties. */
@@ -36,10 +31,6 @@ export function resultRows(result: StatementResult): Record<string, unknown>[] {
       )
   }
 }
-
-/** The average of one group as text, or a dash when it holds no documents. */
-export const averageText = (g: { sum: bigint; count: bigint }): string =>
-  formatAverage(g.sum, g.count)
 
 export const resultJson = (result: StatementResult): string =>
   serializeQueryJson(resultRows(result))

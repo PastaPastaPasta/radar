@@ -10,8 +10,6 @@ interface Explanation {
   rule?: MessageDescriptor
 }
 
-type Values = Record<string, string>
-
 const RANGE_RULE = msg`Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them.`
 
 /** Every parse failure with the sentence that names it and the Platform rule that makes it one. */
@@ -97,18 +95,17 @@ export const PARSE_EXPLANATIONS: Record<ParseCode, Explanation> = {
 }
 
 export interface ExplainedFailure {
+  /** The sentence with its values filled in, ready for `i18n._`. */
   found: MessageDescriptor
   rule?: MessageDescriptor
-  values: Values
 }
 
 export function explainFailure(failure: ParseFailure): ExplainedFailure {
   const explanation = PARSE_EXPLANATIONS[failure.code]
   const arg = failure.arg === '' || failure.arg === undefined ? '…' : failure.arg
   return {
-    found: explanation.found,
+    found: { ...explanation.found, values: { arg, label: failure.label ?? '' } },
     ...(explanation.rule ? { rule: explanation.rule } : {}),
-    values: { arg, label: failure.label ?? '' },
   }
 }
 

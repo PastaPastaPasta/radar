@@ -277,7 +277,7 @@ export function QueryPage() {
               {explained && place ? (
                 <>
                   <p className="font-semibold">
-                    {i18n._(explained.found, explained.values)}{' '}
+                    {i18n._(explained.found)}{' '}
                     <span className="font-normal text-[var(--dh-ink-2)]">
                       {t`Line ${place.line}, column ${place.column}.`}
                     </span>

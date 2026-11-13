@@ -4,7 +4,7 @@ import type { SourceId } from '@/data/envelope'
 import { pageTitle, SITE_MAP, type SitePage } from '@/features/entity'
 import { METHOD_PAGES } from './method-pages'
 
-export const SOURCE_NAMES: Record<SourceId, MessageDescriptor> = {
+const SOURCE_NAMES: Record<SourceId, MessageDescriptor> = {
   sdk: msg`Platform SDK`,
   dapi: msg`DAPI`,
   radar: msg`Radar`,
