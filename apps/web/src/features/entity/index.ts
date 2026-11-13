@@ -1,6 +1,7 @@
 export { Entity } from './Entity'
 export type { EntityProps } from './Entity'
 export { entityHref, entityLabel, entityPath } from './hrefs'
+export type { EntitySearch } from './hrefs'
 export { networkName, useNetwork, withNetwork } from './network'
 export { PageLink } from './PageLink'
 export type { PageLinkProps } from './PageLink'

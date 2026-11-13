@@ -7,8 +7,26 @@ import { withNetwork, withSourceMode } from './network'
 
 const seg = encodeURIComponent
 
-/** `id` is the last path segment; for compound kinds (document, group) it is `a/b/c` as the route expects. */
-export function entityPath(kind: EntityKind, id: string): string {
+/** Search parameters an entity page reads besides the network, e.g. a contested name outside DPNS names its contract, type and index. */
+export type EntitySearch = Readonly<Record<string, string | undefined>>
+
+function withSearch(path: string, search: EntitySearch | undefined): string {
+  const parts = Object.entries(search ?? {}).flatMap(([k, v]) =>
+    v === undefined || v === '' ? [] : [`${seg(k)}=${seg(v)}`],
+  )
+  if (parts.length === 0) return path
+  return `${path}${path.includes('?') ? '&' : '?'}${parts.join('&')}`
+}
+
+/**
+ * `id` is the last path segment; for compound kinds (document, group) it is `a/b/c` as the route expects.
+ * `search` adds query parameters after the quorum's own `q`.
+ */
+export function entityPath(kind: EntityKind, id: string, search?: EntitySearch): string {
+  return withSearch(basePath(kind, id), search)
+}
+
+function basePath(kind: EntityKind, id: string): string {
   const tail = id.split('/').map(seg).join('/')
   switch (kind) {
     case 'block':
@@ -49,8 +67,13 @@ export function entityPath(kind: EntityKind, id: string): string {
   }
 }
 
-export function entityHref(kind: EntityKind, id: string, net: NetworkId): string {
-  return withSourceMode(withNetwork(entityPath(kind, id), net))
+export function entityHref(
+  kind: EntityKind,
+  id: string,
+  net: NetworkId,
+  search?: EntitySearch,
+): string {
+  return withSourceMode(withNetwork(entityPath(kind, id, search), net))
 }
 
 export const ENTITY_LABELS: Record<EntityKind, MessageDescriptor> = {
