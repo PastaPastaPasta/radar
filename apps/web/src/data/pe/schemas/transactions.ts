@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { zBigint, zCount, zHex64, zIsoDate } from '../../zod'
 import { PeOwnerSchema } from './identities'
 
-export const PeTransactionSchema = z.object({
+const PeTransactionRowSchema = z.object({
   hash: zHex64,
   index: z.number().nullish(),
   blockHash: zHex64.nullish(),
@@ -20,6 +20,14 @@ export const PeTransactionSchema = z.object({
   base58Address: z.string().nullish(),
   bech32mAddress: z.string().nullish(),
   addressesCount: z.number().nullish(),
+})
+
+export const PeTransactionSchema = PeTransactionRowSchema.extend({
+  shielded: z
+    .object({ amount: zBigint.nullish(), direction: z.string().nullish() })
+    .nullish(),
+  /** The same transition seen again in later blocks, as Explorer lists them (the later ones failed). */
+  duplicates: z.array(PeTransactionRowSchema).nullish(),
 })
 
 export type PeTransaction = z.output<typeof PeTransactionSchema>

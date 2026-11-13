@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { zHex64, zIsoDate } from '../../zod'
 import { PeQuorumSchema } from './quorums'
+import { PeTransactionSchema } from './transactions'
 
 export const PeBlockHeaderSchema = z.object({
   hash: zHex64,
@@ -28,6 +29,12 @@ export const PeBlockSummarySchema = z.object({
 
 export type PeBlockSummary = z.output<typeof PeBlockSummarySchema>
 
-export const PeBlockSchema = PeBlockSummarySchema.extend({ quorum: PeQuorumSchema.nullish() })
+export const PeBlockSchema = PeBlockSummarySchema.extend({
+  txs: z
+    .array(PeTransactionSchema)
+    .nullish()
+    .transform((v) => v ?? []),
+  quorum: PeQuorumSchema.nullish(),
+})
 
 export type PeBlock = z.output<typeof PeBlockSchema>
