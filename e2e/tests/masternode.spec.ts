@@ -554,7 +554,7 @@ test.describe('search leads somewhere real', () => {
     await expect(dialog.getByRole('option', { name: /Blocks/ })).toBeVisible()
     const pages: [RegExp, string][] = [
       [/^Masternodes/, '/masternodes'],
-      [/^Platform$/, '/platform'],
+      [/^Platform(?! blocks| transitions| address)/, '/platform'],
       [/^Nodes/, '/nodes'],
     ]
     for (const [name, path] of pages) {
