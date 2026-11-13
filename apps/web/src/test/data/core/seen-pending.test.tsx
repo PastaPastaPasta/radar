@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LiveTxEvent } from '@/data/core/live'
 import type { DecodedTx } from '@/data/core/types'
-import { useSeenPending } from '@/data/core/seen-pending'
+import { SEEN_STORE_LIMIT, useSeenPending } from '@/data/core/seen-pending'
 
 const feed = vi.hoisted(() => ({
   listeners: new Set<(e: unknown) => void>(),
@@ -82,5 +82,28 @@ describe('useSeenPending', () => {
     feed.state = 'reconnecting'
     const { result } = renderHook(() => useSeenPending('testnet', true))
     expect(result.current.stamp).toBeUndefined()
+  })
+
+  it('counts and sums everything kept, and lists only the newest rows asked for', () => {
+    const { result } = renderHook(() => useSeenPending('testnet', true, 3))
+    for (let n = 1; n <= 5; n++) emit({ kind: 'tx', tx: tx(n) })
+    expect(result.current.rows.map((r) => r.txid)).toEqual([tx(5).txid, tx(4).txid, tx(3).txid])
+    expect(result.current.count).toBe(5)
+    expect(result.current.bytes).toBe(1000)
+    expect(result.current.capped).toBe(false)
+    emit({ kind: 'block', txids: [tx(1).txid, tx(5).txid] })
+    expect(result.current.count).toBe(3)
+    expect(result.current.rows).toHaveLength(3)
+  })
+
+  it('says so when the oldest were dropped to bound the list', () => {
+    const { result } = renderHook(() => useSeenPending('testnet', true, 3))
+    act(() => {
+      for (let n = 1; n <= SEEN_STORE_LIMIT + 2; n++) {
+        feed.listeners.forEach((l) => l({ kind: 'tx', tx: tx(n) }))
+      }
+    })
+    expect(result.current.count).toBe(SEEN_STORE_LIMIT)
+    expect(result.current.capped).toBe(true)
   })
 })

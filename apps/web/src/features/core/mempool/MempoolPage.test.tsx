@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -118,6 +118,52 @@ describe('Mempool page', () => {
       deliver({ kind: 'block', txids: [tx.txid] })
       expect(await screen.findByText('Nothing seen yet')).toBeInTheDocument()
     })
+
+    it('counts every transaction seen, not only the rows listed @HY-19', async () => {
+      const deliver = feed()
+      renderAt('/mempool?network=testnet')
+      await seenView()
+      const base = (await core.tx('testnet', TESTNET_TX)).data!
+      for (let i = 1; i <= 105; i++) {
+        deliver({
+          kind: 'tx',
+          tx: { ...base, txid: i.toString(16).padStart(64, '0'), size: 200, height: undefined },
+        })
+      }
+      const summary = () => document.querySelector('[data-mempool-summary="seen"]')
+      await waitFor(() => expect(summary()).toHaveTextContent('Seen and still pending105'))
+      expect(summary()).toHaveTextContent('Their size21.0 kB')
+      const table = screen.getByRole('table', { name: /Pending transactions seen/ })
+      expect(within(table).getAllByRole('row')).toHaveLength(101)
+      expect(document.querySelector('#pending')).toHaveTextContent('The newest 100 of 105')
+    })
+
+    it('shows no Hyphen list as live while the probe has not decided @HY-19', async () => {
+      feed()
+      let asked = 0
+      server.use(
+        http.get('*/x/hy/testnet/status', async () => {
+          await delay(1800)
+          return undefined
+        }),
+        http.get('*/x/hy/testnet/mempool*', () => {
+          asked++
+          return undefined
+        }),
+      )
+      renderAt('/mempool?network=testnet')
+      const status = await seenView()
+      expect(status).toHaveTextContent("From DAPI's live feed")
+      expect(document.querySelector('[data-mempool-view="index"]')).toBeNull()
+      expect(screen.queryByText(/Refreshes every/)).toBeNull()
+      expect(asked).toBe(0)
+      expect(document.querySelector('[data-stale-index]')).toBeNull()
+      await waitFor(() => expect(document.querySelectorAll('[data-stale-index]')).toHaveLength(1), {
+        timeout: 4000,
+      })
+      expect(document.querySelector('[data-mempool-view="index"]')).toBeNull()
+      expect(asked).toBe(0)
+    }, 10_000)
 
     it('shows nothing Hyphen says about the mempool, and stops asking it @HY-19', async () => {
       feed()

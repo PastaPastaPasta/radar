@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import type { SourceStamp } from '../envelope'
 import type { NetworkId } from '@/lib/network'
 import type { CoreTxType } from '@/lib/tx-types'
@@ -14,6 +14,8 @@ export interface SeenTx {
 }
 
 const MAX_SEEN = 20
+/** How many transactions are kept to count and sum: on a chain with no blocks the list would otherwise grow for ever. */
+export const SEEN_STORE_LIMIT = 5000
 const TICK_MS = 10_000
 
 interface Scoped {
@@ -54,7 +56,8 @@ function useTick(active: boolean): number {
 /**
  * Transactions DAPI's live feed has delivered since the page opened, newest first, minus those a block has since
  * confirmed. It stands in for the mempool list while Hyphen's index is behind or Decentralized only mode keeps Hyphen
- * off, and says only what this page saw. `limit` is how many rows are kept.
+ * off, and says only what this page saw. `rows` are the newest `limit`; `count` and `bytes` cover everything kept,
+ * up to `SEEN_STORE_LIMIT` (`capped` says the oldest were dropped).
  *
  * The stamp is the feed's, not a transaction's: it is as of now while the stream is connected, however quiet it is,
  * and as of the moment the stream last was connected once it is not. A transaction's arrival time is an event,
@@ -64,7 +67,13 @@ export function useSeenPending(
   net: NetworkId,
   enabled: boolean,
   limit = MAX_SEEN,
-): { rows: SeenTx[]; stamp: SourceStamp | undefined } {
+): {
+  rows: SeenTx[]
+  count: number
+  bytes: number
+  capped: boolean
+  stamp: SourceStamp | undefined
+} {
   const [state, setState] = useState<Scoped>({ net, rows: [] })
   const connected = useSyncExternalStore(
     (onChange) => coreLive.subscribe(onChange),
@@ -92,7 +101,7 @@ export function useSeenPending(
             size: event.tx.size,
             seenAt: Date.now(),
           }
-          return { net, rows: [row, ...rows].slice(0, limit) }
+          return { net, rows: [row, ...rows].slice(0, SEEN_STORE_LIMIT) }
         }
         if (event.kind === 'block') {
           const mined = new Set(event.txids)
@@ -101,11 +110,16 @@ export function useSeenPending(
         return s
       })
     })
-  }, [net, enabled, limit])
+  }, [net, enabled])
 
+  const kept = useMemo(() => (state.net === net ? state.rows : []), [state, net])
+  const bytes = useMemo(() => kept.reduce((n, r) => n + r.size, 0), [kept])
   const asOf = connected ? now : lastConnectedAt?.net === net ? lastConnectedAt.at : undefined
   return {
-    rows: state.net === net ? state.rows : [],
+    rows: kept.length > limit ? kept.slice(0, limit) : kept,
+    count: kept.length,
+    bytes,
+    capped: kept.length >= SEEN_STORE_LIMIT,
     stamp:
       asOf === undefined ? undefined : { source: 'dapi', asOf, fetchedAt: asOf, proved: false },
   }

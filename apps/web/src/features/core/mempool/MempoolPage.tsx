@@ -36,21 +36,29 @@ const SEEN_LIMIT = 100
 
 /**
  * The mempool from Hyphen while its index is current. While the index is behind the chain, or Decentralized only mode
- * keeps Hyphen off, the page shows what DAPI's live feed has delivered since it opened and asks Hyphen nothing.
+ * keeps Hyphen off, the page shows what DAPI's live feed has delivered since it opened and asks Hyphen nothing. The
+ * same view stands in until the index probe has decided, so Hyphen's list is never shown as live before it is known
+ * to be.
  */
 function MempoolContent() {
-  const index = useIndexHealth(useNetwork())
-  if (index.off) return <SeenMempool reason="mode" />
-  if (index.state === 'stale') return <SeenMempool reason="stale" />
-  return <IndexedMempool />
+  const net = useNetwork()
+  const index = useIndexHealth(net)
+  const seenOnly = index.off || index.pending || index.state === 'stale'
+  const seen = useSeenPending(net, seenOnly, SEEN_LIMIT)
+  if (!seenOnly) return <IndexedMempool />
+  const reason = index.off ? 'mode' : index.pending ? 'checking' : 'stale'
+  return <SeenMempool seen={seen} reason={reason} />
 }
 
-function SeenMempool({ reason }: { reason: 'mode' | 'stale' }) {
+function SeenMempool({
+  seen,
+  reason,
+}: {
+  seen: ReturnType<typeof useSeenPending>
+  reason: 'mode' | 'stale' | 'checking'
+}) {
   const { t } = useLingui()
-  const net = useNetwork()
-  const seen = useSeenPending(net, true, SEEN_LIMIT)
-  const [openedAt] = useState(() => Date.now())
-  const bytes = seen.rows.reduce((n, r) => n + r.size, 0)
+  const [since] = useState(() => Date.now())
   const live = seen.stamp !== undefined
   const columns = useMemo<ColumnDef<SeenTx>[]>(
     () => [
@@ -93,23 +101,34 @@ function SeenMempool({ reason }: { reason: 'mode' | 'stale' }) {
         <StaleIndexNotice
           scope={t`The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it.`}
         />
-      ) : (
+      ) : reason === 'mode' ? (
         <Unavailable compact title={t`The full mempool list and its totals need an indexer`} />
-      )}
+      ) : null}
       <p role="status" className="flex items-center gap-2 text-sm" data-mempool-view="seen">
         <LiveDot state={live ? 'live' : 'unknown'} />
         {t`From DAPI's live feed: transactions this page has seen arrive, minus those since mined. It is not the whole mempool.`}
       </p>
       <Card title={t`Since you opened this page`} layer="core" source={seen.stamp}>
         <div className="grid gap-4 sm:grid-cols-3" data-mempool-summary="seen">
-          <Stat size="lg" label={t`Seen and still pending`} value={formatInt(seen.rows.length)} />
-          <Stat label={t`Their size`} value={formatBytes(bytes)} />
-          <Stat label={t`Watching since`} value={<Time ms={openedAt} mode="absolute" />} />
+          <Stat
+            size="lg"
+            label={t`Seen and still pending`}
+            value={`${formatInt(seen.count)}${seen.capped ? '+' : ''}`}
+          />
+          <Stat
+            label={t`Their size`}
+            value={`${formatBytes(seen.bytes)}${seen.capped ? '+' : ''}`}
+          />
+          <Stat label={t`Watching since`} value={<Time ms={since} mode="absolute" />} />
         </div>
       </Card>
       <Card
         title={t`Pending transactions`}
-        subtitle={t`Seen since you opened this page`}
+        subtitle={
+          seen.count > seen.rows.length
+            ? t`The newest ${formatInt(seen.rows.length)} of ${formatInt(seen.count)} seen since you opened this page`
+            : t`Seen since you opened this page`
+        }
         layer="core"
         id="pending"
         padding="flush"
