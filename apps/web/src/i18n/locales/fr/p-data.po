@@ -12,3 +12,729 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "« {field} » a plus d’une clause. Utilisez-en une, ou une borne inférieure et une borne supérieure."
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "« {field} » ne figure dans aucun index de ce type : Platform ne peut donc pas filtrer dessus."
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "« {field} » demande d’abord une clause sur « {other} » : l’index {index} se lit dans l’ordre, les propriétés précédentes avant les suivantes."
+
+msgid "“{field}” needs a value."
+msgstr "« {field} » a besoin d’une valeur."
+
+msgid "“{field}” takes a whole number."
+msgstr "« {field} » attend un nombre entier."
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "« {field} » attend un identifiant : 32 octets écrits en base58."
+
+msgid "“{field}” takes true or false."
+msgstr "« {field} » attend true ou false."
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "« commence par » s’applique au texte, et « {field} » n’est pas du texte."
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, one {# changement} other {# changements}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, one {# signataire} other {# signataires}}"
+
+msgid "{f}, ascending"
+msgstr "{f}, croissant"
+
+msgid "{f}, descending"
+msgstr "{f}, décroissant"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field} : recherche de « {searched} » pour « {typed} » (DPNS stocke o, i et l sous la forme 0, 1 et 1)"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}, croissant"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}, décroissant"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} propriétés · {indices} index"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}, poids {signedPower} sur {requiredPower} requis"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "Un contrat ne peut contenir que des jetons ou que des groupes."
+
+msgid "A contract ID"
+msgstr "Un ID de contrat"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "Un ID de contrat compte au plus 44 caractères base58."
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "Un groupe liste des identités et le poids de chacune ; une décision doit réunir assez de poids pour atteindre le seuil du groupe."
+
+msgid "A query can have only one “in” clause."
+msgstr "Une requête ne peut avoir qu’une seule clause « in »."
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "Une plage (<, ≤, >, ≥, commence par) sur « {field} » doit porter sur la dernière propriété filtrée de l’index {index}, mais « {other} » vient après."
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Action details"
+msgstr "Détails de l’action"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Active"
+msgstr "Actif"
+
+msgid "Activity"
+msgstr "Activité"
+
+msgid "Add a filter"
+msgstr "Ajouter un filtre"
+
+msgid "Added"
+msgstr "Ajouté"
+
+msgid "All"
+msgstr "Tous"
+
+msgid "All contracts"
+msgstr "Tous les contrats"
+
+msgid "All types"
+msgstr "Tous les types"
+
+msgid "Any index"
+msgstr "N’importe quel index"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "at block {height}"
+msgstr "au bloc {height}"
+
+msgid "Back to the contract"
+msgstr "Retour au contrat"
+
+msgid "Back to the previous page"
+msgstr "Retour à la page précédente"
+
+msgid "Base supply"
+msgstr "Offre de base"
+
+msgid "Browse documents"
+msgstr "Parcourir les documents"
+
+msgid "Browse the documents of this type"
+msgstr "Parcourir les documents de ce type"
+
+msgid "Can be deleted"
+msgstr "Peut être supprimé"
+
+msgid "Change or clear the filters to see more."
+msgstr "Modifiez ou effacez les filtres pour en voir davantage."
+
+msgid "Changed"
+msgstr "Modifié"
+
+msgid "Changes"
+msgstr "Changements"
+
+msgid "Choose a version to see what it changed."
+msgstr "Choisissez une version pour voir ce qu’elle a modifié."
+
+msgid "Clear"
+msgstr "Effacer"
+
+msgid "Clear filters"
+msgstr "Effacer les filtres"
+
+msgid "Closed"
+msgstr "Clôturées"
+
+msgid "Compare"
+msgstr "Comparer"
+
+msgid "Compare with"
+msgstr "Comparer avec"
+
+msgid "Comparison"
+msgstr "Comparaison"
+
+msgid "Config"
+msgstr "Config"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Configuration JSON"
+msgstr "Configuration en JSON"
+
+msgid "Contested"
+msgstr "Contesté"
+
+msgid "Contract"
+msgstr "Contrat"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "L’activité d’un contrat nécessite Platform Explorer"
+
+msgid "Contracts"
+msgstr "Contrats"
+
+msgid "Created"
+msgstr "Créé"
+
+msgid "Created or last changed by"
+msgstr "Créé ou modifié en dernier par"
+
+msgid "Current"
+msgstr "En cours"
+
+msgid "Data"
+msgstr "Données"
+
+msgid "Data at this revision"
+msgstr "Données à cette révision"
+
+msgid "Data contracts"
+msgstr "Contrats de données"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "Les contrats de données définissent ce qu’une application stocke sur Platform : types de document, jetons et groupes."
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Decimals"
+msgstr "Décimales"
+
+msgid "Default"
+msgstr "Par défaut"
+
+msgid "Deleted"
+msgstr "Supprimé"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Document data"
+msgstr "Données du document"
+
+msgid "Document type"
+msgstr "Type de document"
+
+msgid "Document types"
+msgstr "Types de document"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Documents deletable by default"
+msgstr "Documents supprimables par défaut"
+
+msgid "Documents keep history by default"
+msgstr "Les documents gardent leur historique par défaut"
+
+msgid "Documents mutable by default"
+msgstr "Documents modifiables par défaut"
+
+msgid "Documents of this contract"
+msgstr "Documents de ce contrat"
+
+msgid "Documents of type {type}"
+msgstr "Documents de type {type}"
+
+msgid "Featured contracts"
+msgstr "Contrats à la une"
+
+msgid "Filter documents"
+msgstr "Filtrer les documents"
+
+msgid "Filters"
+msgstr "Filtres"
+
+msgid "Group"
+msgstr "Groupe"
+
+msgid "Groups"
+msgstr "Groupes"
+
+msgid "Groups of this contract"
+msgstr "Groupes de ce contrat"
+
+msgid "Hide signers"
+msgstr "Masquer les signataires"
+
+msgid "History"
+msgstr "Historique"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities interacted"
+msgstr "Identités ayant interagi"
+
+msgid "Identity ID"
+msgstr "ID d’identité"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "L’index {index} n’a pas de propriété « {field} » pour trier."
+
+msgid "Indices of {type}"
+msgstr "Index de {type}"
+
+msgid "Keeps history"
+msgstr "Garde l’historique"
+
+msgid "Keeps version history"
+msgstr "Garde l’historique des versions"
+
+msgid "Kept"
+msgstr "Conservé"
+
+msgid "Latest transition"
+msgstr "Dernière transition"
+
+msgid "Load more actions"
+msgstr "Charger plus d’actions"
+
+msgid "Load older versions"
+msgstr "Charger les versions plus anciennes"
+
+msgid "Manage in Bridge"
+msgstr "Gérer dans Bridge"
+
+msgid "Maximum supply"
+msgstr "Offre maximale"
+
+msgid "Member"
+msgstr "Membre"
+
+msgid "Members"
+msgstr "Membres"
+
+msgid "Members by power"
+msgstr "Membres par poids"
+
+msgid "Metadata"
+msgstr "Métadonnées"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Never"
+msgstr "Jamais"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "No"
+msgstr "Non"
+
+msgid "No action has closed yet."
+msgstr "Aucune action n’a encore été clôturée."
+
+msgid "No action is waiting for signatures."
+msgstr "Aucune action n’attend de signatures."
+
+msgid "No contract has this ID on this network."
+msgstr "Aucun contrat n’a cet ID sur ce réseau."
+
+msgid "No contracts match."
+msgstr "Aucun contrat ne correspond."
+
+msgid "No document with this ID in this type."
+msgstr "Aucun document avec cet ID dans ce type."
+
+msgid "No documents match."
+msgstr "Aucun document ne correspond."
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "Aucun filtre : les premiers documents de ce type sont listés."
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "Aucun index : les documents ne peuvent être récupérés que par ID."
+
+msgid "No more documents."
+msgstr "Plus aucun document."
+
+msgid "No more revisions."
+msgstr "Plus aucune révision."
+
+msgid "No revisions recorded."
+msgstr "Aucune révision enregistrée."
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "Aucun index ne contient à la fois « {field} » et « {other} ». Platform répond à une requête à partir d’un seul index."
+
+msgid "No transitions match."
+msgstr "Aucune transition ne correspond."
+
+msgid "Nobody has created a document of this type yet."
+msgstr "Personne n’a encore créé de document de ce type."
+
+msgid "Not kept"
+msgstr "Non conservé"
+
+msgid "Of the required"
+msgstr "Du requis"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "Seul un contrat qui définit des groupes, généralement pour ses jetons, en a."
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "Une seule propriété peut avoir une plage (<, ≤, >, ≥, commence par) : « {field} » et « {other} » en ont une chacune."
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Open a contract"
+msgstr "Ouvrir un contrat"
+
+msgid "Open a contract by ID"
+msgstr "Ouvrir un contrat par ID"
+
+msgid "Open a contract by its ID above."
+msgstr "Ouvrez un contrat par son ID ci-dessus."
+
+msgid "Open a part of this schema"
+msgstr "Ouvrir une partie de ce schéma"
+
+msgid "Open groups page"
+msgstr "Ouvrir la page des groupes"
+
+msgid "Open in Platform Explorer"
+msgstr "Ouvrir dans Platform Explorer"
+
+msgid "Open the contract"
+msgstr "Ouvrir le contrat"
+
+msgid "Open the current version"
+msgstr "Ouvrir la version actuelle"
+
+msgid "Open the whole schema"
+msgstr "Ouvrir tout le schéma"
+
+msgid "Order by"
+msgstr "Trier par"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "Le tri doit suivre l’ordre des propriétés de l’index, en commençant par « {field} »."
+
+msgid "Overview"
+msgstr "Aperçu"
+
+msgid "Owner"
+msgstr "Propriétaire"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "Le propriétaire et la date ne restreignent que les lignes de cette page ; Platform Explorer pagine les transitions du contrat par date."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform renvoie au plus {DRIVE_MAX} documents à la fois."
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer n’a pas répondu, la transition est donc inconnue."
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer ne couvre pas les devnets."
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "Platform Explorer n’a pas encore d’enregistrement de ce document."
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform ne stocke que sa version actuelle, {currentVersion}. Un contrat qui définit keepsHistory conserve toutes ses versions."
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform ne stocke que la dernière révision de ces documents."
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Position {pos}"
+msgstr "Position {pos}"
+
+msgid "Power"
+msgstr "Poids"
+
+msgid "power {power}"
+msgstr "poids {power}"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Primary key ($id)"
+msgstr "Clé primaire ($id)"
+
+msgid "Properties, in order"
+msgstr "Propriétés, dans l’ordre"
+
+msgid "Property"
+msgstr "Propriété"
+
+msgid "Proposed by"
+msgstr "Proposé par"
+
+msgid "Provenance"
+msgstr "Provenance"
+
+msgid "Query"
+msgstr "Requête"
+
+msgid "Read-only"
+msgstr "Lecture seule"
+
+msgid "Recorded"
+msgstr "Enregistré"
+
+msgid "Registered"
+msgstr "Enregistré"
+
+msgid "Remove filter"
+msgstr "Retirer le filtre"
+
+msgid "Removed"
+msgstr "Retiré"
+
+msgid "Required power"
+msgstr "Poids requis"
+
+msgid "Revision"
+msgstr "Révision"
+
+msgid "Revision {number}"
+msgstr "Révision {number}"
+
+msgid "Revision at least"
+msgstr "Révision au moins"
+
+msgid "Revision pages"
+msgstr "Pages de révisions"
+
+msgid "Revisions"
+msgstr "Révisions"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Révisions enregistrées par Platform Explorer"
+
+msgid "Rows per page"
+msgstr "Lignes par page"
+
+msgid "Run query"
+msgstr "Lancer la requête"
+
+msgid "Schema"
+msgstr "Schéma"
+
+msgid "Schema JSON"
+msgstr "Schéma en JSON"
+
+msgid "Schema path"
+msgstr "Chemin du schéma"
+
+msgid "Schemas"
+msgstr "Schémas"
+
+msgid "See changes"
+msgstr "Voir les changements"
+
+msgid "See its document types"
+msgstr "Voir ses types de document"
+
+msgid "See the groups of this contract"
+msgstr "Voir les groupes de ce contrat"
+
+msgid "Show signers"
+msgstr "Afficher les signataires"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "Affichage des {MAX_CHANGES} premiers."
+
+msgid "starts with"
+msgstr "commence par"
+
+msgid "State"
+msgstr "État"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "System"
+msgstr "Système"
+
+msgid "System contracts"
+msgstr "Contrats système"
+
+msgid "System only"
+msgstr "Système uniquement"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "Ce n’est pas un ID de contrat : il compte au plus 44 caractères base58."
+
+msgid "That isn’t a contract ID."
+msgstr "Ce n’est pas un ID de contrat."
+
+msgid "That isn’t a document address."
+msgstr "Ce n’est pas une adresse de document."
+
+msgid "That isn’t a group address."
+msgstr "Ce n’est pas une adresse de groupe."
+
+msgid "That path isn’t in this schema."
+msgstr "Ce chemin n’est pas dans ce schéma."
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "La clause « in » sur « {field} » accepte au plus 100 valeurs."
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "Le contrat n’a pas pu être lu : on ne sait donc pas si son historique est conservé."
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "Les données et métadonnées du document ci-dessus proviennent directement de Platform."
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "La liste de tous les contrats nécessite Platform Explorer"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "Le tri doit inclure « {field} », qui a une clause in ou de plage."
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "Les valeurs de la clause « in » sur « {field} » doivent toutes être différentes."
+
+msgid "These two versions are the same."
+msgstr "Ces deux versions sont identiques."
+
+msgid "This contract defines no groups."
+msgstr "Ce contrat ne définit aucun groupe."
+
+msgid "This contract defines no tokens."
+msgstr "Ce contrat ne définit aucun jeton."
+
+msgid "This contract doesn’t keep its history."
+msgstr "Ce contrat ne conserve pas son historique."
+
+msgid "This contract has no document type “{type}”."
+msgstr "Ce contrat n’a pas de type de document « {type} »."
+
+msgid "This contract has no document types."
+msgstr "Ce contrat n’a aucun type de document."
+
+msgid "This contract has no group at position {pos}."
+msgstr "Ce contrat n’a pas de groupe à la position {pos}."
+
+msgid "This contract has no groups."
+msgstr "Ce contrat n’a aucun groupe."
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "Ce contrat n’a pas de version {wantedVersion}."
+
+msgid "This document type doesn’t keep its history."
+msgstr "Ce type de document ne conserve pas son historique."
+
+msgid "This group has no members."
+msgstr "Ce groupe n’a aucun membre."
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "Token ID"
+msgstr "ID du jeton"
+
+msgid "token position {tokenPosition}"
+msgstr "position du jeton {tokenPosition}"
+
+msgid "Tokens"
+msgstr "Jetons"
+
+msgid "Tokens of this contract"
+msgstr "Jetons de ce contrat"
+
+msgid "Total power"
+msgstr "Poids total"
+
+msgid "Transferred"
+msgstr "Transféré"
+
+msgid "Transition"
+msgstr "Transition"
+
+msgid "Transitions"
+msgstr "Transitions"
+
+msgid "Transitions on this contract"
+msgstr "Transitions de ce contrat"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Types"
+msgstr "Types"
+
+msgid "Unique"
+msgstr "Unique"
+
+msgid "Updated"
+msgstr "Mis à jour"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "Utilisez le navigateur de documents pour lire les documents de ce contrat."
+
+msgid "value"
+msgstr "valeur"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Values, separated by commas"
+msgstr "Valeurs, séparées par des virgules"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "De la version {fromVersion} à la version {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "La version {toVersion} est la première enregistrée : il n’y a donc rien avant elle à comparer."
+
+msgid "Version {version}"
+msgstr "Version {version}"
+
+msgid "Version history"
+msgstr "Historique des versions"
+
+msgid "Versions of this contract"
+msgstr "Versions de ce contrat"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "Savoir quelle transition a écrit un document nécessite Platform Explorer"
+
+msgid "With tokens"
+msgstr "Avec jetons"
+
+msgid "Won’t run"
+msgstr "Ne sera pas exécutée"
+
+msgid "Yes"
+msgstr "Oui"

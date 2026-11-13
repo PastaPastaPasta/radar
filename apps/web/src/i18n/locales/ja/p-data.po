@@ -12,3 +12,729 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "「{field}」に複数の条件があります。1 つにするか、下限と上限を 1 つずつ指定してください。"
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "「{field}」はこの種類のどのインデックスにも含まれていないため、Platform は絞り込めません。"
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "「{field}」の前に「{other}」の条件が必要です。インデックス {index} は順番に読まれ、前のプロパティが先になります。"
+
+msgid "“{field}” needs a value."
+msgstr "「{field}」には値が必要です。"
+
+msgid "“{field}” takes a whole number."
+msgstr "「{field}」には整数を指定してください。"
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "「{field}」には識別子（base58 で表した 32 バイト）を指定してください。"
+
+msgid "“{field}” takes true or false."
+msgstr "「{field}」には true か false を指定してください。"
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "「で始まる」はテキストに使えますが、「{field}」はテキストではありません。"
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, other {# 件の変更}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, other {署名者 # 人}}"
+
+msgid "{f}, ascending"
+msgstr "{f}、昇順"
+
+msgid "{f}, descending"
+msgstr "{f}、降順"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field}: 「{typed}」を「{searched}」として検索しています（DPNS は o、i、l を 0、1、1 として保存します）"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}、昇順"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}、降順"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} 個のプロパティ · {indices} 個のインデックス"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}、必要な重み {requiredPower} のうち {signedPower}"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "コントラクトに含められるのはトークンかグループのどちらか一方だけです。"
+
+msgid "A contract ID"
+msgstr "コントラクト ID"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "コントラクト ID は base58 で 44 文字以内です。"
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "グループはアイデンティティとそれぞれの重みを一覧にします。決定にはグループのしきい値に達する重みが必要です。"
+
+msgid "A query can have only one “in” clause."
+msgstr "クエリに指定できる「in」条件は 1 つだけです。"
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "「{field}」の範囲条件（<、≤、>、≥、で始まる）は、インデックス {index} で絞り込む最後のプロパティに指定する必要がありますが、「{other}」がその後にあります。"
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "アクション"
+
+msgid "Action details"
+msgstr "アクションの詳細"
+
+msgid "Actions"
+msgstr "アクション"
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "Activity"
+msgstr "アクティビティ"
+
+msgid "Add a filter"
+msgstr "フィルターを追加"
+
+msgid "Added"
+msgstr "追加"
+
+msgid "All"
+msgstr "すべて"
+
+msgid "All contracts"
+msgstr "すべてのコントラクト"
+
+msgid "All types"
+msgstr "すべての種類"
+
+msgid "Any index"
+msgstr "任意のインデックス"
+
+msgid "Apply"
+msgstr "適用"
+
+msgid "at block {height}"
+msgstr "ブロック {height} 時点"
+
+msgid "Back to the contract"
+msgstr "コントラクトに戻る"
+
+msgid "Back to the previous page"
+msgstr "前のページに戻る"
+
+msgid "Base supply"
+msgstr "基本供給量"
+
+msgid "Browse documents"
+msgstr "ドキュメントを見る"
+
+msgid "Browse the documents of this type"
+msgstr "この種類のドキュメントを見る"
+
+msgid "Can be deleted"
+msgstr "削除可能"
+
+msgid "Change or clear the filters to see more."
+msgstr "フィルターを変更またはクリアすると、さらに表示されます。"
+
+msgid "Changed"
+msgstr "変更"
+
+msgid "Changes"
+msgstr "変更"
+
+msgid "Choose a version to see what it changed."
+msgstr "バージョンを選ぶと、その変更内容が表示されます。"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "Clear filters"
+msgstr "フィルターをクリア"
+
+msgid "Closed"
+msgstr "完了"
+
+msgid "Compare"
+msgstr "比較"
+
+msgid "Compare with"
+msgstr "比較対象"
+
+msgid "Comparison"
+msgstr "比較方法"
+
+msgid "Config"
+msgstr "設定"
+
+msgid "Configuration"
+msgstr "設定"
+
+msgid "Configuration JSON"
+msgstr "設定（JSON）"
+
+msgid "Contested"
+msgstr "競合中"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "コントラクトのアクティビティには Platform Explorer が必要です"
+
+msgid "Contracts"
+msgstr "コントラクト"
+
+msgid "Created"
+msgstr "作成"
+
+msgid "Created or last changed by"
+msgstr "作成または最後に変更したもの"
+
+msgid "Current"
+msgstr "現在"
+
+msgid "Data"
+msgstr "データ"
+
+msgid "Data at this revision"
+msgstr "このリビジョンのデータ"
+
+msgid "Data contracts"
+msgstr "データコントラクト"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "データコントラクトは、アプリケーションが Platform に保存する内容（ドキュメントの種類、トークン、グループ）を定義します。"
+
+msgid "Date"
+msgstr "日付"
+
+msgid "Decimals"
+msgstr "小数桁数"
+
+msgid "Default"
+msgstr "デフォルト"
+
+msgid "Deleted"
+msgstr "削除済み"
+
+msgid "Document"
+msgstr "ドキュメント"
+
+msgid "Document data"
+msgstr "ドキュメントのデータ"
+
+msgid "Document type"
+msgstr "ドキュメントの種類"
+
+msgid "Document types"
+msgstr "ドキュメントの種類"
+
+msgid "Documents"
+msgstr "ドキュメント"
+
+msgid "Documents deletable by default"
+msgstr "ドキュメントはデフォルトで削除可能"
+
+msgid "Documents keep history by default"
+msgstr "ドキュメントはデフォルトで履歴を保持"
+
+msgid "Documents mutable by default"
+msgstr "ドキュメントはデフォルトで変更可能"
+
+msgid "Documents of this contract"
+msgstr "このコントラクトのドキュメント"
+
+msgid "Documents of type {type}"
+msgstr "{type} 型のドキュメント"
+
+msgid "Featured contracts"
+msgstr "注目のコントラクト"
+
+msgid "Filter documents"
+msgstr "ドキュメントを絞り込む"
+
+msgid "Filters"
+msgstr "フィルター"
+
+msgid "Group"
+msgstr "グループ"
+
+msgid "Groups"
+msgstr "グループ"
+
+msgid "Groups of this contract"
+msgstr "このコントラクトのグループ"
+
+msgid "Hide signers"
+msgstr "署名者を隠す"
+
+msgid "History"
+msgstr "履歴"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities interacted"
+msgstr "やり取りしたアイデンティティ"
+
+msgid "Identity ID"
+msgstr "アイデンティティ ID"
+
+msgid "Index"
+msgstr "インデックス"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "インデックス {index} には並べ替えに使えるプロパティ「{field}」がありません。"
+
+msgid "Indices of {type}"
+msgstr "{type} のインデックス"
+
+msgid "Keeps history"
+msgstr "履歴を保持"
+
+msgid "Keeps version history"
+msgstr "バージョン履歴を保持"
+
+msgid "Kept"
+msgstr "保持"
+
+msgid "Latest transition"
+msgstr "最新のトランジション"
+
+msgid "Load more actions"
+msgstr "さらにアクションを読み込む"
+
+msgid "Load older versions"
+msgstr "古いバージョンを読み込む"
+
+msgid "Manage in Bridge"
+msgstr "Bridge で管理"
+
+msgid "Maximum supply"
+msgstr "最大供給量"
+
+msgid "Member"
+msgstr "メンバー"
+
+msgid "Members"
+msgstr "メンバー"
+
+msgid "Members by power"
+msgstr "重み順のメンバー"
+
+msgid "Metadata"
+msgstr "メタデータ"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Never"
+msgstr "なし"
+
+msgid "Next"
+msgstr "次へ"
+
+msgid "No"
+msgstr "いいえ"
+
+msgid "No action has closed yet."
+msgstr "まだ完了したアクションはありません。"
+
+msgid "No action is waiting for signatures."
+msgstr "署名待ちのアクションはありません。"
+
+msgid "No contract has this ID on this network."
+msgstr "このネットワークにこの ID のコントラクトはありません。"
+
+msgid "No contracts match."
+msgstr "一致するコントラクトはありません。"
+
+msgid "No document with this ID in this type."
+msgstr "この種類にこの ID のドキュメントはありません。"
+
+msgid "No documents match."
+msgstr "一致するドキュメントはありません。"
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "フィルターなし：この種類の先頭のドキュメントを表示しています。"
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "インデックスなし：ドキュメントは ID でのみ取得できます。"
+
+msgid "No more documents."
+msgstr "これ以上ドキュメントはありません。"
+
+msgid "No more revisions."
+msgstr "これ以上リビジョンはありません。"
+
+msgid "No revisions recorded."
+msgstr "記録されたリビジョンはありません。"
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "「{field}」と「{other}」の両方を含むインデックスはありません。Platform は 1 つのインデックスだけでクエリに答えます。"
+
+msgid "No transitions match."
+msgstr "一致するトランジションはありません。"
+
+msgid "Nobody has created a document of this type yet."
+msgstr "この種類のドキュメントはまだ作成されていません。"
+
+msgid "Not kept"
+msgstr "保持しない"
+
+msgid "Of the required"
+msgstr "必要量に対する割合"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "グループを持つのは、主にトークン用にグループを定義したコントラクトだけです。"
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "範囲条件（<、≤、>、≥、で始まる）を指定できるプロパティは 1 つだけです。「{field}」と「{other}」の両方に指定されています。"
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Open a contract"
+msgstr "コントラクトを開く"
+
+msgid "Open a contract by ID"
+msgstr "ID でコントラクトを開く"
+
+msgid "Open a contract by its ID above."
+msgstr "上で ID を指定してコントラクトを開いてください。"
+
+msgid "Open a part of this schema"
+msgstr "このスキーマの一部を開く"
+
+msgid "Open groups page"
+msgstr "グループのページを開く"
+
+msgid "Open in Platform Explorer"
+msgstr "Platform Explorer で開く"
+
+msgid "Open the contract"
+msgstr "コントラクトを開く"
+
+msgid "Open the current version"
+msgstr "現在のバージョンを開く"
+
+msgid "Open the whole schema"
+msgstr "スキーマ全体を開く"
+
+msgid "Order by"
+msgstr "並べ替え"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "並べ替えはインデックスのプロパティ順に従い、「{field}」から始める必要があります。"
+
+msgid "Overview"
+msgstr "概要"
+
+msgid "Owner"
+msgstr "オーナー"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "所有者と日付はこのページの行だけを絞り込みます。Platform Explorer はコントラクトのトランジションを時間順にページ分割します。"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform は一度に最大 {DRIVE_MAX} 件のドキュメントを返します。"
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer が応答しなかったため、トランジションは不明です。"
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer は devnet に対応していません。"
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "Platform Explorer にはこのドキュメントの記録がまだありません。"
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform は現在のバージョン {currentVersion} だけを保存します。keepsHistory を設定したコントラクトはすべてのバージョンを保持します。"
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform はこれらのドキュメントの最新リビジョンだけを保存します。"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Position {pos}"
+msgstr "位置 {pos}"
+
+msgid "Power"
+msgstr "重み"
+
+msgid "power {power}"
+msgstr "重み {power}"
+
+msgid "Previous"
+msgstr "前へ"
+
+msgid "Primary key ($id)"
+msgstr "プライマリキー（$id）"
+
+msgid "Properties, in order"
+msgstr "プロパティ（順番どおり）"
+
+msgid "Property"
+msgstr "プロパティ"
+
+msgid "Proposed by"
+msgstr "提案者"
+
+msgid "Provenance"
+msgstr "出所"
+
+msgid "Query"
+msgstr "クエリ"
+
+msgid "Read-only"
+msgstr "読み取り専用"
+
+msgid "Recorded"
+msgstr "記録時刻"
+
+msgid "Registered"
+msgstr "登録"
+
+msgid "Remove filter"
+msgstr "フィルターを削除"
+
+msgid "Removed"
+msgstr "削除"
+
+msgid "Required power"
+msgstr "必要な重み"
+
+msgid "Revision"
+msgstr "リビジョン"
+
+msgid "Revision {number}"
+msgstr "リビジョン {number}"
+
+msgid "Revision at least"
+msgstr "リビジョンの下限"
+
+msgid "Revision pages"
+msgstr "リビジョンのページ"
+
+msgid "Revisions"
+msgstr "リビジョン"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Platform Explorer が記録したリビジョン"
+
+msgid "Rows per page"
+msgstr "1ページあたりの行数"
+
+msgid "Run query"
+msgstr "クエリを実行"
+
+msgid "Schema"
+msgstr "スキーマ"
+
+msgid "Schema JSON"
+msgstr "スキーマ（JSON）"
+
+msgid "Schema path"
+msgstr "スキーマのパス"
+
+msgid "Schemas"
+msgstr "スキーマ一覧"
+
+msgid "See changes"
+msgstr "変更を見る"
+
+msgid "See its document types"
+msgstr "ドキュメントの種類を見る"
+
+msgid "See the groups of this contract"
+msgstr "このコントラクトのグループを見る"
+
+msgid "Show signers"
+msgstr "署名者を表示"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "最初の {MAX_CHANGES} 件を表示しています。"
+
+msgid "starts with"
+msgstr "で始まる"
+
+msgid "State"
+msgstr "状態"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "System"
+msgstr "システム"
+
+msgid "System contracts"
+msgstr "システムコントラクト"
+
+msgid "System only"
+msgstr "システムのみ"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "コントラクト ID ではありません。base58 で 44 文字以内です。"
+
+msgid "That isn’t a contract ID."
+msgstr "コントラクト ID ではありません。"
+
+msgid "That isn’t a document address."
+msgstr "ドキュメントのアドレスではありません。"
+
+msgid "That isn’t a group address."
+msgstr "グループのアドレスではありません。"
+
+msgid "That path isn’t in this schema."
+msgstr "このパスはこのスキーマにありません。"
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "「{field}」の「in」条件には最大 100 個の値を指定できます。"
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "コントラクトを読み取れなかったため、履歴が保持されるかどうかは不明です。"
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "上のドキュメントのデータとメタデータは Platform から直接取得したものです。"
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "すべてのコントラクトの一覧には Platform Explorer が必要です"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "並べ替えには、in 条件または範囲条件を持つ「{field}」を含める必要があります。"
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "「{field}」の「in」条件の値はすべて異なる必要があります。"
+
+msgid "These two versions are the same."
+msgstr "この 2 つのバージョンは同じです。"
+
+msgid "This contract defines no groups."
+msgstr "このコントラクトにはグループが定義されていません。"
+
+msgid "This contract defines no tokens."
+msgstr "このコントラクトにはトークンが定義されていません。"
+
+msgid "This contract doesn’t keep its history."
+msgstr "このコントラクトは履歴を保持しません。"
+
+msgid "This contract has no document type “{type}”."
+msgstr "このコントラクトにはドキュメントの種類「{type}」がありません。"
+
+msgid "This contract has no document types."
+msgstr "このコントラクトにはドキュメントの種類がありません。"
+
+msgid "This contract has no group at position {pos}."
+msgstr "このコントラクトには位置 {pos} のグループがありません。"
+
+msgid "This contract has no groups."
+msgstr "このコントラクトにはグループがありません。"
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "このコントラクトにはバージョン {wantedVersion} がありません。"
+
+msgid "This document type doesn’t keep its history."
+msgstr "この種類のドキュメントは履歴を保持しません。"
+
+msgid "This group has no members."
+msgstr "このグループにはメンバーがいません。"
+
+msgid "Time"
+msgstr "時刻"
+
+msgid "Token ID"
+msgstr "トークン ID"
+
+msgid "token position {tokenPosition}"
+msgstr "トークン位置 {tokenPosition}"
+
+msgid "Tokens"
+msgstr "トークン"
+
+msgid "Tokens of this contract"
+msgstr "このコントラクトのトークン"
+
+msgid "Total power"
+msgstr "重みの合計"
+
+msgid "Transferred"
+msgstr "移転"
+
+msgid "Transition"
+msgstr "トランジション"
+
+msgid "Transitions"
+msgstr "トランジション"
+
+msgid "Transitions on this contract"
+msgstr "このコントラクトのトランジション"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Types"
+msgstr "種類"
+
+msgid "Unique"
+msgstr "一意"
+
+msgid "Updated"
+msgstr "更新"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "このコントラクトのドキュメントはドキュメントブラウザーで読めます。"
+
+msgid "value"
+msgstr "値"
+
+msgid "Value"
+msgstr "値"
+
+msgid "Values, separated by commas"
+msgstr "値（カンマ区切り）"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "バージョン {fromVersion} からバージョン {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "バージョン {toVersion} は最初に記録されたバージョンのため、比較できる前のバージョンがありません。"
+
+msgid "Version {version}"
+msgstr "バージョン {version}"
+
+msgid "Version history"
+msgstr "バージョン履歴"
+
+msgid "Versions of this contract"
+msgstr "このコントラクトのバージョン"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "どのトランジションがドキュメントを書き込んだかを知るには Platform Explorer が必要です"
+
+msgid "With tokens"
+msgstr "トークンあり"
+
+msgid "Won’t run"
+msgstr "実行されません"
+
+msgid "Yes"
+msgstr "はい"

@@ -1,0 +1,464 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7"
+  },
+  "recordedAt": "2026-11-13T12:55:59.265Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+      "ownerId": "11111111111111111111111111111111",
+      "version": 2,
+      "documentSchemas": {
+        "contactInfo": {
+          "type": "object",
+          "indices": [
+            {
+              "name": "ownerIdAndKeys",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "rootEncryptionKeyIndex": "asc"
+                },
+                {
+                  "derivationEncryptionKeyIndex": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "ownerIdAndUpdatedAt",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "encToUserId": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 32,
+              "maxItems": 32,
+              "position": 0
+            },
+            "rootEncryptionKeyIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 1
+            },
+            "derivationEncryptionKeyIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 2
+            },
+            "privateData": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 48,
+              "maxItems": 2048,
+              "position": 3,
+              "description": "This is the encrypted values of aliasName + note + displayHidden encoded as an array in cbor"
+            }
+          },
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "encToUserId",
+            "privateData",
+            "rootEncryptionKeyIndex",
+            "derivationEncryptionKeyIndex"
+          ],
+          "additionalProperties": false
+        },
+        "contactRequest": {
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "requiresIdentityEncryptionBoundedKey": 2,
+          "requiresIdentityDecryptionBoundedKey": 2,
+          "type": "object",
+          "indices": [
+            {
+              "name": "ownerIdUserIdAndAccountRef",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "toUserId": "asc"
+                },
+                {
+                  "accountReference": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "ownerIdUserId",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "toUserId": "asc"
+                }
+              ]
+            },
+            {
+              "name": "userIdCreatedAt",
+              "properties": [
+                {
+                  "toUserId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "ownerIdCreatedAt",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "toUserId": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 32,
+              "maxItems": 32,
+              "position": 0,
+              "contentMediaType": "application/x.dash.dpp.identifier"
+            },
+            "encryptedPublicKey": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 96,
+              "maxItems": 96,
+              "position": 1
+            },
+            "senderKeyIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 2
+            },
+            "recipientKeyIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 3
+            },
+            "accountReference": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 4
+            },
+            "encryptedAccountLabel": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 48,
+              "maxItems": 80,
+              "position": 5
+            },
+            "autoAcceptProof": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 38,
+              "maxItems": 102,
+              "position": 6
+            }
+          },
+          "required": [
+            "$createdAt",
+            "$createdAtCoreBlockHeight",
+            "toUserId",
+            "encryptedPublicKey",
+            "senderKeyIndex",
+            "recipientKeyIndex",
+            "accountReference"
+          ],
+          "additionalProperties": false
+        },
+        "profile": {
+          "type": "object",
+          "indices": [
+            {
+              "name": "ownerId",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "ownerIdAndUpdatedAt",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "avatarUrl": {
+              "type": "string",
+              "format": "uri",
+              "minLength": 1,
+              "maxLength": 2048,
+              "position": 0
+            },
+            "avatarHash": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 32,
+              "maxItems": 32,
+              "description": "SHA256 hash of the bytes of the image specified by avatarUrl",
+              "position": 1
+            },
+            "avatarFingerprint": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 8,
+              "maxItems": 8,
+              "description": "dHash the image specified by avatarUrl",
+              "position": 2
+            },
+            "publicMessage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 140,
+              "position": 3
+            },
+            "displayName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 25,
+              "position": 4
+            },
+            "corePaymentAddress": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 21,
+              "maxItems": 21,
+              "description": "Core chain address in storage form (type byte 0x00 P2PKH / 0x01 P2SH followed by the 20-byte HASH160, i.e. RIPEMD160 of SHA256, of the public key or redeem script) for public payments. The type byte is consensus-enforced by a data trigger; clients render the address as Base58Check for the network they are on. Payments to it are publicly linkable to this profile.",
+              "position": 5
+            },
+            "platformPaymentAddress": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 21,
+              "maxItems": 21,
+              "description": "Platform address in storage form (type byte 0x00 P2PKH / 0x01 P2SH followed by the 20-byte HASH160, i.e. RIPEMD160 of SHA256, of the public key or redeem script) for public payments. The type byte is consensus-enforced by a data trigger.",
+              "position": 6
+            },
+            "shieldedAddress": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 43,
+              "maxItems": 43,
+              "description": "Raw Orchard receiving address: 11-byte diversifier followed by 32-byte diversified transmission key. Clients validate before payment; wallets should use a dedicated tip account.",
+              "position": 7
+            }
+          },
+          "minProperties": 1,
+          "dependentRequired": {
+            "avatarUrl": ["avatarHash", "avatarFingerprint"],
+            "avatarHash": ["avatarUrl", "avatarFingerprint"],
+            "avatarFingerprint": ["avatarUrl", "avatarHash"]
+          },
+          "required": ["$createdAt", "$updatedAt"],
+          "additionalProperties": false
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "2",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": false
+      },
+      "indices": {
+        "contactInfo": [
+          {
+            "name": "ownerIdAndKeys",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "rootEncryptionKeyIndex",
+                "order": "asc"
+              },
+              {
+                "field": "derivationEncryptionKeyIndex",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "ownerIdAndUpdatedAt",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "contactRequest": [
+          {
+            "name": "ownerIdUserIdAndAccountRef",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "toUserId",
+                "order": "asc"
+              },
+              {
+                "field": "accountReference",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "ownerIdUserId",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "toUserId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "userIdCreatedAt",
+            "properties": [
+              {
+                "field": "toUserId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "ownerIdCreatedAt",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "profile": [
+          {
+            "name": "ownerId",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "ownerIdAndUpdatedAt",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 470669,
+      "coreChainLockedHeight": 2571604,
+      "epoch": 88,
+      "timeMs": 1794574424548,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAUfcECTk2ytFZuluw7AbaA6c0yNwuoQHUBH6tOR6azaMBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAA0nrWEQcQ1xU5BRaClf6MMwU5cfrVAyGKxLLc2zqPKChABULkYwYWo1rn7SY6aPSXKPatvlCQCfxVH/teNdt/G5TsRAQFAAI0Bb5zmtddsZwyPS6iDaoMh7urVhT4X5YwzHgNj7I+QU1QEIKKhtKxv7yLqKhpo6BI2RLNXh19rQSwYEJKBwUbnsnG8AAUCAQEBAPQg5Cfz8E7z8ua0rWwwH8g9OHvXzqyoaSNjolxvtmPZEAHFJhx5vDdnLNBUURTsVYmIoiKww48+cFZYQfo6c898LREBIKKhtKxv7yLqKhpo6BI2RLNXh19rQSwYEJKBwUbnsnG8APsQXQMBABAUAPsQDwGiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAIAAAAAAQEAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMLY29udGFjdEluZm8WBRIEdHlwZRIGb2JqZWN0EgdpbmRpY2VzFQIWAxIEbmFtZRIOb3duZXJJZEFuZEtleXMSCnByb3BlcnRpZXMVAxYBEggkb3duZXJJZBIDYXNjFgESFnJvb3RFbmNyeXB0aW9uS2V5SW5kZXgSA2FzYxYBEhxkZXJpdmF0aW9uRW5jcnlwdGlvbktleUluZGV4EgNhc2MSBnVuaXF1ZRMBFgISBG5hbWUSE293bmVySWRBbmRVcGRhdGVkQXQSCnByb3BlcnRpZXMVAhYBEggkb3duZXJJZBIDYXNjFgESCiR1cGRhdGVkQXQSA2FzYxIKcHJvcGVydGllcxYEEgtlbmNUb1VzZXJJZBYFEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASCHBvc2l0aW9uAgASFnJvb3RFbmNyeXB0aW9uS2V5SW5kZXgWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgIBEhxkZXJpdmF0aW9uRW5jcnlwdGlvbktleUluZGV4FgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIIcG9zaXRpb24CAhILcHJpdmF0ZURhdGEWBhIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIwEghtYXhJdGVtcwL7CAASCHBvc2l0aW9uAgMSC2Rlc2NyaXB0aW9uElxUaGlzIGlzIHRoZSBlbmNyeXB0ZWQgdmFsdWVzIG9mIGFsaWFzTmFtZSArIG5vdGUgKyBkaXNwbGF5SGlkZGVuIGVuY29kZWQgYXMgYW4gYXJyYXkgaW4gY2JvchIIcmVxdWlyZWQVBhIKJGNyZWF0ZWRBdBIKJHVwZGF0ZWRBdBILZW5jVG9Vc2VySWQSC3ByaXZhdGVEYXRhEhZyb290RW5jcnlwdGlvbktleUluZGV4EhxkZXJpdmF0aW9uRW5jcnlwdGlvbktleUluZGV4EhRhZGRpdGlvbmFsUHJvcGVydGllcxMADmNvbnRhY3RSZXF1ZXN0FgkSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASJHJlcXVpcmVzSWRlbnRpdHlFbmNyeXB0aW9uQm91bmRlZEtleQICEiRyZXF1aXJlc0lkZW50aXR5RGVjcnlwdGlvbkJvdW5kZWRLZXkCAhIEdHlwZRIGb2JqZWN0EgdpbmRpY2VzFQQWAxIEbmFtZRIab3duZXJJZFVzZXJJZEFuZEFjY291bnRSZWYSCnByb3BlcnRpZXMVAxYBEggkb3duZXJJZBIDYXNjFgESCHRvVXNlcklkEgNhc2MWARIQYWNjb3VudFJlZmVyZW5jZRIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEg1vd25lcklkVXNlcklkEgpwcm9wZXJ0aWVzFQIWARIIJG93bmVySWQSA2FzYxYBEgh0b1VzZXJJZBIDYXNjFgISBG5hbWUSD3VzZXJJZENyZWF0ZWRBdBIKcHJvcGVydGllcxUCFgESCHRvVXNlcklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSEG93bmVySWRDcmVhdGVkQXQSCnByb3BlcnRpZXMVAhYBEggkb3duZXJJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxIKcHJvcGVydGllcxYHEgh0b1VzZXJJZBYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASCHBvc2l0aW9uAgASEGNvbnRlbnRNZWRpYVR5cGUSIWFwcGxpY2F0aW9uL3guZGFzaC5kcHAuaWRlbnRpZmllchISZW5jcnlwdGVkUHVibGljS2V5FgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCYBIIbWF4SXRlbXMCYBIIcG9zaXRpb24CARIOc2VuZGVyS2V5SW5kZXgWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgICEhFyZWNpcGllbnRLZXlJbmRleBYDEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASCHBvc2l0aW9uAgMSEGFjY291bnRSZWZlcmVuY2UWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgIEEhVlbmNyeXB0ZWRBY2NvdW50TGFiZWwWBRIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIwEghtYXhJdGVtcwJQEghwb3NpdGlvbgIFEg9hdXRvQWNjZXB0UHJvb2YWBRIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwImEghtYXhJdGVtcwJmEghwb3NpdGlvbgIGEghyZXF1aXJlZBUHEgokY3JlYXRlZEF0EhkkY3JlYXRlZEF0Q29yZUJsb2NrSGVpZ2h0Egh0b1VzZXJJZBISZW5jcnlwdGVkUHVibGljS2V5Eg5zZW5kZXJLZXlJbmRleBIRcmVjaXBpZW50S2V5SW5kZXgSEGFjY291bnRSZWZlcmVuY2USFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAHcHJvZmlsZRYHEgR0eXBlEgZvYmplY3QSB2luZGljZXMVAhYDEgRuYW1lEgdvd25lcklkEgpwcm9wZXJ0aWVzFQEWARIIJG93bmVySWQSA2FzYxIGdW5pcXVlEwEWAhIEbmFtZRITb3duZXJJZEFuZFVwZGF0ZWRBdBIKcHJvcGVydGllcxUCFgESCCRvd25lcklkEgNhc2MWARIKJHVwZGF0ZWRBdBIDYXNjEgpwcm9wZXJ0aWVzFggSCWF2YXRhclVybBYFEgR0eXBlEgZzdHJpbmcSBmZvcm1hdBIDdXJpEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAvsIABIIcG9zaXRpb24CABIKYXZhdGFySGFzaBYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAiASCG1heEl0ZW1zAiASC2Rlc2NyaXB0aW9uEjxTSEEyNTYgaGFzaCBvZiB0aGUgYnl0ZXMgb2YgdGhlIGltYWdlIHNwZWNpZmllZCBieSBhdmF0YXJVcmwSCHBvc2l0aW9uAgESEWF2YXRhckZpbmdlcnByaW50FgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCCBIIbWF4SXRlbXMCCBILZGVzY3JpcHRpb24SJmRIYXNoIHRoZSBpbWFnZSBzcGVjaWZpZWQgYnkgYXZhdGFyVXJsEghwb3NpdGlvbgICEg1wdWJsaWNNZXNzYWdlFgQSBHR5cGUSBnN0cmluZxIJbWluTGVuZ3RoAgESCW1heExlbmd0aAKMEghwb3NpdGlvbgIDEgtkaXNwbGF5TmFtZRYEEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgCGRIIcG9zaXRpb24CBBISY29yZVBheW1lbnRBZGRyZXNzFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCFRIIbWF4SXRlbXMCFRILZGVzY3JpcHRpb24S+wFsQ29yZSBjaGFpbiBhZGRyZXNzIGluIHN0b3JhZ2UgZm9ybSAodHlwZSBieXRlIDB4MDAgUDJQS0ggLyAweDAxIFAyU0ggZm9sbG93ZWQgYnkgdGhlIDIwLWJ5dGUgSEFTSDE2MCwgaS5lLiBSSVBFTUQxNjAgb2YgU0hBMjU2LCBvZiB0aGUgcHVibGljIGtleSBvciByZWRlZW0gc2NyaXB0KSBmb3IgcHVibGljIHBheW1lbnRzLiBUaGUgdHlwZSBieXRlIGlzIGNvbnNlbnN1cy1lbmZvcmNlZCBieSBhIGRhdGEgdHJpZ2dlcjsgY2xpZW50cyByZW5kZXIgdGhlIGFkZHJlc3MgYXMgQmFzZTU4Q2hlY2sgZm9yIHRoZSBuZXR3b3JrIHRoZXkgYXJlIG9uLiBQYXltZW50cyB0byBpdCBhcmUgcHVibGljbHkgbGlua2FibGUgdG8gdGhpcyBwcm9maWxlLhIIcG9zaXRpb24CBRIWcGxhdGZvcm1QYXltZW50QWRkcmVzcxYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAhUSCG1heEl0ZW1zAhUSC2Rlc2NyaXB0aW9uEu1QbGF0Zm9ybSBhZGRyZXNzIGluIHN0b3JhZ2UgZm9ybSAodHlwZSBieXRlIDB4MDAgUDJQS0ggLyAweDAxIFAyU0ggZm9sbG93ZWQgYnkgdGhlIDIwLWJ5dGUgSEFTSDE2MCwgaS5lLiBSSVBFTUQxNjAgb2YgU0hBMjU2LCBvZiB0aGUgcHVibGljIGtleSBvciByZWRlZW0gc2NyaXB0KSBmb3IgcHVibGljIHBheW1lbnRzLiBUaGUgdHlwZSBieXRlIGlzIGNvbnNlbnN1cy1lbmZvcmNlZCBieSBhIGRhdGEgdHJpZ2dlci4SCHBvc2l0aW9uAgYSD3NoaWVsZGVkQWRkcmVzcxYGEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAisSCG1heEl0ZW1zAisSC2Rlc2NyaXB0aW9uErFSYXcgT3JjaGFyZCByZWNlaXZpbmcgYWRkcmVzczogMTEtYnl0ZSBkaXZlcnNpZmllciBmb2xsb3dlZCBieSAzMi1ieXRlIGRpdmVyc2lmaWVkIHRyYW5zbWlzc2lvbiBrZXkuIENsaWVudHMgdmFsaWRhdGUgYmVmb3JlIHBheW1lbnQ7IHdhbGxldHMgc2hvdWxkIHVzZSBhIGRlZGljYXRlZCB0aXAgYWNjb3VudC4SCHBvc2l0aW9uAgcSDW1pblByb3BlcnRpZXMCARIRZGVwZW5kZW50UmVxdWlyZWQWAxIJYXZhdGFyVXJsFQISCmF2YXRhckhhc2gSEWF2YXRhckZpbmdlcnByaW50EgphdmF0YXJIYXNoFQISCWF2YXRhclVybBIRYXZhdGFyRmluZ2VycHJpbnQSEWF2YXRhckZpbmdlcnByaW50FQISCWF2YXRhclVybBIKYXZhdGFySGFzaBIIcmVxdWlyZWQVAhIKJGNyZWF0ZWRBdBIKJHVwZGF0ZWRBdBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAAAAAAAAAAAAAAAAgVBJCPE+G+sZCXENY+PyVMj/nX1a+2+MqQFLFPwyAMLEAGNaJQG8QFmaUu58Auvw79wXRGNrED4HfElJE+g0paatREA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABbQVpn23fft6efOOglJ3xTU341aiB5oPc4="
+      },
+      "signature": {
+        "$u8": "rw9pr2QYH2UvK4oYtHLWDCSZLyQyd8gW0xB2QKvMyEXeuEah3zz+UZ9fnsdLXCygA35/Fgko1P8wlyXThmC8X4lzVQ+arZwN8F45HaTvnABqfMAKRf4rlOP+MOqOjRxc"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "unkgBufaLkKoJ7ER9eM5V80whgoHW/7ejfT/+X3XbtA="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 474.65122900000006
+  }
+}

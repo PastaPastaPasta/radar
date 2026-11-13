@@ -1,0 +1,290 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "8vLiDsbJXzJUjHGmgrGMw1VQryLW8Tsc8Mn2PaXq6FBt"
+  },
+  "recordedAt": "2026-11-13T12:56:02.296Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "8vLiDsbJXzJUjHGmgrGMw1VQryLW8Tsc8Mn2PaXq6FBt",
+      "ownerId": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+      "version": 8,
+      "documentSchemas": {},
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "1",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": true
+      },
+      "indices": {},
+      "tokens": [
+        {
+          "position": 0,
+          "config": {
+            "$formatVersion": "0",
+            "conventions": {
+              "$formatVersion": "0",
+              "localizations": {
+                "en": {
+                  "$formatVersion": "0",
+                  "shouldCapitalize": false,
+                  "singularForm": "npetok",
+                  "pluralForm": "npetoks"
+                }
+              },
+              "decimals": 8
+            },
+            "conventionsChangeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "baseSupply": 100000000000,
+            "maxSupply": 500000000000000,
+            "keepsHistory": {
+              "$formatVersion": "0",
+              "keepsTransferHistory": true,
+              "keepsFreezingHistory": true,
+              "keepsMintingHistory": true,
+              "keepsBurningHistory": true,
+              "keepsDirectPricingHistory": true,
+              "keepsDirectPurchaseHistory": true
+            },
+            "startAsPaused": false,
+            "allowTransferToFrozenBalance": true,
+            "maxSupplyChangeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "mainGroup"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "distributionRules": {
+              "$formatVersion": "0",
+              "perpetualDistribution": {
+                "$formatVersion": "0",
+                "distributionType": {
+                  "$type": "blockBasedDistribution",
+                  "interval": 5,
+                  "function": {
+                    "$type": "fixedAmount",
+                    "amount": 100000000
+                  }
+                },
+                "distributionRecipient": {
+                  "$type": "contractOwner"
+                }
+              },
+              "perpetualDistributionRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "contractOwner"
+                },
+                "adminActionTakers": {
+                  "$type": "contractOwner"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "preProgrammedDistribution": null,
+              "newTokensDestinationIdentity": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+              "newTokensDestinationIdentityRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "contractOwner"
+                },
+                "adminActionTakers": {
+                  "$type": "contractOwner"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "mintingAllowChoosingDestination": true,
+              "mintingAllowChoosingDestinationRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "contractOwner"
+                },
+                "adminActionTakers": {
+                  "$type": "contractOwner"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              },
+              "changeDirectPurchasePricingRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "contractOwner"
+                },
+                "adminActionTakers": {
+                  "$type": "contractOwner"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              }
+            },
+            "marketplaceRules": {
+              "$formatVersion": "0",
+              "tradeMode": "NotTradeable",
+              "tradeModeChangeRules": {
+                "$formatVersion": "0",
+                "authorizedToMakeChange": {
+                  "$type": "contractOwner"
+                },
+                "adminActionTakers": {
+                  "$type": "contractOwner"
+                },
+                "changingAuthorizedActionTakersToNoOneAllowed": true,
+                "changingAdminActionTakersToNoOneAllowed": true,
+                "selfChangingAdminActionTakersAllowed": true
+              }
+            },
+            "manualMintingRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "manualBurningRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "freezeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "unfreezeRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "destroyFrozenFundsRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "contractOwner"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "emergencyActionRules": {
+              "$formatVersion": "0",
+              "authorizedToMakeChange": {
+                "$type": "noOne"
+              },
+              "adminActionTakers": {
+                "$type": "contractOwner"
+              },
+              "changingAuthorizedActionTakersToNoOneAllowed": true,
+              "changingAdminActionTakersToNoOneAllowed": true,
+              "selfChangingAdminActionTakersAllowed": true
+            },
+            "mainControlGroup": 0,
+            "mainControlGroupCanBeModified": {
+              "$type": "contractOwner"
+            },
+            "description": "native-platform-explorer token write tests"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "position": 0,
+          "requiredPower": 2,
+          "members": [
+            {
+              "id": "7ysNPVoaVZvHWAC7hGn3EmYsbyzizfu8a9Teq3zF6atm",
+              "power": 1
+            },
+            {
+              "id": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+              "power": 1
+            }
+          ]
+        }
+      ]
+    },
+    "proved": true,
+    "meta": {
+      "height": 674061,
+      "coreChainLockedHeight": 1590918,
+      "epoch": 20339,
+      "timeMs": 1794574399212,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAbvFeYV1c49x+aeQRZgSBXEjshXgmLN0hzzBcubmfAgvBAFAACQCASBbtAdymcNfPSWCO6wkd5q+QOPg/012EEtbagdGhxQqSABc0qdvVZA6FsWzvM0X1WKxrhqvzmAlMAh4XRA4tkuP+BABsLJs7YyjxbsL1QgF8PYuGH9s0GSpwDszxKby/4JuV9QRAQFAAPsDNQEy8WDo+x4nKpyL61MiGjg6tLnsVZOW/rMHTkVABYGu+QKZ6B6U1kjrfiSidCBbils1kffm/KZEJLakHaF9BADhHRABHARt9tweOh6GqkU8GMst+jw8SrUvIra3qw+yE83cKowCtTbfGvo61i+X2w/ckmsMK7yWYRwdxJlyC2s9XuqTsuIQAbqYbP4MmnjiJbY3Dg9a71LCNkGcOjY5SG4ZwuhN6NOSAv3Z7KTJZXc6Ma46mz0W9wW7wc77K1Iwy7WkCg9pF2x9EAFfUT2BszHEcCiASa7eyDLiE0AO/3TK3ky6vgJUqEoQcQIe/Ia+CjBeryUDgjVD81rY0+GV96P066fd3GjijCqrKxABgqocLR5MU3jeuiadXne8l47aFslu2OE3Popdn/LWcqMCZq0W9jbntbPoKT4VBDIL8vHv/ghEd3VBwJ21r3yZyt4QBCB1q+DbnNhs4nDfMk6kzV34x3BDLzIWwwi5MOPLi6BZNwAFAgEBAQD18ajzlY9GqjG+iaApj1updi22GXVchdL9Rk9bcjeVFhECnnAk22FNl4p281bPfMyQQg5W5GvgUHFGc3CaBSyuHh0QAS3hbnacnCPLN/nYg2uV31OUFDT6kEKZBWeLTB84YDn4EQJ4XyeP7hI+nLS6ohJQgmuUG/egJF2Gp4pHTeEvfD2ctRABqofFle2zlK0vV7FSRDVSz4QuUx96Oh9hfLW8ja0YPkcREQJkAoodyE8dgejoUs/vksKdpwu22WPM8nxIDImuF/FCyhABppPjvdvMLTpw0IKmAKkPFt7ejOd3iCQGbowZoc1VxaIREQLpHyif/IpJ8ZazO0ZTvzvACDRdIzByvE2WGwdZ+7G6iBABcLsp9qVWXZd/CCnrC/ri/oKKFuwcJx3IEQM/387IQ7sREQKrnFlWUtKSiQCWnHZLO6sHdhp6Q9KBaBZpcwotenmPVhABPh4hFsfD/HhjBsot166qzS+jkap9VFSfOXkwBWvyZnERAtxPZ+wQibfea/3zLG70r5AMfA1Vz31TUQtEKpqcAziWEAEcqE82vx6Fx5L1qZn8MsebZkjZB8PVJvSWEloDAPkQJRERASB1q+DbnNhs4nDfMk6kzV34x3BDLzIWwwi5MOPLi6BZNwD7AeADAQABlwD7AZIBdavg25zYbOJw3zJOpM1d+MdwQy8yFsMIuTDjy4ugWTcBAAAAAAEBAAABCIvylvmwBsh0O0XstV0OJT850cI+iGVyT4Zdw/fVgEsJAAAB/QAAAaF3g/qNAAH8AAneWgAB+02/AAEAAAJnt5lYHUuYKghFqf14O2m2G7moA/Ubnq/WdtdOC1UtJgGL8pb5sAbIdDtF7LVdDiU/OdHCPohlck+GXcP31YBLCQECAQAAAAECZW4AAAZucGV0b2sHbnBldG9rcwgAAQEBAQH9AAAAF0h26AAB/QABxr9SY0AAAAEBAQEBAQABAAMBAQEBAAEAAAUA/AX14QAAAAEBAQEBAAGL8pb5sAbIdDtF7LVdDiU/OdHCPohlck+GXcP31YBLCQABAQEBAQEAAQEBAQEAAQEBAQEAAAABAQEBAQABAQEBAQABAQEBAQABAQEBAQABAQEBAQABAQEBAQAAAQEBAQEAAQEqbmF0aXZlLXBsYXRmb3JtLWV4cGxvcmVyIHRva2VuIHdyaXRlIHRlc3RzAAAAApRX3D2wgyyItXKs/bFCFJtmAT6ynCR0skm5RQU8lGhNEAFrku4L5RdhTZNYe5gffOyOSvT9IWuxPDnwVAxsrtaPMBEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAISmsQJMyXIxSUMB+tSFfDhIsUYk1PQlopmkSNJw="
+      },
+      "signature": {
+        "$u8": "r7XGiFuSk0Qb9YbP83qLrMIS+B3tt5XtsYQn1quZ7U6BXNeNnOur2eipf2CTWYdYC6FqIpW3CD4HYVin0LmzCDa8CecJLVtlpDaEyxdirCu655eFnj9zZYjwxxH1MkQN"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "+EKjcZZNareouQRSjab+EHa1spc6ZLJB5iR3WwgR4vc="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 172.8072820000001
+  }
+}

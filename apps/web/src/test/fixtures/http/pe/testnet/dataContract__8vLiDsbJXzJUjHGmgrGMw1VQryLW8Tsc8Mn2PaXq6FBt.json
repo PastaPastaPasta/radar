@@ -1,0 +1,102 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/8vLiDsbJXzJUjHGmgrGMw1VQryLW8Tsc8Mn2PaXq6FBt"
+  },
+  "recordedAt": "2026-11-13T13:28:46.100Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identifier": "8vLiDsbJXzJUjHGmgrGMw1VQryLW8Tsc8Mn2PaXq6FBt",
+    "name": null,
+    "owner": {
+      "identifier": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+      "aliases": [
+        {
+          "alias": "npeqa-explorer-7294-7864.dash",
+          "status": "ok",
+          "timestamp": "2026-10-26T12:31:22.160Z",
+          "documentId": "2k62yBcYGNrF5STZxSoTuX4hezLc7veGrLoRaJmYEYq5",
+          "contested": false
+        }
+      ]
+    },
+    "schema": "{}",
+    "version": 1,
+    "txHash": "26F26695789791BB0F03614CAA7E7F32BF2B9917ADA3BB3CE0D5C8B76B047484",
+    "timestamp": "2026-10-26T09:21:40.493Z",
+    "isSystem": false,
+    "documentsCount": 0,
+    "tokensCount": 1,
+    "topIdentity": {
+      "identifier": null,
+      "aliases": [
+        {
+          "alias": "npeqa-explorer-7294-7864.dash",
+          "status": "ok",
+          "timestamp": "2026-10-26T12:31:22.160Z",
+          "documentId": "2k62yBcYGNrF5STZxSoTuX4hezLc7veGrLoRaJmYEYq5",
+          "contested": false
+        }
+      ]
+    },
+    "identitiesInteracted": 0,
+    "totalGasUsed": 30104910020,
+    "averageGasUsed": 30104910020,
+    "groups": [
+      {
+        "members": {
+          "7ysNPVoaVZvHWAC7hGn3EmYsbyzizfu8a9Teq3zF6atm": 1,
+          "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa": 1
+        },
+        "requiredPower": 2
+      }
+    ],
+    "tokens": [
+      {
+        "identifier": "5DunBnakFSFb2y6rSxRvP73xqVNYTDT6fceqzLSL4Ej4",
+        "position": 0,
+        "timestamp": null,
+        "description": "native-platform-explorer token write tests",
+        "localizations": {
+          "en": { "pluralForm": "npetoks", "singularForm": "npetok", "shouldCapitalize": false }
+        },
+        "baseSupply": "100000000000",
+        "totalSupply": "102375000000",
+        "maxSupply": "500000000000000",
+        "owner": {
+          "identifier": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+          "aliases": [
+            {
+              "alias": "npeqa-explorer-7294-7864.dash",
+              "status": "ok",
+              "timestamp": "2026-10-26T12:31:22.160Z",
+              "documentId": "2k62yBcYGNrF5STZxSoTuX4hezLc7veGrLoRaJmYEYq5",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "8vLiDsbJXzJUjHGmgrGMw1VQryLW8Tsc8Mn2PaXq6FBt",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      }
+    ],
+    "description": null,
+    "keywords": []
+  }
+}

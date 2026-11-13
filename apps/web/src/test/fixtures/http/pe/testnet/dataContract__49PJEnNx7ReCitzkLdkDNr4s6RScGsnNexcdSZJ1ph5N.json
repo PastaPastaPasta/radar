@@ -1,0 +1,106 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N"
+  },
+  "recordedAt": "2026-11-13T13:28:37.711Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identifier": "49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N",
+    "name": null,
+    "owner": {
+      "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+      "aliases": [
+        {
+          "alias": "therealslimshaddy5.dash",
+          "status": "ok",
+          "timestamp": "2025-07-13T07:55:36.840Z",
+          "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+          "contested": false
+        }
+      ]
+    },
+    "schema": "{}",
+    "version": 1,
+    "txHash": "EE259E7C8AACA5B82AA04B7EF605512638C17286FD2B442D01AE1AD602F40071",
+    "timestamp": "2025-07-14T12:46:52.603Z",
+    "isSystem": false,
+    "documentsCount": 0,
+    "tokensCount": 1,
+    "topIdentity": {
+      "identifier": null,
+      "aliases": [
+        {
+          "alias": "therealslimshaddy5.dash",
+          "status": "ok",
+          "timestamp": "2025-07-13T07:55:36.840Z",
+          "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+          "contested": false
+        }
+      ]
+    },
+    "identitiesInteracted": 0,
+    "totalGasUsed": 40131810480,
+    "averageGasUsed": 40131810480,
+    "groups": [
+      {
+        "members": {
+          "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk": 1,
+          "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA": 1
+        },
+        "requiredPower": 2
+      }
+    ],
+    "tokens": [
+      {
+        "identifier": "EETVvWgohFDKtbB3ejEzBcDRMNYkc9TtgXY6y8hzP3Ta",
+        "position": 0,
+        "timestamp": null,
+        "description": null,
+        "localizations": {
+          "en": {
+            "pluralForm": "GroupTokens",
+            "singularForm": "GroupToken",
+            "shouldCapitalize": true
+          }
+        },
+        "baseSupply": "100000",
+        "totalSupply": "100001",
+        "maxSupply": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "mintable": true,
+        "burnable": true,
+        "freezable": true,
+        "unfreezable": true,
+        "destroyable": true,
+        "allowedEmergencyActions": true,
+        "dataContractIdentifier": "49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N",
+        "changeMaxSupply": true,
+        "totalGasUsed": null,
+        "mainGroup": 0,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 0,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      }
+    ],
+    "description": null,
+    "keywords": ["GroupToken"]
+  }
+}

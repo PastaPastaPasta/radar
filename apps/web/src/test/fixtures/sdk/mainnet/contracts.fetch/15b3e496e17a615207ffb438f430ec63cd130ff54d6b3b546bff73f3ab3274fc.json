@@ -1,0 +1,261 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6"
+  },
+  "recordedAt": "2026-11-13T12:55:59.659Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+      "ownerId": "11111111111111111111111111111111",
+      "version": 2,
+      "documentSchemas": {
+        "withdrawal": {
+          "description": "Withdrawal document to track underlying withdrawal transactions. Withdrawals should be created with IdentityWithdrawalTransition",
+          "creationRestrictionMode": 2,
+          "type": "object",
+          "indices": [
+            {
+              "name": "identityStatus",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "status": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "identityRecent",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                },
+                {
+                  "status": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "pooling",
+              "properties": [
+                {
+                  "status": "asc"
+                },
+                {
+                  "pooling": "asc"
+                },
+                {
+                  "coreFeePerByte": "asc"
+                },
+                {
+                  "$updatedAt": "asc"
+                }
+              ],
+              "unique": false
+            },
+            {
+              "name": "transaction",
+              "properties": [
+                {
+                  "status": "asc"
+                },
+                {
+                  "transactionIndex": "asc"
+                }
+              ],
+              "unique": false
+            }
+          ],
+          "properties": {
+            "transactionIndex": {
+              "type": "integer",
+              "description": "Sequential index of asset unlock (withdrawal) transaction. Populated when a withdrawal pooled into withdrawal transaction",
+              "minimum": 1,
+              "position": 0
+            },
+            "transactionSignHeight": {
+              "type": "integer",
+              "description": "The Core height on which transaction was signed",
+              "minimum": 1,
+              "position": 1
+            },
+            "amount": {
+              "type": "integer",
+              "description": "The amount to be withdrawn",
+              "minimum": 1000,
+              "position": 2
+            },
+            "coreFeePerByte": {
+              "type": "integer",
+              "description": "This is the fee that you are willing to spend for this transaction in Duffs/Byte",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 3
+            },
+            "pooling": {
+              "type": "integer",
+              "description": "This indicated the level at which Platform should try to pool this transaction",
+              "enum": [0, 1, 2],
+              "position": 4
+            },
+            "outputScript": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 23,
+              "maxItems": 25,
+              "position": 5
+            },
+            "status": {
+              "type": "integer",
+              "enum": [0, 1, 2, 3, 4, 5],
+              "description": "0 - Pending, 1 - Signed, 2 - Broadcasted, 3 - Complete, 4 - Expired, 5 - Failed",
+              "position": 6
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "amount",
+            "coreFeePerByte",
+            "pooling",
+            "outputScript",
+            "status"
+          ]
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "2",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": false
+      },
+      "indices": {
+        "withdrawal": [
+          {
+            "name": "identityStatus",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "identityRecent",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              },
+              {
+                "field": "status",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "pooling",
+            "properties": [
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "pooling",
+                "order": "asc"
+              },
+              {
+                "field": "coreFeePerByte",
+                "order": "asc"
+              },
+              {
+                "field": "$updatedAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "transaction",
+            "properties": [
+              {
+                "field": "status",
+                "order": "asc"
+              },
+              {
+                "field": "transactionIndex",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 470669,
+      "coreChainLockedHeight": 2571604,
+      "epoch": 88,
+      "timeMs": 1794574424548,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAUfcECTk2ytFZuluw7AbaA6c0yNwuoQHUBH6tOR6azaMBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAA0nrWEQcQ1xU5BRaClf6MMwU5cfrVAyGKxLLc2zqPKChABULkYwYWo1rn7SY6aPSXKPatvlCQCfxVH/teNdt/G5TsRAQFAAPsBFQFWxIQfaGRIliCkOAagGtuF8XKV65B5rzveq3WUj0BgJAQgNmK7YeF/rj6ilM9gMZf7CqttURgL2LYQTElEpi/i2X8ABQIBAQEAEK9fY0vlbzMAPi2ArIGMN4SOOT/UMWoDoGJY4+gm5iwQARQZwSeCE9M6WuDCnWsXsEtnTW//hxMH6Y5ZJKcdnkbhEQLtnQngh5JLwync2nwvM+iWcnE4NelpTvdO9m2jQQ5XYxABehEPrtJhSOHvWeWe+Aam+/xEcU+VLNG2nVypkl3OvoQRAoIfY7X6FuZHMHAIPQIE0GB714c8PjndzmcJOAjVs6NgEAHFJhx5vDdnLNBUURTsVYmIoiKww48+cFZYQfo6c898LREBIDZiu2Hhf64+opTPYDGX+wqrbVEYC9i2EExJRKYv4tl/APsHOwMBAAbyAPsG7QE2Yrth4X+uPqKUz2Axl/sKq21RGAvYthBMSUSmL+LZfwIAAAAAAQEAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEKd2l0aGRyYXdhbBYHEgtkZXNjcmlwdGlvbhKAV2l0aGRyYXdhbCBkb2N1bWVudCB0byB0cmFjayB1bmRlcmx5aW5nIHdpdGhkcmF3YWwgdHJhbnNhY3Rpb25zLiBXaXRoZHJhd2FscyBzaG91bGQgYmUgY3JlYXRlZCB3aXRoIElkZW50aXR5V2l0aGRyYXdhbFRyYW5zaXRpb24SF2NyZWF0aW9uUmVzdHJpY3Rpb25Nb2RlAgISBHR5cGUSBm9iamVjdBIHaW5kaWNlcxUEFgMSBG5hbWUSDmlkZW50aXR5U3RhdHVzEgpwcm9wZXJ0aWVzFQMWARIIJG93bmVySWQSA2FzYxYBEgZzdGF0dXMSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSBnVuaXF1ZRMAFgMSBG5hbWUSDmlkZW50aXR5UmVjZW50Egpwcm9wZXJ0aWVzFQMWARIIJG93bmVySWQSA2FzYxYBEgokdXBkYXRlZEF0EgNhc2MWARIGc3RhdHVzEgNhc2MSBnVuaXF1ZRMAFgMSBG5hbWUSB3Bvb2xpbmcSCnByb3BlcnRpZXMVBBYBEgZzdGF0dXMSA2FzYxYBEgdwb29saW5nEgNhc2MWARIOY29yZUZlZVBlckJ5dGUSA2FzYxYBEgokdXBkYXRlZEF0EgNhc2MSBnVuaXF1ZRMAFgMSBG5hbWUSC3RyYW5zYWN0aW9uEgpwcm9wZXJ0aWVzFQIWARIGc3RhdHVzEgNhc2MWARIQdHJhbnNhY3Rpb25JbmRleBIDYXNjEgZ1bmlxdWUTABIKcHJvcGVydGllcxYHEhB0cmFuc2FjdGlvbkluZGV4FgQSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uEnlTZXF1ZW50aWFsIGluZGV4IG9mIGFzc2V0IHVubG9jayAod2l0aGRyYXdhbCkgdHJhbnNhY3Rpb24uIFBvcHVsYXRlZCB3aGVuIGEgd2l0aGRyYXdhbCBwb29sZWQgaW50byB3aXRoZHJhd2FsIHRyYW5zYWN0aW9uEgdtaW5pbXVtAgESCHBvc2l0aW9uAgASFXRyYW5zYWN0aW9uU2lnbkhlaWdodBYEEgR0eXBlEgdpbnRlZ2VyEgtkZXNjcmlwdGlvbhIvVGhlIENvcmUgaGVpZ2h0IG9uIHdoaWNoIHRyYW5zYWN0aW9uIHdhcyBzaWduZWQSB21pbmltdW0CARIIcG9zaXRpb24CARIGYW1vdW50FgQSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uEhpUaGUgYW1vdW50IHRvIGJlIHdpdGhkcmF3bhIHbWluaW11bQL7A+gSCHBvc2l0aW9uAgISDmNvcmVGZWVQZXJCeXRlFgUSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uElBUaGlzIGlzIHRoZSBmZWUgdGhhdCB5b3UgYXJlIHdpbGxpbmcgdG8gc3BlbmQgZm9yIHRoaXMgdHJhbnNhY3Rpb24gaW4gRHVmZnMvQnl0ZRIHbWluaW11bQIBEgdtYXhpbXVtAvz/////Eghwb3NpdGlvbgIDEgdwb29saW5nFgQSBHR5cGUSB2ludGVnZXISC2Rlc2NyaXB0aW9uEk5UaGlzIGluZGljYXRlZCB0aGUgbGV2ZWwgYXQgd2hpY2ggUGxhdGZvcm0gc2hvdWxkIHRyeSB0byBwb29sIHRoaXMgdHJhbnNhY3Rpb24SBGVudW0VAwIAAgECAhIIcG9zaXRpb24CBBIMb3V0cHV0U2NyaXB0FgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCFxIIbWF4SXRlbXMCGRIIcG9zaXRpb24CBRIGc3RhdHVzFgQSBHR5cGUSB2ludGVnZXISBGVudW0VBgIAAgECAgIDAgQCBRILZGVzY3JpcHRpb24STzAgLSBQZW5kaW5nLCAxIC0gU2lnbmVkLCAyIC0gQnJvYWRjYXN0ZWQsIDMgLSBDb21wbGV0ZSwgNCAtIEV4cGlyZWQsIDUgLSBGYWlsZWQSCHBvc2l0aW9uAgYSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASCHJlcXVpcmVkFQcSCiRjcmVhdGVkQXQSCiR1cGRhdGVkQXQSBmFtb3VudBIOY29yZUZlZVBlckJ5dGUSB3Bvb2xpbmcSDG91dHB1dFNjcmlwdBIGc3RhdHVzAAAAAAAAAAAAAAACI820iUVyyuwYWxIEqRE/cN8NcrQU+YKGldhRZfGJEDsQAY1olAbxAWZpS7nwC6/Dv3BdEY2sQPgd8SUkT6DSlpq1EQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABbQVpn23fft6efOOglJ3xTU341aiB5oPc4="
+      },
+      "signature": {
+        "$u8": "rw9pr2QYH2UvK4oYtHLWDCSZLyQyd8gW0xB2QKvMyEXeuEah3zz+UZ9fnsdLXCygA35/Fgko1P8wlyXThmC8X4lzVQ+arZwN8F45HaTvnABqfMAKRf4rlOP+MOqOjRxc"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "unkgBufaLkKoJ7ER9eM5V80whgoHW/7ejfT/+X3XbtA="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 361.2825140000001
+  }
+}

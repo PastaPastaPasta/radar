@@ -1,0 +1,2424 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "4WjrqSyLscXtKsw3QUk6pKAXDaQBeahKvugLUZ4tbk86"
+  },
+  "recordedAt": "2026-11-13T12:56:01.898Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "4WjrqSyLscXtKsw3QUk6pKAXDaQBeahKvugLUZ4tbk86",
+      "ownerId": "3vQ6SS5SgSpmZPCJRxb7Ey7KfTDdxzYBVvgQnVGsf2K5",
+      "version": 1,
+      "documentSchemas": {
+        "comment": {
+          "type": "object",
+          "immutable": [
+            "repoId",
+            "targetId",
+            "replyTo",
+            "commitOid",
+            "line",
+            "side",
+            "startLine",
+            "reviewId",
+            "vis",
+            "imported",
+            {
+              "property": "aud",
+              "when": {
+                "anyOf": [
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            },
+            {
+              "property": "path",
+              "when": {
+                "anyOf": [
+                  {
+                    "present": "$old.path"
+                  },
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            },
+            {
+              "property": "diffHunk",
+              "when": {
+                "anyOf": [
+                  {
+                    "present": "$old.diffHunk"
+                  },
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            }
+          ],
+          "dependentRequired": {
+            "enc": ["epoch", "aud"],
+            "aud": ["enc"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "targetId": {
+              "type": "identifier",
+              "refersTo": {
+                "anyOf": [
+                  {
+                    "type": "permanentDocument",
+                    "documentType": "issue",
+                    "where": {
+                      "repoId": "repoId"
+                    }
+                  },
+                  {
+                    "type": "permanentDocument",
+                    "documentType": "patch",
+                    "where": {
+                      "repoId": "repoId"
+                    }
+                  }
+                ]
+              },
+              "position": 1
+            },
+            "body": {
+              "$ref": "#/$defs/body",
+              "position": 2
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 3
+            },
+            "epoch": {
+              "$ref": "#/$defs/u32",
+              "position": 4
+            },
+            "replyTo": {
+              "type": "identifier",
+              "position": 5,
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "comment",
+                "where": {
+                  "targetId": "targetId",
+                  "replyTo": "noParent"
+                }
+              }
+            },
+            "commitOid": {
+              "$ref": "#/$defs/oid",
+              "position": 6
+            },
+            "path": {
+              "type": "string",
+              "maxLength": 500,
+              "maxBytes": 1000,
+              "minLength": 1,
+              "position": 7
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 8
+            },
+            "side": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "position": 9
+            },
+            "imported": {
+              "$ref": "#/$defs/imported",
+              "position": 10
+            },
+            "startLine": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 11
+            },
+            "reviewId": {
+              "type": "identifier",
+              "position": 12,
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "review",
+                "where": {
+                  "repoId": "repoId",
+                  "patchId": "targetId",
+                  "$ownerId": "$ownerId"
+                }
+              }
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 13
+            },
+            "asMember": {
+              "$ref": "#/$defs/member",
+              "position": 14
+            },
+            "noParent": {
+              "type": "identifier",
+              "position": 15
+            },
+            "diffHunk": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024,
+              "maxBytes": 1024,
+              "position": 16
+            },
+            "aud": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "position": 17
+            },
+            "mRole": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 18
+            }
+          },
+          "indices": [
+            {
+              "name": "target",
+              "properties": [
+                {
+                  "targetId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "rangeCountable": true
+            },
+            {
+              "name": "author",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "reply",
+              "properties": [
+                {
+                  "replyTo": "asc"
+                }
+              ],
+              "skipIfAbsent": ["replyTo"]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "$updatedAtBlockHeight",
+            "$createdAtBlockHeight",
+            "repoId",
+            "targetId",
+            "vis"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "absent": "enc"
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "body"
+                    },
+                    {
+                      "absent": "path"
+                    },
+                    {
+                      "absent": "imported.author"
+                    },
+                    {
+                      "absent": "imported.url"
+                    },
+                    {
+                      "absent": "diffHunk"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hasBody": {
+              "anyOf": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "present": "body"
+                }
+              ]
+            },
+            "p_sealedIfPrivate": {
+              "anyOf": [
+                {
+                  "notEqual": [
+                    "vis",
+                    {
+                      "const": "private"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "aud"
+                    },
+                    {
+                      "present": "asMember"
+                    }
+                  ]
+                }
+              ]
+            },
+            "m_self": {
+              "anyOf": [
+                {
+                  "absent": "asMember"
+                },
+                {
+                  "equal": ["asMember", "$ownerId"]
+                }
+              ]
+            },
+            "i_provenance": {
+              "anyOf": [
+                {
+                  "absent": "imported"
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "asMember"
+                    },
+                    {
+                      "lessThanOrEqual": ["mRole", 1]
+                    }
+                  ]
+                }
+              ]
+            },
+            "oidWidth": {
+              "in": [
+                {
+                  "count": "commitOid"
+                },
+                [0, 20, 32]
+              ]
+            },
+            "noParentSet": {
+              "absent": "noParent"
+            },
+            "rangeOrder": {
+              "anyOf": [
+                {
+                  "absent": "startLine"
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "line"
+                    },
+                    {
+                      "lessThanOrEqual": ["startLine", "line"]
+                    }
+                  ]
+                }
+              ]
+            },
+            "lockGate": {
+              "anyOf": [
+                {
+                  "present": "asMember"
+                },
+                {
+                  "greaterThan": ["$revision", 1]
+                },
+                {
+                  "lessThan": [
+                    {
+                      "sumOf": [
+                        "transition",
+                        "delta",
+                        {
+                          "targetId": "targetId"
+                        }
+                      ]
+                    },
+                    16
+                  ]
+                }
+              ]
+            },
+            "audMember": {
+              "ifThen": [
+                {
+                  "equal": ["aud", 1]
+                },
+                {
+                  "present": "asMember"
+                }
+              ]
+            },
+            "encFraming": {
+              "allOf": [
+                {
+                  "notEqual": [
+                    {
+                      "byteAt": ["enc", 0]
+                    },
+                    2
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": ["aud", 1]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        4
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "issue": {
+          "type": "object",
+          "canBeDeleted": false,
+          "documentsKeepHistory": true,
+          "immutable": [
+            "repoId",
+            "number",
+            "tk",
+            "upstreamNumber",
+            "vis",
+            "imported",
+            {
+              "property": "aud",
+              "when": {
+                "anyOf": [
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            }
+          ],
+          "dependentRequired": {
+            "enc": ["epoch", "aud"],
+            "aud": ["enc"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "number": {
+              "$ref": "#/$defs/num",
+              "position": 1
+            },
+            "title": {
+              "$ref": "#/$defs/title",
+              "position": 2
+            },
+            "body": {
+              "$ref": "#/$defs/body",
+              "position": 3
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 4
+            },
+            "epoch": {
+              "$ref": "#/$defs/u32",
+              "position": 5
+            },
+            "imported": {
+              "$ref": "#/$defs/imported",
+              "position": 6
+            },
+            "tk": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "enum": [0],
+              "position": 7
+            },
+            "upstreamNumber": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 8
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 9
+            },
+            "asMember": {
+              "$ref": "#/$defs/member",
+              "position": 10
+            },
+            "aud": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "position": 11
+            },
+            "mRole": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 12
+            }
+          },
+          "indices": [
+            {
+              "name": "number",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "number": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "created",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "author",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "number": "asc"
+                }
+              ],
+              "unique": true,
+              "rangeCountable": true
+            },
+            {
+              "name": "perRepo",
+              "properties": [
+                {
+                  "repoId": "asc"
+                }
+              ],
+              "countable": true
+            },
+            {
+              "name": "upstream",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "upstreamNumber": "asc"
+                }
+              ],
+              "skipIfAbsent": ["upstreamNumber"]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "$updatedAtBlockHeight",
+            "$createdAtBlockHeight",
+            "repoId",
+            "number",
+            "tk",
+            "vis"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "absent": "enc"
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "title"
+                    },
+                    {
+                      "absent": "body"
+                    },
+                    {
+                      "absent": "imported.author"
+                    },
+                    {
+                      "absent": "imported.url"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hasTitle": {
+              "anyOf": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "present": "title"
+                }
+              ]
+            },
+            "dense": {
+              "ifThen": [
+                {
+                  "equal": ["$revision", 1]
+                },
+                {
+                  "equal": [
+                    "number",
+                    {
+                      "add": [
+                        {
+                          "countOf": [
+                            "issue",
+                            {
+                              "repoId": "repoId"
+                            }
+                          ]
+                        },
+                        {
+                          "countOf": [
+                            "patch",
+                            {
+                              "repoId": "repoId"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "p_sealedIfPrivate": {
+              "anyOf": [
+                {
+                  "notEqual": [
+                    "vis",
+                    {
+                      "const": "private"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "aud"
+                    },
+                    {
+                      "present": "asMember"
+                    }
+                  ]
+                }
+              ]
+            },
+            "m_self": {
+              "anyOf": [
+                {
+                  "absent": "asMember"
+                },
+                {
+                  "equal": ["asMember", "$ownerId"]
+                }
+              ]
+            },
+            "i_provenance": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "imported"
+                    },
+                    {
+                      "absent": "upstreamNumber"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "asMember"
+                    },
+                    {
+                      "lessThanOrEqual": ["mRole", 1]
+                    }
+                  ]
+                }
+              ]
+            },
+            "audMember": {
+              "ifThen": [
+                {
+                  "equal": ["aud", 1]
+                },
+                {
+                  "present": "asMember"
+                }
+              ]
+            },
+            "encFraming": {
+              "allOf": [
+                {
+                  "notEqual": [
+                    {
+                      "byteAt": ["enc", 0]
+                    },
+                    2
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": ["aud", 1]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        4
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "patch": {
+          "type": "object",
+          "canBeDeleted": false,
+          "documentsKeepHistory": true,
+          "immutable": [
+            "repoId",
+            "number",
+            "sourceRepoId",
+            "baseRefNameHash",
+            "sourceRefNameHash",
+            "headOid",
+            "tk",
+            "upstreamNumber",
+            "vis",
+            "imported",
+            {
+              "property": "aud",
+              "when": {
+                "anyOf": [
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            },
+            {
+              "property": "baseRefName",
+              "when": {
+                "anyOf": [
+                  {
+                    "present": "$old.baseRefName"
+                  },
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            },
+            {
+              "property": "sourceRefName",
+              "when": {
+                "anyOf": [
+                  {
+                    "present": "$old.sourceRefName"
+                  },
+                  {
+                    "absent": "$old.aud"
+                  },
+                  {
+                    "present": "aud"
+                  }
+                ]
+              }
+            }
+          ],
+          "dependentRequired": {
+            "enc": ["epoch", "aud"],
+            "aud": ["enc"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "number": {
+              "$ref": "#/$defs/num",
+              "position": 1
+            },
+            "title": {
+              "$ref": "#/$defs/title",
+              "position": 2
+            },
+            "body": {
+              "$ref": "#/$defs/body",
+              "position": 3
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 4
+            },
+            "epoch": {
+              "$ref": "#/$defs/u32",
+              "position": 5
+            },
+            "baseRefNameHash": {
+              "$ref": "#/$defs/h32",
+              "position": 6
+            },
+            "baseRefName": {
+              "$ref": "#/$defs/refName",
+              "position": 7
+            },
+            "sourceRepoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "repo"
+              },
+              "position": 8
+            },
+            "sourceRefNameHash": {
+              "type": "bytes",
+              "size": 32,
+              "position": 9
+            },
+            "sourceRefName": {
+              "type": "string",
+              "minLength": 6,
+              "maxLength": 255,
+              "maxBytes": 255,
+              "position": 10,
+              "pattern": "^refs/(?:(?:@*[^\\x00- \\x7f~^:?*\\[\\\\/.@{]|\\{)+@*|@+)(?:(?:\\.?/|\\.)(?:(?:@*[^\\x00- \\x7f~^:?*\\[\\\\/.@{]|\\{)+@*|@+))*$"
+            },
+            "headOid": {
+              "$ref": "#/$defs/oid",
+              "position": 11
+            },
+            "patchManifestHash": {
+              "type": "bytes",
+              "size": 32,
+              "position": 12
+            },
+            "imported": {
+              "$ref": "#/$defs/imported",
+              "position": 13
+            },
+            "tk": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "enum": [1],
+              "position": 14
+            },
+            "upstreamNumber": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 15
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 16
+            },
+            "asMember": {
+              "$ref": "#/$defs/member",
+              "position": 17
+            },
+            "aud": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "position": 18
+            },
+            "mRole": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 19
+            }
+          },
+          "indices": [
+            {
+              "name": "number",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "number": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "created",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "author",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "number": "asc"
+                }
+              ],
+              "unique": true,
+              "rangeCountable": true
+            },
+            {
+              "name": "sourceRef",
+              "properties": [
+                {
+                  "sourceRepoId": "asc"
+                },
+                {
+                  "sourceRefNameHash": "asc"
+                }
+              ]
+            },
+            {
+              "name": "perRepo",
+              "properties": [
+                {
+                  "repoId": "asc"
+                }
+              ],
+              "countable": true
+            },
+            {
+              "name": "upstream",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "upstreamNumber": "asc"
+                }
+              ],
+              "skipIfAbsent": ["upstreamNumber"]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$updatedAt",
+            "$updatedAtBlockHeight",
+            "$createdAtBlockHeight",
+            "repoId",
+            "number",
+            "baseRefNameHash",
+            "sourceRepoId",
+            "headOid",
+            "tk",
+            "vis"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "absent": "enc"
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "title"
+                    },
+                    {
+                      "absent": "body"
+                    },
+                    {
+                      "absent": "baseRefName"
+                    },
+                    {
+                      "absent": "sourceRefName"
+                    },
+                    {
+                      "absent": "imported.author"
+                    },
+                    {
+                      "absent": "imported.url"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hasTitle": {
+              "anyOf": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "present": "title"
+                }
+              ]
+            },
+            "dense": {
+              "ifThen": [
+                {
+                  "equal": ["$revision", 1]
+                },
+                {
+                  "equal": [
+                    "number",
+                    {
+                      "add": [
+                        {
+                          "countOf": [
+                            "issue",
+                            {
+                              "repoId": "repoId"
+                            }
+                          ]
+                        },
+                        {
+                          "countOf": [
+                            "patch",
+                            {
+                              "repoId": "repoId"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "p_sealedIfPrivate": {
+              "anyOf": [
+                {
+                  "notEqual": [
+                    "vis",
+                    {
+                      "const": "private"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "aud"
+                    },
+                    {
+                      "present": "asMember"
+                    }
+                  ]
+                }
+              ]
+            },
+            "m_self": {
+              "anyOf": [
+                {
+                  "absent": "asMember"
+                },
+                {
+                  "equal": ["asMember", "$ownerId"]
+                }
+              ]
+            },
+            "i_provenance": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "imported"
+                    },
+                    {
+                      "absent": "upstreamNumber"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "asMember"
+                    },
+                    {
+                      "lessThanOrEqual": ["mRole", 1]
+                    }
+                  ]
+                }
+              ]
+            },
+            "oidWidth": {
+              "in": [
+                {
+                  "count": "headOid"
+                },
+                [20, 32]
+              ]
+            },
+            "audMember": {
+              "ifThen": [
+                {
+                  "equal": ["aud", 1]
+                },
+                {
+                  "present": "asMember"
+                }
+              ]
+            },
+            "encFraming": {
+              "allOf": [
+                {
+                  "notEqual": [
+                    {
+                      "byteAt": ["enc", 0]
+                    },
+                    2
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": ["aud", 1]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        4
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "review": {
+          "type": "object",
+          "documentsMutable": false,
+          "dependentRequired": {
+            "enc": ["epoch", "aud"],
+            "aud": ["enc"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "patchId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "patch",
+                "where": {
+                  "repoId": "repoId"
+                }
+              },
+              "position": 1
+            },
+            "verdict": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "position": 2
+            },
+            "commitOid": {
+              "$ref": "#/$defs/oid",
+              "position": 3
+            },
+            "body": {
+              "$ref": "#/$defs/body",
+              "position": 4
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 5
+            },
+            "epoch": {
+              "$ref": "#/$defs/u32",
+              "position": 6
+            },
+            "imported": {
+              "$ref": "#/$defs/imported",
+              "position": 7
+            },
+            "commentCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "position": 8
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 9
+            },
+            "asMember": {
+              "$ref": "#/$defs/member",
+              "position": 10
+            },
+            "aud": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "position": 11
+            },
+            "mRole": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 12
+            }
+          },
+          "indices": [
+            {
+              "name": "patch",
+              "properties": [
+                {
+                  "patchId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "rangeCountable": true
+            },
+            {
+              "name": "verdicts",
+              "properties": [
+                {
+                  "patchId": "asc"
+                },
+                {
+                  "commitOid": "asc"
+                },
+                {
+                  "verdict": "asc"
+                }
+              ],
+              "countable": true
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$createdAtBlockHeight",
+            "repoId",
+            "patchId",
+            "verdict",
+            "commitOid",
+            "vis"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "absent": "enc"
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "body"
+                    },
+                    {
+                      "absent": "imported.author"
+                    },
+                    {
+                      "absent": "imported.url"
+                    }
+                  ]
+                }
+              ]
+            },
+            "p_sealedIfPrivate": {
+              "anyOf": [
+                {
+                  "notEqual": [
+                    "vis",
+                    {
+                      "const": "private"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "aud"
+                    },
+                    {
+                      "present": "asMember"
+                    }
+                  ]
+                }
+              ]
+            },
+            "oidWidth": {
+              "in": [
+                {
+                  "count": "commitOid"
+                },
+                [20, 32]
+              ]
+            },
+            "m_self": {
+              "anyOf": [
+                {
+                  "absent": "asMember"
+                },
+                {
+                  "equal": ["asMember", "$ownerId"]
+                }
+              ]
+            },
+            "lockGate": {
+              "anyOf": [
+                {
+                  "present": "asMember"
+                },
+                {
+                  "lessThan": [
+                    {
+                      "sumOf": [
+                        "transition",
+                        "delta",
+                        {
+                          "targetId": "patchId"
+                        }
+                      ]
+                    },
+                    16
+                  ]
+                }
+              ]
+            },
+            "memberVerdict": {
+              "ifThenElse": [
+                {
+                  "in": ["verdict", [1, 2]]
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "asMember"
+                    },
+                    {
+                      "lessThanOrEqual": ["mRole", 1]
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "in": ["verdict", [4, 5]]
+                    },
+                    {
+                      "absent": "asMember"
+                    }
+                  ]
+                }
+              ]
+            },
+            "audMember": {
+              "ifThen": [
+                {
+                  "equal": ["aud", 1]
+                },
+                {
+                  "present": "asMember"
+                }
+              ]
+            },
+            "i_provenance": {
+              "anyOf": [
+                {
+                  "absent": "imported"
+                },
+                {
+                  "allOf": [
+                    {
+                      "present": "asMember"
+                    },
+                    {
+                      "lessThanOrEqual": ["mRole", 1]
+                    }
+                  ]
+                }
+              ]
+            },
+            "authorNoVerdict": {
+              "ifThen": [
+                {
+                  "in": ["verdict", [1, 2]]
+                },
+                {
+                  "notEqual": [
+                    "$ownerId",
+                    {
+                      "referenced": ["patchId", "$ownerId"]
+                    }
+                  ]
+                }
+              ]
+            },
+            "encFraming": {
+              "allOf": [
+                {
+                  "notEqual": [
+                    {
+                      "byteAt": ["enc", 0]
+                    },
+                    2
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": ["aud", 1]
+                    },
+                    {
+                      "notEqual": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        4
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "deleteConstraints": {
+            "keepVerdicts": {
+              "notIn": ["verdict", [1, 2]]
+            }
+          }
+        },
+        "transition": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "anyOf": [
+              {
+                "type": "deletableDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "maintainer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                }
+              },
+              {
+                "type": "deletableDocument",
+                "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+                "documentType": "writer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                },
+                "where": {
+                  "role": "r"
+                }
+              },
+              {
+                "type": "permanentDocument",
+                "documentType": "issue",
+                "findBy": {
+                  "$ownerId": ".",
+                  "repoId": "repoId",
+                  "number": "targetNumber"
+                },
+                "where": {
+                  "$id": "targetId",
+                  "number": "asAuthor"
+                }
+              },
+              {
+                "type": "permanentDocument",
+                "documentType": "patch",
+                "findBy": {
+                  "$ownerId": ".",
+                  "repoId": "repoId",
+                  "number": "targetNumber"
+                },
+                "where": {
+                  "$id": "targetId",
+                  "number": "asAuthor"
+                }
+              }
+            ]
+          },
+          "properties": {
+            "repoId": {
+              "$ref": "#/$defs/id",
+              "position": 0
+            },
+            "targetId": {
+              "type": "identifier",
+              "refersTo": {
+                "anyOf": [
+                  {
+                    "type": "permanentDocument",
+                    "documentType": "issue",
+                    "where": {
+                      "repoId": "repoId",
+                      "number": "targetNumber",
+                      "tk": "targetKind"
+                    }
+                  },
+                  {
+                    "type": "permanentDocument",
+                    "documentType": "patch",
+                    "where": {
+                      "repoId": "repoId",
+                      "number": "targetNumber",
+                      "tk": "targetKind"
+                    }
+                  }
+                ]
+              },
+              "position": 1
+            },
+            "targetNumber": {
+              "$ref": "#/$defs/num",
+              "position": 2
+            },
+            "targetKind": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "position": 3
+            },
+            "kind": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "enum": [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+              "position": 4
+            },
+            "delta": {
+              "type": "integer",
+              "minimum": -16,
+              "maximum": 16,
+              "position": 5
+            },
+            "asAuthor": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 6
+            },
+            "oid": {
+              "$ref": "#/$defs/oid",
+              "position": 7
+            },
+            "reason": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3,
+              "position": 8
+            },
+            "dupNumber": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 9
+            },
+            "r": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "position": 10
+            },
+            "closedByPr": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "position": 11
+            }
+          },
+          "indices": [
+            {
+              "name": "perTarget",
+              "properties": [
+                {
+                  "targetId": "asc"
+                }
+              ],
+              "countable": true,
+              "summable": "delta"
+            },
+            {
+              "name": "perRepoKind",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "kind": "asc"
+                }
+              ],
+              "countable": true
+            },
+            {
+              "name": "feed",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "repoId",
+            "targetId",
+            "targetNumber",
+            "targetKind",
+            "kind",
+            "delta",
+            "asAuthor",
+            "r"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "a_kindOfTarget": {
+              "equal": [
+                "targetKind",
+                {
+                  "divide": ["kind", 10]
+                }
+              ]
+            },
+            "b1_closeDelta": {
+              "ifThen": [
+                {
+                  "in": ["kind", [1, 11, 16]]
+                },
+                {
+                  "equal": ["delta", 1]
+                }
+              ]
+            },
+            "b2_reopenDelta": {
+              "ifThen": [
+                {
+                  "in": ["kind", [2, 12, 17]]
+                },
+                {
+                  "equal": ["delta", -1]
+                }
+              ]
+            },
+            "b3_otherDelta": {
+              "ifThen": [
+                {
+                  "in": ["kind", [13, 14, 15]]
+                },
+                {
+                  "ifThenElse": [
+                    {
+                      "equal": ["kind", 13]
+                    },
+                    {
+                      "equal": ["delta", 2]
+                    },
+                    {
+                      "ifThenElse": [
+                        {
+                          "equal": ["kind", 14]
+                        },
+                        {
+                          "equal": ["delta", 8]
+                        },
+                        {
+                          "equal": ["delta", -8]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "c1_closedAfter": {
+              "ifThen": [
+                {
+                  "in": ["kind", [1, 11]]
+                },
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    1
+                  ]
+                }
+              ]
+            },
+            "c2_openAfter": {
+              "ifThen": [
+                {
+                  "in": ["kind", [2, 12, 15]]
+                },
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    0
+                  ]
+                }
+              ]
+            },
+            "c3_mergedAfter": {
+              "ifThen": [
+                {
+                  "equal": ["kind", 13]
+                },
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    2
+                  ]
+                }
+              ]
+            },
+            "c4_draftAfter": {
+              "ifThen": [
+                {
+                  "in": ["kind", [14, 17]]
+                },
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    8
+                  ]
+                }
+              ]
+            },
+            "c5_draftClosedAfter": {
+              "ifThen": [
+                {
+                  "equal": ["kind", 16]
+                },
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    9
+                  ]
+                }
+              ]
+            },
+            "e_mergeOid": {
+              "allOf": [
+                {
+                  "anyOf": [
+                    {
+                      "notEqual": ["kind", 13]
+                    },
+                    {
+                      "present": "oid"
+                    }
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "in": ["kind", [13, 14, 15]]
+                    },
+                    {
+                      "equal": ["r", 1]
+                    }
+                  ]
+                },
+                {
+                  "in": ["r", [1, 2]]
+                }
+              ]
+            },
+            "f_authorNoMerge": {
+              "anyOf": [
+                {
+                  "equal": ["asAuthor", 0]
+                },
+                {
+                  "notEqual": ["kind", 13]
+                }
+              ]
+            },
+            "oidWidth": {
+              "in": [
+                {
+                  "count": "oid"
+                },
+                [0, 20, 32]
+              ]
+            },
+            "b4_lockDelta": {
+              "ifThen": [
+                {
+                  "in": ["kind", [3, 4, 18, 19]]
+                },
+                {
+                  "ifThenElse": [
+                    {
+                      "in": ["kind", [3, 18]]
+                    },
+                    {
+                      "equal": ["delta", 16]
+                    },
+                    {
+                      "equal": ["delta", -16]
+                    }
+                  ]
+                }
+              ]
+            },
+            "c6_lockedAfter": {
+              "ifThen": [
+                {
+                  "in": ["kind", [3, 4, 18, 19]]
+                },
+                {
+                  "equal": [
+                    {
+                      "divide": [
+                        {
+                          "sumOf": [
+                            "transition",
+                            "delta",
+                            {
+                              "targetId": "targetId"
+                            }
+                          ]
+                        },
+                        16
+                      ]
+                    },
+                    {
+                      "divide": [
+                        {
+                          "add": ["delta", 16]
+                        },
+                        32
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "g_memberLock": {
+              "anyOf": [
+                {
+                  "equal": ["asAuthor", 0]
+                },
+                {
+                  "notIn": ["kind", [3, 4, 18, 19]]
+                }
+              ]
+            },
+            "k_kinds": {
+              "in": ["kind", [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18, 19]]
+            }
+          }
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "2",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": true
+      },
+      "indices": {
+        "comment": [
+          {
+            "name": "target",
+            "properties": [
+              {
+                "field": "targetId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "author",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "reply",
+            "properties": [
+              {
+                "field": "replyTo",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "issue": [
+          {
+            "name": "number",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "number",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "created",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "author",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "number",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "perRepo",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "upstream",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "upstreamNumber",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "patch": [
+          {
+            "name": "number",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "number",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "created",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "author",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "number",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "sourceRef",
+            "properties": [
+              {
+                "field": "sourceRepoId",
+                "order": "asc"
+              },
+              {
+                "field": "sourceRefNameHash",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "perRepo",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "upstream",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "upstreamNumber",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "review": [
+          {
+            "name": "patch",
+            "properties": [
+              {
+                "field": "patchId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "verdicts",
+            "properties": [
+              {
+                "field": "patchId",
+                "order": "asc"
+              },
+              {
+                "field": "commitOid",
+                "order": "asc"
+              },
+              {
+                "field": "verdict",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "transition": [
+          {
+            "name": "perTarget",
+            "properties": [
+              {
+                "field": "targetId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "perRepoKind",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "kind",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "feed",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 674061,
+      "coreChainLockedHeight": 1590918,
+      "epoch": 20339,
+      "timeMs": 1794574399212,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAbvFeYV1c49x+aeQRZgSBXEjshXgmLN0hzzBcubmfAgvBAFAACQCASBbtAdymcNfPSWCO6wkd5q+QOPg/012EEtbagdGhxQqSABc0qdvVZA6FsWzvM0X1WKxrhqvzmAlMAh4XRA4tkuP+BABsLJs7YyjxbsL1QgF8PYuGH9s0GSpwDszxKby/4JuV9QRAQFAAPsDEwHAHzqaEMMhxOwbMYVP37yK7kTVMS32x86xodayCFvQrQJJgPF8tUQMTP+V4eCPcsWzVdQESzhwNk07orWX4b/ZgxABU3lUqDEQaG+SeNVU+6BNcoK4aERlOaIc5u9kOVCoR5oCiaGhLC7HSNt3iSx6mPJH4QKjYj15rjankXPX+P6TSX4QAd90czIVmSm6u1xvxuGOd6G0oXpo91oQrS8Mp9UJYvozAmnR4z7mZxTSUh94uEVOArsJlnKNyEwtW+3gjOLJfZraEAEo1VT62YavLp/IZx2AeeuQ7KP5O85oSO37ApQKXgObcAIENeNUYocC6YXSlkFnXPcpcW9Tlraxw4JROfvD16w5CBAB5i8RYEwrqcN18xCyKT1XdQcb2DYDVZckDNxfuFq2HusCHeODF+/fV0C+rWgHmPintua0lQVFctGe2V0vzASqWYwQAZr5V+M4eo+JZRBF/Eqso6qOpTWgt9mHYsW3TFFBjxACAkXfbRAIH+j4zn1idTf1QN+1eaiVs+D12QPpl83tTrYUEAQgNDFdhhleNgsIpe2rB79hizKj1x2XznZ7SGxs1J9yT4cABQIBAQEAAZ3Nwc5OTZvkdnLTCr+jaFKF/vLSmVIAwdb6CDxmyUoC1e+MjlVVKhjV/cHnCrop01skMs74s2WnaUUSHiL9ZQkQAtFkYixgSxXgSPfD7GHJJfxS2Kdkv7FKXYahv4c+IpyKEAF+w1+VTCijckKDy3RCqQTE/+ypPyDuFEB6AXZF1oYRPhEREREChTPCKI7nv7ALfESR5RnY9f7l47PP+Uv4C5ZtojebctsQAfu0kRergLX+lr0lbjDT8gSiyDbwsrtDAsCQHjTAjqa+EREREQKBKkPc50djbPuVlndU5jJkm+rnXI82SJFiH0YKXlTEAxAB532vD6inUJGrGPUCt6yenYPV9eeZYYHLdepjOQOjelIRApnoHpTWSOt+JKJ0IFuKWzWR9+b8pkQktqQdoX0EAOEdEAFtDSajea3Xho2xnvJiIa4bkrXQpKWsWsYRQHCISLE+pBEBIDQxXYYZXjYLCKXtqwe/YYsyo9cdl852e0hsbNSfck+HAPtDgAMBAEM3APtDMgE0MV2GGV42Cwil7asHv2GLMqPXHZfOdntIbGzUn3JPhwIAAAAAAQEAAAEAAStlRNk1Q+cl9BK3MfHD9s4sxxAOxoVdCmVhhksWrG0sAQwEYm9keRYFEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgC+xQAEghtYXhCeXRlcwL7FAASB3BhdHRlcm4SAlxTA2VuYxYEEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1pbkl0ZW1zAh0SCG1heEl0ZW1zAvsUAANoMzIWAhIEdHlwZRIFYnl0ZXMSBHNpemUCIAJpZBYBEgR0eXBlEgppZGVudGlmaWVyCGltcG9ydGVkFgMSBHR5cGUSBm9iamVjdBIKcHJvcGVydGllcxYDEgZhdXRob3IWBBIEdHlwZRIGc3RyaW5nEgltYXhMZW5ndGgCeBIIbWF4Qnl0ZXMC+wHgEghwb3NpdGlvbgIAEgljcmVhdGVkQXQWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgIBEgN1cmwWBBIEdHlwZRIGc3RyaW5nEgltYXhMZW5ndGgC+wEsEghtYXhCeXRlcwL7ASwSCHBvc2l0aW9uAgISFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAGbWVtYmVyFgISBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgESBWFueU9mFQIWBBIEdHlwZRIRZGVsZXRhYmxlRG9jdW1lbnQSCmNvbnRyYWN0SWQSLDVvZnlOb01vOFlyaXVvRUZXNGFUdDF2a2h5ZWN1clhzbzFZeWlmMzI0cmZWEgxkb2N1bWVudFR5cGUSCm1haW50YWluZXISBmZpbmRCeRYCEgZyZXBvSWQSBnJlcG9JZBIIbWVtYmVySWQSAS4WBRIEdHlwZRIRZGVsZXRhYmxlRG9jdW1lbnQSCmNvbnRyYWN0SWQSLDVvZnlOb01vOFlyaXVvRUZXNGFUdDF2a2h5ZWN1clhzbzFZeWlmMzI0cmZWEgxkb2N1bWVudFR5cGUSBndyaXRlchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhIFd2hlcmUWARIEcm9sZRIFbVJvbGUDbnVtFgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQL8/////wNvaWQWBBIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIUEghtYXhJdGVtcwIgB3JlZk5hbWUWBRIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCBhIJbWF4TGVuZ3RoAvsA/xIIbWF4Qnl0ZXMC+wD/EgdwYXR0ZXJuEnFecmVmcy8oPzooPzpAKlteXHgwMC0gXHg3Zn5eOj8qXFtcXC8uQHtdfFx7KStAKnxAKykoPzooPzpcLj8vfFwuKSg/Oig/OkAqW15ceDAwLSBceDdmfl46PypcW1xcLy5Ae118XHspK0AqfEArKSkqJAV0aXRsZRYFEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgC+wEAEghtYXhCeXRlcwL7BAASB3BhdHRlcm4SNl5bXlx4MDAtXHgxZlx4N2ZdKlteXHNceDAwLVx4MWZceDdmXVteXHgwMC1ceDFmXHg3Zl0qJAN1MzIWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvz/////A3ZpcxYCEgR0eXBlEgZzdHJpbmcSBGVudW0VAhIGcHVibGljEgdwcml2YXRlBQdjb21tZW50FggSBHR5cGUSBm9iamVjdBIJaW1tdXRhYmxlFQ0SBnJlcG9JZBIIdGFyZ2V0SWQSB3JlcGx5VG8SCWNvbW1pdE9pZBIEbGluZRIEc2lkZRIJc3RhcnRMaW5lEghyZXZpZXdJZBIDdmlzEghpbXBvcnRlZBYCEghwcm9wZXJ0eRIDYXVkEgR3aGVuFgESBWFueU9mFQIWARIGYWJzZW50Eggkb2xkLmF1ZBYBEgdwcmVzZW50EgNhdWQWAhIIcHJvcGVydHkSBHBhdGgSBHdoZW4WARIFYW55T2YVAxYBEgdwcmVzZW50Egkkb2xkLnBhdGgWARIGYWJzZW50Eggkb2xkLmF1ZBYBEgdwcmVzZW50EgNhdWQWAhIIcHJvcGVydHkSCGRpZmZIdW5rEgR3aGVuFgESBWFueU9mFQMWARIHcHJlc2VudBINJG9sZC5kaWZmSHVuaxYBEgZhYnNlbnQSCCRvbGQuYXVkFgESB3ByZXNlbnQSA2F1ZBIRZGVwZW5kZW50UmVxdWlyZWQWAhIDZW5jFQISBWVwb2NoEgNhdWQSA2F1ZBUBEgNlbmMSCnByb3BlcnRpZXMWExIGcmVwb0lkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgQSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egpjb250cmFjdElkEiw1b2Z5Tm9NbzhZcml1b0VGVzRhVHQxdmtoeWVjdXJYc28xWXlpZjMyNHJmVhIMZG9jdW1lbnRUeXBlEgRyZXBvEgV3aGVyZRYBEgp2aXNpYmlsaXR5EgN2aXMSCHBvc2l0aW9uAgASCHRhcmdldElkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgESBWFueU9mFQIWAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIFaXNzdWUSBXdoZXJlFgESBnJlcG9JZBIGcmVwb0lkFgMSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egxkb2N1bWVudFR5cGUSBXBhdGNoEgV3aGVyZRYBEgZyZXBvSWQSBnJlcG9JZBIIcG9zaXRpb24CARIEYm9keRYCEgQkcmVmEgwjLyRkZWZzL2JvZHkSCHBvc2l0aW9uAgISA2VuYxYCEgQkcmVmEgsjLyRkZWZzL2VuYxIIcG9zaXRpb24CAxIFZXBvY2gWAhIEJHJlZhILIy8kZGVmcy91MzISCHBvc2l0aW9uAgQSB3JlcGx5VG8WAxIEdHlwZRIKaWRlbnRpZmllchIIcG9zaXRpb24CBRIIcmVmZXJzVG8WAxIEdHlwZRIRZGVsZXRhYmxlRG9jdW1lbnQSDGRvY3VtZW50VHlwZRIHY29tbWVudBIFd2hlcmUWAhIIdGFyZ2V0SWQSCHRhcmdldElkEgdyZXBseVRvEghub1BhcmVudBIJY29tbWl0T2lkFgISBCRyZWYSCyMvJGRlZnMvb2lkEghwb3NpdGlvbgIGEgRwYXRoFgUSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAvsB9BIIbWF4Qnl0ZXMC+wPoEgltaW5MZW5ndGgCARIIcG9zaXRpb24CBxIEbGluZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0C/P////8SCHBvc2l0aW9uAggSBHNpZGUWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAgESCHBvc2l0aW9uAgkSCGltcG9ydGVkFgISBCRyZWYSECMvJGRlZnMvaW1wb3J0ZWQSCHBvc2l0aW9uAgoSCXN0YXJ0TGluZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0C/P////8SCHBvc2l0aW9uAgsSCHJldmlld0lkFgMSBHR5cGUSCmlkZW50aWZpZXISCHBvc2l0aW9uAgwSCHJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSBnJldmlldxIFd2hlcmUWAxIGcmVwb0lkEgZyZXBvSWQSB3BhdGNoSWQSCHRhcmdldElkEggkb3duZXJJZBIIJG93bmVySWQSA3ZpcxYCEgQkcmVmEgsjLyRkZWZzL3ZpcxIIcG9zaXRpb24CDRIIYXNNZW1iZXIWAhIEJHJlZhIOIy8kZGVmcy9tZW1iZXISCHBvc2l0aW9uAg4SCG5vUGFyZW50FgISBHR5cGUSCmlkZW50aWZpZXISCHBvc2l0aW9uAg8SCGRpZmZIdW5rFgUSBHR5cGUSBnN0cmluZxIJbWluTGVuZ3RoAgESCW1heExlbmd0aAL7BAASCG1heEJ5dGVzAvsEABIIcG9zaXRpb24CEBIDYXVkFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQICEghwb3NpdGlvbgIREgVtUm9sZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CBBIIcG9zaXRpb24CEhIHaW5kaWNlcxUDFgMSBG5hbWUSBnRhcmdldBIKcHJvcGVydGllcxUCFgESCHRhcmdldElkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEg5yYW5nZUNvdW50YWJsZRMBFgISBG5hbWUSBmF1dGhvchIKcHJvcGVydGllcxUCFgESCCRvd25lcklkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgMSBG5hbWUSBXJlcGx5Egpwcm9wZXJ0aWVzFQEWARIHcmVwbHlUbxIDYXNjEgxza2lwSWZBYnNlbnQVARIHcmVwbHlUbxIIcmVxdWlyZWQVBxIKJGNyZWF0ZWRBdBIKJHVwZGF0ZWRBdBIVJHVwZGF0ZWRBdEJsb2NrSGVpZ2h0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSBnJlcG9JZBIIdGFyZ2V0SWQSA3ZpcxIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYLEgdub1BsYWluFgESBWFueU9mFQIWARIGYWJzZW50EgNlbmMWARIFYWxsT2YVBRYBEgZhYnNlbnQSBGJvZHkWARIGYWJzZW50EgRwYXRoFgESBmFic2VudBIPaW1wb3J0ZWQuYXV0aG9yFgESBmFic2VudBIMaW1wb3J0ZWQudXJsFgESBmFic2VudBIIZGlmZkh1bmsSB2hhc0JvZHkWARIFYW55T2YVAhYBEgdwcmVzZW50EgNlbmMWARIHcHJlc2VudBIEYm9keRIRcF9zZWFsZWRJZlByaXZhdGUWARIFYW55T2YVAhYBEghub3RFcXVhbBUCEgN2aXMWARIFY29uc3QSB3ByaXZhdGUWARIFYWxsT2YVAhYBEgdwcmVzZW50EgNhdWQWARIHcHJlc2VudBIIYXNNZW1iZXISBm1fc2VsZhYBEgVhbnlPZhUCFgESBmFic2VudBIIYXNNZW1iZXIWARIFZXF1YWwVAhIIYXNNZW1iZXISCCRvd25lcklkEgxpX3Byb3ZlbmFuY2UWARIFYW55T2YVAhYBEgZhYnNlbnQSCGltcG9ydGVkFgESBWFsbE9mFQIWARIHcHJlc2VudBIIYXNNZW1iZXIWARIPbGVzc1RoYW5PckVxdWFsFQISBW1Sb2xlAgESCG9pZFdpZHRoFgESAmluFQIWARIFY291bnQSCWNvbW1pdE9pZBUDAgACFAIgEgtub1BhcmVudFNldBYBEgZhYnNlbnQSCG5vUGFyZW50EgpyYW5nZU9yZGVyFgESBWFueU9mFQIWARIGYWJzZW50EglzdGFydExpbmUWARIFYWxsT2YVAhYBEgdwcmVzZW50EgRsaW5lFgESD2xlc3NUaGFuT3JFcXVhbBUCEglzdGFydExpbmUSBGxpbmUSCGxvY2tHYXRlFgESBWFueU9mFQMWARIHcHJlc2VudBIIYXNNZW1iZXIWARILZ3JlYXRlclRoYW4VAhIJJHJldmlzaW9uAgEWARIIbGVzc1RoYW4VAhYBEgVzdW1PZhUDEgp0cmFuc2l0aW9uEgVkZWx0YRYBEgh0YXJnZXRJZBIIdGFyZ2V0SWQCEBIJYXVkTWVtYmVyFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESB3ByZXNlbnQSCGFzTWVtYmVyEgplbmNGcmFtaW5nFgESBWFsbE9mFQMWARIIbm90RXF1YWwVAhYBEgZieXRlQXQVAhIDZW5jAgACAhYBEgZpZlRoZW4VAhYBEgVlcXVhbBUCEgN2aXMWARIFY29uc3QSBnB1YmxpYxYBEghub3RFcXVhbBUCFgESBmJ5dGVBdBUCEgNlbmMCAAIBFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESCG5vdEVxdWFsFQIWARIGYnl0ZUF0FQISA2VuYwIAAgQFaXNzdWUWChIEdHlwZRIGb2JqZWN0EgxjYW5CZURlbGV0ZWQTABIUZG9jdW1lbnRzS2VlcEhpc3RvcnkTARIJaW1tdXRhYmxlFQcSBnJlcG9JZBIGbnVtYmVyEgJ0axIOdXBzdHJlYW1OdW1iZXISA3ZpcxIIaW1wb3J0ZWQWAhIIcHJvcGVydHkSA2F1ZBIEd2hlbhYBEgVhbnlPZhUCFgESBmFic2VudBIIJG9sZC5hdWQWARIHcHJlc2VudBIDYXVkEhFkZXBlbmRlbnRSZXF1aXJlZBYCEgNlbmMVAhIFZXBvY2gSA2F1ZBIDYXVkFQESA2VuYxIKcHJvcGVydGllcxYNEgZyZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WBBIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSCmNvbnRyYWN0SWQSLDVvZnlOb01vOFlyaXVvRUZXNGFUdDF2a2h5ZWN1clhzbzFZeWlmMzI0cmZWEgxkb2N1bWVudFR5cGUSBHJlcG8SBXdoZXJlFgESCnZpc2liaWxpdHkSA3ZpcxIIcG9zaXRpb24CABIGbnVtYmVyFgISBCRyZWYSCyMvJGRlZnMvbnVtEghwb3NpdGlvbgIBEgV0aXRsZRYCEgQkcmVmEg0jLyRkZWZzL3RpdGxlEghwb3NpdGlvbgICEgRib2R5FgISBCRyZWYSDCMvJGRlZnMvYm9keRIIcG9zaXRpb24CAxIDZW5jFgISBCRyZWYSCyMvJGRlZnMvZW5jEghwb3NpdGlvbgIEEgVlcG9jaBYCEgQkcmVmEgsjLyRkZWZzL3UzMhIIcG9zaXRpb24CBRIIaW1wb3J0ZWQWAhIEJHJlZhIQIy8kZGVmcy9pbXBvcnRlZBIIcG9zaXRpb24CBhICdGsWBRIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvsA/xIEZW51bRUBAgASCHBvc2l0aW9uAgcSDnVwc3RyZWFtTnVtYmVyFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQL8/////xIIcG9zaXRpb24CCBIDdmlzFgISBCRyZWYSCyMvJGRlZnMvdmlzEghwb3NpdGlvbgIJEghhc01lbWJlchYCEgQkcmVmEg4jLyRkZWZzL21lbWJlchIIcG9zaXRpb24CChIDYXVkFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQICEghwb3NpdGlvbgILEgVtUm9sZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CBBIIcG9zaXRpb24CDBIHaW5kaWNlcxUFFgMSBG5hbWUSBm51bWJlchIKcHJvcGVydGllcxUCFgESBnJlcG9JZBIDYXNjFgESBm51bWJlchIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEgdjcmVhdGVkEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgQSBG5hbWUSBmF1dGhvchIKcHJvcGVydGllcxUDFgESCCRvd25lcklkEgNhc2MWARIGcmVwb0lkEgNhc2MWARIGbnVtYmVyEgNhc2MSBnVuaXF1ZRMBEg5yYW5nZUNvdW50YWJsZRMBFgMSBG5hbWUSB3BlclJlcG8SCnByb3BlcnRpZXMVARYBEgZyZXBvSWQSA2FzYxIJY291bnRhYmxlEwEWAxIEbmFtZRIIdXBzdHJlYW0SCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEg51cHN0cmVhbU51bWJlchIDYXNjEgxza2lwSWZBYnNlbnQVARIOdXBzdHJlYW1OdW1iZXISCHJlcXVpcmVkFQgSCiRjcmVhdGVkQXQSCiR1cGRhdGVkQXQSFSR1cGRhdGVkQXRCbG9ja0hlaWdodBIVJGNyZWF0ZWRBdEJsb2NrSGVpZ2h0EgZyZXBvSWQSBm51bWJlchICdGsSA3ZpcxIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYIEgdub1BsYWluFgESBWFueU9mFQIWARIGYWJzZW50EgNlbmMWARIFYWxsT2YVBBYBEgZhYnNlbnQSBXRpdGxlFgESBmFic2VudBIEYm9keRYBEgZhYnNlbnQSD2ltcG9ydGVkLmF1dGhvchYBEgZhYnNlbnQSDGltcG9ydGVkLnVybBIIaGFzVGl0bGUWARIFYW55T2YVAhYBEgdwcmVzZW50EgNlbmMWARIHcHJlc2VudBIFdGl0bGUSBWRlbnNlFgESBmlmVGhlbhUCFgESBWVxdWFsFQISCSRyZXZpc2lvbgIBFgESBWVxdWFsFQISBm51bWJlchYBEgNhZGQVAhYBEgdjb3VudE9mFQISBWlzc3VlFgESBnJlcG9JZBIGcmVwb0lkFgESB2NvdW50T2YVAhIFcGF0Y2gWARIGcmVwb0lkEgZyZXBvSWQSEXBfc2VhbGVkSWZQcml2YXRlFgESBWFueU9mFQIWARIIbm90RXF1YWwVAhIDdmlzFgESBWNvbnN0Egdwcml2YXRlFgESBWFsbE9mFQIWARIHcHJlc2VudBIDYXVkFgESB3ByZXNlbnQSCGFzTWVtYmVyEgZtX3NlbGYWARIFYW55T2YVAhYBEgZhYnNlbnQSCGFzTWVtYmVyFgESBWVxdWFsFQISCGFzTWVtYmVyEggkb3duZXJJZBIMaV9wcm92ZW5hbmNlFgESBWFueU9mFQIWARIFYWxsT2YVAhYBEgZhYnNlbnQSCGltcG9ydGVkFgESBmFic2VudBIOdXBzdHJlYW1OdW1iZXIWARIFYWxsT2YVAhYBEgdwcmVzZW50Eghhc01lbWJlchYBEg9sZXNzVGhhbk9yRXF1YWwVAhIFbVJvbGUCARIJYXVkTWVtYmVyFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESB3ByZXNlbnQSCGFzTWVtYmVyEgplbmNGcmFtaW5nFgESBWFsbE9mFQMWARIIbm90RXF1YWwVAhYBEgZieXRlQXQVAhIDZW5jAgACAhYBEgZpZlRoZW4VAhYBEgVlcXVhbBUCEgN2aXMWARIFY29uc3QSBnB1YmxpYxYBEghub3RFcXVhbBUCFgESBmJ5dGVBdBUCEgNlbmMCAAIBFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESCG5vdEVxdWFsFQIWARIGYnl0ZUF0FQISA2VuYwIAAgQFcGF0Y2gWChIEdHlwZRIGb2JqZWN0EgxjYW5CZURlbGV0ZWQTABIUZG9jdW1lbnRzS2VlcEhpc3RvcnkTARIJaW1tdXRhYmxlFQ0SBnJlcG9JZBIGbnVtYmVyEgxzb3VyY2VSZXBvSWQSD2Jhc2VSZWZOYW1lSGFzaBIRc291cmNlUmVmTmFtZUhhc2gSB2hlYWRPaWQSAnRrEg51cHN0cmVhbU51bWJlchIDdmlzEghpbXBvcnRlZBYCEghwcm9wZXJ0eRIDYXVkEgR3aGVuFgESBWFueU9mFQIWARIGYWJzZW50Eggkb2xkLmF1ZBYBEgdwcmVzZW50EgNhdWQWAhIIcHJvcGVydHkSC2Jhc2VSZWZOYW1lEgR3aGVuFgESBWFueU9mFQMWARIHcHJlc2VudBIQJG9sZC5iYXNlUmVmTmFtZRYBEgZhYnNlbnQSCCRvbGQuYXVkFgESB3ByZXNlbnQSA2F1ZBYCEghwcm9wZXJ0eRINc291cmNlUmVmTmFtZRIEd2hlbhYBEgVhbnlPZhUDFgESB3ByZXNlbnQSEiRvbGQuc291cmNlUmVmTmFtZRYBEgZhYnNlbnQSCCRvbGQuYXVkFgESB3ByZXNlbnQSA2F1ZBIRZGVwZW5kZW50UmVxdWlyZWQWAhIDZW5jFQISBWVwb2NoEgNhdWQSA2F1ZBUBEgNlbmMSCnByb3BlcnRpZXMWFBIGcmVwb0lkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgQSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egpjb250cmFjdElkEiw1b2Z5Tm9NbzhZcml1b0VGVzRhVHQxdmtoeWVjdXJYc28xWXlpZjMyNHJmVhIMZG9jdW1lbnRUeXBlEgRyZXBvEgV3aGVyZRYBEgp2aXNpYmlsaXR5EgN2aXMSCHBvc2l0aW9uAgASBm51bWJlchYCEgQkcmVmEgsjLyRkZWZzL251bRIIcG9zaXRpb24CARIFdGl0bGUWAhIEJHJlZhINIy8kZGVmcy90aXRsZRIIcG9zaXRpb24CAhIEYm9keRYCEgQkcmVmEgwjLyRkZWZzL2JvZHkSCHBvc2l0aW9uAgMSA2VuYxYCEgQkcmVmEgsjLyRkZWZzL2VuYxIIcG9zaXRpb24CBBIFZXBvY2gWAhIEJHJlZhILIy8kZGVmcy91MzISCHBvc2l0aW9uAgUSD2Jhc2VSZWZOYW1lSGFzaBYCEgQkcmVmEgsjLyRkZWZzL2gzMhIIcG9zaXRpb24CBhILYmFzZVJlZk5hbWUWAhIEJHJlZhIPIy8kZGVmcy9yZWZOYW1lEghwb3NpdGlvbgIHEgxzb3VyY2VSZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSCmNvbnRyYWN0SWQSLDVvZnlOb01vOFlyaXVvRUZXNGFUdDF2a2h5ZWN1clhzbzFZeWlmMzI0cmZWEgxkb2N1bWVudFR5cGUSBHJlcG8SCHBvc2l0aW9uAggSEXNvdXJjZVJlZk5hbWVIYXNoFgMSBHR5cGUSBWJ5dGVzEgRzaXplAiASCHBvc2l0aW9uAgkSDXNvdXJjZVJlZk5hbWUWBhIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCBhIJbWF4TGVuZ3RoAvsA/xIIbWF4Qnl0ZXMC+wD/Eghwb3NpdGlvbgIKEgdwYXR0ZXJuEnFecmVmcy8oPzooPzpAKlteXHgwMC0gXHg3Zn5eOj8qXFtcXC8uQHtdfFx7KStAKnxAKykoPzooPzpcLj8vfFwuKSg/Oig/OkAqW15ceDAwLSBceDdmfl46PypcW1xcLy5Ae118XHspK0AqfEArKSkqJBIHaGVhZE9pZBYCEgQkcmVmEgsjLyRkZWZzL29pZBIIcG9zaXRpb24CCxIRcGF0Y2hNYW5pZmVzdEhhc2gWAxIEdHlwZRIFYnl0ZXMSBHNpemUCIBIIcG9zaXRpb24CDBIIaW1wb3J0ZWQWAhIEJHJlZhIQIy8kZGVmcy9pbXBvcnRlZBIIcG9zaXRpb24CDRICdGsWBRIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvsA/xIEZW51bRUBAgESCHBvc2l0aW9uAg4SDnVwc3RyZWFtTnVtYmVyFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQL8/////xIIcG9zaXRpb24CDxIDdmlzFgISBCRyZWYSCyMvJGRlZnMvdmlzEghwb3NpdGlvbgIQEghhc01lbWJlchYCEgQkcmVmEg4jLyRkZWZzL21lbWJlchIIcG9zaXRpb24CERIDYXVkFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQICEghwb3NpdGlvbgISEgVtUm9sZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CBBIIcG9zaXRpb24CExIHaW5kaWNlcxUGFgMSBG5hbWUSBm51bWJlchIKcHJvcGVydGllcxUCFgESBnJlcG9JZBIDYXNjFgESBm51bWJlchIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEgdjcmVhdGVkEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgQSBG5hbWUSBmF1dGhvchIKcHJvcGVydGllcxUDFgESCCRvd25lcklkEgNhc2MWARIGcmVwb0lkEgNhc2MWARIGbnVtYmVyEgNhc2MSBnVuaXF1ZRMBEg5yYW5nZUNvdW50YWJsZRMBFgISBG5hbWUSCXNvdXJjZVJlZhIKcHJvcGVydGllcxUCFgESDHNvdXJjZVJlcG9JZBIDYXNjFgESEXNvdXJjZVJlZk5hbWVIYXNoEgNhc2MWAxIEbmFtZRIHcGVyUmVwbxIKcHJvcGVydGllcxUBFgESBnJlcG9JZBIDYXNjEgljb3VudGFibGUTARYDEgRuYW1lEgh1cHN0cmVhbRIKcHJvcGVydGllcxUCFgESBnJlcG9JZBIDYXNjFgESDnVwc3RyZWFtTnVtYmVyEgNhc2MSDHNraXBJZkFic2VudBUBEg51cHN0cmVhbU51bWJlchIIcmVxdWlyZWQVCxIKJGNyZWF0ZWRBdBIKJHVwZGF0ZWRBdBIVJHVwZGF0ZWRBdEJsb2NrSGVpZ2h0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSBnJlcG9JZBIGbnVtYmVyEg9iYXNlUmVmTmFtZUhhc2gSDHNvdXJjZVJlcG9JZBIHaGVhZE9pZBICdGsSA3ZpcxIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYJEgdub1BsYWluFgESBWFueU9mFQIWARIGYWJzZW50EgNlbmMWARIFYWxsT2YVBhYBEgZhYnNlbnQSBXRpdGxlFgESBmFic2VudBIEYm9keRYBEgZhYnNlbnQSC2Jhc2VSZWZOYW1lFgESBmFic2VudBINc291cmNlUmVmTmFtZRYBEgZhYnNlbnQSD2ltcG9ydGVkLmF1dGhvchYBEgZhYnNlbnQSDGltcG9ydGVkLnVybBIIaGFzVGl0bGUWARIFYW55T2YVAhYBEgdwcmVzZW50EgNlbmMWARIHcHJlc2VudBIFdGl0bGUSBWRlbnNlFgESBmlmVGhlbhUCFgESBWVxdWFsFQISCSRyZXZpc2lvbgIBFgESBWVxdWFsFQISBm51bWJlchYBEgNhZGQVAhYBEgdjb3VudE9mFQISBWlzc3VlFgESBnJlcG9JZBIGcmVwb0lkFgESB2NvdW50T2YVAhIFcGF0Y2gWARIGcmVwb0lkEgZyZXBvSWQSEXBfc2VhbGVkSWZQcml2YXRlFgESBWFueU9mFQIWARIIbm90RXF1YWwVAhIDdmlzFgESBWNvbnN0Egdwcml2YXRlFgESBWFsbE9mFQIWARIHcHJlc2VudBIDYXVkFgESB3ByZXNlbnQSCGFzTWVtYmVyEgZtX3NlbGYWARIFYW55T2YVAhYBEgZhYnNlbnQSCGFzTWVtYmVyFgESBWVxdWFsFQISCGFzTWVtYmVyEggkb3duZXJJZBIMaV9wcm92ZW5hbmNlFgESBWFueU9mFQIWARIFYWxsT2YVAhYBEgZhYnNlbnQSCGltcG9ydGVkFgESBmFic2VudBIOdXBzdHJlYW1OdW1iZXIWARIFYWxsT2YVAhYBEgdwcmVzZW50Eghhc01lbWJlchYBEg9sZXNzVGhhbk9yRXF1YWwVAhIFbVJvbGUCARIIb2lkV2lkdGgWARICaW4VAhYBEgVjb3VudBIHaGVhZE9pZBUCAhQCIBIJYXVkTWVtYmVyFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESB3ByZXNlbnQSCGFzTWVtYmVyEgplbmNGcmFtaW5nFgESBWFsbE9mFQMWARIIbm90RXF1YWwVAhYBEgZieXRlQXQVAhIDZW5jAgACAhYBEgZpZlRoZW4VAhYBEgVlcXVhbBUCEgN2aXMWARIFY29uc3QSBnB1YmxpYxYBEghub3RFcXVhbBUCFgESBmJ5dGVBdBUCEgNlbmMCAAIBFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESCG5vdEVxdWFsFQIWARIGYnl0ZUF0FQISA2VuYwIAAgQGcmV2aWV3FgkSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEhFkZXBlbmRlbnRSZXF1aXJlZBYCEgNlbmMVAhIFZXBvY2gSA2F1ZBIDYXVkFQESA2VuYxIKcHJvcGVydGllcxYNEgZyZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WBBIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSCmNvbnRyYWN0SWQSLDVvZnlOb01vOFlyaXVvRUZXNGFUdDF2a2h5ZWN1clhzbzFZeWlmMzI0cmZWEgxkb2N1bWVudFR5cGUSBHJlcG8SBXdoZXJlFgESCnZpc2liaWxpdHkSA3ZpcxIIcG9zaXRpb24CABIHcGF0Y2hJZBYDEgR0eXBlEgppZGVudGlmaWVyEghyZWZlcnNUbxYDEgR0eXBlEhFwZXJtYW5lbnREb2N1bWVudBIMZG9jdW1lbnRUeXBlEgVwYXRjaBIFd2hlcmUWARIGcmVwb0lkEgZyZXBvSWQSCHBvc2l0aW9uAgESB3ZlcmRpY3QWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIBEgdtYXhpbXVtAgUSCHBvc2l0aW9uAgISCWNvbW1pdE9pZBYCEgQkcmVmEgsjLyRkZWZzL29pZBIIcG9zaXRpb24CAxIEYm9keRYCEgQkcmVmEgwjLyRkZWZzL2JvZHkSCHBvc2l0aW9uAgQSA2VuYxYCEgQkcmVmEgsjLyRkZWZzL2VuYxIIcG9zaXRpb24CBRIFZXBvY2gWAhIEJHJlZhILIy8kZGVmcy91MzISCHBvc2l0aW9uAgYSCGltcG9ydGVkFgISBCRyZWYSECMvJGRlZnMvaW1wb3J0ZWQSCHBvc2l0aW9uAgcSDGNvbW1lbnRDb3VudBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0C+///Eghwb3NpdGlvbgIIEgN2aXMWAhIEJHJlZhILIy8kZGVmcy92aXMSCHBvc2l0aW9uAgkSCGFzTWVtYmVyFgISBCRyZWYSDiMvJGRlZnMvbWVtYmVyEghwb3NpdGlvbgIKEgNhdWQWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIBEgdtYXhpbXVtAgISCHBvc2l0aW9uAgsSBW1Sb2xlFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQIEEghwb3NpdGlvbgIMEgdpbmRpY2VzFQIWAxIEbmFtZRIFcGF0Y2gSCnByb3BlcnRpZXMVAhYBEgdwYXRjaElkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEg5yYW5nZUNvdW50YWJsZRMBFgMSBG5hbWUSCHZlcmRpY3RzEgpwcm9wZXJ0aWVzFQMWARIHcGF0Y2hJZBIDYXNjFgESCWNvbW1pdE9pZBIDYXNjFgESB3ZlcmRpY3QSA2FzYxIJY291bnRhYmxlEwESCHJlcXVpcmVkFQcSCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIGcmVwb0lkEgdwYXRjaElkEgd2ZXJkaWN0Egljb21taXRPaWQSA3ZpcxIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYKEgdub1BsYWluFgESBWFueU9mFQIWARIGYWJzZW50EgNlbmMWARIFYWxsT2YVAxYBEgZhYnNlbnQSBGJvZHkWARIGYWJzZW50Eg9pbXBvcnRlZC5hdXRob3IWARIGYWJzZW50EgxpbXBvcnRlZC51cmwSEXBfc2VhbGVkSWZQcml2YXRlFgESBWFueU9mFQIWARIIbm90RXF1YWwVAhIDdmlzFgESBWNvbnN0Egdwcml2YXRlFgESBWFsbE9mFQIWARIHcHJlc2VudBIDYXVkFgESB3ByZXNlbnQSCGFzTWVtYmVyEghvaWRXaWR0aBYBEgJpbhUCFgESBWNvdW50Egljb21taXRPaWQVAgIUAiASBm1fc2VsZhYBEgVhbnlPZhUCFgESBmFic2VudBIIYXNNZW1iZXIWARIFZXF1YWwVAhIIYXNNZW1iZXISCCRvd25lcklkEghsb2NrR2F0ZRYBEgVhbnlPZhUCFgESB3ByZXNlbnQSCGFzTWVtYmVyFgESCGxlc3NUaGFuFQIWARIFc3VtT2YVAxIKdHJhbnNpdGlvbhIFZGVsdGEWARIIdGFyZ2V0SWQSB3BhdGNoSWQCEBINbWVtYmVyVmVyZGljdBYBEgppZlRoZW5FbHNlFQMWARICaW4VAhIHdmVyZGljdBUCAgECAhYBEgVhbGxPZhUCFgESB3ByZXNlbnQSCGFzTWVtYmVyFgESD2xlc3NUaGFuT3JFcXVhbBUCEgVtUm9sZQIBFgESBmlmVGhlbhUCFgESAmluFQISB3ZlcmRpY3QVAgIEAgUWARIGYWJzZW50Eghhc01lbWJlchIJYXVkTWVtYmVyFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA2F1ZAIBFgESB3ByZXNlbnQSCGFzTWVtYmVyEgxpX3Byb3ZlbmFuY2UWARIFYW55T2YVAhYBEgZhYnNlbnQSCGltcG9ydGVkFgESBWFsbE9mFQIWARIHcHJlc2VudBIIYXNNZW1iZXIWARIPbGVzc1RoYW5PckVxdWFsFQISBW1Sb2xlAgESD2F1dGhvck5vVmVyZGljdBYBEgZpZlRoZW4VAhYBEgJpbhUCEgd2ZXJkaWN0FQICAQICFgESCG5vdEVxdWFsFQISCCRvd25lcklkFgESCnJlZmVyZW5jZWQVAhIHcGF0Y2hJZBIIJG93bmVySWQSCmVuY0ZyYW1pbmcWARIFYWxsT2YVAxYBEghub3RFcXVhbBUCFgESBmJ5dGVBdBUCEgNlbmMCAAICFgESBmlmVGhlbhUCFgESBWVxdWFsFQISA3ZpcxYBEgVjb25zdBIGcHVibGljFgESCG5vdEVxdWFsFQIWARIGYnl0ZUF0FQISA2VuYwIAAgEWARIGaWZUaGVuFQIWARIFZXF1YWwVAhIDYXVkAgEWARIIbm90RXF1YWwVAhYBEgZieXRlQXQVAhIDZW5jAgACBBIRZGVsZXRlQ29uc3RyYWludHMWARIMa2VlcFZlcmRpY3RzFgESBW5vdEluFQISB3ZlcmRpY3QVAgIBAgIKdHJhbnNpdGlvbhYJEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASDW93bmVyUmVmZXJzVG8WARIFYW55T2YVBBYEEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIKY29udHJhY3RJZBIsNW9meU5vTW84WXJpdW9FRlc0YVR0MXZraHllY3VyWHNvMVl5aWYzMjRyZlYSDGRvY3VtZW50VHlwZRIKbWFpbnRhaW5lchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhYFEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIKY29udHJhY3RJZBIsNW9meU5vTW84WXJpdW9FRlc0YVR0MXZraHllY3VyWHNvMVl5aWYzMjRyZlYSDGRvY3VtZW50VHlwZRIGd3JpdGVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuEgV3aGVyZRYBEgRyb2xlEgFyFgQSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egxkb2N1bWVudFR5cGUSBWlzc3VlEgZmaW5kQnkWAxIIJG93bmVySWQSAS4SBnJlcG9JZBIGcmVwb0lkEgZudW1iZXISDHRhcmdldE51bWJlchIFd2hlcmUWAhIDJGlkEgh0YXJnZXRJZBIGbnVtYmVyEghhc0F1dGhvchYEEgR0eXBlEhFwZXJtYW5lbnREb2N1bWVudBIMZG9jdW1lbnRUeXBlEgVwYXRjaBIGZmluZEJ5FgMSCCRvd25lcklkEgEuEgZyZXBvSWQSBnJlcG9JZBIGbnVtYmVyEgx0YXJnZXROdW1iZXISBXdoZXJlFgISAyRpZBIIdGFyZ2V0SWQSBm51bWJlchIIYXNBdXRob3ISCnByb3BlcnRpZXMWDBIGcmVwb0lkFgISBCRyZWYSCiMvJGRlZnMvaWQSCHBvc2l0aW9uAgASCHRhcmdldElkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgESBWFueU9mFQIWAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIFaXNzdWUSBXdoZXJlFgMSBnJlcG9JZBIGcmVwb0lkEgZudW1iZXISDHRhcmdldE51bWJlchICdGsSCnRhcmdldEtpbmQWAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIFcGF0Y2gSBXdoZXJlFgMSBnJlcG9JZBIGcmVwb0lkEgZudW1iZXISDHRhcmdldE51bWJlchICdGsSCnRhcmdldEtpbmQSCHBvc2l0aW9uAgESDHRhcmdldE51bWJlchYCEgQkcmVmEgsjLyRkZWZzL251bRIIcG9zaXRpb24CAhIKdGFyZ2V0S2luZBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0C+wD/Eghwb3NpdGlvbgIDEgRraW5kFgUSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIHbWF4aW11bQL7AP8SBGVudW0VDQIBAgICAwIEAgsCDAINAg4CDwIQAhECEgITEghwb3NpdGlvbgIEEgVkZWx0YRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAx8SB21heGltdW0CEBIIcG9zaXRpb24CBRIIYXNBdXRob3IWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvz/////Eghwb3NpdGlvbgIGEgNvaWQWAhIEJHJlZhILIy8kZGVmcy9vaWQSCHBvc2l0aW9uAgcSBnJlYXNvbhYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CAxIIcG9zaXRpb24CCBIJZHVwTnVtYmVyFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CARIHbWF4aW11bQL8/////xIIcG9zaXRpb24CCRIBchYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CAhIIcG9zaXRpb24CChIKY2xvc2VkQnlQchYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0C/P////8SCHBvc2l0aW9uAgsSB2luZGljZXMVAxYEEgRuYW1lEglwZXJUYXJnZXQSCnByb3BlcnRpZXMVARYBEgh0YXJnZXRJZBIDYXNjEgljb3VudGFibGUTARIIc3VtbWFibGUSBWRlbHRhFgMSBG5hbWUSC3BlclJlcG9LaW5kEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIEa2luZBIDYXNjEgljb3VudGFibGUTARYCEgRuYW1lEgRmZWVkEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjEghyZXF1aXJlZBUJEgokY3JlYXRlZEF0EgZyZXBvSWQSCHRhcmdldElkEgx0YXJnZXROdW1iZXISCnRhcmdldEtpbmQSBGtpbmQSBWRlbHRhEghhc0F1dGhvchIBchIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYQEg5hX2tpbmRPZlRhcmdldBYBEgVlcXVhbBUCEgp0YXJnZXRLaW5kFgESBmRpdmlkZRUCEgRraW5kAgoSDWIxX2Nsb3NlRGVsdGEWARIGaWZUaGVuFQIWARICaW4VAhIEa2luZBUDAgECCwIQFgESBWVxdWFsFQISBWRlbHRhAgESDmIyX3Jlb3BlbkRlbHRhFgESBmlmVGhlbhUCFgESAmluFQISBGtpbmQVAwICAgwCERYBEgVlcXVhbBUCEgVkZWx0YQMBEg1iM19vdGhlckRlbHRhFgESBmlmVGhlbhUCFgESAmluFQISBGtpbmQVAwINAg4CDxYBEgppZlRoZW5FbHNlFQMWARIFZXF1YWwVAhIEa2luZAINFgESBWVxdWFsFQISBWRlbHRhAgIWARIKaWZUaGVuRWxzZRUDFgESBWVxdWFsFQISBGtpbmQCDhYBEgVlcXVhbBUCEgVkZWx0YQIIFgESBWVxdWFsFQISBWRlbHRhAw8SDmMxX2Nsb3NlZEFmdGVyFgESBmlmVGhlbhUCFgESAmluFQISBGtpbmQVAgIBAgsWARIFZXF1YWwVAhYBEgZtb2R1bG8VAhYBEgVzdW1PZhUDEgp0cmFuc2l0aW9uEgVkZWx0YRYBEgh0YXJnZXRJZBIIdGFyZ2V0SWQCEAIBEgxjMl9vcGVuQWZ0ZXIWARIGaWZUaGVuFQIWARICaW4VAhIEa2luZBUDAgICDAIPFgESBWVxdWFsFQIWARIGbW9kdWxvFQIWARIFc3VtT2YVAxIKdHJhbnNpdGlvbhIFZGVsdGEWARIIdGFyZ2V0SWQSCHRhcmdldElkAhACABIOYzNfbWVyZ2VkQWZ0ZXIWARIGaWZUaGVuFQIWARIFZXF1YWwVAhIEa2luZAINFgESBWVxdWFsFQIWARIGbW9kdWxvFQIWARIFc3VtT2YVAxIKdHJhbnNpdGlvbhIFZGVsdGEWARIIdGFyZ2V0SWQSCHRhcmdldElkAhACAhINYzRfZHJhZnRBZnRlchYBEgZpZlRoZW4VAhYBEgJpbhUCEgRraW5kFQICDgIRFgESBWVxdWFsFQIWARIGbW9kdWxvFQIWARIFc3VtT2YVAxIKdHJhbnNpdGlvbhIFZGVsdGEWARIIdGFyZ2V0SWQSCHRhcmdldElkAhACCBITYzVfZHJhZnRDbG9zZWRBZnRlchYBEgZpZlRoZW4VAhYBEgVlcXVhbBUCEgRraW5kAhAWARIFZXF1YWwVAhYBEgZtb2R1bG8VAhYBEgVzdW1PZhUDEgp0cmFuc2l0aW9uEgVkZWx0YRYBEgh0YXJnZXRJZBIIdGFyZ2V0SWQCEAIJEgplX21lcmdlT2lkFgESBWFsbE9mFQMWARIFYW55T2YVAhYBEghub3RFcXVhbBUCEgRraW5kAg0WARIHcHJlc2VudBIDb2lkFgESBmlmVGhlbhUCFgESAmluFQISBGtpbmQVAwINAg4CDxYBEgVlcXVhbBUCEgFyAgEWARICaW4VAhIBchUCAgECAhIPZl9hdXRob3JOb01lcmdlFgESBWFueU9mFQIWARIFZXF1YWwVAhIIYXNBdXRob3ICABYBEghub3RFcXVhbBUCEgRraW5kAg0SCG9pZFdpZHRoFgESAmluFQIWARIFY291bnQSA29pZBUDAgACFAIgEgxiNF9sb2NrRGVsdGEWARIGaWZUaGVuFQIWARICaW4VAhIEa2luZBUEAgMCBAISAhMWARIKaWZUaGVuRWxzZRUDFgESAmluFQISBGtpbmQVAgIDAhIWARIFZXF1YWwVAhIFZGVsdGECEBYBEgVlcXVhbBUCEgVkZWx0YQMfEg5jNl9sb2NrZWRBZnRlchYBEgZpZlRoZW4VAhYBEgJpbhUCEgRraW5kFQQCAwIEAhICExYBEgVlcXVhbBUCFgESBmRpdmlkZRUCFgESBXN1bU9mFQMSCnRyYW5zaXRpb24SBWRlbHRhFgESCHRhcmdldElkEgh0YXJnZXRJZAIQFgESBmRpdmlkZRUCFgESA2FkZBUCEgVkZWx0YQIQAiASDGdfbWVtYmVyTG9jaxYBEgVhbnlPZhUCFgESBWVxdWFsFQISCGFzQXV0aG9yAgAWARIFbm90SW4VAhIEa2luZBUEAgMCBAISAhMSB2tfa2luZHMWARICaW4VAhIEa2luZBUNAgECAgIDAgQCCwIMAg0CDgIPAhACEQISAhMB/QAAAaFK3/P4AAH8AAmIFgAB+0zvAAAAAAFSRGFzaCBGb3JnZSB2MiBjb2xsYWJvcmF0aW9uOiBpc3N1ZXMsIHB1bGwgcmVxdWVzdHMsIHRyYW5zaXRpb25zLCBjb21tZW50cywgcmV2aWV3cwACsSp9RfGN+tJ4x47toBNgXqNUHfjf7Dpilh97RK9CGvAQARIP2bOUp5+vquvwtCWQh2D5mnPGrPm317XCn+XZW5ojEQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAAISmsQJMyXIxSUMB+tSFfDhIsUYk1PQlopmkSNJw="
+      },
+      "signature": {
+        "$u8": "r7XGiFuSk0Qb9YbP83qLrMIS+B3tt5XtsYQn1quZ7U6BXNeNnOur2eipf2CTWYdYC6FqIpW3CD4HYVin0LmzCDa8CecJLVtlpDaEyxdirCu655eFnj9zZYjwxxH1MkQN"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "+EKjcZZNareouQRSjab+EHa1spc6ZLJB5iR3WwgR4vc="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 265.53054899999995
+  }
+}

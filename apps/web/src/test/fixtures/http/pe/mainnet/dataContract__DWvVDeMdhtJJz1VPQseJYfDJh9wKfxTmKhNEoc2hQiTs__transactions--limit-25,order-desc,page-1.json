@@ -1,0 +1,83 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/dataContract/DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs/transactions?limit=25&order=desc&page=1"
+  },
+  "recordedAt": "2026-11-13T13:28:12.252Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "type": "BATCH",
+        "action": [
+          {
+            "action": "DOCUMENT_CREATE",
+            "documentIdentifier": "9ek4kMqGBHZtoBq3QatveYmDXHLjigeq4JsNZ77Qvsgi",
+            "tokenIdentifier": null,
+            "recipient": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "owner": {
+          "identifier": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "aliases": [
+            {
+              "alias": "20000100.dash",
+              "status": "ok",
+              "timestamp": "2024-10-03T12:05:03.607Z",
+              "documentId": "2wT3ZdPWG5DZvUpy9sCq2YXFVNTVfM3ra5YF99JxzQqD",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2024-11-05T10:33:53.339Z",
+        "gasUsed": 10377540,
+        "error": null,
+        "hash": "E84220A5C7516B90D2FC5B8B4F4C1A7CA7F500047FE8BBFDE89039A6E6E30CF1"
+      },
+      {
+        "type": "DATA_CONTRACT_UPDATE",
+        "action": null,
+        "owner": {
+          "identifier": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "aliases": [
+            {
+              "alias": "20000100.dash",
+              "status": "ok",
+              "timestamp": "2024-10-03T12:05:03.607Z",
+              "documentId": "2wT3ZdPWG5DZvUpy9sCq2YXFVNTVfM3ra5YF99JxzQqD",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2024-11-04T14:39:51.820Z",
+        "gasUsed": 11757210,
+        "error": null,
+        "hash": "1751DB6EEEC4A4F134F5C99193ED92A9B6F1CC2921FFDB68CE35708F3E0ACB6C"
+      },
+      {
+        "type": "DATA_CONTRACT_CREATE",
+        "action": null,
+        "owner": {
+          "identifier": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "aliases": [
+            {
+              "alias": "20000100.dash",
+              "status": "ok",
+              "timestamp": "2024-10-03T12:05:03.607Z",
+              "documentId": "2wT3ZdPWG5DZvUpy9sCq2YXFVNTVfM3ra5YF99JxzQqD",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2024-10-31T11:46:35.466Z",
+        "gasUsed": 40054480,
+        "error": null,
+        "hash": "07DC2E9A9F0042C6120FB06C53FDC4E1437DF5B4CBBB86FD96583FD5097CC9AD"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 3 }
+  }
+}

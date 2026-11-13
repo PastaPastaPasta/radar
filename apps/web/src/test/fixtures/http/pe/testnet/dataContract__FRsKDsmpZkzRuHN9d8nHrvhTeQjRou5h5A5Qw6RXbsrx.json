@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx"
+  },
+  "recordedAt": "2026-11-13T13:28:27.976Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identifier": "FRsKDsmpZkzRuHN9d8nHrvhTeQjRou5h5A5Qw6RXbsrx",
+    "name": null,
+    "owner": {
+      "identifier": "7Yowk46VwwHqmD5yZyyygggh937aP6h2UW7aQWBdWpM5",
+      "aliases": [
+        {
+          "alias": "my-unit-test-3.dash",
+          "status": "ok",
+          "timestamp": "2024-08-30T18:26:03.394Z",
+          "documentId": "2qsGt3eFi7xsr35ToAa51XEshk9bM7AsRcuuaWz7zTNP",
+          "contested": false
+        }
+      ]
+    },
+    "schema": "{\"tx_metadata\":{\"type\":\"object\",\"indices\":[{\"name\":\"ownerId\",\"properties\":[{\"$ownerId\":\"asc\"}]},{\"name\":\"ownerIdAndCreatedAt\",\"properties\":[{\"$ownerId\":\"asc\"},{\"$createdAt\":\"asc\"}]}],\"required\":[\"keyIndex\",\"encryptionKeyIndex\",\"encryptedMetadata\",\"$createdAt\"],\"properties\":{\"keyIndex\":{\"type\":\"integer\",\"minimum\":0,\"position\":0,\"description\":\"The index of the owners identity public key used to derive the encryption key.\"},\"encryptedMetadata\":{\"type\":\"array\",\"maxItems\":4096,\"minItems\":32,\"position\":2,\"byteArray\":true,\"description\":\"encrypted metadata using AES-CBC-256\"},\"encryptionKeyIndex\":{\"type\":\"integer\",\"minimum\":0,\"position\":1,\"description\":\"The secondary index used to derive the encryption key that is used to encrypt and decrypt encryptedData.\"}},\"additionalProperties\":false},\"identityVerify\":{\"type\":\"object\",\"indices\":[{\"name\":\"ownerId\",\"properties\":[{\"$ownerId\":\"asc\"}]},{\"name\":\"ownerId_NormDomainName_NormLabel\",\"properties\":[{\"$ownerId\":\"asc\"},{\"normalizedParentDomainName\":\"asc\"},{\"normalizedLabel\":\"asc\"}]},{\"name\":\"uniqueUsernameIndex\",\"unique\":true,\"properties\":[{\"normalizedLabel\":\"asc\"}]}],\"required\":[\"url\",\"normalizedLabel\",\"normalizedParentDomainName\"],\"properties\":{\"url\":{\"type\":\"string\",\"format\":\"uri\",\"pattern\":\"^https?://.*\",\"position\":2,\"maxLength\":128,\"description\":\"The identity verification URL to be stored.\"},\"normalizedLabel\":{\"type\":\"string\",\"pattern\":\"^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-]{0,61}[a-hj-km-np-z0-9]$\",\"$comment\":\"Must match a domain document to provide further information. Must be equal to the label in lowercase. \\\"o\\\", \\\"i\\\" and \\\"l\\\" must be replaced with \\\"0\\\" and \\\"1\\\".\",\"position\":0,\"maxLength\":63,\"description\":\"Domain label converted to lowercase for case-insensitive uniqueness validation. \\\"o\\\", \\\"i\\\" and \\\"l\\\" replaced with \\\"0\\\" and \\\"1\\\" to mitigate homograph attack. e.g. 'b0b'\"},\"normalizedParentDomainName\":{\"type\":\"string\",\"pattern\":\"^$|^[a-hj-km-np-z0-9][a-hj-km-np-z0-9-\\\\.]{0,61}[a-hj-km-np-z0-9]$\",\"$comment\":\"Must either be equal to an existing domain or empty to create a top level domain. \\\"o\\\", \\\"i\\\" and \\\"l\\\" must be replaced with \\\"0\\\" and \\\"1\\\". Only the data contract owner can create top level domains.\",\"position\":1,\"maxLength\":63,\"minLength\":0,\"description\":\"A parent domain name in lowercase for case-insensitive uniqueness validation. \\\"o\\\", \\\"i\\\" and \\\"l\\\" replaced with \\\"0\\\" and \\\"1\\\" to mitigate homograph attack. e.g. 'dash'\"}},\"canBeDeleted\":true,\"documentsMutable\":true,\"additionalProperties\":false}}",
+    "version": 1,
+    "txHash": "3CC7F45DABBAAB5AC8DCEAC94B035EC06FC492CA6BDADB8D6C4057132A6EF94E",
+    "timestamp": "2024-08-25T16:57:12.972Z",
+    "isSystem": false,
+    "documentsCount": 13,
+    "tokensCount": 0,
+    "topIdentity": {
+      "identifier": "31ZChZPLH8pw3rLcWkFVJ6RP5fZXnuENoy8BSSdtmb6F",
+      "aliases": [
+        {
+          "alias": "test3.dash",
+          "status": "ok",
+          "timestamp": "2024-08-26T19:47:45.387Z",
+          "documentId": "47JR4N36M4LauM7Czjb5jufxc4biPvVz6XJp8HE49EYH",
+          "contested": false
+        }
+      ]
+    },
+    "identitiesInteracted": 8,
+    "totalGasUsed": 811538020,
+    "averageGasUsed": 57967001,
+    "groups": [],
+    "tokens": [],
+    "description": null,
+    "keywords": []
+  }
+}

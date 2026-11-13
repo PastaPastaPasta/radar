@@ -12,3 +12,729 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "—"
+msgstr "—"
+
+msgid "“{field}” has more than one clause. Use one, or a lower and an upper bound."
+msgstr "У «{field}» більше однієї умови. Залиште одну або задайте нижню й верхню межі."
+
+msgid "“{field}” isn’t in any index of this type, so Platform can’t filter on it."
+msgstr "«{field}» немає в жодному індексі цього типу, тому Platform не може за ним фільтрувати."
+
+msgid "“{field}” needs a clause on “{other}” first: index {index} is read in order, earlier properties before later ones."
+msgstr "Для «{field}» спершу потрібна умова щодо «{other}»: індекс {index} читається по порядку, спочатку ранні властивості."
+
+msgid "“{field}” needs a value."
+msgstr "Для «{field}» потрібне значення."
+
+msgid "“{field}” takes a whole number."
+msgstr "«{field}» приймає ціле число."
+
+msgid "“{field}” takes an identifier: 32 bytes written in base58."
+msgstr "«{field}» приймає ідентифікатор: 32 байти у форматі base58."
+
+msgid "“{field}” takes true or false."
+msgstr "«{field}» приймає true або false."
+
+msgid "“starts with” works on text, and “{field}” isn’t text."
+msgstr "«починається з» працює з текстом, а «{field}» — не текст."
+
+msgid "{changeCount, plural, one {# change} other {# changes}}"
+msgstr "{changeCount, plural, one {# зміна} few {# зміни} many {# змін} other {# зміни}}"
+
+msgid "{count, plural, one {# signer} other {# signers}}"
+msgstr "{count, plural, one {# підписант} few {# підписанти} many {# підписантів} other {# підписанта}}"
+
+msgid "{f}, ascending"
+msgstr "{f}, за зростанням"
+
+msgid "{f}, descending"
+msgstr "{f}, за спаданням"
+
+msgid "{field}: searching “{searched}” for “{typed}” (DPNS stores o, i and l as 0, 1 and 1)"
+msgstr "{field}: пошук «{searched}» замість «{typed}» (DPNS зберігає o, i та l як 0, 1 та 1)"
+
+msgid "{pinnedOrderField}, ascending"
+msgstr "{pinnedOrderField}, за зростанням"
+
+msgid "{pinnedOrderField}, descending"
+msgstr "{pinnedOrderField}, за спаданням"
+
+msgid "{props} properties · {indices} indices"
+msgstr "{props} властивостей · {indices} індексів"
+
+msgid "{signerCount}, power {signedPower} of {requiredPower} required"
+msgstr "{signerCount}, вага {signedPower} із потрібних {requiredPower}"
+
+msgid "A contract can hold only tokens or groups."
+msgstr "Контракт може містити лише токени або лише групи."
+
+msgid "A contract ID"
+msgstr "ID контракту"
+
+msgid "A contract ID is 44 base58 characters or fewer."
+msgstr "ID контракту — не більше 44 символів base58."
+
+msgid "A group lists identities and the power each holds; a decision needs enough power to reach the group’s threshold."
+msgstr "Група перелічує ідентичності та вагу кожної; для рішення потрібно набрати вагу, достатню для порога групи."
+
+msgid "A query can have only one “in” clause."
+msgstr "У запиті може бути лише одна умова «in»."
+
+msgid "A range (<, ≤, >, ≥, starts with) on “{field}” must be on the last property you filter on in index {index}, but “{other}” comes after it."
+msgstr "Діапазон (<, ≤, >, ≥, починається з) за «{field}» має бути на останній фільтрованій властивості індексу {index}, але «{other}» іде після нього."
+
+msgid "a, b, c"
+msgstr "a, b, c"
+
+msgid "Action"
+msgstr "Дія"
+
+msgid "Action details"
+msgstr "Подробиці дії"
+
+msgid "Actions"
+msgstr "Дії"
+
+msgid "Active"
+msgstr "Активна"
+
+msgid "Activity"
+msgstr "Активність"
+
+msgid "Add a filter"
+msgstr "Додати фільтр"
+
+msgid "Added"
+msgstr "Додано"
+
+msgid "All"
+msgstr "Усі"
+
+msgid "All contracts"
+msgstr "Усі контракти"
+
+msgid "All types"
+msgstr "Усі типи"
+
+msgid "Any index"
+msgstr "Будь-який індекс"
+
+msgid "Apply"
+msgstr "Застосувати"
+
+msgid "at block {height}"
+msgstr "на блоці {height}"
+
+msgid "Back to the contract"
+msgstr "Назад до контракту"
+
+msgid "Back to the previous page"
+msgstr "Назад на попередню сторінку"
+
+msgid "Base supply"
+msgstr "Базова пропозиція"
+
+msgid "Browse documents"
+msgstr "Переглянути документи"
+
+msgid "Browse the documents of this type"
+msgstr "Переглянути документи цього типу"
+
+msgid "Can be deleted"
+msgstr "Можна видалити"
+
+msgid "Change or clear the filters to see more."
+msgstr "Змініть або скиньте фільтри, щоб побачити більше."
+
+msgid "Changed"
+msgstr "Змінено"
+
+msgid "Changes"
+msgstr "Зміни"
+
+msgid "Choose a version to see what it changed."
+msgstr "Виберіть версію, щоб побачити, що вона змінила."
+
+msgid "Clear"
+msgstr "Очистити"
+
+msgid "Clear filters"
+msgstr "Скинути фільтри"
+
+msgid "Closed"
+msgstr "Закриті"
+
+msgid "Compare"
+msgstr "Порівняти"
+
+msgid "Compare with"
+msgstr "Порівняти з"
+
+msgid "Comparison"
+msgstr "Порівняння"
+
+msgid "Config"
+msgstr "Конфіг"
+
+msgid "Configuration"
+msgstr "Конфігурація"
+
+msgid "Configuration JSON"
+msgstr "Конфігурація в JSON"
+
+msgid "Contested"
+msgstr "Оспорюваний"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract activity needs Platform Explorer"
+msgstr "Активність контракту потребує Platform Explorer"
+
+msgid "Contracts"
+msgstr "Контракти"
+
+msgid "Created"
+msgstr "Створено"
+
+msgid "Created or last changed by"
+msgstr "Створений або востаннє змінений"
+
+msgid "Current"
+msgstr "Поточний"
+
+msgid "Data"
+msgstr "Дані"
+
+msgid "Data at this revision"
+msgstr "Дані в цій ревізії"
+
+msgid "Data contracts"
+msgstr "Контракти даних"
+
+msgid "Data contracts define what an application stores on Platform: document types, tokens and groups."
+msgstr "Контракти даних визначають, що застосунок зберігає в Platform: типи документів, токени й групи."
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Decimals"
+msgstr "Десяткові знаки"
+
+msgid "Default"
+msgstr "За замовчуванням"
+
+msgid "Deleted"
+msgstr "Видалено"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document data"
+msgstr "Дані документа"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Document types"
+msgstr "Типи документів"
+
+msgid "Documents"
+msgstr "Документи"
+
+msgid "Documents deletable by default"
+msgstr "Документи видалювані за замовчуванням"
+
+msgid "Documents keep history by default"
+msgstr "Документи зберігають історію за замовчуванням"
+
+msgid "Documents mutable by default"
+msgstr "Документи змінювані за замовчуванням"
+
+msgid "Documents of this contract"
+msgstr "Документи цього контракту"
+
+msgid "Documents of type {type}"
+msgstr "Документи типу {type}"
+
+msgid "Featured contracts"
+msgstr "Вибрані контракти"
+
+msgid "Filter documents"
+msgstr "Фільтр документів"
+
+msgid "Filters"
+msgstr "Фільтри"
+
+msgid "Group"
+msgstr "Група"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "Groups of this contract"
+msgstr "Групи цього контракту"
+
+msgid "Hide signers"
+msgstr "Сховати підписантів"
+
+msgid "History"
+msgstr "Історія"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities interacted"
+msgstr "Взаємодіючі ідентичності"
+
+msgid "Identity ID"
+msgstr "ID ідентичності"
+
+msgid "Index"
+msgstr "Індекс"
+
+msgid "Index {index} has no property “{field}” to order by."
+msgstr "В індексі {index} немає властивості «{field}» для сортування."
+
+msgid "Indices of {type}"
+msgstr "Індекси {type}"
+
+msgid "Keeps history"
+msgstr "Зберігає історію"
+
+msgid "Keeps version history"
+msgstr "Зберігає історію версій"
+
+msgid "Kept"
+msgstr "Зберігається"
+
+msgid "Latest transition"
+msgstr "Останній перехід"
+
+msgid "Load more actions"
+msgstr "Завантажити більше дій"
+
+msgid "Load older versions"
+msgstr "Завантажити старіші версії"
+
+msgid "Manage in Bridge"
+msgstr "Керувати в Bridge"
+
+msgid "Maximum supply"
+msgstr "Максимальна пропозиція"
+
+msgid "Member"
+msgstr "Учасник"
+
+msgid "Members"
+msgstr "Учасники"
+
+msgid "Members by power"
+msgstr "Учасники за вагою"
+
+msgid "Metadata"
+msgstr "Метадані"
+
+msgid "Name"
+msgstr "Ім’я"
+
+msgid "Never"
+msgstr "Ніколи"
+
+msgid "Next"
+msgstr "Далі"
+
+msgid "No"
+msgstr "Ні"
+
+msgid "No action has closed yet."
+msgstr "Поки жодну дію не закрито."
+
+msgid "No action is waiting for signatures."
+msgstr "Жодна дія не очікує підписів."
+
+msgid "No contract has this ID on this network."
+msgstr "У цій мережі немає контракту з таким ID."
+
+msgid "No contracts match."
+msgstr "Відповідних контрактів немає."
+
+msgid "No document with this ID in this type."
+msgstr "У цьому типі немає документа з таким ID."
+
+msgid "No documents match."
+msgstr "Відповідних документів немає."
+
+msgid "No filter: the first documents of this type are listed."
+msgstr "Без фільтра: показано перші документи цього типу."
+
+msgid "No indices: documents can be fetched by ID only."
+msgstr "Індексів немає: документи можна отримати лише за ID."
+
+msgid "No more documents."
+msgstr "Більше документів немає."
+
+msgid "No more revisions."
+msgstr "Більше ревізій немає."
+
+msgid "No revisions recorded."
+msgstr "Ревізій не записано."
+
+msgid "No single index holds both “{field}” and “{other}”. Platform answers a query from one index."
+msgstr "Жоден індекс не містить одночасно «{field}» і «{other}». Platform відповідає на запит за одним індексом."
+
+msgid "No transitions match."
+msgstr "Відповідних переходів немає."
+
+msgid "Nobody has created a document of this type yet."
+msgstr "Документів цього типу ще ніхто не створював."
+
+msgid "Not kept"
+msgstr "Не зберігається"
+
+msgid "Of the required"
+msgstr "Від потрібного"
+
+msgid "Only a contract that defines groups, usually for its tokens, has any."
+msgstr "Групи є лише в контракту, який їх визначає, зазвичай для своїх токенів."
+
+msgid "Only one property may have a range (<, ≤, >, ≥, starts with): “{field}” and “{other}” both do."
+msgstr "Діапазон (<, ≤, >, ≥, починається з) може бути лише в однієї властивості: він заданий і для «{field}», і для «{other}»."
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open a contract"
+msgstr "Відкрити контракт"
+
+msgid "Open a contract by ID"
+msgstr "Відкрити контракт за ID"
+
+msgid "Open a contract by its ID above."
+msgstr "Відкрийте контракт за ID вище."
+
+msgid "Open a part of this schema"
+msgstr "Відкрити частину цієї схеми"
+
+msgid "Open groups page"
+msgstr "Відкрити сторінку груп"
+
+msgid "Open in Platform Explorer"
+msgstr "Відкрити в Platform Explorer"
+
+msgid "Open the contract"
+msgstr "Відкрити контракт"
+
+msgid "Open the current version"
+msgstr "Відкрити поточну версію"
+
+msgid "Open the whole schema"
+msgstr "Відкрити всю схему"
+
+msgid "Order by"
+msgstr "Сортування"
+
+msgid "Order by must follow the index’s property order, starting with “{field}”."
+msgstr "Сортування має йти в порядку властивостей індексу й починатися з «{field}»."
+
+msgid "Overview"
+msgstr "Огляд"
+
+msgid "Owner"
+msgstr "Власник"
+
+msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
+msgstr "Власник і дата звужують лише рядки цієї сторінки; Platform Explorer гортає переходи контракту за часом."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers at most {DRIVE_MAX} documents at a time."
+msgstr "Platform відповідає щонайбільше {DRIVE_MAX} документами за раз."
+
+msgid "Platform Explorer didn’t answer, so the transition isn’t known."
+msgstr "Platform Explorer не відповів, тому перехід невідомий."
+
+msgid "Platform Explorer doesn’t cover devnets."
+msgstr "Platform Explorer не охоплює девнети."
+
+msgid "Platform Explorer has no record of this document yet."
+msgstr "У Platform Explorer поки немає запису про цей документ."
+
+msgid "Platform stores only its current version, {currentVersion}. A contract that sets keepsHistory keeps every version."
+msgstr "Platform зберігає лише поточну версію, {currentVersion}. Контракт із keepsHistory зберігає всі версії."
+
+msgid "Platform stores only the latest revision of these documents."
+msgstr "Platform зберігає лише останню ревізію цих документів."
+
+msgid "Position"
+msgstr "Позиція"
+
+msgid "Position {pos}"
+msgstr "Позиція {pos}"
+
+msgid "Power"
+msgstr "Вага"
+
+msgid "power {power}"
+msgstr "вага {power}"
+
+msgid "Previous"
+msgstr "Назад"
+
+msgid "Primary key ($id)"
+msgstr "Первинний ключ ($id)"
+
+msgid "Properties, in order"
+msgstr "Властивості по порядку"
+
+msgid "Property"
+msgstr "Властивість"
+
+msgid "Proposed by"
+msgstr "Запропонував"
+
+msgid "Provenance"
+msgstr "Походження"
+
+msgid "Query"
+msgstr "Запит"
+
+msgid "Read-only"
+msgstr "Лише читання"
+
+msgid "Recorded"
+msgstr "Записано"
+
+msgid "Registered"
+msgstr "Зареєстровано"
+
+msgid "Remove filter"
+msgstr "Прибрати фільтр"
+
+msgid "Removed"
+msgstr "Вилучено"
+
+msgid "Required power"
+msgstr "Потрібна вага"
+
+msgid "Revision"
+msgstr "Ревізія"
+
+msgid "Revision {number}"
+msgstr "Ревізія {number}"
+
+msgid "Revision at least"
+msgstr "Ревізія не нижче"
+
+msgid "Revision pages"
+msgstr "Сторінки ревізій"
+
+msgid "Revisions"
+msgstr "Ревізії"
+
+msgid "Revisions recorded by Platform Explorer"
+msgstr "Ревізії, записані Platform Explorer"
+
+msgid "Rows per page"
+msgstr "Рядків на сторінці"
+
+msgid "Run query"
+msgstr "Виконати запит"
+
+msgid "Schema"
+msgstr "Схема"
+
+msgid "Schema JSON"
+msgstr "Схема в JSON"
+
+msgid "Schema path"
+msgstr "Шлях у схемі"
+
+msgid "Schemas"
+msgstr "Схеми"
+
+msgid "See changes"
+msgstr "Переглянути зміни"
+
+msgid "See its document types"
+msgstr "Переглянути його типи документів"
+
+msgid "See the groups of this contract"
+msgstr "Переглянути групи цього контракту"
+
+msgid "Show signers"
+msgstr "Показати підписантів"
+
+msgid "Showing the first {MAX_CHANGES}."
+msgstr "Показано перші {MAX_CHANGES}."
+
+msgid "starts with"
+msgstr "починається з"
+
+msgid "State"
+msgstr "Стан"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "System"
+msgstr "Система"
+
+msgid "System contracts"
+msgstr "Системні контракти"
+
+msgid "System only"
+msgstr "Лише системні"
+
+msgid "That isn’t a contract ID: it is up to 44 base58 characters."
+msgstr "Це не ID контракту: у ньому не більше 44 символів base58."
+
+msgid "That isn’t a contract ID."
+msgstr "Це не ID контракту."
+
+msgid "That isn’t a document address."
+msgstr "Це не адреса документа."
+
+msgid "That isn’t a group address."
+msgstr "Це не адреса групи."
+
+msgid "That path isn’t in this schema."
+msgstr "Цього шляху немає в схемі."
+
+msgid "The “in” clause on “{field}” takes at most 100 values."
+msgstr "Умова «in» за «{field}» приймає не більше 100 значень."
+
+msgid "The contract couldn’t be read, so whether its history is kept isn’t known."
+msgstr "Контракт не вдалося прочитати, тож невідомо, чи зберігається його історія."
+
+msgid "The document’s data and metadata above come straight from Platform."
+msgstr "Дані та метадані документа вище отримано безпосередньо з Platform."
+
+msgid "The list of every contract needs Platform Explorer"
+msgstr "Список усіх контрактів потребує Platform Explorer"
+
+msgid "The order must include “{field}”, which has an in or range clause."
+msgstr "У сортування потрібно включити «{field}», який має умову in або діапазон."
+
+msgid "The values of the “in” clause on “{field}” must all be different."
+msgstr "Значення умови «in» за «{field}» мають бути всі різними."
+
+msgid "These two versions are the same."
+msgstr "Ці дві версії однакові."
+
+msgid "This contract defines no groups."
+msgstr "Цей контракт не визначає груп."
+
+msgid "This contract defines no tokens."
+msgstr "Цей контракт не визначає токенів."
+
+msgid "This contract doesn’t keep its history."
+msgstr "Цей контракт не зберігає свою історію."
+
+msgid "This contract has no document type “{type}”."
+msgstr "У цьому контракті немає типу документа «{type}»."
+
+msgid "This contract has no document types."
+msgstr "У цьому контракті немає типів документів."
+
+msgid "This contract has no group at position {pos}."
+msgstr "У цьому контракті немає групи на позиції {pos}."
+
+msgid "This contract has no groups."
+msgstr "У цьому контракті немає груп."
+
+msgid "This contract has no version {wantedVersion}."
+msgstr "У цього контракту немає версії {wantedVersion}."
+
+msgid "This document type doesn’t keep its history."
+msgstr "Цей тип документа не зберігає свою історію."
+
+msgid "This group has no members."
+msgstr "У цій групі немає учасників."
+
+msgid "Time"
+msgstr "Час"
+
+msgid "Token ID"
+msgstr "ID токена"
+
+msgid "token position {tokenPosition}"
+msgstr "позиція токена {tokenPosition}"
+
+msgid "Tokens"
+msgstr "Токени"
+
+msgid "Tokens of this contract"
+msgstr "Токени цього контракту"
+
+msgid "Total power"
+msgstr "Загальна вага"
+
+msgid "Transferred"
+msgstr "Передано"
+
+msgid "Transition"
+msgstr "Перехід"
+
+msgid "Transitions"
+msgstr "Переходи"
+
+msgid "Transitions on this contract"
+msgstr "Переходи цього контракту"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Types"
+msgstr "Типи"
+
+msgid "Unique"
+msgstr "Унікальний"
+
+msgid "Updated"
+msgstr "Оновлено"
+
+msgid "Use the documents browser to read this contract’s documents."
+msgstr "Документи цього контракту можна прочитати в оглядачі документів."
+
+msgid "value"
+msgstr "значення"
+
+msgid "Value"
+msgstr "Значення"
+
+msgid "Values, separated by commas"
+msgstr "Значення через кому"
+
+msgid "Version"
+msgstr "Версія"
+
+msgid "Version {fromVersion} to version {toVersion}"
+msgstr "Від версії {fromVersion} до версії {toVersion}"
+
+msgid "Version {toVersion} is the first one recorded, so there is nothing before it to compare with."
+msgstr "Версія {toVersion} — перша із записаних, тож порівнювати її ні з чим."
+
+msgid "Version {version}"
+msgstr "Версія {version}"
+
+msgid "Version history"
+msgstr "Історія версій"
+
+msgid "Versions of this contract"
+msgstr "Версії цього контракту"
+
+msgid "Which transition wrote a document needs Platform Explorer"
+msgstr "Щоб дізнатися, який перехід записав документ, потрібен Platform Explorer"
+
+msgid "With tokens"
+msgstr "З токенами"
+
+msgid "Won’t run"
+msgstr "Не буде виконано"
+
+msgid "Yes"
+msgstr "Так"
