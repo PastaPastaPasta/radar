@@ -39,26 +39,12 @@
         "contractId": "{doc.contract}",
         "type": "{doc.type}",
         "where": [
-          [
-            "normalizedParentDomainName",
-            "==",
-            "dash"
-          ],
-          [
-            "normalizedLabel",
-            "startsWith",
-            "{name_registered_safe}"
-          ]
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "{name_registered_safe}"]
         ],
         "orderBy": [
-          [
-            "normalizedParentDomainName",
-            "asc"
-          ],
-          [
-            "normalizedLabel",
-            "asc"
-          ]
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
         ],
         "limit": 26
       }
@@ -69,26 +55,12 @@
         "contractId": "{doc.contract}",
         "type": "{doc.type}",
         "where": [
-          [
-            "normalizedParentDomainName",
-            "==",
-            "dash"
-          ],
-          [
-            "normalizedLabel",
-            "startsWith",
-            "a"
-          ]
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "a"]
         ],
         "orderBy": [
-          [
-            "normalizedParentDomainName",
-            "asc"
-          ],
-          [
-            "normalizedLabel",
-            "asc"
-          ]
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
         ],
         "limit": 11
       }
@@ -108,26 +80,12 @@
         "contractId": "{doc.contract}",
         "type": "{doc.type}",
         "where": [
-          [
-            "normalizedParentDomainName",
-            "==",
-            "dash"
-          ],
-          [
-            "normalizedLabel",
-            "startsWith",
-            "a"
-          ]
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "a"]
         ],
         "orderBy": [
-          [
-            "normalizedParentDomainName",
-            "asc"
-          ],
-          [
-            "normalizedLabel",
-            "asc"
-          ]
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
         ],
         "limit": 11,
         "startAfter": "6UbpccWTZDFSpxucwMC1RnrEBp3vekU6679ZuspFDHv3"
@@ -170,21 +128,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -204,12 +149,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -218,21 +158,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "11111111111111111111111111111111"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["11111111111111111111111111111111"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -269,12 +196,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -293,12 +215,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -459,12 +376,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -484,12 +396,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -498,21 +405,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -544,12 +438,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -571,12 +460,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -609,12 +493,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -739,12 +618,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ]
@@ -789,26 +663,12 @@
         "contractId": "{doc.contract}",
         "type": "{doc.type}",
         "where": [
-          [
-            "normalizedParentDomainName",
-            "==",
-            "dash"
-          ],
-          [
-            "normalizedLabel",
-            "startsWith",
-            "{name_registered_safe}"
-          ]
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "startsWith", "{name_registered_safe}"]
         ],
         "orderBy": [
-          [
-            "normalizedParentDomainName",
-            "asc"
-          ],
-          [
-            "normalizedLabel",
-            "asc"
-          ]
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
         ],
         "limit": 26
       }
@@ -950,21 +810,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "7Yowk46VwwHqmD5yZyyygggh937aP6h2UW7aQWBdWpM5"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["7Yowk46VwwHqmD5yZyyygggh937aP6h2UW7aQWBdWpM5"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -983,12 +830,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1012,12 +854,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1026,21 +863,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "11111111111111111111111111111111"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["11111111111111111111111111111111"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1079,12 +903,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1141,12 +960,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1155,21 +969,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1178,21 +979,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "C2fZG5jxKbc85FyWu9UGfEkkbSzK74Wz5Hov7cqzf5Gh"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["C2fZG5jxKbc85FyWu9UGfEkkbSzK74Wz5Hov7cqzf5Gh"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1217,12 +1005,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1252,12 +1035,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1266,21 +1044,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1289,21 +1054,8 @@
       {
         "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
         "type": "domain",
-        "where": [
-          [
-            "records.identity",
-            "in",
-            [
-              "7ysNPVoaVZvHWAC7hGn3EmYsbyzizfu8a9Teq3zF6atm"
-            ]
-          ]
-        ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "where": [["records.identity", "in", ["7ysNPVoaVZvHWAC7hGn3EmYsbyzizfu8a9Teq3zF6atm"]]],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1322,12 +1074,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1376,12 +1123,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1482,12 +1224,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ],
@@ -1528,12 +1265,7 @@
             ]
           ]
         ],
-        "orderBy": [
-          [
-            "records.identity",
-            "asc"
-          ]
-        ],
+        "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
     ]
