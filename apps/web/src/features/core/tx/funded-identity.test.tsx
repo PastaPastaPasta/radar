@@ -43,7 +43,7 @@ describe('the identity an asset lock creates @X-02', () => {
       return {
         ...stamp,
         data: new Map(wanted.map((w) => [w, w === id ? 1_000_000n : null])),
-      } as never
+      }
     })
     renderAt(`/tx/${LOCK}`)
     const row = await waitFor(
@@ -64,10 +64,10 @@ describe('the identity an asset lock creates @X-02', () => {
     const real = sdk.call.bind(sdk)
     vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) =>
       method === 'identities.balances'
-        ? (Promise.resolve({
+        ? Promise.resolve({
             ...stamp,
             data: new Map((args as { ids: string[] }).ids.map((w) => [w, null])),
-          }) as never)
+          })
         : real(net, method, args, signal),
     )
     renderAt(`/tx/${LOCK}`)

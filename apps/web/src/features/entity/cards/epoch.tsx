@@ -36,7 +36,7 @@ export function EpochHoverCard({ id }: { id: string }) {
   if (query.isPending) return <CardLoading />
   if (query.isError) return <ErrorState error={query.error} source="sdk" compact />
   const [epoch, next] = query.data.data.filter((e) => e.index >= index)
-  if (!epoch || epoch.index !== index) {
+  if (epoch?.index !== index) {
     return (
       <HoverCardLayout
         {...common}
@@ -46,7 +46,7 @@ export function EpochHoverCard({ id }: { id: string }) {
       />
     )
   }
-  const ended = next && next.index === index + 1 ? next : undefined
+  const ended = next?.index === index + 1 ? next : undefined
   return (
     <div data-hover-card="epoch">
       <HoverCardLayout

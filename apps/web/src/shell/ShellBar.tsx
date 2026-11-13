@@ -75,7 +75,7 @@ export function ShellBar() {
       const { url } = last
         ? switchTarget(proposed, {
             routeId: last.routeId,
-            params: last.params as Record<string, string>,
+            params: last.params,
           })
         : { url: proposed }
       e.preventDefault()

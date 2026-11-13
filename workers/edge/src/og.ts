@@ -203,7 +203,7 @@ const SOURCES: Record<OgKind, Source> = {
     fetchUrl: (net, id) => {
       const [contract, type, doc] = id.split('/')
       const q = new URLSearchParams({ contract_id: contract!, document_type_name: type! })
-      return `${PE[net]}/document/${doc}?${q}`
+      return `${PE[net]}/document/${doc}?${q.toString()}`
     },
     describe: (id, b) => {
       const [, type, doc] = id.split('/')

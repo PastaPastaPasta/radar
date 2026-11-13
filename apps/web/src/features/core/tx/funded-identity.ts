@@ -1,4 +1,5 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
+import { viewKeys } from '@/data/query/keys'
 import { sdkBatchers } from '@/data/sdk/batchers'
 import { useNetwork } from '@/features/entity'
 import { base58Encode } from '@/lib/base58'
@@ -39,7 +40,7 @@ export function useFundedIdentities(txid: string, outputCount: number) {
   const net = useNetwork()
   const count = Math.min(outputCount, MAX_OUTPUTS)
   const derived = useQuery({
-    queryKey: ['funded-identity-ids', txid, count],
+    queryKey: viewKeys(net, 'entity-funded-ids', { txid, count }),
     queryFn: () => Promise.all(Array.from({ length: count }, (_, i) => fundedIdentityId(txid, i))),
     staleTime: Infinity,
     enabled: count > 0,

@@ -3,12 +3,24 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { budget } from '@/data/dapi-core/budget'
 import type { SourceStamp } from '@/data/envelope'
 import type { MnRow } from '@/data/masternodes/rows'
-import { pe } from '@/data/pe/client'
 import { sdk } from '@/data/sdk'
 import { writeSourceMode } from '@/lib/source-mode'
 import { systemContract } from '@/lib/well-known'
 import type { EntityKind } from '@/ui/base'
 import { renderInApp } from '../test-utils'
+
+const pe = vi.hoisted(() => ({
+  token: vi.fn(),
+  dataContract: vi.fn(),
+  blocks: vi.fn(),
+  block: vi.fn(),
+  transaction: vi.fn(),
+  contestedResource: vi.fn(),
+}))
+vi.mock('@/data/pe/client', async (original) => ({
+  ...(await original<Record<string, unknown>>()),
+  pe,
+}))
 
 const rows = vi.hoisted(() => ({ value: [] as unknown }))
 vi.mock('@/data/masternodes/rows', () => ({
@@ -44,8 +56,7 @@ function sdkAnswers(answers: Record<string, Answer>) {
   return vi.spyOn(sdk, 'call').mockImplementation((_net, method, args) => {
     if (!(method in answers)) return Promise.reject(new Error(`unexpected SDK call ${method}`))
     const a = answers[method]
-    const data =
-      typeof a === 'function' ? (a as Handler)(method, args as Record<string, unknown>) : a
+    const data = typeof a === 'function' ? a(method, args as Record<string, unknown>) : a
     return Promise.resolve({ ...sdkStamp, data }) as never
   })
 }
@@ -59,6 +70,7 @@ const card = async (kind: EntityKind, id: string, url = '/') => {
 }
 
 beforeEach(() => {
+  for (const fn of Object.values(pe)) fn.mockReset()
   rows.value = []
   vi.spyOn(budget, 'snapshot').mockReturnValue({
     pressure: 'ok',
@@ -68,8 +80,8 @@ beforeEach(() => {
     usedLastMinute: 10,
   })
   vi.spyOn(budget, 'canAfford').mockReturnValue(true)
-  vi.spyOn(pe, 'token').mockResolvedValue({ ...peStamp, data: null } as never)
-  vi.spyOn(pe, 'dataContract').mockResolvedValue({ ...peStamp, data: null } as never)
+  pe.token.mockResolvedValue({ ...peStamp, data: null })
+  pe.dataContract.mockResolvedValue({ ...peStamp, data: null })
 })
 afterEach(() => {
   vi.restoreAllMocks()
@@ -321,14 +333,14 @@ describe('Platform block and state transition cards @X-06', () => {
   }
 
   it('shows height, time, transitions and proposer of a block', async () => {
-    vi.spyOn(pe, 'blocks').mockResolvedValue({
+    pe.blocks.mockResolvedValue({
       ...peStamp,
       data: { items: [{ header, txs: [{}] }], page: 1, limit: 1, total: 1 },
-    } as never)
-    vi.spyOn(pe, 'block').mockResolvedValue({
+    })
+    pe.block.mockResolvedValue({
       ...peStamp,
       data: { header, txs: [{}, {}, {}], quorum: null },
-    } as never)
+    })
     await card('platform-block', '468960')
     const root = (await screen.findByText('Transitions')).closest<HTMLElement>(
       '[data-hover-card="platform-block"]',
@@ -338,7 +350,7 @@ describe('Platform block and state transition cards @X-06', () => {
   })
 
   it('shows type, status, owner and block of a transition', async () => {
-    vi.spyOn(pe, 'transaction').mockResolvedValue({
+    pe.transaction.mockResolvedValue({
       ...peStamp,
       data: {
         hash: HEX,
@@ -348,7 +360,7 @@ describe('Platform block and state transition cards @X-06', () => {
         blockHeight: 99,
         owner: { identifier: ID, aliases: [] },
       },
-    } as never)
+    })
     await card('transition', HEX)
     const root = (await screen.findByText('Success')).closest<HTMLElement>(
       '[data-hover-card="transition"]',
@@ -361,9 +373,9 @@ describe('Platform block and state transition cards @X-06', () => {
     'asks no indexer in Decentralized only mode, and says it needs one (%s)',
     async (kind) => {
       writeSourceMode('decentralized')
-      const blocks = vi.spyOn(pe, 'blocks')
-      const block = vi.spyOn(pe, 'block')
-      const transaction = vi.spyOn(pe, 'transaction')
+      const blocks = pe.blocks
+      const block = pe.block
+      const transaction = pe.transaction
       await card(kind, kind === 'transition' ? HEX : '468960')
       const root = (await screen.findByText(/Needs an indexer/)).closest<HTMLElement>(
         `[data-hover-card="${kind}"]`,
@@ -390,10 +402,10 @@ describe('contest card @X-06', () => {
       },
       'documents.query': [],
     })
-    vi.spyOn(pe, 'contestedResource').mockResolvedValue({
+    pe.contestedResource.mockResolvedValue({
       ...peStamp,
       data: { endTimestamp: NOW + 86_400_000 },
-    } as never)
+    })
     await card('contest', 'alice')
     const root = (await screen.findByText('Leading')).closest<HTMLElement>(
       '[data-hover-card="contest"]',
@@ -414,7 +426,7 @@ describe('contest card @X-06', () => {
       },
       'documents.query': [],
     })
-    const contested = vi.spyOn(pe, 'contestedResource')
+    const contested = pe.contestedResource
     await card('contest', 'alice')
     expect(await screen.findByText('Winner')).toBeInTheDocument()
     expect(screen.queryByText('Ends')).toBeNull()

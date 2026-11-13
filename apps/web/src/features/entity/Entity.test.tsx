@@ -42,7 +42,7 @@ describe('Entity labels', () => {
 })
 
 function setTouchScreen(touch: boolean) {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: touch && query.includes('hover: none'),
     media: query,
     addEventListener: () => undefined,
@@ -51,7 +51,7 @@ function setTouchScreen(touch: boolean) {
     removeListener: () => undefined,
     dispatchEvent: () => false,
     onchange: null,
-  })) as typeof window.matchMedia
+  })
 }
 
 const finger = (x = 5, y = 5) => ({ pointerType: 'touch', clientX: x, clientY: y })
@@ -129,8 +129,8 @@ describe('hover cards on a touch screen @X-06', () => {
     fireEvent.pointerDown(link, finger())
     act(() => void vi.advanceTimersByTime(500))
     await screen.findByText(`card for ${OTHER}`)
-    await act(async () => {
-      act(() => void vi.advanceTimersByTime(50))
+    act(() => {
+      void vi.advanceTimersByTime(50)
       fireEvent.pointerDown(document.body, finger(300, 300))
       fireEvent.click(document.body)
     })

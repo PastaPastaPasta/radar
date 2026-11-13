@@ -69,7 +69,7 @@ export function LongPressCard({
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Anchor virtualRef={anchor as React.RefObject<Measurable>} />
+      <Popover.Anchor virtualRef={anchor} />
       <span
         style={{ display: 'contents' }}
         onPointerDown={onPointerDown}
