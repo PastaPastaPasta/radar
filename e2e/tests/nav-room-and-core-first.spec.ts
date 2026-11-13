@@ -127,52 +127,54 @@ test.describe('section rail room on phones', () => {
 })
 
 test.describe('Core figures first on the home page', () => {
-  test('sit directly under the hero plate content, before the lanes, on desktop @HY-01 @HY-03', async ({
+  test('sit directly under the Dash Core heading, before its lists, on desktop @HY-01 @HY-03', async ({
     page,
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
     await page.goto('/')
     await settled(page)
-    const headline = page.locator('.rx-scope [data-headline]')
-    await expect(headline.locator('.rx-stat')).toHaveCount(4)
-    const [h, pulse, lanes] = await Promise.all([
+    const headline = page.locator('#core [data-headline]')
+    await expect(headline.locator('.rx-fig')).toHaveCount(3)
+    const [h, head, lists, hero] = await Promise.all([
       headline.boundingBox(),
-      page.locator('.rx-pulse').boundingBox(),
-      page.locator('.rx-lanes').boundingBox(),
+      page.locator('#core .rx-sec__head').boundingBox(),
+      page.locator('#core .rx-home__lists').boundingBox(),
+      page.locator('.rx-hero').boundingBox(),
     ])
-    expect(h!.y, 'right under the pulse cards').toBeLessThan(pulse!.y + pulse!.height + 40)
-    expect(h!.y + h!.height).toBeLessThanOrEqual(lanes!.y)
-    expect(h!.y + (await page.evaluate(() => scrollY)), 'within the first screen').toBeLessThan(900)
-    for (const label of ['Height', 'Difficulty', 'Circulating supply', 'Blockchain size']) {
+    expect(head!.y, 'the section follows the hero').toBeGreaterThanOrEqual(hero!.y + hero!.height)
+    expect(h!.y, 'right under the heading and its source line').toBeLessThan(
+      head!.y + head!.height + 80,
+    )
+    expect(h!.y + h!.height).toBeLessThanOrEqual(lists!.y)
+    for (const label of ['Difficulty', 'Circulating supply', 'Blockchain size']) {
       await expect(headline).toContainText(label)
     }
-    await expect(page.locator('#core'), 'the pending list is a column of the activity').toHaveCount(
-      0,
-    )
-    await expect(page.locator('.rx-activity__grid > .rx-card')).toHaveCount(3)
+    await expect(page.locator('#core .rx-home__lists > .rx-card')).toHaveCount(2)
   })
 
   for (const [name, path] of [
     ['mainnet', '/'],
     ['testnet', '/?network=testnet'],
   ] as const) {
-    test(`keeps the latest activity heading on the first desktop screen on ${name} @IN-01 @HY-03 @IN-16`, async ({
+    test(`shows the claim, the Core height with its lock state and the whole map on the first desktop screen on ${name} @IN-01 @HY-01 @IN-16`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
       await page.goto(path)
-      const heading = page.locator('#h-latest')
-      await expect(heading).toBeVisible()
+      const core = page.locator('[data-pulse="core"]')
+      await expect(core.locator('.rx-tick')).toContainText(/\d/)
+      await expect(page.locator('[data-map="nodes"] circle.mn').first()).toBeVisible()
       await settled(page)
-      await expect(page.locator('.rx-lane .rx-blk').first()).toBeVisible()
-      const top = () =>
-        heading.evaluate((el) => Math.round(el.getBoundingClientRect().top + window.scrollY))
-      await expect.poll(top, { message: 'heading top' }).toBeLessThan(900 - 24)
-      const box = (await heading.boundingBox())!
-      expect(box.y + box.height, 'the whole heading is inside 900 px').toBeLessThanOrEqual(900)
-      const strip = (await page.locator('.rx-scope [data-headline]').boundingBox())!
-      expect(strip.height, 'the Core figures are one compact strip').toBeLessThan(80)
-      await expect(page.locator('.rx-scope [data-headline] .rx-stat')).toHaveCount(4)
+      for (const part of [
+        page.getByRole('heading', { level: 1 }),
+        core,
+        page.locator('.rx-hero__actions'),
+        page.locator('.rx-hero__map .rx-map'),
+      ]) {
+        const box = (await part.boundingBox())!
+        expect(box.y, 'starts on the first screen').toBeGreaterThanOrEqual(0)
+        expect(box.y + box.height, 'ends on the first screen').toBeLessThanOrEqual(900)
+      }
     })
   }
 
@@ -185,43 +187,36 @@ test.describe('Core figures first on the home page', () => {
       await page.goto('/')
       await settled(page)
       const barTop = 844 - (await tabBarHeight(page))
-      for (const part of ['.rx-pulse__value', '.rx-pulse__meta']) {
+      for (const part of ['.rx-fig__value', '.rx-fig__note']) {
         const b = await page.locator(`[data-pulse="core"] ${part}`).boundingBox()
         expect(b!.y + b!.height, `Core ${part} above the tab bar`).toBeLessThanOrEqual(barTop)
       }
       await expect(page.locator('.rx-maplegend')).toBeVisible()
-      const headline = page.locator('.rx-scope [data-headline]')
+      const headline = page.locator('#core [data-headline]')
       const box = await headline.boundingBox()
       expect(box!.y + (await page.evaluate(() => scrollY))).toBeLessThan(844 * 2)
       expect(box!.y).toBeGreaterThan(0)
-      const pending = await page.locator('#core').boundingBox()
-      expect(box!.y, 'before the pending list').toBeLessThan(pending!.y)
-      await page.getByRole('link', { name: 'Core figures' }).click()
-      await expect(page).toHaveURL(/#core-figures$/)
-      await expect.poll(async () => (await headline.boundingBox())?.y ?? -1).toBeLessThan(844 / 2)
+      const lists = await page.locator('#core .rx-home__lists').boundingBox()
+      expect(box!.y, 'before the Core lists').toBeLessThan(lists!.y)
     })
   }
 
-  test('keeps the Platform-locked-to-Core line on a phone, without costing a line @IN-01', async ({
+  test('says that Platform blocks are locked to Core blocks on a phone, clear of the live control @IN-01', async ({
     page,
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
     await page.goto('/')
     await settled(page)
-    const title = page.locator('#h-lanes')
-    await expect(title).toHaveAttribute('title', 'Each Platform block is locked to a Core block.')
-    const caption = page.locator('.rx-lanes__short')
+    const caption = page.locator('#platform .rx-sec__desc')
+    await expect(caption).toHaveText('Each Platform block is locked to a Core block.')
     await expect(caption).toBeVisible()
-    const [t, c, live] = await Promise.all([
-      title.boundingBox(),
+    const [c, live] = await Promise.all([
       caption.boundingBox(),
-      page.locator('.rx-lanes__head .rx-live').boundingBox(),
+      page.locator('#platform .rx-live').boundingBox(),
     ])
-    expect(
-      Math.abs(c!.y + c!.height / 2 - (t!.y + t!.height / 2)),
-      'on the title line',
-    ).toBeLessThan(12)
-    expect(c!.x + c!.width, 'clear of the live control').toBeLessThanOrEqual(live!.x)
+    const beside = c!.x + c!.width <= live!.x
+    const stacked = c!.y + c!.height <= live!.y || live!.y + live!.height <= c!.y
+    expect(beside || stacked, 'the line and the live control do not overlap').toBe(true)
   })
 })
 

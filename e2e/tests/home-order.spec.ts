@@ -8,237 +8,216 @@ const NETWORKS = [
   ['testnet', '/?network=testnet'],
 ] as const
 
+const overflow = () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+
 test.describe('one home order for eyes and keyboard', () => {
   for (const [name, path] of NETWORKS) {
-    test(`shows the three activity columns and a first row of each on the first desktop screen on ${name} @IN-01 @HY-03 @IN-16`, async ({
+    test(`follows the hero with Dash Core and then Dash Platform, each with its lists side by side, on ${name} @IN-01 @HY-03 @IN-16`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
       await page.goto(path)
-      await expect(page.locator('#h-latest')).toBeVisible()
+      await expect(page.getByRole('table', { name: 'Latest Core blocks' })).toBeVisible()
       await settled(page)
-      const viewportHeight = await page.evaluate(() => window.innerHeight)
-      const columns = page.locator('.rx-activity__grid > .rx-card')
-      await expect(columns).toHaveCount(3)
-      const titles = await columns.locator('.rx-card__title').allTextContents()
-      expect(titles.map((t) => t.trim())).toEqual([
-        'Core blocks',
-        'Platform transitions',
-        'Pending transactions',
-      ])
-      const boxes = await columns.evaluateAll((cards) =>
+      const sections = page.locator('.rx-home > section')
+      await expect(sections).toHaveCount(3)
+      expect(
+        await sections.evaluateAll((els: Element[]) => els.map((el) => el.id || el.className)),
+      ).toEqual(['rx-hero', 'core', 'platform'])
+      const tops = await sections.evaluateAll((els) =>
+        els.map((el) => el.getBoundingClientRect().top),
+      )
+      expect(tops).toEqual([...tops].sort((x, y) => x - y))
+
+      const core = page.locator('#core .rx-home__lists > .rx-card')
+      await expect(core).toHaveCount(2)
+      const titles = await core.locator('.rx-card__title').allTextContents()
+      expect(titles.map((title) => title.trim())).toEqual(['Core blocks', 'Pending transactions'])
+      const boxes = await core.evaluateAll((cards) =>
         cards.map((card) => {
-          const rect = (el: Element | null) => {
-            const r = el?.getBoundingClientRect()
-            return r ? { top: r.top, bottom: r.bottom, left: r.left } : null
-          }
+          const r = card.getBoundingClientRect()
           const first = card.querySelector('tbody tr') ?? card.querySelector('.rx-empty__t')
-          return {
-            card: rect(card),
-            heading: rect(card.querySelector('.rx-card__title')),
-            first: rect(first),
-            note: card.querySelector('.rx-empty__b') !== null,
-          }
+          return { top: r.top, left: r.left, first: first !== null }
         }),
       )
-      boxes.forEach((b, i) => {
-        expect(
-          b.heading!.bottom,
-          `column ${i} heading inside the first screen`,
-        ).toBeLessThanOrEqual(viewportHeight)
-        expect(b.first, `column ${i} has a first row or note`).not.toBeNull()
-        expect(
-          b.first!.bottom,
-          `column ${i} first row inside the first screen`,
-        ).toBeLessThanOrEqual(viewportHeight)
-        expect(Math.abs(b.card!.top - boxes[0]!.card!.top), `column ${i} is level`).toBeLessThan(2)
-      })
-      expect(boxes[0]!.card!.left).toBeLessThan(boxes[1]!.card!.left)
-      expect(boxes[1]!.card!.left).toBeLessThan(boxes[2]!.card!.left)
+      expect(Math.abs(boxes[0]!.top - boxes[1]!.top), 'the two lists are level').toBeLessThan(2)
+      expect(boxes[0]!.left).toBeLessThan(boxes[1]!.left)
+      for (const b of boxes) expect(b.first, 'a first row or a note').toBe(true)
       if (name === 'testnet') {
-        await expect(columns.nth(2)).toContainText(/since you opened this page/)
+        await expect(core.nth(1)).toContainText(/since you opened this page/)
       } else {
-        expect(boxes[2]!.note).toBe(false)
-        expect(await columns.nth(2).locator('tbody tr').count()).toBeGreaterThanOrEqual(1)
+        expect(await core.nth(1).locator('tbody tr').count()).toBeGreaterThanOrEqual(1)
       }
-      await expect(columns.nth(2).getByRole('link', { name: 'Mempool' })).toBeVisible()
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-        ),
-      ).toBeLessThanOrEqual(0)
+      await expect(core.nth(1).getByRole('link', { name: 'Mempool' })).toBeVisible()
+      expect(await page.evaluate(overflow)).toBeLessThanOrEqual(0)
     })
   }
 
   for (const [name, path] of NETWORKS) {
-    test(`shows size, the reported pool and "tx" counts on the Core rows, and size on the pending rows, in the first desktop screen on ${name} @IN-01 @HY-03`, async ({
+    test(`shows transactions, size and the reported pool on the Core rows, and size on the pending rows, on ${name} @IN-01 @HY-03`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
       await page.goto(path)
-      await expect(page.locator('#h-latest')).toBeVisible()
+      const blocks = page.getByRole('table', { name: 'Latest Core blocks' })
+      await expect(blocks.locator('tbody tr').first()).toBeVisible()
       await settled(page)
-      const viewportHeight = await page.evaluate(() => window.innerHeight)
-      const columns = page.locator('.rx-activity__grid > .rx-card')
-      const rows = (card: number) =>
-        columns
-          .nth(card)
-          .locator('tbody tr')
-          .first()
-          .evaluate((tr) => {
-            const pseudo = (td: Element, which: '::before' | '::after') => {
-              const c = getComputedStyle(td, which).content
-              return c === 'none' || c === 'normal' ? '' : c.replace(/^"|"$/g, '')
-            }
-            return {
-              bottom: tr.getBoundingClientRect().bottom,
-              cells: [...tr.querySelectorAll('td')]
-                .filter((td) => td.getBoundingClientRect().width > 0)
-                .map((td) =>
-                  `${pseudo(td, '::before')}${td.textContent?.trim() ?? ''}${pseudo(td, '::after')}`
-                    .replace(/\s+/g, ' ')
-                    .trim(),
-                ),
-            }
-          })
-      const size = /^[\d.,]+ (B|kB|MB)$/
-      const core = await rows(0)
-      expect(core.bottom, 'first Core row inside the first screen').toBeLessThanOrEqual(
-        viewportHeight,
+      const headers = (await blocks.locator('thead th').allTextContents()).map((h) => h.trim())
+      expect(headers, 'the pool column shows where any row names one').toEqual([
+        'Block',
+        'Age',
+        'Txs',
+        'Size',
+        ...(name === 'mainnet' ? ['Mined by'] : []),
+      ])
+      const cells = (await blocks.locator('tbody tr').first().locator('td').allTextContents()).map(
+        (c) => c.replace(/\s+/g, ' ').trim(),
       )
-      expect(
-        core.cells.some((c) => /^[\d,]+ tx$/.test(c)),
-        'the count carries its unit',
-      ).toBe(true)
-      expect(
-        core.cells.some((c) => size.test(c)),
-        'the size is shown',
-      ).toBe(true)
-      expect(
-        core.cells.some((c) => /^Mined by \S/.test(c)),
-        'the reported pool is shown',
-      ).toBe(name === 'mainnet')
+      const size = /^[\d.,]+ (B|kB|MB)$/
+      expect(cells[2], 'the transaction count').toMatch(/^[\d,]+$/)
+      expect(cells[3], 'the size').toMatch(size)
+      if (name === 'mainnet') expect(cells[4], 'the reported pool').toMatch(/\S/)
       if (name === 'mainnet') {
-        const pending = await rows(2)
-        expect(pending.bottom).toBeLessThanOrEqual(viewportHeight)
+        const pending = page.getByRole('table', { name: 'Pending transactions' })
+        const row = (await pending.locator('tbody tr').first().locator('td').allTextContents()).map(
+          (c) => c.replace(/\s+/g, ' ').trim(),
+        )
         expect(
-          pending.cells.some((c) => size.test(c)),
+          row.some((c) => size.test(c)),
           'the pending size is shown',
         ).toBe(true)
-        expect(pending.cells.some((c) => c.endsWith('DASH'))).toBe(true)
+        expect(row.some((c) => c.endsWith('DASH'))).toBe(true)
       }
     })
   }
 
-  test('links the charts from the Latest activity header on desktop @IN-01 @HY-02', async ({
+  test('links the charts from the Dash Core header on desktop @IN-01 @HY-02', async ({
     page,
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
     await page.goto('/')
-    await expect(page.locator('#h-latest')).toBeVisible()
-    const link = page.locator('.rx-activity .rx-sec__head').getByRole('link', { name: 'Charts' })
+    await expect(page.locator('#h-core')).toBeVisible()
+    const link = page.locator('#core .rx-sec__head').getByRole('link', { name: 'Charts' })
     await expect(link).toBeVisible()
     await expect(link).toHaveAttribute('href', /\/charts/)
   })
 
-  for (const width of [1024, 1100, 1280]) {
-    test(`keeps the three columns inside their cards at ${width} px @IN-01 @HY-03`, async ({
+  for (const width of [1024, 1100, 1280, 1440, 1920]) {
+    test(`keeps the map, the figures and every list inside the page at ${width} px @IN-01 @HY-03`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/')
-      await expect(page.locator('#h-latest')).toBeVisible()
+      await expect(page.locator('[data-map="nodes"] circle.mn').first()).toBeVisible()
+      await expect(page.getByRole('table', { name: 'Latest Platform blocks' })).toBeVisible()
       await settled(page)
-      const spill = await page.locator('.rx-activity__grid > .rx-card').evaluateAll((cards) =>
+      expect(await page.evaluate(overflow), 'no sideways scroll').toBeLessThanOrEqual(0)
+      const spill = await page.locator('.rx-home__lists > .rx-card').evaluateAll((cards) =>
         cards.map((card) => {
           const table = card.querySelector('table')?.getBoundingClientRect()
           return table ? Math.round(table.right - card.getBoundingClientRect().right) : 0
         }),
       )
+      expect(spill).toHaveLength(4)
       for (const s of spill) expect(s).toBeLessThanOrEqual(0)
+      const [copy, map] = await Promise.all([
+        page.locator('.rx-hero__copy').boundingBox(),
+        page.locator('.rx-hero__map .rx-map').boundingBox(),
+      ])
+      expect(map!.x, 'the map sits beside the words').toBeGreaterThan(copy!.x)
+      expect(map!.width, 'and takes at least two fifths of the width').toBeGreaterThan(width * 0.4)
+      const words = await page
+        .locator('.rx-hero h1, .rx-hero__lede, [data-hero-figures] .rx-fig__value')
+        .evaluateAll((els) =>
+          els.map((el) => {
+            const range = document.createRange()
+            range.selectNodeContents(el)
+            return range.getBoundingClientRect().right
+          }),
+        )
+      for (const right of words) {
+        expect(right, 'no words run under the map').toBeLessThanOrEqual(map!.x + 1)
+      }
     })
   }
 
-  for (const [name, path] of [
-    ['mainnet', '/'],
-    ['testnet', '/?network=testnet'],
-  ] as const) {
-    test(`sizes each activity card to its own rows instead of the tallest one on ${name} @IN-01`, async ({
+  for (const [name, path] of NETWORKS) {
+    test(`sizes each list card to its own rows instead of the tallest one on ${name} @IN-01`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
       await page.goto(path)
-      await expect(page.locator('#h-latest')).toBeVisible()
+      await expect(page.getByRole('table', { name: 'Latest Core blocks' })).toBeVisible()
       await settled(page)
-      const cards = await page.locator('.rx-activity__grid > .rx-card').evaluateAll((els) =>
-        els.map((el) => {
-          const box = el.getBoundingClientRect()
-          const last = el.lastElementChild!.getBoundingClientRect()
-          return { top: box.top, height: box.height, blank: box.bottom - last.bottom }
-        }),
-      )
-      expect(cards).toHaveLength(3)
-      for (const c of cards) expect(c.blank, 'no empty area under the last row').toBeLessThan(40)
-      for (const c of cards) expect(Math.abs(c.top - cards[0]!.top)).toBeLessThan(2)
+      for (const id of ['core', 'platform']) {
+        const cards = await page.locator(`#${id} .rx-home__lists > .rx-card`).evaluateAll((els) =>
+          els.map((el) => {
+            const box = el.getBoundingClientRect()
+            const last = el.lastElementChild!.getBoundingClientRect()
+            return { top: box.top, blank: box.bottom - last.bottom }
+          }),
+        )
+        expect(cards).toHaveLength(2)
+        for (const c of cards) expect(c.blank, 'no empty area under the last row').toBeLessThan(40)
+        expect(Math.abs(cards[0]!.top - cards[1]!.top)).toBeLessThan(2)
+      }
     })
   }
 
-  test('puts the pending list full width under the two block lists on a tablet @IN-01 @HY-03', async ({
+  test('stacks the map under the words, and each pair of lists, on a tablet @IN-01 @HY-03', async ({
     page,
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
     await page.setViewportSize({ width: 800, height: 900 })
     await page.goto('/')
-    await expect(page.locator('#h-latest')).toBeVisible()
+    await expect(page.getByRole('table', { name: 'Latest Core blocks' })).toBeVisible()
     await settled(page)
-    const cards = page.locator('.rx-activity__grid > .rx-card')
-    await expect(cards).toHaveCount(3)
-    const [core, platform, pending] = await cards.evaluateAll((els) =>
-      els.map((el) => el.getBoundingClientRect().toJSON() as DOMRect),
-    )
-    expect(Math.abs(core!.top - platform!.top)).toBeLessThan(2)
-    expect(core!.left).toBeLessThan(platform!.left)
-    expect(pending!.top, 'under both').toBeGreaterThanOrEqual(
-      Math.max(core!.bottom, platform!.bottom) - 1,
-    )
-    expect(pending!.width, 'full width').toBeGreaterThan(core!.width + platform!.width)
+    const [copy, map] = await Promise.all([
+      page.locator('.rx-hero__copy').boundingBox(),
+      page.locator('.rx-hero__map .rx-map').boundingBox(),
+    ])
+    expect(map!.y, 'the map comes after the words').toBeGreaterThanOrEqual(copy!.y + copy!.height)
+    expect(map!.width, 'at nearly the full width').toBeGreaterThan(800 * 0.85)
+    const [blocks, pending] = await page
+      .locator('#core .rx-home__lists > .rx-card')
+      .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON() as DOMRect))
+    expect(pending!.top, 'pending under the blocks').toBeGreaterThanOrEqual(blocks!.bottom - 1)
+    expect(await page.evaluate(overflow)).toBeLessThanOrEqual(0)
   })
 
   for (const width of [320, 390, 430]) {
-    test(`follows the page's order with the keyboard at ${width} px: timeline, then the pending band, then the block lists @IN-01 @HY-03 @HY-18`, async ({
+    test(`follows the page's order with the keyboard at ${width} px: the hero, then Dash Core, then Dash Platform @IN-01 @HY-03 @HY-18`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
       await page.setViewportSize({ width, height: 844 })
       await page.goto('/')
-      await expect(page.locator('#lane-plat .rx-blk').first()).toBeVisible()
+      await expect(page.getByRole('table', { name: 'Latest Platform blocks' })).toBeVisible()
       await settled(page)
-      const last = page.locator('#lane-plat a.rx-blk').last()
-      await last.focus()
+      await page.locator('.rx-hero a').first().focus()
       const section = () =>
         page.evaluate(() => {
           const el = document.activeElement
           if (!el) return 'none'
-          if (el.closest('.rx-scope')) return 'hero'
-          if (el.closest('#core')) return 'pending'
-          if (el.closest('.rx-home__activity')) return 'activity'
+          if (el.closest('.rx-hero')) return 'hero'
+          if (el.closest('#core')) return 'core'
+          if (el.closest('#platform')) return 'platform'
           return 'outside'
         })
-      const seen: string[] = []
-      for (let i = 0; i < 70; i++) {
+      const seen: string[] = [await section()]
+      for (let i = 0; i < 160; i++) {
         await page.keyboard.press('Tab')
         const s = await section()
         if (s === 'outside') break
         seen.push(s)
       }
-      expect(seen[0], 'the next stop after the timeline is the pending band').toBe('pending')
-      const rank = { hero: 0, pending: 1, activity: 2 } as const
+      const rank = { hero: 0, core: 1, platform: 2 } as const
       const ranks = seen.map((s) => rank[s as keyof typeof rank])
       expect(ranks, 'sections are reached in the order they are drawn').toEqual(
-        [...ranks].sort((a, b) => a - b),
+        [...ranks].sort((x, y) => x - y),
       )
-      expect(seen).toContain('activity')
+      expect(new Set(seen)).toEqual(new Set(['hero', 'core', 'platform']))
     })
   }
 
@@ -252,14 +231,17 @@ test.describe('one home order for eyes and keyboard', () => {
       )
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/')
-      await expect(page.locator('#h-latest')).toBeVisible()
+      await expect(page.getByRole('table', { name: 'Latest Platform blocks' })).toBeVisible()
       await settled(page)
       const report = await page.evaluate(() => {
         const home = document.querySelector('.rx-home')!
         const containers = [
           home,
-          home.querySelector('.rx-home__activity')!,
-          home.querySelector('.rx-activity__grid')!,
+          home.querySelector('.rx-hero')!,
+          home.querySelector('.rx-hero__copy')!,
+          home.querySelector('[data-hero-figures]')!,
+          ...home.querySelectorAll('.rx-home__sec'),
+          ...home.querySelectorAll('.rx-home__lists'),
         ]
         const sections = containers.flatMap((c) => [...c.children] as HTMLElement[])
         const problems: string[] = []

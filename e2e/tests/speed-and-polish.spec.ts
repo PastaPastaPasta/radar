@@ -190,20 +190,20 @@ test.describe('unit switch', () => {
 
 test.describe('phone home', () => {
   for (const width of [320, 390, 430]) {
-    test(`reaches the latest Core blocks sooner at ${width} px @IN-01 @HY-01`, async ({
+    test(`shows the claim and the Core height on the first screen at ${width} px @IN-01 @HY-01`, async ({
       page,
     }, testInfo) => {
       test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
       await page.setViewportSize({ width, height: 844 })
       await page.goto('/')
+      await expect(page.locator('[data-pulse="core"] .rx-tick')).toContainText(/\d/)
       await settled(page)
       expect(await page.evaluate(() => window.scrollY)).toBe(0)
       const barTop = 844 - (await tabBarHeight(page))
+      const claim = await page.getByRole('heading', { level: 1 }).boundingBox()
       const core = await page.locator('[data-pulse="core"]').boundingBox()
-      const lane = await page.locator('.rx-lane').first().boundingBox()
+      expect(claim!.y + claim!.height, 'the claim comes first').toBeLessThanOrEqual(core!.y)
       expect(core!.y + core!.height).toBeLessThanOrEqual(barTop)
-      expect(lane!.y, 'the Core block lane starts above the tab bar').toBeLessThan(barTop - 40)
-      expect(lane!.y, 'the lane follows the Core card').toBeGreaterThan(core!.y + core!.height)
     })
   }
 })

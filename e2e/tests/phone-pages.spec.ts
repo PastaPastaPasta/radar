@@ -23,13 +23,19 @@ test.describe('Core height on the home card', () => {
     })
   }
 
-  test('shows the newest Core height once on a phone, and as the last chip elsewhere @IN-01 @HY-01', async ({
+  test('states the newest Core height once as a figure, and lists that block first @IN-01 @HY-01', async ({
     page,
   }) => {
     await page.goto('/')
-    const lane = page.locator('#lane-core')
-    await expect(lane.locator(`a.rx-blk[data-h="${TIP - 1}"]`)).toBeAttached()
-    await expect(lane.locator(`a.rx-blk[data-h="${TIP}"]`)).toHaveCount(onPhone(page) ? 0 : 1)
+    await expect(page.locator('[data-pulse="core"]')).toContainText(TIP.toLocaleString('en-US'))
+    await expect(page.locator('[data-pulse="core"]')).toHaveCount(1)
+    await expect(page.locator('[data-headline]')).toContainText('Difficulty')
+    await expect(page.locator('[data-headline]')).not.toContainText(TIP.toLocaleString('en-US'))
+    const first = page
+      .getByRole('table', { name: 'Latest Core blocks' })
+      .locator('tbody tr')
+      .first()
+    await expect(first.locator(`a[href="/block/${TIP}"]`).first()).toBeAttached()
   })
 })
 
