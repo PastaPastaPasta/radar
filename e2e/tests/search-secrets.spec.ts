@@ -72,6 +72,34 @@ test.describe('secrets in the search page', () => {
     ).toEqual([])
   })
 
+  test('a held-back phrase asks no index, Explorer or Platform node, on the page and in the palette @X-01 @NX-05', async ({
+    page,
+  }) => {
+    const requests = watchRequests(page)
+    await page.goto('/search')
+    const box = page.getByRole('searchbox', { name: 'Search Radar' })
+    await expect(box).toBeVisible()
+    const before = requests.length
+
+    await box.fill(PHRASE)
+    await box.press('Enter')
+    await expect(page.getByText(NOTICE)).toBeVisible()
+
+    await page.goto('/')
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    await page.keyboard.press('/')
+    const dialog = page.getByRole('dialog', { name: 'Search Radar' })
+    await dialog.getByRole('combobox').fill(PHRASE)
+    await page.keyboard.press('Enter')
+    await expect(dialog.getByText(NOTICE)).toBeVisible()
+    await page.waitForTimeout(500)
+
+    const lookups = requests
+      .slice(before)
+      .filter((url) => /\/x\/hy\/\w+\/search|pe\.dashhq\.org\/search/.test(url))
+    expect(lookups, 'search lookups while a phrase was typed').toEqual([])
+  })
+
   test('ordinary text still goes to the URL @X-01', async ({ page }) => {
     await page.goto('/search')
     const box = page.getByRole('searchbox', { name: 'Search Radar' })
@@ -105,7 +133,9 @@ test.describe('secrets in the search page', () => {
     await box.press('Enter')
 
     await expect(page).toHaveURL(/q=game-zone-arena\.dash$/)
-    await expect(page.locator('[data-classified]')).toContainText(/a contract or token name/)
+    await expect(page.locator('[data-classified]')).toContainText(
+      /could be a name, a contract or a token/,
+    )
     await expect(page.getByText(PARTIAL_NOTICE)).toBeHidden()
   })
 

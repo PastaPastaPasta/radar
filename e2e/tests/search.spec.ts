@@ -1,6 +1,8 @@
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { routeBuilt } from '../routes/uni-s'
 
 const MAINNET_ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const MAINNET_P2SH = '7iRPy8FEHBzbChrktsG85YbDZ3SuiCxsNq'
@@ -23,13 +25,15 @@ interface Sample {
   result?: { name: RegExp; href: string }
   /** A reading whose page is not built yet: search must not offer it. */
   withheld?: RegExp
+  /** A destination whose page is not built yet: no link may lead there. */
+  withheldRoute?: { route: string; prefix: string }
 }
 
 const samples: Sample[] = [
   {
     label: 'a Core height',
     q: '2569992',
-    looksLike: /a number: a Core height, Platform height or epoch/,
+    looksLike: /a number: could be a Core height, a Platform height or an epoch/,
     result: { name: /Core block 2,569,992/, href: '/block/2569992' },
   },
   {
@@ -59,7 +63,7 @@ const samples: Sample[] = [
   {
     label: 'an identity or contract ID',
     q: CONTRACT,
-    looksLike: /an ID: an identity, contract, token or document/,
+    looksLike: /an ID: could be an identity, a contract or a token/,
   },
   {
     label: 'a mainnet address',
@@ -124,7 +128,7 @@ const samples: Sample[] = [
   {
     label: 'a name typed with capitals, offered as its name page',
     q: 'Pshenmic.dash',
-    looksLike: /text: a contract or token name/,
+    looksLike: /text: could be a name, a contract or a token/,
     result: { name: /pshenmic\.dash/, href: '/name/pshenmic' },
   },
 ]
@@ -155,6 +159,11 @@ test.describe('search page', () => {
         await expect(page.locator('[data-classified]')).toBeVisible()
         await expect(page.getByRole('link', { name: s.withheld })).toHaveCount(0)
       }
+      if (s.withheldRoute && !routeBuilt(s.withheldRoute.route)) {
+        await expect(page.locator('[data-classified]')).toBeVisible()
+        await settled(page)
+        await expect(page.locator(`a[href^="${s.withheldRoute.prefix}"]`)).toHaveCount(0)
+      }
     })
   }
 
@@ -169,12 +178,12 @@ test.describe('search page', () => {
     await expect(page.getByText('No match for', { exact: false })).toContainText('Testnet')
   })
 
-  test('says plainly that nonsense matched no Core record and offers only a name guess @IN-10', async ({
+  test('says plainly that nonsense matched nothing and offers only a name guess @IN-10', async ({
     page,
   }) => {
     await page.goto('/search?q=zzzz-not-a-real-core-thing-12345')
 
-    await expect(page.getByText(/No match for .* as a Core record/)).toBeVisible()
+    await expect(page.getByText(/No match for .* on Mainnet/)).toBeVisible()
     const guess = page.getByRole('region', { name: 'A guess' })
     await expect(guess.getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Platform' })).toHaveCount(0)
@@ -349,11 +358,11 @@ test.describe('palette', () => {
   test('keeps the network on the page it opens @X-01 @X-03', async ({ page }) => {
     const dialog = await openPalette(page, '/status?network=testnet')
 
-    await dialog.getByRole('combobox').fill('2569992')
-    await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
+    await dialog.getByRole('combobox').fill('1500000')
+    await expect(dialog.getByRole('option', { name: /Core block 1,500,000/ })).toBeVisible()
     await page.keyboard.press('Enter')
 
-    await expect(page).toHaveURL(/\/block\/2569992\?network=testnet$/)
+    await expect(page).toHaveURL(/\/block\/1500000\?network=testnet$/)
   })
 
   test('fits a phone and has no serious accessibility violations @X-08', async ({ page }) => {

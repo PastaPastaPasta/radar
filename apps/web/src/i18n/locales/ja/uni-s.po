@@ -31,17 +31,26 @@ msgstr "{0, plural, other {トランザクション #件}}"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}。Radar はこれをどこにも送信しません。"
 
+msgid "{type} in contract {contract}"
+msgstr "コントラクト {contract} の {type}"
+
 msgid "a 40-character hash: a public-key hash"
 msgstr "40文字のハッシュ（公開鍵ハッシュ）"
 
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "64文字のハッシュ（ブロック、トランザクション、ProTx、またはトランジション）"
+msgid "a 64-character hash: could be a Core block, a transaction, a Platform block, a state transition or an identity"
+msgstr "64文字のハッシュ（Core ブロック、トランザクション、Platform ブロック、ステートトランジション、またはアイデンティティの可能性があります）"
+
+msgid "A contested name: masternodes vote on who gets it"
+msgstr "争奪中の名前（マスターノードが取得者を投票で決めます）"
 
 msgid "a Core address"
 msgstr "Core アドレス"
 
 msgid "a date: the Core blocks of that UTC day"
 msgstr "日付（そのUTC日のCoreブロック）"
+
+msgid "a document path: a contract, a document type and a document ID"
+msgstr "ドキュメントのパス（コントラクト、ドキュメントタイプ、ドキュメントID）"
 
 msgid "A guess"
 msgstr "推測"
@@ -55,14 +64,14 @@ msgstr "推測：Radar はこの名前が存在するか確認していません
 msgid "a name"
 msgstr "名前"
 
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "数値（Coreの高さ、Platformの高さ、またはエポック）"
+msgid "a number: could be a Core height, a Platform height or an epoch"
+msgstr "数値（Coreの高さ、Platformの高さ、またはエポックの可能性があります）"
 
 msgid "a Platform address"
 msgstr "Platform アドレス"
 
-msgid "an ID: an identity, contract, token or document"
-msgstr "ID（アイデンティティ、コントラクト、トークン、またはドキュメント）"
+msgid "an ID: could be an identity, a contract or a token"
+msgstr "ID（アイデンティティ、コントラクト、またはトークンの可能性があります）"
 
 msgid "an IP address: a masternode’s service address"
 msgstr "IPアドレス（マスターノードのサービスアドレス）"
@@ -70,6 +79,17 @@ msgstr "IPアドレス（マスターノードのサービスアドレス）"
 #. placeholder {0}: short(hash)
 msgid "Block {0}"
 msgstr "ブロック {0}"
+
+msgid "Contest for {alias}"
+msgstr "{alias} の争奪"
+
+#. placeholder {0}: shortId(c.identifier)
+#. placeholder {0}: shortId(c.normalized)
+msgid "Contract {0}"
+msgstr "コントラクト {0}"
+
+msgid "Contract {contract}, position {position}"
+msgstr "コントラクト {contract}、位置 {position}"
 
 msgid "Core"
 msgstr "Core"
@@ -84,6 +104,9 @@ msgstr "Core アドレス · {0} · {1, plural, other {トランザクション 
 
 msgid "Core address · no activity seen"
 msgstr "Core アドレス · 取引は確認されていません"
+
+msgid "Core addresses"
+msgstr "Core アドレス"
 
 msgid "Core block"
 msgstr "Core ブロック"
@@ -101,6 +124,9 @@ msgstr "Core のブロック高とハッシュ、トランザクション ID、�
 msgid "Core blocks on {label}"
 msgstr "{label} の Core ブロック"
 
+msgid "Core blocks, transactions, proposals and masternodes"
+msgstr "Core ブロック、トランザクション、提案、マスターノード"
+
 msgid "Core height"
 msgstr "Core の高さ"
 
@@ -114,6 +140,17 @@ msgstr "ブロック {0} の Core トランザクション"
 msgid "Core transaction, unconfirmed"
 msgstr "Core トランザクション（未承認）"
 
+msgid "Data contracts"
+msgstr "データコントラクト"
+
+#. placeholder {0}: shortId(d.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Document {0}"
+msgstr "ドキュメント {0}"
+
+msgid "Documents"
+msgstr "ドキュメント"
+
 msgid "Enabled"
 msgstr "有効"
 
@@ -122,6 +159,9 @@ msgstr "エポック {label}"
 
 msgid "Evonode {where}"
 msgstr "エボノード {where}"
+
+msgid "Executed on Platform"
+msgstr "Platform で実行済み"
 
 msgid "Go to"
 msgstr "移動"
@@ -135,11 +175,22 @@ msgstr "推測"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "高さ、ハッシュ、アドレス、ProTx、IP、ID、名前…"
 
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "ID によるアイデンティティ、コントラクト、トークン、ドキュメント、または公開鍵ハッシュによるアイデンティティ"
+msgid "Identities"
+msgstr "アイデンティティ"
+
+msgid "Identities, contracts and tokens by ID or name, a document by contract/type/ID, or an identity by its public-key hash"
+msgstr "アイデンティティ、コントラクト、トークンをIDまたは名前で、ドキュメントをコントラクト/タイプ/IDで、アイデンティティを公開鍵ハッシュで"
+
+#. placeholder {0}: shortId(i.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Identity {0}"
+msgstr "アイデンティティ {0}"
 
 msgid "Identity with this public-key hash"
 msgstr "この公開鍵ハッシュを持つアイデンティティ"
+
+msgid "In contract {contract}"
+msgstr "コントラクト {contract} 内"
 
 #. placeholder {0}: description.join(' · ')
 msgid "Looks like {0}"
@@ -147,6 +198,9 @@ msgstr "{0} のようです"
 
 msgid "Lookups in an index were skipped, so some matches may be missing"
 msgstr "インデックスでの検索が省略されたため、一致するものが一部表示されない場合があります"
+
+msgid "Lookups in an index were skipped, so some matches may be missing: {skippedList}"
+msgstr "インデックスでの検索が省略されたため、一致するものが一部表示されない場合があります: {skippedList}"
 
 msgid "Masternode"
 msgstr "マスターノード"
@@ -158,8 +212,20 @@ msgstr "マスターノード {0}"
 msgid "Masternode {where}"
 msgstr "マスターノード {where}"
 
+msgid "Masternodes"
+msgstr "マスターノード"
+
+msgid "Masternodes by address"
+msgstr "アドレスによるマスターノード"
+
 msgid "Masternodes by ProTx hash or IP address"
 msgstr "ProTx ハッシュまたは IP アドレスによるマスターノード"
+
+msgid "Name of identity {ownerId}"
+msgstr "アイデンティティ {ownerId} の名前"
+
+msgid "Names"
+msgstr "名前"
 
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr ".dash で終わる名前、エポック、日付（1日分の Core ブロック）"
@@ -167,14 +233,17 @@ msgstr ".dash で終わる名前、エポック、日付（1日分の Core ブ�
 msgid "Network"
 msgstr "ネットワーク"
 
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "{network} に「{query}」に一致する Core のレコードはありません"
+msgid "No match for “{query}” on {network}"
+msgstr "{network} に「{query}」に一致するものはありません"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "上の結果には裏付けがありません。入力内容の読み方のひとつにすぎません。"
 
 msgid "Open on {where}"
 msgstr "{where} で開く"
+
+msgid "Owned by {owner}"
+msgstr "所有者: {owner}"
 
 msgid "Pages"
 msgstr "ページ"
@@ -188,14 +257,26 @@ msgstr "Platform アドレス"
 msgid "Platform block {label}"
 msgstr "Platform ブロック {label}"
 
+msgid "Platform blocks"
+msgstr "Platform ブロック"
+
 msgid "Platform blocks, state transitions and Platform addresses"
 msgstr "Platform のブロック、ステートトランジション、アドレス"
 
 msgid "Platform epoch"
 msgstr "Platform のエポック"
 
+msgid "Platform epochs"
+msgstr "Platform のエポック"
+
+msgid "Platform Explorer’s search"
+msgstr "Platform Explorer の検索"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
+
+msgid "Platform validator"
+msgstr "Platform バリデーター"
 
 msgid "PoSe banned"
 msgstr "PoSe で BAN"
@@ -207,6 +288,9 @@ msgstr "提案 {0}"
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar は、この種の入力に答えられるすべてのソースを確認しました。"
 
+msgid "Radar checked every source that can answer this kind of input. A document has no lookup by its ID alone: paste its contract, type and ID as contract/type/ID."
+msgstr "Radar はこの種の入力に答えられるすべてのソースを確認しました。ドキュメントはIDだけでは検索できません。コントラクト/タイプ/ID の形式で貼り付けてください。"
+
 msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
 msgstr "Radar はこれに該当するブロック、トランザクション、アドレス、マスターノードなどのレコードを見つけられませんでした。高さ、ハッシュ、アドレス、ID、名前をお試しください。"
 
@@ -215,6 +299,9 @@ msgstr "Radar がリカバリーフレーズを必要とすることはないた
 
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar がこれを必要とすることはないため、どこにも送信されず、アドレスバーや履歴にも残りません。"
+
+msgid "Rejected by Platform"
+msgstr "Platform に拒否されました"
 
 msgid "Results"
 msgstr "結果"
@@ -245,8 +332,18 @@ msgstr "{net} で「{trimmed}」のすべての結果を見る"
 msgid "Some sources didn’t answer: {0}."
 msgstr "応答しなかったソース: {0}。"
 
-msgid "text: a contract or token name"
-msgstr "テキスト（コントラクトまたはトークンの名前）"
+msgid "Started {started}"
+msgstr "開始: {started}"
+
+#. placeholder {0}: shortId(hash)
+msgid "State transition {0}"
+msgstr "ステートトランジション {0}"
+
+msgid "State transitions"
+msgstr "ステートトランジション"
+
+msgid "text: could be a name, a contract or a token"
+msgstr "テキスト（名前、コントラクト、またはトークンの可能性があります）"
 
 msgid "That could be part of a recovery phrase"
 msgstr "リカバリーフレーズの一部の可能性があります"
@@ -265,6 +362,14 @@ msgstr "これはテストネットのアドレスです"
 
 msgid "This is a testnet Platform address"
 msgstr "これはテストネットの Platform アドレスです"
+
+#. placeholder {0}: shortId(c.normalized)
+#. placeholder {0}: shortId(tok.identifier)
+msgid "Token {0}"
+msgstr "トークン {0}"
+
+msgid "Tokens"
+msgstr "トークン"
 
 #. placeholder {0}: short(hash)
 msgid "Transaction {0}"

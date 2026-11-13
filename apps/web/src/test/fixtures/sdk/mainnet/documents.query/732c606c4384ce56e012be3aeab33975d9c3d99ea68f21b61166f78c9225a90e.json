@@ -1,0 +1,108 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "where": [
+      ["normalizedParentDomainName", "==", "dash"],
+      ["normalizedLabel", "startsWith", "f00"]
+    ],
+    "orderBy": [
+      ["normalizedParentDomainName", "asc"],
+      ["normalizedLabel", "asc"]
+    ],
+    "limit": 5
+  },
+  "recordedAt": "2026-11-13T19:22:37.812Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "GB4AW6JPEGLxC8BPyKD1rFjL5VKiJYeCaFg5WiALaw4N",
+        "ownerId": "ERjqbbMXoaJ8C2KKhpg9pU5EwhRgKMXxSPzKygnLUyt",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1787831307641,
+        "updatedAt": 1787831307641,
+        "transferredAt": 1787831307641,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "fool",
+          "normalizedLabel": "f001",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "ERjqbbMXoaJ8C2KKhpg9pU5EwhRgKMXxSPzKygnLUyt"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "BgftaBTLzMUJNPZdgKWwyd27QjNirnoeyMoU95a7A66G",
+        "ownerId": "BMJWm8wKmbApR7nQ6q7RG3HgD8maJ8t7B4yWBKRe7aZ6",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1725579670138,
+        "updatedAt": 1725579670138,
+        "transferredAt": 1725579670138,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "Food2Go",
+          "normalizedLabel": "f00d2g0",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "BMJWm8wKmbApR7nQ6q7RG3HgD8maJ8t7B4yWBKRe7aZ6"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 470808,
+      "coreChainLockedHeight": 2571750,
+      "epoch": 88,
+      "timeMs": 1794597679751,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAC9Zgx7BM8MUk3kpsL5hvPYOHMMDqSW/ohs="
+      },
+      "signature": {
+        "$u8": "hgkarDynUpOqjDNm714/yCkoOLLpc55JJhECchWgGtoK+IFxbEYJKy7XBNmdKWP6AVUH5Yt2OnaiMQhmV6AI7nTdrFETi4H+ZdFSQwEv4yda3G/8vIY7InKPzOYriqSa"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "Ji89J580+0IHshU7px2129iBdh0WOUuTNU9TqeDQI9A="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 839.2578099999992
+  }
+}

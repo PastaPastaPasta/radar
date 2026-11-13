@@ -31,17 +31,26 @@ msgstr "{0, plural, one {# transação} many {# de transações} other {# transa
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. O Radar não o envia para lado nenhum."
 
+msgid "{type} in contract {contract}"
+msgstr "{type} no contrato {contract}"
+
 msgid "a 40-character hash: a public-key hash"
 msgstr "um hash de 40 caracteres: um hash de chave pública"
 
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "um hash de 64 caracteres: um bloco, uma transação, um ProTx ou uma transição"
+msgid "a 64-character hash: could be a Core block, a transaction, a Platform block, a state transition or an identity"
+msgstr "um hash de 64 caracteres: pode ser um bloco Core, uma transação, um bloco da Platform, uma transição de estado ou uma identidade"
+
+msgid "A contested name: masternodes vote on who gets it"
+msgstr "Um nome em disputa: os masternodes votam em quem fica com ele"
 
 msgid "a Core address"
 msgstr "um endereço Core"
 
 msgid "a date: the Core blocks of that UTC day"
 msgstr "uma data: os blocos Core desse dia UTC"
+
+msgid "a document path: a contract, a document type and a document ID"
+msgstr "um caminho de documento: um contrato, um tipo de documento e um ID de documento"
 
 msgid "A guess"
 msgstr "Um palpite"
@@ -55,14 +64,14 @@ msgstr "Um palpite: o Radar não verificou se este nome existe"
 msgid "a name"
 msgstr "um nome"
 
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "um número: uma altura Core, uma altura Platform ou uma época"
+msgid "a number: could be a Core height, a Platform height or an epoch"
+msgstr "um número: pode ser uma altura Core, uma altura Platform ou uma época"
 
 msgid "a Platform address"
 msgstr "um endereço Platform"
 
-msgid "an ID: an identity, contract, token or document"
-msgstr "um ID: uma identidade, um contrato, um token ou um documento"
+msgid "an ID: could be an identity, a contract or a token"
+msgstr "um ID: pode ser uma identidade, um contrato ou um token"
 
 msgid "an IP address: a masternode’s service address"
 msgstr "um endereço IP: o endereço de serviço de um masternode"
@@ -70,6 +79,17 @@ msgstr "um endereço IP: o endereço de serviço de um masternode"
 #. placeholder {0}: short(hash)
 msgid "Block {0}"
 msgstr "Bloco {0}"
+
+msgid "Contest for {alias}"
+msgstr "Disputa por {alias}"
+
+#. placeholder {0}: shortId(c.identifier)
+#. placeholder {0}: shortId(c.normalized)
+msgid "Contract {0}"
+msgstr "Contrato {0}"
+
+msgid "Contract {contract}, position {position}"
+msgstr "Contrato {contract}, posição {position}"
 
 msgid "Core"
 msgstr "Core"
@@ -84,6 +104,9 @@ msgstr "Endereço Core · {0} · {1, plural, one {# transação} many {# de tran
 
 msgid "Core address · no activity seen"
 msgstr "Endereço Core · sem atividade registada"
+
+msgid "Core addresses"
+msgstr "Endereços Core"
 
 msgid "Core block"
 msgstr "Bloco Core"
@@ -101,6 +124,9 @@ msgstr "Alturas e hashes de blocos Core, IDs de transações e endereços"
 msgid "Core blocks on {label}"
 msgstr "Blocos Core de {label}"
 
+msgid "Core blocks, transactions, proposals and masternodes"
+msgstr "Blocos Core, transações, propostas e masternodes"
+
 msgid "Core height"
 msgstr "Altura do Core"
 
@@ -114,6 +140,17 @@ msgstr "Transação Core no bloco {0}"
 msgid "Core transaction, unconfirmed"
 msgstr "Transação Core, não confirmada"
 
+msgid "Data contracts"
+msgstr "Contratos de dados"
+
+#. placeholder {0}: shortId(d.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Document {0}"
+msgstr "Documento {0}"
+
+msgid "Documents"
+msgstr "Documentos"
+
 msgid "Enabled"
 msgstr "Ativado"
 
@@ -122,6 +159,9 @@ msgstr "Época {label}"
 
 msgid "Evonode {where}"
 msgstr "Evonode {where}"
+
+msgid "Executed on Platform"
+msgstr "Executada na Platform"
 
 msgid "Go to"
 msgstr "Ir para"
@@ -135,11 +175,22 @@ msgstr "Palpite"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "Altura, hash, endereço, ProTx, IP, ID, nome…"
 
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "Identidades, contratos, tokens e documentos por ID, ou uma identidade pelo hash da sua chave pública"
+msgid "Identities"
+msgstr "Identidades"
+
+msgid "Identities, contracts and tokens by ID or name, a document by contract/type/ID, or an identity by its public-key hash"
+msgstr "Identidades, contratos e tokens por ID ou nome, um documento por contrato/tipo/ID, ou uma identidade pelo hash da sua chave pública"
+
+#. placeholder {0}: shortId(i.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Identity {0}"
+msgstr "Identidade {0}"
 
 msgid "Identity with this public-key hash"
 msgstr "Identidade com este hash de chave pública"
+
+msgid "In contract {contract}"
+msgstr "No contrato {contract}"
 
 #. placeholder {0}: description.join(' · ')
 msgid "Looks like {0}"
@@ -147,6 +198,9 @@ msgstr "Parece {0}"
 
 msgid "Lookups in an index were skipped, so some matches may be missing"
 msgstr "Foram ignoradas pesquisas num índice, por isso podem faltar algumas correspondências"
+
+msgid "Lookups in an index were skipped, so some matches may be missing: {skippedList}"
+msgstr "Foram ignoradas pesquisas num índice, por isso podem faltar algumas correspondências: {skippedList}"
 
 msgid "Masternode"
 msgstr "Masternode"
@@ -158,8 +212,20 @@ msgstr "Masternode {0}"
 msgid "Masternode {where}"
 msgstr "Masternode {where}"
 
+msgid "Masternodes"
+msgstr "Masternodes"
+
+msgid "Masternodes by address"
+msgstr "Masternodes por endereço"
+
 msgid "Masternodes by ProTx hash or IP address"
 msgstr "Masternodes por hash ProTx ou endereço IP"
+
+msgid "Name of identity {ownerId}"
+msgstr "Nome da identidade {ownerId}"
+
+msgid "Names"
+msgstr "Nomes"
 
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr "Nomes terminados em .dash, épocas e datas (os blocos Core de um dia)"
@@ -167,14 +233,17 @@ msgstr "Nomes terminados em .dash, épocas e datas (os blocos Core de um dia)"
 msgid "Network"
 msgstr "Rede"
 
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "Sem correspondências para “{query}” como registo do Core em {network}"
+msgid "No match for “{query}” on {network}"
+msgstr "Sem correspondências para “{query}” em {network}"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Nada acima o confirma. É apenas uma forma de interpretar o que escreveu."
 
 msgid "Open on {where}"
 msgstr "Abrir na {where}"
+
+msgid "Owned by {owner}"
+msgstr "Pertence a {owner}"
 
 msgid "Pages"
 msgstr "Páginas"
@@ -188,14 +257,26 @@ msgstr "Endereço Platform"
 msgid "Platform block {label}"
 msgstr "Bloco Platform {label}"
 
+msgid "Platform blocks"
+msgstr "Blocos da Platform"
+
 msgid "Platform blocks, state transitions and Platform addresses"
 msgstr "Blocos Platform, transições de estado e endereços Platform"
 
 msgid "Platform epoch"
 msgstr "Época da Platform"
 
+msgid "Platform epochs"
+msgstr "Épocas da Platform"
+
+msgid "Platform Explorer’s search"
+msgstr "A pesquisa do Platform Explorer"
+
 msgid "Platform height"
 msgstr "Altura da Platform"
+
+msgid "Platform validator"
+msgstr "Validador da Platform"
 
 msgid "PoSe banned"
 msgstr "Banido por PoSe"
@@ -207,6 +288,9 @@ msgstr "Proposta {0}"
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "O Radar verificou todas as fontes que podem responder a este tipo de entrada."
 
+msgid "Radar checked every source that can answer this kind of input. A document has no lookup by its ID alone: paste its contract, type and ID as contract/type/ID."
+msgstr "O Radar verificou todas as fontes que podem responder a este tipo de entrada. Um documento não pode ser procurado só pelo seu ID: cole o contrato, o tipo e o ID como contrato/tipo/ID."
+
 msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
 msgstr "O Radar não encontrou nenhum bloco, transação, endereço, masternode ou outro registo para isto. Experimente uma altura, um hash, um endereço, um ID ou um nome."
 
@@ -215,6 +299,9 @@ msgstr "O Radar nunca precisa de uma frase de recuperação, por isso palavras c
 
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "O Radar nunca precisa de uma, por isso não é enviada para lado nenhum e fica fora da barra de endereços e do histórico."
+
+msgid "Rejected by Platform"
+msgstr "Rejeitada pela Platform"
 
 msgid "Results"
 msgstr "Resultados"
@@ -245,8 +332,18 @@ msgstr "Ver todos os resultados de “{trimmed}” na {net}"
 msgid "Some sources didn’t answer: {0}."
 msgstr "Algumas fontes não responderam: {0}."
 
-msgid "text: a contract or token name"
-msgstr "texto: o nome de um contrato ou token"
+msgid "Started {started}"
+msgstr "Começou em {started}"
+
+#. placeholder {0}: shortId(hash)
+msgid "State transition {0}"
+msgstr "Transição de estado {0}"
+
+msgid "State transitions"
+msgstr "Transições de estado"
+
+msgid "text: could be a name, a contract or a token"
+msgstr "texto: pode ser um nome, um contrato ou um token"
 
 msgid "That could be part of a recovery phrase"
 msgstr "Isto pode ser parte de uma frase de recuperação"
@@ -265,6 +362,14 @@ msgstr "Este é um endereço da testnet"
 
 msgid "This is a testnet Platform address"
 msgstr "Este é um endereço Platform da testnet"
+
+#. placeholder {0}: shortId(c.normalized)
+#. placeholder {0}: shortId(tok.identifier)
+msgid "Token {0}"
+msgstr "Token {0}"
+
+msgid "Tokens"
+msgstr "Tokens"
 
 #. placeholder {0}: short(hash)
 msgid "Transaction {0}"

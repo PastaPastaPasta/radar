@@ -1,0 +1,55 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/search?query=quantum" },
+  "recordedAt": "2026-11-13T17:32:14.481Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identities": [
+      {
+        "identifier": "BMJWm8wKmbApR7nQ6q7RG3HgD8maJ8t7B4yWBKRe7aZ6",
+        "alias": "QuantumExplorer2.dash",
+        "status": {
+          "alias": "QuantumExplorer2.dash",
+          "status": "ok",
+          "contested": false,
+          "timestamp": "2024-09-07T15:36:12.697Z",
+          "txHash": "B15ACCD35E0E8A372D0B6B5625DEA47E0A0D526094D789B1C8AD13EDADE499A2"
+        }
+      },
+      {
+        "identifier": "BMJWm8wKmbApR7nQ6q7RG3HgD8maJ8t7B4yWBKRe7aZ6",
+        "alias": "quantum.dash",
+        "status": {
+          "alias": "quantum.dash",
+          "status": "ok",
+          "contested": true,
+          "timestamp": "2024-10-03T10:22:11.480Z",
+          "txHash": "ECC488865CE1A8944F96A66083E79F7DFBC429323AE590989CC767CDF0F96F93"
+        }
+      },
+      {
+        "identifier": "5qCM4hKdkd5G27Qku7jYDm4vTubBizX72sdMTpbySCCj",
+        "alias": "quantumexplorer.dash",
+        "status": {
+          "alias": "quantumexplorer.dash",
+          "status": "ok",
+          "contested": true,
+          "timestamp": "2024-11-13T17:31:28.340Z",
+          "txHash": "9AB2EF1B2CEACA92531C3831C9BE1FBFF8CFCD775ABEA9E27F02F8C75AC75853"
+        }
+      },
+      {
+        "identifier": "2ZpWZXJZn6Fj1U8jkaf4qpMrPnoDDwg3QDNB8Va5s9Tp",
+        "alias": "QuantumX3.dash",
+        "status": {
+          "alias": "QuantumX3.dash",
+          "status": "ok",
+          "contested": false,
+          "timestamp": "2025-08-20T22:07:41.216Z",
+          "txHash": "448C5DC4502A70C50A7E95700381D46AEA6AA6324A263F868459B872D7AE75E4"
+        }
+      }
+    ]
+  },
+  "trimmed": ""
+}

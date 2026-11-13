@@ -1,0 +1,88 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/search?query=sans" },
+  "recordedAt": "2026-11-13T17:32:13.983Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identities": [
+      {
+        "identifier": "7FPDMHJEKN6LAZdkkNdAnYBTidysojvxG6kMwakCXmAF",
+        "alias": "sansbank.dash",
+        "status": {
+          "alias": "sansbank.dash",
+          "status": "ok",
+          "contested": true,
+          "timestamp": "2025-05-29T13:11:29.587Z",
+          "txHash": "3DB58C5D2D6D43D2778EFD93DEE2AD53CC77C15F457685509F85FF1F6CF98D07"
+        }
+      },
+      {
+        "identifier": "HXN2cVA9QMCJrTN58SefBKS4sgh9MJ9DNmweje3vhu2i",
+        "alias": "SansbankBootstrap2025.dash",
+        "status": {
+          "alias": "SansbankBootstrap2025.dash",
+          "status": "ok",
+          "contested": false,
+          "timestamp": "2025-09-27T00:05:28.589Z",
+          "txHash": "B0A8027C4585B1C6E0AEECF8D62756BE8AE96DBD3FD132B9456CFC774A96DBA0"
+        }
+      }
+    ],
+    "tokens": [
+      {
+        "identifier": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+        "position": 0,
+        "timestamp": "2025-08-16T08:26:54.236Z",
+        "description": "Sansnote (SANS), a governance and utility token serving as the backbone of the Sansbank community.",
+        "localizations": {
+          "en": { "pluralForm": "SANS", "singularForm": "SANS", "shouldCapitalize": true }
+        },
+        "baseSupply": "2100000000000000",
+        "totalSupply": "2100000000000000",
+        "maxSupply": "2100000000000000",
+        "owner": { "identifier": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      }
+    ],
+    "dataContracts": [
+      {
+        "identifier": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR",
+        "name": null,
+        "owner": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE",
+        "schema": "{}",
+        "version": 1,
+        "txHash": "3D05D9031E629867D91122A39C6C5EB617F6BB3DDEB38B55B78B1C231BF92203",
+        "timestamp": "2025-08-16T08:26:54.236Z",
+        "isSystem": false,
+        "documentsCount": null,
+        "tokensCount": null,
+        "topIdentity": null,
+        "identitiesInteracted": null,
+        "totalGasUsed": null,
+        "averageGasUsed": null,
+        "groups": null,
+        "tokens": null,
+        "description": "Sansnote (SANS), a governance and utility token serving as the backbone of the Sansbank community.",
+        "keywords": ["dash", "evo", "dao"]
+      }
+    ]
+  },
+  "trimmed": ""
+}

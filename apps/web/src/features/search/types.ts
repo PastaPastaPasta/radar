@@ -1,3 +1,4 @@
+import type { MessageDescriptor } from '@lingui/core'
 import type { LinkProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
@@ -31,6 +32,10 @@ export interface Resolver {
   accepts: InputClass[]
   /** `index` is a lookup in a hosted index or crawl (Hyphen, Radar): never planned in Decentralized only mode. */
   cost: 'local' | 'index' | 'dapi' | 'sdk'
+  /** What the lookup finds, in a few words ("Platform blocks"): the empty state names it when the lookup could not run. */
+  what?: MessageDescriptor
+  /** Waits while a chain tip is still being read, because the tip decides whether it has anything to ask. */
+  waitsForTip?: boolean
   resolve(c: Classified, ctx: ResolverContext): Promise<SearchHit[]>
 }
 

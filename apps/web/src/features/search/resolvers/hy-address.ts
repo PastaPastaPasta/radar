@@ -1,4 +1,4 @@
-import { plural, t } from '@lingui/core/macro'
+import { msg, plural, t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
 import { formatAmountText } from '@/lib/units'
 import { isDevnet } from '@/lib/network'
@@ -12,6 +12,7 @@ export const hyAddress: Resolver = {
   id: 'hy-address',
   accepts: ['core-address'],
   cost: 'index',
+  what: msg`Core addresses`,
   async resolve(c, { net, signal }) {
     if (c.warning || isDevnet(net)) return []
     const { hyLookups } = await import('@/data/hyphen/lookups')

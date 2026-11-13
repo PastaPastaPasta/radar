@@ -1,0 +1,39 @@
+{
+  "method": "contracts.getMany",
+  "args": {
+    "ids": ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"]
+  },
+  "recordedAt": "2026-11-13T17:31:27.166Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp", null]]
+    },
+    "proved": true,
+    "meta": {
+      "height": 470771,
+      "coreChainLockedHeight": 2571706,
+      "epoch": 88,
+      "timeMs": 1794591023843,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAQk6WIh4aKEZq94C9wRcapLvO0+PFHc9A4p6UUkFIoWOBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAA7v+F1Z9A0+mv4qA9/osVAfiYaLMhDa4HyjAHznUKMCBABt01kFuvklXUpBdo4aYSaxC9Y3vuxKGabcaE/n3QKVrURAQFAAPsBtwHEAMTsaHD73T9aaHAQhPFECCqAa1eW5/gKq/UO1y13GwLtnQngh5JLwync2nwvM+iWcnE4NelpTvdO9m2jQQ5XYxABfjRTCM8qr9aDdqsB9FAhm4Yr6IUntT4zOqXhPd+5l/EClItgxMQIyJTA+kSiAok/YdEa8VbrTHytxdydDRPNW3kQAZpi+q8WV8Tg30TXlSFVPozGNJFLRnJffKusTCl+pxwyAg5BLV2fxCs9wlxHDwPNBxtKa7WZpE7nid8mf1NXekV8EAUgnBjhPQtFT4qYxNCBdVb5MctfirnGaw7Ml+S5gNgaaEGyntvC6tVDjHZhzDLI6JY8+ECkKaZzQsCLgXZ5wKcaBQUgoRpmx60aZydhU6jDj00sDCNWbJjh3/juyH6BMFlS7oy/cKQuIHlQZnTq2mZs9S0ePOmRs8a+NVKbtAvCoKDU1RABTjSUe9xYiY/kAJEASVgPSJ0lwb7boYe0ZxeRJ8eWZ+ARERERAoIfY7X6FuZHMHAIPQIE0GB714c8PjndzmcJOAjVs6NgEAGSnP3iNzR27hqFzul98Ynp0kcnLyuN1rvWBvBj+t6CwxEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAByPjN+/5pKB548HBTVZCocGa4o4oXVPcUw="
+      },
+      "signature": {
+        "$u8": "rQToWjLq9VWALmpv2Rqf3lBf7wOVpXD8cS3M9ZtuhiG7SNXiOG+fp7vcx6qLSQEGAQjAZx7OBRo0t4ZUPqcOwRMEq5fqo5icCI5jBBegr4lF1MMCQoXEPGruMz0Cy3H4"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "Qcb8+STAT2Zvy5ts5RyjCKSmmQZQpEgctCdpXEQxHM4="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 151.55325800000037
+  }
+}

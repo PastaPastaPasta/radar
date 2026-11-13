@@ -9,6 +9,7 @@ export type InputClass =
   | 'hex64'
   | 'hex40'
   | 'base58-id'
+  | 'document-path'
   | 'core-address'
   | 'platform-address'
   | 'ip'
@@ -45,6 +46,8 @@ const INT = /^\d{1,9}$/
 const DPNS = /^[a-z0-9-]{3,63}(\.dash)?$/i
 const DATE = /^(\d{4})-(\d{2})-(\d{2})$/
 const IPV4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?::(\d{1,5}))?$/
+const DOCUMENT_PATH =
+  /^([1-9A-HJ-NP-Za-km-z]{43,44})\/([A-Za-z][A-Za-z0-9_-]{0,63})\/([1-9A-HJ-NP-Za-km-z]{43,44})$/
 const IPV6_BRACKETED = /^\[([0-9a-f:.]+)\](?::(\d{1,5}))?$/i
 
 function isValidDate(value: string): boolean {
@@ -206,6 +209,12 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   const words = wordlist()
   if (looksSecret(trimmed, words)) return withheld('secret')
 
+  const path = DOCUMENT_PATH.exec(trimmed)
+  if (path && isBase58Id(path[1] ?? '') && isBase58Id(path[3] ?? '')) {
+    classes.push('document-path')
+    return result(trimmed)
+  }
+
   const hex = trimmed.replace(/^0x/i, '')
   if (isHex(hex, 32)) {
     classes.push('hex64')
@@ -248,7 +257,8 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     const limits = [tip?.core, tip?.platform, tip?.epoch].filter(
       (v): v is number => v !== undefined,
     )
-    if (limits.length === 0 || limits.some((limit) => n <= limit)) classes.push('int')
+    // A tip that is not known yet could still cover the number, so it is only excluded once all three are known.
+    if (limits.length < 3 || limits.some((limit) => n <= limit)) classes.push('int')
   }
   if (isValidDate(trimmed)) classes.push('date')
   if (DPNS.test(trimmed)) classes.push('dpns')

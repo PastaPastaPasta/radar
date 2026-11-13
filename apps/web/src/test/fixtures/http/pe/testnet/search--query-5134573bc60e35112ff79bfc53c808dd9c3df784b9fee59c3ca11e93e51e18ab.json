@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/search?query=5134573bc60e35112ff79bfc53c808dd9c3df784b9fee59c3ca11e93e51e18ab"
+  },
+  "recordedAt": "2026-11-13T17:35:59.012Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "blocks": [
+      {
+        "header": {
+          "hash": "5134573BC60E35112FF79BFC53C808DD9C3DF784B9FEE59C3CA11E93E51E18AB",
+          "height": 667493,
+          "timestamp": "2026-11-10T15:13:59.688Z",
+          "blockVersion": 14,
+          "appVersion": 14,
+          "l1LockedHeight": 1589147,
+          "validator": "8917BB546318F3410D1A7901C7B846A73446311B5164B45A03F0E613F208F234",
+          "totalGasUsed": 4168160,
+          "appHash": "F4CB98E4E987ED854A258830B23D7272F4A6C1829A76736DB6014A606EC7A434",
+          "quorumHash": "00000116043273AF2430DF374C9FD61F2E12F9ECB71F01A62182AA9DD20377BB"
+        },
+        "txs": [
+          {
+            "hash": "DD60BC6D50AD5BDE2B4C843CF45B161812B3100DA0A5EDCAA36AF604B0418BBC",
+            "index": 0,
+            "blockHash": "5134573BC60E35112FF79BFC53C808DD9C3DF784B9FEE59C3CA11E93E51E18AB",
+            "blockHeight": null,
+            "type": "BATCH",
+            "batchType": null,
+            "data": "AgAC7azbjOx1RT0nvMVLypOidAh+FmMYUQCehpz+Z12oEQEBAAIQwZTp9FJTLTszkqyWbYBqGCvUV0XOJiSAMgCKLJRxiPsMdQRwYWdlHRUXgbh1w4kXbkdAOhmILXItRDnnPxQmsINTaqyYuc4AAAMEBHNsdWcSGS9ubC9mYXN0cGFzcy1wYXJ0aWNpcGFudHMJc3RvcmFnZUlkEitXQzFQUDJhNU5NLWNTbllpUjgxRjJwekd6VG5la0x1aFFUUEpKUUE3M3FND3N0b3JhZ2VQcm92aWRlchIHYXJ3ZWF2ZQV0aXRsZRIaRmFzdFBhc3MgZGVlbG5lbWVycyAtIERhc2gAAUEgT6gVEjN10FMiyF/Qbf2WAj6KzcrclcsQJRL0DssVclIqL5d43/2+rf/EXQKkWhLgLOfNT91lw540OBG/gNHvSA==",
+            "timestamp": "2026-11-10T15:13:59.688Z",
+            "gasUsed": 4168160,
+            "status": "SUCCESS",
+            "error": null,
+            "owner": { "identifier": "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t", "aliases": [] },
+            "incoming": null,
+            "amount": null,
+            "base58Address": null,
+            "bech32mAddress": null
+          }
+        ]
+      }
+    ]
+  },
+  "trimmed": ""
+}

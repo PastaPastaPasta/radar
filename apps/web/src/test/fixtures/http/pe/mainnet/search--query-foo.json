@@ -1,0 +1,44 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/search?query=foo" },
+  "recordedAt": "2026-11-13T18:52:23.173Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identities": [
+      {
+        "identifier": "BMJWm8wKmbApR7nQ6q7RG3HgD8maJ8t7B4yWBKRe7aZ6",
+        "alias": "Food2Go.dash",
+        "status": {
+          "alias": "Food2Go.dash",
+          "status": "ok",
+          "contested": false,
+          "timestamp": "2024-09-05T23:41:10.138Z",
+          "txHash": "88F0DE5E5738EBF843A6AB0D1EADE540280B95FF8A3E1536F2A126F03C38A33F"
+        }
+      },
+      {
+        "identifier": "ERjqbbMXoaJ8C2KKhpg9pU5EwhRgKMXxSPzKygnLUyt",
+        "alias": "fool.dash",
+        "status": {
+          "alias": "fool.dash",
+          "status": "ok",
+          "contested": true,
+          "timestamp": "2026-08-27T11:48:27.641Z",
+          "txHash": "0A093610742B51684214E143A85E1C346D43868D471B8FF3B687B464FD825B3C"
+        }
+      },
+      {
+        "identifier": "GRMHDRfmf6cv3xksmheL4gzCnYA3kWsAhvw9BF7XpBpN",
+        "alias": "Football.dash",
+        "status": {
+          "alias": "Football.dash",
+          "status": "pending",
+          "contested": true,
+          "timestamp": "2026-11-07T12:37:21.827Z",
+          "txHash": "226A2A3BE8AE0E354F710FE78675D2B834DD447D037D95E077DA057C4259D2AA"
+        }
+      }
+    ]
+  },
+  "trimmed": ""
+}
