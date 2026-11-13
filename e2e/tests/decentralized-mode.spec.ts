@@ -1,3 +1,16 @@
+/**
+ * Decentralized only mode, end to end: every built page on both networks, and the switch itself.
+ *
+ * What it can and cannot see. A page's requests (including a worker's, which Chromium reports to the page) are
+ * recorded from before the page loads. Fixture builds replace the SDK's transport with one on the main thread
+ * (`FixtureSdkTransport`), so the real SDK worker never runs here. That path is covered by a unit test instead,
+ * `src/test/data/sdk/worker-reach.test.ts`: the worker's import graph holds no hosted client, no hosted host and
+ * no mode gate, only the wasm-part loader starts a request itself, and the SDK's requests go through the
+ * worker's `fetch`, which can only name DAPI evonodes and the quorum host.
+ *
+ * Polls and probes run on a clock the test advances past the longest of them (`pastEveryPoll`), so a request that
+ * bypassed the gate on a timer is caught as well as one made on load.
+ */
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { answerAsUnmined } from '../helpers/fixtures'
@@ -132,8 +145,17 @@ const hostedStamps = (page: Page) =>
     '[data-source="hyphen"], [data-source="insight"], [data-source="pe"], [data-source="radar"], [data-source="rate"]',
   )
 
-/** Long enough for a poll, a probe or a late prefetch to have fired after the page settled. */
+/** Long enough for a late prefetch or an effect to have fired after the page settled. */
 const QUIET_MS = 1_500
+/** Past every poll and probe interval (`POLL_MS`, `HEALTH_PROBE_INTERVAL_MS`: 10 s to 1 min). */
+const POLL_WINDOW_MS = 65_000
+
+/** Moves the page's clock past every poll and probe interval, and lets what that starts finish. Needs `clock.install`. */
+async function pastEveryPoll(page: Page): Promise<void> {
+  await page.clock.fastForward(POLL_WINDOW_MS)
+  await settled(page)
+  await page.waitForTimeout(QUIET_MS)
+}
 
 test.describe('Decentralized only mode: every built page', () => {
   for (const [network, ids] of [
@@ -146,6 +168,7 @@ test.describe('Decentralized only mode: every built page', () => {
         page,
       }) => {
         if (walk.pending) await answerAsUnmined(page, ids.tx, { instantLocked: false })
+        await page.clock.install()
         const requests = watchRequests(page)
         await page.goto(withQuery(walk.path, ids.query, 'sources=decentralized'))
 
@@ -166,6 +189,7 @@ test.describe('Decentralized only mode: every built page', () => {
 
         expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
         if (walk.shows !== 'data' || A11Y.has(walk.path)) await expectAccessible(page)
+        await pastEveryPoll(page)
         expect(requests.hosted, 'requests to a hosted backend').toEqual([])
         expect(requests.elsewhere, 'requests to a host the mode does not list').toEqual([])
       })
@@ -234,6 +258,7 @@ test.describe('Decentralized only mode: the switch', () => {
   test('turns on in Settings without a reload, stops every hosted request and is remembered @X-05 @X-09', async ({
     page,
   }) => {
+    await page.clock.install()
     await page.goto('/settings')
     await settled(page)
     const loads: string[] = []
@@ -256,11 +281,57 @@ test.describe('Decentralized only mode: the switch', () => {
     await page.goto('/rich-list')
     await expect(unavailable(page)).toHaveCount(1)
     await expect(mark(page)).toBeVisible()
-    await settled(page)
-    await page.waitForTimeout(QUIET_MS)
+    await pastEveryPoll(page)
     expect(requests.hosted).toEqual([])
     expect(loads.filter((l) => l === 'load')).toHaveLength(1)
     expect(await page.evaluate(() => localStorage.getItem('radar.sources'))).toBe('decentralized')
+  })
+
+  test('turned on mid-session, in-app navigation back to hosted pages shows no hosted data and asks no hosted backend @X-05 @X-09 @HY-19', async ({
+    page,
+  }) => {
+    await page.clock.install()
+    const loads: string[] = []
+    page.on('load', () => loads.push(page.url()))
+    const core = (name: string) => page.getByRole('link', { name, exact: true }).first()
+    const addresses = page.locator('main a[href^="/address/"]')
+
+    // Visit hosted pages with the mode off, all in the app's own history.
+    await page.goto('/blocks')
+    await settled(page)
+    await core('Rich list').click()
+    await expect(addresses.first()).toBeVisible()
+    await core('Mempool').click()
+    await expect(page.locator('[data-mempool-view="index"]')).toBeVisible()
+    await page.getByRole('link', { name: 'Settings', exact: true }).first().click()
+    await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible()
+
+    const requests = watchRequests(page)
+    await page
+      .getByRole('group', { name: 'Sources' })
+      .getByRole('button', { name: 'Decentralized only' })
+      .click()
+    await expect(mark(page)).toBeVisible()
+    await settled(page)
+
+    // Back to the pages whose hosted answers were in memory: none of it may show.
+    await page.goBack()
+    await expect(page.locator('[data-mempool-view="seen"]')).toBeVisible()
+    await expect(page.locator('[data-mempool-view="index"]')).toHaveCount(0)
+    await expect(hostedStamps(page)).toHaveCount(0)
+    await page.goBack()
+    await expect(unavailable(page)).toHaveCount(1)
+    await expect(addresses).toHaveCount(0)
+    await expect(hostedStamps(page)).toHaveCount(0)
+    await core('Charts').click()
+    await expect(unavailable(page)).toHaveCount(1)
+    await expect(hostedStamps(page)).toHaveCount(0)
+    await expect(failures(page)).toHaveCount(0)
+
+    await pastEveryPoll(page)
+    expect(requests.hosted, 'requests to a hosted backend after the switch').toEqual([])
+    expect(requests.elsewhere).toEqual([])
+    expect(loads, 'the page was never reloaded').toHaveLength(1)
   })
 
   test('a link turns it on for the visit, in-app navigation keeps it, and nothing is remembered @X-05 @X-09', async ({
@@ -354,7 +425,7 @@ test.describe('Decentralized only mode: the switch', () => {
     await page.goBack()
     await expect(unavailable(page)).toHaveCount(1)
     await expect(page.locator('main a[href^="/address/"]')).toHaveCount(0)
-    await page.waitForTimeout(QUIET_MS)
+    await pastEveryPoll(page)
     expect(requests.hosted).toEqual([])
   })
 })
