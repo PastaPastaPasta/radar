@@ -8,10 +8,13 @@ import type { PeContractTransaction, PeDocument, PeTransaction } from '@/data/pe
 import { IdentityRef, TransitionTable } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Badge, Card, DataTable, DateRangeFilter, Empty, Hash, Time, Unavailable } from '@/ui'
-import { typeNames, usePeEnabled } from './contract-data'
+import { listState, typeNames, usePeEnabled } from './contract-data'
 import type { ContractContext } from './contract-context'
 
 const PAGE_SIZE = 25
+
+const formText = (value: FormDataEntryValue | null): string =>
+  typeof value === 'string' ? value.trim() : ''
 
 const startOf = (day: string) => `${day}T00:00:00.000Z`
 const endOf = (day: string) => `${day}T23:59:59.999Z`
@@ -50,8 +53,8 @@ function Filters({ ctx, documents }: { ctx: ContractContext; documents: boolean 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const owner = String(data.get('owner') ?? '').trim()
-    const rev = String(data.get('rev') ?? '').trim()
+    const owner = formText(data.get('owner'))
+    const rev = formText(data.get('rev'))
     apply({
       owner: owner === '' ? undefined : owner,
       rev: /^\d+$/.test(rev) ? Number(rev) : undefined,
@@ -167,15 +170,7 @@ function TransactionsView({ ctx }: { ctx: ContractContext }) {
       <p className="text-ink-2">{t`Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time.`}</p>
       <TransitionTable
         rows={rows}
-        state={
-          query.isPending
-            ? 'loading'
-            : query.isError && !query.data
-              ? 'error'
-              : rows.length === 0
-                ? 'empty'
-                : 'ready'
-        }
+        state={listState(query, rows.length === 0)}
         error={query.error}
         onRetry={() => {
           void query.refetch()
@@ -268,15 +263,7 @@ function DocumentsView({ ctx }: { ctx: ContractContext }) {
       columns={columns}
       rows={rows}
       getRowId={(r) => r.identifier}
-      state={
-        query.isPending
-          ? 'loading'
-          : query.isError && !query.data
-            ? 'error'
-            : rows.length === 0
-              ? 'empty'
-              : 'ready'
-      }
+      state={listState(query, rows.length === 0)}
       error={query.error}
       onRetry={() => {
         void query.refetch()

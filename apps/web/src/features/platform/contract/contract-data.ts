@@ -28,7 +28,9 @@ export function usePeContract(net: NetworkId, id: string) {
 
 /** Well-known contracts name themselves; others take Platform Explorer's name when it has one. */
 export function contractName(net: NetworkId, id: string, peName: string | null | undefined) {
-  return wellKnownLabel(net, 'contract', id) ?? (peName ? peName : undefined)
+  return (
+    wellKnownLabel(net, 'contract', id) ?? (peName == null || peName === '' ? undefined : peName)
+  )
 }
 
 /** Whether a document type keeps every revision: its own flag, else the contract's default. */
@@ -50,3 +52,12 @@ export function propertyNames(schema: unknown): string[] {
     .sort(([, a], [, b]) => Number(a.position ?? 0) - Number(b.position ?? 0))
     .map(([name]) => name)
 }
+
+export type ListState = 'loading' | 'error' | 'empty' | 'ready'
+
+/** How a table fed by one read presents it: an error shows only when there is nothing earlier to keep showing. */
+export const listState = (
+  query: { isPending: boolean; isError: boolean; data: unknown },
+  empty: boolean,
+): ListState =>
+  query.isPending ? 'loading' : query.isError && !query.data ? 'error' : empty ? 'empty' : 'ready'

@@ -10,12 +10,17 @@ interface DocEntity {
 
 function docOf(net: RouteNet): DocEntity {
   const file = new URL(`../../review/fixtures/${net}.json`, import.meta.url)
-  const entities = (JSON.parse(readFileSync(file, 'utf8')) as { entities?: Record<string, any> })
-    .entities
+  const entities =
+    (
+      JSON.parse(readFileSync(file, 'utf8')) as {
+        entities?: Record<string, Record<string, unknown>>
+      }
+    ).entities ?? {}
+  const text = (value: unknown, fallback: string) => (typeof value === 'string' ? value : fallback)
   return {
-    contract: entities?.doc?.contract ?? 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec',
-    type: entities?.doc?.type ?? 'domain',
-    name: entities?.name_registered?.id ?? 'dash',
+    contract: text(entities.doc?.contract, 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'),
+    type: text(entities.doc?.type, 'domain'),
+    name: text(entities.name_registered?.id, 'dash'),
   }
 }
 
@@ -46,14 +51,12 @@ export const pData: RouteCase[] = [
     const where = `normalizedParentDomainName~eq~dash,normalizedLabel~sw~${doc.name}`
     return [
       { path: `/contract/${contract}`, h1: 'Contract', built: true, decentralized: 'partial' },
-      ...TABS.map(
-        (tab): RouteCase => ({
-          path: `/contract/${contract}?tab=${tab}`,
-          h1: 'Contract',
-          built: true,
-          decentralized: tab === 'transactions' || tab === 'documents' ? 'unavailable' : 'data',
-        }),
-      ),
+      ...TABS.map((tab): RouteCase => ({
+        path: `/contract/${contract}?tab=${tab}`,
+        h1: 'Contract',
+        built: true,
+        decentralized: tab === 'transactions' || tab === 'documents' ? 'unavailable' : 'data',
+      })),
       {
         path: `/contract/${doc.contract}/documents/${doc.type}`,
         h1: 'Documents',

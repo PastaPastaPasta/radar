@@ -1,5 +1,4 @@
-import type { PDataMethods } from '../../methods'
-import type { ContractGroupDto } from '../../methods'
+import type { ContractGroupDto, PDataMethods } from '../../methods'
 import {
   contractFullDto,
   documentDto,
@@ -80,21 +79,20 @@ type Impl<M extends keyof PDataMethods> = ImplOf<PDataReads, M>
 
 const statusOf = (s: 'active' | 'closed'): ActionStatus => (s === 'closed' ? 'CLOSED' : 'ACTIVE')
 
-function groupDto(position: number, group: GroupLike): ContractGroupDto {
-  const json = group.toJSON()
-  const members = Object.entries(json.members ?? {}).map(([id, power]) => ({
-    id,
-    power: Number(power),
-  }))
-  members.sort((a, b) => b.power - a.power || (a.id < b.id ? -1 : 1))
-  return { position, requiredPower: Number(json.requiredPower ?? 0), members }
-}
-
-/** A power map as rows, strongest first. */
-const powers = (map: Map<string, bigint | number>) =>
-  [...map]
+/** Power entries as rows, strongest first. */
+const powers = (entries: Iterable<[string, unknown]>) =>
+  [...entries]
     .map(([id, power]) => ({ id, power: Number(power) }))
     .sort((a, b) => b.power - a.power || (a.id < b.id ? -1 : 1))
+
+function groupDto(position: number, group: GroupLike): ContractGroupDto {
+  const json = group.toJSON()
+  return {
+    position,
+    requiredPower: Number(json.requiredPower ?? 0),
+    members: powers(Object.entries(json.members ?? {})),
+  }
+}
 
 export const pDataImpl: { [M in keyof PDataMethods]: Impl<M> } = {
   async 'contracts.getHistory'(sdk, { id, limit, startAtMs }) {

@@ -10,6 +10,7 @@ import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
 import { Badge, Card, Empty, ErrorState, Hash, JsonView, KeyValue, Skeleton, Tabs } from '@/ui'
+import { SdkGate } from '../contract/SdkGate'
 
 export interface GroupPageProps {
   contract: string
@@ -18,8 +19,8 @@ export interface GroupPageProps {
 }
 
 /** Members listed, and actions read, this many at a time. */
-export const GROUP_PAGE = 100
-export const ACTIONS_PAGE = 25
+const GROUP_PAGE = 100
+const ACTIONS_PAGE = 25
 
 function groupLink(contract: string, pos: string, patch: Record<string, unknown>): LinkProps {
   return {
@@ -54,62 +55,56 @@ export function GroupPage({ contract, pos, search }: GroupPageProps) {
           title={t`That isn’t a group address.`}
           body={<Hash value={contract} display="wrap" copy={false} />}
         />
-      ) : info.isPending ? (
-        <Skeleton shape="block" height={160} />
-      ) : info.isError && !info.data ? (
-        <ErrorState
-          error={info.error}
-          source="sdk"
-          onRetry={() => {
-            void info.refetch()
-          }}
-        />
-      ) : !group || !info.data ? (
-        <Empty
-          kind="not-found"
-          title={t`This contract has no group at position ${pos}.`}
-          body={
-            <Link to="/groups/$contract" params={{ contract }}>
-              {t`See the groups of this contract`}
-            </Link>
-          }
-        />
       ) : (
-        <>
-          <Card title={t`Group`} layer="platform" source={stampOf(info.data)} id="group">
-            <KeyValue
-              columns={2}
-              items={[
-                { label: t`Contract`, value: <Entity kind="contract" id={contract} /> },
-                { label: t`Position`, value: String(position) },
-                { label: t`Required power`, value: formatInt(group.requiredPower) },
-                { label: t`Members`, value: formatInt(group.members.length) },
-              ]}
+        <SdkGate query={info} skeleton={<Skeleton shape="block" height={160} />}>
+          {!group || !info.data ? (
+            <Empty
+              kind="not-found"
+              title={t`This contract has no group at position ${pos}.`}
+              body={
+                <Link to="/groups/$contract" params={{ contract }}>
+                  {t`See the groups of this contract`}
+                </Link>
+              }
             />
-          </Card>
-          <div className="min-w-0">
-            <Tabs
-              tabs={[
-                { id: 'members', label: t`Members`, count: group.members.length },
-                { id: 'actions', label: t`Actions` },
-              ]}
-              value={search.tab}
-              layer="platform"
-              to={(id) => groupLink(contract, pos, { tab: id === 'members' ? undefined : id })}
-            />
-          </div>
-          {search.tab === 'members' ? (
-            <Members contract={contract} position={position} required={group.requiredPower} />
           ) : (
-            <Actions
-              contract={contract}
-              pos={pos}
-              position={position}
-              status={search.status}
-              required={group.requiredPower}
-            />
+            <>
+              <Card title={t`Group`} layer="platform" source={stampOf(info.data)} id="group">
+                <KeyValue
+                  columns={2}
+                  items={[
+                    { label: t`Contract`, value: <Entity kind="contract" id={contract} /> },
+                    { label: t`Position`, value: String(position) },
+                    { label: t`Required power`, value: formatInt(group.requiredPower) },
+                    { label: t`Members`, value: formatInt(group.members.length) },
+                  ]}
+                />
+              </Card>
+              <div className="min-w-0">
+                <Tabs
+                  tabs={[
+                    { id: 'members', label: t`Members`, count: group.members.length },
+                    { id: 'actions', label: t`Actions` },
+                  ]}
+                  value={search.tab}
+                  layer="platform"
+                  to={(id) => groupLink(contract, pos, { tab: id === 'members' ? undefined : id })}
+                />
+              </div>
+              {search.tab === 'members' ? (
+                <Members contract={contract} position={position} required={group.requiredPower} />
+              ) : (
+                <Actions
+                  contract={contract}
+                  pos={pos}
+                  position={position}
+                  status={search.status}
+                  required={group.requiredPower}
+                />
+              )}
+            </>
           )}
-        </>
+        </SdkGate>
       )}
     </PageFrame>
   )
@@ -136,48 +131,43 @@ function Members({
       id="members"
       source={members.data ? stampOf(members.data) : undefined}
     >
-      {members.isPending ? (
-        <Skeleton shape="row" count={3} />
-      ) : members.isError && !members.data ? (
-        <ErrorState
-          error={members.error}
-          source="sdk"
-          onRetry={() => {
-            void members.refetch()
-          }}
-        />
-      ) : (members.data?.data.length ?? 0) === 0 ? (
-        <Empty kind="none-yet" title={t`This group has no members.`} />
-      ) : (
-        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={t`Members`}>
-          <table className="rx-table w-full" aria-label={t`Members by power`}>
-            <thead>
-              <tr>
-                <th scope="col">{t`Member`}</th>
-                <th scope="col" className="text-right">
-                  {t`Power`}
-                </th>
-                <th scope="col" className="text-right">
-                  {t`Of the required`}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.data?.data.map((m) => (
-                <tr key={m.id} data-member={m.id}>
-                  <td>
-                    <IdentityRef id={m.id} />
-                  </td>
-                  <td className="text-right">{formatInt(m.power)}</td>
-                  <td className="text-right">
-                    {required > 0 ? `${formatInt(m.power)} / ${formatInt(required)}` : '—'}
-                  </td>
+      <SdkGate query={members} skeleton={<Skeleton shape="row" count={3} />}>
+        {(members.data?.data.length ?? 0) === 0 ? (
+          <Empty kind="none-yet" title={t`This group has no members.`} />
+        ) : (
+          <div>
+            <table
+              className="rx-table w-full [overflow-wrap:anywhere]"
+              aria-label={t`Members by power`}
+            >
+              <thead>
+                <tr>
+                  <th scope="col">{t`Member`}</th>
+                  <th scope="col" className="text-right">
+                    {t`Power`}
+                  </th>
+                  <th scope="col" className="text-right">
+                    {t`Of the required`}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {members.data?.data.map((m) => (
+                  <tr key={m.id} data-member={m.id}>
+                    <td>
+                      <IdentityRef id={m.id} />
+                    </td>
+                    <td className="text-right">{formatInt(m.power)}</td>
+                    <td className="text-right">
+                      {required > 0 ? `${formatInt(m.power)} / ${formatInt(required)}` : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </SdkGate>
     </Card>
   )
 }
@@ -346,37 +336,24 @@ function ActionRow({
       </button>
       {open ? (
         <div className="grid gap-2" data-signers>
-          {signers.isPending ? (
-            <Skeleton shape="row" count={2} />
-          ) : signers.isError && !signers.data ? (
-            <ErrorState
-              error={signers.error}
-              source="sdk"
-              compact
-              onRetry={() => {
-                void signers.refetch()
-              }}
-            />
-          ) : (
-            <>
-              <p className="text-ink-2">
-                {required > 0
-                  ? t`${signerCount}, power ${signedPower} of ${requiredPower} required`
-                  : signerCount}
-              </p>
-              <ul className="flex flex-wrap gap-2">
-                {list.map((s) => {
-                  const power = formatInt(s.power)
-                  return (
-                    <li key={s.id} className="flex items-center gap-1" data-signer={s.id}>
-                      <IdentityRef id={s.id} />
-                      <Badge size="sm">{t`power ${power}`}</Badge>
-                    </li>
-                  )
-                })}
-              </ul>
-            </>
-          )}
+          <SdkGate query={signers} skeleton={<Skeleton shape="row" count={2} />} compact>
+            <p className="text-ink-2">
+              {required > 0
+                ? t`${signerCount}, power ${signedPower} of ${requiredPower} required`
+                : signerCount}
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {list.map((s) => {
+                const power = formatInt(s.power)
+                return (
+                  <li key={s.id} className="flex items-center gap-1" data-signer={s.id}>
+                    <IdentityRef id={s.id} />
+                    <Badge size="sm">{t`power ${power}`}</Badge>
+                  </li>
+                )
+              })}
+            </ul>
+          </SdkGate>
           <JsonView value={action.event} collapsedDepth={1} label={t`Action details`} />
         </div>
       ) : null}

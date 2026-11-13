@@ -11,7 +11,7 @@ import { isPlatformId } from '@/lib/base58'
 import { encodeWhere } from '@/lib/search-schemas'
 import { systemContract } from '@/lib/well-known'
 import { Card, DataTable, Empty, ErrorState, Hash, Skeleton, Time } from '@/ui'
-import { propertyNames, useContract } from './contract-data'
+import { listState, propertyNames, useContract } from './contract-data'
 import { DocFilters, type FilterValues } from './DocFilters'
 import { filterIndices } from './doc-filters'
 import {
@@ -23,6 +23,7 @@ import {
   type DocumentsSearch,
 } from './doc-query'
 import { cellText } from './cell-text'
+import { SdkGate } from './SdkGate'
 
 export interface DocumentsPageProps {
   id: string
@@ -30,7 +31,7 @@ export interface DocumentsPageProps {
   search: DocumentsSearch
 }
 
-export const PAGE_SIZES = [10, 25, 50, 100] as const
+const PAGE_SIZES = [10, 25, 50, 100] as const
 const MAX_PROPERTY_COLUMNS = 3
 
 function documentsLink(id: string, type: string, patch: Partial<DocumentsSearch>): LinkProps {
@@ -76,41 +77,35 @@ export function DocumentsPage({ id, type, search }: DocumentsPageProps) {
           title={t`That isn’t a contract ID.`}
           body={<Hash value={id} display="wrap" copy={false} />}
         />
-      ) : contract.isPending ? (
-        <Skeleton shape="block" height={220} />
-      ) : contract.isError && !contract.data ? (
-        <ErrorState
-          error={contract.error}
-          source="sdk"
-          onRetry={() => {
-            void contract.refetch()
-          }}
-        />
-      ) : !data || !contract.data ? (
-        <Empty
-          kind="not-found"
-          title={t`No contract has this ID on this network.`}
-          body={<Hash value={id} display="wrap" />}
-        />
-      ) : !schema ? (
-        <Empty
-          kind="not-found"
-          title={t`This contract has no document type “${type}”.`}
-          body={
-            <Link to="/contract/$id" params={{ id }} search={{ tab: 'types' } as never}>
-              {t`See its document types`}
-            </Link>
-          }
-        />
       ) : (
-        <Browser
-          id={id}
-          type={type}
-          schema={schema}
-          indices={data.indices[type]}
-          search={search}
-          contractStamp={stampOf(contract.data)}
-        />
+        <SdkGate query={contract} skeleton={<Skeleton shape="block" height={220} />}>
+          {!data || !contract.data ? (
+            <Empty
+              kind="not-found"
+              title={t`No contract has this ID on this network.`}
+              body={<Hash value={id} display="wrap" />}
+            />
+          ) : !schema ? (
+            <Empty
+              kind="not-found"
+              title={t`This contract has no document type “${type}”.`}
+              body={
+                <Link to="/contract/$id" params={{ id }} search={{ tab: 'types' } as never}>
+                  {t`See its document types`}
+                </Link>
+              }
+            />
+          ) : (
+            <Browser
+              id={id}
+              type={type}
+              schema={schema}
+              indices={data.indices[type]}
+              search={search}
+              contractStamp={stampOf(contract.data)}
+            />
+          )}
+        </SdkGate>
       )}
     </PageFrame>
   )
@@ -168,16 +163,7 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
     } as never)
   }
   const filterKey = `${encodeWhere(search.where ?? [])}|${(search.order ?? []).join(',')}|${search.limit}`
-  const state =
-    plan.args === undefined
-      ? 'empty'
-      : query.isPending
-        ? 'loading'
-        : query.isError && !query.data
-          ? 'error'
-          : rows.length === 0
-            ? 'empty'
-            : 'ready'
+  const state = plan.args === undefined ? 'empty' : listState(query, rows.length === 0)
 
   return (
     <div className="grid gap-4">

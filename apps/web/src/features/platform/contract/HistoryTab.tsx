@@ -2,8 +2,8 @@ import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
 import { useQueries } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import type { SourceStamp } from '@/data/envelope'
+import { useState } from 'react'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { ContractFullDto } from '@/data/sdk/methods'
 import type { ContractVersionDto } from '@/data/sdk/methods/p-data'
@@ -14,11 +14,11 @@ import { schemaLink } from './SchemaTab'
 import { diffJson, pointerOf, type Change } from './version-diff'
 
 /** Platform answers at most this many versions in one read. */
-export const HISTORY_CHUNK = 10
+const HISTORY_CHUNK = 10
 const MAX_CHANGES = 200
 
 /** What a version consists of, for comparing two of them. */
-export function comparable(contract: ContractFullDto): Record<string, unknown> {
+function comparable(contract: ContractFullDto): Record<string, unknown> {
   return {
     documentSchemas: contract.documentSchemas,
     config: contract.config,
@@ -171,19 +171,14 @@ function Versions({ ctx }: { ctx: ContractContext }) {
     (v) => v !== undefined && !versions.some((x) => x.contract.version === v),
   )
   const settled = last?.isSuccess === true
-  useEffect(() => {
-    if (missing && more && settled) {
-      setCursors((c) => [...c, lastChunk[lastChunk.length - 1]!.atMs + 1])
-    }
-  }, [missing, more, settled, lastChunk])
+  const next = lastChunk.length === 0 ? undefined : lastChunk[lastChunk.length - 1]!.atMs + 1
+  if (missing && more && settled && next !== undefined && !cursors.includes(next)) {
+    setCursors([...cursors, next])
+  }
 
   const stamps: SourceStamp[] = [
     ctx.stamp,
-    ...queries.flatMap((q) => {
-      if (!q.data) return []
-      const { data: _data, ...rest } = q.data
-      return [rest]
-    }),
+    ...queries.flatMap((q) => (q.data ? [stampOf(q.data)] : [])),
   ]
   const failed = queries.find((q) => q.isError && !q.data)
   const wantedVersion = search.rev
@@ -203,13 +198,11 @@ function Versions({ ctx }: { ctx: ContractContext }) {
         <Skeleton shape="row" count={3} />
       ) : (
         <div className="grid gap-4">
-          <div
-            className="overflow-x-auto"
-            tabIndex={0}
-            role="region"
-            aria-label={t`Version history`}
-          >
-            <table className="rx-table w-full" aria-label={t`Versions of this contract`}>
+          <div>
+            <table
+              className="rx-table w-full [overflow-wrap:anywhere]"
+              aria-label={t`Versions of this contract`}
+            >
               <thead>
                 <tr>
                   <th scope="col">{t`Version`}</th>

@@ -7,7 +7,7 @@ import { Badge, Card, Empty, ErrorState, JsonView, Skeleton, SourceLine, Time } 
 import type { DocumentContext } from './DocumentPage'
 
 /** Platform answers at most this many revisions in one read. */
-export const REVISION_PAGE = 10
+const REVISION_PAGE = 10
 
 const revisionNumber = (revision: bigint | number | undefined | null, fallback: number): string =>
   String(revision ?? fallback)

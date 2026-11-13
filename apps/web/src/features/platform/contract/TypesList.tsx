@@ -27,8 +27,12 @@ function IndexTable({
     return <p className="text-ink-2">{t`No indices: documents can be fetched by ID only.`}</p>
   }
   return (
-    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={t`Indices of ${type}`}>
-      <table className="rx-table w-full" data-indices={id}>
+    <div>
+      <table
+        className="rx-table w-full [overflow-wrap:anywhere]"
+        aria-label={t`Indices of ${type}`}
+        data-indices={id}
+      >
         <thead>
           <tr>
             <th scope="col">{t`Index`}</th>

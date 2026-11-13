@@ -6,20 +6,9 @@ import { sdkQueries } from '@/data/sdk/queries'
 import type { DocumentDto } from '@/data/sdk/methods'
 import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
-import {
-  Badge,
-  Card,
-  Empty,
-  ErrorState,
-  Hash,
-  JsonView,
-  KeyValue,
-  LinkOut,
-  Skeleton,
-  Tabs,
-  Time,
-} from '@/ui'
+import { Badge, Card, Empty, Hash, JsonView, KeyValue, LinkOut, Skeleton, Tabs, Time } from '@/ui'
 import { typeKeepsHistory, useContract } from '../contract/contract-data'
+import { SdkGate } from '../contract/SdkGate'
 import { ProvenanceTab } from './ProvenanceTab'
 import { RevisionsTab } from './RevisionsTab'
 
@@ -74,43 +63,37 @@ export function DocumentPage({ contract, type, id, search }: DocumentPageProps) 
           title={t`That isn’t a document address.`}
           body={<Hash value={id} display="wrap" copy={false} />}
         />
-      ) : doc.isPending ? (
-        <Skeleton shape="block" height={220} />
-      ) : doc.isError && !doc.data ? (
-        <ErrorState
-          error={doc.error}
-          source="sdk"
-          onRetry={() => {
-            void doc.refetch()
-          }}
-        />
-      ) : !data || !doc.data ? (
-        <Empty
-          kind="not-found"
-          title={t`No document with this ID in this type.`}
-          body={
-            <Link to="/contract/$id/documents/$type" params={{ id: contract, type }}>
-              {t`Browse the documents of this type`}
-            </Link>
-          }
-        />
       ) : (
-        <Loaded
-          ctx={{
-            net,
-            contract,
-            type,
-            id,
-            doc: data,
-            stamp: stampOf(doc.data),
-            keepsHistory: contractQuery.data?.data
-              ? typeKeepsHistory(contractQuery.data.data, type)
-              : false,
-            page: search.page,
-          }}
-          tab={search.tab}
-          knowsContract={!!contractQuery.data?.data}
-        />
+        <SdkGate query={doc} skeleton={<Skeleton shape="block" height={220} />}>
+          {!data || !doc.data ? (
+            <Empty
+              kind="not-found"
+              title={t`No document with this ID in this type.`}
+              body={
+                <Link to="/contract/$id/documents/$type" params={{ id: contract, type }}>
+                  {t`Browse the documents of this type`}
+                </Link>
+              }
+            />
+          ) : (
+            <Loaded
+              ctx={{
+                net,
+                contract,
+                type,
+                id,
+                doc: data,
+                stamp: stampOf(doc.data),
+                keepsHistory: contractQuery.data?.data
+                  ? typeKeepsHistory(contractQuery.data.data, type)
+                  : false,
+                page: search.page,
+              }}
+              tab={search.tab}
+              knowsContract={!!contractQuery.data?.data}
+            />
+          )}
+        </SdkGate>
       )}
     </PageFrame>
   )

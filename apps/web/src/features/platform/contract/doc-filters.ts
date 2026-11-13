@@ -12,13 +12,13 @@ export interface FilterIndex {
   implicit?: boolean
 }
 
-export const RANGE_OPS: readonly WhereOp[] = ['lt', 'lte', 'gt', 'gte', 'sw']
+const RANGE_OPS: readonly WhereOp[] = ['lt', 'lte', 'gt', 'gte', 'sw']
 export const ALL_OPS: readonly WhereOp[] = ['eq', 'lt', 'lte', 'gt', 'gte', 'in', 'sw']
 const LOWER: readonly WhereOp[] = ['gt', 'gte']
 const UPPER: readonly WhereOp[] = ['lt', 'lte']
 
 /** Drive's most values in one `in` clause. */
-export const MAX_IN_VALUES = 100
+const MAX_IN_VALUES = 100
 
 export const OP_SYMBOL: Record<WhereOp, string> = {
   eq: '=',
@@ -31,7 +31,7 @@ export const OP_SYMBOL: Record<WhereOp, string> = {
 }
 
 /** The SDK's own spelling of each operator. */
-export const SDK_OP: Record<WhereOp, string> = {
+const SDK_OP: Record<WhereOp, string> = {
   eq: '==',
   lt: '<',
   lte: '<=',

@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQueries } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import type { SourceStamp } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { ContractTokenDto } from '@/data/sdk/methods'
 import { Entity } from '@/features/entity'
@@ -14,7 +14,7 @@ const asRecord = (v: unknown): Record<string, unknown> =>
   typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {}
 
 /** The token's name and decimals as its contract states them (`conventions`). */
-export function tokenFacts(token: ContractTokenDto) {
+function tokenFacts(token: ContractTokenDto) {
   const conventions = asRecord(token.config.conventions)
   const en = asRecord(asRecord(conventions.localizations).en)
   const supply = (v: unknown) => (typeof v === 'number' || typeof v === 'bigint' ? v : undefined)
@@ -43,14 +43,7 @@ export function TokensTab({ ctx }: { ctx: ContractContext }) {
     token,
     tokenId: ids[i]?.data?.data,
   }))
-  const stamps: SourceStamp[] = [
-    stamp,
-    ...ids.flatMap((q) => {
-      if (!q.data) return []
-      const { data: _data, ...rest } = q.data
-      return [rest]
-    }),
-  ]
+  const stamps: SourceStamp[] = [stamp, ...ids.flatMap((q) => (q.data ? [stampOf(q.data)] : []))]
   const columns = useMemo<ColumnDef<Row>[]>(
     () => [
       {

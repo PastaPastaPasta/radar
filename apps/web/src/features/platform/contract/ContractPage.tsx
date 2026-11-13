@@ -4,15 +4,16 @@ import { stampOf } from '@/data/envelope'
 import { IdentityRef, PageFrame, SaveButton, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, ErrorState, Hash, KeyValue, LinkOut, Skeleton, Tabs } from '@/ui'
+import { Badge, Card, Empty, Hash, KeyValue, LinkOut, Skeleton, Tabs } from '@/ui'
 import { ActivityTab } from './ActivityTab'
 import { ConfigTab } from './ConfigTab'
 import type { ContractContext, ContractPageSearch, ContractTab } from './contract-context'
-import { contractName, useContract, usePeContract } from './contract-data'
+import { contractName, typeNames, useContract, usePeContract } from './contract-data'
 import { GroupsTab } from './GroupsTab'
 import { HistoryTab } from './HistoryTab'
 import { OverviewTab } from './OverviewTab'
 import { SchemaTab } from './SchemaTab'
+import { SdkGate } from './SdkGate'
 import { TokensTab } from './TokensTab'
 import { TypesList } from './TypesList'
 
@@ -57,33 +58,27 @@ export function ContractPage({ id, search }: ContractPageProps) {
             </>
           }
         />
-      ) : contract.isPending ? (
-        <Skeleton shape="block" height={220} />
-      ) : contract.isError && !contract.data ? (
-        <ErrorState
-          error={contract.error}
-          source="sdk"
-          onRetry={() => {
-            void contract.refetch()
-          }}
-        />
-      ) : !data || !contract.data ? (
-        <Empty
-          kind="not-found"
-          title={t`No contract has this ID on this network.`}
-          body={<Hash value={id} display="wrap" />}
-        />
       ) : (
-        <Loaded
-          ctx={{
-            net,
-            id,
-            contract: data,
-            stamp: stampOf(contract.data),
-            search,
-          }}
-          pe={pe}
-        />
+        <SdkGate query={contract} skeleton={<Skeleton shape="block" height={220} />}>
+          {!data || !contract.data ? (
+            <Empty
+              kind="not-found"
+              title={t`No contract has this ID on this network.`}
+              body={<Hash value={id} display="wrap" />}
+            />
+          ) : (
+            <Loaded
+              ctx={{
+                net,
+                id,
+                contract: data,
+                stamp: stampOf(contract.data),
+                search,
+              }}
+              pe={pe}
+            />
+          )}
+        </SdkGate>
       )}
     </PageFrame>
   )
@@ -96,7 +91,7 @@ function Loaded({ ctx, pe }: { ctx: ContractContext; pe: ReturnType<typeof usePe
   const tabs: { id: ContractTab; label: string; count?: number }[] = [
     { id: 'overview', label: t`Overview` },
     { id: 'schema', label: t`Schema` },
-    { id: 'types', label: t`Types`, count: Object.keys(contract.documentSchemas).length },
+    { id: 'types', label: t`Types`, count: typeNames(contract).length },
     { id: 'tokens', label: t`Tokens`, count: contract.tokens.length },
     { id: 'groups', label: t`Groups`, count: contract.groups.length },
     { id: 'history', label: t`History` },
@@ -126,7 +121,7 @@ function Loaded({ ctx, pe }: { ctx: ContractContext; pe: ReturnType<typeof usePe
             },
             {
               label: t`Document types`,
-              value: formatInt(Object.keys(contract.documentSchemas).length),
+              value: formatInt(typeNames(contract).length),
             },
             { label: t`Tokens`, value: formatInt(contract.tokens.length) },
             { label: t`Groups`, value: formatInt(contract.groups.length) },

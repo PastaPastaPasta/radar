@@ -10,7 +10,7 @@ import { Entity } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { formatInt } from '@/lib/format'
 import { Badge, Card, DataTable, Empty, KeyValue, SourceLine, Time, Unavailable } from '@/ui'
-import { usePeEnabled } from '../contract/contract-data'
+import { listState, usePeEnabled } from '../contract/contract-data'
 import type { DocumentContext } from './DocumentPage'
 
 const PAGE_SIZE = 25
@@ -147,15 +147,7 @@ function Provenance({ ctx }: { ctx: DocumentContext }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => `${r.revision ?? 'r'}:${r.txHash ?? ''}`}
-        state={
-          revisions.isPending
-            ? 'loading'
-            : revisions.isError && !revisions.data
-              ? 'error'
-              : rows.length === 0
-                ? 'empty'
-                : 'ready'
-        }
+        state={listState(revisions, rows.length === 0)}
         error={revisions.error}
         onRetry={() => {
           void revisions.refetch()
