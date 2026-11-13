@@ -1,5 +1,13 @@
 import { t } from '@lingui/core/macro'
-import { Children, cloneElement, isValidElement, useId, type ReactNode } from 'react'
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useId,
+  useState,
+  type ReactNode,
+} from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { formatNumber, MINUS, UNIT_GAP } from '@/lib/format'
 import { cx, cssVars, layerAttr } from './cx'
@@ -293,27 +301,74 @@ export function Stat({
   )
 }
 
-/** A figure read this much earlier than its group's first shows its own age instead of borrowing the group's. */
+/** A figure with no height of its own, read this much earlier than its group's first, shows its own age instead of borrowing the group's. */
 const SAME_READ_MS = 30_000
+
+/** How long a figure may trail the newest height of its source before it says so: its refetch is usually still in flight. */
+export const BEHIND_GRACE_MS = 8_000
+
+/** The ids in `ids` that have stayed in it for `ms`, and none that left it since. */
+function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
+  const key = ids.join('\n')
+  const [state, setState] = useState<{ key: string; held: ReadonlySet<string> }>({
+    key,
+    held: new Set(),
+  })
+  if (state.key !== key) {
+    const current = new Set(ids)
+    setState({ key, held: new Set([...state.held].filter((id) => current.has(id))) })
+  }
+  useEffect(() => {
+    const timers = key
+      ? key
+          .split('\n')
+          .map((id) =>
+            setTimeout(() => setState((s) => ({ ...s, held: new Set(s.held).add(id) })), ms),
+          )
+      : []
+    return () => timers.forEach(clearTimeout)
+  }, [key, ms])
+  return state.held
+}
 
 /**
  * A row of stats. When several share a source, only the first carries its badge: the rest are read as part of the same
- * group, so a card of four figures from two sources shows two badges, not four. A figure that is clearly older than the
- * first of its source keeps its own badge, so a figure that stopped refreshing can't hide behind one that is current.
+ * group, so a card of four figures from two sources shows two badges, not four. A figure whose source height is below
+ * the newest height of its source in the group keeps its own badge once it has trailed for a grace period, so a figure
+ * that stopped refreshing can't hide behind one that is current. Fetch times play no part for figures that carry a
+ * height: a republish of the same tip says nothing about whether the other reads are current. Figures without a height
+ * fall back to comparing read times.
  */
 export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
+  const items = Children.toArray(children)
+  const sources = items.map((child) =>
+    isValidElement<StatProps>(child) && child.type === Stat ? child.props.source : undefined,
+  )
+  const newest = new Map<string, number>()
+  for (const source of sources) {
+    if (source?.height === undefined) continue
+    const key = sourceKey(source)
+    newest.set(key, Math.max(newest.get(key) ?? -1, source.height))
+  }
+  const trailing = sources.flatMap((source, i) =>
+    source?.height !== undefined && source.height < (newest.get(sourceKey(source)) ?? -1)
+      ? [String(i)]
+      : [],
+  )
+  const behind = useSustained(trailing, BEHIND_GRACE_MS)
   const seen = new Map<string, number>()
-  const stats = Children.map(children, (child) => {
-    if (!isValidElement<StatProps>(child) || child.type !== Stat || !child.props.source)
-      return child
-    const { source } = child.props
+  const stats = items.map((child, i) => {
+    const source = sources[i]
+    if (!source || !isValidElement<StatProps>(child)) return child
     const key = sourceKey(source)
     const first = seen.get(key)
     if (first === undefined) {
       seen.set(key, source.asOf)
       return child
     }
-    return first - source.asOf > SAME_READ_MS ? child : cloneElement(child, { source: undefined })
+    const aged =
+      source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(String(i))
+    return aged ? child : cloneElement(child, { source: undefined })
   })
   return (
     <div className="rx-stats" {...rest}>
