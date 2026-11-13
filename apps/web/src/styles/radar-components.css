@@ -1192,6 +1192,14 @@ button.rx-src--proof:hover {
     transition: none;
   }
 }
+.rx-rich-addr .rx-chip {
+  min-height: 44px;
+}
+.rx-rich-flow {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.4em;
+}
 .rx-pager {
   margin-left: auto;
   display: flex;
@@ -1226,14 +1234,6 @@ button.rx-src--proof:hover {
 }
 .rx-st--bad {
   color: var(--dh-bad);
-}
-.rx-rich-addr .rx-chip {
-  min-height: 44px;
-}
-.rx-rich-flow {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.4em;
 }
 .rx-up {
   display: inline-flex;

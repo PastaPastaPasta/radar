@@ -368,7 +368,6 @@ function TxView({
       </CoreBand>
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>
-        {info && payload ? (
         <SectionIndex
           sections={[
             ...(info && payload ? [{ id: 'payload', label: t`Payload` }] : []),
@@ -378,6 +377,7 @@ function TxView({
             { id: 'raw', label: t`Raw data` },
           ]}
         />
+        {info && payload ? (
           <Section id="payload" title={info.title} description={info.about} source={stamp}>
             <Card layer="core">
               <div data-payload={String(payload.kind)}>
@@ -483,6 +483,8 @@ function RawData({ tx }: { tx: DecodedTx }) {
   const [open, setOpen] = useState(false)
   return (
     <details
+      id="raw"
+      data-sec-target
       className="rx-card dh-disclosure"
       style={{ padding: '14px 20px' }}
       onToggle={(e) => setOpen(e.currentTarget.open)}
@@ -490,8 +492,6 @@ function RawData({ tx }: { tx: DecodedTx }) {
       <summary style={{ cursor: 'pointer', fontWeight: 600 }}>{t`Raw data`}</summary>
       {open ? (
         <>
-      id="raw"
-      data-sec-target
           <p className="rx-note">{t`The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs.`}</p>
           <pre className="rx-mono" style={{ overflow: 'auto', maxHeight: 420 }}>
             {jsonOf(tx)}
