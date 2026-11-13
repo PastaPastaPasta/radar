@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
@@ -534,10 +535,32 @@ test.describe('search leads somewhere real', () => {
     await expect(dialog.getByRole('option', { name: /Masternode/ })).toHaveCount(0)
   })
 
+  /** The routes search still withholds, read from `offered.ts` so this test follows each merge. */
+  const unfinished = new Set(
+    [
+      ...readFileSync(
+        new URL('../../apps/web/src/features/search/offered.ts', import.meta.url),
+        'utf8',
+      )
+        .split('UNFINISHED_ROUTES')[1]!
+        .split('])')[0]!
+        .matchAll(/'([^']+)'/g),
+    ].map((m) => m[1]),
+  )
+
   test('the palette lists only pages that are built @HY-14', async ({ page }) => {
     const dialog = await openPalette(page)
 
     await expect(dialog.getByRole('option', { name: /Blocks/ })).toBeVisible()
-    await expect(dialog.getByRole('option', { name: /Masternodes|Platform$|Nodes/ })).toHaveCount(0)
+    const pages: [RegExp, string][] = [
+      [/^Masternodes/, '/masternodes'],
+      [/^Platform$/, '/platform'],
+      [/^Nodes/, '/nodes'],
+    ]
+    for (const [name, path] of pages) {
+      const option = dialog.getByRole('option', { name })
+      if (unfinished.has(path)) await expect(option, path).toHaveCount(0)
+      else await expect(option.first(), path).toBeVisible()
+    }
   })
 })
