@@ -47,6 +47,7 @@ export function TxHoverCard({ id }: { id: string }) {
   }
   const total = tx.outputs.reduce((sum, o) => sum + o.value, 0n)
   const confirmations = tx.confirmations ?? 0
+  const instant = instantLockView(tx)
   return (
     <div data-hover-card="tx">
       <HoverCardLayout
@@ -71,10 +72,10 @@ export function TxHoverCard({ id }: { id: string }) {
                       claim={tx.chainLockClaim}
                       size="sm"
                     />
-                  ) : tx.isInstantLocked ? (
+                  ) : instant.state === 'claimed' || instant.state === 'corroborated' ? (
                     <InstantSendBadge
-                      claim={tx.instantLockClaim}
-                      sources={instantLockView(tx).sources}
+                      claim={instant.state === 'claimed' ? 'one-node' : undefined}
+                      source={instant.source}
                       size="sm"
                     />
                   ) : (

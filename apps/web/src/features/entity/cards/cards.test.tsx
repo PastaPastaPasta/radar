@@ -205,6 +205,24 @@ describe('TxHoverCard', () => {
     expect(within(root).queryByText('ChainLocked')).toBeNull()
   })
 
+  it.each([
+    ['two sources report the ChainLock', { isChainLocked: true }],
+    ['one node reports the ChainLock', { chainLockClaim: 'one-node' as const }],
+  ])(
+    'shows no InstantSend line once %s, even if the node reports a lock @X-06 @IN-05',
+    async (_name, lock) => {
+      setCoreClient(core({ tx: () => Promise.resolve({ ...stamp, data: { ...tx, ...lock } }) }))
+      const { TxHoverCard } = await import('./tx')
+      const Harness = await harness(<TxHoverCard id={TXID} />)
+      render(<Harness />)
+      const root = (
+        await screen.findByText(/In block 2,570,000/, {}, { timeout: 5000 })
+      ).closest<HTMLElement>('[data-hover-card="tx"]')!
+      expect(within(root).queryByText(/InstantSend/)).toBeNull()
+      expect(within(root).getByText(/ChainLock/)).toBeInTheDocument()
+    },
+  )
+
   it('shows a transaction without a block as in the mempool', async () => {
     setCoreClient(
       core({

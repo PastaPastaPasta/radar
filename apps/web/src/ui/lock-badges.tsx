@@ -43,16 +43,16 @@ export function ChainLockBadge({
 }
 
 /**
- * An InstantSend lock is one source's claim: the DAPI node that answered, or Hyphen's lock tag, which is live state and reports only locks its node relayed. `sources`
- * names who, so a lock recorded after nodes dropped theirs does not read as "reported by one node".
+ * An InstantSend lock is one source's claim: the DAPI node that answered, or Hyphen's lock tag when Hyphen stands in
+ * for DAPI. It is drawn only while the transaction's block is not ChainLocked; after that it no longer matters.
  */
 export function InstantSendBadge({
   claim,
-  sources = ['dapi'],
+  source = 'dapi',
   size,
 }: {
   claim: 'one-node' | undefined
-  sources?: readonly ('dapi' | 'hyphen')[]
+  source?: 'dapi' | 'hyphen'
   size?: 'sm'
 }) {
   if (!claim) {
@@ -62,16 +62,12 @@ export function InstantSendBadge({
       </Badge>
     )
   }
-  const hyphen = sources.includes('hyphen')
-  const dapi = sources.includes('dapi') || !hyphen
   return (
-    <span data-claim="one-node" data-sources={sources.join(' ')}>
+    <span data-claim="one-node" data-source={source}>
       <Badge tone="warning" size={size} icon={<Icon name="is" size="sm" />}>
-        {hyphen && dapi
-          ? t`InstantSend lock recorded by a DAPI node and Hyphen`
-          : hyphen
-            ? t`InstantSend lock recorded by Hyphen`
-            : t`InstantSend lock reported by one node`}
+        {source === 'hyphen'
+          ? t`InstantSend lock recorded by Hyphen`
+          : t`InstantSend lock reported by one node`}
       </Badge>
     </span>
   )

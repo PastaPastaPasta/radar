@@ -9,14 +9,10 @@ const claimedChainLock: Partial<DecodedTx> = { height: 100, chainLockClaim: 'one
 
 describe('InstantSend lock state @IN-05 @HY-07', () => {
   it('reads a pending transaction as its node flag says, with or without a lock', () => {
-    expect(instantLockView({ ...pending, ...instantLockFields(false) })).toMatchObject({
-      state: 'none',
-      sources: [],
-    })
-    expect(instantLockView({ ...pending, ...instantLockFields(true) })).toMatchObject({
+    expect(instantLockView({ ...pending, ...instantLockFields(false) })).toEqual({ state: 'none' })
+    expect(instantLockView({ ...pending, ...instantLockFields(true) })).toEqual({
       state: 'claimed',
-      sources: ['dapi'],
-      historical: false,
+      source: 'dapi',
     })
   })
 
@@ -25,54 +21,34 @@ describe('InstantSend lock state @IN-05 @HY-07', () => {
     expect(instantLockView({ ...mined, ...instantLockFields(true) }).state).toBe('claimed')
   })
 
-  it('ignores Hyphen’s record until the block is ChainLocked', () => {
-    expect(instantLockView({ ...mined, ...instantLockFields(false) }, true).state).toBe('none')
-    expect(instantLockView({ ...pending, ...instantLockFields(false) }, true).state).toBe('none')
+  it('reads a lock with no claim attached as corroborated', () => {
+    expect(instantLockView({ ...pending, isInstantLocked: true })).toEqual({
+      state: 'corroborated',
+      source: 'dapi',
+    })
+  })
+})
+
+describe('once the block is ChainLocked, InstantSend says nothing @IN-05 @HY-07', () => {
+  it.each([
+    ['a node reports a lock', instantLockFields(true)],
+    ['a node reports no lock', instantLockFields(false)],
+    ['Hyphen reports a lock', instantLockFields(true, 'hyphen')],
+    ['Hyphen reports no lock', instantLockFields(false, 'hyphen')],
+    ['nothing is carried', {}],
+  ])('is settled when %s', (_name, fields) => {
+    expect(instantLockView({ ...chainLocked, ...fields })).toEqual({ state: 'settled' })
   })
 
-  it('keeps a lock a DAPI node reports for a ChainLocked block', () => {
-    expect(instantLockView({ ...chainLocked, ...instantLockFields(true) })).toMatchObject({
-      state: 'claimed',
-      sources: ['dapi'],
-      historical: true,
+  it('counts a ChainLock one node reports', () => {
+    expect(instantLockView({ ...claimedChainLock, ...instantLockFields(true) })).toEqual({
+      state: 'settled',
     })
   })
 
-  it('shows Hyphen’s record when the DAPI node has dropped its lock', () => {
-    expect(instantLockView({ ...chainLocked, ...instantLockFields(false) }, true)).toMatchObject({
-      state: 'claimed',
-      sources: ['hyphen'],
-      historical: true,
-    })
-  })
-
-  it('names both sources when both report a lock', () => {
-    expect(instantLockView({ ...chainLocked, ...instantLockFields(true) }, true).sources).toEqual([
-      'dapi',
-      'hyphen',
-    ])
-  })
-
-  it('says the state is not known, never "no lock", when a ChainLocked block has no report', () => {
-    for (const hyphenLock of [undefined, false]) {
-      expect(instantLockView({ ...chainLocked, ...instantLockFields(false) }, hyphenLock)).toEqual({
-        state: 'unknown',
-        sources: [],
-        historical: true,
-        unknownBy: 'pruned',
-      })
-    }
-  })
-
-  it('treats a ChainLock one node reports as already past the point where nodes drop locks', () => {
-    expect(instantLockView({ ...claimedChainLock, ...instantLockFields(false) }).state).toBe(
-      'unknown',
-    )
-  })
-
-  it('names Hyphen as the source when Hyphen stood in for DAPI', () => {
-    expect(instantLockView({ ...chainLocked, ...instantLockFields(true, 'hyphen') })).toMatchObject(
-      { state: 'claimed', sources: ['hyphen'] },
+  it('does not settle a pending transaction, whatever lock fields it carries', () => {
+    expect(instantLockView({ isChainLocked: true, ...instantLockFields(true) }).state).toBe(
+      'claimed',
     )
   })
 })
@@ -81,19 +57,16 @@ describe('Hyphen’s answer is silence, not "no lock" @IN-05 @HY-07', () => {
   it.each([
     ['pending', pending],
     ['mined', mined],
-    ['ChainLocked', chainLocked],
   ])('reads Hyphen’s false for a %s transaction as not known', (_name, base) => {
-    expect(instantLockView({ ...base, ...instantLockFields(false, 'hyphen') })).toMatchObject({
+    expect(instantLockView({ ...base, ...instantLockFields(false, 'hyphen') })).toEqual({
       state: 'unknown',
-      sources: [],
-      unknownBy: 'source',
     })
   })
 
   it('still reads a lock Hyphen reports as one source’s claim', () => {
-    expect(instantLockView({ ...pending, ...instantLockFields(true, 'hyphen') })).toMatchObject({
+    expect(instantLockView({ ...pending, ...instantLockFields(true, 'hyphen') })).toEqual({
       state: 'claimed',
-      sources: ['hyphen'],
+      source: 'hyphen',
     })
   })
 
@@ -102,32 +75,12 @@ describe('Hyphen’s answer is silence, not "no lock" @IN-05 @HY-07', () => {
   })
 })
 
-describe('a lock remembered from an earlier visit @IN-05 @DATA-02', () => {
-  const remembered = { ...instantLockFields(false), instantLockRemembered: true as const }
-
-  it('is ignored for a pending transaction', () => {
-    expect(instantLockView({ ...pending, ...remembered }).state).toBe('none')
-  })
-
-  it('is ignored for a mined transaction that is not historical', () => {
-    expect(instantLockView({ ...mined, ...remembered }).state).toBe('none')
-  })
-
-  it('applies to a transaction in a ChainLocked block, as a DAPI node’s claim', () => {
-    expect(instantLockView({ ...chainLocked, ...remembered })).toMatchObject({
-      state: 'claimed',
-      sources: ['dapi'],
-      historical: true,
-    })
-  })
-})
-
 describe('a network without ChainLocks @IN-05', () => {
-  const deep = (confirmations: number): Partial<DecodedTx> => ({
+  const deep = (confirmations: number, locked = false): Partial<DecodedTx> => ({
     height: 100,
     confirmations,
     instantLockKeepDepth: instantLockKeepDepth('devnet-x'),
-    ...instantLockFields(false),
+    ...instantLockFields(locked),
   })
 
   it('keeps locks 24 blocks on mainnet and 6 elsewhere', () => {
@@ -137,21 +90,13 @@ describe('a network without ChainLocks @IN-05', () => {
   })
 
   it('reads a transaction above the keep depth as its node says', () => {
-    expect(instantLockView(deep(5))).toMatchObject({ state: 'none', historical: false })
+    expect(instantLockView(deep(5)).state).toBe('none')
+    expect(instantLockView(deep(5, true)).state).toBe('claimed')
   })
 
-  it('treats a transaction at the keep depth as historical, and its silence as unknown', () => {
-    expect(instantLockView(deep(6))).toMatchObject({
-      state: 'unknown',
-      historical: true,
-      unknownBy: 'pruned',
-    })
-  })
-
-  it('applies a remembered lock once it is that deep', () => {
-    const view = instantLockView({ ...deep(7), instantLockRemembered: true })
-    expect(view).toMatchObject({ state: 'claimed', sources: ['dapi'] })
-    expect(instantLockView({ ...deep(2), instantLockRemembered: true }).state).toBe('none')
+  it('says nothing once the transaction is at the keep depth, where nodes prune locks', () => {
+    expect(instantLockView(deep(6))).toEqual({ state: 'settled' })
+    expect(instantLockView(deep(7, true))).toEqual({ state: 'settled' })
   })
 
   it('does not apply the depth when a ChainLock is known on the network', () => {
@@ -160,6 +105,6 @@ describe('a network without ChainLocks @IN-05', () => {
       confirmations: 50,
       ...instantLockFields(false),
     }
-    expect(instantLockView(known)).toMatchObject({ state: 'none', historical: false })
+    expect(instantLockView(known).state).toBe('none')
   })
 })

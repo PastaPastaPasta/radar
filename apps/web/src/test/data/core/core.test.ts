@@ -241,21 +241,21 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect((await core.prevouts(net, tx)).data.size).toBe(0)
   })
 
-  it('carries the lock flags and confirmations of a mined transaction', async () => {
+  it('carries the ChainLock flag and confirmations of a mined transaction', async () => {
     const tx = (
       await core.tx(net, manifest.entries.find((x) => x.tags.includes('transfer'))!.txid!)
     ).data!
     expect(tx.confirmations).toBeGreaterThan(0)
-    expect(typeof tx.isInstantLocked).toBe('boolean')
     expect(typeof tx.isChainLocked).toBe('boolean')
   })
 
-  it('reports an InstantSend lock as one node’s claim on the DAPI path @HY-07', async () => {
+  it('carries no InstantSend flag once the block is ChainLocked, though the node reports a lock @IN-05 @HY-07', async () => {
     const tx = (
       await core.tx(net, manifest.entries.find((x) => x.tags.includes('instant-locked'))!.txid!)
     ).data!
-    expect(tx.isInstantLocked).toBe(true)
-    expect(tx.instantLockClaim).toBe('one-node')
+    expect(tx.isChainLocked === true || tx.chainLockClaim === 'one-node').toBe(true)
+    expect(tx).not.toHaveProperty('isInstantLocked')
+    expect(tx).not.toHaveProperty('instantLockClaim')
   })
 
   it('refuses to guess when a node request has no recording', async () => {

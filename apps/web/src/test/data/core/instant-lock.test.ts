@@ -46,11 +46,7 @@ function memoryCache(): CoreCache {
   return {
     getTx: (_net: string, txid: string) => Promise.resolve(txs.get(txid)),
     putTx: (_net: string, tx: CachedTx) => {
-      const kept = txs.get(tx.txid)
-      txs.set(
-        tx.txid,
-        tx.instantLock || !kept?.instantLock ? tx : { ...tx, ...kept, bytes: tx.bytes },
-      )
+      txs.set(tx.txid, tx)
       return Promise.resolve()
     },
     getHeaders: () => Promise.resolve(undefined),
@@ -74,7 +70,7 @@ function clientOver(transport: DapiTransport, cache?: CoreCache, dapi: 'ok' | 'd
   })
 }
 
-describe('a lock a DAPI node reported stays visible @IN-05 @HY-07 @DATA-02', () => {
+describe('a transaction in a ChainLocked block carries no InstantSend state @IN-05 @HY-07 @DATA-02', () => {
   const find = async () => {
     const manifest = await loadDapiManifest('mainnet')
     return manifest.entries.find(
@@ -82,51 +78,29 @@ describe('a lock a DAPI node reported stays visible @IN-05 @HY-07 @DATA-02', () 
     )!.txid!
   }
 
-  it('keeps it when the next node has dropped its own', async () => {
+  it.each([true, false])('whether the node says locked=%s', async (locked) => {
     const txid = await find()
+    const tx = (await clientOver(transportSaying({ locked })).tx('mainnet', txid)).data!
+    expect(tx.isChainLocked === true || tx.chainLockClaim !== undefined).toBe(true)
+    expect(tx).not.toHaveProperty('isInstantLocked')
+    expect(tx).not.toHaveProperty('instantLockClaim')
+    expect(instantLockView(tx)).toEqual({ state: 'settled' })
+  })
+
+  it('remembers no lock between reads or visits', async () => {
+    const txid = await find()
+    const cache = memoryCache()
     const locks = { locked: true }
-    const core = clientOver(transportSaying(locks))
-    expect((await core.tx('mainnet', txid)).data!.isInstantLocked).toBe(true)
+    const core = clientOver(transportSaying(locks), cache)
+    await core.tx('mainnet', txid)
+    expect(Object.keys((await cache.getTx('mainnet', txid))!).sort()).toEqual(['bytes', 'txid'])
     locks.locked = false
     const again = (await core.tx('mainnet', txid)).data!
-    expect(again).toMatchObject({ isInstantLocked: false, instantLockRemembered: true })
-    expect(instantLockView(again)).toMatchObject({ state: 'claimed', sources: ['dapi'] })
-  })
-
-  it('keeps it across visits through the cache', async () => {
-    const txid = await find()
-    const cache = memoryCache()
-    const locks = { locked: true }
-    expect(
-      (await clientOver(transportSaying(locks), cache).tx('mainnet', txid)).data!.isInstantLocked,
-    ).toBe(true)
-    locks.locked = false
     const later = (await clientOver(transportSaying(locks), cache).tx('mainnet', txid)).data!
-    expect(later.isInstantLocked).toBe(false)
-    expect(instantLockView(later)).toMatchObject({ state: 'claimed', sources: ['dapi'] })
-    expect(await cache.getTx('mainnet', txid)).toMatchObject({ instantLock: true })
-  })
-
-  it('does not invent a lock for a transaction no node ever reported one for', async () => {
-    const txid = await find()
-    const cache = memoryCache()
-    const core = clientOver(transportSaying({ locked: false }), cache)
-    expect((await core.tx('mainnet', txid)).data!.isInstantLocked).toBe(false)
-    expect((await core.tx('mainnet', txid)).data!.isInstantLocked).toBe(false)
-    expect((await cache.getTx('mainnet', txid))?.instantLock).toBeUndefined()
-  })
-
-  it('carries a remembered lock as its own field, never as the node’s flag', async () => {
-    const txid = await find()
-    const cache = memoryCache()
-    const locks = { locked: true }
-    await clientOver(transportSaying(locks), cache).tx('mainnet', txid)
-    locks.locked = false
-    const later = (await clientOver(transportSaying(locks), cache).tx('mainnet', txid)).data!
-    expect(later).toMatchObject({ isInstantLocked: false, instantLockRemembered: true })
-    locks.locked = true
-    const fresh = (await clientOver(transportSaying(locks), cache).tx('mainnet', txid)).data!
-    expect(fresh.instantLockRemembered).toBeUndefined()
+    for (const tx of [again, later]) {
+      expect(tx).not.toHaveProperty('instantLockRemembered')
+      expect(instantLockView(tx)).toEqual({ state: 'settled' })
+    }
   })
 })
 
@@ -158,74 +132,73 @@ function withoutChainLocks(locks: { locked: boolean }, confirmations: number): D
   }
 }
 
-describe('a network without ChainLocks keeps locks for the node’s keep depth @IN-05 @DATA-02', () => {
-  const run = async (confirmations: number, laterConfirmations = confirmations) => {
-    const txid = await (async () => {
-      const manifest = await loadDapiManifest('mainnet')
-      return manifest.entries.find((e) => e.id === 'tx-normal-multi')!.txid!
-    })()
-    const cache = memoryCache()
-    const locks = { locked: true }
-    const first = (
-      await clientOver(withoutChainLocks(locks, confirmations), cache).tx('mainnet', txid)
-    ).data!
-    const cached = await cache.getTx('mainnet', txid)
-    locks.locked = false
-    const later = (
-      await clientOver(withoutChainLocks(locks, laterConfirmations), cache).tx('mainnet', txid)
-    ).data!
-    return { first, later, cached }
+describe('a network without ChainLocks shows the node’s answer up to its keep depth @IN-05 @DATA-02', () => {
+  const read = async (locked: boolean, confirmations: number) => {
+    const manifest = await loadDapiManifest('mainnet')
+    const txid = manifest.entries.find((e) => e.id === 'tx-normal-multi')!.txid!
+    return (await clientOver(withoutChainLocks({ locked }, confirmations)).tx('mainnet', txid))
+      .data!
   }
 
-  it('remembers a lock above the keep depth but does not apply it while the node’s answer is live', async () => {
-    const { first, later, cached } = await run(5)
-    expect(first.instantLockKeepDepth).toBe(24)
-    expect(instantLockView(first)).toMatchObject({ state: 'claimed', historical: false })
-    expect(cached).toMatchObject({ instantLock: true })
-    expect(later.instantLockRemembered).toBe(true)
-    expect(instantLockView(later)).toMatchObject({ state: 'none', historical: false })
+  it('shows a lock the node reports while the transaction is above the keep depth', async () => {
+    const tx = await read(true, 5)
+    expect(tx.instantLockKeepDepth).toBe(24)
+    expect(instantLockView(tx)).toEqual({ state: 'claimed', source: 'dapi' })
   })
 
-  it('applies a lock seen while shallow once the transaction is deep enough to be pruned', async () => {
-    const { later } = await run(5, 30)
-    expect(later.instantLockRemembered).toBe(true)
-    expect(instantLockView(later)).toMatchObject({
-      state: 'claimed',
-      historical: true,
-      sources: ['dapi'],
-    })
+  it('shows the node’s "no lock" while the transaction is above the keep depth', async () => {
+    expect(instantLockView(await read(false, 5))).toEqual({ state: 'none' })
   })
 
-  it('persists and applies it once the transaction is that deep', async () => {
-    const { first, later, cached } = await run(30)
-    expect(instantLockView(first)).toMatchObject({ state: 'claimed', historical: true })
-    expect(cached).toMatchObject({ instantLock: true })
-    expect(later.instantLockRemembered).toBe(true)
-    expect(instantLockView(later)).toMatchObject({ state: 'claimed', sources: ['dapi'] })
-  })
+  it.each([true, false])(
+    'shows nothing once the transaction is deep enough for the lock to be pruned (locked=%s)',
+    async (locked) => {
+      expect(instantLockView(await read(locked, 30))).toEqual({ state: 'settled' })
+    },
+  )
 })
 
-describe('Hyphen standing in for DAPI says nothing about a lock it does not hold @IN-05 @HY-07', () => {
+describe('Hyphen standing in for DAPI @IN-05 @HY-07', () => {
   const txid = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
-
-  it('reads its false as not known, and its true as one source’s claim', async () => {
-    const core = clientOver(transportSaying({ locked: false }), undefined, 'down')
-    const claimed = (await core.tx('mainnet', txid)).data!
-    expect(instantLockView(claimed)).toMatchObject({ state: 'claimed', sources: ['hyphen'] })
-
-    const recorded = JSON.parse(
+  const recorded = () =>
+    JSON.parse(
       readFileSync(
         resolve(process.cwd(), `src/test/fixtures/http/hyphen/mainnet/tx__${txid}.json`),
         'utf8',
       ),
-    ) as { body: { live: { tags: { islock: boolean } } } }
-    recorded.body.live.tags.islock = false
-    server.use(http.get(`*/x/hy/mainnet/tx/${txid}`, () => HttpResponse.json(recorded.body)))
-    const silent = (await core.tx('mainnet', txid)).data!
-    expect(instantLockView(silent)).toMatchObject({
-      state: 'unknown',
-      sources: [],
-      unknownBy: 'source',
+    ) as {
+      body: { blockHeight: number | null; asOfHeight: number; live: { tags: { islock: boolean } } }
+    }
+
+  it('reads a lock Hyphen reports for a mined transaction that is not ChainLocked as its claim', async () => {
+    const core = clientOver(transportSaying({ locked: false }), undefined, 'down')
+    expect(instantLockView((await core.tx('mainnet', txid)).data!)).toEqual({
+      state: 'claimed',
+      source: 'hyphen',
     })
+  })
+
+  it('carries no InstantSend state once the block is final under Hyphen’s index', async () => {
+    const core = clientOver(transportSaying({ locked: false }), undefined, 'down')
+    const body = recorded().body
+    body.asOfHeight = body.blockHeight! + 30
+    server.use(http.get(`*/x/hy/mainnet/tx/${txid}`, () => HttpResponse.json(body)))
+    const tx = (await core.tx('mainnet', txid)).data!
+    expect(tx.isChainLocked).toBe(true)
+    expect(tx).not.toHaveProperty('isInstantLocked')
+    expect(instantLockView(tx)).toEqual({ state: 'settled' })
+  })
+
+  it('reads its true as one source’s claim and its false as not known while the transaction is pending', async () => {
+    const core = clientOver(transportSaying({ locked: false }), undefined, 'down')
+    const body = recorded().body
+    body.blockHeight = null
+    server.use(http.get(`*/x/hy/mainnet/tx/${txid}`, () => HttpResponse.json(body)))
+    expect(instantLockView((await core.tx('mainnet', txid)).data!)).toEqual({
+      state: 'claimed',
+      source: 'hyphen',
+    })
+    body.live.tags.islock = false
+    expect(instantLockView((await core.tx('mainnet', txid)).data!)).toEqual({ state: 'unknown' })
   })
 })

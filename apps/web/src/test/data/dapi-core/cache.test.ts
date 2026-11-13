@@ -1,12 +1,8 @@
 import 'fake-indexeddb/auto'
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  CACHE_MAX_BYTES,
-  CACHE_TRIM_TO_BYTES,
-  CoreCache,
-  INSTANT_LOCK_KEEP_MS,
-} from '@/data/dapi-core/cache'
+import { openDB } from 'idb'
+import { CACHE_DB, CACHE_MAX_BYTES, CACHE_TRIM_TO_BYTES, CoreCache } from '@/data/dapi-core/cache'
 
 const bytes = (n: number, fill = 1) => new Uint8Array(n).fill(fill)
 
@@ -46,37 +42,21 @@ describe('CoreCache', () => {
     expect(await cache.getTx('mainnet', 'zz')).toBeUndefined()
   })
 
-  it('never lets a write without a lock clear one a node reported', async () => {
+  it('reads a row written when InstantSend locks were still remembered, and drops the old fields on the next write', async () => {
     const cache = new CoreCache()
-    await cache.putTx('mainnet', {
-      txid: 'tt',
-      bytes: bytes(200),
-      instantLock: true,
-      instantLockAt: Date.now(),
-    })
-    await Promise.all([
-      cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) }),
-      cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) }),
-    ])
-    expect(await cache.getTx('mainnet', 'tt')).toMatchObject({ instantLock: true })
-  })
-
-  it('lets a lock lapse after 30 days, and trusts none written without a time', async () => {
-    let now = 1_000_000
-    const cache = new CoreCache(() => now)
-    await cache.putTx('mainnet', {
-      txid: 'tt',
-      bytes: bytes(10),
-      instantLock: true,
-      instantLockAt: now,
-    })
-    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBe(true)
-    now += INSTANT_LOCK_KEEP_MS + 1
-    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBeUndefined()
-    await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(10) })
-    expect((await cache.getTx('mainnet', 'tt'))?.instantLock).toBeUndefined()
-    await cache.putTx('mainnet', { txid: 'uu', bytes: bytes(10), instantLock: true })
-    expect((await cache.getTx('mainnet', 'uu'))?.instantLock).toBeUndefined()
+    await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200) })
+    const db = await openDB(CACHE_DB)
+    await db.put(
+      'txs',
+      { bytes: bytes(200, 7), instantLock: true, instantLockAt: Date.now() },
+      'mainnet:tt',
+    )
+    const read = await cache.getTx('mainnet', 'tt')
+    expect(Object.keys(read!).sort()).toEqual(['bytes', 'txid'])
+    expect(Array.from(read!.bytes)).toEqual(Array.from(bytes(200, 7)))
+    await cache.putTx('mainnet', { txid: 'tt', bytes: bytes(200, 7) })
+    expect(Object.keys((await db.get('txs', 'mainnet:tt')) as object)).toEqual(['bytes'])
+    db.close()
   })
 
   it('returns a header range only when every header is there', async () => {

@@ -145,9 +145,8 @@ function TxView({
   const sums = totals(tx, prev)
   const firstSeen = useFirstSeen(net, tx.txid, { enabled: hyphenFit && !mined })
   const hyFee = hy.data?.data?.fee ?? undefined
-  const hyphenLock = hy.data?.data ? hy.data.data.live?.tags?.islock === true : undefined
   const lockFacts = useMemo(() => ({ ...tx, confirmations }), [tx, confirmations])
-  const instant = instantLockView(lockFacts, hyphenLock)
+  const instant = instantLockView(lockFacts)
   const fee = sums.fee ?? hyFee
   const outTotal = sumOutputs(tx)
   const toOthers = tx.outputs.reduce(
@@ -300,7 +299,7 @@ function TxView({
                 {instant.state === 'claimed' || instant.state === 'corroborated' ? (
                   <InstantSendBadge
                     claim={instant.state === 'claimed' ? 'one-node' : undefined}
-                    sources={instant.sources}
+                    source={instant.source}
                   />
                 ) : null}
                 <ChainLockBadge locked={tx.isChainLocked === true} claim={tx.chainLockClaim} />
@@ -406,19 +405,10 @@ function TxView({
           id="settlement"
           title={t`How it settled`}
           description={mined ? undefined : t`Waiting to be mined.`}
-          source={[
-            stamp,
-            ...(firstSeen ? [firstSeen.stamp] : []),
-            ...(hy.data && instant.historical ? [stampOf(hy.data)] : []),
-          ]}
+          source={[stamp, ...(firstSeen ? [firstSeen.stamp] : [])]}
         >
           <Card layer="core">
-            <Settlement
-              tx={lockFacts}
-              coinbase={coinbase}
-              firstSeen={firstSeen}
-              hyphenLock={hyphenLock}
-            />
+            <Settlement tx={lockFacts} coinbase={coinbase} firstSeen={firstSeen} />
           </Card>
         </Section>
 

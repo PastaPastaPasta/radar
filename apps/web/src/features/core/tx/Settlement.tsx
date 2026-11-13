@@ -32,29 +32,25 @@ function Step({
 }
 
 /**
- * Received → InstantSend locked → mined → ChainLocked. The received time is the mempool's first sighting, shown
- * while the transaction is pending and for one this page watched arrive. No source keeps it once a transaction
- * is mined, so a mined one opens at the step it has, with one line saying why.
+ * Received → InstantSend → mined → ChainLocked. Once the block is ChainLocked the InstantSend lock no longer
+ * matters, so its step is left out and the timeline reads Mined → ChainLocked. The received time is the mempool's
+ * first sighting, shown while the transaction is pending and for one this page watched arrive. No source keeps it
+ * once a transaction is mined, so a mined one opens at the step it has, with one line saying why.
  */
 export function Settlement({
   tx,
   coinbase,
   firstSeen,
-  hyphenLock,
 }: {
   tx: DecodedTx
   coinbase: boolean
   firstSeen?: FirstSeen
-  /** Hyphen's live lock tag read next to a DAPI answer: `true` means its node relayed a lock; undefined while unasked or unanswered. */
-  hyphenLock?: boolean
 }) {
   const { t } = useLingui()
   const mined = tx.height !== undefined
   const locked = tx.isChainLocked === true
-  const lock = instantLockView(tx, hyphenLock)
+  const lock = instantLockView(tx)
   const instant = lock.state
-  const hyphen = lock.sources.includes('hyphen')
-  const dapi = lock.sources.includes('dapi')
   const received = !coinbase && (firstSeen !== undefined || !mined)
   return (
     <>
@@ -75,7 +71,7 @@ export function Settlement({
             }
           />
         ) : null}
-        {coinbase ? null : (
+        {coinbase || instant === 'settled' ? null : (
           <Step
             name="instantsend"
             state={
@@ -103,15 +99,11 @@ export function Settlement({
               instant === 'corroborated'
                 ? t`masternodes locked its inputs; final from here`
                 : instant === 'claimed'
-                  ? hyphen && dapi
-                    ? t`recorded by a DAPI node and Hyphen; neither is independently confirmed`
-                    : hyphen
-                      ? t`recorded by Hyphen; no second source has confirmed it`
-                      : t`reported by one node; no second source has confirmed it`
+                  ? lock.source === 'hyphen'
+                    ? t`recorded by Hyphen; no second source has confirmed it`
+                    : t`reported by one node; no second source has confirmed it`
                   : instant === 'unknown'
-                    ? lock.unknownBy === 'source'
-                      ? t`not known from this source: Hyphen only reports locks its node relayed while it was watching`
-                      : t`not known: nodes drop InstantSend locks once a block is ChainLocked`
+                    ? t`not known from this source: Hyphen only reports locks its node relayed while it was watching`
                     : mined
                       ? t`No InstantSend lock was seen`
                       : t`waiting for the masternodes to lock it`

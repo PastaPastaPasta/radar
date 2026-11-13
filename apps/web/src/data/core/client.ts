@@ -592,16 +592,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     time?: number
     confirmations?: number
     isInstantLocked: boolean
-    /** A node reported a lock earlier and has since dropped it; it counts only once the transaction is historical. */
-    remembered?: boolean
     /** Blocks after which Core prunes the lock, set only on a network where no ChainLock is known. */
     keepDepth?: number
     lock: LockStatus
     node?: string
   }
-
-  /** Locks DAPI nodes have reported this session, so one a later node has already pruned stays visible. */
-  const seenLocks = new Set<string>()
 
   async function dapiTx(
     net: NetworkId,
@@ -613,7 +608,6 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     if (!o.placement && hit) {
       return { tx: await decoder.tx(hit.bytes, net), isInstantLocked: false, lock: 'none' }
     }
-    const remembered = hit?.instantLock === true || seenLocks.has(`${net}:${txid}`)
     let result
     try {
       result = await verified(
@@ -670,16 +664,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const lock = mined ? await lockStatus(net, m.height, o.signal, o.priority) : 'none'
     const keepDepth =
       mined && lock === 'none' && lockView(net).claimed < 0 ? instantLockKeepDepth(net) : undefined
-    // Remember every lock a node reports, pending or mined: Core may prune it before the transaction is historical.
-    // The view applies a remembered lock only once the transaction is historical, so it never overrides a live answer.
-    if (m.isInstantLocked) seenLocks.add(`${net}:${txid}`)
-    if (cache && mined) {
-      void cache.putTx(net, {
-        txid: tx.txid,
-        bytes: m.transaction,
-        ...(m.isInstantLocked ? { instantLock: true as const, instantLockAt: deps.now() } : {}),
-      })
-    }
+    if (cache && mined) void cache.putTx(net, { txid: tx.txid, bytes: m.transaction })
     return {
       tx,
       blockHash,
@@ -687,7 +672,6 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       time,
       confirmations: m.confirmations,
       isInstantLocked: m.isInstantLocked,
-      remembered: remembered && !m.isInstantLocked,
       ...(keepDepth !== undefined ? { keepDepth } : {}),
       lock,
       node: result.node,
@@ -844,7 +828,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       if (hyphenStandsIn(net)) {
         const found = await hyphenRawTx(net, id, signal)
         if (!found) return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
-        const { tx, height, time, confirmations, isInstantLocked, isChainLocked } = found.value
+        const { tx, height, time, confirmations, isInstantLocked, isChainLocked, chainLockClaim } =
+          found.value
         return fromHyphen(
           found.stamp,
           {
@@ -852,8 +837,12 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
             height,
             ...(time !== undefined ? { time } : {}),
             confirmations,
-            ...instantLockFields(isInstantLocked, 'hyphen'),
+            // Once the block is ChainLocked the InstantSend lock no longer matters, so it is not carried.
+            ...(isChainLocked || chainLockClaim
+              ? {}
+              : instantLockFields(isInstantLocked, 'hyphen')),
             isChainLocked,
+            ...(chainLockClaim ? { chainLockClaim } : {}),
           },
           'dapi-down',
           { height },
@@ -867,8 +856,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         ...(raw.height !== undefined ? { height: raw.height } : {}),
         ...(raw.time !== undefined ? { time: raw.time } : {}),
         ...(raw.height !== undefined ? { confirmations: raw.confirmations } : {}),
-        ...instantLockFields(raw.isInstantLocked),
-        ...(raw.remembered ? { instantLockRemembered: true as const } : {}),
+        // Once the block is ChainLocked the InstantSend lock no longer matters, so it is not carried.
+        ...(raw.lock === 'none' ? instantLockFields(raw.isInstantLocked) : {}),
         ...(raw.keepDepth !== undefined ? { instantLockKeepDepth: raw.keepDepth } : {}),
         isChainLocked: raw.lock === 'locked',
         ...(raw.lock === 'claimed' ? { chainLockClaim: 'one-node' as const } : {}),

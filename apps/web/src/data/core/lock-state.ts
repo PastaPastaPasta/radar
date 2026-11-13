@@ -1,11 +1,7 @@
 import type { NetworkId } from '@/lib/network'
 import type { DecodedTx, InstantLockSource } from './types'
 
-/**
- * Dash Core deletes a transaction's InstantSend lock once the block holding it is fully confirmed by a ChainLock, and
- * nodes do that at different moments. For a mined transaction in a ChainLocked block, a node saying "no lock" only
- * means that node no longer holds one. It is never evidence that none existed.
- */
+/** The InstantSend fields of a transaction whose block is not ChainLocked, from the source that answered. */
 export function instantLockFields(
   isInstantLocked: boolean | undefined,
   source: InstantLockSource = 'dapi',
@@ -39,52 +35,32 @@ type LockFacts = Pick<
   | 'isInstantLocked'
   | 'instantLockClaim'
   | 'instantLockSource'
-  | 'instantLockRemembered'
   | 'instantLockKeepDepth'
 >
 
 /**
- * - `none`: pending, or mined and not yet historical, and the node that answered reports no lock. Its silence is
- *   meaningful.
- * - `claimed`: one or more sources report a lock; nothing independent has confirmed it.
+ * - `settled`: the transaction's block is ChainLocked (or, on a network without ChainLocks, buried past the depth at
+ *   which nodes prune locks). Its InstantSend lock no longer matters and nothing about it is shown.
+ * - `none`: pending or mined, not settled, and the node that answered reports no lock.
+ * - `claimed`: one source reports a lock; nothing independent has confirmed it.
  * - `corroborated`: a lock with no claim attached.
- * - `unknown`: no source can say. Either the transaction is historical and nodes have dropped its lock by now, or the
- *   only answer came from Hyphen, which can't tell "no lock" from "not tracked".
+ * - `unknown`: the only answer came from Hyphen, which can't tell "no lock" from "not tracked".
  */
-export type InstantLockState = 'none' | 'claimed' | 'corroborated' | 'unknown'
+export type InstantLockState = 'settled' | 'none' | 'claimed' | 'corroborated' | 'unknown'
 
 export interface InstantLockView {
   state: InstantLockState
-  /** Who reports the lock, in the order DAPI then Hyphen. Empty for `none` and `unknown`. */
-  sources: InstantLockSource[]
-  /** The transaction is mined past the point where nodes drop locks, so a node's silence says nothing. */
-  historical: boolean
-  /** Why `unknown`: nodes dropped the lock (`pruned`), or the answering source cannot say (`source`). */
-  unknownBy?: 'pruned' | 'source'
+  /** Who reports the lock; set for `claimed` and `corroborated`. */
+  source?: InstantLockSource
 }
 
 /**
- * Whether the block holding the transaction is ChainLocked. A ChainLock one node reports counts too: it can only
- * soften "no lock" into "not known", which is the safe way to be wrong.
+ * Whether InstantSend still says anything about this transaction. A ChainLock one node reports counts as a
+ * ChainLock here: the lock state is dropped a moment early at worst, and never shown where nodes have pruned it.
  */
-export function inChainLockedBlock(
-  tx: Pick<DecodedTx, 'height' | 'isChainLocked' | 'chainLockClaim'>,
-) {
-  return tx.height !== undefined && (tx.isChainLocked === true || tx.chainLockClaim !== undefined)
-}
-
-/**
- * Whether nodes have, or may have, dropped this transaction's lock: it is mined in a ChainLocked block, or the network
- * has no ChainLock at all and the transaction is buried at least `instantLockKeepDepth` deep.
- */
-export function isHistorical(
-  tx: Pick<
-    DecodedTx,
-    'height' | 'confirmations' | 'isChainLocked' | 'chainLockClaim' | 'instantLockKeepDepth'
-  >,
-) {
+export function isSettled(tx: LockFacts): boolean {
   if (tx.height === undefined) return false
-  if (inChainLockedBlock(tx)) return true
+  if (tx.isChainLocked === true || tx.chainLockClaim !== undefined) return true
   return (
     tx.instantLockKeepDepth !== undefined &&
     tx.confirmations !== undefined &&
@@ -92,32 +68,14 @@ export function isHistorical(
   )
 }
 
-/**
- * The one answer every surface shows. `hyphenLock` is Hyphen's lock tag (`live.tags.islock`) read next to a DAPI
- * answer, or undefined when Hyphen was not asked or did not answer. It is live state: `true` means Hyphen's node
- * relayed a lock while Hyphen was listening, `false` only means Hyphen does not know. A remembered lock and Hyphen's
- * `true` count only for a historical transaction; before that the answering node's flag is the live signal.
- */
-export function instantLockView(tx: LockFacts, hyphenLock?: boolean): InstantLockView {
-  const historical = isHistorical(tx)
-  const sources: InstantLockSource[] = []
-  if (tx.isInstantLocked === true) sources.push(tx.instantLockSource ?? 'dapi')
-  if (historical && tx.instantLockRemembered === true && !sources.includes('dapi')) {
-    sources.push('dapi')
-  }
-  if (historical && hyphenLock === true && !sources.includes('hyphen')) sources.push('hyphen')
-  sources.sort()
-  if (sources.length === 0) {
-    if (tx.instantLockSource === 'hyphen') {
-      return { state: 'unknown', sources, historical, unknownBy: 'source' }
+/** The one answer every surface shows (settlement step, header chip, hover card). */
+export function instantLockView(tx: LockFacts): InstantLockView {
+  if (isSettled(tx)) return { state: 'settled' }
+  if (tx.isInstantLocked === true) {
+    return {
+      state: tx.instantLockClaim === undefined ? 'corroborated' : 'claimed',
+      source: tx.instantLockSource ?? 'dapi',
     }
-    return historical
-      ? { state: 'unknown', sources, historical, unknownBy: 'pruned' }
-      : { state: 'none', sources, historical }
   }
-  const claimed =
-    tx.instantLockClaim !== undefined ||
-    tx.instantLockRemembered === true ||
-    sources.includes('hyphen')
-  return { state: claimed ? 'claimed' : 'corroborated', sources, historical }
+  return { state: tx.instantLockSource === 'hyphen' ? 'unknown' : 'none' }
 }

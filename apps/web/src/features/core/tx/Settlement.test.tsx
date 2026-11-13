@@ -24,11 +24,10 @@ function tx(over: Partial<DecodedTx> = {}): DecodedTx {
 async function renderSettlement(
   t: DecodedTx,
   firstSeen?: { at: number; stamp: ReturnType<typeof stamp> },
-  hyphenLock?: boolean,
 ) {
   await renderInRouter(
     <I18nProvider i18n={i18n}>
-      <Settlement tx={t} coinbase={false} firstSeen={firstSeen} hyphenLock={hyphenLock} />
+      <Settlement tx={t} coinbase={false} firstSeen={firstSeen} />
     </I18nProvider>,
   )
   return document.querySelector<HTMLElement>('[data-step="seen"]')
@@ -87,10 +86,10 @@ describe('Settlement step states @HY-07', () => {
     ).toBeVisible()
   })
 
-  it('marks every confirmed step done', async () => {
-    await renderSettlement(tx({ isInstantLocked: true, isChainLocked: true }))
+  it('marks a lock with no claim attached done', async () => {
+    await renderSettlement(tx({ isInstantLocked: true }))
     expect(state('instantsend')).toBe('done')
-    expect(state('chainlocked')).toBe('done')
+    expect(state('chainlocked')).toBe('pending')
   })
 
   it('marks a ChainLock one node reports as a claim', async () => {
@@ -106,46 +105,36 @@ describe('Settlement step states @HY-07', () => {
   })
 })
 
-describe('Settlement InstantSend step in a ChainLocked block @IN-05 @HY-07', () => {
-  const step = () => document.querySelector('[data-step="instantsend"]')!
-  const locked = (over: Partial<DecodedTx> = {}) =>
-    tx({ isChainLocked: true, ...instantLockFields(false), ...over })
+describe('Settlement once the block is ChainLocked @IN-05 @HY-07', () => {
+  const steps = () =>
+    [...document.querySelectorAll('[data-step]')].map((el) => el.getAttribute('data-step'))
 
-  it('says the state is not known, in the neutral style, when no source reports a lock', async () => {
-    await renderSettlement(locked(), undefined, false)
-    expect(step()).toHaveAttribute('data-state', 'unknown')
-    expect(step()).toHaveTextContent(
-      'not known: nodes drop InstantSend locks once a block is ChainLocked',
-    )
-    expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
+  it.each([
+    ['the node reports a lock', { isChainLocked: true, ...instantLockFields(true) }],
+    ['the node reports no lock', { isChainLocked: true, ...instantLockFields(false) }],
+    ['Hyphen answered', { isChainLocked: true, ...instantLockFields(false, 'hyphen') }],
+    ['one node claims the ChainLock', { chainLockClaim: 'one-node' as const }],
+    ['no InstantSend field is carried', { isChainLocked: true }],
+  ])('goes Mined → ChainLocked with no InstantSend step when %s', async (_name, over) => {
+    await renderSettlement(tx(over))
+    expect(steps()).toEqual(['mined', 'chainlocked'])
+    expect(screen.queryByText(/InstantSend/)).toBeNull()
+    expect(screen.queryByText(/not known/)).toBeNull()
   })
 
-  it('says the same when Hyphen was not asked or is down', async () => {
-    await renderSettlement(locked(), undefined, undefined)
-    expect(step()).toHaveAttribute('data-state', 'unknown')
-  })
-
-  it('shows a lock Hyphen recorded after the node dropped its own, as one source’s claim', async () => {
-    await renderSettlement(locked(), undefined, true)
-    expect(step()).toHaveAttribute('data-state', 'claimed')
-    expect(step()).toHaveTextContent('recorded by Hyphen; no second source has confirmed it')
-  })
-
-  it('keeps a lock a DAPI node still reports', async () => {
-    await renderSettlement(locked(instantLockFields(true)), undefined, false)
-    expect(step()).toHaveAttribute('data-state', 'claimed')
-    expect(step()).toHaveTextContent('reported by one node; no second source has confirmed it')
-  })
-
-  it('names both sources when both recorded a lock', async () => {
-    await renderSettlement(locked(instantLockFields(true)), undefined, true)
-    expect(step()).toHaveTextContent('recorded by a DAPI node and Hyphen')
+  it('keeps the Received step of a transaction the page watched arrive', async () => {
+    await renderSettlement(tx({ isChainLocked: true }), {
+      at: SEEN,
+      stamp: stamp({ source: 'hyphen' }),
+    })
+    expect(steps()).toEqual(['seen', 'mined', 'chainlocked'])
   })
 
   it('still says no lock was seen for a mined block that is not ChainLocked', async () => {
-    await renderSettlement(tx(instantLockFields(false)), undefined, true)
-    expect(step()).toHaveAttribute('data-state', 'skipped')
-    expect(step()).toHaveTextContent('No InstantSend lock was seen')
+    await renderSettlement(tx(instantLockFields(false)))
+    const step = document.querySelector('[data-step="instantsend"]')!
+    expect(step).toHaveAttribute('data-state', 'skipped')
+    expect(step).toHaveTextContent('No InstantSend lock was seen')
   })
 })
 
@@ -155,12 +144,17 @@ describe('Settlement InstantSend step when Hyphen answered @IN-05 @HY-07', () =>
   it.each([
     ['a pending transaction', { height: undefined, time: undefined }],
     ['a mined one', {}],
-    ['a ChainLocked one', { isChainLocked: true }],
   ])('says the lock is not known from this source for %s', async (_name, over) => {
     await renderSettlement(tx({ ...instantLockFields(false, 'hyphen'), ...over }))
     expect(step()).toHaveAttribute('data-state', 'unknown')
     expect(step()).toHaveTextContent('not known from this source')
     expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
     expect(screen.queryByText('waiting for the masternodes to lock it')).toBeNull()
+  })
+
+  it('names Hyphen for a lock it reports', async () => {
+    await renderSettlement(tx(instantLockFields(true, 'hyphen')))
+    expect(step()).toHaveAttribute('data-state', 'claimed')
+    expect(step()).toHaveTextContent('recorded by Hyphen; no second source has confirmed it')
   })
 })

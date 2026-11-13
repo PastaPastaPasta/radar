@@ -1,7 +1,5 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
@@ -310,45 +308,23 @@ describe('Transaction page', () => {
     ).toBeInTheDocument()
   })
 
-  it('says a lock is reported by one node until a second source agrees @IN-05', async () => {
+  it('says a ChainLock is reported by one node until a second source agrees @IN-05', async () => {
     const original = core.tx.bind(core)
     vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
       const found = await original(net, txid, signal)
       return found.data
         ? {
             ...found,
-            data: {
-              ...found.data,
-              isChainLocked: false,
-              chainLockClaim: 'one-node' as const,
-              isInstantLocked: true,
-              instantLockClaim: 'one-node' as const,
-            },
+            data: { ...found.data, isChainLocked: false, chainLockClaim: 'one-node' as const },
           }
         : found
     })
     renderAt(`/tx/${MAINNET.transfer}`)
     expect(await screen.findByText('ChainLock reported by one node')).toBeInTheDocument()
-    expect(screen.getByText('InstantSend lock reported by one node')).toBeInTheDocument()
     expect(screen.queryByText('ChainLocked')).toBeNull()
-    expect(screen.queryByText('InstantSend locked')).toBeNull()
   })
 
   describe('InstantSend lock state @IN-05 @HY-07 @DATA-02', () => {
-    const hyphenTx = (txid: string) => {
-      const recorded = JSON.parse(
-        readFileSync(
-          resolve(process.cwd(), `src/test/fixtures/http/hyphen/mainnet/tx__${txid}.json`),
-          'utf8',
-        ),
-      ) as { body: { live: { tags: { islock: boolean } } } }
-      return recorded.body
-    }
-    const hyphenSays = (txid: string, islock: boolean) => {
-      const body = hyphenTx(txid)
-      body.live.tags.islock = islock
-      server.use(http.get(`*/x/hy/mainnet/tx/${txid}`, () => HttpResponse.json(body)))
-    }
     const coreSays = (over: Record<string, unknown>) => {
       const original = core.tx.bind(core)
       vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
@@ -357,7 +333,7 @@ describe('Transaction page', () => {
       })
     }
     const NODE = { isInstantLocked: true, instantLockClaim: 'one-node' as const }
-    const NO_NODE = { isInstantLocked: false, instantLockRemembered: undefined }
+    const NO_NODE = { isInstantLocked: false }
     const CHAIN_LOCKED = { isChainLocked: true }
     const NOT_CHAIN_LOCKED = { isChainLocked: false }
     const PENDING = {
@@ -404,7 +380,7 @@ describe('Transaction page', () => {
       expect(el).toHaveTextContent('waiting for the masternodes to lock it')
     })
 
-    it('says no lock was seen for a mined block that is not ChainLocked yet, whatever Hyphen holds', async () => {
+    it('says no lock was seen for a mined block that is not ChainLocked yet', async () => {
       coreSays({ ...NOT_CHAIN_LOCKED, ...NO_NODE })
       renderAt(`/tx/${MAINNET.transfer}`)
       const el = await step()
@@ -413,9 +389,8 @@ describe('Transaction page', () => {
       expect(screen.queryByText(/InstantSend lock (recorded|reported)/)).toBeNull()
     })
 
-    it('shows a lock a DAPI node reports for a ChainLocked block, naming only that node', async () => {
-      coreSays({ ...CHAIN_LOCKED, ...NODE })
-      hyphenSays(MAINNET.transfer, false)
+    it('shows a lock the node reports for a mined block that is not ChainLocked yet', async () => {
+      coreSays({ ...NOT_CHAIN_LOCKED, ...NODE })
       renderAt(`/tx/${MAINNET.transfer}`)
       expect(
         await screen.findByText('InstantSend lock reported by one node', {}, { timeout: 4000 }),
@@ -423,59 +398,34 @@ describe('Transaction page', () => {
       expect((await step()).dataset.state).toBe('claimed')
     })
 
-    it('shows Hyphen’s record when the DAPI node has dropped the lock, on every surface', async () => {
-      coreSays({ ...CHAIN_LOCKED, ...NO_NODE })
-      hyphenSays(MAINNET.transfer, true)
-      renderAt(`/tx/${MAINNET.transfer}`)
-      expect(
-        await screen.findByText('InstantSend lock recorded by Hyphen', {}, { timeout: 4000 }),
-      ).toBeInTheDocument()
-      const el = await step()
-      expect(el.dataset.state).toBe('claimed')
-      expect(el).toHaveTextContent('recorded by Hyphen')
-      expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
-    })
-
     it.each([
-      ['Hyphen has no record', () => hyphenSays(MAINNET.transfer, false)],
-      [
-        'Hyphen is down',
-        () =>
-          server.use(
-            http.get(`*/x/hy/mainnet/tx/${MAINNET.transfer}`, () =>
-              HttpResponse.json({ message: 'down' }, { status: 503 }),
-            ),
-          ),
-      ],
+      ['a ChainLock two sources report', CHAIN_LOCKED],
+      ['a ChainLock one node reports', { isChainLocked: false, chainLockClaim: 'one-node' }],
     ])(
-      'says the state is not known, and calls nothing a failure, when %s',
-      async (_name, arrange) => {
-        coreSays({ ...CHAIN_LOCKED, ...NO_NODE })
-        arrange()
+      'shows no InstantSend state anywhere on the page under %s, whatever the node says',
+      async (_name, lock) => {
+        coreSays({ ...lock, ...NODE })
         renderAt(`/tx/${MAINNET.transfer}`)
-        const el = await step()
         await settled()
-        expect(el.dataset.state).toBe('unknown')
-        expect(el).toHaveTextContent('not known: nodes drop InstantSend locks')
-        expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
-        expect(screen.queryByText(/InstantSend lock (recorded|reported)/)).toBeNull()
-        expect(screen.queryByText('InstantSend locked')).toBeNull()
+        const steps = [...document.querySelectorAll('[data-step]')].map((el) =>
+          el.getAttribute('data-step'),
+        )
+        expect(steps).toEqual(['mined', 'chainlocked'])
+        expect(screen.queryByText(/InstantSend/)).toBeNull()
+        expect(screen.queryByText(/not known/)).toBeNull()
       },
     )
 
     it.each([
+      ['a transfer', MAINNET.transfer],
       ['a revocation', MAINNET.uprevtx],
       ['an asset lock', MAINNET.assetlock],
-    ])('keeps the lock Hyphen recorded for %s, as on production', async (_name, txid) => {
+    ])('shows no InstantSend state for %s recorded in a ChainLocked block', async (_name, txid) => {
       renderAt(`/tx/${txid}`)
-      expect(
-        await screen.findByText(
-          /InstantSend lock (recorded by|reported by)/,
-          {},
-          { timeout: 4000 },
-        ),
-      ).toBeVisible()
-      expect(screen.queryByText('No InstantSend lock was seen')).toBeNull()
+      await settled()
+      expect(document.querySelector('[data-step="chainlocked"]')).not.toBeNull()
+      expect(document.querySelector('[data-step="instantsend"]')).toBeNull()
+      expect(screen.queryByText(/InstantSend/)).toBeNull()
     })
   })
 
