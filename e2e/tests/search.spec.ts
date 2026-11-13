@@ -166,13 +166,14 @@ test.describe('search page', () => {
     await expect(page.getByText('No match for', { exact: false })).toContainText('Testnet')
   })
 
-  test('says plainly that nonsense matched no Core record and offers no name guess @IN-10', async ({
+  test('says plainly that nonsense matched no Core record and offers only a name guess @IN-10', async ({
     page,
   }) => {
     await page.goto('/search?q=zzzz-not-a-real-core-thing-12345')
 
     await expect(page.getByText(/No match for .* as a Core record/)).toBeVisible()
-    await expect(page.getByRole('region', { name: 'A guess' })).toHaveCount(0)
+    const guess = page.getByRole('region', { name: 'A guess' })
+    await expect(guess.getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Platform' })).toHaveCount(0)
   })
 

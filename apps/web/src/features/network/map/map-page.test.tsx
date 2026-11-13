@@ -136,7 +136,7 @@ describe('the Map page', () => {
     const user = userEvent.setup()
     renderAt('/map')
     await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    await user.click(screen.getByRole('button', { name: 'All nodes' }))
+    await user.click(await screen.findByRole('button', { name: 'All nodes' }))
     await waitFor(() => expect(last().layer).toBe('nodes'))
     expect(last().geo).toHaveLength(198)
     await waitFor(() =>
