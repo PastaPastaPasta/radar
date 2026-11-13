@@ -1,11 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery, type UseQueryOptions } from '@tanstack/react-query'
+import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import { useState } from 'react'
+import type { Page } from '@/data/page'
+import type { QueryKeyOf } from '@/data/query/keys'
 import type { Sourced } from '@/data/envelope'
 import type { VotePollsByEndDateDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
-import { upcomingPollsArgs, type ContestRef } from '@/data/query/prefetch/p-vote'
+import { upcomingPollsArgs, type ContestKey } from '@/data/query/prefetch/p-vote'
 import { useNetwork } from '@/features/entity'
-import { useListMode, type LoadState } from '@/ui'
+import { useListMode, type DataTableProps, type LoadState } from '@/ui'
 
 export function loadState(query: { isPending: boolean; isError: boolean }): LoadState {
   return query.isPending ? 'loading' : query.isError ? 'error' : 'ready'
@@ -28,7 +31,7 @@ export function pollEnds(polls: readonly VotePollsByEndDateDto[]): Map<string, n
   return ends
 }
 
-export const endOf = (ends: Map<string, number>, ref: Omit<ContestRef, 'label' | 'isDpns'>) =>
+export const endOf = (ends: Map<string, number>, ref: ContestKey) =>
   ends.get(pollKey(ref.contractId, ref.type, ref.index, ref.indexValues))
 
 /** The next end dates, shared by the polls page and by every contest that needs its end time. */
@@ -37,15 +40,40 @@ export function useUpcomingPolls() {
   return useQuery(sdkQueries['voting.votePollsByEndDate'](net, upcomingPollsArgs()))
 }
 
-export type UpcomingPolls = Sourced<VotePollsByEndDateDto[]>
+const DEFAULT_LIMIT = 25
 
-export const DEFAULT_LIMIT = 25
+/** A link to the same page with `patch` applied to its search. */
+export function searchLink(patch: Record<string, unknown>): LinkProps {
+  return {
+    to: '.',
+    search: ((prev: Record<string, unknown>) => ({ ...prev, ...patch })) as never,
+  } as LinkProps
+}
+
+/** A link to page `n` of the same list; page 1 leaves `page` out of the search. */
+export const pageLink = (n: number): LinkProps => searchLink({ page: n === 1 ? undefined : n })
+
+/** Changes the page's search in place, back at page 1 unless `patch` says otherwise. */
+export function useSetSearch() {
+  const navigate = useNavigate()
+  return (patch: Record<string, unknown>) =>
+    void navigate({
+      to: '.',
+      search: ((prev: Record<string, unknown>) => ({
+        ...prev,
+        page: undefined,
+        ...patch,
+      })) as never,
+      replace: true,
+      resetScroll: false,
+    })
+}
 
 /**
  * How a PE list is shown, as the list mode says: pages, or one list that grows by a page at a time. The limit is the
  * search's unless it is the default, then the one the list remembers.
  */
-export function usePeListMode(listId: string, searchLimit: number) {
+function usePeListMode(listId: string, searchLimit: number) {
   const listMode = useListMode(listId)
   const [pagesShown, setPagesShown] = useState(1)
   const scroll = listMode.mode === 'scroll'
@@ -57,5 +85,52 @@ export function usePeListMode(listId: string, searchLimit: number) {
     more: () => {
       setPagesShown((n) => n + 1)
     },
+  }
+}
+
+/**
+ * A Platform Explorer list as a table reads it: the page asked for, or in scroll mode every page so far. `queryFor`
+ * builds the query for one page at the limit in force.
+ */
+export function usePeList<T>(
+  listId: string,
+  search: { page: number; limit: number },
+  queryFor: (
+    page: number,
+    limit: number,
+  ) => UseQueryOptions<Sourced<Page<T>>, Error, Sourced<Page<T>>, QueryKeyOf<'pe'>>,
+) {
+  const mode = usePeListMode(listId, search.limit)
+  const queries = useQueries({
+    queries: Array.from({ length: mode.count }, (_, i) =>
+      queryFor(mode.scroll ? i + 1 : search.page, mode.limit),
+    ),
+  })
+  const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
+  const rows = pages.flatMap((p) => p.data.items)
+  const total = pages[0]?.data.total
+  const first = queries[0]
+  const last = queries[queries.length - 1]
+  const paging: DataTableProps<T>['paging'] = mode.scroll
+    ? {
+        kind: 'infinite',
+        hasNext: (last?.data?.data.items.length ?? 0) >= mode.limit,
+        fetchNext: mode.more,
+        fetching: last?.isFetching === true && last.data === undefined,
+      }
+    : { kind: 'page', page: search.page, limit: mode.limit, total, to: pageLink }
+  const state: LoadState = first?.isPending
+    ? 'loading'
+    : first?.isError && !first.data
+      ? 'error'
+      : 'ready'
+  return {
+    pages,
+    rows,
+    total,
+    paging,
+    state,
+    error: first?.error,
+    onRetry: () => void first?.refetch(),
   }
 }

@@ -82,8 +82,8 @@ export const POLL_RANGE_MS: Record<'24h' | '7d' | '30d' | '90d', number> = {
 }
 
 /** A custom range reaches from the start of `from` to the end of `to` (UTC). */
-export const dayStartMs = (date: string): number => Date.parse(`${date}T00:00:00.000Z`)
-export const dayEndMs = (date: string): number => Date.parse(`${date}T23:59:59.999Z`)
+const dayStartMs = (date: string): number => Date.parse(`${date}T00:00:00.000Z`)
+const dayEndMs = (date: string): number => Date.parse(`${date}T23:59:59.999Z`)
 
 export function customPollsArgs(from: string | undefined, to: string | undefined) {
   return {
@@ -95,8 +95,8 @@ export function customPollsArgs(from: string | undefined, to: string | undefined
 }
 
 /** The ISO bounds PE takes for a `from`/`to` date filter. */
-export const peFrom = (from: string | undefined) => (from ? `${from}T00:00:00.000Z` : undefined)
-export const peTo = (to: string | undefined) => (to ? `${to}T23:59:59.999Z` : undefined)
+const peFrom = (from: string | undefined) => (from ? `${from}T00:00:00.000Z` : undefined)
+const peTo = (to: string | undefined) => (to ? `${to}T23:59:59.999Z` : undefined)
 
 export const VOTE_CHOICE = { towards: 0, abstain: 1, lock: 2 } as const
 
@@ -192,7 +192,10 @@ export function contestRef(
   }
 }
 
-export const contestVoteStateArgs = (ref: ContestRef) => ({
+/** What identifies a contest on Platform. */
+export type ContestKey = Pick<ContestRef, 'contractId' | 'type' | 'index' | 'indexValues'>
+
+export const contestVoteStateArgs = (ref: ContestKey) => ({
   contractId: ref.contractId,
   type: ref.type,
   index: ref.index,

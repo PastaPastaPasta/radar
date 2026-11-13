@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { contestRef } from '@/data/query/prefetch/p-vote'
-import { isContestedLabel, isValidLabel, labelOf, labelProblem, normalizeLabel } from './dpns'
+import {
+  contestRef,
+  isContestedLabel,
+  isValidLabel,
+  labelOf,
+  labelProblem,
+  normalizeLabel,
+} from '@/data/query/prefetch/p-vote'
 
 describe('homograph-safe form', () => {
   it.each([

@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, type LinkProps } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
@@ -9,7 +9,7 @@ import type { DocumentDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { Card, DataTable, Empty, Time } from '@/ui'
-import { loadState } from '../contest/shared'
+import { loadState, searchLink } from '../contest/shared'
 
 export interface NamesPageSearch {
   q?: string | undefined
@@ -37,12 +37,6 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
   const rows = all.slice(0, NAMES_PAGE)
   const hasNext = all.length > NAMES_PAGE
   const last = rows[rows.length - 1]
-
-  const go = (patch: { q?: string | undefined; after?: string | undefined }): LinkProps =>
-    ({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({ ...prev, ...patch })) as never,
-    }) as LinkProps
 
   const columns = useMemo<ColumnDef<DocumentDto>[]>(
     () => [
@@ -91,7 +85,7 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
         role="search"
         onSubmit={(e) => {
           e.preventDefault()
-          void navigate(go({ q: draft.trim() || undefined, after: undefined }) as never)
+          void navigate(searchLink({ q: draft.trim() || undefined, after: undefined }) as never)
         }}
       >
         <label className="flex flex-wrap items-center gap-2">
@@ -129,8 +123,8 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
           onRetry={() => void names.refetch()}
           paging={{
             kind: 'cursor',
-            ...(hasNext && last ? { next: go({ after: last.id }) } : {}),
-            ...(search.after ? { prev: go({ after: undefined }) } : {}),
+            ...(hasNext && last ? { next: searchLink({ after: last.id }) } : {}),
+            ...(search.after ? { prev: searchLink({ after: undefined }) } : {}),
           }}
           empty={
             <Empty kind="no-match" title={q ? t`No name starts with ${safe}.` : t`No names yet.`} />

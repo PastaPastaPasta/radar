@@ -1,13 +1,17 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState, type ReactNode } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeContestedResource } from '@/data/pe/schemas'
-import { DPNS, peContestsQuery, type ContestsFilters } from '@/data/query/prefetch/p-vote'
+import {
+  contestVoteStateArgs,
+  DPNS,
+  peContestsQuery,
+  type ContestsFilters,
+} from '@/data/query/prefetch/p-vote'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
@@ -30,25 +34,10 @@ import {
   type LoadState,
 } from '@/ui'
 import { CURSOR_PAGE, CursorPages } from '../contest/CursorPages'
-import { loadState, usePeListMode, useUpcomingPolls } from '../contest/shared'
+import { loadState, pageLink, usePeList, useSetSearch, useUpcomingPolls } from '../contest/shared'
 import { TallyText } from '../contest/Tally'
 
 export type ContestsPageSearch = ContestsFilters
-
-function useSetFilters() {
-  const navigate = useNavigate()
-  return (patch: Record<string, unknown>) =>
-    void navigate({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        page: undefined,
-        ...patch,
-      })) as never,
-      replace: true,
-      resetScroll: false,
-    })
-}
 
 const lastValue = (values: readonly string[]): string => values[values.length - 1] ?? ''
 
@@ -112,7 +101,7 @@ const statusOf = (search: ContestsPageSearch): '' | 'active' | 'finished' =>
 
 function Filters({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
-  const setFilters = useSetFilters()
+  const setFilters = useSetSearch()
   const decentralized = useDecentralizedOnly()
   return (
     <TableTools>
@@ -159,7 +148,7 @@ function Filters({ search }: { search: ContestsPageSearch }) {
 
 function ContractTypeForm({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
-  const setFilters = useSetFilters()
+  const setFilters = useSetSearch()
   const [contract, setContract] = useState(search.contract ?? '')
   const [type, setType] = useState(search.type ?? '')
   return (
@@ -236,28 +225,13 @@ interface RowTable {
   empty: ReactNode
 }
 
-function pageLink(n: number): LinkProps {
-  return {
-    to: '.',
-    search: ((prev: Record<string, unknown>) => ({
-      ...prev,
-      page: n === 1 ? undefined : n,
-    })) as never,
-  } as LinkProps
-}
-
 /** Contests read from Platform: each row's tally and outcome come from its own proof-checked vote state. */
 function SdkContestTable(props: RowTable) {
   const { t } = useLingui()
   const net = useNetwork()
   const states = useQueries({
     queries: props.rows.map((r) =>
-      sdkQueries['voting.contestedResourceVoteState'](net, {
-        contractId: r.contractId,
-        type: r.type,
-        index: r.index,
-        indexValues: r.indexValues,
-      }),
+      sdkQueries['voting.contestedResourceVoteState'](net, contestVoteStateArgs(r)),
     ),
   })
   const rows = props.rows.map((r, i) => ({ ...r, query: states[i]! }))
@@ -449,31 +423,12 @@ function AllDpnsContests({ search }: { search: ContestsPageSearch }) {
   )
 }
 
-function rowStatus(r: PeContestedResource): 'active' | 'finished' {
-  return r.finished ? 'finished' : 'active'
-}
-
 function AllContests({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const mode = usePeListMode('contests', search.limit)
-  const queries = useQueries({
-    queries: Array.from({ length: mode.count }, (_, i) =>
-      peQueries.contestedResources(
-        net,
-        peContestsQuery({ ...search, limit: mode.limit }, mode.scroll ? i + 1 : search.page),
-      ),
-    ),
-  })
-  const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
-  const list = {
-    ...mode,
-    pages,
-    rows: pages.flatMap((p) => p.data.items),
-    total: pages[0]?.data.total,
-    first: queries[0],
-    last: queries[queries.length - 1],
-  }
+  const list = usePeList('contests', search, (page, limit) =>
+    peQueries.contestedResources(net, peContestsQuery({ ...search, limit }, page)),
+  )
   const columns = useMemo<ColumnDef<PeContestedResource>[]>(
     () => [
       {
@@ -496,7 +451,7 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
         id: 'status',
         header: t`Status`,
         cell: ({ row }) =>
-          rowStatus(row.original) === 'finished' ? (
+          row.original.finished ? (
             <Badge>{t`Finished`}</Badge>
           ) : (
             <Badge tone="success">{t`Active`}</Badge>
@@ -548,8 +503,7 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
     ],
     [t],
   )
-  const first = list.first
-  const setFilters = useSetFilters()
+  const setFilters = useSetSearch()
   const status = statusOf(search)
   const tokens = [
     ...(search.contract ? [{ id: 'contract', label: t`Contract: ${search.contract}` }] : []),
@@ -593,32 +547,10 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
           columns={columns}
           rows={list.rows}
           getRowId={(r) => `${r.dataContractIdentifier ?? ''}/${(r.resourceValue ?? []).join('/')}`}
-          state={first?.isPending ? 'loading' : first?.isError && !first.data ? 'error' : 'ready'}
-          error={first?.error}
-          onRetry={() => void first?.refetch()}
-          paging={
-            list.scroll
-              ? {
-                  kind: 'infinite',
-                  hasNext: (list.last?.data?.data.items.length ?? 0) >= list.limit,
-                  fetchNext: list.more,
-                  fetching: list.last?.isFetching === true && list.last.data === undefined,
-                }
-              : {
-                  kind: 'page',
-                  page: search.page,
-                  limit: list.limit,
-                  total: list.total,
-                  to: (n): LinkProps =>
-                    ({
-                      to: '.',
-                      search: ((prev: Record<string, unknown>) => ({
-                        ...prev,
-                        page: n === 1 ? undefined : n,
-                      })) as never,
-                    }) as LinkProps,
-                }
-          }
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
           empty={<Empty kind="no-match" title={t`No contests match.`} />}
         />
       </Card>

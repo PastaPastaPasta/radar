@@ -2,7 +2,6 @@ import type { MessageDescriptor } from '@lingui/core'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
@@ -36,7 +35,7 @@ import {
   Unavailable,
 } from '@/ui'
 import { CURSOR_PAGE, CursorPages } from './CursorPages'
-import { endOf, loadState, pollEnds, useUpcomingPolls } from './shared'
+import { endOf, loadState, pageLink, pollEnds, useSetSearch, useUpcomingPolls } from './shared'
 import { TallyBar, totalVotes, useTallySlices } from './Tally'
 
 export interface ContestPageSearch {
@@ -69,6 +68,8 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
     enabled: !decentralized,
   })
   const s = state.data?.data
+  const stamp = state.data ? stampOf(state.data) : undefined
+  const indexedContest = indexed.data?.data ?? undefined
   const endsAt = polls.data ? endOf(pollEnds(polls.data.data), ref) : undefined
   const exists = s !== undefined && (s.contenders.length > 0 || s.winner !== null)
 
@@ -111,12 +112,7 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
         />
       ) : (
         <>
-          <StatusCard
-            state={s}
-            pending={state.isPending}
-            endsAt={endsAt}
-            stamp={state.data ? stampOf(state.data) : undefined}
-          />
+          <StatusCard state={s} pending={state.isPending} endsAt={endsAt} stamp={stamp} />
           <Tabs
             layer="platform"
             value={search.tab}
@@ -138,8 +134,8 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
                 ref_={ref}
                 state={s}
                 search={search}
-                indexed={indexed.data?.data ?? undefined}
-                stamp={state.data ? stampOf(state.data) : undefined}
+                indexed={indexedContest}
+                stamp={stamp}
               />
             ) : search.tab === 'votes' ? (
               decentralized ? (
@@ -148,7 +144,7 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
                 <VotesTab ref_={ref} state={s} search={search} />
               )
             ) : (
-              <RawTab state={state.data?.data} indexed={indexed.data?.data ?? undefined} />
+              <RawTab state={s} indexed={indexedContest} />
             )
           ) : (
             <Card layer="platform" state={loadState(state)}>
@@ -279,7 +275,7 @@ function TallyTab({
           />
         ) : null}
       </Card>
-      <VotersCard ref_={ref_} state={state} picked={picked} page={search.page} indexed={indexed} />
+      <VotersCard ref_={ref_} state={state} picked={picked} page={search.page} aliasOf={aliasOf} />
     </>
   )
 }
@@ -289,25 +285,17 @@ function VotersCard({
   state,
   picked,
   page,
-  indexed,
+  aliasOf,
 }: {
   ref_: ContestRef
   state: ContestVoteStateDto
   picked: string | undefined
   page: number
-  indexed: PeContestedResource | undefined
+  aliasOf: ReadonlyMap<string, string | undefined>
 }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
-  const aliasOf = new Map(
-    (indexed?.contenders ?? []).map((c) => [c.identifier, c.aliases[0]?.alias] as const),
-  )
-  const go = (patch: Record<string, unknown>): LinkProps =>
-    ({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({ ...prev, ...patch })) as never,
-    }) as LinkProps
+  const setSearch = useSetSearch()
   const columns = useMemo<ColumnDef<{ id: string }>[]>(
     () => [
       {
@@ -335,16 +323,7 @@ function VotersCard({
             label={t`Contender`}
             value={picked}
             onChange={(id) => {
-              void navigate({
-                to: '.',
-                search: ((prev: Record<string, unknown>) => ({
-                  ...prev,
-                  towards: id,
-                  page: undefined,
-                })) as never,
-                replace: true,
-                resetScroll: false,
-              })
+              setSearch({ towards: id })
             }}
             options={state.contenders.map((c) => ({
               id: c.identityId,
@@ -379,10 +358,8 @@ function VotersCard({
                   onRetry={() => void q.refetch()}
                   paging={{
                     kind: 'cursor',
-                    ...(all.length > CURSOR_PAGE ? { next: go({ page: page + 1 }) } : {}),
-                    ...(page > 1
-                      ? { prev: go({ page: page - 1 === 1 ? undefined : page - 1 }) }
-                      : {}),
+                    ...(all.length > CURSOR_PAGE ? { next: pageLink(page + 1) } : {}),
+                    ...(page > 1 ? { prev: pageLink(page - 1) } : {}),
                   }}
                   empty={<Empty kind="none-yet" title={t`No votes for this contender.`} />}
                 />
@@ -406,7 +383,7 @@ function VotesTab({
 }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
+  const setSearch = useSetSearch()
   const choice = search.towards ?? 'all'
   const choiceNo =
     choice === 'all'
@@ -481,16 +458,7 @@ function VotesTab({
         label={t`Choice`}
         value={choice}
         onChange={(id) => {
-          void navigate({
-            to: '.',
-            search: ((prev: Record<string, unknown>) => ({
-              ...prev,
-              towards: id === 'all' ? undefined : id,
-              page: undefined,
-            })) as never,
-            replace: true,
-            resetScroll: false,
-          })
+          setSearch({ towards: id === 'all' ? undefined : id })
         }}
         options={[
           { id: 'all', label: t`All` },
@@ -515,14 +483,7 @@ function VotesTab({
           page: search.page,
           limit: PE_CONTEST_VOTES_PAGE,
           total: votes.data?.data.total,
-          to: (n): LinkProps =>
-            ({
-              to: '.',
-              search: ((prev: Record<string, unknown>) => ({
-                ...prev,
-                page: n === 1 ? undefined : n,
-              })) as never,
-            }) as LinkProps,
+          to: pageLink,
         }}
         empty={<Empty kind="none-yet" title={t`No votes on record.`} />}
       />

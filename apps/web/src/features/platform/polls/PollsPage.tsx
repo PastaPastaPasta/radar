@@ -1,6 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
@@ -17,7 +16,7 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, DataTable, DateRangeFilter, Empty, SegFilter, TableTools, Time } from '@/ui'
-import { loadState } from '../contest/shared'
+import { loadState, pageLink, useSetSearch } from '../contest/shared'
 
 export type PollRange = '24h' | '7d' | '30d' | '90d' | 'upcoming' | 'custom'
 
@@ -50,7 +49,7 @@ export function pollContest(p: VotePollDto): { id: string; search?: Record<strin
 export function PollsPage({ search }: { search: PollsPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
+  const set = useSetSearch()
   const [now] = useState(() => Date.now())
   const custom = search.range === 'custom'
   const polls = useQuery(
@@ -77,18 +76,6 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
   }, [buckets, search.range, search.dir, now])
   const rows = all.slice((search.page - 1) * POLLS_PAGE, search.page * POLLS_PAGE)
   const capped = (buckets?.length ?? 0) >= POLL_BUCKETS
-
-  const set = (patch: Record<string, unknown>) =>
-    void navigate({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        page: undefined,
-        ...patch,
-      })) as never,
-      replace: true,
-      resetScroll: false,
-    })
 
   const columns = useMemo<ColumnDef<PollRow>[]>(
     () => [
@@ -184,14 +171,7 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
             page: search.page,
             limit: POLLS_PAGE,
             total: all.length,
-            to: (n): LinkProps =>
-              ({
-                to: '.',
-                search: ((prev: Record<string, unknown>) => ({
-                  ...prev,
-                  page: n === 1 ? undefined : n,
-                })) as never,
-              }) as LinkProps,
+            to: pageLink,
           }}
           empty={<Empty kind="none-yet" title={t`No vote polls end in this range.`} />}
         />

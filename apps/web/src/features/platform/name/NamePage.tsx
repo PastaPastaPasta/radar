@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { stampOf } from '@/data/envelope'
 import {
   contestRef,
+  contestVoteStateArgs,
   DPNS,
   isContestedLabel,
   labelOf,
@@ -83,12 +84,7 @@ function NameStatus({ label }: { label: string }) {
   const registered = owner.data?.data ?? null
   const ref = contestRef(label, {})
   const contest = useQuery({
-    ...sdkQueries['voting.contestedResourceVoteState'](net, {
-      contractId: ref.contractId,
-      type: ref.type,
-      index: ref.index,
-      indexValues: ref.indexValues,
-    }),
+    ...sdkQueries['voting.contestedResourceVoteState'](net, contestVoteStateArgs(ref)),
     enabled: contestedRule && owner.isSuccess && !registered,
   })
   const state = contest.data?.data

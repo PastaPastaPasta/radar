@@ -1,6 +1,4 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQueries } from '@tanstack/react-query'
-import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
@@ -31,7 +29,7 @@ import {
   Time,
   Unavailable,
 } from '@/ui'
-import { usePeListMode } from '../contest/shared'
+import { usePeList, useSetSearch } from '../contest/shared'
 
 export type VotesPageSearch = VotesFilters
 
@@ -64,39 +62,12 @@ export function VotesPage({ search }: { search: VotesPageSearch }) {
 function VoteList({ search }: { search: VotesPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const navigate = useNavigate()
+  const set = useSetSearch()
   const [voter, setVoter] = useState(search.voter ?? '')
   const [towards, setTowards] = useState(search.towards ?? '')
-  const set = (patch: Record<string, unknown>) =>
-    void navigate({
-      to: '.',
-      search: ((prev: Record<string, unknown>) => ({
-        ...prev,
-        page: undefined,
-        ...patch,
-      })) as never,
-      replace: true,
-      resetScroll: false,
-    })
-  const mode = usePeListMode('votes', search.limit)
-  const queries = useQueries({
-    queries: Array.from({ length: mode.count }, (_, i) =>
-      peQueries.masternodeVotes(
-        net,
-        peVotesQuery({ ...search, limit: mode.limit, page: mode.scroll ? i + 1 : search.page }),
-      ),
-    ),
-  })
-  const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
-  const list = {
-    ...mode,
-    pages,
-    rows: pages.flatMap((p) => p.data.items),
-    total: pages[0]?.data.total,
-    first: queries[0],
-    last: queries[queries.length - 1],
-  }
-
+  const list = usePeList('votes', search, (page, limit) =>
+    peQueries.masternodeVotes(net, peVotesQuery({ ...search, limit, page })),
+  )
   const columns = useMemo<ColumnDef<PeVote>[]>(
     () => [
       {
@@ -193,7 +164,6 @@ function VoteList({ search }: { search: VotesPageSearch }) {
       ? [{ id: 'dates', label: t`Voted ${search.from ?? ''}–${search.to ?? ''}` }]
       : []),
   ]
-  const first = list.first
   return (
     <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
       <TableTools>
@@ -274,32 +244,10 @@ function VoteList({ search }: { search: VotesPageSearch }) {
           columns={columns}
           rows={list.rows}
           getRowId={(v) => `${v.proTxHash}:${v.timestamp}:${(v.indexValues ?? []).join('/')}`}
-          state={first?.isPending ? 'loading' : first?.isError && !first.data ? 'error' : 'ready'}
-          error={first?.error}
-          onRetry={() => void first?.refetch()}
-          paging={
-            list.scroll
-              ? {
-                  kind: 'infinite',
-                  hasNext: (list.last?.data?.data.items.length ?? 0) >= list.limit,
-                  fetchNext: list.more,
-                  fetching: list.last?.isFetching === true && list.last.data === undefined,
-                }
-              : {
-                  kind: 'page',
-                  page: search.page,
-                  limit: list.limit,
-                  total: list.total,
-                  to: (n): LinkProps =>
-                    ({
-                      to: '.',
-                      search: ((prev: Record<string, unknown>) => ({
-                        ...prev,
-                        page: n === 1 ? undefined : n,
-                      })) as never,
-                    }) as LinkProps,
-                }
-          }
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
           empty={<Empty kind="no-match" title={t`No votes match.`} />}
         />
       </Card>
