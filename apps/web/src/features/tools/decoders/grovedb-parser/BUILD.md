@@ -100,8 +100,8 @@ the vendored copies, then re-apply these edits:
   `export function __resetInstance(): WebAssembly.Module | undefined;`.
 
 With wasm-bindgen 0.2.118 those are the only differences, so the glue can be
-reused as-is when only the grovedb rev changes. The generated `_bg.wasm.d.ts`
-is used unmodified.
+reused as-is when only the grovedb rev changes. The generated `_bg.wasm.d.ts` is
+not vendored: nothing imports it, and Lingui's extractor cannot parse it.
 
 Afterwards, run `pnpm vitest run src/components/query-inspector src/lib`. The
 fixtures in `src/components/query-inspector/__tests__/fixtures` must decode to
