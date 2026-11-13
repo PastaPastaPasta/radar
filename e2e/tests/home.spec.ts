@@ -95,11 +95,17 @@ test.describe('Home', () => {
       await settled(page)
       const core = page.getByRole('link', { name: 'Core figures' })
       const latest = page.getByRole('link', { name: 'Latest blocks' })
-      const [a, b] = await Promise.all([core.boundingBox(), latest.boundingBox()])
-      if (width >= 390) {
-        expect(Math.abs(a!.y - b!.y), 'beside it, on the same line').toBeLessThan(4)
+      await page.evaluate(() => document.fonts.ready)
+      // The hero's figures fill in after first paint and can reflow the line once; judge the settled layout.
+      const gap = async () => {
+        const [a, b] = await Promise.all([core.boundingBox(), latest.boundingBox()])
+        return Math.abs(a!.y - b!.y)
       }
-      expect(b!.x + b!.width).toBeLessThanOrEqual(width)
+      if (width >= 390) {
+        await expect.poll(gap, { message: 'beside it, on the same line' }).toBeLessThan(4)
+      }
+      const b = (await latest.boundingBox())!
+      expect(b.x + b.width).toBeLessThanOrEqual(width)
       await latest.click()
       await expect(page).toHaveURL(/#h-latest$/)
       const top = async () => (await page.locator('#h-latest').boundingBox())?.y ?? -1
