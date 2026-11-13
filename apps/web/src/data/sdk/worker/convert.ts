@@ -367,7 +367,7 @@ export function finalizedEpochDto(index: number, epoch: FinalizedEpochLike): Fin
     totalDistributedStorageFees: epoch.totalDistributedStorageFees,
     totalCreatedStorageFees: epoch.totalCreatedStorageFees,
     nextEpochStartCoreBlockHeight: epoch.nextEpochStartCoreBlockHeight,
-    blockProposers: new Map([...epoch.blockProposers].map(([k, v]) => [proTxHashHex(k), v])),
+    blockProposers: hexKeyed(epoch.blockProposers),
   }
 }
 

@@ -32,6 +32,9 @@ const csv = (v: string | readonly string[] | undefined): ReadonlySet<string> | u
 const reachOf = (row: MnRow): 'reachable' | 'unreachable' | undefined =>
   row.crawl?.reachable == null ? undefined : row.crawl.reachable ? 'reachable' : 'unreachable'
 
+const asnOf = (r: MnRow): string | undefined =>
+  r.crawl?.asn == null ? undefined : String(r.crawl.asn)
+
 /** The value of each facet for a row; a row the crawl has not seen has none for the crawl's. */
 const facetValues = {
   type: (r: MnRow) => r.type,
@@ -39,7 +42,7 @@ const facetValues = {
   reach: reachOf,
   country: (r: MnRow) => r.crawl?.country ?? undefined,
   version: (r: MnRow) => r.crawl?.version ?? undefined,
-  host: (r: MnRow) => (r.crawl?.asn == null ? undefined : String(r.crawl.asn)),
+  host: asnOf,
   dkg: (r: MnRow) => r.crawl?.dkg_readiness?.overall,
 } satisfies Record<Exclude<keyof MnFilter, 'q'>, (r: MnRow) => string | undefined>
 
@@ -51,7 +54,7 @@ const searchText = (r: MnRow): string =>
     r.crawl?.city,
     r.crawl?.version,
     r.crawl?.as_org,
-    r.crawl?.asn == null ? undefined : `as${r.crawl.asn}`,
+    asnOf(r) && `as${asnOf(r)}`,
     r.crawl?.user_agent,
     r.crawl?.platform_node_id,
     r.crawl?.payout_address,
