@@ -1,7 +1,7 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { z } from 'zod'
 import { routePrefetch } from '@/app/route-loader'
-import { zDefault, zInt, zOpt, zPage } from '@/app/search'
+import { zDefault, zInt, zIsoDate, zOpt, zPage } from '@/app/search'
 import { ContractPage } from '@/features/platform'
 
 const defaults = { tab: 'overview', page: 1 } as const
@@ -26,6 +26,9 @@ const contractSearch = z.object({
   page: zDefault(zPage, defaults.page),
   rev: zOpt(zInt),
   path: zOpt(z.string()),
+  base: zOpt(zInt),
+  from: zOpt(zIsoDate),
+  to: zOpt(zIsoDate),
 })
 
 export const Route = createFileRoute('/contract/$id/')({
@@ -38,5 +41,5 @@ export const Route = createFileRoute('/contract/$id/')({
 
 function ContractPageRoute() {
   const { id } = Route.useParams()
-  return <ContractPage id={id} />
+  return <ContractPage id={id} search={Route.useSearch()} />
 }
