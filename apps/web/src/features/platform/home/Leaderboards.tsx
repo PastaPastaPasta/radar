@@ -85,7 +85,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
   const tokens = useQuery({ ...peQueries.tokenRating(net, q), enabled: active })
 
   return (
-    <div className="grid gap-4" data-leaderboards>
+    <div className="grid grid-cols-1 gap-4" data-leaderboards>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SegFilter
           label={t`Richest identities by`}
@@ -103,7 +103,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
           }}
         />
       </div>
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Board
           id="board-active-identities"
           title={t`Most active identities`}

@@ -44,7 +44,7 @@ export function Vitals() {
       subtitle={t`Read from the Platform nodes and checked against their proofs.`}
       source={stampsOf(tip.data, credits.data, upgrade.data, quorums.data)}
     >
-      <div className="grid gap-4" data-vitals>
+      <div className="grid grid-cols-1 gap-4" data-vitals>
         {epoch ? (
           <EpochClock
             size="md"

@@ -43,7 +43,7 @@ function Zone({
         </h2>
         {description ? <p className="rx-sec__desc">{description}</p> : null}
       </div>
-      <div className="grid gap-4">{children}</div>
+      <div className="grid grid-cols-1 gap-4">{children}</div>
     </section>
   )
 }
@@ -76,7 +76,7 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
       layer="platform"
       lede={t`How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it.`}
     >
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Vitals />
         <QuickEntry />
       </div>
@@ -93,7 +93,7 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
         {indexed ? (
           <>
             <Pulse />
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <NewestBlocks />
               <NewestTransitions />
             </div>
@@ -104,11 +104,11 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
       </Zone>
 
       <Zone id="chain" title={t`On the chain`} zoneRef={chainRef}>
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Proposers active={chain} />
           <RecentEpochs active={chain} />
         </div>
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <QuorumsCard active={chain} />
           <PollsCard active={chain} />
           <ContractsCard active={chain} />

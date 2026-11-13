@@ -85,7 +85,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -104,7 +109,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -131,7 +141,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -158,7 +173,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -187,7 +207,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -212,7 +237,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -295,7 +325,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -321,7 +356,82 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": [
+          "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+          "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+          "rUnsWrFu3PKyRMGk2mxmZVBPbQuZx2qtHeFjURoQevX",
+          "HY1keaRK5bcDmujNCQq5pxNyvAiHHpoHQgLN5ppiu4kh",
+          "7CSFGeF4WNzgDmx94zwvHkYaG3Dx4XEe5LFsFgJswLbm",
+          "43gujrzZgXqcKBiScLa4T8XTDnRhenR9BLx8GWVHjPxF",
+          "BsjE6tQxG47wffZCRQCovFx5rYrAYYC3rTVRWKro27LA"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt",
+              "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+              "EWNwtGEC1qAbgNgo2UgadmQhB9DaZtB942x8bXgJrPNS"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+              "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+              "HBGPH6fBC8gJtpYaMH4FcQmPUF6i54JBLKU3PK32iUPW",
+              "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+              "4zuMFy1y3trAUTzw82fkcEtafDoL4UMDgyp45F2zz9SY",
+              "3bCTavPFvzgtTFrfKbRg3PkL6kztpKvFxYYxXHo65kU4",
+              "RpcTDPtPup9Zj8aMLaYCJtS92kLRezoD29wYogCnoqX",
+              "FhueBVu8GxuHGsmKkbT3n8aUzy2SwmgyzFCheZXRFwyd",
+              "HAiRAKyEx5hqm2vkPjWSMRo92PA5QGyPmuYfXj6RdJUf"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ]
@@ -396,7 +506,12 @@
             ]
           ]
         ],
-        "orderBy": [["records.identity", "asc"]],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
         "limit": 100
       }
     ],
@@ -531,6 +646,350 @@
       {
         "identityId": "Ei6jtCbzGVaoJqXPhocdFgeYeBgoVBFtP676aMFBn3E4",
         "limit": 1
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2",
+              "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+              "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
+              "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+              "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV",
+              "9CVk5ytx8oD7WQq3R2s3PxDbpT5Skg13Xjbh2tTdmnbv",
+              "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+              "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+              "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+              "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8",
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2",
+              "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+              "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
+              "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+              "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV",
+              "9CVk5ytx8oD7WQq3R2s3PxDbpT5Skg13Xjbh2tTdmnbv",
+              "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+              "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+              "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+              "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "Gcv7zYGAiUpdULhahezTTPuatyT2BwYuYEN5qVDd5Csm",
+              "AFbpKXNhiNHg7eBsnobNo7wZ9U8qWi1kvcACR6t84G6p",
+              "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t",
+              "5q83TWrs45553fB92DPY9n3Rs6cDPa434EbP1LUf8nFY",
+              "8hJmcHWTsdvkHyCrk4UgjbyugDAmE7QfuCTQXpXAc7nB",
+              "36SxvpAKXeBJByUdJ364Hnhp2NfVDe6Gkj7xtTRZj6hh",
+              "BH3zGkUewGZQJ9tzdrBn3FJRjhTkfQmvewo6t1LNnnG5",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "AVGaxbN1apFAM4aWtkjUJvPhT1Nr3AeKzgb22sqWvKNe",
+              "Ei6jtCbzGVaoJqXPhocdFgeYeBgoVBFtP676aMFBn3E4"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2",
+              "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+              "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
+              "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+              "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV",
+              "9CVk5ytx8oD7WQq3R2s3PxDbpT5Skg13Xjbh2tTdmnbv",
+              "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+              "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+              "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+              "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8",
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+        "limit": 1
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ",
+        "limit": 1
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": [
+          "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
+        ]
+      }
+    ],
+    [
+      "contracts.getMany",
+      {
+        "ids": [
+          "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+          "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+          "rUnsWrFu3PKyRMGk2mxmZVBPbQuZx2qtHeFjURoQevX",
+          "HY1keaRK5bcDmujNCQq5pxNyvAiHHpoHQgLN5ppiu4kh",
+          "7CSFGeF4WNzgDmx94zwvHkYaG3Dx4XEe5LFsFgJswLbm",
+          "43gujrzZgXqcKBiScLa4T8XTDnRhenR9BLx8GWVHjPxF",
+          "BsjE6tQxG47wffZCRQCovFx5rYrAYYC3rTVRWKro27LA"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+              "4DDCZmndENMbEXuYoDMzyT6ii8RvMmcJYmSDbnW7bSXG",
+              "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+              "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV",
+              "9CVk5ytx8oD7WQq3R2s3PxDbpT5Skg13Xjbh2tTdmnbv",
+              "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+              "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+              "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+              "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8",
+              "Gcv7zYGAiUpdULhahezTTPuatyT2BwYuYEN5qVDd5Csm",
+              "AFbpKXNhiNHg7eBsnobNo7wZ9U8qWi1kvcACR6t84G6p",
+              "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t",
+              "5q83TWrs45553fB92DPY9n3Rs6cDPa434EbP1LUf8nFY",
+              "8hJmcHWTsdvkHyCrk4UgjbyugDAmE7QfuCTQXpXAc7nB",
+              "36SxvpAKXeBJByUdJ364Hnhp2NfVDe6Gkj7xtTRZj6hh",
+              "BH3zGkUewGZQJ9tzdrBn3FJRjhTkfQmvewo6t1LNnnG5",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "AVGaxbN1apFAM4aWtkjUJvPhT1Nr3AeKzgb22sqWvKNe",
+              "Ei6jtCbzGVaoJqXPhocdFgeYeBgoVBFtP676aMFBn3E4"
+            ]
+          ]
+        ],
+        "orderBy": [
+          [
+            "records.identity",
+            "asc"
+          ]
+        ],
+        "limit": 100
       }
     ]
   ]
