@@ -24,6 +24,7 @@ import {
   DAY_MS,
   FIRST_CHUNK,
   PAGE_SIZES,
+  chunksOf,
   dayStartMs,
   isPageSize,
   shiftDay,
@@ -58,22 +59,27 @@ function useRange(date: string | undefined) {
       floor: 0,
       ceiling: tipBlock?.height ?? -1,
       error: tip.error,
+      provisional: false,
+      found: 0,
     }
   }
-  const pending = !tipBlock || !first.data || !next.data
+  // A day still in progress ends at the tip, so its end needs no search.
+  const open = tipBlock !== undefined && tipBlock.time < start + DAY_MS
+  const endFound = open || next.data !== undefined
+  const ceilingKnown = tipBlock !== undefined && endFound
   const failed =
     (tip.isError && !tip.data) || (first.isError && !first.data) || (next.isError && !next.data)
+  const ready = ceilingKnown && first.data !== undefined
   return {
     tip,
-    state: pending ? (failed ? ('error' as const) : ('loading' as const)) : ('ready' as const),
+    state: ready ? ('ready' as const) : failed ? ('error' as const) : ('loading' as const),
     floor: first.data?.data ?? 0,
-    ceiling:
-      !tipBlock || !next.data
-        ? -1
-        : tipBlock.time < start + DAY_MS
-          ? tipBlock.height
-          : next.data.data - 1,
+    ceiling: !ceilingKnown ? -1 : open ? tipBlock.height : (next.data?.data ?? 0) - 1,
     error: tip.error ?? first.error ?? next.error,
+    /** The day's last block is known and its first is still being searched for: the newest rows can already be read. */
+    provisional: ceilingKnown && !ready && !failed,
+    /** How many of the day's two ends have been found, for the progress line. */
+    found: (first.data !== undefined ? 1 : 0) + (endFound ? 1 : 0),
   }
 }
 
@@ -92,41 +98,48 @@ interface PageRows {
 }
 
 /**
- * A short page's rows in two reads, the first `FIRST_CHUNK` rows and then the rest, so the top of the table shows after
- * two rounds of block reads and not after all twenty. The rest waits for the first so it never competes with it for budget.
+ * A short page's rows in up to three reads, the first `FIRST_CHUNK` rows and then `NEXT_CHUNK` at a time, so the top of
+ * the table shows after two rounds of block reads and the rest fills in as it arrives. Each read waits for the one
+ * before it, so they never compete for budget.
  */
 function useDapiRows(window: Window | null, enabled: boolean): PageRows {
   const net = useNetwork()
-  const head = Math.min(FIRST_CHUNK, window?.count ?? 0)
-  const first = useQuery({
-    ...coreQueries.blockRows(net, { fromHeight: window?.top ?? 0, count: head }),
-    enabled: enabled && window !== null,
+  const on = enabled && window !== null
+  const top = window?.top ?? 0
+  const none = { offset: 0, count: 0 }
+  const [a = none, b = none, c = none] = chunksOf(window?.count ?? 0)
+  const read = (chunk: { offset: number; count: number }, after: boolean) => ({
+    ...coreQueries.blockRows(net, { fromHeight: top - chunk.offset, count: chunk.count }),
+    enabled: on && chunk.count > 0 && after,
     placeholderData: keepPreviousOnNetwork(net),
   })
-  const restCount = window ? window.count - head : 0
-  const rest = useQuery({
-    ...coreQueries.blockRows(net, { fromHeight: (window?.top ?? 0) - head, count: restCount }),
-    enabled:
-      enabled && window !== null && restCount > 0 && first.isSuccess && !first.isPlaceholderData,
-    placeholderData: keepPreviousOnNetwork(net),
-  })
-  const restData = restCount > 0 && !rest.isPlaceholderData ? rest.data : undefined
+  const landed = (q: { isSuccess: boolean; isPlaceholderData: boolean }) =>
+    q.isSuccess && !q.isPlaceholderData
+  const first = useQuery(read(a, true))
+  const second = useQuery(read(b, landed(first)))
+  const third = useQuery(read(c, landed(first) && landed(second)))
+  const reads = [first, second, third].slice(0, [a, b, c].filter((x) => x.count > 0).length)
+  const held = reads.findIndex((q) => !landed(q))
+  const shown = reads.slice(0, held === -1 ? reads.length : held)
+  // The first read's rows stay up as a placeholder while a new page of the same network loads.
+  const visible = shown.length > 0 ? shown : first.data ? [first] : []
   const rows = useMemo(
-    () => [...(first.data?.data ?? []), ...(restData?.data ?? [])],
-    [first.data, restData],
+    () => visible.flatMap((q) => q.data?.data ?? []),
+    // `visible` is a new array every render; the data each read holds is what matters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [first.data, second.data, third.data, visible.length],
   )
-  const last = rest.data && !rest.isPlaceholderData ? rest : first
+  const loaded = shown.reduce((n, q) => n + (q.data?.data.length ?? 0), 0)
+  const failedRead = reads.find((q) => q.isError && !q.data)
+  const last = visible.at(-1)
   return {
     rows,
-    settled:
-      first.isSuccess &&
-      !first.isPlaceholderData &&
-      (restCount === 0 || (rest.isSuccess && !rest.isPlaceholderData)),
-    pending: first.data && restCount > 0 && !restData && !rest.isError ? restCount : 0,
-    stamp: last.data ? stampOf(last.data) : undefined,
-    error: first.error ?? rest.error,
-    failed: (first.isError && !first.data) || (rest.isError && !rest.data),
-    refetch: () => void Promise.all([first.refetch(), rest.refetch()]),
+    settled: reads.length > 0 && held === -1,
+    pending: shown.length > 0 && !failedRead ? Math.max(0, (window?.count ?? 0) - loaded) : 0,
+    stamp: last?.data ? stampOf(last.data) : undefined,
+    error: reads.find((q) => q.error)?.error ?? null,
+    failed: failedRead !== undefined,
+    refetch: () => void Promise.all(reads.map((q) => q.refetch())),
   }
 }
 
@@ -281,6 +294,8 @@ function usePageSource(requested: number | undefined) {
     source,
     offered: hasIndex,
     longPageAvailable: hasIndex && (index.readFrom === 'insight' || index.state === 'fresh'),
+    /** Decentralized only mode: no index is asked, so only DAPI's page size is on offer. */
+    off: index.off,
   }
 }
 
@@ -327,17 +342,33 @@ export function BlocksPage({
   const range = useRange(date)
   const pageSource = usePageSource(requestedSize)
   const size = pageSource.size
-  const window =
+  // While the day's first block is still being searched for, its newest rows are read already: the same read the
+  // finished page starts with, so nothing is asked twice.
+  const early =
+    range.provisional && from === undefined && pageSource.source === 'dapi' && range.ceiling >= 0
+  const window: Window | null =
     range.state === 'ready' && !pageSource.waiting
       ? windowOf(range.ceiling, range.floor, from, size)
-      : null
+      : early
+        ? {
+            top: range.ceiling,
+            count: Math.min(FIRST_CHUNK, range.ceiling + 1),
+            newer: null,
+            older: null,
+          }
+        : null
   useDocumentTitle(date ? t`Blocks on ${date}` : t`Blocks`)
 
   const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
   const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
   const insightRows = useInsightRows(window, pageSource.source === 'insight')
   const page = { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
-  const rows = page.rows
+  const dayStart = date ? dayStartMs(date) : 0
+  // Until the day's first block is known, a row is shown only if its own time puts it in the day.
+  const rows = useMemo(
+    () => (early ? page.rows.filter((r) => r.time >= dayStart) : page.rows),
+    [early, page.rows, dayStart],
+  )
   const newestPage = window !== null && window.newer === null
   const today = todayUtc()
   const fresh = useFreshRows(rows, newestPage && (!date || date === today))
@@ -396,7 +427,7 @@ export function BlocksPage({
 
   const stamp = page.stamp
   const noBlocks = window === null && range.state === 'ready' && !pageSource.waiting
-  const shownEmpty = window !== null && page.settled && rows.length === 0
+  const shownEmpty = window !== null && !early && page.settled && rows.length === 0
   const state =
     range.state === 'error' || page.failed
       ? 'error'
@@ -461,7 +492,7 @@ export function BlocksPage({
           id="blocks"
           title={dateLabel ? t`Blocks on ${dateLabel}` : t`Latest blocks`}
           description={
-            lowest !== undefined && page.pending === 0
+            lowest !== undefined && page.pending === 0 && !early
               ? t`Heights ${formatInt(lowest)} to ${formatInt(Math.max(...heights))}`
               : undefined
           }
@@ -476,7 +507,22 @@ export function BlocksPage({
           ) : null}
           {!pageSource.waiting && pageSource.requested > size ? (
             <p className="rx-note rx-dim" data-nav="page-size-note">
-              {t`Pages of ${formatInt(pageSource.requested)} need an index that is up to date, and none is right now.`}
+              {pageSource.off
+                ? t`Pages of ${formatInt(pageSource.requested)} need an indexer, which Decentralized only mode doesn't use.`
+                : t`Pages of ${formatInt(pageSource.requested)} need an index that is up to date, and none is right now.`}
+            </p>
+          ) : null}
+          {date && range.state === 'loading' ? (
+            <p className="rx-note" role="status" data-range-progress={range.found}>
+              <progress
+                className="rx-progress"
+                max={3}
+                value={(range.tip.data ? 1 : 0) + range.found}
+                aria-label={t`Finding this day's blocks`}
+              />{' '}
+              {range.tip.data
+                ? t`Searching block headers for where this day begins and ends: ${formatInt(range.found)} of 2 found.`
+                : t`Reading the chain tip…`}
             </p>
           ) : null}
           <Card layer="core" padding="flush">
@@ -523,7 +569,7 @@ export function BlocksPage({
                 state={state}
                 error={range.error ?? page.error}
                 onRetry={page.refetch}
-                pendingRows={page.pending}
+                pendingRows={early && rows.length > 0 ? size - rows.length : page.pending}
                 rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
                 live={{ newRowIds: fresh }}
                 paging={

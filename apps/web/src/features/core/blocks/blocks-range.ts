@@ -6,6 +6,19 @@ export type PageSize = (typeof PAGE_SIZES)[number]
 export const isPageSize = (n: number | undefined): n is PageSize => PAGE_SIZES.some((s) => s === n)
 /** Rows read first on a page: one round of block reads, so something shows as soon as the first nodes answer. */
 export const FIRST_CHUNK = 4
+/** Rows read at a time after the first chunk, so a page fills in steps instead of all at once. */
+export const NEXT_CHUNK = 8
+
+/** A page of `count` rows as the reads that fill it, newest rows first: `FIRST_CHUNK`, then `NEXT_CHUNK` at a time. */
+export function chunksOf(count: number): { offset: number; count: number }[] {
+  const chunks: { offset: number; count: number }[] = []
+  for (let offset = 0; offset < count;) {
+    const size = Math.min(offset === 0 ? FIRST_CHUNK : NEXT_CHUNK, count - offset)
+    chunks.push({ offset, count: size })
+    offset += size
+  }
+  return chunks
+}
 export const DAY_MS = 86_400_000
 
 export function dayStartMs(date: string): number {

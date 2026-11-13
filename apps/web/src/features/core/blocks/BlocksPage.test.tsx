@@ -7,7 +7,7 @@ import { core } from '@/data/core/client'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
-import { FIRST_CHUNK } from './blocks-range'
+import { FIRST_CHUNK, NEXT_CHUNK } from './blocks-range'
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
@@ -104,28 +104,60 @@ describe('Blocks list', () => {
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
   })
 
-  it('shows the first rows of a day while the rest of the page is still being read @IN-02', async () => {
+  it("fills a day's page in steps, the first rows and then the rest as each read lands @IN-02", async () => {
     const original = core.blockRows.bind(core)
-    let release: () => void = () => undefined
-    const held = new Promise<void>((resolve) => {
-      release = resolve
-    })
+    const gates: (() => void)[] = []
     const counts: number[] = []
     vi.spyOn(core, 'blockRows').mockImplementation(async (net, q, signal) => {
       counts.push(q.count)
-      if (q.count === 20 - FIRST_CHUNK) await held
+      if (counts.length > 1) await new Promise<void>((resolve) => gates.push(resolve))
       return original(net, q, signal)
     })
     renderAt('/blocks?date=2026-11-03')
     await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
     const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
+    const rows = () => within(table()).getAllByRole('row').length - 1
+    const pending = () => table().querySelectorAll('[data-pending-row]').length
+    await waitFor(() => expect(rows()).toBe(FIRST_CHUNK))
+    expect(within(table()).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
+    expect(pending()).toBe(20 - FIRST_CHUNK)
+
+    await waitFor(() => expect(gates).toHaveLength(1))
+    gates[0]!()
+    await waitFor(() => expect(rows()).toBe(FIRST_CHUNK + NEXT_CHUNK))
+    expect(pending()).toBe(20 - FIRST_CHUNK - NEXT_CHUNK)
+
+    await waitFor(() => expect(gates).toHaveLength(2))
+    gates[1]!()
+    await waitFor(() => expect(rows()).toBe(20))
+    expect(pending()).toBe(0)
+    expect(counts).toEqual([FIRST_CHUNK, NEXT_CHUNK, 20 - FIRST_CHUNK - NEXT_CHUNK])
+  })
+
+  it('says how far the search for a day has got and shows its newest rows before the search ends @IN-02', async () => {
+    const original = core.heightAtTime.bind(core)
+    const dayStart = Date.parse('2026-11-03T00:00:00Z')
+    let release: () => void = () => undefined
+    const held = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    vi.spyOn(core, 'heightAtTime').mockImplementation(async (net, ms, signal) => {
+      if (ms === dayStart) await held
+      return original(net, ms, signal)
+    })
+    renderAt('/blocks?date=2026-11-03')
+    const progress = await screen.findByRole('status')
+    await waitFor(() => expect(progress).toHaveAttribute('data-range-progress', '1'))
+    expect(progress).toHaveTextContent('1 of 2 found')
+    const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(FIRST_CHUNK + 1))
     expect(within(table()).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
     expect(table().querySelectorAll('[data-pending-row]')).toHaveLength(20 - FIRST_CHUNK)
+    expect(screen.queryByText('No blocks on this date')).not.toBeInTheDocument()
+
     release()
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
-    expect(table().querySelectorAll('[data-pending-row]')).toHaveLength(0)
-    expect(counts).toEqual([FIRST_CHUNK, 20 - FIRST_CHUNK])
+    expect(document.querySelector('[data-range-progress]')).toBeNull()
   })
 
   it('says a day in the future has no blocks yet @IN-02', async () => {

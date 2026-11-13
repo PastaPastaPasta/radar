@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BLOCKS_PER_PAGE, shiftDay, windowOf } from './blocks-range'
+import { BLOCKS_PER_PAGE, chunksOf, shiftDay, windowOf } from './blocks-range'
 
 describe('windowOf', () => {
   it('starts at the newest block and pages back', () => {
@@ -36,5 +36,24 @@ describe('shiftDay', () => {
   it('moves across month and year ends', () => {
     expect(shiftDay('2025-12-31', 1)).toBe('2026-01-01')
     expect(shiftDay('2026-03-01', -1)).toBe('2026-02-28')
+  })
+})
+
+describe('chunksOf @IN-02', () => {
+  it('reads a full page as four rows and then eight at a time', () => {
+    expect(chunksOf(20)).toEqual([
+      { offset: 0, count: 4 },
+      { offset: 4, count: 8 },
+      { offset: 12, count: 8 },
+    ])
+  })
+
+  it('reads a short page in as many steps as it needs, and an empty one in none', () => {
+    expect(chunksOf(3)).toEqual([{ offset: 0, count: 3 }])
+    expect(chunksOf(7)).toEqual([
+      { offset: 0, count: 4 },
+      { offset: 4, count: 3 },
+    ])
+    expect(chunksOf(0)).toEqual([])
   })
 })
