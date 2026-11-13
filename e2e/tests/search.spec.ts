@@ -55,7 +55,7 @@ const samples: Sample[] = [
     label: 'a public-key hash',
     q: PKH,
     looksLike: /a 40-character hash: a public-key hash/,
-    withheld: /Identity with this public-key hash/,
+    result: { name: /Identity with this public-key hash/, href: `/identity/lookup?pkh=${PKH}` },
   },
   {
     label: 'an identity or contract ID',
