@@ -3,9 +3,10 @@
  * and trap handling follow native-platform-explorer (src/lib/grovedb-proof-parser.ts), MIT License, Copyright (c) 2026
  * native-platform-explorer contributors. See THIRD_PARTY.md.
  */
+import type * as Parser from './grovedb-parser/grovedb_proof_parser'
 import wasmUrl from './grovedb-parser/grovedb_proof_parser_bg.wasm?url'
 
-type ParserModule = typeof import('./grovedb-parser/grovedb_proof_parser')
+type ParserModule = typeof Parser
 
 /** Why a proof could not be read: the page words each reason in the reader's language. */
 export type ProofParseReason = 'empty' | 'load' | 'trap' | 'truncated' | 'invalid'
@@ -54,7 +55,7 @@ function failure(error: unknown): ProofParseError {
     return new ProofParseError('trap', 'The parser hit an internal limit', { cause: error })
   }
   const raw = error instanceof Error ? error.message : String(error)
-  if (/UnexpectedEnd/.test(raw)) return new ProofParseError('truncated', raw, { cause: error })
+  if (raw.includes('UnexpectedEnd')) return new ProofParseError('truncated', raw, { cause: error })
   return new ProofParseError('invalid', raw.slice(0, 200), { cause: error })
 }
 

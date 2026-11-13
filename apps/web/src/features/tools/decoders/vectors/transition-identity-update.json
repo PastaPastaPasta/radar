@@ -1,0 +1,60 @@
+{
+  "id": "transition-identity-update",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction 989EF31F61C3018331BC3F7B9C983B57AA67DAF9C993C57205B70882FDF96725 (fixture pe/mainnet/identity__BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp__transactions--limit-10,order-desc.json)",
+  "hex": "06009f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb0301030200040001030101a2a1b4ac6fef22ea2a1a68e8123644b357875f6b412c18109281c146e7b271bc0e636f6e74616374526571756573740021036bd2b326255d0d8f808c9ea54b7bf74f80faf456d21a368d09260906c169f30a41207d5881d8135453cf6a858331477be227fdcaea450eba911f2c138407cb8cf9a62b082426f2386878724af89745e1ebf54acee8bdd6c4e1d1db50a64aff26de5900050002030101a2a1b4ac6fef22ea2a1a68e8123644b357875f6b412c18109281c146e7b271bc0e636f6e746163745265717565737400210302556d5dd88048bf9fb848bfd73cdda881bd9452df4cbf556f2ef568231c271241206ef3fcd5b82fc1392af414edc8bf48d22fea87d3b6613c02ea08f030b7a1b4d36d079b8ade82a44dbdaaa8db6e116f58c6de8d3a9c7044daea74829817bac07f000000411f1e1cd7596a3781892db31044fe2c919c78aef1e24f376c2786bb1e980cbcccd6466a1ec61b61692a5af841d712b6bf2155640e31ae4bcefb44a43dab982d2b6c",
+  "expected": {
+    "actionType": "IdentityUpdate",
+    "actionTypeNumber": 5,
+    "hash": "989ef31f61c3018331bc3f7b9c983b57aa67daf9c993c57205b70882fdf96725",
+    "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+    "identityNonce": "3",
+    "identityContractNonce": null,
+    "userFeeIncrease": 0,
+    "signaturePublicKeyId": 0,
+    "byteLength": 416,
+    "body": {
+      "$formatVersion": "0",
+      "identityId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+      "revision": 1,
+      "nonce": 3,
+      "addPublicKeys": [
+        {
+          "$formatVersion": "0",
+          "id": 4,
+          "type": 0,
+          "purpose": 1,
+          "securityLevel": 3,
+          "contractBounds": {
+            "$type": "documentType",
+            "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "documentTypeName": "contactRequest"
+          },
+          "readOnly": false,
+          "data": "A2vSsyYlXQ2PgIyepUt790+A+vRW0ho2jQkmCQbBafMK",
+          "signature": "IH1YgdgTVFPPaoWDMUd74if9yupFDrqRHywThAfLjPmmKwgkJvI4aHhySviXReHr9UrO6L3WxOHR21CmSv8m3lk="
+        },
+        {
+          "$formatVersion": "0",
+          "id": 5,
+          "type": 0,
+          "purpose": 2,
+          "securityLevel": 3,
+          "contractBounds": {
+            "$type": "documentType",
+            "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+            "documentTypeName": "contactRequest"
+          },
+          "readOnly": false,
+          "data": "AwJVbV3YgEi/n7hIv9c83aiBvZRS30y/VW8u9WgjHCcS",
+          "signature": "IG7z/NW4L8E5KvQU7ci/SNIv6ofTtmE8AuoI8DC3obTTbQebit6CpE29qqjbbhFvWMbejTqccETa6nSCmBe6wH8="
+        }
+      ],
+      "disablePublicKeys": [],
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 0,
+      "signature": "Hx4c11lqN4GJLbMQRP4skZx4rvHiTzdsJ4a7HpgMvMzWRmoexhthaSpa+EHXEra/IVVkDjGuS877RKQ9q5gtK2w="
+    }
+  }
+}

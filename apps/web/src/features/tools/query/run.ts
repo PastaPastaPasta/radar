@@ -4,7 +4,13 @@ import { sdk } from '@/data/sdk'
 import type { DocumentDto } from '@/data/sdk/methods'
 import type { AverageGroupDto, CountGroupDto, SumGroupDto } from '@/data/sdk/methods/tools'
 import type { NetworkId } from '@/lib/network'
-import { parseSqlMulti, resolveContractId, toDocumentsQuery, type ParsedQuery } from './sql-parser'
+import {
+  parseSqlMulti,
+  resolveContractId,
+  toDocumentsQuery,
+  type ParseFailure,
+  type ParsedQuery,
+} from './sql-parser'
 
 /** Radar runs one or two statements a time: each is a separate proof-checked request. */
 export const MAX_STATEMENTS = 2
@@ -33,7 +39,7 @@ export interface StatementRun {
 
 export type PlanResult =
   | { ok: true; statements: { parsed: ParsedQuery; contractId: string; sql: string }[] }
-  | { ok: false; problem: 'parse'; failure: import('./sql-parser').ParseFailure }
+  | { ok: false; problem: 'parse'; failure: ParseFailure }
   | { ok: false; problem: 'too-many'; count: number }
   | { ok: false; problem: 'no-contract'; alias: string | undefined; statement: number }
 

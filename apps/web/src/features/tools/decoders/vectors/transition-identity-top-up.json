@@ -1,0 +1,30 @@
+{
+  "id": "transition-identity-top-up",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction F97CA799F1767BADE51F960FC83EE4AB678FBB5E03328F84B57CFCBC10492728 (fixture pe/mainnet/identity__BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp__transactions--limit-10,order-desc,page-2.json)",
+  "hex": "040000c6010191ddba9d9c5be6cba2c1b4690c327e00317d4be0e88210ded13692423c19448a01000000eb67e88bffea67184dac4efadac81c6b6768124d89ffd8aebe40780b23aa5eadae16ca958611700047d54a79ac9172ca31eb615719217b850d00000000000000b30a95cef0b19119f8dd7c529831109c5d5050432eb2ac6a89c7bc20c8f9212e27d857e0d7610ab2463fe497af628bbe0547de80f398fc2c663c1046a82d4048e94b6d554457e52250606863f18d6b23c7a35befcc6417e955f8964c0918bb29f0030008000191ddba9d9c5be6cba2c1b4690c327e00317d4be0e88210ded13692423c19448a010000006b483045022100d2b22c882e8dc99601750b637a60199d66a9bf1cd31ed0d4c485ab5fa48eba8c0220502e48604c2b54844e068d2e1283dc6dccf2bdaac7fd91b75aca0858aacc52f50121027ffccb4b575569490823e8ae8102db957637cd879beab8914d2d93936dfd66f4ffffffff0200ca9a3b00000000026a007d157118020000001976a914f252b04c8cbb29615445aeb126aeba8b36d4b71e88ac0000000024010100ca9a3b000000001976a914ae938723509a20e60ea00ad8011435ae4ae5306588ac009f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb03004120f2b1ca648eef33d514b9d66664e1f48ca12a41482af290abb7667bbaa6cf3b4825a2e9fb2c516ea97184a35982a890756beb183283c644f5316e8c0f536c6da3",
+  "expected": {
+    "actionType": "IdentityTopUp",
+    "actionTypeNumber": 3,
+    "hash": "f97ca799f1767bade51f960fc83ee4ab678fbb5e03328f84b57cfcbc10492728",
+    "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+    "identityNonce": null,
+    "identityContractNonce": null,
+    "userFeeIncrease": 0,
+    "signaturePublicKeyId": null,
+    "byteLength": 543,
+    "body": {
+      "$formatVersion": "0",
+      "assetLockProof": {
+        "$type": "instant",
+        "instantLock": "AQGR3bqdnFvmy6LBtGkMMn4AMX1L4OiCEN7RNpJCPBlEigEAAADrZ+iL/+pnGE2sTvrayBxrZ2gSTYn/2K6+QHgLI6pera4WypWGEXAAR9VKeayRcsox62FXGSF7hQ0AAAAAAAAAswqVzvCxkRn43XxSmDEQnF1QUEMusqxqice8IMj5IS4n2Ffg12EKskY/5JevYou+BUfegPOY/CxmPBBGqC1ASOlLbVVEV+UiUGBoY/GNayPHo1vvzGQX6VX4lkwJGLsp",
+        "transaction": "AwAIAAGR3bqdnFvmy6LBtGkMMn4AMX1L4OiCEN7RNpJCPBlEigEAAABrSDBFAiEA0rIsiC6NyZYBdQtjemAZnWapvxzTHtDUxIWrX6SOuowCIFAuSGBMK1SETgaNLhKD3G3M8r2qx/2Rt1rKCFiqzFL1ASECf/zLS1dVaUkII+iugQLblXY3zYeb6riRTS2Tk239ZvT/////AgDKmjsAAAAAAmoAfRVxGAIAAAAZdqkU8lKwTIy7KWFURa6xJq66izbUtx6IrAAAAAAkAQEAypo7AAAAABl2qRSuk4cjUJog5g6gCtgBFDWuSuUwZYis",
+        "outputIndex": 0
+      },
+      "identityId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+      "userFeeIncrease": 0,
+      "signature": "IPKxymSO7zPVFLnWZmTh9IyhKkFIKvKQq7dme7qmzztIJaLp+yxRbqlxhKNZgqiQdWvrGDKDxkT1MW6MD1NsbaM="
+    }
+  }
+}

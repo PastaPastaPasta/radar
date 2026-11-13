@@ -1,9 +1,8 @@
 /*
  * Ported from native-platform-explorer (src/util/query-workspace.ts), MIT License,
  * Copyright (c) 2026 native-platform-explorer contributors. See THIRD_PARTY.md.
- * Changes: our network and query types, one saved-queries key (`radar.queries`), the installed SDK version.
+ * Changes: our network and query types, one saved-queries key (`radar.queries`).
  */
-import { SDK_VERSION } from '@/data/sdk/worker/version'
 import type { AggregateKind, ParsedQuery } from './sql-parser'
 
 /** What `@dashevo/evo-sdk` takes for a documents query (its own spelling of our arguments). */
@@ -11,7 +10,7 @@ export interface SdkQueryParams {
   dataContractId: string
   documentTypeName: string
   where?: unknown[]
-  orderBy?: Array<[string, 'asc' | 'desc']>
+  orderBy?: [string, 'asc' | 'desc'][]
   limit?: number
   startAfter?: string
   groupBy?: string[]
@@ -31,7 +30,7 @@ export function toSdkParams(args: {
   contractId: string
   type: string
   where?: unknown[]
-  orderBy?: Array<[string, 'asc' | 'desc']>
+  orderBy?: [string, 'asc' | 'desc'][]
   limit?: number
   startAfter?: string
   groupBy?: string[]
@@ -103,7 +102,7 @@ function queryJsonValue(value: unknown, ancestors = new Set<object>(), depth = 0
     if (Array.isArray(value)) return value.map(visit)
     if (value instanceof Set) return Array.from(value, visit)
 
-    const out = Object.create(null) as { [key: string]: JsonValue }
+    const out = Object.create(null) as Record<string, JsonValue>
     if (value instanceof Map) {
       for (const [key, item] of value) out[String(key)] = visit(item)
       return out
@@ -142,7 +141,7 @@ export function serializeQueryJson(value: unknown, indent = 2): string {
 }
 
 /** Preserve SDK instances here so table accessors and pagination keep their getters. */
-export function extractDocumentRows(data: unknown): Array<Record<string, unknown>> {
+export function extractDocumentRows(data: unknown): Record<string, unknown>[] {
   const values = data instanceof Map ? Array.from(data.values()) : Array.isArray(data) ? data : []
   return values.filter(
     (value): value is Record<string, unknown> =>
@@ -163,51 +162,45 @@ export function documentPageCursor(data: unknown): { count: number; lastId?: str
   return { count: data.length, lastId: typeof id === 'string' ? id : undefined }
 }
 
-/** Plain-language explanations for Platform query errors the workspace can
- *  anticipate. The raw error stays visible alongside. */
-export function describeQueryError(message: string | undefined): string | undefined {
+export type QueryErrorKind =
+  'aggregate-index' | 'range-order' | 'no-index' | 'unsupported' | 'limit'
+
+/** Which known Drive refusal a message is, so the page can explain it in the reader's language. */
+export function classifyQueryError(message: string | undefined): QueryErrorKind | undefined {
   if (!message) return undefined
   if (
     /requires a `(?:countable|summable|rangeCountable|rangeSummable)|(?:count|sum) query requires|countable: true/.test(
       message,
     )
   ) {
-    return "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields (or documentsCountable for an unfiltered count); SUM and AVG need a matching summable index. The schema panel lists each index's flags."
+    return 'aggregate-index'
   }
-  if (/missing order by|orderBy field for each range element/i.test(message)) {
-    return 'Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN.'
-  }
+  if (/missing order by|orderBy field for each range element/i.test(message)) return 'range-order'
   if (
     /query must be for valid indexes|where clause on non indexed property|query must better match an existing index/i.test(
       message,
     )
   ) {
-    return "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema panel lists the indices."
+    return 'no-index'
   }
-  if (/Operation is not implemented or not supported/i.test(message)) {
-    return 'The node that answered does not support this request; it may run an older Platform version. Retry to reach a different node.'
-  }
-  if (/invalid limit/i.test(message)) {
-    return 'The Platform rejected the LIMIT for this query shape. Try a smaller LIMIT.'
-  }
+  if (/Operation is not implemented or not supported/i.test(message)) return 'unsupported'
+  if (/invalid limit/i.test(message)) return 'limit'
   return undefined
 }
 
 /** Keep the canonical group key, rather than guessing a schema-dependent decoded value. */
-export function aggregateExportRows(
-  data: unknown,
-  kind: AggregateKind,
-): Array<Record<string, unknown>> {
+const isAverage = (value: unknown): value is { count: bigint; sum: bigint } =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as { count?: unknown }).count === 'bigint' &&
+  typeof (value as { sum?: unknown }).sum === 'bigint'
+
+/** Keep the canonical group key, rather than guessing a schema-dependent decoded value. */
+export function aggregateExportRows(data: unknown, kind: AggregateKind): Record<string, unknown>[] {
   if (!(data instanceof Map)) return []
-  return Array.from(data, ([key, value]) => {
+  return Array.from(data as Map<unknown, unknown>, ([key, value]) => {
     const groupKey = String(key)
-    if (
-      kind === 'avg' &&
-      value &&
-      typeof value === 'object' &&
-      typeof value.count === 'bigint' &&
-      typeof value.sum === 'bigint'
-    ) {
+    if (kind === 'avg' && isAverage(value)) {
       return {
         groupKey,
         count: value.count.toString(),
@@ -231,7 +224,7 @@ function csvCell(value: JsonValue | undefined): string {
   // including the full-width ＝＋－＠ forms some spreadsheets normalize.
   if (
     typeof value === 'string' &&
-    (/^[\t\r\n]/.test(text) || /^[\s\u0000-\u001f]*[=+\-@\uff1d\uff0b\uff0d\uff20]/.test(text)) &&
+    (/^[\t\r\n]/.test(text) || /^[\s\p{Cc}]*[=+\-@\uff1d\uff0b\uff0d\uff20]/u.test(text)) &&
     !/^-\d+(?:\.\d+)?$/.test(text)
   ) {
     text = `'${text}`
@@ -240,11 +233,11 @@ function csvCell(value: JsonValue | undefined): string {
 }
 
 /** Export the current rows with the union of their fields in first-seen order. */
-export function serializeQueryCsv(rows: Array<Record<string, unknown>>): string {
+export function serializeQueryCsv(rows: Record<string, unknown>[]): string {
   if (rows.length === 0) return ''
   const normalized = rows.map((row) => queryJsonValue(row))
   const records = normalized.filter(
-    (row): row is { [key: string]: JsonValue } =>
+    (row): row is Record<string, JsonValue> =>
       row !== null && typeof row === 'object' && !Array.isArray(row),
   )
   const fields = Array.from(new Set(records.flatMap((row) => Object.keys(row))))
@@ -321,7 +314,7 @@ export function buildSdkExample(
       : `const result = await sdk.documents.${method}(params${field});`
   }
   return (
-    `// npm install @dashevo/evo-sdk@${SDK_VERSION}\n` +
+    '// npm install @dashevo/evo-sdk\n' +
     `import { EvoSDK } from '@dashevo/evo-sdk';\n\n` +
     `${instructions}const sdk = ${construction};\nawait sdk.connect();\n\n` +
     `const params = ${sdkLiteral(params)};\n\n${query}\n\n` +

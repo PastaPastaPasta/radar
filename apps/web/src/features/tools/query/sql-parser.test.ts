@@ -505,20 +505,13 @@ describe('workspace SQL validation', () => {
 
   it('parses nested aggregate properties', () => {
     const parsed = parseSql('SELECT SUM(stats.score) FROM grade')
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({ aggregateField: 'stats.score' }),
-      }),
-    )
+    expect(parsed).toMatchObject({ ok: true, query: { aggregateField: 'stats.score' } })
   })
 })
 
 it('preserves escaped SQL identifier punctuation', () => {
   const parsed = parseSql('SELECT * FROM `odd``name` ORDER BY `group` ASC LIMIT 25')
-  expect(parsed).toEqual(
-    expect.objectContaining({ ok: true, query: expect.objectContaining({ from: 'odd`name' }) }),
-  )
+  expect(parsed).toMatchObject({ ok: true, query: { from: 'odd`name' } })
 })
 
 describe('SQL edge cases', () => {
@@ -541,14 +534,14 @@ describe('SQL edge cases', () => {
 
   it('reads unquoted and backticked values as text, with a hint to quote them', () => {
     const sql = "SELECT * FROM doc WHERE x = y AND z IN (a, 'b', y)"
-    expect(parseSql(sql)).toEqual({
+    expect(parseSql(sql)).toMatchObject({
       ok: true,
-      query: expect.objectContaining({
+      query: {
         where: [
           { field: 'x', operator: '==', value: 'y' },
           { field: 'z', operator: 'in', value: ['a', 'b', 'y'] },
         ],
-      }),
+      },
       hints: [
         {
           message:
@@ -578,23 +571,19 @@ describe('SQL edge cases', () => {
   })
 
   it('allows a field named like, and LIKE in operator position', () => {
-    expect(parseSql("SELECT * FROM doc WHERE like = 'x' ORDER BY like DESC")).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({
-          where: [{ field: 'like', operator: '==', value: 'x' }],
-          orderBy: [{ field: 'like', direction: 'desc' }],
-        }),
-      }),
-    )
-    expect(parseSql("SELECT * FROM doc WHERE like LIKE 'a%'")).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({
-          where: [{ field: 'like', operator: 'startsWith', value: 'a' }],
-        }),
-      }),
-    )
+    expect(parseSql("SELECT * FROM doc WHERE like = 'x' ORDER BY like DESC")).toMatchObject({
+      ok: true,
+      query: {
+        where: [{ field: 'like', operator: '==', value: 'x' }],
+        orderBy: [{ field: 'like', direction: 'desc' }],
+      },
+    })
+    expect(parseSql("SELECT * FROM doc WHERE like LIKE 'a%'")).toMatchObject({
+      ok: true,
+      query: {
+        where: [{ field: 'like', operator: 'startsWith', value: 'a' }],
+      },
+    })
   })
 
   it('treats -- as a comment even straight after an operator', () => {
@@ -605,12 +594,10 @@ describe('SQL edge cases', () => {
       position: 30,
       code: 'expected-value',
     })
-    expect(parseSql('SELECT * FROM doc WHERE x == -1')).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({ where: [{ field: 'x', operator: '==', value: -1 }] }),
-      }),
-    )
+    expect(parseSql('SELECT * FROM doc WHERE x == -1')).toMatchObject({
+      ok: true,
+      query: { where: [{ field: 'x', operator: '==', value: -1 }] },
+    })
   })
 
   it('reports malformed numbers as syntax errors', () => {
@@ -621,15 +608,13 @@ describe('SQL edge cases', () => {
       position: sql.indexOf('1.2.3'),
       code: 'invalid-number',
     })
-    expect(parseSql('SELECT * FROM doc WHERE amount = 1. LIMIT 10.')).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({
-          where: [{ field: 'amount', operator: '==', value: 1 }],
-          limit: 10,
-        }),
-      }),
-    )
+    expect(parseSql('SELECT * FROM doc WHERE amount = 1. LIMIT 10.')).toMatchObject({
+      ok: true,
+      query: {
+        where: [{ field: 'amount', operator: '==', value: 1 }],
+        limit: 10,
+      },
+    })
   })
 
   it('ignores -- line comments', () => {
@@ -640,12 +625,10 @@ describe('SQL edge cases', () => {
     if (!parsed.ok) return
     expect(parsed.queries).toHaveLength(1)
     expect(parsed.queries[0]!.where).toEqual([{ field: 'label', operator: '==', value: 'a--b' }])
-    expect(parseSql('SELECT * FROM doc WHERE x > -5 -- negative')).toEqual(
-      expect.objectContaining({
-        ok: true,
-        query: expect.objectContaining({ where: [{ field: 'x', operator: '>', value: -5 }] }),
-      }),
-    )
+    expect(parseSql('SELECT * FROM doc WHERE x > -5 -- negative')).toMatchObject({
+      ok: true,
+      query: { where: [{ field: 'x', operator: '>', value: -5 }] },
+    })
   })
 
   it('rejects inequality and NOT with explanations', () => {

@@ -1,0 +1,30 @@
+{
+  "id": "transition-credit-withdrawal",
+  "kind": "stateTransition",
+  "network": "testnet",
+  "source": "Platform Explorer transaction 789A2A4DD91FB23FD9DEFC33939A7CA5FF064BD4EB788601B9F732A6FCE99C1C (fixture pe/testnet/identity__5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk__transactions--limit-10,order-desc.json)",
+  "hex": "05013ea88cc9622ec22d94db9e2e7a823be13c263d0328146ba80afec33b34ba81affc0002e6300100011976a91470fb0f58999ca30ec8dc8cdb2b212ba64a58643888ac2900034120c95873144a5c9363c5f99836e22a390a36a8d6c1169fae052fd3357408bdd122579a53b609d6682c85563c44ee71b6705556a3b8720f8f20a528af0e2f36fdd3",
+  "expected": {
+    "actionType": "IdentityCreditWithdrawal",
+    "actionTypeNumber": 6,
+    "hash": "789a2a4dd91fb23fd9defc33939a7ca5ff064bd4eb788601b9f732a6fce99c1c",
+    "ownerId": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+    "identityNonce": "41",
+    "identityContractNonce": null,
+    "userFeeIncrease": 0,
+    "signaturePublicKeyId": 3,
+    "byteLength": 137,
+    "body": {
+      "$formatVersion": "1",
+      "identityId": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+      "amount": 190000,
+      "coreFeePerByte": 1,
+      "pooling": "never",
+      "outputScript": "dqkUcPsPWJmcow7I3IzbKyErpkpYZDiIrA==",
+      "nonce": 41,
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 3,
+      "signature": "IMlYcxRKXJNjxfmYNuIqOQo2qNbBFp+uBS/TNXQIvdEiV5pTtgnWaCyFVjxE7nG2cFVWo7hyD48gpSivDi82/dM="
+    }
+  }
+}

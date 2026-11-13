@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 import type { ParsedQuery } from './sql-parser'
 
@@ -13,10 +12,10 @@ function installStorageMock(_name: 'localStorage', initial: Record<string, strin
     key: (index: number) => [...data.keys()][index] ?? null,
     removeItem: (key: string) => data.delete(key),
     setItem: (key: string, value: string) => data.set(key, value),
-  } as Storage
+  }
 }
 import {
-  describeQueryError,
+  classifyQueryError,
   documentPageCursor,
   aggregateExportRows,
   buildSdkExample,
@@ -89,6 +88,7 @@ describe('serializeQueryJson', () => {
       toJSON(): never {
         throw new Error('freed field')
       }
+      // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- an accessor, as the wasm classes expose their fields
       get amount() {
         return 9_007_199_254_740_993n
       }
@@ -137,6 +137,7 @@ describe('serializeQueryJson', () => {
 describe('query export rows', () => {
   it('extracts map and array documents while preserving instances and filtering absent rows', () => {
     class Document {
+      // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- an accessor, as the wasm classes expose their fields
       get id() {
         return 'doc-id'
       }
@@ -250,6 +251,7 @@ async function executeExample(example: string, sdk: unknown) {
   }
   const source = example.replace("import { EvoSDK } from '@dashevo/evo-sdk';", '')
   const log = vi.fn()
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- runs the generated example against stand-ins for the SDK
   const run = new Function('EvoSDK', 'console', `return (async () => {\n${source}\n})();`) as (
     sdkFactory: unknown,
     console: unknown,
@@ -263,13 +265,14 @@ describe('buildSdkExample', () => {
     'uses the %s trusted factory and proof-returning facade',
     async (network) => {
       let connected = false
-      const queryWithProof = vi.fn(async () => {
+      const queryWithProof = vi.fn(() => {
         expect(connected).toBe(true)
-        return { data: new Map([['doc-id', { amount: 9_007_199_254_740_993n }]]) }
+        return Promise.resolve({ data: new Map([['doc-id', { amount: 9_007_199_254_740_993n }]]) })
       })
       const sdk = {
-        connect: async () => {
+        connect: () => {
           connected = true
+          return Promise.resolve()
         },
         documents: { queryWithProof },
       }
@@ -280,15 +283,12 @@ describe('buildSdkExample', () => {
       expect(JSON.parse(log.mock.calls[0]![0] as string)).toEqual({
         'doc-id': { amount: '9007199254740993' },
       })
-      const installed = JSON.parse(
-        readFileSync(`${process.cwd()}/node_modules/@dashevo/evo-sdk/package.json`, 'utf8'),
-      ) as { version: string }
-      expect(example).toContain(`@dashevo/evo-sdk@${installed.version}`)
+      expect(example).toContain('// npm install @dashevo/evo-sdk\n')
     },
   )
 
   it('uses the regular facade in untrusted mode', async () => {
-    const query = vi.fn(async () => new Map())
+    const query = vi.fn(() => Promise.resolve(new Map()))
     const sdk = { connect: vi.fn(), documents: { query } }
     const { factories } = await executeExample(
       buildSdkExample(documentQuery, params, 'testnet', false),
@@ -307,8 +307,8 @@ describe('buildSdkExample', () => {
   ] as const)(
     'uses the documents facade for %s (%s, trusted %s)',
     async (select, method, trusted) => {
-      const plain = vi.fn(async () => new Map([['', 2n]]))
-      const withProof = vi.fn(async () => ({ data: new Map([['', 2n]]) }))
+      const plain = vi.fn(() => Promise.resolve(new Map([['', 2n]])))
+      const withProof = vi.fn(() => Promise.resolve({ data: new Map([['', 2n]]) }))
       const sdk = {
         connect: vi.fn(),
         documents: { [method]: plain, [`${method}WithProof`]: withProof },
@@ -328,8 +328,8 @@ describe('buildSdkExample', () => {
   )
 
   it('quotes query parameter strings so pasted code cannot execute their content', async () => {
-    const untrustedParams = { ...params, documentTypeName: '\"); throw new Error("injected"); //' }
-    const query = vi.fn(async () => new Map())
+    const untrustedParams = { ...params, documentTypeName: '"); throw new Error("injected"); //' }
+    const query = vi.fn(() => Promise.resolve(new Map()))
     await executeExample(buildSdkExample(documentQuery, untrustedParams, 'testnet', false), {
       connect: vi.fn(),
       documents: { query },
@@ -338,10 +338,10 @@ describe('buildSdkExample', () => {
   })
 
   it('uses configured devnet DAPI endpoints and a configured trusted quorum URL', async () => {
-    const query = vi.fn(async () => new Map())
+    const query = vi.fn(() => Promise.resolve(new Map()))
     const sdk = {
       connect: vi.fn(),
-      documents: { query, queryWithProof: async () => ({ data: new Map() }) },
+      documents: { query, queryWithProof: () => Promise.resolve({ data: new Map() }) },
     }
     const network = {
       name: 'custom-network',
@@ -518,7 +518,7 @@ it('normalizes SDK Documents through toObject before versioned toJSON', async ()
   })
   const sdk = {
     connect: vi.fn(),
-    documents: { queryWithProof: async () => ({ data: new Map([['doc-id', document]]) }) },
+    documents: { queryWithProof: () => Promise.resolve({ data: new Map([['doc-id', document]]) }) },
   }
   const { log } = await executeExample(buildSdkExample(documentQuery, params, 'testnet', true), sdk)
   expect(JSON.parse(log.mock.calls[0]![0] as string)).toEqual({
@@ -526,33 +526,33 @@ it('normalizes SDK Documents through toObject before versioned toJSON', async ()
   })
 })
 
-describe('describeQueryError', () => {
+describe('classifyQueryError', () => {
   it.each([
     // Raw testnet responses captured while validating the workspace.
     [
       'transport error: grpc error: code: \'Client specified an invalid argument\', message: "where clause on non indexed property error: prove count requires a `countable: true` (or summableOffCountIndex) index whose properties exactly match the where clause fields"',
-      /no index that supports this aggregate/,
+      'aggregate-index',
     ],
     [
       'transport error: grpc error: code: \'Client specified an invalid argument\', message: "missing order by for range error: query must have an orderBy field for each range element"',
-      /Add ORDER BY for every field/,
+      'range-order',
     ],
     [
       'transport error: grpc error: code: \'Client specified an invalid argument\', message: "where clause on non indexed property error: query must be for valid indexes, valid indexes are: {}"',
-      /No index covers this combination/,
+      'no-index',
     ],
     [
       "DapiClientError [-1]: transport error: grpc error: code: 'Operation is not implemented or not supported'",
-      /does not support this request/,
+      'unsupported',
     ],
-    ['invalid limit error: limit 500 exceeds 100', /rejected the LIMIT/],
-  ])('explains %s', (message, explanation) => {
-    expect(describeQueryError(message)).toMatch(explanation)
+    ['invalid limit error: limit 500 exceeds 100', 'limit'],
+  ])('classifies %s', (message, kind) => {
+    expect(classifyQueryError(message)).toBe(kind)
   })
 
   it('leaves unknown errors to the generic hint', () => {
-    expect(describeQueryError('connection refused')).toBeUndefined()
-    expect(describeQueryError(undefined)).toBeUndefined()
+    expect(classifyQueryError('connection refused')).toBeUndefined()
+    expect(classifyQueryError(undefined)).toBeUndefined()
   })
 })
 

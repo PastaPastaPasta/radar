@@ -268,11 +268,13 @@ export interface KnownKey {
 
 /** The single-byte keys a context defines, for presets that read them. */
 export function knownKeys(context: GroveContext): KnownKey[] {
-  return Object.entries(TABLE_BY_CONTEXT[context] ?? {}).map(([hex, info]) => ({
-    hex,
-    name: info.name,
-    ...(info.description ? { description: info.description } : {}),
-  }))
+  return Object.entries(TABLE_BY_CONTEXT[context] ?? {})
+    .map(([hex, info]) => ({
+      hex,
+      name: info.name,
+      ...(info.description ? { description: info.description } : {}),
+    }))
+    .sort((a, b) => (a.hex < b.hex ? -1 : a.hex > b.hex ? 1 : 0))
 }
 
 /** Try to decode a hex string as an ASCII identifier (e.g. document type name). */

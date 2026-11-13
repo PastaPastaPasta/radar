@@ -1,5 +1,6 @@
 import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
+import type { QueryErrorKind } from './query-workspace'
 import type { ParseCode, ParseFailure } from './sql-parser'
 
 interface Explanation {
@@ -109,4 +110,12 @@ export function explainFailure(failure: ParseFailure): ExplainedFailure {
     ...(explanation.rule ? { rule: explanation.rule } : {}),
     values: { arg, label: failure.label ?? '' },
   }
+}
+
+export const QUERY_ERROR_HINTS: Record<QueryErrorKind, MessageDescriptor> = {
+  'aggregate-index': msg`This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags.`,
+  'range-order': msg`Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN.`,
+  'no-index': msg`No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes.`,
+  unsupported: msg`The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node.`,
+  limit: msg`Platform rejected the LIMIT for this query shape. Try a smaller LIMIT.`,
 }

@@ -184,7 +184,7 @@ export function parseProofTree(text: string): ParsedLayer | null {
   // Each frame is either an open layer or a non-layer brace block
   // (`lower_layers: {`, `<key> => {`, the outer wrapper, etc.). Brace tracking
   // is symmetric — every `{` opens a frame, every `}` pops one.
-  const blockStack: Array<{ layer?: ParsedLayer }> = []
+  const blockStack: { layer?: ParsedLayer }[] = []
   const openLayers: ParsedLayer[] = []
   let root: ParsedLayer | null = null
   let nextParentKey = ''
@@ -207,7 +207,7 @@ export function parseProofTree(text: string): ParsedLayer | null {
         issues: [],
         children: new Map(),
       }
-      if (!root) root = layer
+      root ??= layer
       if (parent) parent.children.set(nextParentKey, layer)
       blockStack.push({ layer })
       openLayers.push(layer)
@@ -221,7 +221,7 @@ export function parseProofTree(text: string): ParsedLayer | null {
     }
 
     // Keys never contain whitespace or `=>`; an empty key prints as nothing.
-    const childMatch = line.match(/^(\S*)\s*=>\s*\{$/)
+    const childMatch = /^(\S*)\s*=>\s*\{$/.exec(line)
     if (childMatch) {
       nextParentKey = childMatch[1] ?? ''
       blockStack.push({})
@@ -236,7 +236,7 @@ export function parseProofTree(text: string): ParsedLayer | null {
     const cur = openLayers[openLayers.length - 1]
     if (!cur) continue
 
-    const proofKind = line.match(/^proof:\s*(\w+)\(/)?.[1]
+    const proofKind = /^proof:\s*(\w+)\(/.exec(line)?.[1]
     if (proofKind) {
       if (proofKind !== 'Merk') cur.proofKind = proofKind
       continue
@@ -287,7 +287,7 @@ function balanceTrailingParens(body: string): string {
  */
 function parseOpLine(line: string): { op?: OpNode; issue?: string } | null {
   // Lines look like: `0: Push(KV(0xabc..., Item(0x0b)))` or `2: Parent`.
-  const prefixMatch = line.match(/^(\d+):\s*(.*)$/)
+  const prefixMatch = /^(\d+):\s*(.*)$/.exec(line)
   if (!prefixMatch) return null
   const index = Number(prefixMatch[1])
   const body = balanceTrailingParens(prefixMatch[2]!.trim())
@@ -301,7 +301,7 @@ function parseOpLine(line: string): { op?: OpNode; issue?: string } | null {
     return { op: { kind: 'combine', index, raw: line, combine: body } }
   }
 
-  const pushMatch = body.match(/^(Push|PushInverted)\((\w+)\((.*)\)\)$/)
+  const pushMatch = /^(Push|PushInverted)\((\w+)\((.*)\)\)$/.exec(body)
   if (!pushMatch) {
     if (body.startsWith('Error decoding op'))
       return { issue: `Op ${index}: the parser stopped (${body}).` }
@@ -385,7 +385,7 @@ function takeAggregates(
   const out: { rest: string[]; count?: string; sum?: string } = { rest }
   for (let i = 0; i < names.length; i++) {
     const name = names[i]!
-    const m = tail[i]!.match(/^(?:(count|sum)=)?(-?\d+)$/)
+    const m = /^(?:(count|sum)=)?(-?\d+)$/.exec(tail[i]!)
     if (!m || (m[1] !== undefined && m[1] !== name) || (m[1] === undefined && names.length > 1))
       return null
     out[name as 'count' | 'sum'] = m[2]!
@@ -451,7 +451,7 @@ function parseNode(shape: NodeShape, inner: string): ParsedNode | null {
 }
 
 function extractHash(s: string): string | undefined {
-  return s.match(/HASH\[([0-9a-fA-F]+)\]/)?.[1]
+  return /HASH\[([0-9a-fA-F]+)\]/.exec(s)?.[1]
 }
 
 /**

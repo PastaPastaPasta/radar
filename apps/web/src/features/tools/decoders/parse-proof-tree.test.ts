@@ -145,13 +145,13 @@ describe('parseProofTree on a real testnet sum-tree proof', () => {
         variant: 'KVDigestSum',
         key: 'e2e-rel2a-cli-p2-20261017',
         sum: '2',
-        hash: expect.stringMatching(/^ce1b3240[0-9a-f]{56}$/),
+        hash: expect.stringMatching(/^ce1b3240[0-9a-f]{56}$/) as string,
       }),
       expect.objectContaining({
         kind: 'hash',
         variant: 'HashWithSum',
         sum: '1',
-        hash: expect.stringMatching(/^13b1c739[0-9a-f]{56}$/),
+        hash: expect.stringMatching(/^13b1c739[0-9a-f]{56}$/) as string,
       }),
       expect.objectContaining({ kind: 'combine', combine: 'Child' }),
     ])

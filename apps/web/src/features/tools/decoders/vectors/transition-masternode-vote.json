@@ -1,0 +1,41 @@
+{
+  "id": "transition-masternode-vote",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction 46FBF2A73E90AB3DD692C9E285951987DCCD4744A5B812872FAED19CBD0BB8C2 (fixture pe/mainnet/transactions--limit-5,order-desc.json)",
+  "hex": "0800569a9b03c0d5ea04ba0ae7f208b9afb40f8cb4a4ff4379281b413d04fed8beac7886712704b443c0ad7fea564a78a63fe35730db2d39731622cb01c36fddec2d000000e668c659af66aee1e72c186dde7b5b7e0a1d712a09c40d5721f622bf53c5315506646f6d61696e12706172656e744e616d65416e644c6162656c021204646173681210646173686672656564306d6d306e657900efa23db4e47367246d9a1460a099ab790701d6f612781d0e560f6d1ba8b5c91f1800412043883143c56d1ad12d830fddfbf0c4ff3cfe40639802dd9b7551504b23e4fc992761b155f0197770c94bb3cd7609e40ec0fdb2c0067fb9e88837c951d9bd531c",
+  "expected": {
+    "actionType": "MasternodeVote",
+    "actionTypeNumber": 8,
+    "hash": "46fbf2a73e90ab3dd692c9e285951987dccd4744a5b812872faed19cbd0bb8c2",
+    "ownerId": "97Upr2cxN1Gq41jpsPw4DqCmV7AAfweqbcWG4oxPLqHN",
+    "identityNonce": "24",
+    "identityContractNonce": null,
+    "userFeeIncrease": 0,
+    "signaturePublicKeyId": 0,
+    "byteLength": 253,
+    "body": {
+      "$formatVersion": "0",
+      "proTxHash": "6q4oAUEmoutF9byhKtAHEA5hesKWopUQmgx3Q1Mx4vFd",
+      "voterIdentityId": "97Upr2cxN1Gq41jpsPw4DqCmV7AAfweqbcWG4oxPLqHN",
+      "vote": {
+        "$type": "resourceVote",
+        "$formatVersion": "0",
+        "votePoll": {
+          "$type": "contestedDocumentResourceVotePoll",
+          "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+          "documentTypeName": "domain",
+          "indexName": "parentNameAndLabel",
+          "indexValues": ["dash", "dashfreed0mm0ney"]
+        },
+        "resourceVoteChoice": {
+          "$type": "towardsIdentity",
+          "identity": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"
+        }
+      },
+      "nonce": 24,
+      "signaturePublicKeyId": 0,
+      "signature": "IEOIMUPFbRrRLYMP3fvwxP88/kBjmALdm3VRUEsj5PyZJ2GxVfAZd3DJS7PNdgnkDsD9ssAGf7noiDfJUdm9Uxw="
+    }
+  }
+}

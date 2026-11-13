@@ -7,7 +7,8 @@ import { isSourceError } from '@/data/errors'
 import { formatInt } from '@/lib/format'
 import { download } from './download'
 import { averageText, resultCsv, resultJson, resultRows } from './export'
-import { buildSdkExample, toSdkParams } from './query-workspace'
+import { QUERY_ERROR_HINTS } from './parse-messages'
+import { buildSdkExample, classifyQueryError, toSdkParams } from './query-workspace'
 import type { StatementRun } from './run'
 import { toDocumentsQuery } from './sql-parser'
 
@@ -47,7 +48,7 @@ export interface ResultsPanelProps {
 }
 
 export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelProps) {
-  const { t } = useLingui()
+  const { t, i18n } = useLingui()
   const { result, error } = run
   const rows = useMemo(() => (result ? resultRows(result) : []), [result])
   const columns = useMemo<ColumnDef<Record<string, unknown>>[]>(() => {
@@ -110,6 +111,8 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
   )
 
   if (error) {
+    const kind = classifyQueryError(error instanceof Error ? error.message : undefined)
+    const hint = kind ? QUERY_ERROR_HINTS[kind] : undefined
     const cancelled = isSourceError(error) && error.kind === 'aborted'
     return (
       <Card title={title} layer="platform">
@@ -120,7 +123,14 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
             body={t`This statement was stopped before it answered.`}
           />
         ) : (
-          <ErrorState error={error} source="sdk" />
+          <div className="grid gap-2">
+            <ErrorState error={error} source="sdk" />
+            {hint ? (
+              <p className="text-sm" data-query-hint>
+                {i18n._(hint)}
+              </p>
+            ) : null}
+          </div>
         )}
       </Card>
     )

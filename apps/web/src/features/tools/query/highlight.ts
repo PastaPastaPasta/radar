@@ -39,7 +39,7 @@ export function highlightSql(sql: string): SqlToken[] {
   const tokens: SqlToken[] = []
   const push = (kind: SqlTokenKind, text: string) => {
     const last = tokens[tokens.length - 1]
-    if (last && last.kind === kind && kind === 'plain') last.text += text
+    if (last?.kind === kind && kind === 'plain') last.text += text
     else tokens.push({ kind, text })
   }
   TOKEN.lastIndex = 0

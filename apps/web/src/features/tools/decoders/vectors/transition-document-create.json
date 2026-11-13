@@ -1,0 +1,41 @@
+{
+  "id": "transition-document-create",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction 49ACF55DC4A1B0128858CB55735E6F114D6D07C359E9282BCC03DA0F39478A4B (fixture pe/mainnet/identity__BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp__transactions--limit-10,order-desc,page-2.json)",
+  "hex": "02019f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb030100000001a2a647b0ee1a21645ef726db473a749b9f0361d758fcea5943d196d1297e56f301086368756e6b446f63b93e6e7b8663f3a765a5f90247e8bd9c56561e10480178c754716926b03e556d0096f59dd914b21e56d7aacf4fbeec6b751230e9d83210eae2e343428324009f0a010564617461300a11707368656e6d6963207761732068657265000101411f1876ec954c4afb10343b2b8bb72872b27acd473f105b3dc5f8a58755f4b7625810269e79ee5efccdef890bcd9882ea7220e37d92596ae86ac33e000fe63aca85",
+  "expected": {
+    "actionType": "DocumentsBatch([Create])",
+    "actionTypeNumber": 1,
+    "hash": "49acf55dc4a1b0128858cb55735e6f114d6d07c359e9282bcc03da0f39478a4b",
+    "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+    "identityNonce": null,
+    "identityContractNonce": "1",
+    "userFeeIncrease": 1,
+    "signaturePublicKeyId": 1,
+    "byteLength": 241,
+    "body": {
+      "$formatVersion": "1",
+      "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+      "transitions": [
+        {
+          "$transition": "document",
+          "$action": "create",
+          "$formatVersion": "0",
+          "$baseFormatVersion": "1",
+          "$id": "Bwv79RFuTTPDs7fzVvtWd4jgz8hd9CD7rfaoDB73ecDg",
+          "$identityContractNonce": 1,
+          "$type": "chunkDoc",
+          "$dataContractId": "DU7e4D7QQqqUTpUZMoAUHWPmR8qLUFzzczaMEfz44t5J",
+          "$tokenPaymentInfo": null,
+          "$entropy": "lvWd2RSyHlbXqs9PvuxrdRIw6dgyEOri40NCgyQAnwo=",
+          "data0": "cHNoZW5taWMgd2FzIGhlcmU=",
+          "$prefundedVotingBalance": null
+        }
+      ],
+      "userFeeIncrease": 1,
+      "signaturePublicKeyId": 1,
+      "signature": "Hxh27JVMSvsQNDsri7cocrJ6zUc/EFs9xfilh1X0t2JYECaeee5e/M3viQvNmILqciDjfZJZauhqwz4AD+Y6yoU="
+    }
+  }
+}
