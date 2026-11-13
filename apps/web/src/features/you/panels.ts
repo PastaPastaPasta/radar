@@ -30,8 +30,12 @@ export function subscribePanels(cb: () => void): () => void {
 
 /** The shell says how to load each panel's code; it asks for it the first time the panel opens. */
 export function setPanelLoader(panel: Panel, load: (() => void) | undefined): void {
-  if (load) loaders[panel] = load
-  else delete loaders[panel]
+  if (!load) {
+    delete loaders[panel]
+    return
+  }
+  loaders[panel] = load
+  if (state[panel].open) load()
 }
 
 function open(panel: Panel, next: PanelsState[Panel]): void {
