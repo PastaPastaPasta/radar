@@ -32,13 +32,13 @@ function ShareBasis({
   short?: boolean
 }) {
   if (basis.kind === 'loading') return null
-  if (basis.kind === 'balances' && (basis.total === undefined || height === undefined)) return null
+  const { total } = basis
+  if (total === undefined || (basis.kind === 'balances' && height === undefined)) return null
   const circulating = basis.kind === 'circulating'
   const block = formatInt(height ?? 0)
-  const total = basis.total
   const headline = circulating ? (
     <Trans>
-      Shares are of the circulating supply, <Amount value={total!} kind="duffs" compact />, the
+      Shares are of the circulating supply, <Amount value={total} kind="duffs" compact />, the
       figure the Charts page shows.
     </Trans>
   ) : (
@@ -48,7 +48,7 @@ function ShareBasis({
     <SourceLine stamp={basis.stamp} compact />
   ) : (
     <Trans>
-      The <Amount value={total!} kind="duffs" compact /> held in positive address balances at block{' '}
+      The <Amount value={total} kind="duffs" compact /> held in positive address balances at block{' '}
       {block}.
     </Trans>
   )
