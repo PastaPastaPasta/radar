@@ -21,8 +21,13 @@ const Covered = createContext<ReadonlySet<string>>(new Set())
 /** What the enclosing card already says about its sources, so its figures do not repeat it. */
 export const SourceScope = Covered.Provider
 
+/** The sources an enclosing card or section already names. */
+export function useCovered(): ReadonlySet<string> {
+  return useContext(Covered)
+}
+
 /** True when an enclosing card's header already names this stamp's source. */
 export function useCoveredSource(stamp: SourceStamp | undefined): boolean {
-  const covered = useContext(Covered)
+  const covered = useCovered()
   return stamp !== undefined && covered.has(sourceKey(stamp))
 }

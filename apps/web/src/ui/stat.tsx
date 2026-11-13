@@ -332,18 +332,13 @@ function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
 }
 
 /**
- * A row of stats. When several share a source, only the first carries its badge: the rest are read as part of the same
- * group, so a card of four figures from two sources shows two badges, not four. A figure whose source height is below
- * the newest height of its source in the group keeps its own badge once it has trailed for a grace period, so a figure
- * that stopped refreshing can't hide behind one that is current. Fetch times play no part for figures that carry a
- * height: a republish of the same tip says nothing about whether the other reads are current. Figures without a height
- * fall back to comparing read times.
+ * Which of a group's figures speak for their source, by position. The first figure of each source does; a later one is
+ * read as part of the same group and stays quiet. A figure whose source height is below the newest height of its source
+ * in the group speaks for itself once it has trailed for a grace period, so a figure that stopped refreshing can't hide
+ * behind one that is current. Fetch times play no part for figures that carry a height: a republish of the same tip says
+ * nothing about whether the other reads are current. Figures without a height fall back to comparing read times.
  */
-export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
-  const items = Children.toArray(children)
-  const sources = items.map((child) =>
-    isValidElement<StatProps>(child) && child.type === Stat ? child.props.source : undefined,
-  )
+export function useLeadSources(sources: readonly (SourceStamp | undefined)[]): boolean[] {
   const newest = new Map<string, number>()
   for (const source of sources) {
     if (source?.height === undefined) continue
@@ -357,19 +352,33 @@ export function Stats({ children, ...rest }: { children: ReactNode } & Record<st
   )
   const behind = useSustained(trailing, BEHIND_GRACE_MS)
   const seen = new Map<string, number>()
-  const stats = items.map((child, i) => {
-    const source = sources[i]
-    if (!source || !isValidElement<StatProps>(child)) return child
+  return sources.map((source, i) => {
+    if (!source) return false
     const key = sourceKey(source)
     const first = seen.get(key)
     if (first === undefined) {
       seen.set(key, source.asOf)
-      return child
+      return true
     }
-    const aged =
-      source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(String(i))
-    return aged ? child : cloneElement(child, { source: undefined })
+    return source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(String(i))
   })
+}
+
+/**
+ * A row of stats. When several share a source, only the first carries its badge, so a card of four figures from two
+ * sources shows two badges, not four; `useLeadSources` says which later ones keep their own.
+ */
+export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
+  const items = Children.toArray(children)
+  const sources = items.map((child) =>
+    isValidElement<StatProps>(child) && child.type === Stat ? child.props.source : undefined,
+  )
+  const lead = useLeadSources(sources)
+  const stats = items.map((child, i) =>
+    sources[i] && !lead[i] && isValidElement<StatProps>(child)
+      ? cloneElement(child, { source: undefined })
+      : child,
+  )
   return (
     <div className="rx-stats" {...rest}>
       {stats}

@@ -10,7 +10,7 @@ import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
 import { useNow } from './hooks'
 import { sourceName } from './source-labels'
-import { SourceScope, sourceKey, useCoveredSource } from './source-scope'
+import { SourceScope, sourceKey, useCovered, useCoveredSource } from './source-scope'
 import { Empty, ErrorState, Skeleton, SourceLine } from './states'
 import type { Layer, LoadState } from './types'
 
@@ -51,9 +51,12 @@ export interface CardProps {
 
 function useCardSource(source: CardProps['source']) {
   const health = useAllSourceHealth()
-  const stamps = source === undefined ? [] : Array.isArray(source) ? source : [source]
-  const down = stamps.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
-  return { stamps, down }
+  const outer = useCovered()
+  const all = source === undefined ? [] : Array.isArray(source) ? source : [source]
+  const down = all.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
+  // A section that already names these sources in its own line is not repeated in the card's head.
+  const stamps = all.filter((s) => !outer.has(sourceKey(s)))
+  return { all, stamps, down }
 }
 
 function present(node: ReactNode): boolean {
@@ -74,8 +77,8 @@ export function Card({
   className,
   children,
 }: CardProps) {
-  const { stamps, down } = useCardSource(source)
-  const keys = stamps.map(sourceKey).join(',')
+  const { all, stamps, down } = useCardSource(source)
+  const keys = all.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
   const hasHead = [title, actions, subtitle].some(present) || stamps.length > 0
@@ -127,7 +130,7 @@ export function Card({
           <Skeleton shape="line" count={5} />
         </div>
       ) : state === 'error' ? (
-        <ErrorState error={error} source={stamps[0]?.source} onRetry={onRetry} />
+        <ErrorState error={error} source={all[0]?.source} onRetry={onRetry} />
       ) : state === 'empty' ? (
         <Empty kind="none-yet" title={t`Nothing to show`} />
       ) : (
