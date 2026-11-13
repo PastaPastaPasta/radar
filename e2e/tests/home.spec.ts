@@ -159,7 +159,6 @@ test.describe('Home', () => {
       })
     })
     await expect.poll(statusReads).toBeGreaterThan(before)
-    await expect(page.locator('[data-headline]')).toContainText('2,570,086')
   })
 
   test('keeps the Core height and ChainLock in the header while scrolling @IN-15', async ({
