@@ -12,3 +12,457 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: stats.missing
+msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
+msgstr "{0, plural, other {有 # 个主节点未显示在地图上：未注册地址，或尚未被爬取。}}"
+
+#. placeholder {0}: totals.unlocated
+msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
+msgstr "{0, plural, other {Tor 或 I2P 上有 # 个可达节点没有位置信息，因此未绘制。}}"
+
+#. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
+msgid "{0} blocks ago"
+msgstr "{0} 个区块前"
+
+#. placeholder {0}: nodeCount(totals.nodes)
+#. placeholder {1}: formatInt(totals.places)
+#. placeholder {2}: formatInt(totals.masternodes)
+msgid "{0} in {1} places; {2} are masternodes."
+msgstr "{1} 个地点共 {0}；其中 {2} 个是主节点。"
+
+#. placeholder {0}: formatInt(places.size)
+msgid "{0} places nearby"
+msgstr "附近 {0} 个地点"
+
+#. placeholder {0}: formatInt(nodes)
+#. placeholder {1}: formatInt(masternodes)
+#. placeholder {2}: formatInt(nodes - masternodes)
+msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
+msgstr "{0} 个可达节点：{1} 个主节点和 {2} 个其他全节点。"
+
+#. placeholder {0}: chosen.length
+msgid "{0} selected"
+msgstr "已选择 {0}"
+
+#. placeholder {0}: nodeCount(nodes)
+#. placeholder {1}: formatInt(masternodes)
+msgid "{0}, {1} of them masternodes"
+msgstr "{0}，其中 {1} 个是主节点"
+
+#. placeholder {0}: mnCount(rows.length)
+#. placeholder {1}: formatInt(reachable)
+msgid "{0}, {1} reachable."
+msgstr "{0}，其中 {1} 个可达。"
+
+#. placeholder {0}: mnCount(total)
+msgid "{0}: {list}"
+msgstr "{0}：{list}"
+
+msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
+msgstr "最近一次爬取中，{total} 个里有 {answered} 个应答：已启用的 {enabled} 个中有 {enabledAnswered} 个，已被 PoSe 封禁的 {banned} 个中有 {bannedAnswered} 个。"
+
+msgid "{answered} of {total} answered the latest crawl."
+msgstr "最近一次爬取中，{total} 个里有 {answered} 个应答。"
+
+#. placeholder {0}: value(c.old)
+msgid "{label} (was at {0})"
+msgstr "{label}（原先位于 {0}）"
+
+#. placeholder {0}: value(c.new)
+msgid "{label} at {0}"
+msgstr "{label}，位于 {0}"
+
+msgid "{n, plural, one {# masternode} other {# masternodes}}"
+msgstr "{n, plural, other {# 个主节点}}"
+
+msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{n, plural, other {# 个可达节点}}"
+
+msgid "← Back to the list"
+msgstr "← 返回列表"
+
+msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
+msgstr "所有网络的数据都是最新且已保存时返回 200，否则返回 503 并说明问题。用于可用性检查。"
+
+msgid "A summary of the speed tests from each vantage point."
+msgstr "各观测点速度测试的汇总。"
+
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
+msgstr "某个分布的时间序列。days 可取 1、7、14、30、90 或 365；top 为 1 到 20；dim=totals 则返回节点数量。"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Address changes"
+msgstr "地址变更"
+
+msgid "Addresses of nodes that aren't masternodes are never published, only counted."
+msgstr "非主节点的地址从不公开，只计数。"
+
+msgid "All nodes"
+msgstr "所有节点"
+
+msgid "All nodes (soon)"
+msgstr "所有节点（即将推出）"
+
+msgid "Any country"
+msgstr "任意国家"
+
+msgid "Any DKG readiness"
+msgstr "任意 DKG 就绪状态"
+
+msgid "Any hosting"
+msgstr "任意托管"
+
+msgid "Any type"
+msgstr "任意类型"
+
+msgid "Any version"
+msgstr "任意版本"
+
+msgid "Back in the list"
+msgstr "已回到列表"
+
+#. placeholder {0}: formatInt(Number(height))
+msgid "Banned at block {0}"
+msgstr "于区块 {0} 被封禁"
+
+msgid "Block"
+msgstr "区块"
+
+#. placeholder {0}: formatInt(c.last_paid_height)
+msgid "block {0}"
+msgstr "区块 {0}"
+
+msgid "Both networks"
+msgstr "两个网络"
+
+msgid "Change"
+msgstr "找零"
+
+msgid "Changes"
+msgstr "变更"
+
+msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
+msgstr "通过向主节点注册地址发起 P2P 握手，立即检查该主节点。每个客户端每分钟最多检查 5 次；不到一分钟的结果会被直接复用。"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Colour"
+msgstr "颜色"
+
+msgid "Colour by"
+msgstr "着色依据"
+
+msgid "Copy command"
+msgstr "复制命令"
+
+msgid "Copy link to {title}"
+msgstr "复制 {title} 的链接"
+
+msgid "Copy URL of {title}"
+msgstr "复制 {title} 的 URL"
+
+msgid "Core P2P address"
+msgstr "Core P2P 地址"
+
+msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
+msgstr "Core 的 version-bits 部署（Dash Core 24 与 evo_shares）：状态、窗口、信号与前景。"
+
+msgid "Couldn't load the masternode list."
+msgstr "无法加载主节点列表。"
+
+msgid "Country"
+msgstr "国家"
+
+msgid "Counts follow the filters and the shown categories."
+msgstr "数量随筛选条件和显示的类别而变化。"
+
+msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
+msgstr "GitHub 上已发布的 Dash Core 版本，最新的在前，每小时刷新。"
+
+msgid "DKG readiness"
+msgstr "DKG 就绪状态"
+
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
+msgstr "爬虫每 15 分钟向每个已注册主节点的地址、过去一周内有应答的每个节点，以及从我们的 Dash 节点和其他节点获知的新地址发起 P2P 连接，完成版本握手后断开。它不转发交易，只保留节点自己公布的信息。"
+
+msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
+msgstr "每个已注册主节点的最新端口检查、用户代理、位置、托管、在线率和 DKG 就绪状态。地图由此绘制。"
+
+msgid "Everything"
+msgstr "全部"
+
+msgid "Everything Radar shows comes from these JSON endpoints. No key is needed, CORS is open and responses are cached for 60 seconds."
+msgstr "Radar 显示的一切内容都来自这些 JSON 端点。无需密钥，CORS 已开放，响应缓存 60 秒。"
+
+msgid "Evo"
+msgstr "Evo"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes' Platform rewards in credits: the current epoch, the protocol upgrade vote, returns, up to 120 epochs, who proposes next and every evonode."
+msgstr "Evonode 的 Platform 奖励（以 credits 计）：当前纪元、协议升级投票、收益、最多 120 个纪元、下一个提议者以及每个 Evonode。"
+
+msgid "Examples"
+msgstr "示例"
+
+msgid "Filters"
+msgstr "筛选"
+
+#. placeholder {0}: label(k)
+msgid "Hide {0}"
+msgstr "隐藏 {0}"
+
+msgid "Hosting"
+msgstr "托管"
+
+msgid "How the data is collected"
+msgstr "数据如何收集"
+
+msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
+msgstr "路径中的 {NET} 为 mainnet 或 testnet。金额以 duff 计（1 DASH = 100,000,000 duff），Platform 金额除外，以 credits 计（1 DASH = 100,000,000,000 credits）。时间为 Unix 秒。"
+
+msgid "Kind of change"
+msgstr "变更类型"
+
+msgid "Last paid"
+msgstr "最近付款"
+
+msgid "Latest masternode list changes"
+msgstr "主节点列表的最新变更"
+
+msgid "Left the list"
+msgstr "已离开列表"
+
+msgid "Link copied"
+msgstr "链接已复制"
+
+msgid "Loading the network…"
+msgstr "正在加载网络…"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Map"
+msgstr "地图"
+
+msgid "Map attribution"
+msgstr "地图署名"
+
+msgid "Map controls"
+msgstr "地图控件"
+
+msgid "Map of the network's nodes"
+msgstr "网络节点地图"
+
+msgid "Masternode"
+msgstr "主节点"
+
+msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
+msgstr "主节点列表的变更来自 Radar 对主网和测试网的爬取。"
+
+msgid "Masternode list changes need Radar's crawl"
+msgstr "主节点列表变更需要 Radar 的爬取"
+
+msgid "Masternode registrations and payments come from our own Dash node. Platform data comes from evonodes' DAPI, each answer confirmed by a second evonode. Reachability is measured from one vantage point, so a node that blocks or rate-limits the crawler shows as unreachable even when others can reach it."
+msgstr "主节点注册和支付信息来自我们自己的 Dash 节点。Platform 数据来自 Evonode 的 DAPI，每个应答都由另一个 Evonode 确认。可达性仅从一个观测点测量，因此屏蔽或限制爬虫的节点即使其他人能连上，也会显示为不可达。"
+
+msgid "Masternodes"
+msgstr "主节点"
+
+msgid "Network"
+msgstr "网络"
+
+msgid "never"
+msgstr "从未"
+
+msgid "No changes of this kind lately."
+msgstr "最近没有此类变更。"
+
+msgid "No changes recorded yet."
+msgstr "尚未记录任何变更。"
+
+msgid "Not checked"
+msgstr "未检查"
+
+msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
+msgstr "某个主节点较早的支付记录，最新的在前。将 before 设为你收到的最后一个高度即可翻页。"
+
+msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
+msgstr "单个主节点：其列表条目、抵押、密钥、地址、版本历史、在线率、支付、收益、变更，以及（若为 Evonode）Platform 奖励。"
+
+msgid "One masternode's speed-test runs from each vantage point, with its rank and combined grade."
+msgstr "某个主节点在各观测点的速度测试结果，含排名和综合评级。"
+
+msgid "Open masternode"
+msgstr "打开主节点"
+
+msgid "Open these as a list"
+msgstr "以列表打开"
+
+msgid "Operator key"
+msgstr "运营者密钥"
+
+msgid "Operator payout address"
+msgstr "运营者付款地址"
+
+msgid "Operator reward"
+msgstr "运营者奖励"
+
+msgid "Other full nodes"
+msgstr "其他全节点"
+
+msgid "Other versions"
+msgstr "其他版本"
+
+msgid "Owner address"
+msgstr "所有者地址"
+
+msgid "Payout address"
+msgstr "付款地址"
+
+msgid "Payout and key changes"
+msgstr "收款与密钥变更"
+
+msgid "Per network"
+msgstr "按网络"
+
+msgid "Places on the map"
+msgstr "地图上的地点"
+
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS 地址"
+
+msgid "Platform node ID"
+msgstr "Platform 节点 ID"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P 地址"
+
+msgid "PoSe"
+msgstr "PoSe"
+
+msgid "PoSe bans and revivals"
+msgstr "PoSe 封禁与恢复"
+
+msgid "PoSe status"
+msgstr "PoSe 状态"
+
+msgid "PoSe-banned"
+msgstr "已被 PoSe 封禁"
+
+msgid "Radar API"
+msgstr "Radar API"
+
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar 不抓取开发网。"
+
+msgid "Reachability"
+msgstr "可达性"
+
+msgid "Reachable"
+msgstr "可达"
+
+msgid "Reachable nodes counted per city, never by address, and how many have no location."
+msgstr "按城市统计可达节点（绝不按地址），以及有多少节点没有位置信息。"
+
+msgid "Registered"
+msgstr "注册"
+
+msgid "Registrations and removals"
+msgstr "注册与移除"
+
+msgid "Same location"
+msgstr "同一位置"
+
+msgid "Search masternodes"
+msgstr "搜索主节点"
+
+msgid "Search ProTx, IP, city, hosting"
+msgstr "搜索 ProTx、IP、城市、托管"
+
+msgid "Show"
+msgstr "显示"
+
+#. placeholder {0}: label(k)
+msgid "Show {0}"
+msgstr "显示 {0}"
+
+msgid "Show or hide categories"
+msgstr "显示或隐藏类别"
+
+msgid "The 300 latest masternode list changes, newest first, and when recording started."
+msgstr "主节点列表最新的 300 条变更，最新的在前，以及开始记录的时间。"
+
+msgid "The API itself is a hosted service, so this page only describes it while Decentralized only mode is on."
+msgstr "API 本身是托管服务，因此在“仅去中心化”模式开启时，本页只作说明。"
+
+msgid "The API URLs are unchanged: https://radar.dashhq.org/api/v1/* returns the same documents as before."
+msgstr "API URL 没有变化：https://radar.dashhq.org/api/v1/* 返回的文档与之前相同。"
+
+msgid "The block hashes the speed tests use."
+msgstr "速度测试使用的区块哈希。"
+
+msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
+msgstr "每个网络的爬虫与链状态：最近一次爬取、我们 Dash 节点的同步情况以及支付索引范围。"
+
+msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
+msgstr "主节点注册的最新变更，最新的在前：新增和移除的主节点、PoSe 封禁与恢复、变更的地址和密钥。"
+
+msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
+msgstr "最近一次完成的爬取、其一天前的爬取以及每个分布（dists[scope][dim]），包含收益、Platform 健康状况和 DKG 就绪状态。"
+
+msgid "The map could not start in this browser. The filters and the list still work."
+msgstr "此浏览器无法启动地图。筛选和列表仍可使用。"
+
+msgid "The map is drawn from Radar's crawl of mainnet and testnet."
+msgstr "地图由 Radar 对主网和测试网的爬取绘制。"
+
+msgid "The map needs Radar's crawl"
+msgstr "地图需要 Radar 的爬取"
+
+msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
+msgstr "网站和 API 由爬虫在每次爬取后发布的文档提供，因此即使爬虫停止，它们也能继续运行。"
+
+msgid "This area"
+msgstr "此区域"
+
+msgid "Tools"
+msgstr "工具"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Unknown version"
+msgstr "未知版本"
+
+msgid "Unreachable"
+msgstr "不可达"
+
+msgid "Uptime, 7 days"
+msgstr "在线率，7 天"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Voting address"
+msgstr "投票地址"
+
+msgid "When"
+msgstr "时间"
+
+msgid "Where the masternodes run, coloured by reachability, version or type."
+msgstr "主节点运行的位置，按可达性、版本或类型着色。"
+
+msgid "Zoom in"
+msgstr "放大"
+
+msgid "Zoom out"
+msgstr "缩小"

@@ -12,3 +12,457 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: stats.missing
+msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
+msgstr "{0, plural, one {# Masternode ist nicht auf der Karte: keine Adresse registriert oder noch nicht gecrawlt.} other {# Masternodes sind nicht auf der Karte: keine Adresse registriert oder noch nicht gecrawlt.}}"
+
+#. placeholder {0}: totals.unlocated
+msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
+msgstr "{0, plural, one {# erreichbarer Knoten über Tor oder I2P hat keinen Standort und wird daher nicht gezeichnet.} other {# erreichbare Knoten über Tor oder I2P haben keinen Standort und werden daher nicht gezeichnet.}}"
+
+#. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
+msgid "{0} blocks ago"
+msgstr "vor {0} Blöcken"
+
+#. placeholder {0}: nodeCount(totals.nodes)
+#. placeholder {1}: formatInt(totals.places)
+#. placeholder {2}: formatInt(totals.masternodes)
+msgid "{0} in {1} places; {2} are masternodes."
+msgstr "{0} an {1} Orten; {2} davon sind Masternodes."
+
+#. placeholder {0}: formatInt(places.size)
+msgid "{0} places nearby"
+msgstr "{0} Orte in der Nähe"
+
+#. placeholder {0}: formatInt(nodes)
+#. placeholder {1}: formatInt(masternodes)
+#. placeholder {2}: formatInt(nodes - masternodes)
+msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
+msgstr "{0} erreichbare Knoten: {1} Masternodes und {2} andere Full Nodes."
+
+#. placeholder {0}: chosen.length
+msgid "{0} selected"
+msgstr "{0} ausgewählt"
+
+#. placeholder {0}: nodeCount(nodes)
+#. placeholder {1}: formatInt(masternodes)
+msgid "{0}, {1} of them masternodes"
+msgstr "{0}, davon {1} Masternodes"
+
+#. placeholder {0}: mnCount(rows.length)
+#. placeholder {1}: formatInt(reachable)
+msgid "{0}, {1} reachable."
+msgstr "{0}, davon {1} erreichbar."
+
+#. placeholder {0}: mnCount(total)
+msgid "{0}: {list}"
+msgstr "{0}: {list}"
+
+msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
+msgstr "{answered} von {total} haben beim letzten Crawl geantwortet: {enabledAnswered} von {enabled} aktiven und {bannedAnswered} von {banned} PoSe-gesperrten."
+
+msgid "{answered} of {total} answered the latest crawl."
+msgstr "{answered} von {total} haben beim letzten Crawl geantwortet."
+
+#. placeholder {0}: value(c.old)
+msgid "{label} (was at {0})"
+msgstr "{label} (war bei {0})"
+
+#. placeholder {0}: value(c.new)
+msgid "{label} at {0}"
+msgstr "{label} bei {0}"
+
+msgid "{n, plural, one {# masternode} other {# masternodes}}"
+msgstr "{n, plural, one {# Masternode} other {# Masternodes}}"
+
+msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{n, plural, one {# erreichbarer Knoten} other {# erreichbare Knoten}}"
+
+msgid "← Back to the list"
+msgstr "← Zurück zur Liste"
+
+msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
+msgstr "200, solange die Daten jedes Netzwerks aktuell und gespeichert sind, sonst 503 mit dem Problem. Für Verfügbarkeitsprüfungen."
+
+msgid "A summary of the speed tests from each vantage point."
+msgstr "Eine Zusammenfassung der Geschwindigkeitstests von jedem Messpunkt."
+
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
+msgstr "Eine Zeitreihe einer Verteilung. days ist 1, 7, 14, 30, 90 oder 365; top ist 1 bis 20; dim=totals liefert stattdessen die Knotenzahlen."
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Address changes"
+msgstr "Adressänderungen"
+
+msgid "Addresses of nodes that aren't masternodes are never published, only counted."
+msgstr "Adressen von Knoten, die keine Masternodes sind, werden nie veröffentlicht, nur gezählt."
+
+msgid "All nodes"
+msgstr "Alle Knoten"
+
+msgid "All nodes (soon)"
+msgstr "Alle Knoten (bald)"
+
+msgid "Any country"
+msgstr "Jedes Land"
+
+msgid "Any DKG readiness"
+msgstr "Jede DKG-Bereitschaft"
+
+msgid "Any hosting"
+msgstr "Jedes Hosting"
+
+msgid "Any type"
+msgstr "Jeder Typ"
+
+msgid "Any version"
+msgstr "Jede Version"
+
+msgid "Back in the list"
+msgstr "Wieder in der Liste"
+
+#. placeholder {0}: formatInt(Number(height))
+msgid "Banned at block {0}"
+msgstr "Bei Block {0} gesperrt"
+
+msgid "Block"
+msgstr "Block"
+
+#. placeholder {0}: formatInt(c.last_paid_height)
+msgid "block {0}"
+msgstr "Block {0}"
+
+msgid "Both networks"
+msgstr "Beide Netzwerke"
+
+msgid "Change"
+msgstr "Wechselgeld"
+
+msgid "Changes"
+msgstr "Änderungen"
+
+msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
+msgstr "Prüft einen Masternode jetzt mit einem P2P-Handshake zu seiner registrierten Adresse. Fünf Prüfungen pro Minute und Client; ein weniger als eine Minute altes Ergebnis wird erneut geliefert."
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Colour"
+msgstr "Farbe"
+
+msgid "Colour by"
+msgstr "Einfärben nach"
+
+msgid "Copy command"
+msgstr "Befehl kopieren"
+
+msgid "Copy link to {title}"
+msgstr "Link zu {title} kopieren"
+
+msgid "Copy URL of {title}"
+msgstr "URL von {title} kopieren"
+
+msgid "Core P2P address"
+msgstr "Core-P2P-Adresse"
+
+msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
+msgstr "Die Version-Bits-Deployments von Core (Dash Core 24 und evo_shares): Zustand, Zeitfenster, Signalisierung und Ausblick."
+
+msgid "Couldn't load the masternode list."
+msgstr "Die Masternode-Liste konnte nicht geladen werden."
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Counts follow the filters and the shown categories."
+msgstr "Die Zahlen folgen den Filtern und den angezeigten Kategorien."
+
+msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
+msgstr "Die veröffentlichten Releases von Dash Core auf GitHub, neueste zuerst, stündlich aktualisiert."
+
+msgid "DKG readiness"
+msgstr "DKG-Bereitschaft"
+
+msgid "Enabled"
+msgstr "Aktiv"
+
+msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
+msgstr "Alle 15 Minuten öffnet der Crawler eine P2P-Verbindung zur Adresse jedes registrierten Masternodes, zu jedem Knoten, der in der letzten Woche geantwortet hat, und zu neuen Adressen, die er von unserem Dash-Node und von anderen Knoten erfährt. Er schließt den Version-Handshake ab und trennt die Verbindung. Er leitet keine Transaktionen weiter und behält nur, was der Knoten ankündigt."
+
+msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
+msgstr "Jeder registrierte Masternode mit letzter Port-Prüfung, User-Agent, Standort, Hosting, Uptime und DKG-Bereitschaft. Die Karte wird daraus gezeichnet."
+
+msgid "Everything"
+msgstr "Alles"
+
+msgid "Everything Radar shows comes from these JSON endpoints. No key is needed, CORS is open and responses are cached for 60 seconds."
+msgstr "Alles, was Radar zeigt, stammt aus diesen JSON-Endpunkten. Es ist kein Schlüssel nötig, CORS ist offen und Antworten werden 60 Sekunden zwischengespeichert."
+
+msgid "Evo"
+msgstr "Evo"
+
+msgid "Evonodes"
+msgstr "Evonodes"
+
+msgid "Evonodes' Platform rewards in credits: the current epoch, the protocol upgrade vote, returns, up to 120 epochs, who proposes next and every evonode."
+msgstr "Platform-Belohnungen der Evonodes in Credits: die aktuelle Epoche, die Abstimmung über das Protokoll-Upgrade, Erträge, bis zu 120 Epochen, wer als Nächstes vorschlägt und jeder Evonode."
+
+msgid "Examples"
+msgstr "Beispiele"
+
+msgid "Filters"
+msgstr "Filter"
+
+#. placeholder {0}: label(k)
+msgid "Hide {0}"
+msgstr "{0} ausblenden"
+
+msgid "Hosting"
+msgstr "Hosting"
+
+msgid "How the data is collected"
+msgstr "Wie die Daten erhoben werden"
+
+msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
+msgstr "In den Pfaden steht {NET} für mainnet oder testnet. Beträge sind in Duffs (1 DASH = 100.000.000 Duffs), außer Platform-Beträgen, die in Credits sind (1 DASH = 100.000.000.000 Credits). Zeiten sind Unix-Sekunden."
+
+msgid "Kind of change"
+msgstr "Art der Änderung"
+
+msgid "Last paid"
+msgstr "Zuletzt bezahlt"
+
+msgid "Latest masternode list changes"
+msgstr "Neueste Änderungen der Masternode-Liste"
+
+msgid "Left the list"
+msgstr "Aus der Liste ausgeschieden"
+
+msgid "Link copied"
+msgstr "Link kopiert"
+
+msgid "Loading the network…"
+msgstr "Netzwerk wird geladen …"
+
+msgid "Location"
+msgstr "Standort"
+
+msgid "Map"
+msgstr "Karte"
+
+msgid "Map attribution"
+msgstr "Kartenquellen"
+
+msgid "Map controls"
+msgstr "Kartensteuerung"
+
+msgid "Map of the network's nodes"
+msgstr "Karte der Knoten im Netzwerk"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
+msgstr "Änderungen der Masternode-Liste stammen aus Radars Crawl von Mainnet und Testnet."
+
+msgid "Masternode list changes need Radar's crawl"
+msgstr "Änderungen der Masternode-Liste brauchen Radars Crawl"
+
+msgid "Masternode registrations and payments come from our own Dash node. Platform data comes from evonodes' DAPI, each answer confirmed by a second evonode. Reachability is measured from one vantage point, so a node that blocks or rate-limits the crawler shows as unreachable even when others can reach it."
+msgstr "Masternode-Registrierungen und -Zahlungen stammen von unserem eigenen Dash-Node. Platform-Daten stammen aus der DAPI der Evonodes, jede Antwort wird von einem zweiten Evonode bestätigt. Die Erreichbarkeit wird von einem Messpunkt aus gemessen; ein Knoten, der den Crawler blockiert oder drosselt, erscheint daher als nicht erreichbar, auch wenn andere ihn erreichen."
+
+msgid "Masternodes"
+msgstr "Masternodes"
+
+msgid "Network"
+msgstr "Netzwerk"
+
+msgid "never"
+msgstr "nie"
+
+msgid "No changes of this kind lately."
+msgstr "Zuletzt keine Änderungen dieser Art."
+
+msgid "No changes recorded yet."
+msgstr "Noch keine Änderungen aufgezeichnet."
+
+msgid "Not checked"
+msgstr "Nicht geprüft"
+
+msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
+msgstr "Ältere Zahlungen eines Masternodes, neueste zuerst. Blättern Sie mit before, gesetzt auf die letzte erhaltene Höhe."
+
+msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
+msgstr "Ein Masternode: Listeneintrag, Collateral, Schlüssel, Adressen, Versionsverlauf, Uptime, Zahlungen, Erträge, Änderungen und bei einem Evonode die Platform-Belohnungen."
+
+msgid "One masternode's speed-test runs from each vantage point, with its rank and combined grade."
+msgstr "Die Geschwindigkeitstests eines Masternodes von jedem Messpunkt, mit Rang und Gesamtnote."
+
+msgid "Open masternode"
+msgstr "Masternode öffnen"
+
+msgid "Open these as a list"
+msgstr "Als Liste öffnen"
+
+msgid "Operator key"
+msgstr "Operator-Schlüssel"
+
+msgid "Operator payout address"
+msgstr "Auszahlungsadresse des Operators"
+
+msgid "Operator reward"
+msgstr "Operator-Belohnung"
+
+msgid "Other full nodes"
+msgstr "Andere Full Nodes"
+
+msgid "Other versions"
+msgstr "Andere Versionen"
+
+msgid "Owner address"
+msgstr "Eigentümeradresse"
+
+msgid "Payout address"
+msgstr "Auszahlungsadresse"
+
+msgid "Payout and key changes"
+msgstr "Änderungen an Auszahlung und Schlüsseln"
+
+msgid "Per network"
+msgstr "Pro Netzwerk"
+
+msgid "Places on the map"
+msgstr "Orte auf der Karte"
+
+msgid "Platform HTTPS address"
+msgstr "Platform-HTTPS-Adresse"
+
+msgid "Platform node ID"
+msgstr "Platform-Knoten-ID"
+
+msgid "Platform P2P address"
+msgstr "Platform-P2P-Adresse"
+
+msgid "PoSe"
+msgstr "PoSe"
+
+msgid "PoSe bans and revivals"
+msgstr "PoSe-Sperren und Reaktivierungen"
+
+msgid "PoSe status"
+msgstr "PoSe-Status"
+
+msgid "PoSe-banned"
+msgstr "PoSe-gesperrt"
+
+msgid "Radar API"
+msgstr "Radar-API"
+
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar crawlt keine Devnets."
+
+msgid "Reachability"
+msgstr "Erreichbarkeit"
+
+msgid "Reachable"
+msgstr "Erreichbar"
+
+msgid "Reachable nodes counted per city, never by address, and how many have no location."
+msgstr "Erreichbare Knoten pro Stadt gezählt, nie nach Adresse, und wie viele keinen Standort haben."
+
+msgid "Registered"
+msgstr "Registriert"
+
+msgid "Registrations and removals"
+msgstr "Registrierungen und Entfernungen"
+
+msgid "Same location"
+msgstr "Gleicher Standort"
+
+msgid "Search masternodes"
+msgstr "Masternodes suchen"
+
+msgid "Search ProTx, IP, city, hosting"
+msgstr "ProTx, IP, Stadt, Hosting suchen"
+
+msgid "Show"
+msgstr "Anzeigen"
+
+#. placeholder {0}: label(k)
+msgid "Show {0}"
+msgstr "{0} anzeigen"
+
+msgid "Show or hide categories"
+msgstr "Kategorien ein- oder ausblenden"
+
+msgid "The 300 latest masternode list changes, newest first, and when recording started."
+msgstr "Die 300 neuesten Änderungen der Masternode-Liste, neueste zuerst, und wann die Aufzeichnung begann."
+
+msgid "The API itself is a hosted service, so this page only describes it while Decentralized only mode is on."
+msgstr "Die API selbst ist ein gehosteter Dienst; diese Seite beschreibt sie daher nur, solange der Modus „Nur dezentral“ aktiv ist."
+
+msgid "The API URLs are unchanged: https://radar.dashhq.org/api/v1/* returns the same documents as before."
+msgstr "Die API-URLs sind unverändert: https://radar.dashhq.org/api/v1/* liefert dieselben Dokumente wie zuvor."
+
+msgid "The block hashes the speed tests use."
+msgstr "Die Block-Hashes, die die Geschwindigkeitstests verwenden."
+
+msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
+msgstr "Der Zustand von Crawler und Chain je Netzwerk: der letzte Crawl, die Synchronisierung unseres Dash-Nodes und der Bereich des Zahlungsindex."
+
+msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
+msgstr "Die neuesten Änderungen an Masternode-Registrierungen, neueste zuerst: neue und entfernte Masternodes, PoSe-Sperren und Reaktivierungen, geänderte Adressen und Schlüssel."
+
+msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
+msgstr "Der letzte abgeschlossene Crawl, der Crawl einen Tag davor und jede Verteilung (dists[scope][dim]), mit Erträgen, Platform-Zustand und DKG-Bereitschaft."
+
+msgid "The map could not start in this browser. The filters and the list still work."
+msgstr "Die Karte konnte in diesem Browser nicht gestartet werden. Filter und Liste funktionieren weiterhin."
+
+msgid "The map is drawn from Radar's crawl of mainnet and testnet."
+msgstr "Die Karte wird aus Radars Crawl von Mainnet und Testnet gezeichnet."
+
+msgid "The map needs Radar's crawl"
+msgstr "Die Karte braucht Radars Crawl"
+
+msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
+msgstr "Die Website und die API werden aus Dokumenten ausgeliefert, die der Crawler nach jedem Crawl veröffentlicht, und bleiben so erreichbar, auch wenn der Crawler ausfällt."
+
+msgid "This area"
+msgstr "Dieser Bereich"
+
+msgid "Tools"
+msgstr "Werkzeuge"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Unknown version"
+msgstr "Unbekannte Version"
+
+msgid "Unreachable"
+msgstr "Nicht erreichbar"
+
+msgid "Uptime, 7 days"
+msgstr "Verfügbarkeit, 7 Tage"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Voting address"
+msgstr "Abstimmungsadresse"
+
+msgid "When"
+msgstr "Wann"
+
+msgid "Where the masternodes run, coloured by reachability, version or type."
+msgstr "Wo die Masternodes laufen, eingefärbt nach Erreichbarkeit, Version oder Typ."
+
+msgid "Zoom in"
+msgstr "Vergrößern"
+
+msgid "Zoom out"
+msgstr "Verkleinern"

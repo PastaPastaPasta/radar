@@ -12,3 +12,457 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: stats.missing
+msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
+msgstr "{0, plural, one {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.} other {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.}}"
+
+#. placeholder {0}: totals.unlocated
+msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
+msgstr "{0, plural, one {Tor veya I2P üzerindeki # erişilebilir düğümün konumu yok, bu yüzden çizilmiyor.} other {Tor veya I2P üzerindeki # erişilebilir düğümün konumu yok, bu yüzden çizilmiyor.}}"
+
+#. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
+msgid "{0} blocks ago"
+msgstr "{0} blok önce"
+
+#. placeholder {0}: nodeCount(totals.nodes)
+#. placeholder {1}: formatInt(totals.places)
+#. placeholder {2}: formatInt(totals.masternodes)
+msgid "{0} in {1} places; {2} are masternodes."
+msgstr "{1} yerde {0}; {2} tanesi masternode."
+
+#. placeholder {0}: formatInt(places.size)
+msgid "{0} places nearby"
+msgstr "Yakında {0} yer"
+
+#. placeholder {0}: formatInt(nodes)
+#. placeholder {1}: formatInt(masternodes)
+#. placeholder {2}: formatInt(nodes - masternodes)
+msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
+msgstr "{0} erişilebilir düğüm: {1} masternode ve {2} diğer tam düğüm."
+
+#. placeholder {0}: chosen.length
+msgid "{0} selected"
+msgstr "{0} seçildi"
+
+#. placeholder {0}: nodeCount(nodes)
+#. placeholder {1}: formatInt(masternodes)
+msgid "{0}, {1} of them masternodes"
+msgstr "{0}, bunların {1} tanesi masternode"
+
+#. placeholder {0}: mnCount(rows.length)
+#. placeholder {1}: formatInt(reachable)
+msgid "{0}, {1} reachable."
+msgstr "{0}, {1} tanesi erişilebilir."
+
+#. placeholder {0}: mnCount(total)
+msgid "{0}: {list}"
+msgstr "{0}: {list}"
+
+msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
+msgstr "Son taramada {total} düğümden {answered} tanesi yanıt verdi: etkin {enabled} düğümün {enabledAnswered} tanesi ve PoSe tarafından yasaklı {banned} düğümün {bannedAnswered} tanesi."
+
+msgid "{answered} of {total} answered the latest crawl."
+msgstr "Son taramada {total} düğümden {answered} tanesi yanıt verdi."
+
+#. placeholder {0}: value(c.old)
+msgid "{label} (was at {0})"
+msgstr "{label} (önceki konum: {0})"
+
+#. placeholder {0}: value(c.new)
+msgid "{label} at {0}"
+msgstr "{label}, konum: {0}"
+
+msgid "{n, plural, one {# masternode} other {# masternodes}}"
+msgstr "{n, plural, one {# masternode} other {# masternode}}"
+
+msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{n, plural, one {# erişilebilir düğüm} other {# erişilebilir düğüm}}"
+
+msgid "← Back to the list"
+msgstr "← Listeye dön"
+
+msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
+msgstr "Her ağın verisi güncel ve kayıtlıyken 200, aksi halde sorunu belirten 503 döner. Çalışma süresi kontrolleri için."
+
+msgid "A summary of the speed tests from each vantage point."
+msgstr "Her gözlem noktasından yapılan hız testlerinin özeti."
+
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
+msgstr "Bir dağılımın zaman serisi. days 1, 7, 14, 30, 90 veya 365; top 1 ile 20 arasıdır; dim=totals bunun yerine düğüm sayılarını döndürür."
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Address changes"
+msgstr "Adres değişiklikleri"
+
+msgid "Addresses of nodes that aren't masternodes are never published, only counted."
+msgstr "Masternode olmayan düğümlerin adresleri hiçbir zaman yayımlanmaz, yalnızca sayılır."
+
+msgid "All nodes"
+msgstr "Tüm düğümler"
+
+msgid "All nodes (soon)"
+msgstr "Tüm düğümler (yakında)"
+
+msgid "Any country"
+msgstr "Herhangi bir ülke"
+
+msgid "Any DKG readiness"
+msgstr "Herhangi bir DKG hazırlığı"
+
+msgid "Any hosting"
+msgstr "Herhangi bir barındırma"
+
+msgid "Any type"
+msgstr "Herhangi bir tür"
+
+msgid "Any version"
+msgstr "Herhangi bir sürüm"
+
+msgid "Back in the list"
+msgstr "Listeye geri döndü"
+
+#. placeholder {0}: formatInt(Number(height))
+msgid "Banned at block {0}"
+msgstr "{0}. blokta yasaklandı"
+
+msgid "Block"
+msgstr "Blok"
+
+#. placeholder {0}: formatInt(c.last_paid_height)
+msgid "block {0}"
+msgstr "blok {0}"
+
+msgid "Both networks"
+msgstr "Her iki ağ"
+
+msgid "Change"
+msgstr "Para üstü"
+
+msgid "Changes"
+msgstr "Değişiklikler"
+
+msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
+msgstr "Bir masternode’u kayıtlı adresine yapılan P2P el sıkışmasıyla hemen kontrol eder. İstemci başına dakikada beş kontrol; bir dakikadan yeni sonuç yeniden döndürülür."
+
+msgid "Close"
+msgstr "Kapat"
+
+msgid "Colour"
+msgstr "Renk"
+
+msgid "Colour by"
+msgstr "Renklendirme ölçütü"
+
+msgid "Copy command"
+msgstr "Komutu kopyala"
+
+msgid "Copy link to {title}"
+msgstr "{title} bağlantısını kopyala"
+
+msgid "Copy URL of {title}"
+msgstr "{title} URL’sini kopyala"
+
+msgid "Core P2P address"
+msgstr "Core P2P adresi"
+
+msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
+msgstr "Core’un version-bits dağıtımları (Dash Core 24 ve evo_shares): durumları, pencereleri, sinyalleri ve görünümü."
+
+msgid "Couldn't load the masternode list."
+msgstr "Masternode listesi yüklenemedi."
+
+msgid "Country"
+msgstr "Ülke"
+
+msgid "Counts follow the filters and the shown categories."
+msgstr "Sayılar filtreleri ve gösterilen kategorileri izler."
+
+msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
+msgstr "Dash Core’un GitHub’daki yayımlanmış sürümleri, en yeniden eskiye, saatlik yenilenir."
+
+msgid "DKG readiness"
+msgstr "DKG hazırlığı"
+
+msgid "Enabled"
+msgstr "Etkin"
+
+msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
+msgstr "Tarayıcı her 15 dakikada bir, kayıtlı her masternode’un adresine, geçen hafta yanıt veren her düğüme ve Dash düğümümüzden ve diğer düğümlerden öğrendiği yeni adreslere bir P2P bağlantısı açar. Sürüm el sıkışmasını tamamlar ve bağlantıyı keser. İşlemleri aktarmaz ve yalnızca düğümün duyurduğu bilgiyi saklar."
+
+msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
+msgstr "Kayıtlı her masternode; son bağlantı noktası kontrolü, kullanıcı aracısı, konum, barındırma, çalışma süresi ve DKG hazırlığıyla. Harita bundan çizilir."
+
+msgid "Everything"
+msgstr "Her şey"
+
+msgid "Everything Radar shows comes from these JSON endpoints. No key is needed, CORS is open and responses are cached for 60 seconds."
+msgstr "Radar’ın gösterdiği her şey bu JSON uç noktalarından gelir. Anahtar gerekmez, CORS açıktır ve yanıtlar 60 saniye önbelleğe alınır."
+
+msgid "Evo"
+msgstr "Evo"
+
+msgid "Evonodes"
+msgstr "Evonode’lar"
+
+msgid "Evonodes' Platform rewards in credits: the current epoch, the protocol upgrade vote, returns, up to 120 epochs, who proposes next and every evonode."
+msgstr "Evonode’ların kredi cinsinden Platform ödülleri: mevcut dönem, protokol yükseltme oylaması, getiriler, en fazla 120 dönem, sıradaki teklif sahibi ve her Evonode."
+
+msgid "Examples"
+msgstr "Örnekler"
+
+msgid "Filters"
+msgstr "Filtreler"
+
+#. placeholder {0}: label(k)
+msgid "Hide {0}"
+msgstr "{0} öğesini gizle"
+
+msgid "Hosting"
+msgstr "Barındırma"
+
+msgid "How the data is collected"
+msgstr "Veriler nasıl toplanır"
+
+msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
+msgstr "Yollarda {NET}, mainnet veya testnet’tir. Tutarlar duff cinsindendir (1 DASH = 100.000.000 duff); yalnızca Platform tutarları kredi cinsindendir (1 DASH = 100.000.000.000 kredi). Zamanlar unix saniyesidir."
+
+msgid "Kind of change"
+msgstr "Değişiklik türü"
+
+msgid "Last paid"
+msgstr "Son ödeme"
+
+msgid "Latest masternode list changes"
+msgstr "Masternode listesindeki son değişiklikler"
+
+msgid "Left the list"
+msgstr "Listeden çıktı"
+
+msgid "Link copied"
+msgstr "Bağlantı kopyalandı"
+
+msgid "Loading the network…"
+msgstr "Ağ yükleniyor…"
+
+msgid "Location"
+msgstr "Konum"
+
+msgid "Map"
+msgstr "Harita"
+
+msgid "Map attribution"
+msgstr "Harita atfı"
+
+msgid "Map controls"
+msgstr "Harita denetimleri"
+
+msgid "Map of the network's nodes"
+msgstr "Ağ düğümlerinin haritası"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
+msgstr "Masternode listesi değişiklikleri, Radar’ın mainnet ve testnet taramasından gelir."
+
+msgid "Masternode list changes need Radar's crawl"
+msgstr "Masternode listesi değişiklikleri için Radar’ın taraması gerekir"
+
+msgid "Masternode registrations and payments come from our own Dash node. Platform data comes from evonodes' DAPI, each answer confirmed by a second evonode. Reachability is measured from one vantage point, so a node that blocks or rate-limits the crawler shows as unreachable even when others can reach it."
+msgstr "Masternode kayıtları ve ödemeleri kendi Dash düğümümüzden gelir. Platform verileri Evonode’ların DAPI’sinden gelir ve her yanıt ikinci bir Evonode tarafından doğrulanır. Erişilebilirlik tek bir gözlem noktasından ölçülür; bu yüzden tarayıcıyı engelleyen veya hız sınırına alan bir düğüm, başkaları ona ulaşabilse bile erişilemez görünür."
+
+msgid "Masternodes"
+msgstr "Masternode’lar"
+
+msgid "Network"
+msgstr "Ağ"
+
+msgid "never"
+msgstr "hiç"
+
+msgid "No changes of this kind lately."
+msgstr "Son zamanlarda bu türde değişiklik yok."
+
+msgid "No changes recorded yet."
+msgstr "Henüz kaydedilmiş değişiklik yok."
+
+msgid "Not checked"
+msgstr "Kontrol edilmedi"
+
+msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
+msgstr "Bir masternode’un eski ödemeleri, en yeniden eskiye. Sayfalamak için before değerini aldığınız son yüksekliğe ayarlayın."
+
+msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
+msgstr "Tek bir masternode: liste girdisi, teminat, anahtarlar, adresler, sürüm geçmişi, çalışma süresi, ödemeler, getiriler, değişiklikler ve Evonode ise Platform ödülleri."
+
+msgid "One masternode's speed-test runs from each vantage point, with its rank and combined grade."
+msgstr "Bir masternode’un her gözlem noktasından hız testi çalıştırmaları, sıralaması ve birleşik notuyla."
+
+msgid "Open masternode"
+msgstr "Masternode’u aç"
+
+msgid "Open these as a list"
+msgstr "Liste olarak aç"
+
+msgid "Operator key"
+msgstr "Operatör anahtarı"
+
+msgid "Operator payout address"
+msgstr "Operatör ödeme adresi"
+
+msgid "Operator reward"
+msgstr "Operatör ödülü"
+
+msgid "Other full nodes"
+msgstr "Diğer tam düğümler"
+
+msgid "Other versions"
+msgstr "Diğer sürümler"
+
+msgid "Owner address"
+msgstr "Sahip adresi"
+
+msgid "Payout address"
+msgstr "Ödeme adresi"
+
+msgid "Payout and key changes"
+msgstr "Ödeme ve anahtar değişiklikleri"
+
+msgid "Per network"
+msgstr "Ağ başına"
+
+msgid "Places on the map"
+msgstr "Haritadaki yerler"
+
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS adresi"
+
+msgid "Platform node ID"
+msgstr "Platform düğüm kimliği"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P adresi"
+
+msgid "PoSe"
+msgstr "PoSe"
+
+msgid "PoSe bans and revivals"
+msgstr "PoSe yasakları ve geri dönüşler"
+
+msgid "PoSe status"
+msgstr "PoSe durumu"
+
+msgid "PoSe-banned"
+msgstr "PoSe tarafından yasaklı"
+
+msgid "Radar API"
+msgstr "Radar API"
+
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar devnet’leri taramaz."
+
+msgid "Reachability"
+msgstr "Erişilebilirlik"
+
+msgid "Reachable"
+msgstr "Erişilebilir"
+
+msgid "Reachable nodes counted per city, never by address, and how many have no location."
+msgstr "Erişilebilir düğümler şehir başına sayılır, asla adrese göre değil; ayrıca kaç tanesinin konumu olmadığı."
+
+msgid "Registered"
+msgstr "Kaydedildi"
+
+msgid "Registrations and removals"
+msgstr "Kayıtlar ve kaldırmalar"
+
+msgid "Same location"
+msgstr "Aynı konum"
+
+msgid "Search masternodes"
+msgstr "Masternode ara"
+
+msgid "Search ProTx, IP, city, hosting"
+msgstr "ProTx, IP, şehir, barındırma ara"
+
+msgid "Show"
+msgstr "Göster"
+
+#. placeholder {0}: label(k)
+msgid "Show {0}"
+msgstr "{0} öğesini göster"
+
+msgid "Show or hide categories"
+msgstr "Kategorileri göster veya gizle"
+
+msgid "The 300 latest masternode list changes, newest first, and when recording started."
+msgstr "Masternode listesindeki son 300 değişiklik, en yeniden eskiye, ve kaydın ne zaman başladığı."
+
+msgid "The API itself is a hosted service, so this page only describes it while Decentralized only mode is on."
+msgstr "API’nin kendisi barındırılan bir hizmettir; bu yüzden bu sayfa onu yalnızca «Yalnızca merkeziyetsiz» modu açıkken tanımlar."
+
+msgid "The API URLs are unchanged: https://radar.dashhq.org/api/v1/* returns the same documents as before."
+msgstr "API URL’leri değişmedi: https://radar.dashhq.org/api/v1/* eskisiyle aynı belgeleri döndürür."
+
+msgid "The block hashes the speed tests use."
+msgstr "Hız testlerinin kullandığı blok özetleri."
+
+msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
+msgstr "Her ağ için tarayıcının ve zincirin durumu: son tarama, Dash düğümümüzün eşitlenmesi ve ödeme dizini aralığı."
+
+msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
+msgstr "Masternode kayıtlarındaki son değişiklikler, en yeniden eskiye: yeni ve kaldırılan masternode’lar, PoSe yasakları ve geri dönüşler, değişen adresler ve anahtarlar."
+
+msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
+msgstr "Son tamamlanan tarama, bir gün öncekisi ve her dağılım (dists[scope][dim]); getiriler, Platform sağlığı ve DKG hazırlığıyla birlikte."
+
+msgid "The map could not start in this browser. The filters and the list still work."
+msgstr "Harita bu tarayıcıda başlatılamadı. Filtreler ve liste yine de çalışıyor."
+
+msgid "The map is drawn from Radar's crawl of mainnet and testnet."
+msgstr "Harita, Radar’ın mainnet ve testnet taramasından çizilir."
+
+msgid "The map needs Radar's crawl"
+msgstr "Harita için Radar’ın taraması gerekir"
+
+msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
+msgstr "Site ve API, tarayıcının her taramadan sonra yayımladığı belgelerden sunulur; bu yüzden tarayıcı çalışmasa bile erişilebilir kalır."
+
+msgid "This area"
+msgstr "Bu alan"
+
+msgid "Tools"
+msgstr "Araçlar"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Unknown version"
+msgstr "Bilinmeyen sürüm"
+
+msgid "Unreachable"
+msgstr "Erişilemez"
+
+msgid "Uptime, 7 days"
+msgstr "Çalışma süresi, 7 gün"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Voting address"
+msgstr "Oylama adresi"
+
+msgid "When"
+msgstr "Ne zaman"
+
+msgid "Where the masternodes run, coloured by reachability, version or type."
+msgstr "Masternode’ların nerede çalıştığı; erişilebilirliğe, sürüme veya türe göre renklendirilir."
+
+msgid "Zoom in"
+msgstr "Yakınlaştır"
+
+msgid "Zoom out"
+msgstr "Uzaklaştır"
