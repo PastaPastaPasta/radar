@@ -9,6 +9,7 @@ const expect = baseExpect.configure({ timeout: 15_000 })
 const TRANSFER = '8acce06e01135b73f1acc26c8cb1084917e9bcf4a83ef1d1068df96a7c427a90'
 const TIP = 2570085
 const FIRST_CHUNK = 4
+const NEXT_CHUNK = 8
 
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1000) <= 640
 
@@ -53,41 +54,98 @@ test.describe('last axis tick', () => {
   }
 })
 
-test.describe('blocks of a day', () => {
-  test('shows the first rows while the rest of the page is still being read @IN-02', async ({
-    page,
-  }) => {
-    await page.addInitScript((chunk) => {
+/**
+ * Holds calls to one method of the Core façade until the spec lets them go. A call is known by a number read from its
+ * second argument: a row count for `blockRows`, a time for `heightAtTime`. Calls whose number is `pass` go straight through.
+ */
+async function holdCore(
+  page: Page,
+  method: 'blockRows' | 'heightAtTime',
+  pass?: number,
+): Promise<(key: number) => Promise<void>> {
+  await page.addInitScript(
+    ([name, free]) => {
+      type Core = Record<string, (...args: unknown[]) => Promise<unknown>>
       const w = window as unknown as {
-        __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
-        __releaseRest: () => void
+        __radarCore?: Core
+        __held: { key: number; release: () => void }[]
       }
-      let release!: () => void
-      const gate = new Promise<void>((resolve) => (release = resolve))
-      w.__releaseRest = release
-      let core: typeof w.__radarCore
+      w.__held = []
+      let core: Core | undefined
       Object.defineProperty(w, '__radarCore', {
         configurable: true,
         get: () => core,
-        set(value: typeof core) {
+        set(value: Core | undefined) {
           core = value
-          const original = value?.blockRows
+          const original = value?.[name]
           if (!value || !original) return
-          value.blockRows = async (...args) => {
-            const query = args[1] as { count: number }
-            if (query.count === 20 - chunk) await gate
+          value[name] = async (...args) => {
+            const arg = args[1] as number | { count: number }
+            const key = typeof arg === 'number' ? arg : arg.count
+            if (key !== free) await new Promise<void>((release) => w.__held.push({ key, release }))
             return original.apply(value, args)
           }
         },
       })
-    }, FIRST_CHUNK)
+    },
+    [method, pass] as const,
+  )
+  return async (key) => {
+    await expect
+      .poll(() =>
+        page.evaluate((k) => {
+          const held = (window as unknown as { __held: { key: number; release: () => void }[] })
+            .__held
+          const at = held.findIndex((h) => h.key === k)
+          if (at < 0) return false
+          held.splice(at, 1)[0]!.release()
+          return true
+        }, key),
+      )
+      .toBe(true)
+  }
+}
+
+test.describe('blocks of a day', () => {
+  test('paints the first rows, then the rest in steps as each read arrives @IN-02', async ({
+    page,
+  }) => {
+    const release = await holdCore(page, 'blockRows', FIRST_CHUNK)
     await page.goto('/blocks?date=2026-11-03')
     await expect(page.locator('tr[data-row-id]')).toHaveCount(FIRST_CHUNK)
     await expect(page.locator('[data-pending-row]')).toHaveCount(20 - FIRST_CHUNK)
     await expect(page.locator('a[href="/block/2566380"]').first()).toBeVisible()
-    await page.evaluate(() => (window as unknown as { __releaseRest: () => void }).__releaseRest())
+    await release(NEXT_CHUNK)
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(FIRST_CHUNK + NEXT_CHUNK)
+    await expect(page.locator('[data-pending-row]')).toHaveCount(20 - FIRST_CHUNK - NEXT_CHUNK)
+    await release(NEXT_CHUNK)
     await expect(page.locator('tr[data-row-id]')).toHaveCount(20)
     await expect(page.locator('[data-pending-row]')).toHaveCount(0)
+  })
+
+  test('says how far the search for the day has come, and shows the day’s newest blocks before its start is found @IN-02', async ({
+    page,
+  }) => {
+    const dayStart = Date.parse('2026-11-03T00:00:00Z')
+    const dayEnd = dayStart + 86_400_000
+    const release = await holdCore(page, 'heightAtTime')
+    await page.goto('/blocks?date=2026-11-03')
+    const progress = page.locator('[data-range-progress]')
+    await expect(progress).toHaveAttribute('data-range-progress', '0')
+    await expect(progress).toContainText('0 of 2 found')
+    await expect(progress.getByRole('progressbar')).toHaveAttribute('value', '1')
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(0)
+
+    await release(dayEnd)
+    await expect(progress).toHaveAttribute('data-range-progress', '1')
+    await expect(progress).toContainText('1 of 2 found')
+    await expect(page.locator('a[href="/block/2566380"]').first()).toBeVisible()
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(FIRST_CHUNK)
+
+    await release(dayStart)
+    await expect(progress).toHaveCount(0)
+    await expect(page.locator('tr[data-row-id]')).toHaveCount(20)
+    await settled(page)
   })
 })
 

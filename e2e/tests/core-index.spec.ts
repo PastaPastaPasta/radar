@@ -311,14 +311,27 @@ test.describe('mempool', () => {
     await expectNoSideScroll(page)
   })
 
-  test('does not look live while the testnet index trails the chain @HY-19', async ({ page }) => {
+  test('fills the page from DAPI’s live feed while the testnet index trails the chain, and says so @HY-19', async ({
+    page,
+  }) => {
     await page.goto('/mempool?network=testnet')
-    const line = page.getByText(/not a live view/)
-    await expect(line).toBeVisible({ timeout: 15_000 })
-    await expect(line).toContainText('Checked every 15 seconds')
-    await expect(page.locator('[data-stale-index]')).toContainText('not live')
+    const view = page.locator('[data-mempool-view="seen"]')
+    await expect(view).toBeVisible({ timeout: 15_000 })
+    await expect(view).toContainText('It is not the whole mempool')
+    const notice = page.locator('[data-stale-index]')
+    await expect(notice).toHaveCount(1)
+    await expect(notice).toContainText('live feed has delivered since you opened it')
+    const pending = page.getByRole('table', {
+      name: 'Pending transactions seen since you opened this page, newest first',
+    })
+    await expect(pending.locator('a[href^="/tx/"]').first()).toBeVisible()
+    await expect(page.locator('[data-mempool-summary="seen"]')).toContainText(
+      'Seen and still pending',
+    )
+    await expect(page.locator('#pending [data-source="dapi"]').first()).toBeVisible()
+    await expect(page.locator('main [data-source="hyphen"]')).toHaveCount(0)
     await expect(page.getByText('Refreshes every 15 seconds.')).toHaveCount(0)
-    await expect(page.locator('main [data-live-dot="live"]')).toHaveCount(0)
+    await expectNoSideScroll(page)
   })
 
   test('says it refreshes when the mainnet index is current @HY-19', async ({ page }) => {
