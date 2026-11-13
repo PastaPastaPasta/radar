@@ -195,24 +195,19 @@ describe('Rich list page', () => {
           }) as MediaQueryList,
       )
 
-    it('lists one compact line per address with the rest on tap', async () => {
+    it('lists two lines per address with received, sent and transactions always visible @HY-09', async () => {
       phone()
       renderAt('/rich-list')
       const list = await screen.findByRole('list', { name: 'Addresses ranked by balance' })
       await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
       expect(screen.queryByRole('table', { name: /Addresses ranked by balance/ })).toBeNull()
       const first = within(list).getAllByRole('listitem')[0]!
-      const toggle = within(first).getByRole('button', { expanded: false })
-      expect(toggle).toHaveTextContent('1')
-      await waitFor(() => expect(toggle).toHaveTextContent('7.54%'))
-      expect(toggle.textContent).toMatch(/…/)
-      for (const label of ['Received', 'Sent', 'Transactions']) {
-        expect(within(first).getByText(label)).not.toBeVisible()
-      }
-      await userEvent.setup().click(toggle)
-      for (const label of ['Received', 'Sent', 'Transactions']) {
-        expect(within(first).getByText(label)).toBeVisible()
-      }
+      expect(first).toHaveAttribute('data-rank', '1')
+      await waitFor(() => expect(first).toHaveTextContent('7.54%'))
+      const flow = first.querySelector<HTMLElement>('.rx-rich-flow')!
+      for (const label of ['Received', 'Sent']) expect(flow).toHaveTextContent(label)
+      expect(flow).toHaveTextContent(/\d[\d,]* tx/)
+      expect(flow).toBeVisible()
       expect(within(first).getByRole('link')).toHaveAttribute(
         'href',
         expect.stringContaining('/address/'),
@@ -242,24 +237,15 @@ describe('Rich list page', () => {
       expect(note.compareDocumentPosition(chart) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     })
 
-    it('hints at the tap and gives every row a chevron that follows its state @HY-09', async () => {
+    it('has no expand control, chevron or tap hint on a phone row @HY-09', async () => {
       phone()
-      const user = userEvent.setup()
       renderAt('/rich-list')
       const list = await screen.findByRole('list', { name: 'Addresses ranked by balance' })
       await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(25))
-      expect(screen.getByText('Tap a row for received, sent and transactions')).toBeInTheDocument()
-      const toggles = within(list).getAllByRole('button')
-      expect(toggles).toHaveLength(25)
-      for (const toggle of toggles) {
-        expect(toggle).toHaveAttribute('aria-expanded', 'false')
-        expect(toggle.querySelector('.rx-rich-chevron')).not.toBeNull()
-      }
-      await user.click(toggles[0]!)
-      expect(toggles[0]).toHaveAttribute('aria-expanded', 'true')
-      expect(toggles[1]).toHaveAttribute('aria-expanded', 'false')
-      await user.click(toggles[0]!)
-      expect(toggles[0]).toHaveAttribute('aria-expanded', 'false')
+      expect(screen.queryByText(/Tap a row/)).toBeNull()
+      expect(within(list).queryAllByRole('button')).toHaveLength(0)
+      expect(list.querySelector('.rx-rich-chevron')).toBeNull()
+      expect(within(list).getAllByRole('link')).toHaveLength(25)
     })
 
     it('loads more ranks and keeps the summary one tap away', async () => {

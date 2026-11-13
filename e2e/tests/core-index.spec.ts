@@ -398,7 +398,7 @@ test.describe('rich list', () => {
     }
   })
 
-  test('lists compact rows on a phone, with the rest on tap and the summary in reach @HY-09', async ({
+  test('lists two-line rows on a phone with nothing behind a tap and the summary in reach @HY-09', async ({
     page,
   }) => {
     test.skip((page.viewportSize()?.width ?? 1000) > 640, 'phone layout only')
@@ -408,16 +408,13 @@ test.describe('rich list', () => {
     await expect(page.getByRole('table', { name: /Addresses ranked by balance/ })).toHaveCount(0)
     const first = list.getByRole('listitem').first()
     const row = await first.boundingBox()
-    expect(row!.height, 'a collapsed row stays one compact line or two').toBeLessThan(72)
-    await expect(page.getByText('Tap a row for received, sent and transactions')).toBeVisible()
-    const toggle = first.getByRole('button', { expanded: false })
-    await expect(toggle.locator('.rx-rich-chevron')).toBeVisible()
-    await expect(first.getByText('Received')).toBeHidden()
-    await toggle.click()
-    await expect(first.getByRole('button', { expanded: true })).toBeVisible()
-    for (const label of ['Received', 'Sent', 'Transactions']) {
-      await expect(first.getByText(label, { exact: true })).toBeVisible()
+    expect(row!.height, 'a row is two lines').toBeLessThan(110)
+    await expect(page.getByText('Tap a row')).toHaveCount(0)
+    await expect(list.getByRole('button')).toHaveCount(0)
+    for (const label of ['Received', 'Sent']) {
+      await expect(first.getByText(label, { exact: false }).first()).toBeVisible()
     }
+    await expect(first).toContainText(/\d[\d,]* tx/)
     await page.getByRole('button', { name: 'Show more' }).click()
     await expect(list.getByRole('listitem')).toHaveCount(50)
     const before = await page.evaluate(() => window.scrollY)
@@ -427,21 +424,29 @@ test.describe('rich list', () => {
     await expectNoSideScroll(page)
   })
 
-  test('keeps an opened row inside the screen at 320 px @HY-09', async ({ page }, testInfo) => {
+  test('keeps every rich-list row inside the screen at 320, 360, 390 and 430 px with a 44 px address link @HY-09', async ({
+    page,
+  }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
-    await page.setViewportSize({ width: 320, height: 640 })
-    await page.goto('/rich-list')
-    const first = page
-      .getByRole('list', { name: 'Addresses ranked by balance' })
-      .getByRole('listitem')
-      .first()
-    await first.getByRole('button', { expanded: false }).click()
-    for (const label of ['Received', 'Sent', 'Transactions']) {
-      const box = await first.getByText(label, { exact: true }).boundingBox()
-      expect(box, label).not.toBeNull()
-      expect(box!.x + box!.width, `${label} stays inside the screen`).toBeLessThanOrEqual(320)
+    for (const width of [320, 360, 390, 430]) {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/rich-list')
+      const list = page.getByRole('list', { name: 'Addresses ranked by balance' })
+      await expect(list.getByRole('listitem')).toHaveCount(25)
+      await settled(page)
+      for (const index of [0, 1, 24]) {
+        const item = list.getByRole('listitem').nth(index)
+        for (const part of [item.locator('.rx-rich-flow'), item.getByRole('link')]) {
+          const box = (await part.boundingBox())!
+          expect(box.x + box.width, `row ${index + 1} stays inside ${width}px`).toBeLessThanOrEqual(
+            width,
+          )
+        }
+        const link = (await item.getByRole('link').boundingBox())!
+        expect(link.height, 'address link tap target').toBeGreaterThanOrEqual(44)
+      }
+      await expectNoSideScroll(page)
     }
-    await expectNoSideScroll(page)
   })
 
   test('keeps received, sent and transactions on every row, desktop @HY-09', async ({ page }) => {
