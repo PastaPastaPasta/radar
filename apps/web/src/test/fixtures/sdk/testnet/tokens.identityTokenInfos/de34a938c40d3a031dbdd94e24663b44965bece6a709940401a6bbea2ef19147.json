@@ -1,0 +1,40 @@
+{
+  "method": "tokens.identityTokenInfos",
+  "args": {
+    "identityId": "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc",
+    "tokenIds": ["9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"]
+  },
+  "recordedAt": "2026-11-13T17:08:48.208Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "$map": [["9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP", null]]
+    },
+    "proved": true,
+    "meta": {
+      "height": 674283,
+      "coreChainLockedHeight": 1591036,
+      "epoch": 20343,
+      "timeMs": 1794589555496,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQD2AXUiR/V952bRlHbbmShMKPvzvnnX8Cp+tyqo07ITusEkBAEQAAUCAQGAAGlJ4/FKJDZcDKSxBpb9zHv+4xpaAYL70YjLKosy56VgEAEQ7cAmZZaXwZTpt5hLGzwTwAoTN1P66Yae0FjkS85w9BEChDy4yXg9BpbmcB0UPa0DKkITl3UbVXZn9cugJ+wn+z4QAbjvB6KKGnIrVJqHkR88DikEUUylg3NxAJ+4j1pNOJ9oEQIHC7IAvTrEQ8aBlFVBXCUkdarvlWb+ukToIqnMXdTJjhABNhudk4QORtnCkq/V+WGmq4mKS0c/aYHaJpbpRO7dOBcRAQEQANEBkZ8eT0t/a4Q1X9uOC2bm096B7DK7P+QPs3et6FOIHQICtfAvEvfMClhBJ4SHiFyRXDmOLc1Wn4A6/ba2qfQqkRIQAfnJjD8h9GOQkzTuuaeA2XyH73Rb7gECbZ4+U3PlMkfzBAHAACQCASBuYHtbF9or4JJKa3kzZSdzTs4NUaouAlhxoj7IUTttogC7Nb1ldmYlWz6Yf+cX8cLICWmPmIhK3yHgi9laYdVsTxABQShLFQLZlKqn34ajq6ptXTqOKjbA3A6Mg+dm8HQoJbMREQEBwAD7Ad8BAYLQA5A534fEkh6UqtahMBvwvS8hlwZMM3mnK8KoPScCoEl19ptHj/6B3y1lUEG99rWeluSWHOvNlHAnLKgj198QAS1VTIlDL3Ure1bVVyT3tpGmKlNP19HF55FPOHDJz7/MAtbtEDupekpmfmWYecln1SXxWqxSxU601uJnuhFit3/nEAFr9XG7pOIsK57PBqTo3RN5fkleX1AjqQQx8PIYrZdtUgQgfw1nDtzQMObdY8J13EbW2N1nl4sqBCNsaQ1OlFMyB7QAAwIAAGUZKeF0c4GhYVdRXlRHYlUC86eYQ4WaCpKdJMYFwLI6EAFneU9L5P5f1x2DmqrwB+EOCN+BLt8Yr2semgDnZrgdyBECU7xN82C3FEAppTb4UP+5GC2jl6dJaXcYQnnw6uJvd08QAbIsc2ZHHXWaoJnhUhO4zteTzraUiqWLb//4G3EfdzSOERECOlzEvSK/rJJvd+GSUMM01qtMbucFeh/DsK0shzJTTjgQAfT07lDqmFwSjsItAmnrG2ZTYmjsHwhYT9Cn8lXbPXZYEQJdkecWYExdgCaQ3PeNb3anEFJ4soiVrfDekvMEh9ta/xAB/EXzT9733Ss1HT/A8p3WHd65YWpYq5844qINKauegRwREQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAAN8QFGqvSi1pPjRIqpz9YrcVCvaSvnIBP6e3NzR0="
+      },
+      "signature": {
+        "$u8": "pXB03dcpx+y3+kTmfM7N6iDreDEv8jMHRAlRLuFfQJWg/BCiVUz4Ev5ILxzwzjDvEj4k5PwbUCSnY8yyMnRa4LH7G/mXpK7uEebu809fYFCVlr9jBoaqFIFEadeWdfFG"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "AoUs9JgcJkfIh+1JuDpTonJJUf1EUr2C9MGWX+7flXc="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 72.78806299999997
+  }
+}

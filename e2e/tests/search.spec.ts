@@ -94,14 +94,17 @@ const samples: Sample[] = [
     label: 'a Platform address',
     q: MAINNET_PLATFORM,
     looksLike: /a Platform address/,
-    withheld: new RegExp(MAINNET_PLATFORM),
+    result: { name: new RegExp(MAINNET_PLATFORM), href: `/platform-address/${MAINNET_PLATFORM}` },
   },
   {
     label: 'a testnet Platform address',
     q: TESTNET_PLATFORM,
     network: 'testnet',
     looksLike: /a Platform address/,
-    withheld: new RegExp(TESTNET_PLATFORM),
+    result: {
+      name: new RegExp(TESTNET_PLATFORM),
+      href: `/platform-address/${TESTNET_PLATFORM}?network=testnet`,
+    },
   },
   {
     label: 'an IP address with a port',

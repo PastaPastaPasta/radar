@@ -1,0 +1,457 @@
+{
+  "mainnet": [
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{token.contract}"
+      }
+    ],
+    [
+      "dpns.resolveName",
+      {
+        "name": "{name_registered}.dash"
+      }
+    ],
+    [
+      "dpns.resolveName",
+      {
+        "name": "{name_available}.dash"
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{tokenHolder}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{tokenHolder}", "{identity}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{tokenHolder}", "{otherIdentity}", "{identity}"]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{tokenHolder}",
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh",
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh",
+              "81x7N39zKLhYDpYg6vk9AUjapc8VMxuDDZGHSMxPna5m",
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": ["DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd"]
+      }
+    ],
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd"
+        ]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+        "tokenIds": ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"]
+      }
+    ],
+    [
+      "tokens.contractInfo",
+      {
+        "tokenId": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+          "Fo3o3J5RQLJNptdjiKFyEycn6br4C7uLz5jte49mHPQH",
+          "DKf6EaeSy94RgPcQM65dKUCDP3qSF6nQg9dNoGPrUuYh",
+          "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE",
+              "EWSqsaghuwHRjtutbXK3nR11KbRkg9a12PNAAkJWRTpY",
+              "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F",
+              "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+              "v24uWwdXJ1fJx7YccBmVB48zXPVT5uRYv7vKr5LS5B5",
+              "9EMDaGV3QwxrPfaMeuuCTLxtpYv9VFjwrBNSHVpGa3gG",
+              "HXN2cVA9QMCJrTN58SefBKS4sgh9MJ9DNmweje3vhu2i",
+              "8PQURbrjLP19bZ1hzK5LgWwL4WfLc7HRqCBigcSRLc9B",
+              "E87ALwLXZdBza2L6wpnFeu7KRCNB6nUNZyjgpDmFMG1X",
+              "ouKoYqz1w3tK5MtKaUCNiG2awB1t9Jmx7h5RtnrXn4a",
+              "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+        "identityIds": [
+          "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh",
+          "99bjnZqHHzA1kgUd9B3pSTadsK3MXba9TBYcQfmDcVTz",
+          "7Gb2CmPtACBekfaW4zEynaZZ76scinwsGDLkdLxEuZsB",
+          "62hNyEtw71GdeeWFiBoB2ZbrMhbfU51mpwY93jMJGT1L",
+          "E87ALwLXZdBza2L6wpnFeu7KRCNB6nUNZyjgpDmFMG1X",
+          "9EMDaGV3QwxrPfaMeuuCTLxtpYv9VFjwrBNSHVpGa3gG",
+          "HuR7xdrfLy7aBKuUf7Jdd1WvwX7hh3EWWQqqrd5WXWiP",
+          "6sgPUvga9YzwfPsSBF3nRiBV9KvSEG72M9BYtrzXtWsZ",
+          "359zkugY7eP99P5LyuTEJcWeLTSQ494PVm3ahM5vFTgk",
+          "ouKoYqz1w3tK5MtKaUCNiG2awB1t9Jmx7h5RtnrXn4a"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh",
+              "99bjnZqHHzA1kgUd9B3pSTadsK3MXba9TBYcQfmDcVTz",
+              "7Gb2CmPtACBekfaW4zEynaZZ76scinwsGDLkdLxEuZsB",
+              "62hNyEtw71GdeeWFiBoB2ZbrMhbfU51mpwY93jMJGT1L",
+              "E87ALwLXZdBza2L6wpnFeu7KRCNB6nUNZyjgpDmFMG1X",
+              "9EMDaGV3QwxrPfaMeuuCTLxtpYv9VFjwrBNSHVpGa3gG",
+              "HuR7xdrfLy7aBKuUf7Jdd1WvwX7hh3EWWQqqrd5WXWiP",
+              "6sgPUvga9YzwfPsSBF3nRiBV9KvSEG72M9BYtrzXtWsZ",
+              "359zkugY7eP99P5LyuTEJcWeLTSQ494PVm3ahM5vFTgk",
+              "ouKoYqz1w3tK5MtKaUCNiG2awB1t9Jmx7h5RtnrXn4a"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": [
+          "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz",
+          "DKf6EaeSy94RgPcQM65dKUCDP3qSF6nQg9dNoGPrUuYh",
+          "Fo3o3J5RQLJNptdjiKFyEycn6br4C7uLz5jte49mHPQH",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"
+        ]
+      }
+    ]
+  ],
+  "testnet": [
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "{token.contract}"
+      }
+    ],
+    [
+      "dpns.resolveName",
+      {
+        "name": "{name_registered}.dash"
+      }
+    ],
+    [
+      "dpns.resolveName",
+      {
+        "name": "{name_available}.dash"
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{tokenHolder}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}", "{tokenHolder}"]
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "{token}",
+        "identityIds": ["{identity}", "{tokenHolder}", "{otherIdentity}"]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{tokenHolder}",
+        "tokenIds": ["{token}"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc",
+              "PJUBWbXWmzEYCs99rAAbnCiHRzrnhKLQrXbmSsuPBYB"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.directPurchasePrices",
+      {
+        "tokenIds": [
+          "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+          "Hqyu8WcRwXCTwbNxdga4CN5gsVEGc67wng4TFzceyLUv",
+          "2i9vANbiyPLFxGErMViXukqcBECXxg9ft7NUyqRgJetL",
+          "5rxTbUXNcDgkxkJCVQRT5gCK9ttik1oCzvHHsKoWdxXM",
+          "EETVvWgohFDKtbB3ejEzBcDRMNYkc9TtgXY6y8hzP3Ta",
+          "H7FRpZJqZK933r9CzZMsCuf1BM34NT5P2wSJyjDkprqy",
+          "5F4Q7PNmdxBP7ULbfUwKP6gNxdgZKygQaQ6m79LPQBd4",
+          "6p86udGakFcMxG2yJdZaWavcs6RbFeV3bmx4EGwBKkyN",
+          "4xd9usiX6WCPE4h1AFPQBJ4Rje6TfZw8kiBzkSAzvmCL",
+          "xwWhSsvSytJZMsHjiRSZhHxy4smdvcJQVYyjKi7Kw5e",
+          "FWuCZYmNo2qWfLcYsNUnu1LdqBWbzvWBUcGQHRFE2mVt",
+          "8RsBCPSDUwWMnvLTDooh7ZcfZmnRb5tecsagsrdAFrrd",
+          "3cjzLAPy9x6Js1TQ7odU2YRshZuoYweVq4SUsrMe3oMB",
+          "8Uv6WJEf7pyw17AtcJpGdURkU3wrmz86RkXxUdNNx575",
+          "3yiTkpe1SKoEyBJmoxb7CzeHizhRrTDbSkszNW3GtHfz",
+          "2AbRXUKNhajnAdcjemLzfTtEdAf6zZnCs3b4NPHQWkZD",
+          "76HAP8UMczsohFApQiGtGfhkUscUceq28jWJDYa3Ghzn",
+          "9NpHWTPH77ADT42p5TacMcnuNgDfCHTrc66oZGaraprL",
+          "Eg49SNkMVgo84vGhj89bEK53X2mURGuVSERzteaT1brr",
+          "5NQx4JX1bDxPzj2KQwHK4zbGUDbq7GJWMEHumKDKVhVY",
+          "HEv1AYWQfwCffXQgmuzmzyzUo9untRTmVr67n4e4PSWa",
+          "5F6WdFnTHr41m5Ez3WPPfxbJyap9hueGm5xy36hw7e3M",
+          "4tyvbA2ZGFLvjXLnJRCacSoMbFfpmBwGRrAZsVwnfYri",
+          "9itsUTJYiiroLNSyr3Nrmiyd9gdk7X9HH22bSew9dmrF",
+          "6niNoQpsT9zyVDJtXcbpV3tR3qEGi6BC6xoDdJyx1u7C"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc",
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "5WP9TadYzCYrnutkYdMHM1wpfFt5eLTZQsXYDkytb7Cf",
+              "HJCQnUa9CVVYGWwbyzHyvrwh5KamyrNGzPCA4N3aMT8r",
+              "DTFPLKMVbnkVQWEfkxHX7Ch62ytjvbtqH6eG1TF3nMbD",
+              "DemU6ZT5EG6B3FiFAenT2BRxnn76eQih6uUhLdZjr6mN",
+              "5rHrJCKxHEtnx7nN1XtKMFNQ9BPLY8Ch4JEXGd6Bvw3E",
+              "AQV2G2Egvqk8jwDBAcpngjKYcwAkck8Cecs5AjYJxfvW",
+              "5RG84o6KsTaZudDqS8ytbaRB8QP4YYQ2uwzb6Hj8cfjX",
+              "ChbnM8RFgmXuY5xi2yB6JMY6k88mBXktCGBWwLYgqcaF",
+              "HT3pUBM1Uv2mKgdPEN1gxa7A4PdsvNY89aJbdSKQb5wR"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ]
+}

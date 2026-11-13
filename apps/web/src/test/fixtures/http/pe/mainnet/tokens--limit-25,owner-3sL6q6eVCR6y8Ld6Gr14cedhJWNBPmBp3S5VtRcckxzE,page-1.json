@@ -1,0 +1,76 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/tokens?limit=25&owner=3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE&page=1"
+  },
+  "recordedAt": "2026-11-13T17:08:41.911Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+        "position": 0,
+        "timestamp": null,
+        "description": "Sansnote (SANS), a governance and utility token serving as the backbone of the Sansbank community.",
+        "localizations": {
+          "en": { "pluralForm": "SANS", "singularForm": "SANS", "shouldCapitalize": true }
+        },
+        "baseSupply": "2100000000000000",
+        "totalSupply": "2100000000000000",
+        "maxSupply": "2100000000000000",
+        "owner": { "identifier": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE", "aliases": [] },
+        "mintable": false,
+        "burnable": false,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 8,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      },
+      {
+        "identifier": "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+        "position": 0,
+        "timestamp": null,
+        "description": "Dash USD (DUSD), an instant settlement, low-fee stablecoin with built-in censorship resistance.",
+        "localizations": {
+          "en": { "pluralForm": "DUSD", "singularForm": "DUSD", "shouldCapitalize": true }
+        },
+        "baseSupply": "100000000",
+        "totalSupply": "5600000000",
+        "maxSupply": null,
+        "owner": { "identifier": "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE", "aliases": [] },
+        "mintable": true,
+        "burnable": true,
+        "freezable": false,
+        "unfreezable": false,
+        "destroyable": false,
+        "allowedEmergencyActions": false,
+        "dataContractIdentifier": "8CkcAPokwFdxEu2tUu2VdLTjgK3eeR1wUGJcxhjsWaDz",
+        "changeMaxSupply": false,
+        "totalGasUsed": null,
+        "mainGroup": null,
+        "totalTransitionsCount": null,
+        "totalFreezeTransitionsCount": null,
+        "totalBurnTransitionsCount": null,
+        "decimals": 6,
+        "perpetualDistribution": null,
+        "preProgrammedDistribution": null,
+        "price": null,
+        "prices": null
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 2 }
+  }
+}
