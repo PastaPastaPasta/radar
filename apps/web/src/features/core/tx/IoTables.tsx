@@ -126,7 +126,7 @@ export function IoTables({
   senders: Set<string>
   spendContext: SpendContext
   /** Inputs beyond `loaded` have no amounts yet. `requested` once the reader asked for all of them. */
-  partial?: { loaded: number; loading: boolean; requested: boolean; failed: boolean }
+  partial?: { loaded: number; requested: boolean; failed: boolean }
   onLoadAll?: () => void
 }) {
   const { t } = useLingui()
@@ -244,11 +244,11 @@ export function IoTables({
                     value={partial.loaded}
                     aria-label={t`Amounts loaded`}
                   />{' '}
-                  {t`Loading amounts: ${formatInt(partial.loaded)} of ${formatInt(inCount)} inputs. Each one is a DAPI request.`}
+                  {t`Loading amounts: ${formatInt(partial.loaded)} of ${formatInt(inCount)} inputs. Each previous transaction is a separate request.`}
                 </span>
               ) : (
                 <>
-                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each one is a DAPI request.`}
+                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each previous transaction is a separate request.`}
                   {inCount > inLimit ? null : (
                     <>
                       {' '}

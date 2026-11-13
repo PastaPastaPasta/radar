@@ -127,7 +127,7 @@ function TxView({
   const needsPrevouts = !coinbase && tx.inputs.length > 0
   const [loadAll, setLoadAll] = useState(false)
   const prevouts = useQuery({ ...txQueries.prevouts(net, tx, count), enabled: needsPrevouts })
-  const rest = usePrevoutSteps(net, tx, count, loadAll && needsPrevouts && !prevouts.isPending)
+  const rest = usePrevoutSteps(net, tx, count, loadAll && needsPrevouts && prevouts.isSuccess)
   const hyphenFit = useHyphenFit(net)
   const hy = useQuery({ ...hyQueries.tx(net, tx.txid), enabled: hyphenFit && mined })
   const index = useIndexHealth(net)
@@ -146,7 +146,8 @@ function TxView({
   const firstSeen = useFirstSeen(net, tx.txid, { enabled: hyphenFit && !mined })
   const hyFee = hy.data?.data?.fee ?? undefined
   const hyphenLock = hy.data?.data ? hy.data.data.live?.tags?.islock === true : undefined
-  const instant = instantLockView(tx, hyphenLock)
+  const lockFacts = useMemo(() => ({ ...tx, confirmations }), [tx, confirmations])
+  const instant = instantLockView(lockFacts, hyphenLock)
   const fee = sums.fee ?? hyFee
   const outTotal = sumOutputs(tx)
   const toOthers = tx.outputs.reduce(
@@ -412,7 +413,12 @@ function TxView({
           ]}
         >
           <Card layer="core">
-            <Settlement tx={tx} coinbase={coinbase} firstSeen={firstSeen} hyphenLock={hyphenLock} />
+            <Settlement
+              tx={lockFacts}
+              coinbase={coinbase}
+              firstSeen={firstSeen}
+              hyphenLock={hyphenLock}
+            />
           </Card>
         </Section>
 
@@ -446,15 +452,15 @@ function TxView({
             partial={
               needsPrevouts && count < tx.inputs.length
                 ? {
-                    loaded: rest.loaded,
-                    loading: prevouts.isFetching || (loadAll && rest.loading),
+                    loaded: prevouts.isSuccess ? rest.loaded : 0,
                     requested: loadAll,
-                    failed: rest.failed,
+                    failed: rest.failed || prevouts.isError,
                   }
                 : undefined
             }
             onLoadAll={() => {
               setLoadAll(true)
+              if (prevouts.isError) void prevouts.refetch()
               rest.retry()
             }}
           />

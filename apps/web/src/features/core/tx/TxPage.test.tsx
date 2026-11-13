@@ -357,7 +357,7 @@ describe('Transaction page', () => {
       })
     }
     const NODE = { isInstantLocked: true, instantLockClaim: 'one-node' as const }
-    const NO_NODE = { isInstantLocked: false }
+    const NO_NODE = { isInstantLocked: false, instantLockRemembered: undefined }
     const CHAIN_LOCKED = { isChainLocked: true }
     const NOT_CHAIN_LOCKED = { isChainLocked: false }
     const PENDING = {
@@ -582,6 +582,25 @@ describe('Transaction page', () => {
       }
       expect(sizes).toEqual([20, 20, 20, 20, 20, 10])
       expect(maxInFlight).toBe(1)
+    })
+
+    it('does not call the first inputs loaded when their read failed, and retries it before any step', async () => {
+      const user = userEvent.setup()
+      renderAt(`/tx/${MAINNET.transfer}`)
+      failNext = true
+      await release()
+      expect(await screen.findByText('Some amounts could not be loaded.')).toBeVisible()
+      expect(screen.queryByText(/Amounts are loaded for the first/)).toBeNull()
+      await user.click(screen.getByRole('button', { name: 'Try again' }))
+      await waitFor(() => expect(open.length).toBe(1))
+      expect(open[0]!.inputs).toBe(10)
+    })
+
+    it('says nothing about DAPI in the note about the inputs still to load', async () => {
+      renderAt(`/tx/${MAINNET.transfer}`)
+      await release()
+      expect(await screen.findByText(/Amounts are loaded for the first 10 inputs/)).toBeVisible()
+      expect(document.querySelector('[data-prevout-progress]')).not.toHaveTextContent(/DAPI/)
     })
 
     it('offers to try again when a step fails', async () => {
