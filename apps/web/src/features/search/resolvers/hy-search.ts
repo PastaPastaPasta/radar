@@ -1,4 +1,4 @@
-import { t } from '@lingui/core/macro'
+import { msg, t } from '@lingui/core/macro'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import type { HySearch } from '@/data/hyphen/schemas'
 import { isDevnet } from '@/lib/network'
@@ -95,6 +95,7 @@ export const hySearch: Resolver = {
   id: 'hy-search',
   accepts: ['hex64', 'text', 'dpns'],
   cost: 'index',
+  what: msg`Core blocks, transactions, proposals and masternodes`,
   async resolve(c, { net, signal }) {
     if (c.warning || isDevnet(net)) return []
     if (c.classes[0] === 'int' || c.classes.includes('date')) return []

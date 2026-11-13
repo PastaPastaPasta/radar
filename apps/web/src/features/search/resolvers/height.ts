@@ -1,5 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { formatInt } from '@/lib/format'
+import { decentralizedOnly } from '@/lib/source-mode'
 import type { Resolver, SearchHit } from '../types'
 import { localStamp } from './helpers'
 
@@ -23,7 +24,8 @@ export const heights: Resolver = {
         rank: 80,
       })
     }
-    if (tip?.platform === undefined || n <= tip.platform) {
+    // Platform blocks are read from Platform Explorer alone, so without it a height has no page to open.
+    if (tip?.platform !== undefined && n <= tip.platform && !decentralizedOnly()) {
       hits.push({
         kind: 'platform-block',
         id: String(n),
@@ -34,7 +36,7 @@ export const heights: Resolver = {
         rank: 80,
       })
     }
-    if (tip?.epoch === undefined || n <= tip.epoch) {
+    if (tip?.epoch !== undefined && n <= tip.epoch) {
       hits.push({
         kind: 'epoch',
         id: String(n),

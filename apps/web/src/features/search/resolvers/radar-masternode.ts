@@ -1,4 +1,4 @@
-import { t } from '@lingui/core/macro'
+import { msg, t } from '@lingui/core/macro'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import type { RadarMasternode } from '@/data/radar/schemas'
 import { isDevnet } from '@/lib/network'
@@ -35,6 +35,7 @@ export const radarMasternodeByAddress: Resolver = {
   id: 'radar-masternode-address',
   accepts: ['ip'],
   cost: 'index',
+  what: msg`Masternodes by address`,
   async resolve(c, { net, signal }) {
     if (isDevnet(net)) return []
     const wanted = serviceHost(c.normalized)
