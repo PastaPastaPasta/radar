@@ -31,17 +31,26 @@ msgstr "{0, plural, one {# транзакція} few {# транзакції} ma
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar нікуди його не надсилає."
 
+msgid "{type} in contract {contract}"
+msgstr "{type} у контракті {contract}"
+
 msgid "a 40-character hash: a public-key hash"
 msgstr "40-символьний хеш: хеш відкритого ключа"
 
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "64-символьний хеш: блок, транзакція, ProTx або перехід"
+msgid "a 64-character hash: could be a Core block, a transaction, a Platform block, a state transition or an identity"
+msgstr "64-символьний хеш: може бути блоком Core, транзакцією, блоком Platform, переходом стану або ідентичністю"
+
+msgid "A contested name: masternodes vote on who gets it"
+msgstr "Спірне ім’я: мастерноди голосують, кому воно дістанеться"
 
 msgid "a Core address"
 msgstr "адреса Core"
 
 msgid "a date: the Core blocks of that UTC day"
 msgstr "дата: блоки Core за цю добу за UTC"
+
+msgid "a document path: a contract, a document type and a document ID"
+msgstr "шлях до документа: контракт, тип документа та ідентифікатор документа"
 
 msgid "A guess"
 msgstr "Припущення"
@@ -55,14 +64,14 @@ msgstr "Припущення: Radar не перевіряв, чи існує ц�
 msgid "a name"
 msgstr "ім’я"
 
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "число: висота Core, висота Platform або епоха"
+msgid "a number: could be a Core height, a Platform height or an epoch"
+msgstr "число: може бути висотою Core, висотою Platform або епохою"
 
 msgid "a Platform address"
 msgstr "адреса Platform"
 
-msgid "an ID: an identity, contract, token or document"
-msgstr "ідентифікатор: ідентичність, контракт, токен або документ"
+msgid "an ID: could be an identity, a contract or a token"
+msgstr "ідентифікатор: може бути ідентичністю, контрактом або токеном"
 
 msgid "an IP address: a masternode’s service address"
 msgstr "IP-адреса: службова адреса мастерноди"
@@ -70,6 +79,17 @@ msgstr "IP-адреса: службова адреса мастерноди"
 #. placeholder {0}: short(hash)
 msgid "Block {0}"
 msgstr "Блок {0}"
+
+msgid "Contest for {alias}"
+msgstr "Суперечка за {alias}"
+
+#. placeholder {0}: shortId(c.identifier)
+#. placeholder {0}: shortId(c.normalized)
+msgid "Contract {0}"
+msgstr "Контракт {0}"
+
+msgid "Contract {contract}, position {position}"
+msgstr "Контракт {contract}, позиція {position}"
 
 msgid "Core"
 msgstr "Core"
@@ -84,6 +104,9 @@ msgstr "Адреса Core · {0} · {1, plural, one {# транзакція} few
 
 msgid "Core address · no activity seen"
 msgstr "Адреса Core · активності не виявлено"
+
+msgid "Core addresses"
+msgstr "Адреси Core"
 
 msgid "Core block"
 msgstr "Блок Core"
@@ -101,6 +124,9 @@ msgstr "Висоти та хеші блоків Core, ID транзакцій і
 msgid "Core blocks on {label}"
 msgstr "Блоки Core за {label}"
 
+msgid "Core blocks, transactions, proposals and masternodes"
+msgstr "Блоки Core, транзакції, пропозиції та мастерноди"
+
 msgid "Core height"
 msgstr "Висота Core"
 
@@ -114,6 +140,17 @@ msgstr "Транзакція Core в блоці {0}"
 msgid "Core transaction, unconfirmed"
 msgstr "Транзакція Core, непідтверджена"
 
+msgid "Data contracts"
+msgstr "Контракти даних"
+
+#. placeholder {0}: shortId(d.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Document {0}"
+msgstr "Документ {0}"
+
+msgid "Documents"
+msgstr "Документи"
+
 msgid "Enabled"
 msgstr "Увімкнена"
 
@@ -122,6 +159,9 @@ msgstr "Епоха {label}"
 
 msgid "Evonode {where}"
 msgstr "Евонода {where}"
+
+msgid "Executed on Platform"
+msgstr "Виконано на Platform"
 
 msgid "Go to"
 msgstr "Перейти"
@@ -135,11 +175,22 @@ msgstr "Припущення"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "Висота, хеш, адреса, ProTx, IP, ID, ім’я…"
 
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "Ідентичності, контракти, токени й документи за ID, а також ідентичність за хешем її відкритого ключа"
+msgid "Identities"
+msgstr "Ідентичності"
+
+msgid "Identities, contracts and tokens by ID or name, a document by contract/type/ID, or an identity by its public-key hash"
+msgstr "Ідентичності, контракти та токени за ідентифікатором або іменем, документ за контрактом/типом/ідентифікатором, або ідентичність за хешем відкритого ключа"
+
+#. placeholder {0}: shortId(i.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Identity {0}"
+msgstr "Ідентичність {0}"
 
 msgid "Identity with this public-key hash"
 msgstr "Ідентичність із цим хешем відкритого ключа"
+
+msgid "In contract {contract}"
+msgstr "У контракті {contract}"
 
 #. placeholder {0}: description.join(' · ')
 msgid "Looks like {0}"
@@ -147,6 +198,9 @@ msgstr "Схоже на {0}"
 
 msgid "Lookups in an index were skipped, so some matches may be missing"
 msgstr "Пошук в індексі було пропущено, тому деякі збіги можуть бути відсутні"
+
+msgid "Lookups in an index were skipped, so some matches may be missing: {skippedList}"
+msgstr "Пошук в індексі було пропущено, тому деякі збіги можуть бути відсутні: {skippedList}"
 
 msgid "Masternode"
 msgstr "Мастернода"
@@ -158,8 +212,20 @@ msgstr "Мастернода {0}"
 msgid "Masternode {where}"
 msgstr "Мастернода {where}"
 
+msgid "Masternodes"
+msgstr "Мастерноди"
+
+msgid "Masternodes by address"
+msgstr "Мастерноди за адресою"
+
 msgid "Masternodes by ProTx hash or IP address"
 msgstr "Мастерноди за хешем ProTx або IP-адресою"
+
+msgid "Name of identity {ownerId}"
+msgstr "Ім’я ідентичності {ownerId}"
+
+msgid "Names"
+msgstr "Імена"
 
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr "Імена, що закінчуються на .dash, епохи та дати (блоки Core за добу)"
@@ -167,14 +233,17 @@ msgstr "Імена, що закінчуються на .dash, епохи та д
 msgid "Network"
 msgstr "Мережа"
 
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "Немає збігів для «{query}» серед записів Core у мережі {network}"
+msgid "No match for “{query}” on {network}"
+msgstr "Немає збігів для «{query}» у мережі {network}"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Ніщо вище цього не підтверджує. Це лише один зі способів прочитати ваш ввід."
 
 msgid "Open on {where}"
 msgstr "Відкрити в мережі {where}"
+
+msgid "Owned by {owner}"
+msgstr "Власник: {owner}"
 
 msgid "Pages"
 msgstr "Сторінки"
@@ -188,14 +257,26 @@ msgstr "Адреса Platform"
 msgid "Platform block {label}"
 msgstr "Блок Platform {label}"
 
+msgid "Platform blocks"
+msgstr "Блоки Platform"
+
 msgid "Platform blocks, state transitions and Platform addresses"
 msgstr "Блоки Platform, переходи стану та адреси Platform"
 
 msgid "Platform epoch"
 msgstr "Епоха Platform"
 
+msgid "Platform epochs"
+msgstr "Епохи Platform"
+
+msgid "Platform Explorer’s search"
+msgstr "Пошук Platform Explorer"
+
 msgid "Platform height"
 msgstr "Висота Platform"
+
+msgid "Platform validator"
+msgstr "Валідатор Platform"
 
 msgid "PoSe banned"
 msgstr "Забанена за PoSe"
@@ -207,6 +288,9 @@ msgstr "Пропозиція {0}"
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar перевірив усі джерела, які можуть відповісти на такий ввід."
 
+msgid "Radar checked every source that can answer this kind of input. A document has no lookup by its ID alone: paste its contract, type and ID as contract/type/ID."
+msgstr "Radar перевірив усі джерела, які можуть відповісти на такий ввід. Документ не можна знайти лише за його ідентифікатором: вставте контракт, тип та ідентифікатор у вигляді контракт/тип/ідентифікатор."
+
 msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
 msgstr "Radar не знайшов для цього ні блока, ні транзакції, ні адреси, ні мастерноди, ні іншого запису. Спробуйте висоту, хеш, адресу, ID або ім’я."
 
@@ -215,6 +299,9 @@ msgstr "Radar ніколи не потребує фрази відновленн
 
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar ніколи цього не потребує, тому це нікуди не надсилається і не потрапляє в адресний рядок та історію."
+
+msgid "Rejected by Platform"
+msgstr "Відхилено Platform"
 
 msgid "Results"
 msgstr "Результати"
@@ -245,8 +332,18 @@ msgstr "Усі результати за запитом «{trimmed}» у мер�
 msgid "Some sources didn’t answer: {0}."
 msgstr "Деякі джерела не відповіли: {0}."
 
-msgid "text: a contract or token name"
-msgstr "текст: назва контракту або токена"
+msgid "Started {started}"
+msgstr "Початок: {started}"
+
+#. placeholder {0}: shortId(hash)
+msgid "State transition {0}"
+msgstr "Перехід стану {0}"
+
+msgid "State transitions"
+msgstr "Переходи стану"
+
+msgid "text: could be a name, a contract or a token"
+msgstr "текст: може бути іменем, контрактом або токеном"
 
 msgid "That could be part of a recovery phrase"
 msgstr "Це може бути частиною фрази відновлення"
@@ -265,6 +362,14 @@ msgstr "Це адреса тестової мережі"
 
 msgid "This is a testnet Platform address"
 msgstr "Це адреса Platform тестової мережі"
+
+#. placeholder {0}: shortId(c.normalized)
+#. placeholder {0}: shortId(tok.identifier)
+msgid "Token {0}"
+msgstr "Токен {0}"
+
+msgid "Tokens"
+msgstr "Токени"
 
 #. placeholder {0}: short(hash)
 msgid "Transaction {0}"

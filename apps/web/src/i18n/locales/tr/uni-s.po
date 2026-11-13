@@ -31,17 +31,26 @@ msgstr "{0, plural, one {# işlem} other {# işlem}}"
 msgid "{0}. Radar never sends it anywhere."
 msgstr "{0}. Radar bunu hiçbir yere göndermez."
 
+msgid "{type} in contract {contract}"
+msgstr "{contract} sözleşmesinde {type}"
+
 msgid "a 40-character hash: a public-key hash"
 msgstr "40 karakterlik bir hash: bir açık anahtar hash’i"
 
-msgid "a 64-character hash: a block, transaction, ProTx or transition"
-msgstr "64 karakterlik bir hash: bir blok, işlem, ProTx veya geçiş"
+msgid "a 64-character hash: could be a Core block, a transaction, a Platform block, a state transition or an identity"
+msgstr "64 karakterlik bir hash: bir Core bloğu, bir işlem, bir Platform bloğu, bir durum geçişi veya bir kimlik olabilir"
+
+msgid "A contested name: masternodes vote on who gets it"
+msgstr "Çekişmeli bir ad: masternode’lar kimin alacağına oy verir"
 
 msgid "a Core address"
 msgstr "bir Core adresi"
 
 msgid "a date: the Core blocks of that UTC day"
 msgstr "bir tarih: o UTC gününün Core blokları"
+
+msgid "a document path: a contract, a document type and a document ID"
+msgstr "bir belge yolu: bir sözleşme, bir belge türü ve bir belge kimlik numarası"
 
 msgid "A guess"
 msgstr "Bir tahmin"
@@ -55,14 +64,14 @@ msgstr "Bir tahmin: Radar bu adın var olup olmadığını denetlemedi"
 msgid "a name"
 msgstr "bir ad"
 
-msgid "a number: a Core height, Platform height or epoch"
-msgstr "bir sayı: bir Core yüksekliği, Platform yüksekliği veya epoch"
+msgid "a number: could be a Core height, a Platform height or an epoch"
+msgstr "bir sayı: bir Core yüksekliği, bir Platform yüksekliği veya bir epoch olabilir"
 
 msgid "a Platform address"
 msgstr "bir Platform adresi"
 
-msgid "an ID: an identity, contract, token or document"
-msgstr "bir kimlik numarası: bir kimlik, sözleşme, token veya belge"
+msgid "an ID: could be an identity, a contract or a token"
+msgstr "bir kimlik numarası: bir kimlik, bir sözleşme veya bir token olabilir"
 
 msgid "an IP address: a masternode’s service address"
 msgstr "bir IP adresi: bir masternode’un hizmet adresi"
@@ -70,6 +79,17 @@ msgstr "bir IP adresi: bir masternode’un hizmet adresi"
 #. placeholder {0}: short(hash)
 msgid "Block {0}"
 msgstr "Blok {0}"
+
+msgid "Contest for {alias}"
+msgstr "{alias} için çekişme"
+
+#. placeholder {0}: shortId(c.identifier)
+#. placeholder {0}: shortId(c.normalized)
+msgid "Contract {0}"
+msgstr "Sözleşme {0}"
+
+msgid "Contract {contract}, position {position}"
+msgstr "Sözleşme {contract}, konum {position}"
 
 msgid "Core"
 msgstr "Core"
@@ -84,6 +104,9 @@ msgstr "Core adresi · {0} · {1, plural, one {# işlem} other {# işlem}}"
 
 msgid "Core address · no activity seen"
 msgstr "Core adresi · hareket görülmedi"
+
+msgid "Core addresses"
+msgstr "Core adresleri"
 
 msgid "Core block"
 msgstr "Core bloğu"
@@ -101,6 +124,9 @@ msgstr "Core blok yükseklikleri ve hash’leri, işlem kimlikleri ve adresler"
 msgid "Core blocks on {label}"
 msgstr "{label} tarihli Core blokları"
 
+msgid "Core blocks, transactions, proposals and masternodes"
+msgstr "Core blokları, işlemler, teklifler ve masternode’lar"
+
 msgid "Core height"
 msgstr "Core yüksekliği"
 
@@ -114,6 +140,17 @@ msgstr "{0}. blokta Core işlemi"
 msgid "Core transaction, unconfirmed"
 msgstr "Core işlemi, onaylanmamış"
 
+msgid "Data contracts"
+msgstr "Veri sözleşmeleri"
+
+#. placeholder {0}: shortId(d.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Document {0}"
+msgstr "Belge {0}"
+
+msgid "Documents"
+msgstr "Belgeler"
+
 msgid "Enabled"
 msgstr "Etkin"
 
@@ -122,6 +159,9 @@ msgstr "Epoch {label}"
 
 msgid "Evonode {where}"
 msgstr "Evonode {where}"
+
+msgid "Executed on Platform"
+msgstr "Platform üzerinde yürütüldü"
 
 msgid "Go to"
 msgstr "Git"
@@ -135,11 +175,22 @@ msgstr "Tahmin"
 msgid "Height, hash, address, ProTx, IP, ID, name…"
 msgstr "Yükseklik, hash, adres, ProTx, IP, kimlik, ad…"
 
-msgid "Identities, contracts, tokens and documents by ID, or an identity by its public-key hash"
-msgstr "Kimlikler, sözleşmeler, token’lar ve belgeler kimlik numarasıyla; bir kimlik ise açık anahtar hash’iyle"
+msgid "Identities"
+msgstr "Kimlikler"
+
+msgid "Identities, contracts and tokens by ID or name, a document by contract/type/ID, or an identity by its public-key hash"
+msgstr "Kimlikleri, sözleşmeleri ve token’ları kimlik numarası veya adla, belgeyi sözleşme/tür/kimlik numarası ile, kimliği ise ortak anahtar hash’iyle arayın"
+
+#. placeholder {0}: shortId(i.identifier)
+#. placeholder {0}: shortId(id)
+msgid "Identity {0}"
+msgstr "Kimlik {0}"
 
 msgid "Identity with this public-key hash"
 msgstr "Bu açık anahtar hash’ine sahip kimlik"
+
+msgid "In contract {contract}"
+msgstr "{contract} sözleşmesinde"
 
 #. placeholder {0}: description.join(' · ')
 msgid "Looks like {0}"
@@ -147,6 +198,9 @@ msgstr "Şuna benziyor: {0}"
 
 msgid "Lookups in an index were skipped, so some matches may be missing"
 msgstr "Bir dizindeki aramalar atlandı, bu yüzden bazı eşleşmeler eksik olabilir"
+
+msgid "Lookups in an index were skipped, so some matches may be missing: {skippedList}"
+msgstr "Bir dizindeki aramalar atlandı, bu yüzden bazı eşleşmeler eksik olabilir: {skippedList}"
 
 msgid "Masternode"
 msgstr "Masternode"
@@ -158,8 +212,20 @@ msgstr "Masternode {0}"
 msgid "Masternode {where}"
 msgstr "Masternode {where}"
 
+msgid "Masternodes"
+msgstr "Masternode’lar"
+
+msgid "Masternodes by address"
+msgstr "Adrese göre masternode’lar"
+
 msgid "Masternodes by ProTx hash or IP address"
 msgstr "ProTx hash’i veya IP adresine göre masternode’lar"
+
+msgid "Name of identity {ownerId}"
+msgstr "{ownerId} kimliğinin adı"
+
+msgid "Names"
+msgstr "Adlar"
 
 msgid "Names ending in .dash, epochs and dates (the Core blocks of a day)"
 msgstr ".dash ile biten adlar, epoch’lar ve tarihler (bir günün Core blokları)"
@@ -167,14 +233,17 @@ msgstr ".dash ile biten adlar, epoch’lar ve tarihler (bir günün Core bloklar
 msgid "Network"
 msgstr "Ağ"
 
-msgid "No match for “{query}” as a Core record on {network}"
-msgstr "{network} üzerinde “{query}” için eşleşen bir Core kaydı yok"
+msgid "No match for “{query}” on {network}"
+msgstr "{network} üzerinde “{query}” için eşleşme yok"
 
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Yukarıdakilerin hiçbiri bunu doğrulamıyor. Yazdığınızı okumanın yalnızca bir yolu."
 
 msgid "Open on {where}"
 msgstr "{where} üzerinde aç"
+
+msgid "Owned by {owner}"
+msgstr "Sahibi: {owner}"
 
 msgid "Pages"
 msgstr "Sayfalar"
@@ -188,14 +257,26 @@ msgstr "Platform adresi"
 msgid "Platform block {label}"
 msgstr "Platform bloğu {label}"
 
+msgid "Platform blocks"
+msgstr "Platform blokları"
+
 msgid "Platform blocks, state transitions and Platform addresses"
 msgstr "Platform blokları, durum geçişleri ve Platform adresleri"
 
 msgid "Platform epoch"
 msgstr "Platform epoch’u"
 
+msgid "Platform epochs"
+msgstr "Platform epoch’ları"
+
+msgid "Platform Explorer’s search"
+msgstr "Platform Explorer araması"
+
 msgid "Platform height"
 msgstr "Platform yüksekliği"
+
+msgid "Platform validator"
+msgstr "Platform doğrulayıcısı"
 
 msgid "PoSe banned"
 msgstr "PoSe ile yasaklı"
@@ -207,6 +288,9 @@ msgstr "Teklif {0}"
 msgid "Radar checked every source that can answer this kind of input."
 msgstr "Radar, bu tür girdiyi yanıtlayabilecek her kaynağı denetledi."
 
+msgid "Radar checked every source that can answer this kind of input. A document has no lookup by its ID alone: paste its contract, type and ID as contract/type/ID."
+msgstr "Radar bu tür bir girdiyi yanıtlayabilecek tüm kaynakları denetledi. Bir belge yalnızca kimlik numarasıyla aranamaz: sözleşmesini, türünü ve kimlik numarasını sözleşme/tür/kimlik numarası biçiminde yapıştırın."
+
 msgid "Radar found no block, transaction, address, masternode or other record for this. Try a height, a hash, an address, an ID or a name."
 msgstr "Radar bunun için herhangi bir blok, işlem, adres, masternode veya başka bir kayıt bulamadı. Bir yükseklik, hash, adres, kimlik numarası veya ad deneyin."
 
@@ -215,6 +299,9 @@ msgstr "Radar hiçbir zaman bir kurtarma ifadesine ihtiyaç duymaz; bu yüzden b
 
 msgid "Radar never needs one, so it isn’t sent anywhere, and it’s kept out of the address bar and your history."
 msgstr "Radar buna hiçbir zaman ihtiyaç duymaz; bu yüzden hiçbir yere gönderilmez ve adres çubuğundan ve geçmişinizden uzak tutulur."
+
+msgid "Rejected by Platform"
+msgstr "Platform tarafından reddedildi"
 
 msgid "Results"
 msgstr "Sonuçlar"
@@ -245,8 +332,18 @@ msgstr "{net} üzerinde “{trimmed}” için tüm sonuçları gör"
 msgid "Some sources didn’t answer: {0}."
 msgstr "Bazı kaynaklar yanıt vermedi: {0}."
 
-msgid "text: a contract or token name"
-msgstr "metin: bir sözleşme veya token adı"
+msgid "Started {started}"
+msgstr "Başlangıç: {started}"
+
+#. placeholder {0}: shortId(hash)
+msgid "State transition {0}"
+msgstr "Durum geçişi {0}"
+
+msgid "State transitions"
+msgstr "Durum geçişleri"
+
+msgid "text: could be a name, a contract or a token"
+msgstr "metin: bir ad, bir sözleşme veya bir token olabilir"
 
 msgid "That could be part of a recovery phrase"
 msgstr "Bu, bir kurtarma ifadesinin parçası olabilir"
@@ -265,6 +362,14 @@ msgstr "Bu bir testnet adresi"
 
 msgid "This is a testnet Platform address"
 msgstr "Bu bir testnet Platform adresi"
+
+#. placeholder {0}: shortId(c.normalized)
+#. placeholder {0}: shortId(tok.identifier)
+msgid "Token {0}"
+msgstr "Token {0}"
+
+msgid "Tokens"
+msgstr "Token’lar"
 
 #. placeholder {0}: short(hash)
 msgid "Transaction {0}"
