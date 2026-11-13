@@ -1,0 +1,32 @@
+{
+  "mainnet": [
+    ["identities.getKeys", { "id": "{identity}" }],
+    ["identities.getKeys", { "id": "{otherIdentity}" }],
+    ["identities.getKeys", { "id": "{absent}" }],
+    ["identities.nonce", { "id": "{identity}" }],
+    ["identities.contractNonce", { "id": "{identity}", "contractId": "{contract}" }],
+    ["identities.contractKeys", { "id": "{otherIdentity}", "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7" }],
+    ["identities.contractKeys", { "id": "{identity}", "contractId": "{contract}" }],
+    ["identities.balanceAndRevision", { "id": "{identity}" }],
+    ["identities.balanceAndRevision", { "id": "{absent}" }],
+    ["identities.byNonUniquePublicKeyHash", { "pkh": "{pkh}" }],
+    ["identities.byNonUniquePublicKeyHash", { "pkh": "{absent_pkh}" }],
+    ["group.identityGroups", { "identityId": "{identity}", "memberContracts": ["{contract}"] }],
+    ["voting.contestedResourceIdentityVotes", { "identityId": "{identity}", "limit": 25 }],
+    ["voting.contestedResourceIdentityVotes", { "identityId": "97Upr2cxN1Gq41jpsPw4DqCmV7AAfweqbcWG4oxPLqHN", "limit": 25 }]
+  ],
+  "testnet": [
+    ["identities.getKeys", { "id": "{identity}" }],
+    ["identities.getKeys", { "id": "{absent}" }],
+    ["identities.nonce", { "id": "{identity}" }],
+    ["identities.contractNonce", { "id": "{identity}", "contractId": "{contract}" }],
+    ["identities.contractKeys", { "id": "{identity}", "contractId": "{contract}" }],
+    ["identities.balanceAndRevision", { "id": "{identity}" }],
+    ["identities.balanceAndRevision", { "id": "{absent}" }],
+    ["identities.byNonUniquePublicKeyHash", { "pkh": "{pkh}" }],
+    ["identities.byNonUniquePublicKeyHash", { "pkh": "{absent_pkh}" }],
+    ["group.identityGroups", { "identityId": "{identity}", "memberContracts": ["49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N"] }],
+    ["voting.contestedResourceIdentityVotes", { "identityId": "{identity}", "limit": 25 }],
+    ["voting.contestedResourceIdentityVotes", { "identityId": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9", "limit": 25 }]
+  ]
+}
