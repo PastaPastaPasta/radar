@@ -19,7 +19,7 @@ stories:
     shard: S1
     story: As a network watcher I want each headline figure to open the nodes behind it
     acceptance: Reachable masternodes, enabled, PoSe-banned, countries, hosting providers and addresses tried each open a filtered list or section that shows that many items
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -28,7 +28,7 @@ stories:
     shard: S1
     story: As a network watcher I want to scope the census to masternodes, evonodes, other full nodes or all
     acceptance: A scope control changes the version, location and reach sections; the scope survives reload and a copied link
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -37,7 +37,7 @@ stories:
     shard: S1
     story: As a network watcher I want to see which Dash Core versions the network runs, now and over time
     acceptance: Release ladder (releases, release candidates, non-release builds, other clients; < 1% folded) with the latest-release share; an over-time chart with 24 h / 7 d / 30 d / 90 d / 1 y ranges; an every-version table with a Core-vs-other column
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -46,7 +46,7 @@ stories:
     shard: S1
     story: As a network watcher I want to see where nodes are hosted and in which countries
     acceptance: Hosting and country breakdowns with ranked lists and "show all"; for masternode and evonode scopes each row opens the filtered masternode list
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: true
@@ -55,7 +55,7 @@ stories:
     shard: S1
     story: As a network watcher I want to know how reachable the network is
     acceptance: Answered / didn't answer / not checked share with a "see which" link; an address-network table (IPv4, IPv6, Tor, I2P, CJDNS, with a reason when one isn't crawled); a network-size chart with a hover tooltip and keyboard stepping
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -64,7 +64,7 @@ stories:
     shard: S1
     story: As a network watcher I want to know whether masternodes are ready for Core 24 quorums
     acceptance: Per-check DKG readiness counts; each failing count opens the masternode list filtered to that check
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -73,7 +73,7 @@ stories:
     shard: S1
     story: As a network watcher I want the typical yield for regular masternodes and evonodes
     acceptance: Median annual yield for each type, with how it's measured
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -82,7 +82,7 @@ stories:
     shard: S1
     story: As a network watcher I want evonodes' Platform health
     acceptance: Healthy share, DAPI answered, Tenderdash P2P open, Platform height, and Drive and Tenderdash version breakdowns
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: true
@@ -91,7 +91,7 @@ stories:
     shard: S1
     story: As a network watcher I want to know how fast nodes serve
     acceptance: Speed-test grade distribution per vantage (hidden only when no tests exist)
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: false
@@ -118,7 +118,7 @@ stories:
     shard: S1
     story: As a network watcher I want to share a section
     acceptance: Each section heading offers a copy-link control; the link scrolls to that section
-    radar_start: /
+    radar_start: /nodes
     prod:
       - https://radar.dashhq.org/
     phone: true
