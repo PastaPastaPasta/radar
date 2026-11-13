@@ -16,9 +16,26 @@ import type {
 } from './methods'
 import { sdkDevnets } from './devnets'
 import { sdkConfigFor } from './networks'
+import { SDK_VERSION } from './worker/version'
 import { proofStore as defaultProofStore, type ProofStore } from './proof-store'
+import {
+  connectionSettings,
+  getSdkSettings,
+  quorumUrlOverride,
+  subscribeSdkSettings,
+  type SdkSettings,
+} from './settings'
 
 export type SdkState = 'cold' | 'loading' | 'ready' | 'failed'
+
+/** The SDK version this page was built with; the worker reports its own on connect. */
+export const PAGE_SDK_VERSION = SDK_VERSION
+
+export interface SdkInfo {
+  /** The version the worker says it runs. */
+  sdkVersion: string
+  protocolVersion: number
+}
 
 /** What the client needs from the worker (or its in-thread or fixture stand-ins). */
 export type SdkTransport = SdkWorkerApi & {
@@ -30,6 +47,8 @@ export interface SdkClient {
   /** Start loading and connecting. Never awaited by UI. */
   warm(net: NetworkId): void
   state(net: NetworkId): SdkState
+  /** What the worker reported when it connected to this network, or nothing before that. */
+  info(net: NetworkId): SdkInfo | undefined
   call<M extends SdkMethodName>(
     net: NetworkId,
     method: M,
@@ -38,11 +57,18 @@ export interface SdkClient {
   ): Promise<Sourced<SdkMethods[M]['result']>>
   decode: SdkWorkerApi['decode']
   subscribe(cb: () => void): () => void
+  /**
+   * Stops the worker and forgets every connection, so the next call connects afresh with the current settings. Calls
+   * in flight end as aborted; the caller refetches what it needs (the settings page does).
+   */
+  restart(): void
 }
 
 export interface SdkClientDeps {
   transport: () => Promise<SdkTransport>
   devnets: () => readonly DevnetConfig[]
+  /** The viewer's connection settings (NX-74); defaults to the stored ones. */
+  settings?: () => SdkSettings
   proofs: ProofStore
   health: Pick<typeof healthRegistry, 'report'>
   /** Forgets the transport after it failed as a whole, so `transport()` makes a new one. */
@@ -58,6 +84,10 @@ const RETRY_CONNECT_AFTER_MS = 5_000
 /** The worker has its own 20 s connect limit; this one is for a worker that never answers at all. */
 export const CONNECT_DEADLINE_MS = 30_000
 export const CALL_DEADLINE_MS = 20_000
+
+/** The worker tries a call twice, each for the request timeout; this one is for a worker that never answers at all. */
+export const callDeadlineMs = (requestTimeoutMs: number | undefined): number =>
+  Math.max(CALL_DEADLINE_MS, requestTimeoutMs === undefined ? 0 : requestTimeoutMs * 2 + 4_000)
 
 const idle = (fn: () => void): void => {
   const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback
@@ -103,9 +133,25 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     state: SdkState
     ready?: Promise<SdkTransport>
     failedAt?: number
+    info?: SdkInfo
   }
   const entries = new Map<NetworkId, Entry>()
   const listeners = new Set<() => void>()
+  const readSettings = deps.settings ?? getSdkSettings
+  /** Runs when the client restarts, so a call waiting on the old worker ends at once instead of at its deadline. */
+  const onRestart = new Set<() => void>()
+  const untilRestart = () => {
+    let drop: () => void = () => undefined
+    const promise = new Promise<never>((_, reject) => {
+      const fail = () => {
+        reject(abortedError('sdk'))
+      }
+      onRestart.add(fail)
+      drop = () => onRestart.delete(fail)
+    })
+    promise.catch(() => undefined)
+    return { promise, drop }
+  }
   const emit = () => {
     for (const cb of [...listeners]) cb()
   }
@@ -124,7 +170,9 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
         message: isDevnet(net) ? 'This devnet is not configured' : 'No SDK for this network',
       })
     }
-    return cfg
+    const settings = readSettings()
+    const quorumUrl = quorumUrlOverride(net, settings)
+    return { ...cfg, ...(quorumUrl ? { quorumUrl } : {}), settings: connectionSettings(settings) }
   }
 
   function ensure(net: NetworkId): Promise<SdkTransport> {
@@ -146,31 +194,38 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     e.state = 'loading'
     emit()
     const started = deps.now()
+    const current = () => entries.get(net) === e
+    const restarted = untilRestart()
     e.ready = (async () => {
       const transport = await deps.transport()
       let info
       try {
-        info = await deadline(
-          transport.connect(configFor(net)),
-          CONNECT_DEADLINE_MS,
-          'The Platform SDK',
-        )
+        info = await Promise.race([
+          deadline(transport.connect(configFor(net)), CONNECT_DEADLINE_MS, 'The Platform SDK'),
+          restarted.promise,
+        ])
       } catch (e) {
         // The worker failed as a whole (never started, died, or never answered): the next try gets a new one.
+        if (e instanceof SourceError && e.kind === 'aborted') throw e
         if (!(e instanceof SourceError && e.source === 'sdk' && e.kind !== 'timeout')) {
           deps.dropTransport?.()
         }
         throw e
       }
+      restarted.drop()
+      if (!current()) throw abortedError('sdk')
       if (info.requests) deps.noteRequests?.(net, info.requests)
       if ('ok' in info) {
         throw toSourceError(info.error)
       }
       deps.health.report(net, 'sdk', { ok: true, latencyMs: deps.now() - started })
+      e.info = { sdkVersion: info.sdkVersion, protocolVersion: info.protocolVersion }
       e.state = 'ready'
       emit()
       return transport
     })().catch((cause: unknown) => {
+      restarted.drop()
+      if (!current()) throw cause instanceof SourceError ? cause : abortedError('sdk')
       e.state = 'failed'
       e.failedAt = deps.now()
       e.ready = undefined
@@ -200,6 +255,8 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
 
     state: (net) => entry(net).state,
 
+    info: (net) => entry(net).info,
+
     async call(net, method, args, signal) {
       if (signal?.aborted) throw abortedError('sdk')
       const started = performance.now()
@@ -207,7 +264,19 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
       try {
         const transport = await ensure(net)
         if (signal?.aborted) throw abortedError('sdk')
-        wire = await deadline(transport.call(net, method, args), CALL_DEADLINE_MS, 'The SDK')
+        const restarted = untilRestart()
+        try {
+          wire = await Promise.race([
+            deadline(
+              transport.call(net, method, args),
+              callDeadlineMs(readSettings().requestTimeoutMs),
+              'The SDK',
+            ),
+            restarted.promise,
+          ])
+        } finally {
+          restarted.drop()
+        }
       } catch (e) {
         if (!(e instanceof SourceError && e.kind === 'aborted')) {
           queryLog.push({
@@ -256,6 +325,7 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
           method,
           args,
           recordedAt: fetchedAt,
+          ...(wire.node ? { node: wire.node } : {}),
           meta,
           proof: wire.proof,
         })
@@ -295,6 +365,15 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     subscribe(cb) {
       listeners.add(cb)
       return () => listeners.delete(cb)
+    },
+
+    restart() {
+      const waiting = [...onRestart]
+      onRestart.clear()
+      entries.clear()
+      deps.dropTransport?.()
+      for (const fail of waiting) fail()
+      emit()
     },
   }
 }
@@ -341,3 +420,12 @@ export const sdk: SdkClient = createSdkClient({
 })
 
 registerSdkReadyProbe((net) => sdk.state(net) === 'ready')
+
+// A changed setting reaches the worker only through a new one: it keeps each connection for the config it was made with.
+let appliedSettings = JSON.stringify(getSdkSettings())
+subscribeSdkSettings(() => {
+  const next = JSON.stringify(getSdkSettings())
+  if (next === appliedSettings) return
+  appliedSettings = next
+  sdk.restart()
+})
