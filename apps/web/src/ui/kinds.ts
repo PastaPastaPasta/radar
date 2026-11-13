@@ -1,7 +1,7 @@
 import { i18n } from '@lingui/core'
 import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
-import type { CoreTxType, TransitionType } from '@/lib/tx-types'
+import type { BatchType, CoreTxType, TransitionType } from '@/lib/tx-types'
 import type { IconName } from './icon-paths'
 import type { EntityKind, Layer } from './types'
 
@@ -32,7 +32,7 @@ export const KIND_META: Record<EntityKind, KindMeta> = {
   contest: { label: msg`Contested name`, layer: 'platform', icon: 'vote' },
 }
 
-export const TYPE_META: Record<CoreTxType | TransitionType, KindMeta> = {
+export const TYPE_META: Record<CoreTxType | TransitionType | BatchType, KindMeta> = {
   transfer: { label: msg`Payment`, layer: 'core', icon: 'tx' },
   coinbase: { label: msg`Coinbase`, layer: 'core', icon: 'coin' },
   'asset-lock': { label: msg`Asset lock`, layer: 'core', icon: 'cl' },
@@ -56,6 +56,100 @@ export const TYPE_META: Record<CoreTxType | TransitionType, KindMeta> = {
   'address-funding-from-asset-lock': { label: msg`Address funding`, layer: 'core', icon: 'cl' },
   'address-credit-withdrawal': { label: msg`Address withdrawal`, layer: 'core', icon: 'up' },
   shielded: { label: msg`Shielded`, layer: 'platform', icon: 'shield' },
+  'identity-credit-transfer-to-address': {
+    label: msg`Transfer to address`,
+    layer: 'platform',
+    icon: 'swap',
+  },
+  'identity-create-from-addresses': {
+    label: msg`Identity create from addresses`,
+    layer: 'platform',
+    icon: 'plus',
+  },
+  'identity-top-up-from-addresses': {
+    label: msg`Identity top-up from addresses`,
+    layer: 'platform',
+    icon: 'plus',
+  },
+  'identity-key-limits-update': { label: msg`Key limits update`, layer: 'platform', icon: 'key' },
+  shield: { label: msg`Shield`, layer: 'platform', icon: 'shield' },
+  'shielded-transfer': { label: msg`Shielded transfer`, layer: 'platform', icon: 'shield' },
+  unshield: { label: msg`Unshield`, layer: 'platform', icon: 'shield' },
+  'shield-from-asset-lock': { label: msg`Shield from asset lock`, layer: 'core', icon: 'shield' },
+  'shield-from-identity': { label: msg`Shield from identity`, layer: 'platform', icon: 'shield' },
+  'shielded-withdrawal': { label: msg`Shielded withdrawal`, layer: 'core', icon: 'shield' },
+  'identity-create-from-shielded-pool': {
+    label: msg`Identity create from pool`,
+    layer: 'platform',
+    icon: 'shield',
+  },
+  'identity-top-up-from-shielded-pool': {
+    label: msg`Identity top-up from pool`,
+    layer: 'platform',
+    icon: 'shield',
+  },
+  'contract-user-moderation': {
+    label: msg`Contract moderation`,
+    layer: 'platform',
+    icon: 'contract',
+  },
+  'contract-fee-claim': { label: msg`Contract fee claim`, layer: 'platform', icon: 'contract' },
+  'token-shielded-transfer-with-shielded-fee': {
+    label: msg`Token shielded transfer`,
+    layer: 'platform',
+    icon: 'token',
+  },
+  'token-unshield-with-shielded-fee': {
+    label: msg`Token unshield`,
+    layer: 'platform',
+    icon: 'token',
+  },
+  'token-purchase-from-shielded-pool': {
+    label: msg`Token purchase from pool`,
+    layer: 'platform',
+    icon: 'token',
+  },
+  'document-create': { label: msg`Document create`, layer: 'platform', icon: 'doc' },
+  'document-replace': { label: msg`Document replace`, layer: 'platform', icon: 'edit' },
+  'document-delete': { label: msg`Document delete`, layer: 'platform', icon: 'x' },
+  'document-transfer': { label: msg`Document transfer`, layer: 'platform', icon: 'swap' },
+  'document-update-price': { label: msg`Document price`, layer: 'platform', icon: 'coin' },
+  'document-purchase': { label: msg`Document purchase`, layer: 'platform', icon: 'coin' },
+  'document-index-only-delete': { label: msg`Document index delete`, layer: 'platform', icon: 'x' },
+  'token-burn': { label: msg`Token burn`, layer: 'platform', icon: 'token' },
+  'token-mint': { label: msg`Token mint`, layer: 'platform', icon: 'token' },
+  'token-transfer': { label: msg`Token transfer`, layer: 'platform', icon: 'swap' },
+  'token-freeze': { label: msg`Token freeze`, layer: 'platform', icon: 'pause' },
+  'token-unfreeze': { label: msg`Token unfreeze`, layer: 'platform', icon: 'play' },
+  'token-destroy-frozen-funds': { label: msg`Destroy frozen funds`, layer: 'platform', icon: 'x' },
+  'token-claim': { label: msg`Token claim`, layer: 'platform', icon: 'token' },
+  'token-emergency-action': {
+    label: msg`Token emergency action`,
+    layer: 'platform',
+    icon: 'alert',
+  },
+  'token-config-update': { label: msg`Token config update`, layer: 'platform', icon: 'edit' },
+  'token-direct-purchase': { label: msg`Token purchase`, layer: 'platform', icon: 'coin' },
+  'token-set-price-for-direct-purchase': {
+    label: msg`Token price`,
+    layer: 'platform',
+    icon: 'coin',
+  },
+  'token-shield': { label: msg`Token shield`, layer: 'platform', icon: 'shield' },
+  'token-mint-to-pool': { label: msg`Token mint to pool`, layer: 'platform', icon: 'shield' },
+  'token-burn-from-pool': { label: msg`Token burn from pool`, layer: 'platform', icon: 'shield' },
+  'token-claim-to-pool': { label: msg`Token claim to pool`, layer: 'platform', icon: 'shield' },
+  'token-direct-purchase-to-pool': {
+    label: msg`Token purchase to pool`,
+    layer: 'platform',
+    icon: 'shield',
+  },
+  'token-unshield': { label: msg`Token unshield`, layer: 'platform', icon: 'shield' },
+  'token-shielded-transfer': {
+    label: msg`Token shielded transfer`,
+    layer: 'platform',
+    icon: 'shield',
+  },
 }
 
 export function typeMeta(type: string): KindMeta {

@@ -22,4 +22,4 @@ export type EntityKind =
 export type AmountUnit = 'DASH' | 'mDASH' | 'uDASH' | 'duffs'
 export type LoadState = 'loading' | 'ready' | 'empty' | 'error'
 
-export type { CoreTxType, TransitionType } from '@/lib/tx-types'
+export type { BatchType, CoreTxType, TransitionType } from '@/lib/tx-types'

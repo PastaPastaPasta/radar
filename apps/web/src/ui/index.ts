@@ -70,6 +70,7 @@ export type { ChartTokens } from './chart-theme'
 export { RADAR_MAP_STYLE } from './map-style'
 export type {
   AmountUnit,
+  BatchType,
   CoreTxType,
   EntityKind,
   Layer,
