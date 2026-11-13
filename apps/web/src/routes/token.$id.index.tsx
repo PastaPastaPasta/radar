@@ -25,5 +25,5 @@ export const Route = createFileRoute('/token/$id/')({
 
 function TokenPageRoute() {
   const { id } = Route.useParams()
-  return <TokenPage id={id} />
+  return <TokenPage id={id} search={Route.useSearch()} />
 }

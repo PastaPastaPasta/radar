@@ -20,5 +20,6 @@ export const Route = createFileRoute('/platform-address/$addr')({
 
 function PlatformAddressPageRoute() {
   const { addr } = Route.useParams()
-  return <PlatformAddressPage addr={addr} />
+  const { page } = Route.useSearch()
+  return <PlatformAddressPage addr={addr} page={page} />
 }
