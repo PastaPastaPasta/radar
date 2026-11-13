@@ -41,7 +41,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/saved',
   '/sdk-reference',
   '/shielded',
-  '/sources',
   '/token/$id',
   '/token/$id/holders',
   '/tokens',

@@ -658,11 +658,11 @@ export const SITE_MAP: SitePage[] = [
     title: msg`Data sources`,
     section: 'tools',
     layer: 'neutral',
-    summary: msg`Where every figure comes from, how each source is checked and what each can’t tell you.`,
-    sources: ['radar', 'pe', 'hyphen', 'dapi', 'sdk'],
+    summary: msg`Every backend Radar can contact, who runs it, and the switch for Decentralized only mode.`,
+    sources: ['local'],
     stories: ['PE-28', 'X-05'],
     nav: true,
-    keywords: ['provenance', 'trust'],
+    keywords: ['provenance', 'trust', 'decentralized', 'backends', 'hosts', 'privacy'],
   }),
 
   page({

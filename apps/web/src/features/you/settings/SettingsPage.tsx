@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState, useSyncExternalStore } from 'react'
 import { rateQueries } from '@/data/rate/queries'
 import { stampOf } from '@/data/envelope'
-import { useDocumentTitle, useNetwork } from '@/features/entity'
+import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
 import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { readUtcPreference } from '@/lib/format'
 import {
@@ -18,7 +18,15 @@ import {
   writeUnitPreference,
   type UnitChoice,
 } from '@/lib/units'
-import { Amount, Card, SegFilter, SourceLine } from '@/ui'
+import {
+  Amount,
+  Card,
+  SegFilter,
+  SourceLine,
+  SourceModeSwitch,
+  Unavailable,
+  useSourceMode,
+} from '@/ui'
 import { DevnetSection, type SettingsDevnets } from './DevnetSection'
 import { writeUtcPreference } from './preferences'
 
@@ -29,11 +37,13 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const net = useNetwork()
   const prefs = useSyncExternalStore(subscribeUnitPrefs, getUnitPrefs, getUnitPrefs)
   const [utc, setUtc] = useState(readUtcPreference)
+  const decentralized = useSourceMode().mode === 'decentralized'
   const mainnet = net === 'mainnet'
-  const usdPrimary = mainnet && prefs.unit === 'USD'
-  const showsRate = mainnet && (prefs.fiat || usdPrimary)
+  const priced = mainnet && !decentralized
+  const usdPrimary = priced && prefs.unit === 'USD'
+  const showsRate = priced && (prefs.fiat || usdPrimary)
   const rate = useQuery({ ...rateQueries.usd(), enabled: showsRate })
-  const unit = prefs.unit === 'USD' && !mainnet ? 'DASH' : prefs.unit
+  const unit = prefs.unit === 'USD' && !priced ? 'DASH' : prefs.unit
   const unitName = unitLabel(denomination(unit))
 
   useDocumentTitle(t`Settings`)
@@ -59,15 +69,18 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               onChange={(next) => writeUnitPreference(next as UnitChoice)}
               options={[
                 ...DISPLAY_UNITS.map((u) => ({ id: u, label: unitLabel(u) })),
-                { id: 'USD', label: 'USD', disabled: !mainnet },
+                { id: 'USD', label: 'USD', disabled: !priced },
               ]}
             />
+            {mainnet && decentralized ? <Unavailable source="rate" compact /> : null}
             <p className="text-[var(--dh-ink-2)]">
               {!mainnet
                 ? t`USD is for mainnet only: test coins have no value.`
                 : usdPrimary
                   ? t`USD comes first, with the DASH figure after it once the rate is in.`
-                  : t`Amounts show in ${unitName}. Choose USD to lead with the dollar value.`}
+                  : decentralized
+                    ? t`Amounts show in ${unitName}.`
+                    : t`Amounts show in ${unitName}. Choose USD to lead with the dollar value.`}
             </p>
             <p className="text-[var(--dh-ink-2)]">
               {t`Example`}: <Amount value={SAMPLE_DUFFS} kind="duffs" fiat />
@@ -79,7 +92,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               <input
                 type="checkbox"
                 checked={prefs.fiat}
-                disabled={usdPrimary}
+                disabled={usdPrimary || (mainnet && decentralized)}
                 onChange={(e) => writeFiatPreference(e.target.checked)}
               />
               {t`Show the USD value next to DASH amounts`}
@@ -118,6 +131,15 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
         <p className="mt-1 text-[var(--dh-ink-2)]">
           {t`Otherwise times follow this device’s time zone. Hovering a time always shows UTC.`}
         </p>
+      </Card>
+
+      <Card id="sources" title={t`Sources`}>
+        <div className="grid gap-2">
+          <SourceModeSwitch />
+          <p>
+            <PageLink to="/sources">{t`See every source`}</PageLink>
+          </p>
+        </div>
       </Card>
 
       <Card id="language" title={t`Language`}>
