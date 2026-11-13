@@ -1,7 +1,5 @@
 // NET-B: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import type { NetworkId } from '@/lib/network'
-import type { PrefetchItem } from '../loader'
-import type { NoParams, RouteSearch } from './types'
+import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface MasternodesSearch extends RouteSearch {
   q?: string | undefined
@@ -18,10 +16,4 @@ export interface MasternodesSearch extends RouteSearch {
   page: number
 }
 
-export function masternodesPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: MasternodesSearch,
-): PrefetchItem[] {
-  return []
-}
+export const masternodesPrefetch: Prefetch<NoParams, MasternodesSearch> = () => []

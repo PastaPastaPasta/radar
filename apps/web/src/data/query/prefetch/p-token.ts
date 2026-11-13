@@ -1,7 +1,5 @@
 // P-TOKEN: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import type { NetworkId } from '@/lib/network'
-import type { PrefetchItem } from '../loader'
-import type { NoParams, RouteSearch } from './types'
+import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface TokensSearch extends RouteSearch {
   page: number
@@ -12,13 +10,7 @@ export interface TokensSearch extends RouteSearch {
   q?: string | undefined
 }
 
-export function tokensPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: TokensSearch,
-): PrefetchItem[] {
-  return []
-}
+export const tokensPrefetch: Prefetch<NoParams, TokensSearch> = () => []
 
 export interface TokenSearch extends RouteSearch {
   tab: 'overview' | 'definition' | 'activity' | 'holders' | 'distribution' | 'balance'
@@ -26,35 +18,17 @@ export interface TokenSearch extends RouteSearch {
   page: number
 }
 
-export function tokenPrefetch(
-  _net: NetworkId,
-  _params: { id: string },
-  _search: TokenSearch,
-): PrefetchItem[] {
-  return []
-}
+export const tokenPrefetch: Prefetch<{ id: string }, TokenSearch> = () => []
 
 export interface TokenHoldersSearch extends RouteSearch {
   ids?: string[] | undefined
   page: number
 }
 
-export function tokenHoldersPrefetch(
-  _net: NetworkId,
-  _params: { id: string },
-  _search: TokenHoldersSearch,
-): PrefetchItem[] {
-  return []
-}
+export const tokenHoldersPrefetch: Prefetch<{ id: string }, TokenHoldersSearch> = () => []
 
 export interface PlatformAddressSearch extends RouteSearch {
   page: number
 }
 
-export function platformAddressPrefetch(
-  _net: NetworkId,
-  _params: { addr: string },
-  _search: PlatformAddressSearch,
-): PrefetchItem[] {
-  return []
-}
+export const platformAddressPrefetch: Prefetch<{ addr: string }, PlatformAddressSearch> = () => []

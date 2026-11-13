@@ -1,9 +1,7 @@
 // P-BLOCKS: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import type { NetworkId } from '@/lib/network'
 import type { NumericRange } from '@/lib/search-schemas'
 import type { TransitionType } from '@/lib/tx-types'
-import type { PrefetchItem } from '../loader'
-import type { NoParams, RouteSearch } from './types'
+import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface PlatformBlocksSearch extends RouteSearch {
   page: number
@@ -18,26 +16,14 @@ export interface PlatformBlocksSearch extends RouteSearch {
   sort: string
 }
 
-export function platformBlocksPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: PlatformBlocksSearch,
-): PrefetchItem[] {
-  return []
-}
+export const platformBlocksPrefetch: Prefetch<NoParams, PlatformBlocksSearch> = () => []
 
 export interface PlatformBlockSearch extends RouteSearch {
   tab: 'transitions' | 'quorum' | 'info'
   page: number
 }
 
-export function platformBlockPrefetch(
-  _net: NetworkId,
-  _params: { id: string },
-  _search: PlatformBlockSearch,
-): PrefetchItem[] {
-  return []
-}
+export const platformBlockPrefetch: Prefetch<{ id: string }, PlatformBlockSearch> = () => []
 
 export interface PlatformTxsSearch extends RouteSearch {
   page: number
@@ -52,22 +38,10 @@ export interface PlatformTxsSearch extends RouteSearch {
   sort: string
 }
 
-export function platformTxsPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: PlatformTxsSearch,
-): PrefetchItem[] {
-  return []
-}
+export const platformTxsPrefetch: Prefetch<NoParams, PlatformTxsSearch> = () => []
 
 export interface PlatformTxSearch extends RouteSearch {
   raw: 'json' | 'hex' | 'base64'
 }
 
-export function platformTxPrefetch(
-  _net: NetworkId,
-  _params: { hash: string },
-  _search: PlatformTxSearch,
-): PrefetchItem[] {
-  return []
-}
+export const platformTxPrefetch: Prefetch<{ hash: string }, PlatformTxSearch> = () => []

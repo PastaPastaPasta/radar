@@ -1,8 +1,6 @@
 // P-DATA: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import type { NetworkId } from '@/lib/network'
 import type { NumericRange, WhereClause } from '@/lib/search-schemas'
-import type { PrefetchItem } from '../loader'
-import type { NoParams, RouteSearch } from './types'
+import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface ContractsSearch extends RouteSearch {
   page: number
@@ -16,13 +14,7 @@ export interface ContractsSearch extends RouteSearch {
   to?: string | undefined
 }
 
-export function contractsPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: ContractsSearch,
-): PrefetchItem[] {
-  return []
-}
+export const contractsPrefetch: Prefetch<NoParams, ContractsSearch> = () => []
 
 export interface ContractSearch extends RouteSearch {
   tab:
@@ -42,13 +34,7 @@ export interface ContractSearch extends RouteSearch {
   path?: string | undefined
 }
 
-export function contractPrefetch(
-  _net: NetworkId,
-  _params: { id: string },
-  _search: ContractSearch,
-): PrefetchItem[] {
-  return []
-}
+export const contractPrefetch: Prefetch<{ id: string }, ContractSearch> = () => []
 
 export interface ContractDocumentsSearch extends RouteSearch {
   where?: WhereClause[] | undefined
@@ -58,46 +44,28 @@ export interface ContractDocumentsSearch extends RouteSearch {
   prev?: string[] | undefined
 }
 
-export function contractDocumentsPrefetch(
-  _net: NetworkId,
-  _params: { id: string; type: string },
-  _search: ContractDocumentsSearch,
-): PrefetchItem[] {
-  return []
-}
+export const contractDocumentsPrefetch: Prefetch<
+  { id: string; type: string },
+  ContractDocumentsSearch
+> = () => []
 
 export interface DocumentSearch extends RouteSearch {
   tab: 'data' | 'meta' | 'revisions' | 'provenance'
   page: number
 }
 
-export function documentPrefetch(
-  _net: NetworkId,
-  _params: { contract: string; type: string; id: string },
-  _search: DocumentSearch,
-): PrefetchItem[] {
-  return []
-}
+export const documentPrefetch: Prefetch<
+  { contract: string; type: string; id: string },
+  DocumentSearch
+> = () => []
 
 export type GroupsSearch = RouteSearch
 
-export function groupsPrefetch(
-  _net: NetworkId,
-  _params: { contract: string },
-  _search: GroupsSearch,
-): PrefetchItem[] {
-  return []
-}
+export const groupsPrefetch: Prefetch<{ contract: string }, GroupsSearch> = () => []
 
 export interface GroupSearch extends RouteSearch {
   tab: 'members' | 'actions'
   status: 'active' | 'closed'
 }
 
-export function groupPrefetch(
-  _net: NetworkId,
-  _params: { contract: string; pos: string },
-  _search: GroupSearch,
-): PrefetchItem[] {
-  return []
-}
+export const groupPrefetch: Prefetch<{ contract: string; pos: string }, GroupSearch> = () => []

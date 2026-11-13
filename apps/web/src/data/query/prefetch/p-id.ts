@@ -1,8 +1,6 @@
 // P-ID: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
-import type { NetworkId } from '@/lib/network'
 import type { NumericRange } from '@/lib/search-schemas'
-import type { PrefetchItem } from '../loader'
-import type { NoParams, RouteSearch } from './types'
+import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface IdentitiesSearch extends RouteSearch {
   page: number
@@ -17,13 +15,7 @@ export interface IdentitiesSearch extends RouteSearch {
   to?: string | undefined
 }
 
-export function identitiesPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: IdentitiesSearch,
-): PrefetchItem[] {
-  return []
-}
+export const identitiesPrefetch: Prefetch<NoParams, IdentitiesSearch> = () => []
 
 export interface IdentitySearch extends RouteSearch {
   tab:
@@ -44,23 +36,11 @@ export interface IdentitySearch extends RouteSearch {
   tokens?: string[] | undefined
 }
 
-export function identityPrefetch(
-  _net: NetworkId,
-  _params: { id: string },
-  _search: IdentitySearch,
-): PrefetchItem[] {
-  return []
-}
+export const identityPrefetch: Prefetch<{ id: string }, IdentitySearch> = () => []
 
 export interface IdentityLookupSearch extends RouteSearch {
   pkh?: string | undefined
   after?: string | undefined
 }
 
-export function identityLookupPrefetch(
-  _net: NetworkId,
-  _params: NoParams,
-  _search: IdentityLookupSearch,
-): PrefetchItem[] {
-  return []
-}
+export const identityLookupPrefetch: Prefetch<NoParams, IdentityLookupSearch> = () => []

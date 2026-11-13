@@ -1,9 +1,24 @@
 import type {
+  ContractFullDto,
+  ContractGroupDto,
+  ContractIndexDto,
+  ContractTokenDto,
+  CurrentQuorumsDto,
+  DocumentDto,
+  DpnsUsernameDto,
   EpochDto,
+  FinalizedEpochDto,
   IdentityDto,
   IdentityKeyDto,
+  IdentityTokenInfoDto,
+  PlatformAddressInfoDto,
   PlatformStatusDto,
   ContractDto,
+  TokenContractInfoDto,
+  TokenStatusDto,
+  VersionUpgradeStateDto,
+  VotePollDto,
+  VotePollsByEndDateDto,
 } from '../methods'
 
 /** A wasm object, as far as these mappers read it. */
@@ -132,3 +147,261 @@ export function chainIdText(bytes: Uint8Array): string {
     ? String.fromCharCode(...bytes)
     : Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
 }
+
+type IdLike = { toString(): string } | string
+
+export interface DocumentLike extends Freeable {
+  id: IdLike
+  ownerId: IdLike
+  dataContractId: IdLike
+  documentTypeName: string
+  revision?: bigint | number | null
+  createdAt?: bigint | number | null
+  updatedAt?: bigint | number | null
+  transferredAt?: bigint | number | null
+  createdAtBlockHeight?: bigint | number | null
+  updatedAtBlockHeight?: bigint | number | null
+  transferredAtBlockHeight?: bigint | number | null
+  createdAtCoreBlockHeight?: number | null
+  updatedAtCoreBlockHeight?: number | null
+  transferredAtCoreBlockHeight?: number | null
+  properties: Record<string, unknown>
+}
+
+const num = (v: bigint | number | null | undefined): number | null =>
+  v === undefined || v === null ? null : Number(v)
+
+export function documentDto(doc: DocumentLike): DocumentDto {
+  return {
+    id: String(doc.id),
+    ownerId: String(doc.ownerId),
+    contractId: String(doc.dataContractId),
+    type: doc.documentTypeName,
+    revision: doc.revision === undefined || doc.revision === null ? null : BigInt(doc.revision),
+    createdAt: num(doc.createdAt),
+    updatedAt: num(doc.updatedAt),
+    transferredAt: num(doc.transferredAt),
+    createdAtBlockHeight: num(doc.createdAtBlockHeight),
+    updatedAtBlockHeight: num(doc.updatedAtBlockHeight),
+    transferredAtBlockHeight: num(doc.transferredAtBlockHeight),
+    createdAtCoreBlockHeight: num(doc.createdAtCoreBlockHeight),
+    updatedAtCoreBlockHeight: num(doc.updatedAtCoreBlockHeight),
+    transferredAtCoreBlockHeight: num(doc.transferredAtCoreBlockHeight),
+    data: { ...doc.properties },
+  }
+}
+
+export interface DpnsUsernameLike extends Freeable {
+  username: string
+  identityId: IdLike
+  documentId: IdLike
+}
+
+export function dpnsUsernameDto(info: DpnsUsernameLike): DpnsUsernameDto {
+  return {
+    username: info.username,
+    identityId: String(info.identityId),
+    documentId: String(info.documentId),
+  }
+}
+
+export interface FullContractLike extends ContractLike {
+  toJSON(): {
+    documentSchemas?: Record<string, unknown>
+    config?: Record<string, unknown>
+    groups?: Record<string, unknown>
+    tokens?: Record<string, unknown>
+  }
+}
+
+function indexDto(raw: unknown): ContractIndexDto | undefined {
+  if (!raw || typeof raw !== 'object') return undefined
+  const o = raw as { name?: unknown; properties?: unknown; unique?: unknown; contested?: unknown }
+  if (typeof o.name !== 'string') return undefined
+  const properties = Array.isArray(o.properties)
+    ? o.properties.flatMap((p: unknown) => {
+        if (!p || typeof p !== 'object') return []
+        const [field, order] = Object.entries(p as Record<string, unknown>)[0] ?? []
+        return field
+          ? [{ field, order: order === 'desc' ? ('desc' as const) : ('asc' as const) }]
+          : []
+      })
+    : []
+  return { name: o.name, properties, unique: o.unique === true, contested: !!o.contested }
+}
+
+function groupDto(position: string, raw: unknown): ContractGroupDto {
+  const o = (raw && typeof raw === 'object' ? raw : {}) as {
+    members?: Record<string, unknown>
+    requiredPower?: unknown
+  }
+  return {
+    position: Number(position),
+    requiredPower: Number(o.requiredPower ?? 0),
+    members: Object.entries(o.members ?? {}).map(([id, power]) => ({ id, power: Number(power) })),
+  }
+}
+
+const byPosition = <T extends { position: number }>(a: T, b: T) => a.position - b.position
+
+export function contractFullDto(contract: FullContractLike): ContractFullDto {
+  const json = contract.toJSON()
+  const schemas = json.documentSchemas ?? {}
+  const config = json.config ?? {}
+  const indices: Record<string, ContractIndexDto[]> = {}
+  for (const [type, schema] of Object.entries(schemas)) {
+    const raw = (schema as { indices?: unknown } | null)?.indices
+    indices[type] = Array.isArray(raw)
+      ? raw.flatMap((i: unknown) => {
+          const dto = indexDto(i)
+          return dto ? [dto] : []
+        })
+      : []
+  }
+  const tokens: ContractTokenDto[] = Object.entries(json.tokens ?? {})
+    .map(([position, cfg]) => ({
+      position: Number(position),
+      config: (cfg && typeof cfg === 'object' ? cfg : {}) as Record<string, unknown>,
+    }))
+    .sort(byPosition)
+  const groups = Object.entries(json.groups ?? {})
+    .map(([position, raw]) => groupDto(position, raw))
+    .sort(byPosition)
+  return {
+    ...contractDto(contract),
+    documentSchemas: schemas,
+    keepsHistory: config.keepsHistory === true,
+    config,
+    indices,
+    tokens,
+    groups,
+  }
+}
+
+export interface TokenContractInfoLike extends Freeable {
+  contractId: IdLike
+  tokenContractPosition: number
+}
+
+export const tokenContractInfoDto = (info: TokenContractInfoLike): TokenContractInfoDto => ({
+  contractId: String(info.contractId),
+  position: info.tokenContractPosition,
+})
+
+export const tokenStatusDto = (status: { isPaused: boolean } & Freeable): TokenStatusDto => ({
+  paused: status.isPaused,
+})
+
+export const identityTokenInfoDto = (
+  info: { isFrozen: boolean } & Freeable,
+): IdentityTokenInfoDto => ({ frozen: info.isFrozen })
+
+export interface FinalizedEpochLike extends Freeable {
+  index?: number
+  firstBlockTime: bigint | number
+  firstBlockHeight: bigint | number
+  firstCoreBlockHeight: number | bigint
+  feeMultiplierPermille: bigint | number
+  protocolVersion: number
+  totalBlocksInEpoch: bigint | number
+  coreBlockRewards: bigint
+  totalProcessingFees: bigint
+  totalDistributedStorageFees: bigint
+  totalCreatedStorageFees: bigint
+  nextEpochStartCoreBlockHeight: number
+  blockProposers: Map<string, bigint>
+}
+
+/** A finalized epoch carries no index of its own: the map key it came under is the index. */
+export function finalizedEpochDto(index: number, epoch: FinalizedEpochLike): FinalizedEpochDto {
+  return {
+    index,
+    firstBlockTimeMs: Number(epoch.firstBlockTime),
+    firstBlockHeight: Number(epoch.firstBlockHeight),
+    firstCoreBlockHeight: Number(epoch.firstCoreBlockHeight),
+    feeMultiplierPermille: Number(epoch.feeMultiplierPermille),
+    protocolVersion: epoch.protocolVersion,
+    totalBlocks: Number(epoch.totalBlocksInEpoch),
+    coreBlockRewards: epoch.coreBlockRewards,
+    totalProcessingFees: epoch.totalProcessingFees,
+    totalDistributedStorageFees: epoch.totalDistributedStorageFees,
+    totalCreatedStorageFees: epoch.totalCreatedStorageFees,
+    nextEpochStartCoreBlockHeight: epoch.nextEpochStartCoreBlockHeight,
+    blockProposers: new Map(epoch.blockProposers),
+  }
+}
+
+export interface VersionUpgradeStateLike extends Freeable {
+  currentProtocolVersion: number
+  nextProtocolVersion?: number | null
+  voteCount?: bigint | number | null
+}
+
+export const versionUpgradeStateDto = (s: VersionUpgradeStateLike): VersionUpgradeStateDto => ({
+  currentProtocolVersion: s.currentProtocolVersion,
+  nextProtocolVersion: s.nextProtocolVersion ?? null,
+  voteCount: s.voteCount === undefined || s.voteCount === null ? null : BigInt(s.voteCount),
+})
+
+export interface CurrentQuorumsLike extends Freeable {
+  height: bigint | number
+  quorums: {
+    quorumHash: string
+    quorumType: string
+    memberCount: number
+    threshold: number
+    isVerified: boolean
+  }[]
+}
+
+export const currentQuorumsDto = (info: CurrentQuorumsLike): CurrentQuorumsDto => ({
+  height: Number(info.height),
+  quorums: info.quorums.map((q) => ({
+    quorumHash: q.quorumHash,
+    quorumType: q.quorumType,
+    memberCount: q.memberCount,
+    threshold: q.threshold,
+    isVerified: q.isVerified,
+  })),
+})
+
+export interface VotePollsEntryLike extends Freeable {
+  timestampMs: bigint | number
+  votePolls: unknown[]
+}
+
+const str = (v: unknown): string => (typeof v === 'string' ? v : '')
+
+function votePollDto(raw: unknown): VotePollDto | undefined {
+  if (!raw || typeof raw !== 'object') return undefined
+  const poll = (
+    typeof (raw as { toJSON?: unknown }).toJSON === 'function'
+      ? (raw as { toJSON(): unknown }).toJSON()
+      : raw
+  ) as Record<string, unknown>
+  return {
+    contractId: str(poll.contractId),
+    documentTypeName: str(poll.documentTypeName),
+    indexName: str(poll.indexName),
+    indexValues: Array.isArray(poll.indexValues) ? [...(poll.indexValues as unknown[])] : [],
+  }
+}
+
+export const votePollsByEndDateDto = (entry: VotePollsEntryLike): VotePollsByEndDateDto => ({
+  timestampMs: Number(entry.timestampMs),
+  polls: entry.votePolls.flatMap((p) => {
+    const dto = votePollDto(p)
+    return dto ? [dto] : []
+  }),
+})
+
+export interface PlatformAddressInfoLike extends Freeable {
+  balance: bigint
+  nonce: bigint | number
+}
+
+/** The address is the one the caller asked about: the SDK keys its answers by it, and the text form needs the network. */
+export const platformAddressInfoDto = (
+  address: string,
+  info: PlatformAddressInfoLike,
+): PlatformAddressInfoDto => ({ address, balance: info.balance, nonce: BigInt(info.nonce) })

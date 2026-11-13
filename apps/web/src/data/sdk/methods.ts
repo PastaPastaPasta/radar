@@ -1,56 +1,38 @@
 import type { NetworkId } from '@/lib/network'
 import type { SourceErrorKind } from '../errors'
+import type { NetCMethods } from './methods/net-c'
+import type { PBlocksMethods } from './methods/p-blocks'
+import type { PChainMethods } from './methods/p-chain'
+import type { PDataMethods } from './methods/p-data'
+import type { PIdMethods } from './methods/p-id'
+import type { PTokenMethods } from './methods/p-token'
+import type { PVoteMethods } from './methods/p-vote'
+import type { SharedMethods } from './methods/shared'
+import type { ToolsMethods } from './methods/tools'
 
-export interface IdentityKeyDto {
-  id: number
-  type: number
-  purpose: number
-  securityLevel: number
-  readOnly: boolean
-  disabledAt?: number
-  data: Uint8Array
+export type * from './methods/shared'
+export type {
+  NetCMethods,
+  PBlocksMethods,
+  PChainMethods,
+  PDataMethods,
+  PIdMethods,
+  PTokenMethods,
+  PVoteMethods,
+  ToolsMethods,
 }
 
-export interface IdentityDto {
-  id: string
-  balance: bigint
-  revision: number
-  keys: IdentityKeyDto[]
-}
-
-export interface ContractDto {
-  id: string
-  ownerId: string
-  version: number
-  documentSchemas: Record<string, unknown>
-}
-
-export interface PlatformStatusDto {
-  chainId: string
-  version: string
-  height: number
-  timeMs: number
-  catchingUp: boolean
-}
-
-export interface EpochDto {
-  index: number
-  firstBlockTimeMs: number
-  firstBlockHeight: number
-  firstCoreBlockHeight: number
-  feeMultiplierPermille: number
-  protocolVersion: number
-}
-
-export interface SdkMethods {
-  'identities.fetch': { args: { id: string }; result: IdentityDto | null }
-  'identities.balances': { args: { ids: string[] }; result: Map<string, bigint | null> }
-  'contracts.getMany': { args: { ids: string[] }; result: Map<string, ContractDto | null> }
-  'system.status': { args: Record<string, never>; result: PlatformStatusDto }
-  'system.totalCredits': { args: Record<string, never>; result: bigint | null }
-  'epoch.current': { args: Record<string, never>; result: EpochDto }
-  // … one entry per facade method in PLAN §3.2; implementers add entries, never rename them
-}
+export interface SdkMethods
+  extends
+    SharedMethods,
+    NetCMethods,
+    PChainMethods,
+    PBlocksMethods,
+    PIdMethods,
+    PDataMethods,
+    PTokenMethods,
+    PVoteMethods,
+    ToolsMethods {}
 export type SdkMethodName = keyof SdkMethods
 
 export interface SdkNetworkConfig {

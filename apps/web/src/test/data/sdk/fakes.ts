@@ -56,15 +56,22 @@ export const fakeIdentity = (id: string, balance = 5n) => ({
   ],
 })
 
-export function fakeReads(over: Partial<SdkReads> = {}): SdkReads {
+type LooseReads = { [K in keyof SdkReads]?: Partial<SdkReads[K]> }
+
+/** A facade with the groups a test names; every other call rejects. */
+export function fakeReads(over: LooseReads = {}): SdkReads {
   const unused = () => Promise.reject(new Error('unused'))
-  return {
+  const base: Record<string, Record<string, unknown>> = {
     identities: { fetchWithProof: unused, balancesWithProof: unused },
     contracts: { getManyWithProof: unused },
     epoch: { currentWithProof: unused },
     system: { status: unused, totalCreditsInPlatformWithProof: unused },
-    ...over,
   }
+  const merged = { ...base }
+  for (const [group, members] of Object.entries(over)) {
+    merged[group] = { ...base[group], ...(members as Record<string, unknown>) }
+  }
+  return merged as unknown as SdkReads
 }
 
 export function fakeHandle(reads: SdkReads, free = () => undefined): SdkHandle {
