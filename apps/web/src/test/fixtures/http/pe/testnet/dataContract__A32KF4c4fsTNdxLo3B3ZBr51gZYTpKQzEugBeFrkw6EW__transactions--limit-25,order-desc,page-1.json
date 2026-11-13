@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/A32KF4c4fsTNdxLo3B3ZBr51gZYTpKQzEugBeFrkw6EW/transactions?limit=25&order=desc&page=1"
+  },
+  "recordedAt": "2026-11-13T13:28:37.145Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "type": "DATA_CONTRACT_UPDATE",
+        "action": null,
+        "owner": {
+          "identifier": "63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY",
+          "aliases": [
+            {
+              "alias": "test-1793109852603-taeo.dash",
+              "status": "ok",
+              "timestamp": "2026-10-27T14:04:16.202Z",
+              "documentId": "XCYTWURg3kPgHefNQ2APLmhrteTuGHQ1egmx55cvhwR",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2026-10-27T14:07:20.124Z",
+        "gasUsed": 12013723890,
+        "error": null,
+        "hash": "603C824B668B5FAF4BC42FDAC8778CCC8C66A80DA438B8CF49A781D120270F04"
+      },
+      {
+        "type": "DATA_CONTRACT_CREATE",
+        "action": null,
+        "owner": {
+          "identifier": "63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY",
+          "aliases": [
+            {
+              "alias": "test-1793109852603-taeo.dash",
+              "status": "ok",
+              "timestamp": "2026-10-27T14:04:16.202Z",
+              "documentId": "XCYTWURg3kPgHefNQ2APLmhrteTuGHQ1egmx55cvhwR",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2026-10-27T14:07:07.883Z",
+        "gasUsed": 12048307120,
+        "error": null,
+        "hash": "0D1822CDFC2D4861B87A0AB178B09AC69DDB932C84FA3DF9D72BF8CFB91F7ECA"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 2 }
+  }
+}

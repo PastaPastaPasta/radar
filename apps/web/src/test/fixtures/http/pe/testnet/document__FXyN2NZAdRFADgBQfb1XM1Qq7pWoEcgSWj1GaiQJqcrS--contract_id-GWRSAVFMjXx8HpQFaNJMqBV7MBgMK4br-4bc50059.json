@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/document/FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS?contract_id=GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec&document_type_name=domain"
+  },
+  "recordedAt": "2026-11-13T13:28:40.298Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "identifier": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS",
+    "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "revision": 1,
+    "txHash": null,
+    "deleted": false,
+    "data": "{\"label\":\"dash\",\"records\":{\"dashAliasIdentityId\":\"11111111111111111111111111111111\"},\"preorderSalt\":\"4LUIxaNoJaIGaTofQUqhPtvs9DxB48eZ6p5ze0+aoiY=\",\"subdomainRules\":{\"allowSubdomains\":true},\"normalizedLabel\":\"dash\",\"parentDomainName\":\"\",\"normalizedParentDomainName\":\"\"}",
+    "timestamp": null,
+    "system": true,
+    "entropy": null,
+    "prefundedVotingBalance": null,
+    "documentTypeName": "domain",
+    "transitionType": "DOCUMENT_CREATE",
+    "identityContractNonce": null,
+    "gasUsed": null,
+    "totalGasUsed": null,
+    "owner": {
+      "identifier": "11111111111111111111111111111111",
+      "aliases": [
+        {
+          "alias": "dash",
+          "status": "ok",
+          "timestamp": "2024-07-19T01:40:09.000Z",
+          "documentId": "FXyN2NZAdRFADgBQfb1XM1Qq7pWoEcgSWj1GaiQJqcrS",
+          "contested": true
+        }
+      ]
+    }
+  }
+}

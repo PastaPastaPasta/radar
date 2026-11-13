@@ -1,0 +1,92 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContract/49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N/transactions?limit=25&order=desc&page=1"
+  },
+  "recordedAt": "2026-11-13T13:28:37.904Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "type": "BATCH",
+        "action": [
+          {
+            "action": "TOKEN_CLAIM",
+            "documentIdentifier": null,
+            "tokenIdentifier": "EETVvWgohFDKtbB3ejEzBcDRMNYkc9TtgXY6y8hzP3Ta",
+            "recipient": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2025-07-14T14:05:42.806Z",
+        "gasUsed": 81070060,
+        "error": null,
+        "hash": "E40B032C14AC2DAA3A493829E629ABB0FF4A441A494643098F6C581C377A2E16"
+      },
+      {
+        "type": "BATCH",
+        "action": [
+          {
+            "action": "TOKEN_MINT",
+            "documentIdentifier": null,
+            "tokenIdentifier": "EETVvWgohFDKtbB3ejEzBcDRMNYkc9TtgXY6y8hzP3Ta",
+            "recipient": null,
+            "price": null,
+            "amount": "100"
+          }
+        ],
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2025-07-14T13:05:29.210Z",
+        "gasUsed": 24220260,
+        "error": null,
+        "hash": "3178D50EB6A3059CE48538532F831CD78017DFBD6C3A259C5A78A355BBCD9D8B"
+      },
+      {
+        "type": "DATA_CONTRACT_CREATE",
+        "action": null,
+        "owner": {
+          "identifier": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+          "aliases": [
+            {
+              "alias": "therealslimshaddy5.dash",
+              "status": "ok",
+              "timestamp": "2025-07-13T07:55:36.840Z",
+              "documentId": "7NYmEKQsYtniQRUmxwdPGeVcirMoPh5ZPyAKz8BWFy3r",
+              "contested": false
+            }
+          ]
+        },
+        "timestamp": "2025-07-14T12:46:52.603Z",
+        "gasUsed": 40131810480,
+        "error": null,
+        "hash": "EE259E7C8AACA5B82AA04B7EF605512638C17286FD2B442D01AE1AD602F40071"
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 3 }
+  }
+}

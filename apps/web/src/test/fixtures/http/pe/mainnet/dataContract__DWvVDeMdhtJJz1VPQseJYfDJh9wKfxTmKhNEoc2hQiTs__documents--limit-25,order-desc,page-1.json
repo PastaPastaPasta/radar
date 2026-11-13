@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/dataContract/DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs/documents?limit=25&order=desc&page=1"
+  },
+  "recordedAt": "2026-11-13T13:28:12.598Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "9ek4kMqGBHZtoBq3QatveYmDXHLjigeq4JsNZ77Qvsgi",
+        "dataContractIdentifier": "DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs",
+        "revision": 1,
+        "txHash": "E84220A5C7516B90D2FC5B8B4F4C1A7CA7F500047FE8BBFDE89039A6E6E30CF1",
+        "deleted": false,
+        "data": "{\"message\":\"Hello World!\"}",
+        "timestamp": "2024-11-05T10:33:53.339Z",
+        "system": false,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": "note",
+        "transitionType": "DOCUMENT_CREATE",
+        "identityContractNonce": null,
+        "gasUsed": null,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "aliases": [
+            {
+              "alias": "20000100.dash",
+              "status": "ok",
+              "timestamp": "2024-10-03T12:05:03.607Z",
+              "documentId": "2wT3ZdPWG5DZvUpy9sCq2YXFVNTVfM3ra5YF99JxzQqD",
+              "contested": false
+            }
+          ]
+        }
+      }
+    ],
+    "pagination": { "page": 1, "limit": 25, "total": 1 }
+  }
+}
