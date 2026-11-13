@@ -1,3 +1,4 @@
+import { expectAccessible } from '../helpers/a11y'
 import type { Page } from '@playwright/test'
 import { settled } from '../helpers/settled'
 import { tabBarHeight } from '../helpers/contrast'
@@ -247,4 +248,41 @@ test.describe('section rail', () => {
     expect(info.start === 'true' || info.end === 'true').toBe(true)
     expect(info.mask).not.toBe('none')
   })
+
+  for (const width of [320, 390, 430]) {
+    test(`fits the rail or shows a chevron where it scrolls, at ${width} px @HY-18`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('/blocks')
+      const rail = page.locator('nav[data-section-nav="core"]')
+      await expect(rail).toBeVisible()
+      const governance = page.getByRole('link', { name: 'Governance', exact: true }).first()
+      const inside = () =>
+        governance.evaluate((el) => {
+          const a = el.getBoundingClientRect()
+          const r = el.closest('nav')!.getBoundingClientRect()
+          return a.left >= r.left - 1 && a.right <= r.right - 1
+        })
+      const overflows = await rail.evaluate((el) => el.scrollWidth > el.clientWidth + 1)
+      const endHint = page.locator('[data-rail-hint="end"]')
+      const startHint = page.locator('[data-rail-hint="start"]')
+      if (!overflows) {
+        expect(await inside(), 'every label fits').toBe(true)
+        await expect(endHint).toBeHidden()
+        return
+      }
+      expect(await inside(), 'the last label is cut').toBe(false)
+      await expect(endHint, 'a chevron says there is more').toBeVisible()
+      const box = await endHint.boundingBox()
+      const railBox = await rail.boundingBox()
+      expect(box!.x + box!.width).toBeLessThanOrEqual(railBox!.x + railBox!.width + 1)
+      await rail.evaluate((el) => (el.scrollLeft = el.scrollWidth))
+      await expect(endHint).toBeHidden()
+      await expect(startHint).toBeVisible()
+      expect(await inside(), 'scrolling reaches the last label').toBe(true)
+      await expectAccessible(page)
+    })
+  }
 })

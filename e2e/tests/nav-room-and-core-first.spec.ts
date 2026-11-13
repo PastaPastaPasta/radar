@@ -103,7 +103,7 @@ test.describe('section rail room on phones', () => {
     })
   }
 
-  test('shows Blocks, Mempool, Rich list, Charts and part of Governance at 390 px @HY-18', async ({
+  test('shows Blocks, Mempool, Rich list, Charts and Governance at 390 px @HY-18', async ({
     page,
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')

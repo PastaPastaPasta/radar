@@ -938,6 +938,7 @@ button.rx-srcline:hover {
   display: none;
 }
 .rx-secrail {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -966,6 +967,31 @@ button.rx-srcline:hover {
 }
 .rx-secrail > nav[data-more-end='true'] {
   --fade-end: 36px;
+}
+/* The fade alone reads as a clipped label; a chevron on each edge that has more links says the rail scrolls. */
+.rx-secrail__hint {
+  position: absolute;
+  inset-block: 0;
+  display: none;
+  align-items: center;
+  color: var(--dh-brand-ink);
+  pointer-events: none;
+}
+.rx-secrail__hint--start {
+  inset-inline-start: 0;
+}
+.rx-secrail__hint--start .rx-ico {
+  transform: rotate(90deg);
+}
+.rx-secrail__hint--end {
+  inset-inline-end: 0;
+}
+.rx-secrail__hint--end .rx-ico {
+  transform: rotate(-90deg);
+}
+.rx-secrail > nav[data-more-start='true'] ~ .rx-secrail__hint--start,
+.rx-secrail > nav[data-more-end='true'] ~ .rx-secrail__hint--end {
+  display: flex;
 }
 @media (max-width: 640px) {
   .rx-unit--bar {
@@ -1002,5 +1028,15 @@ button.rx-srcline:hover {
   }
   .rx-unit--rail select:focus-visible {
     outline: none;
+  }
+}
+
+/* Block page: copy controls stay out of the way until the row or value is hovered or focused; touch screens keep them. The hero's hash is the page's own identifier and keeps its control. */
+@media (hover: hover) and (pointer: fine) {
+  [data-quiet-copy] .rx-copy:not(.rx-rec__meta .rx-copy):not(:focus-visible) {
+    opacity: 0;
+  }
+  [data-quiet-copy] :is(tr, .rx-kv, .rx-hash):is(:hover, :focus-within) .rx-copy {
+    opacity: 1;
   }
 }

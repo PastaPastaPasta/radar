@@ -9,6 +9,7 @@ import {
   pagesInSection,
   sectionOfPath,
 } from '@/features/search'
+import { Icon } from '@/ui'
 import { UnitSwitch } from './UnitSwitch'
 
 /** Marks which edges of the rail have more links beyond them, so the stylesheet can fade exactly those. */
@@ -61,7 +62,7 @@ export function SectionNav() {
           data-section-nav={section}
           onScroll={update}
         >
-          <ul className="flex gap-x-5 gap-y-1 whitespace-nowrap">
+          <ul className="flex gap-x-4 gap-y-1 whitespace-nowrap sm:gap-x-5">
             {pages.map((p) => (
               <li key={p.path}>
                 <PageLink
@@ -75,6 +76,20 @@ export function SectionNav() {
             ))}
           </ul>
         </nav>
+        <span
+          className="rx-secrail__hint rx-secrail__hint--start"
+          aria-hidden="true"
+          data-rail-hint="start"
+        >
+          <Icon name="chevron" size="sm" />
+        </span>
+        <span
+          className="rx-secrail__hint rx-secrail__hint--end"
+          aria-hidden="true"
+          data-rail-hint="end"
+        >
+          <Icon name="chevron" size="sm" />
+        </span>
       </div>
       <UnitSwitch className="rx-unit--rail" />
     </>
