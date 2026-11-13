@@ -19,7 +19,7 @@ import {
 } from '@/data/query/prefetch/p-vote'
 import type { ContestVoteStateDto } from '@/data/sdk/methods/p-vote'
 import { sdkQueries } from '@/data/sdk/queries'
-import { IdentityRef, PageFrame, PageLink, useNetwork } from '@/features/entity'
+import { Entity, IdentityRef, PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
   Amount,
@@ -59,7 +59,7 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
   const { t, i18n } = useLingui()
   const net = useNetwork()
   const decentralized = useDecentralizedOnly()
-  const ref = contestRef(decodeURIComponent(label), search)
+  const ref = contestRef(label, search)
   const state = useQuery(
     sdkQueries['voting.contestedResourceVoteState'](net, contestVoteStateArgs(ref)),
   )
@@ -313,7 +313,7 @@ function VotersCard({
       {
         id: 'voter',
         header: t`Voter`,
-        cell: ({ row }) => <IdentityRef id={row.original.id} />,
+        cell: ({ row }) => <Entity kind="identity" id={row.original.id} identicon />,
         enableSorting: false,
         meta: { phone: 'title' },
       },
@@ -431,7 +431,7 @@ function VotesTab({
       {
         id: 'voter',
         header: t`Voter`,
-        cell: ({ row }) => <IdentityRef id={row.original.voterIdentifier} />,
+        cell: ({ row }) => <Entity kind="identity" id={row.original.voterIdentifier} identicon />,
         enableSorting: false,
         meta: { phone: 'title' },
       },

@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import {
   customPollsArgs,
@@ -16,7 +16,7 @@ import type { VotePollDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, DataTable, DateRangeFilter, Empty, SegFilter, TableTools, Time, useNow } from '@/ui'
+import { Card, DataTable, DateRangeFilter, Empty, SegFilter, TableTools, Time } from '@/ui'
 import { loadState } from '../contest/shared'
 
 export type PollRange = '24h' | '7d' | '30d' | '90d' | 'upcoming' | 'custom'
@@ -51,7 +51,7 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
-  const now = useNow(false)
+  const [now] = useState(() => Date.now())
   const custom = search.range === 'custom'
   const polls = useQuery(
     sdkQueries['voting.votePollsByEndDate'](

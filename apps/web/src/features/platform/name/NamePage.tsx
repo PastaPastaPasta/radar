@@ -20,7 +20,7 @@ import { Badge, Card, Empty, JsonView, KeyValue, LinkOut, Time } from '@/ui'
 
 export function NamePage({ label: raw }: { label: string }) {
   const { t } = useLingui()
-  const label = labelOf(decodeURIComponent(raw))
+  const label = labelOf(raw)
   const problem = labelProblem(label)
   return (
     <PageFrame
@@ -59,8 +59,8 @@ function Invalid({ label, problem }: { label: string; problem: LabelProblem }) {
   const why = useProblemText()
   return (
     <Card layer="platform" id="name-status" title={t`Status`}>
-      <p>
-        <Badge tone="danger" data-status="invalid">
+      <p data-status="invalid">
+        <Badge tone="danger">
           {t`Invalid`}
         </Badge>
       </p>
@@ -89,7 +89,7 @@ function NameStatus({ label }: { label: string }) {
       index: ref.index,
       indexValues: ref.indexValues,
     }),
-    enabled: contestedRule && owner.isSuccess,
+    enabled: contestedRule && owner.isSuccess && !registered,
   })
   const state = contest.data?.data
   const inContest =
@@ -151,8 +151,8 @@ function Available({ label, contestedRule }: { label: string; contestedRule: boo
   const { t } = useLingui()
   return (
     <>
-      <p>
-        <Badge tone="success" data-status="available">
+      <p data-status="available">
+        <Badge tone="success">
           {t`Available`}
         </Badge>
       </p>
@@ -182,8 +182,8 @@ function Contested({
   const decided = state.winner !== null
   return (
     <>
-      <p>
-        <Badge tone="warning" data-status="contested">
+      <p data-status="contested">
+        <Badge tone="warning">
           {decided
             ? state.winner?.kind === 'locked'
               ? t`Contested: locked`
@@ -253,8 +253,8 @@ function Registered({
   const records = d?.data.records
   return (
     <>
-      <p>
-        <Badge tone="info" data-status="registered">
+      <p data-status="registered">
+        <Badge tone="info">
           {t`Registered`}
         </Badge>
       </p>

@@ -7,7 +7,7 @@ import { stampOf } from '@/data/envelope'
 import { namesDocsArgs, NAMES_PAGE, normalizeLabel } from '@/data/query/prefetch/p-vote'
 import type { DocumentDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { Card, DataTable, Empty, Time } from '@/ui'
 import { loadState } from '../contest/shared'
 
@@ -62,7 +62,7 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
       {
         id: 'owner',
         header: t`Owner`,
-        cell: ({ row }) => <IdentityRef id={row.original.ownerId} />,
+        cell: ({ row }) => <Entity kind="identity" id={row.original.ownerId} identicon />,
         enableSorting: false,
         meta: { phone: 'primary' },
       },
