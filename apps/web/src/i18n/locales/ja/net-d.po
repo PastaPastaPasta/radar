@@ -12,3 +12,457 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: stats.missing
+msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
+msgstr "{0, plural, other {マスターノード #件はマップに表示されていません。アドレスが未登録か、まだクロールされていません。}}"
+
+#. placeholder {0}: totals.unlocated
+msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
+msgstr "{0, plural, other {Tor または I2P 上の到達可能なノード #件は位置情報がないため、描画されません。}}"
+
+#. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
+msgid "{0} blocks ago"
+msgstr "{0} ブロック前"
+
+#. placeholder {0}: nodeCount(totals.nodes)
+#. placeholder {1}: formatInt(totals.places)
+#. placeholder {2}: formatInt(totals.masternodes)
+msgid "{0} in {1} places; {2} are masternodes."
+msgstr "{1} か所に {0}。うち {2} はマスターノードです。"
+
+#. placeholder {0}: formatInt(places.size)
+msgid "{0} places nearby"
+msgstr "近くの {0} か所"
+
+#. placeholder {0}: formatInt(nodes)
+#. placeholder {1}: formatInt(masternodes)
+#. placeholder {2}: formatInt(nodes - masternodes)
+msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
+msgstr "{0} 個の到達可能なノード：マスターノード {1}、その他のフルノード {2}。"
+
+#. placeholder {0}: chosen.length
+msgid "{0} selected"
+msgstr "{0} を選択中"
+
+#. placeholder {0}: nodeCount(nodes)
+#. placeholder {1}: formatInt(masternodes)
+msgid "{0}, {1} of them masternodes"
+msgstr "{0}（うちマスターノード {1}）"
+
+#. placeholder {0}: mnCount(rows.length)
+#. placeholder {1}: formatInt(reachable)
+msgid "{0}, {1} reachable."
+msgstr "{0}（到達可能 {1}）。"
+
+#. placeholder {0}: mnCount(total)
+msgid "{0}: {list}"
+msgstr "{0}：{list}"
+
+msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
+msgstr "直近のクロールでは {total} 件中 {answered} 件が応答しました（有効 {enabled} 件中 {enabledAnswered} 件、PoSe で停止 {banned} 件中 {bannedAnswered} 件）。"
+
+msgid "{answered} of {total} answered the latest crawl."
+msgstr "直近のクロールでは {total} 件中 {answered} 件が応答しました。"
+
+#. placeholder {0}: value(c.old)
+msgid "{label} (was at {0})"
+msgstr "{label}（以前は {0}）"
+
+#. placeholder {0}: value(c.new)
+msgid "{label} at {0}"
+msgstr "{label}（{0}）"
+
+msgid "{n, plural, one {# masternode} other {# masternodes}}"
+msgstr "{n, plural, other {マスターノード #件}}"
+
+msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{n, plural, other {到達可能なノード #件}}"
+
+msgid "← Back to the list"
+msgstr "← リストに戻る"
+
+msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
+msgstr "すべてのネットワークのデータが新しく保存されている間は 200、そうでなければ問題点を添えた 503 を返します。稼働監視用です。"
+
+msgid "A summary of the speed tests from each vantage point."
+msgstr "各観測拠点からの速度テストの要約です。"
+
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
+msgstr "1 つの分布の時系列です。days は 1、7、14、30、90、365 のいずれか、top は 1〜20 です。dim=totals ではノード数を返します。"
+
+msgid "Address"
+msgstr "アドレス"
+
+msgid "Address changes"
+msgstr "アドレスの変更"
+
+msgid "Addresses of nodes that aren't masternodes are never published, only counted."
+msgstr "マスターノード以外のノードのアドレスは公開されず、数だけが集計されます。"
+
+msgid "All nodes"
+msgstr "すべてのノード"
+
+msgid "All nodes (soon)"
+msgstr "すべてのノード（近日対応）"
+
+msgid "Any country"
+msgstr "すべての国"
+
+msgid "Any DKG readiness"
+msgstr "すべての DKG 準備状況"
+
+msgid "Any hosting"
+msgstr "すべてのホスティング"
+
+msgid "Any type"
+msgstr "すべての種類"
+
+msgid "Any version"
+msgstr "すべてのバージョン"
+
+msgid "Back in the list"
+msgstr "リストに復帰"
+
+#. placeholder {0}: formatInt(Number(height))
+msgid "Banned at block {0}"
+msgstr "ブロック {0} で BAN"
+
+msgid "Block"
+msgstr "ブロック"
+
+#. placeholder {0}: formatInt(c.last_paid_height)
+msgid "block {0}"
+msgstr "ブロック {0}"
+
+msgid "Both networks"
+msgstr "両方のネットワーク"
+
+msgid "Change"
+msgstr "おつり"
+
+msgid "Changes"
+msgstr "変更"
+
+msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
+msgstr "登録アドレスへの P2P ハンドシェイクで、マスターノードをその場で確認します。1 クライアントにつき毎分 5 回まで。1 分以内の結果はそのまま再利用されます。"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Colour"
+msgstr "色"
+
+msgid "Colour by"
+msgstr "色分けの基準"
+
+msgid "Copy command"
+msgstr "コマンドをコピー"
+
+msgid "Copy link to {title}"
+msgstr "{title} へのリンクをコピー"
+
+msgid "Copy URL of {title}"
+msgstr "{title} の URL をコピー"
+
+msgid "Core P2P address"
+msgstr "Core P2P アドレス"
+
+msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
+msgstr "Core の version-bits デプロイ（Dash Core 24 と evo_shares）：状態、ウィンドウ、シグナル、見通し。"
+
+msgid "Couldn't load the masternode list."
+msgstr "マスターノードのリストを読み込めませんでした。"
+
+msgid "Country"
+msgstr "国"
+
+msgid "Counts follow the filters and the shown categories."
+msgstr "件数はフィルターと表示中のカテゴリーに連動します。"
+
+msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
+msgstr "GitHub で公開されている Dash Core のリリースを新しい順に、1 時間ごとに更新して返します。"
+
+msgid "DKG readiness"
+msgstr "DKG の準備状況"
+
+msgid "Enabled"
+msgstr "有効"
+
+msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
+msgstr "クローラーは 15 分ごとに、登録済みの全マスターノードのアドレス、過去 1 週間に応答した全ノード、当社の Dash ノードや他のノードから知った新しいアドレスへ P2P 接続を開き、バージョンのハンドシェイクを完了して切断します。トランザクションは中継せず、ノードが通知する内容だけを保持します。"
+
+msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
+msgstr "登録済みの全マスターノードについて、最新のポート確認、ユーザーエージェント、位置、ホスティング、稼働率、DKG の準備状況を返します。マップはこれをもとに描画されます。"
+
+msgid "Everything"
+msgstr "すべて"
+
+msgid "Everything Radar shows comes from these JSON endpoints. No key is needed, CORS is open and responses are cached for 60 seconds."
+msgstr "Radar に表示されるものはすべて、これらの JSON エンドポイントから取得しています。キーは不要で、CORS は開放されており、レスポンスは 60 秒キャッシュされます。"
+
+msgid "Evo"
+msgstr "Evo"
+
+msgid "Evonodes"
+msgstr "Evonode"
+
+msgid "Evonodes' Platform rewards in credits: the current epoch, the protocol upgrade vote, returns, up to 120 epochs, who proposes next and every evonode."
+msgstr "Evonode の Platform 報酬（クレジット単位）：現在のエポック、プロトコルアップグレードの投票、利回り、最大 120 エポック、次の提案者、全 Evonode。"
+
+msgid "Examples"
+msgstr "例"
+
+msgid "Filters"
+msgstr "フィルター"
+
+#. placeholder {0}: label(k)
+msgid "Hide {0}"
+msgstr "{0} を非表示"
+
+msgid "Hosting"
+msgstr "ホスティング"
+
+msgid "How the data is collected"
+msgstr "データの収集方法"
+
+msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
+msgstr "パス中の {NET} は mainnet または testnet です。金額は duff 単位（1 DASH = 100,000,000 duff）で、Platform の金額のみクレジット単位（1 DASH = 100,000,000,000 クレジット）です。時刻は Unix 秒です。"
+
+msgid "Kind of change"
+msgstr "変更の種類"
+
+msgid "Last paid"
+msgstr "最終支払い"
+
+msgid "Latest masternode list changes"
+msgstr "マスターノードリストの最新の変更"
+
+msgid "Left the list"
+msgstr "リストから外れた"
+
+msgid "Link copied"
+msgstr "リンクをコピーしました"
+
+msgid "Loading the network…"
+msgstr "ネットワークを読み込み中…"
+
+msgid "Location"
+msgstr "所在地"
+
+msgid "Map"
+msgstr "マップ"
+
+msgid "Map attribution"
+msgstr "マップのクレジット"
+
+msgid "Map controls"
+msgstr "マップ操作"
+
+msgid "Map of the network's nodes"
+msgstr "ネットワークのノードのマップ"
+
+msgid "Masternode"
+msgstr "マスターノード"
+
+msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
+msgstr "マスターノードリストの変更は、Radar によるメインネットとテストネットのクロールから取得しています。"
+
+msgid "Masternode list changes need Radar's crawl"
+msgstr "マスターノードリストの変更には Radar のクロールが必要です"
+
+msgid "Masternode registrations and payments come from our own Dash node. Platform data comes from evonodes' DAPI, each answer confirmed by a second evonode. Reachability is measured from one vantage point, so a node that blocks or rate-limits the crawler shows as unreachable even when others can reach it."
+msgstr "マスターノードの登録と支払いは、当社の Dash ノードから取得しています。Platform のデータは Evonode の DAPI から取得し、各応答は別の Evonode で確認します。到達性は 1 か所の観測点から測定するため、クローラーをブロックまたは制限するノードは、他からは到達できても到達不可と表示されます。"
+
+msgid "Masternodes"
+msgstr "マスターノード"
+
+msgid "Network"
+msgstr "ネットワーク"
+
+msgid "never"
+msgstr "なし"
+
+msgid "No changes of this kind lately."
+msgstr "最近、この種類の変更はありません。"
+
+msgid "No changes recorded yet."
+msgstr "まだ変更は記録されていません。"
+
+msgid "Not checked"
+msgstr "未確認"
+
+msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
+msgstr "あるマスターノードの過去の支払いを新しい順に返します。最後に受け取った高さを before に指定してページを送ります。"
+
+msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
+msgstr "1 つのマスターノードについて、リストのエントリ、担保、キー、アドレス、バージョン履歴、稼働率、支払い、利回り、変更、Evonode の場合は Platform 報酬を返します。"
+
+msgid "One masternode's speed-test runs from each vantage point, with its rank and combined grade."
+msgstr "1 つのマスターノードの、各観測拠点からの速度テストの実行結果と、順位および総合評価です。"
+
+msgid "Open masternode"
+msgstr "マスターノードを開く"
+
+msgid "Open these as a list"
+msgstr "リストとして開く"
+
+msgid "Operator key"
+msgstr "オペレーター鍵"
+
+msgid "Operator payout address"
+msgstr "オペレーターへの支払先アドレス"
+
+msgid "Operator reward"
+msgstr "オペレーター報酬"
+
+msgid "Other full nodes"
+msgstr "その他のフルノード"
+
+msgid "Other versions"
+msgstr "その他のバージョン"
+
+msgid "Owner address"
+msgstr "オーナーアドレス"
+
+msgid "Payout address"
+msgstr "支払先アドレス"
+
+msgid "Payout and key changes"
+msgstr "支払いとキーの変更"
+
+msgid "Per network"
+msgstr "ネットワークごと"
+
+msgid "Places on the map"
+msgstr "マップ上の場所"
+
+msgid "Platform HTTPS address"
+msgstr "Platform HTTPS アドレス"
+
+msgid "Platform node ID"
+msgstr "Platform ノード ID"
+
+msgid "Platform P2P address"
+msgstr "Platform P2P アドレス"
+
+msgid "PoSe"
+msgstr "PoSe"
+
+msgid "PoSe bans and revivals"
+msgstr "PoSe による停止と復活"
+
+msgid "PoSe status"
+msgstr "PoSe ステータス"
+
+msgid "PoSe-banned"
+msgstr "PoSe で停止"
+
+msgid "Radar API"
+msgstr "Radar API"
+
+msgid "Radar doesn't crawl devnets."
+msgstr "Radar は devnet をクロールしません。"
+
+msgid "Reachability"
+msgstr "到達性"
+
+msgid "Reachable"
+msgstr "到達可能"
+
+msgid "Reachable nodes counted per city, never by address, and how many have no location."
+msgstr "到達可能なノードを市区町村ごとに集計します（アドレス単位では集計しません）。位置情報のないノード数も含みます。"
+
+msgid "Registered"
+msgstr "登録"
+
+msgid "Registrations and removals"
+msgstr "登録と削除"
+
+msgid "Same location"
+msgstr "同じ場所"
+
+msgid "Search masternodes"
+msgstr "マスターノードを検索"
+
+msgid "Search ProTx, IP, city, hosting"
+msgstr "ProTx、IP、都市、ホスティングを検索"
+
+msgid "Show"
+msgstr "表示"
+
+#. placeholder {0}: label(k)
+msgid "Show {0}"
+msgstr "{0} を表示"
+
+msgid "Show or hide categories"
+msgstr "カテゴリーの表示/非表示"
+
+msgid "The 300 latest masternode list changes, newest first, and when recording started."
+msgstr "マスターノードリストの直近 300 件の変更を新しい順に返し、記録の開始時刻も含みます。"
+
+msgid "The API itself is a hosted service, so this page only describes it while Decentralized only mode is on."
+msgstr "API 自体はホスト型サービスのため、「分散型のみ」モードがオンの間、このページは説明のみを表示します。"
+
+msgid "The API URLs are unchanged: https://radar.dashhq.org/api/v1/* returns the same documents as before."
+msgstr "API の URL は変わりません。https://radar.dashhq.org/api/v1/* はこれまでと同じドキュメントを返します。"
+
+msgid "The block hashes the speed tests use."
+msgstr "速度テストで使用するブロックハッシュです。"
+
+msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
+msgstr "ネットワークごとのクローラーとチェーンの状態：最新のクロール、当社 Dash ノードの同期状況、支払いインデックスの範囲。"
+
+msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
+msgstr "マスターノード登録の最新の変更を新しい順に返します：新規・削除されたマスターノード、PoSe による停止と復活、変更されたアドレスやキー。"
+
+msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
+msgstr "直近に完了したクロールとその 1 日前のクロール、および全ての分布（dists[scope][dim]）を、利回り、Platform の状態、DKG の準備状況とともに返します。"
+
+msgid "The map could not start in this browser. The filters and the list still work."
+msgstr "このブラウザーではマップを起動できませんでした。フィルターとリストは引き続き使えます。"
+
+msgid "The map is drawn from Radar's crawl of mainnet and testnet."
+msgstr "マップは、Radar によるメインネットとテストネットのクロールをもとに描画されます。"
+
+msgid "The map needs Radar's crawl"
+msgstr "マップには Radar のクロールが必要です"
+
+msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
+msgstr "サイトと API は、クローラーが各クロール後に公開するドキュメントから配信されるため、クローラーが停止していても稼働し続けます。"
+
+msgid "This area"
+msgstr "このエリア"
+
+msgid "Tools"
+msgstr "ツール"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Unknown version"
+msgstr "不明なバージョン"
+
+msgid "Unreachable"
+msgstr "到達不可"
+
+msgid "Uptime, 7 days"
+msgstr "稼働率（7 日間）"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Voting address"
+msgstr "投票アドレス"
+
+msgid "When"
+msgstr "日時"
+
+msgid "Where the masternodes run, coloured by reachability, version or type."
+msgstr "マスターノードが稼働している場所を、到達性・バージョン・種類で色分けして表示します。"
+
+msgid "Zoom in"
+msgstr "ズームイン"
+
+msgid "Zoom out"
+msgstr "ズームアウト"
