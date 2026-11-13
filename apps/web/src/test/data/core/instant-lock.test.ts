@@ -159,7 +159,7 @@ function withoutChainLocks(locks: { locked: boolean }, confirmations: number): D
 }
 
 describe('a network without ChainLocks keeps locks for the node’s keep depth @IN-05 @DATA-02', () => {
-  const run = async (confirmations: number) => {
+  const run = async (confirmations: number, laterConfirmations = confirmations) => {
     const txid = await (async () => {
       const manifest = await loadDapiManifest('mainnet')
       return manifest.entries.find((e) => e.id === 'tx-normal-multi')!.txid!
@@ -169,20 +169,31 @@ describe('a network without ChainLocks keeps locks for the node’s keep depth @
     const first = (
       await clientOver(withoutChainLocks(locks, confirmations), cache).tx('mainnet', txid)
     ).data!
+    const cached = await cache.getTx('mainnet', txid)
     locks.locked = false
     const later = (
-      await clientOver(withoutChainLocks(locks, confirmations), cache).tx('mainnet', txid)
+      await clientOver(withoutChainLocks(locks, laterConfirmations), cache).tx('mainnet', txid)
     ).data!
-    return { first, later, cached: await cache.getTx('mainnet', txid) }
+    return { first, later, cached }
   }
 
-  it('does not persist or apply a remembered lock for a transaction above the keep depth', async () => {
+  it('remembers a lock above the keep depth but does not apply it while the node’s answer is live', async () => {
     const { first, later, cached } = await run(5)
     expect(first.instantLockKeepDepth).toBe(24)
     expect(instantLockView(first)).toMatchObject({ state: 'claimed', historical: false })
-    expect(cached?.instantLock).toBeUndefined()
-    expect(later.instantLockRemembered).toBeUndefined()
+    expect(cached).toMatchObject({ instantLock: true })
+    expect(later.instantLockRemembered).toBe(true)
     expect(instantLockView(later)).toMatchObject({ state: 'none', historical: false })
+  })
+
+  it('applies a lock seen while shallow once the transaction is deep enough to be pruned', async () => {
+    const { later } = await run(5, 30)
+    expect(later.instantLockRemembered).toBe(true)
+    expect(instantLockView(later)).toMatchObject({
+      state: 'claimed',
+      historical: true,
+      sources: ['dapi'],
+    })
   })
 
   it('persists and applies it once the transaction is that deep', async () => {

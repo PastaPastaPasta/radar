@@ -600,7 +600,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     node?: string
   }
 
-  /** A lock a DAPI node reported for a historical transaction stays visible if the next node has already dropped it. */
+  /** Locks DAPI nodes have reported this session, so one a later node has already pruned stays visible. */
   const seenLocks = new Set<string>()
 
   async function dapiTx(
@@ -670,15 +670,14 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const lock = mined ? await lockStatus(net, m.height, o.signal, o.priority) : 'none'
     const keepDepth =
       mined && lock === 'none' && lockView(net).claimed < 0 ? instantLockKeepDepth(net) : undefined
-    const historical =
-      mined && (lock !== 'none' || (keepDepth !== undefined && m.confirmations >= keepDepth))
-    const lockKept = historical && m.isInstantLocked
-    if (lockKept) seenLocks.add(`${net}:${txid}`)
+    // Remember every lock a node reports, pending or mined: Core may prune it before the transaction is historical.
+    // The view applies a remembered lock only once the transaction is historical, so it never overrides a live answer.
+    if (m.isInstantLocked) seenLocks.add(`${net}:${txid}`)
     if (cache && mined) {
       void cache.putTx(net, {
         txid: tx.txid,
         bytes: m.transaction,
-        ...(lockKept ? { instantLock: true as const, instantLockAt: deps.now() } : {}),
+        ...(m.isInstantLocked ? { instantLock: true as const, instantLockAt: deps.now() } : {}),
       })
     }
     return {
