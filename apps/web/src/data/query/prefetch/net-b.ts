@@ -1,4 +1,6 @@
 // NET-B: what each route reads before its page renders (ARCHITECTURE §6.3, §11.5). Loaded on demand by the route's loader.
+import { radarQueries } from '../../radar/queries'
+import { prefetchItem } from '../loader'
 import type { NoParams, Prefetch, RouteSearch } from './types'
 
 export interface MasternodesSearch extends RouteSearch {
@@ -16,4 +18,11 @@ export interface MasternodesSearch extends RouteSearch {
   page: number
 }
 
-export const masternodesPrefetch: Prefetch<NoParams, MasternodesSearch> = () => []
+export const masternodesPrefetch: Prefetch<NoParams, MasternodesSearch> = (
+  net,
+  _params,
+  search,
+) => [
+  prefetchItem('http', radarQueries.masternodes(net), { wait: true }),
+  ...(search.view === 'platform' ? [prefetchItem('http', radarQueries.platform(net))] : []),
+]
