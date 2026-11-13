@@ -29,6 +29,15 @@ describe('parseDevnetForm', () => {
     expect(parseDevnetForm({ ...ok, ...patch }, { checkName: true })).toEqual({ error })
   })
 
+  it('refuses a name that is already saved, however it is written @NX-75', () => {
+    expect(
+      parseDevnetForm({ ...ok, name: 'Devnet-Ruby' }, { checkName: true, existing: ['ruby'] }),
+    ).toEqual({ error: 'exists' })
+    expect(
+      parseDevnetForm({ ...ok, name: 'jade' }, { checkName: true, existing: ['ruby'] }),
+    ).toHaveProperty('config')
+  })
+
   it('skips the name check when editing an existing devnet', () => {
     expect(parseDevnetForm({ ...ok, name: '' }, { checkName: false })).toHaveProperty('config')
   })

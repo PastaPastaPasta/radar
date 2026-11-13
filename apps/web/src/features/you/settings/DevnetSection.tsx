@@ -1,9 +1,10 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useState, type FormEvent } from 'react'
-import { PageLink } from '@/features/entity'
+import { PageLink, withNetwork } from '@/features/entity'
 import type { DevnetConfig } from '@/lib/network'
-import { Card } from '@/ui'
+import { announce, Card } from '@/ui'
+import { copyText } from '@/ui/clipboard'
 import { parseDevnetForm, type DevnetFormError } from './devnet'
 
 export interface SettingsDevnets {
@@ -15,10 +16,13 @@ export interface SettingsDevnets {
 
 function DevnetForm({
   initial,
+  existing,
   onSubmit,
   onCancel,
 }: {
   initial?: DevnetConfig
+  /** The names already saved, which a new devnet may not reuse. */
+  existing?: readonly string[]
   onSubmit: (config: DevnetConfig) => void
   onCancel?: () => void
 }) {
@@ -31,6 +35,7 @@ function DevnetForm({
   const editName = initial?.name ?? ''
   const messages: Record<DevnetFormError, string> = {
     name: t`Use lowercase letters, digits and hyphens, for example "ruby".`,
+    exists: t`A devnet with this name is already saved. Edit it instead.`,
     addresses: t`Enter at least one DAPI address as host:port, one per line.`,
     quorum: t`The quorum list URL must start with https://.`,
   }
@@ -39,7 +44,7 @@ function DevnetForm({
     e.preventDefault()
     const result = parseDevnetForm(
       { name: initial?.name ?? name, addresses, quorumUrl },
-      { checkName: !initial },
+      { checkName: !initial, existing },
     )
     if ('error' in result) {
       setError(result.error)
@@ -71,7 +76,7 @@ function DevnetForm({
             placeholder="ruby"
             autoCapitalize="none"
             spellCheck={false}
-            aria-invalid={error === 'name' || undefined}
+            aria-invalid={error === 'name' || error === 'exists' || undefined}
           />
         </div>
       )}
@@ -127,6 +132,13 @@ export function DevnetSection({ devnets }: { devnets: SettingsDevnets }) {
   const { t } = useLingui()
   const [editing, setEditing] = useState<string>()
   const removeLabel = (devnet: string) => t`Remove ${devnet}`
+  const copyLabel = (devnet: string) => t`Copy a link to ${devnet}`
+  const copyLink = (name: string) => {
+    const url = new URL(withNetwork('/', `devnet-${name}`), window.location.origin).href
+    void copyText(url).then((ok) => {
+      if (ok) announce(t`Link copied`)
+    })
+  }
   return (
     <Card
       id="devnets"
@@ -150,6 +162,16 @@ export function DevnetSection({ devnets }: { devnets: SettingsDevnets }) {
                 <button
                   type="button"
                   className="dh-btn dh-btn--quiet dh-btn--sm"
+                  aria-label={copyLabel(d.name)}
+                  onClick={() => {
+                    copyLink(d.name)
+                  }}
+                >
+                  {t`Copy link`}
+                </button>
+                <button
+                  type="button"
+                  className="dh-btn dh-btn--quiet dh-btn--sm"
                   onClick={() => setEditing(editing === d.name ? undefined : d.name)}
                   aria-expanded={editing === d.name}
                 >
@@ -164,6 +186,15 @@ export function DevnetSection({ devnets }: { devnets: SettingsDevnets }) {
                   {t`Remove`}
                 </button>
               </div>
+              <p className="text-[var(--dh-ink-2)] break-all">
+                <code>{d.dapiAddresses.join(' · ')}</code>
+                {d.quorumUrl ? (
+                  <>
+                    {' '}
+                    · <code>{d.quorumUrl}</code>
+                  </>
+                ) : null}
+              </p>
               {editing === d.name ? (
                 <DevnetForm
                   initial={d}
@@ -178,7 +209,10 @@ export function DevnetSection({ devnets }: { devnets: SettingsDevnets }) {
           ))}
         </ul>
       )}
-      <DevnetForm onSubmit={(config) => devnets.save(config)} />
+      <DevnetForm
+        existing={devnets.saved.map((d) => d.name)}
+        onSubmit={(config) => devnets.save(config)}
+      />
     </Card>
   )
 }

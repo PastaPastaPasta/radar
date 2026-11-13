@@ -27,7 +27,11 @@ import {
   Unavailable,
   useSourceMode,
 } from '@/ui'
+import { ConnectionCard } from './ConnectionCard'
+import { DeveloperCard } from './DeveloperCard'
 import { DevnetSection, type SettingsDevnets } from './DevnetSection'
+import { LabelsCard } from './LabelsCard'
+import { ViewedCard } from './ViewedCard'
 import { writeUtcPreference } from './preferences'
 
 const SAMPLE_DUFFS = 123_456_789n
@@ -152,6 +156,10 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
         </p>
       </Card>
 
+      <ViewedCard />
+      <ConnectionCard />
+      <DeveloperCard />
+      <LabelsCard />
       <DevnetSection devnets={devnets} />
     </article>
   )
