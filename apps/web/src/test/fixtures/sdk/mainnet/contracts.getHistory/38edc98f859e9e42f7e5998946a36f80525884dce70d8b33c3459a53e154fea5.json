@@ -1,0 +1,117 @@
+{
+  "method": "contracts.getHistory",
+  "args": {
+    "id": "DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs",
+    "limit": 10
+  },
+  "recordedAt": "2026-11-13T13:03:41.645Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "atMs": 1730375195466,
+        "contract": {
+          "id": "DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs",
+          "ownerId": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "version": 1,
+          "documentSchemas": {
+            "note": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "position": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "keepsHistory": true,
+          "config": {
+            "$formatVersion": "0",
+            "canBeDeleted": false,
+            "readonly": false,
+            "keepsHistory": true,
+            "documentsKeepHistoryContractDefault": false,
+            "documentsMutableContractDefault": true,
+            "documentsCanBeDeletedContractDefault": true,
+            "requiresIdentityEncryptionBoundedKey": null,
+            "requiresIdentityDecryptionBoundedKey": null
+          },
+          "indices": {
+            "note": []
+          },
+          "tokens": [],
+          "groups": []
+        }
+      },
+      {
+        "atMs": 1730731191820,
+        "contract": {
+          "id": "DWvVDeMdhtJJz1VPQseJYfDJh9wKfxTmKhNEoc2hQiTs",
+          "ownerId": "3m2NuX2syfJtMmYsrW5rDT5p4BJzSmWAoRwdTx4gb95k",
+          "version": 2,
+          "documentSchemas": {
+            "note": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "position": 0
+                },
+                "author": {
+                  "type": "string",
+                  "position": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "keepsHistory": true,
+          "config": {
+            "$formatVersion": "0",
+            "canBeDeleted": false,
+            "readonly": false,
+            "keepsHistory": true,
+            "documentsKeepHistoryContractDefault": false,
+            "documentsMutableContractDefault": true,
+            "documentsCanBeDeletedContractDefault": true,
+            "requiresIdentityEncryptionBoundedKey": null,
+            "requiresIdentityDecryptionBoundedKey": null
+          },
+          "indices": {
+            "note": []
+          },
+          "tokens": [],
+          "groups": []
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 470672,
+      "coreChainLockedHeight": 2571609,
+      "epoch": 88,
+      "timeMs": 1794574972476,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAf4YVWGC1Udq2mF0LjFrZ3L1MjbWfT6hI8zlRZsJifnMBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAA0nrWEQcQ1xU5BRaClf6MMwU5cfrVAyGKxLLc2zqPKChABx1VzbA3lQhElpOI97oNq4esMiY20jvpK07fuOxK3ZX8RAQFAAPsBnQFvnOa112xnDI9LqINqgyHu6tWFPhfljDMeA2Psj5BTVAKCH2O1+hbmRzBwCD0CBNBge9eHPD453c5nCTgI1bOjYBABiQx/rjYCiqBobcCc4Vq8eOA6kDiER5pkpJLcJZ2KO+oC0Xk9++sAGHmYWVp9uzIQXEXSh063s28I3ousxm3/FqYQAQXFxXGYZSyIJYps16crPde939By7ifPPOlnWsI44i8IAvDXhi338Qt0XDYDEZ8iovoeB+LSneurjHK3nWt/FYs3EAQgufaQYNCVXUD5YXcompomh84IvNkqvT28kiBYeiZDF1IABQIBAQEAA9lNXmdT1+T6LKuTfjfkDd3+hgWzf9xp3FhKU2HuggYRAnzf0Wn9BzSUsSFMeib9NnfKfOtsWWoPC4u3pDQGzoXcEAH6CctEgRFYcpq1lrYr2Yj+xqYaw8vpOqzWn/i7r9sf2xERAqdFf5jyPTCmYZyFBMfI0UjT9yVavKZAMs4RVV6/oVkoEAGnFBNIhU7zZo5FQUvVS1DbDtr63o3qgW3gVAYZ1jfgLxERASC59pBg0JVdQPlhdyiamiaHzgi82Sq9PbySIFh6JkMXUgB1BAEAAAwCAQiAAAGS4mYbSgAlrUbklz8k6IHaX5z/Vr8U1fRoB3Fk+eKVI8Ocr0vE2QIDWg+nEQxhVm1DqDL+8AuDn2/IPEdQND7g5vzHSkS+8xABjWiUBvEBZmlLufALr8O/cF0RjaxA+B3xJSRPoNKWmrURAQEAAPsBwQoIgAABkveeLgwA1ADRALn2kGDQlV1A+WF3KJqaJofOCLzZKr09vJIgWHomQxdSAAAAAQABAQAAAij+fLksRsQidDbOM1gGlYam9hkWlYmgY835HLI6FUqTAAEEbm90ZRYDEgR0eXBlEgZvYmplY3QSCnByb3BlcnRpZXMWAhIHbWVzc2FnZRYCEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAgASBmF1dGhvchYCEgR0eXBlEgZzdHJpbmcSCHBvc2l0aW9uAgESFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwAACgiAAAGS4mYbSgCwAK0AufaQYNCVXUD5YXcompomh84IvNkqvT28kiBYeiZDF1IAAAABAAEBAAABKP58uSxGxCJ0Ns4zWAaVhqb2GRaViaBjzfkcsjoVSpMAAQRub3RlFgMSBHR5cGUSBm9iamVjdBIKcHJvcGVydGllcxYBEgdtZXNzYWdlFgISBHR5cGUSBnN0cmluZxIIcG9zaXRpb24DABIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAASDAEACK0dPer5WAZ9bHmlNC+RPR5cUlm28giE2CWilO25nT0TAA=="
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABbQVpn23fft6efOOglJ3xTU341aiB5oPc4="
+      },
+      "signature": {
+        "$u8": "o5gaQHPG99OllC/NkQggapRMRSPQFQnlxuwFa+FQ+RiGIck+i+LDqO0OVRQp9IAQGLmTRvzBYvlcekvkblJFXJRgnIJ5m5/NFk1V7VH60alMJJfUzHg1DkLRpXvx35y7"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "1L6vE+y2NeeZeQzhtJLMQsXOdZeBypvwKsVTknkKJ4o="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 435.25137299999994
+  }
+}
