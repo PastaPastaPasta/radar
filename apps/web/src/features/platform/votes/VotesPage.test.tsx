@@ -20,7 +20,9 @@ describe('Votes page', () => {
   it('says it needs Platform Explorer in Decentralized only mode @PE-21', async () => {
     renderAt('/votes?sources=decentralized')
     await waitFor(() => {
-      expect(document.querySelector('[data-unavailable]') ?? document.querySelector('[role="status"]')).not.toBeNull()
+      expect(
+        document.querySelector('[data-unavailable]') ?? document.querySelector('[role="status"]'),
+      ).not.toBeNull()
     })
     expect(document.querySelectorAll('tbody tr').length).toBe(0)
   })

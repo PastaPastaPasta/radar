@@ -61,9 +61,7 @@ function Invalid({ label, problem }: { label: string; problem: LabelProblem }) {
   return (
     <Card layer="platform" id="name-status" title={t`Status`}>
       <p data-status="invalid">
-        <Badge tone="danger">
-          {t`Invalid`}
-        </Badge>
+        <Badge tone="danger">{t`Invalid`}</Badge>
       </p>
       <Empty
         kind="not-found"
@@ -148,9 +146,7 @@ function Available({ label, contestedRule }: { label: string; contestedRule: boo
   return (
     <>
       <p data-status="available">
-        <Badge tone="success">
-          {t`Available`}
-        </Badge>
+        <Badge tone="success">{t`Available`}</Badge>
       </p>
       <p>
         {contestedRule
@@ -250,9 +246,7 @@ function Registered({
   return (
     <>
       <p data-status="registered">
-        <Badge tone="info">
-          {t`Registered`}
-        </Badge>
+        <Badge tone="info">{t`Registered`}</Badge>
       </p>
       <KeyValue
         columns={2}

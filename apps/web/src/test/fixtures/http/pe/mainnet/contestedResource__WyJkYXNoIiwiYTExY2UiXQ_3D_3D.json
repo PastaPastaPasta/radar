@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/contestedResource/WyJkYXNoIiwiYTExY2UiXQ%3D%3D"
+  },
+  "recordedAt": "2026-11-13T17:43:49.302Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "contenders": [
+      {
+        "identifier": "395bEYpa6wtfAzCBsbqUzdSAjjdbfPwpzWF3whG8RfgB",
+        "timestamp": "2024-11-21T13:11:06.214Z",
+        "documentIdentifier": "ByxWf6Y65yJtneQtyeUf2rtgqzhcL1mLC1FaozEAhtva",
+        "documentStateTransition": "02023CF574964E5862ED20B76109CEC887EA543A2805D872DED6D8439398C650",
+        "aliases": [
+          {
+            "alias": "Alice.dash",
+            "status": "ok",
+            "timestamp": "2024-11-21T13:11:06.214Z",
+            "documentId": "ByxWf6Y65yJtneQtyeUf2rtgqzhcL1mLC1FaozEAhtva",
+            "contested": true
+          }
+        ],
+        "towardsIdentityVotes": 50,
+        "abstainVotes": 0,
+        "lockVotes": 0
+      }
+    ],
+    "indexName": "parentNameAndLabel",
+    "resourceValue": ["dash", "a11ce"],
+    "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "prefundedVotingBalance": { "parentNameAndLabel": 20000000000 },
+    "documentTypeName": "domain",
+    "timestamp": "2024-11-21T13:11:06.214Z",
+    "totalGasUsed": 221036480,
+    "totalDocumentsGasUsed": 81036480,
+    "totalVotesGasUsed": 140000000,
+    "totalCountVotes": 50,
+    "totalCountLock": 0,
+    "totalCountAbstain": 0,
+    "totalCountTowardsIdentity": 50,
+    "status": "finished",
+    "endTimestamp": "2024-12-05T13:11:06.214Z",
+    "finished": true,
+    "towardsIdentity": "395bEYpa6wtfAzCBsbqUzdSAjjdbfPwpzWF3whG8RfgB"
+  }
+}

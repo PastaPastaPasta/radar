@@ -17,10 +17,14 @@ describe('Contest page', () => {
     const table = document.querySelector<HTMLElement>('[data-tally-table]')
     expect(table).not.toBeNull()
     const rows = [...(table?.querySelectorAll('[data-choice]') ?? [])]
-    expect(rows.map((r) => r.getAttribute('data-choice'))).toEqual(['CUaJuBYgwXBCLarN2Gfnnve7SvaM8zvqiQ5PEUztHh4H', 'abstain', 'lock'])
+    expect(rows.map((r) => r.getAttribute('data-choice'))).toEqual([
+      'CUaJuBYgwXBCLarN2Gfnnve7SvaM8zvqiQ5PEUztHh4H',
+      'abstain',
+      'lock',
+    ])
     expect(rows[0]?.textContent).toContain('20')
     expect(rows[0]?.textContent).toContain('100.0%')
     const contender = document.querySelector<HTMLElement>('[data-contender]')
-    expect(within(contender as HTMLElement).getByText('vampyren.dash')).toBeTruthy()
+    expect(within(contender!).getByText('vampyren.dash')).toBeTruthy()
   })
 })

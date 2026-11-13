@@ -59,12 +59,7 @@ describe('Search offers no dead ends @HY-14', () => {
   })
 
   it('withholds the kinds whose page is not built yet', () => {
-    for (const to of [
-      '/platform/block/$id',
-      '/epoch/$n',
-      '/platform-address/$addr',
-      '/about',
-    ]) {
+    for (const to of ['/platform/block/$id', '/epoch/$n', '/platform-address/$addr', '/about']) {
       expect(offered({ href: { to } as never })).toBe(false)
     }
   })

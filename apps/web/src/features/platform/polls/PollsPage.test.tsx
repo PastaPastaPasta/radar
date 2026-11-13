@@ -12,7 +12,9 @@ describe('Polls page', () => {
     renderAt('/polls?range=custom&from=2026-11-01&to=2027-01-31')
     await waitFor(() => {
       expect(document.querySelector('#polls-list')).not.toBeNull()
-      expect(document.querySelectorAll('#polls-list a[href^="/contest/"]').length).toBeGreaterThan(0)
+      expect(document.querySelectorAll('#polls-list a[href^="/contest/"]').length).toBeGreaterThan(
+        0,
+      )
     })
   })
 })

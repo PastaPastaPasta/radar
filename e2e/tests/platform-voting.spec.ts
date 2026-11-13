@@ -120,7 +120,10 @@ test.describe('Contests', () => {
     page,
   }) => {
     await open(page, '/contests', 'Name contests')
-    await page.getByRole('group', { name: 'Status' }).getByRole('button', { name: 'Active' }).click()
+    await page
+      .getByRole('group', { name: 'Status' })
+      .getByRole('button', { name: 'Active' })
+      .click()
     await expect(page).toHaveURL(/status=active/)
     await settled(page)
     await expect(page.locator('main a[href^="/contest/"]').first()).toBeVisible()
@@ -208,9 +211,7 @@ test.describe('Contest', () => {
     await expect(page.locator('main')).toContainText('Winner')
   })
 
-  test('says there is no contest for a name that was never contested @NX-43', async ({
-    page,
-  }) => {
+  test('says there is no contest for a name that was never contested @NX-43', async ({ page }) => {
     await pinClockToFixtures(page)
     await page.goto(`/contest/${NAMES.available}`)
     await expect(page.getByText(/No contest for/)).toBeVisible()
@@ -274,7 +275,10 @@ test.describe('Polls', () => {
     await range.getByRole('button', { name: '7 days' }).click()
     await expect(page).toHaveURL(/range=7d/)
     await settled(page)
-    await page.getByRole('group', { name: 'Order' }).getByRole('button', { name: 'Latest first' }).click()
+    await page
+      .getByRole('group', { name: 'Order' })
+      .getByRole('button', { name: 'Latest first' })
+      .click()
     await expect(page).toHaveURL(/dir=desc/)
   })
 

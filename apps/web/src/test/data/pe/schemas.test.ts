@@ -40,7 +40,7 @@ const rules: [RegExp, z.ZodType][] = [
   [/^token__.*transitions/, S.peList(S.PeTokenTransitionSchema)],
   [/^contestedResources--/, S.peList(S.PeContestedResourceSchema)],
   [/^contestedResources__stats$/, S.PeContestedResourcesStatsSchema],
-  [/^contestedResource__[^_]+$/, S.PeContestedResourceSchema],
+  [/^contestedResource__[^_]+(_3D)*$/, S.PeContestedResourceSchema],
   [/^contestedResource__.*votes/, S.peList(S.PeVoteSchema)],
   [/^masternodes__votes/, S.peList(S.PeVoteSchema)],
   [/^identities__active/, S.peList(S.PeActiveIdentitySchema)],

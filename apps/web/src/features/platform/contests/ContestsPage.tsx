@@ -39,11 +39,12 @@ import { TallyText } from '../contest/Tally'
 
 export type ContestsPageSearch = ContestsFilters
 
-const lastValue = (values: readonly string[]): string => values[values.length - 1] ?? ''
+const lastValue = (values: readonly (string | null)[]): string =>
+  values.findLast((v) => v !== null) ?? ''
 
 /** The contest a row names: DPNS contests by label alone, anything else with the place to look it up. */
 function contestLink(
-  values: readonly string[],
+  values: readonly (string | null)[],
   contract: string | null | undefined,
   type: string | null | undefined,
   index: string | null | undefined,

@@ -7,7 +7,8 @@ afterEach(() => {
   localStorage.clear()
 })
 
-const status = (s: string) => waitFor(() => expect(document.querySelector(`[data-status="${s}"]`)).not.toBeNull())
+const status = (s: string) =>
+  waitFor(() => expect(document.querySelector(`[data-status="${s}"]`)).not.toBeNull())
 
 describe('Name page', () => {
   it('rejects a label DPNS cannot hold @NX-40', async () => {
@@ -23,7 +24,9 @@ describe('Name page', () => {
   it('shows the owner and a Bridge link for a registered name @NX-40', async () => {
     renderAt('/name/pshenmic')
     await status('registered')
-    expect(screen.getAllByRole('link').some((a) => a.getAttribute('href')?.includes('/identity/'))).toBe(true)
+    expect(
+      screen.getAllByRole('link').some((a) => a.getAttribute('href')?.includes('/identity/')),
+    ).toBe(true)
   })
 
   it('links a contested name to its contest @NX-40', async () => {

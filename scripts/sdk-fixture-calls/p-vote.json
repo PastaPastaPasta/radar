@@ -1097,6 +1097,21 @@
         "orderBy": [["records.identity", "asc"]],
         "limit": 100
       }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "alice.dash"
+      }
+    ],
+    [
+      "voting.contestedResourceVoteState",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "index": "parentNameAndLabel",
+        "indexValues": ["dash", "a11ce"]
+      }
     ]
   ],
   "testnet": [
