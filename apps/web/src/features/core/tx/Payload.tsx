@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Amount, Hash, KeyValue } from '@/ui'
+import { REVOKE_REASONS } from './revoke-reason'
 import type { SourceStamp } from '@/data/envelope'
 
 interface Item {
@@ -49,13 +50,6 @@ function scriptValue(v: unknown, none: ReactNode): ReactNode {
   if (script.address) return <Entity kind="address" id={script.address} />
   return script.hex ? <span className="rx-mono">{script.hex}</span> : none
 }
-
-const REVOKE_REASONS = [
-  'Not specified',
-  'Termination of service',
-  'Compromised keys',
-  'Change of keys',
-]
 
 /** Rows for the coinbase payload, shared by the block page and the coinbase transaction. */
 export function CbTxRows({ payload: p }: { payload: Obj }) {
@@ -223,14 +217,24 @@ function ProUpRegRows({ p }: { p: Obj }) {
 }
 
 function ProUpRevRows({ p }: { p: Obj }) {
-  const { t } = useLingui()
+  const { t, i18n } = useLingui()
   const reason = num(p.reason) ?? 0
+  const named = REVOKE_REASONS[reason]
+  const name = named ? i18n._(named) : undefined
   return (
     <KeyValue
       columns={2}
       items={[
         { label: t`Masternode`, value: <Entity kind="masternode" id={str(p.proTxHash) ?? ''} /> },
-        { label: t`Reason`, value: REVOKE_REASONS[reason] ?? t`Code ${reason}` },
+        {
+          label: t`Reason`,
+          value: (
+            <span data-reason={reason}>
+              {name ? t`${name} (reason ${reason})` : t`Unknown reason ${reason}`}
+            </span>
+          ),
+          hint: t`Names follow Dash Core’s definitions of the revocation reason codes.`,
+        },
         { label: t`Operator signature`, value: hashValue(p.payloadSig) },
       ]}
     />
