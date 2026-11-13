@@ -24,7 +24,6 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/identity/$id',
   '/identity/lookup',
   '/map',
-  '/masternodes',
   '/name/$label',
   '/names',
   '/nodes',

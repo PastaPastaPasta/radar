@@ -68,7 +68,7 @@ describe('command palette', () => {
     const { dialog } = await openPalette()
 
     expect(within(dialog).getByRole('option', { name: /Blocks/ })).toBeInTheDocument()
-    expect(within(dialog).queryByRole('option', { name: /Masternodes/ })).toBeNull()
+    expect(within(dialog).queryByRole('option', { name: /About/ })).toBeNull()
   })
 
   it('says what the input is and opens a valid address on Enter', async () => {
