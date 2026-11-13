@@ -15,13 +15,9 @@ export const UNFINISHED_ROUTES: ReadonlySet<string> = new Set([
   '/names',
   '/platform-address/$addr',
   '/polls',
-  '/query',
-  '/sdk-reference',
   '/token/$id',
   '/token/$id/holders',
   '/tokens',
-  '/tools/$decoder',
-  '/tools/transition',
   '/votes',
 ])
 

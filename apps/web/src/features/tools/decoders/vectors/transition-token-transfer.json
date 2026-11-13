@@ -1,0 +1,42 @@
+{
+  "id": "transition-token-transfer",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction 4A9CDA900B37A3F2C53494C4D97CAA75479BA75A847C088BA54840326E81AFE9 (fixture pe/mainnet/identity__BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp__transactions--limit-10,order-desc,page-2.json)",
+  "hex": "02017ff19be957d4fad481ca6b6323942cced653d4c625588d1f0a995639b14ee0c0010102000007002cc34cd8598c673efd93dbc3929efdd1a5e224b513942a5e9134b9ce7764127aa55fab57138093ded5fa86f357c725f4cd1981aff9b77d34fab4dd744692a9ab00fb03e89f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb0300000001044120c261e8910f16409a1d6fd16bb914e4f1f7fd6fe64df5738792f5eb00b6b02244575294c8ce8298af15ad17d3917795f2c6a833d347bb6e02844a99fe783cbf33",
+  "expected": {
+    "actionType": "DocumentsBatch([TokenTransfer])",
+    "actionTypeNumber": 1,
+    "hash": "4a9cda900b37a3f2c53494c4d97caa75479ba75a847c088ba54840326e81afe9",
+    "ownerId": "9cSTZG9ahW3uVryussA9H1nfrDk6oSM2z7MVsawKe711",
+    "identityNonce": null,
+    "identityContractNonce": "7",
+    "userFeeIncrease": 1,
+    "signaturePublicKeyId": 4,
+    "byteLength": 212,
+    "body": {
+      "$formatVersion": "1",
+      "ownerId": "9cSTZG9ahW3uVryussA9H1nfrDk6oSM2z7MVsawKe711",
+      "transitions": [
+        {
+          "$transition": "token",
+          "$action": "transfer",
+          "$formatVersion": "0",
+          "$baseFormatVersion": "0",
+          "$identity-contract-nonce": 7,
+          "$tokenContractPosition": 0,
+          "$dataContractId": "41jfTtvL4jV5WW7CxLv2Ftn7zjkESL1mxmokQSKwG7bw",
+          "$tokenId": "C8Yt59Mg7BGNUKRVWz5mxFxgkdNDuqVZ6y4f3sUwi3vz",
+          "$amount": 1000,
+          "recipientId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+          "publicNote": null,
+          "sharedEncryptedNote": null,
+          "privateEncryptedNote": null
+        }
+      ],
+      "userFeeIncrease": 1,
+      "signaturePublicKeyId": 4,
+      "signature": "IMJh6JEPFkCaHW/Ra7kU5PH3/W/mTfVzh5L16wC2sCJEV1KUyM6CmK8VrRfTkXeV8saoM9NHu24ChEqZ/ng8vzM="
+    }
+  }
+}

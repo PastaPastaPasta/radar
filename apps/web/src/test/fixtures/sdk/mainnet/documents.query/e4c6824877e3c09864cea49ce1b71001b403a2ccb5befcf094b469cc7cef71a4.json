@@ -1,0 +1,62 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+    "type": "profile",
+    "where": [["$ownerId", "==", "9dQixko1C7TrmKYuZDZ8qAhgMQWT5fZ3tvyb13MVnQV6"]],
+    "limit": 10
+  },
+  "recordedAt": "2026-11-13T16:06:51.280Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "AQxRat4fsD3uewt6kMqd9XvEgv5iw6gsZADUVFENdgq",
+        "ownerId": "9dQixko1C7TrmKYuZDZ8qAhgMQWT5fZ3tvyb13MVnQV6",
+        "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+        "type": "profile",
+        "revision": {
+          "$bigint": "3"
+        },
+        "createdAt": 1762089940073,
+        "updatedAt": 1762089963252,
+        "transferredAt": null,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "displayName": "Diess"
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 470737,
+      "coreChainLockedHeight": 2571671,
+      "epoch": 88,
+      "timeMs": 1794585883036,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAByPjN+/5pKB548HBTVZCocGa4o4oXVPcUw="
+      },
+      "signature": {
+        "$u8": "hN8iLCfLSnKO1aZXJ2gkNoqKQqvCGhC+bFfhfB7Hyx4aUp4f5jviEJibqXc1a8rpE/+VB/eSt1mT1wMeVqvaclQfosqIprPpHwXvwuIbuX/0/oeR5OxJ/ZT9EfzsFbNg"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "eRYj/LM+YJmwNRkpmSkr0D/s4Nob3A9UnLqDQdGk0YU="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 781.2007200000003
+  }
+}

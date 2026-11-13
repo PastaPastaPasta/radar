@@ -1,0 +1,181 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "7DiE1W5YYgUXx7s68YTMGEM9UssZ5TFg7dXdGaDj8cet"
+  },
+  "recordedAt": "2026-11-13T16:06:55.164Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "7DiE1W5YYgUXx7s68YTMGEM9UssZ5TFg7dXdGaDj8cet",
+      "ownerId": "ARJDcyfBJFVvWhVZaX4DhwswABWXjHKDWRnzyNT4CpTa",
+      "version": 1,
+      "documentSchemas": {
+        "grade": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "documentsCountable": true,
+          "documentsAverageable": "score",
+          "indices": [
+            {
+              "name": "byClass",
+              "properties": [
+                {
+                  "class": "asc"
+                }
+              ],
+              "countable": "countable",
+              "summable": "score"
+            },
+            {
+              "name": "byClassSemester",
+              "properties": [
+                {
+                  "class": "asc"
+                },
+                {
+                  "semester": "asc"
+                }
+              ],
+              "averageable": "score",
+              "rangeAverageable": true
+            },
+            {
+              "name": "bySemester",
+              "properties": [
+                {
+                  "semester": "asc"
+                }
+              ],
+              "countable": "countable",
+              "rangeCountable": true,
+              "summable": "score",
+              "rangeSummable": true
+            }
+          ],
+          "properties": {
+            "class": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16,
+              "position": 0
+            },
+            "semester": {
+              "type": "integer",
+              "minimum": 20000,
+              "maximum": 99999,
+              "position": 1
+            },
+            "score": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "position": 2
+            },
+            "student": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 32,
+              "maxItems": 32,
+              "position": 3,
+              "contentMediaType": "application/x.dash.dpp.identifier"
+            },
+            "instructor": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 32,
+              "maxItems": 32,
+              "position": 4,
+              "contentMediaType": "application/x.dash.dpp.identifier"
+            }
+          },
+          "required": ["class", "semester", "score", "student", "instructor"],
+          "additionalProperties": false
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "1",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": true
+      },
+      "indices": {
+        "grade": [
+          {
+            "name": "byClass",
+            "properties": [
+              {
+                "field": "class",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "byClassSemester",
+            "properties": [
+              {
+                "field": "class",
+                "order": "asc"
+              },
+              {
+                "field": "semester",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "bySemester",
+            "properties": [
+              {
+                "field": "semester",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 674239,
+      "coreChainLockedHeight": 1591004,
+      "epoch": 20342,
+      "timeMs": 1794585885689,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAVmPnEtkVqLICfAL6Csq/1icvO4eqofsqVIxgyE5d9I3BAFAACQCASBbtAdymcNfPSWCO6wkd5q+QOPg/012EEtbagdGhxQqSAA1s5G4D4kWP/4AP+XNu6grrcVYmE31y8vKoaVNJSwUTRABrJTExUKeAHVkfrzlSlzJtcWNPB4BylIii4zxIMYdFTERAQFAAPsDVwFIR1aOvqCybOdB3JFXjesSXttUoIwK45/qz9An3DywNQKZ6B6U1kjrfiSidCBbils1kffm/KZEJLakHaF9BADhHRAB3Va+gVRen8hP3mdZ0/SQp7XIlWd/RTdQqHC7vC4VPesCMuYHU2UnNZdj3fs18dVNJ3EBuofkm/dJjPSjaHmifJIQAVnNfptxv1vrz6yAAUhlDaamw0YlvD47UFXg57ji/yIaAtglknlfhcpnzRDksnPSWvjg7OOfqGAIzBP6cSTdsu8aEALDqFMk7ScuGCBogJpenUdDF4odgMwm6SKTt9J1N+m17gQgXGe0JspAkswPMfOeK9xXwZzGmLq2aXjRbIz2HpQ0H3kABQIBAQEA57Bq+A9ke3ekQ2J2OzjWBpoTqA+TDV/k+FfwprQv+5kREQLIy6R7I9YsqQlmmeeZX2/0hnndUYOKsF2vadKcEUi5lRABVZOZY8efu8DdrFel6zfZiZwNZnEqqA1G0BZcemW/z+EREQJU1S2yRRic38sk1brvu037Rdb/Hz+lWBXJk8OE6NwCuBAB1R+xs/QrhD+lvXCpTJXjRqjxPKDleL0uzmmfXiMUF4MRAmPMFwpgyDXOPZmxpa8uOYWSNIA7IKy65bLYG5H/ZTGQEAGKKG8jn5G0/wSu90mPqsHGvWIlFqqBkXbao+yjixsbIhECF+NbizL8E9X07Z15fsobikDKYk90H/dEWoKSmuKaz8sQAUMuC6d+X/hZoIFMjypMg5mgx2BEAaBvJ35f8KMXIuElEQIBvibUNv1aVzkr4Xc2j4hJhMI+98PVyBSALoXu491ADBABGj+fk4aK2bXBsBEuqlDg7AEq65G7RVp2AouO5ZJYT8cRArU23xr6OtYvl9sP3JJrDCu8lmEcHcSZcgtrPV7qk7LiEAFiuTDt902yz1hUu25oTbMWCj7ebXJpdI6MlS5xgtjXuBECq5xZVlLSkokAlpx2SzurB3YaekPSgWgWaXMKLXp5j1YQAT4eIRbHw/x4YwbKLdeuqs0vo5GqfVRUnzl5MAVr8mZxEQLcT2fsEIm33mv98yxu9K+QDHwNVc99U1ELRCqanAM4lhABM3lyUYVyMCcMSrZX/50MKjzoHFYbCiet18WoeoZfBAcREQEgXGe0JspAkswPMfOeK9xXwZzGmLq2aXjRbIz2HpQ0H3kA+wSGAwEABD0A+wQ4AVxntCbKQJLMDzHznivcV8Gcxpi6tml40WyM9h6UNB95AQAAAAABAQAAAQGL8pb5sAbIdDtF7LVdDiU/OdHCPohlck+GXcP31YBLCQABBWdyYWRlFgkSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABISZG9jdW1lbnRzQ291bnRhYmxlEwESFGRvY3VtZW50c0F2ZXJhZ2VhYmxlEgVzY29yZRIHaW5kaWNlcxUDFgQSBG5hbWUSB2J5Q2xhc3MSCnByb3BlcnRpZXMVARYBEgVjbGFzcxIDYXNjEgljb3VudGFibGUSCWNvdW50YWJsZRIIc3VtbWFibGUSBXNjb3JlFgQSBG5hbWUSD2J5Q2xhc3NTZW1lc3RlchIKcHJvcGVydGllcxUCFgESBWNsYXNzEgNhc2MWARIIc2VtZXN0ZXISA2FzYxILYXZlcmFnZWFibGUSBXNjb3JlEhByYW5nZUF2ZXJhZ2VhYmxlEwEWBhIEbmFtZRIKYnlTZW1lc3RlchIKcHJvcGVydGllcxUBFgESCHNlbWVzdGVyEgNhc2MSCWNvdW50YWJsZRIJY291bnRhYmxlEg5yYW5nZUNvdW50YWJsZRMBEghzdW1tYWJsZRIFc2NvcmUSDXJhbmdlU3VtbWFibGUTARIKcHJvcGVydGllcxYFEgVjbGFzcxYEEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAMCEgltYXhMZW5ndGgDIBIIcG9zaXRpb24DABIIc2VtZXN0ZXIWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQP7nEASB21heGltdW0D/AADDT4SCHBvc2l0aW9uAwISBXNjb3JlFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0DABIHbWF4aW11bQPIEghwb3NpdGlvbgMEEgdzdHVkZW50FgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMDQBIIbWF4SXRlbXMDQBIIcG9zaXRpb24DBhIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEgppbnN0cnVjdG9yFgYSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMDQBIIbWF4SXRlbXMDQBIIcG9zaXRpb24DCBIQY29udGVudE1lZGlhVHlwZRIhYXBwbGljYXRpb24veC5kYXNoLmRwcC5pZGVudGlmaWVyEghyZXF1aXJlZBUFEgVjbGFzcxIIc2VtZXN0ZXISBXNjb3JlEgdzdHVkZW50EgppbnN0cnVjdG9yEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAAf0AAAGhducsjQAB/AAJ2n8AAftNvAAAAAAAAAIOQx8IkWNV802Q1bq6NcjaHEGj9hmEYG+KPiY3sHVyMBABEg/Zs5Snn6+q6/C0JZCHYPmac8as+bfXtcKf5dlbmiMRAA=="
+      },
+      "quorumHash": {
+        "$u8": "AAAALJbVAoS29rc0FcxUJ/EnjnMPNHIjkFaPX6gICeo="
+      },
+      "signature": {
+        "$u8": "pRRltTjNCEz40/poATSx/tihVra+nCR3n1bvhk+dHUrSeI7fHvsAWpasa5dJM8mrEYhWzGcv0LLvBnbhzh5iAfwVrffZPIrlD8iE6rCcMZO/mS6F3S+KTReRiTp8sKnZ"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "lFgkfB3dP/zVGf7wMU6VWFAUMJAkKZkqRchdSLPsy1A="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 63.311865000000125
+  }
+}

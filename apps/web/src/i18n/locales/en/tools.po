@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "“{arg}” has no wildcard."
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” isn't a number."
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}” isn't an operator Platform knows."
+
+msgid "“{arg}” isn't supported here."
+msgstr "“{arg}” isn't supported here."
+
+msgid "“{arg}” isn't supported."
+msgstr "“{arg}” isn't supported."
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” needs quotes."
+
+msgid "(opens in a new tab)"
+msgstr "(opens in a new tab)"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, one {# document} other {# documents}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, one {# group} other {# groups}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} fields, {1} indexes"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "{0} lines of this layer could not be read."
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "{0} steps"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "A field name in backticks is missing its closing backtick."
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "A field name was expected, but “{arg}” came instead."
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+
+msgid "A name by its label"
+msgstr "A name by its label"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "A number was expected, but “{arg}” came instead."
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "A statement can name a contract itself, as in FROM dpns.domain."
+
+msgid "A string is missing its closing quote."
+msgstr "A string is missing its closing quote."
+
+msgid "A sum over a range"
+msgstr "A sum over a range"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "A value was expected, but “{arg}” came instead."
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "A whole number was expected, but “{arg}” came instead."
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+
+msgid "All documents"
+msgstr "All documents"
+
+msgid "Amount (credits)"
+msgstr "Amount (credits)"
+
+msgid "An average per group"
+msgstr "An average per group"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "An operator was expected, but “{arg}” came instead."
+
+msgid "Another contract…"
+msgstr "Another contract…"
+
+msgid "Average"
+msgstr "Average"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "Average of {0}"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "Byte list"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Cancelled"
+msgstr "Cancelled"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "Check the ID, or pick one of the contracts in the list."
+
+msgid "Check this transition"
+msgstr "Check this transition"
+
+msgid "Check with Platform"
+msgstr "Check with Platform"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "Checking a transition needs Platform Explorer"
+
+msgid "Checking is not available on this network."
+msgstr "Checking is not available on this network."
+
+msgid "Choose a decoder"
+msgstr "Choose a decoder"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "Choose the contract and the document type above to decode this document."
+
+msgid "Clear the filter"
+msgstr "Clear the filter"
+
+msgid "contested"
+msgstr "contested"
+
+msgid "Contested name"
+msgstr "Contested name"
+
+msgid "Contract"
+msgstr "Contract"
+
+msgid "Contract and type"
+msgstr "Contract and type"
+
+msgid "Contract decoder"
+msgstr "Contract decoder"
+
+msgid "Contract ID"
+msgstr "Contract ID"
+
+msgid "Contract version"
+msgstr "Contract version"
+
+msgid "Copy query link"
+msgstr "Copy query link"
+
+msgid "Copy the raw reading"
+msgstr "Copy the raw reading"
+
+msgid "Copy the SDK example"
+msgstr "Copy the SDK example"
+
+msgid "Core fee per byte"
+msgstr "Core fee per byte"
+
+msgid "Count and sum"
+msgstr "Count and sum"
+
+msgid "Credit transfer"
+msgstr "Credit transfer"
+
+msgid "Credit withdrawal"
+msgstr "Credit withdrawal"
+
+msgid "Credits in"
+msgstr "Credits in"
+
+msgid "Credits out"
+msgstr "Credits out"
+
+msgid "Custom"
+msgstr "Custom"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "DashPay profiles of one owner"
+
+msgid "Data contract create"
+msgstr "Data contract create"
+
+msgid "Data contract update"
+msgstr "Data contract update"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "Decode a signed state transition and ask Platform whether it would be accepted."
+
+msgid "Decoded"
+msgstr "Decoded"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "Decoded here: the bytes are not sent anywhere."
+
+msgid "Decoded JSON"
+msgstr "Decoded JSON"
+
+msgid "Decoders"
+msgstr "Decoders"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+
+msgid "Delete"
+msgstr "Delete"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "Delete {0}"
+
+msgid "Detect"
+msgstr "Detect"
+
+msgid "Document decoder"
+msgstr "Document decoder"
+
+msgid "Document type"
+msgstr "Document type"
+
+msgid "Document types"
+msgstr "Document types"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Documents and tokens batch"
+msgstr "Documents and tokens batch"
+
+msgid "DPNS contract"
+msgstr "DPNS contract"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive returns at most 100 documents (or 100 groups) per query."
+
+msgid "Element"
+msgstr "Element"
+
+msgid "Elements"
+msgstr "Elements"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "Error code {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "Every segment and key is hex, two digits to a byte."
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "Expected {label}, but “{arg}” came instead."
+
+msgid "Export CSV"
+msgstr "Export CSV"
+
+msgid "Export JSON"
+msgstr "Export JSON"
+
+msgid "Fee multiplier"
+msgstr "Fee multiplier"
+
+msgid "Fields"
+msgstr "Fields"
+
+msgid "Filter by page, source or call"
+msgstr "Filter by page, source or call"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+
+msgid "GroveDB path"
+msgstr "GroveDB path"
+
+msgid "GroveDB proof"
+msgstr "GroveDB proof"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Hashes standing in for the rest"
+msgstr "Hashes standing in for the rest"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identity"
+msgstr "Identity"
+
+msgid "Identity create"
+msgstr "Identity create"
+
+msgid "Identity create from addresses"
+msgstr "Identity create from addresses"
+
+msgid "Identity decoder"
+msgstr "Identity decoder"
+
+msgid "Identity top-up"
+msgstr "Identity top-up"
+
+msgid "Identity top-up from addresses"
+msgstr "Identity top-up from addresses"
+
+msgid "Identity update"
+msgstr "Identity update"
+
+msgid "indexed"
+msgstr "indexed"
+
+msgid "Indexes"
+msgstr "Indexes"
+
+msgid "Input"
+msgstr "Input"
+
+msgid "Inputs"
+msgstr "Inputs"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Keys"
+msgstr "Keys"
+
+msgid "Keys added"
+msgstr "Keys added"
+
+msgid "Keys disabled"
+msgstr "Keys disabled"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "Layer {0}"
+
+msgid "Layers"
+msgstr "Layers"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE needs a quoted pattern such as 'abc%'."
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT must be between 1 and 100."
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "Line {0}, column {1}."
+
+msgid "Load the next page"
+msgstr "Load the next page"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Masternode vote"
+msgstr "Masternode vote"
+
+msgid "Name at least one key to read."
+msgstr "Name at least one key to read."
+
+msgid "Name for this query"
+msgstr "Name for this query"
+
+msgid "No contract with this ID on this network."
+msgstr "No contract with this ID on this network."
+
+msgid "No documents match."
+msgstr "No documents match."
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "No indexes: documents of this type can only be read by their ID."
+
+msgid "No page or call matches this filter."
+msgstr "No page or call matches this filter."
+
+msgid "No saved queries yet."
+msgstr "No saved queries yet."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "NOT isn't supported."
+msgstr "NOT isn't supported."
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "Nothing in this proof could be read as layers."
+
+msgid "nothing stored"
+msgstr "nothing stored"
+
+msgid "Nothing was returned for these keys."
+msgstr "Nothing was returned for these keys."
+
+msgid "Nothing was sent."
+msgstr "Nothing was sent."
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+
+msgid "One hex key per line."
+msgstr "One hex key per line."
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "One hex segment per line, from the root. Empty reads the root tree."
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "Only prefix patterns work with LIKE."
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+
+msgid "Operations in this batch"
+msgstr "Operations in this batch"
+
+msgid "OR isn't supported."
+msgstr "OR isn't supported."
+
+msgid "or, as the last field you filter"
+msgstr "or, as the last field you filter"
+
+msgid "Outputs"
+msgstr "Outputs"
+
+msgid "Pages"
+msgstr "Pages"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+
+msgid "Paste a proof."
+msgstr "Paste a proof."
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+
+msgid "Paste some bytes."
+msgstr "Paste some bytes."
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "Paste the serialized bytes of a document and name its contract and type to read its fields."
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "Paste the serialized bytes of an identity to read its keys, balance and revision."
+
+msgid "Path"
+msgstr "Path"
+
+msgid "Path decoder"
+msgstr "Path decoder"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+
+msgid "Pick a type"
+msgstr "Pick a type"
+
+msgid "Platform address funding"
+msgstr "Platform address funding"
+
+msgid "Platform address transfer"
+msgstr "Platform address transfer"
+
+msgid "Platform address withdrawal"
+msgstr "Platform address withdrawal"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform groups only aggregate answers. A list of documents can't be grouped."
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+
+msgid "Platform would accept this transition."
+msgstr "Platform would accept this transition."
+
+msgid "Platform would reject this transition."
+msgstr "Platform would reject this transition."
+
+msgid "Points to"
+msgstr "Points to"
+
+msgid "Pooling"
+msgstr "Pooling"
+
+msgid "Preset"
+msgstr "Preset"
+
+msgid "Presets"
+msgstr "Presets"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+
+msgid "Price feed"
+msgstr "Price feed"
+
+msgid "Proof bytes"
+msgstr "Proof bytes"
+
+msgid "Proof decoder"
+msgstr "Proof decoder"
+
+msgid "Proven items"
+msgstr "Proven items"
+
+msgid "Query"
+msgstr "Query"
+
+msgid "Query link copied"
+msgstr "Query link copied"
+
+msgid "Query saved"
+msgstr "Query saved"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+
+msgid "Raw reading"
+msgstr "Raw reading"
+
+msgid "Raw result"
+msgstr "Raw result"
+
+msgid "Read as"
+msgstr "Read as"
+
+msgid "Read elements"
+msgstr "Read elements"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "Read up to {MAX_KEYS} keys at a time."
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "Result of statement {0}"
+
+msgid "Results"
+msgstr "Results"
+
+msgid "Revision"
+msgstr "Revision"
+
+msgid "Run"
+msgstr "Run"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "Saved in this browser only, for this network and contract."
+
+msgid "Saved queries"
+msgstr "Saved queries"
+
+msgid "Schema"
+msgstr "Schema"
+
+msgid "SDK documentation"
+msgstr "SDK documentation"
+
+msgid "SDK example"
+msgstr "SDK example"
+
+msgid "SDK reference"
+msgstr "SDK reference"
+
+msgid "Send transitions with Bridge"
+msgstr "Send transitions with Bridge"
+
+msgid "Sender"
+msgstr "Sender"
+
+msgid "Serialized data contract"
+msgstr "Serialized data contract"
+
+msgid "Serialized document"
+msgstr "Serialized document"
+
+msgid "Serialized identity"
+msgstr "Serialized identity"
+
+msgid "Shield"
+msgstr "Shield"
+
+msgid "Shield from asset lock"
+msgstr "Shield from asset lock"
+
+msgid "Shield from identity"
+msgstr "Shield from identity"
+
+msgid "Shielded actions"
+msgstr "Shielded actions"
+
+msgid "Shielded transfer"
+msgstr "Shielded transfer"
+
+msgid "Shielded withdrawal"
+msgstr "Shielded withdrawal"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "Show all {0} steps"
+
+msgid "Signed state transition"
+msgstr "Signed state transition"
+
+msgid "Signing key"
+msgstr "Signing key"
+
+msgid "Size (bytes)"
+msgstr "Size (bytes)"
+
+msgid "SQL query"
+msgstr "SQL query"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "Start a query on {0}"
+
+msgid "State transition"
+msgstr "State transition"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+
+msgid "Step"
+msgstr "Step"
+
+msgid "Steps"
+msgstr "Steps"
+
+msgid "Subtrees entered"
+msgstr "Subtrees entered"
+
+msgid "Sum"
+msgstr "Sum"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "Sum of {0}"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "That is more than 1 MB, which is more than any of these objects."
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "That isn't a list of numbers from 0 to 255."
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "That isn't hex, base64 or a list of numbers."
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+
+msgid "The first DashPay profiles"
+msgstr "The first DashPay profiles"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "The proof reader could not be loaded. Check the connection and try again."
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "The proof reader stopped on this input: it is larger or deeper than it can read."
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "The query ran and Platform answered with nothing, proof included."
+
+msgid "The raw reading is below."
+msgstr "The raw reading is below."
+
+msgid "The root tree"
+msgstr "The root tree"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "The SDK reads only the envelope of this transition type; its fields are not shown."
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "The two entries inside the DPNS contract's subtree: its definition and its documents."
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "The well-known subtrees Platform keeps at the top of its state."
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "These bytes are not a GroveDB proof."
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "These bytes could not be decoded as a state transition."
+
+msgid "These bytes could not be decoded."
+msgstr "These bytes could not be decoded."
+
+msgid "This browser won't store the query."
+msgstr "This browser won't store the query."
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+
+msgid "This number is too large to write safely here."
+msgstr "This number is too large to write safely here."
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "This proof ends before it should: some of its bytes are missing."
+
+msgid "This statement was stopped before it answered."
+msgstr "This statement was stopped before it answered."
+
+msgid "token"
+msgstr "token"
+
+msgid "Tools"
+msgstr "Tools"
+
+msgid "Transition decoder"
+msgstr "Transition decoder"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "unique"
+msgstr "unique"
+
+msgid "Unshield"
+msgstr "Unshield"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "Use == for an exact match. LIKE is only a prefix match here."
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Vote"
+msgstr "Vote"
+
+msgid "Voting state"
+msgstr "Voting state"
+
+msgid "What the proof contains"
+msgstr "What the proof contains"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "Which Platform SDK call backs each Radar page, with its arguments."
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+
+msgid "Write a query to run."
+msgstr "Write a query to run."
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "Write text between single quotes, and write a quote inside the text twice."
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "Write text values, including IDs, in single quotes."
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "You can keep up to 20 queries here. Delete one first."
+
+msgid "Your browser"
+msgstr "Your browser"

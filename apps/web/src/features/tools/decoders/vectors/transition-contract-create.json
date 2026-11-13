@@ -1,0 +1,64 @@
+{
+  "id": "transition-contract-create",
+  "kind": "stateTransition",
+  "network": "mainnet",
+  "source": "Platform Explorer transaction 9A6EAA1774589AAC3C11FF0DDE9376D4015F7B40B4AC5B8D21669CBB696E87B5 (fixture pe/mainnet/identity__BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp__transactions--limit-10,order-desc,page-2.json)",
+  "hex": "00000058ec72e90517069816f519f6995a9db82abc12beaf71f1f015498b7e3bd41a47000000000001010000019f86b2e73cb97d1caea846243309649a621acba44ff669614a32de04ade9bb0300010d64617461436f6e747261637473160412047479706512066f626a656374120a70726f706572746965731602120a6964656e74696669657216041204747970651206737472696e6712096d696e4c656e677468035612096d61784c656e67746803581208706f736974696f6e030012046e616d6516041204747970651206737472696e6712096d61784c656e677468034012096d696e4c656e67746803061208706f736974696f6e0302120872657175697265641502120a6964656e74696669657212046e616d6512146164646974696f6e616c50726f7065727469657313000100024120d4a53a797ea0e928366ce4c3f61badb54eb88b2dae5965eaf9717079c414817831119a761dd7f63a38bff939b449766b696fa18e8a023cd22489d295c7363e3e",
+  "expected": {
+    "actionType": "DataContractCreate",
+    "actionTypeNumber": 0,
+    "hash": "9a6eaa1774589aac3c11ff0dde9376d4015f7b40b4ac5b8d21669cbb696e87b5",
+    "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+    "identityNonce": "1",
+    "identityContractNonce": null,
+    "userFeeIncrease": 0,
+    "signaturePublicKeyId": 2,
+    "byteLength": 372,
+    "body": {
+      "$formatVersion": "0",
+      "dataContract": {
+        "$formatVersion": "0",
+        "id": "6z7zekYM1HPCn1PJu2P9dmKM5nxA7YvTyzr5LuxB2bpr",
+        "config": {
+          "$formatVersion": "0",
+          "canBeDeleted": false,
+          "readonly": false,
+          "keepsHistory": false,
+          "documentsKeepHistoryContractDefault": false,
+          "documentsMutableContractDefault": true,
+          "documentsCanBeDeletedContractDefault": true,
+          "requiresIdentityEncryptionBoundedKey": null,
+          "requiresIdentityDecryptionBoundedKey": null
+        },
+        "version": 1,
+        "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+        "schemaDefs": null,
+        "documentSchemas": {
+          "dataContracts": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "minLength": 43,
+                "maxLength": 44,
+                "position": 0
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 32,
+                "minLength": 3,
+                "position": 1
+              }
+            },
+            "required": ["identifier", "name"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "identityNonce": 1,
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 2,
+      "signature": "INSlOnl+oOkoNmzkw/YbrbVOuIstrlll6vlxcHnEFIF4MRGadh3X9jo4v/k5tEl2a2lvoY6KAjzSJInSlcc2Pj4="
+    }
+  }
+}

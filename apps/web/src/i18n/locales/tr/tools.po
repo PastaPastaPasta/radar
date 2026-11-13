@@ -12,3 +12,855 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+msgid "“{arg}” has no wildcard."
+msgstr "“{arg}” içinde joker karakter yok."
+
+msgid "“{arg}” isn't a number."
+msgstr "“{arg}” bir sayı değil."
+
+msgid "“{arg}” isn't an operator Platform knows."
+msgstr "“{arg}”, Platform’un tanıdığı bir operatör değil."
+
+msgid "“{arg}” isn't supported here."
+msgstr "“{arg}” burada desteklenmiyor."
+
+msgid "“{arg}” isn't supported."
+msgstr "“{arg}” desteklenmiyor."
+
+msgid "“{arg}” needs quotes."
+msgstr "“{arg}” tırnak içine alınmalı."
+
+msgid "(opens in a new tab)"
+msgstr "(yeni sekmede açılır)"
+
+#. placeholder {0}: result.rows.length
+msgid "{0, plural, one {# document} other {# documents}}"
+msgstr "{0, plural, one {# belge} other {# belge}}"
+
+#. placeholder {0}: result.groups.length
+msgid "{0, plural, one {# group} other {# groups}}"
+msgstr "{0, plural, one {# grup} other {# grup}}"
+
+#. placeholder {0}: type.fields.length
+#. placeholder {1}: type.indexes.length
+msgid "{0} fields, {1} indexes"
+msgstr "{0} alan, {1} dizin"
+
+#. placeholder {0}: layer.issues.length
+msgid "{0} lines of this layer could not be read."
+msgstr "Bu katmanın {0} satırı okunamadı."
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "{0} steps"
+msgstr "{0} adım"
+
+#. placeholder {0}: formatName[parsed.format]
+#. placeholder {1}: formatBytes(parsed.bytes.length)
+msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
+msgstr "{0}, {1}. Burada çözüldü: baytlar hiçbir yere gönderilmez."
+
+msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
+msgstr "Bir belgenin baytları yalnızca sözleşmesi bağlamında anlam taşır. Radar sözleşmeyi bir kez getirir, kanıtını burada doğrular ve çözmek için saklar."
+
+msgid "A field name in backticks is missing its closing backtick."
+msgstr "Ters tırnak içindeki alan adının kapanış ters tırnağı eksik."
+
+msgid "A field name was expected, but “{arg}” came instead."
+msgstr "Bir alan adı bekleniyordu ama “{arg}” geldi."
+
+msgid "A filter follows one index: the fields it names must be an index's leading fields, matched with == or IN, and the last of them may take a range (<, <=, >, >=, BETWEEN) or STARTS WITH. Add ORDER BY for each field you filter with a range or IN."
+msgstr "Bir filtre tek bir dizini izler: adlandırdığı alanlar bir dizinin baştaki alanları olmalı ve == veya IN ile eşleştirilmeli; bunların sonuncusu bir aralık (<, <=, >, >=, BETWEEN) veya STARTS WITH alabilir. Aralık veya IN ile filtrelediğiniz her alan için ORDER BY ekleyin."
+
+msgid "A name by its label"
+msgstr "Etiketine göre bir ad"
+
+msgid "A number was expected, but “{arg}” came instead."
+msgstr "Bir sayı bekleniyordu ama “{arg}” geldi."
+
+msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+msgstr "Bir sorgu SELECT … FROM … WHERE, AND ile bağlanan koşullar, ardından GROUP BY, ORDER BY ve LIMIT’ten oluşur. JOIN, OR, OFFSET ve alt sorgular kullanılamaz, çünkü Platform tek bir dizinden yanıt verir."
+
+msgid "A statement can name a contract itself, as in FROM dpns.domain."
+msgstr "Bir ifade sözleşmeyi kendisi adlandırabilir, örneğin FROM dpns.domain."
+
+msgid "A string is missing its closing quote."
+msgstr "Bir metin değerinin kapanış tırnağı eksik."
+
+msgid "A sum over a range"
+msgstr "Bir aralık üzerinde toplam"
+
+msgid "A value was expected, but “{arg}” came instead."
+msgstr "Bir değer bekleniyordu ama “{arg}” geldi."
+
+msgid "A whole number was expected, but “{arg}” came instead."
+msgstr "Bir tam sayı bekleniyordu ama “{arg}” geldi."
+
+msgid "Action"
+msgstr "Eylem"
+
+msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
+msgstr "Aralıkla (<, >, BETWEEN, STARTS WITH) veya IN ile filtrelenen her alan için ORDER BY ekleyin."
+
+msgid "All documents"
+msgstr "Tüm belgeler"
+
+msgid "Amount (credits)"
+msgstr "Tutar (kredi)"
+
+msgid "An average per group"
+msgstr "Grup başına ortalama"
+
+msgid "An operator was expected, but “{arg}” came instead."
+msgstr "Bir operatör bekleniyordu ama “{arg}” geldi."
+
+msgid "Another contract…"
+msgstr "Başka bir sözleşme…"
+
+msgid "Average"
+msgstr "Ortalama"
+
+#. placeholder {0}: result.field
+msgid "Average of {0}"
+msgstr "{0} ortalaması"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid "Byte list"
+msgstr "Bayt listesi"
+
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Cancelled"
+msgstr "İptal edildi"
+
+msgid "Check the ID, or pick one of the contracts in the list."
+msgstr "Kimliği kontrol edin veya listedeki sözleşmelerden birini seçin."
+
+msgid "Check this transition"
+msgstr "Bu geçişi denetle"
+
+msgid "Check with Platform"
+msgstr "Platform ile denetle"
+
+msgid "Checking a transition needs Platform Explorer"
+msgstr "Bir geçişi denetlemek için Platform Explorer gerekir"
+
+msgid "Checking is not available on this network."
+msgstr "Denetleme bu ağda kullanılamıyor."
+
+msgid "Choose a decoder"
+msgstr "Bir çözücü seçin"
+
+msgid "Choose the contract and the document type above to decode this document."
+msgstr "Bu belgeyi çözmek için yukarıdan sözleşmeyi ve belge türünü seçin."
+
+msgid "Clear the filter"
+msgstr "Filtreyi temizle"
+
+msgid "contested"
+msgstr "çekişmeli"
+
+msgid "Contested name"
+msgstr "Çekişmeli ad"
+
+msgid "Contract"
+msgstr "Sözleşme"
+
+msgid "Contract and type"
+msgstr "Sözleşme ve tür"
+
+msgid "Contract decoder"
+msgstr "Sözleşme çözücü"
+
+msgid "Contract ID"
+msgstr "Sözleşme kimliği"
+
+msgid "Contract version"
+msgstr "Sözleşme sürümü"
+
+msgid "Copy query link"
+msgstr "Sorgu bağlantısını kopyala"
+
+msgid "Copy the raw reading"
+msgstr "Ham okumayı kopyala"
+
+msgid "Copy the SDK example"
+msgstr "SDK örneğini kopyala"
+
+msgid "Core fee per byte"
+msgstr "Bayt başına Core ücreti"
+
+msgid "Count and sum"
+msgstr "Sayı ve toplam"
+
+msgid "Credit transfer"
+msgstr "Kredi transferi"
+
+msgid "Credit withdrawal"
+msgstr "Kredi çekimi"
+
+msgid "Credits in"
+msgstr "Giren krediler"
+
+msgid "Credits out"
+msgstr "Çıkan krediler"
+
+msgid "Custom"
+msgstr "Özel"
+
+msgid "DAPI"
+msgstr "DAPI"
+
+msgid "DashPay profiles of one owner"
+msgstr "Tek bir sahibin DashPay profilleri"
+
+msgid "Data contract create"
+msgstr "Veri sözleşmesi oluşturma"
+
+msgid "Data contract update"
+msgstr "Veri sözleşmesi güncelleme"
+
+msgid "Decode a signed state transition and ask Platform whether it would be accepted."
+msgstr "İmzalı bir durum geçişini çözün ve Platform’a kabul edilip edilmeyeceğini sorun."
+
+msgid "Decoded"
+msgstr "Çözüldü"
+
+msgid "Decoded here: the bytes are not sent anywhere."
+msgstr "Burada çözüldü: baytlar hiçbir yere gönderilmez."
+
+msgid "Decoded JSON"
+msgstr "Çözülmüş JSON"
+
+msgid "Decoders"
+msgstr "Çözücüler"
+
+msgid "Decoding above works on every network. Platform Explorer covers mainnet and testnet."
+msgstr "Yukarıdaki çözme her ağda çalışır. Platform Explorer mainnet ve testnet’i kapsar."
+
+msgid "Delete"
+msgstr "Sil"
+
+#. placeholder {0}: q.name
+msgid "Delete {0}"
+msgstr "{0} öğesini sil"
+
+msgid "Detect"
+msgstr "Algıla"
+
+msgid "Document decoder"
+msgstr "Belge çözücü"
+
+msgid "Document type"
+msgstr "Belge türü"
+
+msgid "Document types"
+msgstr "Belge türleri"
+
+msgid "Documents"
+msgstr "Belgeler"
+
+msgid "Documents and tokens batch"
+msgstr "Belge ve token toplu işlemi"
+
+msgid "DPNS contract"
+msgstr "DPNS sözleşmesi"
+
+msgid "Drive returns at most 100 documents (or 100 groups) per query."
+msgstr "Drive, sorgu başına en fazla 100 belge (veya 100 grup) döndürür."
+
+msgid "Element"
+msgstr "Öğe"
+
+msgid "Elements"
+msgstr "Öğeler"
+
+#. placeholder {0}: result.code
+msgid "Error code {0}"
+msgstr "Hata kodu {0}"
+
+msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
+msgstr "Her koşul sağlanmalı (AND): bir dizin aynı anda iki seçeneğe hizmet edemez. Bunun yerine iki ifade çalıştırın."
+
+msgid "Every segment and key is hex, two digits to a byte."
+msgstr "Her segment ve anahtar hex’tir, bayt başına iki basamak."
+
+msgid "Expected {label}, but “{arg}” came instead."
+msgstr "{label} bekleniyordu ama “{arg}” geldi."
+
+msgid "Export CSV"
+msgstr "CSV olarak dışa aktar"
+
+msgid "Export JSON"
+msgstr "JSON olarak dışa aktar"
+
+msgid "Fee multiplier"
+msgstr "Ücret çarpanı"
+
+msgid "Fields"
+msgstr "Alanlar"
+
+msgid "Filter by page, source or call"
+msgstr "Sayfa, kaynak veya çağrıya göre süz"
+
+msgid "Group"
+msgstr "Grup"
+
+msgid "GROUP BY needs COUNT(*), SUM(field) or AVG(field)."
+msgstr "GROUP BY için COUNT(*), SUM(field) veya AVG(field) gerekir."
+
+msgid "GroveDB path"
+msgstr "GroveDB yolu"
+
+msgid "GroveDB proof"
+msgstr "GroveDB kanıtı"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Hashes standing in for the rest"
+msgstr "Geri kalanın yerini tutan hash’ler"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "Hyphen"
+msgstr "Hyphen"
+
+msgid "ID"
+msgstr "Kimlik"
+
+msgid "Identity"
+msgstr "Kimlik"
+
+msgid "Identity create"
+msgstr "Kimlik oluşturma"
+
+msgid "Identity create from addresses"
+msgstr "Adreslerden kimlik oluşturma"
+
+msgid "Identity decoder"
+msgstr "Kimlik çözücü"
+
+msgid "Identity top-up"
+msgstr "Kimlik bakiye yükleme"
+
+msgid "Identity top-up from addresses"
+msgstr "Adreslerden kimlik bakiye yükleme"
+
+msgid "Identity update"
+msgstr "Kimlik güncelleme"
+
+msgid "indexed"
+msgstr "dizinli"
+
+msgid "Indexes"
+msgstr "Dizinler"
+
+msgid "Input"
+msgstr "Girdi"
+
+msgid "Inputs"
+msgstr "Girdiler"
+
+msgid "Insight"
+msgstr "Insight"
+
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Keys"
+msgstr "Anahtarlar"
+
+msgid "Keys added"
+msgstr "Eklenen anahtarlar"
+
+msgid "Keys disabled"
+msgstr "Devre dışı bırakılan anahtarlar"
+
+#. placeholder {0}: layer.layerIndex
+msgid "Layer {0}"
+msgstr "Katman {0}"
+
+msgid "Layers"
+msgstr "Katmanlar"
+
+msgid "LIKE needs a quoted pattern such as 'abc%'."
+msgstr "LIKE, 'abc%' gibi tırnak içinde bir kalıp gerektirir."
+
+msgid "LIMIT must be between 1 and 100."
+msgstr "LIMIT 1 ile 100 arasında olmalı."
+
+#. placeholder {0}: place.line
+#. placeholder {1}: place.column
+msgid "Line {0}, column {1}."
+msgstr "Satır {0}, sütun {1}."
+
+msgid "Load the next page"
+msgstr "Sonraki sayfayı yükle"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Masternode vote"
+msgstr "Masternode oyu"
+
+msgid "Name at least one key to read."
+msgstr "Okunacak en az bir anahtar belirtin."
+
+msgid "Name for this query"
+msgstr "Bu sorgunun adı"
+
+msgid "No contract with this ID on this network."
+msgstr "Bu ağda bu kimliğe sahip bir sözleşme yok."
+
+msgid "No documents match."
+msgstr "Eşleşen belge yok."
+
+msgid "No index covers this combination of WHERE and ORDER BY fields. Filters and sorting must follow one index's property order; the schema below lists the indexes."
+msgstr "Hiçbir dizin bu WHERE ve ORDER BY alanları birleşimini karşılamıyor. Filtreler ve sıralama tek bir dizinin özellik sırasını izlemeli; aşağıdaki şema dizinleri listeler."
+
+msgid "No indexes: documents of this type can only be read by their ID."
+msgstr "Dizin yok: bu türdeki belgeler yalnızca kimlikleriyle okunabilir."
+
+msgid "No page or call matches this filter."
+msgstr "Bu filtreyle eşleşen sayfa veya çağrı yok."
+
+msgid "No saved queries yet."
+msgstr "Henüz kayıtlı sorgu yok."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "NOT isn't supported."
+msgstr "NOT desteklenmiyor."
+
+msgid "Nothing in this proof could be read as layers."
+msgstr "Bu kanıttaki hiçbir şey katman olarak okunamadı."
+
+msgid "nothing stored"
+msgstr "hiçbir şey saklanmıyor"
+
+msgid "Nothing was returned for these keys."
+msgstr "Bu anahtarlar için hiçbir şey döndürülmedi."
+
+msgid "Nothing was sent."
+msgstr "Hiçbir şey gönderilmedi."
+
+msgid "Numbers are whole or decimal digits with an optional minus sign. Write IDs and other text in single quotes."
+msgstr "Sayılar, isteğe bağlı eksi işaretli tam veya ondalık rakamlardır. Kimlikleri ve diğer metinleri tek tırnak içinde yazın."
+
+msgid "One hex key per line."
+msgstr "Satır başına bir hex anahtar."
+
+msgid "One hex segment per line, from the root. Empty reads the root tree."
+msgstr "Satır başına bir hex segment, kökten başlayarak. Boş bırakılırsa kök ağaç okunur."
+
+msgid "Only prefix patterns work with LIKE."
+msgstr "LIKE ile yalnızca önek kalıpları çalışır."
+
+msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+msgstr "Yalnızca SELECT *, COUNT(*), SUM(field) ve AVG(field) desteklenir."
+
+msgid "Operations in this batch"
+msgstr "Bu toplu işlemdeki operasyonlar"
+
+msgid "OR isn't supported."
+msgstr "OR desteklenmiyor."
+
+msgid "or, as the last field you filter"
+msgstr "veya filtrelediğiniz son alan olarak"
+
+msgid "Outputs"
+msgstr "Çıktılar"
+
+msgid "Pages"
+msgstr "Sayfalar"
+
+msgid "Paste a proof from a Platform answer to see the layers, the keys it proves and the hashes that stand in for the rest."
+msgstr "Katmanları, kanıtladığı anahtarları ve geri kalanın yerini tutan hash’leri görmek için bir Platform yanıtından bir kanıt yapıştırın."
+
+msgid "Paste a proof."
+msgstr "Bir kanıt yapıştırın."
+
+msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
+msgstr "Bir durum geçişini hex veya base64 olarak yapıştırarak çözün ve denetleyin. Hiçbir şey imzalanmaz veya gönderilmez."
+
+msgid "Paste some bytes."
+msgstr "Bazı baytlar yapıştırın."
+
+msgid "Paste the serialized bytes of a data contract to read its document types, tokens and groups."
+msgstr "Belge türlerini, token’ları ve grupları okumak için bir veri sözleşmesinin serileştirilmiş baytlarını yapıştırın."
+
+msgid "Paste the serialized bytes of a document and name its contract and type to read its fields."
+msgstr "Alanlarını okumak için bir belgenin serileştirilmiş baytlarını yapıştırın ve sözleşmesini ve türünü belirtin."
+
+msgid "Paste the serialized bytes of an identity to read its keys, balance and revision."
+msgstr "Anahtarlarını, bakiyesini ve revizyonunu okumak için bir kimliğin serileştirilmiş baytlarını yapıştırın."
+
+msgid "Path"
+msgstr "Yol"
+
+msgid "Path decoder"
+msgstr "Yol çözücü"
+
+msgid "Pick a contract above, or write its name before the type, as in FROM dpns.domain."
+msgstr "Yukarıdan bir sözleşme seçin veya türden önce adını yazın, örneğin FROM dpns.domain."
+
+msgid "Pick a type"
+msgstr "Bir tür seçin"
+
+msgid "Platform address funding"
+msgstr "Platform adresi yükleme"
+
+msgid "Platform address transfer"
+msgstr "Platform adresi transferi"
+
+msgid "Platform address withdrawal"
+msgstr "Platform adresi çekimi"
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value."
+msgstr "Platform değerleri, aralıkları, IN listelerini ve önekleri eşleştirebilir ama bir değeri hariç tutamaz."
+
+msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+msgstr "Platform değerleri, aralıkları, IN listelerini ve önekleri eşleştirebilir ama bir değeri hariç tutamaz. İstediğiniz şeye göre filtreleyin, istemediğinize göre değil."
+
+msgid "Platform Explorer"
+msgstr "Platform Explorer"
+
+msgid "Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes."
+msgstr "Platform Explorer, bir Platform düğümüne bu geçişi kabul edip etmeyeceğini sorar (deneme çalıştırması). Hiçbir şey yayınlanmaz ve hiçbir şey değişmez."
+
+msgid "Platform groups only aggregate answers. A list of documents can't be grouped."
+msgstr "Platform yalnızca toplulaştırılmış yanıtları gruplar. Bir belge listesi gruplanamaz."
+
+msgid "Platform rejected the LIMIT for this query shape. Try a smaller LIMIT."
+msgstr "Platform bu sorgu biçimi için LIMIT’i reddetti. Daha küçük bir LIMIT deneyin."
+
+msgid "Platform returns whole documents or one aggregate, so field projections and DISTINCT are unavailable."
+msgstr "Platform ya tüm belgeleri ya da tek bir toplulaştırma döndürür, bu yüzden alan projeksiyonları ve DISTINCT kullanılamaz."
+
+msgid "Platform SDK"
+msgstr "Platform SDK"
+
+msgid "Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them."
+msgstr "Platform bir dizini sırayla gezer; bu yüzden bir sorgu, dizinin baştaki alanlarında bir dizi eşleşme ve ardından en fazla bir aralıktan oluşur."
+
+msgid "Platform would accept this transition."
+msgstr "Platform bu geçişi kabul ederdi."
+
+msgid "Platform would reject this transition."
+msgstr "Platform bu geçişi reddederdi."
+
+msgid "Points to"
+msgstr "Şuna işaret eder"
+
+msgid "Pooling"
+msgstr "Havuzlama"
+
+msgid "Preset"
+msgstr "Hazır ayar"
+
+msgid "Presets"
+msgstr "Hazır ayarlar"
+
+msgid "Press ⌘ or Ctrl and Enter to run. Up to two statements, separated by a semicolon."
+msgstr "Çalıştırmak için ⌘ veya Ctrl ile Enter’a basın. Noktalı virgülle ayrılmış en fazla iki ifade."
+
+msgid "Price feed"
+msgstr "Fiyat akışı"
+
+msgid "Proof bytes"
+msgstr "Kanıt baytları"
+
+msgid "Proof decoder"
+msgstr "Kanıt çözücü"
+
+msgid "Proven items"
+msgstr "Kanıtlanan öğeler"
+
+msgid "Query"
+msgstr "Sorgu"
+
+msgid "Query link copied"
+msgstr "Sorgu bağlantısı kopyalandı"
+
+msgid "Query saved"
+msgstr "Sorgu kaydedildi"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar keeps numbers within JavaScript's exact range. Use the SDK directly for a larger exact value."
+msgstr "Radar sayıları JavaScript’in kesin aralığı içinde tutar. Daha büyük bir kesin değer için SDK’yı doğrudan kullanın."
+
+msgid "Raw reading"
+msgstr "Ham okuma"
+
+msgid "Raw result"
+msgstr "Ham sonuç"
+
+msgid "Read as"
+msgstr "Şu olarak oku"
+
+msgid "Read elements"
+msgstr "Öğeleri oku"
+
+msgid "Read Platform's own formats in this browser: contracts, identities, documents, proofs and paths. Nothing you paste is sent anywhere."
+msgstr "Platform’un kendi biçimlerini bu tarayıcıda okuyun: sözleşmeler, kimlikler, belgeler, kanıtlar ve yollar. Yapıştırdığınız hiçbir şey hiçbir yere gönderilmez."
+
+msgid "Read the elements stored at a GroveDB path, with a proof checked in this browser."
+msgstr "Bir GroveDB yolunda saklanan öğeleri, bu tarayıcıda doğrulanan bir kanıtla okuyun."
+
+msgid "Read up to {MAX_KEYS} keys at a time."
+msgstr "Bir seferde en fazla {MAX_KEYS} anahtar okunabilir."
+
+#. placeholder {0}: index + 1
+msgid "Result of statement {0}"
+msgstr "{0}. ifadenin sonucu"
+
+msgid "Results"
+msgstr "Sonuçlar"
+
+msgid "Revision"
+msgstr "Revizyon"
+
+msgid "Run"
+msgstr "Çalıştır"
+
+msgid "Run read-only SQL over the documents of a contract. Every answer is checked against a proof in this browser."
+msgstr "Bir sözleşmenin belgeleri üzerinde salt okunur SQL çalıştırın. Her yanıt, bu tarayıcıda bir kanıtla doğrulanır."
+
+msgid "Save"
+msgstr "Kaydet"
+
+msgid "Saved in this browser only, for this network and contract."
+msgstr "Yalnızca bu tarayıcıda, bu ağ ve sözleşme için kaydedilir."
+
+msgid "Saved queries"
+msgstr "Kayıtlı sorgular"
+
+msgid "Schema"
+msgstr "Şema"
+
+msgid "SDK documentation"
+msgstr "SDK dokümantasyonu"
+
+msgid "SDK example"
+msgstr "SDK örneği"
+
+msgid "SDK reference"
+msgstr "SDK başvurusu"
+
+msgid "Send transitions with Bridge"
+msgstr "Geçişleri Bridge ile gönderin"
+
+msgid "Sender"
+msgstr "Gönderen"
+
+msgid "Serialized data contract"
+msgstr "Serileştirilmiş veri sözleşmesi"
+
+msgid "Serialized document"
+msgstr "Serileştirilmiş belge"
+
+msgid "Serialized identity"
+msgstr "Serileştirilmiş kimlik"
+
+msgid "Shield"
+msgstr "Gizleme"
+
+msgid "Shield from asset lock"
+msgstr "Varlık kilidinden gizleme"
+
+msgid "Shield from identity"
+msgstr "Kimlikten gizleme"
+
+msgid "Shielded actions"
+msgstr "Gizli eylemler"
+
+msgid "Shielded transfer"
+msgstr "Gizli transfer"
+
+msgid "Shielded withdrawal"
+msgstr "Gizli çekim"
+
+#. placeholder {0}: formatInt(layer.ops.length)
+msgid "Show all {0} steps"
+msgstr "Tüm {0} adımı göster"
+
+msgid "Signed state transition"
+msgstr "İmzalı durum geçişi"
+
+msgid "Signing key"
+msgstr "İmza anahtarı"
+
+msgid "Size (bytes)"
+msgstr "Boyut (bayt)"
+
+msgid "SQL query"
+msgstr "SQL sorgusu"
+
+#. placeholder {0}: type.name
+msgid "Start a query on {0}"
+msgstr "{0} üzerinde sorgu başlat"
+
+msgid "State transition"
+msgstr "Durum geçişi"
+
+#. placeholder {0}: problem.statement
+#. placeholder {1}: problem.alias
+msgid "Statement {0} names the contract “{1}”, which Radar doesn't know. Use dpns, dashpay or another system contract, or pick a contract above and leave the name out."
+msgstr "{0}. ifade “{1}” sözleşmesini adlandırıyor ama Radar bunu tanımıyor. dpns, dashpay veya başka bir sistem sözleşmesi kullanın ya da yukarıdan bir sözleşme seçip adı bırakın."
+
+msgid "Step"
+msgstr "Adım"
+
+msgid "Steps"
+msgstr "Adımlar"
+
+msgid "Subtrees entered"
+msgstr "Girilen alt ağaçlar"
+
+msgid "Sum"
+msgstr "Toplam"
+
+#. placeholder {0}: result.field
+msgid "Sum of {0}"
+msgstr "{0} toplamı"
+
+msgid "That is more than 1 MB, which is more than any of these objects."
+msgstr "Bu 1 MB’tan fazla; bu nesnelerden herhangi birinden daha büyük."
+
+msgid "That isn't a list of numbers from 0 to 255."
+msgstr "Bu, 0 ile 255 arasında sayılardan oluşan bir liste değil."
+
+msgid "That isn't hex, base64 or a list of numbers."
+msgstr "Bu ne hex, ne base64 ne de bir sayı listesi."
+
+msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
+msgstr "Bu hex değil: 0’dan 9’a kadar rakamları ve a’dan f’ye kadar harfleri kullanın, bayt başına iki karakter."
+
+msgid "The first DashPay profiles"
+msgstr "İlk DashPay profilleri"
+
+msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+msgstr "Bir Platform yanıtındaki grovedbProof. Radar bunu burada okur ve her katmanın neyi kanıtladığını gösterir."
+
+msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
+msgstr "Yanıt veren düğüm bu isteği desteklemiyor; daha eski bir Platform sürümü çalıştırıyor olabilir. Farklı bir düğüme ulaşmak için yeniden çalıştırın."
+
+msgid "The proof reader could not be loaded. Check the connection and try again."
+msgstr "Kanıt okuyucu yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin."
+
+msgid "The proof reader stopped on this input: it is larger or deeper than it can read."
+msgstr "Kanıt okuyucu bu girdide durdu: okuyabileceğinden daha büyük veya daha derin."
+
+msgid "The query ran and Platform answered with nothing, proof included."
+msgstr "Sorgu çalıştı ve Platform, kanıt dahil, boş yanıt verdi."
+
+msgid "The raw reading is below."
+msgstr "Ham okuma aşağıda."
+
+msgid "The root tree"
+msgstr "Kök ağaç"
+
+msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
+msgstr "SDK bu geçiş türünün yalnızca zarfını okur; alanları gösterilmez."
+
+msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
+msgstr "Oy ağacının alt ağaçları: çekişmeli kaynaklar, kararlar, bitiş tarihleri ve kimlik oyları."
+
+msgid "The two entries inside the DPNS contract's subtree: its definition and its documents."
+msgstr "DPNS sözleşmesinin alt ağacındaki iki girdi: tanımı ve belgeleri."
+
+msgid "The well-known subtrees Platform keeps at the top of its state."
+msgstr "Platform’un durumunun en üstünde tuttuğu bilinen alt ağaçlar."
+
+msgid "These bytes are not a GroveDB proof."
+msgstr "Bu baytlar bir GroveDB kanıtı değil."
+
+msgid "These bytes could not be decoded as a state transition."
+msgstr "Bu baytlar bir durum geçişi olarak çözülemedi."
+
+msgid "These bytes could not be decoded."
+msgstr "Bu baytlar çözülemedi."
+
+msgid "This browser won't store the query."
+msgstr "Bu tarayıcı sorguyu saklamayacak."
+
+msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+msgstr "Bu belge türünde bu toplulaştırmayı destekleyen bir dizin yok. COUNT, özellikleri WHERE alanları olan sayılabilir bir dizin gerektirir; SUM ve AVG eşleşen toplanabilir bir dizin gerektirir. Aşağıdaki şema her dizinin bayraklarını listeler."
+
+msgid "This number is too large to write safely here."
+msgstr "Bu sayı burada güvenle yazılamayacak kadar büyük."
+
+msgid "This proof ends before it should: some of its bytes are missing."
+msgstr "Bu kanıt olması gerekenden önce bitiyor: bazı baytları eksik."
+
+msgid "This statement was stopped before it answered."
+msgstr "Bu ifade yanıt vermeden önce durduruldu."
+
+msgid "token"
+msgstr "token"
+
+msgid "Tools"
+msgstr "Araçlar"
+
+msgid "Transition decoder"
+msgstr "Geçiş çözücü"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "unique"
+msgstr "benzersiz"
+
+msgid "Unshield"
+msgstr "Gizlemeyi kaldırma"
+
+#. placeholder {0}: problem.count
+msgid "Up to {MAX_STATEMENTS} statements run at once; this has {0}."
+msgstr "Aynı anda en fazla {MAX_STATEMENTS} ifade çalışır; bunda {0} var."
+
+msgid "Use == for an exact match. LIKE is only a prefix match here."
+msgstr "Tam eşleşme için == kullanın. LIKE burada yalnızca önek eşleşmesidir."
+
+msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
+msgstr "==, >, >=, <, <=, BETWEEN … AND …, IN (…) veya STARTS WITH kullanın."
+
+msgid "Value"
+msgstr "Değer"
+
+msgid "Vote"
+msgstr "Oy"
+
+msgid "Voting state"
+msgstr "Oylama durumu"
+
+msgid "What the proof contains"
+msgstr "Kanıtın içeriği"
+
+msgid "Which Platform SDK call backs each Radar page, with its arguments."
+msgstr "Hangi Platform SDK çağrısının hangi Radar sayfasını beslediği, argümanlarıyla."
+
+msgid "Write a literal prefix and one trailing %, as in LIKE 'abc%', or use STARTS WITH for a prefix that holds % or _."
+msgstr "LIKE 'abc%' gibi düz bir önek ve sonunda tek bir % yazın; % veya _ içeren bir önek için STARTS WITH kullanın."
+
+msgid "Write a query to run."
+msgstr "Çalıştırılacak bir sorgu yazın."
+
+msgid "Write text between single quotes, and write a quote inside the text twice."
+msgstr "Metni tek tırnak arasına yazın; metnin içindeki tırnağı iki kez yazın."
+
+msgid "Write text values, including IDs, in single quotes."
+msgstr "Kimlikler dahil metin değerlerini tek tırnak içinde yazın."
+
+msgid "You can keep up to 20 queries here. Delete one first."
+msgstr "Burada en fazla 20 sorgu tutabilirsiniz. Önce birini silin."
+
+msgid "Your browser"
+msgstr "Tarayıcınız"

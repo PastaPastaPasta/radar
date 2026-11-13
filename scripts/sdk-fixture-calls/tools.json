@@ -1,0 +1,206 @@
+{
+  "mainnet": [
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "==", "pshenm1c"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+        "type": "profile",
+        "where": [["$ownerId", "==", "9dQixko1C7TrmKYuZDZ8qAhgMQWT5fZ3tvyb13MVnQV6"]],
+        "limit": 10
+      }
+    ],
+    [
+      "contracts.serialized",
+      {
+        "id": "11111111111111111111111111111111"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7"
+      }
+    ],
+    [
+      "contracts.serialized",
+      {
+        "id": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": [],
+        "keys": [
+          "08",
+          "10",
+          "18",
+          "20",
+          "24",
+          "28",
+          "30",
+          "34",
+          "38",
+          "40",
+          "48",
+          "50",
+          "58",
+          "60",
+          "68",
+          "70",
+          "78"
+        ]
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": ["70"],
+        "keys": ["63", "64", "65", "69", "70"]
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": ["40", "e668c659af66aee1e72c186dde7b5b7e0a1d712a09c40d5721f622bf53c53155"],
+        "keys": ["00", "01"]
+      }
+    ]
+  ],
+  "testnet": [
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          ["normalizedParentDomainName", "==", "dash"],
+          ["normalizedLabel", "==", "therea1s11mshaddy5"]
+        ],
+        "limit": 5
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7",
+        "type": "profile",
+        "limit": 5
+      }
+    ],
+    [
+      "documents.sum",
+      {
+        "contractId": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+        "type": "release",
+        "where": [
+          ["repoId", "==", "4Gi9cEwBkN1iGUBGqKcewJhj2TfKy94TTTkLLbM4cc1R"],
+          ["tagName", ">", "a"]
+        ],
+        "orderBy": [["tagName", "asc"]],
+        "property": "delta"
+      }
+    ],
+    [
+      "documents.average",
+      {
+        "contractId": "7DiE1W5YYgUXx7s68YTMGEM9UssZ5TFg7dXdGaDj8cet",
+        "type": "grade",
+        "where": [
+          ["class", "==", "CS101"],
+          ["semester", "Between", [20241, 20262]]
+        ],
+        "orderBy": [["semester", "asc"]],
+        "groupBy": ["semester"],
+        "property": "score"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "7DiE1W5YYgUXx7s68YTMGEM9UssZ5TFg7dXdGaDj8cet"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
+      }
+    ],
+    [
+      "contracts.fetch",
+      {
+        "id": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7"
+      }
+    ],
+    [
+      "contracts.serialized",
+      {
+        "id": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": [],
+        "keys": [
+          "08",
+          "10",
+          "18",
+          "20",
+          "24",
+          "28",
+          "30",
+          "34",
+          "38",
+          "40",
+          "48",
+          "50",
+          "58",
+          "60",
+          "68",
+          "70",
+          "78"
+        ]
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": ["70"],
+        "keys": ["63", "64", "65", "69", "70"]
+      }
+    ],
+    [
+      "system.pathElements",
+      {
+        "path": ["40", "e668c659af66aee1e72c186dde7b5b7e0a1d712a09c40d5721f622bf53c53155"],
+        "keys": ["00", "01"]
+      }
+    ]
+  ]
+}

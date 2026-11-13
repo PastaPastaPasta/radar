@@ -1,0 +1,2322 @@
+{
+  "method": "contracts.fetch",
+  "args": {
+    "id": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV"
+  },
+  "recordedAt": "2026-11-13T16:06:55.074Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "id": "5ofyNoMo8YriuoEFW4aTt1vkhyecurXso1Yyif324rfV",
+      "ownerId": "3vQ6SS5SgSpmZPCJRxb7Ey7KfTDdxzYBVvgQnVGsf2K5",
+      "version": 1,
+      "documentSchemas": {
+        "chunk": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "anyOf": [
+              {
+                "type": "deletableDocument",
+                "documentType": "maintainer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                }
+              },
+              {
+                "type": "deletableDocument",
+                "documentType": "writer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                },
+                "where": {
+                  "role": {
+                    "in": [1, 4]
+                  }
+                }
+              }
+            ]
+          },
+          "properties": {
+            "repoId": {
+              "$ref": "#/$defs/id",
+              "position": 0
+            },
+            "packHash": {
+              "$ref": "#/$defs/hid",
+              "position": 1
+            },
+            "seq": {
+              "$ref": "#/$defs/u32",
+              "position": 2
+            },
+            "d0": {
+              "type": "array",
+              "byteArray": true,
+              "maxItems": 4900,
+              "position": 3
+            },
+            "d1": {
+              "type": "array",
+              "byteArray": true,
+              "maxItems": 4900,
+              "position": 4
+            },
+            "d2": {
+              "type": "array",
+              "byteArray": true,
+              "maxItems": 4900,
+              "position": 5
+            }
+          },
+          "indices": [
+            {
+              "name": "chunk",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "packHash": "asc"
+                },
+                {
+                  "seq": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "perPack",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "packHash": "asc"
+                }
+              ],
+              "averageable": "seq"
+            }
+          ],
+          "required": ["repoId", "packHash", "seq", "d0"],
+          "additionalProperties": false,
+          "documentsCountable": true
+        },
+        "config": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "type": "deletableDocument",
+            "documentType": "maintainer",
+            "findBy": {
+              "repoId": "repoId",
+              "memberId": "."
+            }
+          },
+          "dependentRequired": {
+            "enc": ["epoch"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "defaultBranch": {
+              "$ref": "#/$defs/branch",
+              "position": 1
+            },
+            "protectedPatterns": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "position": 2,
+              "uniqueItems": true
+            },
+            "backend": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4,
+                  "position": 0
+                },
+                "uris": {
+                  "type": "array",
+                  "maxItems": 4,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  "position": 1
+                }
+              },
+              "required": ["mode"],
+              "additionalProperties": false,
+              "position": 3
+            },
+            "archived": {
+              "type": "boolean",
+              "position": 4
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 5
+            },
+            "epoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 6
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 7
+            },
+            "movedTo": {
+              "type": "identifier",
+              "position": 8
+            }
+          },
+          "indices": [
+            {
+              "name": "created",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "rangeCountable": true
+            }
+          ],
+          "required": ["$createdAt", "$createdAtBlockHeight", "repoId", "vis"],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "enc"
+                    },
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "defaultBranch"
+                    },
+                    {
+                      "absent": "protectedPatterns"
+                    },
+                    {
+                      "absent": "movedTo"
+                    }
+                  ]
+                }
+              ]
+            },
+            "encV2": {
+              "anyOf": [
+                {
+                  "absent": "enc"
+                },
+                {
+                  "allOf": [
+                    {
+                      "greaterThanOrEqual": [
+                        {
+                          "count": "enc"
+                        },
+                        61
+                      ]
+                    },
+                    {
+                      "equal": [
+                        {
+                          "byteAt": ["enc", 0]
+                        },
+                        2
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "consent": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": true,
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo"
+              },
+              "position": 0
+            }
+          },
+          "indices": [
+            {
+              "name": "byRepoOwner",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                }
+              ],
+              "unique": true
+            }
+          ],
+          "required": ["$createdAt", "repoId"],
+          "additionalProperties": false
+        },
+        "maintainer": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": true,
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "$ownerId": "$ownerId",
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "memberId": {
+              "type": "identifier",
+              "position": 1
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 2
+            },
+            "consentBy": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "consent",
+                "findBy": {
+                  "repoId": "repoId",
+                  "$ownerId": "."
+                }
+              },
+              "position": 3
+            }
+          },
+          "indices": [
+            {
+              "name": "byRepoMember",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "memberId": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "byMember",
+              "properties": [
+                {
+                  "memberId": "asc"
+                }
+              ]
+            }
+          ],
+          "required": ["$createdAt", "repoId", "memberId", "vis"],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "ownerOrConsented": {
+              "anyOf": [
+                {
+                  "equal": ["memberId", "$ownerId"]
+                },
+                {
+                  "equal": ["consentBy", "memberId"]
+                }
+              ]
+            }
+          },
+          "deleteConstraints": {
+            "ownerRowStays": {
+              "notEqual": ["memberId", "$ownerId"]
+            }
+          }
+        },
+        "packManifest": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "anyOf": [
+              {
+                "type": "deletableDocument",
+                "documentType": "maintainer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                }
+              },
+              {
+                "type": "deletableDocument",
+                "documentType": "writer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                },
+                "where": {
+                  "role": "r"
+                }
+              }
+            ]
+          },
+          "properties": {
+            "repoId": {
+              "$ref": "#/$defs/id",
+              "position": 0
+            },
+            "packHash": {
+              "$ref": "#/$defs/hid",
+              "position": 1
+            },
+            "kind": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "position": 2
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "position": 3
+            },
+            "objectCount": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 4
+            },
+            "chunkCount": {
+              "$ref": "#/$defs/u32",
+              "position": 5
+            },
+            "storage": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "position": 6
+            },
+            "uris": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "position": 7
+            },
+            "tips": {
+              "type": "array",
+              "byteArray": true,
+              "maxItems": 512,
+              "position": 8
+            },
+            "supersedes": {
+              "type": "array",
+              "byteArray": true,
+              "maxItems": 1024,
+              "position": 9
+            },
+            "r": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4,
+              "position": 10
+            }
+          },
+          "indices": [
+            {
+              "name": "packHash",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "packHash": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "byHash",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "packHash": "asc"
+                }
+              ]
+            },
+            {
+              "name": "created",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "rangeCountable": true
+            },
+            {
+              "name": "kind",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "kind": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "bytes",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "storage": "asc"
+                },
+                {
+                  "kind": "asc"
+                }
+              ],
+              "summable": "sizeBytes"
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$createdAtBlockHeight",
+            "repoId",
+            "packHash",
+            "kind",
+            "sizeBytes",
+            "objectCount",
+            "chunkCount",
+            "storage",
+            "r"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "platformChunks": {
+              "ifThen": [
+                {
+                  "equal": ["storage", 0]
+                },
+                {
+                  "allOf": [
+                    {
+                      "equal": [
+                        {
+                          "countOf": [
+                            "chunk",
+                            {
+                              "repoId": "repoId",
+                              "$ownerId": "$ownerId",
+                              "packHash": "packHash"
+                            }
+                          ]
+                        },
+                        "chunkCount"
+                      ]
+                    },
+                    {
+                      "equal": [
+                        {
+                          "sumOf": [
+                            "chunk",
+                            "seq",
+                            {
+                              "repoId": "repoId",
+                              "$ownerId": "$ownerId",
+                              "packHash": "packHash"
+                            }
+                          ]
+                        },
+                        {
+                          "divide": [
+                            {
+                              "multiply": [
+                                "chunkCount",
+                                {
+                                  "subtract": ["chunkCount", 1]
+                                }
+                              ]
+                            },
+                            2
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "storageShape": {
+              "ifThenElse": [
+                {
+                  "equal": ["storage", 0]
+                },
+                {
+                  "lessThanOrEqual": [
+                    "sizeBytes",
+                    {
+                      "multiply": ["chunkCount", 14700]
+                    }
+                  ]
+                },
+                {
+                  "equal": ["chunkCount", 0]
+                }
+              ]
+            },
+            "kindShape": {
+              "allOf": [
+                {
+                  "equal": [
+                    {
+                      "modulo": [
+                        {
+                          "count": "supersedes"
+                        },
+                        32
+                      ]
+                    },
+                    0
+                  ]
+                },
+                {
+                  "ifThen": [
+                    {
+                      "equal": ["kind", 3]
+                    },
+                    {
+                      "in": [
+                        {
+                          "count": "tips"
+                        },
+                        [20, 32, 40, 64]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "sizeNonNeg": {
+              "allOf": [
+                {
+                  "greaterThanOrEqual": ["sizeBytes", 0]
+                },
+                {
+                  "lessThanOrEqual": ["sizeBytes", 1099511627776]
+                }
+              ]
+            },
+            "maintKinds": {
+              "ifThen": [
+                {
+                  "in": ["kind", [7, 8, 9, 11]]
+                },
+                {
+                  "equal": ["r", 0]
+                }
+              ]
+            },
+            "botPack": {
+              "ifThenElse": [
+                {
+                  "equal": ["r", 4]
+                },
+                {
+                  "allOf": [
+                    {
+                      "in": ["kind", [0, 1, 6, 64, 65, 70]]
+                    },
+                    {
+                      "absent": "supersedes"
+                    }
+                  ]
+                },
+                {
+                  "in": ["r", [0, 1]]
+                }
+              ]
+            }
+          }
+        },
+        "protectedRefUpdate": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "type": "deletableDocument",
+            "documentType": "maintainer",
+            "findBy": {
+              "repoId": "repoId",
+              "memberId": "."
+            }
+          },
+          "dependentRequired": {
+            "enc": ["epoch"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "refNameHash": {
+              "$ref": "#/$defs/h32",
+              "position": 1
+            },
+            "refName": {
+              "$ref": "#/$defs/refName",
+              "position": 2
+            },
+            "newOid": {
+              "$ref": "#/$defs/oid",
+              "position": 3
+            },
+            "prevOid": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 20,
+              "maxItems": 32,
+              "position": 4
+            },
+            "force": {
+              "type": "boolean",
+              "position": 5
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 6
+            },
+            "epoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 7
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 8
+            }
+          },
+          "indices": [
+            {
+              "name": "refState",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "refNameHash": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "reflog",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "pusher",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$createdAtBlockHeight",
+            "repoId",
+            "refNameHash",
+            "newOid",
+            "vis"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "enc"
+                    },
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "absent": "refName"
+                }
+              ]
+            },
+            "hasName": {
+              "anyOf": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "present": "refName"
+                }
+              ]
+            },
+            "noLock": {
+              "not": {
+                "endsWith": [
+                  "refName",
+                  {
+                    "const": ".lock"
+                  }
+                ]
+              }
+            },
+            "oidWidth": {
+              "allOf": [
+                {
+                  "in": [
+                    {
+                      "count": "newOid"
+                    },
+                    [20, 32]
+                  ]
+                },
+                {
+                  "in": [
+                    {
+                      "count": "prevOid"
+                    },
+                    [0, 20, 32]
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "pushGrant": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": true,
+          "ownerRefersTo": {
+            "type": "deletableDocument",
+            "documentType": "maintainer",
+            "findBy": {
+              "repoId": "repoId",
+              "memberId": "."
+            }
+          },
+          "properties": {
+            "repoId": {
+              "$ref": "#/$defs/id",
+              "position": 0
+            },
+            "botId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "writer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                },
+                "where": {
+                  "role": {
+                    "const": 4
+                  }
+                }
+              },
+              "position": 1
+            },
+            "scope": {
+              "$ref": "#/$defs/h32",
+              "position": 2
+            },
+            "prefix": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "maxBytes": 255,
+              "position": 3
+            },
+            "until": {
+              "type": "integer",
+              "minimum": 0,
+              "position": 4
+            }
+          },
+          "indices": [
+            {
+              "name": "byBot",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "botId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            }
+          ],
+          "required": ["$createdAt", "repoId", "botId", "until"],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "ttl90": {
+              "allOf": [
+                {
+                  "greaterThan": ["until", "$createdAt"]
+                },
+                {
+                  "lessThanOrEqual": [
+                    "until",
+                    {
+                      "add": ["$createdAt", 7776000000]
+                    }
+                  ]
+                }
+              ]
+            },
+            "oneScope": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "present": "scope"
+                    },
+                    {
+                      "absent": "prefix"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "scope"
+                    },
+                    {
+                      "present": "prefix"
+                    }
+                  ]
+                }
+              ]
+            },
+            "headsOnly": {
+              "anyOf": [
+                {
+                  "absent": "prefix"
+                },
+                {
+                  "startsWith": [
+                    "prefix",
+                    {
+                      "const": "refs/heads/"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "refUpdate": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "anyOf": [
+              {
+                "type": "deletableDocument",
+                "documentType": "maintainer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                }
+              },
+              {
+                "type": "deletableDocument",
+                "documentType": "writer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                },
+                "where": {
+                  "role": "r"
+                }
+              }
+            ]
+          },
+          "dependentRequired": {
+            "enc": ["epoch"]
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "refNameHash": {
+              "$ref": "#/$defs/h32",
+              "position": 1
+            },
+            "refName": {
+              "$ref": "#/$defs/refName",
+              "position": 2
+            },
+            "newOid": {
+              "$ref": "#/$defs/oid",
+              "position": 3
+            },
+            "prevOid": {
+              "type": "array",
+              "byteArray": true,
+              "minItems": 20,
+              "maxItems": 32,
+              "position": 4
+            },
+            "force": {
+              "type": "boolean",
+              "position": 5
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 6
+            },
+            "epoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 7
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 8
+            },
+            "r": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 9
+            },
+            "pg": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "pushGrant",
+                "where": {
+                  "repoId": "repoId",
+                  "botId": "$ownerId",
+                  "$ownerId": "grantor",
+                  "until": {
+                    "greaterThanOrEqual": "$createdAt"
+                  },
+                  "scope": "refNameHash"
+                }
+              },
+              "position": 10
+            },
+            "pp": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "pushGrant",
+                "where": {
+                  "repoId": "repoId",
+                  "botId": "$ownerId",
+                  "$ownerId": "grantor",
+                  "until": {
+                    "greaterThanOrEqual": "$createdAt"
+                  }
+                }
+              },
+              "position": 11
+            },
+            "grantor": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "maintainer",
+                "findBy": {
+                  "repoId": "repoId",
+                  "memberId": "."
+                }
+              },
+              "position": 12
+            }
+          },
+          "indices": [
+            {
+              "name": "refState",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "refNameHash": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "reflog",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "pusher",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            }
+          ],
+          "required": [
+            "$createdAt",
+            "$createdAtBlockHeight",
+            "repoId",
+            "refNameHash",
+            "newOid",
+            "vis",
+            "r"
+          ],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "enc"
+                    },
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "absent": "refName"
+                }
+              ]
+            },
+            "hasName": {
+              "anyOf": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "present": "refName"
+                }
+              ]
+            },
+            "noLock": {
+              "not": {
+                "endsWith": [
+                  "refName",
+                  {
+                    "const": ".lock"
+                  }
+                ]
+              }
+            },
+            "oidWidth": {
+              "allOf": [
+                {
+                  "in": [
+                    {
+                      "count": "newOid"
+                    },
+                    [20, 32]
+                  ]
+                },
+                {
+                  "in": [
+                    {
+                      "count": "prevOid"
+                    },
+                    [0, 20, 32]
+                  ]
+                }
+              ]
+            },
+            "botGrant": {
+              "ifThenElse": [
+                {
+                  "equal": ["r", 4]
+                },
+                {
+                  "allOf": [
+                    {
+                      "anyOf": [
+                        {
+                          "present": "pg"
+                        },
+                        {
+                          "present": "pp"
+                        }
+                      ]
+                    },
+                    {
+                      "anyOf": [
+                        {
+                          "absent": "pg"
+                        },
+                        {
+                          "present": "enc"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "equal": ["r", 1]
+                }
+              ]
+            },
+            "grantPrefix": {
+              "anyOf": [
+                {
+                  "absent": "pp"
+                },
+                {
+                  "startsWith": [
+                    "refName",
+                    {
+                      "referenced": ["pp", "prefix"]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "release": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": false,
+          "ownerRefersTo": {
+            "type": "deletableDocument",
+            "documentType": "maintainer",
+            "findBy": {
+              "repoId": "repoId",
+              "memberId": "."
+            }
+          },
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "tagName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "maxBytes": 63,
+              "position": 1,
+              "pattern": "^(?:(?:@*[^\\x00- \\x7f~^:?*\\[\\\\/.@{]|\\{)+@*|@+)(?:(?:\\.?/|\\.)(?:(?:@*[^\\x00- \\x7f~^:?*\\[\\\\/.@{]|\\{)+@*|@+))*$"
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 120,
+              "maxBytes": 480,
+              "position": 2
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 5120,
+              "maxBytes": 5120,
+              "position": 3
+            },
+            "yanked": {
+              "type": "boolean",
+              "position": 4
+            },
+            "assets": {
+              "type": "string",
+              "maxLength": 4096,
+              "maxBytes": 4096,
+              "position": 5
+            },
+            "enc": {
+              "$ref": "#/$defs/enc",
+              "position": 6
+            },
+            "epoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "position": 7
+            },
+            "assetManifest": {
+              "$ref": "#/$defs/h32",
+              "position": 8
+            },
+            "imported": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "maxBytes": 256,
+                  "position": 0
+                },
+                "createdAt": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991,
+                  "position": 1
+                },
+                "url": {
+                  "type": "string",
+                  "maxLength": 300,
+                  "maxBytes": 300,
+                  "position": 2
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false,
+              "position": 9
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 10
+            },
+            "delta": {
+              "type": "integer",
+              "minimum": -1,
+              "maximum": 1,
+              "position": 11
+            },
+            "targetOid": {
+              "$ref": "#/$defs/oid",
+              "position": 12
+            }
+          },
+          "indices": [
+            {
+              "name": "tag",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "tagName": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "created",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ]
+            },
+            {
+              "name": "perTag",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "tagName": "asc"
+                }
+              ],
+              "summable": "delta",
+              "rangeSummable": true
+            }
+          ],
+          "required": ["$createdAt", "repoId", "tagName", "vis", "delta"],
+          "additionalProperties": false,
+          "dependentRequired": {
+            "enc": ["epoch"]
+          },
+          "propertyConstraints": {
+            "noPlain": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "absent": "enc"
+                    },
+                    {
+                      "equal": [
+                        "vis",
+                        {
+                          "const": "public"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "absent": "name"
+                    },
+                    {
+                      "absent": "notes"
+                    },
+                    {
+                      "absent": "assets"
+                    },
+                    {
+                      "absent": "assetManifest"
+                    }
+                  ]
+                }
+              ]
+            },
+            "oneLive": {
+              "ifThenElse": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "equal": ["delta", 0]
+                },
+                {
+                  "equal": [
+                    {
+                      "sumOf": [
+                        "release",
+                        "delta",
+                        {
+                          "repoId": "repoId",
+                          "tagName": "tagName"
+                        }
+                      ]
+                    },
+                    {
+                      "min": [
+                        {
+                          "add": ["delta", 1]
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "targetOnPublish": {
+              "ifThenElse": [
+                {
+                  "present": "enc"
+                },
+                {
+                  "absent": "targetOid"
+                },
+                {
+                  "anyOf": [
+                    {
+                      "notEqual": ["delta", 1]
+                    },
+                    {
+                      "present": "targetOid"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "repo": {
+          "type": "object",
+          "canBeDeleted": false,
+          "immutable": [
+            "name",
+            "forkOf",
+            {
+              "property": "visibility",
+              "when": {
+                "equal": [
+                  "$old.visibility",
+                  {
+                    "const": "public"
+                  }
+                ]
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,62}$",
+              "position": 0
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 500,
+              "maxBytes": 1000,
+              "position": 1
+            },
+            "defaultBranch": {
+              "$ref": "#/$defs/branch",
+              "position": 2
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "private"],
+              "position": 3,
+              "maxLength": 7
+            },
+            "forkOf": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "visibility": "visibility"
+                }
+              },
+              "position": 4
+            },
+            "topics": {
+              "type": "array",
+              "maxItems": 20,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 30,
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "position": 5
+            },
+            "displayName": {
+              "type": "string",
+              "maxLength": 100,
+              "maxBytes": 400,
+              "position": 6
+            },
+            "renamedTo": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo"
+              },
+              "position": 7
+            },
+            "language": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30,
+              "maxBytes": 60,
+              "position": 8
+            }
+          },
+          "indices": [
+            {
+              "name": "ownerName",
+              "properties": [
+                {
+                  "$ownerId": "asc"
+                },
+                {
+                  "name": "asc"
+                }
+              ],
+              "unique": true,
+              "rangeCountable": true
+            },
+            {
+              "name": "name",
+              "properties": [
+                {
+                  "name": "asc"
+                }
+              ]
+            },
+            {
+              "name": "forkOf",
+              "properties": [
+                {
+                  "forkOf": "asc"
+                }
+              ],
+              "rangeCountable": true,
+              "rankedCountable": true,
+              "skipIfAbsent": true
+            },
+            {
+              "name": "recent",
+              "properties": [
+                {
+                  "visibility": "asc"
+                },
+                {
+                  "$createdAt": "asc"
+                }
+              ],
+              "rangeCountable": true
+            }
+          ],
+          "required": ["$createdAt", "name", "visibility"],
+          "additionalProperties": false,
+          "documentsCountable": true,
+          "propertyConstraints": {
+            "forkIsPublic": {
+              "anyOf": [
+                {
+                  "absent": "forkOf"
+                },
+                {
+                  "equal": [
+                    "visibility",
+                    {
+                      "const": "public"
+                    }
+                  ]
+                }
+              ]
+            },
+            "privateNoBranch": {
+              "anyOf": [
+                {
+                  "equal": [
+                    "visibility",
+                    {
+                      "const": "public"
+                    }
+                  ]
+                },
+                {
+                  "absent": "defaultBranch"
+                }
+              ]
+            },
+            "nameNotDotGit": {
+              "not": {
+                "endsWith": [
+                  "name",
+                  {
+                    "const": ".git"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "writer": {
+          "type": "object",
+          "documentsMutable": false,
+          "canBeDeleted": true,
+          "properties": {
+            "repoId": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "permanentDocument",
+                "documentType": "repo",
+                "where": {
+                  "$ownerId": "$ownerId",
+                  "visibility": "vis"
+                }
+              },
+              "position": 0
+            },
+            "memberId": {
+              "type": "identifier",
+              "position": 1
+            },
+            "vis": {
+              "$ref": "#/$defs/vis",
+              "position": 2
+            },
+            "consentBy": {
+              "type": "identifier",
+              "refersTo": {
+                "type": "deletableDocument",
+                "documentType": "consent",
+                "findBy": {
+                  "repoId": "repoId",
+                  "$ownerId": "."
+                }
+              },
+              "position": 3
+            },
+            "role": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "position": 4
+            }
+          },
+          "indices": [
+            {
+              "name": "byRepoMember",
+              "properties": [
+                {
+                  "repoId": "asc"
+                },
+                {
+                  "memberId": "asc"
+                }
+              ],
+              "unique": true
+            },
+            {
+              "name": "byMember",
+              "properties": [
+                {
+                  "memberId": "asc"
+                }
+              ]
+            }
+          ],
+          "required": ["$createdAt", "repoId", "memberId", "vis", "role"],
+          "additionalProperties": false,
+          "propertyConstraints": {
+            "ownerOrConsented": {
+              "anyOf": [
+                {
+                  "equal": ["memberId", "$ownerId"]
+                },
+                {
+                  "equal": ["consentBy", "memberId"]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "keepsHistory": false,
+      "config": {
+        "$formatVersion": "2",
+        "canBeDeleted": false,
+        "readonly": false,
+        "keepsHistory": false,
+        "documentsKeepHistoryContractDefault": false,
+        "documentsMutableContractDefault": true,
+        "documentsCanBeDeletedContractDefault": true,
+        "requiresIdentityEncryptionBoundedKey": null,
+        "requiresIdentityDecryptionBoundedKey": null,
+        "sizedIntegerTypes": true
+      },
+      "indices": {
+        "chunk": [
+          {
+            "name": "chunk",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "packHash",
+                "order": "asc"
+              },
+              {
+                "field": "seq",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "perPack",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "packHash",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "config": [
+          {
+            "name": "created",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "consent": [
+          {
+            "name": "byRepoOwner",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          }
+        ],
+        "maintainer": [
+          {
+            "name": "byRepoMember",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "memberId",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "byMember",
+            "properties": [
+              {
+                "field": "memberId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "packManifest": [
+          {
+            "name": "packHash",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "packHash",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "byHash",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "packHash",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "created",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "kind",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "kind",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "bytes",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "storage",
+                "order": "asc"
+              },
+              {
+                "field": "kind",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "protectedRefUpdate": [
+          {
+            "name": "refState",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "refNameHash",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "reflog",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "pusher",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "pushGrant": [
+          {
+            "name": "byBot",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "botId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "refUpdate": [
+          {
+            "name": "refState",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "refNameHash",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "reflog",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "pusher",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "release": [
+          {
+            "name": "tag",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "tagName",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "created",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "perTag",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "tagName",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "repo": [
+          {
+            "name": "ownerName",
+            "properties": [
+              {
+                "field": "$ownerId",
+                "order": "asc"
+              },
+              {
+                "field": "name",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "name",
+            "properties": [
+              {
+                "field": "name",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "forkOf",
+            "properties": [
+              {
+                "field": "forkOf",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          },
+          {
+            "name": "recent",
+            "properties": [
+              {
+                "field": "visibility",
+                "order": "asc"
+              },
+              {
+                "field": "$createdAt",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ],
+        "writer": [
+          {
+            "name": "byRepoMember",
+            "properties": [
+              {
+                "field": "repoId",
+                "order": "asc"
+              },
+              {
+                "field": "memberId",
+                "order": "asc"
+              }
+            ],
+            "unique": true,
+            "contested": false
+          },
+          {
+            "name": "byMember",
+            "properties": [
+              {
+                "field": "memberId",
+                "order": "asc"
+              }
+            ],
+            "unique": false,
+            "contested": false
+          }
+        ]
+      },
+      "tokens": [],
+      "groups": []
+    },
+    "proved": true,
+    "meta": {
+      "height": 674239,
+      "coreChainLockedHeight": 1591004,
+      "epoch": 20342,
+      "timeMs": 1794585885689,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAVmPnEtkVqLICfAL6Csq/1icvO4eqofsqVIxgyE5d9I3BAFAACQCASBbtAdymcNfPSWCO6wkd5q+QOPg/012EEtbagdGhxQqSAA1s5G4D4kWP/4AP+XNu6grrcVYmE31y8vKoaVNJSwUTRABrJTExUKeAHVkfrzlSlzJtcWNPB4BylIii4zxIMYdFTERAQFAAPsDNQGqUXfUVmIcvKkKzHcRa8NByLfGFrmVTIXQkJ1S7DjszwIj+oJ4hcqMOgtsXwn6dvU9C4200AWL75zsVx812Rq+nhABA6aVrYy46x/pKYz8KDyY+8N5p5/PCgY9TM+StUlKCEsCN7tocTHKqUx0KalPUnSDXzBSiaZHjACbzl+DLSEDmx8QAQQ6CjH4yTx/kyRDFSKy8a/TgnSgM4HSPew26MbrKmbHAqL0SZL3R+mKagAhd91RFuiCZNOmsSmAO9xb3StKXYbBEAFcYN+h5qljrO9+Lyfxw+v9oeJLrMpcSiBlcXQ1UvcTwQK5M0mjWl5BfWr2lGJe1RqUx5qi5xveF92D6gYBBXGM3xABFneRMYa+jIf6L2wNBCb4ryFqgBF9fRN4X3EpqTtyC/cC8wo2B0k5u+icwCgrn28sg0j8qKJPpejkEkcAA9meOx8QBCBHY4fcAjl2eBbDw54RUBEUIKPRlWmFMIk2zvwdmjXdZAAFAgEBAQD9cs5Hhfcby51oqEEgNdQC+wLNuF9CaqPIBzr0Nh5g7QK+/M3edquP4Uj5+O4Gq7m75jIb3oH4Y4o81qdkIGMDehABXmYGUce7kQ3jS5OrjY6Cq0XNSPMl/YU9/CHcwLfr/GIRAqK+7afDaIwPTqSfIqtKHny0jgwx2Gz/gpQPE0LxSXw0EAHtvMp4yOnK+yc3JqNtqx9khqDJSXRmlG4JDQHy1Sm1GhERAoMz5IPFof/G7RPnnkLtjOK692A8FPLCXXbVnnIBW6+nEAG7suSZuFsn1zfojq9B695i6aUZCAhhLQZspWaCoBm8exEREQJiszCLy7ggKMP1agvSs6BZkB6MHiX24wRATQocAyZGTxABdXQz9x8Itl54Oqfcbw7TjIlGFhShY8F392PRzcUUdDYREQKguiVkx29osRS0Eb3BGoW/yvTerEWrR3+it0tyDNy/dxABpOLS9hICyNnPPCuu2ASFMFxpc2a3xqOJSrfHEiZsOM4REQKZ6B6U1kjrfiSidCBbils1kffm/KZEJLakHaF9BADhHRAB1Rn2w21e/57tdNXTNzO40bD/VHTDi4BUsRsrRwXgsRoRASBHY4fcAjl2eBbDw54RUBEUIKPRlWmFMIk2zvwdmjXdZAD7P4kDAQA/QAD7PzsBR2OH3AI5dngWw8OeEVARFCCj0ZVphTCJNs78HZo13WQCAAAAAAEBAAABAAErZUTZNUPnJfQStzHxw/bOLMcQDsaFXQplYYZLFqxtLAEJBmJyYW5jaBYFEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgC+wD/EghtYXhCeXRlcwL7AP8SB3BhdHRlcm4SpV4oPzpAK1teXHgwMC0gXHg3Zn5eOj8qXFtcXC8uQHtdfFx7fFteXHgwMC0gXHg3Zn5eOj8qXFtcXC8uQHtcLV0pKD86QCpbXlx4MDAtIFx4N2Z+Xjo/KlxbXFwvLkB7XXxceykqQCooPzooPzpcLj8vfFwuKSg/Oig/OkAqW15ceDAwLSBceDdmfl46PypcW1xcLy5Ae118XHspK0AqfEArKSkqJANlbmMWBBIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIdEghtYXhJdGVtcwL7BgADaDMyFgISBHR5cGUSBWJ5dGVzEgRzaXplAiADaGlkFgESBHR5cGUSCmlkZW50aWZpZXICaWQWARIEdHlwZRIKaWRlbnRpZmllcgNvaWQWBBIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIUEghtYXhJdGVtcwIgB3JlZk5hbWUWBRIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCBhIJbWF4TGVuZ3RoAvsA/xIIbWF4Qnl0ZXMC+wD/EgdwYXR0ZXJuEnFecmVmcy8oPzooPzpAKlteXHgwMC0gXHg3Zn5eOj8qXFtcXC8uQHtdfFx7KStAKnxAKykoPzooPzpcLj8vfFwuKSg/Oig/OkAqW15ceDAwLSBceDdmfl46PypcW1xcLy5Ae118XHspK0AqfEArKSkqJAN1MzIWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvz/////A3ZpcxYCEgR0eXBlEgZzdHJpbmcSBGVudW0VAhIGcHVibGljEgdwcml2YXRlCwVjaHVuaxYJEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASDW93bmVyUmVmZXJzVG8WARIFYW55T2YVAhYDEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIMZG9jdW1lbnRUeXBlEgptYWludGFpbmVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuFgQSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSBndyaXRlchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhIFd2hlcmUWARIEcm9sZRYBEgJpbhUCAgECBBIKcHJvcGVydGllcxYGEgZyZXBvSWQWAhIEJHJlZhIKIy8kZGVmcy9pZBIIcG9zaXRpb24CABIIcGFja0hhc2gWAhIEJHJlZhILIy8kZGVmcy9oaWQSCHBvc2l0aW9uAgESA3NlcRYCEgQkcmVmEgsjLyRkZWZzL3UzMhIIcG9zaXRpb24CAhICZDAWBBIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtYXhJdGVtcwL7EyQSCHBvc2l0aW9uAgMSAmQxFgQSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWF4SXRlbXMC+xMkEghwb3NpdGlvbgIEEgJkMhYEEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1heEl0ZW1zAvsTJBIIcG9zaXRpb24CBRIHaW5kaWNlcxUCFgMSBG5hbWUSBWNodW5rEgpwcm9wZXJ0aWVzFQQWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEghwYWNrSGFzaBIDYXNjFgESA3NlcRIDYXNjEgZ1bmlxdWUTARYDEgRuYW1lEgdwZXJQYWNrEgpwcm9wZXJ0aWVzFQMWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEghwYWNrSGFzaBIDYXNjEgthdmVyYWdlYWJsZRIDc2VxEghyZXF1aXJlZBUEEgZyZXBvSWQSCHBhY2tIYXNoEgNzZXESAmQwEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEhJkb2N1bWVudHNDb3VudGFibGUTAQZjb25maWcWChIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEg1vd25lclJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSCm1haW50YWluZXISBmZpbmRCeRYCEgZyZXBvSWQSBnJlcG9JZBIIbWVtYmVySWQSAS4SEWRlcGVuZGVudFJlcXVpcmVkFgESA2VuYxUBEgVlcG9jaBIKcHJvcGVydGllcxYJEgZyZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIEcmVwbxIFd2hlcmUWARIKdmlzaWJpbGl0eRIDdmlzEghwb3NpdGlvbgIAEg1kZWZhdWx0QnJhbmNoFgISBCRyZWYSDiMvJGRlZnMvYnJhbmNoEghwb3NpdGlvbgIBEhFwcm90ZWN0ZWRQYXR0ZXJucxYFEgR0eXBlEgVhcnJheRIIbWF4SXRlbXMCCBIFaXRlbXMWAxIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAmQSCHBvc2l0aW9uAgISC3VuaXF1ZUl0ZW1zEwESB2JhY2tlbmQWBRIEdHlwZRIGb2JqZWN0Egpwcm9wZXJ0aWVzFgISBG1vZGUWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAgQSCHBvc2l0aW9uAgASBHVyaXMWBBIEdHlwZRIFYXJyYXkSCG1heEl0ZW1zAgQSBWl0ZW1zFgMSBHR5cGUSBnN0cmluZxIJbWluTGVuZ3RoAgESCW1heExlbmd0aAL7ASwSCHBvc2l0aW9uAgESCHJlcXVpcmVkFQESBG1vZGUSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASCHBvc2l0aW9uAgMSCGFyY2hpdmVkFgISBHR5cGUSB2Jvb2xlYW4SCHBvc2l0aW9uAgQSA2VuYxYCEgQkcmVmEgsjLyRkZWZzL2VuYxIIcG9zaXRpb24CBRIFZXBvY2gWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvz/////Eghwb3NpdGlvbgIGEgN2aXMWAhIEJHJlZhILIy8kZGVmcy92aXMSCHBvc2l0aW9uAgcSB21vdmVkVG8WAhIEdHlwZRIKaWRlbnRpZmllchIIcG9zaXRpb24CCBIHaW5kaWNlcxUBFgMSBG5hbWUSB2NyZWF0ZWQSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSDnJhbmdlQ291bnRhYmxlEwESCHJlcXVpcmVkFQQSCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIGcmVwb0lkEgN2aXMSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASE3Byb3BlcnR5Q29uc3RyYWludHMWAhIHbm9QbGFpbhYBEgVhbnlPZhUCFgESBWFsbE9mFQIWARIGYWJzZW50EgNlbmMWARIFZXF1YWwVAhIDdmlzFgESBWNvbnN0EgZwdWJsaWMWARIFYWxsT2YVAxYBEgZhYnNlbnQSDWRlZmF1bHRCcmFuY2gWARIGYWJzZW50EhFwcm90ZWN0ZWRQYXR0ZXJucxYBEgZhYnNlbnQSB21vdmVkVG8SBWVuY1YyFgESBWFueU9mFQIWARIGYWJzZW50EgNlbmMWARIFYWxsT2YVAhYBEhJncmVhdGVyVGhhbk9yRXF1YWwVAhYBEgVjb3VudBIDZW5jAj0WARIFZXF1YWwVAhYBEgZieXRlQXQVAhIDZW5jAgACAgdjb25zZW50FgcSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTARIKcHJvcGVydGllcxYBEgZyZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAhIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIEcmVwbxIIcG9zaXRpb24CABIHaW5kaWNlcxUBFgMSBG5hbWUSC2J5UmVwb093bmVyEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxIGdW5pcXVlEwESCHJlcXVpcmVkFQISCiRjcmVhdGVkQXQSBnJlcG9JZBIUYWRkaXRpb25hbFByb3BlcnRpZXMTAAptYWludGFpbmVyFgkSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTARIKcHJvcGVydGllcxYEEgZyZXBvSWQWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAxIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIEcmVwbxIFd2hlcmUWAhIIJG93bmVySWQSCCRvd25lcklkEgp2aXNpYmlsaXR5EgN2aXMSCHBvc2l0aW9uAgASCG1lbWJlcklkFgISBHR5cGUSCmlkZW50aWZpZXISCHBvc2l0aW9uAgESA3ZpcxYCEgQkcmVmEgsjLyRkZWZzL3ZpcxIIcG9zaXRpb24CAhIJY29uc2VudEJ5FgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSB2NvbnNlbnQSBmZpbmRCeRYCEgZyZXBvSWQSBnJlcG9JZBIIJG93bmVySWQSAS4SCHBvc2l0aW9uAgMSB2luZGljZXMVAhYDEgRuYW1lEgxieVJlcG9NZW1iZXISCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEghtZW1iZXJJZBIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEghieU1lbWJlchIKcHJvcGVydGllcxUBFgESCG1lbWJlcklkEgNhc2MSCHJlcXVpcmVkFQQSCiRjcmVhdGVkQXQSBnJlcG9JZBIIbWVtYmVySWQSA3ZpcxIUYWRkaXRpb25hbFByb3BlcnRpZXMTABITcHJvcGVydHlDb25zdHJhaW50cxYBEhBvd25lck9yQ29uc2VudGVkFgESBWFueU9mFQIWARIFZXF1YWwVAhIIbWVtYmVySWQSCCRvd25lcklkFgESBWVxdWFsFQISCWNvbnNlbnRCeRIIbWVtYmVySWQSEWRlbGV0ZUNvbnN0cmFpbnRzFgESDW93bmVyUm93U3RheXMWARIIbm90RXF1YWwVAhIIbWVtYmVySWQSCCRvd25lcklkDHBhY2tNYW5pZmVzdBYJEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASDW93bmVyUmVmZXJzVG8WARIFYW55T2YVAhYDEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIMZG9jdW1lbnRUeXBlEgptYWludGFpbmVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuFgQSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSBndyaXRlchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhIFd2hlcmUWARIEcm9sZRIBchIKcHJvcGVydGllcxYLEgZyZXBvSWQWAhIEJHJlZhIKIy8kZGVmcy9pZBIIcG9zaXRpb24CABIIcGFja0hhc2gWAhIEJHJlZhILIy8kZGVmcy9oaWQSCHBvc2l0aW9uAgESBGtpbmQWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvsA/xIIcG9zaXRpb24CAhIJc2l6ZUJ5dGVzFgISBHR5cGUSB2ludGVnZXISCHBvc2l0aW9uAgMSC29iamVjdENvdW50FgMSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIIcG9zaXRpb24CBBIKY2h1bmtDb3VudBYCEgQkcmVmEgsjLyRkZWZzL3UzMhIIcG9zaXRpb24CBRIHc3RvcmFnZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0CARIIcG9zaXRpb24CBhIEdXJpcxYEEgR0eXBlEgVhcnJheRIIbWF4SXRlbXMCCBIFaXRlbXMWAxIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAvsBLBIIcG9zaXRpb24CBxIEdGlwcxYEEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1heEl0ZW1zAvsCABIIcG9zaXRpb24CCBIKc3VwZXJzZWRlcxYEEgR0eXBlEgVhcnJheRIJYnl0ZUFycmF5EwESCG1heEl0ZW1zAvsEABIIcG9zaXRpb24CCRIBchYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0CBBIIcG9zaXRpb24CChIHaW5kaWNlcxUFFgMSBG5hbWUSCHBhY2tIYXNoEgpwcm9wZXJ0aWVzFQMWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEghwYWNrSGFzaBIDYXNjEgZ1bmlxdWUTARYCEgRuYW1lEgZieUhhc2gSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEghwYWNrSGFzaBIDYXNjFgMSBG5hbWUSB2NyZWF0ZWQSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSDnJhbmdlQ291bnRhYmxlEwEWAhIEbmFtZRIEa2luZBIKcHJvcGVydGllcxUDFgESBnJlcG9JZBIDYXNjFgESBGtpbmQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAxIEbmFtZRIFYnl0ZXMSCnByb3BlcnRpZXMVAxYBEgZyZXBvSWQSA2FzYxYBEgdzdG9yYWdlEgNhc2MWARIEa2luZBIDYXNjEghzdW1tYWJsZRIJc2l6ZUJ5dGVzEghyZXF1aXJlZBUKEgokY3JlYXRlZEF0EhUkY3JlYXRlZEF0QmxvY2tIZWlnaHQSBnJlcG9JZBIIcGFja0hhc2gSBGtpbmQSCXNpemVCeXRlcxILb2JqZWN0Q291bnQSCmNodW5rQ291bnQSB3N0b3JhZ2USAXISFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASE3Byb3BlcnR5Q29uc3RyYWludHMWBhIOcGxhdGZvcm1DaHVua3MWARIGaWZUaGVuFQIWARIFZXF1YWwVAhIHc3RvcmFnZQIAFgESBWFsbE9mFQIWARIFZXF1YWwVAhYBEgdjb3VudE9mFQISBWNodW5rFgMSBnJlcG9JZBIGcmVwb0lkEggkb3duZXJJZBIIJG93bmVySWQSCHBhY2tIYXNoEghwYWNrSGFzaBIKY2h1bmtDb3VudBYBEgVlcXVhbBUCFgESBXN1bU9mFQMSBWNodW5rEgNzZXEWAxIGcmVwb0lkEgZyZXBvSWQSCCRvd25lcklkEggkb3duZXJJZBIIcGFja0hhc2gSCHBhY2tIYXNoFgESBmRpdmlkZRUCFgESCG11bHRpcGx5FQISCmNodW5rQ291bnQWARIIc3VidHJhY3QVAhIKY2h1bmtDb3VudAIBAgISDHN0b3JhZ2VTaGFwZRYBEgppZlRoZW5FbHNlFQMWARIFZXF1YWwVAhIHc3RvcmFnZQIAFgESD2xlc3NUaGFuT3JFcXVhbBUCEglzaXplQnl0ZXMWARIIbXVsdGlwbHkVAhIKY2h1bmtDb3VudAL7OWwWARIFZXF1YWwVAhIKY2h1bmtDb3VudAIAEglraW5kU2hhcGUWARIFYWxsT2YVAhYBEgVlcXVhbBUCFgESBm1vZHVsbxUCFgESBWNvdW50EgpzdXBlcnNlZGVzAiACABYBEgZpZlRoZW4VAhYBEgVlcXVhbBUCEgRraW5kAgMWARICaW4VAhYBEgVjb3VudBIEdGlwcxUEAhQCIAIoAkASCnNpemVOb25OZWcWARIFYWxsT2YVAhYBEhJncmVhdGVyVGhhbk9yRXF1YWwVAhIJc2l6ZUJ5dGVzAgAWARIPbGVzc1RoYW5PckVxdWFsFQISCXNpemVCeXRlcwL9AAABAAAAAAASCm1haW50S2luZHMWARIGaWZUaGVuFQIWARICaW4VAhIEa2luZBUEAgcCCAIJAgsWARIFZXF1YWwVAhIBcgIAEgdib3RQYWNrFgESCmlmVGhlbkVsc2UVAxYBEgVlcXVhbBUCEgFyAgQWARIFYWxsT2YVAhYBEgJpbhUCEgRraW5kFQYCAAIBAgYCQAJBAkYWARIGYWJzZW50EgpzdXBlcnNlZGVzFgESAmluFQISAXIVAgIAAgEScHJvdGVjdGVkUmVmVXBkYXRlFgoSBHR5cGUSBm9iamVjdBIQZG9jdW1lbnRzTXV0YWJsZRMAEgxjYW5CZURlbGV0ZWQTABINb3duZXJSZWZlcnNUbxYDEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIMZG9jdW1lbnRUeXBlEgptYWludGFpbmVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuEhFkZXBlbmRlbnRSZXF1aXJlZBYBEgNlbmMVARIFZXBvY2gSCnByb3BlcnRpZXMWCRIGcmVwb0lkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgMSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egxkb2N1bWVudFR5cGUSBHJlcG8SBXdoZXJlFgESCnZpc2liaWxpdHkSA3ZpcxIIcG9zaXRpb24CABILcmVmTmFtZUhhc2gWAhIEJHJlZhILIy8kZGVmcy9oMzISCHBvc2l0aW9uAgESB3JlZk5hbWUWAhIEJHJlZhIPIy8kZGVmcy9yZWZOYW1lEghwb3NpdGlvbgICEgZuZXdPaWQWAhIEJHJlZhILIy8kZGVmcy9vaWQSCHBvc2l0aW9uAgMSB3ByZXZPaWQWBRIEdHlwZRIFYXJyYXkSCWJ5dGVBcnJheRMBEghtaW5JdGVtcwIUEghtYXhJdGVtcwIgEghwb3NpdGlvbgIEEgVmb3JjZRYCEgR0eXBlEgdib29sZWFuEghwb3NpdGlvbgIFEgNlbmMWAhIEJHJlZhILIy8kZGVmcy9lbmMSCHBvc2l0aW9uAgYSBWVwb2NoFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIHbWF4aW11bQL8/////xIIcG9zaXRpb24CBxIDdmlzFgISBCRyZWYSCyMvJGRlZnMvdmlzEghwb3NpdGlvbgIIEgdpbmRpY2VzFQMWAhIEbmFtZRIIcmVmU3RhdGUSCnByb3BlcnRpZXMVAxYBEgZyZXBvSWQSA2FzYxYBEgtyZWZOYW1lSGFzaBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEgZyZWZsb2cSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRIGcHVzaGVyEgpwcm9wZXJ0aWVzFQMWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCHJlcXVpcmVkFQYSCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIGcmVwb0lkEgtyZWZOYW1lSGFzaBIGbmV3T2lkEgN2aXMSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASE3Byb3BlcnR5Q29uc3RyYWludHMWBBIHbm9QbGFpbhYBEgVhbnlPZhUCFgESBWFsbE9mFQIWARIGYWJzZW50EgNlbmMWARIFZXF1YWwVAhIDdmlzFgESBWNvbnN0EgZwdWJsaWMWARIGYWJzZW50EgdyZWZOYW1lEgdoYXNOYW1lFgESBWFueU9mFQIWARIHcHJlc2VudBIDZW5jFgESB3ByZXNlbnQSB3JlZk5hbWUSBm5vTG9jaxYBEgNub3QWARIIZW5kc1dpdGgVAhIHcmVmTmFtZRYBEgVjb25zdBIFLmxvY2sSCG9pZFdpZHRoFgESBWFsbE9mFQIWARICaW4VAhYBEgVjb3VudBIGbmV3T2lkFQICFAIgFgESAmluFQIWARIFY291bnQSB3ByZXZPaWQVAwIAAhQCIAlwdXNoR3JhbnQWCRIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMBEg1vd25lclJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSCm1haW50YWluZXISBmZpbmRCeRYCEgZyZXBvSWQSBnJlcG9JZBIIbWVtYmVySWQSAS4SCnByb3BlcnRpZXMWBRIGcmVwb0lkFgISBCRyZWYSCiMvJGRlZnMvaWQSCHBvc2l0aW9uAgASBWJvdElkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgQSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSBndyaXRlchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhIFd2hlcmUWARIEcm9sZRYBEgVjb25zdAIEEghwb3NpdGlvbgIBEgVzY29wZRYCEgQkcmVmEgsjLyRkZWZzL2gzMhIIcG9zaXRpb24CAhIGcHJlZml4FgUSBHR5cGUSBnN0cmluZxIJbWluTGVuZ3RoAgESCW1heExlbmd0aAL7AP8SCG1heEJ5dGVzAvsA/xIIcG9zaXRpb24CAxIFdW50aWwWAxIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEghwb3NpdGlvbgIEEgdpbmRpY2VzFQEWAhIEbmFtZRIFYnlCb3QSCnByb3BlcnRpZXMVAxYBEgZyZXBvSWQSA2FzYxYBEgVib3RJZBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxIIcmVxdWlyZWQVBBIKJGNyZWF0ZWRBdBIGcmVwb0lkEgVib3RJZBIFdW50aWwSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASE3Byb3BlcnR5Q29uc3RyYWludHMWAxIFdHRsOTAWARIFYWxsT2YVAhYBEgtncmVhdGVyVGhhbhUCEgV1bnRpbBIKJGNyZWF0ZWRBdBYBEg9sZXNzVGhhbk9yRXF1YWwVAhIFdW50aWwWARIDYWRkFQISCiRjcmVhdGVkQXQC/QAAAAHPfFgAEghvbmVTY29wZRYBEgVhbnlPZhUCFgESBWFsbE9mFQIWARIHcHJlc2VudBIFc2NvcGUWARIGYWJzZW50EgZwcmVmaXgWARIFYWxsT2YVAhYBEgZhYnNlbnQSBXNjb3BlFgESB3ByZXNlbnQSBnByZWZpeBIJaGVhZHNPbmx5FgESBWFueU9mFQIWARIGYWJzZW50EgZwcmVmaXgWARIKc3RhcnRzV2l0aBUCEgZwcmVmaXgWARIFY29uc3QSC3JlZnMvaGVhZHMvCXJlZlVwZGF0ZRYKEgR0eXBlEgZvYmplY3QSEGRvY3VtZW50c011dGFibGUTABIMY2FuQmVEZWxldGVkEwASDW93bmVyUmVmZXJzVG8WARIFYW55T2YVAhYDEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIMZG9jdW1lbnRUeXBlEgptYWludGFpbmVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuFgQSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSBndyaXRlchIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEghtZW1iZXJJZBIBLhIFd2hlcmUWARIEcm9sZRIBchIRZGVwZW5kZW50UmVxdWlyZWQWARIDZW5jFQESBWVwb2NoEgpwcm9wZXJ0aWVzFg0SBnJlcG9JZBYDEgR0eXBlEgppZGVudGlmaWVyEghyZWZlcnNUbxYDEgR0eXBlEhFwZXJtYW5lbnREb2N1bWVudBIMZG9jdW1lbnRUeXBlEgRyZXBvEgV3aGVyZRYBEgp2aXNpYmlsaXR5EgN2aXMSCHBvc2l0aW9uAgASC3JlZk5hbWVIYXNoFgISBCRyZWYSCyMvJGRlZnMvaDMyEghwb3NpdGlvbgIBEgdyZWZOYW1lFgISBCRyZWYSDyMvJGRlZnMvcmVmTmFtZRIIcG9zaXRpb24CAhIGbmV3T2lkFgISBCRyZWYSCyMvJGRlZnMvb2lkEghwb3NpdGlvbgIDEgdwcmV2T2lkFgUSBHR5cGUSBWFycmF5EglieXRlQXJyYXkTARIIbWluSXRlbXMCFBIIbWF4SXRlbXMCIBIIcG9zaXRpb24CBBIFZm9yY2UWAhIEdHlwZRIHYm9vbGVhbhIIcG9zaXRpb24CBRIDZW5jFgISBCRyZWYSCyMvJGRlZnMvZW5jEghwb3NpdGlvbgIGEgVlcG9jaBYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgASB21heGltdW0C/P////8SCHBvc2l0aW9uAgcSA3ZpcxYCEgQkcmVmEgsjLyRkZWZzL3ZpcxIIcG9zaXRpb24CCBIBchYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CBBIIcG9zaXRpb24CCRICcGcWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAxIEdHlwZRIRZGVsZXRhYmxlRG9jdW1lbnQSDGRvY3VtZW50VHlwZRIJcHVzaEdyYW50EgV3aGVyZRYFEgZyZXBvSWQSBnJlcG9JZBIFYm90SWQSCCRvd25lcklkEggkb3duZXJJZBIHZ3JhbnRvchIFdW50aWwWARISZ3JlYXRlclRoYW5PckVxdWFsEgokY3JlYXRlZEF0EgVzY29wZRILcmVmTmFtZUhhc2gSCHBvc2l0aW9uAgoSAnBwFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSCXB1c2hHcmFudBIFd2hlcmUWBBIGcmVwb0lkEgZyZXBvSWQSBWJvdElkEggkb3duZXJJZBIIJG93bmVySWQSB2dyYW50b3ISBXVudGlsFgESEmdyZWF0ZXJUaGFuT3JFcXVhbBIKJGNyZWF0ZWRBdBIIcG9zaXRpb24CCxIHZ3JhbnRvchYDEgR0eXBlEgppZGVudGlmaWVyEghyZWZlcnNUbxYDEgR0eXBlEhFkZWxldGFibGVEb2N1bWVudBIMZG9jdW1lbnRUeXBlEgptYWludGFpbmVyEgZmaW5kQnkWAhIGcmVwb0lkEgZyZXBvSWQSCG1lbWJlcklkEgEuEghwb3NpdGlvbgIMEgdpbmRpY2VzFQMWAhIEbmFtZRIIcmVmU3RhdGUSCnByb3BlcnRpZXMVAxYBEgZyZXBvSWQSA2FzYxYBEgtyZWZOYW1lSGFzaBIDYXNjFgESCiRjcmVhdGVkQXQSA2FzYxYCEgRuYW1lEgZyZWZsb2cSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWAhIEbmFtZRIGcHVzaGVyEgpwcm9wZXJ0aWVzFQMWARIGcmVwb0lkEgNhc2MWARIIJG93bmVySWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSCHJlcXVpcmVkFQcSCiRjcmVhdGVkQXQSFSRjcmVhdGVkQXRCbG9ja0hlaWdodBIGcmVwb0lkEgtyZWZOYW1lSGFzaBIGbmV3T2lkEgN2aXMSAXISFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASE3Byb3BlcnR5Q29uc3RyYWludHMWBhIHbm9QbGFpbhYBEgVhbnlPZhUCFgESBWFsbE9mFQIWARIGYWJzZW50EgNlbmMWARIFZXF1YWwVAhIDdmlzFgESBWNvbnN0EgZwdWJsaWMWARIGYWJzZW50EgdyZWZOYW1lEgdoYXNOYW1lFgESBWFueU9mFQIWARIHcHJlc2VudBIDZW5jFgESB3ByZXNlbnQSB3JlZk5hbWUSBm5vTG9jaxYBEgNub3QWARIIZW5kc1dpdGgVAhIHcmVmTmFtZRYBEgVjb25zdBIFLmxvY2sSCG9pZFdpZHRoFgESBWFsbE9mFQIWARICaW4VAhYBEgVjb3VudBIGbmV3T2lkFQICFAIgFgESAmluFQIWARIFY291bnQSB3ByZXZPaWQVAwIAAhQCIBIIYm90R3JhbnQWARIKaWZUaGVuRWxzZRUDFgESBWVxdWFsFQISAXICBBYBEgVhbGxPZhUCFgESBWFueU9mFQIWARIHcHJlc2VudBICcGcWARIHcHJlc2VudBICcHAWARIFYW55T2YVAhYBEgZhYnNlbnQSAnBnFgESB3ByZXNlbnQSA2VuYxYBEgVlcXVhbBUCEgFyAgESC2dyYW50UHJlZml4FgESBWFueU9mFQIWARIGYWJzZW50EgJwcBYBEgpzdGFydHNXaXRoFQISB3JlZk5hbWUWARIKcmVmZXJlbmNlZBUCEgJwcBIGcHJlZml4B3JlbGVhc2UWChIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMAEg1vd25lclJlZmVyc1RvFgMSBHR5cGUSEWRlbGV0YWJsZURvY3VtZW50Egxkb2N1bWVudFR5cGUSCm1haW50YWluZXISBmZpbmRCeRYCEgZyZXBvSWQSBnJlcG9JZBIIbWVtYmVySWQSAS4SCnByb3BlcnRpZXMWDRIGcmVwb0lkFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgMSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egxkb2N1bWVudFR5cGUSBHJlcG8SBXdoZXJlFgESCnZpc2liaWxpdHkSA3ZpcxIIcG9zaXRpb24CABIHdGFnTmFtZRYGEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgCPxIIbWF4Qnl0ZXMCPxIIcG9zaXRpb24CARIHcGF0dGVybhJsXig/Oig/OkAqW15ceDAwLSBceDdmfl46PypcW1xcLy5Ae118XHspK0AqfEArKSg/Oig/OlwuPy98XC4pKD86KD86QCpbXlx4MDAtIFx4N2Z+Xjo/KlxbXFwvLkB7XXxceykrQCp8QCspKSokEgRuYW1lFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAngSCG1heEJ5dGVzAvsB4BIIcG9zaXRpb24CAhIFbm90ZXMWBBIEdHlwZRIGc3RyaW5nEgltYXhMZW5ndGgC+xQAEghtYXhCeXRlcwL7FAASCHBvc2l0aW9uAgMSBnlhbmtlZBYCEgR0eXBlEgdib29sZWFuEghwb3NpdGlvbgIEEgZhc3NldHMWBBIEdHlwZRIGc3RyaW5nEgltYXhMZW5ndGgC+xAAEghtYXhCeXRlcwL7EAASCHBvc2l0aW9uAgUSA2VuYxYCEgQkcmVmEgsjLyRkZWZzL2VuYxIIcG9zaXRpb24CBhIFZXBvY2gWBBIEdHlwZRIHaW50ZWdlchIHbWluaW11bQIAEgdtYXhpbXVtAvz/////Eghwb3NpdGlvbgIHEg1hc3NldE1hbmlmZXN0FgISBCRyZWYSCyMvJGRlZnMvaDMyEghwb3NpdGlvbgIIEghpbXBvcnRlZBYFEgR0eXBlEgZvYmplY3QSCnByb3BlcnRpZXMWAxIGYXV0aG9yFgQSBHR5cGUSBnN0cmluZxIJbWF4TGVuZ3RoAkASCG1heEJ5dGVzAvsBABIIcG9zaXRpb24CABIJY3JlYXRlZEF0FgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0CABIHbWF4aW11bQL9AB////////8SCHBvc2l0aW9uAgESA3VybBYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7ASwSCG1heEJ5dGVzAvsBLBIIcG9zaXRpb24CAhIIcmVxdWlyZWQVARIDdXJsEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEghwb3NpdGlvbgIJEgN2aXMWAhIEJHJlZhILIy8kZGVmcy92aXMSCHBvc2l0aW9uAgoSBWRlbHRhFgQSBHR5cGUSB2ludGVnZXISB21pbmltdW0DARIHbWF4aW11bQIBEghwb3NpdGlvbgILEgl0YXJnZXRPaWQWAhIEJHJlZhILIy8kZGVmcy9vaWQSCHBvc2l0aW9uAgwSB2luZGljZXMVAxYCEgRuYW1lEgN0YWcSCnByb3BlcnRpZXMVAxYBEgZyZXBvSWQSA2FzYxYBEgd0YWdOYW1lEgNhc2MWARIKJGNyZWF0ZWRBdBIDYXNjFgISBG5hbWUSB2NyZWF0ZWQSCnByb3BlcnRpZXMVAhYBEgZyZXBvSWQSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MWBBIEbmFtZRIGcGVyVGFnEgpwcm9wZXJ0aWVzFQIWARIGcmVwb0lkEgNhc2MWARIHdGFnTmFtZRIDYXNjEghzdW1tYWJsZRIFZGVsdGESDXJhbmdlU3VtbWFibGUTARIIcmVxdWlyZWQVBRIKJGNyZWF0ZWRBdBIGcmVwb0lkEgd0YWdOYW1lEgN2aXMSBWRlbHRhEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEhFkZXBlbmRlbnRSZXF1aXJlZBYBEgNlbmMVARIFZXBvY2gSE3Byb3BlcnR5Q29uc3RyYWludHMWAxIHbm9QbGFpbhYBEgVhbnlPZhUCFgESBWFsbE9mFQIWARIGYWJzZW50EgNlbmMWARIFZXF1YWwVAhIDdmlzFgESBWNvbnN0EgZwdWJsaWMWARIFYWxsT2YVBBYBEgZhYnNlbnQSBG5hbWUWARIGYWJzZW50EgVub3RlcxYBEgZhYnNlbnQSBmFzc2V0cxYBEgZhYnNlbnQSDWFzc2V0TWFuaWZlc3QSB29uZUxpdmUWARIKaWZUaGVuRWxzZRUDFgESB3ByZXNlbnQSA2VuYxYBEgVlcXVhbBUCEgVkZWx0YQIAFgESBWVxdWFsFQIWARIFc3VtT2YVAxIHcmVsZWFzZRIFZGVsdGEWAhIGcmVwb0lkEgZyZXBvSWQSB3RhZ05hbWUSB3RhZ05hbWUWARIDbWluFQIWARIDYWRkFQISBWRlbHRhAgECARIPdGFyZ2V0T25QdWJsaXNoFgESCmlmVGhlbkVsc2UVAxYBEgdwcmVzZW50EgNlbmMWARIGYWJzZW50Egl0YXJnZXRPaWQWARIFYW55T2YVAhYBEghub3RFcXVhbBUCEgVkZWx0YQIBFgESB3ByZXNlbnQSCXRhcmdldE9pZARyZXBvFgkSBHR5cGUSBm9iamVjdBIMY2FuQmVEZWxldGVkEwASCWltbXV0YWJsZRUDEgRuYW1lEgZmb3JrT2YWAhIIcHJvcGVydHkSCnZpc2liaWxpdHkSBHdoZW4WARIFZXF1YWwVAhIPJG9sZC52aXNpYmlsaXR5FgESBWNvbnN0EgZwdWJsaWMSCnByb3BlcnRpZXMWCRIEbmFtZRYFEgR0eXBlEgZzdHJpbmcSCW1pbkxlbmd0aAIBEgltYXhMZW5ndGgCPxIHcGF0dGVybhIbXlthLXowLTldW2EtejAtOS5fLV17MCw2Mn0kEghwb3NpdGlvbgIAEgtkZXNjcmlwdGlvbhYEEgR0eXBlEgZzdHJpbmcSCW1heExlbmd0aAL7AfQSCG1heEJ5dGVzAvsD6BIIcG9zaXRpb24CARINZGVmYXVsdEJyYW5jaBYCEgQkcmVmEg4jLyRkZWZzL2JyYW5jaBIIcG9zaXRpb24CAhIKdmlzaWJpbGl0eRYEEgR0eXBlEgZzdHJpbmcSBGVudW0VAhIGcHVibGljEgdwcml2YXRlEghwb3NpdGlvbgIDEgltYXhMZW5ndGgCBxIGZm9ya09mFgMSBHR5cGUSCmlkZW50aWZpZXISCHJlZmVyc1RvFgMSBHR5cGUSEXBlcm1hbmVudERvY3VtZW50Egxkb2N1bWVudFR5cGUSBHJlcG8SBXdoZXJlFgESCnZpc2liaWxpdHkSCnZpc2liaWxpdHkSCHBvc2l0aW9uAgQSBnRvcGljcxYFEgR0eXBlEgVhcnJheRIIbWF4SXRlbXMCFBILdW5pcXVlSXRlbXMTARIFaXRlbXMWBBIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAh4SB3BhdHRlcm4SGF5bYS16MC05XSsoLVthLXowLTldKykqJBIIcG9zaXRpb24CBRILZGlzcGxheU5hbWUWBBIEdHlwZRIGc3RyaW5nEgltYXhMZW5ndGgCZBIIbWF4Qnl0ZXMC+wGQEghwb3NpdGlvbgIGEglyZW5hbWVkVG8WAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAhIEdHlwZRIRcGVybWFuZW50RG9jdW1lbnQSDGRvY3VtZW50VHlwZRIEcmVwbxIIcG9zaXRpb24CBxIIbGFuZ3VhZ2UWBRIEdHlwZRIGc3RyaW5nEgltaW5MZW5ndGgCARIJbWF4TGVuZ3RoAh4SCG1heEJ5dGVzAjwSCHBvc2l0aW9uAggSB2luZGljZXMVBBYEEgRuYW1lEglvd25lck5hbWUSCnByb3BlcnRpZXMVAhYBEggkb3duZXJJZBIDYXNjFgESBG5hbWUSA2FzYxIGdW5pcXVlEwESDnJhbmdlQ291bnRhYmxlEwEWAhIEbmFtZRIEbmFtZRIKcHJvcGVydGllcxUBFgESBG5hbWUSA2FzYxYFEgRuYW1lEgZmb3JrT2YSCnByb3BlcnRpZXMVARYBEgZmb3JrT2YSA2FzYxIOcmFuZ2VDb3VudGFibGUTARIPcmFua2VkQ291bnRhYmxlEwESDHNraXBJZkFic2VudBMBFgMSBG5hbWUSBnJlY2VudBIKcHJvcGVydGllcxUCFgESCnZpc2liaWxpdHkSA2FzYxYBEgokY3JlYXRlZEF0EgNhc2MSDnJhbmdlQ291bnRhYmxlEwESCHJlcXVpcmVkFQMSCiRjcmVhdGVkQXQSBG5hbWUSCnZpc2liaWxpdHkSFGFkZGl0aW9uYWxQcm9wZXJ0aWVzEwASEmRvY3VtZW50c0NvdW50YWJsZRMBEhNwcm9wZXJ0eUNvbnN0cmFpbnRzFgMSDGZvcmtJc1B1YmxpYxYBEgVhbnlPZhUCFgESBmFic2VudBIGZm9ya09mFgESBWVxdWFsFQISCnZpc2liaWxpdHkWARIFY29uc3QSBnB1YmxpYxIPcHJpdmF0ZU5vQnJhbmNoFgESBWFueU9mFQIWARIFZXF1YWwVAhIKdmlzaWJpbGl0eRYBEgVjb25zdBIGcHVibGljFgESBmFic2VudBINZGVmYXVsdEJyYW5jaBINbmFtZU5vdERvdEdpdBYBEgNub3QWARIIZW5kc1dpdGgVAhIEbmFtZRYBEgVjb25zdBIELmdpdAZ3cml0ZXIWCBIEdHlwZRIGb2JqZWN0EhBkb2N1bWVudHNNdXRhYmxlEwASDGNhbkJlRGVsZXRlZBMBEgpwcm9wZXJ0aWVzFgUSBnJlcG9JZBYDEgR0eXBlEgppZGVudGlmaWVyEghyZWZlcnNUbxYDEgR0eXBlEhFwZXJtYW5lbnREb2N1bWVudBIMZG9jdW1lbnRUeXBlEgRyZXBvEgV3aGVyZRYCEggkb3duZXJJZBIIJG93bmVySWQSCnZpc2liaWxpdHkSA3ZpcxIIcG9zaXRpb24CABIIbWVtYmVySWQWAhIEdHlwZRIKaWRlbnRpZmllchIIcG9zaXRpb24CARIDdmlzFgISBCRyZWYSCyMvJGRlZnMvdmlzEghwb3NpdGlvbgICEgljb25zZW50QnkWAxIEdHlwZRIKaWRlbnRpZmllchIIcmVmZXJzVG8WAxIEdHlwZRIRZGVsZXRhYmxlRG9jdW1lbnQSDGRvY3VtZW50VHlwZRIHY29uc2VudBIGZmluZEJ5FgISBnJlcG9JZBIGcmVwb0lkEggkb3duZXJJZBIBLhIIcG9zaXRpb24CAxIEcm9sZRYEEgR0eXBlEgdpbnRlZ2VyEgdtaW5pbXVtAgESB21heGltdW0CBBIIcG9zaXRpb24CBBIHaW5kaWNlcxUCFgMSBG5hbWUSDGJ5UmVwb01lbWJlchIKcHJvcGVydGllcxUCFgESBnJlcG9JZBIDYXNjFgESCG1lbWJlcklkEgNhc2MSBnVuaXF1ZRMBFgISBG5hbWUSCGJ5TWVtYmVyEgpwcm9wZXJ0aWVzFQEWARIIbWVtYmVySWQSA2FzYxIIcmVxdWlyZWQVBRIKJGNyZWF0ZWRBdBIGcmVwb0lkEghtZW1iZXJJZBIDdmlzEgRyb2xlEhRhZGRpdGlvbmFsUHJvcGVydGllcxMAEhNwcm9wZXJ0eUNvbnN0cmFpbnRzFgESEG93bmVyT3JDb25zZW50ZWQWARIFYW55T2YVAhYBEgVlcXVhbBUCEghtZW1iZXJJZBIIJG93bmVySWQWARIFZXF1YWwVAhIJY29uc2VudEJ5EghtZW1iZXJJZAH9AAABoUrf6JUAAfwACYgVAAH7TO8AAAAAAU1EYXNoIEZvcmdlIHYyIGNvcmU6IHJlcG9zaXRvcmllcywgcmVmcywgcGFja3MsIG1lbWJlcnMsIHJlbGVhc2VzLCBwdXNoIGdyYW50cwACA3kPdj4I5ZcxJvrojcc7M1Trz9srElHOMKK4XwDv/D4QARIP2bOUp5+vquvwtCWQh2D5mnPGrPm317XCn+XZW5ojEQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAALJbVAoS29rc0FcxUJ/EnjnMPNHIjkFaPX6gICeo="
+      },
+      "signature": {
+        "$u8": "pRRltTjNCEz40/poATSx/tihVra+nCR3n1bvhk+dHUrSeI7fHvsAWpasa5dJM8mrEYhWzGcv0LLvBnbhzh5iAfwVrffZPIrlD8iE6rCcMZO/mS6F3S+KTReRiTp8sKnZ"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "lFgkfB3dP/zVGf7wMU6VWFAUMJAkKZkqRchdSLPsy1A="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 132.3399260000001
+  }
+}
