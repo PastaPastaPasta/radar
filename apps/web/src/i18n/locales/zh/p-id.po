@@ -12,3 +12,483 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(b.data.balance)
+msgid "{0} credits"
+msgstr "{0} 积分"
+
+msgid "A public key hash holds only the characters 0–9 and a–f."
+msgstr "公钥哈希只包含字符 0–9 和 a–f。"
+
+msgid "A public key hash is exactly 40 hexadecimal characters (20 bytes)."
+msgstr "公钥哈希恰好为 40 个十六进制字符（20 字节）。"
+
+msgid "Abstain"
+msgstr "弃权"
+
+msgid "Active"
+msgstr "有效"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Add a token ID"
+msgstr "添加代币 ID"
+
+msgid "Advanced"
+msgstr "高级"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Amount"
+msgstr "金额"
+
+msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
+msgstr "身份 ID 为 43 或 44 个 base58 字符，或 64 个十六进制字符。"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "Balance (DASH)"
+msgstr "余额 (DASH)"
+
+msgid "Balance (indexed)"
+msgstr "余额（索引）"
+
+#. placeholder {0}: rangeText(search.bal) ?? ''
+msgid "Balance {0} DASH"
+msgstr "余额 {0} DASH"
+
+msgid "Check"
+msgstr "检查"
+
+msgid "Check on-chain"
+msgstr "链上检查"
+
+msgid "Check that it is the HASH160 of the public key, on this network."
+msgstr "请确认它是该公钥在此网络上的 HASH160。"
+
+msgid "Choice"
+msgstr "选择"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Contest"
+msgstr "争议"
+
+msgid "Contested-resource votes"
+msgstr "争议资源投票"
+
+msgid "Contract"
+msgstr "合约"
+
+msgid "Contract bounds"
+msgstr "合约范围"
+
+msgid "Contract details"
+msgstr "合约详情"
+
+#. placeholder {0}: bounds.id
+msgid "Contract group {0}"
+msgstr "合约群组 {0}"
+
+msgid "Contract ID"
+msgstr "合约 ID"
+
+msgid "Contract nonce"
+msgstr "合约 Nonce"
+
+msgid "Contracts"
+msgstr "合约"
+
+#. placeholder {0}: rangeText(search.contracts) ?? ''
+msgid "Contracts {0}"
+msgstr "合约 {0}"
+
+msgid "Created"
+msgstr "创建时间"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Created {0}–{1}"
+msgstr "创建时间 {0}–{1}"
+
+msgid "Credit transfers"
+msgstr "积分转账"
+
+msgid "Data"
+msgstr "数据"
+
+msgid "Disabled"
+msgstr "已停用"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "Document type"
+msgstr "文档类型"
+
+msgid "Documents"
+msgstr "文档"
+
+#. placeholder {0}: rangeText(search.docs) ?? ''
+msgid "Documents {0}"
+msgstr "文档 {0}"
+
+msgid "DPNS names"
+msgstr "DPNS 名称"
+
+msgid "Enter a contract ID to see its nonce and keys."
+msgstr "输入合约 ID 以查看其 Nonce 和密钥。"
+
+msgid "Enter a public key hash: 40 hexadecimal characters."
+msgstr "请输入公钥哈希：40 个十六进制字符。"
+
+msgid "Enter an identity ID or a name such as alice.dash."
+msgstr "请输入身份 ID 或类似 alice.dash 的名称。"
+
+msgid "Every identity Platform Explorer has indexed, with its balance and activity."
+msgstr "Platform Explorer 已索引的所有身份，含余额与活动。"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "Find"
+msgstr "查找"
+
+msgid "Find an identity by key hash"
+msgstr "按密钥哈希查找身份"
+
+msgid "From"
+msgstr "来自"
+
+msgid "Frozen"
+msgstr "已冻结"
+
+msgid "Funded by"
+msgstr "资金来源"
+
+msgid "Group"
+msgstr "群组"
+
+#. placeholder {0}: row.original.position
+msgid "Group {0}"
+msgstr "群组 {0}"
+
+msgid "Groups"
+msgstr "群组"
+
+msgid "hash"
+msgstr "哈希"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "身份"
+
+msgid "Identities holding this key hash"
+msgstr "持有此密钥哈希的身份"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity by key hash"
+msgstr "按密钥哈希查找身份"
+
+msgid "Identity ID or name"
+msgstr "身份 ID 或名称"
+
+msgid "Identity type"
+msgstr "身份类型"
+
+msgid "Indexed tokens"
+msgstr "已索引代币"
+
+msgid "Keys"
+msgstr "密钥"
+
+msgid "Keys bound to the contract"
+msgstr "绑定到合约的密钥"
+
+msgid "Load more"
+msgstr "加载更多"
+
+msgid "Loading…"
+msgstr "加载中…"
+
+msgid "Lock"
+msgstr "锁定"
+
+msgid "Manage in Bridge"
+msgstr "在 Bridge 中管理"
+
+msgid "Masternode"
+msgstr "主节点"
+
+msgid "Name a contract to see this identity’s groups in it."
+msgstr "指定一个合约，即可查看该身份在其中的群组。"
+
+msgid "Names"
+msgstr "名称"
+
+msgid "Names aren’t available right now"
+msgstr "名称目前不可用"
+
+msgid "No {type} documents from this identity."
+msgstr "此身份没有 {type} 文档。"
+
+msgid "No identities match."
+msgstr "没有匹配的身份。"
+
+msgid "No identity holds this key hash."
+msgstr "没有身份持有此密钥哈希。"
+
+msgid "No identity owns the name {name}."
+msgstr "没有身份拥有名称 {name}。"
+
+msgid "No identity with this ID on {net}."
+msgstr "{net} 上没有此 ID 的身份。"
+
+msgid "No keys of this identity are bound to that contract."
+msgstr "此身份没有绑定到该合约的密钥。"
+
+msgid "No names"
+msgstr "无名称"
+
+msgid "No single identity owns this hash; these identities share it."
+msgstr "没有单一身份拥有此哈希；以下身份共用它。"
+
+msgid "No tokens to check."
+msgstr "没有可检查的代币。"
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "无"
+
+msgid "Not available"
+msgstr "不可用"
+
+msgid "Not frozen"
+msgstr "未冻结"
+
+msgid "Not indexed"
+msgstr "未索引"
+
+msgid "Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided."
+msgstr "只有主节点投票身份才会对争议资源投票，争议决出后 Platform 会删除该投票。"
+
+msgid "Only masternode voting identities vote, and Platform drops a vote once its contest is decided."
+msgstr "只有主节点投票身份才会投票，争议决出后 Platform 会丢弃该投票。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open an identity"
+msgstr "打开身份"
+
+msgid "Opening the identity…"
+msgstr "正在打开身份…"
+
+msgid "Operator"
+msgstr "运营者"
+
+msgid "Overview"
+msgstr "概览"
+
+msgid "Paste the HASH160 of a public key to find the identity that holds it."
+msgstr "粘贴公钥的 HASH160，即可找到持有它的身份。"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
+msgstr "Platform 只会针对被查询的合约返回群组成员关系：此身份拥有的合约，以及您指定的合约。"
+
+msgid "Platform Explorer has no tokens for this identity."
+msgstr "Platform Explorer 中没有此身份的代币。"
+
+msgid "Platform Explorer isn’t answering"
+msgstr "Platform Explorer 没有响应"
+
+msgid "Platform has no identity with this ID on this network."
+msgstr "Platform 在此网络上没有此 ID 的身份。"
+
+msgid "Platform keeps no list of identities, so the list needs an indexer"
+msgstr "Platform 不保存身份列表，因此列表需要索引器"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Power"
+msgstr "权重"
+
+msgid "Proof-checked balances for well-known tokens and any token ID you add."
+msgstr "已知代币及您添加的任意代币 ID 的余额，均经证明验证。"
+
+msgid "Public key hash"
+msgstr "公钥哈希"
+
+msgid "Public keys"
+msgstr "公钥"
+
+msgid "Purpose"
+msgstr "用途"
+
+msgid "Read-only"
+msgstr "只读"
+
+msgid "Regular"
+msgstr "普通"
+
+msgid "Remove"
+msgstr "移除"
+
+#. placeholder {0}: row.original.id
+msgid "Remove token {0}"
+msgstr "移除代币 {0}"
+
+msgid "Resource"
+msgstr "资源"
+
+msgid "Revision"
+msgstr "修订版本"
+
+msgid "Role"
+msgstr "角色"
+
+msgid "Search on {other}"
+msgstr "在 {other} 上搜索"
+
+msgid "Security level"
+msgstr "安全级别"
+
+#. placeholder {0}: formatInt(NAMES_LIMIT)
+msgid "Showing the first {0} names."
+msgstr "正在显示前 {0} 个名称。"
+
+msgid "State"
+msgstr "状态"
+
+msgid "Summary"
+msgstr "摘要"
+
+msgid "That is every match."
+msgstr "这些就是全部匹配项。"
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "这不是合约 ID：合约 ID 为 43 或 44 个 base58 字符。"
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "这不是代币 ID：代币 ID 为 43 或 44 个 base58 字符。"
+
+msgid "That isn’t an identity ID."
+msgstr "这不是身份 ID。"
+
+msgid "The contracts this identity created need an indexer"
+msgstr "此身份创建的合约需要索引器"
+
+msgid "The dates narrow the identities on the page being shown."
+msgstr "日期仅筛选当前显示页面上的身份。"
+
+msgid "The funding transaction needs an indexer"
+msgstr "充值交易需要索引器"
+
+msgid "The name couldn’t be looked up right now."
+msgstr "目前无法查询该名称。"
+
+msgid "The tokens Platform Explorer has indexed for this identity need an indexer"
+msgstr "Platform Explorer 为此身份索引的代币需要索引器"
+
+msgid "This identity has created no contracts."
+msgstr "此身份尚未创建任何合约。"
+
+msgid "This identity has created no documents."
+msgstr "此身份尚未创建任何文档。"
+
+msgid "This identity has made no credit transfers."
+msgstr "此身份尚未进行任何积分转账。"
+
+msgid "This identity has no keys."
+msgstr "此身份没有密钥。"
+
+msgid "This identity has no votes on record."
+msgstr "此身份没有投票记录。"
+
+msgid "This identity has sent no transitions."
+msgstr "此身份尚未发送任何状态转换。"
+
+msgid "This identity is not a member of any group in those contracts."
+msgstr "此身份不属于这些合约中的任何群组。"
+
+msgid "This identity owns no names."
+msgstr "此身份没有任何名称。"
+
+msgid "This identity’s credit transfers need an indexer"
+msgstr "此身份的积分转账需要索引器"
+
+msgid "This identity’s documents need an indexer"
+msgstr "此身份的文档需要索引器"
+
+msgid "This identity’s nonce for a contract and the keys bound to it."
+msgstr "此身份针对某个合约的 Nonce 及绑定到该合约的密钥。"
+
+msgid "This identity’s transitions need an indexer"
+msgstr "此身份的状态转换需要索引器"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "To"
+msgstr "发往"
+
+msgid "Token"
+msgstr "代币"
+
+msgid "Token balances"
+msgstr "代币余额"
+
+msgid "Tokens"
+msgstr "代币"
+
+msgid "Tokens Platform Explorer has seen this identity hold."
+msgstr "Platform Explorer 观察到此身份持有的代币。"
+
+msgid "Towards"
+msgstr "投给"
+
+msgid "Transfers"
+msgstr "转账"
+
+msgid "Transition"
+msgstr "状态转换"
+
+msgid "Transitions"
+msgstr "状态转换"
+
+#. placeholder {0}: rangeText(search.txs) ?? ''
+msgid "Transitions {0}"
+msgstr "状态转换 {0}"
+
+msgid "Type"
+msgstr "类型"
+
+#. placeholder {0}: typeLabel(type)
+msgid "Type: {0}"
+msgstr "类型：{0}"
+
+msgid "units"
+msgstr "单位"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Votes"
+msgstr "票数"
+
+msgid "Voting"
+msgstr "投票"

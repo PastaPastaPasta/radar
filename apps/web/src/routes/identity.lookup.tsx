@@ -13,5 +13,10 @@ export const Route = createFileRoute('/identity/lookup')({
   validateSearch: identityLookupSearch,
   loaderDeps: ({ search }) => search,
   loader: routePrefetch('p-id', 'identityLookupPrefetch'),
-  component: IdentityLookupPage,
+  component: IdentityLookupRoute,
 })
+
+function IdentityLookupRoute() {
+  const { pkh, after } = Route.useSearch()
+  return <IdentityLookupPage pkh={pkh} after={after} />
+}

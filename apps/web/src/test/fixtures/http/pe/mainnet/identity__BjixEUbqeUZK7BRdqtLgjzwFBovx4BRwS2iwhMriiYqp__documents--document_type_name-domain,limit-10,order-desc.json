@@ -1,0 +1,72 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/identity/BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp/documents?document_type_name=domain&limit=10&order=desc"
+  },
+  "recordedAt": "2026-11-13T09:55:39.203Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "D8EZ5oCN8XRvL9mcxDMKr6xJdBxdiD3jhejBtJF8PEee",
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "revision": 1,
+        "txHash": "1C39C385AE74CF2F06F720D972E5BF4D867A488EBEE7003981083268F4E23E5A",
+        "deleted": false,
+        "data": null,
+        "timestamp": "2025-09-25T16:06:18.149Z",
+        "system": false,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": "domain",
+        "transitionType": null,
+        "identityContractNonce": null,
+        "gasUsed": null,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+          "aliases": [
+            {
+              "alias": "pshenmic.dash",
+              "status": "ok",
+              "timestamp": "2024-10-06T08:06:14.075Z",
+              "documentId": "7iPVZSZos4GmEf3cz3pwZ1y8YsFSZgvgTSV7XcQ9Vkap",
+              "contested": true
+            }
+          ]
+        }
+      },
+      {
+        "identifier": "7iPVZSZos4GmEf3cz3pwZ1y8YsFSZgvgTSV7XcQ9Vkap",
+        "dataContractIdentifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "revision": 1,
+        "txHash": "5DD4C6D80FB74C7E33F7119D5C412695AF79368ECF15228EAE67CDAF5B3D7732",
+        "deleted": false,
+        "data": null,
+        "timestamp": "2024-10-06T08:06:14.075Z",
+        "system": false,
+        "entropy": null,
+        "prefundedVotingBalance": null,
+        "documentTypeName": "domain",
+        "transitionType": null,
+        "identityContractNonce": null,
+        "gasUsed": null,
+        "totalGasUsed": null,
+        "owner": {
+          "identifier": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+          "aliases": [
+            {
+              "alias": "pshenmic.dash",
+              "status": "ok",
+              "timestamp": "2024-10-06T08:06:14.075Z",
+              "documentId": "7iPVZSZos4GmEf3cz3pwZ1y8YsFSZgvgTSV7XcQ9Vkap",
+              "contested": true
+            }
+          ]
+        }
+      }
+    ],
+    "pagination": { "page": 1, "limit": 10, "total": 2 }
+  }
+}

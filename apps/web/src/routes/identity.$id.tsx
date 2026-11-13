@@ -39,5 +39,6 @@ export const Route = createFileRoute('/identity/$id')({
 
 function IdentityPageRoute() {
   const { id } = Route.useParams()
-  return <IdentityPage id={id} />
+  const search = Route.useSearch()
+  return <IdentityPage id={id} search={search} />
 }

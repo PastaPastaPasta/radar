@@ -12,3 +12,483 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(b.data.balance)
+msgid "{0} credits"
+msgstr "{0} クレジット"
+
+msgid "A public key hash holds only the characters 0–9 and a–f."
+msgstr "公開鍵ハッシュには 0–9 と a–f の文字のみ使用できます。"
+
+msgid "A public key hash is exactly 40 hexadecimal characters (20 bytes)."
+msgstr "公開鍵ハッシュは 16 進数のちょうど 40 文字（20 バイト）です。"
+
+msgid "Abstain"
+msgstr "棄権"
+
+msgid "Active"
+msgstr "有効"
+
+msgid "Add"
+msgstr "追加"
+
+msgid "Add a token ID"
+msgstr "トークン ID を追加"
+
+msgid "Advanced"
+msgstr "詳細"
+
+msgid "All"
+msgstr "すべて"
+
+msgid "Amount"
+msgstr "金額"
+
+msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
+msgstr "アイデンティティ ID は base58 の 43 または 44 文字、または 16 進数の 64 文字です。"
+
+msgid "Balance"
+msgstr "残高"
+
+msgid "Balance (DASH)"
+msgstr "残高 (DASH)"
+
+msgid "Balance (indexed)"
+msgstr "残高（インデックス）"
+
+#. placeholder {0}: rangeText(search.bal) ?? ''
+msgid "Balance {0} DASH"
+msgstr "残高 {0} DASH"
+
+msgid "Check"
+msgstr "確認"
+
+msgid "Check on-chain"
+msgstr "オンチェーンで確認"
+
+msgid "Check that it is the HASH160 of the public key, on this network."
+msgstr "このネットワークでの公開鍵の HASH160 であることを確認してください。"
+
+msgid "Choice"
+msgstr "選択"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "Contest"
+msgstr "コンテスト"
+
+msgid "Contested-resource votes"
+msgstr "競合リソースへの投票"
+
+msgid "Contract"
+msgstr "コントラクト"
+
+msgid "Contract bounds"
+msgstr "コントラクトの範囲"
+
+msgid "Contract details"
+msgstr "コントラクトの詳細"
+
+#. placeholder {0}: bounds.id
+msgid "Contract group {0}"
+msgstr "コントラクトグループ {0}"
+
+msgid "Contract ID"
+msgstr "コントラクト ID"
+
+msgid "Contract nonce"
+msgstr "コントラクトのノンス"
+
+msgid "Contracts"
+msgstr "コントラクト"
+
+#. placeholder {0}: rangeText(search.contracts) ?? ''
+msgid "Contracts {0}"
+msgstr "コントラクト {0}"
+
+msgid "Created"
+msgstr "作成"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Created {0}–{1}"
+msgstr "作成 {0}–{1}"
+
+msgid "Credit transfers"
+msgstr "クレジット送金"
+
+msgid "Data"
+msgstr "データ"
+
+msgid "Disabled"
+msgstr "無効"
+
+msgid "Document"
+msgstr "ドキュメント"
+
+msgid "Document type"
+msgstr "ドキュメントの種類"
+
+msgid "Documents"
+msgstr "ドキュメント"
+
+#. placeholder {0}: rangeText(search.docs) ?? ''
+msgid "Documents {0}"
+msgstr "ドキュメント {0}"
+
+msgid "DPNS names"
+msgstr "DPNS 名"
+
+msgid "Enter a contract ID to see its nonce and keys."
+msgstr "コントラクト ID を入力すると、ノンスとキーが表示されます。"
+
+msgid "Enter a public key hash: 40 hexadecimal characters."
+msgstr "公開鍵ハッシュ（16 進数 40 文字）を入力してください。"
+
+msgid "Enter an identity ID or a name such as alice.dash."
+msgstr "アイデンティティ ID または alice.dash のような名前を入力してください。"
+
+msgid "Every identity Platform Explorer has indexed, with its balance and activity."
+msgstr "Platform Explorer がインデックス化したすべてのアイデンティティと、その残高・アクティビティ。"
+
+msgid "Filter"
+msgstr "絞り込む"
+
+msgid "Find"
+msgstr "検索"
+
+msgid "Find an identity by key hash"
+msgstr "キーハッシュでアイデンティティを検索"
+
+msgid "From"
+msgstr "送信元"
+
+msgid "Frozen"
+msgstr "凍結"
+
+msgid "Funded by"
+msgstr "資金元"
+
+msgid "Group"
+msgstr "グループ"
+
+#. placeholder {0}: row.original.position
+msgid "Group {0}"
+msgstr "グループ {0}"
+
+msgid "Groups"
+msgstr "グループ"
+
+msgid "hash"
+msgstr "ハッシュ"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "アイデンティティ"
+
+msgid "Identities holding this key hash"
+msgstr "このキーハッシュを持つアイデンティティ"
+
+msgid "Identity"
+msgstr "アイデンティティ"
+
+msgid "Identity by key hash"
+msgstr "キーハッシュからアイデンティティを検索"
+
+msgid "Identity ID or name"
+msgstr "アイデンティティ ID または名前"
+
+msgid "Identity type"
+msgstr "アイデンティティの種類"
+
+msgid "Indexed tokens"
+msgstr "インデックス済みトークン"
+
+msgid "Keys"
+msgstr "キー"
+
+msgid "Keys bound to the contract"
+msgstr "コントラクトに紐づくキー"
+
+msgid "Load more"
+msgstr "さらに読み込む"
+
+msgid "Loading…"
+msgstr "読み込み中…"
+
+msgid "Lock"
+msgstr "ロック"
+
+msgid "Manage in Bridge"
+msgstr "Bridge で管理"
+
+msgid "Masternode"
+msgstr "マスターノード"
+
+msgid "Name a contract to see this identity’s groups in it."
+msgstr "コントラクトを指定すると、このアイデンティティのグループが表示されます。"
+
+msgid "Names"
+msgstr "名前"
+
+msgid "Names aren’t available right now"
+msgstr "現在、名前を取得できません"
+
+msgid "No {type} documents from this identity."
+msgstr "このアイデンティティの {type} ドキュメントはありません。"
+
+msgid "No identities match."
+msgstr "一致するアイデンティティはありません。"
+
+msgid "No identity holds this key hash."
+msgstr "このキーハッシュを持つアイデンティティはありません。"
+
+msgid "No identity owns the name {name}."
+msgstr "名前 {name} を持つアイデンティティはありません。"
+
+msgid "No identity with this ID on {net}."
+msgstr "{net} にこの ID のアイデンティティはありません。"
+
+msgid "No keys of this identity are bound to that contract."
+msgstr "このアイデンティティのキーでそのコントラクトに紐づくものはありません。"
+
+msgid "No names"
+msgstr "名前なし"
+
+msgid "No single identity owns this hash; these identities share it."
+msgstr "このハッシュを単独で持つアイデンティティはなく、以下のアイデンティティが共有しています。"
+
+msgid "No tokens to check."
+msgstr "確認するトークンはありません。"
+
+msgid "Nonce"
+msgstr "ノンス"
+
+msgid "None"
+msgstr "なし"
+
+msgid "Not available"
+msgstr "利用不可"
+
+msgid "Not frozen"
+msgstr "凍結なし"
+
+msgid "Not indexed"
+msgstr "未インデックス"
+
+msgid "Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided."
+msgstr "競合リソースに投票できるのはマスターノードの投票用アイデンティティだけで、コンテストが決着すると Platform は投票を削除します。"
+
+msgid "Only masternode voting identities vote, and Platform drops a vote once its contest is decided."
+msgstr "投票できるのはマスターノードの投票用アイデンティティだけで、コンテストが決着すると Platform は投票を破棄します。"
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Open an identity"
+msgstr "アイデンティティを開く"
+
+msgid "Opening the identity…"
+msgstr "アイデンティティを開いています…"
+
+msgid "Operator"
+msgstr "オペレーター"
+
+msgid "Overview"
+msgstr "概要"
+
+msgid "Paste the HASH160 of a public key to find the identity that holds it."
+msgstr "公開鍵の HASH160 を貼り付けると、それを持つアイデンティティが見つかります。"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
+msgstr "Platform がグループ所属を返すのは、問い合わせたコントラクト（このアイデンティティが所有するものと、指定したもの）に限られます。"
+
+msgid "Platform Explorer has no tokens for this identity."
+msgstr "Platform Explorer にはこのアイデンティティのトークンがありません。"
+
+msgid "Platform Explorer isn’t answering"
+msgstr "Platform Explorer が応答していません"
+
+msgid "Platform has no identity with this ID on this network."
+msgstr "このネットワークの Platform に、この ID のアイデンティティはありません。"
+
+msgid "Platform keeps no list of identities, so the list needs an indexer"
+msgstr "Platform はアイデンティティの一覧を持たないため、一覧にはインデクサーが必要です"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Power"
+msgstr "重み"
+
+msgid "Proof-checked balances for well-known tokens and any token ID you add."
+msgstr "既知のトークンと追加した任意のトークン ID の、証明で検証済みの残高。"
+
+msgid "Public key hash"
+msgstr "公開鍵ハッシュ"
+
+msgid "Public keys"
+msgstr "公開鍵"
+
+msgid "Purpose"
+msgstr "用途"
+
+msgid "Read-only"
+msgstr "読み取り専用"
+
+msgid "Regular"
+msgstr "通常"
+
+msgid "Remove"
+msgstr "削除"
+
+#. placeholder {0}: row.original.id
+msgid "Remove token {0}"
+msgstr "トークン {0} を削除"
+
+msgid "Resource"
+msgstr "リソース"
+
+msgid "Revision"
+msgstr "リビジョン"
+
+msgid "Role"
+msgstr "役割"
+
+msgid "Search on {other}"
+msgstr "{other} で検索"
+
+msgid "Security level"
+msgstr "セキュリティレベル"
+
+#. placeholder {0}: formatInt(NAMES_LIMIT)
+msgid "Showing the first {0} names."
+msgstr "最初の {0} 件の名前を表示しています。"
+
+msgid "State"
+msgstr "状態"
+
+msgid "Summary"
+msgstr "概要"
+
+msgid "That is every match."
+msgstr "これで一致するものはすべてです。"
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "コントラクト ID ではありません。base58 の 43 または 44 文字です。"
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "トークン ID ではありません。base58 の 43 または 44 文字です。"
+
+msgid "That isn’t an identity ID."
+msgstr "アイデンティティ ID ではありません。"
+
+msgid "The contracts this identity created need an indexer"
+msgstr "このアイデンティティが作成したコントラクトにはインデクサーが必要です"
+
+msgid "The dates narrow the identities on the page being shown."
+msgstr "日付は表示中のページのアイデンティティを絞り込みます。"
+
+msgid "The funding transaction needs an indexer"
+msgstr "入金トランザクションにはインデクサーが必要です"
+
+msgid "The name couldn’t be looked up right now."
+msgstr "現在、この名前を検索できませんでした。"
+
+msgid "The tokens Platform Explorer has indexed for this identity need an indexer"
+msgstr "Platform Explorer がこのアイデンティティについてインデックス化したトークンにはインデクサーが必要です"
+
+msgid "This identity has created no contracts."
+msgstr "このアイデンティティはコントラクトを作成していません。"
+
+msgid "This identity has created no documents."
+msgstr "このアイデンティティはドキュメントを作成していません。"
+
+msgid "This identity has made no credit transfers."
+msgstr "このアイデンティティはクレジット送金を行っていません。"
+
+msgid "This identity has no keys."
+msgstr "このアイデンティティにはキーがありません。"
+
+msgid "This identity has no votes on record."
+msgstr "このアイデンティティの投票記録はありません。"
+
+msgid "This identity has sent no transitions."
+msgstr "このアイデンティティはトランジションを送信していません。"
+
+msgid "This identity is not a member of any group in those contracts."
+msgstr "このアイデンティティは、それらのコントラクトのどのグループにも属していません。"
+
+msgid "This identity owns no names."
+msgstr "このアイデンティティは名前を所有していません。"
+
+msgid "This identity’s credit transfers need an indexer"
+msgstr "このアイデンティティのクレジット送金にはインデクサーが必要です"
+
+msgid "This identity’s documents need an indexer"
+msgstr "このアイデンティティのドキュメントにはインデクサーが必要です"
+
+msgid "This identity’s nonce for a contract and the keys bound to it."
+msgstr "このアイデンティティのコントラクト別ノンスと、それに紐づくキー。"
+
+msgid "This identity’s transitions need an indexer"
+msgstr "このアイデンティティのトランジションにはインデクサーが必要です"
+
+msgid "Time"
+msgstr "時刻"
+
+msgid "To"
+msgstr "送信先"
+
+msgid "Token"
+msgstr "トークン"
+
+msgid "Token balances"
+msgstr "トークン残高"
+
+msgid "Tokens"
+msgstr "トークン"
+
+msgid "Tokens Platform Explorer has seen this identity hold."
+msgstr "Platform Explorer がこのアイデンティティの保有を確認したトークン。"
+
+msgid "Towards"
+msgstr "投票先"
+
+msgid "Transfers"
+msgstr "送金"
+
+msgid "Transition"
+msgstr "トランジション"
+
+msgid "Transitions"
+msgstr "トランジション"
+
+#. placeholder {0}: rangeText(search.txs) ?? ''
+msgid "Transitions {0}"
+msgstr "トランジション {0}"
+
+msgid "Type"
+msgstr "種類"
+
+#. placeholder {0}: typeLabel(type)
+msgid "Type: {0}"
+msgstr "種類: {0}"
+
+msgid "units"
+msgstr "単位"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Votes"
+msgstr "投票数"
+
+msgid "Voting"
+msgstr "投票"

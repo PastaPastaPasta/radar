@@ -12,3 +12,483 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(b.data.balance)
+msgid "{0} credits"
+msgstr "{0} кредитів"
+
+msgid "A public key hash holds only the characters 0–9 and a–f."
+msgstr "Хеш відкритого ключа містить лише символи 0–9 та a–f."
+
+msgid "A public key hash is exactly 40 hexadecimal characters (20 bytes)."
+msgstr "Хеш відкритого ключа — рівно 40 шістнадцяткових символів (20 байтів)."
+
+msgid "Abstain"
+msgstr "Утриматися"
+
+msgid "Active"
+msgstr "Активний"
+
+msgid "Add"
+msgstr "Додати"
+
+msgid "Add a token ID"
+msgstr "Додати ID токена"
+
+msgid "Advanced"
+msgstr "Додатково"
+
+msgid "All"
+msgstr "Усі"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
+msgstr "ID ідентичності — 43 або 44 символи base58 чи 64 шістнадцяткові символи."
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "Balance (DASH)"
+msgstr "Баланс (DASH)"
+
+msgid "Balance (indexed)"
+msgstr "Баланс (за індексом)"
+
+#. placeholder {0}: rangeText(search.bal) ?? ''
+msgid "Balance {0} DASH"
+msgstr "Баланс {0} DASH"
+
+msgid "Check"
+msgstr "Перевірити"
+
+msgid "Check on-chain"
+msgstr "Перевірити в мережі"
+
+msgid "Check that it is the HASH160 of the public key, on this network."
+msgstr "Переконайтеся, що це HASH160 відкритого ключа в цій мережі."
+
+msgid "Choice"
+msgstr "Вибір"
+
+msgid "Clear"
+msgstr "Очистити"
+
+msgid "Contest"
+msgstr "Спір"
+
+msgid "Contested-resource votes"
+msgstr "Голоси щодо спірних ресурсів"
+
+msgid "Contract"
+msgstr "Контракт"
+
+msgid "Contract bounds"
+msgstr "Прив’язка до контракту"
+
+msgid "Contract details"
+msgstr "Відомості про контракт"
+
+#. placeholder {0}: bounds.id
+msgid "Contract group {0}"
+msgstr "Група контракту {0}"
+
+msgid "Contract ID"
+msgstr "ID контракту"
+
+msgid "Contract nonce"
+msgstr "Nonce контракту"
+
+msgid "Contracts"
+msgstr "Контракти"
+
+#. placeholder {0}: rangeText(search.contracts) ?? ''
+msgid "Contracts {0}"
+msgstr "Контракти {0}"
+
+msgid "Created"
+msgstr "Створено"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Created {0}–{1}"
+msgstr "Створено {0}–{1}"
+
+msgid "Credit transfers"
+msgstr "Перекази кредитів"
+
+msgid "Data"
+msgstr "Дані"
+
+msgid "Disabled"
+msgstr "Вимкнений"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Document type"
+msgstr "Тип документа"
+
+msgid "Documents"
+msgstr "Документи"
+
+#. placeholder {0}: rangeText(search.docs) ?? ''
+msgid "Documents {0}"
+msgstr "Документи {0}"
+
+msgid "DPNS names"
+msgstr "Імена DPNS"
+
+msgid "Enter a contract ID to see its nonce and keys."
+msgstr "Введіть ID контракту, щоб побачити його nonce і ключі."
+
+msgid "Enter a public key hash: 40 hexadecimal characters."
+msgstr "Введіть хеш відкритого ключа: 40 шістнадцяткових символів."
+
+msgid "Enter an identity ID or a name such as alice.dash."
+msgstr "Введіть ID ідентичності або ім’я на кшталт alice.dash."
+
+msgid "Every identity Platform Explorer has indexed, with its balance and activity."
+msgstr "Усі ідентичності, проіндексовані Platform Explorer, з балансом і активністю."
+
+msgid "Filter"
+msgstr "Фільтр"
+
+msgid "Find"
+msgstr "Знайти"
+
+msgid "Find an identity by key hash"
+msgstr "Знайти ідентичність за хешем ключа"
+
+msgid "From"
+msgstr "Від"
+
+msgid "Frozen"
+msgstr "Заморожений"
+
+msgid "Funded by"
+msgstr "Поповнено через"
+
+msgid "Group"
+msgstr "Група"
+
+#. placeholder {0}: row.original.position
+msgid "Group {0}"
+msgstr "Група {0}"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "hash"
+msgstr "хеш"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "Ідентичності"
+
+msgid "Identities holding this key hash"
+msgstr "Ідентичності з цим хешем ключа"
+
+msgid "Identity"
+msgstr "Ідентичність"
+
+msgid "Identity by key hash"
+msgstr "Ідентичність за хешем ключа"
+
+msgid "Identity ID or name"
+msgstr "ID ідентичності або ім’я"
+
+msgid "Identity type"
+msgstr "Тип ідентичності"
+
+msgid "Indexed tokens"
+msgstr "Проіндексовані токени"
+
+msgid "Keys"
+msgstr "Ключі"
+
+msgid "Keys bound to the contract"
+msgstr "Ключі, прив’язані до контракту"
+
+msgid "Load more"
+msgstr "Завантажити ще"
+
+msgid "Loading…"
+msgstr "Завантаження…"
+
+msgid "Lock"
+msgstr "Заблокувати"
+
+msgid "Manage in Bridge"
+msgstr "Керувати в Bridge"
+
+msgid "Masternode"
+msgstr "Мастернода"
+
+msgid "Name a contract to see this identity’s groups in it."
+msgstr "Вкажіть контракт, щоб побачити групи цієї ідентичності в ньому."
+
+msgid "Names"
+msgstr "Імена"
+
+msgid "Names aren’t available right now"
+msgstr "Імена зараз недоступні"
+
+msgid "No {type} documents from this identity."
+msgstr "Немає документів {type} від цієї ідентичності."
+
+msgid "No identities match."
+msgstr "Відповідних ідентичностей немає."
+
+msgid "No identity holds this key hash."
+msgstr "Жодна ідентичність не має цього хешу ключа."
+
+msgid "No identity owns the name {name}."
+msgstr "Жодна ідентичність не володіє іменем {name}."
+
+msgid "No identity with this ID on {net}."
+msgstr "У мережі {net} немає ідентичності з таким ID."
+
+msgid "No keys of this identity are bound to that contract."
+msgstr "Жоден ключ цієї ідентичності не прив’язаний до цього контракту."
+
+msgid "No names"
+msgstr "Немає імен"
+
+msgid "No single identity owns this hash; these identities share it."
+msgstr "Цей хеш не належить одній ідентичності; ним володіють кілька."
+
+msgid "No tokens to check."
+msgstr "Немає токенів для перевірки."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Немає"
+
+msgid "Not available"
+msgstr "Недоступно"
+
+msgid "Not frozen"
+msgstr "Не заморожений"
+
+msgid "Not indexed"
+msgstr "Не проіндексовано"
+
+msgid "Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided."
+msgstr "За спірні ресурси голосують лише голосуючі ідентичності мастернод, а Platform видаляє голос, щойно спір вирішено."
+
+msgid "Only masternode voting identities vote, and Platform drops a vote once its contest is decided."
+msgstr "Голосують лише голосуючі ідентичності мастернод, а Platform відкидає голос, щойно спір вирішено."
+
+msgid "Open"
+msgstr "Відкрити"
+
+msgid "Open an identity"
+msgstr "Відкрити ідентичність"
+
+msgid "Opening the identity…"
+msgstr "Відкриваємо ідентичність…"
+
+msgid "Operator"
+msgstr "Оператор"
+
+msgid "Overview"
+msgstr "Огляд"
+
+msgid "Paste the HASH160 of a public key to find the identity that holds it."
+msgstr "Вставте HASH160 відкритого ключа, щоб знайти ідентичність, якій він належить."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
+msgstr "Platform відповідає про членство в групах лише для запитаних контрактів: тих, що належать цій ідентичності, і вказаного вами."
+
+msgid "Platform Explorer has no tokens for this identity."
+msgstr "У Platform Explorer немає токенів для цієї ідентичності."
+
+msgid "Platform Explorer isn’t answering"
+msgstr "Platform Explorer не відповідає"
+
+msgid "Platform has no identity with this ID on this network."
+msgstr "У цій мережі Platform немає ідентичності з таким ID."
+
+msgid "Platform keeps no list of identities, so the list needs an indexer"
+msgstr "Platform не веде список ідентичностей, тому для списку потрібен індексатор"
+
+msgid "Position"
+msgstr "Позиція"
+
+msgid "Power"
+msgstr "Вага"
+
+msgid "Proof-checked balances for well-known tokens and any token ID you add."
+msgstr "Баланси відомих токенів і будь-якого доданого вами ID токена, підтверджені доказом."
+
+msgid "Public key hash"
+msgstr "Хеш відкритого ключа"
+
+msgid "Public keys"
+msgstr "Відкриті ключі"
+
+msgid "Purpose"
+msgstr "Призначення"
+
+msgid "Read-only"
+msgstr "Лише читання"
+
+msgid "Regular"
+msgstr "Звичайна"
+
+msgid "Remove"
+msgstr "Видалити"
+
+#. placeholder {0}: row.original.id
+msgid "Remove token {0}"
+msgstr "Прибрати токен {0}"
+
+msgid "Resource"
+msgstr "Ресурс"
+
+msgid "Revision"
+msgstr "Ревізія"
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "Search on {other}"
+msgstr "Шукати в {other}"
+
+msgid "Security level"
+msgstr "Рівень безпеки"
+
+#. placeholder {0}: formatInt(NAMES_LIMIT)
+msgid "Showing the first {0} names."
+msgstr "Показано перші {0} імен."
+
+msgid "State"
+msgstr "Стан"
+
+msgid "Summary"
+msgstr "Підсумок"
+
+msgid "That is every match."
+msgstr "Це всі збіги."
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "Це не ID контракту: він складається з 43 або 44 символів base58."
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "Це не ID токена: він складається з 43 або 44 символів base58."
+
+msgid "That isn’t an identity ID."
+msgstr "Це не ID ідентичності."
+
+msgid "The contracts this identity created need an indexer"
+msgstr "Для контрактів, створених цією ідентичністю, потрібен індексатор"
+
+msgid "The dates narrow the identities on the page being shown."
+msgstr "Дати звужують список ідентичностей на показаній сторінці."
+
+msgid "The funding transaction needs an indexer"
+msgstr "Для транзакції поповнення потрібен індексатор"
+
+msgid "The name couldn’t be looked up right now."
+msgstr "Зараз не вдалося знайти ім’я."
+
+msgid "The tokens Platform Explorer has indexed for this identity need an indexer"
+msgstr "Для токенів, які Platform Explorer проіндексував для цієї ідентичності, потрібен індексатор"
+
+msgid "This identity has created no contracts."
+msgstr "Ця ідентичність не створювала контрактів."
+
+msgid "This identity has created no documents."
+msgstr "Ця ідентичність не створювала документів."
+
+msgid "This identity has made no credit transfers."
+msgstr "Ця ідентичність не робила переказів кредитів."
+
+msgid "This identity has no keys."
+msgstr "У цієї ідентичності немає ключів."
+
+msgid "This identity has no votes on record."
+msgstr "У цієї ідентичності немає записаних голосів."
+
+msgid "This identity has sent no transitions."
+msgstr "Ця ідентичність не надсилала переходів."
+
+msgid "This identity is not a member of any group in those contracts."
+msgstr "Ця ідентичність не входить до жодної групи в цих контрактах."
+
+msgid "This identity owns no names."
+msgstr "Ця ідентичність не володіє іменами."
+
+msgid "This identity’s credit transfers need an indexer"
+msgstr "Для переказів кредитів цієї ідентичності потрібен індексатор"
+
+msgid "This identity’s documents need an indexer"
+msgstr "Для документів цієї ідентичності потрібен індексатор"
+
+msgid "This identity’s nonce for a contract and the keys bound to it."
+msgstr "Nonce цієї ідентичності для контракту та прив’язані до нього ключі."
+
+msgid "This identity’s transitions need an indexer"
+msgstr "Для переходів цієї ідентичності потрібен індексатор"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Token balances"
+msgstr "Баланси токенів"
+
+msgid "Tokens"
+msgstr "Токени"
+
+msgid "Tokens Platform Explorer has seen this identity hold."
+msgstr "Токени, які, за даними Platform Explorer, утримує ця ідентичність."
+
+msgid "Towards"
+msgstr "За"
+
+msgid "Transfers"
+msgstr "Перекази"
+
+msgid "Transition"
+msgstr "Перехід"
+
+msgid "Transitions"
+msgstr "Переходи"
+
+#. placeholder {0}: rangeText(search.txs) ?? ''
+msgid "Transitions {0}"
+msgstr "Переходи {0}"
+
+msgid "Type"
+msgstr "Тип"
+
+#. placeholder {0}: typeLabel(type)
+msgid "Type: {0}"
+msgstr "Тип: {0}"
+
+msgid "units"
+msgstr "од."
+
+msgid "Version"
+msgstr "Версія"
+
+msgid "Votes"
+msgstr "Голоси"
+
+msgid "Voting"
+msgstr "Голосування"

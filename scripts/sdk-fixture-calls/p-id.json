@@ -1,0 +1,1044 @@
+{
+  "mainnet": [
+    [
+      "identities.getKeys",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.getKeys",
+      {
+        "id": "{otherIdentity}"
+      }
+    ],
+    [
+      "identities.getKeys",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.contractNonce",
+      {
+        "id": "{identity}",
+        "contractId": "{contract}"
+      }
+    ],
+    [
+      "identities.contractKeys",
+      {
+        "id": "{otherIdentity}",
+        "contractId": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7"
+      }
+    ],
+    [
+      "identities.contractKeys",
+      {
+        "id": "{identity}",
+        "contractId": "{contract}"
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{pkh}"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{absent_pkh}"
+      }
+    ],
+    [
+      "group.identityGroups",
+      {
+        "identityId": "{identity}",
+        "memberContracts": ["{contract}"]
+      }
+    ],
+    [
+      "voting.contestedResourceIdentityVotes",
+      {
+        "identityId": "{identity}",
+        "limit": 25
+      }
+    ],
+    [
+      "voting.contestedResourceIdentityVotes",
+      {
+        "identityId": "97Upr2cxN1Gq41jpsPw4DqCmV7AAfweqbcWG4oxPLqHN",
+        "limit": 25
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{identity}",
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.identityBalances",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd"
+        ]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd"
+        ]
+      }
+    ],
+    [
+      "tokens.identityBalances",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+          "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"
+        ]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+          "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+          "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"
+        ]
+      }
+    ],
+    [
+      "group.identityGroups",
+      {
+        "identityId": "{identity}",
+        "memberContracts": ["6z7zekYM1HPCn1PJu2P9dmKM5nxA7YvTyzr5LuxB2bpr"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+              "7ch5LxSPhBeaWNK1vnkR75bfADTKUgRb2o2Vu9TszDqS"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "HXMUaQZV4zR1fXMy43UxAVX4T5eVLJt9jkoVnu4nsQam",
+              "9PK51qux9HmZ8dnS7zzLGEfVpjFUFBeA9BRDGdgTSMtY",
+              "7hL6Tet2k4m5HstBgp2WMjk64rETFQr4LP3RMfRpwdb5",
+              "F666bVT8jN1hE5p3VYqMb16eiWuRhBRvMnr44E5wHSrp",
+              "DZJKfQdih3E1mfmwZAGbXChVTzNgHbUYKub4uDaVmVMN",
+              "F8yaYW8oNCjyMmTfKT2GHCip1idChmpytp6shPw2PB2H",
+              "5i2BBL64bmV93Pkit8M3Dvu1Rsr5mSB6zpLFxuo7FiqY",
+              "BYb5xjsG57EWaqpsCNfJ8AoKAXsfw3iyVV366EN1s4ES",
+              "4dy5TYq3KXBm8bAPgCJtvukFxJzPHgVvXT12ASdeam66",
+              "4C1VYBX6st5EPmcQt1b82nQxNsyseixHRVRa3Gs8ZzE9",
+              "CnHSWTjoWSBamMuPbgYnZvL2rvTsATc51EikyWhdKG1X",
+              "9KU8gZJkj9bLeLCK3UYPVw1gWNqQbGqrryg5DoRpGt2Y",
+              "GUG8G1m4df1dujnULPspgBj8SDSWe46QCGMCYKdEr2jJ",
+              "8Yiuy3yPKZzXAxzYtLX2vAkkjRK4hfnegUNx76TkLUT7",
+              "WUKLHJcCd7YAqf8C9gSfSnQDuRpTavCXrhrSye5wp6c",
+              "SgWAAt17ebAKfpvWwNZnV7qRMmbDw1f8uq9hyA2cT4C",
+              "4a3kR27Ba19ctpmS5Yurkku9YydSzukjAtohvsvbSgk4",
+              "7XHLH92GbJxzNf7cbBQSnsjhSQiG8jnVGKKGbYtf9iRd",
+              "DBzwjvNfJ6jSjNELQx468wkepuRb4iw3gJQKTg2tRXSc",
+              "B4AdBCPUDCeBYfCkbRMcgNJc4tZfjBhvDvjan5cJ5ohx",
+              "3a6wQz2wMVENEbiWTbdSTQJxtMw8gHWY3msFG9xWS1Mq",
+              "3wFNdNnJsYDYQhqX5uGmPvr4DNr53qrMvxWoLV3hwGu2",
+              "BvzLrALrUYkks2N2hb9K84mBtKujaamUimymQvD4CmBq",
+              "2imYgCSBcjxatuv9mM1PGv8jvyUCnQhNqA3srLCWsYjo",
+              "9r4pwCNc2GctP3DHD4p1fTpbFXjfdoFBp2tPELCz79DR"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+              "7ch5LxSPhBeaWNK1vnkR75bfADTKUgRb2o2Vu9TszDqS",
+              "EWSqsaghuwHRjtutbXK3nR11KbRkg9a12PNAAkJWRTpY",
+              "6Eb4tQdp24cuPuffJyGfyNKkKhNJUfyupUdJcj1m87sj",
+              "HVfqSPfdmiHsrajx7EmErGnV597uYdH3JGhvwpVDcdAT",
+              "5gSUS2D4vozbwVMqQoE3wRXCoR3T6svMTgWyHJ4aojc1",
+              "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+              "4a4513NbhHHFMP2wDVyLfyvSNtDc92TXnZpeFTm19vhi",
+              "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+              "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+              "7ch5LxSPhBeaWNK1vnkR75bfADTKUgRb2o2Vu9TszDqS",
+              "EWSqsaghuwHRjtutbXK3nR11KbRkg9a12PNAAkJWRTpY",
+              "6Eb4tQdp24cuPuffJyGfyNKkKhNJUfyupUdJcj1m87sj",
+              "HVfqSPfdmiHsrajx7EmErGnV597uYdH3JGhvwpVDcdAT",
+              "5gSUS2D4vozbwVMqQoE3wRXCoR3T6svMTgWyHJ4aojc1",
+              "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+              "4a4513NbhHHFMP2wDVyLfyvSNtDc92TXnZpeFTm19vhi",
+              "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+              "JAuf23Tx1XAwA4VRQMibnDA4Wf6rr5npbnaJYXbxiS7F",
+              "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+              "Hvp7W262Up6VkFioC5MQvLxdeLKiCi8sNnXXAsdQGCRi",
+              "DkCQcfPRvFngNTiLBj4R2v4fBg83KzswYiXxmGpdH7gC",
+              "BFX45DueD7qr5YEPHhiSyMMPR9XH16TpH9Z6Re8zVfsB",
+              "3sL6q6eVCR6y8Ld6Gr14cedhJWNBPmBp3S5VtRcckxzE",
+              "Bv9d5QWNjYggESti7rSHr2SsSybgeRZeifg9kUEVv9hy",
+              "9bqNRSXQLnfiBPrn9aUDvQqzXXZcsfaV9o4E1RhVX2CE",
+              "6nKqBZ7fcq1Gc2uHAzks6mjDPzc7Z1aZWHDMewboNmb5",
+              "9eQipJATT1znWfqjzqZiMjSJJLxNo8qqSj7JJ56VCF5i",
+              "6DcWZnCCrNvXdZRzCaSsP7QJ2sQqfiJrTEMCgqRdVWeL",
+              "EB481VZ7RRAHo6FqBwhBLYikseWzametnFouAf1dyzk5",
+              "AXq8gqFCJqNtVZXb31fYx996fPq3oBYX37UPfUtAFxte",
+              "5AnNeCF8TSwj2bBP6fEe2MEfZqmqnUjLxQvQSBNmWiAy",
+              "8yyvTxrDCdWNoUChPeuJUYWv6w32cu9rTgVCtVHy2SWv",
+              "AYJDiSameSQMvM6eNqNsHzTF8F7vv3XbVaJZDwNqpBz7"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD",
+              "HiCY4V51B8ruaiBPWcfLmGpZreWp9hbtVzvWcCWiJbK5",
+              "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G",
+              "8VKn8eWXjh47hikDSek6Zaz1wuD68DuGEto87R5rNwHB",
+              "4xYzvXEbEn5F2ZD4WqzNjcWdqDNmc7pKuHpWrbbCLMyz",
+              "SSosoTPEBRa7V3ZmeMh8cxZg999W6tHSR4U4oxdjU95",
+              "81x7N39zKLhYDpYg6vk9AUjapc8VMxuDDZGHSMxPna5m",
+              "CmZprVCHNQpL3g7qNybwHqW8skkW8xdacCDqMaMgu5NT",
+              "3qx884x4ne2NmYDFVCANw5q2yABSfyLD4pETm5TavEGv",
+              "Fxoo7dVrNfNkhY3Ek6otRAePaXh2k4FnNDr47gtrGSsM",
+              "FLwzhuj295oLjkFKAo6e1EbUJQ1RmAj4UWuemSqnsEqg",
+              "zAnigXqLeRaCaPgzkQuiSektncJjufhSq5TfmUGo6FY",
+              "29oi4HpC9zLmNUqgPZzW51VCHzf8M9yZNNBgyBtdqPex",
+              "HXMUaQZV4zR1fXMy43UxAVX4T5eVLJt9jkoVnu4nsQam",
+              "Dk3Ko3zqv2jp9rWHxGTiyc2BwKg2wFC1VsuWqHu8Wefd",
+              "DH4VkJBBkiL4yrpUzyLJU72b8S5cHxTrSu8ACb4VXe7x",
+              "6AKGCzVhBbXmd9FGeXtVsf2FSd19wN1esiN3uWdgmJa4",
+              "F4ME3vYEzvzr4Lk1dBzu7wzWqzdE7fPQTAeaN13qzEV1",
+              "9PK51qux9HmZ8dnS7zzLGEfVpjFUFBeA9BRDGdgTSMtY",
+              "1fojm5vUVDdkqkGAP9mdnYo8DoJhr1Q8XrnX7Puz8vL",
+              "Ct23mx4t4grheJT7oEBEoLFTeVE4xNW3wznzdfw18tKE",
+              "Bi6smWyXniHoFuc3T1ZbS4uqQweLv8rE5Xv5oAYAuFo1",
+              "9YPuwVBBwv4wAcj66WJ6xsXEVuunbVviZYponsTAKZAF",
+              "CYfhMT3tKUYC8rYk4KjxVB6SVHdMiEyUav7nVjBywNGD",
+              "7hL6Tet2k4m5HstBgp2WMjk64rETFQr4LP3RMfRpwdb5"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "2sXqeYY2uxreYoyTyzVJiRZ4kN6yyJ5qnKEsMn3F1TKM",
+              "48ZVKU99bErud7LnHGewbPxyX5Pgd5BmhfnxUDLELimS",
+              "6PKKbWqqrAJTusLRAWQ3tz2RbfaQfeinxvZihSH3HwFX"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "2sXqeYY2uxreYoyTyzVJiRZ4kN6yyJ5qnKEsMn3F1TKM",
+              "48ZVKU99bErud7LnHGewbPxyX5Pgd5BmhfnxUDLELimS",
+              "6PKKbWqqrAJTusLRAWQ3tz2RbfaQfeinxvZihSH3HwFX",
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+        "identityIds": ["{identity}"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "F666bVT8jN1hE5p3VYqMb16eiWuRhBRvMnr44E5wHSrp",
+              "DZJKfQdih3E1mfmwZAGbXChVTzNgHbUYKub4uDaVmVMN",
+              "F8yaYW8oNCjyMmTfKT2GHCip1idChmpytp6shPw2PB2H",
+              "5i2BBL64bmV93Pkit8M3Dvu1Rsr5mSB6zpLFxuo7FiqY",
+              "BYb5xjsG57EWaqpsCNfJ8AoKAXsfw3iyVV366EN1s4ES",
+              "4dy5TYq3KXBm8bAPgCJtvukFxJzPHgVvXT12ASdeam66",
+              "4C1VYBX6st5EPmcQt1b82nQxNsyseixHRVRa3Gs8ZzE9",
+              "CnHSWTjoWSBamMuPbgYnZvL2rvTsATc51EikyWhdKG1X",
+              "9KU8gZJkj9bLeLCK3UYPVw1gWNqQbGqrryg5DoRpGt2Y",
+              "GUG8G1m4df1dujnULPspgBj8SDSWe46QCGMCYKdEr2jJ",
+              "8Yiuy3yPKZzXAxzYtLX2vAkkjRK4hfnegUNx76TkLUT7",
+              "WUKLHJcCd7YAqf8C9gSfSnQDuRpTavCXrhrSye5wp6c",
+              "SgWAAt17ebAKfpvWwNZnV7qRMmbDw1f8uq9hyA2cT4C",
+              "4a3kR27Ba19ctpmS5Yurkku9YydSzukjAtohvsvbSgk4",
+              "7XHLH92GbJxzNf7cbBQSnsjhSQiG8jnVGKKGbYtf9iRd",
+              "DBzwjvNfJ6jSjNELQx468wkepuRb4iw3gJQKTg2tRXSc",
+              "B4AdBCPUDCeBYfCkbRMcgNJc4tZfjBhvDvjan5cJ5ohx",
+              "3a6wQz2wMVENEbiWTbdSTQJxtMw8gHWY3msFG9xWS1Mq",
+              "3wFNdNnJsYDYQhqX5uGmPvr4DNr53qrMvxWoLV3hwGu2",
+              "BvzLrALrUYkks2N2hb9K84mBtKujaamUimymQvD4CmBq",
+              "2imYgCSBcjxatuv9mM1PGv8jvyUCnQhNqA3srLCWsYjo",
+              "9r4pwCNc2GctP3DHD4p1fTpbFXjfdoFBp2tPELCz79DR"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD",
+              "HiCY4V51B8ruaiBPWcfLmGpZreWp9hbtVzvWcCWiJbK5",
+              "H8RvjxqyPq6EgYWYQsyQvRCtVRyRxbt2P4iZNBrqis1G",
+              "8VKn8eWXjh47hikDSek6Zaz1wuD68DuGEto87R5rNwHB",
+              "4xYzvXEbEn5F2ZD4WqzNjcWdqDNmc7pKuHpWrbbCLMyz",
+              "SSosoTPEBRa7V3ZmeMh8cxZg999W6tHSR4U4oxdjU95",
+              "81x7N39zKLhYDpYg6vk9AUjapc8VMxuDDZGHSMxPna5m",
+              "CmZprVCHNQpL3g7qNybwHqW8skkW8xdacCDqMaMgu5NT",
+              "3qx884x4ne2NmYDFVCANw5q2yABSfyLD4pETm5TavEGv",
+              "Fxoo7dVrNfNkhY3Ek6otRAePaXh2k4FnNDr47gtrGSsM",
+              "FLwzhuj295oLjkFKAo6e1EbUJQ1RmAj4UWuemSqnsEqg",
+              "zAnigXqLeRaCaPgzkQuiSektncJjufhSq5TfmUGo6FY",
+              "29oi4HpC9zLmNUqgPZzW51VCHzf8M9yZNNBgyBtdqPex",
+              "Dk3Ko3zqv2jp9rWHxGTiyc2BwKg2wFC1VsuWqHu8Wefd",
+              "DH4VkJBBkiL4yrpUzyLJU72b8S5cHxTrSu8ACb4VXe7x",
+              "6AKGCzVhBbXmd9FGeXtVsf2FSd19wN1esiN3uWdgmJa4",
+              "F4ME3vYEzvzr4Lk1dBzu7wzWqzdE7fPQTAeaN13qzEV1",
+              "1fojm5vUVDdkqkGAP9mdnYo8DoJhr1Q8XrnX7Puz8vL",
+              "Ct23mx4t4grheJT7oEBEoLFTeVE4xNW3wznzdfw18tKE",
+              "Bi6smWyXniHoFuc3T1ZbS4uqQweLv8rE5Xv5oAYAuFo1",
+              "9YPuwVBBwv4wAcj66WJ6xsXEVuunbVviZYponsTAKZAF",
+              "CYfhMT3tKUYC8rYk4KjxVB6SVHdMiEyUav7nVjBywNGD"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "7E3FbNriEQQpa2UdYVqcgeGTSvXsvvhpqDVuJeTcyLoR",
+              "3igSMtXaaS9iRQHbWU1w4hHveKdxixwMpgmhLzjVhFZJ",
+              "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+              "9cSTZG9ahW3uVryussA9H1nfrDk6oSM2z7MVsawKe711",
+              "DXUVaZfbAYgXZKmUwMi31JJKnBSB7xvDWSfwkf1uMTAn",
+              "7iFK7mhMRAfoM5NaCag6J7i4UsXQ4gysDdgomAzi5rRw",
+              "7shZvit25iytew9VqJEbGwj6GdcJHUKipLXiYwn2VFXT",
+              "8yyvTxrDCdWNoUChPeuJUYWv6w32cu9rTgVCtVHy2SWv",
+              "2HSNkiwpPj7Cm7wpah6Zf6gJf1HvXhLND24eD18LYbF5",
+              "J9VVP7b2N3wf5HntWBCb2Dux2BVLiZD3MCtJFGw3nMdh",
+              "F666bVT8jN1hE5p3VYqMb16eiWuRhBRvMnr44E5wHSrp",
+              "H7otTu6NbBoxHhLrxPmPGnv8YUN6kcjy3hr8U8pquRES",
+              "HdsWewFifJDBRKBmc5TiYkdmaKeH1h3Jw1DuGmvBnEDx",
+              "4sg6kSet7vQR4mWVVy84XpF8hVsEcjDXu6Fn2EXnui7t",
+              "ETvg2BDtdK28KKyVhAHqr7bjHKUftzewq6DfhdhUpBW3",
+              "AN7RhgFsrLecMyET2q6J7GUSaqD4oZYQr5Qtac5C7giw",
+              "DZJKfQdih3E1mfmwZAGbXChVTzNgHbUYKub4uDaVmVMN",
+              "8yPWe7JUA17cxtCrUV1hZ7fkzwu6ZP5ENKsomNt6Eh2",
+              "CeQ9EcUSKGym95jDT8SQ4NoD3wDKPmrqpbH5DhtSjdaC",
+              "DBp5pPYYRm924ovLvuaQgvs2zkDPTKDeJRG7Sosxxr3L",
+              "HU5fwZ2Pd33mQrLfgubLTu55wEYvPyHegWYNJRgxf8bH",
+              "F8yaYW8oNCjyMmTfKT2GHCip1idChmpytp6shPw2PB2H",
+              "B74CmLTeEExyaWYX2DdCJNM3hTn3vy2vGn8XTXx3aqHM",
+              "HbBBYjWAKHhFJRcGcu19na85VuC97Qz6EAjRLJhbhxKH",
+              "5i2BBL64bmV93Pkit8M3Dvu1Rsr5mSB6zpLFxuo7FiqY"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ],
+  "testnet": [
+    [
+      "identities.getKeys",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.getKeys",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.contractNonce",
+      {
+        "id": "{identity}",
+        "contractId": "{contract}"
+      }
+    ],
+    [
+      "identities.contractKeys",
+      {
+        "id": "{identity}",
+        "contractId": "{contract}"
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "{identity}"
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "{absent}"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{pkh}"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{absent_pkh}"
+      }
+    ],
+    [
+      "group.identityGroups",
+      {
+        "identityId": "{identity}",
+        "memberContracts": ["49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N"]
+      }
+    ],
+    [
+      "voting.contestedResourceIdentityVotes",
+      {
+        "identityId": "{identity}",
+        "limit": 25
+      }
+    ],
+    [
+      "voting.contestedResourceIdentityVotes",
+      {
+        "identityId": "2Ey6wdP5YYSqhq96KmU349CeSCsV4avrsNCaXqogGEr9",
+        "limit": 25
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "{identity}",
+        "limit": 100
+      }
+    ],
+    [
+      "tokens.balances",
+      {
+        "tokenId": "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+        "identityIds": ["{identity}"]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": ["9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP"]
+      }
+    ],
+    [
+      "tokens.identityBalances",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"
+        ]
+      }
+    ],
+    [
+      "tokens.identityTokenInfos",
+      {
+        "identityId": "{identity}",
+        "tokenIds": [
+          "9YxdbQUjJmQsmVPen95HjAU3Esj7tVkWSY2EQWT84ZQP",
+          "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"
+        ]
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{pkh}",
+        "startAfter": "3G6e2uxNTAZ8eQnsFPvKH7BCHLKQC19A1ANxR56DEcsT"
+      }
+    ],
+    [
+      "group.identityGroups",
+      {
+        "identityId": "{identity}",
+        "memberContracts": [
+          "49PJEnNx7ReCitzkLdkDNr4s6RScGsnNexcdSZJ1ph5N",
+          "9Dj8zTFoZ3RUt1NsnmVa7UmzeYWr3ugiHDbh8obKHvCR",
+          "ALybvzfcCwMs7sinDwmtumw17NneuW7RgFtFHgjKmF3A",
+          "AyWK6nDVfb8d1ZmkM5MmZZrThbUyWyso1aMeGuuVSfxf",
+          "BMufjjFMHMbBUhnegQyjVWGDCKzKSxRena3koYuUCh9x",
+          "Bjqu4iogSzDktpscbEF3FyHExKqvaNq7yykgGASrExSS",
+          "EBioSoFFTDf346ndCMHGmYF8QzgwM8972jG5fL4ndBL7"
+        ]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["3G6e2uxNTAZ8eQnsFPvKH7BCHLKQC19A1ANxR56DEcsT"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY",
+              "9Jwa6v2Bwj9TtDmgJGn3KV9qqXprYZUBEkKzkxzx3HD8",
+              "E3wmBaWfg7GgqLvgFZKzocbyZGbr2Es4nM4id6MX6iPj",
+              "DgXSL4pD4aNT9Ksy6WBLeT9TZBSJM1btBYQwrmm9JUha",
+              "GzUDCuDiZ1zviBmuvZ7TqxtiE7R3iykhmBkuW7QesexL",
+              "H62hSf5TpKbUSMov85GMhPQahZDbqsTipeoBsYPgveUH",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "69Gqc4sP6ZYXPGphkoP4eqFnayDGJ5tDz5hUdRKY1vJt",
+              "7cBLvT9A6nkU5jPoLak8o97rU4WrARr3xHv7ttFh9n64",
+              "9m1QYXVRyUpg99PyVD6DcdffuMhsJfgwLDxTeAg6PxDj",
+              "AFbpKXNhiNHg7eBsnobNo7wZ9U8qWi1kvcACR6t84G6p",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "5q83TWrs45553fB92DPY9n3Rs6cDPa434EbP1LUf8nFY",
+              "EkKcA2bMmXoCr8c4LTv8KEx9d14ECRgiaNLRkUcNNcLV",
+              "8hJmcHWTsdvkHyCrk4UgjbyugDAmE7QfuCTQXpXAc7nB",
+              "Gcv7zYGAiUpdULhahezTTPuatyT2BwYuYEN5qVDd5Csm",
+              "HHjmkbcwqFzToaoyvQcP45JZro7PoczAv7Nii57uYPX1",
+              "7qP14LTMeiaaPCPZ9GrurU2SieZPB7bgxoMWYFQfqpvr",
+              "CS1xju3yL3XTxQnvmgcec5shBwsK3MZ6FgMsbidbk6t"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3exgSiHnWcVj9V85HFanuroTXX3ViW34vHrbznPnwXB1",
+              "HnqtJWkkDWv1VdV9845NdguKijjfy7rvRwFiKzzmZ8y",
+              "GVWmKJzTzcaxpEXnhEhzEuzQU69BY29HSHyXM26p1dv7",
+              "3eQkmLPrTUMva6ZiRGhyH65TseJ495oPJjQv9oczd3KQ",
+              "FvA9qTtW4YqXHr51BR84ErX6HWX8sQ3wqxjYLUuiGo29",
+              "ES1CTiTddzPNPod9AmMuhB64U8JAt93KPEGNZcNVB4iV",
+              "5qYLiaeGBttq35p5gJGt5th9UANifvaL9M5KtvfyNZtV",
+              "2jf13ZvPeuiXMg4DemQKgtTroYRjAZJ8u4zoKZYqvGhR",
+              "1M6LkwVf6sJwK67UexTjeZ2i6UsfCABNyFTShUwdnK6",
+              "GzyXRtPiEEABpNKXPeqrowfqZyBHPyQ1HGrcnNzk4Twu",
+              "FsjHjVVL5v5yGwYUHPd21Y5sWxKykqZ4P4SWScbx2LJF",
+              "9iNZC8Z9EvmL4TdYQetuGmRdJKfKGsw49rb3qEH9MVtU",
+              "4gdqN4G53ANVSZ6Mhpnx1uWevrxqZrp3Mw2o6dbpwEX6",
+              "GAXQBCXdJwCEHT5gkHfJvHGksHcGkoGBWgU3Y5oFMF5n",
+              "5rhZEV9jAeQU3cf3pGHtPGQ2UZyd9WKvxmsZhQjFDpBg",
+              "5pVH36Hp5usktNUNqhhau14MLZyYQaw5CwBy7LJQcLai",
+              "HfXYfM7uhx3Q8RzTsBWb5RfrC3VDXSNbyqmfynodtHmY",
+              "5YZenQh25sZmpFiJH9ecbVmw7p8jSXbgGLB2QGGj34rE",
+              "HaNPL4nWs5cqDTk7fHc2vGLcdimVwGMJbbxtVLrW5wJ8",
+              "GqJoLyKR6xvTvrBRPJt4ugH2sq8WyPQH18vBBKv2g6LJ",
+              "Dz2C1yx5iNgKt2syumw2M6AYML9KoLhjrDx92knDxTGq",
+              "ACsqaB9V2Pnbg1WiK9CD4u5PiRdQhHpoCxs677CE8bgm",
+              "6Pr1CZuViRy79gQNaXXpPraMy6tv1zwbyhaVzvwicx9u",
+              "J1R45hh9iHENi2iCMVe4hS1L4mgyXtMqQm8exxFrywx2",
+              "7UwrdN9q6XS3mUV4Gy56X2D5S9SRwjoxJFx426TVhiHV"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DcoJJ3W9JauwLD51vzNuXJ9vnaZT7mprVm7wbgVYifNq",
+              "HzHXSQcBkU9Ve5YAxhGd8NgA72xFcG9nCZKKxhayn1NW",
+              "N3kw2XPJiZyiSjyQN8eNTodoqDCr9krV72NDAn2ADVF",
+              "Hq5Kz5LRkVG3R39oS2jYYiBMtdoEXd91eUC8Vf3XbyME",
+              "F74T1JdpwMH1Q4ymBgd3uKTpBWb2ZZ3tNxcaN1r1D798",
+              "5JL7EWzSYHeYzC2AMDXFhU2V8ojeLrid8D289uaxx45v",
+              "4nFZWHwga9X25pKzsmwoeqzUMRDsiFjKzRpNfD3VFagv",
+              "F1xTBzupNLFu4fgD2Vd4uiVgaxYY1JZ9xkyLftQpkmJV",
+              "AeJkWhDjL8QD7UTDEywqbY6qe2yVJ1dG2JfTU1KjHVpJ",
+              "8hJmcHWTsdvkHyCrk4UgjbyugDAmE7QfuCTQXpXAc7nB",
+              "H62hSf5TpKbUSMov85GMhPQahZDbqsTipeoBsYPgveUH",
+              "GzUDCuDiZ1zviBmuvZ7TqxtiE7R3iykhmBkuW7QesexL",
+              "DgXSL4pD4aNT9Ksy6WBLeT9TZBSJM1btBYQwrmm9JUha",
+              "E3wmBaWfg7GgqLvgFZKzocbyZGbr2Es4nM4id6MX6iPj",
+              "9Jwa6v2Bwj9TtDmgJGn3KV9qqXprYZUBEkKzkxzx3HD8",
+              "AFaVqRJCWXFZRUhuq6ZUUcWXVW8fErCN3wpEtgsBnDZm",
+              "AyajV7ByponW8Etse8HhGaYhn4c1CYjapiuV3KiUg2yb",
+              "63LaKWuVQgiKuCST45Emm8qGjpfd6tcvxtUQbFwcDgLY",
+              "7XcruVSsGQVSgTcmPewaE4tXLutnW1F6PXxwMbo8GYQC",
+              "Gcv7zYGAiUpdULhahezTTPuatyT2BwYuYEN5qVDd5Csm",
+              "ADtgYG2MHikwv4UiZeY8faUsEkH1YDjEnJFhGbuXLfFB",
+              "HEAmUtC72dPcZ59yyLUgfS8pfrEWqzYfDPzTofgWxXRr",
+              "FHQWJrKBoA6Ab4jqeZwqFSHVoMy11diLt7wgfjSRmg6o",
+              "AFbpKXNhiNHg7eBsnobNo7wZ9U8qWi1kvcACR6t84G6p"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "E6WLjXLcwiTAeuv23ZbZejVEex7YUkL7W87SjQkY4wWm",
+              "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4",
+              "AGSi3xCbjwkyLg3BNd8Ewv7CUu3Q9FQ6YD57JZmyxEwT",
+              "3tJSjyoMEapAGAZkfi4DG6E3CnZD3BYoc4r4MX9g8weq",
+              "CTvZDr8LfGizVvF3AJPrUdKgcvaQTs8GaTo9X1PKHYa1",
+              "DUBbmWi8F8S6m3e3TVqtwTudwrsWZM2vnELa53cWoNL",
+              "EcbXLyhWeMB3BLmpVk1sWgtwQjUzaFASwhL3ShxXqdVa",
+              "FaqnHo1ryh4ohRzYkC6Hxs1Xv6ieZcBVjvZgJ7JUdfi8",
+              "6t6ZJQ953V4ApzrRhkutPVuPCN16JciJySjT3ywtoDVm",
+              "BsXZciyXGeJULCJzuP3Je3Awwq7mx99MBpwFPDjGiM4o",
+              "9ZkFJLYuX8gr9cJ2M8btBVgJA4JhXA7VBqLoWjnEABHX",
+              "58MMrfTJLvqT7o5iQUbsNkSCe1evZyyr2RZ69NKhLVyn",
+              "HXbVKLgxFDot3EVEjXpBRiTY3TvvpPG9BXMeZWFJgdKZ",
+              "4vMXD6wHptarHEewzm9yRdU1bnmzcsp9nQiLFtR3bQpv",
+              "5ntYgPnG6FefFUpqXGXNJrSvQwuphgydZZBSAxPMskWf",
+              "DDYxksqkJ3eGatgUdzRpTdS7eWJ2yCgmYzVcJiz8pAkm",
+              "CKbZLYBVJ9GxZSCJ9tud4HVHXwoLJ8jZJntciDZ8et8F",
+              "9cvTb9GVdaJF87e4QU96XPLHbDYycpASehQjKBxMnzLZ",
+              "9VyMT56g79uTGGH6CL9oJJ8CR8PYQ3fW1bDG99zrFBqU",
+              "Fqi1iFBzgC3FTiZZUSXsF6gbuYkb1dyktwvQK2tS5h98",
+              "B4pxDQoCZpSPeb3HfSGSqcMwJKWbbkj8aMhA1GhYYbiY",
+              "3Roi4QeaMikPkhb8JFQNFv4VegrEkjNnzmuQrMxwCHb7",
+              "Be9qUCS8Td79jcFz9pM4aauh6jsDpRKwz7zG8jGraerB",
+              "EXHftJ1DQ9SsLFSJgv8p2GiVNC4qtCbKdmNmub9ktGNu",
+              "FJiBExquiJKrmd3jm8v1tZL8njHHc46mwrLfoNAKZJuy"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "DejXJ53k72nvvgCgd9ZuGy7N4h7ppx3eTQHmYjznEa4R",
+              "EzucyuShNrJce51LDUFdpMymEbe1UL3gZY2fyB5zfmEN",
+              "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk",
+              "DejXJ53k72nvvgCgd9ZuGy7N4h7ppx3eTQHmYjznEa4R",
+              "EzucyuShNrJce51LDUFdpMymEbe1UL3gZY2fyB5zfmEN",
+              "HccabTZZpMEDAqU4oQFk3PE47kS6jDDmCjoxR88gFttA"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+      }
+    ],
+    [
+      "identities.nonce",
+      {
+        "id": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"
+      }
+    ],
+    [
+      "dpns.usernames",
+      {
+        "identityId": "2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4",
+        "limit": 100
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["2u4CpSo8r6JdzUvbHfdCD4ocwekDrm82ktznVrydr6x4"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byPublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "1111111111111111111111111111111111111111"
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "3G6e2uxNTAZ8eQnsFPvKH7BCHLKQC19A1ANxR56DEcsT",
+              "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ],
+    [
+      "identities.byNonUniquePublicKeyHash",
+      {
+        "pkh": "{pkh}",
+        "startAfter": "5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk"
+      }
+    ]
+  ]
+}

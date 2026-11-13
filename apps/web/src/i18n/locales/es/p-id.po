@@ -12,3 +12,483 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#. placeholder {0}: formatInt(b.data.balance)
+msgid "{0} credits"
+msgstr "{0} créditos"
+
+msgid "A public key hash holds only the characters 0–9 and a–f."
+msgstr "Un hash de clave pública solo contiene los caracteres 0–9 y a–f."
+
+msgid "A public key hash is exactly 40 hexadecimal characters (20 bytes)."
+msgstr "Un hash de clave pública tiene exactamente 40 caracteres hexadecimales (20 bytes)."
+
+msgid "Abstain"
+msgstr "Abstención"
+
+msgid "Active"
+msgstr "Activa"
+
+msgid "Add"
+msgstr "Añadir"
+
+msgid "Add a token ID"
+msgstr "Añadir un ID de token"
+
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgid "All"
+msgstr "Todo"
+
+msgid "Amount"
+msgstr "Importe"
+
+msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
+msgstr "Un ID de identidad tiene 43 o 44 caracteres base58, o 64 caracteres hexadecimales."
+
+msgid "Balance"
+msgstr "Saldo"
+
+msgid "Balance (DASH)"
+msgstr "Saldo (DASH)"
+
+msgid "Balance (indexed)"
+msgstr "Saldo (indexado)"
+
+#. placeholder {0}: rangeText(search.bal) ?? ''
+msgid "Balance {0} DASH"
+msgstr "Saldo {0} DASH"
+
+msgid "Check"
+msgstr "Comprobar"
+
+msgid "Check on-chain"
+msgstr "Comprobar en la cadena"
+
+msgid "Check that it is the HASH160 of the public key, on this network."
+msgstr "Comprueba que sea el HASH160 de la clave pública, en esta red."
+
+msgid "Choice"
+msgstr "Elección"
+
+msgid "Clear"
+msgstr "Borrar"
+
+msgid "Contest"
+msgstr "Disputa"
+
+msgid "Contested-resource votes"
+msgstr "Votos de recursos en disputa"
+
+msgid "Contract"
+msgstr "Contrato"
+
+msgid "Contract bounds"
+msgstr "Límites de contrato"
+
+msgid "Contract details"
+msgstr "Detalles del contrato"
+
+#. placeholder {0}: bounds.id
+msgid "Contract group {0}"
+msgstr "Grupo de contrato {0}"
+
+msgid "Contract ID"
+msgstr "ID del contrato"
+
+msgid "Contract nonce"
+msgstr "Nonce del contrato"
+
+msgid "Contracts"
+msgstr "Contratos"
+
+#. placeholder {0}: rangeText(search.contracts) ?? ''
+msgid "Contracts {0}"
+msgstr "Contratos {0}"
+
+msgid "Created"
+msgstr "Creado"
+
+#. placeholder {0}: search.from ?? ''
+#. placeholder {1}: search.to ?? ''
+msgid "Created {0}–{1}"
+msgstr "Creado {0}–{1}"
+
+msgid "Credit transfers"
+msgstr "Transferencias de créditos"
+
+msgid "Data"
+msgstr "Datos"
+
+msgid "Disabled"
+msgstr "Desactivada"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "Document type"
+msgstr "Tipo de documento"
+
+msgid "Documents"
+msgstr "Documentos"
+
+#. placeholder {0}: rangeText(search.docs) ?? ''
+msgid "Documents {0}"
+msgstr "Documentos {0}"
+
+msgid "DPNS names"
+msgstr "Nombres DPNS"
+
+msgid "Enter a contract ID to see its nonce and keys."
+msgstr "Introduce un ID de contrato para ver su nonce y sus claves."
+
+msgid "Enter a public key hash: 40 hexadecimal characters."
+msgstr "Introduce un hash de clave pública: 40 caracteres hexadecimales."
+
+msgid "Enter an identity ID or a name such as alice.dash."
+msgstr "Introduce un ID de identidad o un nombre como alice.dash."
+
+msgid "Every identity Platform Explorer has indexed, with its balance and activity."
+msgstr "Todas las identidades que Platform Explorer ha indexado, con su saldo y actividad."
+
+msgid "Filter"
+msgstr "Filtrar"
+
+msgid "Find"
+msgstr "Buscar"
+
+msgid "Find an identity by key hash"
+msgstr "Buscar una identidad por hash de clave"
+
+msgid "From"
+msgstr "De"
+
+msgid "Frozen"
+msgstr "Congelado"
+
+msgid "Funded by"
+msgstr "Financiada por"
+
+msgid "Group"
+msgstr "Grupo"
+
+#. placeholder {0}: row.original.position
+msgid "Group {0}"
+msgstr "Grupo {0}"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "hash"
+msgstr "hash"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Identities"
+msgstr "Identidades"
+
+msgid "Identities holding this key hash"
+msgstr "Identidades con este hash de clave"
+
+msgid "Identity"
+msgstr "Identidad"
+
+msgid "Identity by key hash"
+msgstr "Identidad por hash de clave"
+
+msgid "Identity ID or name"
+msgstr "ID de identidad o nombre"
+
+msgid "Identity type"
+msgstr "Tipo de identidad"
+
+msgid "Indexed tokens"
+msgstr "Tokens indexados"
+
+msgid "Keys"
+msgstr "Claves"
+
+msgid "Keys bound to the contract"
+msgstr "Claves vinculadas al contrato"
+
+msgid "Load more"
+msgstr "Cargar más"
+
+msgid "Loading…"
+msgstr "Cargando…"
+
+msgid "Lock"
+msgstr "Bloquear"
+
+msgid "Manage in Bridge"
+msgstr "Gestionar en Bridge"
+
+msgid "Masternode"
+msgstr "Masternode"
+
+msgid "Name a contract to see this identity’s groups in it."
+msgstr "Indica un contrato para ver los grupos de esta identidad en él."
+
+msgid "Names"
+msgstr "Nombres"
+
+msgid "Names aren’t available right now"
+msgstr "Los nombres no están disponibles ahora"
+
+msgid "No {type} documents from this identity."
+msgstr "Ningún documento {type} de esta identidad."
+
+msgid "No identities match."
+msgstr "Ninguna identidad coincide."
+
+msgid "No identity holds this key hash."
+msgstr "Ninguna identidad tiene este hash de clave."
+
+msgid "No identity owns the name {name}."
+msgstr "Ninguna identidad posee el nombre {name}."
+
+msgid "No identity with this ID on {net}."
+msgstr "No hay ninguna identidad con este ID en {net}."
+
+msgid "No keys of this identity are bound to that contract."
+msgstr "Ninguna clave de esta identidad está vinculada a ese contrato."
+
+msgid "No names"
+msgstr "Sin nombres"
+
+msgid "No single identity owns this hash; these identities share it."
+msgstr "Ninguna identidad posee este hash por sí sola; estas identidades lo comparten."
+
+msgid "No tokens to check."
+msgstr "No hay tokens que comprobar."
+
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "None"
+msgstr "Ninguno"
+
+msgid "Not available"
+msgstr "No disponible"
+
+msgid "Not frozen"
+msgstr "No congelado"
+
+msgid "Not indexed"
+msgstr "No indexado"
+
+msgid "Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided."
+msgstr "Solo las identidades de voto de los masternodes emiten votos de recursos en disputa, y Platform elimina un voto cuando la disputa se resuelve."
+
+msgid "Only masternode voting identities vote, and Platform drops a vote once its contest is decided."
+msgstr "Solo las identidades de voto de los masternodes votan, y Platform descarta un voto cuando su disputa se resuelve."
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Open an identity"
+msgstr "Abrir una identidad"
+
+msgid "Opening the identity…"
+msgstr "Abriendo la identidad…"
+
+msgid "Operator"
+msgstr "Operador"
+
+msgid "Overview"
+msgstr "Resumen"
+
+msgid "Paste the HASH160 of a public key to find the identity that holds it."
+msgstr "Pega el HASH160 de una clave pública para encontrar la identidad que la tiene."
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
+msgstr "Platform solo responde sobre la pertenencia a grupos para los contratos por los que se le pregunta: los que posee esta identidad y el que indiques."
+
+msgid "Platform Explorer has no tokens for this identity."
+msgstr "Platform Explorer no tiene tokens para esta identidad."
+
+msgid "Platform Explorer isn’t answering"
+msgstr "Platform Explorer no responde"
+
+msgid "Platform has no identity with this ID on this network."
+msgstr "Platform no tiene ninguna identidad con este ID en esta red."
+
+msgid "Platform keeps no list of identities, so the list needs an indexer"
+msgstr "Platform no mantiene una lista de identidades, así que la lista necesita un indexador"
+
+msgid "Position"
+msgstr "Posición"
+
+msgid "Power"
+msgstr "Peso"
+
+msgid "Proof-checked balances for well-known tokens and any token ID you add."
+msgstr "Saldos verificados con pruebas para los tokens conocidos y cualquier ID de token que añadas."
+
+msgid "Public key hash"
+msgstr "Hash de clave pública"
+
+msgid "Public keys"
+msgstr "Claves públicas"
+
+msgid "Purpose"
+msgstr "Propósito"
+
+msgid "Read-only"
+msgstr "Solo lectura"
+
+msgid "Regular"
+msgstr "Normal"
+
+msgid "Remove"
+msgstr "Quitar"
+
+#. placeholder {0}: row.original.id
+msgid "Remove token {0}"
+msgstr "Quitar el token {0}"
+
+msgid "Resource"
+msgstr "Recurso"
+
+msgid "Revision"
+msgstr "Revisión"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Search on {other}"
+msgstr "Buscar en {other}"
+
+msgid "Security level"
+msgstr "Nivel de seguridad"
+
+#. placeholder {0}: formatInt(NAMES_LIMIT)
+msgid "Showing the first {0} names."
+msgstr "Se muestran los primeros {0} nombres."
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Summary"
+msgstr "Resumen"
+
+msgid "That is every match."
+msgstr "Esas son todas las coincidencias."
+
+msgid "That isn’t a contract ID: it is 43 or 44 base58 characters."
+msgstr "Eso no es un ID de contrato: tiene 43 o 44 caracteres base58."
+
+msgid "That isn’t a token ID: it is 43 or 44 base58 characters."
+msgstr "Eso no es un ID de token: tiene 43 o 44 caracteres base58."
+
+msgid "That isn’t an identity ID."
+msgstr "Eso no es un ID de identidad."
+
+msgid "The contracts this identity created need an indexer"
+msgstr "Los contratos creados por esta identidad necesitan un indexador"
+
+msgid "The dates narrow the identities on the page being shown."
+msgstr "Las fechas acotan las identidades de la página que se muestra."
+
+msgid "The funding transaction needs an indexer"
+msgstr "La transacción de financiación necesita un indexador"
+
+msgid "The name couldn’t be looked up right now."
+msgstr "No se pudo buscar el nombre ahora."
+
+msgid "The tokens Platform Explorer has indexed for this identity need an indexer"
+msgstr "Los tokens que Platform Explorer ha indexado para esta identidad necesitan un indexador"
+
+msgid "This identity has created no contracts."
+msgstr "Esta identidad no ha creado ningún contrato."
+
+msgid "This identity has created no documents."
+msgstr "Esta identidad no ha creado ningún documento."
+
+msgid "This identity has made no credit transfers."
+msgstr "Esta identidad no ha hecho ninguna transferencia de créditos."
+
+msgid "This identity has no keys."
+msgstr "Esta identidad no tiene claves."
+
+msgid "This identity has no votes on record."
+msgstr "Esta identidad no tiene votos registrados."
+
+msgid "This identity has sent no transitions."
+msgstr "Esta identidad no ha enviado ninguna transición."
+
+msgid "This identity is not a member of any group in those contracts."
+msgstr "Esta identidad no es miembro de ningún grupo en esos contratos."
+
+msgid "This identity owns no names."
+msgstr "Esta identidad no posee ningún nombre."
+
+msgid "This identity’s credit transfers need an indexer"
+msgstr "Las transferencias de créditos de esta identidad necesitan un indexador"
+
+msgid "This identity’s documents need an indexer"
+msgstr "Los documentos de esta identidad necesitan un indexador"
+
+msgid "This identity’s nonce for a contract and the keys bound to it."
+msgstr "El nonce de esta identidad para un contrato y las claves vinculadas a él."
+
+msgid "This identity’s transitions need an indexer"
+msgstr "Las transiciones de esta identidad necesitan un indexador"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "To"
+msgstr "Para"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Token balances"
+msgstr "Saldos de tokens"
+
+msgid "Tokens"
+msgstr "Tokens"
+
+msgid "Tokens Platform Explorer has seen this identity hold."
+msgstr "Tokens que Platform Explorer ha visto que esta identidad posee."
+
+msgid "Towards"
+msgstr "Hacia"
+
+msgid "Transfers"
+msgstr "Transferencias"
+
+msgid "Transition"
+msgstr "Transición"
+
+msgid "Transitions"
+msgstr "Transiciones"
+
+#. placeholder {0}: rangeText(search.txs) ?? ''
+msgid "Transitions {0}"
+msgstr "Transiciones {0}"
+
+msgid "Type"
+msgstr "Tipo"
+
+#. placeholder {0}: typeLabel(type)
+msgid "Type: {0}"
+msgstr "Tipo: {0}"
+
+msgid "units"
+msgstr "unidades"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Votes"
+msgstr "Votos"
+
+msgid "Voting"
+msgstr "Votación"

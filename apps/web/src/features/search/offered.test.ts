@@ -64,7 +64,6 @@ describe('Search offers no dead ends @HY-14', () => {
       '/epoch/$n',
       '/name/$label',
       '/platform-address/$addr',
-      '/identity/lookup',
       '/about',
     ]) {
       expect(offered({ href: { to } as never })).toBe(false)
