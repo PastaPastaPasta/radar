@@ -59,7 +59,7 @@ describe('GlobalMounts', () => {
       openProofInspector(proof)
     })
     expect(await screen.findByText('proof inspector')).toBeInTheDocument()
-    expect(loaded.opened).toEqual(['p1'])
+    await vi.waitFor(() => expect(loaded.opened).toEqual(['p1']))
 
     openProofInspector({ ...proof, id: 'p2' })
     expect(loaded.opened).toEqual(['p1', 'p2'])
