@@ -11,6 +11,12 @@ interface RadarFixtureWindow {
     restoreLiveConnection(): void
     dapiCalls(method: string): number
   }
+  __radarCore: {
+    status(
+      net: string,
+      signal?: AbortSignal,
+    ): Promise<{ height?: number; data: { blocks: number; difficulty: number } }>
+  }
   __radarQueryClient: {
     getQueryData(key: unknown[]): { data: { height: number } } | undefined
     setQueryData(key: unknown[], data: unknown): void
@@ -128,14 +134,9 @@ test.describe('Home', () => {
 
   test('reads the Core figures again when a new block arrives @HY-01', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('[data-headline]')).toContainText('Difficulty')
-    await expect(
-      page.locator('[data-headline] .rx-stat').filter({ hasText: 'Difficulty' }),
-    ).not.toHaveAttribute('aria-busy', 'true')
-    const statusReads = () =>
-      page.evaluate(() =>
-        (window as unknown as RadarFixtureWindow).__radarFixtures.dapiCalls('getBlockchainStatus'),
-      )
+    const difficulty = page.locator('[data-headline] .rx-stat').filter({ hasText: 'Difficulty' })
+    await expect(difficulty).toContainText(/\d/)
+    await expect(difficulty).not.toHaveAttribute('aria-busy', 'true')
     await expect
       .poll(() =>
         page.evaluate(
@@ -148,17 +149,31 @@ test.describe('Home', () => {
         ),
       )
       .toBe(true)
-    const before = await statusReads()
+    const shown = (await difficulty.locator('.rx-stat__value').innerText()).trim()
+
     await page.evaluate(() => {
       const w = window as unknown as RadarFixtureWindow
+      const original = w.__radarCore.status.bind(w.__radarCore)
+      w.__radarCore.status = async (net, signal) => {
+        const read = await original(net, signal)
+        return {
+          ...read,
+          height: (read.height ?? 0) + 1,
+          data: { ...read.data, blocks: read.data.blocks + 1, difficulty: 123_456_789.5 },
+        }
+      }
       const key = ['mainnet', 'dapi', 'tip']
       const tip = w.__radarQueryClient.getQueryData(key)!
       w.__radarQueryClient.setQueryData(key, {
         ...tip,
+        height: tip.data.height + 1,
         data: { ...tip.data, height: tip.data.height + 1 },
       })
     })
-    await expect.poll(statusReads).toBeGreaterThan(before)
+
+    await expect(difficulty.locator('.rx-stat__value')).toHaveText('123,456,789.5')
+    expect(shown).not.toBe('123,456,789.5')
+    await expect(difficulty.locator('[data-source]')).toHaveCount(0)
   })
 
   test('keeps the Core height and ChainLock in the header while scrolling @IN-15', async ({

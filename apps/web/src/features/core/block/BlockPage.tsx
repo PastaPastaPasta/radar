@@ -47,7 +47,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   useDocumentTitle(ref && 'height' in ref ? t`Block ${formatInt(ref.height)}` : t`Block`)
   const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
   const tipHeight = useFollowTip(net, {
-    key: coreQueries.block(net, ref ?? { height: 0 }).queryKey,
+    keys: [coreQueries.block(net, ref ?? { height: 0 }).queryKey],
     settled: block.data?.data?.chainLocked === true,
     enabled: ref !== null,
   })

@@ -15,26 +15,34 @@ vi.mock('@/data/core/client', async (original) => {
   return { ...actual, core: fixtureCore().core }
 })
 
-const stamped = <T,>(data: T, asOf = Date.now()) => ({
+const stamped = <T,>(data: T, asOf = Date.now(), height?: number) => ({
   data,
   source: 'dapi' as const,
   asOf,
   fetchedAt: asOf,
   proved: false,
+  ...(height === undefined ? {} : { height }),
 })
 
-const status = (blocks: number, difficulty: number) =>
-  stamped<CoreChainStatus>({
-    chain: 'main',
+const status = (blocks: number, difficulty: number, asOf = Date.now()) =>
+  stamped<CoreChainStatus>(
+    {
+      chain: 'main',
+      blocks,
+      headers: blocks,
+      bestBlockHash: 'ab'.repeat(32),
+      difficulty,
+      medianTime: 0,
+      chainWork: '',
+      syncProgress: 1,
+      isSynced: true,
+    },
+    asOf,
     blocks,
-    headers: blocks,
-    bestBlockHash: 'ab'.repeat(32),
-    difficulty,
-    medianTime: 0,
-    chainWork: '',
-    syncProgress: 1,
-    isSynced: true,
-  })
+  )
+
+const tip = (height: number, asOf = Date.now()) =>
+  stamped({ height, hash: 'ab'.repeat(32), time: Date.now() }, asOf, height)
 
 const difficultyStat = () => screen.getByText('Difficulty').closest<HTMLElement>('.rx-stat')!
 
@@ -61,38 +69,51 @@ describe('Core figures on the home page @HY-01', () => {
     const reads = vi.spyOn(core, 'status')
     reads.mockResolvedValueOnce(status(2_571_277, 116_445_795.87))
     reads.mockResolvedValue(status(2_571_278, 116_900_000.12))
-    vi.spyOn(core, 'tip').mockResolvedValue(
-      stamped({ height: 2_571_277, hash: 'ab'.repeat(32), time: Date.now() }),
-    )
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_277))
     const client = new QueryClient()
     await renderFigures(client)
     await waitFor(() => expect(difficultyStat()).toHaveTextContent('116,445,795.87'))
     expect(reads).toHaveBeenCalledTimes(1)
 
     act(() => {
-      client.setQueryData(
-        dapiKeys('mainnet', 'tip'),
-        stamped({ height: 2_571_278, hash: 'cd'.repeat(32), time: Date.now() }),
-      )
+      client.setQueryData(dapiKeys('mainnet', 'tip'), tip(2_571_278))
     })
 
     await waitFor(() => expect(difficultyStat()).toHaveTextContent('116,900,000.12'))
     expect(reads).toHaveBeenCalledTimes(2)
   })
 
-  it('shows its own age on a figure read long before the height it sits beside', async () => {
-    const old = Date.now() - 20 * 60_000
-    vi.spyOn(core, 'status').mockResolvedValue({ ...status(2_571_277, 116_445_795.87), asOf: old })
-    vi.spyOn(core, 'tip').mockResolvedValue(
-      stamped({ height: 2_571_300, hash: 'ab'.repeat(32), time: Date.now() }),
+  const badge = () => difficultyStat().querySelector('[data-source="dapi"]')
+
+  it('shows no age on a figure read at the shown height when the tip is republished later @HY-01', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(
+      status(2_571_277, 116_445_795.87, Date.now() - 20 * 60_000),
     )
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_277))
     const client = new QueryClient({
       defaultOptions: { queries: { staleTime: Infinity, refetchOnMount: false } },
     })
     await renderFigures(client)
     await waitFor(() => expect(difficultyStat()).toHaveTextContent('116'))
-    const badge = difficultyStat().querySelector('[data-source="dapi"]')
-    expect(badge).not.toBeNull()
-    expect(badge).toHaveAttribute('data-state', 'stale')
+    act(() => {
+      client.setQueryData(dapiKeys('mainnet', 'tip'), tip(2_571_277, Date.now() + 5 * 60_000))
+    })
+    await waitFor(() => expect(screen.getByText('Height').closest('.rx-stat')).not.toBeNull())
+    expect(badge()).toBeNull()
   })
+
+  it('shows its own age on a figure that stays behind the tip @HY-01', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(
+      status(2_571_277, 116_445_795.87, Date.now() - 20 * 60_000),
+    )
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_300))
+    const client = new QueryClient({
+      defaultOptions: { queries: { staleTime: Infinity, refetchOnMount: false } },
+    })
+    await renderFigures(client)
+    await waitFor(() => expect(difficultyStat()).toHaveTextContent('116'))
+    expect(badge()).toBeNull()
+    await waitFor(() => expect(badge()).not.toBeNull(), { timeout: 12_000 })
+    expect(badge()).toHaveAttribute('data-state', 'stale')
+  }, 20_000)
 })

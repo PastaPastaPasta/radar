@@ -20,4 +20,5 @@ export {
 } from './site-map'
 export type { SitePage, SiteSection } from './site-map'
 export { keepPreviousOnNetwork } from './keep-previous'
+export { useCatchUpToTip, useRefetchOnRise } from './tip-refetch'
 export { HeaderTip } from './HeaderTip.lazy'

@@ -4,9 +4,10 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
+import { dapiKeys } from '@/data/query'
 import { useIndexHealth } from '@/data/index-health'
 import { hyQueries } from '@/data/hyphen/queries'
-import { Entity, PageLink, useNetwork } from '@/features/entity'
+import { Entity, PageLink, useCatchUpToTip, useNetwork, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import {
@@ -21,7 +22,6 @@ import {
   useHyphenLagSentence,
 } from '@/ui'
 import { useHyphenFit } from '@/data/hyphen/fit'
-import { useRefetchOnNewBlock } from './refetch-on-block'
 import { useSeenPending } from './seen-pending'
 
 const PENDING = 8
@@ -53,7 +53,13 @@ function Headline() {
   const status = useQuery(coreQueries.status(net))
   const chainLock = useQuery({ ...coreQueries.chainLock(net), enabled: stale })
   const metrics = useQuery({ ...hyQueries.metricsLatest(net), enabled: fit })
-  useRefetchOnNewBlock(net, tip.data?.data.height)
+  useRefetchOnRise(net, tip.data?.data.height, { keys: [dapiKeys(net, 'status')] })
+  useCatchUpToTip(net, {
+    key: dapiKeys(net, 'metrics-latest'),
+    tipHeight: tip.data?.data.height,
+    dataHeight: metrics.data?.height,
+    enabled: fit,
+  })
   const m = metrics.data?.data
   const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
   // The tip read follows its status read with a header read; the status already carries the height.
