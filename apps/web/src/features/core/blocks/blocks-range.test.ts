@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BLOCKS_PER_PAGE, chunksOf, shiftDay, windowOf } from './blocks-range'
+import { BLOCKS_PER_PAGE, MAX_DAPI_READS, chunksOf, shiftDay, windowOf } from './blocks-range'
 
 describe('windowOf', () => {
   it('starts at the newest block and pages back', () => {
@@ -40,6 +40,12 @@ describe('shiftDay', () => {
 })
 
 describe('chunksOf @IN-02', () => {
+  it('fills a whole DAPI page within the reads the page mounts', () => {
+    const chunks = chunksOf(BLOCKS_PER_PAGE)
+    expect(chunks.length).toBeLessThanOrEqual(MAX_DAPI_READS)
+    expect(chunks.reduce((n, c) => n + c.count, 0)).toBe(BLOCKS_PER_PAGE)
+  })
+
   it('reads a full page as four rows and then eight at a time', () => {
     expect(chunksOf(20)).toEqual([
       { offset: 0, count: 4 },

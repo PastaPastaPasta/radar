@@ -8,6 +8,8 @@ export const isPageSize = (n: number | undefined): n is PageSize => PAGE_SIZES.s
 export const FIRST_CHUNK = 4
 /** Rows read at a time after the first chunk, so a page fills in steps instead of all at once. */
 export const NEXT_CHUNK = 8
+/** The reads a page fills from (`useDapiRows` mounts that many queries): a longer page would lose rows past them. */
+export const MAX_DAPI_READS = 3
 
 /** A page of `count` rows as the reads that fill it, newest rows first: `FIRST_CHUNK`, then `NEXT_CHUNK` at a time. */
 export function chunksOf(count: number): { offset: number; count: number }[] {

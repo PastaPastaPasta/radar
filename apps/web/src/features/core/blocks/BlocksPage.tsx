@@ -98,7 +98,7 @@ interface PageRows {
 }
 
 /**
- * A short page's rows in up to three reads, the first `FIRST_CHUNK` rows and then `NEXT_CHUNK` at a time, so the top of
+ * A short page's rows in up to `MAX_DAPI_READS` (three) reads, the first `FIRST_CHUNK` rows and then `NEXT_CHUNK` at a time, so the top of
  * the table shows after two rounds of block reads and the rest fills in as it arrives. Each read waits for the one
  * before it, so they never compete for budget.
  */
