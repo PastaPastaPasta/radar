@@ -2326,10 +2326,13 @@ html[data-scroll-gutter] {
 }
 
 /* A proposal leads with its name, then its hash; the status colours the row's leading edge so a column of them scans. */
-.rx-table .rx-propcell {
-  display: grid;
-  gap: 1px;
-  box-shadow: inset 3px 0 0 var(--rx-edge, transparent);
+.rx-table .rx-propcell::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  background: var(--rx-edge, transparent);
 }
 .rx-table tbody[data-status='funded'] {
   --rx-edge: var(--dh-good);
@@ -2347,7 +2350,7 @@ html[data-scroll-gutter] {
   --rx-edge: var(--dh-line-2);
 }
 .rx-propname {
-  justify-self: start;
+  display: block;
   padding: 0;
   border: 0;
   background: none;

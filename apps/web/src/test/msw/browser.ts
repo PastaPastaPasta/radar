@@ -30,6 +30,8 @@ export interface RadarFixtureHooks {
   /** Cuts the Core connection: streams fail, calls fail and the DAPI source reports down (IN-15). */
   breakLiveConnection(net?: NetworkId): void
   restoreLiveConnection(net?: NetworkId): void
+  /** How many times the fixture DAPI transport has been asked for `method` (a DAPI method name). */
+  dapiCalls(method: string): number
 }
 
 export async function startFixtureWorker(): Promise<void> {
@@ -38,6 +40,7 @@ export async function startFixtureWorker(): Promise<void> {
   const hooks: RadarFixtureHooks = {
     breakLiveConnection: (net = 'mainnet') => dapi.breakConnection(net),
     restoreLiveConnection: (net = 'mainnet') => dapi.restoreConnection(net),
+    dapiCalls: (method) => dapi.calls.filter((c) => c.method === method).length,
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
   setSdkTransport(() => Promise.resolve(new FixtureSdkTransport()))

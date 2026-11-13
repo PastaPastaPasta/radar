@@ -217,6 +217,43 @@ test.describe('Transaction page', () => {
     )
   })
 
+  test('shows a step green only if it happened, in both themes @HY-07', async ({ page }) => {
+    await page.goto(`/tx/${REVOCATION}`)
+    const settled = page.locator('#settlement')
+    await expect(settled.locator('[data-step="instantsend"]')).toContainText(
+      'No InstantSend lock was seen',
+    )
+    const look = (name: string) =>
+      settled.locator(`[data-step="${name}"]`).evaluate((el) => {
+        const dot = getComputedStyle(el, '::before')
+        const line = getComputedStyle(el, '::after')
+        return {
+          state: el.getAttribute('data-state'),
+          dot: dot.backgroundColor,
+          ring: dot.borderTopColor,
+          line: line.backgroundColor,
+        }
+      })
+    const instant = await look('instantsend')
+    const mined = await look('mined')
+    expect(instant.state).toBe('skipped')
+    expect(mined.state).toBe('done')
+    expect(instant.dot, 'a step that did not happen has no green dot').not.toBe(mined.dot)
+    expect(instant.line, 'nor a green line').not.toBe(mined.line)
+    expect(instant.ring).not.toBe(mined.dot)
+  })
+
+  test('shows the numeric code beside a revocation reason and says whose names they are @HY-07', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${REVOCATION}`)
+    const reason = page.locator('[data-payload="proUpRevTx"] [data-reason]')
+    await expect(reason).toHaveText('Termination of service (reason 1)')
+    await expect(page.locator('[data-payload="proUpRevTx"]')).toContainText(
+      'Names follow Dash Core’s definitions',
+    )
+  })
+
   test('links a testnet output to the transaction that spent it, from Insight @IN-05 @IN-16 @HY-19', async ({
     page,
   }) => {

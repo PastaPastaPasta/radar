@@ -84,7 +84,7 @@ test.describe('Rich list on a phone', () => {
     await page.goto('/rich-list')
     const note = page.locator('[data-share-basis]')
     await expect(note).toBeVisible()
-    await expect(note.locator('summary')).toContainText('Shares are of address balances')
+    await expect(note.locator('summary')).toContainText('Shares are of the circulating supply')
     const chart = page.getByRole('img', { name: /Share of the supply held by the top/ })
     await expect(chart).toBeVisible()
     const top = await chart.evaluate((el) => el.getBoundingClientRect().top)

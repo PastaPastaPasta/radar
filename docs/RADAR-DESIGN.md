@@ -406,7 +406,8 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 ### 6.12 Value flow and settlement (tx page)
 
 - Flow: SVG 1060 × 270; inputs at x = 300, outputs at x = 760; nodes are 8 px bars in the layer fill (change `--dh-line-2`, fee `--dh-warn`); ribbons are cubic curves at 22% fill (change 14% ink-2, fee 35% warn). Amounts tiny relative to the largest get a 16 px minimum height and the caption says so. Labels: two lines beside each bar, the value (13.5 px weight 650) above the identity (address mono 12 px brand-ink, a pool, or "· change"), so neighbouring labels never share a row; no two label boxes may overlap. At 900 px and below: one 22 px stacked bar plus a ruled legend (address, change, fee with amounts).
-- Settlement: four steps in a row (stacked on phone), 14 px dots on a 2 px line; done steps `--dh-good` dot and line, pending step hollow with a pulsing ring, future steps `--dh-line-2`. Each step: glyph + 14 px weight 620 title, 13 px time and detail.
+- Settlement: four steps in a row (stacked on phone), 14 px dots on a 2 px line. A step is green only if it happened. Done: `--dh-good` filled dot, and the line to the next step is good only when that step is done too. Claimed (a lock one node reports): `--dh-warn` ring on `--dh-warn-soft`. Pending (the step the transaction waits at): hollow dot with a `--dh-warn` ring. Skipped (mined with no InstantSend lock) and future: hollow dot with a `--dh-line-2` ring and a `--dh-line-2` line. The detail text and the marker always agree. Each step: glyph + 14 px weight 620 title, 13 px time and detail.
+- Revocation reason: the label is Dash Core's name with its code ("Termination of service (reason 1)"), and a hint says the names follow Dash Core's definitions (`src/evo/providertx.h`): 0 not specified, 1 termination of service, 2 compromised keys, 3 change of keys.
 
 ### 6.13 Source down on a card
 
@@ -614,3 +615,12 @@ Data in the mockups is real, captured from the Radar crawl API, Platform Explore
 - **Tabs carry the layer.** The current tab's underline is 3 px in the layer line colour instead of the family's 2 px selection blue, so a record page's tabs match its band.
 - **`Stat` needs a `tone`.** Status figures (answering %, quorum-ready, failures) colour their keyline and value; ARCHITECTURE.md's `Stat` has no prop for it yet.
 - **Stale is orange, not amber.** ARCHITECTURE.md §7.3 says the age "turns amber" when stale; the look is `--dh-warn`, because amber is reserved for the primary action.
+
+
+## 16. Round 9 corrections
+
+- **Headline figures.** Difficulty, supply and blockchain size are read again on each new tip (they change with every block and nothing pushes them). `Stats` shows the shared source badge on the first figure of a source only; a figure read more than 30 s before that first one keeps its own badge, so one that stops refreshing cannot hide behind a current one.
+- **Rich list.** Shares are of the circulating supply the Charts page shows (Hyphen metrics), with its source line beside the note. If it is unavailable or the index is stale, the columns, chart and note switch to "% of address balances" and name the denominator. On a phone the concentration chart is six labelled rows (label at the left, value at the end of the bar); on wider screens it stays columns.
+- **Status.** The Platform SDK row is probed with one proof-checked epoch read per visit and once a minute after, and reports "Proof-checked at Platform block N, epoch E. That block is X ago."
+- **Address live line.** The status and cadence word share one line that wraps as a unit; the arrival notice sits on its own line below on a phone and beside it from 640 px.
+- **Governance rows.** A proposal's name is its primary text (ink, weight 650), its short hash is secondary (hidden on a phone, where the vote line takes its place), a 3 px leading edge carries the status (funded good, passing brand, not passing warn, invalid bad, ended `--dh-line-2`) beside the status badge, and Ends is a date without the time (the time is in the tooltip). The filters and the Votes column group are unchanged.

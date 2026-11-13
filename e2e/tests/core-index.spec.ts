@@ -1,8 +1,20 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { tabBarHeight } from '../helpers/contrast'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+
+const HY_FIXTURES = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..',
+  'apps/web/src/test/fixtures/http/hyphen/mainnet',
+)
+const recorded = <T>(name: string): T =>
+  (JSON.parse(readFileSync(path.join(HY_FIXTURES, name), 'utf8')) as { body: T }).body
 
 const ADDRESS = 'XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14'
 const EMPTY_ADDRESS = 'XbKzysY6LYGbsGwNG8B7K1BRoA1ffLodAT'
@@ -149,6 +161,48 @@ test.describe('address page', () => {
     )
     await expect(page.locator('[data-pending] a[href*="f96fddff"]')).toHaveCount(1)
     await expect(page.locator('[data-pending] a[href*="ababab"]')).toHaveCount(0)
+  })
+
+  test('keeps the live line, its cadence and the arrival notice readable at phone widths @IN-06', async ({
+    page,
+  }) => {
+    test.slow()
+    test.skip((page.viewportSize()?.width ?? 1000) > 640, 'phone layout only')
+    await page.addInitScript(stubAddress, {
+      address: BUSY,
+      utxos: [],
+      recent: [{ txHash: 'ab'.repeat(32), netValue: 250000000 }],
+    })
+    await page.goto(`/address/${BUSY}`)
+    const notice = page.locator('[data-new-transaction]')
+    await expect(notice.locator('a[href*="f96fddff"]')).toBeVisible({ timeout: 20_000 })
+    await page.evaluate(() =>
+      (
+        window as unknown as { __radarFixtures: { breakLiveConnection(): void } }
+      ).__radarFixtures.breakLiveConnection(),
+    )
+    await expect(notice.locator(`a[href*="${'ab'.repeat(32)}"]`)).toBeVisible({ timeout: 60_000 })
+    const live = page.locator('main [data-live]')
+    await expect(live.locator('[data-arrived]')).toBeVisible()
+    for (const width of [320, 390, 430]) {
+      await page.setViewportSize({ width, height: 800 })
+      const word = live.locator('.rx-livedot')
+      await expect(word).toContainText('Checking every 30 s')
+      const wordBox = (await word.boundingBox())!
+      expect(wordBox.height, `${width}: the cadence is one line`).toBeLessThan(24)
+      const text = (await live.locator('p > span.min-w-0').boundingBox())!
+      expect(text.height, `${width}: the status reads in at most two lines`).toBeLessThan(48)
+      const arrived = (await live.locator('[data-arrived]').boundingBox())!
+      expect(arrived.height, `${width}: the notice reads in at most two lines`).toBeLessThan(48)
+      expect(arrived.width, `${width}: the notice is not squeezed into a column`).toBeGreaterThan(
+        width * 0.6,
+      )
+      const head = (await live.locator('p').boundingBox())!
+      expect(arrived.y, `${width}: the notice sits below the status`).toBeGreaterThanOrEqual(
+        head.y + head.height - 1,
+      )
+      await expectNoSideScroll(page)
+    }
   })
 
   test('pages the history by cursor and keeps what is already shown @IN-06', async ({ page }) => {
@@ -302,19 +356,45 @@ test.describe('rich list', () => {
     await expectNoSideScroll(page)
   })
 
-  test('says which total the shares are of, next to the shares and the chart @HY-09', async ({
+  test('divides each share by the circulating supply the Charts page shows, and says so @HY-09', async ({
     page,
   }) => {
     await page.goto('/rich-list')
     await expect(rankedList(page)).toBeVisible()
-    const notes = page.locator('[data-share-basis]')
+    const notes = page.locator('[data-share-basis="circulating"]')
     const phone = (page.viewportSize()?.width ?? 1000) <= 640
     await expect(notes).toHaveCount(phone ? 1 : 2)
     if (phone) await notes.first().locator('summary').click()
     for (const note of await notes.all()) {
       await expect(note).toBeVisible()
-      await expect(note).toContainText('Shares are of the 12.89 M DASH held in positive address')
-      await expect(note).toContainText('not of the circulating supply')
+      await expect(note).toContainText('Shares are of the circulating supply, 13.17 M DASH')
+      await expect(note.locator('[data-source="hyphen"]')).toBeVisible()
+    }
+    const first = recorded<{ value: { balance: number }[] }>('balances--limit-25.json').value[0]!
+    const share =
+      first.balance /
+      recorded<{ circulatingSupply: number }>('metrics__latest.json').circulatingSupply
+    const firstRow = phone
+      ? rankedList(page).getByRole('listitem').first()
+      : rankedList(page).getByRole('row').nth(1)
+    await expect(firstRow).toContainText(`${(share * 100).toFixed(2)}%`)
+    await page.goto('/charts')
+    await expect(page.locator('[data-charts-now]')).toContainText('13.17 M')
+  })
+
+  test('shows a concentration chart whose six bands can be read without the table on a phone @HY-09', async ({
+    page,
+  }) => {
+    test.skip((page.viewportSize()?.width ?? 1000) > 640, 'phone layout only')
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/rich-list')
+      const canvas = page.locator('#concentration .rx-chart__canvas')
+      await expect(canvas.locator('canvas')).toBeVisible()
+      const box = (await canvas.boundingBox())!
+      expect(box.height, 'six rows need room to be labelled').toBeGreaterThanOrEqual(170)
+      expect(box.x + box.width).toBeLessThanOrEqual(width)
+      await expectNoSideScroll(page)
     }
   })
 
@@ -530,6 +610,42 @@ test.describe('governance', () => {
     await page.evaluate(() => window.scrollTo(0, 0))
     await expectAccessible(page)
     await expectNoSideScroll(page)
+  })
+
+  test('leads each row with the proposal name and colours its leading edge by status @HY-13', async ({
+    page,
+  }) => {
+    await page.goto('/governance')
+    const rows = page.locator('tbody[data-proposal]')
+    await expect(rows.first()).toBeVisible()
+    const name = rows.first().locator('.rx-propname')
+    const hash = rows.first().locator('[data-proposal-hash]')
+    if ((page.viewportSize()?.width ?? 1000) > 640) {
+      await expect(hash).toBeVisible()
+      const nameLook = await name.evaluate((el) => {
+        const css = getComputedStyle(el)
+        return { weight: Number(css.fontWeight), size: parseFloat(css.fontSize) }
+      })
+      const hashLook = await hash.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
+      expect(nameLook.weight).toBeGreaterThanOrEqual(500)
+      expect(hashLook).toBeLessThan(nameLook.size)
+    }
+    const edges = await rows.evaluateAll((all) =>
+      all.map((el) => ({
+        status: el.getAttribute('data-status'),
+        edge: getComputedStyle(el.querySelector('.rx-propcell')!, '::before').backgroundColor,
+      })),
+    )
+    expect(edges.length).toBeGreaterThan(5)
+    const byStatus = new Map(edges.map((e) => [e.status, e.edge]))
+    expect(byStatus.size, 'more than one status is on the page').toBeGreaterThan(1)
+    expect(new Set(byStatus.values()).size, 'each status has its own edge').toBe(byStatus.size)
+    for (const [status, edge] of byStatus)
+      expect(edge, status ?? undefined).not.toBe('rgba(0, 0, 0, 0)')
+    await expect(page.getByRole('group', { name: 'Filter proposals by status' })).toBeVisible()
+    if ((page.viewportSize()?.width ?? 1000) > 640) {
+      await expect(page.getByRole('columnheader', { name: 'Votes', exact: true })).toBeVisible()
+    }
   })
 
   test('the proposal page has the votes and the vote history @HY-13', async ({ page }) => {

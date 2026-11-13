@@ -21,6 +21,9 @@ export function useLiveTip(): void {
   const client = useQueryClient()
   useEffect(() => {
     if (!enabled) return
+    if (import.meta.env.VITE_DATA_MODE === 'fixtures') {
+      ;(window as unknown as { __radarQueryClient: typeof client }).__radarQueryClient = client
+    }
     let cancelled = false
     let release: (() => void) | undefined
     void import('@/data/core/live').then(({ coreLive }) => {

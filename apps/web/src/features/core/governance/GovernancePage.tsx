@@ -7,7 +7,7 @@ import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
 import { Entity, useNetwork } from '@/features/entity'
-import { formatDate, formatInt } from '@/lib/format'
+import { formatDate, formatInt, formatIsoUtc } from '@/lib/format'
 import {
   Amount,
   Card,
@@ -335,10 +335,9 @@ function ProposalTable({
             <Amount value={p.paymentAmount} kind="duffs" />
           </td>
           <td className="rx-propends">
-            <Time ms={p.endTime} mode="relative" />
-            <span className="rx-prophash">
+            <time dateTime={formatIsoUtc(p.endTime)} title={formatIsoUtc(p.endTime)}>
               {formatDate(p.endTime, { time: false, zone: false })}
-            </span>
+            </time>
           </td>
         </tr>
         {expanded ? (

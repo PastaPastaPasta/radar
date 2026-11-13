@@ -19,6 +19,21 @@ test.describe('status', () => {
     await expectAccessible(page)
   })
 
+  for (const [label, url] of [
+    ['mainnet', '/status'],
+    ['testnet', '/status?network=testnet'],
+  ] as const) {
+    test(`checks Platform's SDK itself on a fresh ${label} visit @IN-09`, async ({ page }) => {
+      await page.goto(url)
+      const row = page.locator('[data-source-row="sdk"]')
+      await expect(row.locator('[data-source-sync]')).toContainText(
+        /Proof-checked at Platform block [\d,]+, epoch [\d,]+\. That block is /,
+      )
+      await expect(row).not.toContainText('Nothing has asked it yet')
+      await expect(row).not.toHaveAttribute('data-state', 'unknown')
+    })
+  }
+
   test("names the Core summary's source once, beside its heading @IN-09", async ({ page }) => {
     await page.goto('/status')
     const card = page.locator('#core')

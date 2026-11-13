@@ -6,7 +6,15 @@ import { expect as baseExpect, test } from '../helpers/test'
 const expect = baseExpect.configure({ timeout: 15_000 })
 
 interface RadarFixtureWindow {
-  __radarFixtures: { breakLiveConnection(): void; restoreLiveConnection(): void }
+  __radarFixtures: {
+    breakLiveConnection(): void
+    restoreLiveConnection(): void
+    dapiCalls(method: string): number
+  }
+  __radarQueryClient: {
+    getQueryData(key: unknown[]): { data: { height: number } } | undefined
+    setQueryData(key: unknown[], data: unknown): void
+  }
 }
 
 test.describe('Home', () => {
@@ -116,6 +124,42 @@ test.describe('Home', () => {
     )
     await expect(notice).toHaveCount(0)
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
+  })
+
+  test('reads the Core figures again when a new block arrives @HY-01', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('[data-headline]')).toContainText('Difficulty')
+    await expect(
+      page.locator('[data-headline] .rx-stat').filter({ hasText: 'Difficulty' }),
+    ).not.toHaveAttribute('aria-busy', 'true')
+    const statusReads = () =>
+      page.evaluate(() =>
+        (window as unknown as RadarFixtureWindow).__radarFixtures.dapiCalls('getBlockchainStatus'),
+      )
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as unknown as RadarFixtureWindow).__radarQueryClient.getQueryData([
+              'mainnet',
+              'dapi',
+              'tip',
+            ]) !== undefined,
+        ),
+      )
+      .toBe(true)
+    const before = await statusReads()
+    await page.evaluate(() => {
+      const w = window as unknown as RadarFixtureWindow
+      const key = ['mainnet', 'dapi', 'tip']
+      const tip = w.__radarQueryClient.getQueryData(key)!
+      w.__radarQueryClient.setQueryData(key, {
+        ...tip,
+        data: { ...tip.data, height: tip.data.height + 1 },
+      })
+    })
+    await expect.poll(statusReads).toBeGreaterThan(before)
+    await expect(page.locator('[data-headline]')).toContainText('2,570,086')
   })
 
   test('keeps the Core height and ChainLock in the header while scrolling @IN-15', async ({
