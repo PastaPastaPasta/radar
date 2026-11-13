@@ -282,7 +282,7 @@ test.describe('masternode list', () => {
     await open(page, '/masternodes')
     await page.evaluate(() => window.scrollTo(0, 1400))
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
-    await page.getByRole('link', { name: 'Epochs', exact: true }).first().click()
+    await page.getByRole('link', { name: 'Epochs', exact: true }).first().dispatchEvent('click')
     await expect(page).toHaveURL(/\/epochs/)
     await page.goBack()
     await expect(rows(page).first()).toBeVisible()

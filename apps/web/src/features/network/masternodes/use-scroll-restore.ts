@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+import { useRouter, useRouterState } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 const PREFIX = 'radar.scroll.'
@@ -29,18 +29,15 @@ export function useRestoreScroll(ready: boolean): void {
   const key = useRouterState({
     select: (s) => String(s.location.state.__TSR_key ?? s.location.href),
   })
+  const router = useRouter()
   useEffect(() => {
     if (!ready) return
     const target = read(key)
     let frame = 0
     let pending = 0
     let tracking = false
-    const track = () => {
-      write(key, window.scrollY)
-    }
-    const start = () => {
-      tracking = true
-      window.addEventListener('scroll', track, { passive: true })
+    const save = () => {
+      if (tracking) write(key, window.scrollY)
     }
     const step = () => {
       if (target > 0 && Math.abs(window.scrollY - target) > 2 && frame++ < FRAMES) {
@@ -48,13 +45,17 @@ export function useRestoreScroll(ready: boolean): void {
         pending = requestAnimationFrame(step)
         return
       }
-      start()
+      tracking = true
     }
     if (target > 0) pending = requestAnimationFrame(step)
-    else start()
+    else tracking = true
+    // The router scrolls to the top as it leaves, so the offset is read just before that, not from scroll events.
+    const unsubscribe = router.subscribe('onBeforeLoad', save)
+    window.addEventListener('pagehide', save)
     return () => {
       cancelAnimationFrame(pending)
-      if (tracking) window.removeEventListener('scroll', track)
+      unsubscribe()
+      window.removeEventListener('pagehide', save)
     }
-  }, [key, ready])
+  }, [key, ready, router])
 }
