@@ -379,6 +379,24 @@ test.describe('rich list', () => {
     await expectNoSideScroll(page)
   })
 
+  test('audits the figures after they have rolled in, not while they are part-transparent @HY-09', async ({
+    page,
+  }) => {
+    await page.goto('/rich-list')
+    await expect(rankedList(page)).toBeVisible()
+    await settled(page)
+    await page.evaluate(() => {
+      const slow = new CSSStyleSheet()
+      slow.replaceSync(
+        '.rx-tick.is-new { animation-duration: 2s; animation-timing-function: linear; }',
+      )
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, slow]
+    })
+    await page.getByRole('button', { name: 'Show more' }).click()
+    await expect(page.locator('.rx-tick.is-new').first()).toBeVisible()
+    await expectAccessible(page)
+  })
+
   test('divides each share by the circulating supply the Charts page shows, and says so @HY-09', async ({
     page,
   }) => {

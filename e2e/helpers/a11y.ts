@@ -8,6 +8,7 @@ export interface AccessibleOptions {
 }
 
 const BLOCKING = new Set(['serious', 'critical'])
+const ENTRANCE_LIMIT_MS = 3000
 
 interface AcceptedViolation {
   rule: string
@@ -32,7 +33,28 @@ const isAccepted = (rule: string, target: unknown[]) =>
     (a) => a.rule === rule && JSON.stringify(a.target) === JSON.stringify(target.flat()),
   )
 
+/**
+ * A figure that rolls in and a row that enters are part-transparent while they move, so an audit
+ * taken mid-move reports a contrast the reader never sees. Looping animations are left running.
+ */
+async function entrancesFinished(page: Page): Promise<void> {
+  await page.evaluate(
+    (limit) =>
+      Promise.race([
+        Promise.allSettled(
+          document
+            .getAnimations()
+            .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+            .map((a) => a.finished),
+        ),
+        new Promise((done) => setTimeout(done, limit)),
+      ]).then(() => undefined),
+    ENTRANCE_LIMIT_MS,
+  )
+}
+
 export async function expectAccessible(page: Page, options: AccessibleOptions = {}): Promise<void> {
+  await entrancesFinished(page)
   let axe = new AxeBuilder({ page }).withTags([
     'wcag2a',
     'wcag2aa',
