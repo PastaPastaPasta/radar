@@ -1,0 +1,38 @@
+{
+  "method": "voting.votePollsByEndDate",
+  "args": {
+    "limit": 5,
+    "orderAscending": true
+  },
+  "recordedAt": "2026-11-13T07:59:53.151Z",
+  "result": {
+    "ok": true,
+    "data": [],
+    "proved": true,
+    "meta": {
+      "height": 673764,
+      "coreChainLockedHeight": 1590793,
+      "epoch": 20334,
+      "timeMs": 1794556677181,
+      "protocolVersion": 14,
+      "chainId": "dash-testnet-51"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQD2AZP3DYQVh2uDVYzUC0Kdq4SrORzzPZuVIWza/w1jG9usAu9GWMZGwqYnszc5SKVrBZreMS4NeQ06oEbi9izQPALGEAEu/ez3JJ5qub1QGaF/nPoD2Njs8pbLy0s12Ffn+tqDWQLP2mdh8PoXGuM0xtfLDJqOYy+Z/cdAeKl4fsORs0mU2xABPhn+nXHGCriqPHWWT3J1XH2W/Y8TnYFJywUMOJpA5b0EAXAABQIBAWQADfzjyGydSRtANiEKgRl3xFtFOwhLbdxTY90GEnPT7wsQAaEHiEEmQHtsGpZyCMk7x/CtixiDq1h8X2a8aFUEBa3eERERAQFwAGwBxQ1IZXHU0KIIadwTZMSkistSH3sSVIuvEp/3kJ9oheMCyH61zz6RElbWHBAf+IP5I9w4N0aFkXVPNBicYX8c6vAQBAFlAAMCAABlGSnhdHOBoWFXUV5UR2JVAvOnmEOFmgqSnSTGBcCyOhEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAkFgkWXFbNL1Yvf2u1kroXxzs3lHXMbKYsLqfSEQ="
+      },
+      "signature": {
+        "$u8": "taB5DewZzrF0TkGUxl7bVfdbafX3HtaKLYUNR3aSrpIkrrKGSXTXa6piEoWNrwzFFo0qRVqx34wwwrsIZjIJl3+w64WGz4t+I6j+L623pLkBwEC1hEEKCW0lWY01hzYM"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "gyW4/1Kw20BMoDCUCoT+RtzNJMAiuK7nSpQMjde/8hE="
+      },
+      "quorumType": 6
+    },
+    "tookMs": 133.9325400000007
+  }
+}

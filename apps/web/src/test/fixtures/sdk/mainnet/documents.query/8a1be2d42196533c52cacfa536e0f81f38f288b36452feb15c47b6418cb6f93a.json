@@ -1,0 +1,102 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "where": [["records.identity", "in", ["BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"]]],
+    "orderBy": [["records.identity", "asc"]],
+    "limit": 100
+  },
+  "recordedAt": "2026-11-13T08:02:21.848Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "7iPVZSZos4GmEf3cz3pwZ1y8YsFSZgvgTSV7XcQ9Vkap",
+        "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1728201974075,
+        "updatedAt": 1728201974075,
+        "transferredAt": 1728201974075,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "pshenmic",
+          "normalizedLabel": "pshenm1c",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "D8EZ5oCN8XRvL9mcxDMKr6xJdBxdiD3jhejBtJF8PEee",
+        "ownerId": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1758816378149,
+        "updatedAt": 1758816378149,
+        "transferredAt": 1758816378149,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "cryptofan",
+          "normalizedLabel": "crypt0fan",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 470555,
+      "coreChainLockedHeight": 2571490,
+      "epoch": 88,
+      "timeMs": 1794556873413,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAVeFrjo1e4tFOgloNev7goVjYg75G9XbgmGmtBcLF+ASBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvAC2gY/eMmPxgAyDEIiN5xNmqS/gvi4nPthhGmNDk1/xFBABjzkXBLFcPlU26sgEE6mXg+SMO/oFYtjoDZPyx8bRbe4RAQFAAPsBFQHW4g4nTbnlkeLaW90dwr+7kBcgIajsU5Qrxu9f0qc/ZgKCH2O1+hbmRzBwCD0CBNBge9eHPD453c5nCTgI1bOjYBABlNq2PUaqsWIBbujVstwevhs0LJm7NPnVFKCk19fVvlkCp0V/mPI9MKZhnIUEx8jRSNP3JVq8pkAyzhFVXr+hWSgQARqOib1TigO6hKP4gZ7zTAvChqtyG6WV4f7vdLsT9bF0BCDmaMZZr2au4ecsGG3ee1t+Ch1xKgnEDVch9iK/U8UxVQAFAgEBAQD64o1uxnwrgZCw+LCiC2myUjywgmaatUANSP3gel1/BRABOhTtXe3PVhBKJLfLJYqBt33JgrDfVEFty2fXj3io/aoREREBIOZoxlmvZq7h5ywYbd57W34KHXEqCcQNVyH2Ir9TxTFVAHUBseIAKaFmKTZ9wwtoMsbEbNNh9ktmXGJ5F1FGGfPYJhAEAQEADAIBCHByZW9yZGVyAH80ImiXCascP0aG9Yvlvc2EhslCspVyTY5++HVgk97DEAGNaJQG8QFmaUu58Auvw79wXRGNrED4HfElJE+g0paatREBAQEAagQGZG9tYWluAB4CARpub3JtYWxpemVkUGFyZW50RG9tYWluTmFtZQB+m5S1f+r10FhE4Fe5pkv97GPVOeuZRpFJDaXMz26/awIPyhuIvVc2CqpbmxBQW+nT4rR1n/G77PwIzTZzpzyuwBABBmRvbWFpbgCcAZN9NCAx1+nZHe39xrzb0LkOWF2Py2DBS1qtEqdNtpaGAkhaxjfMkvyf2PBQQPjwXqvp8LJCwSKyVHpgocfcPy2EEAQQcmVjb3Jkcy5pZGVudGl0eQAkAgEgeqaEypB9S+Tb080tQtdRpkszWao/iUSkEeRhbuO4ackAT8hmTk/Lpqs4KGTGqYft0PbdndSe8mqPnPLwF371nBwRARByZWNvcmRzLmlkZW50aXR5APsCrQEmMuiqot0cCThpg0TG3AyiKPo8ziA2jALBBDwSuqdyrgJ/HBNn2PAsdG1tDAAewX72JliqKzBDPKDiKvXUCSpKKhAB8EDHWDyyTOJPaHjJsAqaz5OxvN6G7LI6MhTQzUOABVcCpP/LIc/uujBQgVsTt35PKk1uJ3rXPggmpp06xG0s+YAQARAC6ppnA/YGowMhn02iWqLkPrdQ7rflpkgHRrrCeFSZArxXc9X2lHkDKGxa+McvnWyVvT+pcFxg4V3Xul/KcUVsEAGZf+nK6w1AEbe+e1EIuvi9rmlQjD5ey4cjB+5wVfXlMQIAYm9O+WRwCvTgpltaV1R9wvDdAuIboJnKpVwDPge00BABJLLNhs2q14jcLlzecJzPPwxCo5ylGBEn0QGRzccfDu4CnzdU22+n8YqAVcyl6t/Zfdo015fQRrexOxYNLg1WKjYQAaVu8DHh2bacV4/l3IzQ+slv/IEAae9MQOuUHprBNsCyAsVrPHUx0qloiFlC/Sk7EhsN/a1BU7IDRa8crfd8zs0KEAQgn4ay5zy5fRyuqEYkMwlkmmIay6RP9mlhSjLeBK3puwMABQIBAQAAH4iODXFLFbXYtkpZIjbgYnd7yOEqi1NtGywEZ5NI3BURERECctPxG+oJgXiVbcDcE2m5zOjJtEnOqCErsfdSr4OWY3UQAdgkNcGpNH6j0Ewa7bOKwUxpMV/TdXhq0uc/vep3wzCdERECCarWMQ3sRVZtnTt/ImiMQYzAE2JLgnxVv+As7PGMdKgQAZTVNwznqGM2NQN1bJeyK8BQz6+ADLFsbq5hnGMnSIXQERECIalRZh2dFKLi+iJCAWvZNvRHFWx2ckNTeaPTBg6BE1AQAZ9B8p+nDOMv6smX7ahoH+TTbIkDDEi+Xk63e4eAUD8iEREBIJ+Gsuc8uX0crqhGJDMJZJpiGsukT/ZpYUoy3gSt6bsDAEkEAQAAJAIBIGPAXfHFGHTWt2iIxiR66oqgAIcMcUPLelK4kTl2bIq1AFteilfku7R2DddTmDZkBpFfvrwCPXuAa0RDfHdWqlNSAQEAAPsBzwYgY8Bd8cUYdNa3aIjGJHrqiqAAhwxxQ8t6UriROXZsirUAogCfAGPAXfHFGHTWt2iIxiR66oqgAIcMcUPLelK4kTl2bIq1n4ay5zy5fRyuqEYkMwlkmmIay6RP9mlhSjLeBK3puwMBAAcAAAGSYN1hOwAAAZJg3WE7AAABkmDdYTsACHBzaGVubWljCHBzaGVubTFjAQRkYXNoBGRhc2gAIQGfhrLnPLl9HK6oRiQzCWSaYhrLpE/2aWFKMt4Erem7AwEAAEDTQtkQNogBe1TZ40hctG5UYQjLaTzsf8i5awcVL7hoBiC0JqIk4cqjvvyBaV0y23eLa5xYefrOEt69xoc+orUAuwCkAKEAtCaiJOHKo778gWldMtt3i2ucWHn6zhLevcaHPqK1ALufhrLnPLl9HK6oRiQzCWSaYhrLpE/2aWFKMt4Erem7AwEABwAAAZmBoB0lAAABmYGgHSUAAAGZgaAdJQAJY3J5cHRvZmFuCWNyeXB0MGZhbgEEZGFzaARkYXNoACEBn4ay5zy5fRyuqEYkMwlkmmIay6RP9mlhSjLeBK3puwMBAADt4+e4kV/V21qf+DjTvKDt4+GH60JLgiJuRdbiGOLhTBEA"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABHg5fz1dU/xVeoMZC4PoRoTr9VkiayhtN0="
+      },
+      "signature": {
+        "$u8": "jIbnUvj4ylKWdY0aRUlI0hQ7c4hccp8aViNmooFZ4gWM9bBdvhOEirOKDHZNIyiVDWr0sj6/XGOnJLuj7ubHFRIL2M0PqZsn/BMIZxzyIhOix6FxKttP5TTIBfpVX1mD"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "PSp9xIvkMKHpwjcPRhb5T6rA6D+rdAfQ+q9vDGeWu6I="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 775.955381
+  }
+}
