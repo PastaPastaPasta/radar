@@ -269,7 +269,10 @@ describe('redirect targets', () => {
         where: '[["$id","==","x"]]',
       })
       const search = landed(hit)
-      expect(search).toMatchObject({ order: ['$id'], where: [{ field: '$id', op: 'eq', value: 'x' }] })
+      expect(search).toMatchObject({
+        order: ['$id'],
+        where: [{ field: '$id', op: 'eq', value: 'x' }],
+      })
       expect(search.after).toBeUndefined()
       expect(search.prev).toBeUndefined()
     })
@@ -300,7 +303,12 @@ describe('redirect targets', () => {
       ['/v24', { net: 'testnet' }, '/v24', { network: 'testnet' }],
       ['/api', { net: 'testnet' }, '/api', { network: 'testnet' }],
       ['/map', { net: 'testnet', type: 'Evo' }, '/map', { network: 'testnet', type: 'evo' }],
-      ['/changes', { net: 'testnet', kind: 'joins' }, '/changes', { network: 'testnet', kind: 'joins' }],
+      [
+        '/changes',
+        { net: 'testnet', kind: 'joins' },
+        '/changes',
+        { network: 'testnet', kind: 'joins' },
+      ],
       ['/platform.html', { net: 'testnet' }, '/epochs', { network: 'testnet' }],
       ['/mn.html', {}, '/masternodes', {}],
     ] as const)('%s?%j opens %s', (path, query, pathname, expected) => {

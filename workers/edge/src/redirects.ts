@@ -91,7 +91,12 @@ function whereOf(raw: string | null): string | null {
   for (const row of rows as unknown[]) {
     if (!Array.isArray(row) || row.length !== 3) continue
     const [field, op, value] = row as unknown[]
-    if (typeof field !== 'string' || !field || typeof op !== 'string' || typeof value !== 'string') {
+    if (
+      typeof field !== 'string' ||
+      !field ||
+      typeof op !== 'string' ||
+      typeof value !== 'string'
+    ) {
       continue
     }
     const mapped = Object.hasOwn(WHERE_OPS, op) ? WHERE_OPS[op]! : undefined
@@ -111,7 +116,8 @@ function whereOf(raw: string | null): string | null {
 }
 
 /** The native explorer keeps a stack of page cursors in `after`, newest last. */
-const cursorsOf = (p: URLSearchParams): string[] => (p.get('after') ?? '').split(',').filter(Boolean)
+const cursorsOf = (p: URLSearchParams): string[] =>
+  (p.get('after') ?? '').split(',').filter(Boolean)
 
 /** The native explorer's documents paging and ordering, in the page's own address form. */
 function documentsSearch(p: URLSearchParams): Record<string, string> {
@@ -153,12 +159,20 @@ function contestLabel(p: URLSearchParams): string | null {
 const NATIVE: Record<string, Rule> = {
   '/identity': (p) =>
     p.get('id')
-      ? { path: `/identity/${seg(p.get('id')!)}`, drop: ['id', 'tab'], set: tabSet(p, IDENTITY_TABS) }
+      ? {
+          path: `/identity/${seg(p.get('id')!)}`,
+          drop: ['id', 'tab'],
+          set: tabSet(p, IDENTITY_TABS),
+        }
       : { path: '/identities', drop: ['tab'] },
   '/identity/lookup': () => ({ path: '/identity/lookup' }),
   '/contract': (p) =>
     p.get('id')
-      ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id', 'tab'], set: tabSet(p, CONTRACT_TABS) }
+      ? {
+          path: `/contract/${seg(p.get('id')!)}`,
+          drop: ['id', 'tab'],
+          set: tabSet(p, CONTRACT_TABS),
+        }
       : { path: '/contracts', drop: ['tab'] },
   '/contract/documents': (p) =>
     p.get('id') && p.get('type')
@@ -194,7 +208,9 @@ const NATIVE: Record<string, Rule> = {
       : { path: '/names' },
   '/dpns/search': (p) => {
     const after = cursorsOf(p).at(-1)
-    return { path: '/names', drop: ['after'], set: after ? { after } : {} }
+    const set: Record<string, string> = {}
+    if (after) set.after = after
+    return { path: '/names', drop: ['after'], set }
   },
   '/governance/contested': () => ({ path: '/contests' }),
   '/governance/contested/detail': (p) => {
@@ -204,11 +220,9 @@ const NATIVE: Record<string, Rule> = {
   },
   '/governance/polls': (p) => {
     const range = POLL_WINDOWS[p.get('window') ?? '']
-    return {
-      path: '/polls',
-      drop: ['window'],
-      set: range ? { range } : {},
-    }
+    const set: Record<string, string> = {}
+    if (range) set.range = range
+    return { path: '/polls', drop: ['window'], set }
   },
   '/groups': (p) =>
     p.get('contractId')
