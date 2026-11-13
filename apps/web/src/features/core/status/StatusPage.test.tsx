@@ -226,13 +226,17 @@ describe('Status page', () => {
     setCoreClient(core())
     renderAt('/status')
     await screen.findByRole('list', { name: 'Sources' })
+    const row = document.querySelector<HTMLElement>('[data-source-row="sdk"]')!
+    // The page probes the SDK itself; let that answer land first so it can't lift the row out of "down".
+    await waitFor(() =>
+      expect(row.querySelector('[data-source-sync]')).toHaveTextContent(/Proof-checked at/),
+    )
     act(() => {
       healthRegistry.report('mainnet', 'sdk', { ok: true, latencyMs: 80 })
       for (let i = 0; i < 3; i++) {
         healthRegistry.report('mainnet', 'sdk', { ok: false, kind: 'network', latencyMs: 10 })
       }
     })
-    const row = document.querySelector<HTMLElement>('[data-source-row="sdk"]')!
     await waitFor(() => expect(row.getAttribute('data-state')).toBe('down'))
     expect(row).toHaveTextContent('The connection failed.')
     expect(row).toHaveTextContent(/Last good/)
