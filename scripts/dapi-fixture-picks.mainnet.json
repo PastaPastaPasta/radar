@@ -74,5 +74,9 @@
       "id": "tx-mnhf",
       "reason": "No MnHfSignal on mainnet in the searched range: the v24 deployment has not been signalled yet"
     }
-  ]
+  ],
+  "masternodeList": {
+    "id": "masternode-list",
+    "purpose": "The deterministic masternode list: the first message of subscribeToMasternodeList (a full diff) and the header read that checks its block"
+  }
 }

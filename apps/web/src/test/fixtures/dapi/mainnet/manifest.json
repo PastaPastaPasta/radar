@@ -211,6 +211,13 @@
       "call": "subscribeToTransactionsWithProofs(matchAll, fromBlockHeight: 2570085, count: 0)",
       "height": 2570085,
       "tags": ["stream", "instant-send", "mempool"]
+    },
+    {
+      "id": "masternode-list",
+      "purpose": "The deterministic masternode list: the first message of subscribeToMasternodeList (a full diff) and the header read that checks its block",
+      "call": "masternodeList(\"mainnet\")",
+      "height": 2571527,
+      "tags": ["stream", "masternode-list"]
     }
   ],
   "gaps": [

@@ -79,5 +79,9 @@
       "purpose": "A ProDissolveTx (DIP-26, testnet only): a type the badge palette has no entry for, so it renders as a plain transfer with its payload kind"
     }
   ],
-  "gaps": []
+  "gaps": [],
+  "masternodeList": {
+    "id": "masternode-list",
+    "purpose": "The deterministic masternode list: the first message of subscribeToMasternodeList (a full diff) and the header read that checks its block"
+  }
 }
