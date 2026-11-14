@@ -236,6 +236,20 @@ describe('Time', () => {
     expect(times[2]).toHaveTextContent('11:52 UTC · 8 min ago')
     expect(times[0]).toHaveAttribute('dateTime', '2026-11-10T11:52:00Z')
   })
+
+  it('never prints a date twice: past two days the absolute time stands alone @NX-44', () => {
+    render(
+      <>
+        <Time ms={NOW - 30 * 3_600_000} mode="both" />
+        <Time ms={NOW - 6 * 86_400_000} mode="both" />
+        <Time ms={Date.UTC(2025, 7, 16, 8, 26)} mode="both" />
+      </>,
+    )
+    const times = Array.from(document.querySelectorAll('time'))
+    expect(times[0]).toHaveTextContent('9 Nov 2026, 06:00 UTC · yesterday')
+    expect(times[1]?.textContent).toBe('4 Nov 2026, 12:00 UTC')
+    expect(times[2]?.textContent).toBe('16 Aug 2025, 08:26 UTC')
+  })
 })
 
 describe('Badge and TypeBadge', () => {

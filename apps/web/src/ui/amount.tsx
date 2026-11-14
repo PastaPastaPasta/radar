@@ -62,7 +62,16 @@ export function Amount({
       className={cx('rx-amt rx-num', signed && a.sign === '+' && 'rx-amt--pos')}
       data-amount={value.toString()}
       data-usd={usdFirst ? '' : undefined}
-      title={kind === 'credits' ? t`${formatInt(value)} credits` : undefined}
+      title={
+        kind === 'credits'
+          ? [
+              t`${formatInt(value)} credits`,
+              rate === undefined ? '' : formatFiat(value / 1000n, rate),
+            ]
+              .filter(Boolean)
+              .join(' ')
+          : undefined
+      }
     >
       {usdFirst && rate !== undefined && duffs !== undefined ? (
         <>
@@ -89,6 +98,14 @@ export interface TimeProps {
   seconds?: boolean
 }
 
+const DAY_MS = 86_400_000
+
+/** True where `formatRelative` gives a bare date ("16 Nov") instead of an age. */
+const relativeIsDate = (ms: number, now: number): boolean => {
+  const delta = now - ms
+  return delta >= 2 * DAY_MS || delta <= -DAY_MS
+}
+
 function absolute(ms: number, now: number, seconds: boolean): string {
   const sameDay = formatDate(ms, { time: false }) === formatDate(now, { time: false })
   return formatDate(ms, { date: !sameDay, seconds })
@@ -96,12 +113,14 @@ function absolute(ms: number, now: number, seconds: boolean): string {
 
 export function Time({ ms, mode = 'relative', live = false, seconds = false }: TimeProps) {
   const now = useNow(live && mode !== 'absolute')
+  const at = clampSkew(ms, now)
+  // Past two days the age is itself a date, and the absolute time already says it.
   const text =
-    mode === 'absolute'
-      ? absolute(ms, now, seconds)
-      : mode === 'both'
-        ? `${absolute(ms, now, seconds)} · ${formatRelative(clampSkew(ms, now), now)}`
-        : formatRelative(clampSkew(ms, now), now)
+    mode === 'relative'
+      ? formatRelative(at, now)
+      : mode === 'both' && !relativeIsDate(at, now)
+        ? `${absolute(ms, now, seconds)} · ${formatRelative(at, now)}`
+        : absolute(ms, now, seconds)
   return (
     <time className="rx-time" dateTime={formatIsoUtc(ms)} title={formatIsoUtc(ms)}>
       {text}

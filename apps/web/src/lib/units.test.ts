@@ -207,6 +207,13 @@ describe('formatFiat', () => {
     expect(formatFiat(0n, 46.2)).toBe('≈ $0')
   })
 
+  it('always gives three figures, zeros included, so one amount reads the same everywhere @PE-37', () => {
+    expect(formatFiat(14_365_666n, 34.8)).toBe('≈ $5.00')
+    expect(formatFiat(100_000_000n, 46)).toBe('≈ $46.0')
+    expect(formatFiat(10_000_000n, 50)).toBe('≈ $5.00')
+    expect(formatFiat(1_000_000n, 50)).toBe('≈ $0.500')
+  })
+
   it('keeps the sign of negative amounts and refuses a broken rate', () => {
     expect(formatFiat(-5_000_607_499n, 46.2)).toBe('≈ −$2,310')
     expect(formatFiat(1_000_000n, Number.NaN)).toBe('')

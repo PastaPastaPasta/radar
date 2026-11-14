@@ -292,7 +292,10 @@ function roundSignificant(n: bigint, scale: number, sig: number): { value: bigin
 
 const RATE_PRECISION = 1_000_000
 
-/** USD for an amount of duffs at `usdPerDash`, to three significant figures, e.g. "≈ $2,310". */
+/**
+ * USD for an amount of duffs at `usdPerDash`, to three significant figures, e.g. "≈ $2,310". Always three, zeros
+ * included ("≈ $5.00"), so one amount never reads more precisely in one place than in another.
+ */
 export function formatFiat(duffs: bigint, usdPerDash: number, signed = false): string {
   if (!Number.isFinite(usdPerDash) || usdPerDash < 0) return ''
   const rateMicro = BigInt(Math.round(usdPerDash * RATE_PRECISION))
@@ -312,5 +315,5 @@ export function formatFiat(duffs: bigint, usdPerDash: number, signed = false): s
   }
   if (duffs !== 0n && rounded.value === 0n) return '< $0.000001'
   const sign = rounded.value === 0n ? '' : duffs < 0n ? MINUS : signed ? '+' : ''
-  return `≈ ${sign}$${groupDigits(int)}${rounded.scale > 0 ? trimmedFraction(frac) : ''}`
+  return `≈ ${sign}$${groupDigits(int)}${rounded.scale > 0 ? decimalSeparator() + frac : ''}`
 }
