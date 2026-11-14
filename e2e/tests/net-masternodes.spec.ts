@@ -107,6 +107,19 @@ test.describe('masternode list', () => {
     expect(first!.y, 'where the first row starts').toBeLessThan(430)
     const row = rows(page).first()
     await expect(row.locator('td').first().locator('.rx-chip__text')).toHaveText(/^\w{6}…\w{4}$/)
+    // W2-53: the shortened hash is whole, not cut with a second ellipsis.
+    for (const width of [1440, 1280]) {
+      await page.setViewportSize({ width, height: 900 })
+      expect(
+        await row
+          .locator('td')
+          .first()
+          .locator('.rx-chip__text')
+          .evaluate((el) => el.scrollWidth - el.clientWidth),
+        `the hash is cut at ${width} px`,
+      ).toBeLessThanOrEqual(0)
+    }
+    await page.setViewportSize({ width: 1440, height: 900 })
     // At 1024 px the table scrolls inside its block, and the hash still has a column of its own.
     for (const width of [1440, 1024]) {
       await page.setViewportSize({ width, height: 900 })
@@ -322,6 +335,39 @@ test.describe('masternode list', () => {
     await page.goBack()
     await expect(rows(page).first()).toBeVisible()
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300)
+  })
+
+  test.describe('a row nobody recorded', () => {
+    // Any row is opened, so the masternode it opens is one the fixtures do not hold.
+    test.use({ allowFixtureMisses: true })
+
+    test('comes back to the exact scroll after opening a row and going back @W2-34', async ({
+      page,
+    }, info) => {
+      test.skip(isPhone(info), 'the phone’s cards are not the table')
+      await open(page, '/masternodes?sort=-uptime_7d')
+      await page.evaluate(() => window.scrollTo(0, 1200))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1150)
+      const before = await page.evaluate(() => window.scrollY)
+      // A row already on screen: Playwright's own click would scroll one into view first.
+      const at = await page.evaluate(() => {
+        const link = [
+          ...document.querySelectorAll<HTMLElement>('tbody tr[data-index] a.rx-chip'),
+        ].find((a) => a.getBoundingClientRect().top > 250 && a.getBoundingClientRect().bottom < 700)
+        const box = link?.getBoundingClientRect()
+        return box ? { x: box.left + box.width / 2, y: box.top + box.height / 2 } : null
+      })
+      expect(at, 'a row link on screen').not.toBeNull()
+      await page.mouse.click(at!.x, at!.y)
+      await expect(page).toHaveURL(/\/mn\//)
+      await page.goBack()
+      await expect(rows(page).first()).toBeVisible()
+      await expect
+        .poll(() => page.evaluate(() => window.scrollY), { timeout: 5000 })
+        .toBeGreaterThanOrEqual(before - 5)
+      await page.waitForTimeout(1500)
+      expect(Math.abs((await page.evaluate(() => window.scrollY)) - before)).toBeLessThanOrEqual(5)
+    })
   })
 
   test('downloads the filtered rows as a CSV named by network @RA-25', async ({ page }) => {

@@ -8,6 +8,10 @@ import { formatInt, formatPercent } from '@/lib/format'
 import { Badge } from '@/ui'
 
 const DASH = '—'
+/** Room for the whole shortened hash beside its icon and the chip's spare slot: a narrower column cut it and added a second "…". */
+const MN_ID_STYLE = { minWidth: '8.5rem' } as const
+/** The hosting name gives way first, so the twelve columns still fit a 1440 px block. */
+const HOSTING_STYLE = { maxWidth: '7.5rem' } as const
 /**
  * Mainnet's average block spacing since DIP3 (about 157.5 s, a little over the 150 s target, as blocks arrive a bit
  * slower than the target on average). A height that many spacings behind the tip is about that long ago. Other
@@ -89,7 +93,7 @@ export function useMnColumns({
         header: t`ProTx`,
         accessorFn: (r) => r.protx,
         cell: ({ row }) => (
-          <span className="rx-mnid">
+          <span className="rx-mnid" style={MN_ID_STYLE}>
             <Entity
               kind={row.original.type === 'evo' ? 'evonode' : 'masternode'}
               id={row.original.protx}
@@ -156,7 +160,7 @@ export function useMnColumns({
             cell: ({ row }) => {
               const org = row.original.crawl?.as_org
               return org ? (
-                <span className="rx-clip rx-clip--wide" title={org}>
+                <span className="rx-clip" style={HOSTING_STYLE} title={org}>
                   {org}
                 </span>
               ) : (
