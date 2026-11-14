@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useMemo, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
@@ -55,7 +56,11 @@ function Kpis({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
   return (
     <Stats data-masternode-kpis>
       <Stat
-        label={t`Uptime, 30 days`}
+        label={
+          up && up.days < 30
+            ? plural(up.days, { one: 'Uptime, # day', other: 'Uptime, # days' })
+            : t`Uptime, 30 days`
+        }
         value={up ? formatPercent(up.ratio, up.ratio === 1 ? 0 : 1) : '—'}
         note={
           up

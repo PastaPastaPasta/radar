@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { core } from '@/data/core/client'
 import { SourceError } from '@/data/errors'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -85,7 +86,7 @@ describe('Masternode page', () => {
     expect(header).toHaveTextContent('Enabled, no PoSe penalty')
     expect(header).toHaveTextContent('24.0.0')
     const kpis = document.querySelector<HTMLElement>('[data-masternode-kpis]')!
-    expect(kpis).toHaveTextContent('Uptime, 30 days')
+    expect(kpis).toHaveTextContent('Uptime, 13 days')
     expect(kpis).toHaveTextContent('100%')
     expect(kpis).toHaveTextContent('Last paid')
     expect(kpis).toHaveTextContent('2,568,655')
@@ -134,6 +135,40 @@ describe('Masternode page', () => {
     for (const id of ['uptime', 'registration']) {
       expect(document.getElementById(id)!.querySelector('[data-source]')).toBeNull()
     }
+  })
+
+  it('names the days the uptime is over, not 30 when Radar has fewer @RA-30', async () => {
+    const body = await fixtureBody<{ uptime_daily: unknown[] }>(
+      'radar',
+      'mainnet',
+      `masternodes__${MAINNET.regular}`,
+    )
+    server.use(
+      http.get(`*/masternodes/${MAINNET.regular}`, () =>
+        HttpResponse.json({ ...body, uptime_daily: body.uptime_daily.slice(-5) }),
+      ),
+    )
+    renderAt(`/mn/${MAINNET.regular}`)
+    const kpis = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-masternode-kpis]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    await waitFor(() => expect(kpis).toHaveTextContent('Uptime, 5 days'))
+    expect(kpis).not.toHaveTextContent('Uptime, 13 days')
+  })
+
+  it('names Hyphen’s special transactions as the kit does, not by their raw ids @HY-11', async () => {
+    renderAt(`/mn/${MAINNET.listed}?tab=history`)
+    const special = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#special-txs')
+      expect(el).not.toBeNull()
+      expect(el!.querySelectorAll('tbody tr').length).toBeGreaterThan(1)
+      return el!
+    })
+    expect(special).toHaveTextContent('ProRegTx')
+    expect(special).toHaveTextContent('ProUpServTx')
+    expect(special).not.toHaveTextContent(/provider[_ ](register|update)/)
   })
 
   it('draws the uptime strip with a tone for each day', async () => {
