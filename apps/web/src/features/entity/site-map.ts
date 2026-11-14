@@ -214,7 +214,7 @@ export const SITE_MAP: SitePage[] = [
     section: 'network',
     layer: 'network',
     summary: msg`One masternode: overview, network reachability, Platform record, history and payments.`,
-    sources: ['radar', 'dapi', 'sdk', 'pe', 'local'],
+    sources: ['radar', 'dapi', 'hyphen', 'sdk', 'pe', 'local'],
     record: msg`masternode`,
   }),
   page({

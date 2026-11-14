@@ -41,13 +41,13 @@ describe('Tokens page', () => {
     })
 
     render(<App history={createMemoryHistory({ initialEntries: ['/tokens'] })} />)
-    await waitFor(() => expect(reads).toBe(1), { timeout: 4000 })
+    await waitFor(() => expect(reads).toBe(1))
     await waitFor(() => expect(document.querySelector('[aria-busy="true"]')).toBeNull())
 
     vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 60 * 60_000)
     window.dispatchEvent(new Event('visibilitychange'))
     window.dispatchEvent(new Event('focus'))
-    await waitFor(() => expect(reads).toBeGreaterThan(1), { timeout: 4000 })
+    await waitFor(() => expect(reads).toBeGreaterThan(1))
     await new Promise((r) => setTimeout(r, 200))
 
     expect(screen.queryByText(/isn.t available here/)).toBeNull()

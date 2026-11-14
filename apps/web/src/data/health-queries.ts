@@ -65,6 +65,10 @@ export const healthQueries = {
       queryFn: ({ signal }) => pe.status(net, signal, { probe: true }),
       ...probe,
     }),
-  hyphen: indexProbe('hyphen', (net, signal, tip) => hyphen.status(net, signal, tip, { probe: true })),
-  insight: indexProbe('insight', (net, signal, tip) => insight.status(net, signal, tip, { probe: true })),
+  hyphen: indexProbe('hyphen', (net, signal, tip) =>
+    hyphen.status(net, signal, tip, { probe: true }),
+  ),
+  insight: indexProbe('insight', (net, signal, tip) =>
+    insight.status(net, signal, tip, { probe: true }),
+  ),
 }
