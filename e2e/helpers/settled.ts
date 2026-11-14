@@ -10,7 +10,9 @@ export async function settled(page: Page): Promise<void> {
   await expect(page.locator('[data-skeleton], [aria-busy="true"]')).toHaveCount(0, {
     timeout: 15_000,
   })
-  await page.evaluate(() => document.fonts.ready)
+  await expect(async () => {
+    await page.evaluate(() => document.fonts.ready)
+  }).toPass({ timeout: 5_000 })
 }
 
 /** Page-level sideways overflow in CSS pixels: positive when the page would scroll horizontally. */
