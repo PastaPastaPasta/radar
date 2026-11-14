@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { filterMnRows, type MnFilter } from '@/data/masternodes/filter'
 import { mnCsvColumns, mnCsvName } from '@/data/masternodes/export'
 import { toCsv } from '@/data/masternodes/csv'
@@ -82,12 +82,16 @@ export function ListView({ data, controls, matches, stamps }: ListViewProps) {
   const { t } = useLingui()
   const { search } = controls
   const net = useNetwork()
+  const onEvoFilter = useCallback(() => {
+    controls.filter({ type: ['evo'] })
+  }, [controls])
   const crawl = hasCrawl(data)
   const tip = data.radar?.height ?? 0
   const columns = useMnColumns({
     crawl,
     tip,
     blockMs: net === 'mainnet' ? MAINNET_BLOCK_MS : undefined,
+    onEvoFilter,
   })
   const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE))
   const page = Math.min(search.page, pages)

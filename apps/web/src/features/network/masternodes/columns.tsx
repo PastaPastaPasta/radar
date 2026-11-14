@@ -39,6 +39,8 @@ export interface MnColumnOptions {
   tip: number
   /** Average block spacing, to turn blocks into about how long ago. Undefined where Radar has no figure for the network. */
   blockMs?: number
+  /** Narrows the list to evonodes, for the "Evonode" tag under a ProTx. */
+  onEvoFilter?: () => void
 }
 
 export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none'; key: string } {
@@ -50,7 +52,12 @@ export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none
 }
 
 /** The list's columns. Ids are the `sort` names in the address; a column with a string accessor can filter by its cell. */
-export function useMnColumns({ crawl, tip, blockMs }: MnColumnOptions): ColumnDef<MnRow>[] {
+export function useMnColumns({
+  crawl,
+  tip,
+  blockMs,
+  onEvoFilter,
+}: MnColumnOptions): ColumnDef<MnRow>[] {
   const { t, i18n } = useLingui()
   const locale = i18n.locale
   return useMemo(() => {
@@ -88,7 +95,19 @@ export function useMnColumns({ crawl, tip, blockMs }: MnColumnOptions): ColumnDe
               id={row.original.protx}
             />
             {row.original.type === 'evo' ? (
-              <span className="rx-sub" data-mn-type="evo">{t`Evonode`}</span>
+              onEvoFilter ? (
+                <button
+                  type="button"
+                  className="rx-cellbtn rx-sub"
+                  data-mn-type="evo"
+                  title={t`Filter by Evonode`}
+                  onClick={onEvoFilter}
+                >
+                  {t`Evonode`}
+                </button>
+              ) : (
+                <span className="rx-sub" data-mn-type="evo">{t`Evonode`}</span>
+              )
             ) : null}
             {row.original.crawlDiffers ? (
               <span
@@ -216,5 +235,5 @@ export function useMnColumns({ crawl, tip, blockMs }: MnColumnOptions): ColumnDe
         ]
       : []
     return [...dapi, ...crawled, status, ...history]
-  }, [t, locale, crawl, tip, blockMs])
+  }, [t, locale, crawl, tip, blockMs, onEvoFilter])
 }
