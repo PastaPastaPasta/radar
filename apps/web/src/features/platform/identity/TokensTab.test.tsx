@@ -24,7 +24,7 @@ describe('Identity tokens tab @NX-13', () => {
     const real = sdk.call.bind(sdk)
     vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) =>
       method === 'tokens.contractInfo' && (args as { tokenId?: string }).tokenId === ADDED
-        ? real(net, method, { tokenId: SANS } as never, signal)
+        ? real(net, method, { tokenId: SANS }, signal)
         : real(net, method, args, signal),
     )
     renderAt(`/identity/${IDENTITY}?tab=tokens&tokens=${ADDED}`)
@@ -43,7 +43,7 @@ describe('Identity tokens tab @NX-13', () => {
         ? real(
             net,
             method,
-            { ...a, tokenIds: a.tokenIds.map((id) => (id === ABSENT ? ADDED : id)) } as never,
+            { ...a, tokenIds: a.tokenIds.map((id) => (id === ABSENT ? ADDED : id)) },
             signal,
           )
         : real(net, method, args, signal)

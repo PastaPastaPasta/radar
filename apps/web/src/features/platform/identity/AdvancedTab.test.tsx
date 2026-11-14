@@ -13,7 +13,7 @@ beforeEach(() => {
   vi.spyOn(sdk, 'call').mockImplementation(async (net, method, args, signal) => {
     if (method !== 'identities.contractNonce') return real(net, method, args, signal)
     const keys = await real(net, 'identities.getKeys', { id: IDENTITY }, signal)
-    return { ...keys, data: 7n } as never
+    return { ...keys, data: 7n }
   })
 })
 

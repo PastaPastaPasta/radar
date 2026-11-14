@@ -1,10 +1,23 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderInApp } from '@/features/entity/test-utils'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
+import { I18nProvider, i18n } from '@/i18n'
+import { renderInRouter } from '@/ui/test-utils'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { NewestBlocks } from './Newest'
+
+function renderInApp(node: ReactNode) {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  return renderInRouter(
+    <QueryClientProvider client={client}>
+      <I18nProvider i18n={i18n}>{node}</I18nProvider>
+    </QueryClientProvider>,
+    '/',
+  )
+}
 
 interface Blocks {
   resultSet: { header: { hash: string; height: number } }[]
