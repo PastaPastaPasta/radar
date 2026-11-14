@@ -44,8 +44,9 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   const { t } = useLingui()
   const net = useNetwork()
   const ref = parseBlockRef(id)
-  useDocumentTitle(ref && 'height' in ref ? t`Block ${formatInt(ref.height)}` : t`Block`)
   const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
+  const height = ref && 'height' in ref ? ref.height : block.data?.data?.height
+  useDocumentTitle(height === undefined ? t`Block` : t`Block ${formatInt(height)}`)
   const tipHeight = useFollowTip(net, {
     keys: [coreQueries.block(net, ref ?? { height: 0 }).queryKey],
     settled: block.data?.data?.chainLocked === true,
