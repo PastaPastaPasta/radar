@@ -96,6 +96,14 @@ describe('useSeenPending', () => {
     expect(result.current.rows).toHaveLength(3)
   })
 
+  it('returns the same rows between renders once more than the limit are kept', () => {
+    const { result, rerender } = renderHook(() => useSeenPending('testnet', true, 2))
+    for (let n = 1; n <= 3; n++) emit({ kind: 'tx', tx: tx(n) })
+    const first = result.current.rows
+    rerender()
+    expect(result.current.rows).toBe(first)
+  })
+
   it('says so when the oldest were dropped to bound the list', () => {
     const { result } = renderHook(() => useSeenPending('testnet', true, 3))
     act(() => {
