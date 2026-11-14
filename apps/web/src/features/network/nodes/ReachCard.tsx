@@ -6,6 +6,7 @@ import { Card, Chart, Empty, Skeleton, stampsOf } from '@/ui'
 import { sizeOption, type Series } from './census-charts'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
+import { unreachableLink } from './census-links'
 import { dayMonth, dayMonthTime } from './census-format'
 import { radarScope, reachShare, total } from './census-math'
 import { ScrollRegion, ShareBar, useShareText } from './parts'
@@ -63,10 +64,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
             <p>
               <Link
                 to="/masternodes"
-                search={{
-                  reach: 'unreachable',
-                  ...(scope === 'evo' ? { type: ['evo' as const] } : {}),
-                }}
+                search={unreachableLink(scope)}
               >
                 {t`See which`}
               </Link>

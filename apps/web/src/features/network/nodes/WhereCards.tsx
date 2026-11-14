@@ -5,6 +5,7 @@ import { stampOf } from '@/data/envelope'
 import { Card, Empty } from '@/ui'
 import type { Slice } from './census-charts'
 import { useCensusColors, type CensusColors } from './census-colors'
+import { countryLink, hostLink } from './census-links'
 import { countryName, flag } from './census-format'
 import { byOrg, radarScope, total, UNKNOWN, type DistRow } from './census-math'
 import { Donut, Ranked, useShareText, type RankedRow } from './parts'
@@ -42,7 +43,6 @@ export function WhereCards(props: SectionProps) {
   const sumCountries = total(countries)
   const noun = i18n._(SCOPE_NOUN[scope])
   const listed = scope === 'mn' || scope === 'evo'
-  const type = scope === 'evo' ? { type: ['evo' as const] } : {}
   const realOrgs = orgs.filter((o) => o.org !== UNKNOWN)
   const realCountries = countries.filter(([k]) => k !== UNKNOWN)
   const o0 = realOrgs[0]
@@ -57,7 +57,7 @@ export function WhereCards(props: SectionProps) {
     title: o.asns.map((a) => `AS${a}`).join(', '),
     label:
       listed && o.org !== UNKNOWN && o.asns.length > 0 ? (
-        <Link to="/masternodes" search={{ host: o.asns, ...type }}>
+        <Link to="/masternodes" search={hostLink(o.asns, scope)}>
           {o.org}
         </Link>
       ) : o.org === UNKNOWN ? (
@@ -74,7 +74,7 @@ export function WhereCards(props: SectionProps) {
     color: rankColor(colors, code, i),
     label:
       listed && code !== UNKNOWN ? (
-        <Link to="/masternodes" search={{ country: [code], ...type }}>
+        <Link to="/masternodes" search={countryLink(code, scope)}>
           {countryLabel(code)}
         </Link>
       ) : (
@@ -120,7 +120,7 @@ export function WhereCards(props: SectionProps) {
               surface={colors.surface}
               center={{ value: String(realOrgs.length), caption: t`providers` }}
             />
-            <Ranked rows={hostRows} sum={sumOrgs} empty={t`No data yet.`} />
+            <Ranked rows={hostRows} count={realOrgs.length} sum={sumOrgs} empty={t`No data yet.`} />
           </div>
         )}
       </Card>
@@ -155,7 +155,7 @@ export function WhereCards(props: SectionProps) {
               surface={colors.surface}
               center={{ value: String(realCountries.length), caption: t`countries` }}
             />
-            <Ranked rows={countryRows} sum={sumCountries} empty={t`No data yet.`} />
+            <Ranked rows={countryRows} count={realCountries.length} sum={sumCountries} empty={t`No data yet.`} />
           </div>
         )}
       </Card>

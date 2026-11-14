@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react/macro'
 import { stampOf } from '@/data/envelope'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, Time } from '@/ui'
+import { reachableLink } from './census-links'
 import { byOrg, countOf, reachShare, UNKNOWN } from './census-math'
 import { FigureGrid, FigureLink } from './parts'
 import { loadState, type SectionProps } from './shared'
@@ -58,7 +59,7 @@ export function Headline({ versions, days, summary }: SectionProps) {
           <FigureGrid columns={6}>
             <FigureLink
               to="/masternodes"
-              search={{ reach: 'reachable' }}
+              search={reachableLink()}
               label={t`Reachable masternodes`}
               value={formatInt(crawl.mn_reachable)}
               note={
