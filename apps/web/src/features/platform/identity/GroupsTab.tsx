@@ -82,12 +82,7 @@ export function GroupsTab({ id, contract }: IdentityTabProps & { contract?: stri
     >
       <ContractForm contract={contract} />
       {owned.isError ? (
-        <ErrorState
-          error={owned.error}
-          source="pe"
-          compact
-          onRetry={() => void owned.refetch()}
-        />
+        <ErrorState error={owned.error} source="pe" compact onRetry={() => void owned.refetch()} />
       ) : null}
       {contracts.length === 0 && !waiting ? (
         <Empty kind="none-yet" title={t`Name a contract to see this identity’s groups in it.`} />
