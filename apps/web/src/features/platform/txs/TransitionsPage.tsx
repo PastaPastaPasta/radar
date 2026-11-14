@@ -29,6 +29,9 @@ const LIST_ID = 'platform-txs'
 /** A base58 identifier: what Explorer takes for an owner. */
 const IDENTIFIER = /^[1-9A-HJ-NP-Za-km-z]{42,44}$/
 
+/** What a person types for a DPNS name: a label, with or without .dash. */
+const NAME_LIKE = /^[a-z0-9-]{3,63}(\.dash)?$/i
+
 const SORTS = ['time', 'gas', 'owner'] as const
 
 const typeText = (type: TransitionType | BatchType) => i18n._(TYPE_META[type].label)
@@ -206,7 +209,13 @@ function TransitionsList() {
           label={t`Owner`}
           placeholder={t`Identity ID`}
           value={search.owner}
-          check={(v) => (IDENTIFIER.test(v) ? undefined : t`That isn’t an identity ID.`)}
+          check={(v) =>
+            IDENTIFIER.test(v)
+              ? undefined
+              : NAME_LIKE.test(v)
+                ? t`The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID.`
+                : t`That isn’t an identity ID: it is 43 or 44 base58 characters.`
+          }
           onChange={(owner) => {
             controls.filter({ owner })
           }}
