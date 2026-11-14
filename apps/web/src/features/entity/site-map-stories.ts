@@ -130,4 +130,5 @@ export const PAGE_STORIES: Record<string, readonly string[]> = {
   '/saved': ['NX-06'],
   '/settings': ['NX-18', 'NX-62', 'NX-74', 'NX-75'],
   '/about': ['NX-76'],
+  '/offline': ['NX-77'],
 }

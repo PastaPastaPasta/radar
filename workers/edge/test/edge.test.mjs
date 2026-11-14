@@ -544,6 +544,7 @@ describe('redirects', () => {
     await check(h, '/search?q=x', null)
     await check(h, '/search?q=x&network=mainnet', '/search?q=x')
     await check(h, '/settings', null)
+    await check(h, '/offline', null)
     const moved = await mf.dispatchFetch('http://explorer.dashhq.org/identity/?id=A', {
       redirect: 'manual',
     })
@@ -553,6 +554,15 @@ describe('redirects', () => {
       redirect: 'manual',
     })
     assert.equal(legacy.status, 301)
+  })
+
+  it('serves the app at /offline instead of sending it home @NX-77', async () => {
+    const res = await get('/offline')
+    assert.equal(res.status, 200)
+    const native = await mf.dispatchFetch('http://explorer.dashhq.org/offline', {
+      redirect: 'manual',
+    })
+    assert.equal(native.status, 200)
   })
 
   it('serves the app for ids that contain dots', async () => {

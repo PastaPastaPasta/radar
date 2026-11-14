@@ -27,6 +27,7 @@ import { Route as MasternodesRouteImport } from './routes/masternodes'
 import { Route as MempoolRouteImport } from './routes/mempool'
 import { Route as NamesRouteImport } from './routes/names'
 import { Route as NodesRouteImport } from './routes/nodes'
+import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as PollsRouteImport } from './routes/polls'
 import { Route as ProtocolRouteImport } from './routes/protocol'
 import { Route as QueryRouteImport } from './routes/query'
@@ -162,6 +163,11 @@ const NamesRoute = NamesRouteImport.update({
 const NodesRoute = NodesRouteImport.update({
   id: '/nodes',
   path: '/nodes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfflineRoute = OfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PollsRoute = PollsRouteImport.update({
@@ -414,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/mempool': typeof MempoolRoute
   '/names': typeof NamesRoute
   '/nodes': typeof NodesRoute
+  '/offline': typeof OfflineRoute
   '/polls': typeof PollsRoute
   '/protocol': typeof ProtocolRoute
   '/query': typeof QueryRoute
@@ -480,6 +487,7 @@ export interface FileRoutesByTo {
   '/mempool': typeof MempoolRoute
   '/names': typeof NamesRoute
   '/nodes': typeof NodesRoute
+  '/offline': typeof OfflineRoute
   '/polls': typeof PollsRoute
   '/protocol': typeof ProtocolRoute
   '/query': typeof QueryRoute
@@ -547,6 +555,7 @@ export interface FileRoutesById {
   '/mempool': typeof MempoolRoute
   '/names': typeof NamesRoute
   '/nodes': typeof NodesRoute
+  '/offline': typeof OfflineRoute
   '/polls': typeof PollsRoute
   '/protocol': typeof ProtocolRoute
   '/query': typeof QueryRoute
@@ -615,6 +624,7 @@ export interface FileRouteTypes {
     | '/mempool'
     | '/names'
     | '/nodes'
+    | '/offline'
     | '/polls'
     | '/protocol'
     | '/query'
@@ -681,6 +691,7 @@ export interface FileRouteTypes {
     | '/mempool'
     | '/names'
     | '/nodes'
+    | '/offline'
     | '/polls'
     | '/protocol'
     | '/query'
@@ -747,6 +758,7 @@ export interface FileRouteTypes {
     | '/mempool'
     | '/names'
     | '/nodes'
+    | '/offline'
     | '/polls'
     | '/protocol'
     | '/query'
@@ -814,6 +826,7 @@ export interface RootRouteChildren {
   MempoolRoute: typeof MempoolRoute
   NamesRoute: typeof NamesRoute
   NodesRoute: typeof NodesRoute
+  OfflineRoute: typeof OfflineRoute
   PollsRoute: typeof PollsRoute
   ProtocolRoute: typeof ProtocolRoute
   QueryRoute: typeof QueryRoute
@@ -988,6 +1001,13 @@ declare module '@tanstack/react-router' {
       path: '/nodes'
       fullPath: '/nodes'
       preLoaderRoute: typeof NodesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offline': {
+      id: '/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof OfflineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/polls': {
@@ -1334,6 +1354,7 @@ const rootRouteChildren: RootRouteChildren = {
   MempoolRoute: MempoolRoute,
   NamesRoute: NamesRoute,
   NodesRoute: NodesRoute,
+  OfflineRoute: OfflineRoute,
   PollsRoute: PollsRoute,
   ProtocolRoute: ProtocolRoute,
   QueryRoute: QueryRoute,

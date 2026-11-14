@@ -688,6 +688,16 @@ export const SITE_MAP: SitePage[] = [
     keywords: ['language', 'units', 'devnet'],
   }),
   page({
+    path: '/offline',
+    title: msg`Offline`,
+    section: 'you',
+    layer: 'neutral',
+    summary: msg`Says Radar can’t reach the network and lists what still works without it.`,
+    sources: ['local'],
+    rail: false,
+    keywords: ['connection', 'network'],
+  }),
+  page({
     path: '/about',
     title: msg`About`,
     section: 'you',
@@ -816,6 +826,7 @@ const SECTION_OF_SEGMENT: Record<string, SiteSection> = {
   saved: 'you',
   settings: 'you',
   about: 'you',
+  offline: 'you',
 }
 
 export function sectionOfPath(pathname: string): SiteSection {
