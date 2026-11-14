@@ -7,7 +7,8 @@ import { Badge, ErrorState, HoverCardLayout, LayerGlyph, Time, TypeBadge } from 
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
 import { humanizeType, transitionBadgeType } from '../platform/transition-type'
-import { CardLoading, IndexerNote, OwnerChip, shortId, usePeOn } from './frame'
+import { CardLoading } from './frame'
+import { IndexerNote, OwnerChip, shortId, usePeOn } from './parts'
 
 export function TransitionHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

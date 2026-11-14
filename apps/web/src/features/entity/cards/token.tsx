@@ -9,7 +9,8 @@ import { wellKnownTokens } from '@/lib/well-known'
 import { Amount, Badge, ErrorState, HoverCardLayout, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, shortId, usePeOn } from './frame'
+import { CardLoading } from './frame'
+import { shortId, usePeOn } from './parts'
 
 export function TokenHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

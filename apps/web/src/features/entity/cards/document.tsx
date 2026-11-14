@@ -6,7 +6,8 @@ import { isPlatformId } from '@/lib/base58'
 import { ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, OwnerChip, shortId } from './frame'
+import { CardLoading } from './frame'
+import { OwnerChip, shortId } from './parts'
 
 /** A document is addressed `contract/type/id`. */
 function parts(id: string): { contract: string; type: string; doc: string } | undefined {

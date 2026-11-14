@@ -7,7 +7,8 @@ import { wellKnownIdentities } from '@/lib/well-known'
 import { Amount, ErrorState, HoverCardLayout, Identicon, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, shortId } from './frame'
+import { CardLoading } from './frame'
+import { shortId } from './parts'
 
 export function IdentityHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

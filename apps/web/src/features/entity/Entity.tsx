@@ -1,9 +1,13 @@
-import { useSyncExternalStore } from 'react'
+import { lazy, Suspense, useSyncExternalStore } from 'react'
 import { labelsVersion, subscribeLabels, wellKnownLabel } from '@/lib/well-known'
 import { EntityChip, useMediaQuery, type EntityChipProps } from '@/ui'
 import { entityHref, type EntitySearch } from './hrefs'
-import { LongPressCard } from './LongPressCard'
 import { useNetwork, useSourceModeLink } from './network'
+
+/** Loaded on a touch screen only, so the popover code stays out of the entry chunk; `@__PURE__` lets an unused `Entity` be dropped from it. */
+const LongPressCard = /* @__PURE__ */ lazy(() =>
+  import('./LongPressCard').then((m) => ({ default: m.LongPressCard })),
+)
 
 /** A screen with no hover and a finger for a pointer: its chips open their card by a long press. */
 const TOUCH_ONLY = '(hover: none) and (pointer: coarse)'
@@ -32,9 +36,11 @@ export function Entity({ kind, id, href, search, label, hover = true, ...rest }:
     />
   )
   return card && touch ? (
-    <LongPressCard kind={kind} id={id}>
-      {chip}
-    </LongPressCard>
+    <Suspense fallback={chip}>
+      <LongPressCard kind={kind} id={id}>
+        {chip}
+      </LongPressCard>
+    </Suspense>
   ) : (
     chip
   )

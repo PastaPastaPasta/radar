@@ -8,7 +8,8 @@ import { ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
 import { Entity } from '../Entity'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, IndexerNote, usePeOn } from './frame'
+import { CardLoading } from './frame'
+import { IndexerNote, usePeOn } from './parts'
 
 const isHeight = (id: string) => /^\d+$/.test(id)
 

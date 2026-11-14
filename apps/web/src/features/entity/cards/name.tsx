@@ -5,7 +5,8 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Badge, ErrorState, HoverCardLayout, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, OwnerChip } from './frame'
+import { CardLoading } from './frame'
+import { OwnerChip } from './parts'
 
 const withTld = (label: string) => (label.includes('.') ? label : `${label}.dash`)
 

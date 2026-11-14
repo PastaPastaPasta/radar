@@ -9,7 +9,8 @@ import { wellKnownContracts, wellKnownLabel } from '@/lib/well-known'
 import { ErrorState, HoverCardLayout, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, OwnerChip, shortId, usePeOn } from './frame'
+import { CardLoading } from './frame'
+import { OwnerChip, shortId, usePeOn } from './parts'
 
 export function ContractHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

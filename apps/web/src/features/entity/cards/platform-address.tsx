@@ -7,7 +7,8 @@ import { formatInt } from '@/lib/format'
 import { Amount, ErrorState, HoverCardLayout, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, shortId } from './frame'
+import { CardLoading } from './frame'
+import { shortId } from './parts'
 
 export function PlatformAddressHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

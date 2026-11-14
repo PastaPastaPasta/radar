@@ -6,7 +6,8 @@ import type { SourceStamp } from '@/data/envelope'
 import { Badge, ErrorState, HoverCardLayout, LayerGlyph } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { BusyCard, CardLoading, mayReadDapi, shortId } from './frame'
+import { BusyCard, CardLoading, mayReadDapi } from './frame'
+import { shortId } from './parts'
 
 export function MasternodeHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

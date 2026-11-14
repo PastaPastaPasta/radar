@@ -8,7 +8,8 @@ import { systemContract } from '@/lib/well-known'
 import { Badge, ErrorState, HoverCardLayout, LayerGlyph, Time } from '@/ui'
 import { entityHref } from '../hrefs'
 import { useNetwork } from '../network'
-import { CardLoading, OwnerChip, usePeOn } from './frame'
+import { CardLoading } from './frame'
+import { OwnerChip, usePeOn } from './parts'
 
 export function ContestHoverCard({ id }: { id: string }) {
   const { t } = useLingui()

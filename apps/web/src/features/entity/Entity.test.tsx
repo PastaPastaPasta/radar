@@ -69,6 +69,9 @@ describe('hover cards on a touch screen @X-06', () => {
 
   async function chip() {
     await renderInApp(<Entity kind="identity" id={OTHER} />)
+    await act(async () => {
+      await import('./LongPressCard')
+    })
     return screen.getByRole('link', { name: /Bjix/ })
   }
 
