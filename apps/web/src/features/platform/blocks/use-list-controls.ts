@@ -27,7 +27,7 @@ export interface ListControls<S> {
  * shows; changing either drops the address's `limit` and page.
  */
 export function useListControls<S extends { page: number; limit: number }>(
-  to: '/platform/blocks' | '/platform/txs',
+  to: '/platform/blocks' | '/platform/txs' | '/tokens',
   listId: string,
 ): ListControls<S> {
   const search = useAnySearch() as S

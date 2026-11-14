@@ -4,14 +4,10 @@ import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { Amount, useUnits } from '@/ui'
-import { FLOW, layoutFlow, limitNodes, type FlowNode } from './tx-info'
+import { FLOW, layoutFlow, limitNodes, shortAddress, type FlowNode } from './tx-info'
 
 const swatch = (kind: FlowNode['kind']) =>
   kind === 'fee' ? 'var(--dh-warn)' : kind === 'change' ? 'var(--dh-line-2)' : 'var(--rx-core)'
-
-function short(address: string): string {
-  return address.length > 14 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address
-}
 
 export function ValueFlow({
   inputs,
@@ -112,7 +108,7 @@ export function ValueFlow({
             <li key={n.key}>
               <span className="rx-sw" style={{ ['--c' as string]: swatch(n.kind) }} />
               {n.kind === 'out' && n.address ? (
-                <Entity kind="address" id={n.address} label={short(n.address)} />
+                <Entity kind="address" id={n.address} label={shortAddress(n.address)} />
               ) : (
                 <span>
                   {n.kind === 'fee' ? t`Fee` : n.kind === 'change' ? t`Change to sender` : n.label}

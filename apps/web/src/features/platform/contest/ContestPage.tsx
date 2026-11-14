@@ -34,8 +34,9 @@ import {
   Time,
   Unavailable,
 } from '@/ui'
+import { loadState } from '../identity/common'
 import { CURSOR_PAGE, CursorPages } from './CursorPages'
-import { endOf, loadState, pageLink, pollEnds, useSetSearch, useUpcomingPolls } from './shared'
+import { endOf, pageLink, pollEnds, useSetSearch, useUpcomingPolls } from './shared'
 import { TallyBar, totalVotes, useTallySlices } from './Tally'
 
 export interface ContestPageSearch {

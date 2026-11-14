@@ -477,7 +477,7 @@ test.describe('legibility', () => {
  * no figure is shown as coming from the missing source, and the page either says what is missing or shows what the
  * other sources gave. The fixture build fails the named source from the start.
  */
-const BACKENDS: SiteSource[] = ['radar', 'pe', 'hyphen', 'sdk', 'dapi']
+const BACKENDS: SiteSource[] = ['radar', 'pe', 'hyphen', 'insight', 'rate', 'sdk', 'dapi']
 
 /** Pages that read a backend and do not yet say it is gone; the later design rounds own them (notes/INT.md). */
 const SILENT_WHEN_DOWN = new Set(['/mempool|dapi'])
@@ -494,9 +494,9 @@ const SAYS_SOMETHING_IS_MISSING = [
   '[data-unavailable]',
   '[data-state="down"]',
   '[data-state="stale"]',
-  '[data-proved="false"]',
   '[data-fallback]',
   '[data-balance-state="unknown"]',
+  '[data-spend="unknown"]',
 ].join(', ')
 
 test.describe('a backend that is down', () => {
@@ -535,12 +535,26 @@ test.describe('a backend that is down', () => {
           ),
           `a figure is shown as served by ${backend}, which is down`,
         ).toHaveCount(0)
+        // A page that asked the dead backend must say so; one that never did only has to show something.
         await expect
           .poll(
-            async () =>
-              (await page
-                .locator(`${SAYS_SOMETHING_IS_MISSING}, main .rx-sources [data-source]`)
-                .count()) + (MISSING_WORDS.test(await page.locator('main').innerText()) ? 1 : 0),
+            async () => {
+              const asked = await page.evaluate(
+                (source) =>
+                  (
+                    window as unknown as {
+                      __radarFixtures: { refusedReads(source: string): number }
+                    }
+                  ).__radarFixtures.refusedReads(source),
+                backend,
+              )
+              const saysMissing =
+                (await page.locator('main').locator(SAYS_SOMETHING_IS_MISSING).count()) +
+                (MISSING_WORDS.test(await page.locator('main').innerText()) ? 1 : 0)
+              return asked > 0
+                ? saysMissing
+                : saysMissing + (await page.locator('main .rx-sources [data-source]').count())
+            },
             {
               message: `the page neither says ${backend} is missing nor shows another source`,
               timeout: 15_000,

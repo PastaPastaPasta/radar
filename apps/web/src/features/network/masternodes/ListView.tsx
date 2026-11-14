@@ -12,19 +12,12 @@ import type { SourceStamp } from '@/data/envelope'
 import { useMnColumns } from './columns'
 import { downloadText } from './download'
 import { FilterBar, sortOptionsOf } from './FilterBar'
+import { filterFields } from './filter-fields'
 import { StatusBar } from './StatusBar'
 import { useRestoreScroll } from './use-scroll-restore'
 import { mnPageLink, type MnSearchControls } from './use-mn-search'
 
 export const PAGE_SIZE = 250
-const MAP_FIELDS = ['q', 'type', 'status', 'reach', 'country', 'version', 'host', 'dkg'] as const
-
-/** The filter fields the address carries, for a link to another page that reads the same ones. */
-export function filterFields(search: MnFilter): MnFilter {
-  return Object.fromEntries(
-    MAP_FIELDS.flatMap((k) => (search[k] === undefined ? [] : [[k, search[k]]])),
-  )
-}
 
 export interface ListViewProps {
   data: MnRows

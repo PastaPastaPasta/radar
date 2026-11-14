@@ -15,6 +15,10 @@ export interface LocalLabel {
   label: string
 }
 
+type LabelKey = Pick<LocalLabel, 'net' | 'kind' | 'id'>
+
+const clip = (text: string) => text.trim().slice(0, MAX_LABEL_LENGTH)
+
 function parseLabel(raw: unknown): LocalLabel | undefined {
   if (typeof raw !== 'object' || raw === null) return undefined
   const r = raw as Record<string, unknown>
@@ -22,7 +26,7 @@ function parseLabel(raw: unknown): LocalLabel | undefined {
   const kind = LABEL_KINDS.find((k) => k === r.kind)
   if (!net || !kind || typeof r.id !== 'string' || r.id === '') return undefined
   if (typeof r.label !== 'string' || r.label.trim() === '') return undefined
-  return { net, kind, id: r.id, label: r.label.trim().slice(0, MAX_LABEL_LENGTH) }
+  return { net, kind, id: r.id, label: clip(r.label) }
 }
 
 const parseLabels = (raw: unknown): LocalLabel[] =>
@@ -31,16 +35,11 @@ const parseLabels = (raw: unknown): LocalLabel[] =>
 let store: JsonStore<LocalLabel[]> | undefined
 const labels = () => (store ??= createJsonStore(LABELS_KEY, parseLabels))
 
-const same = (
-  a: Pick<LocalLabel, 'net' | 'kind' | 'id'>,
-  b: Pick<LocalLabel, 'net' | 'kind' | 'id'>,
-) => a.net === b.net && a.kind === b.kind && a.id === b.id
-
-export const getLabels = (): LocalLabel[] => labels().get()
+const same = (a: LabelKey, b: LabelKey) => a.net === b.net && a.kind === b.kind && a.id === b.id
 
 /** Names an id on this device only, replacing an earlier label for it. */
 export function setLabel(entry: LocalLabel): void {
-  const text = entry.label.trim().slice(0, MAX_LABEL_LENGTH)
+  const text = clip(entry.label)
   if (text === '') return
   labels().set([
     ...labels()
@@ -50,7 +49,7 @@ export function setLabel(entry: LocalLabel): void {
   ])
 }
 
-export function removeLabel(key: Pick<LocalLabel, 'net' | 'kind' | 'id'>): void {
+export function removeLabel(key: LabelKey): void {
   const all = labels().get()
   const rest = all.filter((l) => !same(l, key))
   if (rest.length !== all.length) labels().set(rest)

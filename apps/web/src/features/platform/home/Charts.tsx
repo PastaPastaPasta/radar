@@ -6,7 +6,6 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeTxStatistic } from '@/data/pe/schemas'
 import { transitionBadgeType, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber } from '@/lib/format'
-import { creditsToDash as dash } from '@/lib/units'
 import {
   Card,
   Chart,
@@ -18,26 +17,10 @@ import {
   type ChartProps,
   type QueryState,
 } from '@/ui'
+import { poolSeries } from '../shielded/ShieldedChart'
 import { barsOption, bucketLabel, HOME_RANGES, timeOption, type HomeRange } from './chart-options'
 
 const TYPES_SHOWN = 8
-
-interface AmountPoint {
-  t: number
-  amount: bigint
-}
-
-/** Shielded and unshielded amounts on one time axis: every bucket either side has, 0 where one side has none. */
-function poolSeries(shielded: readonly AmountPoint[], unshielded: readonly AmountPoint[]) {
-  const into = new Map(shielded.map((p) => [p.t, dash(p.amount)]))
-  const out = new Map(unshielded.map((p) => [p.t, dash(p.amount)]))
-  const times = [...new Set([...into.keys(), ...out.keys()])].sort((a, b) => a - b)
-  return {
-    times,
-    shielded: times.map((ms) => into.get(ms) ?? 0),
-    unshielded: times.map((ms) => out.get(ms) ?? 0),
-  }
-}
 
 function typeRows(stat: PeTxStatistic, label: (key: string) => string): [string, number][] {
   const rows: [string, number][] = stat.flatMap((s) =>

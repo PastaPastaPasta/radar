@@ -3,7 +3,7 @@ import { aggregateExportRows, serializeQueryCsv, serializeQueryJson } from './qu
 import type { StatementResult } from './run'
 
 /** A document as one flat row: its system fields, then its own properties. */
-export function documentRow(d: DocumentDto): Record<string, unknown> {
+function documentRow(d: DocumentDto): Record<string, unknown> {
   return {
     $id: d.id,
     $ownerId: d.ownerId,

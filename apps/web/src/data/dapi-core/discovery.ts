@@ -58,7 +58,7 @@ export function parseQuorumNodes(body: unknown, net: NetworkId): NodeInfo[] {
   return out
 }
 
-export async function loadSeeds(net: NetworkId): Promise<NodeInfo[]> {
+async function loadSeeds(net: NetworkId): Promise<NodeInfo[]> {
   if (net !== 'mainnet' && net !== 'testnet') return []
   const seed = (await (net === 'mainnet'
     ? import('./seed.mainnet.json')
@@ -68,7 +68,7 @@ export async function loadSeeds(net: NetworkId): Promise<NodeInfo[]> {
   return seed.default.nodes.flatMap((n) => nodeFromHost(n.url, n.proTxHash) ?? [])
 }
 
-export function devnetNodes(net: NetworkId, devnets: readonly DevnetConfig[]): NodeInfo[] {
+function devnetNodes(net: NetworkId, devnets: readonly DevnetConfig[]): NodeInfo[] {
   const name = net.replace(/^devnet-/, '')
   const config = devnets.find((d) => d.name === name)
   return (config?.dapiAddresses ?? []).flatMap((a) => nodeFromHost(a) ?? [])
@@ -82,7 +82,7 @@ export interface DiscoveryDeps {
 }
 
 /** The node list from the quorum service. Throws when it can't be read. */
-export async function fetchNodeList(net: NetworkId, deps: DiscoveryDeps): Promise<NodeInfo[]> {
+async function fetchNodeList(net: NetworkId, deps: DiscoveryDeps): Promise<NodeInfo[]> {
   const base = endpoint(net, 'quorums', deps.devnets())
   if (!base)
     throw new SourceError({

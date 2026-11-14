@@ -16,7 +16,8 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, DataTable, DateRangeFilter, Empty, SegFilter, TableTools, Time } from '@/ui'
-import { loadState, pageLink, useSetSearch } from '../contest/shared'
+import { pageLink, useSetSearch } from '../contest/shared'
+import { loadState } from '../identity/common'
 
 export type PollRange = '24h' | '7d' | '30d' | '90d' | 'upcoming' | 'custom'
 

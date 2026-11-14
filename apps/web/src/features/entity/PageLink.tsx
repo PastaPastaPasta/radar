@@ -14,24 +14,6 @@ export interface PageLinkProps extends AnchorProps {
 }
 
 /** A router link for paths known only as strings (site map, nav tables). `network` is retained by the root route. */
-export function PageLink({
-  to,
-  search,
-  hash,
-  replace,
-  preload,
-  activeOptions,
-  ...rest
-}: PageLinkProps) {
-  return (
-    <Link
-      to={to as '/'}
-      search={search as never}
-      hash={hash}
-      replace={replace}
-      preload={preload}
-      activeOptions={activeOptions}
-      {...rest}
-    />
-  )
+export function PageLink({ to, search, ...rest }: PageLinkProps) {
+  return <Link to={to as '/'} search={search as never} {...rest} />
 }

@@ -25,6 +25,6 @@ export function transitionBadgeType(
 
 /** `SOME_NEW_TYPE` as "Some new type". */
 export function humanizeType(raw: string): string {
-  const text = raw.toLowerCase().split('_').join(' ').trim()
+  const text = raw.toLowerCase().replaceAll('_', ' ').trim()
   return text.charAt(0).toUpperCase() + text.slice(1)
 }

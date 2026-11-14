@@ -34,7 +34,8 @@ import {
   type LoadState,
 } from '@/ui'
 import { CURSOR_PAGE, CursorPages } from '../contest/CursorPages'
-import { loadState, pageLink, usePeList, useSetSearch, useUpcomingPolls } from '../contest/shared'
+import { loadState } from '../identity/common'
+import { pageLink, usePeList, useSetSearch, useUpcomingPolls } from '../contest/shared'
 import { TallyText } from '../contest/Tally'
 
 export type ContestsPageSearch = ContestsFilters

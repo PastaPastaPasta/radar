@@ -164,6 +164,17 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
     <>
       <Header ctx={ctx} />
       <PageTabs protx={protx} evo={evo} value={current} />
+      {!off && !d && radar.isError ? (
+        <ErrorState
+          error={radar.error}
+          source="radar"
+          compact
+          onRetry={() => void radar.refetch()}
+        />
+      ) : null}
+      {!f && dapi.isError ? (
+        <ErrorState error={dapi.error} source="dapi" compact onRetry={() => void dapi.refetch()} />
+      ) : null}
       {current === 'overview' ? <OverviewTab ctx={ctx} /> : null}
       {current === 'network' ? <NetworkTab ctx={ctx} /> : null}
       {current === 'platform' ? <PlatformTab ctx={ctx} epoch={epoch} /> : null}

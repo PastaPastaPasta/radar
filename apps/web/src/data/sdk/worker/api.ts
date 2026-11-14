@@ -66,7 +66,7 @@ function toBytes(v: Uint8Array): Uint8Array {
 }
 
 /** The wire result for an implementation's output. Proof bytes are copied out of wasm memory into buffers the worker can transfer. */
-export function toWire<R>(out: ImplOutput<R>, tookMs: number): WireResult<R> {
+function toWire<R>(out: ImplOutput<R>, tookMs: number): WireResult<R> {
   const r = out.response
   if (!r) {
     const meta = out.unprovedMeta
@@ -218,5 +218,3 @@ export function createSdkWorkerApi(deps: SdkWorkerDeps) {
   }
   return api satisfies SdkWorkerApi
 }
-
-export type SdkWorkerImpl = ReturnType<typeof createSdkWorkerApi>

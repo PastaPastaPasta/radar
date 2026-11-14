@@ -23,7 +23,7 @@ const A4 = 0.003796
 const M = Math.sqrt(3) / 2
 
 /** Equal Earth, scaled to the land layer's 1000-unit-wide box. */
-export function project(lon: number, lat: number): [number, number] {
+function project(lon: number, lat: number): [number, number] {
   const l = (lon * Math.PI) / 180
   const t = Math.asin(M * Math.sin((lat * Math.PI) / 180))
   const t2 = t * t

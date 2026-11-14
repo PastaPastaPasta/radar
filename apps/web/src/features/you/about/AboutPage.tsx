@@ -24,8 +24,8 @@ function Out({ href, children }: { href: string; children: ReactNode }) {
 export function AboutPage() {
   const { t } = useLingui()
   const net = useNetwork()
-  const bridge = linkOutUrl({ app: 'bridge', action: 'token', id: '', net })
-  const gov = linkOutUrl({ app: 'gov', action: 'masternodes', net })
+  const bridge = linkOutUrl({ app: 'bridge', action: 'landing', net })
+  const gov = linkOutUrl({ app: 'gov', action: 'landing', net })
   return (
     <PageFrame
       path="/about"

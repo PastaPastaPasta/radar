@@ -1,7 +1,7 @@
 import { createJsonStore, type JsonStore } from '@/lib/json-store'
 import { useSyncExternalStore } from 'react'
 
-export const DEV_FLAGS_KEY = 'radar.dev'
+const DEV_FLAGS_KEY = 'radar.dev'
 
 /** Whether each keyboard shortcut is live. Both are on until the viewer turns one off. */
 export interface DevFlags {

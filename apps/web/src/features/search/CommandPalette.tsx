@@ -21,7 +21,7 @@ import type { SearchHit } from './types'
 const SEARCH_ALL = '__search-all'
 
 /** How long Enter waits for resolvers that need the network once the local ones have answered. */
-export const ENTER_GRACE_MS = 300
+const ENTER_GRACE_MS = 300
 
 /** The hit Enter opens: the best exact one, or the Core block for a typed height. */
 function decide(hits: SearchHit[], classified: Classified): SearchHit | undefined {

@@ -61,17 +61,18 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
         meta: { phone: i === 0 ? 'title' : i < 3 ? 'primary' : 'secondary' },
       }))
     }
-    const value = result.kind === 'count' ? 'count' : result.kind === 'sum' ? 'sum' : 'average'
-    const columnsFor: [string, string][] = [
-      ['groupKey', t`Group`],
-      ...(result.kind === 'avg'
-        ? ([
+    const columnsFor: [string, string][] =
+      result.kind === 'avg'
+        ? [
+            ['groupKey', t`Group`],
             ['count', t`Documents`],
             ['sum', t`Sum`],
             ['average', t`Average`],
-          ] as [string, string][])
-        : ([[value, result.kind === 'count' ? t`Documents` : t`Sum`]] as [string, string][])),
-    ]
+          ]
+        : [
+            ['groupKey', t`Group`],
+            result.kind === 'count' ? ['count', t`Documents`] : ['sum', t`Sum`],
+          ]
     return columnsFor.map(([key, header], i) => ({
       id: key,
       header,
@@ -187,7 +188,7 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
         <DataTable
           columns={columns}
           rows={rows}
-          getRowId={(_row) => String(rows.indexOf(_row))}
+          getRowId={(row) => String(rows.indexOf(row))}
           state="ready"
           caption={t`Result of statement ${index + 1}`}
           empty={

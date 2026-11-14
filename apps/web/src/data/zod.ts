@@ -10,9 +10,6 @@ export const zBigint = z
   .union([z.number().refine(Number.isSafeInteger), z.string().regex(DIGITS)])
   .transform((v) => BigInt(v))
 
-/** Nullable variant for fields a backend sends as null before it has a value. */
-export const zBigintOrNull = zBigint.nullable()
-
 export const zHex = z
   .string()
   .regex(/^(?:[0-9a-fA-F]{2})*$/)
@@ -34,16 +31,5 @@ export const zIsoDate = z.string().transform((s, ctx) => {
 })
 
 export const zUnixSeconds = z.number().transform((s) => s * 1000)
-
-export const zUnixMs = z.number()
-
-/** A number sent either as a JSON number or a numeric string. */
-export const zNum = z.union([
-  z.number(),
-  z
-    .string()
-    .regex(/^-?\d+(?:\.\d+)?$/)
-    .transform(Number),
-])
 
 export const zCount = z.union([z.number().int(), z.string().regex(/^\d+$/).transform(Number)])

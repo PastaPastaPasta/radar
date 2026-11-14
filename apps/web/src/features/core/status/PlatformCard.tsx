@@ -1,11 +1,11 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { UseQueryResult } from '@tanstack/react-query'
-import { stampOf, type Sourced } from '@/data/envelope'
+import type { Sourced } from '@/data/envelope'
 import type { PlatformStatusDto } from '@/data/sdk/methods'
 import { Entity } from '@/features/entity'
 import { formatDuration, formatInt } from '@/lib/format'
-import { Badge, Card, Hash, KeyValue, Time, useNow } from '@/ui'
+import { Badge, Card, Hash, KeyValue, Time, stampsOf, useNow } from '@/ui'
 import { platformHealth, type PlatformReason } from './platform-health'
 
 export interface PlatformCardProps {
@@ -52,7 +52,6 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
   } as const
   const missing = status.isError ? t`Not available right now` : '…'
   const dash = (v: string) => (v === '' ? '—' : v)
-  const stamps = [status.data, coreTip.data].flatMap((d) => (d ? [stampOf(d)] : []))
 
   return (
     <Card
@@ -63,7 +62,7 @@ export function PlatformCard({ status, coreTip }: PlatformCardProps) {
       state={s ? 'ready' : status.isError ? 'error' : 'loading'}
       error={status.error}
       onRetry={() => void status.refetch()}
-      source={stamps}
+      source={stampsOf(status.data, coreTip.data)}
     >
       {verdict ? (
         <div

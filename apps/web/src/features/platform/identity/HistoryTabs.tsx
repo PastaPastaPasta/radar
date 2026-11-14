@@ -8,19 +8,9 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract, PeDocument, PeTransfer } from '@/data/pe/schemas'
 import { Entity, IdentityRef, TransitionTable, useNetwork } from '@/features/entity'
 import { Amount, Badge, Card, DataTable, Empty, Time, Unavailable } from '@/ui'
-import {
-  loadState,
-  PE_PAGE,
-  pageTo,
-  peChildQuery,
-  useSetSearch,
-  type IdentityTabProps,
-} from './common'
+import { loadState, peChildQuery, pePaging, useSetSearch, type IdentityTabProps } from './common'
 
 type Tab = 'transactions' | 'contracts' | 'documents' | 'transfers'
-
-const pePaging = (page: number, total: number | undefined) =>
-  ({ kind: 'page', page, limit: PE_PAGE, total, to: pageTo }) as const
 
 export function HistoryTab({
   id,

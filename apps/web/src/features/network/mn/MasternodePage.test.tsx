@@ -1,10 +1,15 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { http, HttpResponse } from 'msw'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
+import { core } from '@/data/core/client'
+import { SourceError } from '@/data/errors'
+import { server } from '@/test/server'
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
+  listed: '9c663ed039e98d055af0e1dbd30a7b702e77fce302708114915cf2ede9f85874',
   evo: 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff',
   banned: 'a8355582b280be9452f939d34637ab82226ba2c97e1aac15eaf6db878fec0130',
 }
@@ -18,7 +23,53 @@ function renderAt(url: string) {
   render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
 }
 
+afterEach(() => {
+  vi.restoreAllMocks()
+})
+
 describe('Masternode page', () => {
+  it('says Radar’s crawl is missing when only DAPI’s list has the masternode @X-09', async () => {
+    server.use(
+      http.get(`*/masternodes/${MAINNET.listed}`, () => new HttpResponse(null, { status: 400 })),
+    )
+    vi.spyOn(core, 'masternodeList').mockResolvedValue({
+      data: new Map([
+        [
+          MAINNET.listed,
+          {
+            type: 0,
+            isValid: true,
+            service: '146.190.33.135:9999',
+            votingAddress: 'XqAJRzmwb8nUzpT5zWhbjESQdkd3eKFWTc',
+            pubKeyOperator: '05'.repeat(48),
+          },
+        ],
+      ]),
+      source: 'dapi',
+      asOf: Date.now(),
+      fetchedAt: Date.now(),
+      proved: false,
+    } as unknown as Awaited<ReturnType<typeof core.masternodeList>>)
+    renderAt(`/mn/${MAINNET.listed}`)
+
+    expect(await screen.findByText(/Radar isn.t answering/)).toBeInTheDocument()
+    expect(document.querySelector('[data-masternode-header]')).toHaveTextContent(
+      'Valid on DAPI’s list',
+    )
+  })
+
+  it('says DAPI’s list is missing when only Radar’s crawl has the masternode @X-09', async () => {
+    vi.spyOn(core, 'masternodeList').mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'unavailable', message: 'No node answered' }),
+    )
+    renderAt(`/mn/${MAINNET.regular}`)
+
+    expect(await screen.findByText(/DAPI isn.t available here/)).toBeInTheDocument()
+    expect(document.querySelector('[data-masternode-header]')).toHaveTextContent(
+      'Enabled, no PoSe penalty',
+    )
+  })
+
   it('shows type, status, PoSe, version, uptime, last paid and earnings for a regular masternode @RA-30', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     const header = await waitFor(() => {

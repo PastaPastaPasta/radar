@@ -3,7 +3,7 @@ import type { SourceHealth } from '@/data/health'
 import { endpoint, isHostedSource } from '@/data/endpoints'
 import type { NetworkId } from '@/lib/network'
 
-export const STATUS_SOURCES: readonly SourceId[] = [
+const STATUS_SOURCES: readonly SourceId[] = [
   'dapi',
   'sdk',
   'radar',
@@ -49,7 +49,7 @@ export function sourceRows(
   }))
 }
 
-export type Overall = 'ok' | 'attention' | 'down' | 'checking'
+type Overall = 'ok' | 'attention' | 'down' | 'checking'
 
 /** The banner: any source in use that is down is `down`, any stale, degraded or slow one is `attention`. */
 export function overallState(rows: readonly SourceRow[]): Overall {

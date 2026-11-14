@@ -45,12 +45,12 @@ type ShieldedNoteDto = PChainMethods['shielded.encryptedNotes']['result'][number
 
 type Impl<M extends keyof PChainMethods> = ImplOf<PChainReads, M>
 
-export const prefundedBalanceDto = (id: string, b: PrefundedBalanceLike): PrefundedBalanceDto => ({
+const prefundedBalanceDto = (id: string, b: PrefundedBalanceLike): PrefundedBalanceDto => ({
   id,
   balance: BigInt(b.balance),
 })
 
-export const shieldedNoteDto = (index: number, n: ShieldedNoteLike): ShieldedNoteDto => ({
+const shieldedNoteDto = (index: number, n: ShieldedNoteLike): ShieldedNoteDto => ({
   index,
   cmx: bytesToHex(n.cmx),
   cvNet: bytesToHex(n.cvNet),

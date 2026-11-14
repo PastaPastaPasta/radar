@@ -168,9 +168,7 @@ export function QueryPage() {
                 className="dh-input"
                 value={picked}
                 onChange={(e) => {
-                  const value = e.target.value
-                  if (value === OTHER) setContractId(customId)
-                  else setContractId(value)
+                  setContractId(e.target.value === OTHER ? customId : e.target.value)
                 }}
               >
                 {known.map((c) => (
@@ -191,7 +189,7 @@ export function QueryPage() {
                     placeholder={t`Contract ID`}
                     autoComplete="off"
                     spellCheck={false}
-                    value={customId || (picked === OTHER ? contractId : '')}
+                    value={customId || contractId}
                     aria-invalid={contractId !== '' && !validContract ? true : undefined}
                     onChange={(e) => {
                       setCustomId(e.target.value.trim())

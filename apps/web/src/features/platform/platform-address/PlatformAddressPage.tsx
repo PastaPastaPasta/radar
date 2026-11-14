@@ -19,7 +19,7 @@ import {
   Skeleton,
   Unavailable,
 } from '@/ui'
-import { loadState, PE_PAGE, pageTo, peChildQuery } from '../identity/common'
+import { loadState, peChildQuery, pePaging } from '../identity/common'
 
 export function PlatformAddressPage({ addr, page = 1 }: { addr: string; page?: number }) {
   const { t } = useLingui()
@@ -187,7 +187,7 @@ function Transitions({ addr, page }: { addr: string; page: number }) {
         onRetry={() => void q.refetch()}
         caption={t`Transitions of this address`}
         columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
-        paging={{ kind: 'page', page, limit: PE_PAGE, total: q.data?.data.total, to: pageTo }}
+        paging={pePaging(page, q.data?.data.total)}
         empty={<Empty kind="none-yet" title={t`No transitions involve this address.`} />}
       />
     </Card>

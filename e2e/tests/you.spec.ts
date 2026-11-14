@@ -598,7 +598,7 @@ test.describe('about', () => {
     )
     await expect(page.getByRole('link', { name: 'Governance' })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/masternodes',
+      'https://gov.dashhq.org/',
     )
     await expect(page.locator('[data-third-party]').first()).toBeVisible()
     await settled(page)

@@ -1,6 +1,6 @@
 import type { NetworkId } from '@/lib/network'
 import { createJsonStore, type JsonStore } from '@/lib/json-store'
-import { asNetworkId, useJsonStore } from './local-store'
+import { asNetworkId, asRecord, asTimestamp, useJsonStore } from './local-store'
 
 export const SAVED_KEY = 'radar.saved'
 
@@ -17,8 +17,8 @@ export type SavedKey = Pick<SavedItem, 'net' | 'kind' | 'id'>
 
 const KINDS: readonly SavedItem['kind'][] = ['identity', 'contract', 'token']
 function parseItem(raw: unknown): SavedItem | undefined {
-  if (typeof raw !== 'object' || raw === null) return undefined
-  const r = raw as Record<string, unknown>
+  const r = asRecord(raw)
+  if (!r) return undefined
   const net = asNetworkId(r.net)
   const kind = KINDS.find((k) => k === r.kind)
   if (!net || !kind || typeof r.id !== 'string' || r.id === '') return undefined
@@ -27,7 +27,7 @@ function parseItem(raw: unknown): SavedItem | undefined {
     kind,
     id: r.id,
     ...(typeof r.label === 'string' && r.label !== '' ? { label: r.label } : {}),
-    savedAt: typeof r.savedAt === 'number' && Number.isFinite(r.savedAt) ? r.savedAt : 0,
+    savedAt: asTimestamp(r.savedAt),
   }
 }
 
@@ -52,21 +52,23 @@ export function saveItem(item: Omit<SavedItem, 'savedAt'>, now: number = Date.no
   saved().set([{ ...item, savedAt: now }, ...rest])
 }
 
-export function removeItem(key: SavedKey): void {
+function keepOnly(keep: (item: SavedItem) => boolean): void {
   const all = saved().get()
-  const rest = all.filter((s) => !same(s, key))
+  const rest = all.filter(keep)
   if (rest.length !== all.length) saved().set(rest)
+}
+
+export function removeItem(key: SavedKey): void {
+  keepOnly((s) => !same(s, key))
 }
 
 /** Removes the items the scope names; an empty scope removes everything. */
 export function clearSaved(scope: { net?: NetworkId; kind?: SavedItem['kind'] } = {}): void {
-  const all = saved().get()
-  const rest = all.filter(
+  keepOnly(
     (s) =>
       (scope.net !== undefined && s.net !== scope.net) ||
       (scope.kind !== undefined && s.kind !== scope.kind),
   )
-  if (rest.length !== all.length) saved().set(rest)
 }
 
 export function isSaved(key: SavedKey): boolean {

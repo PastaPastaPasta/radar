@@ -94,10 +94,12 @@ export function QuorumsPage() {
       },
       {
         id: 'verified',
-        header: t({ message: 'Verified', context: 'quorum signature' }),
+        header: t({ message: 'Verified', context: 'quorum is verified' }),
         cell: ({ row }) =>
           row.original.isVerified ? (
-            <Badge tone="success">{t({ message: 'Verified', context: 'quorum signature' })}</Badge>
+            <Badge tone="success">
+              {t({ message: 'Verified', context: 'quorum is verified' })}
+            </Badge>
           ) : (
             <Badge tone="warning">{t`Not verified`}</Badge>
           ),
@@ -141,7 +143,7 @@ export function QuorumsPage() {
                 set({ q: next })
               }}
             />
-            <div className="dh-seg" role="group" aria-label={t`Quorum type`}>
+            <div className="dh-seg rx-seg" role="group" aria-label={t`Quorum type`}>
               {types.map((ty) => {
                 const on = selected.includes(ty)
                 return (

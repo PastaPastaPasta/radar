@@ -50,6 +50,9 @@ export function senderAddresses(values: (PrevOut | undefined)[]): Set<string> {
   return new Set(values.flatMap((v) => (v?.address ? [v.address] : [])))
 }
 
+export const shortAddress = (address: string) =>
+  address.length > 14 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address
+
 export interface FlowNode {
   key: string
   label: string
@@ -57,10 +60,9 @@ export interface FlowNode {
   kind: 'in' | 'out' | 'change' | 'fee'
   /** Address behind the label, for a link. */
   address?: string
-  n?: number
 }
 
-export interface FlowInput {
+interface FlowInput {
   inputs: FlowNode[]
   outputs: FlowNode[]
 }
@@ -83,7 +85,7 @@ export function limitNodes(nodes: FlowNode[], more: (count: number) => string): 
   ]
 }
 
-export interface PlacedNode extends FlowNode {
+interface PlacedNode extends FlowNode {
   x: number
   y: number
   h: number
@@ -94,7 +96,7 @@ export interface Ribbon {
   kind: FlowNode['kind']
 }
 
-export interface FlowLayout {
+interface FlowLayout {
   left: PlacedNode[]
   right: PlacedNode[]
   ribbons: Ribbon[]

@@ -453,7 +453,7 @@ function GenericRows({ p }: { p: Obj }) {
   )
 }
 
-export interface PayloadInfo {
+interface PayloadInfo {
   title: string
   about: string
 }

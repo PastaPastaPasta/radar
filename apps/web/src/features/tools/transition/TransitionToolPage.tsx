@@ -153,7 +153,7 @@ function VerifyCard({ base64 }: { base64: string | undefined }) {
           </>
         )}
         <div>
-          <LinkOut to={{ app: 'bridge', action: 'token', id: '', net }}>
+          <LinkOut to={{ app: 'bridge', action: 'landing', net }}>
             {t`Send transitions with Bridge`}
           </LinkOut>
         </div>

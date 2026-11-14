@@ -6,7 +6,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedBlock, DecodedTx } from '@/data/core/types'
-import { stampOf, type Sourced } from '@/data/envelope'
+import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import { Entity, useDocumentTitle, useNetwork } from '@/features/entity'
 import { hyQueries } from '@/data/hyphen/queries'
 import { formatBytes, formatInt, withUnit } from '@/lib/format'
@@ -103,7 +103,7 @@ function BlockView({
   page,
 }: {
   block: DecodedBlock
-  stamp: ReturnType<typeof stampOf>
+  stamp: SourceStamp
   tipHeight: number | undefined
   page: number
 }) {

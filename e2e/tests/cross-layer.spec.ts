@@ -12,7 +12,7 @@ for (const net of ['mainnet', 'testnet'] as const) {
   const at = (path: string) => withQuery(path, networkQuery(net))
 
   test.describe(`links between layers on ${net}`, () => {
-    test('an asset-lock transaction opens the identity it funded, or says it topped one up @X-02', async ({
+    test('an asset-lock transaction that topped an identity up says so and funds no new identity @X-02', async ({
       page,
     }) => {
       test.skip(net !== 'mainnet', 'the testnet transaction has no DAPI recording')
@@ -22,19 +22,8 @@ for (const net of ['mainnet', 'testnet'] as const) {
         .locator('dt', { hasText: 'Identity created' })
         .locator('xpath=following-sibling::dd[1]')
       await expect(row).toBeVisible({ timeout: 15_000 })
-      const link = row.locator('a[href^="/identity/"]').first()
-      if ((await link.count()) === 0) {
-        await expect(row).toContainText('A top-up credits an identity that already existed')
-        return
-      }
-      const href = (await link.getAttribute('href'))!
-      await link.click()
-      await expect(page).toHaveURL(new RegExp(`${href.split('?')[0]!}`))
-      await expect(page.getByRole('heading', { level: 1, name: 'Identity' })).toBeVisible()
-      await settled(page)
-      await expect(
-        page.getByText(href.split('/identity/')[1]!.split('?')[0]!).first(),
-      ).toBeVisible()
+      await expect(row).toContainText('A top-up credits an identity that already existed')
+      await expect(row.locator('a[href^="/identity/"]')).toHaveCount(0)
     })
 
     test('a masternode opens its Platform validator record and the list chip opens the same tab @X-02', async ({

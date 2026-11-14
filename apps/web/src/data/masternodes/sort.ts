@@ -21,8 +21,6 @@ export const MN_SORT_KEYS = [
 
 export type MnSortKey = (typeof MN_SORT_KEYS)[number]
 
-export const DEFAULT_MN_SORT = '-status'
-
 /** Banned, then silent, then unknown, then answering: so the default sort puts the healthy list first. */
 export function statusRank(row: MnRow): number {
   if (row.status === 'pose-banned') return 0

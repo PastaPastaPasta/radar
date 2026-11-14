@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import { SourceError } from '@/data/errors'
+import { sdk } from '@/data/sdk'
 import { resetSearchEnv, searchEnv } from './env'
 import { useSearchTip } from './tip'
 
@@ -22,6 +24,19 @@ function wrapper() {
 describe('useSearchTip', () => {
   beforeEach(() => {
     resetSearchEnv()
+  })
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('says why the Platform tip is missing when the SDK cannot read it', async () => {
+    vi.spyOn(sdk, 'call').mockRejectedValue(
+      new SourceError({ source: 'sdk', kind: 'network', message: 'The SDK is unreachable' }),
+    )
+    const { result } = renderHook(() => useSearchTip('mainnet', 'page'), { wrapper: wrapper() })
+
+    await waitFor(() => expect(result.current.unread).toBeInstanceOf(SourceError))
+    expect(result.current.tip?.platform).toBeUndefined()
   })
 
   it('reads the Core height, the Platform height and the epoch the pages already hold, and shares them with the environment @X-01 @NX-05', async () => {

@@ -7,17 +7,16 @@ import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import { v24Pending } from '@/data/radar/schemas'
-import { keepPreviousOnNetwork, networkName, PageLink, useNetwork } from '@/features/entity'
+import { networkName, PageLink, useNetwork } from '@/features/entity'
 import { useCommandPalette } from '@/features/search'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Icon, LiveDot, Skeleton, Time, Unavailable, useLiveView, useNow } from '@/ui'
+import { useCoreRows } from './core-rows'
 import { Figure, Figures, SourceRow, SourceScope, useSectionSources } from './Figure'
 import { agedFromRead, pushed } from './freshness'
 import { HomeMap } from './HomeMap'
 import { TIP_POLL_MS, usePlatformTip } from './platform-tip'
-
-export const CORE_ROWS = 12
 
 /** Nothing pushes a new crawl, so the claim is read again while the page stays open, well inside the age at which it would look out of date. */
 const CENSUS_POLL_MS = 5 * 60_000
@@ -75,11 +74,7 @@ function useCoreFigure() {
   const lock = useQuery(coreQueries.chainLock(net))
   // The tip read follows its status read with a header read; the status already carries the height.
   const height = tip.data?.data.height ?? status.data?.data.blocks
-  const rows = useQuery({
-    ...coreQueries.blockRows(net, { fromHeight: tip.data?.data.height ?? 0, count: CORE_ROWS }),
-    enabled: tip.data !== undefined,
-    placeholderData: keepPreviousOnNetwork(net),
-  })
+  const rows = useCoreRows(net, tip.data?.data.height)
   const tipRow = rows.data?.data.find((r) => r.height === height)
   const best = lock.data?.data
   // The rows are read once per new tip, often before the lock arrives; the best lock is re-read and settles it.

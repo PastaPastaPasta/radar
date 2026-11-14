@@ -33,6 +33,7 @@ function DevnetForm({
   const [error, setError] = useState<DevnetFormError>()
 
   const editName = initial?.name ?? ''
+  const fieldKey = initial?.name ?? 'new'
   const messages: Record<DevnetFormError, string> = {
     name: t`Use lowercase letters, digits and hyphens, for example "ruby".`,
     exists: t`A devnet with this name is already saved. Edit it instead.`,
@@ -81,9 +82,9 @@ function DevnetForm({
         </div>
       )}
       <div className="dh-field">
-        <label htmlFor={`devnet-addresses-${initial?.name ?? 'new'}`}>{t`DAPI addresses`}</label>
+        <label htmlFor={`devnet-addresses-${fieldKey}`}>{t`DAPI addresses`}</label>
         <textarea
-          id={`devnet-addresses-${initial?.name ?? 'new'}`}
+          id={`devnet-addresses-${fieldKey}`}
           className="dh-textarea dh-input--mono"
           rows={3}
           value={addresses}
@@ -94,11 +95,11 @@ function DevnetForm({
         />
       </div>
       <div className="dh-field">
-        <label htmlFor={`devnet-quorum-${initial?.name ?? 'new'}`}>
+        <label htmlFor={`devnet-quorum-${fieldKey}`}>
           {t`Quorum list URL`} <span className="dh-field__optional">{t`optional`}</span>
         </label>
         <input
-          id={`devnet-quorum-${initial?.name ?? 'new'}`}
+          id={`devnet-quorum-${fieldKey}`}
           className="dh-input"
           type="url"
           value={quorumUrl}

@@ -27,5 +27,3 @@ export const RADAR_MAP_STYLE = {
     high: 'world-high.json',
   },
 } as const
-
-export type RadarMapStyle = typeof RADAR_MAP_STYLE

@@ -41,64 +41,37 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
       <span className="dh-sr"> {t`(source down)`}</span>
     ) : null
 
-  if (!compact) {
-    const line = (
-      <>
-        <LiveDot state={v.state} bare />
-        <span>
-          {v.label}
-          {age ? <> {age}</> : null}
-        </span>
-        {status}
-      </>
-    )
-    const openable = v.variant === 'proof' ? stamp.proof : undefined
-    if (openable) {
-      return (
-        <button
-          type="button"
-          className="rx-srcline rx-srcline--button"
-          {...attrs}
-          title={
-            v.title
-              ? t`Open the proof for this figure · ${v.title}`
-              : t`Open the proof for this figure`
-          }
-          onClick={() => {
-            openProofInspector(openable)
-          }}
-        >
-          {line}
-        </button>
-      )
-    }
-    return (
-      <span className="rx-srcline" {...attrs}>
-        {line}
-      </span>
-    )
-  }
-
-  const className = cx(
-    'rx-src',
-    v.variant === 'proof' && 'rx-src--proof',
-    v.variant === 'stale' && 'rx-src--stale',
-    v.variant === 'down' && 'rx-src--down',
-  )
-  const content = (
+  const content = compact ? (
     <>
       <Icon name={v.icon} />
       {v.label}
       {age}
       {status}
     </>
+  ) : (
+    <>
+      <LiveDot state={v.state} bare />
+      <span>
+        {v.label}
+        {age ? <> {age}</> : null}
+      </span>
+      {status}
+    </>
   )
-  const proof = stamp.proof
-  if (v.variant === 'proof' && proof) {
+  const className = compact
+    ? cx(
+        'rx-src',
+        v.variant === 'proof' && 'rx-src--proof',
+        v.variant === 'stale' && 'rx-src--stale',
+        v.variant === 'down' && 'rx-src--down',
+      )
+    : 'rx-srcline'
+  const openable = v.variant === 'proof' ? stamp.proof : undefined
+  if (openable) {
     return (
       <button
         type="button"
-        className={className}
+        className={compact ? className : `${className} rx-srcline--button`}
         {...attrs}
         title={
           v.title
@@ -106,7 +79,7 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
             : t`Open the proof for this figure`
         }
         onClick={() => {
-          openProofInspector(proof)
+          openProofInspector(openable)
         }}
       >
         {content}
@@ -277,7 +250,7 @@ interface ErrorShape {
   message?: string
 }
 
-export function describeError(error: unknown, source?: SourceId): { title: string; body: string } {
+function describeError(error: unknown, source?: SourceId): { title: string; body: string } {
   const e: ErrorShape = typeof error === 'object' && error !== null ? error : {}
   const from = e.source ?? source
   const name = from ? sourceName(from) : undefined

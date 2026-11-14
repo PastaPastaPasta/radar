@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { NetworkId } from '@/lib/network'
 import { createJsonStore, type JsonStore } from '@/lib/json-store'
-import { asNetworkId, useJsonStore } from './local-store'
+import { asNetworkId, asRecord, asTimestamp, useJsonStore } from './local-store'
 
 export const VIEWED_KEY = 'radar.viewed'
 export const VIEWED_LIMIT = 50
@@ -19,21 +19,20 @@ interface ViewedState {
 
 const OFF: ViewedState = { on: false, items: [] }
 function parseItem(raw: unknown): ViewedIdentity | undefined {
-  if (typeof raw !== 'object' || raw === null) return undefined
-  const r = raw as Record<string, unknown>
+  const r = asRecord(raw)
+  if (!r) return undefined
   const net = asNetworkId(r.net)
   if (!net || typeof r.id !== 'string' || r.id === '') return undefined
   return {
     net,
     id: r.id,
-    viewedAt: typeof r.viewedAt === 'number' && Number.isFinite(r.viewedAt) ? r.viewedAt : 0,
+    viewedAt: asTimestamp(r.viewedAt),
   }
 }
 
 function parseViewed(raw: unknown): ViewedState {
-  if (typeof raw !== 'object' || raw === null) return OFF
-  const r = raw as Record<string, unknown>
-  if (r.on !== true) return OFF
+  const r = asRecord(raw)
+  if (r?.on !== true) return OFF
   const items = Array.isArray(r.items) ? r.items.flatMap((i) => parseItem(i) ?? []) : []
   return { on: true, items }
 }

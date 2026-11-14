@@ -45,6 +45,13 @@ describe('Quorums', () => {
     expect(all).toBeGreaterThan(1)
   })
 
+  it('lets the quorum type buttons wrap instead of widening the page on a phone @NX-55', async () => {
+    renderAt('/quorums')
+    const quorums = await card('quorums')
+
+    expect(within(quorums).getByRole('group', { name: 'Quorum type' })).toHaveClass('rx-seg')
+  })
+
   it('opens already filtered by the prefix of the address @NX-55', async () => {
     renderAt('/quorums?q=000000000000001e')
     const quorums = await card('quorums')

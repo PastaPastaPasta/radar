@@ -9,7 +9,6 @@ import {
   type SourceMode,
   type SourceModeState,
 } from '@/lib/source-mode'
-import { cx } from './cx'
 import { Icon } from './icon'
 
 export function useSourceMode(): SourceModeState {
@@ -83,7 +82,7 @@ export function Unavailable({ title, source, compact = false }: UnavailableProps
     )
   }
   return (
-    <div className={cx('rx-empty', 'rx-unavail')} data-unavailable="mode">
+    <div className={'rx-empty rx-unavail'} data-unavailable="mode">
       <span className="rx-empty__tile">
         <Icon name="shield" />
       </span>

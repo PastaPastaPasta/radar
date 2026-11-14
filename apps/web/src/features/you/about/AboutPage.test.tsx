@@ -26,7 +26,7 @@ describe('About page @NX-76', () => {
     )
     expect(within(act).getByRole('link', { name: /Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/masternodes',
+      'https://gov.dashhq.org/',
     )
   })
 
@@ -39,7 +39,7 @@ describe('About page @NX-76', () => {
     )
     expect(within(act).getByRole('link', { name: /Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/masternodes?network=testnet',
+      'https://gov.dashhq.org/?network=testnet',
     )
   })
 

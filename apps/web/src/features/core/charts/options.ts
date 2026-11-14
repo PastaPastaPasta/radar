@@ -45,7 +45,7 @@ export function formatHashrate(hps: number, resolve?: number): string {
   return `${shown} ${unit}`
 }
 
-export function formatCompact(n: number, resolve?: number): string {
+function formatCompact(n: number, resolve?: number): string {
   const magnitude = Math.abs(n)
   if (resolve === undefined) {
     return magnitude > 0 && magnitude < 1

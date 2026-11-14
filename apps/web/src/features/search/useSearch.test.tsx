@@ -1,8 +1,9 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { SourceError } from '@/data/errors'
+import { sdk } from '@/data/sdk'
 import { classify } from './classify'
 import { searchEnv } from './env'
 import { resolvers } from './resolvers'
@@ -29,6 +30,7 @@ function add(r: Resolver) {
 }
 
 afterEach(() => {
+  vi.restoreAllMocks()
   for (const r of added.splice(0)) resolvers.splice(resolvers.indexOf(r), 1)
 })
 
@@ -140,6 +142,16 @@ describe('fan-out', () => {
     expect(await screen.findByRole('link', { name: /Found by the index/ })).toBeInTheDocument()
     expect((await screen.findAllByText(/Hyphen isn.t answering/)).length).toBeGreaterThan(0)
     expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'true')
+  })
+
+  it('says on the page that Platform heights can’t be offered when the Platform tip can’t be read', async () => {
+    vi.spyOn(sdk, 'call').mockRejectedValue(
+      new SourceError({ source: 'sdk', kind: 'unavailable', message: 'The SDK is unreachable' }),
+    )
+
+    render(<App history={createMemoryHistory({ initialEntries: ['/search?q=2569992'] })} />)
+
+    expect(await screen.findByText(/isn.t available here/)).toBeInTheDocument()
   })
 
   it('aborts the previous run when the input changes', async () => {

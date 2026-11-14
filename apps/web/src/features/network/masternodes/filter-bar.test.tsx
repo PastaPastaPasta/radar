@@ -1,7 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { SEARCH_DEBOUNCE_MS, useDebouncedQuery } from './FilterBar'
-import { cellFilter, filterFields } from './ListView'
+import { SEARCH_DEBOUNCE_MS, useDebouncedQuery } from '../debounced-query'
+import { filterFields } from './filter-fields'
+import { cellFilter } from './ListView'
 
 describe('useDebouncedQuery', () => {
   beforeEach(() => {

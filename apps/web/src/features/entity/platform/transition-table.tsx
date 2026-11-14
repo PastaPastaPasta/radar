@@ -11,7 +11,7 @@ import { humanizeType, transitionBadgeType } from './transition-type'
 
 export type TransitionColumn = 'type' | 'hash' | 'status' | 'block' | 'gas' | 'owner' | 'time'
 
-export const TRANSITION_COLUMNS: readonly TransitionColumn[] = [
+const TRANSITION_COLUMNS: readonly TransitionColumn[] = [
   'type',
   'hash',
   'status',

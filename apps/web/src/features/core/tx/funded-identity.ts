@@ -24,7 +24,7 @@ export async function fundedIdentityId(txid: string, index: number): Promise<str
   return base58Encode(await sha256(await sha256(outpoint)))
 }
 
-export interface FundedIdentity {
+interface FundedIdentity {
   index: number
   id: string
 }

@@ -196,8 +196,3 @@ onNetworkReset((net) => shared?.forget(net))
 /** `core.masternodeList`: the default instance over the installed transport and the Core façade's header reads. */
 export const masternodeList: CoreClient['masternodeList'] = (net, signal) =>
   defaults().masternodeList(net, signal)
-
-/** Drops the kept list of a network, for tests. */
-export function forgetMasternodeList(net: NetworkId): void {
-  shared?.forget(net)
-}

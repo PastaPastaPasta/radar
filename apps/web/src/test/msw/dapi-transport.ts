@@ -133,7 +133,7 @@ export class FixtureDapiTransport implements DapiTransport {
    */
   breakConnection(net: NetworkId): void {
     this.broken = true
-    const error = this.lostError()
+    const error = this.cutError()
     for (const fail of [...this.openStreams]) fail(error)
     for (let i = 0; i < 3; i++) {
       healthRegistry.report(net, 'dapi', { ok: false, kind: 'network', message: error.message })
@@ -145,7 +145,15 @@ export class FixtureDapiTransport implements DapiTransport {
     healthRegistry.report(net, 'dapi', { ok: true })
   }
 
-  private lostError(): SourceError {
+  /** The methods of the calls turned away since the connection was cut. */
+  readonly refused: string[] = []
+
+  private lostError(method?: string): SourceError {
+    this.refused.push(method ?? 'stream')
+    return this.cutError()
+  }
+
+  private cutError(): SourceError {
     return new SourceError({
       source: 'dapi',
       kind: 'network',
@@ -195,7 +203,7 @@ export class FixtureDapiTransport implements DapiTransport {
     opts?: DapiCallOptions,
   ): Promise<DapiUnaryReply> {
     if (opts?.signal?.aborted) throw abortError()
-    if (this.broken) throw this.lostError()
+    if (this.broken) throw this.lostError(method)
     const fixture = await this.find(net, method, request)
     if (fixture.error) throw recordedError(fixture)
     if (fixture.response === undefined) {
@@ -221,11 +229,13 @@ export class FixtureDapiTransport implements DapiTransport {
     request: Uint8Array,
     opts?: DapiCallOptions,
   ): DapiStreamHandle {
-    const fixture = this.broken ? Promise.reject(this.lostError()) : this.find(net, method, request)
+    const fixture = this.broken
+      ? Promise.reject(this.lostError(method))
+      : this.find(net, method, request)
     fixture.catch(() => undefined)
     const signal = opts?.signal
     const holdOpen = () => this.holdOpen
-    const lost = () => (this.broken ? this.lostError() : undefined)
+    const lost = () => (this.broken ? this.lostError(method) : undefined)
     const openStreams = this.openStreams
     async function* messages(): AsyncGenerator<Uint8Array> {
       if (signal?.aborted) throw abortError()

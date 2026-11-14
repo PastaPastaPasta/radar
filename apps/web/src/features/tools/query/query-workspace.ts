@@ -188,7 +188,6 @@ export function classifyQueryError(message: string | undefined): QueryErrorKind 
   return undefined
 }
 
-/** Keep the canonical group key, rather than guessing a schema-dependent decoded value. */
 const isAverage = (value: unknown): value is { count: bigint; sum: bigint } =>
   typeof value === 'object' &&
   value !== null &&
@@ -487,9 +486,4 @@ export function updateSavedQueries(
     // A denied read must not become an empty list that overwrites existing storage.
     return { status: 'unavailable' }
   }
-}
-
-/** Quote one SQL identifier, including reserved words and punctuation. */
-export function quoteSqlIdentifier(identifier: string): string {
-  return '`' + identifier.replace(/`/g, '``') + '`'
 }

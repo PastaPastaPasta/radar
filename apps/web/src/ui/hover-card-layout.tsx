@@ -58,15 +58,3 @@ export function HoverCardLayout({
     </div>
   )
 }
-
-export function HoverCardLoading() {
-  return (
-    <div className="rx-hc__inner" aria-busy="true">
-      <span className="rx-skels rx-skels--line" aria-hidden="true">
-        <span className="rx-skel" style={{ width: '60%' }} />
-        <span className="rx-skel" style={{ width: '90%' }} />
-        <span className="rx-skel" style={{ width: '75%' }} />
-      </span>
-    </div>
-  )
-}

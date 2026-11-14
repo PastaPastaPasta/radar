@@ -229,11 +229,13 @@ function useWiderThan(
       frame = requestAnimationFrame(measure)
     }
     later()
-    // The box resizes with the window; the table's width changes when rows arrive or a name replaces an identifier.
+    // The box resizes with the window and the table's width follows its content, so both sizes are watched; rows
+    // arriving or leaving are the only structure change that matters.
     const resized = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(later)
     resized?.observe(outer)
+    resized?.observe(inner)
     const changed = new MutationObserver(later)
-    changed.observe(inner, { childList: true, subtree: true, characterData: true })
+    changed.observe(inner, { childList: true, subtree: true })
     return () => {
       cancelAnimationFrame(frame)
       resized?.disconnect()
@@ -418,17 +420,20 @@ export function DataTable<Row>({
     </thead>
   )
 
+  const skeletonCells = (r: number) =>
+    headers.map((h, c) => (
+      <td key={h.id}>
+        <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
+      </td>
+    ))
+
   let body: ReactNode
   if (state === 'loading') {
     body = (
       <tbody aria-hidden="true">
         {Array.from({ length: SKELETON_ROWS }, (_, r) => (
           <tr key={r} className="rx-skelrow">
-            {headers.map((h, c) => (
-              <td key={h.id}>
-                <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
-              </td>
-            ))}
+            {skeletonCells(r)}
           </tr>
         ))}
       </tbody>
@@ -522,11 +527,7 @@ export function DataTable<Row>({
         ) : null}
         {Array.from({ length: pendingRows }, (_, r) => (
           <tr key={`pending-${r}`} className="rx-skelrow" aria-hidden="true" data-pending-row>
-            {headers.map((h, c) => (
-              <td key={h.id}>
-                <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
-              </td>
-            ))}
+            {skeletonCells(r)}
           </tr>
         ))}
         {paging?.kind === 'infinite' && paging.fetching ? (

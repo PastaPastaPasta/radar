@@ -94,7 +94,7 @@ export function spreadOf(
 }
 
 /** A withdrawal document's status as Drive numbers it. */
-export const WITHDRAWAL_STATUS = ['queued', 'pooled', 'broadcast', 'complete', 'expired'] as const
+const WITHDRAWAL_STATUS = ['queued', 'pooled', 'broadcast', 'complete', 'expired'] as const
 export type WithdrawalStatus = (typeof WITHDRAWAL_STATUS)[number] | 'unknown'
 
 export interface Withdrawal {

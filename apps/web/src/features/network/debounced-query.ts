@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const SEARCH_DEBOUNCE_MS = 150
+export const SEARCH_DEBOUNCE_MS = 150
 
 const normalised = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
 

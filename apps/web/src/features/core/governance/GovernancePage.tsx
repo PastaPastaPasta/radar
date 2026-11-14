@@ -8,6 +8,7 @@ import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { formatDate, formatInt, formatIsoUtc } from '@/lib/format'
+import { DUFFS_PER_DASH } from '@/lib/units'
 import {
   Amount,
   Card,
@@ -97,9 +98,9 @@ function GovernanceContent() {
         radius: ['58%', '82%'],
         label: { show: false },
         data: [
-          { name: t`Funded`, value: Number(split.funded / 100_000_000n) },
-          { name: t`Passing, not yet funded`, value: Number(split.passing / 100_000_000n) },
-          { name: t`Not passing`, value: Number(split.failing / 100_000_000n) },
+          { name: t`Funded`, value: Number(split.funded / DUFFS_PER_DASH) },
+          { name: t`Passing, not yet funded`, value: Number(split.passing / DUFFS_PER_DASH) },
+          { name: t`Not passing`, value: Number(split.failing / DUFFS_PER_DASH) },
         ],
       },
     ],
@@ -140,7 +141,7 @@ function GovernanceContent() {
                       ? t`Passing, not yet funded`
                       : t`Not passing`,
                   split.count[s],
-                  `${formatInt(split[s] / 100_000_000n)} DASH`,
+                  `${formatInt(split[s] / DUFFS_PER_DASH)} DASH`,
                 ]),
               }}
             />

@@ -7,9 +7,11 @@ export type LinkOutTarget =
       id: string
       net: NetworkId
     }
+  | { app: 'bridge'; action: 'landing'; net: NetworkId }
   | { app: 'gov'; action: 'contest-vote'; label: string; net: NetworkId }
   | { app: 'gov'; action: 'proposal'; hash: string; net: NetworkId }
   | { app: 'gov'; action: 'masternodes'; net: NetworkId }
+  | { app: 'gov'; action: 'landing'; net: NetworkId }
   | { app: 'pe'; path: string; net: NetworkId }
   | { app: 'hyphen'; path: string; net: NetworkId }
   | { app: 'insight'; path: string; net: NetworkId }
@@ -53,6 +55,8 @@ function bridgeUrl(params: [string, string][], net: NetworkId): string {
 
 function bridgeParams(target: Extract<LinkOutTarget, { app: 'bridge' }>): [string, string][] {
   switch (target.action) {
+    case 'landing':
+      return []
     case 'identity':
       return [
         ['mode', 'topup'],
@@ -80,6 +84,8 @@ function govPath(target: Extract<LinkOutTarget, { app: 'gov' }>): string {
       return `/names/${encodeURIComponent(target.label)}`
     case 'masternodes':
       return '/masternodes'
+    case 'landing':
+      return '/'
   }
 }
 

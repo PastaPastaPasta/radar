@@ -10,7 +10,7 @@ import { Entity } from '../Entity'
 export type PlatformBlockColumn =
   'height' | 'hash' | 'epoch' | 'proposer' | 'gas' | 'transitions' | 'time'
 
-export const PLATFORM_BLOCK_COLUMNS: readonly PlatformBlockColumn[] = [
+const PLATFORM_BLOCK_COLUMNS: readonly PlatformBlockColumn[] = [
   'height',
   'hash',
   'epoch',

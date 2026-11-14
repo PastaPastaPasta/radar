@@ -118,7 +118,7 @@ const stackKind = (book: ReleaseBook, k: string): number =>
   k === UNKNOWN ? 5 : k === 'Other' ? 4 : kindOf(book, k)
 
 /** The ladder's order: the latest release first, older releases after it, then candidates, builds and other clients. */
-export const ladderOrder = (book: ReleaseBook, a: string, b: string): number =>
+const ladderOrder = (book: ReleaseBook, a: string, b: string): number =>
   stackKind(book, a) - stackKind(book, b) || byNewest(a, b)
 
 export interface LadderRow {

@@ -1,6 +1,6 @@
 import type { HyRichRow } from '@/data/hyphen/schemas'
 
-export interface Band {
+interface Band {
   id: string
   from: number
   to: number
@@ -10,7 +10,7 @@ export interface Band {
   count: number
 }
 
-export const BANDS: readonly { id: string; from: number; to: number }[] = [
+const BANDS: readonly { id: string; from: number; to: number }[] = [
   { id: '1', from: 1, to: 1 },
   { id: '2–5', from: 2, to: 5 },
   { id: '6–10', from: 6, to: 10 },

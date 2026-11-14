@@ -20,7 +20,7 @@ import {
 } from '@/ui'
 import { deferred } from '@/ui/deferred'
 import { bottomSheet, type BottomSheet, type Rest } from './bottom-sheet'
-import { useDebouncedQuery } from './debounced'
+import { useDebouncedQuery } from '../debounced-query'
 import { MapControls, HeadlineText, ListLink, useCategoryLabel } from './MapControls'
 import { CityInfo, GroupList } from './MapDetails'
 import { colorScheme, geoTotals, headline, mapView, mnPoints } from './map-model'

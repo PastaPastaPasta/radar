@@ -45,5 +45,12 @@ export function useEpochOf() {
       [epochs],
     ),
     stamp: infos.data,
+    /** Why the epoch list is missing, while it is. */
+    missing:
+      epochs.length === 0 && (current.isError || infos.isError)
+        ? current.isError
+          ? current
+          : infos
+        : undefined,
   }
 }

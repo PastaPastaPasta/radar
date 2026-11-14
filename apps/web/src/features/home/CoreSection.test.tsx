@@ -134,6 +134,32 @@ describe('Core figures on the home page @HY-01', () => {
     )
     await renderFigures(new QueryClient())
     const table = await screen.findByRole('table', { name: 'Latest Core blocks', hidden: true })
-    await waitFor(() => expect(table).not.toHaveAttribute('aria-busy', 'true'))
+    const alert = await screen.findByText(/DAPI isn.t available here/)
+    expect(alert.closest('[role="alert"]')).not.toBeNull()
+    expect(table).not.toHaveAttribute('aria-busy', 'true')
+  })
+
+  it('keeps waiting for the blocks when only a later read of the tip failed @HY-01', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 116_445_795.87))
+    const reads = vi.spyOn(core, 'tip')
+    reads.mockResolvedValueOnce(tip(2_571_277))
+    reads.mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'unavailable', message: 'No node answered' }),
+    )
+    vi.spyOn(core, 'blockRows').mockReturnValue(new Promise<never>(() => undefined))
+    const client = new QueryClient()
+    await renderFigures(client)
+    await waitFor(() => expect(client.getQueryData(dapiKeys('mainnet', 'tip'))).toBeDefined())
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: dapiKeys('mainnet', 'tip') })
+    })
+    await waitFor(() =>
+      expect(client.getQueryState(dapiKeys('mainnet', 'tip'))?.fetchStatus).toBe('idle'),
+    )
+    expect(client.getQueryState(dapiKeys('mainnet', 'tip'))?.error).not.toBeNull()
+    expect(client.getQueryData(dapiKeys('mainnet', 'tip'))).toBeDefined()
+    const table = await screen.findByRole('table', { name: 'Latest Core blocks', hidden: true })
+    expect(table).toHaveAttribute('aria-busy', 'true')
+    expect(screen.queryByText(/DAPI isn.t available here/)).toBeNull()
   })
 })
