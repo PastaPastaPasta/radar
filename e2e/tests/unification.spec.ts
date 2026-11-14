@@ -16,10 +16,15 @@ const entityCases = ROUTE_CASES.filter((c) => ENTITY_ROUTE.test(c.path) && !/0{6
 
 async function openCard(page: Page, kind: string, via: 'hover' | 'focus') {
   const chip = page.locator(`[data-entity="${kind}"] a, [data-entity="${kind}"] button`).first()
-  if (via === 'hover') await chip.hover()
-  else await chip.focus()
   const card = page.locator('.rx-hc').first()
-  await expect(card).toBeVisible({ timeout: 8_000 })
+  // Sections above the chip can still load after the page settles and move it out from under the pointer.
+  await expect(async () => {
+    if (via === 'hover') {
+      await page.mouse.move(0, 0)
+      await chip.hover({ timeout: 2000 })
+    } else await chip.focus({ timeout: 2000 })
+    await expect(card).toBeVisible({ timeout: 2_000 })
+  }).toPass({ timeout: 15_000 })
   return card
 }
 
