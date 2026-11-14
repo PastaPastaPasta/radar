@@ -15,12 +15,12 @@ import {
   Empty,
   Icon,
   LiveControl,
+  Section,
   Time,
   TYPE_META,
   Unavailable,
   usePausedFeed,
 } from '@/ui'
-import { SourceRow, SourceScope, useSectionSources } from './Figure'
 import { transitionKind } from './transition-types'
 import { useFrozen } from './use-frozen'
 
@@ -184,34 +184,30 @@ export function PlatformSection() {
     paused && newest !== undefined
       ? Math.max(0, newest - (shownBlocks?.data.items[0]?.header.height ?? newest))
       : 0
-  const { line, covered } = useSectionSources([
+  const sources = [
     shownTransitions ? stampOf(shownTransitions) : undefined,
     shownBlocks ? stampOf(shownBlocks) : undefined,
-  ])
+  ]
   return (
-    <section
+    <Section
       className="rx-home__sec"
       id="platform"
-      data-layer="platform"
-      aria-labelledby="h-platform"
+      layer="platform"
+      title={t`Dash Platform`}
+      lede={t`Each Platform block is locked to a Core block.`}
+      source={sources}
+      actions={
+        indexed ? (
+          <LiveControl
+            paused={paused}
+            onToggle={() => setPaused(!paused)}
+            newCount={newCount}
+            pulseKey={newest}
+            noun={t`Platform updates`}
+          />
+        ) : null
+      }
     >
-      <div className="rx-sec__head">
-        <h2 className="rx-sec__title" id="h-platform">
-          {t`Dash Platform`}
-        </h2>
-        <p className="rx-sec__desc">{t`Each Platform block is locked to a Core block.`}</p>
-        {indexed ? (
-          <div className="rx-sec__actions">
-            <LiveControl
-              paused={paused}
-              onToggle={() => setPaused(!paused)}
-              newCount={newCount}
-              pulseKey={newest}
-              noun={t`Platform updates`}
-            />
-          </div>
-        ) : null}
-      </div>
       {devnet ? (
         <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
       ) : off ? (
@@ -220,16 +216,11 @@ export function PlatformSection() {
           title={t`Platform's latest transitions and blocks need Platform Explorer`}
         />
       ) : (
-        <>
-          <SourceRow line={line} />
-          <SourceScope value={covered}>
-            <div className="rx-home__lists">
-              <TransitionsCard query={transitions} shown={shownTransitions} />
-              <BlocksCard query={blocks} shown={shownBlocks} />
-            </div>
-          </SourceScope>
-        </>
+        <div className="rx-home__lists">
+          <TransitionsCard query={transitions} shown={shownTransitions} />
+          <BlocksCard query={blocks} shown={shownBlocks} />
+        </div>
       )}
-    </section>
+    </Section>
   )
 }

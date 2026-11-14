@@ -49,7 +49,7 @@ test.describe('Home', () => {
     await page.goto('/')
     const core = page.locator('[data-pulse="core"]')
     await expect(core).toContainText('2,570,085')
-    const line = page.locator('.rx-hero [data-home-sources]')
+    const line = page.locator('.rx-hero [data-section-sources]')
     await expect(line).toHaveCount(1)
     for (const source of ['radar', 'dapi', 'sdk']) {
       await expect(line.locator(`[data-source="${source}"]`)).toHaveCount(1)
@@ -84,7 +84,7 @@ test.describe('Home', () => {
     await page.clock.fastForward(5 * 60_000)
     await settled(page)
     const mark = (within: string, source: string) =>
-      page.locator(`${within} [data-home-sources] [data-source="${source}"]`)
+      page.locator(`${within} [data-section-sources] [data-source="${source}"]`)
     await expect(mark('.rx-hero', 'radar')).toHaveAttribute('data-state', 'ok')
     await expect(mark('.rx-hero', 'dapi')).toHaveAttribute('data-state', 'ok')
     await expect(mark('.rx-hero', 'sdk')).toHaveAttribute('data-state', 'proof')
@@ -148,7 +148,7 @@ test.describe('Home', () => {
     await page.goto('/')
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-live-notice]')).toHaveCount(0)
-    await expect(page.locator('.rx-hero [data-home-sources] [data-source="dapi"]')).toBeVisible()
+    await expect(page.locator('.rx-hero [data-section-sources] [data-source="dapi"]')).toBeVisible()
   })
 
   test('says live updates stopped when the connection is cut, and clears once it is back @IN-15', async ({
@@ -215,7 +215,7 @@ test.describe('Home', () => {
 
     await expect(difficulty.locator('.rx-fig__value')).toHaveText('123,456,789.50')
     expect(shown).not.toBe('123,456,789.50')
-    await expect(page.locator('#core [data-home-sources] [data-source="dapi"]')).toHaveAttribute(
+    await expect(page.locator('#core [data-section-sources] [data-source="dapi"]')).toHaveAttribute(
       'data-state',
       'ok',
     )
@@ -307,7 +307,7 @@ test.describe('Home', () => {
     await page.goto('/')
     await expect(page.locator('[data-headline] .rx-fig')).toHaveCount(3)
     await expect(page.getByRole('table', { name: 'Pending transactions' })).toBeVisible()
-    const line = page.locator('#core [data-home-sources]')
+    const line = page.locator('#core [data-section-sources]')
     await expect(line.locator('[data-source="hyphen"]')).toHaveCount(1)
     await expect(line.locator('[data-source="dapi"]')).toHaveCount(1)
     await settled(page)

@@ -207,7 +207,7 @@ test.describe('Core figures first on the home page', () => {
     test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
     await page.goto('/')
     await settled(page)
-    const caption = page.locator('#platform .rx-sec__desc')
+    const caption = page.locator('#platform .rx-sec__lede')
     await expect(caption).toHaveText('Each Platform block is locked to a Core block.')
     await expect(caption).toBeVisible()
     const [c, live] = await Promise.all([

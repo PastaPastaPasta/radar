@@ -19,6 +19,7 @@ import {
   DataTable,
   Empty,
   LiveControl,
+  Section,
   LockMark,
   queryView,
   Time,
@@ -27,7 +28,7 @@ import {
   usePausedFeed,
 } from '@/ui'
 import { useCoreRows } from './core-rows'
-import { Figure, Figures, SourceRow, SourceScope, useSectionSources } from './Figure'
+import { Figure, Figures } from './Figure'
 import { atTip, pushed } from './freshness'
 import { LiveNotice } from './LiveNotice'
 import { useFrozen } from './use-frozen'
@@ -351,18 +352,20 @@ export function CoreSection() {
   const figures = useCoreFigures()
   const blocks = useCoreBlocks(paused)
   const pending = usePending(paused)
-  const { line, covered } = useSectionSources([
+  const sources = [
     ...figures.stamps,
     blocks.shown ? stampOf(blocks.shown) : undefined,
     pending.stamp,
-  ])
+  ]
   return (
-    <section className="rx-home__sec" id="core" data-layer="core" aria-labelledby="h-core">
-      <div className="rx-sec__head">
-        <h2 className="rx-sec__title" id="h-core">
-          {t`Dash Core`}
-        </h2>
-        <div className="rx-sec__actions">
+    <Section
+      className="rx-home__sec"
+      id="core"
+      layer="core"
+      title={t`Dash Core`}
+      source={sources}
+      actions={
+        <>
           <PageLink to="/charts" className="rx-go">
             {t`Charts`}
           </PageLink>
@@ -373,20 +376,18 @@ export function CoreSection() {
             pulseKey={blocks.tip.data?.data.height}
             noun={t`block updates`}
           />
-        </div>
+        </>
+      }
+    >
+      <div id="core-figures">
+        {figures.figures}
+        <StaleNote />
       </div>
-      <SourceRow line={line} />
-      <SourceScope value={covered}>
-        <div id="core-figures">
-          {figures.figures}
-          <StaleNote />
-        </div>
-        <LiveNotice lastTipAt={blocks.tip.data?.fetchedAt} />
-        <div className="rx-home__lists">
-          <BlocksCard blocks={blocks} />
-          <PendingCard pending={pending} />
-        </div>
-      </SourceScope>
-    </section>
+      <LiveNotice lastTipAt={blocks.tip.data?.fetchedAt} />
+      <div className="rx-home__lists">
+        <BlocksCard blocks={blocks} />
+        <PendingCard pending={pending} />
+      </div>
+    </Section>
   )
 }

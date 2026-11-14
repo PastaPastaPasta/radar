@@ -30,7 +30,7 @@ const section = (id: 'core' | 'platform') => document.querySelector<HTMLElement>
 
 /** The marks in a section's one source line. */
 const lineMarks = (within: string, source: string) =>
-  document.querySelectorAll(`${within} [data-home-sources] [data-source="${source}"]`)
+  document.querySelectorAll(`${within} [data-section-sources] [data-source="${source}"]`)
 
 const TESTNET_TX = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
 
@@ -81,7 +81,7 @@ describe('Home page', () => {
     }
     await waitFor(() => expect(lineMarks('.rx-hero', 'sdk')).toHaveLength(1))
     for (const scope of ['.rx-hero', '#core', '#platform']) {
-      expect(document.querySelectorAll(`${scope} [data-home-sources]`), scope).toHaveLength(1)
+      expect(document.querySelectorAll(`${scope} [data-section-sources]`), scope).toHaveLength(1)
     }
     expect(document.querySelector('.rx-home .rx-card__head [data-source]')).toBeNull()
   })
@@ -313,7 +313,7 @@ describe('Home page', () => {
     renderAt('/')
     const crawled = await waitFor(() => {
       const el = document.querySelector<HTMLTimeElement>(
-        '.rx-hero [data-home-sources] [data-source="radar"] time',
+        '.rx-hero [data-section-sources] [data-source="radar"] time',
       )
       expect(el).not.toBeNull()
       return el!
