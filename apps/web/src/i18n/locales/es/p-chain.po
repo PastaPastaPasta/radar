@@ -202,16 +202,18 @@ msgstr "La época {0} no tiene totales finalizados"
 msgid "Epoch {0} has not started"
 msgstr "La época {0} no ha empezado"
 
-#. placeholder {0}: formatInt(epoch.index)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "La época {0} va por el {1}"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "Época {0}. Evonodes: {1}. Bloques propuestos: {2}."
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "La época {number} va por el {0}"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "La época {number} se prolonga más allá de su final previsto"
 
 msgid "Epoch history"
 msgstr "Historial de épocas"

@@ -201,16 +201,18 @@ msgstr "Epoch {0} has no finalized totals"
 msgid "Epoch {0} has not started"
 msgstr "Epoch {0} has not started"
 
-#. placeholder {0}: formatInt(epoch.index)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "Epoch {0} is {1} through"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "Epoch {number} is {0} through"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "Epoch {number} is running past its expected end"
 
 msgid "Epoch history"
 msgstr "Epoch history"

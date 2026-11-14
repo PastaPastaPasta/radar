@@ -251,16 +251,18 @@ msgstr "Época"
 msgid "Epoch {0}"
 msgstr "Época {0}"
 
-#. placeholder {0}: formatInt(epoch.number)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "A época {0} está {1} concluída"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "Época {0}. Evonodes: {1}. Blocos propostos: {2}."
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "A época {number} está {0} concluída"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "A época {number} está além do fim previsto"
 
 msgid "Epochs"
 msgstr "Épocas"

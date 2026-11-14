@@ -6,13 +6,14 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
+import { staleAfterMs } from '@/data/query/stale'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarChange } from '@/data/radar/schemas'
 import { Entity, PageFrame, PageLink, useNetwork, usePageClaim } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import './changes.css'
-import { Badge, DataTable, Empty, SegFilter, Time, Unavailable } from '@/ui'
+import { Badge, DataTable, Empty, SegFilter, Time, Unavailable, useNow } from '@/ui'
 import {
   CHANGE_KINDS,
   FIELD_LABEL,
@@ -48,7 +49,13 @@ function ChangesList() {
   const available = !off && !isDevnet(net)
   const q = useQuery({ ...radarQueries.changes(net), enabled: available })
   const changes = q.data?.data.changes
-  const lastDay = q.data ? changesInLastDay(q.data.data.changes, q.data.asOf) : undefined
+  const now = useNow()
+  const lastDay = q.data
+    ? changesInLastDay(q.data.data.changes, q.data.asOf, {
+        now,
+        staleAfterMs: q.data.staleAfterMs ?? staleAfterMs('crawl'),
+      })
+    : undefined
   usePageClaim(
     lastDay === undefined
       ? undefined

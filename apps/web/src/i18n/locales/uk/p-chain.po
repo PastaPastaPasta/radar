@@ -202,16 +202,18 @@ msgstr "В епохи {0} немає завершених підсумків"
 msgid "Epoch {0} has not started"
 msgstr "Епоха {0} ще не почалася"
 
-#. placeholder {0}: formatInt(epoch.index)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "Епоху {0} пройдено на {1}"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "Епоха {0}. Евоноди: {1}. Запропоновано блоків: {2}."
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "Епоху {number} пройдено на {0}"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "Епоха {number} триває довше за очікуваний термін"
 
 msgid "Epoch history"
 msgstr "Історія епох"

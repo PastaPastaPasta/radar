@@ -37,9 +37,12 @@ export function useEpochClaim(): string | undefined {
   const { epoch, endsAt } = useEpochNow()
   const now = useNow()
   const ratio = epoch ? epochProgress(epoch.startedAt, endsAt, now) : undefined
-  return epoch && ratio !== undefined
-    ? t`Epoch ${formatInt(epoch.number)} is ${formatPercent(ratio, 0)} through`
-    : undefined
+  if (!epoch || ratio === undefined) return undefined
+  const number = formatInt(epoch.number)
+  // Rounding must not call an epoch that has not reached its expected end complete.
+  return ratio >= 1
+    ? t`Epoch ${number} is running past its expected end`
+    : t`Epoch ${number} is ${formatPercent(Math.min(ratio, 0.99), 0)} through`
 }
 
 /**

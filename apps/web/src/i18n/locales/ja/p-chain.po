@@ -202,16 +202,18 @@ msgstr "エポック {0} には確定した合計がありません"
 msgid "Epoch {0} has not started"
 msgstr "エポック {0} はまだ始まっていません"
 
-#. placeholder {0}: formatInt(epoch.index)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "エポック {0} は {1} 経過"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "エポック {0}。Evonode: {1}。提案されたブロック: {2}。"
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "エポック {number} は {0} 経過"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "エポック {number} は終了予定を過ぎています"
 
 msgid "Epoch history"
 msgstr "エポックの履歴"

@@ -89,12 +89,15 @@ const DAY_MS = 86_400_000
 
 /**
  * How many of the listed changes fall in the 24 hours before `asOf`. Undefined when the list (the latest changes,
- * capped) does not reach back that far: the count would then be a floor, not the figure.
+ * capped) does not reach back that far: the count would then be a floor, not the figure. Also undefined when the
+ * list is older than `staleAfterMs` at `now`: its 24 hours would then end well before today's.
  */
 export function changesInLastDay(
   changes: readonly Pick<RadarChange, 'ts'>[],
   asOf: number,
+  freshness?: { now: number; staleAfterMs: number },
 ): number | undefined {
+  if (freshness && freshness.now - asOf > freshness.staleAfterMs) return undefined
   const from = asOf - DAY_MS
   if (!changes.some((c) => c.ts < from)) return undefined
   return changes.filter((c) => c.ts >= from && c.ts <= asOf).length
