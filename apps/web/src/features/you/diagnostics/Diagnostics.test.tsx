@@ -44,6 +44,18 @@ afterEach(() => {
 const bodyRows = (table: HTMLElement) => within(table).getAllByRole('row').slice(1)
 
 describe('Diagnostics @NX-62', () => {
+  it('labels every cell, so a lone dash on a phone says what it is a dash for @W2-54', async () => {
+    await renderInApp(<Diagnostics />)
+    act(() => {
+      openDiagnostics()
+    })
+    const table = await screen.findByRole('table', { name: 'Requests this tab made, newest first' })
+    const proxied = bodyRows(table)[0]!
+    expect(within(proxied).getByText('Node:')).toBeInTheDocument()
+    expect(within(proxied).getByText('Proof-checked:')).toBeInTheDocument()
+    expect(proxied.querySelectorAll('td[data-label]')).toHaveLength(8)
+  })
+
   it('lists the requests newest first with source, result, time taken, node and proof', async () => {
     await renderInApp(<Diagnostics />)
     act(() => {
