@@ -161,6 +161,10 @@ function TxView({
     0n,
   )
   const payload = tx.payload
+  const locked =
+    payload?.kind === 'assetLockTx' && typeof payload.totalCredit === 'bigint'
+      ? payload.totalCredit
+      : undefined
   const info = usePayloadInfo(typeof payload?.kind === 'string' ? payload.kind : undefined)
   const feeStamp: SourceStamp | undefined =
     sums.fee !== undefined
@@ -333,9 +337,11 @@ function TxView({
             note={
               coinbase
                 ? t`Block reward, masternode and fee payments`
-                : senders.size > 0
-                  ? t`${formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })} to other addresses`
-                  : undefined
+                : locked !== undefined
+                  ? t`${formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })} locked into Platform credits`
+                  : senders.size > 0
+                    ? t`${formatAmountText(toOthers, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })} to other addresses`
+                    : undefined
             }
           />
           <Stat

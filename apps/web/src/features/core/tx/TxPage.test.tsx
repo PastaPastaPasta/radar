@@ -188,6 +188,24 @@ describe('Transaction page', () => {
     expect(el).toHaveTextContent('Signing quorum')
   })
 
+  it('links an asset unlock to the withdrawal document it pays out, from the SDK @W2-19 @X-02', async () => {
+    const el = await payload(`/tx/${MAINNET.assetunlock}`, 'assetUnlockTx')
+    const link = await within(el).findByRole('link', { name: 'Withdrawal document' })
+    expect(link).toHaveAttribute(
+      'href',
+      expect.stringContaining(
+        '/document/4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6/withdrawal/9DsCVJh1fB6yokc8JaxnBQrVjUcxhrkaFoFzXdxsJLg4',
+      ),
+    )
+  })
+
+  it('says an asset lock moved DASH into Platform credits, not to other addresses @W2-19 @X-02', async () => {
+    await payload(`/tx/${MAINNET.assetlock}`, 'assetLockTx')
+    const moved = screen.getByText('Moved').closest('.rx-stat')!
+    await waitFor(() => expect(moved).toHaveTextContent('locked into Platform credits'))
+    expect(moved).not.toHaveTextContent('to other addresses')
+  })
+
   it('renders a hard-fork signal on testnet @IN-05 @HY-07 @IN-16', async () => {
     const el = await payload(`/tx/${MNHF}?network=testnet`, 'mnhfTx')
     expect(el).toHaveTextContent('Version bit')

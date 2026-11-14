@@ -4,6 +4,7 @@ import { Entity, IdentityRef, PageLink } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Amount, Hash, KeyValue } from '@/ui'
 import { useFundedIdentities } from './funded-identity'
+import { useWithdrawalDocument } from './withdrawal-document'
 import { REVOKE_REASONS } from './revoke-reason'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 
@@ -347,6 +348,7 @@ function AssetUnlockRows({ p }: { p: Obj }) {
   const { t } = useLingui()
   const fee = big(p.fee)
   const height = num(p.requestHeight)
+  const withdrawal = useWithdrawalDocument(num(p.index))
   return (
     <KeyValue
       columns={2}
@@ -359,14 +361,28 @@ function AssetUnlockRows({ p }: { p: Obj }) {
         },
         {
           label: t`On Platform`,
-          value: (
-            <PageLink
-              to="/platform/txs"
-              search={{ type: 'identity-credit-withdrawal,address-credit-withdrawal' }}
-            >
-              {t`Withdrawals on Platform`}
-            </PageLink>
+          value: withdrawal.document ? (
+            <Entity
+              kind="document"
+              id={`${withdrawal.contractId}/withdrawal/${withdrawal.document.id}`}
+              label={t`Withdrawal document`}
+            />
+          ) : (
+            <>
+              {withdrawal.pending
+                ? '…'
+                : withdrawal.failed
+                  ? t`Could not look up the withdrawal document right now.`
+                  : t`Platform holds no completed or broadcast withdrawal with this index.`}{' '}
+              <PageLink
+                to="/platform/txs"
+                search={{ type: 'identity-credit-withdrawal,address-credit-withdrawal' }}
+              >
+                {t`Withdrawals on Platform`}
+              </PageLink>
+            </>
           ),
+          ...(withdrawal.source ? { source: stampOf(withdrawal.source) } : {}),
         },
         { label: t`Signing quorum`, value: fullHash(p.quorumHash) },
         { label: t`Quorum signature`, value: hashValue(p.quorumSig) },
