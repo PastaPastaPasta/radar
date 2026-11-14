@@ -4,6 +4,7 @@ import { dirname, join, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { format, resolveConfig } from 'prettier'
+import { rangeQuery, rangeWindow } from '../apps/web/src/data/pe/params.ts'
 import { slugOf } from '../apps/web/src/test/fixtures/slug.ts'
 
 const execFileAsync = promisify(execFile)
@@ -332,7 +333,8 @@ async function recordRadar() {
   await record('radar', `/masternodes/${entities.radar.missingProtx}`, { optional: true })
 }
 
-const PE_TIMEFRAME = 'timeframe=24h'
+const window_ = (range, query = rangeQuery) => new URLSearchParams(query(range)).toString()
+const PE_TIMEFRAME = window_('24h')
 
 async function recordPe() {
   console.log(`pe (${net})`)
@@ -358,7 +360,7 @@ async function recordPe() {
     `/transactions/history?${PE_TIMEFRAME}`,
     `/identities/history?${PE_TIMEFRAME}`,
     '/transactions/statistic',
-    `/transactions/shielded/statistic?${PE_TIMEFRAME}`,
+    `/transactions/shielded/statistic?${window_('24h', rangeWindow)}`,
     `/transactions/shield/history?${PE_TIMEFRAME}`,
     `/transactions/unshield/history?${PE_TIMEFRAME}`,
     '/transactions/shielded/pool',

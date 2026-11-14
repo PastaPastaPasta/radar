@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/validator/5c6542766615387183715d958a925552472f93335fa1612880423e4bbdaef436/stats?timestamp_start=2026-11-07T22%3A30%3A00.000Z&timestamp_end=2026-11-14T22%3A30%3A00.000Z&intervalsCount=7"
+  },
+  "recordedAt": "2026-11-14T22:32:43.072Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": [
+    { "timestamp": "2026-11-07T22:30:00.000Z", "data": { "blocksCount": 23 } },
+    { "timestamp": "2026-11-08T22:30:00.000Z", "data": { "blocksCount": 21 } },
+    { "timestamp": "2026-11-09T22:30:00.000Z", "data": { "blocksCount": 79 } },
+    { "timestamp": "2026-11-10T22:30:00.000Z", "data": { "blocksCount": 74 } },
+    { "timestamp": "2026-11-11T22:30:00.000Z", "data": { "blocksCount": 35 } },
+    { "timestamp": "2026-11-12T22:30:00.000Z", "data": { "blocksCount": 26 } },
+    { "timestamp": "2026-11-13T22:30:00.000Z", "data": { "blocksCount": 70 } }
+  ]
+}

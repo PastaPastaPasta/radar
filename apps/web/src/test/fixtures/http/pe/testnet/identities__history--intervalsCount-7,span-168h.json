@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/identities/history?timestamp_start=2026-11-07T22%3A30%3A00.000Z&timestamp_end=2026-11-14T22%3A30%3A00.000Z&intervalsCount=7"
+  },
+  "recordedAt": "2026-11-14T22:32:40.551Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": [
+    { "timestamp": "2026-11-07T22:30:00.000Z", "data": { "registeredIdentities": 8889 } },
+    { "timestamp": "2026-11-08T22:30:00.000Z", "data": { "registeredIdentities": 8895 } },
+    { "timestamp": "2026-11-09T22:30:00.000Z", "data": { "registeredIdentities": 8900 } },
+    { "timestamp": "2026-11-10T22:30:00.000Z", "data": { "registeredIdentities": 8945 } },
+    { "timestamp": "2026-11-11T22:30:00.000Z", "data": { "registeredIdentities": 8963 } },
+    { "timestamp": "2026-11-12T22:30:00.000Z", "data": { "registeredIdentities": 8974 } },
+    { "timestamp": "2026-11-13T22:30:00.000Z", "data": { "registeredIdentities": 9004 } }
+  ]
+}

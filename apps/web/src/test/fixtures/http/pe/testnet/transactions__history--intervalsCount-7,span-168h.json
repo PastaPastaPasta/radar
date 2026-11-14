@@ -1,0 +1,67 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/transactions/history?timestamp_start=2026-11-07T22%3A30%3A00.000Z&timestamp_end=2026-11-14T22%3A30%3A00.000Z&intervalsCount=7"
+  },
+  "recordedAt": "2026-11-14T22:32:39.920Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": [
+    {
+      "timestamp": "2026-11-07T22:30:00.000Z",
+      "data": {
+        "txs": 455,
+        "blockHeight": 663641,
+        "blockHash": "51ACC2F31793749FCCD176CAA4869158405EE5933C6067B289955F503A293E95"
+      }
+    },
+    {
+      "timestamp": "2026-11-08T22:30:00.000Z",
+      "data": {
+        "txs": 378,
+        "blockHeight": 664726,
+        "blockHash": "6755533E1D6A91D50D0AC60349DD261F348575042F1BEB6FBCBA388CCFB4BC84"
+      }
+    },
+    {
+      "timestamp": "2026-11-09T22:30:00.000Z",
+      "data": {
+        "txs": 1787,
+        "blockHeight": 665750,
+        "blockHash": "C06F03B2022AE0AED2CD95A290E4B732A7583B996A3C58948913B1B980575CA7"
+      }
+    },
+    {
+      "timestamp": "2026-11-10T22:30:00.000Z",
+      "data": {
+        "txs": 2332,
+        "blockHeight": 668524,
+        "blockHash": "F2F3361D3DAF5419D85110416533C64DBE330A395E580AF1A394744720EAEB29"
+      }
+    },
+    {
+      "timestamp": "2026-11-11T22:30:00.000Z",
+      "data": {
+        "txs": 656,
+        "blockHeight": 671922,
+        "blockHash": "2709E976A322C23C98FDEA7D5312458E981A2C88C508BC7331C8E8E88A4D394F"
+      }
+    },
+    {
+      "timestamp": "2026-11-12T22:30:00.000Z",
+      "data": {
+        "txs": 692,
+        "blockHeight": 673229,
+        "blockHash": "50A192062398A6B0F3DA9A07C244E33F37025CADDFD877B46EB0D9DE7C664DFD"
+      }
+    },
+    {
+      "timestamp": "2026-11-13T22:30:00.000Z",
+      "data": {
+        "txs": 1914,
+        "blockHeight": 674580,
+        "blockHash": "6D5A6D519B4BFC4D343BDB914F223D3B539ED4FD56AF63FD1247BDF3773D5B5C"
+      }
+    }
+  ]
+}

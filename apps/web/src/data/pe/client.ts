@@ -74,7 +74,7 @@ import {
   type PeVerify,
   type PeVote,
 } from './schemas'
-import { contestedResourceKey, type PeQuery, type PeTimeframe } from './params'
+import { contestedResourceKey, rangeQuery, rangeWindow, type PeQuery, type PeTimeframe } from './params'
 
 function search(params: PeQuery | undefined): string {
   if (!params) return ''
@@ -334,7 +334,7 @@ export const pe = {
   ) {
     return get(
       net,
-      `/validator/${seg(proTxHash)}/stats${search({ timeframe })}`,
+      `/validator/${seg(proTxHash)}/stats${search(rangeQuery(timeframe))}`,
       peSeries(PeBlocksCountPointSchema),
       signal,
     )
@@ -348,7 +348,7 @@ export const pe = {
   ) {
     return get(
       net,
-      `/validator/${seg(proTxHash)}/rewards/stats${search({ timeframe })}`,
+      `/validator/${seg(proTxHash)}/rewards/stats${search(rangeQuery(timeframe))}`,
       peSeries(PeRewardPointSchema),
       signal,
     )
@@ -572,7 +572,7 @@ export const pe = {
   ) {
     return get(
       net,
-      `/transactions/history${search({ timeframe, intervalsCount })}`,
+      `/transactions/history${search(rangeQuery(timeframe, undefined, intervalsCount))}`,
       peSeries(PeTxHistoryPointSchema),
       signal,
     )
@@ -581,7 +581,7 @@ export const pe = {
   gasHistory(net: NetworkId, timeframe: PeTimeframe, signal?: AbortSignal) {
     return get(
       net,
-      `/transactions/gas/history${search({ timeframe })}`,
+      `/transactions/gas/history${search(rangeQuery(timeframe))}`,
       peSeries(PeGasHistoryPointSchema),
       signal,
     )
@@ -590,7 +590,7 @@ export const pe = {
   identitiesHistory(net: NetworkId, timeframe: PeTimeframe, signal?: AbortSignal) {
     return get(
       net,
-      `/identities/history${search({ timeframe })}`,
+      `/identities/history${search(rangeQuery(timeframe))}`,
       peSeries(PeIdentityHistoryPointSchema),
       signal,
     )
@@ -620,7 +620,7 @@ export const pe = {
   ): Promise<Sourced<PeShieldedStatistic>> {
     return get(
       net,
-      `/transactions/shielded/statistic${search({ timeframe })}`,
+      `/transactions/shielded/statistic${search(rangeWindow(timeframe))}`,
       PeShieldedStatisticSchema,
       signal,
     )
@@ -633,7 +633,7 @@ export const pe = {
   shieldHistory(net: NetworkId, timeframe: PeTimeframe, signal?: AbortSignal) {
     return get(
       net,
-      `/transactions/shield/history${search({ timeframe })}`,
+      `/transactions/shield/history${search(rangeQuery(timeframe))}`,
       peSeries(PeShieldHistoryPointSchema),
       signal,
     )
@@ -642,7 +642,7 @@ export const pe = {
   unshieldHistory(net: NetworkId, timeframe: PeTimeframe, signal?: AbortSignal) {
     return get(
       net,
-      `/transactions/unshield/history${search({ timeframe })}`,
+      `/transactions/unshield/history${search(rangeQuery(timeframe))}`,
       peSeries(PeShieldHistoryPointSchema),
       signal,
     )

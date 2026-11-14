@@ -6,18 +6,14 @@ import { useMemo } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import { useNetwork } from '@/features/entity'
-import { formatDate, formatNumber } from '@/lib/format'
+import { formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, Chart, Empty, SegFilter, Unavailable, queryView, stampsOf } from '@/ui'
+import { bucketLabel, HOME_RANGES, type HomeRange } from '../home/chart-options'
 import { poolSeries } from './pool-series'
 
-const RANGES = ['24h', '3d', '1w', '1m'] as const
-type Range = (typeof RANGES)[number]
-
-const label = (ms: number, range: Range): string =>
-  range === '24h'
-    ? formatDate(ms, { date: false, zone: false })
-    : formatDate(ms, { time: range === '3d', year: false, zone: false })
+const RANGES = HOME_RANGES
+type Range = HomeRange
 
 /** The index's shield and unshield history: the complement to the proved state above, behind Platform Explorer. */
 export function ShieldedChart({ range }: { range: Range }) {
@@ -38,7 +34,7 @@ export function ShieldedChart({ range }: { range: Range }) {
     () => ({
       tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
       grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
-      xAxis: { type: 'category', data: pool.times.map((ms) => label(ms, range)) },
+      xAxis: { type: 'category', data: pool.times.map((ms) => bucketLabel(ms, range)) },
       yAxis: {
         type: 'value',
         axisLabel: { formatter: (v: number) => formatNumber(v, { notation: 'compact' }) },
@@ -105,7 +101,7 @@ export function ShieldedChart({ range }: { range: Range }) {
               table={{
                 columns: [t`Time`, t`Shielded`, t`Unshielded`],
                 rows: pool.times.map((ms, i) => [
-                  label(ms, range),
+                  bucketLabel(ms, range),
                   dashText(pool.shielded[i] ?? 0),
                   dashText(pool.unshielded[i] ?? 0),
                 ]),
