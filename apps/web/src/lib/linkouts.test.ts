@@ -16,6 +16,18 @@ describe('linkOutUrl', () => {
     )
   })
 
+  it('opens the landing page of Bridge and of Governance for the network', () => {
+    expect(linkOutUrl({ app: 'gov', action: 'landing', net: 'mainnet' })).toBe(
+      'https://gov.dashhq.org/',
+    )
+    expect(linkOutUrl({ app: 'gov', action: 'landing', net: 'testnet' })).toBe(
+      'https://gov.dashhq.org/?network=testnet',
+    )
+    expect(linkOutUrl({ app: 'bridge', action: 'landing', net: 'mainnet' })).toBe(
+      'https://bridge.dashhq.org/?network=mainnet',
+    )
+  })
+
   it('opens the contested name in Governance and escapes the label', () => {
     expect(linkOutUrl({ app: 'gov', action: 'contest-vote', label: 'a b/c', net: 'mainnet' })).toBe(
       'https://gov.dashhq.org/names/a%20b%2Fc',
