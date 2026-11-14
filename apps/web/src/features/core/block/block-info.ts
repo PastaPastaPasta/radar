@@ -1,5 +1,5 @@
 import type { DecodedBlock, DecodedTx } from '@/data/core/types'
-import { coinbaseTagOf, poolOfCoinbase } from '@/lib/core/pools'
+import { poolOfCoinbase } from '@/lib/core/pools'
 
 /**
  * Difficulty from the compact target, the way Dash Core prints it: the target a difficulty-1 block
@@ -22,8 +22,27 @@ export function difficultyFromBits(bitsHex: string): number {
   return diff
 }
 
+/**
+ * The readable text in a coinbase script. The script also carries the height push, extra-nonce
+ * bytes and a signature, so only runs of printable ASCII that look like words are kept.
+ */
 export function coinbaseTag(coinbase: DecodedTx | undefined): string {
-  return coinbaseTagOf(coinbase?.inputs[0]?.coinbase)
+  const hex = coinbase?.inputs[0]?.coinbase
+  if (!hex) return ''
+  const bytes = hex.match(/../g) ?? []
+  const push = parseInt(bytes[0] ?? '', 16)
+  const text = bytes
+    .slice(push >= 1 && push <= 8 ? push + 1 : 0)
+    .map((h) => {
+      const code = parseInt(h, 16)
+      return code >= 0x20 && code <= 0x7e ? String.fromCharCode(code) : '\n'
+    })
+    .join('')
+  return text
+    .split('\n')
+    .map((run) => run.trim())
+    .filter((run) => (run.match(/[A-Za-z]/g)?.length ?? 0) >= 4)
+    .join(' ')
 }
 
 /** The pool named in the coinbase script, or undefined when the script carries no known tag. */

@@ -3,6 +3,35 @@ import { loadDapiManifest } from '@/test/fixtures/dapi-load'
 import { fixtureCore } from '@/test/core-client'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 
+const hex = (bytes: number[]) => bytes.map((b) => b.toString(16).padStart(2, '0')).join('')
+const ascii = (s: string) => Array.from(s, (c) => c.charCodeAt(0))
+const coinbaseWith = (script: string) =>
+  ({ inputs: [{ coinbase: script }] }) as unknown as Parameters<typeof coinbaseTag>[0]
+
+describe('coinbaseTag', () => {
+  it('keeps the words and drops the height push, extra nonce and signature bytes @IN-03', () => {
+    const script = hex([
+      0x03,
+      0x37,
+      0x27,
+      0x27,
+      ...ascii('/ViaBTC/Mined by dash'),
+      0x00,
+      0x2d,
+      0x64,
+      0x9f,
+      0x20,
+      0x79,
+    ])
+    expect(coinbaseTag(coinbaseWith(script))).toBe('/ViaBTC/Mined by dash')
+  })
+
+  it('is empty when the script carries no words', () => {
+    expect(coinbaseTag(coinbaseWith(hex([0x03, 0x01, 0x02, 0x03, 0x00])))).toBe('')
+    expect(coinbaseTag(undefined)).toBe('')
+  })
+})
+
 describe('difficultyFromBits', () => {
   it('reads the compact target like Dash Core', () => {
     expect(difficultyFromBits('1d00ffff')).toBe(1)
