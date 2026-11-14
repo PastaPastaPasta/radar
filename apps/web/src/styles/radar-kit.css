@@ -91,7 +91,10 @@
 .rx-hc--pop {
   position: relative;
   z-index: 45;
-  transform-origin: var(--radix-hover-card-content-transform-origin);
+  transform-origin: var(
+    --radix-hover-card-content-transform-origin,
+    var(--radix-popover-content-transform-origin)
+  );
 }
 .rx-hc__inner {
   display: block;
