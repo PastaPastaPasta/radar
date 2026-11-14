@@ -4,6 +4,7 @@ import { useNetwork } from '@/features/entity'
 import { denomination, getUnitPrefs, subscribeUnitPrefs } from '@/lib/units'
 import { UnitsProvider } from '@/ui/base'
 import { deferred } from '@/ui/deferred'
+import { DevnetWatch } from './devnet-watch'
 import type { FiatRateValue } from './fiat-rate'
 
 const FiatRate = deferred(() => import('./fiat-rate').then((m) => m.default))
@@ -33,6 +34,7 @@ export function UnitsMount({ children }: { children: ReactNode }) {
     >
       {wantsFiat ? <FiatRate onRate={setRate} /> : null}
       {children}
+      <DevnetWatch />
     </UnitsProvider>
   )
 }
