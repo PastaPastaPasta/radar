@@ -86,6 +86,10 @@ test.describe('The map', () => {
       'the controls’ share of the map',
     ).toBeLessThan(1 / 3)
     expect(box.width / map.width, 'the controls’ share of its width').toBeLessThan(0.3)
+    expect(
+      Math.abs(box.x - heading.x),
+      'the controls start on the page’s left edge',
+    ).toBeLessThanOrEqual(2)
   })
 
   test('draws the masternodes as clusters coloured by reachability and counts them in the headline @RA-50', async ({

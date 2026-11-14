@@ -26,7 +26,7 @@ import './map.css'
 
 const MapView = deferred(() => import('./MapView').then((m) => m.default))
 
-/** The control panel's width at its widest, and the gap round it: the map's fit leaves this much of its left clear. */
+/** Before the panel is measured: how much of the map's left the control panel covers, with the gap round it. */
 const PANEL_WIDTH = 388 + 24
 
 const ATTRIBUTION = 'Basemap © Natural Earth · Geolocation by DB-IP (CC BY 4.0)'
@@ -186,6 +186,20 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
     }
   }, [crawl])
 
+  const [covered, setCovered] = useState(PANEL_WIDTH)
+  useLayoutEffect(() => {
+    const el = panel.current
+    if (!crawl || phone || !el) return
+    const measure = () => {
+      setCovered(el.offsetLeft + el.offsetWidth + 12)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => {
+      window.removeEventListener('resize', measure)
+    }
+  }, [crawl, phone])
+
   const reduced = useReducedMotion()
 
   const select = (protx: string | undefined) => {
@@ -270,7 +284,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
         selectedAt={selectedAt}
         popup={selected ? <NodeCard row={selected} tip={tip} /> : null}
         inlineDetail={phone}
-        coverLeft={crawl && !phone ? PANEL_WIDTH : 0}
+        coverLeft={crawl && !phone ? covered : 0}
         fitKey={`${net}:${layer}:${points.length > 0 || (geo?.points.length ?? 0) > 0}`}
         texts={texts}
         onSelect={select}

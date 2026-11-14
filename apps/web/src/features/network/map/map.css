@@ -35,9 +35,10 @@
 .rx-map-panel {
   position: absolute;
   z-index: 2;
-  top: 12px;
-  left: 12px;
-  max-height: calc(100% - 24px);
+  top: 16px;
+  /* on the page's own left edge where the window is wider than the column, a 12px gap where it is not */
+  left: max(12px, calc((100% - var(--dh-max)) / 2 + var(--dh-gutter)));
+  max-height: calc(100% - 32px);
   width: clamp(300px, 27vw, 388px);
   display: flex;
   flex-direction: column;
