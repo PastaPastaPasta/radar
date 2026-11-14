@@ -1,7 +1,13 @@
-import { describe, expect, it, vi } from 'vitest'
-import { openDiagnosticsDrawer, registerDiagnosticsOpener } from './diagnostics'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { openDiagnosticsDrawer, registerDiagnosticsOpener, REQUEST_TTL_MS } from './diagnostics'
 
 describe('diagnostics opener', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    window.history.replaceState(null, '', '/')
+    registerDiagnosticsOpener(undefined)
+  })
+
   it('opens through the opener the You features register, and not after it unregisters', () => {
     const open = vi.fn()
     const unregister = registerDiagnosticsOpener(open)
@@ -36,5 +42,22 @@ describe('diagnostics opener', () => {
     openDiagnosticsDrawer()
     expect(second).toHaveBeenCalledTimes(1)
     unregisterSecond()
+  })
+  it('drops a click that waited past the limit', () => {
+    vi.useFakeTimers()
+    openDiagnosticsDrawer()
+    vi.advanceTimersByTime(REQUEST_TTL_MS + 1)
+    const open = vi.fn()
+    registerDiagnosticsOpener(open)
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('drops a click when the reader has navigated away before the features registered', () => {
+    window.history.replaceState(null, '', '/status')
+    openDiagnosticsDrawer()
+    window.history.pushState(null, '', '/blocks')
+    const open = vi.fn()
+    registerDiagnosticsOpener(open)
+    expect(open).not.toHaveBeenCalled()
   })
 })
