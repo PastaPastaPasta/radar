@@ -63,10 +63,13 @@ describe('useEpochOf', () => {
       proved: true,
       data: { index: 90, firstBlockHeight: 900, firstBlockTimeMs: 1 },
     })
-    client.getQueryCache().find({ queryKey: key })?.setState({
-      status: 'error',
-      error: new SourceError({ source: 'sdk', kind: 'network', message: 'refresh failed' }),
-    })
+    client
+      .getQueryCache()
+      .find({ queryKey: key })
+      ?.setState({
+        status: 'error',
+        error: new SourceError({ source: 'sdk', kind: 'network', message: 'refresh failed' }),
+      })
     function Probe() {
       const { epochOf, missing } = useEpochOf()
       return <p data-testid="probe">{missing ? 'missing' : epochOf ? 'known' : 'waiting'}</p>

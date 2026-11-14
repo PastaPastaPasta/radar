@@ -152,7 +152,11 @@ describe('fan-out', () => {
       vi
         .spyOn(sdk, 'call')
         .mockRejectedValue(
-          new SourceError({ source: 'sdk', kind: 'unavailable', message: 'The SDK is unreachable' }),
+          new SourceError({
+            source: 'sdk',
+            kind: 'unavailable',
+            message: 'The SDK is unreachable',
+          }),
         )
     const results = () => screen.getByRole('region', { name: 'Results' })
     const settled = () => waitFor(() => expect(results()).not.toHaveAttribute('aria-busy', 'true'))

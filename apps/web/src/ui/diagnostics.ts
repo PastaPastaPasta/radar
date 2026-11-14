@@ -4,7 +4,8 @@ let requested: { at: number; where: string } | undefined
 /** How long a click waits for the You features before it is let go. */
 export const REQUEST_TTL_MS = 10_000
 
-const here = (): string => `${globalThis.location?.pathname ?? ''}${globalThis.location?.search ?? ''}`
+const here = (): string =>
+  `${globalThis.location?.pathname ?? ''}${globalThis.location?.search ?? ''}`
 
 /**
  * The You features register how to open the diagnostics drawer; a page outside them (the status page) opens it
