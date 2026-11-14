@@ -1,19 +1,12 @@
 import { t } from '@lingui/core/macro'
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useId,
-  useState,
-  type ReactNode,
-} from 'react'
+import { Children, cloneElement, isValidElement, useId, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { formatNumber, MINUS, UNIT_GAP } from '@/lib/format'
 import { cx, cssVars, layerAttr } from './cx'
 import { useChanged } from './hooks'
 import { SourceLine, Skeleton } from './states'
-import { sourceKey, useCoveredSource } from './source-scope'
+import { useInSourceSection, useLeadSources, useSectionSource } from './section-source'
+import { useCoveredSource } from './source-scope'
 import type { Layer, Tone } from './types'
 
 export interface MeterProps {
@@ -238,15 +231,18 @@ export function Stat({
   tone = 'neutral',
 }: StatProps) {
   const labelId = useId()
+  const inSection = useSectionSource(source)
   const covered = useCoveredSource(source)
   const Tag = href ? 'a' : 'div'
+  // A link cannot hold the button that opens a proof, so a linked figure's mark only names its source.
+  const mark = source ? (
+    <SourceLine stamp={href ? { ...source, proof: undefined } : source} compact />
+  ) : null
   const body = (
     <>
       <span className="rx-stat__label" id={labelId}>
         {label}
-        {source && !covered ? (
-          <SourceLine stamp={href ? { ...source, proof: undefined } : source} compact />
-        ) : null}
+        {inSection || covered ? null : mark}
       </span>
       {loading ? (
         <Skeleton shape="stat" />
@@ -282,6 +278,7 @@ export function Stat({
           ) : null}
         </>
       )}
+      {inSection && mark ? <span className="rx-fig__src">{mark}</span> : null}
     </>
   )
   return (
@@ -293,6 +290,7 @@ export function Stat({
       )}
       data-layer={layerAttr(layer)}
       data-tone={tone}
+      data-src-hover={inSection && mark ? '' : undefined}
       aria-busy={loading ? true : undefined}
       {...(href ? { href } : {})}
     >
@@ -301,72 +299,10 @@ export function Stat({
   )
 }
 
-/** A figure with no height of its own, read this much earlier than its group's first, shows its own age instead of borrowing the group's. */
-const SAME_READ_MS = 30_000
-
-/** How long a figure may trail the newest height of its source before it says so: its refetch is usually still in flight. */
-export const BEHIND_GRACE_MS = 8_000
-
-/** The ids in `ids` that have stayed in it for `ms`, and none that left it since. */
-function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
-  const key = ids.join('\n')
-  const [state, setState] = useState<{ key: string; held: ReadonlySet<string> }>({
-    key,
-    held: new Set(),
-  })
-  if (state.key !== key) {
-    const current = new Set(ids)
-    setState({ key, held: new Set([...state.held].filter((id) => current.has(id))) })
-  }
-  useEffect(() => {
-    const timers = key
-      ? key
-          .split('\n')
-          .map((id) =>
-            setTimeout(() => setState((s) => ({ ...s, held: new Set(s.held).add(id) })), ms),
-          )
-      : []
-    return () => timers.forEach(clearTimeout)
-  }, [key, ms])
-  return state.held
-}
-
-/**
- * Which of a group's figures speak for their source, by position. The first figure of each source does; a later one is
- * read as part of the same group and stays quiet. A figure whose source height is below the newest height of its source
- * in the group speaks for itself once it has trailed for a grace period, so a figure that stopped refreshing can't hide
- * behind one that is current. Fetch times play no part for figures that carry a height: a republish of the same tip says
- * nothing about whether the other reads are current. Figures without a height fall back to comparing read times.
- */
-export function useLeadSources(sources: readonly (SourceStamp | undefined)[]): boolean[] {
-  const newest = new Map<string, number>()
-  for (const source of sources) {
-    if (source?.height === undefined) continue
-    const key = sourceKey(source)
-    newest.set(key, Math.max(newest.get(key) ?? -1, source.height))
-  }
-  const trailing = sources.flatMap((source, i) =>
-    source?.height !== undefined && source.height < (newest.get(sourceKey(source)) ?? -1)
-      ? [String(i)]
-      : [],
-  )
-  const behind = useSustained(trailing, BEHIND_GRACE_MS)
-  const seen = new Map<string, number>()
-  return sources.map((source, i) => {
-    if (!source) return false
-    const key = sourceKey(source)
-    const first = seen.get(key)
-    if (first === undefined) {
-      seen.set(key, source.asOf)
-      return true
-    }
-    return source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(String(i))
-  })
-}
-
 /**
  * A row of stats. When several share a source, only the first carries its badge, so a card of four figures from two
- * sources shows two badges, not four; `useLeadSources` says which later ones keep their own.
+ * sources shows two badges, not four; `useLeadSources` says which later ones keep their own. Inside a section that
+ * names its sources once, every figure keeps its stamp for the mark it shows on hover and focus.
  */
 export function Stats({ children, ...rest }: { children: ReactNode } & Record<string, unknown>) {
   const items = Children.toArray(children)
@@ -374,8 +310,9 @@ export function Stats({ children, ...rest }: { children: ReactNode } & Record<st
     isValidElement<StatProps>(child) && child.type === Stat ? child.props.source : undefined,
   )
   const lead = useLeadSources(sources)
+  const inSection = useInSourceSection()
   const stats = items.map((child, i) =>
-    sources[i] && !lead[i] && isValidElement<StatProps>(child)
+    !inSection && sources[i] && !lead[i] && isValidElement<StatProps>(child)
       ? cloneElement(child, { source: undefined })
       : child,
   )

@@ -25,6 +25,7 @@ import { formatInt } from '@/lib/format'
 import { announce } from './announce'
 import { cx } from './cx'
 import { Icon } from './icon'
+import { stampsOfInput, useSectionSource } from './section-source'
 import { AmountDensity } from './units-context'
 import { Empty, ErrorState, SourceLine } from './states'
 import type { LoadState } from './types'
@@ -541,8 +542,9 @@ export function DataTable<Row>({
     )
   }
 
-  const stamps = source === undefined ? [] : Array.isArray(source) ? source : [source]
-  const showFoot = stamps.length > 0 || paging !== undefined || (rowLink !== undefined && isReady)
+  const all = stampsOfInput(source)
+  const stamps = useSectionSource(all) ? [] : all
+  const showFoot = stamps.length > 0 || (paging !== undefined && isReady)
 
   return (
     <AmountDensity value="table">
@@ -583,15 +585,15 @@ export function DataTable<Row>({
             {body}
           </table>
         </div>
+        {rowLink && isReady ? (
+          <span className="rx-tkeys" aria-hidden="true">
+            <kbd>j</kbd>
+            <kbd>k</kbd> {t`move`} <kbd>↵</kbd> {t`open`}
+          </span>
+        ) : null}
       </div>
       {showFoot ? (
         <div className="rx-tfoot">
-          {rowLink && isReady ? (
-            <span className="rx-keys rx-hide-sm">
-              <kbd>j</kbd>
-              <kbd>k</kbd> {t`move`} <kbd>↵</kbd> {t`open`}
-            </span>
-          ) : null}
           {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}
           {paging && isReady ? <Pager paging={paging} shown={modelRows.length} /> : null}
         </div>

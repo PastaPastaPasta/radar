@@ -1,6 +1,6 @@
 import { deferred } from './deferred'
-export { Card, SectionBand, KeyValue } from './layout'
-export type { CardProps, SectionBandProps, KeyValueProps } from './layout'
+export { Card, Section, SectionBand, SectionSources, SourceSection, KeyValue } from './layout'
+export type { CardProps, SectionProps, SectionBandProps, KeyValueProps } from './layout'
 export { QueryView } from './query-view'
 export type { QueryViewProps } from './query-view'
 export { queryView, stampsOf, useAfterIdle } from './query-state'

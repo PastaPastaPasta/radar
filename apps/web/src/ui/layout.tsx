@@ -1,20 +1,25 @@
 import { t } from '@lingui/core/macro'
-import { useMemo, type ReactNode } from 'react'
+import { useId, useMemo, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { useAllSourceHealth } from '@/data/health'
 import { clampSkew, formatRelative } from '@/lib/format'
 import { announce } from './announce'
-import { LayerTile } from './art'
 import { copyText } from './clipboard'
 import { cx, layerAttr } from './cx'
 import { Icon } from './icon'
 import { useNow } from './hooks'
 import { sourceName } from './source-labels'
+import {
+  SourceSectionProvider,
+  stampsOfInput,
+  useSectionLine,
+  useSectionSource,
+  useSourceCollector,
+  type SourceInput,
+} from './section-source'
 import { SourceScope, sourceKey, useCovered, useCoveredSource } from './source-scope'
 import { Empty, ErrorState, Skeleton, SourceLine } from './states'
 import type { Layer, LoadState } from './types'
-
-const LAYER_ICON = { core: 'block', platform: 'plat', network: 'node', neutral: 'radar' } as const
 
 function AnchorLink({ id }: { id: string }) {
   return (
@@ -45,6 +50,11 @@ export interface CardProps {
   onRetry?: () => void
   id?: string
   padding?: 'normal' | 'flush'
+  /**
+   * `section` gives the card a section's look: a ruled head and its subtitle as one sentence under it. Either way its
+   * sources go to the line of the section or page around it; a kit `Section` is what starts a new line.
+   */
+  level?: 'block' | 'section'
   className?: string
   children: ReactNode
 }
@@ -52,10 +62,11 @@ export interface CardProps {
 function useCardSource(source: CardProps['source']) {
   const health = useAllSourceHealth()
   const outer = useCovered()
-  const all = source === undefined ? [] : Array.isArray(source) ? source : [source]
+  const all = stampsOfInput(source)
+  const inSection = useSectionSource(all)
   const down = all.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
-  // A section that already names these sources in its own line is not repeated in the card's head.
-  const stamps = all.filter((s) => !outer.has(sourceKey(s)))
+  // A section names its sources in its own line, so a card inside one carries no mark; a card that stands alone does.
+  const stamps = inSection ? [] : all.filter((s) => !outer.has(sourceKey(s)))
   return { all, stamps, down }
 }
 
@@ -74,44 +85,58 @@ export function Card({
   onRetry,
   id,
   padding = 'normal',
+  level = 'block',
   className,
   children,
 }: CardProps) {
+  const isSection = level === 'section'
   const { all, stamps, down } = useCardSource(source)
   const keys = all.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
   const hasHead = [title, actions, subtitle].some(present) || stamps.length > 0
   const attr = layerAttr(layer)
+  const head = isSection ? (
+    <>
+      <div className="rx-sec__head">
+        {title ? <h2 className="rx-sec__title">{title}</h2> : null}
+        {id ? <AnchorLink id={id} /> : null}
+        {actions ? <div className="rx-sec__actions">{actions}</div> : null}
+      </div>
+      {subtitle ? <p className="rx-sec__lede">{subtitle}</p> : null}
+      {stamps.length > 0 ? (
+        <p className="rx-sec__src">
+          <SourceLine stamp={stamps} compact />
+        </p>
+      ) : null}
+    </>
+  ) : hasHead ? (
+    <div className="rx-card__head">
+      {title ? (
+        <h3 className="rx-card__title">
+          {title}
+          {id ? <AnchorLink id={id} /> : null}
+        </h3>
+      ) : null}
+      {subtitle ? <p className="rx-card__sub">{subtitle}</p> : null}
+      {actions || stamps.length > 0 ? (
+        <div className="rx-card__aside">
+          {actions}
+          {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}
+        </div>
+      ) : null}
+    </div>
+  ) : null
   return (
     <section
       id={id}
-      className={cx('rx-card', down && 'rx-down', className)}
+      className={cx('rx-card', isSection && 'rx-sec rx-sec--ruled', down && 'rx-down', className)}
       data-layer={attr}
       data-state={state}
       data-padding={padding}
       aria-busy={state === 'loading' || undefined}
     >
-      {hasHead ? (
-        <div className="rx-card__head">
-          {title ? (
-            <h3 className="rx-card__title">
-              {attr ? (
-                <LayerTile layer={layer ?? 'neutral'} icon={LAYER_ICON[attr]} size={26} />
-              ) : null}
-              {title}
-              {id ? <AnchorLink id={id} /> : null}
-            </h3>
-          ) : null}
-          {subtitle ? <p className="rx-card__sub">{subtitle}</p> : null}
-          {actions || stamps.length > 0 ? (
-            <div className="rx-card__aside">
-              {actions}
-              {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      {head}
       {down ? (
         <p className="rx-down__msg" role="status">
           <Icon name="alert" />
@@ -134,7 +159,7 @@ export function Card({
       ) : state === 'empty' ? (
         <Empty kind="none-yet" title={t`Nothing to show`} />
       ) : (
-        <div className={cx('rx-card__body', padding === 'flush' && 'rx-card__body--flush')}>
+        <div className="rx-card__body">
           <SourceScope value={covered}>{children}</SourceScope>
         </div>
       )}
@@ -180,13 +205,90 @@ export function SectionBand({
   )
 }
 
+/**
+ * A stretch of a page that says where its figures came from once. `source` names the stamps the page read itself;
+ * cards, stats, tables and key-value rows inside hand theirs up instead of drawing their own marks. `SectionSources`
+ * draws the line wherever the section wants it.
+ */
+export function SourceSection({ source, children }: { source?: SourceInput; children: ReactNode }) {
+  const { collector, line } = useSourceCollector(source)
+  return (
+    <SourceSectionProvider collector={collector} line={line}>
+      {children}
+    </SourceSectionProvider>
+  )
+}
+
+/** The enclosing section's one source line. It keeps its height while empty, so the first answer does not move the page. */
+export function SectionSources({ className }: { className?: string }) {
+  const line = useSectionLine()
+  return (
+    <p className={cx('rx-sec__src', className)} data-section-sources>
+      {line.length > 0 ? <SourceLine stamp={[...line]} compact /> : null}
+    </p>
+  )
+}
+
+export interface SectionProps {
+  title: ReactNode
+  /** One sentence under the title. */
+  lede?: ReactNode
+  id?: string
+  actions?: ReactNode
+  layer?: Layer
+  /** The stamps the section read itself. What its cards, stats and tables show is added without being listed here. */
+  source?: SourceInput
+  className?: string
+  children: ReactNode
+}
+
+/**
+ * A page section on the page ground: a ruled head, one sentence, one source line for everything in it, then its
+ * content. Nothing inside repeats a source the line names.
+ */
+export function Section({
+  title,
+  lede,
+  id,
+  actions,
+  layer,
+  source,
+  className,
+  children,
+}: SectionProps) {
+  const autoId = useId()
+  const headingId = id ? `${id}-title` : autoId
+  return (
+    <SourceSection source={source}>
+      <section
+        id={id}
+        className={cx('rx-sec rx-sec--ruled', className)}
+        data-layer={layerAttr(layer)}
+        aria-labelledby={headingId}
+      >
+        <div className="rx-sec__head">
+          <h2 className="rx-sec__title" id={headingId}>
+            {title}
+          </h2>
+          {id ? <AnchorLink id={id} /> : null}
+          {actions ? <div className="rx-sec__actions">{actions}</div> : null}
+        </div>
+        {lede ? <p className="rx-sec__lede">{lede}</p> : null}
+        <SectionSources />
+        <div className="rx-sec__body">{children}</div>
+      </section>
+    </SourceSection>
+  )
+}
+
 export interface KeyValueProps {
   items: { label: ReactNode; value: ReactNode; source?: SourceStamp; hint?: ReactNode }[]
   columns?: 1 | 2 | 3
 }
 
 function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
-  const covered = useCoveredSource(item.source)
+  const inSection = useSectionSource(item.source)
+  const covered = useCoveredSource(item.source) || inSection
   return (
     <div>
       <dt>{item.label}</dt>

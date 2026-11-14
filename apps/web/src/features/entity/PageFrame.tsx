@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Layer } from '@/ui'
+import { SectionSources, SourceSection } from '@/ui/layout'
 import { CopyLinkButton } from './CopyLinkButton'
 import { useDocumentTitle } from './document-title'
 import { networkName, useNetwork } from './network'
@@ -11,7 +12,7 @@ export interface PageFrameProps {
   eyebrow?: string
   /** The layer the page belongs to; it colors the page's accents. */
   layer?: Layer
-  /** One sentence under the title. */
+  /** One sentence under the title. The page's one source line follows it: it names what the page shows outside its sections. */
   lede?: ReactNode
   actions?: ReactNode
   /** Adds the copy-link button beside `actions`; every page about one entity sets it. */
@@ -32,26 +33,29 @@ export function PageFrame({
   const net = useNetwork()
   useDocumentTitle(title)
   return (
-    <article data-page={path} data-layer={layer} className="grid gap-6 [&>*]:min-w-0">
-      <header className="grid gap-2">
-        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {eyebrow}
-          {net === 'mainnet' ? null : ` · ${networkName(net)}`}
-        </p>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-3xl font-semibold">{title}</h1>
-          {share ? (
-            <div className="flex flex-wrap items-center gap-2">
-              {actions}
-              <CopyLinkButton />
-            </div>
-          ) : (
-            actions
-          )}
-        </div>
-        {lede ? <p className="text-[var(--dh-ink-2,inherit)]">{lede}</p> : null}
-      </header>
-      {children}
-    </article>
+    <SourceSection>
+      <article data-page={path} data-layer={layer} className="rx-page">
+        <header className="rx-page__head">
+          <p data-eyebrow className="rx-page__eyebrow">
+            {eyebrow}
+            {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+          </p>
+          <div className="rx-page__title">
+            <h1>{title}</h1>
+            {share ? (
+              <div className="rx-page__actions">
+                {actions}
+                <CopyLinkButton />
+              </div>
+            ) : (
+              actions
+            )}
+          </div>
+          {lede ? <p className="rx-page__lede">{lede}</p> : null}
+          <SectionSources className="rx-page__src" />
+        </header>
+        {children}
+      </article>
+    </SourceSection>
   )
 }
