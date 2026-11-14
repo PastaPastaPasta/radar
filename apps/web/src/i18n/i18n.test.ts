@@ -85,3 +85,14 @@ describe('one word, several subjects', () => {
     expect(t({ message: 'Oldest first', context: 'list of blocks' })).toBe('Plus anciens d’abord')
   })
 })
+
+describe('the transition check', () => {
+  it('says in German that the check sends the transition but that nothing is broadcast @IN-13', async () => {
+    await activateLocale('de')
+    const lede = t`Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run.`
+    expect(lede).toContain('nichts signiert oder verbreitet')
+    expect(lede).toContain('schickt die Transition')
+    const note = t`Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes.`
+    expect(note).toContain('nichts verbreitet')
+  })
+})
