@@ -181,11 +181,13 @@ test.describe('network switch', () => {
   const switchTo = async (page: Page, to: 'Testnet' | 'Mainnet') => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await settled(page)
-    await page.getByRole('button', { name: /Network: (Mainnet|Testnet)/ }).click()
-    await page
-      .getByRole('navigation', { name: 'Network' })
-      .getByRole('link', { name: to })
-      .dispatchEvent('click')
+    const link = page.getByRole('navigation', { name: 'Network' }).getByRole('link', { name: to })
+    // A late re-render of the page can close the menu just after it opens.
+    await expect(async () => {
+      if (!(await link.isVisible()))
+        await page.getByRole('button', { name: /Network: (Mainnet|Testnet)/ }).click()
+      await link.dispatchEvent('click', undefined, { timeout: 2000 })
+    }).toPass()
   }
 
   for (const path of ['/nodes', '/map', '/masternodes?type=evo', '/epochs', '/platform/blocks']) {
