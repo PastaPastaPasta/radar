@@ -98,14 +98,29 @@ test.describe('masternode list', () => {
     test.skip(isPhone(info), 'the phone shows cards')
     await open(page, '/masternodes')
     for (const name of COLUMNS) await expect(header(page, name), name).toBeInViewport()
-    const wrap = table(page).locator('xpath=ancestor::*[contains(@class,"rx-tablewrap")][1]')
+    const scroller = table(page).locator('xpath=ancestor::*[contains(@class,"rx-tablescroll")][1]')
     expect(
-      await wrap.evaluate((el) => el.scrollWidth - el.clientWidth),
+      await scroller.evaluate((el) => el.scrollWidth - el.clientWidth),
       'the table scrolls sideways inside its block',
     ).toBeLessThanOrEqual(0)
     const first = await rows(page).first().boundingBox()
-    expect(first!.y, 'where the first row starts').toBeLessThan(560)
+    expect(first!.y, 'where the first row starts').toBeLessThan(430)
     const row = rows(page).first()
+    await expect(row.locator('td').first().locator('.rx-chip__text')).toHaveText(/^\w{6}…\w{4}$/)
+    // At 1024 px the table scrolls inside its block, and the hash still has a column of its own.
+    for (const width of [1440, 1024]) {
+      await page.setViewportSize({ width, height: 900 })
+      const [hash, address] = await Promise.all([
+        row.locator('td').first().locator('.rx-chip__text').boundingBox(),
+        row.locator('td').nth(1).boundingBox(),
+      ])
+      expect(
+        hash!.x + hash!.width,
+        `the hash ends before the address at ${width} px`,
+      ).toBeLessThanOrEqual(address!.x + 1)
+      expect(await horizontalOverflow(page), `page overflow at ${width} px`).toBeLessThanOrEqual(0)
+    }
+    await page.setViewportSize({ width: 1440, height: 900 })
     await expect(row.locator('td').nth(9)).toContainText(/blocks?|—/)
     await expect(row.locator('td').nth(10)).toContainText(/[\d,]+/)
     const second = await rows(page).nth(1).boundingBox()

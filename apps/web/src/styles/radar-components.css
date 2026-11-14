@@ -1019,14 +1019,14 @@ button.rx-src--proof:hover {
 /* a cell that gives way before the table scrolls: its full text is in the title */
 .rx-clip {
   display: inline-block;
-  max-width: 7.5rem;
+  max-width: 7rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: bottom;
 }
 .rx-clip--wide {
-  max-width: 9.5rem;
+  max-width: 9rem;
 }
 /* the masternode list: the status mix in one row, then the filters, then the table */
 .rx-mnlist {
@@ -1066,9 +1066,11 @@ button.rx-src--proof:hover {
   gap: 1px;
   justify-items: start;
 }
-/* enough of the hash to tell two rows apart; the chip would otherwise give its whole width away */
-.rx-table--dense .rx-mnid .rx-chip__text {
-  min-width: 13ch;
+/* enough of the hash to tell two rows apart: the chip's own width is a percentage, so the column would give it all away */
+@media (min-width: 641px) {
+  .rx-table--dense .rx-mnid {
+    min-width: 7.25rem;
+  }
 }
 .rx-mnaddr {
   font-family: var(--dh-mono);
