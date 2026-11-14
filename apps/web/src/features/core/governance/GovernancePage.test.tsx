@@ -8,7 +8,12 @@ import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { renderAt } from '../hy-shared/test-utils'
 
-vi.mock('@/ui/chart-view', () => ({ default: () => null }))
+// The canvas cannot draw here; the stand-in keeps the option it was given, so a test can read what would be drawn.
+vi.mock('@/ui/chart-view', () => ({
+  default: ({ option }: { option: { series?: unknown } }) => (
+    <i data-drawn={JSON.stringify(option.series)} />
+  ),
+}))
 
 const HASH = '0f44c3013cb2703ba00b226457189374c8881f855ec1232b24251fe039d6159c'
 const OLD = 'e'.repeat(64)
@@ -51,6 +56,25 @@ describe('Governance page', () => {
     expect(
       await screen.findByRole('table', { name: /Requested payments of open proposals/ }),
     ).toBeInTheDocument()
+  })
+
+  it('draws each status in one colour: the donut, the tile beside it and the row edge @HY-13', async () => {
+    renderAt('/governance')
+    await screen.findByRole('table', { name: 'Budget proposals' })
+    const drawn = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-drawn]')
+      expect(el).not.toBeNull()
+      return JSON.parse(el!.dataset.drawn!) as {
+        data: { name: string; itemStyle: { color: string } }[]
+      }[]
+    })
+    expect(drawn[0]!.data.map((d) => [d.name, d.itemStyle.color])).toEqual([
+      ['Funded', 'var(--dh-good)'],
+      ['Passing, not yet funded', 'var(--dh-brand)'],
+      ['Not passing', 'var(--dh-warn)'],
+    ])
+    const tiles = [...document.querySelectorAll<HTMLElement>('[data-budget] .rx-stat')]
+    expect(tiles.map((t) => t.dataset.tone)).toEqual(['good', 'info', 'warn'])
   })
 
   it('narrows the table by a typed name or hash and says how many match @HY-13', async () => {

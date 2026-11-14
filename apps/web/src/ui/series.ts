@@ -105,3 +105,41 @@ export function withSeriesColors(option: EChartsOption, slots: readonly string[]
     series,
   }
 }
+
+const TOKEN = /^var\((--[\w-]+)\)$/
+
+function resolved<T>(holder: T, read: (name: string) => string): T {
+  if (holder === null || typeof holder !== 'object') return holder
+  let out = holder
+  for (const key of ['itemStyle', 'lineStyle', 'areaStyle'] as const) {
+    const style = (holder as Record<string, unknown>)[key]
+    const name = TOKEN.exec(colorIn(style) ?? '')?.[1]
+    const value = name ? read(name) : ''
+    if (value) out = { ...out, [key]: { ...(style as object), color: value } }
+  }
+  return out
+}
+
+/**
+ * Lets a chart name a colour by its token (`itemStyle: { color: 'var(--dh-good)' }`): a canvas cannot read a custom
+ * property, so each is replaced with its value where the chart stands. A status keeps one colour in the plot, its
+ * tile and its badge, in both themes.
+ */
+export function withTokenColors(
+  option: EChartsOption,
+  read: (name: string) => string,
+): EChartsOption {
+  const all = seriesList(option)
+  let changed = false
+  const series = all.map((s) => {
+    let next = resolved(s, read)
+    const data = (s as { data?: unknown }).data
+    if (Array.isArray(data)) {
+      const items = data.map((d) => resolved(d as unknown, read))
+      if (items.some((d, i) => d !== data[i])) next = { ...next, data: items } as typeof next
+    }
+    if (next !== s) changed = true
+    return next
+  })
+  return changed ? { ...option, series } : option
+}

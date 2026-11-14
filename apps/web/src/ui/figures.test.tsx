@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Amount, Time } from './amount'
@@ -293,6 +293,26 @@ describe('Tabs', () => {
     const off = within(nav).getByText('Tokens')
     expect(off).toHaveAttribute('aria-disabled', 'true')
     expect(within(nav).getAllByRole('link')).toHaveLength(2)
+  })
+
+  it('marks the edges that have more tabs beyond them, and follows the scroll @RA-38', async () => {
+    vi.spyOn(Element.prototype, 'scrollWidth', 'get').mockReturnValue(900)
+    vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(358)
+    await renderInRouter(
+      <Tabs
+        value="a"
+        to={(id) => ({ to: '/', hash: id })}
+        tabs={['a', 'b', 'c', 'd', 'e', 'f'].map((id) => ({ id, label: `Tab ${id}` }))}
+      />,
+    )
+    const bar = document.querySelector<HTMLElement>('.rx-tabs')!
+    expect(bar).toHaveAttribute('data-more-start', 'false')
+    expect(bar).toHaveAttribute('data-more-end', 'true')
+    Object.defineProperty(bar, 'scrollLeft', { value: 542, configurable: true })
+    fireEvent.scroll(bar)
+    expect(bar).toHaveAttribute('data-more-start', 'true')
+    expect(bar).toHaveAttribute('data-more-end', 'false')
+    vi.restoreAllMocks()
   })
 
   it('navigates by link and keyboard', async () => {

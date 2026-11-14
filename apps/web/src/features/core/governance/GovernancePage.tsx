@@ -48,6 +48,13 @@ export function GovernancePage() {
   )
 }
 
+/** One colour per status, the same in the donut, the tiles beside it, the badges and the rows' leading edge. */
+const STATUS_COLOR = {
+  funded: 'var(--dh-good)',
+  passing: 'var(--dh-brand)',
+  failing: 'var(--dh-warn)',
+} as const
+
 const ORDER: Record<ProposalStatus, number> = {
   funded: 0,
   passing: 1,
@@ -101,9 +108,21 @@ function GovernanceContent() {
         radius: ['58%', '82%'],
         label: { show: false },
         data: [
-          { name: t`Funded`, value: Number(split.funded / DUFFS_PER_DASH) },
-          { name: t`Passing, not yet funded`, value: Number(split.passing / DUFFS_PER_DASH) },
-          { name: t`Not passing`, value: Number(split.failing / DUFFS_PER_DASH) },
+          {
+            name: t`Funded`,
+            value: Number(split.funded / DUFFS_PER_DASH),
+            itemStyle: { color: STATUS_COLOR.funded },
+          },
+          {
+            name: t`Passing, not yet funded`,
+            value: Number(split.passing / DUFFS_PER_DASH),
+            itemStyle: { color: STATUS_COLOR.passing },
+          },
+          {
+            name: t`Not passing`,
+            value: Number(split.failing / DUFFS_PER_DASH),
+            itemStyle: { color: STATUS_COLOR.failing },
+          },
         ],
       },
     ],
@@ -159,11 +178,13 @@ function GovernanceContent() {
                 label={t`Passing, not yet funded`}
                 value={<Amount value={split.passing} kind="duffs" compact />}
                 note={t`${formatInt(split.count.passing)} proposals`}
+                tone="info"
               />
               <Stat
                 label={t`Not passing`}
                 value={<Amount value={split.failing} kind="duffs" compact />}
                 note={t`${formatInt(split.count.failing)} proposals`}
+                tone="warn"
               />
             </div>
           </div>
@@ -327,7 +348,7 @@ function ProposalTable({
               {t`${formatInt(p.votes.yes)} yes · ${formatInt(p.votes.no)} no · ${formatInt(p.votes.abstain)} abstain · net ${formatInt(netVotes(p))}`}
             </span>
           </td>
-          <td>
+          <td className="rx-propstatus">
             <StatusBadge status={status} />
           </td>
           <td className="r rx-num rx-votes rx-votes--first">{formatInt(p.votes.yes)}</td>
@@ -339,7 +360,7 @@ function ProposalTable({
               <span className="text-sm"> / {formatInt(p.fundingThreshold)}</span>
             )}
           </td>
-          <td className="r">
+          <td className="r rx-propamount">
             <Amount value={p.paymentAmount} kind="duffs" />
           </td>
           <td className="rx-propends">
@@ -361,7 +382,7 @@ function ProposalTable({
   return (
     <div className="rx-tablewrap rx-tablewrap--scroll">
       <div className="rx-tablescroll">
-        <table className="rx-table rx-table--scrolls">
+        <table className="rx-table rx-table--scrolls rx-proptable">
           <caption className="dh-sr">{t`Budget proposals`}</caption>
           <thead>
             <tr className="rx-votes-group">

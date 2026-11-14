@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SeriesSlots, seriesSwatches, withSeriesColors } from './series'
+import type { EChartsOption } from 'echarts'
+import { SeriesSlots, seriesSwatches, withSeriesColors, withTokenColors } from './series'
 
 const SLOTS = ['#1', '#2', '#3', '#4', '#5', '#6']
 
@@ -90,5 +91,42 @@ describe('withSeriesColors', () => {
   it('hands a donut the whole palette for slices that carry no colour', () => {
     const out = withSeriesColors({ series: [{ type: 'pie', data: [{ value: 1 }] }] }, SLOTS)
     expect(out.color).toEqual(SLOTS)
+  })
+})
+
+describe('withTokenColors', () => {
+  const read = (name: string) => ({ '--dh-good': '#167a46', '--dh-warn': '#94500a' })[name] ?? ''
+
+  it('replaces a token with its value in a series and in a donut’s slices', () => {
+    const option = {
+      series: [
+        { type: 'bar', name: 'A', itemStyle: { color: 'var(--dh-good)', borderRadius: 2 } },
+        {
+          type: 'pie',
+          data: [
+            { name: 'Funded', value: 1, itemStyle: { color: 'var(--dh-good)' } },
+            { name: 'Not passing', value: 2, itemStyle: { color: 'var(--dh-warn)' } },
+            { name: 'Plain', value: 3 },
+          ],
+        },
+      ],
+    } as EChartsOption
+    const out = withTokenColors(option, read) as { series: Record<string, unknown>[] }
+    expect(out.series[0]?.itemStyle).toEqual({ color: '#167a46', borderRadius: 2 })
+    expect(out.series[1]?.data).toEqual([
+      { name: 'Funded', value: 1, itemStyle: { color: '#167a46' } },
+      { name: 'Not passing', value: 2, itemStyle: { color: '#94500a' } },
+      { name: 'Plain', value: 3 },
+    ])
+  })
+
+  it('leaves a literal colour, an unknown token and a chart without tokens alone', () => {
+    const option = {
+      series: [
+        { type: 'line', name: 'A', lineStyle: { color: '#123456' } },
+        { type: 'line', name: 'B', lineStyle: { color: 'var(--nope)' } },
+      ],
+    } as EChartsOption
+    expect(withTokenColors(option, read)).toBe(option)
   })
 })

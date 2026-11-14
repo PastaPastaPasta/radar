@@ -27,7 +27,10 @@ import { loadState, useCensusSearch, type SectionProps } from './shared'
 
 /** True for a version that takes a categorical slot: a release. Candidates and odd builds carry a meaning colour. */
 const isRelease = (book: ReleaseBook, key: string): boolean =>
-  key !== UNKNOWN && isCoreVersion(key) && book.status(key) !== 'candidate' && book.status(key) !== 'build'
+  key !== UNKNOWN &&
+  isCoreVersion(key) &&
+  book.status(key) !== 'candidate' &&
+  book.status(key) !== 'build'
 
 /**
  * A version's colour. A release keeps the slot it was given for as long as it is shown, in the donut, the ladder and
@@ -105,10 +108,12 @@ export function VersionsCard({
     () => (history ? keepVersions(history, 6, latest) : undefined),
     [history, latest],
   )
-  const slotOf = useSeriesSlots([
-    ...flat.filter((r) => r.folded === undefined).map((r) => r.key),
-    ...(narrowed ? stackShares(narrowed, book).map((s) => s.key) : []),
-  ].filter((key) => isRelease(book, key)))
+  const slotOf = useSeriesSlots(
+    [
+      ...flat.filter((r) => r.folded === undefined).map((r) => r.key),
+      ...(narrowed ? stackShares(narrowed, book).map((s) => s.key) : []),
+    ].filter((key) => isRelease(book, key)),
+  )
   const slices: Slice[] = [
     ...flat
       .filter((r) => r.n > 0)

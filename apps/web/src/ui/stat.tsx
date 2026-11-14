@@ -183,7 +183,7 @@ export interface StatProps {
   loading?: boolean
   size?: 'md' | 'lg'
   layer?: Layer
-  tone?: 'neutral' | 'good' | 'warn' | 'bad'
+  tone?: 'neutral' | 'good' | 'warn' | 'bad' | 'info'
 }
 
 function Delta({ delta }: { delta: NonNullable<StatProps['delta']> }) {

@@ -54,7 +54,11 @@ export function SectionNav() {
           ref={railRef}
           aria-label={t`${sectionLabel(section)} pages`}
           data-section-nav={section}
-          data-layer={section === 'core' || section === 'network' || section === 'platform' ? section : undefined}
+          data-layer={
+            section === 'core' || section === 'network' || section === 'platform'
+              ? section
+              : undefined
+          }
           onScroll={update}
         >
           <ul className="flex gap-x-4 gap-y-1 whitespace-nowrap sm:gap-x-5">

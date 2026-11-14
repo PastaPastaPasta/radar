@@ -68,7 +68,7 @@ describe('Identity page', () => {
     })
     const facts = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('[data-record-facts]')
-      expect(el?.querySelector('[data-field="balance"]')).toHaveTextContent('DASH')
+      expect(el?.querySelector('[data-field="balance"]') ?? null).toHaveTextContent('DASH')
       return el!
     })
     expect(facts).toHaveTextContent('1,013,248,617,912 credits')

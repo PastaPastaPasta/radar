@@ -17,7 +17,7 @@ import {
   withEdgeRoom,
 } from './chart-theme'
 import { useReducedMotion, useThemeSignal } from './hooks'
-import { withSeriesColors } from './series'
+import { withSeriesColors, withTokenColors } from './series'
 
 echarts.use([
   BarChart,
@@ -30,6 +30,20 @@ echarts.use([
   CanvasRenderer,
 ])
 
+/** The option as the canvas takes it: tokens resolved where the chart stands, palette slots given, room at the edges. */
+function drawn(
+  option: EChartsOption,
+  still: boolean,
+  el: Element | null,
+  slots: readonly string[],
+): EChartsOption {
+  const read = (name: string) => (el ? getComputedStyle(el).getPropertyValue(name).trim() : '')
+  return withChartMotion(
+    withEdgeRoom(withSeriesColors(withTokenColors(option, read), slots)),
+    still,
+  )
+}
+
 export default function ChartView({ option, group }: { option: EChartsOption; group?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const chartRef = useRef<echarts.ECharts | null>(null)
@@ -38,14 +52,11 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
   const reducedRef = useRef(reduced)
   const theme = useThemeSignal()
   const slotsRef = useRef<string[]>([])
-  const drawn = (o: EChartsOption, still: boolean) =>
-    withChartMotion(withEdgeRoom(withSeriesColors(o, slotsRef.current)), still)
 
   useEffect(() => {
     optionRef.current = option
     reducedRef.current = reduced
-    chartRef.current?.setOption(drawn(option, reduced), true)
-     
+    chartRef.current?.setOption(drawn(option, reduced, ref.current, slotsRef.current), true)
   }, [option, reduced])
 
   useEffect(() => {
@@ -56,7 +67,7 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
     echarts.registerTheme('radar', radarChartTheme(tokens))
     const chart = echarts.init(el, 'radar', { renderer: 'canvas' })
     chartRef.current = chart
-    chart.setOption(drawn(optionRef.current, reducedRef.current))
+    chart.setOption(drawn(optionRef.current, reducedRef.current, el, slotsRef.current))
     if (group) {
       chart.group = group
       echarts.connect(group)
@@ -70,7 +81,6 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
       chart.dispose()
       chartRef.current = null
     }
-     
   }, [group, theme])
 
   return <div ref={ref} className="rx-chart__view" />

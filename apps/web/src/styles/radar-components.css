@@ -638,9 +638,16 @@ kbd,
 /* a figure that is itself a status: a heavier rule and the value in the status colour, always beside its words */
 .rx-stat--good,
 .rx-stat--warn,
-.rx-stat--bad {
+.rx-stat--bad,
+.rx-stat--info {
   padding-left: 10px;
   border-left-width: 4px;
+}
+.rx-stat--info {
+  border-left-color: var(--dh-brand);
+}
+.rx-stat--info .rx-stat__value {
+  color: var(--dh-brand-ink);
 }
 .rx-stat--good {
   border-left-color: var(--dh-good);
@@ -1568,6 +1575,23 @@ button.rx-src--proof:hover {
   scrollbar-width: none;
   list-style: none;
 }
+/* Where the bar has more tabs beyond an edge, that edge fades: a cut-off tab reads as "more this way". */
+.rx-tabs[data-more-start='true'],
+.rx-tabs[data-more-end='true'] {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start, 0px),
+    #000 calc(100% - var(--fade-end, 0px)),
+    transparent
+  );
+}
+.rx-tabs[data-more-start='true'] {
+  --fade-start: 36px;
+}
+.rx-tabs[data-more-end='true'] {
+  --fade-end: 36px;
+}
 .rx-tabs a {
   position: relative;
   display: inline-flex;
@@ -1631,7 +1655,7 @@ button.rx-src--proof:hover {
   position: relative;
   height: 8px;
   border-radius: 4px;
-  background: var(--dh-sunken);
+  background: var(--rx-track);
   overflow: visible;
 }
 .rx-meter > i {
@@ -2458,6 +2482,10 @@ html[data-scroll-gutter] {
 }
 
 /* A proposal leads with its name, then its hash; the status colours the row's leading edge so a column of them scans. */
+.rx-table .rx-propcell,
+.rx-proptable thead th:first-child {
+  padding-inline-start: 14px;
+}
 .rx-table .rx-propcell::before {
   content: '';
   position: absolute;
@@ -2539,7 +2567,8 @@ html[data-scroll-gutter] {
   }
 }
 
-/* On a phone the table scrolls sideways under its sticky first column, so that column carries the votes too. */
+/* On a phone each proposal is a card: its name and status, its votes in one line, then what it asks for and when
+   voting ends. Nothing scrolls sideways. The vote cells stay for a screen reader. */
 .rx-propline {
   display: none;
 }
@@ -2549,7 +2578,80 @@ html[data-scroll-gutter] {
     margin-top: 2px;
     font-size: var(--dh-fs-sm);
     color: var(--dh-ink-2);
+  }
+  .rx-tablewrap--scroll:has(.rx-proptable)::after {
+    content: none;
+  }
+  .rx-tablewrap--scroll .rx-tablescroll:has(.rx-proptable) {
+    overflow-x: visible;
+  }
+  .rx-proptable,
+  .rx-proptable tbody {
+    display: block;
+    min-width: 0;
+  }
+  .rx-proptable thead,
+  .rx-proptable .rx-votes {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
     white-space: nowrap;
+  }
+  .rx-proptable tbody[data-proposal] > tr:first-child {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+    padding: 12px 0 12px 14px;
+    border-bottom: 1px solid var(--dh-line);
+  }
+  .rx-proptable tbody[data-proposal] > tr:first-child::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 3px;
+    background: var(--rx-edge, transparent);
+  }
+  .rx-proptable tbody[data-proposal] > tr:first-child > td {
+    display: block;
+    position: static;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    text-align: start;
+  }
+  .rx-proptable .rx-propcell::before {
+    content: none;
+  }
+  .rx-proptable .rx-propstatus,
+  .rx-proptable tbody[data-proposal] > tr:first-child > .rx-propends {
+    justify-self: end;
+    text-align: end;
+  }
+  .rx-proptable .rx-propamount,
+  .rx-proptable .rx-propends {
+    grid-row: 2;
+    font-size: var(--dh-fs-sm);
+    color: var(--dh-ink-2);
+  }
+  .rx-proptable .rx-propname {
+    align-items: start;
+  }
+  .rx-proptable .rx-propname__label {
+    overflow-wrap: anywhere;
+  }
+  .rx-proptable tr[data-proposal-details],
+  .rx-proptable tr[data-proposal-details] > td,
+  .rx-proptable tbody[data-earlier-proposals] > tr,
+  .rx-proptable tbody[data-earlier-proposals] th {
+    display: block;
+    position: static;
+    padding-inline: 14px 0;
+    box-shadow: none;
   }
 }
 
@@ -2651,6 +2753,54 @@ html[data-scroll-gutter] {
   .rx-page__band .rx-kpis > .rx-stat:has(.rx-amt) {
     grid-column: 1 / -1;
   }
+}
+
+/* section grounds: every second block of a page sits on a raised band that runs the width of the window, so a long
+   page reads as stretches, not one column. A band has no edge and no box: the change of ground is the rule. */
+:is(.rx-page, [data-grounds])
+  > :nth-child(even of :is(.rx-sec--ruled, .rx-card, :has(> .rx-sec--ruled))):not(
+    [data-ground='page']
+  ),
+[data-ground='band'],
+[data-ground='layer'] {
+  --rx-ground: var(--dh-surface);
+  padding-block: 28px;
+  border-top: 0;
+  border-image: conic-gradient(var(--rx-ground) 0 0) fill 0 / 0 / 0 100vw;
+}
+/* a section about another layer than its page stands on that layer's ground */
+[data-ground='layer'] {
+  --rx-ground: var(--rx-l-soft);
+}
+:is(.rx-page, [data-grounds])
+  > :nth-child(even of :is(.rx-sec--ruled, .rx-card, :has(> .rx-sec--ruled))):not(
+    [data-ground='page']
+  )
+  + .rx-sec--ruled,
+:is([data-ground='band'], [data-ground='layer']) + .rx-sec--ruled {
+  border-top-color: transparent;
+  padding-top: 8px;
+}
+@media (max-width: 640px) {
+  :is(.rx-page, [data-grounds])
+    > :nth-child(even of :is(.rx-sec--ruled, .rx-card, :has(> .rx-sec--ruled))):not(
+      [data-ground='page']
+    ),
+  [data-ground='band'],
+  [data-ground='layer'] {
+    padding-block: 20px;
+  }
+}
+/* the record header is the first band of its page */
+.rx-band.rx-page__band {
+  border-bottom: 0;
+  background: none;
+  border-image: linear-gradient(var(--rx-l-soft) calc(100% - 1px), var(--dh-line) 0) fill 0 / 0 / 0
+    100vw;
+}
+.rx-page__band > .dh-container,
+.rx-page .rx-tabbar > .dh-container {
+  padding-inline: 0;
 }
 
 /* ============================================================ 27. page rhythm: blocks in sequence, never packed */

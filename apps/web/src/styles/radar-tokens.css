@@ -81,10 +81,15 @@
   --rx-dur-4: 1200ms; /* flash fade, pings */
   --rx-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --rx-hc-w: 340px;
+  /* an example in an empty field: the secondary ink in light, a step dimmer in dark so it never reads as a value */
+  --rx-placeholder: var(--dh-ink-2);
+  /* the empty part of a meter: visible on the page ground and on a card in both themes */
+  --rx-track: color-mix(in srgb, var(--dh-ink) 13%, transparent);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --dh-ink-2: #b0c6d4; /* 9.6:1 on the card: small captions, timestamps, axis labels, copy icons */
+    --rx-placeholder: #7f97a7; /* 5.6:1 on a dark field; a value is 15:1 */
     --rx-core: #1a9cf0;
     --rx-core-ink: #0a2a3d;
     --rx-core-soft: #0d2b40;
@@ -108,12 +113,12 @@
     --rx-teal-3: #25b8a6;
     --rx-teal-4: #1e9586;
     --rx-teal-5: #155e57;
-  --rx-s1: #1a9cf0;
-  --rx-s2: #d95926;
-  --rx-s3: #1ea898;
-  --rx-s4: #c98500;
-  --rx-s5: #d55181;
-  --rx-s6: #7a9a22;
+    --rx-s1: #1a9cf0;
+    --rx-s2: #d95926;
+    --rx-s3: #1ea898;
+    --rx-s4: #c98500;
+    --rx-s5: #d55181;
+    --rx-s6: #7a9a22;
     --rx-s1: #1a9cf0;
     --rx-s2: #d95926;
     --rx-s3: #1ea898;
@@ -131,6 +136,7 @@
 }
 :root[data-theme='dark'] {
   --dh-ink-2: #b0c6d4;
+  --rx-placeholder: #7f97a7; /* 5.6:1 on a dark field; a value is 15:1 */
   --rx-core: #1a9cf0;
   --rx-core-ink: #0a2a3d;
   --rx-core-soft: #0d2b40;
@@ -227,6 +233,8 @@
   --dh-ink: #e4f3fc;
   --dh-ink-2: #b8d2e2;
   --dh-ink-3: #6a8292;
+  --rx-placeholder: #7f97a7; /* 5.6:1 on a dark field; a value is 15:1 */
+  --rx-track: color-mix(in srgb, var(--dh-ink) 13%, transparent);
   --dh-line: var(--rx-plate-line);
   --dh-line-2: var(--rx-plate-ctl);
   --dh-brand: #1a9cf0;

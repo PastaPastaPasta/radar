@@ -56,9 +56,17 @@ export interface CardProps {
    * sources go to the line of the section or page around it; a kit `Section` is what starts a new line.
    */
   level?: 'block' | 'section'
+  ground?: Ground
   className?: string
   children: ReactNode
 }
+
+/**
+ * The ground a block of a page stands on. Blocks of a page alternate between the page ground and a raised band on
+ * their own; `band` and `page` fix one, and `layer` puts a block about another layer than its page on that layer's
+ * ground.
+ */
+export type Ground = 'page' | 'band' | 'layer'
 
 const nameOf = (label: ReactNode): string | undefined =>
   typeof label === 'string' && label !== '' ? label : undefined
@@ -89,6 +97,7 @@ export function Card({
   onRetry,
   id,
   level = 'block',
+  ground,
   className,
   children,
 }: CardProps) {
@@ -135,6 +144,7 @@ export function Card({
       id={id}
       className={cx('rx-card', isSection && 'rx-sec rx-sec--ruled', down && 'rx-down', className)}
       data-layer={attr}
+      data-ground={ground}
       data-state={state}
       data-reports={reports}
       aria-busy={state === 'loading' || undefined}
@@ -243,12 +253,13 @@ export interface SectionProps {
   layer?: Layer
   /** The stamps the section read itself. What its cards, stats and tables show is added without being listed here. */
   source?: SourceInput
+  ground?: Ground
   className?: string
   children: ReactNode
 }
 
 /**
- * A page section on the page ground: a ruled head, one sentence, one source line for everything in it, then its
+ * A page section: a ruled head, one sentence, one source line for everything in it, then its
  * content. Nothing inside repeats a source the line names.
  */
 export function Section({
@@ -258,6 +269,7 @@ export function Section({
   actions,
   layer,
   source,
+  ground,
   className,
   children,
 }: SectionProps) {
@@ -269,6 +281,7 @@ export function Section({
         id={id}
         className={cx('rx-sec rx-sec--ruled', className)}
         data-layer={layerAttr(layer)}
+        data-ground={ground}
         data-source-scope=""
         aria-labelledby={headingId}
       >
