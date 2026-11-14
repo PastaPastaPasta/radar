@@ -44,6 +44,7 @@ export function StatusPage() {
       lede={
         <span role="status" data-overall={overall} className="flex items-center gap-2">
           {overall === 'ok' ? <LiveDot state="ok" bare /> : null}
+          {claim ? <span className="sr-only">{claim}. </span> : null}
           {overall === 'ok' && decentralized
             ? t`Hosted sources are off in Decentralized only mode.`
             : null}

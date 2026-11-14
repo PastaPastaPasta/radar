@@ -265,6 +265,32 @@ describe('Status page', () => {
     expect(document.querySelector('[data-overall]')).toHaveTextContent('The rest still work')
   })
 
+  it('announces what is wrong inside the live region, not only in the heading @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status?network=testnet')
+    const region = await screen.findByRole('status')
+    await waitFor(() => expect(region.getAttribute('data-overall')).toBe('attention'))
+    expect(region).toHaveTextContent('Some sources are slow or behind')
+    act(() => {
+      healthRegistry.report('testnet', 'dapi', { ok: true, latencyMs: 80 })
+      for (let i = 0; i < 3; i++) {
+        healthRegistry.report('testnet', 'dapi', { ok: false, kind: 'network', latencyMs: 10 })
+      }
+    })
+    await waitFor(() => expect(region.getAttribute('data-overall')).toBe('down'))
+    expect(region).toHaveTextContent('Some sources aren’t answering')
+    expect(region).toHaveTextContent('The rest still work')
+  })
+
+  it('says in the live region that the hosted sources are off in Decentralized only mode @IN-09', async () => {
+    setCoreClient(core())
+    renderAt('/status?sources=decentralized')
+    const region = await screen.findByRole('status')
+    await waitFor(() => expect(region.getAttribute('data-overall')).toBe('ok'))
+    expect(region).toHaveTextContent('DAPI and the Platform SDK are answering')
+    expect(region).toHaveTextContent('Hosted sources are off in Decentralized only mode.')
+  })
+
   it('shows the Hyphen lag on testnet instead of pretending it is fine @IN-16', async () => {
     setCoreClient(core())
     renderAt('/status?network=testnet')
