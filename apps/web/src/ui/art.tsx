@@ -16,7 +16,7 @@ function fnv(id: string, salt: number): number {
 }
 
 /** Bytes for an identifier: its own bytes when it is hex or base58, a stable hash otherwise. */
-export function idBytes(id: string): Uint8Array {
+function idBytes(id: string): Uint8Array {
   try {
     if (isHex(id) && id.length % 2 === 0 && id.length >= 8) return hexToBytes(id)
     if (isBase58(id) && id.length >= 8) {
@@ -37,13 +37,13 @@ export function idBytes(id: string): Uint8Array {
   return out
 }
 
-export interface IdenticonSpec {
+interface IdenticonSpec {
   color: number
   cells: [number, number][]
 }
 
 /** 5×5 mirrored grid from bytes 1–2, fill from byte 0 mod 8. */
-export function identiconSpec(id: string): IdenticonSpec {
+function identiconSpec(id: string): IdenticonSpec {
   const b = idBytes(id)
   const bits = ((b[1] ?? 0) << 8) | (b[2] ?? 0)
   const cells: [number, number][] = []
@@ -82,7 +82,7 @@ export function Identicon({ id, size = 18 }: IdenticonProps) {
   )
 }
 
-export interface NodeprintSpec {
+interface NodeprintSpec {
   segments: boolean[]
   radius: number
 }
@@ -90,7 +90,7 @@ export interface NodeprintSpec {
 const SEGMENTS = 12
 
 /** 12-segment ring from the ProTx hash, every fifth segment always on, centre dot 2.2–3.6. */
-export function nodeprintSpec(id: string): NodeprintSpec {
+function nodeprintSpec(id: string): NodeprintSpec {
   const b = idBytes(id)
   const bits = ((b[0] ?? 0) << 8) | (b[1] ?? 0)
   const segments = Array.from(

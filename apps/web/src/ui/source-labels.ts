@@ -21,7 +21,7 @@ export interface SourceView {
 const MIN = 60_000
 
 /** Past this age the mark turns warning orange, for a stamp that doesn't say its own (`staleAfterMs`, the data class's staleTime × 4). */
-export const STALE_AGE_MS: Record<SourceId, number> = {
+const STALE_AGE_MS: Record<SourceId, number> = {
   radar: 20 * MIN,
   pe: 2 * MIN,
   hyphen: 2 * MIN,

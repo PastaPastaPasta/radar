@@ -420,17 +420,20 @@ export function DataTable<Row>({
     </thead>
   )
 
+  const skeletonCells = (r: number) =>
+    headers.map((h, c) => (
+      <td key={h.id}>
+        <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
+      </td>
+    ))
+
   let body: ReactNode
   if (state === 'loading') {
     body = (
       <tbody aria-hidden="true">
         {Array.from({ length: SKELETON_ROWS }, (_, r) => (
           <tr key={r} className="rx-skelrow">
-            {headers.map((h, c) => (
-              <td key={h.id}>
-                <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
-              </td>
-            ))}
+            {skeletonCells(r)}
           </tr>
         ))}
       </tbody>
@@ -524,11 +527,7 @@ export function DataTable<Row>({
         ) : null}
         {Array.from({ length: pendingRows }, (_, r) => (
           <tr key={`pending-${r}`} className="rx-skelrow" aria-hidden="true" data-pending-row>
-            {headers.map((h, c) => (
-              <td key={h.id}>
-                <span className="rx-skel" style={{ width: `${48 + ((r * 7 + c * 13) % 40)}%` }} />
-              </td>
-            ))}
+            {skeletonCells(r)}
           </tr>
         ))}
         {paging?.kind === 'infinite' && paging.fetching ? (

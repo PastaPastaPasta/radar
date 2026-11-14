@@ -45,7 +45,7 @@ function toneAt(value: number, thresholds: MeterProps['thresholds']): string | u
   return hit ? METER_TONE[hit.tone] : undefined
 }
 
-export function MeterBar({
+function MeterBar({
   value,
   max,
   labelledBy,
@@ -117,7 +117,7 @@ export interface SparklineProps {
 
 const SPARK_PAD = 4
 
-export function sparkPoints(values: number[], height: number): [number, number][] {
+function sparkPoints(values: number[], height: number): [number, number][] {
   const min = Math.min(...values)
   const max = Math.max(...values)
   const span = max - min || 1
