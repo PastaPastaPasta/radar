@@ -62,6 +62,10 @@ test.describe('Epochs', () => {
     ]) {
       await expect(rewards.getByText(label, { exact: true })).toBeVisible()
     }
+    await expect(
+      rewards.getByText('Epoch 87', { exact: true }),
+      'the epoch that just ended',
+    ).toHaveCount(2)
     await expect(sourceLineOf(rewards).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)
   })

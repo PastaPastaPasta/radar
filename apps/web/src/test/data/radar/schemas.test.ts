@@ -52,6 +52,19 @@ describe('radar schema edge cases', () => {
     expect(parsed.amount_duffs).toBe(77060207n)
   })
 
+  it.each(['mainnet', 'testnet'] as const)(
+    'hands back %s epochs in time order, whatever order Radar sent them in',
+    async (net) => {
+      const recorded = await fixture('radar', net, 'platform')
+      const sent = (recorded.body as { epochs: { epoch: number }[] }).epochs.map((e) => e.epoch)
+      expect(sent[0], 'the recording lists the newest epoch first').toBeGreaterThan(sent.at(-1)!)
+      const doc = S.RadarPlatformSchema.parse(recorded.body)
+      const numbers = doc.epochs.map((e) => e.epoch)
+      expect(numbers).toEqual([...numbers].sort((a, b) => a - b))
+      expect(numbers.at(-1)).toBe(doc.now.epoch - 1)
+    },
+  )
+
   it('rejects a payment without an amount', () => {
     expect(
       S.RadarPaymentSchema.safeParse({ height: 5, time: 1, block_hash: 'ab'.repeat(32) }).success,

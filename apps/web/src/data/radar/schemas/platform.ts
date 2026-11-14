@@ -43,30 +43,33 @@ export const RadarPlatformSchema = z.object({
     monthly_basis_days: z.number().nullish(),
     yield_span_days: z.number().nullish(),
   }),
-  epochs: z.array(
-    z.object({
-      epoch: z.number(),
-      start: seconds,
-      end: seconds,
-      duration: z.number(),
-      first_height: z.number(),
-      blocks: z.number(),
-      proposers: z.number(),
-      core_rewards: zBigint,
-      fees: zBigint,
-      pool: zBigint,
-      per_block: zBigint,
-      protocol_version: z.number(),
-      blocks_spread: SpreadSchema,
-      credits_spread: z.object({
-        min: zBigint,
-        p10: zBigint,
-        p50: zBigint,
-        p90: zBigint,
-        max: zBigint,
+  // Radar lists finished epochs newest first. Readers get them in time order: the last one is the latest.
+  epochs: z
+    .array(
+      z.object({
+        epoch: z.number(),
+        start: seconds,
+        end: seconds,
+        duration: z.number(),
+        first_height: z.number(),
+        blocks: z.number(),
+        proposers: z.number(),
+        core_rewards: zBigint,
+        fees: zBigint,
+        pool: zBigint,
+        per_block: zBigint,
+        protocol_version: z.number(),
+        blocks_spread: SpreadSchema,
+        credits_spread: z.object({
+          min: zBigint,
+          p10: zBigint,
+          p50: zBigint,
+          p90: zBigint,
+          max: zBigint,
+        }),
       }),
-    }),
-  ),
+    )
+    .transform((epochs) => [...epochs].sort((a, b) => a.epoch - b.epoch)),
   schedule: z.object({
     epoch: z.number(),
     height: z.number(),

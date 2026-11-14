@@ -57,6 +57,12 @@ test.describe('Platform overview', () => {
       await expect(rewards.locator('.rx-stat', { hasText: label })).toBeVisible()
     }
     await expectReports(rewards.locator('.rx-stat', { hasText: 'Pool so far' }), 'radar')
+    for (const label of ['Last pool', 'Per block']) {
+      await expect(
+        rewards.locator('.rx-stat', { hasText: label }),
+        'the epoch that just ended',
+      ).toContainText('Epoch 87')
+    }
     const [epoch, vitals] = await Promise.all(
       [lead, card(page, 'vitals')].map((l) => l.boundingBox()),
     )

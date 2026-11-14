@@ -67,6 +67,8 @@ describe('Platform overview', () => {
       'Median yield',
     ])
       expect(within(lead).getByText(label)).toBeInTheDocument()
+    // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
+    expect(within(lead).getAllByText('Epoch 87')).toHaveLength(2)
     const line = document.querySelector('.rx-page__src')!
     await waitFor(() => expect(line.querySelector('[data-source="radar"]')).not.toBeNull())
     expect(line.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()

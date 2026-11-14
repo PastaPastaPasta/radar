@@ -45,6 +45,17 @@ describe('Epochs', () => {
     const rewards = await card('rewards')
     await waitFor(() => expect(rewards).toHaveTextContent('Median monthly earnings'))
     expect(rewards).toHaveTextContent('Pool so far')
+    // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
+    expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
+  })
+
+  it('draws the epoch history in time order and lists it newest first @RA-60', async () => {
+    renderAt('/epochs')
+    const history = await card('history')
+    await waitFor(() => expect(rows(history).length).toBeGreaterThan(1))
+    const epochs = rows(history).map((r) => Number(r.querySelector('td, th')?.textContent))
+    expect(epochs[0]).toBe(87)
+    expect(epochs).toEqual([...epochs].sort((a, b) => b - a))
   })
 
   it('ranks twenty proposers and re-sorts them @NX-50', async () => {
