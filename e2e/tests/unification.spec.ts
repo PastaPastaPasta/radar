@@ -12,9 +12,7 @@ const isPhone = (name: string) => name.startsWith('phone')
 const ENTITY_ROUTE =
   /^\/(identity|contract|name|contest|epoch|document|group|tx|block|address|mn|governance|token|platform-address|platform\/block|platform\/tx)\/(?!lookup)[^/?]/
 
-const entityCases = ROUTE_CASES.filter(
-  (c) => c.built && ENTITY_ROUTE.test(c.path) && !/0{64}/.test(c.path),
-)
+const entityCases = ROUTE_CASES.filter((c) => ENTITY_ROUTE.test(c.path) && !/0{64}/.test(c.path))
 
 async function openCard(page: Page, kind: string, via: 'hover' | 'focus') {
   const chip = page.locator(`[data-entity="${kind}"] a, [data-entity="${kind}"] button`).first()
@@ -322,7 +320,7 @@ test.describe('acting elsewhere', () => {
     'input[type="password"], input[autocomplete="current-password"], input[autocomplete="new-password"], input[name*="mnemonic" i], input[name*="private" i], input[name*="wif" i], input[name*="seed" i], textarea[name*="mnemonic" i], textarea[name*="private" i]'
   const seen = new Set<string>()
   for (const route of ROUTE_CASES) {
-    if (!route.built || seen.has(route.path)) continue
+    if (seen.has(route.path)) continue
     seen.add(route.path)
     const net = casesNets(route)[0] ?? 'mainnet'
     test(`${route.path} asks for no key, mnemonic, password or signature @X-11`, async ({

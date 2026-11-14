@@ -10,23 +10,16 @@ const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
 test.describe('routes', () => {
   for (const route of ROUTE_CASES) {
     for (const net of casesNets(route)) {
-      const what = route.built
-        ? 'shows its page, with no error'
-        : 'says what will be here and where the data comes from'
-      test(`${net} ${route.path} ${what} and fits the width @X-08 @X-09`, async ({ page }) => {
+      test(`${net} ${route.path} shows its page, with no error, and fits the width @X-08 @X-09`, async ({
+        page,
+      }) => {
         await page.goto(withQuery(route.path, networkQuery(net)))
 
         await expect(page.getByRole('heading', { level: 1, name: route.h1 })).toBeVisible()
         await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
         await settled(page)
 
-        if (route.built) {
-          await expect(page.getByText('This page is on its way')).toHaveCount(0)
-          await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
-        } else {
-          await expect(page.getByText('This page is on its way')).toBeVisible()
-          await expect(page.getByText('Read from')).toBeVisible()
-        }
+        await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
         expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
       })
     }

@@ -6,47 +6,41 @@ const SQL = encodeURIComponent(
 )
 
 export const tools: RouteCase[] = [
-  { path: '/query', h1: 'Query', built: true, decentralized: 'data', data: '[data-schema-type]' },
+  { path: '/query', h1: 'Query', decentralized: 'data', data: '[data-schema-type]' },
   {
     path: `/query?q=${SQL}&contract=${DPNS}`,
     h1: 'Query',
-    built: true,
     decentralized: 'data',
     data: '[data-schema-type]',
   },
   {
     path: '/tools/transition',
     h1: 'Transition decoder',
-    built: true,
     decentralized: 'partial',
     data: '[data-bytes-field]',
   },
   ...['contract', 'identity', 'document', 'proof'].map((decoder): RouteCase => ({
     path: `/tools/${decoder}`,
     h1: 'Decoder',
-    built: true,
     decentralized: 'data',
     data: '[data-bytes-field]',
   })),
-  { path: '/tools/path', h1: 'Decoder', built: true, decentralized: 'data' },
+  { path: '/tools/path', h1: 'Decoder', decentralized: 'data' },
   {
     path: '/tools/path?preset=root',
     h1: 'Decoder',
-    built: true,
     decentralized: 'data',
     data: '[data-path-element]',
   },
   {
     path: '/tools/nope',
     h1: 'Decoders',
-    built: true,
     decentralized: 'data',
     data: '[data-decoders]',
   },
   {
     path: '/sdk-reference',
     h1: 'SDK reference',
-    built: true,
     decentralized: 'data',
     data: '[data-sdk-pages]',
   },

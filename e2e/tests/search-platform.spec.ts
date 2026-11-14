@@ -3,7 +3,6 @@ import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { netIds } from '../routes/fixtures'
-import { routeBuilt as built } from '../routes/uni-s'
 
 const main = netIds('mainnet')
 const test_ = netIds('testnet')
@@ -127,7 +126,7 @@ test.describe('search page: what the input was and every kind it can be', () => 
 
     await expect(page.locator('[data-classified]')).toContainText(CLASS.id)
     await settled(page)
-    await expect(hrefLink(page, `/token/${TOKEN}`)).toHaveCount(built('/token/$id') ? 1 : 0)
+    await expect(hrefLink(page, `/token/${TOKEN}`)).toHaveCount(1)
   })
 
   test('a document is found from contract/type/ID, and a bare document ID only by Explorer @X-01 @NX-05', async ({
@@ -182,9 +181,7 @@ test.describe('search page: what the input was and every kind it can be', () => 
 
     await expect(page.locator('[data-classified]')).toContainText(/a Platform address/)
     await settled(page)
-    await expect(hrefLink(page, `/platform-address/${paddr}`)).toHaveCount(
-      built('/platform-address/$addr') ? 1 : 0,
-    )
+    await expect(hrefLink(page, `/platform-address/${paddr}`)).toHaveCount(1)
   })
 
   test('a registered name shows its identity, and its name and contest pages once built @X-01 @NX-05 @PE-27', async ({
@@ -195,8 +192,8 @@ test.describe('search page: what the input was and every kind it can be', () => 
     await expect(page.locator('[data-classified]')).toContainText(CLASS.name)
     await expect(hrefLink(page, `/identity/${IDENTITY}`)).toHaveCount(1)
     await settled(page)
-    await expect(hrefLink(page, '/name/pshenmic')).toHaveCount(built('/name/$label') ? 1 : 0)
-    await expect(hrefLink(page, '/contest/pshenmic')).toHaveCount(built('/contest/$label') ? 1 : 0)
+    await expect(hrefLink(page, '/name/pshenmic')).toHaveCount(1)
+    await expect(hrefLink(page, '/contest/pshenmic')).toHaveCount(1)
   })
 
   test('text is searched in Explorer, grouped by kind, without repeats @X-01 @NX-05 @PE-27', async ({
@@ -218,7 +215,7 @@ test.describe('search page: what the input was and every kind it can be', () => 
   }) => {
     await search(page, 'sans')
     await expect(hrefLink(page, `/contract/${CONTRACT}`)).toHaveCount(1)
-    await expect(hrefLink(page, `/token/${TOKEN}`)).toHaveCount(built('/token/$id') ? 1 : 0)
+    await expect(hrefLink(page, `/token/${TOKEN}`)).toHaveCount(1)
 
     await search(page, 'dashpay')
     await settled(page)

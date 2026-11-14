@@ -10,8 +10,6 @@ export interface RouteCase {
   h1: string | RegExp
   /** Networks the path is valid on (it names a record that exists there). Absent: both. */
   nets?: RouteNet[]
-  /** False while the page renders `RoutePlaceholder`; true once it shows its own content. */
-  built: boolean
   /** In Decentralized only mode: its own data only, data plus the unavailable state, or the unavailable state only. */
   decentralized: 'data' | 'partial' | 'unavailable'
   /** Something a built page reads over DAPI or the SDK and must still show in the mode (a CSS selector). */

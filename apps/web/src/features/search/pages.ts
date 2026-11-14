@@ -1,4 +1,3 @@
-import { isFinishedRoute } from './offered'
 import { pageTitle, sectionLabel, SITE_MAP, type SitePage } from '@/features/entity'
 
 const FEATURED = [
@@ -15,7 +14,7 @@ const FEATURED = [
   '/settings',
 ]
 
-const SEARCHABLE = SITE_MAP.filter((p) => p.nav && isFinishedRoute(p.path))
+const SEARCHABLE = SITE_MAP.filter((p) => p.nav)
 
 /** Pages for the palette: a short list with no query, ranked matches otherwise. */
 export function matchPages(query: string, limit = 6): SitePage[] {
