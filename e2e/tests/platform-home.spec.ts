@@ -114,6 +114,8 @@ test.describe('Platform overview', () => {
       expect(shown!.x, `figure ${i}`).toBeGreaterThanOrEqual(0)
       expect(shown!.x + shown!.width, `figure ${i}`).toBeLessThanOrEqual(width)
       expect(await horizontalOverflow(page), `figure ${i} widens the page`).toBe(0)
+      const spill = await own.evaluate((el) => el.scrollWidth - el.clientWidth)
+      expect(spill, `figure ${i}'s text runs past its popover`).toBeLessThanOrEqual(0)
     }
     expect(right).toBeGreaterThan(0)
   })
