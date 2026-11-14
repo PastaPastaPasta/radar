@@ -343,3 +343,38 @@ describe('NewRowsPill', () => {
     expect(onShow).toHaveBeenCalled()
   })
 })
+
+describe('DataTable width', () => {
+  const widths = { scroll: 0, client: 0 }
+  beforeEach(() => {
+    Object.defineProperty(HTMLElement.prototype, 'scrollWidth', {
+      configurable: true,
+      get: () => widths.scroll,
+    })
+    Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
+      configurable: true,
+      get: () => widths.client,
+    })
+    return () => {
+      Reflect.deleteProperty(HTMLElement.prototype, 'scrollWidth')
+      Reflect.deleteProperty(HTMLElement.prototype, 'clientWidth')
+    }
+  })
+
+  it('flags the scroll box of a table wider than its box, so it scrolls instead of widening the page', async () => {
+    widths.scroll = 1400
+    widths.client = 900
+    const { container } = await renderInRouter(<Harness />)
+    await waitFor(() => {
+      expect(container.querySelector('.rx-tablescroll')).toHaveAttribute('data-wide')
+    })
+  })
+
+  it('leaves a table that fits unflagged, so its sticky header keeps working', async () => {
+    widths.scroll = 900
+    widths.client = 900
+    const { container } = await renderInRouter(<Harness />)
+    await new Promise((r) => requestAnimationFrame(r))
+    expect(container.querySelector('.rx-tablescroll')).not.toHaveAttribute('data-wide')
+  })
+})

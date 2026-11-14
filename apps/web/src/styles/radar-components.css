@@ -1505,6 +1505,7 @@ button.rx-src--proof:hover {
   color: var(--rx-l-text);
 }
 .rx-tabbar {
+  min-width: 0;
   position: sticky;
   top: var(--dh-bar-h);
   z-index: 3;
@@ -2444,10 +2445,6 @@ html[data-scroll-gutter] {
     font-size: var(--dh-fs-sm);
     color: var(--dh-ink-2);
     white-space: nowrap;
-  }
-  .rx-tools .dh-seg {
-    max-width: 100%;
-    overflow-x: auto;
   }
 }
 
