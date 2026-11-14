@@ -1,6 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback, useMemo } from 'react'
 import type { MnFilter } from '@/data/masternodes/filter'
+import { filterFields } from '../masternodes/filter-fields'
 import type { ColorMode } from './map-model'
 
 /** What `/map` reads from its address (the route's schema, with its defaults filled in). */
@@ -21,8 +22,6 @@ export interface MapSearchControls {
   set: (change: Change) => void
 }
 
-const FILTER_KEYS = ['q', 'type', 'status', 'reach', 'country', 'version', 'host', 'dkg'] as const
-
 export function useMapSearch(): MapSearchControls {
   const search: MapSearch = useSearch({ from: '/map' })
   const navigate = useNavigate()
@@ -37,13 +36,7 @@ export function useMapSearch(): MapSearchControls {
     },
     [navigate],
   )
-  const filter = useMemo<MnFilter>(
-    () =>
-      Object.fromEntries(
-        FILTER_KEYS.flatMap((k) => (search[k] === undefined ? [] : [[k, search[k]]])),
-      ),
-    [search],
-  )
+  const filter = useMemo(() => filterFields(search), [search])
   const hidden = useMemo(() => new Set(search.hide ?? []), [search.hide])
   return { search, filter, hidden, set }
 }

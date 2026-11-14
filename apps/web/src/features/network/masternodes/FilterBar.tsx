@@ -1,13 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { mnFilterFacets, mnHostLabels, type MnFilter } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
 import { formatInt } from '@/lib/format'
 import { ActiveFilters, FilterButton, SearchField, SegFilter, TableTools } from '@/ui'
+import { useDebouncedQuery } from '../debounced-query'
 import type { MnSearchControls } from './use-mn-search'
-
-export const SEARCH_DEBOUNCE_MS = 150
 
 type FacetId = 'status' | 'reach' | 'version' | 'country' | 'host' | 'dkg'
 const CRAWL_FACETS: FacetId[] = ['reach', 'version', 'country', 'host', 'dkg']
@@ -18,35 +17,6 @@ interface Option {
   label: string
   count: number
 }
-
-/** The search text, shown at once and written to the address after a pause. */
-export function useDebouncedQuery(
-  committed: string | undefined,
-  commit: (q: string | undefined) => void,
-) {
-  const [text, setText] = useState(committed ?? '')
-  const [seen, setSeen] = useState(committed)
-  const latest = useRef(commit)
-  useEffect(() => {
-    latest.current = commit
-  })
-  if (seen !== committed) {
-    setSeen(committed)
-    if (normalised(text) !== committed) setText(committed ?? '')
-  }
-  useEffect(() => {
-    if (normalised(text) === committed) return
-    const timer = setTimeout(() => {
-      latest.current(normalised(text))
-    }, SEARCH_DEBOUNCE_MS)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [text, committed])
-  return [text, setText] as const
-}
-
-const normalised = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
 
 export interface SortOption {
   id: string

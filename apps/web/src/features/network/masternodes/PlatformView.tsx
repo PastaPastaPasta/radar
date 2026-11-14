@@ -16,11 +16,12 @@ import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
 import { ActiveFilters, DataTable, Empty, SearchField, SegFilter, TableTools } from '@/ui'
+import { useDebouncedQuery } from '../debounced-query'
 import { useEvoColumns } from './evo-columns'
-import { SortPicker, sortOptionsOf, useDebouncedQuery } from './FilterBar'
+import { SortPicker, sortOptionsOf } from './FilterBar'
 import { mnPageLink, type MnSearchControls } from './use-mn-search'
 
-export const EVO_PAGE_SIZE = 50
+const EVO_PAGE_SIZE = 50
 /** One SDK call proves at most this many evonodes. */
 const SDK_BATCH = 100
 
