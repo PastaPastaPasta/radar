@@ -95,6 +95,29 @@ test.describe('identities on a list that wants names', () => {
   }
 })
 
+/**
+ * Pages that fetch nothing to show: they document, keep settings in this browser, wait for input (a contract ID, a
+ * query), decode what was typed in the address bar, or say there is nothing under the address.
+ */
+const UNSOURCED =
+  /^\/(about|api|saved|sdk-reference|settings|sources|tools\/(contract|document|identity|nope|path|proof|transition))\b|^\/search(\?q=(6da2|7dc0|dash1|tdash1)|$)|^\/group\/[^/]+\/0$|^\/mn\/0+$|^\/identity\/[^/?]+\?tab=advanced$/
+
+test.describe('every page says where its figures came from and how old they are', () => {
+  for (const route of ROUTE_CASES) {
+    const net = casesNets(route)[0]!
+    test(`${net} ${route.path} shows at least one source line @X-05`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the page')
+      test.skip(UNSOURCED.test(route.path), 'nothing is fetched here')
+      await page.goto(withQuery(route.path, networkQuery(net)))
+      await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
+      await settled(page)
+      await expect(page.locator('main .rx-sources [data-source]:visible').first()).toBeVisible()
+    })
+  }
+})
+
 test.describe('the census links into the masternode list', () => {
   for (const href of [
     '/masternodes?reach=reachable',
