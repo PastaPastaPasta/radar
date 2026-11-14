@@ -7,7 +7,10 @@ export interface Ranked<T> {
 }
 
 /** Highest figure first, with tied figures sharing a rank (1, 2, 2, 4). The order of equal figures is kept. */
-export function rankDesc<T>(items: readonly T[], figure: (item: T) => bigint | number): Ranked<T>[] {
+export function rankDesc<T>(
+  items: readonly T[],
+  figure: (item: T) => bigint | number,
+): Ranked<T>[] {
   const sorted = items
     .map((item, i) => ({ item, i, value: figure(item) }))
     .sort((a, b) => (a.value === b.value ? a.i - b.i : a.value > b.value ? -1 : 1))
