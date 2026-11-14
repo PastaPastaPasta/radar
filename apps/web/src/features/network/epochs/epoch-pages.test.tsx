@@ -219,6 +219,19 @@ describe('Protocol', () => {
     await waitFor(() => expect(rows(table).length).toBeGreaterThan(0))
   })
 
+  it('counts no pending votes when nothing is proposed, and explains the totals @NX-56', async () => {
+    renderAt('/protocol')
+    const vote = await card('vote')
+    await waitFor(() => expect(vote).toHaveTextContent('Activation threshold'))
+    expect(vote).toHaveTextContent('None proposed')
+    expect(vote).not.toHaveTextContent('Pending votes')
+    expect(vote).not.toHaveTextContent('Still needed')
+    const tally = await card('tally')
+    await waitFor(() => expect(rows(tally)).toHaveLength(1))
+    expect(tally).toHaveTextContent(/have a vote on record, and the shares are of those/)
+    expect(vote).toHaveTextContent(/Reported by \d+ of \d+ evonodes/)
+  })
+
   it('states the rule where Radar is off, with one notice @RA-61', async () => {
     writeSourceMode('decentralized')
     renderAt('/protocol')
