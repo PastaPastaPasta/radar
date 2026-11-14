@@ -205,7 +205,33 @@ describe('SDK batchers', () => {
       })
     })
 
-    it('asks dpns.usernames, four at a time, for the identities a full page may have cut off', async () => {
+    it('continues a full page with startAfter instead of asking dpns.usernames per identity', async () => {
+      const ids = Array.from({ length: 6 }, (_, i) => id(i + 30))
+      const full = Array.from({ length: 100 }, (_, i) => domain(`n${i}`, id(30), i))
+      const rest = [domain('second', id(31), 5), domain('third', id(32), 6)]
+      call.mockImplementation((_net, _method, args) =>
+        Promise.resolve(sourced('startAfter' in args ? rest : full)),
+      )
+      const names = ids.map((i) => dpnsName.fetch('mainnet', i))
+      await vi.advanceTimersByTimeAsync(40)
+      const got = await Promise.all(names)
+      expect(got.map((n) => n.data)).toEqual([
+        'n0.dash',
+        'second.dash',
+        'third.dash',
+        null,
+        null,
+        null,
+      ])
+      expect(call.mock.calls.map(([, method]) => method)).toEqual([
+        'documents.query',
+        'documents.query',
+      ])
+      expect(call.mock.calls[1]![2]).toMatchObject({ startAfter: 'n99-doc' })
+      expect(got.every((n) => !n.proved)).toBe(true)
+    })
+
+    it('asks dpns.usernames, four at a time, for the identities that the pages read still leave without a name', async () => {
       const ids = Array.from({ length: 6 }, (_, i) => id(i + 30))
       const full = Array.from({ length: 100 }, (_, i) => domain(`n${i}`, id(30), i))
       let inFlight = 0

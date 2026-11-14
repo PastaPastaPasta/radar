@@ -201,21 +201,33 @@ const nameOf = (doc: DocumentDto): string | undefined => {
     : undefined
 }
 
+/** Pages of the names query read before the per-identity fallback: three calls instead of one per unnamed identity. */
+const MAX_NAME_PAGES = 3
+
 /**
  * DPNS names for many identities in one `domain` query on the `records.identity` index; an identity with several
- * names gets the oldest. Identities the query's row limit may have cut off fall back to `dpns.usernames`, at most
- * four in flight; one that fails is unresolved while the names the query found stay.
+ * names gets the oldest. A full page is continued with `startAfter`, up to `MAX_NAME_PAGES` pages; only if the last
+ * page is still full do the identities with no name yet fall back to `dpns.usernames`, at most four in flight. One that
+ * fails is unresolved while the names the query found stay. Several pages are several answers, so the stamp is not proved.
  */
 async function dpnsNames(net: NetworkId, identityIds: string[]): Promise<Answer<string, string>> {
-  const docs = await sdk.call(net, 'documents.query', {
-    contractId: DPNS_CONTRACT,
-    type: 'domain',
-    where: [['records.identity', 'in', identityIds]],
-    orderBy: [['records.identity', 'asc']],
-    limit: DRIVE_MAX,
-  })
+  const pages: Sourced<DocumentDto[]>[] = []
+  let startAfter: string | undefined
+  for (let page = 0; page < MAX_NAME_PAGES; page++) {
+    const answer = await sdk.call(net, 'documents.query', {
+      contractId: DPNS_CONTRACT,
+      type: 'domain',
+      where: [['records.identity', 'in', identityIds]],
+      orderBy: [['records.identity', 'asc']],
+      limit: DRIVE_MAX,
+      ...(startAfter === undefined ? {} : { startAfter }),
+    })
+    pages.push(answer)
+    if (answer.data.length < DRIVE_MAX) break
+    startAfter = answer.data[answer.data.length - 1]!.id
+  }
   const names = new Map<string, { name: string; at: number }>()
-  for (const doc of docs.data) {
+  for (const doc of pages.flatMap((p) => p.data)) {
     const owner = doc.data.records
     const id =
       owner && typeof owner === 'object' ? (owner as { identity?: unknown }).identity : undefined
@@ -228,7 +240,7 @@ async function dpnsNames(net: NetworkId, identityIds: string[]): Promise<Answer<
   const out = new Map<string, string | null | Error>(
     identityIds.map((id) => [id, names.get(id)?.name ?? null]),
   )
-  if (docs.data.length >= DRIVE_MAX) {
+  if (pages[pages.length - 1]!.data.length >= DRIVE_MAX) {
     const cut = identityIds.filter((id) => !names.has(id))
     const outcomes = await settledLimited(cut, (identityId) =>
       sdk.call(net, 'dpns.usernames', { identityId, limit: 1 }),
@@ -240,7 +252,11 @@ async function dpnsNames(net: NetworkId, identityIds: string[]): Promise<Answer<
       )
     })
   }
-  return mapSourced(docs, () => out)
+  if (pages.length === 1) return mapSourced(pages[0]!, () => out)
+  const { data, proof, ...stamp } = pages.reduce((a, b) => (b.asOf < a.asOf ? b : a))
+  void data
+  void proof
+  return { ...stamp, proved: false, data: out }
 }
 
 export const dpnsName = createBatcher<string, string>({
