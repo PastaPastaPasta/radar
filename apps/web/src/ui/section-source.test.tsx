@@ -124,6 +124,62 @@ describe('a section names its sources once', () => {
     expect(line()).toHaveTextContent(/2[0-9] s ago/)
   })
 
+  it('shows a stale part that has a height behind a section stamp that has none @IN-09', () => {
+    render(
+      <Section title="Masternode" source={[{ ...radar, asOf: now - 1000 }]}>
+        <Card title="Rewards" source={{ ...radar, asOf: now - 600_000, height: 400 }}>
+          <p>body</p>
+        </Card>
+      </Section>,
+    )
+    expect(line().querySelectorAll('[data-source="radar"]')).toHaveLength(1)
+    expect(line()).toHaveTextContent('10 min ago')
+  })
+
+  it('leaves a fresh part with a height under a section stamp that has none @IN-09', () => {
+    render(
+      <Section title="Masternode" source={[{ ...radar, asOf: now - 1000 }]}>
+        <Card title="Rewards" source={{ ...radar, asOf: now - 2000, height: 400 }}>
+          <p>body</p>
+        </Card>
+      </Section>,
+    )
+    expect(line()).toHaveTextContent('1 s ago')
+    expect(line()).not.toHaveTextContent('2 s ago')
+  })
+
+  it('does not take a Platform height for one that trails a Core height @IN-09', () => {
+    vi.useFakeTimers({ now })
+    render(
+      <Section title="Radar" source={[{ ...radar, asOf: now - 1000, height: 1_000_000 }]}>
+        <Stat
+          label="Credits"
+          value="2"
+          source={{ ...radar, asOf: now - 2000, height: 5000, heightChain: 'platform' }}
+        />
+      </Section>,
+    )
+    act(() => {
+      vi.advanceTimersByTime(BEHIND_GRACE_MS + 100)
+    })
+    expect(line().querySelectorAll('[data-source="radar"]')).toHaveLength(1)
+    expect(line()).toHaveTextContent('1 s ago')
+    expect(line()).not.toHaveTextContent(/(2|1[0-9]) s ago/)
+  })
+
+  it('shows a stale part on another chain than the section stamp by its read time @IN-09', () => {
+    render(
+      <Section title="Radar" source={[{ ...radar, asOf: now - 1000, height: 1_000_000 }]}>
+        <Stat
+          label="Credits"
+          value="2"
+          source={{ ...radar, asOf: now - 600_000, height: 5000, heightChain: 'platform' }}
+        />
+      </Section>,
+    )
+    expect(line()).toHaveTextContent('10 min ago')
+  })
+
   it('keeps a trailing part’s grace running when a part before it leaves', () => {
     vi.useFakeTimers({ now })
     const own = [{ ...dapi, asOf: now - 1000, height: 100 }]

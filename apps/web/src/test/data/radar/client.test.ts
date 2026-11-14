@@ -143,6 +143,8 @@ describe('radar client', () => {
     const platform = await radar.platform('mainnet')
     expect(platform.data.epochs.length).toBeGreaterThan(10)
     expect(platform.height).toBe(platform.data.now.height)
+    expect(platform.heightChain).toBe('platform')
+    expect((await radar.activation('mainnet')).heightChain).toBeUndefined()
     const activation = await radar.activation('mainnet')
     expect(activation.data.deployments[0]?.name).toBeTypeOf('string')
     expect(activation.height).toBe(activation.data.tip.height)
