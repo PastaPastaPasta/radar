@@ -78,8 +78,11 @@ describe('Rich list page', () => {
     })
     for (const note of notes) {
       expect(note).toHaveTextContent(/Shares are of the circulating supply, 13\.17 M DASH/)
-      expect(note.querySelector('[data-source="hyphen"]')).not.toBeNull()
+      expect(note.querySelector('[data-source]'), 'the page line names the source once').toBeNull()
     }
+    expect(
+      document.querySelectorAll('[data-page="/rich-list"] .rx-page__src [data-source="hyphen"]'),
+    ).toHaveLength(1)
     expect(within(table).getByRole('columnheader', { name: '% of supply' })).toBeInTheDocument()
     const { value } = recorded.body
     const share = value[0]!.balance / metrics.body.circulatingSupply

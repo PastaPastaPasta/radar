@@ -4,7 +4,8 @@ import type { HyRichRow } from '@/data/hyphen/schemas'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { shareOf } from './concentration'
-import { Amount, Empty, ErrorState, Skeleton, SourceLine, type LoadState } from '@/ui'
+import { Amount, Empty, ErrorState, Skeleton, type LoadState } from '@/ui'
+import { useSectionSource } from '@/ui/section-source'
 
 export interface RichListCompactProps {
   rows: HyRichRow[]
@@ -33,6 +34,7 @@ export function RichListCompact({
   total,
 }: RichListCompactProps) {
   const { t } = useLingui()
+  useSectionSource(source)
   if (state === 'loading') return <Skeleton shape="row" count={8} />
   if (state === 'error') return <ErrorState error={error} source="hyphen" onRetry={onRetry} />
   if (rows.length === 0) return <Empty kind="none-yet" title={t`No balances indexed yet.`} />
@@ -44,7 +46,6 @@ export function RichListCompact({
         ))}
       </ol>
       <div className="rx-tfoot">
-        {source ? <SourceLine stamp={source} compact /> : null}
         <div className="rx-pager">
           <span>{t`${formatInt(rows.length)} loaded`}</span>
           {hasNext ? (
