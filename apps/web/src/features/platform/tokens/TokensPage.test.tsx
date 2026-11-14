@@ -30,10 +30,11 @@ describe('Tokens page', () => {
     const real = sdk.call.bind(sdk)
     let reads = 0
     vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
-      if (method !== 'tokens.directPurchasePrices') return real(net, method, args, signal)
+      const answer = () => real(net, method, args, signal)
+      if (method !== 'tokens.directPurchasePrices') return answer()
       reads += 1
       return reads === 1
-        ? real(net, method, args, signal)
+        ? answer()
         : Promise.reject(
             new SourceError({ source: 'sdk', kind: 'unavailable', message: 'The SDK is down' }),
           )

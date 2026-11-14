@@ -54,10 +54,11 @@ describe('probe tagging', () => {
   const seen = async (read: () => Promise<unknown>): Promise<string[]> => {
     const real = globalThis.fetch
     const urls: string[] = []
-    globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
-      if (String(input).includes('/status')) urls.push(String(input))
+    globalThis.fetch = (input, init) => {
+      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+      if (url.includes('/status')) urls.push(url)
       return real(input, init)
-    }) as typeof fetch
+    }
     try {
       await read()
     } finally {

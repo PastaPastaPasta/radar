@@ -61,7 +61,14 @@ describe('useEpochOf', () => {
       asOf: 1,
       fetchedAt: 1,
       proved: true,
-      data: { index: 90, firstBlockHeight: 900, firstBlockTimeMs: 1 },
+      data: {
+        index: 90,
+        firstBlockHeight: 900,
+        firstBlockTimeMs: 1,
+        firstCoreBlockHeight: 1,
+        feeMultiplierPermille: 1000,
+        protocolVersion: 14,
+      },
     })
     client
       .getQueryCache()
