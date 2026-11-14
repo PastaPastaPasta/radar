@@ -146,26 +146,28 @@ function assertStamp(stamp: SourceStamp): void {
 }
 
 /**
- * When the data was true. Once live updates have stopped, nothing DAPI pushed can be newer than the last thing that
- * arrived, so a pushed figure's age keeps counting from there instead of from a stamp renewed on the page.
+ * The stamp dated by when its data was true. Once live updates have stopped, nothing DAPI pushed can be newer than
+ * the last thing that arrived, so a pushed figure's age keeps counting from there instead of from a stamp renewed on
+ * the page.
  */
-function dataTime(stamp: SourceStamp, live: LiveConnection | undefined): number {
-  return stamp.source === 'dapi' && live?.state === 'stopped' && live.lastEventAt !== undefined
-    ? Math.min(stamp.asOf, live.lastEventAt)
-    : stamp.asOf
+function datedByLive(stamp: SourceStamp, live: LiveConnection | undefined): SourceStamp {
+  if (stamp.source !== 'dapi' || live?.state !== 'stopped' || live.lastEventAt === undefined) {
+    return stamp
+  }
+  return live.lastEventAt < stamp.asOf ? { ...stamp, asOf: live.lastEventAt } : stamp
 }
 
 export function sourceView(
-  stamp: SourceStamp,
+  seen: SourceStamp,
   health: SourceHealth,
   now: number,
   live?: LiveConnection,
 ): SourceView {
-  assertStamp(stamp)
+  assertStamp(seen)
+  const stamp = datedByLive(seen, live)
   const b = base(stamp)
   const down = health.state === 'down'
-  const asOf = dataTime(stamp, live)
-  const ageMs = Math.max(0, now - asOf)
+  const ageMs = Math.max(0, now - stamp.asOf)
   const stale =
     !down &&
     !stamp.immutable &&
@@ -179,7 +181,7 @@ export function sourceView(
   const title = [
     stamp.node ? t`Answered by ${stamp.node}` : undefined,
     health.lag?.detail,
-    t`As of ${formatIsoUtc(asOf)}`,
+    t`As of ${formatIsoUtc(stamp.asOf)}`,
   ]
     .filter(Boolean)
     .join(' · ')
@@ -202,10 +204,10 @@ export function sourceView(
     variant: stale ? 'stale' : proof ? 'proof' : 'ok',
     age:
       lag === undefined && b.showAge && !stamp.immutable
-        ? formatRelative(clampSkew(asOf, now), now)
+        ? formatRelative(clampSkew(stamp.asOf, now), now)
         : undefined,
     ...(lag === undefined ? {} : { lag }),
-    ageTitle: formatIsoUtc(asOf),
+    ageTitle: formatIsoUtc(stamp.asOf),
     spinner: stamp.fallback === 'sdk-cold',
     title,
     state: stale ? 'stale' : health.state === 'unknown' ? 'ok' : health.state,
