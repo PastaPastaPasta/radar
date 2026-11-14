@@ -370,6 +370,52 @@ describe('DataTable width', () => {
     })
   })
 
+  it('measures when the table or its box changes size, and not on every text change', async () => {
+    const watchers: { callback: () => void; targets: Element[] }[] = []
+    class FakeResizeObserver {
+      private readonly entry: { callback: () => void; targets: Element[] }
+      constructor(callback: () => void) {
+        this.entry = { callback, targets: [] }
+        watchers.push(this.entry)
+      }
+      observe(target: Element) {
+        this.entry.targets.push(target)
+      }
+      disconnect() {}
+      unobserve() {}
+    }
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver)
+    let reads = 0
+    Object.defineProperty(HTMLElement.prototype, 'scrollWidth', {
+      configurable: true,
+      get: () => {
+        reads++
+        return widths.scroll
+      },
+    })
+    widths.scroll = 900
+    widths.client = 900
+    try {
+      const { container } = await renderInRouter(<Harness />)
+      await new Promise((r) => requestAnimationFrame(r))
+      const box = container.querySelector('.rx-tablescroll')!
+      const table = box.querySelector('table')!
+      expect(watchers.flatMap((w) => w.targets)).toEqual(expect.arrayContaining([box, table]))
+
+      const settledReads = reads
+      const cell = table.querySelector('td')!
+      cell.firstChild!.textContent = 'a longer name than before'
+      await new Promise((r) => setTimeout(r, 50))
+      expect(reads).toBe(settledReads)
+
+      widths.scroll = 1400
+      watchers.find((w) => w.targets.includes(table))!.callback()
+      await waitFor(() => expect(box).toHaveAttribute('data-wide'))
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('makes the scrolling box a named region a keyboard can focus', async () => {
     widths.scroll = 1400
     widths.client = 900

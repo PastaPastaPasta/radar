@@ -229,11 +229,13 @@ function useWiderThan(
       frame = requestAnimationFrame(measure)
     }
     later()
-    // The box resizes with the window; the table's width changes when rows arrive or a name replaces an identifier.
+    // The box resizes with the window and the table's width follows its content, so both sizes are watched; rows
+    // arriving or leaving are the only structure change that matters.
     const resized = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(later)
     resized?.observe(outer)
+    resized?.observe(inner)
     const changed = new MutationObserver(later)
-    changed.observe(inner, { childList: true, subtree: true, characterData: true })
+    changed.observe(inner, { childList: true, subtree: true })
     return () => {
       cancelAnimationFrame(frame)
       resized?.disconnect()
