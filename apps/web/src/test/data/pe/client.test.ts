@@ -179,6 +179,23 @@ describe('pe client', () => {
     expect(out.data).toMatchObject({ result: true, code: 0, gasWanted: 1000 })
   })
 
+  it('verifyTransaction reads a consensus rejection and a 400 as answers @PE-34', async () => {
+    server.use(
+      http.post(`${MAIN}/transaction/verify`, () =>
+        HttpResponse.json({ result: 'error', error: 'InvalidIdentityNonceError', code: 40204 }),
+      ),
+    )
+    const rejected = await pe.verifyTransaction('mainnet', 'AAEC')
+    expect(rejected.data).toMatchObject({ result: 'error', code: 40204 })
+    server.use(
+      http.post(`${MAIN}/transaction/verify`, () =>
+        HttpResponse.json({ error: 'Error: platform deserialization error' }, { status: 400 }),
+      ),
+    )
+    const refused = await pe.verifyTransaction('mainnet', 'AAEC')
+    expect(refused.data.error).toContain('deserialization')
+  })
+
   it('is unavailable on devnets', async () => {
     const e = await pe.status('devnet-ruby').catch((error: unknown) => error)
     expect(isSourceError(e) && e.kind).toBe('unavailable')
