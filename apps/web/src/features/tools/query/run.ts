@@ -39,14 +39,20 @@ export interface StatementRun {
   cancelled?: boolean
 }
 
+interface PlannedStatement {
+  parsed: ParsedQuery
+  contractId: string
+  sql: string
+}
+
 export type PlanResult =
-  | { ok: true; statements: { parsed: ParsedQuery; contractId: string; sql: string }[] }
+  | { ok: true; statements: PlannedStatement[] }
   | { ok: false; problem: 'parse'; failure: ParseFailure }
   | { ok: false; problem: 'too-many'; count: number }
   | { ok: false; problem: 'no-contract'; alias: string | undefined; statement: number }
 
 /** Splits the text at its semicolons outside strings, for the headings of each statement's results. */
-export function statementTexts(sql: string): string[] {
+function statementTexts(sql: string): string[] {
   const parts: string[] = []
   let start = 0
   let quote: string | undefined
@@ -74,7 +80,7 @@ export function planQuery(sql: string, pickerContract: string | undefined): Plan
     return { ok: false, problem: 'too-many', count: parsed.queries.length }
   }
   const texts = statementTexts(sql)
-  const statements: { parsed: ParsedQuery; contractId: string; sql: string }[] = []
+  const statements: PlannedStatement[] = []
   for (const [i, query] of parsed.queries.entries()) {
     const { contractId } = resolveContractId(query, pickerContract)
     if (!contractId) {

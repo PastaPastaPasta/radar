@@ -13,7 +13,7 @@ interface Explanation {
 const RANGE_RULE = msg`Platform walks an index in order, so a query is a run of matches on the index's leading fields and at most one range after them.`
 
 /** Every parse failure with the sentence that names it and the Platform rule that makes it one. */
-export const PARSE_EXPLANATIONS: Record<ParseCode, Explanation> = {
+const PARSE_EXPLANATIONS: Record<ParseCode, Explanation> = {
   'unterminated-string': {
     found: msg`A string is missing its closing quote.`,
     rule: msg`Write text between single quotes, and write a quote inside the text twice.`,

@@ -2,7 +2,7 @@ export type ByteFormat = 'hex' | 'base64' | 'bytes'
 export type ByteFormatChoice = 'auto' | ByteFormat
 
 /** Larger input is refused: no Platform object this page decodes is near it. */
-export const MAX_INPUT_BYTES = 1_048_576
+const MAX_INPUT_BYTES = 1_048_576
 
 export type ParsedBytes =
   | { ok: true; bytes: Uint8Array<ArrayBuffer>; format: ByteFormat }

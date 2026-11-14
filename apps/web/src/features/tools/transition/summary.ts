@@ -67,7 +67,7 @@ const LABELS: Record<string, MessageDescriptor> = {
 
 const UNKNOWN = msg`State transition`
 
-export const nameOfAction = (actionType: string): string => actionType.replace(/\(.*$/, '')
+const nameOfAction = (actionType: string): string => actionType.replace(/\(.*$/, '')
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
