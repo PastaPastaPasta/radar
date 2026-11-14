@@ -3,7 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
-import { expectProved, sourceLineOf } from '../helpers/sources'
+import { expectProved, expectReports, sourceLineOf } from '../helpers/sources'
 import { CLAIM, H1 } from '../routes/claims'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
@@ -47,7 +47,11 @@ test.describe('Epochs', () => {
       await expect(current.getByText(label, { exact: true })).toBeVisible()
     }
     await expect(current.locator('a[href^="/platform/block/"]')).toBeVisible()
-    await expectProved(current)
+    // The page line is shared with the proposers, an unproved read, so the part's own report is what proves it.
+    await expectReports(current, 'sdk:proved')
+    await expect(
+      sourceLineOf(current).locator('[data-source="sdk"][data-proved="true"]'),
+    ).toBeVisible()
     const rewards = card(page, 'rewards')
     for (const label of [
       'Pool so far',

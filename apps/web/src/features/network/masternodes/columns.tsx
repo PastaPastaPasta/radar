@@ -107,7 +107,7 @@ export function useMnColumns({ crawl, tip }: MnColumnOptions): ColumnDef<MnRow>[
         id: 'address',
         header: t`Address`,
         accessorFn: (r) => r.service ?? '',
-        cell: ({ row }) => <span className="font-mono">{row.original.service ?? DASH}</span>,
+        cell: ({ row }) => <span className="rx-mnaddr">{row.original.service ?? DASH}</span>,
       },
     ]
     const crawled: ColumnDef<MnRow>[] = crawl

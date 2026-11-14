@@ -1003,11 +1003,11 @@ button.rx-src--proof:hover {
     font-size: var(--dh-fs-sm);
   }
   .rx-table--dense th {
-    padding: 8px 7px;
+    padding: 8px 6px;
     font-size: 12.5px;
   }
   .rx-table--dense td {
-    padding: 5px 7px;
+    padding: 5px 6px;
   }
   .rx-table--dense .rx-sub {
     font-size: 12px;
@@ -1019,14 +1019,14 @@ button.rx-src--proof:hover {
 /* a cell that gives way before the table scrolls: its full text is in the title */
 .rx-clip {
   display: inline-block;
-  max-width: 8.5rem;
+  max-width: 7.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: bottom;
 }
 .rx-clip--wide {
-  max-width: 11rem;
+  max-width: 9.5rem;
 }
 /* the masternode list: the status mix in one row, then the filters, then the table */
 .rx-mnlist {
@@ -1065,6 +1065,31 @@ button.rx-src--proof:hover {
   display: grid;
   gap: 1px;
   justify-items: start;
+}
+/* enough of the hash to tell two rows apart; the chip would otherwise give its whole width away */
+.rx-table--dense .rx-mnid .rx-chip__text {
+  min-width: 13ch;
+}
+.rx-mnaddr {
+  font-family: var(--dh-mono);
+  font-variant-ligatures: none;
+}
+.rx-table--dense .rx-mnaddr {
+  font-size: 12.5px;
+}
+@media (min-width: 1280px) {
+  .rx-mnlist .rx-tools .rx-grow {
+    flex-basis: 150px;
+  }
+}
+/* a phone reads the claim, its paragraph and its source before the list's controls */
+@media (max-width: 640px) {
+  [data-page='/masternodes'] .rx-page__title {
+    display: contents;
+  }
+  [data-page='/masternodes'] .rx-page__actions {
+    order: 1;
+  }
 }
 
 .rx-table--feed th {
@@ -2601,9 +2626,11 @@ html[data-scroll-gutter] {
   }
 }
 
-/* a phone shows the top five of each board; the board's link leads to the rest */
+/* a phone shows the top five of each board and of the proposers; the card's link leads to the rest.
+   !important: the rows carry a display utility, and the utilities layer comes after this one. */
 @media (max-width: 640px) {
-  [data-leaderboards] [data-board] > li:nth-child(n + 6) {
-    display: none;
+  [data-leaderboards] [data-board] > li:nth-child(n + 6),
+  .rx-phone5 tbody tr:nth-child(n + 6) {
+    display: none !important;
   }
 }

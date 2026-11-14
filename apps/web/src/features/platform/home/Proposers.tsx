@@ -71,6 +71,7 @@ export function Proposers({ active }: { active: boolean }) {
   return (
     <Card
       id="proposers"
+      className="rx-phone5"
       layer="platform"
       title={t`Top proposers`}
       subtitle={

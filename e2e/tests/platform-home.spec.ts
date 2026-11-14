@@ -92,7 +92,7 @@ test.describe('Platform overview', () => {
     await open(page)
     const proposers = card(page, 'proposers')
     await proposers.scrollIntoViewIfNeeded()
-    await expect(proposers.getByRole('row')).toHaveCount(isPhone(page) ? 10 : 11)
+    await expect(proposers.getByRole('row')).toHaveCount(isPhone(page) ? 5 : 11)
     await expect(proposers).toContainText(/Combined from \d+ proof-checked answers/)
     const first = proposers.locator('a[href^="/mn/"]').first()
     const href = await first.getAttribute('href')
@@ -104,9 +104,10 @@ test.describe('Platform overview', () => {
     await open(page)
     await page
       .getByRole('textbox', { name: /Identity ID, name.dash, token ID or epoch number/ })
-      .fill('88')
+      .fill('86')
     await page.getByRole('button', { name: 'Go', exact: true }).click()
-    await expect(page).toHaveURL(/\/epoch\/88/)
+    await expect(page).toHaveURL(/\/epoch\/86/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Epoch 86' })).toBeVisible()
   })
 
   test('sends text it cannot place to the search page and withholds a recovery phrase @NX-03', async ({
@@ -214,6 +215,8 @@ test.describe('Platform overview', () => {
     const boards = page.locator('[data-leaderboards]')
     await boards.scrollIntoViewIfNeeded()
     await expect(card(page, 'board-richest')).toBeVisible()
+    const ranked = card(page, 'board-richest').locator('[data-board] li:visible')
+    await expect(ranked).toHaveCount(isPhone(page) ? 5 : 10)
     await boards.getByRole('button', { name: 'Transitions' }).click()
     await expect(page).toHaveURL(/rich=txs/)
     await expect(boards.getByRole('button', { name: 'Transitions' })).toHaveAttribute(
@@ -295,11 +298,15 @@ test.describe('Platform overview in Decentralized only mode', () => {
     await expect(card(page, 'epoch-now').locator('[role="meter"]')).toBeVisible()
     await expect(card(page, 'epoch-now').locator('[data-epoch-rewards]')).toHaveCount(0)
     await card(page, 'proposers').scrollIntoViewIfNeeded()
-    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 10 : 11)
+    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 5 : 11)
     await expect(card(page, 'contracts')).toContainText('DPNS')
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(card(page, 'pulse')).toHaveCount(0)
     await expect(card(page, 'newest-blocks')).toHaveCount(0)
+    // From the top of the page: a link that scrolled under the sticky bar counts as an obscured target.
+    await page.evaluate(() => {
+      window.scrollTo(0, 0)
+    })
     await expectAccessible(page)
     expect(hosted, 'requests to the indexer').toEqual([])
   })

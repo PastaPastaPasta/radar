@@ -42,7 +42,7 @@ export function Pulse() {
             ),
           },
           {
-            label: t`Platform height`,
+            label: t`Indexed height`,
             value: tip ? <span data-pulse="height">{formatInt(tip.height)}</span> : '…',
           },
           {

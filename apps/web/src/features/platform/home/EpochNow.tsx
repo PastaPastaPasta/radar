@@ -134,7 +134,7 @@ export function EpochNow() {
         </Stats>
       )}
       <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-        <PageLink to="/epochs" className="rx-go inline-flex min-h-6 items-center">
+        <PageLink to="/epochs" className="rx-go">
           {t`Epochs`}
         </PageLink>
       </p>
