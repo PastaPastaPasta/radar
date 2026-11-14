@@ -16,12 +16,7 @@ const same = (a: string | null | undefined, b: string) => a?.toLowerCase() === b
  * Platform Explorer's indexed search, mapped to one hit per entity. Each kind keeps at most five matches; a
  * match on the typed ID or hash ranks as exact, a name match by what was typed, the rest as text.
  */
-export function peSearchHits(
-  found: PeSearch,
-  q: string,
-  stamp: SourceStamp,
-  net: NetworkId,
-): SearchHit[] {
+function peSearchHits(found: PeSearch, q: string, stamp: SourceStamp, net: NetworkId): SearchHit[] {
   const hits: SearchHit[] = []
   const seen = new Set<string>()
   const add = (hit: SearchHit) => {

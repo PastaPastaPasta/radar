@@ -12,8 +12,8 @@ import { useWordlistLoaded } from './wordlist'
 import { resolvers as registry } from './resolvers'
 import type { Resolver, SearchHit, SearchMode, SearchResult } from './types'
 
-export const RESOLVER_TIMEOUT_MS = 4000
-export const PALETTE_DEBOUNCE_MS = 150
+const RESOLVER_TIMEOUT_MS = 4000
+const PALETTE_DEBOUNCE_MS = 150
 
 interface Settled {
   hits?: SearchHit[]
@@ -27,7 +27,7 @@ interface RunState {
 
 const EMPTY: RunState = { key: '', settled: {} }
 
-export function useDebounced<T>(value: T, ms: number): T {
+function useDebounced<T>(value: T, ms: number): T {
   const [debounced, setDebounced] = useState(value)
   useEffect(() => {
     if (ms === 0) return

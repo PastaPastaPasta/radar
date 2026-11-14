@@ -35,10 +35,6 @@ const GROUP_OF: Record<EntityKind, HitGroup> = {
   contest: 'platform',
 }
 
-export function groupOf(kind: EntityKind): HitGroup {
-  return GROUP_OF[kind]
-}
-
 /** The order kinds appear in inside a group: the chain first, then what lives on it. */
 const KIND_ORDER: EntityKind[] = [
   'block',
@@ -86,7 +82,7 @@ export function groupHits<T extends { kind: EntityKind; rank?: number; speculati
   const order: HitGroup[] = ['core', 'network', 'platform']
   const confirmed = hits.filter((h) => !h.speculative)
   const groups = order.flatMap((g) => {
-    const items = kindRuns(confirmed.filter((h) => groupOf(h.kind) === g)).flatMap((r) => r.items)
+    const items = kindRuns(confirmed.filter((h) => GROUP_OF[h.kind] === g)).flatMap((r) => r.items)
     return items.length > 0 ? [[g, items] as [HitGroup, T[]]] : []
   })
   return { groups, guesses: hits.filter((h) => h.speculative) }
