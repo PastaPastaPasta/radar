@@ -6,11 +6,12 @@ import { formatAmountText, unitLabel, type DisplayUnit } from '@/lib/units'
 export type MetricId =
   'hashrate' | 'transactions' | 'difficulty' | 'supply' | 'utxos' | 'credit-pool'
 
+/** The design token every Core chart draws in: the layer's line colour. A chart's title says what it measures. */
+export const CHART_HUE = '--rx-core-line'
+
 export interface Metric {
   id: MetricId
   shape: 'line' | 'bar'
-  /** The design token (a CSS custom property) the chart draws in; each family of metrics has its own. */
-  hue: string
   /** The value for one bucket; `prev` is the bucket before it (undefined for the first). */
   value(row: HyMetrics, prev: HyMetrics | undefined): number | undefined
   /** `resolve` is the smallest difference the reader needs to see, which an axis passes so its labels differ. */
@@ -100,42 +101,36 @@ const formatDash = (duffs: number, units?: ChartUnits, resolve?: number): string
 export const METRICS: Record<MetricId, Metric> = {
   hashrate: {
     id: 'hashrate',
-    hue: '--rx-core-line',
     shape: 'line',
     value: (r) => r.hashrate,
     format: (v) => formatHashrate(v),
   },
   transactions: {
     id: 'transactions',
-    hue: '--rx-plat-line',
     shape: 'bar',
     value: (r, prev) => (prev ? r.txCount - prev.txCount : undefined),
     format: (v) => formatInt(Math.round(v)),
   },
   difficulty: {
     id: 'difficulty',
-    hue: '--dh-accent-forge-select',
     shape: 'line',
     value: (r) => r.difficulty,
     format: (v) => formatSignificant(v),
   },
   supply: {
     id: 'supply',
-    hue: '--rx-net-line',
     shape: 'line',
     value: (r) => Number(r.circulatingSupply),
     format: formatDash,
   },
   utxos: {
     id: 'utxos',
-    hue: '--dh-good',
     shape: 'line',
     value: (r) => r.utxosSpendable,
     format: (v) => formatInt(Math.round(v)),
   },
   'credit-pool': {
     id: 'credit-pool',
-    hue: '--rx-id-3',
     shape: 'line',
     value: (r) => (r.creditPoolBalance == null ? undefined : Number(r.creditPoolBalance)),
     format: formatDash,

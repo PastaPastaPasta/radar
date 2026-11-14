@@ -11,7 +11,7 @@ import { Difficulty } from '../hy-shared/Difficulty'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState } from '../hy-shared/infinite-list'
 import { chartQueries } from './queries'
-import { buildOption, formatHashrate, METRICS, points, type MetricId } from './options'
+import { buildOption, CHART_HUE, formatHashrate, METRICS, points, type MetricId } from './options'
 import { DEFAULT_RANGE, RANGES, type Range } from './ranges'
 
 const ORDER: MetricId[] = [
@@ -134,7 +134,7 @@ function ChartGrid({ range }: { range: Range }) {
       {series.isError ? (
         <Empty kind="blocked" title={t`The chart data didn’t load.`} />
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="rx-cols">
           {view.map(({ id, metric, data }) => (
             <Card
               key={id}
@@ -144,8 +144,8 @@ function ChartGrid({ range }: { range: Range }) {
               id={`chart-${id}`}
             >
               <div
-                style={{ '--rx-l': `var(${metric.hue})` } as CSSProperties}
-                data-chart-hue={metric.hue}
+                style={{ '--rx-l': `var(${CHART_HUE})` } as CSSProperties}
+                data-chart-hue={CHART_HUE}
               >
                 <Chart
                   option={buildOption(metric, data, titles[id], units)}
