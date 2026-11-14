@@ -1,10 +1,18 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { Chart } from './chart'
 
 describe('Chart table', () => {
   it('opens as a focusable, named scroll region so a keyboard can reach a wide table', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe = vi.fn()
+        unobserve = vi.fn()
+        disconnect = vi.fn()
+      },
+    )
     const user = userEvent.setup()
     render(
       <Chart
