@@ -133,7 +133,7 @@ export function RecentEpochs({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => String(r.epoch.index)}
-        {...queryView(infos)}
+        {...queryView(infos, tip)}
         rowLink={(r) => ({ to: '/epoch/$n', params: { n: String(r.epoch.index) } })}
       />
     </Card>

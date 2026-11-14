@@ -8,20 +8,26 @@ export interface QueryState {
   onRetry: () => void
 }
 
-/**
- * What a card or table needs to show a query: loading until it has an answer, an error only when nothing is left to
- * show. Spread it onto the `Card` or table that draws the query.
- */
-export function queryView(query: {
+interface QueryLike {
   data: unknown
   isError: boolean
   error: unknown
   refetch: () => Promise<unknown>
-}): QueryState {
+}
+
+/**
+ * What a card or table needs to show a query: loading until it has an answer, an error only when nothing is left to
+ * show. Spread it onto the `Card` or table that draws the query. A query that waits for another (an epoch read before
+ * the epoch's proposers) names it as `after`: when that one failed, this one will never start, so the failure is shown.
+ */
+export function queryView(query: QueryLike, after?: QueryLike): QueryState {
+  const blocked =
+    query.data === undefined && !query.isError && after?.isError && after.data === undefined
+  const shown = blocked && after ? after : query
   return {
-    state: query.data !== undefined ? 'ready' : query.isError ? 'error' : 'loading',
-    error: query.error,
-    onRetry: () => void query.refetch(),
+    state: query.data !== undefined ? 'ready' : shown.isError ? 'error' : 'loading',
+    error: shown.error,
+    onRetry: () => void shown.refetch(),
   }
 }
 

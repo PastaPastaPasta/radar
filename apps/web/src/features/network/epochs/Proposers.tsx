@@ -64,7 +64,7 @@ export function Proposers() {
         rows={rows}
         getRowId={(r) => r.proTxHash}
         sort={{ value: sort, onChange: setSort }}
-        {...queryView(query)}
+        {...queryView(query, tip)}
         empty={t`No evonode has proposed a block in this epoch yet.`}
       />
     </Card>

@@ -97,7 +97,7 @@ export function Proposers({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => r.proTxHash}
-        {...queryView(query)}
+        {...queryView(query, tip)}
         empty={t`No evonode has proposed a block in this epoch yet.`}
       />
     </Card>
