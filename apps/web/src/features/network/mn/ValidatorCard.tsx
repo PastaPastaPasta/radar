@@ -1,12 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import type { EChartsOption } from 'echarts'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 import { Entity } from '@/features/entity'
-import { formatInt, formatNumber } from '@/lib/format'
-import { Amount, Badge, Card, Chart, Empty, KeyValue, Stat, Stats, Time } from '@/ui'
+import { formatDate, formatInt, formatNumber } from '@/lib/format'
+import { Amount, Card, Chart, Empty, KeyValue, Skeleton, Stat, Stats, Time } from '@/ui'
 import type { MnContext } from './mn-context'
 import { dash } from './platform-math'
 
@@ -39,13 +39,20 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
     !p ? t`not probed` : (p.error ?? t`answered in ${formatInt(p.ms ?? 0)} ms`)
 
   const fmt = (n: number) => formatNumber(n, { maximumFractionDigits: 2 })
-  const day = (ms: number) => new Date(ms).toISOString().slice(0, 16).replace('T', ' ')
+  const stamp = (ms: number) => new Date(ms).toISOString().slice(0, 16).replace('T', ' ')
+  const tick = (ms: number) =>
+    timeframe === '24h' ? new Date(ms).toISOString().slice(11, 16) : formatDate(ms, { time: false })
+  const axis = (points: readonly { t: number }[]) => ({
+    type: 'category' as const,
+    data: points.map((p) => tick(p.t)),
+    axisLabel: { hideOverlap: true },
+  })
   const blockPoints = blocks.data?.data ?? []
   const rewardPoints = rewards.data?.data ?? []
   const blockOption: EChartsOption = {
     tooltip: { trigger: 'axis' },
     grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
-    xAxis: { type: 'category', data: blockPoints.map((p) => day(p.t)) },
+    xAxis: axis(blockPoints),
     yAxis: { type: 'value', minInterval: 1 },
     series: [
       {
@@ -58,7 +65,7 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
   const rewardOption: EChartsOption = {
     tooltip: { trigger: 'axis', valueFormatter: (x) => `${fmt(Number(x))} DASH` },
     grid: { left: 8, right: 12, top: 16, bottom: 28, containLabel: true },
-    xAxis: { type: 'category', data: rewardPoints.map((p) => day(p.t)) },
+    xAxis: axis(rewardPoints),
     yAxis: { type: 'value', axisLabel: { formatter: (x: number) => fmt(x) } },
     series: [
       {
@@ -78,14 +85,7 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
       layer="platform"
       source={[...stamps, ...(ctx.radar ? [ctx.radar] : [])]}
       id="validator-record"
-      subtitle={t`Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer`}
-      actions={
-        v ? (
-          <Badge tone={v.isActive ? 'success' : 'neutral'}>
-            {v.isActive ? t`In a validator set` : t`Not in a validator set`}
-          </Badge>
-        ) : undefined
-      }
+      subtitle={t`Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above.`}
     >
       <div className="grid gap-5">
         <Stats data-reachability>
@@ -127,17 +127,12 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
                   ),
                 },
                 {
-                  label: t`Rewards this epoch`,
-                  value:
-                    v.epochReward != null ? <Amount value={v.epochReward} kind="credits" /> : '—',
-                },
-                {
-                  label: t`Rewards in total`,
+                  label: t`Rewards, all time`,
                   value:
                     v.totalReward != null ? <Amount value={v.totalReward} kind="credits" /> : '—',
                 },
                 {
-                  label: t`Blocks proposed`,
+                  label: t`Blocks proposed, all time`,
                   value: v.proposedBlocksAmount != null ? formatInt(v.proposedBlocksAmount) : '—',
                 },
                 {
@@ -163,17 +158,6 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
                       {t`last`} <Time ms={v.lastWithdrawalTime} />
                     </>
                   ) : undefined,
-                },
-                {
-                  label: t`PoSe`,
-                  value:
-                    state?.PoSePenalty != null
-                      ? state.PoSePenalty > 0
-                        ? t`Penalty ${formatInt(state.PoSePenalty)}`
-                        : t`No penalty`
-                      : '—',
-                  hint:
-                    v.poseScoreMax != null ? t`bans at ${formatInt(v.poseScoreMax)}` : undefined,
                 },
                 {
                   label: t`Registered`,
@@ -226,30 +210,77 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
               ))}
             </div>
             <div className="grid gap-5 md:grid-cols-2">
-              <Chart
-                option={blockOption}
-                height={200}
-                loading={blocks.isPending}
-                label={t`Blocks this evonode proposed, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
-                table={{
-                  columns: [t`Time (UTC)`, t`Blocks`],
-                  rows: blockPoints.map((p) => [day(p.t), p.blocksCount]),
-                }}
-              />
-              <Chart
-                option={rewardOption}
-                height={200}
-                loading={rewards.isPending}
-                label={t`Platform rewards this evonode earned, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
-                table={{
-                  columns: [t`Time (UTC)`, t`Rewards (DASH)`],
-                  rows: rewardPoints.map((p) => [day(p.t), fmt(dash(p.reward))]),
-                }}
-              />
+              <ChartBlock
+                title={t`Blocks proposed`}
+                empty={t`No blocks proposed in this range.`}
+                pending={blocks.isPending}
+                failed={blocks.isError && !blocks.data}
+                size={blockPoints.length}
+              >
+                <Chart
+                  option={blockOption}
+                  height={200}
+                  label={t`Blocks this evonode proposed, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
+                  table={{
+                    columns: [t`Time (UTC)`, t`Blocks`],
+                    rows: blockPoints.map((p) => [stamp(p.t), p.blocksCount]),
+                  }}
+                />
+              </ChartBlock>
+              <ChartBlock
+                title={t`Rewards`}
+                empty={t`No rewards in this range.`}
+                pending={rewards.isPending}
+                failed={rewards.isError && !rewards.data}
+                size={rewardPoints.length}
+              >
+                <Chart
+                  option={rewardOption}
+                  height={200}
+                  label={t`Platform rewards this evonode earned, over the last ${timeframe === '24h' ? t`24 hours` : t`week`}`}
+                  table={{
+                    columns: [t`Time (UTC)`, t`Rewards (DASH)`],
+                    rows: rewardPoints.map((p) => [stamp(p.t), fmt(dash(p.reward))]),
+                  }}
+                />
+              </ChartBlock>
             </div>
           </>
         )}
       </div>
     </Card>
+  )
+}
+
+/** A titled chart; a series with no points says so instead of drawing an empty axis. */
+function ChartBlock({
+  title,
+  empty,
+  pending,
+  failed,
+  size,
+  children,
+}: {
+  title: string
+  empty: string
+  pending: boolean
+  failed: boolean
+  size: number
+  children: ReactNode
+}) {
+  const { t } = useLingui()
+  return (
+    <div className="grid min-w-0 gap-2" data-validator-chart>
+      <h4 className="font-semibold">{title}</h4>
+      {pending ? (
+        <Skeleton shape="chart" height={200} />
+      ) : failed ? (
+        <Empty kind="blocked" title={t`Platform Explorer didn’t answer.`} />
+      ) : size === 0 ? (
+        <Empty kind="none-yet" title={empty} />
+      ) : (
+        children
+      )}
+    </div>
   )
 }
