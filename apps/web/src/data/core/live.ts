@@ -6,6 +6,7 @@ import type { Sourced } from '../envelope'
 import { healthRegistry } from '../health'
 import { dapiKeys, viewKeys } from '../query'
 import { onNetworkReset } from '../query/network-cache'
+import { staleAfterMs } from '../query/stale'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { parseChainLock } from '@/lib/core/chainlock'
 import { parseHeader } from '@/lib/core/header'
@@ -88,6 +89,8 @@ function stamp<T extends { height: number }>(data: T, now: number, node?: string
     fetchedAt: now,
     proved: false,
     height: data.height,
+    // A pushed tip is as fresh as the last block; judge its age like a polled tip, not by the default.
+    staleAfterMs: staleAfterMs('tip'),
     ...(node ? { node } : {}),
     data,
   }

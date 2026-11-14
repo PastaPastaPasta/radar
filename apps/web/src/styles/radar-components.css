@@ -13,7 +13,7 @@ body {
   font: var(--dh-w-body) var(--dh-fs-body)/var(--dh-lh-body) var(--dh-font);
   -webkit-font-smoothing: antialiased;
 }
-a {
+a:where(:not(.dh-btn)) {
   color: var(--dh-brand-ink);
 }
 .rx-num {

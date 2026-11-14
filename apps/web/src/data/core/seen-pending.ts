@@ -120,8 +120,9 @@ export function useSeenPending(
 
   const kept = useMemo(() => (state.net === net ? state.rows : []), [state, net])
   const bytes = useMemo(() => kept.reduce((n, r) => n + r.size, 0), [kept])
+  const rows = useMemo(() => (kept.length > limit ? kept.slice(0, limit) : kept), [kept, limit])
   return {
-    rows: kept.length > limit ? kept.slice(0, limit) : kept,
+    rows,
     count: kept.length,
     bytes,
     capped: kept.length >= SEEN_STORE_LIMIT,
