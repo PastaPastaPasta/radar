@@ -32,7 +32,7 @@ const SAME_READ_MS = 30_000
 /** How long a figure may trail the newest height of its source before it says so: its refetch is usually still in flight. */
 export const BEHIND_GRACE_MS = 8_000
 
-/** The ids in `ids` that have stayed in it for `ms`, and none that left it since. */
+/** The ids in `ids` that have stayed in it for `ms`, and none that left it since. An id keeps its start when others come and go. */
 function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
   const key = ids.join('\n')
   const [state, setState] = useState<{ key: string; held: ReadonlySet<string> }>({
@@ -43,14 +43,19 @@ function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
     const current = new Set(ids)
     setState({ key, held: new Set([...state.held].filter((id) => current.has(id))) })
   }
+  const since = useRef(new Map<string, number>())
   useEffect(() => {
-    const timers = key
-      ? key
-          .split('\n')
-          .map((id) =>
-            setTimeout(() => setState((s) => ({ ...s, held: new Set(s.held).add(id) })), ms),
-          )
-      : []
+    const current = key ? key.split('\n') : []
+    const now = Date.now()
+    for (const id of [...since.current.keys()]) if (!current.includes(id)) since.current.delete(id)
+    const timers = current.map((id) => {
+      const start = since.current.get(id) ?? now
+      since.current.set(id, start)
+      return setTimeout(
+        () => setState((s) => (s.held.has(id) ? s : { ...s, held: new Set(s.held).add(id) })),
+        Math.max(0, ms - (now - start)),
+      )
+    })
     return () => timers.forEach(clearTimeout)
   }, [key, ms])
   return state.held
@@ -63,7 +68,12 @@ function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
  * behind one that is current. Fetch times play no part for figures that carry a height: a republish of the same tip says
  * nothing about whether the other reads are current. Figures without a height fall back to comparing read times.
  */
-export function useLeadSources(sources: readonly (SourceStamp | undefined)[]): boolean[] {
+export function useLeadSources(
+  sources: readonly (SourceStamp | undefined)[],
+  /** A stable name for each position. Without it a figure is known by its index, which only holds while the list keeps its order. */
+  ids?: readonly string[],
+): boolean[] {
+  const idOf = (i: number) => ids?.[i] ?? String(i)
   const newest = new Map<string, number>()
   for (const source of sources) {
     if (source?.height === undefined) continue
@@ -72,7 +82,7 @@ export function useLeadSources(sources: readonly (SourceStamp | undefined)[]): b
   }
   const trailing = sources.flatMap((source, i) =>
     source?.height !== undefined && source.height < (newest.get(sourceKey(source)) ?? -1)
-      ? [String(i)]
+      ? [idOf(i)]
       : [],
   )
   const behind = useSustained(trailing, BEHIND_GRACE_MS)
@@ -85,7 +95,7 @@ export function useLeadSources(sources: readonly (SourceStamp | undefined)[]): b
       seen.set(key, source.asOf)
       return true
     }
-    return source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(String(i))
+    return source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(idOf(i))
   })
 }
 
@@ -149,7 +159,7 @@ export function useSectionSource(source: SourceInput): boolean {
   return collector !== null
 }
 
-/** What the line shows of a stamp. A proof is left out: it can hold values with no text form, and it travels with its read. */
+/** What the line shows of a stamp. A proof is named by its id: its values have no text form. */
 function stampSignature(s: SourceStamp): string {
   return [
     sourceKey(s),
@@ -160,13 +170,23 @@ function stampSignature(s: SourceStamp): string {
     s.immutable ? 'immutable' : '',
     s.asOfFetched ? 'fetched' : '',
     s.staleAfterMs ?? '',
+    s.proof?.id ?? '',
   ].join('|')
 }
 
+/** What a part handed to its section's line, for `data-reports`: one word per source, `sdk:proved` for a proved read. */
+export function reportsAttr(stamps: readonly SourceStamp[]): string | undefined {
+  const words = stamps.map((s) =>
+    [s.source, s.proved ? 'proved' : '', s.fallback ?? ''].filter(Boolean).join(':'),
+  )
+  return words.length > 0 ? [...new Set(words)].join(' ') : undefined
+}
+
 /**
- * The state behind a section's one source line. `own` are the stamps the section was given; they speak for their
- * sources, and a part inside that reports the same source adds nothing. Each other source a part reports joins the
- * line. Which stamp speaks for a source is `useLeadSources`; of several, `SourceLine` shows the oldest.
+ * The state behind a section's one source line. `own` are the stamps the section was given; they come first, so they
+ * speak for their sources while the parts inside are as fresh. A part's stamp of the same source is not dropped: a
+ * read that trails or was made well before the section's own joins the line, so a stale or failing part can't hide
+ * behind it. Which stamp speaks for a source is `useLeadSources`; of several, `SourceLine` shows the oldest.
  */
 export function useSourceCollector(own: SourceInput): {
   collector: Collector
@@ -190,9 +210,15 @@ export function useSourceCollector(own: SourceInput): {
     [],
   )
   const given = isStampList(own) ? own : own ? [own] : []
-  const named = new Set(stampsOfInput(own).map(sourceKey))
-  const all = [...given, ...[...reported.values()].flat().filter((s) => !named.has(sourceKey(s)))]
-  const lead = useLeadSources(all)
+  const all: (SourceStamp | undefined)[] = [...given]
+  const ids = given.map((_, i) => `own:${i}`)
+  for (const [id, stamps] of reported) {
+    stamps.forEach((s, i) => {
+      all.push(s)
+      ids.push(`${id}:${i}`)
+    })
+  }
+  const lead = useLeadSources(all, ids)
   const line = all.filter((s, i): s is SourceStamp => s !== undefined && lead[i] === true)
   return { collector, line }
 }

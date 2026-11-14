@@ -25,7 +25,7 @@ import { formatInt } from '@/lib/format'
 import { announce } from './announce'
 import { cx } from './cx'
 import { Icon } from './icon'
-import { stampsOfInput, useSectionSource } from './section-source'
+import { reportsAttr, stampsOfInput, useSectionSource } from './section-source'
 import { AmountDensity } from './units-context'
 import { Empty, ErrorState, SourceLine } from './states'
 import type { LoadState } from './types'
@@ -543,13 +543,15 @@ export function DataTable<Row>({
   }
 
   const all = stampsOfInput(source)
-  const stamps = useSectionSource(all) ? [] : all
+  const inSection = useSectionSource(all)
+  const stamps = inSection ? [] : all
   const showFoot = stamps.length > 0 || (paging !== undefined && isReady)
 
   return (
     <AmountDensity value="table">
       <div
         className={cx('rx-tablewrap', phone === 'scroll' && 'rx-tablewrap--scroll')}
+        data-reports={inSection ? reportsAttr(all) : undefined}
         onFocusCapture={() => {
           lastTouched = tableId
         }}

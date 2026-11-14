@@ -10,6 +10,7 @@ import { Icon } from './icon'
 import { useNow } from './hooks'
 import { sourceName } from './source-labels'
 import {
+  reportsAttr,
   SourceSectionProvider,
   stampsOfInput,
   useSectionLine,
@@ -67,7 +68,7 @@ function useCardSource(source: CardProps['source']) {
   const down = all.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
   // A section names its sources in its own line, so a card inside one carries no mark; a card that stands alone does.
   const stamps = inSection ? [] : all.filter((s) => !outer.has(sourceKey(s)))
-  return { all, stamps, down }
+  return { all, stamps, down, reports: inSection ? reportsAttr(all) : undefined }
 }
 
 function present(node: ReactNode): boolean {
@@ -90,7 +91,7 @@ export function Card({
   children,
 }: CardProps) {
   const isSection = level === 'section'
-  const { all, stamps, down } = useCardSource(source)
+  const { all, stamps, down, reports } = useCardSource(source)
   const keys = all.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
@@ -133,6 +134,7 @@ export function Card({
       className={cx('rx-card', isSection && 'rx-sec rx-sec--ruled', down && 'rx-down', className)}
       data-layer={attr}
       data-state={state}
+      data-reports={reports}
       data-padding={padding}
       aria-busy={state === 'loading' || undefined}
     >
@@ -208,7 +210,8 @@ export function SectionBand({
 /**
  * A stretch of a page that says where its figures came from once. `source` names the stamps the page read itself;
  * cards, stats, tables and key-value rows inside hand theirs up instead of drawing their own marks. `SectionSources`
- * draws the line wherever the section wants it.
+ * draws the line wherever the section wants it. The element that wraps the section carries `data-source-scope`, so a
+ * part's line can be found from the part.
  */
 export function SourceSection({ source, children }: { source?: SourceInput; children: ReactNode }) {
   const { collector, line } = useSourceCollector(source)
@@ -264,6 +267,7 @@ export function Section({
         id={id}
         className={cx('rx-sec rx-sec--ruled', className)}
         data-layer={layerAttr(layer)}
+        data-source-scope=""
         aria-labelledby={headingId}
       >
         <div className="rx-sec__head">
@@ -290,7 +294,7 @@ function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
   const inSection = useSectionSource(item.source)
   const covered = useCoveredSource(item.source) || inSection
   return (
-    <div>
+    <div data-reports={inSection && item.source ? reportsAttr([item.source]) : undefined}>
       <dt>{item.label}</dt>
       <dd>
         {item.value}
