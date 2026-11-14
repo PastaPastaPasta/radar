@@ -117,10 +117,12 @@ test.describe('Epochs', () => {
     await range.scrollIntoViewIfNeeded()
     await expect(range).toContainText('The latest 20 epochs.')
     await expect(bodyRows(page, 'range')).toHaveCount(20)
-    const first = range.locator('a[href^="/epoch/"]').first()
-    await expect(first).toHaveAttribute('href', /\/epoch\/88/)
-    await first.click()
-    await expect(page).toHaveURL(/\/epoch\/88/)
+    // Epoch 88 is the current one: its page sends the visitor back here, so a click on its row can't settle on it.
+    await expect(range.locator('a[href^="/epoch/"]').first()).toHaveAttribute('href', /\/epoch\/88/)
+    await range.locator('a[href^="/epoch/"]').nth(1).click()
+    await expect(page.getByRole('heading', { level: 1, name: 'Epoch 87' })).toBeVisible()
+    await settled(page)
+    await expect(page).toHaveURL(/\/epoch\/87/)
   })
 
   test('shows a custom range from the address and from the form @NX-52', async ({ page }) => {
