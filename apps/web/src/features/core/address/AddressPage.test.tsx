@@ -615,6 +615,19 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
     expect(history.querySelector(`a[href*="${idOf(1)}"]`)).toBeNull()
   })
 
+  it('names the source of the unconfirmed activity on the area’s own line', async () => {
+    serveInsightTxs([[mempoolTx(1), insTx(2), insTx(3)], [insTx(4)]])
+    renderAt(url)
+    const area = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#unconfirmed')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    await waitFor(() =>
+      expect(area.querySelector('[data-section-sources] [data-source]')).not.toBeNull(),
+    )
+  })
+
   it('lists a transaction once when a new block shifts it onto the next page', async () => {
     serveInsightTxs([
       [insTx(2), insTx(3)],

@@ -258,6 +258,7 @@ export const radar = {
       signal,
       asOf: (b) => b.now.updated,
       height: (b) => b.now.height,
+      heightChain: 'platform',
     })
   },
 

@@ -13,18 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(answering)
-#. placeholder {1}: formatInt(enabled)
-msgid "{0} of {1} enabled masternodes answered the last crawl"
-msgstr "有効なマスターノード {1} 件のうち {0} 件が直近のクロールに応答しました"
-
-#. placeholder {0}: formatInt(enabled)
-#. placeholder {1}: formatInt(rows.length)
-msgid "{0} of {1} masternodes are enabled"
-msgstr "マスターノード {1} 件のうち {0} 件が有効です"
-
 msgid "{behind, plural, one {# block} other {# blocks}}"
 msgstr "{behind, plural, other {# ブロック}}"
+
+msgid "{enabled, plural, one {{answered} of # enabled masternode answered the last crawl} other {{answered} of # enabled masternodes answered the last crawl}}"
+msgstr "{enabled, plural, other {有効なマスターノード # 件のうち {answered} 件が直近のクロールに応答しました}}"
+
+msgid "{registered, plural, one {{enabledCount} of # masternode is enabled} other {{enabledCount} of # masternodes are enabled}}"
+msgstr "{registered, plural, other {マスターノード # 件のうち {enabledCount} 件が有効です}}"
 
 msgid "30 days"
 msgstr "30 日間"

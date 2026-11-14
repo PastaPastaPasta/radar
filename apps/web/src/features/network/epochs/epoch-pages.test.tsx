@@ -49,6 +49,21 @@ describe('Epochs', () => {
     expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
   })
 
+  it('does not call an epoch complete once it has run past its expected end @RA-60 @NX-50', async () => {
+    vi.useFakeTimers({ toFake: ['Date'], now: Date.now() + 400 * 86_400_000 })
+    try {
+      renderAt('/epochs')
+      const h1 = await screen.findByRole('heading', {
+        level: 1,
+        name: 'Epoch 88 is running past its expected end',
+      })
+      expect(h1).toHaveAttribute('data-claim')
+      expect(screen.queryByText(/100% through/)).toBeNull()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('draws the epoch history in time order and lists it newest first @RA-60', async () => {
     renderAt('/epochs')
     const history = await card('history')

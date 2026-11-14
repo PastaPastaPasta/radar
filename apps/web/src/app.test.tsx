@@ -169,7 +169,12 @@ describe('routes', () => {
           const h1 = screen.getByRole('heading', { level: 1 })
           expect(h1.textContent.trim()).not.toBe('')
           if (path === '/') expect(h1).toHaveTextContent('Radar')
-          else if (!h1.textContent.includes(title)) expect(document.title).toContain(title)
+          else if (!h1.textContent.includes(title)) {
+            // The headline is a claim: the kit marks it, it has words, and no placeholder stands in for them.
+            expect(document.title).toContain(title)
+            expect(h1).toHaveAttribute('data-claim')
+            expect(h1.querySelector('[data-skeleton], [aria-busy="true"]')).toBeNull()
+          }
         },
         { timeout: 12_000 },
       )

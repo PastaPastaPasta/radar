@@ -8,19 +8,23 @@ import { formatInt, formatPercent } from '@/lib/format'
 import { Badge } from '@/ui'
 
 const DASH = '—'
-/** Core's target block time: a height that far behind the tip is about this long ago. */
-const BLOCK_MS = 150_000
+/**
+ * Mainnet's average block spacing since DIP3 (about 157.5 s, a little over the 150 s target, as blocks arrive a bit
+ * slower than the target on average). A height that many spacings behind the tip is about that long ago. Other
+ * networks have no figure measured from data Radar already holds, so they show block counts only.
+ */
+export const MAINNET_BLOCK_MS = 157_500
 const HOUR = 3_600_000
 const DAY = 24 * HOUR
 const YEAR = 365.25 * DAY
 
 const share = (v: number | null | undefined) => (v == null ? DASH : formatPercent(v, 1))
 
-/** About how long ago `blocks` blocks were, in the reader's language: "3 hours ago", "2 days ago", "7.7 years ago". */
-export function blocksAgo(blocks: number, locale: string): string {
-  const ms = blocks * BLOCK_MS
+/** About how long ago `blocks` blocks were, in the reader's language: "~3 hours ago", "~2 days ago", "~7.7 years ago". */
+export function blocksAgo(blocks: number, locale: string, blockMs = MAINNET_BLOCK_MS): string {
+  const ms = blocks * blockMs
   const say = (value: number, unit: Intl.RelativeTimeFormatUnit) =>
-    new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'short' }).format(-value, unit)
+    `~${new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'short' }).format(-value, unit)}`
   if (ms < HOUR) return say(Math.max(1, Math.round(ms / 60_000)), 'minute')
   if (ms < 2 * DAY) return say(Math.round(ms / HOUR), 'hour')
   if (ms < 60 * DAY) return say(Math.round(ms / DAY), 'day')
@@ -28,18 +32,13 @@ export function blocksAgo(blocks: number, locale: string): string {
   return say(Math.round((ms / YEAR) * 10) / 10, 'year')
 }
 
-/** The newest height the list knows: the masternode paid last was paid at the tip, or a block behind it. */
-export function listTip(rows: readonly MnRow[]): number {
-  let tip = 0
-  for (const r of rows) tip = Math.max(tip, r.crawl?.last_paid_height ?? 0)
-  return tip
-}
-
 export interface MnColumnOptions {
   /** Some row carries Radar's crawl: its columns appear. */
   crawl: boolean
-  /** The newest height the list knows, to say how long ago a height was. 0 when unknown. */
+  /** The chain height the crawl was taken at, to say how many blocks ago a height was. 0 when unknown. */
   tip: number
+  /** Average block spacing, to turn blocks into about how long ago. Undefined where Radar has no figure for the network. */
+  blockMs?: number
 }
 
 export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none'; key: string } {
@@ -51,7 +50,7 @@ export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none
 }
 
 /** The list's columns. Ids are the `sort` names in the address; a column with a string accessor can filter by its cell. */
-export function useMnColumns({ crawl, tip }: MnColumnOptions): ColumnDef<MnRow>[] {
+export function useMnColumns({ crawl, tip, blockMs }: MnColumnOptions): ColumnDef<MnRow>[] {
   const { t, i18n } = useLingui()
   const locale = i18n.locale
   return useMemo(() => {
@@ -60,12 +59,14 @@ export function useMnColumns({ crawl, tip }: MnColumnOptions): ColumnDef<MnRow>[
       if (h == null || h <= 0) return DASH
       const behind = tip - h
       if (tip <= 0 || behind < 0) return formatInt(h)
-      const ago = blocksAgo(behind, locale)
+      const ago = blockMs === undefined ? undefined : blocksAgo(behind, locale, blockMs)
       const blocks = plural(behind, { one: '# block', other: '# blocks' })
       return (
         <span className="rx-2l" title={t`Block ${formatInt(h)}`}>
-          <span>{lead === 'time' ? ago : formatInt(h)}</span>
-          <span className="rx-sub">{lead === 'time' ? blocks : ago}</span>
+          <span>{lead === 'time' ? (ago ?? blocks) : formatInt(h)}</span>
+          <span className="rx-sub">
+            {lead === 'time' ? (ago ? blocks : formatInt(h)) : (ago ?? blocks)}
+          </span>
         </span>
       )
     }
@@ -215,5 +216,5 @@ export function useMnColumns({ crawl, tip }: MnColumnOptions): ColumnDef<MnRow>[
         ]
       : []
     return [...dapi, ...crawled, status, ...history]
-  }, [t, locale, crawl, tip])
+  }, [t, locale, crawl, tip, blockMs])
 }

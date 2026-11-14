@@ -125,7 +125,12 @@ function PendingCard({ pending, stamp }: { pending: PendingTx[]; stamp?: SourceS
   const { t } = useLingui()
   if (pending.length === 0) return null
   return (
-    <Section title={t`Unconfirmed activity`} layer="core" id="unconfirmed" source={stamp}>
+    <Section
+      title={t`Unconfirmed activity`}
+      layer="core"
+      id="unconfirmed"
+      source={stamp ?? pending.map((p) => p.stamp)}
+    >
       <ul className="grid gap-2" data-pending>
         {pending.map((p) => (
           <li key={p.txid} className="flex flex-wrap items-center gap-3">

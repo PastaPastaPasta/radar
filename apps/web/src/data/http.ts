@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import type { z } from 'zod'
 import { getActiveNetwork } from './active-network'
 import { endpoint, sourceOff, type EndpointSource } from './endpoints'
-import type { SourceId, Sourced } from './envelope'
+import type { HeightChain, SourceId, Sourced } from './envelope'
 import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
@@ -39,6 +39,8 @@ export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'n
   /** Defaults to `fetchedAt`; returning undefined also means `fetchedAt`. */
   asOf?: (body: z.output<S>, res: Response, fetchedAt: number) => number | undefined
   height?: (body: z.output<S>) => number | undefined
+  /** Set when `height` counts on Platform, not the source's usual chain. */
+  heightChain?: HeightChain
 }
 
 export const DEFAULT_TIMEOUT_MS = 10_000
@@ -329,6 +331,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
     if (sourceTime === undefined) out.asOfFetched = true
     const height = req.height?.(body)
     if (height !== undefined) out.height = height
+    if (height !== undefined && req.heightChain) out.heightChain = req.heightChain
     return out
   } finally {
     clearTimeout(timer)

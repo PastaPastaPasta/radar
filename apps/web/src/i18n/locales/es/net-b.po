@@ -13,18 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(answering)
-#. placeholder {1}: formatInt(enabled)
-msgid "{0} of {1} enabled masternodes answered the last crawl"
-msgstr "{0} de {1} masternodes habilitados respondieron en el último rastreo"
-
-#. placeholder {0}: formatInt(enabled)
-#. placeholder {1}: formatInt(rows.length)
-msgid "{0} of {1} masternodes are enabled"
-msgstr "{0} de {1} masternodes están habilitados"
-
 msgid "{behind, plural, one {# block} other {# blocks}}"
 msgstr "{behind, plural, one {# bloque} other {# bloques}}"
+
+msgid "{enabled, plural, one {{answered} of # enabled masternode answered the last crawl} other {{answered} of # enabled masternodes answered the last crawl}}"
+msgstr "{enabled, plural, one {{answered} de # masternode habilitado respondió en el último rastreo} other {{answered} de # masternodes habilitados respondieron en el último rastreo}}"
+
+msgid "{registered, plural, one {{enabledCount} of # masternode is enabled} other {{enabledCount} of # masternodes are enabled}}"
+msgstr "{registered, plural, one {{enabledCount} de # masternode está habilitado} other {{enabledCount} de # masternodes están habilitados}}"
 
 msgid "30 days"
 msgstr "30 días"

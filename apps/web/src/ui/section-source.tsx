@@ -10,7 +10,7 @@ import {
   type Context,
   type ReactNode,
 } from 'react'
-import type { SourceStamp } from '@/data/envelope'
+import type { HeightChain, SourceStamp } from '@/data/envelope'
 import { sourceKey } from './source-scope'
 
 /** What a component may be given as its source: one stamp, or several with gaps for reads that have not landed. */
@@ -61,12 +61,21 @@ function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
   return state.held
 }
 
+/** The chain a stamp's height counts on: Platform for the Platform SDK and the explorer, else what the stamp says, else Core. */
+export function heightChainOf(stamp: SourceStamp): HeightChain {
+  return (
+    stamp.heightChain ?? (stamp.source === 'sdk' || stamp.source === 'pe' ? 'platform' : 'core')
+  )
+}
+
 /**
  * Which of a group's figures speak for their source, by position. The first figure of each source does; a later one is
  * read as part of the same group and stays quiet. A figure whose source height is below the newest height of its source
- * in the group speaks for itself once it has trailed for a grace period, so a figure that stopped refreshing can't hide
- * behind one that is current. Fetch times play no part for figures that carry a height: a republish of the same tip says
- * nothing about whether the other reads are current. Figures without a height fall back to comparing read times.
+ * on the same chain speaks for itself once it has trailed for a grace period, so a figure that stopped refreshing can't
+ * hide behind one that is current. Heights compare only within a chain (Core and Platform numbers say nothing about
+ * each other). Where heights can't be compared, because the group's first figure or this one has none or they are on
+ * different chains, read times decide. Between figures on the same chain a fetch time plays no part: a republish of the
+ * same tip says nothing about whether the other reads are current.
  */
 export function useLeadSources(
   sources: readonly (SourceStamp | undefined)[],
@@ -74,28 +83,34 @@ export function useLeadSources(
   ids?: readonly string[],
 ): boolean[] {
   const idOf = (i: number) => ids?.[i] ?? String(i)
+  const lineOf = (source: SourceStamp) => `${sourceKey(source)}#${heightChainOf(source)}`
   const newest = new Map<string, number>()
   for (const source of sources) {
     if (source?.height === undefined) continue
-    const key = sourceKey(source)
+    const key = lineOf(source)
     newest.set(key, Math.max(newest.get(key) ?? -1, source.height))
   }
   const trailing = sources.flatMap((source, i) =>
-    source?.height !== undefined && source.height < (newest.get(sourceKey(source)) ?? -1)
+    source?.height !== undefined && source.height < (newest.get(lineOf(source)) ?? -1)
       ? [idOf(i)]
       : [],
   )
   const behind = useSustained(trailing, BEHIND_GRACE_MS)
-  const seen = new Map<string, number>()
+  const seen = new Map<string, SourceStamp>()
   return sources.map((source, i) => {
     if (!source) return false
     const key = sourceKey(source)
     const first = seen.get(key)
     if (first === undefined) {
-      seen.set(key, source.asOf)
+      seen.set(key, source)
       return true
     }
-    return source.height === undefined ? first - source.asOf > SAME_READ_MS : behind.has(idOf(i))
+    const comparable =
+      source.height !== undefined &&
+      first.height !== undefined &&
+      heightChainOf(source) === heightChainOf(first)
+    if (!comparable && first.asOf - source.asOf > SAME_READ_MS) return true
+    return behind.has(idOf(i))
   })
 }
 
@@ -166,6 +181,7 @@ function stampSignature(s: SourceStamp): string {
     s.asOf,
     s.fetchedAt,
     s.height ?? '',
+    heightChainOf(s),
     s.node ?? '',
     s.immutable ? 'immutable' : '',
     s.asOfFetched ? 'fetched' : '',

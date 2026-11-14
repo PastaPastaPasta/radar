@@ -53,4 +53,15 @@ describe('the changes model', () => {
     expect(changesInLastDay([at(1), at(5)], asOf)).toBeUndefined()
     expect(changesInLastDay([], asOf)).toBeUndefined()
   })
+
+  it('does not present a stale list as the last 24 hours from now @RA-80', () => {
+    const HOUR = 3_600_000
+    const asOf = 100 * HOUR
+    const list = [{ ts: asOf - HOUR }, { ts: asOf - 30 * HOUR }]
+    const stale = 20 * 60_000
+    expect(changesInLastDay(list, asOf, { now: asOf + 5 * 60_000, staleAfterMs: stale })).toBe(1)
+    expect(
+      changesInLastDay(list, asOf, { now: asOf + 21 * 60_000, staleAfterMs: stale }),
+    ).toBeUndefined()
+  })
 })

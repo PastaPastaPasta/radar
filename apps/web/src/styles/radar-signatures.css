@@ -205,6 +205,21 @@
   background: var(--dh-surface);
   box-shadow: var(--dh-shadow-pop);
 }
+/* On a phone a figure's popover wraps inside a width that fits between the screen's edges, and opens leftwards from
+   a figure in the right-hand column, so it never widens the page. */
+@media (max-width: 640px) {
+  [data-src-hover]:hover > .rx-fig__src,
+  [data-src-hover]:focus > .rx-fig__src,
+  [data-src-hover]:focus-within > .rx-fig__src {
+    width: max-content;
+    max-width: min(280px, calc(100vw - 32px));
+    white-space: normal;
+  }
+  .rx-stat[data-src-hover]:nth-child(2n) > .rx-fig__src {
+    left: auto;
+    right: 0;
+  }
+}
 .rx-hero .rx-home__src {
   margin: 18px 0 0;
 }

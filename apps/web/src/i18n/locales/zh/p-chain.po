@@ -202,16 +202,18 @@ msgstr "纪元 {0} 没有已完结的汇总"
 msgid "Epoch {0} has not started"
 msgstr "纪元 {0} 尚未开始"
 
-#. placeholder {0}: formatInt(epoch.index)
-#. placeholder {1}: formatPercent(ratio, 0)
-msgid "Epoch {0} is {1} through"
-msgstr "纪元 {0} 已过 {1}"
-
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
 msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
 msgstr "纪元 {0}。Evonode：{1}。已提议区块：{2}。"
+
+#. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
+msgid "Epoch {number} is {0} through"
+msgstr "纪元 {number} 已过 {0}"
+
+msgid "Epoch {number} is running past its expected end"
+msgstr "纪元 {number} 已超过预计结束时间"
 
 msgid "Epoch history"
 msgstr "纪元历史"

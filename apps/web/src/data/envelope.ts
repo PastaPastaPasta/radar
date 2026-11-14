@@ -3,6 +3,9 @@ export type SourceId = 'sdk' | 'dapi' | 'radar' | 'pe' | 'hyphen' | 'insight' | 
 /** Why a value came from a fallback instead of its primary source. */
 export type FallbackReason = 'dapi-budget' | 'dapi-down' | 'sdk-cold' | 'sdk-down'
 
+/** Which chain a stamp's `height` counts on. */
+export type HeightChain = 'core' | 'platform'
+
 export interface ProofMeta {
   /** Key into proofStore for the full bytes (NX-61). */
   id: string
@@ -36,6 +39,8 @@ export interface SourceStamp {
   node?: string
   /** Chain height the answer refers to (Core for dapi/hyphen, Platform for sdk/pe). */
   height?: number
+  /** Set where a source gives heights of the other chain than its usual one (Radar's platform document gives a Platform height; its other documents a Core height). */
+  heightChain?: HeightChain
   fallback?: FallbackReason
   /** Age in ms past which SourceLine turns orange: the query's data class staleTime × 4, set by the query client. */
   staleAfterMs?: number

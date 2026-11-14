@@ -1,7 +1,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { writeSourceMode } from '@/lib/source-mode'
 import { App } from '@/app'
 
@@ -34,6 +34,22 @@ describe('the Changes page', () => {
       expect.arrayContaining(['When', 'Block', 'Masternode', 'Change']),
     )
   })
+
+  it('falls back to the page name once the list is older than its refresh, not "the last 24 hours" @RA-80', async () => {
+    renderAt('/changes')
+    await waitFor(() => expect(bodyRows().length).toBeGreaterThan(50))
+    expect(screen.getByRole('heading', { level: 1 })).toHaveAttribute('data-claim')
+    vi.useFakeTimers({ toFake: ['Date'], now: Date.now() + 3 * 3_600_000 })
+    try {
+      await waitFor(
+        () => expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/^Changes$/),
+        { timeout: 15_000 },
+      )
+      expect(screen.getByRole('heading', { level: 1 })).not.toHaveAttribute('data-claim')
+    } finally {
+      vi.useRealTimers()
+    }
+  }, 20_000)
 
   it('filters by kind, keeps the kind in the address and shows an evonode pill @RA-80', async () => {
     const user = userEvent.setup()

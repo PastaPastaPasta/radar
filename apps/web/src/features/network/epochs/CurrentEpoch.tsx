@@ -40,10 +40,14 @@ export function CurrentEpoch() {
     epoch === undefined || length === undefined ? undefined : epoch.firstBlockTimeMs + length
   const now = useNow()
   const ratio = epoch ? epochProgress(epoch.firstBlockTimeMs, endsAt, now) : undefined
+  const number = epoch ? formatInt(epoch.index) : ''
   usePageClaim(
-    epoch && ratio !== undefined
-      ? t`Epoch ${formatInt(epoch.index)} is ${formatPercent(ratio, 0)} through`
-      : undefined,
+    epoch === undefined || ratio === undefined
+      ? undefined
+      : ratio >= 1
+        ? t`Epoch ${number} is running past its expected end`
+        : // Rounding must not call an epoch that has not reached its expected end complete.
+          t`Epoch ${number} is ${formatPercent(Math.min(ratio, 0.99), 0)} through`,
   )
   return (
     <Card

@@ -42,6 +42,22 @@ afterEach(() => {
 })
 
 describe('Platform overview', () => {
+  it('does not call an epoch complete once it has run past its expected end @NX-01 @RA-60', async () => {
+    vi.useFakeTimers({ toFake: ['Date'], now: Date.now() + 400 * 86_400_000 })
+    try {
+      renderAt('/platform')
+      expect(
+        await screen.findByRole('heading', {
+          level: 1,
+          name: 'Epoch 88 is running past its expected end',
+        }),
+      ).toHaveAttribute('data-claim')
+      expect(screen.queryByText(/100% through/)).toBeNull()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('opens with how far the epoch is, then its pool and what a block pays @NX-01 @RA-60', async () => {
     renderAt('/platform')
     expect(await screen.findByRole('heading', { level: 1, name: 'Platform' })).toBeInTheDocument()

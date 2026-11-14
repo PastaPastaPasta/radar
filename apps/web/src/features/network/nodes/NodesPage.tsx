@@ -1,9 +1,9 @@
-import { Trans, useLingui } from '@lingui/react/macro'
+import { useLingui } from '@lingui/react/macro'
 import { useSearch } from '@tanstack/react-router'
 import { PageFrame, PageLink, useNetwork } from '@/features/entity'
-import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Empty, SegFilter, Unavailable } from '@/ui'
+import { nodesClaim } from './claim'
 import { useCensus, useCrawlAvailable, useV24Pending } from './census-data'
 import { CENSUS_SCOPES, radarScope } from './census-math'
 import { DapiMasternodes } from './DapiMasternodes'
@@ -27,17 +27,14 @@ export function NodesPage() {
   const v24 = useV24Pending(net)
   const props = { net, scope, versions, days, summary: census.summary }
   const answered = available ? census.summary.data?.data.crawl?.reachable : undefined
-  const count = answered === undefined ? '' : formatInt(answered)
   return (
     <PageFrame
       path="/nodes"
       title={t`Nodes`}
       claim={
         answered === undefined ? undefined : (
-          <span data-census-answered>
-            <Trans>
-              <span className="tabular-nums">{count}</span> Dash nodes answered the last crawl
-            </Trans>
+          <span data-census-answered className="tabular-nums">
+            {nodesClaim(answered)}
           </span>
         )
       }
