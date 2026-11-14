@@ -1,10 +1,11 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { core } from '@/data/core/client'
 import { SourceError } from '@/data/errors'
-import { radar } from '@/data/radar/client'
+import { server } from '@/test/server'
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
@@ -28,8 +29,8 @@ afterEach(() => {
 
 describe('Masternode page', () => {
   it('says Radar’s crawl is missing when only DAPI’s list has the masternode @X-09', async () => {
-    vi.spyOn(radar, 'masternode').mockRejectedValue(
-      new SourceError({ source: 'radar', kind: 'unavailable', message: 'Radar is down' }),
+    server.use(
+      http.get(`*/masternodes/${MAINNET.listed}`, () => new HttpResponse(null, { status: 400 })),
     )
     vi.spyOn(core, 'masternodeList').mockResolvedValue({
       data: new Map([
@@ -51,7 +52,7 @@ describe('Masternode page', () => {
     } as unknown as Awaited<ReturnType<typeof core.masternodeList>>)
     renderAt(`/mn/${MAINNET.listed}`)
 
-    expect(await screen.findByText(/Radar isn.t available here/)).toBeInTheDocument()
+    expect(await screen.findByText(/Radar isn.t answering/)).toBeInTheDocument()
     expect(document.querySelector('[data-masternode-header]')).toHaveTextContent(
       'Valid on DAPI’s list',
     )

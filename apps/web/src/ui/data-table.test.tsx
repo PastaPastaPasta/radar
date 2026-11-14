@@ -381,8 +381,8 @@ describe('DataTable width', () => {
       observe(target: Element) {
         this.entry.targets.push(target)
       }
-      disconnect() {}
-      unobserve() {}
+      disconnect = vi.fn()
+      unobserve = vi.fn()
     }
     vi.stubGlobal('ResizeObserver', FakeResizeObserver)
     let reads = 0

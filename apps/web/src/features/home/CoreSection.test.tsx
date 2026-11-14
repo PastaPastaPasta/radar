@@ -146,7 +146,7 @@ describe('Core figures on the home page @HY-01', () => {
     reads.mockRejectedValue(
       new SourceError({ source: 'dapi', kind: 'unavailable', message: 'No node answered' }),
     )
-    vi.spyOn(core, 'blockRows').mockReturnValue(new Promise(() => {}))
+    vi.spyOn(core, 'blockRows').mockReturnValue(new Promise<never>(() => undefined))
     const client = new QueryClient()
     await renderFigures(client)
     await waitFor(() => expect(client.getQueryData(dapiKeys('mainnet', 'tip'))).toBeDefined())
