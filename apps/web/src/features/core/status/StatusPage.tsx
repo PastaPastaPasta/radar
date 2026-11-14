@@ -28,8 +28,6 @@ export function StatusPage() {
   const rows = sourceRows(net, health, decentralized)
   const overall = overallState(rows)
 
-  // The page's subject is the sources themselves, so each card names its own beside its heading and nothing is
-  // handed to a page line.
   const claim = {
     ok: decentralized ? t`DAPI and the Platform SDK are answering` : t`Every source is answering`,
     attention: t`Some sources are slow or behind`,
@@ -55,6 +53,7 @@ export function StatusPage() {
         </span>
       }
     >
+      {/* The sources are the page's subject: each card names its own beside its heading, and none joins a page line. */}
       <NoSourceSection>
         <p>
           <Link to="/internals" className="rx-go whitespace-normal">
