@@ -90,8 +90,9 @@ export function WhereCards(props: SectionProps) {
     : undefined
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2" data-where>
+    <div className="rx-cols" data-where>
       <Card
+        level="section"
         title={t`Hosting providers`}
         id="hosting"
         layer="network"
@@ -124,6 +125,7 @@ export function WhereCards(props: SectionProps) {
         )}
       </Card>
       <Card
+        level="section"
         title={t`Countries`}
         id="countries"
         layer="network"

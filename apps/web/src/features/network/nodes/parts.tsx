@@ -92,8 +92,8 @@ export function Notice({
   return (
     <p
       role="status"
-      className={`rx-note rounded border p-3 [&_a]:underline max-sm:px-2.5 max-sm:py-2 ${
-        tone === 'warn' ? 'border-[var(--dh-warn,#b45309)]' : 'border-[var(--dh-line)]'
+      className={`rx-note border-l-2 py-0.5 pl-3 [&_a]:underline ${
+        tone === 'warn' ? 'border-[var(--dh-warn)]' : 'border-[var(--dh-line-2)]'
       }`}
       {...rest}
     >

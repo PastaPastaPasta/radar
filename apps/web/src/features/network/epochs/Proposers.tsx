@@ -42,6 +42,7 @@ export function Proposers() {
   const pages = answer?.pages ?? 0
   return (
     <Card
+      level="section"
       id="proposers"
       layer="network"
       title={t`Top proposers`}

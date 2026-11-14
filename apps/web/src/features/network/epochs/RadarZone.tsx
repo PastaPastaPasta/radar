@@ -12,6 +12,7 @@ import { dash } from '@/features/network/mn/platform-math'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import {
+  Section,
   Amount,
   Card,
   Chart,
@@ -36,31 +37,24 @@ export function RadarZone() {
   const devnet = isDevnet(net)
   const query = useQuery({ ...radarQueries.platform(net), enabled: !off && !devnet })
   return (
-    <section id="radar-zone" className="rx-sec" aria-labelledby="radar-zone-title">
-      <div className="rx-sec__head">
-        <h2 className="rx-sec__title" id="radar-zone-title">
-          {t`Rewards and schedule`}
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 gap-4">
-        {off ? (
-          <Unavailable
-            source="radar"
-            title={t`The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl`}
-          />
-        ) : devnet ? (
-          <Empty kind="unsupported-network" title={t`Radar doesn’t crawl devnets`} />
-        ) : (
-          <>
-            <Rewards query={query} />
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <Upcoming query={query} />
-              <History query={query} />
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+    <Section id="radar-zone" layer="network" title={t`Rewards and schedule`}>
+      {off ? (
+        <Unavailable
+          source="radar"
+          title={t`The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl`}
+        />
+      ) : devnet ? (
+        <Empty kind="unsupported-network" title={t`Radar doesn’t crawl devnets`} />
+      ) : (
+        <div className="rx-pile">
+          <Rewards query={query} />
+          <div className="rx-cols">
+            <Upcoming query={query} />
+            <History query={query} />
+          </div>
+        </div>
+      )}
+    </Section>
   )
 }
 

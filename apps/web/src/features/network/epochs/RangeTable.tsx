@@ -157,6 +157,7 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
   }
   return (
     <Card
+      level="section"
       id="range"
       layer="network"
       title={t`Epochs`}

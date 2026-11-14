@@ -46,6 +46,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
 
   return (
     <Card
+      level="section"
       title={t`Can they be reached`}
       id="reach"
       layer="network"

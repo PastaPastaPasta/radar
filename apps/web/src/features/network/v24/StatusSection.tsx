@@ -174,6 +174,7 @@ export function StatusSection({
 
   return (
     <Card
+      level="section"
       title={t`Where it stands`}
       id="status"
       layer="network"

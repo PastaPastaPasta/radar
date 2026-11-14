@@ -83,6 +83,7 @@ export function ThresholdsSection({
   )
   return (
     <Card
+      level="section"
       title={t`Thresholds by window`}
       id="thresholds"
       layer="network"

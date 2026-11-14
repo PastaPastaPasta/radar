@@ -128,6 +128,7 @@ export function VersionsCard({
 
   return (
     <Card
+      level="section"
       title={t`What they run`}
       id="versions"
       className="min-w-0 [&_.dh-seg]:max-w-full [&_.dh-seg]:overflow-x-auto"
