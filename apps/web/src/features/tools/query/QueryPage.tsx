@@ -1,18 +1,21 @@
 import { useLingui } from '@lingui/react/macro'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { isSourceError } from '@/data/errors'
+import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, useNetwork } from '@/features/entity'
-import { wellKnownContracts } from '@/lib/well-known'
+import { systemContract, wellKnownContracts } from '@/lib/well-known'
 import { Card, announce } from '@/ui'
 import { copyText } from '@/ui/clipboard'
 import { lineColumn } from './highlight'
 import { explainFailure } from './parse-messages'
-import { queryPresets } from './presets'
+import { presetsFor } from './presets'
 import { QueryEditor } from './QueryEditor'
 import { ResultsPanel } from './ResultsPanel'
 import { MAX_STATEMENTS, planQuery, runStatement, type PlanResult, type StatementRun } from './run'
 import { useSavedQueries } from './saved-queries'
+import { typeHelp } from './schema'
 import { SchemaPanel } from './SchemaPanel'
 
 const CONTRACT_ID = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
@@ -23,17 +26,50 @@ export function QueryPage() {
   const net = useNetwork()
   const search = useSearch({ from: '/query' })
   const navigate = useNavigate()
-  const presets = useMemo(() => queryPresets(net), [net])
-  const known = wellKnownContracts(net)
-  const first = presets[0]!
+  const first = presetsFor(net, search.contract ?? systemContract('dpns').id)[0]!
+  const allKnown = wellKnownContracts(net)
+  // The protocol's own DPNS and DashPay exist everywhere; every other system contract is asked for, and one that
+  // the network answers "none" for is not offered.
+  const existence = useQueries({
+    queries: allKnown.map((c) => ({
+      ...sdkQueries['contracts.fetch'](net, { id: c.id }),
+      enabled: c.key !== 'dpns' && c.key !== 'dashpay',
+    })),
+  })
+  const known = allKnown.filter((_, i) => existence[i]?.data?.data !== null)
 
-  const [sql, setSql] = useState(search.q ?? first.sql)
+  const [sql, setSqlText] = useState(search.q ?? first.sql)
+  const edited = useRef(search.q !== undefined)
+  const setSql = useCallback((next: string) => {
+    edited.current = true
+    setSqlText(next)
+  }, [])
+  const loadSql = useCallback((next: string) => {
+    edited.current = false
+    setSqlText(next)
+  }, [])
   const [contractId, setContractId] = useState(search.contract ?? first.contractId)
   const [customId, setCustomId] = useState(
     search.contract && !known.some((c) => c.id === search.contract) ? search.contract : '',
   )
   const picked = known.some((c) => c.id === contractId) ? contractId : OTHER
   const validContract = CONTRACT_ID.test(contractId)
+  const contract = useQuery({
+    ...sdkQueries['contracts.fetch'](net, { id: contractId }),
+    enabled: validContract,
+  })
+  const firstType = contract.data?.data ? typeHelp(contract.data.data)[0]?.name : undefined
+  const presets = useMemo(
+    () => presetsFor(net, contractId, firstType),
+    [net, contractId, firstType],
+  )
+  // A contract with no ready-made query gets one on its first type once the schema is known, unless the reader has
+  // already written their own.
+  useEffect(() => {
+    if (edited.current) return
+    const preset = presets.find((p) => p.contractId === contractId)
+    if (preset) loadSql(preset.sql)
+  }, [presets, contractId, loadSql])
 
   const [runs, setRuns] = useState<StatementRun[]>([])
   const [running, setRunning] = useState(false)
@@ -168,7 +204,12 @@ export function QueryPage() {
                 className="dh-input"
                 value={picked}
                 onChange={(e) => {
-                  setContractId(e.target.value === OTHER ? customId : e.target.value)
+                  const next = e.target.value === OTHER ? customId : e.target.value
+                  const preset = presetsFor(net, next).find((p) => p.contractId === next)
+                  if (preset) loadSql(preset.sql)
+                  else edited.current = false
+                  setContractId(next)
+                  setProblem(undefined)
                 }}
               >
                 {known.map((c) => (
@@ -213,7 +254,7 @@ export function QueryPage() {
                 className="dh-btn dh-btn--sm"
                 data-preset={p.id}
                 onClick={() => {
-                  setSql(p.sql)
+                  loadSql(p.sql)
                   setContractId(p.contractId)
                   setCustomId('')
                   setProblem(undefined)

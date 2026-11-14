@@ -1,19 +1,42 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
+import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { sdkQueries } from '@/data/sdk/queries'
 import { Card, Copy, DataTable, Empty, ErrorState, JsonView, Skeleton } from '@/ui'
 import { isSourceError } from '@/data/errors'
 import { formatInt } from '@/lib/format'
+import type { NetworkId } from '@/lib/network'
 import { bytesToHex } from '@/lib/hex'
 import { download } from './download'
 import { resultCsv, resultJson, resultRows } from './export'
+import { decodeGroupKey } from './group-key'
 import { QUERY_ERROR_HINTS } from './parse-messages'
 import { buildSdkExample, classifyQueryError, formatAverage, toSdkParams } from './query-workspace'
 import type { StatementRun } from './run'
+import { typeHelp } from './schema'
 import { toDocumentsQuery } from './sql-parser'
 
 const MAX_COLUMNS = 7
+
+/** A cell whose text may be one long unbroken ID: it wraps inside its card instead of running under the next field. */
+const wrapped = ({ getValue }: { getValue: () => unknown }) => (
+  <span className="[overflow-wrap:anywhere]">{String(getValue())}</span>
+)
+
+/** Whether the failure is Platform refusing or failing the query, rather than DAPI being out of reach. */
+function isQueryProblem(error: unknown): boolean {
+  if (!isSourceError(error)) return true
+  return ![
+    'network',
+    'timeout',
+    'rate-limited',
+    'unavailable',
+    'disabled-by-mode',
+    'proof-failed',
+  ].includes(error.kind)
+}
 
 function cellText(value: unknown): string {
   if (value === null || value === undefined) return ''
@@ -42,7 +65,7 @@ function columnsOf(rows: Record<string, unknown>[]): string[] {
 export interface ResultsPanelProps {
   run: StatementRun
   index: number
-  net: string
+  net: NetworkId
   running: boolean
   onMore: (index: number) => void
 }
@@ -51,6 +74,18 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
   const { t, i18n } = useLingui()
   const { result, error } = run
   const rows = useMemo(() => (result ? resultRows(result) : []), [result])
+  const contract = useQuery({
+    ...sdkQueries['contracts.fetch'](net, { id: run.contractId }),
+    enabled:
+      result !== undefined && result.kind !== 'documents' && run.parsed.groupBy?.length === 1,
+  })
+  const groupType = useMemo(() => {
+    const field = run.parsed.groupBy?.length === 1 ? run.parsed.groupBy[0] : undefined
+    const data = contract.data?.data
+    if (!field || !data) return undefined
+    const type = typeHelp(data).find((entry) => entry.name === run.parsed.from)
+    return type?.fields.find((f) => f.name === field)?.type
+  }, [contract.data, run.parsed.groupBy, run.parsed.from])
   const columns = useMemo<ColumnDef<Record<string, unknown>>[]>(() => {
     if (!result) return []
     if (result.kind === 'documents') {
@@ -58,7 +93,8 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
         id: key,
         header: key,
         accessorFn: (row) => cellText(row[key]),
-        meta: { phone: i === 0 ? 'title' : i < 3 ? 'primary' : 'secondary' },
+        cell: wrapped,
+        ...(i === 0 ? { meta: { phone: 'title' as const } } : {}),
       }))
     }
     const columnsFor: [string, string][] =
@@ -78,18 +114,21 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
       header,
       accessorFn: (row) => {
         const cell = row[key]
-        if (key === 'groupKey') return cell === '' ? t`All documents` : cellText(cell)
+        if (key === 'groupKey') {
+          return cell === '' ? t`All documents` : decodeGroupKey(cellText(cell), groupType)
+        }
         return typeof cell === 'bigint' || typeof cell === 'number'
           ? formatInt(cell)
           : cellText(cell)
       },
+      cell: wrapped,
       meta: {
-        phone: i === 0 ? 'title' : 'primary',
+        ...(i === 0 ? { phone: 'title' as const } : {}),
         numeric: i > 0,
         align: i > 0 ? 'end' : 'start',
       },
     }))
-  }, [result, rows, t])
+  }, [result, rows, groupType, t])
 
   const sdkExample = useMemo(() => {
     const { groupBy, ...args } = toDocumentsQuery(run.parsed, run.contractId)
@@ -125,7 +164,16 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
           />
         ) : (
           <div className="grid gap-2">
-            <ErrorState error={error} source="sdk" />
+            {isQueryProblem(error) ? (
+              <div role="alert" data-query-problem="run" className="grid gap-1">
+                <p className="font-semibold">{t`Platform couldn't run this query`}</p>
+                <p className="rx-mono break-words text-sm">
+                  {error instanceof Error ? error.message : String(error)}
+                </p>
+              </div>
+            ) : (
+              <ErrorState error={error} source="sdk" />
+            )}
             {hint ? (
               <p className="text-sm" data-query-hint>
                 {i18n._(hint)}

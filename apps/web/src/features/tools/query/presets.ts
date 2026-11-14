@@ -66,3 +66,26 @@ export function queryPresets(net: NetworkId): QueryPreset[] {
   }
   return presets
 }
+
+/**
+ * The presets for the picked contract: its own starting queries first, or a first look at its first document type
+ * when it has none, then the examples that carry their own contract (the aggregate ones on testnet).
+ */
+export function presetsFor(net: NetworkId, contractId: string, firstType?: string): QueryPreset[] {
+  const all = queryPresets(net)
+  const own = all.filter((p) => p.contractId === contractId)
+  const system = [systemContract('dpns').id, systemContract('dashpay').id]
+  const others = all.filter((p) => p.contractId !== contractId && !system.includes(p.contractId))
+  const generic: QueryPreset[] =
+    own.length === 0 && firstType
+      ? [
+          {
+            id: 'first-documents',
+            title: msg`The first ${firstType} documents`,
+            contractId,
+            sql: `SELECT * FROM ${/^[A-Za-z_$][\w$]*$/.test(firstType) ? firstType : `\`${firstType}\``}\nLIMIT 5`,
+          },
+        ]
+      : []
+  return [...own, ...generic, ...others]
+}
