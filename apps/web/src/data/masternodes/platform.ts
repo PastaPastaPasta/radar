@@ -31,6 +31,11 @@ export interface EvoSources {
   platform?: RadarPlatform | undefined
   /** Platform Explorer's active validators; absent when it was not asked or did not answer. */
   validators?: readonly PeValidator[] | undefined
+  /**
+   * Platform Explorer's record of single evonodes the list of active validators leaves out (queued ones): their totals
+   * fill in the row, but being named here does not put them in a validator set.
+   */
+  records?: readonly PeValidator[] | undefined
   proposed?: ProposedBlocks | undefined
 }
 
@@ -39,16 +44,20 @@ export function buildEvoRows(rows: readonly MnRow[], sources: EvoSources): EvoRo
   const validators = sources.validators
     ? new Map(sources.validators.map((v) => [v.proTxHash, v]))
     : undefined
+  const records = sources.records
+    ? new Map(sources.records.map((v) => [v.proTxHash, v]))
+    : undefined
   return rows
     .filter((r) => r.type === 'evo')
     .map((row) => {
       const record = radar.get(row.protx) ?? null
-      const validator = validators?.get(row.protx) ?? null
+      const listed = validators?.get(row.protx) ?? null
+      const validator = listed ?? records?.get(row.protx) ?? null
       const state: ValidatorState | null =
         row.status === 'pose-banned'
           ? 'banned'
           : validators
-            ? validator
+            ? listed
               ? 'active'
               : 'queued'
             : null

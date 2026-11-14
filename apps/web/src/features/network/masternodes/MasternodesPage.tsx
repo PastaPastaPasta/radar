@@ -54,7 +54,7 @@ export function MasternodesPage() {
       }
     >
       <div className="rx-mnlist">
-        {data && !crawl ? (
+        {data && !crawl && !(mode && search.view === 'platform') ? (
           mode ? (
             <Unavailable
               compact

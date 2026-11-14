@@ -37,7 +37,34 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       header: t`Blocks this epoch`,
       accessorFn: (e) => e.blocks ?? 0,
       cell: ({ row }) => (row.original.blocks == null ? DASH : formatInt(row.original.blocks)),
-      meta: { numeric: true, phone: 'primary' },
+      meta: { numeric: true, phone: 'primary', phoneUnit: t`blocks this epoch` },
+    }
+    const blocksTotal: ColumnDef<EvoRow> = {
+      id: 'blocks_total',
+      header: t`Blocks proposed`,
+      accessorFn: (e) => e.validator?.proposedBlocksAmount ?? 0,
+      cell: ({ row }) => {
+        const n = row.original.validator?.proposedBlocksAmount
+        return n == null ? DASH : formatInt(n)
+      },
+      meta: { numeric: true, phone: 'hidden' },
+    }
+    const lastBlock: ColumnDef<EvoRow> = {
+      id: 'last_block',
+      header: t`Last block`,
+      accessorFn: (e) => e.validator?.lastProposedBlockHeader?.height ?? 0,
+      cell: ({ row }) => {
+        const block = row.original.validator?.lastProposedBlockHeader
+        return block ? (
+          <span className="grid gap-1">
+            <Entity kind="platform-block" id={String(block.height)} />
+            {block.timestamp ? <Time ms={block.timestamp} mode="relative" /> : null}
+          </span>
+        ) : (
+          DASH
+        )
+      },
+      meta: { numeric: true, phone: 'hidden' },
     }
     if (!indexers) {
       return [
@@ -54,12 +81,15 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
           meta: { phone: 'secondary' },
         },
         blocks,
+        blocksTotal,
+        lastBlock,
       ]
     }
     const credits = (
       id: 'last_epoch' | 'd30' | 'monthly' | 'balance',
       header: string,
       phone?: 'secondary',
+      phoneUnit?: string,
     ): ColumnDef<EvoRow> => ({
       id,
       header,
@@ -74,7 +104,7 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
           </AmountDensity>
         )
       },
-      meta: { numeric: true, phone: phone ?? 'hidden' },
+      meta: { numeric: true, phone: phone ?? 'hidden', ...(phoneUnit ? { phoneUnit } : {}) },
     })
     const stateLabels = {
       active: t({ message: 'Active', context: 'evonode state' }),
@@ -98,35 +128,10 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
         meta: { phone: 'hidden' },
       },
       blocks,
-      {
-        id: 'blocks_total',
-        header: t`Blocks proposed`,
-        accessorFn: (e) => e.validator?.proposedBlocksAmount ?? 0,
-        cell: ({ row }) => {
-          const n = row.original.validator?.proposedBlocksAmount
-          return n == null ? DASH : formatInt(n)
-        },
-        meta: { numeric: true, phone: 'hidden' },
-      },
-      {
-        id: 'last_block',
-        header: t`Last block`,
-        accessorFn: (e) => e.validator?.lastProposedBlockHeader?.height ?? 0,
-        cell: ({ row }) => {
-          const block = row.original.validator?.lastProposedBlockHeader
-          return block ? (
-            <span className="grid gap-1">
-              <Entity kind="platform-block" id={String(block.height)} />
-              {block.timestamp ? <Time ms={block.timestamp} mode="relative" /> : null}
-            </span>
-          ) : (
-            DASH
-          )
-        },
-        meta: { numeric: true, phone: 'hidden' },
-      },
+      blocksTotal,
+      lastBlock,
       credits('last_epoch', t`Last epoch`),
-      credits('d30', t`30 days`, 'secondary'),
+      credits('d30', t`30 days`, 'secondary', t`earned in 30 days`),
       credits('monthly', t`A month (est.)`),
       credits('balance', t`Claimable`),
       {

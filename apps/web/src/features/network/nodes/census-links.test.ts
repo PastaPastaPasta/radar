@@ -4,12 +4,13 @@ import type { MnRow } from '@/data/masternodes/rows'
 import type { CensusScope } from './census-math'
 import { countryLink, hostLink, reachableLink, unreachableLink } from './census-links'
 
-const row = (over: Partial<MnRow> & { crawl?: Partial<NonNullable<MnRow['crawl']>> }): MnRow =>
+type Crawl = { reachable?: boolean }
+
+const row = (over: { type?: 'evo'; status?: 'pose-banned'; crawl?: Crawl } = {}): MnRow =>
   ({
     protx: 'a'.repeat(64),
-    type: 'regular',
-    status: 'enabled',
-    ...over,
+    type: over.type ?? 'regular',
+    status: over.status ?? 'enabled',
     crawl: { reachable: true, country: 'DE', asn: 24940, ...over.crawl },
   }) as unknown as MnRow
 
@@ -19,8 +20,8 @@ const rows: MnRow[] = [
   row({ type: 'evo' }),
   row({ crawl: { reachable: false } }),
   row({ type: 'evo', crawl: { reachable: false } }),
-  row({ status: 'pose-banned' as never }),
-  row({ status: 'pose-banned' as never, crawl: { reachable: false } }),
+  row({ status: 'pose-banned' }),
+  row({ status: 'pose-banned', crawl: { reachable: false } }),
 ]
 const enabled = rows.filter((r) => r.status === 'enabled')
 const evoEnabled = enabled.filter((r) => r.type === 'evo')
