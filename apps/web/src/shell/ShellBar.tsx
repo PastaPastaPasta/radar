@@ -22,7 +22,6 @@ import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './ico
 import { SourceModeMark } from './SourceModeMark'
 import { switchTarget } from './network-switch'
 import { routerLocation } from './spa-links'
-import { UnitSwitch } from './UnitSwitch'
 
 interface NavItem {
   section: SiteSection
@@ -114,7 +113,6 @@ export function ShellBar() {
       </nav>
       <div slot="actions">
         <SourceModeMark place="bar" />
-        <UnitSwitch className="rx-unit--bar" />
         <HeaderTip />
         <SearchTrigger className="rx-hdr-search" />
       </div>
