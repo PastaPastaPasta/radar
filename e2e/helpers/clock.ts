@@ -49,3 +49,11 @@ export async function pinClockToFixtures(page: Page): Promise<Date> {
   await page.clock.install({ time })
   return time
 }
+
+/** Starts the page's clock `afterMs` past Radar's last recorded mainnet crawl, the oldest reading the home page shows. */
+export async function pinClockAfterCrawl(page: Page, afterMs: number): Promise<void> {
+  const summary = JSON.parse(
+    readFileSync(path.join(FIXTURES, 'radar', 'mainnet', 'summary.json'), 'utf8'),
+  ) as { body: { crawl: { finished: number } } }
+  await page.clock.install({ time: new Date(summary.body.crawl.finished * 1000 + afterMs) })
+}

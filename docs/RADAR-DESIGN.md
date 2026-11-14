@@ -15,21 +15,36 @@ An instrument, not a document. A visitor should see the network moving within a 
 Five ideas carry that:
 
 1. **Three layers, three hues.** Core is Dash blue, Platform is teal, the masternode network is plate navy. Every page, badge, keyline, chart series and map ping says which layer it belongs to by colour before the words do.
-2. **The plate.** Network pages and the home page open on a deep navy ground with a faint dot grid: a dark island in both themes. It is Radar's signature surface and the only place the map lives.
+2. **The plate.** Network pages open on a deep navy ground with a faint dot grid: a dark island in both themes. It is Radar's signature surface for the masternode network. The home page does not use it: it opens on the page ground (§1.1), so the first thing a visitor meets is one calm statement, not an instrument panel.
 3. **Entities have faces.** Identities get identicons, masternodes get nodeprints, blocks and transactions get layer tiles. Chips carry them everywhere, with copy and a hover card.
-4. **Figures carry their source.** A small source mark (`SourceLine`) sits beside the figure it describes, not in a footer: Proof-checked, Served by DAPI, Indexed by Platform Explorer or Hyphen, Crawled by Radar, plus age.
+4. **Sources are said once, where they apply.** Every figure's source and age can be found, but a page does not repeat them. A section says where its figures came from in **one source line** (`SourceLine`: Proof-checked, Served by DAPI, Indexed by Platform Explorer or Hyphen, Crawled by Radar, plus age) that names every source the section uses. A single figure's own source and age appear when it is hovered or focused, and a proved figure's mark opens the proof inspector. A source mark looks like an alarm only when something is wrong (§6.9).
 5. **Live means visibly live.** New blocks slide in, rows flash once, pings ripple on the map, the freshness dot pulses on update. Every live feed can be paused. Reduced motion keeps the information and drops the movement.
 
-### 1.1 Home signature: the scope
+### 1.1 Home: one claim, then the layers in sequence
 
-The home page opens on the plate with a full-bleed **scope** (mockup `home.html`):
+The home page says one thing first and lets the rest follow down the page. It is built to be read, not scanned: a visitor who stops after the first screen knows the size and health of the network; one who scrolls meets Core, then Platform, each in its own quiet section. Nothing on the home page is a dashboard tile.
 
-- **Left column (400 px):** kicker with live dot and network ("Live · Mainnet · Core, Platform and the masternode network"), the headline "The Dash network, now" (40 px, weight 680, stretch 116%; 28 px on phone), a two-line lede, the omni search (50 px high, 8 px radius, `/` hint), three *Try* chips with real examples, the page's one amber button ("Open the map") and a blue text link ("Network census →").
-- **Right, bleeding to the viewport edge:** a static Equal Earth **dot-matrix world map** (hex-offset land dots, 6 px pitch at 1000 px width; the dots are a separate lazy chunk) with one disc per place in Radar's geo data: a pale-blue disc for masternodes and a ring for other reachable nodes, radius `2 + √n × 0.85` (map units). A **callout** (`--rx-callout` panel with a 1 px `--rx-plate-edge` border and a 3 px layer keyline on the left) names the busiest place, a legend with the source badge sits bottom-left, and a text list of the top places stands in for the map for screen readers. Devnets and a failing Radar show the land and a one-line note. Pings for the latest Core and Platform block are not drawn, because Radar has no block-to-location data.
-- **Pulse row (3 tiles, full container width):** Core height (ChainLock mark, or "reported by one node", + age), Platform height (Proof-checked, epoch meter "Epoch 88 · 18% through"), masternodes answering (99.1%, good colour, "2,187 of 2,207"). Each tile has a 40 px layer tile, its `SourceLine` in the label row, and a 28 px value (weight 680; 22 px on phone).
-- **Two-lane chain:** the latest 8 Core blocks on the top lane and the latest 10 Platform blocks under them, as 44 px block cards. **Tie lines** (1 px, teal, 70% opacity) run from each Platform block up to the Core block it is locked to (`l1LockedHeight`), so the relationship between the two chains is visible at a glance. A Live/Pause toggle sits at the lane's top right.
+**The hero** sits on the page ground (no plate, no panel, no border around it) and ends in a 1 px rule.
 
-Below the scope the page changes to the light page ground and proceeds in **zones** (§5): latest activity, masternode network, Dash Platform, Dash Core, and the link-out cards to Governance and Bridge.
+- **Left column (max 540 px):**
+  - a kicker: the live dot, the live word and the network name. Nothing else.
+  - **the claim**, built from the last crawl: "2,594 Dash nodes answered the last crawl" (48 px, weight 680, stretch 118%, balanced over two or three lines; `clamp(30px, 4.2vw, 48px)`). The number is the only part that changes.
+  - one plain paragraph (17 px, `--dh-ink-2`): "Among them 2,033 of the 2,051 enabled masternodes, 2 nodes fewer than a day ago."
+  - **six figures** in a 3 × 2 grid (2 × 3 on a phone), each a label (13 px, `--dh-ink-2`), a value (24 px, weight 650, stretch 110%) and at most one note (12.5 px, `--dh-ink-2`), with a 2 px `--dh-line` rule on its left and no box. Row one is the three layers: masternodes answering (a 4 px rule and the value in the status colour: good from 98%, warn from 90%, bad below), Core block height (ChainLocked, or "reported by one node", and the block's age), Platform block height (epoch and blocks in). Row two is the census: evonodes, countries, PoSe-banned. Every figure is a link to the list or page behind it.
+  - **one source line** for the whole hero (Crawled by Radar · 3 min ago, Served by DAPI, Proof-checked).
+  - the page's one amber button, "Open the map", and one secondary button, "Search Radar" with its `/` key hint. While a Core upgrade is activating, a text link to its tracker follows them.
+- **Right, bleeding past the container toward the viewport edge:** the Equal Earth **dot-matrix world map** (land dots at 6 px pitch; the dots are a separate lazy chunk), up to 920 px wide, on the page ground. One disc per place in Radar's geo data: a brand-blue disc at 55% for masternodes and a ring for other reachable nodes, radius `2 + √n × 0.85` (map units). **Nothing floats over the map**: no callout, no panel. A place's name and count are in the disc's tooltip, a text list of the top places stands in for the map for screen readers, and a one-line key (the disc with the masternode and place counts, the ring for other reachable nodes) sits under the map in 12.5 px `--dh-ink-2`. From 1023 px down the map follows the column instead of sitting beside it.
+
+**When the census is not available** (Decentralized only mode, a devnet, or Radar not answering) the hero keeps its shape: the claim becomes "The Dash network, now", the paragraph says in one sentence why the node count and map are missing, the grid holds the two chain figures (which DAPI and the SDK still answer), and the map shows the land with no discs. In Decentralized only mode the one compact `Unavailable` row (§6.13a) follows the figures. No cell is ever drawn empty.
+
+**Below the hero the page continues in two layer sections**, on the page ground, each closed by a 1 px rule (34 px above the head, 38 px below the content):
+
+1. **Dash Core.** A 21 px ruled head with the Live/Pause control at its right; a row of figures in the hero's figure style (difficulty, circulating supply, blockchain size; or difficulty and best ChainLock while Hyphen is behind or off); then two lists side by side: the latest 12 Core blocks and the 8 pending transactions. One source line under the head.
+2. **Dash Platform.** The same head; two lists side by side: the latest transitions and the latest Platform blocks, each block with the Core block it is locked to. One source line under the head.
+
+Lists stack in the page's order on a phone; nothing is reordered by CSS.
+
+**No figure appears twice.** The Core height is the hero's Core figure (and the newest row of the block list, which is a list, not a figure). It is not repeated as a section figure, and the shell's header pill is the only other place it shows.
 
 ### 1.2 Per-page signatures
 
@@ -37,7 +52,7 @@ Each record type gets one visual that only it has. They earn their place by answ
 
 | Page | Signature | Answers |
 |---|---|---|
-| `/` | the scope (map + pulses + two-lane chain) | Is the network alive, and where is it working right now? |
+| `/` | the claim and the node map (§1.1) | How big and how healthy is the network right now? |
 | `/tx/<txid>` | value-flow ribbon + settlement steps (seen → InstantSend → mined → ChainLocked) | Where did the money go, and is it final? |
 | `/mn/<protx>` | uptime strip (one cell per crawled day) + rewards-by-epoch bars against the middle 80% band (the bars wait for M2) | Is this node healthy and earning like its peers? |
 | `/identity/<id>` | activity calendar (one square a day, a year wide) | How active is this identity, and when? |
@@ -59,14 +74,14 @@ Each record type gets one visual that only it has. They earn their place by answ
 | bar | 52 px (`--dh-bar-h`), sticky | family shell |
 | tab bar | 44 px, sticky under the bar | record pages |
 
-Radar keeps the family 1200 px container. Two things break out on purpose: the scope map bleeds to the right viewport edge (`margin-right: calc(-1 * ((100vw - min(100vw, var(--dh-max))) / 2 + var(--dh-gutter)))`), and bands and zones run full width with their content in the container.
+Radar keeps the family 1200 px container. Two things break out on purpose: the home map bleeds past the container's right edge toward the viewport edge (`margin-right: calc(-1 * var(--rx-bleed))`, where `--rx-bleed` is the space beside the container less 12 px, so a classic scrollbar never causes a sideways scroll), and bands and zones run full width with their content in the container.
 
 ### 2.2 Breakpoints
 
 | Width | Changes |
 |---|---|
 | ≥ 1024 | full layout; 12-col grid; split with 360 px aside |
-| 1023 – 861 | grid items fall to 6 columns (wide ones full); split stacks (aside under main); scope stacks map under copy |
+| 1023 – 861 | grid items fall to 6 columns (wide ones full); split stacks (aside under main); the home map moves under the hero column |
 | 1099 – 641 | inputs/outputs stack with a rotated arrow; record actions wrap under the title |
 | ≤ 640 (phone) | single column; stat rows 2-up; tables become cards (§6.7); bottom tab bar (§11); the ⌘K palette goes full screen; card padding 14 px |
 
@@ -80,8 +95,10 @@ Archivo variable (family), system mono for hashes, addresses, versions and keys.
 
 | Role | Size / line | Weight / stretch | Token |
 |---|---|---|---|
-| Home headline (scope) | 40 px / 1.05 (28 px phone) | 680 / 116% | — (fixed so the scope column holds two lines) |
-| Pulse tile value | 28 px (22 px phone) | 680 / 108% | — |
+| Home claim | `clamp(30px, 4.2vw, 48px)` / 1.06 | 680 / 118% | — |
+| Home lede | 17 px / 1.5 (16 px phone) | 400 | — |
+| Home figure value | 24 px / 1.2 (22 px phone) | 650 / 110% | — |
+| Home figure label, note | 13 px, 12.5 px | 400–450 | — |
 | Hero number (one per page, optional) | 62 px | 660 / 108% | `--rx-fs-hero` |
 | Page title (`h1`, record header) | 30 px (24 px phone) | 660 / 110% | `--dh-fs-h1` |
 | Section title (`h2`, ruled) | 21 px | 660 / 110% | `--dh-fs-h2` |
@@ -224,7 +241,8 @@ Every page starts with one band directly under the bar. It holds the band nav (t
 
 | Page family | Band ground |
 |---|---|
-| Home, Network pages (`/masternodes`, `/mn/*`, `/map`, census) | the plate |
+| Home | none: the hero sits on the page ground (§1.1) |
+| Network pages (`/masternodes`, `/mn/*`, `/map`, census) | the plate |
 | Core pages (`/block/*`, `/tx/*`, `/address/*`, mempool) | `--rx-core-soft` |
 | Platform pages (`/identity/*`, `/contract/*`, `/epoch/*`, names) | `--rx-plat-soft` |
 
@@ -234,7 +252,7 @@ Band padding 28 px top, 32 px bottom; 1 px `--dh-line` bottom edge (none on the 
 
 ### 5.2 Zones and sections
 
-A **`SectionBand`** is a full-width zone in its layer's soft ground (`--rx-l-soft`, 1 px rules top and bottom, 40 px top padding) with a ruled section head. The home page stacks three: Masternode network, Dash Platform, Dash Core. Record pages use plain sections on the page ground instead.
+A **`SectionBand`** is a full-width zone in its layer's soft ground (`--rx-l-soft`, 1 px rules top and bottom, 40 px top padding) with a ruled section head. Record pages and the home page use plain sections on the page ground instead; the home's two (Dash Core, Dash Platform) are separated by a 1 px rule (§1.1).
 
 A **section head** is the family ruled head: 4 px rounded keyline in the layer line colour to the left of a 21 px title, a one-line description in `--dh-ink-2` beside it, actions ("All 2,997 masternodes →") right-aligned. A hidden copy-link icon appears on hover/focus of the head.
 
@@ -253,7 +271,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - One plate band per page at most. Never put the plate inside a card.
 - One amber button per view, and no amber on record pages unless the page has a real primary action.
 - No more than two layer hues side by side in one card. A card is one layer.
-- Every figure in a stat, tile or KPI has its `SourceLine` in its label row or the card head.
+- Every figure in a stat, tile or KPI is covered by a `SourceLine`: its section's one line where the section has one (the home page), otherwise its label row or the card head. Never both.
 - Lists show 8–22 rows before "All … →"; long lists page (§6.7).
 
 ---
@@ -377,6 +395,15 @@ ARCHITECTURE.md lists a glyph only for Proof-checked; the glyphs above are part 
 
 Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime × 4 the text turns `--dh-warn` and the border becomes dashed in the same colour (`--stale`). When the source is down: `--dh-bad` text, dashed bad border, "isn't answering · last good 4 min ago" (`--down`). Joined sources render one mark per source. Examples of every state: the States section of `mockups/index.html`.
 
+**How many, and how loud (the density rule).**
+
+- **One visible source line per section.** It names every source the section's figures use, one mark per source. A card inside a section that already has a line does not repeat it in its head (`SourceScope`), and its figures carry no marks of their own.
+- **Which stamp speaks for a source.** The figure read most recently at the newest height. A figure that has trailed its source's newest height for 8 s, or was read more than 30 s before the others, takes over the mark, so the line never looks fresher than its oldest figure and never looks stale because nothing has changed since the last block.
+- **Per-figure detail on demand.** A figure's own mark (source, age, the node that answered) shows under it on hover and on keyboard focus, without moving the layout. A proved figure's mark there, and in the section line, is the button that opens the proof inspector.
+- **No figure twice.** A value is stated once per page, where it matters most.
+- **Calm unless wrong.** The resting mark has no border and no ground: a 12 px glyph and 12 px `--dh-ink-2` text. Colour and a dashed border are reserved for a source that is actually stale or down, and both show at the section line. A page that shows a figure keeps it fresh for as long as it is on screen, so an open tab does not drift into the stale look by itself: the home page reads the Platform tip again once a minute and the census every five, and an index figure read at the newest block is not aged at all, because nothing newer exists to read. Proof-checked keeps its good-green solid border: it is a control, and it is good news.
+- The home page follows this rule now. The other pages still carry a mark per card; moving them to section lines is listed for the whole-app rounds.
+
 `LiveDot`: 8 px dot, always followed by a word. Health states: `live` and `ok` → `--dh-good` with one 900 ms ring pulse each time data lands (not on a loop), word "Live"; `slow` → `--dh-good`, no pulse, "Slow"; `degraded` and `stale` → `--dh-warn`, "Behind"; `down` → `--dh-bad`, "Down"; `unknown` → `--dh-ink-3` hollow dot, "Checking". Paused feeds use `--dh-ink-3`.
 
 **Live/Pause control** (every auto-updating feed, WCAG 2.2.2): a 26 px pill on `--dh-good-soft` with the `LiveDot`, "Live" and a pause icon button; paused, it turns neutral (`--dh-chip`) and reads "Paused · 4 new" with a play button.
@@ -491,7 +518,7 @@ Rules:
 
 ## 8. Map (MapLibre)
 
-The full map (`/map`, "View on map", "Open the map") keeps Radar's existing MapLibre basemap: self-hosted Natural Earth GeoJSON (`world-low.json` below zoom 3.2, `world-high.json` with lakes and state lines above), self-hosted Noto Sans glyphs, `places.json` labels, no tile server. Radar restyles it onto the plate so the map page and the home scope read as one surface. The map always uses the plate colours, in both themes.
+The full map (`/map`, "View on map", "Open the map") keeps Radar's existing MapLibre basemap: self-hosted Natural Earth GeoJSON (`world-low.json` below zoom 3.2, `world-high.json` with lakes and state lines above), self-hosted Noto Sans glyphs, `places.json` labels, no tile server. Radar restyles it onto the plate. The map page always uses the plate colours, in both themes; the home map (§1.1) is the static dot-matrix on the page ground.
 
 | Style token | Value (light and dark) |
 |---|---|
@@ -508,7 +535,7 @@ The full map (`/map`, "View on map", "Open the map") keeps Radar's existing MapL
 
 Colour modes (segmented control top-left, on plate-2): Type (masternode / evonode), Status (good / warn / bad plate values), Version (blue ramp), Hosting (top 5 in the blue ramp + other). The legend always shows counts. Controls: zoom +/− and reset in a plate-2 pill bottom-right; filter sheet bottom on phone.
 
-The **home scope and minimaps** don't load MapLibre: they are static SVG dot-matrix projections (Equal Earth) drawn from the same node clusters, cheap enough to render on first paint. The record minimap ("Where it is" on `/mn/*`) crops to the node's region, draws the node as a focus ring, and links to `/map?protx=…`.
+The **home map and minimaps** don't load MapLibre: they are static SVG dot-matrix projections (Equal Earth) drawn from the same node clusters, cheap enough to render on first paint. The record minimap ("Where it is" on `/mn/*`) crops to the node's region, draws the node as a focus ring, and links to `/map?protx=…`.
 
 ---
 
@@ -558,7 +585,7 @@ Mockup: `home.html?testnet`, shot `shots/home-testnet--desk-light.png`.
 - Band navs and record tabs scroll horizontally; the current one scrolls into view.
 - Tables become cards (§6.7). Filters collapse to a "Filters n" button that opens a bottom sheet.
 - Hover cards are off; chips navigate on tap and copy buttons are always visible (40 px targets via the family touch rules).
-- The home scope stacks: copy, then a cropped map (Europe–Asia), pulse tiles one per row, then the lane chain scrolling horizontally.
+- The home hero stacks: the claim, the paragraph, the six figures two per row, the source line, the buttons, then the whole map. The Core figure sits on the first screen.
 
 ---
 
@@ -575,7 +602,7 @@ Target: WCAG 2.2 AA in light and dark, on the plate and off it.
 - Auto-updating content has Pause (2.2.2), and pausing persists for the session.
 - Hover cards are supplementary: everything in them is on the target page. They open on focus and dismiss with Esc (1.4.13), and the pointer can move into them.
 - Tables: real `<table>` with `caption` (visually hidden), `th scope`, `aria-sort`; phone cards keep the table semantics (CSS only).
-- Charts and maps: `role="img"` with an `aria-label` summary plus the table/list equivalent. The scope map has a text list of the latest events beside it for screen readers.
+- Charts and maps: `role="img"` with an `aria-label` summary plus the table/list equivalent. The home map has a text list of the busiest places beside it for screen readers.
 - Identicons, nodeprints and tiles are `aria-hidden`; the adjacent text names the entity.
 - The dialog palette traps focus, restores it on close, and uses the combobox/listbox pattern with `aria-activedescendant`.
 - Motion follows §9 under reduced motion.
@@ -601,7 +628,7 @@ List pages follow the same band, then one full-width card: tools row → active 
 
 | File | Route | Shows |
 |---|---|---|
-| `mockups/home.html` | `/` | scope, pulses, two-lane chain with ties, live feeds, three `SectionBand`s, link-out cards |
+| `mockups/home.html` | `/` | superseded by §1.1 (the mockup shows the earlier scope, pulses and two-lane chain) |
 | `mockups/masternodes.html` | `/masternodes` | plate band with status stack and census stats, tools + filters, scannable table with nodeprints, open hover card, phone cards |
 | `mockups/mn.html` | `/mn/<protx>` | evonode record header, KPIs, uptime strip, rewards-by-epoch vs the middle 80%, payments, minimap, registration, quorum checks |
 | `mockups/identity.html` | `/identity/<id>` | identicon header with Verified, proof-checked balance, activity calendar, transitions, usernames, keys (security level pips), funded from Core |
@@ -618,7 +645,7 @@ Data in the mockups is real, captured from the Radar crawl API, Platform Explore
 ## 15. Departures from the family, to confirm
 
 - **Phone navigation uses tabs.** DESIGN.md keeps core tools on the short menu; Radar uses `phone-nav="tabs"` because it has four peer areas plus search and is used one-handed while checking a node or payment.
-- **The plate in light mode.** Network bands and the home scope stay navy in the light theme. It is the product's signature; the family allows it as a "layer ground" but not yet as a full-width dark band in light mode.
+- **The plate in light mode.** Network bands stay navy in the light theme (the home page no longer uses the plate, §1.1). It is the product's signature; the family allows it as a "layer ground" but not yet as a full-width dark band in light mode.
 - **Layer hues as tokens.** `--rx-core/plat/net-*` live in Radar until the shell ships shared per-layer colour tokens for every product.
 - **Card source sits in the head.** ARCHITECTURE.md §7.2 says `Card.source` renders in the card foot; the look puts it at the right of the head, next to the figures it describes. The foot keeps navigation.
 - **Proof-checked is a button.** The family source tag is a label, never a link; Radar's Proof-checked mark opens the proof inspector, so it is a button with the same look and a hover ground.

@@ -64,11 +64,16 @@ test.describe('Network census', () => {
     await expectAccessible(page)
 
     await page.goto('/')
-    const pulse = page.locator('[data-pulse="census"]')
-    await expect(pulse).toContainText('2,190 of 2,207')
-    await expect(pulse.locator('[data-census-nodes]')).toContainText('2,581 nodes')
-    await expect(pulse.locator('[data-census-nodes]')).toContainText('−1')
-    await expect(pulse).toContainText(/crawled 3 min(utes)? ago/)
+    await expect(page.locator('h1 [data-census-claim]')).toContainText(
+      '2,581 Dash nodes answered the last crawl',
+    )
+    const lede = page.locator('[data-census-lede]')
+    await expect(lede).toContainText('2,190 of the 2,207 enabled masternodes')
+    await expect(lede).toContainText('1 node fewer than a day ago')
+    await expect(page.locator('.rx-hero [data-home-sources] [data-source="radar"]')).toContainText(
+      /Crawled by Radar\s*3 min(utes)? ago/,
+    )
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
   })
 
@@ -312,14 +317,14 @@ test.describe('Network census', () => {
     await expect(census(page).locator('[data-v24-link] a')).toHaveAttribute('href', /\/v24$/)
 
     await page.goto('/')
-    const link = page.locator('[data-pulse="census"] [data-v24-link]')
+    const link = page.locator('.rx-hero [data-v24-link]')
     await expect(link).toBeVisible()
     await link.click()
     await expect(page).toHaveURL(/\/v24$/)
 
     // Testnet's Core 24 went active 14 days before the recording: still inside 30 days, then outside it.
     await page.goto('/?network=testnet')
-    await expect(page.locator('[data-pulse="census"] [data-v24-link]')).toBeVisible()
+    await expect(page.locator('.rx-hero [data-v24-link]')).toBeVisible()
   })
 
   test('hides the home link to the tracker once Core 24 has been active for 30 days @RA-11', async ({
@@ -327,9 +332,9 @@ test.describe('Network census', () => {
   }) => {
     await pinAfterCrawl(page, 20 * DAY, 'testnet')
     await page.goto('/?network=testnet')
-    await expect(page.locator('[data-pulse="census"]')).toContainText('of ')
+    await expect(page.locator('[data-census-lede]')).toContainText('of the ')
     await settled(page)
-    await expect(page.locator('[data-pulse="census"] [data-v24-link]')).toHaveCount(0)
+    await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })
 
   test('warns when the crawl is older than 45 minutes and not before, and shows the tip and crawl age @RA-12', async ({
@@ -344,7 +349,12 @@ test.describe('Network census', () => {
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
 
     await page.goto('/')
-    await expect(page.locator('[data-pulse="census"]')).toContainText(/crawled 4\d min(utes)? ago/)
+    const crawled = page.locator('.rx-hero [data-home-sources] [data-source="radar"]')
+    await expect(crawled).toContainText(/Crawled by Radar\s*4\d min(utes)? ago/)
+    await expect(crawled, 'a stale crawl shows as stale in the hero line').toHaveAttribute(
+      'data-state',
+      'stale',
+    )
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
   })
 

@@ -7,7 +7,7 @@ import type { CoreChainStatus } from '@/data/core/types'
 import { dapiKeys } from '@/data/query'
 import { I18nProvider, i18n } from '@/i18n'
 import { renderInRouter } from '@/ui/test-utils'
-import { CoreFigures } from './CoreZone'
+import { CoreSection } from './CoreSection'
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
@@ -44,9 +44,13 @@ const status = (blocks: number, difficulty: number, asOf = Date.now()) =>
 const tip = (height: number, asOf = Date.now()) =>
   stamped({ height, hash: 'ab'.repeat(32), time: Date.now() }, asOf, height)
 
-const difficultyStat = () => screen.getByText('Difficulty').closest<HTMLElement>('.rx-stat')!
+const difficultyStat = () => screen.getByText('Difficulty').closest<HTMLElement>('.rx-fig')!
 
 describe('Core figures on the home page @HY-01', () => {
+  /** The mark that speaks for DAPI in the section's one source line. */
+  const lineMark = () =>
+    document.querySelector<HTMLElement>('[data-home-sources] [data-source="dapi"]')
+
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ['Date'] })
   })
@@ -59,7 +63,7 @@ describe('Core figures on the home page @HY-01', () => {
     await renderInRouter(
       <I18nProvider i18n={i18n}>
         <QueryClientProvider client={client}>
-          <CoreFigures />
+          <CoreSection />
         </QueryClientProvider>
       </I18nProvider>,
     )
@@ -83,9 +87,7 @@ describe('Core figures on the home page @HY-01', () => {
     expect(reads).toHaveBeenCalledTimes(2)
   })
 
-  const badge = () => difficultyStat().querySelector('[data-source="dapi"]')
-
-  it('shows no age on a figure read at the shown height when the tip is republished later @HY-01', async () => {
+  it('keeps the section line current for a figure read at the shown height when the tip is republished later @HY-01', async () => {
     vi.spyOn(core, 'status').mockResolvedValue(
       status(2_571_277, 116_445_795.87, Date.now() - 20 * 60_000),
     )
@@ -98,11 +100,12 @@ describe('Core figures on the home page @HY-01', () => {
     act(() => {
       client.setQueryData(dapiKeys('mainnet', 'tip'), tip(2_571_277, Date.now() + 5 * 60_000))
     })
-    await waitFor(() => expect(screen.getByText('Height').closest('.rx-stat')).not.toBeNull())
-    expect(badge()).toBeNull()
+    await waitFor(() => expect(lineMark()).not.toBeNull())
+    expect(lineMark()).toHaveAttribute('data-state', 'ok')
+    expect(document.querySelectorAll('[data-home-sources] [data-source="dapi"]')).toHaveLength(1)
   })
 
-  it('shows its own age on a figure that stays behind the tip @HY-01', async () => {
+  it('turns the section line stale for a figure that stays behind the tip, and keeps the age on the figure @HY-01', async () => {
     vi.spyOn(core, 'status').mockResolvedValue(
       status(2_571_277, 116_445_795.87, Date.now() - 20 * 60_000),
     )
@@ -112,8 +115,14 @@ describe('Core figures on the home page @HY-01', () => {
     })
     await renderFigures(client)
     await waitFor(() => expect(difficultyStat()).toHaveTextContent('116'))
-    expect(badge()).toBeNull()
-    await waitFor(() => expect(badge()).not.toBeNull(), { timeout: 12_000 })
-    expect(badge()).toHaveAttribute('data-state', 'stale')
+    expect(lineMark()).toHaveAttribute('data-state', 'ok')
+    await waitFor(() => expect(lineMark()).toHaveAttribute('data-state', 'stale'), {
+      timeout: 12_000,
+    })
+    expect(document.querySelectorAll('[data-home-sources] [data-source="dapi"]')).toHaveLength(1)
+    expect(difficultyStat().querySelector('.rx-fig__src [data-source="dapi"]')).toHaveAttribute(
+      'data-state',
+      'stale',
+    )
   }, 20_000)
 })

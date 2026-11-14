@@ -63,7 +63,6 @@ msgstr "{0} 台はバージョン確認のみ不合格で、アップグレー�
 msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgstr "{0} が {noun} の {1} をホストしており、上位3社のプロバイダーで {2} をホストしています。"
 
-#. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "マスターノード {0} 台"
@@ -72,10 +71,6 @@ msgstr "マスターノード {0} 台"
 #. placeholder {1}: formatInt(points.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} か所にマスターノード {0} 台"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "マスターノード {0} 台、最多の地域"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -91,20 +86,16 @@ msgid "{0} must sign"
 msgstr "{0} の署名が必要"
 
 #. placeholder {0}: formatInt(crawl.reachable)
-msgid "{0} nodes"
-msgstr "{0} ノード"
-
-#. placeholder {0}: formatInt(crawl.reachable)
 #. placeholder {1}: formatInt(crawl.tried)
 msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
 msgstr "試行した {1} 件のアドレスのうち {0} ノードが応答しました。今週1回以上応答したノードに、有効なマスターノードすべてを加えて数えています。"
 
-#. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {0}: formatInt(r.threshold)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
+#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
@@ -185,11 +176,6 @@ msgstr "{noun}の {1} が {0} で動作しています。"
 msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 msgstr "今回のサイクルでテストしたのは {0} 台。中央値は {1} ヘッダー/秒、ping {2} ms。"
 
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
-msgid "{0} tx"
-msgstr "{0} tx"
-
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
 #. placeholder {2}: when(blockMs(b))
@@ -199,8 +185,14 @@ msgstr "{0}、{1}{2}"
 msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
 msgstr "{diff, plural, other {1日前より # ノード多い}}"
 
+msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
+msgstr "{silent, plural, other {# が応答なし}}"
+
 msgid "<0.1%"
 msgstr "<0.1%"
+
+msgid "<0>{count}</0> Dash nodes answered the last crawl"
+msgstr "直近のクロールに <0>{count}</0> の Dash ノードが応答しました"
 
 msgid "0 ready"
 msgstr "0 台が対応済み"
@@ -269,6 +261,15 @@ msgstr "すべてのノード"
 
 msgid "All nodes"
 msgstr "すべてのノード"
+
+msgid "All Platform blocks"
+msgstr "すべての Platform ブロック"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
+msgstr "そのうち有効なマスターノードは {enabled} 中 {answering}、{change}。"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes."
+msgstr "そのうち有効なマスターノードは {enabled} 中 {answering}。"
 
 msgid "Announce 24"
 msgstr "Announce 24"
@@ -354,9 +355,6 @@ msgstr "クライアント"
 msgid "Compact block filters"
 msgstr "コンパクトブロックフィルター"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core 24"
 msgstr "Core 24"
 
@@ -396,17 +394,11 @@ msgstr "Core ブロック"
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Core のブロック、マスターノード、Platform のレコードをひとつの場所に。すべての数値に出所と鮮度が表示されます。"
 
-msgid "Core figures"
-msgstr "Core の数値"
-
 msgid "Core height"
 msgstr "Core の高さ"
 
 msgid "Core tip"
 msgstr "Core の先頭"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core、Platform、マスターノードネットワーク"
 
 msgid "countries"
 msgstr "か国"
@@ -431,6 +423,9 @@ msgstr "Dash Core 24 の有効化が進行中です。"
 
 msgid "Dash nodes answered the last crawl"
 msgstr "直近のクロールに応答した Dash ノード"
+
+msgid "Dash Platform"
+msgstr "Dash Platform"
 
 msgid "Dates of windows to come are estimates."
 msgstr "今後のウィンドウの日付は推定です。"
@@ -531,9 +526,6 @@ msgstr "グレード {g}"
 msgid "Healthy"
 msgstr "正常"
 
-msgid "Height"
-msgstr "高さ"
-
 msgid "highest seen"
 msgstr "最高値"
 
@@ -568,23 +560,11 @@ msgstr "ブロック {0} 時点のものです。dashd またはクローラー�
 msgid "Known addresses"
 msgstr "既知のアドレス"
 
-msgid "Last block"
-msgstr "最新ブロック"
-
-msgid "Latest activity"
-msgstr "最新のアクティビティ"
-
-msgid "Latest blocks"
-msgstr "最新のブロック"
-
 msgid "Latest Core blocks"
 msgstr "最新の Core ブロック"
 
-msgid "Latest Core blocks, oldest first"
-msgstr "最新の Core ブロック（古い順）"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "最新の Platform ブロック（古い順）"
+msgid "Latest Platform blocks"
+msgstr "最新の Platform ブロック"
 
 msgid "Latest Platform transitions"
 msgstr "最新の Platform トランジション"
@@ -613,9 +593,8 @@ msgstr "ロックイン（そのウィンドウがしきい値に達した場合
 msgid "Locked in"
 msgstr "ロックイン済み"
 
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Core ブロック {0} に紐づけ"
+msgid "Locked to Core block"
+msgstr "ロック先の Core ブロック"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Radar がマスターノードを見つけた場所ごとに円を描いた世界地図。{summary}。"
@@ -666,9 +645,6 @@ msgstr "中央値、直近 {0} 日間の Platform エポックから算出"
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "今署名するクォーラムのメンバーのうち、Dash Core 24 を通知しているもの"
 
-msgid "mempool"
-msgstr "メモリプール"
-
 msgid "Mempool"
 msgstr "メモリプール"
 
@@ -705,14 +681,8 @@ msgstr "いずれかのウィンドウがカウントされる前に必要"
 msgid "needs {0}+"
 msgstr "{0} 以上が必要"
 
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Radar のクローラーが必要: 「分散型のみ」モードではオフ"
-
 msgid "Network"
 msgstr "ネットワーク"
-
-msgid "Network census"
-msgstr "ネットワーク調査"
 
 msgid "Network size"
 msgstr "ネットワーク規模"
@@ -722,9 +692,6 @@ msgstr "ネットワーク規模の推移"
 
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "ネットワーク規模。左右の矢印キーで各点を順に移動できます。"
-
-msgid "New rows appear at the top."
-msgstr "新しい行は上に追加されます。"
 
 msgid "Next window that counts"
 msgstr "次にカウントされるウィンドウ"
@@ -865,17 +832,14 @@ msgstr "このページを開いてから確認した保留中のトランザク
 msgid "Places with the most masternodes"
 msgstr "マスターノードが最も多い地域"
 
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform block height"
 msgstr "Platform ブロック高"
 
+msgid "Platform blocks"
+msgstr "Platform ブロック"
+
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer は devnet をインデックスしません"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer は devnet をインデックスしません。"
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer が応答していません"
@@ -883,17 +847,14 @@ msgstr "Platform Explorer が応答していません"
 msgid "Platform height"
 msgstr "Platform の高さ"
 
-msgid "Platform locks to Core"
-msgstr "Platform は Core に固定"
-
 msgid "Platform transitions"
 msgstr "Platform トランジション"
 
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Platform の最新のブロックには Platform Explorer が必要ですが、「分散型のみ」モードでは使用しません。"
+msgid "Platform updates"
+msgstr "Platform の更新"
 
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Platform の最新のトランジションには Platform Explorer が必要です"
+msgid "Platform's latest transitions and blocks need Platform Explorer"
+msgstr "Platform の最新のトランジションとブロックには Platform Explorer が必要です"
 
 msgid "PoSe-banned"
 msgstr "PoSe で停止"
@@ -912,9 +873,6 @@ msgstr "クォーラム"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 のシグナルに署名するクォーラム"
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar は devnet をクロールしません"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar は devnet をクロールしないため、地図に表示するものがありません。"
@@ -987,8 +945,8 @@ msgstr "リリース"
 msgid "Request id"
 msgstr "リクエスト ID"
 
-msgid "Search blocks, txs, masternodes, names"
-msgstr "ブロック、tx、マスターノード、名前を検索"
+msgid "Search Radar"
+msgstr "Radar を検索"
 
 msgid "See the sources"
 msgstr "ソースを見る"
@@ -1122,11 +1080,11 @@ msgstr "ノード調査には Radar のクロールが必要です"
 msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 msgstr "不足しているのは、Radar のクロールが必要なノード調査の部分です。上の Core の先頭は DAPI から取得しています。"
 
+msgid "The node count and map need Radar's crawler"
+msgstr "ノード数とマップには Radar のクローラーが必要です"
+
 msgid "The node map"
 msgstr "ノードマップ"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "ノードのマップには Radar のクローラーが必要ですが、「分散型のみ」モードでは使用しません。"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK が応答していません"
@@ -1207,9 +1165,6 @@ msgstr "トランザクションリレー"
 msgid "Transition"
 msgstr "トランジション"
 
-msgid "Try"
-msgstr "例："
-
 msgid "Try again"
 msgstr "再試行"
 
@@ -1264,9 +1219,6 @@ msgstr "dashd から署名クォーラムを読み取れませんでした: {0}"
 
 msgid "What happens next"
 msgstr "この先の流れ"
-
-msgid "What is waiting to be mined."
-msgstr "マイニング待ちのもの。"
 
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."

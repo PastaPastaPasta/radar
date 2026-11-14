@@ -1,5 +1,6 @@
 import { expectAccessible } from '../helpers/a11y'
 import { tabBarHeight } from '../helpers/contrast'
+import { pinClockAfterCrawl } from '../helpers/clock'
 import { settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
 
@@ -24,20 +25,73 @@ interface RadarFixtureWindow {
 }
 
 test.describe('Home', () => {
-  test('shows the Core and Platform heights, the census and the node map @IN-01 @HY-01', async ({
+  test('opens on the claim from the crawl, a figure for each layer and the node map @IN-01 @HY-01 @RA-01', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(
+      '2,581 Dash nodes answered the last crawl',
+    )
+    const core = page.locator('[data-pulse="core"]')
+    await expect(core).toContainText('2,570,085')
+    await expect(page.locator('[data-pulse="platform"]')).toContainText(/Epoch \d+/)
+    await expect(page.locator('[data-pulse="census"]')).toContainText(/\d%/)
+    const map = page.locator('[data-map="nodes"]')
+    await expect(map.locator('circle.mn').first()).toBeVisible()
+    await expect(map.locator('.rx-callout')).toHaveCount(0)
+    await expect(page.getByText(/not loaded yet|Arrives with the network pages/)).toHaveCount(0)
+    await expectAccessible(page)
+  })
+
+  test('says each source once in the hero, and a figure shows its own on hover and on focus @IN-09 @IN-01', async ({
     page,
   }) => {
     await page.goto('/')
     const core = page.locator('[data-pulse="core"]')
     await expect(core).toContainText('2,570,085')
-    await expect(core.locator('[data-source="dapi"]')).toBeVisible()
+    const line = page.locator('.rx-hero [data-home-sources]')
+    await expect(line).toHaveCount(1)
+    for (const source of ['radar', 'dapi', 'sdk']) {
+      await expect(line.locator(`[data-source="${source}"]`)).toHaveCount(1)
+      await expect(line.locator(`[data-source="${source}"]`)).toBeVisible()
+    }
+    await expect(line.locator('[data-source="sdk"]')).toHaveAttribute('data-proved', 'true')
+    await settled(page)
+    await expect(page.locator('.rx-hero [data-source]:visible')).toHaveCount(3)
+
+    const own = core.locator('.rx-fig__src [data-source="dapi"]')
+    await expect(own).toBeHidden()
+    await core.hover()
+    await expect(own).toBeVisible()
+    await page.mouse.move(0, 0)
+    await expect(own).toBeHidden()
+    await core.getByRole('link').focus()
+    await expect(own).toBeVisible()
+    const proof = page.locator('[data-pulse="platform"] .rx-fig__src [data-source="sdk"]')
+    await page.locator('[data-pulse="platform"]').getByRole('link').focus()
+    await expect(proof).toBeVisible()
+    await expect(proof).toHaveAttribute('data-proved', 'true')
+  })
+
+  test('no source mark looks out of date after the page has been open for five minutes @IN-09', async ({
+    page,
+  }) => {
+    await pinClockAfterCrawl(page, 3 * 60_000)
+    await page.goto('/')
     await expect(page.locator('[data-pulse="platform"]')).toContainText(/Epoch \d+/)
-    await expect(page.locator('[data-pulse="census"]')).toContainText(/of \d/)
-    const map = page.locator('[data-map="nodes"]')
-    await expect(map.locator('circle.mn').first()).toBeVisible()
-    await expect(map.locator('.rx-callout')).toContainText('masternodes')
-    await expect(page.getByText(/not loaded yet|Arrives with the network pages/)).toHaveCount(0)
-    await expectAccessible(page)
+    await expect(page.getByRole('table', { name: 'Pending transactions' })).toBeVisible()
+    await settled(page)
+    await page.clock.fastForward(5 * 60_000)
+    await settled(page)
+    const mark = (within: string, source: string) =>
+      page.locator(`${within} [data-home-sources] [data-source="${source}"]`)
+    await expect(mark('.rx-hero', 'radar')).toHaveAttribute('data-state', 'ok')
+    await expect(mark('.rx-hero', 'dapi')).toHaveAttribute('data-state', 'ok')
+    await expect(mark('.rx-hero', 'sdk')).toHaveAttribute('data-state', 'proof')
+    await expect(page.locator('.rx-hero [data-state="stale"]')).toHaveCount(0)
+    // Hyphen's recorded figures are 72 blocks below the recorded tip, so its mark is rightly out of date here.
+    await expect(mark('#core', 'dapi')).toHaveAttribute('data-state', 'ok')
+    await expect(mark('#platform', 'pe')).toHaveAttribute('data-state', 'ok')
   })
 
   test('lists the latest Core blocks and pending transactions, each opening its page @HY-03 @IN-01', async ({
@@ -53,70 +107,28 @@ test.describe('Home', () => {
     await expect(page).toHaveURL(/\/block\/2570085/)
   })
 
-  test('shows height, difficulty, supply and size @HY-01', async ({ page }) => {
+  test('shows height, difficulty, supply and size, each once @HY-01', async ({ page }) => {
     await page.goto('/')
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     const headline = page.locator('[data-headline]')
-    await expect(headline).toContainText('Height')
     await expect(headline).toContainText('Difficulty')
     await expect(headline).toContainText('Circulating supply')
     await expect(headline).toContainText('Blockchain size')
+    await expect(headline).not.toContainText('2,570,085')
+    await expect(page.locator('[data-pulse="core"]')).toHaveCount(1)
   })
 
-  test('puts the height and difficulty in the Core figures as soon as DAPI answers @HY-01', async ({
+  test('puts the height and difficulty on the page as soon as DAPI answers @HY-01', async ({
     page,
   }) => {
     await page.goto('/')
-    const headline = page.locator('[data-headline]')
-    await expect(headline).toContainText(/Height.*2,570,085/)
-    await expect(headline).toContainText(/Difficulty.*106,426,839\.80/)
+    await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
+    await expect(page.locator('[data-headline]')).toContainText(/Difficulty.*106,426,839\.80/)
   })
-
-  test('a phone jumps from the top of the page to the Core figures @HY-01', async ({
-    page,
-    viewport,
-  }) => {
-    test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
-    await page.goto('/')
-    await page.getByRole('link', { name: 'Core figures' }).click()
-    await expect(page).toHaveURL(/#core-figures$/)
-    const top = async () => (await page.locator('[data-headline]').boundingBox())?.y ?? -1
-    await expect.poll(top).toBeGreaterThanOrEqual(0)
-    await expect.poll(top).toBeLessThan(page.viewportSize()!.height / 2)
-  })
-
-  for (const width of [320, 390, 430]) {
-    test(`a phone jumps to the latest blocks, beside the Core figures link where the width allows, at ${width} px @HY-01`, async ({
-      page,
-      viewport,
-    }) => {
-      test.skip((viewport?.width ?? 0) > 640, 'phone layout only')
-      await page.setViewportSize({ width, height: 844 })
-      await page.goto('/')
-      await settled(page)
-      const core = page.getByRole('link', { name: 'Core figures' })
-      const latest = page.getByRole('link', { name: 'Latest blocks' })
-      await page.evaluate(() => document.fonts.ready)
-      // The hero's figures fill in after first paint and can reflow the line once; judge the settled layout.
-      const gap = async () => {
-        const [a, b] = await Promise.all([core.boundingBox(), latest.boundingBox()])
-        return Math.abs(a!.y - b!.y)
-      }
-      if (width >= 390) {
-        await expect.poll(gap, { message: 'beside it, on the same line' }).toBeLessThan(4)
-      }
-      const b = (await latest.boundingBox())!
-      expect(b.x + b.width).toBeLessThanOrEqual(width)
-      await latest.click()
-      await expect(page).toHaveURL(/#h-latest$/)
-      const top = async () => (await page.locator('#h-latest').boundingBox())?.y ?? -1
-      await expect.poll(top).toBeGreaterThanOrEqual(0)
-      await expect.poll(top).toBeLessThan(page.viewportSize()!.height * 0.75)
-    })
-  }
 
   test('opens a block from search by height @IN-10', async ({ page }) => {
     await page.goto('/')
-    await page.locator('[data-palette-trigger]:visible').first().click()
+    await page.locator('.rx-hero [data-palette-trigger]').click()
     await page.locator('[data-palette] input').fill('2570085')
     await page
       .getByRole('option', { name: /Core block 2,570,085/ })
@@ -136,7 +148,7 @@ test.describe('Home', () => {
     await page.goto('/')
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-live-notice]')).toHaveCount(0)
-    await expect(page.locator('[data-pulse="core"] [data-source="dapi"]')).toBeVisible()
+    await expect(page.locator('.rx-hero [data-home-sources] [data-source="dapi"]')).toBeVisible()
   })
 
   test('says live updates stopped when the connection is cut, and clears once it is back @IN-15', async ({
@@ -164,7 +176,7 @@ test.describe('Home', () => {
 
   test('reads the Core figures again when a new block arrives @HY-01', async ({ page }) => {
     await page.goto('/')
-    const difficulty = page.locator('[data-headline] .rx-stat').filter({ hasText: 'Difficulty' })
+    const difficulty = page.locator('[data-headline] .rx-fig').filter({ hasText: 'Difficulty' })
     await expect(difficulty).toContainText(/\d/)
     await expect(difficulty).not.toHaveAttribute('aria-busy', 'true')
     await expect
@@ -179,7 +191,7 @@ test.describe('Home', () => {
         ),
       )
       .toBe(true)
-    const shown = (await difficulty.locator('.rx-stat__value').innerText()).trim()
+    const shown = (await difficulty.locator('.rx-fig__value').innerText()).trim()
 
     await page.evaluate(() => {
       const w = window as unknown as RadarFixtureWindow
@@ -201,9 +213,12 @@ test.describe('Home', () => {
       })
     })
 
-    await expect(difficulty.locator('.rx-stat__value')).toHaveText('123,456,789.50')
+    await expect(difficulty.locator('.rx-fig__value')).toHaveText('123,456,789.50')
     expect(shown).not.toBe('123,456,789.50')
-    await expect(difficulty.locator('[data-source]')).toHaveCount(0)
+    await expect(page.locator('#core [data-home-sources] [data-source="dapi"]')).toHaveAttribute(
+      'data-state',
+      'ok',
+    )
   })
 
   test('keeps the Core height and ChainLock in the header while scrolling @IN-15', async ({
@@ -213,7 +228,7 @@ test.describe('Home', () => {
     const tip = page.locator('[data-header-tip]')
     await expect(tip).toContainText('2,570,085')
     await expect(tip.locator('.rx-hdrtip__lock')).toBeVisible()
-    await page.getByRole('heading', { name: 'Latest activity' }).scrollIntoViewIfNeeded()
+    await page.getByRole('heading', { name: 'Dash Platform' }).scrollIntoViewIfNeeded()
     await expect(tip).toBeInViewport()
     await expect(tip).toContainText('2,570,085')
     await page.goto('/status')
@@ -238,12 +253,12 @@ test.describe('Home', () => {
     await expect(tip.locator('.rx-hdrtip__state:visible, .rx-hdrtip__short:visible')).toContainText(
       'Stopped',
     )
-    await expect(page.locator('.rx-lanes .rx-live')).toContainText('Stopped since')
+    await expect(page.locator('#core .rx-live')).toContainText('Stopped since')
 
     await context.setOffline(false)
     await expect(word).toHaveText('Live')
     await expect(tip).toHaveAttribute('data-connection', 'live')
-    await expect(page.locator('.rx-lanes .rx-live')).toContainText('Live')
+    await expect(page.locator('#core .rx-live')).toContainText('Live')
   })
 
   test('does not say Live while the live connection is cut @IN-15', async ({ page }) => {
@@ -271,12 +286,12 @@ test.describe('Home', () => {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/')
       const supply = page
-        .locator('[data-headline] .rx-stat')
+        .locator('[data-headline] .rx-fig')
         .filter({ hasText: 'Circulating supply' })
       await expect(supply.locator('.rx-fiat')).toBeVisible()
       const fits = await supply.evaluate((card) => {
         const box = card.getBoundingClientRect()
-        return [...card.querySelectorAll('.rx-stat__value, .rx-amt, .rx-fiat')].every((el) => {
+        return [...card.querySelectorAll('.rx-fig__value, .rx-amt, .rx-fiat')].every((el) => {
           const r = el.getBoundingClientRect()
           return r.left >= box.left - 0.5 && r.right <= box.right + 0.5
         })
@@ -285,12 +300,19 @@ test.describe('Home', () => {
     }
   })
 
-  test('shows one source badge per source across the headline figures @IN-09', async ({ page }) => {
+  test('names each source once for the Dash Core section, with no mark on a card @IN-09', async ({
+    page,
+  }) => {
     await page.goto('/')
-    const headline = page.locator('[data-headline]')
-    await expect(headline.locator('[data-source="hyphen"]')).toHaveCount(1)
-    await expect(headline.locator('[data-source="dapi"]')).toHaveCount(1)
-    await expect(headline.locator('.rx-stat')).toHaveCount(4)
+    await expect(page.locator('[data-headline] .rx-fig')).toHaveCount(3)
+    await expect(page.getByRole('table', { name: 'Pending transactions' })).toBeVisible()
+    const line = page.locator('#core [data-home-sources]')
+    await expect(line.locator('[data-source="hyphen"]')).toHaveCount(1)
+    await expect(line.locator('[data-source="dapi"]')).toHaveCount(1)
+    await settled(page)
+    await expect(page.locator('#core [data-source]:visible')).toHaveCount(2)
+    await expect(page.locator('#platform [data-source]:visible')).toHaveCount(1)
+    await expect(page.locator('.rx-home .rx-card__head [data-source]')).toHaveCount(0)
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
@@ -308,7 +330,7 @@ test.describe('Home', () => {
     await page.goto('/')
     const bar = page.locator('dashhq-bar')
     await expect(bar).toBeVisible()
-    await page.getByRole('heading', { name: /Latest blocks/ }).scrollIntoViewIfNeeded()
+    await page.getByRole('heading', { name: 'Dash Core' }).scrollIntoViewIfNeeded()
     await expect(page.locator('[data-pulse="core"]')).toBeVisible()
   })
 })
@@ -328,14 +350,14 @@ test.describe('Home on a phone', () => {
         await page.goto(path)
         const core = page.locator('[data-pulse="core"]')
         await expect(core.locator('.rx-tick')).toContainText(/\d/)
-        await expect(core.locator('.rx-pulse__meta time')).toHaveText(/\S/)
+        await expect(core.locator('.rx-fig__note time')).toHaveText(/\S/)
         await settled(page)
         expect(await page.evaluate(() => window.scrollY)).toBe(0)
         const barTop = 844 - (await tabBarHeight(page))
         for (const part of [
           core,
-          core.locator('.rx-pulse__value'),
-          core.locator('.rx-pulse__meta'),
+          core.locator('.rx-fig__value'),
+          core.locator('.rx-fig__note'),
           ...(locked ? [core.locator('.rx-ok')] : []),
         ]) {
           const box = await part.boundingBox()
@@ -347,13 +369,13 @@ test.describe('Home on a phone', () => {
   }
 
   for (const width of [320, 390, 430]) {
-    test(`keys the map beside the masternode count without pushing the Core card down at ${width} px @HY-18`, async ({
+    test(`keys the map beside the masternode count, under the map and inside the screen at ${width} px @HY-18`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 844 })
       await page.goto('/')
       const legend = page.locator('.rx-maplegend')
-      await expect(legend.locator('.rx-maplegend__sum')).toContainText(/masternodes/)
+      await expect(legend.locator('.rx-maplegend__sum')).toContainText(/masternodes in/)
       await settled(page)
       const filled = legend.locator('.rx-maplegend__key').first().locator('i.d')
       const hollow = legend.locator('.rx-maplegend__key--other i.d--all')
@@ -369,20 +391,19 @@ test.describe('Home on a phone', () => {
       expect(follows, 'the hollow key follows the count, on its line or the next').toBe(true)
       const box = await legend.boundingBox()
       expect(box!.x + box!.width).toBeLessThanOrEqual(width)
-      const barTop = 844 - (await tabBarHeight(page))
-      for (const part of ['.rx-pulse__value', '.rx-pulse__meta']) {
-        const b = await page.locator(`[data-pulse="core"] ${part}`).boundingBox()
-        expect(b!.y + b!.height, `Core ${part} above the tab bar`).toBeLessThanOrEqual(barTop)
-      }
+      const map = await page.locator('.rx-hero__map .rx-map').boundingBox()
+      expect(box!.y, 'the key sits under the map, not over it').toBeGreaterThanOrEqual(
+        map!.y + map!.height - 1,
+      )
     })
   }
 
-  test('puts the Core figures before the long activity lists @HY-01', async ({ page }) => {
+  test('puts the Core figures before the Core lists @HY-01', async ({ page }) => {
     await page.goto('/')
     await settled(page)
     const supply = await page.getByText('Circulating supply').boundingBox()
-    const activity = await page.locator('.rx-home__activity').boundingBox()
-    expect(supply?.y ?? Infinity).toBeLessThan(activity?.y ?? 0)
+    const lists = await page.locator('#core .rx-home__lists').boundingBox()
+    expect(supply?.y ?? Infinity).toBeLessThan(lists?.y ?? 0)
   })
 
   for (const width of [320, 390, 430]) {

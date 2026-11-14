@@ -63,7 +63,6 @@ msgstr "Не проходять лише перевірку версії й по
 msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgstr "{noun}: {0} розміщує {1}, а три найбільші провайдери — {2}."
 
-#. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "Мастернод: {0}"
@@ -72,10 +71,6 @@ msgstr "Мастернод: {0}"
 #. placeholder {1}: formatInt(points.length)
 msgid "{0} masternodes in {1} places"
 msgstr "Мастернод: {0}, місць: {1}"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "Мастернод: {0}, найбільше серед усіх місць"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -91,20 +86,16 @@ msgid "{0} must sign"
 msgstr "Підписати мають {0}"
 
 #. placeholder {0}: formatInt(crawl.reachable)
-msgid "{0} nodes"
-msgstr "Вузлів: {0}"
-
-#. placeholder {0}: formatInt(crawl.reachable)
 #. placeholder {1}: formatInt(crawl.tried)
 msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
 msgstr "Вузлів, що відповіли: {0} із {1} опитаних адрес. Враховано вузли, які відповіли принаймні раз цього тижня, а також кожну увімкнену мастерноду."
 
-#. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {0}: formatInt(r.threshold)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
+#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} з {1}"
 
@@ -185,11 +176,6 @@ msgstr "{noun}: {0} працює на {1}."
 msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 msgstr "Протестовано в цьому циклі: {0}. Медіана {1} заголовків/с, пінг {2} мс."
 
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
-msgid "{0} tx"
-msgstr "{0} тх"
-
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
 #. placeholder {2}: when(blockMs(b))
@@ -199,8 +185,14 @@ msgstr "{0}, {1}{2}"
 msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
 msgstr "{diff, plural, one {на # вузол більше, ніж добу тому} few {на # вузли більше, ніж добу тому} many {на # вузлів більше, ніж добу тому} other {на # вузла більше, ніж добу тому}}"
 
+msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
+msgstr "{silent, plural, one {# не відповів} few {# не відповіли} many {# не відповіли} other {# не відповіли}}"
+
 msgid "<0.1%"
 msgstr "<0.1%"
+
+msgid "<0>{count}</0> Dash nodes answered the last crawl"
+msgstr "<0>{count}</0> вузлів Dash відповіли в останньому обході"
 
 msgid "0 ready"
 msgstr "0 готових"
@@ -269,6 +261,15 @@ msgstr "усі вузли"
 
 msgid "All nodes"
 msgstr "Усі вузли"
+
+msgid "All Platform blocks"
+msgstr "Усі блоки Platform"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
+msgstr "Серед них {answering} з {enabled} увімкнених мастернод, {change}."
+
+msgid "Among them {answering} of the {enabled} enabled masternodes."
+msgstr "Серед них {answering} з {enabled} увімкнених мастернод."
 
 msgid "Announce 24"
 msgstr "Announce 24"
@@ -354,9 +355,6 @@ msgstr "Клієнт"
 msgid "Compact block filters"
 msgstr "Компактні фільтри блоків"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core 24"
 msgstr "Core 24"
 
@@ -396,17 +394,11 @@ msgstr "Блоки Core"
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Блоки Core, мастерноди й записи Platform в одному місці. Кожна цифра вказує, звідки вона взята і наскільки свіжа."
 
-msgid "Core figures"
-msgstr "Показники Core"
-
 msgid "Core height"
 msgstr "Висота Core"
 
 msgid "Core tip"
 msgstr "Вершина Core"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core, Platform і мережа мастернод"
 
 msgid "countries"
 msgstr "країни"
@@ -431,6 +423,9 @@ msgstr "Триває активація Dash Core 24."
 
 msgid "Dash nodes answered the last crawl"
 msgstr "вузлів Dash відповіли в останньому обході"
+
+msgid "Dash Platform"
+msgstr "Dash Platform"
 
 msgid "Dates of windows to come are estimates."
 msgstr "Дати майбутніх вікон — оцінки."
@@ -531,9 +526,6 @@ msgstr "Оцінка {g}"
 msgid "Healthy"
 msgstr "У нормі"
 
-msgid "Height"
-msgstr "Висота"
-
 msgid "highest seen"
 msgstr "найвища з бачених"
 
@@ -568,23 +560,11 @@ msgstr "Він з блока {0}; можливо, наш dashd або хост �
 msgid "Known addresses"
 msgstr "Відомі адреси"
 
-msgid "Last block"
-msgstr "Останній блок"
-
-msgid "Latest activity"
-msgstr "Остання активність"
-
-msgid "Latest blocks"
-msgstr "Останні блоки"
-
 msgid "Latest Core blocks"
 msgstr "Останні блоки Core"
 
-msgid "Latest Core blocks, oldest first"
-msgstr "Останні блоки Core, спочатку старіші"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "Останні блоки Platform, спочатку старіші"
+msgid "Latest Platform blocks"
+msgstr "Останні блоки Platform"
 
 msgid "Latest Platform transitions"
 msgstr "Останні переходи Platform"
@@ -613,9 +593,8 @@ msgstr "Фіксація, якщо це вікно досягне порогу"
 msgid "Locked in"
 msgstr "Зафіксовано"
 
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Прив’язаний до блока Core {0}"
+msgid "Locked to Core block"
+msgstr "Прив’язаний до блока Core"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Карта світу з кружком у кожному місці, де Radar знайшов мастерноди. {summary}."
@@ -666,9 +645,6 @@ msgstr "медіана за епохами Platform за останні {0} дн
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Учасники кворуму, який підписував би зараз, що оголошують Dash Core 24"
 
-msgid "mempool"
-msgstr "мемпул"
-
 msgid "Mempool"
 msgstr "Мемпул"
 
@@ -705,14 +681,8 @@ msgstr "потрібно, щоб вікно почало враховувати�
 msgid "needs {0}+"
 msgstr "потрібно {0}+"
 
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Потрібен краулер Radar: вимкнено в режимі «Лише децентралізовано»"
-
 msgid "Network"
 msgstr "Мережа"
-
-msgid "Network census"
-msgstr "Перепис мережі"
 
 msgid "Network size"
 msgstr "Розмір мережі"
@@ -722,9 +692,6 @@ msgstr "Розмір мережі з часом"
 
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Розмір мережі. Клавішами зі стрілками вліво та вправо переходьте між точками."
-
-msgid "New rows appear at the top."
-msgstr "Нові рядки з’являються вгорі."
 
 msgid "Next window that counts"
 msgstr "Наступне вікно, що враховується"
@@ -865,17 +832,14 @@ msgstr "Непідтверджені транзакції, помічені ві
 msgid "Places with the most masternodes"
 msgstr "Місця з найбільшою кількістю мастернод"
 
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform block height"
 msgstr "Висота блока Platform"
 
+msgid "Platform blocks"
+msgstr "Блоки Platform"
+
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer не індексує devnet"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer не індексує devnet."
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer не відповідає"
@@ -883,17 +847,14 @@ msgstr "Platform Explorer не відповідає"
 msgid "Platform height"
 msgstr "Висота Platform"
 
-msgid "Platform locks to Core"
-msgstr "Platform прив’язаний до Core"
-
 msgid "Platform transitions"
 msgstr "Переходи Platform"
 
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Для останніх блоків Platform потрібен Platform Explorer, який режим «Лише децентралізовано» не використовує."
+msgid "Platform updates"
+msgstr "оновлення Platform"
 
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Для останніх переходів Platform потрібен Platform Explorer"
+msgid "Platform's latest transitions and blocks need Platform Explorer"
+msgstr "Для останніх переходів і блоків Platform потрібен Platform Explorer"
 
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
@@ -912,9 +873,6 @@ msgstr "Кворум"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Кворуми, які підписали б сигнал Core 24"
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar не обходить devnet"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar не обходить devnet, тому на карті нічого відображати."
@@ -987,8 +945,8 @@ msgstr "Релізи"
 msgid "Request id"
 msgstr "ID запиту"
 
-msgid "Search blocks, txs, masternodes, names"
-msgstr "Пошук блоків, тх, мастернод, імен"
+msgid "Search Radar"
+msgstr "Пошук у Radar"
 
 msgid "See the sources"
 msgstr "Переглянути джерела"
@@ -1122,11 +1080,11 @@ msgstr "Для перепису вузлів потрібен обхід Radar"
 msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 msgstr "Бракує перепису вузлів, якому потрібен обхід Radar. Вершина Core вище походить з DAPI."
 
+msgid "The node count and map need Radar's crawler"
+msgstr "Для кількості вузлів і мапи потрібен краулер Radar"
+
 msgid "The node map"
 msgstr "Карта вузлів"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "Для мапи вузлів потрібен краулер Radar, який режим «Лише децентралізовано» не використовує."
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK не відповідає"
@@ -1207,9 +1165,6 @@ msgstr "Ретрансляція транзакцій"
 msgid "Transition"
 msgstr "Перехід"
 
-msgid "Try"
-msgstr "Спробуйте"
-
 msgid "Try again"
 msgstr "Спробувати знову"
 
@@ -1264,9 +1219,6 @@ msgstr "Не вдалося прочитати підписувальний кв
 
 msgid "What happens next"
 msgstr "Що буде далі"
-
-msgid "What is waiting to be mined."
-msgstr "Що очікує на видобуток."
 
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."

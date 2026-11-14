@@ -63,7 +63,6 @@ msgstr "{0} n’échouent qu’au contrôle de version et n’ont besoin que de 
 msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgstr "{0} héberge {1} des {noun}, et les trois plus gros fournisseurs en hébergent {2}."
 
-#. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
@@ -72,10 +71,6 @@ msgstr "{0} masternodes"
 #. placeholder {1}: formatInt(points.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{0} masternodes dans {1} lieux"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "{0} masternodes, le plus de tous les lieux"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -91,20 +86,16 @@ msgid "{0} must sign"
 msgstr "{0} doivent signer"
 
 #. placeholder {0}: formatInt(crawl.reachable)
-msgid "{0} nodes"
-msgstr "{0} nœuds"
-
-#. placeholder {0}: formatInt(crawl.reachable)
 #. placeholder {1}: formatInt(crawl.tried)
 msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
 msgstr "{0} nœuds ont répondu sur {1} adresses essayées. Sont comptés les nœuds qui ont répondu au moins une fois cette semaine, plus chaque masternode activé."
 
-#. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {0}: formatInt(r.threshold)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
+#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
 
@@ -185,11 +176,6 @@ msgstr "{0} tourne sur {1} des {noun}."
 msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 msgstr "{0} testés durant ce cycle. Médiane de {1} en-têtes/s, ping de {2} ms."
 
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
-msgid "{0} tx"
-msgstr "{0} tx"
-
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
 #. placeholder {2}: when(blockMs(b))
@@ -199,8 +185,14 @@ msgstr "{0}, {1}{2}"
 msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
 msgstr "{diff, plural, one {# nœud de plus qu’il y a un jour} other {# nœuds de plus qu’il y a un jour}}"
 
+msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
+msgstr "{silent, plural, one {# n’a pas répondu} other {# n’ont pas répondu}}"
+
 msgid "<0.1%"
 msgstr "<0,1 %"
+
+msgid "<0>{count}</0> Dash nodes answered the last crawl"
+msgstr "<0>{count}</0> nœuds Dash ont répondu au dernier crawl"
 
 msgid "0 ready"
 msgstr "0 prêt"
@@ -269,6 +261,15 @@ msgstr "tous les nœuds"
 
 msgid "All nodes"
 msgstr "Tous les nœuds"
+
+msgid "All Platform blocks"
+msgstr "Tous les blocs Platform"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
+msgstr "Parmi eux, {answering} des {enabled} masternodes activés, {change}."
+
+msgid "Among them {answering} of the {enabled} enabled masternodes."
+msgstr "Parmi eux, {answering} des {enabled} masternodes activés."
 
 msgid "Announce 24"
 msgstr "Announce 24"
@@ -354,9 +355,6 @@ msgstr "Client"
 msgid "Compact block filters"
 msgstr "Filtres de blocs compacts"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core 24"
 msgstr "Core 24"
 
@@ -396,17 +394,11 @@ msgstr "Blocs Core"
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Blocs Core, masternodes et données Platform au même endroit. Chaque chiffre indique sa provenance et sa fraîcheur."
 
-msgid "Core figures"
-msgstr "Chiffres de Core"
-
 msgid "Core height"
 msgstr "Hauteur Core"
 
 msgid "Core tip"
 msgstr "Pointe de Core"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core, Platform et le réseau de masternodes"
 
 msgid "countries"
 msgstr "pays"
@@ -431,6 +423,9 @@ msgstr "L’activation de Dash Core 24 est en cours."
 
 msgid "Dash nodes answered the last crawl"
 msgstr "nœuds Dash ont répondu au dernier crawl"
+
+msgid "Dash Platform"
+msgstr "Dash Platform"
 
 msgid "Dates of windows to come are estimates."
 msgstr "Les dates des fenêtres à venir sont des estimations."
@@ -531,9 +526,6 @@ msgstr "Note {g}"
 msgid "Healthy"
 msgstr "En bonne santé"
 
-msgid "Height"
-msgstr "Hauteur"
-
 msgid "highest seen"
 msgstr "plus haut observé"
 
@@ -568,23 +560,11 @@ msgstr "Elle date du bloc {0} ; notre dashd ou l’hôte du crawler est peut-êt
 msgid "Known addresses"
 msgstr "Adresses connues"
 
-msgid "Last block"
-msgstr "Dernier bloc"
-
-msgid "Latest activity"
-msgstr "Activité récente"
-
-msgid "Latest blocks"
-msgstr "Derniers blocs"
-
 msgid "Latest Core blocks"
 msgstr "Derniers blocs Core"
 
-msgid "Latest Core blocks, oldest first"
-msgstr "Derniers blocs Core, du plus ancien au plus récent"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "Derniers blocs Platform, du plus ancien au plus récent"
+msgid "Latest Platform blocks"
+msgstr "Derniers blocs Platform"
 
 msgid "Latest Platform transitions"
 msgstr "Dernières transitions Platform"
@@ -613,9 +593,8 @@ msgstr "Verrouillage, si cette fenêtre atteint le seuil"
 msgid "Locked in"
 msgstr "Verrouillé"
 
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Lié au bloc Core {0}"
+msgid "Locked to Core block"
+msgstr "Verrouillé au bloc Core"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Carte du monde avec un disque pour chaque lieu où Radar a trouvé des masternodes. {summary}."
@@ -666,9 +645,6 @@ msgstr "médiane, d’après les époques Platform des {0} derniers jours"
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Membres du quorum qui signerait maintenant et qui annoncent Dash Core 24"
 
-msgid "mempool"
-msgstr "mempool"
-
 msgid "Mempool"
 msgstr "Mempool"
 
@@ -705,14 +681,8 @@ msgstr "requis avant que toute fenêtre compte"
 msgid "needs {0}+"
 msgstr "requiert {0}+"
 
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Nécessite le crawler de Radar : désactivé en mode « Décentralisé uniquement »"
-
 msgid "Network"
 msgstr "Réseau"
-
-msgid "Network census"
-msgstr "Recensement du réseau"
 
 msgid "Network size"
 msgstr "Taille du réseau"
@@ -722,9 +692,6 @@ msgstr "Taille du réseau dans le temps"
 
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Taille du réseau. Utilisez les flèches gauche et droite pour parcourir les points."
-
-msgid "New rows appear at the top."
-msgstr "Les nouvelles lignes apparaissent en haut."
 
 msgid "Next window that counts"
 msgstr "Prochaine fenêtre qui compte"
@@ -865,17 +832,14 @@ msgstr "Transactions en attente vues depuis l’ouverture de cette page"
 msgid "Places with the most masternodes"
 msgstr "Lieux avec le plus de masternodes"
 
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform block height"
 msgstr "Hauteur de bloc Platform"
 
+msgid "Platform blocks"
+msgstr "Blocs Platform"
+
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer n’indexe pas les devnets"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer n’indexe pas les devnets."
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer ne répond pas"
@@ -883,17 +847,14 @@ msgstr "Platform Explorer ne répond pas"
 msgid "Platform height"
 msgstr "Hauteur Platform"
 
-msgid "Platform locks to Core"
-msgstr "Platform s’ancre à Core"
-
 msgid "Platform transitions"
 msgstr "Transitions Platform"
 
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Les derniers blocs de Platform nécessitent Platform Explorer, que le mode « Décentralisé uniquement » n’utilise pas."
+msgid "Platform updates"
+msgstr "mises à jour de Platform"
 
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Les dernières transitions de Platform nécessitent Platform Explorer"
+msgid "Platform's latest transitions and blocks need Platform Explorer"
+msgstr "Les dernières transitions et les derniers blocs de Platform nécessitent Platform Explorer"
 
 msgid "PoSe-banned"
 msgstr "Banni par PoSe"
@@ -912,9 +873,6 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Quorums qui signeraient le signal Core 24"
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar n’explore pas les devnets"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar n’explore pas les devnets, donc il n’y a rien à cartographier."
@@ -987,8 +945,8 @@ msgstr "Versions publiées"
 msgid "Request id"
 msgstr "ID de la requête"
 
-msgid "Search blocks, txs, masternodes, names"
-msgstr "Rechercher blocs, tx, masternodes, noms"
+msgid "Search Radar"
+msgstr "Rechercher dans Radar"
 
 msgid "See the sources"
 msgstr "Voir les sources"
@@ -1122,11 +1080,11 @@ msgstr "Le recensement des nœuds nécessite le crawl de Radar"
 msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 msgstr "Le recensement des nœuds, qui nécessite le crawl de Radar, est la partie manquante. La pointe de Core ci-dessus provient de DAPI."
 
+msgid "The node count and map need Radar's crawler"
+msgstr "Le nombre de nœuds et la carte nécessitent le crawler de Radar"
+
 msgid "The node map"
 msgstr "La carte des nœuds"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "La carte des nœuds nécessite le crawler de Radar, que le mode « Décentralisé uniquement » n’utilise pas."
 
 msgid "The Platform SDK isn't answering"
 msgstr "Le SDK Platform ne répond pas"
@@ -1207,9 +1165,6 @@ msgstr "Relais de transactions"
 msgid "Transition"
 msgstr "Transition"
 
-msgid "Try"
-msgstr "Essayez"
-
 msgid "Try again"
 msgstr "Réessayer"
 
@@ -1264,9 +1219,6 @@ msgstr "Nous n’avons pas pu lire le quorum signataire depuis notre dashd : {0}
 
 msgid "What happens next"
 msgstr "Ce qui se passe ensuite"
-
-msgid "What is waiting to be mined."
-msgstr "Ce qui attend d’être miné."
 
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."

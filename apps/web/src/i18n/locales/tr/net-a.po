@@ -63,7 +63,6 @@ msgstr "{0} yalnızca sürüm kontrolünde başarısız ve yalnızca yükseltme 
 msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgstr "{noun} içindeki {1} payı {0} barındırıyor; en büyük üç sağlayıcı toplamda {2} barındırıyor."
 
-#. placeholder {0}: formatInt(masternodes)
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} masternode"
@@ -72,10 +71,6 @@ msgstr "{0} masternode"
 #. placeholder {1}: formatInt(points.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} yerde {0} masternode"
-
-#. placeholder {0}: formatInt(top.masternodes)
-msgid "{0} masternodes, the most of any place"
-msgstr "{0} masternode, tüm yerler arasında en çok"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -91,20 +86,16 @@ msgid "{0} must sign"
 msgstr "{0} imzalamalı"
 
 #. placeholder {0}: formatInt(crawl.reachable)
-msgid "{0} nodes"
-msgstr "{0} düğüm"
-
-#. placeholder {0}: formatInt(crawl.reachable)
 #. placeholder {1}: formatInt(crawl.tried)
 msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
 msgstr "Denenen {1} adresten {0} düğüm yanıt verdi. Bu hafta en az bir kez yanıt veren düğümler ve etkin tüm masternode’lar sayılır."
 
-#. placeholder {0}: formatInt(crawl.mn_reachable)
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {1}: formatInt(crawl.mn_total)
+#. placeholder {0}: formatInt(r.threshold)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
+#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
@@ -185,11 +176,6 @@ msgstr "{0}, {noun} içinde {1} oranında çalışıyor."
 msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
 msgstr "Bu turda {0} test edildi. Ortanca {1} başlık/sn, ping {2} ms."
 
-#. placeholder {0}: formatInt(b.txCount)
-#. placeholder {0}: formatInt(b.txs.length)
-msgid "{0} tx"
-msgstr "{0} işlem"
-
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
 #. placeholder {2}: when(blockMs(b))
@@ -199,8 +185,14 @@ msgstr "{0}, {1}{2}"
 msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
 msgstr "{diff, plural, one {Bir gün öncekinden # düğüm fazla} other {Bir gün öncekinden # düğüm fazla}}"
 
+msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
+msgstr "{silent, plural, one {# yanıt vermedi} other {# yanıt vermedi}}"
+
 msgid "<0.1%"
 msgstr "<%0,1"
+
+msgid "<0>{count}</0> Dash nodes answered the last crawl"
+msgstr "Son taramaya <0>{count}</0> Dash düğümü yanıt verdi"
 
 msgid "0 ready"
 msgstr "0 hazır"
@@ -269,6 +261,15 @@ msgstr "tüm düğümler"
 
 msgid "All nodes"
 msgstr "Tüm düğümler"
+
+msgid "All Platform blocks"
+msgstr "Tüm Platform blokları"
+
+msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
+msgstr "Bunların arasında {enabled} etkin masternode’un {answering} tanesi var. {change}."
+
+msgid "Among them {answering} of the {enabled} enabled masternodes."
+msgstr "Bunların arasında {enabled} etkin masternode’un {answering} tanesi var."
 
 msgid "Announce 24"
 msgstr "Announce 24"
@@ -354,9 +355,6 @@ msgstr "İstemci"
 msgid "Compact block filters"
 msgstr "Kompakt blok filtreleri"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core 24"
 msgstr "Core 24"
 
@@ -396,17 +394,11 @@ msgstr "Core blokları"
 msgid "Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is."
 msgstr "Core blokları, masternode’lar ve Platform kayıtları tek yerde. Her rakam nereden geldiğini ve ne kadar güncel olduğunu belirtir."
 
-msgid "Core figures"
-msgstr "Core rakamları"
-
 msgid "Core height"
 msgstr "Core yüksekliği"
 
 msgid "Core tip"
 msgstr "Core ucu"
-
-msgid "Core, Platform and the masternode network"
-msgstr "Core, Platform ve masternode ağı"
 
 msgid "countries"
 msgstr "ülkeler"
@@ -431,6 +423,9 @@ msgstr "Dash Core 24 etkinleştirmesi sürüyor."
 
 msgid "Dash nodes answered the last crawl"
 msgstr "Son taramaya yanıt veren Dash düğümleri"
+
+msgid "Dash Platform"
+msgstr "Dash Platform"
 
 msgid "Dates of windows to come are estimates."
 msgstr "Gelecek pencerelerin tarihleri tahminidir."
@@ -531,9 +526,6 @@ msgstr "Not {g}"
 msgid "Healthy"
 msgstr "Sağlıklı"
 
-msgid "Height"
-msgstr "Yükseklik"
-
 msgid "highest seen"
 msgstr "görülen en yüksek"
 
@@ -568,23 +560,11 @@ msgstr "{0}. bloktan; dashd’miz veya tarayıcı sunucusu kapalı olabilir."
 msgid "Known addresses"
 msgstr "Bilinen adresler"
 
-msgid "Last block"
-msgstr "Son blok"
-
-msgid "Latest activity"
-msgstr "Son etkinlik"
-
-msgid "Latest blocks"
-msgstr "Son bloklar"
-
 msgid "Latest Core blocks"
 msgstr "Son Core blokları"
 
-msgid "Latest Core blocks, oldest first"
-msgstr "Son Core blokları, en eskiden yeniye"
-
-msgid "Latest Platform blocks, oldest first"
-msgstr "Son Platform blokları, en eskiden yeniye"
+msgid "Latest Platform blocks"
+msgstr "Son Platform blokları"
 
 msgid "Latest Platform transitions"
 msgstr "Son Platform geçişleri"
@@ -613,9 +593,8 @@ msgstr "Kilitlenme, o pencere eşiğe ulaşırsa"
 msgid "Locked in"
 msgstr "Kilitlendi"
 
-#. placeholder {0}: formatInt(b.header.l1LockedHeight)
-msgid "Locked to Core block {0}"
-msgstr "Core bloğu {0}’a bağlı"
+msgid "Locked to Core block"
+msgstr "Kilitlendiği Core bloğu"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Radar’ın masternode bulduğu her yer için bir daire içeren dünya haritası. {summary}."
@@ -666,9 +645,6 @@ msgstr "ortanca, son {0} günün Platform epoch’larından"
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Şimdi imzalayacak quorum’un Dash Core 24 duyuran üyeleri"
 
-msgid "mempool"
-msgstr "mempool"
-
 msgid "Mempool"
 msgstr "Mempool"
 
@@ -705,14 +681,8 @@ msgstr "herhangi bir pencere sayılmadan önce gerekli"
 msgid "needs {0}+"
 msgstr "{0}+ gerekir"
 
-msgid "Needs Radar's crawler: off in Decentralized only mode"
-msgstr "Radar’ın tarayıcısı gerekir: “Yalnızca merkeziyetsiz” modunda kapalı"
-
 msgid "Network"
 msgstr "Ağ"
-
-msgid "Network census"
-msgstr "Ağ sayımı"
 
 msgid "Network size"
 msgstr "Ağ boyutu"
@@ -722,9 +692,6 @@ msgstr "Zaman içinde ağ boyutu"
 
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Ağ boyutu. Noktalar arasında gezinmek için sol ve sağ ok tuşlarını kullanın."
-
-msgid "New rows appear at the top."
-msgstr "Yeni satırlar en üstte görünür."
 
 msgid "Next window that counts"
 msgstr "Sayılacak sonraki pencere"
@@ -865,17 +832,14 @@ msgstr "Bu sayfayı açtığınızdan beri görülen bekleyen işlemler"
 msgid "Places with the most masternodes"
 msgstr "En çok masternode bulunan yerler"
 
-msgid "Platform"
-msgstr "Platform"
-
 msgid "Platform block height"
 msgstr "Platform blok yüksekliği"
 
+msgid "Platform blocks"
+msgstr "Platform blokları"
+
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer devnet’leri dizinlemez"
-
-msgid "Platform Explorer doesn't index devnets."
-msgstr "Platform Explorer devnet’leri dizinlemez."
 
 msgid "Platform Explorer isn't answering"
 msgstr "Platform Explorer yanıt vermiyor"
@@ -883,17 +847,14 @@ msgstr "Platform Explorer yanıt vermiyor"
 msgid "Platform height"
 msgstr "Platform yüksekliği"
 
-msgid "Platform locks to Core"
-msgstr "Platform, Core’a kilitlenir"
-
 msgid "Platform transitions"
 msgstr "Platform geçişleri"
 
-msgid "Platform's latest blocks need Platform Explorer, which Decentralized only mode doesn't use."
-msgstr "Platform’un son blokları Platform Explorer gerektirir; “Yalnızca merkeziyetsiz” modu bunu kullanmaz."
+msgid "Platform updates"
+msgstr "Platform güncellemeleri"
 
-msgid "Platform's latest transitions need Platform Explorer"
-msgstr "Platform’un son geçişleri Platform Explorer gerektirir"
+msgid "Platform's latest transitions and blocks need Platform Explorer"
+msgstr "Platform’un son geçişleri ve blokları Platform Explorer gerektirir"
 
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
@@ -912,9 +873,6 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 sinyalini imzalayacak quorum’lar"
-
-msgid "Radar doesn't crawl devnets"
-msgstr "Radar devnet’leri taramaz"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar devnet’leri taramadığı için haritalanacak bir şey yok."
@@ -987,8 +945,8 @@ msgstr "Sürümler"
 msgid "Request id"
 msgstr "İstek kimliği"
 
-msgid "Search blocks, txs, masternodes, names"
-msgstr "Blok, işlem, masternode, ad ara"
+msgid "Search Radar"
+msgstr "Radar’da ara"
 
 msgid "See the sources"
 msgstr "Kaynaklara bak"
@@ -1122,11 +1080,11 @@ msgstr "Düğüm sayımı için Radar’ın taraması gerekir"
 msgid "The node census, which needs Radar's crawl, is the part that is missing. The Core tip above comes from DAPI."
 msgstr "Eksik olan kısım, Radar’ın taramasını gerektiren düğüm sayımı. Yukarıdaki Core ucu DAPI’den geliyor."
 
+msgid "The node count and map need Radar's crawler"
+msgstr "Düğüm sayısı ve harita Radar’ın tarayıcısını gerektirir"
+
 msgid "The node map"
 msgstr "Düğüm haritası"
-
-msgid "The node map needs Radar's crawler, which Decentralized only mode doesn't use."
-msgstr "Düğüm haritası Radar’ın tarayıcısını gerektirir; “Yalnızca merkeziyetsiz” modu bunu kullanmaz."
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK yanıt vermiyor"
@@ -1207,9 +1165,6 @@ msgstr "İşlem iletimi"
 msgid "Transition"
 msgstr "Geçiş"
 
-msgid "Try"
-msgstr "Deneyin"
-
 msgid "Try again"
 msgstr "Tekrar dene"
 
@@ -1264,9 +1219,6 @@ msgstr "İmzalayan quorum’u dashd’mizden okuyamadık: {0}"
 
 msgid "What happens next"
 msgstr "Sırada ne var"
-
-msgid "What is waiting to be mined."
-msgstr "Madenciliği bekleyenler."
 
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."

@@ -7,7 +7,8 @@ import { platformTipQuery, type PlatformTip } from '@/data/sdk/queries'
 import type { NetworkId } from '@/lib/network'
 import { isDevnet } from '@/lib/network'
 
-export type { PlatformTip }
+/** Nothing pushes the Platform tip, so the page reads it again while it is open: a figure on screen must not drift into looking out of date. */
+export const TIP_POLL_MS = 60_000
 
 /** True once the browser has had an idle moment after first paint, so loading the SDK never competes with it (§3.3). */
 function useAfterIdle(): boolean {
@@ -34,7 +35,11 @@ function useAfterIdle(): boolean {
 export function usePlatformTip(net: NetworkId) {
   const sdkOnly = useDecentralizedOnly() || isDevnet(net)
   const afterIdle = useAfterIdle()
-  const sdkTip = useQuery({ ...platformTipQuery(net), enabled: afterIdle })
+  const sdkTip = useQuery({
+    ...platformTipQuery(net),
+    enabled: afterIdle,
+    refetchInterval: TIP_POLL_MS,
+  })
   const explorerTip = useQuery({
     ...peQueries.status(net),
     enabled: !sdkOnly && !sdkTip.data,
