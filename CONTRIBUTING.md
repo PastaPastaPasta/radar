@@ -11,20 +11,20 @@ pnpm --filter @radar/web dev
 
 ## Commands
 
-| Command                           | What it does                                                                 |
-| --------------------------------- | ---------------------------------------------------------------------------- |
-| `pnpm typecheck`                  | `tsc --noEmit` in every package                                              |
-| `pnpm lint`                       | ESLint, then Prettier in check mode. `pnpm format` rewrites files            |
-| `pnpm test`                       | Vitest unit and component tests                                              |
-| `pnpm build`                      | Production build of every package                                            |
-| `pnpm size`                       | Fails if the initial JS of `apps/web/dist` exceeds 220 kB gzipped            |
-| `pnpm check:bundle`               | Fails if the production build contains the fixture worker or the kit page    |
-| `pnpm test:review`                | Unit tests for the review harness in `review/`                               |
-| `pnpm check:stories`              | Lists user stories no e2e test is tagged with; fails on tags naming no story |
-| `pnpm e2e:fixtures`               | Playwright (Chromium) against a fixture build served by the edge Worker      |
-| `pnpm e2e:fixtures --grep @RA-20` | Only tests tagged `@RA-20`; `pnpm e2e:smoke` runs the `@smoke` subset        |
-| `pnpm e2e:live`                   | The `@live` tests against live services; not part of CI                      |
-| `pnpm i18n:extract`               | Rewrites the message catalogs; commit the result. `pnpm i18n:check` is in CI |
+| Command                              | What it does                                                                 |
+| ------------------------------------ | ---------------------------------------------------------------------------- |
+| `pnpm typecheck`                     | `tsc --noEmit` in every package                                              |
+| `pnpm lint`                          | ESLint, then Prettier in check mode. `pnpm format` rewrites files            |
+| `pnpm test`                          | Vitest unit and component tests                                              |
+| `pnpm build`                         | Production build of every package                                            |
+| `pnpm size`                          | Fails if the initial JS of `apps/web/dist` exceeds 220 kB gzipped            |
+| `pnpm check:bundle`                  | Fails if the production build contains the fixture worker or the kit page    |
+| `pnpm test:review`                   | Unit tests for the review harness in `review/`                               |
+| `pnpm check:stories`                 | Lists user stories no e2e test is tagged with; fails on tags naming no story |
+| `pnpm e2e:fixtures`                  | Playwright (Chromium) against a fixture build served by the edge Worker      |
+| `pnpm e2e:fixtures -- --grep @RA-20` | Only tests tagged `@RA-20`; `pnpm e2e:smoke` runs the `@smoke` subset        |
+| `pnpm e2e:live`                      | The `@live` tests against live services; not part of CI                      |
+| `pnpm i18n:extract`                  | Rewrites the message catalogs; commit the result. `pnpm i18n:check` is in CI |
 
 `packages/core-decode` builds with Rust (`wasm32-unknown-unknown` and `wasm-bindgen-cli` 0.2.118): `pnpm --filter @radar/core-decode build:wasm`, then `test:wasm` and `test:rust` in that package. CI runs them in their own job.
 
