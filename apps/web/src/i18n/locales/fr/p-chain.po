@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
+msgid ": a missed turn, or a new set, shifts it."
+msgstr " : un tour manqué ou un nouvel ensemble le décale."
+
 msgid "(estimated)"
 msgstr "(estimée)"
 
@@ -104,6 +107,9 @@ msgstr "Un ID fait 32 octets : une chaîne base58 de 43 ou 44 caractères, ou 64
 msgid "Anchors"
 msgstr "Ancres"
 
+msgid "any moment"
+msgstr "d’un instant à l’autre"
+
 msgid "Balance"
 msgstr "Solde"
 
@@ -121,6 +127,9 @@ msgstr "blocs"
 
 msgid "Blocks"
 msgstr "Blocs"
+
+msgid "Blocks away"
+msgstr "Blocs restants"
 
 msgid "Blocks so far"
 msgstr "Blocs jusqu’ici"
@@ -226,11 +235,17 @@ msgstr "Époques"
 
 #. placeholder {0}: formatInt(range.from)
 #. placeholder {1}: formatInt(range.to)
+#. placeholder {2}: formatInt(range.to)
+msgid "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+msgstr "Époques {0} à {1} ; la dernière époque est la {2}, la plage s’arrête donc là."
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
 msgid "Epochs {0} to {1}."
 msgstr "Époques {0} à {1}."
 
-msgid "Epochs with their start, end and fee multiplier"
-msgstr "Époques avec leur début, leur fin et leur multiplicateur de frais"
+msgid "Epochs with their start, end, fee multiplier and fees"
+msgstr "Époques avec leur début, leur fin, leur multiplicateur de frais et leurs frais"
 
 msgid "Estimated end"
 msgstr "Fin estimée"
@@ -253,6 +268,9 @@ msgstr "Evonodes qui ne votent pas encore pour elle"
 msgid "Fee multiplier"
 msgstr "Multiplicateur de frais"
 
+msgid "Fees"
+msgstr "Frais"
+
 msgid "Final once the epoch ended."
 msgstr "Définitif une fois l’époque terminée."
 
@@ -267,6 +285,12 @@ msgstr "Préfixe du hash"
 
 msgid "How many evonodes vote for each protocol version."
 msgstr "Combien d’evonodes votent pour chaque version du protocole."
+
+#. placeholder {0}: formatInt(voters)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
+msgstr "Combien d’evonodes votent pour chaque version du protocole. {0} des {1} evonodes activés ont un vote enregistré, et les parts sont calculées sur ceux-là ; le seuil d’activation compte les {2}."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -309,14 +333,15 @@ msgstr "Réseau"
 msgid "Next chunk"
 msgstr "Bloc suivant"
 
-msgid "Next epoch"
-msgstr "Époque suivante"
-
 msgid "Next epoch’s version"
 msgstr "Version de l’époque suivante"
 
 msgid "Next version"
 msgstr "Version suivante"
+
+#. placeholder {0}: formatInt(index + 1)
+msgid "Next: epoch {0}"
+msgstr "Suivante : époque {0}"
 
 msgid "No epochs in this range."
 msgstr "Aucune époque dans cette plage."
@@ -418,6 +443,10 @@ msgstr "Bloc précédent"
 msgid "Previous epoch"
 msgstr "Époque précédente"
 
+#. placeholder {0}: formatInt(index - 1)
+msgid "Previous: epoch {0}"
+msgstr "Précédente : époque {0}"
+
 msgid "Processing fees"
 msgstr "Frais de traitement"
 
@@ -463,6 +492,11 @@ msgstr "Le seuil exact, la phase et les décomptes par candidat de Radar nécess
 msgid "Range"
 msgstr "Plage"
 
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} of {1} evonodes"
+msgstr "Signalé par {0} evonodes sur {1}"
+
 msgid "Rewards and schedule"
 msgstr "Récompenses et calendrier"
 
@@ -490,9 +524,6 @@ msgstr "Afficher"
 
 msgid "Show more"
 msgstr "Afficher plus"
-
-msgid "Slots"
-msgstr "Créneaux"
 
 msgid "Spent"
 msgstr "Dépensé"
@@ -551,8 +582,8 @@ msgstr "Les {0} dernières époques."
 msgid "The next proposers"
 msgstr "Les prochains proposeurs"
 
-msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
-msgstr "Les douze prochains proposeurs du calendrier, avec le nombre de blocs consécutifs de chacun."
+msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgstr "Les douze prochains proposeurs, chacun avec les blocs avant son tour. Une estimation d’environ {pace} secondes par bloc, d’après les ensembles de validateurs"
 
 msgid "The node reported no quorums."
 msgstr "Le nœud n’a signalé aucun quorum."

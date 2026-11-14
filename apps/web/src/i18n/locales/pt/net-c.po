@@ -41,6 +41,10 @@ msgstr "{0, plural, one {# transação especial no registo do Hyphen} other {# t
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, one {# saque} other {# saques}}{1}, "
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, one {Disponibilidade por # dia} other {Disponibilidade por # dias}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0} (incompleto)"
@@ -230,10 +234,6 @@ msgstr "Banido no bloco {0}"
 msgid "Banned on Platform"
 msgstr "Banido na Platform"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "banimentos em {0}"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Melhor do que {0} dos masternodes testados a partir do mesmo local."
@@ -259,6 +259,9 @@ msgstr "Blocos e recompensas das últimas 12 épocas finalizadas, a partir das p
 
 msgid "Blocks proposed"
 msgstr "Blocos propostos"
+
+msgid "Blocks proposed, all time"
+msgstr "Blocos propostos, no total"
 
 msgid "Blocks this epoch"
 msgstr "Blocos nesta época"
@@ -515,9 +518,6 @@ msgstr "O índice do Hyphen está atrasado em relação à cadeia, por isso esta
 msgid "if it ended now (an estimate)"
 msgstr "se terminasse agora (uma estimativa)"
 
-msgid "In a validator set"
-msgstr "Num conjunto de validadores"
-
 msgid "in total (not counting expired ones)."
 msgstr "no total (sem contar as expiradas)."
 
@@ -685,6 +685,9 @@ msgstr "Próxima época {0}"
 msgid "No answer"
 msgstr "Sem resposta"
 
+msgid "No blocks proposed in this range."
+msgstr "Nenhum bloco proposto neste intervalo."
+
 msgid "No changes since Radar started recording them."
 msgstr "Nenhuma alteração desde que o Radar começou a registá-las."
 
@@ -714,6 +717,9 @@ msgstr "Sem penalidade"
 
 msgid "No Platform ban"
 msgstr "Sem banimento na Platform"
+
+msgid "No rewards in this range."
+msgstr "Nenhuma recompensa neste intervalo."
 
 msgid "No stalls or bad data"
 msgstr "Sem bloqueios nem dados incorretos"
@@ -747,9 +753,6 @@ msgstr "Ainda não verificado"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "não comparado: o registo do Radar não está em uso"
-
-msgid "Not in a validator set"
-msgstr "Fora de um conjunto de validadores"
 
 msgid "not in a validator set that takes turns now"
 msgstr "fora de um conjunto de validadores que faz turnos agora"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "Endereço de pagamento"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Penalidade {0}"
 
@@ -890,6 +892,9 @@ msgstr "Endpoints da Platform"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "O Platform Explorer não respondeu, por isso falta o seu registo deste validador."
+
+msgid "Platform Explorer didn’t answer."
+msgstr "O Platform Explorer não respondeu."
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "O Platform Explorer não tem registo de validador para este ProTx."
@@ -1055,8 +1060,8 @@ msgstr "Registo do Radar"
 msgid "Rank"
 msgstr "Posição"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "Alcançabilidade segundo o rastreio do Radar; blocos, recompensas e chaves segundo o Platform Explorer"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "Alcançabilidade segundo a varredura do Radar. Os totais e os gráficos são do Platform Explorer, ao longo de toda a vida do evonode; esta época está acima."
 
 msgid "Reachable"
 msgstr "Alcançável"
@@ -1127,11 +1132,8 @@ msgstr "Recompensas (DASH)"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "As recompensas aparecem depois de ele propor um bloco numa época concluída."
 
-msgid "Rewards in total"
-msgstr "Recompensas no total"
-
-msgid "Rewards this epoch"
-msgstr "Recompensas nesta época"
+msgid "Rewards, all time"
+msgstr "Recompensas, no total"
 
 msgid "Same as the owner address"
 msgstr "Igual ao endereço do proprietário"

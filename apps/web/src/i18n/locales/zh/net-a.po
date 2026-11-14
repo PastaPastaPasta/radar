@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr "，{0} 个未知"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr "，位于区块 {0}"
-
 msgid ", so the figures below may be out of date."
 msgstr "，因此下方数据可能已过时。"
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "{0} 个主节点"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} 个地点共 {0} 个主节点"
 
@@ -149,6 +145,10 @@ msgstr "另有 {0} 个其他客户端"
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
 msgstr "另有 {0} 个其他全节点接受连接。仅向外连接的节点无法从外部看到，因此实际数量更高。"
+
+#. placeholder {0}: formatInt(p.nodes)
+msgid "{0} other nodes"
+msgstr "另有 {0} 个节点"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
@@ -419,14 +419,15 @@ msgstr "Core 高度"
 msgid "Core tip"
 msgstr "Core 链顶"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "统计于区块 {0}"
+
 msgid "countries"
 msgstr "国家/地区"
 
 msgid "Countries"
 msgstr "国家/地区"
-
-msgid "crawled"
-msgstr "已抓取"
 
 msgid "DAPI answered"
 msgstr "DAPI 已响应"
@@ -997,7 +998,7 @@ msgstr "各版本的{noun}占比"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "各窗口区块的占比，标出阈值。未来窗口的日期为估算。"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "显示全部 {0} 项"
 

@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} desconocidos"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr ", en el bloque {0}"
-
 msgid ", so the figures below may be out of date."
 msgstr ", así que las cifras de abajo pueden estar desactualizadas."
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "{0} masternodes"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{0} masternodes en {1} lugares"
 
@@ -149,6 +145,10 @@ msgstr "otros {0} clientes"
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
 msgstr "Otros {0} nodos completos aceptan conexiones. Los nodos que solo se conectan hacia fuera no se pueden ver desde el exterior, así que la cifra real es mayor."
+
+#. placeholder {0}: formatInt(p.nodes)
+msgid "{0} other nodes"
+msgstr "{0} nodos más"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
@@ -419,14 +419,15 @@ msgstr "Altura de Core"
 msgid "Core tip"
 msgstr "Punta de Core"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "contados en el bloque {0}"
+
 msgid "countries"
 msgstr "países"
 
 msgid "Countries"
 msgstr "Países"
-
-msgid "crawled"
-msgstr "rastreado"
 
 msgid "DAPI answered"
 msgstr "DAPI respondió"
@@ -997,7 +998,7 @@ msgstr "Proporción de {noun} por versión"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "Proporción de los bloques de cada ventana, con el umbral marcado. Las ventanas futuras se fechan por estimación."
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "Mostrar los {0}"
 

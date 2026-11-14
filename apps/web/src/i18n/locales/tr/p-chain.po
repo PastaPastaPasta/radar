@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
+msgid ": a missed turn, or a new set, shifts it."
+msgstr ": kaçırılan bir sıra ya da yeni bir küme onu kaydırır."
+
 msgid "(estimated)"
 msgstr "(tahmini)"
 
@@ -104,6 +107,9 @@ msgstr "Bir ID 32 bayttır: 43 veya 44 karakterlik bir base58 dizesi ya da 64 on
 msgid "Anchors"
 msgstr "Çıpalar"
 
+msgid "any moment"
+msgstr "her an"
+
 msgid "Balance"
 msgstr "Bakiye"
 
@@ -121,6 +127,9 @@ msgstr "bloklar"
 
 msgid "Blocks"
 msgstr "Bloklar"
+
+msgid "Blocks away"
+msgstr "Kalan blok"
 
 msgid "Blocks so far"
 msgstr "Şu ana kadarki bloklar"
@@ -226,11 +235,17 @@ msgstr "Epoch’lar"
 
 #. placeholder {0}: formatInt(range.from)
 #. placeholder {1}: formatInt(range.to)
+#. placeholder {2}: formatInt(range.to)
+msgid "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+msgstr "Epoch {0} – {1}; son epoch {2} olduğundan aralık orada biter."
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
 msgid "Epochs {0} to {1}."
 msgstr "Epoch {0}–{1}."
 
-msgid "Epochs with their start, end and fee multiplier"
-msgstr "Başlangıcı, bitişi ve ücret çarpanıyla epoch’lar"
+msgid "Epochs with their start, end, fee multiplier and fees"
+msgstr "Başlangıcı, bitişi, ücret çarpanı ve ücretleriyle epoch’lar"
 
 msgid "Estimated end"
 msgstr "Tahmini bitiş"
@@ -253,6 +268,9 @@ msgstr "Henüz bunun için oy vermeyen evonode’lar"
 msgid "Fee multiplier"
 msgstr "Ücret çarpanı"
 
+msgid "Fees"
+msgstr "Ücretler"
+
 msgid "Final once the epoch ended."
 msgstr "Epoch bittiğinde kesinleşir."
 
@@ -267,6 +285,12 @@ msgstr "Hash öneki"
 
 msgid "How many evonodes vote for each protocol version."
 msgstr "Her protokol sürümü için kaç evonode oy veriyor."
+
+#. placeholder {0}: formatInt(voters)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
+msgstr "Her protokol sürümü için kaç evonode oy veriyor. Etkin {1} evonode’un {0} tanesinin kayıtlı bir oyu var ve paylar bunlara göre hesaplanır; etkinleştirme eşiği tüm {2} evonode’u sayar."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -309,14 +333,15 @@ msgstr "Ağ"
 msgid "Next chunk"
 msgstr "Sonraki parça"
 
-msgid "Next epoch"
-msgstr "Sonraki epoch"
-
 msgid "Next epoch’s version"
 msgstr "Sonraki epoch’un sürümü"
 
 msgid "Next version"
 msgstr "Sonraki sürüm"
+
+#. placeholder {0}: formatInt(index + 1)
+msgid "Next: epoch {0}"
+msgstr "Sonraki: epoch {0}"
 
 msgid "No epochs in this range."
 msgstr "Bu aralıkta epoch yok."
@@ -418,6 +443,10 @@ msgstr "Önceki parça"
 msgid "Previous epoch"
 msgstr "Önceki epoch"
 
+#. placeholder {0}: formatInt(index - 1)
+msgid "Previous: epoch {0}"
+msgstr "Önceki: epoch {0}"
+
 msgid "Processing fees"
 msgstr "İşlem ücretleri"
 
@@ -463,6 +492,11 @@ msgstr "Radar’ın kesin eşiği, aşaması ve aday başına sayıları için R
 msgid "Range"
 msgstr "Aralık"
 
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} of {1} evonodes"
+msgstr "{1} evonode’un {0} tanesi bildirdi"
+
 msgid "Rewards and schedule"
 msgstr "Ödüller ve takvim"
 
@@ -490,9 +524,6 @@ msgstr "Göster"
 
 msgid "Show more"
 msgstr "Daha fazla göster"
-
-msgid "Slots"
-msgstr "Slotlar"
 
 msgid "Spent"
 msgstr "Harcandı"
@@ -551,8 +582,8 @@ msgstr "Son {0} epoch."
 msgid "The next proposers"
 msgstr "Sıradaki önericiler"
 
-msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
-msgstr "Takvimdeki sıradaki on iki önerici ve her birinin art arda kaç bloğu olduğu."
+msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgstr "Sonraki on iki önerici, her biri sırasına kadar kalan blokla. Doğrulayıcı kümelerinden, blok başına yaklaşık {pace} saniye varsayımıyla bir tahmin"
 
 msgid "The node reported no quorums."
 msgstr "Düğüm hiç quorum bildirmedi."

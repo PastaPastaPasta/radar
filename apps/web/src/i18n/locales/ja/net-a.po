@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr "、不明 {0}"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr "、ブロック {0} 時点"
-
 msgid ", so the figures below may be out of date."
 msgstr "。そのため、以下の数値は古い可能性があります。"
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "マスターノード {0} 台"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} か所にマスターノード {0} 台"
 
@@ -149,6 +145,10 @@ msgstr "ほか {0} クライアント"
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
 msgstr "ほか {0} 台のフルノードが接続を受け付けています。外向きにのみ接続するノードは外部から見えないため、実際の数はこれより多くなります。"
+
+#. placeholder {0}: formatInt(p.nodes)
+msgid "{0} other nodes"
+msgstr "ほか {0} ノード"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
@@ -419,14 +419,15 @@ msgstr "Core の高さ"
 msgid "Core tip"
 msgstr "Core の先頭"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "ブロック {0} で集計"
+
 msgid "countries"
 msgstr "か国"
 
 msgid "Countries"
 msgstr "国"
-
-msgid "crawled"
-msgstr "クロール済み"
 
 msgid "DAPI answered"
 msgstr "DAPI 応答"
@@ -997,7 +998,7 @@ msgstr "バージョン別の{noun}の割合"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "各ウィンドウのブロックに占める割合（しきい値を表示）。今後のウィンドウの日付は推定です。"
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "{0} 件すべて表示"
 

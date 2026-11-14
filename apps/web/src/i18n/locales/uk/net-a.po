@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} невідомих"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr ", на блоці {0}"
-
 msgid ", so the figures below may be out of date."
 msgstr ", тож наведені нижче цифри можуть бути застарілими."
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "Мастернод: {0}"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "Мастернод: {0}, місць: {1}"
 
@@ -149,6 +145,10 @@ msgstr "Інших клієнтів: {0}"
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
 msgstr "Інших повних вузлів, що приймають з’єднання: {0}. Вузли, які лише підключаються назовні, зовні не видно, тож реальна кількість вища."
+
+#. placeholder {0}: formatInt(p.nodes)
+msgid "{0} other nodes"
+msgstr "ще {0} вузлів"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
@@ -419,14 +419,15 @@ msgstr "Висота Core"
 msgid "Core tip"
 msgstr "Вершина Core"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "пораховано на блоці {0}"
+
 msgid "countries"
 msgstr "країни"
 
 msgid "Countries"
 msgstr "Країни"
-
-msgid "crawled"
-msgstr "опитано"
 
 msgid "DAPI answered"
 msgstr "DAPI відповів"
@@ -997,7 +998,7 @@ msgstr "Частка за версіями: {noun}"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "Частка блоків кожного вікна з позначеним порогом. Дати майбутніх вікон — оцінка."
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "Показати всі {0}"
 

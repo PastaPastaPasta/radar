@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
+msgid ": a missed turn, or a new set, shifts it."
+msgstr ": ターンを逃すか新しいセットになると、ずれます。"
+
 msgid "(estimated)"
 msgstr "（推定）"
 
@@ -104,6 +107,9 @@ msgstr "ID は 32 バイトです。43 または 44 文字の base58 文字列�
 msgid "Anchors"
 msgstr "アンカー"
 
+msgid "any moment"
+msgstr "まもなく"
+
 msgid "Balance"
 msgstr "残高"
 
@@ -121,6 +127,9 @@ msgstr "ブロック"
 
 msgid "Blocks"
 msgstr "ブロック"
+
+msgid "Blocks away"
+msgstr "あとのブロック数"
 
 msgid "Blocks so far"
 msgstr "ここまでのブロック"
@@ -226,11 +235,17 @@ msgstr "エポック"
 
 #. placeholder {0}: formatInt(range.from)
 #. placeholder {1}: formatInt(range.to)
+#. placeholder {2}: formatInt(range.to)
+msgid "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+msgstr "エポック {0} から {1}。最新のエポックは {2} のため、範囲はそこで終わります。"
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
 msgid "Epochs {0} to {1}."
 msgstr "エポック {0}〜{1}。"
 
-msgid "Epochs with their start, end and fee multiplier"
-msgstr "エポックの開始、終了、手数料倍率"
+msgid "Epochs with their start, end, fee multiplier and fees"
+msgstr "開始、終了、手数料倍率、手数料を示すエポック一覧"
 
 msgid "Estimated end"
 msgstr "終了予定"
@@ -253,6 +268,9 @@ msgstr "まだ投票していないエボノード"
 msgid "Fee multiplier"
 msgstr "手数料の倍率"
 
+msgid "Fees"
+msgstr "手数料"
+
 msgid "Final once the epoch ended."
 msgstr "エポックの終了後に確定します。"
 
@@ -267,6 +285,12 @@ msgstr "ハッシュの先頭部分"
 
 msgid "How many evonodes vote for each protocol version."
 msgstr "各プロトコルバージョンに投票しているエボノードの数。"
+
+#. placeholder {0}: formatInt(voters)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
+msgstr "各プロトコルバージョンに投票している Evonode の数。有効な {1} 件の Evonode のうち {0} 件に投票記録があり、割合はそれらに対するものです。有効化のしきい値は全 {2} 件で数えます。"
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -309,14 +333,15 @@ msgstr "ネットワーク"
 msgid "Next chunk"
 msgstr "次のまとまり"
 
-msgid "Next epoch"
-msgstr "次のエポック"
-
 msgid "Next epoch’s version"
 msgstr "次のエポックのバージョン"
 
 msgid "Next version"
 msgstr "次のバージョン"
+
+#. placeholder {0}: formatInt(index + 1)
+msgid "Next: epoch {0}"
+msgstr "次: エポック {0}"
 
 msgid "No epochs in this range."
 msgstr "この範囲にエポックはありません。"
@@ -418,6 +443,10 @@ msgstr "前のまとまり"
 msgid "Previous epoch"
 msgstr "前のエポック"
 
+#. placeholder {0}: formatInt(index - 1)
+msgid "Previous: epoch {0}"
+msgstr "前: エポック {0}"
+
 msgid "Processing fees"
 msgstr "処理手数料"
 
@@ -463,6 +492,11 @@ msgstr "Radar の正確なしきい値、フェーズ、候補ごとの件数に
 msgid "Range"
 msgstr "範囲"
 
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} of {1} evonodes"
+msgstr "{1} 件の Evonode のうち {0} 件が報告"
+
 msgid "Rewards and schedule"
 msgstr "報酬とスケジュール"
 
@@ -490,9 +524,6 @@ msgstr "表示"
 
 msgid "Show more"
 msgstr "もっと見る"
-
-msgid "Slots"
-msgstr "スロット"
 
 msgid "Spent"
 msgstr "使用済み"
@@ -551,8 +582,8 @@ msgstr "直近 {0} エポック。"
 msgid "The next proposers"
 msgstr "次のプロポーザー"
 
-msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
-msgstr "スケジュール上の次の 12 人のプロポーザーと、それぞれの連続ブロック数。"
+msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgstr "次の 12 のプロポーザーと、それぞれの順番までのブロック数。バリデーターセットから、1 ブロックあたり約 {pace} 秒として見積もった値です"
 
 msgid "The node reported no quorums."
 msgstr "ノードはクォーラムを報告しませんでした。"

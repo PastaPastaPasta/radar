@@ -41,6 +41,10 @@ msgstr "Hyphen 记录中有 {0, plural, other {# 笔特殊交易}}"
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, other {# 笔提现}}{1}，"
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, other {在线率，# 天}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0}（不完整）"
@@ -230,10 +234,6 @@ msgstr "于区块 {0} 被封禁"
 msgid "Banned on Platform"
 msgstr "在 Platform 上被封禁"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "达到 {0} 时封禁"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "优于在同一位置测试的 {0} 的主节点。"
@@ -259,6 +259,9 @@ msgstr "最近 12 个已完结纪元的区块和奖励，来自 Platform 的证�
 
 msgid "Blocks proposed"
 msgstr "已提议区块"
+
+msgid "Blocks proposed, all time"
+msgstr "提议区块数，累计"
 
 msgid "Blocks this epoch"
 msgstr "本纪元区块"
@@ -515,9 +518,6 @@ msgstr "Hyphen 的索引落后于区块链，因此不读取此列表。"
 msgid "if it ended now (an estimate)"
 msgstr "如果现在结束（估算）"
 
-msgid "In a validator set"
-msgstr "在验证者集合中"
-
 msgid "in total (not counting expired ones)."
 msgstr "合计（不含已过期的）。"
 
@@ -685,6 +685,9 @@ msgstr "下一纪元 {0}"
 msgid "No answer"
 msgstr "无应答"
 
+msgid "No blocks proposed in this range."
+msgstr "此范围内没有提议的区块。"
+
 msgid "No changes since Radar started recording them."
 msgstr "自 Radar 开始记录以来没有变更。"
 
@@ -714,6 +717,9 @@ msgstr "无罚分"
 
 msgid "No Platform ban"
 msgstr "无 Platform 封禁"
+
+msgid "No rewards in this range."
+msgstr "此范围内没有奖励。"
 
 msgid "No stalls or bad data"
 msgstr "无停滞或错误数据"
@@ -747,9 +753,6 @@ msgstr "尚未检查"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "未比较：未使用 Radar 的记录"
-
-msgid "Not in a validator set"
-msgstr "不在验证者集合中"
 
 msgid "not in a validator set that takes turns now"
 msgstr "不在当前轮流出块的验证者集合中"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "付款地址"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "罚分 {0}"
 
@@ -890,6 +892,9 @@ msgstr "Platform 端点"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "Platform Explorer 没有应答，因此缺少它对此验证者的记录。"
+
+msgid "Platform Explorer didn’t answer."
+msgstr "Platform Explorer 没有响应。"
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "Platform Explorer 中没有此 ProTx 的验证者记录。"
@@ -1055,8 +1060,8 @@ msgstr "Radar 的记录"
 msgid "Rank"
 msgstr "排名"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "可达性来自 Radar 的抓取；区块、奖励和密钥来自 Platform Explorer"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "可达性来自 Radar 的爬取。总数和图表来自 Platform Explorer，涵盖该 evonode 的整个生命周期；本纪元见上方。"
 
 msgid "Reachable"
 msgstr "可达"
@@ -1127,11 +1132,8 @@ msgstr "奖励（DASH）"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "它在已完结的纪元中提议过区块后，奖励才会显示。"
 
-msgid "Rewards in total"
-msgstr "奖励合计"
-
-msgid "Rewards this epoch"
-msgstr "本纪元奖励"
+msgid "Rewards, all time"
+msgstr "奖励，累计"
 
 msgid "Same as the owner address"
 msgstr "与所有者地址相同"

@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
+msgid ": a missed turn, or a new set, shifts it."
+msgstr ": пропущений хід або новий набір зсуває його."
+
 msgid "(estimated)"
 msgstr "(оцінка)"
 
@@ -104,6 +107,9 @@ msgstr "ID — це 32 байти: рядок base58 із 43 або 44 симв�
 msgid "Anchors"
 msgstr "Якорі"
 
+msgid "any moment"
+msgstr "з хвилини на хвилину"
+
 msgid "Balance"
 msgstr "Баланс"
 
@@ -121,6 +127,9 @@ msgstr "блоків"
 
 msgid "Blocks"
 msgstr "Блоки"
+
+msgid "Blocks away"
+msgstr "Блоків до ходу"
 
 msgid "Blocks so far"
 msgstr "Блоків на цей момент"
@@ -226,11 +235,17 @@ msgstr "Епохи"
 
 #. placeholder {0}: formatInt(range.from)
 #. placeholder {1}: formatInt(range.to)
+#. placeholder {2}: formatInt(range.to)
+msgid "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+msgstr "Епохи з {0} по {1}; остання епоха — {2}, тому діапазон на ній закінчується."
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
 msgid "Epochs {0} to {1}."
 msgstr "Епохи з {0} по {1}."
 
-msgid "Epochs with their start, end and fee multiplier"
-msgstr "Епохи з початком, кінцем і множником комісії"
+msgid "Epochs with their start, end, fee multiplier and fees"
+msgstr "Епохи з початком, кінцем, множником комісій і комісіями"
 
 msgid "Estimated end"
 msgstr "Орієнтовний кінець"
@@ -253,6 +268,9 @@ msgstr "Евоноди, які ще не голосують за неї"
 msgid "Fee multiplier"
 msgstr "Множник комісії"
 
+msgid "Fees"
+msgstr "Комісії"
+
 msgid "Final once the epoch ended."
 msgstr "Остаточно після завершення епохи."
 
@@ -267,6 +285,12 @@ msgstr "Префікс хеша"
 
 msgid "How many evonodes vote for each protocol version."
 msgstr "Скільки евонод голосує за кожну версію протоколу."
+
+#. placeholder {0}: formatInt(voters)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
+msgstr "Скільки евонод голосує за кожну версію протоколу. У {0} із {1} увімкнених евонод є записаний голос, і частки рахуються від них; поріг активації враховує всі {2}."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -309,14 +333,15 @@ msgstr "Мережа"
 msgid "Next chunk"
 msgstr "Наступний блок"
 
-msgid "Next epoch"
-msgstr "Наступна епоха"
-
 msgid "Next epoch’s version"
 msgstr "Версія наступної епохи"
 
 msgid "Next version"
 msgstr "Наступна версія"
+
+#. placeholder {0}: formatInt(index + 1)
+msgid "Next: epoch {0}"
+msgstr "Далі: епоха {0}"
 
 msgid "No epochs in this range."
 msgstr "У цьому діапазоні немає епох."
@@ -418,6 +443,10 @@ msgstr "Попередній блок"
 msgid "Previous epoch"
 msgstr "Попередня епоха"
 
+#. placeholder {0}: formatInt(index - 1)
+msgid "Previous: epoch {0}"
+msgstr "Назад: епоха {0}"
+
 msgid "Processing fees"
 msgstr "Комісії за обробку"
 
@@ -463,6 +492,11 @@ msgstr "Точний поріг, фаза й підрахунок за канд�
 msgid "Range"
 msgstr "Діапазон"
 
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} of {1} evonodes"
+msgstr "Повідомили {0} із {1} евонод"
+
 msgid "Rewards and schedule"
 msgstr "Нагороди та розклад"
 
@@ -490,9 +524,6 @@ msgstr "Показати"
 
 msgid "Show more"
 msgstr "Показати ще"
-
-msgid "Slots"
-msgstr "Слоти"
 
 msgid "Spent"
 msgstr "Витрачено"
@@ -551,8 +582,8 @@ msgstr "Останні епохи ({0})."
 msgid "The next proposers"
 msgstr "Наступні пропонувачі"
 
-msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
-msgstr "Наступні дванадцять пропонувачів у розкладі та скільки блоків поспіль у кожного."
+msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgstr "Наступні дванадцять пропонувачів, у кожного — кількість блоків до його ходу. Оцінка за приблизно {pace} с на блок за наборами валідаторів"
 
 msgid "The node reported no quorums."
 msgstr "Вузол не повідомив жодного кворуму."

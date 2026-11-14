@@ -41,6 +41,10 @@ msgstr "{0, plural, one {# специальная транзакция в зап
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, one {# вывод} few {# вывода} many {# выводов} other {# вывода}}{1}, "
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, one {Доступность за # день} few {Доступность за # дня} many {Доступность за # дней} other {Доступность за # дня}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0} (неполно)"
@@ -230,10 +234,6 @@ msgstr "Забанен на блоке {0}"
 msgid "Banned on Platform"
 msgstr "Забанен на Platform"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "бан при {0}"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Лучше, чем у {0} мастернод, проверенных из той же локации."
@@ -259,6 +259,9 @@ msgstr "Блоки и награды за последние 12 завершён
 
 msgid "Blocks proposed"
 msgstr "Предложено блоков"
+
+msgid "Blocks proposed, all time"
+msgstr "Предложено блоков за всё время"
 
 msgid "Blocks this epoch"
 msgstr "Блоков в этой эпохе"
@@ -515,9 +518,6 @@ msgstr "Индекс Hyphen отстаёт от цепи, поэтому это�
 msgid "if it ended now (an estimate)"
 msgstr "если бы закончилась сейчас (оценка)"
 
-msgid "In a validator set"
-msgstr "В наборе валидаторов"
-
 msgid "in total (not counting expired ones)."
 msgstr "всего (без учёта истёкших)."
 
@@ -685,6 +685,9 @@ msgstr "Следующая эпоха {0}"
 msgid "No answer"
 msgstr "Нет ответа"
 
+msgid "No blocks proposed in this range."
+msgstr "В этом диапазоне блоки не предлагались."
+
 msgid "No changes since Radar started recording them."
 msgstr "Изменений с начала записи Radar нет."
 
@@ -714,6 +717,9 @@ msgstr "Штрафа нет"
 
 msgid "No Platform ban"
 msgstr "Нет бана на Platform"
+
+msgid "No rewards in this range."
+msgstr "В этом диапазоне нет наград."
 
 msgid "No stalls or bad data"
 msgstr "Без остановок и неверных данных"
@@ -747,9 +753,6 @@ msgstr "Ещё не проверялось"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "не сравнивается: запись Radar не используется"
-
-msgid "Not in a validator set"
-msgstr "Не в наборе валидаторов"
 
 msgid "not in a validator set that takes turns now"
 msgstr "не в наборе валидаторов, который сейчас работает по очереди"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "Адрес выплаты"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Штраф {0}"
 
@@ -890,6 +892,9 @@ msgstr "Конечные точки Platform"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "Platform Explorer не ответил, поэтому записи об этом валидаторе нет."
+
+msgid "Platform Explorer didn’t answer."
+msgstr "Platform Explorer не ответил."
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "В Platform Explorer нет записи о валидаторе для этого ProTx."
@@ -1055,8 +1060,8 @@ msgstr "Запись Radar"
 msgid "Rank"
 msgstr "Место"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "Доступность — из обхода Radar; блоки, награды и ключи — из Platform Explorer"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "Доступность по данным обхода Radar. Итоги и графики — от Platform Explorer за всю жизнь эвоноды; эта эпоха показана выше."
 
 msgid "Reachable"
 msgstr "Доступна"
@@ -1127,11 +1132,8 @@ msgstr "Награды (DASH)"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "Награды появятся, когда она предложит блок в завершённой эпохе."
 
-msgid "Rewards in total"
-msgstr "Награды всего"
-
-msgid "Rewards this epoch"
-msgstr "Награды в этой эпохе"
+msgid "Rewards, all time"
+msgstr "Награды за всё время"
 
 msgid "Same as the owner address"
 msgstr "Совпадает с адресом владельца"
