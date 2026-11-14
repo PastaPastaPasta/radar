@@ -1,16 +1,16 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { isSourceError } from '@/data/errors'
 import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, useNetwork } from '@/features/entity'
-import { systemContract, wellKnownContracts } from '@/lib/well-known'
+import { systemContract } from '@/lib/well-known'
 import { Card, announce } from '@/ui'
 import { copyText } from '@/ui/clipboard'
 import { lineColumn } from './highlight'
 import { explainFailure } from './parse-messages'
-import { presetsFor } from './presets'
+import { pickerContracts, presetsFor } from './presets'
 import { QueryEditor } from './QueryEditor'
 import { ResultsPanel } from './ResultsPanel'
 import { MAX_STATEMENTS, planQuery, runStatement, type PlanResult, type StatementRun } from './run'
@@ -27,16 +27,7 @@ export function QueryPage() {
   const search = useSearch({ from: '/query' })
   const navigate = useNavigate()
   const first = presetsFor(net, search.contract ?? systemContract('dpns').id)[0]!
-  const allKnown = wellKnownContracts(net)
-  // The protocol's own DPNS and DashPay exist everywhere; every other system contract is asked for, and one that
-  // the network answers "none" for is not offered.
-  const existence = useQueries({
-    queries: allKnown.map((c) => ({
-      ...sdkQueries['contracts.fetch'](net, { id: c.id }),
-      enabled: c.key !== 'dpns' && c.key !== 'dashpay',
-    })),
-  })
-  const known = allKnown.filter((_, i) => existence[i]?.data?.data !== null)
+  const known = pickerContracts(net)
 
   const [sql, setSqlText] = useState(search.q ?? first.sql)
   const edited = useRef(search.q !== undefined)

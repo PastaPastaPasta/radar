@@ -181,7 +181,6 @@ const GRADE_CONTRACT = {
     ],
   },
 }
-const FEATURE_FLAGS = 'HY1keaRK5bcDmujNCQq5pxNyvAiHHpoHQgLN5ppiu4kh'
 
 describe('Query page results and picker', () => {
   it('decodes GROUP BY keys by the schema type, and labels each phone field @NX-70', async () => {
@@ -293,14 +292,10 @@ describe('Query page results and picker', () => {
   })
 
   it('does not offer a contract the network does not have @NX-70', async () => {
-    stubSdkCalls({
-      'contracts.fetch': (args: { id: string }) => (args.id === FEATURE_FLAGS ? null : CONTRACT),
-    })
+    stubSdkCalls({ 'contracts.fetch': () => CONTRACT })
     renderAt('/query')
     const picker = await screen.findByLabelText('Contract')
-    await waitFor(() =>
-      expect(within(picker).queryByRole('option', { name: 'Feature flags' })).toBeNull(),
-    )
+    expect(within(picker).queryByRole('option', { name: 'Feature flags' })).toBeNull()
     expect(within(picker).getByRole('option', { name: 'DPNS' })).toBeInTheDocument()
     expect(within(picker).getByRole('option', { name: 'Withdrawals' })).toBeInTheDocument()
   })

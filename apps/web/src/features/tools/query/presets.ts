@@ -1,6 +1,6 @@
 import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
-import { systemContract } from '@/lib/well-known'
+import { systemContract, wellKnownContracts } from '@/lib/well-known'
 import type { NetworkId } from '@/lib/network'
 
 export interface QueryPreset {
@@ -88,4 +88,13 @@ export function presetsFor(net: NetworkId, contractId: string, firstType?: strin
         ]
       : []
   return [...own, ...generic, ...others]
+}
+
+/** System contracts a network does not have: Dash Platform has no Feature flags contract on mainnet. */
+const ABSENT: Partial<Record<NetworkId, readonly string[]>> = { mainnet: ['feature-flags'] }
+
+/** The contracts the picker offers on this network. */
+export function pickerContracts(net: NetworkId) {
+  const absent = ABSENT[net] ?? []
+  return wellKnownContracts(net).filter((c) => !absent.includes(c.key))
 }
