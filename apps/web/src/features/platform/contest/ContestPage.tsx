@@ -18,7 +18,14 @@ import {
 } from '@/data/query/prefetch/p-vote'
 import type { ContestVoteStateDto } from '@/data/sdk/methods/p-vote'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, IdentityRef, PageFrame, PageLink, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  PageFrame,
+  PageLink,
+  useIdentityNames,
+  useNetwork,
+} from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
   Amount,
@@ -241,10 +248,7 @@ function TallyTab({
 }) {
   const { t } = useLingui()
   const decentralized = useDecentralizedOnly()
-  const aliasOf = new Map(
-    (indexed?.contenders ?? []).map((c) => [c.identifier, c.aliases[0]?.alias] as const),
-  )
-  const slices = useTallySlices(state, aliasOf)
+  const slices = useTallySlices(state)
   const fund = prefunded(indexed, ref_.index)
   const picked = search.towards ?? state.contenders[0]?.identityId
   return (
@@ -256,14 +260,13 @@ function TallyTab({
         <ul className="grid gap-3" data-contenders>
           {state.contenders.map((c) => {
             const winner = state.winner?.kind === 'won' && state.winner.identityId === c.identityId
-            const alias = aliasOf.get(c.identityId)
             return (
               <li
                 key={c.identityId}
                 className="flex flex-wrap items-center gap-x-4 gap-y-1"
                 data-contender={c.identityId}
               >
-                <IdentityRef id={c.identityId} label={alias} />
+                <IdentityRef id={c.identityId} />
                 <span className="rx-num">{t`${formatInt(c.voteTally ?? 0)} votes`}</span>
                 {winner ? <Badge tone="success">{t`Winner`}</Badge> : null}
                 {fund !== undefined ? (
@@ -282,7 +285,7 @@ function TallyTab({
           />
         ) : null}
       </Card>
-      <VotersCard ref_={ref_} state={state} picked={picked} page={search.page} aliasOf={aliasOf} />
+      <VotersCard ref_={ref_} state={state} picked={picked} page={search.page} />
     </>
   )
 }
@@ -292,17 +295,16 @@ function VotersCard({
   state,
   picked,
   page,
-  aliasOf,
 }: {
   ref_: ContestRef
   state: ContestVoteStateDto
   picked: string | undefined
   page: number
-  aliasOf: ReadonlyMap<string, string | undefined>
 }) {
   const { t } = useLingui()
   const net = useNetwork()
   const setSearch = useSetSearch()
+  const names = useIdentityNames(state.contenders.map((c) => c.identityId))
   const columns = useMemo<ColumnDef<{ id: string }>[]>(
     () => [
       {
@@ -334,7 +336,7 @@ function VotersCard({
             }}
             options={state.contenders.map((c) => ({
               id: c.identityId,
-              label: aliasOf.get(c.identityId) ?? `${c.identityId.slice(0, 8)}…`,
+              label: names.get(c.identityId) ?? `${c.identityId.slice(0, 8)}…`,
               count: c.voteTally ?? 0,
             }))}
           />
@@ -392,6 +394,7 @@ function VotesTab({
   const { t } = useLingui()
   const net = useNetwork()
   const setSearch = useSetSearch()
+  const names = useIdentityNames(state.contenders.map((c) => c.identityId))
   const choice = search.towards ?? 'all'
   const choiceNo =
     choice === 'all'
@@ -472,7 +475,7 @@ function VotesTab({
           { id: 'all', label: t`All` },
           ...state.contenders.map((c) => ({
             id: c.identityId,
-            label: `${c.identityId.slice(0, 8)}…`,
+            label: names.get(c.identityId) ?? `${c.identityId.slice(0, 8)}…`,
           })),
           { id: 'abstain', label: t`Abstain` },
           { id: 'lock', label: t`Lock` },
