@@ -88,7 +88,7 @@ export function OverviewTab({ id }: IdentityTabProps) {
             ),
             source: names.data ? stampOf(names.data) : undefined,
           },
-          { label: t`Funded by`, value: funding },
+          { label: t({ message: 'Funded by', context: 'identity funding' }), value: funding },
         ]}
       />
     </Card>

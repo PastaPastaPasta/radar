@@ -114,7 +114,7 @@ function Filters({ search }: { search: ContestsPageSearch }) {
         }}
         options={[
           { id: '', label: t`All` },
-          { id: 'active', label: t`Active` },
+          { id: 'active', label: t({ message: 'Active', context: 'contest status' }) },
           { id: 'finished', label: t`Finished` },
         ]}
       />
@@ -136,8 +136,8 @@ function Filters({ search }: { search: ContestsPageSearch }) {
               setFilters({ sort: id === 'oldest' ? 'oldest' : undefined })
             }}
             options={[
-              { id: 'newest', label: t`Newest first` },
-              { id: 'oldest', label: t`Oldest first` },
+              { id: 'newest', label: t({ message: 'Newest first', context: 'list of contests' }) },
+              { id: 'oldest', label: t({ message: 'Oldest first', context: 'list of contests' }) },
             ]}
           />
           <ListModeToggle listId="contests" />
@@ -270,7 +270,7 @@ function SdkContestTable(props: RowTable) {
           ) : s.winner ? (
             <Badge>{t`Decided`}</Badge>
           ) : (
-            <Badge tone="success">{t`Active`}</Badge>
+            <Badge tone="success">{t({ message: 'Active', context: 'contest status' })}</Badge>
           )
         },
         enableSorting: false,
@@ -459,7 +459,7 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
           row.original.finished ? (
             <Badge>{t`Finished`}</Badge>
           ) : (
-            <Badge tone="success">{t`Active`}</Badge>
+            <Badge tone="success">{t({ message: 'Active', context: 'contest status' })}</Badge>
           ),
         enableSorting: false,
         meta: { phone: 'primary' },

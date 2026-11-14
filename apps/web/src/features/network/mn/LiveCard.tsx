@@ -187,7 +187,7 @@ export function LiveCard({ ctx }: { ctx: MnContext }) {
   const statusLabel = (s: WithdrawalStatus): string => {
     switch (s) {
       case 'queued':
-        return t`Queued`
+        return t({ message: 'Queued', context: 'withdrawal status' })
       case 'pooled':
         return t`Pooled`
       case 'broadcast':

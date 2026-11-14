@@ -178,7 +178,13 @@ function StatusCard({
   const decidedAt = winner?.timeMs
   const ended = endsAt ?? decidedAt
   const status =
-    kind === 'won' ? t`Won` : kind === 'locked' ? t`Locked` : winner ? t`Decided` : t`Active`
+    kind === 'won'
+      ? t`Won`
+      : kind === 'locked'
+        ? t`Locked`
+        : winner
+          ? t`Decided`
+          : t({ message: 'Active', context: 'contest status' })
   return (
     <Card
       layer="platform"

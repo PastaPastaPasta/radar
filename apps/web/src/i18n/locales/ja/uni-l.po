@@ -31,10 +31,6 @@ msgstr "{0, plural, other {出力 #件}}"
 msgid "{0} base units"
 msgstr "{0} 基本単位"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} は devnet に対応していません。"
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} duff"
@@ -121,6 +117,11 @@ msgstr "共有マスターノードの持分保有者が、報酬の支払先を
 msgid "About"
 msgstr "概要"
 
+msgctxt "contest status"
+msgid "Active"
+msgstr "アクティブ"
+
+msgctxt "token status"
 msgid "Active"
 msgstr "アクティブ"
 
@@ -161,9 +162,6 @@ msgstr "アセットアンロック"
 
 msgid "Asset unlocks root"
 msgstr "アセットアンロックのルート"
-
-msgid "Back to Mainnet"
-msgstr "メインネットに戻る"
 
 msgid "Balance"
 msgstr "残高"
@@ -499,9 +497,6 @@ msgstr "グループ"
 msgid "Hard-fork signal"
 msgstr "ハードフォークのシグナル"
 
-msgid "Hash"
-msgstr "ハッシュ"
-
 msgid "Hide the table"
 msgstr "表を隠す"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen は使用済みとしていますが、履歴からどのトラ�
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen のインデックスはチェーンより {0} ブロック遅れているため、この出力がその後使われたかどうかは分かりません。"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Identities"
 msgstr "アイデンティティ"
@@ -817,9 +809,6 @@ msgstr "未登録です。空いているか、まだ争奪中の可能性があ
 msgid "Not specified"
 msgstr "未指定"
 
-msgid "Number"
-msgstr "番号"
-
 msgid "On Platform"
 msgstr "Platform上"
 
@@ -977,9 +966,6 @@ msgstr "Platform の鼓動：高さ、エポック、アクティビティのチ
 msgid "PoSe-banned"
 msgstr "PoSe で停止"
 
-msgid "Position"
-msgstr "位置"
-
 msgid "proposal"
 msgstr "提案"
 
@@ -991,9 +977,6 @@ msgstr "プロポーザー"
 
 msgid "Protocol"
 msgstr "プロトコル"
-
-msgid "ProTx hash"
-msgstr "ProTx ハッシュ"
 
 msgid "QR reader"
 msgstr "QR リーダー"
@@ -1045,9 +1028,6 @@ msgstr "生データ"
 
 msgid "Raw payload"
 msgstr "生のペイロード"
-
-msgid "Read from"
-msgstr "読み取り元"
 
 msgid "Reason"
 msgstr "理由"
@@ -1265,17 +1245,11 @@ msgstr "オーナーがマスターノードのオペレーターキー、投票
 msgid "the Platform Explorer price feed"
 msgstr "Platform Explorer の価格フィード"
 
-msgid "The Platform SDK"
-msgstr "Platform SDK"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "Platform SDK（証明で検証）"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "Platform のバリデーターセット：Platform レコード付きのエボノード（マスターノード一覧に表示）。"
-
-msgid "The price feed"
-msgstr "価格フィード"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "ノードセンサスとマスターノードのページを支える公開 API（例付き）。"
@@ -1307,9 +1281,6 @@ msgstr "この {record} は {network} にあります。"
 msgid "This address holds nothing on Platform."
 msgstr "このアドレスはPlatform上に何も保有していません。"
 
-msgid "This browser"
-msgstr "このブラウザ"
-
 msgid "This is not a contract ID."
 msgstr "これはコントラクトIDではありません。"
 
@@ -1327,13 +1298,6 @@ msgstr "これはエポック番号ではありません。"
 
 msgid "This is not an identity ID."
 msgstr "これはアイデンティティIDではありません。"
-
-msgid "This page is on its way"
-msgstr "このページは準備中です"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "このページは {0} から読み取ります。表示するには Mainnet または Testnet に切り替えてください。"
 
 msgid "Threshold signature"
 msgstr "しきい値署名"
@@ -1374,9 +1338,6 @@ msgstr "トランザクション"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "トランザクション {0}…"
-
-msgid "Transaction ID"
-msgstr "トランザクション ID"
 
 msgid "Transactions"
 msgstr "トランザクション"
@@ -1487,9 +1448,6 @@ msgstr "Radar が証明できること・できないこと、見たものに対
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Core 24 有効化の進捗：しきい値、マイナーのシグナルをウィンドウごとに、マスターノードの準備状況。"
-
-msgid "Where the data comes from"
-msgstr "データの出所"
 
 msgid "Where the value went"
 msgstr "価値の行き先"

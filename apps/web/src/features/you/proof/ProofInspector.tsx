@@ -41,7 +41,7 @@ function ProofDetail({ record }: { record: ProofRecord }) {
   return (
     <div className="grid gap-4" data-proof-detail={record.id}>
       <p className="flex flex-wrap items-center gap-2">
-        <Badge tone="success">{t`Verified`}</Badge>
+        <Badge tone="success">{t({ message: 'Verified', context: 'proof check' })}</Badge>
         <span className="text-[var(--dh-ink-2)]">
           {t`The SDK checked this proof against the trusted quorum keys before Radar showed the figure.`}
         </span>

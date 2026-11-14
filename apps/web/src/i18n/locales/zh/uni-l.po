@@ -31,10 +31,6 @@ msgstr "{0, plural, other {# 个输出}}"
 msgid "{0} base units"
 msgstr "{0} 基本单位"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} 不支持开发网。"
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} duff"
@@ -121,6 +117,11 @@ msgstr "共享主节点的份额持有者更改其奖励的支付地址。"
 msgid "About"
 msgstr "关于"
 
+msgctxt "contest status"
+msgid "Active"
+msgstr "活跃"
+
+msgctxt "token status"
 msgid "Active"
 msgstr "活跃"
 
@@ -161,9 +162,6 @@ msgstr "资产解锁"
 
 msgid "Asset unlocks root"
 msgstr "资产解锁根"
-
-msgid "Back to Mainnet"
-msgstr "返回主网"
 
 msgid "Balance"
 msgstr "余额"
@@ -499,9 +497,6 @@ msgstr "群组"
 msgid "Hard-fork signal"
 msgstr "硬分叉信号"
 
-msgid "Hash"
-msgstr "哈希"
-
 msgid "Hide the table"
 msgstr "隐藏表格"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen 显示已花费，但其历史记录没有显示是哪笔交易�
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen 的索引落后链 {0} 个区块，因此无法判断该输出之后是否已被花费。"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Identities"
 msgstr "身份"
@@ -817,9 +809,6 @@ msgstr "未注册。可能尚未被占用，或仍在争夺中。"
 msgid "Not specified"
 msgstr "未指定"
 
-msgid "Number"
-msgstr "编号"
-
 msgid "On Platform"
 msgstr "在 Platform 上"
 
@@ -977,9 +966,6 @@ msgstr "Platform 的脉搏：高度、纪元、活动图表、领导者以及最
 msgid "PoSe-banned"
 msgstr "已被 PoSe 封禁"
 
-msgid "Position"
-msgstr "位置"
-
 msgid "proposal"
 msgstr "提案"
 
@@ -991,9 +977,6 @@ msgstr "提议者"
 
 msgid "Protocol"
 msgstr "协议"
-
-msgid "ProTx hash"
-msgstr "ProTx 哈希"
 
 msgid "QR reader"
 msgstr "二维码读取器"
@@ -1045,9 +1028,6 @@ msgstr "原始数据"
 
 msgid "Raw payload"
 msgstr "原始载荷"
-
-msgid "Read from"
-msgstr "读取自"
 
 msgid "Reason"
 msgstr "原因"
@@ -1265,17 +1245,11 @@ msgstr "所有者更改主节点的运营者密钥、投票密钥或付款地址
 msgid "the Platform Explorer price feed"
 msgstr "Platform Explorer 价格数据源"
 
-msgid "The Platform SDK"
-msgstr "Platform SDK"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "Platform SDK（已通过证明验证）"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "Platform 验证者集合：带有 Platform 记录的 Evonode，显示在主节点列表中。"
-
-msgid "The price feed"
-msgstr "价格数据"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "节点普查和主节点页面背后的公共 API，附示例。"
@@ -1307,9 +1281,6 @@ msgstr "此 {record} 位于 {network}。"
 msgid "This address holds nothing on Platform."
 msgstr "此地址在 Platform 上没有任何资产。"
 
-msgid "This browser"
-msgstr "此浏览器"
-
 msgid "This is not a contract ID."
 msgstr "这不是合约 ID。"
 
@@ -1327,13 +1298,6 @@ msgstr "这不是纪元编号。"
 
 msgid "This is not an identity ID."
 msgstr "这不是身份 ID。"
-
-msgid "This page is on its way"
-msgstr "此页面即将上线"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "此页面读取自{0}。请切换到 Mainnet 或 Testnet 查看。"
 
 msgid "Threshold signature"
 msgstr "门限签名"
@@ -1374,9 +1338,6 @@ msgstr "交易"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "交易 {0}…"
-
-msgid "Transaction ID"
-msgstr "交易 ID"
 
 msgid "Transactions"
 msgstr "交易"
@@ -1487,9 +1448,6 @@ msgstr "Radar 能证明什么、不能证明什么，在哪里可以对所见内
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Core 24 激活进度：阈值、矿工逐个窗口的信号以及主节点就绪情况。"
-
-msgid "Where the data comes from"
-msgstr "数据来源"
 
 msgid "Where the value went"
 msgstr "价值的去向"

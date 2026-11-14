@@ -299,8 +299,8 @@ function TokenList() {
             controls.filter({ sort: id === 'new' ? NEWEST_FIRST : undefined })
           }}
           options={[
-            { id: 'old', label: t`Oldest first` },
-            { id: 'new', label: t`Newest first` },
+            { id: 'old', label: t({ message: 'Oldest first', context: 'list of tokens' }) },
+            { id: 'new', label: t({ message: 'Newest first', context: 'list of tokens' }) },
           ]}
         />
         <span className="inline-flex items-center gap-2 whitespace-nowrap">
