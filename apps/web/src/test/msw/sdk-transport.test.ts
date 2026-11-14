@@ -289,3 +289,42 @@ describe('FixtureSdkTransport composing dpns.usernames', () => {
     expect(takeFixtureMisses()).toHaveLength(2)
   })
 })
+
+describe('FixtureSdkTransport composing epoch.evonodesProposedBlocksByIds', () => {
+  const H1 = 'a'.repeat(64)
+  const H2 = 'b'.repeat(64)
+  const H3 = 'c'.repeat(64)
+  const t = () =>
+    transport(
+      recording(
+        'epoch.evonodesProposedBlocksByIds',
+        { epoch: 88, proTxHashes: [H1, H2] },
+        new Map([[H1, 4n]]),
+        '2026-11-01T00:00:00Z',
+      ),
+      recording(
+        'epoch.evonodesProposedBlocksByIds',
+        { epoch: 87, proTxHashes: [H3] },
+        new Map([[H3, 9n]]),
+        '2026-11-02T00:00:00Z',
+      ),
+    )
+
+  it('answers a regrouped batch, keeping an asked hash with no blocks out of the map', async () => {
+    const answer = (await t().call('mainnet', 'epoch.evonodesProposedBlocksByIds', {
+      epoch: 88,
+      proTxHashes: [H2, H1],
+    })) as { data: Map<string, bigint> }
+    expect([...answer.data]).toEqual([[H1, 4n]])
+    expect(takeFixtureMisses()).toEqual([])
+  })
+
+  it('misses for a hash recorded only in another epoch', async () => {
+    const answer = await t().call('mainnet', 'epoch.evonodesProposedBlocksByIds', {
+      epoch: 88,
+      proTxHashes: [H1, H3],
+    })
+    expect(answer).toMatchObject({ ok: false, error: { kind: 'network' } })
+    expect(takeFixtureMisses()).toHaveLength(1)
+  })
+})

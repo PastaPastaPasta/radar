@@ -171,6 +171,23 @@ function composeUsernames(
   return composed ? stamped(composed.used, composed.docs.map(nameOf)) : null
 }
 
+/** Blocks proposed per evonode in one epoch: a hash a recording asked about but left out of its map proposed none. */
+function composeProposed(recorded: Recording[], epoch: number, hashes: string[]): unknown {
+  const used = new Set<Recording>()
+  const out = new Map<string, unknown>()
+  for (const hash of hashes) {
+    const rec = recorded.find((r) => {
+      const a = r.fixture.args as { epoch?: number; proTxHashes?: string[] }
+      return a.epoch === epoch && a.proTxHashes?.includes(hash)
+    })
+    if (!rec) return null
+    used.add(rec)
+    const map = rec.result.data
+    if (map instanceof Map && map.has(hash)) out.set(hash, map.get(hash))
+  }
+  return used.size > 0 ? stamped([...used], out) : null
+}
+
 /**
  * Answers a batched call that has no recording under its own key from what is recorded under other groupings, or
  * returns null when any part of it is not covered: nothing that was not recorded is ever invented.
@@ -193,6 +210,14 @@ export async function composeSdkAnswer(
     if (!singleClause(query)?.isIn) return null
     const composed = composeDocuments(await recordings(source, 'documents.query'), query)
     return composed ? stamped(composed.used, composed.docs) : null
+  }
+  if (method === 'epoch.evonodesProposedBlocksByIds') {
+    const { epoch, proTxHashes } = args as { epoch: number; proTxHashes: string[] }
+    return composeProposed(
+      await recordings(source, 'epoch.evonodesProposedBlocksByIds'),
+      epoch,
+      proTxHashes,
+    )
   }
   if (method === 'dpns.usernames') {
     const a = args as { identityId: string; limit?: number }
