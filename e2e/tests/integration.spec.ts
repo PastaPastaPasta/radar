@@ -76,3 +76,20 @@ test.describe('layout between a phone and a wide screen', () => {
     await expect(page.getByText('Link copied')).toBeAttached()
   })
 })
+
+test.describe('identities on a list that wants names', () => {
+  for (const path of ['/names', '/votes']) {
+    test(`${path} draws an identity with its DPNS name once the batch has answered @NX-40 @NX-41`, async ({
+      page,
+    }) => {
+      await page.goto(path)
+      await settled(page)
+      await expect(
+        page
+          .locator('[data-entity="identity"]')
+          .filter({ hasText: /\.dash$/ })
+          .first(),
+      ).toBeVisible({ timeout: 15_000 })
+    })
+  }
+})
