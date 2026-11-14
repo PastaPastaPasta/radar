@@ -30,20 +30,25 @@ function hitFor(m: RadarMasternode, stamp: SourceStamp): SearchHit {
   }
 }
 
-/** The masternodes whose service address is the one typed; a typed port narrows it, a bare address matches any port. */
+/**
+ * The masternode whose ProTx hash is the one typed, or whose service address is: a typed port narrows an address, a
+ * bare address matches any port.
+ */
 export const radarMasternodeByAddress: Resolver = {
   id: 'radar-masternode-address',
-  accepts: ['ip'],
+  accepts: ['ip', 'hex64'],
   cost: 'index',
   what: msg`Masternodes by address`,
   async resolve(c, { net, signal }) {
     if (isDevnet(net)) return []
+    const byHash = c.classes.includes('hex64')
     const wanted = serviceHost(c.normalized)
     const { radarLookups } = await import('@/data/radar/lookups')
     const list = await radarLookups.masternodes(net, signal)
     const stamp = stampOf(list)
     return list.data
       .filter((m) => {
+        if (byHash) return m.protx.toLowerCase() === c.normalized
         if (!m.service) return false
         const have = serviceHost(m.service.toLowerCase())
         return have.host === wanted.host && (wanted.port === null || have.port === wanted.port)
