@@ -2,11 +2,11 @@ import { http, HttpResponse } from 'msw'
 import { setupWorker } from 'msw/browser'
 import { core } from '@/data/core/client'
 import { setDapiTransport } from '@/data/dapi-core'
-import { sdk, setSdkTransport } from '@/data/sdk/client'
+import { sdk, setSdkTransport, type SdkTransport } from '@/data/sdk/client'
 import type { NetworkId } from '@/lib/network'
 import { FixtureDapiTransport } from './dapi-transport'
 import { FixtureSdkTransport } from './sdk-transport'
-import { fixtureHandlers, onFixtureMiss } from './handlers'
+import { fixtureHandlers, HTTP_SOURCE_PATTERNS, onFixtureMiss } from './handlers'
 
 export const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
 
@@ -37,6 +37,35 @@ export interface RadarFixtureHooks {
 /** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
 export const FIXTURE_UNMINED_KEY = 'radar.fixture.unmined'
 
+/**
+ * `sessionStorage` key a spec sets before the page loads: a JSON array of the sources to answer as down, from
+ * `radar`, `pe`, `hyphen`, `insight`, `sdk` and `dapi`. HTTP sources fail at the network, the SDK refuses every call
+ * and the DAPI pool is cut, so a page shows what it does when that backend is gone.
+ */
+export const FIXTURE_DOWN_KEY = 'radar.fixture.down'
+
+type DownSource = keyof typeof HTTP_SOURCE_PATTERNS | 'sdk' | 'dapi'
+
+function downFromSession(): ReadonlySet<DownSource> {
+  try {
+    return new Set(JSON.parse(sessionStorage.getItem(FIXTURE_DOWN_KEY) ?? '[]') as DownSource[])
+  } catch {
+    return new Set()
+  }
+}
+
+/** An SDK whose nodes are all unreachable. */
+const unreachableSdk: SdkTransport = {
+  connect: () => Promise.resolve({ sdkVersion: 'fixture', protocolVersion: 14, tookMs: 0 }),
+  call: () =>
+    Promise.resolve({ ok: false, error: { kind: 'network', message: 'The SDK is unreachable' } }),
+  decode: () =>
+    Promise.resolve({
+      ok: false,
+      error: { kind: 'unavailable', message: 'Local decoding is not recorded in fixtures' },
+    }),
+}
+
 function unminedFromSession(): Record<string, { instantLocked: boolean }> {
   try {
     return JSON.parse(sessionStorage.getItem(FIXTURE_UNMINED_KEY) ?? '{}') as Record<
@@ -58,14 +87,25 @@ export async function startFixtureWorker(): Promise<void> {
     dapiCalls: (method) => dapi.calls.filter((c) => c.method === method).length,
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
-  setSdkTransport(() => Promise.resolve(new FixtureSdkTransport()))
+  const down = downFromSession()
+  if (down.has('dapi')) for (const net of ['mainnet', 'testnet'] as const) dapi.breakConnection(net)
+  setSdkTransport(() =>
+    Promise.resolve(down.has('sdk') ? unreachableSdk : new FixtureSdkTransport()),
+  )
   // The Core façade, so a spec can call it without a page that renders its answers.
   ;(window as unknown as { __radarCore: typeof core }).__radarCore = core
   ;(window as unknown as { __radarSdk: typeof sdk }).__radarSdk = sdk
   onFixtureMiss((request) => {
     fail(`no recorded fixture for ${request}`)
   })
-  await setupWorker(...fixtureHandlers, refuseUnrecorded).start({
+  const refused = [...down].flatMap((source) =>
+    source === 'sdk' || source === 'dapi'
+      ? []
+      : HTTP_SOURCE_PATTERNS[source].map((pattern) =>
+          http.all(pattern, () => HttpResponse.error()),
+        ),
+  )
+  await setupWorker(...refused, ...fixtureHandlers, refuseUnrecorded).start({
     quiet: true,
     onUnhandledFrame: 'bypass',
   })

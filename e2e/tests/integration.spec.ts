@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from '../helpers/test'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
+import { fetchesNothing } from '../helpers/site-map'
 
 const isPhone = (name: string) => name.startsWith('phone')
 
@@ -95,13 +96,6 @@ test.describe('identities on a list that wants names', () => {
   }
 })
 
-/**
- * Pages that fetch nothing to show: they document, keep settings in this browser, wait for input (a contract ID, a
- * query), decode what was typed in the address bar, or say there is nothing under the address.
- */
-const UNSOURCED =
-  /^\/(about|api|saved|sdk-reference|settings|sources|tools\/(contract|document|identity|nope|path|proof|transition))\b|^\/search(\?q=(6da2|7dc0|dash1|tdash1)|$)|^\/group\/[^/]+\/0$|^\/mn\/0+$|^\/identity\/[^/?]+\?tab=advanced$/
-
 test.describe('every page says where its figures came from and how old they are', () => {
   for (const route of ROUTE_CASES) {
     const net = casesNets(route)[0]!
@@ -109,7 +103,7 @@ test.describe('every page says where its figures came from and how old they are'
       page,
     }, testInfo) => {
       test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the page')
-      test.skip(UNSOURCED.test(route.path), 'nothing is fetched here')
+      test.skip(fetchesNothing(route.path), 'nothing is fetched here')
       await page.goto(withQuery(route.path, networkQuery(net)))
       await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
       await settled(page)

@@ -30,8 +30,13 @@ interface Violation {
 const describeViolation = (v: Violation) =>
   `${v.directive} blocked ${v.blocked || 'inline'} at ${v.source}${v.sample ? ` (${v.sample})` : ''}`
 
-export const test = base.extend({
-  context: async ({ context, baseURL, colorScheme }, use) => {
+export const test = base.extend<{ allowFixtureMisses: boolean }>({
+  /**
+   * A spec that fails a source on purpose sets this: the page then reads from fallbacks nobody recorded, and the
+   * fixture layer refuses them with a network failure, the same as the source being down.
+   */
+  allowFixtureMisses: [false, { option: true }],
+  context: async ({ context, baseURL, colorScheme, allowFixtureMisses }, use) => {
     if (baseURL) {
       await context.addCookies([
         { name: 'dh_theme', value: colorScheme === 'dark' ? 'dark' : 'light', url: baseURL },
@@ -67,6 +72,6 @@ export const test = base.extend({
     await use(context)
 
     expect(violations, 'content security policy violations').toEqual([])
-    expect(fixtureErrors, 'requests with no recorded fixture').toEqual([])
+    if (!allowFixtureMisses) expect(fixtureErrors, 'requests with no recorded fixture').toEqual([])
   },
 })
