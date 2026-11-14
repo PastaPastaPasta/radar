@@ -64,13 +64,20 @@ export function ContestsPage({ search }: { search: ContestsPageSearch }) {
   const decentralized = useDecentralizedOnly()
   const wanted = search.status ?? []
   const onlyFinished = wanted.length > 0 && !wanted.includes('active')
+  const status = statusOf(search)
+  const lede =
+    status === 'active'
+      ? t`Name contests still open, with end time, votes and status.`
+      : status === 'finished'
+        ? t`Name contests that have ended, with their votes and outcome.`
+        : t`Every name contest, open ones first, with end time, votes and status.`
   return (
     <PageFrame
       path="/contests"
       title={t`Name contests`}
       eyebrow={t`Platform`}
       layer="platform"
-      lede={t`Active contested names with end time, votes and status.`}
+      lede={lede}
     >
       <PageGroupTabs group="voting" />
       <Filters search={search} />
@@ -94,6 +101,20 @@ export function ContestsPage({ search }: { search: ContestsPageSearch }) {
   )
 }
 
+const activeFilterCount = (search: ContestsPageSearch): number =>
+  [
+    statusOf(search) !== '',
+    !!search.contract,
+    !!search.type,
+    !!(search.from || search.to),
+    search.sort === 'oldest',
+  ].filter(Boolean).length
+
+const opensWide = (): boolean =>
+  typeof window === 'undefined' ||
+  typeof window.matchMedia !== 'function' ||
+  !window.matchMedia('(max-width: 767px)').matches
+
 const statusOf = (search: ContestsPageSearch): '' | 'active' | 'finished' =>
   search.status?.includes('active')
     ? 'active'
@@ -105,46 +126,69 @@ function Filters({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
   const setFilters = useSetSearch()
   const decentralized = useDecentralizedOnly()
+  const [open, setOpen] = useState(opensWide)
+  const count = activeFilterCount(search)
   return (
-    <TableTools>
-      <SegFilter
-        label={t`Status`}
-        value={statusOf(search)}
-        onChange={(id) => {
-          setFilters({ status: id === '' ? undefined : [id] })
-        }}
-        options={[
-          { id: '', label: t`All` },
-          { id: 'active', label: t({ message: 'Active', context: 'contest status' }) },
-          { id: 'finished', label: t`Finished` },
-        ]}
-      />
-      <ContractTypeForm key={`${search.contract ?? ''}|${search.type ?? ''}`} search={search} />
-      {decentralized ? null : (
-        <>
-          <DateRangeFilter
-            label={t`Started`}
-            from={search.from}
-            to={search.to}
-            onChange={(r) => {
-              setFilters({ from: r.from, to: r.to })
-            }}
-          />
-          <SegFilter
-            label={t`Order`}
-            value={search.sort === 'oldest' ? 'oldest' : 'newest'}
-            onChange={(id) => {
-              setFilters({ sort: id === 'oldest' ? 'oldest' : undefined })
-            }}
-            options={[
-              { id: 'newest', label: t({ message: 'Newest first', context: 'list of contests' }) },
-              { id: 'oldest', label: t({ message: 'Oldest first', context: 'list of contests' }) },
-            ]}
-          />
-          <ListModeToggle listId="contests" />
-        </>
-      )}
-    </TableTools>
+    <details
+      data-contest-filters
+      open={open}
+      onToggle={(e) => {
+        setOpen(e.currentTarget.open)
+      }}
+    >
+      <summary
+        className={`rx-filter${count > 0 ? ' is-on' : ''}`}
+        style={{ cursor: 'pointer', listStyle: 'none' }}
+      >
+        {t`Filters`}
+        {count > 0 ? <span className="rx-count"> {count}</span> : null}
+      </summary>
+      <TableTools>
+        <SegFilter
+          label={t`Status`}
+          value={statusOf(search)}
+          onChange={(id) => {
+            setFilters({ status: id === '' ? undefined : [id] })
+          }}
+          options={[
+            { id: '', label: t`All` },
+            { id: 'active', label: t({ message: 'Active', context: 'contest status' }) },
+            { id: 'finished', label: t`Finished` },
+          ]}
+        />
+        <ContractTypeForm key={`${search.contract ?? ''}|${search.type ?? ''}`} search={search} />
+        {decentralized ? null : (
+          <>
+            <DateRangeFilter
+              label={t`Started`}
+              from={search.from}
+              to={search.to}
+              onChange={(r) => {
+                setFilters({ from: r.from, to: r.to })
+              }}
+            />
+            <SegFilter
+              label={t`Order`}
+              value={search.sort === 'oldest' ? 'oldest' : 'newest'}
+              onChange={(id) => {
+                setFilters({ sort: id === 'oldest' ? 'oldest' : undefined })
+              }}
+              options={[
+                {
+                  id: 'newest',
+                  label: t({ message: 'Newest first', context: 'list of contests' }),
+                },
+                {
+                  id: 'oldest',
+                  label: t({ message: 'Oldest first', context: 'list of contests' }),
+                },
+              ]}
+            />
+            <ListModeToggle listId="contests" />
+          </>
+        )}
+      </TableTools>
+    </details>
   )
 }
 
