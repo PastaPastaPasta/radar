@@ -32,6 +32,10 @@ export interface RadarFixtureHooks {
   restoreLiveConnection(net?: NetworkId): void
   /** How many times the fixture DAPI transport has been asked for `method` (a DAPI method name). */
   dapiCalls(method: string): number
+  /** How many reads a source turned away because `radar.fixture.down` lists it, not counting health probes and the shell's live tip; a page that never asked reads 0. */
+  refusedReads(source: string): number
+  /** The DAPI methods turned away, one entry per call. */
+  refusedDapiMethods(): string[]
 }
 
 /** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
@@ -44,7 +48,15 @@ export const FIXTURE_UNMINED_KEY = 'radar.fixture.unmined'
  */
 export const FIXTURE_DOWN_KEY = 'radar.fixture.down'
 
-type DownSource = keyof typeof HTTP_SOURCE_PATTERNS | 'sdk' | 'dapi'
+type DownSource = keyof typeof HTTP_SOURCE_PATTERNS | 'rate' | 'sdk' | 'dapi'
+
+/** The live tip the shell keeps open on every page; a refusal of it says nothing about the page. */
+const SHELL_TIP_STREAM = 'subscribeToBlockHeadersWithChainLocks'
+
+const refusedBySource: Record<string, number> = {}
+const countRefusal = (source: string) => {
+  refusedBySource[source] = (refusedBySource[source] ?? 0) + 1
+}
 
 function downFromSession(): ReadonlySet<DownSource> {
   try {
@@ -57,8 +69,13 @@ function downFromSession(): ReadonlySet<DownSource> {
 /** An SDK whose nodes are all unreachable. */
 const unreachableSdk: SdkTransport = {
   connect: () => Promise.resolve({ sdkVersion: 'fixture', protocolVersion: 14, tookMs: 0 }),
-  call: () =>
-    Promise.resolve({ ok: false, error: { kind: 'network', message: 'The SDK is unreachable' } }),
+  call: () => {
+    countRefusal('sdk')
+    return Promise.resolve({
+      ok: false,
+      error: { kind: 'network', message: 'The SDK is unreachable' },
+    })
+  },
   decode: () =>
     Promise.resolve({
       ok: false,
@@ -85,6 +102,11 @@ export async function startFixtureWorker(): Promise<void> {
     breakLiveConnection: (net = 'mainnet') => dapi.breakConnection(net),
     restoreLiveConnection: (net = 'mainnet') => dapi.restoreConnection(net),
     dapiCalls: (method) => dapi.calls.filter((c) => c.method === method).length,
+    refusedReads: (source) =>
+      source === 'dapi'
+        ? dapi.refused.filter((m) => m !== SHELL_TIP_STREAM).length
+        : (refusedBySource[source] ?? 0),
+    refusedDapiMethods: () => [...dapi.refused],
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
   const down = downFromSession()
@@ -98,12 +120,21 @@ export async function startFixtureWorker(): Promise<void> {
   onFixtureMiss((request) => {
     fail(`no recorded fixture for ${request}`)
   })
+  const refuse = (source: DownSource, pattern: string) =>
+    http.all(pattern, ({ request }) => {
+      const { pathname } = new URL(request.url)
+      // A health probe is not a page reading the source.
+      if (!pathname.endsWith('/status')) {
+        countRefusal(source === 'pe' && pathname.endsWith('/rate') ? 'rate' : source)
+      }
+      return HttpResponse.error()
+    })
   const refused = [...down].flatMap((source) =>
     source === 'sdk' || source === 'dapi'
       ? []
-      : HTTP_SOURCE_PATTERNS[source].map((pattern) =>
-          http.all(pattern, () => HttpResponse.error()),
-        ),
+      : source === 'rate'
+        ? HTTP_SOURCE_PATTERNS.pe.map((origin) => refuse(source, origin.replace(/\*$/, 'rate')))
+        : HTTP_SOURCE_PATTERNS[source].map((pattern) => refuse(source, pattern)),
   )
   await setupWorker(...refused, ...fixtureHandlers, refuseUnrecorded).start({
     quiet: true,

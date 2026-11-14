@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 
-export type SiteSource = 'local' | 'radar' | 'dapi' | 'sdk' | 'pe' | 'hyphen' | 'rate'
+export type SiteSource = 'local' | 'radar' | 'dapi' | 'sdk' | 'pe' | 'hyphen' | 'insight' | 'rate'
 
 interface SiteEntry {
   pattern: RegExp
