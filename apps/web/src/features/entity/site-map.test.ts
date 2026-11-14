@@ -79,3 +79,13 @@ describe('page stories', () => {
     expect(Object.keys(PAGE_STORIES).sort()).toEqual(SITE_MAP.map((p) => p.path).sort())
   })
 })
+
+describe('what a page says it reads', () => {
+  it('names Platform Explorer on the transition tool, whose check sends the transition there', () => {
+    expect(findPage('/tools/transition')?.sources).toEqual(['local', 'sdk', 'pe'])
+  })
+
+  it('names only the SDK on the names page, which reads nothing else', () => {
+    expect(findPage('/names')?.sources).toEqual(['sdk'])
+  })
+})

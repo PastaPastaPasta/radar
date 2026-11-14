@@ -211,7 +211,7 @@ export function TransitionToolPage() {
       title={t`Transition decoder`}
       eyebrow={t`Tools`}
       layer="neutral"
-      lede={t`Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent.`}
+      lede={t`Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run.`}
     >
       <Card title={t`Input`} layer="platform">
         <BytesField
