@@ -130,7 +130,7 @@ describe('Core figures on the home page @HY-01', () => {
   it('says the blocks are missing when the tip they are read from cannot be read', async () => {
     vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 116_445_795.87))
     vi.spyOn(core, 'tip').mockRejectedValue(
-      new SourceError({ source: 'dapi', kind: 'auth', message: 'No node answered' }),
+      new SourceError({ source: 'dapi', kind: 'unavailable', message: 'No node answered' }),
     )
     await renderFigures(new QueryClient())
     const table = await screen.findByRole('table', { name: 'Latest Core blocks', hidden: true })
