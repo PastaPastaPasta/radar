@@ -4,8 +4,8 @@ import { LOCALE_CODES, SOURCE_LOCALE } from './src/i18n/locales'
 
 /**
  * Which directories (or files) of `src` each package's strings are extracted from. A package's catalog is
- * `src/i18n/locales/{locale}/<name>.po`; everything else stays in `messages.po`, which is frozen until INT.
- * ARCHITECTURE §9.1.
+ * `src/i18n/locales/{locale}/<name>.po`; everything no package claims is in the base `messages.po`. The split
+ * stays, so the ten locale files of one area change together without touching the others. ARCHITECTURE §9.1.
  */
 const PACKAGES = {
   'net-a': ['features/network/nodes', 'features/network/v24', 'features/home'],

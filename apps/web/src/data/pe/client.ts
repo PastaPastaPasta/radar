@@ -150,7 +150,11 @@ function reportPeLag(net: NetworkId, body: PeStatus, unhealthy: boolean): void {
 }
 
 export const pe = {
-  async status(net: NetworkId, signal?: AbortSignal): Promise<Sourced<PeStatus>> {
+  async status(
+    net: NetworkId,
+    signal?: AbortSignal,
+    opts: { probe?: boolean } = {},
+  ): Promise<Sourced<PeStatus>> {
     let unhealthy = false
     const out = await fetchSourced({
       source: 'pe',
@@ -159,6 +163,7 @@ export const pe = {
       schema: PeStatusOrErrorSchema,
       acceptStatus: [503],
       signal,
+      probe: opts.probe,
       height: (b) => ('error' in b ? undefined : statusHeight(b)),
       reject: (b, res) => {
         unhealthy = res.status === 503

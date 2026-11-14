@@ -8,28 +8,11 @@ import { peQueries } from '@/data/pe/queries'
 import { useNetwork } from '@/features/entity'
 import { formatDate, formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { creditsToDash as dash } from '@/lib/units'
 import { Card, Chart, Empty, SegFilter, Unavailable, queryView, stampsOf } from '@/ui'
+import { poolSeries } from './pool-series'
 
 const RANGES = ['24h', '3d', '1w', '1m'] as const
 type Range = (typeof RANGES)[number]
-
-interface Point {
-  t: number
-  amount: bigint
-}
-
-/** Shielded and unshielded amounts on one time axis: every bucket either side has, 0 where one side has none. */
-export function poolSeries(shielded: readonly Point[], unshielded: readonly Point[]) {
-  const into = new Map(shielded.map((p) => [p.t, dash(p.amount)]))
-  const out = new Map(unshielded.map((p) => [p.t, dash(p.amount)]))
-  const times = [...new Set([...into.keys(), ...out.keys()])].sort((a, b) => a - b)
-  return {
-    times,
-    shielded: times.map((ms) => into.get(ms) ?? 0),
-    unshielded: times.map((ms) => out.get(ms) ?? 0),
-  }
-}
 
 const label = (ms: number, range: Range): string =>
   range === '24h'

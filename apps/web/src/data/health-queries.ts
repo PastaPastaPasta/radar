@@ -29,7 +29,7 @@ async function referenceTip(net: NetworkId, signal: AbortSignal): Promise<number
     .catch(() => undefined)
   if (dapi !== undefined) return dapi
   return radar
-    .status(signal, key)
+    .status(signal, key, { probe: true })
     .then((s) => s.data.networks[key].chain.blocks)
     .catch(() => undefined)
 }
@@ -56,15 +56,15 @@ export const healthQueries = {
   radar: (net: NetworkId) =>
     queryOptions({
       queryKey: healthKeys(net, 'radar'),
-      queryFn: ({ signal }) => radar.status(signal, net),
+      queryFn: ({ signal }) => radar.status(signal, net, { probe: true }),
       ...probe,
     }),
   pe: (net: NetworkId) =>
     queryOptions({
       queryKey: healthKeys(net, 'pe'),
-      queryFn: ({ signal }) => pe.status(net, signal),
+      queryFn: ({ signal }) => pe.status(net, signal, { probe: true }),
       ...probe,
     }),
-  hyphen: indexProbe('hyphen', (net, signal, tip) => hyphen.status(net, signal, tip)),
-  insight: indexProbe('insight', (net, signal, tip) => insight.status(net, signal, tip)),
+  hyphen: indexProbe('hyphen', (net, signal, tip) => hyphen.status(net, signal, tip, { probe: true })),
+  insight: indexProbe('insight', (net, signal, tip) => insight.status(net, signal, tip, { probe: true })),
 }

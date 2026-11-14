@@ -43,6 +43,9 @@ const MAINNET_ADDRESS_VERSIONS = new Set([0x4c, 0x10])
 const TESTNET_ADDRESS_VERSIONS = new Set([0x8c, 0x13])
 
 const INT = /^\d{1,9}$/
+
+/** Only a number needs the chain tips, to say which chain it could be a height or an epoch of. */
+export const needsTips = (input: string): boolean => INT.test(input.trim())
 const DPNS = /^[a-z0-9-]{3,63}(\.dash)?$/i
 const DATE = /^(\d{4})-(\d{2})-(\d{2})$/
 const IPV4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?::(\d{1,5}))?$/

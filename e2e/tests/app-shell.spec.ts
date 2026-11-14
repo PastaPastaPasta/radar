@@ -480,7 +480,11 @@ test.describe('legibility', () => {
 const BACKENDS: SiteSource[] = ['radar', 'pe', 'hyphen', 'insight', 'rate', 'sdk', 'dapi']
 
 /** Pages that read a backend and do not yet say it is gone; the later design rounds own them (notes/INT.md). */
-const SILENT_WHEN_DOWN = new Set(['/mempool|dapi'])
+const SILENT_WHEN_DOWN = new Set([
+  '/mempool|dapi',
+  // The SDK only supplies the Platform tip, and Platform Explorer's one-block lookup answered without it.
+  '/search?q=2569992|sdk',
+])
 
 /** Wording a page uses for a missing figure, where there is no alert to find. */
 const MISSING_WORDS =
@@ -496,11 +500,35 @@ const SAYS_SOMETHING_IS_MISSING = [
   '[data-state="stale"]',
   '[data-fallback]',
   '[data-balance-state="unknown"]',
-  '[data-spend="unknown"]',
+  '[data-spend-reason="no-index"]',
+  '[data-spend-reason="not-reported"]',
 ].join(', ')
 
 test.describe('a backend that is down', () => {
   test.use({ allowFixtureMisses: true })
+
+  test('the read counter counts a page reading /status and not a health probe @X-09', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the counter')
+    await page.addInitScript(() => sessionStorage.setItem('radar.fixture.down', '["radar"]'))
+    await page.goto('/about')
+    await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
+    const url = 'https://radar.dashhq.org/api/v1/status'
+    const refused = () =>
+      page.evaluate(() =>
+        (
+          window as unknown as { __radarFixtures: { refusedReads(s: string): number } }
+        ).__radarFixtures.refusedReads('radar'),
+      )
+    const read = (target: string) => page.evaluate((u) => fetch(u).catch(() => null), target)
+
+    const before = await refused()
+    await read(`${url}#radar-probe`)
+    expect(await refused(), 'a probe is not a page read').toBe(before)
+    await read(url)
+    expect(await refused(), 'a page read of /status is').toBe(before + 1)
+  })
 
   for (const route of ROUTE_CASES) {
     for (const backend of BACKENDS.filter(
@@ -511,7 +539,11 @@ test.describe('a backend that is down', () => {
         page,
       }, testInfo) => {
         test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the page')
-        test.skip(SILENT_WHEN_DOWN.has(`${route.path.split('?')[0]}|${backend}`), 'listed in notes')
+        test.skip(
+          SILENT_WHEN_DOWN.has(`${route.path}|${backend}`) ||
+            SILENT_WHEN_DOWN.has(`${route.path.split('?')[0]}|${backend}`),
+          'listed in notes',
+        )
         const errors: string[] = []
         page.on('pageerror', (e) => errors.push(e.message))
         await page.addInitScript(
@@ -553,7 +585,8 @@ test.describe('a backend that is down', () => {
                 (MISSING_WORDS.test(await page.locator('main').innerText()) ? 1 : 0)
               return asked > 0
                 ? saysMissing
-                : saysMissing + (await page.locator('main .rx-sources [data-source]').count())
+                : saysMissing +
+                    (await page.locator('main [data-source]:not([role="alert"])').count())
             },
             {
               message: `the page neither says ${backend} is missing nor shows another source`,

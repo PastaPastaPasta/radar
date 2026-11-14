@@ -4,7 +4,7 @@ import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 import { decentralizedOnly } from '@/lib/source-mode'
-import { classify, type Classified } from './classify'
+import { classify, needsTips, type Classified } from './classify'
 import { searchEnv } from './env'
 import { useSdkState, useSearchTip } from './tip'
 import { networkHintHit } from './network-hint'
@@ -110,7 +110,7 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   // Read so a change of mode plans the lookups again.
   const indexOff = useDecentralizedOnly()
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
-  const { tip, reading: tipReading, unread } = useSearchTip(net, mode, q.trim() !== '')
+  const { tip, reading: tipReading, unread } = useSearchTip(net, mode, needsTips(q))
   // Read so the SDK reaching 'ready' plans its lookups in the palette.
   useSdkState(net)
   const wordsReady = useWordlistLoaded()
@@ -151,10 +151,17 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const pendingLocal = planned
     .filter((r) => r.cost === 'local' && !(r.id in settled))
     .map((r) => r.id)
+  const blockLookup = 'pe-platform-block'
+  const platformTipHidesHeight =
+    classified.classes.includes('int') &&
+    !tipReading &&
+    (!plannedIds.split(',').includes(blockLookup) || settled[blockLookup]?.error !== undefined)
   const failed = [
     ...Object.entries(settled).flatMap(([id, s]) => (s.error ? [{ id, error: s.error }] : [])),
-    // Platform heights and epochs are offered only up to the Platform tip, so a tip that can't be read hides them.
-    ...(mode === 'page' && unread !== undefined
+    // A Platform height is offered only up to the Platform tip, so a tip that can't be read hides it. That matters
+    // only to a number, and only once Platform Explorer's one-block lookup, which answers without the tip, has not
+    // run (Decentralized only mode, a devnet) or has failed.
+    ...(mode === 'page' && unread !== undefined && platformTipHidesHeight
       ? [{ id: 'platform-tip', error: toSourceError(unread, false) }]
       : []),
   ]

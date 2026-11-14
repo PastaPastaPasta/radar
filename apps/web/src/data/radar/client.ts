@@ -88,6 +88,7 @@ export const radar = {
   async status(
     signal?: AbortSignal,
     net: NetworkId = getActiveNetwork(),
+    opts: { probe?: boolean } = {},
   ): Promise<Sourced<RadarStatus>> {
     const out = await fetchSourced({
       source: 'radar',
@@ -98,6 +99,7 @@ export const radar = {
       },
       schema: RadarStatusSchema,
       signal,
+      probe: opts.probe,
       asOf: (b) => b.networks[net === 'testnet' ? 'testnet' : 'mainnet'].chain.updated,
     })
     reportCrawlLag(out.data)

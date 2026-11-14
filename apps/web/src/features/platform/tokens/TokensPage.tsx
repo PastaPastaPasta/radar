@@ -358,7 +358,7 @@ function TokenList() {
           }}
         />
       ) : null}
-      {prices.isError ? (
+      {prices.isError && !prices.data ? (
         <ErrorState
           error={prices.error}
           source="sdk"

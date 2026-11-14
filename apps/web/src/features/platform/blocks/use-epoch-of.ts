@@ -24,6 +24,10 @@ export function epochForHeight(epochs: readonly EpochStart[], height: number): n
   return found
 }
 
+/** The query, when it has an error and nothing to show for it; a failed refresh that left an answer in place is not missing. */
+const failed = <Q extends { isError: boolean; data: unknown }>(q: Q): Q | undefined =>
+  q.isError && q.data === undefined ? q : undefined
+
 /** The epoch of a block, read from the proof-checked list of the most recent epochs. */
 export function useEpochOf() {
   const net = useNetwork()
@@ -46,11 +50,6 @@ export function useEpochOf() {
     ),
     stamp: infos.data,
     /** Why the epoch list is missing, while it is. */
-    missing:
-      epochs.length === 0 && (current.isError || infos.isError)
-        ? current.isError
-          ? current
-          : infos
-        : undefined,
+    missing: epochs.length === 0 ? (failed(current) ?? failed(infos)) : undefined,
   }
 }
