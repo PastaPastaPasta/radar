@@ -6,10 +6,11 @@ import { mnCsvColumns, mnCsvName } from '@/data/masternodes/export'
 import { toCsv } from '@/data/masternodes/csv'
 import type { MnRow, MnRows } from '@/data/masternodes/rows'
 import { sortMnRows } from '@/data/masternodes/sort'
+import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 import { DataTable, Empty } from '@/ui'
 import type { SourceStamp } from '@/data/envelope'
-import { listTip, useMnColumns } from './columns'
+import { MAINNET_BLOCK_MS, useMnColumns } from './columns'
 import { downloadText } from './download'
 import { FilterBar, sortOptionsOf } from './FilterBar'
 import { filterFields } from './filter-fields'
@@ -80,9 +81,14 @@ export interface ListViewProps {
 export function ListView({ data, controls, matches, stamps }: ListViewProps) {
   const { t } = useLingui()
   const { search } = controls
+  const net = useNetwork()
   const crawl = hasCrawl(data)
-  const tip = useMemo(() => listTip(data.rows), [data.rows])
-  const columns = useMnColumns({ crawl, tip })
+  const tip = data.radar?.height ?? 0
+  const columns = useMnColumns({
+    crawl,
+    tip,
+    blockMs: net === 'mainnet' ? MAINNET_BLOCK_MS : undefined,
+  })
   const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE))
   const page = Math.min(search.page, pages)
   const shown = useMemo(
