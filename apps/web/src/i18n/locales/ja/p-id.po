@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(b.data.balance)
+#. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} クレジット"
 
@@ -278,9 +278,6 @@ msgstr "利用不可"
 msgid "Not frozen"
 msgstr "凍結なし"
 
-msgid "Not indexed"
-msgstr "未インデックス"
-
 msgid "Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided."
 msgstr "競合リソースに投票できるのはマスターノードの投票用アイデンティティだけで、コンテストが決着すると Platform は投票を削除します。"
 
@@ -310,6 +307,9 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "Platform がグループ所属を返すのは、問い合わせたコントラクト（このアイデンティティが所有するものと、指定したもの）に限られます。"
+
+msgid "Platform Explorer has no record of it"
+msgstr "Platform Explorer に記録がありません"
 
 msgid "Platform Explorer has no tokens for this identity."
 msgstr "Platform Explorer にはこのアイデンティティのトークンがありません。"

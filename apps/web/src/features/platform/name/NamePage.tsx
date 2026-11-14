@@ -30,7 +30,7 @@ export function NamePage({ label: raw }: { label: string }) {
       eyebrow={t`Platform`}
       layer="platform"
       share
-      lede={<span data-name-label>{`${label}.${DPNS.tld}`}</span>}
+      record={{ kind: 'name', name: `${label}.${DPNS.tld}` }}
     >
       {problem ? <Invalid label={label} problem={problem} /> : <NameStatus label={label} />}
     </PageFrame>

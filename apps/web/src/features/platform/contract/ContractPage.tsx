@@ -4,10 +4,11 @@ import { stampOf } from '@/data/envelope'
 import { IdentityRef, PageFrame, SaveButton, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, Hash, KeyValue, LinkOut, Skeleton, Tabs } from '@/ui'
+import { Badge, Card, Empty, Hash, KeyValue, LinkOut, Skeleton, Stat, Tabs } from '@/ui'
 import { ActivityTab } from './ActivityTab'
 import { ConfigTab } from './ConfigTab'
 import type { ContractContext, ContractPageSearch, ContractTab } from './contract-context'
+import { localizationsOf, pickLocalization } from '../token/token-config'
 import { contractName, typeNames, useContract, usePeContract } from './contract-data'
 import { GroupsTab } from './GroupsTab'
 import { HistoryTab } from './HistoryTab'
@@ -23,12 +24,18 @@ export interface ContractPageProps {
 }
 
 export function ContractPage({ id, search }: ContractPageProps) {
-  const { t } = useLingui()
+  const { t, i18n } = useLingui()
   const net = useNetwork()
   const contract = useContract(net, id)
   const pe = usePeContract(net, id)
   const data = contract.data?.data ?? null
-  const name = contractName(net, id, pe.data?.data?.name)
+  const given = contractName(net, id, pe.data?.data?.name)
+  // A contract that only defines one token has no name of its own; its token's name says what it is.
+  const only = data?.tokens.length === 1 ? data.tokens[0] : undefined
+  const token = only
+    ? pickLocalization(localizationsOf(only.config), i18n.locale)?.singular
+    : undefined
+  const name = given ?? (token ? t`${token} token contract` : undefined)
 
   return (
     <PageFrame
@@ -37,10 +44,28 @@ export function ContractPage({ id, search }: ContractPageProps) {
       eyebrow={t`Platform`}
       layer="platform"
       share
-      lede={name}
+      {...(isPlatformId(id)
+        ? {
+            record: {
+              kind: 'contract' as const,
+              id,
+              name,
+              facts: data ? (
+                <>
+                  <Stat label={t`Version`} value={formatInt(data.version)} />
+                  <Stat label={t`Document types`} value={formatInt(typeNames(data).length)} />
+                  <Stat label={t`Tokens`} value={formatInt(data.tokens.length)} />
+                  <Stat label={t`Groups`} value={formatInt(data.groups.length)} />
+                </>
+              ) : undefined,
+            },
+          }
+        : {})}
       actions={
         <>
-          {data ? <SaveButton kind="contract" id={id} {...(name ? { label: name } : {})} /> : null}
+          {data ? (
+            <SaveButton kind="contract" id={id} {...(given ? { label: given } : {})} />
+          ) : null}
           <LinkOut
             to={{ app: 'bridge', action: 'contract', id, net }}
           >{t`Manage in Bridge`}</LinkOut>
@@ -105,12 +130,10 @@ function Loaded({ ctx, pe }: { ctx: ContractContext; pe: ReturnType<typeof usePe
         <KeyValue
           columns={2}
           items={[
-            { label: t`ID`, value: <Hash value={id} display="wrap" /> },
             {
               label: t`Owner`,
               value: <IdentityRef id={contract.ownerId} />,
             },
-            { label: t`Version`, value: formatInt(contract.version) },
             {
               label: t`Version history`,
               value: contract.keepsHistory ? (
@@ -119,12 +142,6 @@ function Loaded({ ctx, pe }: { ctx: ContractContext; pe: ReturnType<typeof usePe
                 <Badge>{t`Not kept`}</Badge>
               ),
             },
-            {
-              label: t`Document types`,
-              value: formatInt(typeNames(contract).length),
-            },
-            { label: t`Tokens`, value: formatInt(contract.tokens.length) },
-            { label: t`Groups`, value: formatInt(contract.groups.length) },
             ...(contract.config.readonly === true
               ? [{ label: t`Read-only`, value: <Badge>{t`Yes`}</Badge> }]
               : []),

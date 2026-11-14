@@ -295,10 +295,14 @@ export interface KeyValueProps {
 function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
   const inSection = useSectionSource(item.source, nameOf(item.label))
   const covered = useCoveredSource(item.source) || inSection
+  const srcId = useId()
+  // The section's line names a source once. A proof-checked figure also keeps its own mark within reach of a
+  // pointer, the keyboard and a tap, since each proof is its own.
+  const own = inSection && item.source?.proved === true ? item.source : undefined
   return (
     <div data-reports={inSection && item.source ? reportsAttr([item.source]) : undefined}>
       <dt>{item.label}</dt>
-      <dd>
+      <dd {...(own ? { 'data-src-hover': '', tabIndex: 0, 'aria-describedby': srcId } : {})}>
         {item.value}
         {item.source && !covered ? (
           <>
@@ -307,6 +311,11 @@ function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
           </>
         ) : null}
         {item.hint ? <span className="rx-kv__hint">{item.hint}</span> : null}
+        {own ? (
+          <span className="rx-fig__src" id={srcId}>
+            <SourceLine stamp={own} compact />
+          </span>
+        ) : null}
       </dd>
     </div>
   )

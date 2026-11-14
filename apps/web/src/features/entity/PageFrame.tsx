@@ -1,10 +1,69 @@
-import { createContext, useContext, useEffect, useState, type Context, type ReactNode } from 'react'
-import type { Layer } from '@/ui'
+import { useLingui } from '@lingui/react/macro'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type Context,
+  type ReactNode,
+} from 'react'
+import { labelsVersion, subscribeLabels, wellKnownLabel } from '@/lib/well-known'
+import type { EntityKind, Layer } from '@/ui'
+import { Identicon, LayerTile } from '@/ui/art'
+import { Hash } from '@/ui/hash'
+import { KIND_META } from '@/ui/kinds'
 import { SectionSources, SourceSection } from '@/ui/layout'
 import { CopyLinkButton } from './CopyLinkButton'
 import { useDocumentTitle } from './document-title'
 import { networkName, useNetwork } from './network'
 import { findPage, sectionLabel } from './site-map'
+
+/**
+ * What a page about one entity says of it. The page then opens with the record header: a band in the layer's tint,
+ * the entity's identicon or kind glyph, a headline that names it, its ID, and its key facts.
+ */
+export interface PageRecord {
+  kind: EntityKind
+  /** The entity's ID, shown in full under the headline. A name page has none. */
+  id?: string | undefined
+  /** The entity's own name (a DPNS name, a contract's or token's name), once it is known. */
+  name?: string | undefined
+  /** The word the headline starts with while the entity has no name; the kind's label when left out. */
+  noun?: string
+  /** Two to four `Stat`s: the figures a reader came for. */
+  facts?: ReactNode
+}
+
+const shortId = (id: string): string => (id.length > 16 ? `${id.slice(0, 8)}…${id.slice(-6)}` : id)
+
+/**
+ * The name a record goes by: the reader's own label for it (Settings › Your own names) or a well-known one first,
+ * then the entity's name, then its kind and short ID. Never empty.
+ */
+export function useRecordTitle(record: PageRecord | undefined, fallback: string): string {
+  const { i18n } = useLingui()
+  const net = useNetwork()
+  useSyncExternalStore(subscribeLabels, labelsVersion, labelsVersion)
+  if (!record) return fallback
+  const own = record.id === undefined ? undefined : wellKnownLabel(net, record.kind, record.id)
+  const named = own ?? record.name
+  if (named !== undefined && named !== '') return named
+  if (record.id === undefined) return fallback
+  return `${record.noun ?? i18n._(KIND_META[record.kind].label)} ${shortId(record.id)}`
+}
+
+/** A DPNS name with its `.dash` set back, as every name chip draws it. */
+function RecordName({ title }: { title: string }) {
+  const dot = title.lastIndexOf('.')
+  if (dot <= 0 || title.slice(dot) !== '.dash') return <>{title}</>
+  return (
+    <>
+      {title.slice(0, dot)}
+      <span className="rx-tld">{title.slice(dot)}</span>
+    </>
+  )
+}
 
 export interface PageFrameProps {
   /** The route id pattern, for `data-page`. */
@@ -26,6 +85,8 @@ export interface PageFrameProps {
   actions?: ReactNode
   /** Adds the copy-link button beside `actions`; every page about one entity sets it. */
   share?: boolean
+  /** The entity this page is about. The page then opens with the record header, and its title names the entity. */
+  record?: PageRecord
   children: ReactNode
 }
 
@@ -60,10 +121,13 @@ export function PageFrame({
   lede,
   actions,
   share = false,
+  record,
   children,
 }: PageFrameProps) {
+  const { i18n } = useLingui()
   const net = useNetwork()
-  useDocumentTitle(title)
+  const name = useRecordTitle(record, title)
+  useDocumentTitle(name)
   const page = findPage(path)
   // The rail above the page names its section, and the header names the network.
   const above = eyebrow && (!page || eyebrow !== sectionLabel(page.section)) ? eyebrow : undefined
@@ -71,31 +135,78 @@ export function PageFrame({
   const given = claim === undefined || claim === null || claim === false ? reported : claim
   const headline = given === '' ? undefined : given
   const Claims = claims()
+  const tools =
+    share || actions ? (
+      <>
+        {actions}
+        {share ? <CopyLinkButton /> : null}
+      </>
+    ) : null
+  const kind = record ? KIND_META[record.kind] : undefined
   return (
     <Claims.Provider value={setReported}>
       <SourceSection>
-        <article data-page={path} data-layer={layer} data-source-scope="" className="rx-page">
-          <header className="rx-page__head">
-            {above ? (
-              <p data-eyebrow className="rx-page__eyebrow">
-                {above}
-                {net === 'mainnet' ? null : ` · ${networkName(net)}`}
-              </p>
-            ) : null}
-            <div className="rx-page__title">
-              <h1 data-claim={headline === undefined ? undefined : ''}>{headline ?? title}</h1>
-              {share ? (
-                <div className="rx-page__actions">
-                  {actions}
-                  <CopyLinkButton />
+        <article
+          data-page={path}
+          data-layer={layer}
+          data-source-scope=""
+          className={record ? 'rx-page rx-page--record' : 'rx-page'}
+        >
+          {record && kind ? (
+            <header className="rx-band rx-page__band" data-layer={layer} data-record={record.kind}>
+              <div className="dh-container">
+                <div className="rx-rec">
+                  <span className="rx-rec__glyph">
+                    {record.kind === 'identity' && record.id !== undefined ? (
+                      <span className="rx-rec__face">
+                        <Identicon id={record.id} size={40} />
+                      </span>
+                    ) : (
+                      <LayerTile layer={layer} icon={kind.icon} size={60} />
+                    )}
+                  </span>
+                  <p className="rx-rec__kicker" data-record-kind>
+                    <span className="rx-rec__kind">{i18n._(kind.label)}</span>
+                    {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+                  </p>
+                  <h1
+                    className="rx-rec__title"
+                    data-claim={headline === undefined ? undefined : ''}
+                  >
+                    {headline ?? <RecordName title={name} />}
+                  </h1>
+                  {tools ? <div className="rx-rec__actions">{tools}</div> : null}
+                  {record.id !== undefined ? (
+                    <div className="rx-rec__meta" data-record-id>
+                      <Hash value={record.id} display="wrap" />
+                    </div>
+                  ) : null}
+                  {lede ? <p className="rx-rec__also">{lede}</p> : null}
+                  <SectionSources className="rx-rec__src rx-page__src" />
                 </div>
-              ) : (
-                actions
-              )}
-            </div>
-            {lede ? <p className="rx-page__lede">{lede}</p> : null}
-            <SectionSources className="rx-page__src" />
-          </header>
+                {record.facts ? (
+                  <div className="rx-kpis" data-record-facts>
+                    {record.facts}
+                  </div>
+                ) : null}
+              </div>
+            </header>
+          ) : (
+            <header className="rx-page__head">
+              {above ? (
+                <p data-eyebrow className="rx-page__eyebrow">
+                  {above}
+                  {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+                </p>
+              ) : null}
+              <div className="rx-page__title">
+                <h1 data-claim={headline === undefined ? undefined : ''}>{headline ?? title}</h1>
+                {share ? <div className="rx-page__actions">{tools}</div> : actions}
+              </div>
+              {lede ? <p className="rx-page__lede">{lede}</p> : null}
+              <SectionSources className="rx-page__src" />
+            </header>
+          )}
           {children}
         </article>
       </SourceSection>

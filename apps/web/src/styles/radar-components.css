@@ -2611,6 +2611,48 @@ html[data-scroll-gutter] {
   margin: 2px 0 0;
 }
 
+/* a page about one entity opens with the record header: the block and transaction band, in the page's layer */
+.rx-page--record {
+  gap: 28px;
+}
+.rx-page__band .rx-rec__kind {
+  color: var(--rx-l-text);
+  font-weight: var(--dh-w-strong);
+}
+.rx-page__band .rx-rec__kicker {
+  display: block;
+}
+/* an identity's own face, where another record has its kind glyph */
+.rx-rec__face {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: var(--dh-surface);
+  box-shadow: inset 0 0 0 1px var(--dh-line);
+}
+.rx-page__band .rx-rec__meta .rx-hash {
+  color: var(--dh-ink-2);
+}
+.rx-page__band .rx-rec__also {
+  margin: 0;
+}
+.rx-page__band .rx-rec__src:empty {
+  display: none;
+}
+@media (max-width: 640px) {
+  .rx-rec__face {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+  /* an amount is the record's headline figure: it takes the row, so its unit never wraps under it */
+  .rx-page__band .rx-kpis > .rx-stat:has(.rx-amt) {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ============================================================ 27. page rhythm: blocks in sequence, never packed */
 /* blocks one under another */
 .rx-pile {

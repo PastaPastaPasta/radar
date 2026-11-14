@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { perNet } from './fixtures'
-import type { RouteCase, RouteNet } from './types'
+import { recordH1, type RouteCase, type RouteNet } from './types'
 
 interface DocEntity {
   contract: string
@@ -49,10 +49,10 @@ export const pData: RouteCase[] = [
     const docId = ids.id('doc', '0')
     const where = `normalizedParentDomainName~eq~dash,normalizedLabel~sw~${doc.name}`
     return [
-      { path: `/contract/${contract}`, h1: 'Contract', decentralized: 'partial' },
+      { path: `/contract/${contract}`, h1: recordH1('(Data )?contract'), decentralized: 'partial' },
       ...TABS.map((tab): RouteCase => ({
         path: `/contract/${contract}?tab=${tab}`,
-        h1: 'Contract',
+        h1: recordH1('(Data )?contract'),
         decentralized: tab === 'transactions' || tab === 'documents' ? 'unavailable' : 'data',
       })),
       {
@@ -67,7 +67,7 @@ export const pData: RouteCase[] = [
       },
       {
         path: `/document/${doc.contract}/${doc.type}/${docId}`,
-        h1: 'Document',
+        h1: /^Document \S+…\S+$/,
         decentralized: 'data',
       },
       { path: `/groups/${group.contract}`, h1: 'Groups', decentralized: 'data' },

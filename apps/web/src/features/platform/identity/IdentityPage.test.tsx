@@ -66,13 +66,65 @@ describe('Identity page', () => {
       expect(el).not.toBeNull()
       return el!
     })
-    await waitFor(() => {
-      expect(card.querySelector('[data-field="balance"]')).toHaveTextContent('DASH')
+    const facts = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-record-facts]')
+      expect(el?.querySelector('[data-field="balance"]')).toHaveTextContent('DASH')
+      return el!
     })
-    expect(card).toHaveTextContent('1,013,248,617,912 credits')
+    expect(facts).toHaveTextContent('1,013,248,617,912 credits')
+    expect(within(facts).getByText('Revision')).toBeInTheDocument()
     await waitFor(() => {
       expect(card).toHaveTextContent('pshenmic.dash')
     })
+    expect(within(card).getByText('Nonce')).toBeInTheDocument()
+    expect(within(card).queryByText('Balance'), 'no figure is printed twice').toBeNull()
+  })
+
+  it('names the identity in its headline and the tab title, in a Platform record header @X-10', async () => {
+    renderAt(`/identity/${M}`)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'pshenmic.dash' }),
+    ).toBeInTheDocument()
+    const band = document.querySelector<HTMLElement>('[data-record="identity"]')!
+    expect(band).toHaveAttribute('data-layer', 'platform')
+    expect(band.querySelector('[data-art="identicon"]')).not.toBeNull()
+    expect(band.querySelector('[data-record-id] [data-copy]')).toHaveAttribute('data-copy', M)
+    await waitFor(() => {
+      expect(document.title).toBe('pshenmic.dash · Radar')
+    })
+  })
+
+  it('carries each proof-checked figure’s own mark in the figure’s popover @NX-61', async () => {
+    renderAt(`/identity/${M}`)
+    const balance = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-record-facts] [data-src-hover]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(balance.querySelector('.rx-fig__src [data-source="sdk"]')).toHaveAttribute(
+      'data-proved',
+      'true',
+    )
+    const nonce = await waitFor(() => {
+      const el = [...document.querySelectorAll<HTMLElement>('#identity-summary [data-src-hover]')]
+      expect(el.length).toBeGreaterThan(0)
+      return el[0]!
+    })
+    expect(nonce).toHaveAttribute('tabindex', '0')
+    expect(nonce.querySelector('.rx-fig__src [data-proved="true"]')).not.toBeNull()
+  })
+
+  it('says Platform Explorer has no funding record instead of “Not indexed” @NX-10', async () => {
+    renderAt(`/identity/${M}`)
+    const card = await waitFor(() => {
+      const el = document.getElementById('identity-summary')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    await waitFor(() => {
+      expect(card).not.toHaveTextContent('Loading…')
+    })
+    expect(card).not.toHaveTextContent('Not indexed')
   })
 
   it('records the identity as viewed only when the viewer turned that on @NX-10', async () => {

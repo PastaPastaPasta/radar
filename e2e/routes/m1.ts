@@ -85,7 +85,7 @@ function m1(net: RouteNet): RouteCase[] {
     },
     {
       path: `/address/${r.address}`,
-      h1: 'Address',
+      h1: `Address ${r.address.slice(0, 8)}…${r.address.slice(-6)}`,
       nets,
       decentralized: 'partial',
       data: '[data-live]',

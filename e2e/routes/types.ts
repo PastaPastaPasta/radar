@@ -15,3 +15,9 @@ export interface RouteCase {
   /** Something a built page reads over DAPI or the SDK and must still show in the mode (a CSS selector). */
   data?: string
 }
+
+/**
+ * The headline of a page about one entity: the entity's own name, or its kind and short ID when it has none.
+ * Never the bare kind ("Identity"), which names no entity.
+ */
+export const recordH1 = (kind: string): RegExp => new RegExp(`^(?!${kind}$)\\S.*$`)
