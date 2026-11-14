@@ -13,18 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(answering)
-#. placeholder {1}: formatInt(enabled)
-msgid "{0} of {1} enabled masternodes answered the last crawl"
-msgstr "{0} з {1} увімкнених мастернод відповіли в останньому обході"
-
-#. placeholder {0}: formatInt(enabled)
-#. placeholder {1}: formatInt(rows.length)
-msgid "{0} of {1} masternodes are enabled"
-msgstr "{0} з {1} мастернод увімкнені"
-
 msgid "{behind, plural, one {# block} other {# blocks}}"
 msgstr "{behind, plural, one {# блок} few {# блоки} many {# блоків} other {# блока}}"
+
+msgid "{enabled, plural, one {{answered} of # enabled masternode answered the last crawl} other {{answered} of # enabled masternodes answered the last crawl}}"
+msgstr "{enabled, plural, one {{answered} з # увімкненої мастерноди відповіли в останньому обході} few {{answered} з # увімкнених мастернод відповіли в останньому обході} many {{answered} з # увімкнених мастернод відповіли в останньому обході} other {{answered} з # увімкнених мастернод відповіли в останньому обході}}"
+
+msgid "{registered, plural, one {{enabledCount} of # masternode is enabled} other {{enabledCount} of # masternodes are enabled}}"
+msgstr "{registered, plural, one {{enabledCount} з # мастерноди увімкнені} few {{enabledCount} з # мастернод увімкнені} many {{enabledCount} з # мастернод увімкнені} other {{enabledCount} з # мастернод увімкнені}}"
 
 msgid "30 days"
 msgstr "30 днів"

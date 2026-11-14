@@ -4,8 +4,8 @@ import { useMemo } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
 import { PageFrame, useNetwork } from '@/features/entity'
-import { formatInt } from '@/lib/format'
 import { Empty, ErrorState, SegFilter, Skeleton, Unavailable } from '@/ui'
+import { masternodesClaim } from './claim'
 import { ListActions, ListView, useMnMatches } from './ListView'
 import { PlatformView } from './PlatformView'
 import { useMnSearch } from './use-mn-search'
@@ -83,26 +83,7 @@ export function MasternodesPage() {
   )
 }
 
-/**
- * The page's headline. With a crawl of every enabled masternode it is how many of them answered; with DAPI's list
- * alone, or a crawl that has not reached them all, it is how many of the registered ones are enabled.
- */
 function Claim({ rows }: { rows: readonly MnRow[] }) {
-  const { t } = useLingui()
-  let enabled = 0
-  let answering = 0
-  let unknown = 0
-  for (const r of rows) {
-    if (r.status !== 'enabled') continue
-    enabled++
-    if (r.crawl?.reachable === true) answering++
-    else if (r.crawl?.reachable !== false) unknown++
-  }
-  return (
-    <span data-mn-claim={unknown === 0 ? 'answering' : 'enabled'}>
-      {unknown === 0
-        ? t`${formatInt(answering)} of ${formatInt(enabled)} enabled masternodes answered the last crawl`
-        : t`${formatInt(enabled)} of ${formatInt(rows.length)} masternodes are enabled`}
-    </span>
-  )
+  const { kind, text } = masternodesClaim(rows)
+  return <span data-mn-claim={kind}>{text}</span>
 }

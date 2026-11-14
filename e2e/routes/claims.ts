@@ -4,9 +4,9 @@
  * `H1` either.
  */
 export const CLAIM = {
-  nodes: /^[\d,]+ Dash nodes answered the last crawl$/,
+  nodes: /^[\d,]+ Dash nodes? answered the last crawl$/,
   masternodes:
-    /^[\d,]+ of [\d,]+ (enabled masternodes answered the last crawl|masternodes are enabled)$/,
+    /^[\d,]+ of [\d,]+ (enabled masternodes? answered the last crawl|masternodes? (is|are) enabled)$/,
   platform: /^Epoch [\d,]+ is \d+% through$/,
   epochs: /^Epoch [\d,]+ is \d+% through$/,
   map: /^[\d,]+ masternodes? in \d+ countr(y|ies)$/,
