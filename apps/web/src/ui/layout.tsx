@@ -13,6 +13,7 @@ import {
   reportsAttr,
   SourceSectionProvider,
   stampsOfInput,
+  useSectionCovers,
   useSectionLine,
   useSectionSource,
   useSourceCollector,
@@ -59,11 +60,14 @@ export interface CardProps {
   children: ReactNode
 }
 
-function useCardSource(source: CardProps['source']) {
+const nameOf = (label: ReactNode): string | undefined =>
+  typeof label === 'string' && label !== '' ? label : undefined
+
+function useCardSource(source: CardProps['source'], title: ReactNode) {
   const health = useAllSourceHealth()
   const outer = useCovered()
   const all = stampsOfInput(source)
-  const inSection = useSectionSource(all)
+  const inSection = useSectionSource(all, nameOf(title))
   const down = all.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
   // A section names its sources in its own line, so a card inside one carries no mark; a card that stands alone does.
   const stamps = inSection ? [] : all.filter((s) => !outer.has(sourceKey(s)))
@@ -89,7 +93,7 @@ export function Card({
   children,
 }: CardProps) {
   const isSection = level === 'section'
-  const { all, stamps, down, reports } = useCardSource(source)
+  const { all, stamps, down, reports } = useCardSource(source, title)
   const keys = all.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
@@ -211,9 +215,9 @@ export function SectionBand({
  * part's line can be found from the part.
  */
 export function SourceSection({ source, children }: { source?: SourceInput; children: ReactNode }) {
-  const { collector, line } = useSourceCollector(source)
+  const { collector, line, covers } = useSourceCollector(source)
   return (
-    <SourceSectionProvider collector={collector} line={line}>
+    <SourceSectionProvider collector={collector} line={line} covers={covers}>
       {children}
     </SourceSectionProvider>
   )
@@ -222,9 +226,10 @@ export function SourceSection({ source, children }: { source?: SourceInput; chil
 /** The enclosing section's one source line. It keeps its height while empty, so the first answer does not move the page. */
 export function SectionSources({ className }: { className?: string }) {
   const line = useSectionLine()
+  const covers = useSectionCovers()
   return (
     <p className={cx('rx-sec__src', className)} data-section-sources>
-      {line.length > 0 ? <SourceLine stamp={[...line]} compact /> : null}
+      {line.length > 0 ? <SourceLine stamp={[...line]} compact covers={covers} /> : null}
     </p>
   )
 }
@@ -288,7 +293,7 @@ export interface KeyValueProps {
 }
 
 function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
-  const inSection = useSectionSource(item.source)
+  const inSection = useSectionSource(item.source, nameOf(item.label))
   const covered = useCoveredSource(item.source) || inSection
   return (
     <div data-reports={inSection && item.source ? reportsAttr([item.source]) : undefined}>

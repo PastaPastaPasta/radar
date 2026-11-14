@@ -547,7 +547,7 @@ export function DataTable<Row>({
   }
 
   const all = stampsOfInput(source)
-  const inSection = useSectionSource(all)
+  const inSection = useSectionSource(all, caption)
   const stamps = inSection ? [] : all
   const showFoot = stamps.length > 0 || (paging !== undefined && isReady)
 

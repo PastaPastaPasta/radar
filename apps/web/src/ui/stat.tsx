@@ -232,7 +232,7 @@ export function Stat({
 }: StatProps) {
   const labelId = useId()
   const srcId = useId()
-  const inSection = useSectionSource(source)
+  const inSection = useSectionSource(source, typeof label === 'string' ? label : undefined)
   const covered = useCoveredSource(source)
   const Tag = href ? 'a' : 'div'
   // A link cannot hold the button that opens a proof, so a linked figure's mark only names its source.

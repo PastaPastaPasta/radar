@@ -5,21 +5,43 @@ import { useSourceHealth, type HealthState } from '@/data/health'
 import { cx } from './cx'
 import { Icon, type IconName } from './icon'
 import { useNow } from './hooks'
-import { useLiveView } from './live-connection'
+import { useLiveConnection, useLiveView } from './live-connection'
 import { openProofInspector } from './proof'
 import { sourceName, sourceView } from './source-labels'
 import { Unavailable } from './source-mode'
-import { distinctSources } from './source-scope'
+import { distinctSources, sourceKey } from './source-scope'
 
 export interface SourceLineProps {
   stamp: SourceStamp | SourceStamp[]
   compact?: boolean
+  /** The parts each source covers, by `sourceKey`. Shown only on a line that mixes proved and unproved reads. */
+  covers?: ReadonlyMap<string, readonly string[]>
 }
 
-function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }) {
+/** How many figures a mark names before it counts the rest. */
+const COVERS_SHOWN = 3
+
+function SourceMark({
+  stamp,
+  compact,
+  covers,
+}: {
+  stamp: SourceStamp
+  compact: boolean
+  covers?: readonly string[] | undefined
+}) {
   const health = useSourceHealth(stamp.source)
   const now = useNow(!stamp.immutable)
-  const v = sourceView(stamp, health, now)
+  const live = useLiveConnection()
+  const v = sourceView(stamp, health, now, live)
+  const names = covers?.slice(0, COVERS_SHOWN) ?? []
+  const more = (covers?.length ?? 0) - names.length
+  const covered =
+    names.length > 0 ? (
+      <span className="rx-src__for" data-covers>
+        {`: ${names.join(', ')}${more > 0 ? ` +${String(more)}` : ''}`}
+      </span>
+    ) : null
   const attrs = {
     'data-source': stamp.source,
     'data-proved': String(stamp.proved),
@@ -33,6 +55,10 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
     <time dateTime={new Date(stamp.asOf).toISOString()} title={v.ageTitle}>
       {v.age}
     </time>
+  ) : v.lag ? (
+    <span className="rx-src__lag" data-lag>
+      {v.lag}
+    </span>
   ) : null
   const status =
     v.variant === 'stale' ? (
@@ -45,6 +71,7 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
     <>
       <Icon name={v.icon} />
       {v.label}
+      {covered}
       {age}
       {status}
     </>
@@ -93,12 +120,23 @@ function SourceMark({ stamp, compact }: { stamp: SourceStamp; compact: boolean }
   )
 }
 
-export function SourceLine({ stamp, compact = false }: SourceLineProps) {
+/** True for a line a reader cannot split by eye: a proved Platform read beside an unproved one. */
+const mixesProof = (stamps: readonly SourceStamp[]): boolean =>
+  stamps.some((s) => s.source === 'sdk' && s.proved) &&
+  stamps.some((s) => s.source === 'sdk' && !s.proved)
+
+export function SourceLine({ stamp, compact = false, covers }: SourceLineProps) {
   const stamps = distinctSources(Array.isArray(stamp) ? stamp : [stamp])
+  const named = covers && mixesProof(stamps) ? covers : undefined
   return (
     <span className={cx('rx-sources', compact && 'rx-sources--compact')}>
       {stamps.map((s, i) => (
-        <SourceMark key={`${s.source}-${i}`} stamp={s} compact={compact} />
+        <SourceMark
+          key={`${s.source}-${i}`}
+          stamp={s}
+          compact={compact}
+          covers={s.source === 'sdk' ? named?.get(sourceKey(s)) : undefined}
+        />
       ))}
     </span>
   )

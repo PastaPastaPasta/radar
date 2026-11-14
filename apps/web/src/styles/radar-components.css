@@ -788,6 +788,19 @@ a.rx-stat:focus-visible,
 .rx-src time::before {
   content: '\00b7\00a0';
 }
+/* an index behind the chain says so where the age would be; the sentence may wrap on a phone */
+.rx-src__lag::before {
+  content: '\00b7\00a0';
+}
+.rx-src:has(.rx-src__lag) {
+  white-space: normal;
+}
+/* what a mark covers, on a line that mixes proved and unproved reads: plain ink beside the coloured mark */
+.rx-src__for {
+  margin-left: -4px;
+  color: var(--dh-ink-2);
+  font-weight: var(--dh-w-ui);
+}
 .rx-src--proof {
   color: var(--dh-good);
   border-style: solid;

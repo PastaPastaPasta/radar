@@ -115,16 +115,22 @@ export function useLeadSources(
 }
 
 interface Collector {
-  /** Hands the section the stamps one of its parts shows; an empty list takes them back. */
-  report: (id: string, stamps: readonly SourceStamp[]) => void
+  /** Hands the section the stamps one of its parts shows, with the part's name; an empty list takes them back. */
+  report: (id: string, stamps: readonly SourceStamp[], what?: string) => void
 }
+
+/** Which of a section's parts each source covers: the parts' names by `sourceKey`, in the order they reported. */
+export type SourceCovers = ReadonlyMap<string, readonly string[]>
+const NO_COVERS: SourceCovers = new Map()
 
 // Made on first use, not at load: a module that does work when it loads is bundled into the entry chunk through the
 // kit barrel, and only pages need this one.
 let collecting: Context<Collector | null> | undefined
 let sectionLine: Context<readonly SourceStamp[]> | undefined
+let sectionCovers: Context<SourceCovers> | undefined
 const collectingContext = () => (collecting ??= createContext<Collector | null>(null))
 const sectionLineContext = () => (sectionLine ??= createContext<readonly SourceStamp[]>([]))
+const sectionCoversContext = () => (sectionCovers ??= createContext<SourceCovers>(NO_COVERS))
 
 /** Cuts a subtree off from the section around it, so what it shows keeps its own marks (a hover card, a dialog). */
 export function NoSourceSection({ children }: { children: ReactNode }) {
@@ -135,16 +141,22 @@ export function NoSourceSection({ children }: { children: ReactNode }) {
 export function SourceSectionProvider({
   collector,
   line,
+  covers = NO_COVERS,
   children,
 }: {
   collector: Collector
   line: readonly SourceStamp[]
+  covers?: SourceCovers
   children: ReactNode
 }) {
   return createElement(
     collectingContext(),
     { value: collector },
-    createElement(sectionLineContext(), { value: line }, children),
+    createElement(
+      sectionLineContext(),
+      { value: line },
+      createElement(sectionCoversContext(), { value: covers }, children),
+    ),
   )
 }
 
@@ -155,9 +167,10 @@ export function useInSourceSection(): boolean {
 
 /**
  * Hands this part's stamps to the section around it, which names every source once in its own line. Returns true when
- * a section took them, so the part leaves its own mark out (or keeps it for hover and focus).
+ * a section took them, so the part leaves its own mark out (or keeps it for hover and focus). `what` is the part's
+ * name ("Balance"): a line that mixes proved and unproved reads uses it to say which figures each covers.
  */
-export function useSectionSource(source: SourceInput): boolean {
+export function useSectionSource(source: SourceInput, what?: string): boolean {
   const collector = useContext(collectingContext())
   const id = useId()
   const stamps = stampsOfInput(source)
@@ -168,9 +181,9 @@ export function useSectionSource(source: SourceInput): boolean {
   const signature = stamps.map(stampSignature).join('\n')
   useEffect(() => {
     if (!collector) return
-    collector.report(id, latest.current)
+    collector.report(id, latest.current, what)
     return () => collector.report(id, [])
-  }, [collector, id, signature])
+  }, [collector, id, signature, what])
   return collector !== null
 }
 
@@ -207,18 +220,19 @@ export function reportsAttr(stamps: readonly SourceStamp[]): string | undefined 
 export function useSourceCollector(own: SourceInput): {
   collector: Collector
   line: SourceStamp[]
+  covers: SourceCovers
 } {
-  const [reported, setReported] = useState<ReadonlyMap<string, readonly SourceStamp[]>>(
-    () => new Map(),
-  )
+  const [reported, setReported] = useState<
+    ReadonlyMap<string, { stamps: readonly SourceStamp[]; what?: string }>
+  >(() => new Map())
   const collector = useMemo<Collector>(
     () => ({
-      report(id, stamps) {
+      report(id, stamps, what) {
         setReported((prev) => {
           if (stamps.length === 0 && !prev.has(id)) return prev
           const next = new Map(prev)
           if (stamps.length === 0) next.delete(id)
-          else next.set(id, stamps)
+          else next.set(id, what === undefined ? { stamps } : { stamps, what })
           return next
         })
       },
@@ -228,18 +242,31 @@ export function useSourceCollector(own: SourceInput): {
   const given = isStampList(own) ? own : own ? [own] : []
   const all: (SourceStamp | undefined)[] = [...given]
   const ids = given.map((_, i) => `own:${i}`)
-  for (const [id, stamps] of reported) {
+  const named = new Map<string, string[]>()
+  for (const [id, { stamps, what }] of reported) {
     stamps.forEach((s, i) => {
       all.push(s)
       ids.push(`${id}:${i}`)
+      if (what === undefined) return
+      const names = named.get(sourceKey(s)) ?? []
+      if (!names.includes(what)) names.push(what)
+      named.set(sourceKey(s), names)
     })
   }
   const lead = useLeadSources(all, ids)
   const line = all.filter((s, i): s is SourceStamp => s !== undefined && lead[i] === true)
-  return { collector, line }
+  const coversKey = [...named].map(([key, names]) => `${key}=${names.join('\u0001')}`).join('\n')
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `coversKey` is the content of `named`
+  const covers = useMemo<SourceCovers>(() => named, [coversKey])
+  return { collector, line, covers }
 }
 
 /** The stamps the enclosing section's line shows. */
 export function useSectionLine(): readonly SourceStamp[] {
   return useContext(sectionLineContext())
+}
+
+/** The names of the parts each source of the enclosing section covers. */
+export function useSectionCovers(): SourceCovers {
+  return useContext(sectionCoversContext())
 }
