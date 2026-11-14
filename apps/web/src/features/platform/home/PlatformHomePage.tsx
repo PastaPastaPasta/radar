@@ -1,9 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
-import type { ReactNode, RefObject } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { PageFrame, useNetwork } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
-import { Empty, Unavailable, useAfterIdle } from '@/ui'
+import { Empty, Section, Unavailable, useAfterIdle } from '@/ui'
 import type { HomeRange } from './chart-options'
 import { PlatformCharts } from './Charts'
 import { ContractsCard, PollsCard, QuorumsCard } from './ChainFacts'
@@ -22,32 +21,6 @@ export interface PlatformHomePageProps {
   rich?: 'balance' | 'txs'
 }
 
-function Zone({
-  id,
-  title,
-  description,
-  zoneRef,
-  children,
-}: {
-  id: string
-  title: string
-  description?: string
-  zoneRef?: RefObject<HTMLElement | null>
-  children: ReactNode
-}) {
-  return (
-    <section id={id} ref={zoneRef} className="rx-sec" aria-labelledby={`${id}-title`}>
-      <div className="rx-sec__head">
-        <h2 className="rx-sec__title" id={`${id}-title`}>
-          {title}
-        </h2>
-        {description ? <p className="rx-sec__desc">{description}</p> : null}
-      </div>
-      <div className="grid grid-cols-1 gap-4">{children}</div>
-    </section>
-  )
-}
-
 export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHomePageProps) {
   const { t } = useLingui()
   const net = useNetwork()
@@ -55,8 +28,8 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
   const devnet = isDevnet(net)
   const indexed = !off && !devnet
   const idle = useAfterIdle()
-  const [chainRef, chainSeen] = useInView<HTMLElement>(2_000)
-  const [historyRef, historySeen] = useInView<HTMLElement>(4_000)
+  const [chainRef, chainSeen] = useInView<HTMLDivElement>(2_000)
+  const [historyRef, historySeen] = useInView<HTMLDivElement>(4_000)
   const chain = idle && chainSeen
 
   const notice = off ? (
@@ -76,51 +49,56 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
       layer="platform"
       lede={t`How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it.`}
     >
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="rx-cols rx-cols--lead">
         <Vitals />
         <QuickEntry />
       </div>
 
-      <Zone
+      <Section
         id="activity"
+        layer="platform"
         title={t`Live activity`}
-        description={
+        lede={
           indexed
             ? t`Updates every few seconds. A list holds still while you point at it.`
             : undefined
         }
       >
         {indexed ? (
-          <>
+          <div className="rx-pile">
             <Pulse />
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="rx-cols">
               <NewestBlocks />
               <NewestTransitions />
             </div>
-          </>
+          </div>
         ) : (
           notice
         )}
-      </Zone>
+      </Section>
 
-      <Zone id="chain" title={t`On the chain`} zoneRef={chainRef}>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <Proposers active={chain} />
-          <div className="grid grid-cols-1 content-start gap-4">
-            <QuorumsCard active={chain} />
-            <PollsCard active={chain} />
+      <Section id="chain" layer="platform" title={t`On the chain`}>
+        <div className="rx-pile" ref={chainRef}>
+          <div className="rx-cols">
+            <Proposers active={chain} />
+            <div className="rx-pile">
+              <QuorumsCard active={chain} />
+              <PollsCard active={chain} />
+            </div>
           </div>
+          <RecentEpochs active={chain} />
+          <ContractsCard active={chain} />
         </div>
-        <RecentEpochs active={chain} />
-        <ContractsCard active={chain} />
-      </Zone>
+      </Section>
 
       {indexed ? (
-        <Zone id="history" title={t`History and leaders`} zoneRef={historyRef}>
-          <PlatformCharts range={range} active={historySeen} />
-          <Leaderboards rich={rich} active={historySeen} />
-          <Validators active={historySeen} />
-        </Zone>
+        <Section id="history" layer="platform" title={t`History and leaders`}>
+          <div className="rx-pile" ref={historyRef}>
+            <PlatformCharts range={range} active={historySeen} />
+            <Leaderboards rich={rich} active={historySeen} />
+            <Validators active={historySeen} />
+          </div>
+        </Section>
       ) : null}
     </PageFrame>
   )

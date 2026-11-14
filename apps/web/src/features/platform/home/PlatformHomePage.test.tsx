@@ -69,7 +69,12 @@ describe('Platform overview', () => {
       .slice(1)
       .map((r) => Number(r.querySelectorAll('td')[2]?.textContent?.replaceAll(',', '')))
     expect(blocks).toEqual([...blocks].sort((a, b) => b - a))
-    expect(proposers.querySelector('[data-proved="false"]')).not.toBeNull()
+    expect(proposers.querySelector('[data-source]')).toBeNull()
+    await waitFor(() =>
+      expect(
+        document.querySelector('#chain [data-section-sources] [data-proved="false"]'),
+      ).not.toBeNull(),
+    )
   })
 
   it('goes straight to an epoch, and to the search page for anything it cannot place @NX-03', async () => {

@@ -39,7 +39,6 @@ export function Vitals() {
       id="vitals"
       layer="platform"
       title={t`Vital signs`}
-      subtitle={t`Read from the Platform nodes and checked against their proofs.`}
       source={stampsOf(tip.data, credits.data, upgrade.data, quorums.data)}
     >
       <div className="grid grid-cols-1 gap-4" data-vitals>
