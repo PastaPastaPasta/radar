@@ -1,5 +1,6 @@
 import { expectAccessible } from '../helpers/a11y'
 import { expect as baseExpect, test } from '../helpers/test'
+import { CLAIM } from '../routes/claims'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
@@ -10,7 +11,7 @@ const TESTNET_TIP = 1589232
 test.describe('Blocks list', () => {
   test('lists the newest blocks and pages back by cursor @HY-04', async ({ page }) => {
     await page.goto('/blocks')
-    await expect(page.getByRole('heading', { level: 1, name: 'Blocks' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.blocks })).toBeVisible()
     await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
     await expectAccessible(page)
     await page.getByRole('link', { name: 'Older' }).click()

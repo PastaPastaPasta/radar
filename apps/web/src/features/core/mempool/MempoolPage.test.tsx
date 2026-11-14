@@ -36,13 +36,14 @@ describe('Mempool page', () => {
 
   it('summarises the mempool: count, size and memory use @HY-06', async () => {
     renderAt('/mempool')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Mempool' })).toBeInTheDocument()
-    const summary = await waitFor(() => {
-      const el = document.querySelector('[data-mempool-summary]')
-      expect(el).toHaveTextContent('71')
-      return el as HTMLElement
-    })
-    expect(summary).toHaveTextContent('Transactions')
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: '71 transactions are waiting for a block',
+      }),
+    ).toBeInTheDocument()
+    const summary = document.querySelector('[data-mempool-summary]')!
+    expect(summary).not.toHaveTextContent('71')
     expect(summary).toHaveTextContent('Size')
     expect(summary).toHaveTextContent('Memory in use')
   })

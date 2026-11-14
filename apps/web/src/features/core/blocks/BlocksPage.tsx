@@ -19,6 +19,7 @@ import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
+import { BlocksClaim } from '../claims'
 import {
   BLOCKS_PER_PAGE,
   DAY_MS,
@@ -465,7 +466,15 @@ export function BlocksPage({
         <RecordHeader
           icon="block"
           kicker={t`Core`}
-          title={dateLabel ? t`Blocks on ${dateLabel}` : t`Blocks`}
+          title={
+            dateLabel ? (
+              t`Blocks on ${dateLabel}`
+            ) : tipTime === undefined ? (
+              t`Blocks`
+            ) : (
+              <BlocksClaim minedAt={tipTime} />
+            )
+          }
           actions={date ? <DayNav date={date} canNext={canNextDay} /> : null}
           meta={
             <div className="rx-rec__meta">

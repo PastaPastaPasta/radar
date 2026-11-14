@@ -35,7 +35,12 @@ afterEach(() => vi.restoreAllMocks())
 describe('Governance page', () => {
   it('shows the budget split and a proposal table with status, votes and amounts @HY-13', async () => {
     renderAt('/governance')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Governance' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: /^\d+ of \d+ open proposals? ha(s|ve) the votes to be funded$/,
+      }),
+    ).toBeInTheDocument()
     const table = await screen.findByRole('table', { name: 'Budget proposals' })
     for (const head of ['Proposal', 'Status', 'Yes', 'No', 'Abstain', 'Amount']) {
       expect(within(table).getByRole('columnheader', { name: head })).toBeInTheDocument()

@@ -59,6 +59,7 @@ const PACKAGES = {
   you: ['features/you', 'app/global-mounts.tsx', 'app/sw-register.ts', 'sw'],
   'uni-s': ['features/search'],
   'uni-l': ['features/entity', 'shell', 'features/core/tx', 'ui/link-out.tsx', 'lib/linkouts.ts'],
+  core: ['features/core/claims.tsx'],
 } as const satisfies Record<string, readonly string[]>
 
 /** Files that sit inside one package's directory but belong to another. */
