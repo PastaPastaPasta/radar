@@ -9,7 +9,8 @@ import type { DocumentDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { Card, DataTable, Empty, Time } from '@/ui'
-import { loadState, searchLink } from '../contest/shared'
+import { searchLink } from '../contest/shared'
+import { loadState } from '../identity/common'
 
 export interface NamesPageSearch {
   q?: string | undefined

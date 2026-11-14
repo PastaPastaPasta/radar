@@ -36,6 +36,10 @@ export const pageTo = (n: number): LinkProps =>
     })) as never,
   }) as LinkProps
 
+/** The pager of a PE child list. */
+export const pePaging = (page: number, total: number | undefined) =>
+  ({ kind: 'page', page, limit: PE_PAGE, total, to: pageTo }) as const
+
 /** Changes this page's search parameters, keeping the others (and the network and mode). */
 export function useSetSearch() {
   const navigate = useNavigate()

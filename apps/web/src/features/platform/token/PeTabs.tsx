@@ -11,16 +11,9 @@ import { sdkBatchers } from '@/data/sdk/queries'
 import { Entity, IdentityRef, transitionBadgeType } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Time, TypeBadge, Unavailable } from '@/ui'
-import { loadState, PE_PAGE, pageTo, peChildQuery } from '../identity/common'
+import { loadState, peChildQuery, pePaging } from '../identity/common'
+import { humanize } from '../tx/decoded'
 import { tokenAmountKind, type TokenView } from './use-token'
-
-const humanize = (raw: string): string => {
-  const text = raw.toLowerCase().split('_').join(' ').trim()
-  return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
-const pePaging = (page: number, total: number | undefined) =>
-  ({ kind: 'page', page, limit: PE_PAGE, total, to: pageTo }) as const
 
 /** The index-backed tabs: Decentralized only mode and devnets say so once, the rest read Platform Explorer. */
 export function IndexedTab({

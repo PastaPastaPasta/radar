@@ -10,10 +10,6 @@ import { upcomingPollsArgs, type ContestKey } from '@/data/query/prefetch/p-vote
 import { useNetwork } from '@/features/entity'
 import { useListMode, type DataTableProps, type LoadState } from '@/ui'
 
-export function loadState(query: { isPending: boolean; isError: boolean }): LoadState {
-  return query.isPending ? 'loading' : query.isError ? 'error' : 'ready'
-}
-
 const pollKey = (contractId: string, type: string, index: string, values: readonly unknown[]) =>
   `${contractId}|${type}|${index}|${values.map(String).join('\u0000')}`
 

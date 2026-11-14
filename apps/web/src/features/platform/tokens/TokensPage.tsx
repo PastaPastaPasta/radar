@@ -26,6 +26,7 @@ import {
   Unavailable,
 } from '@/ui'
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
+import { useListControls } from '../blocks/use-list-controls'
 import { usePagedList } from '../blocks/use-paged-list'
 import { ByContractForm } from '../token/ByContractForm'
 import { localizationsOf, pickLocalization } from '../token/token-config'
@@ -34,7 +35,7 @@ import {
   textFilter,
   tokensQuery,
   TOKENS_LIST_ID,
-  useTokenListControls,
+  type TokensSearch,
 } from './token-list'
 
 const TRENDING_LIMIT = 10
@@ -180,7 +181,7 @@ function Trending() {
 function TokenList() {
   const { t } = useLingui()
   const net = useNetwork()
-  const controls = useTokenListControls()
+  const controls = useListControls<TokensSearch>('/tokens', TOKENS_LIST_ID)
   const { search, mode, limit } = controls
   const nameOf = useNameOf()
   const query = useMemo(() => tokensQuery(search), [search])
