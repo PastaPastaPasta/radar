@@ -149,15 +149,13 @@ describe('fan-out', () => {
   describe('with the Platform tip unreadable', () => {
     const NOT_OFFERED = /isn.t available here/
     const sdkDown = () =>
-      vi
-        .spyOn(sdk, 'call')
-        .mockRejectedValue(
-          new SourceError({
-            source: 'sdk',
-            kind: 'unavailable',
-            message: 'The SDK is unreachable',
-          }),
-        )
+      vi.spyOn(sdk, 'call').mockRejectedValue(
+        new SourceError({
+          source: 'sdk',
+          kind: 'unavailable',
+          message: 'The SDK is unreachable',
+        }),
+      )
     const results = () => screen.getByRole('region', { name: 'Results' })
     const settled = () => waitFor(() => expect(results()).not.toHaveAttribute('aria-busy', 'true'))
     const open = (q: string) =>
@@ -169,14 +167,14 @@ describe('fan-out', () => {
         new SourceError({ source: 'pe', kind: 'http', message: 'Platform Explorer is down' }),
       )
       open('2569992')
-      expect(await screen.findByText(NOT_OFFERED)).toBeInTheDocument()
+      await waitFor(() => expect(screen.getByText(NOT_OFFERED)).toBeInTheDocument())
     })
 
     it('says so in Decentralized only mode, where no index answers a height', async () => {
       sdkDown()
       writeSourceMode('decentralized')
       open('2569992')
-      expect(await screen.findByText(NOT_OFFERED)).toBeInTheDocument()
+      await waitFor(() => expect(screen.getByText(NOT_OFFERED)).toBeInTheDocument())
     })
 
     it('stays quiet when Platform Explorer’s block lookup answered', async () => {
@@ -193,6 +191,13 @@ describe('fan-out', () => {
       expect(await screen.findByRole('link', { name: /Platform block 2,569,992/ })).toBeVisible()
       await settled()
       expect(screen.queryByText(NOT_OFFERED)).toBeNull()
+    })
+
+    it('does not ask the SDK for the Platform tip unless the input is a number', async () => {
+      const call = sdkDown()
+      open('XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc')
+      await settled()
+      expect(call.mock.calls.filter(([, method]) => method === 'epoch.current')).toHaveLength(0)
     })
 
     it('stays quiet for a Core address, which no Platform height concerns', async () => {

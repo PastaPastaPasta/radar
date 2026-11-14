@@ -4,7 +4,7 @@ import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 import { decentralizedOnly } from '@/lib/source-mode'
-import { classify, type Classified } from './classify'
+import { classify, needsTips, type Classified } from './classify'
 import { searchEnv } from './env'
 import { useSdkState, useSearchTip } from './tip'
 import { networkHintHit } from './network-hint'
@@ -110,7 +110,7 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   // Read so a change of mode plans the lookups again.
   const indexOff = useDecentralizedOnly()
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
-  const { tip, reading: tipReading, unread } = useSearchTip(net, mode, q.trim() !== '')
+  const { tip, reading: tipReading, unread } = useSearchTip(net, mode, needsTips(q))
   // Read so the SDK reaching 'ready' plans its lookups in the palette.
   useSdkState(net)
   const wordsReady = useWordlistLoaded()
