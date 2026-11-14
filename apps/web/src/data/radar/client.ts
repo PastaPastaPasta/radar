@@ -65,6 +65,61 @@ function reportCrawlLag(status: RadarStatus): void {
 
 const modified = (_body: unknown, res: Response) => lastModifiedMs(res)
 
+interface Crawl {
+  id: number | null
+  finished: number
+}
+
+/** The newest crawl each network's documents have named: every crawl-derived stamp carries its finish time. */
+const crawls = new Map<NetworkId, Crawl>()
+const crawlReads = new Map<NetworkId, Promise<void>>()
+
+/** Forgets every crawl time, so the next document asks Radar's status again. */
+export function forgetCrawls(): void {
+  crawls.clear()
+}
+
+function noteCrawl(net: NetworkId, id: number | null | undefined, finished: number | null): void {
+  if (finished === null) return
+  const had = crawls.get(net)
+  if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished })
+}
+
+/** The finish time of `net`'s latest crawl. Radar's status says it when no document has yet; one read serves them all. */
+async function crawlOf(net: NetworkId, signal?: AbortSignal): Promise<Crawl | undefined> {
+  if (!crawls.has(net)) {
+    let read = crawlReads.get(net)
+    if (!read) {
+      read = radar.status(signal, net).then(
+        () => undefined,
+        () => undefined,
+      )
+      crawlReads.set(net, read)
+      void read.finally(() => crawlReads.delete(net))
+    }
+    await read
+  }
+  return crawls.get(net)
+}
+
+/**
+ * Stamps a document built from the crawl with the crawl's finish time rather than with the time it was fetched. A
+ * document that names its crawl (`id`) only takes the time of that crawl; a newer one keeps its own stamp.
+ */
+async function stampedByCrawl<T>(
+  net: NetworkId,
+  signal: AbortSignal | undefined,
+  read: Promise<Sourced<T>>,
+  crawlId?: (data: T) => number | null | undefined,
+): Promise<Sourced<T>> {
+  const [out, crawl] = await Promise.all([read, crawlOf(net, signal)])
+  const id = crawlId?.(out.data)
+  if (!crawl || (id != null && crawl.id !== null && id !== crawl.id)) return out
+  const { asOfFetched, ...rest } = out
+  void asOfFetched
+  return { ...rest, asOf: crawl.finished }
+}
+
 function newest(times: Iterable<number | null | undefined>): number | undefined {
   let max: number | undefined
   for (const t of times) if (t != null && (max === undefined || t > max)) max = t
@@ -103,6 +158,10 @@ export const radar = {
       asOf: (b) => b.networks[net === 'testnet' ? 'testnet' : 'mainnet'].chain.updated,
     })
     reportCrawlLag(out.data)
+    for (const n of ['mainnet', 'testnet'] as const) {
+      const crawl = out.data.networks[n].crawl
+      noteCrawl(n, crawl.last_id, crawl.last_finished)
+    }
     return out
   },
 
@@ -129,8 +188,8 @@ export const radar = {
     })
   },
 
-  summary(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarSummary>> {
-    return fetchSourced({
+  async summary(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarSummary>> {
+    const out = await fetchSourced({
       source: 'radar',
       net,
       url: () => `${netBase(net)}/summary`,
@@ -139,6 +198,8 @@ export const radar = {
       asOf: (b) => b.crawl.finished,
       height: (b) => b.crawl.tip_height,
     })
+    noteCrawl(net, out.data.crawl.id, out.data.crawl.finished)
+    return out
   },
 
   history(
@@ -152,37 +213,51 @@ export const radar = {
       days: String(q.days ?? 30),
     })
     if (q.top !== undefined) params.set('top', String(q.top))
-    return fetchSourced({
-      source: 'radar',
+    return stampedByCrawl(
       net,
-      url: () => `${netBase(net)}/history?${params}`,
-      schema: RadarHistorySchema,
       signal,
-      asOf: modified,
-    })
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/history?${params}`,
+        schema: RadarHistorySchema,
+        signal,
+        asOf: modified,
+      }),
+    )
   },
 
   geo(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarGeo>> {
-    return fetchSourced({
-      source: 'radar',
+    return stampedByCrawl(
       net,
-      url: () => `${netBase(net)}/geo`,
-      schema: RadarGeoSchema,
       signal,
-      asOf: modified,
-    })
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/geo`,
+        schema: RadarGeoSchema,
+        signal,
+        asOf: modified,
+      }),
+      (d) => d.crawl_id,
+    )
   },
 
   masternodes(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarMasternode[]>> {
-    return fetchSourced({
-      source: 'radar',
+    return stampedByCrawl(
       net,
-      url: () => `${netBase(net)}/masternodes`,
-      schema: RadarMasternodesSchema,
       signal,
-      height: (b) => b.tip ?? undefined,
-      asOf: (b, res) => newest(b.masternodes.map((m) => m.last_seen)) ?? lastModifiedMs(res),
-    }).then((s) => mapSourced(s, (d) => d.masternodes))
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/masternodes`,
+        schema: RadarMasternodesSchema,
+        signal,
+        height: (b) => b.tip ?? undefined,
+        asOf: (b, res) => newest(b.masternodes.map((m) => m.last_seen)) ?? lastModifiedMs(res),
+      }),
+      (d) => d.crawl_id,
+    ).then((s) => mapSourced(s, (d) => d.masternodes))
   },
 
   masternode(
@@ -190,15 +265,19 @@ export const radar = {
     protx: string,
     signal?: AbortSignal,
   ): Promise<Sourced<RadarMasternodeDetail | null>> {
-    return fetchSourced({
-      source: 'radar',
+    return stampedByCrawl(
       net,
-      url: () => `${netBase(net)}/masternodes/${protxPath(protx)}`,
-      schema: RadarMasternodeDetailSchema,
-      notFound: 'null',
       signal,
-      asOf: modified,
-    })
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/masternodes/${protxPath(protx)}`,
+        schema: RadarMasternodeDetailSchema,
+        notFound: 'null',
+        signal,
+        asOf: modified,
+      }),
+    )
   },
 
   payments(
@@ -275,14 +354,18 @@ export const radar = {
   },
 
   changes(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarChanges>> {
-    return fetchSourced({
-      source: 'radar',
+    return stampedByCrawl(
       net,
-      url: () => `${netBase(net)}/changes`,
-      schema: RadarChangesSchema,
       signal,
-      asOf: modified,
-    })
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/changes`,
+        schema: RadarChangesSchema,
+        signal,
+        asOf: modified,
+      }),
+    )
   },
 
   /** Live P2P handshake against one masternode (testnet, port 19999 only). Radar rate-limits it. */

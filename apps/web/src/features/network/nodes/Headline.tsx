@@ -2,7 +2,7 @@ import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { stampOf } from '@/data/envelope'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Card, Time } from '@/ui'
+import { Card } from '@/ui'
 import { reachableLink } from './census-links'
 import { byOrg, countOf, reachShare, UNKNOWN } from './census-math'
 import { FigureGrid, FigureLink } from './parts'
@@ -53,8 +53,7 @@ export function Headline({ versions, days, summary }: SectionProps) {
                 {' · '}
               </span>
             )}
-            {t`crawled`} <Time ms={crawl.finished} mode="relative" live />
-            {t`, at block ${formatInt(crawl.tip_height)}`}
+            {t`counted at block ${formatInt(crawl.tip_height)}`}
           </p>
           <FigureGrid columns={6}>
             <FigureLink

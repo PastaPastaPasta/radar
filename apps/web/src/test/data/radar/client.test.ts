@@ -84,7 +84,7 @@ describe('radar client', () => {
     const out = await radar.history('mainnet', { dim: 'version', top: 8 })
     expect(seen).toEqual(['?dim=version&scope=all&days=30&top=8'])
     expect(out.data.t).toEqual([1000, 2000])
-    expect(out.asOf).toBe(out.fetchedAt)
+    expect(out.asOf).toBe((await radar.summary('mainnet')).data.crawl.finished)
   })
 
   it('history serves the recorded series', async () => {
