@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { QuorumDto } from '@/data/sdk/methods'
 import { parseCreditId } from '../credits/CreditsPage'
 import { parseNullifier } from '../shielded/ShieldedPage'
-import { poolSeries } from '../shielded/ShieldedChart'
+import { poolSeries } from '../shielded/pool-series'
 import { filterQuorums } from './QuorumsPage'
 
 const q = (quorumHash: string, quorumType: string): QuorumDto => ({

@@ -17,7 +17,7 @@ import {
   type ChartProps,
   type QueryState,
 } from '@/ui'
-import { poolSeries } from '../shielded/ShieldedChart'
+import { poolSeries } from '../shielded/pool-series'
 import { barsOption, bucketLabel, HOME_RANGES, timeOption, type HomeRange } from './chart-options'
 
 const TYPES_SHOWN = 8
