@@ -4,11 +4,20 @@ import { SectionSources, SourceSection } from '@/ui/layout'
 import { CopyLinkButton } from './CopyLinkButton'
 import { useDocumentTitle } from './document-title'
 import { networkName, useNetwork } from './network'
+import { findPage, sectionLabel } from './site-map'
 
 export interface PageFrameProps {
   /** The route id pattern, for `data-page`. */
   path: string
+  /** The page's name: the document title, and the headline until `claim` is there. */
   title: string
+  /**
+   * What the page has to say right now, as its headline: one specific sentence built from live data ("2,581 Dash
+   * nodes answered the last crawl"). Leave it out while the data is on its way or its source is down: the headline
+   * is then the page's name, never an empty line or a skeleton.
+   */
+  claim?: ReactNode
+  /** Where the page sits, when the section rail does not already say it: a parent page. The section's own name is not drawn. */
   eyebrow?: string
   /** The layer the page belongs to; it colors the page's accents. */
   layer?: Layer
@@ -23,7 +32,8 @@ export interface PageFrameProps {
 export function PageFrame({
   path,
   title,
-  eyebrow = 'Core',
+  claim,
+  eyebrow,
   layer = 'core',
   lede,
   actions,
@@ -32,16 +42,22 @@ export function PageFrame({
 }: PageFrameProps) {
   const net = useNetwork()
   useDocumentTitle(title)
+  const page = findPage(path)
+  // The rail above the page names its section, and the header names the network.
+  const above = eyebrow && (!page || eyebrow !== sectionLabel(page.section)) ? eyebrow : undefined
+  const headline = claim === undefined || claim === null || claim === false ? undefined : claim
   return (
     <SourceSection>
-      <article data-page={path} data-layer={layer} className="rx-page">
+      <article data-page={path} data-layer={layer} data-source-scope="" className="rx-page">
         <header className="rx-page__head">
-          <p data-eyebrow className="rx-page__eyebrow">
-            {eyebrow}
-            {net === 'mainnet' ? null : ` · ${networkName(net)}`}
-          </p>
+          {above ? (
+            <p data-eyebrow className="rx-page__eyebrow">
+              {above}
+              {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+            </p>
+          ) : null}
           <div className="rx-page__title">
-            <h1>{title}</h1>
+            <h1 data-claim={headline === undefined ? undefined : ''}>{headline ?? title}</h1>
             {share ? (
               <div className="rx-page__actions">
                 {actions}
