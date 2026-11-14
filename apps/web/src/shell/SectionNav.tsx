@@ -61,6 +61,7 @@ export function SectionNav() {
               <li key={entry.key}>
                 <PageLink
                   to={entry.href ?? entry.to}
+                  activeOptions={{ exact: true, includeSearch: false }}
                   aria-current={current && entry.pages.includes(current.path) ? 'page' : undefined}
                   className="inline-block py-2"
                 >

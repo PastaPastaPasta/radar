@@ -115,8 +115,8 @@ function BlocksList() {
             controls.filter({ sort: id === 'old' ? 'height' : undefined })
           }}
           options={[
-            { id: 'new', label: t`Newest first` },
-            { id: 'old', label: t`Oldest first` },
+            { id: 'new', label: t({ message: 'Newest first', context: 'list of blocks' }) },
+            { id: 'old', label: t({ message: 'Oldest first', context: 'list of blocks' }) },
           ]}
         />
         <span className="inline-flex items-center gap-2 whitespace-nowrap">

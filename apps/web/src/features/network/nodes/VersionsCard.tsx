@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
 import { formatInt } from '@/lib/format'
-import { Card, Chart, Empty, SegFilter, Skeleton, useNow } from '@/ui'
+import { Card, Chart, Empty, SegFilter, Skeleton, stampsOf, useNow } from '@/ui'
 import { stackedShareOption, type Series, type Slice } from './census-charts'
 import { useCensusColors, type CensusColors } from './census-colors'
 import { dayMonth, dayMonthYear, monthYear } from './census-format'
@@ -22,7 +22,7 @@ import {
 } from './census-math'
 import { Donut, ScrollRegion, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
-import { loadState, stampsOf, useCensusSearch, type SectionProps } from './shared'
+import { loadState, useCensusSearch, type SectionProps } from './shared'
 
 /** A version's colour: the latest release in the layer hue and each older one a step lighter. */
 function versionColor(

@@ -178,7 +178,13 @@ function StatusCard({
   const decidedAt = winner?.timeMs
   const ended = endsAt ?? decidedAt
   const status =
-    kind === 'won' ? t`Won` : kind === 'locked' ? t`Locked` : winner ? t`Decided` : t`Active`
+    kind === 'won'
+      ? t`Won`
+      : kind === 'locked'
+        ? t`Locked`
+        : winner
+          ? t`Decided`
+          : t({ message: 'Active', context: 'contest status' })
   return (
     <Card
       layer="platform"
@@ -356,6 +362,7 @@ function VotersCard({
                   state={loadState(q)}
                   error={q.error}
                   onRetry={() => void q.refetch()}
+                  source={q.data ? stampOf(q.data) : undefined}
                   paging={{
                     kind: 'cursor',
                     ...(all.length > CURSOR_PAGE ? { next: pageLink(page + 1) } : {}),

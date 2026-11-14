@@ -85,7 +85,7 @@ export function TokenHoverCard({ id }: { id: string }) {
               t`Not available`
             ) : (
               <Badge tone={paused ? 'warning' : 'success'} size="sm">
-                {paused ? t`Paused` : t`Active`}
+                {paused ? t`Paused` : t({ message: 'Active', context: 'token status' })}
               </Badge>
             ),
           },

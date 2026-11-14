@@ -1,5 +1,8 @@
+import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
 
 const LANGUAGES = [
   'English',
@@ -123,3 +126,60 @@ test.describe('Chinese', () => {
     await expectAccessible(page)
   })
 })
+
+const ENGLISH_WORDS = new Set(
+  'the of and to is for this that with from are not or it be was has have your you can no when which by an as at will they their these those than then there here only into out about after before over under until while'.split(
+    ' ',
+  ),
+)
+
+/**
+ * Visible text runs that read as English: three or more words, a fifth or more of them English function words. What a
+ * contract's author or a miner wrote stays as written (`translate="no"`), and SQL and JSON are not prose.
+ */
+function englishRuns(page: Page): Promise<string[]> {
+  return page.evaluate(
+    (english) => {
+      const words = new Set(english)
+      const skip = 'script, style, code, pre, kbd, samp, [data-json-view], [translate="no"]'
+      const found = new Set<string>()
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const el = node.parentElement
+        if (!el || el.closest(skip)) continue
+        const rect = el.getBoundingClientRect()
+        if (rect.width === 0 || rect.height === 0) continue
+        const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim()
+        if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(text)) continue
+        const tokens = text.toLowerCase().match(/[a-z']+/g) ?? []
+        if (tokens.length < 3) continue
+        const hits = tokens.filter((w) => words.has(w))
+        if (new Set(hits).size >= 2 && hits.length / tokens.length >= 0.2) found.add(text)
+      }
+      return [...found]
+    },
+    [...ENGLISH_WORDS],
+  )
+}
+
+for (const [locale, name] of [
+  ['de-DE', 'German'],
+  ['ja-JP', 'Japanese'],
+] as const) {
+  test.describe(`every route in ${name}`, () => {
+    test.use({ locale })
+
+    for (const route of ROUTE_CASES) {
+      const net = casesNets(route)[0]!
+      test(`${net} ${route.path} has no hard-coded English @IN-13 @HY-15`, async ({
+        page,
+      }, testInfo) => {
+        test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the page')
+        await page.goto(withQuery(route.path, networkQuery(net)))
+        await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
+        await settled(page)
+        expect(await englishRuns(page), 'English text on a translated page').toEqual([])
+      })
+    }
+  })
+}

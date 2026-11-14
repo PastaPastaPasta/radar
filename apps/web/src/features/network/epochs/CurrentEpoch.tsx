@@ -3,9 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, EpochClock, KeyValue, Time } from '@/ui'
-import { epochLengthMs } from './epoch-length'
-import { queryView, stampsOf, useAfterIdle } from './state'
+import { Card, EpochClock, KeyValue, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
+import { epochLengthMs } from '@/lib/epoch-length'
 
 const NONE = {} as const
 

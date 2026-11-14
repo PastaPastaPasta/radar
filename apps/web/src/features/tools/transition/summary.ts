@@ -133,7 +133,7 @@ function detailRows(name: string, body: Record<string, unknown>): SummaryRow[] {
       break
     case 'IdentityCreditWithdrawal':
       number(msg`Amount (credits)`, num(body.amount))
-      text(msg`Pooling`, str(body.pooling))
+      text(msg({ message: 'Pooling', context: 'field of a decoded transition' }), str(body.pooling))
       number(msg`Core fee per byte`, num(body.coreFeePerByte))
       break
     case 'IdentityTopUp':

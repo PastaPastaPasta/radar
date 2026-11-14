@@ -1,9 +1,8 @@
 // The payout rule follows dash-nodes' proof check of an evonode's rewards (MIT, github.com/PastaPastaPasta/dash-nodes).
 import type { FinalizedEpochDto } from '@/data/sdk/methods'
-import { CREDITS_PER_DASH } from '@/lib/units'
+import { creditsToDash } from '@/lib/units'
 
-/** Credits as a number of DASH, for charts and sentences. */
-export const dash = (credits: bigint): number => Number(credits) / Number(CREDITS_PER_DASH)
+export const dash = creditsToDash
 
 export type Finalized = Pick<
   FinalizedEpochDto,

@@ -22,11 +22,24 @@ describe('About page @NX-76', () => {
     const act = screen.getByRole('heading', { name: 'Where to act' }).closest('section')!
     expect(within(act).getByRole('link', { name: /Bridge/ })).toHaveAttribute(
       'href',
-      'https://bridge.dashhq.org/',
+      'https://bridge.dashhq.org/?network=mainnet',
     )
     expect(within(act).getByRole('link', { name: /Governance/ })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/',
+      'https://gov.dashhq.org/masternodes',
+    )
+  })
+
+  it('carries the network in the links it says carry it', async () => {
+    render(<App history={createMemoryHistory({ initialEntries: ['/about?network=testnet'] })} />)
+    const act = (await screen.findByRole('heading', { name: 'Where to act' })).closest('section')!
+    expect(within(act).getByRole('link', { name: /Bridge/ })).toHaveAttribute(
+      'href',
+      'https://bridge.dashhq.org/?network=testnet',
+    )
+    expect(within(act).getByRole('link', { name: /Governance/ })).toHaveAttribute(
+      'href',
+      'https://gov.dashhq.org/masternodes?network=testnet',
     )
   })
 

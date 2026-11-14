@@ -76,7 +76,11 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       },
       meta: { numeric: true, phone: phone ?? 'hidden' },
     })
-    const stateLabels = { active: t`Active`, queued: t`Queued`, banned: t`PoSe-banned` }
+    const stateLabels = {
+      active: t({ message: 'Active', context: 'evonode state' }),
+      queued: t({ message: 'Queued', context: 'evonode state' }),
+      banned: t`PoSe-banned`,
+    }
     return [
       evonode,
       {

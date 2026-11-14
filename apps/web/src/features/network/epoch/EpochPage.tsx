@@ -13,16 +13,20 @@ import {
   useProposerColumns,
   type ProposerRow,
 } from '@/features/network/epochs/proposer-table'
+import { sortRows, useSortedPaging } from '@/features/network/epochs/state'
+import { formatInt } from '@/lib/format'
 import {
+  Amount,
+  Card,
+  DataTable,
+  Empty,
+  KeyValue,
+  Time,
   queryView,
-  sortRows,
   stampsOf,
   useAfterIdle,
-  useSortedPaging,
-  type QueryView,
-} from '@/features/network/epochs/state'
-import { formatInt } from '@/lib/format'
-import { Amount, Card, DataTable, Empty, KeyValue, Time } from '@/ui'
+  type QueryState,
+} from '@/ui'
 
 const NONE = {} as const
 const PAGE = 50
@@ -212,7 +216,7 @@ function EpochProposers({
 }: {
   info: FinalizedEpochDto | undefined
   source: SourceStamp[]
-  state: QueryView
+  state: QueryState
 }) {
   const { t } = useLingui()
   const { sort } = useSearch({ from: '/epoch/$n' })

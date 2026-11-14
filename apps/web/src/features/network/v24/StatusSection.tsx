@@ -39,7 +39,7 @@ export function StatusSection({
     defined: t`Not started`,
     started: t`Signalling`,
     locked_in: t`Locked in`,
-    active: t`Active`,
+    active: t({ message: 'Active', context: 'upgrade state' }),
     failed: t`Failed`,
   }
   const block = (b: ActivationBlock | null | undefined): string =>
@@ -168,7 +168,7 @@ export function StatusSection({
           : t`Activation, at the earliest`,
     'window-end': t`This window ends (attempt ${String((w?.attempt ?? 0) + 1)})`,
     'locked-in': t`Locked in`,
-    active: t`Active`,
+    active: t({ message: 'Active', context: 'upgrade state' }),
   }
   const road = milestones(d, o)
 

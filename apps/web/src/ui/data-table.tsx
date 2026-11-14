@@ -16,6 +16,7 @@ import {
   useId,
   useLayoutEffect,
   useRef,
+  type RefObject,
   useState,
   type ReactNode,
 } from 'react'
@@ -209,6 +210,39 @@ export function Pager({
   )
 }
 
+/** Whether the table is wider than the box that holds it, so the box scrolls instead of pushing the page sideways. */
+function useWiderThan(
+  box: RefObject<HTMLElement | null>,
+  table: RefObject<HTMLElement | null>,
+): boolean {
+  const [wide, setWide] = useState(false)
+  useEffect(() => {
+    const outer = box.current
+    const inner = table.current
+    if (!outer || !inner) return
+    let frame = 0
+    const measure = () => {
+      setWide(inner.scrollWidth > outer.clientWidth + 1)
+    }
+    const later = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    }
+    later()
+    // The box resizes with the window; the table's width changes when rows arrive or a name replaces an identifier.
+    const resized = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(later)
+    resized?.observe(outer)
+    const changed = new MutationObserver(later)
+    changed.observe(inner, { childList: true, subtree: true, characterData: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      resized?.disconnect()
+      changed.disconnect()
+    }
+  }, [box, table])
+  return wide
+}
+
 export function DataTable<Row>({
   columns,
   rows,
@@ -230,6 +264,8 @@ export function DataTable<Row>({
 }: DataTableProps<Row>) {
   const router = useRouter()
   const tableRef = useRef<HTMLTableElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const wide = useWiderThan(scrollRef, tableRef)
   const bodyId = useId()
   const [tableId] = useState(() => Symbol('table'))
   const [focusId, setFocusId] = useState<string | undefined>(undefined)
@@ -518,7 +554,12 @@ export function DataTable<Row>({
           lastTouched = tableId
         }}
       >
-        <div className="rx-tablescroll">
+        <div
+          ref={scrollRef}
+          className="rx-tablescroll"
+          data-wide={wide || undefined}
+          {...(wide ? { role: 'region', 'aria-label': caption, tabIndex: 0 } : {})}
+        >
           <table
             ref={tableRef}
             className={cx(

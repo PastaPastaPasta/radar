@@ -6,14 +6,21 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeTxStatistic } from '@/data/pe/schemas'
 import { transitionBadgeType, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber } from '@/lib/format'
-import { Card, Chart, Empty, SegFilter, TYPE_META, type ChartProps } from '@/ui'
+import { creditsToDash as dash } from '@/lib/units'
+import {
+  Card,
+  Chart,
+  Empty,
+  SegFilter,
+  TYPE_META,
+  queryView,
+  stampsOf,
+  type ChartProps,
+  type QueryState,
+} from '@/ui'
 import { barsOption, bucketLabel, HOME_RANGES, timeOption, type HomeRange } from './chart-options'
-import { stampsOf, queryView, type QueryView } from './state'
 
-const CREDITS_PER_DASH = 1e11
 const TYPES_SHOWN = 8
-
-const dash = (credits: bigint): number => Number(credits) / CREDITS_PER_DASH
 
 interface AmountPoint {
   t: number
@@ -57,7 +64,7 @@ function ChartCard({
   id: string
   title: string
   subtitle?: string
-  view: QueryView
+  view: QueryState
   source: SourceStamp[]
   /** The note to show instead of the chart; undefined when there is data. */
   empty: string | undefined

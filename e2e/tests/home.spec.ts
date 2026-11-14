@@ -289,6 +289,7 @@ test.describe('Home', () => {
         .locator('[data-headline] .rx-fig')
         .filter({ hasText: 'Circulating supply' })
       await expect(supply.locator('.rx-fiat')).toBeVisible()
+      await settled(page)
       const fits = await supply.evaluate((card) => {
         const box = card.getBoundingClientRect()
         return [...card.querySelectorAll('.rx-fig__value, .rx-amt, .rx-fiat')].every((el) => {

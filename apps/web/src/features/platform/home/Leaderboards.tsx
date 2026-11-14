@@ -6,8 +6,7 @@ import type { Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import { Entity, IdentityRef, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, Empty, SegFilter } from '@/ui'
-import { queryView, stampsOf } from './state'
+import { Amount, Card, Empty, SegFilter, queryView, stampsOf } from '@/ui'
 
 const TOP = 10
 

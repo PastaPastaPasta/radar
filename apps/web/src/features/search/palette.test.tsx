@@ -2,12 +2,11 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { afterEach, beforeAll, describe, expect, it, onTestFinished } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { App } from '@/app'
 import { server } from '@/test/server'
 import { resolvers } from './resolvers'
 import { ensureWordlist } from './wordlist'
-import { UNFINISHED_ROUTES } from './offered'
 import { localStamp } from './resolvers/helpers'
 import type { Resolver, SearchHit } from './types'
 
@@ -259,12 +258,7 @@ describe('/search page', () => {
     expect(screen.getByText('zzzz-not-a-real-core-thing-12345.dash')).toBeInTheDocument()
   })
 
-  it('shows a confirmed hit as a result, not a guess, and drops one whose page is unfinished', async () => {
-    const unfinished = UNFINISHED_ROUTES as Set<string>
-    unfinished.add('/token/$id')
-    onTestFinished(() => {
-      unfinished.delete('/token/$id')
-    })
+  it('shows a confirmed hit as a result, not a guess', async () => {
     addResolver({
       id: 'confirmed-hits',
       accepts: ['dpns'],
@@ -279,14 +273,6 @@ describe('/search page', () => {
             stamp: localStamp(),
             rank: 80,
           },
-          {
-            kind: 'token',
-            id: 'c'.repeat(44),
-            title: 'Unbuilt token',
-            href: { to: '/token/$id', params: { id: 'c'.repeat(44) } },
-            stamp: localStamp(),
-            rank: 80,
-          },
         ]),
     })
     const history = createMemoryHistory({ initialEntries: ['/search?q=pshenmic.dash'] })
@@ -294,7 +280,6 @@ describe('/search page', () => {
 
     expect(await screen.findByRole('heading', { name: 'Network' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Masternode 1.2.3.4/ })).toBeInTheDocument()
-    expect(screen.queryByText('Unbuilt token')).toBeNull()
     expect(screen.queryByRole('region', { name: 'A guess' })).toBeNull()
     expect(screen.queryByText(/No match for/)).toBeNull()
   })

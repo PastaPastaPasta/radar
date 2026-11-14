@@ -8,7 +8,7 @@ import { peQueries } from '@/data/pe/queries'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { IdentityGroupDto } from '@/data/sdk/methods/p-id'
 import { Entity, useNetwork } from '@/features/entity'
-import { Card, DataTable, Empty } from '@/ui'
+import { Card, DataTable, Empty, ErrorState } from '@/ui'
 import { loadState, type IdentityTabProps } from './common'
 import { ContractForm } from './IdForm'
 
@@ -81,6 +81,9 @@ export function GroupsTab({ id, contract }: IdentityTabProps & { contract?: stri
       subtitle={t`Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name.`}
     >
       <ContractForm contract={contract} />
+      {owned.isError ? (
+        <ErrorState error={owned.error} source="pe" compact onRetry={() => void owned.refetch()} />
+      ) : null}
       {contracts.length === 0 && !waiting ? (
         <Empty kind="none-yet" title={t`Name a contract to see this identity’s groups in it.`} />
       ) : (

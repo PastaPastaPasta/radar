@@ -31,10 +31,6 @@ msgstr "{0, plural, one {# вихід} few {# виходи} many {# виході
 msgid "{0} base units"
 msgstr "{0} базових одиниць"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} не охоплює devnet."
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} даффів"
@@ -121,8 +117,13 @@ msgstr "Співвласник спільної мастерноди зміню�
 msgid "About"
 msgstr "Про проєкт"
 
+msgctxt "contest status"
 msgid "Active"
-msgstr "Активна"
+msgstr "Активний"
+
+msgctxt "token status"
+msgid "Active"
+msgstr "Активний"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Активні спірні імена з часом завершення, голосами та статусом."
@@ -161,9 +162,6 @@ msgstr "Розблокування активів"
 
 msgid "Asset unlocks root"
 msgstr "Корінь розблокувань активів"
-
-msgid "Back to Mainnet"
-msgstr "Назад до основної мережі"
 
 msgid "Balance"
 msgstr "Баланс"
@@ -499,9 +497,6 @@ msgstr "Групи"
 msgid "Hard-fork signal"
 msgstr "Сигнал хардфорку"
 
-msgid "Hash"
-msgstr "Хеш"
-
 msgid "Hide the table"
 msgstr "Сховати таблицю"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen повідомляє, що її витрачено, але в і�
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Індекс Hyphen відстає від ланцюга на {0} блоків, тому не може сказати, чи витрачено цей вихід відтоді."
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Identities"
 msgstr "Ідентичності"
@@ -817,9 +809,6 @@ msgstr "Не зареєстровано. Імʼя може бути вільни
 msgid "Not specified"
 msgstr "Не вказано"
 
-msgid "Number"
-msgstr "Номер"
-
 msgid "On Platform"
 msgstr "На Platform"
 
@@ -929,8 +918,8 @@ msgstr "P2P {0}, HTTPS {1}"
 msgid "Page not found"
 msgstr "Сторінку не знайдено"
 
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Вставте перехід стану у hex або base64, щоб розшифрувати та перевірити його. Нічого не підписується й не надсилається."
+msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
+msgstr "Вставте перехід стану у hex або base64, щоб розшифрувати його. Нічого не підписується й не розсилається; необов’язкова перевірка надсилає перехід до Platform Explorer для пробного прогону."
 
 msgid "Paused"
 msgstr "Призупинено"
@@ -977,9 +966,6 @@ msgstr "Пульс Platform: висота, епоха, графіки актив
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
 
-msgid "Position"
-msgstr "Позиція"
-
 msgid "proposal"
 msgstr "пропозиція"
 
@@ -991,9 +977,6 @@ msgstr "Пропонувач"
 
 msgid "Protocol"
 msgstr "Протокол"
-
-msgid "ProTx hash"
-msgstr "Хеш ProTx"
 
 msgid "QR reader"
 msgstr "Зчитувач QR"
@@ -1045,9 +1028,6 @@ msgstr "Необроблені дані"
 
 msgid "Raw payload"
 msgstr "Необроблене корисне навантаження"
-
-msgid "Read from"
-msgstr "Джерела"
 
 msgid "Reason"
 msgstr "Причина"
@@ -1265,17 +1245,11 @@ msgstr "Власник змінює ключ оператора, ключ гол
 msgid "the Platform Explorer price feed"
 msgstr "цінова стрічка Platform Explorer"
 
-msgid "The Platform SDK"
-msgstr "Platform SDK"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "SDK Platform, перевірка за доказами"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "Набір валідаторів Platform: евоноди з їхнім записом Platform, показуються в списку мастернод."
-
-msgid "The price feed"
-msgstr "Джерело цін"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "Публічний API, на якому працюють перепис вузлів і сторінки мастернод, з прикладами."
@@ -1307,9 +1281,6 @@ msgstr "Цей {record} розташований у мережі {network}."
 msgid "This address holds nothing on Platform."
 msgstr "Ця адреса нічого не зберігає на Platform."
 
-msgid "This browser"
-msgstr "Цей браузер"
-
 msgid "This is not a contract ID."
 msgstr "Це не ID контракту."
 
@@ -1327,13 +1298,6 @@ msgstr "Це не номер епохи."
 
 msgid "This is not an identity ID."
 msgstr "Це не ID ідентичності."
-
-msgid "This page is on its way"
-msgstr "Ця сторінка скоро з’явиться"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Ця сторінка читає дані з: {0}. Перемкніться на Mainnet або Testnet, щоб побачити її."
 
 msgid "Threshold signature"
 msgstr "Порогальний підпис"
@@ -1374,9 +1338,6 @@ msgstr "Транзакція"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "Транзакція {0}…"
-
-msgid "Transaction ID"
-msgstr "ID транзакції"
 
 msgid "Transactions"
 msgstr "Транзакції"
@@ -1487,9 +1448,6 @@ msgstr "Що Radar може й не може довести, де діяти н�
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Як просувається активація Core 24: поріг, сигнали майнерів по вікнах і готовність мастернод."
-
-msgid "Where the data comes from"
-msgstr "Звідки беруться дані"
 
 msgid "Where the value went"
 msgstr "Куди пішла вартість"

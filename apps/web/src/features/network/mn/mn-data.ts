@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { coreQueries } from '@/data/core/queries'
-import { mapSourced, stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
+import { mapSourced, type Sourced } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { useIndexHealth } from '@/data/index-health'
 import { hyQueries } from '@/data/hyphen/queries'
@@ -76,9 +76,4 @@ export function useSpecialTxs(net: NetworkId, protx: string) {
   const enabled = !index.off && !isDevnet(net) && index.probed && index.state !== 'stale'
   const query = useQuery({ ...hyQueries.validator(net, protx), enabled })
   return { index, query, enabled }
-}
-
-/** The stamps of the answers that have arrived, for a card's one source line. */
-export function stampsOf(...answers: (Sourced<unknown> | undefined)[]): SourceStamp[] {
-  return answers.flatMap((a) => (a ? [stampOf(a)] : []))
 }

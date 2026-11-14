@@ -5,9 +5,9 @@ import { useMemo, type ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Badge, Card, DataTable, Empty, KeyValue, Time } from '@/ui'
+import { Amount, Badge, Card, DataTable, Empty, KeyValue, Time, stampsOf } from '@/ui'
 import type { MnContext } from './mn-context'
-import { stampsOf, usePlatformLive } from './mn-data'
+import { usePlatformLive } from './mn-data'
 import {
   compareEpochs,
   withdrawalOf,
@@ -187,7 +187,7 @@ export function LiveCard({ ctx }: { ctx: MnContext }) {
   const statusLabel = (s: WithdrawalStatus): string => {
     switch (s) {
       case 'queued':
-        return t`Queued`
+        return t({ message: 'Queued', context: 'withdrawal status' })
       case 'pooled':
         return t`Pooled`
       case 'broadcast':

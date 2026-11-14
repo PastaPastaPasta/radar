@@ -91,7 +91,6 @@ export function LongPressCard({
       <Popover.Portal>
         <Popover.Content
           className="rx-hc rx-hc--pop"
-          style={{ transformOrigin: 'var(--radix-popover-content-transform-origin)' }}
           data-layer={layerAttr(KIND_META[kind].layer)}
           data-long-press-card={kind}
           sideOffset={8}

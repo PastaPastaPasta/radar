@@ -83,7 +83,7 @@ export function useKeyColumns(): ColumnDef<IdentityKeyDetailDto>[] {
           ) : row.original.readOnly ? (
             <Badge>{t`Read-only`}</Badge>
           ) : (
-            <Badge tone="success">{t`Active`}</Badge>
+            <Badge tone="success">{t({ message: 'Active', context: 'identity key status' })}</Badge>
           ),
         meta: { phone: 'secondary' },
       },

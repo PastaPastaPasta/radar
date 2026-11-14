@@ -8,8 +8,17 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { normalizeHex } from '@/lib/hex'
-import { Badge, Card, DataTable, Hash, SearchField, TableTools } from '@/ui'
-import { queryView, stampsOf, useAfterIdle } from './state'
+import {
+  Badge,
+  Card,
+  DataTable,
+  Hash,
+  SearchField,
+  TableTools,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+} from '@/ui'
 
 const NONE = {} as const
 
@@ -85,10 +94,10 @@ export function QuorumsPage() {
       },
       {
         id: 'verified',
-        header: t`Verified`,
+        header: t({ message: 'Verified', context: 'quorum signature' }),
         cell: ({ row }) =>
           row.original.isVerified ? (
-            <Badge tone="success">{t`Verified`}</Badge>
+            <Badge tone="success">{t({ message: 'Verified', context: 'quorum signature' })}</Badge>
           ) : (
             <Badge tone="warning">{t`Not verified`}</Badge>
           ),

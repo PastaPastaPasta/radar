@@ -45,14 +45,12 @@ const BLOCK_TXS = 'a[href^="/tx/"], [aria-label^="Transactions in block"] button
 function m1(net: RouteNet): RouteCase[] {
   const r = M1_RECORDS[net]
   const nets = [net]
-  const built = true as const
   return [
-    { path: '/', h1: 'Radar', nets, built, decentralized: 'partial', data: '[data-headline]' },
+    { path: '/', h1: 'Radar', nets, decentralized: 'partial', data: '[data-headline]' },
     {
       path: '/blocks',
       h1: 'Blocks',
       nets,
-      built,
       decentralized: 'data',
       data: 'a[href^="/block/"]',
     },
@@ -60,7 +58,6 @@ function m1(net: RouteNet): RouteCase[] {
       path: `/blocks?date=${r.date}`,
       h1: 'Blocks',
       nets,
-      built,
       decentralized: 'data',
       data: 'a[href^="/block/"]',
     },
@@ -68,7 +65,6 @@ function m1(net: RouteNet): RouteCase[] {
       path: `/block/${r.blockHash}`,
       h1: 'Block',
       nets,
-      built,
       decentralized: 'data',
       data: BLOCK_TXS,
     },
@@ -76,7 +72,6 @@ function m1(net: RouteNet): RouteCase[] {
       path: `/block/${r.height}`,
       h1: 'Block',
       nets,
-      built,
       decentralized: 'data',
       data: BLOCK_TXS,
     },
@@ -84,7 +79,6 @@ function m1(net: RouteNet): RouteCase[] {
       path: `/tx/${r.tx}`,
       h1: 'Transaction',
       nets,
-      built,
       decentralized: 'partial',
       data: '#io',
     },
@@ -92,7 +86,6 @@ function m1(net: RouteNet): RouteCase[] {
       path: `/address/${r.address}`,
       h1: 'Address',
       nets,
-      built,
       decentralized: 'partial',
       data: '[data-live]',
     },
@@ -100,31 +93,28 @@ function m1(net: RouteNet): RouteCase[] {
       path: '/mempool',
       h1: 'Mempool',
       nets,
-      built,
       decentralized: 'partial',
       data: '[data-mempool-view="seen"]',
     },
-    { path: '/rich-list', h1: 'Rich list', nets, built, decentralized: 'unavailable' },
-    { path: '/charts', h1: 'Charts', nets, built, decentralized: 'unavailable' },
-    { path: '/internals', h1: 'Network internals', nets, built, decentralized: 'unavailable' },
-    { path: '/governance', h1: 'Governance', nets, built, decentralized: 'unavailable' },
+    { path: '/rich-list', h1: 'Rich list', nets, decentralized: 'unavailable' },
+    { path: '/charts', h1: 'Charts', nets, decentralized: 'unavailable' },
+    { path: '/internals', h1: 'Network internals', nets, decentralized: 'unavailable' },
+    { path: '/governance', h1: 'Governance', nets, decentralized: 'unavailable' },
     {
       path: `/governance/${r.proposal}`,
       h1: 'Proposal',
       nets,
-      built,
       decentralized: 'unavailable',
     },
     {
       path: '/sources',
       h1: 'Data sources',
       nets,
-      built,
       decentralized: 'data',
       data: '[data-backend="dapi"]',
     },
-    { path: '/tools/verify-message', h1: 'Verify message', nets, built, decentralized: 'data' },
-    { path: '/tools/qr', h1: 'QR reader', nets, built, decentralized: 'data' },
+    { path: '/tools/verify-message', h1: 'Verify message', nets, decentralized: 'data' },
+    { path: '/tools/qr', h1: 'QR reader', nets, decentralized: 'data' },
   ]
 }
 

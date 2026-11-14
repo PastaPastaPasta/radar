@@ -36,11 +36,10 @@ const TABS = [
 ] as const
 
 export const pData: RouteCase[] = [
-  { path: '/contracts', h1: 'Contracts', built: true, decentralized: 'unavailable' },
+  { path: '/contracts', h1: 'Contracts', decentralized: 'unavailable' },
   {
     path: '/contracts?sort=-docs&tokens=1',
     h1: 'Contracts',
-    built: true,
     decentralized: 'unavailable',
   },
   ...perNet((ids) => {
@@ -50,36 +49,31 @@ export const pData: RouteCase[] = [
     const docId = ids.id('doc', '0')
     const where = `normalizedParentDomainName~eq~dash,normalizedLabel~sw~${doc.name}`
     return [
-      { path: `/contract/${contract}`, h1: 'Contract', built: true, decentralized: 'partial' },
+      { path: `/contract/${contract}`, h1: 'Contract', decentralized: 'partial' },
       ...TABS.map((tab): RouteCase => ({
         path: `/contract/${contract}?tab=${tab}`,
         h1: 'Contract',
-        built: true,
         decentralized: tab === 'transactions' || tab === 'documents' ? 'unavailable' : 'data',
       })),
       {
         path: `/contract/${doc.contract}/documents/${doc.type}`,
         h1: 'Documents',
-        built: true,
         decentralized: 'data',
       },
       {
         path: `/contract/${doc.contract}/documents/${doc.type}?where=${where}`,
         h1: 'Documents',
-        built: true,
         decentralized: 'data',
       },
       {
         path: `/document/${doc.contract}/${doc.type}/${docId}`,
         h1: 'Document',
-        built: true,
         decentralized: 'data',
       },
-      { path: `/groups/${group.contract}`, h1: 'Groups', built: true, decentralized: 'data' },
+      { path: `/groups/${group.contract}`, h1: 'Groups', decentralized: 'data' },
       {
         path: `/group/${group.contract}/${group.position}`,
         h1: 'Group',
-        built: true,
         decentralized: 'data',
       },
     ]

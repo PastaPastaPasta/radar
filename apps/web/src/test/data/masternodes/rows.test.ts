@@ -223,6 +223,27 @@ describe('filterMnRows and mnFilterFacets', () => {
   )!.data.rows
   const ids = (r: MnRow[]) => r.map((x) => Number.parseInt(x.protx, 16))
 
+  it('reads dkg as the overall verdict, "ready" for a pass, or a check that fails', () => {
+    const verdict = (
+      overall: string,
+      checks: Record<string, string>,
+    ): RadarMasternode['dkg_readiness'] => ({ overall, checks })
+    const dkgRows = joinMnRows(
+      sourced('radar', [
+        crawled(1, { dkg_readiness: verdict('pass', { protocol: 'pass', relay: 'pass' }) }),
+        crawled(2, { dkg_readiness: verdict('fail', { protocol: 'fail', relay: 'pass' }) }),
+        crawled(3, { dkg_readiness: verdict('fail', { protocol: 'pass', relay: 'fail' }) }),
+        crawled(4, { dkg_readiness: verdict('unknown', { protocol: 'unknown' }) }),
+      ]),
+      sourced('dapi', new Map([1, 2, 3, 4].map((n) => [hex(n), entry({ proRegTxHash: hex(n) })]))),
+    )!.data.rows
+    expect(ids(filterMnRows(dkgRows, { dkg: ['ready'] }))).toEqual([1])
+    expect(ids(filterMnRows(dkgRows, { dkg: ['pass'] }))).toEqual([1])
+    expect(ids(filterMnRows(dkgRows, { dkg: ['fail'] }))).toEqual([2, 3])
+    expect(ids(filterMnRows(dkgRows, { dkg: ['protocol'] }))).toEqual([2])
+    expect(ids(filterMnRows(dkgRows, { dkg: ['relay', 'unknown'] }))).toEqual([3, 4])
+  })
+
   it('passes everything when the filter sets nothing', () => {
     expect(filterMnRows(rows, {})).toHaveLength(4)
   })

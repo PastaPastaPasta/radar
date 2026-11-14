@@ -6,7 +6,14 @@ import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeVote } from '@/data/pe/schemas'
 import { DPNS, peVotesQuery, VOTE_CHOICE, type VotesFilters } from '@/data/query/prefetch/p-vote'
-import { Entity, PageFrame, PageGroupTabs, PageLink, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  PageFrame,
+  PageGroupTabs,
+  PageLink,
+  useNetwork,
+} from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import {
@@ -101,11 +108,7 @@ function VoteList({ search }: { search: VotesPageSearch }) {
         id: 'towards',
         header: t`Towards`,
         cell: ({ row }) =>
-          row.original.towardsIdentity ? (
-            <Entity kind="identity" id={row.original.towardsIdentity} identicon />
-          ) : (
-            '—'
-          ),
+          row.original.towardsIdentity ? <IdentityRef id={row.original.towardsIdentity} /> : '—',
         enableSorting: false,
         meta: { phone: 'secondary' },
       },

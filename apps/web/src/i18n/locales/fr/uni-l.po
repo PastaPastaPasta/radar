@@ -31,10 +31,6 @@ msgstr "{0, plural, one {# sortie} many {# de sorties} other {# sorties}}"
 msgid "{0} base units"
 msgstr "{0} unités de base"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} ne couvre pas les devnets."
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} duffs"
@@ -121,6 +117,11 @@ msgstr "Un détenteur de parts d’un masternode partagé change l’adresse où
 msgid "About"
 msgstr "À propos"
 
+msgctxt "contest status"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "token status"
 msgid "Active"
 msgstr "Actif"
 
@@ -161,9 +162,6 @@ msgstr "Déverrouillage d’actifs"
 
 msgid "Asset unlocks root"
 msgstr "Racine des déverrouillages d’actifs"
-
-msgid "Back to Mainnet"
-msgstr "Retour au mainnet"
 
 msgid "Balance"
 msgstr "Solde"
@@ -499,9 +497,6 @@ msgstr "Groupes"
 msgid "Hard-fork signal"
 msgstr "Signal de hard fork"
 
-msgid "Hash"
-msgstr "Hash"
-
 msgid "Hide the table"
 msgstr "Masquer le tableau"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen indique qu’elle est dépensée, mais son historique ne montre p
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "L’index de Hyphen a {0} blocs de retard sur la chaîne et ne peut donc pas dire si cette sortie a été dépensée depuis."
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Identities"
 msgstr "Identités"
@@ -817,9 +809,6 @@ msgstr "Non enregistré. Il peut être libre ou encore contesté."
 msgid "Not specified"
 msgstr "Non précisé"
 
-msgid "Number"
-msgstr "Numéro"
-
 msgid "On Platform"
 msgstr "Sur Platform"
 
@@ -929,8 +918,8 @@ msgstr "P2P {0}, HTTPS {1}"
 msgid "Page not found"
 msgstr "Page introuvable"
 
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Collez une transition d’état en hex ou base64 pour la décoder et la vérifier. Rien n’est signé ni envoyé."
+msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
+msgstr "Collez une transition d’état en hex ou base64 pour la décoder. Rien n’est signé ni diffusé ; la vérification facultative envoie la transition à Platform Explorer pour un essai à blanc."
 
 msgid "Paused"
 msgstr "En pause"
@@ -977,9 +966,6 @@ msgstr "Le pouls de Platform : hauteur, époque, graphiques d’activité, leade
 msgid "PoSe-banned"
 msgstr "Banni par PoSe"
 
-msgid "Position"
-msgstr "Position"
-
 msgid "proposal"
 msgstr "proposition"
 
@@ -991,9 +977,6 @@ msgstr "Proposeur"
 
 msgid "Protocol"
 msgstr "Protocole"
-
-msgid "ProTx hash"
-msgstr "Hash ProTx"
 
 msgid "QR reader"
 msgstr "Lecteur de code QR"
@@ -1045,9 +1028,6 @@ msgstr "Données brutes"
 
 msgid "Raw payload"
 msgstr "Charge utile brute"
-
-msgid "Read from"
-msgstr "Lu depuis"
 
 msgid "Reason"
 msgstr "Motif"
@@ -1265,17 +1245,11 @@ msgstr "Le propriétaire modifie la clé d’opérateur, la clé de vote ou le v
 msgid "the Platform Explorer price feed"
 msgstr "le flux de prix de Platform Explorer"
 
-msgid "The Platform SDK"
-msgstr "Le SDK Platform"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "le SDK Platform, vérifié par preuves"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "L’ensemble de validateurs Platform : evonodes avec leur enregistrement Platform, affichés dans la liste des masternodes."
-
-msgid "The price feed"
-msgstr "Le flux de prix"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "L’API publique derrière le recensement des nœuds et les pages de masternodes, avec des exemples."
@@ -1307,9 +1281,6 @@ msgstr "Cet enregistrement {record} se trouve sur {network}."
 msgid "This address holds nothing on Platform."
 msgstr "Cette adresse ne détient rien sur Platform."
 
-msgid "This browser"
-msgstr "Ce navigateur"
-
 msgid "This is not a contract ID."
 msgstr "Ce n’est pas un ID de contrat."
 
@@ -1327,13 +1298,6 @@ msgstr "Ce n’est pas un numéro d’époque."
 
 msgid "This is not an identity ID."
 msgstr "Ce n’est pas un ID d’identité."
-
-msgid "This page is on its way"
-msgstr "Cette page arrive bientôt"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Cette page lit {0}. Passez à Mainnet ou Testnet pour la voir."
 
 msgid "Threshold signature"
 msgstr "Signature à seuil"
@@ -1374,9 +1338,6 @@ msgstr "Transaction"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "Transaction {0}…"
-
-msgid "Transaction ID"
-msgstr "ID de transaction"
 
 msgid "Transactions"
 msgstr "Transactions"
@@ -1487,9 +1448,6 @@ msgstr "Ce que Radar peut et ne peut pas prouver, où agir sur ce que vous voyez
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Où en est l’activation de Core 24 : seuil, signalisation des mineurs fenêtre par fenêtre et préparation des masternodes."
-
-msgid "Where the data comes from"
-msgstr "D’où viennent les données"
 
 msgid "Where the value went"
 msgstr "Où est allée la valeur"

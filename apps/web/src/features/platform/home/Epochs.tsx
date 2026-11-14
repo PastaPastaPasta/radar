@@ -10,8 +10,7 @@ import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Amount, Card, DataTable, Time } from '@/ui'
-import { queryView, stampsOf } from './state'
+import { Amount, Card, DataTable, Time, queryView, stampsOf } from '@/ui'
 
 const RECENT = 4
 
@@ -133,7 +132,7 @@ export function RecentEpochs({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => String(r.epoch.index)}
-        {...queryView(infos)}
+        {...queryView(infos, tip)}
         rowLink={(r) => ({ to: '/epoch/$n', params: { n: String(r.epoch.index) } })}
       />
     </Card>

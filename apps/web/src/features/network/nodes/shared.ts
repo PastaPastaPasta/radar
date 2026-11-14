@@ -1,7 +1,6 @@
 import type { UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { Sourced } from '@/data/envelope'
-import { stampOf } from '@/data/envelope'
 import type { RadarSummary } from '@/data/radar/schemas'
 import type { LoadState } from '@/ui'
 import type { NetworkId } from '@/lib/network'
@@ -19,9 +18,6 @@ export interface SectionProps {
 
 export const loadState = (q: Pick<UseQueryResult, 'isPending' | 'isError' | 'data'>): LoadState =>
   q.data !== undefined ? 'ready' : q.isError ? 'error' : q.isPending ? 'loading' : 'ready'
-
-export const stampsOf = (...qs: (Sourced<unknown> | undefined)[]) =>
-  qs.flatMap((q) => (q ? [stampOf(q)] : []))
 
 /** Changes the census page's search in place: no new history entry, no scroll reset, and the hash is kept. */
 export function useCensusSearch(): (patch: {

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   DISPLAY_UNITS,
+  creditsToDash,
   formatAmountParts,
   fixedParts,
   getUnitPrefs,
@@ -382,5 +383,11 @@ describe('USD as the primary unit @IN-12', () => {
     expect(formatFiat(-100_000_000n, 46.2, true)).toBe('≈ −$46.2')
     expect(formatFiat(0n, 46.2, true)).toBe('≈ $0')
     expect(formatFiat(5_000_607_499n, 46.2, true)).toBe('≈ +$2,310')
+  })
+})
+
+describe('creditsToDash', () => {
+  it('is 1e11 credits to the DASH', () => {
+    expect(creditsToDash(150_000_000_000n)).toBe(1.5)
   })
 })

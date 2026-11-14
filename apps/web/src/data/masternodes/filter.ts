@@ -63,6 +63,18 @@ const searchText = (r: MnRow): string =>
     .join('\n')
     .toLowerCase()
 
+/**
+ * `dkg` takes the crawl's overall verdict (`pass`, `fail`, `unknown`; the census says `ready` for `pass`), or the id of one
+ * check, which keeps the rows where that check fails.
+ */
+function dkgMatches(row: MnRow, wanted: ReadonlySet<string>): boolean {
+  const readiness = row.crawl?.dkg_readiness
+  if (!readiness) return false
+  return [...wanted].some(
+    (v) => (v === 'ready' ? 'pass' : v) === readiness.overall || readiness.checks[v] === 'fail',
+  )
+}
+
 const CRAWL_FACETS: ReadonlySet<keyof typeof facetValues> = new Set([
   'reach',
   'country',
@@ -86,6 +98,7 @@ export function filterMnRows(rows: readonly MnRow[], filter: MnFilter): MnRow[] 
     (row) =>
       (!q || searchText(row).includes(q)) &&
       sets.every(([k, wanted]) => {
+        if (k === 'dkg') return dkgMatches(row, wanted)
         const v = facetValues[k](row)
         return v !== undefined && wanted.has(v)
       }),

@@ -68,3 +68,20 @@ describe('switching language', () => {
     expect(formatRelative(when, when + 90_000)).toMatch(/мин/)
   })
 })
+
+describe('one word, several subjects', () => {
+  it('agrees with the subject: a contest, a token and an evonode are "Active" in their own gender @IN-13 @HY-15', async () => {
+    await activateLocale('es')
+    expect(t({ message: 'Active', context: 'contest status' })).toBe('Activa')
+    expect(t({ message: 'Active', context: 'token status' })).toBe('Activo')
+    await activateLocale('ru')
+    expect(t({ message: 'Active', context: 'evonode state' })).toBe('Активна')
+    expect(t({ message: 'Active', context: 'token status' })).toBe('Активен')
+    expect(t({ message: 'Active', context: 'upgrade state' })).toBe('Активно')
+    await activateLocale('fr')
+    expect(t({ message: 'Oldest first', context: 'list of contests' })).toBe(
+      'Plus anciennes d’abord',
+    )
+    expect(t({ message: 'Oldest first', context: 'list of blocks' })).toBe('Plus anciens d’abord')
+  })
+})

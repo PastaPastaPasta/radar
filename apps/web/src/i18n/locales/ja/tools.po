@@ -486,8 +486,8 @@ msgstr "Platform の応答から証明を貼り付けると、レイヤー、証
 msgid "Paste a proof."
 msgstr "証明を貼り付けてください。"
 
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードして検証できます。署名も送信も行いません。"
+msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
+msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードできます。署名も配信も行いません。任意の検証では、トランジションをドライランのために Platform Explorer へ送信します。"
 
 msgid "Paste some bytes."
 msgstr "バイト列を貼り付けてください。"
@@ -558,6 +558,7 @@ msgstr "Platform はこのトランジションを拒否します。"
 msgid "Points to"
 msgstr "参照先"
 
+msgctxt "field of a decoded transition"
 msgid "Pooling"
 msgstr "プーリング"
 

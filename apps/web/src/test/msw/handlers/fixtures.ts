@@ -50,7 +50,15 @@ function forOrigin(pattern: string): AnyHandler[] {
   return [http.get(pattern, serve('GET')), http.post(pattern, serve('POST'))]
 }
 
-export const radarHandlers = forOrigin('https://radar.dashhq.org/api/v1/*')
-export const peHandlers = PE_ORIGINS.flatMap((o) => forOrigin(`${o}/*`))
-export const hyphenHandlers = forOrigin('*/x/hy/*')
-export const insightHandlers = INSIGHT_ORIGINS.flatMap((o) => forOrigin(`${o}/*`))
+/** The URL patterns each HTTP source answers on. */
+export const HTTP_SOURCE_PATTERNS = {
+  radar: ['https://radar.dashhq.org/api/v1/*'],
+  pe: PE_ORIGINS.map((o) => `${o}/*`),
+  hyphen: ['*/x/hy/*'],
+  insight: INSIGHT_ORIGINS.map((o) => `${o}/*`),
+} as const
+
+export const radarHandlers = HTTP_SOURCE_PATTERNS.radar.flatMap(forOrigin)
+export const peHandlers = HTTP_SOURCE_PATTERNS.pe.flatMap(forOrigin)
+export const hyphenHandlers = HTTP_SOURCE_PATTERNS.hyphen.flatMap(forOrigin)
+export const insightHandlers = HTTP_SOURCE_PATTERNS.insight.flatMap(forOrigin)

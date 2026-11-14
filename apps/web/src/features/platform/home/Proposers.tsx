@@ -6,9 +6,8 @@ import { useMemo } from 'react'
 import { platformTipQuery } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Card, DataTable } from '@/ui'
+import { Card, DataTable, queryView, stampsOf } from '@/ui'
 import { homeQueries, type EpochProposers, type Proposer } from './queries'
-import { queryView, stampsOf } from './state'
 
 const TOP = 10
 
@@ -97,7 +96,7 @@ export function Proposers({ active }: { active: boolean }) {
         columns={columns}
         rows={rows}
         getRowId={(r) => r.proTxHash}
-        {...queryView(query)}
+        {...queryView(query, tip)}
         empty={t`No evonode has proposed a block in this epoch yet.`}
       />
     </Card>

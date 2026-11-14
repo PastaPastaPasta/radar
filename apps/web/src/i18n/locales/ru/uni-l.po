@@ -31,10 +31,6 @@ msgstr "{0, plural, one {# выход} few {# выхода} many {# выходо
 msgid "{0} base units"
 msgstr "{0} базовых единиц"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} не охватывает devnet."
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} даффов"
@@ -121,8 +117,13 @@ msgstr "Совладелец общей мастерноды меняет адр
 msgid "About"
 msgstr "О проекте"
 
+msgctxt "contest status"
 msgid "Active"
-msgstr "Активна"
+msgstr "Активен"
+
+msgctxt "token status"
+msgid "Active"
+msgstr "Активен"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Активные спорные имена со временем окончания, голосами и статусом."
@@ -161,9 +162,6 @@ msgstr "Разблокировка активов"
 
 msgid "Asset unlocks root"
 msgstr "Корень разблокировок активов"
-
-msgid "Back to Mainnet"
-msgstr "Назад к основной сети"
 
 msgid "Balance"
 msgstr "Баланс"
@@ -499,9 +497,6 @@ msgstr "Группы"
 msgid "Hard-fork signal"
 msgstr "Сигнал хардфорка"
 
-msgid "Hash"
-msgstr "Хеш"
-
 msgid "Hide the table"
 msgstr "Скрыть таблицу"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen сообщает, что она потрачена, но в ис�
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Индекс Hyphen отстаёт от цепочки на {0} блоков, поэтому не может сказать, потрачен ли этот выход с тех пор."
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Identities"
 msgstr "Идентичности"
@@ -817,9 +809,6 @@ msgstr "Не зарегистрировано. Имя может быть сво
 msgid "Not specified"
 msgstr "Не указана"
 
-msgid "Number"
-msgstr "Номер"
-
 msgid "On Platform"
 msgstr "На Platform"
 
@@ -929,8 +918,8 @@ msgstr "P2P {0}, HTTPS {1}"
 msgid "Page not found"
 msgstr "Страница не найдена"
 
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Вставьте переход состояния в hex или base64, чтобы расшифровать и проверить его. Ничего не подписывается и не отправляется."
+msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
+msgstr "Вставьте переход состояния в hex или base64, чтобы расшифровать его. Ничего не подписывается и не рассылается; необязательная проверка отправляет переход в Platform Explorer для пробного прогона."
 
 msgid "Paused"
 msgstr "Приостановлено"
@@ -977,9 +966,6 @@ msgstr "Пульс Platform: высота, эпоха, графики актив
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
 
-msgid "Position"
-msgstr "Позиция"
-
 msgid "proposal"
 msgstr "предложение"
 
@@ -991,9 +977,6 @@ msgstr "Предлагающий"
 
 msgid "Protocol"
 msgstr "Протокол"
-
-msgid "ProTx hash"
-msgstr "Хеш ProTx"
 
 msgid "QR reader"
 msgstr "Считыватель QR"
@@ -1045,9 +1028,6 @@ msgstr "Необработанные данные"
 
 msgid "Raw payload"
 msgstr "Необработанная полезная нагрузка"
-
-msgid "Read from"
-msgstr "Источники"
 
 msgid "Reason"
 msgstr "Причина"
@@ -1265,17 +1245,11 @@ msgstr "Владелец меняет ключ оператора, ключ го
 msgid "the Platform Explorer price feed"
 msgstr "ценовой фид Platform Explorer"
 
-msgid "The Platform SDK"
-msgstr "Platform SDK"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "SDK Platform, проверка по доказательствам"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "Набор валидаторов Platform: эвоноды с их записью Platform, показываются в списке мастернод."
-
-msgid "The price feed"
-msgstr "Источник цен"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "Публичный API, на котором работают перепись узлов и страницы мастернод, с примерами."
@@ -1307,9 +1281,6 @@ msgstr "Этот {record} находится в сети {network}."
 msgid "This address holds nothing on Platform."
 msgstr "Этот адрес ничего не хранит на Platform."
 
-msgid "This browser"
-msgstr "Этот браузер"
-
 msgid "This is not a contract ID."
 msgstr "Это не ID контракта."
 
@@ -1327,13 +1298,6 @@ msgstr "Это не номер эпохи."
 
 msgid "This is not an identity ID."
 msgstr "Это не ID идентичности."
-
-msgid "This page is on its way"
-msgstr "Эта страница скоро появится"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Эта страница читает данные из: {0}. Переключитесь на Mainnet или Testnet, чтобы увидеть её."
 
 msgid "Threshold signature"
 msgstr "Пороговая подпись"
@@ -1374,9 +1338,6 @@ msgstr "Транзакция"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "Транзакция {0}…"
-
-msgid "Transaction ID"
-msgstr "ID транзакции"
 
 msgid "Transactions"
 msgstr "Транзакции"
@@ -1487,9 +1448,6 @@ msgstr "Что Radar может и не может доказать, где де
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Как продвигается активация Core 24: порог, сигналы майнеров по окнам и готовность мастернод."
-
-msgid "Where the data comes from"
-msgstr "Откуда берутся данные"
 
 msgid "Where the value went"
 msgstr "Куда ушла стоимость"

@@ -186,6 +186,10 @@ test.describe('Contest', () => {
     await open(page, `/contest/${NAMES.contested}`, 'Name contest')
     await expect(page.getByRole('heading', { name: 'Voters' })).toBeVisible()
     await expect(page.locator('main tbody tr').first()).toBeVisible()
+    await expect(
+      page.locator('#contest-voters .rx-tfoot [data-source="sdk"]'),
+      'the voters list says where it came from',
+    ).toBeVisible()
   })
 
   test('shows every vote with a choice filter and paging @PE-20', async ({ page }) => {

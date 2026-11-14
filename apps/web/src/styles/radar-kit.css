@@ -91,7 +91,10 @@
 .rx-hc--pop {
   position: relative;
   z-index: 45;
-  transform-origin: var(--radix-hover-card-content-transform-origin);
+  transform-origin: var(
+    --radix-hover-card-content-transform-origin,
+    var(--radix-popover-content-transform-origin)
+  );
 }
 .rx-hc__inner {
   display: block;
@@ -535,6 +538,14 @@ dashhq-footer .rx-ratenote {
     opacity: 1;
   }
 }
+/* A fingertip needs 40 px; the negative margin keeps the card head the height it was. */
+@media (pointer: coarse) {
+  .rx-sec__copy {
+    width: 40px;
+    height: 40px;
+    margin-block: -8px;
+  }
+}
 .rx-kv {
   grid-template-columns: var(--rx-kv-label, 160px) minmax(0, 1fr);
 }
@@ -605,9 +616,17 @@ dashhq-footer .rx-ratenote {
 /* data table */
 .rx-tablewrap {
   position: relative;
+  min-width: 0;
 }
 .rx-tablescroll {
   min-width: 0;
+}
+/* A table wider than its box scrolls inside it at any width; a sticky header cannot stick inside a scroll box. */
+.rx-tablescroll[data-wide] {
+  overflow-x: auto;
+}
+.rx-tablescroll[data-wide] .rx-table th {
+  position: static;
 }
 @media (max-width: 1023px) {
   .rx-tablescroll {
@@ -621,9 +640,12 @@ dashhq-footer .rx-ratenote {
   .rx-tablescroll {
     overflow-x: visible;
   }
-  .rx-tablewrap--scroll .rx-tablescroll {
-    overflow-x: auto;
-  }
+}
+.rx-tablewrap--scroll .rx-tablescroll {
+  overflow-x: auto;
+}
+.rx-tablewrap--scroll .rx-table th {
+  position: static;
 }
 .rx-table--scrolls {
   min-width: 720px;
@@ -743,6 +765,19 @@ dashhq-footer .rx-ratenote {
 }
 .rx-chart__table {
   margin-top: 8px;
+  overflow-x: auto;
+}
+.rx-tablescroll[data-wide]:focus-visible,
+.rx-chart__table:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+}
+.dh-seg.rx-seg {
+  flex-wrap: wrap;
+  overflow-x: visible;
+}
+.rx-map-panel .dh-seg.rx-seg {
+  flex-wrap: nowrap;
   overflow-x: auto;
 }
 

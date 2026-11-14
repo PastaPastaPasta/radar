@@ -32,7 +32,7 @@ export function PageFrame({
   const net = useNetwork()
   useDocumentTitle(title)
   return (
-    <article data-page={path} data-layer={layer} className="grid gap-6">
+    <article data-page={path} data-layer={layer} className="grid gap-6 [&>*]:min-w-0">
       <header className="grid gap-2">
         <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
           {eyebrow}

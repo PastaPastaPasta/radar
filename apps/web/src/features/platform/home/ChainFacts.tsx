@@ -6,9 +6,8 @@ import { sdkBatchers, sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { wellKnownContracts } from '@/lib/well-known'
-import { Card, Empty, Time } from '@/ui'
+import { Card, Empty, Time, queryView, stampsOf } from '@/ui'
 import { homeQueries } from './queries'
-import { queryView, stampsOf } from './state'
 
 const NONE = {} as const
 const POLLS_SHOWN = 5

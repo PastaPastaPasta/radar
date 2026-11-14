@@ -5,6 +5,9 @@ export type DisplayUnit = 'DASH' | 'mDASH' | 'uDASH' | 'duffs'
 export const DUFFS_PER_DASH = 100_000_000n
 export const CREDITS_PER_DASH = 100_000_000_000n
 
+/** Credits as a number of DASH, for charts and sentences. */
+export const creditsToDash = (credits: bigint): number => Number(credits) / Number(CREDITS_PER_DASH)
+
 /** Decimal places between a base unit (duffs or credits) and each display unit. */
 const SCALE: Record<'duffs' | 'credits', Record<DisplayUnit, number>> = {
   duffs: { DASH: 8, mDASH: 5, uDASH: 2, duffs: 0 },

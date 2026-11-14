@@ -1,6 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
-import { PageFrame, PageLink } from '@/features/entity'
+import { PageFrame, PageLink, useNetwork } from '@/features/entity'
+import { linkOutUrl } from '@/lib/linkouts'
 import { Card } from '@/ui'
 import { THIRD_PARTY } from './third-party'
 
@@ -22,6 +23,9 @@ function Out({ href, children }: { href: string; children: ReactNode }) {
 /** What Radar can and can’t prove, where to act, and what it remembers. Static: it reads nothing from any source. */
 export function AboutPage() {
   const { t } = useLingui()
+  const net = useNetwork()
+  const bridge = linkOutUrl({ app: 'bridge', action: 'token', id: '', net })
+  const gov = linkOutUrl({ app: 'gov', action: 'masternodes', net })
   return (
     <PageFrame
       path="/about"
@@ -64,8 +68,8 @@ export function AboutPage() {
             {t`Radar only reads. To top up an identity, register a name, or work with a token, a contract or a Platform address, use Bridge. To vote on a proposal or as a masternode, use Governance. Each link opens in a new tab and carries the network you were looking at.`}
           </p>
           <p className="flex flex-wrap gap-4">
-            <Out href="https://bridge.dashhq.org/">{t`Bridge`}</Out>
-            <Out href="https://gov.dashhq.org/">{t`Governance`}</Out>
+            {bridge ? <Out href={bridge}>{t`Bridge`}</Out> : null}
+            {gov ? <Out href={gov}>{t`Governance`}</Out> : null}
           </p>
         </div>
       </Card>

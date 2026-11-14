@@ -19,7 +19,7 @@ export interface SegFilterProps {
 
 export function SegFilter({ label, options, value, onChange }: SegFilterProps) {
   return (
-    <div className="dh-seg" role="group" aria-label={label}>
+    <div className="dh-seg rx-seg" role="group" aria-label={label}>
       {options.map((o) => (
         <button
           key={o.id}

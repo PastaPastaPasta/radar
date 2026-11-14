@@ -85,7 +85,7 @@ export function OverviewTab({ token }: { token: TokenView }) {
               ) : status.data?.data?.paused ? (
                 <Badge tone="warning">{t`Paused`}</Badge>
               ) : (
-                <Badge tone="success">{t`Active`}</Badge>
+                <Badge tone="success">{t({ message: 'Active', context: 'token status' })}</Badge>
               ),
             },
             {

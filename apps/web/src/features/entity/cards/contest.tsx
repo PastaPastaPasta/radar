@@ -48,7 +48,7 @@ export function ContestHoverCard({ id }: { id: string }) {
         : winner
           ? t`Finished`
           : contenders.length > 0
-            ? t`Active`
+            ? t({ message: 'Active', context: 'contest status' })
             : undefined
   if (status === undefined) {
     return (

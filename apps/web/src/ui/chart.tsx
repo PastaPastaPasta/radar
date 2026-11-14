@@ -43,7 +43,14 @@ export function Chart({ option, height, label, table, group, loading }: ChartPro
           {shown ? t`Hide table` : t`Show as a table`}
         </button>
       </figcaption>
-      <div id={tableId} className={shown ? 'rx-chart__table' : 'dh-sr'}>
+      {/* A scroll box a keyboard can reach: the table scrolls sideways when it is wider than the card. */}
+      <div
+        id={tableId}
+        className={shown ? 'rx-chart__table' : 'dh-sr'}
+        role={shown ? 'region' : undefined}
+        aria-label={shown ? label : undefined}
+        tabIndex={shown ? 0 : undefined}
+      >
         <table className="dh-table dh-table--compact">
           <caption className="dh-sr">{label}</caption>
           <thead>

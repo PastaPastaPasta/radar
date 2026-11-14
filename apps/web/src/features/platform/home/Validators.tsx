@@ -4,8 +4,7 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeQuorum } from '@/data/pe/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, Stat, Stats } from '@/ui'
-import { queryView, stampsOf } from './state'
+import { Badge, Card, Empty, Stat, Stats, queryView, stampsOf } from '@/ui'
 
 const QUORUMS_SHOWN = 6
 
@@ -57,7 +56,11 @@ export function Validators({ active }: { active: boolean }) {
       >
         <Stats>
           <Stat label={t`Total`} value={count(all, total.isError)} layer="platform" />
-          <Stat label={t`Active`} value={count(up, live.isError)} layer="platform" />
+          <Stat
+            label={t({ message: 'Active', context: 'count of active validators' })}
+            value={count(up, live.isError)}
+            layer="platform"
+          />
           <Stat label={t`Banned`} value={count(down, banned.isError)} layer="platform" />
           <Stat
             label={t`Inactive`}

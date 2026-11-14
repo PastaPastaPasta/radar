@@ -1,3 +1,4 @@
+import { registerDiagnosticsOpener } from '@/ui/diagnostics'
 import { getDevFlags } from './dev-flags'
 import { installLabelOverlay } from './labels'
 import { closePanel, openDiagnostics, openProofList, panelsState, setPanelLoader } from './panels'
@@ -41,11 +42,13 @@ export function installYou(loaders: {
   setPanelLoader('proof', loaders.proof)
   setPanelLoader('diagnostics', loaders.diagnostics)
   setUpdateLoader(loaders.update)
+  const unregisterOpener = registerDiagnosticsOpener(openDiagnostics)
   const removeLabels = installLabelOverlay()
   document.addEventListener('keydown', onKey)
   return () => {
     document.removeEventListener('keydown', onKey)
     removeLabels()
+    unregisterOpener()
     setPanelLoader('proof', undefined)
     setPanelLoader('diagnostics', undefined)
     setUpdateLoader(undefined)

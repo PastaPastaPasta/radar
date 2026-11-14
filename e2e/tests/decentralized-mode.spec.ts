@@ -86,9 +86,7 @@ async function pastEveryPoll(page: Page): Promise<void> {
 test.describe('Decentralized only mode: every route', () => {
   for (const route of ROUTE_CASES) {
     for (const net of casesNets(route)) {
-      const title = route.built
-        ? `asks no hosted backend and shows ${SHOWS[route.decentralized]}`
-        : 'asks no hosted backend and says what will be here'
+      const title = `asks no hosted backend and shows ${SHOWS[route.decentralized]}`
       test(`${net} ${route.path} ${title} @X-05 @X-09 @PE-28 @HY-19`, async ({ page }) => {
         await page.clock.install()
         const requests = watchRequests(page)
@@ -104,18 +102,13 @@ test.describe('Decentralized only mode: every route', () => {
         await expect(hostedStamps(page)).toHaveCount(0)
         expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
 
-        if (route.built) {
-          await expect(page.getByText('This page is on its way')).toHaveCount(0)
-          if (route.data)
-            await expect(page.locator(route.data).locator('visible=true').first()).toBeVisible()
-          if (route.decentralized === 'data') await expect(unavailable(page)).toHaveCount(0)
-          else await expect(unavailable(page).first()).toBeVisible()
-          if (route.decentralized === 'unavailable') await expect(unavailable(page)).toHaveCount(1)
-          if (route.decentralized !== 'data' || A11Y.has(route.path)) await expectAccessible(page)
-          await pastEveryPoll(page)
-        } else {
-          await expect(page.getByText('This page is on its way')).toBeVisible()
-        }
+        if (route.data)
+          await expect(page.locator(route.data).locator('visible=true').first()).toBeVisible()
+        if (route.decentralized === 'data') await expect(unavailable(page)).toHaveCount(0)
+        else await expect(unavailable(page).first()).toBeVisible()
+        if (route.decentralized === 'unavailable') await expect(unavailable(page)).toHaveCount(1)
+        if (route.decentralized !== 'data' || A11Y.has(route.path)) await expectAccessible(page)
+        await pastEveryPoll(page)
         expect(requests.hosted, 'requests to a hosted backend').toEqual([])
         expect(requests.elsewhere, 'requests to a host the mode does not list').toEqual([])
       })

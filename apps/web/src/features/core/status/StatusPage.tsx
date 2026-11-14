@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useAllSourceHealth, useDecentralizedOnly } from '@/data/health'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
-import { LiveDot } from '@/ui'
+import { LiveDot, openDiagnosticsDrawer } from '@/ui'
 import { BudgetCard } from './BudgetCard'
 import { CoreCard } from './CoreCard'
 import { PlatformCard } from './PlatformCard'
@@ -54,6 +54,17 @@ export function StatusPage() {
         <Link to="/internals" className="rx-go whitespace-normal">
           {t`Network internals: peers, mempool pressure, versions and history`}
         </Link>
+      </p>
+
+      <p>
+        <button
+          type="button"
+          className="dh-btn dh-btn--link text-start"
+          data-open-diagnostics
+          onClick={openDiagnosticsDrawer}
+        >
+          {t`Diagnostics: the requests this tab made and how each one went`}
+        </button>
       </p>
 
       <CoreCard tip={tip} chainLock={chainLock} chain={chain} />

@@ -66,7 +66,14 @@ function IdentityCreatePanel({ body }: PanelProps) {
   const { t } = useLingui()
   return (
     <>
-      <Facts items={[{ label: t`Funded by`, value: <Funding proof={body.assetLockProof} /> }]} />
+      <Facts
+        items={[
+          {
+            label: t({ message: 'Funded by', context: 'transition funding' }),
+            value: <Funding proof={body.assetLockProof} />,
+          },
+        ]}
+      />
       <Section title={t`Keys`}>
         <KeysTable keys={records(body.publicKeys)} caption={t`Keys of the new identity`} />
       </Section>
@@ -82,7 +89,10 @@ function TopUpPanel({ body }: PanelProps) {
       <Facts
         items={[
           { label: t`Identity`, value: <Who id={body.identityId} /> },
-          { label: t`Funded by`, value: <Funding proof={body.assetLockProof} /> },
+          {
+            label: t({ message: 'Funded by', context: 'transition funding' }),
+            value: <Funding proof={body.assetLockProof} />,
+          },
         ]}
       />
       <Fields value={body} label={t`Fields as sent`} />
@@ -135,7 +145,10 @@ function IdentityWithdrawalPanel({ body, net }: PanelProps) {
               ),
           },
           { label: t`Core fee per byte`, value: num(body.coreFeePerByte) ?? '—' },
-          { label: t`Pooling`, value: str(body.pooling) ?? '—' },
+          {
+            label: t({ message: 'Pooling', context: 'withdrawal pooling' }),
+            value: str(body.pooling) ?? '—',
+          },
         ]}
       />
       <Fields value={body} label={t`Fields as sent`} />
@@ -226,10 +239,17 @@ function AddressPanel({ body, net }: PanelProps) {
   if (body.identityId !== undefined)
     facts.push({ label: t`Identity`, value: <Who id={body.identityId} /> })
   if (body.assetLockProof !== undefined)
-    facts.push({ label: t`Funded by`, value: <Funding proof={body.assetLockProof} /> })
+    facts.push({
+      label: t({ message: 'Funded by', context: 'transition funding' }),
+      value: <Funding proof={body.assetLockProof} />,
+    })
   if (body.coreFeePerByte !== undefined)
     facts.push({ label: t`Core fee per byte`, value: num(body.coreFeePerByte) ?? '—' })
-  if (body.pooling !== undefined) facts.push({ label: t`Pooling`, value: str(body.pooling) ?? '—' })
+  if (body.pooling !== undefined)
+    facts.push({
+      label: t({ message: 'Pooling', context: 'withdrawal pooling' }),
+      value: str(body.pooling) ?? '—',
+    })
   if (body.outputScript !== undefined)
     facts.push({
       label: t`Pays out to`,
@@ -272,7 +292,10 @@ function ShieldedPanel({ body, net }: PanelProps) {
   if (body.outputAddress !== undefined)
     facts.push({ label: t`Output address`, value: <Address hex={body.outputAddress} net={net} /> })
   if (body.assetLockProof !== undefined)
-    facts.push({ label: t`Funded by`, value: <Funding proof={body.assetLockProof} /> })
+    facts.push({
+      label: t({ message: 'Funded by', context: 'transition funding' }),
+      value: <Funding proof={body.assetLockProof} />,
+    })
   if (body.identityId !== undefined)
     facts.push({ label: t`Identity`, value: <Who id={body.identityId} /> })
   if (body.outputScript !== undefined)

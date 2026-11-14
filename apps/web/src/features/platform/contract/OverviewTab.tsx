@@ -53,7 +53,11 @@ export function OverviewTab({
                 : []),
             ]}
           />
-          {record.description ? <p className="mt-3 text-ink-2">{record.description}</p> : null}
+          {record.description ? (
+            <p className="mt-3 text-ink-2" translate="no">
+              {record.description}
+            </p>
+          ) : null}
         </Card>
       ) : null}
     </div>

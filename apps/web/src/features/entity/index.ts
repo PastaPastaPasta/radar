@@ -5,8 +5,6 @@ export type { EntitySearch } from './hrefs'
 export { networkName, useNetwork, withNetwork } from './network'
 export { PageLink } from './PageLink'
 export type { PageLinkProps } from './PageLink'
-export { RoutePlaceholder } from './RoutePlaceholder'
-export type { RoutePlaceholderProps } from './RoutePlaceholder'
 export { useDocumentTitle } from './document-title'
 export { registerEntityHoverCards } from './register'
 export {

@@ -15,7 +15,6 @@ export const netC: RouteCase[] = perNet(({ id }) => {
   const partial = (path: string): RouteCase => ({
     path,
     h1: MN_H1,
-    built: true,
     decentralized: 'partial',
   })
   return [
@@ -24,6 +23,6 @@ export const netC: RouteCase[] = perNet(({ id }) => {
     partial(`/mn/${regular}?tab=history`),
     partial(`/mn/${regular}?tab=payments`),
     partial(`/mn/${regular}?tab=network`),
-    { path: `/mn/${'0'.repeat(64)}`, h1: 'Masternode', built: true, decentralized: 'unavailable' },
+    { path: `/mn/${'0'.repeat(64)}`, h1: 'Masternode', decentralized: 'unavailable' },
   ]
 })

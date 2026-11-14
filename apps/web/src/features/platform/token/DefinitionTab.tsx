@@ -148,7 +148,9 @@ export function DefinitionTab({ token }: { token: TokenView }) {
               label: t`History kept for`,
               value: kept.length > 0 ? kept.join(', ') : t`Nothing`,
             },
-            ...(description ? [{ label: t`Description`, value: description }] : []),
+            ...(description
+              ? [{ label: t`Description`, value: <span translate="no">{description}</span> }]
+              : []),
           ]}
         />
       </Card>

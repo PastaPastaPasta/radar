@@ -31,10 +31,6 @@ msgstr "{0, plural, one {# çıktı} other {# çıktı}}"
 msgid "{0} base units"
 msgstr "{0} temel birim"
 
-#. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
-msgid "{0} doesn’t cover devnets."
-msgstr "{0} devnet’leri kapsamaz."
-
 #. placeholder {0}: formatInt(n.value)
 msgid "{0} duffs"
 msgstr "{0} duff"
@@ -121,6 +117,11 @@ msgstr "Paylaşımlı bir masternode’un pay sahibi, ödülünün ödendiği ye
 msgid "About"
 msgstr "Hakkında"
 
+msgctxt "contest status"
+msgid "Active"
+msgstr "Etkin"
+
+msgctxt "token status"
 msgid "Active"
 msgstr "Etkin"
 
@@ -161,9 +162,6 @@ msgstr "Varlık kilidi açma"
 
 msgid "Asset unlocks root"
 msgstr "Varlık kilidi açma kökü"
-
-msgid "Back to Mainnet"
-msgstr "Mainnet’e dön"
 
 msgid "Balance"
 msgstr "Bakiye"
@@ -499,9 +497,6 @@ msgstr "Gruplar"
 msgid "Hard-fork signal"
 msgstr "Hard fork sinyali"
 
-msgid "Hash"
-msgstr "Hash"
-
 msgid "Hide the table"
 msgstr "Tabloyu gizle"
 
@@ -520,9 +515,6 @@ msgstr "Hyphen harcandığını söylüyor ancak geçmişinde hangi işlemin har
 #. placeholder {0}: formatInt(spend.behind ?? 0)
 msgid "Hyphen's index is {0} blocks behind the chain, so it cannot say whether this output has been spent since."
 msgstr "Hyphen’in dizini zincirin {0} blok gerisinde, bu yüzden bu çıktının sonradan harcanıp harcanmadığını söyleyemez."
-
-msgid "ID"
-msgstr "Kimlik"
 
 msgid "Identities"
 msgstr "Kimlikler"
@@ -817,9 +809,6 @@ msgstr "Kayıtlı değil. Boş olabilir ya da hâlâ çekişmeli olabilir."
 msgid "Not specified"
 msgstr "Belirtilmedi"
 
-msgid "Number"
-msgstr "Numara"
-
 msgid "On Platform"
 msgstr "Platform’da"
 
@@ -929,8 +918,8 @@ msgstr "P2P {0}, HTTPS {1}"
 msgid "Page not found"
 msgstr "Sayfa bulunamadı"
 
-msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
-msgstr "Bir durum geçişini hex veya base64 olarak yapıştırarak çözün ve denetleyin. Hiçbir şey imzalanmaz veya gönderilmez."
+msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
+msgstr "Bir durum geçişini hex veya base64 olarak yapıştırarak çözün. Hiçbir şey imzalanmaz veya yayınlanmaz; isteğe bağlı denetim, geçişi deneme amaçlı olarak Platform Explorer’a gönderir."
 
 msgid "Paused"
 msgstr "Duraklatıldı"
@@ -977,9 +966,6 @@ msgstr "Platform’un nabzı: yükseklik, epoch, etkinlik grafikleri, liderler v
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
 
-msgid "Position"
-msgstr "Konum"
-
 msgid "proposal"
 msgstr "teklif"
 
@@ -991,9 +977,6 @@ msgstr "Önerici"
 
 msgid "Protocol"
 msgstr "Protokol"
-
-msgid "ProTx hash"
-msgstr "ProTx hash’i"
 
 msgid "QR reader"
 msgstr "QR okuyucu"
@@ -1045,9 +1028,6 @@ msgstr "Ham veri"
 
 msgid "Raw payload"
 msgstr "Ham yük"
-
-msgid "Read from"
-msgstr "Okunan kaynak"
 
 msgid "Reason"
 msgstr "Neden"
@@ -1265,17 +1245,11 @@ msgstr "Sahip, bir masternode’un operatör anahtarını, oylama anahtarını v
 msgid "the Platform Explorer price feed"
 msgstr "Platform Explorer fiyat akışı"
 
-msgid "The Platform SDK"
-msgstr "Platform SDK"
-
 msgid "the Platform SDK, proof-checked"
 msgstr "Platform SDK (kanıtlarla doğrulanır)"
 
 msgid "The Platform validator set: evonodes with their Platform record, shown on the masternode list."
 msgstr "Platform doğrulayıcı kümesi: Platform kayıtlarıyla evonode’lar; masternode listesinde gösterilir."
-
-msgid "The price feed"
-msgstr "Fiyat akışı"
 
 msgid "The public API behind the node census and masternode pages, with examples."
 msgstr "Düğüm sayımı ve masternode sayfalarının arkasındaki herkese açık API, örneklerle."
@@ -1307,9 +1281,6 @@ msgstr "Bu {record}, {network} üzerinde."
 msgid "This address holds nothing on Platform."
 msgstr "Bu adres Platform’da hiçbir şey tutmuyor."
 
-msgid "This browser"
-msgstr "Bu tarayıcı"
-
 msgid "This is not a contract ID."
 msgstr "Bu bir sözleşme kimliği değil."
 
@@ -1327,13 +1298,6 @@ msgstr "Bu bir dönem numarası değil."
 
 msgid "This is not an identity ID."
 msgstr "Bu bir kimlik ID’si değil."
-
-msgid "This page is on its way"
-msgstr "Bu sayfa yolda"
-
-#. placeholder {0}: listSources(page.sources)
-msgid "This page reads from {0}. Switch to Mainnet or Testnet to see it."
-msgstr "Bu sayfa {0} kaynaklarından okur. Görmek için Mainnet’e veya Testnet’e geçin."
 
 msgid "Threshold signature"
 msgstr "Eşik imzası"
@@ -1374,9 +1338,6 @@ msgstr "İşlem"
 #. placeholder {0}: txid.slice(0, 8)
 msgid "Transaction {0}…"
 msgstr "İşlem {0}…"
-
-msgid "Transaction ID"
-msgstr "İşlem kimliği"
 
 msgid "Transactions"
 msgstr "İşlemler"
@@ -1487,9 +1448,6 @@ msgstr "Radar’ın neyi kanıtlayıp neyi kanıtlayamadığı, gördüklerinize
 
 msgid "Where the Core 24 activation stands: threshold, miner signalling window by window and masternode readiness."
 msgstr "Core 24 etkinleştirmesinin durumu: eşik, madencilerin pencere pencere sinyali ve masternode hazırlığı."
-
-msgid "Where the data comes from"
-msgstr "Verilerin kaynağı"
 
 msgid "Where the value went"
 msgstr "Değerin gittiği yer"

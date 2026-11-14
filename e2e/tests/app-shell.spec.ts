@@ -3,6 +3,7 @@ import { lowContrastText } from '../helpers/contrast'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
+import { fetchesNothing, sourcesOf, type SiteSource } from '../helpers/site-map'
 
 const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
 const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
@@ -10,23 +11,16 @@ const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
 test.describe('routes', () => {
   for (const route of ROUTE_CASES) {
     for (const net of casesNets(route)) {
-      const what = route.built
-        ? 'shows its page, with no error'
-        : 'says what will be here and where the data comes from'
-      test(`${net} ${route.path} ${what} and fits the width @X-08 @X-09`, async ({ page }) => {
+      test(`${net} ${route.path} shows its page, with no error, and fits the width @X-08 @X-09`, async ({
+        page,
+      }) => {
         await page.goto(withQuery(route.path, networkQuery(net)))
 
         await expect(page.getByRole('heading', { level: 1, name: route.h1 })).toBeVisible()
         await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
         await settled(page)
 
-        if (route.built) {
-          await expect(page.getByText('This page is on its way')).toHaveCount(0)
-          await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
-        } else {
-          await expect(page.getByText('This page is on its way')).toBeVisible()
-          await expect(page.getByText('Read from')).toBeVisible()
-        }
+        await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
         expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
       })
     }
@@ -476,4 +470,86 @@ test.describe('legibility', () => {
     await expect(icon).toBeVisible()
     expect((await icon.boundingBox())?.width).toBeGreaterThanOrEqual(16)
   })
+})
+
+/**
+ * What a page that reads a backend does when that backend is gone: it still draws its frame, nothing keeps loading,
+ * no figure is shown as coming from the missing source, and the page either says what is missing or shows what the
+ * other sources gave. The fixture build fails the named source from the start.
+ */
+const BACKENDS: SiteSource[] = ['radar', 'pe', 'hyphen', 'sdk', 'dapi']
+
+/** Pages that read a backend and do not yet say it is gone; the later design rounds own them (notes/INT.md). */
+const SILENT_WHEN_DOWN = new Set(['/mempool|dapi'])
+
+/** Wording a page uses for a missing figure, where there is no alert to find. */
+const MISSING_WORDS =
+  /did not answer|didn.t answer|isn.t answering|couldn.t|can.t be reached|not available/i
+
+const SAYS_SOMETHING_IS_MISSING = [
+  '[role="alert"]',
+  '.rx-empty--error',
+  '.rx-errrow',
+  '.rx-down__msg',
+  '[data-unavailable]',
+  '[data-state="down"]',
+  '[data-state="stale"]',
+  '[data-proved="false"]',
+  '[data-fallback]',
+  '[data-balance-state="unknown"]',
+].join(', ')
+
+test.describe('a backend that is down', () => {
+  test.use({ allowFixtureMisses: true })
+
+  for (const route of ROUTE_CASES) {
+    for (const backend of BACKENDS.filter(
+      (b) => !fetchesNothing(route.path) && sourcesOf(route.path).includes(b),
+    )) {
+      const net = casesNets(route)[0]!
+      test(`${net} ${route.path} with ${backend} down shows what is left and says what is missing @X-09`, async ({
+        page,
+      }, testInfo) => {
+        test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the page')
+        test.skip(SILENT_WHEN_DOWN.has(`${route.path.split('?')[0]}|${backend}`), 'listed in notes')
+        const errors: string[] = []
+        page.on('pageerror', (e) => errors.push(e.message))
+        await page.addInitScript(
+          (down) => sessionStorage.setItem('radar.fixture.down', JSON.stringify(down)),
+          [backend],
+        )
+        await page.goto(withQuery(route.path, networkQuery(net)))
+
+        await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
+        const frame = page.getByRole('heading', { level: 1 }).or(page.getByRole('alert')).first()
+        await expect(frame, 'neither the page nor a message about it').toBeVisible({
+          timeout: 20_000,
+        })
+        await expect(
+          page.locator('[data-skeleton], [aria-busy="true"]'),
+          'something is still loading',
+        ).toHaveCount(0, { timeout: 30_000 })
+        await expect(
+          page.locator(
+            `main .rx-sources [data-source="${backend}"]:not([data-state="down"], [data-state="stale"])`,
+          ),
+          `a figure is shown as served by ${backend}, which is down`,
+        ).toHaveCount(0)
+        await expect
+          .poll(
+            async () =>
+              (await page
+                .locator(`${SAYS_SOMETHING_IS_MISSING}, main .rx-sources [data-source]`)
+                .count()) + (MISSING_WORDS.test(await page.locator('main').innerText()) ? 1 : 0),
+            {
+              message: `the page neither says ${backend} is missing nor shows another source`,
+              timeout: 15_000,
+            },
+          )
+          .toBeGreaterThan(0)
+        expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
+        expect(errors, 'uncaught errors').toEqual([])
+      })
+    }
+  }
 })

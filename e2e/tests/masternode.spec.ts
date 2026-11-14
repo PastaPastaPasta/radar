@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
@@ -509,7 +508,6 @@ test.describe('search leads somewhere real', () => {
 
     await expect(page).toHaveURL(new RegExp(`/mn/${MAINNET.regular}$`))
     await expect(page.locator('[data-masternode-header]')).toContainText('85.209.241.228')
-    await expect(page.getByText('This page is on its way')).toHaveCount(0)
   })
 
   test('a testnet masternode suggestion opens its page on testnet @HY-14 @HY-19', async ({
@@ -535,20 +533,7 @@ test.describe('search leads somewhere real', () => {
     await expect(dialog.getByRole('option', { name: /Masternode/ })).toHaveCount(0)
   })
 
-  /** The routes search still withholds, read from `offered.ts` so this test follows each merge. */
-  const unfinished = new Set(
-    [
-      ...readFileSync(
-        new URL('../../apps/web/src/features/search/offered.ts', import.meta.url),
-        'utf8',
-      )
-        .split('UNFINISHED_ROUTES')[1]!
-        .split('])')[0]!
-        .matchAll(/'([^']+)'/g),
-    ].map((m) => m[1]),
-  )
-
-  test('the palette lists only pages that are built @HY-14', async ({ page }) => {
+  test('the palette lists the pages that are built @HY-14', async ({ page }) => {
     const dialog = await openPalette(page)
 
     await expect(dialog.getByRole('option', { name: /Blocks/ })).toBeVisible()
@@ -558,9 +543,7 @@ test.describe('search leads somewhere real', () => {
       [/^Nodes/, '/nodes'],
     ]
     for (const [name, path] of pages) {
-      const option = dialog.getByRole('option', { name })
-      if (unfinished.has(path)) await expect(option, path).toHaveCount(0)
-      else await expect(option.first(), path).toBeVisible()
+      await expect(dialog.getByRole('option', { name }).first(), path).toBeVisible()
     }
   })
 })

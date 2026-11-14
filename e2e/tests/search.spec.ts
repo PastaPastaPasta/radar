@@ -2,7 +2,6 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
-import { routeBuilt } from '../routes/uni-s'
 
 const MAINNET_ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const MAINNET_P2SH = '7iRPy8FEHBzbChrktsG85YbDZ3SuiCxsNq'
@@ -23,10 +22,8 @@ interface Sample {
   network?: 'testnet'
   looksLike: RegExp
   result?: { name: RegExp; href: string }
-  /** A reading whose page is not built yet: search must not offer it. */
+  /** A reading search must not offer for this input (a Platform height past the tip). */
   withheld?: RegExp
-  /** A destination whose page is not built yet: no link may lead there. */
-  withheldRoute?: { route: string; prefix: string }
 }
 
 const samples: Sample[] = [
@@ -42,6 +39,7 @@ const samples: Sample[] = [
     network: 'testnet',
     looksLike: /a number/,
     result: { name: /Core block 1,500,000/, href: '/block/1500000?network=testnet' },
+    withheld: /Platform block|Epoch/,
   },
   {
     label: 'a block hash',
@@ -160,12 +158,8 @@ test.describe('search page', () => {
       }
       if (s.withheld) {
         await expect(page.locator('[data-classified]')).toBeVisible()
-        await expect(page.getByRole('link', { name: s.withheld })).toHaveCount(0)
-      }
-      if (s.withheldRoute && !routeBuilt(s.withheldRoute.route)) {
-        await expect(page.locator('[data-classified]')).toBeVisible()
         await settled(page)
-        await expect(page.locator(`a[href^="${s.withheldRoute.prefix}"]`)).toHaveCount(0)
+        await expect(page.getByRole('link', { name: s.withheld })).toHaveCount(0)
       }
     })
   }
@@ -342,6 +336,7 @@ test.describe('palette', () => {
 
     await dialog.getByRole('combobox').fill('2569992')
     await expect(dialog.getByRole('option', { name: /Core block 2,569,992/ })).toBeVisible()
+    await expect(dialog.getByRole('option', { name: /Platform block|Epoch/ })).toHaveCount(0)
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('Enter')
 

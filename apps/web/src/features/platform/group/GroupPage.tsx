@@ -234,7 +234,9 @@ function Actions({
                 status: id === 'active' ? undefined : id,
               })}
             >
-              {id === 'active' ? t`Active` : t`Closed`}
+              {id === 'active'
+                ? t({ message: 'Active', context: 'group actions filter' })
+                : t`Closed`}
             </Link>
           ))}
         </nav>

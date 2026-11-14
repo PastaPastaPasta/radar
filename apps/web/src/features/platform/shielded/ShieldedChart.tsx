@@ -8,14 +8,11 @@ import { peQueries } from '@/data/pe/queries'
 import { useNetwork } from '@/features/entity'
 import { formatDate, formatNumber } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { CREDITS_PER_DASH } from '@/lib/units'
-import { Card, Chart, Empty, SegFilter, Unavailable } from '@/ui'
-import { queryView, stampsOf } from '../quorums/state'
+import { creditsToDash as dash } from '@/lib/units'
+import { Card, Chart, Empty, SegFilter, Unavailable, queryView, stampsOf } from '@/ui'
 
 const RANGES = ['24h', '3d', '1w', '1m'] as const
 type Range = (typeof RANGES)[number]
-
-const dash = (credits: bigint): number => Number(credits) / Number(CREDITS_PER_DASH)
 
 interface Point {
   t: number

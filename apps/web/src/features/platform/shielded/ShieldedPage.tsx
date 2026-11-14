@@ -23,9 +23,11 @@ import {
   Skeleton,
   Stat,
   Stats,
+  queryView,
+  stampsOf,
+  useAfterIdle,
 } from '@/ui'
 import { useLookupForm } from '../quorums/lookup-form'
-import { queryView, stampsOf, useAfterIdle } from '../quorums/state'
 import { ShieldedChart } from './ShieldedChart'
 
 const NONE = {} as const

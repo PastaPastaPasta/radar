@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { formatInt } from '@/lib/format'
-import { Card, Chart, Empty, Skeleton } from '@/ui'
+import { Card, Chart, Empty, Skeleton, stampsOf } from '@/ui'
 import { sizeOption, type Series } from './census-charts'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
@@ -10,7 +10,7 @@ import { dayMonth, dayMonthTime } from './census-format'
 import { radarScope, reachShare, total } from './census-math'
 import { ScrollRegion, ShareBar, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
-import { loadState, stampsOf, type SectionProps } from './shared'
+import { loadState, type SectionProps } from './shared'
 
 export function ReachCard({ scope, summary, census }: SectionProps & { census: Census }) {
   const { t, i18n } = useLingui()
