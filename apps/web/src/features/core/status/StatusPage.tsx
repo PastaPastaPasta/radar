@@ -9,7 +9,8 @@ import { BudgetCard } from './BudgetCard'
 import { CoreCard } from './CoreCard'
 import { PlatformCard } from './PlatformCard'
 import { useProbes } from './probes'
-import { overallState, sourceRows } from './source-rows'
+import { SOURCE_ROLE } from './source-detail'
+import { laggingSources, overallState, sourceRows } from './source-rows'
 import { SourcesCard } from './SourcesCard'
 import { statusQueries } from './queries'
 
@@ -27,6 +28,10 @@ export function StatusPage() {
   const decentralized = useDecentralizedOnly()
   const rows = sourceRows(net, health, decentralized)
   const overall = overallState(rows)
+
+  const behind = laggingSources(rows)
+    .map((source) => SOURCE_ROLE[source]().name)
+    .join(', ')
 
   const claim = {
     ok: decentralized ? t`DAPI and the Platform SDK are answering` : t`Every source is answering`,
@@ -49,6 +54,7 @@ export function StatusPage() {
             ? t`Hosted sources are off in Decentralized only mode.`
             : null}
           {overall === 'ok' && !decentralized ? t`Nothing is slow, behind or down.` : null}
+          {behind ? t`Behind the chain: ${behind}.` : null}{' '}
           {overall === 'attention' || overall === 'down' ? t`The rest still work.` : null}
           {overall === 'checking' ? t`Checking the sources…` : null}
         </span>

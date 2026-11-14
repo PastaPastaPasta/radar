@@ -271,6 +271,7 @@ describe('Status page', () => {
     const region = await screen.findByRole('status')
     await waitFor(() => expect(region.getAttribute('data-overall')).toBe('attention'))
     expect(region).toHaveTextContent('Some sources are slow or behind')
+    expect(region).toHaveTextContent(/Behind the chain: .*Hyphen/)
     act(() => {
       healthRegistry.report('testnet', 'dapi', { ok: true, latencyMs: 80 })
       for (let i = 0; i < 3; i++) {
