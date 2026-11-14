@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
-import { PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
+import { PageFrame, PageLink, networkName, useNetwork } from '@/features/entity'
 import type { DevnetConfig } from '@/lib/network'
 import { Badge, Card, SourceModeSwitch, useSourceMode } from '@/ui'
 import { EVONODES, backends, type Backend, type BackendId } from './backends'
@@ -130,20 +130,13 @@ export function SourcesPage({ devnets }: { devnets?: readonly DevnetConfig[] }) 
     devnets,
   })
 
-  useDocumentTitle(t`Data sources`)
-
   return (
-    <article data-page="/sources" className="grid gap-6">
-      <header className="grid gap-2">
-        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {t`Tools`}
-        </p>
-        <h1 className="text-3xl font-semibold">{t`Data sources`}</h1>
-        <p className="max-w-2xl text-[var(--dh-ink-2)]">
-          {t`Every backend Radar can contact, who runs it and whether it is in use on ${network}. Each figure in Radar names the one it came from.`}
-        </p>
-      </header>
-
+    <PageFrame
+      path="/sources"
+      title={t`Data sources`}
+      eyebrow={t`Tools`}
+      lede={t`Every backend Radar can contact, who runs it and whether it is in use on ${network}. Each figure in Radar names the one it came from.`}
+    >
       <Card id="mode" title={t`Which sources Radar may use`}>
         <div className="grid gap-2">
           <SourceModeSwitch />
@@ -172,6 +165,6 @@ export function SourcesPage({ devnets }: { devnets?: readonly DevnetConfig[] }) 
           {t`Status: how each source is answering right now`}
         </PageLink>
       </p>
-    </article>
+    </PageFrame>
   )
 }

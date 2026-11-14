@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState, useSyncExternalStore } from 'react'
 import { rateQueries } from '@/data/rate/queries'
 import { stampOf } from '@/data/envelope'
-import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
+import { PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { LanguageSelect } from '@/i18n/LanguageSelect'
 import { readUtcPreference } from '@/lib/format'
 import {
@@ -50,20 +50,13 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const unit = prefs.unit === 'USD' && !priced ? 'DASH' : prefs.unit
   const unitName = unitLabel(denomination(unit))
 
-  useDocumentTitle(t`Settings`)
-
   return (
-    <article data-page="/settings" className="grid gap-6">
-      <header className="grid gap-2">
-        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {t`You`}
-        </p>
-        <h1 className="text-3xl font-semibold">{t`Settings`}</h1>
-        <p className="max-w-2xl text-[var(--dh-ink-2)]">
-          {t`These choices stay in this browser. Radar never sends them anywhere.`}
-        </p>
-      </header>
-
+    <PageFrame
+      path="/settings"
+      title={t`Settings`}
+      eyebrow={t`You`}
+      lede={t`These choices stay in this browser. Radar never sends them anywhere.`}
+    >
       <Card id="units" title={t`Amounts`}>
         <div className="grid gap-5">
           <div className="grid gap-2">
@@ -161,6 +154,6 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
       <DeveloperCard />
       <LabelsCard />
       <DevnetSection devnets={devnets} />
-    </article>
+    </PageFrame>
   )
 }
