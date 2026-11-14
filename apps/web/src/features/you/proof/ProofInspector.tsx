@@ -11,6 +11,7 @@ import { copyText } from '@/ui/clipboard'
 import { closePanel, openProofFor, openProofList, panelsState, subscribePanels } from '../panels'
 import { Sheet } from '../Sheet'
 import { downloadText, evidenceFile, evidenceName, evidenceText } from './evidence'
+import { figureOf } from './figures'
 
 const HEX_PREVIEW = 192
 
@@ -34,6 +35,15 @@ function exportEvidence(records: readonly ProofRecord[], scope: string): void {
   downloadText(evidenceName(scope, now), evidenceText(evidenceFile(records, now, __APP_VERSION__)))
 }
 
+function QuorumHash({ hash }: { hash: string }) {
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2" data-quorum-hash>
+      <code className="text-xs break-all">{hash}</code>
+      <Copy value={hash} />
+    </span>
+  )
+}
+
 function ProofDetail({ record }: { record: ProofRecord }) {
   const { t } = useLingui()
   const hex = bytesToHex(record.proof.grovedbProof)
@@ -48,6 +58,7 @@ function ProofDetail({ record }: { record: ProofRecord }) {
       </p>
       <KeyValue
         items={[
+          { label: t`Covers`, value: figureOf(record.method) },
           { label: t`Call`, value: <code>{record.method}</code> },
           { label: t`Network`, value: record.net },
           { label: t`Asked`, value: <Time ms={record.recordedAt} mode="both" /> },
@@ -62,7 +73,7 @@ function ProofDetail({ record }: { record: ProofRecord }) {
           { label: t`Protocol version`, value: record.meta.protocolVersion },
           { label: t`Chain`, value: record.meta.chainId },
           { label: t`Quorum type`, value: record.proof.quorumType },
-          { label: t`Quorum`, value: <Copy value={bytesToHex(record.proof.quorumHash)} /> },
+          { label: t`Quorum`, value: <QuorumHash hash={bytesToHex(record.proof.quorumHash)} /> },
           { label: t`Round`, value: record.proof.round },
         ]}
       />
@@ -171,7 +182,7 @@ export function ProofInspector() {
       title={t`Proof inspector`}
       description={
         selected
-          ? t`One figure’s proof, as Radar received it.`
+          ? t`The proof behind “${figureOf(selected.method)}”, as Radar received it.`
           : t`Every proof this tab holds, newest first.`
       }
       actions={
