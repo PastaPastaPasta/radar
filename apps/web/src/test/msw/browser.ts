@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import { setupWorker } from 'msw/browser'
 import { core } from '@/data/core/client'
 import { setDapiTransport } from '@/data/dapi-core'
+import { PROBE_FRAGMENT } from '@/data/http'
 import { sdk, setSdkTransport, type SdkTransport } from '@/data/sdk/client'
 import type { NetworkId } from '@/lib/network'
 import { FixtureDapiTransport } from './dapi-transport'
@@ -122,9 +123,9 @@ export async function startFixtureWorker(): Promise<void> {
   })
   const refuse = (source: DownSource, pattern: string) =>
     http.all(pattern, ({ request }) => {
-      const { pathname } = new URL(request.url)
-      // A health probe is not a page reading the source.
-      if (!pathname.endsWith('/status')) {
+      const { pathname, hash } = new URL(request.url)
+      // A health probe is not a page reading the source; a page reading /status is.
+      if (hash !== PROBE_FRAGMENT) {
         countRefusal(source === 'pe' && pathname.endsWith('/rate') ? 'rate' : source)
       }
       return HttpResponse.error()

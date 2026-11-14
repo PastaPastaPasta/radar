@@ -36,6 +36,7 @@ function get<S extends z.ZodType, N extends 'throw' | 'null' = 'throw'>(
   opts: {
     signal?: AbortSignal
     notFound?: N
+    probe?: boolean
     height?: (body: z.output<S>) => number | undefined
   } = {},
 ) {
@@ -54,9 +55,11 @@ export const insight = {
     net: NetworkId,
     signal?: AbortSignal,
     referenceHeight?: number,
+    opts: { probe?: boolean } = {},
   ): Promise<Sourced<InsStatus>> {
     const out = await get(net, '/status', InsStatusSchema, {
       signal,
+      probe: opts.probe,
       height: (b) => b.info.blocks,
     })
     if (referenceHeight !== undefined) {

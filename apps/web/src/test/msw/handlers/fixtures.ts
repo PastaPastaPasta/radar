@@ -28,7 +28,10 @@ const PE_ORIGINS = ['https://api.pe.dashhq.org', 'https://api.testnet.pe.dashhq.
 
 function serve(method: 'GET' | 'POST') {
   return async ({ request }: { request: Request }): Promise<Response> => {
-    const url = request.url
+    // A probe's fragment tags the request; recordings are keyed without it.
+    const parsed = new URL(request.url)
+    parsed.hash = ''
+    const url = parsed.toString()
     if (method === 'GET' && new URL(url).pathname.endsWith('/stream')) {
       const stream = await loadStreamFixture(url)
       if (stream) {

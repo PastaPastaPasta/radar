@@ -34,12 +34,17 @@ export interface FetchSourcedRequest<S extends z.ZodType, N extends 'throw' | 'n
   ) => { kind: SourceErrorKind; detail?: string } | undefined
   method?: 'GET' | 'POST'
   body?: unknown
+  /** A freshness probe, not a page reading the source. Tagged in the request URL's fragment, which no server sees. */
+  probe?: boolean
   /** Defaults to `fetchedAt`; returning undefined also means `fetchedAt`. */
   asOf?: (body: z.output<S>, res: Response, fetchedAt: number) => number | undefined
   height?: (body: z.output<S>) => number | undefined
 }
 
 export const DEFAULT_TIMEOUT_MS = 10_000
+
+/** Fragment that marks a health probe's request for the fixture layer; it is never sent over the wire. */
+export const PROBE_FRAGMENT = '#radar-probe'
 
 function sourceName(source: SourceId): string {
   switch (source) {
@@ -246,7 +251,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   try {
     let res: Response
     try {
-      res = await fetch(resolveUrl(url), {
+      res = await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
         method: req.method ?? 'GET',
         headers: {
           accept: 'application/json',

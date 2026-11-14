@@ -5,6 +5,7 @@ import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
 import { healthRegistry } from '@/data/health'
 import { healthQueries } from '@/data/health-queries'
+import { PROBE_FRAGMENT } from '@/data/http'
 import { radar } from '@/data/radar/client'
 import { rate } from '@/data/rate/client'
 
@@ -46,5 +47,33 @@ describe('hyphen probe lag', () => {
     expect(healthRegistry.get('testnet', 'hyphen').lag).toBeUndefined()
     // Nothing to measure against, so the state decided before stands.
     expect(healthRegistry.get('testnet', 'hyphen').state).toBe('stale')
+  })
+})
+
+describe('probe tagging', () => {
+  const seen = async (read: () => Promise<unknown>): Promise<string[]> => {
+    const real = globalThis.fetch
+    const urls: string[] = []
+    globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+      if (String(input).includes('/status')) urls.push(String(input))
+      return real(input, init)
+    }) as typeof fetch
+    try {
+      await read()
+    } finally {
+      globalThis.fetch = real
+    }
+    return urls
+  }
+
+  it('marks the requests a health probe makes, and only those', async () => {
+    const c = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    const probes = await seen(() => c.fetchQuery(healthQueries.radar('mainnet')))
+    expect(probes.length).toBeGreaterThan(0)
+    expect(probes.every((u) => u.endsWith(PROBE_FRAGMENT))).toBe(true)
+
+    const reads = await seen(() => radar.status(undefined, 'mainnet'))
+    expect(reads.length).toBeGreaterThan(0)
+    expect(reads.some((u) => u.includes('#'))).toBe(false)
   })
 })

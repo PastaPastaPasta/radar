@@ -127,6 +127,7 @@ export const hyphen = {
     net: NetworkId,
     signal?: AbortSignal,
     referenceHeight?: number,
+    opts: { probe?: boolean } = {},
   ): Promise<Sourced<HyStatus>> {
     const out = await fetchSourced({
       source: 'hyphen',
@@ -134,6 +135,7 @@ export const hyphen = {
       url: () => `${base(net)}/status`,
       schema: HyStatusSchema,
       signal,
+      probe: opts.probe,
       height: (b) => {
         const heights = Object.values(b.indices).map((i) => i.indexedHeight)
         return heights.length > 0 ? Math.min(...heights) : undefined
