@@ -26,7 +26,8 @@ import './map.css'
 
 const MapView = deferred(() => import('./MapView').then((m) => m.default))
 
-const PANEL_WIDTH = 400
+/** The control panel's width at its widest, and the gap round it: the map's fit leaves this much of its left clear. */
+const PANEL_WIDTH = 388 + 24
 
 const ATTRIBUTION = 'Basemap © Natural Earth · Geolocation by DB-IP (CC BY 4.0)'
 
@@ -133,6 +134,11 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
     if (!el) return
     const measure = () => {
       el.style.setProperty('--rx-map-top', `${el.getBoundingClientRect().top + window.scrollY}px`)
+      // The map runs edge to edge of what the page can show, which leaves out a classic scrollbar.
+      el.style.setProperty(
+        '--rx-sbw',
+        `${Math.max(0, window.innerWidth - document.documentElement.clientWidth)}px`,
+      )
     }
     measure()
     window.addEventListener('resize', measure)
