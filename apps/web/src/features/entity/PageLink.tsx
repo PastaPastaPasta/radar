@@ -10,10 +10,19 @@ export interface PageLinkProps extends AnchorProps {
   hash?: string
   replace?: boolean
   preload?: LinkProps['preload']
+  activeOptions?: LinkProps['activeOptions']
 }
 
 /** A router link for paths known only as strings (site map, nav tables). `network` is retained by the root route. */
-export function PageLink({ to, search, hash, replace, preload, ...rest }: PageLinkProps) {
+export function PageLink({
+  to,
+  search,
+  hash,
+  replace,
+  preload,
+  activeOptions,
+  ...rest
+}: PageLinkProps) {
   return (
     <Link
       to={to as '/'}
@@ -21,6 +30,7 @@ export function PageLink({ to, search, hash, replace, preload, ...rest }: PageLi
       hash={hash}
       replace={replace}
       preload={preload}
+      activeOptions={activeOptions}
       {...rest}
     />
   )
