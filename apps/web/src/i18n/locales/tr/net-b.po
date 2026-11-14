@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{net} üzerinde {0} masternode ve evonode."
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "{1} etkin masternode’dan {0} tanesi son taramaya yanıt verdi"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "{1} masternode’dan {0} tanesi etkin"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, one {# blok} other {# blok}}"
 
 msgid "30 days"
 msgstr "30 gün"
@@ -38,6 +47,10 @@ msgstr "Yanıt veriyor"
 
 msgid "Ascending. Switch to descending"
 msgstr "Artan. Azalana geç"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "Blok {0}"
 
 msgid "Blocks proposed"
 msgstr "Önerilen bloklar"
@@ -145,11 +158,8 @@ msgstr "Bir doğrulayıcı kümesinde değil"
 msgid "Platform node ID"
 msgstr "Platform düğüm kimliği"
 
-msgid "Platform, 30 days"
-msgstr "Platform, 30 gün"
-
-msgid "PoSe penalty"
-msgstr "PoSe cezası"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
@@ -213,11 +223,11 @@ msgstr "Tür"
 msgid "Upgrade vote not counted"
 msgstr "Yükseltme oyu sayılmadı"
 
-msgid "Uptime, 30 days"
-msgstr "Çalışma süresi, 30 gün"
+msgid "Uptime 30d"
+msgstr "Çalışma 30 g"
 
-msgid "Uptime, 7 days"
-msgstr "Çalışma süresi, 7 gün"
+msgid "Uptime 7d"
+msgstr "Çalışma 7 g"
 
 msgid "Validator set"
 msgstr "Doğrulayıcı kümesi"

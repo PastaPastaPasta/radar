@@ -1,21 +1,45 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { MnRow } from '@/data/masternodes/rows'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Amount, AmountDensity, Badge, Time } from '@/ui'
+import { Badge } from '@/ui'
 
 const DASH = '—'
+/** Core's target block time: a height that far behind the tip is about this long ago. */
+const BLOCK_MS = 150_000
+const HOUR = 3_600_000
+const DAY = 24 * HOUR
+const YEAR = 365.25 * DAY
 
-const height = (h: number | null | undefined) => (h != null && h > 0 ? formatInt(h) : DASH)
 const share = (v: number | null | undefined) => (v == null ? DASH : formatPercent(v, 1))
+
+/** About how long ago `blocks` blocks were, in the reader's language: "3 hours ago", "2 days ago", "7.7 years ago". */
+export function blocksAgo(blocks: number, locale: string): string {
+  const ms = blocks * BLOCK_MS
+  const say = (value: number, unit: Intl.RelativeTimeFormatUnit) =>
+    new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'short' }).format(-value, unit)
+  if (ms < HOUR) return say(Math.max(1, Math.round(ms / 60_000)), 'minute')
+  if (ms < 2 * DAY) return say(Math.round(ms / HOUR), 'hour')
+  if (ms < 60 * DAY) return say(Math.round(ms / DAY), 'day')
+  if (ms < 2 * YEAR) return say(Math.round(ms / (YEAR / 12)), 'month')
+  return say(Math.round((ms / YEAR) * 10) / 10, 'year')
+}
+
+/** The newest height the list knows: the masternode paid last was paid at the tip, or a block behind it. */
+export function listTip(rows: readonly MnRow[]): number {
+  let tip = 0
+  for (const r of rows) tip = Math.max(tip, r.crawl?.last_paid_height ?? 0)
+  return tip
+}
 
 export interface MnColumnOptions {
   /** Some row carries Radar's crawl: its columns appear. */
   crawl: boolean
-  /** Some row is an evonode: the Platform columns appear. */
-  evo: boolean
+  /** The newest height the list knows, to say how long ago a height was. 0 when unknown. */
+  tip: number
 }
 
 export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none'; key: string } {
@@ -27,9 +51,24 @@ export function statusLabel(row: MnRow): { tone: 'good' | 'warn' | 'bad' | 'none
 }
 
 /** The list's columns. Ids are the `sort` names in the address; a column with a string accessor can filter by its cell. */
-export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[] {
-  const { t } = useLingui()
+export function useMnColumns({ crawl, tip }: MnColumnOptions): ColumnDef<MnRow>[] {
+  const { t, i18n } = useLingui()
+  const locale = i18n.locale
   return useMemo(() => {
+    /** A height with, beside it, the same in the other unit: when it was, or how many blocks ago. */
+    const when = (h: number | null | undefined, lead: 'time' | 'height') => {
+      if (h == null || h <= 0) return DASH
+      const behind = tip - h
+      if (tip <= 0 || behind < 0) return formatInt(h)
+      const ago = blocksAgo(behind, locale)
+      const blocks = plural(behind, { one: '# block', other: '# blocks' })
+      return (
+        <span className="rx-2l" title={t`Block ${formatInt(h)}`}>
+          <span>{lead === 'time' ? ago : formatInt(h)}</span>
+          <span className="rx-sub">{lead === 'time' ? blocks : ago}</span>
+        </span>
+      )
+    }
     const labels = {
       answering: t`Answering`,
       silent: t`No answer`,
@@ -42,11 +81,14 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
         header: t`ProTx`,
         accessorFn: (r) => r.protx,
         cell: ({ row }) => (
-          <span className="grid gap-1">
+          <span className="rx-mnid">
             <Entity
               kind={row.original.type === 'evo' ? 'evonode' : 'masternode'}
               id={row.original.protx}
             />
+            {row.original.type === 'evo' ? (
+              <span className="rx-sub" data-mn-type="evo">{t`Evonode`}</span>
+            ) : null}
             {row.original.crawlDiffers ? (
               <span
                 data-crawl-differs
@@ -59,14 +101,7 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
             ) : null}
           </span>
         ),
-        meta: { phone: 'title', width: '10rem' },
-      },
-      {
-        id: 'type',
-        header: t`Type`,
-        accessorFn: (r) => r.type,
-        cell: ({ row }) => (row.original.type === 'evo' ? t`Evonode` : t`Masternode`),
-        meta: { filterable: true, phone: 'hidden' },
+        meta: { phone: 'title' },
       },
       {
         id: 'address',
@@ -84,7 +119,7 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
             cell: ({ row }) => {
               const c = row.original.crawl
               return c?.country ? (
-                <span>
+                <span className="rx-clip" title={c.city ?? undefined}>
                   <span className="rx-cc">{c.country}</span>
                   {c.city ? ` ${c.city}` : ''}
                 </span>
@@ -98,7 +133,16 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
             id: 'hosting',
             header: t`Hosting`,
             accessorFn: (r) => (r.crawl?.asn == null ? '' : String(r.crawl.asn)),
-            cell: ({ row }) => row.original.crawl?.as_org ?? DASH,
+            cell: ({ row }) => {
+              const org = row.original.crawl?.as_org
+              return org ? (
+                <span className="rx-clip rx-clip--wide" title={org}>
+                  {org}
+                </span>
+              ) : (
+                DASH
+              )
+            },
             meta: { filterable: true, phone: 'hidden' },
           },
           {
@@ -135,14 +179,14 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
       ? [
           {
             id: 'uptime_7d',
-            header: t`Uptime, 7 days`,
+            header: t`Uptime 7d`,
             accessorFn: (r) => r.crawl?.uptime_7d ?? 0,
             cell: ({ row }) => share(row.original.crawl?.uptime_7d),
             meta: { numeric: true, phone: 'hidden' },
           },
           {
             id: 'uptime_30d',
-            header: t`Uptime, 30 days`,
+            header: t`Uptime 30d`,
             accessorFn: (r) => r.crawl?.uptime_30d ?? 0,
             cell: ({ row }) => share(row.original.crawl?.uptime_30d),
             meta: { numeric: true },
@@ -151,56 +195,25 @@ export function useMnColumns({ crawl, evo }: MnColumnOptions): ColumnDef<MnRow>[
             id: 'last_paid',
             header: t`Last paid`,
             accessorFn: (r) => r.crawl?.last_paid_height ?? 0,
-            cell: ({ row }) => height(row.original.crawl?.last_paid_height),
+            cell: ({ row }) => when(row.original.crawl?.last_paid_height, 'time'),
             meta: { numeric: true },
           },
           {
             id: 'registered',
             header: t`Registered`,
             accessorFn: (r) => r.crawl?.registered_height ?? 0,
-            cell: ({ row }) => height(row.original.crawl?.registered_height),
+            cell: ({ row }) => when(row.original.crawl?.registered_height, 'height'),
             meta: { numeric: true, phone: 'hidden' },
           },
           {
             id: 'pose_penalty',
-            header: t`PoSe penalty`,
+            header: t`PoSe`,
             accessorFn: (r) => r.crawl?.pose_penalty ?? 0,
             cell: ({ row }) => row.original.crawl?.pose_penalty ?? DASH,
             meta: { numeric: true, phone: 'hidden' },
           },
         ]
       : []
-    const platform: ColumnDef<MnRow>[] =
-      crawl && evo
-        ? [
-            {
-              id: 'platform_30d',
-              header: t`Platform, 30 days`,
-              accessorFn: (r) => Number(r.crawl?.platform?.d30 ?? 0),
-              cell: ({ row }) => {
-                const d30 = row.original.crawl?.platform?.d30
-                return d30 == null ? (
-                  DASH
-                ) : (
-                  <AmountDensity value="prose">
-                    <Amount value={d30} kind="credits" compact />
-                  </AmountDensity>
-                )
-              },
-              meta: { numeric: true, phone: 'hidden' },
-            },
-            {
-              id: 'next_block',
-              header: t`Next block`,
-              accessorFn: (r) => r.crawl?.platform?.next ?? 0,
-              cell: ({ row }) => {
-                const next = row.original.crawl?.platform?.next
-                return next == null ? DASH : <Time ms={next} mode="relative" />
-              },
-              meta: { numeric: true, phone: 'hidden' },
-            },
-          ]
-        : []
-    return [...dapi, ...crawled, status, ...history, ...platform]
-  }, [t, crawl, evo])
+    return [...dapi, ...crawled, status, ...history]
+  }, [t, locale, crawl, tip])
 }

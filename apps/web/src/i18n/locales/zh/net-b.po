@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{net} 上的 {0} 个主节点和 Evonode。"
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "{1} 个已启用的主节点中有 {0} 个在上次抓取中响应"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "{1} 个主节点中有 {0} 个已启用"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, other {# 个区块}}"
 
 msgid "30 days"
 msgstr "30 天"
@@ -38,6 +47,10 @@ msgstr "有应答"
 
 msgid "Ascending. Switch to descending"
 msgstr "升序。切换为降序"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "区块 {0}"
 
 msgid "Blocks proposed"
 msgstr "已提议区块"
@@ -145,11 +158,8 @@ msgstr "不在验证者集合中"
 msgid "Platform node ID"
 msgstr "Platform 节点 ID"
 
-msgid "Platform, 30 days"
-msgstr "Platform，30 天"
-
-msgid "PoSe penalty"
-msgstr "PoSe 罚分"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "已被 PoSe 封禁"
@@ -213,11 +223,11 @@ msgstr "类型"
 msgid "Upgrade vote not counted"
 msgstr "升级投票未计入"
 
-msgid "Uptime, 30 days"
-msgstr "在线率，30 天"
+msgid "Uptime 30d"
+msgstr "在线率 30天"
 
-msgid "Uptime, 7 days"
-msgstr "在线率，7 天"
+msgid "Uptime 7d"
+msgstr "在线率 7天"
 
 msgid "Validator set"
 msgstr "验证者集合"

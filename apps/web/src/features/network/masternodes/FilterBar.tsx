@@ -219,7 +219,7 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
       </TableTools>
       {panelFacets.length > 0 ? (
         <div
-          className="grid gap-4 border-b border-line p-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-4 border-b border-line pb-4 sm:grid-cols-2 lg:grid-cols-3"
           data-filter-panel
         >
           {panelFacets.map((facet) => (
@@ -245,18 +245,20 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
           ))}
         </div>
       ) : null}
-      <ActiveFilters
-        matches={matches}
-        tokens={active}
-        onRemove={(id) => {
-          const hit = active.find((a) => a.id === id)
-          if (hit) toggle(hit.facet, hit.value)
-        }}
-        onClear={() => {
-          setText('')
-          controls.filter(Object.fromEntries([...ALL_FIELDS, 'q'].map((k) => [k, undefined])))
-        }}
-      />
+      {active.length === 0 && !search.q ? null : (
+        <ActiveFilters
+          matches={matches}
+          tokens={active}
+          onRemove={(id) => {
+            const hit = active.find((a) => a.id === id)
+            if (hit) toggle(hit.facet, hit.value)
+          }}
+          onClear={() => {
+            setText('')
+            controls.filter(Object.fromEntries([...ALL_FIELDS, 'q'].map((k) => [k, undefined])))
+          }}
+        />
+      )}
     </>
   )
 }

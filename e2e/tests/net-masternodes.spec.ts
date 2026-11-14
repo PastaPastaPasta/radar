@@ -3,6 +3,7 @@ import type { Page, Request, TestInfo } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { CLAIM, H1 } from '../routes/claims'
 
 const EVO = {
   protx: 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff',
@@ -21,14 +22,31 @@ const TESTNET = { total: 401 }
 const isPhone = (info: TestInfo) => info.project.name.startsWith('phone')
 const table = (page: Page, name = 'Masternodes') => page.getByRole('table', { name })
 const rows = (page: Page, name?: string) => table(page, name).locator('tbody tr[data-index]')
+/** The count and the tokens of the filters in force; nothing is drawn while no filter is. */
 const matches = (page: Page) => page.locator('.rx-activef').first()
+const pager = (page: Page) => page.getByRole('navigation', { name: 'Pagination' })
+const PAGE = 100
+const COLUMNS = [
+  'ProTx',
+  'Address',
+  'Country',
+  'Hosting',
+  'Version',
+  'Protocol',
+  'Status',
+  'Uptime 7d',
+  'Uptime 30d',
+  'Last paid',
+  'Registered',
+  'PoSe',
+]
 const typeGroup = (page: Page) => page.getByRole('group', { name: 'Type' })
 const header = (page: Page, name: string | RegExp) =>
   table(page).locator('thead th').filter({ hasText: name })
 
 async function open(page: Page, path: string, name?: string) {
   await page.goto(path)
-  await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
   await expect(rows(page, name).first()).toBeVisible()
   await settled(page)
 }
@@ -54,41 +72,44 @@ test.describe('masternode list', () => {
     page,
   }, info) => {
     await open(page, '/masternodes')
-    await expect(matches(page)).toContainText(`${MAINNET.total.toLocaleString('en-US')} match`)
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
+    await expect(matches(page)).toHaveCount(0)
     await expect(page.locator('[data-status-bar]')).toContainText('PoSe-banned')
     await expect(page.locator('[data-status-bar]')).toContainText('Enabled, answering')
     const first = rows(page).first()
     await expect(first.locator('a[href^="/mn/"]').first()).toBeVisible()
     await expect(first).toContainText(/\d+\.\d+\.\d+\.\d+/)
     await expect(first).toContainText(/Answering|No answer|Enabled|PoSe-banned/)
-    expect(await rows(page).count(), 'a page of rows is virtualised').toBeLessThan(250)
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText(
-      '1–250 of 2,990',
-    )
+    expect(await rows(page).count(), 'a page of rows').toBeLessThanOrEqual(PAGE)
+    await expect(pager(page)).toContainText(`1–${PAGE} of 2,990`)
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
     await expect(page.locator('[data-source="radar"]').first()).toBeVisible()
     if (!isPhone(info)) {
-      for (const name of [
-        'ProTx',
-        'Address',
-        'Country',
-        'Hosting',
-        'Version',
-        'Protocol',
-        'Status',
-        'Uptime, 7 days',
-        'Uptime, 30 days',
-        'Last paid',
-        'Registered',
-        'PoSe penalty',
-        'Platform, 30 days',
-        'Next block',
-      ]) {
-        await expect(header(page, name), name).toHaveCount(1)
-      }
+      const heads = await table(page).locator('thead th').allInnerTexts()
+      expect(heads.map((h) => h.replace(/\s+/g, ' ').trim())).toEqual(COLUMNS)
     }
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
     await expectAccessible(page)
+  })
+
+  test('shows all twelve columns at 1440 with no sideways scroll, and the first row on the first screen @RA-20', async ({
+    page,
+  }, info) => {
+    test.skip(isPhone(info), 'the phone shows cards')
+    await open(page, '/masternodes')
+    for (const name of COLUMNS) await expect(header(page, name), name).toBeInViewport()
+    const wrap = table(page).locator('xpath=ancestor::*[contains(@class,"rx-tablewrap")][1]')
+    expect(
+      await wrap.evaluate((el) => el.scrollWidth - el.clientWidth),
+      'the table scrolls sideways inside its block',
+    ).toBeLessThanOrEqual(0)
+    const first = await rows(page).first().boundingBox()
+    expect(first!.y, 'where the first row starts').toBeLessThan(560)
+    const row = rows(page).first()
+    await expect(row.locator('td').nth(9)).toContainText(/blocks?|—/)
+    await expect(row.locator('td').nth(10)).toContainText(/[\d,]+/)
+    const second = await rows(page).nth(1).boundingBox()
+    expect(second!.y - first!.y, 'a row’s height').toBeLessThanOrEqual(44)
   })
 
   test('shows a phone card per masternode, with last paid, status and address @RA-20 @HY-10', async ({
@@ -104,7 +125,7 @@ test.describe('masternode list', () => {
 
   test('works on testnet with its own list @RA-20', async ({ page }) => {
     await open(page, '/masternodes?network=testnet')
-    await expect(matches(page)).toContainText(`${TESTNET.total} match`)
+    await expect(pager(page)).toContainText(`of ${TESTNET.total}`)
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
   })
 
@@ -122,7 +143,7 @@ test.describe('masternode list', () => {
       'user_agent_is_not_matched_here',
     ]) {
       await page.goto(`/masternodes?q=${q}`)
-      await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+      await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
       await settled(page)
       if (q.startsWith('user_agent')) {
         await expect(matches(page)).toContainText('0 match')
@@ -146,7 +167,7 @@ test.describe('masternode list', () => {
     await expect(rows(page)).toHaveCount(1)
     await box.fill('')
     await expect(page).not.toHaveURL(/q=/)
-    await expect(matches(page)).toContainText('2,990 match')
+    await expect(pager(page)).toContainText('of 2,990')
   })
 
   test('filters by type, country, hosting and more, with counts, tokens and a clear button @RA-22', async ({
@@ -178,7 +199,8 @@ test.describe('masternode list', () => {
     await expect(page).not.toHaveURL(/country=/)
     await expect(matches(page)).toContainText(`${MAINNET.unreachable} match`)
     await matches(page).getByRole('button', { name: 'Clear' }).click()
-    await expect(matches(page)).toContainText('2,990 match')
+    await expect(pager(page)).toContainText('of 2,990')
+    await expect(matches(page)).toHaveCount(0)
     await expect(page).not.toHaveURL(/reach=/)
     await expectAccessible(page)
   })
@@ -197,15 +219,15 @@ test.describe('masternode list', () => {
     await open(page, '/masternodes')
     const before = await page.evaluate(() => history.length)
     const cell = (n: number) => rows(page).first().locator(`td:nth-child(${n}) button.rx-cellbtn`)
-    await cell(4).click()
+    await cell(3).click()
     await expect(page).toHaveURL(/country=[A-Z]{2}/)
     expect(await page.evaluate(() => history.length)).toBe(before)
     await expect(matches(page)).toContainText('Country:')
-    await cell(6).click()
-    await expect(page).toHaveURL(/version=/)
-    await cell(2).click()
-    await expect(page).toHaveURL(/type=(evo|regular)/)
     await cell(5).click()
+    await expect(page).toHaveURL(/version=/)
+    await cell(7).click()
+    await expect(page).toHaveURL(/status=(enabled|pose-banned)/)
+    await cell(4).click()
     await expect(page).toHaveURL(/host=\d+/)
     await expect(matches(page)).toContainText('Hosting:')
   })
@@ -227,11 +249,10 @@ test.describe('masternode list', () => {
     await header(page, 'Last paid').getByRole('button').click()
     await expect(header(page, 'Last paid')).toHaveAttribute('aria-sort', /ascending|descending/)
     const paid = await rows(page).evaluateAll((trs) =>
-      trs
-        .slice(0, 8)
-        .map((tr) => Number((tr.querySelectorAll('td')[9]?.textContent ?? '').replaceAll(',', ''))),
+      trs.slice(0, 8).map((tr) => tr.querySelectorAll('td')[9]?.textContent ?? ''),
     )
     expect(paid.length).toBeGreaterThan(1)
+    for (const cell of paid) expect(cell).toMatch(/blocks?|—/)
   })
 
   test('puts a sort select and a Filters button where the table header was @RA-23', async ({
@@ -255,22 +276,21 @@ test.describe('masternode list', () => {
     await open(page, '/masternodes?sort=protx')
     await page.getByRole('link', { name: 'Next' }).click()
     await expect(page).toHaveURL(/page=2/)
-    await expect(matches(page)).toContainText('2,990 match')
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText('251–500')
+    await expect(pager(page)).toContainText(`${PAGE + 1}–${2 * PAGE} of 2,990`)
     const url = page.url()
     await page.reload()
     await expect(rows(page).first()).toBeVisible()
     expect(page.url()).toBe(url)
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText('251–500')
+    await expect(pager(page)).toContainText(`${PAGE + 1}–${2 * PAGE}`)
 
     await page.goBack()
     await expect(page).not.toHaveURL(/page=2/)
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText('1–250')
+    await expect(pager(page)).toContainText(`1–${PAGE} of`)
     await page.goForward()
     await expect(page).toHaveURL(/page=2/)
 
     await page.goto('/masternodes?type=evo&country=DE&sort=-version&q=a')
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
     await expect(matches(page)).toContainText('Type: Evonode')
     await expect(matches(page)).toContainText('Country: DE')
     await expect(page.getByRole('searchbox', { name: 'Search masternodes' })).toHaveValue('a')
@@ -436,7 +456,7 @@ test.describe('evonodes on Platform', () => {
     await page.goto('/validators')
     await expect(page).toHaveURL(/\/masternodes\?.*view=platform/)
     await expect(page).toHaveURL(/type=evo/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
     await expect(rows(page, 'Evonodes').first()).toBeVisible()
   })
 
@@ -460,12 +480,14 @@ test.describe('Decentralized only mode', () => {
     await open(page, mode('/masternodes'))
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(page.locator('[data-unavailable="mode"]')).toContainText('Radar’s crawl')
-    await expect(matches(page)).toContainText('2,990 match')
+    await expect(pager(page)).toContainText('of 2,990')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      /^[\d,]+ of 2,990 masternodes are enabled$/,
+    )
     if (!isPhone(info)) {
       const heads = await table(page).locator('thead th').allInnerTexts()
       expect(heads.map((h) => h.replace(/\s+/g, ' ').trim())).toEqual([
         'ProTx',
-        'Type',
         'Address',
         'Status',
       ])
@@ -522,7 +544,7 @@ test.describe('Decentralized only mode', () => {
 
   test('works on testnet @RA-20', async ({ page }) => {
     await open(page, mode('/masternodes?network=testnet'))
-    await expect(matches(page)).toContainText(`${TESTNET.total} match`)
+    await expect(pager(page)).toContainText(`of ${TESTNET.total}`)
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
   })
 
