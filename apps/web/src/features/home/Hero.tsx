@@ -243,7 +243,7 @@ export function Hero() {
 
   return (
     <section className="rx-hero" aria-labelledby="h-hero" data-census={crawl ? 'ready' : 'none'}>
-      <div className="rx-hero__copy">
+      <div className="rx-hero__copy" data-source-scope="">
         <SourceSection source={sources}>
           <Kicker />
           <h1 id="h-hero">

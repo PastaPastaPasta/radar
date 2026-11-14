@@ -23,6 +23,24 @@ afterEach(() => {
 })
 
 describe('EpochClock', () => {
+  it('leaves the epoch number and the share out when the headline above it says them', () => {
+    render(
+      <EpochClock
+        bare
+        index={88}
+        startedAt={NOW - 30 * H}
+        expectedEndAt={NOW + 90 * H}
+        blocksSoFar={1091}
+        estimated
+      />,
+    )
+    const track = screen.getByRole('meter', { name: 'Epoch 88 progress' })
+    expect(track).toHaveAttribute('aria-valuetext', expect.stringContaining('25% through'))
+    expect(document.querySelector('.rx-clock__n')).toBeNull()
+    expect(document.querySelector('.rx-clock__axis')).toHaveTextContent('1,091 blocks so far')
+    expect(document.querySelector('.rx-clock__axis')).not.toHaveTextContent('through')
+  })
+
   it('fills the track by the share of the epoch gone and says so in words', () => {
     render(
       <EpochClock

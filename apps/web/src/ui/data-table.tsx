@@ -51,6 +51,8 @@ export interface DataTableProps<Row> {
   /** Placeholder rows after the real ones, for a page whose remaining rows are still on their way. */
   pendingRows?: number
   phone?: 'cards' | 'scroll'
+  /** A long list read across many columns: smaller type and tighter cells, so a dozen columns fit the container. */
+  dense?: boolean
   source?: SourceStamp | SourceStamp[]
 }
 
@@ -68,6 +70,7 @@ declare module '@tanstack/react-table' {
 }
 
 const ROW_HEIGHT = 53
+const DENSE_ROW_HEIGHT = 41
 
 const keyTables: symbol[] = []
 let lastTouched: symbol | undefined
@@ -263,6 +266,7 @@ export function DataTable<Row>({
   live,
   pendingRows = 0,
   phone = 'cards',
+  dense = false,
   source,
 }: DataTableProps<Row>) {
   const router = useRouter()
@@ -298,7 +302,7 @@ export function DataTable<Row>({
 
   const virtualizer = useWindowVirtualizer({
     count: virtual ? modelRows.length : 0,
-    estimateSize: () => ROW_HEIGHT,
+    estimateSize: () => (dense ? DENSE_ROW_HEIGHT : ROW_HEIGHT),
     overscan: 12,
     scrollMargin,
     initialRect: { width: 1200, height: 900 },
@@ -570,6 +574,7 @@ export function DataTable<Row>({
             className={cx(
               'rx-table',
               phone === 'cards' ? 'rx-table--cards' : 'rx-table--scrolls',
+              dense && 'rx-table--dense',
               rowLink && 'rx-table--link',
               rowLink && 'rx-table--nav',
             )}

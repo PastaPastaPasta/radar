@@ -14,11 +14,14 @@ export interface EpochClockProps {
   /** The end time is a forecast (most are), not a boundary the chain has fixed. */
   estimated: boolean
   size?: 'md' | 'lg'
+  /** The page's headline already names the epoch and how far through it is: draw the track, its dates and its end only. */
+  bare?: boolean
 }
 
 const TICKS = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => (n * 100) / 9)
 
-function progressOf(startedAt: number, expectedEndAt: number | undefined, now: number) {
+/** How far through an epoch `now` is, 0 to 1; undefined when its end is not known. */
+export function epochProgress(startedAt: number, expectedEndAt: number | undefined, now: number) {
   if (expectedEndAt === undefined || expectedEndAt <= startedAt) return undefined
   return Math.min(1, Math.max(0, (now - startedAt) / (expectedEndAt - startedAt)))
 }
@@ -31,9 +34,10 @@ export function EpochClock({
   expectedEndAt,
   estimated,
   size = 'lg',
+  bare = false,
 }: EpochClockProps) {
   const now = useNow()
-  const ratio = progressOf(startedAt, expectedEndAt, now)
+  const ratio = epochProgress(startedAt, expectedEndAt, now)
   const over = expectedEndAt !== undefined && now >= expectedEndAt
   const epoch = formatInt(index)
   const startedText = formatDate(startedAt, { year: false })
@@ -41,7 +45,7 @@ export function EpochClock({
   const blockCount = blocksSoFar === undefined ? '' : formatInt(blocksSoFar)
   const axis = [
     t`Started ${startedText}`,
-    ratio === undefined ? undefined : t`${percent} through`,
+    ratio === undefined || bare ? undefined : t`${percent} through`,
     blocksSoFar === undefined ? undefined : t`${blockCount} blocks so far`,
   ]
     .filter(Boolean)
@@ -86,6 +90,7 @@ export function EpochClock({
   }
   const summary = [
     t`Epoch ${epoch}`,
+    bare && ratio !== undefined ? t`${percent} through` : undefined,
     axis,
     endLine,
     expectedEndAt === undefined ? undefined : endText,
@@ -96,15 +101,17 @@ export function EpochClock({
 
   return (
     <div
-      className={cx('rx-clock', size === 'md' && 'gap-x-4 p-3')}
+      className={cx('rx-clock', size === 'md' && 'gap-x-4 p-3', bare && 'rx-clock--bare')}
       data-layer="platform"
       data-size={size}
       data-estimated={estimated ? 'true' : 'false'}
     >
-      <div className="rx-clock__n">
-        <span className="rx-dim rx-sm">{t`Epoch`}</span>
-        <b className={size === 'md' ? 'text-[22px]' : undefined}>{epoch}</b>
-      </div>
+      {bare ? null : (
+        <div className="rx-clock__n">
+          <span className="rx-dim rx-sm">{t`Epoch`}</span>
+          <b className={size === 'md' ? 'text-[22px]' : undefined}>{epoch}</b>
+        </div>
+      )}
       <div className="rx-clock__mid">
         <div
           className="rx-clock__track"

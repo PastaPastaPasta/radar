@@ -3,7 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
-import { sourceLineOf } from '../helpers/sources'
+import { expectReports, sourceLineOf } from '../helpers/sources'
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
@@ -344,6 +344,7 @@ test.describe('masternode page', () => {
 
     const live = page.locator('#platform-live')
     await expect(live).toBeVisible()
+    await expectReports(live, 'sdk:proved')
     await expect(
       sourceLineOf(live).locator('[data-source="sdk"][data-proved="true"]'),
     ).toBeVisible()

@@ -909,10 +909,25 @@
   font-size: 17px;
   font-weight: var(--dh-w-strong);
 }
+/* under a headline that already names the epoch: the track and its dates, on the page ground */
+.rx-clock--bare {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0;
+}
 @media (max-width: 640px) {
   .rx-clock {
     grid-template-columns: minmax(0, 1fr) auto;
     padding: 14px;
+  }
+  .rx-clock--bare {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+  .rx-clock--bare .rx-clock__mid {
+    grid-row: 1;
+  }
+  .rx-clock--bare .rx-clock__end {
+    text-align: left;
   }
   .rx-clock__mid {
     grid-column: 1 / -1;
