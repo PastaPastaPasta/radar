@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import { Icon } from '@/ui'
 
-export interface SheetProps {
+interface SheetProps {
   open: boolean
   onClose: () => void
   title: string

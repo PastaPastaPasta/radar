@@ -45,7 +45,7 @@ function omit<K extends keyof SdkSettings>(settings: SdkSettings, key: K): SdkSe
 type Errors = Partial<Record<Field, string>>
 
 /** The settings a draft stands for, or what is wrong with each field. */
-export function settingsOfDraft(
+function settingsOfDraft(
   d: Draft,
   messages: { url: string; https: string; whole: (min: number, max: number) => string },
 ): { settings: SdkSettings } | { errors: Errors } {
