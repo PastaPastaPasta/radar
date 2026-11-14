@@ -108,7 +108,9 @@ test.describe('Token page', () => {
         new RegExp(`/contract/${t.contract}.*tab=tokens`),
       )
       await expect(summary.getByText('Position in the contract', { exact: true })).toBeVisible()
-      await expect(page.locator('[data-token-plural], [data-eyebrow]').first()).toBeVisible()
+      const plural = page.locator('[data-token-plural]')
+      if ((await plural.count()) > 0) await expect(plural.first()).toBeVisible()
+      await expect(page.locator('[data-eyebrow]'), 'the rail names the section').toHaveCount(0)
       await expectAccessible(page)
     })
   }

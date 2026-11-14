@@ -4,6 +4,7 @@ import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
 import { netIds } from '../routes/fixtures'
+import { H1 } from '../routes/claims'
 
 const main = netIds('mainnet')
 const isPhone = (name: string) => name.startsWith('phone')
@@ -239,7 +240,7 @@ test.describe('network switch', () => {
     await page.goto(`/epoch/${main.id('epoch_current', '88')}`)
     await switchTo(page, 'Testnet')
     await expect(page).toHaveURL(/\/epochs\?.*network=testnet|\/epochs$/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Epochs' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.epochs })).toBeVisible()
   })
 })
 
@@ -343,7 +344,7 @@ test.describe('keyboard', () => {
     page,
   }) => {
     await page.goto('/status')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
     await page.keyboard.press('?')
     const sheet = page.getByRole('dialog', { name: 'Keyboard shortcuts' })
     await expect(sheet).toBeVisible()

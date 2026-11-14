@@ -3,6 +3,7 @@ import type { BrowserContext, Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { H1 } from '../routes/claims'
 
 // A recorded mainnet identity (platform-identity.spec), so opening it from a saved item needs no unrecorded call.
 const ID_A = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
@@ -32,7 +33,7 @@ const SAVED = [
   { net: 'testnet', kind: 'token', id: ID_C, label: 'Test token', savedAt: 1000 },
 ]
 
-const h1 = (page: Page, name: string) => page.getByRole('heading', { level: 1, name })
+const h1 = (page: Page, name: string | RegExp) => page.getByRole('heading', { level: 1, name })
 
 async function grantClipboard(context: BrowserContext): Promise<void> {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
@@ -50,14 +51,14 @@ const pinned = new WeakSet<Page>()
  */
 async function openPlatform(page: Page, query = 'network=testnet'): Promise<void> {
   await page.goto(`/platform?${query}`)
-  await expect(h1(page, 'Platform')).toBeVisible()
+  await expect(h1(page, H1.platform)).toBeVisible()
   if (!pinned.has(page)) {
     pinned.add(page)
     const stamped = page.locator('[data-source="sdk"][data-proved="true"][title^="As of "]')
     const title = (await stamped.first().getAttribute('title')) ?? ''
     await page.clock.install({ time: new Date(title.slice('As of '.length)) })
     await page.reload()
-    await expect(h1(page, 'Platform')).toBeVisible()
+    await expect(h1(page, H1.platform)).toBeVisible()
   }
   await settled(page)
 }
@@ -728,7 +729,7 @@ test.describe('offline and updates', () => {
   test('keeps only the app’s own files, never an API answer @NX-77', async ({ page }) => {
     await installWorker(page)
     await page.goto('/status')
-    await expect(h1(page, 'Status')).toBeVisible()
+    await expect(h1(page, H1.status)).toBeVisible()
     await settled(page)
     const cached = await page.evaluate(async () => {
       const out: { cache: string; paths: string[] }[] = []

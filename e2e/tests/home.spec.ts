@@ -2,6 +2,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { tabBarHeight } from '../helpers/contrast'
 import { pinClockAfterCrawl } from '../helpers/clock'
 import { settled } from '../helpers/settled'
+import { expectShown, expectTucked, ownMarkOf, RESTING_MARKS } from '../helpers/sources'
 import { expect as baseExpect, test } from '../helpers/test'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
@@ -57,20 +58,24 @@ test.describe('Home', () => {
     }
     await expect(line.locator('[data-source="sdk"]')).toHaveAttribute('data-proved', 'true')
     await settled(page)
-    await expect(page.locator('.rx-hero [data-source]:visible')).toHaveCount(3)
+    await expect(page.locator(`.rx-hero ${RESTING_MARKS}`)).toHaveCount(3)
 
-    const own = core.locator('.rx-fig__src [data-source="dapi"]')
-    await expect(own).toBeHidden()
+    const own = ownMarkOf(core)
+    await expect(own.locator('[data-source="dapi"]')).toHaveCount(1)
+    await expectTucked(own)
     await core.hover()
-    await expect(own).toBeVisible()
+    await expectShown(own)
     await page.mouse.move(0, 0)
-    await expect(own).toBeHidden()
+    await expectTucked(own)
     await core.getByRole('link').focus()
-    await expect(own).toBeVisible()
-    const proof = page.locator('[data-pulse="platform"] .rx-fig__src [data-source="sdk"]')
-    await page.locator('[data-pulse="platform"]').getByRole('link').focus()
-    await expect(proof).toBeVisible()
-    await expect(proof).toHaveAttribute('data-proved', 'true')
+    await expectShown(own)
+    const platform = page.locator('[data-pulse="platform"]')
+    await platform.getByRole('link').focus()
+    await expectShown(ownMarkOf(platform))
+    await expect(ownMarkOf(platform).locator('[data-source="sdk"]')).toHaveAttribute(
+      'data-proved',
+      'true',
+    )
   })
 
   test('no source mark looks out of date after the page has been open for five minutes @IN-09', async ({
@@ -311,8 +316,8 @@ test.describe('Home', () => {
     await expect(line.locator('[data-source="hyphen"]')).toHaveCount(1)
     await expect(line.locator('[data-source="dapi"]')).toHaveCount(1)
     await settled(page)
-    await expect(page.locator('#core [data-source]:visible')).toHaveCount(2)
-    await expect(page.locator('#platform [data-source]:visible')).toHaveCount(1)
+    await expect(page.locator(`#core ${RESTING_MARKS}`)).toHaveCount(2)
+    await expect(page.locator(`#platform ${RESTING_MARKS}`)).toHaveCount(1)
     await expect(page.locator('.rx-home .rx-card__head [data-source]')).toHaveCount(0)
   })
 
