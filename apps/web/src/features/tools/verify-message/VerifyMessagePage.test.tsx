@@ -62,6 +62,8 @@ describe('Verify message page', () => {
     await user.click(screen.getByRole('button', { name: 'Verify' }))
     expect(await screen.findByText('This address did not sign this message.')).toBeInTheDocument()
     expect(document.querySelector('[data-result="invalid"]')).not.toBeNull()
+    expect(screen.getByText(/the message is not exactly what was signed/)).toBeInTheDocument()
+    expect(screen.queryByText(/made by a different key/)).toBeNull()
   })
 
   it('says it cannot check a malformed signature @IN-08', async () => {
