@@ -12,6 +12,12 @@ test.describe('Blocks list', () => {
   test('lists the newest blocks and pages back by cursor @HY-04', async ({ page }) => {
     await page.goto('/blocks')
     await expect(page.getByRole('heading', { level: 1, name: CLAIM.blocks })).toBeVisible()
+    const [headline, kicker] = await Promise.all(
+      ['.rx-rec__title', '.rx-rec__kicker'].map((s) => page.locator(s).boundingBox()),
+    )
+    expect(Math.abs(headline!.x - kicker!.x), 'the headline starts under its kicker').toBeLessThan(
+      2,
+    )
     await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
     await expectAccessible(page)
     await page.getByRole('link', { name: 'Older' }).click()
