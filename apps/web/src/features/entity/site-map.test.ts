@@ -60,6 +60,37 @@ describe('section rails', () => {
   })
 })
 
+describe('where a page sits in its rail', () => {
+  const SECTIONS: SiteSection[] = ['core', 'network', 'platform', 'tools', 'you']
+  const entryOf = (path: string) =>
+    SECTIONS.flatMap((s) => railEntries(s)).filter((e) => e.pages.includes(path))
+
+  it('gives every page of a railed section exactly one rail entry', () => {
+    for (const p of SITE_MAP.filter((page) => SECTIONS.includes(page.section))) {
+      expect(
+        entryOf(p.path).map((e) => e.to),
+        p.path,
+      ).toHaveLength(1)
+    }
+  })
+
+  it('puts a record under its list', () => {
+    expect(entryOf('/mn/$protx')[0]?.to).toBe('/masternodes')
+    expect(entryOf('/identity/$id')[0]?.to).toBe('/identities')
+    expect(entryOf('/tx/$txid')[0]?.to).toBe('/blocks')
+    expect(entryOf('/contest/$label')[0]?.key).toBe('group:voting')
+    expect(entryOf('/quorums')[0]?.key).toBe('group:chain')
+  })
+
+  it('names only rail pages of the same section as a parent', () => {
+    for (const p of SITE_MAP.filter((page) => page.under !== undefined)) {
+      const parent = findPage(p.under!)
+      expect(parent?.section, p.path).toBe(p.section)
+      expect(parent?.nav, p.path).toBe(true)
+    }
+  })
+})
+
 describe('page groups', () => {
   it('names only registered pages that carry the group', () => {
     for (const [group, { pages }] of Object.entries(SITE_GROUPS)) {

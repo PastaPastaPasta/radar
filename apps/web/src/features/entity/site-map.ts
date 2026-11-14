@@ -27,6 +27,8 @@ export interface SitePage {
   railTitle?: MessageDescriptor
   /** False for an alias that redirects to another rail page. */
   rail?: boolean
+  /** The rail page a page without its own entry sits under (a record under its list), so the rail still marks where you are. */
+  under?: string
   keywords?: string[]
   /** The thing a record page shows, for titles and the other-network notice: "block", "masternode". */
   record?: MessageDescriptor
@@ -93,6 +95,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/block/$id',
+    under: '/blocks',
     title: msg`Block`,
     section: 'core',
     layer: 'core',
@@ -102,6 +105,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/tx/$txid',
+    under: '/blocks',
     title: msg`Transaction`,
     section: 'core',
     layer: 'core',
@@ -111,6 +115,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/address/$address',
+    under: '/rich-list',
     title: msg`Address`,
     section: 'core',
     layer: 'core',
@@ -160,6 +165,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/governance/$hash',
+    under: '/governance',
     title: msg`Proposal`,
     section: 'core',
     layer: 'core',
@@ -210,6 +216,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/mn/$protx',
+    under: '/masternodes',
     title: msg`Masternode`,
     section: 'network',
     layer: 'network',
@@ -239,6 +246,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/epoch/$n',
+    under: '/epochs',
     title: msg`Epoch`,
     section: 'network',
     layer: 'network',
@@ -279,6 +287,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/validators',
+    under: '/masternodes',
     title: msg`Validators`,
     section: 'network',
     layer: 'network',
@@ -312,6 +321,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/platform/block/$id',
+    under: '/platform/blocks',
     title: msg`Platform block`,
     section: 'platform',
     layer: 'platform',
@@ -332,6 +342,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/platform/tx/$hash',
+    under: '/platform/txs',
     title: msg`State transition`,
     section: 'platform',
     layer: 'platform',
@@ -350,6 +361,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/identity/lookup',
+    under: '/identities',
     title: msg`Identity by key hash`,
     section: 'platform',
     layer: 'platform',
@@ -359,6 +371,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/identity/$id',
+    under: '/identities',
     title: msg`Identity`,
     section: 'platform',
     layer: 'platform',
@@ -378,6 +391,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/contract/$id',
+    under: '/contracts',
     title: msg`Contract`,
     section: 'platform',
     layer: 'platform',
@@ -387,6 +401,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/contract/$id/documents/$type',
+    under: '/contracts',
     title: msg`Documents`,
     section: 'platform',
     layer: 'platform',
@@ -396,6 +411,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/document/$contract/$type/$id',
+    under: '/contracts',
     title: msg`Document`,
     section: 'platform',
     layer: 'platform',
@@ -414,6 +430,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/token/$id',
+    under: '/tokens',
     title: msg`Token`,
     section: 'platform',
     layer: 'platform',
@@ -423,6 +440,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/token/$id/holders',
+    under: '/tokens',
     title: msg`Token holders`,
     section: 'platform',
     layer: 'platform',
@@ -442,6 +460,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/name/$label',
+    under: '/names',
     title: msg`Name`,
     section: 'platform',
     layer: 'platform',
@@ -462,6 +481,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/contest/$label',
+    under: '/contests',
     title: msg`Name contest`,
     section: 'platform',
     layer: 'platform',
@@ -491,6 +511,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/groups/$contract',
+    under: '/contracts',
     title: msg`Groups`,
     section: 'platform',
     layer: 'platform',
@@ -500,6 +521,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/group/$contract/$pos',
+    under: '/contracts',
     title: msg`Group`,
     section: 'platform',
     layer: 'platform',
@@ -540,6 +562,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/platform-address/$addr',
+    under: '/identities',
     title: msg`Platform address`,
     section: 'platform',
     layer: 'platform',
@@ -693,24 +716,31 @@ export interface RailEntry {
   pages: string[]
 }
 
-/** The section rail: one entry per page, one per group (at its first page's place), no aliases. */
+/**
+ * The section rail: one entry per page, one per group (at its first page's place), no aliases. An entry is current
+ * on its own page, on every page of its group and on every page that sits `under` one of those.
+ */
 export function railEntries(section: SiteSection): RailEntry[] {
   const seen = new Set<SiteGroup>()
   const entries: RailEntry[] = []
+  const withRecords = (pages: readonly string[]) => [
+    ...pages,
+    ...SITE_MAP.filter((p) => p.under !== undefined && pages.includes(p.under)).map((p) => p.path),
+  ]
   for (const p of SITE_MAP) {
     if (p.section !== section || p.rail === false || !(p.nav || p.navHref)) continue
     if (p.group) {
       if (seen.has(p.group)) continue
       seen.add(p.group)
       const { title, pages } = SITE_GROUPS[p.group]
-      entries.push({ key: `group:${p.group}`, title, to: pages[0]!, pages })
+      entries.push({ key: `group:${p.group}`, title, to: pages[0]!, pages: withRecords(pages) })
     } else {
       entries.push({
         key: p.path,
         title: p.railTitle ?? p.title,
         to: p.path,
         ...(p.navHref ? { href: p.navHref } : {}),
-        pages: [p.path],
+        pages: withRecords([p.path]),
       })
     }
   }

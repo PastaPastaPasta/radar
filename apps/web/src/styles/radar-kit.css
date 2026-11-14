@@ -1095,42 +1095,64 @@ button.rx-srcline:hover {
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
-  --fade-start: 0px;
-  --fade-end: 0px;
+  /* Where the rail has more beyond an edge, the first --cut px are fully hidden: the chevron sits there on the page
+     ground, beside the links, and a link is never drawn under it. The fade follows the cut. */
+  --cut-start: 0px;
+  --cut-end: 0px;
   mask-image: linear-gradient(
     to right,
-    transparent,
-    #000 var(--fade-start),
-    #000 calc(100% - var(--fade-end)),
-    transparent
+    transparent var(--cut-start),
+    #000 calc(var(--cut-start) + var(--fade-start, 0px)),
+    #000 calc(100% - var(--cut-end) - var(--fade-end, 0px)),
+    transparent calc(100% - var(--cut-end))
   );
 }
 .rx-secrail > nav::-webkit-scrollbar {
   display: none;
 }
 .rx-secrail > nav[data-more-start='true'] {
-  --fade-start: 28px;
+  --cut-start: 18px;
+  --fade-start: 14px;
 }
 .rx-secrail > nav[data-more-end='true'] {
-  --fade-end: 36px;
+  --cut-end: 18px;
+  --fade-end: 14px;
 }
-/* The fade alone reads as a clipped label; a chevron on each edge that has more links says the rail scrolls. */
+/* The page you are on: ink, a little heavier, on a rule in the layer's hue. The others stay links. */
+.rx-secrail a {
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+}
+.rx-secrail a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rx-secrail a[aria-current='page'] {
+  color: var(--dh-ink);
+  font-weight: var(--dh-w-strong, 620);
+  border-bottom-color: var(--rx-l, var(--dh-brand));
+  text-decoration: none;
+}
+/* A chevron on each edge that has more links says the rail scrolls. It fills the cut, so it never lies over a link. */
 .rx-secrail__hint {
   position: absolute;
   inset-block: 0;
   display: none;
   align-items: center;
+  width: 18px;
   color: var(--dh-brand-ink);
   pointer-events: none;
 }
 .rx-secrail__hint--start {
   inset-inline-start: 0;
+  justify-content: flex-start;
 }
 .rx-secrail__hint--start .rx-ico {
   transform: rotate(90deg);
 }
 .rx-secrail__hint--end {
   inset-inline-end: 0;
+  justify-content: flex-end;
 }
 .rx-secrail__hint--end .rx-ico {
   transform: rotate(-90deg);
