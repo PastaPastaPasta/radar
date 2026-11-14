@@ -1,16 +1,17 @@
 import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { H1 } from '../routes/claims'
 
 test.describe('status', () => {
   test('shows the Core tip, the best ChainLock and every source @IN-09', async ({ page }) => {
     await page.goto('/status')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
 
     await expect(page.getByText('Core tip', { exact: true }).first()).toBeVisible()
     await expect(page.getByText('Best ChainLock', { exact: true }).first()).toBeVisible()
 
-    const sources = page.getByRole('heading', { name: 'Sources' })
+    const sources = page.getByRole('heading', { level: 3, name: 'Sources' })
     await expect(sources).toBeVisible()
     for (const name of ['DAPI', 'Hyphen', 'Platform Explorer', 'Radar']) {
       await expect(page.locator('main').getByText(name, { exact: false }).first()).toBeVisible()
@@ -99,7 +100,7 @@ test.describe('status', () => {
 
   test('works on testnet and says which network it is reading @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/status?network=testnet')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
     await expect(page.getByText('Core tip', { exact: true }).first()).toBeVisible()
     await expect(page.locator('[data-testnet-keyline="test"]')).toBeAttached()
     await expectAccessible(page)
