@@ -5,7 +5,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
-import { stampOf } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 import { insQueries } from '@/data/insight/queries'
 import { useIndexHealth } from '@/data/index-health'
 import {
@@ -91,7 +91,7 @@ interface PageRows {
   /** The page's reads have finished and answered, whatever they held. */
   settled: boolean
   pending: number
-  stamp: ReturnType<typeof stampOf> | undefined
+  stamp: SourceStamp | undefined
   error: unknown
   failed: boolean
   refetch: () => void

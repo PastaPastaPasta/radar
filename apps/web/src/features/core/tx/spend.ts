@@ -155,7 +155,7 @@ export interface SpenderDeps {
 }
 
 /** Pages of an address's history read, and candidate transactions opened, before giving up on finding a spender. */
-export const SPENDER_MAX_PAGES = 3
+const SPENDER_MAX_PAGES = 3
 export const SPENDER_MAX_CANDIDATES = 8
 
 /**

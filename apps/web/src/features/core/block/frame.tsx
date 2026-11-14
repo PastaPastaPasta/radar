@@ -5,7 +5,7 @@ import { CopyLinkButton, useDocumentTitle, networkName, PageLink } from '@/featu
 import { type NetworkId } from '@/lib/network'
 import { Empty, LayerTile, Skeleton, SourceLine, type IconName } from '@/ui'
 
-export interface Crumb {
+interface Crumb {
   label: ReactNode
   to?: ReactNode
 }
@@ -83,7 +83,7 @@ export function RecordHeader({
   )
 }
 
-export interface SectionLink {
+interface SectionLink {
   id: string
   label: ReactNode
 }

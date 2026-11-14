@@ -19,7 +19,7 @@ interface OldestPage {
 }
 
 /** When an address was first and last seen, worked out from Insight's history pages. */
-export interface InsightSeen {
+interface InsightSeen {
   first?: number
   last?: number
   /** Where each time came from: the newest transactions and the oldest page are separate requests. */

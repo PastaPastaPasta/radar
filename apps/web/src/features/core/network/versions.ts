@@ -1,4 +1,4 @@
-export interface VersionCount {
+interface VersionCount {
   version: string
   count: number
 }
@@ -22,7 +22,7 @@ export function versionCounts(peers: readonly { subversion?: string | null }[]):
     .sort((a, b) => b.count - a.count || (a.version < b.version ? 1 : -1))
 }
 
-export interface Velocity {
+interface Velocity {
   perBlock: number
   blocks: number
 }

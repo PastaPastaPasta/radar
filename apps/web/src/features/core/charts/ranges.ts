@@ -11,7 +11,7 @@ const BLOCKS: Record<Exclude<Range, 'all'>, { blocks: number; points: number }> 
   '1y': { blocks: 210_240, points: 120 },
 }
 
-export const ALL_POINTS = 120
+const ALL_POINTS = 120
 
 export function rangeWindow(
   range: Range,

@@ -51,6 +51,7 @@ import {
   isCoinbaseTx,
   movesNoValue,
   senderAddresses,
+  shortAddress,
   sumOutputs,
   totals,
   type FlowNode,
@@ -61,8 +62,6 @@ const TXID = /^[0-9a-f]{64}$/i
 /** Above this many inputs the page loads previous outputs for the first few and asks before loading the rest. */
 const PREVOUT_EAGER = 50
 const PREVOUT_FIRST = 10
-
-const short = (a: string) => (a.length > 14 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a)
 
 export function TxPage({ txid }: { txid: string }) {
   const { t } = useLingui()
@@ -207,7 +206,7 @@ function TxView({
                   ? [
                       {
                         key: `i${n}`,
-                        label: `#${n} ${v.address ? short(v.address) : ''}`.trim(),
+                        label: `#${n} ${v.address ? shortAddress(v.address) : ''}`.trim(),
                         value: v.value,
                         kind: 'in' as const,
                         address: v.address,
@@ -223,7 +222,7 @@ function TxView({
         : [
             {
               key: `o${n}`,
-              label: `#${n} ${o.address ? short(o.address) : t`data`}`,
+              label: `#${n} ${o.address ? shortAddress(o.address) : t`data`}`,
               value: o.value,
               kind: o.address && senders.has(o.address) ? ('change' as const) : ('out' as const),
               address: o.address,

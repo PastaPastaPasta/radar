@@ -1,7 +1,7 @@
 export const BLOCKS_PER_PAGE = 20
 /** Page sizes on offer. Past `BLOCKS_PER_PAGE` a page comes from an index list in one request, not from DAPI block by block. */
 export const PAGE_SIZES = [20, 50, 100] as const
-export type PageSize = (typeof PAGE_SIZES)[number]
+type PageSize = (typeof PAGE_SIZES)[number]
 
 export const isPageSize = (n: number | undefined): n is PageSize => PAGE_SIZES.some((s) => s === n)
 /** Rows read first on a page: one round of block reads, so something shows as soon as the first nodes answer. */

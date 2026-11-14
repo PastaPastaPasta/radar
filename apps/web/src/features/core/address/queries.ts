@@ -10,8 +10,8 @@ import type { HyAddressTx, HyPage, HyUtxo } from '@/data/hyphen/schemas'
 import { hyKeys, insKeys } from '@/data/query/keys'
 import type { NetworkId } from '@/lib/network'
 
-export const HISTORY_LIMIT = 25
-export const UTXO_LIMIT = 25
+const HISTORY_LIMIT = 25
+const UTXO_LIMIT = 25
 
 export type IndexSource = 'hyphen' | 'insight'
 

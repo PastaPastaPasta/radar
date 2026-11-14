@@ -3,7 +3,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import { stampOf, type Sourced } from '@/data/envelope'
 import type { CoreChainLock, CoreChainStatus } from '@/data/core/types'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Card, Hash, KeyValue, Time } from '@/ui'
+import { Card, Hash, KeyValue, Time, stampsOf } from '@/ui'
 
 type Tip = Sourced<{ height: number; hash: string; time: number }>
 type ChainLock = Sourced<CoreChainLock>
@@ -23,9 +23,6 @@ function stateOf(...results: UseQueryResult[]): 'loading' | 'error' | 'ready' {
 export function CoreCard({ tip, chainLock, chain }: CoreCardProps) {
   const { t } = useLingui()
   const state = stateOf(tip, chainLock, chain)
-  const stamps = [tip.data, chainLock.data, chain.data].flatMap((s) =>
-    s ? [stampOf<unknown>(s)] : [],
-  )
   const behind =
     tip.data && chainLock.data
       ? Math.max(0, tip.data.data.height - chainLock.data.data.height)
@@ -48,7 +45,7 @@ export function CoreCard({ tip, chainLock, chain }: CoreCardProps) {
         void chainLock.refetch()
         void chain.refetch()
       }}
-      source={stamps}
+      source={stampsOf(tip.data, chainLock.data, chain.data)}
     >
       <KeyValue
         columns={2}
