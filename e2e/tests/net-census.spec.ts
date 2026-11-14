@@ -67,7 +67,10 @@ test.describe('Network census', () => {
       'the header carries the Core tip',
     ).toContainText('2,570,085')
     await expect(headline, 'the page does not repeat it').not.toContainText('2,570,085')
-    await expect(headline).toContainText('crawled 3 min ago')
+    await expect(headline).toContainText('counted at block')
+    await expect(headline, 'the crawl age is said once, by the source line').not.toContainText(
+      /crawled \d+ min/,
+    )
     await expect(headline.locator('[data-source]')).toHaveCount(0)
     await expect(sourceLineOf(headline).locator('[data-source="radar"]')).toBeVisible()
     await expectAccessible(page)
@@ -89,7 +92,7 @@ test.describe('Network census', () => {
   test('opens the list or section behind each headline figure @RA-02', async ({ page }) => {
     await openNodes(page)
     const hrefs: [string, RegExp][] = [
-      ['Reachable masternodes', /\/masternodes\?reach=reachable$/],
+      ['Reachable masternodes', /\/masternodes\?reach=reachable&status=enabled$/],
       ['Enabled', /\/masternodes\?status=enabled$/],
       ['PoSe-banned', /\/masternodes\?status=pose-banned$/],
       ['Countries', /\/nodes#countries$/],
@@ -119,6 +122,54 @@ test.describe('Network census', () => {
 
     await figure(page, /^PoSe-banned/).click()
     await expect(page).toHaveURL(/\/masternodes\?status=pose-banned$/)
+  })
+
+  test('opens lists whose match count equals the figure that was clicked @RA-02 @RA-05 @RA-06', async ({
+    page,
+  }) => {
+    const matched = async () => {
+      const text = await page.locator('.rx-activef').first().innerText()
+      return Number(/([\d,]+) match/.exec(text)![1]!.replace(/,/g, ''))
+    }
+    const value = async (name: RegExp) =>
+      Number(
+        (
+          await figure(page, name)
+            .locator('.rx-stat__value')
+            .innerText()
+        ).replace(/,/g, ''),
+      )
+
+    await openNodes(page)
+    for (const name of [/^Reachable masternodes/, /^Enabled/, /^PoSe-banned/]) {
+      const n = await value(name)
+      await figure(page, name).click()
+      await expect(page.locator('.rx-activef').first()).toContainText('match')
+      expect(await matched(), String(name)).toBe(n)
+      await page.goBack()
+      await expect(card(page, 'now')).toBeVisible()
+    }
+
+    await openNodes(page, '?scope=mn')
+    const reach = card(page, 'reach')
+    const silent = Number(
+      /([\d,]+) didn't\./.exec(await reach.innerText())![1]!.replace(/,/g, ''),
+    )
+    await reach.getByRole('link', { name: 'See which' }).click()
+    await expect(page.locator('.rx-activef').first()).toContainText('match')
+    expect(await matched(), 'See which').toBe(silent)
+
+    for (const [id, link] of [
+      ['hosting', 'a'],
+      ['countries', 'a'],
+    ] as const) {
+      await openNodes(page, '?scope=mn')
+      const first = card(page, id).locator('[data-ranked] li').first()
+      const n = Number((await first.locator('span').nth(1).innerText()).replace(/,/g, ''))
+      await first.locator(link).click()
+      await expect(page.locator('.rx-activef').first()).toContainText('match')
+      expect(await matched(), id).toBe(n)
+    }
   })
 
   test('scopes the versions, location and reach sections and keeps the scope through a reload and a copied link @RA-03', async ({
@@ -212,11 +263,11 @@ test.describe('Network census', () => {
     await expect(page).toHaveURL(/scope=mn/)
     await expect(hosting.getByRole('link', { name: 'Hetzner Online GmbH' })).toHaveAttribute(
       'href',
-      /\/masternodes\?host=\d+/,
+      /\/masternodes\?host=\d+.*status=enabled/,
     )
     await expect(card(page, 'countries').locator('[data-ranked] a').first()).toHaveAttribute(
       'href',
-      /\/masternodes\?country=[A-Z]{2}/,
+      /\/masternodes\?country=[A-Z]{2}.*status=enabled/,
     )
 
     await census(page)
@@ -238,7 +289,7 @@ test.describe('Network census', () => {
     await expect(reach.locator('[data-sharebar]')).toContainText("Didn't answer")
     await expect(reach.getByRole('link', { name: 'See which' })).toHaveAttribute(
       'href',
-      /\/masternodes\?reach=unreachable$/,
+      /\/masternodes\?reach=unreachable&status=enabled$/,
     )
     const networks = reach.locator('[data-address-networks]')
     for (const name of ['IPv4', 'IPv6', 'Tor', 'I2P', 'CJDNS']) {
