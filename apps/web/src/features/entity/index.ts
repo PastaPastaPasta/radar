@@ -39,7 +39,7 @@ export {
 export type { ViewedIdentity } from './viewed'
 export { CopyLinkButton } from './CopyLinkButton'
 export type { CopyLinkButtonProps } from './CopyLinkButton'
-export { PageFrame } from './PageFrame'
+export { PageFrame, usePageClaim } from './PageFrame'
 export type { PageFrameProps } from './PageFrame'
 export { IdentityRef } from './platform/IdentityRef'
 export type { IdentityRefProps } from './platform/IdentityRef'

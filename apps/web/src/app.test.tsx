@@ -163,11 +163,14 @@ describe('routes', () => {
       const url = path.replace(/\$\w+/g, (m) => encodeURIComponent(SAMPLE[m] ?? 'x'))
       renderAt(url)
 
+      // A page that opens with its claim keeps its name in the document title.
       await waitFor(
-        () =>
-          expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-            path === '/' ? 'Radar' : title,
-          ),
+        () => {
+          const h1 = screen.getByRole('heading', { level: 1 })
+          expect(h1.textContent.trim()).not.toBe('')
+          if (path === '/') expect(h1).toHaveTextContent('Radar')
+          else if (!h1.textContent.includes(title)) expect(document.title).toContain(title)
+        },
         { timeout: 12_000 },
       )
     },

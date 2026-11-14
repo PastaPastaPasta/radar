@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { resetAnnouncer } from '@/ui/announce'
-import { PageFrame } from './PageFrame'
+import { PageFrame, usePageClaim } from './PageFrame'
 import { renderInApp } from './test-utils'
 
 afterEach(() => {
@@ -74,6 +74,40 @@ describe('PageFrame', () => {
     expect(h1()).toHaveAttribute('data-claim')
     expect(document.title).toMatch(/^Nodes/)
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+  })
+
+  it('takes its claim from the part that reads the data, and its name again when that part goes', async () => {
+    function Reading({ count }: { count: string | undefined }) {
+      usePageClaim(count ? `${count} transactions are waiting for a block` : undefined)
+      return <p>list</p>
+    }
+    function Page() {
+      const [state, setState] = useState<'loading' | 'ready' | 'down'>('loading')
+      return (
+        <PageFrame path="/mempool" title="Mempool">
+          {state === 'down' ? (
+            <p>down</p>
+          ) : (
+            <Reading count={state === 'ready' ? '41' : undefined} />
+          )}
+          <button type="button" onClick={() => setState('ready')}>
+            land
+          </button>
+          <button type="button" onClick={() => setState('down')}>
+            fail
+          </button>
+        </PageFrame>
+      )
+    }
+    await renderInApp(<Page />)
+    const h1 = () => screen.getByRole('heading', { level: 1 })
+    expect(h1()).toHaveTextContent('Mempool')
+    await userEvent.click(screen.getByRole('button', { name: 'land' }))
+    expect(h1()).toHaveTextContent('41 transactions are waiting for a block')
+    expect(h1()).toHaveAttribute('data-claim')
+    await userEvent.click(screen.getByRole('button', { name: 'fail' }))
+    expect(h1()).toHaveTextContent('Mempool')
+    expect(h1()).not.toHaveAttribute('data-claim')
   })
 
   it('shows the actions and, with share, a button that copies the address with its network', async () => {
