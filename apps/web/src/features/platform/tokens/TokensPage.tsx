@@ -287,12 +287,7 @@ function TokenList() {
   const newest = search.sort === NEWEST_FIRST
 
   return (
-    <Card
-      layer="platform"
-      padding="flush"
-      id="tokens-list"
-      source={stamps.length > 0 ? stamps : undefined}
-    >
+    <Card layer="platform" id="tokens-list" source={stamps.length > 0 ? stamps : undefined}>
       <TableTools>
         <SegFilter
           label={t`Order`}

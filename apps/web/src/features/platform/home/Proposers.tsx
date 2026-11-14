@@ -83,7 +83,6 @@ export function Proposers({ active }: { active: boolean }) {
             : base(answer)
           : t`The evonodes that proposed the most blocks this epoch.`
       }
-      padding="flush"
       source={stampsOf(query.data)}
       actions={
         <PageLink to="/masternodes" search={{ view: 'platform' }} className="rx-go">

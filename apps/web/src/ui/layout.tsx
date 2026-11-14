@@ -50,7 +50,6 @@ export interface CardProps {
   error?: unknown
   onRetry?: () => void
   id?: string
-  padding?: 'normal' | 'flush'
   /**
    * `section` gives the card a section's look: a ruled head and its subtitle as one sentence under it. Either way its
    * sources go to the line of the section or page around it; a kit `Section` is what starts a new line.
@@ -85,7 +84,6 @@ export function Card({
   error,
   onRetry,
   id,
-  padding = 'normal',
   level = 'block',
   className,
   children,
@@ -135,7 +133,6 @@ export function Card({
       data-layer={attr}
       data-state={state}
       data-reports={reports}
-      data-padding={padding}
       aria-busy={state === 'loading' || undefined}
     >
       {head}

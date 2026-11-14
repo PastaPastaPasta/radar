@@ -240,12 +240,7 @@ export function TableSection() {
       title="DataTable"
       description="Sort by mouse and keyboard; j and k move through rows, Enter opens; on a phone every row is a card."
     >
-      <Card
-        layer="network"
-        padding="flush"
-        title="Masternodes"
-        source={[STAMPS.radar, STAMPS.dapi]}
-      >
+      <Card layer="network" title="Masternodes" source={[STAMPS.radar, STAMPS.dapi]}>
         <TableTools>
           <SegFilter
             label="Type"
@@ -316,7 +311,6 @@ export function TableSection() {
         <div className="rx-c6">
           <Card
             layer="core"
-            padding="flush"
             title="Latest blocks"
             source={STAMPS.dapi}
             actions={
@@ -355,7 +349,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c6">
-          <Card layer="platform" padding="flush" title="Infinite" source={STAMPS.pe}>
+          <Card layer="platform" title="Infinite" source={STAMPS.pe}>
             <DataTable
               caption="Blocks, loading more as you go"
               columns={FEED_COLUMNS}
@@ -374,7 +368,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c4">
-          <Card layer="core" padding="flush" title="Loading">
+          <Card layer="core" title="Loading">
             <DataTable
               caption="Loading"
               columns={FEED_COLUMNS.slice(0, 3)}
@@ -385,7 +379,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c4">
-          <Card layer="platform" padding="flush" title="Empty">
+          <Card layer="platform" title="Empty">
             <DataTable
               caption="Empty"
               columns={FEED_COLUMNS.slice(0, 3)}
@@ -396,7 +390,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c4">
-          <Card layer="network" padding="flush" title="Error">
+          <Card layer="network" title="Error">
             <DataTable
               caption="Error"
               columns={FEED_COLUMNS.slice(0, 3)}
@@ -409,12 +403,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c8">
-          <Card
-            layer="core"
-            padding="flush"
-            title="Paged, scrolls sideways on a phone"
-            source={STAMPS.hyphen}
-          >
+          <Card layer="core" title="Paged, scrolls sideways on a phone" source={STAMPS.hyphen}>
             <DataTable
               caption="Rich list"
               phone="scroll"
@@ -449,7 +438,7 @@ export function TableSection() {
           </Card>
         </div>
         <div className="rx-c12">
-          <Card layer="core" padding="flush" title="Virtual, 120 rows">
+          <Card layer="core" title="Virtual, 120 rows">
             <DataTable
               caption="120 blocks"
               columns={FEED_COLUMNS}

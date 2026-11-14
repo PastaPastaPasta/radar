@@ -22,12 +22,7 @@ export function TransitionsTab({ block, stamp }: { block: PeBlock; stamp: Source
     [block, page],
   )
   return (
-    <Card
-      layer="platform"
-      padding="flush"
-      source={stamp}
-      title={t`State transitions in this block`}
-    >
+    <Card layer="platform" source={stamp} title={t`State transitions in this block`}>
       <TransitionTable
         rows={rows}
         state={block.txs.length === 0 ? 'empty' : 'ready'}

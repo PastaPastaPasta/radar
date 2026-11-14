@@ -114,7 +114,7 @@ function TransitionsList() {
   }
 
   return (
-    <Card layer="platform" padding="flush" source={list.source}>
+    <Card layer="platform" source={list.source}>
       <TableTools>
         <SegFilter
           label={t`Status`}

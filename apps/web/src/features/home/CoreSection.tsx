@@ -210,7 +210,6 @@ function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
   return (
     <Card
       title={t`Core blocks`}
-      padding="flush"
       source={shown ? stampOf(shown) : undefined}
       actions={
         <PageLink to="/blocks" className="rx-go">
@@ -295,7 +294,6 @@ function PendingCard({ pending }: { pending: ReturnType<typeof usePending> }) {
     <Card
       title={t`Pending transactions`}
       subtitle={seenOnly && seenAny ? t`Seen since you opened this page` : undefined}
-      padding="flush"
       source={stamp}
       actions={
         <PageLink to="/mempool" className="rx-go">

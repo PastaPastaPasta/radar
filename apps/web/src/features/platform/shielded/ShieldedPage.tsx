@@ -248,7 +248,6 @@ function Notes() {
           ? t`The pool serves its notes in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} of the chunk starting at note ${formatInt(start)} are shown.`
           : t`The pool holds ${formatInt(total)} notes, served in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} of the chunk starting at note ${formatInt(start)} are shown.`
       }
-      padding="flush"
       source={stampsOf(answer.data)}
     >
       <DataTable

@@ -148,7 +148,6 @@ export function ReadinessCard({ d, stamp }: { d: RadarMasternodeDetail; stamp: S
           {overall === 'pass' ? t`Ready` : overall === 'fail' ? t`Not ready` : t`Unknown`}
         </Badge>
       }
-      padding="flush"
     >
       <ul aria-label={t`Quorum readiness checks`} className="grid" data-readiness>
         {rows.map((row) => (

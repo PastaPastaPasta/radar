@@ -95,7 +95,6 @@ function VersionsCard({ versions, stamp }: { versions: Version[]; stamp: SourceS
       source={stamp}
       id="versions"
       subtitle={t`What the node announced, newest first`}
-      padding="flush"
     >
       <DataTable
         caption={t`Versions this masternode has announced`}
@@ -200,7 +199,6 @@ function ChangesCard({ changes, stamp }: { changes: Change[]; stamp: SourceStamp
       source={stamp}
       id="changes"
       subtitle={t`Addresses, keys and PoSe status, as Radar recorded them`}
-      padding="flush"
     >
       <DataTable
         caption={t`Registration changes of this masternode`}
@@ -270,7 +268,6 @@ function SpecialTxCard({ ctx }: { ctx: MnContext }) {
       source={query.data}
       id="special-txs"
       subtitle={t`Every ProRegTx and ProUp… transaction that changed this masternode`}
-      padding={enabled && !stale && history.length > 0 ? 'flush' : 'normal'}
       state={
         enabled && query.isPending
           ? 'loading'

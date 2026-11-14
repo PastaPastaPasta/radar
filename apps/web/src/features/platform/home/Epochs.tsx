@@ -119,7 +119,6 @@ export function RecentEpochs({ active }: { active: boolean }) {
           ? t`Start times and block counts are proof-checked; transitions and fees come from Platform Explorer.`
           : t`Start times and block counts are proof-checked.`
       }
-      padding="flush"
       source={stampsOf(infos.data, ...details.map((d) => d.data))}
       actions={
         <PageLink to="/epochs" className="rx-go">

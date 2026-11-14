@@ -256,7 +256,6 @@ function Tally({ votes }: { votes: VotesQuery }) {
       layer="network"
       title={t`Votes by version`}
       subtitle={t`How many evonodes vote for each protocol version.`}
-      padding="flush"
       source={stampsOf(votes.data)}
     >
       <DataTable
@@ -315,7 +314,6 @@ function VoteTable({ votes }: { votes: VotesQuery }) {
             })
           : undefined
       }
-      padding="flush"
       source={stampsOf(votes.data)}
     >
       <DataTable

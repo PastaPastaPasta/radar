@@ -312,13 +312,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
 
       <PendingCard pending={pending} />
 
-      <Card
-        title={t`Transactions`}
-        layer="core"
-        id="history"
-        padding="flush"
-        source={firstPageStamp(txs)}
-      >
+      <Card title={t`Transactions`} layer="core" id="history" source={firstPageStamp(txs)}>
         <DataTable
           caption={t`Transactions of this address, newest first`}
           columns={columns}
@@ -543,7 +537,6 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
       subtitle={subtitle}
       layer="core"
       id="utxos"
-      padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
     >
       {pending > 0 ? (

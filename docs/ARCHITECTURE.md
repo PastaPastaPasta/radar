@@ -1173,7 +1173,7 @@ Card: { title?: ReactNode; subtitle?: ReactNode; actions?: ReactNode; layer?: La
         source?: SourceStamp | SourceStamp[]   // renders SourceLine at the right of the card head; health greys the body
         state?: LoadState; error?: unknown; onRetry?: () => void
         id?: string                            // section anchor (copy-link icon)
-        padding?: 'normal' | 'flush'; className?: string; children: ReactNode }
+        className?: string; children: ReactNode }
 SectionBand: { layer: Layer; title: ReactNode; description?: ReactNode; id?: string; actions?: ReactNode; children: ReactNode }
 KeyValue: { items: { label: ReactNode; value: ReactNode; source?: SourceStamp; hint?: ReactNode }[]; columns?: 1 | 2 | 3 }
 

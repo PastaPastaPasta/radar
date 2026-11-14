@@ -107,7 +107,7 @@ function BlocksList() {
   const phrase = list.total ?? list.rows.length
 
   return (
-    <Card layer="platform" padding="flush" source={stamps.length > 0 ? stamps : undefined}>
+    <Card layer="platform" source={stamps.length > 0 ? stamps : undefined}>
       <TableTools>
         <SegFilter
           label={t`Order`}

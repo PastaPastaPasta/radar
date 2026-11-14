@@ -534,7 +534,7 @@ export function BlocksPage({
                 : t`Reading the chain tip…`}
             </p>
           ) : null}
-          <Card layer="core" padding="flush">
+          <Card layer="core">
             {noBlocks ? (
               <Empty
                 kind="none-yet"

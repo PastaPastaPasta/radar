@@ -175,7 +175,6 @@ function GovernanceContent() {
         subtitle={data ? t`${formatInt(data.data.total ?? proposals.length)} proposals` : undefined}
         layer="network"
         id="proposals"
-        padding="flush"
         source={stamps}
       >
         {insight && data ? <DerivedFundingNote proposals={proposals} /> : null}

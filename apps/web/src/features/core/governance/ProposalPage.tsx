@@ -210,13 +210,7 @@ function VoteHistory({ hash }: { hash: string }) {
   )
 
   return (
-    <Card
-      title={t`Vote history`}
-      layer="network"
-      id="vote-history"
-      padding="flush"
-      source={firstPageStamp(votes)}
-    >
+    <Card title={t`Vote history`} layer="network" id="vote-history" source={firstPageStamp(votes)}>
       <DataTable
         caption={t`Masternode votes on this proposal, newest first`}
         columns={columns}

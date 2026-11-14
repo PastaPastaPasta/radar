@@ -127,7 +127,6 @@ function SeenMempool({
         }
         layer="core"
         id="pending"
-        padding="flush"
         source={seen.stamp}
       >
         <DataTable
@@ -231,7 +230,6 @@ function IndexedMempool() {
         subtitle={total === undefined ? undefined : t`${formatInt(total)} in the mempool`}
         layer="core"
         id="pending"
-        padding="flush"
         source={firstPageStamp(txs)}
       >
         <DataTable

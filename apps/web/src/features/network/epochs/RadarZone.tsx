@@ -160,7 +160,6 @@ function Upcoming({ query }: { query: PlatformQuery }) {
       layer="network"
       title={t`Who proposes next`}
       subtitle={t`The next twelve proposers in the schedule, with how many blocks in a row each has.`}
-      padding="flush"
       source={stampsOf(query.data)}
     >
       <DataTable

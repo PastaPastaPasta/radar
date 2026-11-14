@@ -231,7 +231,6 @@ function RichListContent() {
           first?.total === undefined ? undefined : t`${formatInt(first.total)} addresses ranked`
         }
         layer="core"
-        padding="flush"
         source={firstPageSource}
       >
         {phone ? null : (

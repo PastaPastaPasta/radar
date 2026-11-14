@@ -56,7 +56,6 @@ export function Proposers() {
             : base(answer)
           : t`The evonodes that proposed the most blocks this epoch.`
       }
-      padding="flush"
       source={stampsOf(query.data)}
     >
       <DataTable
