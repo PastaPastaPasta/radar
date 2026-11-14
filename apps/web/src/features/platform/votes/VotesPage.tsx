@@ -83,11 +83,12 @@ function VoteList({ search }: { search: VotesPageSearch }) {
     voter: classifyIdentityInput(search.voter ?? ''),
     towards: classifyIdentityInput(search.towards ?? ''),
   })
+  const identityOnly = (text: string | undefined) =>
+    classifyIdentityInput(text ?? '') === 'identity' ? text : undefined
   const asked = {
     ...search,
-    voter: classifyIdentityInput(search.voter ?? '') === 'identity' ? search.voter : undefined,
-    towards:
-      classifyIdentityInput(search.towards ?? '') === 'identity' ? search.towards : undefined,
+    voter: identityOnly(search.voter),
+    towards: identityOnly(search.towards),
   }
   const list = usePeList('votes', asked, (page, limit) =>
     peQueries.masternodeVotes(net, peVotesQuery({ ...asked, limit, page })),

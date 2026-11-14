@@ -18,44 +18,47 @@ interface BoardRow {
   value: bigint | number
 }
 
-interface BoardSpec<T = unknown> {
+interface Board {
   id: string
   title: string
   unit: string
-  query: UseQueryResult<Sourced<T>>
-  rows: (data: T) => BoardRow[]
+  query: UseQueryResult<Sourced<unknown>>
+  ranked: Ranked<BoardRow>[]
   actions?: ReactNode
 }
 
-const spec = <T,>(s: BoardSpec<T>) => s as unknown as BoardSpec
-
-interface Ready {
-  spec: BoardSpec
-  ranked: Ranked<BoardRow>[]
+function board<T>({
+  rows,
+  query,
+  ...rest
+}: Omit<Board, 'query' | 'ranked'> & {
+  query: UseQueryResult<Sourced<T>>
+  rows: (data: T) => BoardRow[]
+}): Board {
+  const all = query.data ? rows(query.data.data) : []
+  return { ...rest, query, ranked: rankDesc(all, (r) => r.value).slice(0, TOP) }
 }
 
-function Board({ spec: s, ranked }: Ready) {
+function BoardCard({ id, title, unit, query, ranked, actions }: Board) {
   const { t } = useLingui()
   return (
     <Card
-      id={s.id}
+      id={id}
       layer="platform"
-      title={s.title}
-      subtitle={s.unit}
-      {...queryView(s.query)}
-      source={stampsOf(s.query.data)}
-      actions={s.actions}
+      title={title}
+      subtitle={unit}
+      {...queryView(query)}
+      source={stampsOf(query.data)}
+      actions={actions}
     >
       {ranked.length === 0 ? (
         <Empty kind="none-yet" title={t`Nothing ranked yet`} />
       ) : (
-        <ol className="grid gap-2" data-board={s.id}>
+        <ol className="grid gap-2" data-board={id}>
           {ranked.map(({ item, rank }) => (
             <li key={item.key} className="flex items-center justify-between gap-3">
               <span className="flex min-w-0 items-center gap-2">
-                <span className="rx-num w-5 text-right text-[var(--dh-ink-2,inherit)]">
-                  {rank}
-                </span>
+                <span className="rx-num w-5 text-right text-[var(--dh-ink-2,inherit)]">{rank}</span>
                 {item.who}
               </span>
               <span className="rx-num">{item.figure}</span>
@@ -68,8 +71,8 @@ function Board({ spec: s, ranked }: Ready) {
 }
 
 /** A board whose answer is in and has nothing above zero has nothing to rank. */
-const isQuiet = ({ spec: s, ranked }: Ready) =>
-  s.query.isSuccess && ranked.every((r) => r.item.value === 0 || r.item.value === 0n)
+const isQuiet = ({ query, ranked }: Board) =>
+  query.isSuccess && ranked.every((r) => r.item.value === 0 || r.item.value === 0n)
 
 /** PE-05: who and what is busiest on Platform. The richest list switches between balance and transition count. */
 export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active: boolean }) {
@@ -89,7 +92,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
   const tokens = useQuery({ ...peQueries.tokenRating(net, BOARD_PAGE), enabled: active })
 
   const boards = [
-    spec({
+    board({
       id: 'board-active-identities',
       title: t`Most active identities`,
       unit: t`By transitions sent`,
@@ -107,7 +110,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
         </PageLink>
       ),
     }),
-    spec({
+    board({
       id: 'board-richest',
       title: rich === 'txs' ? t`Busiest identities` : t`Richest identities`,
       unit: rich === 'txs' ? t`By transition count` : t`By credit balance`,
@@ -144,7 +147,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
         />
       ),
     }),
-    spec({
+    board({
       id: 'board-tokens',
       title: t`Trending tokens`,
       unit: t`By recent token transitions`,
@@ -162,7 +165,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
         </PageLink>
       ),
     }),
-    spec({
+    board({
       id: 'board-contracts-rated',
       title: t`Top-rated contracts`,
       unit: t`By transitions`,
@@ -175,7 +178,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
           value: r.transitionsCount,
         })),
     }),
-    spec({
+    board({
       id: 'board-contracts-active',
       title: t`Most active contracts`,
       unit: t`By recent transitions`,
@@ -193,22 +196,19 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
         </PageLink>
       ),
     }),
-  ].map((s): Ready => {
-    const all = s.query.data ? s.rows(s.query.data.data) : []
-    return { spec: s, ranked: rankDesc(all, (r) => r.value).slice(0, TOP) }
-  })
+  ]
   // The richest board stays so the switch that changes it stays.
-  const quiet = boards.filter(isQuiet).filter((b) => b.spec.id !== 'board-richest')
+  const quiet = boards.filter(isQuiet).filter((b) => b.id !== 'board-richest')
   const shown = boards.filter((b) => !quiet.includes(b))
   const quietNames = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(
-    quiet.map((b) => b.spec.title),
+    quiet.map((b) => b.title),
   )
 
   return (
     <div className="rx-pile" data-leaderboards>
       <div className="rx-cols rx-cols--3">
         {shown.map((b) => (
-          <Board key={b.spec.id} {...b} />
+          <BoardCard key={b.id} {...b} />
         ))}
       </div>
       {quiet.length > 0 ? (

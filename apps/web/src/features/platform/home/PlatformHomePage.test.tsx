@@ -198,14 +198,14 @@ describe('Platform overview', () => {
     expect(within(txs).getAllByRole('row').length).toBeLessThanOrEqual(6)
   })
 
-  it('holds a list still, and says so, while the pointer is over it @PE-02', async () => {
+  it('holds a list still, and says it is paused, while the pointer is over it @PE-02', async () => {
     const user = userEvent.setup()
     renderAt('/platform')
     const blocks = await ready('newest-blocks')
     const list = blocks.querySelector<HTMLElement>('[data-list="blocks"]')!
     await user.hover(list)
     expect(list).toHaveAttribute('data-held', 'true')
-    expect(within(blocks).getByRole('status')).toHaveTextContent('Held still while you look')
+    expect(within(blocks).getByRole('status')).toHaveTextContent('Paused')
     await user.unhover(list)
     await waitFor(() => expect(list).toHaveAttribute('data-held', 'false'))
   })
@@ -248,7 +248,10 @@ describe('Platform overview', () => {
     const PE = 'https://api.pe.dashhq.org'
     const id = (n: number) => `${String(n).padStart(2, '1')}${'A'.repeat(41)}`
     const page = (items: unknown[]) =>
-      HttpResponse.json({ pagination: { page: 1, limit: 50, total: items.length }, resultSet: items })
+      HttpResponse.json({
+        pagination: { page: 1, limit: 50, total: items.length },
+        resultSet: items,
+      })
     server.use(
       http.get(`${PE}/dataContracts/rating`, () =>
         page([0, 0, 31, 271, 105].map((n, i) => ({ identifier: id(i), transitionsCount: n }))),
@@ -298,9 +301,7 @@ describe('Platform overview', () => {
     )
     renderAt('/platform')
     const richest = await ready('board-richest')
-    expect(
-      within(richest).getByRole('button', { name: 'Transitions' }),
-    ).toBeInTheDocument()
+    expect(within(richest).getByRole('button', { name: 'Transitions' })).toBeInTheDocument()
     await waitFor(() =>
       expect(document.querySelector('[data-quiet-boards]')).toHaveTextContent(
         'Nothing to rank yet: Trending tokens.',

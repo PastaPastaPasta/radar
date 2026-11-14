@@ -12,11 +12,8 @@ import { Card, Chart, Empty, SegFilter, Unavailable, queryView, stampsOf } from 
 import { bucketLabel, HOME_RANGES, type HomeRange } from '../home/chart-options'
 import { poolSeries } from './pool-series'
 
-const RANGES = HOME_RANGES
-type Range = HomeRange
-
 /** The index's shield and unshield history: the complement to the proved state above, behind Platform Explorer. */
-export function ShieldedChart({ range }: { range: Range }) {
+export function ShieldedChart({ range }: { range: HomeRange }) {
   const { t } = useLingui()
   const net = useNetwork()
   const off = useDecentralizedOnly()
@@ -28,7 +25,12 @@ export function ShieldedChart({ range }: { range: Range }) {
     () => poolSeries(shield.data?.data ?? [], unshield.data?.data ?? []),
     [shield.data, unshield.data],
   )
-  const names: Record<Range, string> = { '24h': t`24 h`, '3d': t`3 d`, '1w': t`1 w`, '1m': t`1 m` }
+  const names: Record<HomeRange, string> = {
+    '24h': t`24 h`,
+    '3d': t`3 d`,
+    '1w': t`1 w`,
+    '1m': t`1 m`,
+  }
   const dashText = (v: number) => t`${formatNumber(v, { maximumFractionDigits: 2 })} DASH`
   const option = useMemo<EChartsOption>(
     () => ({
@@ -71,7 +73,7 @@ export function ShieldedChart({ range }: { range: Range }) {
             <SegFilter
               label={t`Range`}
               value={range}
-              options={RANGES.map((r) => ({ id: r, label: names[r] }))}
+              options={HOME_RANGES.map((r) => ({ id: r, label: names[r] }))}
               onChange={(r) => {
                 void navigate({
                   to: '/shielded',
