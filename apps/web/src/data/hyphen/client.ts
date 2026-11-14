@@ -51,7 +51,7 @@ import {
   type HyValidator,
   type HyValidatorDetail,
 } from './schemas'
-import { cursorFromHeight, decodeCursor, type HyListQuery, type HyQueryParams } from './params'
+import { cursorFromHeight, type HyListQuery, type HyQueryParams } from './params'
 import { openHyphenStream } from './stream'
 
 function qs(q: HyQueryParams | undefined): string {
@@ -122,9 +122,6 @@ function reportHyphenLag(
 }
 
 export const hyphen = {
-  cursorFromHeight,
-  decodeCursor,
-
   /** `referenceHeight`: the chain tip from a source outside Hyphen, to measure how far its index trails. */
   async status(
     net: NetworkId,

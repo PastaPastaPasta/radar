@@ -46,7 +46,7 @@ export const isMined = (tx: Pick<InsTx, 'blockheight' | 'confirmations'>): boole
   tx.blockheight != null && tx.blockheight >= 0 && (tx.confirmations ?? 1) > 0
 
 /** What a transaction does to one address, in duffs: outputs paying it less the inputs it spends. */
-export function netEffectOn(tx: Pick<InsTx, 'vin' | 'vout'>, address: string): bigint {
+function netEffectOn(tx: Pick<InsTx, 'vin' | 'vout'>, address: string): bigint {
   let net = 0n
   for (const i of tx.vin) if (i.addr === address) net -= i.valueSat ?? 0n
   for (const o of tx.vout) if (o.scriptPubKey.addresses?.includes(address)) net += o.value

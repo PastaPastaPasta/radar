@@ -194,7 +194,7 @@ const reversedHex = (b: Uint8Array) => bytesToHex(Uint8Array.from(b).reverse())
  * Height and masternode-list root of a DIP-4 coinbase transaction: version and type, the coinbase input, the outputs,
  * the lock time, then the payload (version, height, merkleRootMNList, …).
  */
-export function readCoinbasePayload(tx: Uint8Array): { height: number; merkleRootMNList: string } {
+function readCoinbasePayload(tx: Uint8Array): { height: number; merkleRootMNList: string } {
   const view = new DataView(tx.buffer, tx.byteOffset, tx.byteLength)
   let at = 0
   const need = (n: number) => {

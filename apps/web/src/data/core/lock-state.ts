@@ -58,7 +58,7 @@ export interface InstantLockView {
  * Whether InstantSend still says anything about this transaction. A ChainLock one node reports counts as a
  * ChainLock here: the lock state is dropped a moment early at worst, and never shown where nodes have pruned it.
  */
-export function isSettled(tx: LockFacts): boolean {
+function isSettled(tx: LockFacts): boolean {
   if (tx.height === undefined) return false
   if (tx.isChainLocked === true || tx.chainLockClaim !== undefined) return true
   return (
