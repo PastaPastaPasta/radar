@@ -1,5 +1,26 @@
 {
-  "mainnet": [],
+  "mainnet": [
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["normalizedParentDomainName", "==", "dash"]],
+        "orderBy": [
+          ["normalizedParentDomainName", "asc"],
+          ["normalizedLabel", "asc"]
+        ],
+        "limit": 26,
+        "startAfter": "8QYFCJLHXTSWpb43ofwvpmaUvWSGb2KYz41WZhrqFUzk"
+      }
+    ],
+    [
+      "identities.balanceAndRevision",
+      {
+        "id": "HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD"
+      }
+    ]
+  ],
   "testnet": [
     [
       "documents.query",

@@ -122,7 +122,7 @@ describe('Address page', () => {
       }
       expect(screen.queryByRole('heading', { name: 'QR code' })).toBeNull()
       expect(screen.queryByRole('img', { name: /QR code of the address/ })).toBeNull()
-      expect(screen.getByText(/Watching for new transactions/)).toBeVisible()
+      expect(await screen.findByText(/Watching for new transactions/)).toBeVisible()
       const toggle = screen.getByRole('button', { name: 'Show QR code' })
       expect(toggle).toHaveAttribute('aria-expanded', 'false')
       await user.click(toggle)

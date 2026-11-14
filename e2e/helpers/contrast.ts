@@ -14,6 +14,14 @@ export interface LowContrast {
  */
 export async function lowContrastText(page: Page): Promise<LowContrast[]> {
   return page.evaluate(() => {
+    // Measure the settled colours: a live figure that just changed is still fading in.
+    for (const animation of document.getAnimations()) {
+      try {
+        animation.finish()
+      } catch {
+        // An endless animation cannot finish; its frames are measured as they are.
+      }
+    }
     interface Rgba {
       r: number
       g: number
