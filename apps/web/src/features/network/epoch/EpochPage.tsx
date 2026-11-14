@@ -106,7 +106,7 @@ function Neighbours({ index }: { index: number }) {
           className="dh-btn dh-btn--sm"
           rel="prev"
         >
-          {t`Previous epoch`}
+          {t`Previous: epoch ${formatInt(index - 1)}`}
         </Link>
       ) : (
         <span className="dh-btn dh-btn--sm" aria-disabled="true">
@@ -119,7 +119,7 @@ function Neighbours({ index }: { index: number }) {
         className="dh-btn dh-btn--sm"
         rel="next"
       >
-        {t`Next epoch`}
+        {t`Next: epoch ${formatInt(index + 1)}`}
       </Link>
       <PageLink to="/epochs" className="rx-go">
         {t`All epochs`}

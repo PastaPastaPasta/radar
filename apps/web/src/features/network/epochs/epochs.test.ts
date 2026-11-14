@@ -3,6 +3,7 @@ import { formatMultiplier } from './CurrentEpoch'
 import { epochLengthMs } from '@/lib/epoch-length'
 import { byBlocks, combined } from './queries'
 import { DEFAULT_COUNT, EPOCH_REQUEST_CAP, epochChunks, resolveRange } from './RangeTable'
+import { rankProposers } from './proposer-table'
 import { sortRows } from './state'
 
 describe('epochChunks', () => {
@@ -100,5 +101,13 @@ describe('sortRows', () => {
 
   it('keeps the order of a sort it does not know', () => {
     expect(sortRows(rows, 'nope', keys)).toEqual(rows)
+  })
+})
+
+describe('rankProposers', () => {
+  it('gives proposers of as many blocks one rank, and the next after them its place @NX-51', () => {
+    const p = (n: number, blocks: bigint) => ({ proTxHash: `a${String(n)}`, blocks })
+    const ranked = rankProposers([p(1, 9n), p(2, 8n), p(3, 8n), p(4, 8n), p(5, 1n)], 34)
+    expect(ranked.map((r) => r.rank)).toEqual([1, 2, 2, 2, 5])
   })
 })

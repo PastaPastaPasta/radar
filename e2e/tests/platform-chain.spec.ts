@@ -211,11 +211,11 @@ test.describe('One epoch', () => {
 
   test('links to the previous and next epoch @NX-51', async ({ page }) => {
     await open(page, '/epoch/86', 'Epoch 86')
-    await page.getByRole('link', { name: 'Previous epoch' }).click()
+    await page.getByRole('link', { name: 'Previous: epoch 85' }).click()
     await expect(page).toHaveURL(/\/epoch\/85/)
     await expect(page.getByRole('heading', { level: 1, name: 'Epoch 85' })).toBeVisible()
-    await page.getByRole('link', { name: 'Next epoch' }).click()
-    await page.getByRole('link', { name: 'Next epoch' }).click()
+    await page.getByRole('link', { name: 'Next: epoch 86' }).click()
+    await page.getByRole('link', { name: 'Next: epoch 87' }).click()
     await expect(page).toHaveURL(/\/epoch\/87/)
   })
 

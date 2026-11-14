@@ -1,6 +1,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
@@ -48,6 +49,19 @@ describe('Epochs', () => {
     expect(rewards).toHaveTextContent('Pool so far')
     // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
     expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
+  })
+
+  it('gives the pool as an exact amount, not as 1.5k @RA-60', async () => {
+    const doc = await fixtureBody<{ now: { pool_so_far: number } }>('radar', 'mainnet', 'platform')
+    server.use(
+      http.get('*/mainnet/platform', () =>
+        HttpResponse.json({ ...doc, now: { ...doc.now, pool_so_far: 150_243_800_000_000 } }),
+      ),
+    )
+    renderAt('/epochs')
+    const rewards = await card('rewards')
+    await waitFor(() => expect(rewards).toHaveTextContent('Pool so far1,502.'))
+    expect(rewards).not.toHaveTextContent(/\dk\s*DASH/)
   })
 
   it('does not call an epoch complete once it has run past its expected end @RA-60 @NX-50', async () => {
@@ -161,11 +175,14 @@ describe('One epoch', () => {
     await waitFor(() =>
       expect(document.getElementById('epoch-totals')).toHaveTextContent('Processing fees'),
     )
-    expect(screen.getByRole('link', { name: 'Previous epoch' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Previous: epoch 85' })).toHaveAttribute(
       'href',
       '/epoch/85',
     )
-    expect(screen.getByRole('link', { name: 'Next epoch' })).toHaveAttribute('href', '/epoch/87')
+    expect(screen.getByRole('link', { name: 'Next: epoch 87' })).toHaveAttribute(
+      'href',
+      '/epoch/87',
+    )
     const proposers = await card('epoch-proposers')
     await waitFor(() => expect(rows(proposers).length).toBeGreaterThan(0))
   })
