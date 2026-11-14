@@ -47,6 +47,18 @@ describe('Quorums', () => {
     expect(all).toBeGreaterThan(1)
   })
 
+  it('labels the Verified column as the flag Platform reports, not Radar’s proof @NX-55', async () => {
+    renderAt('/quorums')
+    const quorums = await card('quorums')
+    await waitFor(() =>
+      expect(quorums.querySelectorAll('[data-quorum-hash]').length).toBeGreaterThan(3),
+    )
+    const header = within(quorums).getByRole('columnheader', { name: /Platform’s flag/ })
+    expect(header.querySelector('[title]')?.getAttribute('title')).toMatch(
+      /Radar has not checked the signature/,
+    )
+  })
+
   it('lets the quorum type buttons wrap instead of widening the page on a phone @NX-55', async () => {
     renderAt('/quorums')
     const quorums = await card('quorums')

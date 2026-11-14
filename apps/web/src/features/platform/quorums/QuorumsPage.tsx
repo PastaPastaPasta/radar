@@ -94,12 +94,14 @@ export function QuorumsPage() {
       },
       {
         id: 'verified',
-        header: t({ message: 'Verified', context: 'quorum is verified' }),
+        header: () => (
+          <span title={t`Platform’s own flag for this quorum. Radar has not checked the signature.`}>
+            {t`Platform’s flag`}
+          </span>
+        ),
         cell: ({ row }) =>
           row.original.isVerified ? (
-            <Badge tone="success">
-              {t({ message: 'Verified', context: 'quorum is verified' })}
-            </Badge>
+            <Badge tone="success">{t({ message: 'Verified', context: 'quorum is verified' })}</Badge>
           ) : (
             <Badge tone="warning">{t`Not verified`}</Badge>
           ),
