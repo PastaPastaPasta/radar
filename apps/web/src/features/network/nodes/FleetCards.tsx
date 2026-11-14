@@ -1,12 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Card, Time } from '@/ui'
+import { Card, Time, stampsOf } from '@/ui'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { DKG_CHECK_IDS, GRADES, median } from './census-math'
 import { Figure, FigureGrid, ShareBar } from './parts'
-import { loadState, stampsOf, type SectionProps } from './shared'
+import { loadState, type SectionProps } from './shared'
 
 const ENABLED = { status: ['enabled' as const] }
 

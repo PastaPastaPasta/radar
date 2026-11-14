@@ -10,16 +10,22 @@ import { radarQueries } from '@/data/radar/queries'
 import type { RadarPlatform } from '@/data/radar/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
-import {
-  queryView,
-  sortRows,
-  stampsOf,
-  useAfterIdle,
-  useSortedPaging,
-} from '@/features/network/epochs/state'
+import { sortRows, useSortedPaging } from '@/features/network/epochs/state'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Card, DataTable, Empty, KeyValue, Meter, Stat, Stats, Unavailable } from '@/ui'
+import {
+  Card,
+  DataTable,
+  Empty,
+  KeyValue,
+  Meter,
+  Stat,
+  Stats,
+  Unavailable,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+} from '@/ui'
 import { ACTIVATION_SHARE, protocolQueries, thresholdOf, type VoteRow, type Votes } from './queries'
 
 type VotesQuery = UseQueryResult<Sourced<Votes>>

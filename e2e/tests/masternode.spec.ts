@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'

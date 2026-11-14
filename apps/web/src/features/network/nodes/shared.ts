@@ -19,8 +19,6 @@ export interface SectionProps {
 export const loadState = (q: Pick<UseQueryResult, 'isPending' | 'isError' | 'data'>): LoadState =>
   q.data !== undefined ? 'ready' : q.isError ? 'error' : q.isPending ? 'loading' : 'ready'
 
-export { stampsOf } from '@/ui'
-
 /** Changes the census page's search in place: no new history entry, no scroll reset, and the hash is kept. */
 export function useCensusSearch(): (patch: {
   scope?: string

@@ -6,9 +6,20 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { base58Encode, isPlatformId } from '@/lib/base58'
 import { hexToBytes, isHex, normalizeHex } from '@/lib/hex'
-import { Amount, Card, Copy, Empty, ErrorState, Skeleton, Stat, Stats } from '@/ui'
+import {
+  Amount,
+  Card,
+  Copy,
+  Empty,
+  ErrorState,
+  Skeleton,
+  Stat,
+  Stats,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+} from '@/ui'
 import { useLookupForm } from '../quorums/lookup-form'
-import { queryView, stampsOf, useAfterIdle } from '../quorums/state'
 
 const NONE = {} as const
 

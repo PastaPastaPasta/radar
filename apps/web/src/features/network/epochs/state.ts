@@ -1,8 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
-export { queryView, stampsOf, useAfterIdle, type QueryState as QueryView } from '@/ui'
-
 /** Sorts a copy of `rows` by a sort value (`-id` descending): ties keep their order, so a re-sort is stable. */
 export function sortRows<Row>(
   rows: readonly Row[],

@@ -11,8 +11,19 @@ import { Entity, useNetwork } from '@/features/entity'
 import { dash } from '@/features/network/mn/platform-math'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Amount, Card, Chart, DataTable, Empty, Stat, Stats, Time, Unavailable } from '@/ui'
-import { queryView, stampsOf } from './state'
+import {
+  Amount,
+  Card,
+  Chart,
+  DataTable,
+  Empty,
+  Stat,
+  Stats,
+  Time,
+  Unavailable,
+  queryView,
+  stampsOf,
+} from '@/ui'
 
 const UPCOMING = 12
 const HISTORY = 60

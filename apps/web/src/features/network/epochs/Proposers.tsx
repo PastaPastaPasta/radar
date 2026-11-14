@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 import { sdkQueries } from '@/data/sdk/queries'
 import { useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, DataTable } from '@/ui'
+import { Card, DataTable, queryView, stampsOf, useAfterIdle } from '@/ui'
 import {
   PROPOSER_SORT_KEYS,
   rankProposers,
@@ -13,7 +13,7 @@ import {
   type ProposerRow,
 } from './proposer-table'
 import { epochsQueries, type EpochProposers } from './queries'
-import { queryView, sortRows, stampsOf, useAfterIdle } from './state'
+import { sortRows } from './state'
 
 const TOP = 20
 const NONE = {} as const

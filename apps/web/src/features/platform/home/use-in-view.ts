@@ -29,5 +29,3 @@ export function useInView<T extends Element>(
   }, [seen, margin, lateMs])
   return [ref, seen]
 }
-
-export { useAfterIdle } from '@/ui'

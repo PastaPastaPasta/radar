@@ -8,8 +8,17 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { normalizeHex } from '@/lib/hex'
-import { Badge, Card, DataTable, Hash, SearchField, TableTools } from '@/ui'
-import { queryView, stampsOf, useAfterIdle } from './state'
+import {
+  Badge,
+  Card,
+  DataTable,
+  Hash,
+  SearchField,
+  TableTools,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+} from '@/ui'
 
 const NONE = {} as const
 

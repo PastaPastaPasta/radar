@@ -5,8 +5,7 @@ import { useMemo, type ReactNode } from 'react'
 import type { Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import { PageLink, PlatformBlockTable, TransitionTable, useNetwork } from '@/features/entity'
-import { Card } from '@/ui'
-import { queryView, stampsOf } from './state'
+import { Card, queryView, stampsOf } from '@/ui'
 import { useHold } from './use-hold'
 
 const SHOWN = 5

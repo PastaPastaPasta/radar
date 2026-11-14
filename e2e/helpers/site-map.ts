@@ -7,13 +7,25 @@ interface SiteEntry {
   sources: SiteSource[]
 }
 
-const FILE = new URL('../../apps/web/src/features/entity/site-map.ts', import.meta.url)
+const SITE_MAP = readFileSync(
+  new URL('../../apps/web/src/features/entity/site-map.ts', import.meta.url),
+  'utf8',
+)
 
-/** Every page of the site map with the sources it says it reads, read from the file so the spec cannot drift from it. */
+/** The addresses of a site-map page: its path with each `$param` standing for one segment, and any query. */
+export const pagePattern = (path: string): RegExp =>
+  new RegExp(`^${path.replace(/\$[a-zA-Z]+/g, '[^/?]+')}(\\?.*)?$`)
+
+/** The path of every page of the site map, read from the file so a spec cannot drift from it. */
+export const SITE_PATHS: string[] = [...SITE_MAP.matchAll(/^\s+path: '([^']+)',$/gm)].map(
+  (m) => m[1]!,
+)
+
+/** Every page of the site map with the sources it says it reads. */
 const ENTRIES: SiteEntry[] = [
-  ...readFileSync(FILE, 'utf8').matchAll(/path: '([^']+)'[\s\S]*?sources: \[([^\]]*)\]/g),
+  ...SITE_MAP.matchAll(/path: '([^']+)'[\s\S]*?sources: \[([^\]]*)\]/g),
 ].map((m) => ({
-  pattern: new RegExp(`^${m[1]!.replace(/\$[a-zA-Z]+/g, '[^/?]+')}(\\?.*)?$`),
+  pattern: pagePattern(m[1]!),
   sources: [...m[2]!.matchAll(/'(\w+)'/g)].map((s) => s[1] as SiteSource),
 }))
 

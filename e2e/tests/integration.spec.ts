@@ -1,8 +1,7 @@
-import { readFileSync } from 'node:fs'
 import { expect, test } from '../helpers/test'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
-import { fetchesNothing, sourcesOf } from '../helpers/site-map'
+import { fetchesNothing, pagePattern, SITE_PATHS, sourcesOf } from '../helpers/site-map'
 
 const isPhone = (name: string) => name.startsWith('phone')
 
@@ -141,16 +140,10 @@ test.describe('the census links into the masternode list', () => {
   }
 })
 
-test('every page in the site map has a route case, so the sweeps and the mode walk reach it @X-05 @X-08 @X-09', ({}, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-light', 'reads files; one project is enough')
-  const source = readFileSync(
-    new URL('../../apps/web/src/features/entity/site-map.ts', import.meta.url),
-    'utf8',
-  )
-  const paths = [...source.matchAll(/^\s+path: '([^']+)',$/gm)].map((m) => m[1]!)
-  expect(paths.length).toBeGreaterThan(50)
-  const uncovered = paths.filter((path) => {
-    const pattern = new RegExp(`^${path.replace(/\$[a-zA-Z]+/g, '[^/?]+')}(\\?.*)?$`)
+test('every page in the site map has a route case, so the sweeps and the mode walk reach it @X-05 @X-08 @X-09', () => {
+  expect(SITE_PATHS.length).toBeGreaterThan(50)
+  const uncovered = SITE_PATHS.filter((path) => {
+    const pattern = pagePattern(path)
     return !ROUTE_CASES.some((c) => pattern.test(c.path))
   })
   expect(uncovered, 'site-map pages with no route case').toEqual([])

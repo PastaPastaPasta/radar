@@ -7,9 +7,18 @@ import type { PeTxStatistic } from '@/data/pe/schemas'
 import { transitionBadgeType, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber } from '@/lib/format'
 import { creditsToDash as dash } from '@/lib/units'
-import { Card, Chart, Empty, SegFilter, TYPE_META, type ChartProps } from '@/ui'
+import {
+  Card,
+  Chart,
+  Empty,
+  SegFilter,
+  TYPE_META,
+  queryView,
+  stampsOf,
+  type ChartProps,
+  type QueryState,
+} from '@/ui'
 import { barsOption, bucketLabel, HOME_RANGES, timeOption, type HomeRange } from './chart-options'
-import { stampsOf, queryView, type QueryView } from './state'
 
 const TYPES_SHOWN = 8
 
@@ -55,7 +64,7 @@ function ChartCard({
   id: string
   title: string
   subtitle?: string
-  view: QueryView
+  view: QueryState
   source: SourceStamp[]
   /** The note to show instead of the chart; undefined when there is data. */
   empty: string | undefined

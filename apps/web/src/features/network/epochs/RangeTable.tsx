@@ -7,10 +7,9 @@ import type { EpochDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, DataTable, Time } from '@/ui'
+import { Card, DataTable, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
 import { formatMultiplier } from './CurrentEpoch'
 import { epochLengthMs } from '@/lib/epoch-length'
-import { queryView, stampsOf, useAfterIdle } from './state'
 
 /** Drive answers at most this many epochs per call. */
 export const EPOCH_REQUEST_CAP = 100

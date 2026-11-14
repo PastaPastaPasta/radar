@@ -77,5 +77,3 @@ export function useSpecialTxs(net: NetworkId, protx: string) {
   const query = useQuery({ ...hyQueries.validator(net, protx), enabled })
   return { index, query, enabled }
 }
-
-export { stampsOf } from '@/ui'

@@ -4,8 +4,7 @@ import { peQueries } from '@/data/pe/queries'
 import type { PeQuorum } from '@/data/pe/schemas'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, Empty, Stat, Stats } from '@/ui'
-import { queryView, stampsOf } from './state'
+import { Badge, Card, Empty, Stat, Stats, queryView, stampsOf } from '@/ui'
 
 const QUORUMS_SHOWN = 6
 
