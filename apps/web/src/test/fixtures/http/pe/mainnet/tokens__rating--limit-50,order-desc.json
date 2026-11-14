@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/tokens/rating?limit=50&order=desc"
+  },
+  "recordedAt": "2026-11-14T22:34:41.861Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "localizations": {
+          "en": { "pluralForm": "SANS", "singularForm": "SANS", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+        "transitionCount": 1
+      },
+      {
+        "localizations": {
+          "en": { "pluralForm": "DUSD", "singularForm": "DUSD", "shouldCapitalize": true }
+        },
+        "tokenIdentifier": "DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd",
+        "transitionCount": 1
+      }
+    ],
+    "pagination": { "page": 1, "limit": 50, "total": 5 }
+  }
+}

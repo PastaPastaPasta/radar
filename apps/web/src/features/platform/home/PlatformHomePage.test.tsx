@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { App } from '@/app'
+import { http, HttpResponse } from 'msw'
 import { writeSourceMode } from '@/lib/source-mode'
 import { server } from '@/test/server'
 
@@ -224,6 +225,71 @@ describe('Platform overview', () => {
     ]) {
       await card(id)
     }
+  })
+
+  it('ranks each board by the figure it shows, whatever order PE answers in @NX-01 @PE-05', async () => {
+    const PE = 'https://api.pe.dashhq.org'
+    const id = (n: number) => `${String(n).padStart(2, '1')}${'A'.repeat(41)}`
+    const page = (items: unknown[]) =>
+      HttpResponse.json({ pagination: { page: 1, limit: 50, total: items.length }, resultSet: items })
+    server.use(
+      http.get(`${PE}/dataContracts/rating`, () =>
+        page([0, 0, 31, 271, 105].map((n, i) => ({ identifier: id(i), transitionsCount: n }))),
+      ),
+      http.get(`${PE}/identities/active`, () =>
+        page([1, 1, 4, 1, 2].map((n, i) => ({ identifier: id(i), transactionsCount: n }))),
+      ),
+    )
+    renderAt('/platform')
+    const figures = (board: string) =>
+      Array.from(document.querySelectorAll(`[data-board="${board}"] li`)).map((li) => ({
+        rank: li.querySelector('.rx-num')?.textContent,
+        figure: li.querySelector('span.rx-num:last-child')?.textContent,
+      }))
+    await waitFor(() =>
+      expect(figures('board-contracts-rated').map((r) => r.figure)).toEqual([
+        '271',
+        '105',
+        '31',
+        '0',
+        '0',
+      ]),
+    )
+    await waitFor(() =>
+      expect(figures('board-active-identities')).toEqual([
+        { rank: '1', figure: '4' },
+        { rank: '2', figure: '2' },
+        { rank: '3', figure: '1' },
+        { rank: '3', figure: '1' },
+        { rank: '3', figure: '1' },
+      ]),
+    )
+  })
+
+  it('folds a board with nothing above zero into one line, and keeps the switch with its board @NX-01', async () => {
+    const PE = 'https://api.pe.dashhq.org'
+    server.use(
+      http.get(`${PE}/tokens/rating`, () =>
+        HttpResponse.json({
+          pagination: { page: 1, limit: 50, total: 2 },
+          resultSet: [
+            { tokenIdentifier: 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB', transitionCount: 0 },
+            { tokenIdentifier: 'DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd', transitionCount: 0 },
+          ],
+        }),
+      ),
+    )
+    renderAt('/platform')
+    const richest = await ready('board-richest')
+    expect(
+      within(richest).getByRole('button', { name: 'Transitions' }),
+    ).toBeInTheDocument()
+    await waitFor(() =>
+      expect(document.querySelector('[data-quiet-boards]')).toHaveTextContent(
+        'Nothing to rank yet: Trending tokens.',
+      ),
+    )
+    expect(document.getElementById('board-tokens')).toBeNull()
   })
 
   it('counts validators and lists quorums, linking to the platform masternode view @PE-06', async () => {

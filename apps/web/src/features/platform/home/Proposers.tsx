@@ -7,6 +7,7 @@ import { platformTipQuery } from '@/data/sdk/queries'
 import { Entity, PageLink, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, DataTable, queryView, stampsOf } from '@/ui'
+import { rankDesc } from './rank'
 import { homeQueries, type EpochProposers, type Proposer } from './queries'
 
 const TOP = 10
@@ -30,11 +31,13 @@ export function Proposers({ active }: { active: boolean }) {
   const rows = useMemo<Row[]>(() => {
     if (!answer) return []
     const total = Number(answer.total)
-    return answer.proposers.slice(0, TOP).map((p, i) => ({
-      ...p,
-      rank: i + 1,
-      share: total === 0 ? 0 : Number(p.blocks) / total,
-    }))
+    return rankDesc(answer.proposers, (p) => Number(p.blocks))
+      .slice(0, TOP)
+      .map(({ item, rank }) => ({
+        ...item,
+        rank,
+        share: total === 0 ? 0 : Number(item.blocks) / total,
+      }))
   }, [answer])
   const columns = useMemo<ColumnDef<Row>[]>(
     () => [
@@ -42,25 +45,24 @@ export function Proposers({ active }: { active: boolean }) {
         id: 'rank',
         header: '#',
         accessorFn: (r) => r.rank,
-        meta: { numeric: true, phone: 'hidden' },
+        meta: { numeric: true },
       },
       {
         id: 'node',
         header: t`Evonode`,
         cell: ({ row }) => <Entity kind="evonode" id={row.original.proTxHash} />,
-        meta: { phone: 'title' },
       },
       {
         id: 'blocks',
         header: t`Blocks`,
         accessorFn: (r) => formatInt(Number(r.blocks)),
-        meta: { numeric: true, phone: 'primary', phoneUnit: t`blocks` },
+        meta: { numeric: true },
       },
       {
         id: 'share',
         header: t`Share`,
         accessorFn: (r) => formatPercent(r.share, 1),
-        meta: { numeric: true, phone: 'secondary' },
+        meta: { numeric: true },
       },
     ],
     [t],
@@ -93,6 +95,7 @@ export function Proposers({ active }: { active: boolean }) {
     >
       <DataTable
         caption={t`Top proposers this epoch`}
+        phone="scroll"
         columns={columns}
         rows={rows}
         getRowId={(r) => r.proTxHash}

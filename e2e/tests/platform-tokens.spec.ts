@@ -429,11 +429,16 @@ test.describe('Token list', () => {
     await expectAccessible(page)
   })
 
-  test('shows the trending tokens @PE-24', async ({ page }) => {
-    await open(page, '/tokens', 'Tokens')
+  test('shows the trending tokens that have had a transition, and no empty ranking @PE-24 @NX-01', async ({
+    page,
+  }) => {
+    await open(page, url('/tokens', 'testnet'), 'Tokens')
     const trending = page.locator('#tokens-trending')
     await expect(trending.locator('[data-trending] li')).toHaveCount(5)
     await expect(trending).toContainText('transitions')
+    await open(page, '/tokens', 'Tokens')
+    await expect(page.locator('#tokens-list')).toBeVisible()
+    await expect(page.locator('#tokens-trending')).toHaveCount(0)
   })
 
   test('filters by name, and says what matches @PE-24', async ({ page }) => {
