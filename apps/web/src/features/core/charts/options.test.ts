@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { HyMetrics } from '@/data/hyphen/schemas'
-import { buildOption, formatHashrate, METRICS, points } from './options'
+import { buildOption, CHART_HUE, formatHashrate, METRICS, points } from './options'
 import { rangeWindow } from './ranges'
 
 const row = (height: number, txCount: number, extra: Partial<HyMetrics> = {}): HyMetrics => ({
@@ -131,10 +131,9 @@ describe('chart metrics', () => {
   })
 })
 
-describe('metric hues @HY-02', () => {
-  it('gives every chart its own design token', () => {
-    const hues = Object.values(METRICS).map((m) => m.hue)
-    expect(new Set(hues).size).toBe(hues.length)
-    expect(hues.every((h) => /^--(rx|dh)-[a-z0-9-]+$/.test(h))).toBe(true)
+describe('chart hue @HY-02', () => {
+  it('is one design token for every chart: the layer colour, not one colour per metric', () => {
+    expect(CHART_HUE).toBe('--rx-core-line')
+    expect(Object.values(METRICS).every((m) => !('hue' in m))).toBe(true)
   })
 })

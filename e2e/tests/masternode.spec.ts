@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
@@ -97,8 +98,10 @@ test.describe('masternode page', () => {
     await expect(
       registration.locator('a[href="/address/Xt77nU5qc5wquYng2om1fRSHsnmUB3WL1Z"]'),
     ).toBeVisible()
+    await expect(header.locator('[data-section-sources] [data-source="radar"]')).toHaveCount(1)
+    await expect(header.locator('[data-section-sources] [data-source="radar"]')).toBeVisible()
     for (const id of ['uptime', 'registration']) {
-      await expect(page.locator(`#${id} [data-source="radar"]`).first()).toBeVisible()
+      await expect(page.locator(`#${id} [data-source]`)).toHaveCount(0)
     }
     await expect(page.getByRole('link', { name: /Vote in Governance/ })).toHaveAttribute(
       'href',
@@ -156,7 +159,7 @@ test.describe('masternode page', () => {
     for (const label of ['User agent', 'Protocol', 'Services', 'Height it reported', 'Latency']) {
       await expect(check).toContainText(label)
     }
-    await expect(check.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(check).locator('[data-source="radar"]')).toBeVisible()
 
     const location = page.locator('#location')
     await expect(location.locator('[data-show-on-map]')).toHaveAttribute(
@@ -272,7 +275,7 @@ test.describe('masternode page', () => {
     await expect(
       special.getByRole('table', { name: 'Special transactions of this masternode' }),
     ).toBeVisible()
-    await expect(special.locator('[data-source="hyphen"]').first()).toBeVisible()
+    await expect(sourceLineOf(special).locator('[data-source="hyphen"]')).toBeVisible()
     await expect(special.locator(`a[href^="/tx/"]`).first()).toBeVisible()
   })
 
@@ -330,7 +333,7 @@ test.describe('masternode page', () => {
     await expect(rewards).toBeVisible()
     await expect(rewards.locator('[data-reward-tiles]')).toBeVisible()
     await expect(rewards.locator('[data-rank-strip]')).toBeVisible()
-    await expect(rewards.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(rewards).locator('[data-source="radar"]')).toBeVisible()
     await expect(rewards.getByRole('table').first()).toBeAttached()
   })
 
@@ -341,7 +344,9 @@ test.describe('masternode page', () => {
 
     const live = page.locator('#platform-live')
     await expect(live).toBeVisible()
-    await expect(live.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(live).locator('[data-source="sdk"][data-proved="true"]'),
+    ).toBeVisible()
     await expect(live.locator('[data-combined]')).toContainText('Combined from')
     await expect(live.locator('[data-epoch-comparison]')).toBeVisible()
     await expect(live.locator('[data-withdrawals]')).toBeVisible()
@@ -384,7 +389,7 @@ test.describe('masternode page', () => {
     const record = page.locator('#validator-record')
     await expect(record).toBeVisible()
     await expect(record.locator('[data-reachability]')).toBeVisible()
-    await expect(record.locator('[data-source="pe"]').first()).toBeVisible()
+    await expect(sourceLineOf(record).locator('[data-source="pe"]')).toBeVisible()
     await expect(record.getByRole('group', { name: 'Chart range' })).toBeVisible()
   })
 
@@ -460,7 +465,9 @@ test.describe('masternode page, in Decentralized only mode', () => {
     )
 
     await expect(page.locator('#platform-live')).toBeVisible()
-    await expect(page.locator('#platform-live [data-source="sdk"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(page.locator('#platform-live')).locator('[data-source="sdk"]').first(),
+    ).toBeVisible()
     await expect(unavailable(page)).toHaveCount(1)
   })
 })

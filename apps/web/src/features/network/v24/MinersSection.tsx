@@ -48,7 +48,14 @@ export function MinersSection({
   }
 
   return (
-    <Card title={t`Miners' signalling`} id="miners" layer="network" subtitle={lede} source={stamp}>
+    <Card
+      level="section"
+      title={t`Miners' signalling`}
+      id="miners"
+      layer="network"
+      subtitle={lede}
+      source={stamp}
+    >
       <div className="grid gap-8" data-v24-miners>
         {progress && w ? (
           <div className="grid gap-2" data-v24-window>

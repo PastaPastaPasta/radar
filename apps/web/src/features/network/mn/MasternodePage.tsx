@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { LinkProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { coreQueries } from '@/data/core/queries'
-import { stampOf, type SourceStamp } from '@/data/envelope'
+import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import { CopyLinkButton, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
@@ -12,13 +12,12 @@ import {
   Empty,
   ErrorState,
   Hash,
-  Icon,
   LinkOut,
   Nodeprint,
+  SectionSources,
   Skeleton,
-  SourceLine,
+  SourceSection,
   Tabs,
-  Time,
   Unavailable,
 } from '@/ui'
 import { HistoryTab } from './HistoryTab'
@@ -161,7 +160,7 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
   }
   const current: MnTab = tab === 'platform' && !evo ? 'overview' : (tab ?? 'overview')
   return (
-    <>
+    <SourceSection source={[d ? ctx.radar : null, f ? ctx.dapi : null].filter((x) => x !== null)}>
       <Header ctx={ctx} />
       <PageTabs protx={protx} evo={evo} value={current} />
       {!off && !d && radar.isError ? (
@@ -180,7 +179,7 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
       {current === 'platform' ? <PlatformTab ctx={ctx} epoch={epoch} /> : null}
       {current === 'history' ? <HistoryTab ctx={ctx} /> : null}
       {current === 'payments' ? <PaymentsTab ctx={ctx} before={before} /> : null}
-    </>
+    </SourceSection>
   )
 }
 
@@ -341,20 +340,8 @@ function Header({ ctx }: { ctx: MnContext }) {
               : t`Valid on DAPI’s list`}
         </span>
         {d?.version ? <span className="rx-ver">{d.version}</span> : null}
-        {ctx.radar && d ? <CrawlLine stamp={ctx.radar} /> : null}
-        {ctx.dapi && f ? <SourceLine stamp={ctx.dapi} compact /> : null}
       </div>
+      <SectionSources className="rx-rec__src" />
     </header>
-  )
-}
-
-function CrawlLine({ stamp }: { stamp: SourceStamp }) {
-  const { t } = useLingui()
-  return (
-    <span className="rx-src" data-source={stamp.source}>
-      <Icon name="radar" />
-      {t`Crawled by Radar`}
-      <Time ms={stamp.fetchedAt} />
-    </span>
   )
 }

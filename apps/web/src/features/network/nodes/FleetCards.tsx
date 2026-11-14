@@ -34,6 +34,7 @@ export function ReadinessCard({ summary }: SectionProps) {
     : []
   return (
     <Card
+      level="section"
       title={t`Ready for ${release} quorums`}
       id="readiness"
       layer="network"
@@ -126,6 +127,7 @@ export function YieldsCard({ summary }: SectionProps) {
   const pct = (v: number | null | undefined) => (v == null ? '–' : t`${formatPercent(v, 1)} a year`)
   return (
     <Card
+      level="section"
       title={t`What they earn`}
       id="yields"
       layer="network"
@@ -192,6 +194,7 @@ export function PlatformHealthCard({ summary }: SectionProps) {
     }))
   return (
     <Card
+      level="section"
       title={t`Evonode Platform health`}
       id="platform"
       layer="network"
@@ -259,6 +262,7 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
   const good = scores.filter((s) => s >= 75).length
   return (
     <Card
+      level="section"
       title={t`How fast they serve`}
       id="speed"
       layer="network"

@@ -95,7 +95,7 @@ export function PlatformCharts({ range, active }: { range: HomeRange; active: bo
   const dashText = (v: number) => t`${formatNumber(v, { maximumFractionDigits: 2 })} DASH`
 
   return (
-    <div className="grid grid-cols-1 gap-4" data-charts>
+    <div className="rx-pile" data-charts>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SegFilter
           label={t`Range`}
@@ -110,7 +110,7 @@ export function PlatformCharts({ range, active }: { range: HomeRange; active: bo
           }}
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="rx-cols">
         <ChartCard
           id="chart-transitions"
           title={t`Transition activity`}

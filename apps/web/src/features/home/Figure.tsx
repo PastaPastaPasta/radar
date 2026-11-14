@@ -1,8 +1,6 @@
-import { useMemo, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { Skeleton, SourceLine } from '@/ui'
-import { SourceScope, sourceKey } from '@/ui/source-scope'
-import { useLeadSources } from '@/ui/stat'
 
 interface FigureProps {
   /** The figure's name; pass a link with `rx-fig__link` to make the whole figure open it. */
@@ -50,30 +48,3 @@ export function Figures({
     </dl>
   )
 }
-
-/**
- * A section's one source line: each source once, with the stamp that speaks for it (`useLeadSources`; of several,
- * `SourceLine` shows the oldest), and the keys of every source it covers, so the cards and figures inside a
- * `SourceScope` of them leave their own marks out.
- */
-export function useSectionSources(stamps: readonly (SourceStamp | undefined)[]): {
-  line: SourceStamp[]
-  covered: ReadonlySet<string>
-} {
-  const lead = useLeadSources(stamps)
-  const line = stamps.filter((s, i): s is SourceStamp => s !== undefined && lead[i] === true)
-  const keys = stamps.flatMap((s) => (s ? [sourceKey(s)] : [])).join(',')
-  const covered = useMemo(() => new Set(keys ? keys.split(',') : []), [keys])
-  return { line, covered }
-}
-
-export function SourceRow({ line }: { line: SourceStamp[] }) {
-  if (line.length === 0) return null
-  return (
-    <p className="rx-home__src" data-home-sources>
-      <SourceLine stamp={line} compact />
-    </p>
-  )
-}
-
-export { SourceScope }

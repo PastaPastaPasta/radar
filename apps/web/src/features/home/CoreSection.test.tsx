@@ -50,7 +50,7 @@ const difficultyStat = () => screen.getByText('Difficulty').closest<HTMLElement>
 describe('Core figures on the home page @HY-01', () => {
   /** The mark that speaks for DAPI in the section's one source line. */
   const lineMark = () =>
-    document.querySelector<HTMLElement>('[data-home-sources] [data-source="dapi"]')
+    document.querySelector<HTMLElement>('[data-section-sources] [data-source="dapi"]')
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ['Date'] })
@@ -103,7 +103,7 @@ describe('Core figures on the home page @HY-01', () => {
     })
     await waitFor(() => expect(lineMark()).not.toBeNull())
     expect(lineMark()).toHaveAttribute('data-state', 'ok')
-    expect(document.querySelectorAll('[data-home-sources] [data-source="dapi"]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-section-sources] [data-source="dapi"]')).toHaveLength(1)
   })
 
   it('turns the section line stale for a figure that stays behind the tip, and keeps the age on the figure @HY-01', async () => {
@@ -120,7 +120,7 @@ describe('Core figures on the home page @HY-01', () => {
     await waitFor(() => expect(lineMark()).toHaveAttribute('data-state', 'stale'), {
       timeout: 12_000,
     })
-    expect(document.querySelectorAll('[data-home-sources] [data-source="dapi"]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-section-sources] [data-source="dapi"]')).toHaveLength(1)
     expect(difficultyStat().querySelector('.rx-fig__src [data-source="dapi"]')).toHaveAttribute(
       'data-state',
       'stale',

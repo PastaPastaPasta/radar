@@ -240,8 +240,10 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     )
     renderAt('/governance?network=testnet')
     await screen.findByRole('button', { name: 'test' })
-    expect(document.querySelector('#proposals [data-source="insight"]')).not.toBeNull()
-    expect(document.querySelector('#proposals [data-source="hyphen"]')).toBeNull()
+    await waitFor(() =>
+      expect(document.querySelector('.rx-page__src [data-source="insight"]')).not.toBeNull(),
+    )
+    expect(document.querySelector('[data-page] [data-source="hyphen"]')).toBeNull()
   })
 
   it('adds the proposals only Hyphen still has after Insight’s, labelled as Hyphen’s and behind', async () => {
@@ -266,9 +268,10 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     expect(rows.at(-1)).toBe(OLD)
     expect(rows).toHaveLength(5)
     expect(group.compareDocumentPosition(older) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    const card = document.querySelector('#proposals')!
-    expect(card.querySelector('[data-source="insight"]')).not.toBeNull()
-    expect(card.querySelector('[data-source="hyphen"]')).not.toBeNull()
+    const line = document.querySelector('.rx-page__src')!
+    await waitFor(() => expect(line.querySelector('[data-source="insight"]')).not.toBeNull())
+    expect(line.querySelector('[data-source="hyphen"]')).not.toBeNull()
+    expect(document.querySelector('#proposals [data-source]')).toBeNull()
     expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
       'Earlier proposals below are from Hyphen’s index',
     )

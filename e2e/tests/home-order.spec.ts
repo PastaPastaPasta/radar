@@ -96,7 +96,7 @@ test.describe('one home order for eyes and keyboard', () => {
   }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith('desktop'), 'desktop only')
     await page.goto('/')
-    await expect(page.locator('#h-core')).toBeVisible()
+    await expect(page.locator('#core-title')).toBeVisible()
     const link = page.locator('#core .rx-sec__head').getByRole('link', { name: 'Charts' })
     await expect(link).toBeVisible()
     await expect(link).toHaveAttribute('href', /\/charts/)

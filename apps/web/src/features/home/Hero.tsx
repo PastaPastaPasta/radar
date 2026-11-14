@@ -11,9 +11,19 @@ import { networkName, PageLink, useNetwork } from '@/features/entity'
 import { useCommandPalette } from '@/features/search'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Icon, LiveDot, Skeleton, Time, Unavailable, useLiveView, useNow } from '@/ui'
+import {
+  Icon,
+  LiveDot,
+  SectionSources,
+  Skeleton,
+  SourceSection,
+  Time,
+  Unavailable,
+  useLiveView,
+  useNow,
+} from '@/ui'
 import { useCoreRows } from './core-rows'
-import { Figure, Figures, SourceRow, SourceScope, useSectionSources } from './Figure'
+import { Figure, Figures } from './Figure'
 import { agedFromRead, pushed } from './freshness'
 import { HomeMap } from './HomeMap'
 import { TIP_POLL_MS, usePlatformTip } from './platform-tip'
@@ -229,43 +239,38 @@ export function Hero() {
   const answering = crawl ? formatInt(crawl.mn_reachable) : ''
   const enabled = crawl ? formatInt(crawl.mn_total) : ''
   const v24 = v24Pending(activation.data?.data, now)
-  const { line, covered } = useSectionSources([
-    crawled,
-    geo.data ? stampOf(geo.data) : undefined,
-    core.source,
-    platform.source,
-  ])
+  const sources = [crawled, geo.data ? stampOf(geo.data) : undefined, core.source, platform.source]
 
   return (
     <section className="rx-hero" aria-labelledby="h-hero" data-census={crawl ? 'ready' : 'none'}>
       <div className="rx-hero__copy">
-        <Kicker />
-        <h1 id="h-hero">
-          <span className="sr-only">{t`Radar:`} </span>
-          {crawl || counting ? (
-            <span data-census-claim>
-              <Trans>
-                <span className="rx-hero__n">{count}</span> Dash nodes answered the last crawl
-              </Trans>
-            </span>
-          ) : (
-            t`The Dash network, now`
-          )}
-        </h1>
-        <p className="rx-hero__lede" data-census-lede={crawl ? '' : undefined}>
-          {crawl ? (
-            change === undefined ? (
-              t`Among them ${answering} of the ${enabled} enabled masternodes.`
+        <SourceSection source={sources}>
+          <Kicker />
+          <h1 id="h-hero">
+            <span className="sr-only">{t`Radar:`} </span>
+            {crawl || counting ? (
+              <span data-census-claim>
+                <Trans>
+                  <span className="rx-hero__n">{count}</span> Dash nodes answered the last crawl
+                </Trans>
+              </span>
             ) : (
-              t`Among them ${answering} of the ${enabled} enabled masternodes, ${change}.`
-            )
-          ) : counting ? (
-            <Skeleton shape="line" count={2} />
-          ) : (
-            t`Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is.`
-          )}
-        </p>
-        <SourceScope value={covered}>
+              t`The Dash network, now`
+            )}
+          </h1>
+          <p className="rx-hero__lede" data-census-lede={crawl ? '' : undefined}>
+            {crawl ? (
+              change === undefined ? (
+                t`Among them ${answering} of the ${enabled} enabled masternodes.`
+              ) : (
+                t`Among them ${answering} of the ${enabled} enabled masternodes, ${change}.`
+              )
+            ) : counting ? (
+              <Skeleton shape="line" count={2} />
+            ) : (
+              t`Core blocks, masternodes and Platform records in one place. Every figure says where it came from and how fresh it is.`
+            )}
+          </p>
           <Figures data-hero-figures>
             {crawl || counting ? (
               <Figure
@@ -337,30 +342,30 @@ export function Hero() {
               </>
             ) : null}
           </Figures>
-        </SourceScope>
-        {off ? (
-          <Unavailable compact title={t`The node count and map need Radar's crawler`} />
-        ) : devnet ? (
-          <p className="rx-note" data-census-note>
-            {t`Radar doesn't crawl devnets, so there is nothing to map.`}
-          </p>
-        ) : !crawl && summary.isError ? (
-          <p className="rx-note" data-census-note>
-            {t`Radar isn't answering, so the map shows no nodes.`}
-          </p>
-        ) : null}
-        <SourceRow line={line} />
-        <div className="rx-hero__actions">
-          <PageLink to="/map" className="dh-btn dh-btn--primary">
-            {t`Open the map`}
-          </PageLink>
-          <SearchButton />
-          {v24 ? (
-            <Link to="/v24" className="rx-go" data-v24-link>
-              {t`Core 24 activation`}
-            </Link>
+          {off ? (
+            <Unavailable compact title={t`The node count and map need Radar's crawler`} />
+          ) : devnet ? (
+            <p className="rx-note" data-census-note>
+              {t`Radar doesn't crawl devnets, so there is nothing to map.`}
+            </p>
+          ) : !crawl && summary.isError ? (
+            <p className="rx-note" data-census-note>
+              {t`Radar isn't answering, so the map shows no nodes.`}
+            </p>
           ) : null}
-        </div>
+          <SectionSources className="rx-home__src" />
+          <div className="rx-hero__actions">
+            <PageLink to="/map" className="dh-btn dh-btn--primary">
+              {t`Open the map`}
+            </PageLink>
+            <SearchButton />
+            {v24 ? (
+              <Link to="/v24" className="rx-go" data-v24-link>
+                {t`Core 24 activation`}
+              </Link>
+            ) : null}
+          </div>
+        </SourceSection>
       </div>
       <HomeMap />
     </section>

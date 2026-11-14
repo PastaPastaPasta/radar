@@ -38,7 +38,7 @@ export function HowItWorks({
     </a>
   )
   return (
-    <Card title={t`How activation works`} id="how" layer="network" source={stamp}>
+    <Card level="section" title={t`How activation works`} id="how" layer="network" source={stamp}>
       <div className="grid gap-3 max-w-prose" data-v24-how>
         <p>
           {t`Core 24 is a hard fork (deployment bit ${String(p.bit)}) with two gates. First the masternodes: after ${when(p.start_time)} (by the chain's median time past), a ${doc.mnhf ?? 'masternode'} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal.`}

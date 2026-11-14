@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
@@ -95,7 +96,10 @@ test.describe('Identity page', () => {
     await expect(summary.getByText('Revision', { exact: true })).toBeVisible()
     await expect(summary.getByText('Nonce', { exact: true })).toBeVisible()
     await expect(summary.getByRole('link', { name: 'pshenmic.dash' }).first()).toBeVisible()
-    await expect(summary.getByText('Proof-checked')).toHaveCount(4)
+    await expect(summary.getByText('Proof-checked')).toHaveCount(0)
+    await expect(
+      sourceLineOf(summary).locator('[data-source="sdk"][data-proved="true"]'),
+    ).toHaveCount(1)
     await expect(page.getByRole('heading', { level: 1, name: 'Identity' })).toBeVisible()
     await expectAccessible(page)
   })
@@ -291,7 +295,7 @@ test.describe('Tokens tab', () => {
   }) => {
     await openIdentity(page, M, { tab: 'tokens' })
     const indexed = page.locator('#identity-indexed-tokens')
-    await expect(indexed).toContainText('Indexed by Platform Explorer')
+    await expect(sourceLineOf(indexed)).toContainText('Indexed by Platform Explorer')
     await expect(indexed.getByRole('button', { name: 'Check on-chain' }).first()).toBeVisible()
   })
 })
@@ -361,7 +365,7 @@ test.describe('Advanced tab', () => {
     await expect(details).toContainText('Contract nonce')
     await expect(details).toContainText('7')
     await expect(details.getByText('Keys bound to the contract').first()).toBeVisible()
-    await expect(details.getByText('Proof-checked').first()).toBeVisible()
+    await expect(sourceLineOf(details).getByText('Proof-checked').first()).toBeVisible()
     await expectAccessible(page)
   })
 

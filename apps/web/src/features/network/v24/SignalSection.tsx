@@ -83,7 +83,13 @@ export function SignalSection({ d, stamp }: { d: RadarActivationDeployment; stam
   )
 
   const note = (text: string, mined = false) => (
-    <Card title={t`The masternode signal`} id="signal" layer="network" source={stamp}>
+    <Card
+      level="section"
+      title={t`The masternode signal`}
+      id="signal"
+      layer="network"
+      source={stamp}
+    >
       <p data-signal-mined={mined || undefined}>{text}</p>
     </Card>
   )
@@ -106,6 +112,7 @@ export function SignalSection({ d, stamp }: { d: RadarActivationDeployment; stam
   const threshold = g.threshold ?? 0
   return (
     <Card
+      level="section"
       title={t`The masternode signal`}
       id="signal"
       layer="network"

@@ -5,6 +5,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
 
 const FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -60,7 +61,8 @@ test.describe('Network census', () => {
     await expect(headline).toContainText('Core tip')
     await expect(headline.getByRole('link', { name: '2,570,085' })).toBeVisible()
     await expect(headline).toContainText('crawled 3 min ago')
-    await expect(headline.locator('[data-source="radar"]')).toBeVisible()
+    await expect(headline.locator('[data-source]')).toHaveCount(0)
+    await expect(sourceLineOf(headline).locator('[data-source="radar"]')).toBeVisible()
     await expectAccessible(page)
 
     await page.goto('/')
@@ -70,9 +72,9 @@ test.describe('Network census', () => {
     const lede = page.locator('[data-census-lede]')
     await expect(lede).toContainText('2,190 of the 2,207 enabled masternodes')
     await expect(lede).toContainText('1 node fewer than a day ago')
-    await expect(page.locator('.rx-hero [data-home-sources] [data-source="radar"]')).toContainText(
-      /Crawled by Radar\s*3 min(utes)? ago/,
-    )
+    await expect(
+      page.locator('.rx-hero [data-section-sources] [data-source="radar"]'),
+    ).toContainText(/Crawled by Radar\s*3 min(utes)? ago/)
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
   })
@@ -122,12 +124,12 @@ test.describe('Network census', () => {
       'true',
     )
     const reach = card(page, 'reach')
-    const allText = await reach.locator('.rx-card__sub').innerText()
+    const allText = await reach.locator('.rx-sec__lede').innerText()
     await scope.getByRole('button', { name: 'Evonodes' }).click()
     await expect(page).toHaveURL(/scope=evo/)
-    await expect(card(page, 'versions').locator('.rx-card__sub')).toContainText('evonodes')
-    await expect(reach.locator('.rx-card__sub')).not.toHaveText(allText)
-    await expect(card(page, 'hosting').locator('.rx-card__sub')).toContainText('evonodes')
+    await expect(card(page, 'versions').locator('.rx-sec__lede')).toContainText('evonodes')
+    await expect(reach.locator('.rx-sec__lede')).not.toHaveText(allText)
+    await expect(card(page, 'hosting').locator('.rx-sec__lede')).toContainText('evonodes')
 
     await page.reload()
     await expect(scope.getByRole('button', { name: 'Evonodes' })).toHaveAttribute(
@@ -141,7 +143,7 @@ test.describe('Network census', () => {
     await expect(
       census(page).locator('[data-census-scope]').getByRole('button', { name: 'Evonodes' }),
     ).toHaveAttribute('aria-pressed', 'true')
-    await expect(card(page, 'versions').locator('.rx-card__sub')).toContainText('evonodes')
+    await expect(card(page, 'versions').locator('.rx-sec__lede')).toContainText('evonodes')
   })
 
   test('lays out the release ladder, the latest-release share, the over-time chart with its ranges and the every-version table @RA-04', async ({
@@ -349,7 +351,7 @@ test.describe('Network census', () => {
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
 
     await page.goto('/')
-    const crawled = page.locator('.rx-hero [data-home-sources] [data-source="radar"]')
+    const crawled = page.locator('.rx-hero [data-section-sources] [data-source="radar"]')
     await expect(crawled).toContainText(/Crawled by Radar\s*4\d min(utes)? ago/)
     await expect(crawled, 'a stale crawl shows as stale in the hero line').toHaveAttribute(
       'data-state',
@@ -364,8 +366,8 @@ test.describe('Network census', () => {
   }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => undefined)
     await openNodes(page)
+    await expect(card(page, 'now').getByRole('heading')).toHaveCount(0)
     const ids = [
-      'now',
       'versions',
       'hosting',
       'countries',

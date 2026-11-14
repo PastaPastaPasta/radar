@@ -110,7 +110,8 @@ describe('Mempool page', () => {
       expect(document.querySelector('#pending')).toHaveTextContent(
         'Seen since you opened this page',
       )
-      expect(document.querySelector('#pending [data-source="dapi"]')).not.toBeNull()
+      expect(document.querySelector('.rx-page__src [data-source="dapi"]')).not.toBeNull()
+      expect(document.querySelector('#pending [data-source]')).toBeNull()
       expect(document.querySelector('[data-mempool-summary="seen"]')).toHaveTextContent(
         'Seen and still pending1',
       )

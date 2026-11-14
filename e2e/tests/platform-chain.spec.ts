@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 700
@@ -41,7 +42,9 @@ test.describe('Epochs', () => {
       await expect(current.getByText(label, { exact: true })).toBeVisible()
     }
     await expect(current.locator('a[href^="/platform/block/"]')).toBeVisible()
-    await expect(current.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(current).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
     const rewards = card(page, 'rewards')
     for (const label of [
       'Pool so far',
@@ -52,7 +55,7 @@ test.describe('Epochs', () => {
     ]) {
       await expect(rewards.getByText(label, { exact: true })).toBeVisible()
     }
-    await expect(rewards.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(rewards).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)
   })
 
@@ -85,7 +88,7 @@ test.describe('Epochs', () => {
     await upcoming.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     await expect(upcoming.locator('a[href^="/mn/"]').first()).toBeVisible()
-    await expect(upcoming.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(upcoming).locator('[data-source="radar"]').first()).toBeVisible()
     await expect(upcoming.locator('tbody tr').first()).toContainText(/\b20\d\d\b/)
     if (!isPhone(page)) {
       await expect(upcoming.getByRole('columnheader', { name: 'Slots' })).toBeVisible()
@@ -183,7 +186,9 @@ test.describe('One epoch', () => {
     ]) {
       await expect(totals.getByText(label, { exact: true })).toBeVisible()
     }
-    await expect(totals.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(totals).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
     const proposers = card(page, 'epoch-proposers')
     await proposers.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'epoch-proposers').first()).toBeVisible()
@@ -260,7 +265,7 @@ test.describe('Protocol', () => {
     await expect(vote).toContainText(/244 of 363 evonodes \(67%\)/)
     await expect(vote.getByText('Pending votes', { exact: true })).toBeVisible()
     await expect(vote.getByText('Candidate version', { exact: true })).toBeVisible()
-    await expect(vote.locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(vote).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)
   })
 
@@ -344,7 +349,9 @@ test.describe('Chain state', () => {
     await open(page, '/quorums', 'Quorums')
     const quorums = card(page, 'quorums')
     await expect(quorums).toContainText('Not proof-checked')
-    await expect(quorums.locator('[data-source="sdk"][data-proved="false"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(quorums).locator('[data-source="sdk"][data-proved="false"]').first(),
+    ).toBeVisible()
     await expect(quorums.locator('[data-quorum-hash]').first()).toBeVisible()
     expect(await quorums.locator('[data-quorum-hash]').count()).toBeGreaterThan(3)
     await expect(quorums.getByRole('button', { name: /LLMQ/ }).first()).toBeVisible()
@@ -403,7 +410,9 @@ test.describe('Chain state', () => {
     await open(page, '/credits', 'Credits')
     const total = card(page, 'total-credits')
     await expect(total.locator('[data-amount]').first()).toBeVisible()
-    await expect(total.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(total).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
     await expect(total.locator('.rx-fiat')).toContainText('$')
     await audit(page)
   })
@@ -422,7 +431,9 @@ test.describe('Chain state', () => {
     await lookup.getByRole('button', { name: 'Look up' }).click()
     await expect(page).toHaveURL(/id=1111/)
     await expect(lookup.getByText('No prefunded balance')).toBeVisible()
-    await expect(lookup.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(lookup).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
   })
 
   test('refuses an ID that is not an ID before asking anything @NX-57', async ({ page }) => {
@@ -438,7 +449,9 @@ test.describe('Chain state', () => {
     const pool = card(page, 'pool')
     await expect(pool.locator('[data-amount]').first()).toBeVisible()
     await expect(pool.locator('[data-recent-anchor] [data-copy]')).toHaveCount(1)
-    await expect(pool.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(pool).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
     const anchors = card(page, 'anchors')
     await anchors.scrollIntoViewIfNeeded()
     await expect(anchors.locator('[data-anchors] li')).toHaveCount(10)
@@ -470,7 +483,9 @@ test.describe('Chain state', () => {
     const lookup = card(page, 'nullifier')
     await expect(lookup.locator('[data-nullifier-result="spent"]')).toBeVisible()
     await expect(lookup.locator('[data-nullifier-result] [data-copy]')).toHaveCount(1)
-    await expect(lookup.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(lookup).locator('[data-source="sdk"][data-proved="true"]').first(),
+    ).toBeVisible()
 
     await lookup.getByLabel('Nullifier').fill('0'.repeat(63) + '1')
     await lookup.getByRole('button', { name: 'Look up' }).click()

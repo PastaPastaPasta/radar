@@ -2,7 +2,8 @@ import { act, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Card, KeyValue } from './layout'
 import { SourceLine } from './states'
-import { BEHIND_GRACE_MS, Stat, Stats } from './stat'
+import { BEHIND_GRACE_MS } from './section-source'
+import { Stat, Stats } from './stat'
 import { stamp } from './test-utils'
 
 const now = Date.now()

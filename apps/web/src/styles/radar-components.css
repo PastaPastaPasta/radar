@@ -179,6 +179,50 @@ kbd,
   font-size: var(--dh-fs-ui);
   color: var(--dh-ink-2);
 }
+.rx-sec__lede {
+  margin: 8px 0 0;
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--dh-ink-2);
+  text-wrap: pretty;
+}
+/* the section's one source line: a quiet run of text; colour and a glyph only when a source is proved, stale or down */
+.rx-sec__src {
+  min-height: 18px;
+  margin: 6px 0 0;
+}
+.rx-sec__src .rx-sources {
+  gap: 2px 14px;
+}
+.rx-sec__src .rx-src {
+  padding: 0;
+  border-color: transparent;
+}
+.rx-sec__src .rx-src:not(.rx-src--proof, .rx-src--stale, .rx-src--down) .rx-ico {
+  display: none;
+}
+.rx-sec__src button.rx-src--proof:hover {
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* a section on the page ground: a rule above, its head, one sentence, its source line, then its content */
+.rx-sec--ruled {
+  margin: 0;
+  padding: 30px 0 10px;
+  border-top: 1px solid var(--dh-line);
+  scroll-margin-top: calc(var(--dh-bar-h) + 8px);
+}
+.rx-sec--ruled > .rx-sec__head {
+  margin-bottom: 0;
+}
+.rx-sec--ruled > .rx-sec__body,
+.rx-sec--ruled > .rx-card__body,
+.rx-sec--ruled > .rx-empty,
+.rx-sec--ruled > .rx-unavail {
+  margin-top: 18px;
+}
 .rx-sec__actions {
   margin-left: auto;
   display: flex;
@@ -306,19 +350,18 @@ kbd,
 }
 
 /* ============================================================ 6. cards */
+/* A card is a titled block on the page ground: no box, its own breathing room below. */
 .rx-card {
   box-sizing: border-box;
   min-width: 0;
-  background: var(--dh-surface);
-  border: 1px solid var(--dh-line);
-  border-radius: var(--dh-r3);
+  padding-bottom: 12px;
 }
 .rx-card__head {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 10px;
-  padding: 14px 20px 12px;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 0 0 10px;
 }
 .rx-card__title {
   margin: 0;
@@ -333,16 +376,12 @@ kbd,
   align-items: center;
   gap: 10px;
 }
-.rx-card__body {
-  padding: 0 20px 18px;
-}
 .rx-card__foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 14px;
-  padding: 11px 20px;
-  border-top: 1px solid var(--dh-line);
+  padding: 10px 0 0;
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
@@ -356,18 +395,9 @@ kbd,
   border-left: 3px solid var(--rx-l);
 }
 @media (max-width: 640px) {
-  .rx-card__head {
-    padding: 12px 14px 10px;
-  }
   .rx-card__aside {
     flex-wrap: wrap;
     min-width: 0;
-  }
-  .rx-card__body {
-    padding: 0 14px 14px;
-  }
-  .rx-card__foot {
-    padding: 10px 14px;
   }
 }
 .rx-go {
@@ -591,43 +621,35 @@ kbd,
 .rx-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  gap: 18px 24px;
 }
 .rx-stat {
   position: relative;
   box-sizing: border-box;
   display: grid;
   align-content: start;
-  gap: 3px;
+  gap: 2px;
   min-width: 0;
-  padding: 14px 16px 14px 18px;
-  background: var(--dh-surface);
-  border: 1px solid var(--dh-line);
-  border-radius: var(--dh-r3);
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--dh-line);
   color: inherit;
   text-decoration: none;
 }
-.rx-stat::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 12px;
-  bottom: 12px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: var(--rx-rule, var(--dh-line-2));
-}
-.rx-stat[data-layer] {
-  --rx-rule: var(--rx-l);
+/* a figure that is itself a status: a heavier rule and the value in the status colour, always beside its words */
+.rx-stat--good,
+.rx-stat--warn,
+.rx-stat--bad {
+  padding-left: 10px;
+  border-left-width: 4px;
 }
 .rx-stat--good {
-  --rx-rule: var(--dh-good);
+  border-left-color: var(--dh-good);
 }
 .rx-stat--warn {
-  --rx-rule: var(--dh-warn);
+  border-left-color: var(--dh-warn);
 }
 .rx-stat--bad {
-  --rx-rule: var(--dh-bad);
+  border-left-color: var(--dh-bad);
 }
 .rx-stat--good .rx-stat__value {
   color: var(--dh-good);
@@ -647,9 +669,9 @@ kbd,
   color: var(--dh-ink-2);
 }
 .rx-stat__value {
-  font: var(--dh-w-head) var(--dh-fs-stat)/1.15 var(--dh-font);
-  font-stretch: var(--dh-stretch-stat);
-  letter-spacing: -0.015em;
+  font: 650 24px/1.2 var(--dh-font);
+  font-stretch: 110%;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -664,13 +686,8 @@ kbd,
   font-size: 12.5px;
   color: var(--dh-ink-2);
 }
-.rx-stat--big .rx-stat__value {
-  font-size: var(--rx-fs-big);
-}
-a.rx-stat:hover {
-  border-color: var(--dh-line-2);
-}
-a.rx-stat:hover .rx-stat__label {
+a.rx-stat:hover .rx-stat__label,
+a.rx-stat:hover .rx-stat__value {
   color: var(--dh-brand-ink);
 }
 a.rx-stat:focus-visible {
@@ -683,31 +700,22 @@ a.rx-stat:focus-visible {
 @media (max-width: 640px) {
   .rx-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-  .rx-stat {
-    padding: 12px 12px 12px 14px;
+    gap: 16px 20px;
   }
   .rx-stat__value {
     font-size: 22px;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
-  .rx-stat--big .rx-stat__value {
-    font-size: 26px;
+  .rx-stats > .rx-stat:nth-child(2n) > .rx-fig__src {
+    left: auto;
+    right: 0;
   }
 }
 
 @media (max-width: 640px) {
   .rx-statgrid .rx-stat {
     gap: 1px;
-    padding: 2px 0 2px 10px;
-    border: 0;
-    border-radius: 0;
-    background: none;
-  }
-  .rx-statgrid .rx-stat::before {
-    left: 0;
-    top: 3px;
-    bottom: 3px;
   }
   .rx-statgrid .rx-stat__label {
     font-size: 12px;
@@ -905,8 +913,8 @@ button.rx-src--proof:hover {
   vertical-align: bottom;
   font: var(--dh-w-ui) var(--dh-fs-sm)/1.2 var(--dh-font);
   color: var(--dh-ink-2);
-  background: var(--dh-surface);
-  border-bottom: 1px solid var(--dh-line);
+  background: var(--rx-ground, var(--dh-page));
+  border-bottom: 1px solid var(--dh-line-2);
 }
 .rx-table th button {
   all: unset;
@@ -976,13 +984,14 @@ button.rx-src--proof:hover {
   gap: 1px;
   line-height: 1.3;
 }
+/* On the page ground the first and last cells have no side padding, so a table's text lines up with the page. */
 .rx-table td:first-child,
 .rx-table th:first-child {
-  padding-left: 20px;
+  padding-left: 0;
 }
 .rx-table td:last-child,
 .rx-table th:last-child {
-  padding-right: 20px;
+  padding-right: 0;
 }
 .rx-table--feed td {
   padding-block: 7px;
@@ -1044,8 +1053,7 @@ button.rx-src--proof:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--dh-line);
+  padding: 0 0 14px;
 }
 .rx-tools .rx-grow {
   flex: 1 1 260px;
@@ -1110,9 +1118,7 @@ button.rx-src--proof:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--dh-line);
-  background: var(--dh-sunken);
+  padding: 0 0 12px;
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
@@ -1147,15 +1153,10 @@ button.rx-src--proof:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 18px;
-  padding: 12px 20px;
+  padding: 12px 0 0;
   border-top: 1px solid var(--dh-line);
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
-}
-.rx-tfoot .rx-keys {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
 }
 .rx-verify-result {
   scroll-margin-block-end: calc(var(--dh-tabs-h, 0px) + 16px);
@@ -1296,8 +1297,8 @@ button.rx-src--proof:hover {
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, auto);
-    gap: 4px 12px;
-    padding: 12px 14px;
+    gap: 3px 12px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--dh-line);
   }
   .rx-table--cards td {
@@ -1378,7 +1379,7 @@ button.rx-src--proof:hover {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 2px 12px;
-    padding: 6px 16px;
+    padding: 6px 0;
     border-bottom: 1px solid var(--dh-line);
   }
   .rx-card--feed .rx-table--cards td {
@@ -2165,17 +2166,8 @@ button.rx-src--proof:hover {
   .rx-band {
     padding-block: 18px 22px;
   }
-  .rx-tools {
-    padding: 12px 14px;
-  }
   .rx-tools .rx-hide-sm {
     display: none;
-  }
-  .rx-activef {
-    padding: 8px 14px;
-  }
-  .rx-tfoot {
-    padding: 10px 14px;
   }
   .rx-kbtn {
     display: none;
@@ -2457,4 +2449,83 @@ html[data-scroll-gutter] {
   block-size: 6px;
   vertical-align: middle;
   accent-color: var(--dh-brand);
+}
+
+/* ============================================================ 26. the page frame: a name, one sentence, one source line */
+.rx-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+.rx-page > * {
+  min-width: 0;
+}
+.rx-page__head {
+  display: grid;
+  gap: 6px;
+}
+.rx-page__eyebrow {
+  margin: 0;
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-page__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rx-page__title h1 {
+  margin: 0;
+  font: var(--dh-w-head) var(--dh-fs-h1)/1.15 var(--dh-font);
+  font-stretch: var(--dh-stretch-head);
+  letter-spacing: -0.015em;
+}
+.rx-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.rx-page__lede {
+  margin: 0;
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--dh-ink-2);
+  text-wrap: pretty;
+}
+.rx-page__src {
+  margin: 2px 0 0;
+}
+
+/* ============================================================ 27. page rhythm: blocks in sequence, never packed */
+/* blocks one under another */
+.rx-pile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 20px;
+}
+/* two blocks side by side from 1024 px, with room between them in place of borders */
+.rx-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 20px 48px;
+}
+.rx-cols > * {
+  min-width: 0;
+}
+@media (min-width: 1024px) {
+  .rx-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .rx-cols--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .rx-cols--lead {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
 }

@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
+import { sourceLineOf } from '../helpers/sources'
 import { expect as baseExpect, test } from '../helpers/test'
 import { TOKEN_HOLDER } from '../routes/p-token'
 
@@ -98,7 +99,7 @@ test.describe('Token page', () => {
       await expect(summary.getByText('Total supply', { exact: true })).toBeVisible()
       await expect(summary.getByText('Direct purchase price', { exact: true })).toBeVisible()
       await expect(summary.getByText('Active', { exact: true })).toBeVisible()
-      await expect(summary.getByText('Proof-checked').first()).toBeVisible()
+      await expect(sourceLineOf(summary).getByText('Proof-checked').first()).toBeVisible()
       const contract = summary
         .getByRole('link', { name: new RegExp(t.contract.slice(0, 5)) })
         .first()
@@ -170,7 +171,7 @@ test.describe('Token page', () => {
     const balance = page.locator('#token-balance')
     await expect(balance.locator('[data-field="token-balance"]')).toContainText(M.symbol)
     await expect(balance.getByText('Not frozen')).toBeVisible()
-    await expect(balance.getByText('Proof-checked').first()).toBeVisible()
+    await expect(sourceLineOf(balance).getByText('Proof-checked').first()).toBeVisible()
     await expectAccessible(page)
   })
 
@@ -274,7 +275,7 @@ test.describe('Token activity and holders from Platform Explorer', () => {
     }) => {
       await open(page, tokenUrl(net, { tab: 'activity' }), 'Token')
       const activity = page.locator('#token-activity')
-      await expect(activity.getByText('Platform Explorer').first()).toBeVisible()
+      await expect(sourceLineOf(activity).getByText('Platform Explorer').first()).toBeVisible()
       await expect(activity.locator('tbody tr, .rx-card-row').first()).toBeVisible()
       await expectAccessible(page)
     })
@@ -422,7 +423,7 @@ test.describe('Token list', () => {
       'href',
       new RegExp(`/token/${M.token}`),
     )
-    await expect(list.getByText('Platform Explorer').first()).toBeVisible()
+    await expect(sourceLineOf(list).getByText('Platform Explorer').first()).toBeVisible()
     await expectAccessible(page)
   })
 
@@ -495,7 +496,7 @@ test.describe('Platform address', () => {
       const summary = page.locator('#paddr-summary')
       await expect(summary.locator('[data-paddr-balance]')).toContainText(/DASH/)
       await expect(summary.getByText('Nonce', { exact: true })).toBeVisible()
-      await expect(summary.getByText('Proof-checked').first()).toBeVisible()
+      await expect(sourceLineOf(summary).getByText('Proof-checked').first()).toBeVisible()
       await expect(page.getByRole('link', { name: /Manage in Bridge/ })).toHaveAttribute(
         'href',
         /address=/,
@@ -507,7 +508,7 @@ test.describe('Platform address', () => {
       await open(page, url(`/platform-address/${NET[net].paddr}`, net), 'Platform address')
       const list = page.locator('#paddr-transitions')
       await expect(list.locator('tbody tr, .rx-card-row').first()).toBeVisible()
-      await expect(list.getByText('Platform Explorer').first()).toBeVisible()
+      await expect(sourceLineOf(list).getByText('Platform Explorer').first()).toBeVisible()
     })
   }
 

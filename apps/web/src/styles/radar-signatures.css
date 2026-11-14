@@ -195,11 +195,8 @@
 [data-src-hover]:focus-within > .rx-fig__src {
   display: block;
 }
-.rx-home__src {
+.rx-hero .rx-home__src {
   margin: 18px 0 0;
-}
-.rx-home__src .rx-sources {
-  gap: 2px 12px;
 }
 
 /* the node map: on the page ground, bleeding past the container, with nothing floating over it */
@@ -263,9 +260,10 @@
   box-shadow: inset 0 0 0 1.4px color-mix(in srgb, var(--dh-brand) 60%, transparent);
 }
 
-/* the layer sections under the hero: on the page ground, a rule between them */
+/* the layer sections under the hero: on the page ground, the hero's rule above the first and a rule between them */
 .rx-home__sec {
   padding: 34px 0 38px;
+  border-top: 0;
   border-bottom: 1px solid var(--dh-line);
   scroll-margin-top: 8px;
 }
@@ -273,11 +271,8 @@
   padding-bottom: 8px;
   border-bottom: 0;
 }
-.rx-home__sec > .rx-sec__head {
-  margin-bottom: 6px;
-}
-.rx-home__sec > .rx-home__src {
-  margin: 0;
+.rx-home__sec > .rx-sec__body {
+  margin-top: 0;
 }
 .rx-home__sec .rx-figs {
   max-width: 760px;
@@ -662,6 +657,10 @@
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
+.rx-rec__src {
+  grid-column: 2 / -1;
+  margin: 2px 0 0;
+}
 .rx-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -678,7 +677,8 @@
     justify-content: flex-start;
   }
   .rx-rec__meta,
-  .rx-rec__also {
+  .rx-rec__also,
+  .rx-rec__src {
     grid-column: 1 / -1;
   }
   .rx-rec__glyph {

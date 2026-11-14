@@ -30,6 +30,7 @@ export function CurrentEpoch() {
     epoch === undefined || length === undefined ? undefined : epoch.firstBlockTimeMs + length
   return (
     <Card
+      level="section"
       id="current-epoch"
       layer="network"
       title={t`Current epoch`}

@@ -30,7 +30,6 @@ export function Headline({ net, versions, days, summary }: SectionProps) {
 
   return (
     <Card
-      title={t`The network right now`}
       id="now"
       layer="network"
       source={[

@@ -60,8 +60,9 @@
   --rx-testnet-soft: #fcf3d3;
 
   /* liveness */
-  --rx-flash-core: color-mix(in srgb, var(--rx-core-line) 16%, transparent);
-  --rx-flash-plat: color-mix(in srgb, var(--rx-plat) 20%, transparent);
+  /* on the page ground, where tables now sit, a stronger wash drops a link under 4.5:1 */
+  --rx-flash-core: color-mix(in srgb, var(--rx-core-line) 10%, transparent);
+  --rx-flash-plat: color-mix(in srgb, var(--rx-plat) 12%, transparent);
 
   /* type additions */
   --rx-fs-hero: 62px; /* one headline number per home */

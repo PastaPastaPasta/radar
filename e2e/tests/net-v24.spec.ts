@@ -5,6 +5,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
 
 const FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -140,7 +141,7 @@ test.describe('Core 24 activation tracker', () => {
     const road = status.locator('[data-milestones] li')
     await expect(road).toHaveCount(5)
     await expect(road.first()).toHaveAttribute('data-done', 'true')
-    await expect(status.locator('[data-source="radar"]')).toBeVisible()
+    await expect(sourceLineOf(status).locator('[data-source="radar"]')).toBeVisible()
     await expect(tracker(page).locator('[data-stale-notice]')).toHaveCount(0)
     await expectAccessible(page)
   })

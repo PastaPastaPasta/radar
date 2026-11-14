@@ -167,20 +167,21 @@ A **type badge takes the layer the type touches**, not the chain it is recorded 
 ### 4.3 Data colours
 
 - **Single series:** the layer line colour (`--rx-l`). Platform bars use `--rx-plat-line` in light (`#1E9586`, 3.7:1 on white); `--rx-plat` (`#25B8A6`) is only for fills that carry text in `--rx-plat-ink` or for marks on the plate.
-- **Core chart families** (`/charts`): one token each, so six cards read apart in both themes: hash rate `--rx-core-line` (blue), transactions `--rx-plat-line` (teal), difficulty `--dh-accent-forge-select` (ember), supply `--rx-net-line` (navy; pale blue in dark), unspent outputs `--dh-good` (green), credit pool `--rx-id-3` (cyan). The chart's wrapper sets `--rx-l`. Each is at least 3:1 on the card.
+- **Core charts** (`/charts`): every chart is drawn in the Core line colour (`--rx-core-line`, at least 3:1 on the page ground in both themes). Each chart has its own title and axis, so a hue per chart told the reader nothing and put six colours on one page. The chart's wrapper sets `--rx-l`.
 - **Ordered series** (versions, ranks): the family blue ramp `--dh-ramp-1…5`, newest/most first, then `--dh-line-2` for "Other".
 - **Platform ordered series:** teal ramp `--rx-teal-1…5` (`#0B6B60 #1E9586 #25B8A6 #7FD6CA #BDEBE4`; reversed in dark).
 - **Heatmaps** (activity calendar): `--rx-cal-1…3`, each at least 3:1 against the empty cell: light `#1E9586 #0B6B60 #06403A`, dark `#1E9586 #5FD9C7 #BDEBE4`.
 - **Comparison band** ("middle 80% of evonodes"): the layer fill at 18% opacity behind the bars.
 - **Status in data** (answering / no answer / banned; uptime cells): `--dh-good`, `--dh-warn`, `--dh-bad` with a legend that names them.
 - **Fee** is `--dh-warn` in the value-flow chart; change is `--dh-line-2`.
-- Never more than five hues in one chart (the six Core charts are six separate charts). No purple, indigo, magenta, gradients or neon.
+- Never more than five hues in one chart, and one hue per page of single-series charts. No purple, indigo, magenta, gradients or neon.
+- **One accent plus meaning.** A page's colour is its layer hue (section keylines, chart marks, the current tab), link blue, and the three status colours where a figure is a status. Nothing else is coloured: figures, card titles and table heads are ink.
 
 ### 4.4 Identicons and nodeprints
 
 - **Identicon** (identities, contract owners): 5×5 grid mirrored left–right from bytes 1–2 of the identifier, on a tinted square with a 24% corner radius. Fill comes from byte 0 mod 8: `--rx-id-0…7` = `#0070C4 #1E9586 #0A2A3D #2B90BC #0B6B60 #4A6B85 #1F7FB8 #2E8F99` (dark swaps `--rx-id-2` to `#A6D8F7` and `--rx-id-5` to `#8FB3CC`). Background is the fill at 14%. Sizes: 18 (chips), 28 (palette), 48 (preview), 64 (record header).
 - **Nodeprint** (masternodes, evonodes): a 12-segment ring, each segment on or off from the ProTx hash (every fifth always on), with a centre dot whose radius varies 2.2–3.6. Masternode: ring and core in `--dh-ink`. Evonode: core in `--rx-plat` and a teal ring tint. Sizes 18, 28, 60.
-- **Layer tile** (blocks, transactions, contracts, documents, tokens, epochs): rounded square (22% radius) in the layer fill with a white or ink glyph at 55%. Sizes 26 (card titles), 28 (palette), 36 (default), 44 (pulse), 60 (record header).
+- **Layer tile** (blocks, transactions, contracts, documents, tokens, epochs): rounded square (22% radius) in the layer fill with a white or ink glyph at 55%. Sizes 28 (palette), 36 (default), 44 (pulse), 60 (record header). Card titles carry no tile.
 
 These are recognition aids, never the only label: the hash or name always sits next to them.
 
@@ -254,16 +255,21 @@ Band padding 28 px top, 32 px bottom; 1 px `--dh-line` bottom edge (none on the 
 
 A **`SectionBand`** is a full-width zone in its layer's soft ground (`--rx-l-soft`, 1 px rules top and bottom, 40 px top padding) with a ruled section head. Record pages and the home page use plain sections on the page ground instead; the home's two (Dash Core, Dash Platform) are separated by a 1 px rule (§1.1).
 
-A **section head** is the family ruled head: 4 px rounded keyline in the layer line colour to the left of a 21 px title, a one-line description in `--dh-ink-2` beside it, actions ("All 2,997 masternodes →") right-aligned. A hidden copy-link icon appears on hover/focus of the head.
+A **section head** is the family ruled head: 4 px rounded keyline in the layer line colour to the left of a 21 px title, actions ("All 2,997 masternodes →") right-aligned. A hidden copy-link icon appears on hover/focus of the head.
+
+**`Section`** (`ui/layout.tsx`) is how a page is divided. It is a 1 px rule across the page, 30 px of air, the section head, an optional lede (one or two sentences, 16 px `--dh-ink-2`, 760 px at most), **the section's one source line**, then the body 18 px below. The section collects the stamps of everything inside it (cards, stats, key-value rows, tables) and names each source once in that line; stamps passed as `source` speak for their sources ahead of what the parts report. `Card level="section"` gives a card the same ruled head and lede for a page whose sections are single cards; it does not start a line of its own, so a page whose sections all read one source says so once, under the page title.
+
+**Page head** (`PageFrame`, `.rx-page__head`): eyebrow (layer, and the network off mainnet), `h1`, a lede of at most 760 px, then the page's source line for everything outside a `Section`. Pages are a single column of sections with 12–20 px between blocks (`.rx-pile`); two blocks sit side by side from 1024 px with 48 px between them in place of borders (`.rx-cols`, `--3`, `--lead`).
 
 ### 5.3 Card
 
-`Card`: `--dh-surface`, 1 px `--dh-line` border, `--dh-r3` (10 px) radius, no shadow at rest.
+`Card` is a titled block on the page ground: no border, no fill, no radius, no padding at the sides. What separates one block from the next is space and the section rules, as on the old radar.dashhq.org. Boxes are kept for things that are objects: the map, a chart's plot, a callout, a hover card, a dialog.
 
-- Head: 14 px top / 12 px bottom, 20 px sides. Title 17 px, optionally preceded by a 26 px layer tile. `actions` and the card's `SourceLine` right-aligned in the head, so the source sits beside the figures (see §15). The foot keeps the "All … →" link and keyboard hints.
-- Body: 0 20 px 18 px. `padding="flush"` for tables, which run edge to edge.
-- Foot: 11 px × 20 px, 1 px top rule, 13 px `--dh-ink-2`; "All … →" link at the right; keyboard hints on the left (desktop only).
-- `layer` sets `data-layer`, which tints the title tile, the table flash and focus row.
+- Head: title 17 px with 10 px under it, `actions` right-aligned on the same baseline. No layer tile.
+- Source: inside a `Section` or a `PageFrame` the card hands its stamps to that line and shows none. A card that stands alone (no section around it) keeps its `SourceLine` in the head.
+- Body: no padding. Tables and lists run the full width of the block.
+- Foot: 12 px above, no rule, 13 px `--dh-ink-2`; "All … →" link at the right.
+- `layer` sets `data-layer`, which tints the table flash and focus row.
 - States: loading → `Skeleton` blocks in the body; empty → `Empty` in the body; error → `ErrorState` in the body; source down → body at 74% opacity and greyscale with the down message on top and the last-good age (§6.13).
 
 ### 5.4 Composition rules
@@ -271,7 +277,9 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - One plate band per page at most. Never put the plate inside a card.
 - One amber button per view, and no amber on record pages unless the page has a real primary action.
 - No more than two layer hues side by side in one card. A card is one layer.
-- Every figure in a stat, tile or KPI is covered by a `SourceLine`: its section's one line where the section has one (the home page), otherwise its label row or the card head. Never both.
+- Every figure in a stat, tile or KPI is covered by a `SourceLine`: the one line of its section, or of its page when it sits outside a section. A card or figure with neither around it carries its own. Never both.
+- Sequence over density. A page is a column of sections read top to bottom; a section is a sentence of context, then its figures or its list. Do not pack three cards across to save height.
+- No figure twice on a page. If the page head states it, a card below does not.
 - Lists show 8–22 rows before "All … →"; long lists page (§6.7).
 
 ---
@@ -282,14 +290,14 @@ Names and props are in `docs/ARCHITECTURE.md` §7.2. Measurements are desktop un
 
 ### 6.1 `Card`, `SectionBand`, `KeyValue`
 
-See §5. `KeyValue` uses the family `dh-kv dh-kv--ruled`: label 13 px `--dh-ink-2` in a 110 px column (aside) or 160 px (main), value 14 px ink, 1 px rules between rows, 10 px row padding. `columns={2|3}` sets a CSS grid of kv blocks with 24 px gaps. A row with `source` puts a compact `SourceLine` after the value. `hint` is a 12.5 px `--dh-ink-2` line under the value.
+See §5 (`Section`, `Card`, `Card level="section"`). `KeyValue` uses the family `dh-kv dh-kv--ruled`: label 13 px `--dh-ink-2` in a 110 px column (aside) or 160 px (main), value 14 px ink, 1 px rules between rows, 10 px row padding. `columns={2|3}` sets a CSS grid of kv blocks with 24 px gaps. A row with `source` hands its stamp to the section or page line; only a row with no such line around it shows a compact `SourceLine` after the value. `hint` is a 12.5 px `--dh-ink-2` line under the value.
 
 ### 6.2 `Stat`
 
-Box: `--dh-surface` (plate-2 on the plate), 1 px line, 10 px radius, padding 14 16 14 18 px. A 3 px **keyline** runs down the left edge (inside the radius): the layer line colour when `layer` is set, `--dh-line-2` otherwise, and `--dh-good/warn/bad` when the figure itself is a status (needs a `tone` prop, §15).
+A figure, not a box: no fill, no border, no radius. A 2 px rule in `--dh-line` runs down the left edge with 12 px between it and the text, as the old site's stat row had. When the figure itself is a status (`tone`), the rule is 4 px in `--dh-good/warn/bad` and the value takes the same colour; no other stat is coloured, and the layer does not tint it.
 
-- Label: 13 px `--dh-ink-2`, with the `SourceLine` (compact) inline after it.
-- Value: 26 px (`size="lg"`: 34 px), weight 660, stretch 108%, tabular; tone colours the value too for good/warn/bad.
+- Label: 13 px `--dh-ink-2`. Inside a section or page line the stat's own `SourceLine` is not drawn at rest: it sits under the figure in a popover shown on hover, and on keyboard focus when the figure is a link (`.rx-fig__src`). The proof inspector is always reachable from the section line, whose Proof-checked mark is a button. A stat with no line around it keeps the mark inline after the label.
+- Value: 24 px, weight 650, stretch 110%, tabular. One size on the page: `size="lg"` no longer enlarges a figure, because a page states its lead figure in its head. It only keeps the first figure of a compact phone grid (`.rx-statgrid`, the address summary) a step larger.
 - Unit: 14 px `--dh-ink-2`, after a no-break space.
 - Note: 12.5 px `--dh-ink-2`, one or two lines.
 - `meter`: 6 px meter under the note. `spark`: 28 px high sparkline under the note.
@@ -298,7 +306,7 @@ Box: `--dh-surface` (plate-2 on the plate), 1 px line, 10 px radius, padding 14 
 - Loading: label stays, value becomes a 120 × 26 px skeleton.
 - Value change (live): the new digits roll in from above (`rx-roll`, 240 ms). Reduced motion: swap.
 
-Stat rows: 5 across at ≥ 1024 (`.rx-stats`, 12 px gap), 2 across on phone.
+Stat rows: 5 across at ≥ 1024 (`.rx-stats`, 18 × 24 px gap), 2 across on phone (16 × 20 px, 22 px value).
 
 ### 6.3 `EntityChip`
 
@@ -346,18 +354,20 @@ Type → glyph → layer:
 
 Desktop:
 
-- Header: 13 px weight 520 `--dh-ink-2`, 9 px × 12 px, sticky under the bar, 1 px bottom rule. Sortable headers are buttons; the sorted one is ink with ↓/↑ in brand blue and `aria-sort`.
+- The table sits on the page ground with rules, not in a bordered card: the first and last cells have no side padding, so the rules run the width of the block and line up with the text above.
+- Header: 13 px weight 520 `--dh-ink-2`, 9 px × 12 px, sticky under the bar on the page ground, 1 px bottom rule in `--dh-line-2`. Sortable headers are buttons; the sorted one is ink with ↓/↑ in brand blue and `aria-sort`.
 - Rows: 8 px × 12 px (feeds: 7 px), 1 px `--dh-line` rule, middle aligned, no zebra. Numeric columns right-aligned and tabular. Two-line cells (`.rx-2l`): primary 14 px, secondary 12.5 px `--dh-ink-2`.
 - Hover: `--dh-hover` ground. Focused row (`j`/`k` or keyboard): `--dh-select-soft` ground and a 3 px `--dh-select` inset keyline on the left. Whole-row links via `rowLink`; inner chips and filter buttons stay separately clickable.
 - Click-to-filter cells (country, version, host) are ghost buttons that show an underline and a filter glyph on hover.
-- Tools row above (16 px padding): segmented type filter with counts, search input (grows), filter buttons (`is-on` = brand ring and value), "Filters n" on phone. Active-filter row on `--dh-sunken`: match count, removable tokens, Clear, sort description.
-- Foot (`.rx-tfoot`): keyboard hints, `SourceLine`s, pager ("1–22 of 2,207", Previous/Next). Infinite lists show a 40 px "Loading more" row with a skeleton.
+- Tools row above (14 px under it, no rule): segmented type filter with counts, search input (grows), filter buttons (`is-on` = brand ring and value), "Filters n" on phone. Active-filter row, plain: match count, removable tokens, Clear, sort description.
+- Foot (`.rx-tfoot`): the pager ("1–22 of 2,207", Previous/Next), and the table's `SourceLine` only when no section or page line covers it. A table with neither has no foot. Infinite lists show a 40 px "Loading more" row with a skeleton.
+- Keyboard hints (`j` `k` move, `↵` open) are not printed under every table. They show as a small chip at the table's lower right while a row has keyboard focus (`.rx-tkeys`, ≥ 641 px), and the shortcuts dialog lists them.
 - **Live** (`live.newRowIds`): new rows slide down 8 px and fade in over 240 ms, then their ground flashes in the layer flash colour and fades over 1.2 s. While the pointer is over the table or a row has focus, inserts queue and a "3 new blocks · show" pill appears above the table instead.
 - States: loading → 8 skeleton rows at real row height; empty → `Empty` spanning the table; error → `ErrorState` row with Retry.
 
 Paging: `page` shows "1–22 of 2,207" + Previous/Next (small secondary buttons, Previous disabled on page 1); `cursor` shows only Previous/Next with "Newer"/"Older" labels for time-ordered lists; `infinite` appends with the loading row and keeps a "Back to top" link in the foot.
 
-Phone (`phone="cards"`, default) — each row becomes a 2-column card, 12 × 14 px padding, 1 px rule between cards. Column `phone` meta places cells:
+Phone (`phone="cards"`, default) — each row becomes a 2-column block, 10 px above and below, no side padding, 1 px rule between rows. Aim for two lines a row: a title with its state or age, then one line of detail; and no label the row does not need (`/changes`: the masternode and when, then the change with its block at the right). Column `phone` meta places cells:
 
 | meta | Position |
 |---|---|
@@ -369,7 +379,7 @@ Phone (`phone="cards"`, default) — each row becomes a 2-column card, 12 × 14 
 
 Masternode card: nodeprint + IP:port + type tag | Answering; version | country + city; "Paid 2,569,990 · 5 min ago".
 
-`phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside the card, the first column sticky with a 1 px right rule, and a 24 px fade on the scrolling edge.
+`phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside its own block (never the page), the first column sticky on the page ground with a 1 px right rule, and a 24 px fade on the scrolling edge.
 
 ### 6.8 `Tabs`
 
@@ -397,12 +407,12 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 
 **How many, and how loud (the density rule).**
 
-- **One visible source line per section.** It names every source the section's figures use, one mark per source. A card inside a section that already has a line does not repeat it in its head (`SourceScope`), and its figures carry no marks of their own.
+- **One visible source line per section.** It names every source the section's figures use, one mark per source. The section builds it: every card, stat, key-value row and table inside reports its stamps to the nearest `Section` (or to the page head, outside one) and draws no mark of its own (`SourceSection`, `useSectionSource`). Nothing has to be wired by hand, and a part that loads late joins the line when its read lands. The marks keep `data-source`, `data-proved`, `data-fallback` and `data-state`.
 - **Which stamp speaks for a source.** The figure read most recently at the newest height. A figure that has trailed its source's newest height for 8 s, or was read more than 30 s before the others, takes over the mark, so the line never looks fresher than its oldest figure and never looks stale because nothing has changed since the last block.
 - **Per-figure detail on demand.** A figure's own mark (source, age, the node that answered) shows under it on hover and on keyboard focus, without moving the layout. A proved figure's mark there, and in the section line, is the button that opens the proof inspector.
 - **No figure twice.** A value is stated once per page, where it matters most.
-- **Calm unless wrong.** The resting mark has no border and no ground: a 12 px glyph and 12 px `--dh-ink-2` text. Colour and a dashed border are reserved for a source that is actually stale or down, and both show at the section line. A page that shows a figure keeps it fresh for as long as it is on screen, so an open tab does not drift into the stale look by itself: the home page reads the Platform tip again once a minute and the census every five, and an index figure read at the newest block is not aged at all, because nothing newer exists to read. Proof-checked keeps its good-green solid border: it is a control, and it is good news.
-- The home page follows this rule now. The other pages still carry a mark per card; moving them to section lines is listed for the whole-app rounds.
+- **Calm unless wrong.** The resting mark in a section or page line has no border, no ground and no glyph: 12 px `--dh-ink-2` text, marks separated by space. A glyph appears with Proof-checked, stale and down, and stale and down take `--dh-warn` and `--dh-bad` text; the dashed box is kept for a mark that stands alone on a card. Colour is reserved for a source that is actually stale or down, and shows at the section line. A page that shows a figure keeps it fresh for as long as it is on screen, so an open tab does not drift into the stale look by itself: the home page reads the Platform tip again once a minute and the census every five, and an index figure read at the newest block is not aged at all, because nothing newer exists to read. Proof-checked keeps its good green and its shield glyph, and underlines on hover: it is a control, and it is good news.
+- Every page built on `PageFrame` follows this rule, and so do the home page and `/mn/{hash}` (its line is in the record header). The Core record pages built on the Core band (`/block/*`, `/tx/*`, `/blocks`) keep one line per section head, and `/status` keeps a mark per card because the sources are its subject.
 
 `LiveDot`: 8 px dot, always followed by a word. Health states: `live` and `ok` → `--dh-good` with one 900 ms ring pulse each time data lands (not on a loop), word "Live"; `slow` → `--dh-good`, no pulse, "Slow"; `degraded` and `stale` → `--dh-warn`, "Behind"; `down` → `--dh-bad`, "Down"; `unknown` → `--dh-ink-3` hollow dot, "Checking". Paused feeds use `--dh-ink-3`.
 

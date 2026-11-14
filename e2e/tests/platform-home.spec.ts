@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
+import { sourceLineOf } from '../helpers/sources'
 import { expect, test } from '../helpers/test'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
@@ -28,7 +29,9 @@ test.describe('Platform overview', () => {
     await expect(vitals).toContainText('Protocol version')
     await expect(vitals).toContainText(/Epoch\s*\d+/)
     await expect(vitals).toContainText('Not proof-checked')
-    await expect(vitals.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
+    await expect(
+      sourceLineOf(vitals).locator('[data-source="sdk"][data-proved="true"]'),
+    ).toBeVisible()
     await expectAccessible(page)
   })
 
