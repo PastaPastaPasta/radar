@@ -2,13 +2,15 @@ import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 /**
- * Waits until nothing on the page is still loading: no skeleton and no `aria-busy` region. Layout checks and error
- * checks run after this, so they look at the page's data and not at its placeholders.
+ * Waits until nothing on the page is still loading: no skeleton and no `aria-busy` region, and the web fonts have
+ * loaded, so a line does not wrap differently a moment after it was measured. Layout checks and error checks run
+ * after this, so they look at the page's data and not at its placeholders.
  */
 export async function settled(page: Page): Promise<void> {
   await expect(page.locator('[data-skeleton], [aria-busy="true"]')).toHaveCount(0, {
     timeout: 15_000,
   })
+  await page.evaluate(() => document.fonts.ready)
 }
 
 /** Page-level sideways overflow in CSS pixels: positive when the page would scroll horizontally. */
