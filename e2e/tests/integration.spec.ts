@@ -93,3 +93,20 @@ test.describe('identities on a list that wants names', () => {
     })
   }
 })
+
+test.describe('the census links into the masternode list', () => {
+  for (const href of [
+    '/masternodes?reach=reachable',
+    '/masternodes?status=pose-banned',
+    '/masternodes?dkg=ready&status=enabled',
+    '/masternodes?dkg=protocol&status=enabled',
+    '/masternodes?host=51167&type=evo',
+    '/masternodes?country=DE&type=evo',
+  ]) {
+    test(`${href} lists the nodes it counts @RA-04 @RA-09`, async ({ page }) => {
+      await page.goto(href)
+      await settled(page)
+      await expect(page.locator('a[href^="/mn/"]').first()).toBeVisible({ timeout: 15_000 })
+    })
+  }
+})
