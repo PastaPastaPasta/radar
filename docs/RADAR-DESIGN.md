@@ -249,7 +249,7 @@ Every page starts with one band directly under the bar. It holds the band nav (t
 
 Band padding 28 px top, 32 px bottom; 1 px `--dh-line` bottom edge (none on the plate). Band nav: 30 px pill links (11 px side padding, 6 px radius), `--dh-ink-2`, current page on `--dh-surface` with ink text.
 
-**Record header** (`.rx-rec`): glyph (60–64 px identicon, nodeprint or tile) | kicker (type badge + context line) | title (30 px; mono for hashes, the port of an IP:port in `--dh-ink-2`) | actions on the right (link-outs, copy link, save) | full ID with copy | status badges and `SourceLine`s. Then the KPI row: 5 stats (4 on tx), 12 px gap, the first one `--big` with the layer keyline.
+**Record header** (`.rx-rec`): glyph (60–64 px identicon, nodeprint or tile) | kicker (type badge + context line) | title under the kicker, in the second column whether or not the header has actions (30 px; mono for hashes, the port of an IP:port in `--dh-ink-2`) | actions on the right (link-outs, copy link, save) | full ID with copy | status badges and `SourceLine`s. Then the KPI row: 5 stats (4 on tx), 12 px gap, the first one `--big` with the layer keyline.
 
 ### 5.2 Zones and sections
 
@@ -302,7 +302,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - Every figure in a stat, tile or KPI is covered by a `SourceLine`: the one line of its section, or of its page when it sits outside a section. A card or figure with neither around it carries its own. Never both.
 - Sequence over density. A page is a column of sections read top to bottom; a section is a sentence of context, then its figures or its list. Do not pack three cards across to save height.
 - No figure twice on a page. If the page head states it, a card below does not.
-- Lists show 8–22 rows before "All … →"; long lists page (§6.7).
+- Lists show 8–22 rows before "All … →"; long lists page (§6.7). On a phone a top ten shows its first five (the Platform leaderboards and top proposers, `.rx-phone5`); the card's link leads to the rest.
 
 ---
 
@@ -402,7 +402,7 @@ Phone (`phone="cards"`, default) — each row becomes a 2-column block, 10 px ab
 
 Masternode card: nodeprint + IP:port + type tag | Answering; version | country + city; "Paid 2,569,990 · 5 min ago".
 
-**The masternode list at 1440 px** is one dense table of twelve columns, in the old page's order: ProTx, address, country, hosting, version, protocol, status, uptime 7d, uptime 30d, last paid (age, with the blocks since), registered (height and age) and PoSe. Above it sit one row with the status mix (legend and stack bar) and one row of filters (type, search, status, version, country, hosting, columns, export), so the first row is on the first screen. The page shows 100 rows a page. In Decentralized only mode the crawl's columns are left out, with one notice.
+**The masternode list at 1440 px** is one dense table of twelve columns, in the old page's order: ProTx, address, country, hosting, version, protocol, status, uptime 7d, uptime 30d, last paid (age, with the blocks since), registered (height and age) and PoSe. Above it sit one row with the status mix (legend and stack bar) and one row of filters (type, search, status, version, country, hosting, columns, export), so the first row is on the first screen. The page shows 100 rows a page. In Decentralized only mode the crawl's columns are left out, with one notice. The ProTx cell keeps 7.25 rem so the hash reads as `00ae93…0633`; city and hosting give way first (`.rx-clip`). At 1024 px the table scrolls inside its block. On a phone the head reads claim, paragraph, source line, and only then the view switch and the buttons.
 
 `phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside its own block (never the page), the first column sticky on the page ground with a 1 px right rule, and a 24 px fade on the scrolling edge.
 
