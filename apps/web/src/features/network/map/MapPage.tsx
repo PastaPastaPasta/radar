@@ -93,7 +93,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
   const byProtx = useMemo(() => new Map(rows.map((r) => [r.protx, r])), [rows])
   const totals = useMemo(() => (geo ? geoTotals(geo) : undefined), [geo])
   const stats = useMemo(() => headline(view.visible), [view.visible])
-  const placed = useMemo(() => placedIn(rows), [rows])
+  const placed = useMemo(() => placedIn(view.visible), [view.visible])
   const onMap = mnCount(placed.masternodes)
   usePageClaim(
     placed.countries > 0
@@ -390,7 +390,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
                       })}{' '}
                     </>
                   ) : null}
-                  <ListLink scheme={scheme} controls={controls} />
+                  <ListLink rows={rows} scheme={scheme} controls={controls} />
                 </>
               )}
             </p>

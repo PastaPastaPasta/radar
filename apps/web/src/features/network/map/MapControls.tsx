@@ -10,7 +10,7 @@ import {
   TONE_COLOR,
   CATEGORY_LABEL,
   filterSearch,
-  listFilter,
+  listTarget,
   type ColorMode,
   type ColorScheme,
   type Headline,
@@ -250,17 +250,32 @@ export function MapControls({
 
 /** "Open these as a list": the list with the same filter fields. */
 export function ListLink({
+  rows,
   scheme,
   controls,
 }: {
+  rows: readonly MnRow[]
   scheme: ColorScheme
   controls: MapSearchControls
 }) {
   const { t } = useLingui()
-  const filter = listFilter(controls.filter, scheme, controls.hidden)
+  const label = useCategoryLabel()
+  const target = useMemo(
+    () => listTarget(rows, controls.filter, scheme, controls.hidden),
+    [rows, controls.filter, scheme, controls.hidden],
+  )
+  const names = target.unexpressed.map(label).join(', ')
   return (
-    <Link to="/masternodes" search={filterSearch(filter) as never} data-open-list>
-      {t`Open these as a list`}
-    </Link>
+    <>
+      <Link to="/masternodes" search={filterSearch(target.filter) as never} data-open-list>
+        {t`Open these as a list`}
+      </Link>
+      {target.extra > 0 ? (
+        <span data-list-extra>
+          {' '}
+          {t`The list also shows ${formatInt(target.extra)} hidden here (${names}); it can't leave them out.`}
+        </span>
+      ) : null}
+    </>
   )
 }

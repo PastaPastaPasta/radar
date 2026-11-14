@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { filterMnRows } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
 import type { RadarMasternode } from '@/data/radar/schemas'
 import {
@@ -6,7 +7,7 @@ import {
   filterSearch,
   geoTotals,
   headline,
-  listFilter,
+  listTarget,
   mapView,
   mnPoints,
   sortGroup,
@@ -107,17 +108,47 @@ describe('the map model', () => {
     })
   })
 
-  it('turns one remaining reachability or PoSe chip into a list filter @RA-51', () => {
-    const reach = colorScheme('reach', rows)
-    expect(listFilter({ q: 'x' }, reach, new Set(['unreachable', 'unchecked']))).toEqual({
+  it('carries what the hidden categories leave out into the list, and says what it cannot @RA-51', () => {
+    const open = (
+      mode: Parameters<typeof colorScheme>[0],
+      hide: string[],
+      filter: Parameters<typeof listTarget>[1] = {},
+    ) => listTarget(rows, filter, colorScheme(mode, rows), new Set(hide))
+    const protxs = (t: ReturnType<typeof listTarget>) =>
+      filterMnRows(rows, t.filter).map((r) => r.protx)
+
+    // reach: one category left
+    expect(open('reach', ['unreachable', 'unchecked'], { q: 'x' }).filter).toEqual({
       q: 'x',
       reach: 'reachable',
     })
-    expect(listFilter({}, reach, new Set(['unchecked']))).toEqual({})
-    const pose = colorScheme('pose', rows)
-    expect(listFilter({}, pose, new Set(['enabled']))).toEqual({ status: ['pose-banned'] })
-    expect(listFilter({ reach: 'unreachable' }, colorScheme('version', rows), new Set())).toEqual({
-      reach: 'unreachable',
+    // reach: "not checked" has no value the list can filter by, so the list keeps it and says so
+    const unchecked = open('reach', ['unchecked'])
+    expect(unchecked.filter).toEqual({})
+    expect(unchecked.unexpressed).toEqual(['unchecked'])
+    expect(unchecked.extra).toBe(1)
+    // pose
+    expect(open('pose', ['enabled']).filter).toEqual({ status: ['pose-banned'] })
+    // type
+    expect(open('type', ['regular']).filter).toEqual({ type: ['evo'] })
+    expect(open('type', ['regular']).unexpressed).toEqual([])
+    // version: the versions that stay, when every unknown one is hidden too
+    const version = open('version', ['23.1.8', '22.0.0', 'unknown'], { country: ['DE'] })
+    expect(version.filter.version).toEqual(['24.0.0'])
+    expect(version.filter.country).toEqual(['DE'])
+    expect(version.unexpressed).toEqual([])
+    expect(protxs(version)).toEqual(
+      mapView(
+        rows,
+        { country: ['DE'] },
+        colorScheme('version', rows),
+        new Set(['23.1.8', '22.0.0', 'unknown']),
+      ).visible.map((r) => r.protx),
+    )
+    // nothing hidden: the filter as it is
+    expect(open('version', [], { reach: 'unreachable' })).toMatchObject({
+      filter: { reach: 'unreachable' },
+      extra: 0,
     })
   })
 
