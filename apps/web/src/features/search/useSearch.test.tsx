@@ -62,6 +62,30 @@ describe('planResolvers', () => {
     expect(plan.map((r) => r.id)).not.toContain('local-core-address')
   })
 
+  it('asks Hyphen for the start of an address or hash, and offers no ".dash" guess for it @W2-29 @HY-14', () => {
+    for (const input of ['Xbuboxzf25', '8acce06e01135b']) {
+      const ids = planResolvers(classify(input, 'mainnet'), 'mainnet', 'palette').map((r) => r.id)
+      expect(ids).toContain('hy-search')
+      expect(ids).not.toContain('local-name')
+    }
+    const name = planResolvers(classify('alice', 'mainnet'), 'mainnet', 'palette').map((r) => r.id)
+    expect(name).toContain('local-name')
+  })
+
+  it('asks Hyphen for nothing in Decentralized only mode @W2-29', () => {
+    writeSourceMode('decentralized')
+    const ids = planResolvers(classify('Xbuboxzf25', 'mainnet'), 'mainnet', 'palette').map(
+      (r) => r.id,
+    )
+    writeSourceMode('all')
+    expect(ids).not.toContain('hy-search')
+  })
+
+  it('plans the epoch lookup for "epoch 86" @W2-28', () => {
+    const ids = planResolvers(classify('epoch 86', 'mainnet'), 'mainnet', 'page').map((r) => r.id)
+    expect(ids).toContain('local-epoch')
+  })
+
   it('skips every resolver when the address belongs to another network', () => {
     const c = classify('yhq7ifNCtTKEpY4Yu5XPCcztQco6Fh6JsZ', 'mainnet')
 

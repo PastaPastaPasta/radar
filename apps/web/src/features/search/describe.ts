@@ -12,6 +12,8 @@ const NAMES = {
   'platform-address': msg`a Platform address`,
   ip: msg`an IP address: a masternode’s service address`,
   date: msg`a date: the Core blocks of that UTC day`,
+  prefix: msg`the start of a Core address or hash`,
+  'epoch-ref': msg`an epoch of Platform`,
   dpns: msg`a name`,
   text: msg`text: could be a name, a contract or a token`,
 } satisfies Record<InputClass, ReturnType<typeof msg>>

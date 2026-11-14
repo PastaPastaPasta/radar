@@ -1,8 +1,15 @@
 import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { entityLabel, PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import {
+  entityLabel,
+  PageLink,
+  networkName,
+  sectionLabel,
+  useDocumentTitle,
+  useNetwork,
+} from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { Badge, Card, Empty, ErrorState, Section, Skeleton, SourceLine, Unavailable } from '@/ui'
 import { reportsAttr, useSectionSource } from '@/ui/section-source'
@@ -12,8 +19,11 @@ import { groupHits, groupLabel, kindRuns } from './groups'
 import { KindGlyph } from './KindGlyph'
 import { lookupNames } from './unavailable'
 import type { SearchHit } from './types'
+import { matchPages } from './pages'
 import { useSearch } from './useSearch'
 import { useWordlistLoaded } from './wordlist'
+
+const LIVE_MS = 150
 
 const EXAMPLES = ['2569992', 'pshenmic.dash', '75.119.128.71', '2026-10-01']
 
@@ -89,20 +99,67 @@ function GroupHits({ items }: { items: SearchHit[] }) {
   )
 }
 
+function PageHits({ pages }: { pages: ReturnType<typeof matchPages> }) {
+  return (
+    <ul className="grid grid-cols-[minmax(0,1fr)] gap-2">
+      {pages.map((p) => (
+        <li
+          key={p.path}
+          data-kind="page"
+          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+        >
+          <Link to={p.path as '/'} className="min-w-0 truncate">
+            {p.title}
+          </Link>
+          <Badge size="sm">{sectionLabel(p.section)}</Badge>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export function SearchPage({ q }: { q?: string }) {
   const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
-  const query = (q ?? '').trim()
-  const [draft, setDraft] = useState(() => (classify(query, net).warning ? '' : query))
+  const urlQuery = (q ?? '').trim()
+  const [draft, setDraft] = useState(() => (classify(urlQuery, net).warning ? '' : urlQuery))
+  const typedQuery = draft.trim()
+  // Results follow what is typed, so a phone, with no palette, sees them before it presses Enter.
+  const [live, setLive] = useState(typedQuery)
+  useEffect(() => {
+    const id = setTimeout(() => setLive(typedQuery), LIVE_MS)
+    return () => clearTimeout(id)
+  }, [typedQuery])
+  const pushed = useRef(urlQuery)
+  useEffect(() => {
+    if (urlQuery !== pushed.current) {
+      pushed.current = urlQuery
+      setDraft(urlQuery)
+      setLive(urlQuery)
+    }
+  }, [urlQuery])
+  const query = classify(live, net).warning ? urlQuery : live
   const { hits, pending, failed, skipped, classified } = useSearch(query, { mode: 'page' })
-  const secret = classified.warning
   const wordsReady = useWordlistLoaded()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
+  const inUrl = useMemo(() => classify(urlQuery, net).warning, [urlQuery, net, wordsReady])
+  const secret = classified.warning ?? inUrl
   // eslint-disable-next-line react-hooks/exhaustive-deps -- the wordlist arriving changes the answer
   const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net, wordsReady])
   const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
   const withheld = typed ?? secret ?? stripped
   useDocumentTitle(query && !secret ? t`“${query}” · Search` : t`Search`)
+
+  useEffect(() => {
+    if (live === urlQuery || inUrl || classify(live, net).warning) return
+    pushed.current = live
+    void navigate({
+      to: '/search',
+      search: (prev) => ({ ...prev, q: live || undefined }),
+      replace: true,
+    })
+  }, [live, urlQuery, inUrl, net, navigate])
 
   useEffect(() => {
     if (!secret) return
@@ -121,14 +178,17 @@ export function SearchPage({ q }: { q?: string }) {
   }
 
   const { groups, guesses } = groupHits(hits)
+  const pages = useMemo(() => matchPages(query, 5), [query])
   const settled = pending.length === 0
-  const noMatch = settled && groups.length === 0
+  const noMatch = settled && groups.length === 0 && pages.length === 0
   const description = describeInput({
     ...classified,
     classes: noMatch ? classified.classes.filter((k) => k !== 'dpns') : classified.classes,
   })
   const network = networkName(net)
   const skippedNames = lookupNames(skipped)
+  const failedNames = lookupNames(failed.filter((f) => f.error.source === 'local').map((f) => f.id))
+  const failedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(failedNames)
   const skippedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(skippedNames)
   const askedForId = classified.classes.includes('base58-id')
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
@@ -216,6 +276,12 @@ export function SearchPage({ q }: { q?: string }) {
             </p>
           ) : null}
 
+          {pages.length > 0 ? (
+            <Section title={t`Pages`}>
+              <PageHits pages={pages} />
+            </Section>
+          ) : null}
+
           {groups.map(([group, items]) => (
             <Section key={group} title={groupLabel(group)} layer={group}>
               <GroupHits items={items} />
@@ -224,9 +290,16 @@ export function SearchPage({ q }: { q?: string }) {
 
           {!settled ? <Skeleton shape="row" count={2} /> : null}
 
-          {failed.map((f) => (
-            <ErrorState key={f.id} error={f.error} source={f.error.source} compact />
-          ))}
+          {failed
+            .filter((f) => f.error.source !== 'local')
+            .map((f) => (
+              <ErrorState key={f.id} error={f.error} source={f.error.source} compact />
+            ))}
+          {failedNames.length > 0 ? (
+            <p role="status" data-lookups-failed className="text-sm text-[var(--dh-ink-2,inherit)]">
+              {t`Some lookups didn’t answer, so some matches may be missing: ${failedList}.`}
+            </p>
+          ) : null}
 
           {skipped.length > 0 ? (
             <Unavailable

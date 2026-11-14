@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { useNavigate } from '@tanstack/react-router'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -12,6 +13,7 @@ import { KindGlyph } from './KindGlyph'
 import { classify, type Classified } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { groupHits, groupLabel } from './groups'
+import { lookupNames } from './unavailable'
 import { matchPages } from './pages'
 import { useCommandPalette } from './palette-context'
 import { useSearch } from './useSearch'
@@ -101,6 +103,10 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
   const [query, setQuery] = useState(initialQuery)
   const [selected, setSelected] = useState('')
   const arrowed = useRef(false)
+  const { ready } = useCommandPalette()
+  useEffect(() => {
+    ready()
+  }, [ready])
   const { hits, pending, pendingLocal, failed, classified } = useSearch(query, { mode: 'palette' })
   const pages = matchPages(query)
   const trimmed = query.trim()
@@ -163,6 +169,15 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
 
   const { groups, guesses } = groupHits(hits)
   const description = describeInput(classified)
+  const failedNames = lookupNames(failed.map((f) => f.id))
+  const failedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(failedNames)
+  const noResults =
+    trimmed.length > 0 &&
+    !secret &&
+    pending.length === 0 &&
+    groups.length === 0 &&
+    guesses.length === 0 &&
+    pages.length === 0
   // A word is more likely a page than an entity, so pages lead; any typed ID, hash, address or number leads with its matches.
   const pagesFirst = classified.classes.every((k) => k === 'text' || k === 'dpns')
 
@@ -220,9 +235,14 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
           </p>
         ) : null}
 
-        {failed.length > 0 ? (
+        {failedNames.length > 0 ? (
           <p role="status" className="px-2 py-1 text-xs text-[var(--dh-ink-2,inherit)]">
-            {t`Some sources didn’t answer: ${failed.map((f) => f.id).join(', ')}.`}
+            {t`Some lookups didn’t answer: ${failedList}.`}
+          </p>
+        ) : null}
+        {noResults ? (
+          <p role="status" data-no-results className="px-2 py-3 text-sm">
+            {t`No results`}
           </p>
         ) : null}
       </div>

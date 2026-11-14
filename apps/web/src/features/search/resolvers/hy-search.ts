@@ -93,7 +93,7 @@ function hitFor(found: Found, exact: boolean, stamp: SourceStamp): SearchHit | u
  */
 export const hySearch: Resolver = {
   id: 'hy-search',
-  accepts: ['hex64', 'text', 'dpns'],
+  accepts: ['hex64', 'prefix', 'text', 'dpns'],
   cost: 'index',
   what: msg`Core blocks, transactions, proposals and masternodes`,
   async resolve(c, { net, signal }) {

@@ -14,6 +14,8 @@ export type InputClass =
   | 'platform-address'
   | 'ip'
   | 'date'
+  | 'prefix'
+  | 'epoch-ref'
   | 'dpns'
   | 'text'
 
@@ -44,8 +46,23 @@ const TESTNET_ADDRESS_VERSIONS = new Set([0x8c, 0x13])
 
 const INT = /^\d{1,9}$/
 
-/** Only a number needs the chain tips, to say which chain it could be a height or an epoch of. */
-export const needsTips = (input: string): boolean => INT.test(input.trim())
+const EPOCH_REF = /^epoch\s*#?\s*(\d{1,5})$/i
+
+/** A number needs the chain tips, to say which chain it could be a height or an epoch of; "epoch 86" needs the epoch. */
+export const needsTips = (input: string): boolean =>
+  INT.test(input.trim()) || EPOCH_REF.test(input.trim())
+
+const HEX_PREFIX = /^(?=.*[a-f])[0-9a-f]{8,63}$/i
+const BASE58_ADDRESS_PREFIX = /^[Xy789][1-9A-HJ-NP-Za-km-z]{7,33}$/
+
+/**
+ * The start of a transaction or block hash, or of a Core address: text no name is likely to be, so Hyphen is
+ * asked for what completes it and the ".dash" guess is left out. A lowercase "y" start needs a capital to count.
+ */
+function isCorePrefix(value: string): boolean {
+  if (HEX_PREFIX.test(value)) return true
+  return BASE58_ADDRESS_PREFIX.test(value) && /[A-Z]/.test(value)
+}
 const DPNS = /^[a-z0-9-]{3,63}(\.dash)?$/i
 const DATE = /^(\d{4})-(\d{2})-(\d{2})$/
 const IPV4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?::(\d{1,5}))?$/
@@ -263,8 +280,18 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     // A tip that is not known yet could still cover the number, so it is only excluded once all three are known.
     if (limits.length < 3 || limits.some((limit) => n <= limit)) classes.push('int')
   }
+  const epoch = EPOCH_REF.exec(trimmed)
+  if (epoch) {
+    const n = Number(epoch[1])
+    if (tip?.epoch === undefined || n <= tip.epoch) {
+      classes.push('epoch-ref')
+      return result(String(n))
+    }
+  }
   if (isValidDate(trimmed)) classes.push('date')
-  if (DPNS.test(trimmed)) classes.push('dpns')
+  const corePrefix = isCorePrefix(trimmed)
+  if (corePrefix) classes.push('prefix')
+  else if (DPNS.test(trimmed)) classes.push('dpns')
   const isNumber = /^\d+$/.test(trimmed)
   if (trimmed.length >= 2 && !isNumber && !classes.includes('date')) classes.push('text')
 
