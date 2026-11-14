@@ -10,14 +10,7 @@ import { useHyphenFit } from '@/data/hyphen/fit'
 import { hyQueries } from '@/data/hyphen/queries'
 import { useIndexHealth } from '@/data/index-health'
 import { dapiKeys } from '@/data/query'
-import {
-  Entity,
-  keepPreviousOnNetwork,
-  PageLink,
-  useCatchUpToTip,
-  useNetwork,
-  useRefetchOnRise,
-} from '@/features/entity'
+import { Entity, PageLink, useCatchUpToTip, useNetwork, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import {
@@ -33,9 +26,9 @@ import {
   useMediaQuery,
   usePausedFeed,
 } from '@/ui'
+import { useCoreRows } from './core-rows'
 import { Figure, Figures, SourceRow, SourceScope, useSectionSources } from './Figure'
 import { atTip, pushed } from './freshness'
-import { CORE_ROWS } from './Hero'
 import { LiveNotice } from './LiveNotice'
 import { useFrozen } from './use-frozen'
 
@@ -154,11 +147,7 @@ function useCoreBlocks(paused: boolean) {
   const net = useNetwork()
   const tip = useQuery(coreQueries.tip(net))
   const from = tip.data?.data.height
-  const rows = useQuery({
-    ...coreQueries.blockRows(net, { fromHeight: from ?? 0, count: CORE_ROWS }),
-    enabled: from !== undefined,
-    placeholderData: keepPreviousOnNetwork(net),
-  })
+  const rows = useCoreRows(net, from)
   const shown = useFrozen(rows.data, paused)
   const newCount =
     paused && rows.data && shown
@@ -271,8 +260,9 @@ function usePending(paused: boolean) {
 function PendingCard({ pending }: { pending: ReturnType<typeof usePending> }) {
   const { t } = useLingui()
   const { query, rows, stamp, seenOnly, seenAny, fit, devnet, off } = pending
-  const columns = useMemo<ColumnDef<PendingRow>[]>(() => {
-    return [
+  const view = queryView(query)
+  const columns = useMemo<ColumnDef<PendingRow>[]>(
+    () => [
       {
         id: 'tx',
         header: t`Transaction`,
@@ -297,8 +287,9 @@ function PendingCard({ pending }: { pending: ReturnType<typeof usePending> }) {
         cell: ({ row }) => <Time ms={row.original.at} mode="relative" live />,
         meta: { phone: 'primary' },
       },
-    ]
-  }, [t, seenOnly])
+    ],
+    [t, seenOnly],
+  )
   return (
     <Card
       title={t`Pending transactions`}
@@ -342,9 +333,9 @@ function PendingCard({ pending }: { pending: ReturnType<typeof usePending> }) {
           columns={columns}
           rows={rows.slice(0, PENDING)}
           getRowId={(r) => r.txid}
-          state={query.isError && !query.data ? 'error' : query.data ? 'ready' : 'loading'}
-          error={query.error}
-          onRetry={() => void query.refetch()}
+          state={view.state}
+          error={view.error}
+          onRetry={view.onRetry}
           empty={<Empty kind="none-yet" title={t`No transactions in the mempool right now`} />}
           rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
         />
