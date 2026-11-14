@@ -772,9 +772,13 @@ dashhq-footer .rx-ratenote {
   outline: var(--dh-ring-w) solid var(--dh-focus);
   outline-offset: 2px;
 }
-.rx-tools .dh-seg.rx-seg {
+.dh-seg.rx-seg {
   flex-wrap: wrap;
   overflow-x: visible;
+}
+.rx-map-panel .dh-seg.rx-seg {
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 /* ⌘K palette */
