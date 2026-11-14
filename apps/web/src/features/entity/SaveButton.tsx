@@ -31,7 +31,7 @@ export function SaveButton({ kind, id, label }: SaveButtonProps) {
       }}
     >
       <Icon name={on ? 'bookmarkOn' : 'bookmark'} size="sm" />
-      {t`Save`}
+      {on ? t`Saved` : t`Save`}
     </button>
   )
 }
