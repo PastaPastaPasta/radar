@@ -13,6 +13,8 @@ configure({ asyncUtilTimeout: 15000 })
 
 await i18nReady
 await installFixtureSdk()
+// The app shell imports the You boot lazily; loading it here keeps that import from resolving after a test file has torn down.
+await import('@/features/you/boot')
 
 Element.prototype.scrollTo = () => undefined
 Element.prototype.scrollIntoView = () => undefined
