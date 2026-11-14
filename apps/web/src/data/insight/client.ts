@@ -11,6 +11,8 @@ import {
   InsBlockListSchema,
   InsBlockSchema,
   InsGovernanceInfoSchema,
+  InsRawBlockSchema,
+  InsRawTxSchema,
   InsProposalListSchema,
   InsStatusSchema,
   InsTxPageSchema,
@@ -129,6 +131,24 @@ export const insight = {
 
   addressUtxos(net: NetworkId, address: string, signal?: AbortSignal): Promise<Sourced<InsUtxo[]>> {
     return get(net, `/addr/${seg(address)}/utxo`, InsUtxoListSchema, { signal })
+  },
+
+  /** A transaction's bytes as hex; null when Insight has no such transaction. */
+  rawTx(
+    net: NetworkId,
+    txid: string,
+    signal?: AbortSignal,
+  ): Promise<Sourced<{ rawtx: string } | null>> {
+    return get(net, `/rawtx/${seg(txid)}`, InsRawTxSchema, { notFound: 'null', signal })
+  },
+
+  /** A block's bytes as hex, by hash; null when Insight has no such block. */
+  rawBlock(
+    net: NetworkId,
+    hash: string,
+    signal?: AbortSignal,
+  ): Promise<Sourced<{ rawblock: string } | null>> {
+    return get(net, `/rawblock/${seg(hash)}`, InsRawBlockSchema, { notFound: 'null', signal })
   },
 
   tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<InsTx | null>> {

@@ -382,6 +382,50 @@ describe('Address page', () => {
   })
 })
 
+describe('Address page when Hyphen fails @W2-25 @X-09', () => {
+  const INSIGHT_MAINNET = 'https://insight.dash.org/insight-api'
+
+  const serveInsightMainnet = () =>
+    server.use(
+      http.get(`${INSIGHT_MAINNET}/addr/${ADDRESS}`, () =>
+        HttpResponse.json({
+          addrStr: ADDRESS,
+          balanceSat: 424_200_000,
+          totalReceivedSat: 424_200_000,
+          totalSentSat: 0,
+          txApperances: 0,
+        }),
+      ),
+      http.get(`${INSIGHT_MAINNET}/addr/${ADDRESS}/utxo`, () => HttpResponse.json([])),
+      http.get(`${INSIGHT_MAINNET}/txs`, () => HttpResponse.json({ pagesTotal: 1, txs: [] })),
+    )
+
+  it('reads the address from Insight, and says so on its source line', async () => {
+    server.use(
+      http.get(/\/x\/hy\/mainnet\/address\//, () => new HttpResponse(null, { status: 503 })),
+    )
+    serveInsightMainnet()
+    renderAt(`/address/${ADDRESS}`)
+    await waitFor(() => {
+      expect(document.querySelector('[data-address-summary]')).toHaveTextContent('4.242')
+    })
+    expect(screen.queryByText(/Indexed by Hyphen/)).toBeNull()
+    expect(screen.getAllByText('Indexed by Insight').length).toBeGreaterThan(0)
+  })
+
+  it('does not ask Insight in Decentralized only mode, and shows the unavailable state', async () => {
+    writeSourceMode('decentralized')
+    const asked = vi.fn()
+    server.use(
+      http.get(`${INSIGHT_MAINNET}/*`, () => (asked(), new HttpResponse(null, { status: 500 }))),
+    )
+    renderAt(`/address/${ADDRESS}`)
+    await screen.findByRole('heading', { level: 1 })
+    expect(asked).not.toHaveBeenCalled()
+    writeSourceMode('all')
+  })
+})
+
 const INSIGHT_TESTNET = 'https://insight.testnet.networks.dash.org/insight-api'
 const OTHER_TESTNET = 'ycUsXFtJGbJRVDH57gcMnQQP8kByuNp2fb'
 const OTHER_MAINNET = 'XsPYocbGL8ubicsjgfav5E8ubFPMHSNzUU'

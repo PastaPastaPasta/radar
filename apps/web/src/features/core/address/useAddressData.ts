@@ -2,6 +2,7 @@ import { useInfiniteQuery, useQuery, type UseQueryResult } from '@tanstack/react
 import { useEffect } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import type { HyAddressTx, HyPage } from '@/data/hyphen/schemas'
+import { sourceInUse } from '@/data/endpoints'
 import { useIndexHealth } from '@/data/index-health'
 import type { NetworkId } from '@/lib/network'
 import {
@@ -42,13 +43,20 @@ interface InsightSeen {
  */
 export function useAddressData(net: NetworkId, address: string) {
   const index = useIndexHealth(net)
-  const insight = index.readFrom === 'insight'
-  const hyphen = !insight && !index.pending
+  const insightOpen = sourceInUse(net, 'insight')
+  const skipHyphen = index.readFrom === 'insight' || (index.down && insightOpen)
+  const hyphen = !skipHyphen && !index.pending
   const hy = {
     summary: useQuery({ ...addressQueries.summary(net, address), enabled: hyphen }),
     txs: useInfiniteQuery({ ...addressQueries.txs(net, address), enabled: hyphen }),
     utxos: useQuery({ ...addressQueries.utxos(net, address), enabled: hyphen }),
   }
+  // Hyphen answered nothing usable (down, hung or erroring): Insight reads the page instead of leaving it blank.
+  const failedWithNothing = (q: { isError: boolean; data: unknown }) =>
+    q.isError && q.data === undefined
+  const insight =
+    skipHyphen ||
+    (hyphen && (failedWithNothing(hy.summary) || failedWithNothing(hy.txs)) && insightOpen)
   const ins = {
     summary: useQuery({ ...insightAddressQueries.summary(net, address), enabled: insight }),
     txs: useInfiniteQuery({ ...insightAddressQueries.txs(net, address), enabled: insight }),

@@ -50,6 +50,7 @@ function useHyphenBlocked() {
     net,
     fit,
     lag: index.lag,
+    hyphenDown: index.down,
     devnet: isDevnet(net),
     stale: index.state === 'stale',
     /** Decentralized only mode: Hyphen is not asked, so the DAPI-only figures and the seen list show, as on a stale network. */
@@ -60,7 +61,7 @@ function useHyphenBlocked() {
 /** Difficulty, supply and size, read again on each new block; the height itself is the hero's Core figure. */
 function useCoreFigures() {
   const { t } = useLingui()
-  const { net, fit, lag, devnet, stale, off } = useHyphenBlocked()
+  const { net, fit, lag, hyphenDown, devnet, stale, off } = useHyphenBlocked()
   const dapiOnly = stale || off
   const tip = useQuery(coreQueries.tip(net))
   const status = useQuery(coreQueries.status(net))
@@ -74,7 +75,9 @@ function useCoreFigures() {
     enabled: fit,
   })
   const m = metrics.data?.data
-  const note = devnet ? t`Hyphen doesn't index devnets` : (lag ?? t`Checking Hyphen…`)
+  const note = devnet
+    ? t`Hyphen doesn't index devnets`
+    : (lag ?? (hyphenDown ? t`Hyphen isn't answering` : t`Checking Hyphen…`))
   const tipHeight = tip.data?.data.height
   const sources = {
     status: status.data ? atTip(stampOf(status.data), tipHeight) : undefined,

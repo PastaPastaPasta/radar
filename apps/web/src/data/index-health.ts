@@ -22,6 +22,8 @@ export interface IndexHealth extends IndexFacts {
   readFrom: 'hyphen' | 'insight'
   /** Hyphen answered its status probe. */
   probed: boolean
+  /** Hyphen is known not to answer: its probe failed or timed out, or its health says down. */
+  down: boolean
   /** Insight's own standing, measured once a page reads from it (`insight: true`, or while it is the source in use). */
   insight: IndexFacts
   /** Decentralized only mode is on: no index is probed or read, and a page shows its unavailable state instead. */
@@ -66,6 +68,7 @@ export function useIndexHealth(net: NetworkId, opts: { insight?: boolean } = {})
     pending: enabled && probe.isPending,
     readFrom,
     probed: enabled && probe.isSuccess,
+    down: enabled && (probe.isError || health.state === 'down'),
     insight,
     off,
   }
