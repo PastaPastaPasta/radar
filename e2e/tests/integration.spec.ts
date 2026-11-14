@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from '../helpers/test'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
-import { fetchesNothing } from '../helpers/site-map'
+import { fetchesNothing, sourcesOf } from '../helpers/site-map'
 
 const isPhone = (name: string) => name.startsWith('phone')
 
@@ -108,6 +108,18 @@ test.describe('every page says where its figures came from and how old they are'
       await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
       await settled(page)
       await expect(page.locator('main .rx-sources [data-source]:visible').first()).toBeVisible()
+      const shown = await page.evaluate(() => [
+        ...new Set(
+          [...document.querySelectorAll('main [data-source], .rx-home [data-source]')].map((e) =>
+            e.getAttribute('data-source'),
+          ),
+        ),
+      ])
+      const listed = sourcesOf(route.path)
+      expect(
+        shown.filter((source) => source && !listed.includes(source as never)),
+        `sources the page shows that the site map does not list for it`,
+      ).toEqual([])
     })
   }
 })
