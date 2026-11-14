@@ -30,19 +30,4 @@ export function useInView<T extends Element>(
   return [ref, seen]
 }
 
-/** True once the browser has had an idle moment after first paint, so loading the SDK never competes with it (§3.3). */
-export function useAfterIdle(): boolean {
-  const [idle, setIdle] = useState(false)
-  useEffect(() => {
-    const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => number })
-      .requestIdleCallback
-    const cancel = (globalThis as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback
-    if (!ric) {
-      const timer = setTimeout(() => setIdle(true), 1)
-      return () => clearTimeout(timer)
-    }
-    const id = ric(() => setIdle(true))
-    return () => cancel?.(id)
-  }, [])
-  return idle
-}
+export { useAfterIdle } from '@/ui'

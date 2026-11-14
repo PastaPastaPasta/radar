@@ -6,7 +6,7 @@ import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, Card, EpochClock, Stat, Stats } from '@/ui'
-import { epochLengthMs } from './epoch-length'
+import { epochLengthMs } from '@/lib/epoch-length'
 import { stampsOf } from './state'
 import { useAfterIdle } from './use-in-view'
 

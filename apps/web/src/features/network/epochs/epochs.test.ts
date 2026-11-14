@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { formatMultiplier } from './CurrentEpoch'
-import { epochLengthMs } from './epoch-length'
+import { epochLengthMs } from '@/lib/epoch-length'
 import { byBlocks, combined } from './queries'
 import { DEFAULT_COUNT, EPOCH_REQUEST_CAP, epochChunks, resolveRange } from './RangeTable'
 import { sortRows } from './state'

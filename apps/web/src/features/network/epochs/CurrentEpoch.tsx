@@ -4,7 +4,7 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, EpochClock, KeyValue, Time } from '@/ui'
-import { epochLengthMs } from './epoch-length'
+import { epochLengthMs } from '@/lib/epoch-length'
 import { queryView, stampsOf, useAfterIdle } from './state'
 
 const NONE = {} as const

@@ -9,7 +9,7 @@ import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, DataTable, Time } from '@/ui'
 import { formatMultiplier } from './CurrentEpoch'
-import { epochLengthMs } from './epoch-length'
+import { epochLengthMs } from '@/lib/epoch-length'
 import { queryView, stampsOf, useAfterIdle } from './state'
 
 /** Drive answers at most this many epochs per call. */

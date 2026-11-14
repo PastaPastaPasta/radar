@@ -5,7 +5,7 @@ import { POLL_MS } from '@/data/query/stale'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Card, KeyValue, LiveDot, Time, useNow } from '@/ui'
-import { epochLengthMs } from './epoch-length'
+import { epochLengthMs } from '@/lib/epoch-length'
 import { queryView, stampsOf } from './state'
 
 /** PE-01: what the indexer says about the chain right now. The height follows the indexer's poll. */
