@@ -17,8 +17,7 @@ const row = (over: Partial<MnRow> = {}): MnRow => ({
   radar: null,
   ...over,
 })
-const crawled = (reachable: boolean) =>
-  ({ reachable }) as unknown as NonNullable<MnRow['crawl']>
+const crawled = (reachable: boolean) => ({ reachable }) as unknown as NonNullable<MnRow['crawl']>
 const many = (n: number, over: Partial<MnRow> = {}) =>
   Array.from({ length: n }, (_, i) => row({ protx: String(i), ...over }))
 

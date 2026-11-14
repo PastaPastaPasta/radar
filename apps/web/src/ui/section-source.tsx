@@ -63,7 +63,9 @@ function useSustained(ids: readonly string[], ms: number): ReadonlySet<string> {
 
 /** The chain a stamp's height counts on: Platform for the Platform SDK and the explorer, else what the stamp says, else Core. */
 export function heightChainOf(stamp: SourceStamp): HeightChain {
-  return stamp.heightChain ?? (stamp.source === 'sdk' || stamp.source === 'pe' ? 'platform' : 'core')
+  return (
+    stamp.heightChain ?? (stamp.source === 'sdk' || stamp.source === 'pe' ? 'platform' : 'core')
+  )
 }
 
 /**

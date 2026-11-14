@@ -60,6 +60,8 @@ describe('the changes model', () => {
     const list = [{ ts: asOf - HOUR }, { ts: asOf - 30 * HOUR }]
     const stale = 20 * 60_000
     expect(changesInLastDay(list, asOf, { now: asOf + 5 * 60_000, staleAfterMs: stale })).toBe(1)
-    expect(changesInLastDay(list, asOf, { now: asOf + 21 * 60_000, staleAfterMs: stale })).toBeUndefined()
+    expect(
+      changesInLastDay(list, asOf, { now: asOf + 21 * 60_000, staleAfterMs: stale }),
+    ).toBeUndefined()
   })
 })
