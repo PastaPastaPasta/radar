@@ -87,6 +87,9 @@ export const EVO_SORT_KEYS = [
 
 export type EvoSortKey = (typeof EVO_SORT_KEYS)[number]
 
+/** The columns that hold a hash: the ProTx, and the Platform node ID. */
+const HEX_KEYS: ReadonlySet<EvoSortKey> = new Set(['evonode', 'node_id'])
+
 export const isEvoSortKey = (key: string): key is EvoSortKey =>
   (EVO_SORT_KEYS as readonly string[]).includes(key)
 
@@ -114,7 +117,7 @@ export const parseEvoSort = (sort: string, fallback = DEFAULT_EVO_SORT) =>
 
 export function sortEvoRows(rows: readonly EvoRow[], sort: string, fallback?: string): EvoRow[] {
   const { key, desc } = parseEvoSort(sort, fallback)
-  return sortItems(rows, desc, valueOf[key], (e) => e.protx)
+  return sortItems(rows, desc, valueOf[key], (e) => e.protx, HEX_KEYS.has(key))
 }
 
 /** An evonode's identity id is its ProTx in base58: the ProTx a base58 id stands for, if the text is one. */

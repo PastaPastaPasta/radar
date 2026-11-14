@@ -52,10 +52,20 @@ const valueOf: Record<MnSortKey, (r: MnRow) => SortValue> = {
 
 const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 
+/** Byte order: what a hash column needs, where "0a1d…" comes after "001c…" (a numeric collator would put it before). */
+const bytewise = (a: SortValue, b: SortValue): number => {
+  const x = String(a)
+  const y = String(b)
+  return x < y ? -1 : x > y ? 1 : 0
+}
+
 function compare(a: SortValue, b: SortValue): number {
   if (typeof a === 'number' && typeof b === 'number') return a - b
   return collator.compare(String(a), String(b))
 }
+
+/** The columns that hold a hash. */
+const HEX_KEYS: ReadonlySet<MnSortKey> = new Set(['protx'])
 
 export const isMnSortKey = (key: string): key is MnSortKey =>
   (MN_SORT_KEYS as readonly string[]).includes(key)
@@ -71,20 +81,25 @@ export function parseSort<K extends string>(
   return isKey(key) ? { key, desc } : fallback
 }
 
-/** A new array in order. An item with no value comes last in either direction; ties go by `id`. */
+/**
+ * A new array in order. An item with no value comes last in either direction; ties go by `id`. Text sorts with
+ * numbers in it in numeric order ("24.0.0" after "9.0.0"), unless `hex` says it is a hash: then in byte order.
+ */
 export function sortItems<T>(
   items: readonly T[],
   desc: boolean,
   read: (item: T) => SortValue,
   id: (item: T) => string,
+  hex = false,
 ): T[] {
+  const byOrder = hex ? bytewise : compare
   const keyed = items.map((item) => ({ item, value: read(item), id: id(item) }))
   keyed.sort((a, b) => {
     if (a.value === null || b.value === null) {
       if (a.value === b.value) return a.id < b.id ? -1 : 1
       return a.value === null ? 1 : -1
     }
-    const order = compare(a.value, b.value)
+    const order = byOrder(a.value, b.value)
     return order !== 0 ? (desc ? -order : order) : a.id < b.id ? -1 : 1
   })
   return keyed.map((k) => k.item)
@@ -95,5 +110,5 @@ export const parseMnSort = (sort: string) =>
 
 export function sortMnRows(rows: readonly MnRow[], sort: string): MnRow[] {
   const { key, desc } = parseMnSort(sort)
-  return sortItems(rows, desc, valueOf[key], (r) => r.protx)
+  return sortItems(rows, desc, valueOf[key], (r) => r.protx, HEX_KEYS.has(key))
 }

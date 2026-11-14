@@ -142,6 +142,12 @@ describe('sortEvoRows', () => {
     expect(ids(sortEvoRows(evo, 'monthly'))).toEqual([1, 3, 2])
   })
 
+  it('sorts the ProTx as plain hex', () => {
+    const ids16 = ['0a1d', '001c', '0a5d'].map((h) => ({ ...mn(1), protx: h }))
+    const out = sortEvoRows(buildEvoRows(ids16, {}), 'evonode')
+    expect(out.map((e) => e.protx)).toEqual(['001c', '0a1d', '0a5d'])
+  })
+
   it('falls back to the earnings order for a key the evonode table does not have', () => {
     expect(ids(sortEvoRows(evo, '-status'))).toEqual([3, 1, 2])
   })
