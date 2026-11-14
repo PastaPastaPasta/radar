@@ -369,11 +369,14 @@ describe('Address page', () => {
       const el = document.querySelector('[data-address-summary]')
       expect(el).toHaveTextContent('999,999')
     })
-    await waitFor(() => expect(screen.getAllByText('Indexed by Insight').length).toBeGreaterThan(1))
+    await waitFor(() => expect(screen.getAllByText('Indexed by Insight')).toHaveLength(1))
     expect(screen.queryByText(/Indexed by Hyphen/)).toBeNull()
     const history = document.querySelector<HTMLElement>('#history')!
     await waitFor(() => expect(within(history).getAllByRole('row').length).toBeGreaterThan(1))
-    expect(within(history).getByText('Indexed by Insight')).toBeInTheDocument()
+    expect(history.querySelector('[data-source]')).toBeNull()
+    expect(
+      within(document.querySelector<HTMLElement>('.rx-page__src')!).getByText('Indexed by Insight'),
+    ).toBeInTheDocument()
     expect(document.querySelector('[data-stale-index]')).toBeNull()
     expect(screen.queryByText('Not seen yet')).toBeNull()
   })
@@ -816,7 +819,7 @@ describe('Address page reading Insight @IN-06 @IN-16', () => {
     expect(notice).toHaveTextContent('as of those blocks')
     await waitFor(() =>
       expect(
-        document.querySelector('#history [data-source="insight"]')?.getAttribute('data-state'),
+        document.querySelector('.rx-page__src [data-source="insight"]')?.getAttribute('data-state'),
       ).toBe('stale'),
     )
   })
@@ -846,8 +849,9 @@ describe('Address page in Decentralized only mode @X-05 @IN-06', () => {
       expect(el).not.toBeNull()
       return el!
     })
-    const line = card.querySelector('[data-source="dapi"]')
-    expect(line).not.toBeNull()
-    expect(card.querySelector('[data-source="hyphen"]')).toBeNull()
+    expect(card.querySelector('[data-source]')).toBeNull()
+    const line = document.querySelector<HTMLElement>('.rx-page__src')!
+    await waitFor(() => expect(line.querySelector('[data-source="dapi"]')).not.toBeNull())
+    expect(line.querySelector('[data-source="hyphen"]')).toBeNull()
   })
 })

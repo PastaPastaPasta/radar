@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
+import { sourceLineOf } from '../helpers/sources'
 import { expect as baseExpect, test } from '../helpers/test'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
@@ -187,7 +188,7 @@ test.describe('Contest', () => {
     await expect(page.getByRole('heading', { name: 'Voters' })).toBeVisible()
     await expect(page.locator('main tbody tr').first()).toBeVisible()
     await expect(
-      page.locator('#contest-voters .rx-tfoot [data-source="sdk"]'),
+      sourceLineOf(page.locator('#contest-voters')).locator('[data-source="sdk"]'),
       'the voters list says where it came from',
     ).toBeVisible()
   })

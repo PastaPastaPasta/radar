@@ -338,7 +338,7 @@ test.describe('mempool', () => {
     await expect(page.locator('[data-mempool-summary="seen"]')).toContainText(
       'Seen and still pending',
     )
-    await expect(page.locator('#pending [data-source="dapi"]').first()).toBeVisible()
+    await expect(page.locator('.rx-page__src [data-source="dapi"]').first()).toBeVisible()
     await expect(page.locator('main [data-source="hyphen"]')).toHaveCount(0)
     await expect(page.getByText('Refreshes every 15 seconds.')).toHaveCount(0)
     await expectNoSideScroll(page)
@@ -554,7 +554,9 @@ test.describe('charts', () => {
     await expectNoSideScroll(page)
   })
 
-  test('draws each metric in its own colour, legible on the card @HY-02', async ({ page }) => {
+  test('draws every metric in the layer colour, legible on the page ground @HY-02', async ({
+    page,
+  }) => {
     await page.goto('/charts')
     const hues = page.locator('[data-chart-hue]')
     await expect(hues).toHaveCount(6)
@@ -570,38 +572,19 @@ test.describe('charts', () => {
         }
         return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
       }
+      const ground = parse(getComputedStyle(document.body).backgroundColor)
       return els.map((el) => {
         const probe = document.createElement('i')
         probe.style.color = getComputedStyle(el).getPropertyValue('--rx-l')
         el.appendChild(probe)
         const line = parse(getComputedStyle(probe).color)
         probe.remove()
-        const card = el.closest('.rx-card') ?? el
-        const ground = parse(getComputedStyle(card).backgroundColor)
         const [hi, lo] = [lum(line), lum(ground)].sort((a, b) => b - a) as [number, number]
-        return { line: line.join(','), rgb: line, contrast: (hi + 0.05) / (lo + 0.05) }
+        return { line: line.join(','), contrast: (hi + 0.05) / (lo + 0.05) }
       })
     })
-    expect(new Set(colours.map((c) => c.line)).size).toBe(6)
+    expect(new Set(colours.map((c) => c.line)).size, 'one colour for all six').toBe(1)
     for (const c of colours) expect(c.contrast, c.line).toBeGreaterThanOrEqual(3)
-    const lab = (rgb: number[]) => {
-      const [r, g, b] = rgb.map((v) => {
-        const s = v / 255
-        return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
-      }) as [number, number, number]
-      const f = (t: number) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116)
-      const x = f((r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047)
-      const y = f(r * 0.2126 + g * 0.7152 + b * 0.0722)
-      const z = f((r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883)
-      return [116 * y - 16, 500 * (x - y), 200 * (y - z)] as const
-    }
-    for (const [i, a] of colours.entries()) {
-      for (const b of colours.slice(i + 1)) {
-        const [p, q] = [lab(a.rgb), lab(b.rgb)]
-        const apart = Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])
-        expect(apart, `${a.line} and ${b.line} look alike`).toBeGreaterThanOrEqual(18)
-      }
-    }
   })
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {

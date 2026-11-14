@@ -68,7 +68,11 @@ describe('Credits', () => {
     renderAt('/credits')
     const total = await card('total-credits')
     await waitFor(() => expect(total.querySelector('[data-amount]')).not.toBeNull())
-    expect(total.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+    await waitFor(() =>
+      expect(
+        document.querySelector('.rx-page__src [data-source="sdk"][data-proved="true"]'),
+      ).not.toBeNull(),
+    )
   })
 
   it('says an ID has no prefunded balance, and refuses what is not an ID @NX-57', async () => {
@@ -103,7 +107,11 @@ describe('Credits', () => {
     const lookup = await card('prefunded')
     await waitFor(() => expect(lookup.querySelector('[data-prefunded-balance]')).not.toBeNull())
     expect(lookup.querySelector('[data-amount="20000000000"]')).not.toBeNull()
-    expect(lookup.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+    await waitFor(() =>
+      expect(
+        document.querySelector('.rx-page__src [data-source="sdk"][data-proved="true"]'),
+      ).not.toBeNull(),
+    )
     expect(lookup.querySelector('[data-copy]')).not.toBeNull()
     expect(screen.queryByText('No prefunded balance')).toBeNull()
     vi.restoreAllMocks()
