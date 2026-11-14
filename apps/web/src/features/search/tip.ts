@@ -53,7 +53,7 @@ export function useSearchTip(
   net: NetworkId,
   mode: SearchMode,
   active = true,
-): { tip: Tip | undefined; reading: boolean } {
+): { tip: Tip | undefined; reading: boolean; unread: unknown } {
   const sdkReady = useSdkState(net) === 'ready'
   const [queries, setQueries] = useState<TipQueries>()
   useEffect(() => {
@@ -91,5 +91,10 @@ export function useSearchTip(
   useEffect(() => {
     searchEnv.publishTip(net, tip)
   }, [net, tip])
-  return { tip, reading: active && (!queries || core.isLoading || platform.isLoading) }
+  return {
+    tip,
+    reading: active && (!queries || core.isLoading || platform.isLoading),
+    /** Why the Platform tip could not be read, when it could not. */
+    unread: platform.data === undefined && platform.isError ? platform.error : undefined,
+  }
 }

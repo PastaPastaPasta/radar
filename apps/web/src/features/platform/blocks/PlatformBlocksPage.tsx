@@ -9,6 +9,7 @@ import {
   Card,
   DateRangeFilter,
   Empty,
+  ErrorState,
   ListModeToggle,
   RangeFilter,
   SegFilter,
@@ -76,7 +77,7 @@ function BlocksList() {
     enabled: !both || upperHeight !== undefined,
     onLoaded: controls.loaded,
   })
-  const { epochOf: epochByHeight, stamp: epochStamp } = useEpochOf()
+  const { epochOf: epochByHeight, stamp: epochStamp, missing: epochMissing } = useEpochOf()
   const epochOf = useCallback(
     (row: PeBlockSummary) => epochByHeight?.(row.header.height),
     [epochByHeight],
@@ -189,6 +190,14 @@ function BlocksList() {
               to: undefined,
             })
           }}
+        />
+      ) : null}
+      {epochMissing ? (
+        <ErrorState
+          error={epochMissing.error}
+          source="sdk"
+          compact
+          onRetry={() => void epochMissing.refetch()}
         />
       ) : null}
       <PlatformBlockTable

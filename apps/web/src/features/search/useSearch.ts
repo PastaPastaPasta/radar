@@ -110,7 +110,7 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   // Read so a change of mode plans the lookups again.
   const indexOff = useDecentralizedOnly()
   const input = useDebounced(q, mode === 'palette' ? PALETTE_DEBOUNCE_MS : 0)
-  const { tip, reading: tipReading } = useSearchTip(net, mode, q.trim() !== '')
+  const { tip, reading: tipReading, unread } = useSearchTip(net, mode, q.trim() !== '')
   // Read so the SDK reaching 'ready' plans its lookups in the palette.
   useSdkState(net)
   const wordsReady = useWordlistLoaded()
@@ -151,9 +151,13 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const pendingLocal = planned
     .filter((r) => r.cost === 'local' && !(r.id in settled))
     .map((r) => r.id)
-  const failed = Object.entries(settled).flatMap(([id, s]) =>
-    s.error ? [{ id, error: s.error }] : [],
-  )
+  const failed = [
+    ...Object.entries(settled).flatMap(([id, s]) => (s.error ? [{ id, error: s.error }] : [])),
+    // Platform heights and epochs are offered only up to the Platform tip, so a tip that can't be read hides them.
+    ...(mode === 'page' && unread !== undefined
+      ? [{ id: 'platform-tip', error: toSourceError(unread, false) }]
+      : []),
+  ]
   const skipped =
     indexOff && !classified.networkHint && !classified.warning
       ? registry

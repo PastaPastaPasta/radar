@@ -120,7 +120,7 @@ function Record({ id, blockRef }: { id: string; blockRef: BlockRef }) {
 function Summary({ block, stamp }: { block: PeBlock; stamp: SourceStamp }) {
   const { t } = useLingui()
   const h = block.header
-  const { epochOf, stamp: epochStamp } = useEpochOf()
+  const { epochOf, stamp: epochStamp, missing: epochMissing } = useEpochOf()
   const epoch = epochOf?.(h.height)
   return (
     <Card
@@ -144,6 +144,14 @@ function Summary({ block, stamp }: { block: PeBlock; stamp: SourceStamp }) {
         </span>
       }
     >
+      {epochMissing ? (
+        <ErrorState
+          error={epochMissing.error}
+          source="sdk"
+          compact
+          onRetry={() => void epochMissing.refetch()}
+        />
+      ) : null}
       <KeyValue
         columns={2}
         items={[

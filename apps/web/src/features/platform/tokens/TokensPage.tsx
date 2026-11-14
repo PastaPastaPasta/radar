@@ -19,6 +19,7 @@ import {
   Card,
   DataTable,
   Empty,
+  ErrorState,
   ListModeToggle,
   SegFilter,
   TableTools,
@@ -354,6 +355,14 @@ function TokenList() {
           onClear={() => {
             controls.filter({ q: undefined, owner: undefined, contract: undefined })
           }}
+        />
+      ) : null}
+      {prices.isError ? (
+        <ErrorState
+          error={prices.error}
+          source="sdk"
+          compact
+          onRetry={() => void prices.refetch()}
         />
       ) : null}
       <DataTable
