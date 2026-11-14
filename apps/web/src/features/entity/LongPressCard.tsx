@@ -9,6 +9,7 @@ import {
 import { layerAttr } from '@/ui/cx'
 import { useHoverCard } from '@/ui/hover-cards'
 import { KIND_META } from '@/ui/kinds'
+import { NoSourceSection } from '@/ui/section-source'
 import type { EntityKind } from '@/ui/types'
 
 /** How long a finger rests on a chip before its card opens, and how far it may drift meanwhile. */
@@ -100,7 +101,7 @@ export function LongPressCard({
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {createElement(Card, { id })}
+          <NoSourceSection>{createElement(Card, { id })}</NoSourceSection>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

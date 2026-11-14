@@ -5,6 +5,8 @@ import { resetAnnouncer } from './announce'
 import { EntityChip } from './entities'
 import { Copy, Hash } from './hash'
 import { clearHoverCards, registerHoverCard } from './hover-cards'
+import { KeyValue, Section } from './layout'
+import { stamp } from './test-utils'
 
 const TXID = 'cb4c0d655f15ba97aa1a8e71f746db6fd15530df83d6d355396620705f5bcdf0'
 
@@ -152,6 +154,25 @@ describe('EntityChip', () => {
     await user.tab()
     expect(screen.getByRole('link')).toHaveFocus()
     expect(await screen.findByTestId('card', {}, { timeout: 2000 })).toBeInTheDocument()
+  })
+
+  it('keeps a hover card’s sources on the card, out of the line of the section the chip sits in', async () => {
+    const hyphen = stamp({ source: 'hyphen' })
+    registerHoverCard('tx', () => (
+      <div data-testid="card">
+        <KeyValue items={[{ label: 'Fee', value: '1', source: hyphen }]} />
+      </div>
+    ))
+    const user = userEvent.setup()
+    render(
+      <Section title="Latest">
+        <EntityChip kind="tx" id={TXID} href="/tx/x" />
+      </Section>,
+    )
+    await user.tab()
+    const card = await screen.findByTestId('card', {}, { timeout: 2000 })
+    expect(card.querySelector('[data-source="hyphen"]')).not.toBeNull()
+    expect(document.querySelector('[data-section-sources] [data-source]')).toBeNull()
   })
 
   it('shows no card for kinds without one, or when hover is off', async () => {
