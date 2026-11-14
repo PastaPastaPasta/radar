@@ -83,7 +83,7 @@ test.describe('masternode page', () => {
     await expect(header).toContainText('24.0.0')
     const kpis = page.locator('[data-masternode-kpis]')
     for (const label of [
-      'Uptime, 13 days',
+      'Uptime for 13 days',
       'Last paid',
       'Earned on Core, 90 days',
       'PoSe penalty',

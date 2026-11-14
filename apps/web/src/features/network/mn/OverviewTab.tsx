@@ -58,7 +58,7 @@ function Kpis({ d, stamp }: { d: RadarMasternodeDetail; stamp: SourceStamp }) {
       <Stat
         label={
           up && up.days < 30
-            ? plural(up.days, { one: 'Uptime, # day', other: 'Uptime, # days' })
+            ? plural(up.days, { one: 'Uptime for # day', other: 'Uptime for # days' })
             : t`Uptime, 30 days`
         }
         value={up ? formatPercent(up.ratio, up.ratio === 1 ? 0 : 1) : '—'}

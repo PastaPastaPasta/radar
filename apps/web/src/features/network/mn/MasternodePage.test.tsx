@@ -86,7 +86,7 @@ describe('Masternode page', () => {
     expect(header).toHaveTextContent('Enabled, no PoSe penalty')
     expect(header).toHaveTextContent('24.0.0')
     const kpis = document.querySelector<HTMLElement>('[data-masternode-kpis]')!
-    expect(kpis).toHaveTextContent('Uptime, 13 days')
+    expect(kpis).toHaveTextContent('Uptime for 13 days')
     expect(kpis).toHaveTextContent('100%')
     expect(kpis).toHaveTextContent('Last paid')
     expect(kpis).toHaveTextContent('2,568,655')
@@ -155,7 +155,7 @@ describe('Masternode page', () => {
       return el!
     })
     await waitFor(() => expect(kpis).toHaveTextContent('Uptime, 5 days'))
-    expect(kpis).not.toHaveTextContent('Uptime, 13 days')
+    expect(kpis).not.toHaveTextContent('Uptime for 13 days')
   })
 
   it('names Hyphen’s special transactions as the kit does, not by their raw ids @HY-11', async () => {
