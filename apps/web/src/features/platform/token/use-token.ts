@@ -17,13 +17,13 @@ import {
  * What the contract and the node say about one token: where it comes from (`tokens.contractInfo`), its configuration
  * (the contract's token at that position), and the names and decimals read from it.
  */
-export function useToken(id: string) {
+export function useToken(id: string, enabled = true) {
   const net = useNetwork()
   const { i18n } = useLingui()
   const valid = isPlatformId(id)
   const info = useQuery({
     ...sdkQueries['tokens.contractInfo'](net, { tokenId: id }),
-    enabled: valid,
+    enabled: valid && enabled,
   })
   const origin = info.data?.data ?? undefined
   const contract = useQuery({
@@ -53,7 +53,7 @@ export function useToken(id: string) {
     decimals,
     symbol: known?.symbol ?? name?.singular,
     /** True once the node has answered that no token has this ID. */
-    missing: valid && info.data?.data === null,
+    missing: valid && enabled && info.data?.data === null,
     stamps,
   }
 }

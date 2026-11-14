@@ -5,30 +5,45 @@ import { useMemo } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { ContractTokenDto } from '@/data/sdk/methods'
-import { Entity } from '@/features/entity'
-import { formatInt } from '@/lib/format'
-import { Card, DataTable, Empty } from '@/ui'
+import { Entity, useNetwork } from '@/features/entity'
+import { wellKnownTokens } from '@/lib/well-known'
+import { Amount, Card, DataTable, Empty } from '@/ui'
+import { decimalsOf, localizationsOf, pickLocalization, supplyOf } from '../token/token-config'
 import type { ContractContext } from './contract-context'
 
-const asRecord = (v: unknown): Record<string, unknown> =>
-  typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {}
-
-/** The token's name and decimals as its contract states them (`conventions`). */
-function tokenFacts(token: ContractTokenDto) {
-  const conventions = asRecord(token.config.conventions)
-  const en = asRecord(asRecord(conventions.localizations).en)
-  const supply = (v: unknown) => (typeof v === 'number' || typeof v === 'bigint' ? v : undefined)
+/** The token's name, decimals and supplies as its contract states them (`conventions`, `baseSupply`, `maxSupply`). */
+function tokenFacts(token: ContractTokenDto, locale: string) {
+  const name = pickLocalization(localizationsOf(token.config), locale)?.singular
   return {
-    name: typeof en.singularForm === 'string' ? en.singularForm : undefined,
-    decimals: typeof conventions.decimals === 'number' ? conventions.decimals : undefined,
-    baseSupply: supply(token.config.baseSupply),
-    maxSupply: supply(token.config.maxSupply),
+    name,
+    decimals: decimalsOf(token.config),
+    baseSupply: supplyOf(token.config, 'baseSupply'),
+    maxSupply: supplyOf(token.config, 'maxSupply'),
   }
 }
 
 interface Row {
   token: ContractTokenDto
   tokenId: string | undefined
+}
+
+/** One fact about a token; a supply is in whole tokens with the symbol, as the token's own page shows it. */
+function FactCell({
+  row,
+  field,
+}: {
+  row: Row
+  field: 'name' | 'decimals' | 'baseSupply' | 'maxSupply'
+}) {
+  const { t, i18n } = useLingui()
+  const known = wellKnownTokens(useNetwork())
+  const facts = tokenFacts(row.token, i18n.locale)
+  if (field === 'name' || field === 'decimals') return facts[field] ?? '—'
+  const value = facts[field]
+  if (value === undefined) return '—'
+  if (facts.decimals === undefined) return <span className="rx-num">{`${value} ${t`units`}`}</span>
+  const symbol = known.find((k) => k.id === row.tokenId)?.symbol ?? facts.name
+  return <Amount value={value} kind={{ token: { decimals: facts.decimals, symbol } }} />
 }
 
 export function TokensTab({ ctx }: { ctx: ContractContext }) {
@@ -56,36 +71,30 @@ export function TokensTab({ ctx }: { ctx: ContractContext }) {
         id: 'token',
         header: t`Token ID`,
         cell: ({ row }) =>
-          row.original.tokenId ? <Entity kind="token" id={row.original.tokenId} /> : '…',
+          row.original.tokenId ? <Entity kind="token" id={row.original.tokenId} byId /> : '…',
         meta: { phone: 'primary' },
       },
       {
         id: 'name',
         header: t`Name`,
-        cell: ({ row }) => tokenFacts(row.original.token).name ?? '—',
+        cell: ({ row }) => <FactCell row={row.original} field="name" />,
       },
       {
         id: 'decimals',
         header: t`Decimals`,
-        cell: ({ row }) => tokenFacts(row.original.token).decimals ?? '—',
+        cell: ({ row }) => <FactCell row={row.original} field="decimals" />,
         meta: { numeric: true },
       },
       {
         id: 'base',
         header: t`Base supply`,
-        cell: ({ row }) => {
-          const v = tokenFacts(row.original.token).baseSupply
-          return v === undefined ? '—' : formatInt(v)
-        },
+        cell: ({ row }) => <FactCell row={row.original} field="baseSupply" />,
         meta: { numeric: true },
       },
       {
         id: 'max',
         header: t`Maximum supply`,
-        cell: ({ row }) => {
-          const v = tokenFacts(row.original.token).maxSupply
-          return v === undefined ? '—' : formatInt(v)
-        },
+        cell: ({ row }) => <FactCell row={row.original} field="maxSupply" />,
         meta: { numeric: true },
       },
     ],
