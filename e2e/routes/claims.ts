@@ -7,8 +7,8 @@ export const CLAIM = {
   nodes: /^[\d,]+ Dash nodes? answered the last crawl$/,
   masternodes:
     /^[\d,]+ of [\d,]+ (enabled masternodes? answered the last crawl|masternodes? (is|are) enabled)$/,
-  platform: /^Epoch [\d,]+ is \d+% through$/,
-  epochs: /^Epoch [\d,]+ is \d+% through$/,
+  platform: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
+  epochs: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
   map: /^[\d,]+ masternodes? in \d+ countr(y|ies)$/,
   changes: /^([\d,]+ changes?|No changes) to the masternode list in the last 24 hours$/,
   v24: /^(Core 24 is |Miners are signalling for Core 24$|Core 24 did not activate$)/,
