@@ -86,6 +86,19 @@ describe('one word, several subjects', () => {
   })
 })
 
+describe('the quorum table', () => {
+  it('agrees "Verified" with the quorum the row describes, in the context that names it @IN-13', async () => {
+    await activateLocale('es')
+    expect(t({ message: 'Verified', context: 'quorum is verified' })).toBe('Verificado')
+    await activateLocale('fr')
+    expect(t({ message: 'Verified', context: 'quorum is verified' })).toBe('Vérifié')
+    await activateLocale('pt')
+    expect(t({ message: 'Verified', context: 'quorum is verified' })).toBe('Verificado')
+    await activateLocale('ru')
+    expect(t({ message: 'Verified', context: 'quorum is verified' })).toBe('Проверен')
+  })
+})
+
 describe('the transition check', () => {
   it('says in German that the check sends the transition but that nothing is broadcast @IN-13', async () => {
     await activateLocale('de')

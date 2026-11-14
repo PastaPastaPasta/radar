@@ -94,10 +94,10 @@ export function QuorumsPage() {
       },
       {
         id: 'verified',
-        header: t({ message: 'Verified', context: 'quorum signature' }),
+        header: t({ message: 'Verified', context: 'quorum is verified' }),
         cell: ({ row }) =>
           row.original.isVerified ? (
-            <Badge tone="success">{t({ message: 'Verified', context: 'quorum signature' })}</Badge>
+            <Badge tone="success">{t({ message: 'Verified', context: 'quorum is verified' })}</Badge>
           ) : (
             <Badge tone="warning">{t`Not verified`}</Badge>
           ),
