@@ -80,7 +80,7 @@ export function CreditsPage() {
 function Lookup({ id, off }: { id: string | undefined; off: boolean }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const { draft, setDraft, submit } = useLookupForm('/credits', 'id', id)
+  const { draft, setDraft, submit, blank } = useLookupForm('/credits', 'id', id)
   const parsed = id === undefined ? undefined : parseCreditId(id)
   const balance = useQuery({
     ...sdkQueries['system.prefundedSpecializedBalance'](net, { id: parsed ?? '' }),
@@ -97,10 +97,10 @@ function Lookup({ id, off }: { id: string | undefined; off: boolean }) {
     >
       <div className="grid grid-cols-1 gap-4">
         <form className="flex flex-wrap items-end gap-2" onSubmit={submit}>
-          <label className="rx-grow grid gap-1 text-sm">
+          <label className="grid min-w-[min(100%,46ch)] flex-[1_1_46ch] gap-1 text-sm">
             <span>{t`Balance ID`}</span>
             <input
-              className="dh-input"
+              className="dh-input w-full"
               name="id"
               value={draft}
               onChange={(e) => {
@@ -109,13 +109,18 @@ function Lookup({ id, off }: { id: string | undefined; off: boolean }) {
               spellCheck={false}
               autoComplete="off"
               placeholder={t`Base58 or 64 hex characters`}
-              aria-invalid={invalid || undefined}
+              aria-invalid={invalid || blank || undefined}
             />
           </label>
           <button type="submit" className="dh-btn">
             {t`Look up`}
           </button>
         </form>
+        {blank ? (
+          <p role="alert" className="text-bad text-sm">
+            {t`Enter a balance ID to look up: base58, or 64 hex characters.`}
+          </p>
+        ) : null}
         {invalid ? (
           <Empty
             kind="no-match"

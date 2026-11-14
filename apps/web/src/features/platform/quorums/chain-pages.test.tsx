@@ -100,6 +100,16 @@ describe('Credits', () => {
     expect(await within(lookup).findByText('That is not a valid ID')).toBeInTheDocument()
   })
 
+  it('answers an empty lookup with a message, and clears it on the next keystroke @NX-57', async () => {
+    const user = userEvent.setup()
+    renderAt('/credits')
+    const lookup = await card('prefunded')
+    await user.click(within(lookup).getByRole('button', { name: 'Look up' }))
+    expect(await within(lookup).findByRole('alert')).toHaveTextContent('Enter a balance ID')
+    await user.type(within(lookup).getByLabelText('Balance ID'), '1')
+    expect(within(lookup).queryByRole('alert')).toBeNull()
+  })
+
   it('shows a balance that is there, with its proof mark and a copy control @NX-57', async () => {
     const id = '5DbLwAxGBzUzo81VewMUwn4b5P4bpv9FNFybi25XB5Bk'
     const real = sdk.call.bind(sdk) as (...a: unknown[]) => Promise<unknown>
