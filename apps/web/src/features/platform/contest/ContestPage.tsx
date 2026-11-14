@@ -362,6 +362,7 @@ function VotersCard({
                   state={loadState(q)}
                   error={q.error}
                   onRetry={() => void q.refetch()}
+                  source={q.data ? stampOf(q.data) : undefined}
                   paging={{
                     kind: 'cursor',
                     ...(all.length > CURSOR_PAGE ? { next: pageLink(page + 1) } : {}),
