@@ -143,3 +143,24 @@ test('every page in the site map has a route case, so the sweeps and the mode wa
   })
   expect(uncovered, 'site-map pages with no route case').toEqual([])
 })
+
+test('the data sources page names every backend the pages read and links the Platform Explorer API docs @PE-28', async ({
+  page,
+}) => {
+  await page.goto('/sources')
+  await expect(page.getByRole('heading', { level: 1, name: /sources/i })).toBeVisible()
+  const main = page.locator('main')
+  for (const name of [
+    'DAPI',
+    'Platform SDK',
+    'Hyphen',
+    'Insight',
+    'Platform Explorer',
+    'Radar census API',
+  ]) {
+    await expect(main.getByText(name, { exact: true }).first(), name).toBeVisible()
+  }
+  await expect(
+    main.getByRole('link', { name: "Platform Explorer's API documentation" }),
+  ).toHaveAttribute('href', /platform-explorer/)
+})
