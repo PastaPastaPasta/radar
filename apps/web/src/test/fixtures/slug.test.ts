@@ -18,9 +18,13 @@ describe('slugOf', () => {
   })
 
   it('keys a history window by its length, not by the clock', () => {
-    const a = 'intervalsCount=7&timestamp_end=2026-11-14T22:30:00.000Z&timestamp_start=2026-11-07T22:30:00.000Z'
-    const b = 'intervalsCount=7&timestamp_end=2026-11-20T10:00:00.000Z&timestamp_start=2026-11-13T10:00:00.000Z'
-    expect(slugOf('/transactions/history', a)).toBe('transactions__history--intervalsCount-7,span-168h')
+    const a =
+      'intervalsCount=7&timestamp_end=2026-11-14T22:30:00.000Z&timestamp_start=2026-11-07T22:30:00.000Z'
+    const b =
+      'intervalsCount=7&timestamp_end=2026-11-20T10:00:00.000Z&timestamp_start=2026-11-13T10:00:00.000Z'
+    expect(slugOf('/transactions/history', a)).toBe(
+      'transactions__history--intervalsCount-7,span-168h',
+    )
     expect(slugOf('/transactions/history', b)).toBe(slugOf('/transactions/history', a))
     expect(slugOf('/blocks', 'timestamp_start=2026-11-10T00:00:00.000Z')).toContain('2026-11-10')
   })

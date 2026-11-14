@@ -74,7 +74,13 @@ import {
   type PeVerify,
   type PeVote,
 } from './schemas'
-import { contestedResourceKey, rangeQuery, rangeWindow, type PeQuery, type PeTimeframe } from './params'
+import {
+  contestedResourceKey,
+  rangeQuery,
+  rangeWindow,
+  type PeQuery,
+  type PeTimeframe,
+} from './params'
 
 function search(params: PeQuery | undefined): string {
   if (!params) return ''
