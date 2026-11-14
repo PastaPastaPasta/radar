@@ -205,6 +205,21 @@ describe('Masternode page', () => {
     expect(card.querySelector('[data-platform-daily] [data-uptime-strip]')).not.toBeNull()
   })
 
+  it('gives an evonode’s share of an epoch with the blocks it is of @NX-53', async () => {
+    renderAt(
+      `/mn/${'b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77'}?tab=platform`,
+    )
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#epoch-record')
+      expect(el).not.toBeNull()
+      expect(el!.textContent).toMatch(/Share of blocks/)
+      return el!
+    })
+    await waitFor(() =>
+      expect(card).toHaveTextContent(/Share of blocks\d+\.\d\d% \(\d+ \/ [\d,]+\)/),
+    )
+  })
+
   describe('validator record on the Platform tab @RA-38 @W2-09', () => {
     const EVO = 'b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77'
     const record = async () =>

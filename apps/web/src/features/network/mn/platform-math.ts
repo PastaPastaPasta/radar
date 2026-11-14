@@ -1,5 +1,6 @@
 // The payout rule follows dash-nodes' proof check of an evonode's rewards (MIT, github.com/PastaPastaPasta/dash-nodes).
 import type { FinalizedEpochDto } from '@/data/sdk/methods'
+import { formatInt, formatPercent } from '@/lib/format'
 import { creditsToDash } from '@/lib/units'
 
 export const dash = creditsToDash
@@ -34,6 +35,12 @@ export function payoutIn(info: Finalized, protx: string): bigint {
     if (key === id) return i === list.length - 1 ? share + left : share
   }
   return 0n
+}
+
+/** An evonode's share of an epoch's blocks, as "0.41% (15 / 3,699)"; "—" when the epoch's total is not known. */
+export function shareOfBlocks(blocks: number | bigint, total: number | null | undefined): string {
+  if (!total) return '—'
+  return `${formatPercent(Number(blocks) / total, 2)} (${formatInt(blocks)} / ${formatInt(total)})`
 }
 
 /** Rank among the proposers by blocks (1 is the most; equal counts share a rank), or null when it proposed none. */
