@@ -168,9 +168,12 @@ describe('Platform overview', () => {
     renderAt('/platform')
     const validators = await card('validators')
     await waitFor(() => expect(validators).toHaveTextContent('681'))
-    expect(validators).toHaveTextContent('99')
-    expect(validators).toHaveTextContent('327')
-    expect(validators).toHaveTextContent('255')
+    // The status breakdown comes from a second read that can land after the total.
+    await waitFor(() => {
+      expect(validators).toHaveTextContent('99')
+      expect(validators).toHaveTextContent('327')
+      expect(validators).toHaveTextContent('255')
+    })
     expect(within(validators).getByRole('link', { name: 'All evonodes' })).toHaveAttribute(
       'href',
       '/masternodes?view=platform',
