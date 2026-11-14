@@ -164,3 +164,75 @@ test('the data sources page names every backend the pages read and links the Pla
     main.getByRole('link', { name: "Platform Explorer's API documentation" }),
   ).toHaveAttribute('href', /platform-explorer/)
 })
+
+const SECTION_STARTS = [
+  ['Core', '/blocks'],
+  ['Network', '/nodes'],
+  ['Platform', '/platform'],
+  ['Tools', '/query'],
+  ['You', '/settings'],
+] as const
+
+test.describe('the section rail', () => {
+  for (const [section, start] of SECTION_STARTS) {
+    test(`every ${section} rail entry lands on a built page that marks itself current @X-04`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'desktop-light', 'one project walks the rail')
+      await page.goto(start)
+      const rail = page.locator('nav[data-section-nav]')
+      await expect(rail).toBeVisible()
+      const hrefs = await rail
+        .locator('a')
+        .evaluateAll((links) => links.map((a) => a.getAttribute('href')!))
+      expect(hrefs.length).toBeGreaterThan(1)
+      for (const href of hrefs) {
+        await page.goto(href)
+        await expect(
+          page.getByRole('heading', { level: 1 }).first(),
+          `${href} shows a page`,
+        ).toBeVisible()
+        await expect(
+          page.getByRole('heading', { level: 1, name: 'Page not found' }),
+          `${href} is a built page`,
+        ).toHaveCount(0)
+        await expect(
+          page.locator('nav[data-section-nav] a[aria-current="page"]'),
+          `${href} marks its rail entry`,
+        ).toHaveCount(1)
+      }
+    })
+
+    for (const width of [320, 390]) {
+      test(`the ${section} rail shows that it scrolls at ${width} px, and drops the cue at its end @X-08`, async ({
+        page,
+      }, testInfo) => {
+        test.skip(testInfo.project.name !== 'phone-light', 'phone layout only')
+        await page.setViewportSize({ width, height: 844 })
+        await page.goto(start)
+        const rail = page.locator('nav[data-section-nav]')
+        await expect(rail).toBeVisible()
+        const state = () =>
+          rail.evaluate((el) => ({
+            start: (el as HTMLElement).dataset.moreStart,
+            end: (el as HTMLElement).dataset.moreEnd,
+            overflows: el.scrollWidth > el.clientWidth + 1,
+            mask: getComputedStyle(el).maskImage,
+          }))
+        const first = await state()
+        expect(first.start, 'nothing before the first entry').toBe('false')
+        if (!first.overflows) {
+          expect(first.end).toBe('false')
+          return
+        }
+        expect(first.end, 'more entries beyond the edge').toBe('true')
+        expect(first.mask, 'a fade says so').not.toBe('none')
+        await rail.evaluate((el) => {
+          el.scrollLeft = el.scrollWidth
+        })
+        await expect.poll(async () => (await state()).end).toBe('false')
+        expect((await state()).start).toBe('true')
+      })
+    }
+  }
+})
