@@ -126,7 +126,7 @@ test.describe('Platform overview', () => {
     await open(page)
     const proposers = card(page, 'proposers')
     await proposers.scrollIntoViewIfNeeded()
-    await expect(proposers.getByRole('row')).toHaveCount(isPhone(page) ? 5 : 11)
+    await expect(proposers.getByRole('row')).toHaveCount(isPhone(page) ? 6 : 11)
     await expect(proposers).toContainText(/Combined from \d+ proof-checked answers/)
     const first = proposers.locator('a[href^="/mn/"]').first()
     const href = await first.getAttribute('href')
@@ -198,21 +198,48 @@ test.describe('Platform overview', () => {
     await open(page)
     const blocks = card(page, 'newest-blocks')
     const list = blocks.locator('[data-list="blocks"]')
+    const hint = blocks.locator('[data-paused]')
     await expect(list).toHaveAttribute('data-held', 'false')
     if (!isPhone(page)) {
       await list.hover()
       await expect(list).toHaveAttribute('data-held', 'true')
-      await expect(blocks.getByRole('status')).toContainText('Held still while you look')
+      await expect(hint).toHaveText('Paused')
+      await blocks.getByRole('heading', { name: 'Newest blocks' }).hover()
+      await expect(list).toHaveAttribute('data-held', 'true')
       await page.mouse.move(0, 0)
       await expect(list).toHaveAttribute('data-held', 'false')
+      await expect(hint).toHaveText('')
     }
     await blocks.getByRole('link', { name: 'All blocks' }).focus()
-    await expect(list).toHaveAttribute('data-held', 'false')
-    await page.keyboard.press('Tab')
     await expect(list).toHaveAttribute('data-held', 'true')
-    await expect(blocks.getByRole('status')).toContainText('Held still while you look')
+    await expect(hint).toHaveText('Paused')
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
     await expect(list).toHaveAttribute('data-held', 'false')
+  })
+
+  test('a new block that arrives while the pointer is on the card waits until it leaves @PE-02', async ({
+    page,
+  }) => {
+    test.skip(isPhone(page), 'needs a pointer')
+    await open(page)
+    const blocks = card(page, 'newest-blocks')
+    const heights = () => blocks.locator('tbody tr a[href*="/platform/block/"]').allTextContents()
+    const before = await heights()
+    expect(before.length).toBeGreaterThan(0)
+    await blocks.getByRole('heading', { name: 'Newest blocks' }).hover()
+    await page.evaluate(() => {
+      ;(
+        window as unknown as { __radarFixtures: { addPlatformBlocks(n: number): void } }
+      ).__radarFixtures.addPlatformBlocks(1)
+    })
+    await expect(blocks.locator('[data-paused]')).toHaveText('Paused · 1 newer', {
+      timeout: 30_000,
+    })
+    expect(await heights()).toEqual(before)
+    await page.mouse.move(0, 0)
+    await expect(blocks.locator('[data-paused]')).toHaveText('')
+    await expect.poll(heights).not.toEqual(before)
+    expect((await heights())[0]).not.toEqual(before[0])
   })
 
   test('lists the current epoch and the three before it @PE-03', async ({ page }) => {
@@ -332,7 +359,7 @@ test.describe('Platform overview in Decentralized only mode', () => {
     await expect(card(page, 'epoch-now').locator('[role="meter"]')).toBeVisible()
     await expect(card(page, 'epoch-now').locator('[data-epoch-rewards]')).toHaveCount(0)
     await card(page, 'proposers').scrollIntoViewIfNeeded()
-    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 5 : 11)
+    await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 6 : 11)
     await expect(card(page, 'contracts')).toContainText('DPNS')
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(card(page, 'pulse')).toHaveCount(0)
