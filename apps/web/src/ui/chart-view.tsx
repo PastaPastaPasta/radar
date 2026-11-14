@@ -9,8 +9,15 @@ import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import type { EChartsOption } from 'echarts'
 import { useEffect, useRef } from 'react'
-import { radarChartTheme, readChartTokens, withChartMotion, withEdgeRoom } from './chart-theme'
+import {
+  radarChartTheme,
+  readChartTokens,
+  seriesColors,
+  withChartMotion,
+  withEdgeRoom,
+} from './chart-theme'
 import { useReducedMotion, useThemeSignal } from './hooks'
+import { withSeriesColors } from './series'
 
 echarts.use([
   BarChart,
@@ -30,20 +37,26 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
   const reduced = useReducedMotion()
   const reducedRef = useRef(reduced)
   const theme = useThemeSignal()
+  const slotsRef = useRef<string[]>([])
+  const drawn = (o: EChartsOption, still: boolean) =>
+    withChartMotion(withEdgeRoom(withSeriesColors(o, slotsRef.current)), still)
 
   useEffect(() => {
     optionRef.current = option
     reducedRef.current = reduced
-    chartRef.current?.setOption(withChartMotion(withEdgeRoom(option), reduced), true)
+    chartRef.current?.setOption(drawn(option, reduced), true)
+     
   }, [option, reduced])
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    echarts.registerTheme('radar', radarChartTheme(readChartTokens(el)))
+    const tokens = readChartTokens(el)
+    slotsRef.current = seriesColors(tokens)
+    echarts.registerTheme('radar', radarChartTheme(tokens))
     const chart = echarts.init(el, 'radar', { renderer: 'canvas' })
     chartRef.current = chart
-    chart.setOption(withChartMotion(withEdgeRoom(optionRef.current), reducedRef.current))
+    chart.setOption(drawn(optionRef.current, reducedRef.current))
     if (group) {
       chart.group = group
       echarts.connect(group)
@@ -57,6 +70,7 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
       chart.dispose()
       chartRef.current = null
     }
+     
   }, [group, theme])
 
   return <div ref={ref} className="rx-chart__view" />

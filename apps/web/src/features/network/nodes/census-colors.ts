@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useThemeSignal } from '@/ui'
 
 export interface CensusColors {
-  /** The layer's own hue, then the ramp: a rank's slice or series. */
+  /** The six categorical slots in their fixed order: a rank's slice, or the slot a key holds (`useSeriesSlots`). */
   rank: string[]
   other: string
   axis: string
@@ -15,7 +15,7 @@ export interface CensusColors {
 }
 
 const FALLBACK: CensusColors = {
-  rank: ['#0a2a3d', '#0080D0', '#39A2E8', '#86C4F0', '#C2E0F7'],
+  rank: ['#008DE4', '#D95926', '#1E9586', '#BD7F00', '#D55181', '#6B8E00'],
   other: '#7A8B98',
   axis: '#7A8B98',
   good: '#1a7f4f',
@@ -30,13 +30,7 @@ function read(el: Element): CensusColors {
   const style = getComputedStyle(el)
   const v = (name: string, fallback: string) => style.getPropertyValue(name).trim() || fallback
   return {
-    rank: [
-      v('--rx-net-line', FALLBACK.rank[0]!),
-      v('--dh-ramp-2', FALLBACK.rank[1]!),
-      v('--dh-ramp-3', FALLBACK.rank[2]!),
-      v('--dh-ramp-4', FALLBACK.rank[3]!),
-      v('--dh-ramp-5', FALLBACK.rank[4]!),
-    ],
+    rank: FALLBACK.rank.map((fallback, i) => v(`--rx-s${String(i + 1)}`, fallback)),
     other: v('--dh-line-2', FALLBACK.other),
     axis: v('--dh-line-2', FALLBACK.axis),
     good: v('--dh-good', FALLBACK.good),

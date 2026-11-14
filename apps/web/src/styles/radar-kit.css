@@ -779,8 +779,17 @@ dashhq-footer .rx-ratenote {
   height: 100%;
 }
 .rx-chart__cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px 16px;
   margin-top: 6px;
-  text-align: right;
+}
+/* the legend names the series at the left; "Show as a table" keeps the right edge */
+.rx-chart__legend {
+  flex: 1 1 auto;
+  margin: 0;
 }
 .rx-chart__table {
   margin-top: 8px;

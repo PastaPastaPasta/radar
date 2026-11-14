@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import type { EChartsOption } from 'echarts'
 import { useId, useState } from 'react'
 import { deferred } from './deferred'
+import { seriesSwatches, seriesVar } from './series'
 import { Skeleton } from './states'
 
 export interface ChartProps {
@@ -11,6 +12,8 @@ export interface ChartProps {
   table: { columns: string[]; rows: (string | number)[][] }
   group?: string
   loading?: boolean
+  /** False for a chart whose series are already named beside it, with their colours. */
+  legend?: boolean
 }
 
 const ChartView = deferred<{ option: EChartsOption; group?: string; height: number }>(
@@ -18,9 +21,10 @@ const ChartView = deferred<{ option: EChartsOption; group?: string; height: numb
   ({ height }) => <Skeleton shape="chart" height={height} />,
 )
 
-export function Chart({ option, height, label, table, group, loading }: ChartProps) {
+export function Chart({ option, height, label, table, group, loading, legend = true }: ChartProps) {
   const [shown, setShown] = useState(false)
   const tableId = useId()
+  const swatches = legend && !loading ? seriesSwatches(option) : []
   return (
     <figure className="rx-chart" data-chart-group={group}>
       <div className="rx-chart__canvas" role="img" aria-label={label} style={{ height }}>
@@ -31,6 +35,20 @@ export function Chart({ option, height, label, table, group, loading }: ChartPro
         )}
       </div>
       <figcaption className="rx-chart__cap">
+        {swatches.length > 0 ? (
+          <ul className="rx-legend rx-chart__legend" data-chart-legend>
+            {swatches.map((s) => (
+              <li key={s.name}>
+                <i
+                  className="rx-sw"
+                  aria-hidden="true"
+                  style={{ background: s.color ?? seriesVar(s.slot ?? 1) }}
+                />
+                {s.name}
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <button
           type="button"
           className="dh-btn dh-btn--link dh-btn--sm"
