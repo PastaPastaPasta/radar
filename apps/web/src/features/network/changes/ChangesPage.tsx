@@ -66,7 +66,7 @@ function ChangesList() {
         header: t`When`,
         accessorFn: (c) => c.ts,
         cell: ({ row }) => <Time ms={row.original.ts} mode="relative" live />,
-        meta: { phone: 'secondary' },
+        meta: { phone: 'primary' },
       },
       {
         id: 'block',
@@ -108,7 +108,7 @@ function ChangesList() {
                 ? c.old
                   ? t`${label} (was at ${value(c.old)})`
                   : label
-                : `${label}: ${value(c.old)} → ${value(c.new)}`
+                : `${value(c.old)} → ${value(c.new)}`
           return (
             <span className="rx-chg" data-change-field={c.field}>
               <Badge tone={changeTone(c)}>{label}</Badge>
@@ -116,6 +116,7 @@ function ChangesList() {
             </span>
           )
         },
+        meta: { phone: 'secondary' },
       },
     ],
     [t, i18n, words],
@@ -140,7 +141,7 @@ function ChangesList() {
   ]
 
   return (
-    <div className="grid min-w-0 gap-4">
+    <div className="rx-changes grid min-w-0 gap-4">
       <SegFilter
         label={t`Kind of change`}
         value={kind}

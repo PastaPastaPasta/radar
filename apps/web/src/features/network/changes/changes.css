@@ -10,3 +10,14 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* A phone row is two lines: the masternode and when, then what changed with its block at the right. */
+@media (max-width: 640px) {
+  .rx-changes .rx-table--cards td.s {
+    grid-column: 1;
+    text-align: left;
+  }
+  .rx-changes .rx-table--cards td.u {
+    grid-column: 2;
+    text-align: right;
+  }
+}
