@@ -41,6 +41,29 @@ test.describe('Core height on the home card', () => {
   })
 })
 
+test.describe('A long name in a phone row card', () => {
+  test('is cut short instead of pushing the card past the screen @X-08', async ({ page }) => {
+    test.skip(!onPhone(page), 'phone only')
+    await page.goto('/names')
+    await settled(page)
+    const chip = page.locator('.rx-table--cards td.e .rx-chip').first()
+    // An owner's name arrives only when its lookup lands, so the longest testnet name is put in place directly.
+    await chip.evaluate((el) => {
+      const name = document.createElement('span')
+      name.className = 'rx-chip__name'
+      name.textContent = 'identity-name-goes-hereeeeeeeeeeeeeeeeeeeeeeeeeeeee.dash'
+      el.append(name)
+    })
+    const fits = await chip.evaluate((el) => {
+      const cell = el.closest('td')!.getBoundingClientRect()
+      const card = el.closest('tr')!.getBoundingClientRect()
+      return cell.right <= card.right + 0.5
+    })
+    expect(fits, 'the cell stays inside its card').toBe(true)
+    expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
+  })
+})
+
 test.describe('Address summary on a phone', () => {
   test('keeps the figures in one block, the QR code behind a button, and the history close @IN-06 @HY-08', async ({
     page,

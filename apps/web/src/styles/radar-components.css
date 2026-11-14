@@ -1295,7 +1295,7 @@ button.rx-src--proof:hover {
   .rx-table--cards tr {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
     gap: 4px 12px;
     padding: 12px 14px;
     border-bottom: 1px solid var(--dh-line);
@@ -1322,6 +1322,8 @@ button.rx-src--proof:hover {
   .rx-table--cards td.e {
     grid-column: 2;
     grid-row: 1;
+    min-width: 0;
+    max-width: 100%;
     text-align: right;
     color: var(--dh-ink);
   }
