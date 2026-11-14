@@ -71,6 +71,9 @@ msgstr "3 j"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "Un second index pour les adresses, les sorties dépensées, le chainwork et la gouvernance"
 
+msgid "A year, on the collateral"
+msgstr "Un an, sur le collatéral"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "Actifs"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI et le SDK Platform répondent. Les sources hébergées sont désactivées en mode « Décentralisé uniquement »."
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI et le SDK Platform répondent"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI est occupé : les listes de blocs viennent de Hyphen le temps que le budget se rétablisse. Les détails utilisent toujours DAPI."
@@ -241,11 +244,17 @@ msgstr "Diagnostic : les requêtes de cet onglet et leur résultat"
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "se termine"
-
 msgid "Epoch"
 msgstr "Époque"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Époque {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "L’époque {0} est écoulée à {1}"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "Époques"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Tous les evonodes que Platform Explorer a vus valider."
 
-msgid "Every source is answering."
-msgstr "Toutes les sources répondent."
+msgid "Every source is answering"
+msgstr "Toutes les sources répondent"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Tout ce que Core affiche provient de DAPI."
@@ -298,6 +307,9 @@ msgstr "Figé pendant que vous regardez. Les nouveaux éléments apparaissent d�
 msgid "History and leaders"
 msgstr "Historique et meneurs"
 
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "Les sources hébergées sont désactivées en mode « Décentralisé uniquement »."
+
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "L’état de santé de Dash Platform : sa hauteur, son époque et ses crédits, qui propose des blocs et ce qui s’y passe."
 
@@ -324,6 +336,9 @@ msgstr "Synchronisé"
 
 msgid "Inactive"
 msgstr "Inactif"
+
+msgid "Indexed height"
+msgstr "Hauteur indexée"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "Indexé jusqu’au bloc Core {indexed} sur {chain}. Hyphen dit que sa synchronisation est « {sync} », mais son index est en retard sur la chaîne."
@@ -382,6 +397,9 @@ msgstr "Le dernier crawl s’est terminé {0}. Son nœud Core est au bloc {1}."
 msgid "Last good {0}."
 msgstr "Dernier succès {0}."
 
+msgid "Last pool"
+msgstr "Dernier pool"
+
 msgid "Later ones may be missing."
 msgstr "Les suivants peuvent manquer."
 
@@ -405,6 +423,12 @@ msgstr "Recherche…"
 
 msgid "Median answer {rounded} ms"
 msgstr "Temps de réponse médian {rounded} ms"
+
+msgid "Median monthly earnings"
+msgstr "Gains mensuels médians"
+
+msgid "Median yield"
+msgstr "Rendement médian"
 
 msgid "Most active contracts"
 msgstr "Contrats les plus actifs"
@@ -482,6 +506,9 @@ msgstr "Non vérifié par preuve"
 msgid "Nothing has asked it yet on this network."
 msgstr "Personne ne l’a encore interrogée sur ce réseau."
 
+msgid "Nothing is slow, behind or down."
+msgstr "Rien n’est lent, en retard ou en panne."
+
 msgid "Nothing ranked yet"
 msgstr "Rien de classé pour l’instant"
 
@@ -496,6 +523,13 @@ msgstr "Sur la chaîne"
 
 msgid "Peers"
 msgstr "Pairs"
+
+msgid "Per block"
+msgstr "Par bloc"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Par evonode, sur {0} jours"
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +554,9 @@ msgstr "Beaucoup de marge"
 
 msgid "Polls ending soon"
 msgstr "Sondages de vote bientôt clôturés"
+
+msgid "Pool so far"
+msgstr "Pool jusqu’ici"
 
 msgid "Pressure"
 msgstr "Pression"
@@ -596,20 +633,17 @@ msgstr "Blindé et non blindé, en DASH"
 msgid "Shielded pool"
 msgstr "Pool blindé"
 
-msgid "should have ended"
-msgstr "aurait dû se terminer"
-
 msgid "Software"
 msgstr "Logiciel"
 
 msgid "Some requests are failing."
 msgstr "Certaines requêtes échouent."
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Certaines sources sont lentes ou en retard. Les autres fonctionnent toujours."
+msgid "Some sources are slow or behind"
+msgstr "Certaines sources sont lentes ou en retard"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Certaines sources ne répondent pas. Les autres fonctionnent toujours."
+msgid "Some sources aren’t answering"
+msgstr "Certaines sources ne répondent pas"
 
 msgid "Sources"
 msgstr "Sources"
@@ -668,6 +702,9 @@ msgstr "Les quorums avec lesquels Platform signe actuellement. Non vérifié par
 
 msgid "The request budget is nearly used."
 msgstr "Le budget de requêtes est presque épuisé."
+
+msgid "The rest still work."
+msgstr "Les autres fonctionnent toujours."
 
 msgid "The system contracts every network ships with."
 msgstr "Les contrats système fournis avec chaque réseau."

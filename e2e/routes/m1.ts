@@ -1,4 +1,5 @@
 import type { RouteCase, RouteNet } from './types'
+import { H1 } from './claims'
 
 /** A masternode page's h1: "Masternode" until a record names it, then its host and port. */
 export const masternodeH1 = (net: RouteNet): RegExp =>
@@ -49,7 +50,7 @@ function m1(net: RouteNet): RouteCase[] {
     { path: '/', h1: 'Radar', nets, decentralized: 'partial', data: '[data-headline]' },
     {
       path: '/blocks',
-      h1: 'Blocks',
+      h1: H1.blocks,
       nets,
       decentralized: 'data',
       data: 'a[href^="/block/"]',
@@ -91,7 +92,7 @@ function m1(net: RouteNet): RouteCase[] {
     },
     {
       path: '/mempool',
-      h1: 'Mempool',
+      h1: H1.mempool,
       nets,
       decentralized: 'partial',
       data: '[data-mempool-view="seen"]',
@@ -99,7 +100,7 @@ function m1(net: RouteNet): RouteCase[] {
     { path: '/rich-list', h1: 'Rich list', nets, decentralized: 'unavailable' },
     { path: '/charts', h1: 'Charts', nets, decentralized: 'unavailable' },
     { path: '/internals', h1: 'Network internals', nets, decentralized: 'unavailable' },
-    { path: '/governance', h1: 'Governance', nets, decentralized: 'unavailable' },
+    { path: '/governance', h1: H1.governance, nets, decentralized: 'unavailable' },
     {
       path: `/governance/${r.proposal}`,
       h1: 'Proposal',

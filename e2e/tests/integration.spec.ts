@@ -2,6 +2,7 @@ import { expect, test } from '../helpers/test'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
 import { fetchesNothing, pagePattern, SITE_PATHS, sourcesOf } from '../helpers/site-map'
+import { RESTING_MARKS } from '../helpers/sources'
 
 const isPhone = (name: string) => name.startsWith('phone')
 
@@ -106,7 +107,7 @@ test.describe('every page says where its figures came from and how old they are'
       await page.goto(withQuery(route.path, networkQuery(net)))
       await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
       await settled(page)
-      await expect(page.locator('main .rx-sources [data-source]:visible').first()).toBeVisible()
+      await expect(page.locator(`main .rx-sources ${RESTING_MARKS}`).first()).toBeVisible()
       const shown = await page.evaluate(() => [
         ...new Set(
           [...document.querySelectorAll('main [data-source], .rx-home [data-source]')].map((e) =>

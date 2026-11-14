@@ -48,7 +48,7 @@ export function SectionNav() {
   if (section === 'home' || section === 'search') return null
   const entries = railEntries(section)
   return (
-    <>
+    <div className="rx-secbar">
       <div className="rx-secrail">
         <nav
           ref={railRef}
@@ -83,6 +83,6 @@ export function SectionNav() {
         ))}
       </div>
       <UnitSwitch className="rx-unit--rail" />
-    </>
+    </div>
   )
 }

@@ -41,8 +41,8 @@ export function StatusBar({ rows }: { rows: readonly MnRow[] }) {
   }, [rows, t])
   const summary = segments.map((s) => `${formatInt(s.count)} ${s.label.toLowerCase()}`).join(', ')
   return (
-    <div data-status-bar className="grid gap-2">
-      <div className="rx-stack" style={{ height: 16 }} role="img" aria-label={summary}>
+    <div data-status-bar className="rx-mnstatus">
+      <div className="rx-stack" role="img" aria-label={summary}>
         {segments.map((s) => (
           <i key={s.id} style={{ flex: s.count, background: s.colour, minWidth: 4 }} />
         ))}

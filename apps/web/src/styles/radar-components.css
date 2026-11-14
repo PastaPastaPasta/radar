@@ -690,7 +690,8 @@ a.rx-stat:hover .rx-stat__label,
 a.rx-stat:hover .rx-stat__value {
   color: var(--dh-brand-ink);
 }
-a.rx-stat:focus-visible {
+a.rx-stat:focus-visible,
+.rx-stat[tabindex]:focus-visible {
   outline: var(--dh-ring-w) solid var(--dh-focus);
   outline-offset: 2px;
 }
@@ -996,6 +997,103 @@ button.rx-src--proof:hover {
 .rx-table--feed td {
   padding-block: 7px;
 }
+/* a long list read across a dozen columns: smaller type and tighter cells, so they fit the container at 1440 px */
+@media (min-width: 641px) {
+  .rx-table--dense {
+    font-size: var(--dh-fs-sm);
+  }
+  .rx-table--dense th {
+    padding: 8px 6px;
+    font-size: 12.5px;
+  }
+  .rx-table--dense td {
+    padding: 5px 6px;
+  }
+  .rx-table--dense .rx-sub {
+    font-size: 12px;
+  }
+  .rx-table--dense .rx-chip__text {
+    font-size: 12.5px;
+  }
+}
+/* a cell that gives way before the table scrolls: its full text is in the title */
+.rx-clip {
+  display: inline-block;
+  max-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+.rx-clip--wide {
+  max-width: 9rem;
+}
+/* the masternode list: the status mix in one row, then the filters, then the table */
+.rx-mnlist {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  min-width: 0;
+}
+.rx-mnlist .rx-tools,
+.rx-mnlist .rx-activef {
+  padding-bottom: 0;
+}
+.rx-mnstatus {
+  display: grid;
+  gap: 8px;
+}
+.rx-mnstatus .rx-stack {
+  height: 8px;
+}
+.rx-mnstatus .rx-legend {
+  margin: 0;
+}
+@media (min-width: 900px) {
+  .rx-mnstatus {
+    grid-template-columns: auto minmax(120px, 1fr);
+    align-items: center;
+    gap: 20px;
+  }
+  .rx-mnstatus .rx-legend {
+    order: -1;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+}
+.rx-mnid {
+  display: grid;
+  gap: 1px;
+  justify-items: start;
+}
+/* enough of the hash to tell two rows apart: the chip's own width is a percentage, so the column would give it all away */
+@media (min-width: 641px) {
+  .rx-table--dense .rx-mnid {
+    min-width: 7.25rem;
+  }
+}
+.rx-mnaddr {
+  font-family: var(--dh-mono);
+  font-variant-ligatures: none;
+}
+.rx-table--dense .rx-mnaddr {
+  font-size: 12.5px;
+}
+@media (min-width: 1280px) {
+  .rx-mnlist .rx-tools .rx-grow {
+    flex-basis: 150px;
+  }
+}
+/* a phone reads the claim, its paragraph and its source before the list's controls */
+@media (max-width: 640px) {
+  [data-page='/masternodes'] .rx-page__title {
+    display: contents;
+  }
+  [data-page='/masternodes'] .rx-page__actions {
+    order: 1;
+  }
+}
+
 .rx-table--feed th {
   position: static;
 }
@@ -2527,5 +2625,14 @@ html[data-scroll-gutter] {
   }
   .rx-cols--lead {
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}
+
+/* a phone shows the top five of each board and of the proposers; the card's link leads to the rest.
+   !important: the rows carry a display utility, and the utilities layer comes after this one. */
+@media (max-width: 640px) {
+  [data-leaderboards] [data-board] > li:nth-child(n + 6),
+  .rx-phone5 tbody tr:nth-child(n + 6) {
+    display: none !important;
   }
 }

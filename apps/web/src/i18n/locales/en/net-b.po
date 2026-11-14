@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{0} masternodes and evonodes on {net}."
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "{0} of {1} enabled masternodes answered the last crawl"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "{0} of {1} masternodes are enabled"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, one {# block} other {# blocks}}"
 
 msgid "30 days"
 msgstr "30 days"
@@ -38,6 +47,10 @@ msgstr "Answering"
 
 msgid "Ascending. Switch to descending"
 msgstr "Ascending. Switch to descending"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "Block {0}"
 
 msgid "Blocks proposed"
 msgstr "Blocks proposed"
@@ -145,11 +158,8 @@ msgstr "Not in a validator set"
 msgid "Platform node ID"
 msgstr "Platform node ID"
 
-msgid "Platform, 30 days"
-msgstr "Platform, 30 days"
-
-msgid "PoSe penalty"
-msgstr "PoSe penalty"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "PoSe-banned"
@@ -213,11 +223,11 @@ msgstr "Type"
 msgid "Upgrade vote not counted"
 msgstr "Upgrade vote not counted"
 
-msgid "Uptime, 30 days"
-msgstr "Uptime, 30 days"
+msgid "Uptime 30d"
+msgstr "Uptime 30d"
 
-msgid "Uptime, 7 days"
-msgstr "Uptime, 7 days"
+msgid "Uptime 7d"
+msgstr "Uptime 7d"
 
 msgid "Validator set"
 msgstr "Validator set"

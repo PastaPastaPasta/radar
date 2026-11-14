@@ -3,7 +3,8 @@ import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
-import { sourceLineOf } from '../helpers/sources'
+import { expectProved, expectReports, sourceLineOf } from '../helpers/sources'
+import { CLAIM, H1 } from '../routes/claims'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 700
@@ -32,18 +33,24 @@ test.describe('Epochs', () => {
   test('shows where the current epoch stands: clock, start, estimated end, first block and fee multiplier @RA-60 @NX-50', async ({
     page,
   }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     const current = card(page, 'current-epoch')
     await expect(current.getByRole('meter')).toBeVisible()
-    await expect(current).toContainText(/Epoch\s*88/)
-    await expect(current).toContainText(/% through/)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^Epoch 88 is \d+% through$/)
+    await expect(current.getByRole('meter')).toHaveAttribute(
+      'aria-valuetext',
+      /^Epoch 88\. \d+% through\. /,
+    )
+    await expect(current.locator('.rx-clock')).not.toContainText(/% through/)
     await expect(current).toContainText(/blocks so far/)
     for (const label of ['Started', 'Estimated end', 'First block', 'Fee multiplier']) {
       await expect(current.getByText(label, { exact: true })).toBeVisible()
     }
     await expect(current.locator('a[href^="/platform/block/"]')).toBeVisible()
+    // The page line is shared with the proposers, an unproved read, so the part's own report is what proves it.
+    await expectReports(current, 'sdk:proved')
     await expect(
-      sourceLineOf(current).locator('[data-source="sdk"][data-proved="true"]').first(),
+      sourceLineOf(current).locator('[data-source="sdk"][data-proved="true"]'),
     ).toBeVisible()
     const rewards = card(page, 'rewards')
     for (const label of [
@@ -55,12 +62,16 @@ test.describe('Epochs', () => {
     ]) {
       await expect(rewards.getByText(label, { exact: true })).toBeVisible()
     }
+    await expect(
+      rewards.getByText('Epoch 87', { exact: true }),
+      'the epoch that just ended',
+    ).toHaveCount(2)
     await expect(sourceLineOf(rewards).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)
   })
 
   test('ranks the twenty top proposers and sorts them @NX-50', async ({ page }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     const proposers = card(page, 'proposers')
     await proposers.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'proposers')).toHaveCount(20)
@@ -83,7 +94,7 @@ test.describe('Epochs', () => {
   })
 
   test('lists the next twelve proposers with their slots and ETA @RA-62', async ({ page }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     const upcoming = card(page, 'upcoming')
     await upcoming.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
@@ -99,7 +110,7 @@ test.describe('Epochs', () => {
   test('draws the earnings band over the last epochs, with a table on request @RA-63', async ({
     page,
   }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     const history = card(page, 'history')
     await history.scrollIntoViewIfNeeded()
     await expect(
@@ -115,7 +126,7 @@ test.describe('Epochs', () => {
   })
 
   test('lists the latest twenty epochs, each linking to its page @NX-52', async ({ page }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     const range = card(page, 'range')
     await range.scrollIntoViewIfNeeded()
     await expect(range).toContainText('The latest 20 epochs.')
@@ -129,7 +140,7 @@ test.describe('Epochs', () => {
   })
 
   test('shows a custom range from the address and from the form @NX-52', async ({ page }) => {
-    await open(page, '/epochs?from=81&to=86', 'Epochs')
+    await open(page, '/epochs?from=81&to=86', H1.epochs)
     const range = card(page, 'range')
     await range.scrollIntoViewIfNeeded()
     await expect(range).toContainText('Epochs 81 to 86.')
@@ -150,7 +161,7 @@ test.describe('Epochs', () => {
   test('says in Decentralized only mode that the rewards and schedule need Radar and keeps the proof-checked parts @RA-60 @NX-50 @NX-52', async ({
     page,
   }) => {
-    await open(page, mode('/epochs'), 'Epochs')
+    await open(page, mode('/epochs'), H1.epochs)
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(card(page, 'radar-zone')).toContainText('need Radar’s crawl')
     await expect(card(page, 'current-epoch').getByRole('meter')).toBeVisible()
@@ -161,12 +172,12 @@ test.describe('Epochs', () => {
   })
 
   test('fits the phone and the desktop @NX-50', async ({ page }) => {
-    await open(page, '/epochs', 'Epochs')
+    await open(page, '/epochs', H1.epochs)
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
   })
 
   test('works on testnet, whose epochs are an hour long @NX-50', async ({ page }) => {
-    await open(page, '/epochs?network=testnet', 'Epochs')
+    await open(page, '/epochs?network=testnet', H1.epochs)
     await expect(card(page, 'current-epoch').getByRole('meter')).toBeVisible()
     await expect(card(page, 'rewards')).toContainText('Pool so far')
     await expect(bodyRows(page, 'range')).toHaveCount(20)
@@ -188,9 +199,7 @@ test.describe('One epoch', () => {
     ]) {
       await expect(totals.getByText(label, { exact: true })).toBeVisible()
     }
-    await expect(
-      sourceLineOf(totals).locator('[data-source="sdk"][data-proved="true"]').first(),
-    ).toBeVisible()
+    await expectProved(totals)
     const proposers = card(page, 'epoch-proposers')
     await proposers.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'epoch-proposers').first()).toBeVisible()
@@ -232,7 +241,7 @@ test.describe('One epoch', () => {
     await pinClockToFixtures(page)
     await page.goto('/epoch/88')
     await expect(page).toHaveURL(/\/epochs(\?|$)/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Epochs' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.epochs })).toBeVisible()
   })
 
   test('says a future or unknown epoch is not there, without an error @NX-51', async ({ page }) => {
@@ -412,9 +421,7 @@ test.describe('Chain state', () => {
     await open(page, '/credits', 'Credits')
     const total = card(page, 'total-credits')
     await expect(total.locator('[data-amount]').first()).toBeVisible()
-    await expect(
-      sourceLineOf(total).locator('[data-source="sdk"][data-proved="true"]').first(),
-    ).toBeVisible()
+    await expectProved(total)
     await expect(total.locator('.rx-fiat')).toContainText('$')
     await audit(page)
   })
@@ -433,9 +440,7 @@ test.describe('Chain state', () => {
     await lookup.getByRole('button', { name: 'Look up' }).click()
     await expect(page).toHaveURL(/id=1111/)
     await expect(lookup.getByText('No prefunded balance')).toBeVisible()
-    await expect(
-      sourceLineOf(lookup).locator('[data-source="sdk"][data-proved="true"]').first(),
-    ).toBeVisible()
+    await expectProved(lookup)
   })
 
   test('refuses an ID that is not an ID before asking anything @NX-57', async ({ page }) => {
@@ -451,9 +456,7 @@ test.describe('Chain state', () => {
     const pool = card(page, 'pool')
     await expect(pool.locator('[data-amount]').first()).toBeVisible()
     await expect(pool.locator('[data-recent-anchor] [data-copy]')).toHaveCount(1)
-    await expect(
-      sourceLineOf(pool).locator('[data-source="sdk"][data-proved="true"]').first(),
-    ).toBeVisible()
+    await expectProved(pool)
     const anchors = card(page, 'anchors')
     await anchors.scrollIntoViewIfNeeded()
     await expect(anchors.locator('[data-anchors] li')).toHaveCount(10)
@@ -485,9 +488,7 @@ test.describe('Chain state', () => {
     const lookup = card(page, 'nullifier')
     await expect(lookup.locator('[data-nullifier-result="spent"]')).toBeVisible()
     await expect(lookup.locator('[data-nullifier-result] [data-copy]')).toHaveCount(1)
-    await expect(
-      sourceLineOf(lookup).locator('[data-source="sdk"][data-proved="true"]').first(),
-    ).toBeVisible()
+    await expectProved(lookup)
 
     await lookup.getByLabel('Nullifier').fill('0'.repeat(63) + '1')
     await lookup.getByRole('button', { name: 'Look up' }).click()

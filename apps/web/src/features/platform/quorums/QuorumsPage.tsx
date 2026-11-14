@@ -127,7 +127,6 @@ export function QuorumsPage() {
             ? t`${formatInt(all.length)} quorums at Platform height ${formatInt(query.data.data.height)}. Not proof-checked: the SDK has no proof for this list.`
             : t`Not proof-checked: the SDK has no proof for this list.`
         }
-        padding="flush"
         source={stampsOf(query.data)}
       >
         <div className="p-3">

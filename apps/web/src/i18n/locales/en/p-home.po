@@ -71,6 +71,9 @@ msgstr "3 d"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "A second index for addresses, spent outputs, chainwork and governance"
 
+msgid "A year, on the collateral"
+msgstr "A year, on the collateral"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "Active"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI and the Platform SDK are answering"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
@@ -241,11 +244,17 @@ msgstr "Diagnostics: the requests this tab made and how each one went"
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "ends"
-
 msgid "Epoch"
 msgstr "Epoch"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Epoch {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "Epoch {0} is {1} through"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "Epochs"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Every evonode Platform Explorer has seen validate."
 
-msgid "Every source is answering."
-msgstr "Every source is answering."
+msgid "Every source is answering"
+msgstr "Every source is answering"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Everything Core shows comes from DAPI."
@@ -298,6 +307,9 @@ msgstr "Held still while you look. New ones appear when you move away."
 msgid "History and leaders"
 msgstr "History and leaders"
 
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "Hosted sources are off in Decentralized only mode."
+
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 
@@ -324,6 +336,9 @@ msgstr "In sync"
 
 msgid "Inactive"
 msgstr "Inactive"
+
+msgid "Indexed height"
+msgstr "Indexed height"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
@@ -382,6 +397,9 @@ msgstr "Last crawl finished {0}. Its Core node is at block {1}."
 msgid "Last good {0}."
 msgstr "Last good {0}."
 
+msgid "Last pool"
+msgstr "Last pool"
+
 msgid "Later ones may be missing."
 msgstr "Later ones may be missing."
 
@@ -405,6 +423,12 @@ msgstr "Looking…"
 
 msgid "Median answer {rounded} ms"
 msgstr "Median answer {rounded} ms"
+
+msgid "Median monthly earnings"
+msgstr "Median monthly earnings"
+
+msgid "Median yield"
+msgstr "Median yield"
 
 msgid "Most active contracts"
 msgstr "Most active contracts"
@@ -482,6 +506,9 @@ msgstr "Not proof-checked"
 msgid "Nothing has asked it yet on this network."
 msgstr "Nothing has asked it yet on this network."
 
+msgid "Nothing is slow, behind or down."
+msgstr "Nothing is slow, behind or down."
+
 msgid "Nothing ranked yet"
 msgstr "Nothing ranked yet"
 
@@ -496,6 +523,13 @@ msgstr "On the chain"
 
 msgid "Peers"
 msgstr "Peers"
+
+msgid "Per block"
+msgstr "Per block"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Per evonode, over {0} days"
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +554,9 @@ msgstr "Plenty of room"
 
 msgid "Polls ending soon"
 msgstr "Polls ending soon"
+
+msgid "Pool so far"
+msgstr "Pool so far"
 
 msgid "Pressure"
 msgstr "Pressure"
@@ -596,20 +633,17 @@ msgstr "Shielded and unshielded, in DASH"
 msgid "Shielded pool"
 msgstr "Shielded pool"
 
-msgid "should have ended"
-msgstr "should have ended"
-
 msgid "Software"
 msgstr "Software"
 
 msgid "Some requests are failing."
 msgstr "Some requests are failing."
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Some sources are slow or behind. The rest still work."
+msgid "Some sources are slow or behind"
+msgstr "Some sources are slow or behind"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Some sources aren’t answering. The rest still work."
+msgid "Some sources aren’t answering"
+msgstr "Some sources aren’t answering"
 
 msgid "Sources"
 msgstr "Sources"
@@ -668,6 +702,9 @@ msgstr "The quorums Platform signs with now. Not proof-checked: the SDK has no p
 
 msgid "The request budget is nearly used."
 msgstr "The request budget is nearly used."
+
+msgid "The rest still work."
+msgstr "The rest still work."
 
 msgid "The system contracts every network ships with."
 msgstr "The system contracts every network ships with."

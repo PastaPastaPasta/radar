@@ -263,7 +263,6 @@ export function NetworkInternals() {
             : undefined
         }
         layer="network"
-        padding="flush"
         source={network.data ? stampOf(network.data) : undefined}
         id="peers"
       >

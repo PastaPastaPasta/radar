@@ -223,8 +223,8 @@ export function LayoutSection() {
           </DownSource>
         </div>
         <div className="rx-c6">
-          <Card title="Flush body" layer="core" padding="flush" subtitle="Tables run edge to edge">
-            <div className="p-4 text-[14px]">Content with its own padding.</div>
+          <Card title="Table body" layer="core" subtitle="Tables run the width of the block">
+            <div className="py-4 text-[14px]">The body has no padding of its own.</div>
           </Card>
         </div>
       </div>

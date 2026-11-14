@@ -36,7 +36,7 @@ function Filters() {
   const [none, setNone] = useState<{ from?: string; to?: string }>({})
   return (
     <>
-      <Card layer="platform" title="RangeFilter" padding="flush">
+      <Card layer="platform" title="RangeFilter">
         <TableTools>
           <RangeFilter label="Balance" value={balance} onChange={setBalance} />
           <RangeFilter label="Gas" value={open} onChange={setOpen} />
@@ -48,7 +48,7 @@ function Filters() {
         </p>
       </Card>
       <div className="h-4" />
-      <Card layer="platform" title="DateRangeFilter" padding="flush">
+      <Card layer="platform" title="DateRangeFilter">
         <TableTools>
           <DateRangeFilter label="Created" from={dates.from} to={dates.to} onChange={setDates} />
           <DateRangeFilter label="Voted" from={after.from} to={after.to} onChange={setAfter} />
@@ -67,7 +67,7 @@ function ListModes() {
   const a = useListMode('kit-a')
   return (
     <>
-      <Card layer="neutral" title="ListModeToggle" padding="flush">
+      <Card layer="neutral" title="ListModeToggle">
         <TableTools>
           <ListModeToggle listId="kit-a" />
         </TableTools>
@@ -76,7 +76,7 @@ function ListModes() {
         </p>
       </Card>
       <div className="h-4" />
-      <Card layer="neutral" title="A second list keeps its own choice" padding="flush">
+      <Card layer="neutral" title="A second list keeps its own choice">
         <TableTools>
           <ListModeToggle listId="kit-b" />
         </TableTools>
@@ -93,25 +93,25 @@ function Clocks() {
   })
   return (
     <div className="grid gap-4">
-      <Card layer="platform" padding="flush">
+      <Card layer="platform">
         <EpochClock index={88} blocksSoFar={1091} estimated {...at(32, 142)} />
       </Card>
-      <Card layer="platform" padding="flush" title="Medium">
+      <Card layer="platform" title="Medium">
         <EpochClock index={88} blocksSoFar={1091} estimated size="md" {...at(32, 142)} />
       </Card>
-      <Card layer="platform" padding="flush" title="End time known, not an estimate">
+      <Card layer="platform" title="End time known, not an estimate">
         <EpochClock index={87} blocksSoFar={3650} estimated={false} {...at(120, 48)} />
       </Card>
-      <Card layer="platform" padding="flush" title="Just started">
+      <Card layer="platform" title="Just started">
         <EpochClock index={89} blocksSoFar={0} estimated {...at(0.1, 167)} />
       </Card>
-      <Card layer="platform" padding="flush" title="Past its expected end (estimate)">
+      <Card layer="platform" title="Past its expected end (estimate)">
         <EpochClock index={90} blocksSoFar={3702} estimated {...at(170, -2)} />
       </Card>
-      <Card layer="platform" padding="flush" title="Past its end (known)">
+      <Card layer="platform" title="Past its end (known)">
         <EpochClock index={86} estimated={false} {...at(190, -22)} />
       </Card>
-      <Card layer="platform" padding="flush" title="No end time yet, blocks only">
+      <Card layer="platform" title="No end time yet, blocks only">
         <EpochClock index={91} startedAt={base - 5 * DAY} blocksSoFar={2480} estimated size="md" />
       </Card>
     </div>

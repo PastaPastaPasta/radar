@@ -6,24 +6,17 @@ import { useDecentralizedOnly } from '@/data/health'
 import { stampOf } from '@/data/envelope'
 import { joinMnRows } from '@/data/masternodes/rows'
 import { radarQueries } from '@/data/radar/queries'
-import { PageFrame, useNetwork } from '@/features/entity'
+import { PageFrame, useNetwork, usePageClaim } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import {
-  Empty,
-  ErrorState,
-  SearchField,
-  SourceLine,
-  Unavailable,
-  useMediaQuery,
-  useReducedMotion,
-} from '@/ui'
+import { Empty, ErrorState, SearchField, Unavailable, useMediaQuery, useReducedMotion } from '@/ui'
 import { deferred } from '@/ui/deferred'
+import { useSectionSource } from '@/ui/section-source'
 import { bottomSheet, type BottomSheet, type Rest } from './bottom-sheet'
 import { useDebouncedQuery } from '../debounced-query'
 import { MapControls, HeadlineText, ListLink, useCategoryLabel } from './MapControls'
 import { CityInfo, GroupList } from './MapDetails'
-import { colorScheme, geoTotals, headline, mapView, mnPoints } from './map-model'
+import { colorScheme, geoTotals, headline, mapView, mnPoints, placedIn } from './map-model'
 import type { CityPick, MapTexts } from './MapView'
 import { NodeCard } from './NodeCard'
 import { PHONE, isPhone } from './phone'
@@ -100,6 +93,20 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
   const byProtx = useMemo(() => new Map(rows.map((r) => [r.protx, r])), [rows])
   const totals = useMemo(() => (geo ? geoTotals(geo) : undefined), [geo])
   const stats = useMemo(() => headline(view.visible), [view.visible])
+  const placed = useMemo(() => placedIn(rows), [rows])
+  const onMap = mnCount(placed.masternodes)
+  usePageClaim(
+    placed.countries > 0
+      ? plural(placed.countries, {
+          one: `${onMap} in # country`,
+          other: `${onMap} in # countries`,
+        })
+      : undefined,
+  )
+  useSectionSource([
+    mnQ.data ? stampOf(mnQ.data) : undefined,
+    layer === 'nodes' && geoQ.data ? stampOf(geoQ.data) : undefined,
+  ])
 
   const selected = search.protx ? view.visible.find((r) => r.protx === search.protx) : undefined
   const selectedAt =
@@ -129,8 +136,14 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
     }
     measure()
     window.addEventListener('resize', measure)
+    // The headline grows from the page's name to its claim once the list is read, which moves the map down.
+    const head = el.closest('[data-page]')?.querySelector('.rx-page__head')
+    const grown =
+      head && typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : undefined
+    if (head) grown?.observe(head)
     return () => {
       window.removeEventListener('resize', measure)
+      grown?.disconnect()
     }
   }, [])
 
@@ -229,7 +242,6 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
   }
 
   const loading = crawl && mnQ.isPending
-  const stamp = mnQ.data ? stampOf(mnQ.data) : undefined
   const detailNode = selected && phone
   const groupRows = group?.flatMap((p) => byProtx.get(p) ?? []) ?? []
 
@@ -382,11 +394,6 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
                 </>
               )}
             </p>
-            {stamp ? (
-              <p className="rx-map-source">
-                <SourceLine stamp={stamp} compact />
-              </p>
-            ) : null}
           </div>
         </aside>
       ) : null}

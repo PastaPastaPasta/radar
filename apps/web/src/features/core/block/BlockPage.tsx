@@ -377,7 +377,7 @@ function BlockView({
           title={t`Transactions`}
           description={plural(block.txs.length, { one: '# transaction', other: '# transactions' })}
         >
-          <Card layer="core" padding="flush">
+          <Card layer="core">
             {phone ? (
               <BlockTxCompact rows={rows} caption={txCaption} paging={paging} />
             ) : (

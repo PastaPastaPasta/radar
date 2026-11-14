@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { netIds } from '../routes/fixtures'
+import { CLAIM } from '../routes/claims'
 
 const isPhone = (info: TestInfo) => info.project.name.startsWith('phone')
 const MAINNET = netIds('mainnet')
@@ -15,7 +16,7 @@ const panel = (page: Page) => page.locator('[data-map-panel]')
 /** Opens the map and waits for the masternode list to have drawn the headline. On a phone the controls sit in the sheet. */
 async function openMap(page: Page, query = '') {
   await page.goto(`/map${query}`)
-  await expect(page.getByRole('heading', { level: 1, name: 'Map' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: CLAIM.map })).toBeVisible()
   await expect(page.locator('[data-map-view][data-ready]')).toBeAttached({ timeout: 30_000 })
   await expect(headline(page)).toContainText(/answered the latest crawl|reachable nodes in/, {
     timeout: 30_000,
@@ -164,7 +165,7 @@ test.describe('The map', () => {
     await expect(list).toHaveAttribute('href', /reach=reachable/)
     await list.click()
     await expect(page).toHaveURL(/\/masternodes\?.*country=DE/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
   })
 
   test('keeps the layer, colour, filters, hidden categories and focused masternode in the address through a reload @RA-52', async ({
@@ -245,7 +246,7 @@ test.describe('The map', () => {
     page,
   }) => {
     await page.goto('/map?sources=decentralized')
-    await expect(page.getByRole('heading', { level: 1, name: 'Map' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Map', exact: true })).toBeVisible()
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(page.locator('[data-map-view][data-ready]')).toBeAttached({ timeout: 30_000 })
     await expect(panel(page)).toHaveCount(0)

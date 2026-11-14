@@ -5,12 +5,14 @@ import { stampOf } from '@/data/envelope'
 import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, EpochClock, Stat, Stats, stampsOf, useAfterIdle } from '@/ui'
-import { epochLengthMs } from '@/lib/epoch-length'
+import { Amount, Card, Stat, Stats, stampsOf, useAfterIdle } from '@/ui'
 
 const NONE = {} as const
 
-/** The five vital signs of NX-01: four proof-checked reads and the unproved quorum list, five SDK calls in all. */
+/**
+ * The vital signs of NX-01 after the epoch, which the page leads with: the protocol, the height and the credits,
+ * proof-checked, and the unproved quorum count.
+ */
 export function Vitals() {
   const { t } = useLingui()
   const net = useNetwork()
@@ -26,9 +28,7 @@ export function Vitals() {
     enabled: ready,
   })
 
-  const epoch = tip.data?.data.epoch
   const height = tip.data?.data.height
-  const length = epochLengthMs(net)
   const missing = (failed: boolean) => (failed ? t`Not available right now` : '…')
   const next = upgrade.data?.data.nextProtocolVersion
   const votes = upgrade.data?.data.voteCount
@@ -42,47 +42,7 @@ export function Vitals() {
       source={stampsOf(tip.data, credits.data, upgrade.data, quorums.data)}
     >
       <div className="grid grid-cols-1 gap-4" data-vitals>
-        {epoch ? (
-          <EpochClock
-            size="md"
-            index={epoch.number}
-            startedAt={epoch.startedAt}
-            blocksSoFar={
-              height === undefined ? undefined : Math.max(0, height - epoch.firstBlockHeight + 1)
-            }
-            expectedEndAt={length === undefined ? undefined : epoch.startedAt + length}
-            estimated
-          />
-        ) : null}
         <Stats>
-          <Stat
-            label={t`Platform height`}
-            value={height === undefined ? missing(tip.isError) : formatInt(height)}
-            loading={height === undefined && !tip.isError}
-            source={tip.data ? stampOf(tip.data) : undefined}
-            layer="platform"
-          />
-          {epoch ? null : (
-            <Stat
-              label={t`Epoch`}
-              value={missing(tip.isError)}
-              loading={!tip.isError}
-              layer="platform"
-            />
-          )}
-          <Stat
-            label={t`Total credits`}
-            value={
-              credits.data?.data == null ? (
-                missing(credits.isError)
-              ) : (
-                <Amount value={credits.data.data} kind="credits" fiat compact />
-              )
-            }
-            loading={!credits.data && !credits.isError}
-            source={credits.data ? stampOf(credits.data) : undefined}
-            layer="platform"
-          />
           <Stat
             label={t`Protocol version`}
             value={
@@ -107,6 +67,26 @@ export function Vitals() {
             layer="platform"
           />
           <Stat
+            label={t`Platform height`}
+            value={height === undefined ? missing(tip.isError) : formatInt(height)}
+            loading={height === undefined && !tip.isError}
+            source={tip.data ? stampOf(tip.data) : undefined}
+            layer="platform"
+          />
+          <Stat
+            label={t`Total credits`}
+            value={
+              credits.data?.data == null ? (
+                missing(credits.isError)
+              ) : (
+                <Amount value={credits.data.data} kind="credits" fiat compact />
+              )
+            }
+            loading={!credits.data && !credits.isError}
+            source={credits.data ? stampOf(credits.data) : undefined}
+            layer="platform"
+          />
+          <Stat
             label={t`Active quorums`}
             value={quorumCount === undefined ? missing(quorums.isError) : formatInt(quorumCount)}
             note={quorumCount === undefined ? undefined : t`Not proof-checked`}
@@ -118,9 +98,6 @@ export function Vitals() {
         <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <PageLink to="/platform/blocks" className="rx-go">
             {t`Blocks`}
-          </PageLink>
-          <PageLink to="/epochs" className="rx-go">
-            {t`Epochs`}
           </PageLink>
           <PageLink to="/credits" className="rx-go">
             {t`Credits`}

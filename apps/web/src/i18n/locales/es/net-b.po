@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{0} masternodes y evonodes en {net}."
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "{0} de {1} masternodes habilitados respondieron en el último rastreo"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "{0} de {1} masternodes están habilitados"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, one {# bloque} other {# bloques}}"
 
 msgid "30 days"
 msgstr "30 días"
@@ -38,6 +47,10 @@ msgstr "Responde"
 
 msgid "Ascending. Switch to descending"
 msgstr "Ascendente. Cambiar a descendente"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "Bloque {0}"
 
 msgid "Blocks proposed"
 msgstr "Bloques propuestos"
@@ -145,11 +158,8 @@ msgstr "No está en un conjunto de validadores"
 msgid "Platform node ID"
 msgstr "ID del nodo de Platform"
 
-msgid "Platform, 30 days"
-msgstr "Platform, 30 días"
-
-msgid "PoSe penalty"
-msgstr "Penalización PoSe"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "Vetado por PoSe"
@@ -213,11 +223,11 @@ msgstr "Tipo"
 msgid "Upgrade vote not counted"
 msgstr "Voto de actualización no contado"
 
-msgid "Uptime, 30 days"
-msgstr "Disponibilidad, 30 días"
+msgid "Uptime 30d"
+msgstr "Disp. 30 d"
 
-msgid "Uptime, 7 days"
-msgstr "Disponibilidad, 7 días"
+msgid "Uptime 7d"
+msgstr "Disp. 7 d"
 
 msgid "Validator set"
 msgstr "Conjunto de validadores"

@@ -366,6 +366,9 @@ msgstr "Core-24-Aktivierung"
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 kann nicht vor {0} starten (der Median Time der Chain). Danach signalisieren die Masternodes, und die Miner stimmen Fenster für Fenster ab."
 
+msgid "Core 24 did not activate"
+msgstr "Core 24 wurde nicht aktiviert"
+
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 ist gescheitert: Das Timeout wurde erreicht, ohne dass es festgeschrieben wurde."
 
@@ -375,13 +378,25 @@ msgstr "Core 24 ist gescheitert: Das Timeout wurde erreicht, ohne dass es festge
 msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
 msgstr "Core 24 ist ein Hardfork (Deployment-Bit {0}) mit zwei Hürden. Zuerst die Masternodes: Nach {1} (nach der Median Time Past der Chain) signiert ein {2}-Quorum die Aktivierungsanfrage, und ein Miner nimmt die Signatur in einen Block auf. Das ist das Enhanced-Hard-Fork-Signal (EHF) aus DIP-0023. Solange sie nicht in einem Block steht, zählen die Blöcke der Miner nicht, egal wie viele signalisieren."
 
+msgid "Core 24 is active"
+msgstr "Core 24 ist aktiv"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is active since {0}."
 msgstr "Core 24 ist seit {0} aktiv."
 
+msgid "Core 24 is locked in"
+msgstr "Core 24 ist festgeschrieben"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is locked in. It activates at {0}."
 msgstr "Core 24 ist festgeschrieben und wird bei {0} aktiviert."
+
+msgid "Core 24 is waiting for its first signalling window"
+msgstr "Core 24 wartet auf sein erstes Signalisierungsfenster"
+
+msgid "Core 24 is waiting for the masternodes' signal"
+msgstr "Core 24 wartet auf das Signal der Masternodes"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "Das Timeout von Core 24 ist abgelaufen, bevor das Signal der Masternodes in einen Block kam, daher kann es nicht mehr starten."
@@ -421,9 +436,6 @@ msgstr "Dash Core"
 
 msgid "Dash Core 24 activation is under way."
 msgstr "Die Aktivierung von Dash Core 24 läuft."
-
-msgid "Dash nodes answered the last crawl"
-msgstr "Dash-Knoten haben beim letzten Crawl geantwortet"
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -651,6 +663,9 @@ msgstr "Mempool"
 
 msgid "Mined by"
 msgstr "Gemined von"
+
+msgid "Miners are signalling for Core 24"
+msgstr "Die Miner signalisieren für Core 24"
 
 #. placeholder {0}: formatInt(w?.count ?? 0)
 #. placeholder {1}: formatInt(w?.threshold ?? 0)

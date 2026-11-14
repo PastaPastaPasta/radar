@@ -161,7 +161,6 @@ export function IoTables({
         <Card
           layer="core"
           title={t`${formatInt(inCount)} inputs`}
-          padding="flush"
           actions={inTotal === undefined ? null : <Amount value={inTotal} kind="duffs" />}
         >
           <table className={tableClass(columnUnit)}>
@@ -269,7 +268,6 @@ export function IoTables({
         <Card
           layer="core"
           title={t`${formatInt(outCount)} outputs`}
-          padding="flush"
           actions={<Amount value={outTotal} kind="duffs" />}
         >
           <table className={tableClass(columnUnit)}>

@@ -18,6 +18,7 @@ import {
   Empty,
   Hash,
   LiveDot,
+  Section,
   Skeleton,
   SourceLine,
   Stat,
@@ -124,7 +125,7 @@ function PendingCard({ pending, stamp }: { pending: PendingTx[]; stamp?: SourceS
   const { t } = useLingui()
   if (pending.length === 0) return null
   return (
-    <Card title={t`Unconfirmed activity`} layer="core" id="unconfirmed" source={stamp}>
+    <Section title={t`Unconfirmed activity`} layer="core" id="unconfirmed" source={stamp}>
       <ul className="grid gap-2" data-pending>
         {pending.map((p) => (
           <li key={p.txid} className="flex flex-wrap items-center gap-3">
@@ -134,7 +135,7 @@ function PendingCard({ pending, stamp }: { pending: PendingTx[]; stamp?: SourceS
           </li>
         ))}
       </ul>
-    </Card>
+    </Section>
   )
 }
 
@@ -311,13 +312,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
 
       <PendingCard pending={pending} />
 
-      <Card
-        title={t`Transactions`}
-        layer="core"
-        id="history"
-        padding="flush"
-        source={firstPageStamp(txs)}
-      >
+      <Card title={t`Transactions`} layer="core" id="history" source={firstPageStamp(txs)}>
         <DataTable
           caption={t`Transactions of this address, newest first`}
           columns={columns}
@@ -542,7 +537,6 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
       subtitle={subtitle}
       layer="core"
       id="utxos"
-      padding="flush"
       source={query.data ? stampOf(query.data) : undefined}
     >
       {pending > 0 ? (

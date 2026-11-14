@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { local } from '@/data/envelope'
-import { PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
+import { PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { classify, useWordlistLoaded } from '@/features/search'
 import { Badge, Card, Hash } from '@/ui'
 import { verifySignedMessage, type VerifyOutcome } from './verify'
@@ -17,7 +17,6 @@ const EMPTY: Fields = { address: '', message: '', signature: '' }
 export function VerifyMessagePage() {
   const { t } = useLingui()
   const net = useNetwork()
-  useDocumentTitle(t`Verify message`)
   const ids = { address: useId(), message: useId(), signature: useId() }
   const [fields, setFields] = useState<Fields>(EMPTY)
   const [outcome, setOutcome] = useState<(VerifyOutcome & { for: Fields }) | undefined>()
@@ -51,17 +50,13 @@ export function VerifyMessagePage() {
   }
 
   return (
-    <article data-page="/tools/verify-message" data-layer="core" className="grid gap-6">
-      <header className="grid gap-2">
-        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {t`Tools`}
-        </p>
-        <h1 className="text-3xl font-semibold">{t`Verify message`}</h1>
-        <p className="text-[var(--dh-ink-2,inherit)]">
-          {t`Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key.`}
-        </p>
-      </header>
-
+    <PageFrame
+      path="/tools/verify-message"
+      title={t`Verify message`}
+      eyebrow={t`Tools`}
+      layer="core"
+      lede={t`Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key.`}
+    >
       <Card title={t`Signed message`} layer="core" source={stamp}>
         <form className="grid gap-4" onSubmit={submit} noValidate>
           <Field id={ids.address} label={t`Address`}>
@@ -134,7 +129,7 @@ export function VerifyMessagePage() {
       <div ref={resultRef} className="rx-verify-result" role="status" aria-live="polite">
         {current ? <Result outcome={current} /> : null}
       </div>
-    </article>
+    </PageFrame>
   )
 }
 

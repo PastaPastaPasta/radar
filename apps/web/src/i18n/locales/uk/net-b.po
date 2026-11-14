@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{0} мастернод та евонод у мережі {net}."
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "{0} з {1} увімкнених мастернод відповіли в останньому обході"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "{0} з {1} мастернод увімкнені"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, one {# блок} few {# блоки} many {# блоків} other {# блока}}"
 
 msgid "30 days"
 msgstr "30 днів"
@@ -38,6 +47,10 @@ msgstr "Відповідає"
 
 msgid "Ascending. Switch to descending"
 msgstr "За зростанням. Перемкнути на спадання"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "Блок {0}"
 
 msgid "Blocks proposed"
 msgstr "Запропоновані блоки"
@@ -145,11 +158,8 @@ msgstr "Не в наборі валідаторів"
 msgid "Platform node ID"
 msgstr "ID вузла Platform"
 
-msgid "Platform, 30 days"
-msgstr "Platform за 30 днів"
-
-msgid "PoSe penalty"
-msgstr "Штраф PoSe"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
@@ -213,11 +223,11 @@ msgstr "Тип"
 msgid "Upgrade vote not counted"
 msgstr "Голос за оновлення не зараховано"
 
-msgid "Uptime, 30 days"
-msgstr "Доступність за 30 днів"
+msgid "Uptime 30d"
+msgstr "Доступність 30 д"
 
-msgid "Uptime, 7 days"
-msgstr "Доступність за 7 днів"
+msgid "Uptime 7d"
+msgstr "Доступність 7 д"
 
 msgid "Validator set"
 msgstr "Набір валідаторів"

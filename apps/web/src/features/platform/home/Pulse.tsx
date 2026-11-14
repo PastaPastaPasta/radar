@@ -2,10 +2,9 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { peQueries } from '@/data/pe/queries'
 import { POLL_MS } from '@/data/query/stale'
-import { Entity, useNetwork } from '@/features/entity'
+import { useNetwork } from '@/features/entity'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
-import { Card, KeyValue, LiveDot, Time, queryView, stampsOf, useNow } from '@/ui'
-import { epochLengthMs } from '@/lib/epoch-length'
+import { Card, KeyValue, LiveDot, Time, queryView, stampsOf } from '@/ui'
 
 /** PE-01: what the indexer says about the chain right now. The height follows the indexer's poll. */
 export function Pulse() {
@@ -13,16 +12,8 @@ export function Pulse() {
   const net = useNetwork()
   const status = useQuery({ ...peQueries.status(net), refetchInterval: POLL_MS.peLatest })
   const detail = useQuery(peQueries.epoch(net))
-  const now = useNow()
   const s = status.data?.data
   const tip = s?.tenderdash.block
-  const epoch = s?.epoch
-  const length = epochLengthMs(net)
-  const endsAt = epoch
-    ? length === undefined
-      ? epoch.endTime
-      : epoch.startTime + length
-    : undefined
   const avg = detail.data?.data.avgBlockTime
   const synced = s?.indexer.status === 'synced'
   return (
@@ -51,7 +42,7 @@ export function Pulse() {
             ),
           },
           {
-            label: t`Platform height`,
+            label: t`Indexed height`,
             value: tip ? <span data-pulse="height">{formatInt(tip.height)}</span> : '…',
           },
           {
@@ -70,23 +61,6 @@ export function Pulse() {
             value: tip ? (
               <span data-pulse="since">
                 <Time ms={tip.timestamp} mode="relative" live />
-              </span>
-            ) : (
-              '…'
-            ),
-          },
-          {
-            label: t`Epoch`,
-            value: epoch ? (
-              <span data-pulse="epoch">
-                <Entity kind="epoch" id={String(epoch.number)} />
-                {endsAt === undefined ? null : (
-                  <>
-                    {' · '}
-                    {endsAt > now ? t`ends` : t`should have ended`}{' '}
-                    <Time ms={endsAt} mode="relative" live />
-                  </>
-                )}
               </span>
             ) : (
               '…'

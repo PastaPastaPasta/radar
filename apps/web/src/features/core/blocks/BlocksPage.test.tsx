@@ -26,6 +26,9 @@ describe('Blocks list', () => {
     const table = () => screen.getByRole('table', { name: 'Core blocks' })
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
     expect(within(table()).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument()
+    const h1 = screen.getByRole('heading', { level: 1 })
+    expect(h1).toHaveTextContent(/^The latest block was mined .+$/)
+    expect(h1.querySelector('time')).not.toBeNull()
     const pager = screen.getByRole('navigation', { name: 'Pagination' })
     expect(within(pager).getByRole('link', { name: 'Older' })).toHaveAttribute(
       'href',

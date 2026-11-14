@@ -84,3 +84,18 @@ export function valueText(
   if (field === 'pubkey_operator' || field === 'platform_node_id') return short(s)
   return s
 }
+
+const DAY_MS = 86_400_000
+
+/**
+ * How many of the listed changes fall in the 24 hours before `asOf`. Undefined when the list (the latest changes,
+ * capped) does not reach back that far: the count would then be a floor, not the figure.
+ */
+export function changesInLastDay(
+  changes: readonly Pick<RadarChange, 'ts'>[],
+  asOf: number,
+): number | undefined {
+  const from = asOf - DAY_MS
+  if (!changes.some((c) => c.ts < from)) return undefined
+  return changes.filter((c) => c.ts >= from && c.ts <= asOf).length
+}

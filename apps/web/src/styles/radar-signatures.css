@@ -176,24 +176,34 @@
   color: var(--dh-good);
   transform: translateY(2px);
 }
-/* a figure's own source and age: under it on hover and focus, over the page and not in its flow */
+/* a figure's own source and age: under it on hover, focus and tap, over the page and not in its flow. At rest it is
+   clipped to a point instead of removed, so a screen reader can read it as the figure's description and the proof
+   button inside it can take focus; a point cannot widen the page on a phone. */
 .rx-fig__src {
   position: absolute;
   left: 8px;
   top: calc(100% + 2px);
   z-index: 6;
+  width: 1px;
+  height: 1px;
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+[data-src-hover]:hover > .rx-fig__src,
+[data-src-hover]:focus > .rx-fig__src,
+[data-src-hover]:focus-within > .rx-fig__src {
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 32px);
   padding: 3px 6px;
+  overflow: visible;
+  clip-path: none;
   border-radius: var(--dh-r2);
   background: var(--dh-surface);
   box-shadow: var(--dh-shadow-pop);
-  white-space: nowrap;
-  /* not merely invisible: a hidden box would still widen the page on a phone */
-  display: none;
-}
-[data-src-hover]:hover > .rx-fig__src,
-[data-src-hover]:focus-within > .rx-fig__src {
-  display: block;
 }
 .rx-hero .rx-home__src {
   margin: 18px 0 0;
@@ -624,6 +634,7 @@
   color: var(--dh-ink-2);
 }
 .rx-rec__title {
+  grid-column: 2;
   margin: 0;
   display: block;
   font: var(--dh-w-head) var(--dh-fs-h1)/1.15 var(--dh-font);
@@ -899,10 +910,25 @@
   font-size: 17px;
   font-weight: var(--dh-w-strong);
 }
+/* under a headline that already names the epoch: the track and its dates, on the page ground */
+.rx-clock--bare {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0;
+}
 @media (max-width: 640px) {
   .rx-clock {
     grid-template-columns: minmax(0, 1fr) auto;
     padding: 14px;
+  }
+  .rx-clock--bare {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+  .rx-clock--bare .rx-clock__mid {
+    grid-row: 1;
+  }
+  .rx-clock--bare .rx-clock__end {
+    text-align: left;
   }
   .rx-clock__mid {
     grid-column: 1 / -1;

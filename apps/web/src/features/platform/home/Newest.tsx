@@ -53,14 +53,7 @@ function NewestCard<T>({
   const hold = useHold(live)
   const held = hold.held ? 'true' : 'false'
   return (
-    <Card
-      id={id}
-      layer="platform"
-      title={title}
-      padding="flush"
-      source={stampsOf(query.data)}
-      actions={actions}
-    >
+    <Card id={id} layer="platform" title={title} source={stampsOf(query.data)} actions={actions}>
       <div {...hold.props} data-list={list} data-held={held}>
         {table(hold.shown)}
         <HeldNote held={hold.held} fresh={freshCount(live, hold.shown, rowId)} />

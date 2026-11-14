@@ -71,6 +71,9 @@ msgstr "3日"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "アドレス、使用済み出力、チェーンワーク、ガバナンスのための第2のインデックス"
 
+msgid "A year, on the collateral"
+msgstr "1 年あたり、担保に対して"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "アクティブ"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI と Platform SDK が応答しています。ホスト型のソースは「分散型のみ」モードではオフです。"
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI と Platform SDK が応答しています"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI が混み合っているため、予算が回復するまでブロック一覧は Hyphen から取得します。詳細は引き続き DAPI を使います。"
@@ -241,11 +244,17 @@ msgstr "診断：このタブが行ったリクエストとその結果"
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "終了"
-
 msgid "Epoch"
 msgstr "エポック"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "エポック {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "エポック {0} は {1} 経過"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "エポック"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Platform Explorer が検証を確認したすべての Evonode。"
 
-msgid "Every source is answering."
-msgstr "すべてのソースが応答しています。"
+msgid "Every source is answering"
+msgstr "すべてのソースが応答しています"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core に表示されるものはすべて DAPI から取得しています。"
@@ -298,6 +307,9 @@ msgstr "表示中は固定されます。カーソルを離すと新しいもの
 msgid "History and leaders"
 msgstr "履歴とリーダー"
 
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "ホスト型のソースは「分散型のみ」モードではオフです。"
+
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "Dash Platform の状況: 高さ、エポック、クレジット、ブロックを提案しているのは誰か、そして何が起きているか。"
 
@@ -324,6 +336,9 @@ msgstr "同期済み"
 
 msgid "Inactive"
 msgstr "非アクティブ"
+
+msgid "Indexed height"
+msgstr "インデックス済みの高さ"
 
 msgid "Indexed to Core block {indexed} of {chain}. It calls its sync “{sync}”, but its index is behind the chain."
 msgstr "Core ブロック {indexed}（チェーンは {chain}）までインデックス済みです。同期は「{sync}」と表示されていますが、インデックスはチェーンに遅れています。"
@@ -382,6 +397,9 @@ msgstr "直近のクロールは {0} に完了しました。その Core ノー�
 msgid "Last good {0}."
 msgstr "最後に正常だったのは {0} です。"
 
+msgid "Last pool"
+msgstr "前回のプール"
+
 msgid "Later ones may be missing."
 msgstr "それ以降は表示されない場合があります。"
 
@@ -405,6 +423,12 @@ msgstr "検索中…"
 
 msgid "Median answer {rounded} ms"
 msgstr "応答時間の中央値 {rounded} ms"
+
+msgid "Median monthly earnings"
+msgstr "月間収益の中央値"
+
+msgid "Median yield"
+msgstr "利回りの中央値"
 
 msgid "Most active contracts"
 msgstr "最もアクティブなコントラクト"
@@ -482,6 +506,9 @@ msgstr "証明で未検証"
 msgid "Nothing has asked it yet on this network."
 msgstr "このネットワークではまだ誰も問い合わせていません。"
 
+msgid "Nothing is slow, behind or down."
+msgstr "遅延、遅れ、停止はありません。"
+
 msgid "Nothing ranked yet"
 msgstr "まだランキングはありません"
 
@@ -496,6 +523,13 @@ msgstr "チェーン上"
 
 msgid "Peers"
 msgstr "ピア"
+
+msgid "Per block"
+msgstr "ブロックあたり"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "エボノードあたり、{0} 日間"
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +554,9 @@ msgstr "十分な余裕"
 
 msgid "Polls ending soon"
 msgstr "まもなく終了する投票"
+
+msgid "Pool so far"
+msgstr "ここまでのプール"
 
 msgid "Pressure"
 msgstr "負荷"
@@ -596,20 +633,17 @@ msgstr "シールドとアンシールド（DASH 建て）"
 msgid "Shielded pool"
 msgstr "シールドプール"
 
-msgid "should have ended"
-msgstr "終了しているはず"
-
 msgid "Software"
 msgstr "ソフトウェア"
 
 msgid "Some requests are failing."
 msgstr "一部のリクエストが失敗しています。"
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "一部のソースが遅いか、遅れています。ほかは引き続き動作しています。"
+msgid "Some sources are slow or behind"
+msgstr "一部のソースが遅いか、遅れています"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "一部のソースが応答していません。ほかは引き続き動作しています。"
+msgid "Some sources aren’t answering"
+msgstr "一部のソースが応答していません"
 
 msgid "Sources"
 msgstr "ソース"
@@ -668,6 +702,9 @@ msgstr "Platform が現在署名に使っているクォーラム。証明では
 
 msgid "The request budget is nearly used."
 msgstr "リクエスト予算がほぼ尽きています。"
+
+msgid "The rest still work."
+msgstr "ほかは引き続き動作しています。"
 
 msgid "The system contracts every network ships with."
 msgstr "すべてのネットワークに標準で含まれるシステムコントラクト。"

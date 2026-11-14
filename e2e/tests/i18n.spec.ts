@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
+import { CLAIM } from '../routes/claims'
 
 const LANGUAGES = [
   'English',
@@ -56,13 +57,15 @@ test.describe('language', () => {
     await page.goto('/blocks')
     const footer = page.locator('dashhq-footer').getByLabel('Language', { exact: true })
     await expect(footer.locator('option')).toHaveText(LANGUAGES)
-    await expect(page.getByRole('heading', { level: 1, name: 'Blocks' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.blocks })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Settings' })).toBeVisible()
 
     await footer.selectOption('de')
 
     await expect(page.locator('html')).toHaveAttribute('lang', 'de')
-    await expect(page.getByRole('heading', { level: 1, name: 'Blöcke' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { level: 1, name: /^Der neueste Block wurde .+ gefunden$/ }),
+    ).toBeVisible()
     await expect(page.getByRole('link', { name: 'Einstellungen' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Settings' })).toHaveCount(0)
     await expect(page.locator('[data-section-nav]')).toBeVisible()

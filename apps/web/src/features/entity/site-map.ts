@@ -295,7 +295,7 @@ export const SITE_MAP: SitePage[] = [
     section: 'platform',
     layer: 'platform',
     summary: msg`Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions.`,
-    sources: ['sdk', 'pe'],
+    sources: ['sdk', 'pe', 'radar'],
     nav: true,
     keywords: ['pulse', 'height', 'leaders'],
     railTitle: msg`Overview`,

@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { local } from '@/data/envelope'
-import { useDocumentTitle, useNetwork } from '@/features/entity'
+import { PageFrame, useNetwork } from '@/features/entity'
 import { Card, Empty, SourceLine } from '@/ui'
 import { interpretScan, type ScanOutcome } from './interpret'
 import { readQr } from './scan'
@@ -16,7 +16,6 @@ export function QrPage() {
   const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
-  useDocumentTitle(t`QR reader`)
   const fileId = useId()
   const video = useRef<HTMLVideoElement>(null)
   const stream = useRef<MediaStream | null>(null)
@@ -126,17 +125,13 @@ export function QrPage() {
   }
 
   return (
-    <article data-page="/tools/qr" data-layer="core" className="grid gap-6">
-      <header className="grid gap-2">
-        <p data-eyebrow className="text-sm text-[var(--dh-ink-2,inherit)]">
-          {t`Tools`}
-        </p>
-        <h1 className="text-3xl font-semibold">{t`QR reader`}</h1>
-        <p className="text-[var(--dh-ink-2,inherit)]">
-          {t`Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded.`}
-        </p>
-      </header>
-
+    <PageFrame
+      path="/tools/qr"
+      title={t`QR reader`}
+      eyebrow={t`Tools`}
+      layer="core"
+      lede={t`Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded.`}
+    >
       <div className="grid gap-4 lg:grid-cols-2">
         <Card title={t`Camera`} layer="core" source={stamp}>
           <div className="grid gap-3">
@@ -203,7 +198,7 @@ export function QrPage() {
         {notice ? <Problem notice={notice} /> : null}
       </div>
       <SourceLine stamp={stamp} compact />
-    </article>
+    </PageFrame>
   )
 }
 

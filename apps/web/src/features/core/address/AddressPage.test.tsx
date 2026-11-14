@@ -849,9 +849,9 @@ describe('Address page in Decentralized only mode @X-05 @IN-06', () => {
       expect(el).not.toBeNull()
       return el!
     })
-    expect(card.querySelector('[data-source]')).toBeNull()
-    const line = document.querySelector<HTMLElement>('.rx-page__src')!
-    await waitFor(() => expect(line.querySelector('[data-source="dapi"]')).not.toBeNull())
-    expect(line.querySelector('[data-source="hyphen"]')).toBeNull()
+    await waitFor(() =>
+      expect(card.querySelectorAll('[data-section-sources] [data-source="dapi"]')).toHaveLength(1),
+    )
+    expect(card.querySelector('[data-source="hyphen"]')).toBeNull()
   })
 })

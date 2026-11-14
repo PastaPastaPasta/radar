@@ -240,7 +240,6 @@ function EpochProposers({
           ? t`${formatInt(all.length)} evonodes proposed the epoch’s ${formatInt(info.totalBlocks)} blocks.`
           : undefined
       }
-      padding="flush"
       source={source}
     >
       <DataTable

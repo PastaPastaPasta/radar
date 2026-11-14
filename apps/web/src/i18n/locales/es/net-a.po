@@ -366,6 +366,9 @@ msgstr "Activación de Core 24"
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 no puede empezar antes de {0} (el tiempo mediano de la cadena). Entonces los masternodes lo señalan y los mineros votan ventana a ventana."
 
+msgid "Core 24 did not activate"
+msgstr "Core 24 no se activó"
+
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 falló: llegó a su tiempo límite sin fijarse."
 
@@ -375,13 +378,25 @@ msgstr "Core 24 falló: llegó a su tiempo límite sin fijarse."
 msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
 msgstr "Core 24 es un hard fork (bit de despliegue {0}) con dos condiciones. Primero, los masternodes: después de {1} (según el tiempo mediano pasado de la cadena), un quórum {2} firma la solicitud de activación y un minero incluye la firma en un bloque. Es la señal de hard fork mejorada (EHF) del DIP-0023. Hasta que se mine, los bloques de los mineros no cuentan, por muchos que señalicen."
 
+msgid "Core 24 is active"
+msgstr "Core 24 está activo"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is active since {0}."
 msgstr "Core 24 está activo desde {0}."
 
+msgid "Core 24 is locked in"
+msgstr "Core 24 está fijado"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is locked in. It activates at {0}."
 msgstr "Core 24 está fijado. Se activa en {0}."
+
+msgid "Core 24 is waiting for its first signalling window"
+msgstr "Core 24 espera su primera ventana de señalización"
+
+msgid "Core 24 is waiting for the masternodes' signal"
+msgstr "Core 24 espera la señal de los masternodes"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "El tiempo límite de Core 24 pasó antes de que se minara la señal de los masternodes, así que ya no puede empezar."
@@ -421,9 +436,6 @@ msgstr "Dash Core"
 
 msgid "Dash Core 24 activation is under way."
 msgstr "La activación de Dash Core 24 está en marcha."
-
-msgid "Dash nodes answered the last crawl"
-msgstr "Nodos Dash que respondieron en el último rastreo"
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -651,6 +663,9 @@ msgstr "Mempool"
 
 msgid "Mined by"
 msgstr "Minado por"
+
+msgid "Miners are signalling for Core 24"
+msgstr "Los mineros señalizan Core 24"
 
 #. placeholder {0}: formatInt(w?.count ?? 0)
 #. placeholder {1}: formatInt(w?.threshold ?? 0)

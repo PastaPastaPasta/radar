@@ -34,12 +34,28 @@ describe('Epochs', () => {
     renderAt('/epochs')
     const current = await card('current-epoch')
     await waitFor(() => expect(within(current).getByRole('meter')).toBeInTheDocument())
-    expect(current).toHaveTextContent(/Epoch\s*88/)
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+        /^Epoch 88 is \d+% through$/,
+      ),
+    )
+    expect(current.querySelector('.rx-clock__n')).toBeNull()
     expect(current).toHaveTextContent('Fee multiplier')
     expect(current.querySelector('a[href^="/platform/block/"]')).not.toBeNull()
     const rewards = await card('rewards')
     await waitFor(() => expect(rewards).toHaveTextContent('Median monthly earnings'))
     expect(rewards).toHaveTextContent('Pool so far')
+    // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
+    expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
+  })
+
+  it('draws the epoch history in time order and lists it newest first @RA-60', async () => {
+    renderAt('/epochs')
+    const history = await card('history')
+    await waitFor(() => expect(rows(history).length).toBeGreaterThan(1))
+    const epochs = rows(history).map((r) => Number(r.querySelector('td, th')?.textContent))
+    expect(epochs[0]).toBe(87)
+    expect(epochs).toEqual([...epochs].sort((a, b) => b - a))
   })
 
   it('ranks twenty proposers and re-sorts them @NX-50', async () => {
@@ -117,7 +133,8 @@ describe('One epoch', () => {
 
   it('sends the current epoch to /epochs @NX-51', async () => {
     renderAt('/epoch/88')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Epochs' })).toBeInTheDocument()
+    await waitFor(() => expect(document.querySelector('[data-page="/epochs"]')).not.toBeNull())
+    expect(await screen.findByRole('heading', { level: 1, name: /^Epoch/ })).toBeInTheDocument()
   })
 })
 

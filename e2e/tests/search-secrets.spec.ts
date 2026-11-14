@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '../helpers/test'
+import { H1 } from '../routes/claims'
 
 const PHRASE =
   'abandon ability able about above absent absorb abstract absurd abuse access accident'
@@ -143,7 +144,7 @@ test.describe('secrets in the search page', () => {
     page,
   }) => {
     await page.goto('/status')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
     await page.keyboard.press('/')
     const input = page.getByRole('dialog', { name: 'Search Radar' }).getByRole('combobox')
 

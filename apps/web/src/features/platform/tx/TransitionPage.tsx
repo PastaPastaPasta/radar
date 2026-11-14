@@ -290,7 +290,7 @@ function Duplicates({ tx, stamp }: { tx: PeTransaction; stamp: SourceStamp }) {
   if (rows.length === 0) return null
   return (
     <div data-duplicates>
-      <Card layer="platform" padding="flush" title={t`Sent again in later blocks`} source={stamp}>
+      <Card layer="platform" title={t`Sent again in later blocks`} source={stamp}>
         <TransitionTable
           rows={rows}
           state="ready"

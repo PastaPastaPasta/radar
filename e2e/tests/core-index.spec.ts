@@ -6,6 +6,8 @@ import { expectAccessible } from '../helpers/a11y'
 import { tabBarHeight } from '../helpers/contrast'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { sourceLineOf } from '../helpers/sources'
+import { CLAIM, H1 } from '../routes/claims'
 
 const HY_FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -314,7 +316,7 @@ test.describe('address page', () => {
 test.describe('mempool', () => {
   test('summary and a pageable list of pending transactions @HY-06', async ({ page }) => {
     await page.goto('/mempool')
-    await expect(page.getByRole('heading', { level: 1, name: 'Mempool' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.mempool })).toBeVisible()
     await expect(page.getByRole('table', { name: /Pending transactions/ })).toBeVisible()
     await sourced(page)
     await expectAccessible(page)
@@ -352,7 +354,7 @@ test.describe('mempool', () => {
 
   test('works on testnet @IN-16 @HY-19', async ({ page }) => {
     await page.goto('/mempool?network=testnet')
-    await expect(page.getByRole('heading', { level: 1, name: 'Mempool' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.mempool })).toBeVisible()
     await expect(page.locator('[data-testnet-keyline="test"]')).toBeAttached()
   })
 })
@@ -409,8 +411,11 @@ test.describe('rich list', () => {
     for (const note of await notes.all()) {
       await expect(note).toBeVisible()
       await expect(note).toContainText('Shares are of the circulating supply, 13.17 M DASH')
-      await expect(note.locator('[data-source="hyphen"]')).toBeVisible()
+      await expect(note.locator('[data-source]')).toHaveCount(0)
     }
+    const line = sourceLineOf(rankedList(page))
+    await expect(line.locator('[data-source="hyphen"]')).toBeVisible()
+    await expect(line.locator('[data-source]')).toHaveCount(1)
     const first = recorded<{ value: { balance: number }[] }>('balances--limit-25.json').value[0]!
     const share =
       first.balance /
@@ -623,7 +628,7 @@ test.describe('charts', () => {
 test.describe('governance', () => {
   test('lists proposals, expands one, and links out to vote @HY-13', async ({ page }) => {
     await page.goto('/governance')
-    await expect(page.getByRole('heading', { level: 1, name: 'Governance' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.governance })).toBeVisible()
     const row = page.getByRole('button', { name: 'DashDaoGrowthEngine' })
     await row.click()
     await expect(row).toHaveAttribute('aria-expanded', 'true')

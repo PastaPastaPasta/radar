@@ -18,6 +18,7 @@ import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery, type RouteCase } from '../routes'
 import { M1_RECORDS } from '../routes/m1'
+import { H1 } from '../routes/claims'
 
 /** What the page must show in the mode: its own data, the mode's unavailable state, or both. */
 const SHOWS = {
@@ -148,7 +149,7 @@ test.describe('Decentralized only mode: the switch', () => {
     const requests = watchRequests(page)
     const asked = (name: string) => () => requests.hosted.some((r) => r.startsWith(name))
     await page.goto('/mempool')
-    await expect(page.getByRole('heading', { level: 1, name: 'Mempool' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.mempool })).toBeVisible()
     await expect.poll(asked('Hyphen')).toBe(true)
     await expect(mark(page)).toHaveCount(0)
     await page.goto('/')

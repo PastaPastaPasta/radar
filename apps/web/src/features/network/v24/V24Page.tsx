@@ -4,7 +4,7 @@ import { stampOf, type SourceStamp } from '@/data/envelope'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarActivation, RadarActivationDeployment } from '@/data/radar/schemas'
 import { CoreTipCard } from './CoreTipCard'
-import { PageFrame, PageLink, useNetwork } from '@/features/entity'
+import { PageFrame, PageLink, useNetwork, usePageClaim } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Empty, ErrorState, Skeleton, Unavailable, useNow } from '@/ui'
 import { ActivationNotes, HowItWorks } from './HowItWorks'
@@ -88,6 +88,16 @@ function Readings({
   const stale = now - doc.updated > STALE_AFTER_MS
   const failed =
     doc.error === null ? undefined : typeof doc.error === 'string' ? doc.error : doc.error.message
+  const claims: Record<string, string | undefined> = {
+    waiting_for_signal: t`Core 24 is waiting for the masternodes' signal`,
+    waiting_for_window: t`Core 24 is waiting for its first signalling window`,
+    signalling: t`Miners are signalling for Core 24`,
+    locked_in: t`Core 24 is locked in`,
+    active: t`Core 24 is active`,
+    failed: t`Core 24 did not activate`,
+    timed_out: t`Core 24 did not activate`,
+  }
+  usePageClaim(failed || stale ? undefined : claims[d.outlook.phase])
   return (
     <>
       {failed || stale ? (

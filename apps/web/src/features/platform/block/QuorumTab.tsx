@@ -92,7 +92,6 @@ export function QuorumTab({ block, stamp }: { block: PeBlock; stamp: SourceStamp
       </Card>
       <Card
         layer="platform"
-        padding="flush"
         title={t`Quorum members`}
         subtitle={t`${formatInt(members.length)} members`}
         source={stamp}

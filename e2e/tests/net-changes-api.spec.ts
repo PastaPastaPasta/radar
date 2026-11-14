@@ -2,6 +2,7 @@ import type { Page, TestInfo } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { CLAIM } from '../routes/claims'
 
 const isPhone = (info: TestInfo) => info.project.name.startsWith('phone')
 const rows = (page: Page) => page.locator('[data-page="/changes"] tbody tr')
@@ -11,7 +12,7 @@ test.describe('Masternode list changes', () => {
     page,
   }, info) => {
     await page.goto('/changes')
-    await expect(page.getByRole('heading', { level: 1, name: 'Changes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.changes })).toBeVisible()
     await expect(rows(page).first()).toBeVisible()
     await settled(page)
     expect(await rows(page).count()).toBeGreaterThan(100)

@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import { Icon } from '@/ui'
+import { NoSourceSection } from '@/ui/section-source'
 
 interface SheetProps {
   open: boolean
@@ -51,7 +52,7 @@ export function Sheet({
             </Dialog.Close>
           </header>
           <div className="grid gap-4 overflow-y-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-            {children}
+            <NoSourceSection>{children}</NoSourceSection>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

@@ -6,6 +6,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { sourceLineOf } from '../helpers/sources'
+import { CLAIM } from '../routes/claims'
 
 const FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -43,7 +44,7 @@ const card = (page: Page, id: string) => census(page).locator(`section#${id}`)
 async function openNodes(page: Page, query = '', after = 3 * MIN) {
   await pinAfterCrawl(page, after)
   await page.goto(`/nodes${query}`)
-  await expect(page.getByRole('heading', { level: 1, name: 'Nodes' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: CLAIM.nodes })).toBeVisible()
   await expect(card(page, 'now')).toBeVisible()
   await settled(page)
 }
@@ -54,12 +55,18 @@ test.describe('Network census', () => {
   }) => {
     await openNodes(page)
     const headline = card(page, 'now')
-    await expect(headline.locator('[data-census-answered]')).toContainText('2,581')
+    await expect(census(page).locator('h1 [data-census-answered]')).toHaveText(
+      '2,581 Dash nodes answered the last crawl',
+    )
+    await expect(headline).not.toContainText('answered the last crawl')
     await expect(headline.locator('[data-census-delta]')).toContainText(
       '1 node fewer than a day ago',
     )
-    await expect(headline).toContainText('Core tip')
-    await expect(headline.getByRole('link', { name: '2,570,085' })).toBeVisible()
+    await expect(
+      page.locator('[data-header-tip]'),
+      'the header carries the Core tip',
+    ).toContainText('2,570,085')
+    await expect(headline, 'the page does not repeat it').not.toContainText('2,570,085')
     await expect(headline).toContainText('crawled 3 min ago')
     await expect(headline.locator('[data-source]')).toHaveCount(0)
     await expect(sourceLineOf(headline).locator('[data-source="radar"]')).toBeVisible()
@@ -429,7 +436,7 @@ test.describe('Network census', () => {
     page,
   }) => {
     await page.goto('/nodes?sources=decentralized')
-    await expect(page.getByRole('heading', { level: 1, name: 'Nodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Nodes', exact: true })).toBeVisible()
     await settled(page)
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(census(page).locator('#tip')).toContainText('2,570,085')

@@ -4,7 +4,8 @@ import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { entityLabel, PageLink, networkName, useDocumentTitle, useNetwork } from '@/features/entity'
 import { isDevnet, type NetworkId } from '@/lib/network'
-import { Badge, Card, Empty, ErrorState, Skeleton, SourceLine, Unavailable } from '@/ui'
+import { Badge, Card, Empty, ErrorState, Section, Skeleton, SourceLine, Unavailable } from '@/ui'
+import { reportsAttr, useSectionSource } from '@/ui/section-source'
 import { classify, type SecretWarning } from './classify'
 import { describeInput, secretNotice } from './describe'
 import { groupHits, groupLabel, kindRuns } from './groups'
@@ -27,31 +28,44 @@ function withheldFrom(state: unknown): SecretWarning | undefined {
 
 const kindBadge = (hit: SearchHit) => entityLabel(hit.kind)
 
+/**
+ * One match. Where it was found goes to its group's line; a proof-checked match keeps its own mark, because the
+ * proof is about that match and not about the group.
+ */
+function Hit({ hit, badge }: { hit: SearchHit; badge: (hit: SearchHit) => string }) {
+  const own = hit.stamp.source !== 'local' && hit.stamp.proved
+  const handed = hit.stamp.source === 'local' || own ? undefined : hit.stamp
+  const lined = useSectionSource(handed)
+  return (
+    <li
+      data-kind={hit.kind}
+      data-reports={handed && lined ? reportsAttr([handed]) : undefined}
+      className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+    >
+      <span className="flex min-w-48 flex-1 items-center gap-2">
+        <KindGlyph kind={hit.kind} />
+        <Link {...hit.href} className="min-w-0">
+          <span className="block truncate">{hit.title}</span>
+          {hit.subtitle ? (
+            <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
+              {hit.subtitle}
+            </span>
+          ) : null}
+        </Link>
+      </span>
+      <span className="flex max-w-full flex-wrap items-center gap-2">
+        {own || (handed && !lined) ? <SourceLine stamp={hit.stamp} compact /> : null}
+        <Badge size="sm">{badge(hit)}</Badge>
+      </span>
+    </li>
+  )
+}
+
 function HitList({ hits, badge }: { hits: SearchHit[]; badge: (hit: SearchHit) => string }) {
   return (
     <ul className="grid grid-cols-[minmax(0,1fr)] gap-2">
       {hits.map((hit) => (
-        <li
-          key={`${hit.kind}:${hit.id}`}
-          data-kind={hit.kind}
-          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
-        >
-          <span className="flex min-w-48 flex-1 items-center gap-2">
-            <KindGlyph kind={hit.kind} />
-            <Link {...hit.href} className="min-w-0">
-              <span className="block truncate">{hit.title}</span>
-              {hit.subtitle ? (
-                <span className="block truncate text-sm text-[var(--dh-ink-2,inherit)]">
-                  {hit.subtitle}
-                </span>
-              ) : null}
-            </Link>
-          </span>
-          <span className="flex max-w-full flex-wrap items-center gap-2">
-            {hit.stamp.source === 'local' ? null : <SourceLine stamp={hit.stamp} compact />}
-            <Badge size="sm">{badge(hit)}</Badge>
-          </span>
-        </li>
+        <Hit key={`${hit.kind}:${hit.id}`} hit={hit} badge={badge} />
       ))}
     </ul>
   )
@@ -203,9 +217,9 @@ export function SearchPage({ q }: { q?: string }) {
           ) : null}
 
           {groups.map(([group, items]) => (
-            <Card key={group} title={groupLabel(group)} layer={group}>
+            <Section key={group} title={groupLabel(group)} layer={group}>
               <GroupHits items={items} />
-            </Card>
+            </Section>
           ))}
 
           {!settled ? <Skeleton shape="row" count={2} /> : null}

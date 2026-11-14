@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
+import { H1 } from '../routes/claims'
 
 const MAINNET_ADDRESS = 'XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc'
 const MAINNET_P2SH = '7iRPy8FEHBzbChrktsG85YbDZ3SuiCxsNq'
@@ -235,7 +236,7 @@ test.describe('palette', () => {
     viewport,
   }) => {
     await page.goto('/status')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
 
     await page.keyboard.press('/')
     const dialog = page.getByRole('dialog', { name: 'Search Radar' })

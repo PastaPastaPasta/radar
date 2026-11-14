@@ -71,6 +71,7 @@ export function Proposers({ active }: { active: boolean }) {
   return (
     <Card
       id="proposers"
+      className="rx-phone5"
       layer="platform"
       title={t`Top proposers`}
       subtitle={
@@ -83,7 +84,6 @@ export function Proposers({ active }: { active: boolean }) {
             : base(answer)
           : t`The evonodes that proposed the most blocks this epoch.`
       }
-      padding="flush"
       source={stampsOf(query.data)}
       actions={
         <PageLink to="/masternodes" search={{ view: 'platform' }} className="rx-go">

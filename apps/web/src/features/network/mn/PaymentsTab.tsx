@@ -105,7 +105,6 @@ function Payments({
           ? t`${formatInt(summary.count)} payments, ${formatInt(Number(summary.total_duffs / 100_000_000n))} DASH in total; indexed blocks ${formatInt(summary.indexed.from)} to ${formatInt(summary.indexed.to)}`
           : t`Radar’s payment index has not started for this node`
       }
-      padding="flush"
     >
       <DataTable
         caption={t`Recent payments to this masternode`}

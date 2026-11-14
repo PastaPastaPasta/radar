@@ -157,6 +157,7 @@ test.describe('unit switch', () => {
     await expect(page.locator('[data-amount]').first()).toBeVisible()
     const control = page.locator('[data-unit-switch] select:visible')
     await expect(control).toHaveCount(1)
+    await expect(page.locator('dashhq-bar [data-unit-switch]'), 'not in the header').toHaveCount(0)
     await expect(control).toHaveValue('DASH')
     await control.selectOption('duffs')
     await expect(page.locator('.rx-amt .rx-u').filter({ hasText: 'DASH' })).toHaveCount(0)

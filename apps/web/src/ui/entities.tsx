@@ -7,6 +7,7 @@ import { cx, layerAttr } from './cx'
 import { Copy, ShortText, shortHash } from './hash'
 import { useHoverCard } from './hover-cards'
 import { KIND_META, labelOf } from './kinds'
+import { NoSourceSection } from './section-source'
 import type { EntityKind } from './types'
 
 export interface EntityChipProps {
@@ -135,7 +136,7 @@ export function EntityChip({
               collisionPadding={12}
               align="start"
             >
-              {createElement(Card, { id })}
+              <NoSourceSection>{createElement(Card, { id })}</NoSourceSection>
             </HoverCard.Content>
           </HoverCard.Portal>
         </HoverCard.Root>

@@ -13,9 +13,18 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: formatInt(data.rows.length)
-msgid "{0} masternodes and evonodes on {net}."
-msgstr "{net} の {0} 件のマスターノードとエボノード。"
+#. placeholder {0}: formatInt(answering)
+#. placeholder {1}: formatInt(enabled)
+msgid "{0} of {1} enabled masternodes answered the last crawl"
+msgstr "有効なマスターノード {1} 件のうち {0} 件が直近のクロールに応答しました"
+
+#. placeholder {0}: formatInt(enabled)
+#. placeholder {1}: formatInt(rows.length)
+msgid "{0} of {1} masternodes are enabled"
+msgstr "マスターノード {1} 件のうち {0} 件が有効です"
+
+msgid "{behind, plural, one {# block} other {# blocks}}"
+msgstr "{behind, plural, other {# ブロック}}"
 
 msgid "30 days"
 msgstr "30 日間"
@@ -38,6 +47,10 @@ msgstr "応答あり"
 
 msgid "Ascending. Switch to descending"
 msgstr "昇順。降順に切り替え"
+
+#. placeholder {0}: formatInt(h)
+msgid "Block {0}"
+msgstr "ブロック {0}"
 
 msgid "Blocks proposed"
 msgstr "提案したブロック"
@@ -145,11 +158,8 @@ msgstr "バリデーターセットに未所属"
 msgid "Platform node ID"
 msgstr "Platform ノード ID"
 
-msgid "Platform, 30 days"
-msgstr "Platform（30 日間）"
-
-msgid "PoSe penalty"
-msgstr "PoSe ペナルティ"
+msgid "PoSe"
+msgstr "PoSe"
 
 msgid "PoSe-banned"
 msgstr "PoSe で停止"
@@ -213,11 +223,11 @@ msgstr "種類"
 msgid "Upgrade vote not counted"
 msgstr "アップグレード投票が未集計"
 
-msgid "Uptime, 30 days"
-msgstr "稼働率（30 日間）"
+msgid "Uptime 30d"
+msgstr "稼働率 30日"
 
-msgid "Uptime, 7 days"
-msgstr "稼働率（7 日間）"
+msgid "Uptime 7d"
+msgstr "稼働率 7日"
 
 msgid "Validator set"
 msgstr "バリデータセット"

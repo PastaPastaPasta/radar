@@ -62,7 +62,12 @@ describe('Status page', () => {
   it('shows the Core tip, the best ChainLock and how far apart they are @IN-09', async () => {
     setCoreClient(core())
     renderAt('/status')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Status' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: /^(Status|Every source is answering|Some sources (are slow or behind|aren’t answering))$/,
+      }),
+    ).toBeInTheDocument()
     await waitFor(() =>
       expect(document.querySelector('[data-status="tip"]')).toHaveTextContent('2,570,010'),
     )

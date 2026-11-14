@@ -6,7 +6,7 @@ import { useCallback, useId, useMemo, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import { useIndexHealth } from '@/data/index-health'
 import type { HyProposal } from '@/data/hyphen/schemas'
-import { Entity, PageFrame, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, useNetwork, usePageClaim } from '@/features/entity'
 import { formatDate, formatInt, formatIsoUtc } from '@/lib/format'
 import { DUFFS_PER_DASH } from '@/lib/units'
 import {
@@ -25,6 +25,7 @@ import {
   Time,
   useNow,
 } from '@/ui'
+import { governanceClaim } from '../claims'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
@@ -83,6 +84,8 @@ function GovernanceContent() {
     return rank(hy.data.data.items.filter((p) => !current.has(p.hash)))
   }, [insight, hy.data, proposals, rank])
   const split = useMemo(() => budgetSplit(proposals, now), [proposals, now])
+  const { funded, passing, failing } = split.count
+  usePageClaim(data ? governanceClaim(funded + passing + failing, funded + passing) : undefined)
   const stamp = data ? stampOf(data) : undefined
   const stamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
 
@@ -172,7 +175,6 @@ function GovernanceContent() {
         subtitle={data ? t`${formatInt(data.data.total ?? proposals.length)} proposals` : undefined}
         layer="network"
         id="proposals"
-        padding="flush"
         source={stamps}
       >
         {insight && data ? <DerivedFundingNote proposals={proposals} /> : null}

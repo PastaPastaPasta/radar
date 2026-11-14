@@ -89,7 +89,6 @@ export function ThresholdsSection({
       layer="network"
       subtitle={t`The threshold starts at ${formatInt(p.threshold_start)} of ${formatInt(p.window)} blocks and drops after each window that misses it: ${formatInt(p.threshold_start)} − attempt² × ${formatInt(p.window)} ÷ 100 ÷ ${String(p.falloff_coeff)}, rounded down at each step, never below ${formatInt(p.threshold_min)}.${isDecided(d) ? '' : ` ${t`Dates of windows to come are estimates.`}`}`}
       source={stamp}
-      padding="flush"
     >
       <DataTable
         caption={t`Lock-in threshold of each window`}

@@ -366,6 +366,9 @@ msgstr "Core 24 の有効化"
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 は {0}（チェーンの中央値時刻）より前には開始できません。その後マスターノードがシグナルを発信し、マイナーがウィンドウごとに投票します。"
 
+msgid "Core 24 did not activate"
+msgstr "Core 24 は有効化されませんでした"
+
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 は失敗しました。ロックインしないままタイムアウトに達しました。"
 
@@ -375,13 +378,25 @@ msgstr "Core 24 は失敗しました。ロックインしないままタイム�
 msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
 msgstr "Core 24 は2つの関門があるハードフォーク（デプロイメントビット {0}）です。まずマスターノード：{1}（チェーンの過去中央値時刻による）以降、{2} クォーラムが有効化リクエストに署名し、マイナーがその署名をブロックに含めます。これは DIP-0023 の拡張ハードフォークシグナル（EHF）です。これがマイニングされるまでは、いくらシグナルが発信されてもマイナーのブロックはカウントされません。"
 
+msgid "Core 24 is active"
+msgstr "Core 24 は有効です"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is active since {0}."
 msgstr "Core 24 は {0} から有効です。"
 
+msgid "Core 24 is locked in"
+msgstr "Core 24 はロックイン済みです"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is locked in. It activates at {0}."
 msgstr "Core 24 はロックインされました。{0} に有効化されます。"
+
+msgid "Core 24 is waiting for its first signalling window"
+msgstr "Core 24 は最初のシグナル期間を待っています"
+
+msgid "Core 24 is waiting for the masternodes' signal"
+msgstr "Core 24 はマスターノードのシグナルを待っています"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "マスターノードのシグナルがマイニングされる前に Core 24 のタイムアウトを過ぎたため、もう開始できません。"
@@ -421,9 +436,6 @@ msgstr "Dash Core"
 
 msgid "Dash Core 24 activation is under way."
 msgstr "Dash Core 24 の有効化が進行中です。"
-
-msgid "Dash nodes answered the last crawl"
-msgstr "直近のクロールに応答した Dash ノード"
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -651,6 +663,9 @@ msgstr "メモリプール"
 
 msgid "Mined by"
 msgstr "マイナー"
+
+msgid "Miners are signalling for Core 24"
+msgstr "マイナーが Core 24 へのシグナルを出しています"
 
 #. placeholder {0}: formatInt(w?.count ?? 0)
 #. placeholder {1}: formatInt(w?.threshold ?? 0)

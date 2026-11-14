@@ -6,6 +6,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { sourceLineOf } from '../helpers/sources'
+import { H1 } from '../routes/claims'
 
 const FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -42,7 +43,7 @@ const card = (page: Page, id: string) => tracker(page).locator(`section#${id}`)
 async function open(page: Page, net: Net = 'mainnet', after = MIN) {
   await pinAfterReading(page, after, net)
   await page.goto(net === 'mainnet' ? '/v24' : '/v24?network=testnet')
-  await expect(page.getByRole('heading', { level: 1, name: 'Core 24 activation' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: H1.v24 })).toBeVisible()
   await expect(card(page, 'status')).toBeVisible()
   await settled(page)
 }
@@ -273,7 +274,9 @@ test.describe('Core 24 activation tracker', () => {
     page,
   }) => {
     await page.goto('/v24?sources=decentralized')
-    await expect(page.getByRole('heading', { level: 1, name: 'Core 24 activation' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Core 24 activation', exact: true }),
+    ).toBeVisible()
     await settled(page)
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(tracker(page).locator('#tip')).toContainText('2,570,085')

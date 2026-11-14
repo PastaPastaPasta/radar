@@ -6,7 +6,8 @@ import { stampOf } from '@/data/envelope'
 import type { HyRichRow } from '@/data/hyphen/schemas'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Amount, Card, Chart, DataTable, Empty, SourceLine, Stat, useMediaQuery } from '@/ui'
+import { Amount, Card, Chart, DataTable, Empty, Stat, useMediaQuery } from '@/ui'
+import { useSectionSource } from '@/ui/section-source'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { concentration, shareOf } from './concentration'
@@ -30,6 +31,7 @@ function ShareBasis({
   /** One line with the full explanation behind a tap, for a phone. */
   short?: boolean
 }) {
+  useSectionSource(basis.kind === 'circulating' ? basis.stamp : undefined)
   if (basis.kind === 'loading') return null
   const { total } = basis
   if (total === undefined || (basis.kind === 'balances' && height === undefined)) return null
@@ -46,18 +48,12 @@ function ShareBasis({
     <Trans>The circulating supply isn’t available, so shares are of address balances.</Trans>
   )
   const detail = circulating ? (
-    <>
-      <SourceLine stamp={basis.stamp} compact />
-      {basis.height !== undefined && height !== undefined && basis.height !== height ? (
-        <>
-          {' '}
-          <Trans>
-            The supply is as of block {formatInt(basis.height)}, the list as of block{' '}
-            {formatInt(height)}.
-          </Trans>
-        </>
-      ) : null}
-    </>
+    basis.height !== undefined && height !== undefined && basis.height !== height ? (
+      <Trans>
+        The supply is as of block {formatInt(basis.height)}, the list as of block{' '}
+        {formatInt(height)}.
+      </Trans>
+    ) : null
   ) : (
     <Trans>
       The <Amount value={total} kind="duffs" compact /> held in positive address balances at block{' '}
@@ -68,7 +64,7 @@ function ShareBasis({
     return (
       <details className="rx-note rx-sharebasis" data-share-basis={basis.kind}>
         <summary>{headline}</summary>
-        <p className="m-0 mt-1">{detail}</p>
+        {detail ? <p className="m-0 mt-1">{detail}</p> : null}
       </details>
     )
   }
@@ -235,7 +231,6 @@ function RichListContent() {
           first?.total === undefined ? undefined : t`${formatInt(first.total)} addresses ranked`
         }
         layer="core"
-        padding="flush"
         source={firstPageSource}
       >
         {phone ? null : (

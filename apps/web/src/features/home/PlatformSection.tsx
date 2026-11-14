@@ -82,7 +82,6 @@ function TransitionsCard({ query, shown }: { query: ListQuery; shown: Listed<PeT
   return (
     <Card
       title={t`Platform transitions`}
-      padding="flush"
       source={shown ? stampOf(shown) : undefined}
       actions={
         <PageLink to="/platform/txs" className="rx-go" aria-label={t`View all transitions`}>
@@ -145,7 +144,6 @@ function BlocksCard({ query, shown }: { query: ListQuery; shown: Listed<Platform
   return (
     <Card
       title={t`Platform blocks`}
-      padding="flush"
       source={shown ? stampOf(shown) : undefined}
       actions={
         <PageLink to="/platform/blocks" className="rx-go">

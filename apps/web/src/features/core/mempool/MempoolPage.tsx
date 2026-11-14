@@ -7,9 +7,10 @@ import { stampOf } from '@/data/envelope'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { useIndexHealth } from '@/data/index-health'
 import { POLL_MS } from '@/data/query/stale'
-import { Entity, PageFrame, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, useNetwork, usePageClaim } from '@/features/entity'
 import { formatBytes, formatInt, formatPercent } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, LiveDot, Stat, Time, TypeBadge, Unavailable } from '@/ui'
+import { mempoolClaim } from '../claims'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { cardState, firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { TxTypeBadge } from '../hy-shared/TxTypeBadge'
@@ -126,7 +127,6 @@ function SeenMempool({
         }
         layer="core"
         id="pending"
-        padding="flush"
         source={seen.stamp}
       >
         <DataTable
@@ -158,6 +158,7 @@ function IndexedMempool() {
   const table = infiniteTableProps(txs)
   const total = txs.data?.pages[0]?.data.total
   const usage = m?.usageBytes != null && m.maxBytes ? m.usageBytes / m.maxBytes : undefined
+  usePageClaim(m ? mempoolClaim(m.count) : undefined)
 
   const columns = useMemo<ColumnDef<HyMempoolTx>[]>(
     () => [
@@ -209,8 +210,7 @@ function IndexedMempool() {
         error={summary.error}
         onRetry={() => void summary.refetch()}
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-mempool-summary>
-          <Stat size="lg" label={t`Transactions`} value={m ? formatInt(m.count) : '—'} />
+        <div className="grid gap-4 sm:grid-cols-3" data-mempool-summary>
           <Stat label={t`Size`} value={m ? formatBytes(m.totalBytes) : '—'} />
           <Stat
             label={t`Memory in use`}
@@ -230,7 +230,6 @@ function IndexedMempool() {
         subtitle={total === undefined ? undefined : t`${formatInt(total)} in the mempool`}
         layer="core"
         id="pending"
-        padding="flush"
         source={firstPageStamp(txs)}
       >
         <DataTable

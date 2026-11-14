@@ -1036,7 +1036,7 @@ button.rx-srcline:hover {
   }
 }
 
-/* The unit switch, plain text until hovered: in the header from 641 px, and on its own line under the section rail below that, where the header has no room and the rail needs its full width */
+/* The unit switch, plain text until hovered. It sits where amounts are read, not in the header: at the end of the section rail from 641 px, and on its own line under the rail below that, where the rail needs its full width */
 .rx-unit {
   display: inline-flex;
   align-items: center;
@@ -1064,21 +1064,22 @@ button.rx-srcline:hover {
   outline: 2px solid var(--dh-brand);
   outline-offset: 2px;
 }
-.rx-unit--bar {
-  margin-right: 8px;
-}
-.rx-unit--bar select {
+.rx-unit--rail select {
   height: 28px;
 }
-.rx-unit--rail {
-  display: none;
+.rx-secbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 .rx-secrail {
   position: relative;
   display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
 }
 .rx-secrail > nav {
   flex: 1 1 auto;
@@ -1130,8 +1131,12 @@ button.rx-srcline:hover {
   display: flex;
 }
 @media (max-width: 640px) {
-  .rx-unit--bar {
-    display: none;
+  .rx-secbar {
+    display: block;
+    margin-bottom: 0;
+  }
+  .rx-secrail {
+    margin-bottom: 24px;
   }
   /* The select is 44 px tall for the thumb and its lower 18 px lie over the empty top padding of the page below; the 26 px box behind its top part carries the focus ring. */
   .rx-unit--rail {

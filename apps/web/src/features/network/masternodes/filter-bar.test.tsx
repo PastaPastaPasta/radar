@@ -68,7 +68,6 @@ describe('cellFilter', () => {
     expect(cellFilter('country', 'DE')).toEqual({ country: ['DE'] })
     expect(cellFilter('hosting', '24940')).toEqual({ host: ['24940'] })
     expect(cellFilter('version', '24.0.0')).toEqual({ version: ['24.0.0'] })
-    expect(cellFilter('type', 'evo')).toEqual({ type: ['evo'] })
     expect(cellFilter('status', 'pose-banned')).toEqual({ status: ['pose-banned'] })
     expect(cellFilter('address', '1.2.3.4')).toEqual({})
   })

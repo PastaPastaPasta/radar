@@ -168,7 +168,6 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
             : t`The latest ${formatInt(DEFAULT_COUNT)} epochs.`
           : undefined
       }
-      padding="flush"
       source={stampsOf(...infos.map((q) => q.data))}
       actions={
         <form

@@ -4,6 +4,7 @@ import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { casesNets, networkQuery, ROUTE_CASES, withQuery } from '../routes'
 import { fetchesNothing, sourcesOf, type SiteSource } from '../helpers/site-map'
+import { CLAIM, H1 } from '../routes/claims'
 
 const BLOCK_HASH = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
 const TXID = 'e0028eb9648db56b1ac77cf090b99048a8007e2bb64b74b4a4cb7c4d8d6e6e47'
@@ -28,7 +29,7 @@ test.describe('routes', () => {
 
   test('a route has no serious accessibility violations @X-08', async ({ page }) => {
     await page.goto('/masternodes')
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
 
     await expectAccessible(page)
   })
@@ -175,7 +176,7 @@ test.describe('network', () => {
     await expect(page).toHaveURL(/type=evo/)
     await expect(page).toHaveURL(/q=1.2.3.4/)
     await expect(page.getByRole('button', { name: /Network: Testnet/ })).toBeVisible()
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
   })
 
   test('switching back to mainnet leaves no network in the link @X-03', async ({ page }) => {
@@ -279,7 +280,7 @@ test.describe('old paths', () => {
 
     await expect(page).toHaveURL(/\/masternodes\?.*type=evo/)
     await expect(page).toHaveURL(/view=platform/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Masternodes' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
   })
 
   test('Insight-style block paths open the block @X-04', async ({ page }) => {
@@ -298,7 +299,7 @@ test.describe('phone navigation', () => {
     page,
   }) => {
     await page.goto('/blocks')
-    await expect(page.getByRole('heading', { level: 1, name: 'Blocks' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.blocks })).toBeVisible()
     await expect(page.getByRole('table', { name: /Core blocks/ })).toBeVisible()
     await settled(page)
 
@@ -408,7 +409,7 @@ test.describe('keyboard', () => {
 
   test('a skip link jumps past the bar @X-07', async ({ page }) => {
     await page.goto('/status')
-    await expect(page.getByRole('heading', { level: 1, name: 'Status' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: H1.status })).toBeVisible()
     await page.keyboard.press('Tab')
 
     await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused()

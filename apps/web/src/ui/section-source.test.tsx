@@ -1,15 +1,42 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { act, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DataTable } from './data-table'
 import { Card, KeyValue, Section, SectionSources, SourceSection } from './layout'
-import { NoSourceSection } from './section-source'
+import { BEHIND_GRACE_MS, NoSourceSection } from './section-source'
 import { Stat, Stats } from './stat'
 import { stamp } from './test-utils'
 
+const openProofInspector = vi.hoisted(() => vi.fn())
+vi.mock('./proof', () => ({ openProofInspector }))
+
+afterEach(() => {
+  vi.useRealTimers()
+})
+
 const now = Date.now()
+const radar = stamp({ source: 'radar', asOf: now - 1000, fetchedAt: now - 1000 })
 const dapi = stamp({ source: 'dapi', asOf: now - 2000, fetchedAt: now - 2000 })
 const hyphen = stamp({ source: 'hyphen', asOf: now - 5000, fetchedAt: now - 5000 })
-const proved = stamp({ source: 'sdk', proved: true })
+const proved = stamp({
+  source: 'sdk',
+  proved: true,
+  asOf: now - 1000,
+  fetchedAt: now - 1000,
+  proof: {
+    id: 'a',
+    method: 'system.status',
+    platformHeight: 1,
+    coreChainLockedHeight: 1,
+    epoch: 1,
+    timeMs: now,
+    protocolVersion: 1,
+    chainId: 'x',
+    quorumType: 1,
+    quorumHash: '00',
+    round: 0,
+    proofBytes: 1,
+  },
+})
 
 const line = (root: ParentNode = document) =>
   root.querySelector<HTMLElement>('[data-section-sources]')!
@@ -57,7 +84,7 @@ describe('a section names its sources once', () => {
     expect(line()).toHaveTextContent(/2 min/)
   })
 
-  it('lets the stamps a section is given speak for their sources @IN-09', () => {
+  it('lets the stamps a section is given speak for their sources while its parts are as fresh @IN-09', () => {
     render(
       <Section title="Core" source={[{ ...dapi, asOf: now - 1000 }]}>
         <Stat label="Height" value="1" source={{ ...dapi, asOf: now - 9000 }} />
@@ -69,23 +96,145 @@ describe('a section names its sources once', () => {
     expect(line()).not.toHaveTextContent('9 s ago')
   })
 
-  it('keeps a stat’s own mark for hover and focus, out of the resting layout @IN-09', () => {
+  it('shows a part read well before the section’s own stamp of the same source @IN-09', () => {
+    render(
+      <Section title="Masternode" source={[{ ...radar, asOf: now - 1000 }]}>
+        <Card title="Rewards" source={{ ...radar, asOf: now - 600_000 }}>
+          <p>body</p>
+        </Card>
+      </Section>,
+    )
+    expect(line().querySelectorAll('[data-source="radar"]')).toHaveLength(1)
+    expect(line()).toHaveTextContent('10 min ago')
+    expect(line()).not.toHaveTextContent('1 s ago')
+  })
+
+  it('shows a part that trails the height of the section’s own stamp, once the grace has passed @IN-09', () => {
+    vi.useFakeTimers({ now })
+    render(
+      <Section title="Core" source={[{ ...dapi, asOf: now - 1000, height: 100 }]}>
+        <Stat label="Locked" value="2" source={{ ...dapi, asOf: now - 20_000, height: 98 }} />
+      </Section>,
+    )
+    expect(line()).toHaveTextContent('1 s ago')
+    act(() => {
+      vi.advanceTimersByTime(BEHIND_GRACE_MS + 100)
+    })
+    expect(line().querySelectorAll('[data-source="dapi"]')).toHaveLength(1)
+    expect(line()).toHaveTextContent(/2[0-9] s ago/)
+  })
+
+  it('keeps a trailing part’s grace running when a part before it leaves', () => {
+    vi.useFakeTimers({ now })
+    const own = [{ ...dapi, asOf: now - 1000, height: 100 }]
+    const trailing = (
+      <Stat label="Locked" value="2" source={{ ...dapi, asOf: now - 20_000, height: 98 }} />
+    )
+    const { rerender } = render(
+      <Section title="Core" source={own}>
+        <Stat key="tip" label="Tip" value="1" source={{ ...hyphen, height: 100 }} />
+        <div key="locked">{trailing}</div>
+      </Section>,
+    )
+    act(() => {
+      vi.advanceTimersByTime(BEHIND_GRACE_MS - 1000)
+    })
+    rerender(
+      <Section title="Core" source={own}>
+        <div key="locked">{trailing}</div>
+      </Section>,
+    )
+    expect(line()).not.toHaveTextContent(/2[0-9] s ago/)
+    act(() => {
+      vi.advanceTimersByTime(1100)
+    })
+    expect(line()).toHaveTextContent(/2[0-9] s ago/)
+  })
+
+  it('hands the line a part’s new proof when only the proof changed', () => {
+    const at = { asOf: now - 1000, fetchedAt: now - 1000 }
+    const proof = (id: string) => ({ ...proved.proof!, id })
+    const { rerender } = render(
+      <Section title="Platform">
+        <Stat label="Height" value="1" source={{ ...proved, ...at, proof: proof('a') }} />
+      </Section>,
+    )
+    rerender(
+      <Section title="Platform">
+        <Stat label="Height" value="1" source={{ ...proved, ...at, proof: proof('b') }} />
+      </Section>,
+    )
+    openProofInspector.mockClear()
+    line().querySelector<HTMLElement>('button[data-source="sdk"]')!.click()
+    expect(openProofInspector).toHaveBeenCalledWith(expect.objectContaining({ id: 'b' }))
+  })
+
+  it('says on each part what it handed to the line', () => {
+    render(
+      <Section id="chain" title="On the chain">
+        <Card id="tip" title="Tip" source={[proved, dapi]}>
+          <KeyValue items={[{ label: 'Rate', value: '3', source: hyphen }]} />
+        </Card>
+        <Stat label="Height" value="1" source={proved} />
+        <DataTable
+          columns={[{ id: 'a', header: 'A', accessorFn: (r: { a: string }) => r.a }]}
+          rows={[{ a: 'x' }]}
+          getRowId={(r) => r.a}
+          state="ready"
+          caption="Rows"
+          source={hyphen}
+        />
+      </Section>,
+    )
+    expect(document.getElementById('tip')).toHaveAttribute('data-reports', 'sdk:proved dapi')
+    expect(document.querySelector('.rx-kv [data-reports]')).toHaveAttribute(
+      'data-reports',
+      'hyphen',
+    )
+    expect(document.querySelector('.rx-stat')).toHaveAttribute('data-reports', 'sdk:proved')
+    expect(document.querySelector('.rx-tablewrap')).toHaveAttribute('data-reports', 'hyphen')
+  })
+
+  it('keeps a stat’s own mark out of the resting layout, and within reach of the keyboard and a screen reader @IN-09', () => {
     render(
       <Section title="Platform">
         <Stats>
           <Stat label="Height" value="1" source={proved} />
-          <Stat label="Epoch" value="2" source={proved} />
+          <Stat label="Epoch" value="2" source={dapi} />
+          <Stat label="Blocks" value="3" source={dapi} href="/blocks" />
         </Stats>
       </Section>,
     )
     const stats = [...document.querySelectorAll<HTMLElement>('.rx-stat')]
-    expect(stats).toHaveLength(2)
+    expect(stats).toHaveLength(3)
     for (const stat of stats) {
       expect(stat).toHaveAttribute('data-src-hover')
-      expect(stat.querySelector('.rx-fig__src [data-source="sdk"]')).not.toBeNull()
+      const own = stat.querySelector('.rx-fig__src')!
+      expect(own.querySelector('[data-source]')).not.toBeNull()
       expect(stat.querySelector('.rx-stat__label [data-source]')).toBeNull()
+      expect(stat).toHaveAttribute('aria-describedby', own.id)
+      expect(stat).toHaveAccessibleDescription(/Proof-checked|Served by DAPI/)
     }
+    const [height, epoch, blocks] = stats
+    for (const figure of [height!, epoch!]) {
+      expect(figure).toHaveAttribute('tabindex', '0')
+      expect(figure).toHaveAttribute('role', 'group')
+      figure.focus()
+      expect(figure).toHaveFocus()
+    }
+    expect(height).toHaveAccessibleName('Height')
+    expect(height!.querySelector('.rx-fig__src button[data-proved="true"]')).not.toBeNull()
+    expect(blocks!.tagName).toBe('A')
+    expect(blocks).not.toHaveAttribute('tabindex')
     expect(line().querySelectorAll('[data-source="sdk"]')).toHaveLength(1)
+  })
+
+  it('gives a figure outside a section no popover and no tab stop', () => {
+    render(<Stat label="Height" value="1" source={dapi} />)
+    const stat = document.querySelector('.rx-stat')!
+    expect(stat).not.toHaveAttribute('tabindex')
+    expect(stat.querySelector('.rx-fig__src')).toBeNull()
+    expect(stat.querySelector('.rx-stat__label [data-source="dapi"]')).not.toBeNull()
   })
 
   it('takes a source back when the part that showed it goes away', () => {

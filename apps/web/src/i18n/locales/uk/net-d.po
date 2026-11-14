@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: placed.countries
+msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
+msgstr "{0, plural, one {{onMap} у # країні} few {{onMap} у # країнах} many {{onMap} у # країнах} other {{onMap} у # країни}}"
+
 #. placeholder {0}: stats.missing
 msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
 msgstr "{0, plural, one {# мастернода немає на мапі: адресу не зареєстровано або ще не опитано.} few {# мастерноди немає на мапі: адресу не зареєстровано або ще не опитано.} many {# мастернод немає на мапі: адресу не зареєстровано або ще не опитано.} other {# мастернод немає на мапі: адресу не зареєстровано або ще не опитано.}}"
@@ -72,6 +76,9 @@ msgstr "{label} (було на {0})"
 #. placeholder {0}: value(c.new)
 msgid "{label} at {0}"
 msgstr "{label} на {0}"
+
+msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
+msgstr "{lastDay, plural, one {# зміна списку мастернод за останні 24 години} few {# зміни списку мастернод за останні 24 години} many {# змін списку мастернод за останні 24 години} other {# зміни списку мастернод за останні 24 години}}"
 
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# мастернода} few {# мастерноди} many {# мастернод} other {# мастерноди}}"
@@ -288,6 +295,9 @@ msgstr "Останнім часом змін такого виду немає."
 
 msgid "No changes recorded yet."
 msgstr "Змін поки не записано."
+
+msgid "No changes to the masternode list in the last 24 hours"
+msgstr "За останні 24 години список мастернод не змінювався"
 
 msgid "Not checked"
 msgstr "Не перевірено"

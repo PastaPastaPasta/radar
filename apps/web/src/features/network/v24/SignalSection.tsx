@@ -118,7 +118,6 @@ export function SignalSection({ d, stamp }: { d: RadarActivationDeployment; stam
       layer="network"
       subtitle={t`Before miners' votes count, one ${g.llmq} quorum (${formatInt(size)} masternodes) must sign the Core 24 signal: ${formatInt(threshold)} of its members, running Dash Core 24. A miner then puts it in a block.`}
       source={stamp}
-      padding="flush"
     >
       <div className="grid gap-4 p-5" data-v24-signal>
         {selected && size > 0 ? (

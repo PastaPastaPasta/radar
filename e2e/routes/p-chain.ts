@@ -1,5 +1,6 @@
 import { perNet } from './fixtures'
 import type { RouteCase } from './types'
+import { H1 } from './claims'
 
 /** The custom range the route sweep opens: the last six epochs up to the finalized one. */
 const RANGE_BACK = 5
@@ -7,7 +8,7 @@ const RANGE_BACK = 5
 export const pChain: RouteCase[] = [
   {
     path: '/epochs',
-    h1: 'Epochs',
+    h1: H1.epochs,
     decentralized: 'partial',
     data: '#current-epoch [role="meter"]',
   },
@@ -16,7 +17,7 @@ export const pChain: RouteCase[] = [
     return [
       {
         path: `/epochs?from=${last - RANGE_BACK}&to=${last}`,
-        h1: 'Epochs',
+        h1: H1.epochs,
         decentralized: 'partial' as const,
         data: '#range tbody tr, #range [data-card]',
       },

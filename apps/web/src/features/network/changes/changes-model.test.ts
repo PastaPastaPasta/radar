@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { changeTone, kindOf, matchesKind, valueText } from './changes-model'
+import { changeTone, changesInLastDay, kindOf, matchesKind, valueText } from './changes-model'
 
 describe('the changes model', () => {
   it('groups each recorded field under one kind @RA-80', () => {
@@ -42,5 +42,15 @@ describe('the changes model', () => {
     )
     expect(valueText('service', null, words)).toBe('–')
     expect(valueText('service', '1.2.3.4:9999', words)).toBe('1.2.3.4:9999')
+  })
+
+  it('counts the changes of the last 24 hours only when the list reaches back that far', () => {
+    const HOUR = 3_600_000
+    const asOf = 100 * HOUR
+    const at = (hoursAgo: number) => ({ ts: asOf - hoursAgo * HOUR })
+    expect(changesInLastDay([at(1), at(5), at(23), at(30)], asOf)).toBe(3)
+    expect(changesInLastDay([at(30), at(40)], asOf)).toBe(0)
+    expect(changesInLastDay([at(1), at(5)], asOf)).toBeUndefined()
+    expect(changesInLastDay([], asOf)).toBeUndefined()
   })
 })
