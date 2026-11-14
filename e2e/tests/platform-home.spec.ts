@@ -92,6 +92,32 @@ test.describe('Platform overview', () => {
     expect(box!.x + box!.width).toBeLessThanOrEqual(width)
   })
 
+  test('a right-hand figure’s source stays inside the phone screen when tapped @NX-01', async ({
+    page,
+  }) => {
+    test.skip(!isPhone(page), 'the popover is anchored differently on a wide screen')
+    await open(page)
+    const width = page.viewportSize()!.width
+    const figures = page.locator('.rx-stat[data-src-hover]')
+    const count = await figures.count()
+    let right = 0
+    for (let i = 0; i < count; i++) {
+      const figure = figures.nth(i)
+      await figure.scrollIntoViewIfNeeded()
+      const box = await figure.boundingBox()
+      if (!box || box.x < width / 2 - 20) continue
+      right++
+      await figure.tap()
+      const own = ownMarkOf(figure)
+      await expectShown(own)
+      const shown = await own.boundingBox()
+      expect(shown!.x, `figure ${i}`).toBeGreaterThanOrEqual(0)
+      expect(shown!.x + shown!.width, `figure ${i}`).toBeLessThanOrEqual(width)
+      expect(await horizontalOverflow(page), `figure ${i} widens the page`).toBe(0)
+    }
+    expect(right).toBeGreaterThan(0)
+  })
+
   test('ranks the ten evonodes with the most blocks and opens each one @NX-02', async ({
     page,
   }) => {
