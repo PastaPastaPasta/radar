@@ -71,10 +71,14 @@ export function HomeMap() {
       (geo.data?.data.points ?? []).filter((p) => p.nodes > 0).sort((a, b) => b.nodes - a.nodes),
     [geo.data],
   )
-  const masternodes = points.reduce((n, p) => n + p.masternodes, 0)
+  const places = useMemo(
+    () => points.filter((p) => p.masternodes > 0).sort((a, b) => b.masternodes - a.masternodes),
+    [points],
+  )
+  const masternodes = places.reduce((n, p) => n + p.masternodes, 0)
   const summary =
     points.length > 0
-      ? t`${formatInt(masternodes)} masternodes in ${formatInt(points.length)} places`
+      ? t`${formatInt(masternodes)} masternodes in ${formatInt(places.length)} places`
       : t`The node map`
 
   return (
@@ -92,7 +96,10 @@ export function HomeMap() {
             return (
               <g key={`${p.lat},${p.lon}`}>
                 <title>
-                  {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
+                  {place(p)}:{' '}
+                  {p.masternodes > 0
+                    ? t`${formatInt(p.masternodes)} masternodes`
+                    : t`${formatInt(p.nodes)} other nodes`}
                 </title>
                 <circle
                   className="mn mn--all"
@@ -132,7 +139,7 @@ export function HomeMap() {
             ) : null}
           </div>
           <ul className="dh-sr" aria-label={t`Places with the most masternodes`}>
-            {points.slice(0, 8).map((p) => (
+            {places.slice(0, 8).map((p) => (
               <li key={`${p.lat},${p.lon}`}>
                 {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
               </li>
