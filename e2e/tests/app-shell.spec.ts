@@ -507,6 +507,29 @@ const SAYS_SOMETHING_IS_MISSING = [
 test.describe('a backend that is down', () => {
   test.use({ allowFixtureMisses: true })
 
+  test('the read counter counts a page reading /status and not a health probe @X-09', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-light', 'one project reads the counter')
+    await page.addInitScript(() => sessionStorage.setItem('radar.fixture.down', '["radar"]'))
+    await page.goto('/about')
+    await expect(page.getByRole('navigation', { name: 'Radar' })).toBeAttached()
+    const url = 'https://radar.dashhq.org/api/v1/status'
+    const refused = () =>
+      page.evaluate(() =>
+        (
+          window as unknown as { __radarFixtures: { refusedReads(s: string): number } }
+        ).__radarFixtures.refusedReads('radar'),
+      )
+    const read = (target: string) => page.evaluate((u) => fetch(u).catch(() => null), target)
+
+    const before = await refused()
+    await read(`${url}#radar-probe`)
+    expect(await refused(), 'a probe is not a page read').toBe(before)
+    await read(url)
+    expect(await refused(), 'a page read of /status is').toBe(before + 1)
+  })
+
   for (const route of ROUTE_CASES) {
     for (const backend of BACKENDS.filter(
       (b) => !fetchesNothing(route.path) && sourcesOf(route.path).includes(b),
