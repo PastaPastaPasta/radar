@@ -102,8 +102,11 @@ test.describe('hover cards, one per kind', () => {
     await page.goto('/masternodes')
     await settled(page)
     const chip = page.locator('[data-entity="masternode"] a').first()
-    await chip.scrollIntoViewIfNeeded()
-    await chip.focus()
+    // The list can still replace its rows after the page settles.
+    await expect(async () => {
+      await chip.scrollIntoViewIfNeeded({ timeout: 2000 })
+      await chip.focus({ timeout: 2000 })
+    }).toPass()
     await page.waitForTimeout(800)
     await expect(page.locator('.rx-hc')).toHaveCount(0)
   })
