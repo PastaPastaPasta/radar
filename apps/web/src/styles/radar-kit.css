@@ -505,9 +505,6 @@ dashhq-footer .rx-ratenote {
   font-size: var(--dh-fs-sm);
   color: var(--dh-ink-2);
 }
-.rx-card__body--flush {
-  padding: 0;
-}
 .rx-card__head:hover .rx-sec__copy,
 .rx-card__head:focus-within .rx-sec__copy {
   opacity: 1;
@@ -655,7 +652,7 @@ dashhq-footer .rx-ratenote {
   position: sticky;
   left: 0;
   z-index: 1;
-  background: var(--dh-surface);
+  background: var(--rx-ground, var(--dh-page));
   box-shadow: 1px 0 0 var(--dh-line);
 }
 .rx-tablewrap--scroll::after {
@@ -666,7 +663,7 @@ dashhq-footer .rx-ratenote {
   bottom: 0;
   width: 24px;
   pointer-events: none;
-  background: linear-gradient(to left, var(--dh-surface), transparent);
+  background: linear-gradient(to left, var(--rx-ground, var(--dh-page)), transparent);
 }
 .rx-table caption {
   text-align: left;
@@ -723,8 +720,30 @@ dashhq-footer .rx-ratenote {
   outline: var(--dh-ring-w) solid var(--dh-focus);
   outline-offset: 2px;
 }
-.rx-tfoot .rx-keys kbd + kbd {
+/* The row keys are named in the shortcuts list; beside a table they show only while a row holds keyboard focus. */
+.rx-tkeys {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  z-index: 2;
+  display: none;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--dh-r2);
+  background: var(--dh-surface);
+  box-shadow: var(--dh-shadow-pop);
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+  white-space: nowrap;
+}
+.rx-tkeys kbd + kbd {
   margin-left: 0;
+}
+@media (min-width: 641px) {
+  .rx-tablewrap:has(tbody tr:focus-visible) > .rx-tkeys {
+    display: inline-flex;
+  }
 }
 .rx-activef b {
   color: var(--dh-ink);
@@ -889,10 +908,7 @@ dashhq-footer .rx-ratenote {
   container-type: inline-size;
 }
 .rx-stat__value {
-  font-size: clamp(22px, 17cqi, var(--dh-fs-stat));
-}
-.rx-stat--big .rx-stat__value {
-  font-size: clamp(26px, 20cqi, var(--rx-fs-big));
+  font-size: clamp(20px, 17cqi, 24px);
 }
 .rx-stat .rx-sources {
   display: flex;
@@ -1020,7 +1036,7 @@ button.rx-srcline:hover {
   }
 }
 
-/* The unit chip: in the header from 641 px, and on its own line under the section rail below that, where the header has no room and the rail needs its full width */
+/* The unit switch, plain text until hovered: in the header from 641 px, and on its own line under the section rail below that, where the header has no room and the rail needs its full width */
 .rx-unit {
   display: inline-flex;
   align-items: center;
@@ -1029,17 +1045,20 @@ button.rx-srcline:hover {
 .rx-unit select {
   appearance: none;
   height: 32px;
-  padding: 0 26px 0 10px;
-  border: 1px solid var(--dh-line-2);
+  padding: 0 22px 0 8px;
+  border: 1px solid transparent;
   border-radius: var(--dh-r2);
-  background: var(--dh-surface)
+  background: transparent
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23778' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E")
-    right 8px center / 12px no-repeat;
-  color: var(--dh-ink);
+    right 6px center / 12px no-repeat;
+  color: var(--dh-ink-2);
   font: inherit;
   font-size: 13px;
-  font-weight: var(--dh-w-strong);
   cursor: pointer;
+}
+.rx-unit select:hover {
+  background-color: var(--dh-hover);
+  color: var(--dh-ink);
 }
 .rx-unit select:focus-visible {
   outline: 2px solid var(--dh-brand);
@@ -1114,7 +1133,7 @@ button.rx-srcline:hover {
   .rx-unit--bar {
     display: none;
   }
-  /* The select is 44 px tall for the thumb and its lower 18 px lie over the empty top padding of the page below; the chip the eye sees is the 26 px box drawn behind its top part. */
+  /* The select is 44 px tall for the thumb and its lower 18 px lie over the empty top padding of the page below; the 26 px box behind its top part carries the focus ring. */
   .rx-unit--rail {
     position: relative;
     z-index: 1;
@@ -1126,9 +1145,7 @@ button.rx-srcline:hover {
     content: '';
     position: absolute;
     inset: 0 0 18px;
-    border: 1px solid var(--dh-line-2);
     border-radius: var(--dh-r2);
-    background: var(--dh-surface);
     pointer-events: none;
   }
   .rx-unit--rail:has(select:focus-visible)::before {
@@ -1139,9 +1156,7 @@ button.rx-srcline:hover {
     position: relative;
     height: 44px;
     padding-bottom: 18px;
-    border-color: transparent;
-    background-color: transparent;
-    background-position: right 8px top 7px;
+    background-position: right 6px top 7px;
   }
   .rx-unit--rail select:focus-visible {
     outline: none;
@@ -1156,4 +1171,18 @@ button.rx-srcline:hover {
   [data-quiet-copy] :is(tr, .rx-kv, .rx-hash):is(:hover, :focus-within) .rx-copy {
     opacity: 1;
   }
+}
+
+/* family tables on the page ground: no header fill, and the first and last cells line up with the page */
+.dh-table th {
+  background: none;
+  border-bottom-color: var(--dh-line-2);
+}
+.dh-table th:first-child,
+.dh-table td:first-child {
+  padding-left: 0;
+}
+.dh-table th:last-child,
+.dh-table td:last-child {
+  padding-right: 0;
 }
