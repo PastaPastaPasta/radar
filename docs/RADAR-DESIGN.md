@@ -56,8 +56,8 @@ Each record type gets one visual that only it has. They earn their place by answ
 | `/tx/<txid>` | value-flow ribbon + settlement steps (seen → InstantSend → mined → ChainLocked) | Where did the money go, and is it final? |
 | `/mn/<protx>` | uptime strip (one cell per crawled day) + rewards-by-epoch bars against the middle 80% band (the bars wait for M2) | Is this node healthy and earning like its peers? |
 | `/identity/<id>` | activity calendar (one square a day, a year wide) | How active is this identity, and when? |
-| `/epoch`, Platform home | epoch clock (track with blocks-so-far and ETA) | Where are we in the epoch? |
-| `/masternodes` | status stack bar above the census stats | How much of the list is healthy? |
+| `/epochs`, Platform home | the headline (“Epoch 88 is 59% through”) over the epoch clock (track with blocks-so-far and ETA) | Where are we in the epoch? |
+| `/masternodes` | the headline (“2,845 of 2,990 enabled masternodes answered the last crawl”) over the status mix in one row | How much of the list is healthy? |
 
 ---
 
@@ -259,7 +259,29 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 
 **`Section`** (`ui/layout.tsx`) is how a page is divided. It is a 1 px rule across the page, 30 px of air, the section head, an optional lede (one or two sentences, 16 px `--dh-ink-2`, 760 px at most), **the section's one source line**, then the body 18 px below. The section collects the stamps of everything inside it (cards, stats, key-value rows, tables) and names each source once in that line; stamps passed as `source` speak for their sources ahead of what the parts report. `Card level="section"` gives a card the same ruled head and lede for a page whose sections are single cards; it does not start a line of its own, so a page whose sections all read one source says so once, under the page title.
 
-**Page head** (`PageFrame`, `.rx-page__head`): eyebrow (layer, and the network off mainnet), `h1`, a lede of at most 760 px, then the page's source line for everything outside a `Section`. Pages are a single column of sections with 12–20 px between blocks (`.rx-pile`); two blocks sit side by side from 1024 px with 48 px between them in place of borders (`.rx-cols`, `--3`, `--lead`).
+**Page head** (`PageFrame`, `.rx-page__head`): `h1`, a lede of at most 760 px, then the page's source line for everything outside a `Section`. Pages are a single column of sections with 12–20 px between blocks (`.rx-pile`); two blocks sit side by side from 1024 px with 48 px between them in place of borders (`.rx-cols`, `--3`, `--lead`).
+
+**A page opens with its claim, not its name.** The bar and the section rail already say where you are, so the `h1` says what the page found: one specific, live sentence, as the old radar.dashhq.org did ("2,593 Dash nodes answered our last crawl"). The description of the page goes into the lede under it.
+
+| Page | Name (document title, site map, rail) | `h1` once the data is in |
+|---|---|---|
+| `/nodes` | Nodes | 2,581 Dash nodes answered the last crawl |
+| `/masternodes` | Masternodes | 2,845 of 2,990 enabled masternodes answered the last crawl (Decentralized only: 2,990 of 3,012 masternodes are enabled) |
+| `/platform`, `/epochs` | Platform, Epochs | Epoch 88 is 59% through |
+| `/map` | Map | 2,958 masternodes in 44 countries |
+| `/changes` | Changes | 14 changes to the masternode list in the last 24 hours |
+| `/v24` | Core 24 activation | the phase as a sentence ("Miners are signalling for Core 24") |
+| `/blocks` | Blocks | The latest block was mined 2 min ago |
+| `/mempool` | Mempool | 37 transactions are waiting for a block |
+| `/governance` | Governance | 6 of 9 open proposals have the votes to be funded |
+| `/status` | Status | Every source is answering |
+
+- `PageFrame` takes the sentence as `claim`, or the part of the page that reads the data hands it up with `usePageClaim(sentence)` (`@/features/entity`). The page's `title` still names the document and the site map.
+- **The name is the fallback.** Until the data arrives, when its source is down, and where Decentralized only mode leaves the data out, the `h1` is the page's name. Never an empty `h1`, a skeleton or a sentence with a blank in it. A claim is `undefined` until every number in it is known.
+- **No eyebrow where the rail shows the section.** `PageFrame` leaves out an `eyebrow` that only repeats the page's section ("Network", "Core", "Platform", "Tools"), because the section rail right above the head already says it. An eyebrow that says something else (a record's kind, "Search") is drawn. The network off mainnet is the testnet frame's job (§10).
+- **The figure in the headline is not repeated** in the stats or cards below (§5.4). The epoch clock under an epoch headline draws its track, dates and end only (`EpochClock bare`); `/mempool` has no "Transactions" stat; `/nodes` and `/blocks` do not print the Core height the bar already shows.
+- **Record pages keep the record header** (§5.1): one block, one identity, one masternode is named by what it is.
+- A test that opens such a page matches either form (`e2e/routes/claims.ts`: `H1` for name-or-claim, `CLAIM` for the sentence alone).
 
 ### 5.3 Card
 
@@ -296,7 +318,7 @@ See §5 (`Section`, `Card`, `Card level="section"`). `KeyValue` uses the family 
 
 A figure, not a box: no fill, no border, no radius. A 2 px rule in `--dh-line` runs down the left edge with 12 px between it and the text, as the old site's stat row had. When the figure itself is a status (`tone`), the rule is 4 px in `--dh-good/warn/bad` and the value takes the same colour; no other stat is coloured, and the layer does not tint it.
 
-- Label: 13 px `--dh-ink-2`. Inside a section or page line the stat's own `SourceLine` is not drawn at rest: it sits under the figure in a popover shown on hover, and on keyboard focus when the figure is a link (`.rx-fig__src`). The proof inspector is always reachable from the section line, whose Proof-checked mark is a button. A stat with no line around it keeps the mark inline after the label.
+- Label: 13 px `--dh-ink-2`. Inside a section or page line the stat's own `SourceLine` is not drawn at rest: it sits under the figure in a popover (`.rx-fig__src`) shown on hover, on keyboard focus and on a tap. A figure that is a link shows it on the link's focus; a plain figure takes focus itself (`role="group"`, `tabindex="0"`, named by its label), so the keyboard, a screen reader and a touch screen reach the mark as a pointer does. The popover is hidden by clipping, not `display: none`, and the figure is `aria-describedby` it, so its words are read with the figure. The proof inspector is also reachable from the section line, whose Proof-checked mark is a button. A stat with no line around it keeps the mark inline after the label. The stat carries `data-reports` (below, §6.9) naming what it handed to the line.
 - Value: 24 px, weight 650, stretch 110%, tabular. One size on the page: `size="lg"` no longer enlarges a figure, because a page states its lead figure in its head. It only keeps the first figure of a compact phone grid (`.rx-statgrid`, the address summary) a step larger.
 - Unit: 14 px `--dh-ink-2`, after a no-break space.
 - Note: 12.5 px `--dh-ink-2`, one or two lines.
@@ -359,6 +381,7 @@ Desktop:
 - Rows: 8 px × 12 px (feeds: 7 px), 1 px `--dh-line` rule, middle aligned, no zebra. Numeric columns right-aligned and tabular. Two-line cells (`.rx-2l`): primary 14 px, secondary 12.5 px `--dh-ink-2`.
 - Hover: `--dh-hover` ground. Focused row (`j`/`k` or keyboard): `--dh-select-soft` ground and a 3 px `--dh-select` inset keyline on the left. Whole-row links via `rowLink`; inner chips and filter buttons stay separately clickable.
 - Click-to-filter cells (country, version, host) are ghost buttons that show an underline and a filter glyph on hover.
+- `dense` (the masternode list): 13 px type, 5 × 7 px cells and a 41 px row, so a dozen columns fit 1440 px without the table scrolling sideways. A cell that would push the table wider gives way first (`.rx-clip`, ellipsis, full text in its `title`). Use it for a long list that is read across, as the old site's masternode table was; a short list keeps the normal row.
 - Tools row above (14 px under it, no rule): segmented type filter with counts, search input (grows), filter buttons (`is-on` = brand ring and value), "Filters n" on phone. Active-filter row, plain: match count, removable tokens, Clear, sort description.
 - Foot (`.rx-tfoot`): the pager ("1–22 of 2,207", Previous/Next), and the table's `SourceLine` only when no section or page line covers it. A table with neither has no foot. Infinite lists show a 40 px "Loading more" row with a skeleton.
 - Keyboard hints (`j` `k` move, `↵` open) are not printed under every table. They show as a small chip at the table's lower right while a row has keyboard focus (`.rx-tkeys`, ≥ 641 px), and the shortcuts dialog lists them.
@@ -378,6 +401,8 @@ Phone (`phone="cards"`, default) — each row becomes a 2-column block, 10 px ab
 | `hidden` | not shown |
 
 Masternode card: nodeprint + IP:port + type tag | Answering; version | country + city; "Paid 2,569,990 · 5 min ago".
+
+**The masternode list at 1440 px** is one dense table of twelve columns, in the old page's order: ProTx, address, country, hosting, version, protocol, status, uptime 7d, uptime 30d, last paid (age, with the blocks since), registered (height and age) and PoSe. Above it sit one row with the status mix (legend and stack bar) and one row of filters (type, search, status, version, country, hosting, columns, export), so the first row is on the first screen. The page shows 100 rows a page. In Decentralized only mode the crawl's columns are left out, with one notice.
 
 `phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside its own block (never the page), the first column sticky on the page ground with a 1 px right rule, and a 24 px fade on the scrolling edge.
 
@@ -408,11 +433,15 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 **How many, and how loud (the density rule).**
 
 - **One visible source line per section.** It names every source the section's figures use, one mark per source. The section builds it: every card, stat, key-value row and table inside reports its stamps to the nearest `Section` (or to the page head, outside one) and draws no mark of its own (`SourceSection`, `useSectionSource`). Nothing has to be wired by hand, and a part that loads late joins the line when its read lands. The marks keep `data-source`, `data-proved`, `data-fallback` and `data-state`.
+- **A section's own stamps come first, and hide nothing.** Stamps passed as `source` speak for their sources while the parts inside are as fresh. A part's stamp of the same source is still collected: one that trails the newest height or was read well before the section's own joins the line, so a stale or failing read cannot hide behind a fresh one.
 - **Which stamp speaks for a source.** The figure read most recently at the newest height. A figure that has trailed its source's newest height for 8 s, or was read more than 30 s before the others, takes over the mark, so the line never looks fresher than its oldest figure and never looks stale because nothing has changed since the last block.
 - **Per-figure detail on demand.** A figure's own mark (source, age, the node that answered) shows under it on hover and on keyboard focus, without moving the layout. A proved figure's mark there, and in the section line, is the button that opens the proof inspector.
+- **What a part reported is on the part.** A `Stat`, `Card`, `KeyValue` row or table that hands its stamps to a line carries `data-reports`, one word per source (`sdk:proved`, `radar`, `hyphen:busy`). A test of one part's provenance asserts that attribute, or the stat's own mark, and where the proof is the point also that no unproved `sdk` mark is on the line. The line itself is shared, so it cannot prove what one part read.
+- **Dialogs, hover cards and sheets start no line and join none.** Their content is wrapped in `NoSourceSection`, so a mark inside one is drawn where it is read and never lands on the line of the page behind it.
+- **A search hit** hands an unproved stamp to its group's line; a proof-checked hit keeps its mark on the row, because the proof belongs to that one record.
 - **No figure twice.** A value is stated once per page, where it matters most.
 - **Calm unless wrong.** The resting mark in a section or page line has no border, no ground and no glyph: 12 px `--dh-ink-2` text, marks separated by space. A glyph appears with Proof-checked, stale and down, and stale and down take `--dh-warn` and `--dh-bad` text; the dashed box is kept for a mark that stands alone on a card. Colour is reserved for a source that is actually stale or down, and shows at the section line. A page that shows a figure keeps it fresh for as long as it is on screen, so an open tab does not drift into the stale look by itself: the home page reads the Platform tip again once a minute and the census every five, and an index figure read at the newest block is not aged at all, because nothing newer exists to read. Proof-checked keeps its good green and its shield glyph, and underlines on hover: it is a control, and it is good news.
-- Every page built on `PageFrame` follows this rule, and so do the home page and `/mn/{hash}` (its line is in the record header). The Core record pages built on the Core band (`/block/*`, `/tx/*`, `/blocks`) keep one line per section head, and `/status` keeps a mark per card because the sources are its subject.
+- Every page built on `PageFrame` follows this rule, and so do the home page and `/mn/{hash}` (its line is in the record header). The Core record pages built on the Core band (`/block/*`, `/tx/*`, `/blocks`) keep one line per section head, and `/status` keeps a mark per card because the sources are its subject (its body is a `NoSourceSection` under a `PageFrame` head).
 
 `LiveDot`: 8 px dot, always followed by a word. Health states: `live` and `ok` → `--dh-good` with one 900 ms ring pulse each time data lands (not on a loop), word "Live"; `slow` → `--dh-good`, no pulse, "Slow"; `degraded` and `stale` → `--dh-warn`, "Behind"; `down` → `--dh-bad`, "Down"; `unknown` → `--dh-ink-3` hollow dot, "Checking". Paused feeds use `--dh-ink-3`.
 
@@ -457,7 +486,7 @@ Not an error and not a warning: the viewer chose this, so the state is calm and 
 - **Full.** The `Empty` layout: a 32 px tile in `--dh-chip` with a shield glyph (never the alert glyph, never bad-soft or warn-soft), a 15 px weight 620 title that names what is missing and what it needs ("The rich list needs an indexer"), one line of 14 px `--dh-ink-2` body ("Decentralized only mode reads only DAPI nodes and the Platform SDK."), then a secondary button "Use all sources" and a text link "About sources" in one centred row that wraps (gap 6 × 14 px). Used once where a page's whole content is missing.
 - **Compact.** One row, 40 px minimum, 14 px `--dh-ink-2`: shield glyph, the title, and the same secondary button pushed to the right edge; it wraps under the title on a narrow screen. Used inside a page that still shows data, at most once per missing section.
 - **Never** a wall of them, never over a card as an overlay (§6.13 is for a source that is down), never with a Retry.
-- **Header mark.** A shield glyph in a 24 px square in the shell bar's actions, before the unit switch: 1 px `--dh-line-2` border from 1101 px (none below, where the header is tight), `--dh-r2` radius, `--dh-ink-2`. No fill and no status colour: it states a setting, not a problem. No word beside it, because the bar has no room for one next to the section links; "Decentralized only" is its accessible name and the tooltip says what the mode does. Hover is `--dh-hover`, focus the family ring. It links to Tools → Sources.
+- **Header mark.** A shield glyph in a 24 px square in the shell bar's actions, before the Core tip: 1 px `--dh-line-2` border from 1101 px (none below, where the header is tight), `--dh-r2` radius, `--dh-ink-2`. No fill and no status colour: it states a setting, not a problem. No word beside it, because the bar has no room for one next to the section links; "Decentralized only" is its accessible name and the tooltip says what the mode does. Hover is `--dh-hover`, focus the family ring. It links to Tools → Sources.
 - **Phone strip.** Below 412 px the bar cannot take the glyph without cutting the product name, so a strip sits directly under the bar instead: full width, 28 px, `--dh-sunken` with a 1 px `--dh-line` bottom border, the shield glyph and "Decentralized only" in `--dh-fs-sm` `--dh-ink-2`, left-aligned at the page gutter. The whole strip is the link. It is not sticky.
 
 ### 6.14 ⌘K palette (`CommandPalette`)
