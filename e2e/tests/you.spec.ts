@@ -594,11 +594,11 @@ test.describe('about', () => {
     await expect(page.getByText(/no analytics, no cookies, no accounts/)).toBeVisible()
     await expect(page.getByRole('link', { name: 'Bridge' })).toHaveAttribute(
       'href',
-      'https://bridge.dashhq.org/',
+      'https://bridge.dashhq.org/?network=mainnet',
     )
     await expect(page.getByRole('link', { name: 'Governance' })).toHaveAttribute(
       'href',
-      'https://gov.dashhq.org/',
+      'https://gov.dashhq.org/masternodes',
     )
     await expect(page.locator('[data-third-party]').first()).toBeVisible()
     await settled(page)
