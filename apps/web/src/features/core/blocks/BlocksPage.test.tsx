@@ -466,6 +466,17 @@ describe('Blocks list', () => {
       expect(link.getAttribute('href')).toContain('from=2565826')
     })
 
+    it('says that paging older leaves the chosen day @IN-02', async () => {
+      vi.spyOn(core, 'blockRows').mockImplementation((_net, q) =>
+        Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight, q.count) }),
+      )
+      renderAt('/blocks?date=2026-11-03&from=2565827')
+      await screen.findByRole('link', { name: 'Older blocks from before this date' })
+      expect(
+        screen.getByText(/first block on 3 Nov 2026\. Going older leaves this day/),
+      ).toBeInTheDocument()
+    })
+
     it('titles the page by the heights its rows hold, not the ones asked for @IN-02', async () => {
       vi.spyOn(core, 'blockRows').mockImplementation((_net, q) =>
         Promise.resolve({ ...stamp('hyphen'), data: rowsFor(q.fromHeight - 10, q.count - 10) }),
