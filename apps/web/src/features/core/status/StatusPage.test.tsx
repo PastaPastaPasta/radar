@@ -1,4 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
+import userEvent from '@testing-library/user-event'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
@@ -145,6 +146,22 @@ describe('Status page', () => {
     const links = await screen.findAllByRole('link', { name: /Network internals/ })
     expect(links.length).toBeGreaterThan(1)
     for (const link of links) expect(link).toHaveAttribute('href', '/internals')
+  })
+
+  it('opens the diagnostics drawer from a link, through the seam the You features fill @NX-62', async () => {
+    setCoreClient(core())
+    renderAt('/status')
+    const link = await screen.findByRole('button', { name: /^Diagnostics/ })
+
+    await waitFor(() => {
+      link.click()
+      expect(screen.getByRole('dialog', { name: 'Diagnostics' })).toBeInTheDocument()
+    })
+
+    await userEvent.setup().keyboard('{Escape}')
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Diagnostics' })).toBeNull()
+    })
   })
 
   it('lists every source with its state and what its backend reports @IN-09', async () => {

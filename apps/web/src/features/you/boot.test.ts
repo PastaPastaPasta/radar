@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { openDiagnosticsDrawer } from '@/ui/diagnostics'
 import { forgetDevFlags, setDevFlag } from './dev-flags'
 import { installYou } from './boot'
 import { panelsState, resetPanels } from './panels'
@@ -40,6 +41,16 @@ describe('keyboard shortcuts @NX-61 @NX-62', () => {
     expect(loaders.proof).toHaveBeenCalledTimes(1)
     press('KeyP')
     expect(panelsState().proof.open).toBe(false)
+  })
+
+  it('registers the diagnostics opener the status page uses, and removes it when stopped', () => {
+    openDiagnosticsDrawer()
+    expect(panelsState().diagnostics.open).toBe(true)
+    resetPanels()
+    stop()
+    openDiagnosticsDrawer()
+    expect(panelsState().diagnostics.open).toBe(false)
+    stop = installYou(loaders)
   })
 
   it('Alt+Shift+D opens diagnostics', () => {
