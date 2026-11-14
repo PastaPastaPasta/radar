@@ -53,7 +53,7 @@ afterEach(() => {
 describe('the Map page', () => {
   it('draws the masternodes, colours them by reachability and counts them in the headline @RA-50 @RA-51', async () => {
     renderAt('/map')
-    await screen.findByRole('heading', { level: 1, name: 'Map' })
+    await screen.findByRole('heading', { level: 1, name: /^\d+ masternodes in \d+ countries$/ })
     await waitFor(() => expect(headline()).toHaveTextContent(/134 of 150 masternodes answered/))
     expect(headline()).toHaveTextContent('130 enabled')
     expect(headline()).toHaveTextContent('PoSe-banned')

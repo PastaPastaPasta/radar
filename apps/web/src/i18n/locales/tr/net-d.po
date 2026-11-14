@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: placed.countries
+msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
+msgstr "{0, plural, one {# ülkede {onMap}} other {# ülkede {onMap}}}"
+
 #. placeholder {0}: stats.missing
 msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
 msgstr "{0, plural, one {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.} other {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.}}"
@@ -72,6 +76,9 @@ msgstr "{label} (önceki konum: {0})"
 #. placeholder {0}: value(c.new)
 msgid "{label} at {0}"
 msgstr "{label}, konum: {0}"
+
+msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
+msgstr "{lastDay, plural, one {Son 24 saatte masternode listesinde # değişiklik} other {Son 24 saatte masternode listesinde # değişiklik}}"
 
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternode}}"
@@ -288,6 +295,9 @@ msgstr "Son zamanlarda bu türde değişiklik yok."
 
 msgid "No changes recorded yet."
 msgstr "Henüz kaydedilmiş değişiklik yok."
+
+msgid "No changes to the masternode list in the last 24 hours"
+msgstr "Son 24 saatte masternode listesinde değişiklik yok"
 
 msgid "Not checked"
 msgstr "Kontrol edilmedi"

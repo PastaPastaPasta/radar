@@ -191,6 +191,15 @@ export function headline(visible: readonly MnRow[]): Headline {
   }
 }
 
+/** How many masternodes the crawl placed, and in how many countries: the page's claim. */
+export function placedIn(rows: readonly MnRow[]): { masternodes: number; countries: number } {
+  const placed = rows.filter((r) => r.crawl?.lat != null && r.crawl.lon != null)
+  return {
+    masternodes: placed.length,
+    countries: new Set(placed.flatMap((r) => r.crawl?.country ?? [])).size,
+  }
+}
+
 export interface GeoTotals {
   nodes: number
   masternodes: number

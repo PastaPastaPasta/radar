@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
@@ -7,7 +8,7 @@ import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarChange } from '@/data/radar/schemas'
-import { Entity, PageFrame, PageLink, useNetwork } from '@/features/entity'
+import { Entity, PageFrame, PageLink, useNetwork, usePageClaim } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import './changes.css'
@@ -17,6 +18,7 @@ import {
   FIELD_LABEL,
   KIND_LABEL,
   changeTone,
+  changesInLastDay,
   matchesKind,
   valueText,
   type KindFilter,
@@ -46,6 +48,17 @@ function ChangesList() {
   const available = !off && !isDevnet(net)
   const q = useQuery({ ...radarQueries.changes(net), enabled: available })
   const changes = q.data?.data.changes
+  const lastDay = q.data ? changesInLastDay(q.data.data.changes, q.data.asOf) : undefined
+  usePageClaim(
+    lastDay === undefined
+      ? undefined
+      : lastDay === 0
+        ? t`No changes to the masternode list in the last 24 hours`
+        : plural(lastDay, {
+            one: '# change to the masternode list in the last 24 hours',
+            other: '# changes to the masternode list in the last 24 hours',
+          }),
+  )
 
   const rows = useMemo(
     () => (changes ?? []).filter((c) => matchesKind(c.field, kind)),

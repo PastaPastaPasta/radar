@@ -1,8 +1,5 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
-import { Link } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
-import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, Time } from '@/ui'
@@ -11,9 +8,8 @@ import { FigureGrid, FigureLink } from './parts'
 import { loadState, type SectionProps } from './shared'
 
 /** The six headline figures: each opens the list or the section that shows that many items. */
-export function Headline({ net, versions, days, summary }: SectionProps) {
+export function Headline({ versions, days, summary }: SectionProps) {
   const { t } = useLingui()
-  const tip = useQuery(coreQueries.tip(net))
   const crawl = summary.data?.data.crawl
   const dayAgo = summary.data?.data.day_ago
   const all = summary.data?.data.dists.all ?? {}
@@ -32,22 +28,16 @@ export function Headline({ net, versions, days, summary }: SectionProps) {
     <Card
       id="now"
       layer="network"
-      source={[
-        ...(summary.data ? [stampOf(summary.data)] : []),
-        ...(tip.data ? [stampOf(tip.data)] : []),
-      ]}
+      source={summary.data ? stampOf(summary.data) : undefined}
       state={loadState(summary)}
       error={summary.error}
       onRetry={() => void summary.refetch()}
     >
       {crawl ? (
         <div className="grid gap-4" data-census-headline>
-          <p className="text-xl leading-snug max-sm:text-lg" data-census-answered>
-            <b className="tabular-nums">{formatInt(crawl.reachable)}</b>{' '}
-            {t`Dash nodes answered the last crawl`}
+          <p className="text-sm text-[var(--dh-ink-2)] [&_a]:underline">
             {diff === undefined ? null : (
-              <span className="text-base font-normal text-[var(--dh-ink-2)]" data-census-delta>
-                {' · '}
+              <span data-census-delta>
                 {diff === 0
                   ? t`the same as a day ago`
                   : diff > 0
@@ -59,19 +49,9 @@ export function Headline({ net, versions, days, summary }: SectionProps) {
                         one: '# node fewer than a day ago',
                         other: '# nodes fewer than a day ago',
                       })}
+                {' · '}
               </span>
             )}
-          </p>
-          <p className="text-sm text-[var(--dh-ink-2)] [&_a]:underline">
-            {tip.data ? (
-              <>
-                {t`Core tip`}{' '}
-                <Link to="/block/$id" params={{ id: String(tip.data.data.height) }}>
-                  {formatInt(tip.data.data.height)}
-                </Link>
-                {' · '}
-              </>
-            ) : null}
             {t`crawled`} <Time ms={crawl.finished} mode="relative" live />
             {t`, at block ${formatInt(crawl.tip_height)}`}
           </p>

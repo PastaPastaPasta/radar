@@ -1,9 +1,19 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, useNetwork } from '@/features/entity'
-import { formatInt } from '@/lib/format'
-import { Card, EpochClock, KeyValue, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
+import { Entity, useNetwork, usePageClaim } from '@/features/entity'
+import { formatInt, formatPercent } from '@/lib/format'
+import {
+  Card,
+  EpochClock,
+  KeyValue,
+  Time,
+  epochProgress,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+  useNow,
+} from '@/ui'
 import { epochLengthMs } from '@/lib/epoch-length'
 
 const NONE = {} as const
@@ -28,6 +38,13 @@ export function CurrentEpoch() {
       : Math.max(0, height - epoch.firstBlockHeight + 1)
   const endsAt =
     epoch === undefined || length === undefined ? undefined : epoch.firstBlockTimeMs + length
+  const now = useNow()
+  const ratio = epoch ? epochProgress(epoch.firstBlockTimeMs, endsAt, now) : undefined
+  usePageClaim(
+    epoch && ratio !== undefined
+      ? t`Epoch ${formatInt(epoch.index)} is ${formatPercent(ratio, 0)} through`
+      : undefined,
+  )
   return (
     <Card
       level="section"
@@ -41,6 +58,7 @@ export function CurrentEpoch() {
         <div className="grid grid-cols-1 gap-4">
           <EpochClock
             size="lg"
+            bare
             index={epoch.index}
             startedAt={epoch.firstBlockTimeMs}
             blocksSoFar={blocksSoFar}

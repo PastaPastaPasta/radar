@@ -34,7 +34,12 @@ describe('Epochs', () => {
     renderAt('/epochs')
     const current = await card('current-epoch')
     await waitFor(() => expect(within(current).getByRole('meter')).toBeInTheDocument())
-    expect(current).toHaveTextContent(/Epoch\s*88/)
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+        /^Epoch 88 is \d+% through$/,
+      ),
+    )
+    expect(current.querySelector('.rx-clock__n')).toBeNull()
     expect(current).toHaveTextContent('Fee multiplier')
     expect(current.querySelector('a[href^="/platform/block/"]')).not.toBeNull()
     const rewards = await card('rewards')
@@ -117,7 +122,8 @@ describe('One epoch', () => {
 
   it('sends the current epoch to /epochs @NX-51', async () => {
     renderAt('/epoch/88')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Epochs' })).toBeInTheDocument()
+    await waitFor(() => expect(document.querySelector('[data-page="/epochs"]')).not.toBeNull())
+    expect(await screen.findByRole('heading', { level: 1, name: /^Epoch/ })).toBeInTheDocument()
   })
 })
 

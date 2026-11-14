@@ -18,8 +18,10 @@ const bodyRows = () => within(screen.getByRole('table')).getAllByRole('row').sli
 describe('the Changes page', () => {
   it('lists the latest changes with their time, block, masternode and a coloured badge @RA-80', async () => {
     renderAt('/changes')
-    await screen.findByRole('heading', { level: 1, name: 'Changes' })
     await waitFor(() => expect(bodyRows().length).toBeGreaterThan(50))
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      /^(\d+ changes?|No changes) to the masternode list in the last 24 hours$/,
+    )
     const first = bodyRows()[0]!
     expect(within(first).getByRole('link', { name: /2,569,960/ })).toHaveAttribute(
       'href',
@@ -36,7 +38,6 @@ describe('the Changes page', () => {
   it('filters by kind, keeps the kind in the address and shows an evonode pill @RA-80', async () => {
     const user = userEvent.setup()
     renderAt('/changes?kind=pose')
-    await screen.findByRole('heading', { level: 1, name: 'Changes' })
     await waitFor(() => expect(bodyRows().length).toBeGreaterThan(20))
     expect(screen.getByRole('button', { name: 'PoSe bans and revivals' })).toHaveAttribute(
       'aria-pressed',

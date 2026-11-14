@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: placed.countries
+msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
+msgstr "{0, plural, one {{onMap} dans # pays} other {{onMap} dans # pays}}"
+
 #. placeholder {0}: stats.missing
 msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
 msgstr "{0, plural, one {# masternode n’est pas sur la carte : aucune adresse enregistrée ou pas encore exploré.} other {# masternodes ne sont pas sur la carte : aucune adresse enregistrée ou pas encore explorés.}}"
@@ -72,6 +76,9 @@ msgstr "{label} (était à {0})"
 #. placeholder {0}: value(c.new)
 msgid "{label} at {0}"
 msgstr "{label} à {0}"
+
+msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
+msgstr "{lastDay, plural, one {# changement de la liste des masternodes en 24 heures} other {# changements de la liste des masternodes en 24 heures}}"
 
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternodes}}"
@@ -288,6 +295,9 @@ msgstr "Aucun changement de ce type récemment."
 
 msgid "No changes recorded yet."
 msgstr "Aucun changement enregistré pour l’instant."
+
+msgid "No changes to the masternode list in the last 24 hours"
+msgstr "Aucun changement de la liste des masternodes en 24 heures"
 
 msgid "Not checked"
 msgstr "Non vérifié"

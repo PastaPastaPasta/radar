@@ -366,6 +366,9 @@ msgstr "Core 24 激活"
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 在 {0}（链的中位时间）之前无法启动。之后主节点发出信号，矿工逐个窗口投票。"
 
+msgid "Core 24 did not activate"
+msgstr "Core 24 未能激活"
+
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 激活失败：已达超时仍未锁定。"
 
@@ -375,13 +378,25 @@ msgstr "Core 24 激活失败：已达超时仍未锁定。"
 msgid "Core 24 is a hard fork (deployment bit {0}) with two gates. First the masternodes: after {1} (by the chain's median time past), a {2} quorum signs the activation request and a miner puts the signature in a block. This is DIP-0023's enhanced hard fork signal (EHF). Until it's mined, miners' blocks don't count, however many signal."
 msgstr "Core 24 是一次硬分叉（部署位 {0}），有两道关口。首先是主节点：在 {1}（按链的过去中位时间）之后，由 {2} Quorum 对激活请求签名，再由矿工将该签名放入区块。这就是 DIP-0023 的增强型硬分叉信号（EHF）。在它被挖出之前，无论有多少矿工发出信号，其区块都不计入。"
 
+msgid "Core 24 is active"
+msgstr "Core 24 已激活"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is active since {0}."
 msgstr "Core 24 自 {0} 起已激活。"
 
+msgid "Core 24 is locked in"
+msgstr "Core 24 已锁定"
+
 #. placeholder {0}: o.activation ? blockWithTime(o.activation) : ''
 msgid "Core 24 is locked in. It activates at {0}."
 msgstr "Core 24 已锁定，将在 {0} 激活。"
+
+msgid "Core 24 is waiting for its first signalling window"
+msgstr "Core 24 正在等待第一个信号窗口"
+
+msgid "Core 24 is waiting for the masternodes' signal"
+msgstr "Core 24 正在等待主节点的信号"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "在主节点的信号被挖出之前，Core 24 的超时已过，因此无法再启动。"
@@ -421,9 +436,6 @@ msgstr "Dash Core"
 
 msgid "Dash Core 24 activation is under way."
 msgstr "Dash Core 24 激活正在进行中。"
-
-msgid "Dash nodes answered the last crawl"
-msgstr "Dash 节点在上次抓取中有响应"
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -651,6 +663,9 @@ msgstr "内存池"
 
 msgid "Mined by"
 msgstr "挖出者"
+
+msgid "Miners are signalling for Core 24"
+msgstr "矿工正在为 Core 24 发出信号"
 
 #. placeholder {0}: formatInt(w?.count ?? 0)
 #. placeholder {1}: formatInt(w?.threshold ?? 0)
