@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -91,6 +92,39 @@ describe('Epochs', () => {
     renderAt('/epochs')
     const upcoming = await card('upcoming')
     await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+  })
+
+  it('counts the blocks until each turn and never says a turn was ago @RA-62 @NX-50', async () => {
+    renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    expect(within(upcoming).getByRole('columnheader', { name: 'Blocks away' })).toBeVisible()
+    const cells = (i: number) => rows(upcoming).map((r) => r.querySelectorAll('td')[i]?.textContent)
+    expect(cells(1)).toEqual(Array.from({ length: 12 }, (_, i) => `+${String(i + 1)}`))
+    // The sample is long past: every turn is due.
+    expect(cells(2)).toEqual(Array.from({ length: 12 }, () => 'any moment'))
+    expect(upcoming.querySelector('thead')).not.toHaveTextContent('Slots')
+    expect(upcoming).toHaveTextContent(/from the validator sets .*\d{4}/)
+  })
+
+  it('shows when a turn comes while it is still ahead @RA-62', async () => {
+    const doc = await fixtureBody<{ schedule: { ts: number; next: { eta: number }[] } }>(
+      'radar',
+      'mainnet',
+      'platform',
+    )
+    vi.useFakeTimers({ toFake: ['Date'], now: doc.schedule.ts * 1000 })
+    try {
+      renderAt('/epochs')
+      const upcoming = await card('upcoming')
+      await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+      const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent!
+      expect(first).toMatch(/in \d+ min/)
+      expect(first).not.toMatch(/ago/)
+      expect(upcoming).toHaveTextContent(/validator sets \d+ s ago/)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('lists the latest twenty epochs, and a custom range @NX-52', async () => {
