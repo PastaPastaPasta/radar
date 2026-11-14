@@ -3,6 +3,7 @@ import { screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SourceError } from '@/data/errors'
 import { sdk } from '@/data/sdk'
+import { sdkQueries } from '@/data/sdk/queries'
 import { renderInRouter } from '@/ui/test-utils'
 import { epochForHeight, useEpochOf } from './use-epoch-of'
 
@@ -47,5 +48,35 @@ describe('useEpochOf', () => {
     )
 
     await waitFor(() => expect(screen.getByTestId('probe')).toHaveTextContent('missing'))
+  })
+  it('does not say the list is missing while it loads after a failed refresh of the current epoch', async () => {
+    vi.spyOn(sdk, 'call').mockReturnValue(new Promise(() => undefined))
+    const net = 'mainnet'
+    const client = new QueryClient({
+      defaultOptions: { queries: { retry: false, staleTime: Infinity } },
+    })
+    const key = sdkQueries['epoch.current'](net, {}).queryKey
+    client.setQueryData(key, {
+      source: 'sdk',
+      asOf: 1,
+      fetchedAt: 1,
+      proved: true,
+      data: { index: 90, firstBlockHeight: 900, firstBlockTimeMs: 1 },
+    })
+    client.getQueryCache().find({ queryKey: key })?.setState({
+      status: 'error',
+      error: new SourceError({ source: 'sdk', kind: 'network', message: 'refresh failed' }),
+    })
+    function Probe() {
+      const { epochOf, missing } = useEpochOf()
+      return <p data-testid="probe">{missing ? 'missing' : epochOf ? 'known' : 'waiting'}</p>
+    }
+    await renderInRouter(
+      <QueryClientProvider client={client}>
+        <Probe />
+      </QueryClientProvider>,
+    )
+
+    expect(screen.getByTestId('probe')).toHaveTextContent('waiting')
   })
 })

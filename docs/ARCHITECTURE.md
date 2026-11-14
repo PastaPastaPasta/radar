@@ -547,7 +547,7 @@ Every method needs a row in `METHOD_PAGES` (`features/tools/sdk-reference/method
 - `/epochs` reads `epoch.current`, the proposers of the current epoch (`epoch.evonodesProposedBlocksByRange`, up to `MAX_PROPOSER_PAGES` (8) pages of 100, combined and stamped `proved: false`, "Combined from N proof-checked answers") and a range table (`RangeTable.tsx`) that splits a from/to range into 100-epoch requests (`EPOCH_REQUEST_CAP`, `epochChunks`). Rewards, the schedule and history are Radar's (`radarQueries.platform`, `RadarZone.tsx`).
 - `/epoch/$n` routes by the current epoch: a past epoch reads `epoch.finalizedInfos` plus `epoch.epochsInfo` (count 2, for its end); the current one shows the live clock; a future one says it has not started. Its prefetch lists `epoch.current` only.
 - `/protocol` pages `protocol.versionUpgradeVoteStatus` (100 a call, the start key inclusive), tallies the answers in the browser (`tallyOf`) and states the threshold as 67 % of the evonodes that vote (`ACTIVATION_SHARE`); Radar's crawl adds the exact threshold, phase and per-candidate counts.
-- `/quorums` reads `system.currentQuorumsInfo`, which has no proof: the page says "Not proof-checked" beside its stamp, and each row's Verified badge speaks only for the quorum's signature.
+- `/quorums` reads `system.currentQuorumsInfo`, which has no proof: the page says "Not proof-checked" beside its stamp, and each row's badge says whether the quorum is verified (the `isVerified` flag the node reports for it, "Not verified" otherwise), which is part of the same unproved answer and is no stronger than it.
 - `/credits` reads `system.totalCredits` and looks up `system.prefundedSpecializedBalance`; the fiat estimate needs the rate.
 - `/shielded` reads the pool state, anchors and nullifier lookup from the SDK and pages encrypted notes in 2048-note chunks (`NOTES_CHUNK`), showing the first 10 of a chunk; the shield and unshield history is Platform Explorer's (`peQueries.shieldHistory`, `unshieldHistory`).
 - Decentralized only mode: each section backed by Radar or Platform Explorer passes `enabled: false` and renders one `Unavailable`; the SDK sections stay.
@@ -889,7 +889,7 @@ One record in five tabs, `?tab=overview|network|platform|history|payments` (over
 - **History**: version history, registration changes, and the special transactions Hyphen has for the ProTx (`#special-txs`, `hyQueries.validator`). Hyphen is asked only while its index is fit; while it is stale the card says so once and shows the registration transaction (the ProTx hash) instead.
 - **Payments** (`#payments`): the first page comes with the record; "Show more" pages back by block height (`radarQueries.payments`, 25 at a time) and keeps the place in `before`.
 - **Unknown ProTx**: asks the other network and offers "Open it on testnet/mainnet", else search. Devnets get "Radar doesn't crawl devnets."
-- **Decentralized only mode**: the header, the registration fields DAPI has and every SDK figure stay. Radar's crawl, Platform Explorer's record and Hyphen's history are refused (`enabled: false`), each tab shows one `Unavailable`, and "Check now" is hidden. With no DAPI entry either, the page is one `Unavailable`.
+- **Decentralized only mode**: the header, the registration fields DAPI has and every SDK figure stay. Radar's crawl, Platform Explorer's record and Hyphen's history are refused (`enabled: false`), each tab shows one `Unavailable`, and "Check now" is hidden. When DAPI errors as well, the page is one `Unavailable` ("Masternode records need an indexer"); when DAPI answers and its list has no entry for the ProTx, the page is the not-found `Empty` ("DAPI's list doesn't include it").
 
 ### 4.11 Decentralized only mode (`lib/source-mode.ts`, `data/endpoints.ts`, `data/query/source-mode.ts`)
 
@@ -921,7 +921,7 @@ The error is `SourceError` kind `disabled-by-mode` (§2.3). It is not an outage:
 | Mempool | the seen list (§4.8) | the full list and totals (compact) |
 | Rich list, Charts, Network internals, Governance, Proposal | — | the whole page, once (`HyphenGate`) |
 | Masternodes, Nodes, Map, Changes, Core 24 | DAPI's list on `/masternodes` and `/nodes` (§4.12–4.15) | the crawl's columns and facets; the census, map points, changes and activation tracker |
-| Masternode | the header, the registration fields and Platform figures from DAPI's list and the SDK (§4.10) | one notice per tab for what needs Radar, Platform Explorer or Hyphen; the whole page only when DAPI's list has no entry either |
+| Masternode | the header, the registration fields and Platform figures from DAPI's list and the SDK (§4.10) | one notice per tab for what needs Radar, Platform Explorer or Hyphen; the whole page is one `Unavailable` only when DAPI errors as well, and a ProTx DAPI's list does not have is the not-found `Empty` |
 | Status | DAPI and SDK rows and the node pool; overall line "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode." | hosted rows stay listed as "Off in this mode" (`data-state="off"`), with no probe |
 | Search | local, DAPI and SDK resolvers | index lookups (compact) |
 | Settings, Tools | everything; USD is disabled in the unit choice | USD prices (compact, mainnet only: the feed is not offered elsewhere) |
