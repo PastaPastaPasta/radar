@@ -27,6 +27,10 @@ msgstr "{0, plural, one {# entrada} many {# de entradas} other {# entradas}}"
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, one {# salida} many {# de salidas} other {# salidas}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} unidades base"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} no cubre las devnets."
@@ -68,6 +72,10 @@ msgstr "{0} participaciones, {1} bloques de penalización por salida anticipada"
 msgid "{0} to other addresses"
 msgstr "{0} a otras direcciones"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} votos"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# confirmación} many {# de confirmaciones} other {# confirmaciones}}"
 
@@ -92,6 +100,9 @@ msgstr "{n} salidas más"
 msgid "{name} (reason {reason})"
 msgstr "{name} (motivo {reason})"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, one {# tipo} other {# tipos}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Los grupos de un contrato, con posición, umbral y miembros."
 
@@ -109,6 +120,9 @@ msgstr "Un participante de un masternode compartido cambia a dónde se paga su r
 
 msgid "About"
 msgstr "Acerca de"
+
+msgid "Active"
+msgstr "Activo"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Nombres en disputa activos, con hora de cierre, votos y estado."
@@ -170,8 +184,9 @@ msgstr "Bloque"
 msgid "block {0}"
 msgstr "bloque {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "Bloque {0}"
 
@@ -253,8 +268,14 @@ msgstr "Vincula el bloque a la lista de masternodes y al último ChainLock."
 msgid "Compromised keys"
 msgstr "Claves comprometidas"
 
+msgid "Contenders"
+msgstr "Candidatos"
+
 msgid "contest"
 msgstr "disputa"
+
+msgid "Contested name"
+msgstr "Nombre en disputa"
 
 msgid "contract"
 msgstr "contrato"
@@ -298,6 +319,12 @@ msgstr "Punta de Core y ChainLock, altura y época de Platform, mapa de nodos y 
 msgid "Core transaction"
 msgstr "Transacción Core"
 
+msgid "Could not check this right now."
+msgstr "Ahora mismo no se puede comprobar."
+
+msgid "Could not read names."
+msgstr "No se pudieron leer los nombres."
+
 msgid "Created"
 msgstr "Creado"
 
@@ -330,6 +357,9 @@ msgstr "datos"
 
 msgid "Data (OP_RETURN)"
 msgstr "Datos (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "Contrato de datos"
 
 msgid "Data sources"
 msgstr "Fuentes de datos"
@@ -364,17 +394,32 @@ msgstr "Documento"
 msgid "document type"
 msgstr "tipo de documento"
 
+msgid "Document types"
+msgstr "Tipos de documento"
+
 msgid "Documents"
 msgstr "Documentos"
 
 msgid "Early-leave penalty"
 msgstr "Penalización por salida anticipada"
 
+msgid "Enabled"
+msgstr "Habilitado"
+
+msgid "Ended"
+msgstr "Finalizó"
+
+msgid "Ends"
+msgstr "Termina"
+
 msgid "epoch"
 msgstr "época"
 
 msgid "Epoch"
 msgstr "Época"
+
+msgid "Epoch {id}"
+msgstr "Época {id}"
 
 msgid "Epochs"
 msgstr "Épocas"
@@ -403,6 +448,9 @@ msgstr "Evonode"
 msgid "Evonode (high-performance)"
 msgstr "Evonode (alto rendimiento)"
 
+msgid "Failed"
+msgstr "Fallida"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "Contratos de datos destacados e indexados, con propietario, documentos y tokens."
 
@@ -417,6 +465,12 @@ msgstr "Encuentra la identidad que posee una clave pública, a partir de su hash
 
 msgid "finding where…"
 msgstr "buscando dónde…"
+
+msgid "Finished"
+msgstr "Finalizada"
+
+msgid "First block"
+msgstr "Primer bloque"
 
 msgid "First seen"
 msgstr "Visto por primera vez"
@@ -488,6 +542,9 @@ msgstr "Identidad"
 msgid "Identity by key hash"
 msgstr "Identidad por hash de clave"
 
+msgid "Identity created"
+msgstr "Identidad creada"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "en {0}"
@@ -495,6 +552,9 @@ msgstr "en {0}"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "En el bloque {0}"
+
+msgid "In progress"
+msgstr "En curso"
 
 msgid "in the mempool"
 msgstr "en el mempool"
@@ -535,8 +595,14 @@ msgstr "Idioma"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "Idioma, unidades, zona horaria, opciones de conexión y devnets personalizadas."
 
+msgid "Last paid"
+msgstr "Último pago"
+
 msgid "Last seen"
 msgstr "Visto por última vez"
+
+msgid "Leading"
+msgstr "En cabeza"
 
 msgid "Link copied"
 msgstr "Enlace copiado"
@@ -555,6 +621,9 @@ msgstr "Cargando importes: {0} de {1} entradas. Cada transacción anterior es un
 
 msgid "Loading inputs…"
 msgstr "Cargando entradas…"
+
+msgid "Locked"
+msgstr "Bloqueado"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Bloquea Dash en Core para crear créditos en Platform."
@@ -667,11 +736,38 @@ msgstr "Sin dirección"
 msgid "No block with this ID on this network."
 msgstr "No hay ningún bloque con este ID en esta red."
 
+msgid "No contest for this name on this network."
+msgstr "No hay disputa por este nombre en esta red."
+
+msgid "No contract with this ID on this network."
+msgstr "No hay ningún contrato con este ID en esta red."
+
+msgid "No document with this ID on this network."
+msgstr "No hay ningún documento con este ID en esta red."
+
+msgid "No epoch with this number yet."
+msgstr "Todavía no hay una época con este número."
+
+msgid "No identity with this ID on this network."
+msgstr "No hay ninguna identidad con este ID en esta red."
+
+msgid "No indexer covers this network."
+msgstr "Ningún indexador cubre esta red."
+
 msgid "No InstantSend lock was seen"
 msgstr "No se vio ningún bloqueo InstantSend"
 
+msgid "No Platform block with this ID on this network."
+msgstr "No hay ningún bloque de Platform con este ID en esta red."
+
 msgid "No source can say whether this output is spent."
 msgstr "Ninguna fuente puede decir si esta salida se ha gastado."
+
+msgid "No state transition with this hash on this network."
+msgstr "No hay ninguna transición de estado con este hash en esta red."
+
+msgid "No token with this ID on this network."
+msgstr "No hay ningún token con este ID en esta red."
 
 msgid "No transaction with this ID on this network."
 msgstr "No hay ninguna transacción con este ID en esta red."
@@ -682,14 +778,26 @@ msgstr "En esta transacción no se mueve ningún valor"
 msgid "Nodes"
 msgstr "Nodos"
 
+msgid "Nonce"
+msgstr "Nonce"
+
 msgid "None"
 msgstr "Ninguno"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "Ninguna. Una recarga abona créditos a una identidad que ya existía."
+
+msgid "Not available"
+msgstr "No disponible"
 
 msgid "Not ChainLocked yet"
 msgstr "Aún sin ChainLock"
 
 msgid "not in a block yet"
 msgstr "aún no está en un bloque"
+
+msgid "Not in this network's masternode list."
+msgstr "No está en la lista de masternodes de esta red."
 
 msgid "Not in this version"
 msgstr "No está en esta versión"
@@ -703,11 +811,17 @@ msgstr "No cargado"
 msgid "Not mined yet"
 msgstr "Aún no minado"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "No registrado. Puede estar libre o aún en disputa."
+
 msgid "Not specified"
 msgstr "No especificado"
 
 msgid "Number"
 msgstr "Número"
+
+msgid "On Platform"
+msgstr "En Platform"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "Una disputa: estado, recuento, contendientes con saldo prefinanciado y quién votó."
@@ -754,6 +868,12 @@ msgstr "Un token: suministro, precio, estado de pausa, definición, actividad y 
 msgid "Open"
 msgstr "Abrir"
 
+msgid "Open the diagnostics drawer"
+msgstr "Abrir el panel de diagnóstico"
+
+msgid "Open the proof inspector"
+msgstr "Abrir el inspector de pruebas"
+
 msgid "Open the result, or all results"
 msgstr "Abrir el resultado o todos los resultados"
 
@@ -792,6 +912,9 @@ msgstr "Salidas"
 msgid "Overview"
 msgstr "Resumen"
 
+msgid "Owner"
+msgstr "Propietario"
+
 msgid "Owner key"
 msgstr "Clave del propietario"
 
@@ -808,6 +931,9 @@ msgstr "Página no encontrada"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "Pega una transición de estado en hex o base64 para decodificarla y comprobarla. No se firma ni se envía nada."
+
+msgid "Paused"
+msgstr "En pausa"
 
 msgid "Payload"
 msgstr "Payload"
@@ -848,6 +974,9 @@ msgstr "Votación de la versión del protocolo de Platform: la versión actual y
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "El pulso de Platform: altura, época, gráficos de actividad, líderes y los bloques y transiciones de estado más recientes."
 
+msgid "PoSe-banned"
+msgstr "Vetado por PoSe"
+
 msgid "Position"
 msgstr "Posición"
 
@@ -856,6 +985,9 @@ msgstr "propuesta"
 
 msgid "Proposal"
 msgstr "Propuesta"
+
+msgid "Proposer"
+msgstr "Proponente"
 
 msgid "Protocol"
 msgstr "Protocolo"
@@ -932,6 +1064,9 @@ msgstr "registrado por Hyphen; ninguna segunda fuente lo ha confirmado"
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "Registra que un quórum terminó su generación de claves y quién firmó."
 
+msgid "Registered"
+msgstr "Registrado"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "Registra un masternode o evonode y establece las claves que lo operan."
 
@@ -955,6 +1090,9 @@ msgstr "Solicitado en la altura"
 
 msgid "Result"
 msgstr "Resultado"
+
+msgid "Revision"
+msgstr "Revisión"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "El ancho de la cinta es el importe. El gris es el cambio devuelto al remitente y el naranja es la comisión."
@@ -1073,6 +1211,9 @@ msgstr "Gastos"
 msgid "Spent"
 msgstr "Gastado"
 
+msgid "Started"
+msgstr "Inicio"
+
 msgid "State"
 msgstr "Estado"
 
@@ -1087,6 +1228,12 @@ msgstr "Transiciones de estado"
 
 msgid "Status"
 msgstr "Estado"
+
+msgid "Success"
+msgstr "Correcta"
+
+msgid "Supply"
+msgstr "Suministro"
 
 msgid "Termination of service"
 msgstr "Terminación del servicio"
@@ -1157,8 +1304,29 @@ msgstr "No hay ninguna transacción con este ID en esta red. Puede ser demasiado
 msgid "This {record} is on {network}."
 msgstr "Este {record} está en {network}."
 
+msgid "This address holds nothing on Platform."
+msgstr "Esta dirección no tiene nada en Platform."
+
 msgid "This browser"
 msgstr "Este navegador"
+
+msgid "This is not a contract ID."
+msgstr "Esto no es un ID de contrato."
+
+msgid "This is not a document address."
+msgstr "Esta no es la dirección de un documento."
+
+msgid "This is not a Platform address."
+msgstr "Esta no es una dirección de Platform."
+
+msgid "This is not a token ID."
+msgstr "Esto no es un ID de token."
+
+msgid "This is not an epoch number."
+msgstr "Esto no es un número de época."
+
+msgid "This is not an identity ID."
+msgstr "Esto no es un ID de identidad."
 
 msgid "This page is on its way"
 msgstr "Esta página está en camino"
@@ -1258,10 +1426,16 @@ msgstr "Sin gastar"
 msgid "Upcoming vote polls by end date."
 msgstr "Próximas votaciones por fecha de cierre."
 
+msgid "Updated"
+msgstr "Actualizado"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD a {0} por DASH, de {1}."
+
+msgid "Username"
+msgstr "Nombre de usuario"
 
 msgid "Valid members"
 msgstr "Miembros válidos"
@@ -1279,6 +1453,9 @@ msgstr "Flujo de valor: {0} entradas hacia {1} salidas"
 
 msgid "Verify message"
 msgstr "Verificar mensaje"
+
+msgid "Version"
+msgstr "Versión"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1500,17 @@ msgstr "Saber si una salida está gastada, y por qué transacción, necesita un 
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Qué llamada del SDK de Platform respalda cada página de Radar, con sus argumentos."
 
+msgid "Winner"
+msgstr "Ganador"
+
 msgid "Withdrawal index"
 msgstr "Índice de retirada"
+
+msgid "Withdrawals on Platform"
+msgstr "Retiros en Platform"
+
+msgid "Won"
+msgstr "Ganada"
 
 msgid "You"
 msgstr "Tú"

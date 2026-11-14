@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { decodeWhere } from '../src/lib/search-schemas'
 import { LEGACY_PATTERNS, NATIVE_PATHS, redirectFor } from '../../../workers/edge/src/redirects'
 import { createAppRouter } from '../src/router'
 import { createQueryClient } from '../src/app/query-client'
@@ -10,6 +11,21 @@ const HASH = 'b'.repeat(64)
 function isRoute(pathname: string): boolean {
   const [, params, found] = router.getMatchedRoutes(pathname)
   return found !== undefined && !('**' in params)
+}
+
+type Validate = (search: Record<string, unknown>) => Record<string, unknown>
+
+/** What the page the redirect lands on reads from its address, run through the route's own search schema. */
+function landed(hit: URL): Record<string, unknown> {
+  const [matched] = router.getMatchedRoutes(hit.pathname)
+  const raw = router.options.parseSearch(hit.search) as Record<string, unknown>
+  const search: Record<string, unknown> = {}
+  for (const route of matched) {
+    const validate = route.options.validateSearch as Validate | { parse: Validate } | undefined
+    if (!validate) continue
+    Object.assign(search, typeof validate === 'function' ? validate(raw) : validate.parse(raw))
+  }
+  return search
 }
 
 const FULL_QUERY = new URLSearchParams({
@@ -147,6 +163,161 @@ describe('redirect targets', () => {
       const hit = at('/tools', { tool })
       expect(isRoute(hit!.pathname), tool).toBe(true)
     }
+  })
+
+  describe('the native explorer pages', () => {
+    const at = (path: string, q: Record<string, string>, host = 'explorer.dashhq.org') =>
+      target(path, new URLSearchParams(q), host)!
+
+    it.each([
+      ['/identity', { id: ID, tab: 'dpns' }, `/identity/${ID}`, { tab: 'names' }],
+      ['/identity', { id: ID, tab: 'keys' }, `/identity/${ID}`, { tab: 'keys' }],
+      ['/identity', { id: ID, tab: 'nonsense' }, `/identity/${ID}`, { tab: 'overview' }],
+      ['/contract', { id: ID, tab: 'internal' }, `/contract/${ID}`, { tab: 'config' }],
+      ['/contract', { id: ID, tab: 'documents' }, `/contract/${ID}`, { tab: 'types' }],
+      ['/contract/token', { id: ID, position: '1' }, `/contract/${ID}`, { tab: 'tokens' }],
+      [
+        '/contract/document',
+        { id: ID, type: 'note', docId: ID, tab: 'metadata' },
+        `/document/${ID}/note/${ID}`,
+        { tab: 'meta' },
+      ],
+      [
+        '/contract/document',
+        { id: ID, type: 'note', docId: ID, tab: 'history' },
+        `/document/${ID}/note/${ID}`,
+        { tab: 'revisions' },
+      ],
+      ['/token', { id: ID, tab: 'holders' }, `/token/${ID}`, { tab: 'holders' }],
+      ['/token', { id: ID }, `/token/${ID}`, { tab: 'overview' }],
+      ['/token/holders', { id: ID }, `/token/${ID}/holders`, {}],
+      ['/dpns', { name: 'alice.dash' }, '/name/alice', {}],
+      ['/dpns/search', { q: 'al', after: 'x,y' }, '/names', { q: 'al', after: 'y' }],
+      ['/governance/polls', { window: 'all-upcoming' }, '/polls', { range: 'upcoming' }],
+      ['/governance/polls', {}, '/polls', { range: 'upcoming' }],
+      ['/governance/polls', { window: '7d', page: '2' }, '/polls', { range: '7d', page: 2 }],
+      ['/epoch/detail', { index: '7' }, '/epoch/7', {}],
+      ['/epoch/history', { from: '3', to: '9' }, '/epochs', { from: 3, to: 9 }],
+      ['/evonode', { proTxHash: HASH }, `/mn/${HASH}`, { tab: 'platform' }],
+      ['/network/quorums', {}, '/quorums', {}],
+      ['/network/credits', {}, '/credits', {}],
+      ['/network/shielded', {}, '/shielded', {}],
+      ['/network/protocol', {}, '/protocol', {}],
+      ['/state-transition', { hash: HASH }, `/platform/tx/${HASH}`, {}],
+      ['/address', { addr: 'dash1x' }, '/platform-address/dash1x', {}],
+      ['/tools', { tool: 'path-elements' }, '/tools/path', {}],
+      ['/tools', { tool: 'proof' }, '/tools/proof', {}],
+      ['/tools', { tool: 'identity' }, '/tools/identity', {}],
+      ['/governance/contested', {}, '/contests', {}],
+    ] as const)('%s?%j opens %s with %j', (path, query, pathname, expected) => {
+      const hit = at(path, query)
+      expect(hit.pathname).toBe(pathname)
+      expect(isRoute(hit.pathname)).toBe(true)
+      expect(landed(hit)).toMatchObject(expected)
+    })
+
+    it.each([
+      ['/query', { q: 'SELECT COUNT(*) FROM dpns.domain', contract: ID }],
+      ['/settings', {}],
+      ['/about', {}],
+      ['/sdk-reference', {}],
+      ['/saved', { scope: 'all' }],
+    ] as const)('%s keeps its address, which the new page reads as it is', (path, query) => {
+      const params = new URLSearchParams(query)
+      expect(target(path, params, 'explorer.dashhq.org')).toBeNull()
+      expect(isRoute(path)).toBe(true)
+      const search = landed(new URL(`https://x.invalid${path}?${params}`))
+      for (const [k, v] of Object.entries(query)) expect(search[k]).toBe(v)
+    })
+
+    it('turns the documents browser filter, order and cursors into the page address', () => {
+      const where = JSON.stringify([
+        ['normalizedLabel', 'startsWith', 'al~ice'],
+        ['$ownerId', 'in', `${ID}, ${HASH}`],
+        ['age', '>=', '18'],
+        ['age', '!=', '3'],
+        ['', '==', 'x'],
+      ])
+      const hit = at('/contract/documents', {
+        id: ID,
+        type: 'domain',
+        where,
+        order: '$createdAt:desc',
+        limit: '50',
+        after: 'c1,c2,c3',
+      })
+      expect(hit.pathname).toBe(`/contract/${ID}/documents/domain`)
+      const search = landed(hit)
+      expect(search).toMatchObject({
+        where: [
+          { field: 'normalizedLabel', op: 'sw', value: 'al~ice' },
+          { field: '$ownerId', op: 'in', value: [ID, HASH] },
+          { field: 'age', op: 'gte', value: '18' },
+        ],
+        order: ['-$createdAt'],
+        limit: 50,
+        after: 'c3',
+        prev: ['c1', 'c2'],
+      })
+      expect(decodeWhere(hit.searchParams.get('where')!)).toHaveLength(3)
+    })
+
+    it('carries a plain ascending order and no cursor through', () => {
+      const hit = at('/contract/documents', {
+        id: ID,
+        type: 'note',
+        order: '$id:asc',
+        where: '[["$id","==","x"]]',
+      })
+      const search = landed(hit)
+      expect(search).toMatchObject({
+        order: ['$id'],
+        where: [{ field: '$id', op: 'eq', value: 'x' }],
+      })
+      expect(search.after).toBeUndefined()
+      expect(search.prev).toBeUndefined()
+    })
+
+    it('drops a filter it cannot read instead of failing', () => {
+      const hit = at('/contract/documents', { id: ID, type: 'note', where: '{not json' })
+      expect(isRoute(hit.pathname)).toBe(true)
+      expect(hit.searchParams.has('where')).toBe(false)
+    })
+
+    it('keeps the network through every translation', () => {
+      const hit = at('/contract/documents', {
+        id: ID,
+        type: 'note',
+        where: '[["a","==","b"]]',
+        network: 'testnet',
+      })
+      expect(hit.searchParams.get('network')).toBe('testnet')
+    })
+  })
+
+  describe('the old Radar pages', () => {
+    const at = (path: string, q: Record<string, string>) =>
+      target(path, new URLSearchParams(q), 'radar.dashhq.org')!
+
+    it.each([
+      ['/mn/' + HASH, { net: 'testnet' }, `/mn/${HASH}`, { network: 'testnet' }],
+      ['/v24', { net: 'testnet' }, '/v24', { network: 'testnet' }],
+      ['/api', { net: 'testnet' }, '/api', { network: 'testnet' }],
+      ['/map', { net: 'testnet', type: 'Evo' }, '/map', { network: 'testnet', type: 'evo' }],
+      [
+        '/changes',
+        { net: 'testnet', kind: 'joins' },
+        '/changes',
+        { network: 'testnet', kind: 'joins' },
+      ],
+      ['/platform.html', { net: 'testnet' }, '/epochs', { network: 'testnet' }],
+      ['/mn.html', {}, '/masternodes', {}],
+    ] as const)('%s?%j opens %s', (path, query, pathname, expected) => {
+      const hit = at(path, query)
+      expect(hit.pathname).toBe(pathname)
+      expect(isRoute(hit.pathname)).toBe(true)
+      for (const [k, v] of Object.entries(expected)) expect(hit.searchParams.get(k)).toBe(v)
+    })
   })
 
   it('does not treat an unknown path as a route', () => {

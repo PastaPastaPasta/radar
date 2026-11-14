@@ -163,6 +163,10 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
           columns={columns}
           rows={rows}
           getRowId={(r) => r.key}
+          rowLink={(r) => {
+            const c = pollContest(r.poll)
+            return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
+          }}
           state={loadState(polls)}
           error={polls.error}
           onRetry={() => void polls.refetch()}

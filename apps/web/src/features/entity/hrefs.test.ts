@@ -14,7 +14,7 @@ const CASES: Record<EntityKind, { id: string; path: string; route: string }> = {
   tx: { id: HEX, path: `/tx/${HEX}`, route: '/tx/$txid' },
   address: { id: 'XabcDEF', path: '/address/XabcDEF', route: '/address/$address' },
   masternode: { id: HEX, path: `/mn/${HEX}`, route: '/mn/$protx' },
-  evonode: { id: HEX, path: `/mn/${HEX}`, route: '/mn/$protx' },
+  evonode: { id: HEX, path: `/mn/${HEX}?tab=platform`, route: '/mn/$protx' },
   proposal: { id: HEX, path: `/governance/${HEX}`, route: '/governance/$hash' },
   'platform-block': { id: '1200', path: '/platform/block/1200', route: '/platform/block/$id' },
   transition: { id: HEX, path: `/platform/tx/${HEX}`, route: '/platform/tx/$hash' },
@@ -72,6 +72,11 @@ describe('entityPath @X-09', () => {
   it('leaves out empty search values and joins a quorum’s own parameter', () => {
     expect(entityPath('contest', 'alice', { contract: undefined, type: '' })).toBe('/contest/alice')
     expect(entityPath('quorum', HEX, { type: '4' })).toBe(`/quorums?q=${HEX}&type=4`)
+  })
+
+  it('opens an evonode on its Platform tab and a masternode on its overview @X-02', () => {
+    expect(entityHref('evonode', HEX, 'testnet')).toBe(`/mn/${HEX}?tab=platform&network=testnet`)
+    expect(entityHref('masternode', HEX, 'testnet')).toBe(`/mn/${HEX}?network=testnet`)
   })
 
   it('encodes a label that is not a plain path segment', () => {

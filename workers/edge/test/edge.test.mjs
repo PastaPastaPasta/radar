@@ -445,14 +445,14 @@ describe('redirects', () => {
     await check(h, '/token/?id=T1&network=mainnet', '/token/T1')
     await check(h, '/token/holders/?id=T1', '/token/T1/holders?network=testnet')
     await check(h, '/dpns/?name=alice.dash', '/name/alice?network=testnet')
-    await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12')
+    await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12?tab=platform')
     await check(h, '/epoch/detail/?index=5', '/epoch/5?network=testnet')
     await check(h, '/network/status/?network=mainnet', '/status')
     await check(h, '/address/?addr=dash1x', '/platform-address/dash1x?network=testnet')
     await check(h, '/state-transition/?hash=AB', '/platform/tx/AB?network=testnet')
     await check(h, '/tools/?tool=state-transition', '/tools/transition?network=testnet')
     await check(h, '/tools/?tool=proof', '/tools/proof?network=testnet')
-    await check(h, '/tools/?tool=path-elements', '/tools/transition?network=testnet')
+    await check(h, '/tools/?tool=path-elements', '/tools/path?network=testnet')
     await check(
       h,
       '/governance/contested/detail/?contract=C1&docType=domain&indexName=parentNameAndLabel&indexValues=%5B%22dash%22%2C%22al1ce%22%5D',
@@ -472,9 +472,64 @@ describe('redirects', () => {
     await check(h, '/tools/?tool=constructor', '/tools/transition?network=testnet')
     await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
     await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
-    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?network=testnet')
-    await check(h, '/governance/polls/?network=mainnet', '/polls')
+    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?tab=tokens&network=testnet')
+    await check(h, '/governance/polls/?network=mainnet', '/polls?range=upcoming')
     await check(h, '/search/?q=alice', '/search?q=alice')
+  })
+
+  it('renames the native explorer tabs and keeps only the tabs the pages have', async () => {
+    const h = 'explorer.dashhq.org'
+    await check(h, '/identity/?id=ABC&tab=dpns&network=mainnet', '/identity/ABC?tab=names')
+    await check(h, '/identity/?id=ABC&tab=bogus&network=mainnet', '/identity/ABC')
+    await check(h, '/contract/?id=C1&tab=internal&network=mainnet', '/contract/C1?tab=config')
+    await check(h, '/contract/?id=C1&tab=documents&network=mainnet', '/contract/C1?tab=types')
+    await check(
+      h,
+      '/contract/document/?id=C1&type=note&docId=D1&tab=metadata&network=mainnet',
+      '/document/C1/note/D1?tab=meta',
+    )
+    await check(
+      h,
+      '/contract/document/?id=C1&type=note&docId=D1&tab=history&network=mainnet',
+      '/document/C1/note/D1?tab=revisions',
+    )
+    await check(h, '/token/?id=T1&tab=holders&network=mainnet', '/token/T1?tab=holders')
+    await check(h, '/token/?id=T1&tab=status&network=mainnet', '/token/T1')
+  })
+
+  it('turns the documents browser filter, order and page cursors into the page address', async () => {
+    const h = 'explorer.dashhq.org'
+    const where = encodeURIComponent(
+      JSON.stringify([
+        ['normalizedLabel', 'startsWith', 'ali'],
+        ['$ownerId', 'in', 'A, B'],
+        ['age', '>=', '18'],
+        ['bad', '!=', '1'],
+      ]),
+    )
+    await check(
+      h,
+      `/contract/documents/?id=C1&type=domain&network=mainnet&where=${where}&order=%24createdAt%3Adesc&after=c1%2Cc2%2Cc3&limit=50`,
+      '/contract/C1/documents/domain?limit=50&where=normalizedLabel%7Esw%7Eali%2C%2524ownerId%7Ein%7EA%7CB%2Cage%7Egte%7E18&order=-%24createdAt&after=c3&prev=c1%2Cc2',
+    )
+    await check(
+      h,
+      '/contract/documents/?id=C1&type=note&network=mainnet&where=%7Bnot-json&order=title%3Aasc',
+      '/contract/C1/documents/note?order=title',
+    )
+  })
+
+  it('maps the native polls window and name search cursors', async () => {
+    const h = 'explorer.dashhq.org'
+    await check(
+      h,
+      '/governance/polls/?window=all-upcoming&network=mainnet',
+      '/polls?range=upcoming',
+    )
+    await check(h, '/governance/polls/?window=7d&page=2&network=mainnet', '/polls?page=2&range=7d')
+    await check(h, '/governance/polls/?network=mainnet', '/polls?range=upcoming')
+    await check(h, '/governance/polls/?window=__proto__&network=mainnet', '/polls?range=upcoming')
+    await check(h, '/dpns/search/?q=al&after=x%2Cy&network=mainnet', '/names?q=al&after=y')
   })
 
   it('sends write paths to the entity page and drops signing parameters', async () => {
@@ -672,6 +727,164 @@ describe('per-entity title and OG', () => {
       /og:url" content="http:\/\/radar\.localhost\/block\/1234567\?sources=decentralized"/,
     )
     assert.equal(upstreamCalls.length, 0)
+  })
+
+  describe('Platform entities', () => {
+    const hash = 'c'.repeat(64)
+    const contract = 'D'.repeat(44)
+    const doc = 'E'.repeat(44)
+    const address = 'dash1k2gwmxl4sy6qrq6xgwk2z4mxd8hdq7zk4r'
+    const reads = async (path, body) => {
+      reset(() => Response.json(body))
+      const html = await (await getAsBot(path)).text()
+      return { html, url: upstreamCalls[0]?.url, calls: upstreamCalls.length }
+    }
+
+    it('names an epoch by its number, start and transitions', async () => {
+      const r = await reads('/epoch/42', {
+        epoch: { number: 42, startTime: Date.UTC(2026, 9, 1) },
+        totalTxCount: 1234,
+      })
+      assert.equal(r.url, 'https://api.pe.dashhq.org/epoch/42')
+      assert.match(r.html, /<title>Epoch 42 · Radar<\/title>/)
+      assert.match(r.html, /og:description" content="starts 2026-10-01 · 1,234 transactions"/)
+    })
+
+    it('keeps what names a quorum or a custom contest in the canonical address', async () => {
+      reset(() => Response.json({}))
+      let html = await (await getAsBot(`/quorums?q=${hash}`)).text()
+      assert.match(
+        html,
+        new RegExp(`og:url" content="http://radar\\.localhost/quorums\\?q=${hash}"`),
+      )
+      html = await (
+        await getAsBot(`/contest/x?contract=${contract}&type=widget&index=byName`)
+      ).text()
+      assert.match(
+        html,
+        /og:url" content="[^"]*\/contest\/x\?contract=D+&amp;type=widget&amp;index=byName"/,
+      )
+    })
+
+    it('names a name from its address without asking a backend', async () => {
+      const r = await reads('/name/alice', {})
+      assert.equal(r.calls, 0)
+      assert.match(r.html, /<title>Name alice\.dash · Radar<\/title>/)
+      assert.match(r.html, /<div id="root">/)
+    })
+
+    it('describes a contest from its status and votes, and keeps a custom one generic', async () => {
+      const r = await reads('/contest/alice?network=testnet', {
+        status: 'Active',
+        totalCountVotes: 3,
+        endTimestamp: '2026-11-20T00:00:00Z',
+      })
+      assert.equal(
+        r.url,
+        `https://api.testnet.pe.dashhq.org/contestedResource/${encodeURIComponent(btoa('["dash","alice"]'))}`,
+      )
+      assert.match(r.html, /<title>Contest alice\.dash · Radar<\/title>/)
+      assert.match(r.html, /og:description" content="Active · 3 votes · ends 2026-11-20"/)
+      const custom = await reads(`/contest/gold?contract=${contract}&type=note&index=byName`, {})
+      assert.equal(custom.calls, 0)
+      assert.match(custom.html, /<title>Name contest · Radar<\/title>/)
+    })
+
+    it('describes a document from its three-part address', async () => {
+      const r = await reads(`/document/${contract}/note/${doc}`, {
+        documentTypeName: 'note',
+        revision: 2,
+      })
+      const url = new URL(r.url)
+      assert.equal(url.pathname, `/document/${doc}`)
+      assert.equal(url.searchParams.get('contract_id'), contract)
+      assert.equal(url.searchParams.get('document_type_name'), 'note')
+      assert.match(r.html, /<title>Document note EEEEEEEE…EEEEEE · Radar<\/title>/)
+      assert.match(r.html, /og:description" content="note · revision 2"/)
+    })
+
+    it('describes a Platform block by hash or by height', async () => {
+      const header = { height: 4321, timestamp: '2026-11-10T00:00:00Z' }
+      const byHash = await reads(`/platform/block/${hash}`, { header, txs: [{}, {}] })
+      assert.equal(byHash.url, `https://api.pe.dashhq.org/block/${hash}`)
+      assert.match(byHash.html, /<title>Platform block 4,321 · Radar<\/title>/)
+      assert.match(byHash.html, /og:description" content="2 transitions · 2026-11-10T00:00:00Z"/)
+      const byHeight = await reads('/platform/block/4321', { resultSet: [{ header, txs: [{}] }] })
+      assert.match(byHeight.url, /\/blocks\?height_min=4321&height_max=4321&limit=1/)
+      assert.match(byHeight.html, /<title>Platform block 4,321 · Radar<\/title>/)
+      const absent = await reads('/platform/block/9999999', { resultSet: [] })
+      assert.match(absent.html, /<title>Platform block · Radar<\/title>/)
+    })
+
+    it('describes a state transition by type, status and block', async () => {
+      const r = await reads(`/platform/tx/${hash}`, {
+        type: 'DocumentsBatch',
+        status: 'SUCCESS',
+        blockHeight: 77,
+      })
+      assert.equal(r.url, `https://api.pe.dashhq.org/transaction/${hash}`)
+      assert.match(r.html, /<title>State transition cccccccc…cccccc · Radar<\/title>/)
+      assert.match(r.html, /og:description" content="DocumentsBatch · SUCCESS · block 77"/)
+    })
+
+    it('describes a Platform address by its balance', async () => {
+      const r = await reads(`/platform-address/${address}`, { balance: '250000000000' })
+      assert.equal(r.url, `https://api.pe.dashhq.org/platformAddress/${address}/info`)
+      assert.match(r.html, /<title>Platform address dash1k2g…q7zk4r · Radar<\/title>/)
+      assert.match(r.html, /og:description" content="2\.5 DASH on Platform"/)
+    })
+
+    it('finds a quorum in the list by the hash in the address', async () => {
+      const r = await reads(`/quorums?q=${hash}`, [
+        { type: 'llmq_25_67', quorumHash: 'd'.repeat(64) },
+        { type: 'llmq_100_67', quorumHash: hash, numValidMembers: 98, blockHeight: 2400000 },
+      ])
+      assert.equal(r.url, 'https://api.pe.dashhq.org/quorums')
+      assert.match(r.html, /<title>Quorum cccccccc…cccccc · Radar<\/title>/)
+      assert.match(
+        r.html,
+        /og:description" content="llmq_100_67 · 98 valid members · height 2400000"/,
+      )
+      const none = await reads(`/quorums?q=${'e'.repeat(64)}`, [{ type: 'x', quorumHash: hash }])
+      assert.match(none.html, /<title>Quorum · Radar<\/title>/)
+      const plain = await reads('/quorums', [])
+      assert.equal(plain.calls, 0)
+      assert.doesNotMatch(plain.html, /og:title/)
+    })
+
+    it('falls back to a generic description when the backend fails or the id is malformed', async () => {
+      for (const [path, title] of [
+        ['/epoch/7', 'Epoch'],
+        [`/document/${contract}/note/${doc}`, 'Document'],
+        [`/platform/tx/${hash}`, 'State transition'],
+        [`/platform-address/${address}`, 'Platform address'],
+        [`/platform/block/${hash}`, 'Platform block'],
+        [`/quorums?q=${hash}`, 'Quorum'],
+      ]) {
+        reset(() => new Response('boom', { status: 500 }))
+        const html = await (await getAsBot(path)).text()
+        assert.match(html, new RegExp(`<title>${title} · Radar</title>`), path)
+      }
+      reset()
+      for (const [path, title] of [
+        ['/epoch/abc', 'Epoch'],
+        ['/platform/tx/zz', 'State transition'],
+        ['/platform-address/notanaddress', 'Platform address'],
+        ['/platform/block/xyz', 'Platform block'],
+      ]) {
+        const html = await (await getAsBot(path)).text()
+        assert.match(html, new RegExp(`<title>${title} · Radar</title>`), path)
+      }
+      assert.equal(upstreamCalls.length, 0)
+    })
+
+    it('reads no hosted backend for a Decentralized only link', async () => {
+      reset(() => Response.json({}))
+      for (const path of ['/epoch/42', `/platform/tx/${hash}`, `/platform-address/${address}`]) {
+        await getAsBot(`${path}?sources=decentralized`)
+      }
+      assert.equal(upstreamCalls.length, 0)
+    })
   })
 
   it('makes no backend call for devnets or other routes', async () => {

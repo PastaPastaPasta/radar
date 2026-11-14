@@ -18,6 +18,7 @@ const TOOLS: Record<string, string> = {
   document: 'document',
   identity: 'identity',
   proof: 'proof',
+  'path-elements': 'path',
 }
 
 function toolPath(tool: string | null): string {
@@ -31,6 +32,112 @@ function parseJson(raw: string): unknown {
     return undefined
   }
 }
+
+/** The native explorer's tab names, where the new pages call them something else; an unknown tab is dropped. */
+function tabSet(p: URLSearchParams, names: Record<string, string>): Record<string, string> {
+  const key = (p.get('tab') ?? '').toLowerCase()
+  return Object.hasOwn(names, key) ? { tab: names[key]! } : {}
+}
+
+const IDENTITY_TABS = {
+  keys: 'keys',
+  dpns: 'names',
+  names: 'names',
+  tokens: 'tokens',
+  groups: 'groups',
+  votes: 'votes',
+  advanced: 'advanced',
+}
+const CONTRACT_TABS = {
+  schema: 'schema',
+  documents: 'types',
+  tokens: 'tokens',
+  groups: 'groups',
+  history: 'history',
+  internal: 'config',
+}
+const DOCUMENT_TABS = { data: 'data', metadata: 'meta', history: 'revisions' }
+const TOKEN_TABS = { definition: 'definition', holders: 'holders', balance: 'balance' }
+const POLL_WINDOWS: Record<string, string> = {
+  '24h': '24h',
+  '7d': '7d',
+  '30d': '30d',
+  '90d': '90d',
+  'all-upcoming': 'upcoming',
+  custom: 'custom',
+}
+
+const WHERE_OPS: Record<string, string> = {
+  '==': 'eq',
+  '<': 'lt',
+  '<=': 'lte',
+  '>': 'gt',
+  '>=': 'gte',
+  in: 'in',
+  startsWith: 'sw',
+}
+
+const wherePart = (s: string) => encodeURIComponent(s).replace(/~/g, '%7E')
+
+/**
+ * The native explorer's `where` is JSON, `[["field","==","value"]]`, with `in` values as a comma list;
+ * the documents page reads `field~op~value` clauses joined by commas, with `in` values joined by `|`.
+ */
+function whereOf(raw: string | null): string | null {
+  if (!raw) return null
+  const rows = parseJson(raw)
+  if (!Array.isArray(rows)) return null
+  const clauses: string[] = []
+  for (const row of rows as unknown[]) {
+    if (!Array.isArray(row) || row.length !== 3) continue
+    const [field, op, value] = row as unknown[]
+    if (
+      typeof field !== 'string' ||
+      !field ||
+      typeof op !== 'string' ||
+      typeof value !== 'string'
+    ) {
+      continue
+    }
+    const mapped = Object.hasOwn(WHERE_OPS, op) ? WHERE_OPS[op]! : undefined
+    if (!mapped) continue
+    const text =
+      mapped === 'in'
+        ? value
+            .split(',')
+            .map((v) => v.trim())
+            .filter(Boolean)
+            .map(wherePart)
+            .join('|')
+        : wherePart(value)
+    if (text) clauses.push(`${wherePart(field)}~${mapped}~${text}`)
+  }
+  return clauses.length > 0 ? clauses.join(',') : null
+}
+
+/** The native explorer keeps a stack of page cursors in `after`, newest last. */
+const cursorsOf = (p: URLSearchParams): string[] =>
+  (p.get('after') ?? '').split(',').filter(Boolean)
+
+/** The native explorer's documents paging and ordering, in the page's own address form. */
+function documentsSearch(p: URLSearchParams): Record<string, string> {
+  const set: Record<string, string> = {}
+  const where = whereOf(p.get('where'))
+  if (where) set.where = where
+  const order = p.get('order')
+  if (order) {
+    const at = order.lastIndexOf(':')
+    const field = at > 0 ? order.slice(0, at) : order
+    if (field) set.order = order.slice(at + 1) === 'desc' && at > 0 ? `-${field}` : field
+  }
+  const cursors = cursorsOf(p)
+  const last = cursors.pop()
+  if (last) set.after = last
+  if (cursors.length > 0) set.prev = cursors.join(',')
+  return set
+}
+
+const DOCUMENT_DROPS = ['id', 'type', 'where', 'order', 'after']
 
 function contestLabel(p: URLSearchParams): string | null {
   if (p.get('docType') !== 'domain' || p.get('indexName') !== 'parentNameAndLabel') return null
@@ -52,31 +159,45 @@ function contestLabel(p: URLSearchParams): string | null {
 const NATIVE: Record<string, Rule> = {
   '/identity': (p) =>
     p.get('id')
-      ? { path: `/identity/${seg(p.get('id')!)}`, drop: ['id'] }
-      : { path: '/identities' },
+      ? {
+          path: `/identity/${seg(p.get('id')!)}`,
+          drop: ['id', 'tab'],
+          set: tabSet(p, IDENTITY_TABS),
+        }
+      : { path: '/identities', drop: ['tab'] },
   '/identity/lookup': () => ({ path: '/identity/lookup' }),
   '/contract': (p) =>
-    p.get('id') ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id'] } : { path: '/contracts' },
+    p.get('id')
+      ? {
+          path: `/contract/${seg(p.get('id')!)}`,
+          drop: ['id', 'tab'],
+          set: tabSet(p, CONTRACT_TABS),
+        }
+      : { path: '/contracts', drop: ['tab'] },
   '/contract/documents': (p) =>
     p.get('id') && p.get('type')
       ? {
           path: `/contract/${seg(p.get('id')!)}/documents/${seg(p.get('type')!)}`,
-          drop: ['id', 'type'],
+          drop: DOCUMENT_DROPS,
+          set: documentsSearch(p),
         }
-      : { path: '/contracts' },
+      : { path: '/contracts', drop: DOCUMENT_DROPS },
   '/contract/document': (p) =>
     p.get('id') && p.get('type') && p.get('docId')
       ? {
           path: `/document/${seg(p.get('id')!)}/${seg(p.get('type')!)}/${seg(p.get('docId')!)}`,
-          drop: ['id', 'type', 'docId'],
+          drop: ['id', 'type', 'docId', 'tab'],
+          set: tabSet(p, DOCUMENT_TABS),
         }
-      : { path: '/contracts' },
+      : { path: '/contracts', drop: ['tab'] },
   '/contract/token': (p) =>
     p.get('id')
-      ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id', 'position'] }
-      : { path: '/tokens' },
+      ? { path: `/contract/${seg(p.get('id')!)}`, drop: ['id', 'position'], set: { tab: 'tokens' } }
+      : { path: '/tokens', drop: ['position'] },
   '/token': (p) =>
-    p.get('id') ? { path: `/token/${seg(p.get('id')!)}`, drop: ['id'] } : { path: '/tokens' },
+    p.get('id')
+      ? { path: `/token/${seg(p.get('id')!)}`, drop: ['id', 'tab'], set: tabSet(p, TOKEN_TABS) }
+      : { path: '/tokens', drop: ['tab'] },
   '/token/holders': (p) =>
     p.get('id')
       ? { path: `/token/${seg(p.get('id')!)}/holders`, drop: ['id'] }
@@ -85,14 +206,23 @@ const NATIVE: Record<string, Rule> = {
     p.get('name')
       ? { path: `/name/${seg(p.get('name')!.replace(/\.dash$/i, ''))}`, drop: ['name'] }
       : { path: '/names' },
-  '/dpns/search': () => ({ path: '/names' }),
+  '/dpns/search': (p) => {
+    const after = cursorsOf(p).at(-1)
+    const set: Record<string, string> = {}
+    if (after) set.after = after
+    return { path: '/names', drop: ['after'], set }
+  },
   '/governance/contested': () => ({ path: '/contests' }),
   '/governance/contested/detail': (p) => {
     const label = contestLabel(p)
     const drop = ['contract', 'docType', 'indexName', 'indexValues']
     return label ? { path: `/contest/${seg(label)}`, drop } : { path: '/contests', drop }
   },
-  '/governance/polls': () => ({ path: '/polls' }),
+  '/governance/polls': (p) => {
+    const window = p.get('window') ?? ''
+    const range = Object.hasOwn(POLL_WINDOWS, window) ? POLL_WINDOWS[window]! : 'upcoming'
+    return { path: '/polls', drop: ['window'], set: { range } }
+  },
   '/groups': (p) =>
     p.get('contractId')
       ? { path: `/groups/${seg(p.get('contractId')!)}`, drop: ['contractId'] }
@@ -114,7 +244,9 @@ const NATIVE: Record<string, Rule> = {
   '/epoch/history': () => ({ path: '/epochs' }),
   '/evonode': (p) => {
     const id = p.get('proTxHash') ?? p.get('protx')
-    return id ? { path: `/mn/${seg(id)}`, drop: ['proTxHash', 'protx'] } : { path: '/validators' }
+    return id
+      ? { path: `/mn/${seg(id)}`, drop: ['proTxHash', 'protx'], set: { tab: 'platform' } }
+      : { path: '/validators' }
   },
   '/network/status': () => ({ path: '/status' }),
   '/network/quorums': () => ({ path: '/quorums' }),

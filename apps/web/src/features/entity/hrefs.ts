@@ -20,7 +20,8 @@ function withSearch(path: string, search: EntitySearch | undefined): string {
 
 /**
  * `id` is the last path segment; for compound kinds (document, group) it is `a/b/c` as the route expects.
- * `search` adds query parameters after the quorum's own `q`.
+ * `search` adds query parameters after the quorum's own `q`. An evonode opens on its Platform tab, where its validator
+ * record and the blocks it proposed are.
  */
 export function entityPath(kind: EntityKind, id: string, search?: EntitySearch): string {
   return withSearch(basePath(kind, id), search)
@@ -36,8 +37,9 @@ function basePath(kind: EntityKind, id: string): string {
     case 'address':
       return `/address/${tail}`
     case 'masternode':
-    case 'evonode':
       return `/mn/${tail}`
+    case 'evonode':
+      return `/mn/${tail}?tab=platform`
     case 'proposal':
       return `/governance/${tail}`
     case 'platform-block':

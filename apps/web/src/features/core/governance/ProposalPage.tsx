@@ -31,7 +31,7 @@ import { StatusBadge } from './StatusBadge'
 export function ProposalPage({ hash }: { hash: string }) {
   const { t } = useLingui()
   return (
-    <PageFrame path="/governance/$hash" title={t`Proposal`} eyebrow={t`Governance`}>
+    <PageFrame path="/governance/$hash" title={t`Proposal`} eyebrow={t`Governance`} share>
       <HyphenGate unavailable={t`Governance proposals need an indexer`}>
         <ProposalContent hash={hash} />
       </HyphenGate>

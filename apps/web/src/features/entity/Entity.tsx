@@ -1,8 +1,22 @@
-import { useSyncExternalStore } from 'react'
+import { useSyncExternalStore, type ReactNode } from 'react'
 import { labelsVersion, subscribeLabels, wellKnownLabel } from '@/lib/well-known'
-import { EntityChip, type EntityChipProps } from '@/ui'
+import { deferred } from '@/ui/deferred'
+import { EntityChip, useMediaQuery, type EntityChipProps, type EntityKind } from '@/ui'
 import { entityHref, type EntitySearch } from './hrefs'
 import { useNetwork, useSourceModeLink } from './network'
+
+/** Loaded on a touch screen only, so the popover code stays out of the entry chunk; `@__PURE__` lets an unused `Entity` be dropped from it. */
+const LongPressCard = /* @__PURE__ */ deferred<{
+  kind: EntityKind
+  id: string
+  children: ReactNode
+}>(
+  () => import('./LongPressCard').then((m) => m.LongPressCard),
+  (props) => props.children,
+)
+
+/** A screen with no hover and a finger for a pointer: its chips open their card by a long press. */
+const TOUCH_ONLY = '(hover: none) and (pointer: coarse)'
 
 export type EntityProps = Omit<EntityChipProps, 'href'> & {
   href?: false
@@ -11,17 +25,27 @@ export type EntityProps = Omit<EntityChipProps, 'href'> & {
 }
 
 /** A chip for an entity; without a `label`, a well-known contract, token or identity (or one the user labelled) is named. */
-export function Entity({ kind, id, href, search, label, ...rest }: EntityProps) {
+export function Entity({ kind, id, href, search, label, hover = true, ...rest }: EntityProps) {
   const net = useNetwork()
   useSourceModeLink()
   useSyncExternalStore(subscribeLabels, labelsVersion, labelsVersion)
-  return (
+  const touch = useMediaQuery(TOUCH_ONLY)
+  const card = hover && !(kind === 'contest' && search?.contract)
+  const chip = (
     <EntityChip
       kind={kind}
       id={id}
       label={label ?? wellKnownLabel(net, kind, id)}
       href={href ?? entityHref(kind, id, net, search)}
+      hover={card && !touch}
       {...rest}
     />
+  )
+  return card && touch ? (
+    <LongPressCard kind={kind} id={id}>
+      {chip}
+    </LongPressCard>
+  ) : (
+    chip
   )
 }

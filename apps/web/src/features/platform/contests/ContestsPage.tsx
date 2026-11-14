@@ -320,6 +320,10 @@ function SdkContestTable(props: RowTable) {
         columns={columns}
         rows={rows}
         getRowId={(r) => r.key}
+        rowLink={(r) => {
+          const c = contestLink(r.indexValues, r.contractId, r.type, r.index)
+          return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
+        }}
         state={props.state}
         error={props.error}
         onRetry={props.onRetry}
@@ -548,6 +552,15 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
           columns={columns}
           rows={list.rows}
           getRowId={(r) => `${r.dataContractIdentifier ?? ''}/${(r.resourceValue ?? []).join('/')}`}
+          rowLink={(r) => {
+            const c = contestLink(
+              r.resourceValue ?? [],
+              r.dataContractIdentifier,
+              r.documentTypeName,
+              r.indexName,
+            )
+            return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
+          }}
           state={list.state}
           error={list.error}
           onRetry={list.onRetry}

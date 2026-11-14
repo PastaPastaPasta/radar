@@ -27,6 +27,10 @@ msgstr "{0, plural, one {# вход} few {# входа} many {# входов} ot
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, one {# выход} few {# выхода} many {# выходов} other {# выхода}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} базовых единиц"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} не охватывает devnet."
@@ -68,6 +72,10 @@ msgstr "Долей: {0}, штрафных блоков за ранний вых�
 msgid "{0} to other addresses"
 msgstr "{0} на другие адреса"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} голосов"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
 
@@ -92,6 +100,9 @@ msgstr "Ещё выходов: {n}"
 msgid "{name} (reason {reason})"
 msgstr "{name} (причина {reason})"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, one {# тип} few {# типа} many {# типов} other {# типа}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Группы контракта: позиция, порог и участники."
 
@@ -109,6 +120,9 @@ msgstr "Совладелец общей мастерноды меняет адр
 
 msgid "About"
 msgstr "О проекте"
+
+msgid "Active"
+msgstr "Активна"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Активные спорные имена со временем окончания, голосами и статусом."
@@ -170,8 +184,9 @@ msgstr "Блок"
 msgid "block {0}"
 msgstr "блок {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "Блок {0}"
 
@@ -253,8 +268,14 @@ msgstr "Привязывает блок к списку мастернод и п
 msgid "Compromised keys"
 msgstr "Скомпрометированные ключи"
 
+msgid "Contenders"
+msgstr "Претенденты"
+
 msgid "contest"
 msgstr "спор"
+
+msgid "Contested name"
+msgstr "Спорное имя"
 
 msgid "contract"
 msgstr "контракт"
@@ -298,6 +319,12 @@ msgstr "Вершина Core и ChainLock, высота и эпоха Platform, �
 msgid "Core transaction"
 msgstr "Транзакция Core"
 
+msgid "Could not check this right now."
+msgstr "Сейчас проверить не удаётся."
+
+msgid "Could not read names."
+msgstr "Не удалось прочитать имена."
+
 msgid "Created"
 msgstr "Создано"
 
@@ -330,6 +357,9 @@ msgstr "данные"
 
 msgid "Data (OP_RETURN)"
 msgstr "Данные (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "Контракт данных"
 
 msgid "Data sources"
 msgstr "Источники данных"
@@ -364,17 +394,32 @@ msgstr "Документ"
 msgid "document type"
 msgstr "тип документа"
 
+msgid "Document types"
+msgstr "Типы документов"
+
 msgid "Documents"
 msgstr "Документы"
 
 msgid "Early-leave penalty"
 msgstr "Штраф за ранний выход"
 
+msgid "Enabled"
+msgstr "Включена"
+
+msgid "Ended"
+msgstr "Завершено"
+
+msgid "Ends"
+msgstr "Заканчивается"
+
 msgid "epoch"
 msgstr "эпоха"
 
 msgid "Epoch"
 msgstr "Эпоха"
+
+msgid "Epoch {id}"
+msgstr "Эпоха {id}"
 
 msgid "Epochs"
 msgstr "Эпохи"
@@ -403,6 +448,9 @@ msgstr "Эвонода"
 msgid "Evonode (high-performance)"
 msgstr "Evonode (высокопроизводительная)"
 
+msgid "Failed"
+msgstr "Ошибка"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "Избранные и проиндексированные контракты данных: владелец, документы и токены."
 
@@ -417,6 +465,12 @@ msgstr "Найдите идентичность, которой принадле
 
 msgid "finding where…"
 msgstr "ищем, где…"
+
+msgid "Finished"
+msgstr "Завершён"
+
+msgid "First block"
+msgstr "Первый блок"
 
 msgid "First seen"
 msgstr "Впервые замечено"
@@ -488,6 +542,9 @@ msgstr "Идентичность"
 msgid "Identity by key hash"
 msgstr "Идентичность по хешу ключа"
 
+msgid "Identity created"
+msgstr "Созданная идентичность"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "в {0}"
@@ -495,6 +552,9 @@ msgstr "в {0}"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "В блоке {0}"
+
+msgid "In progress"
+msgstr "Идёт"
 
 msgid "in the mempool"
 msgstr "в мемпуле"
@@ -535,8 +595,14 @@ msgstr "Язык"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "Язык, единицы, часовой пояс, параметры подключения и собственные devnet."
 
+msgid "Last paid"
+msgstr "Последняя выплата"
+
 msgid "Last seen"
 msgstr "Последний раз замечено"
+
+msgid "Leading"
+msgstr "Лидирует"
 
 msgid "Link copied"
 msgstr "Ссылка скопирована"
@@ -555,6 +621,9 @@ msgstr "Загрузка сумм: {0} из {1} входов. Каждая пр�
 
 msgid "Loading inputs…"
 msgstr "Загрузка входов…"
+
+msgid "Locked"
+msgstr "Заблокировано"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Блокирует Dash в Core, чтобы создать кредиты на Platform."
@@ -667,11 +736,38 @@ msgstr "Нет адреса"
 msgid "No block with this ID on this network."
 msgstr "В этой сети нет блока с таким ID."
 
+msgid "No contest for this name on this network."
+msgstr "Для этого имени в этой сети нет спора."
+
+msgid "No contract with this ID on this network."
+msgstr "В этой сети нет контракта с таким ID."
+
+msgid "No document with this ID on this network."
+msgstr "В этой сети нет документа с таким ID."
+
+msgid "No epoch with this number yet."
+msgstr "Эпохи с таким номером ещё нет."
+
+msgid "No identity with this ID on this network."
+msgstr "В этой сети нет идентичности с таким ID."
+
+msgid "No indexer covers this network."
+msgstr "Ни один индексатор не охватывает эту сеть."
+
 msgid "No InstantSend lock was seen"
 msgstr "Блокировка InstantSend не обнаружена"
 
+msgid "No Platform block with this ID on this network."
+msgstr "В этой сети нет блока Platform с таким ID."
+
 msgid "No source can say whether this output is spent."
 msgstr "Ни один источник не может сказать, потрачен ли этот выход."
+
+msgid "No state transition with this hash on this network."
+msgstr "В этой сети нет перехода состояния с таким хешем."
+
+msgid "No token with this ID on this network."
+msgstr "В этой сети нет токена с таким ID."
 
 msgid "No transaction with this ID on this network."
 msgstr "В этой сети нет транзакции с таким ID."
@@ -682,14 +778,26 @@ msgstr "В этой транзакции не перемещаются сред�
 msgid "Nodes"
 msgstr "Узлы"
 
+msgid "Nonce"
+msgstr "Nonce"
+
 msgid "None"
 msgstr "Нет"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "Нет. Пополнение зачисляет кредиты уже существовавшей идентичности."
+
+msgid "Not available"
+msgstr "Недоступно"
 
 msgid "Not ChainLocked yet"
 msgstr "Пока без ChainLock"
 
 msgid "not in a block yet"
 msgstr "ещё не в блоке"
+
+msgid "Not in this network's masternode list."
+msgstr "Нет в списке мастернод этой сети."
 
 msgid "Not in this version"
 msgstr "Нет в этой версии"
@@ -703,11 +811,17 @@ msgstr "Не загружено"
 msgid "Not mined yet"
 msgstr "Ещё не добыт"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "Не зарегистрировано. Имя может быть свободно или ещё оспариваться."
+
 msgid "Not specified"
 msgstr "Не указана"
 
 msgid "Number"
 msgstr "Номер"
+
+msgid "On Platform"
+msgstr "На Platform"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "Один спор: статус, подсчёт, претенденты с предоплаченным балансом и кто голосовал."
@@ -754,6 +868,12 @@ msgstr "Один токен: предложение, цена, состояни�
 msgid "Open"
 msgstr "Открыть"
 
+msgid "Open the diagnostics drawer"
+msgstr "Открыть панель диагностики"
+
+msgid "Open the proof inspector"
+msgstr "Открыть инспектор доказательств"
+
 msgid "Open the result, or all results"
 msgstr "Открыть результат или все результаты"
 
@@ -792,6 +912,9 @@ msgstr "Выходы"
 msgid "Overview"
 msgstr "Обзор"
 
+msgid "Owner"
+msgstr "Владелец"
+
 msgid "Owner key"
 msgstr "Ключ владельца"
 
@@ -808,6 +931,9 @@ msgstr "Страница не найдена"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "Вставьте переход состояния в hex или base64, чтобы расшифровать и проверить его. Ничего не подписывается и не отправляется."
+
+msgid "Paused"
+msgstr "Приостановлено"
 
 msgid "Payload"
 msgstr "Полезная нагрузка"
@@ -848,6 +974,9 @@ msgstr "Голосование за версию протокола Platform: т
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Пульс Platform: высота, эпоха, графики активности, лидеры, новейшие блоки и переходы состояния."
 
+msgid "PoSe-banned"
+msgstr "Забанена PoSe"
+
 msgid "Position"
 msgstr "Позиция"
 
@@ -856,6 +985,9 @@ msgstr "предложение"
 
 msgid "Proposal"
 msgstr "Предложение"
+
+msgid "Proposer"
+msgstr "Предлагающий"
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -932,6 +1064,9 @@ msgstr "записано Hyphen; второй источник не подтве
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "Фиксирует, что кворум завершил генерацию ключей, и кто подписал."
 
+msgid "Registered"
+msgstr "Зарегистрирована"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "Регистрирует мастерноду или evonode и задаёт ключи, которые ею управляют."
 
@@ -955,6 +1090,9 @@ msgstr "Запрошено на высоте"
 
 msgid "Result"
 msgstr "Результат"
+
+msgid "Revision"
+msgstr "Ревизия"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "Ширина ленты — это сумма. Серый — сдача отправителю, оранжевый — комиссия."
@@ -1073,6 +1211,9 @@ msgstr "Траты"
 msgid "Spent"
 msgstr "Потрачен"
 
+msgid "Started"
+msgstr "Начало"
+
 msgid "State"
 msgstr "Состояние"
 
@@ -1087,6 +1228,12 @@ msgstr "Переходы состояния"
 
 msgid "Status"
 msgstr "Статус"
+
+msgid "Success"
+msgstr "Успешно"
+
+msgid "Supply"
+msgstr "Предложение"
 
 msgid "Termination of service"
 msgstr "Прекращение работы сервиса"
@@ -1157,8 +1304,29 @@ msgstr "В этой сети нет транзакции с таким ID. Во�
 msgid "This {record} is on {network}."
 msgstr "Этот {record} находится в сети {network}."
 
+msgid "This address holds nothing on Platform."
+msgstr "Этот адрес ничего не хранит на Platform."
+
 msgid "This browser"
 msgstr "Этот браузер"
+
+msgid "This is not a contract ID."
+msgstr "Это не ID контракта."
+
+msgid "This is not a document address."
+msgstr "Это не адрес документа."
+
+msgid "This is not a Platform address."
+msgstr "Это не адрес Platform."
+
+msgid "This is not a token ID."
+msgstr "Это не ID токена."
+
+msgid "This is not an epoch number."
+msgstr "Это не номер эпохи."
+
+msgid "This is not an identity ID."
+msgstr "Это не ID идентичности."
 
 msgid "This page is on its way"
 msgstr "Эта страница скоро появится"
@@ -1258,10 +1426,16 @@ msgstr "Не потрачен"
 msgid "Upcoming vote polls by end date."
 msgstr "Предстоящие голосования по дате окончания."
 
+msgid "Updated"
+msgstr "Обновлено"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD по курсу {0} за DASH, источник — {1}."
+
+msgid "Username"
+msgstr "Имя пользователя"
 
 msgid "Valid members"
 msgstr "Действительные участники"
@@ -1279,6 +1453,9 @@ msgstr "Поток стоимости: входов {0} → выходов {1}"
 
 msgid "Verify message"
 msgstr "Проверка сообщения"
+
+msgid "Version"
+msgstr "Версия"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1500,17 @@ msgstr "Чтобы узнать, потрачен ли выход и какой 
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Какой вызов SDK Platform обслуживает каждую страницу Radar, с аргументами."
 
+msgid "Winner"
+msgstr "Победитель"
+
 msgid "Withdrawal index"
 msgstr "Индекс вывода"
+
+msgid "Withdrawals on Platform"
+msgstr "Выводы на Platform"
+
+msgid "Won"
+msgstr "Выиграно"
 
 msgid "You"
 msgstr "Вы"

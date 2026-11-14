@@ -41,4 +41,47 @@ export function registerEntityHoverCards(): void {
     'address',
     lazyCard(() => import('./cards/address').then((m) => m.AddressHoverCard)),
   )
+  const masternode = lazyCard(() => import('./cards/masternode').then((m) => m.MasternodeHoverCard))
+  registerHoverCard('masternode', masternode)
+  registerHoverCard('evonode', masternode)
+  registerHoverCard(
+    'identity',
+    lazyCard(() => import('./cards/identity').then((m) => m.IdentityHoverCard)),
+  )
+  registerHoverCard(
+    'contract',
+    lazyCard(() => import('./cards/contract').then((m) => m.ContractHoverCard)),
+  )
+  registerHoverCard(
+    'token',
+    lazyCard(() => import('./cards/token').then((m) => m.TokenHoverCard)),
+  )
+  registerHoverCard(
+    'document',
+    lazyCard(() => import('./cards/document').then((m) => m.DocumentHoverCard)),
+  )
+  registerHoverCard(
+    'name',
+    lazyCard(() => import('./cards/name').then((m) => m.NameHoverCard)),
+  )
+  registerHoverCard(
+    'epoch',
+    lazyCard(() => import('./cards/epoch').then((m) => m.EpochHoverCard)),
+  )
+  registerHoverCard(
+    'platform-block',
+    lazyCard(() => import('./cards/platform-block').then((m) => m.PlatformBlockHoverCard)),
+  )
+  registerHoverCard(
+    'transition',
+    lazyCard(() => import('./cards/transition').then((m) => m.TransitionHoverCard)),
+  )
+  registerHoverCard(
+    'platform-address',
+    lazyCard(() => import('./cards/platform-address').then((m) => m.PlatformAddressHoverCard)),
+  )
+  registerHoverCard(
+    'contest',
+    lazyCard(() => import('./cards/contest').then((m) => m.ContestHoverCard)),
+  )
 }

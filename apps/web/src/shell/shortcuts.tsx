@@ -25,6 +25,11 @@ const ROWS: { keys: string[]; does: MessageDescriptor }[] = [
   { keys: ['Enter'], does: msg`Open the result, or all results` },
   { keys: ['j', 'k'], does: msg`Move through table rows` },
   { keys: ['Enter'], does: msg`Open the selected table row` },
+  { keys: ['Alt', 'Shift', 'P'], does: msg`Open the proof inspector` },
+  {
+    keys: ['Alt', 'Shift', 'D'],
+    does: msg`Open the diagnostics drawer`,
+  },
 ]
 
 export function ShortcutsProvider({ children }: { children: ReactNode }) {

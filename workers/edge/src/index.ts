@@ -65,7 +65,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
   const res = await serveAssets(request, env, url)
   if (url.pathname === SERVICE_WORKER_PATH && res.ok) return asServiceWorker(res)
 
-  const og = matchOgRoute(url.pathname)
+  const og = matchOgRoute(url)
   const isHtml = res.headers.get('content-type')?.startsWith('text/html') === true
   if (og && res.ok && isHtml && request.method === 'GET') {
     const out = new Response(res.body, res)
@@ -73,8 +73,9 @@ async function handle(request: Request, env: Env): Promise<Response> {
     const network = url.searchParams.get('network')
     const decentralized = url.searchParams.get('sources') === 'decentralized'
     const preview = isLinkPreviewAgent(request.headers.get('user-agent')) && !decentralized
-    const meta = preview ? await resolveOg(og.kind, og.id, network) : genericOg(og.kind)
+    const meta = preview ? await resolveOg(og, network) : genericOg(og.kind)
     const query = [
+      ...Object.entries(og.search ?? {}).map(([k, v]) => `${k}=${encodeURIComponent(v)}`),
       network && `network=${encodeURIComponent(network)}`,
       decentralized && 'sources=decentralized',
     ].filter(Boolean)

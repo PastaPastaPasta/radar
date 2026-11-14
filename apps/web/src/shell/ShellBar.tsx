@@ -1,7 +1,7 @@
 import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
-import { useNavigate, useRouterState } from '@tanstack/react-router'
+import { useNavigate, useRouter, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { allDevnets, useDevnets } from '@/app/devnets'
 import {
@@ -20,6 +20,7 @@ import { adoptBarOverlay } from './bar-overlay'
 import { DashhqBar, type DashhqNetworkDetail } from './elements'
 import { CoreIcon, HomeIcon, NetworkIcon, PlatformIcon, SearchIcon } from './icons'
 import { SourceModeMark } from './SourceModeMark'
+import { switchTarget } from './network-switch'
 import { routerLocation } from './spa-links'
 import { UnitSwitch } from './UnitSwitch'
 
@@ -43,6 +44,7 @@ export function ShellBar() {
   const { t, i18n } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
+  const router = useRouter()
   const devnets = useDevnets()
   const barRef = useRef<HTMLElement>(null)
   const { pathname, routeId } = useRouterState({
@@ -68,7 +70,14 @@ export function ShellBar() {
     })
     const onNetwork = (e: Event) => {
       const detail = (e as CustomEvent<DashhqNetworkDetail>).detail
-      const url = new URL(detail.href, location.href)
+      const proposed = new URL(detail.href, location.href)
+      const last = router.state.matches.at(-1)
+      const { url } = last
+        ? switchTarget(proposed, {
+            routeId: last.routeId,
+            params: last.params,
+          })
+        : { url: proposed }
       e.preventDefault()
       void navigate(routerLocation(url))
     }
@@ -77,7 +86,7 @@ export function ShellBar() {
       live = false
       bar.removeEventListener('dashhq-network', onNetwork)
     }
-  }, [navigate])
+  }, [navigate, router])
 
   return (
     <DashhqBar

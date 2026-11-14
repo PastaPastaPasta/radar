@@ -118,6 +118,7 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
           columns={columns}
           rows={rows}
           getRowId={(d) => d.id}
+          rowLink={(d) => ({ to: '/name/$label', params: { label: labelOfDoc(d) } }) as never}
           state={loadState(names)}
           error={names.error}
           onRetry={() => void names.refetch()}

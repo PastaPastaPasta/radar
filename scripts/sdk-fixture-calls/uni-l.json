@@ -1,0 +1,47 @@
+{
+  "mainnet": [
+    [
+      "identities.balances",
+      {
+        "ids": ["E8WLTskzWewrcViHLyLJSAP2Q8X2BxMWZgWW6U78DpbT"]
+      }
+    ],
+    [
+      "identities.balances",
+      {
+        "ids": ["HP7gXKxuq1Eho6Rs7BQyJhXdzhWm78xAbuP6C3BU1TXD"]
+      }
+    ],
+    [
+      "dpns.getUsernameByName",
+      {
+        "name": "0-0.dash"
+      }
+    ],
+    [
+      "epoch.epochsInfo",
+      {
+        "startEpoch": 88,
+        "count": 2,
+        "ascending": true
+      }
+    ],
+    [
+      "tokens.statuses",
+      {
+        "tokenIds": ["AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB"]
+      }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["E5Mty9ojZou1GrcGaAszCywo3tqHykzrN1onmTox8FXG"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
+    ]
+  ],
+  "testnet": []
+}

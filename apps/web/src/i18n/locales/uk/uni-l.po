@@ -27,6 +27,10 @@ msgstr "{0, plural, one {# вхід} few {# входи} many {# входів} ot
 msgid "{0, plural, one {# output} other {# outputs}}"
 msgstr "{0, plural, one {# вихід} few {# виходи} many {# виходів} other {# виходу}}"
 
+#. placeholder {0}: total.toLocaleString('en-US')
+msgid "{0} base units"
+msgstr "{0} базових одиниць"
+
 #. placeholder {0}: i18n._(SOURCE_NAMES[unsupported])
 msgid "{0} doesn’t cover devnets."
 msgstr "{0} не охоплює devnet."
@@ -68,6 +72,10 @@ msgstr "Часток: {0}, штрафних блоків за ранній ви�
 msgid "{0} to other addresses"
 msgstr "{0} на інші адреси"
 
+#. placeholder {0}: formatInt(leader.voteTally)
+msgid "{0} votes"
+msgstr "{0} голосів"
+
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
 
@@ -92,6 +100,9 @@ msgstr "Ще виходів: {n}"
 msgid "{name} (reason {reason})"
 msgstr "{name} (причина {reason})"
 
+msgid "{types, plural, one {# type} other {# types}}"
+msgstr "{types, plural, one {# тип} few {# типи} many {# типів} other {# типу}}"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Групи контракту: позиція, поріг і учасники."
 
@@ -109,6 +120,9 @@ msgstr "Співвласник спільної мастерноди зміню�
 
 msgid "About"
 msgstr "Про проєкт"
+
+msgid "Active"
+msgstr "Активна"
 
 msgid "Active contested names with end time, votes and status."
 msgstr "Активні спірні імена з часом завершення, голосами та статусом."
@@ -170,8 +184,9 @@ msgstr "Блок"
 msgid "block {0}"
 msgstr "блок {0}"
 
+#. placeholder {0}: formatInt(Number(id))
+#. placeholder {0}: formatInt(block.header.height)
 #. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(tx.height)
 msgid "Block {0}"
 msgstr "Блок {0}"
 
@@ -253,8 +268,14 @@ msgstr "Прив’язує блок до списку мастернод і о�
 msgid "Compromised keys"
 msgstr "Скомпрометовані ключі"
 
+msgid "Contenders"
+msgstr "Претенденти"
+
 msgid "contest"
 msgstr "суперечка"
+
+msgid "Contested name"
+msgstr "Спірне ім’я"
 
 msgid "contract"
 msgstr "контракт"
@@ -298,6 +319,12 @@ msgstr "Вершина Core і ChainLock, висота та епоха Platform,
 msgid "Core transaction"
 msgstr "Транзакція Core"
 
+msgid "Could not check this right now."
+msgstr "Зараз перевірити не вдається."
+
+msgid "Could not read names."
+msgstr "Не вдалося прочитати імена."
+
 msgid "Created"
 msgstr "Створено"
 
@@ -330,6 +357,9 @@ msgstr "дані"
 
 msgid "Data (OP_RETURN)"
 msgstr "Дані (OP_RETURN)"
+
+msgid "Data contract"
+msgstr "Контракт даних"
 
 msgid "Data sources"
 msgstr "Джерела даних"
@@ -364,17 +394,32 @@ msgstr "Документ"
 msgid "document type"
 msgstr "тип документа"
 
+msgid "Document types"
+msgstr "Типи документів"
+
 msgid "Documents"
 msgstr "Документи"
 
 msgid "Early-leave penalty"
 msgstr "Штраф за ранній вихід"
 
+msgid "Enabled"
+msgstr "Увімкнена"
+
+msgid "Ended"
+msgstr "Завершено"
+
+msgid "Ends"
+msgstr "Закінчується"
+
 msgid "epoch"
 msgstr "епоха"
 
 msgid "Epoch"
 msgstr "Епоха"
+
+msgid "Epoch {id}"
+msgstr "Епоха {id}"
 
 msgid "Epochs"
 msgstr "Епохи"
@@ -403,6 +448,9 @@ msgstr "Евонода"
 msgid "Evonode (high-performance)"
 msgstr "Evonode (високопродуктивна)"
 
+msgid "Failed"
+msgstr "Помилка"
+
 msgid "Featured and indexed data contracts with owner, documents and tokens."
 msgstr "Вибрані та проіндексовані контракти даних: власник, документи й токени."
 
@@ -417,6 +465,12 @@ msgstr "Знайдіть ідентичність, якій належить в�
 
 msgid "finding where…"
 msgstr "шукаємо, де…"
+
+msgid "Finished"
+msgstr "Завершено"
+
+msgid "First block"
+msgstr "Перший блок"
 
 msgid "First seen"
 msgstr "Уперше помічено"
@@ -488,6 +542,9 @@ msgstr "Ідентичність"
 msgid "Identity by key hash"
 msgstr "Ідентичність за хешем ключа"
 
+msgid "Identity created"
+msgstr "Створена ідентичність"
+
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
 msgstr "у {0}"
@@ -495,6 +552,9 @@ msgstr "у {0}"
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "У блоці {0}"
+
+msgid "In progress"
+msgstr "Триває"
 
 msgid "in the mempool"
 msgstr "у мемпулі"
@@ -535,8 +595,14 @@ msgstr "Мова"
 msgid "Language, units, time zone, connection options and custom devnets."
 msgstr "Мова, одиниці, часовий пояс, параметри підключення та власні devnet."
 
+msgid "Last paid"
+msgstr "Остання виплата"
+
 msgid "Last seen"
 msgstr "Востаннє помічено"
+
+msgid "Leading"
+msgstr "Лідирує"
 
 msgid "Link copied"
 msgstr "Посилання скопійовано"
@@ -555,6 +621,9 @@ msgstr "Завантаження сум: {0} із {1} входів. Кожна �
 
 msgid "Loading inputs…"
 msgstr "Завантаження входів…"
+
+msgid "Locked"
+msgstr "Заблоковано"
 
 msgid "Locks Dash on Core to create credits on Platform."
 msgstr "Блокує Dash у Core, щоб створити кредити на Platform."
@@ -667,11 +736,38 @@ msgstr "Немає адреси"
 msgid "No block with this ID on this network."
 msgstr "У цій мережі немає блока з таким ID."
 
+msgid "No contest for this name on this network."
+msgstr "Для цього імені в цій мережі немає спору."
+
+msgid "No contract with this ID on this network."
+msgstr "У цій мережі немає контракту з таким ID."
+
+msgid "No document with this ID on this network."
+msgstr "У цій мережі немає документа з таким ID."
+
+msgid "No epoch with this number yet."
+msgstr "Епохи з таким номером ще немає."
+
+msgid "No identity with this ID on this network."
+msgstr "У цій мережі немає ідентичності з таким ID."
+
+msgid "No indexer covers this network."
+msgstr "Жоден індексатор не охоплює цю мережу."
+
 msgid "No InstantSend lock was seen"
 msgstr "Блокування InstantSend не виявлено"
 
+msgid "No Platform block with this ID on this network."
+msgstr "У цій мережі немає блока Platform з таким ID."
+
 msgid "No source can say whether this output is spent."
 msgstr "Жодне джерело не може сказати, чи витрачено цей вихід."
+
+msgid "No state transition with this hash on this network."
+msgstr "У цій мережі немає переходу стану з таким хешем."
+
+msgid "No token with this ID on this network."
+msgstr "У цій мережі немає токена з таким ID."
 
 msgid "No transaction with this ID on this network."
 msgstr "У цій мережі немає транзакції з таким ID."
@@ -682,14 +778,26 @@ msgstr "У цій транзакції не переміщуються кошт�
 msgid "Nodes"
 msgstr "Вузли"
 
+msgid "Nonce"
+msgstr "Nonce"
+
 msgid "None"
 msgstr "Немає"
+
+msgid "None. A top-up credits an identity that already existed."
+msgstr "Немає. Поповнення зараховує кредити вже наявній ідентичності."
+
+msgid "Not available"
+msgstr "Недоступно"
 
 msgid "Not ChainLocked yet"
 msgstr "Ще без ChainLock"
 
 msgid "not in a block yet"
 msgstr "ще не в блоці"
+
+msgid "Not in this network's masternode list."
+msgstr "Немає в списку мастернод цієї мережі."
 
 msgid "Not in this version"
 msgstr "Немає в цій версії"
@@ -703,11 +811,17 @@ msgstr "Не завантажено"
 msgid "Not mined yet"
 msgstr "Ще не видобуто"
 
+msgid "Not registered. It may be free or still contested."
+msgstr "Не зареєстровано. Імʼя може бути вільним або ще оскаржуватися."
+
 msgid "Not specified"
 msgstr "Не вказано"
 
 msgid "Number"
 msgstr "Номер"
+
+msgid "On Platform"
+msgstr "На Platform"
 
 msgid "One contest: status, tally, contenders with prefunded balance and who voted."
 msgstr "Одна суперечка: статус, підрахунок, претенденти з попередньо поповненим балансом і хто голосував."
@@ -754,6 +868,12 @@ msgstr "Один токен: пропозиція, ціна, стан паузи
 msgid "Open"
 msgstr "Відкрити"
 
+msgid "Open the diagnostics drawer"
+msgstr "Відкрити панель діагностики"
+
+msgid "Open the proof inspector"
+msgstr "Відкрити інспектор доказів"
+
 msgid "Open the result, or all results"
 msgstr "Відкрити результат або всі результати"
 
@@ -792,6 +912,9 @@ msgstr "Виходи"
 msgid "Overview"
 msgstr "Огляд"
 
+msgid "Owner"
+msgstr "Власник"
+
 msgid "Owner key"
 msgstr "Ключ власника"
 
@@ -808,6 +931,9 @@ msgstr "Сторінку не знайдено"
 
 msgid "Paste a state transition as hex or base64 to decode it and check it. Nothing is signed or sent."
 msgstr "Вставте перехід стану у hex або base64, щоб розшифрувати та перевірити його. Нічого не підписується й не надсилається."
+
+msgid "Paused"
+msgstr "Призупинено"
 
 msgid "Payload"
 msgstr "Корисне навантаження"
@@ -848,6 +974,9 @@ msgstr "Голосування за версію протоколу Platform: п
 msgid "Platform’s pulse: height, epoch, activity charts, leaders and the newest blocks and state transitions."
 msgstr "Пульс Platform: висота, епоха, графіки активності, лідери, найновіші блоки та переходи стану."
 
+msgid "PoSe-banned"
+msgstr "Забанена PoSe"
+
 msgid "Position"
 msgstr "Позиція"
 
@@ -856,6 +985,9 @@ msgstr "пропозиція"
 
 msgid "Proposal"
 msgstr "Пропозиція"
+
+msgid "Proposer"
+msgstr "Пропонувач"
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -932,6 +1064,9 @@ msgstr "записано Hyphen; другого підтвердження не�
 msgid "Records that a quorum finished its key generation and who signed."
 msgstr "Фіксує, що кворум завершив генерацію ключів, і хто підписав."
 
+msgid "Registered"
+msgstr "Зареєстровано"
+
 msgid "Registers a masternode or evonode and sets the keys that run it."
 msgstr "Реєструє мастерноду або evonode і задає ключі, які нею керують."
 
@@ -955,6 +1090,9 @@ msgstr "Запитано на висоті"
 
 msgid "Result"
 msgstr "Результат"
+
+msgid "Revision"
+msgstr "Ревізія"
 
 msgid "Ribbon width is the amount. Grey is change back to the sender, orange is the fee."
 msgstr "Ширина стрічки — це сума. Сірий — решта відправнику, помаранчевий — комісія."
@@ -1073,6 +1211,9 @@ msgstr "Витрати"
 msgid "Spent"
 msgstr "Витрачено"
 
+msgid "Started"
+msgstr "Початок"
+
 msgid "State"
 msgstr "Стан"
 
@@ -1087,6 +1228,12 @@ msgstr "Переходи стану"
 
 msgid "Status"
 msgstr "Статус"
+
+msgid "Success"
+msgstr "Успішно"
+
+msgid "Supply"
+msgstr "Пропозиція"
 
 msgid "Termination of service"
 msgstr "Припинення роботи сервісу"
@@ -1157,8 +1304,29 @@ msgstr "У цій мережі немає транзакції з таким ID.
 msgid "This {record} is on {network}."
 msgstr "Цей {record} розташований у мережі {network}."
 
+msgid "This address holds nothing on Platform."
+msgstr "Ця адреса нічого не зберігає на Platform."
+
 msgid "This browser"
 msgstr "Цей браузер"
+
+msgid "This is not a contract ID."
+msgstr "Це не ID контракту."
+
+msgid "This is not a document address."
+msgstr "Це не адреса документа."
+
+msgid "This is not a Platform address."
+msgstr "Це не адреса Platform."
+
+msgid "This is not a token ID."
+msgstr "Це не ID токена."
+
+msgid "This is not an epoch number."
+msgstr "Це не номер епохи."
+
+msgid "This is not an identity ID."
+msgstr "Це не ID ідентичності."
 
 msgid "This page is on its way"
 msgstr "Ця сторінка скоро з’явиться"
@@ -1258,10 +1426,16 @@ msgstr "Не витрачено"
 msgid "Upcoming vote polls by end date."
 msgstr "Майбутні голосування за датою завершення."
 
+msgid "Updated"
+msgstr "Оновлено"
+
 #. placeholder {0}: formatFiat(DUFFS_PER_DASH, usdPerDash)
 #. placeholder {1}: rate.provider
 msgid "USD at {0} per DASH, from {1}."
 msgstr "USD за курсом {0} за DASH, джерело — {1}."
+
+msgid "Username"
+msgstr "Ім’я користувача"
 
 msgid "Valid members"
 msgstr "Дійсні учасники"
@@ -1279,6 +1453,9 @@ msgstr "Потік вартості: входів {0} → виходів {1}"
 
 msgid "Verify message"
 msgstr "Перевірка повідомлення"
+
+msgid "Version"
+msgstr "Версія"
 
 #. placeholder {0}: tx.version
 msgid "Version {0}"
@@ -1323,8 +1500,17 @@ msgstr "Щоб дізнатися, чи витрачено вихід і яко�
 msgid "Which Platform SDK call backs each Radar page, with its arguments."
 msgstr "Який виклик SDK Platform забезпечує кожну сторінку Radar, з аргументами."
 
+msgid "Winner"
+msgstr "Переможець"
+
 msgid "Withdrawal index"
 msgstr "Індекс виведення"
+
+msgid "Withdrawals on Platform"
+msgstr "Виведення на Platform"
+
+msgid "Won"
+msgstr "Виграно"
 
 msgid "You"
 msgstr "Ви"

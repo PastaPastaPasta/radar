@@ -279,6 +279,7 @@ function TxView({
       >
         <RecordHeader
           icon="tx"
+          share
           kicker={
             <>
               <TypeBadge type={tx.type} />
