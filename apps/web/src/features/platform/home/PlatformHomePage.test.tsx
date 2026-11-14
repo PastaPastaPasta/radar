@@ -145,6 +145,23 @@ describe('Platform overview', () => {
     await waitFor(() => expect(document.querySelector('[data-page="/epoch/$n"]')).not.toBeNull())
   })
 
+  it('opens an exact .dash name at once, and says at once when the input cannot be placed @NX-03', async () => {
+    const user = userEvent.setup()
+    renderAt('/platform')
+    const box = await screen.findByRole('textbox', {
+      name: 'Identity ID, name.dash, token ID or epoch number',
+    })
+    await user.type(box, 'what is this?!{Enter}')
+    expect(await screen.findByText(/not an identity ID, a name, a token ID/)).toBeInTheDocument()
+    expect(document.querySelector('[data-page="/platform"]')).not.toBeNull()
+    await user.clear(box)
+    await user.type(box, 'ab.dash{Enter}')
+    expect(await screen.findByText(/not an identity ID, a name, a token ID/)).toBeInTheDocument()
+    await user.clear(box)
+    await user.type(box, 'Pshenmic.dash{Enter}')
+    await waitFor(() => expect(document.querySelector('[data-page="/name/$label"]')).not.toBeNull())
+  })
+
   it('sends text it cannot place to /search and never sends a recovery phrase @NX-03', async () => {
     const user = userEvent.setup()
     renderAt('/platform')
