@@ -11,6 +11,7 @@ export function IdForm({
   invalid,
   optional = false,
   clearOnSubmit = false,
+  onInvalid,
   onSubmit,
 }: {
   initial?: string
@@ -19,6 +20,8 @@ export function IdForm({
   invalid: string
   optional?: boolean
   clearOnSubmit?: boolean
+  /** Called when the input is refused, so the page can drop what the last good input showed. */
+  onInvalid?: () => void
   onSubmit: (value: string) => void
 }) {
   const [draft, setDraft] = useState(initial)
@@ -31,6 +34,7 @@ export function IdForm({
         const value = draft.trim()
         if (!(optional && value === '') && !isPlatformId(value)) {
           setProblem(invalid)
+          onInvalid?.()
           return
         }
         setProblem(undefined)
@@ -64,7 +68,15 @@ export function IdForm({
 }
 
 /** Platform answers group membership and contract nonces only for contracts it is told about. */
-export function ContractForm({ contract }: { contract: string | undefined }) {
+export function ContractForm({
+  contract,
+  onInvalid,
+  onSubmitted,
+}: {
+  contract: string | undefined
+  onInvalid?: () => void
+  onSubmitted?: () => void
+}) {
   const { t } = useLingui()
   const setSearch = useSetSearch()
   return (
@@ -75,7 +87,9 @@ export function ContractForm({ contract }: { contract: string | undefined }) {
       submit={t`Check`}
       invalid={t`That isn’t a contract ID: it is 43 or 44 base58 characters.`}
       optional
+      onInvalid={onInvalid}
       onSubmit={(c) => {
+        onSubmitted?.()
         setSearch({ contract: c === '' ? undefined : c })
       }}
     />

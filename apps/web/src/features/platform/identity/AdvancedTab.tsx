@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
@@ -16,24 +17,41 @@ export function AdvancedTab({
   const { t } = useLingui()
   const net = useNetwork()
   const columns = useKeyColumns()
-  const args = { id, contractId: contract ?? '' }
+  const [refused, setRefused] = useState(false)
   const nonce = useQuery({
-    ...sdkQueries['identities.contractNonce'](net, args),
+    ...sdkQueries['identities.contractNonce'](net, { id, contractId: contract ?? '' }),
     enabled: contract !== undefined,
   })
-  const keys = useQuery({
-    ...sdkQueries['identities.contractKeys'](net, args),
+  const identityKeys = useQuery({
+    ...sdkQueries['identities.getKeys'](net, { id }),
     enabled: contract !== undefined,
   })
+  const keys = {
+    ...identityKeys,
+    data: identityKeys.data && {
+      ...identityKeys.data,
+      data: identityKeys.data.data.filter(
+        (k) => k.contractBounds?.type !== 'contractGroup' && k.contractBounds?.id === contract,
+      ),
+    },
+  }
   return (
     <Card
       title={t`Contract details`}
       layer="platform"
       id="identity-advanced"
-      subtitle={t`This identity’s nonce for a contract and the keys bound to it.`}
+      subtitle={t`This identity’s nonce for a contract and the keys bound to it, including keys bound to one document type of it.`}
     >
-      <ContractForm contract={contract} />
-      {contract === undefined ? (
+      <ContractForm
+        contract={contract}
+        onInvalid={() => {
+          setRefused(true)
+        }}
+        onSubmitted={() => {
+          setRefused(false)
+        }}
+      />
+      {contract === undefined || refused ? (
         <Empty kind="none-yet" title={t`Enter a contract ID to see its nonce and keys.`} />
       ) : (
         <>
