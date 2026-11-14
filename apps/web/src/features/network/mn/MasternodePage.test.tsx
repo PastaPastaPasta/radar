@@ -119,12 +119,18 @@ describe('Masternode page', () => {
     expect(card).toHaveTextContent('No penalty')
   })
 
-  it('gives every card a source line from Radar’s crawl @RA-30', async () => {
+  it('names Radar’s crawl once, in the record header, for every card under it @RA-30', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     await waitFor(() => expect(document.querySelector('#registration')).not.toBeNull())
+    const header = document.querySelector<HTMLElement>('[data-masternode-header]')!
+    await waitFor(() =>
+      expect(header.querySelectorAll('[data-section-sources] [data-source="radar"]')).toHaveLength(
+        1,
+      ),
+    )
+    expect(header.querySelector('[data-section-sources]')).toHaveTextContent(/Radar/)
     for (const id of ['uptime', 'registration']) {
-      const card = document.getElementById(id)!
-      expect(card.querySelector('[data-source="radar"]')).not.toBeNull()
+      expect(document.getElementById(id)!.querySelector('[data-source]')).toBeNull()
     }
   })
 
