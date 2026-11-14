@@ -6,6 +6,7 @@ import { Empty, Section, Unavailable, useAfterIdle } from '@/ui'
 import type { HomeRange } from './chart-options'
 import { PlatformCharts } from './Charts'
 import { ContractsCard, PollsCard, QuorumsCard } from './ChainFacts'
+import { EpochNow, useEpochClaim } from './EpochNow'
 import { RecentEpochs } from './Epochs'
 import { Leaderboards } from './Leaderboards'
 import { NewestBlocks, NewestTransitions } from './Newest'
@@ -31,6 +32,7 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
   const [chainRef, chainSeen] = useInView<HTMLDivElement>(2_000)
   const [historyRef, historySeen] = useInView<HTMLDivElement>(4_000)
   const chain = idle && chainSeen
+  const claim = useEpochClaim()
 
   const notice = off ? (
     <Unavailable
@@ -45,14 +47,31 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
     <PageFrame
       path="/platform"
       title={t`Platform`}
+      claim={claim}
       eyebrow={t`Platform`}
       layer="platform"
       lede={t`How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it.`}
     >
+      <EpochNow />
+
       <div className="rx-cols rx-cols--lead">
         <Vitals />
         <QuickEntry />
       </div>
+
+      <Section id="chain" layer="platform" title={t`On the chain`}>
+        <div className="rx-pile" ref={chainRef}>
+          <div className="rx-cols">
+            <Proposers active={chain} />
+            <div className="rx-pile">
+              <QuorumsCard active={chain} />
+              <PollsCard active={chain} />
+            </div>
+          </div>
+          <RecentEpochs active={chain} />
+          <ContractsCard active={chain} />
+        </div>
+      </Section>
 
       <Section
         id="activity"
@@ -75,20 +94,6 @@ export function PlatformHomePage({ range = '24h', rich = 'balance' }: PlatformHo
         ) : (
           notice
         )}
-      </Section>
-
-      <Section id="chain" layer="platform" title={t`On the chain`}>
-        <div className="rx-pile" ref={chainRef}>
-          <div className="rx-cols">
-            <Proposers active={chain} />
-            <div className="rx-pile">
-              <QuorumsCard active={chain} />
-              <PollsCard active={chain} />
-            </div>
-          </div>
-          <RecentEpochs active={chain} />
-          <ContractsCard active={chain} />
-        </div>
       </Section>
 
       {indexed ? (

@@ -71,6 +71,9 @@ msgstr "3 д"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "Другий індекс для адрес, витрачених виходів, chainwork і управління"
 
+msgid "A year, on the collateral"
+msgstr "За рік, на заставу"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "Активні"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI і Platform SDK відповідають. Розміщені джерела вимкнені в режимі «Лише децентралізовано»."
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI і Platform SDK відповідають"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI зайнятий, тому списки блоків беруться з Hyphen, поки відновлюється ліміт запитів. Подробиці, як і раніше, йдуть через DAPI."
@@ -241,11 +244,17 @@ msgstr "Діагностика: запити цієї вкладки і чим �
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "завершується"
-
 msgid "Epoch"
 msgstr "Епоха"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Епоха {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "Епоху {0} пройдено на {1}"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "Епохи"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Усі евоноди, помічені Platform Explorer під час валідації."
 
-msgid "Every source is answering."
-msgstr "Усі джерела відповідають."
+msgid "Every source is answering"
+msgstr "Усі джерела відповідають"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Усе, що показує Core, береться з DAPI."
@@ -297,6 +306,9 @@ msgstr "Список не змінюється, поки ви дивитеся. 
 
 msgid "History and leaders"
 msgstr "Історія та лідери"
+
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "Розміщені джерела вимкнені в режимі «Лише децентралізовано»."
 
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "Стан Dash Platform: висота, епоха й кредити, хто пропонує блоки і що відбувається в мережі."
@@ -382,6 +394,9 @@ msgstr "Останнє опитування завершилося {0}. Його
 msgid "Last good {0}."
 msgstr "Остання успішна відповідь: {0}."
 
+msgid "Last pool"
+msgstr "Минулий пул"
+
 msgid "Later ones may be missing."
 msgstr "Пізніші можуть бути відсутні."
 
@@ -405,6 +420,12 @@ msgstr "Шукаємо…"
 
 msgid "Median answer {rounded} ms"
 msgstr "Медіанний час відповіді {rounded} мс"
+
+msgid "Median monthly earnings"
+msgstr "Медіанний місячний дохід"
+
+msgid "Median yield"
+msgstr "Медіанна дохідність"
 
 msgid "Most active contracts"
 msgstr "Найактивніші контракти"
@@ -482,6 +503,9 @@ msgstr "Не підтверджено доказом"
 msgid "Nothing has asked it yet on this network."
 msgstr "У цій мережі до нього ще ніхто не звертався."
 
+msgid "Nothing is slow, behind or down."
+msgstr "Ніщо не гальмує, не відстає і не лежить."
+
 msgid "Nothing ranked yet"
 msgstr "Рейтингу поки немає"
 
@@ -496,6 +520,13 @@ msgstr "У ланцюгу"
 
 msgid "Peers"
 msgstr "Піри"
+
+msgid "Per block"
+msgstr "На блок"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "На евоноду, за {0} дн."
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +551,9 @@ msgstr "Великий запас"
 
 msgid "Polls ending soon"
 msgstr "Голосування, які скоро завершаться"
+
+msgid "Pool so far"
+msgstr "Пул на цей момент"
 
 msgid "Pressure"
 msgstr "Навантаження"
@@ -596,20 +630,17 @@ msgstr "Захищені та незахищені, у DASH"
 msgid "Shielded pool"
 msgstr "Захищений пул"
 
-msgid "should have ended"
-msgstr "мала завершитися"
-
 msgid "Software"
 msgstr "Програмне забезпечення"
 
 msgid "Some requests are failing."
 msgstr "Частина запитів завершується помилкою."
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Деякі джерела повільні або відстають. Решта працює."
+msgid "Some sources are slow or behind"
+msgstr "Деякі джерела повільні або відстають"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Деякі джерела не відповідають. Решта працює."
+msgid "Some sources aren’t answering"
+msgstr "Деякі джерела не відповідають"
 
 msgid "Sources"
 msgstr "Джерела"
@@ -668,6 +699,9 @@ msgstr "Кворуми, якими Platform підписує зараз. Не п
 
 msgid "The request budget is nearly used."
 msgstr "Ліміт запитів майже вичерпано."
+
+msgid "The rest still work."
+msgstr "Решта працює."
 
 msgid "The system contracts every network ships with."
 msgstr "Системні контракти, які є в кожній мережі."

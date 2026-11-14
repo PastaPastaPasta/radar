@@ -2,12 +2,13 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
-import { sourceLineOf } from '../helpers/sources'
+import { expectReports, expectShown, expectTucked, ownMarkOf } from '../helpers/sources'
 import { expect, test } from '../helpers/test'
+import { CLAIM, H1 } from '../routes/claims'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
 
-const heading = (page: Page) => page.getByRole('heading', { level: 1, name: 'Platform' })
+const heading = (page: Page) => page.getByRole('heading', { level: 1, name: H1.platform })
 
 async function open(page: Page, url = '/platform'): Promise<void> {
   await pinClockToFixtures(page)
@@ -24,15 +25,65 @@ test.describe('Platform overview', () => {
   }) => {
     await open(page)
     const vitals = card(page, 'vitals')
-    await expect(vitals).toContainText('Platform height')
-    await expect(vitals).toContainText('Total credits')
-    await expect(vitals).toContainText('Protocol version')
-    await expect(vitals).toContainText(/Epoch\s*\d+/)
-    await expect(vitals).toContainText('Not proof-checked')
+    const figure = (label: string) => vitals.locator('.rx-stat', { hasText: label })
+    for (const label of ['Protocol version', 'Platform height', 'Total credits']) {
+      await expectReports(figure(label), 'sdk:proved')
+      await expect(
+        ownMarkOf(figure(label)).locator('[data-source="sdk"][data-proved="true"]'),
+        label,
+      ).toHaveCount(1)
+    }
+    const quorums = figure('Active quorums')
+    await expect(quorums).toContainText('Not proof-checked')
+    await expectReports(quorums, 'sdk')
     await expect(
-      sourceLineOf(vitals).locator('[data-source="sdk"][data-proved="true"]'),
-    ).toBeVisible()
+      ownMarkOf(quorums).locator('[data-source="sdk"][data-proved="false"]'),
+    ).toHaveCount(1)
+    await expect(vitals.locator('[role="meter"]'), 'the epoch leads the page instead').toHaveCount(
+      0,
+    )
     await expectAccessible(page)
+  })
+
+  test('leads with the epoch: how far it is, its pool and what a block pays, before the vital signs @NX-01 @RA-60', async ({
+    page,
+  }) => {
+    await open(page)
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.platform })).toBeVisible()
+    const lead = card(page, 'epoch-now')
+    await expect(lead.locator('[role="meter"]')).toBeVisible()
+    const rewards = lead.locator('[data-epoch-rewards]')
+    for (const label of ['Pool so far', 'Last pool', 'Per block', 'Median monthly earnings']) {
+      await expect(rewards.locator('.rx-stat', { hasText: label })).toBeVisible()
+    }
+    await expectReports(rewards.locator('.rx-stat', { hasText: 'Pool so far' }), 'radar')
+    const [epoch, vitals] = await Promise.all(
+      [lead, card(page, 'vitals')].map((l) => l.boundingBox()),
+    )
+    expect(epoch!.y).toBeLessThan(vitals!.y)
+    expect(epoch!.y, 'the epoch starts on the first screen').toBeLessThan(isPhone(page) ? 420 : 320)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1)
+  })
+
+  test('a figure’s own source opens from the keyboard and from a tap @NX-01', async ({ page }) => {
+    await open(page)
+    const height = card(page, 'vitals').locator('.rx-stat', { hasText: 'Platform height' })
+    const own = ownMarkOf(height)
+    await expectTucked(own)
+    await expect(height).toHaveAttribute('tabindex', '0')
+    await expect(height).toHaveAttribute('aria-describedby', (await own.getAttribute('id'))!)
+    if (isPhone(page)) {
+      await height.tap()
+    } else {
+      await height.focus()
+      await expect(height).toBeFocused()
+    }
+    await expectShown(own)
+    await expect(own.locator('[data-source="sdk"][data-proved="true"]')).toBeVisible()
+    const box = await own.boundingBox()
+    const width = page.viewportSize()!.width
+    expect(box!.x).toBeGreaterThanOrEqual(0)
+    expect(box!.x + box!.width).toBeLessThanOrEqual(width)
   })
 
   test('ranks the ten evonodes with the most blocks and opens each one @NX-02', async ({
@@ -217,7 +268,7 @@ test.describe('Platform overview', () => {
     await settled(page)
     expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
     const boxes = await page
-      .locator('#vitals, #quick-entry')
+      .locator('#epoch-now, #vitals')
       .evaluateAll((els) => els.map((el) => el.getBoundingClientRect()))
     expect(boxes[0]!.bottom).toBeLessThanOrEqual(boxes[1]!.top + 1)
     const chart = await card(page, 'chart-transitions').boundingBox()
@@ -240,6 +291,9 @@ test.describe('Platform overview in Decentralized only mode', () => {
     await expect(heading(page)).toBeVisible()
     await settled(page)
     await expect(card(page, 'vitals')).toContainText('Platform height')
+    await expect(page.getByRole('heading', { level: 1, name: CLAIM.platform })).toBeVisible()
+    await expect(card(page, 'epoch-now').locator('[role="meter"]')).toBeVisible()
+    await expect(card(page, 'epoch-now').locator('[data-epoch-rewards]')).toHaveCount(0)
     await card(page, 'proposers').scrollIntoViewIfNeeded()
     await expect(card(page, 'proposers').getByRole('row')).toHaveCount(isPhone(page) ? 10 : 11)
     await expect(card(page, 'contracts')).toContainText('DPNS')

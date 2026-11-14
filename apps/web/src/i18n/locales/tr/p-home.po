@@ -71,6 +71,9 @@ msgstr "3 g"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "Adresler, harcanmış çıktılar, chainwork ve yönetişim için ikinci bir dizin"
 
+msgid "A year, on the collateral"
+msgstr "Bir yıl, teminata göre"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "Etkin"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI ve Platform SDK yanıt veriyor. Barındırılan kaynaklar “Yalnızca merkeziyetsiz” modunda kapalıdır."
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI ve Platform SDK yanıt veriyor"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI meşgul, bu yüzden bütçe toparlanana kadar blok listeleri Hyphen’den gelir. Ayrıntılar yine DAPI’yi kullanır."
@@ -241,11 +244,17 @@ msgstr "Tanılama: bu sekmenin yaptığı istekler ve her birinin sonucu"
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "sona erer"
-
 msgid "Epoch"
 msgstr "Epoch"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "Dönem {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "Dönem {0}, {1} tamamlandı"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "Epoch’lar"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Platform Explorer’ın doğrulama yaparken gördüğü tüm evonode’lar."
 
-msgid "Every source is answering."
-msgstr "Tüm kaynaklar yanıt veriyor."
+msgid "Every source is answering"
+msgstr "Tüm kaynaklar yanıt veriyor"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core’un gösterdiği her şey DAPI’den gelir."
@@ -297,6 +306,9 @@ msgstr "Siz bakarken sabit tutulur. Uzaklaştığınızda yenileri görünür."
 
 msgid "History and leaders"
 msgstr "Geçmiş ve liderler"
+
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "Barındırılan kaynaklar “Yalnızca merkeziyetsiz” modunda kapalıdır."
 
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "Dash Platform’un durumu: yüksekliği, epoch’u ve kredileri, blokları kimin önerdiği ve üzerinde neler olduğu."
@@ -382,6 +394,9 @@ msgstr "Son tarama {0} bitti. Core düğümü {1}. blokta."
 msgid "Last good {0}."
 msgstr "Son başarılı yanıt {0}."
 
+msgid "Last pool"
+msgstr "Önceki havuz"
+
 msgid "Later ones may be missing."
 msgstr "Sonrakiler eksik olabilir."
 
@@ -405,6 +420,12 @@ msgstr "Aranıyor…"
 
 msgid "Median answer {rounded} ms"
 msgstr "Ortanca yanıt {rounded} ms"
+
+msgid "Median monthly earnings"
+msgstr "Medyan aylık kazanç"
+
+msgid "Median yield"
+msgstr "Medyan getiri"
 
 msgid "Most active contracts"
 msgstr "En aktif sözleşmeler"
@@ -482,6 +503,9 @@ msgstr "Kanıtla doğrulanmadı"
 msgid "Nothing has asked it yet on this network."
 msgstr "Bu ağda henüz kimse ona sormadı."
 
+msgid "Nothing is slow, behind or down."
+msgstr "Yavaş, geride veya kapalı olan bir şey yok."
+
 msgid "Nothing ranked yet"
 msgstr "Henüz sıralanan yok"
 
@@ -496,6 +520,13 @@ msgstr "Zincirde"
 
 msgid "Peers"
 msgstr "Eşler"
+
+msgid "Per block"
+msgstr "Blok başına"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "Evonode başına, {0} gün boyunca"
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +551,9 @@ msgstr "Bol miktarda pay"
 
 msgid "Polls ending soon"
 msgstr "Yakında sona erecek oylamalar"
+
+msgid "Pool so far"
+msgstr "Şu ana kadarki havuz"
 
 msgid "Pressure"
 msgstr "Baskı"
@@ -596,20 +630,17 @@ msgstr "Gizlenmiş ve gizlenmemiş, DASH cinsinden"
 msgid "Shielded pool"
 msgstr "Gizli havuz"
 
-msgid "should have ended"
-msgstr "sona ermiş olmalıydı"
-
 msgid "Software"
 msgstr "Yazılım"
 
 msgid "Some requests are failing."
 msgstr "Bazı istekler başarısız oluyor."
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "Bazı kaynaklar yavaş veya geride. Diğerleri çalışmaya devam ediyor."
+msgid "Some sources are slow or behind"
+msgstr "Bazı kaynaklar yavaş veya geride"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "Bazı kaynaklar yanıt vermiyor. Diğerleri çalışmaya devam ediyor."
+msgid "Some sources aren’t answering"
+msgstr "Bazı kaynaklar yanıt vermiyor"
 
 msgid "Sources"
 msgstr "Kaynaklar"
@@ -668,6 +699,9 @@ msgstr "Platform’un şu anda imzaladığı quorum’lar. Kanıtla doğrulanmad
 
 msgid "The request budget is nearly used."
 msgstr "İstek bütçesi neredeyse tükendi."
+
+msgid "The rest still work."
+msgstr "Diğerleri çalışmaya devam ediyor."
 
 msgid "The system contracts every network ships with."
 msgstr "Her ağın birlikte geldiği sistem sözleşmeleri."

@@ -42,17 +42,56 @@ afterEach(() => {
 })
 
 describe('Platform overview', () => {
-  it('shows the proof-checked vital signs, and says the quorum count is not proved @NX-01', async () => {
+  it('opens with how far the epoch is, then its pool and what a block pays @NX-01 @RA-60', async () => {
     renderAt('/platform')
     expect(await screen.findByRole('heading', { level: 1, name: 'Platform' })).toBeInTheDocument()
+    const h1 = await screen.findByRole('heading', { level: 1, name: /^Epoch 88 is \d+% through$/ })
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+    const lead = await card('epoch-now')
+    expect(h1.compareDocumentPosition(lead) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(
+      lead.compareDocumentPosition(await card('vitals')) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    const clock = within(lead).getByRole('meter', { name: 'Epoch 88 progress' })
+    expect(clock).toHaveAttribute('aria-valuetext', expect.stringMatching(/% through/))
+    expect(lead.querySelector('.rx-clock__axis')).not.toHaveTextContent('% through')
+    expect(lead.querySelector('.rx-clock__n')).toBeNull()
+    await waitFor(() =>
+      expect(lead.querySelector('[data-epoch-rewards] [data-amount]')).not.toBeNull(),
+    )
+    for (const label of [
+      'Pool so far',
+      'Last pool',
+      'Per block',
+      'Median monthly earnings',
+      'Median yield',
+    ])
+      expect(within(lead).getByText(label)).toBeInTheDocument()
+    const line = document.querySelector('.rx-page__src')!
+    await waitFor(() => expect(line.querySelector('[data-source="radar"]')).not.toBeNull())
+    expect(line.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+  })
+
+  it('shows the proof-checked vital signs after it, and says the quorum count is not proved @NX-01', async () => {
+    renderAt('/platform')
     const vitals = await card('vitals')
     await waitFor(() => expect(vitals).toHaveTextContent('Platform height'))
     await waitFor(() => expect(vitals).toHaveTextContent(/Total credits/))
     await waitFor(() => expect(vitals.querySelector('[data-amount]')).not.toBeNull())
-    await waitFor(() => expect(vitals).toHaveTextContent(/Epoch\s*88/))
     expect(vitals).toHaveTextContent('Protocol version')
+    expect(vitals).not.toHaveTextContent(/Epoch\s*88/)
     await waitFor(() => expect(vitals).toHaveTextContent('Not proof-checked'))
-    expect(vitals.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+    const figure = (label: string) =>
+      within(vitals).getByText(label).closest<HTMLElement>('.rx-stat')!
+    for (const label of ['Platform height', 'Total credits', 'Protocol version'])
+      await waitFor(() => expect(figure(label)).toHaveAttribute('data-reports', 'sdk:proved'))
+    await waitFor(() => expect(figure('Active quorums')).toHaveAttribute('data-reports', 'sdk'))
+    expect(
+      figure('Platform height').querySelector('.rx-fig__src [data-proved="true"]'),
+    ).not.toBeNull()
+    expect(
+      figure('Active quorums').querySelector('.rx-fig__src [data-proved="false"]'),
+    ).not.toBeNull()
   })
 
   it('ranks the ten evonodes with the most blocks and links each to its page @NX-02', async () => {
@@ -201,6 +240,11 @@ describe('Platform overview', () => {
     await card('vitals')
     await act(() => new Promise((r) => setTimeout(r, 150)))
     expect(document.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: /^Epoch 88 is/ }),
+    ).toBeInTheDocument()
+    expect(document.querySelector('#epoch-now [role="meter"]')).not.toBeNull()
+    expect(document.querySelector('[data-epoch-rewards]')).toBeNull()
     expect(document.getElementById('pulse')).toBeNull()
     expect(document.getElementById('chart-transitions')).toBeNull()
     expect(hosted).toEqual([])

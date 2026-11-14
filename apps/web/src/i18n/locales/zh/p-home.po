@@ -71,6 +71,9 @@ msgstr "3天"
 msgid "A second index for addresses, spent outputs, chainwork and governance"
 msgstr "用于地址、已花费输出、链工作量和治理的第二个索引"
 
+msgid "A year, on the collateral"
+msgstr "按一年计，相对于抵押品"
+
 msgctxt "count of active validators"
 msgid "Active"
 msgstr "活跃"
@@ -210,8 +213,8 @@ msgstr "DAPI"
 msgid "DAPI {0}"
 msgstr "DAPI {0}"
 
-msgid "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."
-msgstr "DAPI 和 Platform SDK 正在响应。托管数据源在“仅去中心化”模式下已关闭。"
+msgid "DAPI and the Platform SDK are answering"
+msgstr "DAPI 和 Platform SDK 正在响应"
 
 msgid "DAPI is busy, so block lists come from Hyphen while the budget recovers. Details still use DAPI."
 msgstr "DAPI 繁忙，在配额恢复之前，区块列表改由 Hyphen 提供。详情仍使用 DAPI。"
@@ -241,11 +244,17 @@ msgstr "诊断：此标签页发出的请求及各自的结果"
 msgid "Drive {0}"
 msgstr "Drive {0}"
 
-msgid "ends"
-msgstr "结束"
-
 msgid "Epoch"
 msgstr "纪元"
+
+#. placeholder {0}: formatInt(last.epoch)
+msgid "Epoch {0}"
+msgstr "纪元 {0}"
+
+#. placeholder {0}: formatInt(epoch.number)
+#. placeholder {1}: formatPercent(ratio, 0)
+msgid "Epoch {0} is {1} through"
+msgstr "纪元 {0} 已过 {1}"
 
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
@@ -259,8 +268,8 @@ msgstr "纪元"
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Platform Explorer 见过参与验证的每个 evonode。"
 
-msgid "Every source is answering."
-msgstr "所有数据源均正常响应。"
+msgid "Every source is answering"
+msgstr "所有数据源均正常响应"
 
 msgid "Everything Core shows comes from DAPI."
 msgstr "Core 中显示的所有内容均来自 DAPI。"
@@ -297,6 +306,9 @@ msgstr "查看时列表保持不动。移开后会显示新内容。"
 
 msgid "History and leaders"
 msgstr "历史与领先者"
+
+msgid "Hosted sources are off in Decentralized only mode."
+msgstr "托管数据源在“仅去中心化”模式下已关闭。"
 
 msgid "How Dash Platform is doing: its height, epoch and credits, who is proposing blocks, and what is happening on it."
 msgstr "Dash Platform 运行状况：高度、纪元和积分，谁在提议区块，以及其上正在发生的事。"
@@ -382,6 +394,9 @@ msgstr "上次抓取于 {0} 完成，其 Core 节点位于区块 {1}。"
 msgid "Last good {0}."
 msgstr "上次正常为 {0}。"
 
+msgid "Last pool"
+msgstr "上一期奖池"
+
 msgid "Later ones may be missing."
 msgstr "之后的内容可能缺失。"
 
@@ -405,6 +420,12 @@ msgstr "正在查找…"
 
 msgid "Median answer {rounded} ms"
 msgstr "响应时间中位数 {rounded} ms"
+
+msgid "Median monthly earnings"
+msgstr "每月收益中位数"
+
+msgid "Median yield"
+msgstr "收益率中位数"
 
 msgid "Most active contracts"
 msgstr "最活跃的合约"
@@ -482,6 +503,9 @@ msgstr "未通过证明验证"
 msgid "Nothing has asked it yet on this network."
 msgstr "此网络上还没有人向它发出请求。"
 
+msgid "Nothing is slow, behind or down."
+msgstr "没有缓慢、落后或中断的数据源。"
+
 msgid "Nothing ranked yet"
 msgstr "暂无排名"
 
@@ -496,6 +520,13 @@ msgstr "链上"
 
 msgid "Peers"
 msgstr "对等节点"
+
+msgid "Per block"
+msgstr "每区块"
+
+#. placeholder {0}: formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })
+msgid "Per evonode, over {0} days"
+msgstr "每个 Evonode，{0} 天"
 
 msgid "Platform"
 msgstr "Platform"
@@ -520,6 +551,9 @@ msgstr "余量充足"
 
 msgid "Polls ending soon"
 msgstr "即将结束的投票"
+
+msgid "Pool so far"
+msgstr "目前奖池"
 
 msgid "Pressure"
 msgstr "压力"
@@ -596,20 +630,17 @@ msgstr "隐私保护与未隐私保护，以 DASH 计"
 msgid "Shielded pool"
 msgstr "隐私池"
 
-msgid "should have ended"
-msgstr "应已结束"
-
 msgid "Software"
 msgstr "软件"
 
 msgid "Some requests are failing."
 msgstr "部分请求失败。"
 
-msgid "Some sources are slow or behind. The rest still work."
-msgstr "部分数据源响应缓慢或数据落后，其余仍正常工作。"
+msgid "Some sources are slow or behind"
+msgstr "部分数据源响应缓慢或数据落后"
 
-msgid "Some sources aren’t answering. The rest still work."
-msgstr "部分数据源没有响应，其余仍正常工作。"
+msgid "Some sources aren’t answering"
+msgstr "部分数据源没有响应"
 
 msgid "Sources"
 msgstr "数据源"
@@ -668,6 +699,9 @@ msgstr "Platform 当前用于签名的 Quorum。未通过证明验证：SDK 没�
 
 msgid "The request budget is nearly used."
 msgstr "请求配额即将用尽。"
+
+msgid "The rest still work."
+msgstr "其余仍正常工作。"
 
 msgid "The system contracts every network ships with."
 msgstr "每个网络都自带的系统合约。"
