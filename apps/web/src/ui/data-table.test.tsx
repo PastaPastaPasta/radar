@@ -370,6 +370,15 @@ describe('DataTable width', () => {
     })
   })
 
+  it('makes the scrolling box a named region a keyboard can focus', async () => {
+    widths.scroll = 1400
+    widths.client = 900
+    await renderInRouter(<Harness />)
+    const region = await screen.findByRole('region', { name: /./ })
+    expect(region).toHaveAttribute('tabindex', '0')
+    expect(region.querySelector('table')).not.toBeNull()
+  })
+
   it('leaves a table that fits unflagged, so its sticky header keeps working', async () => {
     widths.scroll = 900
     widths.client = 900

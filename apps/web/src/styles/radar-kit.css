@@ -767,11 +767,12 @@ dashhq-footer .rx-ratenote {
   margin-top: 8px;
   overflow-x: auto;
 }
+.rx-tablescroll[data-wide]:focus-visible,
 .rx-chart__table:focus-visible {
   outline: var(--dh-ring-w) solid var(--dh-focus);
   outline-offset: 2px;
 }
-.dh-seg.rx-seg {
+.rx-tools .dh-seg.rx-seg {
   flex-wrap: wrap;
   overflow-x: visible;
 }

@@ -554,7 +554,12 @@ export function DataTable<Row>({
           lastTouched = tableId
         }}
       >
-        <div ref={scrollRef} className="rx-tablescroll" data-wide={wide || undefined}>
+        <div
+          ref={scrollRef}
+          className="rx-tablescroll"
+          data-wide={wide || undefined}
+          {...(wide ? { role: 'region', 'aria-label': caption, tabIndex: 0 } : {})}
+        >
           <table
             ref={tableRef}
             className={cx(
