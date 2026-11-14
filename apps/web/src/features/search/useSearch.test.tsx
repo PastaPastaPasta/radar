@@ -8,7 +8,9 @@ import { classify } from './classify'
 import { searchEnv } from './env'
 import { resolvers } from './resolvers'
 import { localStamp } from './resolvers/helpers'
+import { writeSourceMode } from '@/lib/source-mode'
 import { mergeHits, planResolvers } from './useSearch'
+import { pePlatformBlock } from './resolvers/platform-block'
 import type { Resolver, SearchHit } from './types'
 
 const HASH = 'ab'.repeat(32)
@@ -144,14 +146,57 @@ describe('fan-out', () => {
     expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'true')
   })
 
-  it('says on the page that Platform heights can’t be offered when the Platform tip can’t be read', async () => {
-    vi.spyOn(sdk, 'call').mockRejectedValue(
-      new SourceError({ source: 'sdk', kind: 'unavailable', message: 'The SDK is unreachable' }),
-    )
+  describe('with the Platform tip unreadable', () => {
+    const NOT_OFFERED = /isn.t available here/
+    const sdkDown = () =>
+      vi
+        .spyOn(sdk, 'call')
+        .mockRejectedValue(
+          new SourceError({ source: 'sdk', kind: 'unavailable', message: 'The SDK is unreachable' }),
+        )
+    const results = () => screen.getByRole('region', { name: 'Results' })
+    const settled = () => waitFor(() => expect(results()).not.toHaveAttribute('aria-busy', 'true'))
+    const open = (q: string) =>
+      render(<App history={createMemoryHistory({ initialEntries: [`/search?q=${q}`] })} />)
 
-    render(<App history={createMemoryHistory({ initialEntries: ['/search?q=2569992'] })} />)
+    it('says Platform heights can’t be offered when the block lookup failed', async () => {
+      sdkDown()
+      vi.spyOn(pePlatformBlock, 'resolve').mockRejectedValue(
+        new SourceError({ source: 'pe', kind: 'http', message: 'Platform Explorer is down' }),
+      )
+      open('2569992')
+      expect(await screen.findByText(NOT_OFFERED)).toBeInTheDocument()
+    })
 
-    expect(await screen.findByText(/isn.t available here/)).toBeInTheDocument()
+    it('says so in Decentralized only mode, where no index answers a height', async () => {
+      sdkDown()
+      writeSourceMode('decentralized')
+      open('2569992')
+      expect(await screen.findByText(NOT_OFFERED)).toBeInTheDocument()
+    })
+
+    it('stays quiet when Platform Explorer’s block lookup answered', async () => {
+      sdkDown()
+      vi.spyOn(pePlatformBlock, 'resolve').mockResolvedValue([
+        hit({
+          kind: 'platform-block',
+          id: '2569992',
+          title: 'Platform block 2,569,992',
+          href: { to: '/platform/block/$id', params: { id: '2569992' } },
+        }),
+      ])
+      open('2569992')
+      expect(await screen.findByRole('link', { name: /Platform block 2,569,992/ })).toBeVisible()
+      await settled()
+      expect(screen.queryByText(NOT_OFFERED)).toBeNull()
+    })
+
+    it('stays quiet for a Core address, which no Platform height concerns', async () => {
+      sdkDown()
+      open('XpG61qAVhdyN7AqVZQsHfJL7AEk4dPVinc')
+      await settled()
+      expect(screen.queryByText(NOT_OFFERED)).toBeNull()
+    })
   })
 
   it('aborts the previous run when the input changes', async () => {

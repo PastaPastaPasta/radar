@@ -151,10 +151,17 @@ export function useSearch(q: string, opts: { mode: SearchMode }): SearchResult {
   const pendingLocal = planned
     .filter((r) => r.cost === 'local' && !(r.id in settled))
     .map((r) => r.id)
+  const blockLookup = 'pe-platform-block'
+  const platformTipHidesHeight =
+    classified.classes.includes('int') &&
+    !tipReading &&
+    (!plannedIds.split(',').includes(blockLookup) || settled[blockLookup]?.error !== undefined)
   const failed = [
     ...Object.entries(settled).flatMap(([id, s]) => (s.error ? [{ id, error: s.error }] : [])),
-    // Platform heights and epochs are offered only up to the Platform tip, so a tip that can't be read hides them.
-    ...(mode === 'page' && unread !== undefined
+    // A Platform height is offered only up to the Platform tip, so a tip that can't be read hides it. That matters
+    // only to a number, and only once Platform Explorer's one-block lookup, which answers without the tip, has not
+    // run (Decentralized only mode, a devnet) or has failed.
+    ...(mode === 'page' && unread !== undefined && platformTipHidesHeight
       ? [{ id: 'platform-tip', error: toSourceError(unread, false) }]
       : []),
   ]
