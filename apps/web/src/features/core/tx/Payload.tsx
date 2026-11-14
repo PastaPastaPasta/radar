@@ -250,6 +250,9 @@ function QcTxRows({ p }: { p: Obj }) {
   const { t } = useLingui()
   const c = obj(p.commitment) ?? {}
   const members = str(c.signers)?.length ?? 0
+  const signers = num(c.signersCount) ?? 0
+  const valid = num(c.validMembersCount) ?? 0
+  const isNull = signers === 0 && valid === 0
   return (
     <KeyValue
       columns={2}
@@ -260,16 +263,25 @@ function QcTxRows({ p }: { p: Obj }) {
           ? []
           : [{ label: t`Quorum index`, value: String(num(c.quorumIndex)) }]),
         { label: t`Mined for height`, value: formatInt(num(p.height) ?? 0) },
-        {
-          label: t`Signers`,
-          value: t`${formatInt(num(c.signersCount) ?? 0)} of ${formatInt(members)}`,
-        },
-        {
-          label: t`Valid members`,
-          value: t`${formatInt(num(c.validMembersCount) ?? 0)} of ${formatInt(members)}`,
-        },
-        { label: t`Quorum public key`, value: hashValue(c.quorumPublicKey, 16, 8) },
-        { label: t`Threshold signature`, value: hashValue(c.thresholdSig) },
+        ...(isNull
+          ? [
+              {
+                label: t`Commitment`,
+                value: t`Null commitment: no quorum was formed for this slot`,
+              },
+            ]
+          : [
+              {
+                label: t`Signers`,
+                value: t`${formatInt(signers)} of ${formatInt(members)}`,
+              },
+              {
+                label: t`Valid members`,
+                value: t`${formatInt(valid)} of ${formatInt(members)}`,
+              },
+              { label: t`Quorum public key`, value: hashValue(c.quorumPublicKey, 16, 8) },
+              { label: t`Threshold signature`, value: hashValue(c.thresholdSig) },
+            ]),
       ]}
     />
   )
