@@ -15,7 +15,13 @@ test.describe('layout between a phone and a wide screen', () => {
       await page.goto(withQuery(route.path, networkQuery(net)))
       await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible()
       await settled(page)
-      expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
+      // The scroll box takes over on the frame after a table's rows land, so the width is read until it settles.
+      await expect
+        .poll(() => horizontalOverflow(page), {
+          message: 'sideways overflow in px',
+          timeout: 3_000,
+        })
+        .toBeLessThanOrEqual(0)
     })
   }
 
