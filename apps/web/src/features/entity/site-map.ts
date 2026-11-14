@@ -30,6 +30,14 @@ export interface SitePage {
   keywords?: string[]
   /** The thing a record page shows, for titles and the other-network notice: "block", "masternode". */
   record?: MessageDescriptor
+  /** Named URLs under a route with params, each findable in the palette and search's page list. */
+  entries?: SiteEntry[]
+}
+
+export interface SiteEntry {
+  href: string
+  title: MessageDescriptor
+  keywords?: string[]
 }
 
 export const SOURCE_LABELS: Record<SourceId, MessageDescriptor> = {
@@ -577,8 +585,37 @@ export const SITE_MAP: SitePage[] = [
     summary: msg`Decode raw bytes offline: a transaction, block, identity, contract, document or proof.`,
     sources: ['local', 'sdk'],
     record: msg`decoder`,
-    navHref: '/tools/contract',
+    navHref: '/tools/decoders',
     railTitle: msg`Decoders`,
+    keywords: ['decode', 'bytes', 'hex'],
+    entries: [
+      { href: '/tools/decoders', title: msg`Decoders`, keywords: ['decode', 'bytes', 'hex'] },
+      {
+        href: '/tools/contract',
+        title: msg`Contract decoder`,
+        keywords: ['decode', 'data contract', 'bytes'],
+      },
+      {
+        href: '/tools/identity',
+        title: msg`Identity decoder`,
+        keywords: ['decode', 'keys', 'bytes'],
+      },
+      {
+        href: '/tools/document',
+        title: msg`Document decoder`,
+        keywords: ['decode', 'fields', 'bytes'],
+      },
+      {
+        href: '/tools/proof',
+        title: msg`Proof decoder`,
+        keywords: ['decode', 'grovedb', 'proof', 'layers'],
+      },
+      {
+        href: '/tools/path',
+        title: msg`Path decoder`,
+        keywords: ['decode', 'grovedb', 'path', 'elements'],
+      },
+    ],
   }),
   page({
     path: '/tools/verify-message',

@@ -1,6 +1,7 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { sdk } from '@/data/sdk'
 import { bytesToHex } from '@/lib/hex'
 import { renderAt } from '../test-utils'
 import type * as GroveProof from './grove-proof'
@@ -14,6 +15,42 @@ vi.mock('./grove-proof', async (original) => ({
 
 beforeEach(() => {
   parser.parse.mockReset()
+})
+
+describe('a proof pasted into the contract decoder', () => {
+  it('is named a proof and linked to the proof decoder @NX-72', async () => {
+    parser.parse.mockResolvedValue(proofText('testnet-dpns-domain-asc'))
+    vi.spyOn(sdk, 'decode').mockImplementation(() =>
+      Promise.resolve({
+        ok: false as const,
+        error: { kind: 'invalid-response', message: 'UnexpectedVariant' },
+      }),
+    )
+    const user = userEvent.setup()
+    renderAt('/tools/contract')
+    await user.click(await screen.findByLabelText('Serialized data contract'))
+    await user.paste(bytesToHex(proofBytes('testnet-dpns-domain-asc')))
+    const note = await screen.findByText(/look like a GroveDB proof/)
+    expect(within(note.closest('p')!).getByRole('link')).toHaveAttribute('href', '/tools/proof')
+  })
+
+  it('says nothing about proofs for bytes the proof reader refuses too @NX-72', async () => {
+    const { ProofParseError } = await import('./grove-proof')
+    parser.parse.mockRejectedValue(new ProofParseError('invalid', 'bad'))
+    vi.spyOn(sdk, 'decode').mockImplementation(() =>
+      Promise.resolve({
+        ok: false as const,
+        error: { kind: 'invalid-response', message: 'unable to deserialize' },
+      }),
+    )
+    const user = userEvent.setup()
+    renderAt('/tools/contract')
+    await user.click(await screen.findByLabelText('Serialized data contract'))
+    await user.paste('0102')
+    await screen.findByRole('alert')
+    await waitFor(() => expect(parser.parse).toHaveBeenCalled())
+    expect(document.querySelector('[data-looks-like-proof]')).toBeNull()
+  })
 })
 
 describe('proof decoder', () => {

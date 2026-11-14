@@ -4,7 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Command } from 'cmdk'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import { entityLabel, pageTitle, sectionLabel, useNetwork } from '@/features/entity'
+import { entityLabel, sectionLabel, useNetwork } from '@/features/entity'
 import { Badge } from '@/ui/base'
 import { SourceLine } from '@/ui/states'
 import { searchEnv } from './env'
@@ -176,7 +176,7 @@ function PaletteBody({ initialQuery, onDone }: { initialQuery: string; onDone: (
             onSelect={() => go({ to: p.path as '/' })}
             className="flex items-center justify-between gap-3 rounded px-2 py-2 data-[selected=true]:bg-black/5"
           >
-            <span>{pageTitle(p)}</span>
+            <span>{p.title}</span>
             <span className="text-xs text-[var(--dh-ink-2,inherit)]">
               {sectionLabel(p.section)}
             </span>

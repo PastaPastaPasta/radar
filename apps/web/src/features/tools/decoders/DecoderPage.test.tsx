@@ -22,6 +22,39 @@ describe('decoders index', () => {
   })
 })
 
+describe('decoders index', () => {
+  it('opens the chooser at /tools/decoders and every decoder links to its siblings @NX-72', async () => {
+    renderAt('/tools/decoders')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Decoders' })).toBeInTheDocument()
+    const chooser = document.querySelector('[data-decoders]')!
+    const hrefs = [...chooser.querySelectorAll('a')].map((a) => a.getAttribute('href'))
+    expect(hrefs).toEqual([
+      '/tools/contract',
+      '/tools/identity',
+      '/tools/document',
+      '/tools/proof',
+      '/tools/path',
+      '/tools/transition',
+    ])
+  })
+
+  it('shows the other decoders on a decoder page @NX-72', async () => {
+    renderAt('/tools/proof')
+    const nav = await screen.findByRole('navigation', { name: 'Decoders', hidden: false })
+    const links = [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href'))
+    expect(links).toEqual([
+      '/tools/decoders',
+      '/tools/contract',
+      '/tools/identity',
+      '/tools/document',
+      '/tools/proof',
+      '/tools/path',
+      '/tools/transition',
+    ])
+    expect(nav.querySelector('[aria-current="page"]')?.textContent).toBe('Proof decoder')
+  })
+})
+
 describe('byte decoders', () => {
   it('decodes pasted hex locally and keeps the bytes out of the address @NX-71', async () => {
     const decode = vi.spyOn(sdk, 'decode').mockImplementation(() => wire({ id: 'abc', version: 1 }))
