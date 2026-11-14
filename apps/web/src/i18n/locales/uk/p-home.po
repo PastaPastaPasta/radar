@@ -50,9 +50,6 @@ msgstr "{0} дійсних"
 msgid "{behind} blocks behind the tip"
 msgstr "Відставання від вершини: {behind} блоків"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, one {Список не змінюється, поки ви дивитеся · нових: #. Приберіть курсор, щоб побачити.} few {Список не змінюється, поки ви дивитеся · нових: #. Приберіть курсор, щоб побачити.} many {Список не змінюється, поки ви дивитеся · нових: #. Приберіть курсор, щоб побачити.} other {Список не змінюється, поки ви дивитеся · нових: #. Приберіть курсор, щоб побачити.}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Зібрано з # відповіді, перевіреної за доказом.} few {Зібрано з # відповідей, перевірених за доказами.} many {Зібрано з # відповідей, перевірених за доказами.} other {Зібрано з # відповіді, перевіреної за доказами.}}"
 
@@ -303,9 +300,6 @@ msgstr "Заголовки та блоки"
 msgid "Headroom"
 msgstr "Запас"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "Список не змінюється, поки ви дивитеся. Нові записи з’являться, коли ви приберете курсор."
-
 msgid "History and leaders"
 msgstr "Історія та лідери"
 
@@ -517,11 +511,21 @@ msgstr "Рейтингу поки немає"
 msgid "Nothing shielded in this range"
 msgstr "У цьому діапазоні нічого не захищено"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "Поки що нічого ранжувати: {quietNames}."
+
 msgid "Off in this mode"
 msgstr "У цьому режимі вимкнено"
 
 msgid "On the chain"
 msgstr "У ланцюгу"
+
+msgid "Paused"
+msgstr "Призупинено"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "Призупинено · {0} новіших"
 
 msgid "Peers"
 msgstr "Піри"
@@ -674,6 +678,9 @@ msgstr "Синхронізовано"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "Це не ID ідентичності, не ім’я, не ID токена й не номер епохи. Імена складаються з a–z, 0–9 і дефісів, від 3 до 63 символів, далі .dash."
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "Це схоже на фразу відновлення або закритий ключ. Її нікуди не надіслано."

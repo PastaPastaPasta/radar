@@ -63,9 +63,6 @@ msgctxt "contest status"
 msgid "Active"
 msgstr "Active"
 
-msgid "Active contested names with end time, votes and status."
-msgstr "Noms contestés actifs, avec heure de fin, votes et statut."
-
 msgid "All"
 msgstr "Tous"
 
@@ -173,6 +170,12 @@ msgstr "Chaque vote de masternode sur cette contestation, d’après l’index d
 msgid "Every masternode vote with voter, choice, resource and time."
 msgstr "Chaque vote de masternode, avec votant, choix, ressource et heure."
 
+msgid "Every name contest, open ones first, with end time, votes and status."
+msgstr "Toutes les contestations de noms, les ouvertes d’abord, avec heure de fin, votes et statut."
+
+msgid "Filters"
+msgstr "Filtres"
+
 msgid "Finished"
 msgstr "Terminé"
 
@@ -214,6 +217,12 @@ msgstr "Contestation de nom"
 
 msgid "Name contests"
 msgstr "Contestations de noms"
+
+msgid "Name contests still open, with end time, votes and status."
+msgstr "Contestations de noms encore ouvertes, avec heure de fin, votes et statut."
+
+msgid "Name contests that have ended, with their votes and outcome."
+msgstr "Contestations de noms terminées, avec leurs votes et leur issue."
 
 msgid "Name starts with"
 msgstr "Le nom commence par"
@@ -368,6 +377,12 @@ msgstr "Statut : Terminé"
 msgid "Tally"
 msgstr "Décompte"
 
+msgid "That is a masternode ProTx hash. This filter takes the voter’s identity ID, which the Voting identity column shows beside each vote."
+msgstr "Il s’agit d’un hash ProTx de masternode. Ce filtre attend l’ID d’identité du votant, que la colonne « Identité votante » affiche à côté de chaque vote."
+
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "Ce n’est pas un ID d’identité : il compte 43 ou 44 caractères base58."
+
 msgid "The list of masternode votes needs Platform Explorer’s index"
 msgstr "La liste des votes de masternodes nécessite l’index de Platform Explorer"
 
@@ -376,6 +391,9 @@ msgstr "Les identités de vote des masternodes qui ont voté pour un candidat."
 
 msgid "The prefunded voting balance comes from Platform Explorer’s index"
 msgstr "Le solde de vote préfinancé provient de l’index de Platform Explorer"
+
+msgid "The Towards filter takes an identity ID: 43 or 44 base58 characters."
+msgstr "Le filtre « En faveur de » attend un ID d’identité : 43 ou 44 caractères base58."
 
 msgid "This contest has no contenders."
 msgstr "Cette contestation n’a aucun candidat."
@@ -459,6 +477,9 @@ msgstr "Votes exprimés"
 
 msgid "Voting ends"
 msgstr "Fin du vote"
+
+msgid "Voting identity"
+msgstr "Identité votante"
 
 msgid "Who voted, and when, comes from Platform Explorer’s index"
 msgstr "Qui a voté, et quand, provient de l’index de Platform Explorer"

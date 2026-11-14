@@ -50,9 +50,6 @@ msgstr "{0} válidos"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} bloques por detrás de la punta"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, one {Detenido mientras miras · # más reciente. Aparta el cursor para verlo.} other {Detenido mientras miras · # más recientes. Aparta el cursor para verlos.} many {Detenido mientras miras · # más recientes. Aparta el cursor para verlos.}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Combinado a partir de # respuesta verificada con prueba.} other {Combinado a partir de # respuestas verificadas con prueba.} many {Combinado a partir de # respuestas verificadas con prueba.}}"
 
@@ -303,9 +300,6 @@ msgstr "Encabezados y bloques"
 msgid "Headroom"
 msgstr "Margen"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "Detenido mientras miras. Los nuevos aparecen al apartar el cursor."
-
 msgid "History and leaders"
 msgstr "Historial y líderes"
 
@@ -517,11 +511,21 @@ msgstr "Aún no hay nada clasificado"
 msgid "Nothing shielded in this range"
 msgstr "Nada blindado en este rango"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "Aún no hay nada que clasificar: {quietNames}."
+
 msgid "Off in this mode"
 msgstr "Desactivado en este modo"
 
 msgid "On the chain"
 msgstr "En la cadena"
+
+msgid "Paused"
+msgstr "En pausa"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "En pausa · {0} más nuevos"
 
 msgid "Peers"
 msgstr "Pares"
@@ -674,6 +678,9 @@ msgstr "Sincronizado"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "Eso no es un ID de identidad, un nombre, un ID de token ni un número de época. Los nombres usan a–z, 0–9 y guiones, de 3 a 63 caracteres, y luego .dash."
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "Parece una frase de recuperación o una clave privada. No se envió a ningún sitio."

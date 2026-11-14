@@ -50,9 +50,6 @@ msgstr "{0} valides"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocs de retard sur la tête"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, one {Figé pendant que vous regardez · # plus récent. Éloignez le pointeur pour le voir.} other {Figé pendant que vous regardez · # plus récents. Éloignez le pointeur pour les voir.} many {Figé pendant que vous regardez · # plus récents. Éloignez le pointeur pour les voir.}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Combiné à partir de # réponse vérifiée par preuve.} other {Combiné à partir de # réponses vérifiées par preuve.} many {Combiné à partir de # réponses vérifiées par preuve.}}"
 
@@ -303,9 +300,6 @@ msgstr "En-têtes et blocs"
 msgid "Headroom"
 msgstr "Marge"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "Figé pendant que vous regardez. Les nouveaux éléments apparaissent dès que vous éloignez le pointeur."
-
 msgid "History and leaders"
 msgstr "Historique et meneurs"
 
@@ -517,11 +511,21 @@ msgstr "Rien de classé pour l’instant"
 msgid "Nothing shielded in this range"
 msgstr "Rien de blindé dans cette plage"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "Rien à classer pour l’instant : {quietNames}."
+
 msgid "Off in this mode"
 msgstr "Désactivé dans ce mode"
 
 msgid "On the chain"
 msgstr "Sur la chaîne"
+
+msgid "Paused"
+msgstr "En pause"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "En pause · {0} de plus récents"
 
 msgid "Peers"
 msgstr "Pairs"
@@ -674,6 +678,9 @@ msgstr "Synchronisé"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "Ce n’est ni un ID d’identité, ni un nom, ni un ID de jeton, ni un numéro d’époque. Les noms utilisent a–z, 0–9 et des tirets, de 3 à 63 caractères, puis .dash."
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "Cela ressemble à une phrase de récupération ou à une clé privée. Rien n’a été envoyé."

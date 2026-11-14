@@ -63,9 +63,6 @@ msgctxt "contest status"
 msgid "Active"
 msgstr "Активен"
 
-msgid "Active contested names with end time, votes and status."
-msgstr "Активные спорные имена со временем окончания, голосами и статусом."
-
 msgid "All"
 msgstr "Все"
 
@@ -173,6 +170,12 @@ msgstr "Каждый голос мастерноды в этом споре — 
 msgid "Every masternode vote with voter, choice, resource and time."
 msgstr "Каждый голос мастерноды: голосующий, выбор, ресурс и время."
 
+msgid "Every name contest, open ones first, with end time, votes and status."
+msgstr "Все споры за имена, сначала открытые, со временем окончания, голосами и статусом."
+
+msgid "Filters"
+msgstr "Фильтры"
+
 msgid "Finished"
 msgstr "Завершён"
 
@@ -214,6 +217,12 @@ msgstr "Спор за имя"
 
 msgid "Name contests"
 msgstr "Споры за имена"
+
+msgid "Name contests still open, with end time, votes and status."
+msgstr "Ещё открытые споры за имена со временем окончания, голосами и статусом."
+
+msgid "Name contests that have ended, with their votes and outcome."
+msgstr "Завершённые споры за имена с голосами и итогом."
 
 msgid "Name starts with"
 msgstr "Имя начинается с"
@@ -368,6 +377,12 @@ msgstr "Статус: Завершён"
 msgid "Tally"
 msgstr "Подсчёт"
 
+msgid "That is a masternode ProTx hash. This filter takes the voter’s identity ID, which the Voting identity column shows beside each vote."
+msgstr "Это ProTx-хеш мастернода. Фильтр принимает ID идентичности голосующего, который столбец «Голосующая идентичность» показывает рядом с каждым голосом."
+
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "Это не ID идентичности: он состоит из 43 или 44 символов base58."
+
 msgid "The list of masternode votes needs Platform Explorer’s index"
 msgstr "Список голосов мастернод требует индекса Platform Explorer"
 
@@ -376,6 +391,9 @@ msgstr "Идентичности голосования мастернод, пр
 
 msgid "The prefunded voting balance comes from Platform Explorer’s index"
 msgstr "Предоплаченный баланс голосования берётся из индекса Platform Explorer"
+
+msgid "The Towards filter takes an identity ID: 43 or 44 base58 characters."
+msgstr "Фильтр «За кого» принимает ID идентичности: 43 или 44 символа base58."
 
 msgid "This contest has no contenders."
 msgstr "В этом споре нет претендентов."
@@ -459,6 +477,9 @@ msgstr "Подано голосов"
 
 msgid "Voting ends"
 msgstr "Голосование заканчивается"
+
+msgid "Voting identity"
+msgstr "Голосующая идентичность"
 
 msgid "Who voted, and when, comes from Platform Explorer’s index"
 msgstr "Кто и когда голосовал — берётся из индекса Platform Explorer"

@@ -602,8 +602,8 @@ msgstr "Це не висота блока й не хеш."
 msgid "That isn't a state transition hash."
 msgstr "Це не хеш переходу стану."
 
-msgid "That isn’t an identity ID."
-msgstr "Це не ID ідентичності."
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "Це не ID ідентичності: він складається з 43 або 44 символів base58."
 
 msgid "The identity's withdrawal address"
 msgstr "Адреса виведення ідентичності"
@@ -619,6 +619,9 @@ msgstr "Вузол не повідомив результату за кільк�
 
 msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
 msgstr "Вузол не повідомив результату за кілька секунд. Вузли зберігають лише недавні результати, тому для старого переходу результату може не бути."
+
+msgid "The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID."
+msgstr "Фільтр «Власник» приймає ID ідентичності, а не ім’я. Відкрийте ім’я, щоб скопіювати його ID ідентичності."
 
 msgid "The same transition seen again in later blocks"
 msgstr "Той самий перехід, знову помічений у пізніших блоках"

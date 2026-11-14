@@ -50,9 +50,6 @@ msgstr "{0} valid"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocks behind the tip"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 
@@ -303,9 +300,6 @@ msgstr "Headers and blocks"
 msgid "Headroom"
 msgstr "Headroom"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "Held still while you look. New ones appear when you move away."
-
 msgid "History and leaders"
 msgstr "History and leaders"
 
@@ -517,11 +511,21 @@ msgstr "Nothing ranked yet"
 msgid "Nothing shielded in this range"
 msgstr "Nothing shielded in this range"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "Nothing to rank yet: {quietNames}."
+
 msgid "Off in this mode"
 msgstr "Off in this mode"
 
 msgid "On the chain"
 msgstr "On the chain"
+
+msgid "Paused"
+msgstr "Paused"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "Paused · {0} newer"
 
 msgid "Peers"
 msgstr "Peers"
@@ -674,6 +678,9 @@ msgstr "Synced"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "That looks like a recovery phrase or a private key. It was not sent anywhere."
