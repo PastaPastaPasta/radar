@@ -34,7 +34,7 @@ function useScrollToAnchor(ready: boolean, hash: string) {
 
 type SpendContext = Omit<Parameters<typeof useOutputSpends>[0], 'net' | 'tx' | 'visible'>
 
-function SpendState({ spend, index }: { spend: OutputSpend | undefined; index: number }) {
+export function SpendState({ spend, index }: { spend: OutputSpend | undefined; index: number }) {
   const { t } = useLingui()
   if (!spend) return <span className="rx-dim rx-sm">—</span>
   switch (spend.state) {
@@ -86,6 +86,7 @@ function SpendState({ spend, index }: { spend: OutputSpend | undefined; index: n
       return (
         <span
           data-spend="unknown"
+          data-spend-reason={spend.reason}
           className="rx-dim rx-sm"
           title={
             spend.reason === 'behind'

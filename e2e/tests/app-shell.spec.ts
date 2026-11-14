@@ -496,7 +496,8 @@ const SAYS_SOMETHING_IS_MISSING = [
   '[data-state="stale"]',
   '[data-fallback]',
   '[data-balance-state="unknown"]',
-  '[data-spend="unknown"]',
+  '[data-spend-reason="no-index"]',
+  '[data-spend-reason="not-reported"]',
 ].join(', ')
 
 test.describe('a backend that is down', () => {
