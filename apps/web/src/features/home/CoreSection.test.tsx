@@ -3,6 +3,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
+import { SourceError } from '@/data/errors'
 import type { CoreChainStatus } from '@/data/core/types'
 import { dapiKeys } from '@/data/query'
 import { I18nProvider, i18n } from '@/i18n'
@@ -125,4 +126,14 @@ describe('Core figures on the home page @HY-01', () => {
       'stale',
     )
   }, 20_000)
+
+  it('says the blocks are missing when the tip they are read from cannot be read', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 116_445_795.87))
+    vi.spyOn(core, 'tip').mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'auth', message: 'No node answered' }),
+    )
+    await renderFigures(new QueryClient())
+    const table = await screen.findByRole('table', { name: 'Latest Core blocks', hidden: true })
+    await waitFor(() => expect(table).not.toHaveAttribute('aria-busy', 'true'))
+  })
 })
