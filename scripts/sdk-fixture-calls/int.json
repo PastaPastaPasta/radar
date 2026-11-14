@@ -29,6 +29,16 @@
           "c418f3897f923d8b5e1c5087b552e38cfde15292299ac4de0fc415be0ed08230"
         ]
       }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [["records.identity", "in", ["62LEgAXTDXWc91bkJEc7GNE1PMnw4ib9Ff6noNQ3EHay"]]],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
     ]
   ],
   "testnet": [
