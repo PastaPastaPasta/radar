@@ -690,7 +690,8 @@ a.rx-stat:hover .rx-stat__label,
 a.rx-stat:hover .rx-stat__value {
   color: var(--dh-brand-ink);
 }
-a.rx-stat:focus-visible {
+a.rx-stat:focus-visible,
+.rx-stat[tabindex]:focus-visible {
   outline: var(--dh-ring-w) solid var(--dh-focus);
   outline-offset: 2px;
 }

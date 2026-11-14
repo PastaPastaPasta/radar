@@ -5,7 +5,7 @@ import { formatNumber, MINUS, UNIT_GAP } from '@/lib/format'
 import { cx, cssVars, layerAttr } from './cx'
 import { useChanged } from './hooks'
 import { SourceLine, Skeleton } from './states'
-import { useInSourceSection, useLeadSources, useSectionSource } from './section-source'
+import { reportsAttr, useInSourceSection, useLeadSources, useSectionSource } from './section-source'
 import { useCoveredSource } from './source-scope'
 import type { Layer, Tone } from './types'
 
@@ -231,6 +231,7 @@ export function Stat({
   tone = 'neutral',
 }: StatProps) {
   const labelId = useId()
+  const srcId = useId()
   const inSection = useSectionSource(source)
   const covered = useCoveredSource(source)
   const Tag = href ? 'a' : 'div'
@@ -238,6 +239,7 @@ export function Stat({
   const mark = source ? (
     <SourceLine stamp={href ? { ...source, proof: undefined } : source} compact />
   ) : null
+  const popover = inSection && mark !== null
   const body = (
     <>
       <span className="rx-stat__label" id={labelId}>
@@ -278,9 +280,20 @@ export function Stat({
           ) : null}
         </>
       )}
-      {inSection && mark ? <span className="rx-fig__src">{mark}</span> : null}
+      {popover ? (
+        <span className="rx-fig__src" id={srcId}>
+          {mark}
+        </span>
+      ) : null}
     </>
   )
+  // The figure's own source sits in a popover. A link shows it on focus; a plain figure takes focus itself, so the
+  // keyboard, a screen reader and a tap reach it as a pointer does.
+  const reach = popover
+    ? href
+      ? { 'aria-describedby': srcId }
+      : { role: 'group', tabIndex: 0, 'aria-labelledby': labelId, 'aria-describedby': srcId }
+    : {}
   return (
     <Tag
       className={cx(
@@ -290,8 +303,10 @@ export function Stat({
       )}
       data-layer={layerAttr(layer)}
       data-tone={tone}
-      data-src-hover={inSection && mark ? '' : undefined}
+      data-src-hover={popover ? '' : undefined}
+      data-reports={inSection && source ? reportsAttr([source]) : undefined}
       aria-busy={loading ? true : undefined}
+      {...reach}
       {...(href ? { href } : {})}
     >
       {body}

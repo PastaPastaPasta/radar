@@ -176,24 +176,34 @@
   color: var(--dh-good);
   transform: translateY(2px);
 }
-/* a figure's own source and age: under it on hover and focus, over the page and not in its flow */
+/* a figure's own source and age: under it on hover, focus and tap, over the page and not in its flow. At rest it is
+   clipped to a point instead of removed, so a screen reader can read it as the figure's description and the proof
+   button inside it can take focus; a point cannot widen the page on a phone. */
 .rx-fig__src {
   position: absolute;
   left: 8px;
   top: calc(100% + 2px);
   z-index: 6;
+  width: 1px;
+  height: 1px;
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+[data-src-hover]:hover > .rx-fig__src,
+[data-src-hover]:focus > .rx-fig__src,
+[data-src-hover]:focus-within > .rx-fig__src {
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 32px);
   padding: 3px 6px;
+  overflow: visible;
+  clip-path: none;
   border-radius: var(--dh-r2);
   background: var(--dh-surface);
   box-shadow: var(--dh-shadow-pop);
-  white-space: nowrap;
-  /* not merely invisible: a hidden box would still widen the page on a phone */
-  display: none;
-}
-[data-src-hover]:hover > .rx-fig__src,
-[data-src-hover]:focus-within > .rx-fig__src {
-  display: block;
 }
 .rx-hero .rx-home__src {
   margin: 18px 0 0;
