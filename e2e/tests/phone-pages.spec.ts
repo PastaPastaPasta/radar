@@ -46,21 +46,24 @@ test.describe('A long name in a phone row card', () => {
     test.skip(!onPhone(page), 'phone only')
     await page.goto('/names')
     await settled(page)
-    const chip = page.locator('.rx-table--cards td.e .rx-chip').first()
-    // An owner's name arrives only when its lookup lands, so the longest testnet name is put in place directly.
-    await chip.evaluate((el) => {
+    await expect(page.locator('.rx-table--cards td.e .rx-chip').first()).toBeVisible()
+    // An owner's name arrives only when its lookup lands, so the longest testnet name is put in place directly,
+    // and measured in the same task so a re-render cannot take it away first.
+    const overhang = await page.evaluate(() => {
+      const chip = document.querySelector('.rx-table--cards td.e .rx-chip')
+      const cell = chip?.closest('td')
+      const card = chip?.closest('tr')
+      if (!chip || !cell || !card) return null
       const name = document.createElement('span')
       name.className = 'rx-chip__name'
       name.textContent = 'identity-name-goes-hereeeeeeeeeeeeeeeeeeeeeeeeeeeee.dash'
-      el.append(name)
+      chip.append(name)
+      const over = cell.getBoundingClientRect().right - card.getBoundingClientRect().right
+      const sideways = document.documentElement.scrollWidth - document.documentElement.clientWidth
+      name.remove()
+      return Math.max(over, sideways)
     })
-    const fits = await chip.evaluate((el) => {
-      const cell = el.closest('td')!.getBoundingClientRect()
-      const card = el.closest('tr')!.getBoundingClientRect()
-      return cell.right <= card.right + 0.5
-    })
-    expect(fits, 'the cell stays inside its card').toBe(true)
-    expect(await horizontalOverflow(page), 'sideways overflow in px').toBeLessThanOrEqual(0)
+    expect(overhang ?? Infinity, 'px past the card or the screen').toBeLessThanOrEqual(0.5)
   })
 })
 
