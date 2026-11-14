@@ -62,10 +62,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
           {parts.length > 0 ? <ShareBar parts={parts} label={t`Reachability`} /> : null}
           {reach.no > 0 && scope !== 'all' && scope !== 'other' ? (
             <p>
-              <Link
-                to="/masternodes"
-                search={unreachableLink(scope)}
-              >
+              <Link to="/masternodes" search={unreachableLink(scope)}>
                 {t`See which`}
               </Link>
             </p>

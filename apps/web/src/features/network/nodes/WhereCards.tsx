@@ -155,7 +155,12 @@ export function WhereCards(props: SectionProps) {
               surface={colors.surface}
               center={{ value: String(realCountries.length), caption: t`countries` }}
             />
-            <Ranked rows={countryRows} count={realCountries.length} sum={sumCountries} empty={t`No data yet.`} />
+            <Ranked
+              rows={countryRows}
+              count={realCountries.length}
+              sum={sumCountries}
+              empty={t`No data yet.`}
+            />
           </div>
         )}
       </Card>

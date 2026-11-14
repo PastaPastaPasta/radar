@@ -54,13 +54,7 @@ export function buildEvoRows(rows: readonly MnRow[], sources: EvoSources): EvoRo
       const listed = validators?.get(row.protx) ?? null
       const validator = listed ?? records?.get(row.protx) ?? null
       const state: ValidatorState | null =
-        row.status === 'pose-banned'
-          ? 'banned'
-          : validators
-            ? listed
-              ? 'active'
-              : 'queued'
-            : null
+        row.status === 'pose-banned' ? 'banned' : validators ? (listed ? 'active' : 'queued') : null
       const counted = sources.proposed?.asked.has(row.protx)
         ? Number(sources.proposed.counts.get(row.protx) ?? 0n)
         : null
