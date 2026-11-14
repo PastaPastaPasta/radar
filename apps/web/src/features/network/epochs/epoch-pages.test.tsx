@@ -155,6 +155,27 @@ describe('Epochs', () => {
     expect(range).toHaveTextContent('Epochs 81 to 86.')
   })
 
+  it('shows the fees each epoch collected, and says when a range was cut back @W2-37', async () => {
+    renderAt('/epochs?from=69&to=500')
+    const range = await card('range')
+    await waitFor(() => expect(rows(range)).toHaveLength(20))
+    expect(range).toHaveTextContent(/latest epoch is 88/)
+    expect(within(range).getByRole('columnheader', { name: 'Fees' })).toBeInTheDocument()
+    await waitFor(() => {
+      const cells = rows(range).map((r) => within(r).getAllByRole('cell').at(-1)?.textContent)
+      expect(cells.some((c) => c && c !== '—' && /DASH|\d/.test(c))).toBe(true)
+    })
+  })
+
+  it('leaves the fees blank in Decentralized only mode @W2-37', async () => {
+    writeSourceMode('decentralized')
+    renderAt('/epochs?from=81&to=86')
+    const range = await card('range')
+    await waitFor(() => expect(rows(range)).toHaveLength(6))
+    for (const r of rows(range))
+      expect(within(r).getAllByRole('cell').at(-1)).toHaveTextContent('—')
+  })
+
   it('says the Radar parts need Radar in Decentralized only mode, once @RA-60', async () => {
     writeSourceMode('decentralized')
     renderAt('/epochs')

@@ -27,22 +27,48 @@ describe('epochChunks', () => {
 
 describe('resolveRange', () => {
   it('shows the latest twenty when no range is asked for', () => {
-    expect(resolveRange(88, undefined, undefined)).toEqual({ from: 69, to: 88, custom: false })
+    expect(resolveRange(88, undefined, undefined)).toEqual({
+      from: 69,
+      to: 88,
+      custom: false,
+      clamped: false,
+    })
     expect(DEFAULT_COUNT).toBe(20)
   })
 
   it('starts at the first epoch on a young network', () => {
-    expect(resolveRange(5, undefined, undefined)).toEqual({ from: 0, to: 5, custom: false })
+    expect(resolveRange(5, undefined, undefined)).toEqual({
+      from: 0,
+      to: 5,
+      custom: false,
+      clamped: false,
+    })
   })
 
   it('holds the end to the current epoch and swaps a reversed range', () => {
-    expect(resolveRange(88, 80, 500)).toEqual({ from: 80, to: 88, custom: true })
-    expect(resolveRange(88, 86, 80)).toEqual({ from: 80, to: 86, custom: true })
+    expect(resolveRange(88, 80, 500)).toEqual({ from: 80, to: 88, custom: true, clamped: true })
+    expect(resolveRange(88, 86, 80)).toEqual({ from: 80, to: 86, custom: true, clamped: false })
+  })
+
+  it('says when the range was cut back to the epochs that exist @W2-37', () => {
+    expect(resolveRange(88, 1, 200)).toEqual({ from: 1, to: 88, custom: true, clamped: true })
+    expect(resolveRange(88, 500, undefined)).toMatchObject({ from: 88, to: 88, clamped: true })
+    expect(resolveRange(88, 1, 88).clamped).toBe(false)
   })
 
   it('counts back twenty from an end given alone, and runs a start given alone to the current epoch', () => {
-    expect(resolveRange(88, undefined, 60)).toEqual({ from: 41, to: 60, custom: true })
-    expect(resolveRange(88, 70, undefined)).toEqual({ from: 70, to: 88, custom: true })
+    expect(resolveRange(88, undefined, 60)).toEqual({
+      from: 41,
+      to: 60,
+      custom: true,
+      clamped: false,
+    })
+    expect(resolveRange(88, 70, undefined)).toEqual({
+      from: 70,
+      to: 88,
+      custom: true,
+      clamped: false,
+    })
   })
 })
 
