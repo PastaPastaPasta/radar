@@ -45,7 +45,7 @@ describe('Contest page', () => {
           ...d,
           data: { ...d.data, label: 'spawn', normalizedLabel: 'spawn' },
         })),
-      } as typeof answer
+      } as unknown as typeof answer
     })
     renderAt('/contest/reza')
     await waitFor(() => {
