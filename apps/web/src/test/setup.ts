@@ -4,6 +4,7 @@ import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { resetHealthRegistry } from '@/data/health'
 import { i18nReady } from '@/i18n'
 import { setSourceModeFromLink, writeSourceMode } from '@/lib/source-mode'
+import { resendRefusedBeforeWrite } from './msw/resend-refused'
 import { installFixtureSdk } from './msw/sdk-transport'
 import { takeFixtureMisses } from './msw/handlers'
 import { server } from './server'
@@ -20,7 +21,13 @@ Element.prototype.scrollTo = () => undefined
 Element.prototype.scrollIntoView = () => undefined
 window.scrollTo = () => undefined
 
-beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
+let unwrappedFetch: typeof fetch | undefined
+beforeAll(() => {
+  server.listen({ onUnhandledFrame: 'error' })
+  const mocked = globalThis.fetch
+  unwrappedFetch = mocked
+  globalThis.fetch = resendRefusedBeforeWrite(mocked)
+})
 beforeEach(() => {
   takeFixtureMisses()
   resetHealthRegistry()
@@ -36,4 +43,7 @@ afterEach(() => {
     throw new Error(`No recorded fixture for:\n  ${misses.join('\n  ')}`)
   }
 })
-afterAll(() => server.close())
+afterAll(() => {
+  if (unwrappedFetch) globalThis.fetch = unwrappedFetch
+  server.close()
+})

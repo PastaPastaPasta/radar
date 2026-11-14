@@ -6,7 +6,13 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract } from '@/data/pe/schemas'
-import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  PageFrame,
+  useIdentityNamesFailed,
+  useNetwork,
+} from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
@@ -17,6 +23,7 @@ import {
   DataTable,
   DateRangeFilter,
   Empty,
+  Icon,
   ListModeToggle,
   RangeFilter,
   SegFilter,
@@ -186,6 +193,9 @@ function ContractTable({
   const last = queries.at(-1)
   const total = first?.data?.data.total
   const stamps: SourceStamp[] = first?.data ? [first.data] : []
+  const namesFailed = useIdentityNamesFailed(
+    rows.flatMap((r) => (r.owner?.identifier ? [r.owner.identifier] : [])),
+  )
   const state = first?.isPending
     ? 'loading'
     : first?.isError && !first.data
@@ -390,6 +400,12 @@ function ContractTable({
         }
         source={stamps}
       />
+      {namesFailed ? (
+        <p className="rx-errrow" data-names-unavailable>
+          <Icon name="alert" />
+          <span>{t`Owner names are unavailable: the Platform SDK didn’t answer.`}</span>
+        </p>
+      ) : null}
     </div>
   )
 }
