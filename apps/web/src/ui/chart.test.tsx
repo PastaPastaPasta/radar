@@ -18,7 +18,7 @@ describe('Chart table', () => {
 
     await user.click(screen.getByRole('button', { name: 'Show as a table' }))
 
-    const region = screen.getByRole('region', { name: 'Blocks per day' })
+    const region = await screen.findByRole('region', { name: 'Blocks per day' })
     expect(region).toHaveAttribute('tabindex', '0')
     expect(region.querySelector('table')).not.toBeNull()
   })
