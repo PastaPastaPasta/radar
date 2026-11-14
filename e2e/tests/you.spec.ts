@@ -40,23 +40,29 @@ async function grantClipboard(context: BrowserContext): Promise<void> {
 }
 
 /** A proof-checked mark from the Platform overview, which the SDK fixtures answer on both networks. */
+/** A proof-checked mark on a source line. A figure's own mark is clipped to a point until the figure has focus. */
 const proofMark = (page: Page) =>
-  page.locator('button[data-source="sdk"][data-proved="true"]').first()
+  page.locator('button[data-source="sdk"][data-proved="true"]:not(.rx-fig__src *)').first()
 
 const pinned = new WeakSet<Page>()
 
 /**
- * Opens Platform's overview with the clock pinned to when its first proof-checked figure was recorded, so that figure's
- * mark is fresh and opens the inspector. Fixtures are recorded at different times, so the newest one is no guide.
+ * Opens Platform's overview with the clock pinned to when its oldest proof-checked figure was recorded, so every proof
+ * mark is fresh and opens the inspector. Fixtures are recorded at different times and arrive in no fixed order, so
+ * neither the newest one nor the first one on the page is a guide.
  */
 async function openPlatform(page: Page, query = 'network=testnet'): Promise<void> {
   await page.goto(`/platform?${query}`)
   await expect(h1(page, H1.platform)).toBeVisible()
   if (!pinned.has(page)) {
     pinned.add(page)
+    await settled(page)
     const stamped = page.locator('[data-source="sdk"][data-proved="true"][title^="As of "]')
-    const title = (await stamped.first().getAttribute('title')) ?? ''
-    await page.clock.install({ time: new Date(title.slice('As of '.length)) })
+    await expect(stamped.first()).toBeAttached()
+    const recorded = await stamped.evaluateAll((marks) =>
+      marks.map((mark) => Date.parse((mark.getAttribute('title') ?? '').slice('As of '.length))),
+    )
+    await page.clock.install({ time: Math.min(...recorded) })
     await page.reload()
     await expect(h1(page, H1.platform)).toBeVisible()
   }
