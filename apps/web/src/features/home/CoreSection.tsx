@@ -27,6 +27,7 @@ import {
   Empty,
   LiveControl,
   LockMark,
+  queryView,
   Time,
   useHyphenLagSentence,
   useMediaQuery,
@@ -169,7 +170,7 @@ function useCoreBlocks(paused: boolean) {
 function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
   const { t } = useLingui()
   const { rows, shown, tip } = blocks
-  const failed = rows.isError || tip.isError
+  const view = queryView(rows, tip)
   const phone = useMediaQuery('(max-width: 640px)')
   const hasPool = (shown?.data ?? []).some((r) => r.pool)
   const columns = useMemo<ColumnDef<BlockRow>[]>(
@@ -232,9 +233,9 @@ function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
         columns={columns}
         rows={shown?.data ?? []}
         getRowId={(r) => String(r.height)}
-        state={shown ? 'ready' : failed ? 'error' : 'loading'}
-        error={rows.isError ? rows.error : tip.error}
-        onRetry={() => void (rows.isError ? rows.refetch() : tip.refetch())}
+        state={shown ? 'ready' : view.state}
+        error={view.error}
+        onRetry={view.onRetry}
         rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
       />
     </Card>
