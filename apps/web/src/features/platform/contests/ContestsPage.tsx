@@ -106,7 +106,7 @@ const activeFilterCount = (search: ContestsPageSearch): number =>
     statusOf(search) !== '',
     !!search.contract,
     !!search.type,
-    !!(search.from || search.to),
+    Boolean(search.from ?? search.to),
     search.sort === 'oldest',
   ].filter(Boolean).length
 
