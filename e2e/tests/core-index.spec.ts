@@ -305,7 +305,7 @@ test.describe('address page', () => {
     test.skip(browserName !== 'chromium', 'clipboard permissions are Chromium only')
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
     await page.goto(`/address/${ADDRESS}`)
-    await page.getByRole('button', { name: /^Copy/ }).first().click()
+    await page.getByRole('button', { name: 'Copy full value' }).first().click()
     await expect(page.getByText(/Copied/).first()).toBeVisible()
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(ADDRESS)
   })

@@ -43,7 +43,7 @@ test.describe('Platform overview', () => {
     const first = proposers.locator('a[href^="/mn/"]').first()
     const href = await first.getAttribute('href')
     await first.click()
-    await expect(page).toHaveURL(new RegExp(`${href}`))
+    await expect.poll(() => new URL(page.url()).pathname + new URL(page.url()).search).toBe(href)
   })
 
   test('goes straight to an epoch from the quick entry @NX-03', async ({ page }) => {
