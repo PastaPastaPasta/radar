@@ -18,18 +18,18 @@ app/
   query-client.ts                    QueryClient factory, defaults, persister (§5)
   search.ts                          parseSearch/stringifySearch, network middleware (§6); re-exports lib/search-schemas.ts
   route-loader.ts                    routePrefetch: the loader every route uses to start its package's prefetch (§6.3)
-  global-mounts.tsx, sw-register.ts  deferred proof inspector and diagnostics mounts; service worker registration (§11.5)
+  global-mounts.tsx, sw-register.ts  deferred proof inspector, diagnostics and update mounts (§7.9); service worker registration (§9.4)
   network-context.tsx                useNetwork(), NetworkGate (unknown devnet, unsupported source)
   error-boundary.tsx
 routes/                              TanStack file routes: search schema, loader prefetch, page component import. No markup beyond <XPage/>
 shell/                               dashhq shell bar and footer, NetworkSwitch, theme (dh_theme), phone nav, testnet keyline, palette mount, bar-overlay.ts (second stylesheet for the bar's shadow root, §11.4), RateNote
 features/
-  home/                              `/` network pulse
+  home/                              `/`: Hero, CoreSection, PlatformSection, freshness.ts (§4.8, §3.10)
   core/                              blocks, block, tx, address, mempool, rich-list, charts, governance, status
   network/                           nodes, masternodes, mn, map, epochs, epoch, protocol, v24, changes
   platform/                          platform home, identity, contract, document, token, names, contests, groups, credits, shielded, …
   tools/                             query (SQL), decoders, transition, verify-message, qr, sdk-reference, api, sources
-  you/                               saved, settings, about, proof inspector and diagnostics mounts
+  you/                               saved, settings, about, the You drawer (proof/, diagnostics/, update/), boot.ts (§7.9)
   search/                            classify.ts, resolvers/, useSearch, CommandPalette (loaded by CommandPalette.lazy.tsx), /search page
   entity/                            <Entity> (chip + link + hover card), hover-card registry, cross-layer links (X-02), site-map.ts,
                                      PageFrame, PageGroupTabs, saved and viewed stores, platform/ (IdentityRef, TransitionTable, PlatformBlockTable)
@@ -49,10 +49,12 @@ data/
     persister.ts, network-cache.ts   IndexedDB persister and its GC; resetNetworkCache (§5.3)
     loader.ts                        prefetchForRoute, the gates, registerSdkReadyProbe (§6.3)
     health-probes.ts, route-prefetch.ts   the prefetch items loaders import on demand (§6.3)
-    prefetch/<pkg>.ts                one prefetch module per M2–M6 package, one function per route (§6.3, §11.5)
-  query-log.ts                       the last 100 source calls, for diagnostics (§11.5)
+    prefetch/<pkg>.ts                one prefetch module per package, one function per route (§6.3, §11.5)
+    source-mode.ts                   watchSourceMode: Decentralized only mode switched mid-session (§4.11)
+  query-log.ts                       the last 100 source calls, for diagnostics (§7.9)
   masternodes/                       rows.ts (DAPI + Radar join), filter.ts (shared filter schema, filterMnRows, facets)
-  radar/ pe/ rate/                   client.ts, schemas.ts (a schemas/ directory split by owner in radar and pe, §11.5), queries.ts (queryOptions factories), *.test.ts
+  radar/ pe/ rate/ insight/           client.ts, schemas.ts (a schemas/ directory split by owner in radar and pe, §11.5), queries.ts (queryOptions factories), *.test.ts;
+                                     pe/ also blocks-query.ts, transitions-query.ts, tokens-query.ts (list pages' address and query, §3.6, §3.9)
   hyphen/                            the same, plus pages.ts (infinite lists), lookups.ts (resolvers), fit.ts (useHyphenFit) (§5.6)
   dapi-core/                         transport.ts (the seam, §4.1), rpc.ts, grpc-web.ts, discovery.ts, nodes.ts, budget.ts, pool.ts,
                                      streams.ts, cache.ts, lazy.ts + production.ts (loads the pool on first use), client.ts, gen/ (protoc output)
@@ -60,13 +62,15 @@ data/
     types.ts                         CoreClient, decoded block/tx types  ← contract file
     decode.ts, decode.worker.ts      core-decode wasm behind Comlink (§12b)
     live.ts                          coreLive: follows the tip, ChainLock and the transaction feed (§4.6)
+    mn-list.ts, mn-list-decode.ts    DAPI's masternode list: one stream read, CBOR decode, checks (§4.12)
   sdk/
     methods.ts                       SdkMethods map: method name → args/result DTO types  ← contract file
     client.ts                        main-thread SdkClient (worker or inline transport), registers the SDK-ready probe
     methods/<pkg>.ts, shared.ts      the method map's parts: args/result DTOs and data classes, one file per package (§11.5)
     queries.ts                       sdkQueries factories, sdkBatchers, platformTipQuery
     batchers.ts                      the six rule-4 batchers (§5.4)
-    proof-store.ts                   LRU of full proofs for the inspector (NX-61)
+    proof-store.ts                   LRU of full proofs for the inspector (§7.9)
+    settings.ts, cache.ts            connection settings (`radar.sdk`) and clearSdkCache (§3.3)
     worker/sdk.worker.ts             Comlink endpoint
     worker/impl.ts, worker/impl/     method implementations + DTO mapping, merged from one file per package (runs in worker or inline)
     worker/decode.ts                 decodeWithWasm
@@ -75,14 +79,19 @@ data/
 ui/                                  design-system components (§7); index.ts is the only import path
   base.ts                            the slice of the kit the shell and first-paint code use (§1.2, §7.5)
   hash.tsx                           Hash and Copy (kept apart from EntityChip so they stay in the entry chunk)
+  query-state.ts                     queryView, stampsOf, useAfterIdle (§7.8)
+  proof.ts, diagnostics.ts           seams that open the proof inspector and the diagnostics drawer (§7.9)
+  data-table.tsx                     DataTable, useWiderThan (§7.2)
   types.ts                           Layer, Tone, EntityKind, AmountUnit  ← contract file
 lib/                                 pure, framework-free: network.ts, units.ts, format.ts, hex.ts, base58.ts, bech32.ts,
-                                     core/{header,chainlock,pools,block-ref}.ts, linkouts.ts, time.ts, search-schemas.ts, data-class.ts, json-store.ts, tx-types.ts, well-known.ts
-i18n/                                Lingui setup, locales/<locale>/{messages,<pkg>}.po, useLocale
+                                     core/{header,chainlock,pools,block-ref}.ts, linkouts.ts, search-schemas.ts, data-class.ts, json-store.ts, tx-types.ts, well-known.ts,
+                                     source-mode.ts, epoch-length.ts, sha256-stream.ts
+i18n/                                Lingui setup, locales/<locale>/{messages,<pkg>}.po, useLocale (§9.1)
+sw/                                  sw.ts (emitted as /sw.js), sw-core.ts (cache rules), offline-page.ts (§9.4)
 test/                                setup.ts, server.ts (exist), msw/handlers/*, fixtures loader, sdk and dapi fixture transports
 ```
 
-Outside `apps/web`: `packages/core-decode` (Rust → wasm), `workers/edge` (radar-web Worker), `e2e/tests` and `e2e/routes` (Playwright specs and the route cases they iterate), `review/` (harness), `scripts/` (fixture recorders and their call lists, seed-node list, size budget). `apps/web/src/sw/sw.ts` is the service worker stub, emitted as `/sw.js` (§11.5).
+Outside `apps/web`: `packages/core-decode` (Rust → wasm), `workers/edge` (radar-web Worker), `e2e/tests` and `e2e/routes` (Playwright specs and the route cases they iterate), `review/` (harness), `scripts/` (fixture recorders and their call lists, seed-node list, size budget). The service worker is `apps/web/src/sw/` (§9.4).
 
 ### 1.2 Dependency rules
 
@@ -1023,6 +1032,7 @@ export function useHydratedFact<K, V>(batcher: Batcher<K, V>, key: K, backend: F
 - `run` answers every key: a value, `null` (absent) or an `Error`. An `Error` rejects only that key's askers, so a chunk can fail in part (every shared batcher answers a key that is not a valid ID with its own `invalid-response` and still asks the others); a `run` that throws rejects the whole chunk. A key the result lacks rejects its askers with `invalid-response`. `keyId(key)` (exported) is a key's identity: a string as it is, an object as JSON with its names sorted.
 - Hydration runs only for rows that are rendered (virtualised tables hydrate the visible window plus 20 rows).
 - The six batchers of rule 4 are in `data/sdk/batchers.ts` (also `sdkBatchers`, exported from `data/sdk/queries.ts`): `identityBalance` (`identities.balances`), `tokenBalance` (`tokens.balances` and `tokens.identityBalances`, key `{ tokenId, identityId }`; one call per group, at most four at a time: per identity (`tokens.identityBalances`) when the batch holds fewer identities than tokens, otherwise per token (`tokens.balances`), so a holder list of one token is one call; a group that fails fails only its own keys), `tokenStatus` (`tokens.statuses`), `contractMeta` (`contracts.getMany`), `platformAddressInfo` (`addresses.getMany`) and `dpnsName`. `dpnsName` reads one `documents.query` on DPNS's `domain` type with `records.identity in [...]` (that index exists on mainnet and testnet), batches of 25 so a page of names fits Drive's 100-row cap, and gives an identity with several names its oldest; the name is `<label>.<parentDomainName>`, never a bare `dash.`. An identity missing from a full (100-row) page falls back to `dpns.usernames` with at most four calls in flight, and one whose call fails is unresolved (an `Error` for that key) while the names the query found stay. The DPNS contract id is `DPNS_CONTRACT` (`systemContract('dpns').id`). `useIdentityName(id)` (`features/entity`) is the hook the identity chip reads, so every `IdentityRef` shows the name once it lands.
+- A batch's grouping depends on render timing, so in fixture builds a batched call with no recording of its own is composed from recordings of other groupings (`test/msw/sdk-compose.ts`, §10).
 - When the SDK value differs from the backend's, the SDK value wins and the cell shows the SDK's stamp. No warning; the backend lag is normal.
 
 ### 5.5 Live updates
@@ -1232,6 +1242,8 @@ DataTable<Row>: {
   live?: { newRowIds: Set<string> }              // slide-in highlight
   phone?: 'cards' | 'scroll'                     // default 'cards'
   source?: SourceStamp | SourceStamp[] }
+// a table wider than its box (useWiderThan: a ResizeObserver on both, a MutationObserver on rows, childList only)
+// marks its scroll box `data-wide` and makes it a focusable region named by the caption, so it scrolls by keyboard
 // column meta: { align?: 'start' | 'end'; numeric?: boolean; phone?: 'title' | 'primary' | 'secondary' | 'hidden'; phoneUnit?: string; filterable?: boolean; width?: string }
 // phoneUnit: a short translated unit written after the value on a phone card (`td[data-u]::after`), where no header is shown; Core blocks uses it for "tx"
 
@@ -1240,20 +1252,21 @@ LinkOut: { to: LinkOutTarget; children?: ReactNode }  // secondary button, exter
 // lib/linkouts.ts:
 type LinkOutTarget =
   | { app: 'bridge'; action: 'identity' | 'name' | 'token' | 'contract' | 'platform-address'; id: string; net: NetworkId }
+  | { app: 'bridge'; action: 'landing'; net: NetworkId }
   | { app: 'gov'; action: 'contest-vote'; label: string; net: NetworkId } | { app: 'gov'; action: 'proposal'; hash: string; net: NetworkId }
-  | { app: 'gov'; action: 'masternodes'; net: NetworkId }
+  | { app: 'gov'; action: 'masternodes'; net: NetworkId } | { app: 'gov'; action: 'landing'; net: NetworkId }
   | { app: 'pe'; path: string; net: NetworkId } | { app: 'hyphen'; path: string; net: NetworkId } | { app: 'insight'; path: string; net: NetworkId }
 linkOutUrl(target): string | null
 ```
 
 **Link-outs** (`lib/linkouts.ts`, unit-tested target by target). `linkOutUrl` returns the most specific page each app has, and `null` where the app has no page for the network (`pe`, `hyphen` and `insight` cover mainnet and testnet only), in which case `LinkOut` draws nothing.
-- Governance (`https://gov.dashhq.org`, `?network=<net>` off mainnet): `proposal` → `/p/h/<hash>`, `contest-vote` → `/names/<label>`. Governance has no page per masternode (its `/masternodes` is the signed-in owner's keyring page), so the masternode page's "Vote in Governance" uses `masternodes` → `/masternodes`, the closest page.
-- Bridge (`https://bridge.dashhq.org/`, which redirects to bridge.thepasta.org and keeps the query; `network=<net>` is always sent, since Bridge defaults to testnet): `identity` → `?mode=topup&identity=<id>`, `name` → `?mode=dpns&identity=<id>` (`id` is the owning identity), `platform-address` → `?address=<bech32m>`. Bridge has no screen for one contract or one token, so `contract` → `?mode=contract` and `token` → the landing screen.
+- Governance (`https://gov.dashhq.org`, `?network=<net>` off mainnet): `proposal` → `/p/h/<hash>`, `contest-vote` → `/names/<label>`. Governance has no page per masternode (its `/masternodes` is the signed-in owner's keyring page), so the masternode page's "Vote in Governance" uses `masternodes` → `/masternodes`, the closest page. `landing` → `/`, the front page for the network (About's Governance link).
+- Bridge (`https://bridge.dashhq.org/`, which redirects to bridge.thepasta.org and keeps the query; `network=<net>` is always sent, since Bridge defaults to testnet): `identity` → `?mode=topup&identity=<id>`, `name` → `?mode=dpns&identity=<id>` (`id` is the owning identity), `platform-address` → `?address=<bech32m>`. `landing` → no parameter but the network (About's Bridge link, the transition tool's "Where to act"). Bridge has no screen for one contract or one token, so `contract` → `?mode=contract` and `token` → the landing screen.
 - Explorers: `pe` → `pe.dashhq.org` / `testnet.pe.dashhq.org`, `hyphen` → `hy.kw.vg` / `ts.kw.vg`, `insight` → `insight.dash.org/insight` / `insight.testnet.networks.dash.org/insight`, each followed by `path`.
 
-**Quiet sources.** `SourceLine` collapses stamps of the same source, fallback and proof state into one badge (the oldest age). `Card` passes the sources of its header down (`SourceScope`), and a `Stat` or `KeyValue` row inside it with the same source draws no badge of its own. `Stats` (`ui/stat.tsx`) is a row of `Stat`s where only the first of each source carries a badge (it dedupes with `Children.map`, so pass keyed arrays, not Fragments). Badges lose their border and use the ink-2 colour at 12 px, weight 520 (`.rx-src`, `--dh-fs-xs`, `--dh-w-ui`), measured at 6.0:1 or better on every card surface in both themes; stale, down and proof marks keep theirs. A `Stat` value that carries an amount puts its USD companion on its own line and lets the unit wrap, so a figure never leaves its card.
+**Quiet sources.** `SourceLine` collapses stamps of the same source, fallback and proof state into one badge (the oldest age). `Card` passes the sources of its header down (`SourceScope`), and a `Stat` or `KeyValue` row inside it with the same source draws no badge of its own. `Stats` (`ui/stat.tsx`) is a row of `Stat`s where only the first of each source carries a badge (it dedupes with `Children.map`, so pass keyed arrays, not Fragments). Badges lose their border and use the ink-2 colour at 12 px, weight 520 (`.rx-src`, `--dh-fs-xs`, `--dh-w-ui`), measured at 6.0:1 or better on every card surface in both themes; stale, down and proof marks keep theirs. A `Stat` value that carries an amount puts its USD companion on its own line and lets the unit wrap, so a figure never leaves its card. `useLeadSources(stamps)` (`ui/stat.tsx`) is the rule underneath: the first figure of each source speaks for it, unless a later one's height trails the newest of its source past a grace period. `useCovered()` (`ui/source-scope.tsx`) is what an enclosing `SourceScope` already names. The home builds one source line per section from it (`useSectionSources`, `features/home/Figure.tsx`).
 
-**Lock marks** (`ui/lock-badges.tsx`, exported from `@/ui`). `ChainLockBadge({ locked, claim, unlockedLabel, size })` and `InstantSendBadge({ claim, source, size })` are the badges of the record pages and cards (`source: 'hyphen'` words the claim "recorded by Hyphen" when Hyphen stands in for DAPI; the InstantSend badge is drawn only for `instantLockView` states `claimed` and `corroborated`, so never for a transaction in a ChainLocked block); `LockMark({ locked, claim, compact })` is the small mark of lists and lanes (`.rx-lockmark`). A `claim` of `'one-node'` draws "reported by one node" instead of the lock glyph (§4.4a). The hover cards (`features/entity/cards/{tx,block}.tsx`) and the home lists (`Activity.tsx`, `Scope.tsx`) use them; the Core pulse tile reads the lock from the tip row of `coreQueries.blockRows`, else shows "ChainLock at N, reported by one node" (`data-claim="one-node"`).
+**Lock marks** (`ui/lock-badges.tsx`, exported from `@/ui`). `ChainLockBadge({ locked, claim, unlockedLabel, size })` and `InstantSendBadge({ claim, source, size })` are the badges of the record pages and cards (`source: 'hyphen'` words the claim "recorded by Hyphen" when Hyphen stands in for DAPI; the InstantSend badge is drawn only for `instantLockView` states `claimed` and `corroborated`, so never for a transaction in a ChainLocked block); `LockMark({ locked, claim, compact })` is the small mark of lists and lanes (`.rx-lockmark`). A `claim` of `'one-node'` draws "reported by one node" instead of the lock glyph (§4.4a). The hover cards (`features/entity/cards/{tx,block}.tsx`) and the home's block list (`features/home/CoreSection.tsx`) use them; the home hero (`Hero.tsx`) reads the lock from the tip row of `coreQueries.blockRows` or the best ChainLock, else shows "ChainLock at N, reported by one node" (`data-claim="one-node"`).
 
 - The block page's Header section keeps the page's DAPI source line. The Chainwork row's Hyphen/Insight stamp covers that row only ("This source covers this row only").
 - Long input lists: each step reads each parent transaction once (`stepInputs`): a parent shared across steps is fetched in the step where it first appears, with all the outputs spent from it. If the first read fails, no input counts as loaded and "Try again" retries it before any step. The note says "Each previous transaction is a separate request", whatever source serves.
@@ -1280,6 +1293,8 @@ linkOutUrl(target): string | null
 
 Age is hidden when `immutable`. The age turns warning orange (`--dh-warn`; amber is reserved for the primary action) past the stamp's `staleAfterMs`, which the query layer sets from the data class (§5.2), and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
 
+On the home, a mark turns stale only when a reading has stopped arriving, never because the chain was quiet (`features/home/freshness.ts`): `pushed` gives the streamed tip and best ChainLock the `tip` data class's age, `atTip` never ages a figure read at the newest block, and `agedFromRead` ages a reading stamped with its block's time from when it was read.
+
 ### 7.3a The unavailable state and the header mark (`ui/source-mode.tsx`, `shell/SourceModeMark.tsx`)
 
 `Unavailable` is the one way Decentralized only mode (§4.11) says something is missing. It is not `Empty` (nothing is empty), not `ErrorState` (nothing failed) and not `StaleIndexNotice` (nothing is behind).
@@ -1300,6 +1315,11 @@ export function registerHoverCard(kind: EntityKind, C: ComponentType<{ id: strin
 ```
 
 `features/entity/register.ts` registers one card per kind at startup; each card uses the entity's cheapest source (X-06). Features render entities through `features/entity`'s `<Entity kind id label? />`, which builds the route `href` and wraps `EntityChip`. Raw `EntityChip` with a hand-built `href` is only for the kit page.
+
+- Every card is registered through `lazyCard` (`features/entity/cards/lazy.tsx`), so a card's code and its data clients load the first time one opens, not with the entry chunk.
+- On a touch screen a long press (450 ms, 10 px slop) opens the same card (`features/entity/LongPressCard.tsx`); a tap still follows the link.
+- The network switch (`shell/network-switch.ts`, `switchTarget`) decides where the switch leads: the same page for a list, search or tool (less cursors and filters that name something of the network left), the same id for a record that can exist on both networks, a search for a record that belongs to one (a ProTx, a transaction, a block), and the list of its kind for a record with no counterpart (`/epoch/$n` → `/epochs`).
+- An asset lock's transaction page lists the identities it funded (`features/core/tx/funded-identity.ts`): each credit output's identity id is derived (double SHA-256 of the outpoint) and asked of the SDK, at most 8 outputs.
 
 ### 7.5 Palette and kit page
 
@@ -1329,6 +1349,19 @@ The vendored `<dashhq-bar>` is hash-checked and never edited. It anchors its net
 - **Sources on phones** (HY-12): at ≤ 640 px `SourcesCard` lists each source as its name, a state chip, the health sentence with its lag (`data-source-lag`) and what the backend reports with its heights (`data-source-sync`, with its source line), then a `<details>` whose summary is the median answer time; it holds the source's role and any probe error, and is open by itself when the source is down, behind, degraded or slow (IN-09). Desktop keeps the three-column rows.
 - **Section index** (IN-03, IN-05): the block and transaction pages put `SectionIndex` (`features/core/block/frame.tsx`) at the top of the page container, directly after the record header band: a `<nav aria-label="On this page">` with one anchor per section the page renders (transaction: Payload when it has one, Value, Settlement, Inputs and outputs, Raw data; block: Header, Coinbase when it has one, Transactions). It is one row that scrolls sideways, hidden by CSS above 640 px, not sticky. Sections and the raw-data `<details>` carry `scroll-margin-top`, and at ≤ 640 px `.rx-sec` spacing drops from 40 to 28 px; no `SourceLine` is hidden.
 - Settings explains the selected unit once: "Amounts show in {unit}…" and "USD … follows the amount in {unit}" for DASH units, "USD comes first, with the DASH figure after it…" when USD is selected.
+
+### 7.8 Query state (`ui/query-state.ts`)
+
+- `queryView(query, after?)` gives a `Card` or `DataTable` its `{ state, error, onRetry }`: loading until the query has an answer, an error only when nothing is left to show. A query that waits for another names it as `after`; when that one failed with no data, this one never starts, so its failure is shown and Retry retries it.
+- `stampsOf(...answers)` is the stamps of the answers that have arrived, for a card drawn from several.
+- `useAfterIdle()` is true after the browser's first idle moment; pages enable their SDK reads with it so loading the SDK never competes with first paint (§3.3).
+
+### 7.9 Proof inspector, diagnostics and the You drawer
+
+- **Seams in `ui/`.** `ui/proof.ts`: the Proof-checked mark calls `openProofInspector(proof)`; `ProofInspector` registers itself with `registerProofInspector`, and until it does, `app/global-mounts.tsx` has said how to load it (`onProofInspectorNeeded`), so the first click loads it and is carried out once it registers. `ui/diagnostics.ts`: `openDiagnosticsDrawer()` opens the drawer for a page outside the You features (the status page's Diagnostics button); a request made before `registerDiagnosticsOpener` is kept and carried out when it registers.
+- **Mounts.** `GlobalMounts` (`app/global-mounts.tsx`) mounts `proof`, `diagnostics` and `update`, each loaded on first use. It imports `features/you/boot.ts` after the shell renders; `installYou` sets each panel's loader (`panels.ts`, plain state with no React), registers the diagnostics opener, puts the viewer's own labels over the well-known names, and installs the shortcuts: Alt+Shift+P toggles the proof inspector and Alt+Shift+D the diagnostics drawer, read from `e.code` so they work on any layout, ignored in a text field, and each can be turned off in Settings' developer card (`radar.dev`).
+- **Proof inspector** (`features/you/proof/`). Reads `data/sdk/proof-store.ts`, an LRU of the last 300 full proofs; it opens on one proof or on the list of all held. "Export evidence" (one proof) or "Export all" writes `radar-proof-evidence` version 1 JSON (`evidence.ts`): per proof the network, method, arguments, node, Platform and Core heights, epoch, time, protocol version, chain id, quorum, signature and the GroveDB proof bytes.
+- **Diagnostics drawer** (`features/you/diagnostics/`). The requests this tab made, newest first, from `data/query-log.ts` (the last 100 source calls), with a Clear button.
 
 ## 8. Search
 
@@ -1430,11 +1463,12 @@ The English wordlist (6 kB gzipped, `features/search/bip39-words.ts`) loads in i
 ### 9.1 i18n (Lingui 5)
 
 - `@lingui/vite-plugin` + `@lingui/babel-plugin-lingui-macro` (through `@vitejs/plugin-react`'s babel option). Source strings are marked with the macros `t` and `plural` (from `@lingui/core/macro`), `useLingui` (from `@lingui/react/macro`), `<Trans>`, and `msg` for module-level constants (rendered with `i18n._(descriptor)`), with ICU syntax. No string concatenation of translatable text.
-- Source locale `en`. Ten locales ship, the union of Insight's and Hyphen's: `en, de, fr, es, pt, ja, zh, ru, tr, uk`; `LOCALES` in `src/i18n/locales.ts` is the list and the language menu shows each in its own script. Catalogues: `src/i18n/locales/<locale>/<catalog>.po`, compiled at build: one per M2–M6 package named for its lower-case id (`net-a.po`, `p-blocks.po`, `uni-l.po`, …) and the base `messages.po`. **No catalogue is in the entry chunk**: every one, `en` included, loads as its own chunk as one chunk per locale: `locales/<code>/index.ts` eagerly imports that locale's `*.po` files and exports them merged, `i18n/index.ts` loads it through `import.meta.glob('./locales/*/index.ts')`, and `AVAILABLE_LOCALES` lists the locales that have one, and `main.tsx` waits for `i18nReady` (the visitor's locale, falling back to `en`) before it renders, so message ids never flash.
-- **Per-package catalogs.** `lingui.config.ts` has a `PACKAGES` table: the directories (or files) whose strings go to each package's catalog, as in the ownership table of §11.5. The base `messages.po` takes everything else (`include: ['<rootDir>/src']` less every claimed path). **A package's strings live in its own directories and so in its own catalogs; the base `messages.po` is frozen until INT.** A string used by two packages belongs to the one whose directory holds the code, and one in a shared directory goes to the base catalog, which INT may edit. A message that appears in two catalogs must read the same in both. A package edits only its own `<pkg>.po` files: that is what keeps the ten locale files from conflicting on every merge. A file in a package's directory that belongs to another package is listed in `BELONGS_ELSEWHERE`, and `lingui.config.ts` also names single files (UNI-L's `ui/link-out.tsx` and `lib/linkouts.ts`). The proper names of `lib/well-known.ts` are not translated and so are in no catalog. `activateLocale` ignores a load that a later call has overtaken, so quick locale changes end on the last one asked for.
+- Source locale `en`. Ten locales ship, the union of Insight's and Hyphen's: `en, de, fr, es, pt, ja, zh, ru, tr, uk`; `LOCALES` in `src/i18n/locales.ts` is the list and the language menu shows each in its own script. Catalogues: `src/i18n/locales/<locale>/<catalog>.po`, compiled at build: one per package named for its lower-case id (`net-a.po`, `p-blocks.po`, `uni-l.po`, `tools.po`, `you.po`, …) and the base `messages.po`. **No catalogue is in the entry chunk**: every one, `en` included, loads as its own chunk as one chunk per locale: `locales/<code>/index.ts` eagerly imports that locale's `*.po` files and exports them merged, `i18n/index.ts` loads it through `import.meta.glob('./locales/*/index.ts')`, and `AVAILABLE_LOCALES` lists the locales that have one, and `main.tsx` waits for `i18nReady` (the visitor's locale, falling back to `en`) before it renders, so message ids never flash.
+- **Per-package catalogs.** `lingui.config.ts` has a `PACKAGES` table: the directories (or files) whose strings go to each package's catalog, as in the ownership table of §11.5. The base `messages.po` takes everything else (`include: ['<rootDir>/src']` less every claimed path). A package's strings live in its own directories and so in its own catalogs; everything no package claims (`ui/`, most of `app/`, `data/` and `lib/`, the Core pages, `features/tools/` outside the package tools) goes to the base `messages.po`. A string used by two packages belongs to the one whose directory holds the code. A message that appears in two catalogs must read the same in both, so a changed translation is changed in every catalog that has it. Keeping each package's strings in its own `<pkg>.po` keeps the ten locale files from conflicting on every change. A file in a package's directory that belongs to another package is listed in `BELONGS_ELSEWHERE`, and `lingui.config.ts` also names single files (UNI-L's `ui/link-out.tsx` and `lib/linkouts.ts`). The proper names of `lib/well-known.ts` are not translated and so are in no catalog. `activateLocale` ignores a load that a later call has overtaken, so quick locale changes end on the last one asked for.
 - `pnpm i18n:extract` rewrites `apps/web/src/i18n/locales/*/*.po`; commit the result. `pnpm i18n:check` (`scripts/check-i18n.mjs`, CI, after lint) runs `lingui extract --clean` and fails if any catalogue changed, a locale has no catalogue or lacks one of `en`'s, a message reads differently in two catalogues, any message has no translation or a fuzzy flag, a translation's placeholders or tags differ from the source, or a plural message lacks a category its locale needs (`one`/`other` for en, de, fr, es, pt, tr; `other` only for ja and zh; `one`/`few`/`many`/`other` for ru and uk). Adding a locale is data only: add `{ code, name }` to `LOCALES`, copy another locale's `index.ts` into `locales/<code>/`, run `pnpm i18n:extract`, translate `locales/<code>/*.po`, commit; the language menu lists a locale only when its catalogue exists in the build. Hashes, IDs and amounts are never translated; the number and date locale follows the language. A change that adds a string needs all nine translations in the same commit (workflow in `CONTRIBUTING.md`).
 - **Marking rules.** In `src/ui` use the global `t` from `@lingui/core/macro`, because the ui tests render without an `I18nProvider`; elsewhere in components `useLingui()` from `@lingui/react/macro`. Tables of labels at module level (`ENTITY_LABELS`, the site map, section labels) hold `msg` descriptors and are rendered through helpers (`entityLabel()`, `pageTitle()`, `pageSummary()`, `sectionLabel()`, `sourceLabel()`, `recordLabel()`, `labelOf()`) that call `i18n._()` at render time; `matchPages` in `features/search/pages.ts` still matches the English titles and keywords. Lists of names use `Intl.ListFormat`.
 - **Switching language.** `LanguageSelect` (a native `<select>`) sits in the shell footer (`ShellFooter.tsx`) and in Settings. It saves the choice and sets `<html lang>`. `AppShell` renders the routed `<main>` with `key={locale}`, so a switch remounts the page; without it a component that read the global `t` during render would keep its old text until some other re-render. Text computed outside React, such as the `lag.detail` of a health probe, is translated when it is produced and does not change on a switch until the next probe.
+- **Message contexts.** A short English word that is translated differently by what it describes carries a `context` (`msgctxt`), which names the thing, not the page: "Active" (count of active validators, evonode state, group actions filter, identity key status, token status, upgrade state, contest status), "Funded by" (identity funding, transition funding), "Newest first" / "Oldest first" (list of blocks, list of tokens, list of contests), "Pooling" (field of a decoded transition, withdrawal pooling), "Queued" (evonode state, withdrawal status) and "Verified" (proof check, quorum is verified). `i18n/i18n.test.ts` checks that the gendered forms differ where they must.
 - **Not translated:** the kit page (`/__kit`) and dev-only text.
 - **Plurals.** Russian and Ukrainian need `few` and `many` forms; the catalogue lists each ICU plural with the categories its locale requires, and the check rejects a message that omits one.
 - Locale choice: `localStorage` `radar.locale`, else the first match in `navigator.languages`, else `en`. `<html lang>` follows it.
@@ -1462,6 +1496,12 @@ Every query renders through `QueryView` or `DataTable`'s `state`, so each has th
 - **None yet** is for lists that are legitimately empty ("No transactions in the mempool right now").
 
 No page-level error unless the route itself can't render (bad route param after validation). One failed source never blanks a page.
+
+### 9.4 Offline and updates (`sw/`, `app/sw-register.ts`, `features/you/update/`)
+
+- **What the worker does** (`sw/sw-core.ts`, `sw/sw.ts`, emitted as `/sw.js?v=<build>`). It touches only same-origin GETs: a page navigation is network first, and the build's hashed files under `/assets/` are cache first. No other request, so no API answer, is stored or served. Install precaches the app shell and every asset its HTML names, all or nothing, in `radar-v1:<build>`; activate drops every other build's cache. A failed navigation to `/saved`, `/settings` or `/about` gets the cached shell; any other gets the offline page (`sw/offline-page.ts`): plain HTML in the ten languages, with no app script, listing the saved items from `localStorage` through `textContent`.
+- **Registration** (`app/sw-register.ts`, called from `main.tsx` after first paint). On in production builds, off in dev servers and fixture builds; `localStorage['radar.sw']` = `on` forces it on, `off` unregisters it and deletes its caches. The script URL passes the Trusted Types worker policy and is registered with `updateViaCache: 'none'`. It checks for a new build every 30 minutes and when the tab becomes visible (at most every 5 minutes). A blocked registration is ignored: Radar works without a worker.
+- **Updates.** A new worker waits; it never takes over a tab by itself. A waiting worker of this page's own build is told to `skip-waiting` quietly; one of another build raises `offerUpdate` (`features/you/update/update-state.ts`, plain state), which loads `UpdateNotice` through the `update` mount (§7.9). "Reload" posts `skip-waiting` and reloads on `controllerchange` (or after 5 s); dismissing hides the notice until the next page load.
 
 ---
 
@@ -1793,7 +1833,7 @@ What it measures: TLS to evonode IPs, CORS, unary and server streams through con
 - Ports: 443 mainnet, 1443 testnet, for every node that answered (RAD's masternode list doesn't carry the Platform HTTP port).
 - Certificates last about 6 days, so treat a TLS failure as a short bench, not a ban.
 - `getEstimatedTransactionFee` answers 403 everywhere; nothing in Radar needs it.
-- Streams close at 601 s; the 1.35 MB first masternode-list diff means the list stream opens only on network pages, never on home.
+- Streams close at 601 s; the 1.35 MB first masternode-list diff means the list stream opens only for the masternode pages, `/nodes`, a masternode hover card and a search for a hash or an IP (§4.12), never for the home.
 - Reference code to lift into `data/dapi-core`: `spikes/dapi-core/src/{dapi.ts,pool.ts,gen/}`.
 
 ### (b) `core-decode` wasm from rust-dashcore (T-010)
@@ -1825,7 +1865,7 @@ Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the h
 - **Pinned to rust-dashcore `dev` at 568d5866**, because that is where the special-transaction types live.
 - **Gaps:** MNHF has no real mainnet vector (none in the last 30 days), and ProDissolveTx, ProUpShareTx and ProUpSharedRegTx are mapped but untested (they exist only on rust-dashcore `dev`). The UI renders an unknown or failed payload as raw hex with its type number; it never hides the transaction.
 
-**As used (M1).** `data/core/decode.ts`: `createCoreDecoder(load)` maps the wasm output to the contract types on the calling thread. The default decoder runs the wasm in a module worker (`decode.worker.ts`, Comlink) and falls back to the main thread where `Worker` doesn't exist (jsdom). The worker is created through `trustedWorkerUrl` (`data/trusted-worker.ts`), a same-origin-only Trusted Types policy, because `require-trusted-types-for 'script'` reports a plain `new Worker(url)` as a violation. Import a worker as `./x.worker.ts?worker&url` and wrap `new URL(url, location.href)`; Vite doesn't bundle a worker whose `new URL(...)` sits inside another call. The SDK worker is created the same way. `CoreDecoder.isLock` is a small TS parser (DIP-22 v1 layout), and `mnListDiff` is not decoded yet (it rejects with `unavailable`; the wasm has no decoder for it), so `core.masternodeList` isn't built.
+**As used.** `data/core/decode.ts`: `createCoreDecoder(load)` maps the wasm output to the contract types on the calling thread. The default decoder runs the wasm in a module worker (`decode.worker.ts`, Comlink) and falls back to the main thread where `Worker` doesn't exist (jsdom). The worker is created through `trustedWorkerUrl` (`data/trusted-worker.ts`), a same-origin-only Trusted Types policy, because `require-trusted-types-for 'script'` reports a plain `new Worker(url)` as a violation. Import a worker as `./x.worker.ts?worker&url` and wrap `new URL(url, location.href)`; Vite doesn't bundle a worker whose `new URL(...)` sits inside another call. The SDK worker is created the same way. `CoreDecoder.isLock` is a small TS parser (DIP-22 v1 layout). `CoreDecoder.mnListDiff` is TypeScript too: DAPI sends the list as CBOR of Core's `protx diff`, not the P2P `mnlistdiff`, so the wasm has no part in it (`parseMnListDiff`, §4.12).
 
 ### (c) The Evo SDK in a web worker (T-011)
 
