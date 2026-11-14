@@ -78,7 +78,7 @@ export function entityHref(
   return withSourceMode(withNetwork(entityPath(kind, id, search), net))
 }
 
-export const ENTITY_LABELS: Record<EntityKind, MessageDescriptor> = {
+const ENTITY_LABELS: Record<EntityKind, MessageDescriptor> = {
   block: msg`Core block`,
   tx: msg`Core transaction`,
   address: msg`Core address`,
