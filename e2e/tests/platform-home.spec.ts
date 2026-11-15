@@ -338,6 +338,21 @@ test.describe('Platform overview', () => {
     const chart = await card(page, 'chart-transitions').boundingBox()
     expect(chart!.width).toBeLessThanOrEqual(390)
   })
+
+  test('a long name on a leaderboard shortens inside the board instead of widening the page @NX-01 @X-08', async ({
+    page,
+  }) => {
+    test.skip(!isPhone(page), 'phone layout')
+    await open(page, '/platform?network=testnet')
+    const board = card(page, 'board-richest')
+    await expect(board.locator('li').filter({ hasText: 'atlanta-degen-for-life' })).toBeVisible()
+    const edge = (await board.boundingBox())!
+    for (const right of await board
+      .locator('li')
+      .evaluateAll((rows) => rows.map((r) => r.getBoundingClientRect().right)))
+      expect(right).toBeLessThanOrEqual(edge.x + edge.width)
+    expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
+  })
 })
 
 test.describe('Platform overview in Decentralized only mode', () => {

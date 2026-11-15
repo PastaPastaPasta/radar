@@ -54,14 +54,16 @@ function BoardCard({ id, title, unit, query, ranked, actions }: Board) {
       {ranked.length === 0 ? (
         <Empty kind="none-yet" title={t`Nothing ranked yet`} />
       ) : (
-        <ol className="grid gap-2" data-board={id}>
+        <ol className="grid grid-cols-[minmax(0,1fr)] gap-2" data-board={id}>
           {ranked.map(({ item, rank }) => (
             <li key={item.key} className="flex items-center justify-between gap-3">
               <span className="flex min-w-0 items-center gap-2">
-                <span className="rx-num w-5 text-right text-[var(--dh-ink-2,inherit)]">{rank}</span>
+                <span className="rx-num w-5 shrink-0 text-right text-[var(--dh-ink-2,inherit)]">
+                  {rank}
+                </span>
                 {item.who}
               </span>
-              <span className="rx-num">{item.figure}</span>
+              <span className="rx-num shrink-0 whitespace-nowrap">{item.figure}</span>
             </li>
           ))}
         </ol>
