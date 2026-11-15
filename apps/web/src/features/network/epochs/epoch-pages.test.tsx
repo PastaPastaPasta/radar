@@ -253,16 +253,26 @@ describe('Protocol', () => {
     expect(vote).not.toHaveTextContent('Still needed')
     const tally = await card('tally')
     await waitFor(() => expect(rows(tally)).toHaveLength(1))
-    const sub = tally.querySelector('.rx-card__sub')?.textContent ?? ''
-    const ofEnabled = /([\d,]+) of the ([\d,]+) enabled/.exec(sub)
-    if (ofEnabled) {
-      const voters = Number(ofEnabled[1]!.replaceAll(',', ''))
-      const enabled = Number(ofEnabled[2]!.replaceAll(',', ''))
-      expect(voters).toBeLessThanOrEqual(enabled)
-    } else {
-      expect(sub).toMatch(/no longer enabled/)
-    }
+    await waitFor(() =>
+      expect(tally.querySelector('.rx-card__sub')).toHaveTextContent(
+        '354 votes are on record: 352 from enabled evonodes and 2 from evonodes that are no longer enabled. The shares are of the votes on record; the activation threshold counts all 363 enabled evonodes.',
+      ),
+    )
     expect(vote).toHaveTextContent(/Reported by \d+ of \d+ evonodes/)
+  })
+
+  it('lists each figure once on the vote section line, under the source that served it @RA-61', async () => {
+    renderAt('/protocol')
+    const vote = await card('vote')
+    await waitFor(() => expect(vote).toHaveTextContent('Activation threshold'))
+    const covers = (proved: boolean) =>
+      [...document.querySelectorAll(`[data-proved="${proved}"] [data-covers]`)]
+        .map((el) => el.textContent ?? '')
+        .join(' ')
+    await waitFor(() => expect(covers(true)).toContain('Upgrade vote'))
+    expect(covers(false)).not.toContain('Upgrade vote')
+    expect(covers(false)).toContain('Votes for it')
+    expect(covers(true)).not.toContain('Votes for it')
   })
 
   it('shows pending votes and how many are still needed while a vote is live', async () => {
