@@ -187,7 +187,14 @@ export function PlatformSection() {
     shownTransitions ? stampOf(shownTransitions) : undefined,
     shownBlocks ? stampOf(shownBlocks) : undefined,
   ]
-  const down = indexed && transitions.isError && !shownTransitions && blocks.isError && !shownBlocks
+  const down =
+    indexed &&
+    transitions.isFetched &&
+    blocks.isFetched &&
+    transitions.isError &&
+    blocks.isError &&
+    !shownTransitions &&
+    !shownBlocks
   return (
     <Section
       className="rx-home__sec"

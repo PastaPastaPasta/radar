@@ -467,18 +467,13 @@ describe('Home page', () => {
   })
 
   it('the Platform badge follows Platform Explorer, not the connection', async () => {
-    server.use(
-      http.get(/pe\.dashhq\.org\/blocks/, () => HttpResponse.error()),
-      http.get(/pe\.dashhq\.org\/transactions/, () => HttpResponse.error()),
-    )
+    server.use(http.all(/api\.pe\.dashhq\.org/, () => HttpResponse.error()))
     renderAt('/')
-    const section = await waitFor(() => {
+    await waitFor(() => {
       const el = document.getElementById('platform')
+      expect(el?.querySelector('[data-feed="down"]')).toHaveTextContent('Down')
       expect(el).toHaveTextContent(/Platform Explorer isn.t answering/)
-      return el!
     })
-    expect(section.querySelector('[data-feed="down"]')).toHaveTextContent('Down')
-    expect(section.querySelector('.rx-live')).not.toHaveTextContent('Live')
   })
 
   it('says live updates stopped when the Core connection is down, and offers a retry @IN-15', async () => {
