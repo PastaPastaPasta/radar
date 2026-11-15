@@ -756,10 +756,14 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         message: `Asked Insight for transaction ${txid} and got a different one`,
       })
     }
+    // Without the detail Insight cannot say whether the transaction is mined, and an answer without it would read as
+    // unconfirmed.
+    if (!detail?.data) return null
     const tx = await decoder.tx(bytes, net)
-    const d = detail?.data
-    const height = d?.blockheight ?? undefined
-    const confirmations = height !== undefined ? (d?.confirmations ?? undefined) : undefined
+    const d = detail.data
+    // Insight gives a mempool transaction a block height of -1.
+    const height = d.blockheight != null && d.blockheight >= 0 ? d.blockheight : undefined
+    const confirmations = height !== undefined ? (d.confirmations ?? undefined) : undefined
     const lock =
       height === undefined
         ? lockFields('none')
@@ -774,7 +778,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         tx,
         blockHash: undefined,
         height,
-        time: d?.blocktime ?? undefined,
+        time: height !== undefined ? (d.blocktime ?? undefined) : undefined,
         // Insight's lock flag is not carried: with no lock claim the page says the lock is unknown, not absent.
         confirmations,
         isInstantLocked: false,
@@ -784,11 +788,16 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  /** The answer of Hyphen, then Insight, whichever has it; null when neither does (which proves nothing). */
+  /**
+   * The answer of Hyphen, then Insight, whichever has it; null when neither does (which proves nothing). With
+   * `strict`, a source's error is thrown when no other source answered, so a failure does not pass for a miss.
+   */
   async function firstHosted<T>(
     net: NetworkId,
     ask: Record<'hyphen' | 'insight', () => Promise<T | null>>,
+    strict = false,
   ): Promise<T | null> {
+    let failure: Error | undefined
     for (const source of ['hyphen', 'insight'] as const) {
       if (!hostedOk(net, source)) continue
       try {
@@ -796,8 +805,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         if (found) return found
       } catch (e) {
         if (isAborted(e)) throw e
+        failure ??= e instanceof Error ? e : new Error(String(e))
       }
     }
+    if (strict && failure) throw failure
     return null
   }
 
@@ -805,11 +816,15 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     | NonNullable<Awaited<ReturnType<typeof hyphenRawTx>>>
     | NonNullable<Awaited<ReturnType<typeof insightRawTx>>>
 
-  const hostedRawTx = (net: NetworkId, txid: string, signal?: AbortSignal) =>
-    firstHosted<HostedTx>(net, {
-      hyphen: () => hyphenRawTx(net, txid, signal),
-      insight: () => insightRawTx(net, txid, signal),
-    })
+  const hostedRawTx = (net: NetworkId, txid: string, signal?: AbortSignal, strict = false) =>
+    firstHosted<HostedTx>(
+      net,
+      {
+        hyphen: () => hyphenRawTx(net, txid, signal),
+        insight: () => insightRawTx(net, txid, signal),
+      },
+      strict,
+    )
 
   function hostedTxResult(found: HostedTx): Sourced<DecodedTx> {
     const { tx, height, time, confirmations, isInstantLocked, isChainLocked, chainLockClaim } =
@@ -1049,7 +1064,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         async (txid, rowSignal) => {
           let decoded: DecodedTx | undefined
           if (useHyphen) {
-            const found = await hostedRawTx(net, txid, rowSignal)
+            const found = await hostedRawTx(net, txid, rowSignal, true)
             decoded = found?.value.tx
             if (found && (!hyphenStamp || found.stamp.asOf < hyphenStamp.asOf)) {
               hyphenStamp = found.stamp

@@ -139,6 +139,27 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     expect(tx.data && instantLockView(tx.data)).toEqual({ state: 'settled' })
   })
 
+  it('reads a mempool transaction from Insight as unconfirmed, not as ChainLocked', async () => {
+    const { core, hyphen, insight } = setup()
+    hyphen.rawTx.mockRejectedValue(unreachable())
+    insightHasTx(insight)
+    insight.tx.mockResolvedValue(sourced('insight', { blockheight: -1, confirmations: 0 }) as never)
+    const tx = await core.tx('mainnet', TXID)
+    expect(tx.source).toBe('insight')
+    expect(tx.data?.height).toBeUndefined()
+    expect(tx.data?.isChainLocked).toBe(false)
+  })
+
+  it('gives no answer from Insight when its detail read fails, rather than calling a mined transaction unconfirmed', async () => {
+    const { core, hyphen, insight } = setup()
+    hyphen.rawTx.mockRejectedValue(unreachable())
+    insightHasTx(insight)
+    insight.tx.mockRejectedValue(
+      new SourceError({ source: 'insight', kind: 'network', message: 'down' }),
+    )
+    await expect(core.tx('mainnet', TXID)).rejects.toThrow()
+  })
+
   it('asks Insight when Hyphen does not have the transaction yet', async () => {
     const { core, insight } = setup({ hyphen: 'stale' })
     insightHasTx(insight)
@@ -213,6 +234,17 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     expect(prevs.source).toBe('insight')
     expect(prevs.fallback).toBe('dapi-down')
     expect(prevs.data.has(`${TXID}:0`)).toBe(true)
+  })
+
+  it('fails the previous outputs when Hyphen errors and Insight misses, rather than leaving them out', async () => {
+    const { core, hyphen } = setup({ dapi: 'down' })
+    hyphen.rawTx.mockRejectedValue(unreachable())
+    await expect(
+      core.prevouts('mainnet', {
+        inputs: [{ txid: TXID, vout: 0, sequence: 0, scriptSig: '' }],
+        outputs: [],
+      } as never),
+    ).rejects.toThrow()
   })
 
   it('reads the previous outputs of a transaction from a hosted index when DAPI fails', async () => {
