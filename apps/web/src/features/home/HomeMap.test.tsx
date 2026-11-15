@@ -44,6 +44,5 @@ describe('the home map @RA-01', () => {
     expect(document.querySelector('.rx-maplegend__sum')).toHaveTextContent(
       '30 masternodes in 2 places',
     )
-    expect(screen.getByText(/Warsaw, PL: 4 other nodes/)).toBeInTheDocument()
   })
 })

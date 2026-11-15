@@ -96,10 +96,7 @@ export function HomeMap() {
             return (
               <g key={`${p.lat},${p.lon}`}>
                 <title>
-                  {place(p)}:{' '}
-                  {p.masternodes > 0
-                    ? t`${formatInt(p.masternodes)} masternodes`
-                    : t`${formatInt(p.nodes)} other nodes`}
+                  {place(p)}: {t`${formatInt(p.masternodes)} masternodes`}
                 </title>
                 <circle
                   className="mn mn--all"
