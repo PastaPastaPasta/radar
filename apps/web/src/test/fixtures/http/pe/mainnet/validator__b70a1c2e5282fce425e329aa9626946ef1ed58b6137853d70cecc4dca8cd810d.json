@@ -1,0 +1,117 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/validator/b70a1c2e5282fce425e329aa9626946ef1ed58b6137853d70cecc4dca8cd810d"
+  },
+  "recordedAt": "2026-11-13T09:49:11.952Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "proTxHash": "B70A1C2E5282FCE425E329AA9626946EF1ED58B6137853D70CECC4DCA8CD810D",
+    "isActive": false,
+    "proposedBlocksAmount": 1110,
+    "lastProposedBlockHeader": {
+      "hash": "6F8500B2055F1A7DB26D4418E8CD92C201A26BBDEF5EB06789B995D499439203",
+      "height": 471221,
+      "timestamp": "2026-11-14T09:11:45.415Z",
+      "blockVersion": 14,
+      "appVersion": 14,
+      "l1LockedHeight": 2572063,
+      "validator": "B70A1C2E5282FCE425E329AA9626946EF1ED58B6137853D70CECC4DCA8CD810D",
+      "totalGasUsed": 0,
+      "appHash": "9E1AF1AF78E043C56B4BEBAFB6B44761FF677976864384672C900AF6B4CE3F26",
+      "quorumHash": "00000000000000168437254367271162B2DBFD374CF21E52C00D3F645D161A72"
+    },
+    "proTxInfo": {
+      "type": "Evo",
+      "collateralHash": "876faf20eaa11f9a9671277db7a9c7b14cf44f41aef9299a9c6fce7712e82ccf",
+      "collateralIndex": 1,
+      "collateralAddress": "XsKxhvJnnHdne3R2KuhaeD9idwevP9KTQE",
+      "operatorReward": 0,
+      "confirmations": 373609,
+      "state": {
+        "version": 2,
+        "service": "139.99.201.103:9999",
+        "addresses": {
+          "core_p2p": ["139.99.201.103:9999"],
+          "platform_https": ["139.99.201.103:443"],
+          "platform_p2p": ["139.99.201.103:26656"]
+        },
+        "registeredHeight": 2198997,
+        "lastPaidHeight": 2572246,
+        "consecutivePayments": 0,
+        "PoSePenalty": 0,
+        "PoSeRevivedHeight": 2289685,
+        "PoSeBanHeight": -1,
+        "revocationReason": 0,
+        "ownerAddress": "Xve24AWqsPNUuYwVwsFks9fzt9VLyCo3QQ",
+        "votingAddress": "Xve24AWqsPNUuYwVwsFks9fzt9VLyCo3QQ",
+        "platformNodeID": "0a7eb2785ecbab3e72f351e81e0a49f943d05933",
+        "platformP2PPort": 26656,
+        "platformHTTPPort": 443,
+        "payoutAddress": "XtWWg7zQvHA6GTn3yGU7LYeJhK8HAei48E",
+        "pubKeyOperator": "98e47537be8d5c62a07681863cc8e419c36a5464edc0ee870c3af6a0714d9766d6dc46aa726534fb06429f812ea5211e"
+      }
+    },
+    "identity": "DKWYuXhxU8faRcztPCdVgxbXC2MA2AxA7qoTuWEFL3ek",
+    "identityBalance": "9919200448825",
+    "epochInfo": {
+      "number": 88,
+      "firstBlockHeight": "467862",
+      "firstCoreBlockHeight": 2569070,
+      "startTime": 1794174796794,
+      "feeMultiplier": "1000",
+      "endTime": 1794178396794,
+      "totalBlocksInEpoch": null,
+      "totalProcessingFees": null,
+      "totalDistributedStorageFees": null,
+      "totalCreatedStorageFees": null,
+      "coreBlockRewards": null,
+      "blockProposers": null
+    },
+    "totalReward": 40090518348313,
+    "epochReward": 686342548918,
+    "withdrawalsCount": 13,
+    "lastWithdrawal": "34965A58288202B1FB185D4DAA292135E4F4D98BB36F238CA22AB2B8ED151178",
+    "lastWithdrawalTime": "2026-07-09T04:44:18.462Z",
+    "endpoints": {
+      "coreP2PPortStatus": {
+        "host": "139.99.201.103",
+        "port": 9999,
+        "status": "OK",
+        "message": null
+      },
+      "platformP2PPortStatus": {
+        "host": "139.99.201.103",
+        "port": 26656,
+        "status": "OK",
+        "message": null
+      },
+      "platformGrpcPortStatus": {
+        "host": "139.99.201.103",
+        "port": 443,
+        "status": "OK",
+        "message": null
+      }
+    },
+    "geoIpInfo": {
+      "ipv4": "139.99.201.103",
+      "countryCode": "AU",
+      "city": "North Sydney",
+      "latitude": -33.8400993347168,
+      "longitude": 151.20899963378906
+    },
+    "registeredAt": "2025-01-02T18:38:41.000Z",
+    "votingIdentity": "afVbcsNVFbuo2RJReecfNx3pxRiHn33YQUd1txHQthR",
+    "votingIdentityBalance": "0",
+    "poseScoreMax": 2994,
+    "blocksUntilCorePayment": 1768,
+    "registeredCoreBlockHash": "00000000000000188d64873e019c0aa5dd2944b8053ac2e72ae3ab44f89947a5",
+    "lastPaidCoreBlockHash": "0000000000000003101612b853f6ebd7480a72ef9a0766ca6be5803d10f5f451",
+    "poseRevivedCoreBlockHash": "0000000000000003e67b3c36a2d4bfaffcdce12d7fac76e7bac407b23d9cb268",
+    "poseBanCoreBlockHash": null,
+    "coreYieldPerYear": 71.41165404632933,
+    "coreTipTime": "2026-11-15T05:16:02.000Z",
+    "coreBlockIntervalMs": 157698
+  }
+}

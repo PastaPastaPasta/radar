@@ -1,0 +1,117 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/validator/56a079a856094c2e5ab4e7004dd984a56b56941f56bed303a045d347ebd0b9b3"
+  },
+  "recordedAt": "2026-11-13T09:49:11.952Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "proTxHash": "56A079A856094C2E5AB4E7004DD984A56B56941F56BED303A045D347EBD0B9B3",
+    "isActive": false,
+    "proposedBlocksAmount": 297,
+    "lastProposedBlockHeader": {
+      "hash": "8C4E610C8404DCA44E841B8B9AC524B9A8DA87BC9676E5FBCCBF5326221ED656",
+      "height": 471540,
+      "timestamp": "2026-11-14T20:24:00.840Z",
+      "blockVersion": 14,
+      "appVersion": 14,
+      "l1LockedHeight": 2572323,
+      "validator": "56A079A856094C2E5AB4E7004DD984A56B56941F56BED303A045D347EBD0B9B3",
+      "totalGasUsed": 0,
+      "appHash": "43D54FF99601D72B5DFEB345D1154BE48E8D27B4A29FC9618A356737ACDA7432",
+      "quorumHash": "00000000000000040F62FD55ED4AA8F9B84BEB098C0513A6CDB664D20DA9C575"
+    },
+    "proTxInfo": {
+      "type": "Evo",
+      "collateralHash": "26884e91650f25d10ea5db7bfcaadbb3287b2c938bed161b1731a3aaf97cbbde",
+      "collateralIndex": 1,
+      "collateralAddress": "XwFmpCMWvJ1zmtKR3xSt47jVF3wEPdfVNa",
+      "operatorReward": 0,
+      "confirmations": 666091,
+      "state": {
+        "version": 2,
+        "service": "157.90.238.161:9999",
+        "addresses": {
+          "core_p2p": ["157.90.238.161:9999"],
+          "platform_https": ["157.90.238.161:443"],
+          "platform_p2p": ["157.90.238.161:26656"]
+        },
+        "registeredHeight": 2477921,
+        "lastPaidHeight": 2571986,
+        "consecutivePayments": 0,
+        "PoSePenalty": 0,
+        "PoSeRevivedHeight": -1,
+        "PoSeBanHeight": -1,
+        "revocationReason": 0,
+        "ownerAddress": "Xy8ccovmazpycKmq92gMNFUez5nZrJ14F1",
+        "votingAddress": "XawU5FysouNNCqkhoXDCTCN7qQmSHjoiMW",
+        "platformNodeID": "41a55d227b75911d1e0bccf825a82b8269f4ebe0",
+        "platformP2PPort": 26656,
+        "platformHTTPPort": 443,
+        "payoutAddress": "XxUscBv7sGpUZcDRxJiQtAdncbWWmuciZp",
+        "pubKeyOperator": "85101d68fb5c7e00dff9b9526b227f8fe22dd1e2a004a5ea46757322714b7855ba3837f57514881638f1d3e665a5a5d1"
+      }
+    },
+    "identity": "6q9zFdyYRJEkHoEZkXMGp2sRPNY4N9tnevLtLdVfZwtn",
+    "identityBalance": "196345891",
+    "epochInfo": {
+      "number": 88,
+      "firstBlockHeight": "467862",
+      "firstCoreBlockHeight": 2569070,
+      "startTime": 1794174796794,
+      "feeMultiplier": "1000",
+      "endTime": 1794178396794,
+      "totalBlocksInEpoch": null,
+      "totalProcessingFees": null,
+      "totalDistributedStorageFees": null,
+      "totalCreatedStorageFees": null,
+      "coreBlockRewards": null,
+      "blockProposers": null
+    },
+    "totalReward": 13059974213711,
+    "epochReward": 724472690525,
+    "withdrawalsCount": 6,
+    "lastWithdrawal": "1B60A9460B6B0E95E5E212E3AE0D1A72B4B5E78C631D9BDA329DF2BB5CCB1131",
+    "lastWithdrawalTime": "2026-11-11T12:23:12.506Z",
+    "endpoints": {
+      "coreP2PPortStatus": {
+        "host": "157.90.238.161",
+        "port": 9999,
+        "status": "OK",
+        "message": null
+      },
+      "platformP2PPortStatus": {
+        "host": "157.90.238.161",
+        "port": 26656,
+        "status": "OK",
+        "message": null
+      },
+      "platformGrpcPortStatus": {
+        "host": "157.90.238.161",
+        "port": 443,
+        "status": "OK",
+        "message": null
+      }
+    },
+    "geoIpInfo": {
+      "ipv4": "157.90.238.161",
+      "countryCode": "DE",
+      "city": "Nuremberg",
+      "latitude": 49.45429992675781,
+      "longitude": 11.074600219726562
+    },
+    "registeredAt": "2026-05-26T15:24:37.000Z",
+    "votingIdentity": "5eBL7sZkfVrTdYGWUZhaLy51BhsdDNSTRusfRWFHxpBS",
+    "votingIdentityBalance": "0",
+    "poseScoreMax": 2994,
+    "blocksUntilCorePayment": 1501,
+    "registeredCoreBlockHash": "000000000000000b7fb7ba5c789bfea1e5cff35b511c4b6e6c1e6f8eaf8443ed",
+    "lastPaidCoreBlockHash": "0000000000000000cb20e9619a5d382baf9ad228223a9ac1bd2f7c8c6519905c",
+    "poseRevivedCoreBlockHash": null,
+    "poseBanCoreBlockHash": null,
+    "coreYieldPerYear": 71.41165404632933,
+    "coreTipTime": "2026-11-15T05:16:02.000Z",
+    "coreBlockIntervalMs": 157698
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/validator/0faa7a17fed7dd609d4920972ee9b2e45f1ed1361add7f4ea16a9d734c9851d3"
+  },
+  "recordedAt": "2026-11-13T09:49:11.952Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "proTxHash": "0FAA7A17FED7DD609D4920972EE9B2E45F1ED1361ADD7F4EA16A9D734C9851D3",
+    "isActive": false,
+    "proposedBlocksAmount": 605,
+    "lastProposedBlockHeader": {
+      "hash": "BFC35C15D8E42C401785BECE17C1887B1141FF705D5459D9D5E3235DFFE2D57D",
+      "height": 470790,
+      "timestamp": "2026-11-13T18:25:19.886Z",
+      "blockVersion": 14,
+      "appVersion": 14,
+      "l1LockedHeight": 2571723,
+      "validator": "0FAA7A17FED7DD609D4920972EE9B2E45F1ED1361ADD7F4EA16A9D734C9851D3",
+      "totalGasUsed": 0,
+      "appHash": "A8D2071F2C2D2B2FC3AF01768CA10B31AF920A0971E0F320AE027305A1A4E819",
+      "quorumHash": "000000000000002F59831EC133C314937929B0BE61BCF60E1CC303A925BFA21B"
+    },
+    "proTxInfo": {
+      "type": "Evo",
+      "collateralHash": "3ef492734214266d7dd1dcb4082df82076e84b343d81d0509455147358f5e565",
+      "collateralIndex": 1,
+      "collateralAddress": "XsEiYMCWtg4KevQFhGG8HHdt3uJjNw6CvJ",
+      "operatorReward": 0,
+      "confirmations": 206393,
+      "state": {
+        "version": 2,
+        "service": "142.44.136.69:9999",
+        "addresses": {
+          "core_p2p": ["142.44.136.69:9999"],
+          "platform_https": ["142.44.136.69:443"],
+          "platform_p2p": ["142.44.136.69:26656"]
+        },
+        "registeredHeight": 2366137,
+        "lastPaidHeight": 2571711,
+        "consecutivePayments": 0,
+        "PoSePenalty": 1909,
+        "PoSeRevivedHeight": 2479671,
+        "PoSeBanHeight": -1,
+        "revocationReason": 0,
+        "ownerAddress": "XewozAfj57WNCXxUBsBbTKf9wjVHY9aWDL",
+        "votingAddress": "XgrX9ztrU6qhrK9LRTXB2T5iRXxzCLUP6N",
+        "platformNodeID": "1c5e9b2467d2ceaa20701a6c3e4ef7d9edb9b4df",
+        "platformP2PPort": 26656,
+        "platformHTTPPort": 443,
+        "payoutAddress": "XmiixP3LcEgWEfMvhnf6G3WhGWtBYxeM4f",
+        "pubKeyOperator": "9396503e92018126cf953be87567006130b716b4736ceb140a0637c5515ec666bd4b2bbceeb5ae7219c7d57d51f25f5c"
+      }
+    },
+    "identity": "249tPvsykiMbd5fwMre3b5VFFYj2psJGV9uo8XVRNwNr",
+    "identityBalance": "504341914",
+    "epochInfo": {
+      "number": 88,
+      "firstBlockHeight": "467862",
+      "firstCoreBlockHeight": 2569070,
+      "startTime": 1794174796794,
+      "feeMultiplier": "1000",
+      "endTime": 1794178396794,
+      "totalBlocksInEpoch": null,
+      "totalProcessingFees": null,
+      "totalDistributedStorageFees": null,
+      "totalCreatedStorageFees": null,
+      "coreBlockRewards": null,
+      "blockProposers": null
+    },
+    "totalReward": 29478389220254,
+    "epochReward": 610082265705,
+    "withdrawalsCount": 24,
+    "lastWithdrawal": "21F227A177AE653A5FB627680262A6F44887EC8434EED38E11F431C5A4CB10E5",
+    "lastWithdrawalTime": "2026-11-08T22:47:38.349Z",
+    "endpoints": {
+      "coreP2PPortStatus": {
+        "host": "142.44.136.69",
+        "port": 9999,
+        "status": "OK",
+        "message": null
+      },
+      "platformP2PPortStatus": {
+        "host": "142.44.136.69",
+        "port": 26656,
+        "status": "OK",
+        "message": null
+      },
+      "platformGrpcPortStatus": {
+        "host": "142.44.136.69",
+        "port": 443,
+        "status": "OK",
+        "message": null
+      }
+    },
+    "geoIpInfo": {
+      "ipv4": "142.44.136.69",
+      "countryCode": "CA",
+      "city": "Montreal (Ville-Marie)",
+      "latitude": 45.502899169921875,
+      "longitude": -73.57230377197266
+    },
+    "registeredAt": "2025-11-03T17:27:16.000Z",
+    "votingIdentity": "4FPm1J3TiAowb7iwg6XK7cc6HSpnEGQe3UfGBuNajqAk",
+    "votingIdentityBalance": "0",
+    "poseScoreMax": 2994,
+    "blocksUntilCorePayment": 1229,
+    "registeredCoreBlockHash": "000000000000001d789cd69520a1162effee63790fe8eb26aa6878c0dbcdee9f",
+    "lastPaidCoreBlockHash": "00000000000000182a64242ff60a88af4006e83365fb9a7e5b6709d2a26323d6",
+    "poseRevivedCoreBlockHash": "000000000000000d72b224d776b2131da67b946311650f64a418dd8313d22152",
+    "poseBanCoreBlockHash": null,
+    "coreYieldPerYear": 71.41165404632933,
+    "coreTipTime": "2026-11-15T05:16:02.000Z",
+    "coreBlockIntervalMs": 157698
+  }
+}
