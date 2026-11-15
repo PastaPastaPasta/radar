@@ -68,7 +68,12 @@ const modified = (_body: unknown, res: Response) => lastModifiedMs(res)
 interface Crawl {
   id: number | null
   finished: number
+  /** When a document last told us about the latest crawl. */
+  checkedAt: number
 }
+
+/** Radar crawls about every five minutes; a crawl time older than this is asked for again. */
+const CRAWL_RECHECK_MS = 5 * 60_000
 
 /** The newest crawl each network's documents have named: every crawl-derived stamp carries its finish time. */
 const crawls = new Map<NetworkId, Crawl>()
@@ -82,15 +87,19 @@ export function forgetCrawls(): void {
 function noteCrawl(net: NetworkId, id: number | null | undefined, finished: number | null): void {
   if (finished === null) return
   const had = crawls.get(net)
-  if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished })
+  const checkedAt = Date.now()
+  if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished, checkedAt })
+  else had.checkedAt = checkedAt
 }
 
 /**
- * The finish time of `net`'s latest crawl. Radar's status says it when no document has yet; one read serves them all.
+ * The finish time of `net`'s latest crawl. Radar's status says it when no document has, or none has for a while; one
+ * read serves them all.
  * The read is not tied to a caller's signal: one query unmounting must not cancel the time the others are waiting on.
  */
 async function crawlOf(net: NetworkId): Promise<Crawl | undefined> {
-  if (!crawls.has(net)) {
+  const had = crawls.get(net)
+  if (!had || Date.now() - had.checkedAt > CRAWL_RECHECK_MS) {
     let read = crawlReads.get(net)
     if (!read) {
       read = radar.status(undefined, net).then(

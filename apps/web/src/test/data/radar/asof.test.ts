@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
@@ -222,6 +222,35 @@ describe('every document the crawl built carries the crawl’s finish time', () 
     )
     const out = await radar.changes('testnet')
     expect(out.asOf).toBe(status.networks.testnet.crawl.last_finished * 1000)
+  })
+
+  it('asks the status again once the crawl time is older than a crawl @W2-13', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { testnet: { crawl: { last_finished: number } } }
+    }>('radar', 'global', 'status')
+    const first = status.networks.testnet.crawl.last_finished
+    let finished = first
+    server.use(
+      http.get(`${BASE}/status`, () => {
+        const body = structuredClone(status)
+        body.networks.testnet.crawl.last_finished = finished
+        return HttpResponse.json(body)
+      }),
+      http.get(`${BASE}/testnet/changes`, () => HttpResponse.json({ since: 1, changes: [] })),
+    )
+    vi.useFakeTimers({ toFake: ['Date'] })
+    try {
+      vi.setSystemTime(first * 1000 + 60_000)
+      expect((await radar.changes('testnet')).asOf).toBe(first * 1000)
+      finished = first + 300
+      vi.setSystemTime(first * 1000 + 2 * 60_000)
+      expect((await radar.changes('testnet')).asOf, 'within a crawl').toBe(first * 1000)
+      vi.setSystemTime(first * 1000 + 7 * 60_000)
+      expect((await radar.changes('testnet')).asOf, 'a crawl later').toBe(finished * 1000)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('keeps its own stamp when the crawl is unknown', async () => {
