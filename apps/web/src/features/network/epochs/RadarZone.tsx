@@ -79,24 +79,24 @@ function Rewards({ query }: { query: PlatformQuery }) {
         <Stats>
           <Stat
             label={t`Pool so far`}
-            value={<Amount value={doc.now.pool_so_far} kind="credits" />}
+            value={<Amount value={doc.now.pool_so_far} kind="credits" compact />}
             layer="network"
           />
           <Stat
             label={t`Last pool`}
-            value={last ? <Amount value={last.pool} kind="credits" /> : '—'}
+            value={last ? <Amount value={last.pool} kind="credits" compact /> : '—'}
             note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
             layer="network"
           />
           <Stat
             label={t`Per block`}
-            value={last ? <Amount value={last.per_block} kind="credits" /> : '—'}
+            value={last ? <Amount value={last.per_block} kind="credits" compact /> : '—'}
             note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
             layer="network"
           />
           <Stat
             label={t`Median monthly earnings`}
-            value={<Amount value={doc.returns.median_monthly} kind="credits" />}
+            value={<Amount value={doc.returns.median_monthly} kind="credits" compact />}
             note={t`Per evonode, over ${formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })} days`}
             layer="network"
           />

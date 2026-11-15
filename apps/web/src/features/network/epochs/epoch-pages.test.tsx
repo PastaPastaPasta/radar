@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
+import { sdk } from '@/data/sdk/client'
 import { writeSourceMode } from '@/lib/source-mode'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
@@ -51,7 +52,7 @@ describe('Epochs', () => {
     expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
   })
 
-  it('gives the pool as an exact amount, not as 1.5k @RA-60', async () => {
+  it('gives the pool in the same short form as Platform, with the unit on the figure @RA-60', async () => {
     const doc = await fixtureBody<{ now: { pool_so_far: number } }>('radar', 'mainnet', 'platform')
     server.use(
       http.get('*/mainnet/platform', () =>
@@ -60,8 +61,10 @@ describe('Epochs', () => {
     )
     renderAt('/epochs')
     const rewards = await card('rewards')
-    await waitFor(() => expect(rewards).toHaveTextContent('Pool so far1,502.'))
-    expect(rewards).not.toHaveTextContent(/\dk\s*DASH/)
+    await waitFor(() =>
+      expect(rewards.querySelector('[data-amount]')?.textContent).toBe('1.5k\u00a0DASH'),
+    )
+    expect(rewards).not.toHaveTextContent('1,502.')
   })
 
   it('does not call an epoch complete once it has run past its expected end @RA-60 @NX-50', async () => {
@@ -249,8 +252,54 @@ describe('Protocol', () => {
     expect(vote).not.toHaveTextContent('Still needed')
     const tally = await card('tally')
     await waitFor(() => expect(rows(tally)).toHaveLength(1))
-    expect(tally).toHaveTextContent(/have a vote on record, and the shares are of those/)
+    const sub = tally.querySelector('.rx-card__sub')?.textContent ?? ''
+    const ofEnabled = /([\d,]+) of the ([\d,]+) enabled/.exec(sub)
+    if (ofEnabled) {
+      const voters = Number(ofEnabled[1]!.replaceAll(',', ''))
+      const enabled = Number(ofEnabled[2]!.replaceAll(',', ''))
+      expect(voters).toBeLessThanOrEqual(enabled)
+    } else {
+      expect(sub).toMatch(/no longer enabled/)
+    }
     expect(vote).toHaveTextContent(/Reported by \d+ of \d+ evonodes/)
+  })
+
+  it('shows pending votes and how many are still needed while a vote is live', async () => {
+    const original = sdk.call.bind(sdk)
+    const spy = vi.spyOn(sdk, 'call').mockImplementation(async (net, method, args, signal) => {
+      if (method === 'protocol.versionUpgradeState') {
+        return {
+          source: 'sdk' as const,
+          asOf: Date.now(),
+          fetchedAt: Date.now(),
+          proved: false,
+          height: 470554,
+          data: {
+            currentProtocolVersion: 14,
+            nextProtocolVersion: 15,
+            voteCount: 100n,
+          },
+        }
+      }
+      return original(net, method, args, signal)
+    })
+    try {
+      renderAt('/protocol')
+      const vote = await card('vote')
+      await waitFor(() => expect(vote).toHaveTextContent('Pending votes263'))
+      expect(vote).toHaveTextContent('Still needed144')
+      expect(vote).toHaveTextContent('v15')
+    } finally {
+      spy.mockRestore()
+    }
+  })
+
+  it('does not say testnet reported more next-epoch versions than it has enabled evonodes', async () => {
+    renderAt('/protocol?network=testnet')
+    const vote = await card('vote')
+    await waitFor(() => expect(vote).toHaveTextContent('Activation threshold'))
+    expect(vote).toHaveTextContent('more than the 42 enabled now')
+    expect(vote).not.toHaveTextContent('43 of 42')
   })
 
   it('states the rule where Radar is off, with one notice @RA-61', async () => {
