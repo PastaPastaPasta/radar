@@ -85,14 +85,16 @@ function rewriteAxis(axis: Axis, ticks: readonly number[], digits: number): Axis
   }
 }
 
-function mapAxes(
-  axis: EChartsOption['yAxis'],
-  ticks: readonly number[],
-  digits: number,
-): EChartsOption['yAxis'] {
-  if (!axis) return axis
-  if (Array.isArray(axis)) return axis.map((item) => rewriteAxis(item, ticks, digits))
-  return rewriteAxis(axis, ticks, digits)
+function isAxis(value: unknown): value is Axis {
+  return typeof value === 'object' && value !== null
+}
+
+function mapAxes(axis: unknown, ticks: readonly number[], digits: number): unknown {
+  if (Array.isArray(axis)) {
+    const items: unknown[] = Array.from(axis)
+    return items.map((item) => (isAxis(item) ? rewriteAxis(item, ticks, digits) : item))
+  }
+  return isAxis(axis) ? rewriteAxis(axis, ticks, digits) : axis
 }
 
 /**
@@ -110,9 +112,8 @@ export function withDistinctCompactAxes(option: EChartsOption): EChartsOption {
   const yAxis = mapAxes(option.yAxis, ticks, digits)
   const xAxis = mapAxes(option.xAxis, ticks, digits)
   if (yAxis === option.yAxis && xAxis === option.xAxis) return option
-  return {
-    ...option,
-    ...(yAxis === option.yAxis ? {} : { yAxis }),
-    ...(xAxis === option.xAxis ? {} : { xAxis }),
-  }
+  const next: EChartsOption = { ...option }
+  if (yAxis !== option.yAxis) next.yAxis = yAxis as EChartsOption['yAxis']
+  if (xAxis !== option.xAxis) next.xAxis = xAxis as EChartsOption['xAxis']
+  return next
 }
