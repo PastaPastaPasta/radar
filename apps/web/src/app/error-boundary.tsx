@@ -21,6 +21,21 @@ export const isChunkFailure = (error: Error): boolean =>
 const isOffline = (error: Error): boolean =>
   (typeof navigator !== 'undefined' && !navigator.onLine) || isChunkFailure(error)
 
+/**
+ * The router reloads the page once when a page's code fails to load. Offline, that reload ends on the browser's own
+ * error page, so the failure is marked as already tried and the offline notice shows instead.
+ */
+export function keepPageWhenOffline(event: Event): void {
+  const error = (event as Event & { payload?: unknown }).payload
+  if (navigator.onLine || !(error instanceof Error)) return
+  try {
+    sessionStorage.setItem(`tanstack_router_reload:${error.message}`, '1')
+  } catch {
+    // Storage blocked: the router's reload goes ahead.
+  }
+}
+if (typeof window !== 'undefined') window.addEventListener('vite:preloadError', keepPageWhenOffline)
+
 /** A failed chunk is not fetched again by React or the router, so that page starts over. */
 function recover(error: Error, reset: () => void): void {
   if (isChunkFailure(error)) window.location.reload()

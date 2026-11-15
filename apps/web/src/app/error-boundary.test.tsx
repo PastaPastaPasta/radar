@@ -91,3 +91,26 @@ describe('the page error boundary', () => {
     expect(screen.getByRole('status')).toHaveTextContent('This page couldn’t be loaded')
   })
 })
+
+describe('a page whose code fails to load offline @NX-77', () => {
+  const failedImport = (message: string) =>
+    Object.assign(new Event('vite:preloadError', { cancelable: true }), {
+      payload: new TypeError(message),
+    })
+  const KEY = 'tanstack_router_reload:Failed to fetch dynamically imported module: /assets/x.js'
+
+  afterEach(() => {
+    sessionStorage.clear()
+  })
+
+  it('stops the router from reloading into the browser error page', () => {
+    setOnline(false)
+    window.dispatchEvent(failedImport('Failed to fetch dynamically imported module: /assets/x.js'))
+    expect(sessionStorage.getItem(KEY)).toBe('1')
+  })
+
+  it('lets the router reload once while online, when a newer build replaced the file', () => {
+    window.dispatchEvent(failedImport('Failed to fetch dynamically imported module: /assets/x.js'))
+    expect(sessionStorage.getItem(KEY)).toBeNull()
+  })
+})
