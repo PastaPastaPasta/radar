@@ -100,7 +100,7 @@ test.describe('Epochs', () => {
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     await expect(upcoming.locator('a[href^="/mn/"]').first()).toBeVisible()
     await expect(sourceLineOf(upcoming).locator('[data-source="radar"]').first()).toBeVisible()
-    await expect(upcoming.locator('tbody tr').first()).toContainText(/\+1\b/)
+    await expect(upcoming.locator('tbody tr').first()).toContainText(/\+1(?!\d)/)
     await expect(upcoming.locator('tbody')).not.toContainText(/\bago\b/)
     if (!isPhone(page)) {
       await expect(upcoming.getByRole('columnheader', { name: 'Blocks away' })).toBeVisible()
@@ -275,7 +275,10 @@ test.describe('Protocol', () => {
     await expect(vote.locator('.rx-meter__mark')).toBeVisible()
     await expect(vote.getByText('Activation threshold', { exact: true })).toBeVisible()
     await expect(vote).toContainText(/244 of 363 evonodes \(67%\)/)
-    await expect(vote.getByText('Pending votes', { exact: true })).toBeVisible()
+    await expect(
+      vote.getByText('Pending votes', { exact: true }),
+      'nothing is proposed',
+    ).toHaveCount(0)
     await expect(vote.getByText('Candidate version', { exact: true })).toBeVisible()
     await expect(sourceLineOf(vote).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)

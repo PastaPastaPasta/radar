@@ -133,9 +133,11 @@ test.describe('Network census', () => {
     }
     const value = async (name: RegExp) =>
       Number((await figure(page, name).locator('.rx-stat__value').innerText()).replace(/,/g, ''))
+    const filters = () => new URL(page.url()).searchParams
 
+    // The DAPI list gives both these figures and the list, so their counts can be compared here.
     await openNodes(page)
-    for (const name of [/^Reachable masternodes/, /^Enabled/, /^PoSe-banned/]) {
+    for (const name of [/^Enabled/, /^PoSe-banned/]) {
       const n = await value(name)
       await figure(page, name).click()
       await expect(page.locator('.rx-activef').first()).toContainText('match')
@@ -144,23 +146,30 @@ test.describe('Network census', () => {
       await expect(card(page, 'now')).toBeVisible()
     }
 
-    await openNodes(page, '?scope=mn')
-    const reach = card(page, 'reach')
-    const silent = Number(/([\d,]+) didn't\./.exec(await reach.innerText())![1]!.replace(/,/g, ''))
-    await reach.getByRole('link', { name: 'See which' }).click()
+    // The crawl's figures count enabled masternodes, so each link carries that filter. The recorded crawl list is a
+    // 150-node sample of the crawl the figures count, so here only the filters are checked; the link builders' unit
+    // test checks that the list then counts what the figure counts.
+    await figure(page, /^Reachable masternodes/).click()
     await expect(page.locator('.rx-activef').first()).toContainText('match')
-    expect(await matched(), 'See which').toBe(silent)
+    expect(filters().get('reach')).toBe('reachable')
+    expect(filters().get('status')).toBe('enabled')
 
-    for (const [id, link] of [
-      ['hosting', 'a'],
-      ['countries', 'a'],
+    await openNodes(page, '?scope=mn')
+    await card(page, 'reach').getByRole('link', { name: 'See which' }).click()
+    await expect(page.locator('.rx-activef').first()).toContainText('match')
+    expect(filters().get('reach')).toBe('unreachable')
+    expect(filters().get('status')).toBe('enabled')
+
+    for (const [id, key] of [
+      ['hosting', 'host'],
+      ['countries', 'country'],
     ] as const) {
-      await openNodes(page, '?scope=mn')
-      const first = card(page, id).locator('[data-ranked] li').first()
-      const n = Number((await first.locator('span').nth(1).innerText()).replace(/,/g, ''))
-      await first.locator(link).click()
+      await openNodes(page, '?scope=evo')
+      await card(page, id).locator('[data-ranked] li').first().locator('a').click()
       await expect(page.locator('.rx-activef').first()).toContainText('match')
-      expect(await matched(), id).toBe(n)
+      expect(filters().get(key), id).toBeTruthy()
+      expect(filters().get('status'), id).toBe('enabled')
+      expect(filters().get('type'), id).toBe('evo')
     }
   })
 
@@ -389,25 +398,35 @@ test.describe('Network census', () => {
     await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })
 
-  test('warns when the crawl is older than 45 minutes and not before, and shows the tip and crawl age @RA-12', async ({
+  test('warns once the crawl is old enough for its stamps to turn amber (20 minutes), and not before, and shows the tip and crawl age @RA-12', async ({
     page,
   }) => {
-    await openNodes(page, '', 44 * MIN)
+    await openNodes(page, '', 19 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toHaveCount(0)
     await page.clock.fastForward(2 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toBeVisible()
     await expect(census(page).locator('[data-stale-crawl]')).toContainText('The crawl is stale')
-    await expect(census(page).locator('[data-stale-crawl]')).toContainText('46 min ago')
+    await expect(census(page).locator('[data-stale-crawl]')).toContainText('21 min ago')
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
 
     await page.goto('/')
     const crawled = page.locator('.rx-hero [data-section-sources] [data-source="radar"]')
-    await expect(crawled).toContainText(/Crawled by Radar\s*4\d min(utes)? ago/)
+    await expect(crawled).toContainText(/Crawled by Radar\s*2\d min(utes)? ago/)
     await expect(crawled, 'a stale crawl shows as stale in the hero line').toHaveAttribute(
       'data-state',
       'stale',
     )
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
+  })
+
+  test('gives the page one crawl time: the crawl’s, not the older speed test’s @RA-12', async ({
+    page,
+  }) => {
+    await openNodes(page)
+    const iso = new Date(crawlFinished('mainnet')).toISOString().replace(/\.\d{3}Z$/, 'Z')
+    await expect(census(page).locator('[data-source="radar"]').first()).toHaveAccessibleName(
+      new RegExp(`As of ${iso}`),
+    )
   })
 
   test('gives every section a copy-link control and scrolls to a shared section @RA-13', async ({

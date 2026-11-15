@@ -1,5 +1,6 @@
 import type { Page, TestInfo } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
+import { pinClockAfterCrawl } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { CLAIM } from '../routes/claims'
@@ -11,6 +12,7 @@ test.describe('Masternode list changes', () => {
   test('lists the latest changes with their time, block, masternode and a coloured badge @RA-80', async ({
     page,
   }, info) => {
+    await pinClockAfterCrawl(page, 3 * 60_000)
     await page.goto('/changes')
     await expect(page.getByRole('heading', { level: 1, name: CLAIM.changes })).toBeVisible()
     await expect(rows(page).first()).toBeVisible()
