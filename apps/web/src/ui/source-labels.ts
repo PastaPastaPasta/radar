@@ -39,6 +39,11 @@ const QUIET_AGE_MS: Record<SourceId, number> = {
   local: Infinity,
 }
 
+/** The age past which a reading from `source` shows as out of date: the source's quiet age or the stamp's own limit. */
+export function staleAgeMs(source: SourceId, staleAfterMs = 0): number {
+  return Math.max(staleAfterMs, QUIET_AGE_MS[source])
+}
+
 /** An index this far behind the chain says so in the visible line; one block behind is the index doing its work. */
 const LAG_BLOCKS_SHOWN = 2
 const LAG_MS_SHOWN = 5 * MIN
@@ -146,12 +151,12 @@ function assertStamp(stamp: SourceStamp): void {
 }
 
 /**
- * The stamp dated by when its data was true. Once live updates have stopped, nothing DAPI pushed can be newer than
- * the last thing that arrived, so a pushed figure's age keeps counting from there instead of from a stamp renewed on
- * the page.
+ * The stamp dated by when its data was true. Once live updates have stopped, nothing the stream pushed can be newer
+ * than the last thing that arrived, so a pushed figure's age keeps counting from there instead of from a stamp renewed
+ * on the page. A figure a request just returned keeps its own age.
  */
 function datedByLive(stamp: SourceStamp, live: LiveConnection | undefined): SourceStamp {
-  if (stamp.source !== 'dapi' || live?.state !== 'stopped' || live.lastEventAt === undefined) {
+  if (!stamp.pushed || live?.state !== 'stopped' || live.lastEventAt === undefined) {
     return stamp
   }
   return live.lastEventAt < stamp.asOf ? { ...stamp, asOf: live.lastEventAt } : stamp
@@ -174,7 +179,7 @@ export function sourceView(
     (stamp.fallback === 'dapi-down' ||
       health.state === 'stale' ||
       health.state === 'degraded' ||
-      ageMs > Math.max(stamp.staleAfterMs ?? 0, QUIET_AGE_MS[stamp.source]))
+      ageMs > staleAgeMs(stamp.source, stamp.staleAfterMs))
   const lag = shownLag(stamp, health)
 
   const proof = stamp.source === 'sdk' && stamp.proved && !stamp.fallback

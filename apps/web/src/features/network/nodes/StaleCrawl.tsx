@@ -5,6 +5,7 @@ import { staleAfterMs } from '@/data/query/stale'
 import type { RadarStatus, RadarSummary } from '@/data/radar/schemas'
 import type { NetworkId } from '@/lib/network'
 import { Time, useNow } from '@/ui'
+import { staleAgeMs } from '@/ui/source-labels'
 import { Notice } from './parts'
 
 /** When the crawl behind the page's figures finished: the summary's own crawl first, Radar's status as a fallback. */
@@ -33,7 +34,8 @@ export function StaleCrawl({
   const { t } = useLingui()
   const now = useNow()
   const finished = lastCrawlMs(net, status.data, summary.data)
-  if (finished === undefined || now - finished <= staleAfterMs('crawl')) return null
+  if (finished === undefined || now - finished <= staleAgeMs('radar', staleAfterMs('crawl')))
+    return null
   return (
     <Notice tone="warn" data-stale-crawl>
       <b>{t`The crawl is stale.`}</b> {t`Radar's last crawl finished`}{' '}

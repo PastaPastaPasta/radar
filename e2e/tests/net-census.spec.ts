@@ -382,20 +382,20 @@ test.describe('Network census', () => {
     await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })
 
-  test('warns once the crawl is old enough for its stamps to turn amber (20 minutes), and not before, and shows the tip and crawl age @RA-12', async ({
+  test('warns once the crawl is old enough for its stamps to turn amber (30 minutes), and not before, and shows the tip and crawl age @RA-12', async ({
     page,
   }) => {
-    await openNodes(page, '', 19 * MIN)
+    await openNodes(page, '', 29 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toHaveCount(0)
     await page.clock.fastForward(2 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toBeVisible()
     await expect(census(page).locator('[data-stale-crawl]')).toContainText('The crawl is stale')
-    await expect(census(page).locator('[data-stale-crawl]')).toContainText('21 min ago')
+    await expect(census(page).locator('[data-stale-crawl]')).toContainText('31 min ago')
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
 
     await page.goto('/')
     const crawled = page.locator('.rx-hero [data-section-sources] [data-source="radar"]')
-    await expect(crawled).toContainText(/Crawled by Radar\s*2\d min(utes)? ago/)
+    await expect(crawled).toContainText(/Crawled by Radar\s*3\d min(utes)? ago/)
     await expect(crawled, 'a stale crawl shows as stale in the hero line').toHaveAttribute(
       'data-state',
       'stale',
