@@ -47,7 +47,7 @@ export const PeValidatorSchema = z.object({
     .record(
       z.string(),
       z.object({
-        host: z.string(),
+        host: z.string().nullish(),
         port: z.number(),
         status: z.string(),
         message: z.string().nullish(),
