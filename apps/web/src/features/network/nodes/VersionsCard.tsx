@@ -114,6 +114,7 @@ export function VersionsCard({
       ...flat.filter((r) => r.folded === undefined).map((r) => r.key),
       ...shares.map((s) => s.key),
     ].filter((key) => isRelease(book, key)),
+    !census.releases.isLoading,
   )
   const slices: Slice[] = [
     ...flat

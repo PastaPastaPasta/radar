@@ -1,8 +1,15 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { EChartsOption } from 'echarts'
-import { SeriesSlots, seriesSwatches, withSeriesColors, withTokenColors } from './series'
+import {
+  SeriesSlots,
+  seriesSwatches,
+  useSeriesSlots,
+  withSeriesColors,
+  withTokenColors,
+} from './series'
 
 const SLOTS = ['#1', '#2', '#3', '#4', '#5', '#6']
 
@@ -130,6 +137,24 @@ describe('withTokenColors', () => {
       ],
     } as EChartsOption
     expect(withTokenColors(option, read)).toBe(option)
+  })
+})
+
+describe('useSeriesSlots', () => {
+  it('assigns nothing until the keys are in their settled order, so a load race never picks the colours @W2-40', () => {
+    const { result, rerender } = renderHook(
+      ({ keys, ready }: { keys: string[]; ready: boolean }) => useSeriesSlots(keys, ready),
+      { initialProps: { keys: ['b', 'x', 'a'], ready: false } },
+    )
+    expect(result.current('b')).toBeUndefined()
+    rerender({ keys: ['a', 'b'], ready: true })
+    expect([result.current('a'), result.current('b'), result.current('x')]).toEqual([
+      1,
+      2,
+      undefined,
+    ])
+    rerender({ keys: ['b', 'a', 'c'], ready: true })
+    expect([result.current('a'), result.current('b'), result.current('c')]).toEqual([1, 2, 3])
   })
 })
 

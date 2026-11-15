@@ -34,10 +34,17 @@ export class SeriesSlots {
   }
 }
 
-/** One set of slots for the life of a component, so a filter or a new reading does not repaint what stays. */
-export function useSeriesSlots(keys: readonly string[]): (key: string) => number | undefined {
+/**
+ * One set of slots for the life of a component, so a filter or a new reading does not repaint what stays. Nothing is
+ * assigned until `ready`: the order of the keys decides the slots, so it has to be the order the page settles on, not
+ * the order of a half-loaded one.
+ */
+export function useSeriesSlots(
+  keys: readonly string[],
+  ready = true,
+): (key: string) => number | undefined {
   const [slots] = useState(() => new SeriesSlots())
-  slots.assign(keys)
+  if (ready) slots.assign(keys)
   return (key) => slots.slot(key)
 }
 
