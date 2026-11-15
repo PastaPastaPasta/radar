@@ -1,10 +1,15 @@
 import { useLingui } from '@lingui/react/macro'
+import { useQuery } from '@tanstack/react-query'
 import { useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
-import { PageFrame } from '@/features/entity'
+import { radarQueries } from '@/data/radar/queries'
+import { PageFrame, useNetwork } from '@/features/entity'
+import { isDevnet } from '@/lib/network'
 import { announce, Copy, Icon } from '@/ui'
 import { copyText } from '@/ui/clipboard'
+import { useSectionSource } from '@/ui/section-source'
 import {
   API_ORIGIN,
   CURL_EXAMPLES,
@@ -29,6 +34,7 @@ export function ApiPage() {
       lede={t`Everything Radar shows comes from these JSON endpoints. No key is needed, CORS is open and responses are cached for 60 seconds.`}
     >
       <div className="grid min-w-0 gap-6">
+        <CrawlAge />
         <div className="grid gap-2" data-api-intro>
           <p className="rx-note" data-api-unchanged>
             {t`The API URLs are unchanged: https://radar.dashhq.org/api/v1/* returns the same documents as before.`}
@@ -75,6 +81,22 @@ export function ApiPage() {
       </div>
     </PageFrame>
   )
+}
+
+/** The header already shows the Core tip. This adds the crawl's age, the way other Radar pages do. */
+function CrawlAge() {
+  const net = useNetwork()
+  const off = useDecentralizedOnly()
+  const status = useQuery({
+    ...radarQueries.status(net),
+    enabled: !off && !isDevnet(net),
+  })
+  const key = net === 'testnet' ? 'testnet' : 'mainnet'
+  const finished = status.data?.data.networks[key]?.crawl.last_finished
+  useSectionSource(
+    status.data && finished != null ? { ...stampOf(status.data), asOf: finished } : undefined,
+  )
+  return null
 }
 
 function Group({ id, title, endpoints }: { id: string; title: string; endpoints: ApiEndpoint[] }) {

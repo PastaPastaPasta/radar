@@ -3,7 +3,10 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
+import { http, HttpResponse } from 'msw'
 import { coreLive, type LiveTxEvent } from '@/data/core/live'
+import { fixtureBody } from '@/test/fixtures/load'
+import { server } from '@/test/server'
 import { healthRegistry } from '@/data/health'
 import { writeSourceMode } from '@/lib/source-mode'
 import { resetLiveConnection, setLiveConnection } from '@/ui'
@@ -412,26 +415,70 @@ describe('Home page', () => {
     expect(row).not.toHaveTextContent(/ChainLocked/)
   })
 
+  it('the hero badge follows the crawl it sits over', async () => {
+    const summary = await fixtureBody<{ crawl: { finished: number } }>(
+      'radar',
+      'mainnet',
+      'summary',
+    )
+    vi.useFakeTimers({ toFake: ['Date'], now: summary.crawl.finished * 1000 + 60 * 60_000 })
+    try {
+      renderAt('/')
+      const kicker = () => document.querySelector<HTMLElement>('[data-live-word]')!
+      await waitFor(() => expect(kicker()).toHaveTextContent('Behind'))
+      expect(kicker()).toHaveAttribute('data-data', 'stale')
+      expect(kicker()).not.toHaveTextContent('Live')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('qualifies every Live when the connection drops, and recovers @IN-15', async () => {
+    const summary = await fixtureBody<{ crawl: { finished: number } }>(
+      'radar',
+      'mainnet',
+      'summary',
+    )
+    vi.useFakeTimers({ toFake: ['Date'], now: summary.crawl.finished * 1000 + 3 * 60_000 })
+    try {
+      renderAt('/')
+      await coreRow('2,570,085')
+      const kicker = () => document.querySelector<HTMLElement>('[data-live-word]')!
+      const lanes = () => document.querySelector<HTMLElement>('#core .rx-live')!
+      const tip = () => document.querySelector<HTMLElement>('[data-header-tip]')!
+      expect(kicker()).toHaveTextContent('Live')
+      expect(kicker()).toHaveAttribute('data-data', 'fresh')
+      act(() => setLiveConnection({ state: 'reconnecting', lastEventAt: Date.now() }))
+      expect(kicker()).toHaveTextContent('Reconnecting…')
+      expect(lanes()).toHaveTextContent('Reconnecting…')
+      expect(tip()).toHaveTextContent('Reconnecting…')
+      act(() => setLiveConnection({ state: 'stopped', lastEventAt: Date.UTC(2026, 10, 11, 9, 41) }))
+      expect(kicker()).toHaveTextContent(/Stopped since \d\d:\d\d/)
+      expect(lanes()).toHaveTextContent(/Stopped since/)
+      expect(tip()).toHaveTextContent(/Stopped since/)
+      expect(tip()).toHaveAttribute('data-up', 'false')
+      act(() => setLiveConnection({ state: 'live' }))
+      expect(kicker()).toHaveTextContent('Live')
+      expect(lanes()).not.toHaveTextContent(/Stopped|Reconnecting/)
+      expect(tip().querySelector('.rx-hdrtip__state')).toBeNull()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('the Platform badge follows Platform Explorer, not the connection', async () => {
+    server.use(
+      http.get(/pe\.dashhq\.org\/blocks/, () => HttpResponse.error()),
+      http.get(/pe\.dashhq\.org\/transactions/, () => HttpResponse.error()),
+    )
     renderAt('/')
-    await coreRow('2,570,085')
-    const kicker = () => document.querySelector<HTMLElement>('[data-live-word]')!
-    const lanes = () => document.querySelector<HTMLElement>('#core .rx-live')!
-    const tip = () => document.querySelector<HTMLElement>('[data-header-tip]')!
-    expect(kicker()).toHaveTextContent('Live')
-    act(() => setLiveConnection({ state: 'reconnecting', lastEventAt: Date.now() }))
-    expect(kicker()).toHaveTextContent('Reconnecting…')
-    expect(lanes()).toHaveTextContent('Reconnecting…')
-    expect(tip()).toHaveTextContent('Reconnecting…')
-    act(() => setLiveConnection({ state: 'stopped', lastEventAt: Date.UTC(2026, 10, 11, 9, 41) }))
-    expect(kicker()).toHaveTextContent(/Stopped since \d\d:\d\d/)
-    expect(lanes()).toHaveTextContent(/Stopped since/)
-    expect(tip()).toHaveTextContent(/Stopped since/)
-    expect(tip()).toHaveAttribute('data-up', 'false')
-    act(() => setLiveConnection({ state: 'live' }))
-    expect(kicker()).toHaveTextContent('Live')
-    expect(lanes()).not.toHaveTextContent(/Stopped|Reconnecting/)
-    expect(tip().querySelector('.rx-hdrtip__state')).toBeNull()
+    const section = await waitFor(() => {
+      const el = document.getElementById('platform')
+      expect(el).toHaveTextContent(/Platform Explorer isn.t answering/)
+      return el!
+    })
+    expect(section.querySelector('[data-feed="down"]')).toHaveTextContent('Down')
+    expect(section.querySelector('.rx-live')).not.toHaveTextContent('Live')
   })
 
   it('says live updates stopped when the Core connection is down, and offers a retry @IN-15', async () => {
