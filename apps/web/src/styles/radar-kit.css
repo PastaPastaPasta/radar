@@ -75,9 +75,13 @@
 }
 .rx-stat__value .rx-amt {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: baseline;
   max-width: 100%;
+  white-space: nowrap;
+}
+.rx-stat__value .rx-amt .rx-u {
+  flex: none;
 }
 .rx-stat__value .rx-fiat {
   flex-basis: 100%;
@@ -624,6 +628,27 @@ dashhq-footer .rx-ratenote {
 }
 .rx-tablescroll[data-wide] .rx-table th {
   position: static;
+}
+/* A wide table says so: the first column stays in view, and the right edge fades where columns continue. */
+@media (min-width: 641px) {
+  .rx-tablescroll[data-wide] .rx-table th:first-child,
+  .rx-tablescroll[data-wide] .rx-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--rx-ground, var(--dh-page));
+    box-shadow: 1px 0 0 var(--dh-line);
+  }
+  .rx-tablewrap:has(.rx-tablescroll[data-wide])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    pointer-events: none;
+    background: linear-gradient(to left, var(--rx-ground, var(--dh-page)), transparent);
+  }
 }
 @media (max-width: 1023px) {
   .rx-tablescroll {

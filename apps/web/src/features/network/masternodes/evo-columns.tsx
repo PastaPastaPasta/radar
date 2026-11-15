@@ -22,7 +22,7 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       header: t`Evonode`,
       accessorFn: (e) => e.protx,
       cell: ({ row }) => (
-        <span className="grid gap-1">
+        <span className="rx-evonode">
           <Entity kind="evonode" id={row.original.protx} />
           <span className="rx-sub font-mono">
             {row.original.row.service ?? DASH}
@@ -56,9 +56,11 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       cell: ({ row }) => {
         const block = row.original.validator?.lastProposedBlockHeader
         return block ? (
-          <span className="grid gap-1">
-            <Entity kind="platform-block" id={String(block.height)} />
-            {block.timestamp ? <Time ms={block.timestamp} mode="relative" /> : null}
+          <span
+            className="rx-lastblock"
+            title={block.timestamp ? new Date(block.timestamp).toISOString() : undefined}
+          >
+            <Entity kind="platform-block" id={String(block.height)} copy={false} />
           </span>
         ) : (
           DASH

@@ -335,7 +335,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - Every figure in a stat, tile or KPI is covered by a `SourceLine`: the one line of its section, or of its page when it sits outside a section. A card or figure with neither around it carries its own. Never both.
 - Sequence over density. A page is a column of sections read top to bottom; a section is a sentence of context, then its figures or its list. Do not pack three cards across to save height.
 - No figure twice on a page. If the page head states it, a card below does not.
-- Lists show 8–22 rows before "All … →"; long lists page (§6.7). On a phone a top ten shows its first five (the Platform leaderboards and top proposers, `.rx-phone5`); the card's link leads to the rest.
+- Lists show 8–22 rows before "All … →"; long lists page (§6.7). On a phone a leaderboard shows its first five (`.rx-phone5`); the card's link leads to the rest. Top proposers show all ten, with the rank, the evonode, the blocks and the share visible and no sideways scroll.
 
 ---
 
@@ -442,6 +442,8 @@ Masternode card: nodeprint + IP:port + type tag | Answering; version | country +
 **Proposals** (`/governance`, `.rx-proptable`): the name cell starts 14 px in from the status edge, so the 3 px edge never cuts the first letter. On a phone each proposal is a card: the name and its status on the first line, the amount and the end date on the second, the status edge down the left; the vote columns are left to the proposal's own page and nothing scrolls sideways.
 
 `phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside its own block (never the page), the first column sticky on the page ground with a 1 px right rule, and a 24 px fade on the scrolling edge.
+
+A table that is wider than its box at desktop does the same (`data-wide` on the scroll box): it scrolls inside the box, the first column stays in view, and a fade on the right edge says there is more. The evonode list uses this, so a column at the right is not cut off with no hint, and sorting a right-hand column does not lose the evonode. A last-block cell is one line, the height in full; its time is the cell's title.
 
 ### 6.8 `Tabs`
 

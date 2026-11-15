@@ -56,6 +56,10 @@ describe('Evonodes on Platform @PE-22', () => {
     const row = within(table).getAllByRole('row')[1]!
     await waitFor(() => expect(row).toHaveTextContent('1,585'))
     expect(row).toHaveTextContent('471,483')
+    expect(row.querySelector('.rx-lastblock time')).toBeNull()
+    expect(row.querySelector('[data-entity="platform-block"] button')).toBeNull()
+    expect(row.querySelector('.rx-evonode')).not.toBeNull()
+    expect(document.querySelector('[class*="overflow-x-auto"]')).toBeNull()
     expect(row).toHaveTextContent('Queued')
   })
 })

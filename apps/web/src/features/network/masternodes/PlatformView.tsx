@@ -175,44 +175,42 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
           title={t`Blocks proposed in total, the last block, rewards and the validator set need Radar and Platform Explorer`}
         />
       )}
-      <div className="min-[1024px]:overflow-x-auto min-[1024px]:[&_th]:static">
-        <DataTable
-          caption={t`Evonodes`}
-          columns={columns}
-          rows={shown}
-          getRowId={(e) => e.protx}
-          rowLink={(e) =>
-            ({ to: '/mn/$protx', params: { protx: e.protx }, search: { tab: 'platform' } }) as never
-          }
-          state={shown.length === 0 ? 'empty' : 'ready'}
-          empty={
-            <Empty
-              kind="no-match"
-              title={t`No evonodes match`}
-              body={t`Clear the filter or search for something else.`}
-            />
-          }
-          sort={{
-            value: search.sort,
-            onChange: (sort) => {
-              controls.sort({ sort })
-            },
-          }}
-          paging={
-            pages > 1
-              ? {
-                  kind: 'page',
-                  page,
-                  limit: EVO_PAGE_SIZE,
-                  total: matching.length,
-                  to: mnPageLink,
-                }
-              : undefined
-          }
-          phone="cards"
-          source={stamps}
-        />
-      </div>
+      <DataTable
+        caption={t`Evonodes`}
+        columns={columns}
+        rows={shown}
+        getRowId={(e) => e.protx}
+        rowLink={(e) =>
+          ({ to: '/mn/$protx', params: { protx: e.protx }, search: { tab: 'platform' } }) as never
+        }
+        state={shown.length === 0 ? 'empty' : 'ready'}
+        empty={
+          <Empty
+            kind="no-match"
+            title={t`No evonodes match`}
+            body={t`Clear the filter or search for something else.`}
+          />
+        }
+        sort={{
+          value: search.sort,
+          onChange: (sort) => {
+            controls.sort({ sort })
+          },
+        }}
+        paging={
+          pages > 1
+            ? {
+                kind: 'page',
+                page,
+                limit: EVO_PAGE_SIZE,
+                total: matching.length,
+                to: mnPageLink,
+              }
+            : undefined
+        }
+        phone="cards"
+        source={stamps}
+      />
     </div>
   )
 }
