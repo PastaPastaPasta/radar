@@ -383,7 +383,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
   })
 
   /**
-   * The lock flags for a block Hyphen served. Hyphen's own lock tag is one source's claim, so it reads as locked only
+   * The lock flags for a block a hosted index served, `indexedTo` being the index's tip. The index's lock tag is one source's claim, so it reads as locked only
    * once a second source agrees; a block deep under Hyphen's index with no claim at all is final by depth.
    */
   function hyphenLockFields(net: NetworkId, height: number, indexedTo: number | undefined) {
@@ -759,6 +759,15 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const tx = await decoder.tx(bytes, net)
     const d = detail?.data
     const height = d?.blockheight ?? undefined
+    const confirmations = height !== undefined ? (d?.confirmations ?? undefined) : undefined
+    const lock =
+      height === undefined
+        ? lockFields('none')
+        : hyphenLockFields(
+            net,
+            height,
+            confirmations !== undefined ? height + confirmations - 1 : undefined,
+          )
     return {
       stamp: raw,
       value: {
@@ -767,10 +776,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         height,
         time: d?.blocktime ?? undefined,
         // Insight's lock flag is not carried: with no lock claim the page says the lock is unknown, not absent.
-        confirmations: height !== undefined ? (d?.confirmations ?? undefined) : undefined,
+        confirmations,
         isInstantLocked: false,
-        isChainLocked: false,
-        chainLockClaim: undefined,
+        isChainLocked: lock.chainLocked,
+        chainLockClaim: lock.chainLockClaim,
       },
     }
   }

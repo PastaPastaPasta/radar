@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createCoreClient } from '@/data/core/client'
 import { createCoreDecoder } from '@/data/core/decode'
+import { instantLockView } from '@/data/core/lock-state'
 import { SourceError, isSourceError } from '@/data/errors'
 import type { HealthState } from '@/data/health'
 import { writeSourceMode } from '@/lib/source-mode'
@@ -81,12 +82,12 @@ const hyphenHasTx = (h: ReturnType<typeof setup>['hyphen']) => {
   )
 }
 
-const insightHasTx = (i: ReturnType<typeof setup>['insight']) => {
+const insightHasTx = (i: ReturnType<typeof setup>['insight'], confirmations = 4) => {
   i.rawTx.mockResolvedValue(sourced('insight', { rawtx }) as never)
   i.tx.mockResolvedValue(
     sourced('insight', {
       blockheight: BLOCK_HEIGHT,
-      confirmations: 4,
+      confirmations,
       blocktime: 1_700_000_000_000,
     }) as never,
   )
@@ -126,6 +127,16 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     expect(tx.data?.txid).toBe(TXID)
     expect(tx.data?.height).toBe(BLOCK_HEIGHT)
     expect(tx.data?.confirmations).toBe(4)
+  })
+
+  it('counts a deep transaction from Insight as final, so it shows no InstantSend state', async () => {
+    const { core, hyphen, insight } = setup()
+    hyphen.rawTx.mockRejectedValue(unreachable())
+    insightHasTx(insight, 30)
+    const tx = await core.tx('mainnet', TXID)
+    expect(tx.source).toBe('insight')
+    expect(tx.data?.isChainLocked).toBe(true)
+    expect(tx.data && instantLockView(tx.data)).toEqual({ state: 'settled' })
   })
 
   it('asks Insight when Hyphen does not have the transaction yet', async () => {
