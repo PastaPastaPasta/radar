@@ -125,7 +125,7 @@ function SizeChart({ census }: { census: Census }) {
     masternodes: t`Enabled masternodes`,
     masternodes_reachable: t`Masternodes reachable`,
   }
-  const tones = [colors.rank[0]!, colors.rank[2]!, colors.good]
+  const tones = [colors.rank[0]!, colors.rank[3]!, colors.good]
   const series: Series[] = (doc?.series ?? []).map((s, i) => ({
     key: s.key,
     name: labels[s.key] ?? s.key,
