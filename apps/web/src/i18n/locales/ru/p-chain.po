@@ -289,11 +289,18 @@ msgstr "Префикс хеша"
 msgid "How many evonodes vote for each protocol version."
 msgstr "Сколько эвонод голосует за каждую версию протокола."
 
-#. placeholder {0}: formatInt(voters)
+#. placeholder {0}: formatInt(onRecord)
 #. placeholder {1}: formatInt(total)
 #. placeholder {2}: formatInt(total)
 msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
 msgstr "Сколько эвонод голосует за каждую версию протокола. У {0} из {1} включённых эвонод есть записанный голос, и доли считаются от них; порог активации учитывает все {2}."
+
+#. placeholder {0}: formatInt(onRecord)
+#. placeholder {1}: formatInt(retired > 0 ? enabledWithVote : total)
+#. placeholder {2}: formatInt(retired > 0 ? retired : onRecord - total)
+#. placeholder {3}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} votes are on record: {1} from enabled evonodes and {2} from evonodes that are no longer enabled. The shares are of the votes on record; the activation threshold counts all {3} enabled evonodes."
+msgstr "Сколько эвонод голосует за каждую версию протокола. Записано {0} голосов: {1} от включённых эвонод и {2} от эвонод, которые больше не включены. Доли считаются от записанных голосов; порог активации учитывает все {3} включённых эвонод."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -500,6 +507,11 @@ msgstr "Точный порог, фаза и подсчёт по кандида�
 
 msgid "Range"
 msgstr "Диапазон"
+
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} evonodes, more than the {1} enabled now"
+msgstr "Сообщили {0} эвонод, больше чем {1} включённых сейчас"
 
 #. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
 #. placeholder {1}: formatInt(total)

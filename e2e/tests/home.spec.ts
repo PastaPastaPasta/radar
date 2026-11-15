@@ -244,6 +244,8 @@ test.describe('Home', () => {
     page,
     context,
   }) => {
+    // The hero word is Live only while the crawl it sits over is fresh.
+    await pinClockAfterCrawl(page, 3 * 60_000)
     await page.goto('/')
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     const word = page.locator('[data-live-word]')
@@ -267,6 +269,7 @@ test.describe('Home', () => {
   })
 
   test('does not say Live while the live connection is cut @IN-15', async ({ page }) => {
+    await pinClockAfterCrawl(page, 3 * 60_000)
     await page.goto('/')
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     await expect(page.locator('[data-live-word]')).toHaveText('Live')

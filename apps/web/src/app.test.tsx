@@ -67,8 +67,9 @@ describe('network param', () => {
   it('reads an explicit mainnet as mainnet and leaves it off links', async () => {
     renderAt('/status?network=mainnet')
 
-    const link = await screen.findByRole('link', { name: 'Data sources' })
-    expect(link).toHaveAttribute('href', '/sources')
+    const links = await screen.findAllByRole('link', { name: 'Data sources' })
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) expect(link).toHaveAttribute('href', '/sources')
     expect(document.documentElement.dataset.networkKind).toBe('main')
   })
 
@@ -81,8 +82,9 @@ describe('network param', () => {
   it('keeps network on links', async () => {
     renderAt('/status?network=testnet')
 
-    const link = await screen.findByRole('link', { name: 'Data sources' })
-    expect(link).toHaveAttribute('href', '/sources?network=testnet')
+    const links = await screen.findAllByRole('link', { name: 'Data sources' })
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) expect(link).toHaveAttribute('href', '/sources?network=testnet')
   })
 
   it('asks for the devnet details before showing a page', async () => {

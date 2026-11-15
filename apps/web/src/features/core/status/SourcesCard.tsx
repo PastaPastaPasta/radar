@@ -14,7 +14,7 @@ import {
   SOURCE_ROLE,
   type ProbeFacts,
 } from './source-detail'
-import type { SourceRow } from './source-rows'
+import { isBehind, type SourceRow } from './source-rows'
 
 export interface SourcesCardProps {
   rows: SourceRow[]
@@ -63,7 +63,8 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
         {rows.map(({ source, offered: onNetwork, off, health }) => {
           const offered = onNetwork && !off
           const { name, role } = SOURCE_ROLE[source]()
-          const facts = probeFacts(source, probes, net, now, health.state === 'stale')
+          const behind = isBehind(health)
+          const facts = probeFacts(source, probes, net, now, behind)
           const probeError =
             source === 'radar' ||
             source === 'pe' ||
@@ -73,7 +74,7 @@ export function SourcesCard({ rows, probes }: SourcesCardProps) {
               ? probes[source].error
               : undefined
           const state = offered ? (
-            <LiveDot state={health.state} />
+            <LiveDot state={behind && health.state === 'ok' ? 'stale' : health.state} />
           ) : (
             <span className="text-[var(--dh-ink-2)]">
               {onNetwork ? t`Off in this mode` : t`Not offered`}

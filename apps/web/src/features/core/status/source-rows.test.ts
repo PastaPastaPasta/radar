@@ -74,6 +74,21 @@ describe('overallState', () => {
     ).toBe('ok')
   })
 
+  it('does not call a fresh Radar crawl behind the chain, and does once the crawl is stale', () => {
+    const fresh: SourceHealth = {
+      ...h('radar', 'ok'),
+      lag: { ms: 2 * 60_000, detail: 'last crawl finished 2 minutes ago' },
+    }
+    const stale: SourceHealth = {
+      ...h('radar', 'stale'),
+      lag: { ms: 50 * 60_000, detail: 'last crawl finished 50 minutes ago' },
+    }
+    expect(laggingSources(sourceRows('mainnet', [h('dapi', 'ok'), fresh]))).toEqual([])
+    expect(overallState(sourceRows('mainnet', [h('dapi', 'ok'), fresh]))).toBe('ok')
+    expect(laggingSources(sourceRows('mainnet', [h('dapi', 'ok'), stale]))).toEqual(['radar'])
+    expect(overallState(sourceRows('mainnet', [h('dapi', 'ok'), stale]))).toBe('attention')
+  })
+
   it('is checking until something has answered, ok after', () => {
     expect(overallState(rows({}))).toBe('checking')
     expect(overallState(rows({ dapi: 'ok' }))).toBe('ok')

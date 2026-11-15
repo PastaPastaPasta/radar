@@ -234,6 +234,10 @@ msgstr "{0}. blokta yasaklandı"
 msgid "Banned on Platform"
 msgstr "Platform’da yasaklı"
 
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "{0} değerinde yasaklanır"
+
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Aynı konumdan test edilen masternode’ların {0} oranından daha iyi."
@@ -518,6 +522,9 @@ msgstr "Hyphen’in dizini zincirin gerisinde olduğundan bu liste okunmuyor."
 msgid "if it ended now (an estimate)"
 msgstr "şimdi bitseydi (bir tahmin)"
 
+msgid "In a validator set"
+msgstr "Bir doğrulayıcı kümesinde"
+
 msgid "in total (not counting expired ones)."
 msgstr "toplam (süresi dolanlar hariç)."
 
@@ -754,6 +761,9 @@ msgstr "Henüz kontrol edilmedi"
 msgid "not compared: Radar’s record is not in use"
 msgstr "karşılaştırılmadı: Radar’ın kaydı kullanımda değil"
 
+msgid "Not in a validator set"
+msgstr "Bir doğrulayıcı kümesinde değil"
+
 msgid "not in a validator set that takes turns now"
 msgstr "şu anda sırayla çalışan bir doğrulayıcı kümesinde değil"
 
@@ -867,6 +877,7 @@ msgid "Payout address"
 msgstr "Ödeme adresi"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Ceza {0}"
 

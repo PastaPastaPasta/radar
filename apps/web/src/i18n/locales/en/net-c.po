@@ -234,6 +234,10 @@ msgstr "Banned at block {0}"
 msgid "Banned on Platform"
 msgstr "Banned on Platform"
 
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "bans at {0}"
+
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Better than {0} of masternodes tested from the same location."
@@ -518,6 +522,9 @@ msgstr "Hyphen’s index is behind the chain, so this list is not read."
 msgid "if it ended now (an estimate)"
 msgstr "if it ended now (an estimate)"
 
+msgid "In a validator set"
+msgstr "In a validator set"
+
 msgid "in total (not counting expired ones)."
 msgstr "in total (not counting expired ones)."
 
@@ -754,6 +761,9 @@ msgstr "Not checked yet"
 msgid "not compared: Radar’s record is not in use"
 msgstr "not compared: Radar’s record is not in use"
 
+msgid "Not in a validator set"
+msgstr "Not in a validator set"
+
 msgid "not in a validator set that takes turns now"
 msgstr "not in a validator set that takes turns now"
 
@@ -867,6 +877,7 @@ msgid "Payout address"
 msgstr "Payout address"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Penalty {0}"
 

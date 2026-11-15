@@ -148,9 +148,10 @@ describe('Status page', () => {
   it('links to the network internals on its own page @HY-12', async () => {
     setCoreClient(core())
     renderAt('/status')
-    const links = await screen.findAllByRole('link', { name: /Network internals/ })
-    expect(links.length).toBeGreaterThan(1)
-    for (const link of links) expect(link).toHaveAttribute('href', '/internals')
+    const link = await screen.findByRole('link', { name: /Network internals: peers/ })
+    expect(link).toHaveAttribute('href', '/internals')
+    expect(document.querySelector('nav[data-section-nav="tools"]')).not.toBeNull()
+    expect(document.querySelector('nav[data-section-nav="core"]')).toBeNull()
   })
 
   it('opens the diagnostics drawer from a link, through the seam the You features fill @NX-62', async () => {

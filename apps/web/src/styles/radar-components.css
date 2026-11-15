@@ -1049,6 +1049,32 @@ button.rx-src--proof:hover {
 .rx-clip--wide {
   max-width: 9rem;
 }
+/* Evonode rows stay one line. On a phone card the address drops under the name, as before. */
+.rx-evonode {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+}
+.rx-evonode .rx-sub {
+  max-width: 9.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rx-lastblock {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .rx-evonode {
+    display: grid;
+    gap: 2px;
+    white-space: normal;
+  }
+  .rx-evonode .rx-sub {
+    max-width: none;
+  }
+}
 /* the masternode list: the status mix in one row, then the filters, then the table */
 .rx-mnlist {
   display: grid;
@@ -2847,11 +2873,49 @@ html[data-scroll-gutter] {
   }
 }
 
-/* a phone shows the top five of each board and of the proposers; the card's link leads to the rest.
-   !important: the rows carry a display utility, and the utilities layer comes after this one. */
+/* a phone shows the top five of each leaderboard; the card's link leads to the rest.
+   Top proposers show all ten. !important: the rows carry a display utility, and the utilities layer comes after this one. */
 @media (max-width: 640px) {
-  [data-leaderboards] [data-board] > li:nth-child(n + 6),
-  .rx-phone5 tbody tr:nth-child(n + 6) {
+  [data-leaderboards] [data-board] > li:nth-child(n + 6) {
     display: none !important;
+  }
+}
+
+/* Top proposers share a half column. The four columns use that width; the hash gives way before the table scrolls. */
+#proposers .rx-table {
+  table-layout: fixed;
+}
+#proposers .rx-table th:nth-child(1),
+#proposers .rx-table td:nth-child(1) {
+  width: 2.75rem;
+}
+#proposers .rx-table th:nth-child(3),
+#proposers .rx-table td:nth-child(3) {
+  width: 5.75rem;
+}
+#proposers .rx-table th:nth-child(4),
+#proposers .rx-table td:nth-child(4) {
+  width: 4.5rem;
+}
+#proposers .rx-chip {
+  min-width: 0;
+  max-width: 100%;
+}
+#proposers .rx-chip__text,
+#proposers .rx-chip__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+  #proposers .rx-table {
+    table-layout: auto;
+  }
+  #proposers .rx-table th,
+  #proposers .rx-table td {
+    width: auto;
+  }
+  /* "22 blocks" on the left, "· 0.5%" on the right: one detail line. */
+  #proposers .rx-table--cards td.s::before {
+    content: '· ';
   }
 }

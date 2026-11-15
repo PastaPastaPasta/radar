@@ -128,6 +128,14 @@ describe('Platform overview', () => {
       .map((r) => Number(r.querySelectorAll('td')[2]?.textContent?.replaceAll(',', '')))
     expect(blocks).toEqual([...blocks].sort((a, b) => b - a))
     expect(proposers.querySelector('[data-source]')).toBeNull()
+    expect(proposers).not.toHaveClass('rx-phone5')
+    expect(proposers.querySelector('table')).toHaveClass('rx-table--cards')
+    expect(proposers.querySelector('table')).not.toHaveClass('rx-table--scrolls')
+    expect(within(proposers).getByRole('columnheader', { name: 'Rank' })).toBeInTheDocument()
+    const ranks = rows.slice(1).map((r) => r.querySelectorAll('td')[0]?.textContent ?? '')
+    blocks.forEach((count, i) => {
+      if (blocks[i + 1] === count) expect(ranks[i]).toBe(ranks[i + 1])
+    })
     await waitFor(() =>
       expect(
         document.querySelector('#chain [data-section-sources] [data-proved="false"]'),

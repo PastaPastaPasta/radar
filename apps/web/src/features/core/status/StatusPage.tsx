@@ -45,7 +45,7 @@ export function StatusPage() {
       path="/status"
       title={t`Status`}
       claim={claim}
-      eyebrow={t`Core`}
+      eyebrow={t`Tools`}
       lede={
         <span role="status" data-overall={overall} className="flex items-center gap-2">
           {overall === 'ok' ? <LiveDot state="ok" bare /> : null}

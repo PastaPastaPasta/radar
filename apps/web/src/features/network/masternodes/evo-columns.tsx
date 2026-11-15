@@ -3,7 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { EvoRow } from '@/data/masternodes/platform'
 import { Entity } from '@/features/entity'
-import { formatInt } from '@/lib/format'
+import { formatDate, formatInt } from '@/lib/format'
 import { Amount, AmountDensity, Time } from '@/ui'
 
 const DASH = '—'
@@ -22,9 +22,9 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       header: t`Evonode`,
       accessorFn: (e) => e.protx,
       cell: ({ row }) => (
-        <span className="grid gap-1">
+        <span className="rx-evonode">
           <Entity kind="evonode" id={row.original.protx} />
-          <span className="rx-sub font-mono">
+          <span className="rx-sub font-mono" title={row.original.row.service ?? undefined}>
             {row.original.row.service ?? DASH}
             {row.original.row.status === 'pose-banned' ? ` · ${t`PoSe-banned`}` : ''}
           </span>
@@ -56,9 +56,11 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       cell: ({ row }) => {
         const block = row.original.validator?.lastProposedBlockHeader
         return block ? (
-          <span className="grid gap-1">
-            <Entity kind="platform-block" id={String(block.height)} />
-            {block.timestamp ? <Time ms={block.timestamp} mode="relative" /> : null}
+          <span
+            className="rx-lastblock"
+            title={block.timestamp ? formatDate(block.timestamp) : undefined}
+          >
+            <Entity kind="platform-block" id={String(block.height)} copy={false} />
           </span>
         ) : (
           DASH

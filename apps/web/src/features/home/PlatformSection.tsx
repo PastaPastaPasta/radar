@@ -15,6 +15,7 @@ import {
   Empty,
   Icon,
   LiveControl,
+  LiveDot,
   Section,
   Time,
   TYPE_META,
@@ -186,6 +187,14 @@ export function PlatformSection() {
     shownTransitions ? stampOf(shownTransitions) : undefined,
     shownBlocks ? stampOf(shownBlocks) : undefined,
   ]
+  const down =
+    indexed &&
+    transitions.isFetched &&
+    blocks.isFetched &&
+    transitions.isError &&
+    blocks.isError &&
+    !shownTransitions &&
+    !shownBlocks
   return (
     <Section
       className="rx-home__sec"
@@ -196,13 +205,19 @@ export function PlatformSection() {
       source={sources}
       actions={
         indexed ? (
-          <LiveControl
-            paused={paused}
-            onToggle={() => setPaused(!paused)}
-            newCount={newCount}
-            pulseKey={newest}
-            noun={t`Platform updates`}
-          />
+          down ? (
+            <span className="rx-live rx-live--down" data-feed="down">
+              <LiveDot state="down" />
+            </span>
+          ) : (
+            <LiveControl
+              paused={paused}
+              onToggle={() => setPaused(!paused)}
+              newCount={newCount}
+              pulseKey={newest}
+              noun={t`Platform updates`}
+            />
+          )
         ) : null
       }
     >

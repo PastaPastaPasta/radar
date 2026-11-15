@@ -4,8 +4,8 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useSearch } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { stampOf, type Sourced } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
-import type { Sourced } from '@/data/envelope'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarPlatform } from '@/data/radar/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
@@ -26,7 +26,14 @@ import {
   stampsOf,
   useAfterIdle,
 } from '@/ui'
-import { ACTIVATION_SHARE, protocolQueries, thresholdOf, type VoteRow, type Votes } from './queries'
+import {
+  ACTIVATION_SHARE,
+  protocolQueries,
+  thresholdOf,
+  voteCensus,
+  type VoteRow,
+  type Votes,
+} from './queries'
 
 type VotesQuery = UseQueryResult<Sourced<Votes>>
 
@@ -51,6 +58,12 @@ export function ProtocolPage() {
   const current = state.data?.data.currentProtocolVersion
   const tally = votes.data?.data.tally
   const voters = votes.data?.data.rows.length
+  const enabledIds = useMemo(() => {
+    const list = radar.data?.data.evonodes
+    if (!list) return undefined
+    return new Set(list.filter((e) => e.status === 'enabled').map((e) => e.protx.toLowerCase()))
+  }, [radar.data])
+  const census = voteCensus(votes.data?.data.rows ?? [], enabledIds)
   const upgrade = radar.data?.data.upgrade
   const total = upgrade?.enabled_evonodes ?? voters
   const needed = upgrade?.required ?? (voters === undefined ? undefined : thresholdOf(voters))
@@ -80,7 +93,7 @@ export function ProtocolPage() {
             ? t`No upgrade to a newer protocol version is being voted on.`
             : undefined
         }
-        source={stampsOf(state.data, votes.data, radar.data)}
+        source={stampsOf(state.data, radar.data)}
         {...queryView(state)}
       >
         {state.data ? (
@@ -101,6 +114,13 @@ export function ProtocolPage() {
                     : undefined
                 }
                 layer="network"
+                source={
+                  state.data?.data.voteCount != null
+                    ? undefined
+                    : votes.data
+                      ? stampOf(votes.data)
+                      : undefined
+                }
               />
             </Stats>
             {forNext !== undefined && total !== undefined && needed !== undefined ? (
@@ -130,7 +150,7 @@ export function ProtocolPage() {
           </div>
         ) : null}
       </Card>
-      <Tally votes={votes} total={total} />
+      <Tally votes={votes} total={total} census={census} />
       <VoteTable votes={votes} />
     </PageFrame>
   )
@@ -207,7 +227,9 @@ function Threshold({
                             one: 'Reported by # evonode',
                             other: 'Reported by # evonodes',
                           })
-                        : t`Reported by ${formatInt(upgrade.next_epoch_reported_by)} of ${formatInt(total)} evonodes`,
+                        : upgrade.next_epoch_reported_by > total
+                          ? t`Reported by ${formatInt(upgrade.next_epoch_reported_by)} evonodes, more than the ${formatInt(total)} enabled now`
+                          : t`Reported by ${formatInt(upgrade.next_epoch_reported_by)} of ${formatInt(total)} evonodes`,
                 },
                 {
                   label: t`Candidate version`,
@@ -230,13 +252,28 @@ function Threshold({
   )
 }
 
-function Tally({ votes, total }: { votes: VotesQuery; total: number | undefined }) {
+function Tally({
+  votes,
+  total,
+  census,
+}: {
+  votes: VotesQuery
+  total: number | undefined
+  census: ReturnType<typeof voteCensus>
+}) {
   const { t } = useLingui()
   const rows = useMemo(
     () => [...(votes.data?.data.tally ?? [])].sort((a, b) => b[0] - a[0]),
     [votes.data],
   )
   const voters = votes.data?.data.rows.length ?? 0
+  const { onRecord, enabledWithVote, retired } = census
+  const subtitle =
+    total === undefined || onRecord === 0 || (retired === 0 && onRecord === total)
+      ? t`How many evonodes vote for each protocol version.`
+      : retired > 0 || onRecord > total
+        ? t`How many evonodes vote for each protocol version. ${formatInt(onRecord)} votes are on record: ${formatInt(retired > 0 ? enabledWithVote : total)} from enabled evonodes and ${formatInt(retired > 0 ? retired : onRecord - total)} from evonodes that are no longer enabled. The shares are of the votes on record; the activation threshold counts all ${formatInt(total)} enabled evonodes.`
+        : t`How many evonodes vote for each protocol version. ${formatInt(onRecord)} of the ${formatInt(total)} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all ${formatInt(total)}.`
   const columns = useMemo<ColumnDef<[number, number]>[]>(
     () => [
       {
@@ -265,11 +302,7 @@ function Tally({ votes, total }: { votes: VotesQuery; total: number | undefined 
       id="tally"
       layer="network"
       title={t`Votes by version`}
-      subtitle={
-        total === undefined || voters === 0 || voters === total
-          ? t`How many evonodes vote for each protocol version.`
-          : t`How many evonodes vote for each protocol version. ${formatInt(voters)} of the ${formatInt(total)} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all ${formatInt(total)}.`
-      }
+      subtitle={subtitle}
       source={stampsOf(votes.data)}
     >
       <DataTable

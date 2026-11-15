@@ -513,6 +513,28 @@ test.describe('evonodes on Platform', () => {
     await expect(rows(page, 'Evonodes')).toHaveCount(1)
   })
 
+  test('keeps the pinned Evonode header in the header row and over its column when the table scrolls @RA-64 @PE-22', async ({
+    page,
+  }, info) => {
+    test.skip(isPhone(info), 'a phone lists evonodes as cards')
+    await open(page, path, 'Evonodes')
+    const box = page.locator('.rx-tablescroll[data-wide]').first()
+    await expect(box).toBeVisible()
+    const first = box.locator('thead th').first()
+    const second = box.locator('thead th').nth(1)
+    const top = async (el: typeof first) => (await el.boundingBox())!.y
+    expect(Math.abs((await top(first)) - (await top(second)))).toBeLessThan(2)
+    await expect(first).toContainText('Evonode')
+    await box.evaluate((el) => {
+      el.scrollLeft = el.scrollWidth
+    })
+    const cell = box.locator('tbody tr').first().locator('td').first()
+    await expect
+      .poll(async () => Math.abs((await first.boundingBox())!.x - (await cell.boundingBox())!.x))
+      .toBeLessThan(2)
+    expect(Math.abs((await top(first)) - (await top(second)))).toBeLessThan(2)
+  })
+
   test('is where /validators leads @PE-22', async ({ page }) => {
     await page.goto('/validators')
     await expect(page).toHaveURL(/\/masternodes\?.*view=platform/)

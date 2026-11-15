@@ -289,11 +289,18 @@ msgstr "哈希前缀"
 msgid "How many evonodes vote for each protocol version."
 msgstr "每个协议版本有多少 Evonode 投票。"
 
-#. placeholder {0}: formatInt(voters)
+#. placeholder {0}: formatInt(onRecord)
 #. placeholder {1}: formatInt(total)
 #. placeholder {2}: formatInt(total)
 msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
 msgstr "各协议版本有多少 evonode 投票。{1} 个已启用的 evonode 中有 {0} 个有投票记录，占比以这些为基数；激活阈值则统计全部 {2} 个。"
+
+#. placeholder {0}: formatInt(onRecord)
+#. placeholder {1}: formatInt(retired > 0 ? enabledWithVote : total)
+#. placeholder {2}: formatInt(retired > 0 ? retired : onRecord - total)
+#. placeholder {3}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} votes are on record: {1} from enabled evonodes and {2} from evonodes that are no longer enabled. The shares are of the votes on record; the activation threshold counts all {3} enabled evonodes."
+msgstr "各协议版本有多少 evonode 投票。共有 {0} 条投票记录：{1} 条来自已启用的 evonode，{2} 条来自已不再启用的 evonode。占比以这些记录为基数；激活阈值则统计全部 {3} 个已启用的 evonode。"
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -500,6 +507,11 @@ msgstr "Radar 的确切门槛、阶段和各候选版本计数需要 Radar 的�
 
 msgid "Range"
 msgstr "范围"
+
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} evonodes, more than the {1} enabled now"
+msgstr "{0} 个 evonode 已上报，多于目前已启用的 {1} 个"
 
 #. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
 #. placeholder {1}: formatInt(total)

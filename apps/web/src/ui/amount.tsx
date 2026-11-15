@@ -59,7 +59,11 @@ export function Amount({
   )
   return (
     <span
-      className={cx('rx-amt rx-num', signed && a.sign === '+' && 'rx-amt--pos')}
+      className={cx(
+        'rx-amt rx-num',
+        compact && 'rx-amt--compact',
+        signed && a.sign === '+' && 'rx-amt--pos',
+      )}
       data-amount={value.toString()}
       data-usd={usdFirst ? '' : undefined}
       title={

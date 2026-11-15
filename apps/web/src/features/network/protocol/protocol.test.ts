@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { QueryClient } from '@tanstack/react-query'
 import { stampOf } from '@/data/envelope'
-import { ACTIVATION_SHARE, protocolQueries, tallyOf, thresholdOf } from './queries'
+import { ACTIVATION_SHARE, protocolQueries, tallyOf, thresholdOf, voteCensus } from './queries'
 
 const call = vi.hoisted(() => vi.fn())
 vi.mock('@/data/sdk/client', () => ({ sdk: { call } }))
@@ -42,6 +42,20 @@ describe('thresholds', () => {
         [15, 1],
       ]),
     )
+  })
+})
+
+describe('voteCensus', () => {
+  const row = (n: number) => ({ proTxHash: n.toString(16).padStart(64, 'a') })
+
+  it('counts votes from evonodes that are no longer enabled separately', () => {
+    const enabled = new Set([row(1).proTxHash, row(2).proTxHash])
+    expect(voteCensus([row(1), row(2), row(3), row(4)], enabled)).toEqual({
+      onRecord: 4,
+      enabledWithVote: 2,
+      retired: 2,
+    })
+    expect(voteCensus([row(1)], undefined).retired).toBe(0)
   })
 })
 

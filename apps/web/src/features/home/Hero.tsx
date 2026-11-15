@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
+import { staleAfterMs } from '@/data/query/stale'
 import { radarQueries } from '@/data/radar/queries'
 import { v24Pending } from '@/data/radar/schemas'
 import { networkName, PageLink, useNetwork } from '@/features/entity'
@@ -22,6 +23,7 @@ import {
   useLiveView,
   useNow,
 } from '@/ui'
+import { staleAgeMs } from '@/ui/source-labels'
 import { useCoreRows } from './core-rows'
 import { Figure, Figures } from './Figure'
 import { agedFromRead, pushed } from './freshness'
@@ -37,14 +39,17 @@ type Dist = readonly (readonly [string, number])[] | undefined
 
 const countOf = (rows: Dist, key: string): number => rows?.find(([k]) => k === key)?.[1] ?? 0
 
-function Kicker() {
+function Kicker({ crawlStale }: { crawlStale: boolean }) {
+  const { t } = useLingui()
   const live = useLiveView()
   const net = useNetwork()
+  // The word follows the connection first. While that is live, it follows the crawl the claim is built from.
+  const dataStale = crawlStale && live.dot === 'live'
   return (
     <p className="rx-hero__kicker">
-      <LiveDot state="live" bare />
-      <b data-live-word data-connection={live.state}>
-        {live.word}
+      <LiveDot state={dataStale ? 'stale' : 'live'} bare />
+      <b data-live-word data-connection={live.state} data-data={dataStale ? 'stale' : 'fresh'}>
+        {dataStale ? t`Behind` : live.word}
       </b>
       <span className={net === 'mainnet' ? undefined : 'rx-tnbadge'} data-net>
         {networkName(net)}
@@ -240,12 +245,15 @@ export function Hero() {
   const enabled = crawl ? formatInt(crawl.mn_total) : ''
   const v24 = v24Pending(activation.data?.data, now)
   const sources = [crawled, geo.data ? stampOf(geo.data) : undefined, core.source, platform.source]
+  const crawlStale =
+    crawled !== undefined &&
+    now - crawled.asOf > staleAgeMs('radar', crawled.staleAfterMs ?? staleAfterMs('crawl'))
 
   return (
     <section className="rx-hero" aria-labelledby="h-hero" data-census={crawl ? 'ready' : 'none'}>
       <div className="rx-hero__copy" data-source-scope="">
         <SourceSection source={sources}>
-          <Kicker />
+          <Kicker crawlStale={crawlStale} />
           <h1 id="h-hero">
             <span className="sr-only">{t`Radar:`} </span>
             {crawl || counting ? (

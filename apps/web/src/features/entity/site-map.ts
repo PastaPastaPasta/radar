@@ -191,16 +191,6 @@ export const SITE_MAP: SitePage[] = [
     nav: true,
     keywords: ['network', 'peers', 'utxo', 'versions'],
   }),
-  page({
-    path: '/status',
-    title: msg`Status`,
-    section: 'core',
-    layer: 'core',
-    summary: msg`Every data source Radar reads, its health and freshness on this network, and the DAPI request budget.`,
-    sources: ['radar', 'pe', 'hyphen', 'dapi', 'sdk', 'insight'],
-    nav: true,
-    keywords: ['health', 'sources', 'budget'],
-  }),
 
   page({
     path: '/nodes',
@@ -680,6 +670,16 @@ export const SITE_MAP: SitePage[] = [
     keywords: ['docs', 'endpoints'],
   }),
   page({
+    path: '/status',
+    title: msg`Status`,
+    section: 'tools',
+    layer: 'core',
+    summary: msg`Every data source Radar reads, its health and freshness on this network, and the DAPI request budget.`,
+    sources: ['radar', 'pe', 'hyphen', 'dapi', 'sdk', 'insight'],
+    nav: true,
+    keywords: ['health', 'sources', 'budget'],
+  }),
+  page({
     path: '/sources',
     title: msg`Data sources`,
     section: 'tools',
@@ -818,7 +818,7 @@ const SECTION_OF_SEGMENT: Record<string, SiteSection> = {
   charts: 'core',
   internals: 'core',
   governance: 'core',
-  status: 'core',
+  status: 'tools',
   nodes: 'network',
   masternodes: 'network',
   mn: 'network',

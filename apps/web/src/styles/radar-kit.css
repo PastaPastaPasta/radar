@@ -79,6 +79,14 @@
   align-items: baseline;
   max-width: 100%;
 }
+/* A short amount keeps its unit on the same line. A full figure may still break, so a long balance does not widen the page. */
+.rx-stat__value .rx-amt--compact {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.rx-stat__value .rx-amt--compact .rx-u {
+  flex: none;
+}
 .rx-stat__value .rx-fiat {
   flex-basis: 100%;
   margin: 2px 0 0;
@@ -624,6 +632,30 @@ dashhq-footer .rx-ratenote {
 }
 .rx-tablescroll[data-wide] .rx-table th {
   position: static;
+}
+/* A wide table says so: the first column stays in view, and a shadow sits on the right edge while columns continue
+   past it. The shadow is fixed to the box; a cover in the ground colour scrolls with the table and hides it at the end. */
+@media (min-width: 641px) {
+  .rx-tablescroll[data-wide] .rx-table th:first-child,
+  .rx-tablescroll[data-wide] .rx-table td:first-child {
+    position: sticky;
+    top: auto;
+    left: 0;
+    z-index: 2;
+    background: var(--rx-ground, var(--dh-page));
+    box-shadow: 1px 0 0 var(--dh-line);
+  }
+  .rx-tablescroll[data-wide] {
+    background:
+      linear-gradient(to right, transparent, var(--rx-ground, var(--dh-page)) 60%) right / 32px 100%
+        no-repeat local,
+      radial-gradient(
+          farthest-side at 100% 50%,
+          color-mix(in srgb, var(--dh-ink) 22%, transparent),
+          transparent
+        )
+        right / 14px 100% no-repeat scroll;
+  }
 }
 @media (max-width: 1023px) {
   .rx-tablescroll {

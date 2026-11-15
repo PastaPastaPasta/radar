@@ -234,6 +234,10 @@ msgstr "于区块 {0} 被封禁"
 msgid "Banned on Platform"
 msgstr "在 Platform 上被封禁"
 
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "在 {0} 时封禁"
+
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "优于在同一位置测试的 {0} 的主节点。"
@@ -518,6 +522,9 @@ msgstr "Hyphen 的索引落后于区块链，因此不读取此列表。"
 msgid "if it ended now (an estimate)"
 msgstr "如果现在结束（估算）"
 
+msgid "In a validator set"
+msgstr "在验证者集合中"
+
 msgid "in total (not counting expired ones)."
 msgstr "合计（不含已过期的）。"
 
@@ -754,6 +761,9 @@ msgstr "尚未检查"
 msgid "not compared: Radar’s record is not in use"
 msgstr "未比较：未使用 Radar 的记录"
 
+msgid "Not in a validator set"
+msgstr "不在验证者集合中"
+
 msgid "not in a validator set that takes turns now"
 msgstr "不在当前轮流出块的验证者集合中"
 
@@ -867,6 +877,7 @@ msgid "Payout address"
 msgstr "付款地址"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "罚分 {0}"
 

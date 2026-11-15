@@ -234,6 +234,10 @@ msgstr "ブロック {0} で BAN"
 msgid "Banned on Platform"
 msgstr "Platform で BAN 済み"
 
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "{0} で停止"
+
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "同じ拠点でテストしたマスターノードの {0} より良好です。"
@@ -518,6 +522,9 @@ msgstr "Hyphen のインデックスがチェーンに追いついていない�
 msgid "if it ended now (an estimate)"
 msgstr "今終了した場合（推定）"
 
+msgid "In a validator set"
+msgstr "バリデーターセットに所属"
+
 msgid "in total (not counting expired ones)."
 msgstr "合計（期限切れを除く）。"
 
@@ -754,6 +761,9 @@ msgstr "未確認"
 msgid "not compared: Radar’s record is not in use"
 msgstr "比較なし: Radar の記録は使用されていません"
 
+msgid "Not in a validator set"
+msgstr "バリデーターセットに未所属"
+
 msgid "not in a validator set that takes turns now"
 msgstr "現在ターン制のバリデーターセットに入っていません"
 
@@ -867,6 +877,7 @@ msgid "Payout address"
 msgstr "支払先アドレス"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "ペナルティ {0}"
 

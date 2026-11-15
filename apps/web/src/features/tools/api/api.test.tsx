@@ -48,6 +48,11 @@ describe('the API page', () => {
     expect(screen.getByRole('heading', { name: 'How the data is collected' })).toBeInTheDocument()
     expect(screen.getByText(/The API URLs are unchanged/)).toBeInTheDocument()
     expect(document.querySelector('[data-api-hosted]')).toBeNull()
+    await waitFor(() =>
+      expect(document.querySelector('[data-page="/api"] .rx-page__src')).toHaveTextContent(
+        /Crawled by Radar/,
+      ),
+    )
   })
 
   it('copies the link to one endpoint @RA-90', async () => {
