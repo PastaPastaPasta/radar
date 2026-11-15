@@ -950,7 +950,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       }
       if (hyphenStandsIn(net)) {
         try {
-          return await hyphenBlock(net, ref, signal)
+          const fromIndex = await hyphenBlock(net, ref, signal)
+          if (fromIndex.data || !hostedOk(net, 'insight')) return fromIndex
+          const fromInsight = await insightBlock(net, ref, signal)
+          if (fromInsight.data) return fromInsight
+          return fromIndex
         } catch (e) {
           if (isAborted(e)) throw e
         }
@@ -991,8 +995,13 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       if (hyphenStandsIn(net)) {
         try {
           const found = await hyphenRawTx(net, id, signal)
-          if (!found) return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
-          return hostedTxResult(found)
+          if (found) return hostedTxResult(found)
+          // Hyphen's "not found" is not the chain's answer when it simply doesn't have the transaction yet.
+          if (hostedOk(net, 'insight')) {
+            const fromInsight = await insightRawTx(net, id, signal)
+            if (fromInsight) return hostedTxResult(fromInsight)
+          }
+          return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
         } catch (e) {
           if (isAborted(e)) throw e
         }
@@ -1040,7 +1049,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         async (txid, rowSignal) => {
           let decoded: DecodedTx | undefined
           if (useHyphen) {
-            const found = await hyphenRawTx(net, txid, rowSignal)
+            const found = await hostedRawTx(net, txid, rowSignal)
             decoded = found?.value.tx
             if (found && (!hyphenStamp || found.stamp.asOf < hyphenStamp.asOf)) {
               hyphenStamp = found.stamp

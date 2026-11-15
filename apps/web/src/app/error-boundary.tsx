@@ -21,14 +21,16 @@ export const isChunkFailure = (error: Error): boolean =>
 const isOffline = (error: Error): boolean =>
   (typeof navigator !== 'undefined' && !navigator.onLine) || isChunkFailure(error)
 
+/** A failed chunk is not fetched again by React or the router, so that page starts over. */
+function recover(error: Error, reset: () => void): void {
+  if (isChunkFailure(error)) window.location.reload()
+  else reset()
+}
+
 function Offline({ error, reset }: { error: Error; reset: () => void }) {
   const online = typeof navigator === 'undefined' || navigator.onLine
   useEffect(() => {
-    const retry = () => {
-      // A chunk that failed to load is not fetched again by React or the router, so the page starts over.
-      if (isChunkFailure(error)) window.location.reload()
-      else reset()
-    }
+    const retry = () => recover(error, reset)
     window.addEventListener('online', retry)
     return () => {
       window.removeEventListener('online', retry)
@@ -47,10 +49,7 @@ function Offline({ error, reset }: { error: Error; reset: () => void }) {
       <p>
         <button
           type="button"
-          onClick={() => {
-            if (isChunkFailure(error)) window.location.reload()
-            else reset()
-          }}
+          onClick={() => recover(error, reset)}
         >
           {t`Try again`}
         </button>

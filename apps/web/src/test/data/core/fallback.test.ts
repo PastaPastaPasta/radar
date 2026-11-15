@@ -142,6 +142,27 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     expect(hyphen.rawTx).not.toHaveBeenCalled()
   })
 
+  it('asks Insight when DAPI is already down and Hyphen does not have the transaction', async () => {
+    const { core, hyphen, insight } = setup({ dapi: 'down' })
+    insightHasTx(insight)
+    const tx = await core.tx('mainnet', TXID)
+    expect(hyphen.rawTx).toHaveBeenCalled()
+    expect(tx.source).toBe('insight')
+    expect(tx.fallback).toBe('dapi-down')
+    expect(tx.data?.txid).toBe(TXID)
+  })
+
+  it('reads a block from Insight when DAPI is already down and Hyphen does not have it', async () => {
+    const { core, insight } = setup({ dapi: 'down' })
+    insight.block.mockResolvedValue(
+      sourced('insight', { hash: BLOCK, height: BLOCK_HEIGHT, time: 0 }) as never,
+    )
+    insight.rawBlock.mockResolvedValue(sourced('insight', { rawblock }) as never)
+    const block = await core.block('mainnet', { hash: BLOCK })
+    expect(block.source).toBe('insight')
+    expect(block.data?.height).toBe(BLOCK_HEIGHT)
+  })
+
   it('throws DAPI’s own error when nothing else has the transaction, never "not found"', async () => {
     const { core } = setup()
     const error = await core.tx('mainnet', TXID).catch((e: unknown) => e)
@@ -168,6 +189,19 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     const fromInsight = await b.core.block('mainnet', { height: BLOCK_HEIGHT })
     expect(fromInsight.source).toBe('insight')
     expect(fromInsight.data?.hash).toBe(BLOCK)
+  })
+
+  it('reads previous outputs from Insight when DAPI is already down and Hyphen misses', async () => {
+    const { core, hyphen, insight } = setup({ dapi: 'down' })
+    hyphen.rawTx.mockRejectedValue(unreachable() as never)
+    insightHasTx(insight)
+    const prevs = await core.prevouts('mainnet', {
+      inputs: [{ txid: TXID, vout: 0, sequence: 0, scriptSig: '' }],
+      outputs: [],
+    } as never)
+    expect(prevs.source).toBe('insight')
+    expect(prevs.fallback).toBe('dapi-down')
+    expect(prevs.data.has(`${TXID}:0`)).toBe(true)
   })
 
   it('reads the previous outputs of a transaction from a hosted index when DAPI fails', async () => {
