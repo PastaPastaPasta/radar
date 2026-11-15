@@ -423,7 +423,7 @@ function ProposalTable({
 function ProposalDetails({ p }: { p: HyProposal }) {
   const { t } = useLingui()
   return (
-    <div className="grid gap-3 py-2">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-3 py-2">
       <KeyValue
         columns={2}
         items={[
