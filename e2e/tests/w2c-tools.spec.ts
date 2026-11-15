@@ -37,16 +37,21 @@ test.describe('decoders @NX-72 @NX-71', () => {
     { id: 'path', title: 'Path decoder' },
   ]
 
-  test('every decoder is reached by clicking from the header', async ({ page }) => {
-    for (const { id, title } of DECODERS) {
-      await page.goto('/')
-      await openDecoders(page)
-      await expect(page).toHaveURL(/\/tools\/decoders$/)
-      await expect(page.getByRole('heading', { level: 1, name: 'Decoders' })).toBeVisible()
-      await page.locator(`[data-decoder-link="${id}"]`).click()
-      await expect(page).toHaveURL(new RegExp(`/tools/${id}$`))
-      await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible()
-    }
+  test.describe('from the header', () => {
+    // On a phone the way there is search, which also asks its lookups for the typed word; none of those is recorded.
+    test.use({ allowFixtureMisses: true })
+
+    test('every decoder is reached by clicking from the header', async ({ page }) => {
+      for (const { id, title } of DECODERS) {
+        await page.goto('/')
+        await openDecoders(page)
+        await expect(page).toHaveURL(/\/tools\/decoders$/)
+        await expect(page.getByRole('heading', { level: 1, name: 'Decoders' })).toBeVisible()
+        await page.locator(`[data-decoder-link="${id}"]`).click()
+        await expect(page).toHaveURL(new RegExp(`/tools/${id}$`))
+        await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible()
+      }
+    })
   })
 
   test('the chooser lists all the decoders and State transition', async ({ page }) => {
