@@ -23,6 +23,7 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
   const v = validator.data?.data ?? null
   const state = v?.proTxInfo?.state
   const latest = d.platform?.latest
+  const inSet = d.platform_rewards?.in_validator_sets
 
   const tile = (label: string, ok: boolean | null, detail: string) => (
     <Stat
@@ -87,11 +88,11 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
       id="validator-record"
       subtitle={t`Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above.`}
       actions={
-        v ? (
-          <Badge tone={v.isActive ? 'success' : 'neutral'}>
-            {v.isActive ? t`In a validator set` : t`Not in a validator set`}
+        inSet == null ? undefined : (
+          <Badge tone={inSet ? 'success' : 'neutral'}>
+            {inSet ? t`In a validator set` : t`Not in a validator set`}
           </Badge>
-        ) : undefined
+        )
       }
     >
       <div className="grid gap-5">
