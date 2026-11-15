@@ -291,12 +291,16 @@ describe('Query page results and picker', () => {
     ).toBeInTheDocument()
   })
 
-  it('does not offer a contract the network does not have @NX-70', async () => {
+  it('offers Feature flags again, and it can be picked with no preset of its own @NX-70', async () => {
     stubSdkCalls({ 'contracts.fetch': () => CONTRACT })
+    const user = userEvent.setup()
     renderAt('/query')
     const picker = await screen.findByLabelText('Contract')
-    expect(within(picker).queryByRole('option', { name: 'Feature flags' })).toBeNull()
+    expect(within(picker).getByRole('option', { name: 'Feature flags' })).toBeInTheDocument()
     expect(within(picker).getByRole('option', { name: 'DPNS' })).toBeInTheDocument()
     expect(within(picker).getByRole('option', { name: 'Withdrawals' })).toBeInTheDocument()
+    const editor = screen.getByRole('textbox', { name: 'SQL query' })
+    await user.selectOptions(picker, 'Feature flags')
+    await waitFor(() => expect(editor).toHaveValue('SELECT * FROM domain\nLIMIT 5'))
   })
 })
