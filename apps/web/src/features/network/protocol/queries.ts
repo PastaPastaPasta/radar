@@ -34,6 +34,32 @@ export const ACTIVATION_SHARE = 0.67
 /** Evonodes needed to activate: the share of all evonodes, rounded up. */
 export const thresholdOf = (evonodes: number): number => Math.ceil(evonodes * ACTIVATION_SHARE)
 
+export interface VoteCensus {
+  /** Every vote the chain still has on record, including evonodes that are no longer enabled. */
+  onRecord: number
+  /** How many of those votes belong to an evonode that is enabled now. */
+  enabledWithVote: number
+  /** Votes whose evonode is not in the enabled set. */
+  retired: number
+}
+
+/**
+ * Splits a vote list into enabled evonodes and the rest. The chain keeps a vote after an evonode is no longer
+ * enabled, so the list can be longer than the enabled set. Without that set, every vote counts as enabled.
+ */
+export function voteCensus(
+  rows: readonly { proTxHash: string }[],
+  enabled: ReadonlySet<string> | undefined,
+): VoteCensus {
+  const onRecord = rows.length
+  if (!enabled) return { onRecord, enabledWithVote: onRecord, retired: 0 }
+  let enabledWithVote = 0
+  for (const row of rows) {
+    if (enabled.has(row.proTxHash.toLowerCase())) enabledWithVote++
+  }
+  return { onRecord, enabledWithVote, retired: onRecord - enabledWithVote }
+}
+
 export const protocolQueries = {
   /** Every evonode's vote: pages of 100 by ProTxHash, the SDK repeating the page's first node as the last one before. */
   votes: (net: NetworkId) =>
