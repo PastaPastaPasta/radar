@@ -25,6 +25,8 @@ export type EntityProps = Omit<EntityChipProps, 'href'> & {
   search?: EntitySearch
   /** Name it by its ID alone, even when it has a well-known name, for a column that sits beside the name. */
   byId?: boolean
+  /** The entity's own name (an identity's DPNS name), shown when neither `label` nor a well-known label names it. */
+  name?: string
 }
 
 /** A document's route id is `contract/type/document`; its chip is the short form of the document id alone. */
@@ -42,6 +44,7 @@ export function Entity({
   search,
   label,
   byId,
+  name,
   hover = true,
   ...rest
 }: EntityProps) {
@@ -56,7 +59,11 @@ export function Entity({
       id={id}
       label={
         label ??
-        (kind === 'document' ? documentLabel(id) : byId ? undefined : wellKnownLabel(net, kind, id))
+        (kind === 'document'
+          ? documentLabel(id)
+          : byId
+            ? undefined
+            : (wellKnownLabel(net, kind, id) ?? name))
       }
       href={href ?? entityHref(kind, id, net, search)}
       hover={card && !touch}

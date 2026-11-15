@@ -16,7 +16,7 @@ export const shortId = (id: string): string =>
 /** An identity inside a card: named when the SDK knows its name, without a card of its own. */
 export function OwnerChip({ id }: { id: string }) {
   const name = useIdentityName(id)
-  return <Entity kind="identity" id={id} label={name} size="sm" copy={false} hover={false} />
+  return <Entity kind="identity" id={id} name={name} size="sm" copy={false} hover={false} />
 }
 
 /** What a card says in the row an indexer would have filled, when none may be asked. */
