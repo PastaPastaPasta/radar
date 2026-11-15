@@ -159,7 +159,10 @@ test.describe('network', () => {
     expect(style.border).toBe('4px')
     await expect(page.locator('[data-testnet-label]')).toHaveText('Testnet')
     expect(style.color).not.toBe('rgba(0, 0, 0, 0)')
-    await page.getByRole('link', { name: 'Data sources' }).click()
+    await page
+      .locator('[data-section-nav="tools"]')
+      .getByRole('link', { name: 'Data sources' })
+      .click()
     await expect(page).toHaveURL(/\/sources\?network=testnet$/)
   })
 
