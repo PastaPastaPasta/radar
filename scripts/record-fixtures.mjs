@@ -4,6 +4,7 @@ import { dirname, join, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { format, resolveConfig } from 'prettier'
+import { rangeQuery, rangeWindow } from '../apps/web/src/data/pe/params.ts'
 import { slugOf } from '../apps/web/src/test/fixtures/slug.ts'
 
 const execFileAsync = promisify(execFile)
@@ -332,7 +333,8 @@ async function recordRadar() {
   await record('radar', `/masternodes/${entities.radar.missingProtx}`, { optional: true })
 }
 
-const PE_TIMEFRAME = 'timeframe=24h'
+const window_ = (range, query = rangeQuery) => new URLSearchParams(query(range)).toString()
+const PE_TIMEFRAME = window_('24h')
 
 async function recordPe() {
   console.log(`pe (${net})`)
@@ -351,14 +353,16 @@ async function recordPe() {
     '/contestedResources?limit=10',
     '/contestedResources/stats',
     '/masternodes/votes?limit=10',
-    '/identities/active?limit=10',
-    '/dataContracts/rating?limit=10',
-    '/dataContracts/active?limit=10',
-    '/tokens/rating?limit=10',
+    '/identities/active?limit=50&order=desc',
+    '/dataContracts/rating?limit=50&order=desc',
+    '/dataContracts/active?limit=50&order=desc',
+    '/tokens/rating?limit=50&order=desc',
+    '/identities?limit=50&order=desc&order_by=balance',
+    '/identities?limit=50&order=desc&order_by=tx_count',
     `/transactions/history?${PE_TIMEFRAME}`,
     `/identities/history?${PE_TIMEFRAME}`,
     '/transactions/statistic',
-    `/transactions/shielded/statistic?${PE_TIMEFRAME}`,
+    `/transactions/shielded/statistic?${window_('24h', rangeWindow)}`,
     `/transactions/shield/history?${PE_TIMEFRAME}`,
     `/transactions/unshield/history?${PE_TIMEFRAME}`,
     '/transactions/shielded/pool',

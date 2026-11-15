@@ -10,6 +10,7 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { Card, DataTable, Empty, Time } from '@/ui'
 import { searchLink } from '../contest/shared'
+import { ListPager } from '../ListPager'
 import { loadState } from '../identity/common'
 
 export interface NamesPageSearch {
@@ -123,14 +124,13 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
           state={loadState(names)}
           error={names.error}
           onRetry={() => void names.refetch()}
-          paging={{
-            kind: 'cursor',
-            ...(hasNext && last ? { next: searchLink({ after: last.id }) } : {}),
-            ...(search.after ? { prev: searchLink({ after: undefined }) } : {}),
-          }}
           empty={
             <Empty kind="no-match" title={q ? t`No name starts with ${safe}.` : t`No names yet.`} />
           }
+        />
+        <ListPager
+          next={hasNext && last ? searchLink({ after: last.id }) : undefined}
+          prev={search.after ? searchLink({ after: undefined }) : undefined}
         />
       </Card>
     </PageFrame>

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/dataContracts/active?limit=50&order=desc"
+  },
+  "recordedAt": "2026-11-13T21:50:00.000Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      { "identifier": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7", "transitionsCount": 3 },
+      { "identifier": "BqszMpFvXm11jWeUYRqQu2yREZi7EzgkFfDKZR9dqamq", "transitionsCount": 2 },
+      { "identifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec", "transitionsCount": 2 }
+    ],
+    "pagination": { "page": 1, "limit": 50, "total": 3 }
+  }
+}

@@ -13,6 +13,7 @@ import { wellKnownTokens } from '@/lib/well-known'
 import { Amount, Badge, Card, DataTable, Empty, Unavailable } from '@/ui'
 import { loadState, peChildQuery, useSetSearch, type IdentityTabProps } from './common'
 import { IdForm } from './IdForm'
+import { useToken } from '../token/use-token'
 
 interface TokenRow {
   id: string
@@ -20,6 +21,63 @@ interface TokenRow {
   name?: string
   decimals?: number
   added: boolean
+}
+
+/** A token the user added reads its name and decimals from its contract, through the SDK; a well-known one already has them. */
+function useRowToken(row: TokenRow) {
+  const token = useToken(row.id, row.added)
+  return {
+    missing: token.missing,
+    loading: row.added && !token.missing && (token.info.isPending || token.contract.isPending),
+    name: row.name ?? token.name?.singular,
+    symbol: row.symbol ?? token.symbol,
+    decimals: row.decimals ?? token.decimals,
+  }
+}
+
+function TokenCell({ row }: { row: TokenRow }) {
+  const { t } = useLingui()
+  const token = useRowToken(row)
+  return (
+    <span className="flex flex-wrap items-center gap-2">
+      <Entity kind="token" id={row.id} label={row.symbol ? undefined : token.name} />
+      {token.symbol ? <Badge>{token.symbol}</Badge> : null}
+      {token.missing ? <Badge tone="warning">{t`Not on this network`}</Badge> : null}
+    </span>
+  )
+}
+
+function BalanceCell({
+  row,
+  balance,
+}: {
+  row: TokenRow
+  balance: { isPending: boolean; isError: boolean; data?: { data: bigint | null } } | undefined
+}) {
+  const { t } = useLingui()
+  const token = useRowToken(row)
+  if (token.missing) return <span data-token-balance>—</span>
+  if (!balance || balance.isPending || token.loading) return t`Loading…`
+  if (balance.isError) return <span className="text-bad">{t`Not available`}</span>
+  const value = balance.data?.data ?? 0n
+  return token.decimals === undefined ? (
+    <span className="rx-num" data-token-balance>{`${value} ${t`units`}`}</span>
+  ) : (
+    <span data-token-balance>
+      <Amount value={value} kind={{ token: { decimals: token.decimals, symbol: token.symbol } }} />
+    </span>
+  )
+}
+
+function StateCell({ row, frozen }: { row: TokenRow; frozen: boolean | undefined }) {
+  const { t } = useLingui()
+  const token = useRowToken(row)
+  if (token.missing) return '—'
+  return frozen ? (
+    <Badge tone="danger">{t`Frozen`}</Badge>
+  ) : (
+    <Badge tone="success">{t`Not frozen`}</Badge>
+  )
 }
 
 export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] }) {
@@ -71,12 +129,7 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
       {
         id: 'token',
         header: t`Token`,
-        cell: ({ row }) => (
-          <span className="flex flex-wrap items-center gap-2">
-            <Entity kind="token" id={row.original.id} />
-            {row.original.symbol ? <Badge>{row.original.symbol}</Badge> : null}
-          </span>
-        ),
+        cell: ({ row }) => <TokenCell row={row.original} />,
         meta: { phone: 'title' },
       },
       {
@@ -84,20 +137,7 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
         header: t`Balance`,
         cell: ({ row }) => {
           const index = rows.findIndex((r) => r.id === row.original.id)
-          const q = balances[index]
-          if (!q || q.isPending) return t`Loading…`
-          if (q.isError) return <span className="text-bad">{t`Not available`}</span>
-          const value = q.data?.data ?? 0n
-          return row.original.decimals === undefined ? (
-            <span className="rx-num" data-token-balance>{`${value} ${t`units`}`}</span>
-          ) : (
-            <span data-token-balance>
-              <Amount
-                value={value}
-                kind={{ token: { decimals: row.original.decimals, symbol: row.original.symbol } }}
-              />
-            </span>
-          )
+          return <BalanceCell row={row.original} balance={balances[index]} />
         },
         meta: { align: 'end', numeric: true, phone: 'primary' },
       },
@@ -107,11 +147,8 @@ export function TokensTab({ id, tokens }: IdentityTabProps & { tokens: string[] 
         cell: ({ row }) => {
           if (infos.isPending) return t`Loading…`
           if (infos.isError) return <span className="text-bad">{t`Not available`}</span>
-          const info = infos.data?.data.get(row.original.id)
-          return info?.frozen ? (
-            <Badge tone="danger">{t`Frozen`}</Badge>
-          ) : (
-            <Badge tone="success">{t`Not frozen`}</Badge>
+          return (
+            <StateCell row={row.original} frozen={infos.data?.data.get(row.original.id)?.frozen} />
           )
         },
         meta: { phone: 'secondary' },

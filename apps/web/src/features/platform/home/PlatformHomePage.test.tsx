@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { App } from '@/app'
+import { http, HttpResponse } from 'msw'
 import { writeSourceMode } from '@/lib/source-mode'
 import { server } from '@/test/server'
 
@@ -144,6 +145,23 @@ describe('Platform overview', () => {
     await waitFor(() => expect(document.querySelector('[data-page="/epoch/$n"]')).not.toBeNull())
   })
 
+  it('opens an exact .dash name at once, and says at once when the input cannot be placed @NX-03', async () => {
+    const user = userEvent.setup()
+    renderAt('/platform')
+    const box = await screen.findByRole('textbox', {
+      name: 'Identity ID, name.dash, token ID or epoch number',
+    })
+    await user.type(box, 'what is this?!{Enter}')
+    expect(await screen.findByText(/not an identity ID, a name, a token ID/)).toBeInTheDocument()
+    expect(document.querySelector('[data-page="/platform"]')).not.toBeNull()
+    await user.clear(box)
+    await user.type(box, 'ab.dash{Enter}')
+    expect(await screen.findByText(/not an identity ID, a name, a token ID/)).toBeInTheDocument()
+    await user.clear(box)
+    await user.type(box, 'Pshenmic.dash{Enter}')
+    await waitFor(() => expect(document.querySelector('[data-page="/name/$label"]')).not.toBeNull())
+  })
+
   it('sends text it cannot place to /search and never sends a recovery phrase @NX-03', async () => {
     const user = userEvent.setup()
     renderAt('/platform')
@@ -180,14 +198,14 @@ describe('Platform overview', () => {
     expect(within(txs).getAllByRole('row').length).toBeLessThanOrEqual(6)
   })
 
-  it('holds a list still, and says so, while the pointer is over it @PE-02', async () => {
+  it('holds a list still, and says it is paused, while the pointer is over it @PE-02', async () => {
     const user = userEvent.setup()
     renderAt('/platform')
     const blocks = await ready('newest-blocks')
     const list = blocks.querySelector<HTMLElement>('[data-list="blocks"]')!
     await user.hover(list)
     expect(list).toHaveAttribute('data-held', 'true')
-    expect(within(blocks).getByRole('status')).toHaveTextContent('Held still while you look')
+    expect(within(blocks).getByRole('status')).toHaveTextContent('Paused')
     await user.unhover(list)
     await waitFor(() => expect(list).toHaveAttribute('data-held', 'false'))
   })
@@ -224,6 +242,72 @@ describe('Platform overview', () => {
     ]) {
       await card(id)
     }
+  })
+
+  it('ranks each board by the figure it shows, whatever order PE answers in @NX-01 @PE-05', async () => {
+    const PE = 'https://api.pe.dashhq.org'
+    const id = (n: number) => `${String(n).padStart(2, '1')}${'A'.repeat(41)}`
+    const page = (items: unknown[]) =>
+      HttpResponse.json({
+        pagination: { page: 1, limit: 50, total: items.length },
+        resultSet: items,
+      })
+    server.use(
+      http.get(`${PE}/dataContracts/rating`, () =>
+        page([0, 0, 31, 271, 105].map((n, i) => ({ identifier: id(i), transitionsCount: n }))),
+      ),
+      http.get(`${PE}/identities/active`, () =>
+        page([1, 1, 4, 1, 2].map((n, i) => ({ identifier: id(i), transactionsCount: n }))),
+      ),
+    )
+    renderAt('/platform')
+    const figures = (board: string) =>
+      Array.from(document.querySelectorAll(`[data-board="${board}"] li`)).map((li) => ({
+        rank: li.querySelector('.rx-num')?.textContent,
+        figure: li.querySelector('span.rx-num:last-child')?.textContent,
+      }))
+    await waitFor(() =>
+      expect(figures('board-contracts-rated').map((r) => r.figure)).toEqual([
+        '271',
+        '105',
+        '31',
+        '0',
+        '0',
+      ]),
+    )
+    await waitFor(() =>
+      expect(figures('board-active-identities')).toEqual([
+        { rank: '1', figure: '4' },
+        { rank: '2', figure: '2' },
+        { rank: '3', figure: '1' },
+        { rank: '3', figure: '1' },
+        { rank: '3', figure: '1' },
+      ]),
+    )
+  })
+
+  it('folds a board with nothing above zero into one line, and keeps the switch with its board @NX-01', async () => {
+    const PE = 'https://api.pe.dashhq.org'
+    server.use(
+      http.get(`${PE}/tokens/rating`, () =>
+        HttpResponse.json({
+          pagination: { page: 1, limit: 50, total: 2 },
+          resultSet: [
+            { tokenIdentifier: 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB', transitionCount: 0 },
+            { tokenIdentifier: 'DYqxCsuDgYsEAJ2ADnimkwNdL7C4xbe4No4so19X9mmd', transitionCount: 0 },
+          ],
+        }),
+      ),
+    )
+    renderAt('/platform')
+    const richest = await ready('board-richest')
+    expect(within(richest).getByRole('button', { name: 'Transitions' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(document.querySelector('[data-quiet-boards]')).toHaveTextContent(
+        'Nothing to rank yet: Trending tokens.',
+      ),
+    )
+    expect(document.getElementById('board-tokens')).toBeNull()
   })
 
   it('counts validators and lists quorums, linking to the platform masternode view @PE-06', async () => {

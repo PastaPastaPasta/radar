@@ -1,6 +1,7 @@
 import { useSyncExternalStore, type ReactNode } from 'react'
 import { labelsVersion, subscribeLabels, wellKnownLabel } from '@/lib/well-known'
 import { deferred } from '@/ui/deferred'
+import { shortHash } from '@/ui/hash'
 import { EntityChip, useMediaQuery, type EntityChipProps, type EntityKind } from '@/ui'
 import { entityHref, type EntitySearch } from './hrefs'
 import { useNetwork, useSourceModeLink } from './network'
@@ -22,10 +23,28 @@ export type EntityProps = Omit<EntityChipProps, 'href'> & {
   href?: false
   /** Extra query parameters on the link, e.g. a contest outside DPNS names its contract, type and index. */
   search?: EntitySearch
+  /** Name it by its ID alone, even when it has a well-known name, for a column that sits beside the name. */
+  byId?: boolean
+}
+
+/** A document's route id is `contract/type/document`; its chip is the short form of the document id alone. */
+function documentLabel(id: string): string {
+  const doc = id.slice(id.lastIndexOf('/') + 1)
+  const short = shortHash(doc)
+  return short ? `${short.head}…${short.tail}` : doc
 }
 
 /** A chip for an entity; without a `label`, a well-known contract, token or identity (or one the user labelled) is named. */
-export function Entity({ kind, id, href, search, label, hover = true, ...rest }: EntityProps) {
+export function Entity({
+  kind,
+  id,
+  href,
+  search,
+  label,
+  byId,
+  hover = true,
+  ...rest
+}: EntityProps) {
   const net = useNetwork()
   useSourceModeLink()
   useSyncExternalStore(subscribeLabels, labelsVersion, labelsVersion)
@@ -35,7 +54,10 @@ export function Entity({ kind, id, href, search, label, hover = true, ...rest }:
     <EntityChip
       kind={kind}
       id={id}
-      label={label ?? wellKnownLabel(net, kind, id)}
+      label={
+        label ??
+        (kind === 'document' ? documentLabel(id) : byId ? undefined : wellKnownLabel(net, kind, id))
+      }
       href={href ?? entityHref(kind, id, net, search)}
       hover={card && !touch}
       {...rest}

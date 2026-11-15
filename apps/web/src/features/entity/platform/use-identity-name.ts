@@ -28,3 +28,19 @@ export function useIdentityNamesFailed(ids: readonly string[]): boolean {
     combine: (results) => results.some((r) => r.isError),
   })
 }
+
+/** The DPNS names of these identities from the same resolver `useIdentityName` reads, for a label that must be plain text. */
+export function useIdentityNames(ids: readonly string[]): ReadonlyMap<string, string> {
+  const net = useNetwork()
+  const unique = [...new Set(ids)]
+  return useQueries({
+    queries: unique.map((id) => identityNameQuery(net, id)),
+    combine: (results) =>
+      new Map(
+        unique.flatMap((id, i) => {
+          const name = results[i]?.data?.data
+          return name ? [[id, name] as const] : []
+        }),
+      ),
+  })
+}

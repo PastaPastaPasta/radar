@@ -26,6 +26,13 @@ async function open(page: Page, url: string, h1: string): Promise<void> {
   await settled(page)
 }
 
+async function openFilters(page: Page): Promise<void> {
+  const details = page.locator('[data-contest-filters]')
+  if (!(await details.evaluate((el) => (el as HTMLDetailsElement).open))) {
+    await details.locator('summary').click()
+  }
+}
+
 const onlyUrl = (path: string) => `${path}${path.includes('?') ? '&' : '?'}${ONLY}`
 const rows = (page: Page, card: string) => page.locator(`#${card} tbody tr`)
 
@@ -37,11 +44,11 @@ test.describe('Names', () => {
     const list = page.locator('#names-list')
     await expect(list.locator('a[href^="/name/"]').first()).toBeVisible()
     const first = await list.locator('a[href^="/name/"]').first().textContent()
-    await page.getByRole('link', { name: 'Older' }).click()
+    await page.getByRole('link', { name: 'Next' }).click()
     await expect(page).toHaveURL(/after=/)
     await settled(page)
     await expect(list.locator('a[href^="/name/"]').first()).not.toHaveText(first ?? '')
-    await page.getByRole('link', { name: 'Newer' }).click()
+    await page.getByRole('link', { name: 'Previous' }).click()
     await expect(page).not.toHaveURL(/after=/)
     await settled(page)
     await expect(list.locator('a[href^="/name/"]').first()).toHaveText(first ?? '')
@@ -117,10 +124,24 @@ test.describe('Contests', () => {
     await expectAccessible(page)
   })
 
+  test('shows the first contest on the first screen, with the filters behind one disclosure @NX-42', async ({
+    page,
+  }) => {
+    await open(page, '/contests', 'Name contests')
+    const first = page.locator('main a[href^="/contest/"]').first()
+    await expect(first).toBeVisible()
+    const height = page.viewportSize()!.height
+    const box = (await first.boundingBox())!
+    expect(box.y + box.height).toBeLessThanOrEqual(height)
+    await expect(page.locator('[data-contest-filters] summary')).toContainText('Filters')
+    await expect(page.locator('main')).toContainText('Every name contest')
+  })
+
   test('filters to active contests and keeps the filter in the URL @NX-42 @PE-19', async ({
     page,
   }) => {
     await open(page, '/contests', 'Name contests')
+    await openFilters(page)
     await page
       .getByRole('group', { name: 'Status' })
       .getByRole('button', { name: 'Active' })
@@ -179,7 +200,8 @@ test.describe('Contest', () => {
   }) => {
     await open(page, `/contest/${NAMES.contested}`, 'Name contest')
     const contender = page.locator('[data-contender]').first()
-    await expect(contender).toContainText('vampyren.dash')
+    await expect(contender).toContainText('spawn.dash')
+    await expect(contender).not.toContainText('vampyren')
     await expect(contender).toContainText('Prefunded')
   })
 

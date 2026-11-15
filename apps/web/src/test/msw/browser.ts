@@ -7,7 +7,7 @@ import { sdk, setSdkTransport, type SdkTransport } from '@/data/sdk/client'
 import type { NetworkId } from '@/lib/network'
 import { FixtureDapiTransport } from './dapi-transport'
 import { FixtureSdkTransport } from './sdk-transport'
-import { fixtureHandlers, HTTP_SOURCE_PATTERNS, onFixtureMiss } from './handlers'
+import { addPlatformBlocks, fixtureHandlers, HTTP_SOURCE_PATTERNS, onFixtureMiss } from './handlers'
 
 export const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
 
@@ -37,6 +37,8 @@ export interface RadarFixtureHooks {
   refusedReads(source: string): number
   /** The DAPI methods turned away, one entry per call. */
   refusedDapiMethods(): string[]
+  /** Platform Explorer's newest-blocks list answers with `n` blocks on top of the recorded ones from the next read on. */
+  addPlatformBlocks(n: number): void
 }
 
 /** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
@@ -108,6 +110,7 @@ export async function startFixtureWorker(): Promise<void> {
         ? dapi.refused.filter((m) => m !== SHELL_TIP_STREAM).length
         : (refusedBySource[source] ?? 0),
     refusedDapiMethods: () => [...dapi.refused],
+    addPlatformBlocks,
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
   const down = downFromSession()

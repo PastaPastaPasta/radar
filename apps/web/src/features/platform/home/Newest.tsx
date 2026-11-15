@@ -1,28 +1,22 @@
-import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useMemo, type ReactNode } from 'react'
 import type { Sourced } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import { PageLink, PlatformBlockTable, TransitionTable, useNetwork } from '@/features/entity'
+import { formatInt } from '@/lib/format'
 import { Card, queryView, stampsOf } from '@/ui'
 import { useHold } from './use-hold'
 
 const SHOWN = 5
 
-function HeldNote({ held, fresh }: { held: boolean; fresh: number }) {
+/** The card's quiet note that its rows are paused, and how many newer ones are waiting. */
+function PausedHint({ held, fresh }: { held: boolean; fresh: number }) {
   const { t } = useLingui()
   return (
-    <p className="rx-note px-3 pb-2 text-sm" role="status" data-held={held ? 'true' : 'false'}>
-      {held
-        ? fresh > 0
-          ? plural(fresh, {
-              one: 'Held still while you look · # newer. Move away to see it.',
-              other: 'Held still while you look · # newer. Move away to see them.',
-            })
-          : t`Held still while you look. New ones appear when you move away.`
-        : ''}
-    </p>
+    <span className="rx-note text-sm" role="status" data-paused={held ? 'true' : 'false'}>
+      {held ? (fresh > 0 ? t`Paused · ${formatInt(fresh)} newer` : t`Paused`) : ''}
+    </span>
   )
 }
 
@@ -53,12 +47,24 @@ function NewestCard<T>({
   const hold = useHold(live)
   const held = hold.held ? 'true' : 'false'
   return (
-    <Card id={id} layer="platform" title={title} source={stampsOf(query.data)} actions={actions}>
-      <div {...hold.props} data-list={list} data-held={held}>
-        {table(hold.shown)}
-        <HeldNote held={hold.held} fresh={freshCount(live, hold.shown, rowId)} />
-      </div>
-    </Card>
+    <div className="contents" {...hold.props}>
+      <Card
+        id={id}
+        layer="platform"
+        title={title}
+        source={stampsOf(query.data)}
+        actions={
+          <>
+            <PausedHint held={hold.held} fresh={freshCount(live, hold.shown, rowId)} />
+            {actions}
+          </>
+        }
+      >
+        <div data-list={list} data-held={held}>
+          {table(hold.shown)}
+        </div>
+      </Card>
+    </div>
   )
 }
 

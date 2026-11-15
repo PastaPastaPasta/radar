@@ -30,6 +30,7 @@ export function IdentityLookupPage({
       setSearch({ pkh: read.pkh, after: undefined })
       return
     }
+    setSearch({ pkh: undefined, after: undefined })
     setProblem(
       read.reason === 'empty'
         ? t`Enter a public key hash: 40 hexadecimal characters.`

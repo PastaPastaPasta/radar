@@ -26,6 +26,32 @@ const INSIGHT_ORIGINS = [
 ]
 const PE_ORIGINS = ['https://api.pe.dashhq.org', 'https://api.testnet.pe.dashhq.org']
 
+let newPlatformBlocks = 0
+
+/** From now on, PE's newest-blocks list answers with `n` more blocks on top than the recording holds. */
+export function addPlatformBlocks(n: number): void {
+  newPlatformBlocks = n
+}
+
+interface RecordedBlocks {
+  resultSet: { header: { hash: string; height: number } }[]
+}
+
+function withNewBlocks(url: URL, body: unknown): unknown {
+  const list = body as RecordedBlocks
+  const top = list?.resultSet?.[0]
+  if (newPlatformBlocks === 0 || url.pathname !== '/blocks' || !top) return body
+  const newer = Array.from({ length: newPlatformBlocks }, (_, i) => ({
+    ...top,
+    header: {
+      ...top.header,
+      height: top.header.height + newPlatformBlocks - i,
+      hash: (i + 1).toString(16).padStart(64, 'F'),
+    },
+  }))
+  return { ...list, resultSet: [...newer, ...list.resultSet].slice(0, list.resultSet.length) }
+}
+
 function serve(method: 'GET' | 'POST') {
   return async ({ request }: { request: Request }): Promise<Response> => {
     // A probe's fragment tags the request; recordings are keyed without it.
@@ -45,7 +71,8 @@ function serve(method: 'GET' | 'POST') {
     }
     const headers = new Headers(fixture.headers)
     if (!headers.has('content-type')) headers.set('content-type', 'application/json')
-    return new HttpResponse(JSON.stringify(fixture.body), { status: fixture.status, headers })
+    const body = withNewBlocks(parsed, fixture.body)
+    return new HttpResponse(JSON.stringify(body), { status: fixture.status, headers })
   }
 }
 

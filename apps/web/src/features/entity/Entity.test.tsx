@@ -39,6 +39,25 @@ describe('Entity labels', () => {
     act(() => remove())
     expect(screen.queryByText('My friend')).not.toBeInTheDocument()
   })
+
+  it("shortens a document's own id, not the compound route id @PE-13", async () => {
+    const contract = 'Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7'
+    const doc = 'Ga4zoJsPrcBfRtc7fjsCcwKbbSbWxCrnvPuFMDpvFXv6'
+    await renderInApp(<Entity kind="document" id={`${contract}/contactRequest/${doc}`} />)
+    const link = await screen.findByRole('link', { name: /Ga4zoJ/ })
+    expect(link).toHaveTextContent('Ga4zoJ…FXv6')
+    expect(link).not.toHaveTextContent('Bwr4WH')
+    expect(link).toHaveAttribute(
+      'href',
+      expect.stringContaining(`${contract}/contactRequest/${doc}`),
+    )
+  })
+
+  it('names a well-known token by its ID alone when a column beside it carries the name', async () => {
+    const sans = 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB'
+    await renderInApp(<Entity kind="token" id={sans} byId />)
+    expect(await screen.findByRole('link', { name: /AxAYWy/ })).not.toHaveTextContent('SANS')
+  })
 })
 
 function setTouchScreen(touch: boolean) {

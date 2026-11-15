@@ -602,8 +602,8 @@ msgstr "Ce n’est ni une hauteur de bloc ni un hash."
 msgid "That isn't a state transition hash."
 msgstr "Ce n’est pas un hash de transition d’état."
 
-msgid "That isn’t an identity ID."
-msgstr "Ce n’est pas un ID d’identité."
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "Ce n’est pas un ID d’identité : il compte 43 ou 44 caractères base58."
 
 msgid "The identity's withdrawal address"
 msgstr "L’adresse de retrait de l’identité"
@@ -619,6 +619,9 @@ msgstr "Le nœud n’a signalé aucun résultat en quelques secondes : cette tra
 
 msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
 msgstr "Le nœud n’a signalé aucun résultat en quelques secondes. Les nœuds ne gardent que les résultats récents ; une transition plus ancienne peut donc n’en montrer aucun."
+
+msgid "The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID."
+msgstr "Le filtre Propriétaire attend un ID d’identité, pas un nom. Ouvrez le nom pour copier son ID d’identité."
 
 msgid "The same transition seen again in later blocks"
 msgstr "La même transition revue dans des blocs ultérieurs"

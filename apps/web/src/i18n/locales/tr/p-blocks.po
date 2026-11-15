@@ -602,8 +602,8 @@ msgstr "Bu bir blok yüksekliği ya da hash değil."
 msgid "That isn't a state transition hash."
 msgstr "Bu bir durum geçişi hash’i değil."
 
-msgid "That isn’t an identity ID."
-msgstr "Bu bir kimlik ID’si değil."
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "Bu bir kimlik ID’si değil: 43 veya 44 base58 karakterdir."
 
 msgid "The identity's withdrawal address"
 msgstr "Kimliğin çekim adresi"
@@ -619,6 +619,9 @@ msgstr "Düğüm birkaç saniye içinde sonuç bildirmedi: bu geçiş henüz yü
 
 msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
 msgstr "Düğüm birkaç saniye içinde sonuç bildirmedi. Düğümler yalnızca yakın tarihli sonuçları tutar; bu yüzden eski bir geçişte sonuç görünmeyebilir."
+
+msgid "The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID."
+msgstr "Sahip süzgeci bir ad değil, kimlik ID’si alır. Kimlik ID’sini kopyalamak için adı açın."
 
 msgid "The same transition seen again in later blocks"
 msgstr "Aynı geçişin sonraki bloklarda yeniden görülmesi"

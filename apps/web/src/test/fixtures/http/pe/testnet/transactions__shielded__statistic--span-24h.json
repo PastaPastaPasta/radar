@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/transactions/shielded/statistic?timestamp_start=2026-11-13T22%3A30%3A00.000Z&timestamp_end=2026-11-14T22%3A30%3A00.000Z"
+  },
+  "recordedAt": "2026-11-13T21:50:00.000Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "totalShieldedIn": "10271720000",
+    "totalShieldedOut": "5773228400",
+    "transitionsCount": 13,
+    "types": [
+      { "transactionType": "SHIELD", "count": 1, "amount": "300000000" },
+      { "transactionType": "UNSHIELD", "count": 1, "amount": "631100000" },
+      { "transactionType": "SHIELD_FROM_ASSET_LOCK", "count": 4, "amount": "8971720000" },
+      { "transactionType": "SHIELDED_WITHDRAWAL", "count": 2, "amount": "3453340000" },
+      { "transactionType": "SHIELD_FROM_IDENTITY", "count": 2, "amount": "1000000000" },
+      {
+        "transactionType": "IDENTITY_TOP_UP_FROM_SHIELDED_POOL",
+        "count": 3,
+        "amount": "1688788400"
+      }
+    ]
+  }
+}

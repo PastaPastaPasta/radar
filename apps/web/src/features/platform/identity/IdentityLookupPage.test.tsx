@@ -80,4 +80,16 @@ describe('Identity lookup by key hash @NX-17', () => {
     renderAt(`/identity/lookup?pkh=${'1'.repeat(40)}`)
     expect(await screen.findByText('No identity holds this key hash.')).toBeInTheDocument()
   })
+
+  it('drops the last result when the next hash is not one @NX-17', async () => {
+    const user = userEvent.setup()
+    renderAt(`/identity/lookup?network=testnet&pkh=${TESTNET_PKH}`)
+    await screen.findByRole('button', { name: 'Load more' })
+    const box = screen.getByLabelText('Public key hash')
+    await user.clear(box)
+    await user.type(box, 'abc{Enter}')
+    expect(await screen.findByRole('alert')).toHaveTextContent('exactly 40 hexadecimal characters')
+    await waitFor(() => expect(document.querySelector('[data-matches]')).toBeNull())
+    expect(screen.queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
 })

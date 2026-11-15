@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/identities/active?limit=50&order=desc"
+  },
+  "recordedAt": "2026-11-13T21:50:00.000Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      {
+        "identifier": "34Bm1VnVHTaSJ1oTRLreUhdHAAk4j42L5H2yZitLKAyv",
+        "transactionsCount": "5",
+        "aliases": [
+          {
+            "alias": "mahamuud600.dash",
+            "status": "ok",
+            "timestamp": "2026-11-14T21:36:38.207Z",
+            "documentId": "87Sy9VFYG94dnCkWqV6QgmoyhJHCCaqMxcHbDaScKyQk",
+            "contested": false
+          }
+        ]
+      },
+      {
+        "identifier": "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+        "transactionsCount": "2",
+        "aliases": []
+      },
+      {
+        "identifier": "7nWhft5MZAUnxo5qcW8zJJL92RcNqYz821VJTuxY9xZx",
+        "transactionsCount": "1",
+        "aliases": [
+          {
+            "alias": "jerry.dash",
+            "status": "ok",
+            "timestamp": "2025-02-23T21:20:25.094Z",
+            "documentId": "Ads8aupJhgA4W5jpQGnK7hrKtwCaXLnodZjLMKjSRy4Q",
+            "contested": true
+          }
+        ]
+      },
+      {
+        "identifier": "CZUa7rTxZZUL3vF5MrtFj1fT2TX5C1YtqnTxT2gFmG3P",
+        "transactionsCount": "1",
+        "aliases": [
+          {
+            "alias": "evonextmainnetf55.dash",
+            "status": "ok",
+            "timestamp": "2026-11-14T10:19:16.365Z",
+            "documentId": "GyUKpymq2MY6o2d8qiytNuh2Xc2QvC6dQJLXyQyPEzmc",
+            "contested": false
+          }
+        ]
+      }
+    ],
+    "pagination": { "page": 1, "limit": 50, "total": 4 }
+  }
+}

@@ -1,11 +1,25 @@
 import { describe, expect, it } from 'vitest'
-import { barsOption, bucketLabel, timeOption } from './chart-options'
+import { rangeQuery } from '@/data/pe/params'
+import { barsOption, bucketLabel, HOME_RANGES, timeOption } from './chart-options'
 
 describe('chart options @PE-04', () => {
   it('labels buckets by the hour for a day and by the day for longer ranges', () => {
     const ms = Date.UTC(2026, 10, 13, 8, 30)
     expect(bucketLabel(ms, '24h')).toMatch(/\d/)
     expect(bucketLabel(ms, '1w')).not.toEqual(bucketLabel(ms, '24h'))
+  })
+
+  it('labels every bucket of every range differently', () => {
+    const now = Date.UTC(2026, 10, 14, 22, 33)
+    for (const range of HOME_RANGES) {
+      const q = rangeQuery(range, now)
+      const start = Date.parse(String(q.timestamp_start))
+      const step = (Date.parse(String(q.timestamp_end)) - start) / Number(q.intervalsCount)
+      const labels = Array.from({ length: Number(q.intervalsCount) }, (_, i) =>
+        bucketLabel(start + i * step, range),
+      )
+      expect(new Set(labels).size, `${range}: ${labels.join(' | ')}`).toBe(labels.length)
+    }
   })
 
   it('draws bars for counts and a line for a running total, one category per bucket', () => {

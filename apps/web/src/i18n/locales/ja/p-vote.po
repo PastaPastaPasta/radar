@@ -63,9 +63,6 @@ msgctxt "contest status"
 msgid "Active"
 msgstr "アクティブ"
 
-msgid "Active contested names with end time, votes and status."
-msgstr "進行中の争奪中の名前（終了時刻、投票数、状態）。"
-
 msgid "All"
 msgstr "すべて"
 
@@ -173,6 +170,12 @@ msgstr "この争奪に対するすべてのマスターノード投票（Platfo
 msgid "Every masternode vote with voter, choice, resource and time."
 msgstr "すべてのマスターノード投票（投票者、選択、対象、時刻）。"
 
+msgid "Every name contest, open ones first, with end time, votes and status."
+msgstr "すべての名前の争奪を、開催中のものから順に、終了時刻・票数・状態とともに表示します。"
+
+msgid "Filters"
+msgstr "フィルター"
+
 msgid "Finished"
 msgstr "終了"
 
@@ -214,6 +217,12 @@ msgstr "名前の争奪"
 
 msgid "Name contests"
 msgstr "名前の争奪"
+
+msgid "Name contests still open, with end time, votes and status."
+msgstr "開催中の名前の争奪を、終了時刻・票数・状態とともに表示します。"
+
+msgid "Name contests that have ended, with their votes and outcome."
+msgstr "終了した名前の争奪を、票数と結果とともに表示します。"
 
 msgid "Name starts with"
 msgstr "名前の先頭"
@@ -368,6 +377,12 @@ msgstr "ステータス: 終了"
 msgid "Tally"
 msgstr "集計"
 
+msgid "That is a masternode ProTx hash. This filter takes the voter’s identity ID, which the Voting identity column shows beside each vote."
+msgstr "これはマスターノードの ProTx ハッシュです。このフィルターは投票者のアイデンティティ ID を受け付けます。各票の横の「投票アイデンティティ」列に表示されています。"
+
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "アイデンティティ ID ではありません。base58 の 43 または 44 文字です。"
+
 msgid "The list of masternode votes needs Platform Explorer’s index"
 msgstr "マスターノード投票の一覧には Platform Explorer のインデックスが必要です"
 
@@ -376,6 +391,9 @@ msgstr "ある候補者に投票したマスターノードの投票用アイデ
 
 msgid "The prefunded voting balance comes from Platform Explorer’s index"
 msgstr "事前資金の投票残高は Platform Explorer のインデックスから取得されます"
+
+msgid "The Towards filter takes an identity ID: 43 or 44 base58 characters."
+msgstr "「投票先」フィルターにはアイデンティティ ID(base58 の 43 または 44 文字)を入力します。"
 
 msgid "This contest has no contenders."
 msgstr "この争奪には候補者がいません。"
@@ -459,6 +477,9 @@ msgstr "投票数"
 
 msgid "Voting ends"
 msgstr "投票終了"
+
+msgid "Voting identity"
+msgstr "投票アイデンティティ"
 
 msgid "Who voted, and when, comes from Platform Explorer’s index"
 msgstr "誰がいつ投票したかは Platform Explorer のインデックスから取得されます"

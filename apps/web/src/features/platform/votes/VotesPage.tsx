@@ -31,6 +31,7 @@ import {
   Unavailable,
 } from '@/ui'
 import { usePeList, useSetSearch } from '../contest/shared'
+import { classifyIdentityInput, type IdentityInput } from './filter-input'
 
 export type VotesPageSearch = VotesFilters
 
@@ -78,8 +79,19 @@ function VoteList({ search }: { search: VotesPageSearch }) {
   const set = useSetSearch()
   const [voter, setVoter] = useState(search.voter ?? '')
   const [towards, setTowards] = useState(search.towards ?? '')
-  const list = usePeList('votes', search, (page, limit) =>
-    peQueries.masternodeVotes(net, peVotesQuery({ ...search, limit, page })),
+  const [problem, setProblem] = useState<{ voter: IdentityInput; towards: IdentityInput }>({
+    voter: classifyIdentityInput(search.voter ?? ''),
+    towards: classifyIdentityInput(search.towards ?? ''),
+  })
+  const identityOnly = (text: string | undefined) =>
+    classifyIdentityInput(text ?? '') === 'identity' ? text : undefined
+  const asked = {
+    ...search,
+    voter: identityOnly(search.voter),
+    towards: identityOnly(search.towards),
+  }
+  const list = usePeList('votes', asked, (page, limit) =>
+    peQueries.masternodeVotes(net, peVotesQuery({ ...asked, limit, page })),
   )
   const columns = useMemo<ColumnDef<PeVote>[]>(
     () => [
@@ -89,6 +101,13 @@ function VoteList({ search }: { search: VotesPageSearch }) {
         cell: ({ row }) => <Entity kind="masternode" id={row.original.proTxHash.toLowerCase()} />,
         enableSorting: false,
         meta: { phone: 'title' },
+      },
+      {
+        id: 'voting-identity',
+        header: t`Voting identity`,
+        cell: ({ row }) => <IdentityRef id={row.original.voterIdentifier} />,
+        enableSorting: false,
+        meta: { phone: 'hidden' },
       },
       {
         id: 'choice',
@@ -197,7 +216,14 @@ function VoteList({ search }: { search: VotesPageSearch }) {
           className="flex flex-wrap items-center gap-2"
           onSubmit={(e) => {
             e.preventDefault()
-            set({ voter: voter.trim() || undefined, towards: towards.trim() || undefined })
+            const kinds = {
+              voter: classifyIdentityInput(voter),
+              towards: classifyIdentityInput(towards),
+            }
+            setProblem(kinds)
+            const ok = (k: IdentityInput) => k === 'empty' || k === 'identity'
+            if (ok(kinds.voter) && ok(kinds.towards))
+              set({ voter: voter.trim() || undefined, towards: towards.trim() || undefined })
           }}
         >
           <SearchField
@@ -215,6 +241,18 @@ function VoteList({ search }: { search: VotesPageSearch }) {
           <button type="submit" className="dh-btn dh-btn--sm">
             {t`Apply`}
           </button>
+          {problem.voter === 'protx' || problem.voter === 'invalid' ? (
+            <span role="alert" className="basis-full text-bad">
+              {problem.voter === 'protx'
+                ? t`That is a masternode ProTx hash. This filter takes the voter’s identity ID, which the Voting identity column shows beside each vote.`
+                : t`That isn’t an identity ID: it is 43 or 44 base58 characters.`}
+            </span>
+          ) : null}
+          {problem.towards === 'protx' || problem.towards === 'invalid' ? (
+            <span role="alert" className="basis-full text-bad">
+              {t`The Towards filter takes an identity ID: 43 or 44 base58 characters.`}
+            </span>
+          ) : null}
         </form>
         <DateRangeFilter
           label={t`Voted`}

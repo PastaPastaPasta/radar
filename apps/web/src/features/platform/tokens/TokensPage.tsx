@@ -26,6 +26,7 @@ import {
   Unavailable,
 } from '@/ui'
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
+import { BOARD_PAGE, rankDesc } from '../home/rank'
 import { useListControls } from '../blocks/use-list-controls'
 import { usePagedList } from '../blocks/use-paged-list'
 import { ByContractForm } from '../token/ByContractForm'
@@ -38,7 +39,6 @@ import {
   type TokensSearch,
 } from './token-list'
 
-const TRENDING_LIMIT = 10
 const TRENDING_SHOWN = 5
 
 export function TokensPage() {
@@ -142,8 +142,12 @@ function Trending() {
   const { t } = useLingui()
   const net = useNetwork()
   const nameOf = useNameOf()
-  const q = useQuery(peQueries.tokenRating(net, { limit: TRENDING_LIMIT }))
-  const rows = (q.data?.data.items ?? []).slice(0, TRENDING_SHOWN)
+  const q = useQuery(peQueries.tokenRating(net, BOARD_PAGE))
+  const rows = rankDesc(q.data?.data.items ?? [], (r) => r.transitionCount)
+    .map((r) => r.item)
+    .filter((r) => r.transitionCount > 0)
+    .slice(0, TRENDING_SHOWN)
+  if (q.isSuccess && rows.length === 0) return null
   return (
     <Card
       title={t`Trending`}

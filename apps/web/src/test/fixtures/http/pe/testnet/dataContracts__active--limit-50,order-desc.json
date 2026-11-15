@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.testnet.pe.dashhq.org/dataContracts/active?limit=50&order=desc"
+  },
+  "recordedAt": "2026-11-13T21:50:00.000Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "resultSet": [
+      { "identifier": "EvCyNsq874kf8jGRhHFjvbnnmXE5DmebyqLE9PYrKgRF", "transitionsCount": 66 },
+      { "identifier": "GWghYQoDFEb3osEfigrF7CKdZLWauxC7TwM4jsJyqa23", "transitionsCount": 44 },
+      { "identifier": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec", "transitionsCount": 10 },
+      { "identifier": "3ueAfbVe8LvCxYWk7bKvXxc5uHe7E1TDJHzN3k3ZDehZ", "transitionsCount": 2 },
+      { "identifier": "4raRir2xasapYiwrxmL7UTT5VxW27FZ4H3x5kzhHwx5Y", "transitionsCount": 1 },
+      { "identifier": "Bwr4WHCPz5rFVAD87RqTs3izo4zpzwsEdKPWUT1NS1C7", "transitionsCount": 1 }
+    ],
+    "pagination": { "page": 1, "limit": 50, "total": 6 }
+  }
+}

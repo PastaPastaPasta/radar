@@ -47,6 +47,18 @@ describe('Quorums', () => {
     expect(all).toBeGreaterThan(1)
   })
 
+  it('labels the Verified column as the flag Platform reports, not Radar’s proof @NX-55', async () => {
+    renderAt('/quorums')
+    const quorums = await card('quorums')
+    await waitFor(() =>
+      expect(quorums.querySelectorAll('[data-quorum-hash]').length).toBeGreaterThan(3),
+    )
+    const header = within(quorums).getByRole('columnheader', { name: /Platform’s flag/ })
+    expect(header.querySelector('[title]')?.getAttribute('title')).toMatch(
+      /Radar has not checked the signature/,
+    )
+  })
+
   it('lets the quorum type buttons wrap instead of widening the page on a phone @NX-55', async () => {
     renderAt('/quorums')
     const quorums = await card('quorums')
@@ -86,6 +98,16 @@ describe('Credits', () => {
     await user.type(within(lookup).getByLabelText('Balance ID'), 'nope')
     await user.click(within(lookup).getByRole('button', { name: 'Look up' }))
     expect(await within(lookup).findByText('That is not a valid ID')).toBeInTheDocument()
+  })
+
+  it('answers an empty lookup with a message, and clears it on the next keystroke @NX-57', async () => {
+    const user = userEvent.setup()
+    renderAt('/credits')
+    const lookup = await card('prefunded')
+    await user.click(within(lookup).getByRole('button', { name: 'Look up' }))
+    expect(await within(lookup).findByRole('alert')).toHaveTextContent('Enter a balance ID')
+    await user.type(within(lookup).getByLabelText('Balance ID'), '1')
+    expect(within(lookup).queryByRole('alert')).toBeNull()
   })
 
   it('shows a balance that is there, with its proof mark and a copy control @NX-57', async () => {

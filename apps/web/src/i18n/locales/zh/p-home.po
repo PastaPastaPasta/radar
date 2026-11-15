@@ -50,9 +50,6 @@ msgstr "{0} 个有效"
 msgid "{behind} blocks behind the tip"
 msgstr "落后链顶 {behind} 个区块"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, other {查看时保持不动 · 有 # 条更新。移开即可查看。}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, other {由 # 个已通过证明验证的应答合并而成。}}"
 
@@ -303,9 +300,6 @@ msgstr "区块头和区块"
 msgid "Headroom"
 msgstr "余量"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "查看时列表保持不动。移开后会显示新内容。"
-
 msgid "History and leaders"
 msgstr "历史与领先者"
 
@@ -517,11 +511,21 @@ msgstr "暂无排名"
 msgid "Nothing shielded in this range"
 msgstr "此范围内没有隐私保护的内容"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "暂无可排名内容:{quietNames}。"
+
 msgid "Off in this mode"
 msgstr "此模式下已关闭"
 
 msgid "On the chain"
 msgstr "链上"
+
+msgid "Paused"
+msgstr "已暂停"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "已暂停 · {0} 条新内容"
 
 msgid "Peers"
 msgstr "对等节点"
@@ -674,6 +678,9 @@ msgstr "已同步"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "这不是身份 ID、名称、代币 ID 或纪元编号。名称由 a–z、0–9 和连字符组成,3 到 63 个字符,后接 .dash。"
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "这看起来像助记词或私钥。它没有被发送到任何地方。"

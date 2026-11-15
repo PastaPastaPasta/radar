@@ -602,8 +602,8 @@ msgstr "这不是区块高度或哈希。"
 msgid "That isn't a state transition hash."
 msgstr "这不是状态转换哈希。"
 
-msgid "That isn’t an identity ID."
-msgstr "这不是身份 ID。"
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "这不是身份 ID:它是 43 或 44 个 base58 字符。"
 
 msgid "The identity's withdrawal address"
 msgstr "该身份的提现地址"
@@ -619,6 +619,9 @@ msgstr "节点在几秒内没有返回结果：此状态转换尚未执行，或
 
 msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
 msgstr "节点在几秒内没有返回结果。节点只保留近期结果，因此较早的状态转换可能没有结果。"
+
+msgid "The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID."
+msgstr "“所有者”筛选器需要身份 ID,而不是名称。打开该名称即可复制其身份 ID。"
 
 msgid "The same transition seen again in later blocks"
 msgstr "在之后的区块中再次出现的同一状态转换"

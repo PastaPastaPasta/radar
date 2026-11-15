@@ -24,6 +24,7 @@ import {
 } from './doc-query'
 import { cellText } from './cell-text'
 import { SdkGate } from './SdkGate'
+import { ListPager } from '../ListPager'
 
 export interface DocumentsPageProps {
   id: string
@@ -231,50 +232,45 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
             </pre>
           </div>
         ) : (
-          <DataTable
-            caption={t`Documents of type ${type}`}
-            columns={columns}
-            rows={rows}
-            getRowId={(r) => r.id}
-            state={state}
-            empty={
-              <Empty
-                kind={search.where?.length || search.after ? 'no-match' : 'none-yet'}
-                title={search.after ? t`No more documents.` : t`No documents match.`}
-                body={
-                  search.where?.length
-                    ? t`Change or clear the filters to see more.`
-                    : t`Nobody has created a document of this type yet.`
-                }
-              />
-            }
-            rowLink={(r) =>
-              ({
-                to: '/document/$contract/$type/$id',
-                params: { contract: id, type, id: r.id },
-              }) as never
-            }
-            paging={{
-              kind: 'cursor',
-              ...(more && nextSearch
-                ? {
-                    next: documentsLink(id, type, {
-                      after: nextSearch.after,
-                      prev: nextSearch.prev,
-                    }),
+          <>
+            <DataTable
+              caption={t`Documents of type ${type}`}
+              columns={columns}
+              rows={rows}
+              getRowId={(r) => r.id}
+              state={state}
+              empty={
+                <Empty
+                  kind={search.where?.length || search.after ? 'no-match' : 'none-yet'}
+                  title={search.after ? t`No more documents.` : t`No documents match.`}
+                  body={
+                    search.where?.length
+                      ? t`Change or clear the filters to see more.`
+                      : t`Nobody has created a document of this type yet.`
                   }
-                : {}),
-              ...(prevSearch
-                ? {
-                    prev: documentsLink(id, type, {
-                      after: prevSearch.after,
-                      prev: prevSearch.prev,
-                    }),
-                  }
-                : {}),
-            }}
-            {...(query.data ? { source: stampOf(query.data) } : {})}
-          />
+                />
+              }
+              rowLink={(r) =>
+                ({
+                  to: '/document/$contract/$type/$id',
+                  params: { contract: id, type, id: r.id },
+                }) as never
+              }
+              {...(query.data ? { source: stampOf(query.data) } : {})}
+            />
+            <ListPager
+              next={
+                more && nextSearch
+                  ? documentsLink(id, type, { after: nextSearch.after, prev: nextSearch.prev })
+                  : undefined
+              }
+              prev={
+                prevSearch
+                  ? documentsLink(id, type, { after: prevSearch.after, prev: prevSearch.prev })
+                  : undefined
+              }
+            />
+          </>
         )}
         {search.limit >= DRIVE_MAX ? (
           <p className="mt-2 text-ink-2">{t`Platform answers at most ${DRIVE_MAX} documents at a time.`}</p>

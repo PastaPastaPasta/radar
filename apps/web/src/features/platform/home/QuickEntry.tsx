@@ -6,6 +6,8 @@ import { useNetwork } from '@/features/entity'
 import { Card } from '@/ui'
 
 const EXPLICIT_NAME = /\.dash$/i
+const EXACT_NAME = /^([a-z0-9-]{3,63})\.dash$/i
+const PLACEABLE = new Set(['int', 'hex64', 'hex40', 'base58-id', 'document-path', 'dpns'])
 
 /**
  * NX-03: one box for an identity ID, a DPNS name, a token ID or an epoch number. An epoch number opens the epoch; any
@@ -20,6 +22,7 @@ export function QuickEntry() {
   const [text, setText] = useState('')
   const [asked, setAsked] = useState<string | undefined>()
   const [withheld, setWithheld] = useState(false)
+  const [unplaced, setUnplaced] = useState(false)
   const result = useSearch(asked ?? '', { mode: 'page' })
   const handled = useRef<string | undefined>(undefined)
 
@@ -42,9 +45,19 @@ export function QuickEntry() {
     const value = text.trim()
     if (!value) return
     setWithheld(false)
+    setUnplaced(false)
+    const exact = EXACT_NAME.exec(value)
+    if (exact?.[1]) {
+      void navigate({ to: '/name/$label', params: { label: exact[1].toLowerCase() } })
+      return
+    }
     const c = classify(value, net)
     if (c.warning) {
       setWithheld(true)
+      return
+    }
+    if (!c.classes.some((k) => PLACEABLE.has(k)) || EXPLICIT_NAME.test(value)) {
+      setUnplaced(true)
       return
     }
     if (c.classes[0] === 'int') {
@@ -79,7 +92,11 @@ export function QuickEntry() {
           autoComplete="off"
           spellCheck={false}
           placeholder={t`Identity ID, name.dash, token ID or epoch`}
-          onChange={(e) => setText(e.target.value)}
+          aria-invalid={unplaced || undefined}
+          onChange={(e) => {
+            setText(e.target.value)
+            setUnplaced(false)
+          }}
         />
         <button type="submit" className="dh-btn" disabled={asked !== undefined}>
           {asked === undefined ? t`Go` : t`Looking…`}
@@ -88,7 +105,9 @@ export function QuickEntry() {
       <p role="status" className="mt-2 text-sm text-[var(--dh-ink-2,inherit)]">
         {withheld
           ? t`That looks like a recovery phrase or a private key. It was not sent anywhere.`
-          : ''}
+          : unplaced
+            ? t`That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash.`
+            : ''}
       </p>
     </Card>
   )

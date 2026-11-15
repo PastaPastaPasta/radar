@@ -50,9 +50,6 @@ msgstr "{0} gültig"
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} Blöcke hinter der Spitze"
 
-msgid "{fresh, plural, one {Held still while you look · # newer. Move away to see it.} other {Held still while you look · # newer. Move away to see them.}}"
-msgstr "{fresh, plural, one {Angehalten beim Ansehen · # neuer. Zeiger wegbewegen, um ihn zu sehen.} other {Angehalten beim Ansehen · # neuere. Zeiger wegbewegen, um sie zu sehen.}}"
-
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Aus # beweisgeprüfter Antwort kombiniert.} other {Aus # beweisgeprüften Antworten kombiniert.}}"
 
@@ -303,9 +300,6 @@ msgstr "Header und Blöcke"
 msgid "Headroom"
 msgstr "Spielraum"
 
-msgid "Held still while you look. New ones appear when you move away."
-msgstr "Angehalten beim Ansehen. Neue Einträge erscheinen, sobald der Zeiger wegbewegt wird."
-
 msgid "History and leaders"
 msgstr "Verlauf und Spitzenreiter"
 
@@ -517,11 +511,21 @@ msgstr "Noch nichts im Ranking"
 msgid "Nothing shielded in this range"
 msgstr "Nichts abgeschirmt in diesem Bereich"
 
+msgid "Nothing to rank yet: {quietNames}."
+msgstr "Noch nichts zu ranken: {quietNames}."
+
 msgid "Off in this mode"
 msgstr "In diesem Modus aus"
 
 msgid "On the chain"
 msgstr "In der Chain"
+
+msgid "Paused"
+msgstr "Pausiert"
+
+#. placeholder {0}: formatInt(fresh)
+msgid "Paused · {0} newer"
+msgstr "Pausiert · {0} neuer"
 
 msgid "Peers"
 msgstr "Peers"
@@ -674,6 +678,9 @@ msgstr "Synchronisiert"
 #. placeholder {0}: s.tenderdashVersion
 msgid "Tenderdash {0}"
 msgstr "Tenderdash {0}"
+
+msgid "That is not an identity ID, a name, a token ID or an epoch number. Names use a–z, 0–9 and hyphens, 3 to 63 characters, then .dash."
+msgstr "Das ist weder eine Identitäts-ID, ein Name, eine Token-ID noch eine Epochennummer. Namen bestehen aus a–z, 0–9 und Bindestrichen, 3 bis 63 Zeichen, dann .dash."
 
 msgid "That looks like a recovery phrase or a private key. It was not sent anywhere."
 msgstr "Das sieht nach einer Wiederherstellungsphrase oder einem privaten Schlüssel aus. Es wurde nirgendwohin gesendet."

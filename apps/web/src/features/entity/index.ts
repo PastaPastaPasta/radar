@@ -43,7 +43,11 @@ export { PageFrame, usePageClaim } from './PageFrame'
 export type { PageFrameProps } from './PageFrame'
 export { IdentityRef } from './platform/IdentityRef'
 export type { IdentityRefProps } from './platform/IdentityRef'
-export { useIdentityName, useIdentityNamesFailed } from './platform/use-identity-name'
+export {
+  useIdentityName,
+  useIdentityNames,
+  useIdentityNamesFailed,
+} from './platform/use-identity-name'
 export { TransitionTable } from './platform/transition-table'
 export type { TransitionColumn, TransitionTableProps } from './platform/transition-table'
 export { PlatformBlockTable } from './platform/block-table'

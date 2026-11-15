@@ -131,6 +131,45 @@ describe('pe client', () => {
     expect(out.data[0]?.txs).toBeTypeOf('number')
   })
 
+  it('asks every history read for the range as a time window, since PE ignores timeframe', async () => {
+    const seen: URL[] = []
+    server.use(
+      http.get(`${MAIN}/*`, ({ request }) => {
+        seen.push(new URL(request.url))
+        return HttpResponse.json([])
+      }),
+    )
+    const hash = 'b5'.repeat(32)
+    await Promise.all([
+      pe.transactionsHistory('mainnet', '1w'),
+      pe.gasHistory('mainnet', '1w'),
+      pe.identitiesHistory('mainnet', '1w'),
+      pe.shieldHistory('mainnet', '1w'),
+      pe.unshieldHistory('mainnet', '1w'),
+      pe.validatorBlockStats('mainnet', hash, '1w'),
+      pe.validatorRewardStats('mainnet', hash, '1w'),
+    ])
+    const reads = seen
+    expect(reads.map((u) => u.pathname).sort()).toEqual([
+      '/identities/history',
+      '/transactions/gas/history',
+      '/transactions/history',
+      '/transactions/shield/history',
+      '/transactions/unshield/history',
+      `/validator/${hash}/rewards/stats`,
+      `/validator/${hash}/stats`,
+    ])
+    for (const u of reads) {
+      expect(u.searchParams.has('timeframe')).toBe(false)
+      expect(u.searchParams.get('intervalsCount')).toBe('7')
+      const days =
+        (Date.parse(u.searchParams.get('timestamp_end')!) -
+          Date.parse(u.searchParams.get('timestamp_start')!)) /
+        86_400_000
+      expect(days).toBe(7)
+    }
+  })
+
   it('search resolves 404 to null', async () => {
     server.use(
       http.get(`${MAIN}/search`, () =>

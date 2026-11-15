@@ -602,8 +602,8 @@ msgstr "ブロックの高さでもハッシュでもありません。"
 msgid "That isn't a state transition hash."
 msgstr "ステートトランジションのハッシュではありません。"
 
-msgid "That isn’t an identity ID."
-msgstr "アイデンティティ ID ではありません。"
+msgid "That isn’t an identity ID: it is 43 or 44 base58 characters."
+msgstr "アイデンティティ ID ではありません。base58 の 43 または 44 文字です。"
 
 msgid "The identity's withdrawal address"
 msgstr "アイデンティティの出金アドレス"
@@ -619,6 +619,9 @@ msgstr "ノードは数秒以内に結果を返しませんでした。このト
 
 msgid "The node reported no result within a few seconds. Nodes keep only recent results, so an older transition may show none."
 msgstr "ノードは数秒以内に結果を返しませんでした。ノードは最近の結果しか保持しないため、古いトランジションでは結果が表示されないことがあります。"
+
+msgid "The Owner filter takes an identity ID, not a name. Open the name to copy its identity ID."
+msgstr "所有者フィルターには名前ではなくアイデンティティ ID を入力します。名前のページを開くと、そのアイデンティティ ID をコピーできます。"
 
 msgid "The same transition seen again in later blocks"
 msgstr "後のブロックで再び現れた同じトランジション"

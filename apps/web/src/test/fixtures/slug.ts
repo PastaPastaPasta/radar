@@ -44,12 +44,31 @@ function safe(s: string): string {
 
 const HEX64 = /[0-9a-fA-F]{64}/g
 
-export function slugOf(path: string, query: string, method = 'GET'): string {
+const WINDOWED = /\/(?:history|stats|statistic)$/
+
+/**
+ * A history read names its window by absolute times that move with the clock. A recording is keyed by the
+ * window's length instead, so the read made today finds the one recorded last week.
+ */
+function spanned(path: string, query: string): string {
+  if (!WINDOWED.test(path)) return query
+  const sp = new URLSearchParams(query)
+  const start = Date.parse(sp.get('timestamp_start') ?? '')
+  const end = Date.parse(sp.get('timestamp_end') ?? '')
+  if (Number.isNaN(start) || Number.isNaN(end)) return query
+  sp.delete('timestamp_start')
+  sp.delete('timestamp_end')
+  sp.set('span', `${Math.round((end - start) / 3_600_000)}h`)
+  return normalizedQuery(sp)
+}
+
+export function slugOf(path: string, rawQuery: string, method = 'GET'): string {
+  const query = spanned(path, rawQuery)
   const base = (path.replace(/^\/+|\/+$/g, '') || 'root').replace(HEX64, (h) => h.toLowerCase())
   let slug = safe(base.replaceAll('/', '__'))
   if (query) slug += '--' + safe(query.replaceAll('=', '-').replaceAll('&', ','))
   if (method !== 'GET') slug = `${method.toLowerCase()}--${slug}`
-  if (slug.length > 120) slug = `${slug.slice(0, 100)}-${fnv1a(`${method} ${path}?${query}`)}`
+  if (slug.length > 120) slug = `${slug.slice(0, 100)}-${fnv1a(`${method} ${path}?${rawQuery}`)}`
   return slug
 }
 
