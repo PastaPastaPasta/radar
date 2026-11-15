@@ -168,7 +168,11 @@ export function ResultsPanel({ run, index, net, running, onMore }: ResultsPanelP
               <div role="alert" data-query-problem="run" className="grid gap-1">
                 <p className="font-semibold">{t`Platform couldn't run this query`}</p>
                 <p className="rx-mono break-words text-sm">
-                  {error instanceof Error ? error.message : String(error)}
+                  {error instanceof Error
+                    ? error.message
+                    : typeof error === 'string'
+                      ? error
+                      : null}
                 </p>
               </div>
             ) : (

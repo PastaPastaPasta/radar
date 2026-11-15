@@ -57,8 +57,8 @@ function setup(health: Record<string, HealthState> = {}) {
   const core = createCoreClient({
     transport: () => transport,
     decoder,
-    hyphen: hyphen as never,
-    insight: insight as never,
+    hyphen: hyphen,
+    insight: insight,
     health: { get: (_net, source) => ({ state: health[source] ?? 'ok' }) as never },
     now: Date.now,
   })
@@ -118,7 +118,7 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
 
   it('asks Insight when Hyphen fails too, and says it stood in', async () => {
     const { core, hyphen, insight } = setup()
-    hyphen.rawTx.mockRejectedValue(unreachable() as never)
+    hyphen.rawTx.mockRejectedValue(unreachable())
     insightHasTx(insight)
     const tx = await core.tx('mainnet', TXID)
     expect(tx.source).toBe('insight')
@@ -181,7 +181,7 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     expect(fromHyphen.data?.height).toBe(BLOCK_HEIGHT)
 
     const b = setup()
-    b.hyphen.rawBlock.mockRejectedValue(unreachable() as never)
+    b.hyphen.rawBlock.mockRejectedValue(unreachable())
     b.insight.block.mockResolvedValue(
       sourced('insight', { hash: BLOCK, height: BLOCK_HEIGHT, time: 0 }) as never,
     )
@@ -193,7 +193,7 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
 
   it('reads previous outputs from Insight when DAPI is already down and Hyphen misses', async () => {
     const { core, hyphen, insight } = setup({ dapi: 'down' })
-    hyphen.rawTx.mockRejectedValue(unreachable() as never)
+    hyphen.rawTx.mockRejectedValue(unreachable())
     insightHasTx(insight)
     const prevs = await core.prevouts('mainnet', {
       inputs: [{ txid: TXID, vout: 0, sequence: 0, scriptSig: '' }],
@@ -212,7 +212,7 @@ describe('a failed DAPI read falls back inside the same query @W2-25 @X-09', () 
     const prevs = await core.prevouts('mainnet', {
       ...tx!,
       inputs: [{ txid: TXID, vout: 0, sequence: 0, scriptSig: '' }],
-    } as never)
+    })
     expect(prevs.fallback).toBe('dapi-down')
     expect(prevs.data.has(`${TXID}:0`)).toBe(true)
   })

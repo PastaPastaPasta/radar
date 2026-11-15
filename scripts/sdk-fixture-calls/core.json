@@ -6,27 +6,13 @@
         "contractId": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
         "type": "withdrawal",
         "orderBy": [
-          [
-            "status",
-            "asc"
-          ],
-          [
-            "transactionIndex",
-            "asc"
-          ]
+          ["status", "asc"],
+          ["transactionIndex", "asc"]
         ],
         "limit": 2,
         "where": [
-          [
-            "status",
-            "==",
-            3
-          ],
-          [
-            "transactionIndex",
-            "==",
-            15590
-          ]
+          ["status", "==", 3],
+          ["transactionIndex", "==", 15590]
         ]
       }
     ],
@@ -36,27 +22,13 @@
         "contractId": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
         "type": "withdrawal",
         "orderBy": [
-          [
-            "status",
-            "asc"
-          ],
-          [
-            "transactionIndex",
-            "asc"
-          ]
+          ["status", "asc"],
+          ["transactionIndex", "asc"]
         ],
         "limit": 2,
         "where": [
-          [
-            "status",
-            "==",
-            2
-          ],
-          [
-            "transactionIndex",
-            "==",
-            15590
-          ]
+          ["status", "==", 2],
+          ["transactionIndex", "==", 15590]
         ]
       }
     ]

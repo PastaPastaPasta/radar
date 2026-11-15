@@ -8,7 +8,7 @@ export interface PaletteApi {
   initialQuery: string
   open(initialQuery?: string): void
   /** The search box is on screen: keys typed before it was are in `initialQuery`, and the box takes over from here. */
-  ready(): void
+  ready: () => void
   close(): void
   toggle(): void
 }
