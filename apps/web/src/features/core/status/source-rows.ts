@@ -51,9 +51,13 @@ export function sourceRows(
 
 type Overall = 'ok' | 'attention' | 'down' | 'checking'
 
-/** The row says "N blocks behind" or "M minutes behind": an index or crawl that trails the chain by that much. */
+/**
+ * A source trails the chain when its index is blocks behind, or health itself calls a time-only lag stale.
+ * Radar records minutes since the last crawl on every read. A crawl a few minutes old, with its Core node at the
+ * tip, is not behind the chain: the row stays Live until that age is stale (45 minutes).
+ */
 export const isBehind = (health: SourceHealth): boolean =>
-  (health.lag?.blocks ?? 0) > 0 || (health.lag?.ms ?? 0) >= 60_000
+  (health.lag?.blocks ?? 0) > 0 || (health.state === 'stale' && (health.lag?.ms ?? 0) > 0)
 
 /** The sources in use whose own row reports that they trail the chain. */
 export function laggingSources(rows: readonly SourceRow[]): SourceId[] {
