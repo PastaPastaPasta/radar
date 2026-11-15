@@ -234,6 +234,10 @@ msgstr "Banido no bloco {0}"
 msgid "Banned on Platform"
 msgstr "Banido na Platform"
 
+#. placeholder {0}: formatInt(v.poseScoreMax)
+msgid "bans at {0}"
+msgstr "banido em {0}"
+
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Melhor do que {0} dos masternodes testados a partir do mesmo local."
@@ -518,6 +522,9 @@ msgstr "O índice do Hyphen está atrasado em relação à cadeia, por isso esta
 msgid "if it ended now (an estimate)"
 msgstr "se terminasse agora (uma estimativa)"
 
+msgid "In a validator set"
+msgstr "Em um conjunto de validadores"
+
 msgid "in total (not counting expired ones)."
 msgstr "no total (sem contar as expiradas)."
 
@@ -754,6 +761,9 @@ msgstr "Ainda não verificado"
 msgid "not compared: Radar’s record is not in use"
 msgstr "não comparado: o registo do Radar não está em uso"
 
+msgid "Not in a validator set"
+msgstr "Fora de um conjunto de validadores"
+
 msgid "not in a validator set that takes turns now"
 msgstr "fora de um conjunto de validadores que faz turnos agora"
 
@@ -867,6 +877,7 @@ msgid "Payout address"
 msgstr "Endereço de pagamento"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
+#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Penalidade {0}"
 

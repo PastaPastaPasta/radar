@@ -289,11 +289,18 @@ msgstr "Hash-Präfix"
 msgid "How many evonodes vote for each protocol version."
 msgstr "Wie viele Evonodes für welche Protokollversion stimmen."
 
-#. placeholder {0}: formatInt(voters)
+#. placeholder {0}: formatInt(onRecord)
 #. placeholder {1}: formatInt(total)
 #. placeholder {2}: formatInt(total)
 msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
 msgstr "Wie viele Evonodes für jede Protokollversion stimmen. {0} der {1} aktiven Evonodes haben eine Stimme hinterlegt, und die Anteile beziehen sich auf diese; die Aktivierungsschwelle zählt alle {2}."
+
+#. placeholder {0}: formatInt(onRecord)
+#. placeholder {1}: formatInt(retired > 0 ? enabledWithVote : total)
+#. placeholder {2}: formatInt(retired > 0 ? retired : onRecord - total)
+#. placeholder {3}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} votes are on record: {1} from enabled evonodes and {2} from evonodes that are no longer enabled. The shares are of the votes on record; the activation threshold counts all {3} enabled evonodes."
+msgstr "Wie viele Evonodes für jede Protokollversion stimmen. {0} Stimmen sind hinterlegt: {1} von aktiven Evonodes und {2} von Evonodes, die nicht mehr aktiv sind. Die Anteile beziehen sich auf die hinterlegten Stimmen; die Aktivierungsschwelle zählt alle {3} aktiven Evonodes."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -500,6 +507,11 @@ msgstr "Radars genaue Schwelle, Phase und Zahlen je Kandidat benötigen Radars C
 
 msgid "Range"
 msgstr "Bereich"
+
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} evonodes, more than the {1} enabled now"
+msgstr "Gemeldet von {0} Evonodes, mehr als die {1} jetzt aktiven"
 
 #. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
 #. placeholder {1}: formatInt(total)
