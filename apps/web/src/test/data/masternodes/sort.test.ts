@@ -101,6 +101,29 @@ describe('sortMnRows', () => {
     expect(ids(sortMnRows(rows, 'version'))).toEqual([1, 2, 4, 3])
   })
 
+  it('sorts a ProTx as plain hex, not as text with numbers in it', () => {
+    const protx = ['0a1dc4', '001cb9', '0a5d4e', '00ff00', 'ab', '9f'].map((h) => ({
+      ...row(1),
+      protx: h,
+    }))
+    expect(sortMnRows(protx, 'protx').map((r) => r.protx)).toEqual([
+      '001cb9',
+      '00ff00',
+      '0a1dc4',
+      '0a5d4e',
+      '9f',
+      'ab',
+    ])
+    expect(sortMnRows(protx, '-protx').map((r) => r.protx)).toEqual([
+      'ab',
+      '9f',
+      '0a5d4e',
+      '0a1dc4',
+      '00ff00',
+      '001cb9',
+    ])
+  })
+
   it('does not change the rows it is given', () => {
     const before = rows.map((r) => r.protx)
     sortMnRows(rows, 'protx')

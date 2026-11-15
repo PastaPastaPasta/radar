@@ -67,7 +67,10 @@ test.describe('Network census', () => {
       'the header carries the Core tip',
     ).toContainText('2,570,085')
     await expect(headline, 'the page does not repeat it').not.toContainText('2,570,085')
-    await expect(headline).toContainText('crawled 3 min ago')
+    await expect(headline).toContainText('counted at block')
+    await expect(headline, 'the crawl age is said once, by the source line').not.toContainText(
+      /crawled \d+ min/,
+    )
     await expect(headline.locator('[data-source]')).toHaveCount(0)
     await expect(sourceLineOf(headline).locator('[data-source="radar"]')).toBeVisible()
     await expectAccessible(page)
@@ -89,7 +92,7 @@ test.describe('Network census', () => {
   test('opens the list or section behind each headline figure @RA-02', async ({ page }) => {
     await openNodes(page)
     const hrefs: [string, RegExp][] = [
-      ['Reachable masternodes', /\/masternodes\?reach=reachable$/],
+      ['Reachable masternodes', /\/masternodes\?reach=reachable&status=enabled$/],
       ['Enabled', /\/masternodes\?status=enabled$/],
       ['PoSe-banned', /\/masternodes\?status=pose-banned$/],
       ['Countries', /\/nodes#countries$/],
@@ -119,6 +122,39 @@ test.describe('Network census', () => {
 
     await figure(page, /^PoSe-banned/).click()
     await expect(page).toHaveURL(/\/masternodes\?status=pose-banned$/)
+  })
+
+  test('opens lists filtered the way the figure that was clicked counts @RA-02 @RA-05 @RA-06', async ({
+    page,
+  }) => {
+    const filters = () => new URL(page.url()).searchParams
+
+    // The figures come from Radar's crawl, the list from DAPI's list; the recordings are a 150-node sample of the crawl,
+    // taken days before the list, so here only the filters are checked. The link builders' unit test checks that the
+    // list then counts what the figure counts.
+    await openNodes(page)
+    await figure(page, /^Reachable masternodes/).click()
+    await expect(page.locator('.rx-activef').first()).toContainText('match')
+    expect(filters().get('reach')).toBe('reachable')
+    expect(filters().get('status')).toBe('enabled')
+
+    await openNodes(page, '?scope=mn')
+    await card(page, 'reach').getByRole('link', { name: 'See which' }).click()
+    await expect(page.locator('.rx-activef').first()).toContainText('match')
+    expect(filters().get('reach')).toBe('unreachable')
+    expect(filters().get('status')).toBe('enabled')
+
+    for (const [id, key] of [
+      ['hosting', 'host'],
+      ['countries', 'country'],
+    ] as const) {
+      await openNodes(page, '?scope=evo')
+      await card(page, id).locator('[data-ranked] li').first().locator('a').click()
+      await expect(page.locator('.rx-activef').first()).toContainText('match')
+      expect(filters().get(key), id).toBeTruthy()
+      expect(filters().get('status'), id).toBe('enabled')
+      expect(filters().get('type'), id).toBe('evo')
+    }
   })
 
   test('scopes the versions, location and reach sections and keeps the scope through a reload and a copied link @RA-03', async ({
@@ -212,11 +248,11 @@ test.describe('Network census', () => {
     await expect(page).toHaveURL(/scope=mn/)
     await expect(hosting.getByRole('link', { name: 'Hetzner Online GmbH' })).toHaveAttribute(
       'href',
-      /\/masternodes\?host=\d+/,
+      /\/masternodes\?host=\d+.*status=enabled/,
     )
     await expect(card(page, 'countries').locator('[data-ranked] a').first()).toHaveAttribute(
       'href',
-      /\/masternodes\?country=[A-Z]{2}/,
+      /\/masternodes\?country=[A-Z]{2}.*status=enabled/,
     )
 
     await census(page)
@@ -238,7 +274,7 @@ test.describe('Network census', () => {
     await expect(reach.locator('[data-sharebar]')).toContainText("Didn't answer")
     await expect(reach.getByRole('link', { name: 'See which' })).toHaveAttribute(
       'href',
-      /\/masternodes\?reach=unreachable$/,
+      /\/masternodes\?reach=unreachable&status=enabled$/,
     )
     const networks = reach.locator('[data-address-networks]')
     for (const name of ['IPv4', 'IPv6', 'Tor', 'I2P', 'CJDNS']) {
@@ -346,25 +382,35 @@ test.describe('Network census', () => {
     await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })
 
-  test('warns when the crawl is older than 45 minutes and not before, and shows the tip and crawl age @RA-12', async ({
+  test('warns once the crawl is old enough for its stamps to turn amber (20 minutes), and not before, and shows the tip and crawl age @RA-12', async ({
     page,
   }) => {
-    await openNodes(page, '', 44 * MIN)
+    await openNodes(page, '', 19 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toHaveCount(0)
     await page.clock.fastForward(2 * MIN)
     await expect(census(page).locator('[data-stale-crawl]')).toBeVisible()
     await expect(census(page).locator('[data-stale-crawl]')).toContainText('The crawl is stale')
-    await expect(census(page).locator('[data-stale-crawl]')).toContainText('46 min ago')
+    await expect(census(page).locator('[data-stale-crawl]')).toContainText('21 min ago')
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
 
     await page.goto('/')
     const crawled = page.locator('.rx-hero [data-section-sources] [data-source="radar"]')
-    await expect(crawled).toContainText(/Crawled by Radar\s*4\d min(utes)? ago/)
+    await expect(crawled).toContainText(/Crawled by Radar\s*2\d min(utes)? ago/)
     await expect(crawled, 'a stale crawl shows as stale in the hero line').toHaveAttribute(
       'data-state',
       'stale',
     )
     await expect(page.locator('[data-header-tip]')).toContainText('2,570,085')
+  })
+
+  test('gives the page one crawl time: the crawl’s, not the older speed test’s @RA-12', async ({
+    page,
+  }) => {
+    await openNodes(page)
+    const iso = new Date(crawlFinished('mainnet')).toISOString().replace(/\.\d{3}Z$/, 'Z')
+    await expect(census(page).locator('[data-source="radar"]').first()).toHaveAccessibleName(
+      new RegExp(`As of ${iso}`),
+    )
   })
 
   test('gives every section a copy-link control and scrolls to a shared section @RA-13', async ({

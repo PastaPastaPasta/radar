@@ -1,7 +1,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { writeSourceMode } from '@/lib/source-mode'
 import { App } from '@/app'
 
@@ -9,7 +9,15 @@ function renderAt(url: string) {
   render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
 }
 
+/** The fixture crawl's finish (summary.json): the list is stamped with it, so the clock starts just after. */
+const CRAWL_MS = 1794322011 * 1000
+
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'], now: CRAWL_MS + 5 * 60_000 })
+})
+
 afterEach(() => {
+  vi.useRealTimers()
   writeSourceMode('all')
 })
 
@@ -39,16 +47,12 @@ describe('the Changes page', () => {
     renderAt('/changes')
     await waitFor(() => expect(bodyRows().length).toBeGreaterThan(50))
     expect(screen.getByRole('heading', { level: 1 })).toHaveAttribute('data-claim')
-    vi.useFakeTimers({ toFake: ['Date'], now: Date.now() + 3 * 3_600_000 })
-    try {
-      await waitFor(
-        () => expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/^Changes$/),
-        { timeout: 15_000 },
-      )
-      expect(screen.getByRole('heading', { level: 1 })).not.toHaveAttribute('data-claim')
-    } finally {
-      vi.useRealTimers()
-    }
+    vi.setSystemTime(CRAWL_MS + 3 * 3_600_000)
+    await waitFor(
+      () => expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/^Changes$/),
+      { timeout: 15_000 },
+    )
+    expect(screen.getByRole('heading', { level: 1 })).not.toHaveAttribute('data-claim')
   }, 20_000)
 
   it('filters by kind, keeps the kind in the address and shows an evonode pill @RA-80', async () => {

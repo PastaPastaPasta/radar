@@ -22,11 +22,13 @@ import {
   Stats,
   Time,
   Unavailable,
+  useNow,
   queryView,
   stampsOf,
 } from '@/ui'
 
 const UPCOMING = 12
+const MINUTE = 60_000
 const HISTORY = 60
 
 /** RA-60, RA-62, RA-63: what Radar's crawl adds to the epoch: the pool, the schedule and the history band. */
@@ -77,24 +79,24 @@ function Rewards({ query }: { query: PlatformQuery }) {
         <Stats>
           <Stat
             label={t`Pool so far`}
-            value={<Amount value={doc.now.pool_so_far} kind="credits" compact />}
+            value={<Amount value={doc.now.pool_so_far} kind="credits" />}
             layer="network"
           />
           <Stat
             label={t`Last pool`}
-            value={last ? <Amount value={last.pool} kind="credits" compact /> : '—'}
+            value={last ? <Amount value={last.pool} kind="credits" /> : '—'}
             note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
             layer="network"
           />
           <Stat
             label={t`Per block`}
-            value={last ? <Amount value={last.per_block} kind="credits" compact /> : '—'}
+            value={last ? <Amount value={last.per_block} kind="credits" /> : '—'}
             note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
             layer="network"
           />
           <Stat
             label={t`Median monthly earnings`}
-            value={<Amount value={doc.returns.median_monthly} kind="credits" compact />}
+            value={<Amount value={doc.returns.median_monthly} kind="credits" />}
             note={t`Per evonode, over ${formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })} days`}
             layer="network"
           />
@@ -131,6 +133,7 @@ function Upcoming({ query }: { query: PlatformQuery }) {
       })),
     [query.data],
   )
+  const sample = query.data?.data.schedule
   const columns = useMemo<ColumnDef<UpcomingRow>[]>(
     () => [
       {
@@ -141,14 +144,14 @@ function Upcoming({ query }: { query: PlatformQuery }) {
       },
       {
         id: 'slots',
-        header: t`Slots`,
-        accessorFn: (r) => formatInt(r.slots),
+        header: t`Blocks away`,
+        accessorFn: (r) => `+${formatInt(r.slots)}`,
         meta: { numeric: true, phone: 'secondary' },
       },
       {
         id: 'eta',
         header: t`Proposes around`,
-        cell: ({ row }) => <Time ms={row.original.eta} mode="both" />,
+        cell: ({ row }) => <Eta ms={row.original.eta} />,
         meta: { phone: 'primary' },
       },
     ],
@@ -159,7 +162,7 @@ function Upcoming({ query }: { query: PlatformQuery }) {
       id="upcoming"
       layer="network"
       title={t`Who proposes next`}
-      subtitle={t`The next twelve proposers in the schedule, with how many blocks in a row each has.`}
+      subtitle={sample ? <Sample sample={sample} /> : undefined}
       source={stampsOf(query.data)}
     >
       <DataTable
@@ -171,6 +174,28 @@ function Upcoming({ query }: { query: PlatformQuery }) {
         empty={t`Radar has no proposer schedule right now.`}
       />
     </Card>
+  )
+}
+
+/** When a turn is due: "in 2 min", and "any moment" once it is a minute away or past, never "ago". */
+function Eta({ ms }: { ms: number }) {
+  const { t } = useLingui()
+  const now = useNow()
+  return ms - now < MINUTE ? <>{t`any moment`}</> : <Time ms={ms} mode="both" live />
+}
+
+const OLD_SAMPLE_MS = 10 * MINUTE
+
+function Sample({ sample }: { sample: { ts: number; block_secs: number } }) {
+  const { t } = useLingui()
+  const now = useNow()
+  const pace = formatNumber(sample.block_secs, { maximumFractionDigits: 0 })
+  return (
+    <>
+      {t`The next twelve proposers, each with the blocks until its turn. An estimate at about ${pace} seconds a block, from the validator sets`}{' '}
+      <Time ms={sample.ts} mode={now - sample.ts > OLD_SAMPLE_MS ? 'both' : 'relative'} />
+      {t`: a missed turn, or a new set, shifts it.`}
+    </>
   )
 }
 

@@ -216,21 +216,57 @@ export function geoTotals(geo: RadarGeo): GeoTotals {
   }
 }
 
+export interface ListTarget {
+  filter: MnFilter
+  /** Hidden categories whose rows the list still shows, because its filter has no way to leave them out. */
+  unexpressed: string[]
+  /** How many rows the list shows that the map does not draw. */
+  extra: number
+}
+
 /**
- * The `/masternodes` filter for "Open these as a list": the map's filter, plus the one reachability or PoSe category
- * left showing when the colouring is by that and every other category is hidden.
+ * The `/masternodes` filter for "Open these as a list": the map's filter, plus what the hidden categories leave out
+ * wherever the list's filter can say it (the reachability, PoSe status, type or versions that stay). What it cannot say
+ * is named, so the link can say that the list shows more than the map.
  */
-export function listFilter(
+export function listTarget(
+  rows: readonly MnRow[],
   filter: MnFilter,
   scheme: ColorScheme,
   hidden: ReadonlySet<string>,
-): MnFilter {
+): ListTarget {
+  const filtered = filterMnRows(rows, filter)
+  const shownRows = filtered.filter((r) => !hidden.has(scheme.keyOf(r)))
   const shown = scheme.order.filter((k) => !hidden.has(k))
-  const only = shown.length === 1 ? shown[0] : undefined
   const out: MnFilter = { ...filter }
-  if (scheme.mode === 'reach' && (only === 'reachable' || only === 'unreachable')) out.reach = only
-  if (scheme.mode === 'pose' && only) out.status = only === 'banned' ? ['pose-banned'] : ['enabled']
-  return out
+  if (hidden.size > 0) {
+    switch (scheme.mode) {
+      case 'reach':
+        if (shown.length === 1 && (shown[0] === 'reachable' || shown[0] === 'unreachable'))
+          out.reach = shown[0]
+        break
+      case 'pose':
+        if (shown.length === 1) out.status = shown[0] === 'banned' ? ['pose-banned'] : ['enabled']
+        break
+      case 'type':
+        if (shown.length > 0)
+          out.type = shown.filter((k): k is 'regular' | 'evo' => k === 'regular' || k === 'evo')
+        break
+      case 'version': {
+        const versions = new Set(shownRows.flatMap((r) => r.crawl?.version ?? []))
+        if (versions.size > 0) out.version = [...versions].sort()
+        break
+      }
+    }
+  }
+  const drawn = new Set(shownRows.map((r) => r.protx))
+  const extra = filterMnRows(rows, out).filter((r) => !drawn.has(r.protx))
+  const left = new Set(extra.map((r) => scheme.keyOf(r)))
+  return {
+    filter: out,
+    unexpressed: scheme.order.filter((k) => left.has(k)),
+    extra: extra.length,
+  }
 }
 
 /** A filter as the `search` of a link: unset fields are left out. */

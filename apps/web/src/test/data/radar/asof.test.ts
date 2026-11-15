@@ -4,7 +4,7 @@ import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
 import { healthRegistry } from '@/data/health'
-import { radar } from '@/data/radar/client'
+import { forgetCrawls, radar } from '@/data/radar/client'
 
 const BASE = 'https://radar.dashhq.org/api/v1'
 const EVO = 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff'
@@ -33,7 +33,7 @@ interface Timed {
 }
 type Call = () => Promise<Timed>
 
-/** Resources whose documents carry no crawl time: a time field in them would be an event time. */
+/** Resources that are not built from a crawl and whose documents carry no time: a field in them would be an event time. */
 const UNTIMED: {
   name: string
   arrange: (h: Record<string, string>) => Promise<void>
@@ -43,23 +43,6 @@ const UNTIMED: {
     name: 'releases',
     arrange: (h) => serve('radar', 'global', 'releases', `${BASE}/releases`, h),
     call: () => radar.releases(),
-  },
-  {
-    name: 'geo',
-    arrange: (h) => serve('radar', 'mainnet', 'geo', `${BASE}/mainnet/geo`, h),
-    call: () => radar.geo('mainnet'),
-  },
-  {
-    name: 'a banned masternode, which was never reached',
-    arrange: (h) =>
-      serve(
-        'radar',
-        'mainnet',
-        `masternodes__${BANNED}`,
-        `${BASE}/mainnet/masternodes/${BANNED}`,
-        h,
-      ),
-    call: () => radar.masternode('mainnet', BANNED),
   },
   {
     name: 'payments',
@@ -84,23 +67,6 @@ const UNTIMED: {
         h,
       ),
     call: () => radar.mnBench('mainnet', EVO),
-  },
-  {
-    name: 'changes',
-    arrange: (h) => serve('radar', 'mainnet', 'changes', `${BASE}/mainnet/changes`, h),
-    call: () => radar.changes('mainnet'),
-  },
-  {
-    name: 'history',
-    arrange: (h) =>
-      serve(
-        'radar',
-        'mainnet',
-        'history--days-30,dim-totals,scope-all',
-        `${BASE}/mainnet/history`,
-        h,
-      ),
-    call: () => radar.history('mainnet', { dim: 'totals' }),
   },
 ]
 
@@ -170,23 +136,20 @@ describe('radar asOf from the crawl the document was built from', () => {
     expect((await radar.health()).asOf).toBe(MODIFIED)
   })
 
-  it('the masternode list is as old as the newest node the crawler reached', async () => {
-    const body = await fixtureBody<{ masternodes: { last_seen: number | null }[] }>(
-      'radar',
-      'mainnet',
-      'masternodes',
-    )
-    const newest = Math.max(...body.masternodes.map((m) => m.last_seen ?? 0)) * 1000
+  it('the masternode list is as old as the crawl that built it', async () => {
+    const summary = await radar.summary('mainnet')
     const out = await radar.masternodes('mainnet')
-    expect(out.asOf).toBe(newest)
+    expect(out.asOf).toBe(summary.data.crawl.finished)
     expect(out.asOfFetched).toBeUndefined()
   })
 
-  it('a masternode carries no crawl time, so it is stamped as fetched, not by its last_seen', async () => {
+  it('a masternode is stamped with the crawl, not with its last_seen', async () => {
     const body = await fixtureBody<{ last_seen: number }>('radar', 'mainnet', `masternodes__${EVO}`)
     const out = await radar.masternode('mainnet', EVO)
+    const summary = await radar.summary('mainnet')
+    expect(out.asOf).toBe(summary.data.crawl.finished)
     expect(out.asOf).not.toBe(body.last_seen * 1000)
-    expect(out.asOfFetched).toBe(true)
+    expect(out.asOfFetched).toBeUndefined()
     expect(out.data?.last_seen).toBe(body.last_seen * 1000)
   })
 
@@ -229,5 +192,77 @@ describe('radar status', () => {
     await expect(radar.status(undefined, 'devnet-ruby')).rejects.toMatchObject({
       kind: 'unavailable',
     })
+  })
+})
+
+describe('every document the crawl built carries the crawl’s finish time', () => {
+  const crawlTimed: [string, () => Promise<Timed>][] = [
+    ['summary', () => radar.summary('mainnet')],
+    ['geo', () => radar.geo('mainnet')],
+    ['masternodes', () => radar.masternodes('mainnet')],
+    ['a masternode', () => radar.masternode('mainnet', EVO)],
+    ['a banned masternode', () => radar.masternode('mainnet', BANNED)],
+    ['changes', () => radar.changes('mainnet')],
+    ['history', () => radar.history('mainnet', { dim: 'totals' })],
+  ]
+
+  it('gives one age on every page, whichever document is read first', async () => {
+    const stamps = await Promise.all(crawlTimed.map(([, call]) => call()))
+    expect(new Set(stamps.map((s) => s.asOf)).size).toBe(1)
+    for (const s of stamps) expect(s.asOfFetched).toBeUndefined()
+  })
+
+  it('reads the crawl from the status when no document has named it yet', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { testnet: { crawl: { last_finished: number } } }
+    }>('radar', 'global', 'status')
+    server.use(
+      http.get(`${BASE}/testnet/changes`, () => HttpResponse.json({ since: 1, changes: [] })),
+    )
+    const out = await radar.changes('testnet')
+    expect(out.asOf).toBe(status.networks.testnet.crawl.last_finished * 1000)
+  })
+
+  it('keeps its own stamp when the crawl is unknown', async () => {
+    forgetCrawls()
+    server.use(
+      http.get(`${BASE}/status`, () => HttpResponse.json({}, { status: 500 })),
+      http.get(`${BASE}/testnet/geo`, () => HttpResponse.json({ points: [], unlocated: 0 })),
+    )
+    const out = await radar.geo('testnet')
+    expect(out.asOf).toBe(out.fetchedAt)
+    expect(out.asOfFetched).toBe(true)
+  })
+
+  it('an aborted reader does not take the crawl time from one still waiting', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { testnet: { crawl: { last_finished: number } } }
+    }>('radar', 'global', 'status')
+    let release!: () => void
+    const gate = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    server.use(
+      http.get(`${BASE}/status`, async () => {
+        await gate
+        return HttpResponse.json(status)
+      }),
+      http.get(`${BASE}/testnet/geo`, async () => {
+        await gate
+        return HttpResponse.json({ points: [], unlocated: 0 })
+      }),
+      http.get(`${BASE}/testnet/changes`, () => HttpResponse.json({ since: 1, changes: [] })),
+    )
+    const ctrl = new AbortController()
+    const geo = radar.geo('testnet', ctrl.signal)
+    const changes = radar.changes('testnet')
+    ctrl.abort()
+    release()
+    await expect(geo).rejects.toMatchObject({ kind: 'aborted' })
+    const out = await changes
+    expect(out.asOf).toBe(status.networks.testnet.crawl.last_finished * 1000)
+    expect(out.asOfFetched).toBeUndefined()
   })
 })

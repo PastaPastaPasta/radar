@@ -1,15 +1,20 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { mnFilterFacets, mnHostLabels, type MnFilter } from '@/data/masternodes/filter'
+import { mnFilterFacets, mnHostLabels } from '@/data/masternodes/facets'
+import type { MnFilter } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
 import { formatInt } from '@/lib/format'
 import { ActiveFilters, FilterButton, SearchField, SegFilter, TableTools } from '@/ui'
 import { useDebouncedQuery } from '../debounced-query'
+import { DKG_CHECK_IDS } from '../nodes/census-math'
+import { countryName } from '../nodes/census-format'
 import type { MnSearchControls } from './use-mn-search'
 
 type FacetId = 'status' | 'reach' | 'version' | 'country' | 'host' | 'dkg'
 const CRAWL_FACETS: FacetId[] = ['reach', 'version', 'country', 'host', 'dkg']
+/** The facets with enough options to need finding one by name. */
+const SEARCHABLE: FacetId[] = ['country', 'host']
 const ALL_FIELDS = ['type', 'status', 'reach', 'country', 'version', 'host', 'dkg'] as const
 
 interface Option {
@@ -98,6 +103,7 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
     controls.filter({ q })
   })
   const [open, setOpen] = useState<FacetId | 'all' | null>(null)
+  const [findIn, setFindIn] = useState<Partial<Record<FacetId, string>>>({})
 
   const facetLabels: Record<FacetId | 'type', string> = {
     type: t`Type`,
@@ -107,6 +113,16 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
     country: t`Country`,
     host: t`Hosting`,
     dkg: t`DKG readiness`,
+  }
+  const dkgLabels: Record<string, string> = {
+    pass: t`Passes every check`,
+    fail: t`Fails a check`,
+    unknown: t`Unknown`,
+    reachable: t`Fails: Reachable`,
+    platform_ban: t`Fails: No Platform ban`,
+    protocol: t`Fails: Protocol version`,
+    relay: t`Fails: Transaction relay`,
+    filters: t`Fails: Compact block filters`,
   }
   const optionLabel = (facet: FacetId | 'type', value: string): string => {
     switch (facet) {
@@ -118,6 +134,10 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
         return value === 'reachable' ? t`Answering` : t`No answer`
       case 'host':
         return hostLabels[value] ?? `AS${value}`
+      case 'country':
+        return countryName(value)
+      case 'dkg':
+        return dkgLabels[value] ?? value
       default:
         return value
     }
@@ -129,11 +149,29 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
       label: optionLabel(facet, value),
       count: facets[facet][value] ?? 0,
     }))
+    if (facet === 'dkg') {
+      const order = ['pass', 'fail', 'unknown', ...DKG_CHECK_IDS] as string[]
+      const at = (v: string) => (order.includes(v) ? order.indexOf(v) : order.length)
+      return options.sort((a, b) => at(a.value) - at(b.value) || a.label.localeCompare(b.label))
+    }
     return options.sort(
       facet === 'version'
         ? (a, b) => b.value.localeCompare(a.value, 'en', { numeric: true })
         : (a, b) => b.count - a.count || a.label.localeCompare(b.label),
     )
+  }
+
+  const visibleOptions = (facet: FacetId): Option[] => {
+    const needle = (findIn[facet] ?? '').trim().toLowerCase()
+    const all = optionsOf(facet)
+    return needle === ''
+      ? all
+      : all.filter(
+          (o) =>
+            o.label.toLowerCase().includes(needle) ||
+            o.value.toLowerCase().includes(needle) ||
+            valuesOf(search, facet).includes(o.value),
+        )
   }
 
   const setFacet = (facet: FacetId | 'type', values: string[]) => {
@@ -225,8 +263,21 @@ export function FilterBar({ rows, matches, crawl, controls, sortOptions }: Filte
           {panelFacets.map((facet) => (
             <fieldset key={facet} className="m-0 min-w-0 border-0 p-0" data-facet={facet}>
               <legend className="mb-1 text-sm font-semibold">{facetLabels[facet]}</legend>
+              {SEARCHABLE.includes(facet) ? (
+                <input
+                  type="search"
+                  className="dh-input dh-input--sm mb-1 w-full"
+                  data-facet-search={facet}
+                  aria-label={t`Find in ${facetLabels[facet]}`}
+                  placeholder={t`Find…`}
+                  value={findIn[facet] ?? ''}
+                  onChange={(e) => {
+                    setFindIn({ ...findIn, [facet]: e.target.value })
+                  }}
+                />
+              ) : null}
               <div className="grid max-h-56 gap-1 overflow-auto">
-                {optionsOf(facet).map((o) => (
+                {visibleOptions(facet).map((o) => (
                   <label key={o.value} className="flex items-center gap-2 text-sm">
                     <input
                       type={facet === 'reach' ? 'radio' : 'checkbox'}

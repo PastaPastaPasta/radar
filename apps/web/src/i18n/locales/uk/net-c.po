@@ -41,6 +41,10 @@ msgstr "{0, plural, one {# спеціальна транзакція у запи
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, one {# виведення} few {# виведення} many {# виведень} other {# виведення}}{1}, "
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, one {Доступність за # день} few {Доступність за # дні} many {Доступність за # днів} other {Доступність за # дня}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0} (неповно)"
@@ -230,10 +234,6 @@ msgstr "Забанено на блоці {0}"
 msgid "Banned on Platform"
 msgstr "Забанено на Platform"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "бан на {0}"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Краще, ніж у {0} мастернод, протестованих з того самого розташування."
@@ -259,6 +259,9 @@ msgstr "Блоки й нагороди за останні 12 завершени
 
 msgid "Blocks proposed"
 msgstr "Запропоновані блоки"
+
+msgid "Blocks proposed, all time"
+msgstr "Запропоновано блоків за весь час"
 
 msgid "Blocks this epoch"
 msgstr "Блоки цієї епохи"
@@ -515,9 +518,6 @@ msgstr "Індекс Hyphen відстає від ланцюга, тому це�
 msgid "if it ended now (an estimate)"
 msgstr "якби вона закінчилася зараз (оцінка)"
 
-msgid "In a validator set"
-msgstr "У наборі валідаторів"
-
 msgid "in total (not counting expired ones)."
 msgstr "усього (без урахування тих, що спливли)."
 
@@ -685,6 +685,9 @@ msgstr "Наступна епоха {0}"
 msgid "No answer"
 msgstr "Немає відповіді"
 
+msgid "No blocks proposed in this range."
+msgstr "У цьому діапазоні блоки не пропонувалися."
+
 msgid "No changes since Radar started recording them."
 msgstr "Змін немає відтоді, як Radar почав їх записувати."
 
@@ -714,6 +717,9 @@ msgstr "Штрафу немає"
 
 msgid "No Platform ban"
 msgstr "Бану на Platform немає"
+
+msgid "No rewards in this range."
+msgstr "У цьому діапазоні немає нагород."
 
 msgid "No stalls or bad data"
 msgstr "Немає зупинок і некоректних даних"
@@ -747,9 +753,6 @@ msgstr "Ще не перевірялося"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "не порівнювалося: запис Radar не використовується"
-
-msgid "Not in a validator set"
-msgstr "Не в наборі валідаторів"
 
 msgid "not in a validator set that takes turns now"
 msgstr "не в наборі валідаторів, які зараз пропонують блоки по черзі"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "Адреса виплат"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Штраф {0}"
 
@@ -890,6 +892,9 @@ msgstr "Кінцеві точки Platform"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "Platform Explorer не відповів, тому запис про цього валідатора відсутній."
+
+msgid "Platform Explorer didn’t answer."
+msgstr "Platform Explorer не відповів."
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "У Platform Explorer немає запису валідатора для цього ProTx."
@@ -1055,8 +1060,8 @@ msgstr "Запис Radar"
 msgid "Rank"
 msgstr "Місце"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "Доступність — з обходу Radar; блоки, нагороди й ключі — з Platform Explorer"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "Доступність за даними обходу Radar. Підсумки та графіки — від Platform Explorer за все життя евоноди; ця епоха показана вище."
 
 msgid "Reachable"
 msgstr "Доступний"
@@ -1127,11 +1132,8 @@ msgstr "Нагороди (DASH)"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "Нагороди з’являться після того, як вона запропонує блок у завершеній епосі."
 
-msgid "Rewards in total"
-msgstr "Нагороди загалом"
-
-msgid "Rewards this epoch"
-msgstr "Нагороди цієї епохи"
+msgid "Rewards, all time"
+msgstr "Нагороди за весь час"
 
 msgid "Same as the owner address"
 msgstr "Збігається з адресою власника"

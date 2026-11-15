@@ -120,6 +120,7 @@ export function ProtocolPage() {
               forNext={forNext}
               needed={needed}
               total={total}
+              proposed={next !== null || upgrade?.candidate != null}
               share={
                 upgrade && upgrade.enabled_evonodes > 0
                   ? upgrade.required / upgrade.enabled_evonodes
@@ -129,7 +130,7 @@ export function ProtocolPage() {
           </div>
         ) : null}
       </Card>
-      <Tally votes={votes} />
+      <Tally votes={votes} total={total} />
       <VoteTable votes={votes} />
     </PageFrame>
   )
@@ -143,6 +144,7 @@ function Threshold({
   forNext,
   needed,
   total,
+  proposed,
   share,
 }: {
   off: boolean
@@ -152,6 +154,8 @@ function Threshold({
   forNext: number | undefined
   needed: number | undefined
   total: number | undefined
+  /** A newer version is being voted on: only then are there pending votes to count. */
+  proposed: boolean
   share: number
 }) {
   const { t } = useLingui()
@@ -176,15 +180,19 @@ function Threshold({
                 ? t`Stated from the protocol’s rule of two thirds of the evonodes that vote.`
                 : t`Stated from the protocol’s rule of two thirds of the evonodes that vote, ${formatInt(voters)} now.`,
           },
-          {
-            label: t`Pending votes`,
-            value: pending === undefined ? '…' : formatInt(pending),
-            hint: t`Evonodes not yet voting for it`,
-          },
-          {
-            label: t`Still needed`,
-            value: missing === undefined ? '…' : formatInt(missing),
-          },
+          ...(proposed
+            ? [
+                {
+                  label: t`Pending votes`,
+                  value: pending === undefined ? '…' : formatInt(pending),
+                  hint: t`Evonodes not yet voting for it`,
+                },
+                {
+                  label: t`Still needed`,
+                  value: missing === undefined ? '…' : formatInt(missing),
+                },
+              ]
+            : []),
           ...(upgrade
             ? [
                 { label: t`Phase`, value: upgrade.phase },
@@ -194,10 +202,12 @@ function Threshold({
                   hint:
                     upgrade.next_epoch_reported_by == null
                       ? undefined
-                      : plural(upgrade.next_epoch_reported_by, {
-                          one: 'Reported by # evonode',
-                          other: 'Reported by # evonodes',
-                        }),
+                      : total === undefined
+                        ? plural(upgrade.next_epoch_reported_by, {
+                            one: 'Reported by # evonode',
+                            other: 'Reported by # evonodes',
+                          })
+                        : t`Reported by ${formatInt(upgrade.next_epoch_reported_by)} of ${formatInt(total)} evonodes`,
                 },
                 {
                   label: t`Candidate version`,
@@ -220,7 +230,7 @@ function Threshold({
   )
 }
 
-function Tally({ votes }: { votes: VotesQuery }) {
+function Tally({ votes, total }: { votes: VotesQuery; total: number | undefined }) {
   const { t } = useLingui()
   const rows = useMemo(
     () => [...(votes.data?.data.tally ?? [])].sort((a, b) => b[0] - a[0]),
@@ -255,7 +265,11 @@ function Tally({ votes }: { votes: VotesQuery }) {
       id="tally"
       layer="network"
       title={t`Votes by version`}
-      subtitle={t`How many evonodes vote for each protocol version.`}
+      subtitle={
+        total === undefined || voters === 0 || voters === total
+          ? t`How many evonodes vote for each protocol version.`
+          : t`How many evonodes vote for each protocol version. ${formatInt(voters)} of the ${formatInt(total)} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all ${formatInt(total)}.`
+      }
       source={stampsOf(votes.data)}
     >
       <DataTable

@@ -41,6 +41,10 @@ msgstr "{0, plural, other {Hyphen の記録に特殊トランザクション # �
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, other {出金 # 件}}{1}, "
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, other {稼働率（# 日間）}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0}（未完了）"
@@ -230,10 +234,6 @@ msgstr "ブロック {0} で BAN"
 msgid "Banned on Platform"
 msgstr "Platform で BAN 済み"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "{0} で BAN"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "同じ拠点でテストしたマスターノードの {0} より良好です。"
@@ -259,6 +259,9 @@ msgstr "Platform の証明に基づく、確定済み直近 12 エポックの�
 
 msgid "Blocks proposed"
 msgstr "提案したブロック"
+
+msgid "Blocks proposed, all time"
+msgstr "提案ブロック数（累計）"
 
 msgid "Blocks this epoch"
 msgstr "このエポックのブロック"
@@ -515,9 +518,6 @@ msgstr "Hyphen のインデックスがチェーンに追いついていない�
 msgid "if it ended now (an estimate)"
 msgstr "今終了した場合（推定）"
 
-msgid "In a validator set"
-msgstr "バリデーターセットに所属"
-
 msgid "in total (not counting expired ones)."
 msgstr "合計（期限切れを除く）。"
 
@@ -685,6 +685,9 @@ msgstr "次のエポック {0}"
 msgid "No answer"
 msgstr "応答なし"
 
+msgid "No blocks proposed in this range."
+msgstr "この範囲で提案されたブロックはありません。"
+
 msgid "No changes since Radar started recording them."
 msgstr "Radar が記録を始めてから変更はありません。"
 
@@ -714,6 +717,9 @@ msgstr "ペナルティなし"
 
 msgid "No Platform ban"
 msgstr "Platform での BAN なし"
+
+msgid "No rewards in this range."
+msgstr "この範囲に報酬はありません。"
 
 msgid "No stalls or bad data"
 msgstr "停止や不正なデータなし"
@@ -747,9 +753,6 @@ msgstr "未確認"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "比較なし: Radar の記録は使用されていません"
-
-msgid "Not in a validator set"
-msgstr "バリデーターセットに未所属"
 
 msgid "not in a validator set that takes turns now"
 msgstr "現在ターン制のバリデーターセットに入っていません"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "支払先アドレス"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "ペナルティ {0}"
 
@@ -890,6 +892,9 @@ msgstr "Platform エンドポイント"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "Platform Explorer が応答しなかったため、このバリデーターの記録がありません。"
+
+msgid "Platform Explorer didn’t answer."
+msgstr "Platform Explorer から応答がありませんでした。"
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "Platform Explorer にはこの ProTx のバリデーター記録がありません。"
@@ -1055,8 +1060,8 @@ msgstr "Radar の記録"
 msgid "Rank"
 msgstr "順位"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "到達性は Radar のクロール、ブロック・報酬・鍵は Platform Explorer による"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "到達可能性は Radar のクロール結果です。合計とグラフは Platform Explorer による Evonode の全期間のもので、このエポックは上に表示しています。"
 
 msgid "Reachable"
 msgstr "到達可能"
@@ -1127,11 +1132,8 @@ msgstr "報酬（DASH）"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "終了したエポックでブロックを提案すると、報酬が表示されます。"
 
-msgid "Rewards in total"
-msgstr "報酬の合計"
-
-msgid "Rewards this epoch"
-msgstr "このエポックの報酬"
+msgid "Rewards, all time"
+msgstr "報酬（累計）"
 
 msgid "Same as the owner address"
 msgstr "オーナーアドレスと同じ"

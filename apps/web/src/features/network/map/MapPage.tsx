@@ -26,7 +26,8 @@ import './map.css'
 
 const MapView = deferred(() => import('./MapView').then((m) => m.default))
 
-const PANEL_WIDTH = 400
+/** Before the panel is measured: how much of the map's left the control panel covers, with the gap round it. */
+const PANEL_WIDTH = 388 + 24
 
 const ATTRIBUTION = 'Basemap © Natural Earth · Geolocation by DB-IP (CC BY 4.0)'
 
@@ -93,7 +94,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
   const byProtx = useMemo(() => new Map(rows.map((r) => [r.protx, r])), [rows])
   const totals = useMemo(() => (geo ? geoTotals(geo) : undefined), [geo])
   const stats = useMemo(() => headline(view.visible), [view.visible])
-  const placed = useMemo(() => placedIn(rows), [rows])
+  const placed = useMemo(() => placedIn(view.visible), [view.visible])
   const onMap = mnCount(placed.masternodes)
   usePageClaim(
     placed.countries > 0
@@ -133,6 +134,11 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
     if (!el) return
     const measure = () => {
       el.style.setProperty('--rx-map-top', `${el.getBoundingClientRect().top + window.scrollY}px`)
+      // The map runs edge to edge of what the page can show, which leaves out a classic scrollbar.
+      el.style.setProperty(
+        '--rx-sbw',
+        `${Math.max(0, window.innerWidth - document.documentElement.clientWidth)}px`,
+      )
     }
     measure()
     window.addEventListener('resize', measure)
@@ -179,6 +185,20 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
       sheet.current = null
     }
   }, [crawl])
+
+  const [covered, setCovered] = useState(PANEL_WIDTH)
+  useLayoutEffect(() => {
+    const el = panel.current
+    if (!crawl || phone || !el) return
+    const measure = () => {
+      setCovered(el.offsetLeft + el.offsetWidth + 12)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => {
+      window.removeEventListener('resize', measure)
+    }
+  }, [crawl, phone])
 
   const reduced = useReducedMotion()
 
@@ -264,7 +284,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
         selectedAt={selectedAt}
         popup={selected ? <NodeCard row={selected} tip={tip} /> : null}
         inlineDetail={phone}
-        coverLeft={crawl && !phone ? PANEL_WIDTH : 0}
+        coverLeft={crawl && !phone ? covered : 0}
         fitKey={`${net}:${layer}:${points.length > 0 || (geo?.points.length ?? 0) > 0}`}
         texts={texts}
         onSelect={select}
@@ -390,7 +410,7 @@ function MapBoard({ net, crawl }: { net: ReturnType<typeof useNetwork>; crawl: b
                       })}{' '}
                     </>
                   ) : null}
-                  <ListLink scheme={scheme} controls={controls} />
+                  <ListLink rows={rows} scheme={scheme} controls={controls} />
                 </>
               )}
             </p>

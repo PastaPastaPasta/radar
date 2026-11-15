@@ -1,11 +1,15 @@
 /* The map page: always on the plate, in both themes. Inside .rx-plate every --dh-* token already has its dark value. */
+/* full-bleed: the width of the window less a classic scrollbar, whatever the page's container is */
 .rx-map {
+  --rx-map-w: calc(100vw - var(--rx-sbw, 0px));
   position: relative;
-  height: clamp(520px, calc(100dvh - 260px), 840px);
-  border-radius: 14px;
+  width: var(--rx-map-w);
+  margin-inline: calc((100% - var(--rx-map-w)) / 2);
+  height: max(560px, calc(100dvh - var(--rx-map-top, 260px)));
+  border-radius: 0;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid var(--rx-plate-line);
+  border: 0;
   background-image: none;
   background-color: #0d3149;
   color: var(--dh-ink);
@@ -30,10 +34,11 @@
 .rx-map-panel {
   position: absolute;
   z-index: 2;
-  top: 12px;
-  left: 12px;
-  bottom: 12px;
-  width: min(400px, calc(100% - 24px));
+  top: 16px;
+  /* on the page's own left edge where the window is wider than the column, a 12px gap where it is not */
+  left: max(12px, calc((100% - var(--dh-max)) / 2 + var(--dh-gutter)));
+  max-height: calc(100% - 32px);
+  width: clamp(300px, 27vw, 388px);
   display: flex;
   flex-direction: column;
   background: color-mix(in srgb, var(--rx-plate-2) 94%, transparent);
@@ -428,13 +433,14 @@
 @media (max-width: 900px) {
   .rx-map {
     height: max(440px, calc(100dvh - var(--dh-tabs-h, 57px) - var(--rx-map-top, 220px)));
-    overflow: clip;
+    overflow: hidden;
   }
   .rx-map-panel {
     top: auto;
     left: 0;
     right: 0;
     bottom: 0;
+    max-height: none;
     width: auto;
     border-radius: 18px 18px 0 0;
     padding-bottom: env(safe-area-inset-bottom);

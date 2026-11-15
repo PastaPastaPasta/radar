@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} bilinmiyor"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr ", {0}. blokta"
-
 msgid ", so the figures below may be out of date."
 msgstr ", bu yüzden aşağıdaki rakamlar güncel olmayabilir."
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "{0} masternode"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{1} yerde {0} masternode"
 
@@ -419,14 +415,15 @@ msgstr "Core yüksekliği"
 msgid "Core tip"
 msgstr "Core ucu"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "{0}. blokta sayıldı"
+
 msgid "countries"
 msgstr "ülkeler"
 
 msgid "Countries"
 msgstr "Ülkeler"
-
-msgid "crawled"
-msgstr "taranmış"
 
 msgid "DAPI answered"
 msgstr "DAPI yanıt verdi"
@@ -997,7 +994,7 @@ msgstr "{noun} payı, sürüme göre"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "Her pencerenin bloklarındaki pay, eşik işaretli. Gelecek pencerelerin tarihleri tahminidir."
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "Tümünü göster ({0})"
 

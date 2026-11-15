@@ -31,6 +31,11 @@ export interface EvoSources {
   platform?: RadarPlatform | undefined
   /** Platform Explorer's active validators; absent when it was not asked or did not answer. */
   validators?: readonly PeValidator[] | undefined
+  /**
+   * Platform Explorer's record of single evonodes the list of active validators leaves out (queued ones): their totals
+   * fill in the row, but being named here does not put them in a validator set.
+   */
+  records?: readonly PeValidator[] | undefined
   proposed?: ProposedBlocks | undefined
 }
 
@@ -39,19 +44,17 @@ export function buildEvoRows(rows: readonly MnRow[], sources: EvoSources): EvoRo
   const validators = sources.validators
     ? new Map(sources.validators.map((v) => [v.proTxHash, v]))
     : undefined
+  const records = sources.records
+    ? new Map(sources.records.map((v) => [v.proTxHash, v]))
+    : undefined
   return rows
     .filter((r) => r.type === 'evo')
     .map((row) => {
       const record = radar.get(row.protx) ?? null
-      const validator = validators?.get(row.protx) ?? null
+      const listed = validators?.get(row.protx) ?? null
+      const validator = listed ?? records?.get(row.protx) ?? null
       const state: ValidatorState | null =
-        row.status === 'pose-banned'
-          ? 'banned'
-          : validators
-            ? validator
-              ? 'active'
-              : 'queued'
-            : null
+        row.status === 'pose-banned' ? 'banned' : validators ? (listed ? 'active' : 'queued') : null
       const counted = sources.proposed?.asked.has(row.protx)
         ? Number(sources.proposed.counts.get(row.protx) ?? 0n)
         : null
@@ -87,6 +90,9 @@ export const EVO_SORT_KEYS = [
 
 export type EvoSortKey = (typeof EVO_SORT_KEYS)[number]
 
+/** The columns that hold a hash: the ProTx, and the Platform node ID. */
+const HEX_KEYS: ReadonlySet<EvoSortKey> = new Set(['evonode', 'node_id'])
+
 export const isEvoSortKey = (key: string): key is EvoSortKey =>
   (EVO_SORT_KEYS as readonly string[]).includes(key)
 
@@ -114,7 +120,7 @@ export const parseEvoSort = (sort: string, fallback = DEFAULT_EVO_SORT) =>
 
 export function sortEvoRows(rows: readonly EvoRow[], sort: string, fallback?: string): EvoRow[] {
   const { key, desc } = parseEvoSort(sort, fallback)
-  return sortItems(rows, desc, valueOf[key], (e) => e.protx)
+  return sortItems(rows, desc, valueOf[key], (e) => e.protx, HEX_KEYS.has(key))
 }
 
 /** An evonode's identity id is its ProTx in base58: the ProTx a base58 id stands for, if the text is one. */

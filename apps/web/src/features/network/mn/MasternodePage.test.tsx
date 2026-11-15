@@ -5,7 +5,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { core } from '@/data/core/client'
 import { SourceError } from '@/data/errors'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
+
+vi.mock('@/ui/chart-view', () => ({ default: () => null }))
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
@@ -83,7 +86,7 @@ describe('Masternode page', () => {
     expect(header).toHaveTextContent('Enabled, no PoSe penalty')
     expect(header).toHaveTextContent('24.0.0')
     const kpis = document.querySelector<HTMLElement>('[data-masternode-kpis]')!
-    expect(kpis).toHaveTextContent('Uptime, 30 days')
+    expect(kpis).toHaveTextContent('Uptime for 13 days')
     expect(kpis).toHaveTextContent('100%')
     expect(kpis).toHaveTextContent('Last paid')
     expect(kpis).toHaveTextContent('2,568,655')
@@ -134,6 +137,40 @@ describe('Masternode page', () => {
     }
   })
 
+  it('names the days the uptime is over, not 30 when Radar has fewer @RA-30', async () => {
+    const body = await fixtureBody<{ uptime_daily: unknown[] }>(
+      'radar',
+      'mainnet',
+      `masternodes__${MAINNET.regular}`,
+    )
+    server.use(
+      http.get(`*/masternodes/${MAINNET.regular}`, () =>
+        HttpResponse.json({ ...body, uptime_daily: body.uptime_daily.slice(-5) }),
+      ),
+    )
+    renderAt(`/mn/${MAINNET.regular}`)
+    const kpis = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-masternode-kpis]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    await waitFor(() => expect(kpis).toHaveTextContent('Uptime for 5 days'))
+    expect(kpis).not.toHaveTextContent('Uptime for 13 days')
+  })
+
+  it('names Hyphen’s special transactions as the kit does, not by their raw ids @HY-11', async () => {
+    renderAt(`/mn/${MAINNET.listed}?tab=history`)
+    const special = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#special-txs')
+      expect(el).not.toBeNull()
+      expect(el!.querySelectorAll('tbody tr').length).toBeGreaterThan(1)
+      return el!
+    })
+    expect(special).toHaveTextContent('ProRegTx')
+    expect(special).toHaveTextContent('ProUpServTx')
+    expect(special).not.toHaveTextContent(/provider[_ ](register|update)/)
+  })
+
   it('draws the uptime strip with a tone for each day', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     const strip = await waitFor(() => {
@@ -166,6 +203,58 @@ describe('Masternode page', () => {
     expect(card).toHaveTextContent('DAPI 5.0.3')
     expect(card).toHaveTextContent('Tenderdash 1.8.2')
     expect(card.querySelector('[data-platform-daily] [data-uptime-strip]')).not.toBeNull()
+  })
+
+  it('gives an evonode’s share of an epoch with the blocks it is of @NX-53', async () => {
+    renderAt(
+      `/mn/${'b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77'}?tab=platform`,
+    )
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#epoch-record')
+      expect(el).not.toBeNull()
+      expect(el!.textContent).toMatch(/Share of blocks/)
+      return el!
+    })
+    await waitFor(() =>
+      expect(card).toHaveTextContent(/Share of blocks\d+\.\d\d% \(\d+ \/ [\d,]+\)/),
+    )
+  })
+
+  describe('validator record on the Platform tab @RA-38 @W2-09', () => {
+    const EVO = 'b5c4d7bba1b11f98497c419c4d81b72a525fe30ae788028c570dd4eb77255e77'
+    const record = async () =>
+      waitFor(() => {
+        const el = document.querySelector<HTMLElement>('#validator-record')
+        expect(el).not.toBeNull()
+        expect(el!.textContent).toContain('Rewards, all time')
+        return el!
+      })
+
+    it('shows no figure Radar already shows on the same tab, and says what Platform Explorer’s are', async () => {
+      renderAt(`/mn/${EVO}?tab=platform`)
+      const card = await record()
+      expect(card).not.toHaveTextContent('Rewards this epoch')
+      expect(card).not.toHaveTextContent(/validator set/i)
+      expect(card).not.toHaveTextContent(/bans at/)
+      expect(card).toHaveTextContent('Blocks proposed, all time')
+      expect(card).toHaveTextContent(/Platform Explorer’s, over the evonode’s whole life/)
+    })
+
+    it('titles each chart and says so when a series is empty', async () => {
+      server.use(
+        http.get('*/validator/*/stats', () => HttpResponse.json([])),
+        http.get('*/validator/*/rewards/stats', () => HttpResponse.json([])),
+      )
+      renderAt(`/mn/${EVO}?tab=platform`)
+      const card = await record()
+      await waitFor(() => expect(card).toHaveTextContent('No blocks proposed in this range.'))
+      expect(card).toHaveTextContent('No rewards in this range.')
+      const titles = [...card.querySelectorAll('[data-validator-chart] h4')].map(
+        (h) => h.textContent,
+      )
+      expect(titles).toEqual(['Blocks proposed', 'Rewards'])
+      expect(card.querySelectorAll('[data-validator-chart] [data-empty]')).toHaveLength(2)
+    })
   })
 
   it('has no Platform card or tab for a regular masternode', async () => {

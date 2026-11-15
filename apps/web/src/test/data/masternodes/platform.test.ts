@@ -131,6 +131,29 @@ describe('filterEvoRows', () => {
   })
 })
 
+describe('records of single validators', () => {
+  const queued = { proTxHash: hex(2), isActive: false, proposedBlocksAmount: 1585 } as PeValidator
+
+  it('fill the totals of a queued evonode without putting it in a validator set', () => {
+    const rows = buildEvoRows([mn(1), mn(2)], {
+      validators: [validator(1)],
+      records: [queued],
+    })
+    const two = rows.find((e) => e.protx === hex(2))!
+    expect(two.validator?.proposedBlocksAmount).toBe(1585)
+    expect(two.state).toBe('queued')
+    expect(rows.find((e) => e.protx === hex(1))!.state).toBe('active')
+  })
+
+  it('leave a row alone that the active list already names', () => {
+    const rows = buildEvoRows([mn(1)], {
+      validators: [{ ...validator(1), proposedBlocksAmount: 7 }],
+      records: [{ ...queued, proTxHash: hex(1), proposedBlocksAmount: 1 }],
+    })
+    expect(rows[0]!.validator?.proposedBlocksAmount).toBe(7)
+  })
+})
+
 describe('sortEvoRows', () => {
   const evo = buildEvoRows([mn(1), mn(2), mn(3)], {
     platform: platform([radar(1), radar(3)]),
@@ -140,6 +163,12 @@ describe('sortEvoRows', () => {
   it('sorts by earnings first, highest first, and leaves the unrecorded last', () => {
     expect(ids(sortEvoRows(evo, '-monthly'))).toEqual([3, 1, 2])
     expect(ids(sortEvoRows(evo, 'monthly'))).toEqual([1, 3, 2])
+  })
+
+  it('sorts the ProTx as plain hex', () => {
+    const ids16 = ['0a1d', '001c', '0a5d'].map((h) => ({ ...mn(1), protx: h }))
+    const out = sortEvoRows(buildEvoRows(ids16, {}), 'evonode')
+    expect(out.map((e) => e.protx)).toEqual(['001c', '0a1d', '0a5d'])
   })
 
   it('falls back to the earnings order for a key the evonode table does not have', () => {

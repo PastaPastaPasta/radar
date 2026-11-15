@@ -107,6 +107,19 @@ test.describe('masternode list', () => {
     expect(first!.y, 'where the first row starts').toBeLessThan(430)
     const row = rows(page).first()
     await expect(row.locator('td').first().locator('.rx-chip__text')).toHaveText(/^\w{6}…\w{4}$/)
+    // W2-53: the shortened hash is whole, not cut with a second ellipsis.
+    for (const width of [1440, 1280]) {
+      await page.setViewportSize({ width, height: 900 })
+      expect(
+        await row
+          .locator('td')
+          .first()
+          .locator('.rx-chip__text')
+          .evaluate((el) => el.scrollWidth - el.clientWidth),
+        `the hash is cut at ${width} px`,
+      ).toBeLessThanOrEqual(0)
+    }
+    await page.setViewportSize({ width: 1440, height: 900 })
     // At 1024 px the table scrolls inside its block, and the hash still has a column of its own.
     for (const width of [1440, 1024]) {
       await page.setViewportSize({ width, height: 900 })
@@ -200,17 +213,17 @@ test.describe('masternode list', () => {
     const phone = isPhone(info)
     await toggle(page, phone ? 'Filters' : 'Country')
     const panel = page.locator('[data-filter-panel]')
-    const germany = panel.getByRole('checkbox', { name: `DE ${MAINNET.germany}` })
+    const germany = panel.getByRole('checkbox', { name: `Germany ${MAINNET.germany}` })
     await expect(germany).toBeVisible()
     await germany.click()
     await expect(page).toHaveURL(/country=DE/)
     await expect(matches(page)).toContainText(`${MAINNET.germany} match`)
-    await expect(matches(page)).toContainText('Country: DE')
+    await expect(matches(page)).toContainText('Country: Germany')
     if (!phone) await toggle(page, 'Reachability')
     await panel.getByRole('radio', { name: /^No answer/ }).click()
     await expect(page).toHaveURL(/reach=unreachable/)
     await expect(matches(page)).not.toContainText(`${MAINNET.germany} match`)
-    await page.getByRole('button', { name: 'Remove filter Country: DE' }).click()
+    await page.getByRole('button', { name: 'Remove filter Country: Germany' }).click()
     await expect(page).not.toHaveURL(/country=/)
     await expect(matches(page)).toContainText(`${MAINNET.unreachable} match`)
     await matches(page).getByRole('button', { name: 'Clear' }).click()
@@ -307,7 +320,7 @@ test.describe('masternode list', () => {
     await page.goto('/masternodes?type=evo&country=DE&sort=-version&q=a')
     await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
     await expect(matches(page)).toContainText('Type: Evonode')
-    await expect(matches(page)).toContainText('Country: DE')
+    await expect(matches(page)).toContainText('Country: Germany')
     await expect(page.getByRole('searchbox', { name: 'Search masternodes' })).toHaveValue('a')
   })
 
@@ -322,6 +335,39 @@ test.describe('masternode list', () => {
     await page.goBack()
     await expect(rows(page).first()).toBeVisible()
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300)
+  })
+
+  test.describe('a row nobody recorded', () => {
+    // Any row is opened, so the masternode it opens is one the fixtures do not hold.
+    test.use({ allowFixtureMisses: true })
+
+    test('comes back to the exact scroll after opening a row and going back @W2-34', async ({
+      page,
+    }, info) => {
+      test.skip(isPhone(info), 'the phone’s cards are not the table')
+      await open(page, '/masternodes?sort=-uptime_7d')
+      await page.evaluate(() => window.scrollTo(0, 1200))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1150)
+      const before = await page.evaluate(() => window.scrollY)
+      // A row already on screen: Playwright's own click would scroll one into view first.
+      const at = await page.evaluate(() => {
+        const link = [
+          ...document.querySelectorAll<HTMLElement>('tbody tr[data-index] a.rx-chip'),
+        ].find((a) => a.getBoundingClientRect().top > 250 && a.getBoundingClientRect().bottom < 700)
+        const box = link?.getBoundingClientRect()
+        return box ? { x: box.left + box.width / 2, y: box.top + box.height / 2 } : null
+      })
+      expect(at, 'a row link on screen').not.toBeNull()
+      await page.mouse.click(at!.x, at!.y)
+      await expect(page).toHaveURL(/\/mn\//)
+      await page.goBack()
+      await expect(rows(page).first()).toBeVisible()
+      await expect
+        .poll(() => page.evaluate(() => window.scrollY), { timeout: 5000 })
+        .toBeGreaterThanOrEqual(before - 5)
+      await page.waitForTimeout(1500)
+      expect(Math.abs((await page.evaluate(() => window.scrollY)) - before)).toBeLessThanOrEqual(5)
+    })
   })
 
   test('downloads the filtered rows as a CSV named by network @RA-25', async ({ page }) => {
@@ -550,6 +596,9 @@ test.describe('Decentralized only mode', () => {
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(table(page, 'Evonodes')).toContainText('Blocks this epoch')
     await expect(table(page, 'Evonodes')).toContainText('Platform node ID')
+    await expect(table(page, 'Evonodes')).toContainText('Blocks proposed')
+    await expect(table(page, 'Evonodes')).toContainText('Last block')
+    await expect(rows(page, 'Evonodes').first()).toContainText('—')
     await expect(table(page, 'Evonodes')).not.toContainText('Drive')
     await expect(page.locator('[data-source="sdk"][data-proved="true"]').first()).toBeVisible()
     await expect(page.locator('[data-source="radar"], [data-source="pe"]')).toHaveCount(0)

@@ -13,6 +13,9 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+msgid ": a missed turn, or a new set, shifts it."
+msgstr ": a missed turn, or a new set, shifts it."
+
 msgid "(estimated)"
 msgstr "(estimated)"
 
@@ -103,6 +106,9 @@ msgstr "An ID is 32 bytes: a base58 string of 43 or 44 characters, or 64 hex cha
 msgid "Anchors"
 msgstr "Anchors"
 
+msgid "any moment"
+msgstr "any moment"
+
 msgid "Balance"
 msgstr "Balance"
 
@@ -120,6 +126,9 @@ msgstr "blocks"
 
 msgid "Blocks"
 msgstr "Blocks"
+
+msgid "Blocks away"
+msgstr "Blocks away"
 
 msgid "Blocks so far"
 msgstr "Blocks so far"
@@ -225,11 +234,17 @@ msgstr "Epochs"
 
 #. placeholder {0}: formatInt(range.from)
 #. placeholder {1}: formatInt(range.to)
+#. placeholder {2}: formatInt(range.to)
+msgid "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+msgstr "Epochs {0} to {1}; the latest epoch is {2}, so the range stops there."
+
+#. placeholder {0}: formatInt(range.from)
+#. placeholder {1}: formatInt(range.to)
 msgid "Epochs {0} to {1}."
 msgstr "Epochs {0} to {1}."
 
-msgid "Epochs with their start, end and fee multiplier"
-msgstr "Epochs with their start, end and fee multiplier"
+msgid "Epochs with their start, end, fee multiplier and fees"
+msgstr "Epochs with their start, end, fee multiplier and fees"
 
 msgid "Estimated end"
 msgstr "Estimated end"
@@ -252,6 +267,9 @@ msgstr "Evonodes not yet voting for it"
 msgid "Fee multiplier"
 msgstr "Fee multiplier"
 
+msgid "Fees"
+msgstr "Fees"
+
 msgid "Final once the epoch ended."
 msgstr "Final once the epoch ended."
 
@@ -266,6 +284,12 @@ msgstr "Hash prefix"
 
 msgid "How many evonodes vote for each protocol version."
 msgstr "How many evonodes vote for each protocol version."
+
+#. placeholder {0}: formatInt(voters)
+#. placeholder {1}: formatInt(total)
+#. placeholder {2}: formatInt(total)
+msgid "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
+msgstr "How many evonodes vote for each protocol version. {0} of the {1} enabled evonodes have a vote on record, and the shares are of those; the activation threshold counts all {2}."
 
 #. placeholder {0}: names[range]
 msgid "In DASH, over the last {0}."
@@ -308,14 +332,15 @@ msgstr "Network"
 msgid "Next chunk"
 msgstr "Next chunk"
 
-msgid "Next epoch"
-msgstr "Next epoch"
-
 msgid "Next epoch’s version"
 msgstr "Next epoch’s version"
 
 msgid "Next version"
 msgstr "Next version"
+
+#. placeholder {0}: formatInt(index + 1)
+msgid "Next: epoch {0}"
+msgstr "Next: epoch {0}"
 
 msgid "No epochs in this range."
 msgstr "No epochs in this range."
@@ -417,6 +442,10 @@ msgstr "Previous chunk"
 msgid "Previous epoch"
 msgstr "Previous epoch"
 
+#. placeholder {0}: formatInt(index - 1)
+msgid "Previous: epoch {0}"
+msgstr "Previous: epoch {0}"
+
 msgid "Processing fees"
 msgstr "Processing fees"
 
@@ -462,6 +491,11 @@ msgstr "Radar’s exact threshold, phase and per-candidate counts need Radar’s
 msgid "Range"
 msgstr "Range"
 
+#. placeholder {0}: formatInt(upgrade.next_epoch_reported_by)
+#. placeholder {1}: formatInt(total)
+msgid "Reported by {0} of {1} evonodes"
+msgstr "Reported by {0} of {1} evonodes"
+
 msgid "Rewards and schedule"
 msgstr "Rewards and schedule"
 
@@ -489,9 +523,6 @@ msgstr "Show"
 
 msgid "Show more"
 msgstr "Show more"
-
-msgid "Slots"
-msgstr "Slots"
 
 msgid "Spent"
 msgstr "Spent"
@@ -550,8 +581,8 @@ msgstr "The latest {0} epochs."
 msgid "The next proposers"
 msgstr "The next proposers"
 
-msgid "The next twelve proposers in the schedule, with how many blocks in a row each has."
-msgstr "The next twelve proposers in the schedule, with how many blocks in a row each has."
+msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgstr "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
 
 msgid "The node reported no quorums."
 msgstr "The node reported no quorums."

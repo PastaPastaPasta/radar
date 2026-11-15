@@ -4,6 +4,7 @@ import {
   compareEpochs,
   payoutIn,
   rankIn,
+  shareOfBlocks,
   spreadOf,
   withdrawalOf,
   type Finalized,
@@ -95,5 +96,18 @@ describe('withdrawalOf', () => {
     expect(withdrawalOf({ id: 'y', createdAt: null, updatedAt: null, data: {} }).status).toBe(
       'unknown',
     )
+  })
+})
+
+describe('shareOfBlocks', () => {
+  it('says the share with the blocks behind it @NX-53', () => {
+    expect(shareOfBlocks(15, 3699)).toBe('0.41% (15 / 3,699)')
+    expect(shareOfBlocks(15n, 3699)).toBe('0.41% (15 / 3,699)')
+    expect(shareOfBlocks(0, 3699)).toBe('0.00% (0 / 3,699)')
+  })
+
+  it('says nothing for an epoch with no known total', () => {
+    expect(shareOfBlocks(15, null)).toBe('—')
+    expect(shareOfBlocks(15, 0)).toBe('—')
   })
 })

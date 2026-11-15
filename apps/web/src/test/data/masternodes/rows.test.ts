@@ -3,12 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DapiMnEntry } from '@/data/core/types'
 import type { Sourced } from '@/data/envelope'
 import { disabledByMode, SourceError } from '@/data/errors'
-import {
-  filterMnRows,
-  mnFilterFacets,
-  mnFilterSearch,
-  mnHostLabels,
-} from '@/data/masternodes/filter'
+import { mnFilterFacets, mnHostLabels } from '@/data/masternodes/facets'
+import { filterMnRows, mnFilterSearch } from '@/data/masternodes/filter'
 import { joinMnRows, mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
 import type { RadarMasternode } from '@/data/radar/schemas'
 

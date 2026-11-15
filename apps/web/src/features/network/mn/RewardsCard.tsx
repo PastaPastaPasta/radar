@@ -11,7 +11,7 @@ import type { RadarMasternodeDetail, RadarPlatform } from '@/data/radar/schemas'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Amount, Card, Chart, Empty, KeyValue, Stat, Stats, Time } from '@/ui'
 import type { MnContext } from './mn-context'
-import { dash, spreadOf } from './platform-math'
+import { dash, shareOfBlocks, spreadOf } from './platform-math'
 
 type Rewards = NonNullable<RadarMasternodeDetail['platform_rewards']>
 
@@ -326,6 +326,7 @@ function EpochBars({ p, platform }: { p: Rewards; platform: RadarPlatform | null
     return <p className="rx-dim">{t`It hasn’t proposed a block in a finished epoch yet.`}</p>
   }
   const band = new Map((platform?.epochs ?? []).map((e) => [e.epoch, e.credits_spread]))
+  const totalBlocks = new Map((platform?.epochs ?? []).map((e) => [e.epoch, e.blocks]))
   const fmt = (v: number) => formatNumber(v, { maximumFractionDigits: 2 })
   const option: EChartsOption = {
     tooltip: { trigger: 'axis', valueFormatter: (v) => `${fmt(Number(v))} DASH` },
@@ -371,12 +372,20 @@ function EpochBars({ p, platform }: { p: Rewards; platform: RadarPlatform | null
         height={220}
         label={t`Platform rewards per epoch, epochs ${first ?? 0} to ${last ?? 0}, against the middle 80 % of evonodes`}
         table={{
-          columns: [t`Epoch`, t`Blocks`, t`Earned (DASH)`, t`Rank`, t`Middle 80 % (DASH)`],
+          columns: [
+            t`Epoch`,
+            t`Blocks`,
+            t`Share of blocks`,
+            t`Earned (DASH)`,
+            t`Rank`,
+            t`Middle 80 % (DASH)`,
+          ],
           rows: [...epochs].reverse().map((e) => {
             const s = band.get(e.epoch)
             return [
               e.epoch,
               e.blocks,
+              shareOfBlocks(e.blocks, totalBlocks.get(e.epoch)),
               fmt(dash(e.credits)),
               e.rank ? `${e.rank} / ${e.of ?? ''}` : '—',
               s ? `${fmt(dash(s.p10))} – ${fmt(dash(s.p90))}` : '—',

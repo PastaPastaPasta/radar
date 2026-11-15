@@ -3,11 +3,15 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState, type FormEvent } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
+import { peQueries } from '@/data/pe/queries'
+import type { PeEpochDetail } from '@/data/pe/schemas'
 import type { EpochDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, DataTable, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
+import { isDevnet } from '@/lib/network'
+import { Amount, Card, DataTable, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
 import { formatMultiplier } from './CurrentEpoch'
 import { epochLengthMs } from '@/lib/epoch-length'
 
@@ -36,11 +40,12 @@ export function resolveRange(
   current: number,
   from: number | undefined,
   to: number | undefined,
-): { from: number; to: number; custom: boolean } {
+): { from: number; to: number; custom: boolean; clamped: boolean } {
   const hi = Math.min(current, to ?? current)
-  const lo = from ?? Math.max(0, hi - DEFAULT_COUNT + 1)
+  const lo = Math.min(from ?? Math.max(0, hi - DEFAULT_COUNT + 1), current)
   const a = Math.min(lo, hi)
-  return { from: a, to: Math.max(lo, hi), custom: from !== undefined || to !== undefined }
+  const clamped = (to !== undefined && to > current) || (from !== undefined && from > current)
+  return { from: a, to: Math.max(lo, hi), custom: from !== undefined || to !== undefined, clamped }
 }
 
 interface Row {
@@ -48,6 +53,7 @@ interface Row {
   /** The next epoch's first block time; absent for the current epoch. */
   endsAt: number | undefined
   blocks: number | undefined
+  detail: PeEpochDetail | undefined
 }
 
 /** NX-52: start, end and fee multiplier of a range of epochs, the latest twenty unless a range is asked for. */
@@ -71,8 +77,21 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
       enabled: ready,
     })),
   })
+  const off = useDecentralizedOnly()
+  const indexed = !off && !isDevnet(net)
+  const shownIndexes = useMemo(() => {
+    if (!range) return []
+    const out: number[] = []
+    for (const c of shownChunks) for (let n = c.first; n < c.first + c.shown; n++) out.push(n)
+    return out
+  }, [range, shownChunks])
+  const details = useQueries({
+    queries: shownIndexes.map((n) => ({ ...peQueries.epoch(net, n), enabled: ready && indexed })),
+  })
   const rows = useMemo<Row[]>(() => {
     if (!range) return []
+    const detailOf = new Map<number, PeEpochDetail>()
+    for (const q of details) if (q.data) detailOf.set(q.data.data.epoch.number, q.data.data)
     const byIndex = new Map<number, EpochDto>()
     for (const q of infos) for (const e of q.data?.data ?? []) byIndex.set(e.index, e)
     const out: Row[] = []
@@ -84,10 +103,11 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
         epoch,
         endsAt: next?.firstBlockTimeMs,
         blocks: next ? next.firstBlockHeight - epoch.firstBlockHeight : undefined,
+        detail: detailOf.get(n),
       })
     }
     return out
-  }, [infos, range])
+  }, [infos, details, range])
   const length = epochLengthMs(net)
   const columns = useMemo<ColumnDef<Row>[]>(
     () => [
@@ -126,10 +146,21 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
         meta: { numeric: true, phone: 'hidden' },
       },
       {
-        id: 'fees',
+        id: 'multiplier',
         header: t`Fee multiplier`,
         accessorFn: (r) => formatMultiplier(r.epoch.feeMultiplierPermille),
         meta: { numeric: true, phone: 'secondary' },
+      },
+      {
+        id: 'fees',
+        header: t`Fees`,
+        cell: ({ row }) =>
+          row.original.detail?.totalCollectedFees == null ? (
+            '—'
+          ) : (
+            <Amount value={row.original.detail.totalCollectedFees} kind="credits" compact />
+          ),
+        meta: { numeric: true, phone: 'hidden' },
       },
     ],
     [t, length],
@@ -163,9 +194,11 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
       title={t`Epochs`}
       subtitle={
         range
-          ? range.custom
-            ? t`Epochs ${formatInt(range.from)} to ${formatInt(range.to)}.`
-            : t`The latest ${formatInt(DEFAULT_COUNT)} epochs.`
+          ? range.clamped
+            ? t`Epochs ${formatInt(range.from)} to ${formatInt(range.to)}; the latest epoch is ${formatInt(range.to)}, so the range stops there.`
+            : range.custom
+              ? t`Epochs ${formatInt(range.from)} to ${formatInt(range.to)}.`
+              : t`The latest ${formatInt(DEFAULT_COUNT)} epochs.`
           : undefined
       }
       source={stampsOf(...infos.map((q) => q.data))}
@@ -225,7 +258,7 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
       }
     >
       <DataTable
-        caption={t`Epochs with their start, end and fee multiplier`}
+        caption={t`Epochs with their start, end, fee multiplier and fees`}
         columns={columns}
         rows={rows}
         getRowId={(r) => String(r.epoch.index)}

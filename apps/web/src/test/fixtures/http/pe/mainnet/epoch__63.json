@@ -1,0 +1,1460 @@
+{
+  "request": { "method": "GET", "url": "https://api.pe.dashhq.org/epoch/63" },
+  "recordedAt": "2026-11-13T09:39:54.077Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "epoch": {
+      "number": 63,
+      "firstBlockHeight": "341295",
+      "firstCoreBlockHeight": 2444015,
+      "startTime": 1774464822305,
+      "feeMultiplier": "1000",
+      "endTime": 1775253162905,
+      "totalBlocksInEpoch": 4456,
+      "totalProcessingFees": "61664181900",
+      "totalDistributedStorageFees": "2310210585",
+      "totalCreatedStorageFees": "20360782040",
+      "coreBlockRewards": "248788530469077",
+      "blockProposers": [
+        {
+          "proposer": "00F8C11EC50A9572821CD228441C0B03D1ABF225EE8AAAA3497A75DA65FA91E4",
+          "count": 18
+        },
+        {
+          "proposer": "0205A7E63DF7DF90D11D1BCED03BD64464207E6D3015C9051440D5875258D35D",
+          "count": 11
+        },
+        {
+          "proposer": "02EA5D030DA10C84AD09CA95289C28D6AFFE7CD40947AD30FA11FC782C677D75",
+          "count": 10
+        },
+        {
+          "proposer": "035D2FA64DB2B9A59AA90445DC84499E4911FC75B382A9B83682A5E8CBBA6A15",
+          "count": 14
+        },
+        {
+          "proposer": "0376DC6FBFACE9F697568F92E83D3BCA48B932683242A0715D059A692DEA5E9D",
+          "count": 18
+        },
+        {
+          "proposer": "03E0AC65173D68075CE818DBF01C7B46FC8E9B1D242A3A4BF732AE6CE6471A80",
+          "count": 11
+        },
+        {
+          "proposer": "046C7BFBB01B0D5BCE1B381FFA5A97BFA49F48002D2A2D8E7BCC4287B741820B",
+          "count": 17
+        },
+        {
+          "proposer": "05491DC2B9A8C11125B58FD688FE50BA37FC8F4AA836E52C0B4B0A54FFB93F7C",
+          "count": 13
+        },
+        {
+          "proposer": "05C3A7B2275A294AEEABD3D40E7978BF0A970514D9269C94726A70582AACB473",
+          "count": 18
+        },
+        {
+          "proposer": "06A9EE248111BF6D6D5B123CC40B3A9C9C9C3C84A58E5A2ED9DF97AD7C4E7289",
+          "count": 16
+        },
+        {
+          "proposer": "07BFFAA884F78CFB549D6557065D01A5C537B39434B2B2767A6114E5D9D73CCB",
+          "count": 13
+        },
+        {
+          "proposer": "08185F663A086511CA8491FD0C66999DB90B1DAEC572D48017A2733B2E5D4A7F",
+          "count": 19
+        },
+        {
+          "proposer": "092828EDC081D3BA1A54F043259B941368F2C718881B06A9D347883B21BFE313",
+          "count": 12
+        },
+        {
+          "proposer": "093C7924743D735BA2F73D6C0DADA30BABADD8D083FD35106AB31561F850D31A",
+          "count": 15
+        },
+        {
+          "proposer": "0A1DC4C81B3BA19229F698E454DC41EE9832343FBE9E9A4FBF8A91B4DC39C291",
+          "count": 15
+        },
+        {
+          "proposer": "0AC126CA993C3633E9CE99E9B5F0F93A4566973BC2EF9136D97E14C8DC80D931",
+          "count": 12
+        },
+        {
+          "proposer": "0BF16F96DD87D0994B865BA49C449A280743E7CC12AEC1ECBB8AA1A0407E540E",
+          "count": 9
+        },
+        {
+          "proposer": "0C00D16531A1CA3012CA4B29F8E3474C5378AFCC3F1A671030DE16F9DCECF350",
+          "count": 6
+        },
+        {
+          "proposer": "0C3774B735180708D90A53D5FC99A2699A9A53CC21CF27505D1A184E1EE836BC",
+          "count": 12
+        },
+        {
+          "proposer": "0C76B69F3B96A0A9E932F21E126252E0EC77B9A990E01F6AE974B311F7AEC6F4",
+          "count": 14
+        },
+        {
+          "proposer": "0DD99BC27F36FBA3C62DCCE4956E8E671D191332BAC01DFA4C331E3D7FA25CE0",
+          "count": 21
+        },
+        {
+          "proposer": "0DF0E3250FC371E7AECD622946027810D2A08EBB12073F16D8770660CFEC80A7",
+          "count": 8
+        },
+        {
+          "proposer": "0E57E03AF6AB553916F1AC5AEDD1F5602301E2F79E4E7D6F9BF74D55E88B2DF6",
+          "count": 12
+        },
+        {
+          "proposer": "0E9A4F75C4BB0CEEA1EEC28E2B730D81C192A5C386C46886EC48BDCEAA8D3FF2",
+          "count": 9
+        },
+        {
+          "proposer": "0EBFBB9BA2648696581B21FFF6FF4A1AD20AC574E0D5A8811E03726617E33E96",
+          "count": 1
+        },
+        {
+          "proposer": "0FAA7A17FED7DD609D4920972EE9B2E45F1ED1361ADD7F4EA16A9D734C9851D3",
+          "count": 15
+        },
+        {
+          "proposer": "104B336E605975A557182930F37E929EECA6E553E2E84DD7ACB8C8503BFEDDEF",
+          "count": 19
+        },
+        {
+          "proposer": "114EDAF079B652B35D82EC35180FF8145834C36E1B7E49CA307613FC994FF750",
+          "count": 10
+        },
+        {
+          "proposer": "12F35C3050A1E08B9A79002218A0F5F7B2E9709CF82CFDF9AB04C74DBD16CC5A",
+          "count": 21
+        },
+        {
+          "proposer": "144D21600EB7F37203CEBEF3AC5C5D4FAA6063D9178EDF746F838A2440FBB428",
+          "count": 15
+        },
+        {
+          "proposer": "156E1736A458C5F2596DDCEDC98B588FC219EBA076F838876B1D7488EDA1DEBF",
+          "count": 11
+        },
+        {
+          "proposer": "15E59B5BC8A6CA68C3D5CB8FE415AEC62FE2C1401CB39DD61DF5BFFA713F4BC8",
+          "count": 12
+        },
+        {
+          "proposer": "174DEFD7F00894EFA75A025315106960E5538A62112D9850F6F1B2940446C2A4",
+          "count": 17
+        },
+        {
+          "proposer": "187728365E5B7957350E968101B96663E147054147809A91FF163AFFCA69ED36",
+          "count": 14
+        },
+        {
+          "proposer": "1879EAFF7F39E572B58CEE59999B519F5C253B14A56C6076C82B09BA8DF397B0",
+          "count": 13
+        },
+        {
+          "proposer": "190F07BD27261BC9F2A2D125BF30D55E4756DA9F10AE4C4AEE70351F550A4705",
+          "count": 9
+        },
+        {
+          "proposer": "1978E9FD8A305F1D4E303E186FEF14D3A5DBABE45BAE141A0E36846023CCA1DE",
+          "count": 8
+        },
+        {
+          "proposer": "1987207EF4E9554815AFCEFCDA8C95BEE778F02093137B1F12792D534DF1B2E1",
+          "count": 16
+        },
+        {
+          "proposer": "1AA98B7A42C1DE1444CBA7830AE7F627DA661B683E667B9529B9DFD764DD3952",
+          "count": 15
+        },
+        {
+          "proposer": "1ACD6B43BA56DFAD7CEB547D054250F6ED1427D23778EA290BDF9203473F03F9",
+          "count": 8
+        },
+        {
+          "proposer": "1CF2F1A9ADD560F8E343FF08128F695AABFFF2658FB0C497483AF3D471671CB9",
+          "count": 10
+        },
+        {
+          "proposer": "1E5112A9F38D7A0228B23A73FBEAB0D7D097CCB5AA4AAF13B4065D1502BE5614",
+          "count": 8
+        },
+        {
+          "proposer": "1F4766EC83B8C4C63EE139CCCFFBFEA83E711934777134B1A2D2666EAA8D9E6C",
+          "count": 12
+        },
+        {
+          "proposer": "1FF4E7E6F15ACB8CAA19642E722D62BCFA616D9D7378D18E18F2F88F42A3205F",
+          "count": 12
+        },
+        {
+          "proposer": "204F7B930CD8091D60160600B32051B74D9B9BA25BCBA0A5CA038FF9A9F7B03F",
+          "count": 9
+        },
+        {
+          "proposer": "21CDF6D1FB416336E5BC6E42A4B56D6B6EDBDB0063D9FC89F149F779FA85C20C",
+          "count": 13
+        },
+        {
+          "proposer": "22299C9A86CEBD1958D69AF744A75972CEF4E944BFD1877B4FCA7FE0A920B77C",
+          "count": 16
+        },
+        {
+          "proposer": "24943DA0ED97BB42083CA8856CA7D0DC96586F78277E96FAA30A7C7DBB5A65EA",
+          "count": 13
+        },
+        {
+          "proposer": "2583EF29DC8B29CE32C5CBD21B88C90C9C9FF0225DE7FAD9D6C83C0E1CD324A9",
+          "count": 14
+        },
+        {
+          "proposer": "25A8B283B81A0C3B2B3462CFFA660B19EE6FCBFE116013705C498FED1BD52637",
+          "count": 17
+        },
+        {
+          "proposer": "262F356FD84978BDF204E27C5D2BB08B7B4DF448DCA0AF41FF6FE9841844449C",
+          "count": 10
+        },
+        {
+          "proposer": "26B8C4D88EB8023857A737DF91F63167285CA090513E0EA5C341A63D4BF34ABB",
+          "count": 10
+        },
+        {
+          "proposer": "272C13B64739B9853979EDEECE1E3271BF94787122A8A201D253DAFA9D4A7B7A",
+          "count": 13
+        },
+        {
+          "proposer": "2793B8CFE8A204CA782B9A2A72BCC0765EDD0DDF17EF305B3F2D416C12C4498F",
+          "count": 8
+        },
+        {
+          "proposer": "285D6AC35857CB73BB7952A52887DC7AFCCDE0043A344B973EC7621AE02F2A4F",
+          "count": 11
+        },
+        {
+          "proposer": "289A0CFCAB454C3FC7A475CC80EC7183FD4D6D5F2D8DD23B2931F90573B811A8",
+          "count": 13
+        },
+        {
+          "proposer": "28A307D67352089E183A0A9907BE95690C7558D330A58F2A2A4932BE9D43D78B",
+          "count": 21
+        },
+        {
+          "proposer": "28CDAE2272C4E52901CB76097E4109FF96D442A9D323F37CD4D325A07A0D49DD",
+          "count": 10
+        },
+        {
+          "proposer": "28DE8E7B6B045D8B0186797F3B3B772BBED08C016D2FED302201D01F8430D8A5",
+          "count": 5
+        },
+        {
+          "proposer": "28F542CCA56257D08C0710E40AE4248BA40038E3299E2AE5E05B0784BFE6CD89",
+          "count": 7
+        },
+        {
+          "proposer": "2963A68CC4F9B4E3D371F089022F0FAEB68566B12B2C5CDDDA92E36C1AF0799D",
+          "count": 9
+        },
+        {
+          "proposer": "2B4951FA5E5BC7CCA385D879FFC22D69DF866287B8B136A810DB913BC046AC0C",
+          "count": 13
+        },
+        {
+          "proposer": "2D605CD48DF5C831B70D98297708F75E8BF1BCC3B88322E62E391ACA51385CEE",
+          "count": 12
+        },
+        {
+          "proposer": "2D80CA81D3CE72365889060A9C5DCC30B04E7075F589552739188ECAC01B01D0",
+          "count": 15
+        },
+        {
+          "proposer": "2D86F2D542E64735ABD6602A5A2FF502E720AC06C04CD6028AE5184B8551FC07",
+          "count": 14
+        },
+        {
+          "proposer": "2DB0B28C6A06251C27A148749C1B5EB61942A30DC1741D57145BFC58A59E9ED5",
+          "count": 14
+        },
+        {
+          "proposer": "2E6475A698E98A9093B2A659F0A6BF586A4E6366B6D50ACEDB933ECDCB6BA408",
+          "count": 17
+        },
+        {
+          "proposer": "2ED7C6CA06533AE4A7624F7ADC12F1B56E67E7892D0A3DA0A8A116CF956EE54C",
+          "count": 11
+        },
+        {
+          "proposer": "305D1A13667FE4B76A24F5E9BB5BF37893D50A650EC4EB0BAD2B114A58D6F995",
+          "count": 19
+        },
+        {
+          "proposer": "30A4037AAD9AED884111DD0B1A497EA024CB57A260ED54209F52ADA3EBAC8472",
+          "count": 12
+        },
+        {
+          "proposer": "30A6BF1D8C099D5AB06BCCFA4024A3AB0EAA8A743179EC3801A1B8A2105948B3",
+          "count": 13
+        },
+        {
+          "proposer": "317E4164B31F7A4969BDE08CC5D24AC805E2A57A656A5E52C484A3DCE15C6F4E",
+          "count": 14
+        },
+        {
+          "proposer": "328DB6689AE2D4B51244325BFF23D17209DEF29FA3A18DCBF72395F09F1820F2",
+          "count": 9
+        },
+        {
+          "proposer": "32C9D1D33AE15B13D76268CAFB8D5720A1BFE43A422CAE76B91A0BAC8D125CAB",
+          "count": 11
+        },
+        {
+          "proposer": "32CD682500972CE75443CFAE0B6149173CA3CFAA7E2715B1493E1C0884D23DBF",
+          "count": 18
+        },
+        {
+          "proposer": "32E393FA1992D520D48F417BBB296E393E6A90FB584BC8FF6189FB71812C11EF",
+          "count": 17
+        },
+        {
+          "proposer": "3406E618281962F15F3DEFF5DC3DF8256A3289499930CC926B107BEE1D5A0395",
+          "count": 13
+        },
+        {
+          "proposer": "34275283D67D69A588EDAFD85A75A7131775A5F812A419D7608997ED3764DF1E",
+          "count": 13
+        },
+        {
+          "proposer": "34C13E9AAC546BB954E6E56C16F809449B150D724A6D9514E23F78263062E933",
+          "count": 11
+        },
+        {
+          "proposer": "35978E1A9095AFC9DCD72925A001B8B38331154FA2ACAA7D2B00D6F81165D2E8",
+          "count": 13
+        },
+        {
+          "proposer": "35DE293B2EA08606355D16E971D89C721257B935C70650870BAD9DE7360A8312",
+          "count": 14
+        },
+        {
+          "proposer": "364EE14241A4ADF0BB940A4F1BC13241738A5E818AB20D3B31F635921750C683",
+          "count": 13
+        },
+        {
+          "proposer": "36B3E63BA54ABA9B75994128D124E9E1CEBE348CD30415B5098C60526DE0157E",
+          "count": 17
+        },
+        {
+          "proposer": "36D014B83C54F35061DCC08178315FCA46C951FFA6C606E2C0AC3222BB0D01EB",
+          "count": 13
+        },
+        {
+          "proposer": "3727F52C17C4744DA84D11113F069B8B1D9ED9557B21E03FCBA991ED8C1698F1",
+          "count": 17
+        },
+        {
+          "proposer": "3756DBABFD9B35E442BAC23E88B342B563148B3489312B12E11DAB7ED720224F",
+          "count": 14
+        },
+        {
+          "proposer": "376B8D360CFBEA5C20D3A598999C6C04C832D372D1C5118FD98CC3AF9A8D12C2",
+          "count": 10
+        },
+        {
+          "proposer": "38F32F98AA6CB06AC93E52CAAF18AE84B19727375493C864B9B46FA7EBD40A3C",
+          "count": 9
+        },
+        {
+          "proposer": "3B08C9C6B92D3258D0F6FB93BDC593DD9A930B9BDC76BEBE8C076338A060B30B",
+          "count": 13
+        },
+        {
+          "proposer": "3BF2B9F9F6152C7B39A61634F1632CDA68BDF78556C6DBD2E20A718D0AE6E994",
+          "count": 11
+        },
+        {
+          "proposer": "3C72423ECC450C5F9025BB7F1E67C2DA0C685859EE7F7CE0D1B4E87C098F6CEB",
+          "count": 9
+        },
+        {
+          "proposer": "3CF31E20E634BC16762F5A5ABB3722BBCAA853CBF6805669152BAD4D5C2B4137",
+          "count": 14
+        },
+        {
+          "proposer": "3CF571A52447555754D8A2721976EF14151749DC8253E6BB0FA5063726FC4C31",
+          "count": 9
+        },
+        {
+          "proposer": "3CF6632B0AD1B41F82B704C794B3EA63AD0AB775EFB6CA81002E97D6922DFC32",
+          "count": 17
+        },
+        {
+          "proposer": "3D039CE62023346C62C2FE5F1CACB3A38678A0F54A2817931440D6C8E0856EDC",
+          "count": 10
+        },
+        {
+          "proposer": "3D1BABD752D50C51084B8AB7F719B391D482E7417E162970CCDD06F49D9512B0",
+          "count": 12
+        },
+        {
+          "proposer": "3D6139BFCD120242D791FFB8A5D881CA219B790447D267120003F03501875C93",
+          "count": 15
+        },
+        {
+          "proposer": "3E35BDD0BBCC488D390207068E0BDD4A288CF7DA4CDBCCFDF9D8E55AB541D57F",
+          "count": 12
+        },
+        {
+          "proposer": "3E596421618DA23EC6700771C2F4CF819FD9DDEC753F7889C96F7D1ECB6F9C40",
+          "count": 11
+        },
+        {
+          "proposer": "3EE1BA80075C803EAF8CA2D44B2215C95285C8BC73A8EA7BC697A802B5FF9E85",
+          "count": 9
+        },
+        {
+          "proposer": "3FD4C78DBFC0FBFB669BDDEA1DC747DBE07FF986359C29853BF85BB9B817B3E3",
+          "count": 1
+        },
+        {
+          "proposer": "4177C31F6EE93416BE5FB46529AC283DAF9BBBCFE39FF1ECD8FC3D22D1450B42",
+          "count": 14
+        },
+        {
+          "proposer": "41D3C31C5F113497936E26255CD6C52CCAD2B2EE7C7F8E5EF10D2ED682D9B271",
+          "count": 7
+        },
+        {
+          "proposer": "42375D5AFC0BE9639BF9A89CB95387E0A44AE37DBF1D3FD4E7A92F4A98D35A6B",
+          "count": 14
+        },
+        {
+          "proposer": "43A068CDE9F9318471AB16006A938201A83153C4C7497EDE5A3382DF38E27B9E",
+          "count": 9
+        },
+        {
+          "proposer": "43DB44334DE4FFCD6BE84CA21542A3A0353D80F7AF86908207A0CE46CC1A62C5",
+          "count": 8
+        },
+        {
+          "proposer": "44433A3E3D441A59D562C9177D0C969A979E4EE3758358F32F23F6D76DA4180E",
+          "count": 7
+        },
+        {
+          "proposer": "455D20D96055D79C1755458F855B698308CF27703A8A9C75B2BAF6DAF394100A",
+          "count": 16
+        },
+        {
+          "proposer": "4625244116F046068EAD56D61D994FE5FEF076826C439A6015B57689A238B8AD",
+          "count": 12
+        },
+        {
+          "proposer": "46CD6CF9D2B8FAEE6EC2328211A343CED91D813880EC3FE2B60BE5E3454780A1",
+          "count": 18
+        },
+        {
+          "proposer": "47676550ECA46ED65B0565DA7239C3439B1D6900A0C4562EFFD551A094BBBE5F",
+          "count": 19
+        },
+        {
+          "proposer": "47FE744EF930C3FD4B835BD1C585D355D51015306CC6B390AE08587C73388AA4",
+          "count": 11
+        },
+        {
+          "proposer": "482B588AF45443D15CE41C5FE7E9C317738E0D600768CA5A3F7ECDBCFF919AB2",
+          "count": 13
+        },
+        {
+          "proposer": "4A570F1B8E1EAAE5A8A2409DFBFB52508C6C50ED083E1045EEEBA12F9F0528E5",
+          "count": 17
+        },
+        {
+          "proposer": "4B9E75808B451AA192E1BD448971192BD5AB9F8EC1790B6535D845AEF57E4B22",
+          "count": 9
+        },
+        {
+          "proposer": "4C2E231FE2732724651D0FD8C5DB6A37E2F689C47170CFFC52EABB8318D227EF",
+          "count": 9
+        },
+        {
+          "proposer": "4CAD1FF2DE67738075929F52B57FF947D1BA6EDE541086F306747589C1B38028",
+          "count": 11
+        },
+        {
+          "proposer": "4D31719A03B0CA5027E83CC49279FD5AAA9967A35AD2FB4AAE32C6AB8FFF4BE1",
+          "count": 14
+        },
+        {
+          "proposer": "4D40028FB24A5E42C629052D04B85BBB84E3B519E307197C42B32CE317EAE4DD",
+          "count": 18
+        },
+        {
+          "proposer": "4E8BED8A17AD508A592249528089D682A0169B1702815CFEA4C80DCAA9133EDE",
+          "count": 17
+        },
+        {
+          "proposer": "4EBA7299ACD923212F9FF9FAEFDA1C8268FF2366FAF4099CC36FD0DB403703B3",
+          "count": 12
+        },
+        {
+          "proposer": "4EC84738F503F534E4FD54D1C1F8D4EFE814FEFD9652AA03A022BA1BBC87A308",
+          "count": 15
+        },
+        {
+          "proposer": "52882407701DBD3B1B73E37C05225908938785DA21470C67F61897C62DD4509A",
+          "count": 11
+        },
+        {
+          "proposer": "5348F5464E85CFEA9CB003C41C07FCD20A138310D77FC97A3A98119570D89DF6",
+          "count": 17
+        },
+        {
+          "proposer": "5422F2847C2884CA2594F29C54F8FBEF2C8F542E128F726F6EC8EFA18FDC512B",
+          "count": 14
+        },
+        {
+          "proposer": "5428FD626581C92448AB190C4D21F1FA66C3199F7B95C51215F7BBCE99FA7477",
+          "count": 16
+        },
+        {
+          "proposer": "5436B58BFFDCCFC6930972835C0CD5668195B9F416B8B5106B6C79829280C41F",
+          "count": 15
+        },
+        {
+          "proposer": "54A1C102716D8AA2F34A1CBE332C4A1C4F8E59C84F0409484F7DC09E981367C5",
+          "count": 15
+        },
+        {
+          "proposer": "54E5FDE28EC4FF8FBC1874E7CAEC7ADE49873343EA42FF4A09509241A3AA958B",
+          "count": 12
+        },
+        {
+          "proposer": "556E946FA496C13CC78D1F3F4C07C44DEC0ADC8BB333E3EF879070C6188D60D1",
+          "count": 10
+        },
+        {
+          "proposer": "55A7851E0476155E96F2A094C9CD3D5F5E4BB2559B8934E40F9E820E4896C6A8",
+          "count": 8
+        },
+        {
+          "proposer": "56B5EC5A031F5884C3F51039D580DD47D2A53B85F2C33C5F673701DD3EB8DDC0",
+          "count": 13
+        },
+        {
+          "proposer": "578390A1470D1EB3DA1DB6EF51C7D4E169BF3B7A5E46F6AE92CDB5C89602FCCE",
+          "count": 2
+        },
+        {
+          "proposer": "57F2E758BDF8C592062DBB7B9B13BB1515092EB4856ACA8F405FB3E1B098A9DD",
+          "count": 18
+        },
+        {
+          "proposer": "5814092A082E060480BD9916FFE1A53F27DB8DB06552750FAC146BB766C3684E",
+          "count": 7
+        },
+        {
+          "proposer": "595B5F42176B7F62116C633B024256200AFF7C54387DEE9B6711C93F2491A286",
+          "count": 11
+        },
+        {
+          "proposer": "5AF8C6C6245C9BAF263CEE89D45FE93C3ED57A7763B7B17FDDFA9A60EBD7CD9D",
+          "count": 15
+        },
+        {
+          "proposer": "5B4D3A92EFC402EC5E51B977F9C3CB50AFC10E23D72866233A7539014E77A37C",
+          "count": 11
+        },
+        {
+          "proposer": "5C8B0881A67C1D164ED343095554C73B986D37004F941D476889F5A0C3C0E0A6",
+          "count": 19
+        },
+        {
+          "proposer": "5D2A7D92B81CE02CD948B6BE31F13536694A9FBF5D7C76B4EEA4F428ED31BABE",
+          "count": 15
+        },
+        {
+          "proposer": "5D7C80F9C8A3A2D428E9B6758178C2CE5A48C207FEDF3A7FF96B946511DD28CB",
+          "count": 19
+        },
+        {
+          "proposer": "5E20D3DF9DEED8BC6A93168822C715902E4D87E6463937D51FFE8C0E07C515EE",
+          "count": 8
+        },
+        {
+          "proposer": "5EFC91E1CD8404DF92D0497AEBE47EA4211FA8D6CCFAE9E8346BB356F9BE3342",
+          "count": 16
+        },
+        {
+          "proposer": "5F0F9700D4E6C9CED64AD672D88B0C021AB9D8CAA94C2500CC2CB70228C5CEC6",
+          "count": 11
+        },
+        {
+          "proposer": "5FB692835408714A5EC9F72348970C5A60A6F378D234633EDA56E636059FCD76",
+          "count": 15
+        },
+        {
+          "proposer": "5FD42027CC83F130486AB811A5C59EDF62660BC381053D793970D6AB6D9EE9D8",
+          "count": 10
+        },
+        {
+          "proposer": "602630FC16FE27D7A86684B3B7DE698ED9D93CDC4A43129EE45EF32AA7B014F1",
+          "count": 9
+        },
+        {
+          "proposer": "60869D88C31BA5F5869F2E3B072288F5523A90B7B276F595D2D067C15BB33E91",
+          "count": 8
+        },
+        {
+          "proposer": "62472F43D140786ABF3EA0A02F5D9879604FFE7F9552529015BFF335C3382159",
+          "count": 10
+        },
+        {
+          "proposer": "635D089A4D768E3F4397DA4AD00C63C2C1A0125D5F79CE612F5FE1A19E6B0EC4",
+          "count": 12
+        },
+        {
+          "proposer": "63D0E84D82F3C909890372CA37F5B2DD0D4FC594D9FB30FFF566CC2CA3B58C88",
+          "count": 12
+        },
+        {
+          "proposer": "64FE8C60E2E4E47F6AB6F34368F2A297174E79074DE25C7A3222B05D7502A36D",
+          "count": 15
+        },
+        {
+          "proposer": "67E8E38C72C8D5440010C55C04B83D8050FDFC4CE9E9C4ED6898C8FF74DA23FE",
+          "count": 16
+        },
+        {
+          "proposer": "685CDF498B76F704AC4CC352492CF7A432D9DDFA273C2BB86CD8281C81BE06E2",
+          "count": 17
+        },
+        {
+          "proposer": "6939B1E557AF26DCD97599F38B7F00C3CBD4650207E5BCD8079F049B7CBCAC71",
+          "count": 15
+        },
+        {
+          "proposer": "6A21976AA2BB752D4032D707672803683CEBF28B551A7BAB81579497DE08B7A6",
+          "count": 16
+        },
+        {
+          "proposer": "6A5E47919C5C07843B21095B5CCB7402537FBB921DDE01437E56D03A3B382B37",
+          "count": 10
+        },
+        {
+          "proposer": "6A66D10F33489EE415D3CA93834B31C5612E3821D1A17D15E45E55015800C5F1",
+          "count": 10
+        },
+        {
+          "proposer": "6C19E428D2D97F2FFD05CF6B272A7C3DDB750D0BB7213B6C8072A505670C44C7",
+          "count": 18
+        },
+        {
+          "proposer": "6DD5EFF79BC43AEE874A0C010B54B1F9CF872E1141F4DC383B81DDD93B5DB56A",
+          "count": 10
+        },
+        {
+          "proposer": "6EC1651BDEB935B12C0EFD20E1C95834CFBE3D1F70766268C620BC5ADC954344",
+          "count": 13
+        },
+        {
+          "proposer": "6EDE4EEABD1E11B4E90142237B992EAD732F7A0C4AD39A607BAE6D502B453864",
+          "count": 11
+        },
+        {
+          "proposer": "6F30A47BB0FAE228FB10CB960F45843F637997172DDD644CCC02F81A85E9A2CE",
+          "count": 11
+        },
+        {
+          "proposer": "6FC59664F3757335C05185970D7D93DC195E3A0E864EC446DC60A295834C77DF",
+          "count": 8
+        },
+        {
+          "proposer": "7047304CE4D6D2A79E8E27CC482AEEDBD8A554E10D7F64FABFA14458B154BAAA",
+          "count": 12
+        },
+        {
+          "proposer": "706B871255D45BE704983D89207FF0844C281E34F8E87E45F8AE173270DEB354",
+          "count": 11
+        },
+        {
+          "proposer": "70A7A081AD478E42E0A701BF16EFC802B2796B137032B30B9CABF5038AFE963E",
+          "count": 14
+        },
+        {
+          "proposer": "71113A092BD4A1AAB6ED171831444D7BE833718B05136A55129D3C2773FBF642",
+          "count": 13
+        },
+        {
+          "proposer": "717EE8E9302A9A53FEEE91D1EC846B0B860203C370650B618BAB2689EF471F59",
+          "count": 10
+        },
+        {
+          "proposer": "72588EA84F79B1FA4E84380A50507C614A58532FBEE889E1D49C069E86945209",
+          "count": 17
+        },
+        {
+          "proposer": "7284FEBED5466DBC53852EF3765B6A97762CADC380B9DC9B74234E189F396EEE",
+          "count": 9
+        },
+        {
+          "proposer": "7399537154F6587CBEDCEDA381A75B1AA053733A07B3E04A89B8CB660AC276B0",
+          "count": 15
+        },
+        {
+          "proposer": "7494AB33759421B6E04E52A664665C55D279A70A06B07B68A6356DDA2EA54B81",
+          "count": 13
+        },
+        {
+          "proposer": "74A08086D3BF920C0E56748BF2D0CFED1419F251D598FDCFAD1213391D23DB09",
+          "count": 10
+        },
+        {
+          "proposer": "750580758E7226CFF218E1ABC4B8AAF577173773136C5B9757EE53191E79BD8B",
+          "count": 18
+        },
+        {
+          "proposer": "755CC40D5A42DD829CF95C9735815606C871EC9E7B8D5C62EC1F7C3CF19707ED",
+          "count": 16
+        },
+        {
+          "proposer": "75CA856A30F72068343D24C1DFC30FEBDFD23802AEB6343D9E52016718FE89F3",
+          "count": 10
+        },
+        {
+          "proposer": "788707B373DAB06ACF548194B0EC81486370ABFDE06E6462732B58ECBD4E80F4",
+          "count": 11
+        },
+        {
+          "proposer": "79CCCDFB7514E5F197541DC6662B29D122660E91A3059D13CF7B3E0C05550403",
+          "count": 1
+        },
+        {
+          "proposer": "79F6B7508B8982B883EA1A6E6657E005FC751729BD6EBEFAE6D5B012C3661323",
+          "count": 12
+        },
+        {
+          "proposer": "7A1CF3C4F01D67B3C32755155D7E908AC93EB45E2AB7459BC08DA91B98335050",
+          "count": 14
+        },
+        {
+          "proposer": "7A26C877C1E2DAFEA292B54AE37C39BE5C51F27B24FD7A1E5A634523B5526EAC",
+          "count": 16
+        },
+        {
+          "proposer": "7AFCCFE4BE5BCA95906EFD36C2E887DC64B74CC7548C3F3478C9656EF39D3B11",
+          "count": 6
+        },
+        {
+          "proposer": "7BC39FD97FA0E4AB9C36CE553BE151232C3343CAFB366769B85BCEEA98EAEB0E",
+          "count": 15
+        },
+        {
+          "proposer": "7C117FD39D453ED398CD0C24234C6741603E3C27AEAC606ABB14FE9DC97794C0",
+          "count": 13
+        },
+        {
+          "proposer": "7DAA17E48AE605DFF4EF652567BBDD13ED717136AF8C13E450364693C1172019",
+          "count": 13
+        },
+        {
+          "proposer": "8051FF446C7D5BB3C2C73D40274EEE304EB5D487C7305FF57A9BD0AE8EDF499B",
+          "count": 11
+        },
+        {
+          "proposer": "810792D7C10CD60B0AADFF85AFAE5C2542CF39E9DAD26CEFE31088736BD1DE80",
+          "count": 14
+        },
+        {
+          "proposer": "814B632DD1C8D6330C8CC2B9627986CF79BE7918581C620A483B431A4BF69942",
+          "count": 14
+        },
+        {
+          "proposer": "8185DD58F231DD9E26491667F29B0438A94849F0883B88D518A7B00588312BAC",
+          "count": 5
+        },
+        {
+          "proposer": "822C235FFDE3D95CB72E8822913B0B057D266A0E2E909F4B112CDABA0B07FB9E",
+          "count": 13
+        },
+        {
+          "proposer": "8239CF70ABA2791020C2AF741476DA624445BE6C6D27055875BE19C79018B92E",
+          "count": 12
+        },
+        {
+          "proposer": "8267056EDEE9883C7C7EC937958752A4FDBE256BFD03536AE7F708188C530E55",
+          "count": 14
+        },
+        {
+          "proposer": "8398C81F62D24C8349615A9F805DD716800427FF5872C15F67DA053712F21E4F",
+          "count": 22
+        },
+        {
+          "proposer": "876B7FDFC60B90FD2D549C55CF52DF787B1BBD80C1932C886711609FBB3BA404",
+          "count": 16
+        },
+        {
+          "proposer": "88D16464E26420FAB8EEFE4C6BE4771AB2ADA126C111BEC9D8787A8EDE65977B",
+          "count": 12
+        },
+        {
+          "proposer": "88F021C8A3D7B4997C8947EB921F23B8D4E293664CF680E1807C34047A0A5A8D",
+          "count": 11
+        },
+        {
+          "proposer": "88FAB7B71F6E1A591B3AA1FD1B6776981EFE569012D409C9E2EED12CBDFE5534",
+          "count": 13
+        },
+        {
+          "proposer": "8935AA7E62F160DA45664E5DC02A9C3E01E8A577ED791685DCD2EE7EC449D769",
+          "count": 6
+        },
+        {
+          "proposer": "8B447AD22F5068A9F7FDD46A3AA09387D53933F56B9D625D0C1981888A92AFE0",
+          "count": 18
+        },
+        {
+          "proposer": "8BC76CA7A979DED6171E6A0BD9BD2A43DFA052E7B54B092D9862DB52EFE38726",
+          "count": 12
+        },
+        {
+          "proposer": "8BF45E345E11D3FD9AB5BDF8D6A8ABC153CA5B4B433F25DF40F0DB31469BC93A",
+          "count": 14
+        },
+        {
+          "proposer": "8C618567CAEB7AB661CECDF6A551238EC42E602C73BC65A6BEC9DB5F91D2AF06",
+          "count": 8
+        },
+        {
+          "proposer": "8EEE03D815E2AAF6859E13FDF86BA7832627DA29D38DAC6B18A47D2D52FF10E0",
+          "count": 12
+        },
+        {
+          "proposer": "8F5A84E90E0183A6AF7F8896A11198707195237B5972D4A896AC5082ADADE439",
+          "count": 9
+        },
+        {
+          "proposer": "8F826DFA0A2D6A9DA119F3EF7437C0EC1CF14118E52DC0813D1106C97B5B4352",
+          "count": 16
+        },
+        {
+          "proposer": "8FFC80302E1D26CB992A3979692E55CAA704D2F0DD1A8DBF146B34AE225A3AAE",
+          "count": 14
+        },
+        {
+          "proposer": "9043F9EF0A4EABEEC70C1146B801E4C0D5D09FE72523DD969B3B9D78A0280D0E",
+          "count": 7
+        },
+        {
+          "proposer": "92286B26E6B754F16BE5C41FC0A32E1C007398AAEB1468EB3FA0C9EE9E272A89",
+          "count": 12
+        },
+        {
+          "proposer": "927E563B632A7937010F7D619655A0E1DB3DC1BF01290CFB0C845EF30D60CB74",
+          "count": 10
+        },
+        {
+          "proposer": "936876AEA72924467DAA99A22205E3D94462B9CAE824E4127EF1D554F397D6E4",
+          "count": 15
+        },
+        {
+          "proposer": "975F3ED61F5ECB096509AA52B10FDC6A4B3B371D5D22835E393EC2A26FF36B9F",
+          "count": 15
+        },
+        {
+          "proposer": "98576D6F21ABE52A2B122CEEDC2B927EC5F7D627FA819C2EAC0C384740D03F5F",
+          "count": 16
+        },
+        {
+          "proposer": "99ADD4CD92CB01FC8F8B8C1FD07BED7B89907DD373F5A35CB9FFC7724357FC88",
+          "count": 13
+        },
+        {
+          "proposer": "9A8AA10F1B62A4DAE39E173C21995395C0B5AE33A708D0C1FAA8188EA17CDC20",
+          "count": 17
+        },
+        {
+          "proposer": "9AC3911FA197FF37626658C43DD589C09E461AD59EDE1AB349BE3EABF515AA55",
+          "count": 11
+        },
+        {
+          "proposer": "9ACC9FB02491BB09573E77D9D1AB2A69EC184F027A38DDB390C43DBC7B1BFF81",
+          "count": 13
+        },
+        {
+          "proposer": "9BAF6264EBB2CD086AC9744E17E70BF4D8B352D476C09DA8385EED2F75973F79",
+          "count": 17
+        },
+        {
+          "proposer": "9C018B7E046D73C4712360CA6748F817B7005D65DBDB68B2B23994472EBD08E9",
+          "count": 14
+        },
+        {
+          "proposer": "9C145E47B2DA700F5A819DE5B1B974B10EBA38E1146309DBE55899DAC4BB11BA",
+          "count": 11
+        },
+        {
+          "proposer": "9D3D7AB3A243EA2FBCE8C822CB09E47B2211A4015BD24113912D6D06D00D57E4",
+          "count": 10
+        },
+        {
+          "proposer": "9D632BB143D2DFBB889F4BE7C304527450161ECBEB9638A8FA11E1C9DAF44260",
+          "count": 15
+        },
+        {
+          "proposer": "9D7E2A59D89DA01B10B52535917389BD4A05C6FC3816B47F94CDC8028FFD2C78",
+          "count": 12
+        },
+        {
+          "proposer": "9E3FF349FBE7944A99B77764F7D03A3D765CE669BC3C07637014C683CE324CC0",
+          "count": 17
+        },
+        {
+          "proposer": "9EB8C7EBFE212CB7BD121FD8F4D3EC7B331CB650C7E3EABEE3ED80BA35FAF164",
+          "count": 9
+        },
+        {
+          "proposer": "A090DE1FD0C85425304F2460EA761D043CD2F9815757A4C70741909544A1B17F",
+          "count": 18
+        },
+        {
+          "proposer": "A10DA57395EF4B40A42464E9BDC5A2C5A31D1B9DB3E4557E6BA53BE73E96B5DE",
+          "count": 14
+        },
+        {
+          "proposer": "A116C0EC761F0542919FBF226B4C8D77A57EF064E09DF201DFE9AACB0D9018B6",
+          "count": 13
+        },
+        {
+          "proposer": "A20F3EDB99394AD9D93997567599BAAC88ABE28992276B602BEA48D5EB4FC2A9",
+          "count": 18
+        },
+        {
+          "proposer": "A26D953BB69C294092A42805A118488BC3E81B55451B47B2D449DC98E8048123",
+          "count": 12
+        },
+        {
+          "proposer": "A4313722C75F52E1B2666C099060BE756C024C0B237F22B2153F46703515EC5F",
+          "count": 14
+        },
+        {
+          "proposer": "A4BA5069A3A192521B878F24AF710D74D673A7C006C3CD51614C65524333484B",
+          "count": 13
+        },
+        {
+          "proposer": "A61DA3F47BF21D005F64FBF729DFB832422B5CCAC2C5B8173AD17F334E15AA42",
+          "count": 9
+        },
+        {
+          "proposer": "A74FDEC3ED1FB840DDFF63142B40B8E24907CDB3D92C9E884F6C7593354436BF",
+          "count": 10
+        },
+        {
+          "proposer": "A84F04909F64EB8F99342FBA835AFCC89F7E095DF16040840473AC72BABF5B9C",
+          "count": 5
+        },
+        {
+          "proposer": "A8AAC6FB44E9B1EB1C3355F7FCB103BCC7B92D2379E248EF73507A40F5C095D2",
+          "count": 11
+        },
+        {
+          "proposer": "A9234EE0E18829E382274C6AA03A3863CC24F3FC43EB1DFC4977BD2FBB988391",
+          "count": 17
+        },
+        {
+          "proposer": "A92A62C548C54877EE35F42AE186ABFD4A5B73ED57A307836516F1F44D0FF69D",
+          "count": 14
+        },
+        {
+          "proposer": "A9D95A8364BC38C576103ED0AF5BB732ED8D1F8C0ADAC39A5FB92CD44D900BDA",
+          "count": 9
+        },
+        {
+          "proposer": "AA1D7EFB277B44348B44D967BEEE3064C55C4F2DEB8A35799FE823F8EEE4BECE",
+          "count": 10
+        },
+        {
+          "proposer": "AAA0DDDEE42CAD41C5DBC71174BA93D1AC3AAB8A46DB047C2786310B3D06298B",
+          "count": 14
+        },
+        {
+          "proposer": "AB65E314B9D04D6BB066FAC4D35E62F74AC8F52A4C1134301354428DFFB949D8",
+          "count": 10
+        },
+        {
+          "proposer": "ABED8F5B72FD56F6B3C84E7EB9B34B2A99932655CB7C55F14D5D62A94E4FA36C",
+          "count": 9
+        },
+        {
+          "proposer": "ACA242C7D78B8658BCA0BA0B4F0D9ACBEB57375D1C0F49702E5882714D8C5F4D",
+          "count": 8
+        },
+        {
+          "proposer": "AD8658096653D22FF59BC04297A5148554F555911A7CF61CE65F5BE28218E11C",
+          "count": 14
+        },
+        {
+          "proposer": "AF7B4AA038148DB5291361D97037296794B08E4D22DA190AA7982A1A1D142254",
+          "count": 10
+        },
+        {
+          "proposer": "B055D2740D9E9C7060083C85972D8CAEB699B4C197D2DED96BDFB6D2E82A1418",
+          "count": 20
+        },
+        {
+          "proposer": "B0CCB2D9C6547BC7EDE01D701E670B4DA563B19BA58D4B5ADD9B9A8E147447B6",
+          "count": 11
+        },
+        {
+          "proposer": "B2434BA02DB92796946CA31F8E7C6D1AE709E1E25A005C11A2F42D507828994B",
+          "count": 17
+        },
+        {
+          "proposer": "B2DEADD3BDA2551A39B99A868E8F4558C9A9ECE2FF80B4361816F1D1A46CD1F5",
+          "count": 13
+        },
+        {
+          "proposer": "B4065019B28331B4DA15D6EEF38B7A42039550420A8330D7B363DB4865C8B5D7",
+          "count": 12
+        },
+        {
+          "proposer": "B41591CF598C31FB6F5F6EE1C0C7FC18FE0296B2AB4FDB4221F8D83B52C7D9E2",
+          "count": 13
+        },
+        {
+          "proposer": "B5C4D7BBA1B11F98497C419C4D81B72A525FE30AE788028C570DD4EB77255E77",
+          "count": 19
+        },
+        {
+          "proposer": "B61211FF962D9A8D010E3A1D0CCF28136D768F52C5206FF51D37B1C4CAA0DFC0",
+          "count": 13
+        },
+        {
+          "proposer": "B70A1C2E5282FCE425E329AA9626946EF1ED58B6137853D70CECC4DCA8CD810D",
+          "count": 17
+        },
+        {
+          "proposer": "B73732F3667B37CB551CCAB126D383F56A65272F74274F7CE0C7287A70191278",
+          "count": 12
+        },
+        {
+          "proposer": "B7C893B4FB76B54888921DF35C2B96B97DCF29A1AC0EB5B2C52D7ED35E9E0ADB",
+          "count": 14
+        },
+        {
+          "proposer": "B9D379079830CB4736EF21471CF348723563D6B8164E30CF7B6F822C553FF21D",
+          "count": 18
+        },
+        {
+          "proposer": "BA4BF2E079616ADEF4DAA69AAA567CC01F75267CC54992E3E5AAD5220CEF8680",
+          "count": 17
+        },
+        {
+          "proposer": "BB774A5520266AAA6A60FC5706E6F0E5C3CFF1599E7F522EF059B146B2EA1C8B",
+          "count": 20
+        },
+        {
+          "proposer": "BBF2D6A06A186CEFC4BDEDC1116A61B39B15EDAF29DE3A1310C36557638642DF",
+          "count": 6
+        },
+        {
+          "proposer": "BC99D43CA3EA3B3E4A8177D19F20197D75414CCAC0BFCA365B38A7D544C6731B",
+          "count": 8
+        },
+        {
+          "proposer": "BCC3A10725EF7434786CD016B01FE017959DB45F96E072047226604496673782",
+          "count": 10
+        },
+        {
+          "proposer": "BCCB751A5BD39B2AE0ED946C33D2E1CD07192FEE92C6F05C68701F4BF06B2115",
+          "count": 16
+        },
+        {
+          "proposer": "BE1CFDE128DCFB63035219B03CEE7EF3C7CD9C483224DC811E8DB64A907A7C57",
+          "count": 17
+        },
+        {
+          "proposer": "BE6D577DCF32D552D3BBA8D6B8F68C144E7B644DDE0653A49B04BB163AFB15DA",
+          "count": 10
+        },
+        {
+          "proposer": "BF403BADC1D7A6E486D9EA0860026470CB0CAF64757E4C2C7CF3DF980D785730",
+          "count": 16
+        },
+        {
+          "proposer": "BFF24DF591C06CC7D106663232172799CF4A43C2A5B006072660D4D8871D007A",
+          "count": 8
+        },
+        {
+          "proposer": "C04C7791D7AE7E1C45F8582AB62DECF89390E5E49B3C965965E92967822173C2",
+          "count": 11
+        },
+        {
+          "proposer": "C06AB623CE5FA91D5862F260D702E1D2BBD85DBCD8698834AFFCCD5F5D48B188",
+          "count": 13
+        },
+        {
+          "proposer": "C0B811BBE7BAD3580506B12AC92F6ACAC73F35447C6F64685F4DABA465BE699A",
+          "count": 14
+        },
+        {
+          "proposer": "C3A213B255A6321C441FA6EDD0C6C47C774733C946A6FA619910B825226ECBCC",
+          "count": 12
+        },
+        {
+          "proposer": "C418F3897F923D8B5E1C5087B552E38CFDE15292299AC4DE0FC415BE0ED08230",
+          "count": 9
+        },
+        {
+          "proposer": "C5AC9C619DE0227E5697DBF38287015537F0C22025756A97B293A59FFACCB058",
+          "count": 18
+        },
+        {
+          "proposer": "C70737214ED362EF4034ECEAE812667E509AC499095E4F7318A6EC30649964D1",
+          "count": 12
+        },
+        {
+          "proposer": "CA8A53B4C9BA3A0AEDF9A4162139D02851F959D2710C5AEDA9D85EF68648628A",
+          "count": 12
+        },
+        {
+          "proposer": "CC009172FB973D5CBC85B236ADBBC5D592D7F3FD0CF564C59D56ECF7F7B35CF7",
+          "count": 11
+        },
+        {
+          "proposer": "CCC6028D6A93C6E1D4565A64E621D39A1352D8C373605A4A44803B166CCED738",
+          "count": 12
+        },
+        {
+          "proposer": "CE6CA219907BDF643803B614DAE6E52CA3A2A43910BE8D478A0A1D303B987D9C",
+          "count": 15
+        },
+        {
+          "proposer": "CE8F06345973FF94EC398E48AF1CA30F58FFCF393D5F002D56936CA5B9B620DD",
+          "count": 10
+        },
+        {
+          "proposer": "CF9A0C7008CB5F6FAA429CA42C379E39A788756D1FE65027E2230E824760A0EC",
+          "count": 11
+        },
+        {
+          "proposer": "D014F16E0DC12E9BE9DE52D52B2EB57D6427A13072F7A9BFE1D761808B0876D8",
+          "count": 15
+        },
+        {
+          "proposer": "D10996A328EF00887C7C8C2402D0014A64F16E2DE6DE95062A46F15494B84D62",
+          "count": 7
+        },
+        {
+          "proposer": "D23104CB8D1019500523E8DAB780B9635A7A2E9E48779D62063CD1053DB2F4C6",
+          "count": 14
+        },
+        {
+          "proposer": "D31C566A20D49422E19F077023797439230744C1A0A6EDFB05D4D375515B5D5B",
+          "count": 14
+        },
+        {
+          "proposer": "D353CDCAE53071401345C38AB482935CB62442BE2174A1D3210CA356C9017EFF",
+          "count": 12
+        },
+        {
+          "proposer": "D3AE3A1EC8604C4696D9415E2BCB42623CE60D5A87A7A7C9EDFD384C73424C5F",
+          "count": 11
+        },
+        {
+          "proposer": "D3E4223E5289E40D74ABF4BE75C58769B1731665F1EBEBA82704E21310FECC15",
+          "count": 15
+        },
+        {
+          "proposer": "D407800EE6B009E403B4172277A36306CC12BF2CA64517D126C14A0EFC263050",
+          "count": 11
+        },
+        {
+          "proposer": "D8672DEE97F5EB5CF96EB6C13C6D5BD21E22CBE73EDE5B9362C50893EFCBE14A",
+          "count": 13
+        },
+        {
+          "proposer": "D8BAC23CC1896568A827754BABEC9FB05C928186355B9FB828DED3FECEADFF80",
+          "count": 11
+        },
+        {
+          "proposer": "D9301D2E636194BFA3E68AA1AA2EA85D08E2957875EDCB5E7F4314BFDDE9EDD0",
+          "count": 14
+        },
+        {
+          "proposer": "D9C0BB20EC9A7B72D60FD74B183925EBBCC1D7E8464EA75F0B5AEB6F4C2062AC",
+          "count": 16
+        },
+        {
+          "proposer": "DA8DC1D2E764D34A5D25142641FA57B22B74A049AAF982403B03C548492D8BA7",
+          "count": 12
+        },
+        {
+          "proposer": "DAAC597031DEEBF4586DA025DE5902EE5781CC79139C91B4E6D86A4D9D187772",
+          "count": 13
+        },
+        {
+          "proposer": "DAAF1D979BBF2F6F2A2DD200196603D80796F2DABA19C2A351083B3904CC7C7A",
+          "count": 10
+        },
+        {
+          "proposer": "DAE46924284F132FE930CAF14EB104B57B02F959EEF60C5CF955383EC6F1414C",
+          "count": 11
+        },
+        {
+          "proposer": "DB5D1D4AD81F1F735BB6CC2561A9C1EABB1A3CD20395508F4FDB36F70EBD4F53",
+          "count": 12
+        },
+        {
+          "proposer": "DC16A768F5FD716843DB5FE9774EA488C43B001EEBABF0DF3A7910C371496D5D",
+          "count": 12
+        },
+        {
+          "proposer": "DD8C23AB581C32FDCD0D888873BC16726CEDCDD1FDDAC706C1785B868420E5ED",
+          "count": 17
+        },
+        {
+          "proposer": "DE52BBE473A6E7DBF6250E01442B65AB656DAB27C2B31E4D4A9C0A958C890C00",
+          "count": 15
+        },
+        {
+          "proposer": "E064E3A4DF4CAF3F197B32D6BAAFC56507B2D2781606D4F8EB476DB48438EB10",
+          "count": 11
+        },
+        {
+          "proposer": "E08D9AA12329ACC01BB9929EECC191A4477727C94231864C10F94F718F262999",
+          "count": 13
+        },
+        {
+          "proposer": "E2033B3FEACD99A295B28594CE0559846D5F924B460D399473FB0B52F76523C4",
+          "count": 7
+        },
+        {
+          "proposer": "E381A967B13822ACC9DEADA97B4ED87DEA4EC6DBA1327F905E7292D8F85DE7E3",
+          "count": 13
+        },
+        {
+          "proposer": "E390C1A6C3A8765B18D09B611A9F4E26D1693ABA86060EFA34D54A94CDCE7061",
+          "count": 14
+        },
+        {
+          "proposer": "E3B68AB54C808C5386E34BABDC29DCF7A219A426C307EBA15196228016E44862",
+          "count": 16
+        },
+        {
+          "proposer": "E42DF66F0518918AD2CDD24AE5C96C7C57800AA2AA77C9EE2BDFAA9CFB96AAF0",
+          "count": 11
+        },
+        {
+          "proposer": "E488CA493028FC1F34ADEF607BAB3905AB05C06D49486363E18CCABE86CE248A",
+          "count": 13
+        },
+        {
+          "proposer": "E4BB242753BAD98939B0174A1B3354455E57A944ABE77E8CC208435AD68CB8A7",
+          "count": 11
+        },
+        {
+          "proposer": "E562FBFA3013DB86C9F597F2E44105AFD70DE3B9E4EE0451173FCA4B803A4CA2",
+          "count": 16
+        },
+        {
+          "proposer": "E5D14CD81686E0CCC081470CAF59E6CE4ED1925816D26AD66FF76B00E9F29C59",
+          "count": 16
+        },
+        {
+          "proposer": "E5E9D32C65D9C26DADC6A937E172E044F32156DF378CEBB7307493646A586E77",
+          "count": 10
+        },
+        {
+          "proposer": "E5F8184B9BB3A44C89AE0AA6F7E4C14F59E5504DA1990365BC5942807EC56046",
+          "count": 14
+        },
+        {
+          "proposer": "E6870FF3AC5E7EB2967F9F33645F7245E5F314CD10ED874137CFAAE46074F3E0",
+          "count": 11
+        },
+        {
+          "proposer": "E6BB0BE6C21671BE706838E83D8E4559E3910BD6EFB62AB60D9325FCA866970E",
+          "count": 15
+        },
+        {
+          "proposer": "E78966D144D820782AB9F8175F4E4CBB4AD600F45C679D8710070CA8ED7CDC1A",
+          "count": 13
+        },
+        {
+          "proposer": "E846786C2170E235A0B69DF1A6D9B22EF795E58C4460E209C71EFE725EEC69DE",
+          "count": 14
+        },
+        {
+          "proposer": "E8519E0A0DDE718C3D3AB7A0850855499DFAEF6A7881487CE91C9D5F1E6FBEE2",
+          "count": 5
+        },
+        {
+          "proposer": "E8B171935C91BBDA6D72901702B97479FF76C4D7B3AA292513F35050E96B5DFC",
+          "count": 13
+        },
+        {
+          "proposer": "EA4A6971496F94644600FFF68FAB26E76C01496415FEE28EAB224846C558E09C",
+          "count": 14
+        },
+        {
+          "proposer": "EA79FB34C0B400ACEFD841C9FC03C784746EE7340F860F0DD0202AB4E1DDB201",
+          "count": 8
+        },
+        {
+          "proposer": "EAAD71820A38454ADB25A1A7B53A6691912BFAA39D7DA47A72A62D90A29E2054",
+          "count": 11
+        },
+        {
+          "proposer": "EB241031BA77247140946F61BE2BA00F7BE6681D03C0CD4884EB67C29BBAB2AD",
+          "count": 12
+        },
+        {
+          "proposer": "EB69DF6B9733FDA04F2B94F4634C0E1FE8082595DF26C4FADA846775EAE8A4EC",
+          "count": 12
+        },
+        {
+          "proposer": "EDF362E55EAFDA494D9C5AA28A8332DC1BCC67B324D24EC2665DD92E66E51898",
+          "count": 5
+        },
+        {
+          "proposer": "EE22F5BCE3B6F8734A664BA7BE36B1BAB218EDA764136691E8B506003A7BB662",
+          "count": 9
+        },
+        {
+          "proposer": "EF601723EBD7F00472F2CC6B28FCB2587EB89BE90C38218BF8140B3500615327",
+          "count": 13
+        },
+        {
+          "proposer": "F121584681DE40B05E5D345B2E9727317FA085B1A7CFE228B1D201797FE7E089",
+          "count": 13
+        },
+        {
+          "proposer": "F1616A597EAC912C0DB8B4696EC11B2C004A421D77A4FF599F6B13654F5A88F8",
+          "count": 13
+        },
+        {
+          "proposer": "F185950E61FE261AC02C02EFCC3F3851300C81CAC64621EDFC8726D5A0F1A310",
+          "count": 11
+        },
+        {
+          "proposer": "F1CC3940E4ED45D1CA63491008127A66749EFE1BE782586A039F36C6E2949C24",
+          "count": 15
+        },
+        {
+          "proposer": "F2BE5B4461313CE0212C2F5877C3FAFB794C0D90F513B701BFEFCFA60A506003",
+          "count": 15
+        },
+        {
+          "proposer": "F35EE3D0A08ECB52372FD61F4226C652E60B180CFEC637D2D108CBFD4EDFC348",
+          "count": 13
+        },
+        {
+          "proposer": "F3777D129BD3C79360774B7C5F131D73B37378621621EDC2D6A852F2E7C969C0",
+          "count": 11
+        },
+        {
+          "proposer": "F46219B5C489ED7DCE0A17891A2F4BE0CBA5F4175F257E87A985930DC478341D",
+          "count": 19
+        },
+        {
+          "proposer": "F46C5B8627939527541E293B16AD035FDC79D282E328C412FB80C1133BA593AF",
+          "count": 11
+        },
+        {
+          "proposer": "F4C06B958EDF0E3792FC3899F4B2E79492DDA5509AE05DB70FE674AFE8829445",
+          "count": 10
+        },
+        {
+          "proposer": "F513574B70A029EF1F482CF31A7A338E7FB1A7B0337929A0DD3A480EB9FAA4B3",
+          "count": 13
+        },
+        {
+          "proposer": "F56136202A356A9E828BE209BCF09729E619EB385CEBE78D5FD5254E03D81328",
+          "count": 10
+        },
+        {
+          "proposer": "F7A82A04CE08ECE9974B8E225B53DCDC5259A46D6E15C13B87EC48C2D1106A40",
+          "count": 11
+        },
+        {
+          "proposer": "F9514E7C4B5032E11B1CC97C092CCDB0A8D413AC2F660B25741ECC490BC673A1",
+          "count": 6
+        },
+        {
+          "proposer": "FB518306C5FAB9BE0E92BE6580486BD2316628B02D80FB4A3ACF760D400CE279",
+          "count": 15
+        },
+        {
+          "proposer": "FB71666911314D393315F2FC18BD4779C964E7FA95FAB6B69949FB2F9985BD94",
+          "count": 13
+        },
+        {
+          "proposer": "FB9A0095B182C74F5A043F182F1CE4A43CD8EC065466FC83714AB18EEF91B48C",
+          "count": 6
+        },
+        {
+          "proposer": "FBB813674695A79D739D911C5B82D1FD995568D976382345ED9E4AA20B3E3725",
+          "count": 10
+        },
+        {
+          "proposer": "FC08E30E64483AF9FB1190AD17386DBCCAF378DAF9F4ACCBF26BEF12D0D55508",
+          "count": 12
+        },
+        {
+          "proposer": "FC8D2165B4CAFCE64ABB5F34624E89B90992C1C7CD802CA55D10D0121417FD63",
+          "count": 16
+        },
+        {
+          "proposer": "FE91D423A3E67F6655678987F2AAE25EA6E4733DA75556D77715B2B0BC25B488",
+          "count": 9
+        },
+        {
+          "proposer": "FECE837ACE59CBCC362E9C71B51C08ABFE81D624A3618D707689CB51A4DAA080",
+          "count": 13
+        },
+        {
+          "proposer": "FEEEBA72D96BBA076B65F350C48FA03484676E5E1AE3C5B0F2BFD869A690AA87",
+          "count": 18
+        },
+        {
+          "proposer": "FFA4A74C58AA0002696DF1A7D2562B5A36F5116581A0DF1A91500A9664985F52",
+          "count": 19
+        },
+        {
+          "proposer": "FFB44DDFE12FD80C16FE61D6BCE14E15BF0B1692E586B6C4C49651AFC938B781",
+          "count": 15
+        }
+      ]
+    },
+    "tps": 0.0003627873535880303,
+    "totalCollectedFees": 42144962900,
+    "bestValidator": "8398C81F62D24C8349615A9F805DD716800427FF5872C15F67DA053712F21E4F",
+    "topVotedResource": {
+      "resourceValue": ["dash", "dak0tah"],
+      "totalCountTowardsIdentity": 7,
+      "totalCountAbstain": 0,
+      "totalCountLock": 0
+    },
+    "bestVoter": {
+      "identifier": "29fT9b71acANAmECGPtSYidaNAprd567t9YWzPthoGW4",
+      "totalCountTowardsIdentity": 1,
+      "totalCountAbstain": 0,
+      "totalCountLock": 0
+    },
+    "totalVotesCount": 4,
+    "totalVotesGasUsed": 40000000,
+    "totalTxCount": 286,
+    "totalCreatedDocumentsCount": 28,
+    "totalDeletedDocumentsCount": 0,
+    "totalRegisteredNamesCount": 3,
+    "totalContestedDocumentsCount": 0,
+    "avgBlockTime": 176932,
+    "pendingBlocksInEpoch": null,
+    "pendingEpochReward": null
+  }
+}

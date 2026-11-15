@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { stampOf, type SourceStamp } from '@/data/envelope'
+import { stampOf, type Sourced, type SourceStamp } from '@/data/envelope'
 import {
   buildEvoRows,
   evoFilterCounts,
@@ -11,11 +11,20 @@ import {
 } from '@/data/masternodes/platform'
 import type { MnRows } from '@/data/masternodes/rows'
 import { peQueries } from '@/data/pe/queries'
+import type { PeValidator } from '@/data/pe/schemas'
 import { radarQueries } from '@/data/radar/queries'
 import { platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
-import { ActiveFilters, DataTable, Empty, SearchField, SegFilter, TableTools } from '@/ui'
+import {
+  ActiveFilters,
+  DataTable,
+  Empty,
+  SearchField,
+  SegFilter,
+  TableTools,
+  Unavailable,
+} from '@/ui'
 import { useDebouncedQuery } from '../debounced-query'
 import { useEvoColumns } from './evo-columns'
 import { SortPicker, sortOptionsOf } from './FilterBar'
@@ -32,6 +41,10 @@ export interface PlatformViewProps {
   /** Radar's Platform record and Platform Explorer's validators may be asked. */
   indexers: boolean
 }
+
+const validatorRecords = (results: readonly UseQueryResult<Sourced<PeValidator | null>>[]) => ({
+  items: results.flatMap((r) => (r.data?.data ? [r.data.data] : [])),
+})
 
 export function PlatformView({ data, net, controls, indexers }: PlatformViewProps) {
   const { t } = useLingui()
@@ -76,19 +89,27 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
     }),
     enabled: epoch !== undefined && asked.length > 0,
   })
+  // A queued evonode is not in the active validators' list; its totals come from Platform Explorer's own record of it.
+  const unlisted = useMemo(
+    () => (validators.data ? window.filter((e) => !e.validator).map((e) => e.protx) : []),
+    [validators.data, window],
+  )
+  const records = useQueries({
+    queries: unlisted.map((protx) => ({ ...peQueries.validator(net, protx), enabled: indexers })),
+    combine: validatorRecords,
+  })
   const shown = useMemo(
     () =>
-      blocks.data
-        ? buildEvoRows(
-            window.map((e) => e.row),
-            {
-              platform: platform.data?.data,
-              validators: validators.data?.data.items,
-              proposed: { asked: new Set(asked), counts: blocks.data.data },
-            },
-          )
-        : window,
-    [blocks.data, window, asked, platform.data, validators.data],
+      buildEvoRows(
+        window.map((e) => e.row),
+        {
+          platform: platform.data?.data,
+          validators: validators.data?.data.items,
+          records: records.items,
+          ...(blocks.data ? { proposed: { asked: new Set(asked), counts: blocks.data.data } } : {}),
+        },
+      ),
+    [blocks.data, window, asked, platform.data, validators.data, records.items],
   )
 
   const columns = useEvoColumns({ indexers })
@@ -147,6 +168,13 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
       >
         {epoch === undefined ? null : t`Epoch ${formatInt(epoch)}`}
       </ActiveFilters>
+      {indexers ? null : (
+        <Unavailable
+          compact
+          source="pe"
+          title={t`Blocks proposed in total, the last block, rewards and the validator set need Radar and Platform Explorer`}
+        />
+      )}
       <div className="min-[1024px]:overflow-x-auto min-[1024px]:[&_th]:static">
         <DataTable
           caption={t`Evonodes`}

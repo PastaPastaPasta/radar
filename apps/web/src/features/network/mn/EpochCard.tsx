@@ -1,12 +1,12 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { PageLink, Entity } from '@/features/entity'
-import { formatInt, formatPercent } from '@/lib/format'
+import { formatInt } from '@/lib/format'
 import { Amount, Badge, Card, Hash, KeyValue, Time, stampsOf } from '@/ui'
 import type { MnContext } from './mn-context'
 import { usePlatformLive } from './mn-data'
 import { protxToBase58 } from './mn-info'
-import { blocksIn, payoutIn, rankIn } from './platform-math'
+import { blocksIn, payoutIn, rankIn, shareOfBlocks } from './platform-math'
 
 /** One evonode's Platform record for an epoch picked from the recent ones, and its id in both spellings. */
 export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | undefined }) {
@@ -34,7 +34,6 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
     : info
       ? rankIn(info, protx)
       : null
-  const share = blocks !== undefined && total ? Number(blocks) / total : null
   const voted = vote.data?.data.get(protx)
   const stamps = stampsOf(current.data, thisEpoch.data, finalized.data, vote.data)
 
@@ -113,7 +112,7 @@ export function EpochCard({ ctx, epoch }: { ctx: MnContext; epoch: number | unde
               },
               {
                 label: t`Share of blocks`,
-                value: share === null ? '—' : formatPercent(share, 2),
+                value: blocks === undefined ? '—' : shareOfBlocks(blocks, total),
               },
               ...(info
                 ? [

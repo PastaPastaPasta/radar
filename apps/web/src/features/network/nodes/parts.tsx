@@ -167,11 +167,14 @@ export interface RankedRow {
 export function Ranked({
   rows,
   limit = 8,
+  count = rows.length,
   sum,
   empty,
 }: {
   rows: readonly RankedRow[]
   limit?: number
+  /** What "Show all" says it reveals: the named groups, when a row for "Unknown" comes besides them. */
+  count?: number
   sum: number
   empty: ReactNode
 }) {
@@ -222,7 +225,7 @@ export function Ranked({
             setAll((v) => !v)
           }}
         >
-          {all ? t`Show fewer` : t`Show all ${formatInt(rows.length)}`}
+          {all ? t`Show fewer` : t`Show all ${formatInt(count)}`}
         </button>
       ) : null}
     </div>

@@ -36,7 +36,7 @@ const asnOf = (r: MnRow): string | undefined =>
   r.crawl?.asn == null ? undefined : String(r.crawl.asn)
 
 /** The value of each facet for a row; a row the crawl has not seen has none for the crawl's. */
-const facetValues = {
+export const facetValues = {
   type: (r: MnRow) => r.type,
   status: (r: MnRow) => r.status,
   reach: reachOf,
@@ -103,33 +103,4 @@ export function filterMnRows(rows: readonly MnRow[], filter: MnFilter): MnRow[] 
         return v !== undefined && wanted.has(v)
       }),
   )
-}
-
-export type MnFacets = { [K in keyof typeof facetValues]: Record<string, number> }
-
-/** How many rows hold each value of each facet, for the filter's options. Pass the rows before the filter applies. */
-export function mnFilterFacets(rows: readonly MnRow[]): MnFacets {
-  const out: MnFacets = {
-    type: {},
-    status: {},
-    reach: {},
-    country: {},
-    version: {},
-    host: {},
-    dkg: {},
-  }
-  for (const row of rows)
-    for (const k of Object.keys(facetValues) as (keyof typeof facetValues)[]) {
-      const v = facetValues[k](row)
-      if (v !== undefined) out[k][v] = (out[k][v] ?? 0) + 1
-    }
-  return out
-}
-
-/** The organisation name to show for each autonomous system number in the rows (`host` facet values). */
-export function mnHostLabels(rows: readonly MnRow[]): Record<string, string> {
-  const out: Record<string, string> = {}
-  for (const { crawl } of rows)
-    if (crawl?.asn != null && crawl.as_org) out[String(crawl.asn)] ??= crawl.as_org
-  return out
 }

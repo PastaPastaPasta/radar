@@ -63,6 +63,39 @@ async function openControls(page: Page, info: TestInfo) {
 }
 
 test.describe('The map', () => {
+  test('runs edge to edge under its claim, and the controls leave most of it open @W2-43', async ({
+    page,
+  }, info) => {
+    await openMap(page)
+    const viewport = page.viewportSize()!
+    const map = (await page.locator('[data-map-root]').boundingBox())!
+    const heading = (await page.getByRole('heading', { level: 1, name: CLAIM.map }).boundingBox())!
+    expect(map.y, 'the map starts below the claim').toBeGreaterThanOrEqual(
+      heading.y + heading.height,
+    )
+    expect(map.x, 'the map reaches the left edge').toBeLessThanOrEqual(1)
+    expect(map.x + map.width, 'the map reaches the right edge').toBeGreaterThanOrEqual(
+      viewport.width - 20,
+    )
+    expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
+    expect(
+      await page.locator('[data-map-root]').evaluate((el) => getComputedStyle(el).borderTopWidth),
+      'the map has no border of its own',
+    ).toBe('0px')
+    if (isPhone(info)) return
+    expect(map.height, 'a map worth looking at').toBeGreaterThanOrEqual(520)
+    const box = (await panel(page).boundingBox())!
+    expect(
+      (box.width * box.height) / (map.width * map.height),
+      'the controls’ share of the map',
+    ).toBeLessThan(1 / 3)
+    expect(box.width / map.width, 'the controls’ share of its width').toBeLessThan(0.3)
+    expect(
+      Math.abs(box.x - heading.x),
+      'the controls start on the page’s left edge',
+    ).toBeLessThanOrEqual(2)
+  })
+
   test('draws the masternodes as clusters coloured by reachability and counts them in the headline @RA-50', async ({
     page,
   }, info) => {
@@ -95,8 +128,12 @@ test.describe('The map', () => {
   test('zooms into a cluster when it is clicked @RA-50', async ({ page }) => {
     await openMap(page)
     const map = page.locator('[data-map-view]')
-    const donut = page.locator('.rx-map-donut').first()
-    await expect(donut).toBeVisible({ timeout: 30_000 })
+    await expect(page.locator('.rx-map-donut').first()).toBeVisible({ timeout: 30_000 })
+    // A cluster of masternodes at one spot opens its list instead of zooming; the largest one spreads out when zoomed.
+    const counts = await page
+      .locator('.rx-map-donut')
+      .evaluateAll((els) => els.map((el) => Number(el.textContent?.replace(/\D/g, '')) || 0))
+    const donut = page.locator('.rx-map-donut').nth(counts.indexOf(Math.max(...counts)))
     const before = Number(await map.getAttribute('data-zoom'))
     await donut.dispatchEvent('click')
     await expect

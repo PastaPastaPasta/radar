@@ -41,6 +41,10 @@ msgstr "{0, plural, one {# special transaction in Hyphen’s record} other {# sp
 msgid "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 msgstr "{0, plural, one {# withdrawal} other {# withdrawals}}{1}, "
 
+#. placeholder {0}: up.days
+msgid "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+msgstr "{0, plural, one {Uptime for # day} other {Uptime for # days}}"
+
 #. placeholder {0}: secs(h.seconds)
 msgid "{0} (incomplete)"
 msgstr "{0} (incomplete)"
@@ -230,10 +234,6 @@ msgstr "Banned at block {0}"
 msgid "Banned on Platform"
 msgstr "Banned on Platform"
 
-#. placeholder {0}: formatInt(v.poseScoreMax)
-msgid "bans at {0}"
-msgstr "bans at {0}"
-
 #. placeholder {0}: formatPercent(rank, 0)
 msgid "Better than {0} of masternodes tested from the same location."
 msgstr "Better than {0} of masternodes tested from the same location."
@@ -259,6 +259,9 @@ msgstr "Blocks and rewards of the last 12 finalized epochs, from Platform’s pr
 
 msgid "Blocks proposed"
 msgstr "Blocks proposed"
+
+msgid "Blocks proposed, all time"
+msgstr "Blocks proposed, all time"
 
 msgid "Blocks this epoch"
 msgstr "Blocks this epoch"
@@ -515,9 +518,6 @@ msgstr "Hyphen’s index is behind the chain, so this list is not read."
 msgid "if it ended now (an estimate)"
 msgstr "if it ended now (an estimate)"
 
-msgid "In a validator set"
-msgstr "In a validator set"
-
 msgid "in total (not counting expired ones)."
 msgstr "in total (not counting expired ones)."
 
@@ -685,6 +685,9 @@ msgstr "Next epoch {0}"
 msgid "No answer"
 msgstr "No answer"
 
+msgid "No blocks proposed in this range."
+msgstr "No blocks proposed in this range."
+
 msgid "No changes since Radar started recording them."
 msgstr "No changes since Radar started recording them."
 
@@ -714,6 +717,9 @@ msgstr "No penalty"
 
 msgid "No Platform ban"
 msgstr "No Platform ban"
+
+msgid "No rewards in this range."
+msgstr "No rewards in this range."
 
 msgid "No stalls or bad data"
 msgstr "No stalls or bad data"
@@ -747,9 +753,6 @@ msgstr "Not checked yet"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "not compared: Radar’s record is not in use"
-
-msgid "Not in a validator set"
-msgstr "Not in a validator set"
 
 msgid "not in a validator set that takes turns now"
 msgstr "not in a validator set that takes turns now"
@@ -864,7 +867,6 @@ msgid "Payout address"
 msgstr "Payout address"
 
 #. placeholder {0}: formatInt(d.pose_penalty)
-#. placeholder {0}: formatInt(state.PoSePenalty)
 msgid "Penalty {0}"
 msgstr "Penalty {0}"
 
@@ -890,6 +892,9 @@ msgstr "Platform endpoints"
 
 msgid "Platform Explorer didn’t answer, so its record of this validator is missing."
 msgstr "Platform Explorer didn’t answer, so its record of this validator is missing."
+
+msgid "Platform Explorer didn’t answer."
+msgstr "Platform Explorer didn’t answer."
 
 msgid "Platform Explorer has no validator record for this ProTx."
 msgstr "Platform Explorer has no validator record for this ProTx."
@@ -1055,8 +1060,8 @@ msgstr "Radar’s record"
 msgid "Rank"
 msgstr "Rank"
 
-msgid "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
-msgstr "Reachability from Radar’s crawl; blocks, rewards and keys from Platform Explorer"
+msgid "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
+msgstr "Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above."
 
 msgid "Reachable"
 msgstr "Reachable"
@@ -1127,11 +1132,8 @@ msgstr "Rewards (DASH)"
 msgid "Rewards appear after it has proposed a block in a finished epoch."
 msgstr "Rewards appear after it has proposed a block in a finished epoch."
 
-msgid "Rewards in total"
-msgstr "Rewards in total"
-
-msgid "Rewards this epoch"
-msgstr "Rewards this epoch"
+msgid "Rewards, all time"
+msgstr "Rewards, all time"
 
 msgid "Same as the owner address"
 msgstr "Same as the owner address"

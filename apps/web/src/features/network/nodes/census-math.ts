@@ -8,9 +8,6 @@ export const CENSUS_SCOPES: readonly CensusScope[] = ['all', 'mn', 'evo', 'other
 /** The route's scope names one of Radar's; "other full nodes" is Radar's `nonmn`. */
 export const radarScope = (scope: CensusScope): RadarScope => (scope === 'other' ? 'nonmn' : scope)
 
-/** A crawl older than this is called stale (Radar's own rule, `STALE_AFTER` in `data/health.ts`). */
-export const STALE_CRAWL_MS = 45 * 60_000
-
 export type DistRow = readonly [key: string, count: number]
 
 export const total = (rows: readonly DistRow[]): number => rows.reduce((a, r) => a + r[1], 0)

@@ -100,9 +100,10 @@ test.describe('Epochs', () => {
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     await expect(upcoming.locator('a[href^="/mn/"]').first()).toBeVisible()
     await expect(sourceLineOf(upcoming).locator('[data-source="radar"]').first()).toBeVisible()
-    await expect(upcoming.locator('tbody tr').first()).toContainText(/\b20\d\d\b/)
+    await expect(upcoming.locator('tbody tr').first()).toContainText(/\+1(?!\d)/)
+    await expect(upcoming.locator('tbody')).not.toContainText(/\bago\b/)
     if (!isPhone(page)) {
-      await expect(upcoming.getByRole('columnheader', { name: 'Slots' })).toBeVisible()
+      await expect(upcoming.getByRole('columnheader', { name: 'Blocks away' })).toBeVisible()
       await expect(upcoming.getByRole('columnheader', { name: 'Proposes around' })).toBeVisible()
     }
   })
@@ -210,11 +211,11 @@ test.describe('One epoch', () => {
 
   test('links to the previous and next epoch @NX-51', async ({ page }) => {
     await open(page, '/epoch/86', 'Epoch 86')
-    await page.getByRole('link', { name: 'Previous epoch' }).click()
+    await page.getByRole('link', { name: 'Previous: epoch 85' }).click()
     await expect(page).toHaveURL(/\/epoch\/85/)
     await expect(page.getByRole('heading', { level: 1, name: 'Epoch 85' })).toBeVisible()
-    await page.getByRole('link', { name: 'Next epoch' }).click()
-    await page.getByRole('link', { name: 'Next epoch' }).click()
+    await page.getByRole('link', { name: 'Next: epoch 86' }).click()
+    await page.getByRole('link', { name: 'Next: epoch 87' }).click()
     await expect(page).toHaveURL(/\/epoch\/87/)
   })
 
@@ -274,7 +275,10 @@ test.describe('Protocol', () => {
     await expect(vote.locator('.rx-meter__mark')).toBeVisible()
     await expect(vote.getByText('Activation threshold', { exact: true })).toBeVisible()
     await expect(vote).toContainText(/244 of 363 evonodes \(67%\)/)
-    await expect(vote.getByText('Pending votes', { exact: true })).toBeVisible()
+    await expect(
+      vote.getByText('Pending votes', { exact: true }),
+      'nothing is proposed',
+    ).toHaveCount(0)
     await expect(vote.getByText('Candidate version', { exact: true })).toBeVisible()
     await expect(sourceLineOf(vote).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)

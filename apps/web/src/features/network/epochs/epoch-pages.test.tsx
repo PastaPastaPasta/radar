@@ -1,9 +1,11 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -47,6 +49,19 @@ describe('Epochs', () => {
     expect(rewards).toHaveTextContent('Pool so far')
     // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
     expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
+  })
+
+  it('gives the pool as an exact amount, not as 1.5k @RA-60', async () => {
+    const doc = await fixtureBody<{ now: { pool_so_far: number } }>('radar', 'mainnet', 'platform')
+    server.use(
+      http.get('*/mainnet/platform', () =>
+        HttpResponse.json({ ...doc, now: { ...doc.now, pool_so_far: 150_243_800_000_000 } }),
+      ),
+    )
+    renderAt('/epochs')
+    const rewards = await card('rewards')
+    await waitFor(() => expect(rewards).toHaveTextContent('Pool so far1,502.'))
+    expect(rewards).not.toHaveTextContent(/\dk\s*DASH/)
   })
 
   it('does not call an epoch complete once it has run past its expected end @RA-60 @NX-50', async () => {
@@ -93,6 +108,39 @@ describe('Epochs', () => {
     await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
   })
 
+  it('counts the blocks until each turn and never says a turn was ago @RA-62 @NX-50', async () => {
+    renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    expect(within(upcoming).getByRole('columnheader', { name: 'Blocks away' })).toBeVisible()
+    const cells = (i: number) => rows(upcoming).map((r) => r.querySelectorAll('td')[i]?.textContent)
+    expect(cells(1)).toEqual(Array.from({ length: 12 }, (_, i) => `+${String(i + 1)}`))
+    // The sample is long past: every turn is due.
+    expect(cells(2)).toEqual(Array.from({ length: 12 }, () => 'any moment'))
+    expect(upcoming.querySelector('thead')).not.toHaveTextContent('Slots')
+    expect(upcoming).toHaveTextContent(/from the validator sets .*\d{4}/)
+  })
+
+  it('shows when a turn comes while it is still ahead @RA-62', async () => {
+    const doc = await fixtureBody<{ schedule: { ts: number; next: { eta: number }[] } }>(
+      'radar',
+      'mainnet',
+      'platform',
+    )
+    vi.useFakeTimers({ toFake: ['Date'], now: doc.schedule.ts * 1000 })
+    try {
+      renderAt('/epochs')
+      const upcoming = await card('upcoming')
+      await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+      const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent
+      expect(first).toMatch(/in \d+ min/)
+      expect(first).not.toMatch(/ago/)
+      expect(upcoming).toHaveTextContent(/validator sets \d+ s ago/)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('lists the latest twenty epochs, and a custom range @NX-52', async () => {
     renderAt('/epochs')
     const range = await card('range')
@@ -105,6 +153,27 @@ describe('Epochs', () => {
     const range = await card('range')
     await waitFor(() => expect(rows(range)).toHaveLength(6))
     expect(range).toHaveTextContent('Epochs 81 to 86.')
+  })
+
+  it('shows the fees each epoch collected, and says when a range was cut back @W2-37', async () => {
+    renderAt('/epochs?from=69&to=500')
+    const range = await card('range')
+    await waitFor(() => expect(rows(range)).toHaveLength(20))
+    expect(range).toHaveTextContent(/latest epoch is 88/)
+    expect(within(range).getByRole('columnheader', { name: 'Fees' })).toBeInTheDocument()
+    await waitFor(() => {
+      const cells = rows(range).map((r) => within(r).getAllByRole('cell').at(-1)?.textContent)
+      expect(cells.some((c) => c && c !== '—' && /DASH|\d/.test(c))).toBe(true)
+    })
+  })
+
+  it('leaves the fees blank in Decentralized only mode @W2-37', async () => {
+    writeSourceMode('decentralized')
+    renderAt('/epochs?from=81&to=86')
+    const range = await card('range')
+    await waitFor(() => expect(rows(range)).toHaveLength(6))
+    for (const r of rows(range))
+      expect(within(r).getAllByRole('cell').at(-1)).toHaveTextContent('—')
   })
 
   it('says the Radar parts need Radar in Decentralized only mode, once @RA-60', async () => {
@@ -127,11 +196,14 @@ describe('One epoch', () => {
     await waitFor(() =>
       expect(document.getElementById('epoch-totals')).toHaveTextContent('Processing fees'),
     )
-    expect(screen.getByRole('link', { name: 'Previous epoch' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Previous: epoch 85' })).toHaveAttribute(
       'href',
       '/epoch/85',
     )
-    expect(screen.getByRole('link', { name: 'Next epoch' })).toHaveAttribute('href', '/epoch/87')
+    expect(screen.getByRole('link', { name: 'Next: epoch 87' })).toHaveAttribute(
+      'href',
+      '/epoch/87',
+    )
     const proposers = await card('epoch-proposers')
     await waitFor(() => expect(rows(proposers).length).toBeGreaterThan(0))
   })
@@ -166,6 +238,19 @@ describe('Protocol', () => {
     await waitFor(() => expect(rows(tally)).toHaveLength(1))
     const table = await card('vote-table')
     await waitFor(() => expect(rows(table).length).toBeGreaterThan(0))
+  })
+
+  it('counts no pending votes when nothing is proposed, and explains the totals @NX-56', async () => {
+    renderAt('/protocol')
+    const vote = await card('vote')
+    await waitFor(() => expect(vote).toHaveTextContent('Activation threshold'))
+    expect(vote).toHaveTextContent('None proposed')
+    expect(vote).not.toHaveTextContent('Pending votes')
+    expect(vote).not.toHaveTextContent('Still needed')
+    const tally = await card('tally')
+    await waitFor(() => expect(rows(tally)).toHaveLength(1))
+    expect(tally).toHaveTextContent(/have a vote on record, and the shares are of those/)
+    expect(vote).toHaveTextContent(/Reported by \d+ of \d+ evonodes/)
   })
 
   it('states the rule where Radar is off, with one notice @RA-61', async () => {

@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card, Time, stampsOf } from '@/ui'
+import { NoSourceSection } from '@/ui/section-source'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { DKG_CHECK_IDS, GRADES, median } from './census-math'
@@ -260,45 +261,48 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
   const scores = vantages.flatMap((v) => v.scores.filter((s): s is number => s !== null))
   const runs = scores.length + vantages.reduce((a, v) => a + v.failed, 0)
   const good = scores.filter((s) => s >= 75).length
+  // The speed tests run every two weeks: their time is said on the card, not taken for the crawl's on the page line.
   return (
-    <Card
-      level="section"
-      title={t`How fast they serve`}
-      id="speed"
-      layer="network"
-      subtitle={
-        runs > 0
-          ? t`Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. ${formatPercent(good / runs, 0)} of the latest tests earned an A or B.`
-          : undefined
-      }
-      source={stampsOf(census.bench.data)}
-      state={loadState(census.bench)}
-      error={census.bench.error}
-      onRetry={() => void census.bench.refetch()}
-    >
-      <div className="grid gap-5 md:grid-cols-2" data-speed>
-        {vantages.map((v) => {
-          const parts = [
-            ...GRADES.map((g) => ({
-              key: g,
-              name: t`Grade ${g}`,
-              n: v.grades[g] ?? 0,
-              color: tones[g]!,
-            })),
-            { key: 'failed', name: t`Didn't answer`, n: v.failed, color: tones.failed! },
-          ].filter((p) => p.n > 0)
-          return (
-            <div key={v.vantage} className="grid gap-2" data-vantage={v.vantage}>
-              <h4 className="font-semibold">{v.location || v.vantage}</h4>
-              <ShareBar parts={parts} label={v.location || v.vantage} />
-              <p className="text-sm text-[var(--dh-ink-2)]">
-                {t`${formatInt(v.tested)} tested this cycle. Median ${formatInt(Math.round(median(v.headers_per_sec) ?? 0))} headers/s, ping ${formatInt(Math.round(median(v.ping_ms) ?? 0))} ms.`}{' '}
-                {t`Updated`} <Time ms={v.updated} mode="relative" live />.
-              </p>
-            </div>
-          )
-        })}
-      </div>
-    </Card>
+    <NoSourceSection>
+      <Card
+        level="section"
+        title={t`How fast they serve`}
+        id="speed"
+        layer="network"
+        subtitle={
+          runs > 0
+            ? t`Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. ${formatPercent(good / runs, 0)} of the latest tests earned an A or B.`
+            : undefined
+        }
+        source={stampsOf(census.bench.data)}
+        state={loadState(census.bench)}
+        error={census.bench.error}
+        onRetry={() => void census.bench.refetch()}
+      >
+        <div className="grid gap-5 md:grid-cols-2" data-speed>
+          {vantages.map((v) => {
+            const parts = [
+              ...GRADES.map((g) => ({
+                key: g,
+                name: t`Grade ${g}`,
+                n: v.grades[g] ?? 0,
+                color: tones[g]!,
+              })),
+              { key: 'failed', name: t`Didn't answer`, n: v.failed, color: tones.failed! },
+            ].filter((p) => p.n > 0)
+            return (
+              <div key={v.vantage} className="grid gap-2" data-vantage={v.vantage}>
+                <h4 className="font-semibold">{v.location || v.vantage}</h4>
+                <ShareBar parts={parts} label={v.location || v.vantage} />
+                <p className="text-sm text-[var(--dh-ink-2)]">
+                  {t`${formatInt(v.tested)} tested this cycle. Median ${formatInt(Math.round(median(v.headers_per_sec) ?? 0))} headers/s, ping ${formatInt(Math.round(median(v.ping_ms) ?? 0))} ms.`}{' '}
+                  {t`Updated`} <Time ms={v.updated} mode="relative" live />.
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </Card>
+    </NoSourceSection>
   )
 }

@@ -18,10 +18,6 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} unknown"
 
-#. placeholder {0}: formatInt(crawl.tip_height)
-msgid ", at block {0}"
-msgstr ", at block {0}"
-
 msgid ", so the figures below may be out of date."
 msgstr ", so the figures below may be out of date."
 
@@ -68,7 +64,7 @@ msgid "{0} masternodes"
 msgstr "{0} masternodes"
 
 #. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(points.length)
+#. placeholder {1}: formatInt(places.length)
 msgid "{0} masternodes in {1} places"
 msgstr "{0} masternodes in {1} places"
 
@@ -419,14 +415,15 @@ msgstr "Core height"
 msgid "Core tip"
 msgstr "Core tip"
 
+#. placeholder {0}: formatInt(crawl.tip_height)
+msgid "counted at block {0}"
+msgstr "counted at block {0}"
+
 msgid "countries"
 msgstr "countries"
 
 msgid "Countries"
 msgstr "Countries"
-
-msgid "crawled"
-msgstr "crawled"
 
 msgid "DAPI answered"
 msgstr "DAPI answered"
@@ -997,7 +994,7 @@ msgstr "Share of {noun} by version"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 
-#. placeholder {0}: formatInt(rows.length)
+#. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "Show all {0}"
 

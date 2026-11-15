@@ -124,6 +124,27 @@ describe('the Map page', () => {
     expect(href.searchParams.has('hide')).toBe(false)
   })
 
+  it('makes its headline say what the filters leave @RA-26', async () => {
+    renderAt('/map?country=DE')
+    const h1 = await screen.findByRole('heading', {
+      level: 1,
+      name: /^\d+ masternodes in 1 country$/,
+    })
+    expect(h1).not.toHaveTextContent(/in \d\d+ countries/)
+    await waitFor(() => expect(last().points.length).toBe(78))
+    expect(h1).toHaveTextContent(/^78 masternodes in 1 country$/)
+  })
+
+  it('says beside the link when the list cannot leave out what the map hides @RA-51', async () => {
+    renderAt('/map?hide=unchecked')
+    const link = await screen.findByRole('link', { name: 'Open these as a list' })
+    await waitFor(() => expect(document.querySelector('[data-list-extra]')).not.toBeNull())
+    expect(document.querySelector('[data-list-extra]')).toHaveTextContent(
+      /hidden here \(Not checked\)/,
+    )
+    expect(link.getAttribute('href')).not.toContain('reach')
+  })
+
   it('says how many masternodes are not on the map @RA-51', async () => {
     renderAt('/map')
     await waitFor(() => expect(screen.getByText(/not on the map/)).toBeInTheDocument())

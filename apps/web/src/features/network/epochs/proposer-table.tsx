@@ -18,13 +18,13 @@ export const PROPOSER_SORT_KEYS = {
   share: (r: ProposerRow) => r.share,
 }
 
-/** `proposers` (already in rank order) with each one's rank and its share of `total` blocks. */
+/** `proposers` (already in rank order) with each one's rank and its share of `total` blocks. Proposers of as many blocks share a rank. */
 export function rankProposers(proposers: readonly Proposer[], total: number): ProposerRow[] {
-  return proposers.map((p, i) => ({
-    ...p,
-    rank: i + 1,
-    share: total === 0 ? 0 : Number(p.blocks) / total,
-  }))
+  let rank = 0
+  return proposers.map((p, i) => {
+    if (i === 0 || p.blocks !== proposers[i - 1]!.blocks) rank = i + 1
+    return { ...p, rank, share: total === 0 ? 0 : Number(p.blocks) / total }
+  })
 }
 
 export function useProposerColumns(): ColumnDef<ProposerRow>[] {

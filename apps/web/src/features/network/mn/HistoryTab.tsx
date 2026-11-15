@@ -7,7 +7,8 @@ import type { HyValidatorDetail } from '@/data/hyphen/schemas'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 import { Entity, PageLink } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Badge, Card, DataTable, Empty, Hash, Time, useHyphenLagSentence } from '@/ui'
+import type { CoreTxType } from '@/lib/tx-types'
+import { Badge, Card, DataTable, Empty, Hash, Time, TypeBadge, useHyphenLagSentence } from '@/ui'
 import { useIndexHealth } from '@/data/index-health'
 import type { MnContext } from './mn-context'
 import { useSpecialTxs } from './mn-data'
@@ -17,6 +18,14 @@ import { UptimeCard } from './UptimeCard'
 type Change = RadarMasternodeDetail['changes'][number]
 type Version = RadarMasternodeDetail['versions'][number]
 type Special = HyValidatorDetail['history'][number]
+
+/** Hyphen's names for the special transactions of a masternode, as the kit's type badges know them. */
+const SPECIAL_TYPE: Record<string, CoreTxType> = {
+  provider_register: 'pro-reg',
+  provider_update_service: 'pro-up-serv',
+  provider_update_registrar: 'pro-up-reg',
+  provider_update_revoke: 'pro-up-rev',
+}
 
 export function HistoryTab({ ctx }: { ctx: MnContext }) {
   const { t } = useLingui()
@@ -225,7 +234,14 @@ function SpecialTxCard({ ctx }: { ctx: MnContext }) {
       {
         id: 'type',
         header: t`Type`,
-        cell: ({ row }) => <Badge tone="info">{row.original.txType}</Badge>,
+        cell: ({ row }) => {
+          const type = SPECIAL_TYPE[row.original.txType]
+          return type ? (
+            <TypeBadge type={type} />
+          ) : (
+            <Badge tone="info">{row.original.txType.replace(/_/g, ' ')}</Badge>
+          )
+        },
         meta: { phone: 'title' },
       },
       {
