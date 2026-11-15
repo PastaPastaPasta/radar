@@ -3,7 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { EvoRow } from '@/data/masternodes/platform'
 import { Entity } from '@/features/entity'
-import { formatInt } from '@/lib/format'
+import { formatDate, formatInt } from '@/lib/format'
 import { Amount, AmountDensity, Time } from '@/ui'
 
 const DASH = '—'
@@ -24,7 +24,7 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
       cell: ({ row }) => (
         <span className="rx-evonode">
           <Entity kind="evonode" id={row.original.protx} />
-          <span className="rx-sub font-mono">
+          <span className="rx-sub font-mono" title={row.original.row.service ?? undefined}>
             {row.original.row.service ?? DASH}
             {row.original.row.status === 'pose-banned' ? ` · ${t`PoSe-banned`}` : ''}
           </span>
@@ -58,7 +58,7 @@ export function useEvoColumns({ indexers }: EvoColumnOptions): ColumnDef<EvoRow>
         return block ? (
           <span
             className="rx-lastblock"
-            title={block.timestamp ? new Date(block.timestamp).toISOString() : undefined}
+            title={block.timestamp ? formatDate(block.timestamp) : undefined}
           >
             <Entity kind="platform-block" id={String(block.height)} copy={false} />
           </span>

@@ -1058,6 +1058,7 @@ button.rx-src--proof:hover {
   white-space: nowrap;
 }
 .rx-evonode .rx-sub {
+  max-width: 9.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1069,6 +1070,9 @@ button.rx-src--proof:hover {
     display: grid;
     gap: 2px;
     white-space: normal;
+  }
+  .rx-evonode .rx-sub {
+    max-width: none;
   }
 }
 /* the masternode list: the status mix in one row, then the filters, then the table */
@@ -2872,8 +2876,7 @@ html[data-scroll-gutter] {
 /* a phone shows the top five of each leaderboard; the card's link leads to the rest.
    Top proposers show all ten. !important: the rows carry a display utility, and the utilities layer comes after this one. */
 @media (max-width: 640px) {
-  [data-leaderboards] [data-board] > li:nth-child(n + 6),
-  .rx-phone5 tbody tr:nth-child(n + 6) {
+  [data-leaderboards] [data-board] > li:nth-child(n + 6) {
     display: none !important;
   }
 }

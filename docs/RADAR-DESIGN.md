@@ -335,7 +335,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - Every figure in a stat, tile or KPI is covered by a `SourceLine`: the one line of its section, or of its page when it sits outside a section. A card or figure with neither around it carries its own. Never both.
 - Sequence over density. A page is a column of sections read top to bottom; a section is a sentence of context, then its figures or its list. Do not pack three cards across to save height.
 - No figure twice on a page. If the page head states it, a card below does not.
-- Lists show 8–22 rows before "All … →"; long lists page (§6.7). On a phone a leaderboard shows its first five (`.rx-phone5`); the card's link leads to the rest. Top proposers show all ten, with the rank, the evonode, the blocks and the share visible and no sideways scroll.
+- Lists show 8–22 rows before "All … →"; long lists page (§6.7). On a phone a leaderboard shows its first five (`[data-leaderboards]`); the card's link leads to the rest. Top proposers show all ten, with the rank, the evonode, the blocks and the share visible and no sideways scroll.
 
 ---
 
