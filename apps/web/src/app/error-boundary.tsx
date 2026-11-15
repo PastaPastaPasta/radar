@@ -47,10 +47,7 @@ function Offline({ error, reset }: { error: Error; reset: () => void }) {
           : t`This page loads when the connection returns. Radar will try again by itself.`}
       </p>
       <p>
-        <button
-          type="button"
-          onClick={() => recover(error, reset)}
-        >
+        <button type="button" onClick={() => recover(error, reset)}>
           {t`Try again`}
         </button>
       </p>
