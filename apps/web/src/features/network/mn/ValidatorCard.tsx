@@ -6,7 +6,7 @@ import { peQueries } from '@/data/pe/queries'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 import { Entity } from '@/features/entity'
 import { formatDate, formatInt, formatNumber } from '@/lib/format'
-import { Amount, Card, Chart, Empty, KeyValue, Skeleton, Stat, Stats, Time } from '@/ui'
+import { Amount, Badge, Card, Chart, Empty, KeyValue, Skeleton, Stat, Stats, Time } from '@/ui'
 import type { MnContext } from './mn-context'
 import { dash } from './platform-math'
 
@@ -86,6 +86,13 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
       source={[...stamps, ...(ctx.radar ? [ctx.radar] : [])]}
       id="validator-record"
       subtitle={t`Reachability from Radar’s crawl. The totals and charts are Platform Explorer’s, over the evonode’s whole life; this epoch is above.`}
+      actions={
+        v ? (
+          <Badge tone={v.isActive ? 'success' : 'neutral'}>
+            {v.isActive ? t`In a validator set` : t`Not in a validator set`}
+          </Badge>
+        ) : undefined
+      }
     >
       <div className="grid gap-5">
         <Stats data-reachability>
@@ -134,6 +141,17 @@ export function ValidatorCard({ ctx, d }: { ctx: MnContext; d: RadarMasternodeDe
                 {
                   label: t`Blocks proposed, all time`,
                   value: v.proposedBlocksAmount != null ? formatInt(v.proposedBlocksAmount) : '—',
+                },
+                {
+                  label: t`PoSe`,
+                  value:
+                    state?.PoSePenalty != null
+                      ? state.PoSePenalty > 0
+                        ? t`Penalty ${formatInt(state.PoSePenalty)}`
+                        : t`No penalty`
+                      : '—',
+                  hint:
+                    v.poseScoreMax != null ? t`bans at ${formatInt(v.poseScoreMax)}` : undefined,
                 },
                 {
                   label: t`Last block`,
