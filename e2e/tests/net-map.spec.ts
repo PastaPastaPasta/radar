@@ -78,6 +78,10 @@ test.describe('The map', () => {
       viewport.width - 20,
     )
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
+    expect(
+      await page.locator('[data-map-root]').evaluate((el) => getComputedStyle(el).borderTopWidth),
+      'the map has no border of its own',
+    ).toBe('0px')
     if (isPhone(info)) return
     expect(map.height, 'a map worth looking at').toBeGreaterThanOrEqual(520)
     const box = (await panel(page).boundingBox())!
