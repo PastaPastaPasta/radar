@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { queryPresets } from './presets'
+import { pickerContracts, queryPresets } from './presets'
 import { planQuery } from './run'
 import { toDocumentsQuery } from './sql-parser'
 
@@ -14,6 +14,12 @@ describe('query presets', () => {
       }
     })
   }
+
+  it('offers Feature flags on every network, preset or not', () => {
+    for (const net of ['mainnet', 'testnet', 'devnet-ruby'] as const) {
+      expect(pickerContracts(net).map((c) => c.key)).toContain('feature-flags')
+    }
+  })
 
   it('offers aggregates only where a contract can answer them', () => {
     expect(queryPresets('mainnet').map((p) => p.id)).toEqual(['dpns-label', 'dashpay-owner'])

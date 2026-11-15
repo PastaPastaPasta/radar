@@ -67,14 +67,11 @@ export function DocumentPage({ contract, type, id, search }: DocumentPageProps) 
             record: {
               kind: 'document' as const,
               id,
-              facts: (
-                <>
-                  <Stat label={t`Type`} value={<span className="font-mono">{type}</span>} />
-                  {data && data.revision !== null ? (
-                    <Stat label={t`Revision`} value={String(data.revision)} />
-                  ) : null}
-                </>
-              ),
+              name: type,
+              facts:
+                data && data.revision !== null ? (
+                  <Stat label={t`Revision`} value={String(data.revision)} />
+                ) : undefined,
             },
           }
         : {})}

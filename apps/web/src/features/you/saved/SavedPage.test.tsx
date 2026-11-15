@@ -1,5 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { App } from '@/app'
@@ -58,6 +58,46 @@ describe('Saved page @NX-06', () => {
     expect(within(rows()[0]!).getByText('Testnet')).toBeInTheDocument()
     const link = within(rows()[0]!).getAllByRole('link')[0]!
     expect(link).toHaveAttribute('href', expect.stringContaining('network=testnet'))
+  })
+
+  it('links every saved item to its own network, in every scope', async () => {
+    const history = renderAt('/saved?scope=all&network=testnet')
+    await screen.findByText('Alice')
+    const linkOf = (kind: string) => {
+      const row = rows().find((r) => within(r).queryByText(kind))
+      expect(row, kind).toBeTruthy()
+      return within(row!).getAllByRole('link')[0]!
+    }
+    expect(linkOf('Identity')).toHaveAttribute('href', expect.stringContaining('network=mainnet'))
+    expect(linkOf('Identity')).toHaveAttribute('href', expect.stringContaining(`/identity/${ID_A}`))
+    expect(linkOf('Contract')).toHaveAttribute('href', expect.stringContaining('network=mainnet'))
+    expect(linkOf('Contract')).toHaveAttribute('href', expect.stringContaining(`/contract/${ID_B}`))
+    expect(linkOf('Token')).toHaveAttribute('href', expect.stringContaining('network=testnet'))
+    expect(linkOf('Token').getAttribute('href')).not.toContain('network=mainnet')
+
+    history.push('/saved?network=testnet')
+    expect(await screen.findByText('Test token')).toBeInTheDocument()
+    expect(screen.queryByText('Alice')).toBeNull()
+    expect(linkOf('Token')).toHaveAttribute('href', expect.stringContaining('network=testnet'))
+
+    history.push('/saved')
+    expect(await screen.findByText('Alice')).toBeInTheDocument()
+    expect(linkOf('Identity')).toHaveAttribute('href', expect.stringContaining('network=mainnet'))
+    expect(linkOf('Contract')).toHaveAttribute('href', expect.stringContaining('network=mainnet'))
+
+    const known = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
+    saveItem({ net: 'mainnet', kind: 'identity', id: known, label: 'Known' }, 4)
+    history.push('/saved?scope=all&network=testnet')
+    const knownLink = within(await screen.findByRole('row', { name: /Known/ })).getAllByRole(
+      'link',
+    )[0]!
+    expect(knownLink).toHaveAttribute('href', expect.stringContaining('network=mainnet'))
+    fireEvent.click(knownLink)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'pshenmic.dash' }),
+    ).toBeInTheDocument()
+    expect(history.location.pathname).toBe(`/identity/${known}`)
+    expect(history.location.search).not.toContain('testnet')
   })
 
   it('switches scope and kind without leaving the page', async () => {

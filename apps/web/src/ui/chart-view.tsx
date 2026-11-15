@@ -9,6 +9,7 @@ import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import type { EChartsOption } from 'echarts'
 import { useEffect, useRef } from 'react'
+import { withDistinctCompactAxes } from './chart-axis'
 import {
   radarChartTheme,
   readChartTokens,
@@ -39,7 +40,7 @@ function drawn(
 ): EChartsOption {
   const read = (name: string) => (el ? getComputedStyle(el).getPropertyValue(name).trim() : '')
   return withChartMotion(
-    withEdgeRoom(withSeriesColors(withTokenColors(option, read), slots)),
+    withDistinctCompactAxes(withEdgeRoom(withSeriesColors(withTokenColors(option, read), slots))),
     still,
   )
 }

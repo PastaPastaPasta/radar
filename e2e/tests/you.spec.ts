@@ -431,6 +431,32 @@ test.describe('proof inspector', () => {
     await expectAccessible(page)
   })
 
+  test('scrolls the proof drawer so Copy proof as hex is reachable at 1440×900 and 1024×768', async ({
+    page,
+  }) => {
+    await grantClipboard(page.context())
+    for (const size of [
+      { width: 1440, height: 900 },
+      { width: 1024, height: 768 },
+    ]) {
+      await page.setViewportSize(size)
+      await openPlatform(page)
+      await proofMark(page).click()
+      const dialog = page.getByRole('dialog', { name: 'Proof inspector' })
+      await expect(dialog).toBeVisible()
+      const box = (await dialog.boundingBox())!
+      expect(
+        box.height,
+        `${size.width}×${size.height}: the drawer fits the window`,
+      ).toBeLessThanOrEqual(size.height + 1)
+      const copy = dialog.getByRole('button', { name: 'Copy proof as hex' })
+      await copy.click()
+      await expect(page.locator('#rx-announcer')).toHaveText('Proof copied')
+      await page.keyboard.press('Escape')
+      await expect(dialog).toHaveCount(0)
+    }
+  })
+
   test('is a side sheet on a desktop and a bottom sheet on a phone @NX-61', async ({ page }) => {
     await openPlatform(page)
     await proofMark(page).click()
