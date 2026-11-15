@@ -119,12 +119,6 @@
     --rx-s4: #c98500;
     --rx-s5: #d55181;
     --rx-s6: #7a9a22;
-    --rx-s1: #1a9cf0;
-    --rx-s2: #d95926;
-    --rx-s3: #1ea898;
-    --rx-s4: #c98500;
-    --rx-s5: #d55181;
-    --rx-s6: #7a9a22;
     --rx-id-2: #a6d8f7;
     --rx-id-5: #8fb3cc;
     --rx-testnet: #f2c94c;
@@ -135,6 +129,12 @@
   }
 }
 :root[data-theme='dark'] {
+  --rx-s1: #1a9cf0;
+  --rx-s2: #d95926;
+  --rx-s3: #1ea898;
+  --rx-s4: #c98500;
+  --rx-s5: #d55181;
+  --rx-s6: #7a9a22;
   --dh-ink-2: #b0c6d4;
   --rx-placeholder: #7f97a7; /* 5.6:1 on a dark field; a value is 15:1 */
   --rx-core: #1a9cf0;

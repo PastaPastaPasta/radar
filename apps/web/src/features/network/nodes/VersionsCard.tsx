@@ -108,10 +108,11 @@ export function VersionsCard({
     () => (history ? keepVersions(history, 6, latest) : undefined),
     [history, latest],
   )
+  const shares = narrowed ? stackShares(narrowed, book) : []
   const slotOf = useSeriesSlots(
     [
       ...flat.filter((r) => r.folded === undefined).map((r) => r.key),
-      ...(narrowed ? stackShares(narrowed, book).map((s) => s.key) : []),
+      ...shares.map((s) => s.key),
     ].filter((key) => isRelease(book, key)),
   )
   const slices: Slice[] = [
@@ -138,14 +139,12 @@ export function VersionsCard({
   const proto = (dist.protocol ?? []).filter(([k]) => k !== UNKNOWN)
   const protoTotal = total(proto)
   const overTime = versions === 'time'
-  const series: Series[] = narrowed
-    ? stackShares(narrowed, book).map((s) => ({
-        key: s.key,
-        name: s.key === UNKNOWN ? t`No answer this week` : s.key,
-        color: versionColor(book, colors, slotOf, s.key, undefined),
-        values: s.values,
-      }))
-    : []
+  const series: Series[] = shares.map((s) => ({
+    key: s.key,
+    name: s.key === UNKNOWN ? t`No answer this week` : s.key,
+    color: versionColor(book, colors, slotOf, s.key, undefined),
+    values: s.values,
+  }))
 
   return (
     <Card

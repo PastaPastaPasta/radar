@@ -32,8 +32,8 @@ interface Part {
 }
 
 /** One bar split by share, with the key under it: what each part is, and how many. */
-function ShareBar({ parts, of }: { parts: Part[]; of?: (count: number) => string }) {
-  const say = (p: Part) => `${p.id}: ${of ? of(p.count) : formatInt(p.count)}`
+function ShareBar({ parts, of = formatInt }: { parts: Part[]; of?: (count: number) => string }) {
+  const say = (p: Part) => `${p.id}: ${of(p.count)}`
   return (
     <div data-share-bar>
       <div className="rx-stack" role="img" aria-label={parts.map(say).join(', ')}>
@@ -45,7 +45,7 @@ function ShareBar({ parts, of }: { parts: Part[]; of?: (count: number) => string
         {parts.map((p) => (
           <li key={p.id} data-part={p.id}>
             <span className="rx-sw" style={{ background: p.color }} />
-            {p.id} <b>{of ? of(p.count) : formatInt(p.count)}</b>
+            {p.id} <b>{of(p.count)}</b>
           </li>
         ))}
       </ul>
@@ -71,16 +71,17 @@ export function NetworkInternals() {
   const slotOf = useSeriesSlots(versions.map((v) => v.version))
   const units = useUnits()
   const plot = (id: MetricId, title: string, label: string, height: number) => {
-    const data = points(METRICS[id], rows)
+    const metric = METRICS[id]
+    const data = points(metric, rows)
     return (
       <Chart
-        option={buildOption(METRICS[id], data, title, units)}
+        option={buildOption(metric, data, title, units)}
         height={height}
         label={label}
         loading={history.isPending}
         table={{
           columns: [t`Block height`, title],
-          rows: data.map((p) => [formatInt(p.height), METRICS[id].format(p.value, units)]),
+          rows: data.map((p) => [formatInt(p.height), metric.format(p.value, units)]),
         }}
       />
     )

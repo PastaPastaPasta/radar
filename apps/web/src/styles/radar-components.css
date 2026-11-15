@@ -799,7 +799,8 @@ a.rx-stat:focus-visible,
 .rx-src__lag::before {
   content: '\00b7\00a0';
 }
-.rx-src:has(.rx-src__lag) {
+.rx-src:has(.rx-src__lag, .rx-src__for) {
+  max-width: 100%;
   white-space: normal;
 }
 /* what a mark covers, on a line that mixes proved and unproved reads: plain ink beside the coloured mark */
@@ -2482,8 +2483,8 @@ html[data-scroll-gutter] {
 }
 
 /* A proposal leads with its name, then its hash; the status colours the row's leading edge so a column of them scans. */
-.rx-table .rx-propcell,
-.rx-proptable thead th:first-child {
+.rx-table.rx-proptable td.rx-propcell,
+.rx-table.rx-proptable thead th:first-child {
   padding-inline-start: 14px;
 }
 .rx-table .rx-propcell::before {
@@ -2585,10 +2586,11 @@ html[data-scroll-gutter] {
   .rx-tablewrap--scroll .rx-tablescroll:has(.rx-proptable) {
     overflow-x: visible;
   }
-  .rx-proptable,
+  .rx-table.rx-proptable,
   .rx-proptable tbody {
     display: block;
     min-width: 0;
+    width: 100%;
   }
   .rx-proptable thead,
   .rx-proptable .rx-votes {

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import type { EChartsOption } from 'echarts'
 import { SeriesSlots, seriesSwatches, withSeriesColors, withTokenColors } from './series'
@@ -128,5 +130,24 @@ describe('withTokenColors', () => {
       ],
     } as EChartsOption
     expect(withTokenColors(option, read)).toBe(option)
+  })
+})
+
+describe('the categorical slots per theme', () => {
+  const tokens = readFileSync(join(import.meta.dirname, '../styles/radar-tokens.css'), 'utf8')
+  const slots = (block: string) =>
+    [...block.matchAll(/--rx-s([1-6]): (#[0-9a-f]{6});/g)].map((m) => `${m[1]}=${m[2]}`)
+  const blockAfter = (opening: string) => {
+    const from = tokens.indexOf(opening)
+    expect(from).toBeGreaterThanOrEqual(0)
+    return tokens.slice(from, tokens.indexOf('\n}', from))
+  }
+
+  it('gives the dark theme the reader picks the same steps as the dark theme the system picks @W2-40', () => {
+    const system = slots(blockAfter(":root:not([data-theme='light']) {"))
+    const picked = slots(blockAfter(":root[data-theme='dark'] {"))
+    expect(system).toHaveLength(6)
+    expect(picked).toEqual(system)
+    expect(picked).not.toEqual(slots(blockAfter(':root {')))
   })
 })

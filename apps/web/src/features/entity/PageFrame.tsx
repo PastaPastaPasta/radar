@@ -143,6 +143,7 @@ export function PageFrame({
       </>
     ) : null
   const kind = record ? KIND_META[record.kind] : undefined
+  const netSuffix = net === 'mainnet' ? null : ` · ${networkName(net)}`
   return (
     <Claims.Provider value={setReported}>
       <SourceSection>
@@ -167,7 +168,7 @@ export function PageFrame({
                   </span>
                   <p className="rx-rec__kicker" data-record-kind>
                     <span className="rx-rec__kind">{i18n._(kind.label)}</span>
-                    {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+                    {netSuffix}
                   </p>
                   <h1
                     className="rx-rec__title"
@@ -196,7 +197,7 @@ export function PageFrame({
               {above ? (
                 <p data-eyebrow className="rx-page__eyebrow">
                   {above}
-                  {net === 'mainnet' ? null : ` · ${networkName(net)}`}
+                  {netSuffix}
                 </p>
               ) : null}
               <div className="rx-page__title">
