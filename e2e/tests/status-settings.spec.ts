@@ -192,7 +192,7 @@ test.describe('units and fiat', () => {
     await expect(example).toHaveText(/^Example:\s*≈ \$[\d,.]+\s*\(1\.2346\s*DASH\)/)
   })
 
-  test('USD is not offered on testnet, which shows DASH there @IN-12 @IN-16', async ({ page }) => {
+  test('USD is not offered on testnet, which shows tDASH there @IN-12 @IN-16', async ({ page }) => {
     await page.goto('/settings')
     await page
       .getByRole('group', { name: 'Unit for amounts' })
@@ -202,7 +202,7 @@ test.describe('units and fiat', () => {
     await page.goto('/settings?network=testnet')
     const group = page.getByRole('group', { name: 'Unit for amounts' })
     await expect(group.getByRole('button', { name: 'USD' })).toBeDisabled()
-    await expect(group.getByRole('button', { name: 'DASH', exact: true })).toHaveAttribute(
+    await expect(group.getByRole('button', { name: 'tDASH', exact: true })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
