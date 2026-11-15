@@ -28,7 +28,7 @@ function useRowToken(row: TokenRow) {
   const token = useToken(row.id, row.added)
   return {
     missing: token.missing,
-    loading: row.added && !token.missing && (token.info.isPending || token.contract.isPending),
+    loading: row.added && !token.missing && (token.info.isLoading || token.contract.isLoading),
     name: row.name ?? token.name?.singular,
     symbol: row.symbol ?? token.symbol,
     decimals: row.decimals ?? token.decimals,
