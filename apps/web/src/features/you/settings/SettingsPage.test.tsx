@@ -111,7 +111,7 @@ describe('Settings', () => {
     renderAt('/settings?network=testnet')
     const group = await screen.findByRole('group', { name: 'Unit for amounts' })
     expect(within(group).getByRole('button', { name: 'USD' })).toBeDisabled()
-    expect(within(group).getByRole('button', { name: 'DASH' })).toHaveAttribute(
+    expect(within(group).getByRole('button', { name: 'tDASH' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )

@@ -48,7 +48,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
   const showsRate = priced && (prefs.fiat || usdPrimary)
   const rate = useQuery({ ...rateQueries.usd(), enabled: showsRate })
   const unit = prefs.unit === 'USD' && !priced ? 'DASH' : prefs.unit
-  const unitName = unitLabel(denomination(unit))
+  const unitName = unitLabel(denomination(unit), !mainnet)
 
   return (
     <PageFrame
@@ -65,7 +65,7 @@ export function SettingsPage({ devnets }: { devnets: SettingsDevnets }) {
               value={unit}
               onChange={(next) => writeUnitPreference(next as UnitChoice)}
               options={[
-                ...DISPLAY_UNITS.map((u) => ({ id: u, label: unitLabel(u) })),
+                ...DISPLAY_UNITS.map((u) => ({ id: u, label: unitLabel(u, !mainnet) })),
                 { id: 'USD', label: 'USD', disabled: !priced },
               ]}
             />
