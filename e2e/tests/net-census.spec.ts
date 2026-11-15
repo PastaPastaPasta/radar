@@ -124,31 +124,15 @@ test.describe('Network census', () => {
     await expect(page).toHaveURL(/\/masternodes\?status=pose-banned$/)
   })
 
-  test('opens lists whose match count equals the figure that was clicked @RA-02 @RA-05 @RA-06', async ({
+  test('opens lists filtered the way the figure that was clicked counts @RA-02 @RA-05 @RA-06', async ({
     page,
   }) => {
-    const matched = async () => {
-      const text = await page.locator('.rx-activef').first().innerText()
-      return Number(/([\d,]+) match/.exec(text)![1]!.replace(/,/g, ''))
-    }
-    const value = async (name: RegExp) =>
-      Number((await figure(page, name).locator('.rx-stat__value').innerText()).replace(/,/g, ''))
     const filters = () => new URL(page.url()).searchParams
 
-    // The DAPI list gives both these figures and the list, so their counts can be compared here.
+    // The figures come from Radar's crawl, the list from DAPI's list; the recordings are a 150-node sample of the crawl,
+    // taken days before the list, so here only the filters are checked. The link builders' unit test checks that the
+    // list then counts what the figure counts.
     await openNodes(page)
-    for (const name of [/^Enabled/, /^PoSe-banned/]) {
-      const n = await value(name)
-      await figure(page, name).click()
-      await expect(page.locator('.rx-activef').first()).toContainText('match')
-      expect(await matched(), String(name)).toBe(n)
-      await page.goBack()
-      await expect(card(page, 'now')).toBeVisible()
-    }
-
-    // The crawl's figures count enabled masternodes, so each link carries that filter. The recorded crawl list is a
-    // 150-node sample of the crawl the figures count, so here only the filters are checked; the link builders' unit
-    // test checks that the list then counts what the figure counts.
     await figure(page, /^Reachable masternodes/).click()
     await expect(page.locator('.rx-activef').first()).toContainText('match')
     expect(filters().get('reach')).toBe('reachable')
