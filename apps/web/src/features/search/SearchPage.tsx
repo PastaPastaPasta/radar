@@ -1,7 +1,7 @@
 import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import {
   entityLabel,
   PageLink,
@@ -131,14 +131,6 @@ export function SearchPage({ q }: { q?: string }) {
     const id = setTimeout(() => setLive(typedQuery), LIVE_MS)
     return () => clearTimeout(id)
   }, [typedQuery])
-  const pushed = useRef(urlQuery)
-  useEffect(() => {
-    if (urlQuery !== pushed.current) {
-      pushed.current = urlQuery
-      setDraft(urlQuery)
-      setLive(urlQuery)
-    }
-  }, [urlQuery])
   const query = classify(live, net).warning ? urlQuery : live
   const { hits, pending, failed, skipped, classified } = useSearch(query, { mode: 'page' })
   const wordsReady = useWordlistLoaded()
@@ -149,17 +141,8 @@ export function SearchPage({ q }: { q?: string }) {
   const typed = useMemo(() => classify(draft.trim(), net).warning, [draft, net, wordsReady])
   const stripped = useRouterState({ select: (s) => withheldFrom(s.location.state) })
   const withheld = typed ?? secret ?? stripped
-  useDocumentTitle(query && !secret ? t`“${query}” · Search` : t`Search`)
-
-  useEffect(() => {
-    if (live === urlQuery || inUrl || classify(live, net).warning) return
-    pushed.current = live
-    void navigate({
-      to: '/search',
-      search: (prev) => ({ ...prev, q: live || undefined }),
-      replace: true,
-    })
-  }, [live, urlQuery, inUrl, net, navigate])
+  // The address and the title keep what was submitted: what is still being typed stays on the page.
+  useDocumentTitle(urlQuery && !inUrl ? t`“${{ query: urlQuery }}” · Search` : t`Search`)
 
   useEffect(() => {
     if (!secret) return

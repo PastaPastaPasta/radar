@@ -355,6 +355,21 @@ describe('/search page', () => {
     expect(visited.join()).not.toContain('abandon')
   })
 
+  it('shows results while typing and leaves the address and the title alone until Enter @W2-28', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/search'] })
+    render(<App history={history} />)
+    const user = userEvent.setup()
+
+    await user.type(await screen.findByRole('searchbox'), '2569992')
+
+    expect(await screen.findByRole('link', { name: /Core block 2,569,992/ })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'false'),
+    )
+    expect(history.location.search).not.toContain('2569992')
+    expect(document.title).not.toContain('2569992')
+  })
+
   it('keeps a partly typed phrase out of the address and the title', async () => {
     const history = createMemoryHistory({ initialEntries: ['/search'] })
     const visited = recordVisits(history)

@@ -26,13 +26,15 @@ async function openSearch(url = '/search') {
 }
 
 describe('the search page shows results while typing @W2-28 @X-01', () => {
-  it('lists matching pages and entities without Enter, and keeps the address in step', async () => {
+  it('lists matching pages and entities without Enter, and puts the query in the address on Enter', async () => {
     const { user, input, history } = await openSearch()
     await user.type(input, 'status')
     await waitFor(() => {
       const page = document.querySelector('[data-kind="page"] a[href="/status"]')
       expect(page).toHaveTextContent('Status')
     })
+    expect(history.location.search).not.toContain('status')
+    await user.type(input, '{Enter}')
     await waitFor(() => expect(history.location.search).toContain('status'))
   })
 
