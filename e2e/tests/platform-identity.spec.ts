@@ -100,7 +100,8 @@ test.describe('Identity page', () => {
     const summary = page.locator('#identity-summary')
     await expect(summary.getByText('Nonce', { exact: true })).toBeVisible()
     await expect(summary.getByRole('link', { name: 'pshenmic.dash' }).first()).toBeVisible()
-    await expect(summary.getByText('Proof-checked').filter({ visible: true })).toHaveCount(0)
+    // The card draws no mark of its own; a proved figure keeps one in its popover.
+    await expect(summary.locator('.rx-src:not(.rx-fig__src .rx-src)')).toHaveCount(0)
     await expect(
       sourceLineOf(summary).locator('[data-source="sdk"][data-proved="true"]'),
     ).toHaveCount(1)

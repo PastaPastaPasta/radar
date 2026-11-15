@@ -50,7 +50,7 @@ test.describe('Record header', () => {
   })
 
   test('gives an address the same header, named by its short form @W2-41', async ({ page }) => {
-    await open(page, '/address/XnT33zjrnP4SSeB4QuD8Vg6eLj5a3WVj14')
+    await open(page, '/address/XnT33zjrFKjt3ymfyQZs2FPiKNer3WVj14')
     const band = page.locator('[data-record="address"]')
     await expect(band.getByRole('heading', { level: 1 })).toHaveText(/^Address XnT33zjr…\S+$/)
     await expect(page).toHaveTitle(/Address XnT33zjr/)
@@ -88,6 +88,7 @@ test.describe('Section grounds', () => {
     page,
   }) => {
     await open(page, '/platform')
+    await expect(page.locator('.rx-page > .rx-sec--ruled').nth(2)).toBeVisible()
     const grounds = await page
       .locator('.rx-page > .rx-sec--ruled')
       .evaluateAll((els) => els.map((el) => getComputedStyle(el).borderImageSource !== 'none'))
@@ -100,12 +101,12 @@ test.describe('Section grounds', () => {
 test.describe('Governance', () => {
   test('shows every proposal name in full view of its status edge @W2-45', async ({ page }) => {
     await open(page, '/governance')
-    const cell = page.locator('.rx-proptable tbody .rx-propcell').first()
-    const name = cell.locator('.rx-propname__label')
+    const row = page.locator('.rx-proptable tbody[data-proposal] > tr').first()
+    const name = row.locator('.rx-propname__label')
     await expect(name).toBeVisible()
-    const c = await box(cell)
+    const edge = await box(row)
     const n = await box(name)
-    expect(n.left).toBeGreaterThanOrEqual(c.left + 8)
+    expect(n.left).toBeGreaterThanOrEqual(edge.left + 8)
   })
 
   test('lists proposals as cards on a phone, with nothing to scroll sideways @W2-45', async ({
@@ -117,9 +118,21 @@ test.describe('Governance', () => {
     const [scroll, client] = await scroller.evaluate((el) => [el.scrollWidth, el.clientWidth])
     expect(scroll).toBeLessThanOrEqual(client + 1)
     await expect(page.locator('.rx-proptable thead')).not.toBeInViewport()
-    const row = await box(page.locator('.rx-proptable tbody tr').first())
-    const amount = await box(page.locator('.rx-proptable tbody tr .rx-propamount').first())
-    expect(amount.right).toBeLessThanOrEqual(row.right + 1)
+    // No name, however long, runs under its status or past the card.
+    const fits = await page
+      .locator('.rx-proptable tbody[data-proposal] > tr:first-child')
+      .evaluateAll((rows) =>
+        rows.every((row) => {
+          const edge = row.getBoundingClientRect().right
+          const status = row.querySelector('.rx-propstatus')!.getBoundingClientRect().left
+          const name = row.querySelector('.rx-propname')!.getBoundingClientRect().right
+          return name <= status + 0.5 && name <= edge + 0.5
+        }),
+      )
+    expect(fits).toBe(true)
+    expect(await horizontalOverflow(page)).toBeLessThanOrEqual(1)
+    await page.locator('tbody[data-proposal] .rx-propname').first().click()
+    await expect(page.locator('[data-proposal-details]')).toBeVisible()
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(1)
   })
 })
@@ -175,8 +188,8 @@ test.describe('Dark theme', () => {
 
   test('draws a placeholder dimmer than a typed value @W2-62', async ({ page }, info) => {
     test.skip(!isDark(info), 'a dark-theme check')
-    await open(page, '/search')
-    const input = page.locator('input.dh-input').first()
+    await open(page, '/governance')
+    const input = page.getByRole('searchbox', { name: 'Filter proposals by name or hash' })
     await expect(input).toBeVisible()
     const [value, placeholder] = await input.evaluate((el) => [
       getComputedStyle(el).color,
