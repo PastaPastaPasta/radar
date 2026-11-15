@@ -436,6 +436,11 @@ test.describe('Token list', () => {
     const trending = page.locator('#tokens-trending')
     await expect(trending.locator('[data-trending] li')).toHaveCount(5)
     await expect(trending).toContainText('transitions')
+  })
+
+  test('shows no trending ranking when no token has had a transition @PE-24 @NX-01', async ({
+    page,
+  }) => {
     await open(page, '/tokens', 'Tokens')
     await expect(page.locator('#tokens-list')).toBeVisible()
     await expect(page.locator('#tokens-trending')).toHaveCount(0)
