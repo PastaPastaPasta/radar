@@ -1,4 +1,7 @@
+import { useSyncExternalStore } from 'react'
+import { labelsVersion, subscribeLabels, wellKnownLabel } from '@/lib/well-known'
 import { Entity, type EntityProps } from '../Entity'
+import { useNetwork } from '../network'
 import { useIdentityName } from './use-identity-name'
 
 export interface IdentityRefProps {
@@ -10,6 +13,16 @@ export interface IdentityRefProps {
 
 /** A link to an identity, drawn with its identicon and, when known, its name. */
 export function IdentityRef({ id, label, size }: IdentityRefProps) {
+  const net = useNetwork()
   const name = useIdentityName(id)
-  return <Entity kind="identity" id={id} label={label ?? name} size={size} identicon />
+  useSyncExternalStore(subscribeLabels, labelsVersion, labelsVersion)
+  return (
+    <Entity
+      kind="identity"
+      id={id}
+      label={label ?? wellKnownLabel(net, 'identity', id) ?? name}
+      size={size}
+      identicon
+    />
+  )
 }
