@@ -21,6 +21,13 @@ type Scope = 'network' | 'all'
 
 const rowId = (s: SavedItem) => `${s.net}/${s.kind}/${s.id}`
 
+/** A saved item opens on the network it was saved from. Mainnet is usually left out of a link, and the router then keeps whichever network the reader is on. */
+function savedHref(item: SavedItem): string {
+  const href = entityHref(item.kind, item.id, item.net)
+  if (item.net !== 'mainnet' || /[?&]network=/.test(href)) return href
+  return `${href}${href.includes('?') ? '&' : '?'}network=mainnet`
+}
+
 function useSavedFilters(): { scope: Scope; kinds: readonly SavedItem['kind'][] } {
   const search = useSearch({
     strict: false,
@@ -80,7 +87,7 @@ export function SavedPage() {
               kind={s.kind}
               id={s.id}
               label={s.label ?? wellKnownLabel(s.net, s.kind, s.id)}
-              href={entityHref(s.kind, s.id, s.net)}
+              href={savedHref(s)}
             />
           )
         },
