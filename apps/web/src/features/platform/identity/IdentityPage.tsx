@@ -6,7 +6,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { useEffect, type ReactNode } from 'react'
 import { sdkQueries } from '@/data/sdk/queries'
 import {
-  IdentityRef,
   PageFrame,
   PageLink,
   recordViewedIdentity,
@@ -14,8 +13,10 @@ import {
   useIdentityName,
   useNetwork,
 } from '@/features/entity'
+import { stampOf } from '@/data/envelope'
+import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Empty, ErrorState, Hash, LinkOut, Skeleton, Tabs } from '@/ui'
+import { Amount, Empty, ErrorState, LinkOut, Skeleton, Stat, Tabs } from '@/ui'
 import { AdvancedTab } from './AdvancedTab'
 import { GroupsTab } from './GroupsTab'
 import { HistoryTab } from './HistoryTabs'
@@ -85,6 +86,8 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
 
   const missing = exists.data?.data === null
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
+  const found = exists.data?.data
+  const stamp = exists.data ? stampOf(exists.data) : undefined
 
   return (
     <PageFrame
@@ -93,7 +96,26 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
       eyebrow={t`Platform`}
       layer="platform"
       share
-      lede={<IdentityRef id={id} />}
+      record={{
+        kind: 'identity',
+        id,
+        name,
+        facts: found ? (
+          <>
+            <Stat
+              label={t`Balance`}
+              value={
+                <span data-field="balance">
+                  <Amount value={found.balance} kind="credits" fiat />
+                </span>
+              }
+              note={t`${formatInt(found.balance)} credits`}
+              source={stamp}
+            />
+            <Stat label={t`Revision`} value={formatInt(found.revision)} source={stamp} />
+          </>
+        ) : undefined,
+      }}
       actions={
         <>
           <SaveButton kind="identity" id={id} label={name} />
@@ -103,7 +125,6 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
         </>
       }
     >
-      <Hash value={id} display="wrap" />
       {missing ? (
         <Empty
           kind="not-found"

@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, type ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
 import { layerAttr } from './cx'
 import type { Layer } from './types'
@@ -12,17 +12,44 @@ export interface TabsProps {
   layer?: Layer
 }
 
+/** Marks which edges of the bar have more tabs beyond them, so the stylesheet fades exactly those. */
+function markOverflow(el: HTMLElement) {
+  const max = el.scrollWidth - el.clientWidth
+  el.dataset.moreStart = String(el.scrollLeft > 1)
+  el.dataset.moreEnd = String(max > 1 && el.scrollLeft < max - 1)
+}
+
 export function Tabs({ tabs, value, to, layer }: TabsProps) {
   const ref = useRef<HTMLUListElement>(null)
+  const update = useCallback(() => {
+    if (ref.current) markOverflow(ref.current)
+  }, [])
+  // The current tab is brought into view inside the bar only; the page itself never scrolls for it.
+  useLayoutEffect(() => {
+    const bar = ref.current
+    const current = bar?.querySelector<HTMLElement>('[aria-current="page"]')
+    if (bar && current) {
+      const left = current.offsetLeft - bar.offsetLeft
+      const fits =
+        left >= bar.scrollLeft && left + current.offsetWidth <= bar.scrollLeft + bar.clientWidth
+      if (!fits) bar.scrollLeft = Math.max(0, left - (bar.clientWidth - current.offsetWidth) / 2)
+    }
+    update()
+  }, [value, tabs.length, update])
   useEffect(() => {
-    const current = ref.current?.querySelector('[aria-current="page"]')
-    current?.scrollIntoView?.({ inline: 'nearest', block: 'nearest' })
-  }, [value])
+    const bar = ref.current
+    if (!bar || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(update)
+    observer.observe(bar)
+    return () => {
+      observer.disconnect()
+    }
+  }, [update])
   return (
     <div className="rx-tabbar">
       <div className="dh-container">
         <nav aria-label={t`Sections`} data-layer={layerAttr(layer)}>
-          <ul className="rx-tabs" ref={ref}>
+          <ul className="rx-tabs" ref={ref} onScroll={update}>
             {tabs.map((tab) => (
               <li key={tab.id}>
                 {tab.disabled ? (

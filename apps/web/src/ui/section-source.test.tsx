@@ -73,6 +73,46 @@ describe('a section names its sources once', () => {
     expect(section.querySelector('.rx-tfoot')).toBeNull()
   })
 
+  it('says which figures each mark covers when a line mixes proved and unproved reads @X-05', () => {
+    const unproved = stamp({
+      source: 'sdk',
+      proved: false,
+      asOf: now - 1000,
+      fetchedAt: now - 1000,
+    })
+    render(
+      <Section id="epoch" title="This epoch">
+        <Stats>
+          <Stat label="Epoch" value="42" source={proved} />
+          <Stat label="Fees" value="3" source={proved} />
+          <Stat label="Blocks" value="900" source={unproved} />
+        </Stats>
+        <Card title="Proposers" source={unproved}>
+          x
+        </Card>
+      </Section>,
+    )
+    const marks = line(document.getElementById('epoch')!)
+    expect(marks.querySelector('[data-proved="true"] [data-covers]')).toHaveTextContent(
+      ': Epoch, Fees',
+    )
+    expect(marks.querySelector('[data-proved="false"] [data-covers]')).toHaveTextContent(
+      ': Blocks, Proposers',
+    )
+  })
+
+  it('names no figures on a line whose reads are all proved, or all from elsewhere', () => {
+    render(
+      <Section id="plain" title="Plain">
+        <Stats>
+          <Stat label="Epoch" value="42" source={proved} />
+          <Stat label="Height" value="9" source={dapi} />
+        </Stats>
+      </Section>,
+    )
+    expect(document.querySelector('[data-covers]')).toBeNull()
+  })
+
   it('shows the age of a figure read well before the rest, so the line never flatters it @IN-09', () => {
     render(
       <Section title="Core">

@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
 import { formatInt } from '@/lib/format'
 import { Card, Chart, Empty, SegFilter, Skeleton, stampsOf, useNow } from '@/ui'
+import { useSeriesSlots } from '@/ui/series'
 import { stackedShareOption, type Series, type Slice } from './census-charts'
 import { useCensusColors, type CensusColors } from './census-colors'
 import { dayMonth, dayMonthYear, monthYear } from './census-format'
@@ -24,10 +25,22 @@ import { Donut, ScrollRegion, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
 import { loadState, useCensusSearch, type SectionProps } from './shared'
 
-/** A version's colour: the latest release in the layer hue and each older one a step lighter. */
+/** True for a version that takes a categorical slot: a release. Candidates and odd builds carry a meaning colour. */
+const isRelease = (book: ReleaseBook, key: string): boolean =>
+  key !== UNKNOWN &&
+  isCoreVersion(key) &&
+  book.status(key) !== 'candidate' &&
+  book.status(key) !== 'build'
+
+/**
+ * A version's colour. A release keeps the slot it was given for as long as it is shown, in the donut, the ladder and
+ * the history alike; a candidate is good, a build that is no release is warn, no answer is the axis grey and
+ * everything folded together is the muted "other".
+ */
 function versionColor(
   book: ReleaseBook,
   colors: CensusColors,
+  slotOf: (key: string) => number | undefined,
   key: string,
   folded?: number,
 ): string {
@@ -36,8 +49,8 @@ function versionColor(
   const status = book.status(key)
   if (status === 'candidate') return colors.good
   if (status === 'build') return colors.warn
-  const rank = book.known ? book.finals.indexOf(key) : 0
-  return colors.rank[Math.min(Math.max(rank, 0), colors.rank.length - 1)]!
+  const slot = slotOf(key)
+  return slot === undefined ? colors.other : colors.rank[slot - 1]!
 }
 
 export function VersionsCard({
@@ -90,13 +103,26 @@ export function VersionsCard({
           : t`${formatInt(r.folded)} more versions`
 
   const flat = groups.flatMap((g) => g.rows.map((r) => ({ ...r, group: g.kind })))
+  const history = census.versions.data?.data
+  const narrowed = useMemo(
+    () => (history ? keepVersions(history, 6, latest) : undefined),
+    [history, latest],
+  )
+  const shares = narrowed ? stackShares(narrowed, book) : []
+  const slotOf = useSeriesSlots(
+    [
+      ...flat.filter((r) => r.folded === undefined).map((r) => r.key),
+      ...shares.map((s) => s.key),
+    ].filter((key) => isRelease(book, key)),
+    !census.releases.isLoading,
+  )
   const slices: Slice[] = [
     ...flat
       .filter((r) => r.n > 0)
       .map((r) => ({
         name: label(r, r.group),
         value: r.n,
-        color: versionColor(book, colors, r.key, r.folded),
+        color: versionColor(book, colors, slotOf, r.key, r.folded),
       })),
     ...(unknown > 0 ? [{ name: t`No answer this week`, value: unknown, color: colors.axis }] : []),
   ]
@@ -114,17 +140,12 @@ export function VersionsCard({
   const proto = (dist.protocol ?? []).filter(([k]) => k !== UNKNOWN)
   const protoTotal = total(proto)
   const overTime = versions === 'time'
-  const history = census.versions.data?.data
-  const series: Series[] = useMemo(() => {
-    if (!history) return []
-    const narrowed = keepVersions(history, 6, latest)
-    return stackShares(narrowed, book).map((s) => ({
-      key: s.key,
-      name: s.key === UNKNOWN ? t`No answer this week` : s.key,
-      color: versionColor(book, colors, s.key, undefined),
-      values: s.values,
-    }))
-  }, [history, book, colors, latest, t])
+  const series: Series[] = shares.map((s) => ({
+    key: s.key,
+    name: s.key === UNKNOWN ? t`No answer this week` : s.key,
+    color: versionColor(book, colors, slotOf, s.key, undefined),
+    values: s.values,
+  }))
 
   return (
     <Card
@@ -234,7 +255,7 @@ export function VersionsCard({
                   label: label(r, g.kind),
                   note: note(r),
                   n: r.n,
-                  color: versionColor(book, colors, r.key, r.folded),
+                  color: versionColor(book, colors, slotOf, r.key, r.folded),
                 })),
               }))}
               unknown={unknown}

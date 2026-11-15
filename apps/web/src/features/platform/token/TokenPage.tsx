@@ -2,16 +2,21 @@ import type { MessageDescriptor } from '@lingui/core'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
-import { Entity, PageFrame, PageLink, SaveButton } from '@/features/entity'
+import { useQuery } from '@tanstack/react-query'
+import { stampOf } from '@/data/envelope'
+import { sdkQueries } from '@/data/sdk/queries'
+import { PageFrame, PageLink, SaveButton } from '@/features/entity'
+import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Card, Empty, ErrorState, Hash, LinkOut, Skeleton, Tabs } from '@/ui'
+import { Amount, Card, Empty, ErrorState, LinkOut, Skeleton, Stat, Tabs } from '@/ui'
 import { BalanceTab } from './BalanceTab'
 import { ByContractForm } from './ByContractForm'
 import { DefinitionTab } from './DefinitionTab'
 import { DistributionTab } from './DistributionTab'
 import { OverviewTab } from './OverviewTab'
 import { IndexedTab } from './PeTabs'
-import { useToken, type TokenView } from './use-token'
+import { supplyOf } from './token-config'
+import { tokenAmountKind, useToken, type TokenView } from './use-token'
 
 export const TOKEN_TABS = [
   'overview',
@@ -44,7 +49,15 @@ export function TokenPage({ id, search }: { id: string; search: TokenPageSearch 
   const { net } = token
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
   const label = token.name?.singular
-  const ready = token.valid && !token.missing
+  const ready = token.valid && token.info.data !== undefined && !token.missing
+  const supply = useQuery({
+    ...sdkQueries['tokens.totalSupply'](net, { tokenId: id }),
+    enabled: ready,
+  })
+  const kind = tokenAmountKind(token)
+  const max = token.config ? supplyOf(token.config, 'maxSupply') : undefined
+  const plural =
+    token.name && token.name.plural !== token.name.singular ? token.name.plural : undefined
 
   const frame = (body: ReactNode) => (
     <PageFrame
@@ -53,16 +66,40 @@ export function TokenPage({ id, search }: { id: string; search: TokenPageSearch 
       eyebrow={t`Platform`}
       layer="platform"
       share
-      lede={
-        ready ? (
-          <span className="inline-flex flex-wrap items-center gap-2">
-            <Entity kind="token" id={id} label={label} />
-            {token.name && token.name.plural !== token.name.singular ? (
-              <span data-token-plural>{token.name.plural}</span>
-            ) : null}
-          </span>
-        ) : undefined
-      }
+      {...(token.valid
+        ? {
+            record: {
+              kind: 'token' as const,
+              id,
+              name: label,
+              facts:
+                ready && supply.data && kind ? (
+                  <>
+                    <Stat
+                      label={t`Total supply`}
+                      value={
+                        <span data-token-supply>
+                          <Amount value={supply.data.data ?? 0n} kind={kind} />
+                        </span>
+                      }
+                      note={
+                        max !== undefined ? (
+                          <>
+                            {t`Maximum`} <Amount value={max} kind={kind} />
+                          </>
+                        ) : undefined
+                      }
+                      source={stampOf(supply.data)}
+                    />
+                    {token.decimals === undefined ? null : (
+                      <Stat label={t`Decimals`} value={formatInt(token.decimals)} />
+                    )}
+                  </>
+                ) : undefined,
+            },
+          }
+        : {})}
+      lede={ready && plural ? <span data-token-plural>{plural}</span> : undefined}
       actions={
         ready ? (
           <>
@@ -113,7 +150,6 @@ export function TokenPage({ id, search }: { id: string; search: TokenPageSearch 
   }
   return frame(
     <>
-      <Hash value={id} display="wrap" />
       <div className="min-w-0">
         <Tabs
           layer="platform"

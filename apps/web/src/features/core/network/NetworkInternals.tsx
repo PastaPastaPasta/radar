@@ -7,8 +7,9 @@ import { hyQueries } from '@/data/hyphen/queries'
 import type { HyNetwork } from '@/data/hyphen/schemas'
 import { useNetwork } from '@/features/entity'
 import { formatBytes, formatInt, formatNumber, formatPercent } from '@/lib/format'
-import { Amount, Badge, Card, DataTable, Meter, Sparkline, Stat, Time } from '@/ui'
-import { formatHashrate } from '../charts/options'
+import { Amount, Badge, Card, Chart, DataTable, Meter, Stat, Time, useUnits } from '@/ui'
+import { seriesVar, useSeriesSlots } from '@/ui/series'
+import { buildOption, formatHashrate, METRICS, points, type MetricId } from '../charts/options'
 import { Difficulty } from '../hy-shared/Difficulty'
 import { cardState } from '../hy-shared/infinite-list'
 import { coreVersion, velocity, versionCounts } from './versions'
@@ -16,6 +17,41 @@ import { coreVersion, velocity, versionCounts } from './versions'
 const HISTORY = { blocks: 144, points: 48 } as const
 
 type Peer = HyNetwork['peerInfo'][number]
+
+/** The colour a masternode status draws in: a state, so a status colour and never a palette slot. */
+const STATUS_COLOR: Record<string, string> = {
+  valid: 'var(--dh-good)',
+  banned: 'var(--dh-bad)',
+}
+const OTHER_COLOR = 'var(--dh-ink-3)'
+
+interface Part {
+  id: string
+  count: number
+  color: string
+}
+
+/** One bar split by share, with the key under it: what each part is, and how many. */
+function ShareBar({ parts, of = formatInt }: { parts: Part[]; of?: (count: number) => string }) {
+  const say = (p: Part) => `${p.id}: ${of(p.count)}`
+  return (
+    <div data-share-bar>
+      <div className="rx-stack" role="img" aria-label={parts.map(say).join(', ')}>
+        {parts.map((p) => (
+          <i key={p.id} style={{ flex: p.count, background: p.color, minWidth: 4 }} />
+        ))}
+      </div>
+      <ul className="rx-legend">
+        {parts.map((p) => (
+          <li key={p.id} data-part={p.id}>
+            <span className="rx-sw" style={{ background: p.color }} />
+            {p.id} <b>{of(p.count)}</b>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 /** Hyphen's view of the chain and of the node it indexes from (HY-12). */
 export function NetworkInternals() {
@@ -32,6 +68,24 @@ export function NetworkInternals() {
   const rows = history.data?.data.value ?? []
   const pace = velocity(rows)
   const versions = useMemo(() => versionCounts(n?.peerInfo ?? []), [n])
+  const slotOf = useSeriesSlots(versions.map((v) => v.version))
+  const units = useUnits()
+  const plot = (id: MetricId, title: string, label: string, height: number) => {
+    const metric = METRICS[id]
+    const data = points(metric, rows)
+    return (
+      <Chart
+        option={buildOption(metric, data, title, units)}
+        height={height}
+        label={label}
+        loading={history.isPending}
+        table={{
+          columns: [t`Block height`, title],
+          rows: data.map((p) => [formatInt(p.height), metric.format(p.value, units)]),
+        }}
+      />
+    )
+  }
 
   const peerColumns = useMemo<ColumnDef<Peer>[]>(
     () => [
@@ -149,13 +203,14 @@ export function NetworkInternals() {
               label={t`Transactions per block`}
               value={pace ? formatNumber(pace.perBlock, { maximumFractionDigits: 1 }) : '—'}
             />
-            <Sparkline
-              values={rows.slice(1).map((r, i) => r.txCount - (rows[i]?.txCount ?? r.txCount))}
-              label={t`Transactions per bucket over the last ${formatInt(HISTORY.blocks)} blocks`}
-              layer="core"
-              width={320}
-              height={48}
-            />
+            <div data-internals-plot="transactions">
+              {plot(
+                'transactions',
+                t`Transactions`,
+                t`Transactions per bucket over the last ${formatInt(HISTORY.blocks)} blocks`,
+                150,
+              )}
+            </div>
           </div>
         </Card>
       </div>
@@ -167,36 +222,33 @@ export function NetworkInternals() {
         source={history.data ? stampOf(history.data) : undefined}
         id="history"
       >
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="grid gap-1">
-            <span className="text-sm">{t`Hash rate`}</span>
-            <Sparkline
-              values={rows.map((r) => r.hashrate)}
-              label={t`Hash rate over the last ${formatInt(HISTORY.blocks)} blocks`}
-              layer="core"
-              width={240}
-              height={48}
-            />
+        <div className="grid gap-6 lg:grid-cols-3" data-internals-history>
+          <div className="grid min-w-0 gap-1" data-internals-plot="hashrate">
+            <h3 className="rx-plot__title">{t`Hash rate`}</h3>
+            {plot(
+              'hashrate',
+              t`Hash rate`,
+              t`Hash rate over the last ${formatInt(HISTORY.blocks)} blocks`,
+              190,
+            )}
           </div>
-          <div className="grid gap-1">
-            <span className="text-sm">{t`Difficulty`}</span>
-            <Sparkline
-              values={rows.map((r) => r.difficulty)}
-              label={t`Difficulty over the last ${formatInt(HISTORY.blocks)} blocks`}
-              layer="core"
-              width={240}
-              height={48}
-            />
+          <div className="grid min-w-0 gap-1" data-internals-plot="difficulty">
+            <h3 className="rx-plot__title">{t`Difficulty`}</h3>
+            {plot(
+              'difficulty',
+              t`Difficulty`,
+              t`Difficulty over the last ${formatInt(HISTORY.blocks)} blocks`,
+              190,
+            )}
           </div>
-          <div className="grid gap-1">
-            <span className="text-sm">{t`Spendable outputs`}</span>
-            <Sparkline
-              values={rows.map((r) => r.utxosSpendable)}
-              label={t`Spendable outputs over the last ${formatInt(HISTORY.blocks)} blocks`}
-              layer="core"
-              width={240}
-              height={48}
-            />
+          <div className="grid min-w-0 gap-1" data-internals-plot="utxos">
+            <h3 className="rx-plot__title">{t`Spendable outputs`}</h3>
+            {plot(
+              'utxos',
+              t`Spendable outputs`,
+              t`Spendable outputs over the last ${formatInt(HISTORY.blocks)} blocks`,
+              190,
+            )}
           </div>
         </div>
       </Card>
@@ -219,16 +271,15 @@ export function NetworkInternals() {
                     label={kind === 'regular' ? t`Regular masternodes` : t`Evonodes`}
                     value={formatInt(n.validators[kind].total)}
                   />
-                  <ul className="grid gap-1 text-sm">
-                    {Object.entries(n.validators[kind].status)
+                  <ShareBar
+                    parts={Object.entries(n.validators[kind].status)
                       .sort((a, b) => b[1] - a[1])
-                      .map(([status, count]) => (
-                        <li key={status} className="flex justify-between gap-3">
-                          <span>{status}</span>
-                          <span className="rx-num">{formatInt(count)}</span>
-                        </li>
-                      ))}
-                  </ul>
+                      .map(([status, count]) => ({
+                        id: status,
+                        count,
+                        color: STATUS_COLOR[status] ?? OTHER_COLOR,
+                      }))}
+                  />
                 </div>
               ))}
             </div>
@@ -241,16 +292,20 @@ export function NetworkInternals() {
           source={network.data ? stampOf(network.data) : undefined}
           id="versions"
         >
-          <div className="grid gap-3" data-internals-versions>
-            {versions.map((v) => (
-              <Meter
-                key={v.version}
-                value={v.count}
-                max={Math.max(1, n?.peerInfo.length ?? 1)}
-                label={v.version}
-                format={(c) => t`${formatInt(c)} of ${formatInt(n?.peerInfo.length ?? 0)} peers`}
+          <div data-internals-versions>
+            {versions.length > 0 ? (
+              <ShareBar
+                parts={versions.map((v) => {
+                  const slot = slotOf(v.version)
+                  return {
+                    id: v.version,
+                    count: v.count,
+                    color: slot === undefined ? OTHER_COLOR : seriesVar(slot),
+                  }
+                })}
+                of={(c) => t`${formatInt(c)} of ${formatInt(n?.peerInfo.length ?? 0)} peers`}
               />
-            ))}
+            ) : null}
           </div>
         </Card>
       </div>

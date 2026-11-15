@@ -6,6 +6,7 @@ import { writeSourceMode } from '@/lib/source-mode'
 import { renderAt } from '../identity/test-utils'
 
 const TOKEN = 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB'
+const ABSENT = '7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds'
 const HOLDER = '3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh'
 const OTHER = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 const TESTNET_PADDR = 'tdash1kpgz9hk6tkn5zj3653s8qkjmk9439qkf0gt229dv'
@@ -34,6 +35,13 @@ describe('Token page @NX-30', () => {
     renderAt('/token/not-a-token')
     expect(await screen.findByText('That isn’t a token ID.')).toBeInTheDocument()
     expect(asked(call)).toEqual([])
+  })
+
+  it('asks for no supply of a token that is not there @NX-30', async () => {
+    const call = vi.spyOn(sdk, 'call')
+    renderAt(`/token/${ABSENT}`)
+    expect(await screen.findByText('No token with this ID on mainnet.')).toBeInTheDocument()
+    expect(asked(call).map(([method]) => method)).not.toContain('tokens.totalSupply')
   })
 
   it('reads the rules from the contract on the definition tab @NX-31', async () => {

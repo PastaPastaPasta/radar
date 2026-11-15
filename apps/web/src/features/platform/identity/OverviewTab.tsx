@@ -6,7 +6,7 @@ import { peQueries } from '@/data/pe/queries'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, KeyValue, Unavailable } from '@/ui'
+import { Card, KeyValue, Unavailable } from '@/ui'
 import { loadState, nameLabel, type IdentityTabProps } from './common'
 
 export const NAMES_LIMIT = 100
@@ -29,10 +29,9 @@ export function OverviewTab({ id }: IdentityTabProps) {
   ) : indexed.isError ? (
     t`Platform Explorer isn’t answering`
   ) : (
-    t`Not indexed`
+    t`Platform Explorer has no record of it`
   )
 
-  const b = balance.data
   return (
     <Card
       title={t`Summary`}
@@ -45,23 +44,6 @@ export function OverviewTab({ id }: IdentityTabProps) {
       <KeyValue
         columns={2}
         items={[
-          {
-            label: t`Balance`,
-            value: b?.data ? (
-              <span data-field="balance">
-                <Amount value={b.data.balance} kind="credits" fiat />
-              </span>
-            ) : (
-              '—'
-            ),
-            source: b ? stampOf(b) : undefined,
-            hint: b?.data ? t`${formatInt(b.data.balance)} credits` : undefined,
-          },
-          {
-            label: t`Revision`,
-            value: b?.data ? formatInt(b.data.revision) : '—',
-            source: b ? stampOf(b) : undefined,
-          },
           {
             label: t`Nonce`,
             value: nonce.isPending

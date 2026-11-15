@@ -31,7 +31,7 @@ export function UnitSwitch({ className }: { className?: string }) {
       >
         {DISPLAY_UNITS.map((u) => (
           <option key={u} value={u}>
-            {unitLabel(u)}
+            {unitLabel(u, net !== 'mainnet')}
           </option>
         ))}
         <option value="USD" disabled={!priced}>

@@ -205,6 +205,15 @@
   background: var(--dh-surface);
   box-shadow: var(--dh-shadow-pop);
 }
+/* a proof-checked row of a key-value list holds its own mark the same way */
+.rx-kv dd[data-src-hover] {
+  position: relative;
+}
+.rx-kv dd[data-src-hover]:focus-visible {
+  outline: var(--dh-ring-w) solid var(--dh-focus);
+  outline-offset: 2px;
+  border-radius: var(--dh-r1);
+}
 /* On a phone a figure's popover wraps inside a width that fits between the screen's edges, and opens leftwards from
    a figure in the right-hand column, so it never widens the page. */
 @media (max-width: 640px) {

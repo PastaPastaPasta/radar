@@ -9,8 +9,15 @@ import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import type { EChartsOption } from 'echarts'
 import { useEffect, useRef } from 'react'
-import { radarChartTheme, readChartTokens, withChartMotion, withEdgeRoom } from './chart-theme'
+import {
+  radarChartTheme,
+  readChartTokens,
+  seriesColors,
+  withChartMotion,
+  withEdgeRoom,
+} from './chart-theme'
 import { useReducedMotion, useThemeSignal } from './hooks'
+import { withSeriesColors, withTokenColors } from './series'
 
 echarts.use([
   BarChart,
@@ -23,6 +30,20 @@ echarts.use([
   CanvasRenderer,
 ])
 
+/** The option as the canvas takes it: tokens resolved where the chart stands, palette slots given, room at the edges. */
+function drawn(
+  option: EChartsOption,
+  still: boolean,
+  el: Element | null,
+  slots: readonly string[],
+): EChartsOption {
+  const read = (name: string) => (el ? getComputedStyle(el).getPropertyValue(name).trim() : '')
+  return withChartMotion(
+    withEdgeRoom(withSeriesColors(withTokenColors(option, read), slots)),
+    still,
+  )
+}
+
 export default function ChartView({ option, group }: { option: EChartsOption; group?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const chartRef = useRef<echarts.ECharts | null>(null)
@@ -30,20 +51,23 @@ export default function ChartView({ option, group }: { option: EChartsOption; gr
   const reduced = useReducedMotion()
   const reducedRef = useRef(reduced)
   const theme = useThemeSignal()
+  const slotsRef = useRef<string[]>([])
 
   useEffect(() => {
     optionRef.current = option
     reducedRef.current = reduced
-    chartRef.current?.setOption(withChartMotion(withEdgeRoom(option), reduced), true)
+    chartRef.current?.setOption(drawn(option, reduced, ref.current, slotsRef.current), true)
   }, [option, reduced])
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    echarts.registerTheme('radar', radarChartTheme(readChartTokens(el)))
+    const tokens = readChartTokens(el)
+    slotsRef.current = seriesColors(tokens)
+    echarts.registerTheme('radar', radarChartTheme(tokens))
     const chart = echarts.init(el, 'radar', { renderer: 'canvas' })
     chartRef.current = chart
-    chart.setOption(withChartMotion(withEdgeRoom(optionRef.current), reducedRef.current))
+    chart.setOption(drawn(optionRef.current, reducedRef.current, el, slotsRef.current))
     if (group) {
       chart.group = group
       echarts.connect(group)

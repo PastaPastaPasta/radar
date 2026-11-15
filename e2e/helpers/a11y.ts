@@ -33,6 +33,23 @@ const isAccepted = (rule: string, target: unknown[]) =>
     (a) => a.rule === rule && JSON.stringify(a.target) === JSON.stringify(target.flat()),
   )
 
+interface AuditedNode {
+  any: { id: string; data?: unknown; relatedNodes?: { target: unknown[] }[] }[]
+}
+
+/**
+ * A target that is large enough but has scrolled part-way under the shell's sticky bar: axe measures
+ * what the bar's buttons leave of it. That is a scroll position, not the size of the target.
+ */
+const coveredByShellBar = (rule: string, node: AuditedNode) =>
+  rule === 'target-size' &&
+  node.any.some(
+    (check) =>
+      (check.data as { messageKey?: string } | null)?.messageKey === 'partiallyObscured' &&
+      !!check.relatedNodes?.length &&
+      check.relatedNodes.every((r) => r.target.flat()[0] === 'dashhq-bar'),
+  )
+
 /**
  * A figure that rolls in and a row that enters are part-transparent while they move, so an audit
  * taken mid-move reports a contrast the reader never sees. Looping animations are left running.
@@ -74,7 +91,10 @@ export async function expectAccessible(page: Page, options: AccessibleOptions = 
     .finally(() => page.emulateMedia({ reducedMotion: null }))
   const blocking = violations
     .filter((v) => v.impact && BLOCKING.has(v.impact))
-    .map((v) => ({ ...v, nodes: v.nodes.filter((n) => !isAccepted(v.id, n.target)) }))
+    .map((v) => ({
+      ...v,
+      nodes: v.nodes.filter((n) => !isAccepted(v.id, n.target) && !coveredByShellBar(v.id, n)),
+    }))
     .filter((v) => v.nodes.length > 0)
     .map((v) => ({
       rule: v.id,

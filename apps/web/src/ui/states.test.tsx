@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { healthRegistry } from '@/data/health'
 import { Card } from './layout'
+import { resetLiveConnection, setLiveConnection } from './live-connection'
 import { registerProofInspector } from './proof'
 import { Empty, ErrorState, LiveControl, LiveDot, Skeleton, SourceLine } from './states'
 import { NOW, stamp } from './test-utils'
@@ -58,7 +59,7 @@ describe('SourceLine', () => {
 
   it('goes orange when the figure is older than its source allows', () => {
     const { container } = render(
-      <SourceLine stamp={stamp({ source: 'pe', asOf: NOW - 6 * 60_000 })} compact />,
+      <SourceLine stamp={stamp({ source: 'pe', asOf: NOW - 11 * 60_000 })} compact />,
     )
     expect(container.querySelector('.rx-src--stale')).not.toBeNull()
     expect(screen.getByText('(out of date)')).toBeInTheDocument()
@@ -97,15 +98,59 @@ describe('SourceLine', () => {
     expect(screen.getByText(/Crawled by Radar/)).toBeInTheDocument()
   })
 
-  it('does not claim a crawl for a Radar answer that carries no time', () => {
-    render(
+  it('gives no crawl age to a Radar answer that carries no time @X-01', () => {
+    const { container } = render(
       <SourceLine
         stamp={stamp({ source: 'radar', asOf: NOW - 2000, asOfFetched: true })}
         compact
       />,
     )
-    expect(screen.getByText(/Fetched from Radar/)).toHaveTextContent('2 s ago')
-    expect(screen.queryByText(/Crawled/)).not.toBeInTheDocument()
+    expect(screen.getByText(/Crawled by Radar/)).toBeInTheDocument()
+    expect(container.querySelector('time')).toBeNull()
+    expect(screen.queryByText(/Fetched/)).not.toBeInTheDocument()
+  })
+
+  it('does not call a proof two minutes old out of date @X-05', () => {
+    const proof = { kind: 'identity', height: 12 } as never
+    const { container } = render(
+      <SourceLine
+        stamp={stamp({
+          source: 'sdk',
+          proved: true,
+          proof,
+          asOf: NOW - 2 * 60_000,
+          staleAfterMs: 60_000,
+        })}
+        compact
+      />,
+    )
+    expect(screen.getByRole('button', { name: /Proof-checked/ })).toHaveTextContent('2 min ago')
+    expect(container.querySelector('.rx-src--stale')).toBeNull()
+    expect(screen.queryByText('(out of date)')).toBeNull()
+  })
+
+  it('says in the line how far behind an index is @X-05', () => {
+    healthRegistry.setLag('mainnet', 'hyphen', {
+      blocks: 4,
+      ms: 9 * 60_000,
+      detail: 'indexed to block 2,570,010 (9 minutes behind)',
+    })
+    render(<SourceLine stamp={stamp({ source: 'hyphen', asOf: NOW - 8000 })} compact />)
+    const mark = screen.getByText(/Indexed by Hyphen/)
+    expect(mark).toHaveTextContent('indexed to block 2,570,010 (9 minutes behind)')
+    expect(mark).not.toHaveTextContent('8 s ago')
+    healthRegistry.setLag('mainnet', 'hyphen', undefined)
+  })
+
+  it('keeps a pushed figure’s age counting after live updates stop @X-05', () => {
+    setLiveConnection({ state: 'stopped', lastEventAt: NOW - 3 * 60_000 })
+    render(<SourceLine stamp={stamp({ source: 'dapi', asOf: NOW - 1000 })} compact />)
+    expect(screen.getByText(/Served by DAPI/)).toHaveTextContent('3 min ago')
+    act(() => {
+      vi.advanceTimersByTime(2 * 60_000)
+    })
+    expect(screen.getByText(/Served by DAPI/)).toHaveTextContent('5 min ago')
+    resetLiveConnection()
   })
 
   it('reads as one plain line when not compact', () => {

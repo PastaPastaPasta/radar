@@ -6,7 +6,19 @@ import { sdkQueries } from '@/data/sdk/queries'
 import type { DocumentDto } from '@/data/sdk/methods'
 import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
-import { Badge, Card, Empty, Hash, JsonView, KeyValue, LinkOut, Skeleton, Tabs, Time } from '@/ui'
+import {
+  Badge,
+  Card,
+  Empty,
+  Hash,
+  JsonView,
+  KeyValue,
+  LinkOut,
+  Skeleton,
+  Stat,
+  Tabs,
+  Time,
+} from '@/ui'
 import { typeKeepsHistory, useContract } from '../contract/contract-data'
 import { SdkGate } from '../contract/SdkGate'
 import { ProvenanceTab } from './ProvenanceTab'
@@ -50,7 +62,22 @@ export function DocumentPage({ contract, type, id, search }: DocumentPageProps) 
       eyebrow={t`Platform`}
       layer="platform"
       share
-      lede={<span className="font-mono">{type}</span>}
+      {...(valid
+        ? {
+            record: {
+              kind: 'document' as const,
+              id,
+              facts: (
+                <>
+                  <Stat label={t`Type`} value={<span className="font-mono">{type}</span>} />
+                  {data && data.revision !== null ? (
+                    <Stat label={t`Revision`} value={String(data.revision)} />
+                  ) : null}
+                </>
+              ),
+            },
+          }
+        : {})}
       actions={
         <LinkOut
           to={{ app: 'pe', path: `/document/${id}`, net }}
@@ -134,11 +161,8 @@ function Loaded({
         <KeyValue
           columns={2}
           items={[
-            { label: t`ID`, value: <Hash value={ctx.id} display="wrap" /> },
-            { label: t`Type`, value: <span className="font-mono">{ctx.type}</span> },
             { label: t`Contract`, value: <Entity kind="contract" id={ctx.contract} /> },
             { label: t`Owner`, value: <IdentityRef id={doc.ownerId} /> },
-            ...(doc.revision === null ? [] : [{ label: t`Revision`, value: String(doc.revision) }]),
           ]}
         />
       </Card>

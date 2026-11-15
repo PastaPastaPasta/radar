@@ -1,7 +1,8 @@
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { notifyLabelsChanged, registerLabelOverlay } from '@/lib/well-known'
 import { resetAnnouncer } from '@/ui/announce'
 import { PageFrame, usePageClaim } from './PageFrame'
 import { renderInApp } from './test-utils'
@@ -126,6 +127,84 @@ describe('PageFrame', () => {
     })
     await waitFor(() => {
       expect(document.getElementById('rx-announcer')).toHaveTextContent('Link copied')
+    })
+  })
+
+  describe('a page about one entity', () => {
+    const ID = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
+    const frame = (name?: string) => (
+      <PageFrame
+        path="/identity/$id"
+        title="Identity"
+        layer="platform"
+        share
+        record={{ kind: 'identity', id: ID, name, facts: <span data-fact>10 DASH</span> }}
+      >
+        <p>body</p>
+      </PageFrame>
+    )
+
+    it('names the entity in its headline and the tab title @X-10', async () => {
+      await renderInApp(frame('pshenmic.dash'))
+      expect(screen.getByRole('heading', { level: 1, name: 'pshenmic.dash' })).toBeInTheDocument()
+      await waitFor(() => {
+        expect(document.title).toBe('pshenmic.dash · Radar')
+      })
+      const band = document.querySelector<HTMLElement>('[data-record="identity"]')!
+      expect(band).toHaveClass('rx-band')
+      expect(band).toHaveAttribute('data-layer', 'platform')
+      expect(band.querySelector('[data-record-kind]')).toHaveTextContent('Identity')
+      expect(band.querySelector('[data-art="identicon"]')).not.toBeNull()
+      expect(band.querySelector('[data-record-id]')).toHaveTextContent(ID.slice(0, 8))
+      expect(band.querySelector('[data-record-facts] [data-fact]')).toHaveTextContent('10 DASH')
+      expect(screen.getByRole('button', { name: 'Copy link' })).toBeInTheDocument()
+    })
+
+    it('falls back to the kind and the short ID, never an empty or bare headline @X-10', async () => {
+      await renderInApp(frame())
+      expect(
+        screen.getByRole('heading', { level: 1, name: 'Identity BjixEUbq…riiYqp' }),
+      ).toBeInTheDocument()
+      await waitFor(() => {
+        expect(document.title).toBe('Identity BjixEUbq…riiYqp · Radar')
+      })
+    })
+
+    it('puts the reader’s own name for it first, and follows it when it changes @NX-74', async () => {
+      let own: string | undefined = 'My savings'
+      const remove = registerLabelOverlay((_net, kind, id) =>
+        kind === 'identity' && id === ID ? own : undefined,
+      )
+      await renderInApp(frame('pshenmic.dash'))
+      expect(screen.getByRole('heading', { level: 1, name: 'My savings' })).toBeInTheDocument()
+      await waitFor(() => {
+        expect(document.title).toBe('My savings · Radar')
+      })
+      own = undefined
+      act(() => {
+        notifyLabelsChanged()
+      })
+      expect(screen.getByRole('heading', { level: 1, name: 'pshenmic.dash' })).toBeInTheDocument()
+      remove()
+    })
+
+    it('draws a kind glyph for a record without a face, and a name page without an ID', async () => {
+      await renderInApp(
+        <PageFrame
+          path="/name/$label"
+          title="Name"
+          layer="platform"
+          record={{ kind: 'name', name: 'reza.dash' }}
+        >
+          <p>body</p>
+        </PageFrame>,
+        '/?network=testnet',
+      )
+      expect(screen.getByRole('heading', { level: 1, name: 'reza.dash' })).toBeInTheDocument()
+      const band = document.querySelector<HTMLElement>('[data-record="name"]')!
+      expect(band.querySelector('.rx-tile')).not.toBeNull()
+      expect(band.querySelector('[data-record-id]')).toBeNull()
+      expect(band.querySelector('[data-record-kind]')).toHaveTextContent('Username · Testnet')
     })
   })
 })

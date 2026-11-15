@@ -1,11 +1,13 @@
 import { perNet } from './fixtures'
-import type { RouteCase } from './types'
+import { recordH1, type RouteCase } from './types'
 
 /** A holder of each network's review token (`scripts/sdk-fixture-picks.json`), whose balance is recorded. */
 export const TOKEN_HOLDER = {
   mainnet: '3NQNyo6DAtXxdWjG4pKxyi51yis9k19UgbtYxZSmFrAh',
   testnet: '8eTDkBhpQjHeqgbVeriwLeZr1tCa6yBGw76SckvD1cwc',
 } as const
+
+const TOKEN = recordH1('Token')
 
 export const pToken: RouteCase[] = [
   {
@@ -21,36 +23,36 @@ export const pToken: RouteCase[] = [
     return [
       {
         path: `/token/${token}`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'partial',
         data: '[data-token-supply]',
       },
       {
         path: `/token/${token}?tab=definition`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'data',
         data: '#token-rules',
       },
       {
         path: `/token/${token}?tab=distribution`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'data',
         data: '#token-distribution',
       },
       {
         path: `/token/${token}?tab=balance&who=${holder}`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'data',
         data: '[data-field="token-balance"]',
       },
       {
         path: `/token/${token}?tab=activity`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'unavailable',
       },
       {
         path: `/token/${token}?tab=holders`,
-        h1: 'Token',
+        h1: TOKEN,
         decentralized: 'unavailable',
       },
       {

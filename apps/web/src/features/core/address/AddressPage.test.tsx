@@ -223,7 +223,12 @@ describe('Address page', () => {
 
   it('shows the balance, totals and counts from Hyphen @IN-06 @HY-08', async () => {
     renderAt(`/address/${ADDRESS}`)
-    expect(await screen.findByRole('heading', { level: 1, name: 'Address' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Address XnT33zjr…3WVj14' }),
+    ).toBeInTheDocument()
+    const band = document.querySelector<HTMLElement>('[data-record="address"]')!
+    expect(band).toHaveAttribute('data-layer', 'core')
+    expect(band.querySelector('[data-record-id] [data-copy]')).toHaveAttribute('data-copy', ADDRESS)
     const summary = await waitFor(() => {
       const el = document.querySelector('[data-address-summary]')
       expect(el).toHaveTextContent('992,908')

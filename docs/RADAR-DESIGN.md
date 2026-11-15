@@ -168,14 +168,29 @@ A **type badge takes the layer the type touches**, not the chain it is recorded 
 
 - **Single series:** the layer line colour (`--rx-l`). Platform bars use `--rx-plat-line` in light (`#1E9586`, 3.7:1 on white); `--rx-plat` (`#25B8A6`) is only for fills that carry text in `--rx-plat-ink` or for marks on the plate.
 - **Core charts** (`/charts`): every chart is drawn in the Core line colour (`--rx-core-line`, at least 3:1 on the page ground in both themes). Each chart has its own title and axis, so a hue per chart told the reader nothing and put six colours on one page. The chart's wrapper sets `--rx-l`.
-- **Ordered series** (versions, ranks): the family blue ramp `--dh-ramp-1…5`, newest/most first, then `--dh-line-2` for "Other".
-- **Platform ordered series:** teal ramp `--rx-teal-1…5` (`#0B6B60 #1E9586 #25B8A6 #7FD6CA #BDEBE4`; reversed in dark).
+- **Named series** (versions, providers, countries, anything with a legend): six categorical slots, `--rx-s1…6`, chosen per theme and checked with the palette validator on both grounds (adjacent slots at least ΔE 8 apart under colour-vision deficiency and ΔE 15 in full colour; each at least 3:1 on the page and on a raised band).
+
+  | Slot | Hue | Light | Dark |
+  |---|---|---|---|
+  | 1 | blue | `#008de4` | `#1a9cf0` |
+  | 2 | orange | `#d95926` | `#d95926` |
+  | 3 | teal | `#1e9586` | `#1ea898` |
+  | 4 | ochre | `#bd7f00` | `#c98500` |
+  | 5 | rose | `#d55181` | `#d55181` |
+  | 6 | moss | `#6b8e00` | `#7a9a22` |
+
+  - `--rx-series-1…6` is the order a chart uses. It is slots 1–6, except inside `[data-layer='platform']`, where teal leads and blue takes the third place.
+  - **A key keeps its slot.** `SeriesSlots` (`ui/series.ts`, `useSeriesSlots`) gives each key the first free slot and holds it for as long as the key is on the page: a filter or a new crawl that changes the ranking never repaints a version. A seventh key gets no slot; it folds into "Other" in `--dh-ink-3`.
+  - **Two or more named series always have a legend** (`.rx-legend`, HTML under the chart, swatch and name in ink). `Chart` draws it from the series names; a single series has none, because the title names it.
+  - No green and no violet among the slots: green means "good" (§4.5) and violet is outside the family. Slot 3 is the nearest to status green, so a slot colour and a status colour never share one bar; a chart is either categorical or a status chart.
+- **Status in a chart** takes the status tokens by name (`itemStyle: { color: 'var(--dh-good)' }`); `withTokenColors` resolves them when the chart is drawn, so a donut and the tiles beside it are the same colours in both themes (governance: funded good, passing brand blue, not passing warn).
+- **Ramps** (`--dh-ramp-1…5`, `--rx-teal-1…5`) are for magnitude only: a heatmap, a choropleth, a density. They never tell named series apart.
 - **Heatmaps** (activity calendar): `--rx-cal-1…3`, each at least 3:1 against the empty cell: light `#1E9586 #0B6B60 #06403A`, dark `#1E9586 #5FD9C7 #BDEBE4`.
 - **Comparison band** ("middle 80% of evonodes"): the layer fill at 18% opacity behind the bars.
 - **Status in data** (answering / no answer / banned; uptime cells): `--dh-good`, `--dh-warn`, `--dh-bad` with a legend that names them.
 - **Fee** is `--dh-warn` in the value-flow chart; change is `--dh-line-2`.
-- Never more than five hues in one chart, and one hue per page of single-series charts. No purple, indigo, magenta, gradients or neon.
-- **One accent plus meaning.** A page's colour is its layer hue (section keylines, chart marks, the current tab), link blue, and the three status colours where a figure is a status. Nothing else is coloured: figures, card titles and table heads are ink.
+- Never more than six hues in one chart, and one hue per page of single-series charts. No purple, indigo, magenta, gradients or neon.
+- **One accent plus meaning.** A page's colour is its layer hue (section keylines, chart marks, the current tab), link blue, and the three status colours where a figure is a status. Data may add the categorical slots, inside a chart or a share bar and its legend only. Nothing else is coloured: figures, card titles and table heads are ink.
 
 ### 4.4 Identicons and nodeprints
 
@@ -251,6 +266,16 @@ Band padding 28 px top, 32 px bottom; 1 px `--dh-line` bottom edge (none on the 
 
 **Record header** (`.rx-rec`): glyph (60–64 px identicon, nodeprint or tile) | kicker (type badge + context line) | title under the kicker, in the second column whether or not the header has actions (30 px; mono for hashes, the port of an IP:port in `--dh-ink-2`) | actions on the right (link-outs, copy link, save) | full ID with copy | status badges and `SourceLine`s. Then the KPI row: 5 stats (4 on tx), 12 px gap, the first one `--big` with the layer keyline.
 
+**Every page about one entity opens with this header.** `PageFrame` takes `record={{ kind, id, name, noun, facts }}` and draws the band in place of the plain page head, so identity, contract, token, name, document and address pages belong to the block and transaction family:
+
+- **Ground:** the layer's soft colour, the width of the window, 1 px `--dh-line` under it. Its content keeps the page column.
+- **Glyph:** an identity shows its identicon on a 60 px surface tile; every other kind shows the layer tile with the kind's glyph.
+- **Kicker:** the kind in the layer text colour ("Identity", "Data contract", "Token"), then the network off mainnet.
+- **`h1` and document title name the entity, never the kind alone and never empty.** In order: the name the reader gave it in Settings or a well-known label, the entity's own name (`pshenmic.dash`, a token's name, a contract's known name), then the kind with a short ID ("Identity BjixEUbq…MriiYqp", "Address XnT33zjr…3WVj14"). The `.dash` of a name is `--dh-ink-2`.
+- **Full ID** with copy under the title, then the page's one source line.
+- **Facts:** two to four stats in the KPI row, each figure stated here and nowhere else on the page (identity: balance and revision; contract: version, document types, tokens, groups; token: total supply and decimals; document: type and revision). On a phone an amount takes the whole row.
+- **Proof per figure:** a proof-checked figure keeps its own mark in its popover (hover, focus or tap), in a key-value row as in a stat, so a line that mixes proved and unproved reads never leaves a figure unaccounted for.
+
 ### 5.2 Zones and sections
 
 A **`SectionBand`** is a full-width zone in its layer's soft ground (`--rx-l-soft`, 1 px rules top and bottom, 40 px top padding) with a ruled section head. Record pages and the home page use plain sections on the page ground instead; the home's two (Dash Core, Dash Platform) are separated by a 1 px rule (§1.1).
@@ -258,6 +283,13 @@ A **`SectionBand`** is a full-width zone in its layer's soft ground (`--rx-l-sof
 A **section head** is the family ruled head: 4 px rounded keyline in the layer line colour to the left of a 21 px title, actions ("All 2,997 masternodes →") right-aligned. A hidden copy-link icon appears on hover/focus of the head.
 
 **`Section`** (`ui/layout.tsx`) is how a page is divided. It is a 1 px rule across the page, 30 px of air, the section head, an optional lede (one or two sentences, 16 px `--dh-ink-2`, 760 px at most), **the section's one source line**, then the body 18 px below. The section collects the stamps of everything inside it (cards, stats, key-value rows, tables) and names each source once in that line; stamps passed as `source` speak for their sources ahead of what the parts report. `Card level="section"` gives a card the same ruled head and lede for a page whose sections are single cards; it does not start a line of its own, so a page whose sections all read one source says so once, under the page title.
+
+**Section grounds.** A long page is not one column on one ground. The blocks directly under a `PageFrame` (kit `Section`s, `Card`s, or a row of section cards) alternate: the first stands on the page ground, the second on a raised band (`--dh-surface`), and so on down the page. A band runs the width of the window while its content keeps the page column; it has 28 px of air above and below (20 px on a phone), and no border, radius or shadow: the change of ground is the rule, so neither the band nor the section after it draws the 1 px rule. Sticky table cells and scroll fades inside a band read `--rx-ground`, which the band sets.
+
+- `ground="band"` or `ground="page"` on `Card` or `Section` fixes a block's ground where the alternation would be wrong (a note or a control row that should not be raised).
+- `ground="layer"` puts a block about another layer than its page on that layer's soft ground (an Evonode Platform block on a Network page).
+- A container that is not a `PageFrame` joins the rule with `data-grounds` (a tab panel that stacks cards).
+- Bands are grounds, never boxes: a block is never given a border or a card fill to set it apart (§5.3).
 
 **Page head** (`PageFrame`, `.rx-page__head`): `h1`, a lede of at most 760 px, then the page's source line for everything outside a `Section`. Pages are a single column of sections with 12–20 px between blocks (`.rx-pile`); two blocks sit side by side from 1024 px with 48 px between them in place of borders (`.rx-cols`, `--3`, `--lead`).
 
@@ -280,7 +312,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - **The name is the fallback.** Until the data arrives, when its source is down, and where Decentralized only mode leaves the data out, the `h1` is the page's name. Never an empty `h1`, a skeleton or a sentence with a blank in it. A claim is `undefined` until every number in it is known.
 - **No eyebrow where the rail shows the section.** `PageFrame` leaves out an `eyebrow` that only repeats the page's section ("Network", "Core", "Platform", "Tools"), because the section rail right above the head already says it. An eyebrow that says something else (a record's kind, "Search") is drawn. The network off mainnet is the testnet frame's job (§10).
 - **The figure in the headline is not repeated** in the stats or cards below (§5.4). The epoch clock under an epoch headline draws its track, dates and end only (`EpochClock bare`); `/mempool` has no "Transactions" stat; `/nodes` and `/blocks` do not print the Core height the bar already shows.
-- **Record pages keep the record header** (§5.1): one block, one identity, one masternode is named by what it is.
+- **Record pages keep the record header** (§5.1): one block, one identity, one masternode is named by what it is, and its `h1` is that name, not a claim.
 - A test that opens such a page matches either form (`e2e/routes/claims.ts`: `H1` for name-or-claim, `CLAIM` for the sentence alone).
 
 ### 5.3 Card
@@ -292,6 +324,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 - Body: no padding. Tables and lists run the full width of the block.
 - Foot: 12 px above, no rule, 13 px `--dh-ink-2`; "All … →" link at the right.
 - `layer` sets `data-layer`, which tints the table flash and focus row.
+- `ground` (`band`, `page`, `layer`) names the ground the block stands on (§5.2); without it a block directly on a page takes its turn in the alternation.
 - States: loading → `Skeleton` blocks in the body; empty → `Empty` in the body; error → `ErrorState` in the body; source down → body at 74% opacity and greyscale with the down message on top and the last-good age (§6.13).
 
 ### 5.4 Composition rules
@@ -348,10 +381,12 @@ Mono, `--dh-ink`. `short`: 6…4 with the ellipsis in `--dh-ink-2`. `full`: one 
 ### 6.5 `Amount` and `Time`
 
 - `Amount` default unit DASH. Eight decimals in tables (last four dimmed, §3), four decimals in stats and prose ("50.0061 DASH"). `duffs` for fees under 0.0001 DASH ("666 duffs"). Credits show as DASH with the credit count in the note ("10.1333 DASH · 1,013,331,591,984 credits"). `mDASH` for Platform fees ("0.7460 mDASH").
+- Every USD estimate is three significant figures, zeros included ("≈ $5.00", "≈ $477", "≈ $2,310"), so one amount never reads more precisely in one place than in another. Credits get the same estimate as DASH: a credit amount's `title` reads "1,013,248,617,912 credits ≈ $477" on mainnet.
+- The unit menu names the coin of the network: `tDASH`, `tmDASH`, `tµDASH` off mainnet.
 - `fiat`: "≈ $2,310" in the note, mainnet only. When the reader chooses USD as the unit (mainnet, rate in) the figure leads instead: "≈ $2,310 (50.0061 DASH)", the DASH amount in parentheses and `signed` giving "≈ +$…"; the footer says "USD at ≈ $47.1 per DASH, from <provider>." with the rate's source line, and charts keep their DASH axes.
 - `signed`: "+1.3916" in `--dh-good`, "−0.5" in ink (outflows are not errors).
 - `compact`: "1.2k DASH", "12.66 M DASH" (supply). Use it in tiles where the exact value is one click away; stats on record pages stay exact ("36,921 DASH").
-- `Time` `mode="both"`: "14:28 UTC · 2 min ago". Relative: "21 s", "8 min", "2 h", "yesterday", then "6 Nov". Absolute: "14:28 UTC" or "10 Nov 2026, 14:28 UTC". Relative values tick every 10 s when `live`. A `title` always carries the full UTC time.
+- `Time` `mode="both"`: "14:28 UTC · 2 min ago". Once the relative form is itself a date (two days old or more, or a day or more ahead) only the absolute time is drawn, so a date is never printed twice ("19 Jan 2014, 01:40 UTC", not "… · 19 Jan 2014"). Relative: "21 s", "8 min", "2 h", "yesterday", then "6 Nov". Absolute: "14:28 UTC" or "10 Nov 2026, 14:28 UTC". Relative values tick every 10 s when `live`. A `title` always carries the full UTC time.
 
 ### 6.6 `Badge` and `TypeBadge`
 
@@ -404,11 +439,13 @@ Masternode card: nodeprint + IP:port + type tag | Answering; version | country +
 
 **The masternode list at 1440 px** is one dense table of twelve columns, in the old page's order: ProTx, address, country, hosting, version, protocol, status, uptime 7d, uptime 30d, last paid (age, with the blocks since), registered (height and age) and PoSe. Above it sit one row with the status mix (legend and stack bar) and one row of filters (type, search, status, version, country, hosting, columns, export), so the first row is on the first screen. The page shows 100 rows a page. In Decentralized only mode the crawl's columns are left out, with one notice. The ProTx cell keeps 7.25 rem so the hash reads as `00ae93…0633`; city and hosting give way first (`.rx-clip`). At 1024 px the table scrolls inside its block. On a phone the head reads claim, paragraph, source line, and only then the view switch and the buttons.
 
+**Proposals** (`/governance`, `.rx-proptable`): the name cell starts 14 px in from the status edge, so the 3 px edge never cuts the first letter. On a phone each proposal is a card: the name and its status on the first line, the amount and the end date on the second, the status edge down the left; the vote columns are left to the proposal's own page and nothing scrolls sideways.
+
 `phone="scroll"` (wide numeric tables such as rich lists and epoch history): the table keeps its columns and scrolls sideways inside its own block (never the page), the first column sticky on the page ground with a 1 px right rule, and a 24 px fade on the scrolling edge.
 
 ### 6.8 `Tabs`
 
-Links, not buttons. 44 px high, 22 px gap, 14 px weight 520 `--dh-ink-2`; current tab ink weight 620 with a 3 px layer keyline on the bottom edge (rounded top corners). Counts: 18 px pill, 11 px 600, `--dh-chip`. Scrolls horizontally on overflow with no visible scrollbar; the current tab scrolls into view. A `disabled` tab is `--dh-ink-3`, not focusable, with its reason in a `title` ("No tokens on this identity"). Focus is a 2 px inset ring (the row clips outlines). The tab bar is sticky under the bar on record pages, on the page ground with a 1 px rule.
+Links, not buttons. 44 px high, 22 px gap, 14 px weight 520 `--dh-ink-2`; current tab ink weight 620 with a 3 px layer keyline on the bottom edge (rounded top corners). Counts: 18 px pill, 11 px 600, `--dh-chip`. Scrolls horizontally on overflow with no visible scrollbar. The current tab is brought into view inside the bar only (the page does not move), and a side with more tabs fades out over 36 px (`data-more-start`, `data-more-end`), so a cut label reads as "more this way", not as a clipped word. A `disabled` tab is `--dh-ink-3`, not focusable, with its reason in a `title` ("No tokens on this identity"). Focus is a 2 px inset ring (the row clips outlines). The tab bar is sticky under the bar on record pages, on the page ground with a 1 px rule.
 
 ### 6.9 `SourceLine` and `LiveDot`
 
@@ -428,7 +465,7 @@ Compact mark (the family source tag): 20 px min height, 1 × 6 px padding, 1 px 
 
 ARCHITECTURE.md lists a glyph only for Proof-checked; the glyphs above are part of the look and every mark keeps its words, so the glyph never carries meaning alone.
 
-Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime × 4 the text turns `--dh-warn` and the border becomes dashed in the same colour (`--stale`). When the source is down: `--dh-bad` text, dashed bad border, "isn't answering · last good 4 min ago" (`--down`). Joined sources render one mark per source. Examples of every state: the States section of `mockups/index.html`.
+Age follows after a middle dot ("· 12 s ago"). The mark turns `--dh-warn` with a dashed border in the same colour (`--stale`) only when the source is past its own limit: its health says stale or degraded, DAPI is unreachable, or its age has passed both the stamp's own limit and a floor of 10 minutes (30 for a crawl). A read that is a few minutes old is quiet ink. When the source is down: `--dh-bad` text, dashed bad border, "isn't answering · last good 4 min ago" (`--down`). Joined sources render one mark per source. Examples of every state: the States section of `mockups/index.html`.
 
 **How many, and how loud (the density rule).**
 
@@ -440,6 +477,8 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 - **Dialogs, hover cards and sheets start no line and join none.** Their content is wrapped in `NoSourceSection`, so a mark inside one is drawn where it is read and never lands on the line of the page behind it.
 - **A search hit** hands an unproved stamp to its group's line; a proof-checked hit keeps its mark on the row, because the proof belongs to that one record.
 - **No figure twice.** A value is stated once per page, where it matters most.
+- **The line says the data's age, not the request's.** An index that trails its chain by two blocks or more (or five minutes, where it gives no block count) shows that lag where the age would be ("Indexed by Hyphen · indexed to block 2,571,148 (9 minutes behind)"). While the live connection is stopped, a DAPI stamp ages from the last live event, so the line does not restart at "0 s ago" on every poll. A crawl stamp that only knows when it was fetched reads "Crawled by Radar" with no age.
+- **A line that mixes proved and unproved reads names its figures.** Each `sdk` mark is followed by up to three of the figures it covers ("Proof-checked: Balance, Revision", "Served by DAPI · not proved: Names"), then "+N".
 - **Calm unless wrong.** The resting mark in a section or page line has no border, no ground and no glyph: 12 px `--dh-ink-2` text, marks separated by space. A glyph appears with Proof-checked, stale and down, and stale and down take `--dh-warn` and `--dh-bad` text; the dashed box is kept for a mark that stands alone on a card. Colour is reserved for a source that is actually stale or down, and shows at the section line. A page that shows a figure keeps it fresh for as long as it is on screen, so an open tab does not drift into the stale look by itself: the home page reads the Platform tip again once a minute and the census every five, and an index figure read at the newest block is not aged at all, because nothing newer exists to read. Proof-checked keeps its good green and its shield glyph, and underlines on hover: it is a control, and it is good news.
 - Every page built on `PageFrame` follows this rule, and so do the home page and `/mn/{hash}` (its line is in the record header). The Core record pages built on the Core band (`/block/*`, `/tx/*`, `/blocks`) keep one line per section head, and `/status` keeps a mark per card because the sources are its subject (its body is a `NoSourceSection` under a `PageFrame` head).
 
@@ -462,8 +501,9 @@ Age follows after a middle dot ("· 12 s ago"). When the age passes staleTime ×
 
 - `Sparkline`: 1.75 px line in the layer line colour, 14% area, last point as a 3 px dot with a 2 px surface ring when `highlightLast`. Default full width × 36 px. No axes; the `label` and an `aria-describedby` summary carry the meaning.
 - Bar strips (`.rx-bars`): 56 px high, 2 px gaps, 2 px top radius, layer line colour at 90%; `dim` bars at 35% for incomplete periods.
-- `Meter`: 8 px track (`--dh-sunken`, plate-3 on the plate), 4 px radius, fill in the layer line colour or the threshold tone; `--lg` is 14 px. `marker`: a 2 px ink tick 4 px taller than the track with its label above.
-- Stack bar (status mix): 14–16 px, 4 px radius, 2 px gaps between segments, min segment 3 px, always with a legend that has counts.
+- `Meter`: 8 px track (`--rx-track`, 13% ink on any ground, so it shows on the dark page, a band and the plate alike), 4 px radius, fill in the layer line colour or the threshold tone; `--lg` is 14 px. `marker`: a 2 px ink tick 4 px taller than the track with its label above.
+- Stack bar (status mix): 14–16 px, 4 px radius, 2 px gaps between segments, min segment 3 px, always with a legend that has counts. A share of named parts (versions) takes the categorical slots, one per key, with the rest in `--dh-ink-3`; a share of states takes the status colours.
+- `/internals` histories are `Chart`s, not sparklines: each plot is the width of its card, has a title, a value axis with its unit and a hover value.
 - Uptime strip: one cell per day Radar has crawled, up to 90 (masternode page), 2 px gap, 34 px high, good/warn/bad; 30-cell compact form 2 px wide × 14 px in tables. A tooltip and a hidden text summary ("Missed 9 of 48 checks on 5–6 Sep") per bad stretch.
 - Epoch clock: 18 px track, 9 px radius, `--rx-plat-line` fill, blocks-so-far tick, end time and "Ends in about 7.4 days" at the right.
 - Activity calendar: 7 rows × 53 columns of square cells that fill the card width (about 10 px in the 1440 layout), 3 px gap, 2 px radius; levels 1 / 2–4 / 5+ in `--rx-cal-1…3`; empty days `--dh-sunken`. Month labels under it. Each cell's count is in its accessible table equivalent, not only in a tooltip.
@@ -517,7 +557,7 @@ Charts read tokens at mount and on theme change (`getComputedStyle(document.docu
 
 ```js
 export const radarChartTheme = (t /* resolved token values */) => ({
-  color: [t['rx-l'], t['dh-ramp-2'], t['dh-ramp-3'], t['dh-ramp-4'], t['dh-ramp-5']], // layer first
+  color: [t['rx-series-1'], t['rx-series-2'], t['rx-series-3'], t['rx-series-4'], t['rx-series-5'], t['rx-series-6']], // §4.3; a single series is drawn in t['rx-l']
   backgroundColor: 'transparent',
   textStyle: { fontFamily: 'Archivo, system-ui, sans-serif', fontSize: 12, color: t['dh-ink-2'] },
   grid: { left: 8, right: 8, top: 16, bottom: 24, containLabel: true },
@@ -540,7 +580,7 @@ export const radarChartTheme = (t /* resolved token values */) => ({
     extraCssText: 'border-radius:8px;box-shadow:0 8px 24px -8px rgba(0,30,50,.35);',
     axisPointer: { type: 'line', lineStyle: { color: t['dh-ink-2'], width: 1 } },
   },
-  legend: { show: false },              // legends are HTML (.rx-legend) beside the chart
+  legend: { show: false },              // legends are HTML (.rx-legend) under the chart, drawn by Chart for two or more named series
   dataZoom: { borderColor: t['dh-line'], fillerColor: t['dh-brand-soft'], handleStyle: { color: t['dh-surface'], borderColor: t['dh-line-2'] } },
   animationDuration: 400, animationDurationUpdate: 240, animationEasing: 'cubicOut',
 })
@@ -622,6 +662,8 @@ Mockup: `home.html?testnet`, shot `shots/home-testnet--desk-light.png`.
 - The family bar with `phone-nav="tabs"`: a fixed bottom tab bar, 56 px + safe area, five tabs with 22 px icons and 11 px labels: **Home, Core, Network, Platform, Search**. The current tab follows the shell's tab-bar look (selection keyline and ink text); others `--dh-ink-2`. "Search" opens the full-screen palette.
 - The top bar keeps the logo, network switch, theme toggle, the live Core height and the menu (Tools, other dashhq products, settings); the header search icon is hidden below 600 px because the tab bar has Search. The network menu opens against the bar row so it is fully visible from 320 px, and the pill keeps the network's name (its first letter below 360 px, with the dot and the Testnet keyline saying the rest). Below 380 px the Core height loses its connection dot.
 - Band navs and record tabs scroll horizontally; the current one scrolls into view.
+- **Section rail:** every page maps to one rail item, a record to the list it belongs to (`/identity/*` to Identities). That item carries `aria-current="page"` and a 2 px layer underline. Where the rail scrolls, the links fade out under an 18 px gutter that holds the chevron, so a chevron never sits on link text.
+- Placeholders are dimmer than typed values in both themes (`--rx-placeholder`).
 - Tables become cards (§6.7). Filters collapse to a "Filters n" button that opens a bottom sheet.
 - Hover cards are off; chips navigate on tap and copy buttons are always visible (40 px targets via the family touch rules).
 - The home hero stacks: the claim, the paragraph, the six figures two per row, the source line, the buttons, then the whole map. The Core figure sits on the first screen.

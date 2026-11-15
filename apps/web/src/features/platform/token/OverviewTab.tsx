@@ -10,17 +10,14 @@ import { formatInt } from '@/lib/format'
 import { Amount, Badge, Card, Empty, KeyValue, Unavailable } from '@/ui'
 import { loadState } from '../identity/common'
 import { ByContractForm } from './ByContractForm'
-import { supplyOf } from './token-config'
-import { tokenAmountKind, type TokenView } from './use-token'
+import type { TokenView } from './use-token'
 
 export function OverviewTab({ token }: { token: TokenView }) {
   const { t } = useLingui()
-  const { id, net, origin, config } = token
+  const { id, net, origin } = token
   const supply = useQuery(sdkQueries['tokens.totalSupply'](net, { tokenId: id }))
   const status = useQuery(sdkBatchers.tokenStatus.queryOptions(net, id))
   const price = useQuery(sdkQueries['tokens.directPurchasePrices'](net, { tokenIds: [id] }))
-  const kind = tokenAmountKind(token)
-  const max = config ? supplyOf(config, 'maxSupply') : undefined
   const stamps: SourceStamp[] = [
     ...token.stamps,
     ...(supply.data ? [stampOf(supply.data)] : []),
@@ -43,23 +40,6 @@ export function OverviewTab({ token }: { token: TokenView }) {
         <KeyValue
           columns={2}
           items={[
-            {
-              label: t`Total supply`,
-              value:
-                supply.data && kind ? (
-                  <span data-token-supply>
-                    <Amount value={supply.data.data ?? 0n} kind={kind} />
-                  </span>
-                ) : (
-                  '—'
-                ),
-              hint:
-                max !== undefined && kind ? (
-                  <span>
-                    {t`Maximum`} <Amount value={max} kind={kind} />
-                  </span>
-                ) : undefined,
-            },
             {
               label: t`Direct purchase price`,
               value: price.isPending ? (
@@ -87,10 +67,6 @@ export function OverviewTab({ token }: { token: TokenView }) {
               ) : (
                 <Badge tone="success">{t({ message: 'Active', context: 'token status' })}</Badge>
               ),
-            },
-            {
-              label: t`Decimals`,
-              value: token.decimals === undefined ? '—' : formatInt(token.decimals),
             },
             {
               label: t`Defined by contract`,

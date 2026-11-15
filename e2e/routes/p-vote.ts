@@ -15,7 +15,7 @@ export const pVote: RouteCase[] = [
   ...perNet(({ id }) => [
     {
       path: `/name/${id('name_registered', 'alice')}`,
-      h1: 'Name',
+      h1: `${id('name_registered', 'alice')}.dash`,
       decentralized: 'data' as const,
       data: '[data-status="registered"]',
     },

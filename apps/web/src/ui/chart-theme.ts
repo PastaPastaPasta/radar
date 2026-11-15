@@ -12,6 +12,12 @@ export const CHART_TOKEN_NAMES = [
   'dh-line-2',
   'dh-surface',
   'dh-brand-soft',
+  'rx-series-1',
+  'rx-series-2',
+  'rx-series-3',
+  'rx-series-4',
+  'rx-series-5',
+  'rx-series-6',
 ] as const
 
 export type ChartTokens = Record<(typeof CHART_TOKEN_NAMES)[number], string>
@@ -28,6 +34,12 @@ const FALLBACK: ChartTokens = {
   'dh-line-2': '#7A8B98',
   'dh-surface': '#FFFFFF',
   'dh-brand-soft': '#E0EFFA',
+  'rx-series-1': '#008DE4',
+  'rx-series-2': '#D95926',
+  'rx-series-3': '#1E9586',
+  'rx-series-4': '#BD7F00',
+  'rx-series-5': '#D55181',
+  'rx-series-6': '#6B8E00',
 }
 
 /** Resolved token values, read from `el` (inside the plate, pass the plate element so its island values apply). */
@@ -41,6 +53,16 @@ export function readChartTokens(el: Element = document.documentElement): ChartTo
   return out
 }
 
+/** The categorical slots in the order the chart's layer draws them (`--rx-series-1…6`). */
+export const seriesColors = (t: ChartTokens): string[] => [
+  t['rx-series-1'],
+  t['rx-series-2'],
+  t['rx-series-3'],
+  t['rx-series-4'],
+  t['rx-series-5'],
+  t['rx-series-6'],
+]
+
 const axisLabel = (t: ChartTokens) => ({ color: t['dh-ink-2'], fontSize: 13 })
 
 export const radarChartTheme = (t: ChartTokens) => {
@@ -51,7 +73,9 @@ export const radarChartTheme = (t: ChartTokens) => {
     splitLine: { show: false },
   }
   return {
-    color: [t['rx-l'], t['dh-ramp-2'], t['dh-ramp-3'], t['dh-ramp-4'], t['dh-ramp-5']],
+    // One series draws in the layer's hue. Several take the categorical slots (`withSeriesColors`); the rest of this
+    // list only catches a series the option left unnamed.
+    color: [t['rx-l'], ...seriesColors(t).slice(1)],
     backgroundColor: 'transparent',
     textStyle: { fontFamily: 'Archivo, system-ui, sans-serif', fontSize: 12, color: t['dh-ink-2'] },
     grid: { left: 8, right: 8, top: 16, bottom: 24, containLabel: true },

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Amount, Time } from './amount'
@@ -236,6 +236,20 @@ describe('Time', () => {
     expect(times[2]).toHaveTextContent('11:52 UTC · 8 min ago')
     expect(times[0]).toHaveAttribute('dateTime', '2026-11-10T11:52:00Z')
   })
+
+  it('never prints a date twice: past two days the absolute time stands alone @NX-44', () => {
+    render(
+      <>
+        <Time ms={NOW - 30 * 3_600_000} mode="both" />
+        <Time ms={NOW - 6 * 86_400_000} mode="both" />
+        <Time ms={Date.UTC(2025, 7, 16, 8, 26)} mode="both" />
+      </>,
+    )
+    const times = Array.from(document.querySelectorAll('time'))
+    expect(times[0]).toHaveTextContent('9 Nov 2026, 06:00 UTC · yesterday')
+    expect(times[1]?.textContent).toBe('4 Nov 2026, 12:00 UTC')
+    expect(times[2]?.textContent).toBe('16 Aug 2025, 08:26 UTC')
+  })
 })
 
 describe('Badge and TypeBadge', () => {
@@ -279,6 +293,26 @@ describe('Tabs', () => {
     const off = within(nav).getByText('Tokens')
     expect(off).toHaveAttribute('aria-disabled', 'true')
     expect(within(nav).getAllByRole('link')).toHaveLength(2)
+  })
+
+  it('marks the edges that have more tabs beyond them, and follows the scroll @RA-38', async () => {
+    vi.spyOn(Element.prototype, 'scrollWidth', 'get').mockReturnValue(900)
+    vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(358)
+    await renderInRouter(
+      <Tabs
+        value="a"
+        to={(id) => ({ to: '/', hash: id })}
+        tabs={['a', 'b', 'c', 'd', 'e', 'f'].map((id) => ({ id, label: `Tab ${id}` }))}
+      />,
+    )
+    const bar = document.querySelector<HTMLElement>('.rx-tabs')!
+    expect(bar).toHaveAttribute('data-more-start', 'false')
+    expect(bar).toHaveAttribute('data-more-end', 'true')
+    Object.defineProperty(bar, 'scrollLeft', { value: 542, configurable: true })
+    fireEvent.scroll(bar)
+    expect(bar).toHaveAttribute('data-more-start', 'true')
+    expect(bar).toHaveAttribute('data-more-end', 'false')
+    vi.restoreAllMocks()
   })
 
   it('navigates by link and keyboard', async () => {

@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import type { SourceId, SourceStamp } from '@/data/envelope'
 import type { HealthState, SourceHealth } from '@/data/health'
 import { clampSkew, formatRelative, formatIsoUtc } from '@/lib/format'
+import type { LiveConnection } from './live-connection'
 import type { IconName } from './icon-paths'
 
 export type SourceVariant = 'ok' | 'proof' | 'stale' | 'down'
@@ -13,6 +14,8 @@ export interface SourceView {
   /** Relative age to show after the label ("12 s ago"), or the last-good time when down. */
   age?: string
   ageTitle?: string
+  /** How far the index trails the chain ("indexed to block N (9 minutes behind)"); shown in place of `age`. */
+  lag?: string
   spinner?: boolean
   title?: string
   state: HealthState | 'live'
@@ -20,16 +23,34 @@ export interface SourceView {
 
 const MIN = 60_000
 
-/** Past this age the mark turns warning orange, for a stamp that doesn't say its own (`staleAfterMs`, the data class's staleTime × 4). */
-const STALE_AGE_MS: Record<SourceId, number> = {
-  radar: 20 * MIN,
-  pe: 2 * MIN,
-  hyphen: 2 * MIN,
-  insight: 2 * MIN,
-  dapi: 2 * MIN,
-  sdk: 2 * MIN,
-  rate: 4 * MIN,
+/**
+ * The age below which a mark is never drawn as out of date, whatever its stamp says: a reading a few minutes old is
+ * simply a few minutes old, and reads as quiet ink. A stamp's own limit (`staleAfterMs`, the data class's
+ * staleTime × 4) applies where it is longer. Radar's is three missed crawls.
+ */
+const QUIET_AGE_MS: Record<SourceId, number> = {
+  radar: 30 * MIN,
+  pe: 10 * MIN,
+  hyphen: 10 * MIN,
+  insight: 10 * MIN,
+  dapi: 10 * MIN,
+  sdk: 10 * MIN,
+  rate: 10 * MIN,
   local: Infinity,
+}
+
+/** An index this far behind the chain says so in the visible line; one block behind is the index doing its work. */
+const LAG_BLOCKS_SHOWN = 2
+const LAG_MS_SHOWN = 5 * MIN
+const INDEXES: ReadonlySet<SourceId> = new Set(['hyphen', 'insight', 'pe'])
+
+/** What the line says in place of the read's age when the index trails the chain: "indexed to block N (9 minutes behind)". */
+function shownLag(stamp: SourceStamp, health: SourceHealth): string | undefined {
+  const lag = health.lag
+  if (!lag || stamp.immutable || stamp.fallback || !INDEXES.has(stamp.source)) return undefined
+  const behind =
+    lag.blocks !== undefined ? lag.blocks >= LAG_BLOCKS_SHOWN : (lag.ms ?? 0) >= LAG_MS_SHOWN
+  return behind ? lag.detail : undefined
 }
 
 /** What a source is called in a sentence. Product names stay as they are; the generic ones are translated. */
@@ -83,11 +104,8 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
     case 'dapi':
       return { label: t`Served by DAPI`, icon: ICON.dapi, showAge: true }
     case 'radar':
-      return {
-        label: stamp.asOfFetched ? t`Fetched from Radar` : t`Crawled by Radar`,
-        icon: ICON.radar,
-        showAge: true,
-      }
+      // A document that gave no crawl time has only the time it was fetched, which is not the data's age.
+      return { label: t`Crawled by Radar`, icon: ICON.radar, showAge: !stamp.asOfFetched }
     case 'pe':
       return { label: t`Indexed by Platform Explorer`, icon: ICON.pe, showAge: true }
     case 'hyphen':
@@ -127,8 +145,26 @@ function assertStamp(stamp: SourceStamp): void {
   console.error(`[radar] ${problem} (docs/ARCHITECTURE.md §2.1)`, stamp)
 }
 
-export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number): SourceView {
-  assertStamp(stamp)
+/**
+ * The stamp dated by when its data was true. Once live updates have stopped, nothing DAPI pushed can be newer than
+ * the last thing that arrived, so a pushed figure's age keeps counting from there instead of from a stamp renewed on
+ * the page.
+ */
+function datedByLive(stamp: SourceStamp, live: LiveConnection | undefined): SourceStamp {
+  if (stamp.source !== 'dapi' || live?.state !== 'stopped' || live.lastEventAt === undefined) {
+    return stamp
+  }
+  return live.lastEventAt < stamp.asOf ? { ...stamp, asOf: live.lastEventAt } : stamp
+}
+
+export function sourceView(
+  seen: SourceStamp,
+  health: SourceHealth,
+  now: number,
+  live?: LiveConnection,
+): SourceView {
+  assertStamp(seen)
+  const stamp = datedByLive(seen, live)
   const b = base(stamp)
   const down = health.state === 'down'
   const ageMs = Math.max(0, now - stamp.asOf)
@@ -138,7 +174,8 @@ export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number
     (stamp.fallback === 'dapi-down' ||
       health.state === 'stale' ||
       health.state === 'degraded' ||
-      ageMs > (stamp.staleAfterMs ?? STALE_AGE_MS[stamp.source]))
+      ageMs > Math.max(stamp.staleAfterMs ?? 0, QUIET_AGE_MS[stamp.source]))
+  const lag = shownLag(stamp, health)
 
   const proof = stamp.source === 'sdk' && stamp.proved && !stamp.fallback
   const title = [
@@ -166,7 +203,10 @@ export function sourceView(stamp: SourceStamp, health: SourceHealth, now: number
     icon: b.icon,
     variant: stale ? 'stale' : proof ? 'proof' : 'ok',
     age:
-      b.showAge && !stamp.immutable ? formatRelative(clampSkew(stamp.asOf, now), now) : undefined,
+      lag === undefined && b.showAge && !stamp.immutable
+        ? formatRelative(clampSkew(stamp.asOf, now), now)
+        : undefined,
+    ...(lag === undefined ? {} : { lag }),
     ageTitle: formatIsoUtc(stamp.asOf),
     spinner: stamp.fallback === 'sdk-cold',
     title,

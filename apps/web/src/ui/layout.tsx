@@ -13,6 +13,7 @@ import {
   reportsAttr,
   SourceSectionProvider,
   stampsOfInput,
+  useSectionCovers,
   useSectionLine,
   useSectionSource,
   useSourceCollector,
@@ -55,15 +56,26 @@ export interface CardProps {
    * sources go to the line of the section or page around it; a kit `Section` is what starts a new line.
    */
   level?: 'block' | 'section'
+  ground?: Ground
   className?: string
   children: ReactNode
 }
 
-function useCardSource(source: CardProps['source']) {
+/**
+ * The ground a block of a page stands on. Blocks of a page alternate between the page ground and a raised band on
+ * their own; `band` and `page` fix one, and `layer` puts a block about another layer than its page on that layer's
+ * ground.
+ */
+export type Ground = 'page' | 'band' | 'layer'
+
+const nameOf = (label: ReactNode): string | undefined =>
+  typeof label === 'string' && label !== '' ? label : undefined
+
+function useCardSource(source: CardProps['source'], title: ReactNode) {
   const health = useAllSourceHealth()
   const outer = useCovered()
   const all = stampsOfInput(source)
-  const inSection = useSectionSource(all)
+  const inSection = useSectionSource(all, nameOf(title))
   const down = all.find((s) => health.find((h) => h.source === s.source)?.state === 'down')
   // A section names its sources in its own line, so a card inside one carries no mark; a card that stands alone does.
   const stamps = inSection ? [] : all.filter((s) => !outer.has(sourceKey(s)))
@@ -85,11 +97,12 @@ export function Card({
   onRetry,
   id,
   level = 'block',
+  ground,
   className,
   children,
 }: CardProps) {
   const isSection = level === 'section'
-  const { all, stamps, down, reports } = useCardSource(source)
+  const { all, stamps, down, reports } = useCardSource(source, title)
   const keys = all.map(sourceKey).join(',')
   const covered = useMemo(() => new Set(keys.split(',')), [keys])
   const now = useNow(down !== undefined)
@@ -131,6 +144,7 @@ export function Card({
       id={id}
       className={cx('rx-card', isSection && 'rx-sec rx-sec--ruled', down && 'rx-down', className)}
       data-layer={attr}
+      data-ground={ground}
       data-state={state}
       data-reports={reports}
       aria-busy={state === 'loading' || undefined}
@@ -211,9 +225,9 @@ export function SectionBand({
  * part's line can be found from the part.
  */
 export function SourceSection({ source, children }: { source?: SourceInput; children: ReactNode }) {
-  const { collector, line } = useSourceCollector(source)
+  const { collector, line, covers } = useSourceCollector(source)
   return (
-    <SourceSectionProvider collector={collector} line={line}>
+    <SourceSectionProvider collector={collector} line={line} covers={covers}>
       {children}
     </SourceSectionProvider>
   )
@@ -222,9 +236,10 @@ export function SourceSection({ source, children }: { source?: SourceInput; chil
 /** The enclosing section's one source line. It keeps its height while empty, so the first answer does not move the page. */
 export function SectionSources({ className }: { className?: string }) {
   const line = useSectionLine()
+  const covers = useSectionCovers()
   return (
     <p className={cx('rx-sec__src', className)} data-section-sources>
-      {line.length > 0 ? <SourceLine stamp={[...line]} compact /> : null}
+      {line.length > 0 ? <SourceLine stamp={[...line]} compact covers={covers} /> : null}
     </p>
   )
 }
@@ -238,12 +253,13 @@ export interface SectionProps {
   layer?: Layer
   /** The stamps the section read itself. What its cards, stats and tables show is added without being listed here. */
   source?: SourceInput
+  ground?: Ground
   className?: string
   children: ReactNode
 }
 
 /**
- * A page section on the page ground: a ruled head, one sentence, one source line for everything in it, then its
+ * A page section: a ruled head, one sentence, one source line for everything in it, then its
  * content. Nothing inside repeats a source the line names.
  */
 export function Section({
@@ -253,6 +269,7 @@ export function Section({
   actions,
   layer,
   source,
+  ground,
   className,
   children,
 }: SectionProps) {
@@ -264,6 +281,7 @@ export function Section({
         id={id}
         className={cx('rx-sec rx-sec--ruled', className)}
         data-layer={layerAttr(layer)}
+        data-ground={ground}
         data-source-scope=""
         aria-labelledby={headingId}
       >
@@ -288,12 +306,16 @@ export interface KeyValueProps {
 }
 
 function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
-  const inSection = useSectionSource(item.source)
+  const inSection = useSectionSource(item.source, nameOf(item.label))
   const covered = useCoveredSource(item.source) || inSection
+  const srcId = useId()
+  // The section's line names a source once. A proof-checked figure also keeps its own mark within reach of a
+  // pointer, the keyboard and a tap, since each proof is its own.
+  const own = inSection && item.source?.proved === true ? item.source : undefined
   return (
     <div data-reports={inSection && item.source ? reportsAttr([item.source]) : undefined}>
       <dt>{item.label}</dt>
-      <dd>
+      <dd {...(own ? { 'data-src-hover': '', tabIndex: 0, 'aria-describedby': srcId } : {})}>
         {item.value}
         {item.source && !covered ? (
           <>
@@ -302,6 +324,11 @@ function KvRow({ item }: { item: KeyValueProps['items'][number] }) {
           </>
         ) : null}
         {item.hint ? <span className="rx-kv__hint">{item.hint}</span> : null}
+        {own ? (
+          <span className="rx-fig__src" id={srcId}>
+            <SourceLine stamp={own} compact />
+          </span>
+        ) : null}
       </dd>
     </div>
   )

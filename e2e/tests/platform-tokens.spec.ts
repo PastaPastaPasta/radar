@@ -4,6 +4,7 @@ import { horizontalOverflow, settled } from '../helpers/settled'
 import { sourceLineOf } from '../helpers/sources'
 import { expect as baseExpect, test } from '../helpers/test'
 import { TOKEN_HOLDER } from '../routes/p-token'
+import { recordH1 } from '../routes/types'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
@@ -44,7 +45,9 @@ const url = (path: string, net: Net = 'mainnet', query: Record<string, string> =
   return `${path}${q ? `?${q}` : ''}`
 }
 
-const open = async (page: Page, target: string, h1: string) => {
+const TOKEN_H1 = recordH1('Token')
+
+const open = async (page: Page, target: string, h1: string | RegExp) => {
   await page.goto(target)
   await expect(page.getByRole('heading', { level: 1, name: h1 })).toBeVisible()
   await settled(page)
@@ -92,11 +95,12 @@ test.describe('Token page', () => {
     test(`${net} shows the name, supply, price and status, and names the contract and position it comes from @NX-30 @NX-32 @PE-25`, async ({
       page,
     }) => {
-      await open(page, tokenUrl(net), 'Token')
+      await open(page, tokenUrl(net), TOKEN_H1)
       const t = NET[net]
       const summary = overview(page)
-      await expect(summary.locator('[data-token-supply]')).toContainText(/\d/)
-      await expect(summary.getByText('Total supply', { exact: true })).toBeVisible()
+      const facts = page.locator('[data-record="token"] [data-record-facts]')
+      await expect(facts.locator('[data-token-supply]')).toContainText(/\d/)
+      await expect(facts.getByText('Total supply', { exact: true })).toBeVisible()
       await expect(summary.getByText('Direct purchase price', { exact: true })).toBeVisible()
       await expect(summary.getByText('Active', { exact: true })).toBeVisible()
       await expect(sourceLineOf(summary).getByText('Proof-checked').first()).toBeVisible()
@@ -118,7 +122,7 @@ test.describe('Token page', () => {
   test('shows the localised name from the contract beside the token chip @NX-30', async ({
     page,
   }) => {
-    await open(page, tokenUrl(), 'Token')
+    await open(page, tokenUrl(), TOKEN_H1)
     await expect(
       page.locator('[data-page="/token/$id"] header').getByText(M.symbol, { exact: false }).first(),
     ).toBeVisible()
@@ -129,7 +133,7 @@ test.describe('Token page', () => {
     context,
   }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => undefined)
-    await open(page, tokenUrl(), 'Token')
+    await open(page, tokenUrl(), TOKEN_H1)
     const save = page.getByRole('button', { name: /^Saved?$/ })
     await expect(save).toHaveAttribute('aria-pressed', 'false')
     await save.click()
@@ -145,7 +149,7 @@ test.describe('Token page', () => {
   test('lists who may do what, the names and the raw configuration on the definition tab @NX-30 @PE-25', async ({
     page,
   }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'definition' }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'definition' }), TOKEN_H1)
     const rules = page.locator('#token-rules')
     await expect(rules.getByText('Mint', { exact: true }).first()).toBeVisible()
     await expect(rules.getByText('No one').first()).toBeVisible()
@@ -159,7 +163,7 @@ test.describe('Token page', () => {
   test('says a token without perpetual distribution has no claims to look up @PE-25', async ({
     page,
   }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'distribution' }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'distribution' }), TOKEN_H1)
     await expect(page.locator('#token-distribution')).toContainText('Perpetual distribution')
     await expect(page.locator('#token-distribution')).toContainText('None')
     await expect(page.locator('#token-last-claim')).toContainText(
@@ -169,7 +173,7 @@ test.describe('Token page', () => {
   })
 
   test('looks up the balance of an identity by ID @NX-30', async ({ page }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'balance', who: TOKEN_HOLDER.mainnet }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'balance', who: TOKEN_HOLDER.mainnet }), TOKEN_H1)
     const balance = page.locator('#token-balance')
     await expect(balance.locator('[data-field="token-balance"]')).toContainText(M.symbol)
     await expect(balance.getByText('Not frozen')).toBeVisible()
@@ -180,7 +184,7 @@ test.describe('Token page', () => {
   test('looks up the balance of an identity by DPNS name and shows the ID it resolved to @NX-30', async ({
     page,
   }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'balance' }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'balance' }), TOKEN_H1)
     await page.getByLabel('Identity ID or name').fill(M.name)
     await page.getByRole('button', { name: 'Look up', exact: true }).click()
     await expect(page).toHaveURL(new RegExp(`who=${M.name}`))
@@ -192,7 +196,7 @@ test.describe('Token page', () => {
   test('says a name nobody holds, and a malformed entry, without an error alert @NX-30', async ({
     page,
   }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'balance', who: 'radarfx44661899' }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'balance', who: 'radarfx44661899' }), TOKEN_H1)
     await expect(page.getByText('No identity has the name radarfx44661899.dash.')).toBeVisible()
     await page.getByLabel('Identity ID or name').fill('!!')
     await page.getByRole('button', { name: 'Look up', exact: true }).click()
@@ -229,7 +233,7 @@ test.describe('Token page', () => {
     await form.getByLabel('Position').fill('0')
     await form.getByRole('button', { name: 'Open token' }).click()
     await expect(page).toHaveURL(new RegExp(`/token/${M.token}`))
-    await expect(page.getByRole('heading', { level: 1, name: 'Token' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: TOKEN_H1 })).toBeVisible()
   })
 
   test('refuses a contract ID or position that cannot name a token @NX-32', async ({ page }) => {
@@ -249,7 +253,7 @@ test.describe('Token page', () => {
   test('carries the contract and position of the token it shows into the open-by-contract form @NX-32', async ({
     page,
   }) => {
-    await open(page, tokenUrl(), 'Token')
+    await open(page, tokenUrl(), TOKEN_H1)
     const form = page.locator('[data-by-contract]')
     await expect(form.getByLabel('Contract ID')).toHaveValue(M.contract)
     await expect(form.getByLabel('Position')).toHaveValue('0')
@@ -264,7 +268,7 @@ test.describe('Token page', () => {
       'activity',
       'holders',
     ]) {
-      await open(page, tokenUrl('mainnet', tab === 'overview' ? {} : { tab }), 'Token')
+      await open(page, tokenUrl('mainnet', tab === 'overview' ? {} : { tab }), TOKEN_H1)
       expect(await horizontalOverflow(page), tab).toBeLessThanOrEqual(0)
     }
   })
@@ -275,7 +279,7 @@ test.describe('Token activity and holders from Platform Explorer', () => {
     test(`${net} lists the token's transitions with their action, amount and time @PE-25`, async ({
       page,
     }) => {
-      await open(page, tokenUrl(net, { tab: 'activity' }), 'Token')
+      await open(page, tokenUrl(net, { tab: 'activity' }), TOKEN_H1)
       const activity = page.locator('#token-activity')
       await expect(sourceLineOf(activity).getByText('Platform Explorer').first()).toBeVisible()
       await expect(activity.locator('tbody tr, .rx-card-row').first()).toBeVisible()
@@ -283,7 +287,7 @@ test.describe('Token activity and holders from Platform Explorer', () => {
     })
 
     test(`${net} lists the holders with their balances @PE-25`, async ({ page }) => {
-      await open(page, tokenUrl(net, { tab: 'holders' }), 'Token')
+      await open(page, tokenUrl(net, { tab: 'holders' }), TOKEN_H1)
       const holders = page.locator('#token-holders')
       await expect(holders.locator('tbody tr, .rx-card-row').first()).toBeVisible()
       await expect(holders).toContainText(NET[net].symbol)
@@ -637,7 +641,7 @@ test.describe('Decentralized only mode', () => {
   test('switches without a reload when the mode is turned on from Settings @NX-30', async ({
     page,
   }) => {
-    await open(page, tokenUrl('mainnet', { tab: 'holders' }), 'Token')
+    await open(page, tokenUrl('mainnet', { tab: 'holders' }), TOKEN_H1)
     await expect(page.locator('#token-holders')).toBeVisible()
     await expect(page.locator(MODE)).toHaveCount(0)
     await page.evaluate(() => {
