@@ -95,8 +95,9 @@ test.describe('Token page', () => {
       await open(page, tokenUrl(net), 'Token')
       const t = NET[net]
       const summary = overview(page)
-      await expect(summary.locator('[data-token-supply]')).toContainText(/\d/)
-      await expect(summary.getByText('Total supply', { exact: true })).toBeVisible()
+      const facts = page.locator('[data-record="token"] [data-record-facts]')
+      await expect(facts.locator('[data-token-supply]')).toContainText(/\d/)
+      await expect(facts.getByText('Total supply', { exact: true })).toBeVisible()
       await expect(summary.getByText('Direct purchase price', { exact: true })).toBeVisible()
       await expect(summary.getByText('Active', { exact: true })).toBeVisible()
       await expect(sourceLineOf(summary).getByText('Proof-checked').first()).toBeVisible()

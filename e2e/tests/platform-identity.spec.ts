@@ -72,6 +72,9 @@ const identityUrl = (
   return `/identity/${id}${q ? `?${q}` : ''}`
 }
 
+const HEADER = '[data-record="identity"]'
+const FACTS = `${HEADER} [data-record-facts]`
+
 const openIdentity = async (
   page: Page,
   id: string,
@@ -79,7 +82,7 @@ const openIdentity = async (
   net: 'mainnet' | 'testnet' = 'mainnet',
 ) => {
   await page.goto(identityUrl(id, query, net))
-  await expect(page.getByRole('heading', { level: 1, name: 'Identity' })).toBeVisible()
+  await expect(page.locator(HEADER).getByRole('heading', { level: 1 })).toHaveText(/\S/)
   await settled(page)
 }
 
@@ -90,17 +93,19 @@ test.describe('Identity page', () => {
     page,
   }) => {
     await openIdentity(page, M)
+    const facts = page.locator(FACTS)
+    await expect(facts.locator('[data-field="balance"]')).toContainText('DASH')
+    await expect(facts).toContainText('1,013,248,617,912 credits')
+    await expect(facts.getByText('Revision', { exact: true })).toBeVisible()
     const summary = page.locator('#identity-summary')
-    await expect(summary.locator('[data-field="balance"]')).toContainText('DASH')
-    await expect(summary).toContainText('1,013,248,617,912 credits')
-    await expect(summary.getByText('Revision', { exact: true })).toBeVisible()
     await expect(summary.getByText('Nonce', { exact: true })).toBeVisible()
     await expect(summary.getByRole('link', { name: 'pshenmic.dash' }).first()).toBeVisible()
-    await expect(summary.getByText('Proof-checked')).toHaveCount(0)
+    await expect(summary.getByText('Proof-checked').filter({ visible: true })).toHaveCount(0)
     await expect(
       sourceLineOf(summary).locator('[data-source="sdk"][data-proved="true"]'),
     ).toHaveCount(1)
-    await expect(page.getByRole('heading', { level: 1, name: 'Identity' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'pshenmic.dash' })).toBeVisible()
+    await expect(page.locator(`${HEADER} [data-record-kind]`)).toHaveText('Identity')
     await expectAccessible(page)
   })
 
@@ -433,11 +438,13 @@ test.describe('History tabs', () => {
     })
   }
 
-  test('says an identity with no funding transaction on record is not indexed @PE-15', async ({
+  test('says Platform Explorer has no record of an identity’s funding transaction @PE-15', async ({
     page,
   }) => {
     await openIdentity(page, M)
-    await expect(page.locator('#identity-summary')).toContainText('Not indexed')
+    await expect(page.locator('#identity-summary')).toContainText(
+      'Platform Explorer has no record of it',
+    )
   })
 })
 
@@ -446,13 +453,13 @@ test.describe('Fiat estimates', () => {
     page,
   }) => {
     await openIdentity(page, M)
-    const fiat = page.locator('#identity-summary [data-field="balance"] .rx-fiat')
+    const fiat = page.locator(`${FACTS} [data-field="balance"] .rx-fiat`)
     await expect(fiat).toHaveText(/≈\s*\$4[67]\d\b/)
   })
 
   test('shows no USD estimate on testnet, where the DASH has no price @PE-37', async ({ page }) => {
     await openIdentity(page, T, {}, 'testnet')
-    await expect(page.locator('#identity-summary [data-field="balance"]')).toContainText('tDASH')
+    await expect(page.locator(`${FACTS} [data-field="balance"]`)).toContainText('tDASH')
     await expect(page.locator('.rx-fiat')).toHaveCount(0)
   })
 
@@ -675,8 +682,8 @@ test.describe('Decentralized only mode', () => {
   }) => {
     await page.goto(only(identityUrl(M)))
     await settled(page)
-    await expect(page.locator('#identity-summary [data-field="balance"]')).toBeVisible()
-    await expect(page.locator('#identity-summary')).toContainText('1,013,248,617,912 credits')
+    await expect(page.locator(`${FACTS} [data-field="balance"]`)).toBeVisible()
+    await expect(page.locator(FACTS)).toContainText('1,013,248,617,912 credits')
     await expect(page.locator(MODE)).toHaveCount(1)
   })
 

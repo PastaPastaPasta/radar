@@ -169,7 +169,10 @@ describe('routes', () => {
           const h1 = screen.getByRole('heading', { level: 1 })
           expect(h1.textContent.trim()).not.toBe('')
           if (path === '/') expect(h1).toHaveTextContent('Radar')
-          else if (!h1.textContent.includes(title)) {
+          else if (h1.closest('[data-record]')) {
+            // A record page is named after its entity, and so is the document.
+            expect(document.title).toContain(h1.textContent.trim())
+          } else if (!h1.textContent.includes(title)) {
             // The headline is a claim: the kit marks it, it has words, and no placeholder stands in for them.
             expect(document.title).toContain(title)
             expect(h1).toHaveAttribute('data-claim')
