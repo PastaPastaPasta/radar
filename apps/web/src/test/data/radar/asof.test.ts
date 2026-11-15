@@ -234,4 +234,35 @@ describe('every document the crawl built carries the crawl’s finish time', () 
     expect(out.asOf).toBe(out.fetchedAt)
     expect(out.asOfFetched).toBe(true)
   })
+
+  it('an aborted reader does not take the crawl time from one still waiting', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { testnet: { crawl: { last_finished: number } } }
+    }>('radar', 'global', 'status')
+    let release!: () => void
+    const gate = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    server.use(
+      http.get(`${BASE}/status`, async () => {
+        await gate
+        return HttpResponse.json(status)
+      }),
+      http.get(`${BASE}/testnet/geo`, async () => {
+        await gate
+        return HttpResponse.json({ points: [], unlocated: 0 })
+      }),
+      http.get(`${BASE}/testnet/changes`, () => HttpResponse.json({ since: 1, changes: [] })),
+    )
+    const ctrl = new AbortController()
+    const geo = radar.geo('testnet', ctrl.signal)
+    const changes = radar.changes('testnet')
+    ctrl.abort()
+    release()
+    await expect(geo).rejects.toMatchObject({ kind: 'aborted' })
+    const out = await changes
+    expect(out.asOf).toBe(status.networks.testnet.crawl.last_finished * 1000)
+    expect(out.asOfFetched).toBeUndefined()
+  })
 })

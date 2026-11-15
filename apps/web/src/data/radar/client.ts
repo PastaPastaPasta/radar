@@ -85,12 +85,15 @@ function noteCrawl(net: NetworkId, id: number | null | undefined, finished: numb
   if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished })
 }
 
-/** The finish time of `net`'s latest crawl. Radar's status says it when no document has yet; one read serves them all. */
-async function crawlOf(net: NetworkId, signal?: AbortSignal): Promise<Crawl | undefined> {
+/**
+ * The finish time of `net`'s latest crawl. Radar's status says it when no document has yet; one read serves them all.
+ * The read is not tied to a caller's signal: one query unmounting must not cancel the time the others are waiting on.
+ */
+async function crawlOf(net: NetworkId): Promise<Crawl | undefined> {
   if (!crawls.has(net)) {
     let read = crawlReads.get(net)
     if (!read) {
-      read = radar.status(signal, net).then(
+      read = radar.status(undefined, net).then(
         () => undefined,
         () => undefined,
       )
@@ -108,11 +111,10 @@ async function crawlOf(net: NetworkId, signal?: AbortSignal): Promise<Crawl | un
  */
 async function stampedByCrawl<T>(
   net: NetworkId,
-  signal: AbortSignal | undefined,
   read: Promise<Sourced<T>>,
   crawlId?: (data: T) => number | null | undefined,
 ): Promise<Sourced<T>> {
-  const [out, crawl] = await Promise.all([read, crawlOf(net, signal)])
+  const [out, crawl] = await Promise.all([read, crawlOf(net)])
   const id = crawlId?.(out.data)
   if (!crawl || (id != null && crawl.id !== null && id !== crawl.id)) return out
   const { asOfFetched, ...rest } = out
@@ -215,7 +217,6 @@ export const radar = {
     if (q.top !== undefined) params.set('top', String(q.top))
     return stampedByCrawl(
       net,
-      signal,
       fetchSourced({
         source: 'radar',
         net,
@@ -230,7 +231,6 @@ export const radar = {
   geo(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarGeo>> {
     return stampedByCrawl(
       net,
-      signal,
       fetchSourced({
         source: 'radar',
         net,
@@ -246,7 +246,6 @@ export const radar = {
   masternodes(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarMasternode[]>> {
     return stampedByCrawl(
       net,
-      signal,
       fetchSourced({
         source: 'radar',
         net,
@@ -267,7 +266,6 @@ export const radar = {
   ): Promise<Sourced<RadarMasternodeDetail | null>> {
     return stampedByCrawl(
       net,
-      signal,
       fetchSourced({
         source: 'radar',
         net,
@@ -356,7 +354,6 @@ export const radar = {
   changes(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarChanges>> {
     return stampedByCrawl(
       net,
-      signal,
       fetchSourced({
         source: 'radar',
         net,
