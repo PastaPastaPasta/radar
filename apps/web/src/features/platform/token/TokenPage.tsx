@@ -49,7 +49,7 @@ export function TokenPage({ id, search }: { id: string; search: TokenPageSearch 
   const { net } = token
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
   const label = token.name?.singular
-  const ready = token.valid && !token.missing
+  const ready = token.valid && token.info.data !== undefined && !token.missing
   const supply = useQuery({
     ...sdkQueries['tokens.totalSupply'](net, { tokenId: id }),
     enabled: ready,
