@@ -51,14 +51,14 @@ for (const net of ['mainnet', 'testnet'] as const) {
   test.describe(`links to unrecorded pages on ${net}`, () => {
     test.use({ allowFixtureMisses: true })
 
-    test('an asset-unlock transaction opens the withdrawals on Platform @X-02', async ({
+    test('an asset-unlock transaction opens its withdrawal document on Platform @X-02', async ({
       page,
     }) => {
       test.skip(net !== 'mainnet', 'the testnet transaction has no DAPI recording')
       await page.goto(at(`/tx/${ids.id('tx_assetunlock', '')}`))
       await settled(page)
-      await page.getByRole('link', { name: 'Withdrawals on Platform' }).click()
-      await expect(page).toHaveURL(/\/platform\/txs\?.*type=/)
+      await page.getByRole('link', { name: 'Withdrawal document' }).click()
+      await expect(page).toHaveURL(/\/document\/\w+\/withdrawal\/\w+/)
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     })
 

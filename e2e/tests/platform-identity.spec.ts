@@ -110,14 +110,15 @@ test.describe('Identity page', () => {
   }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => undefined)
     await openIdentity(page, M)
-    const save = page.getByRole('button', { name: 'Save', exact: true })
+    const save = page.getByRole('button', { name: /^Saved?$/ })
     await expect(save).toHaveAttribute('aria-pressed', 'false')
     await save.click()
     await expect(save).toHaveAttribute('aria-pressed', 'true')
+    await expect(save).toHaveAccessibleName('Saved')
     expect(await stored(page, 'radar.saved')).toContain(M)
     await page.reload()
     await settled(page)
-    await expect(page.getByRole('button', { name: 'Save', exact: true })).toHaveAttribute(
+    await expect(page.getByRole('button', { name: 'Saved', exact: true })).toHaveAttribute(
       'aria-pressed',
       'true',
     )

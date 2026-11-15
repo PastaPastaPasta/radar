@@ -3,16 +3,29 @@ import { expect, test } from '../helpers/test'
 
 const onPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 700
 
-async function openTools(page: Page): Promise<void> {
+/** The decoder chooser, reached by clicking from the header: the rail's Tools on a wide screen, search's pages on a phone. */
+async function openDecoders(page: Page): Promise<void> {
   if (onPhone(page)) {
-    await page.getByRole('contentinfo').getByRole('link', { name: 'Tools', exact: true }).click()
+    await page
+      .getByRole('navigation', { name: 'Radar' })
+      .getByRole('link', { name: 'Search' })
+      .click()
+    await page.getByRole('searchbox').fill('decoders')
+    await page
+      .locator('[data-kind="page"]')
+      .getByRole('link', { name: 'Decoders', exact: true })
+      .click()
   } else {
     await page
       .getByRole('navigation', { name: 'Radar' })
       .getByRole('link', { name: 'Tools' })
       .click()
+    await expect(page).toHaveURL(/\/query/)
+    await page
+      .getByRole('navigation', { name: /Tools pages/ })
+      .getByRole('link', { name: 'Decoders' })
+      .click()
   }
-  await expect(page).toHaveURL(/\/query/)
 }
 
 test.describe('decoders @NX-72 @NX-71', () => {
@@ -27,11 +40,7 @@ test.describe('decoders @NX-72 @NX-71', () => {
   test('every decoder is reached by clicking from the header', async ({ page }) => {
     for (const { id, title } of DECODERS) {
       await page.goto('/')
-      await openTools(page)
-      await page
-        .getByRole('navigation', { name: /Tools pages/ })
-        .getByRole('link', { name: 'Decoders' })
-        .click()
+      await openDecoders(page)
       await expect(page).toHaveURL(/\/tools\/decoders$/)
       await expect(page.getByRole('heading', { level: 1, name: 'Decoders' })).toBeVisible()
       await page.locator(`[data-decoder-link="${id}"]`).click()
@@ -60,7 +69,8 @@ test.describe('decoders @NX-72 @NX-71', () => {
 })
 
 test('the "/" shortcut chip shows only where a pointer can hover @W2-63', async ({ page }) => {
-  await page.goto('/')
+  // Not the home page: its hero has a search box of its own.
+  await page.goto('/blocks')
   const chips = page.locator('[data-palette-trigger] kbd')
   await expect(chips.first()).toBeAttached()
   const touch = await page.evaluate(() => matchMedia('(hover: none)').matches)

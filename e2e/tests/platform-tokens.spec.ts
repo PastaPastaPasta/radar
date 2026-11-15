@@ -130,7 +130,7 @@ test.describe('Token page', () => {
   }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => undefined)
     await open(page, tokenUrl(), 'Token')
-    const save = page.getByRole('button', { name: 'Save', exact: true })
+    const save = page.getByRole('button', { name: /^Saved?$/ })
     await expect(save).toHaveAttribute('aria-pressed', 'false')
     await save.click()
     await expect(save).toHaveAttribute('aria-pressed', 'true')
