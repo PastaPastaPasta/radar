@@ -154,7 +154,7 @@ describe('Masternode page', () => {
       expect(el).not.toBeNull()
       return el!
     })
-    await waitFor(() => expect(kpis).toHaveTextContent('Uptime, 5 days'))
+    await waitFor(() => expect(kpis).toHaveTextContent('Uptime for 5 days'))
     expect(kpis).not.toHaveTextContent('Uptime for 13 days')
   })
 
