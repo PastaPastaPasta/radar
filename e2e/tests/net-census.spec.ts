@@ -132,13 +132,7 @@ test.describe('Network census', () => {
       return Number(/([\d,]+) match/.exec(text)![1]!.replace(/,/g, ''))
     }
     const value = async (name: RegExp) =>
-      Number(
-        (
-          await figure(page, name)
-            .locator('.rx-stat__value')
-            .innerText()
-        ).replace(/,/g, ''),
-      )
+      Number((await figure(page, name).locator('.rx-stat__value').innerText()).replace(/,/g, ''))
 
     await openNodes(page)
     for (const name of [/^Reachable masternodes/, /^Enabled/, /^PoSe-banned/]) {
@@ -152,9 +146,7 @@ test.describe('Network census', () => {
 
     await openNodes(page, '?scope=mn')
     const reach = card(page, 'reach')
-    const silent = Number(
-      /([\d,]+) didn't\./.exec(await reach.innerText())![1]!.replace(/,/g, ''),
-    )
+    const silent = Number(/([\d,]+) didn't\./.exec(await reach.innerText())![1]!.replace(/,/g, ''))
     await reach.getByRole('link', { name: 'See which' }).click()
     await expect(page.locator('.rx-activef').first()).toContainText('match')
     expect(await matched(), 'See which').toBe(silent)
