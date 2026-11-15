@@ -775,19 +775,16 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  /** The transaction from Hyphen, then Insight, whichever has it; null when neither does (which proves nothing). */
-  async function hostedRawTx(net: NetworkId, txid: string, signal?: AbortSignal) {
-    if (hostedOk(net, 'hyphen')) {
+  /** The answer of Hyphen, then Insight, whichever has it; null when neither does (which proves nothing). */
+  async function firstHosted<T>(
+    net: NetworkId,
+    ask: Record<'hyphen' | 'insight', () => Promise<T | null>>,
+  ): Promise<T | null> {
+    for (const source of ['hyphen', 'insight'] as const) {
+      if (!hostedOk(net, source)) continue
       try {
-        const found = await hyphenRawTx(net, txid, signal)
+        const found = await ask[source]()
         if (found) return found
-      } catch (e) {
-        if (isAborted(e)) throw e
-      }
-    }
-    if (hostedOk(net, 'insight')) {
-      try {
-        return await insightRawTx(net, txid, signal)
       } catch (e) {
         if (isAborted(e)) throw e
       }
@@ -795,7 +792,15 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     return null
   }
 
-  type HostedTx = NonNullable<Awaited<ReturnType<typeof hostedRawTx>>>
+  type HostedTx =
+    | NonNullable<Awaited<ReturnType<typeof hyphenRawTx>>>
+    | NonNullable<Awaited<ReturnType<typeof insightRawTx>>>
+
+  const hostedRawTx = (net: NetworkId, txid: string, signal?: AbortSignal) =>
+    firstHosted<HostedTx>(net, {
+      hyphen: () => hyphenRawTx(net, txid, signal),
+      insight: () => insightRawTx(net, txid, signal),
+    })
 
   function hostedTxResult(found: HostedTx): Sourced<DecodedTx> {
     const { tx, height, time, confirmations, isInstantLocked, isChainLocked, chainLockClaim } =
@@ -845,25 +850,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     })
   }
 
-  async function hostedBlock(net: NetworkId, ref: BlockRef, signal?: AbortSignal) {
-    if (hostedOk(net, 'hyphen')) {
-      try {
-        const found = await hyphenBlock(net, ref, signal)
-        if (found.data) return found
-      } catch (e) {
-        if (isAborted(e)) throw e
-      }
-    }
-    if (hostedOk(net, 'insight')) {
-      try {
-        const found = await insightBlock(net, ref, signal)
-        if (found.data) return found
-      } catch (e) {
-        if (isAborted(e)) throw e
-      }
-    }
-    return null
-  }
+  const hostedBlock = (net: NetworkId, ref: BlockRef, signal?: AbortSignal) =>
+    firstHosted(net, {
+      hyphen: () => hyphenBlock(net, ref, signal).then((found) => (found.data ? found : null)),
+      insight: () => insightBlock(net, ref, signal).then((found) => (found.data ? found : null)),
+    })
 
   function normalizedTxid(txid: string): string | null {
     const id = txid.trim().toLowerCase()

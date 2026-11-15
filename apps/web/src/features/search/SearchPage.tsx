@@ -188,8 +188,9 @@ export function SearchPage({ q }: { q?: string }) {
   const network = networkName(net)
   const skippedNames = lookupNames(skipped)
   const failedNames = lookupNames(failed.filter((f) => f.error.source === 'local').map((f) => f.id))
-  const failedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(failedNames)
-  const skippedList = new Intl.ListFormat(i18n.locale, { type: 'conjunction' }).format(skippedNames)
+  const names = new Intl.ListFormat(i18n.locale, { type: 'conjunction' })
+  const failedList = names.format(failedNames)
+  const skippedList = names.format(skippedNames)
   const askedForId = classified.classes.includes('base58-id')
   const portable = classified.classes.some((k) => !['core-address', 'platform-address'].includes(k))
 
