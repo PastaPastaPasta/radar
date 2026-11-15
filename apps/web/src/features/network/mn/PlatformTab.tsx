@@ -11,7 +11,7 @@ export function PlatformTab({ ctx, epoch }: { ctx: MnContext; epoch: number | un
   const { t } = useLingui()
   const { d, radar } = ctx
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-5" data-grounds>
       {ctx.off ? (
         <Unavailable
           title={t`Reward estimates, endpoint health and Platform Explorer’s record need indexers`}

@@ -198,7 +198,8 @@ export function PlatformHealthCard({ summary }: SectionProps) {
       level="section"
       title={t`Evonode Platform health`}
       id="platform"
-      layer="network"
+      layer="platform"
+      ground="layer"
       subtitle={
         p
           ? t`${formatPercent(p.healthy / p.checked, 1)} of ${formatInt(p.checked)} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS.`
@@ -252,7 +253,7 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
   if (census.bench.data ? vantages.length === 0 : census.bench.isError) return null
   const tones: Record<string, string> = {
     A: colors.good,
-    B: colors.rank[2]!,
+    B: colors.rank[3]!,
     C: colors.warn,
     D: colors.bad,
     F: colors.bad,
