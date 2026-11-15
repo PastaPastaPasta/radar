@@ -16,6 +16,11 @@ function useLog(): readonly QueryLogEntry[] {
   return useSyncExternalStore(subscribeLog, snapshotLog, snapshotLog)
 }
 
+/** On a phone the header row is hidden, so each cell says what it is. */
+function Label({ children }: { children: string }) {
+  return <span className="text-[var(--dh-ink-2)] md:hidden">{children}: </span>
+}
+
 function Status({ entry }: { entry: QueryLogEntry }) {
   const { t } = useLingui()
   if (entry.refusedByMode) return <Badge tone="info">{t`Refused by mode`}</Badge>
@@ -127,24 +132,43 @@ export function Diagnostics() {
                 data-ok={e.ok}
                 className="border-t border-[var(--dh-line)] align-top max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-1 max-md:py-2"
               >
-                <td className="py-1 pe-2 max-md:block">
+                <td className="py-1 pe-2 max-md:block" data-label={t`When`}>
+                  <Label>{t`When`}</Label>
                   <Time ms={e.at} mode="absolute" seconds />
                 </td>
-                <td className="py-1 pe-2 max-md:block">{e.net}</td>
-                <td className="py-1 pe-2 max-md:block">
+                <td className="py-1 pe-2 max-md:block" data-label={t`Network`}>
+                  <Label>{t`Network`}</Label>
+                  {e.net}
+                </td>
+                <td className="py-1 pe-2 max-md:block" data-label={t`Source`}>
+                  <Label>{t`Source`}</Label>
                   <code>{e.source}</code>
                 </td>
-                <td className="py-1 pe-2 break-all max-md:col-span-2 max-md:block">
+                <td
+                  className="py-1 pe-2 break-all max-md:col-span-2 max-md:block"
+                  data-label={t`Request`}
+                >
                   <code>{e.what}</code>
                 </td>
-                <td className="py-1 pe-2 max-md:block">
+                <td className="py-1 pe-2 max-md:block" data-label={t`Result`}>
+                  <Label>{t`Result`}</Label>
                   <Status entry={e} />
                 </td>
-                <td className="py-1 pe-2 text-end tabular-nums max-md:block max-md:text-start">
+                <td
+                  className="py-1 pe-2 text-end tabular-nums max-md:block max-md:text-start"
+                  data-label={t`Took`}
+                >
+                  <Label>{t`Took`}</Label>
                   {formatInt(e.tookMs)} ms
                 </td>
-                <td className="py-1 pe-2 break-all max-md:block">{e.node ?? '—'}</td>
-                <td className="py-1 max-md:block">{e.proved ? t`Yes` : '—'}</td>
+                <td className="py-1 pe-2 break-all max-md:block" data-label={t`Node`}>
+                  <Label>{t`Node`}</Label>
+                  {e.node ?? '—'}
+                </td>
+                <td className="py-1 max-md:block" data-label={t`Proof-checked`}>
+                  <Label>{t`Proof-checked`}</Label>
+                  {e.proved ? t`Yes` : '—'}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -14,6 +14,7 @@ import { sourceOff } from '../endpoints'
 import { abortedError, disabledByMode, isSourceError, SourceError } from '../errors'
 import { healthRegistry } from '../health'
 import { hyphen } from '../hyphen/client'
+import { insight } from '../insight/client'
 import type { HyBlockSummary } from '../hyphen/schemas'
 import { onNetworkReset } from '../query/network-cache'
 import type { NetworkId } from '@/lib/network'
@@ -81,6 +82,8 @@ export interface CoreDeps {
     typeof hyphen,
     'status' | 'blocks' | 'blocksFrom' | 'block' | 'rawBlock' | 'tx' | 'rawTx'
   >
+  /** The second hosted index, asked only when DAPI and Hyphen cannot answer. */
+  insight?: Pick<typeof insight, 'rawTx' | 'rawBlock' | 'tx' | 'block' | 'status'>
   health: Pick<typeof healthRegistry, 'get'>
   now: () => number
   /** Where immutable answers are kept between visits. Resolves nothing when the build has no cache. */
@@ -218,6 +221,20 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
   const hyphenStandsIn = (net: NetworkId) =>
     deps.health.get(net, 'dapi').state === 'down' && hyphenFit(net)
+
+  const insightApi = deps.insight ?? insight
+
+  /**
+   * A hosted index may stand in once DAPI has failed a read, even when it is behind: it either has the height asked
+   * for or answers "not found", and a not-found is never taken for the chain's answer. Never while the mode forbids
+   * it, and never on a source already known to be down.
+   */
+  const hostedOk = (net: NetworkId, source: 'hyphen' | 'insight') =>
+    !isDevnet(net) && !sourceOff(source) && deps.health.get(net, source).state !== 'down'
+
+  /** Unreachable or erroring DAPI. A node that lied is not a failure to route around: that answer is refused. */
+  const isDapiFailure = (e: unknown): boolean =>
+    isSourceError(e) && e.source === 'dapi' && !isAborted(e) && !isNotFound(e) && !isInvalid(e)
 
   // ---- what the nodes say about ChainLocks ---------------------------------
   //
@@ -722,6 +739,123 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
+  async function insightRawTx(net: NetworkId, txid: string, signal?: AbortSignal) {
+    const [raw, detail] = await Promise.all([
+      insightApi.rawTx(net, txid, signal),
+      insightApi.tx(net, txid, signal).catch((e: unknown) => {
+        if (isAborted(e)) throw e
+        return null
+      }),
+    ])
+    if (!raw.data) return null
+    const bytes = hexToBytes(raw.data.rawtx)
+    if (txidOfBytes(bytes) !== txid) {
+      throw new SourceError({
+        source: 'insight',
+        kind: 'invalid-response',
+        message: `Asked Insight for transaction ${txid} and got a different one`,
+      })
+    }
+    const tx = await decoder.tx(bytes, net)
+    const d = detail?.data
+    const height = d?.blockheight ?? undefined
+    return {
+      stamp: raw,
+      value: {
+        tx,
+        blockHash: undefined,
+        height,
+        time: d?.blocktime ?? undefined,
+        // Insight's lock flag is not carried: with no lock claim the page says the lock is unknown, not absent.
+        confirmations: height !== undefined ? (d?.confirmations ?? undefined) : undefined,
+        isInstantLocked: false,
+        isChainLocked: false,
+        chainLockClaim: undefined,
+      },
+    }
+  }
+
+  /** The answer of Hyphen, then Insight, whichever has it; null when neither does (which proves nothing). */
+  async function firstHosted<T>(
+    net: NetworkId,
+    ask: Record<'hyphen' | 'insight', () => Promise<T | null>>,
+  ): Promise<T | null> {
+    for (const source of ['hyphen', 'insight'] as const) {
+      if (!hostedOk(net, source)) continue
+      try {
+        const found = await ask[source]()
+        if (found) return found
+      } catch (e) {
+        if (isAborted(e)) throw e
+      }
+    }
+    return null
+  }
+
+  type HostedTx =
+    | NonNullable<Awaited<ReturnType<typeof hyphenRawTx>>>
+    | NonNullable<Awaited<ReturnType<typeof insightRawTx>>>
+
+  const hostedRawTx = (net: NetworkId, txid: string, signal?: AbortSignal) =>
+    firstHosted<HostedTx>(net, {
+      hyphen: () => hyphenRawTx(net, txid, signal),
+      insight: () => insightRawTx(net, txid, signal),
+    })
+
+  function hostedTxResult(found: HostedTx): Sourced<DecodedTx> {
+    const { tx, height, time, confirmations, isInstantLocked, isChainLocked, chainLockClaim } =
+      found.value
+    return fromHyphen(
+      found.stamp,
+      {
+        ...tx,
+        height,
+        ...(time !== undefined ? { time } : {}),
+        confirmations,
+        // Once the block is ChainLocked the InstantSend lock no longer matters, so it is not carried.
+        ...(isChainLocked || chainLockClaim ? {} : instantLockFields(isInstantLocked, 'hyphen')),
+        isChainLocked,
+        ...(chainLockClaim ? { chainLockClaim } : {}),
+      },
+      'dapi-down',
+      { height },
+    )
+  }
+
+  async function insightBlock(
+    net: NetworkId,
+    ref: BlockRef,
+    signal?: AbortSignal,
+  ): Promise<Sourced<DecodedBlock | null>> {
+    const hash =
+      'hash' in ref
+        ? ref.hash.toLowerCase()
+        : (await insightApi.block(net, ref.height, signal)).data?.hash
+    if (!hash)
+      return { ...stampOf(await insightApi.status(net, signal)), fallback: 'dapi-down', data: null }
+    const raw = await insightApi.rawBlock(net, hash, signal)
+    if (!raw.data) return fromHyphen(raw, null, 'dapi-down')
+    const block = await decodeBlockFor(net, hexToBytes(raw.data.rawblock), ref, signal)
+    try {
+      checkBlock(net, block, ref)
+    } catch (e) {
+      throw new SourceError({
+        source: 'insight',
+        kind: 'invalid-response',
+        message: (e as Error).message,
+      })
+    }
+    return fromHyphen(raw, { ...block, ...lockFields(statusAt(net, block.height)) }, 'dapi-down', {
+      height: block.height,
+    })
+  }
+
+  const hostedBlock = (net: NetworkId, ref: BlockRef, signal?: AbortSignal) =>
+    firstHosted(net, {
+      hyphen: () => hyphenBlock(net, ref, signal).then((found) => (found.data ? found : null)),
+      insight: () => insightBlock(net, ref, signal).then((found) => (found.data ? found : null)),
+    })
+
   function normalizedTxid(txid: string): string | null {
     const id = txid.trim().toLowerCase()
     return isHex(id, 32) ? id : null
@@ -805,23 +939,40 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
         return dapi({ ...block, ...lockFields(status) }, { height: block.height })
       }
-      if (hyphenStandsIn(net)) return hyphenBlock(net, ref, signal)
-
-      // Start the ChainLock lookup beside the block fetch: by height the answer to "is it locked" is already known to be needed.
-      const early = byHash
-        ? lockView(net).corroborated < 0
-          ? refreshLocks(net, signal, opts.priority)
-          : undefined
-        : lockStatus(net, ref.height, signal, opts.priority)
-      early?.catch(() => undefined)
-      const fetched = await fetchVerifiedBlock(net, ref, { signal, priority: opts.priority })
-      if (!fetched) return dapi(null)
-      const { block, bytes, node } = fetched
-      const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
-      if (cache && status === 'locked') {
-        void cache.putBlock(net, { hash: block.hash, height: block.height, bytes })
+      if (hyphenStandsIn(net)) {
+        try {
+          const fromIndex = await hyphenBlock(net, ref, signal)
+          if (fromIndex.data || !hostedOk(net, 'insight')) return fromIndex
+          const fromInsight = await insightBlock(net, ref, signal)
+          if (fromInsight.data) return fromInsight
+          return fromIndex
+        } catch (e) {
+          if (isAborted(e)) throw e
+        }
       }
-      return dapi({ ...block, ...lockFields(status) }, { node, height: block.height })
+
+      try {
+        // Start the ChainLock lookup beside the block fetch: by height the answer to "is it locked" is already known to be needed.
+        const early = byHash
+          ? lockView(net).corroborated < 0
+            ? refreshLocks(net, signal, opts.priority)
+            : undefined
+          : lockStatus(net, ref.height, signal, opts.priority)
+        early?.catch(() => undefined)
+        const fetched = await fetchVerifiedBlock(net, ref, { signal, priority: opts.priority })
+        if (!fetched) return dapi(null)
+        const { block, bytes, node } = fetched
+        const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
+        if (cache && status === 'locked') {
+          void cache.putBlock(net, { hash: block.hash, height: block.height, bytes })
+        }
+        return dapi({ ...block, ...lockFields(status) }, { node, height: block.height })
+      } catch (e) {
+        if (!isDapiFailure(e)) throw e
+        const stood = await hostedBlock(net, ref, signal)
+        if (!stood) throw e
+        return stood
+      }
     },
 
     async tx(
@@ -833,29 +984,28 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       const id = normalizedTxid(txid)
       if (!id) return dapi(null)
       if (hyphenStandsIn(net)) {
-        const found = await hyphenRawTx(net, id, signal)
-        if (!found) return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
-        const { tx, height, time, confirmations, isInstantLocked, isChainLocked, chainLockClaim } =
-          found.value
-        return fromHyphen(
-          found.stamp,
-          {
-            ...tx,
-            height,
-            ...(time !== undefined ? { time } : {}),
-            confirmations,
-            // Once the block is ChainLocked the InstantSend lock no longer matters, so it is not carried.
-            ...(isChainLocked || chainLockClaim
-              ? {}
-              : instantLockFields(isInstantLocked, 'hyphen')),
-            isChainLocked,
-            ...(chainLockClaim ? { chainLockClaim } : {}),
-          },
-          'dapi-down',
-          { height },
-        )
+        try {
+          const found = await hyphenRawTx(net, id, signal)
+          if (found) return hostedTxResult(found)
+          // Hyphen's "not found" is not the chain's answer when it simply doesn't have the transaction yet.
+          if (hostedOk(net, 'insight')) {
+            const fromInsight = await insightRawTx(net, id, signal)
+            if (fromInsight) return hostedTxResult(fromInsight)
+          }
+          return fromHyphen(await deps.hyphen.tx(net, id, signal), null, 'dapi-down')
+        } catch (e) {
+          if (isAborted(e)) throw e
+        }
       }
-      const raw = await dapiTx(net, id, { signal, priority: opts.priority, placement: true })
+      let raw: Awaited<ReturnType<typeof dapiTx>>
+      try {
+        raw = await dapiTx(net, id, { signal, priority: opts.priority, placement: true })
+      } catch (e) {
+        if (!isDapiFailure(e)) throw e
+        const found = await hostedRawTx(net, id, signal)
+        if (!found) throw e
+        return hostedTxResult(found)
+      }
       if (!raw) return dapi(null)
       const data: DecodedTx = {
         ...raw.tx,
@@ -879,6 +1029,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         wanted.set(input.txid, [...(wanted.get(input.txid) ?? []), input.vout])
       }
       const useHyphen = hyphenStandsIn(net)
+      let stoodIn = false
       let node: string | undefined
       let allFound = true
       let hyphenStamp: Sourced<unknown> | undefined
@@ -889,15 +1040,24 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         async (txid, rowSignal) => {
           let decoded: DecodedTx | undefined
           if (useHyphen) {
-            const found = await hyphenRawTx(net, txid, rowSignal)
+            const found = await hostedRawTx(net, txid, rowSignal)
             decoded = found?.value.tx
             if (found && (!hyphenStamp || found.stamp.asOf < hyphenStamp.asOf)) {
               hyphenStamp = found.stamp
             }
           } else {
-            const raw = await dapiTx(net, txid, { signal: rowSignal, placement: false })
-            decoded = raw?.tx
-            node ??= raw?.node
+            try {
+              const raw = await dapiTx(net, txid, { signal: rowSignal, placement: false })
+              decoded = raw?.tx
+              node ??= raw?.node
+            } catch (e) {
+              if (!isDapiFailure(e)) throw e
+              const found = await hostedRawTx(net, txid, rowSignal)
+              if (!found) throw e
+              decoded = found.value.tx
+              stoodIn = true
+              if (!hyphenStamp || found.stamp.asOf < hyphenStamp.asOf) hyphenStamp = found.stamp
+            }
           }
           if (!decoded) {
             allFound = false
@@ -916,7 +1076,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         },
         signal,
       )
-      if (useHyphen && hyphenStamp) return fromHyphen(hyphenStamp, out, 'dapi-down')
+      if ((useHyphen || stoodIn) && hyphenStamp) return fromHyphen(hyphenStamp, out, 'dapi-down')
       if (useHyphen)
         return { ...dapi(out), source: 'hyphen' as const, fallback: 'dapi-down' as const }
       // Every output here comes from bytes that hash to the id asked for, so the values cannot change.

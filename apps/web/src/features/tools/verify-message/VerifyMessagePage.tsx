@@ -172,10 +172,13 @@ function Result({ outcome }: { outcome: VerifyOutcome }) {
           {t`This address did not sign this message.`}
         </p>
         <p className="mt-2">
-          {t`The signature is well formed, but it was made by a different key. It matches this address:`}
+          {t`The signature is well formed, but checked against this exact message it points to a different address:`}
         </p>
         <p className="mt-1">
           <Hash value={outcome.signedBy} display="wrap" />
+        </p>
+        <p className="mt-2">
+          {t`Either another key made this signature, or the message is not exactly what was signed. A changed letter, space or line break gives a different address, and Radar cannot tell the two apart.`}
         </p>
         {elsewhere ? <OtherNetworkNote network={outcome.network} /> : null}
       </Card>

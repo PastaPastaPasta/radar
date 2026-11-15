@@ -1,17 +1,29 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-14 14:02+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ru\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 14:02+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, one {# транзакция} few {# транзакции} many {# транзакций} other {# транзакции}}"
+
+#. placeholder {0}: formatInt(size)
+msgid "{0} blocks a page, newest first."
+msgstr "{0} блоков на странице, сначала новые."
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
 
 msgid "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 msgstr "{count, plural, one {# транзакция ждёт блока} few {# транзакции ждут блока} many {# транзакций ждут блока} other {# транзакции ждут блока}}"
@@ -19,8 +31,254 @@ msgstr "{count, plural, one {# транзакция ждёт блока} few {# 
 msgid "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 msgstr "{open, plural, one {{have} из # открытого предложения набрали голоса для финансирования} few {{have} из # открытых предложений набрали голоса для финансирования} many {{have} из # открытых предложений набрали голоса для финансирования} other {{have} из # открытых предложений набрали голоса для финансирования}}"
 
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, one {# коммитмент кворума в этом блоке} few {# коммитмента кворума в этом блоке} many {# коммитментов кворума в этом блоке} other {# коммитмента кворума в этом блоке}}"
+
+msgid "← Previous"
+msgstr "← Назад"
+
+msgid "← Previous day"
+msgstr "← Предыдущий день"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "Блок"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(height)
+msgid "Block {0}"
+msgstr "Блок {0}"
+
+msgid "Block reward"
+msgstr "Награда за блок"
+
+msgid "Blocks"
+msgstr "Блоки"
+
+msgid "Blocks on {date}"
+msgstr "Блоки за {date}"
+
+msgid "Blocks on {dateLabel}"
+msgstr "Блоки за {dateLabel}"
+
+msgid "Blocks per page"
+msgstr "Блоков на странице"
+
+msgid "Browse by date"
+msgstr "Просмотр по дате"
+
+msgid "bytes"
+msgstr "байт"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "Coinbase"
+msgstr "Coinbase"
+
+msgid "Coinbase payload"
+msgstr "Полезная нагрузка coinbase"
+
+msgid "Coinbase tag says"
+msgstr "Тег coinbase гласит"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core blocks"
+msgstr "Блоки Core"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash добавляет в coinbase полезную нагрузку, которая фиксирует список мастернод и последний ChainLock."
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "Сутки считаются с 00:00 до 24:00 по UTC."
+
+msgid "Difficulty"
+msgstr "Сложность"
+
+msgid "Everything the coinbase pays out"
+msgstr "Всё, что выплачивает coinbase"
+
+msgid "Finding this day's blocks"
+msgstr "Поиск блоков за этот день"
+
+msgid "Hash"
+msgstr "Хеш"
+
+msgid "Header"
+msgstr "Заголовок"
+
+msgid "Height"
+msgstr "Высота"
+
+#. placeholder {0}: formatInt(lowest)
+#. placeholder {1}: formatInt(Math.max(...heights))
+msgid "Heights {0} to {1}"
+msgstr "Высоты с {0} по {1}"
+
+msgid "Hyphen isn’t answering, so this page reads Insight where it needs an index."
+msgstr "Hyphen не отвечает, поэтому там, где странице нужен индекс, она читает Insight."
+
+msgid "Inputs → outputs"
+msgstr "Входы → выходы"
+
+msgid "Insight couldn’t be reached"
+msgstr "Не удалось связаться с Insight"
+
+msgid "Jump to a date"
+msgstr "Перейти к дате"
+
+msgid "Latest blocks"
+msgstr "Последние блоки"
+
+msgid "Merkle root"
+msgstr "Корень Меркла"
+
+msgid "Newer"
+msgstr "Новее"
+
+msgid "Next →"
+msgstr "Далее →"
+
+msgid "Next block"
+msgstr "Следующий блок"
+
+msgid "Next day"
+msgstr "Следующий день"
+
+msgid "Next day →"
+msgstr "Следующий день →"
+
+msgid "No blocks came back for this page"
+msgstr "Для этой страницы не пришло ни одного блока"
+
+msgid "No blocks on this date"
+msgstr "В эту дату блоков нет"
+
+msgid "No known pool"
+msgstr "Известный пул не найден"
+
+msgid "No tag in the coinbase"
+msgstr "В coinbase нет тега"
+
 msgid "No transactions are waiting for a block"
 msgstr "Ни одна транзакция не ждёт блока"
 
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not ChainLocked yet"
+msgstr "Пока без ChainLock"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "Не найдено в сети {0}"
+
+msgid "Not in DAPI"
+msgstr "Нет в DAPI"
+
+msgid "Older"
+msgstr "Старее"
+
+msgid "Older blocks from before this date"
+msgstr "Более старые блоки до этой даты"
+
+msgid "On this page"
+msgstr "На этой странице"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "Для страниц по {0} нужен актуальный индекс, а сейчас такого нет."
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "Для страниц по {0} нужен индексатор, который режим «Только децентрализованно» не использует."
+
+msgid "Previous block"
+msgstr "Предыдущий блок"
+
+msgid "Previous day"
+msgstr "Предыдущий день"
+
+msgid "Reading the chain tip…"
+msgstr "Читаем вершину цепочки…"
+
+#. placeholder {0}: networkName(other)
+msgid "Search {0}"
+msgstr "Искать в сети {0}"
+
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "Поиск в заголовках блоков начала и конца этого дня: найдено {0} из 2."
+
+msgid "See the sources"
+msgstr "Посмотреть источники"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "Тег: {tag}. Его пишет майнер, поэтому это не доказательство."
+
+msgid "Tap a transaction for its inputs, outputs and size"
+msgstr "Нажмите на транзакцию, чтобы увидеть входы, выходы и размер"
+
+#. placeholder {0}: dateLabel ?? date
+msgid "That is the first block on {0}. Going older leaves this day."
+msgstr "Это первый блок за {0}. Переход к более старым покидает этот день."
+
 msgid "The latest block was mined <0/>"
 msgstr "Последний блок добыт <0/>"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "Источник не вернул блоки для высот с {0} по {1}. Попробуйте соседнюю страницу или страницу покороче."
+
+msgid "There is no block with this height or hash on this network."
+msgstr "В этой сети нет блока с такой высотой или хешем."
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "В этой сети в этот день нет блоков, либо этот день ещё не наступил."
+
+msgid "This source covers this row only"
+msgstr "Этот источник относится только к этой строке"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Total out"
+msgstr "Всего выведено"
+
+msgid "Transaction"
+msgstr "Транзакция"
+
+msgid "Transactions"
+msgstr "Транзакции"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "Транзакции в блоке {0}"
+
+msgid "tx"
+msgstr "тх"
+
+msgid "Txs"
+msgstr "Тх"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Version"
+msgstr "Версия"
+
+#. placeholder {0}: block.version.toString(16)
+msgid "Version {0}"
+msgstr "Версия {0}"
+
+msgid "Where this is"
+msgstr "Где это находится"

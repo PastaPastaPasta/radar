@@ -1,10 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
+import { sourceInUse } from '@/data/endpoints'
 import { useIndexHealth } from '@/data/index-health'
 import { isDevnet } from '@/lib/network'
 import { PageLink, useNetwork } from '@/features/entity'
 import { Empty, Unavailable, useHyphenLagSentence, useInsightLagSentence } from '@/ui'
+import { IndexStandIn } from './IndexStandIn'
 
 /**
  * Wraps a page that reads an index. Hyphen indexes mainnet and testnet only, so a devnet gets a plain explanation
@@ -59,6 +61,9 @@ export function StaleIndexNotice({ scope, reads }: { scope?: string; reads?: 'in
   const hyphen = useHyphenLagSentence(net, index.state === 'stale' ? index.lag : undefined)
   const insightStale = reads === 'insight' && index.insight.state === 'stale'
   const insight = useInsightLagSentence(net, insightStale ? index.insight.lag : undefined)
+  if (reads === 'insight' && index.down && !index.off && sourceInUse(net, 'insight')) {
+    return <IndexStandIn />
+  }
   if (hyphen === undefined) return null
   if (reads === 'insight' && !insightStale && scope === undefined) return null
   const figures =

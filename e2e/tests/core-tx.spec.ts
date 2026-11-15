@@ -20,7 +20,7 @@ const PAYLOADS: { name: string; txid: string; kind: string; shows: string }[] = 
     name: 'a quorum commitment',
     txid: '4fa48aca80dfcf1e7fa0c59eb36e15ae7470195d79185a0b9fd3f4e5c10be76b',
     kind: 'qcTx',
-    shows: 'Signers',
+    shows: 'Null commitment',
   },
   {
     name: 'a masternode registration',

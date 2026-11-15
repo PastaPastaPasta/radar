@@ -23,7 +23,11 @@ export function SearchTrigger({ label, className }: SearchTriggerProps) {
         palette.open()
       }}
     >
-      <span>{label ?? t`Search Radar`}</span> <kbd aria-hidden="true">/</kbd>
+      <span>{label ?? t`Search Radar`}</span>{' '}
+      {/* A touch screen has no "/" key to press, so the chip would only mislead. */}
+      <kbd aria-hidden="true" className="[@media(hover:none)]:hidden">
+        /
+      </kbd>
     </PageLink>
   )
 }

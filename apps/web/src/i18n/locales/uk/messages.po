@@ -29,10 +29,6 @@ msgstr "(цей сайт передає запит до {0})"
 msgid "[circular]"
 msgstr "[циклічне посилання]"
 
-#. placeholder {0}: block.txs.length
-msgid "{0, plural, one {# transaction} other {# transactions}}"
-msgstr "{0, plural, one {# транзакція} few {# транзакції} many {# транзакцій} other {# транзакції}}"
-
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, one {останній заголовок блоку # хвилину тому} few {останній заголовок блоку # хвилини тому} many {останній заголовок блоку # хвилин тому} other {останній заголовок блоку # хвилини тому}}"
@@ -40,10 +36,6 @@ msgstr "{0, plural, one {останній заголовок блоку # хви
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
 msgstr "Адрес у рейтингу: {0}"
-
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} блоків на сторінці, спочатку нові."
 
 #. placeholder {0}: titles[id]
 msgid "{0} by block height"
@@ -149,9 +141,6 @@ msgstr "{base} ({detail})"
 msgid "{blockCount} blocks so far"
 msgstr "Поки що блоків: {blockCount}"
 
-msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{confirmations, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
-
 msgid "{d} d"
 msgstr "{d} д"
 
@@ -242,9 +231,6 @@ msgstr "{name} надто довго відповідав"
 msgid "{percent} through"
 msgstr "Пройдено {percent}"
 
-msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
-msgstr "{quorumCommitments, plural, one {# коммітмент кворуму в цьому блоці} few {# коммітменти кворуму в цьому блоці} many {# коммітментів кворуму в цьому блоці} other {# коммітменту кворуму в цьому блоці}}"
-
 msgid "{s} s"
 msgstr "{s} с"
 
@@ -253,12 +239,6 @@ msgstr "% від залишків на адресах"
 
 msgid "% of supply"
 msgstr "% від пропозиції"
-
-msgid "← Previous"
-msgstr "← Назад"
-
-msgid "← Previous day"
-msgstr "← Попередній день"
 
 #. placeholder {0}: formatInt(matches)
 msgid "<0>{0}</0> match"
@@ -284,12 +264,6 @@ msgstr "Адреса Dash складається з 34 символів і в о
 
 msgid "A proof didn't verify"
 msgstr "Доказ не пройшов перевірку"
-
-msgid "A script address (starting with 7 or 8) can’t sign a message."
-msgstr "Адреса скрипту (починається з 7 або 8) не може підписувати повідомлення."
-
-msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
-msgstr "Підпис — це 88 символів base64, що закінчуються на «=», у тому вигляді, в якому його виводить signmessage у Dash Core."
 
 msgid "About sources"
 msgstr "Про джерела"
@@ -374,26 +348,11 @@ msgstr "Баланс"
 msgid "Behind"
 msgstr "Відстає"
 
-msgid "Bits"
-msgstr "Bits"
-
 msgid "Block"
 msgstr "Блок"
 
-#. placeholder {0}: formatInt(block.height - 1)
-#. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(ref.height)
-msgid "Block {0}"
-msgstr "Блок {0}"
-
 msgid "Block height"
 msgstr "Висота блока"
-
-msgid "Block reward"
-msgstr "Нагорода за блок"
-
-msgid "Blocks"
-msgstr "Блоки"
 
 #. placeholder {0}: formatInt(chart.startHeight)
 #. placeholder {1}: formatInt(chart.endHeight)
@@ -404,20 +363,8 @@ msgstr "Блоки з {0} по {1}, одна точка на {2, plural, one {# 
 msgid "Blocks and transactions elsewhere in Radar are current."
 msgstr "Блоки й транзакції в інших розділах Radar актуальні."
 
-msgid "Blocks on {date}"
-msgstr "Блоки за {date}"
-
-msgid "Blocks on {dateLabel}"
-msgstr "Блоки за {dateLabel}"
-
-msgid "Blocks per page"
-msgstr "Блоків на сторінці"
-
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Блоки, транзакції та адреси в інших розділах Radar актуальні."
-
-msgid "Browse by date"
-msgstr "Перегляд за датою"
 
 msgid "Budget"
 msgstr "Бюджет"
@@ -428,17 +375,11 @@ msgstr "Бюджетні пропозиції"
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Бюджетні пропозиції та стан голосування за них. Голосують у Governance."
 
-msgid "bytes"
-msgstr "байт"
-
 msgid "Camera"
 msgstr "Камера"
 
 msgid "Camera preview"
 msgstr "Перегляд з камери"
-
-msgid "Can’t check"
-msgstr "Не вдається перевірити"
 
 msgid "Cancel"
 msgstr "Скасувати"
@@ -455,17 +396,11 @@ msgstr "ChainLock повідомлено одним вузлом"
 msgid "ChainLocked"
 msgstr "ChainLocked"
 
-msgid "Chainwork"
-msgstr "Chainwork"
-
 msgid "Charts"
 msgstr "Графіки"
 
 msgid "Charts need an indexer"
 msgstr "Графікам потрібен індексатор"
-
-msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
-msgstr "Перевірте, чи підписала адреса Dash повідомлення. Перевірка виконується в цьому браузері: нічого з уведеного тут нікуди не надсилається, а Radar ніколи не просить ключ."
 
 msgid "Checking"
 msgstr "Перевірка"
@@ -493,12 +428,6 @@ msgstr "закрити"
 
 msgid "Coinbase"
 msgstr "Coinbase"
-
-msgid "Coinbase payload"
-msgstr "Корисне навантаження coinbase"
-
-msgid "Coinbase tag says"
-msgstr "Тег coinbase повідомляє"
 
 msgid "Collapse all"
 msgstr "Згорнути все"
@@ -552,17 +481,11 @@ msgstr "Копіювати JSON"
 msgid "Copy link to this section"
 msgstr "Копіювати посилання на цей розділ"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core address"
 msgstr "Адреса Core"
 
 msgid "Core block"
 msgstr "Блок Core"
-
-msgid "Core blocks"
-msgstr "Блоки Core"
 
 msgid "Core transaction"
 msgstr "Транзакція Core"
@@ -600,17 +523,11 @@ msgstr "Виведення кредитів"
 msgid "DAPI addresses"
 msgstr "Адреси DAPI"
 
-msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
-msgstr "Dash додає до coinbase корисне навантаження, яке фіксує список мастернод і останній ChainLock."
-
 msgid "Data contract"
 msgstr "Контракт даних"
 
 msgid "Data sources"
 msgstr "Джерела даних"
-
-msgid "Days run from 00:00 to 24:00 UTC."
-msgstr "Доба триває з 00:00 до 24:00 за UTC."
 
 msgid "Decentralized"
 msgstr "Децентралізовано"
@@ -730,9 +647,6 @@ msgstr "Оцінка"
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Усі бекенди, до яких може звертатися Radar, хто їх підтримує і чи використовуються вони в мережі {network}. Кожна цифра в Radar вказує, звідки вона взята."
 
-msgid "Everything the coinbase pays out"
-msgstr "Усе, що виплачує coinbase"
-
 msgid "Evonode"
 msgstr "Евонода"
 
@@ -765,9 +679,6 @@ msgstr "Фільтр пропозицій за назвою або хешем"
 
 msgid "Filter proposals by status"
 msgstr "Фільтр пропозицій за статусом"
-
-msgid "Finding this day's blocks"
-msgstr "Пошук блоків за цей день"
 
 msgid "First"
 msgstr "Перша"
@@ -813,9 +724,6 @@ msgstr "Пропозиціям щодо управління потрібен і
 msgid "Group"
 msgstr "Група"
 
-msgid "Hash"
-msgstr "Хеш"
-
 msgid "Hash rate"
 msgstr "Хешрейт"
 
@@ -823,19 +731,8 @@ msgstr "Хешрейт"
 msgid "Hash rate over the last {0} blocks"
 msgstr "Хешрейт за останні {0} блоків"
 
-msgid "Header"
-msgstr "Заголовок"
-
-msgid "Height"
-msgstr "Висота"
-
 msgid "Height when connected"
 msgstr "Висота під час підключення"
-
-#. placeholder {0}: formatInt(lowest)
-#. placeholder {1}: formatInt(Math.max(...heights))
-msgid "Heights {0} to {1}"
-msgstr "Висоти з {0} по {1}"
 
 msgid "Held by the top 10"
 msgstr "Належить топ-10"
@@ -936,17 +833,11 @@ msgstr "проіндексовано до блоку {block} (відставан
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "проіндексовано до блоку {block} (відставання: {0} блоків)"
 
-msgid "Inputs → outputs"
-msgstr "Входи → виходи"
-
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight не зміг повернути найдавніші транзакції цієї адреси."
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight не зміг повернути транзакції цієї адреси."
-
-msgid "Insight couldn’t be reached"
-msgstr "Не вдалося зв’язатися з Insight"
 
 msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
 msgstr "Insight не повідомляє про фінансування, а час наступного суперблоку невідомий, тому жодну пропозицію не показано як профінансовану. «Проходить» Radar обчислює за кількістю голосів з Insight."
@@ -975,9 +866,6 @@ msgstr "недійсна дата"
 msgid "JSON"
 msgstr "JSON"
 
-msgid "Jump to a date"
-msgstr "Перейти до дати"
-
 msgid "Key limits update"
 msgstr "Оновлення лімітів ключів"
 
@@ -998,9 +886,6 @@ msgstr "останній обхід завершено {0} тому"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "остання успішна {0}"
-
-msgid "Latest blocks"
-msgstr "Останні блоки"
 
 msgid "Link copied"
 msgstr "Посилання скопійовано"
@@ -1054,12 +939,6 @@ msgstr "Мемпул"
 msgid "Mempool pressure"
 msgstr "Навантаження мемпулу"
 
-msgid "Merkle root"
-msgstr "Корінь Меркла"
-
-msgid "Message"
-msgstr "Повідомлення"
-
 msgid "Metrics history"
 msgstr "Історія метрик"
 
@@ -1102,35 +981,14 @@ msgstr "Новіші"
 msgid "Next"
 msgstr "Далі"
 
-msgid "Next →"
-msgstr "Далі →"
-
-msgid "Next block"
-msgstr "Наступний блок"
-
-msgid "Next day"
-msgstr "Наступний день"
-
-msgid "Next day →"
-msgstr "Наступний день →"
-
 msgid "No"
 msgstr "Ні"
 
 msgid "No balances indexed yet."
 msgstr "Баланси ще не проіндексовано."
 
-msgid "No blocks came back for this page"
-msgstr "Для цієї сторінки не прийшов жоден блок"
-
-msgid "No blocks on this date"
-msgstr "За цією датою блоків немає"
-
 msgid "No camera could be opened here. Choose a picture instead."
 msgstr "Тут не вдалося відкрити камеру. Виберіть зображення."
-
-msgid "No known pool"
-msgstr "Відомого пулу немає"
 
 msgid "No proposal with this hash on this network."
 msgstr "У цій мережі немає пропозиції з таким хешем."
@@ -1143,9 +1001,6 @@ msgstr "У цій мережі немає пропозицій."
 
 msgid "No QR code found in that picture."
 msgstr "На цьому зображенні QR-код не знайдено."
-
-msgid "No tag in the coinbase"
-msgstr "У coinbase немає тега"
 
 msgid "No transactions in the mempool right now."
 msgstr "Зараз у мемпулі немає транзакцій."
@@ -1162,21 +1017,8 @@ msgstr "За цією пропозицією голосів не зафіксо�
 msgid "Node list and quorum keys"
 msgstr "Список вузлів і ключі кворуму"
 
-msgid "Nonce"
-msgstr "Nonce"
-
 msgid "Not available for this record"
 msgstr "Недоступно для цього запису"
-
-msgid "Not ChainLocked yet"
-msgstr "Ще без ChainLock"
-
-#. placeholder {0}: networkName(net)
-msgid "Not found on {0}"
-msgstr "Не знайдено в мережі {0}"
-
-msgid "Not in DAPI"
-msgstr "Немає в DAPI"
 
 msgid "Not on {net}"
 msgstr "Немає в мережі {net}"
@@ -1208,12 +1050,6 @@ msgstr "У цьому режимі вимкнено"
 msgid "Older"
 msgstr "Старіші"
 
-msgid "Older blocks from before this date"
-msgstr "Старіші блоки до цієї дати"
-
-msgid "On this page"
-msgstr "На цій сторінці"
-
 msgid "open"
 msgstr "відкрити"
 
@@ -1244,14 +1080,6 @@ msgstr "Вихід"
 
 msgid "Pages"
 msgstr "Сторінки"
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an index that is up to date, and none is right now."
-msgstr "Для сторінок по {0} потрібен актуальний індекс, а зараз такого немає."
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
-msgstr "Для сторінок по {0} потрібен індексатор, який режим «Лише децентралізовано» не використовує."
 
 msgid "Pagination"
 msgstr "Посторінкова навігація"
@@ -1333,12 +1161,6 @@ msgstr "Попередній перегляд"
 
 msgid "Previous"
 msgstr "Назад"
-
-msgid "Previous block"
-msgstr "Попередній блок"
-
-msgid "Previous day"
-msgstr "Попередній день"
 
 msgid "Price feed"
 msgstr "Джерело цін"
@@ -1424,9 +1246,6 @@ msgstr "Діапазон місць"
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "Зчитайте QR-код камерою або із зображення й знайдіть те, що в ньому міститься. Зображення читається в цьому браузері й не завантажується."
 
-msgid "Reading the chain tip…"
-msgstr "Читаємо вершину ланцюга…"
-
 msgid "Reading the picture…"
 msgstr "Читання зображення…"
 
@@ -1480,16 +1299,8 @@ msgstr "Рядків на сторінці"
 msgid "Scroll"
 msgstr "Прокрутка"
 
-#. placeholder {0}: networkName(other)
-msgid "Search {0}"
-msgstr "Шукати в мережі {0}"
-
 msgid "Search Radar"
 msgstr "Пошук у Radar"
-
-#. placeholder {0}: formatInt(range.found)
-msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
-msgstr "Пошук у заголовках блоків початку й кінця цього дня: знайдено {0} із 2."
 
 msgid "Searching…"
 msgstr "Пошук…"
@@ -1575,12 +1386,6 @@ msgstr "Показати ще"
 msgid "Show QR code"
 msgstr "Показати QR-код"
 
-msgid "Signature"
-msgstr "Підпис"
-
-msgid "Signed message"
-msgstr "Підписане повідомлення"
-
 msgid "Since you opened this page"
 msgstr "Відколи ви відкрили сторінку"
 
@@ -1589,9 +1394,6 @@ msgstr "Розмір"
 
 msgid "Slow"
 msgstr "Повільно"
-
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "На сторінці щось зламалося. Решта Radar працює."
 
 msgid "Something went wrong"
 msgstr "Щось пішло не так"
@@ -1608,9 +1410,6 @@ msgstr "Сортування за стовпцем «{column}», за спада
 
 msgid "Sources"
 msgstr "Джерела"
-
-msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
-msgstr "Пробіли та розриви рядків у повідомленні враховуються: воно має точно збігатися з підписаним."
 
 msgid "Spendable outputs"
 msgstr "Виходи, доступні для витрат"
@@ -1646,29 +1445,11 @@ msgstr "Підсумок"
 msgid "Supply concentration"
 msgstr "Концентрація пропозиції"
 
-msgid "Switch to mainnet"
-msgstr "Перемкнутися на основну мережу"
-
-msgid "Switch to testnet"
-msgstr "Перемкнутися на тестову мережу"
-
-msgid "Tag: {tag}. The miner writes it, so it is not proof."
-msgstr "Тег: {tag}. Його пише майнер, тому це не доказ."
-
-msgid "Tap a transaction for its inputs, outputs and size"
-msgstr "Торкніться транзакції, щоб побачити входи, виходи та розмір"
-
 msgid "testnet"
 msgstr "тестова мережа"
 
-msgid "That isn’t a Dash address Radar can check."
-msgstr "Це не адреса Dash, яку Radar може перевірити."
-
 msgid "That isn’t a Dash address."
 msgstr "Це не адреса Dash."
-
-msgid "That isn’t a Dash signature."
-msgstr "Це не підпис Dash."
 
 msgid "That picture couldn’t be read."
 msgstr "Не вдалося прочитати це зображення."
@@ -1754,19 +1535,11 @@ msgstr "Решта цієї сторінки працює."
 msgid "The rich list needs an indexer"
 msgstr "Для списку найбагатших потрібен індексатор"
 
-msgid "The signature is well formed, but it was made by a different key. It matches this address:"
-msgstr "Підпис складено правильно, але створено іншим ключем. Він відповідає цій адресі:"
-
 msgid "The source is busy"
 msgstr "Джерело перевантажене"
 
 msgid "The source isn't answering"
 msgstr "Джерело не відповідає"
-
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
-msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
-msgstr "Джерело не повернуло блоки для висот від {0} до {1}. Спробуйте сусідню сторінку або коротшу."
 
 msgid "The source sent something Radar couldn't read"
 msgstr "Джерело надіслало дані, які Radar не зміг прочитати"
@@ -1785,15 +1558,6 @@ msgstr "Курс USD поруч із сумами в DASH. Лише mainnet."
 msgid "Their size"
 msgstr "Їхній розмір"
 
-msgid "There is no block with this height or hash on this network."
-msgstr "У цій мережі немає блока з такою висотою або хешем."
-
-msgid "This address did not sign this message."
-msgstr "Ця адреса не підписувала це повідомлення."
-
-msgid "This address signed this message."
-msgstr "Ця адреса підписала це повідомлення."
-
 msgid "This address's balance, history and unspent outputs need an indexer"
 msgstr "Для балансу, історії та невитрачених виходів цієї адреси потрібен індексатор"
 
@@ -1803,17 +1567,8 @@ msgstr "Цей браузер"
 msgid "This is a {name} address."
 msgstr "Це адреса {name}."
 
-msgid "This is a mainnet address."
-msgstr "Це адреса основної мережі."
-
 msgid "This is a Radar bug, not your connection. {rest}"
 msgstr "Це помилка Radar, а не проблема з вашим з’єднанням. {rest}"
-
-msgid "This is a testnet address."
-msgstr "Це адреса тестової мережі."
-
-msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
-msgstr "Це схоже на закритий ключ або фразу відновлення. Radar вони ніколи не потрібні, тому перевіряти це він не буде. Очистіть поле й вставте натомість підписане повідомлення."
 
 msgid "This needs an indexer"
 msgstr "Для цього потрібен індексатор"
@@ -1823,12 +1578,6 @@ msgstr "Для цього потрібен Platform Explorer"
 
 msgid "This needs Radar's crawler"
 msgstr "Для цього потрібен краулер Radar"
-
-msgid "This network has no blocks in this day, or the day has not happened yet."
-msgstr "У цій мережі за цю добу немає блоків, або цієї доби ще не настало."
-
-msgid "This page couldn’t be shown"
-msgstr "Не вдалося показати цю сторінку"
 
 msgid "This page needs an indexer"
 msgstr "Для цієї сторінки потрібен індексатор"
@@ -1841,9 +1590,6 @@ msgstr "Ця пропозиція та історія голосування в�
 
 msgid "This site"
 msgstr "Цей сайт"
-
-msgid "This source covers this row only"
-msgstr "Це джерело стосується лише цього рядка"
 
 msgid "This source isn't available here"
 msgstr "Це джерело тут недоступне"
@@ -1915,9 +1661,6 @@ msgstr "Інструменти"
 msgid "Top {0}"
 msgstr "Топ-{0}"
 
-msgid "Total out"
-msgstr "Усього виведено"
-
 msgid "Total received"
 msgstr "Усього отримано"
 
@@ -1932,10 +1675,6 @@ msgstr "Швидкість транзакцій"
 
 msgid "Transactions"
 msgstr "Транзакції"
-
-#. placeholder {0}: formatInt(block.height)
-msgid "Transactions in block {0}"
-msgstr "Транзакції в блоці {0}"
 
 msgid "Transactions of this address, newest first"
 msgstr "Транзакції цієї адреси, спочатку нові"
@@ -1977,12 +1716,6 @@ msgstr "Повторіть за хвилину. {rest}"
 msgid "Try another name or hash, or choose All."
 msgstr "Спробуйте іншу назву чи хеш або виберіть «Усі»."
 
-msgid "tx"
-msgstr "тх"
-
-msgid "Txs"
-msgstr "Тх"
-
 msgid "Type"
 msgstr "Тип"
 
@@ -2016,9 +1749,6 @@ msgstr "Цінам у USD потрібне джерело цін"
 msgid "Use all sources"
 msgstr "Використовувати всі джерела"
 
-msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
-msgstr "Використовуйте адресу, яка підписала повідомлення; в основній мережі вона починається з X, у тестовій — з y."
-
 msgid "Use the camera"
 msgstr "Використати камеру"
 
@@ -2028,24 +1758,8 @@ msgstr "Використовувати цей devnet"
 msgid "Username"
 msgstr "Ім’я користувача"
 
-msgid "Valid"
-msgstr "Дійсно"
-
 msgid "Value"
 msgstr "Значення"
-
-msgid "Verify"
-msgstr "Перевірити"
-
-msgid "Verify message"
-msgstr "Перевірка повідомлення"
-
-msgid "Version"
-msgstr "Версія"
-
-#. placeholder {0}: block.version.toString(16)
-msgid "Version {0}"
-msgstr "Версія {0}"
 
 msgid "Vote"
 msgstr "Голос"
@@ -2079,9 +1793,6 @@ msgstr "Коли"
 
 msgid "Where requests go on {network}, and what each one is for."
 msgstr "Куди йдуть запити в мережі {network} і для чого потрібен кожен."
-
-msgid "Where this is"
-msgstr "Де це розташовано"
 
 msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
 msgstr "Які існують evonode: список читається приблизно раз на годину (якщо прочитати його не вдалося, використовується збережений або вбудований), а також публічні ключі кворуму, за якими SDK перевіряє докази. Режим «Лише децентралізовано» усе одно його використовує: без нього Radar не зміг би знаходити вузли й перевіряти докази."

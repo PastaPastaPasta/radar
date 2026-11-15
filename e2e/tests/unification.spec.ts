@@ -150,13 +150,12 @@ test.describe('links between layers', () => {
     )
   })
 
-  test('an asset unlock links to the withdrawals on Platform @X-02', async ({ page }) => {
+  test('an asset unlock links to its withdrawal document on Platform @X-02', async ({ page }) => {
     await page.goto(`/tx/${main.id('tx_assetunlock', '')}`)
     await settled(page)
-    const link = page.getByRole('link', { name: 'Withdrawals on Platform' })
+    const link = page.getByRole('link', { name: 'Withdrawal document' })
     await expect(link).toBeVisible({ timeout: 15_000 })
-    await link.click()
-    await expect(page).toHaveURL(/\/platform\/txs\?.*type=/)
+    await expect(link).toHaveAttribute('href', /^\/document\/\w+\/withdrawal\/\w+$/)
   })
 
   test('an evonode chip opens the Platform tab of its masternode @X-02', async ({ page }) => {

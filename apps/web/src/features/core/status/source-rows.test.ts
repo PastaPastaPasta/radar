@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { HealthState, SourceHealth } from '@/data/health'
 import type { SourceId } from '@/data/envelope'
-import { offers, overallState, sourceRows } from './source-rows'
+import { laggingSources, offers, overallState, sourceRows } from './source-rows'
 
 const h = (source: SourceId, state: HealthState): SourceHealth => ({
   source,
@@ -56,6 +56,22 @@ describe('overallState', () => {
     expect(overallState(rows({ dapi: 'ok', hyphen: 'stale' }))).toBe('attention')
     expect(overallState(rows({ radar: 'degraded', dapi: 'ok' }))).toBe('attention')
     expect(overallState(rows({ sdk: 'slow', dapi: 'ok' }))).toBe('attention')
+  })
+
+  it('is attention when a source in use reports that it trails the chain, though it is not stale @W2-11 @X-09', () => {
+    const behind: SourceHealth = {
+      ...h('hyphen', 'ok'),
+      lag: { blocks: 9, ms: 20 * 60_000, detail: 'indexed to block 1 (20 minutes behind)' },
+    }
+    const all = sourceRows('mainnet', [h('dapi', 'ok'), behind])
+    expect(overallState(all)).toBe('attention')
+    expect(laggingSources(all)).toEqual(['hyphen'])
+    expect(laggingSources(sourceRows('mainnet', [h('dapi', 'ok')]))).toEqual([])
+    expect(
+      overallState(
+        sourceRows('mainnet', [h('dapi', 'ok'), { ...behind, lag: { blocks: 0, detail: '' } }]),
+      ),
+    ).toBe('ok')
   })
 
   it('is checking until something has answered, ok after', () => {

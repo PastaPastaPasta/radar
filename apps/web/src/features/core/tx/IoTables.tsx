@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
@@ -160,7 +161,7 @@ export function IoTables({
       <div className="rx-io">
         <Card
           layer="core"
-          title={t`${formatInt(inCount)} inputs`}
+          title={plural(inCount, { one: '# input', other: '# inputs' })}
           actions={inTotal === undefined ? null : <Amount value={inTotal} kind="duffs" />}
         >
           <table className={tableClass(columnUnit)}>
@@ -248,7 +249,7 @@ export function IoTables({
                 </span>
               ) : (
                 <>
-                  {t`Amounts are loaded for the first ${formatInt(partial.loaded)} inputs. Each previous transaction is a separate request.`}
+                  {t`Amounts are loaded for the first ${plural(partial.loaded, { one: '# input', other: '# inputs' })}. Each previous transaction is a separate request.`}
                   {inCount > inLimit ? null : (
                     <>
                       {' '}
@@ -267,7 +268,7 @@ export function IoTables({
         </div>
         <Card
           layer="core"
-          title={t`${formatInt(outCount)} outputs`}
+          title={plural(outCount, { one: '# output', other: '# outputs' })}
           actions={<Amount value={outTotal} kind="duffs" />}
         >
           <table className={tableClass(columnUnit)}>

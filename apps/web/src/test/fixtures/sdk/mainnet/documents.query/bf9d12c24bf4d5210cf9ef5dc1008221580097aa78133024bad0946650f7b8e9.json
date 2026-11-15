@@ -1,0 +1,47 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6",
+    "type": "withdrawal",
+    "where": [
+      ["status", "==", 2],
+      ["transactionIndex", "==", 15590]
+    ],
+    "orderBy": [
+      ["status", "asc"],
+      ["transactionIndex", "asc"]
+    ],
+    "limit": 2
+  },
+  "recordedAt": "2026-11-14T23:06:12.151Z",
+  "result": {
+    "ok": true,
+    "data": [],
+    "proved": true,
+    "meta": {
+      "height": 471635,
+      "coreChainLockedHeight": 2572379,
+      "epoch": 88,
+      "timeMs": 1794697402485,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "AQCNAYu0Y9N7x+P9nSpvTIfo4Y/2NqSLOzZ3aAtLd5NPHR3eBAFAACQCASCiobSsb+8i6ioaaOgSNkSzV4dfa0EsGBCSgcFG57JxvACp8Q2avgttEytbh/7fdGmIRRBufKSP9txrcCg/0wfqMBABhCAXslyBPhXkgOc4b4Fj7UMsSi2f0Pvc3yOrS+h/BOsRAQFAAPsBFQHmTXSyAkvUdwBe+68QTo7jnBScgza1bf4ofweeWJHHLQQgNmK7YeF/rj6ilM9gMZf7CqttURgL2LYQTElEpi/i2X8ABQIBAQEAln/LevpVWwxV+sQaIgDADZI7G8JYxle2EtclaD9/K4AQAecKdt8f8pJRUPx2QJ+jr5Ojmzvqu/wD3H1dol0dg+RLEQLtnQngh5JLwync2nwvM+iWcnE4NelpTvdO9m2jQQ5XYxABnTHyaQgzfBaaHJjFNiK64oG2Cxr7w9vZtoSuCPIUUDERAs1/q0m7Ln8I+6eawn1Uz81Ym/PTy6wq/9ytxjSNMiNJEAFxhL96HAwo05mQZwFrgeGyEcS1zEMWavmRk24M0DrhdBEBIDZiu2Hhf64+opTPYDGX+wqrbVEYC9i2EExJRKYv4tl/AHcBuaNnaoMrqkpSLZxB30oTBx5i/pB3hgk6j/6bZolu7UsEAQEADgIBCndpdGhkcmF3YWwA5OCqakd1ayPzTyRhi7fcob2VQqZ7+dFOmaN4hqI1LBsQAY1olAbxAWZpS7nwC6/Dv3BdEY2sQPgd8SUkT6DSlpq1EQEBAQA6BAp3aXRoZHJhd2FsAAwCAQgkb3duZXJJZADzAzth01oheckUPzg7cpOkPxDY85M80BTJSJALUceuFAEKd2l0aGRyYXdhbAB6AQ+crUeRmd3M6Gq6TMJJVOlyFu3hZLIGosPLELo0sC8wAnFIPPWe/pRrrcHfJ1NheF/zLYCsD5rt2wvhhuaF9QcHEAQGc3RhdHVzAAwCAQiAAAAAAAAAAwCVo3+LqVotaqcc5hv2FZiPWPglqTdohlfz8hj2p4+cgxEBBnN0YXR1cwBMBQiAAAAAAAAAAxxn8FWouZkowsk29mqAqSgqqbRoZpjiYX1/7Y22XXhdAYgzRkZe18jPtUilw2ebHVrqcBhJ6NA+3zQ7o1ZXx+I+EQA="
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAABQoz0ZfZI0A88uYRfuR1YrhSNI0qEhbG4s="
+      },
+      "signature": {
+        "$u8": "qHvwB7E2jRCGGw2eSFuZLs05tVR9Agw9w3gwzlgA29wU4xGUCggOZo2rwGifS8kyDxBfTKPNlw6m5mPCuGP+sMDtEJ/j7W9xVUjttG9ctgqR5uNr+bsx2VfNkn7Uyrw/"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "D2pspbvhClbNf2KvAo9FCs/Ky3AWqe1ix26D0Eor3BU="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 972.9721030000001
+  }
+}

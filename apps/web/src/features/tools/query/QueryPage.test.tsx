@@ -6,6 +6,7 @@ import { render } from '@testing-library/react'
 import { App } from '@/app'
 import { renderAt } from '../test-utils'
 import { sdk } from '@/data/sdk'
+import { SourceError } from '@/data/errors'
 import { sourced, stubSdkCalls } from '../test-sdk'
 
 const DPNS = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
@@ -158,5 +159,144 @@ describe('Query page', () => {
     renderAt(`/query?q=${encodeURIComponent('SELECT * FROM domain LIMIT 3')}&contract=${DPNS}`)
     const editor = await screen.findByRole('textbox', { name: 'SQL query' })
     expect(editor).toHaveValue('SELECT * FROM domain LIMIT 3')
+  })
+})
+
+const GRADES = '7DiE1W5YYgUXx7s68YTMGEM9UssZ5TFg7dXdGaDj8cet'
+const GRADE_CONTRACT = {
+  id: GRADES,
+  ownerId: '1'.repeat(32),
+  version: 1,
+  documentSchemas: {
+    grade: { properties: { class: { type: 'string' }, semester: { type: 'integer' } } },
+  },
+  indices: {
+    grade: [
+      {
+        name: 'byClass',
+        unique: false,
+        contested: false,
+        properties: [{ field: 'class' }],
+      },
+    ],
+  },
+}
+
+describe('Query page results and picker', () => {
+  it('decodes GROUP BY keys by the schema type, and labels each phone field @NX-70', async () => {
+    stubSdkCalls({
+      'contracts.fetch': () => GRADE_CONTRACT,
+      'documents.count': () => [
+        { key: '4353313031', count: 35n },
+        { key: '4353323032', count: 23n },
+      ],
+    })
+    const sql = "SELECT COUNT(*) FROM grade WHERE class IN ('CS101','CS202') GROUP BY class"
+    const user = userEvent.setup()
+    renderAt(`/query?contract=${GRADES}&q=${encodeURIComponent(sql)}`)
+    await user.click(await screen.findByRole('button', { name: 'Run' }))
+    expect(await screen.findByText('CS101')).toBeInTheDocument()
+    expect(screen.getByText('CS202')).toBeInTheDocument()
+    expect(screen.queryByText('4353313031')).toBeNull()
+    const row = document.querySelector('[data-results] tbody tr')!
+    const cells = [...row.querySelectorAll('td')]
+    expect(cells.map((c) => c.className.split(' ')[0])).toEqual(['t', 'f'])
+    expect(cells[1]!.getAttribute('data-l')).toBe('Documents')
+  })
+
+  it('labels every field of a document row on a phone, with none beside the title @NX-70', async () => {
+    stubSdkCalls({
+      'contracts.fetch': () => CONTRACT,
+      'documents.query': () => [DOMAIN],
+    })
+    const user = userEvent.setup()
+    renderAt('/query')
+    await user.click(await screen.findByRole('button', { name: 'Run' }))
+    const results = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-results] tbody tr')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const classes = [...results.querySelectorAll('td')].map((c) => c.className.split(' ')[0])
+    expect(classes[0]).toBe('t')
+    expect(classes.slice(1).every((c) => c === 'f')).toBe(true)
+    expect(results.querySelectorAll('td[data-l]').length).toBe(classes.length - 1)
+  })
+
+  it('titles a refused query as a query problem, not an outage @NX-70', async () => {
+    stubSdkCalls({
+      'contracts.fetch': () => CONTRACT,
+      'documents.query': () => {
+        throw new SourceError({
+          source: 'sdk',
+          kind: 'http',
+          message: 'Operation is not implemented or not supported',
+        })
+      },
+    })
+    const user = userEvent.setup()
+    renderAt('/query')
+    await user.click(await screen.findByRole('button', { name: 'Run' }))
+    const problem = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-query-problem="run"]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(within(problem).getByText("Platform couldn't run this query")).toBeInTheDocument()
+    expect(within(problem).getByText(/not implemented or not supported/)).toBeInTheDocument()
+    expect(screen.queryByText(/isn.t answering/)).toBeNull()
+  })
+
+  it('still calls a DAPI outage an outage @NX-70', async () => {
+    stubSdkCalls({
+      'contracts.fetch': () => CONTRACT,
+      'documents.query': () => {
+        throw new SourceError({ source: 'sdk', kind: 'network', message: 'Failed to fetch' })
+      },
+    })
+    const user = userEvent.setup()
+    renderAt('/query')
+    await user.click(await screen.findByRole('button', { name: 'Run' }))
+    expect(await screen.findByText(/isn.t answering/)).toBeInTheDocument()
+    expect(document.querySelector('[data-query-problem="run"]')).toBeNull()
+  })
+
+  it('swaps the presets and the editor when the contract changes @NX-70', async () => {
+    stubSdkCalls({ 'contracts.fetch': () => CONTRACT })
+    const user = userEvent.setup()
+    renderAt('/query')
+    const editor = await screen.findByRole('textbox', { name: 'SQL query' })
+    expect((editor as HTMLTextAreaElement).value).toContain('FROM domain')
+    expect(
+      within(document.querySelector('[data-presets]')!).getByText('A name by its label'),
+    ).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Contract'), 'DashPay')
+    await waitFor(() => expect((editor as HTMLTextAreaElement).value).toContain('FROM profile'))
+    const presets = document.querySelector<HTMLElement>('[data-presets]')!
+    expect(within(presets).queryByText('A name by its label')).toBeNull()
+    expect(
+      within(presets).getByText(/DashPay profiles|DashPay profiles of one owner/),
+    ).toBeInTheDocument()
+  })
+
+  it('offers a first look at a contract with no ready-made query @NX-70', async () => {
+    stubSdkCalls({ 'contracts.fetch': () => CONTRACT })
+    const user = userEvent.setup()
+    renderAt('/query')
+    const editor = await screen.findByRole('textbox', { name: 'SQL query' })
+    await user.selectOptions(screen.getByLabelText('Contract'), 'Withdrawals')
+    await waitFor(() => expect(editor).toHaveValue('SELECT * FROM domain\nLIMIT 5'))
+    expect(
+      within(document.querySelector('[data-presets]')!).getByText('The first domain documents'),
+    ).toBeInTheDocument()
+  })
+
+  it('does not offer a contract the network does not have @NX-70', async () => {
+    stubSdkCalls({ 'contracts.fetch': () => CONTRACT })
+    renderAt('/query')
+    const picker = await screen.findByLabelText('Contract')
+    expect(within(picker).queryByRole('option', { name: 'Feature flags' })).toBeNull()
+    expect(within(picker).getByRole('option', { name: 'DPNS' })).toBeInTheDocument()
+    expect(within(picker).getByRole('option', { name: 'Withdrawals' })).toBeInTheDocument()
   })
 })

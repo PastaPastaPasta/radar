@@ -28,17 +28,80 @@ msgstr "{count, plural, one {# adresse DAPI} many {# d’adresses DAPI} other {#
 msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
 msgstr "{count, plural, one {# identité mémorisée sur ce réseau} other {# identités mémorisées sur ce réseau}}"
 
+msgid "A data contract"
+msgstr "Un contrat de données"
+
+msgid "A data contract’s bytes"
+msgstr "Les octets d’un contrat de données"
+
+msgid "A data contract’s history"
+msgstr "L’historique d’un contrat de données"
+
 msgid "A devnet with this name is already saved. Edit it instead."
 msgstr "Un devnet portant ce nom est déjà enregistré. Modifiez-le plutôt."
+
+msgid "A document"
+msgstr "Un document"
+
+msgid "A document average"
+msgstr "Une moyenne de documents"
+
+msgid "A document count"
+msgstr "Un nombre de documents"
+
+msgid "A document total"
+msgstr "Un total de documents"
+
+msgid "A document’s history"
+msgstr "L’historique d’un document"
 
 msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
 msgstr "Un chiffre que Radar calcule à partir de plusieurs réponses vérifiées par preuve, comme un total sur une plage de blocs, n’est pas lui-même prouvé. Il porte la mention « Combiné à partir de N réponses vérifiées par preuve »."
 
+msgid "A group"
+msgstr "Un groupe"
+
+msgid "A group’s actions"
+msgstr "Les actions d’un groupe"
+
+msgid "A group’s members"
+msgstr "Les membres d’un groupe"
+
+msgid "A list of documents"
+msgstr "Une liste de documents"
+
+msgid "A name’s owner"
+msgstr "Le titulaire d’un nom"
+
+msgid "A name’s record"
+msgstr "L’enregistrement d’un nom"
+
 msgid "A new version is available."
 msgstr "Une nouvelle version est disponible."
 
+msgid "A Platform address’s balance"
+msgstr "Le solde d’une adresse Platform"
+
+msgid "A prefunded balance"
+msgstr "Un solde préfinancé"
+
 msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
 msgstr "Une preuve répond à une question sur une clé : le solde de cette identité, ce contrat, ce document. Dash Platform ne peut pas prouver une liste de tout, donc il n’existe pas de « toutes les identités », de « tous les détenteurs de ce jeton » ou de « tous les documents sur X » à demander à un nœud."
+
+msgid "A token’s contract"
+msgstr "Le contrat d’un jeton"
+
+msgid "A token’s last distribution claim"
+msgstr "La dernière réclamation de distribution d’un jeton"
+
+msgid "A token’s purchase prices"
+msgstr "Les prix d’achat d’un jeton"
+
+msgid "A token’s status"
+msgstr "L’état d’un jeton"
+
+msgid "A token’s total supply"
+msgstr "L’offre totale d’un jeton"
 
 msgid "About"
 msgstr "À propos"
@@ -76,6 +139,39 @@ msgstr "Les montants s’affichent en {unitName}."
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Les montants s’affichent en {unitName}. Choisissez USD pour mettre la valeur en dollars en premier."
 
+msgid "An identity’s balance"
+msgstr "Le solde d’une identité"
+
+msgid "An identity’s contract nonce"
+msgstr "Le nonce de contrat d’une identité"
+
+msgid "An identity’s groups"
+msgstr "Les groupes d’une identité"
+
+msgid "An identity’s keys"
+msgstr "Les clés d’une identité"
+
+msgid "An identity’s keys for a contract"
+msgstr "Les clés d’une identité pour un contrat"
+
+msgid "An identity’s names"
+msgstr "Les noms d’une identité"
+
+msgid "An identity’s nonce"
+msgstr "Le nonce d’une identité"
+
+msgid "An identity’s record"
+msgstr "L’enregistrement d’une identité"
+
+msgid "An identity’s token balances"
+msgstr "Les soldes de jetons d’une identité"
+
+msgid "An identity’s token status"
+msgstr "L’état des jetons d’une identité"
+
+msgid "An identity’s votes"
+msgstr "Les votes d’une identité"
+
 msgid "Answered by"
 msgstr "Réponse de"
 
@@ -93,6 +189,9 @@ msgstr "Demandé"
 
 msgid "Ban nodes that fail"
 msgstr "Bannir les nœuds en échec"
+
+msgid "Blocks proposed per evonode"
+msgstr "Blocs proposés par evonode"
 
 msgid "Bridge"
 msgstr "Bridge"
@@ -145,6 +244,9 @@ msgstr "Paramètres de connexion"
 msgid "Connection settings applied. The Platform SDK restarted."
 msgstr "Paramètres de connexion appliqués. Le Platform SDK a redémarré."
 
+msgid "Contested names"
+msgstr "Noms contestés"
+
 msgid "Copy a link to {devnet}"
 msgstr "Copier un lien vers {devnet}"
 
@@ -160,6 +262,9 @@ msgstr "Copier la preuve en hexadécimal"
 msgid "Core chain-locked height"
 msgstr "Hauteur Core verrouillée par ChainLock"
 
+msgid "Covers"
+msgstr "Couvre"
+
 msgid "Custom devnets"
 msgstr "Devnets personnalisés"
 
@@ -168,6 +273,9 @@ msgstr "Adresses DAPI"
 
 msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
 msgstr "Les réponses de Dash Platform portent une preuve cryptographique. Le Platform SDK de votre navigateur la vérifie avec la clé publique du quorum de validateurs qui l’a signée, avant que Radar n’affiche le chiffre. Un nœud qui a répondu ne peut pas inventer une valeur : la vérification échoue et Radar le dit. Ces chiffres portent la mention « Preuve vérifiée », et cette mention ouvre l’inspecteur de preuve."
+
+msgid "Data contracts"
+msgstr "Contrats de données"
 
 msgid "Developer"
 msgstr "Développeur"
@@ -187,6 +295,9 @@ msgstr "Modifier"
 msgid "Edit {editName}"
 msgstr "Modifier {editName}"
 
+msgid "Edit devnet"
+msgstr "Modifier le devnet"
+
 msgid "Enter a full address such as https://quorums.example.org."
 msgstr "Saisissez une adresse complète, par exemple https://quorums.example.org."
 
@@ -198,6 +309,9 @@ msgstr "Saisissez l’ID en texte Base58, de 32 à 44 caractères."
 
 msgid "Epoch"
 msgstr "Époque"
+
+msgid "Epoch details"
+msgstr "Détails de l’époque"
 
 msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
 msgstr "Chaque mention « Preuve vérifiée » l’ouvre. Il montre l’appel, le nœud, la hauteur de Platform, le quorum et les octets de la preuve, et les exporte comme justificatif."
@@ -223,6 +337,9 @@ msgstr "Échec"
 msgid "Failures only"
 msgstr "Échecs uniquement"
 
+msgid "Finished epochs"
+msgstr "Époques terminées"
+
 msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
 msgstr "Oublie chaque réponse donnée par le Platform SDK, ici et dans le stockage de ce navigateur, ainsi que les preuves conservées pour l’inspecteur. Les pages les relisent à leur ouverture."
 
@@ -231,6 +348,9 @@ msgstr "Donnez-lui un nom."
 
 msgid "Governance"
 msgstr "Governance"
+
+msgid "Groups"
+msgstr "Groupes"
 
 msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
 msgstr "Comment Radar parle à Dash Platform. Un changement redémarre le Platform SDK ; rien ici ne quitte ce navigateur."
@@ -241,6 +361,9 @@ msgstr "ID sur {0}"
 
 msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
 msgstr "Les identités, contrats et jetons que vous avez enregistrés. Ils restent uniquement dans ce navigateur, sur cet appareil : Radar n’a pas de comptes, donc ils ne vous suivent pas dans un autre navigateur, et effacer les données de ce site les supprime."
+
+msgid "Identity balances"
+msgstr "Soldes d’identités"
 
 msgid "Kind"
 msgstr "Type"
@@ -265,6 +388,9 @@ msgstr "Donnez un nom à une identité, un contrat ou un jeton. Le nom s’affic
 
 msgid "Network"
 msgstr "Réseau"
+
+msgid "Network pulse"
+msgstr "Pouls du réseau"
 
 msgid "Networks"
 msgstr "Réseaux"
@@ -311,11 +437,11 @@ msgstr "Rien d’enregistré pour l’instant"
 msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
 msgstr "Désactivé par défaut. Une fois activé, ce navigateur mémorise les identités que vous ouvrez, jusqu’à 50 par réseau."
 
+msgid "Offline"
+msgstr "Hors ligne"
+
 msgid "OK"
 msgstr "OK"
-
-msgid "One figure’s proof, as Radar received it."
-msgstr "La preuve d’un chiffre, telle que Radar l’a reçue."
 
 msgid "Open"
 msgstr "Ouvrir"
@@ -347,6 +473,9 @@ msgstr "facultatif"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "Sinon, les heures suivent le fuseau horaire de cet appareil. Survoler une heure affiche toujours l’UTC."
 
+msgid "Platform address balances"
+msgstr "Soldes d’adresses Platform"
+
 msgid "Platform height"
 msgstr "Hauteur Platform"
 
@@ -364,6 +493,9 @@ msgstr "Platform SDK dans le worker"
 
 msgid "Platform SDK in this page"
 msgstr "Platform SDK dans cette page"
+
+msgid "Platform status"
+msgstr "État de Platform"
 
 msgid "Platform time"
 msgstr "Heure Platform"
@@ -389,6 +521,12 @@ msgstr "Preuves conservées"
 msgid "Proofs that did not verify"
 msgstr "Preuves non vérifiées"
 
+msgid "Protocol upgrade state"
+msgstr "État de la mise à niveau du protocole"
+
+msgid "Protocol upgrade votes"
+msgstr "Votes de la mise à niveau du protocole"
+
 msgid "Protocol version"
 msgstr "Version du protocole"
 
@@ -409,6 +547,9 @@ msgstr "Type de quorum"
 
 msgid "Radar"
 msgstr "Radar"
+
+msgid "Radar can’t reach these DAPI addresses. Check them, or the devnet may be down."
+msgstr "Radar n’atteint pas ces adresses DAPI. Vérifie-les, ou le devnet est peut-être arrêté."
 
 msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
 msgstr "Radar n’a ni analytique, ni cookies, ni comptes, ni publicité. Vos choix et tout ce que vous enregistrez restent dans ce navigateur : vos éléments enregistrés, les identités consultées (désactivé sauf si vous l’activez), les noms que vous avez donnés, vos paramètres et devnets, et un cache des réponses récentes pour ouvrir les pages vite. Un service worker conserve les fichiers de Radar pour qu’il s’ouvre hors ligne."
@@ -432,6 +573,9 @@ msgstr "Le code de Radar est open source sous licence MIT. Lorsqu’il adapte du
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "Taux : {0} par DASH, depuis {1}."
+
+msgid "Raw Platform state"
+msgstr "État brut de Platform"
 
 msgid "Refused by mode"
 msgstr "Refusé par le mode"
@@ -517,11 +661,23 @@ msgstr "Voir toutes les sources et le commutateur"
 msgid "Settings"
 msgstr "Paramètres"
 
+msgid "Shielded anchors"
+msgstr "Ancres du pool blindé"
+
+msgid "Shielded notes"
+msgstr "Notes du pool blindé"
+
+msgid "Shielded nullifiers"
+msgstr "Nullifiers du pool blindé"
+
 msgid "Show the USD value next to DASH amounts"
 msgstr "Afficher la valeur en USD à côté des montants en DASH"
 
 msgid "Show times in UTC"
 msgstr "Afficher les heures en UTC"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "Un problème est survenu sur la page. Le reste de Radar fonctionne toujours."
 
 msgid "Source"
 msgstr "Source"
@@ -538,12 +694,34 @@ msgstr "Les pièces de test n’ont aucune valeur : le testnet et les devnets n�
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Ce qui n’est pas encore traduit apparaît en anglais. Les hashes, les ID et les montants ne sont jamais traduits."
 
+msgid "The connection dropped while it loaded. Try again."
+msgstr "La connexion a été coupée pendant le chargement. Réessayer."
+
+msgid "The current epoch"
+msgstr "L’époque en cours"
+
+msgid "The current quorums"
+msgstr "Les quorums actuels"
+
+msgid "The identities behind a public key"
+msgstr "Les identités derrière une clé publique"
+
+msgid "The identity behind a public key"
+msgstr "L’identité derrière une clé publique"
+
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
 msgstr "Les {0} dernières requêtes de cet onglet. Rien ici n’est envoyé ailleurs."
 
 msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
 msgstr "Les 100 dernières requêtes de cet onglet, avec la source, le nœud, la durée de chacune et si le mode Décentralisé uniquement l’a refusée."
+
+msgid "The latest shielded anchor"
+msgstr "La dernière ancre du pool blindé"
+
+#. placeholder {0}: figureOf(selected.method)
+msgid "The proof behind “{0}”, as Radar received it."
+msgstr "La preuve derrière « {0} », telle que Radar l’a reçue."
 
 msgid "The quorum list address must start with https://."
 msgstr "L’adresse de la liste des quorums doit commencer par https://."
@@ -553,6 +731,18 @@ msgstr "L’URL de la liste des quorums doit commencer par https://."
 
 msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
 msgstr "Le SDK a vérifié cette preuve avec les clés de quorum de confiance avant que Radar n’affiche le chiffre."
+
+msgid "The shielded pool"
+msgstr "Le pool blindé"
+
+msgid "The signers of a group action"
+msgstr "Les signataires d’une action de groupe"
+
+msgid "The state of a name contest"
+msgstr "L’état d’une contestation de nom"
+
+msgid "The voters for a contender"
+msgstr "Les votants pour un candidat"
 
 msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
 msgstr "Le worker exécute le SDK {workerVersion}, mais cette page a été construite avec {PAGE_SDK_VERSION}. Rechargez la page ; si cela persiste, effacez les données de ce site."
@@ -566,6 +756,15 @@ msgstr "Ils alimentent la liste de départ des détenteurs de jetons : aucun ind
 msgid "This network"
 msgstr "Ce réseau"
 
+msgid "This page couldn’t be loaded"
+msgstr "Cette page n’a pas pu être chargée"
+
+msgid "This page couldn’t be shown"
+msgstr "Cette page n’a pas pu être affichée"
+
+msgid "This page loads when the connection returns. Radar will try again by itself."
+msgstr "Cette page se charge quand la connexion revient. Radar réessaiera de lui-même."
+
 msgid "This proof is no longer held"
 msgstr "Cette preuve n’est plus conservée"
 
@@ -578,11 +777,20 @@ msgstr "Pour l’effacer : les boutons de Paramètres et d’Enregistrés suppri
 msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
 msgstr "Pour lire le réseau, votre navigateur interroge des nœuds DAPI, les nœuds et la liste de quorums du Platform SDK et, sauf si vous les désactivez, Platform Explorer, le crawler de Radar, Hyphen, Insight et un flux de prix. Chacun voit votre adresse IP et ce que vous avez demandé, comme n’importe quel serveur web."
 
+msgid "Token balances"
+msgstr "Soldes de jetons"
+
 msgid "Took"
 msgstr "Durée"
 
 msgid "Tools for checking what Radar asked and what it was told."
 msgstr "Des outils pour vérifier ce que Radar a demandé et ce qu’on lui a répondu."
+
+msgid "Total credits on Platform"
+msgstr "Total des crédits sur Platform"
+
+msgid "Try again"
+msgstr "Réessayer"
 
 msgid "Unit for amounts"
 msgstr "Unité des montants"
@@ -615,6 +823,9 @@ msgstr "Identités consultées"
 msgid "Viewed identities cleared"
 msgstr "Identités consultées effacées"
 
+msgid "Vote polls by end date"
+msgstr "Scrutins par date de fin"
+
 msgid "Wasm bindings"
 msgstr "Bindings Wasm"
 
@@ -623,6 +834,9 @@ msgstr "Ce que signifie « preuve vérifiée »"
 
 msgid "What can’t be listed without an index"
 msgstr "Ce qui ne peut pas être listé sans index"
+
+msgid "What still works"
+msgstr "Ce qui fonctionne encore"
 
 msgid "When"
 msgstr "Quand"
@@ -642,8 +856,20 @@ msgstr "Oui, retirer"
 msgid "You"
 msgstr "Vous"
 
+msgid "You’re back online: Radar can reach the network again, so any page loads."
+msgstr "Tu es de nouveau en ligne : Radar atteint à nouveau le réseau, donc chaque page se charge."
+
+msgid "You’re offline"
+msgstr "Tu es hors ligne"
+
+msgid "You’re offline: Radar can’t reach the network, so pages that read from it can’t load. They load again when the connection returns."
+msgstr "Tu es hors ligne : Radar n’atteint pas le réseau, donc les pages qui le lisent ne peuvent pas se charger. Elles se chargent à nouveau quand la connexion revient."
+
 msgid "Your names"
 msgstr "Vos noms"
 
 msgid "Your own names"
 msgstr "Vos propres noms"
+
+msgid "Your saved items"
+msgstr "Tes éléments enregistrés"

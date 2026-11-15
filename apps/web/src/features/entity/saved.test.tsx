@@ -116,6 +116,7 @@ describe('SaveButton @YOU', () => {
 
     await userEvent.click(button)
     expect(button).toHaveAttribute('aria-pressed', 'true')
+    expect(button).toHaveTextContent('Saved')
     expect(isSaved({ net: 'testnet', kind: 'identity', id: ID })).toBe(true)
     expect(isSaved({ net: 'mainnet', kind: 'identity', id: ID })).toBe(false)
     expect(
@@ -127,6 +128,8 @@ describe('SaveButton @YOU', () => {
 
     await userEvent.click(button)
     expect(button).toHaveAttribute('aria-pressed', 'false')
+    expect(button).toHaveTextContent('Save')
+    expect(button).not.toHaveTextContent('Saved')
     await vi.waitFor(() => {
       expect(document.getElementById('rx-announcer')).toHaveTextContent('Removed from saved')
     })

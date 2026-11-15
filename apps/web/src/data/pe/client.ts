@@ -672,6 +672,7 @@ export const pe = {
       url: () => `${base(net)}/transaction/verify`,
       body: { base64 },
       schema: PeVerifySchema,
+      acceptStatus: [400],
       signal,
       timeoutMs: 20_000,
     })

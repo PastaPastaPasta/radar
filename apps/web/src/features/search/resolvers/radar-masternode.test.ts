@@ -34,6 +34,21 @@ describe('masternode by service address @HY-14', () => {
     })
   })
 
+  it('finds the masternode a typed ProTx hash names, in normal mode @W2-27 @X-01', async () => {
+    const c = classify(REGULAR, 'mainnet')
+    expect(planResolvers(c, 'mainnet', 'palette').map((r) => r.id)).toContain(
+      'radar-masternode-address',
+    )
+    const hits = await radarMasternodeByAddress.resolve(c, ctx())
+    expect(hits).toHaveLength(1)
+    expect(hits[0]).toMatchObject({
+      kind: 'masternode',
+      id: REGULAR,
+      title: 'Masternode 85.209.241.228:9999',
+      href: { to: '/mn/$protx', params: { protx: REGULAR } },
+    })
+  })
+
   it('matches only the typed port when there is one', async () => {
     const right = await radarMasternodeByAddress.resolve(
       classify('85.209.241.228:9999', 'mainnet'),

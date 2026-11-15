@@ -2,6 +2,7 @@ import { msg, t } from '@lingui/core/macro'
 import { stampOf } from '@/data/envelope'
 import { formatDate, formatInt } from '@/lib/format'
 import type { Resolver } from '../types'
+import { localStamp } from './helpers'
 
 /** Epoch indexes are 16-bit on Platform; the SDK rejects a larger one. */
 const MAX_EPOCH = 65_535
@@ -37,5 +38,27 @@ export const sdkEpoch: Resolver = {
         rank: 100,
       },
     ]
+  },
+}
+
+/** "epoch 86": the epoch page itself. A number alone could be a height, so only the word makes it an epoch. */
+export const epochByName: Resolver = {
+  id: 'local-epoch',
+  accepts: ['epoch-ref'],
+  cost: 'local',
+  resolve(c) {
+    const n = Number(c.normalized)
+    const label = formatInt(n)
+    return Promise.resolve([
+      {
+        kind: 'epoch',
+        id: String(n),
+        title: t`Epoch ${label}`,
+        subtitle: t`Platform epoch`,
+        href: { to: '/epoch/$n', params: { n: String(n) } },
+        stamp: localStamp(),
+        rank: 100,
+      },
+    ])
   },
 }

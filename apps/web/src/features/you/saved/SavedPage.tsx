@@ -124,7 +124,7 @@ export function SavedPage() {
             </button>
           )
         },
-        meta: { phone: 'secondary', align: 'end' },
+        meta: { phone: 'primary', align: 'end' },
       },
     ],
     [t],

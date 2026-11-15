@@ -13,6 +13,7 @@ export type OgKind =
   | 'transition'
   | 'platform-address'
   | 'quorum'
+  | 'address'
 
 /** A link the Worker knows how to describe. `plain` marks one whose title comes from the address alone. */
 export interface OgMatch {
@@ -40,6 +41,7 @@ interface Source {
 
 const BASE58 = /^[1-9A-HJ-NP-Za-km-z]{42,46}$/
 const HEX64 = /^[0-9a-fA-F]{64}$/
+const CORE_ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{26,35}$/
 
 const PE = { mainnet: 'https://api.pe.dashhq.org', testnet: 'https://api.testnet.pe.dashhq.org' }
 const HY = { mainnet: 'https://hy.kw.vg/api/v1', testnet: 'https://ts.kw.vg/api/v1' }
@@ -281,6 +283,17 @@ const SOURCES: Record<OgKind, Source> = {
       description: 'Dash Platform address: balance, nonce and the transitions that moved it.',
     },
   },
+  address: {
+    id: CORE_ADDRESS,
+    describe: (id) => ({
+      title: `Address ${short(id)}`,
+      description: 'Dash Core address: balance, history and unspent outputs.',
+    }),
+    generic: {
+      title: 'Address',
+      description: 'Dash Core address: balance, history and unspent outputs.',
+    },
+  },
   quorum: {
     id: HEX64,
     fetchUrl: (net) => `${PE[net]}/quorums`,
@@ -319,6 +332,7 @@ const ROUTES: [RegExp, OgKind][] = [
   [new RegExp(`^/platform/block/${SEGMENT}/?$`), 'platform-block'],
   [new RegExp(`^/platform/tx/${SEGMENT}/?$`), 'transition'],
   [new RegExp(`^/platform-address/${SEGMENT}/?$`), 'platform-address'],
+  [new RegExp(`^/address/${SEGMENT}/?$`), 'address'],
 ]
 const FETCH_TIMEOUT_MS = 2000
 const CACHE_TTL_SECONDS = 300
@@ -365,15 +379,33 @@ export function matchOgRoute(url: URL): OgMatch | null {
   return null
 }
 
-export function genericOg(kind: OgKind): OgMeta {
-  return SOURCES[kind].generic
+/** The title a link gets with no backend read: the kind and what the address itself says, never just the kind. */
+function named(match: OgMatch): OgMeta {
+  const source = SOURCES[match.kind]
+  const { id } = match
+  if (!source.id.test(id)) return source.generic
+  const label = source.generic.title
+  const parts = id.split('/')
+  const entity =
+    match.kind === 'name' || match.kind === 'contest'
+      ? `${id.replace(/\.dash$/i, '')}.dash`
+      : match.kind === 'document'
+        ? `${parts[1] ?? ''} ${short(parts[2] ?? id)}`.trim()
+        : /^\d{1,10}$/.test(id)
+          ? Number(id).toLocaleString('en-US')
+          : short(id)
+  return { title: `${label} ${entity}`, description: source.generic.description }
+}
+
+export function genericOg(match: OgMatch): OgMeta {
+  return named(match)
 }
 
 export async function resolveOg(match: OgMatch, network: string | null): Promise<OgMeta> {
   const source = SOURCES[match.kind]
   const { id } = match
-  if (!source.id.test(id) || match.plain) return source.generic
-  if (network !== null && network !== 'mainnet' && network !== 'testnet') return source.generic
+  if (!source.id.test(id) || match.plain) return named(match)
+  if (network !== null && network !== 'mainnet' && network !== 'testnet') return named(match)
   const net = network === 'testnet' ? 'testnet' : 'mainnet'
   if (!source.fetchUrl) return source.describe(id, {})
   try {
@@ -385,9 +417,9 @@ export async function resolveOg(match: OgMatch, network: string | null): Promise
         cacheTtlByStatus: { '200-299': CACHE_TTL_SECONDS, '300-599': 0 },
       },
     })
-    if (!res.ok) return source.generic
+    if (!res.ok) return named(match)
     const body: unknown = await res.json()
-    if (typeof body !== 'object' || body === null) return source.generic
+    if (typeof body !== 'object' || body === null) return named(match)
     const found = source.pick
       ? source.pick(
           id,
@@ -398,7 +430,7 @@ export async function resolveOg(match: OgMatch, network: string | null): Promise
         : (body as Record<string, unknown>)
     return found && Object.keys(found).length > 0 ? source.describe(id, found) : source.generic
   } catch {
-    return source.generic
+    return named(match)
   }
 }
 

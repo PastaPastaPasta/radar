@@ -28,17 +28,80 @@ msgstr "{count, plural, other {# 个 DAPI 地址}}"
 msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
 msgstr "{count, plural, other {本网络已记住 # 个身份}}"
 
+msgid "A data contract"
+msgstr "一份数据合约"
+
+msgid "A data contract’s bytes"
+msgstr "数据合约的字节"
+
+msgid "A data contract’s history"
+msgstr "数据合约的历史"
+
 msgid "A devnet with this name is already saved. Edit it instead."
 msgstr "已保存同名的开发网。请改为编辑它。"
+
+msgid "A document"
+msgstr "一份文档"
+
+msgid "A document average"
+msgstr "文档的平均值"
+
+msgid "A document count"
+msgstr "文档的数量"
+
+msgid "A document total"
+msgstr "文档的合计"
+
+msgid "A document’s history"
+msgstr "文档的历史"
 
 msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
 msgstr "Radar 由多个已通过证明验证的回答汇总得出的数据（例如某个区块范围内的合计）本身并未被证明。它会标注“由 N 个已通过证明验证的回答合并而成”。"
 
+msgid "A group"
+msgstr "一个群组"
+
+msgid "A group’s actions"
+msgstr "群组的操作"
+
+msgid "A group’s members"
+msgstr "群组的成员"
+
+msgid "A list of documents"
+msgstr "文档列表"
+
+msgid "A name’s owner"
+msgstr "名称的所有者"
+
+msgid "A name’s record"
+msgstr "名称的记录"
+
 msgid "A new version is available."
 msgstr "有新版本可用。"
 
+msgid "A Platform address’s balance"
+msgstr "Platform 地址的余额"
+
+msgid "A prefunded balance"
+msgstr "一笔预充余额"
+
 msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
 msgstr "证明回答的是关于某个键的问题：这个身份的余额、这个合约、这份文档。Dash Platform 无法证明“所有内容”的列表，因此没有“所有身份”“此代币的所有持有者”或“关于 X 的所有文档”可以向节点询问。"
+
+msgid "A token’s contract"
+msgstr "代币的合约"
+
+msgid "A token’s last distribution claim"
+msgstr "代币的最近一次分发领取"
+
+msgid "A token’s purchase prices"
+msgstr "代币的购买价格"
+
+msgid "A token’s status"
+msgstr "代币的状态"
+
+msgid "A token’s total supply"
+msgstr "代币的总供应量"
 
 msgid "About"
 msgstr "关于"
@@ -76,6 +139,39 @@ msgstr "金额以 {unitName} 显示。"
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金额以 {unitName} 显示。选择 USD 可让美元金额排在前面。"
 
+msgid "An identity’s balance"
+msgstr "身份的余额"
+
+msgid "An identity’s contract nonce"
+msgstr "身份的合约 nonce"
+
+msgid "An identity’s groups"
+msgstr "身份的群组"
+
+msgid "An identity’s keys"
+msgstr "身份的密钥"
+
+msgid "An identity’s keys for a contract"
+msgstr "身份在某合约上的密钥"
+
+msgid "An identity’s names"
+msgstr "身份的名称"
+
+msgid "An identity’s nonce"
+msgstr "身份的 nonce"
+
+msgid "An identity’s record"
+msgstr "身份的记录"
+
+msgid "An identity’s token balances"
+msgstr "身份的代币余额"
+
+msgid "An identity’s token status"
+msgstr "身份的代币状态"
+
+msgid "An identity’s votes"
+msgstr "身份的投票"
+
 msgid "Answered by"
 msgstr "响应方"
 
@@ -93,6 +189,9 @@ msgstr "请求时间"
 
 msgid "Ban nodes that fail"
 msgstr "封禁失败的节点"
+
+msgid "Blocks proposed per evonode"
+msgstr "每个 Evonode 提议的区块"
 
 msgid "Bridge"
 msgstr "Bridge"
@@ -145,6 +244,9 @@ msgstr "连接设置"
 msgid "Connection settings applied. The Platform SDK restarted."
 msgstr "连接设置已应用。Platform SDK 已重启。"
 
+msgid "Contested names"
+msgstr "争议名称"
+
 msgid "Copy a link to {devnet}"
 msgstr "复制指向 {devnet} 的链接"
 
@@ -160,6 +262,9 @@ msgstr "以十六进制复制证明"
 msgid "Core chain-locked height"
 msgstr "Core 已 ChainLock 高度"
 
+msgid "Covers"
+msgstr "涵盖"
+
 msgid "Custom devnets"
 msgstr "自定义开发网"
 
@@ -168,6 +273,9 @@ msgstr "DAPI 地址"
 
 msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
 msgstr "Dash Platform 的回答都附带密码学证明。在 Radar 显示数据之前，浏览器中的 Platform SDK 会用签署该证明的验证者 Quorum 的公钥对其进行检查。给出回答的节点无法凭空编造数值：检查会失败，Radar 会如实告知。这些数据会标注“已通过证明验证”，点击该标记即可打开证明检查器。"
+
+msgid "Data contracts"
+msgstr "数据合约"
 
 msgid "Developer"
 msgstr "开发者"
@@ -187,6 +295,9 @@ msgstr "编辑"
 msgid "Edit {editName}"
 msgstr "编辑 {editName}"
 
+msgid "Edit devnet"
+msgstr "编辑开发网"
+
 msgid "Enter a full address such as https://quorums.example.org."
 msgstr "请输入完整地址，例如 https://quorums.example.org。"
 
@@ -198,6 +309,9 @@ msgstr "请输入 Base58 文本形式的 ID，长度为 32 至 44 个字符。"
 
 msgid "Epoch"
 msgstr "纪元"
+
+msgid "Epoch details"
+msgstr "纪元详情"
 
 msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
 msgstr "每个“已通过证明验证”标记都会打开它。它显示调用、节点、Platform 高度、Quorum 和证明字节，并可将其导出为证据。"
@@ -223,6 +337,9 @@ msgstr "失败"
 msgid "Failures only"
 msgstr "仅显示失败"
 
+msgid "Finished epochs"
+msgstr "已结束的纪元"
+
 msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
 msgstr "清除 Platform SDK 给出的所有回答（包括此处和此浏览器存储中的），以及为检查器保留的证明。页面在你打开时会重新读取。"
 
@@ -231,6 +348,9 @@ msgstr "请为它命名。"
 
 msgid "Governance"
 msgstr "治理"
+
+msgid "Groups"
+msgstr "群组"
 
 msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
 msgstr "Radar 如何与 Dash Platform 通信。更改会重启 Platform SDK；此处的内容不会离开此浏览器。"
@@ -241,6 +361,9 @@ msgstr "{0} 上的 ID"
 
 msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
 msgstr "你保存的身份、合约和代币。它们只保留在此设备的此浏览器中：Radar 没有账户，因此不会跟随你到其他浏览器，清除本站数据也会将其移除。"
+
+msgid "Identity balances"
+msgstr "身份余额"
 
 msgid "Kind"
 msgstr "类型"
@@ -265,6 +388,9 @@ msgstr "为身份、合约或代币命名。该名称会显示在 Radar 显示�
 
 msgid "Network"
 msgstr "网络"
+
+msgid "Network pulse"
+msgstr "网络脉搏"
 
 msgid "Networks"
 msgstr "网络"
@@ -311,11 +437,11 @@ msgstr "暂无已保存项目"
 msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
 msgstr "默认关闭。开启后，此浏览器会记住你打开的身份，每个网络最多 50 个。"
 
+msgid "Offline"
+msgstr "离线"
+
 msgid "OK"
 msgstr "确定"
-
-msgid "One figure’s proof, as Radar received it."
-msgstr "Radar 收到的某一个数据的证明。"
 
 msgid "Open"
 msgstr "打开"
@@ -347,6 +473,9 @@ msgstr "可选"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "否则时间将按此设备的时区显示。悬停在时间上始终会显示 UTC。"
 
+msgid "Platform address balances"
+msgstr "Platform 地址余额"
+
 msgid "Platform height"
 msgstr "Platform 高度"
 
@@ -364,6 +493,9 @@ msgstr "Worker 中的 Platform SDK"
 
 msgid "Platform SDK in this page"
 msgstr "此页面中的 Platform SDK"
+
+msgid "Platform status"
+msgstr "Platform 状态"
 
 msgid "Platform time"
 msgstr "Platform 时间"
@@ -389,6 +521,12 @@ msgstr "已持有的证明"
 msgid "Proofs that did not verify"
 msgstr "未通过验证的证明"
 
+msgid "Protocol upgrade state"
+msgstr "协议升级状态"
+
+msgid "Protocol upgrade votes"
+msgstr "协议升级投票"
+
 msgid "Protocol version"
 msgstr "协议版本"
 
@@ -409,6 +547,9 @@ msgstr "Quorum 类型"
 
 msgid "Radar"
 msgstr "Radar"
+
+msgid "Radar can’t reach these DAPI addresses. Check them, or the devnet may be down."
+msgstr "Radar 连不上这些 DAPI 地址。请检查它们，或者开发网已经停止。"
 
 msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
 msgstr "Radar 没有分析、Cookie、账户和广告。你的选择和所保存的内容都留在此浏览器中：已保存的项目、浏览过的身份（除非开启，否则为关闭）、你起的名称、你的设置和开发网，以及用于让页面快速打开的近期回答缓存。Service Worker 会保存 Radar 自己的文件，使其可以离线打开。"
@@ -432,6 +573,9 @@ msgstr "Radar 的代码以 MIT 许可证开源。凡是改编自其他项目的�
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "汇率：每 DASH {0}，来自 {1}。"
+
+msgid "Raw Platform state"
+msgstr "Platform 的原始状态"
 
 msgid "Refused by mode"
 msgstr "被模式拒绝"
@@ -517,11 +661,23 @@ msgstr "查看所有数据源和开关"
 msgid "Settings"
 msgstr "设置"
 
+msgid "Shielded anchors"
+msgstr "隐私池的锚点"
+
+msgid "Shielded notes"
+msgstr "隐私池的票据"
+
+msgid "Shielded nullifiers"
+msgstr "隐私池的 nullifier"
+
 msgid "Show the USD value next to DASH amounts"
 msgstr "在 DASH 金额旁显示美元价值"
 
 msgid "Show times in UTC"
 msgstr "以 UTC 显示时间"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "页面出了点问题。Radar 的其他部分仍可使用。"
 
 msgid "Source"
 msgstr "数据源"
@@ -538,12 +694,34 @@ msgstr "测试币没有价值，因此测试网和开发网从不显示美元。
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "尚未翻译的文字将以英文显示。哈希、ID 和金额永远不会被翻译。"
 
+msgid "The connection dropped while it loaded. Try again."
+msgstr "加载时连接中断了。请重试。"
+
+msgid "The current epoch"
+msgstr "当前纪元"
+
+msgid "The current quorums"
+msgstr "当前的仲裁组"
+
+msgid "The identities behind a public key"
+msgstr "一把公钥背后的身份"
+
+msgid "The identity behind a public key"
+msgstr "一把公钥背后的身份"
+
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
 msgstr "此标签页最近发出的 {0} 个请求。此处内容不会发送到任何地方。"
 
 msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
 msgstr "此标签页最近发出的 100 个请求，包括数据源、节点、每个请求的耗时，以及“仅去中心化”模式是否拒绝了它。"
+
+msgid "The latest shielded anchor"
+msgstr "最新的隐私锚点"
+
+#. placeholder {0}: figureOf(selected.method)
+msgid "The proof behind “{0}”, as Radar received it."
+msgstr "“{0}”背后的证明，按 Radar 收到的原样。"
 
 msgid "The quorum list address must start with https://."
 msgstr "Quorum 列表地址必须以 https:// 开头。"
@@ -553,6 +731,18 @@ msgstr "Quorum 列表 URL 必须以 https:// 开头。"
 
 msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
 msgstr "在 Radar 显示该数据之前，SDK 已用受信任的 Quorum 密钥检查了此证明。"
+
+msgid "The shielded pool"
+msgstr "隐私池"
+
+msgid "The signers of a group action"
+msgstr "群组操作的签名者"
+
+msgid "The state of a name contest"
+msgstr "名称争议的状态"
+
+msgid "The voters for a contender"
+msgstr "某一竞争者的投票者"
 
 msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
 msgstr "Worker 运行的是 SDK {workerVersion}，但此页面是用 {PAGE_SDK_VERSION} 构建的。请重新加载页面；如果仍然如此，请清除本站数据。"
@@ -566,6 +756,15 @@ msgstr "它们用于生成代币持有者的种子列表：没有任何索引能
 msgid "This network"
 msgstr "本网络"
 
+msgid "This page couldn’t be loaded"
+msgstr "此页面无法加载"
+
+msgid "This page couldn’t be shown"
+msgstr "无法显示此页面"
+
+msgid "This page loads when the connection returns. Radar will try again by itself."
+msgstr "连接恢复后此页面会加载。Radar 会自行重试。"
+
 msgid "This proof is no longer held"
 msgstr "不再持有此证明"
 
@@ -578,11 +777,20 @@ msgstr "清除方法：设置和已保存页面上的按钮会移除各自的列
 msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
 msgstr "为了读取网络，你的浏览器会询问 DAPI 节点、Platform SDK 的节点和 Quorum 列表，并且（除非你关闭）还会询问 Platform Explorer、Radar 的爬虫、Hyphen、Insight 和价格数据源。与任何网络服务器一样，它们每一个都能看到你的 IP 地址和你询问的内容。"
 
+msgid "Token balances"
+msgstr "代币余额"
+
 msgid "Took"
 msgstr "耗时"
 
 msgid "Tools for checking what Radar asked and what it was told."
 msgstr "用于检查 Radar 问了什么、得到了什么回答的工具。"
+
+msgid "Total credits on Platform"
+msgstr "Platform 上的积分总量"
+
+msgid "Try again"
+msgstr "重试"
 
 msgid "Unit for amounts"
 msgstr "金额单位"
@@ -615,6 +823,9 @@ msgstr "浏览过的身份"
 msgid "Viewed identities cleared"
 msgstr "已清除浏览过的身份"
 
+msgid "Vote polls by end date"
+msgstr "按结束日期排列的投票"
+
 msgid "Wasm bindings"
 msgstr "Wasm 绑定"
 
@@ -623,6 +834,9 @@ msgstr "“已通过证明验证”是什么意思"
 
 msgid "What can’t be listed without an index"
 msgstr "没有索引就无法列出的内容"
+
+msgid "What still works"
+msgstr "仍然可用"
 
 msgid "When"
 msgstr "时间"
@@ -642,8 +856,20 @@ msgstr "是，移除"
 msgid "You"
 msgstr "我的"
 
+msgid "You’re back online: Radar can reach the network again, so any page loads."
+msgstr "已恢复在线：Radar 又能连上网络，因此任何页面都会加载。"
+
+msgid "You’re offline"
+msgstr "你已离线"
+
+msgid "You’re offline: Radar can’t reach the network, so pages that read from it can’t load. They load again when the connection returns."
+msgstr "你已离线：Radar 连不上网络，因此需要读取网络的页面无法加载。连接恢复后它们会重新加载。"
+
 msgid "Your names"
 msgstr "你的名称"
 
 msgid "Your own names"
 msgstr "你自己的名称"
+
+msgid "Your saved items"
+msgstr "你保存的项目"

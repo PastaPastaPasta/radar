@@ -40,6 +40,16 @@ describe('Saved page @NX-06', () => {
     expect(rows()).toHaveLength(2)
   })
 
+  it('keeps the remove control’s hidden header out of the phone card @W2-60 @NX-06', async () => {
+    renderAt('/saved')
+    await screen.findByText('Alice')
+    const labels = [...document.querySelectorAll('td[data-l]')].map((td) =>
+      td.getAttribute('data-l'),
+    )
+    expect(labels.map((l) => l?.toLowerCase())).not.toContain('remove')
+    expect(within(rows()[0]!).getAllByRole('button', { name: /^Remove / })).toHaveLength(1)
+  })
+
   it('shows every network and filters by kind from the address', async () => {
     renderAt('/saved?scope=all&kind=token')
     expect(await screen.findByText('Test token')).toBeInTheDocument()

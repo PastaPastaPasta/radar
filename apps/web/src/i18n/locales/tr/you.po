@@ -28,17 +28,80 @@ msgstr "{count, plural, one {# DAPI adresi} other {# DAPI adresi}}"
 msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
 msgstr "{count, plural, one {Bu ağda # kimlik hatırlanıyor} other {Bu ağda # kimlik hatırlanıyor}}"
 
+msgid "A data contract"
+msgstr "Bir veri sözleşmesi"
+
+msgid "A data contract’s bytes"
+msgstr "Bir veri sözleşmesinin baytları"
+
+msgid "A data contract’s history"
+msgstr "Bir veri sözleşmesinin geçmişi"
+
 msgid "A devnet with this name is already saved. Edit it instead."
 msgstr "Bu adda bir devnet zaten kayıtlı. Onu düzenleyin."
+
+msgid "A document"
+msgstr "Bir belge"
+
+msgid "A document average"
+msgstr "Bir belge ortalaması"
+
+msgid "A document count"
+msgstr "Bir belge sayısı"
+
+msgid "A document total"
+msgstr "Bir belge toplamı"
+
+msgid "A document’s history"
+msgstr "Bir belgenin geçmişi"
 
 msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
 msgstr "Radar’ın birkaç kanıtla doğrulanmış yanıttan topladığı bir değer, örneğin bir blok aralığındaki toplam, kendi başına kanıtlanmış değildir. Üzerinde “N kanıtla doğrulanmış yanıttan birleştirildi” yazar."
 
+msgid "A group"
+msgstr "Bir grup"
+
+msgid "A group’s actions"
+msgstr "Bir grubun işlemleri"
+
+msgid "A group’s members"
+msgstr "Bir grubun üyeleri"
+
+msgid "A list of documents"
+msgstr "Bir belge listesi"
+
+msgid "A name’s owner"
+msgstr "Bir adın sahibi"
+
+msgid "A name’s record"
+msgstr "Bir adın kaydı"
+
 msgid "A new version is available."
 msgstr "Yeni bir sürüm var."
 
+msgid "A Platform address’s balance"
+msgstr "Bir Platform adresinin bakiyesi"
+
+msgid "A prefunded balance"
+msgstr "Önceden sağlanmış bir bakiye"
+
 msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
 msgstr "Bir kanıt, bir anahtar hakkındaki soruyu yanıtlar: bu kimliğin bakiyesi, bu sözleşme, bu belge. Dash Platform her şeyin listesini kanıtlayamaz; bu yüzden bir düğüme sorulabilecek “tüm kimlikler”, “bu token’ın tüm sahipleri” veya “X hakkındaki tüm belgeler” diye bir şey yoktur."
+
+msgid "A token’s contract"
+msgstr "Bir token’ın sözleşmesi"
+
+msgid "A token’s last distribution claim"
+msgstr "Bir token’ın son dağıtım talebi"
+
+msgid "A token’s purchase prices"
+msgstr "Bir token’ın alış fiyatları"
+
+msgid "A token’s status"
+msgstr "Bir token’ın durumu"
+
+msgid "A token’s total supply"
+msgstr "Bir token’ın toplam arzı"
 
 msgid "About"
 msgstr "Hakkında"
@@ -76,6 +139,39 @@ msgstr "Tutarlar {unitName} cinsinden gösterilir."
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Tutarlar {unitName} cinsinden gösterilir. Dolar değerinin önce gelmesi için USD’yi seçin."
 
+msgid "An identity’s balance"
+msgstr "Bir kimliğin bakiyesi"
+
+msgid "An identity’s contract nonce"
+msgstr "Bir kimliğin sözleşme nonce’u"
+
+msgid "An identity’s groups"
+msgstr "Bir kimliğin grupları"
+
+msgid "An identity’s keys"
+msgstr "Bir kimliğin anahtarları"
+
+msgid "An identity’s keys for a contract"
+msgstr "Bir kimliğin bir sözleşme için anahtarları"
+
+msgid "An identity’s names"
+msgstr "Bir kimliğin adları"
+
+msgid "An identity’s nonce"
+msgstr "Bir kimliğin nonce’u"
+
+msgid "An identity’s record"
+msgstr "Bir kimliğin kaydı"
+
+msgid "An identity’s token balances"
+msgstr "Bir kimliğin token bakiyeleri"
+
+msgid "An identity’s token status"
+msgstr "Bir kimliğin token durumu"
+
+msgid "An identity’s votes"
+msgstr "Bir kimliğin oyları"
+
 msgid "Answered by"
 msgstr "Yanıtlayan"
 
@@ -93,6 +189,9 @@ msgstr "İstenen"
 
 msgid "Ban nodes that fail"
 msgstr "Başarısız olan düğümleri yasakla"
+
+msgid "Blocks proposed per evonode"
+msgstr "Evonode başına önerilen bloklar"
 
 msgid "Bridge"
 msgstr "Bridge"
@@ -145,6 +244,9 @@ msgstr "Bağlantı ayarları"
 msgid "Connection settings applied. The Platform SDK restarted."
 msgstr "Bağlantı ayarları uygulandı. Platform SDK yeniden başlatıldı."
 
+msgid "Contested names"
+msgstr "Çekişmeli adlar"
+
 msgid "Copy a link to {devnet}"
 msgstr "{devnet} bağlantısını kopyala"
 
@@ -160,6 +262,9 @@ msgstr "Kanıtı hex olarak kopyala"
 msgid "Core chain-locked height"
 msgstr "Core’un ChainLock’lu yüksekliği"
 
+msgid "Covers"
+msgstr "Kapsar"
+
 msgid "Custom devnets"
 msgstr "Özel devnet’ler"
 
@@ -168,6 +273,9 @@ msgstr "DAPI adresleri"
 
 msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
 msgstr "Dash Platform yanıtları kriptografik bir kanıt taşır. Tarayıcınızdaki Platform SDK, Radar değeri göstermeden önce kanıtı, onu imzalayan doğrulayıcı quorum’unun açık anahtarına karşı denetler. Yanıt veren bir düğüm değer uyduramaz: denetim başarısız olur ve Radar bunu belirtir. Bu değerler “Kanıtla doğrulandı” ile işaretlenir ve işaret kanıt denetçisini açar."
+
+msgid "Data contracts"
+msgstr "Veri sözleşmeleri"
 
 msgid "Developer"
 msgstr "Geliştirici"
@@ -187,6 +295,9 @@ msgstr "Düzenle"
 msgid "Edit {editName}"
 msgstr "{editName} düzenle"
 
+msgid "Edit devnet"
+msgstr "Devnet’i düzenle"
+
 msgid "Enter a full address such as https://quorums.example.org."
 msgstr "https://quorums.example.org gibi tam bir adres girin."
 
@@ -198,6 +309,9 @@ msgstr "Kimliği Base58 metni olarak girin, 32 ila 44 karakter."
 
 msgid "Epoch"
 msgstr "Epoch"
+
+msgid "Epoch details"
+msgstr "Epoch ayrıntıları"
 
 msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
 msgstr "Her “Kanıtla doğrulandı” işareti onu açar. Çağrıyı, düğümü, Platform yüksekliğini, quorum’u ve kanıt baytlarını gösterir ve bunları kanıt olarak dışa aktarır."
@@ -223,6 +337,9 @@ msgstr "Başarısız"
 msgid "Failures only"
 msgstr "Yalnızca hatalar"
 
+msgid "Finished epochs"
+msgstr "Bitmiş epoch’lar"
+
 msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
 msgstr "Platform SDK’nın burada ve bu tarayıcının depolamasında verdiği her yanıtı ve denetçi için tutulan kanıtları unutturur. Sayfalar, açıldıkça bunları yeniden okur."
 
@@ -231,6 +348,9 @@ msgstr "Ona bir ad verin."
 
 msgid "Governance"
 msgstr "Yönetişim"
+
+msgid "Groups"
+msgstr "Gruplar"
 
 msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
 msgstr "Radar’ın Dash Platform ile nasıl konuştuğu. Bir değişiklik Platform SDK’yı yeniden başlatır; buradaki hiçbir şey bu tarayıcıdan çıkmaz."
@@ -241,6 +361,9 @@ msgstr "{0} üzerindeki kimlik"
 
 msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
 msgstr "Kaydettiğiniz kimlikler, sözleşmeler ve token’lar. Yalnızca bu tarayıcıda, bu cihazda kalırlar: Radar’da hesap yoktur, bu yüzden başka bir tarayıcıya geçmezler ve bu sitenin verilerini temizlemek onları siler."
+
+msgid "Identity balances"
+msgstr "Kimlik bakiyeleri"
 
 msgid "Kind"
 msgstr "Tür"
@@ -265,6 +388,9 @@ msgstr "Bir kimliğe, sözleşmeye veya token’a ad verin. Ad, Radar o kimliği
 
 msgid "Network"
 msgstr "Ağ"
+
+msgid "Network pulse"
+msgstr "Ağ nabzı"
 
 msgid "Networks"
 msgstr "Ağlar"
@@ -311,11 +437,11 @@ msgstr "Henüz kayıtlı bir şey yok"
 msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
 msgstr "Varsayılan olarak kapalı. Açıkken bu tarayıcı, açtığınız kimlikleri ağ başına en fazla 50 olacak şekilde hatırlar."
 
+msgid "Offline"
+msgstr "Çevrimdışı"
+
 msgid "OK"
 msgstr "Tamam"
-
-msgid "One figure’s proof, as Radar received it."
-msgstr "Bir değerin kanıtı, Radar’ın aldığı haliyle."
 
 msgid "Open"
 msgstr "Aç"
@@ -347,6 +473,9 @@ msgstr "isteğe bağlı"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "Aksi halde saatler bu cihazın saat dilimine göre gösterilir. Bir saatin üzerine gelindiğinde her zaman UTC gösterilir."
 
+msgid "Platform address balances"
+msgstr "Platform adresi bakiyeleri"
+
 msgid "Platform height"
 msgstr "Platform yüksekliği"
 
@@ -364,6 +493,9 @@ msgstr "Worker’daki Platform SDK"
 
 msgid "Platform SDK in this page"
 msgstr "Bu sayfadaki Platform SDK"
+
+msgid "Platform status"
+msgstr "Platform durumu"
 
 msgid "Platform time"
 msgstr "Platform zamanı"
@@ -389,6 +521,12 @@ msgstr "Tutulan kanıtlar"
 msgid "Proofs that did not verify"
 msgstr "Doğrulanamayan kanıtlar"
 
+msgid "Protocol upgrade state"
+msgstr "Protokol yükseltmesinin durumu"
+
+msgid "Protocol upgrade votes"
+msgstr "Protokol yükseltmesi oyları"
+
 msgid "Protocol version"
 msgstr "Protokol sürümü"
 
@@ -409,6 +547,9 @@ msgstr "Quorum türü"
 
 msgid "Radar"
 msgstr "Radar"
+
+msgid "Radar can’t reach these DAPI addresses. Check them, or the devnet may be down."
+msgstr "Radar bu DAPI adreslerine ulaşamıyor. Onları kontrol et, ya da devnet kapalı olabilir."
 
 msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
 msgstr "Radar’da analiz, çerez, hesap ve reklam yoktur. Seçimleriniz ve kaydettiğiniz her şey bu tarayıcıda kalır: kayıtlı öğeleriniz, görüntülediğiniz kimlikler (siz açmadıkça kapalı), verdiğiniz adlar, ayarlarınız ve devnet’leriniz ile sayfaların hızlı açılması için son yanıtların bir önbelleği. Bir service worker, Radar çevrimdışı açılabilsin diye Radar’ın kendi dosyalarını tutar."
@@ -432,6 +573,9 @@ msgstr "Radar’ın kodu MIT lisansıyla açık kaynaktır. Başka bir projeden 
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "Kur: DASH başına {0}, kaynak {1}."
+
+msgid "Raw Platform state"
+msgstr "Ham Platform durumu"
 
 msgid "Refused by mode"
 msgstr "Mod tarafından reddedildi"
@@ -517,11 +661,23 @@ msgstr "Tüm kaynakları ve anahtarı gör"
 msgid "Settings"
 msgstr "Ayarlar"
 
+msgid "Shielded anchors"
+msgstr "Gizli havuzun çapaları"
+
+msgid "Shielded notes"
+msgstr "Gizli havuzun notları"
+
+msgid "Shielded nullifiers"
+msgstr "Gizli havuzun nullifier’ları"
+
 msgid "Show the USD value next to DASH amounts"
 msgstr "DASH tutarlarının yanında USD değerini göster"
 
 msgid "Show times in UTC"
 msgstr "Saatleri UTC olarak göster"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "Sayfada bir şey bozuldu. Radar’ın geri kalanı çalışmaya devam ediyor."
 
 msgid "Source"
 msgstr "Kaynak"
@@ -538,12 +694,34 @@ msgstr "Test coin’lerin değeri yoktur; bu yüzden Testnet ve devnet’lerde U
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Henüz çevrilmemiş metinler İngilizce görünür. Hash’ler, kimlik numaraları ve tutarlar asla çevrilmez."
 
+msgid "The connection dropped while it loaded. Try again."
+msgstr "Yüklenirken bağlantı koptu. Tekrar dene."
+
+msgid "The current epoch"
+msgstr "Geçerli epoch"
+
+msgid "The current quorums"
+msgstr "Geçerli quorum’lar"
+
+msgid "The identities behind a public key"
+msgstr "Bir açık anahtarın ardındaki kimlikler"
+
+msgid "The identity behind a public key"
+msgstr "Bir açık anahtarın ardındaki kimlik"
+
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
 msgstr "Bu sekmenin yaptığı son {0} istek. Buradaki hiçbir şey hiçbir yere gönderilmez."
 
 msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
 msgstr "Bu sekmenin yaptığı son 100 istek: kaynak, düğüm, her birinin ne kadar sürdüğü ve “Yalnızca merkeziyetsiz” modunun onu reddedip reddetmediği."
+
+msgid "The latest shielded anchor"
+msgstr "En son gizli çapa"
+
+#. placeholder {0}: figureOf(selected.method)
+msgid "The proof behind “{0}”, as Radar received it."
+msgstr "“{0}” arkasındaki kanıt, Radar’ın aldığı haliyle."
 
 msgid "The quorum list address must start with https://."
 msgstr "Quorum listesi adresi https:// ile başlamalıdır."
@@ -553,6 +731,18 @@ msgstr "Quorum listesi URL’si https:// ile başlamalıdır."
 
 msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
 msgstr "SDK, Radar değeri göstermeden önce bu kanıtı güvenilen quorum anahtarlarına karşı denetledi."
+
+msgid "The shielded pool"
+msgstr "Gizli havuz"
+
+msgid "The signers of a group action"
+msgstr "Bir grup işleminin imzalayanları"
+
+msgid "The state of a name contest"
+msgstr "Bir ad çekişmesinin durumu"
+
+msgid "The voters for a contender"
+msgstr "Bir adayın oy verenleri"
 
 msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
 msgstr "Worker SDK {workerVersion} çalıştırıyor ama bu sayfa {PAGE_SDK_VERSION} ile derlendi. Sayfayı yeniden yükleyin; sorun sürerse bu sitenin verilerini temizleyin."
@@ -566,6 +756,15 @@ msgstr "Token sahipleri için tohum listesini beslerler: hiçbir dizin bir token
 msgid "This network"
 msgstr "Bu ağ"
 
+msgid "This page couldn’t be loaded"
+msgstr "Bu sayfa yüklenemedi"
+
+msgid "This page couldn’t be shown"
+msgstr "Bu sayfa gösterilemedi"
+
+msgid "This page loads when the connection returns. Radar will try again by itself."
+msgstr "Bağlantı dönünce bu sayfa yüklenir. Radar kendisi yeniden dener."
+
 msgid "This proof is no longer held"
 msgstr "Bu kanıt artık tutulmuyor"
 
@@ -578,11 +777,20 @@ msgstr "Temizlemek için: Ayarlar’daki ve Kaydedilenler’deki düğmeler her 
 msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
 msgstr "Ağı okumak için tarayıcınız DAPI düğümlerine, Platform SDK’nın düğümlerine ve quorum listesine, ayrıca kapatmadığınız sürece Platform Explorer’a, Radar’ın tarayıcısına, Hyphen’e, Insight’a ve bir fiyat kaynağına sorar. Her biri, herhangi bir web sunucusu gibi IP adresinizi ve ne sorduğunuzu görür."
 
+msgid "Token balances"
+msgstr "Token bakiyeleri"
+
 msgid "Took"
 msgstr "Süre"
 
 msgid "Tools for checking what Radar asked and what it was told."
 msgstr "Radar’ın ne sorduğunu ve ona ne söylendiğini denetleme araçları."
+
+msgid "Total credits on Platform"
+msgstr "Platform’daki toplam kredi"
+
+msgid "Try again"
+msgstr "Tekrar dene"
 
 msgid "Unit for amounts"
 msgstr "Tutarlar için birim"
@@ -615,6 +823,9 @@ msgstr "Görüntülenen kimlikler"
 msgid "Viewed identities cleared"
 msgstr "Görüntülenen kimlikler temizlendi"
 
+msgid "Vote polls by end date"
+msgstr "Bitiş tarihine göre oylamalar"
+
 msgid "Wasm bindings"
 msgstr "Wasm bağlamaları"
 
@@ -623,6 +834,9 @@ msgstr "“Kanıtla doğrulandı” ne demek"
 
 msgid "What can’t be listed without an index"
 msgstr "Dizin olmadan listelenemeyenler"
+
+msgid "What still works"
+msgstr "Hâlâ çalışanlar"
 
 msgid "When"
 msgstr "Ne zaman"
@@ -642,8 +856,20 @@ msgstr "Evet, kaldır"
 msgid "You"
 msgstr "Siz"
 
+msgid "You’re back online: Radar can reach the network again, so any page loads."
+msgstr "Yeniden çevrimiçisin: Radar ağa yine ulaşıyor, bu yüzden her sayfa yüklenir."
+
+msgid "You’re offline"
+msgstr "Çevrimdışısın"
+
+msgid "You’re offline: Radar can’t reach the network, so pages that read from it can’t load. They load again when the connection returns."
+msgstr "Çevrimdışısın: Radar ağa ulaşamıyor, bu yüzden ağı okuyan sayfalar yüklenemez. Bağlantı dönünce yeniden yüklenirler."
+
 msgid "Your names"
 msgstr "Adlarınız"
 
 msgid "Your own names"
 msgstr "Kendi adlarınız"
+
+msgid "Your saved items"
+msgstr "Kayıtlı öğelerin"

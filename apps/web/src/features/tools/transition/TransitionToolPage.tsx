@@ -1,9 +1,9 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { endpoint } from '@/data/endpoints'
-import { peQueries } from '@/data/pe'
+import { peQueries, type PeVerify } from '@/data/pe'
 import { Entity, PageFrame, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
@@ -20,6 +20,7 @@ import {
 import { BytesField, useParsedBytes, type BytesState } from '../decoders/BytesField'
 import { toBase64 } from '../decoders/bytes'
 import { useDecoded } from '../decoders/use-decoded'
+import { knownReason, readVerdict } from './verdict'
 import {
   isDecodedTransition,
   summarizeTransition,
@@ -89,8 +90,9 @@ function SummaryCard({ summary, actionType }: { summary: TransitionSummary; acti
   )
 }
 
-function VerifyCard({ base64 }: { base64: string | undefined }) {
+function VerifyCard({ base64, ready }: { base64: string | undefined; ready: boolean }) {
   const { t } = useLingui()
+  const noteId = useId()
   const net = useNetwork()
   const decentralized = useDecentralizedOnly()
   const [asked, setAsked] = useState<string | undefined>()
@@ -114,11 +116,25 @@ function VerifyCard({ base64 }: { base64: string | undefined }) {
           {t`Platform Explorer asks a Platform node whether it would accept this transition (a dry run). Nothing is broadcast and nothing changes.`}
         </p>
         {decentralized ? (
-          <Unavailable
-            source="pe"
-            title={t`Checking a transition needs Platform Explorer`}
-            compact
-          />
+          <div className="grid gap-2">
+            <div id={noteId}>
+              <Unavailable
+                source="pe"
+                title={t`Checking a transition needs Platform Explorer`}
+                compact
+              />
+            </div>
+            <div>
+              <button
+                type="button"
+                className="dh-btn dh-btn--primary"
+                disabled
+                aria-describedby={noteId}
+              >
+                {t`Check this transition`}
+              </button>
+            </div>
+          </div>
         ) : !supported ? (
           <Empty
             kind="unsupported-network"
@@ -131,7 +147,7 @@ function VerifyCard({ base64 }: { base64: string | undefined }) {
               <button
                 type="button"
                 className="dh-btn dh-btn--primary"
-                disabled={base64 === undefined || query.isFetching}
+                disabled={!ready || base64 === undefined || query.isFetching}
                 onClick={() => {
                   setAsked(base64)
                 }}
@@ -162,35 +178,37 @@ function VerifyCard({ base64 }: { base64: string | undefined }) {
   )
 }
 
-function VerifyOutcome({
-  result,
-}: {
-  result: {
-    result?: boolean | null | undefined
-    error?: string | null | undefined
-    code?: number | null | undefined
-    info?: string | null | undefined
+function VerifyOutcome({ result }: { result: PeVerify }) {
+  const { t, i18n } = useLingui()
+  const verdict = readVerdict(result)
+  if (verdict.kind === 'accepted') {
+    return (
+      <div
+        role="status"
+        data-verify="valid"
+        className="grid gap-1 rounded-[var(--dh-r2)] border p-3"
+        style={{ borderColor: 'var(--dh-ok)' }}
+      >
+        <p className="font-semibold">{t`Platform would accept this transition.`}</p>
+      </div>
+    )
   }
-}) {
-  const { t } = useLingui()
-  const accepted = result.result === true && !result.error
+  const reason = knownReason(verdict.name)
+  const label = [verdict.name, verdict.code && verdict.code !== 0 ? verdict.code : undefined]
+    .filter((x) => x !== undefined)
+    .join(' ')
   return (
     <div
       role="status"
-      data-verify={accepted ? 'valid' : 'invalid'}
+      data-verify="invalid"
+      data-reject-code={verdict.code}
       className="grid gap-1 rounded-[var(--dh-r2)] border p-3"
-      style={{ borderColor: accepted ? 'var(--dh-ok)' : 'var(--dh-bad)' }}
+      style={{ borderColor: 'var(--dh-bad)' }}
     >
-      <p className="font-semibold">
-        {accepted
-          ? t`Platform would accept this transition.`
-          : t`Platform would reject this transition.`}
-      </p>
-      {result.error ? <p className="rx-mono break-words text-sm">{result.error}</p> : null}
-      {result.code !== null && result.code !== undefined && result.code !== 0 ? (
-        <p className="text-sm text-[var(--dh-ink-2)]">{t`Error code ${result.code}`}</p>
-      ) : null}
-      {result.info ? <p className="rx-mono break-words text-sm">{result.info}</p> : null}
+      <p className="font-semibold">{t`Platform would reject this transition.`}</p>
+      {reason ? <p>{i18n._(reason)}</p> : null}
+      {label ? <p className="rx-mono break-words text-sm">{label}</p> : null}
+      {verdict.raw ? <p className="rx-mono break-words text-sm">{verdict.raw}</p> : null}
     </div>
   )
 }
@@ -251,7 +269,7 @@ export function TransitionToolPage() {
           </Card>
         </>
       ) : null}
-      <VerifyCard base64={base64} />
+      <VerifyCard base64={base64} ready={data !== undefined} />
     </PageFrame>
   )
 }

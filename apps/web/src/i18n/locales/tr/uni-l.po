@@ -1,17 +1,18 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:10+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: tr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
 
 msgid "· change"
 msgstr "· değiştir"
@@ -35,7 +36,6 @@ msgstr "{0} temel birim"
 msgid "{0} duffs"
 msgstr "{0} duff"
 
-#. placeholder {0}: formatInt(inCount)
 #. placeholder {0}: formatInt(inputs.length)
 #. placeholder {0}: formatInt(tx.inputs.length)
 msgid "{0} inputs"
@@ -45,15 +45,15 @@ msgstr "{0} girdi"
 msgid "{0} inputs not loaded"
 msgstr "{0} girdi yüklenmedi"
 
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
-#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {0}: formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} locked into Platform credits"
+msgstr "{0} Platform kredisine kilitlendi"
+
+#. placeholder {0}: formatInt(signers)
+#. placeholder {0}: formatInt(valid)
 #. placeholder {1}: formatInt(members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "{0} çıktı"
 
 #. placeholder {0}: sectionLabel(section)
 msgid "{0} pages"
@@ -84,6 +84,9 @@ msgstr "Bayt başına {feeRate} duff"
 msgid "{feeRate} duffs a byte: it spends no coins"
 msgstr "Bayt başına {feeRate} duff: hiç coin harcamaz"
 
+msgid "{inCount, plural, one {# input} other {# inputs}}"
+msgstr "{inCount, plural, one {# girdi} other {# girdi}}"
+
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} bu adresi bu ağda henüz görmedi."
 
@@ -95,6 +98,9 @@ msgstr "{n} çıktı daha"
 
 msgid "{name} (reason {reason})"
 msgstr "{name} (neden {reason})"
+
+msgid "{outCount, plural, one {# output} other {# outputs}}"
+msgstr "{outCount, plural, one {# çıktı} other {# çıktı}}"
 
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# tür} other {# tür}}"
@@ -140,9 +146,9 @@ msgstr "madenciliği yapıldıktan sonra"
 msgid "Amount"
 msgstr "Tutar"
 
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "Tutarlar ilk {0} girdi için yüklenir. Her önceki işlem ayrı bir istektir."
+#. placeholder {0}: partial.loaded
+msgid "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
+msgstr "Tutarlar ilk {0, plural, one {# girdi} other {# girdi}} için yüklendi. Her önceki işlem ayrı bir istektir."
 
 msgid "Amounts loaded"
 msgstr "Yüklenen tutarlar"
@@ -260,6 +266,9 @@ msgstr "Coinbase işlemleri ödemez"
 msgid "Collateral"
 msgstr "Teminat"
 
+msgid "Commitment"
+msgstr "Taahhüt"
+
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Bloğu masternode listesine ve en son ChainLock’a bağlar."
 
@@ -280,6 +289,9 @@ msgstr "sözleşme"
 
 msgid "Contract"
 msgstr "Sözleşme"
+
+msgid "Contract decoder"
+msgstr "Sözleşme çözücü"
 
 msgid "Contracts"
 msgstr "Sözleşmeler"
@@ -319,6 +331,9 @@ msgstr "Core işlemi"
 
 msgid "Could not check this right now."
 msgstr "Şu anda kontrol edilemiyor."
+
+msgid "Could not look up the withdrawal document right now."
+msgstr "Çekim belgesi şu anda bulunamadı."
 
 msgid "Could not read names."
 msgstr "Adlar okunamadı."
@@ -388,6 +403,9 @@ msgstr "belge"
 
 msgid "Document"
 msgstr "Belge"
+
+msgid "Document decoder"
+msgstr "Belge çözücü"
 
 msgid "document type"
 msgstr "belge türü"
@@ -536,6 +554,9 @@ msgstr "Anahtar hash’ine göre kimlik"
 
 msgid "Identity created"
 msgstr "Oluşturulan kimlik"
+
+msgid "Identity decoder"
+msgstr "Kimlik çözücü"
 
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
@@ -809,6 +830,12 @@ msgstr "Kayıtlı değil. Boş olabilir ya da hâlâ çekişmeli olabilir."
 msgid "Not specified"
 msgstr "Belirtilmedi"
 
+msgid "Null commitment: no quorum was formed for this slot"
+msgstr "Boş taahhüt: bu yuva için bir quorum oluşmadı"
+
+msgid "Offline"
+msgstr "Çevrimdışı"
+
 msgid "On Platform"
 msgstr "Platform’da"
 
@@ -921,6 +948,9 @@ msgstr "Sayfa bulunamadı"
 msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 msgstr "Bir durum geçişini hex veya base64 olarak yapıştırarak çözün. Hiçbir şey imzalanmaz veya yayınlanmaz; isteğe bağlı denetim, geçişi deneme amaçlı olarak Platform Explorer’a gönderir."
 
+msgid "Path decoder"
+msgstr "Yol çözücü"
+
 msgid "Paused"
 msgstr "Duraklatıldı"
 
@@ -951,6 +981,9 @@ msgstr "Platform blokları"
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
 
+msgid "Platform holds no completed or broadcast withdrawal with this index."
+msgstr "Platform’da bu indekse sahip tamamlanmış veya yayınlanmış bir çekim yok."
+
 msgid "Platform node ID"
 msgstr "Platform düğüm kimliği"
 
@@ -965,6 +998,9 @@ msgstr "Platform’un nabzı: yükseklik, epoch, etkinlik grafikleri, liderler v
 
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
+
+msgid "Proof decoder"
+msgstr "Kanıt çözücü"
 
 msgid "proposal"
 msgstr "teklif"
@@ -1088,6 +1124,9 @@ msgstr "Kaydet"
 
 msgid "Saved"
 msgstr "Kaydedilenler"
+
+msgid "Says Radar can’t reach the network and lists what still works without it."
+msgstr "Radar’ın ağa ulaşamadığını söyler ve ağ olmadan hâlâ çalışanları listeler."
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Bir QR kodunu tarayın veya yükleyin ve içeriğini açın: bir adres, ödeme bağlantısı veya anahtar hash’i."
@@ -1460,6 +1499,9 @@ msgstr "Hangi Platform SDK çağrısının hangi Radar sayfasını beslediği, a
 
 msgid "Winner"
 msgstr "Kazanan"
+
+msgid "Withdrawal document"
+msgstr "Çekim belgesi"
 
 msgid "Withdrawal index"
 msgstr "Çekim dizini"

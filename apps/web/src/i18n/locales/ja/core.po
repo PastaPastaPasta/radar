@@ -1,17 +1,29 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-14 14:02+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 14:02+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, other {トランザクション #件}}"
+
+#. placeholder {0}: formatInt(size)
+msgid "{0} blocks a page, newest first."
+msgstr "1ページ {0} ブロック、新しい順。"
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, other {# 承認}}"
 
 msgid "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 msgstr "{count, plural, other {# 件のトランザクションがブロックを待っています}}"
@@ -19,8 +31,254 @@ msgstr "{count, plural, other {# 件のトランザクションがブロック�
 msgid "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 msgstr "{open, plural, other {受付中の提案 # 件のうち {have} 件が資金確保に必要な票を得ています}}"
 
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, other {このブロック内のクォーラムコミットメント #件}}"
+
+msgid "← Previous"
+msgstr "← 前へ"
+
+msgid "← Previous day"
+msgstr "← 前の日"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "ブロック"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(height)
+msgid "Block {0}"
+msgstr "ブロック {0}"
+
+msgid "Block reward"
+msgstr "ブロック報酬"
+
+msgid "Blocks"
+msgstr "ブロック"
+
+msgid "Blocks on {date}"
+msgstr "{date} のブロック"
+
+msgid "Blocks on {dateLabel}"
+msgstr "{dateLabel} のブロック"
+
+msgid "Blocks per page"
+msgstr "1ページあたりのブロック数"
+
+msgid "Browse by date"
+msgstr "日付で探す"
+
+msgid "bytes"
+msgstr "バイト"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "Coinbase"
+msgstr "コインベース"
+
+msgid "Coinbase payload"
+msgstr "Coinbase ペイロード"
+
+msgid "Coinbase tag says"
+msgstr "Coinbase タグの内容"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core blocks"
+msgstr "Core ブロック"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash は coinbase にペイロードを追加し、マスターノードリストと最新の ChainLock にコミットします。"
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "1日は UTC の 00:00 から 24:00 です。"
+
+msgid "Difficulty"
+msgstr "難易度"
+
+msgid "Everything the coinbase pays out"
+msgstr "coinbase が支払うものすべて"
+
+msgid "Finding this day's blocks"
+msgstr "この日のブロックを検索中"
+
+msgid "Hash"
+msgstr "ハッシュ"
+
+msgid "Header"
+msgstr "ヘッダー"
+
+msgid "Height"
+msgstr "高さ"
+
+#. placeholder {0}: formatInt(lowest)
+#. placeholder {1}: formatInt(Math.max(...heights))
+msgid "Heights {0} to {1}"
+msgstr "高さ {0} から {1}"
+
+msgid "Hyphen isn’t answering, so this page reads Insight where it needs an index."
+msgstr "Hyphen が応答しないため、このページはインデックスが必要な箇所で Insight を読み込みます。"
+
+msgid "Inputs → outputs"
+msgstr "入力 → 出力"
+
+msgid "Insight couldn’t be reached"
+msgstr "Insight に接続できませんでした"
+
+msgid "Jump to a date"
+msgstr "日付へ移動"
+
+msgid "Latest blocks"
+msgstr "最新のブロック"
+
+msgid "Merkle root"
+msgstr "マークルルート"
+
+msgid "Newer"
+msgstr "新しい方へ"
+
+msgid "Next →"
+msgstr "次へ →"
+
+msgid "Next block"
+msgstr "次のブロック"
+
+msgid "Next day"
+msgstr "次の日"
+
+msgid "Next day →"
+msgstr "次の日 →"
+
+msgid "No blocks came back for this page"
+msgstr "このページのブロックは返されませんでした"
+
+msgid "No blocks on this date"
+msgstr "この日付のブロックはありません"
+
+msgid "No known pool"
+msgstr "既知のプールなし"
+
+msgid "No tag in the coinbase"
+msgstr "coinbase にタグなし"
+
 msgid "No transactions are waiting for a block"
 msgstr "ブロックを待っているトランザクションはありません"
 
+msgid "Nonce"
+msgstr "ノンス"
+
+msgid "Not ChainLocked yet"
+msgstr "まだ ChainLocked ではありません"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "{0} には見つかりません"
+
+msgid "Not in DAPI"
+msgstr "DAPI にありません"
+
+msgid "Older"
+msgstr "古い方へ"
+
+msgid "Older blocks from before this date"
+msgstr "この日付より前の古いブロック"
+
+msgid "On this page"
+msgstr "このページの内容"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "{0} 件のページには最新のインデックスが必要ですが、現在は該当するものがありません。"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "{0} 件のページにはインデクサーが必要ですが、「分散型のみ」モードでは使用しません。"
+
+msgid "Previous block"
+msgstr "前のブロック"
+
+msgid "Previous day"
+msgstr "前の日"
+
+msgid "Reading the chain tip…"
+msgstr "チェーンの先頭を読み取り中…"
+
+#. placeholder {0}: networkName(other)
+msgid "Search {0}"
+msgstr "{0} で検索"
+
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "ブロックヘッダーを検索して、この日の開始と終了の位置を探しています: 2 件中 {0} 件見つかりました。"
+
+msgid "See the sources"
+msgstr "ソースを見る"
+
+msgid "Size"
+msgstr "サイズ"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "タグ: {tag}。マイナーが書き込むため、証拠にはなりません。"
+
+msgid "Tap a transaction for its inputs, outputs and size"
+msgstr "トランザクションをタップすると入力、出力、サイズを表示します"
+
+#. placeholder {0}: dateLabel ?? date
+msgid "That is the first block on {0}. Going older leaves this day."
+msgstr "{0} の最初のブロックです。さらに古い方へ進むと、この日を離れます。"
+
 msgid "The latest block was mined <0/>"
 msgstr "最新のブロックがマイニングされたのは <0/>"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "高さ {0} から {1} のブロックは取得元から返されませんでした。前後のページか、より短いページをお試しください。"
+
+msgid "There is no block with this height or hash on this network."
+msgstr "このネットワークにこの高さまたはハッシュのブロックはありません。"
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "このネットワークにはこの日のブロックがないか、その日がまだ来ていません。"
+
+msgid "This source covers this row only"
+msgstr "このソースはこの行のみを対象とします"
+
+msgid "Time"
+msgstr "時刻"
+
+msgid "Total out"
+msgstr "出力合計"
+
+msgid "Transaction"
+msgstr "トランザクション"
+
+msgid "Transactions"
+msgstr "トランザクション"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "ブロック {0} のトランザクション"
+
+msgid "tx"
+msgstr "Tx"
+
+msgid "Txs"
+msgstr "Tx"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Version"
+msgstr "バージョン"
+
+#. placeholder {0}: block.version.toString(16)
+msgid "Version {0}"
+msgstr "バージョン {0}"
+
+msgid "Where this is"
+msgstr "所在地"

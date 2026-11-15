@@ -544,6 +544,7 @@ describe('redirects', () => {
     await check(h, '/search?q=x', null)
     await check(h, '/search?q=x&network=mainnet', '/search?q=x')
     await check(h, '/settings', null)
+    await check(h, '/offline', null)
     const moved = await mf.dispatchFetch('http://explorer.dashhq.org/identity/?id=A', {
       redirect: 'manual',
     })
@@ -553,6 +554,15 @@ describe('redirects', () => {
       redirect: 'manual',
     })
     assert.equal(legacy.status, 301)
+  })
+
+  it('serves the app at /offline instead of sending it home @NX-77', async () => {
+    const res = await get('/offline')
+    assert.equal(res.status, 200)
+    const native = await mf.dispatchFetch('http://explorer.dashhq.org/offline', {
+      redirect: 'manual',
+    })
+    assert.equal(native.status, 200)
   })
 
   it('serves the app for ids that contain dots', async () => {
@@ -688,10 +698,10 @@ describe('per-entity title and OG', () => {
     assert.match(html, /&lt;script&gt;/)
   })
 
-  it('falls back to a generic title when the backend fails or the id is malformed', async () => {
+  it('names the entity from the address when the backend fails, and falls back to the kind alone when the id is malformed', async () => {
     reset(() => new Response('boom', { status: 500 }))
     let html = await (await getAsBot(`/token/${identity}`)).text()
-    assert.match(html, /<title>Token · Radar<\/title>/)
+    assert.match(html, /<title>Token \S+…\S+ · Radar<\/title>/)
     reset()
     html = await (await getAsBot('/tx/not-a-txid')).text()
     assert.match(html, /<title>Transaction · Radar<\/title>/)
@@ -700,7 +710,25 @@ describe('per-entity title and OG', () => {
       throw new Error('timeout')
     })
     html = await (await getAsBot(`/mn/${protx}`)).text()
-    assert.match(html, /<title>Masternode · Radar<\/title>/)
+    assert.match(html, /<title>Masternode \S+…\S+ · Radar<\/title>/)
+    const tx = 'a'.repeat(64)
+    html = await (await getAsBot(`/tx/${tx}`)).text()
+    assert.match(html, /<title>Transaction aaaaaaaa…aaaaaa · Radar<\/title>/)
+    html = await (await getAsBot('/block/2570010')).text()
+    assert.match(html, /<title>Block 2,570,010 · Radar<\/title>/)
+    html = await (await getAsBot(`/block/${tx}`)).text()
+    assert.match(html, /<title>Block aaaaaaaa…aaaaaa · Radar<\/title>/)
+  })
+
+  it('previews an address from the address alone, with no backend read', async () => {
+    reset(() => new Response('boom', { status: 500 }))
+    const addr = 'Xbuboxzf25x1oHuaddSgUe6qmQK48Pipv1'
+    const html = await (await getAsBot(`/address/${addr}`)).text()
+    assert.match(html, /<title>Address Xbuboxzf…8Pipv1 · Radar<\/title>/)
+    assert.match(html, /og:title" content="Address Xbuboxzf…8Pipv1 · Radar"/)
+    assert.equal(upstreamCalls.length, 0)
+    const bad = await (await getAsBot('/address/not-an-address')).text()
+    assert.match(bad, /<title>Address · Radar<\/title>/)
   })
 
   it('reads no hosted backend for a Decentralized only link, and keeps the parameter in the canonical address', async () => {
@@ -712,7 +740,7 @@ describe('per-entity title and OG', () => {
       [`/identity/${identity}`, 'Identity'],
     ]) {
       const html = await (await getAsBot(`${route}?network=testnet&sources=decentralized`)).text()
-      assert.match(html, new RegExp(`<title>${title} · Radar</title>`), route)
+      assert.match(html, new RegExp(`<title>${title} \\S+ · Radar</title>`), route)
       assert.match(
         html,
         new RegExp(
@@ -787,7 +815,7 @@ describe('per-entity title and OG', () => {
       assert.match(r.html, /og:description" content="Active · 3 votes · ends 2026-11-20"/)
       const custom = await reads(`/contest/gold?contract=${contract}&type=note&index=byName`, {})
       assert.equal(custom.calls, 0)
-      assert.match(custom.html, /<title>Name contest · Radar<\/title>/)
+      assert.match(custom.html, /<title>Name contest gold\.dash · Radar<\/title>/)
     })
 
     it('describes a document from its three-part address', async () => {
@@ -854,12 +882,12 @@ describe('per-entity title and OG', () => {
 
     it('falls back to a generic description when the backend fails or the id is malformed', async () => {
       for (const [path, title] of [
-        ['/epoch/7', 'Epoch'],
-        [`/document/${contract}/note/${doc}`, 'Document'],
-        [`/platform/tx/${hash}`, 'State transition'],
-        [`/platform-address/${address}`, 'Platform address'],
-        [`/platform/block/${hash}`, 'Platform block'],
-        [`/quorums?q=${hash}`, 'Quorum'],
+        ['/epoch/7', 'Epoch 7'],
+        [`/document/${contract}/note/${doc}`, 'Document note \\S+'],
+        [`/platform/tx/${hash}`, 'State transition \\S+'],
+        [`/platform-address/${address}`, 'Platform address \\S+'],
+        [`/platform/block/${hash}`, 'Platform block \\S+'],
+        [`/quorums?q=${hash}`, 'Quorum \\S+'],
       ]) {
         reset(() => new Response('boom', { status: 500 }))
         const html = await (await getAsBot(path)).text()
@@ -904,7 +932,7 @@ describe('per-entity title and OG', () => {
     ]) {
       const res = await get(`/mn/${protx}`, { headers: { 'user-agent': agent } })
       const html = await res.text()
-      assert.match(html, /<title>Masternode · Radar<\/title>/, agent)
+      assert.match(html, /<title>Masternode \S+…\S+ · Radar<\/title>/, agent)
       assert.match(html, /<div id="root">/)
       assert.match(res.headers.get('vary'), /user-agent/i)
     }

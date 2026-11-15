@@ -1,17 +1,29 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-14 14:02+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: es\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 14:02+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, one {# transacción} many {# de transacciones} other {# transacciones}}"
+
+#. placeholder {0}: formatInt(size)
+msgid "{0} blocks a page, newest first."
+msgstr "{0} bloques por página, los más recientes primero."
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, one {# confirmación} many {# de confirmaciones} other {# confirmaciones}}"
 
 msgid "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 msgstr "{count, plural, one {# transacción espera un bloque} other {# transacciones esperan un bloque}}"
@@ -19,8 +31,254 @@ msgstr "{count, plural, one {# transacción espera un bloque} other {# transacci
 msgid "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 msgstr "{open, plural, one {{have} de # propuesta abierta tiene los votos para financiarse} other {{have} de # propuestas abiertas tienen los votos para financiarse}}"
 
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, one {# compromiso de quórum en este bloque} many {# de compromisos de quórum en este bloque} other {# compromisos de quórum en este bloque}}"
+
+msgid "← Previous"
+msgstr "← Anterior"
+
+msgid "← Previous day"
+msgstr "← Día anterior"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "Bloque"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(height)
+msgid "Block {0}"
+msgstr "Bloque {0}"
+
+msgid "Block reward"
+msgstr "Recompensa de bloque"
+
+msgid "Blocks"
+msgstr "Bloques"
+
+msgid "Blocks on {date}"
+msgstr "Bloques del {date}"
+
+msgid "Blocks on {dateLabel}"
+msgstr "Bloques del {dateLabel}"
+
+msgid "Blocks per page"
+msgstr "Bloques por página"
+
+msgid "Browse by date"
+msgstr "Explorar por fecha"
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "Coinbase"
+msgstr "Coinbase"
+
+msgid "Coinbase payload"
+msgstr "Payload de coinbase"
+
+msgid "Coinbase tag says"
+msgstr "La etiqueta de coinbase dice"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core blocks"
+msgstr "Bloques Core"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash añade a la coinbase un payload que se compromete con la lista de masternodes y el último ChainLock."
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "Los días van de 00:00 a 24:00 UTC."
+
+msgid "Difficulty"
+msgstr "Dificultad"
+
+msgid "Everything the coinbase pays out"
+msgstr "Todo lo que paga la coinbase"
+
+msgid "Finding this day's blocks"
+msgstr "Buscando los bloques de este día"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Header"
+msgstr "Encabezado"
+
+msgid "Height"
+msgstr "Altura"
+
+#. placeholder {0}: formatInt(lowest)
+#. placeholder {1}: formatInt(Math.max(...heights))
+msgid "Heights {0} to {1}"
+msgstr "Alturas {0} a {1}"
+
+msgid "Hyphen isn’t answering, so this page reads Insight where it needs an index."
+msgstr "Hyphen no responde, así que esta página lee Insight donde necesita un índice."
+
+msgid "Inputs → outputs"
+msgstr "Entradas → salidas"
+
+msgid "Insight couldn’t be reached"
+msgstr "No se pudo contactar con Insight"
+
+msgid "Jump to a date"
+msgstr "Ir a una fecha"
+
+msgid "Latest blocks"
+msgstr "Últimos bloques"
+
+msgid "Merkle root"
+msgstr "Raíz de Merkle"
+
+msgid "Newer"
+msgstr "Más recientes"
+
+msgid "Next →"
+msgstr "Siguiente →"
+
+msgid "Next block"
+msgstr "Siguiente bloque"
+
+msgid "Next day"
+msgstr "Día siguiente"
+
+msgid "Next day →"
+msgstr "Día siguiente →"
+
+msgid "No blocks came back for this page"
+msgstr "No llegó ningún bloque para esta página"
+
+msgid "No blocks on this date"
+msgstr "No hay bloques en esta fecha"
+
+msgid "No known pool"
+msgstr "Ningún pool conocido"
+
+msgid "No tag in the coinbase"
+msgstr "Sin etiqueta en la coinbase"
+
 msgid "No transactions are waiting for a block"
 msgstr "Ninguna transacción espera un bloque"
 
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not ChainLocked yet"
+msgstr "Aún sin ChainLock"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "No se encontró en {0}"
+
+msgid "Not in DAPI"
+msgstr "No está en DAPI"
+
+msgid "Older"
+msgstr "Más antiguos"
+
+msgid "Older blocks from before this date"
+msgstr "Bloques anteriores a esta fecha"
+
+msgid "On this page"
+msgstr "En esta página"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "Las páginas de {0} necesitan un índice al día, y ahora no hay ninguno."
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "Las páginas de {0} necesitan un indexador, que el modo «Solo descentralizado» no utiliza."
+
+msgid "Previous block"
+msgstr "Bloque anterior"
+
+msgid "Previous day"
+msgstr "Día anterior"
+
+msgid "Reading the chain tip…"
+msgstr "Leyendo la punta de la cadena…"
+
+#. placeholder {0}: networkName(other)
+msgid "Search {0}"
+msgstr "Buscar en {0}"
+
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "Buscando en los encabezados de bloque dónde empieza y termina este día: {0} de 2 encontrados."
+
+msgid "See the sources"
+msgstr "Ver las fuentes"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "Etiqueta: {tag}. La escribe el minero, así que no es una prueba."
+
+msgid "Tap a transaction for its inputs, outputs and size"
+msgstr "Toca una transacción para ver sus entradas, salidas y tamaño"
+
+#. placeholder {0}: dateLabel ?? date
+msgid "That is the first block on {0}. Going older leaves this day."
+msgstr "Ese es el primer bloque del {0}. Ir más atrás sale de este día."
+
 msgid "The latest block was mined <0/>"
 msgstr "El último bloque se minó <0/>"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "La fuente no devolvió bloques para las alturas {0} a {1}. Prueba la página anterior o la siguiente, o una página más corta."
+
+msgid "There is no block with this height or hash on this network."
+msgstr "No hay ningún bloque con esta altura o hash en esta red."
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "Esta red no tiene bloques en este día, o el día aún no ha ocurrido."
+
+msgid "This source covers this row only"
+msgstr "Esta fuente solo cubre esta fila"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "Total out"
+msgstr "Total de salida"
+
+msgid "Transaction"
+msgstr "Transacción"
+
+msgid "Transactions"
+msgstr "Transacciones"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "Transacciones en el bloque {0}"
+
+msgid "tx"
+msgstr "tx"
+
+msgid "Txs"
+msgstr "Tx"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Version"
+msgstr "Versión"
+
+#. placeholder {0}: block.version.toString(16)
+msgid "Version {0}"
+msgstr "Versión {0}"
+
+msgid "Where this is"
+msgstr "Dónde está esto"

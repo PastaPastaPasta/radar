@@ -62,6 +62,18 @@ describe('Proof inspector @NX-61', () => {
     expect(within(dialog).getByRole('button', { name: 'Export evidence' })).toBeInTheDocument()
   })
 
+  it('shows the quorum hash in full and names the figure the proof covers @NX-61 @W2-18', async () => {
+    const held = proofStore.put(record('identities.balanceAndRevision', 4321))
+    await renderInApp(<ProofInspector />)
+    act(() => {
+      openProofInspector({ id: held.id } as never)
+    })
+    const dialog = await screen.findByRole('dialog', { name: 'Proof inspector' })
+    expect(within(dialog).getByText('01'.repeat(32))).toBeInTheDocument()
+    expect(within(dialog).getByText('An identity’s balance')).toBeInTheDocument()
+    expect(dialog).toHaveTextContent('The proof behind “An identity’s balance”')
+  })
+
   it('lists every proof held when opened without a mark, newest first, and opens one from the list', async () => {
     const user = userEvent.setup()
     proofStore.put(record('epoch.current', 10))

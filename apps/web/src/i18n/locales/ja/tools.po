@@ -1,17 +1,18 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:06+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:06+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
 
 msgid "“{arg}” has no wildcard."
 msgstr "“{arg}” にワイルドカードがありません。"
@@ -60,6 +61,12 @@ msgstr "{0} ステップ"
 msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
 msgstr "{0}、{1}。ここでデコードしています。バイト列はどこにも送信されません。"
 
+msgid "A data contract with this ID already exists."
+msgstr "この ID のデータコントラクトは既に存在します。"
+
+msgid "A document with this ID already exists."
+msgstr "この ID のドキュメントは既に存在します。"
+
 msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
 msgstr "ドキュメントのバイト列は、そのコントラクトと照らして初めて意味を持ちます。Radar はコントラクトを一度取得し、その証明をここで検証して、デコード用に保持します。"
 
@@ -80,6 +87,12 @@ msgstr "数値が必要ですが、“{arg}” が指定されました。"
 
 msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
 msgstr "クエリは SELECT … FROM … WHERE の後に AND で結んだ条件を置き、続けて GROUP BY、ORDER BY、LIMIT を指定します。Platform は 1 つのインデックスから応答するため、JOIN、OR、OFFSET、サブクエリは使えません。"
+
+msgid "A script address (starting with 7 or 8) can’t sign a message."
+msgstr "スクリプトアドレス（7 または 8 で始まる）ではメッセージに署名できません。"
+
+msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
+msgstr "署名は base64 で88文字、末尾は「=」で、Dash Core の signmessage が出力する形式です。"
 
 msgid "A statement can name a contract itself, as in FROM dpns.domain."
 msgstr "ステートメント内でコントラクトを直接指定できます（例: FROM dpns.domain）。"
@@ -102,6 +115,12 @@ msgstr "アクション"
 msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
 msgstr "範囲（<, >, BETWEEN, STARTS WITH）または IN でフィルターするフィールドごとに ORDER BY を追加してください。"
 
+msgid "Address"
+msgstr "アドレス"
+
+msgid "All decoders"
+msgstr "すべてのデコーダー"
+
 msgid "All documents"
 msgstr "すべてのドキュメント"
 
@@ -110,6 +129,9 @@ msgstr "金額（クレジット）"
 
 msgid "An average per group"
 msgstr "グループごとの平均"
+
+msgid "An identity with this ID already exists."
+msgstr "この ID のアイデンティティは既に存在します。"
 
 msgid "An operator was expected, but “{arg}” came instead."
 msgstr "演算子が必要ですが、“{arg}” が指定されました。"
@@ -130,11 +152,17 @@ msgstr "Base64"
 msgid "Byte list"
 msgstr "バイトリスト"
 
+msgid "Can’t check"
+msgstr "確認できません"
+
 msgid "Cancel"
 msgstr "キャンセル"
 
 msgid "Cancelled"
 msgstr "キャンセルしました"
+
+msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
+msgstr "Dash アドレスがメッセージに署名したかを確認します。確認はこのブラウザ内で行われ、ここに入力した内容はどこにも送信されません。Radar が鍵を求めることもありません。"
 
 msgid "Check the ID, or pick one of the contracts in the list."
 msgstr "ID を確認するか、一覧のコントラクトから選んでください。"
@@ -156,6 +184,9 @@ msgstr "デコーダーを選択"
 
 msgid "Choose the contract and the document type above to decode this document."
 msgstr "このドキュメントをデコードするには、上でコントラクトとドキュメントの種類を選択してください。"
+
+msgid "Clear"
+msgstr "クリア"
 
 msgid "Clear the filter"
 msgstr "フィルターをクリア"
@@ -272,15 +303,14 @@ msgstr "DPNS コントラクト"
 msgid "Drive returns at most 100 documents (or 100 groups) per query."
 msgstr "Drive が 1 回のクエリで返すのは最大 100 件のドキュメント（または 100 個のグループ）です。"
 
+msgid "Either another key made this signature, or the message is not exactly what was signed. A changed letter, space or line break gives a different address, and Radar cannot tell the two apart."
+msgstr "別の鍵がこの署名を作ったか、メッセージが署名されたものと完全には一致していません。文字、空白、改行が1つ違うだけで別のアドレスになり、Radar はそのどちらとも判別できません。"
+
 msgid "Element"
 msgstr "要素"
 
 msgid "Elements"
 msgstr "要素"
-
-#. placeholder {0}: result.code
-msgid "Error code {0}"
-msgstr "エラーコード {0}"
 
 msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
 msgstr "すべての条件が成り立つ必要があります（AND）。インデックスは 2 つの選択肢を同時に処理できません。代わりに 2 つのステートメントを実行してください。"
@@ -369,6 +399,9 @@ msgstr "入力"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Invalid"
+msgstr "無効"
+
 msgid "Key"
 msgstr "キー"
 
@@ -407,6 +440,9 @@ msgstr "マスターノード"
 
 msgid "Masternode vote"
 msgstr "マスターノード投票"
+
+msgid "Message"
+msgstr "メッセージ"
 
 msgid "Name at least one key to read."
 msgstr "読み取るキーを少なくとも 1 つ指定してください。"
@@ -464,6 +500,9 @@ msgstr "LIKE で使えるのは前方一致パターンだけです。"
 
 msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
 msgstr "サポートされているのは SELECT *、COUNT(*)、SUM(field)、AVG(field) だけです。"
+
+msgid "Open the proof decoder"
+msgstr "証明デコーダーを開く"
 
 msgid "Operations in this batch"
 msgstr "このバッチの操作"
@@ -527,6 +566,9 @@ msgstr "Platform は値、範囲、IN リスト、前方一致を照合できま
 
 msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
 msgstr "Platform は値、範囲、IN リスト、前方一致を照合できますが、値を除外することはできません。欲しいものでフィルターし、欲しくないものでは絞り込まないでください。"
+
+msgid "Platform couldn't run this query"
+msgstr "Platform はこのクエリを実行できませんでした"
 
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
@@ -693,6 +735,12 @@ msgstr "シールド出金"
 msgid "Show all {0} steps"
 msgstr "{0} 個のステップをすべて表示"
 
+msgid "Signature"
+msgstr "署名"
+
+msgid "Signed message"
+msgstr "署名付きメッセージ"
+
 msgid "Signed state transition"
 msgstr "署名済みステートトランジション"
 
@@ -701,6 +749,9 @@ msgstr "署名キー"
 
 msgid "Size (bytes)"
 msgstr "サイズ（バイト）"
+
+msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
+msgstr "メッセージ内のスペースや改行も区別されます。署名されたものと完全に一致する必要があります。"
 
 msgid "SQL query"
 msgstr "SQL クエリ"
@@ -733,8 +784,20 @@ msgstr "合計"
 msgid "Sum of {0}"
 msgstr "{0} の合計"
 
+msgid "Switch to mainnet"
+msgstr "メインネットに切り替え"
+
+msgid "Switch to testnet"
+msgstr "テストネットに切り替え"
+
 msgid "That is more than 1 MB, which is more than any of these objects."
 msgstr "1 MB を超えており、これらのどのオブジェクトよりも大きいサイズです。"
+
+msgid "That isn’t a Dash address Radar can check."
+msgstr "Radar が確認できる Dash アドレスではありません。"
+
+msgid "That isn’t a Dash signature."
+msgstr "Dash の署名ではありません。"
 
 msgid "That isn't a list of numbers from 0 to 255."
 msgstr "0〜255 の数値のリストではありません。"
@@ -745,11 +808,20 @@ msgstr "16 進、base64、数値のリストのいずれでもありません。
 msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
 msgstr "16 進ではありません。0〜9 と a〜f の数字を、1 バイトにつき 2 桁で使ってください。"
 
+msgid "The first {firstType} documents"
+msgstr "最初の {firstType} ドキュメント"
+
 msgid "The first DashPay profiles"
 msgstr "先頭の DashPay プロフィール"
 
 msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
 msgstr "Platform の応答に含まれる grovedbProof です。Radar がここで読み取り、各レイヤーが何を証明しているかを表示します。"
+
+msgid "The identity does not have enough balance for the fee."
+msgstr "このアイデンティティには手数料に足る残高がありません。"
+
+msgid "The identity nonce has already been used, or is not the next one."
+msgstr "アイデンティティのノンスは既に使われているか、次の値ではありません。"
 
 msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
 msgstr "応答したノードはこのリクエストをサポートしていません。古い Platform バージョンで動作している可能性があります。再実行すると別のノードに接続されます。"
@@ -772,6 +844,12 @@ msgstr "ルートツリー"
 msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
 msgstr "SDK はこのトランジションタイプのエンベロープしか読み取らないため、フィールドは表示されません。"
 
+msgid "The signature does not match the signing key."
+msgstr "署名が署名鍵と一致しません。"
+
+msgid "The signature is well formed, but checked against this exact message it points to a different address:"
+msgstr "署名の形式は正しいですが、このメッセージそのもので検証すると別のアドレスを指します:"
+
 msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
 msgstr "投票ツリーのサブツリー: 争奪中のリソース、決定、終了日、アイデンティティの投票。"
 
@@ -790,11 +868,29 @@ msgstr "このバイト列をステートトランジションとしてデコー
 msgid "These bytes could not be decoded."
 msgstr "このバイト列をデコードできませんでした。"
 
+msgid "These bytes look like a GroveDB proof, not a serialized object."
+msgstr "これらのバイトは直列化されたオブジェクトではなく、GroveDB の証明のようです。"
+
+msgid "This address did not sign this message."
+msgstr "このアドレスはこのメッセージに署名していません。"
+
+msgid "This address signed this message."
+msgstr "このアドレスはこのメッセージに署名しました。"
+
 msgid "This browser won't store the query."
 msgstr "このブラウザはクエリを保存できません。"
 
 msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
 msgstr "このドキュメントの種類には、この集計に対応するインデックスがありません。COUNT には、プロパティが WHERE のフィールドと一致するカウント可能なインデックスが必要で、SUM と AVG には対応する合計可能なインデックスが必要です。各インデックスのフラグは下のスキーマに一覧があります。"
+
+msgid "This is a mainnet address."
+msgstr "これはメインネットのアドレスです。"
+
+msgid "This is a testnet address."
+msgstr "これはテストネットのアドレスです。"
+
+msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
+msgstr "秘密鍵またはリカバリーフレーズのようです。Radar がこれを必要とすることはないため、確認は行いません。入力欄をクリアして、代わりに署名付きメッセージを貼り付けてください。"
 
 msgid "This number is too large to write safely here."
 msgstr "この数値は大きすぎて、ここで安全に書き込めません。"
@@ -833,8 +929,20 @@ msgstr "完全一致には == を使ってください。ここでの LIKE は�
 msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
 msgstr "==、>、>=、<、<=、BETWEEN … AND …、IN (…)、STARTS WITH を使ってください。"
 
+msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
+msgstr "署名したアドレスを使用してください。メインネットでは X、テストネットでは y で始まります。"
+
+msgid "Valid"
+msgstr "有効"
+
 msgid "Value"
 msgstr "値"
+
+msgid "Verify"
+msgstr "検証"
+
+msgid "Verify message"
+msgstr "メッセージを検証"
 
 msgid "Vote"
 msgstr "投票"

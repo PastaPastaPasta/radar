@@ -434,12 +434,19 @@ test.describe('transition tool', () => {
   test('in Decentralized only mode it still decodes and says checking needs Platform Explorer @PE-34', async ({
     page,
   }) => {
+    const peCalls: string[] = []
+    page.on('request', (r) => {
+      if (/platform-explorer|pe\.dashhq\.org/.test(r.url())) peCalls.push(r.url())
+    })
     await stubSdk(page, [create])
     await page.goto('/tools/transition?sources=decentralized')
     await page.getByLabel('Signed state transition').fill(create.hex)
     await expect(page.locator('#transition-summary')).toContainText('Documents and tokens batch')
     await expect(page.locator('#transition-verify [data-unavailable="mode"]')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Check this transition' })).toHaveCount(0)
+    const check = page.getByRole('button', { name: 'Check this transition' })
+    await expect(check).toBeDisabled()
+    await expect(check).toHaveAccessibleDescription(/needs Platform Explorer/)
+    expect(peCalls).toEqual([])
     await expectAccessible(page)
   })
 

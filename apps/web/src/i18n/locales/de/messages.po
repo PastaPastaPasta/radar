@@ -29,10 +29,6 @@ msgstr "(diese Website leitet die Anfrage an {0} weiter)"
 msgid "[circular]"
 msgstr "[zirkulär]"
 
-#. placeholder {0}: block.txs.length
-msgid "{0, plural, one {# transaction} other {# transactions}}"
-msgstr "{0, plural, one {# Transaktion} other {# Transaktionen}}"
-
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, one {letzter Block-Header vor # Minute} other {letzter Block-Header vor # Minuten}}"
@@ -40,10 +36,6 @@ msgstr "{0, plural, one {letzter Block-Header vor # Minute} other {letzter Block
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
 msgstr "{0} Adressen im Ranking"
-
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} Blöcke pro Seite, neueste zuerst."
 
 #. placeholder {0}: titles[id]
 msgid "{0} by block height"
@@ -149,9 +141,6 @@ msgstr "{base} ({detail})"
 msgid "{blockCount} blocks so far"
 msgstr "{blockCount} Blöcke bisher"
 
-msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{confirmations, plural, one {# Bestätigung} other {# Bestätigungen}}"
-
 msgid "{d} d"
 msgstr "{d} T"
 
@@ -242,9 +231,6 @@ msgstr "{name} hat zu lange für eine Antwort gebraucht"
 msgid "{percent} through"
 msgstr "{percent} geschafft"
 
-msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
-msgstr "{quorumCommitments, plural, one {# Quorum-Commitment in diesem Block} other {# Quorum-Commitments in diesem Block}}"
-
 msgid "{s} s"
 msgstr "{s} Sek."
 
@@ -253,12 +239,6 @@ msgstr "% der Adressguthaben"
 
 msgid "% of supply"
 msgstr "% des Angebots"
-
-msgid "← Previous"
-msgstr "← Zurück"
-
-msgid "← Previous day"
-msgstr "← Vorheriger Tag"
 
 #. placeholder {0}: formatInt(matches)
 msgid "<0>{0}</0> match"
@@ -284,12 +264,6 @@ msgstr "Eine Dash-Adresse hat 34 Zeichen und beginnt im Mainnet mit X oder 7, im
 
 msgid "A proof didn't verify"
 msgstr "Ein Beweis wurde nicht bestätigt"
-
-msgid "A script address (starting with 7 or 8) can’t sign a message."
-msgstr "Eine Skriptadresse (beginnt mit 7 oder 8) kann keine Nachricht signieren."
-
-msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
-msgstr "Eine Signatur besteht aus 88 Base64-Zeichen und endet mit „=“, wie von signmessage in Dash Core ausgegeben."
 
 msgid "About sources"
 msgstr "Über die Quellen"
@@ -374,26 +348,11 @@ msgstr "Guthaben"
 msgid "Behind"
 msgstr "Hinterher"
 
-msgid "Bits"
-msgstr "Bits"
-
 msgid "Block"
 msgstr "Block"
 
-#. placeholder {0}: formatInt(block.height - 1)
-#. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(ref.height)
-msgid "Block {0}"
-msgstr "Block {0}"
-
 msgid "Block height"
 msgstr "Blockhöhe"
-
-msgid "Block reward"
-msgstr "Blockbelohnung"
-
-msgid "Blocks"
-msgstr "Blöcke"
 
 #. placeholder {0}: formatInt(chart.startHeight)
 #. placeholder {1}: formatInt(chart.endHeight)
@@ -404,20 +363,8 @@ msgstr "Blöcke {0} bis {1}, ein Punkt pro {2, plural, one {# Block} other {# Bl
 msgid "Blocks and transactions elsewhere in Radar are current."
 msgstr "Blöcke und Transaktionen an anderer Stelle in Radar sind aktuell."
 
-msgid "Blocks on {date}"
-msgstr "Blöcke am {date}"
-
-msgid "Blocks on {dateLabel}"
-msgstr "Blöcke am {dateLabel}"
-
-msgid "Blocks per page"
-msgstr "Blöcke pro Seite"
-
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Blöcke, Transaktionen und Adressen an anderer Stelle in Radar sind aktuell."
-
-msgid "Browse by date"
-msgstr "Nach Datum durchsuchen"
 
 msgid "Budget"
 msgstr "Budget"
@@ -428,17 +375,11 @@ msgstr "Budgetvorschläge"
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Budgetvorschläge und der Stand ihrer Abstimmungen. Abgestimmt wird in der Governance."
 
-msgid "bytes"
-msgstr "Bytes"
-
 msgid "Camera"
 msgstr "Kamera"
 
 msgid "Camera preview"
 msgstr "Kameravorschau"
-
-msgid "Can’t check"
-msgstr "Nicht prüfbar"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -455,17 +396,11 @@ msgstr "ChainLock von einem Knoten gemeldet"
 msgid "ChainLocked"
 msgstr "ChainLocked"
 
-msgid "Chainwork"
-msgstr "Chainwork"
-
 msgid "Charts"
 msgstr "Diagramme"
 
 msgid "Charts need an indexer"
 msgstr "Diagramme brauchen einen Indexer"
-
-msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
-msgstr "Prüfe, ob eine Dash-Adresse eine Nachricht signiert hat. Die Prüfung läuft in diesem Browser: Nichts, was du hier eingibst, wird irgendwohin gesendet, und Radar fragt nie nach einem Schlüssel."
 
 msgid "Checking"
 msgstr "Prüfung läuft"
@@ -493,12 +428,6 @@ msgstr "schließen"
 
 msgid "Coinbase"
 msgstr "Coinbase"
-
-msgid "Coinbase payload"
-msgstr "Coinbase-Payload"
-
-msgid "Coinbase tag says"
-msgstr "Der Coinbase-Tag sagt"
 
 msgid "Collapse all"
 msgstr "Alle einklappen"
@@ -552,17 +481,11 @@ msgstr "JSON kopieren"
 msgid "Copy link to this section"
 msgstr "Link zu diesem Abschnitt kopieren"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core address"
 msgstr "Core-Adresse"
 
 msgid "Core block"
 msgstr "Core-Block"
-
-msgid "Core blocks"
-msgstr "Core-Blöcke"
 
 msgid "Core transaction"
 msgstr "Core-Transaktion"
@@ -600,17 +523,11 @@ msgstr "Credit-Auszahlung"
 msgid "DAPI addresses"
 msgstr "DAPI-Adressen"
 
-msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
-msgstr "Dash fügt der Coinbase eine Payload hinzu, die auf die Masternode-Liste und den neuesten ChainLock festgelegt ist."
-
 msgid "Data contract"
 msgstr "Datenvertrag"
 
 msgid "Data sources"
 msgstr "Datenquellen"
-
-msgid "Days run from 00:00 to 24:00 UTC."
-msgstr "Tage laufen von 00:00 bis 24:00 UTC."
 
 msgid "Decentralized"
 msgstr "Dezentral"
@@ -730,9 +647,6 @@ msgstr "Schätzung"
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Jedes Backend, das Radar kontaktieren kann, wer es betreibt und ob es auf {network} genutzt wird. Jede Zahl in Radar nennt das Backend, aus dem sie stammt."
 
-msgid "Everything the coinbase pays out"
-msgstr "Alles, was die Coinbase auszahlt"
-
 msgid "Evonode"
 msgstr "Evonode"
 
@@ -765,9 +679,6 @@ msgstr "Vorschläge nach Name oder Hash filtern"
 
 msgid "Filter proposals by status"
 msgstr "Vorschläge nach Status filtern"
-
-msgid "Finding this day's blocks"
-msgstr "Blöcke dieses Tages werden gesucht"
 
 msgid "First"
 msgstr "Erste"
@@ -813,9 +724,6 @@ msgstr "Governance-Vorschläge brauchen einen Indexer"
 msgid "Group"
 msgstr "Gruppe"
 
-msgid "Hash"
-msgstr "Hash"
-
 msgid "Hash rate"
 msgstr "Hashrate"
 
@@ -823,19 +731,8 @@ msgstr "Hashrate"
 msgid "Hash rate over the last {0} blocks"
 msgstr "Hashrate über die letzten {0} Blöcke"
 
-msgid "Header"
-msgstr "Header"
-
-msgid "Height"
-msgstr "Höhe"
-
 msgid "Height when connected"
 msgstr "Höhe bei Verbindung"
-
-#. placeholder {0}: formatInt(lowest)
-#. placeholder {1}: formatInt(Math.max(...heights))
-msgid "Heights {0} to {1}"
-msgstr "Höhen {0} bis {1}"
 
 msgid "Held by the top 10"
 msgstr "Von den Top 10 gehalten"
@@ -936,17 +833,11 @@ msgstr "bis Block {block} indexiert ({0} im Rückstand)"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "bis Block {block} indexiert ({0} Blöcke im Rückstand)"
 
-msgid "Inputs → outputs"
-msgstr "Inputs → Outputs"
-
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight konnte die ältesten Transaktionen dieser Adresse nicht liefern."
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight konnte die Transaktionen dieser Adresse nicht liefern."
-
-msgid "Insight couldn’t be reached"
-msgstr "Insight war nicht erreichbar"
 
 msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
 msgstr "Insight meldet keine Finanzierung, und der Zeitpunkt des nächsten Superblocks ist nicht bekannt, daher gilt kein Vorschlag als finanziert. „Bestanden“ errechnet Radar aus den Stimmenzahlen von Insight."
@@ -975,9 +866,6 @@ msgstr "ungültiges Datum"
 msgid "JSON"
 msgstr "JSON"
 
-msgid "Jump to a date"
-msgstr "Zu einem Datum springen"
-
 msgid "Key limits update"
 msgstr "Schlüssellimits aktualisieren"
 
@@ -998,9 +886,6 @@ msgstr "letzter Crawl vor {0} abgeschlossen"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "zuletzt in Ordnung {0}"
-
-msgid "Latest blocks"
-msgstr "Neueste Blöcke"
 
 msgid "Link copied"
 msgstr "Link kopiert"
@@ -1054,12 +939,6 @@ msgstr "Mempool"
 msgid "Mempool pressure"
 msgstr "Mempool-Auslastung"
 
-msgid "Merkle root"
-msgstr "Merkle-Root"
-
-msgid "Message"
-msgstr "Nachricht"
-
 msgid "Metrics history"
 msgstr "Metrikverlauf"
 
@@ -1102,35 +981,14 @@ msgstr "Neuer"
 msgid "Next"
 msgstr "Weiter"
 
-msgid "Next →"
-msgstr "Weiter →"
-
-msgid "Next block"
-msgstr "Nächster Block"
-
-msgid "Next day"
-msgstr "Nächster Tag"
-
-msgid "Next day →"
-msgstr "Nächster Tag →"
-
 msgid "No"
 msgstr "Nein"
 
 msgid "No balances indexed yet."
 msgstr "Noch keine Guthaben indiziert."
 
-msgid "No blocks came back for this page"
-msgstr "Für diese Seite kamen keine Blöcke zurück"
-
-msgid "No blocks on this date"
-msgstr "Keine Blöcke an diesem Datum"
-
 msgid "No camera could be opened here. Choose a picture instead."
 msgstr "Hier konnte keine Kamera geöffnet werden. Wähle stattdessen ein Bild."
-
-msgid "No known pool"
-msgstr "Kein bekannter Pool"
 
 msgid "No proposal with this hash on this network."
 msgstr "In diesem Netzwerk gibt es keinen Vorschlag mit diesem Hash."
@@ -1143,9 +1001,6 @@ msgstr "In diesem Netzwerk gibt es keine Vorschläge."
 
 msgid "No QR code found in that picture."
 msgstr "In diesem Bild wurde kein QR-Code gefunden."
-
-msgid "No tag in the coinbase"
-msgstr "Kein Tag in der Coinbase"
 
 msgid "No transactions in the mempool right now."
 msgstr "Derzeit keine Transaktionen im Mempool."
@@ -1162,21 +1017,8 @@ msgstr "Für diesen Vorschlag wurden keine Stimmen erfasst."
 msgid "Node list and quorum keys"
 msgstr "Knotenliste und Quorum-Schlüssel"
 
-msgid "Nonce"
-msgstr "Nonce"
-
 msgid "Not available for this record"
 msgstr "Für diesen Eintrag nicht verfügbar"
-
-msgid "Not ChainLocked yet"
-msgstr "Noch nicht ChainLocked"
-
-#. placeholder {0}: networkName(net)
-msgid "Not found on {0}"
-msgstr "Nicht gefunden im {0}"
-
-msgid "Not in DAPI"
-msgstr "Nicht in DAPI"
 
 msgid "Not on {net}"
 msgstr "Nicht auf {net}"
@@ -1208,12 +1050,6 @@ msgstr "In diesem Modus aus"
 msgid "Older"
 msgstr "Älter"
 
-msgid "Older blocks from before this date"
-msgstr "Ältere Blöcke vor diesem Datum"
-
-msgid "On this page"
-msgstr "Auf dieser Seite"
-
 msgid "open"
 msgstr "öffnen"
 
@@ -1244,14 +1080,6 @@ msgstr "Output"
 
 msgid "Pages"
 msgstr "Seiten"
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an index that is up to date, and none is right now."
-msgstr "Seiten mit {0} Blöcken brauchen einen aktuellen Index, und gerade ist keiner aktuell."
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
-msgstr "Seiten mit {0} Blöcken brauchen einen Indexer, den der Modus „Nur dezentral“ nicht nutzt."
 
 msgid "Pagination"
 msgstr "Seitenwahl"
@@ -1333,12 +1161,6 @@ msgstr "Vorschau"
 
 msgid "Previous"
 msgstr "Zurück"
-
-msgid "Previous block"
-msgstr "Vorheriger Block"
-
-msgid "Previous day"
-msgstr "Vorheriger Tag"
 
 msgid "Price feed"
 msgstr "Preisfeed"
@@ -1424,9 +1246,6 @@ msgstr "Rangband"
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "Lies einen QR-Code mit der Kamera oder aus einem Bild und schlage nach, was er enthält. Das Bild wird in diesem Browser gelesen und nicht hochgeladen."
 
-msgid "Reading the chain tip…"
-msgstr "Die Chain-Spitze wird gelesen …"
-
 msgid "Reading the picture…"
 msgstr "Bild wird gelesen …"
 
@@ -1480,16 +1299,8 @@ msgstr "Zeilen pro Seite"
 msgid "Scroll"
 msgstr "Scrollen"
 
-#. placeholder {0}: networkName(other)
-msgid "Search {0}"
-msgstr "{0} durchsuchen"
-
 msgid "Search Radar"
 msgstr "Radar durchsuchen"
-
-#. placeholder {0}: formatInt(range.found)
-msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
-msgstr "Block-Header werden durchsucht, wo dieser Tag beginnt und endet: {0} von 2 gefunden."
 
 msgid "Searching…"
 msgstr "Suche läuft …"
@@ -1575,12 +1386,6 @@ msgstr "Mehr anzeigen"
 msgid "Show QR code"
 msgstr "QR-Code anzeigen"
 
-msgid "Signature"
-msgstr "Signatur"
-
-msgid "Signed message"
-msgstr "Signierte Nachricht"
-
 msgid "Since you opened this page"
 msgstr "Seit du diese Seite geöffnet hast"
 
@@ -1589,9 +1394,6 @@ msgstr "Größe"
 
 msgid "Slow"
 msgstr "Langsam"
-
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "Auf der Seite ist etwas schiefgegangen. Der Rest von Radar funktioniert weiterhin."
 
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgegangen"
@@ -1608,9 +1410,6 @@ msgstr "Sortiert nach {column}, absteigend"
 
 msgid "Sources"
 msgstr "Quellen"
-
-msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
-msgstr "Leerzeichen und Zeilenumbrüche in der Nachricht zählen: Sie muss genau dem entsprechen, was signiert wurde."
 
 msgid "Spendable outputs"
 msgstr "Ausgebbare Outputs"
@@ -1646,29 +1445,11 @@ msgstr "Zusammenfassung"
 msgid "Supply concentration"
 msgstr "Konzentration des Angebots"
 
-msgid "Switch to mainnet"
-msgstr "Zum Mainnet wechseln"
-
-msgid "Switch to testnet"
-msgstr "Zum Testnet wechseln"
-
-msgid "Tag: {tag}. The miner writes it, so it is not proof."
-msgstr "Tag: {tag}. Der Miner schreibt es, daher ist es kein Beweis."
-
-msgid "Tap a transaction for its inputs, outputs and size"
-msgstr "Transaktion antippen für Eingänge, Ausgänge und Größe"
-
 msgid "testnet"
 msgstr "Testnet"
 
-msgid "That isn’t a Dash address Radar can check."
-msgstr "Das ist keine Dash-Adresse, die Radar prüfen kann."
-
 msgid "That isn’t a Dash address."
 msgstr "Das ist keine Dash-Adresse."
-
-msgid "That isn’t a Dash signature."
-msgstr "Das ist keine Dash-Signatur."
 
 msgid "That picture couldn’t be read."
 msgstr "Das Bild konnte nicht gelesen werden."
@@ -1754,19 +1535,11 @@ msgstr "Der Rest dieser Seite funktioniert weiterhin."
 msgid "The rich list needs an indexer"
 msgstr "Die Reichenliste braucht einen Indexer"
 
-msgid "The signature is well formed, but it was made by a different key. It matches this address:"
-msgstr "Die Signatur ist wohlgeformt, wurde aber mit einem anderen Schlüssel erstellt. Sie passt zu dieser Adresse:"
-
 msgid "The source is busy"
 msgstr "Die Quelle ist ausgelastet"
 
 msgid "The source isn't answering"
 msgstr "Die Quelle antwortet nicht"
-
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
-msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
-msgstr "Die Quelle lieferte keine Blöcke für die Höhen {0} bis {1}. Versuche die Seite davor oder danach, oder eine kürzere Seite."
 
 msgid "The source sent something Radar couldn't read"
 msgstr "Die Quelle hat etwas gesendet, das Radar nicht lesen konnte"
@@ -1785,15 +1558,6 @@ msgstr "Der USD-Kurs neben DASH-Beträgen. Nur im Mainnet."
 msgid "Their size"
 msgstr "Ihre Größe"
 
-msgid "There is no block with this height or hash on this network."
-msgstr "In diesem Netzwerk gibt es keinen Block mit dieser Höhe oder diesem Hash."
-
-msgid "This address did not sign this message."
-msgstr "Diese Adresse hat diese Nachricht nicht signiert."
-
-msgid "This address signed this message."
-msgstr "Diese Adresse hat diese Nachricht signiert."
-
 msgid "This address's balance, history and unspent outputs need an indexer"
 msgstr "Guthaben, Verlauf und nicht ausgegebene Outputs dieser Adresse brauchen einen Indexer"
 
@@ -1803,17 +1567,8 @@ msgstr "Dieser Browser"
 msgid "This is a {name} address."
 msgstr "Dies ist eine {name}-Adresse."
 
-msgid "This is a mainnet address."
-msgstr "Dies ist eine Mainnet-Adresse."
-
 msgid "This is a Radar bug, not your connection. {rest}"
 msgstr "Das ist ein Fehler in Radar, nicht in deiner Verbindung. {rest}"
-
-msgid "This is a testnet address."
-msgstr "Dies ist eine Testnet-Adresse."
-
-msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
-msgstr "Das sieht nach einem privaten Schlüssel oder einer Wiederherstellungsphrase aus. Radar braucht so etwas nie und prüft es deshalb nicht. Leere das Feld und füge stattdessen die signierte Nachricht ein."
 
 msgid "This needs an indexer"
 msgstr "Dafür braucht es einen Indexer"
@@ -1823,12 +1578,6 @@ msgstr "Dafür braucht es Platform Explorer"
 
 msgid "This needs Radar's crawler"
 msgstr "Dafür braucht es den Radar-Crawler"
-
-msgid "This network has no blocks in this day, or the day has not happened yet."
-msgstr "In diesem Netzwerk gibt es an diesem Tag keine Blöcke, oder der Tag ist noch nicht gewesen."
-
-msgid "This page couldn’t be shown"
-msgstr "Diese Seite konnte nicht angezeigt werden"
 
 msgid "This page needs an indexer"
 msgstr "Diese Seite braucht einen Indexer"
@@ -1841,9 +1590,6 @@ msgstr "Dieser Vorschlag und sein Stimmverlauf stammen aus dem Index von Hyphen,
 
 msgid "This site"
 msgstr "Diese Website"
-
-msgid "This source covers this row only"
-msgstr "Diese Quelle gilt nur für diese Zeile"
 
 msgid "This source isn't available here"
 msgstr "Diese Quelle ist hier nicht verfügbar"
@@ -1915,9 +1661,6 @@ msgstr "Werkzeuge"
 msgid "Top {0}"
 msgstr "Top {0}"
 
-msgid "Total out"
-msgstr "Gesamt ausgegeben"
-
 msgid "Total received"
 msgstr "Gesamt empfangen"
 
@@ -1932,10 +1675,6 @@ msgstr "Transaktionsgeschwindigkeit"
 
 msgid "Transactions"
 msgstr "Transaktionen"
-
-#. placeholder {0}: formatInt(block.height)
-msgid "Transactions in block {0}"
-msgstr "Transaktionen in Block {0}"
 
 msgid "Transactions of this address, newest first"
 msgstr "Transaktionen dieser Adresse, neueste zuerst"
@@ -1977,12 +1716,6 @@ msgstr "Versuche es gleich noch einmal. {rest}"
 msgid "Try another name or hash, or choose All."
 msgstr "Anderen Namen oder Hash versuchen oder „Alle“ wählen."
 
-msgid "tx"
-msgstr "Tx"
-
-msgid "Txs"
-msgstr "Tx"
-
 msgid "Type"
 msgstr "Typ"
 
@@ -2016,9 +1749,6 @@ msgstr "USD-Preise brauchen einen Preisfeed"
 msgid "Use all sources"
 msgstr "Alle Quellen verwenden"
 
-msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
-msgstr "Verwende die Adresse, die signiert hat; sie beginnt im Mainnet mit X und im Testnet mit y."
-
 msgid "Use the camera"
 msgstr "Kamera verwenden"
 
@@ -2028,24 +1758,8 @@ msgstr "Dieses Devnet verwenden"
 msgid "Username"
 msgstr "Benutzername"
 
-msgid "Valid"
-msgstr "Gültig"
-
 msgid "Value"
 msgstr "Wert"
-
-msgid "Verify"
-msgstr "Prüfen"
-
-msgid "Verify message"
-msgstr "Nachricht prüfen"
-
-msgid "Version"
-msgstr "Version"
-
-#. placeholder {0}: block.version.toString(16)
-msgid "Version {0}"
-msgstr "Version {0}"
 
 msgid "Vote"
 msgstr "Stimme"
@@ -2079,9 +1793,6 @@ msgstr "Wann"
 
 msgid "Where requests go on {network}, and what each one is for."
 msgstr "Wohin Anfragen auf {network} gehen und wofür jede gedacht ist."
-
-msgid "Where this is"
-msgstr "Wo sich das befindet"
 
 msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
 msgstr "Welche Evonodes es gibt, etwa einmal pro Stunde gelesen (eine gespeicherte oder die eingebaute Liste springt ein, wenn sie nicht gelesen werden kann), und die öffentlichen Quorum-Schlüssel, gegen die das SDK Beweise prüft. Der Modus „Nur dezentral“ nutzt sie weiterhin: Ohne sie könnte Radar weder Knoten finden noch einen Beweis prüfen."

@@ -1,16 +1,38 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
-import { useId, useState } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useEffect, useId, useState } from 'react'
 import { sdkQueries } from '@/data/sdk/queries'
 import { useNetwork } from '@/features/entity'
 import { wellKnownContracts } from '@/lib/well-known'
 import { Card, Empty, ErrorState, Skeleton } from '@/ui'
 import { BytesField, useParsedBytes, type BytesState } from './BytesField'
 import { DecodedResult } from './DecodedResult'
+import { parseGroveProof } from './grove-proof'
 import { useDecoded } from './use-decoded'
 
 const CONTRACT_ID = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
+
+/** Whether bytes the object decoder refused parse as a GroveDB proof, which is the likeliest thing pasted into the wrong box. */
+function useLooksLikeProof(bytes: Uint8Array | undefined, refused: boolean): boolean {
+  const [found, setFound] = useState<Uint8Array | undefined>()
+  useEffect(() => {
+    if (!bytes || !refused) return
+    let live = true
+    parseGroveProof(bytes).then(
+      () => {
+        if (live) setFound(bytes)
+      },
+      () => {
+        if (live) setFound(undefined)
+      },
+    )
+    return () => {
+      live = false
+    }
+  }, [bytes, refused])
+  return refused && bytes !== undefined && found === bytes
+}
 
 /** The data contract and identity decoders: paste bytes, read them back as JSON. */
 export function ByteDecoder({ kind, label }: { kind: 'dataContract' | 'identity'; label: string }) {
@@ -18,11 +40,23 @@ export function ByteDecoder({ kind, label }: { kind: 'dataContract' | 'identity'
   const [state, setState] = useState<BytesState>({ text: '', choice: 'auto' })
   const parsed = useParsedBytes(state)
   const decoded = useDecoded(kind, parsed)
+  const isProof = useLooksLikeProof(
+    parsed?.ok ? parsed.bytes : undefined,
+    decoded.status === 'error',
+  )
   return (
     <div className="grid gap-4">
       <Card title={t`Input`} layer="platform">
         <BytesField state={state} onChange={setState} parsed={parsed} label={label} />
       </Card>
+      {isProof ? (
+        <p role="status" data-looks-like-proof className="text-sm">
+          {t`These bytes look like a GroveDB proof, not a serialized object.`}{' '}
+          <Link to="/tools/$decoder" params={{ decoder: 'proof' }}>
+            {t`Open the proof decoder`}
+          </Link>
+        </p>
+      ) : null}
       <DecodedResult state={decoded} />
     </div>
   )

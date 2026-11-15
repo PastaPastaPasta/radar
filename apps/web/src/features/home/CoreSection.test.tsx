@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, screen, waitFor } from '@testing-library/react'
+import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { core } from '@/data/core/client'
@@ -7,6 +8,7 @@ import { SourceError } from '@/data/errors'
 import type { CoreChainStatus } from '@/data/core/types'
 import { dapiKeys } from '@/data/query'
 import { I18nProvider, i18n } from '@/i18n'
+import { server } from '@/test/server'
 import { renderInRouter } from '@/ui/test-utils'
 import { CoreSection } from './CoreSection'
 
@@ -161,5 +163,14 @@ describe('Core figures on the home page @HY-01', () => {
     const table = await screen.findByRole('table', { name: 'Latest Core blocks', hidden: true })
     expect(table).toHaveAttribute('aria-busy', 'true')
     expect(screen.queryByText(/DAPI isn.t available here/)).toBeNull()
+  })
+
+  it('stops saying it is checking Hyphen once Hyphen has failed to answer @W2-25 @X-09', async () => {
+    server.use(http.get(/\/x\/hy\/mainnet\/status/, () => new HttpResponse(null, { status: 400 })))
+    vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 116_445_795.87))
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_277))
+    await renderFigures(new QueryClient())
+    expect((await screen.findAllByText(/Hyphen isn.t answering/)).length).toBeGreaterThan(0)
+    expect(screen.queryByText('Checking Hyphen…')).toBeNull()
   })
 })

@@ -35,7 +35,6 @@ msgstr "{0} base units"
 msgid "{0} duffs"
 msgstr "{0} duffs"
 
-#. placeholder {0}: formatInt(inCount)
 #. placeholder {0}: formatInt(inputs.length)
 #. placeholder {0}: formatInt(tx.inputs.length)
 msgid "{0} inputs"
@@ -45,15 +44,15 @@ msgstr "{0} inputs"
 msgid "{0} inputs not loaded"
 msgstr "{0} inputs not loaded"
 
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
-#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {0}: formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} locked into Platform credits"
+msgstr "{0} locked into Platform credits"
+
+#. placeholder {0}: formatInt(signers)
+#. placeholder {0}: formatInt(valid)
 #. placeholder {1}: formatInt(members)
 msgid "{0} of {1}"
 msgstr "{0} of {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "{0} outputs"
 
 #. placeholder {0}: sectionLabel(section)
 msgid "{0} pages"
@@ -84,6 +83,9 @@ msgstr "{feeRate} duffs a byte"
 msgid "{feeRate} duffs a byte: it spends no coins"
 msgstr "{feeRate} duffs a byte: it spends no coins"
 
+msgid "{inCount, plural, one {# input} other {# inputs}}"
+msgstr "{inCount, plural, one {# input} other {# inputs}}"
+
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} has not seen this address on this network."
 
@@ -95,6 +97,9 @@ msgstr "{n} more outputs"
 
 msgid "{name} (reason {reason})"
 msgstr "{name} (reason {reason})"
+
+msgid "{outCount, plural, one {# output} other {# outputs}}"
+msgstr "{outCount, plural, one {# output} other {# outputs}}"
 
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# type} other {# types}}"
@@ -140,9 +145,9 @@ msgstr "after it is mined"
 msgid "Amount"
 msgstr "Amount"
 
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
+#. placeholder {0}: partial.loaded
+msgid "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
+msgstr "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
 
 msgid "Amounts loaded"
 msgstr "Amounts loaded"
@@ -260,6 +265,9 @@ msgstr "Coinbase transactions pay none"
 msgid "Collateral"
 msgstr "Collateral"
 
+msgid "Commitment"
+msgstr "Commitment"
+
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Commits the block to the masternode list and the latest ChainLock."
 
@@ -280,6 +288,9 @@ msgstr "contract"
 
 msgid "Contract"
 msgstr "Contract"
+
+msgid "Contract decoder"
+msgstr "Contract decoder"
 
 msgid "Contracts"
 msgstr "Contracts"
@@ -319,6 +330,9 @@ msgstr "Core transaction"
 
 msgid "Could not check this right now."
 msgstr "Could not check this right now."
+
+msgid "Could not look up the withdrawal document right now."
+msgstr "Could not look up the withdrawal document right now."
 
 msgid "Could not read names."
 msgstr "Could not read names."
@@ -388,6 +402,9 @@ msgstr "document"
 
 msgid "Document"
 msgstr "Document"
+
+msgid "Document decoder"
+msgstr "Document decoder"
 
 msgid "document type"
 msgstr "document type"
@@ -536,6 +553,9 @@ msgstr "Identity by key hash"
 
 msgid "Identity created"
 msgstr "Identity created"
+
+msgid "Identity decoder"
+msgstr "Identity decoder"
 
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
@@ -809,6 +829,12 @@ msgstr "Not registered. It may be free or still contested."
 msgid "Not specified"
 msgstr "Not specified"
 
+msgid "Null commitment: no quorum was formed for this slot"
+msgstr "Null commitment: no quorum was formed for this slot"
+
+msgid "Offline"
+msgstr "Offline"
+
 msgid "On Platform"
 msgstr "On Platform"
 
@@ -921,6 +947,9 @@ msgstr "Page not found"
 msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 msgstr "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 
+msgid "Path decoder"
+msgstr "Path decoder"
+
 msgid "Paused"
 msgstr "Paused"
 
@@ -951,6 +980,9 @@ msgstr "Platform blocks"
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
 
+msgid "Platform holds no completed or broadcast withdrawal with this index."
+msgstr "Platform holds no completed or broadcast withdrawal with this index."
+
 msgid "Platform node ID"
 msgstr "Platform node ID"
 
@@ -965,6 +997,9 @@ msgstr "Platform’s pulse: height, epoch, activity charts, leaders and the newe
 
 msgid "PoSe-banned"
 msgstr "PoSe-banned"
+
+msgid "Proof decoder"
+msgstr "Proof decoder"
 
 msgid "proposal"
 msgstr "proposal"
@@ -1088,6 +1123,9 @@ msgstr "Save"
 
 msgid "Saved"
 msgstr "Saved"
+
+msgid "Says Radar can’t reach the network and lists what still works without it."
+msgstr "Says Radar can’t reach the network and lists what still works without it."
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
@@ -1460,6 +1498,9 @@ msgstr "Which Platform SDK call backs each Radar page, with its arguments."
 
 msgid "Winner"
 msgstr "Winner"
+
+msgid "Withdrawal document"
+msgstr "Withdrawal document"
 
 msgid "Withdrawal index"
 msgstr "Withdrawal index"

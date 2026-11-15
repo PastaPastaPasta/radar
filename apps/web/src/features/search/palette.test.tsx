@@ -23,6 +23,17 @@ beforeAll(async () => {
   Element.prototype.scrollIntoView = () => undefined
 })
 
+/** The block page these tests open has no DAPI node here, so the hosted indexes are told they do not have the block either. */
+function holdHostedSourcesDown() {
+  server.use(
+    http.get(
+      /\/x\/hy\/mainnet\/(raw)?block\/2569992/,
+      () => new HttpResponse(null, { status: 404 }),
+    ),
+    http.get(/insight-api\/block-index\/2569992/, () => new HttpResponse(null, { status: 404 })),
+  )
+}
+
 const added: Resolver[] = []
 function addResolver(r: Resolver) {
   resolvers.push(r)
@@ -122,6 +133,7 @@ describe('command palette', () => {
   })
 
   it('waits for a slow local resolver before it picks a hit', async () => {
+    holdHostedSourcesDown()
     addResolver({
       id: 'slow-local',
       accepts: ['int'],
@@ -139,6 +151,7 @@ describe('command palette', () => {
   })
 
   it('stops waiting for a network resolver after the grace period', async () => {
+    holdHostedSourcesDown()
     addResolver({
       id: 'stuck-remote',
       accepts: ['int'],
@@ -155,6 +168,7 @@ describe('command palette', () => {
   })
 
   it('opens the highlighted result after arrow keys', async () => {
+    holdHostedSourcesDown()
     const { user, history, input } = await openPalette()
 
     await user.type(input, '2569992')
@@ -339,6 +353,21 @@ describe('/search page', () => {
       '"abandon ability able about above absent absorb abstract absurd abuse access accident"',
     )
     expect(visited.join()).not.toContain('abandon')
+  })
+
+  it('shows results while typing and leaves the address and the title alone until Enter @W2-28', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/search'] })
+    render(<App history={history} />)
+    const user = userEvent.setup()
+
+    await user.type(await screen.findByRole('searchbox'), '2569992')
+
+    expect(await screen.findByRole('link', { name: /Core block 2,569,992/ })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('region', { name: 'Results' })).toHaveAttribute('aria-busy', 'false'),
+    )
+    expect(history.location.search).not.toContain('2569992')
+    expect(document.title).not.toContain('2569992')
   })
 
   it('keeps a partly typed phrase out of the address and the title', async () => {

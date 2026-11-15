@@ -13,14 +13,271 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, one {# transaction} other {# transactions}}"
+
+#. placeholder {0}: formatInt(size)
+msgid "{0} blocks a page, newest first."
+msgstr "{0} blocks a page, newest first."
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+
 msgid "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 msgstr "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 
 msgid "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 msgstr "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+
+msgid "← Previous"
+msgstr "← Previous"
+
+msgid "← Previous day"
+msgstr "← Previous day"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "Block"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(height)
+msgid "Block {0}"
+msgstr "Block {0}"
+
+msgid "Block reward"
+msgstr "Block reward"
+
+msgid "Blocks"
+msgstr "Blocks"
+
+msgid "Blocks on {date}"
+msgstr "Blocks on {date}"
+
+msgid "Blocks on {dateLabel}"
+msgstr "Blocks on {dateLabel}"
+
+msgid "Blocks per page"
+msgstr "Blocks per page"
+
+msgid "Browse by date"
+msgstr "Browse by date"
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "Coinbase"
+msgstr "Coinbase"
+
+msgid "Coinbase payload"
+msgstr "Coinbase payload"
+
+msgid "Coinbase tag says"
+msgstr "Coinbase tag says"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core blocks"
+msgstr "Core blocks"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "Days run from 00:00 to 24:00 UTC."
+
+msgid "Difficulty"
+msgstr "Difficulty"
+
+msgid "Everything the coinbase pays out"
+msgstr "Everything the coinbase pays out"
+
+msgid "Finding this day's blocks"
+msgstr "Finding this day's blocks"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Header"
+msgstr "Header"
+
+msgid "Height"
+msgstr "Height"
+
+#. placeholder {0}: formatInt(lowest)
+#. placeholder {1}: formatInt(Math.max(...heights))
+msgid "Heights {0} to {1}"
+msgstr "Heights {0} to {1}"
+
+msgid "Hyphen isn’t answering, so this page reads Insight where it needs an index."
+msgstr "Hyphen isn’t answering, so this page reads Insight where it needs an index."
+
+msgid "Inputs → outputs"
+msgstr "Inputs → outputs"
+
+msgid "Insight couldn’t be reached"
+msgstr "Insight couldn’t be reached"
+
+msgid "Jump to a date"
+msgstr "Jump to a date"
+
+msgid "Latest blocks"
+msgstr "Latest blocks"
+
+msgid "Merkle root"
+msgstr "Merkle root"
+
+msgid "Newer"
+msgstr "Newer"
+
+msgid "Next →"
+msgstr "Next →"
+
+msgid "Next block"
+msgstr "Next block"
+
+msgid "Next day"
+msgstr "Next day"
+
+msgid "Next day →"
+msgstr "Next day →"
+
+msgid "No blocks came back for this page"
+msgstr "No blocks came back for this page"
+
+msgid "No blocks on this date"
+msgstr "No blocks on this date"
+
+msgid "No known pool"
+msgstr "No known pool"
+
+msgid "No tag in the coinbase"
+msgstr "No tag in the coinbase"
+
 msgid "No transactions are waiting for a block"
 msgstr "No transactions are waiting for a block"
 
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not ChainLocked yet"
+msgstr "Not ChainLocked yet"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "Not found on {0}"
+
+msgid "Not in DAPI"
+msgstr "Not in DAPI"
+
+msgid "Older"
+msgstr "Older"
+
+msgid "Older blocks from before this date"
+msgstr "Older blocks from before this date"
+
+msgid "On this page"
+msgstr "On this page"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "Pages of {0} need an index that is up to date, and none is right now."
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+
+msgid "Previous block"
+msgstr "Previous block"
+
+msgid "Previous day"
+msgstr "Previous day"
+
+msgid "Reading the chain tip…"
+msgstr "Reading the chain tip…"
+
+#. placeholder {0}: networkName(other)
+msgid "Search {0}"
+msgstr "Search {0}"
+
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "Searching block headers for where this day begins and ends: {0} of 2 found."
+
+msgid "See the sources"
+msgstr "See the sources"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "Tag: {tag}. The miner writes it, so it is not proof."
+
+msgid "Tap a transaction for its inputs, outputs and size"
+msgstr "Tap a transaction for its inputs, outputs and size"
+
+#. placeholder {0}: dateLabel ?? date
+msgid "That is the first block on {0}. Going older leaves this day."
+msgstr "That is the first block on {0}. Going older leaves this day."
+
 msgid "The latest block was mined <0/>"
 msgstr "The latest block was mined <0/>"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+
+msgid "There is no block with this height or hash on this network."
+msgstr "There is no block with this height or hash on this network."
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "This network has no blocks in this day, or the day has not happened yet."
+
+msgid "This source covers this row only"
+msgstr "This source covers this row only"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Total out"
+msgstr "Total out"
+
+msgid "Transaction"
+msgstr "Transaction"
+
+msgid "Transactions"
+msgstr "Transactions"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "Transactions in block {0}"
+
+msgid "tx"
+msgstr "tx"
+
+msgid "Txs"
+msgstr "Txs"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Version"
+msgstr "Version"
+
+#. placeholder {0}: block.version.toString(16)
+msgid "Version {0}"
+msgstr "Version {0}"
+
+msgid "Where this is"
+msgstr "Where this is"

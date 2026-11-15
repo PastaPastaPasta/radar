@@ -1,6 +1,6 @@
 import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
-import { systemContract } from '@/lib/well-known'
+import { systemContract, wellKnownContracts } from '@/lib/well-known'
 import type { NetworkId } from '@/lib/network'
 
 export interface QueryPreset {
@@ -65,4 +65,36 @@ export function queryPresets(net: NetworkId): QueryPreset[] {
     )
   }
   return presets
+}
+
+/**
+ * The presets for the picked contract: its own starting queries first, or a first look at its first document type
+ * when it has none, then the examples that carry their own contract (the aggregate ones on testnet).
+ */
+export function presetsFor(net: NetworkId, contractId: string, firstType?: string): QueryPreset[] {
+  const all = queryPresets(net)
+  const own = all.filter((p) => p.contractId === contractId)
+  const system = [systemContract('dpns').id, systemContract('dashpay').id]
+  const others = all.filter((p) => p.contractId !== contractId && !system.includes(p.contractId))
+  const generic: QueryPreset[] =
+    own.length === 0 && firstType
+      ? [
+          {
+            id: 'first-documents',
+            title: msg`The first ${firstType} documents`,
+            contractId,
+            sql: `SELECT * FROM ${/^[A-Za-z_$][\w$]*$/.test(firstType) ? firstType : `\`${firstType}\``}\nLIMIT 5`,
+          },
+        ]
+      : []
+  return [...own, ...generic, ...others]
+}
+
+/** System contracts a network does not have: Dash Platform has no Feature flags contract on mainnet. */
+const ABSENT: Partial<Record<NetworkId, readonly string[]>> = { mainnet: ['feature-flags'] }
+
+/** The contracts the picker offers on this network. */
+export function pickerContracts(net: NetworkId) {
+  const absent = ABSENT[net] ?? []
+  return wellKnownContracts(net).filter((c) => !absent.includes(c.key))
 }

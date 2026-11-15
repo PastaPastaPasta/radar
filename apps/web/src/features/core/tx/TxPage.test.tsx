@@ -123,6 +123,10 @@ describe('shared masternode payloads', () => {
 })
 
 describe('Transaction page', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('shows a transfer with its fee, flow, settlement and inputs @IN-05 @HY-07', async () => {
     renderAt(`/tx/${MAINNET.transfer}`)
     expect(
@@ -134,6 +138,16 @@ describe('Transaction page', () => {
     expect(document.querySelector('#in-0')).not.toBeNull()
     expect(document.querySelector('#out-0')).not.toBeNull()
     expect(document.querySelector('[data-source="dapi"]')).not.toBeNull()
+  })
+
+  it('counts one input and one output in the singular @IN-05', async () => {
+    renderAt(`/tx/${MAINNET.coinbase}`)
+    await waitFor(() => expect(document.querySelector('#out-0')).not.toBeNull(), { timeout: 4000 })
+    const headings = Array.from(document.querySelectorAll('.rx-io h2, .rx-io h3')).map(
+      (h) => h.textContent,
+    )
+    expect(headings.join(' ')).not.toMatch(/\b1 (inputs|outputs)\b/)
+    expect(headings.join(' ')).toMatch(/\b1 input\b/)
   })
 
   it('shows the coinbase as a reward without a fee or inputs to trace @IN-05', async () => {
@@ -151,7 +165,39 @@ describe('Transaction page', () => {
   it('renders a quorum commitment @IN-05 @HY-07', async () => {
     const el = await payload(`/tx/${MAINNET.qctx}`, 'qcTx')
     expect(el).toHaveTextContent('Quorum type')
-    expect(el).toHaveTextContent('Signers')
+    expect(el).toHaveTextContent('Null commitment')
+    expect(el).not.toHaveTextContent('Signers')
+    expect(el).not.toHaveTextContent('0 of')
+  })
+
+  it('shows signers and members for a commitment that formed @HY-07', async () => {
+    const original = core.tx.bind(core)
+    vi.spyOn(core, 'tx').mockImplementation(async (net, txid, signal) => {
+      const found = await original(net, txid, signal)
+      const commitment = (found.data?.payload as { commitment?: Record<string, unknown> })
+        ?.commitment
+      return found.data
+        ? {
+            ...found,
+            data: {
+              ...found.data,
+              payload: {
+                ...(found.data.payload as object),
+                commitment: {
+                  ...commitment,
+                  signers: '1'.repeat(100),
+                  signersCount: 96,
+                  validMembersCount: 98,
+                },
+              },
+            },
+          }
+        : found
+    })
+    const el = await payload(`/tx/${MAINNET.qctx}`, 'qcTx')
+    expect(el).not.toHaveTextContent('Null commitment')
+    expect(el).toHaveTextContent('96 of 100')
+    expect(el).toHaveTextContent('98 of 100')
   })
 
   it('renders a masternode registration @IN-05 @HY-07', async () => {
@@ -186,6 +232,24 @@ describe('Transaction page', () => {
     const el = await payload(`/tx/${MAINNET.assetunlock}`, 'assetUnlockTx')
     expect(el).toHaveTextContent('Withdrawal index')
     expect(el).toHaveTextContent('Signing quorum')
+  })
+
+  it('links an asset unlock to the withdrawal document it pays out, from the SDK @W2-19 @X-02', async () => {
+    const el = await payload(`/tx/${MAINNET.assetunlock}`, 'assetUnlockTx')
+    const link = await within(el).findByRole('link', { name: 'Withdrawal document' })
+    expect(link).toHaveAttribute(
+      'href',
+      expect.stringContaining(
+        '/document/4fJLR2GYTPFdomuTVvNy3VRrvWgvkKPzqehEBpNf2nk6/withdrawal/9DsCVJh1fB6yokc8JaxnBQrVjUcxhrkaFoFzXdxsJLg4',
+      ),
+    )
+  })
+
+  it('says an asset lock moved DASH into Platform credits, not to other addresses @W2-19 @X-02', async () => {
+    await payload(`/tx/${MAINNET.assetlock}`, 'assetLockTx')
+    const moved = screen.getByText('Moved').closest('.rx-stat')!
+    await waitFor(() => expect(moved).toHaveTextContent('locked into Platform credits'))
+    expect(moved).not.toHaveTextContent('to other addresses')
   })
 
   it('renders a hard-fork signal on testnet @IN-05 @HY-07 @IN-16', async () => {

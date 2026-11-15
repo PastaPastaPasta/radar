@@ -51,12 +51,24 @@ export function sourceRows(
 
 type Overall = 'ok' | 'attention' | 'down' | 'checking'
 
-/** The banner: any source in use that is down is `down`, any stale, degraded or slow one is `attention`. */
+/** The row says "N blocks behind" or "M minutes behind": an index or crawl that trails the chain by that much. */
+export const isBehind = (health: SourceHealth): boolean =>
+  (health.lag?.blocks ?? 0) > 0 || (health.lag?.ms ?? 0) >= 60_000
+
+/** The sources in use whose own row reports that they trail the chain. */
+export function laggingSources(rows: readonly SourceRow[]): SourceId[] {
+  return rows
+    .filter((r) => r.offered && !r.off && r.health.state !== 'down' && isBehind(r.health))
+    .map((r) => r.source)
+}
+
+/** The banner: any source in use that is down is `down`; any stale, degraded, slow or behind one is `attention`. */
 export function overallState(rows: readonly SourceRow[]): Overall {
   const offered = rows.filter((r) => r.offered && !r.off)
   if (offered.some((r) => r.health.state === 'down')) return 'down'
   if (offered.some((r) => ['stale', 'degraded', 'slow'].includes(r.health.state)))
     return 'attention'
+  if (laggingSources(rows).length > 0) return 'attention'
   if (offered.every((r) => r.health.state === 'unknown')) return 'checking'
   return 'ok'
 }

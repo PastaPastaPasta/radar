@@ -141,6 +141,11 @@ describe('Block page', () => {
     )
   })
 
+  it('names a block opened by hash in the tab title once its height is known @IN-03 @X-10', async () => {
+    renderAt(`/block/${BY_HASH}`)
+    await waitFor(() => expect(document.title).toMatch(/^Block 2,570,084/))
+  })
+
   it('says a ChainLock is reported by one node, not that the block is locked @IN-03', async () => {
     const original = core.block.bind(core)
     vi.spyOn(core, 'block').mockImplementation(async (net, ref, signal) => {

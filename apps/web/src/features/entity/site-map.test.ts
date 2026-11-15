@@ -38,7 +38,7 @@ describe('section rails', () => {
     expect(labels('tools').map((e) => e.to)).toEqual([
       '/query',
       '/tools/transition',
-      '/tools/contract',
+      '/tools/decoders',
       '/tools/verify-message',
       '/tools/qr',
       '/sdk-reference',

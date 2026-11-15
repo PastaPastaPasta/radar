@@ -18,6 +18,9 @@ export const InsStatusSchema = z.object({
 })
 export type InsStatus = z.output<typeof InsStatusSchema>
 
+export const InsRawTxSchema = z.object({ rawtx: zHex })
+export const InsRawBlockSchema = z.object({ rawblock: zHex })
+
 export const InsBlockIndexSchema = z.object({ blockHash: zHex64 })
 
 export const InsBlockSchema = z.object({

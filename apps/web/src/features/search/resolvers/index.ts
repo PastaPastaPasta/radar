@@ -11,7 +11,7 @@ import { platformAddress } from './platform-address'
 import { publicKeyHash } from './public-key-hash'
 import { radarMasternodeByAddress } from './radar-masternode'
 import { dapiMasternode } from './dapi-masternode'
-import { sdkEpoch } from './epoch'
+import { epochByName, sdkEpoch } from './epoch'
 import { pePlatformBlock } from './platform-block'
 import { peSearch } from './pe-search'
 import { sdkContract, sdkDocument, sdkIdentity, sdkToken } from './sdk-entities'
@@ -32,6 +32,7 @@ export const resolvers: Resolver[] = [
   dapiBlock,
   dapiTx,
   sdkEpoch,
+  epochByName,
   pePlatformBlock,
   sdkTransition,
   sdkIdentity,

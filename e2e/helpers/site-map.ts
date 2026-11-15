@@ -39,7 +39,7 @@ export function sourcesOf(path: string): SiteSource[] {
  * query), decode what was typed in the address bar, or say there is nothing under the address.
  */
 const UNFETCHED =
-  /^\/(about|api|saved|sdk-reference|settings|sources|tools\/(contract|document|identity|nope|path|proof|transition))\b|^\/search(\?q=(6da2|7dc0|dash1|tdash1)|$)|^\/group\/[^/]+\/0$|^\/mn\/0+$|^\/identity\/[^/?]+\?tab=advanced$/
+  /^\/(about|api|offline|saved|sdk-reference|settings|sources|tools\/(contract|document|identity|nope|path|proof|transition))\b|^\/search(\?q=(6da2|7dc0|dash1|tdash1)|$)|^\/group\/[^/]+\/0$|^\/mn\/0+$|^\/identity\/[^/?]+\?tab=advanced$/
 
 /** True for a page that fetches nothing to show, so there is no source to name and none that can be down. */
 export const fetchesNothing = (path: string): boolean => UNFETCHED.test(path)

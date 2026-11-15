@@ -48,6 +48,33 @@ function DecoderIndex() {
   )
 }
 
+function DecoderSwitch({ current }: { current: DecoderId }) {
+  const { t, i18n } = useLingui()
+  return (
+    <nav
+      aria-label={t`Decoders`}
+      className="flex flex-wrap gap-x-4 gap-y-1 text-sm"
+      data-decoder-switch
+    >
+      <Link to="/tools/$decoder" params={{ decoder: 'decoders' }}>
+        {t`All decoders`}
+      </Link>
+      {DECODER_IDS.map((id) => (
+        <Link
+          key={id}
+          to="/tools/$decoder"
+          params={{ decoder: id }}
+          aria-current={id === current ? 'page' : undefined}
+          className={id === current ? 'font-semibold' : undefined}
+        >
+          {i18n._(DECODER_TEXT[id].title)}
+        </Link>
+      ))}
+      <Link to="/tools/transition">{t`State transition`}</Link>
+    </nav>
+  )
+}
+
 function Body({ id }: { id: DecoderId }) {
   const { t } = useLingui()
   const search = useSearch({ from: '/tools/$decoder' })
@@ -77,7 +104,10 @@ export function DecoderPage({ decoder }: { decoder: string }) {
       layer="neutral"
       lede={i18n._(text.about)}
     >
-      <Body id={decoder} />
+      <div className="grid gap-4">
+        <DecoderSwitch current={decoder} />
+        <Body id={decoder} />
+      </div>
     </PageFrame>
   )
 }

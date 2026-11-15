@@ -28,17 +28,80 @@ msgstr "{count, plural, other {DAPI アドレス #件}}"
 msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
 msgstr "{count, plural, other {このネットワークで記憶したアイデンティティ # 件}}"
 
+msgid "A data contract"
+msgstr "データコントラクト"
+
+msgid "A data contract’s bytes"
+msgstr "データコントラクトのバイト"
+
+msgid "A data contract’s history"
+msgstr "データコントラクトの履歴"
+
 msgid "A devnet with this name is already saved. Edit it instead."
 msgstr "この名前の devnet はすでに保存されています。代わりに編集してください。"
+
+msgid "A document"
+msgstr "ドキュメント"
+
+msgid "A document average"
+msgstr "ドキュメントの平均"
+
+msgid "A document count"
+msgstr "ドキュメントの件数"
+
+msgid "A document total"
+msgstr "ドキュメントの合計"
+
+msgid "A document’s history"
+msgstr "ドキュメントの履歴"
 
 msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
 msgstr "Radar が複数の証明で検証済みの回答から合算した数値(ブロック範囲での集計など)は、それ自体は証明されていません。その場合は「N 件の証明で検証済みの回答を合算」と表示されます。"
 
+msgid "A group"
+msgstr "グループ"
+
+msgid "A group’s actions"
+msgstr "グループの操作"
+
+msgid "A group’s members"
+msgstr "グループのメンバー"
+
+msgid "A list of documents"
+msgstr "ドキュメントの一覧"
+
+msgid "A name’s owner"
+msgstr "名前の所有者"
+
+msgid "A name’s record"
+msgstr "名前のレコード"
+
 msgid "A new version is available."
 msgstr "新しいバージョンがあります。"
 
+msgid "A Platform address’s balance"
+msgstr "Platform アドレスの残高"
+
+msgid "A prefunded balance"
+msgstr "事前に用意された残高"
+
 msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
 msgstr "証明が答えるのは、キーに関する問いです。このアイデンティティの残高、このコントラクト、このドキュメントなど。Dash Platform ではすべての一覧を証明できないため、ノードに尋ねられる「すべてのアイデンティティ」「このトークンの全保有者」「X に関するすべてのドキュメント」はありません。"
+
+msgid "A token’s contract"
+msgstr "トークンのコントラクト"
+
+msgid "A token’s last distribution claim"
+msgstr "トークンの最後の分配請求"
+
+msgid "A token’s purchase prices"
+msgstr "トークンの購入価格"
+
+msgid "A token’s status"
+msgstr "トークンの状態"
+
+msgid "A token’s total supply"
+msgstr "トークンの総供給量"
 
 msgid "About"
 msgstr "概要"
@@ -76,6 +139,39 @@ msgstr "金額は {unitName} で表示されます。"
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "金額は {unitName} で表示されます。USD を選ぶと、ドルの金額が先頭に表示されます。"
 
+msgid "An identity’s balance"
+msgstr "アイデンティティの残高"
+
+msgid "An identity’s contract nonce"
+msgstr "アイデンティティのコントラクトノンス"
+
+msgid "An identity’s groups"
+msgstr "アイデンティティのグループ"
+
+msgid "An identity’s keys"
+msgstr "アイデンティティの鍵"
+
+msgid "An identity’s keys for a contract"
+msgstr "あるコントラクトに対するアイデンティティの鍵"
+
+msgid "An identity’s names"
+msgstr "アイデンティティの名前"
+
+msgid "An identity’s nonce"
+msgstr "アイデンティティのノンス"
+
+msgid "An identity’s record"
+msgstr "アイデンティティのレコード"
+
+msgid "An identity’s token balances"
+msgstr "アイデンティティのトークン残高"
+
+msgid "An identity’s token status"
+msgstr "アイデンティティのトークン状態"
+
+msgid "An identity’s votes"
+msgstr "アイデンティティの票"
+
 msgid "Answered by"
 msgstr "応答元"
 
@@ -93,6 +189,9 @@ msgstr "要求時刻"
 
 msgid "Ban nodes that fail"
 msgstr "失敗するノードを BAN する"
+
+msgid "Blocks proposed per evonode"
+msgstr "エボノードごとの提案ブロック"
 
 msgid "Bridge"
 msgstr "Bridge"
@@ -145,6 +244,9 @@ msgstr "接続設定"
 msgid "Connection settings applied. The Platform SDK restarted."
 msgstr "接続設定を適用しました。Platform SDK を再起動しました。"
 
+msgid "Contested names"
+msgstr "争奪中の名前"
+
 msgid "Copy a link to {devnet}"
 msgstr "{devnet} へのリンクをコピー"
 
@@ -160,6 +262,9 @@ msgstr "証明を 16 進でコピー"
 msgid "Core chain-locked height"
 msgstr "Core の ChainLock 済みの高さ"
 
+msgid "Covers"
+msgstr "対象"
+
 msgid "Custom devnets"
 msgstr "カスタム devnet"
 
@@ -168,6 +273,9 @@ msgstr "DAPI アドレス"
 
 msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
 msgstr "Dash Platform の回答には暗号学的な証明が付いています。Radar が数値を表示する前に、ブラウザー内の Platform SDK が、署名したバリデータークォーラムの公開鍵でその証明を検証します。回答したノードは値をでっち上げられません。検証は失敗し、Radar がそれを伝えます。こうした数値には「証明で検証済み」のマークが付き、マークから証明インスペクターを開けます。"
+
+msgid "Data contracts"
+msgstr "データコントラクト"
 
 msgid "Developer"
 msgstr "開発者"
@@ -187,6 +295,9 @@ msgstr "編集"
 msgid "Edit {editName}"
 msgstr "{editName} を編集"
 
+msgid "Edit devnet"
+msgstr "devnet を編集"
+
 msgid "Enter a full address such as https://quorums.example.org."
 msgstr "https://quorums.example.org のような完全なアドレスを入力してください。"
 
@@ -198,6 +309,9 @@ msgstr "ID を Base58 のテキストで、32〜44 文字で入力してくだ�
 
 msgid "Epoch"
 msgstr "エポック"
+
+msgid "Epoch details"
+msgstr "エポックの詳細"
 
 msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
 msgstr "「証明で検証済み」のマークをクリックすると開きます。呼び出し、ノード、Platform の高さ、クォーラム、証明のバイト列を表示し、証拠として書き出せます。"
@@ -223,6 +337,9 @@ msgstr "失敗"
 msgid "Failures only"
 msgstr "失敗のみ"
 
+msgid "Finished epochs"
+msgstr "終了したエポック"
+
 msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
 msgstr "Platform SDK が返したすべての回答を、ここおよびこのブラウザーのストレージから消去し、インスペクター用に保持している証明も消去します。ページは開くときに再度読み込みます。"
 
@@ -231,6 +348,9 @@ msgstr "名前を付けてください。"
 
 msgid "Governance"
 msgstr "ガバナンス"
+
+msgid "Groups"
+msgstr "グループ"
 
 msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
 msgstr "Radar が Dash Platform とやり取りする方法です。変更すると Platform SDK が再起動します。ここの内容がこのブラウザーの外に出ることはありません。"
@@ -241,6 +361,9 @@ msgstr "{0} での ID"
 
 msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
 msgstr "保存したアイデンティティ、コントラクト、トークン。このデバイスのこのブラウザー内にのみ残ります。Radar にはアカウントがないため、別のブラウザーには引き継がれず、このサイトのデータを消去すると削除されます。"
+
+msgid "Identity balances"
+msgstr "アイデンティティの残高"
 
 msgid "Kind"
 msgstr "種類"
@@ -265,6 +388,9 @@ msgstr "アイデンティティ、コントラクト、トークンに名前を
 
 msgid "Network"
 msgstr "ネットワーク"
+
+msgid "Network pulse"
+msgstr "ネットワークの鼓動"
 
 msgid "Networks"
 msgstr "ネットワーク"
@@ -311,11 +437,11 @@ msgstr "まだ何も保存されていません"
 msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
 msgstr "初期設定ではオフです。オンにすると、このブラウザーが開いたアイデンティティをネットワークごとに最大 50 件まで記憶します。"
 
+msgid "Offline"
+msgstr "オフライン"
+
 msgid "OK"
 msgstr "OK"
-
-msgid "One figure’s proof, as Radar received it."
-msgstr "Radar が受け取った、1 つの数値の証明。"
 
 msgid "Open"
 msgstr "開く"
@@ -347,6 +473,9 @@ msgstr "任意"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "オフの場合、時刻はこの端末のタイムゾーンに従います。時刻にカーソルを合わせると常に UTC が表示されます。"
 
+msgid "Platform address balances"
+msgstr "Platform アドレスの残高"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
 
@@ -364,6 +493,9 @@ msgstr "ワーカー内の Platform SDK"
 
 msgid "Platform SDK in this page"
 msgstr "このページ内の Platform SDK"
+
+msgid "Platform status"
+msgstr "Platform の状態"
 
 msgid "Platform time"
 msgstr "Platform の時刻"
@@ -389,6 +521,12 @@ msgstr "保持中の証明"
 msgid "Proofs that did not verify"
 msgstr "検証に失敗した証明"
 
+msgid "Protocol upgrade state"
+msgstr "プロトコル更新の状態"
+
+msgid "Protocol upgrade votes"
+msgstr "プロトコル更新の票"
+
 msgid "Protocol version"
 msgstr "プロトコルバージョン"
 
@@ -409,6 +547,9 @@ msgstr "クォーラムの種類"
 
 msgid "Radar"
 msgstr "Radar"
+
+msgid "Radar can’t reach these DAPI addresses. Check them, or the devnet may be down."
+msgstr "Radar はこれらの DAPI アドレスに届きません。アドレスを確認するか、devnet が停止している可能性があります。"
 
 msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
 msgstr "Radar には分析、Cookie、アカウント、広告がありません。選択内容や保存したものはこのブラウザー内に残ります。保存した項目、閲覧したアイデンティティ(オンにしない限りオフ)、付けた名前、設定と devnet、そしてページを素早く開くための最近の回答のキャッシュです。サービスワーカーは、オフラインでも開けるよう Radar 自身のファイルを保持します。"
@@ -432,6 +573,9 @@ msgstr "Radar のコードは MIT ライセンスのオープンソースです�
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "レート: 1 DASH あたり {0}（{1}）。"
+
+msgid "Raw Platform state"
+msgstr "Platform の生の状態"
 
 msgid "Refused by mode"
 msgstr "モードにより拒否"
@@ -517,11 +661,23 @@ msgstr "すべてのソースとスイッチを見る"
 msgid "Settings"
 msgstr "設定"
 
+msgid "Shielded anchors"
+msgstr "シールドプールのアンカー"
+
+msgid "Shielded notes"
+msgstr "シールドプールのノート"
+
+msgid "Shielded nullifiers"
+msgstr "シールドプールのヌリファイア"
+
 msgid "Show the USD value next to DASH amounts"
 msgstr "DASH の金額の横に USD 換算額を表示"
 
 msgid "Show times in UTC"
 msgstr "時刻を UTC で表示"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "ページで問題が発生しました。Radar のほかの部分は引き続き使えます。"
 
 msgid "Source"
 msgstr "ソース"
@@ -538,12 +694,34 @@ msgstr "テストコインに価値はないため、テストネットと devne
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "まだ翻訳されていないテキストは英語で表示されます。ハッシュ、ID、金額は翻訳されません。"
 
+msgid "The connection dropped while it loaded. Try again."
+msgstr "読み込み中に接続が切れました。再試行してください。"
+
+msgid "The current epoch"
+msgstr "現在のエポック"
+
+msgid "The current quorums"
+msgstr "現在のクォーラム"
+
+msgid "The identities behind a public key"
+msgstr "公開鍵の背後にあるアイデンティティ"
+
+msgid "The identity behind a public key"
+msgstr "公開鍵の背後にあるアイデンティティ"
+
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
 msgstr "このタブが行った直近 {0} 件のリクエスト。ここの内容はどこにも送信されません。"
 
 msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
 msgstr "このタブが行った直近 100 件のリクエスト。ソース、ノード、所要時間、「分散型のみ」モードで拒否されたかどうかを表示します。"
+
+msgid "The latest shielded anchor"
+msgstr "最新のシールドアンカー"
+
+#. placeholder {0}: figureOf(selected.method)
+msgid "The proof behind “{0}”, as Radar received it."
+msgstr "「{0}」の裏にある証明を、Radar が受け取ったとおりに表示します。"
 
 msgid "The quorum list address must start with https://."
 msgstr "クォーラムリストのアドレスは https:// で始める必要があります。"
@@ -553,6 +731,18 @@ msgstr "クォーラム一覧の URL は https:// で始まる必要がありま
 
 msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
 msgstr "Radar が数値を表示する前に、SDK がこの証明を信頼済みのクォーラム鍵で検証しました。"
+
+msgid "The shielded pool"
+msgstr "シールドプール"
+
+msgid "The signers of a group action"
+msgstr "グループ操作の署名者"
+
+msgid "The state of a name contest"
+msgstr "名前の争奪の状態"
+
+msgid "The voters for a contender"
+msgstr "候補者への投票者"
 
 msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
 msgstr "ワーカーは SDK {workerVersion} を実行していますが、このページは {PAGE_SDK_VERSION} でビルドされています。ページを再読み込みしてください。解消しない場合は、このサイトのデータを消去してください。"
@@ -566,6 +756,15 @@ msgstr "これらはトークン保有者のシードリストに使われます
 msgid "This network"
 msgstr "このネットワーク"
 
+msgid "This page couldn’t be loaded"
+msgstr "このページを読み込めませんでした"
+
+msgid "This page couldn’t be shown"
+msgstr "このページを表示できませんでした"
+
+msgid "This page loads when the connection returns. Radar will try again by itself."
+msgstr "接続が戻るとこのページは読み込まれます。Radar が自分でやり直します。"
+
 msgid "This proof is no longer held"
 msgstr "この証明はもう保持されていません"
 
@@ -578,11 +777,20 @@ msgstr "消去するには、設定と保存済みのボタンで各リストを
 msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
 msgstr "ネットワークを読み取るため、ブラウザーは DAPI ノード、Platform SDK のノードとクォーラムリスト、そして(オフにしない限り)Platform Explorer、Radar のクローラー、Hyphen、Insight、価格フィードに問い合わせます。それぞれ、一般的な Web サーバーと同様に、あなたの IP アドレスと問い合わせ内容を把握します。"
 
+msgid "Token balances"
+msgstr "トークン残高"
+
 msgid "Took"
 msgstr "所要時間"
 
 msgid "Tools for checking what Radar asked and what it was told."
 msgstr "Radar が何を問い合わせ、何が返ってきたかを確認するツール。"
+
+msgid "Total credits on Platform"
+msgstr "Platform 上のクレジット合計"
+
+msgid "Try again"
+msgstr "再試行"
 
 msgid "Unit for amounts"
 msgstr "金額の単位"
@@ -615,6 +823,9 @@ msgstr "閲覧したアイデンティティ"
 msgid "Viewed identities cleared"
 msgstr "閲覧したアイデンティティをクリアしました"
 
+msgid "Vote polls by end date"
+msgstr "終了日ごとの投票"
+
 msgid "Wasm bindings"
 msgstr "Wasm バインディング"
 
@@ -623,6 +834,9 @@ msgstr "「証明で検証済み」とは"
 
 msgid "What can’t be listed without an index"
 msgstr "インデックスなしでは一覧できないもの"
+
+msgid "What still works"
+msgstr "まだ使えるもの"
 
 msgid "When"
 msgstr "日時"
@@ -642,8 +856,20 @@ msgstr "はい、削除します"
 msgid "You"
 msgstr "あなた"
 
+msgid "You’re back online: Radar can reach the network again, so any page loads."
+msgstr "オンラインに戻りました: Radar は再びネットワークに届くので、どのページも読み込めます。"
+
+msgid "You’re offline"
+msgstr "オフラインです"
+
+msgid "You’re offline: Radar can’t reach the network, so pages that read from it can’t load. They load again when the connection returns."
+msgstr "オフラインです: Radar はネットワークに届かないため、そこから読むページは読み込めません。接続が戻ると再び読み込まれます。"
+
 msgid "Your names"
 msgstr "自分の名前"
 
 msgid "Your own names"
 msgstr "自分で付けた名前"
+
+msgid "Your saved items"
+msgstr "保存した項目"

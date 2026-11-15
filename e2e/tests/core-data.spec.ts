@@ -96,7 +96,10 @@ for (const net of ['mainnet', 'testnet'] as const) {
       }
     }, net)
     plainExpect(kind).toBe('network')
-    plainExpect(errors).toHaveLength(1)
     plainExpect(errors[0]).toContain('getBlock')
+    // A failed DAPI read asks the hosted indexes for the same block before it gives up; none answers anything else.
+    for (const later of errors.slice(1)) {
+      plainExpect(later).toMatch(/\/x\/hy\/\w+\/(rawblock|block)\/7$|insight-api\/block-index\/7$/)
+    }
   })
 }

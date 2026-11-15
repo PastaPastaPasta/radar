@@ -595,6 +595,7 @@ export function BlocksPage({
           </Card>
           {firstOfDay !== undefined && firstOfDay > 0 && window && !older ? (
             <p className="rx-note" data-nav="older-than-day">
+              {t`That is the first block on ${dateLabel ?? date}. Going older leaves this day.`}{' '}
               <Link
                 to="/blocks"
                 search={

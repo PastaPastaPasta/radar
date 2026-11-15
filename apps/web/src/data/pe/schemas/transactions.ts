@@ -30,8 +30,12 @@ export const PeTransactionSchema = PeTransactionRowSchema.extend({
 
 export type PeTransaction = z.output<typeof PeTransactionSchema>
 
+/**
+ * Tenderdash's CheckTx answer. Platform Explorer sends `result` as a boolean or as "ok"/"error", puts the consensus
+ * error's class name in `error` and its number in `code`; `info` is the error serialized, which Radar does not read.
+ */
 export const PeVerifySchema = z.object({
-  result: z.boolean().nullish(),
+  result: z.union([z.boolean(), z.string()]).nullish(),
   error: z.string().nullish(),
   code: z.number().nullish(),
   gasWanted: zCount.nullish(),

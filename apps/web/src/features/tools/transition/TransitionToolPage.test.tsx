@@ -11,6 +11,15 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
+/** What api.pe.dashhq.org answered on 2026-11-14 to a dry run of a transition that had already executed. */
+const RECORDED_NONCE_REJECTION = {
+  result: 'error',
+  error: 'InvalidIdentityNonceError',
+  code: 40204,
+  gasWanted: '0',
+  info: 'oWRkYXRhoW9zZXJpYWxpemVkRXJyb3KYKgIYGAEYohhpDg8Y4xjxGHwNGG0YJhiYGM0YoxiVGEYY2xhbGMQYchhXGPkVGFAYZBg3GC0YIRgyGHcYGhjFARj7ARhKGPsBGEoD',
+}
+
 const DECODED = {
   actionType: 'IdentityTopUp',
   actionTypeNumber: 3,
@@ -88,13 +97,81 @@ describe('transition tool', () => {
   it('still decodes, and says checking is unavailable, in Decentralized only mode @PE-34', async () => {
     writeSourceMode('decentralized')
     decoded()
+    const asked = vi.fn()
+    server.use(
+      http.post('https://api.pe.dashhq.org/transaction/verify', () => {
+        asked()
+        return HttpResponse.json({ result: true })
+      }),
+    )
     const user = userEvent.setup()
     renderAt('/tools/transition')
     await user.click(await screen.findByLabelText('Signed state transition'))
     await user.paste('010203')
     expect(await screen.findByText('Identity top-up')).toBeInTheDocument()
-    expect(document.querySelector('[data-unavailable="mode"]')).not.toBeNull()
-    expect(screen.queryByRole('button', { name: 'Check this transition' })).toBeNull()
+    expect(document.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1)
+    const button = screen.getByRole('button', { name: 'Check this transition' })
+    expect(button).toBeDisabled()
+    expect(button).toHaveAccessibleDescription(/needs Platform Explorer/)
+    await user.click(button)
+    expect(asked).not.toHaveBeenCalled()
+  })
+
+  it('shows a consensus rejection as a result, with its code and a plain sentence @PE-34', async () => {
+    decoded()
+    server.use(
+      http.post('https://api.pe.dashhq.org/transaction/verify', () =>
+        HttpResponse.json(RECORDED_NONCE_REJECTION),
+      ),
+    )
+    const user = userEvent.setup()
+    renderAt('/tools/transition')
+    await user.click(await screen.findByLabelText('Signed state transition'))
+    await user.paste('010203')
+    await user.click(screen.getByRole('button', { name: 'Check this transition' }))
+    const status = await screen.findByRole('status')
+    expect(status.dataset.verify).toBe('invalid')
+    expect(within(status).getByText('Platform would reject this transition.')).toBeInTheDocument()
+    expect(within(status).getByText(/identity nonce has already been used/)).toBeInTheDocument()
+    expect(within(status).getByText('InvalidIdentityNonceError 40204')).toBeInTheDocument()
+    expect(screen.queryByText(/Radar bug/)).toBeNull()
+  })
+
+  it('reads a 400 from Platform Explorer about the bytes as a rejection too @PE-34', async () => {
+    decoded()
+    server.use(
+      http.post('https://api.pe.dashhq.org/transaction/verify', () =>
+        HttpResponse.json(
+          { error: 'Error: platform deserialization error: unable to deserialize StateTransition' },
+          { status: 400 },
+        ),
+      ),
+    )
+    const user = userEvent.setup()
+    renderAt('/tools/transition')
+    await user.click(await screen.findByLabelText('Signed state transition'))
+    await user.paste('010203')
+    await user.click(screen.getByRole('button', { name: 'Check this transition' }))
+    const status = await screen.findByRole('status')
+    expect(status.dataset.verify).toBe('invalid')
+    expect(within(status).getByText(/unable to deserialize StateTransition/)).toBeInTheDocument()
+    expect(screen.queryByText(/isn.t answering/)).toBeNull()
+  })
+
+  it('keeps Check disabled until the bytes decode @PE-34', async () => {
+    vi.spyOn(sdk, 'decode').mockImplementation(() =>
+      Promise.resolve({
+        ok: false as const,
+        error: { kind: 'invalid-response', message: 'unable to deserialize' },
+      }),
+    )
+    const user = userEvent.setup()
+    renderAt('/tools/transition')
+    expect(await screen.findByRole('button', { name: 'Check this transition' })).toBeDisabled()
+    await user.click(screen.getByLabelText('Signed state transition'))
+    await user.paste('010203')
+    await screen.findByRole('alert')
+    expect(screen.getByRole('button', { name: 'Check this transition' })).toBeDisabled()
   })
 
   it('refuses garbage without decoding @NX-71', async () => {
