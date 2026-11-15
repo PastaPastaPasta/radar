@@ -1,7 +1,8 @@
+import { coreAddressNetwork, networkHintFor } from '@/lib/address'
 import { base58CheckDecode, base58Decode, isBase58 } from '@/lib/base58'
 import { decodePlatformAddress } from '@/lib/bech32'
 import { isHex } from '@/lib/hex'
-import { isDevnet, type NetworkId } from '@/lib/network'
+import type { NetworkId } from '@/lib/network'
 import { wordlist } from './wordlist'
 
 export type InputClass =
@@ -40,9 +41,6 @@ export interface Classified {
 }
 
 export type SecretWarning = 'secret' | 'possible-secret'
-
-const MAINNET_ADDRESS_VERSIONS = new Set([0x4c, 0x10])
-const TESTNET_ADDRESS_VERSIONS = new Set([0x8c, 0x13])
 
 const INT = /^\d{1,9}$/
 
@@ -111,15 +109,6 @@ function isIp(value: string): boolean {
   const bracketed = IPV6_BRACKETED.exec(value)
   if (bracketed) return isIpv6Address(bracketed[1] ?? '') && validPort(bracketed[2])
   return isIpv6Address(value)
-}
-
-function coreAddressNetwork(value: string): 'mainnet' | 'testnet' | undefined {
-  if (value.length < 26 || value.length > 35) return undefined
-  const decoded = base58CheckDecode(value)
-  if (decoded?.payload.length !== 20) return undefined
-  if (MAINNET_ADDRESS_VERSIONS.has(decoded.version)) return 'mainnet'
-  if (TESTNET_ADDRESS_VERSIONS.has(decoded.version)) return 'testnet'
-  return undefined
 }
 
 const EXTENDED_KEY = /^(?:xprv|tprv|drkv|drkp)[1-9A-HJ-NP-Za-km-z]{80,}$/
@@ -197,11 +186,6 @@ function isBase58Id(value: string): boolean {
 }
 
 /** Whether an address of `found` network belongs on `net`. Devnets share testnet's prefixes. */
-function hintFor(found: 'mainnet' | 'testnet', net: NetworkId): NetworkId | undefined {
-  if (found === 'mainnet') return net === 'mainnet' ? undefined : 'mainnet'
-  return net === 'testnet' || isDevnet(net) ? undefined : 'testnet'
-}
-
 export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   const raw = input
   const trimmed = input.trim()
@@ -248,7 +232,7 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
   const coreNet = coreAddressNetwork(trimmed)
   if (coreNet) {
     classes.push('core-address')
-    return result(trimmed, hintFor(coreNet, net))
+    return result(trimmed, networkHintFor(coreNet, net))
   }
 
   const platform = decodePlatformAddress(trimmed)
@@ -256,7 +240,7 @@ export function classify(input: string, net: NetworkId, tip?: Tip): Classified {
     classes.push('platform-address')
     return result(
       trimmed.toLowerCase(),
-      hintFor(platform.hrp === 'dash' ? 'mainnet' : 'testnet', net),
+      networkHintFor(platform.hrp === 'dash' ? 'mainnet' : 'testnet', net),
     )
   }
 
