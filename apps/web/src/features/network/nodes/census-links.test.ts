@@ -4,7 +4,9 @@ import type { MnRow } from '@/data/masternodes/rows'
 import type { CensusScope } from './census-math'
 import { countryLink, hostLink, reachableLink, unreachableLink } from './census-links'
 
-type Crawl = { reachable?: boolean }
+interface Crawl {
+  reachable?: boolean
+}
 
 const row = (over: { type?: 'evo'; status?: 'pose-banned'; crawl?: Crawl } = {}): MnRow =>
   ({

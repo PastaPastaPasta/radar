@@ -147,8 +147,8 @@ describe('records of single validators', () => {
 
   it('leave a row alone that the active list already names', () => {
     const rows = buildEvoRows([mn(1)], {
-      validators: [{ ...validator(1), proposedBlocksAmount: 7 } as PeValidator],
-      records: [{ ...queued, proTxHash: hex(1), proposedBlocksAmount: 1 } as PeValidator],
+      validators: [{ ...validator(1), proposedBlocksAmount: 7 }],
+      records: [{ ...queued, proTxHash: hex(1), proposedBlocksAmount: 1 }],
     })
     expect(rows[0]!.validator?.proposedBlocksAmount).toBe(7)
   })

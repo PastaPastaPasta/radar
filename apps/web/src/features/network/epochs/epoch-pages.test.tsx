@@ -132,7 +132,7 @@ describe('Epochs', () => {
       renderAt('/epochs')
       const upcoming = await card('upcoming')
       await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
-      const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent!
+      const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent
       expect(first).toMatch(/in \d+ min/)
       expect(first).not.toMatch(/ago/)
       expect(upcoming).toHaveTextContent(/validator sets \d+ s ago/)

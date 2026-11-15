@@ -102,9 +102,10 @@ describe('sortMnRows', () => {
   })
 
   it('sorts a ProTx as plain hex, not as text with numbers in it', () => {
-    const protx = ['0a1dc4', '001cb9', '0a5d4e', '00ff00', 'ab', '9f'].map(
-      (h) => ({ ...row(1), protx: h }) as MnRow,
-    )
+    const protx = ['0a1dc4', '001cb9', '0a5d4e', '00ff00', 'ab', '9f'].map((h) => ({
+      ...row(1),
+      protx: h,
+    }))
     expect(sortMnRows(protx, 'protx').map((r) => r.protx)).toEqual([
       '001cb9',
       '00ff00',
