@@ -14,6 +14,8 @@ const TOP = 10
 
 interface Row extends Proposer {
   rank: number
+  /** True when another row in the top ten proposed the same number of blocks. */
+  tied: boolean
   share: number
 }
 
@@ -31,38 +33,49 @@ export function Proposers({ active }: { active: boolean }) {
   const rows = useMemo<Row[]>(() => {
     if (!answer) return []
     const total = Number(answer.total)
-    return rankDesc(answer.proposers, (p) => Number(p.blocks))
-      .slice(0, TOP)
-      .map(({ item, rank }) => ({
-        ...item,
-        rank,
-        share: total === 0 ? 0 : Number(item.blocks) / total,
-      }))
+    const ranked = rankDesc(answer.proposers, (p) => Number(p.blocks)).slice(0, TOP)
+    return ranked.map(({ item, rank }) => ({
+      ...item,
+      rank,
+      tied: ranked.filter((o) => o.rank === rank).length > 1,
+      share: total === 0 ? 0 : Number(item.blocks) / total,
+    }))
   }, [answer])
   const columns = useMemo<ColumnDef<Row>[]>(
     () => [
       {
         id: 'rank',
-        header: '#',
-        accessorFn: (r) => r.rank,
-        meta: { numeric: true },
+        header: () => (
+          <>
+            <span aria-hidden="true">#</span>
+            <span className="dh-sr">{t`Rank`}</span>
+          </>
+        ),
+        cell: ({ row }) => (
+          <span>
+            {row.original.rank}
+            {row.original.tied ? <span className="dh-sr">{t`, tied`}</span> : null}
+          </span>
+        ),
+        meta: { numeric: true, phone: 'primary' },
       },
       {
         id: 'node',
         header: t`Evonode`,
         cell: ({ row }) => <Entity kind="evonode" id={row.original.proTxHash} />,
+        meta: { phone: 'title' },
       },
       {
         id: 'blocks',
         header: t`Blocks`,
         accessorFn: (r) => formatInt(Number(r.blocks)),
-        meta: { numeric: true },
+        meta: { numeric: true, phone: 'secondary', phoneUnit: t`blocks` },
       },
       {
         id: 'share',
         header: t`Share`,
         accessorFn: (r) => formatPercent(r.share, 1),
-        meta: { numeric: true },
+        meta: { numeric: true, phone: 'secondary' },
       },
     ],
     [t],
@@ -73,7 +86,6 @@ export function Proposers({ active }: { active: boolean }) {
   return (
     <Card
       id="proposers"
-      className="rx-phone5"
       layer="platform"
       title={t`Top proposers`}
       subtitle={
@@ -95,7 +107,6 @@ export function Proposers({ active }: { active: boolean }) {
     >
       <DataTable
         caption={t`Top proposers this epoch`}
-        phone="scroll"
         columns={columns}
         rows={rows}
         getRowId={(r) => r.proTxHash}
