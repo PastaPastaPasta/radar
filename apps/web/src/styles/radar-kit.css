@@ -75,12 +75,16 @@
 }
 .rx-stat__value .rx-amt {
   display: inline-flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: baseline;
   max-width: 100%;
+}
+/* A short amount keeps its unit on the same line. A full figure may still break, so a long balance does not widen the page. */
+.rx-stat__value .rx-amt--compact {
+  flex-wrap: nowrap;
   white-space: nowrap;
 }
-.rx-stat__value .rx-amt .rx-u {
+.rx-stat__value .rx-amt--compact .rx-u {
   flex: none;
 }
 .rx-stat__value .rx-fiat {

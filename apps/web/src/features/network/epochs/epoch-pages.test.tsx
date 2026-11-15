@@ -64,6 +64,7 @@ describe('Epochs', () => {
     await waitFor(() =>
       expect(rewards.querySelector('[data-amount]')?.textContent).toBe('1.5k\u00a0DASH'),
     )
+    expect(rewards.querySelector('[data-amount]')).toHaveClass('rx-amt--compact')
     expect(rewards).not.toHaveTextContent('1,502.')
   })
 
