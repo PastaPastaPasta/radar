@@ -244,8 +244,11 @@ test.describe('The map', () => {
       expect(room.y + room.height, 'the map ends above the tab bar').toBeLessThanOrEqual(
         page.viewportSize()!.height - tabs + 1,
       )
+      // A released drag overshoots by its rubber band and settles over a few hundred ms.
+      await expect
+        .poll(async () => (await box()).y, { message: 'the sheet starts inside the map' })
+        .toBeGreaterThanOrEqual(room.y - 1)
       const b = await box()
-      expect(b.y, 'the sheet starts inside the map').toBeGreaterThanOrEqual(room.y - 1)
       expect(b.y, 'the sheet starts above the map bottom').toBeLessThan(room.y + room.height)
     }
     await clear()
