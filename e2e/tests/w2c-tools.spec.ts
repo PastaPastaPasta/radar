@@ -58,3 +58,14 @@ test.describe('decoders @NX-72 @NX-71', () => {
     )
   })
 })
+
+test('the "/" shortcut chip shows only where a pointer can hover @W2-63', async ({ page }) => {
+  await page.goto('/')
+  const chips = page.locator('[data-palette-trigger] kbd')
+  await expect(chips.first()).toBeAttached()
+  const touch = await page.evaluate(() => matchMedia('(hover: none)').matches)
+  for (const chip of await chips.all()) {
+    if (touch) await expect(chip).toBeHidden()
+    else if (await chip.locator('..').isVisible()) await expect(chip).toBeVisible()
+  }
+})

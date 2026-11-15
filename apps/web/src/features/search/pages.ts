@@ -31,16 +31,19 @@ interface Candidate {
   keywords: string[]
 }
 
-const SEARCHABLE: Candidate[] = SITE_MAP.flatMap((p) =>
-  p.nav
-    ? [{ path: p.path, title: p.title, section: p.section, keywords: p.keywords ?? [] }]
-    : (p.entries ?? []).map((e) => ({
-        path: e.href,
-        title: e.title,
-        section: p.section,
-        keywords: e.keywords ?? [],
-      })),
-)
+let searchable: Candidate[] | undefined
+/** Built on first use, so the app's first load does not pay for it. */
+const candidates = (): Candidate[] =>
+  (searchable ??= SITE_MAP.flatMap((p) =>
+    p.nav
+      ? [{ path: p.path, title: p.title, section: p.section, keywords: p.keywords ?? [] }]
+      : (p.entries ?? []).map((e) => ({
+          path: e.href,
+          title: e.title,
+          section: p.section,
+          keywords: e.keywords ?? [],
+        })),
+  ))
 
 const match = (c: Candidate): PageMatch => ({
   path: c.path,
@@ -52,9 +55,9 @@ const match = (c: Candidate): PageMatch => ({
 export function matchPages(query: string, limit = 6): PageMatch[] {
   const q = query.trim().toLowerCase()
   if (q.length === 0) {
-    return FEATURED.flatMap((path) => SEARCHABLE.filter((p) => p.path === path)).map(match)
+    return FEATURED.flatMap((path) => candidates().filter((p) => p.path === path)).map(match)
   }
-  const scored = SEARCHABLE.flatMap((p) => {
+  const scored = candidates().flatMap((p) => {
     const titles = [i18n._(p.title), p.title.message ?? ''].map((x) => x.toLowerCase())
     const keywords = p.keywords.map((k) => k.toLowerCase())
     let score = 0

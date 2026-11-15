@@ -1,13 +1,15 @@
 import { useState, useSyncExternalStore, type ReactNode } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { useNetwork } from '@/features/entity'
+import { isDevnet } from '@/lib/network'
 import { denomination, getUnitPrefs, subscribeUnitPrefs } from '@/lib/units'
 import { UnitsProvider } from '@/ui/base'
 import { deferred } from '@/ui/deferred'
-import { DevnetWatch } from './devnet-watch'
+import { ErrorBoundary } from './error-boundary'
 import type { FiatRateValue } from './fiat-rate'
 
 const FiatRate = deferred(() => import('./fiat-rate').then((m) => m.default))
+const DevnetWatch = deferred(() => import('./devnet-watch').then((m) => m.DevnetWatch))
 
 /**
  * Gives every `Amount` the viewer's unit, the testnet unit label and, on mainnet, the USD rate. USD as the primary
@@ -34,7 +36,11 @@ export function UnitsMount({ children }: { children: ReactNode }) {
     >
       {wantsFiat ? <FiatRate onRate={setRate} /> : null}
       {children}
-      <DevnetWatch />
+      {isDevnet(net) ? (
+        <ErrorBoundary fallback={() => null}>
+          <DevnetWatch />
+        </ErrorBoundary>
+      ) : null}
     </UnitsProvider>
   )
 }
