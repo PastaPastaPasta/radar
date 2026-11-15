@@ -712,6 +712,7 @@ export const SITE_MAP: SitePage[] = [
   }),
   page({
     path: '/offline',
+    under: '/settings',
     title: msg`Offline`,
     section: 'you',
     layer: 'neutral',

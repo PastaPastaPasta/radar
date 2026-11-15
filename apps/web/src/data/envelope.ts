@@ -28,7 +28,7 @@ export interface SourceStamp {
   asOf: number
   /** ms epoch: when the browser received it. */
   fetchedAt: number
-  /** The source gave no time for this answer, so `asOf` is `fetchedAt`. Labels say "fetched", not what the source did. */
+  /** The source gave no time for this answer, so `asOf` is `fetchedAt`. Labels name the source with no age, not what the source did. */
   asOfFetched?: true
   /** True only when this exact value came from a call that returned a verified proof. */
   proved: boolean
