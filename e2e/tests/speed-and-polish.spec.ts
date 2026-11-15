@@ -289,7 +289,7 @@ test.describe('section rail', () => {
     test.skip(!testInfo.project.name.startsWith('phone'), 'phone only')
     await page.setViewportSize({ width: 320, height: 844 })
     await page.goto('/status')
-    const rail = page.locator('[data-section-nav="core"]')
+    const rail = page.locator('[data-section-nav="tools"]')
     await expect(rail).toBeVisible()
     const info = await rail.evaluate((el) => ({
       overflows: el.scrollWidth > el.clientWidth + 1,

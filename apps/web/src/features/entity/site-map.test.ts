@@ -43,8 +43,10 @@ describe('section rails', () => {
       '/tools/qr',
       '/sdk-reference',
       '/api',
+      '/status',
       '/sources',
     ])
+    expect(labels('core').map((e) => e.to)).not.toContain('/status')
     expect(labels('you').map((e) => e.to)).toEqual(['/saved', '/settings', '/about'])
   })
 
