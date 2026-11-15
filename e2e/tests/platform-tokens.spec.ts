@@ -438,12 +438,11 @@ test.describe('Token list', () => {
     await expect(trending).toContainText('transitions')
   })
 
-  test('shows no trending ranking when no token has had a transition @PE-24 @NX-01', async ({
-    page,
-  }) => {
+  test('ranks only the tokens that have had a transition @PE-24 @NX-01', async ({ page }) => {
     await open(page, '/tokens', 'Tokens')
-    await expect(page.locator('#tokens-list')).toBeVisible()
-    await expect(page.locator('#tokens-trending')).toHaveCount(0)
+    const trending = page.locator('#tokens-trending [data-trending] li')
+    await expect(trending).toHaveCount(2)
+    await expect(trending.first()).toContainText('transitions')
   })
 
   test('filters by name, and says what matches @PE-24', async ({ page }) => {
