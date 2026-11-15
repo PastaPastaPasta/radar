@@ -89,6 +89,7 @@ function stamp<T extends { height: number }>(data: T, now: number, node?: string
     fetchedAt: now,
     proved: false,
     height: data.height,
+    pushed: true,
     // A pushed tip is as fresh as the last block; judge its age like a polled tip, not by the default.
     staleAfterMs: staleAfterMs('tip'),
     ...(node ? { node } : {}),

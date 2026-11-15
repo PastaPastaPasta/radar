@@ -42,6 +42,8 @@ export interface SourceStamp {
   /** Set where a source gives heights of the other chain than its usual one (Radar's platform document gives a Platform height; its other documents a Core height). */
   heightChain?: HeightChain
   fallback?: FallbackReason
+  /** The live stream pushed this figure (a tip or a ChainLock); once updates stop, its age counts from the last one. */
+  pushed?: true
   /** Age in ms past which SourceLine turns orange: the query's data class staleTime × 4, set by the query client. */
   staleAfterMs?: number
 }

@@ -146,7 +146,7 @@ describe('sourceView data age', () => {
   })
 
   it('keeps counting a pushed figure from the last live update once updates stop @X-05', () => {
-    const dapi = stamp({ source: 'dapi', asOf: NOW - 1000 })
+    const dapi = stamp({ source: 'dapi', asOf: NOW - 1000, pushed: true })
     const dapiHealth: SourceHealth = { ...health, source: 'dapi' }
     const stopped = { state: 'stopped', lastEventAt: NOW - 4 * 60_000 } as const
     expect(sourceView(dapi, dapiHealth, NOW, stopped).age).toBe('4 min ago')
@@ -154,11 +154,13 @@ describe('sourceView data age', () => {
     expect(
       sourceView(dapi, dapiHealth, NOW, { state: 'live', lastEventAt: NOW - 4 * 60_000 }).age,
     ).toBe('1 s ago')
-    const older = stamp({ source: 'dapi', asOf: NOW - 6 * 60_000 })
+    const older = stamp({ source: 'dapi', asOf: NOW - 6 * 60_000, pushed: true })
     expect(sourceView(older, dapiHealth, NOW, stopped).age).toBe('6 min ago')
     expect(
       sourceView(stamp({ source: 'pe', asOf: NOW - 1000 }), dapiHealth, NOW, stopped).age,
     ).toBe('1 s ago')
+    const read = stamp({ source: 'dapi', asOf: NOW - 1000 })
+    expect(sourceView(read, dapiHealth, NOW, stopped).age, 'a fresh DAPI read').toBe('1 s ago')
   })
 
   it('says Radar crawled it everywhere, and gives no age to a document that carries none @X-01', () => {

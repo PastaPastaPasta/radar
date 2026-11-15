@@ -144,7 +144,7 @@ describe('SourceLine', () => {
 
   it('keeps a pushed figure’s age counting after live updates stop @X-05', () => {
     setLiveConnection({ state: 'stopped', lastEventAt: NOW - 3 * 60_000 })
-    render(<SourceLine stamp={stamp({ source: 'dapi', asOf: NOW - 1000 })} compact />)
+    render(<SourceLine stamp={stamp({ source: 'dapi', asOf: NOW - 1000, pushed: true })} compact />)
     expect(screen.getByText(/Served by DAPI/)).toHaveTextContent('3 min ago')
     act(() => {
       vi.advanceTimersByTime(2 * 60_000)
