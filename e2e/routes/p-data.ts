@@ -67,7 +67,7 @@ export const pData: RouteCase[] = [
       },
       {
         path: `/document/${doc.contract}/${doc.type}/${docId}`,
-        h1: /^Document \S+…\S+$/,
+        h1: doc.type,
         decentralized: 'data',
       },
       { path: `/groups/${group.contract}`, h1: 'Groups', decentralized: 'data' },

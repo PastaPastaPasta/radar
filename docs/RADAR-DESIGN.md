@@ -271,9 +271,9 @@ Band padding 28 px top, 32 px bottom; 1 px `--dh-line` bottom edge (none on the 
 - **Ground:** the layer's soft colour, the width of the window, 1 px `--dh-line` under it. Its content keeps the page column.
 - **Glyph:** an identity shows its identicon on a 60 px surface tile; every other kind shows the layer tile with the kind's glyph.
 - **Kicker:** the kind in the layer text colour ("Identity", "Data contract", "Token"), then the network off mainnet.
-- **`h1` and document title name the entity, never the kind alone and never empty.** In order: the name the reader gave it in Settings or a well-known label, the entity's own name (`pshenmic.dash`, a token's name, a contract's known name), then the kind with a short ID ("Identity BjixEUbq…MriiYqp", "Address XnT33zjr…3WVj14"). The `.dash` of a name is `--dh-ink-2`.
+- **`h1` and document title name the entity, never the kind alone and never empty.** In order: the name the reader gave it in Settings or a well-known label, the entity's own name (`pshenmic.dash`, a token's name, a contract's known name), then the kind with a short ID ("Identity BjixEUbq…MriiYqp", "Address XnT33zjr…3WVj14"). The `.dash` of a name is `--dh-ink-2`. A document has no name of its own, so its title is its type (`domain`) and the full ID appears once under it, not again as a short ID in the title.
 - **Full ID** with copy under the title, then the page's one source line.
-- **Facts:** two to four stats in the KPI row, each figure stated here and nowhere else on the page (identity: balance and revision; contract: version, document types, tokens, groups; token: total supply and decimals; document: type and revision). On a phone an amount takes the whole row.
+- **Facts:** two to four stats in the KPI row, each figure stated here and nowhere else on the page (identity: balance and revision; contract: version, document types, tokens, groups; token: total supply and decimals; document: revision, because the type is already the title). On a phone an amount takes the whole row.
 - **Proof per figure:** a proof-checked figure keeps its own mark in its popover (hover, focus or tap), in a key-value row as in a stat, so a line that mixes proved and unproved reads never leaves a figure unaccounted for.
 
 ### 5.2 Zones and sections
