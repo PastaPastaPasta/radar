@@ -72,20 +72,20 @@ test.describe('Names', () => {
 
 test.describe('Name', () => {
   test('rejects a label DPNS cannot hold and says why @NX-40', async ({ page }) => {
-    await open(page, '/name/ab', 'Name')
+    await open(page, '/name/ab', 'ab.dash')
     await expect(page.locator('[data-status="invalid"]')).toBeVisible()
     await expect(page.locator('#name-status')).toContainText('at least 3 characters')
   })
 
   test('reports a free name as available @NX-40', async ({ page }) => {
-    await open(page, `/name/${NAMES.available}`, 'Name')
+    await open(page, `/name/${NAMES.available}`, `${NAMES.available}.dash`)
     await expect(page.locator('[data-status="available"]')).toBeVisible()
   })
 
   test('shows a registered name with its owner, document and a Bridge link out @NX-40', async ({
     page,
   }) => {
-    await open(page, `/name/${NAMES.registered}`, 'Name')
+    await open(page, `/name/${NAMES.registered}`, `${NAMES.registered}.dash`)
     await expect(page.locator('[data-status="registered"]')).toBeVisible()
     await expect(page.locator('main a[href^="/identity/"]').first()).toBeVisible()
     const bridge = page.getByRole('link', { name: /Bridge/ }).first()
@@ -94,7 +94,7 @@ test.describe('Name', () => {
   })
 
   test('sends a contested name to its contest and to Governance @NX-40', async ({ page }) => {
-    await open(page, `/name/${NAMES.contested}`, 'Name')
+    await open(page, `/name/${NAMES.contested}`, `${NAMES.contested}.dash`)
     await expect(page.locator('[data-status="contested"]')).toBeVisible()
     await expect(page.locator(`main a[href="/contest/${NAMES.contested}"]`).first()).toBeVisible()
     await expect(page.getByRole('link', { name: /Governance/ }).first()).toHaveAttribute(
@@ -104,7 +104,11 @@ test.describe('Name', () => {
   })
 
   test('shows a name whose contest is over as registered on testnet @NX-40', async ({ page }) => {
-    await open(page, `/name/${NAMES.testnetContest}?network=testnet`, 'Name')
+    await open(
+      page,
+      `/name/${NAMES.testnetContest}?network=testnet`,
+      `${NAMES.testnetContest}.dash`,
+    )
     await expect(page.locator('[data-status="registered"]')).toBeVisible()
   })
 })
@@ -306,9 +310,9 @@ test.describe('Decentralized only mode', () => {
   })
 
   test('keeps the name states from the SDK @NX-40', async ({ page }) => {
-    await open(page, onlyUrl(`/name/${NAMES.registered}`), 'Name')
+    await open(page, onlyUrl(`/name/${NAMES.registered}`), `${NAMES.registered}.dash`)
     await expect(page.locator('[data-status="registered"]')).toBeVisible()
-    await open(page, onlyUrl(`/name/${NAMES.contested}`), 'Name')
+    await open(page, onlyUrl(`/name/${NAMES.contested}`), `${NAMES.contested}.dash`)
     await expect(page.locator('[data-status="contested"]')).toBeVisible()
   })
 

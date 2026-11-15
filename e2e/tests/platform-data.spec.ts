@@ -39,7 +39,9 @@ test.describe('contract page', () => {
       await go(page, `/contract/${DPNS}`, net)
       const summary = page.locator('#contract')
       await expect(summary.getByText('Owner')).toBeVisible()
-      await expect(summary.getByText('Version', { exact: true })).toBeVisible()
+      const facts = page.locator('[data-record="contract"] [data-record-facts]')
+      await expect(facts.getByText('Version', { exact: true })).toBeVisible()
+      await expect(facts.getByText('Document types', { exact: true })).toBeVisible()
       await expect(
         page
           .locator('#types')
