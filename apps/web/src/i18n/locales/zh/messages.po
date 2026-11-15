@@ -29,10 +29,6 @@ msgstr "（本站会把请求转发给 {0}）"
 msgid "[circular]"
 msgstr "[循环]"
 
-#. placeholder {0}: block.txs.length
-msgid "{0, plural, one {# transaction} other {# transactions}}"
-msgstr "{0, plural, other {# 笔交易}}"
-
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, other {最后一个区块头：# 分钟前}}"
@@ -40,10 +36,6 @@ msgstr "{0, plural, other {最后一个区块头：# 分钟前}}"
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
 msgstr "已排名 {0} 个地址"
-
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "每页 {0} 个区块，最新的在前。"
 
 #. placeholder {0}: titles[id]
 msgid "{0} by block height"
@@ -149,9 +141,6 @@ msgstr "{base}（{detail}）"
 msgid "{blockCount} blocks so far"
 msgstr "目前已有 {blockCount} 个区块"
 
-msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
-msgstr "{confirmations, plural, other {# 次确认}}"
-
 msgid "{d} d"
 msgstr "{d}天"
 
@@ -242,9 +231,6 @@ msgstr "{name} 响应超时"
 msgid "{percent} through"
 msgstr "已过 {percent}"
 
-msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
-msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}"
-
 msgid "{s} s"
 msgstr "{s}秒"
 
@@ -253,12 +239,6 @@ msgstr "占地址余额的 %"
 
 msgid "% of supply"
 msgstr "占总供应量的 %"
-
-msgid "← Previous"
-msgstr "← 上一页"
-
-msgid "← Previous day"
-msgstr "← 前一天"
 
 #. placeholder {0}: formatInt(matches)
 msgid "<0>{0}</0> match"
@@ -284,12 +264,6 @@ msgstr "Dash 地址为 34 个字符，主网以 X 或 7 开头，测试网以 y 
 
 msgid "A proof didn't verify"
 msgstr "有一项证明未通过验证"
-
-msgid "A script address (starting with 7 or 8) can’t sign a message."
-msgstr "脚本地址（以 7 或 8 开头）无法签署消息。"
-
-msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
-msgstr "签名为 88 个 base64 字符，以“=”结尾，与 Dash Core 的 signmessage 输出一致。"
 
 msgid "About sources"
 msgstr "关于数据源"
@@ -374,26 +348,11 @@ msgstr "余额"
 msgid "Behind"
 msgstr "落后"
 
-msgid "Bits"
-msgstr "Bits"
-
 msgid "Block"
 msgstr "区块"
 
-#. placeholder {0}: formatInt(block.height - 1)
-#. placeholder {0}: formatInt(block.height)
-#. placeholder {0}: formatInt(ref.height)
-msgid "Block {0}"
-msgstr "区块 {0}"
-
 msgid "Block height"
 msgstr "区块高度"
-
-msgid "Block reward"
-msgstr "区块奖励"
-
-msgid "Blocks"
-msgstr "区块"
 
 #. placeholder {0}: formatInt(chart.startHeight)
 #. placeholder {1}: formatInt(chart.endHeight)
@@ -404,20 +363,8 @@ msgstr "区块 {0} 至 {1}，每 {2, plural, other {# 个区块}}一个点"
 msgid "Blocks and transactions elsewhere in Radar are current."
 msgstr "Radar 其他位置的区块和交易都是最新的。"
 
-msgid "Blocks on {date}"
-msgstr "{date} 的区块"
-
-msgid "Blocks on {dateLabel}"
-msgstr "{dateLabel} 的区块"
-
-msgid "Blocks per page"
-msgstr "每页区块数"
-
 msgid "Blocks, transactions and addresses elsewhere in Radar are current."
 msgstr "Radar 其他位置的区块、交易和地址都是最新的。"
-
-msgid "Browse by date"
-msgstr "按日期浏览"
 
 msgid "Budget"
 msgstr "预算"
@@ -428,17 +375,11 @@ msgstr "预算提案"
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "预算提案及其投票情况。投票请前往 Governance 进行。"
 
-msgid "bytes"
-msgstr "字节"
-
 msgid "Camera"
 msgstr "摄像头"
 
 msgid "Camera preview"
 msgstr "摄像头预览"
-
-msgid "Can’t check"
-msgstr "无法验证"
 
 msgid "Cancel"
 msgstr "取消"
@@ -455,17 +396,11 @@ msgstr "由一个节点报告的 ChainLock"
 msgid "ChainLocked"
 msgstr "ChainLocked"
 
-msgid "Chainwork"
-msgstr "Chainwork"
-
 msgid "Charts"
 msgstr "图表"
 
 msgid "Charts need an indexer"
 msgstr "图表需要索引器"
-
-msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
-msgstr "检查某个 Dash 地址是否签署了一条消息。检查在此浏览器中完成：你在这里输入的任何内容都不会被发送到别处，Radar 也绝不会索要密钥。"
 
 msgid "Checking"
 msgstr "检查中"
@@ -493,12 +428,6 @@ msgstr "关闭"
 
 msgid "Coinbase"
 msgstr "Coinbase"
-
-msgid "Coinbase payload"
-msgstr "Coinbase 载荷"
-
-msgid "Coinbase tag says"
-msgstr "Coinbase 标签内容"
 
 msgid "Collapse all"
 msgstr "全部收起"
@@ -552,16 +481,10 @@ msgstr "复制 JSON"
 msgid "Copy link to this section"
 msgstr "复制此部分的链接"
 
-msgid "Core"
-msgstr "Core"
-
 msgid "Core address"
 msgstr "Core 地址"
 
 msgid "Core block"
-msgstr "Core 区块"
-
-msgid "Core blocks"
 msgstr "Core 区块"
 
 msgid "Core transaction"
@@ -600,17 +523,11 @@ msgstr "积分提现"
 msgid "DAPI addresses"
 msgstr "DAPI 地址"
 
-msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
-msgstr "Dash 会在 coinbase 中加入一段载荷，承诺主节点列表和最新的 ChainLock。"
-
 msgid "Data contract"
 msgstr "数据合约"
 
 msgid "Data sources"
 msgstr "数据来源"
-
-msgid "Days run from 00:00 to 24:00 UTC."
-msgstr "每天按 UTC 00:00 至 24:00 计算。"
 
 msgid "Decentralized"
 msgstr "去中心化"
@@ -730,9 +647,6 @@ msgstr "估算"
 msgid "Every backend Radar can contact, who runs it and whether it is in use on {network}. Each figure in Radar names the one it came from."
 msgstr "Radar 可以连接的所有后端、运营方，以及它们在 {network} 上是否在使用。Radar 中的每个数字都会注明其来源。"
 
-msgid "Everything the coinbase pays out"
-msgstr "coinbase 支付的所有款项"
-
 msgid "Evonode"
 msgstr "Evonode"
 
@@ -765,9 +679,6 @@ msgstr "按名称或哈希筛选提案"
 
 msgid "Filter proposals by status"
 msgstr "按状态筛选提案"
-
-msgid "Finding this day's blocks"
-msgstr "正在查找当天的区块"
 
 msgid "First"
 msgstr "首次"
@@ -813,9 +724,6 @@ msgstr "治理提案需要索引器"
 msgid "Group"
 msgstr "群组"
 
-msgid "Hash"
-msgstr "哈希"
-
 msgid "Hash rate"
 msgstr "算力"
 
@@ -823,19 +731,8 @@ msgstr "算力"
 msgid "Hash rate over the last {0} blocks"
 msgstr "最近 {0} 个区块的算力"
 
-msgid "Header"
-msgstr "区块头"
-
-msgid "Height"
-msgstr "高度"
-
 msgid "Height when connected"
 msgstr "连接时的高度"
-
-#. placeholder {0}: formatInt(lowest)
-#. placeholder {1}: formatInt(Math.max(...heights))
-msgid "Heights {0} to {1}"
-msgstr "高度 {0} 至 {1}"
 
 msgid "Held by the top 10"
 msgstr "前 10 名持有"
@@ -936,17 +833,11 @@ msgstr "已索引至区块 {block}（落后 {0}）"
 msgid "indexed to block {block} ({0} blocks behind)"
 msgstr "已索引至区块 {block}（落后 {0} 个区块）"
 
-msgid "Inputs → outputs"
-msgstr "输入 → 输出"
-
 msgid "Insight could not return this address’s oldest transactions."
 msgstr "Insight 无法返回此地址最早的交易。"
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight 无法返回此地址的交易。"
-
-msgid "Insight couldn’t be reached"
-msgstr "无法连接 Insight"
 
 msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
 msgstr "Insight 不提供资助情况,且下一个超级区块的时间未知,因此没有提案显示为已获资助。“通过”由 Radar 根据 Insight 的票数计算。"
@@ -975,9 +866,6 @@ msgstr "日期无效"
 msgid "JSON"
 msgstr "JSON"
 
-msgid "Jump to a date"
-msgstr "跳转到日期"
-
 msgid "Key limits update"
 msgstr "密钥上限更新"
 
@@ -998,9 +886,6 @@ msgstr "上次抓取完成于 {0}前"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "上次正常 {0}"
-
-msgid "Latest blocks"
-msgstr "最新区块"
 
 msgid "Link copied"
 msgstr "链接已复制"
@@ -1054,12 +939,6 @@ msgstr "内存池"
 msgid "Mempool pressure"
 msgstr "内存池压力"
 
-msgid "Merkle root"
-msgstr "Merkle 根"
-
-msgid "Message"
-msgstr "消息"
-
 msgid "Metrics history"
 msgstr "指标历史"
 
@@ -1102,35 +981,14 @@ msgstr "较新"
 msgid "Next"
 msgstr "下一页"
 
-msgid "Next →"
-msgstr "下一页 →"
-
-msgid "Next block"
-msgstr "下一个区块"
-
-msgid "Next day"
-msgstr "后一天"
-
-msgid "Next day →"
-msgstr "后一天 →"
-
 msgid "No"
 msgstr "否"
 
 msgid "No balances indexed yet."
 msgstr "尚未索引任何余额。"
 
-msgid "No blocks came back for this page"
-msgstr "此页没有返回任何区块"
-
-msgid "No blocks on this date"
-msgstr "这一天没有区块"
-
 msgid "No camera could be opened here. Choose a picture instead."
 msgstr "此处无法打开摄像头，请改为选择一张图片。"
-
-msgid "No known pool"
-msgstr "无已知矿池"
 
 msgid "No proposal with this hash on this network."
 msgstr "此网络上没有该哈希的提案。"
@@ -1143,9 +1001,6 @@ msgstr "此网络上没有提案。"
 
 msgid "No QR code found in that picture."
 msgstr "在该图片中未找到二维码。"
-
-msgid "No tag in the coinbase"
-msgstr "coinbase 中无标签"
 
 msgid "No transactions in the mempool right now."
 msgstr "内存池中目前没有交易。"
@@ -1162,21 +1017,8 @@ msgstr "此提案没有投票记录。"
 msgid "Node list and quorum keys"
 msgstr "节点列表和 Quorum 密钥"
 
-msgid "Nonce"
-msgstr "Nonce"
-
 msgid "Not available for this record"
 msgstr "此记录不可用"
-
-msgid "Not ChainLocked yet"
-msgstr "尚未 ChainLocked"
-
-#. placeholder {0}: networkName(net)
-msgid "Not found on {0}"
-msgstr "在 {0} 上未找到"
-
-msgid "Not in DAPI"
-msgstr "不在 DAPI 中"
 
 msgid "Not on {net}"
 msgstr "{net} 上不可用"
@@ -1208,12 +1050,6 @@ msgstr "此模式下已关闭"
 msgid "Older"
 msgstr "较早"
 
-msgid "Older blocks from before this date"
-msgstr "此日期之前的较早区块"
-
-msgid "On this page"
-msgstr "本页内容"
-
 msgid "open"
 msgstr "打开"
 
@@ -1244,14 +1080,6 @@ msgstr "输出"
 
 msgid "Pages"
 msgstr "页面"
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an index that is up to date, and none is right now."
-msgstr "每页 {0} 个区块需要最新的索引，而目前没有可用的。"
-
-#. placeholder {0}: formatInt(pageSource.requested)
-msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
-msgstr "每页 {0} 个区块需要索引器，而“仅去中心化”模式不使用索引器。"
 
 msgid "Pagination"
 msgstr "分页"
@@ -1333,12 +1161,6 @@ msgstr "预览"
 
 msgid "Previous"
 msgstr "上一页"
-
-msgid "Previous block"
-msgstr "上一个区块"
-
-msgid "Previous day"
-msgstr "前一天"
 
 msgid "Price feed"
 msgstr "价格数据"
@@ -1424,9 +1246,6 @@ msgstr "排名区间"
 msgid "Read a QR code with your camera or from a picture, and look up what it holds. The image is read in this browser and is not uploaded."
 msgstr "用摄像头或图片读取二维码，并查询其中的内容。图片在此浏览器中读取，不会上传。"
 
-msgid "Reading the chain tip…"
-msgstr "正在读取链顶…"
-
 msgid "Reading the picture…"
 msgstr "正在读取图片…"
 
@@ -1480,16 +1299,8 @@ msgstr "每页行数"
 msgid "Scroll"
 msgstr "滚动"
 
-#. placeholder {0}: networkName(other)
-msgid "Search {0}"
-msgstr "在 {0} 中搜索"
-
 msgid "Search Radar"
 msgstr "搜索 Radar"
-
-#. placeholder {0}: formatInt(range.found)
-msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
-msgstr "正在搜索区块头，以确定这一天的起止位置：已找到 {0}/2。"
 
 msgid "Searching…"
 msgstr "正在搜索…"
@@ -1575,12 +1386,6 @@ msgstr "显示更多"
 msgid "Show QR code"
 msgstr "显示二维码"
 
-msgid "Signature"
-msgstr "签名"
-
-msgid "Signed message"
-msgstr "已签名消息"
-
 msgid "Since you opened this page"
 msgstr "自你打开此页面以来"
 
@@ -1589,9 +1394,6 @@ msgstr "大小"
 
 msgid "Slow"
 msgstr "较慢"
-
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "页面出了点问题。Radar 的其他部分仍可使用。"
 
 msgid "Something went wrong"
 msgstr "出了点问题"
@@ -1608,9 +1410,6 @@ msgstr "按{column}降序排序"
 
 msgid "Sources"
 msgstr "数据源"
-
-msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
-msgstr "消息中的空格和换行都会计入：必须与签名时的内容完全一致。"
 
 msgid "Spendable outputs"
 msgstr "可花费的输出"
@@ -1646,29 +1445,11 @@ msgstr "摘要"
 msgid "Supply concentration"
 msgstr "供应集中度"
 
-msgid "Switch to mainnet"
-msgstr "切换到主网"
-
-msgid "Switch to testnet"
-msgstr "切换到测试网"
-
-msgid "Tag: {tag}. The miner writes it, so it is not proof."
-msgstr "标签：{tag}。该标签由矿工写入，因此不能作为证明。"
-
-msgid "Tap a transaction for its inputs, outputs and size"
-msgstr "点按交易可查看其输入、输出和大小"
-
 msgid "testnet"
 msgstr "测试网"
 
-msgid "That isn’t a Dash address Radar can check."
-msgstr "这不是 Radar 能检查的 Dash 地址。"
-
 msgid "That isn’t a Dash address."
 msgstr "这不是 Dash 地址。"
-
-msgid "That isn’t a Dash signature."
-msgstr "这不是 Dash 签名。"
 
 msgid "That picture couldn’t be read."
 msgstr "无法读取该图片。"
@@ -1754,19 +1535,11 @@ msgstr "此页面的其余部分仍可使用。"
 msgid "The rich list needs an indexer"
 msgstr "富豪榜需要索引器"
 
-msgid "The signature is well formed, but it was made by a different key. It matches this address:"
-msgstr "签名格式正确，但由另一个密钥生成。它与此地址匹配："
-
 msgid "The source is busy"
 msgstr "数据源繁忙"
 
 msgid "The source isn't answering"
 msgstr "数据源没有响应"
-
-#. placeholder {0}: formatInt(window.top - window.count + 1)
-#. placeholder {1}: formatInt(window.top)
-msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
-msgstr "数据源没有返回高度 {0} 到 {1} 的区块。请尝试相邻的页面，或更短的页面。"
 
 msgid "The source sent something Radar couldn't read"
 msgstr "数据源返回了 Radar 无法读取的内容"
@@ -1785,15 +1558,6 @@ msgstr "显示在 DASH 金额旁的 USD 汇率。仅限主网。"
 msgid "Their size"
 msgstr "它们的大小"
 
-msgid "There is no block with this height or hash on this network."
-msgstr "此网络上没有该高度或哈希的区块。"
-
-msgid "This address did not sign this message."
-msgstr "该地址没有签署此消息。"
-
-msgid "This address signed this message."
-msgstr "该地址签署了此消息。"
-
 msgid "This address's balance, history and unspent outputs need an indexer"
 msgstr "此地址的余额、历史和未花费的输出需要索引器"
 
@@ -1803,17 +1567,8 @@ msgstr "此浏览器"
 msgid "This is a {name} address."
 msgstr "这是一个 {name} 地址。"
 
-msgid "This is a mainnet address."
-msgstr "这是主网地址。"
-
 msgid "This is a Radar bug, not your connection. {rest}"
 msgstr "这是 Radar 的问题，不是你的网络连接问题。{rest}"
-
-msgid "This is a testnet address."
-msgstr "这是测试网地址。"
-
-msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
-msgstr "这看起来像私钥或助记词。Radar 从不需要它们，因此不会检查。请清空该字段，改为粘贴已签名的消息。"
 
 msgid "This needs an indexer"
 msgstr "这需要索引器"
@@ -1823,12 +1578,6 @@ msgstr "这需要 Platform Explorer"
 
 msgid "This needs Radar's crawler"
 msgstr "这需要 Radar 爬虫"
-
-msgid "This network has no blocks in this day, or the day has not happened yet."
-msgstr "此网络在这一天没有区块，或者这一天还没有到来。"
-
-msgid "This page couldn’t be shown"
-msgstr "无法显示此页面"
 
 msgid "This page needs an indexer"
 msgstr "此页面需要索引器"
@@ -1841,9 +1590,6 @@ msgstr "此提案及其投票记录来自 Hyphen 的索引,截至该区块,并�
 
 msgid "This site"
 msgstr "本站"
-
-msgid "This source covers this row only"
-msgstr "此来源仅涵盖这一行"
 
 msgid "This source isn't available here"
 msgstr "此数据源在此不可用"
@@ -1915,9 +1661,6 @@ msgstr "工具"
 msgid "Top {0}"
 msgstr "前 {0}"
 
-msgid "Total out"
-msgstr "总输出"
-
 msgid "Total received"
 msgstr "总接收"
 
@@ -1932,10 +1675,6 @@ msgstr "交易速率"
 
 msgid "Transactions"
 msgstr "交易"
-
-#. placeholder {0}: formatInt(block.height)
-msgid "Transactions in block {0}"
-msgstr "区块 {0} 中的交易"
 
 msgid "Transactions of this address, newest first"
 msgstr "此地址的交易，最新的在前"
@@ -1977,12 +1716,6 @@ msgstr "请稍后再试。{rest}"
 msgid "Try another name or hash, or choose All."
 msgstr "请尝试其他名称或哈希，或选择“全部”。"
 
-msgid "tx"
-msgstr "笔"
-
-msgid "Txs"
-msgstr "交易"
-
 msgid "Type"
 msgstr "类型"
 
@@ -2016,9 +1749,6 @@ msgstr "USD 价格需要价格数据"
 msgid "Use all sources"
 msgstr "使用所有数据源"
 
-msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
-msgstr "请使用签名所用的地址，主网地址以 X 开头，测试网地址以 y 开头。"
-
 msgid "Use the camera"
 msgstr "使用摄像头"
 
@@ -2028,24 +1758,8 @@ msgstr "使用此开发网"
 msgid "Username"
 msgstr "用户名"
 
-msgid "Valid"
-msgstr "有效"
-
 msgid "Value"
 msgstr "数值"
-
-msgid "Verify"
-msgstr "验证"
-
-msgid "Verify message"
-msgstr "验证消息"
-
-msgid "Version"
-msgstr "版本"
-
-#. placeholder {0}: block.version.toString(16)
-msgid "Version {0}"
-msgstr "版本 {0}"
 
 msgid "Vote"
 msgstr "投票"
@@ -2079,9 +1793,6 @@ msgstr "时间"
 
 msgid "Where requests go on {network}, and what each one is for."
 msgstr "{network} 上的请求会发往哪里，以及各自的用途。"
-
-msgid "Where this is"
-msgstr "所在位置"
 
 msgid "Which evonodes exist, read about once an hour (a saved list or the built-in one stands in when it can't be read), and the quorum public keys the SDK checks proofs against. Decentralized only mode still uses it: without it Radar could not find nodes or check a proof."
 msgstr "有哪些 evonode，大约每小时读取一次（读取失败时，会改用已保存的列表或内置列表），以及 SDK 用来验证证明的 Quorum 公钥。“仅去中心化”模式仍会使用它：没有它，Radar 就无法找到节点或验证证明。"

@@ -60,6 +60,12 @@ msgstr "{0} steps"
 msgid "{0}, {1}. Decoded here: the bytes are not sent anywhere."
 msgstr "{0}, {1}. Decoded here: the bytes are not sent anywhere."
 
+msgid "A data contract with this ID already exists."
+msgstr "A data contract with this ID already exists."
+
+msgid "A document with this ID already exists."
+msgstr "A document with this ID already exists."
+
 msgid "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
 msgstr "A document's bytes only mean something against its contract. Radar fetches the contract once, checks its proof here and keeps it to decode with."
 
@@ -80,6 +86,12 @@ msgstr "A number was expected, but “{arg}” came instead."
 
 msgid "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
 msgstr "A query is SELECT … FROM … WHERE conditions joined by AND, then GROUP BY, ORDER BY and LIMIT. JOIN, OR, OFFSET and sub-queries are unavailable because Platform answers from one index."
+
+msgid "A script address (starting with 7 or 8) can’t sign a message."
+msgstr "A script address (starting with 7 or 8) can’t sign a message."
+
+msgid "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
+msgstr "A signature is 88 characters of base64 and ends with “=”, as printed by Dash Core’s signmessage."
 
 msgid "A statement can name a contract itself, as in FROM dpns.domain."
 msgstr "A statement can name a contract itself, as in FROM dpns.domain."
@@ -102,6 +114,12 @@ msgstr "Action"
 msgid "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
 msgstr "Add ORDER BY for every field filtered with a range (<, >, BETWEEN, STARTS WITH) or IN."
 
+msgid "Address"
+msgstr "Address"
+
+msgid "All decoders"
+msgstr "All decoders"
+
 msgid "All documents"
 msgstr "All documents"
 
@@ -110,6 +128,9 @@ msgstr "Amount (credits)"
 
 msgid "An average per group"
 msgstr "An average per group"
+
+msgid "An identity with this ID already exists."
+msgstr "An identity with this ID already exists."
 
 msgid "An operator was expected, but “{arg}” came instead."
 msgstr "An operator was expected, but “{arg}” came instead."
@@ -130,11 +151,17 @@ msgstr "Base64"
 msgid "Byte list"
 msgstr "Byte list"
 
+msgid "Can’t check"
+msgstr "Can’t check"
+
 msgid "Cancel"
 msgstr "Cancel"
 
 msgid "Cancelled"
 msgstr "Cancelled"
+
+msgid "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
+msgstr "Check that a Dash address signed a message. The check runs in this browser: nothing you type here is sent anywhere, and Radar never asks for a key."
 
 msgid "Check the ID, or pick one of the contracts in the list."
 msgstr "Check the ID, or pick one of the contracts in the list."
@@ -156,6 +183,9 @@ msgstr "Choose a decoder"
 
 msgid "Choose the contract and the document type above to decode this document."
 msgstr "Choose the contract and the document type above to decode this document."
+
+msgid "Clear"
+msgstr "Clear"
 
 msgid "Clear the filter"
 msgstr "Clear the filter"
@@ -272,15 +302,14 @@ msgstr "DPNS contract"
 msgid "Drive returns at most 100 documents (or 100 groups) per query."
 msgstr "Drive returns at most 100 documents (or 100 groups) per query."
 
+msgid "Either another key made this signature, or the message is not exactly what was signed. A changed letter, space or line break gives a different address, and Radar cannot tell the two apart."
+msgstr "Either another key made this signature, or the message is not exactly what was signed. A changed letter, space or line break gives a different address, and Radar cannot tell the two apart."
+
 msgid "Element"
 msgstr "Element"
 
 msgid "Elements"
 msgstr "Elements"
-
-#. placeholder {0}: result.code
-msgid "Error code {0}"
-msgstr "Error code {0}"
 
 msgid "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
 msgstr "Every condition must hold (AND): an index can't serve two alternatives at once. Run two statements instead."
@@ -369,6 +398,9 @@ msgstr "Inputs"
 msgid "Insight"
 msgstr "Insight"
 
+msgid "Invalid"
+msgstr "Invalid"
+
 msgid "Key"
 msgstr "Key"
 
@@ -407,6 +439,9 @@ msgstr "Masternode"
 
 msgid "Masternode vote"
 msgstr "Masternode vote"
+
+msgid "Message"
+msgstr "Message"
 
 msgid "Name at least one key to read."
 msgstr "Name at least one key to read."
@@ -464,6 +499,9 @@ msgstr "Only prefix patterns work with LIKE."
 
 msgid "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
 msgstr "Only SELECT *, COUNT(*), SUM(field) and AVG(field) are supported."
+
+msgid "Open the proof decoder"
+msgstr "Open the proof decoder"
 
 msgid "Operations in this batch"
 msgstr "Operations in this batch"
@@ -527,6 +565,9 @@ msgstr "Platform can match values, ranges, IN lists and prefixes, but it can't e
 
 msgid "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
 msgstr "Platform can match values, ranges, IN lists and prefixes, but it can't exclude a value. Filter on what you want, not on what you don't."
+
+msgid "Platform couldn't run this query"
+msgstr "Platform couldn't run this query"
 
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
@@ -693,6 +734,12 @@ msgstr "Shielded withdrawal"
 msgid "Show all {0} steps"
 msgstr "Show all {0} steps"
 
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Signed message"
+msgstr "Signed message"
+
 msgid "Signed state transition"
 msgstr "Signed state transition"
 
@@ -701,6 +748,9 @@ msgstr "Signing key"
 
 msgid "Size (bytes)"
 msgstr "Size (bytes)"
+
+msgid "Spaces and line breaks in the message count: it must be exactly what was signed."
+msgstr "Spaces and line breaks in the message count: it must be exactly what was signed."
 
 msgid "SQL query"
 msgstr "SQL query"
@@ -733,8 +783,20 @@ msgstr "Sum"
 msgid "Sum of {0}"
 msgstr "Sum of {0}"
 
+msgid "Switch to mainnet"
+msgstr "Switch to mainnet"
+
+msgid "Switch to testnet"
+msgstr "Switch to testnet"
+
 msgid "That is more than 1 MB, which is more than any of these objects."
 msgstr "That is more than 1 MB, which is more than any of these objects."
+
+msgid "That isn’t a Dash address Radar can check."
+msgstr "That isn’t a Dash address Radar can check."
+
+msgid "That isn’t a Dash signature."
+msgstr "That isn’t a Dash signature."
 
 msgid "That isn't a list of numbers from 0 to 255."
 msgstr "That isn't a list of numbers from 0 to 255."
@@ -745,11 +807,20 @@ msgstr "That isn't hex, base64 or a list of numbers."
 msgid "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
 msgstr "That isn't hex: use the digits 0 to 9 and a to f, two to a byte."
 
+msgid "The first {firstType} documents"
+msgstr "The first {firstType} documents"
+
 msgid "The first DashPay profiles"
 msgstr "The first DashPay profiles"
 
 msgid "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
 msgstr "The grovedbProof of an answer from Platform. Radar reads it here and shows what each layer proves."
+
+msgid "The identity does not have enough balance for the fee."
+msgstr "The identity does not have enough balance for the fee."
+
+msgid "The identity nonce has already been used, or is not the next one."
+msgstr "The identity nonce has already been used, or is not the next one."
 
 msgid "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
 msgstr "The node that answered does not support this request; it may run an older Platform version. Run it again to reach a different node."
@@ -772,6 +843,12 @@ msgstr "The root tree"
 msgid "The SDK reads only the envelope of this transition type; its fields are not shown."
 msgstr "The SDK reads only the envelope of this transition type; its fields are not shown."
 
+msgid "The signature does not match the signing key."
+msgstr "The signature does not match the signing key."
+
+msgid "The signature is well formed, but checked against this exact message it points to a different address:"
+msgstr "The signature is well formed, but checked against this exact message it points to a different address:"
+
 msgid "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
 msgstr "The subtrees of the votes tree: contested resources, decisions, end dates and identity votes."
 
@@ -790,11 +867,29 @@ msgstr "These bytes could not be decoded as a state transition."
 msgid "These bytes could not be decoded."
 msgstr "These bytes could not be decoded."
 
+msgid "These bytes look like a GroveDB proof, not a serialized object."
+msgstr "These bytes look like a GroveDB proof, not a serialized object."
+
+msgid "This address did not sign this message."
+msgstr "This address did not sign this message."
+
+msgid "This address signed this message."
+msgstr "This address signed this message."
+
 msgid "This browser won't store the query."
 msgstr "This browser won't store the query."
 
 msgid "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
 msgstr "This document type has no index that supports this aggregate. COUNT needs a countable index whose properties are the WHERE fields; SUM and AVG need a matching summable index. The schema below lists each index's flags."
+
+msgid "This is a mainnet address."
+msgstr "This is a mainnet address."
+
+msgid "This is a testnet address."
+msgstr "This is a testnet address."
+
+msgid "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
+msgstr "This looks like a private key or a recovery phrase. Radar never needs one, so it won’t check it. Clear the field and paste the signed message instead."
 
 msgid "This number is too large to write safely here."
 msgstr "This number is too large to write safely here."
@@ -833,8 +928,20 @@ msgstr "Use == for an exact match. LIKE is only a prefix match here."
 msgid "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
 msgstr "Use ==, >, >=, <, <=, BETWEEN … AND …, IN (…) or STARTS WITH."
 
+msgid "Use the address that signed, which starts with X on mainnet and y on testnet."
+msgstr "Use the address that signed, which starts with X on mainnet and y on testnet."
+
+msgid "Valid"
+msgstr "Valid"
+
 msgid "Value"
 msgstr "Value"
+
+msgid "Verify"
+msgstr "Verify"
+
+msgid "Verify message"
+msgstr "Verify message"
 
 msgid "Vote"
 msgstr "Vote"

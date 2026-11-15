@@ -1,17 +1,29 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-14 14:02+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 14:02+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
+
+#. placeholder {0}: block.txs.length
+msgid "{0, plural, one {# transaction} other {# transactions}}"
+msgstr "{0, plural, other {# 笔交易}}"
+
+#. placeholder {0}: formatInt(size)
+msgid "{0} blocks a page, newest first."
+msgstr "每页 {0} 个区块，最新的在前。"
+
+msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
+msgstr "{confirmations, plural, other {# 次确认}}"
 
 msgid "{count, plural, one {# transaction is waiting for a block} other {# transactions are waiting for a block}}"
 msgstr "{count, plural, other {# 笔交易正在等待进入区块}}"
@@ -19,8 +31,248 @@ msgstr "{count, plural, other {# 笔交易正在等待进入区块}}"
 msgid "{open, plural, one {{have} of # open proposal has the votes to be funded} other {{have} of # open proposals have the votes to be funded}}"
 msgstr "{open, plural, other {# 个进行中的提案里有 {have} 个已获得足够票数可获资助}}"
 
+msgid "{quorumCommitments, plural, one {# quorum commitment in this block} other {# quorum commitments in this block}}"
+msgstr "{quorumCommitments, plural, other {此区块中有 # 个 Quorum 承诺}}"
+
+msgid "← Previous"
+msgstr "← 上一页"
+
+msgid "← Previous day"
+msgstr "← 前一天"
+
+msgid "Bits"
+msgstr "Bits"
+
+msgid "Block"
+msgstr "区块"
+
+#. placeholder {0}: formatInt(block.height - 1)
+#. placeholder {0}: formatInt(block.height)
+#. placeholder {0}: formatInt(height)
+msgid "Block {0}"
+msgstr "区块 {0}"
+
+msgid "Block reward"
+msgstr "区块奖励"
+
+msgid "Blocks"
+msgstr "区块"
+
+msgid "Blocks on {date}"
+msgstr "{date} 的区块"
+
+msgid "Blocks on {dateLabel}"
+msgstr "{dateLabel} 的区块"
+
+msgid "Blocks per page"
+msgstr "每页区块数"
+
+msgid "Browse by date"
+msgstr "按日期浏览"
+
+msgid "bytes"
+msgstr "字节"
+
+msgid "Chainwork"
+msgstr "Chainwork"
+
+msgid "Coinbase"
+msgstr "Coinbase"
+
+msgid "Coinbase payload"
+msgstr "Coinbase 载荷"
+
+msgid "Coinbase tag says"
+msgstr "Coinbase 标签内容"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Core blocks"
+msgstr "Core 区块"
+
+msgid "Dash adds a payload to the coinbase that commits to the masternode list and the latest ChainLock."
+msgstr "Dash 会在 coinbase 中加入一段载荷，承诺主节点列表和最新的 ChainLock。"
+
+msgid "Days run from 00:00 to 24:00 UTC."
+msgstr "每天按 UTC 00:00 至 24:00 计算。"
+
+msgid "Difficulty"
+msgstr "难度"
+
+msgid "Everything the coinbase pays out"
+msgstr "coinbase 支付的所有款项"
+
+msgid "Finding this day's blocks"
+msgstr "正在查找当天的区块"
+
+msgid "Hash"
+msgstr "哈希"
+
+msgid "Header"
+msgstr "区块头"
+
+msgid "Height"
+msgstr "高度"
+
+#. placeholder {0}: formatInt(lowest)
+#. placeholder {1}: formatInt(Math.max(...heights))
+msgid "Heights {0} to {1}"
+msgstr "高度 {0} 至 {1}"
+
+msgid "Inputs → outputs"
+msgstr "输入 → 输出"
+
+msgid "Insight couldn’t be reached"
+msgstr "无法连接 Insight"
+
+msgid "Jump to a date"
+msgstr "跳转到日期"
+
+msgid "Latest blocks"
+msgstr "最新区块"
+
+msgid "Merkle root"
+msgstr "Merkle 根"
+
+msgid "Newer"
+msgstr "较新"
+
+msgid "Next →"
+msgstr "下一页 →"
+
+msgid "Next block"
+msgstr "下一个区块"
+
+msgid "Next day"
+msgstr "后一天"
+
+msgid "Next day →"
+msgstr "后一天 →"
+
+msgid "No blocks came back for this page"
+msgstr "此页没有返回任何区块"
+
+msgid "No blocks on this date"
+msgstr "这一天没有区块"
+
+msgid "No known pool"
+msgstr "无已知矿池"
+
+msgid "No tag in the coinbase"
+msgstr "coinbase 中无标签"
+
 msgid "No transactions are waiting for a block"
 msgstr "没有交易在等待进入区块"
 
+msgid "Nonce"
+msgstr "Nonce"
+
+msgid "Not ChainLocked yet"
+msgstr "尚未 ChainLocked"
+
+#. placeholder {0}: networkName(net)
+msgid "Not found on {0}"
+msgstr "在 {0} 上未找到"
+
+msgid "Not in DAPI"
+msgstr "不在 DAPI 中"
+
+msgid "Older"
+msgstr "较早"
+
+msgid "Older blocks from before this date"
+msgstr "此日期之前的较早区块"
+
+msgid "On this page"
+msgstr "本页内容"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an index that is up to date, and none is right now."
+msgstr "每页 {0} 个区块需要最新的索引，而目前没有可用的。"
+
+#. placeholder {0}: formatInt(pageSource.requested)
+msgid "Pages of {0} need an indexer, which Decentralized only mode doesn't use."
+msgstr "每页 {0} 个区块需要索引器，而“仅去中心化”模式不使用索引器。"
+
+msgid "Previous block"
+msgstr "上一个区块"
+
+msgid "Previous day"
+msgstr "前一天"
+
+msgid "Reading the chain tip…"
+msgstr "正在读取链顶…"
+
+#. placeholder {0}: networkName(other)
+msgid "Search {0}"
+msgstr "在 {0} 中搜索"
+
+#. placeholder {0}: formatInt(range.found)
+msgid "Searching block headers for where this day begins and ends: {0} of 2 found."
+msgstr "正在搜索区块头，以确定这一天的起止位置：已找到 {0}/2。"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Tag: {tag}. The miner writes it, so it is not proof."
+msgstr "标签：{tag}。该标签由矿工写入，因此不能作为证明。"
+
+msgid "Tap a transaction for its inputs, outputs and size"
+msgstr "点按交易可查看其输入、输出和大小"
+
+#. placeholder {0}: dateLabel ?? date
+msgid "That is the first block on {0}. Going older leaves this day."
+msgstr "这是 {0} 的第一个区块。再往更早翻会离开这一天。"
+
 msgid "The latest block was mined <0/>"
 msgstr "最新区块挖出于 <0/>"
+
+#. placeholder {0}: formatInt(window.top - window.count + 1)
+#. placeholder {1}: formatInt(window.top)
+msgid "The source returned no blocks for heights {0} to {1}. Try the page either side, or a shorter page."
+msgstr "数据源没有返回高度 {0} 到 {1} 的区块。请尝试相邻的页面，或更短的页面。"
+
+msgid "There is no block with this height or hash on this network."
+msgstr "此网络上没有该高度或哈希的区块。"
+
+msgid "This network has no blocks in this day, or the day has not happened yet."
+msgstr "此网络在这一天没有区块，或者这一天还没有到来。"
+
+msgid "This source covers this row only"
+msgstr "此来源仅涵盖这一行"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "Total out"
+msgstr "总输出"
+
+msgid "Transaction"
+msgstr "交易"
+
+msgid "Transactions"
+msgstr "交易"
+
+#. placeholder {0}: formatInt(block.height)
+msgid "Transactions in block {0}"
+msgstr "区块 {0} 中的交易"
+
+msgid "tx"
+msgstr "笔"
+
+msgid "Txs"
+msgstr "交易"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Version"
+msgstr "版本"
+
+#. placeholder {0}: block.version.toString(16)
+msgid "Version {0}"
+msgstr "版本 {0}"
+
+msgid "Where this is"
+msgstr "所在位置"

@@ -1,17 +1,18 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:10+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: fr\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
 
 msgid "· change"
 msgstr "· modifier"
@@ -35,7 +36,6 @@ msgstr "{0} unités de base"
 msgid "{0} duffs"
 msgstr "{0} duffs"
 
-#. placeholder {0}: formatInt(inCount)
 #. placeholder {0}: formatInt(inputs.length)
 #. placeholder {0}: formatInt(tx.inputs.length)
 msgid "{0} inputs"
@@ -45,15 +45,15 @@ msgstr "{0} entrées"
 msgid "{0} inputs not loaded"
 msgstr "{0} entrées non chargées"
 
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
-#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {0}: formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} locked into Platform credits"
+msgstr "{0} verrouillés en crédits Platform"
+
+#. placeholder {0}: formatInt(signers)
+#. placeholder {0}: formatInt(valid)
 #. placeholder {1}: formatInt(members)
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "{0} sorties"
 
 #. placeholder {0}: sectionLabel(section)
 msgid "{0} pages"
@@ -84,6 +84,9 @@ msgstr "{feeRate} duffs par octet"
 msgid "{feeRate} duffs a byte: it spends no coins"
 msgstr "{feeRate} duffs par octet : elle ne dépense aucune pièce"
 
+msgid "{inCount, plural, one {# input} other {# inputs}}"
+msgstr "{inCount, plural, one {# entrée} many {# d’entrées} other {# entrées}}"
+
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} n’a pas vu cette adresse sur ce réseau."
 
@@ -95,6 +98,9 @@ msgstr "{n} autres sorties"
 
 msgid "{name} (reason {reason})"
 msgstr "{name} (motif {reason})"
+
+msgid "{outCount, plural, one {# output} other {# outputs}}"
+msgstr "{outCount, plural, one {# sortie} many {# de sorties} other {# sorties}}"
 
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# type} other {# types}}"
@@ -140,9 +146,9 @@ msgstr "après son extraction"
 msgid "Amount"
 msgstr "Montant"
 
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "Les montants sont chargés pour les {0} premières entrées. Chaque transaction précédente est une requête distincte."
+#. placeholder {0}: partial.loaded
+msgid "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
+msgstr "Les montants sont chargés pour les {0, plural, one {# entrée} many {# d’entrées} other {# entrées}} premières. Chaque transaction précédente est une requête distincte."
 
 msgid "Amounts loaded"
 msgstr "Montants chargés"
@@ -260,6 +266,9 @@ msgstr "Les transactions coinbase n’en paient aucun"
 msgid "Collateral"
 msgstr "Collatéral"
 
+msgid "Commitment"
+msgstr "Engagement"
+
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "Lie le bloc à la liste des masternodes et au dernier ChainLock."
 
@@ -280,6 +289,9 @@ msgstr "contrat"
 
 msgid "Contract"
 msgstr "Contrat"
+
+msgid "Contract decoder"
+msgstr "Décodeur de contrats"
 
 msgid "Contracts"
 msgstr "Contrats"
@@ -319,6 +331,9 @@ msgstr "Transaction Core"
 
 msgid "Could not check this right now."
 msgstr "Vérification impossible pour le moment."
+
+msgid "Could not look up the withdrawal document right now."
+msgstr "Impossible de consulter le document de retrait pour le moment."
 
 msgid "Could not read names."
 msgstr "Impossible de lire les noms."
@@ -388,6 +403,9 @@ msgstr "document"
 
 msgid "Document"
 msgstr "Document"
+
+msgid "Document decoder"
+msgstr "Décodeur de documents"
 
 msgid "document type"
 msgstr "type de document"
@@ -536,6 +554,9 @@ msgstr "Identité par hash de clé"
 
 msgid "Identity created"
 msgstr "Identité créée"
+
+msgid "Identity decoder"
+msgstr "Décodeur d’identités"
 
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
@@ -809,6 +830,12 @@ msgstr "Non enregistré. Il peut être libre ou encore contesté."
 msgid "Not specified"
 msgstr "Non précisé"
 
+msgid "Null commitment: no quorum was formed for this slot"
+msgstr "Engagement nul : aucun quorum n’a été formé pour ce créneau"
+
+msgid "Offline"
+msgstr "Hors ligne"
+
 msgid "On Platform"
 msgstr "Sur Platform"
 
@@ -921,6 +948,9 @@ msgstr "Page introuvable"
 msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 msgstr "Collez une transition d’état en hex ou base64 pour la décoder. Rien n’est signé ni diffusé ; la vérification facultative envoie la transition à Platform Explorer pour un essai à blanc."
 
+msgid "Path decoder"
+msgstr "Décodeur de chemins"
+
 msgid "Paused"
 msgstr "En pause"
 
@@ -951,6 +981,9 @@ msgstr "Blocs Platform"
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
 
+msgid "Platform holds no completed or broadcast withdrawal with this index."
+msgstr "Platform n’a aucun retrait terminé ou diffusé avec cet index."
+
 msgid "Platform node ID"
 msgstr "ID du nœud Platform"
 
@@ -965,6 +998,9 @@ msgstr "Le pouls de Platform : hauteur, époque, graphiques d’activité, leade
 
 msgid "PoSe-banned"
 msgstr "Banni par PoSe"
+
+msgid "Proof decoder"
+msgstr "Décodeur de preuves"
 
 msgid "proposal"
 msgstr "proposition"
@@ -1088,6 +1124,9 @@ msgstr "Enregistrer"
 
 msgid "Saved"
 msgstr "Enregistrés"
+
+msgid "Says Radar can’t reach the network and lists what still works without it."
+msgstr "Dit que Radar n’atteint pas le réseau et liste ce qui fonctionne encore sans lui."
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "Scannez ou importez un code QR et ouvrez ce qu’il contient : une adresse, un lien de paiement ou un hash de clé."
@@ -1460,6 +1499,9 @@ msgstr "Quel appel du SDK Platform alimente chaque page de Radar, avec ses argum
 
 msgid "Winner"
 msgstr "Gagnant"
+
+msgid "Withdrawal document"
+msgstr "Document de retrait"
 
 msgid "Withdrawal index"
 msgstr "Index du retrait"

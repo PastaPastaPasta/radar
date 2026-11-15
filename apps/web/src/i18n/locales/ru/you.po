@@ -28,17 +28,80 @@ msgstr "{count, plural, one {# адрес DAPI} few {# адреса DAPI} many {
 msgid "{count, plural, one {# identity remembered on this network} other {# identities remembered on this network}}"
 msgstr "{count, plural, one {# идентичность запомнена в этой сети} few {# идентичности запомнены в этой сети} many {# идентичностей запомнено в этой сети} other {# идентичности запомнено в этой сети}}"
 
+msgid "A data contract"
+msgstr "Контракт данных"
+
+msgid "A data contract’s bytes"
+msgstr "Байты контракта данных"
+
+msgid "A data contract’s history"
+msgstr "История контракта данных"
+
 msgid "A devnet with this name is already saved. Edit it instead."
 msgstr "Devnet с таким именем уже сохранён. Измените его."
+
+msgid "A document"
+msgstr "Документ"
+
+msgid "A document average"
+msgstr "Среднее по документам"
+
+msgid "A document count"
+msgstr "Число документов"
+
+msgid "A document total"
+msgstr "Сумма документов"
+
+msgid "A document’s history"
+msgstr "История документа"
 
 msgid "A figure Radar adds up from several proof-checked answers, such as a tally over a range of blocks, is not itself proved. It says “Combined from N proof-checked answers”."
 msgstr "Показатель, который Radar складывает из нескольких ответов, подтверждённых доказательством (например, сумма по диапазону блоков), сам по себе не доказан. Он помечен «Собрано из N ответов, проверенных по доказательствам»."
 
+msgid "A group"
+msgstr "Группа"
+
+msgid "A group’s actions"
+msgstr "Действия группы"
+
+msgid "A group’s members"
+msgstr "Участники группы"
+
+msgid "A list of documents"
+msgstr "Список документов"
+
+msgid "A name’s owner"
+msgstr "Владелец имени"
+
+msgid "A name’s record"
+msgstr "Запись имени"
+
 msgid "A new version is available."
 msgstr "Доступна новая версия."
 
+msgid "A Platform address’s balance"
+msgstr "Баланс адреса Platform"
+
+msgid "A prefunded balance"
+msgstr "Предоплаченный баланс"
+
 msgid "A proof answers a question about a key: this identity’s balance, this contract, this document. Dash Platform can’t prove a list of everything, so there is no “all identities”, “every holder of this token” or “all documents about X” to ask a node."
 msgstr "Доказательство отвечает на вопрос о ключе: баланс этой идентичности, этот контракт, этот документ. Dash Platform не может доказать список всего, поэтому узлу нельзя задать вопрос «все идентичности», «все держатели этого токена» или «все документы об X»."
+
+msgid "A token’s contract"
+msgstr "Контракт токена"
+
+msgid "A token’s last distribution claim"
+msgstr "Последнее получение распределения токена"
+
+msgid "A token’s purchase prices"
+msgstr "Цены покупки токена"
+
+msgid "A token’s status"
+msgstr "Статус токена"
+
+msgid "A token’s total supply"
+msgstr "Общее предложение токена"
 
 msgid "About"
 msgstr "О проекте"
@@ -76,6 +139,39 @@ msgstr "Суммы показываются в {unitName}."
 msgid "Amounts show in {unitName}. Choose USD to lead with the dollar value."
 msgstr "Суммы показываются в {unitName}. Выберите USD, чтобы сначала показывать сумму в долларах."
 
+msgid "An identity’s balance"
+msgstr "Баланс идентичности"
+
+msgid "An identity’s contract nonce"
+msgstr "Nonce контракта идентичности"
+
+msgid "An identity’s groups"
+msgstr "Группы идентичности"
+
+msgid "An identity’s keys"
+msgstr "Ключи идентичности"
+
+msgid "An identity’s keys for a contract"
+msgstr "Ключи идентичности для контракта"
+
+msgid "An identity’s names"
+msgstr "Имена идентичности"
+
+msgid "An identity’s nonce"
+msgstr "Nonce идентичности"
+
+msgid "An identity’s record"
+msgstr "Запись идентичности"
+
+msgid "An identity’s token balances"
+msgstr "Балансы токенов идентичности"
+
+msgid "An identity’s token status"
+msgstr "Статус токенов идентичности"
+
+msgid "An identity’s votes"
+msgstr "Голоса идентичности"
+
 msgid "Answered by"
 msgstr "Ответил"
 
@@ -93,6 +189,9 @@ msgstr "Запрошено"
 
 msgid "Ban nodes that fail"
 msgstr "Блокировать узлы с ошибками"
+
+msgid "Blocks proposed per evonode"
+msgstr "Предложенные блоки по эвоноде"
 
 msgid "Bridge"
 msgstr "Bridge"
@@ -145,6 +244,9 @@ msgstr "Настройки подключения"
 msgid "Connection settings applied. The Platform SDK restarted."
 msgstr "Настройки подключения применены. Platform SDK перезапущен."
 
+msgid "Contested names"
+msgstr "Спорные имена"
+
 msgid "Copy a link to {devnet}"
 msgstr "Копировать ссылку на {devnet}"
 
@@ -160,6 +262,9 @@ msgstr "Копировать доказательство в hex"
 msgid "Core chain-locked height"
 msgstr "Высота Core с ChainLock"
 
+msgid "Covers"
+msgstr "Относится к"
+
 msgid "Custom devnets"
 msgstr "Пользовательские devnet"
 
@@ -168,6 +273,9 @@ msgstr "Адреса DAPI"
 
 msgid "Dash Platform answers carry a cryptographic proof. The Platform SDK in your browser checks it against the public key of the validator quorum that signed it, before Radar shows the figure. A node that answered can’t make a value up: the check fails and Radar says so. Those figures are marked “Proof-checked”, and the mark opens the proof inspector."
 msgstr "Ответы Dash Platform сопровождаются криптографическим доказательством. Platform SDK в вашем браузере проверяет его по открытому ключу кворума валидаторов, который его подписал, прежде чем Radar покажет значение. Узел не может выдумать значение: проверка не пройдёт, и Radar сообщит об этом. Такие значения помечены «Подтверждено доказательством», и эта метка открывает инспектор доказательств."
+
+msgid "Data contracts"
+msgstr "Контракты данных"
 
 msgid "Developer"
 msgstr "Разработчикам"
@@ -187,6 +295,9 @@ msgstr "Изменить"
 msgid "Edit {editName}"
 msgstr "Изменить {editName}"
 
+msgid "Edit devnet"
+msgstr "Изменить devnet"
+
 msgid "Enter a full address such as https://quorums.example.org."
 msgstr "Введите полный адрес, например https://quorums.example.org."
 
@@ -198,6 +309,9 @@ msgstr "Введите ID в виде текста Base58, от 32 до 44 си�
 
 msgid "Epoch"
 msgstr "Эпоха"
+
+msgid "Epoch details"
+msgstr "Сведения об эпохе"
 
 msgid "Every “Proof-checked” mark opens it. It shows the call, the node, the Platform height, the quorum and the proof bytes, and exports them as evidence."
 msgstr "Его открывает каждая метка «Подтверждено доказательством». Он показывает вызов, узел, высоту Platform, кворум и байты доказательства и экспортирует их как свидетельство."
@@ -223,6 +337,9 @@ msgstr "Ошибка"
 msgid "Failures only"
 msgstr "Только ошибки"
 
+msgid "Finished epochs"
+msgstr "Завершённые эпохи"
+
 msgid "Forgets every answer the Platform SDK gave, here and in this browser’s storage, and the proofs held for the inspector. Pages read it again as you open them."
 msgstr "Забывает все ответы Platform SDK, здесь и в хранилище этого браузера, а также доказательства, хранимые для инспектора. Страницы читают их заново при открытии."
 
@@ -231,6 +348,9 @@ msgstr "Дайте ему имя."
 
 msgid "Governance"
 msgstr "Управление"
+
+msgid "Groups"
+msgstr "Группы"
 
 msgid "How Radar talks to Dash Platform. A change restarts the Platform SDK; nothing here leaves this browser."
 msgstr "Как Radar обращается к Dash Platform. Изменение перезапускает Platform SDK; ничто из этого не покидает этот браузер."
@@ -241,6 +361,9 @@ msgstr "ID в сети {0}"
 
 msgid "Identities, contracts and tokens you saved. They stay only in this browser, on this device: Radar has no accounts, so they don’t follow you to another browser, and clearing this site’s data removes them."
 msgstr "Идентичности, контракты и токены, которые вы сохранили. Они хранятся только в этом браузере на этом устройстве: в Radar нет аккаунтов, поэтому они не переходят в другой браузер, а очистка данных этого сайта их удаляет."
+
+msgid "Identity balances"
+msgstr "Балансы идентичностей"
 
 msgid "Kind"
 msgstr "Тип"
@@ -265,6 +388,9 @@ msgstr "Назовите идентичность, контракт или то�
 
 msgid "Network"
 msgstr "Сеть"
+
+msgid "Network pulse"
+msgstr "Пульс сети"
 
 msgid "Networks"
 msgstr "Сети"
@@ -311,11 +437,11 @@ msgstr "Пока ничего не сохранено"
 msgid "Off by default. When on, this browser remembers the identities you open, up to 50 per network."
 msgstr "По умолчанию выключено. Если включено, этот браузер запоминает открытые вами идентичности, до 50 на сеть."
 
+msgid "Offline"
+msgstr "Не в сети"
+
 msgid "OK"
 msgstr "OK"
-
-msgid "One figure’s proof, as Radar received it."
-msgstr "Доказательство одного значения в том виде, в каком его получил Radar."
 
 msgid "Open"
 msgstr "Открыть"
@@ -347,6 +473,9 @@ msgstr "необязательно"
 msgid "Otherwise times follow this device’s time zone. Hovering a time always shows UTC."
 msgstr "Иначе время показывается в часовом поясе этого устройства. При наведении на время всегда отображается UTC."
 
+msgid "Platform address balances"
+msgstr "Балансы адресов Platform"
+
 msgid "Platform height"
 msgstr "Высота Platform"
 
@@ -364,6 +493,9 @@ msgstr "Platform SDK в воркере"
 
 msgid "Platform SDK in this page"
 msgstr "Platform SDK на этой странице"
+
+msgid "Platform status"
+msgstr "Статус Platform"
 
 msgid "Platform time"
 msgstr "Время Platform"
@@ -389,6 +521,12 @@ msgstr "Хранимые доказательства"
 msgid "Proofs that did not verify"
 msgstr "Доказательства, не прошедшие проверку"
 
+msgid "Protocol upgrade state"
+msgstr "Состояние обновления протокола"
+
+msgid "Protocol upgrade votes"
+msgstr "Голоса за обновление протокола"
+
 msgid "Protocol version"
 msgstr "Версия протокола"
 
@@ -409,6 +547,9 @@ msgstr "Тип кворума"
 
 msgid "Radar"
 msgstr "Radar"
+
+msgid "Radar can’t reach these DAPI addresses. Check them, or the devnet may be down."
+msgstr "Radar не достигает этих адресов DAPI. Проверьте их: devnet может быть недоступен."
 
 msgid "Radar has no analytics, no cookies, no accounts and no advertising. Your choices and anything you save stay in this browser: your saved items, the identities you viewed (off unless you turn it on), the names you gave, your settings and devnets, and a cache of recent answers so pages open quickly. A service worker keeps Radar’s own files so it can open offline."
 msgstr "В Radar нет аналитики, cookie, аккаунтов и рекламы. Ваш выбор и всё сохранённое остаются в этом браузере: сохранённое, просмотренные идентичности (выключено, пока вы не включите), заданные вами имена, настройки и devnet’ы, а также кэш недавних ответов, чтобы страницы открывались быстро. Service worker хранит файлы самого Radar, чтобы он открывался офлайн."
@@ -432,6 +573,9 @@ msgstr "Код Radar открыт по лицензии MIT. Если он ад�
 #. placeholder {1}: rate.data.data.provider
 msgid "Rate: {0} per DASH, from {1}."
 msgstr "Курс: {0} за DASH, источник — {1}."
+
+msgid "Raw Platform state"
+msgstr "Сырое состояние Platform"
 
 msgid "Refused by mode"
 msgstr "Отклонено режимом"
@@ -517,11 +661,23 @@ msgstr "Все источники и переключатель"
 msgid "Settings"
 msgstr "Настройки"
 
+msgid "Shielded anchors"
+msgstr "Якоря защищённого пула"
+
+msgid "Shielded notes"
+msgstr "Записи защищённого пула"
+
+msgid "Shielded nullifiers"
+msgstr "Нуллификаторы защищённого пула"
+
 msgid "Show the USD value next to DASH amounts"
 msgstr "Показывать стоимость в USD рядом с суммами в DASH"
 
 msgid "Show times in UTC"
 msgstr "Показывать время в UTC"
+
+msgid "Something in the page broke. The rest of Radar still works."
+msgstr "На странице что-то сломалось. Остальные части Radar работают."
 
 msgid "Source"
 msgstr "Источник"
@@ -538,12 +694,34 @@ msgstr "У тестовых монет нет стоимости, поэтому
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Текст, который ещё не переведён, отображается на английском. Хеши, ID и суммы никогда не переводятся."
 
+msgid "The connection dropped while it loaded. Try again."
+msgstr "Соединение оборвалось во время загрузки. Повторить."
+
+msgid "The current epoch"
+msgstr "Текущая эпоха"
+
+msgid "The current quorums"
+msgstr "Текущие кворумы"
+
+msgid "The identities behind a public key"
+msgstr "Идентичности за публичным ключом"
+
+msgid "The identity behind a public key"
+msgstr "Идентичность за публичным ключом"
+
 #. placeholder {0}: formatInt(log.length)
 msgid "The last {0} requests this tab made. Nothing here is sent anywhere."
 msgstr "Последние {0} запросов этой вкладки. Ничто здесь никуда не отправляется."
 
 msgid "The last 100 requests this tab made, with the source, the node, how long each took and whether Decentralized only mode refused it."
 msgstr "Последние 100 запросов этой вкладки: источник, узел, сколько занял каждый и отклонил ли его режим «Только децентрализованно»."
+
+msgid "The latest shielded anchor"
+msgstr "Последний якорь защищённого пула"
+
+#. placeholder {0}: figureOf(selected.method)
+msgid "The proof behind “{0}”, as Radar received it."
+msgstr "Доказательство за «{0}», как его получил Radar."
 
 msgid "The quorum list address must start with https://."
 msgstr "Адрес списка кворумов должен начинаться с https://."
@@ -553,6 +731,18 @@ msgstr "URL списка кворумов должен начинаться с h
 
 msgid "The SDK checked this proof against the trusted quorum keys before Radar showed the figure."
 msgstr "SDK проверил это доказательство по доверенным ключам кворума, прежде чем Radar показал значение."
+
+msgid "The shielded pool"
+msgstr "Защищённый пул"
+
+msgid "The signers of a group action"
+msgstr "Подписавшие действие группы"
+
+msgid "The state of a name contest"
+msgstr "Состояние спора за имя"
+
+msgid "The voters for a contender"
+msgstr "Голосующие за претендента"
 
 msgid "The worker runs SDK {workerVersion} but this page was built with {PAGE_SDK_VERSION}. Reload the page; if it stays, clear this site’s data."
 msgstr "Воркер запускает SDK {workerVersion}, но эта страница собрана с {PAGE_SDK_VERSION}. Перезагрузите страницу; если не помогло, очистите данные этого сайта."
@@ -566,6 +756,15 @@ msgstr "Они пополняют список для держателей то�
 msgid "This network"
 msgstr "Эта сеть"
 
+msgid "This page couldn’t be loaded"
+msgstr "Эту страницу не удалось загрузить"
+
+msgid "This page couldn’t be shown"
+msgstr "Не удалось показать эту страницу"
+
+msgid "This page loads when the connection returns. Radar will try again by itself."
+msgstr "Эта страница загрузится, когда связь вернётся. Radar повторит попытку сам."
+
 msgid "This proof is no longer held"
 msgstr "Это доказательство больше не хранится"
 
@@ -578,11 +777,20 @@ msgstr "Чтобы очистить: кнопки в «Настройках» и
 msgid "To read the network, your browser asks DAPI nodes, the Platform SDK’s nodes and quorum list, and, unless you turn them off, Platform Explorer, Radar’s crawler, Hyphen, Insight and a price feed. Each one sees your IP address and what you asked it, like any web server."
 msgstr "Чтобы прочитать сеть, ваш браузер обращается к узлам DAPI, узлам Platform SDK и списку кворумов, а также, если вы не отключили их, к Platform Explorer, краулеру Radar, Hyphen, Insight и источнику цен. Каждый из них видит ваш IP-адрес и ваш запрос, как любой веб-сервер."
 
+msgid "Token balances"
+msgstr "Балансы токенов"
+
 msgid "Took"
 msgstr "Заняло"
 
 msgid "Tools for checking what Radar asked and what it was told."
 msgstr "Инструменты для проверки того, что Radar спрашивал и что ему ответили."
+
+msgid "Total credits on Platform"
+msgstr "Всего кредитов на Platform"
+
+msgid "Try again"
+msgstr "Повторить"
 
 msgid "Unit for amounts"
 msgstr "Единица для сумм"
@@ -615,6 +823,9 @@ msgstr "Просмотренные идентичности"
 msgid "Viewed identities cleared"
 msgstr "Просмотренные идентичности очищены"
 
+msgid "Vote polls by end date"
+msgstr "Голосования по дате окончания"
+
 msgid "Wasm bindings"
 msgstr "Привязки Wasm"
 
@@ -623,6 +834,9 @@ msgstr "Что значит «подтверждено доказательст�
 
 msgid "What can’t be listed without an index"
 msgstr "Что нельзя перечислить без индекса"
+
+msgid "What still works"
+msgstr "Что ещё работает"
 
 msgid "When"
 msgstr "Когда"
@@ -642,8 +856,20 @@ msgstr "Да, удалить"
 msgid "You"
 msgstr "Вы"
 
+msgid "You’re back online: Radar can reach the network again, so any page loads."
+msgstr "Связь снова есть: Radar опять достигает сети, поэтому загружается любая страница."
+
+msgid "You’re offline"
+msgstr "Нет сети"
+
+msgid "You’re offline: Radar can’t reach the network, so pages that read from it can’t load. They load again when the connection returns."
+msgstr "Нет сети: Radar не достигает сети, поэтому страницы, которые читают её, не загружаются. Они загрузятся снова, когда связь вернётся."
+
 msgid "Your names"
 msgstr "Ваши имена"
 
 msgid "Your own names"
 msgstr "Ваши собственные имена"
+
+msgid "Your saved items"
+msgstr "Ваши сохранённые элементы"

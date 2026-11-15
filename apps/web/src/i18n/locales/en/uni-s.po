@@ -70,6 +70,9 @@ msgstr "a number: could be a Core height, a Platform height or an epoch"
 msgid "a Platform address"
 msgstr "a Platform address"
 
+msgid "an epoch of Platform"
+msgstr "an epoch of Platform"
+
 msgid "an ID: could be an identity, a contract or a token"
 msgstr "an ID: could be an identity, a contract or a token"
 
@@ -236,6 +239,9 @@ msgstr "Network"
 msgid "No match for “{query}” on {network}"
 msgstr "No match for “{query}” on {network}"
 
+msgid "No results"
+msgstr "No results"
+
 msgid "Nothing above confirms this. It is only one way to read what you typed."
 msgstr "Nothing above confirms this. It is only one way to read what you typed."
 
@@ -328,9 +334,11 @@ msgstr "See all results for “{trimmed}”"
 msgid "See all results for “{trimmed}” on {net}"
 msgstr "See all results for “{trimmed}” on {net}"
 
-#. placeholder {0}: failed.map((f) => f.id).join(', ')
-msgid "Some sources didn’t answer: {0}."
-msgstr "Some sources didn’t answer: {0}."
+msgid "Some lookups didn’t answer, so some matches may be missing: {failedList}."
+msgstr "Some lookups didn’t answer, so some matches may be missing: {failedList}."
+
+msgid "Some lookups didn’t answer: {failedList}."
+msgstr "Some lookups didn’t answer: {failedList}."
 
 msgid "Started {started}"
 msgstr "Started {started}"
@@ -350,6 +358,9 @@ msgstr "That could be part of a recovery phrase"
 
 msgid "That looks like a private key or recovery phrase"
 msgstr "That looks like a private key or recovery phrase"
+
+msgid "the start of a Core address or hash"
+msgstr "the start of a Core address or hash"
 
 msgid "This is a mainnet address"
 msgstr "This is a mainnet address"

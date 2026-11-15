@@ -1,17 +1,18 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:10+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
 
 msgid "· change"
 msgstr "・変更"
@@ -35,7 +36,6 @@ msgstr "{0} 基本単位"
 msgid "{0} duffs"
 msgstr "{0} duff"
 
-#. placeholder {0}: formatInt(inCount)
 #. placeholder {0}: formatInt(inputs.length)
 #. placeholder {0}: formatInt(tx.inputs.length)
 msgid "{0} inputs"
@@ -45,15 +45,15 @@ msgstr "入力 {0} 件"
 msgid "{0} inputs not loaded"
 msgstr "未読み込みの入力 {0} 件"
 
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
-#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {0}: formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} locked into Platform credits"
+msgstr "{0} が Platform クレジットとしてロックされました"
+
+#. placeholder {0}: formatInt(signers)
+#. placeholder {0}: formatInt(valid)
 #. placeholder {1}: formatInt(members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "出力 {0} 件"
 
 #. placeholder {0}: sectionLabel(section)
 msgid "{0} pages"
@@ -84,6 +84,9 @@ msgstr "1バイトあたり {feeRate} duff"
 msgid "{feeRate} duffs a byte: it spends no coins"
 msgstr "1バイトあたり {feeRate} duff：コインを使用しません"
 
+msgid "{inCount, plural, one {# input} other {# inputs}}"
+msgstr "{inCount, plural, other {入力 #件}}"
+
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} はこのネットワークでこのアドレスをまだ確認していません。"
 
@@ -95,6 +98,9 @@ msgstr "ほか {n} 件の出力"
 
 msgid "{name} (reason {reason})"
 msgstr "{name}（理由 {reason}）"
+
+msgid "{outCount, plural, one {# output} other {# outputs}}"
+msgstr "{outCount, plural, other {出力 #件}}"
 
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, other {# 種類}}"
@@ -140,9 +146,9 @@ msgstr "マイニングされた後"
 msgid "Amount"
 msgstr "金額"
 
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "最初の {0} 件の入力について金額を読み込みます。前のトランザクションごとに別のリクエストが発生します。"
+#. placeholder {0}: partial.loaded
+msgid "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
+msgstr "金額は最初の{0, plural, other {入力 #件}}まで読み込まれています。前のトランザクションごとに別のリクエストが発生します。"
 
 msgid "Amounts loaded"
 msgstr "読み込み済みの金額"
@@ -260,6 +266,9 @@ msgstr "Coinbase トランザクションは支払いません"
 msgid "Collateral"
 msgstr "担保"
 
+msgid "Commitment"
+msgstr "コミットメント"
+
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "ブロックをマスターノードリストと最新の ChainLock に結び付けます。"
 
@@ -280,6 +289,9 @@ msgstr "コントラクト"
 
 msgid "Contract"
 msgstr "コントラクト"
+
+msgid "Contract decoder"
+msgstr "コントラクトデコーダー"
 
 msgid "Contracts"
 msgstr "コントラクト"
@@ -319,6 +331,9 @@ msgstr "Core トランザクション"
 
 msgid "Could not check this right now."
 msgstr "今は確認できません。"
+
+msgid "Could not look up the withdrawal document right now."
+msgstr "出金ドキュメントを今は照会できません。"
 
 msgid "Could not read names."
 msgstr "名前を読み込めませんでした。"
@@ -388,6 +403,9 @@ msgstr "ドキュメント"
 
 msgid "Document"
 msgstr "ドキュメント"
+
+msgid "Document decoder"
+msgstr "ドキュメントデコーダー"
 
 msgid "document type"
 msgstr "ドキュメントタイプ"
@@ -536,6 +554,9 @@ msgstr "キーハッシュからアイデンティティを検索"
 
 msgid "Identity created"
 msgstr "作成されたアイデンティティ"
+
+msgid "Identity decoder"
+msgstr "アイデンティティデコーダー"
 
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
@@ -809,6 +830,12 @@ msgstr "未登録です。空いているか、まだ争奪中の可能性があ
 msgid "Not specified"
 msgstr "未指定"
 
+msgid "Null commitment: no quorum was formed for this slot"
+msgstr "空のコミットメント: このスロットではクォーラムが構成されませんでした"
+
+msgid "Offline"
+msgstr "オフライン"
+
 msgid "On Platform"
 msgstr "Platform上"
 
@@ -921,6 +948,9 @@ msgstr "ページが見つかりません"
 msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 msgstr "ステートトランジションを 16 進または base64 で貼り付けると、デコードできます。署名も配信も行いません。任意の検証では、トランジションをドライランのために Platform Explorer へ送信します。"
 
+msgid "Path decoder"
+msgstr "パスデコーダー"
+
 msgid "Paused"
 msgstr "一時停止中"
 
@@ -951,6 +981,9 @@ msgstr "Platform ブロック"
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
 
+msgid "Platform holds no completed or broadcast withdrawal with this index."
+msgstr "Platform には、このインデックスの完了済みまたはブロードキャスト済みの出金がありません。"
+
 msgid "Platform node ID"
 msgstr "Platform ノード ID"
 
@@ -965,6 +998,9 @@ msgstr "Platform の鼓動：高さ、エポック、アクティビティのチ
 
 msgid "PoSe-banned"
 msgstr "PoSe で停止"
+
+msgid "Proof decoder"
+msgstr "証明デコーダー"
 
 msgid "proposal"
 msgstr "提案"
@@ -1088,6 +1124,9 @@ msgstr "保存"
 
 msgid "Saved"
 msgstr "保存済み"
+
+msgid "Says Radar can’t reach the network and lists what still works without it."
+msgstr "Radar がネットワークに届かないことを示し、届かなくても使えるものを挙げます。"
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "QR コードを読み取るかアップロードして、中身（アドレス、支払いリンク、キーハッシュ）を開きます。"
@@ -1460,6 +1499,9 @@ msgstr "どの Platform SDK 呼び出しがどの Radar ページを支えてい
 
 msgid "Winner"
 msgstr "勝者"
+
+msgid "Withdrawal document"
+msgstr "出金ドキュメント"
 
 msgid "Withdrawal index"
 msgstr "出金インデックス"

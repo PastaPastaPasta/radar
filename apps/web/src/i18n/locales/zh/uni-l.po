@@ -1,17 +1,18 @@
+#
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2026-11-13 08:10+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 08:10+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: @lingui/cli\n"
 
 msgid "· change"
 msgstr "· 更改"
@@ -35,7 +36,6 @@ msgstr "{0} 基本单位"
 msgid "{0} duffs"
 msgstr "{0} duff"
 
-#. placeholder {0}: formatInt(inCount)
 #. placeholder {0}: formatInt(inputs.length)
 #. placeholder {0}: formatInt(tx.inputs.length)
 msgid "{0} inputs"
@@ -45,15 +45,15 @@ msgstr "{0} 个输入"
 msgid "{0} inputs not loaded"
 msgstr "{0} 个输入未加载"
 
-#. placeholder {0}: formatInt(num(c.signersCount) ?? 0)
-#. placeholder {0}: formatInt(num(c.validMembersCount) ?? 0)
+#. placeholder {0}: formatAmountText(locked, 'duffs', { unit: units.unit === 'DASH' ? undefined : units.unit, testnet: units.testnet })
+msgid "{0} locked into Platform credits"
+msgstr "{0} 已锁定为 Platform 积分"
+
+#. placeholder {0}: formatInt(signers)
+#. placeholder {0}: formatInt(valid)
 #. placeholder {1}: formatInt(members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(outCount)
-msgid "{0} outputs"
-msgstr "{0} 个输出"
 
 #. placeholder {0}: sectionLabel(section)
 msgid "{0} pages"
@@ -84,6 +84,9 @@ msgstr "每字节 {feeRate} duff"
 msgid "{feeRate} duffs a byte: it spends no coins"
 msgstr "每字节 {feeRate} duff：它不花费任何币"
 
+msgid "{inCount, plural, one {# input} other {# inputs}}"
+msgstr "{inCount, plural, other {# 个输入}}"
+
 msgid "{indexName} has not seen this address on this network."
 msgstr "{indexName} 尚未在此网络上见过该地址。"
 
@@ -95,6 +98,9 @@ msgstr "另有 {n} 个输出"
 
 msgid "{name} (reason {reason})"
 msgstr "{name}（原因 {reason}）"
+
+msgid "{outCount, plural, one {# output} other {# outputs}}"
+msgstr "{outCount, plural, other {# 个输出}}"
 
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, other {# 种类型}}"
@@ -140,9 +146,9 @@ msgstr "在被挖出之后"
 msgid "Amount"
 msgstr "金额"
 
-#. placeholder {0}: formatInt(partial.loaded)
-msgid "Amounts are loaded for the first {0} inputs. Each previous transaction is a separate request."
-msgstr "仅加载前 {0} 个输入的金额，每个前序交易对应一次单独请求。"
+#. placeholder {0}: partial.loaded
+msgid "Amounts are loaded for the first {0, plural, one {# input} other {# inputs}}. Each previous transaction is a separate request."
+msgstr "金额已加载前 {0, plural, other {# 个输入}}。每个前序交易对应一次单独请求。"
 
 msgid "Amounts loaded"
 msgstr "已加载的金额"
@@ -260,6 +266,9 @@ msgstr "Coinbase 交易不支付"
 msgid "Collateral"
 msgstr "抵押品"
 
+msgid "Commitment"
+msgstr "承诺"
+
 msgid "Commits the block to the masternode list and the latest ChainLock."
 msgstr "将区块绑定到主节点列表和最新的 ChainLock。"
 
@@ -280,6 +289,9 @@ msgstr "合约"
 
 msgid "Contract"
 msgstr "合约"
+
+msgid "Contract decoder"
+msgstr "合约解码器"
 
 msgid "Contracts"
 msgstr "合约"
@@ -319,6 +331,9 @@ msgstr "Core 交易"
 
 msgid "Could not check this right now."
 msgstr "暂时无法检查。"
+
+msgid "Could not look up the withdrawal document right now."
+msgstr "现在无法查询提现文档。"
 
 msgid "Could not read names."
 msgstr "无法读取名称。"
@@ -388,6 +403,9 @@ msgstr "文档"
 
 msgid "Document"
 msgstr "文档"
+
+msgid "Document decoder"
+msgstr "文档解码器"
 
 msgid "document type"
 msgstr "文档类型"
@@ -536,6 +554,9 @@ msgstr "按密钥哈希查找身份"
 
 msgid "Identity created"
 msgstr "创建的身份"
+
+msgid "Identity decoder"
+msgstr "身份解码器"
 
 #. placeholder {0}: short(spend.by.txid)
 msgid "in {0}"
@@ -809,6 +830,12 @@ msgstr "未注册。可能尚未被占用，或仍在争夺中。"
 msgid "Not specified"
 msgstr "未指定"
 
+msgid "Null commitment: no quorum was formed for this slot"
+msgstr "空承诺：这个时段没有组成仲裁组"
+
+msgid "Offline"
+msgstr "离线"
+
 msgid "On Platform"
 msgstr "在 Platform 上"
 
@@ -921,6 +948,9 @@ msgstr "找不到页面"
 msgid "Paste a state transition as hex or base64 to decode it. Nothing is signed or broadcast; the optional check sends the transition to Platform Explorer for a dry run."
 msgstr "粘贴十六进制或 base64 格式的状态转换，即可解码。不会签名，也不会广播；可选的检查会把该转换发送到 Platform Explorer 进行试运行。"
 
+msgid "Path decoder"
+msgstr "路径解码器"
+
 msgid "Paused"
 msgstr "已暂停"
 
@@ -951,6 +981,9 @@ msgstr "Platform 区块"
 msgid "Platform Explorer"
 msgstr "Platform Explorer"
 
+msgid "Platform holds no completed or broadcast withdrawal with this index."
+msgstr "Platform 上没有此序号的已完成或已广播提现。"
+
 msgid "Platform node ID"
 msgstr "Platform 节点 ID"
 
@@ -965,6 +998,9 @@ msgstr "Platform 的脉搏：高度、纪元、活动图表、领导者以及最
 
 msgid "PoSe-banned"
 msgstr "已被 PoSe 封禁"
+
+msgid "Proof decoder"
+msgstr "证明解码器"
 
 msgid "proposal"
 msgstr "提案"
@@ -1088,6 +1124,9 @@ msgstr "保存"
 
 msgid "Saved"
 msgstr "已保存"
+
+msgid "Says Radar can’t reach the network and lists what still works without it."
+msgstr "说明 Radar 连不上网络，并列出没有网络时仍可用的内容。"
 
 msgid "Scan or upload a QR code and open what it holds: an address, a payment link or a key hash."
 msgstr "扫描或上传二维码，并打开其中的内容：地址、付款链接或密钥哈希。"
@@ -1460,6 +1499,9 @@ msgstr "每个 Radar 页面由哪个 Platform SDK 调用支撑，含参数。"
 
 msgid "Winner"
 msgstr "获胜者"
+
+msgid "Withdrawal document"
+msgstr "提现文档"
 
 msgid "Withdrawal index"
 msgstr "提现索引"

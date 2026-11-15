@@ -55,11 +55,18 @@ const PACKAGES = {
     'features/tools/decoders',
     'features/tools/transition',
     'features/tools/sdk-reference',
+    'features/tools/verify-message',
   ],
-  you: ['features/you', 'app/global-mounts.tsx', 'app/sw-register.ts', 'sw'],
+  you: [
+    'features/you',
+    'app/global-mounts.tsx',
+    'app/sw-register.ts',
+    'app/error-boundary.tsx',
+    'sw',
+  ],
   'uni-s': ['features/search'],
   'uni-l': ['features/entity', 'shell', 'features/core/tx', 'ui/link-out.tsx', 'lib/linkouts.ts'],
-  core: ['features/core/claims.tsx'],
+  core: ['features/core/claims.tsx', 'features/core/block', 'features/core/blocks'],
 } as const satisfies Record<string, readonly string[]>
 
 /** Files that sit inside one package's directory but belong to another. */
