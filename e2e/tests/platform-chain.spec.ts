@@ -261,7 +261,10 @@ test.describe('Live schedule', () => {
     await expect.poll(() => rowIds(page)).toEqual([...before.slice(1), expect.any(String)])
     expect((await rowIds(page)).at(-1)).not.toBe(before.at(-1))
     // The proposer of the new block comes from the validator sets read for it: the evonode that was first in line.
-    await expect(strip.locator(`a[href*="${before[0]!.slice(0, 16)}"]`).first()).toBeVisible()
+    // It is read again once the 10 s gap after the page's first read has passed.
+    await expect(strip.locator(`a[href*="${before[0]!.slice(0, 16)}"]`).first()).toBeVisible({
+      timeout: 20_000,
+    })
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     const classes = await rowClasses(page)
     expect(classes).toEqual(expect.arrayContaining(['rx-leave', 'rx-rise', 'rx-enter']))

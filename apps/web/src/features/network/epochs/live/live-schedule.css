@@ -28,6 +28,14 @@
 }
 .rx-livesched__tip {
   overflow-wrap: anywhere;
+  line-height: 28px;
+}
+/* Links in the strip keep a 24 px touch target, on the phone too. */
+.rx-livesched__tip a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: middle;
 }
 .rx-livesched__next {
   color: var(--dh-ink);
