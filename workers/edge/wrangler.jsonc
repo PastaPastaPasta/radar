@@ -10,8 +10,21 @@
     "binding": "ASSETS",
     "run_worker_first": ["/*", "!/assets/*"],
   },
+  "routes": [{ "pattern": "explorer.dashhq.org", "custom_domain": true }],
   "vars": {
     "NATIVE_HOSTS": "explorer.dashhq.org",
   },
   "observability": { "enabled": false },
+  "env": {
+    "preview": {
+      "name": "radar-web-preview",
+      "workers_dev": false,
+      "preview_urls": false,
+      "routes": [{ "pattern": "explorer-next.dashhq.org", "custom_domain": true }],
+      "vars": {
+        "NATIVE_HOSTS": "explorer-next.dashhq.org",
+      },
+      "observability": { "enabled": false },
+    },
+  },
 }
