@@ -337,7 +337,7 @@ const disc = (o: LabelBox) => {
 
 /**
  * Labels the largest places first, beside their disc (right, left, above, below), skipping any that would cover
- * a label already placed or another place's disc, or run off the map. The rest are named on hover and in the list.
+ * a label already placed or a bigger city's disc, or run off the map. The rest are named on hover and in the list.
  */
 export function placeLabels(
   boxes: readonly LabelBox[],
@@ -348,12 +348,20 @@ export function placeLabels(
   for (const b of boxes) {
     if (placed.length >= max) break
     const gap = b.r * 0.25 + b.h * 0.2
+    const side = b.r + gap
+    const diag = b.r * 0.72 + gap
     const tries: PlacedLabel[] = [
-      { id: b.id, x: b.x + b.r + gap, y: b.y - b.h / 2, anchor: 'start' },
-      { id: b.id, x: b.x - b.r - gap - b.w, y: b.y - b.h / 2, anchor: 'end' },
-      { id: b.id, x: b.x - b.w / 2, y: b.y - b.r - gap - b.h, anchor: 'start' },
-      { id: b.id, x: b.x - b.w / 2, y: b.y + b.r + gap, anchor: 'start' },
+      { id: b.id, x: b.x + side, y: b.y - b.h / 2, anchor: 'start' },
+      { id: b.id, x: b.x - side - b.w, y: b.y - b.h / 2, anchor: 'end' },
+      { id: b.id, x: b.x - b.w / 2, y: b.y - side - b.h, anchor: 'start' },
+      { id: b.id, x: b.x - b.w / 2, y: b.y + side, anchor: 'start' },
+      { id: b.id, x: b.x + diag, y: b.y - diag - b.h, anchor: 'start' },
+      { id: b.id, x: b.x - diag - b.w, y: b.y - diag - b.h, anchor: 'end' },
+      { id: b.id, x: b.x + diag, y: b.y + diag, anchor: 'start' },
+      { id: b.id, x: b.x - diag - b.w, y: b.y + diag, anchor: 'end' },
     ]
+    // A label may lie over smaller cities, never over a bigger city's disc.
+    const bigger = boxes.filter((o) => o.id !== b.id && o.r >= b.r).map(disc)
     const fit = tries.find((p) => {
       const box = { x: p.x, y: p.y, w: b.w, h: b.h }
       const inside =
@@ -362,9 +370,7 @@ export function placeLabels(
         box.x + box.w <= bounds.x + bounds.w &&
         box.y + box.h <= bounds.y + bounds.h
       return (
-        inside &&
-        !placed.some((q) => overlaps(box, q)) &&
-        !boxes.some((o) => o.id !== b.id && overlaps(box, disc(o)))
+        inside && !placed.some((q) => overlaps(box, q)) && !bigger.some((o) => overlaps(box, o))
       )
     })
     if (fit) placed.push({ ...fit, w: b.w, h: b.h })

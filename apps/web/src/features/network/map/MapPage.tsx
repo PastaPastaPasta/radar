@@ -559,11 +559,17 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
         <p className="rx-mapnote" data-left-out>
           {b.bannedOut > 0 ? (
             <>
-              {plural(b.bannedOut, {
-                one: '# PoSe-banned masternode is not counted: it serves nothing until it is revived.',
-                other:
-                  '# PoSe-banned masternodes are not counted: they serve nothing until they are revived.',
-              })}{' '}
+              {b.scope === 'evo' && !b.narrowed
+                ? plural(b.bannedOut, {
+                    one: '# PoSe-banned evonode is not counted: it serves nothing until it is revived.',
+                    other:
+                      '# PoSe-banned evonodes are not counted: they serve nothing until they are revived.',
+                  })
+                : plural(b.bannedOut, {
+                    one: '# PoSe-banned masternode is not counted: it serves nothing until it is revived.',
+                    other:
+                      '# PoSe-banned masternodes are not counted: they serve nothing until they are revived.',
+                  })}{' '}
               <button
                 type="button"
                 className="rx-maplink"
