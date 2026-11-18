@@ -1,11 +1,15 @@
 /* /map: the claim, the map of cities beside the list of them, then countries and hosting providers. */
 
+.rx-mapboard {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
 .rx-maptools {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 16px;
-  margin: 4px 0 0;
 }
 .rx-maptools .rx-search {
   flex: 1 1 260px;
@@ -15,7 +19,6 @@
 .rx-mapnotes {
   display: grid;
   gap: 8px;
-  margin: 12px 0 0;
 }
 .rx-mapnotes:empty {
   display: none;
@@ -74,7 +77,7 @@
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: 20px 36px;
   align-items: start;
-  margin: 20px 0 0;
+  margin: 6px 0 0;
 }
 .rx-mapgrid--bare {
   grid-template-columns: minmax(0, 1fr);
@@ -86,6 +89,7 @@
 }
 
 .rx-pmap {
+  --rx-map-land: color-mix(in srgb, var(--dh-ink) 22%, transparent);
   margin: 0;
   min-width: 0;
 }
@@ -164,6 +168,9 @@
   white-space: nowrap;
   pointer-events: none;
   transform: translate(-50%, calc(-100% - 14px));
+}
+.rx-pmap__tip[data-below] {
+  transform: translate(-50%, 14px);
 }
 .rx-pmap__tip span {
   color: var(--dh-ink-2);
@@ -368,6 +375,18 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+.rx-mapcard__hosts {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-mapcard__hosts li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
 .rx-mapcard .rx-map-card {
   display: grid;
   gap: 8px;
@@ -555,7 +574,7 @@ button.rx-sharebar__item[aria-pressed='true'] {
     justify-content: flex-start;
   }
   .rx-mapgrid {
-    margin-top: 16px;
+    margin-top: 2px;
   }
   .rx-mapbars {
     margin-top: 28px;

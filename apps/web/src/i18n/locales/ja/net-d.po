@@ -38,7 +38,7 @@ msgid "{0} others"
 msgstr "その他 {0}"
 
 #. placeholder {0}: pct(host.n)
-#. placeholder {1}: host.key
+#. placeholder {1}: host.key.replace(/\.$/, '')
 msgid "{0} run with one hosting provider, {1}."
 msgstr "{0} が 1 社のホスティングプロバイダー（{1}）で稼働しています。"
 
@@ -257,6 +257,9 @@ msgstr "フィルター"
 
 msgid "Half of the evonodes run in the cities above."
 msgstr "Evonode の半数が上の都市で稼働しています。"
+
+msgid "Half of the masternodes run in the cities above."
+msgstr "マスターノードの半数が上の都市で稼働しています。"
 
 msgid "Half of the reachable nodes run in the cities above."
 msgstr "到達可能なノードの半数が上の都市で稼働しています。"

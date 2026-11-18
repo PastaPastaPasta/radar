@@ -38,7 +38,7 @@ msgid "{0} others"
 msgstr "{0} outros"
 
 #. placeholder {0}: pct(host.n)
-#. placeholder {1}: host.key
+#. placeholder {1}: host.key.replace(/\.$/, '')
 msgid "{0} run with one hosting provider, {1}."
 msgstr "{0} funcionam num só fornecedor de alojamento: {1}."
 
@@ -257,6 +257,9 @@ msgstr "Filtros"
 
 msgid "Half of the evonodes run in the cities above."
 msgstr "Metade dos evonodes funciona nas cidades acima."
+
+msgid "Half of the masternodes run in the cities above."
+msgstr "Metade dos masternodes funciona nas cidades acima."
 
 msgid "Half of the reachable nodes run in the cities above."
 msgstr "Metade dos nós acessíveis funciona nas cidades acima."

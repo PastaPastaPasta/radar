@@ -75,7 +75,7 @@ export function PlaceMap({
   const zoomed = region !== 'world'
   /** Map units per screen pixel. */
   const unit = box.w / px
-  const scale = (zoomed ? 1.7 : 1) * (box.w / 1000)
+  const scale = (zoomed ? 1.25 : 1) * (box.w / 1000)
   const [hover, setHover] = useState<string>()
 
   const discs = useMemo(
@@ -195,6 +195,7 @@ export function PlaceMap({
           <p
             className="rx-pmap__tip"
             role="presentation"
+            data-below={tip.y - box.y < box.h * 0.3 ? '' : undefined}
             style={{
               left: `${String(((tip.x - box.x) / box.w) * 100)}%`,
               top: `${String(((tip.y - box.y) / box.h) * 100)}%`,

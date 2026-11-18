@@ -329,9 +329,15 @@ const overlaps = (
   b: { x: number; y: number; w: number; h: number },
 ) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
 
+/** The square inside a disc: a label may graze the disc's edge but not cover its middle. */
+const disc = (o: LabelBox) => {
+  const h = o.r * 0.7
+  return { x: o.x - h, y: o.y - h, w: 2 * h, h: 2 * h }
+}
+
 /**
  * Labels the largest places first, beside their disc (right, left, above, below), skipping any that would cover
- * a label already placed or run off the map. The rest are named on hover and in the list.
+ * a label already placed or another place's disc, or run off the map. The rest are named on hover and in the list.
  */
 export function placeLabels(
   boxes: readonly LabelBox[],
@@ -355,7 +361,11 @@ export function placeLabels(
         box.y >= bounds.y &&
         box.x + box.w <= bounds.x + bounds.w &&
         box.y + box.h <= bounds.y + bounds.h
-      return inside && !placed.some((q) => overlaps(box, q))
+      return (
+        inside &&
+        !placed.some((q) => overlaps(box, q)) &&
+        !boxes.some((o) => o.id !== b.id && overlaps(box, disc(o)))
+      )
     })
     if (fit) placed.push({ ...fit, w: b.w, h: b.h })
   }

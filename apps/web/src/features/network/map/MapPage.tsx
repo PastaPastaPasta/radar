@@ -62,7 +62,7 @@ const PHONE = '(max-width: 640px)'
 /** "Falkenstein, Germany". */
 export function placeText(p: Pick<Place, 'city' | 'country'>): string {
   const country = p.country ? countryName(p.country) : undefined
-  return [p.city, country].filter(Boolean).join(', ')
+  return [p.city, country === p.city ? undefined : country].filter(Boolean).join(', ')
 }
 
 function useShare(total: number): (n: number) => string {
@@ -210,7 +210,7 @@ function useAnswer(b: Board): string | undefined {
     j === undefined || !host
       ? undefined
       : j === 1
-        ? t`${pct(host.n)} run with one hosting provider, ${host.key}.`
+        ? t`${pct(host.n)} run with one hosting provider, ${host.key.replace(/\.$/, '')}.`
         : plural(j, {
             one: 'Half run with # hosting provider.',
             other: 'Half run with # hosting providers.',
@@ -315,7 +315,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
     const p = findPlace(b.places, id)
     const off = p && !inBox(regionBox(region), ...projectWorld(p.lon, p.lat))
     set({
-      place: id === search.place ? undefined : id,
+      place: id,
       protx: undefined,
       ...(off ? { region: undefined } : {}),
     })
@@ -326,10 +326,12 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
       ? t`Half of the reachable nodes run in the cities above.`
       : b.scope === 'evo' && !b.narrowed
         ? t`Half of the evonodes run in the cities above.`
-        : t`Half of these masternodes run in the cities above.`
+        : b.narrowed
+          ? t`Half of these masternodes run in the cities above.`
+          : t`Half of the masternodes run in the cities above.`
 
   return (
-    <>
+    <div className="rx-mapboard">
       <Toolbar board={b} controls={controls} />
       <Notes board={b} controls={controls} />
       {b.query.isError ? (
@@ -415,7 +417,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
           <Bars board={b} controls={controls} />
         </>
       )}
-    </>
+    </div>
   )
 }
 
@@ -441,7 +443,7 @@ function PlaceName({ place }: { place: Place }) {
         </span>
       ) : null}
       <span className="rx-places__city">{place.city ?? placeText(place)}</span>
-      {place.city && place.country ? (
+      {place.city && place.country && countryName(place.country) !== place.city ? (
         <span className="rx-places__country">{countryName(place.country)}</span>
       ) : null}
     </>
@@ -650,8 +652,14 @@ function PlaceCard({
           <div>
             <dt>{t`Hosting`}</dt>
             <dd>
-              {providers.map((p) => `${p.org} ${formatInt(p.n)}`).join(' · ')}
-              {more > 0 ? ` ${t`and ${formatInt(more)} more`}` : null}
+              <ul className="rx-mapcard__hosts">
+                {providers.map((p) => (
+                  <li key={p.org}>
+                    <span>{p.org}</span> <span>{formatInt(p.n)}</span>
+                  </li>
+                ))}
+                {more > 0 ? <li>{t`and ${formatInt(more)} more`}</li> : null}
+              </ul>
             </dd>
           </div>
         </dl>
