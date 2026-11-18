@@ -7,6 +7,7 @@ import { sdk, setSdkTransport, type SdkTransport } from '@/data/sdk/client'
 import type { NetworkId } from '@/lib/network'
 import { FixtureDapiTransport } from './dapi-transport'
 import { FixtureSdkTransport } from './sdk-transport'
+import { advancePlatformTip, cutPlatform } from './platform-tip'
 import { addPlatformBlocks, fixtureHandlers, HTTP_SOURCE_PATTERNS, onFixtureMiss } from './handlers'
 
 export const FIXTURE_ERROR_PREFIX = '[radar-fixtures]'
@@ -39,6 +40,10 @@ export interface RadarFixtureHooks {
   refusedDapiMethods(): string[]
   /** Platform Explorer's newest-blocks list answers with `n` blocks on top of the recorded ones from the next read on. */
   addPlatformBlocks(n: number): void
+  /** The SDK's current-epoch read and DAPI's validator sets answer `n` more blocks on, each `blockMs` apart, every turn taken. */
+  advancePlatformTip(n: number, blockMs?: number): void
+  /** Every SDK call and DAPI validator-set read fails while `down`, as with no evonode reachable. */
+  cutPlatform(down: boolean): void
 }
 
 /** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
@@ -111,6 +116,8 @@ export async function startFixtureWorker(): Promise<void> {
         : (refusedBySource[source] ?? 0),
     refusedDapiMethods: () => [...dapi.refused],
     addPlatformBlocks,
+    advancePlatformTip,
+    cutPlatform,
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
   const down = downFromSession()

@@ -1,201 +1,241 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
-import type { ColumnDef } from '@tanstack/react-table'
 import type { EChartsOption } from 'echarts'
-import { useMemo } from 'react'
-import type { Sourced } from '@/data/envelope'
+import { useMemo, type ReactNode } from 'react'
+import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarPlatform } from '@/data/radar/schemas'
-import { Entity, useNetwork } from '@/features/entity'
+import { useNetwork } from '@/features/entity'
 import { dash } from '@/features/network/mn/platform-math'
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
-import { isDevnet } from '@/lib/network'
+import { isDevnet, type NetworkId } from '@/lib/network'
 import {
   Section,
   Amount,
   Card,
   Chart,
-  DataTable,
   Empty,
   Stat,
   Stats,
-  Time,
   Unavailable,
-  useNow,
   queryView,
   stampsOf,
+  useChanged,
 } from '@/ui'
+import { perBlockSoFar, poolSoFar } from './live/pool'
+import { Upcoming } from './live/Upcoming'
+import { useLiveSchedule, type LiveSchedule } from './live/useLiveSchedule'
 
-const UPCOMING = 12
-const MINUTE = 60_000
 const HISTORY = 60
 
-/** RA-60, RA-62, RA-63: what Radar's crawl adds to the epoch: the pool, the schedule and the history band. */
+/** RA-60, RA-62, RA-63: the epoch's pool and the proposer schedule, followed live, and the crawl's history band. */
 export function RadarZone() {
   const { t } = useLingui()
   const net = useNetwork()
   const off = useDecentralizedOnly()
   const devnet = isDevnet(net)
-  const query = useQuery({ ...radarQueries.platform(net), enabled: !off && !devnet })
+  const crawlOn = !off && !devnet
+  const query = useQuery({ ...radarQueries.platform(net), enabled: crawlOn })
   return (
     <Section id="radar-zone" layer="network" title={t`Rewards and schedule`}>
-      {off ? (
-        <Unavailable
-          source="radar"
-          title={t`The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl`}
-        />
-      ) : devnet ? (
-        <Empty kind="unsupported-network" title={t`Radar doesn’t crawl devnets`} />
-      ) : (
-        <div className="rx-pile">
-          <Rewards query={query} />
-          <div className="rx-cols">
-            <Upcoming query={query} />
-            <History query={query} />
-          </div>
-        </div>
-      )}
+      <LiveZone key={net} net={net} query={query} off={off} devnet={devnet} />
     </Section>
   )
 }
 
 type PlatformQuery = UseQueryResult<Sourced<RadarPlatform>>
 
-function Rewards({ query }: { query: PlatformQuery }) {
+function LiveZone({
+  net,
+  query,
+  off,
+  devnet,
+}: {
+  net: NetworkId
+  query: PlatformQuery
+  off: boolean
+  devnet: boolean
+}) {
+  const crawlOn = !off && !devnet
+  const live = useLiveSchedule(net, crawlOn ? query.data : undefined)
+  const crawlState = !crawlOn ? 'off' : query.data ? 'ready' : query.isError ? 'error' : 'loading'
+  return (
+    <div className="rx-pile">
+      <Rewards query={query} live={live} off={off} devnet={devnet} />
+      {crawlOn ? (
+        <div className="rx-cols">
+          <Upcoming live={live} crawlState={crawlState} />
+          <History query={query} />
+        </div>
+      ) : (
+        <Upcoming live={live} crawlState={crawlState} />
+      )}
+    </div>
+  )
+}
+
+/** A figure that rolls its digits in when it changes, as every live stat does. */
+function Ticking({ value, children }: { value: string | undefined; children: ReactNode }) {
+  const n = useChanged(value)
+  return (
+    <span key={n} className={n > 0 ? 'rx-livefig is-new' : 'rx-livefig'}>
+      {children}
+    </span>
+  )
+}
+
+/** The pool so far and each block's share of it, from the newest proof-checked epoch read when it has its ChainLock. */
+function livePool(live: LiveSchedule) {
+  const answer = live.epoch
+  const cl = answer?.proof?.coreChainLockedHeight
+  if (!answer || cl === undefined || answer.height === undefined) return undefined
+  const pool = poolSoFar(answer.data.firstCoreBlockHeight, cl)
+  if (pool === undefined) return undefined
+  const blocks = Math.max(0, answer.height - answer.data.firstBlockHeight + 1)
+  // Worked out here from one proof-checked answer: the figure itself is not what the proof covers.
+  const stamp: SourceStamp = { ...stampOf(answer), proved: false, proof: undefined }
+  return {
+    pool,
+    perBlock: perBlockSoFar(pool, blocks),
+    blocks,
+    cl,
+    epoch: answer.data.index,
+    stamp,
+  }
+}
+
+function Rewards({
+  query,
+  live,
+  off,
+  devnet,
+}: {
+  query: PlatformQuery
+  live: LiveSchedule
+  off: boolean
+  devnet: boolean
+}) {
   const { t } = useLingui()
   const doc = query.data?.data
+  const crawlStamp = query.data ? stampOf(query.data) : undefined
   const last = doc?.epochs.at(-1)
+  const pool = livePool(live)
+  const crawlOn = !off && !devnet
+  const waiting = crawlOn && !doc && !query.isError
+  const poolValue = pool?.pool ?? doc?.now.pool_so_far
+  const crawlPerBlock =
+    doc && doc.now.blocks > 0 ? doc.now.pool_so_far / BigInt(doc.now.blocks) : undefined
+  const perBlock = pool ? pool.perBlock : crawlPerBlock
+  const stamps = [pool?.stamp, crawlStamp].filter((s): s is SourceStamp => s !== undefined)
   return (
     <Card
       id="rewards"
       layer="network"
       title={t`Epoch rewards`}
       subtitle={t`What the evonodes are paid from, and what that comes to.`}
-      source={stampsOf(query.data)}
-      {...queryView(query)}
+      source={stamps}
     >
-      {doc ? (
-        <Stats>
-          <Stat
-            label={t`Pool so far`}
-            value={<Amount value={doc.now.pool_so_far} kind="credits" compact />}
-            layer="network"
-          />
-          <Stat
-            label={t`Last pool`}
-            value={last ? <Amount value={last.pool} kind="credits" compact /> : '—'}
-            note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
-            layer="network"
-          />
-          <Stat
-            label={t`Per block`}
-            value={last ? <Amount value={last.per_block} kind="credits" compact /> : '—'}
-            note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
-            layer="network"
-          />
-          <Stat
-            label={t`Median monthly earnings`}
-            value={<Amount value={doc.returns.median_monthly} kind="credits" compact />}
-            note={t`Per evonode, over ${formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })} days`}
-            layer="network"
-          />
-          <Stat
-            label={t`Median yield`}
-            value={
-              doc.returns.median_platform_yield == null
-                ? '—'
-                : formatPercent(doc.returns.median_platform_yield, 1)
-            }
-            note={t`A year, on the collateral`}
-            layer="network"
-          />
-        </Stats>
+      <Stats>
+        <Stat
+          label={t`Pool so far`}
+          value={
+            poolValue === undefined ? (
+              '—'
+            ) : (
+              <Ticking value={poolValue.toString()}>
+                <Amount value={poolValue} kind="credits" compact />
+              </Ticking>
+            )
+          }
+          note={
+            pool
+              ? t`Core block rewards to Core block ${formatInt(pool.cl)}; fees not counted`
+              : doc
+                ? t`From Radar’s crawl; fees not counted`
+                : undefined
+          }
+          source={pool?.stamp ?? crawlStamp}
+          loading={poolValue === undefined && (waiting || !live.epoch)}
+          layer="network"
+        />
+        <Stat
+          label={t`Per block`}
+          value={
+            perBlock === undefined ? (
+              '—'
+            ) : (
+              <Ticking value={perBlock.toString()}>
+                <Amount value={perBlock} kind="credits" compact />
+              </Ticking>
+            )
+          }
+          note={
+            pool
+              ? t`The pool so far over ${formatInt(pool.blocks)} blocks: an estimate until the epoch ends`
+              : perBlock !== undefined
+                ? t`From Radar’s crawl: an estimate until the epoch ends`
+                : undefined
+          }
+          source={pool?.stamp ?? crawlStamp}
+          loading={perBlock === undefined && (waiting || !live.epoch)}
+          layer="network"
+        />
+        {crawlOn
+          ? [
+              <Stat
+                key="last"
+                label={t`Last pool`}
+                value={last ? <Amount value={last.pool} kind="credits" compact /> : '—'}
+                note={last ? t`Epoch ${formatInt(last.epoch)}` : undefined}
+                source={crawlStamp}
+                loading={waiting}
+                layer="network"
+              />,
+              <Stat
+                key="monthly"
+                label={t`Median monthly earnings`}
+                value={
+                  doc ? <Amount value={doc.returns.median_monthly} kind="credits" compact /> : '—'
+                }
+                note={
+                  doc
+                    ? t`Per evonode, over ${formatNumber(doc.returns.monthly_basis_days ?? 0, { maximumFractionDigits: 0 })} days`
+                    : undefined
+                }
+                source={crawlStamp}
+                loading={waiting}
+                layer="network"
+              />,
+              <Stat
+                key="yield"
+                label={t`Median yield`}
+                value={
+                  doc?.returns.median_platform_yield == null
+                    ? '—'
+                    : formatPercent(doc.returns.median_platform_yield, 1)
+                }
+                note={t`A year, on the collateral`}
+                source={crawlStamp}
+                loading={waiting}
+                layer="network"
+              />,
+            ]
+          : null}
+      </Stats>
+      {off ? (
+        <Unavailable
+          compact
+          source="radar"
+          title={t`The last pool, earnings, yield and the epoch history need Radar’s crawl`}
+        />
+      ) : devnet ? (
+        <Empty
+          kind="unsupported-network"
+          title={t`Radar doesn’t crawl devnets: no last pool, earnings, yield or history`}
+        />
       ) : null}
     </Card>
-  )
-}
-
-interface UpcomingRow {
-  protx: string
-  slots: number
-  eta: number
-}
-
-function Upcoming({ query }: { query: PlatformQuery }) {
-  const { t } = useLingui()
-  const rows = useMemo<UpcomingRow[]>(
-    () =>
-      (query.data?.data.schedule.next ?? []).slice(0, UPCOMING).map((n) => ({
-        protx: n.protx,
-        slots: n.slots,
-        eta: n.eta,
-      })),
-    [query.data],
-  )
-  const sample = query.data?.data.schedule
-  const columns = useMemo<ColumnDef<UpcomingRow>[]>(
-    () => [
-      {
-        id: 'node',
-        header: t`Evonode`,
-        cell: ({ row }) => <Entity kind="evonode" id={row.original.protx} />,
-        meta: { phone: 'title' },
-      },
-      {
-        id: 'slots',
-        header: t`Blocks away`,
-        accessorFn: (r) => `+${formatInt(r.slots)}`,
-        meta: { numeric: true, phone: 'secondary' },
-      },
-      {
-        id: 'eta',
-        header: t`Proposes around`,
-        cell: ({ row }) => <Eta ms={row.original.eta} />,
-        meta: { phone: 'primary' },
-      },
-    ],
-    [t],
-  )
-  return (
-    <Card
-      id="upcoming"
-      layer="network"
-      title={t`Who proposes next`}
-      subtitle={sample ? <Sample sample={sample} /> : undefined}
-      source={stampsOf(query.data)}
-    >
-      <DataTable
-        caption={t`The next proposers`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => r.protx}
-        {...queryView(query)}
-        empty={t`Radar has no proposer schedule right now.`}
-      />
-    </Card>
-  )
-}
-
-/** When a turn is due: "in 2 min", and "any moment" once it is a minute away or past, never "ago". */
-function Eta({ ms }: { ms: number }) {
-  const { t } = useLingui()
-  const now = useNow()
-  return ms - now < MINUTE ? <>{t`any moment`}</> : <Time ms={ms} mode="both" live />
-}
-
-const OLD_SAMPLE_MS = 10 * MINUTE
-
-function Sample({ sample }: { sample: { ts: number; block_secs: number } }) {
-  const { t } = useLingui()
-  const now = useNow()
-  const pace = formatNumber(sample.block_secs, { maximumFractionDigits: 0 })
-  return (
-    <>
-      {t`The next twelve proposers, each with the blocks until its turn. An estimate at about ${pace} seconds a block, from the validator sets`}{' '}
-      <Time ms={sample.ts} mode={now - sample.ts > OLD_SAMPLE_MS ? 'both' : 'relative'} />
-      {t`: a missed turn, or a new set, shifts it.`}
-    </>
   )
 }
 

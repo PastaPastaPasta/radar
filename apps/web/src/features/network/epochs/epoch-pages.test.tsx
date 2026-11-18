@@ -2,11 +2,13 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { App } from '@/app'
+import { getDapiTransport, setDapiTransport } from '@/data/dapi-core'
 import { sdk } from '@/data/sdk/client'
 import { writeSourceMode } from '@/lib/source-mode'
 import { fixtureBody } from '@/test/fixtures/load'
+import { FixtureDapiTransport } from '@/test/msw/dapi-transport'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -15,8 +17,13 @@ vi.mock('@/features/entity/platform/use-identity-name', () => ({
 }))
 
 function renderAt(url: string) {
-  render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
+  const history = createMemoryHistory({ initialEntries: [url] })
+  render(<App history={history} />)
+  return history
 }
+
+/** The recorded current-epoch answer: block 469,065 of epoch 88, its time, and the epoch's first block. */
+const MAINNET_TIP = { height: 469_065, timeMs: 1_794_337_718_422 }
 
 const card = (id: string) =>
   waitFor(() => {
@@ -27,9 +34,14 @@ const card = (id: string) =>
 
 const rows = (el: HTMLElement) => within(el).getAllByRole('row').slice(1)
 
+const noDapi = getDapiTransport()
+beforeEach(() => {
+  setDapiTransport(new FixtureDapiTransport())
+})
 afterEach(() => {
   server.events.removeAllListeners()
   writeSourceMode('all')
+  setDapiTransport(noDapi)
 })
 
 describe('Epochs', () => {
@@ -53,8 +65,15 @@ describe('Epochs', () => {
     const rewards = await card('rewards')
     await waitFor(() => expect(rewards).toHaveTextContent('Median monthly earnings'))
     expect(rewards).toHaveTextContent('Pool so far')
-    // The pool and the pay are the epoch that just ended, not the oldest one Radar still lists.
-    expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(2)
+    // The last pool is the epoch that just ended, not the oldest one Radar still lists.
+    expect(within(rewards).getAllByText('Epoch 87')).toHaveLength(1)
+    // The pool so far is worked out from the proof-checked epoch read, up to the ChainLock it carries.
+    await waitFor(() =>
+      expect(rewards).toHaveTextContent(
+        'Core block rewards to Core block 2,570,099; fees not counted',
+      ),
+    )
+    expect(rewards).toHaveTextContent(/The pool so far over 1,204 blocks: an estimate/)
   })
 
   it('gives the pool in the same short form as Platform, with the unit on the figure @RA-60', async () => {
@@ -64,6 +83,18 @@ describe('Epochs', () => {
         HttpResponse.json({ ...doc, now: { ...doc.now, pool_so_far: 150_243_800_000_000 } }),
       ),
     )
+    // Without the live read the crawl's pool stands in.
+    const original = sdk.call.bind(sdk)
+    const spy = vi
+      .spyOn(sdk, 'call')
+      .mockImplementation((net, method, args, signal) =>
+        method === 'epoch.current'
+          ? Promise.reject(new Error('not now'))
+          : original(net, method, args, signal),
+      )
+    onTestFinished(() => {
+      spy.mockRestore()
+    })
     renderAt('/epochs')
     const rewards = await card('rewards')
     await waitFor(() =>
@@ -124,30 +155,95 @@ describe('Epochs', () => {
     expect(within(upcoming).getByRole('columnheader', { name: 'Blocks away' })).toBeVisible()
     const cells = (i: number) => rows(upcoming).map((r) => r.querySelectorAll('td')[i]?.textContent)
     expect(cells(1)).toEqual(Array.from({ length: 12 }, (_, i) => `+${String(i + 1)}`))
-    // The sample is long past: every turn is due.
-    expect(cells(2)).toEqual(Array.from({ length: 12 }, () => 'any moment'))
+    // The newest block is long past: the next turn is due, and the rest follow a block apart, never in the past.
+    expect(cells(2)[0]).toBe('any moment')
+    for (const c of cells(2).slice(1)) expect(c).not.toMatch(/ago/)
     expect(upcoming.querySelector('thead')).not.toHaveTextContent('Slots')
-    expect(upcoming).toHaveTextContent(/from the validator sets .*\d{4}/)
+    expect(upcoming).toHaveTextContent(
+      'from the validator sets an evonode reported at block 469,065. Not proof-checked',
+    )
   })
 
-  it('shows when a turn comes while it is still ahead @RA-62', async () => {
-    const doc = await fixtureBody<{ schedule: { ts: number; next: { eta: number }[] } }>(
-      'radar',
-      'mainnet',
-      'platform',
-    )
-    vi.useFakeTimers({ toFake: ['Date'], now: doc.schedule.ts * 1000 })
-    try {
-      renderAt('/epochs')
-      const upcoming = await card('upcoming')
-      await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
-      const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent
-      expect(first).toMatch(/in \d+ min/)
-      expect(first).not.toMatch(/ago/)
-      expect(upcoming).toHaveTextContent(/validator sets \d+ s ago/)
-    } finally {
+  it('shows when a turn comes while it is still ahead, and the latest block with its proposer @RA-62', async () => {
+    vi.useFakeTimers({ toFake: ['Date'], now: MAINNET_TIP.timeMs + 10_000 })
+    onTestFinished(() => {
       vi.useRealTimers()
-    }
+    })
+    renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    const first = rows(upcoming)[0]!.querySelectorAll('td')[2]!.textContent
+    expect(first).toMatch(/in \d+ min/)
+    expect(first).not.toMatch(/ago/)
+    const strip = upcoming.querySelector('.rx-livesched')!
+    await waitFor(() => expect(strip).toHaveAttribute('data-live', 'live'))
+    expect(strip).toHaveTextContent(/Latest block.*469,065.*proposed by/)
+    expect(strip).toHaveTextContent(/Next block expected in about 2 min \d+ s/)
+    expect(upcoming).not.toHaveTextContent(/Crawled/)
+  })
+
+  it('moves the list on when a block lands: the proposer drops off and a twelfth row joins @RA-62', async () => {
+    let advance = 0
+    const original = sdk.call.bind(sdk)
+    const spy = vi.spyOn(sdk, 'call').mockImplementation(async (net, method, args, signal) => {
+      const answer = await original(net, method, args, signal)
+      if (method !== 'epoch.current' || answer.height === undefined) return answer
+      return { ...answer, height: answer.height + advance, asOf: answer.asOf + advance * 135_000 }
+    })
+    onTestFinished(() => {
+      spy.mockRestore()
+    })
+    renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    const ids = () => rows(upcoming).map((r) => r.getAttribute('data-row-id'))
+    const before = ids()
+    advance = 1
+    await waitFor(
+      () => expect(upcoming.querySelector('[data-tip-height="469066"]')).not.toBeNull(),
+      { timeout: 12_000 },
+    )
+    await waitFor(() => expect(ids()).toEqual([...before.slice(1), expect.any(String)]))
+    expect(ids().at(-1)).not.toBe(before.at(-1))
+    expect(upcoming).toHaveTextContent('Moved on 1 block since, assuming no missed turn.')
+  }, 20_000)
+
+  it('says updates are paused when Platform stops answering, and offers to try again @RA-62', async () => {
+    const original = sdk.call.bind(sdk)
+    const spy = vi
+      .spyOn(sdk, 'call')
+      .mockImplementation((net, method, args, signal) =>
+        method === 'epoch.current'
+          ? Promise.reject(Object.assign(new Error('down'), { source: 'sdk', kind: 'network' }))
+          : original(net, method, args, signal),
+      )
+    onTestFinished(() => {
+      spy.mockRestore()
+    })
+    renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    const strip = await waitFor(() => upcoming.querySelector('.rx-livesched')!)
+    await waitFor(() => expect(strip).toHaveAttribute('data-live', 'paused'), { timeout: 12_000 })
+    expect(strip).toHaveTextContent('Updates paused')
+    expect(within(upcoming).getByRole('button', { name: 'Try again' })).toBeVisible()
+  }, 20_000)
+
+  it('starts over on the other network when the network switches @RA-62', async () => {
+    const history = renderAt('/epochs')
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    const mainnet = rows(upcoming).map((r) => r.getAttribute('data-row-id'))
+    history.push('/epochs?network=testnet')
+    await waitFor(() =>
+      expect(
+        document.querySelector('#upcoming [data-tip-height="668393"]'),
+        'the testnet tip',
+      ).not.toBeNull(),
+    )
+    const testnet = await card('upcoming')
+    await waitFor(() => expect(rows(testnet)).toHaveLength(12))
+    const ids = rows(testnet).map((r) => r.getAttribute('data-row-id'))
+    expect(ids.some((id) => mainnet.includes(id))).toBe(false)
   })
 
   it('lists the latest twenty epochs, and a custom range @NX-52', async () => {
@@ -185,14 +281,18 @@ describe('Epochs', () => {
       expect(within(r).getAllByRole('cell').at(-1)).toHaveTextContent('—')
   })
 
-  it('says the Radar parts need Radar in Decentralized only mode, once @RA-60', async () => {
+  it('keeps the live pool and schedule in Decentralized only mode and says the crawl parts need Radar, once @RA-60 @RA-62', async () => {
     writeSourceMode('decentralized')
     renderAt('/epochs')
     await card('current-epoch')
     await waitFor(() =>
       expect(document.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1),
     )
-    expect(document.getElementById('rewards')).toBeNull()
+    const rewards = await card('rewards')
+    await waitFor(() => expect(rewards).toHaveTextContent('Core block rewards to Core block'))
+    const upcoming = await card('upcoming')
+    await waitFor(() => expect(rows(upcoming)).toHaveLength(12))
+    expect(document.getElementById('history')).toBeNull()
     const proposers = await card('proposers')
     await waitFor(() => expect(rows(proposers)).toHaveLength(20))
   })

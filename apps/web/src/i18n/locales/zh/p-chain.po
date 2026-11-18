@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
-msgid ": a missed turn, or a new set, shifts it."
-msgstr "：错过一轮或出现新集合都会使其移动。"
-
 msgid "(estimated)"
 msgstr "（估算）"
 
@@ -62,8 +59,17 @@ msgstr "需要 {1} 个 Evonode 中的 {0} 个"
 msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform 高度 {1} 时共 {0} 个 Quorum。未通过证明验证：SDK 没有此列表的证明。"
 
+msgid "{m} min {s} s"
+msgstr "{m}分{s}秒"
+
+msgid "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+msgstr "{moved, plural, other {此后已顺延 # 个区块（假设没有人错过轮次）。}}"
+
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, other {由 # 个已通过证明验证的应答合并而成。}}"
+
+msgid "{s} s"
+msgstr "{s}秒"
 
 msgid "1 m"
 msgstr "1个月"
@@ -146,6 +152,9 @@ msgstr "笔记分块"
 msgid "Commitment"
 msgstr "承诺"
 
+msgid "Connecting to Platform…"
+msgstr "正在连接 Platform…"
+
 msgid "Copy encrypted note"
 msgstr "复制加密票据"
 
@@ -154,6 +163,10 @@ msgstr "复制 ID"
 
 msgid "Core block rewards"
 msgstr "Core 区块奖励"
+
+#. placeholder {0}: formatInt(pool.cl)
+msgid "Core block rewards to Core block {0}; fees not counted"
+msgstr "截至 Core 区块 {0} 的 Core 区块奖励；不含手续费"
 
 msgid "Credits"
 msgstr "积分"
@@ -283,6 +296,15 @@ msgstr "首个区块"
 msgid "From epoch"
 msgstr "起始纪元"
 
+msgid "From Radar’s crawl; fees not counted"
+msgstr "来自 Radar 的爬取数据；不含手续费"
+
+msgid "From Radar’s crawl: an estimate until the epoch ends"
+msgstr "来自 Radar 的爬取数据：纪元结束前为估算值"
+
+msgid "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+msgstr "在 DAPI 无响应期间，取自 Radar 在区块 {at} 时最后一次查看的验证者集合。错过轮次或新集合会使其顺延。"
+
 msgid "Hash prefix"
 msgstr "哈希前缀"
 
@@ -316,6 +338,15 @@ msgstr "上一期奖池"
 msgid "Latest {0}"
 msgstr "最近 {0}"
 
+msgid "Latest block"
+msgstr "最新区块"
+
+msgid "Latest Platform block"
+msgstr "最新 Platform 区块"
+
+msgid "Live"
+msgstr "实时"
+
 msgid "Look up"
 msgstr "查找"
 
@@ -339,6 +370,17 @@ msgstr "相邻纪元"
 
 msgid "Network"
 msgstr "网络"
+
+#. placeholder {0}: formatInt(height)
+msgid "New Platform block {0}"
+msgstr "新的 Platform 区块 {0}"
+
+msgid "Next block due now (about every {pace})"
+msgstr "下一个区块随时产生（约每 {pace} 一个）"
+
+#. placeholder {0}: countdown(next)
+msgid "Next block expected in about {0}"
+msgstr "预计约 {0} 后产生下一个区块"
 
 msgid "Next chunk"
 msgstr "下一分块"
@@ -365,8 +407,14 @@ msgstr "没有 Evonode 投票。"
 msgid "No evonode proposed a block in this epoch."
 msgstr "本纪元没有 Evonode 提议区块。"
 
+msgid "No new block for {ago}, where one usually comes about every {pace}"
+msgstr "已有 {ago} 没有新区块，通常约每 {pace} 产生一个"
+
 msgid "No prefunded balance"
 msgstr "没有预存余额"
+
+msgid "No proposer order yet."
+msgstr "暂无提议者顺序。"
 
 msgid "No quorum matches this filter."
 msgstr "没有符合此筛选条件的 Quorum。"
@@ -466,6 +514,9 @@ msgstr "上一个：纪元 {0}"
 msgid "Processing fees"
 msgstr "处理费用"
 
+msgid "proposed by"
+msgstr "提议者"
+
 msgid "Proposers"
 msgstr "提议者"
 
@@ -496,11 +547,11 @@ msgstr "Quorum"
 msgid "Radar doesn’t crawl devnets"
 msgstr "Radar 不抓取开发网"
 
+msgid "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+msgstr "Radar 不爬取 devnet：没有上一期奖池、收益、收益率或历史"
+
 msgid "Radar has no epoch history yet."
 msgstr "Radar 暂无纪元历史。"
-
-msgid "Radar has no proposer schedule right now."
-msgstr "Radar 目前没有提议者排期。"
 
 msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
 msgstr "Radar 的确切门槛、阶段和各候选版本计数需要 Radar 的爬取数据"
@@ -571,6 +622,9 @@ msgstr "新增存储费用"
 msgid "Storage fees distributed"
 msgstr "已分配存储费用"
 
+msgid "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+msgstr "Tenderdash 的轮次顺序，取自某个 evonode 在区块 {at} 报告的验证者集合。未经证明校验：错过轮次或新集合会使其顺延。"
+
 msgid "That is not a nullifier"
 msgstr "这不是 nullifier"
 
@@ -587,14 +641,17 @@ msgstr "Platform 中持有的积分，以及按 ID 查询预存专用余额。"
 msgid "The current epoch is {0}."
 msgstr "当前纪元为 {0}。"
 
-msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-msgstr "纪元的奖池、收益、收益率、提议者排期和历史需要 Radar 的爬取数据"
-
 msgid "The evonodes that proposed the most blocks this epoch."
 msgstr "本纪元提议区块最多的 evonode。"
 
 msgid "The history of shielding and unshielding needs Platform Explorer’s index"
 msgstr "隐私保护与取消保护的历史需要 Platform Explorer 的索引"
+
+msgid "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+msgstr "上一期奖池、收益、收益率和纪元历史需要 Radar 的爬取数据"
+
+msgid "The last proposer order has run out. A fresh one is on its way."
+msgstr "上一份提议者顺序已用完，新的顺序正在获取。"
 
 #. placeholder {0}: formatInt(DEFAULT_COUNT)
 msgid "The latest {0} epochs."
@@ -603,8 +660,8 @@ msgstr "最近 {0} 个纪元。"
 msgid "The next proposers"
 msgstr "接下来的提议者"
 
-msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
-msgstr "接下来的十二位提议者，各附距其轮次的区块数。按每个区块约 {pace} 秒，根据验证者集估算"
+msgid "The next twelve proposers, each with the blocks until its turn."
+msgstr "接下来的十二个提议者，以及各自轮到前的区块数。"
 
 msgid "The node reported no quorums."
 msgstr "该节点未报告任何 Quorum。"
@@ -641,6 +698,10 @@ msgstr "隐私积分池：其余额、接受的锚点、加密票据，以及某
 msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 msgstr "池按每 {0} 条一块提供票据。显示从票据 {1} 开始的分块中的前 {NOTES_SHOWN} 条。"
 
+#. placeholder {0}: formatInt(pool.blocks)
+msgid "The pool so far over {0} blocks: an estimate until the epoch ends"
+msgstr "目前奖池除以 {0} 个区块：纪元结束前为估算值"
+
 msgid "The protocol version each evonode votes for"
 msgstr "每个 Evonode 所投的协议版本"
 
@@ -675,11 +736,20 @@ msgstr "积分总量"
 msgid "Totals"
 msgstr "汇总"
 
+msgid "Try again"
+msgstr "重试"
+
 msgid "Type"
 msgstr "类型"
 
 msgid "Unshielded"
 msgstr "未隐私保护"
+
+msgid "Updates paused, last block {ago} ago"
+msgstr "更新已暂停，上一个区块在 {ago} 前"
+
+msgid "Updates paused: Platform isn’t answering"
+msgstr "更新已暂停：Platform 无响应"
 
 msgid "Upgrade vote"
 msgstr "升级投票"
