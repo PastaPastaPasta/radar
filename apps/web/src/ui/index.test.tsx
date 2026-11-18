@@ -9,7 +9,6 @@ import {
   withChartMotion,
 } from './chart-theme'
 import * as ui from './index'
-import { RADAR_MAP_STYLE } from './map-style'
 
 describe('ui exports', () => {
   it.each([
@@ -121,11 +120,6 @@ describe('chart theme and map style', () => {
   it('turns animation off for reduced motion', () => {
     expect(withChartMotion({ series: [] }, false).animation).toBeUndefined()
     expect(withChartMotion({ series: [] }, true).animation).toBe(false)
-  })
-
-  it('exports the plate map values', () => {
-    expect(RADAR_MAP_STYLE.ocean.light).toMatch(/^#/)
-    expect(RADAR_MAP_STYLE.sources.lowZoomBelow).toBeGreaterThan(0)
   })
 })
 

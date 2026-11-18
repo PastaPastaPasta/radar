@@ -85,7 +85,6 @@ export type { UnitsValue } from './units-context'
 export { useNow, useMediaQuery, useReducedMotion, useThemeSignal, usePausedFeed } from './hooks'
 export { radarChartTheme, readChartTokens, withChartMotion, CHART_HEIGHT } from './chart-theme'
 export type { ChartTokens } from './chart-theme'
-export { RADAR_MAP_STYLE } from './map-style'
 export type {
   AmountUnit,
   BatchType,
