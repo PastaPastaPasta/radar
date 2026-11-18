@@ -430,6 +430,10 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 
 **Link previews (OG tags).** HTML for `/block/*`, `/tx/*`, `/mn/*`, `/identity/*`, `/contract/*` and `/token/*` gets per-entity tags from a backend read only for link-preview and crawler user agents (bots, crawlers, spiders, Slack, WhatsApp, Facebook and similar; see `isLinkPreviewAgent` in `workers/edge/src/og.ts`). Everyone else gets the page at once with the generic per-kind tags (`Block · Radar`). The response carries `vary: user-agent`.
 
+
+**Deploying.** `wrangler deploy` from `workers/edge` (after `pnpm build`) deploys `radar-web` to explorer.dashhq.org. `wrangler deploy --env preview` deploys `radar-web-preview` to explorer-next.dashhq.org, so a preview never touches production. Both custom domains are set in `wrangler.jsonc`, not as flags: wrangler replaces a Worker's whole custom-domain set on each deploy, and in a non-interactive shell it overwrites a conflicting DNS record without asking.
+
+**Edge transforms.** HTML responses carry `cache-control: …, no-transform`. The dashhq.org zone has Cloudflare Web Analytics auto-install on, and without `no-transform` the edge injects its beacon script, which the CSP refuses. Backend reads (the pass-through and the link-preview reads) send `UPSTREAM_USER_AGENT`, because Hyphen answers 520 to a request with no User-Agent.
 ---
 
 ## 3. The SDK worker (`data/sdk`)
