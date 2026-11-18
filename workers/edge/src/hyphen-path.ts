@@ -1,3 +1,6 @@
+// Hyphen answers 520 to requests without a User-Agent, and Workers send none by default.
+export const UPSTREAM_USER_AGENT = 'Radar/1 (+https://explorer.dashhq.org)'
+
 export const HYPHEN_API_BASE = {
   mainnet: 'https://hy.kw.vg/api/v1/',
   testnet: 'https://ts.kw.vg/api/v1/',

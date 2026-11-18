@@ -1,3 +1,5 @@
+import { UPSTREAM_USER_AGENT } from './hyphen-path'
+
 export type OgKind =
   | 'mn'
   | 'block'
@@ -410,7 +412,7 @@ export async function resolveOg(match: OgMatch, network: string | null): Promise
   if (!source.fetchUrl) return source.describe(id, {})
   try {
     const res = await fetch(source.fetchUrl(net, id), {
-      headers: { accept: 'application/json' },
+      headers: { accept: 'application/json', 'user-agent': UPSTREAM_USER_AGENT },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       cf: {
         cacheEverything: true,

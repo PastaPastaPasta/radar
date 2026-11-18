@@ -966,6 +966,7 @@ describe('per-entity title and OG', () => {
       )
       const html = await (await get(`/mn/${protx}`, { headers: { 'user-agent': agent } })).text()
       assert.equal(upstreamCalls.length, 1, agent)
+      assert.match(upstreamCalls[0].headers.get('user-agent'), /^Radar\//, agent)
       assert.match(html, /<title>Evonode eeeeeeee…eeeeee · Radar<\/title>/, agent)
     }
   })
