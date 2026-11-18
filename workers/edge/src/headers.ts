@@ -33,7 +33,8 @@ export function withSecurityHeaders(res: Response): Response {
     if (k === 'content-security-policy' && out.headers.has(k)) continue
     out.headers.set(k, v)
   }
-  if (out.headers.get('content-type')?.startsWith('text/html')) keepUntransformed(out.headers)
+  if (out.headers.get('content-type')?.toLowerCase().startsWith('text/html'))
+    keepUntransformed(out.headers)
   return out
 }
 
