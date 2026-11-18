@@ -335,6 +335,7 @@ async function recordRadar() {
 
 const window_ = (range, query = rangeQuery) => new URLSearchParams(query(range)).toString()
 const PE_TIMEFRAME = window_('24h')
+const BOARD_SPAN = window_('30d', rangeWindow)
 
 async function recordPe() {
   console.log(`pe (${net})`)
@@ -346,16 +347,14 @@ async function recordPe() {
     '/transactions?limit=10&order=desc',
     '/identities?limit=10&order=desc&order_by=balance',
     '/validators?limit=10',
-    '/quorums',
-    '/quorums/current',
     '/dataContracts?limit=10',
     '/tokens?limit=10',
     '/contestedResources?limit=10',
     '/contestedResources/stats',
     '/masternodes/votes?limit=10',
-    '/identities/active?limit=50&order=desc',
-    '/dataContracts/rating?limit=50&order=desc',
-    '/dataContracts/active?limit=50&order=desc',
+    `/identities/active?limit=50&order=desc&${BOARD_SPAN}`,
+    `/dataContracts/active?limit=50&order=desc&${BOARD_SPAN}`,
+    `/tokens/rating?limit=50&order=desc&${BOARD_SPAN}`,
     '/tokens/rating?limit=50&order=desc',
     '/identities?limit=50&order=desc&order_by=balance',
     '/identities?limit=50&order=desc&order_by=tx_count',

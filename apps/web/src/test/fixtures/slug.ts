@@ -44,10 +44,11 @@ function safe(s: string): string {
 
 const HEX64 = /[0-9a-fA-F]{64}/g
 
-const WINDOWED = /\/(?:history|stats|statistic)$/
+const WINDOWED =
+  /\/(?:history|stats|statistic)$|^\/(?:identities\/active|dataContracts\/active|tokens\/rating)$/
 
 /**
- * A history read names its window by absolute times that move with the clock. A recording is keyed by the
+ * A history read, or a leaderboard read over a span, names its window by absolute times that move with the clock. A recording is keyed by the
  * window's length instead, so the read made today finds the one recorded last week.
  */
 function spanned(path: string, query: string): string {

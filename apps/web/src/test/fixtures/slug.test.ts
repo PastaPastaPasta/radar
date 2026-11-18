@@ -29,6 +29,17 @@ describe('slugOf', () => {
     expect(slugOf('/blocks', 'timestamp_start=2026-11-10T00:00:00.000Z')).toContain('2026-11-10')
   })
 
+  it('keys a leaderboard read over a span by the span', () => {
+    const q = (end: string, start: string) =>
+      `limit=50&order=desc&timestamp_end=${end}&timestamp_start=${start}`
+    const a = q('2026-11-18T20:00:00.000Z', '2026-10-19T20:00:00.000Z')
+    const b = q('2026-12-01T08:05:00.000Z', '2026-11-01T08:05:00.000Z')
+    for (const path of ['/identities/active', '/dataContracts/active', '/tokens/rating']) {
+      expect(slugOf(path, a)).toBe(slugOf(path, b))
+      expect(slugOf(path, a)).toMatch(/--limit-50,order-desc,span-720h$/)
+    }
+  })
+
   it('shortens long slugs with a stable hash', () => {
     const long = slugOf('/x', `q=${'z'.repeat(200)}`)
     expect(long.length).toBeLessThan(125)
