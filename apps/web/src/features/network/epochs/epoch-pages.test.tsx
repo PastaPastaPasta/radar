@@ -2,7 +2,7 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { App } from '@/app'
 import { sdk } from '@/data/sdk/client'
 import { writeSourceMode } from '@/lib/source-mode'
@@ -34,6 +34,11 @@ afterEach(() => {
 
 describe('Epochs', () => {
   it('shows the clock, the facts and the rewards @RA-60 @NX-50', async () => {
+    const doc = await fixtureBody<{ schedule: { ts: number } }>('radar', 'mainnet', 'platform')
+    vi.useFakeTimers({ toFake: ['Date'], now: doc.schedule.ts * 1000 })
+    onTestFinished(() => {
+      vi.useRealTimers()
+    })
     renderAt('/epochs')
     const current = await card('current-epoch')
     await waitFor(() => expect(within(current).getByRole('meter')).toBeInTheDocument())
@@ -309,7 +314,7 @@ describe('Protocol', () => {
     renderAt('/protocol?network=testnet')
     const vote = await card('vote')
     await waitFor(() => expect(vote).toHaveTextContent('Activation threshold'))
-    expect(vote).toHaveTextContent('more than the 42 enabled now')
+    await waitFor(() => expect(vote).toHaveTextContent('more than the 42 enabled now'))
     expect(vote).not.toHaveTextContent('43 of 42')
   })
 

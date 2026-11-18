@@ -75,9 +75,7 @@ const LEGACY_SAMPLES = [
 
 function target(path: string, query: URLSearchParams, host: string) {
   const qs = query.size ? `?${query.toString()}` : ''
-  const hit = redirectFor(new URL(`https://${host}${path}${qs}`), {
-    nativeHosts: ['explorer.dashhq.org'],
-  })
+  const hit = redirectFor(new URL(`https://${host}${path}${qs}`))
   return hit ? new URL(hit.location, 'https://radar.invalid') : null
 }
 
