@@ -4,7 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { Entity } from '@/features/entity'
-import { formatInt } from '@/lib/format'
+import { clampSkew, formatInt, formatIsoUtc, formatRelative } from '@/lib/format'
 import { announce, Card, DataTable, LiveDot, Time, useReducedMotion } from '@/ui'
 import type { LiveKind } from './connection'
 import { etaOf, movedOn, type ScheduleRow, type ScheduleState } from './schedule'
@@ -138,7 +138,13 @@ function LiveStrip({ live }: { live: LiveSchedule }) {
             </>
           ) : null}
           {' · '}
-          <Time ms={tip.timeMs} live />
+          <time
+            className="rx-time"
+            dateTime={formatIsoUtc(tip.timeMs)}
+            title={formatIsoUtc(tip.timeMs)}
+          >
+            {formatRelative(clampSkew(tip.timeMs, now), now)}
+          </time>
         </span>
       ) : null}
       {kind === 'live' && next !== undefined ? (
