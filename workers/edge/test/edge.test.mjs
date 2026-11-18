@@ -97,6 +97,16 @@ describe('security headers', () => {
     assert.match(res.headers.get('permissions-policy'), /camera=\(self\)/)
   })
 
+  it('marks documents no-transform so the edge injects no analytics beacon the CSP would refuse', async () => {
+    for (const p of ['/', '/settings', '/identity/ABC']) {
+      const res = await get(p)
+      assert.match(res.headers.get('content-type'), /^text\/html/, p)
+      assert.match(res.headers.get('cache-control') ?? '', /(^|, )no-transform$/, p)
+    }
+    const sw = await get('/sw.js')
+    assert.doesNotMatch(sw.headers.get('cache-control'), /no-transform/)
+  })
+
   it('also sets them on assets and error responses', async () => {
     for (const p of ['/x/hy/mainnet/blocks', '/api/v1/summary', '/missing.png']) {
       reset(() => new Response('{}', { headers: { 'content-type': 'application/json' } }))

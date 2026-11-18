@@ -33,5 +33,12 @@ export function withSecurityHeaders(res: Response): Response {
     if (k === 'content-security-policy' && out.headers.has(k)) continue
     out.headers.set(k, v)
   }
+  if (out.headers.get('content-type')?.startsWith('text/html')) keepUntransformed(out.headers)
   return out
+}
+
+function keepUntransformed(headers: Headers): void {
+  const cache = headers.get('cache-control')
+  if (cache?.includes('no-transform')) return
+  headers.set('cache-control', cache ? `${cache}, no-transform` : 'no-transform')
 }
