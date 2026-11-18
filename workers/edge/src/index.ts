@@ -5,7 +5,6 @@ import { redirectFor } from './redirects'
 
 export interface Env {
   ASSETS: Fetcher
-  NATIVE_HOSTS?: string
 }
 
 const STATIC_FILE =
@@ -47,11 +46,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
     )
   }
 
-  const nativeHosts = (env.NATIVE_HOSTS ?? '')
-    .split(',')
-    .map((h) => h.trim())
-    .filter(Boolean)
-  const redirect = redirectFor(url, { nativeHosts })
+  const redirect = redirectFor(url)
   if (redirect) {
     return new Response(null, {
       status: redirect.permanent ? 301 : 302,

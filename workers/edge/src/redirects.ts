@@ -1,7 +1,3 @@
-export interface RedirectOptions {
-  nativeHosts: readonly string[]
-}
-
 interface Hit {
   path: string
   drop?: string[]
@@ -381,10 +377,9 @@ export interface Redirect {
   permanent: boolean
 }
 
-export function redirectFor(url: URL, opts: RedirectOptions): Redirect | null {
+export function redirectFor(url: URL): Redirect | null {
   const path = trimSlash(url.pathname)
   const q = new URLSearchParams(url.search)
-  const nativeHost = opts.nativeHosts.includes(url.hostname)
 
   const nativeHit = NATIVE[path]?.(q)
   const hit = nativeHit ?? matchLegacy(path, q)
@@ -393,20 +388,18 @@ export function redirectFor(url: URL, opts: RedirectOptions): Redirect | null {
   const dropsMainnet = q.get('network') === 'mainnet'
   if (!hit && !legacyNet && !dropsMainnet) return null
 
-  let network = q.get('network') ?? q.get('net')
+  const network = q.get('network') ?? q.get('net')
   const target = new URLSearchParams(q)
   for (const k of hit?.drop ?? []) target.delete(k)
   for (const [k, v] of Object.entries(hit?.set ?? {})) target.set(k, v)
   target.delete('net')
   target.delete('network')
-  const defaultedToTestnet = !network && !!nativeHit && nativeHost && nativeHit.path !== path
-  if (defaultedToTestnet) network = 'testnet'
   if (network && network !== 'mainnet') target.set('network', network)
 
   const path2 = hit ? hit.path : url.pathname.replace(/^\/{2,}/, '/')
   const search = target.size ? `?${target.toString()}` : ''
   const same = path2 === url.pathname && canonical(target) === canonical(q)
-  return same ? null : { location: `${path2}${search}`, permanent: !defaultedToTestnet }
+  return same ? null : { location: `${path2}${search}`, permanent: true }
 }
 
 const canonical = (p: URLSearchParams) =>
