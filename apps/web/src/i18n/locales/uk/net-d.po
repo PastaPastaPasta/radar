@@ -13,61 +13,52 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: placed.countries
-msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
-msgstr "{0, plural, one {{onMap} у # країні} few {{onMap} у # країнах} many {{onMap} у # країнах} other {{onMap} у # країни}}"
+msgid ", so the figures below may be out of date."
+msgstr ", тож наведені нижче цифри можуть бути застарілими."
 
-#. placeholder {0}: stats.missing
-msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
-msgstr "{0, plural, one {# мастернода немає на мапі: адресу не зареєстровано або ще не опитано.} few {# мастерноди немає на мапі: адресу не зареєстровано або ще не опитано.} many {# мастернод немає на мапі: адресу не зареєстровано або ще не опитано.} other {# мастернод немає на мапі: адресу не зареєстровано або ще не опитано.}}"
-
-#. placeholder {0}: totals.unlocated
-msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
-msgstr "{0, plural, one {# досяжний вузол у Tor або I2P не має розташування, тому його не показано.} few {# досяжні вузли в Tor або I2P не мають розташування, тому їх не показано.} many {# досяжних вузлів у Tor або I2P не мають розташування, тому їх не показано.} other {# досяжних вузла в Tor або I2P не мають розташування, тому їх не показано.}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned masternode is not counted: it serves nothing until it is revived.} other {# PoSe-banned masternodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, one {# мастернода, забанена PoSe, не враховується: вона нічого не обслуговує, доки її не відновлять.} few {# мастерноди, забанені PoSe, не враховуються: вони нічого не обслуговують, доки їх не відновлять.} many {# мастернод, забанених PoSe, не враховуються: вони нічого не обслуговують, доки їх не відновлять.} other {# мастерноди, забаненої PoSe, не враховуються: вони нічого не обслуговують, доки їх не відновлять.}}"
 
 #. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
 msgid "{0} blocks ago"
 msgstr "{0} блоків тому"
 
-#. placeholder {0}: nodeCount(totals.nodes)
-#. placeholder {1}: formatInt(totals.places)
-#. placeholder {2}: formatInt(totals.masternodes)
-msgid "{0} in {1} places; {2} are masternodes."
-msgstr "{0} у {1} місцях; з них мастернод: {2}."
+#. placeholder {0}: share(place.n)
+msgid "{0} of the total"
+msgstr "{0} від загальної кількості"
 
-#. placeholder {0}: formatInt(places.size)
-msgid "{0} places nearby"
-msgstr "Поруч {0} місць"
+#. placeholder {0}: pct(top.n)
+#. placeholder {1}: countryName(top.key)
+msgid "{0} of them run in one country, {1}."
+msgstr "{0} з них працюють в одній країні — {1}."
 
-#. placeholder {0}: formatInt(nodes)
-#. placeholder {1}: formatInt(masternodes)
-#. placeholder {2}: formatInt(nodes - masternodes)
-msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
-msgstr "Досяжних вузлів: {0} — {1} мастернод і {2} інших повних вузлів."
+#. placeholder {0}: formatInt(others)
+msgid "{0} others"
+msgstr "ще {0}"
 
-#. placeholder {0}: chosen.length
-msgid "{0} selected"
-msgstr "Вибрано: {0}"
+#. placeholder {0}: pct(host.n)
+#. placeholder {1}: host.key
+msgid "{0} run with one hosting provider, {1}."
+msgstr "{0} працюють в одного хостинг-провайдера — {1}."
 
-#. placeholder {0}: nodeCount(nodes)
-#. placeholder {1}: formatInt(masternodes)
-msgid "{0}, {1} of them masternodes"
-msgstr "{0}, з них мастернод: {1}"
+msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
+msgstr "{j, plural, one {Половина працює в # хостинг-провайдера.} few {Половина працює в # хостинг-провайдерів.} many {Половина працює в # хостинг-провайдерів.} other {Половина працює в # хостинг-провайдера.}}"
 
-#. placeholder {0}: mnCount(rows.length)
-#. placeholder {1}: formatInt(reachable)
-msgid "{0}, {1} reachable."
-msgstr "{0}, досяжні: {1}."
+msgid "{k, plural, one {Half of the {total} evonodes run in # city} other {Half of the {total} evonodes run in # cities}}"
+msgstr "{k, plural, one {Половина з {total} Evonode працює в # місті} few {Половина з {total} Evonode працює в # містах} many {Половина з {total} Evonode працює в # містах} other {Половина з {total} Evonode працює в # міста}}"
 
-#. placeholder {0}: mnCount(total)
-msgid "{0}: {list}"
-msgstr "{0}: {list}"
+msgid "{k, plural, one {Half of the {total} masternodes run in # city} other {Half of the {total} masternodes run in # cities}}"
+msgstr "{k, plural, one {Половина з {total} мастернод працює в # місті} few {Половина з {total} мастернод працює в # містах} many {Половина з {total} мастернод працює в # містах} other {Половина з {total} мастернод працює в # міста}}"
 
-msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
-msgstr "В останньому обході відповіли {answered} із {total}: {enabledAnswered} із {enabled} увімкнених і {bannedAnswered} із {banned} забанених PoSe."
+msgid "{k, plural, one {Half of the {total} reachable nodes run in # city} other {Half of the {total} reachable nodes run in # cities}}"
+msgstr "{k, plural, one {Половина з {total} досяжних вузлів працює в # місті} few {Половина з {total} досяжних вузлів працює в # містах} many {Половина з {total} досяжних вузлів працює в # містах} other {Половина з {total} досяжних вузлів працює в # міста}}"
 
-msgid "{answered} of {total} answered the latest crawl."
-msgstr "В останньому обході відповіли {answered} із {total}."
+msgid "{k, plural, one {Half of them run in # country.} other {Half of them run in # countries.}}"
+msgstr "{k, plural, one {Половина працює в # країні.} few {Половина працює в # країнах.} many {Половина працює в # країнах.} other {Половина працює в # країни.}}"
+
+msgid "{k, plural, one {Half of these {total} masternodes run in # city} other {Half of these {total} masternodes run in # cities}}"
+msgstr "{k, plural, one {Половина з цих {total} мастернод працює в # місті} few {Половина з цих {total} мастернод працює в # містах} many {Половина з цих {total} мастернод працює в # містах} other {Половина з цих {total} мастернод працює в # міста}}"
 
 #. placeholder {0}: value(c.old)
 msgid "{label} (was at {0})"
@@ -80,14 +71,38 @@ msgstr "{label} на {0}"
 msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
 msgstr "{lastDay, plural, one {# зміна списку мастернод за останні 24 години} few {# зміни списку мастернод за останні 24 години} many {# змін списку мастернод за останні 24 години} other {# зміни списку мастернод за останні 24 години}}"
 
+msgid "{n, plural, one {# evonode} other {# evonodes}}"
+msgstr "{n, plural, one {# Evonode} few {# Evonode} many {# Evonode} other {# Evonode}}"
+
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# мастернода} few {# мастерноди} many {# мастернод} other {# мастерноди}}"
 
 msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
 msgstr "{n, plural, one {# досяжний вузол} few {# досяжні вузли} many {# досяжних вузлів} other {# досяжного вузла}}"
 
-msgid "← Back to the list"
-msgstr "← Назад до списку"
+msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
+msgstr "{others, plural, one {У місті {city} з нею ще # врахована мастернода: там працюють {part} від загальної кількості.} few {У місті {city} з нею ще # враховані мастерноди: там працюють {part} від загальної кількості.} many {У місті {city} з нею ще # врахованих мастернод: там працюють {part} від загальної кількості.} other {У місті {city} з нею ще # врахованої мастерноди: там працюють {part} від загальної кількості.}}"
+
+msgid "{pct} of the {total} evonodes run in one city, {where}"
+msgstr "{pct} з {total} Evonode працюють в одному місті — {where}"
+
+msgid "{pct} of the {total} masternodes run in one city, {where}"
+msgstr "{pct} з {total} мастернод працюють в одному місті — {where}"
+
+msgid "{pct} of the {total} reachable nodes run in one city, {where}"
+msgstr "{pct} з {total} досяжних вузлів працюють в одному місті — {where}"
+
+msgid "{pct} of these {total} masternodes run in one city, {where}"
+msgstr "{pct} з цих {total} мастернод працюють в одному місті — {where}"
+
+msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {Для # обхід не знайшов розташування; у частках її враховано як невідому.} few {Для # обхід не знайшов розташування; у частках їх враховано як невідомі.} many {Для # обхід не знайшов розташування; у частках їх враховано як невідомі.} other {Для # обхід не знайшов розташування; у частках їх враховано як невідомі.}}"
+
+msgid "{unplaced, plural, one {# reachable node is on Tor or I2P and has no place; the shares count it as unknown.} other {# reachable nodes are on Tor or I2P and have no place; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# досяжний вузол працює через Tor або I2P і не має місця; у частках його враховано як невідомий.} few {# досяжні вузли працюють через Tor або I2P і не мають місця; у частках їх враховано як невідомі.} many {# досяжних вузлів працюють через Tor або I2P і не мають місця; у частках їх враховано як невідомі.} other {# досяжного вузла працюють через Tor або I2P і не мають місця; у частках їх враховано як невідомі.}}"
+
+msgid "<0.1%"
+msgstr "<0.1%"
 
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "200, поки дані кожної мережі свіжі й збережені; інакше 503 з описом проблеми. Для перевірок доступності."
@@ -107,26 +122,24 @@ msgstr "Зміни адреси"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Адреси вузлів, що не є мастернодами, ніколи не публікуються — їх лише підраховують."
 
-msgid "All nodes"
-msgstr "Усі вузли"
+msgid "All reachable nodes"
+msgstr "Усі досяжні вузли"
 
-msgid "All nodes (soon)"
-msgstr "Усі вузли (незабаром)"
+msgid "Americas"
+msgstr "Америка"
 
-msgid "Any country"
-msgstr "Будь-яка країна"
+#. placeholder {0}: formatInt(more)
+msgid "and {0} more"
+msgstr "і ще {0}"
 
-msgid "Any DKG readiness"
-msgstr "Будь-яка готовність до DKG"
+msgid "Answered the crawl"
+msgstr "Відповіла на обхід"
 
-msgid "Any hosting"
-msgstr "Будь-який хостинг"
+msgid "Answered the last crawl"
+msgstr "Відповіли на останній обхід"
 
-msgid "Any type"
-msgstr "Будь-який тип"
-
-msgid "Any version"
-msgstr "Будь-яка версія"
+msgid "Asia and Oceania"
+msgstr "Азія та Океанія"
 
 msgid "Back in the list"
 msgstr "Назад до списку"
@@ -154,14 +167,20 @@ msgstr "Зміни"
 msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
 msgstr "Одразу перевіряє мастернод P2P-рукостисканням за його зареєстрованою адресою. П’ять перевірок на хвилину на клієнта; результат, молодший за хвилину, повертається повторно."
 
+msgid "Cities"
+msgstr "Міста"
+
+msgid "Cities, largest first"
+msgstr "Міста, найбільші першими"
+
+msgid "Clear all"
+msgstr "Скинути все"
+
+msgid "Clear the filters"
+msgstr "Скинути фільтри"
+
 msgid "Close"
 msgstr "Закрити"
-
-msgid "Colour"
-msgstr "Колір"
-
-msgid "Colour by"
-msgstr "Розфарбувати за"
 
 msgid "Copy command"
 msgstr "Копіювати команду"
@@ -178,23 +197,33 @@ msgstr "Адреса Core P2P"
 msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
 msgstr "Розгортання Core через version bits (Dash Core 24 та evo_shares): стан, вікна, сигналізація й прогноз."
 
-msgid "Couldn't load the masternode list."
-msgstr "Не вдалося завантажити список мастернод."
+msgid "Count them too"
+msgstr "Враховувати й їх"
 
-msgid "Country"
-msgstr "Країна"
+msgid "Countries"
+msgstr "Країни"
 
-msgid "Counts follow the filters and the shown categories."
-msgstr "Числа залежать від фільтрів і показаних категорій."
+msgid "Countries and hosting providers"
+msgstr "Країни та хостинг-провайдери"
+
+#. placeholder {0}: countryName(c)
+msgid "Country: {0}"
+msgstr "Країна: {0}"
 
 msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
 msgstr "Опубліковані релізи Dash Core на GitHub, нові спочатку, оновлюються щогодини."
 
-msgid "DKG readiness"
-msgstr "Готовність до DKG"
+msgid "Did not answer the crawl"
+msgstr "Не відповіла на обхід"
+
+msgid "DKG: {d}"
+msgstr "DKG: {d}"
 
 msgid "Enabled"
 msgstr "Увімкнена"
+
+msgid "Europe"
+msgstr "Європа"
 
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Кожні 15 хвилин краулер відкриває P2P-з’єднання з адресою кожного зареєстрованого мастернода, з кожним вузлом, що відповів за останній тиждень, і з новими адресами, про які дізнається від нашого вузла Dash та інших вузлів. Він завершує рукостискання версії й відключається. Транзакції він не ретранслює й зберігає лише те, що оголошує вузол."
@@ -220,21 +249,42 @@ msgstr "Нагороди Platform евонод у кредитах: поточн
 msgid "Examples"
 msgstr "Приклади"
 
+msgid "Filter masternodes"
+msgstr "Фільтр мастернод"
+
 msgid "Filters"
 msgstr "Фільтри"
 
-#. placeholder {0}: label(k)
-msgid "Hide {0}"
-msgstr "Сховати: {0}"
+msgid "Half of the evonodes run in the cities above."
+msgstr "Половина Evonode працює в містах вище."
+
+msgid "Half of the reachable nodes run in the cities above."
+msgstr "Половина досяжних вузлів працює в містах вище."
+
+msgid "Half of these masternodes run in the cities above."
+msgstr "Половина цих мастернод працює в містах вище."
 
 msgid "Hosting"
 msgstr "Хостинг"
+
+msgid "Hosting providers"
+msgstr "Хостинг-провайдери"
+
+#. placeholder {0}: hosts[h] ?? `AS${h}`
+msgid "Hosting: {0}"
+msgstr "Хостинг: {0}"
 
 msgid "How the data is collected"
 msgstr "Як збираються дані"
 
 msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
 msgstr "У шляхах {NET} — це mainnet або testnet. Суми вказано в даффах (1 DASH = 100 000 000 даффів), крім сум Platform — вони в кредитах (1 DASH = 100 000 000 000 кредитів). Час — у секундах unix."
+
+msgid "It is not among the masternodes counted here (PoSe-banned, or left out by a filter)."
+msgstr "Вона не входить до врахованих тут мастернод (забанена PoSe або виключена фільтром)."
+
+msgid "It is the only counted masternode in {city}."
+msgstr "Це єдина врахована мастернода в місті {city}."
 
 msgid "Kind of change"
 msgstr "Вид зміни"
@@ -251,23 +301,23 @@ msgstr "Вибув зі списку"
 msgid "Link copied"
 msgstr "Посилання скопійовано"
 
-msgid "Loading the network…"
-msgstr "Завантаження мережі…"
-
 msgid "Location"
 msgstr "Розташування"
+
+msgid "Locations: DB-IP (CC BY 4.0). Land: Natural Earth."
+msgstr "Розташування: DB-IP (CC BY 4.0). Суходіл: Natural Earth."
 
 msgid "Map"
 msgstr "Мапа"
 
-msgid "Map attribution"
-msgstr "Джерела мапи"
+msgid "Map of the world with a disc for each city, sized by how many nodes run there: {all}. Largest: {largest}."
+msgstr "Мапа світу з колом на кожне місто за кількістю вузлів у ньому: {all}. Найбільші: {largest}."
 
-msgid "Map controls"
-msgstr "Керування мапою"
+msgid "Map of the world. Radar's crawl places the nodes on it, and it is not read in this mode."
+msgstr "Мапа світу. Вузли на неї наносить обхід Radar, а в цьому режимі він не читається."
 
-msgid "Map of the network's nodes"
-msgstr "Мапа вузлів мережі"
+msgid "Map of the world. The nodes are on their way."
+msgstr "Мапа світу. Вузли завантажуються."
 
 msgid "Masternode"
 msgstr "Мастернода"
@@ -299,11 +349,29 @@ msgstr "Змін поки не записано."
 msgid "No changes to the masternode list in the last 24 hours"
 msgstr "За останні 24 години список мастернод не змінювався"
 
+msgid "No location"
+msgstr "Без розташування"
+
+msgid "No location (Tor, I2P)"
+msgstr "Без розташування (Tor, I2P)"
+
+msgid "No masternode matches these filters."
+msgstr "Жодна мастернода не відповідає цим фільтрам."
+
+msgid "No provider (Tor, I2P)"
+msgstr "Без провайдера (Tor, I2P)"
+
+msgid "No provider on record"
+msgstr "Провайдер невідомий"
+
 msgid "Not checked"
 msgstr "Не перевірено"
 
 msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
 msgstr "Старіші виплати одного мастернода, нові спочатку. Для посторінкового завантаження передайте в before останню отриману висоту."
+
+msgid "One disc per city; its area is the count. A city is where the node's IP address is registered, so it marks a data centre's region, not a building."
+msgstr "Одне коло на місто, його площа — кількість. Місто — це місце реєстрації IP-адреси вузла, тож воно позначає регіон дата-центру, а не будівлю."
 
 msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
 msgstr "Один мастернод: запис у списку, застава, ключі, адреси, історія версій, аптайм, виплати, дохідність, зміни та, для евоноди, нагороди Platform."
@@ -314,8 +382,8 @@ msgstr "Тести швидкості одного мастернода з ко�
 msgid "Open masternode"
 msgstr "Відкрити мастернод"
 
-msgid "Open these as a list"
-msgstr "Відкрити списком"
+msgid "Open them in the masternode list"
+msgstr "Відкрити їх у списку мастернод"
 
 msgid "Operator key"
 msgstr "Ключ оператора"
@@ -325,12 +393,6 @@ msgstr "Адреса виплат оператору"
 
 msgid "Operator reward"
 msgstr "Нагорода оператора"
-
-msgid "Other full nodes"
-msgstr "Інші повні вузли"
-
-msgid "Other versions"
-msgstr "Інші версії"
 
 msgid "Owner address"
 msgstr "Адреса власника"
@@ -344,9 +406,6 @@ msgstr "Зміни виплат і ключів"
 msgid "Per network"
 msgstr "За мережами"
 
-msgid "Places on the map"
-msgstr "Місця на мапі"
-
 msgid "Platform HTTPS address"
 msgstr "Адреса HTTPS Platform"
 
@@ -355,9 +414,6 @@ msgstr "ID вузла Platform"
 
 msgid "Platform P2P address"
 msgstr "Адреса Platform P2P"
-
-msgid "PoSe"
-msgstr "PoSe"
 
 msgid "PoSe bans and revivals"
 msgstr "Бани та повернення PoSe"
@@ -368,14 +424,23 @@ msgstr "Статус PoSe"
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
 
+msgid "PoSe-banned counted too"
+msgstr "Забанені PoSe теж враховано"
+
+msgid "PoSe-banned only"
+msgstr "Лише забанені PoSe"
+
+msgid "ProTx, IP, city or provider"
+msgstr "ProTx, IP, місто або провайдер"
+
 msgid "Radar API"
 msgstr "API Radar"
 
 msgid "Radar doesn't crawl devnets."
 msgstr "Radar не обходить devnet."
 
-msgid "Reachability"
-msgstr "Досяжність"
+msgid "Radar's last crawl finished"
+msgstr "Останній обхід Radar завершився"
 
 msgid "Reachable"
 msgstr "Доступний"
@@ -383,30 +448,36 @@ msgstr "Доступний"
 msgid "Reachable nodes counted per city, never by address, and how many have no location."
 msgstr "Досяжні вузли, підраховані за містами (ніколи за адресами), і скільки з них без розташування."
 
+msgid "Region"
+msgstr "Регіон"
+
 msgid "Registered"
 msgstr "Зареєстровано"
 
 msgid "Registrations and removals"
 msgstr "Реєстрації та вилучення"
 
-msgid "Same location"
-msgstr "Те саме місце"
+msgid "Regular masternodes only"
+msgstr "Лише звичайні мастерноди"
 
-msgid "Search masternodes"
-msgstr "Пошук мастернод"
+#. placeholder {0}: c.label
+msgid "Remove the filter {0}"
+msgstr "Прибрати фільтр {0}"
 
-msgid "Search ProTx, IP, city, hosting"
-msgstr "Пошук за ProTx, IP, містом, хостингом"
+#. placeholder {0}: filter.q
+msgid "Search: {0}"
+msgstr "Пошук: {0}"
 
-msgid "Show"
-msgstr "Показати"
+#. placeholder {0}: formatInt(places.length)
+msgid "Show all {0} cities"
+msgstr "Показати всі міста ({0})"
 
-#. placeholder {0}: label(k)
-msgid "Show {0}"
-msgstr "Показати: {0}"
+msgid "Show fewer"
+msgstr "Показати менше"
 
-msgid "Show or hide categories"
-msgstr "Показати або сховати категорії"
+#. placeholder {0}: formatInt(s.n)
+msgid "Show only these: {0}"
+msgstr "Показати лише їх: {0}"
 
 msgid "The 300 latest masternode list changes, newest first, and when recording started."
 msgstr "300 останніх змін списку мастернод, нові спочатку, і час початку запису."
@@ -420,6 +491,12 @@ msgstr "URL API не змінилися: https://radar.dashhq.org/api/v1/* по�
 msgid "The block hashes the speed tests use."
 msgstr "Хеші блоків, які використовують тести швидкості."
 
+msgid "The crawl found no location for it, so it is not on the map."
+msgstr "Обхід не знайшов її розташування, тому її немає на мапі."
+
+msgid "The crawl is stale."
+msgstr "Обхід застарів."
+
 msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
 msgstr "Стан краулера й блокчейна для кожної мережі: останній обхід, синхронізація нашого вузла Dash і діапазон індексу виплат."
 
@@ -429,33 +506,29 @@ msgstr "Останні зміни реєстрацій мастернод, но�
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "Останній завершений обхід, обхід добою раніше і кожен розподіл (dists[scope][dim]), з дохідністю, станом Platform і готовністю до DKG."
 
-#. placeholder {0}: formatInt(target.extra)
-msgid "The list also shows {0} hidden here ({names}); it can't leave them out."
-msgstr "У списку також є {0}, приховані тут ({names}); виключити їх він не може."
-
-msgid "The map could not start in this browser. The filters and the list still work."
-msgstr "Мапу не вдалося запустити в цьому браузері. Фільтри та список усе ще працюють."
-
 msgid "The map is drawn from Radar's crawl of mainnet and testnet."
 msgstr "Мапа будується за обходом Radar у mainnet і testnet."
 
 msgid "The map needs Radar's crawl"
 msgstr "Для мапи потрібен обхід Radar"
 
+msgid "The masternode in the address is not in Radar's list: it may have left the network."
+msgstr "Мастерноди з адреси немає в списку Radar: можливо, вона залишила мережу."
+
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "Сайт і API віддаються з документів, які краулер публікує після кожного обходу, тому вони працюють, навіть коли краулер недоступний."
 
-msgid "This area"
-msgstr "Ця область"
+msgid "The tick marks half of every reachable node."
+msgstr "Позначка показує половину всіх досяжних вузлів."
+
+msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
+msgstr "Позначка показує половину. Виберіть країну або провайдера, щоб побачити, де його мастерноди."
+
+msgid "This masternode"
+msgstr "Ця мастернода"
 
 msgid "Tools"
 msgstr "Інструменти"
-
-msgid "Type"
-msgstr "Тип"
-
-msgid "Unknown version"
-msgstr "Невідома версія"
 
 msgid "Unreachable"
 msgstr "Недоступний"
@@ -466,17 +539,20 @@ msgstr "Доступність за 7 днів"
 msgid "Version"
 msgstr "Версія"
 
+msgid "Version: {v}"
+msgstr "Версія: {v}"
+
 msgid "Voting address"
 msgstr "Адреса для голосування"
+
+msgid "What to count"
+msgstr "Що рахувати"
 
 msgid "When"
 msgstr "Коли"
 
-msgid "Where the masternodes run, coloured by reachability, version or type."
-msgstr "Де працюють мастерноди, із розфарбуванням за досяжністю, версією або типом."
+msgid "Where the network runs, by city, country and hosting provider, from Radar's latest crawl."
+msgstr "Де працює мережа — за містами, країнами та хостинг-провайдерами, за останнім обходом Radar."
 
-msgid "Zoom in"
-msgstr "Наблизити"
-
-msgid "Zoom out"
-msgstr "Віддалити"
+msgid "World"
+msgstr "Світ"

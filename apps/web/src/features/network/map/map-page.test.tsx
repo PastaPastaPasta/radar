@@ -1,217 +1,132 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { act, render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
-import type { MapViewProps } from './MapView'
+
+let history: ReturnType<typeof createMemoryHistory>
 
 function renderAt(url: string) {
-  render(<App history={createMemoryHistory({ initialEntries: [url] })} />)
+  history = createMemoryHistory({ initialEntries: [url] })
+  render(<App history={history} />)
 }
 
-const views: MapViewProps[] = []
-
-vi.mock('./MapView', () => ({
-  default: (props: MapViewProps) => {
-    views.push(props)
-    return (
-      <div
-        data-fake-map
-        data-layer={props.layer}
-        data-points={props.points.length}
-        data-geo={props.geo.length}
-        data-selected={props.selected ?? ''}
-      >
-        {props.popup}
-      </div>
-    )
-  },
-}))
-
-const last = () => views[views.length - 1]!
-const mapPage = () => document.querySelector<HTMLElement>('[data-page="/map"]')!
-const headline = () => screen.getByText(/answered the latest crawl/)
-
-beforeEach(() => {
-  views.length = 0
-  vi.stubGlobal(
-    'ResizeObserver',
-    class {
-      observe = vi.fn()
-      unobserve = vi.fn()
-      disconnect = vi.fn()
-    },
-  )
-})
+const search = () => new URLSearchParams(history.location.search)
+const h1 = () => screen.getByRole('heading', { level: 1 })
+const cities = () => screen.getByRole('list', { name: 'Cities, largest first' })
+const rows = () => within(cities()).getAllByRole('button')
 
 afterEach(() => {
-  vi.unstubAllGlobals()
   writeSourceMode('all')
 })
 
 describe('the Map page', () => {
-  it('draws the masternodes, colours them by reachability and counts them in the headline @RA-50 @RA-51', async () => {
+  it('claims how few cities hold half of the enabled masternodes, and says the rest by country and provider @RA-50', async () => {
     renderAt('/map')
-    await screen.findByRole('heading', { level: 1, name: /^\d+ masternodes in \d+ countries$/ })
-    await waitFor(() => expect(headline()).toHaveTextContent(/134 of 150 masternodes answered/))
-    expect(headline()).toHaveTextContent('130 enabled')
-    expect(headline()).toHaveTextContent('PoSe-banned')
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    expect(last().layer).toBe('mn')
-    expect(new Set(last().points.map((p) => p.tone))).toEqual(new Set(['good', 'critical']))
-    const chips = within(screen.getByRole('group', { name: 'Show or hide categories' }))
-    expect(chips.getByRole('button', { name: /Reachable/ })).toHaveTextContent('134')
-    expect(chips.getByRole('button', { name: /Unreachable/ })).toHaveTextContent('10')
-    expect(chips.getByRole('button', { name: /Not checked/ })).toHaveTextContent('6')
-  })
-
-  it('hides a category from the chips and keeps it in the address @RA-51 @RA-52', async () => {
-    const user = userEvent.setup()
-    renderAt('/map')
-    const chips = await screen.findByRole('group', { name: 'Show or hide categories' })
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    const before = last().points.length
-    await user.click(within(chips).getByRole('button', { name: /Unreachable/ }))
-    await waitFor(() => expect(last().points.length).toBeLessThan(before))
-    expect(within(chips).getByRole('button', { name: /Unreachable/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
-    expect(headline()).toHaveTextContent(/134 of 140 masternodes answered/)
-  })
-
-  it('colours by version, with the five commonest versions named and the rest folded @RA-50', async () => {
-    renderAt('/map?color=version')
-    const chips = await screen.findByRole('group', { name: 'Show or hide categories' })
     await waitFor(() =>
-      expect(within(chips).getByRole('button', { name: /24\.0\.0/ })).toBeInTheDocument(),
+      expect(h1()).toHaveTextContent('Half of the 130 masternodes run in 2 cities'),
     )
-    expect(within(chips).getByRole('button', { name: /Unknown version/ })).toHaveTextContent('16')
-    expect(screen.getByRole('button', { name: 'Version' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByText(/60% of them run in one country, Germany\./)).toBeInTheDocument()
+    expect(screen.getByText(/Half run with 3 hosting providers\./)).toBeInTheDocument()
+    expect(rows()[0]).toHaveTextContent(/Falkenstein.*49/)
+    // "Frankfurt am Main (Innenstadt I)" is Frankfurt am Main
+    expect(rows()[1]).toHaveTextContent(/Frankfurt am Main.*27/)
+    expect(document.querySelectorAll('[data-half-line]')).toHaveLength(1)
+    expect(screen.getByText(/20 PoSe-banned masternodes are not counted/)).toBeInTheDocument()
+    expect(document.querySelector('[data-map-figure] svg')).toHaveAttribute(
+      'aria-label',
+      expect.stringMatching(/Map of the world with a disc for each city/),
+    )
   })
 
-  it('narrows the map with the type, version, country, hosting and search filters @RA-51', async () => {
+  it('picks a city from the list, rings it and keeps it in the address @RA-50 @RA-52', async () => {
     const user = userEvent.setup()
     renderAt('/map')
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    const all = last().points.length
-    const country = screen.getByLabelText('Country')
-    expect(within(country).getByRole('option', { name: /Germany \(DE\) · 78/ })).toBeInTheDocument()
-    await user.selectOptions(country, 'DE')
-    await waitFor(() => expect(last().points.length).toBe(78))
-    expect(last().points.length).toBeLessThan(all)
-    const hosting = screen.getByLabelText('Hosting')
-    expect(
-      within(hosting).getByRole('option', { name: /^Hetzner Online GmbH/ }),
-    ).toBeInTheDocument()
-    await user.selectOptions(screen.getByLabelText('Type'), 'evo')
-    await waitFor(() => expect(last().points.length).toBeLessThan(78))
-    await user.type(screen.getByRole('searchbox', { name: 'Search masternodes' }), 'zzzz-no-such')
-    await waitFor(() => expect(last().points.length).toBe(0))
-  })
-
-  it('opens these masternodes as a list with the same filter fields @RA-51', async () => {
-    renderAt('/map?country=DE&type=evo&host=24940&hide=unchecked,unreachable')
-    const link = await screen.findByRole('link', { name: 'Open these as a list' })
-    await waitFor(() => expect(link.getAttribute('href')).toContain('/masternodes?'))
-    const href = new URL(link.getAttribute('href')!, 'http://x')
+    await waitFor(() => expect(rows().length).toBeGreaterThan(3))
+    await user.click(rows()[0]!)
+    await waitFor(() => expect(search().get('place')).toBe('DE:Falkenstein'))
+    const card = document.querySelector<HTMLElement>('[data-place-card]')!
+    expect(card).toHaveTextContent('49 masternodes')
+    expect(card).toHaveTextContent('Hetzner Online GmbH')
+    const list = within(card).getByRole('link', { name: 'Open them in the masternode list' })
+    const href = new URL(list.getAttribute('href')!, 'http://x')
     expect(href.pathname).toBe('/masternodes')
     expect(href.searchParams.get('country')).toBe('DE')
-    expect(href.searchParams.get('type')).toBe('evo')
-    expect(href.searchParams.get('host')).toBe('24940')
-    expect(href.searchParams.get('reach')).toBe('reachable')
-    expect(href.searchParams.has('hide')).toBe(false)
+    expect(href.searchParams.get('q')).toBe('Falkenstein')
+    expect(document.querySelector('[data-selected]')).not.toBeNull()
+    await user.click(within(card).getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(search().has('place')).toBe(false))
   })
 
-  it('makes its headline say what the filters leave @RA-26', async () => {
-    renderAt('/map?country=DE')
-    const h1 = await screen.findByRole('heading', {
-      level: 1,
-      name: /^\d+ masternodes in 1 country$/,
-    })
-    expect(h1).not.toHaveTextContent(/in \d\d+ countries/)
-    await waitFor(() => expect(last().points.length).toBe(78))
-    expect(h1).toHaveTextContent(/^78 masternodes in 1 country$/)
-  })
-
-  it('says beside the link when the list cannot leave out what the map hides @RA-51', async () => {
-    renderAt('/map?hide=unchecked')
-    const link = await screen.findByRole('link', { name: 'Open these as a list' })
-    await waitFor(() => expect(document.querySelector('[data-list-extra]')).not.toBeNull())
-    expect(document.querySelector('[data-list-extra]')).toHaveTextContent(
-      /hidden here \(Not checked\)/,
-    )
-    expect(link.getAttribute('href')).not.toContain('reach')
-  })
-
-  it('says how many masternodes are not on the map @RA-51', async () => {
-    renderAt('/map')
-    await waitFor(() => expect(screen.getByText(/not on the map/)).toBeInTheDocument())
-    expect(screen.getByText(/not on the map/)).toHaveTextContent(
-      /^\d+ masternodes are not on the map/,
-    )
-  })
-
-  it('switches to the all-nodes layer, per city, from the geo document @RA-50', async () => {
+  it('narrows to a country or a provider from its share bar @RA-51', async () => {
     const user = userEvent.setup()
     renderAt('/map')
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    await user.click(await screen.findByRole('button', { name: 'All nodes' }))
-    await waitFor(() => expect(last().layer).toBe('nodes'))
-    expect(last().geo).toHaveLength(198)
+    const bars = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-map-bars]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    await user.click(within(bars).getByRole('button', { name: /Germany/ }))
+    await waitFor(() => expect(search().get('country')).toBe('DE'))
     await waitFor(() =>
-      expect(screen.getByText(/reachable nodes in 198 places/)).toBeInTheDocument(),
+      expect(h1()).toHaveTextContent(
+        /^63% of these 78 masternodes run in one city, Falkenstein, Germany$/,
+      ),
     )
-    expect(screen.getByText(/have no location, so they are not drawn/)).toBeInTheDocument()
-    expect(screen.queryByLabelText('Country')).toBeNull()
+    const chip = screen.getByRole('button', { name: 'Remove the filter Country: Germany' })
+    await user.click(chip)
+    await waitFor(() => expect(search().has('country')).toBe(false))
+    await user.click(within(bars).getByRole('button', { name: /Hetzner Online GmbH/ }))
+    await waitFor(() => expect(search().get('host')).toMatch(/24940/))
   })
 
-  it('opens a masternode popup from the address, focused on its protx, with a link to it @RA-52', async () => {
+  it('switches between masternodes, evonodes and every reachable node @RA-51', async () => {
+    const user = userEvent.setup()
+    renderAt('/map')
+    await waitFor(() => expect(h1()).toHaveTextContent(/masternodes run in/))
+    await user.click(screen.getByRole('button', { name: 'Evonodes' }))
+    await waitFor(() => expect(search().get('type')).toBe('evo'))
+    await waitFor(() => expect(h1()).toHaveTextContent(/of the 12 evonodes run in/))
+    await user.click(screen.getByRole('button', { name: 'All reachable nodes' }))
+    await waitFor(() => expect(search().get('layer')).toBe('nodes'))
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable nodes run in/))
+    expect(search().has('type')).toBe(false)
+    expect(
+      screen.getByText(/reachable nodes are on Tor or I2P and have no place/),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('searchbox')).toBeNull()
+  })
+
+  it('turns an old map link into the filter it meant @RA-52', async () => {
+    renderAt('/map?color=pose&hide=enabled')
+    await waitFor(() => expect(search().get('status')).toBe('pose-banned'))
+    expect(search().has('hide')).toBe(false)
+    expect(search().has('color')).toBe(false)
+    await waitFor(() => expect(h1()).toHaveTextContent(/these 20 masternodes/))
+  })
+
+  it('opens a masternode from the address and says how many share its city @RA-52', async () => {
     const protx = '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32'
     renderAt(`/map?protx=${protx}`)
     const card = await waitFor(() => {
-      const el = document.querySelector(`[data-fake-map] [data-map-card="${protx}"]`)
+      const el = document.querySelector<HTMLElement>(`[data-map-card="${protx}"]`)
       expect(el).not.toBeNull()
-      return el as HTMLElement
+      return el!
     })
-    expect(last().selected).toBe(protx)
-    expect(last().selectedAt).toHaveLength(2)
     expect(within(card).getByRole('link', { name: 'Open masternode' })).toHaveAttribute(
       'href',
       `/mn/${protx}`,
     )
-    expect(card).toHaveTextContent('Address')
-    expect(card).toHaveTextContent('Uptime, 7 days')
-    expect(card).toHaveTextContent('Last paid')
+    expect(document.querySelector('[data-map-node]')).toHaveTextContent(
+      /It shares|It is the only|not among/,
+    )
   })
 
-  it('drops a protx that is not on the map without opening anything @RA-52', async () => {
+  it('says when the masternode in the address is not in the list @RA-52', async () => {
     renderAt(`/map?protx=${'0'.repeat(64)}`)
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    expect(last().selected).toBeUndefined()
+    await waitFor(() => expect(document.querySelector('[data-node-missing]')).not.toBeNull())
     expect(document.querySelector('[data-map-card]')).toBeNull()
-  })
-
-  it('lists the masternodes of a cluster that cannot split any further @RA-50', async () => {
-    renderAt('/map')
-    await waitFor(() => expect(last().points.length).toBeGreaterThan(100))
-    const protxs = last()
-      .points.slice(0, 3)
-      .map((p) => p.protx)
-    act(() => {
-      last().onGroup(protxs)
-    })
-    const group = await waitFor(() => {
-      const el = document.querySelector('[data-map-group]')
-      expect(el).not.toBeNull()
-      return el as HTMLElement
-    })
-    expect(within(group).getAllByRole('button').length).toBeGreaterThanOrEqual(3)
-    act(() => {
-      last().onSelect(protxs[0])
-    })
-    await waitFor(() => expect(last().selected).toBe(protxs[0]))
   })
 
   it('says once that the crawl is needed in Decentralized only mode, and draws the land with no data @RA-50 @X-05', async () => {
@@ -219,9 +134,7 @@ describe('the Map page', () => {
     renderAt('/map')
     await screen.findByRole('heading', { level: 1, name: 'Map' })
     expect(document.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1)
-    await waitFor(() => expect(views.length).toBeGreaterThan(0))
-    expect(last().points).toHaveLength(0)
-    expect(last().geo).toHaveLength(0)
-    expect(mapPage().querySelector('[data-map-panel]')).toBeNull()
+    expect(document.querySelectorAll('.rx-pmap__disc[data-place]')).toHaveLength(0)
+    expect(document.querySelector('[data-places]')).toBeNull()
   })
 })

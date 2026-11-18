@@ -1,292 +1,363 @@
-import { msg } from '@lingui/core/macro'
-import type { MessageDescriptor } from '@lingui/core'
-import { filterMnRows, type MnFilter } from '@/data/masternodes/filter'
+import type { MnFilter } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
-import type { RadarGeo } from '@/data/radar/schemas'
+import type { RadarGeo, RadarSummary } from '@/data/radar/schemas'
+import { byOrg, UNKNOWN } from '../nodes/census-math'
 
-export const COLOR_MODES = ['reach', 'pose', 'version', 'type'] as const
-export type ColorMode = (typeof COLOR_MODES)[number]
+/** What the page counts: enabled masternodes, enabled evonodes, or every node that answered the crawl. */
+export type Scope = 'mn' | 'evo' | 'nodes'
 
-/** A colour role on the plate. The values are in `TONE_COLOR`; donuts, chips and points all read them from there. */
-export type Tone =
-  'good' | 'critical' | 'serious' | 'axis' | 'evo' | 's1' | 's2' | 's3' | 's4' | 's5' | 'other'
-
-export const TONES: readonly Tone[] = [
-  'good',
-  'critical',
-  'serious',
-  'axis',
-  'evo',
-  's1',
-  's2',
-  's3',
-  's4',
-  's5',
-  'other',
-]
-
-/** Fixed hex values: the map is on the plate in both themes, and a canvas cannot read custom properties. */
-export const TONE_COLOR: Record<Tone, string> = {
-  good: '#4CC38A',
-  critical: '#FF8F86',
-  serious: '#F29C5F',
-  axis: '#7A9DB4',
-  evo: '#25B8A6',
-  s1: '#E4F3FC',
-  s2: '#A6D8F7',
-  s3: '#62B8F3',
-  s4: '#2B90DA',
-  s5: '#4F86B5',
-  other: '#9BBDD2',
+export interface MapScopeSearch extends MnFilter {
+  layer: 'mn' | 'nodes'
 }
 
-export const CATEGORY_LABEL: Record<string, MessageDescriptor> = {
-  reachable: msg`Reachable`,
-  unreachable: msg`Unreachable`,
-  unchecked: msg`Not checked`,
-  enabled: msg`Enabled`,
-  banned: msg`PoSe-banned`,
-  regular: msg`Masternodes`,
-  evo: msg`Evonodes`,
-  other: msg`Other versions`,
-  unknown: msg`Unknown version`,
+export function scopeOf(search: MapScopeSearch): Scope {
+  if (search.layer === 'nodes') return 'nodes'
+  const type = search.type
+  return type?.length === 1 && type[0] === 'evo' ? 'evo' : 'mn'
 }
 
-export interface ColorScheme {
-  mode: ColorMode
-  keyOf: (row: MnRow) => string
-  /** Every category the legend can show, in order. */
-  order: string[]
-  toneOf: (key: string) => Tone
-}
-
-const VERSION_TONES: Tone[] = ['s1', 's2', 's3', 's4', 's5']
-const TOP_VERSIONS = VERSION_TONES.length
-
-/** Versions by how many rows run them, most first; ties by the higher version. */
-export function topVersions(rows: readonly MnRow[], n = TOP_VERSIONS): string[] {
-  const counts = new Map<string, number>()
-  for (const r of rows) {
-    const v = r.crawl?.version
-    if (v) counts.set(v, (counts.get(v) ?? 0) + 1)
-  }
-  return [...counts]
-    .sort((a, b) => b[1] - a[1] || b[0].localeCompare(a[0], 'en', { numeric: true }))
-    .slice(0, n)
-    .map(([v]) => v)
-}
-
-/** `rows` is every masternode, not the filtered list: the five common versions keep their colours whatever is filtered. */
-export function colorScheme(mode: ColorMode, rows: readonly MnRow[]): ColorScheme {
-  switch (mode) {
-    case 'reach': {
-      const tone: Record<string, Tone> = {
-        reachable: 'good',
-        unreachable: 'critical',
-        unchecked: 'axis',
-      }
-      return {
-        mode,
-        keyOf: (r) =>
-          r.crawl?.reachable == null
-            ? 'unchecked'
-            : r.crawl.reachable
-              ? 'reachable'
-              : 'unreachable',
-        order: ['reachable', 'unreachable', 'unchecked'],
-        toneOf: (k) => tone[k] ?? 'axis',
-      }
-    }
-    case 'pose':
-      return {
-        mode,
-        keyOf: (r) => (r.status === 'pose-banned' ? 'banned' : 'enabled'),
-        order: ['enabled', 'banned'],
-        toneOf: (k) => (k === 'banned' ? 'serious' : 's2'),
-      }
-    case 'type':
-      return {
-        mode,
-        keyOf: (r) => r.type,
-        order: ['regular', 'evo'],
-        toneOf: (k) => (k === 'evo' ? 'evo' : 's2'),
-      }
-    case 'version': {
-      const top = topVersions(rows)
-      const slot = new Map(top.map((v, i) => [v, VERSION_TONES[i]!]))
-      return {
-        mode,
-        keyOf: (r) => {
-          const v = r.crawl?.version
-          return !v ? 'unknown' : slot.has(v) ? v : 'other'
-        },
-        order: [...top, 'other', 'unknown'],
-        toneOf: (k) => slot.get(k) ?? (k === 'unknown' ? 'axis' : 'other'),
-      }
-    }
-  }
-}
-
-export interface MapView {
-  /** Rows passing the search and selects. */
-  filtered: MnRow[]
-  /** `filtered` less the hidden categories: what the map draws and the headline counts. */
-  visible: MnRow[]
-  /** Rows per category among `filtered`. */
-  counts: Map<string, number>
-}
-
-export function mapView(
-  rows: readonly MnRow[],
-  filter: MnFilter,
-  scheme: ColorScheme,
-  hidden: ReadonlySet<string>,
-): MapView {
-  const filtered = filterMnRows(rows, filter)
-  const counts = new Map<string, number>()
-  for (const r of filtered) {
-    const k = scheme.keyOf(r)
-    counts.set(k, (counts.get(k) ?? 0) + 1)
-  }
-  return { filtered, visible: filtered.filter((r) => !hidden.has(scheme.keyOf(r))), counts }
-}
-
-export interface MapPoint {
-  protx: string
-  lon: number
-  lat: number
-  tone: Tone
-  evo: boolean
-}
-
-export function mnPoints(visible: readonly MnRow[], scheme: ColorScheme): MapPoint[] {
-  return visible.flatMap((r) => {
-    const { lat, lon } = r.crawl ?? {}
-    return lat == null || lon == null
-      ? []
-      : [{ protx: r.protx, lon, lat, tone: scheme.toneOf(scheme.keyOf(r)), evo: r.type === 'evo' }]
-  })
-}
-
-export interface Headline {
-  total: number
-  answered: number
-  enabled: { total: number; answered: number }
-  banned: { total: number; answered: number }
-  /** Masternodes drawn on no point: no address registered, or not crawled yet. */
-  missing: number
-}
-
-export function headline(visible: readonly MnRow[]): Headline {
-  const answered = (list: readonly MnRow[]) =>
-    list.filter((r) => r.crawl?.reachable === true).length
-  const banned = visible.filter((r) => r.status === 'pose-banned')
-  const enabled = visible.filter((r) => r.status !== 'pose-banned')
-  return {
-    total: visible.length,
-    answered: answered(visible),
-    enabled: { total: enabled.length, answered: answered(enabled) },
-    banned: { total: banned.length, answered: answered(banned) },
-    missing: visible.filter((r) => r.crawl?.lat == null || r.crawl.lon == null).length,
-  }
-}
-
-/** How many masternodes the crawl placed, and in how many countries: the page's claim. */
-export function placedIn(rows: readonly MnRow[]): { masternodes: number; countries: number } {
-  const placed = rows.filter((r) => r.crawl?.lat != null && r.crawl.lon != null)
-  return {
-    masternodes: placed.length,
-    countries: new Set(placed.flatMap((r) => r.crawl?.country ?? [])).size,
-  }
-}
-
-export interface GeoTotals {
-  nodes: number
-  masternodes: number
-  places: number
-  unlocated: number
-}
-
-export function geoTotals(geo: RadarGeo): GeoTotals {
-  return {
-    nodes: geo.points.reduce((a, p) => a + p.nodes, 0),
-    masternodes: geo.points.reduce((a, p) => a + p.masternodes, 0),
-    places: geo.points.length,
-    unlocated: geo.unlocated,
-  }
-}
-
-export interface ListTarget {
-  filter: MnFilter
-  /** Hidden categories whose rows the list still shows, because its filter has no way to leave them out. */
-  unexpressed: string[]
-  /** How many rows the list shows that the map does not draw. */
-  extra: number
+/** The address change that switches to a scope; the masternode filters stay, `type` follows the scope. */
+export function scopeChange(scope: Scope): { layer: 'mn' | 'nodes'; type: ['evo'] | undefined } {
+  return scope === 'nodes'
+    ? { layer: 'nodes', type: undefined }
+    : { layer: 'mn', type: scope === 'evo' ? ['evo'] : undefined }
 }
 
 /**
- * The `/masternodes` filter for "Open these as a list": the map's filter, plus what the hidden categories leave out
- * wherever the list's filter can say it (the reachability, PoSe status, type or versions that stay). What it cannot say
- * is named, so the link can say that the list shows more than the map.
+ * The filter behind the page's masternodes. A PoSe-banned masternode serves nothing, so it is left out unless the
+ * address asks for it with `status`.
  */
-export function listTarget(
-  rows: readonly MnRow[],
-  filter: MnFilter,
-  scheme: ColorScheme,
-  hidden: ReadonlySet<string>,
-): ListTarget {
-  const filtered = filterMnRows(rows, filter)
-  const shownRows = filtered.filter((r) => !hidden.has(scheme.keyOf(r)))
-  const shown = scheme.order.filter((k) => !hidden.has(k))
-  const out: MnFilter = { ...filter }
-  if (hidden.size > 0) {
-    switch (scheme.mode) {
-      case 'reach':
-        if (shown.length === 1 && (shown[0] === 'reachable' || shown[0] === 'unreachable'))
-          out.reach = shown[0]
-        break
-      case 'pose':
-        if (shown.length === 1) out.status = shown[0] === 'banned' ? ['pose-banned'] : ['enabled']
-        break
-      case 'type':
-        if (shown.length > 0)
-          out.type = shown.filter((k): k is 'regular' | 'evo' => k === 'regular' || k === 'evo')
-        break
-      case 'version': {
-        const versions = new Set(shownRows.flatMap((r) => r.crawl?.version ?? []))
-        if (versions.size > 0) out.version = [...versions].sort()
-        break
+export function populationFilter(filter: MnFilter): MnFilter {
+  return filter.status ? filter : { ...filter, status: ['enabled'] }
+}
+
+/** Whether the address narrows the masternodes beyond the scope itself (a search, a country, a host, …). */
+export function isNarrowed(filter: MnFilter): boolean {
+  return (
+    filter.q !== undefined ||
+    filter.reach !== undefined ||
+    (filter.status !== undefined &&
+      !(filter.status.length === 1 && filter.status[0] === 'enabled')) ||
+    filter.country !== undefined ||
+    filter.version !== undefined ||
+    filter.host !== undefined ||
+    filter.dkg !== undefined ||
+    (filter.type !== undefined && !(filter.type.length === 1 && filter.type[0] === 'evo'))
+  )
+}
+
+// ---- places ----
+
+/** One city on the map. Districts the geolocation names apart ("Singapore (Pioneer)") are folded into their city. */
+export interface Place {
+  id: string
+  city: string | null
+  country: string | null
+  lat: number
+  lon: number
+  n: number
+  /** Masternodes only: how many are evonodes, how many answered the crawl, and who hosts them (largest first). */
+  evo: number
+  answering: number
+  providers: { org: string; n: number }[]
+}
+
+/** "Frankfurt am Main (Innenstadt I)" is Frankfurt am Main. */
+export const baseCity = (city: string | null | undefined): string | null =>
+  city ? city.replace(/\s*\([^)]*\)\s*$/, '').trim() || city : null
+
+const placeId = (
+  country: string | null | undefined,
+  city: string | null,
+  lat: number,
+  lon: number,
+) => (city ? `${country ?? ''}:${city}` : `${lat.toFixed(2)},${lon.toFixed(2)}`)
+
+interface Builder {
+  place: Place
+  /** Rows at each exact point, so the place sits where most of them are. */
+  points: Map<string, { lat: number; lon: number; n: number }>
+  providers: Map<string, number>
+}
+
+function addTo(
+  builders: Map<string, Builder>,
+  at: {
+    lat: number
+    lon: number
+    city: string | null | undefined
+    country: string | null | undefined
+  },
+  n: number,
+): Builder {
+  const city = baseCity(at.city)
+  const id = placeId(at.country, city, at.lat, at.lon)
+  let b = builders.get(id)
+  if (!b) {
+    b = {
+      place: {
+        id,
+        city,
+        country: at.country ?? null,
+        lat: at.lat,
+        lon: at.lon,
+        n: 0,
+        evo: 0,
+        answering: 0,
+        providers: [],
+      },
+      points: new Map(),
+      providers: new Map(),
+    }
+    builders.set(id, b)
+  }
+  b.place.n += n
+  const key = `${at.lat},${at.lon}`
+  const p = b.points.get(key) ?? { lat: at.lat, lon: at.lon, n: 0 }
+  p.n += n
+  b.points.set(key, p)
+  return b
+}
+
+function finish(builders: Map<string, Builder>): Place[] {
+  return [...builders.values()]
+    .map(({ place, points, providers }) => {
+      const where = [...points.values()].sort((a, b) => b.n - a.n)[0]!
+      return {
+        ...place,
+        lat: where.lat,
+        lon: where.lon,
+        providers: [...providers]
+          .map(([org, n]) => ({ org, n }))
+          .sort((a, b) => b.n - a.n || a.org.localeCompare(b.org)),
       }
+    })
+    .sort(byCount)
+}
+
+const byCount = (a: Place, b: Place) =>
+  b.n - a.n || (a.city ?? '').localeCompare(b.city ?? '') || a.id.localeCompare(b.id)
+
+/** The cities of these masternodes, largest first. A row the crawl could not place is left out (see `unplaced`). */
+export function placesOfRows(rows: readonly MnRow[]): Place[] {
+  const builders = new Map<string, Builder>()
+  for (const r of rows) {
+    const c = r.crawl
+    if (c?.lat == null || c.lon == null) continue
+    const b = addTo(builders, { lat: c.lat, lon: c.lon, city: c.city, country: c.country }, 1)
+    if (r.type === 'evo') b.place.evo++
+    if (c.reachable === true) b.place.answering++
+    const org = c.as_org ?? UNKNOWN
+    b.providers.set(org, (b.providers.get(org) ?? 0) + 1)
+  }
+  return finish(builders)
+}
+
+/** The cities of every node that answered the crawl, from Radar's geo document. */
+export function placesOfGeo(geo: RadarGeo): Place[] {
+  const builders = new Map<string, Builder>()
+  for (const p of geo.points) if (p.nodes > 0) addTo(builders, p, p.nodes)
+  return finish(builders)
+}
+
+export const unplaced = (rows: readonly MnRow[]): number =>
+  rows.filter((r) => r.crawl?.lat == null || r.crawl.lon == null).length
+
+export const findPlace = (places: readonly Place[], id: string | undefined): Place | undefined =>
+  id === undefined ? undefined : places.find((p) => p.id === id)
+
+/** The place a masternode is counted in. */
+export function placeOfRow(places: readonly Place[], row: MnRow): Place | undefined {
+  const c = row.crawl
+  if (c?.lat == null || c.lon == null) return undefined
+  return findPlace(places, placeId(c.country, baseCity(c.city), c.lat, c.lon))
+}
+
+// ---- concentration ----
+
+/** One group in a share bar: a city, a country or a hosting provider. `filter` narrows the page to it, when it can. */
+export interface Share {
+  key: string
+  n: number
+  /** Autonomous system numbers for a provider, so the group can be filtered by `host`. */
+  asns?: string[]
+}
+
+export interface Concentration {
+  /** Every group the crawl could name, largest first. */
+  ranked: Share[]
+  /** The nodes no group holds: no location (Tor, I2P, no address), or no hosting record. */
+  unknown: number
+  /** Every node counted, the unknown ones included: the shares' denominator. */
+  total: number
+  /** The fewest groups that together hold at least half of `total`; undefined when even all of them hold less. */
+  toHalf: number | undefined
+}
+
+export function concentration(groups: readonly Share[], unknown: number): Concentration {
+  const ranked = groups
+    .filter((g) => g.n > 0)
+    .sort((a, b) => b.n - a.n || a.key.localeCompare(b.key))
+  const total = ranked.reduce((a, g) => a + g.n, 0) + unknown
+  let held = 0
+  let toHalf: number | undefined
+  for (let i = 0; i < ranked.length; i++) {
+    held += ranked[i]!.n
+    if (held * 2 >= total) {
+      toHalf = i + 1
+      break
     }
   }
-  const drawn = new Set(shownRows.map((r) => r.protx))
-  const extra = filterMnRows(rows, out).filter((r) => !drawn.has(r.protx))
-  const left = new Set(extra.map((r) => scheme.keyOf(r)))
+  return { ranked, unknown, total, toHalf: total === 0 ? undefined : toHalf }
+}
+
+export interface Concentrations {
+  city: Concentration
+  country: Concentration
+  provider: Concentration
+}
+
+function counted<K>(items: readonly K[], keyOf: (k: K) => string | null | undefined) {
+  const m = new Map<string, number>()
+  let unknown = 0
+  for (const it of items) {
+    const k = keyOf(it)
+    if (k) m.set(k, (m.get(k) ?? 0) + 1)
+    else unknown++
+  }
+  return { groups: [...m].map(([key, n]) => ({ key, n })), unknown }
+}
+
+/** Cities, countries and hosting providers of these masternodes. */
+export function concentrationsOfRows(
+  rows: readonly MnRow[],
+  places: readonly Place[],
+): Concentrations {
+  const countries = counted(rows, (r) => (r.crawl?.lat == null ? null : r.crawl.country))
+  const asns = new Map<string, Set<string>>()
+  const providers = counted(rows, (r) => {
+    const org = r.crawl?.as_org
+    if (org && r.crawl?.asn != null) {
+      const set = asns.get(org) ?? new Set()
+      set.add(String(r.crawl.asn))
+      asns.set(org, set)
+    }
+    return org
+  })
   return {
-    filter: out,
-    unexpressed: scheme.order.filter((k) => left.has(k)),
-    extra: extra.length,
+    city: concentration(
+      places.map((p) => ({ key: p.id, n: p.n })),
+      unplaced(rows),
+    ),
+    country: concentration(countries.groups, countries.unknown),
+    provider: concentration(
+      providers.groups.map((g) => ({ ...g, asns: [...(asns.get(g.key) ?? [])].sort() })),
+      providers.unknown,
+    ),
   }
 }
 
-/** A filter as the `search` of a link: unset fields are left out. */
-export function filterSearch(filter: MnFilter): Record<string, unknown> {
-  return Object.fromEntries(Object.entries(filter).filter(([, v]) => v !== undefined))
+/** Every reachable node: cities from the geo document, countries and providers from the crawl's summary. */
+export function concentrationsOfNodes(
+  places: readonly Place[],
+  unlocated: number,
+  summary: RadarSummary | undefined,
+): Concentrations {
+  const dist = summary?.dists.all
+  const country = (dist?.country ?? []).filter(([k]) => k !== UNKNOWN)
+  const orgs = byOrg(dist?.asn ?? [])
+  return {
+    city: concentration(
+      places.map((p) => ({ key: p.id, n: p.n })),
+      unlocated,
+    ),
+    country: concentration(
+      country.map(([key, n]) => ({ key, n })),
+      (dist?.country ?? []).filter(([k]) => k === UNKNOWN).reduce((a, [, n]) => a + n, 0),
+    ),
+    provider: concentration(
+      orgs.filter((o) => o.org !== UNKNOWN).map((o) => ({ key: o.org, n: o.n, asns: o.asns })),
+      orgs.filter((o) => o.org === UNKNOWN).reduce((a, o) => a + o.n, 0),
+    ),
+  }
 }
 
-export function placeName(
-  c: { city?: string | null; country?: string | null } | null | undefined,
-): string {
-  return [c?.city, c?.country].filter(Boolean).join(', ')
+/** The share bar's segments: the `top` largest groups, then the rest together, then the unknown. */
+export function segments(
+  c: Concentration,
+  top = 5,
+): { kind: 'group' | 'rest' | 'unknown'; share: Share | undefined; n: number; rank: number }[] {
+  const named = c.ranked.slice(0, top).map((share, rank) => ({
+    kind: 'group' as const,
+    share,
+    n: share.n,
+    rank,
+  }))
+  const rest = c.ranked.slice(top).reduce((a, g) => a + g.n, 0)
+  return [
+    ...named,
+    ...(rest > 0 ? [{ kind: 'rest' as const, share: undefined, n: rest, rank: top }] : []),
+    ...(c.unknown > 0
+      ? [{ kind: 'unknown' as const, share: undefined, n: c.unknown, rank: top + 1 }]
+      : []),
+  ]
 }
 
-/** The rows at one point, answering ones first. */
-export function sortGroup(group: readonly MnRow[]): MnRow[] {
-  const rank = (r: MnRow) =>
-    r.crawl?.reachable === true ? 0 : r.crawl?.reachable === false ? 1 : 2
-  return [...group].sort(
-    (a, b) =>
-      rank(a) - rank(b) ||
-      (a.service ?? '').localeCompare(b.service ?? '', 'en', { numeric: true }),
-  )
+// ---- the map's labels ----
+
+export interface LabelBox {
+  id: string
+  /** The disc: centre and radius, in map units. */
+  x: number
+  y: number
+  r: number
+  /** The label's size in map units. */
+  w: number
+  h: number
+}
+
+export interface PlacedLabel {
+  id: string
+  /** Top-left corner of the label, in map units. */
+  x: number
+  y: number
+  anchor: 'start' | 'end'
+}
+
+const overlaps = (
+  a: { x: number; y: number; w: number; h: number },
+  b: { x: number; y: number; w: number; h: number },
+) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+
+/**
+ * Labels the largest places first, beside their disc (right, left, above, below), skipping any that would cover
+ * a label already placed or run off the map. The rest are named on hover and in the list.
+ */
+export function placeLabels(
+  boxes: readonly LabelBox[],
+  bounds: { x: number; y: number; w: number; h: number },
+  max: number,
+): PlacedLabel[] {
+  const placed: (PlacedLabel & { w: number; h: number })[] = []
+  for (const b of boxes) {
+    if (placed.length >= max) break
+    const gap = b.r * 0.25 + b.h * 0.2
+    const tries: PlacedLabel[] = [
+      { id: b.id, x: b.x + b.r + gap, y: b.y - b.h / 2, anchor: 'start' },
+      { id: b.id, x: b.x - b.r - gap - b.w, y: b.y - b.h / 2, anchor: 'end' },
+      { id: b.id, x: b.x - b.w / 2, y: b.y - b.r - gap - b.h, anchor: 'start' },
+      { id: b.id, x: b.x - b.w / 2, y: b.y + b.r + gap, anchor: 'start' },
+    ]
+    const fit = tries.find((p) => {
+      const box = { x: p.x, y: p.y, w: b.w, h: b.h }
+      const inside =
+        box.x >= bounds.x &&
+        box.y >= bounds.y &&
+        box.x + box.w <= bounds.x + bounds.w &&
+        box.y + box.h <= bounds.y + bounds.h
+      return inside && !placed.some((q) => overlaps(box, q))
+    })
+    if (fit) placed.push({ ...fit, w: b.w, h: b.h })
+  }
+  return placed.map(({ id, x, y, anchor }) => ({ id, x, y, anchor }))
 }

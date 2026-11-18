@@ -4,7 +4,6 @@ import type { MnRow } from '@/data/masternodes/rows'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Badge } from '@/ui'
-import { placeName } from './map-model'
 
 const DASH = '—'
 
@@ -21,7 +20,7 @@ export function useWhere() {
   const { i18n } = useLingui()
   return (c: { city?: string | null; country?: string | null } | null | undefined): string => {
     const name = countryName(c?.country, i18n.locale)
-    return placeName({ city: c?.city, country: name })
+    return [c?.city, name].filter(Boolean).join(', ')
   }
 }
 

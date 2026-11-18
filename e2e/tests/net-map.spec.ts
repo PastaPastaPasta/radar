@@ -9,287 +9,157 @@ const isPhone = (info: TestInfo) => info.project.name.startsWith('phone')
 const MAINNET = netIds('mainnet')
 const REGULAR = MAINNET.id('mn_regular', '0'.repeat(64))
 
-const headline = (page: Page) => page.locator('[data-map-headline]')
-const chips = (page: Page) => page.getByRole('group', { name: 'Show or hide categories' })
-const panel = (page: Page) => page.locator('[data-map-panel]')
+const h1 = (page: Page) => page.getByRole('heading', { level: 1 })
+const cities = (page: Page) => page.getByRole('list', { name: 'Cities, largest first' })
+const bars = (page: Page) => page.locator('[data-map-bars]')
 
-/** Opens the map and waits for the masternode list to have drawn the headline. On a phone the controls sit in the sheet. */
+/** Opens the map and waits for its claim, its land and its list of cities. */
 async function openMap(page: Page, query = '') {
   await page.goto(`/map${query}`)
-  await expect(page.getByRole('heading', { level: 1, name: CLAIM.map })).toBeVisible()
+  await expect(h1(page)).toHaveText(CLAIM.map, { timeout: 30_000 })
   await expect(page.locator('[data-map-view][data-ready]')).toBeAttached({ timeout: 30_000 })
-  await expect(headline(page)).toContainText(/answered the latest crawl|reachable nodes in/, {
-    timeout: 30_000,
-  })
   await settled(page)
 }
 
-/** The handle's box once the sheet has stopped moving, so a drag starts on it rather than where it was. */
-async function restingHandle(page: Page) {
-  const handle = page.locator('.rx-map-handle')
-  let last = (await handle.boundingBox())!
-  await expect
-    .poll(async () => {
-      const now = (await handle.boundingBox())!
-      const still = now.y === last.y
-      last = now
-      return still
-    })
-    .toBe(true)
-  return last
-}
-
-/** Drags the sheet's handle up the way a thumb would, so everything in the sheet is within reach. A drag that a busy machine drops is tried again. */
-async function pullSheetUp(page: Page) {
-  const sheet = panel(page)
-  await expect(async () => {
-    const h = await restingHandle(page)
-    const x = h.x + h.width / 2
-    const y = h.y + h.height / 2
-    await page.mouse.move(x, y)
-    await page.mouse.down()
-    for (let i = 1; i <= 12; i++) await page.mouse.move(x, y - i * 40)
-    await page.mouse.up()
-    await expect(sheet).toHaveAttribute('data-snap', 'full', { timeout: 2_000 })
-  }).toPass({ timeout: 20_000 })
-}
-
-/** On a phone the chips and selects are in the sheet's body, out of sight until it opens. */
-async function openControls(page: Page, info: TestInfo) {
-  if (isPhone(info)) {
-    await page.getByRole('button', { name: 'Filters' }).click()
-    await expect(panel(page)).toHaveAttribute('data-mode', 'open')
-  }
-}
-
 test.describe('The map', () => {
-  test('runs edge to edge under its claim, and the controls leave most of it open @W2-43', async ({
+  test('answers how concentrated the network is in its claim, its map and its list of cities @RA-50', async ({
     page,
   }, info) => {
     await openMap(page)
-    const viewport = page.viewportSize()!
-    const map = (await page.locator('[data-map-root]').boundingBox())!
-    const heading = (await page.getByRole('heading', { level: 1, name: CLAIM.map }).boundingBox())!
-    expect(map.y, 'the map starts below the claim').toBeGreaterThanOrEqual(
-      heading.y + heading.height,
+    await expect(h1(page)).toHaveText('Half of the 130 masternodes run in 2 cities')
+    await expect(page.locator('.rx-page__lede')).toHaveText(
+      '60% of them run in one country, Germany. Half run with 3 hosting providers.',
     )
-    expect(map.x, 'the map reaches the left edge').toBeLessThanOrEqual(1)
-    expect(map.x + map.width, 'the map reaches the right edge').toBeGreaterThanOrEqual(
-      viewport.width - 20,
+    const rows = cities(page).getByRole('button')
+    await expect(rows.nth(0)).toContainText('Falkenstein')
+    await expect(rows.nth(0)).toContainText('49')
+    await expect(rows.nth(1)).toContainText('Frankfurt am Main')
+    await expect(page.locator('[data-half-line]')).toHaveCount(1)
+    await expect(page.locator('.rx-pmap__disc[data-place]').first()).toBeVisible()
+    await expect(page.locator('.rx-pmap__labels text').first()).toBeVisible()
+    await expect(page.locator('[data-left-out]')).toContainText(
+      '20 PoSe-banned masternodes are not counted',
     )
+    // the map and the start of the list are on the first screen
+    const map = (await page.locator('[data-map-view]').boundingBox())!
+    expect(map.y, 'the map starts on the first screen').toBeLessThan(page.viewportSize()!.height)
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
-    expect(
-      await page.locator('[data-map-root]').evaluate((el) => getComputedStyle(el).borderTopWidth),
-      'the map has no border of its own',
-    ).toBe('0px')
-    if (isPhone(info)) return
-    expect(map.height, 'a map worth looking at').toBeGreaterThanOrEqual(520)
-    const box = (await panel(page).boundingBox())!
-    expect(
-      (box.width * box.height) / (map.width * map.height),
-      'the controls’ share of the map',
-    ).toBeLessThan(1 / 3)
-    expect(box.width / map.width, 'the controls’ share of its width').toBeLessThan(0.3)
-    expect(
-      Math.abs(box.x - heading.x),
-      'the controls start on the page’s left edge',
-    ).toBeLessThanOrEqual(2)
-  })
-
-  test('draws the masternodes as clusters coloured by reachability and counts them in the headline @RA-50', async ({
-    page,
-  }, info) => {
-    await openMap(page)
-    await expect(headline(page)).toContainText('134 of 150 masternodes answered the latest crawl')
-    await expect(headline(page)).toContainText('130 enabled')
-    await expect(page.locator('.rx-map-canvas canvas')).toHaveAttribute('aria-label', /Map of/)
-    await expect(page.locator('.rx-map-donut').first()).toBeVisible({ timeout: 30_000 })
-    await expect(page.locator('[data-map-clusters] li').first()).toContainText(/masternodes?:/)
-    await openControls(page, info)
-    await expect(panel(page)).toContainText('6 masternodes are not on the map')
-    await expect(chips(page).getByRole('button', { name: /Reachable/ })).toContainText('134')
-    await expect(chips(page).getByRole('button', { name: /Unreachable/ })).toContainText('10')
+    if (!isPhone(info)) {
+      const list = (await cities(page).boundingBox())!
+      expect(list.x, 'the list sits beside the map').toBeGreaterThan(map.x + map.width)
+      expect(list.y, 'the list starts on the first screen').toBeLessThan(
+        page.viewportSize()!.height,
+      )
+    }
     await expectAccessible(page)
   })
 
-  test('colours by PoSe, version or type and the chips follow @RA-50', async ({ page }, info) => {
+  test('picks a city from the list or the map, and keeps it in the address @RA-50 @RA-52', async ({
+    page,
+  }) => {
     await openMap(page)
-    await openControls(page, info)
-    await page.getByRole('button', { name: 'PoSe', exact: true }).click()
-    await expect(chips(page).getByRole('button', { name: /PoSe-banned/ })).toContainText('20')
-    await page.getByRole('button', { name: 'Version', exact: true }).click()
-    await expect(page).toHaveURL(/color=version/)
-    await expect(chips(page).getByRole('button', { name: /24\.0\.0/ })).toContainText('121')
-    await expect(chips(page).getByRole('button', { name: /Unknown version/ })).toContainText('16')
-    await page.getByRole('button', { name: 'Type', exact: true }).click()
-    await expect(chips(page).getByRole('button', { name: /Evonodes/ })).toBeVisible()
+    await cities(page).getByRole('button').nth(0).click()
+    await expect(page).toHaveURL(/place=DE%3AFalkenstein|place=DE:Falkenstein/)
+    const card = page.locator('[data-place-card]')
+    await expect(card).toContainText('49 masternodes')
+    await expect(card).toContainText('Hetzner Online GmbH')
+    await expect(page.locator('[data-selected]')).toBeAttached()
+    await page.reload()
+    await expect(page.locator('[data-place-card]')).toContainText('Falkenstein', {
+      timeout: 30_000,
+    })
+    await card.getByRole('button', { name: 'Close' }).click()
+    await expect(page).not.toHaveURL(/place=/)
+    await page.locator('.rx-pmap__disc[data-place="DE:Falkenstein"]').dispatchEvent('click')
+    await expect(card).toContainText('Falkenstein')
+    const list = card.getByRole('link', { name: 'Open them in the masternode list' })
+    await expect(list).toHaveAttribute('href', /\/masternodes\?.*country=DE/)
+    await list.click()
+    await expect(page).toHaveURL(/\/masternodes\?.*q=Falkenstein/)
   })
 
-  test('zooms into a cluster when it is clicked @RA-50', async ({ page }) => {
+  test('narrows to a country or a provider from the share bars, and filters by text @RA-51', async ({
+    page,
+  }) => {
     await openMap(page)
-    const map = page.locator('[data-map-view]')
-    await expect(page.locator('.rx-map-donut').first()).toBeVisible({ timeout: 30_000 })
-    // A cluster of masternodes at one spot opens its list instead of zooming; the largest one spreads out when zoomed.
-    const counts = await page
-      .locator('.rx-map-donut')
-      .evaluateAll((els) => els.map((el) => Number(el.textContent?.replace(/\D/g, '')) || 0))
-    const donut = page.locator('.rx-map-donut').nth(counts.indexOf(Math.max(...counts)))
-    const before = Number(await map.getAttribute('data-zoom'))
-    await donut.dispatchEvent('click')
-    await expect
-      .poll(async () => Number(await map.getAttribute('data-zoom')), { timeout: 15_000 })
-      .toBeGreaterThan(before)
+    await bars(page)
+      .getByRole('button', { name: /Germany/ })
+      .click()
+    await expect(page).toHaveURL(/country=DE/)
+    await expect(h1(page)).toHaveText(/^\d+% of these 78 masternodes run in one city, Falkenstein/)
+    await page.getByRole('button', { name: 'Remove the filter Country: Germany' }).click()
+    await expect(page).not.toHaveURL(/country=/)
+    await bars(page)
+      .getByRole('button', { name: /Hetzner Online GmbH/ })
+      .click()
+    await expect(page).toHaveURL(/host=/)
+    await page.getByRole('button', { name: /Remove the filter Hosting/ }).click()
+    await page.getByRole('searchbox', { name: 'Filter masternodes' }).fill('zzzz-nothing')
+    await expect(page.getByText('No masternode matches these filters.')).toBeVisible()
+    await page.getByRole('button', { name: 'Clear the filters' }).click()
+    await expect(h1(page)).toHaveText('Half of the 130 masternodes run in 2 cities')
   })
 
-  test('opens a masternode popup that links to its page @RA-50', async ({ page }, info) => {
+  test('counts evonodes or every reachable node instead @RA-51', async ({ page }) => {
+    await openMap(page)
+    await page.getByRole('button', { name: 'Evonodes', exact: true }).click()
+    await expect(page).toHaveURL(/type=evo/)
+    await expect(h1(page)).toHaveText(/of the 12 evonodes run in/)
+    await page.getByRole('button', { name: 'All reachable nodes' }).click()
+    await expect(page).toHaveURL(/layer=nodes/)
+    await expect(h1(page)).toHaveText(/reachable nodes run in/)
+    await expect(page.locator('[data-left-out]')).toContainText('on Tor or I2P')
+    await expect(page.getByRole('searchbox')).toHaveCount(0)
+  })
+
+  test('turns an old map link into the filter it meant @RA-52', async ({ page }) => {
+    await page.goto('/map?color=reach&hide=unreachable,unchecked&country=DE')
+    await expect(page).toHaveURL(/reach=reachable/)
+    await expect(page).not.toHaveURL(/hide=|color=/)
+    await expect(
+      page.getByRole('button', { name: 'Remove the filter Answered the crawl' }),
+    ).toBeVisible()
+  })
+
+  test('opens the masternode in the address, rings its city and leaves the map on Back @RA-52', async ({
+    page,
+  }) => {
+    await page.goto('/masternodes')
     await openMap(page, `?protx=${REGULAR}`)
     const card = page.locator(`[data-map-card="${REGULAR}"]`)
-    await expect(card).toBeVisible({ timeout: 30_000 })
-    if (!isPhone(info)) await expect(page.locator('.rx-map-popup')).toContainText('Uptime, 7 days')
-    else await expect(page.locator('[data-map-node]')).toContainText('Close')
+    await expect(card).toBeVisible()
     await expect(card).toContainText('146.190.33.135:9999')
-    await card.getByRole('link', { name: 'Open masternode' }).click()
-    await expect(page).toHaveURL(new RegExp(`/mn/${REGULAR}`))
-  })
-
-  test('shows every city of the all-nodes layer as masternodes against full nodes, with no addresses @RA-50', async ({
-    page,
-  }, info) => {
-    await openMap(page, '?layer=nodes&color=version')
-    await expect(headline(page)).toContainText(/reachable nodes in 198 places/)
-    await expect(panel(page)).toContainText(/no location, so they are not drawn/)
-    await openControls(page, info)
-    await expect(page.locator('[data-static-chips]')).toContainText('Other full nodes')
-    await expect(page.getByLabel('Country')).toHaveCount(0)
-    await expect(page.locator('[data-map-view]')).toBeAttached()
-    await expect(page.locator('.rx-map-donut').first()).toContainText(/\d/, { timeout: 30_000 })
-  })
-
-  test('filters by search, type, country and hosting, hides categories and opens the result as a list @RA-51', async ({
-    page,
-  }, info) => {
-    await openMap(page)
-    await openControls(page, info)
-    await chips(page)
-      .getByRole('button', { name: /Unreachable/ })
-      .click()
-    await chips(page)
-      .getByRole('button', { name: /Not checked/ })
-      .click()
-    await expect(page).toHaveURL(/hide=/)
-    await expect(chips(page).getByRole('button', { name: /Unreachable/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
-    await expect(
-      page.getByLabel('Country').locator('option', { hasText: 'Germany (DE) · 78' }),
-    ).toHaveCount(1)
-    await page.getByLabel('Country').selectOption('DE')
-    await expect(page).toHaveURL(/country=DE/)
-    await expect(headline(page)).toContainText(/of 78 masternodes answered/)
-    const hosting = page.getByLabel('Hosting')
-    await expect(hosting.locator('option', { hasText: 'Hetzner' }).first()).toBeAttached()
-    await page.getByLabel('Version').selectOption({ index: 1 })
-    await page.getByLabel('Version').selectOption('')
-    await page.getByRole('searchbox', { name: 'Search masternodes' }).fill('zzzz-nothing')
-    await expect(headline(page)).toContainText('0 of 0 masternodes')
-    await page.getByRole('searchbox', { name: 'Search masternodes' }).fill('')
-    await expect(headline(page)).toContainText(/of \d+ masternodes answered/)
-    const list = page.getByRole('link', { name: 'Open these as a list' })
-    await expect(list).not.toHaveAttribute('href', /q=zzzz/)
-    if (isPhone(info)) await pullSheetUp(page)
-    await expect(list).toHaveAttribute('href', /\/masternodes\?.*country=DE/)
-    await expect(list).toHaveAttribute('href', /reach=reachable/)
-    await list.click()
-    await expect(page).toHaveURL(/\/masternodes\?.*country=DE/)
-    await expect(page.getByRole('heading', { level: 1, name: CLAIM.masternodes })).toBeVisible()
-  })
-
-  test('keeps the layer, colour, filters, hidden categories and focused masternode in the address through a reload @RA-52', async ({
-    page,
-  }, info) => {
-    await openMap(page, `?color=version&country=US&hide=other&protx=${REGULAR}`)
-    await expect(page.locator(`[data-map-card="${REGULAR}"]`)).toBeVisible({ timeout: 30_000 })
-    await page.reload()
-    await expect(page.locator(`[data-map-card="${REGULAR}"]`)).toBeVisible({ timeout: 30_000 })
-    await expect(page).toHaveURL(/color=version/)
-    await expect(page).toHaveURL(/country=US/)
-    await expect(page).toHaveURL(/hide=other/)
-    await expect(page).toHaveURL(new RegExp(`protx=${REGULAR}`))
-    if (!isPhone(info)) {
-      await expect(page.getByLabel('Country')).toHaveValue('US')
-      await expect(page.getByRole('button', { name: 'Version', exact: true })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      )
-    }
+    await expect(page.locator('[data-map-node]')).toContainText(/It shares|It is the only/)
+    await expect(page.locator('[data-marked]')).toBeAttached()
+    await page.getByRole('button', { name: 'Evonodes', exact: true }).click()
     await page.goBack()
     await expect(page).not.toHaveURL(/\/map/)
   })
 
-  test('moves the controls into a bottom sheet on a phone that drags and closes with Esc, clear of the tab bar @RA-52', async ({
+  test('fits a phone: one column, no sheet and no sideways scroll @RA-52', async ({
     page,
   }, info) => {
     test.skip(!isPhone(info), 'phone only')
     await openMap(page)
-    const sheet = panel(page)
-    await expect(sheet).toHaveAttribute('data-snap', 'collapsed')
-    const box = async () => (await sheet.boundingBox())!
-    const tabs = await page.evaluate(() => {
-      const v = getComputedStyle(document.documentElement).getPropertyValue('--dh-tabs-h')
-      return parseFloat(v) || 57
-    })
-    const clear = async () => {
-      const room = (await page.locator('[data-map-root]').boundingBox())!
-      expect(room.y + room.height, 'the map ends above the tab bar').toBeLessThanOrEqual(
-        page.viewportSize()!.height - tabs + 1,
-      )
-      // A released drag overshoots by its rubber band and settles over a few hundred ms.
-      await expect
-        .poll(async () => (await box()).y, { message: 'the sheet starts inside the map' })
-        .toBeGreaterThanOrEqual(room.y - 1)
-      const b = await box()
-      expect(b.y, 'the sheet starts above the map bottom').toBeLessThan(room.y + room.height)
-    }
-    await clear()
-    const handle = page.locator('.rx-map-handle')
-    await handle.click()
-    await expect(sheet).toHaveAttribute('data-mode', 'open')
-    await expect(sheet).not.toHaveAttribute('data-snap', 'collapsed')
-    await clear()
-    await page.keyboard.press('Escape')
-    await expect(sheet).toHaveAttribute('data-mode', 'peek')
-    await expect(sheet).toHaveAttribute('data-snap', 'collapsed')
-
-    await pullSheetUp(page)
-    await expect(sheet).not.toHaveAttribute('data-snap', 'collapsed')
-    await expect(sheet).toHaveAttribute('data-mode', 'open')
-    await clear()
-    expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
-  })
-
-  test('stops the selection pings and the sheet and map transitions under reduced motion @RA-52 @RA-92', async ({
-    page,
-  }, info) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' })
-    await openMap(page, `?protx=${REGULAR}`)
-    const mark = page.locator('[data-selected]')
-    await expect(mark).toBeAttached({ timeout: 30_000 })
-    await expect(mark.locator('i').first()).toHaveCSS('display', 'none')
-    await expect(mark.locator('b')).toBeVisible()
-    if (isPhone(info)) await expect(panel(page)).toHaveCSS('transition-duration', '0s')
-    await page.emulateMedia({ reducedMotion: 'no-preference' })
-    await expect(mark.locator('i').first()).toHaveCSS('animation-name', 'rx-map-ping')
+    const vw = page.viewportSize()!.width
+    const map = (await page.locator('[data-map-view]').boundingBox())!
+    const list = (await cities(page).boundingBox())!
+    expect(map.width, 'the map takes the column').toBeGreaterThan(vw - 40)
+    expect(list.y, 'the list follows the map').toBeGreaterThan(map.y + map.height)
+    expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
+    await page.getByRole('button', { name: 'Europe' }).click()
+    await expect(page).toHaveURL(/region=europe/)
+    expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
   })
 
   test('asks nothing hosted in Decentralized only mode: the land is drawn and it says once that the crawl is needed @RA-50', async ({
     page,
   }) => {
     await page.goto('/map?sources=decentralized')
-    await expect(page.getByRole('heading', { level: 1, name: 'Map', exact: true })).toBeVisible()
+    await expect(h1(page)).toHaveText('Map')
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(page.locator('[data-map-view][data-ready]')).toBeAttached({ timeout: 30_000 })
-    await expect(panel(page)).toHaveCount(0)
-    await expect(page.locator('.rx-map-donut')).toHaveCount(0)
+    await expect(page.locator('.rx-pmap__disc[data-place]')).toHaveCount(0)
+    await expect(page.locator('[data-places]')).toHaveCount(0)
   })
 })
