@@ -25,10 +25,12 @@ export function scopeChange(scope: Scope): { layer: 'mn' | 'nodes'; type: ['evo'
 
 /**
  * The filter behind the page's masternodes. A PoSe-banned masternode serves nothing, so it is left out unless the
- * address asks for it with `status`.
+ * address asks for it with `status`. A link from the old map (`legacy`) counts what that map counted, every status,
+ * before its own hidden categories apply: `color=pose&hide=enabled` meant the PoSe-banned ones.
  */
-export function populationFilter(filter: MnFilter): MnFilter {
-  return filter.status ? filter : { ...filter, status: ['enabled'] }
+export function populationFilter(filter: MnFilter, legacy = false): MnFilter {
+  if (filter.status) return filter
+  return { ...filter, status: legacy ? ['enabled', 'pose-banned'] : ['enabled'] }
 }
 
 /** Whether the address narrows the masternodes beyond the scope itself (a search, a country, a host, …). */
@@ -51,6 +53,8 @@ export type Standing =
   | { kind: 'counted'; place: Place }
   | { kind: 'unplaced' }
   | { kind: 'banned' }
+  /** Enabled, in a view that counts PoSe-banned masternodes only. */
+  | { kind: 'enabled' }
   | { kind: 'type'; type: 'regular' | 'evo' }
   | { kind: 'filtered' }
 
@@ -59,14 +63,16 @@ export function standingOf(
   members: readonly MnRow[],
   places: readonly Place[],
   filter: MnFilter,
+  legacy = false,
 ): Standing {
   if (row.crawl?.lat == null || row.crawl.lon == null) return { kind: 'unplaced' }
   if (members.includes(row)) {
     const place = placeOfRow(places, row)
     if (place) return { kind: 'counted', place }
   }
-  const status = populationFilter(filter).status
-  if (status && !status.includes(row.status)) return { kind: 'banned' }
+  const status = populationFilter(filter, legacy).status
+  if (status && !status.includes(row.status))
+    return row.status === 'pose-banned' ? { kind: 'banned' } : { kind: 'enabled' }
   if (filter.type && !filter.type.includes(row.type)) return { kind: 'type', type: row.type }
   return { kind: 'filtered' }
 }

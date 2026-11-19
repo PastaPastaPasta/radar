@@ -117,17 +117,18 @@ function useBoard(net: NetworkId, controls: MapSearchControls, enabled: boolean)
     if (search.color !== undefined && search.hide === undefined) set({ color: undefined })
   }, [search.color, search.hide, set])
 
-  const population = useMemo(() => populationFilter(filter), [filter])
+  const legacy = hiddenBy !== undefined
+  const population = useMemo(() => populationFilter(filter, legacy), [filter, legacy])
   const members = useMemo(() => {
     const passed = filterMnRows(rows, population)
     return hiddenBy ? passed.filter((r) => !hiddenBy(r)) : passed
   }, [rows, population, hiddenBy])
   const bannedOut = useMemo(
     () =>
-      filter.status || nodes
+      filter.status || nodes || legacy
         ? 0
         : filterMnRows(rows, { ...filter, status: ['pose-banned'] }).length,
-    [rows, filter, nodes],
+    [rows, filter, nodes, legacy],
   )
   const places = useMemo(
     () => (nodes ? (geoQ.data ? placesOfGeo(geoQ.data.data) : []) : placesOfRows(members)),
@@ -321,7 +322,9 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
   const node = search.protx ? b.rows.find((r) => r.protx === search.protx) : undefined
   const single = !node && search.q && b.members.length === 1 ? b.members[0] : undefined
   const shown = node ?? single
-  const standing = shown ? standingOf(shown, b.members, b.places, filter) : undefined
+  const standing = shown
+    ? standingOf(shown, b.members, b.places, filter, b.legacy !== undefined)
+    : undefined
   const marked =
     shown?.crawl?.lat != null && shown.crawl.lon != null
       ? {
@@ -757,7 +760,7 @@ function PlaceCard({
   // The list's search is words a row must all hold: the visitor's own search, then the city.
   const q = [filter.q?.trim(), place.city].filter(Boolean).join(' ')
   const listSearch = {
-    ...filterFields(populationFilter(filter)),
+    ...filterFields(populationFilter(filter, b.legacy !== undefined)),
     ...(place.country ? { country: [place.country] } : {}),
     ...(q ? { q } : {}),
   }
@@ -855,6 +858,10 @@ function NodePanel({
     case 'banned':
       where = t`It is PoSe-banned, so it is not counted here. The ring marks where it is.`
       action = { label: t`Count PoSe-banned masternodes too`, run: onCountBanned }
+      break
+    case 'enabled':
+      where = t`It is enabled, and this view counts PoSe-banned masternodes only. The ring marks where it is.`
+      action = { label: t`Count enabled masternodes too`, run: onCountBanned }
       break
     case 'type':
       where =

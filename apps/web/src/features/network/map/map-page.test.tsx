@@ -154,11 +154,12 @@ describe('the Map page', () => {
 
   it('keeps what an old map link hid hidden, and says so @RA-52', async () => {
     renderAt('/map?color=pose&hide=enabled')
-    await waitFor(() => expect(h1()).toHaveTextContent(/these 0|these \d+ masternodes|Map/))
+    // the old map counted every status: hiding "Enabled" left the 20 PoSe-banned masternodes
+    await waitFor(() => expect(h1()).toHaveTextContent(/of these 20 masternodes run in/))
     expect(search().get('hide')).toBe('enabled')
-    // hiding "Enabled" under the default population leaves nothing to count
-    await waitFor(() =>
-      expect(screen.getByText('No masternode matches these filters.')).toBeInTheDocument(),
+    expect(search().has('status')).toBe(false)
+    expect(document.querySelector('[data-left-out]')?.textContent ?? '').not.toMatch(
+      /PoSe-banned masternodes? (is|are) not counted/,
     )
     const chip = screen.getByRole('button', {
       name: 'Remove the filter Left out by an old map link: Enabled',
@@ -238,6 +239,23 @@ describe('the Map page', () => {
       expect(document.querySelector('[data-map-node]')).toHaveAttribute('data-standing', 'counted'),
     )
     expect(document.querySelector('[data-map-node]')).toHaveTextContent('It shares Santa Clara')
+  })
+
+  it('says an enabled masternode is enabled, not PoSe-banned, in a PoSe-banned view @RA-52', async () => {
+    renderAt(
+      '/map?status=pose-banned&protx=219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
+    )
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-node]')).toHaveAttribute('data-standing', 'enabled'),
+    )
+    const panel = document.querySelector('[data-map-node]')!
+    expect(panel).toHaveTextContent(
+      'It is enabled, and this view counts PoSe-banned masternodes only.',
+    )
+    expect(panel).not.toHaveTextContent('It is PoSe-banned')
+    expect(
+      within(panel as HTMLElement).getByRole('button', { name: 'Count enabled masternodes too' }),
+    ).toBeInTheDocument()
   })
 
   it('says a regular masternode is not counted in the evonode view @RA-52', async () => {

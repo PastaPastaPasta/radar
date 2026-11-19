@@ -39,6 +39,9 @@ describe('the map model', () => {
   it('counts enabled masternodes unless the address asks for PoSe-banned ones @RA-51', () => {
     expect(populationFilter({})).toEqual({ status: ['enabled'] })
     expect(populationFilter({ status: ['pose-banned'] })).toEqual({ status: ['pose-banned'] })
+    // an old map link counts every status, as that map did, unless it names one
+    expect(populationFilter({}, true)).toEqual({ status: ['enabled', 'pose-banned'] })
+    expect(populationFilter({ status: ['enabled'] }, true)).toEqual({ status: ['enabled'] })
     expect(isNarrowed({})).toBe(false)
     expect(isNarrowed({ type: ['evo'], status: ['enabled'] })).toBe(false)
     expect(isNarrowed({ country: ['DE'] })).toBe(true)
@@ -72,6 +75,12 @@ describe('the map model', () => {
     })
     expect(standingOf(regular, [], [], { country: ['DE'] })).toEqual({ kind: 'filtered' })
     expect(standingOf(nowhere, counted, places, {})).toEqual({ kind: 'unplaced' })
+    // an enabled node left out of a PoSe-banned view is enabled, not banned
+    expect(
+      standingOf(regular, [banned], placesOfRows([banned]), { status: ['pose-banned'] }),
+    ).toEqual({
+      kind: 'enabled',
+    })
     // once PoSe-banned nodes are counted, the banned one is in its city
     const all = [banned, regular, evo]
     const withBanned = placesOfRows(all)
@@ -79,6 +88,8 @@ describe('the map model', () => {
       kind: 'counted',
       place: withBanned[0],
     })
+    // a banned node under an old map link is counted with the rest, as that map counted it
+    expect(standingOf(banned, all, withBanned, {}, true).kind).toBe('counted')
   })
 
   it('folds districts into their city and places it where most of its nodes are @RA-50', () => {
