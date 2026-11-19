@@ -103,8 +103,8 @@ export function HomeMap() {
             </span>
             <span className="rx-maplegend__key rx-maplegend__key--other">
               <i className="d d--all" aria-hidden="true" />
-              <span className="rx-maplegend__long">{t`Other reachable nodes`}</span>
-              <span className="rx-maplegend__short">{t`Other nodes`}</span>
+              <span className="rx-maplegend__long">{t`Other reachable addresses`}</span>
+              <span className="rx-maplegend__short">{t`Other addresses`}</span>
             </span>
             {geo.data ? (
               <span className="rx-fig__src">

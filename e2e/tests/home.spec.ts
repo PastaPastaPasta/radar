@@ -31,7 +31,7 @@ test.describe('Home', () => {
   }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
-      '2,581 Dash nodes answered the last crawl',
+      '2,190 masternodes answered the last crawl',
     )
     const core = page.locator('[data-pulse="core"]')
     await expect(core).toContainText('2,570,085')

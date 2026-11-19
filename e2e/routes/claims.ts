@@ -4,12 +4,12 @@
  * `H1` either.
  */
 export const CLAIM = {
-  nodes: /^[\d,]+ Dash nodes? answered the last crawl$/,
+  nodes: /^[\d,]+ masternodes? answered the last crawl$/,
   masternodes:
     /^[\d,]+ of [\d,]+ (enabled masternodes? answered the last crawl|masternodes? (is|are) enabled)$/,
   platform: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
   epochs: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
-  map: /^(Half of (the|these) [\d,]+ (masternodes|evonodes|reachable nodes) run in [\d,]+ cit(y|ies)|\d+% of (the|these) [\d,]+ (masternodes|evonodes|reachable nodes) run in one city, .+)$/,
+  map: /^(Half of (the|these) [\d,]+ (masternodes|evonodes) run in [\d,]+ cit(y|ies)|\d+% of (the|these) [\d,]+ (masternodes|evonodes) run in one city, .+|Half of the [\d,]+ reachable IP addresses are in [\d,]+ cit(y|ies)|\d+% of the [\d,]+ reachable IP addresses are in one city, .+)$/,
   changes: /^([\d,]+ changes?|No changes) to the masternode list in the last 24 hours$/,
   v24: /^(Core 24 is |Miners are signalling for Core 24$|Core 24 did not activate$)/,
   blocks: /^The latest block was mined .+$/,

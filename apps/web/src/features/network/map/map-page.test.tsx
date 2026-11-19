@@ -142,12 +142,12 @@ describe('the Map page', () => {
     await user.click(screen.getByRole('button', { name: 'Evonodes' }))
     await waitFor(() => expect(search().get('type')).toBe('evo'))
     await waitFor(() => expect(h1()).toHaveTextContent(/of the 12 evonodes run in/))
-    await user.click(screen.getByRole('button', { name: 'All reachable nodes' }))
+    await user.click(screen.getByRole('button', { name: 'All reachable addresses' }))
     await waitFor(() => expect(search().get('layer')).toBe('nodes'))
-    await waitFor(() => expect(h1()).toHaveTextContent(/reachable nodes run in/))
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable IP addresses are in/))
     expect(search().has('type')).toBe(false)
     expect(
-      screen.getByText(/reachable nodes have no place, most of them on Tor or I2P/),
+      screen.getByText(/reachable addresses have no place, most of them on Tor or I2P/),
     ).toBeInTheDocument()
     expect(screen.queryByRole('searchbox')).toBeNull()
   })
@@ -373,7 +373,7 @@ describe('the Map page', () => {
   it('keeps every reachable node’s city map when the summary fails, with its own retry @RA-50', async () => {
     server.use(http.get('*/mainnet/summary', () => new HttpResponse(null, { status: 500 })))
     renderAt('/map?layer=nodes')
-    await waitFor(() => expect(h1()).toHaveTextContent(/reachable nodes run in/))
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable IP addresses are in/))
     await waitFor(() =>
       expect(document.querySelector('[data-map-bars]')).toHaveAttribute('data-map-bars', 'error'),
     )
@@ -392,7 +392,7 @@ describe('the Map page', () => {
     )
     renderAt('/map?layer=nodes')
     await waitFor(() =>
-      expect(screen.getByText('The latest crawl placed no reachable node.')).toBeInTheDocument(),
+      expect(screen.getByText('The latest crawl placed no reachable address.')).toBeInTheDocument(),
     )
     await waitFor(() =>
       expect(document.querySelector('[data-map-bars]')).toHaveAttribute('data-map-bars', 'error'),
@@ -418,7 +418,7 @@ describe('the Map page', () => {
     )
     renderAt('/map?layer=nodes')
     await waitFor(() =>
-      expect(screen.getByText('The latest crawl placed no reachable node.')).toBeInTheDocument(),
+      expect(screen.getByText('The latest crawl placed no reachable address.')).toBeInTheDocument(),
     )
     expect(screen.queryByRole('button', { name: 'Clear the filters' })).toBeNull()
   })

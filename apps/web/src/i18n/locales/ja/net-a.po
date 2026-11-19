@@ -30,12 +30,21 @@ msgid "(empty)"
 msgstr "（空）"
 
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
-msgstr "{0, plural, other {1日前より # ノード少ない}}"
+msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
+msgstr "{0, plural, other {応答しているマスターノードは1日前より # 件少ない}}"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
+msgstr "{0, plural, other {1日前より # 件少なくなっています。}}"
 
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "年 {0}"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
+msgstr "試行した {1} 件のアドレスのうち {0} 件が応答しました。今週1回以上応答したアドレスと、有効なすべてのマスターノードのアドレスを数えています。"
 
 #. placeholder {0}: countryName(c0[0])
 #. placeholder {1}: share(c0[1], sumCountries)
@@ -81,11 +90,6 @@ msgstr "ほか {0} バージョン"
 #. placeholder {0}: formatInt(threshold)
 msgid "{0} must sign"
 msgstr "{0} の署名が必要"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
-msgstr "試行した {1} 件のアドレスのうち {0} ノードが応答しました。今週1回以上応答したノードに、有効なマスターノードすべてを加えて数えています。"
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
@@ -143,10 +147,6 @@ msgstr "うち {0} が Evonode"
 msgid "{0} other clients"
 msgstr "ほか {0} クライアント"
 
-#. placeholder {0}: formatInt(total(dist.version ?? []))
-msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
-msgstr "ほか {0} 台のフルノードが接続を受け付けています。外向きにのみ接続するノードは外部から見えないため、実際の数はこれより多くなります。"
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
 msgstr "ほか {0} リリース"
@@ -179,11 +179,14 @@ msgstr "今回のサイクルでテストしたのは {0} 台。中央値は {1}
 msgid "{0}, {1}{2}"
 msgstr "{0}、{1}{2}"
 
-msgid "{answered, plural, one {# Dash node answered the last crawl} other {# Dash nodes answered the last crawl}}"
-msgstr "{answered, plural, other {直近のクロールに # の Dash ノードが応答しました}}"
+msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
+msgstr "{answered, plural, other {# 件のマスターノードが直近のクロールに応答しました}}"
 
-msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
-msgstr "{diff, plural, other {1日前より # ノード多い}}"
+msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
+msgstr "{diff, plural, other {応答しているマスターノードは1日前より # 件多い}}"
+
+msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
+msgstr "{diff, plural, other {1日前より # 件多くなっています。}}"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, other {# が応答なし}}"
@@ -191,8 +194,8 @@ msgstr "{silent, plural, other {# が応答なし}}"
 msgid "<0.1%"
 msgstr "<0.1%"
 
-msgid "<0>{count}</0> Dash nodes answered the last crawl"
-msgstr "直近のクロールに <0>{count}</0> の Dash ノードが応答しました"
+msgid "<0>{count}</0> masternodes answered the last crawl"
+msgstr "<0>{count}</0> 件のマスターノードが直近のクロールに応答しました"
 
 msgid "0 ready"
 msgstr "0 台が対応済み"
@@ -266,17 +269,17 @@ msgstr "すべてのノード"
 msgid "All Platform blocks"
 msgstr "すべての Platform ブロック"
 
-msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
-msgstr "そのうち有効なマスターノードは {enabled} 中 {answering}、{change}。"
-
-msgid "Among them {answering} of the {enabled} enabled masternodes."
-msgstr "そのうち有効なマスターノードは {enabled} 中 {answering}。"
-
 msgid "Announce 24"
 msgstr "Announce 24"
 
 msgid "Answered"
 msgstr "応答あり"
+
+msgid "As many as a day ago."
+msgstr "1日前と同じ数です。"
+
+msgid "as many masternodes answering as a day ago"
+msgstr "応答しているマスターノードは1日前と同数"
 
 msgid "at the earliest"
 msgstr "最短で"
@@ -571,6 +574,9 @@ msgstr "Hyphen のインデックスはまだ確認中です。"
 msgid "I2P"
 msgstr "I2P"
 
+msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
+msgstr "合計で {addresses} 件のアドレスが応答しました。複数のネットワークで到達可能なノードは、それぞれで数えられます。"
+
 msgid "IPv4"
 msgstr "IPv4"
 
@@ -809,6 +815,9 @@ msgstr "現在"
 msgid "of {0} so far"
 msgstr "これまでの {0} のうち"
 
+msgid "Of the {enabled} enabled, each counted once."
+msgstr "有効な {enabled} 件のうち。それぞれ1回だけ数えています。"
+
 msgid "Older"
 msgstr "古い方へ"
 
@@ -825,6 +834,9 @@ msgstr "地図を開く"
 msgid "Other"
 msgstr "その他"
 
+msgid "Other addresses"
+msgstr "その他のアドレス"
+
 msgid "Other clients"
 msgstr "その他のクライアント"
 
@@ -834,11 +846,12 @@ msgstr "その他のフルノード"
 msgid "Other full nodes"
 msgstr "その他のフルノード"
 
-msgid "Other nodes"
-msgstr "その他のノード"
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+msgstr "その他のフルノードは {0} 件のアドレスで接続を受け付けています。複数のネットワークで到達可能なノードはそれぞれで数えられ、外向きにしか接続しないノードは外から見えません。"
 
-msgid "Other reachable nodes"
-msgstr "その他の到達可能なノード"
+msgid "Other reachable addresses"
+msgstr "その他の到達可能なアドレス"
 
 #. placeholder {0}: dayMonthYear(history.t[0]!)
 msgid "Our history starts {0}, so this range shows less than it asks for."
@@ -937,11 +950,14 @@ msgstr "到達性"
 msgid "Reachable"
 msgstr "到達可能"
 
+msgid "Reachable addresses"
+msgstr "到達可能なアドレス"
+
+msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
+msgstr "到達可能なアドレスはノードではなくアドレスの数です。ノードは他のネットワークでの自分のアドレスをピアに伝えないため、IPv4 と Tor で到達可能なノードは2回数えられます。マスターノードは登録で数えるため、それぞれ1回です。"
+
 msgid "Reachable masternodes"
 msgstr "到達可能なマスターノード"
-
-msgid "Reachable nodes"
-msgstr "到達可能なノード"
 
 msgid "Reachable now"
 msgstr "現在到達可能"
@@ -1121,9 +1137,6 @@ msgstr "ノードマップ"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK が応答していません"
-
-msgid "the same as a day ago"
-msgstr "1日前と同じ"
 
 msgid "The share of all masternodes on Core 24 is on the node census."
 msgstr "Core 24 を使用しているマスターノード全体の割合は、ノード調査に掲載されています。"

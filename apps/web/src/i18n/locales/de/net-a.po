@@ -30,12 +30,21 @@ msgid "(empty)"
 msgstr "(leer)"
 
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
-msgstr "{0, plural, one {# Knoten weniger als vor einem Tag} other {# Knoten weniger als vor einem Tag}}"
+msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
+msgstr "{0, plural, one {# Masternode weniger antwortet als vor einem Tag} other {# Masternodes weniger antworten als vor einem Tag}}"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
+msgstr "{0, plural, one {Das ist # weniger als vor einem Tag.} other {Das sind # weniger als vor einem Tag.}}"
 
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "{0} pro Jahr"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
+msgstr "{0} Adressen haben von {1} versuchten geantwortet. Gezählt werden Adressen, die diese Woche mindestens einmal geantwortet haben, dazu die jeder aktiven Masternode."
 
 #. placeholder {0}: countryName(c0[0])
 #. placeholder {1}: share(c0[1], sumCountries)
@@ -81,11 +90,6 @@ msgstr "{0} weitere Versionen"
 #. placeholder {0}: formatInt(threshold)
 msgid "{0} must sign"
 msgstr "{0} müssen signieren"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
-msgstr "{0} Knoten haben geantwortet, von {1} versuchten Adressen. Gezählt werden Knoten, die diese Woche mindestens einmal geantwortet haben, plus jeder aktive Masternode."
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
@@ -143,10 +147,6 @@ msgstr "davon {0} Evonodes"
 msgid "{0} other clients"
 msgstr "{0} weitere Clients"
 
-#. placeholder {0}: formatInt(total(dist.version ?? []))
-msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
-msgstr "{0} andere Full Nodes nehmen Verbindungen an. Knoten, die nur nach außen verbinden, sind von außen nicht zu sehen, daher liegt die tatsächliche Zahl höher."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
 msgstr "{0} weitere Releases"
@@ -179,11 +179,14 @@ msgstr "{0} in diesem Zyklus getestet. Median {1} Header/s, Ping {2} ms."
 msgid "{0}, {1}{2}"
 msgstr "{0}, {1}{2}"
 
-msgid "{answered, plural, one {# Dash node answered the last crawl} other {# Dash nodes answered the last crawl}}"
-msgstr "{answered, plural, one {# Dash-Knoten hat beim letzten Crawl geantwortet} other {# Dash-Knoten haben beim letzten Crawl geantwortet}}"
+msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
+msgstr "{answered, plural, one {# Masternode hat beim letzten Crawl geantwortet} other {# Masternodes haben beim letzten Crawl geantwortet}}"
 
-msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
-msgstr "{diff, plural, one {# Knoten mehr als vor einem Tag} other {# Knoten mehr als vor einem Tag}}"
+msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
+msgstr "{diff, plural, one {# Masternode mehr antwortet als vor einem Tag} other {# Masternodes mehr antworten als vor einem Tag}}"
+
+msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
+msgstr "{diff, plural, one {Das ist # mehr als vor einem Tag.} other {Das sind # mehr als vor einem Tag.}}"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# hat nicht geantwortet} other {# haben nicht geantwortet}}"
@@ -191,8 +194,8 @@ msgstr "{silent, plural, one {# hat nicht geantwortet} other {# haben nicht gean
 msgid "<0.1%"
 msgstr "<0,1 %"
 
-msgid "<0>{count}</0> Dash nodes answered the last crawl"
-msgstr "<0>{count}</0> Dash-Knoten haben beim letzten Crawl geantwortet"
+msgid "<0>{count}</0> masternodes answered the last crawl"
+msgstr "<0>{count}</0> Masternodes haben beim letzten Crawl geantwortet"
 
 msgid "0 ready"
 msgstr "0 bereit"
@@ -266,17 +269,17 @@ msgstr "Alle Knoten"
 msgid "All Platform blocks"
 msgstr "Alle Platform-Blöcke"
 
-msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
-msgstr "Darunter {answering} der {enabled} aktiven Masternodes, {change}."
-
-msgid "Among them {answering} of the {enabled} enabled masternodes."
-msgstr "Darunter {answering} der {enabled} aktiven Masternodes."
-
 msgid "Announce 24"
 msgstr "Meldet 24"
 
 msgid "Answered"
 msgstr "Geantwortet"
+
+msgid "As many as a day ago."
+msgstr "So viele wie vor einem Tag."
+
+msgid "as many masternodes answering as a day ago"
+msgstr "so viele antwortende Masternodes wie vor einem Tag"
 
 msgid "at the earliest"
 msgstr "frühestens"
@@ -571,6 +574,9 @@ msgstr "Der Hyphen-Index wird noch geprüft."
 msgid "I2P"
 msgstr "I2P"
 
+msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
+msgstr "Insgesamt haben {addresses} Adressen geantwortet; ein Knoten, der in mehreren Netzen erreichbar ist, zählt in jedem."
+
 msgid "IPv4"
 msgstr "IPv4"
 
@@ -809,6 +815,9 @@ msgstr "Jetzt"
 msgid "of {0} so far"
 msgstr "von {0} bisher"
 
+msgid "Of the {enabled} enabled, each counted once."
+msgstr "Von {enabled} aktiven, jede einmal gezählt."
+
 msgid "Older"
 msgstr "Älter"
 
@@ -825,6 +834,9 @@ msgstr "Karte öffnen"
 msgid "Other"
 msgstr "Sonstige"
 
+msgid "Other addresses"
+msgstr "Andere Adressen"
+
 msgid "Other clients"
 msgstr "Andere Clients"
 
@@ -834,11 +846,12 @@ msgstr "anderen Full Nodes"
 msgid "Other full nodes"
 msgstr "Andere Full Nodes"
 
-msgid "Other nodes"
-msgstr "Weitere Knoten"
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+msgstr "Andere Full Nodes nehmen an {0} Adressen Verbindungen an. Ein Knoten, der in mehreren Netzen erreichbar ist, zählt in jedem, und Knoten, die nur ausgehend verbinden, sind von außen nicht zu sehen."
 
-msgid "Other reachable nodes"
-msgstr "Weitere erreichbare Knoten"
+msgid "Other reachable addresses"
+msgstr "Andere erreichbare Adressen"
 
 #. placeholder {0}: dayMonthYear(history.t[0]!)
 msgid "Our history starts {0}, so this range shows less than it asks for."
@@ -937,11 +950,14 @@ msgstr "Erreichbarkeit"
 msgid "Reachable"
 msgstr "Erreichbar"
 
+msgid "Reachable addresses"
+msgstr "Erreichbare Adressen"
+
+msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
+msgstr "Erreichbare Adressen sind Adressen, keine Knoten: Ein Knoten teilt Peers seine Adressen in anderen Netzen nicht mit, daher zählt einer, der über IPv4 und Tor erreichbar ist, doppelt. Masternodes werden nach ihrer Registrierung gezählt, also jede einmal."
+
 msgid "Reachable masternodes"
 msgstr "Erreichbare Masternodes"
-
-msgid "Reachable nodes"
-msgstr "Erreichbare Knoten"
 
 msgid "Reachable now"
 msgstr "Jetzt erreichbar"
@@ -1121,9 +1137,6 @@ msgstr "Die Knotenkarte"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Das Platform SDK antwortet nicht"
-
-msgid "the same as a day ago"
-msgstr "wie vor einem Tag"
 
 msgid "The share of all masternodes on Core 24 is on the node census."
 msgstr "Der Anteil aller Masternodes mit Core 24 steht im Knoten-Zensus."

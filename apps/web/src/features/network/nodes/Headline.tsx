@@ -15,7 +15,7 @@ export function Headline({ versions, days, summary }: SectionProps) {
   const dayAgo = summary.data?.data.day_ago
   const all = summary.data?.data.dists.all ?? {}
   const mn = summary.data?.data.dists.mn ?? {}
-  const diff = crawl && dayAgo ? crawl.reachable - dayAgo.reachable : undefined
+  const diff = crawl && dayAgo ? crawl.mn_reachable - dayAgo.mn_reachable : undefined
   const evo = countOf(mn.type ?? [], 'Evo')
   const banned = countOf(mn.status ?? [], 'pose_banned')
   const { yes: answered, no: silent } = reachShare(mn.reachable)
@@ -40,15 +40,15 @@ export function Headline({ versions, days, summary }: SectionProps) {
             {diff === undefined ? null : (
               <span data-census-delta>
                 {diff === 0
-                  ? t`the same as a day ago`
+                  ? t`as many masternodes answering as a day ago`
                   : diff > 0
                     ? plural(diff, {
-                        one: '# node more than a day ago',
-                        other: '# nodes more than a day ago',
+                        one: '# more masternode answering than a day ago',
+                        other: '# more masternodes answering than a day ago',
                       })
                     : plural(-diff, {
-                        one: '# node fewer than a day ago',
-                        other: '# nodes fewer than a day ago',
+                        one: '# fewer masternode answering than a day ago',
+                        other: '# fewer masternodes answering than a day ago',
                       })}
                 {' · '}
               </span>

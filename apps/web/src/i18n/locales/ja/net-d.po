@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, other {# 台の Evonode}}"
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, other {# 台のマスターノード}}"
 
-msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{claimTotal, plural, other {# 台の到達可能なノード}}"
+msgid "{claimTotal, plural, one {# reachable IP address} other {# reachable IP addresses}}"
+msgstr "{claimTotal, plural, other {到達可能な IP アドレス # 件}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, other {半数が # 社のホスティングプロバイダーで稼働しています。}}"
@@ -77,14 +77,17 @@ msgstr "{n, plural, other {Evonode #台}}"
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, other {マスターノード #件}}"
 
-msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{n, plural, other {到達可能なノード #件}}"
+msgid "{n, plural, one {# reachable IP address} other {# reachable IP addresses}}"
+msgstr "{n, plural, other {到達可能な IP アドレス # 件}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, other {その他 #}}"
 
 msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
 msgstr "{others, plural, other {{city} にはほかに # 台の集計対象マスターノードがあり、全体の {part} がそこで稼働しています。}}"
+
+msgid "{pct} of the {tot} are in one city, {where}"
+msgstr "{tot} のうち {pct} が1つの都市（{where}）にあります"
 
 msgid "{pct} of the {tot} run in one city, {where}"
 msgstr "{tot}のうち {pct} が 1 つの都市（{where}）で稼働"
@@ -95,8 +98,8 @@ msgstr "これら{tot}のうち {pct} が 1 つの都市（{where}）で稼働"
 msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 msgstr "{unplaced, plural, other {# 台はクロールで場所が見つかりませんでした。割合では不明として数えます。}}"
 
-msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
-msgstr "{unplaced, plural, other {到達可能なノード # 台には場所がありません（多くは Tor または I2P）。割合では不明として数えます。}}"
+msgid "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, other {到達可能なアドレス # 件には場所がありません（ほとんどが Tor か I2P）。割合では不明として数えます。}}"
 
 msgid "<0.1%"
 msgstr "<0.1%"
@@ -104,11 +107,14 @@ msgstr "<0.1%"
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "すべてのネットワークのデータが新しく保存されている間は 200、そうでなければ問題点を添えた 503 を返します。稼働監視用です。"
 
+msgid "A node reachable on both IPv4 and IPv6 counts at each address."
+msgstr "IPv4 と IPv6 の両方で到達可能なノードは、それぞれのアドレスで数えられます。"
+
 msgid "A summary of the speed tests from each vantage point."
 msgstr "各観測拠点からの速度テストの要約です。"
 
-msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
-msgstr "1 つの分布の時系列です。days は 1、7、14、30、90、365 のいずれか、top は 1〜20 です。dim=totals ではノード数を返します。"
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
+msgstr "1つの分布の時系列です。days は 1、7、14、30、90、365 のいずれか、top は 1〜20 です。dim=totals は代わりに到達可能なアドレス、有効なマスターノード、到達可能なマスターノードを返します。1つのノードが複数のネットワークで応答できるため、アドレスはノードではありません。"
 
 msgid "Address"
 msgstr "アドレス"
@@ -119,8 +125,8 @@ msgstr "アドレスの変更"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "マスターノード以外のノードのアドレスは公開されず、数だけが集計されます。"
 
-msgid "All reachable nodes"
-msgstr "到達可能なすべてのノード"
+msgid "All reachable addresses"
+msgstr "すべての到達可能なアドレス"
 
 msgid "Americas"
 msgstr "南北アメリカ"
@@ -241,6 +247,9 @@ msgstr "ヨーロッパ"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "クローラーは 15 分ごとに、登録済みの全マスターノードのアドレス、過去 1 週間に応答した全ノード、当社の Dash ノードや他のノードから知った新しいアドレスへ P2P 接続を開き、バージョンのハンドシェイクを完了して切断します。トランザクションは中継せず、ノードが通知する内容だけを保持します。"
 
+msgid "Every IP address that answered the latest crawl, counted per city without the addresses themselves, and how many have no location."
+msgstr "直近のクロールに応答した各 IP アドレスを、アドレス自体は含めずに都市ごとに数えたものと、場所のない件数。"
+
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "登録済みの全マスターノードについて、最新のポート確認、ユーザーエージェント、位置、ホスティング、稼働率、DKG の準備状況を返します。マップはこれをもとに描画されます。"
 
@@ -268,6 +277,9 @@ msgstr "マスターノードを絞り込む"
 msgid "Filters"
 msgstr "フィルター"
 
+msgid "Half of the {tot} are in {cities}"
+msgstr "{tot} の半分が {cities} にあります"
+
 msgid "Half of the {tot} run in {cities}"
 msgstr "{tot}の半数が{cities}で稼働"
 
@@ -277,8 +289,8 @@ msgstr "Evonode の半数が上の都市で稼働しています。"
 msgid "Half of the masternodes run in the cities above."
 msgstr "マスターノードの半数が上の都市で稼働しています。"
 
-msgid "Half of the reachable nodes run in the cities above."
-msgstr "到達可能なノードの半数が上の都市で稼働しています。"
+msgid "Half of the reachable IP addresses are in the cities above."
+msgstr "到達可能な IP アドレスの半分は上の都市にあります。"
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "これら{tot}の半数が{cities}で稼働"
@@ -360,8 +372,8 @@ msgid "Masternode"
 msgstr "マスターノード"
 
 #. placeholder {0}: chips .map((c) => c.label) .join('; ')
-msgid "Masternode filters are off while every reachable node is counted: {0}."
-msgstr "到達可能なすべてのノードを数えている間、マスターノードのフィルターは無効です: {0}。"
+msgid "Masternode filters are off while every reachable address is counted: {0}."
+msgstr "到達可能なすべてのアドレスを数えている間、マスターノードのフィルターはオフです：{0}。"
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "マスターノードリストの変更は、Radar によるメインネットとテストネットのクロールから取得しています。"
@@ -492,9 +504,6 @@ msgstr "Radar の直近のクロール完了"
 msgid "Reachable"
 msgstr "到達可能"
 
-msgid "Reachable nodes counted per city, never by address, and how many have no location."
-msgstr "到達可能なノードを市区町村ごとに集計します（アドレス単位では集計しません）。位置情報のないノード数も含みます。"
-
 msgid "Region"
 msgstr "地域"
 
@@ -562,8 +571,8 @@ msgstr "フィルターで除外されているため、ここでは数えてい
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "マスターノード登録の最新の変更を新しい順に返します：新規・削除されたマスターノード、PoSe による停止と復活、変更されたアドレスやキー。"
 
-msgid "The latest crawl placed no reachable node."
-msgstr "最新のクロールでは到達可能なノードを配置できませんでした。"
+msgid "The latest crawl placed no reachable address."
+msgstr "直近のクロールでは、場所を特定できた到達可能なアドレスはありませんでした。"
 
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "直近に完了したクロールとその 1 日前のクロール、および全ての分布（dists[scope][dim]）を、利回り、Platform の状態、DKG の準備状況とともに返します。"
@@ -586,14 +595,14 @@ msgstr "数えている Evonode は 1 台だけで、{where} で稼働"
 msgid "The only masternode counted runs in {where}"
 msgstr "数えているマスターノードは 1 台だけで、{where} で稼働"
 
-msgid "The only reachable node runs in {where}"
-msgstr "到達可能なノードは 1 台だけで、{where} で稼働"
+msgid "The only reachable IP address is in {where}"
+msgstr "唯一の到達可能な IP アドレスは {where} にあります"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "サイトと API は、クローラーが各クロール後に公開するドキュメントから配信されるため、クローラーが停止していても稼働し続けます。"
 
-msgid "The tick marks half of every reachable node."
-msgstr "目盛りは到達可能な全ノードの半分を示します。"
+msgid "The tick marks half of every reachable address."
+msgstr "目盛りは到達可能なすべてのアドレスの半分を示します。"
 
 msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
 msgstr "目盛りは半分を示します。国かプロバイダーを選ぶと、そのマスターノードの場所が分かります。"

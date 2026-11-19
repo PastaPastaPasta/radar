@@ -197,7 +197,7 @@ export const SITE_MAP: SitePage[] = [
     title: msg`Nodes`,
     section: 'network',
     layer: 'network',
-    summary: msg`The census: how many nodes answered the last crawl, versions, hosting, countries and reachability.`,
+    summary: msg`The census: how many masternodes answered the last crawl, versions, hosting, countries and reachability.`,
     sources: ['radar', 'dapi'],
     nav: true,
     keywords: ['census', 'versions', 'hosting', 'countries'],
