@@ -289,29 +289,27 @@ test.describe('Platform overview', () => {
     await expectAccessible(page)
   })
 
-  test('counts validators and lists quorums, linking to the platform masternode view @PE-06', async ({
-    page,
-  }) => {
+  test('counts validators, linking to the platform masternode view @PE-06', async ({ page }) => {
     await open(page)
     const validators = card(page, 'validators')
     await validators.scrollIntoViewIfNeeded()
     await expect(validators).toContainText('681')
-    await expect(validators.locator('[data-last-proposer]')).toBeVisible()
     await validators.getByRole('link', { name: 'All evonodes' }).click()
     await expect(page).toHaveURL(/\/masternodes\?.*view=platform/)
   })
 
-  test('lists the quorums DAPI knows, the one that signed the newest block first @PE-06', async ({
+  test('names the newest indexed block, who proposed it and the quorum that signed it @PE-06', async ({
     page,
   }) => {
     await open(page)
-    const quorums = card(page, 'quorum-list')
-    await quorums.scrollIntoViewIfNeeded()
-    await expect(quorums).toHaveAttribute('data-state', 'ready')
-    await expect(quorums.locator('li')).toHaveCount(4)
-    await expect(quorums.locator('li').first()).toHaveAttribute('data-signing', 'true')
-    await expect(quorums.locator('li').first()).toContainText('Signed the latest block')
-    await expect(quorums.locator('[data-board-none]')).toHaveCount(0)
+    const block = card(page, 'latest-block')
+    await block.scrollIntoViewIfNeeded()
+    await expect(block).toHaveAttribute('data-state', 'ready')
+    const facts = block.locator('[data-last-proposer]')
+    await expect(facts.locator('[data-entity="platform-block"]')).toBeVisible()
+    await expect(facts.locator('[data-entity="evonode"]')).toBeVisible()
+    await expect(facts.locator('[data-signing-quorum] [data-entity="quorum"]')).toBeVisible()
+    await expect(page.locator('#quorum-list')).toHaveCount(0)
   })
 
   for (const net of ['mainnet', 'testnet'] as const) {
@@ -329,7 +327,15 @@ test.describe('Platform overview', () => {
         await expect(boards.locator('[aria-busy="true"]')).toHaveCount(0)
         const shape = await page.evaluate(() => {
           const rect = (el: Element) => el.getBoundingClientRect()
-          const full = [...document.querySelectorAll('.rx-boards__full > .rx-board')]
+          // the full boards that share a row, in page order
+          const full = [
+            ...document.querySelectorAll<HTMLElement>(
+              '.rx-boards__cell[data-group="full"][data-span="1"]',
+            ),
+          ].sort((a, b) => Number(a.style.order) - Number(b.style.order))
+          const panels = ['#validators', '#latest-block'].map((sel) =>
+            Math.round(rect(document.querySelector(sel)!).bottom),
+          )
           const wide = document.querySelector('[data-board][data-layout="wide"]')
           const lefts = (list: Element | null) =>
             new Set([...(list?.children ?? [])].map((li) => Math.round(rect(li).left))).size
@@ -347,6 +353,7 @@ test.describe('Platform overview', () => {
             figures: [...document.querySelectorAll('.rx-board__fig')].map((el) => el.textContent),
             duplicates: keys.length - new Set(keys).size,
             statRows: new Set(stats).size,
+            panelGap: Math.abs(panels[0]! - panels[1]!),
           }
         })
         expect(shape.duplicates, `${width}: a row twice`).toBe(0)
@@ -362,8 +369,15 @@ test.describe('Platform overview', () => {
             ).toBeLessThanOrEqual(2)
           }
         }
+        if (width >= 1024)
+          expect(
+            shape.panelGap,
+            `${width}: validator and block cards end together`,
+          ).toBeLessThanOrEqual(48)
         if (width > 640 && shape.wideColumns > 0) expect(shape.wideColumns).toBe(2)
-        expect(shape.statRows, `${width}: validator counts`).toBe(width <= 640 ? 2 : 1)
+        expect(shape.statRows, `${width}: validator counts`).toBe(
+          width > 640 && width < 1024 ? 1 : 2,
+        )
         expect(await horizontalOverflow(page), `${width}: sideways overflow`).toBeLessThanOrEqual(0)
       }
     })
@@ -376,7 +390,7 @@ test.describe('Platform overview', () => {
     const boards = page.locator('[data-leaderboards]')
     await boards.scrollIntoViewIfNeeded()
     await settled(page)
-    await expect(page.locator('[data-short-boards] #board-tokens')).toBeVisible()
+    await expect(page.locator('[data-group="short"] #board-tokens')).toBeVisible()
     await expect(page.locator('#board-tokens li')).toHaveCount(2)
     await expect(page.locator('[data-board="board-contracts"]')).toHaveAttribute(
       'data-layout',
@@ -391,6 +405,18 @@ test.describe('Platform overview', () => {
   }) => {
     await open(page, '/platform?range=1w&rich=txs')
     const proposersBefore = await card(page, 'vitals').innerText()
+    // the boards have loaded before the switch
+    const boards = page.locator('[data-leaderboards]')
+    await boards.scrollIntoViewIfNeeded()
+    await expect(card(page, 'board-active-identities').locator('li').first()).toBeVisible()
+    const mainnetIds = await card(page, 'board-active-identities')
+      .locator('[data-board] [data-id]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-id')!))
+    const stale = () =>
+      boards.evaluate(
+        (el, ids) => ids.filter((id) => el.querySelector(`[data-id="${id}"]`)).length,
+        mainnetIds,
+      )
     await page.getByRole('button', { name: /Network: Mainnet/ }).click()
     await page
       .getByRole('navigation', { name: 'Network' })
@@ -398,6 +424,7 @@ test.describe('Platform overview', () => {
       .click()
     await expect(page).toHaveURL(/\/platform\?/)
     await expect(page).toHaveURL(/network=testnet/)
+    expect(await stale(), 'mainnet identities on the testnet boards').toBe(0)
     await expect(page).toHaveURL(/range=1w/)
     await expect(page).toHaveURL(/rich=txs/)
     await expect(heading(page)).toBeVisible()
@@ -437,6 +464,30 @@ test.describe('Platform overview', () => {
       .evaluateAll((rows) => rows.map((r) => r.getBoundingClientRect().right)))
       expect(right).toBeLessThanOrEqual(edge.x + edge.width)
     expect(await horizontalOverflow(page), 'sideways overflow').toBeLessThanOrEqual(0)
+  })
+})
+
+test.describe('Platform overview with Platform Explorer down', () => {
+  test.use({ allowFixtureMisses: true })
+
+  test('with Platform Explorer down, the validator and block cards say so in a few lines @PE-06 @X-09', async ({
+    page,
+  }) => {
+    test.skip(isPhone(page), 'the 1024–1279 px widths')
+    await page.addInitScript(() => sessionStorage.setItem('radar.fixture.down', '["pe"]'))
+    await open(page)
+    for (const width of [1024, 1279]) {
+      await page.setViewportSize({ width, height: 900 })
+      const panels = page.locator('[data-validators]')
+      await panels.scrollIntoViewIfNeeded()
+      await settled(page)
+      for (const id of ['validators', 'latest-block']) {
+        await expect(card(page, id)).toHaveAttribute('data-state', 'error')
+        const box = (await card(page, id).boundingBox())!
+        expect(box.height, `${width}: #${id} height`).toBeLessThanOrEqual(260)
+      }
+      expect(await horizontalOverflow(page), `${width}: sideways overflow`).toBeLessThanOrEqual(0)
+    }
   })
 })
 

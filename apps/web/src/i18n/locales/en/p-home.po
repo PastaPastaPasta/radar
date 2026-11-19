@@ -32,9 +32,7 @@ msgstr "{0, plural, one {Upgrade to v{next}: # vote so far} other {Upgrade to v{
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
-#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
-#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "{0} members, {1} to sign"
@@ -43,11 +41,6 @@ msgstr "{0} members, {1} to sign"
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} of {1}"
-
-#. placeholder {0}: formatInt(listed.quorums.length)
-#. placeholder {1}: formatInt(listed.height)
-msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
-msgstr "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
@@ -138,6 +131,9 @@ msgstr "Behind the chain: {behind}."
 msgid "Best ChainLock"
 msgstr "Best ChainLock"
 
+msgid "Block"
+msgstr "Block"
+
 msgid "blocks"
 msgstr "blocks"
 
@@ -156,14 +152,14 @@ msgstr "Busiest identities"
 msgid "By credit balance"
 msgstr "By credit balance"
 
-msgid "By token transitions in the last 30 days"
-msgstr "By token transitions in the last 30 days"
+msgid "By document and token actions in the last 30 days"
+msgstr "By document and token actions in the last 30 days"
+
+msgid "By token actions in the last 30 days"
+msgstr "By token actions in the last 30 days"
 
 msgid "By transition count"
 msgstr "By transition count"
-
-msgid "By transitions in the last 30 days"
-msgstr "By transitions in the last 30 days"
 
 msgid "By transitions sent in the last 30 days"
 msgstr "By transitions sent in the last 30 days"
@@ -399,9 +395,6 @@ msgstr "Last pool"
 msgid "Later ones may be missing."
 msgstr "Later ones may be missing."
 
-msgid "Latest block"
-msgstr "Latest block"
-
 msgid "Latest block hash"
 msgstr "Latest block hash"
 
@@ -438,6 +431,9 @@ msgstr "Network internals: peers, mempool pressure, versions and history"
 msgid "Newest blocks"
 msgstr "Newest blocks"
 
+msgid "Newest indexed block"
+msgstr "Newest indexed block"
+
 msgid "Newest Platform blocks"
 msgstr "Newest Platform blocks"
 
@@ -449,6 +445,9 @@ msgstr "Newest transitions"
 
 msgid "No active quorums"
 msgstr "No active quorums"
+
+msgid "No activity in the last 30 days."
+msgstr "No activity in the last 30 days."
 
 msgid "No crawl has finished yet."
 msgstr "No crawl has finished yet."
@@ -465,9 +464,6 @@ msgstr "No identity history in this range"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "No new Platform block for {0}."
-
-msgid "No transitions in the last 30 days."
-msgstr "No transitions in the last 30 days."
 
 msgid "No transitions in this range"
 msgstr "No transitions in this range"
@@ -498,9 +494,6 @@ msgstr "Not offered"
 
 msgid "Not proof-checked"
 msgstr "Not proof-checked"
-
-msgid "Not proof-checked: the SDK has no proof for this list."
-msgstr "Not proof-checked: the SDK has no proof for this list."
 
 msgid "Nothing has asked it yet on this network."
 msgstr "Nothing has asked it yet on this network."
@@ -545,6 +538,9 @@ msgstr "Platform Explorer"
 
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer doesn't index devnets"
+
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer has indexed no block yet."
 
 msgid "Platform height"
 msgstr "Platform height"
@@ -645,8 +641,8 @@ msgstr "Shielded and unshielded, in DASH"
 msgid "Shielded pool"
 msgstr "Shielded pool"
 
-msgid "Signed the latest block"
-msgstr "Signed the latest block"
+msgid "Signed by quorum"
+msgstr "Signed by quorum"
 
 msgid "Software"
 msgstr "Software"
@@ -709,14 +705,14 @@ msgstr "The masternode census and network history"
 msgid "The median answer takes {seconds} s."
 msgstr "The median answer takes {seconds} s."
 
+msgid "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+msgstr "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+
 msgid "The node has no peers."
 msgstr "The node has no peers."
 
 msgid "The node is still catching up with the chain."
 msgstr "The node is still catching up with the chain."
-
-msgid "The node that answered listed no quorums."
-msgstr "The node that answered listed no quorums."
 
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."

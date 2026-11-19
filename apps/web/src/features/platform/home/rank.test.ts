@@ -46,7 +46,7 @@ describe('boardRows @NX-01 @PE-05', () => {
   const row = (key: string, value: number | bigint) => ({ key, value })
 
   it('answers a contract once when the index holds it twice, with its counts added', () => {
-    // PE's mainnet index keeps two rows for each system contract; its trend list answers each row.
+    // A safeguard: PE's contract trend list answered each system contract once per row of its mainnet index.
     const rows = mergeByKey([row('dpns', 268), row('wallet', 31), row('dpns', 0), row('wallet', 4)])
     expect(rows).toEqual([row('dpns', 268), row('wallet', 35)])
     expect(mergeByKey([row('a', 2n), row('a', 3n)])).toEqual([row('a', 5n)])
@@ -56,6 +56,13 @@ describe('boardRows @NX-01 @PE-05', () => {
     const ranked = boardRows([row('a', 0), row('b', 8), row('c', 0n), row('d', 1)])
     expect(ranked.map((r) => r.item.key)).toEqual(['b', 'd'])
     expect(boardRows([row('a', 0), row('b', 0)])).toEqual([])
+  })
+
+  it('puts tied rows in key order, whatever order PE answers them in', () => {
+    const a = boardRows([row('m', 5), row('c', 5), row('x', 9), row('a', 5)])
+    const b = boardRows([row('a', 5), row('x', 9), row('m', 5), row('c', 5)])
+    expect(a.map((r) => r.item.key)).toEqual(['x', 'a', 'c', 'm'])
+    expect(b.map((r) => r.item.key)).toEqual(a.map((r) => r.item.key))
   })
 
   it('ranks the merged rows with ties shown as ties', () => {

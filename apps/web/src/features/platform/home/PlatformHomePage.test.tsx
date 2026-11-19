@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { App } from '@/app'
-import { http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import { writeSourceMode } from '@/lib/source-mode'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
@@ -266,7 +266,7 @@ describe('Platform overview', () => {
     server.use(
       http.get(`${PE}/dataContracts/active`, ({ request }) => {
         windows.push(new URL(request.url).searchParams.get('timestamp_start') ?? '')
-        // PE's mainnet index answers each system contract twice, once with its count and once with none.
+        // /dataContracts/active groups by contract ID; merging the same ID is a safeguard, kept by this answer.
         return page(
           [
             [0, 0],
@@ -327,15 +327,15 @@ describe('Platform overview', () => {
     const richest = await ready('board-richest')
     expect(within(richest).getByRole('button', { name: 'Transitions' })).toBeInTheDocument()
     const tokens = await ready('board-tokens')
-    expect(tokens.closest('[data-short-boards]')).not.toBeNull()
+    expect(tokens.closest('[data-group="short"]')).not.toBeNull()
     expect(tokens.querySelector('[data-board-none]')).toHaveTextContent(
-      'No transitions in the last 30 days.',
+      'No activity in the last 30 days.',
     )
     expect(tokens.querySelectorAll('li')).toHaveLength(0)
     expect(document.querySelector('[data-quiet-boards]')).toBeNull()
   })
 
-  it('counts validators and lists quorums, linking to the platform masternode view @PE-06', async () => {
+  it('counts validators, linking to the platform masternode view @PE-06', async () => {
     renderAt('/platform')
     const validators = await card('validators')
     await waitFor(() => expect(validators).toHaveTextContent('681'))
@@ -349,25 +349,47 @@ describe('Platform overview', () => {
       'href',
       '/masternodes?view=platform',
     )
-    await waitFor(() =>
-      expect(validators.querySelector('[data-last-proposer]')).toHaveTextContent(/[0-9a-f]{6}/i),
-    )
   })
 
-  it('lists the quorums DAPI knows, the one that signed the newest block first @PE-06', async () => {
+  it('names the newest indexed block, who proposed it and the quorum that signed it @PE-06', async () => {
     renderAt('/platform')
-    const quorums = await ready('quorum-list')
-    expect(quorums).toHaveTextContent('24 quorums at Platform height 470,554.')
-    // The newest block comes from a second read that can land after the list.
-    await waitFor(() => expect(quorums.querySelector('li')).toHaveAttribute('data-signing', 'true'))
-    const rows = quorums.querySelectorAll('li')
-    expect(rows).toHaveLength(4)
-    expect(rows[0]).toHaveTextContent('Signed the latest block')
-    expect(rows[0]!.querySelector('[data-entity="quorum"]')).toHaveAttribute(
+    const block = await ready('latest-block')
+    const facts = block.querySelector('[data-last-proposer]')!
+    expect(facts).toHaveTextContent('470,592')
+    expect(facts.querySelector('[data-entity="evonode"]')?.getAttribute('data-id')).toMatch(
+      /^0ac126ca993c3633e9ce99e9b5f0f93a4566973bc2ef9136d97e14c8dc80d931$/i,
+    )
+    expect(facts.querySelector('[data-signing-quorum] [data-entity="quorum"]')).toHaveAttribute(
       'data-id',
       '0000000000000016d05699f6ddf7ede9e7ce3a0949df14d4df8d5a881e683dce',
     )
-    expect(quorums.querySelector('[data-board-none]')).toBeNull()
+    // The quorums are counted and sized once, under "On the chain"; no second list or height repeats them.
+    expect(document.getElementById('quorum-list')).toBeNull()
+    expect(document.querySelectorAll('[data-quorum-sizes]')).toHaveLength(1)
+  })
+
+  it('shows no rows of the last network while the next one answers @PE-05 @PE-36', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/platform'] })
+    render(<App history={history} />)
+    const contracts = await ready('board-contracts')
+    await waitFor(() => expect(contracts.querySelectorAll('li').length).toBeGreaterThan(0))
+    const mainnetIds = [...contracts.querySelectorAll('[data-board] [data-id]')].map((el) =>
+      el.getAttribute('data-id'),
+    )
+    const TESTNET_PE = 'https://api.testnet.pe.dashhq.org'
+    server.use(
+      http.get(`${TESTNET_PE}/dataContracts/active`, async () => {
+        await delay('infinite')
+        return HttpResponse.json({})
+      }),
+    )
+    act(() => history.push('/platform?network=testnet'))
+    await waitFor(() =>
+      expect(document.getElementById('board-contracts')).toHaveAttribute('data-state', 'loading'),
+    )
+    const after = document.getElementById('board-contracts')!
+    for (const id of mainnetIds) expect(after.querySelector(`[data-id="${id}"]`)).toBeNull()
+    expect(after.querySelectorAll('li')).toHaveLength(0)
   })
 
   it('keeps SDK zones, shows one notice and asks no hosted source in Decentralized only mode @NX-01 @NX-02 @NX-04 @PE-01', async () => {

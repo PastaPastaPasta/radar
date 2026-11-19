@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { keepPreviousData, useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { CSSProperties, ReactNode } from 'react'
 import type { Sourced } from '@/data/envelope'
@@ -8,12 +8,15 @@ import { peQueries } from '@/data/pe/queries'
 import { Entity, IdentityRef, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Amount, Card, SegFilter, queryView, stampsOf } from '@/ui'
-import { arrangeBoards, pairRows } from './arrange'
+import { arrangeBoards, type Placement } from './arrange'
+import { keepWithinNetwork } from './queries'
 import { BOARD_PAGE, boardRows, type Ranked } from './rank'
 
 const TOP = 10
 /** The span the activity boards count over, the one PE's own trend lists use. */
 const SPAN = '30d'
+/** The window's ends move on a 5-minute grid, so an answer is as fresh as it can be for 5 minutes. */
+const SPAN_FRESH_MS = 5 * 60_000
 
 interface BoardRow {
   key: string
@@ -51,50 +54,50 @@ const count = (v: bigint | number) => formatInt(Number(v))
 
 function BoardCard({
   board: { id, title, unit, query, ranked, figure, none, actions },
-  shown,
-  layout,
+  place: { group, order, span, shown },
 }: {
   board: Board
-  shown: number
-  layout: 'half' | 'wide' | 'short'
+  place: Placement
 }) {
   const { t } = useLingui()
   return (
-    <Card
-      id={id}
-      layer="platform"
-      title={title}
-      subtitle={unit}
-      {...queryView(query)}
-      source={stampsOf(query.data)}
-      actions={actions}
-      className="rx-board"
-    >
-      {ranked.length === 0 ? (
-        <p className="rx-board__none" data-board-none>
-          {none}
-        </p>
-      ) : (
-        <ol
-          className="rx-board__list"
-          data-board={id}
-          data-layout={layout}
-          style={{ '--rows': Math.ceil(Math.min(shown, ranked.length) / 2) } as CSSProperties}
-        >
-          {ranked.slice(0, shown).map(({ item, rank, tied }) => (
-            <li key={item.key} className="rx-board__row" data-tied={tied || undefined}>
-              <span className="rx-board__rank rx-num">
-                {tied ? <span aria-hidden="true">=</span> : null}
-                {rank}
-                {tied ? <span className="dh-sr">{t`, tied`}</span> : null}
-              </span>
-              <span className="rx-board__who">{item.who}</span>
-              <span className="rx-board__fig rx-num">{figure(item.value)}</span>
-            </li>
-          ))}
-        </ol>
-      )}
-    </Card>
+    <div className="rx-boards__cell" data-group={group} data-span={span} style={{ order }}>
+      <Card
+        id={id}
+        layer="platform"
+        title={title}
+        subtitle={unit}
+        {...queryView(query)}
+        source={stampsOf(query.data)}
+        actions={actions}
+        className="rx-board"
+      >
+        {ranked.length === 0 ? (
+          <p className="rx-board__none" data-board-none>
+            {none}
+          </p>
+        ) : (
+          <ol
+            className="rx-board__list"
+            data-board={id}
+            data-layout={span === 2 ? 'wide' : 'half'}
+            style={{ '--rows': Math.ceil(Math.min(shown, ranked.length) / 2) } as CSSProperties}
+          >
+            {ranked.slice(0, shown).map(({ item, rank, tied }) => (
+              <li key={item.key} className="rx-board__row" data-tied={tied || undefined}>
+                <span className="rx-board__rank rx-num">
+                  {tied ? <span aria-hidden="true">=</span> : null}
+                  {rank}
+                  {tied ? <span className="dh-sr">{t`, tied`}</span> : null}
+                </span>
+                <span className="rx-board__who">{item.who}</span>
+                <span className="rx-board__fig rx-num">{figure(item.value)}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </Card>
+    </div>
   )
 }
 
@@ -104,7 +107,12 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
   const net = useNetwork()
   const navigate = useNavigate()
   const span = { ...BOARD_PAGE, ...rangeWindow(SPAN) }
-  const recent = { enabled: active, placeholderData: keepPreviousData }
+  const recent = {
+    enabled: active,
+    placeholderData: keepWithinNetwork(net),
+    staleTime: SPAN_FRESH_MS,
+    refetchOnWindowFocus: false,
+  }
   const activeIds = useQuery({ ...peQueries.activeIdentities(net, span), ...recent })
   const contracts = useQuery({ ...peQueries.contractActivity(net, span), ...recent })
   const tokens = useQuery({ ...peQueries.tokenRating(net, span), ...recent })
@@ -115,7 +123,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
     }),
     enabled: active,
   })
-  const quiet = t`No transitions in the last 30 days.`
+  const quiet = t`No activity in the last 30 days.`
 
   const boards = [
     board({
@@ -173,7 +181,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
     board({
       id: 'board-contracts',
       title: t`Busiest contracts`,
-      unit: t`By transitions in the last 30 days`,
+      unit: t`By document and token actions in the last 30 days`,
       query: contracts,
       rows: (page) =>
         page.items.map((r) => ({
@@ -192,7 +200,7 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
     board({
       id: 'board-tokens',
       title: t`Trending tokens`,
-      unit: t`By token transitions in the last 30 days`,
+      unit: t`By token actions in the last 30 days`,
       query: tokens,
       rows: (page) =>
         page.items.map((r) => ({
@@ -210,41 +218,19 @@ export function Leaderboards({ rich, active }: { rich: 'balance' | 'txs'; active
     }),
   ]
 
-  const { full, wide, short } = arrangeBoards(
+  const places = arrangeBoards(
     boards.map((b) => ({
       ...b,
       rows: b.query.data === undefined ? undefined : b.ranked.length,
     })),
+    TOP,
   )
-  const partnerOf = (i: number) => full[i % 2 === 0 ? i + 1 : i - 1]?.rows
 
   return (
     <div className="rx-boards" data-leaderboards>
-      {full.length > 0 ? (
-        <div className="rx-boards__full">
-          {full.map((b, i) => (
-            <BoardCard
-              key={b.id}
-              board={b}
-              layout="half"
-              shown={pairRows(b.rows ?? TOP, partnerOf(i), TOP)}
-            />
-          ))}
-        </div>
-      ) : null}
-      {wide ? <BoardCard board={wide} layout="wide" shown={TOP} /> : null}
-      {short.length > 0 ? (
-        <div className="rx-boards__short" data-short-boards>
-          {short.map((b) => (
-            <BoardCard
-              key={b.id}
-              board={b}
-              layout={short.length === 1 ? 'wide' : 'short'}
-              shown={TOP}
-            />
-          ))}
-        </div>
-      ) : null}
+      {boards.map((b) => (
+        <BoardCard key={b.id} board={b} place={places.get(b.id)!} />
+      ))}
     </div>
   )
 }

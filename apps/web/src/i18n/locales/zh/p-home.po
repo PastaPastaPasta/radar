@@ -33,9 +33,7 @@ msgstr "{0, plural, other {升级至 v{next}：目前 # 票}}"
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
-#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
-#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "{0} 名成员，需 {1} 个签名"
@@ -44,11 +42,6 @@ msgstr "{0} 名成员，需 {1} 个签名"
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(listed.quorums.length)
-#. placeholder {1}: formatInt(listed.height)
-msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
-msgstr "Platform 高度 {1} 时共 {0} 个 Quorum。未通过证明验证：SDK 没有此列表的证明。"
 
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
@@ -139,6 +132,9 @@ msgstr "落后于区块链：{behind}。"
 msgid "Best ChainLock"
 msgstr "最新 ChainLock"
 
+msgid "Block"
+msgstr "区块"
+
 msgid "blocks"
 msgstr "区块"
 
@@ -157,14 +153,14 @@ msgstr "最活跃的身份"
 msgid "By credit balance"
 msgstr "按积分余额"
 
-msgid "By token transitions in the last 30 days"
-msgstr "按过去 30 天的代币状态转换"
+msgid "By document and token actions in the last 30 days"
+msgstr "按过去 30 天的文档和代币操作"
+
+msgid "By token actions in the last 30 days"
+msgstr "按过去 30 天的代币操作"
 
 msgid "By transition count"
 msgstr "按状态转换数量"
-
-msgid "By transitions in the last 30 days"
-msgstr "按过去 30 天的状态转换"
 
 msgid "By transitions sent in the last 30 days"
 msgstr "按过去 30 天已发送的状态转换"
@@ -400,9 +396,6 @@ msgstr "上一期奖池"
 msgid "Later ones may be missing."
 msgstr "之后的内容可能缺失。"
 
-msgid "Latest block"
-msgstr "最新区块"
-
 msgid "Latest block hash"
 msgstr "最新区块哈希"
 
@@ -439,6 +432,9 @@ msgstr "网络内部信息：对等节点、内存池压力、版本和历史"
 msgid "Newest blocks"
 msgstr "最新区块"
 
+msgid "Newest indexed block"
+msgstr "最新已索引区块"
+
 msgid "Newest Platform blocks"
 msgstr "最新 Platform 区块"
 
@@ -450,6 +446,9 @@ msgstr "最新状态转换"
 
 msgid "No active quorums"
 msgstr "没有活跃的 Quorum"
+
+msgid "No activity in the last 30 days."
+msgstr "过去 30 天内没有活动。"
 
 msgid "No crawl has finished yet."
 msgstr "尚无已完成的抓取。"
@@ -466,9 +465,6 @@ msgstr "此范围内没有身份历史"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} 内没有新的 Platform 区块。"
-
-msgid "No transitions in the last 30 days."
-msgstr "过去 30 天内没有状态转换。"
 
 msgid "No transitions in this range"
 msgstr "此范围内没有状态转换"
@@ -499,9 +495,6 @@ msgstr "未提供"
 
 msgid "Not proof-checked"
 msgstr "未通过证明验证"
-
-msgid "Not proof-checked: the SDK has no proof for this list."
-msgstr "未通过证明验证：SDK 没有此列表的证明。"
 
 msgid "Nothing has asked it yet on this network."
 msgstr "此网络上还没有人向它发出请求。"
@@ -546,6 +539,9 @@ msgstr "Platform Explorer"
 
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer 不索引开发网"
+
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer 尚未索引任何区块。"
 
 msgid "Platform height"
 msgstr "Platform 高度"
@@ -646,8 +642,8 @@ msgstr "隐私保护与未隐私保护，以 DASH 计"
 msgid "Shielded pool"
 msgstr "隐私池"
 
-msgid "Signed the latest block"
-msgstr "签署了最新区块"
+msgid "Signed by quorum"
+msgstr "签名仲裁组"
 
 msgid "Software"
 msgstr "软件"
@@ -710,14 +706,14 @@ msgstr "主节点普查与网络历史"
 msgid "The median answer takes {seconds} s."
 msgstr "响应时间中位数为 {seconds} 秒。"
 
+msgid "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+msgstr "Platform Explorer 索引中的最新区块。已验证的链头可能更靠前。"
+
 msgid "The node has no peers."
 msgstr "该节点没有对等节点。"
 
 msgid "The node is still catching up with the chain."
 msgstr "该节点仍在追赶链。"
-
-msgid "The node that answered listed no quorums."
-msgstr "应答的节点没有列出任何仲裁组。"
 
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform 当前用于签名的 Quorum。未通过证明验证：SDK 没有为此列表提供证明。"

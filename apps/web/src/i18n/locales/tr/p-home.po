@@ -33,9 +33,7 @@ msgstr "{0, plural, one {v{next} sürümüne yükseltme: şu ana kadar # oy} oth
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
-#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
-#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "{0} üye, imzalamak için {1}"
@@ -44,11 +42,6 @@ msgstr "{0} üye, imzalamak için {1}"
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(listed.quorums.length)
-#. placeholder {1}: formatInt(listed.height)
-msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
-msgstr "Platform yüksekliği {1}’de {0} quorum. Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
 
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
@@ -139,6 +132,9 @@ msgstr "Zincirin gerisinde: {behind}."
 msgid "Best ChainLock"
 msgstr "En iyi ChainLock"
 
+msgid "Block"
+msgstr "Blok"
+
 msgid "blocks"
 msgstr "bloklar"
 
@@ -157,14 +153,14 @@ msgstr "En yoğun kimlikler"
 msgid "By credit balance"
 msgstr "Kredi bakiyesine göre"
 
-msgid "By token transitions in the last 30 days"
-msgstr "Son 30 gündeki token geçişlerine göre"
+msgid "By document and token actions in the last 30 days"
+msgstr "Son 30 gündeki belge ve token işlemlerine göre"
+
+msgid "By token actions in the last 30 days"
+msgstr "Son 30 gündeki token işlemlerine göre"
 
 msgid "By transition count"
 msgstr "Geçiş sayısına göre"
-
-msgid "By transitions in the last 30 days"
-msgstr "Son 30 gündeki geçişlere göre"
 
 msgid "By transitions sent in the last 30 days"
 msgstr "Son 30 günde gönderilen geçişlere göre"
@@ -400,9 +396,6 @@ msgstr "Önceki havuz"
 msgid "Later ones may be missing."
 msgstr "Sonrakiler eksik olabilir."
 
-msgid "Latest block"
-msgstr "Son blok"
-
 msgid "Latest block hash"
 msgstr "En son blok hash’i"
 
@@ -439,6 +432,9 @@ msgstr "Ağın iç işleyişi: eşler, mempool baskısı, sürümler ve geçmiş
 msgid "Newest blocks"
 msgstr "En yeni bloklar"
 
+msgid "Newest indexed block"
+msgstr "Dizine eklenen en yeni blok"
+
 msgid "Newest Platform blocks"
 msgstr "En yeni Platform blokları"
 
@@ -450,6 +446,9 @@ msgstr "En yeni geçişler"
 
 msgid "No active quorums"
 msgstr "Etkin quorum yok"
+
+msgid "No activity in the last 30 days."
+msgstr "Son 30 günde etkinlik yok."
 
 msgid "No crawl has finished yet."
 msgstr "Henüz tamamlanmış bir tarama yok."
@@ -466,9 +465,6 @@ msgstr "Bu aralıkta kimlik geçmişi yok"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} boyunca yeni Platform bloğu yok."
-
-msgid "No transitions in the last 30 days."
-msgstr "Son 30 günde geçiş yok."
 
 msgid "No transitions in this range"
 msgstr "Bu aralıkta geçiş yok"
@@ -499,9 +495,6 @@ msgstr "Sunulmuyor"
 
 msgid "Not proof-checked"
 msgstr "Kanıtla doğrulanmadı"
-
-msgid "Not proof-checked: the SDK has no proof for this list."
-msgstr "Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
 
 msgid "Nothing has asked it yet on this network."
 msgstr "Bu ağda henüz kimse ona sormadı."
@@ -546,6 +539,9 @@ msgstr "Platform Explorer"
 
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer devnet’leri dizinlemez"
+
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer henüz hiç blok dizine eklemedi."
 
 msgid "Platform height"
 msgstr "Platform yüksekliği"
@@ -646,8 +642,8 @@ msgstr "Gizlenmiş ve gizlenmemiş, DASH cinsinden"
 msgid "Shielded pool"
 msgstr "Gizli havuz"
 
-msgid "Signed the latest block"
-msgstr "Son bloğu imzaladı"
+msgid "Signed by quorum"
+msgstr "İmzalayan kuorum"
 
 msgid "Software"
 msgstr "Yazılım"
@@ -710,14 +706,14 @@ msgstr "Masternode sayımı ve ağ geçmişi"
 msgid "The median answer takes {seconds} s."
 msgstr "Ortanca yanıt süresi {seconds} sn."
 
+msgid "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+msgstr "Platform Explorer dizinindeki en yeni blok. Kanıtlanmış uç daha ileride olabilir."
+
 msgid "The node has no peers."
 msgstr "Düğümün eşi yok."
 
 msgid "The node is still catching up with the chain."
 msgstr "Düğüm hâlâ zincire yetişiyor."
-
-msgid "The node that answered listed no quorums."
-msgstr "Yanıt veren düğüm hiç kuorum listelemedi."
 
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform’un şu anda imzaladığı quorum’lar. Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."

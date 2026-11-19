@@ -8,14 +8,24 @@ export interface Ranked<T> {
   tied: boolean
 }
 
-/** Highest figure first, with tied figures sharing a rank (1, 2, 2, 4). The order of equal figures is kept. */
+/**
+ * Highest figure first, with tied figures sharing a rank (1, 2, 2, 4). Equal figures follow `tieBreak` when given,
+ * else the order they arrived in.
+ */
 export function rankDesc<T>(
   items: readonly T[],
   figure: (item: T) => bigint | number,
+  tieBreak?: (a: T, b: T) => number,
 ): Ranked<T>[] {
   const sorted = items
     .map((item, i) => ({ item, i, value: figure(item) }))
-    .sort((a, b) => (a.value === b.value ? a.i - b.i : a.value > b.value ? -1 : 1))
+    .sort((a, b) =>
+      a.value !== b.value
+        ? a.value > b.value
+          ? -1
+          : 1
+        : (tieBreak?.(a.item, b.item) ?? 0) || a.i - b.i,
+    )
   let rank = 0
   return sorted.map((e, i) => {
     if (i === 0 || e.value !== sorted[i - 1]!.value) rank = i + 1
@@ -27,8 +37,8 @@ export function rankDesc<T>(
 }
 
 /**
- * One entry per key, its figures added up, in the order each key first arrived. An index that keeps two rows for
- * one contract answers it twice, each with part of its count.
+ * One entry per key, its figures added up, in the order each key first arrived. A safeguard: the lists the boards
+ * read group by ID, but PE's contract trend list answered a system contract once per row of its index.
  */
 export function mergeByKey<T extends { key: string; value: bigint | number }>(
   rows: readonly T[],
@@ -44,12 +54,19 @@ export function mergeByKey<T extends { key: string; value: bigint | number }>(
   return [...merged.values()]
 }
 
-/** A board's rows: merged by key, without the ones at zero, highest first with ties shared. */
+const byKey = (a: { key: string }, b: { key: string }) =>
+  a.key < b.key ? -1 : a.key > b.key ? 1 : 0
+
+/**
+ * A board's rows: merged by key, without the ones at zero, highest first with ties shared. Tied rows are in key
+ * order, so a refetch that answers them in another order does not reshuffle the board.
+ */
 export function boardRows<T extends { key: string; value: bigint | number }>(
   rows: readonly T[],
 ): Ranked<T>[] {
   return rankDesc(
     mergeByKey(rows).filter((r) => r.value > 0),
     (r) => r.value,
+    byKey,
   )
 }

@@ -33,9 +33,7 @@ msgstr "{0, plural, other {v{next} へのアップグレード: 現在 # 票}}"
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
-#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
-#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "メンバー {0} 人、署名に必要 {1} 人"
@@ -44,11 +42,6 @@ msgstr "メンバー {0} 人、署名に必要 {1} 人"
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(listed.quorums.length)
-#. placeholder {1}: formatInt(listed.height)
-msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
-msgstr "Platform の高さ {1} で {0} 件のクォーラム。証明では未検証：この一覧には SDK の証明がありません。"
 
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
@@ -139,6 +132,9 @@ msgstr "チェーンより遅れています: {behind}。"
 msgid "Best ChainLock"
 msgstr "最新の ChainLock"
 
+msgid "Block"
+msgstr "ブロック"
+
 msgid "blocks"
 msgstr "ブロック"
 
@@ -157,14 +153,14 @@ msgstr "最も利用されているアイデンティティ"
 msgid "By credit balance"
 msgstr "クレジット残高順"
 
-msgid "By token transitions in the last 30 days"
-msgstr "過去30日間のトークントランジション数順"
+msgid "By document and token actions in the last 30 days"
+msgstr "過去30日間のドキュメントとトークンの操作数順"
+
+msgid "By token actions in the last 30 days"
+msgstr "過去30日間のトークン操作数順"
 
 msgid "By transition count"
 msgstr "トランジション数順"
-
-msgid "By transitions in the last 30 days"
-msgstr "過去30日間のトランジション数順"
 
 msgid "By transitions sent in the last 30 days"
 msgstr "過去30日間に送信したトランジション数順"
@@ -400,9 +396,6 @@ msgstr "前回のプール"
 msgid "Later ones may be missing."
 msgstr "それ以降は表示されない場合があります。"
 
-msgid "Latest block"
-msgstr "最新ブロック"
-
 msgid "Latest block hash"
 msgstr "最新ブロックのハッシュ"
 
@@ -439,6 +432,9 @@ msgstr "ネットワークの内部情報：ピア、メモリプールの負荷
 msgid "Newest blocks"
 msgstr "最新のブロック"
 
+msgid "Newest indexed block"
+msgstr "最新のインデックス済みブロック"
+
 msgid "Newest Platform blocks"
 msgstr "最新の Platform ブロック"
 
@@ -450,6 +446,9 @@ msgstr "最新のトランジション"
 
 msgid "No active quorums"
 msgstr "アクティブなクォーラムはありません"
+
+msgid "No activity in the last 30 days."
+msgstr "過去30日間に動きはありません。"
 
 msgid "No crawl has finished yet."
 msgstr "完了したクロールはまだありません。"
@@ -466,9 +465,6 @@ msgstr "この範囲にアイデンティティの履歴はありません"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} の間、新しい Platform ブロックはありません。"
-
-msgid "No transitions in the last 30 days."
-msgstr "過去30日間にトランジションはありません。"
 
 msgid "No transitions in this range"
 msgstr "この範囲にトランジションはありません"
@@ -499,9 +495,6 @@ msgstr "提供なし"
 
 msgid "Not proof-checked"
 msgstr "証明で未検証"
-
-msgid "Not proof-checked: the SDK has no proof for this list."
-msgstr "証明では未検証：この一覧には SDK の証明がありません。"
 
 msgid "Nothing has asked it yet on this network."
 msgstr "このネットワークではまだ誰も問い合わせていません。"
@@ -546,6 +539,9 @@ msgstr "Platform Explorer"
 
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer は devnet をインデックスしません"
+
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer はまだブロックをインデックスしていません。"
 
 msgid "Platform height"
 msgstr "Platform の高さ"
@@ -646,8 +642,8 @@ msgstr "シールドとアンシールド（DASH 建て）"
 msgid "Shielded pool"
 msgstr "シールドプール"
 
-msgid "Signed the latest block"
-msgstr "最新ブロックに署名"
+msgid "Signed by quorum"
+msgstr "署名したクォーラム"
 
 msgid "Software"
 msgstr "ソフトウェア"
@@ -710,14 +706,14 @@ msgstr "マスターノードの調査とネットワークの履歴"
 msgid "The median answer takes {seconds} s."
 msgstr "応答時間の中央値は {seconds} 秒です。"
 
+msgid "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+msgstr "Platform Explorer のインデックスにある最新ブロック。検証済みの先端はこれより先の場合があります。"
+
 msgid "The node has no peers."
 msgstr "このノードにはピアがありません。"
 
 msgid "The node is still catching up with the chain."
 msgstr "ノードはまだチェーンに追いついていません。"
-
-msgid "The node that answered listed no quorums."
-msgstr "応答したノードはクォーラムを返しませんでした。"
 
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform が現在署名に使っているクォーラム。証明では未検証です。SDK にこのリストの証明はありません。"

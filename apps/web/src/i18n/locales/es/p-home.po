@@ -33,9 +33,7 @@ msgstr "{0, plural, one {Actualización a v{next}: # voto hasta ahora} other {Ac
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
-#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
-#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "{0} miembros, {1} deben firmar"
@@ -44,11 +42,6 @@ msgstr "{0} miembros, {1} deben firmar"
 #. placeholder {1}: formatInt(budget.capacity)
 msgid "{0} of {1}"
 msgstr "{0} de {1}"
-
-#. placeholder {0}: formatInt(listed.quorums.length)
-#. placeholder {1}: formatInt(listed.height)
-msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
-msgstr "{0} quórums a la altura {1} de Platform. Sin verificar con prueba: el SDK no tiene prueba para esta lista."
 
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
@@ -139,6 +132,9 @@ msgstr "Por detrás de la cadena: {behind}."
 msgid "Best ChainLock"
 msgstr "Mejor ChainLock"
 
+msgid "Block"
+msgstr "Bloque"
+
 msgid "blocks"
 msgstr "bloques"
 
@@ -157,14 +153,14 @@ msgstr "Identidades más activas"
 msgid "By credit balance"
 msgstr "Por saldo de créditos"
 
-msgid "By token transitions in the last 30 days"
-msgstr "Por transiciones de tokens en los últimos 30 días"
+msgid "By document and token actions in the last 30 days"
+msgstr "Por acciones de documentos y tokens en los últimos 30 días"
+
+msgid "By token actions in the last 30 days"
+msgstr "Por acciones de tokens en los últimos 30 días"
 
 msgid "By transition count"
 msgstr "Por número de transiciones"
-
-msgid "By transitions in the last 30 days"
-msgstr "Por transiciones en los últimos 30 días"
 
 msgid "By transitions sent in the last 30 days"
 msgstr "Por transiciones enviadas en los últimos 30 días"
@@ -400,9 +396,6 @@ msgstr "Último pool"
 msgid "Later ones may be missing."
 msgstr "Puede que falten los posteriores."
 
-msgid "Latest block"
-msgstr "Último bloque"
-
 msgid "Latest block hash"
 msgstr "Hash del último bloque"
 
@@ -439,6 +432,9 @@ msgstr "Funcionamiento interno de la red: pares, presión del mempool, versiones
 msgid "Newest blocks"
 msgstr "Últimos bloques"
 
+msgid "Newest indexed block"
+msgstr "Último bloque indexado"
+
 msgid "Newest Platform blocks"
 msgstr "Últimos bloques de Platform"
 
@@ -450,6 +446,9 @@ msgstr "Últimas transiciones"
 
 msgid "No active quorums"
 msgstr "Ningún quórum activo"
+
+msgid "No activity in the last 30 days."
+msgstr "Sin actividad en los últimos 30 días."
 
 msgid "No crawl has finished yet."
 msgstr "Todavía no ha terminado ningún rastreo."
@@ -466,9 +465,6 @@ msgstr "Sin historial de identidades en este rango"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "Ningún bloque nuevo de Platform desde hace {0}."
-
-msgid "No transitions in the last 30 days."
-msgstr "Ninguna transición en los últimos 30 días."
 
 msgid "No transitions in this range"
 msgstr "Sin transiciones en este rango"
@@ -499,9 +495,6 @@ msgstr "No ofrecido"
 
 msgid "Not proof-checked"
 msgstr "Sin verificar con prueba"
-
-msgid "Not proof-checked: the SDK has no proof for this list."
-msgstr "Sin verificar con prueba: el SDK no tiene prueba para esta lista."
 
 msgid "Nothing has asked it yet on this network."
 msgstr "Nadie le ha preguntado todavía en esta red."
@@ -546,6 +539,9 @@ msgstr "Platform Explorer"
 
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer no indexa las devnets"
+
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer aún no ha indexado ningún bloque."
 
 msgid "Platform height"
 msgstr "Altura de Platform"
@@ -646,8 +642,8 @@ msgstr "Blindado y no blindado, en DASH"
 msgid "Shielded pool"
 msgstr "Pool blindado"
 
-msgid "Signed the latest block"
-msgstr "Firmó el último bloque"
+msgid "Signed by quorum"
+msgstr "Firmado por el quórum"
 
 msgid "Software"
 msgstr "Software"
@@ -710,14 +706,14 @@ msgstr "El censo de masternodes y el historial de la red"
 msgid "The median answer takes {seconds} s."
 msgstr "La respuesta mediana tarda {seconds} s."
 
+msgid "The newest block in Platform Explorer’s index. The proved tip can be ahead of it."
+msgstr "El bloque más reciente en el índice de Platform Explorer. La punta verificada puede ir por delante."
+
 msgid "The node has no peers."
 msgstr "El nodo no tiene pares."
 
 msgid "The node is still catching up with the chain."
 msgstr "El nodo aún se está poniendo al día con la cadena."
-
-msgid "The node that answered listed no quorums."
-msgstr "El nodo que respondió no listó ningún quórum."
 
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Los quórums con los que Platform firma ahora. Sin verificar con prueba: el SDK no tiene prueba para esta lista."
