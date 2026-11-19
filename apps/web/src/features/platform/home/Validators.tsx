@@ -53,7 +53,7 @@ export function Validators({ active }: { active: boolean }) {
         className="rx-netcard"
         layer="platform"
         title={t`Validators`}
-        subtitle={t`Every evonode Platform Explorer has ever seen validate, removed ones included, in its own states. The masternode list counts only registered evonodes.`}
+        subtitle={t`Every evonode Platform Explorer has seen validate.`}
         {...queryView(total)}
         source={stampsOf(total.data, live.data, banned.data)}
         actions={
@@ -63,7 +63,11 @@ export function Validators({ active }: { active: boolean }) {
         }
       >
         <Stats data-counts>
-          <Stat label={t`Total`} value={count(all, total.isError)} layer="platform" />
+          <Stat
+            label={t({ message: 'Ever seen', context: 'validators, removed ones included' })}
+            value={count(all, total.isError)}
+            layer="platform"
+          />
           <Stat
             label={t({ message: 'Active', context: 'count of active validators' })}
             value={count(up, live.isError)}

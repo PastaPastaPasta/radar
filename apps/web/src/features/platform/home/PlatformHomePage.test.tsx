@@ -340,6 +340,8 @@ describe('Platform overview', () => {
     renderAt('/platform')
     const validators = await card('validators')
     await waitFor(() => expect(validators).toHaveTextContent('681'))
+    // Platform Explorer's total is every evonode it has seen, removed ones too, so it is not the list's count.
+    expect(validators).toHaveTextContent('Ever seen')
     // The status breakdown comes from a second read that can land after the total.
     await waitFor(() => {
       expect(validators).toHaveTextContent('99')
