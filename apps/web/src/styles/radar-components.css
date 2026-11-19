@@ -1167,6 +1167,28 @@ button.rx-src--proof:hover {
 .rx-enter[data-layer='platform'] {
   --rx-flash: var(--rx-flash-plat);
 }
+/* leaving row: fades out before it is dropped; the rows below then rise into its place */
+.rx-leave {
+  animation: rx-leave var(--rx-dur-3) var(--rx-ease-out) forwards;
+  pointer-events: none;
+}
+.rx-rise {
+  animation: rx-rise var(--rx-dur-3) var(--rx-ease-out);
+}
+@keyframes rx-leave {
+  to {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+@keyframes rx-rise {
+  from {
+    transform: translateY(calc(var(--rx-rise, 1) * 100%));
+  }
+  to {
+    transform: none;
+  }
+}
 @keyframes rx-enter {
   from {
     transform: translateY(-8px);

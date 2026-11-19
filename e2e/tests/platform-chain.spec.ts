@@ -65,7 +65,8 @@ test.describe('Epochs', () => {
     await expect(
       rewards.getByText('Epoch 87', { exact: true }),
       'the epoch that just ended',
-    ).toHaveCount(2)
+    ).toHaveCount(1)
+    await expect(rewards).toContainText('Core block rewards to Core block 2,570,099')
     await expect(sourceLineOf(rewards).locator('[data-source="radar"]').first()).toBeVisible()
     await audit(page)
   })
@@ -99,7 +100,8 @@ test.describe('Epochs', () => {
     await upcoming.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
     await expect(upcoming.locator('a[href^="/mn/"]').first()).toBeVisible()
-    await expect(sourceLineOf(upcoming).locator('[data-source="radar"]').first()).toBeVisible()
+    await expect(sourceLineOf(upcoming).locator('[data-source="dapi"]').first()).toBeVisible()
+    await expect(upcoming).toContainText('from the validator sets an evonode reported at block')
     await expect(upcoming.locator('tbody tr').first()).toContainText(/\+1(?!\d)/)
     await expect(upcoming.locator('tbody')).not.toContainText(/\bago\b/)
     if (!isPhone(page)) {
@@ -159,7 +161,7 @@ test.describe('Epochs', () => {
     await expect(bodyRows(page, 'range')).toHaveCount(20)
   })
 
-  test('says in Decentralized only mode that the rewards and schedule need Radar and keeps the proof-checked parts @RA-60 @NX-50 @NX-52', async ({
+  test('keeps the live pool and schedule in Decentralized only mode, says once what needs Radar, and keeps the proof-checked parts @RA-60 @RA-62 @NX-50 @NX-52', async ({
     page,
   }) => {
     await open(page, mode('/epochs'), H1.epochs)
@@ -168,8 +170,10 @@ test.describe('Epochs', () => {
     await expect(card(page, 'current-epoch').getByRole('meter')).toBeVisible()
     await expect(bodyRows(page, 'proposers')).toHaveCount(20)
     await expect(bodyRows(page, 'range')).toHaveCount(20)
-    await expect(card(page, 'rewards')).toHaveCount(0)
-    await expect(card(page, 'upcoming')).toHaveCount(0)
+    await expect(card(page, 'rewards')).toContainText('Core block rewards to Core block')
+    await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
+    await expect(card(page, 'history')).toHaveCount(0)
+    await expect(card(page, 'radar-zone').locator('[data-source="radar"]')).toHaveCount(0)
   })
 
   test('fits the phone and the desktop @NX-50', async ({ page }) => {
@@ -182,6 +186,125 @@ test.describe('Epochs', () => {
     await expect(card(page, 'current-epoch').getByRole('meter')).toBeVisible()
     await expect(card(page, 'rewards')).toContainText('Pool so far')
     await expect(bodyRows(page, 'range')).toHaveCount(20)
+  })
+})
+
+/** The recorded current-epoch answer's block time: block 469,065. */
+const TIP_MS = 1_794_337_718_422
+
+interface PlatformHooks {
+  __radarFixtures: {
+    advancePlatformTip(n: number, blockMs?: number): void
+    cutPlatform(down: boolean): void
+  }
+}
+
+/** Opens /epochs with the clock just after the recorded tip, so the section is live rather than quiet. */
+async function openLive(page: Page): Promise<void> {
+  await page.clock.install({ time: new Date(TIP_MS + 20_000) })
+  await page.goto('/epochs')
+  await expect(page.getByRole('heading', { level: 1, name: H1.epochs })).toBeVisible()
+  await settled(page)
+  await expect(page.locator('#upcoming .rx-livesched')).toHaveAttribute('data-live', 'live')
+  await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
+}
+
+/** Records every class a schedule row took on, so a spec can tell whether rows moved. */
+async function watchRowClasses(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const seen = new Set<string>()
+    ;(window as unknown as { __rowClasses: Set<string> }).__rowClasses = seen
+    new MutationObserver((records) => {
+      for (const r of records) {
+        const el = r.target as Element
+        if (el.tagName === 'TR') for (const c of el.classList) seen.add(c)
+        for (const n of r.addedNodes)
+          if (n instanceof Element && n.tagName === 'TR') for (const c of n.classList) seen.add(c)
+      }
+    }).observe(document.querySelector('#upcoming tbody')!, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+  })
+}
+const rowClasses = (page: Page) =>
+  page.evaluate(() => [...(window as unknown as { __rowClasses: Set<string> }).__rowClasses])
+const rowIds = (page: Page) =>
+  bodyRows(page, 'upcoming').evaluateAll((rows) => rows.map((r) => r.getAttribute('data-row-id')))
+
+test.describe('Live schedule', () => {
+  test('shows the latest block, its proposer and a countdown, with no crawl age @RA-62', async ({
+    page,
+  }) => {
+    await openLive(page)
+    const strip = page.locator('#upcoming .rx-livesched')
+    await expect(strip).toContainText(/Latest block\s*469,065/)
+    await expect(strip).toContainText('proposed by')
+    await expect(strip).toContainText(/Next block expected in about \d+ min \d+ s/)
+    await expect(card(page, 'upcoming')).not.toContainText('Crawled')
+    await audit(page)
+  })
+
+  test('drops the proposer whose block landed, moves the rest up and adds a twelfth row @RA-62', async ({
+    page,
+  }) => {
+    await openLive(page)
+    const before = await rowIds(page)
+    await watchRowClasses(page)
+    await page.evaluate(() => {
+      ;(window as unknown as PlatformHooks).__radarFixtures.advancePlatformTip(1, 10_000)
+    })
+    const strip = page.locator('#upcoming .rx-livesched')
+    await expect(strip.locator('[data-tip-height="469066"]')).toBeVisible({ timeout: 15_000 })
+    await expect.poll(() => rowIds(page)).toEqual([...before.slice(1), expect.any(String)])
+    expect((await rowIds(page)).at(-1)).not.toBe(before.at(-1))
+    // The proposer of the new block comes from the validator sets read for it: the evonode that was first in line.
+    // It is read again once the 10 s gap after the page's first read has passed.
+    await expect(strip.locator(`a[href*="${before[0]!.slice(0, 16)}"]`).first()).toBeVisible({
+      timeout: 20_000,
+    })
+    await expect(bodyRows(page, 'upcoming')).toHaveCount(12)
+    const classes = await rowClasses(page)
+    expect(classes).toEqual(expect.arrayContaining(['rx-leave', 'rx-rise', 'rx-enter']))
+  })
+
+  test('updates the list in place under reduced motion @RA-62', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await openLive(page)
+    const before = await rowIds(page)
+    await watchRowClasses(page)
+    await page.evaluate(() => {
+      ;(window as unknown as PlatformHooks).__radarFixtures.advancePlatformTip(2, 10_000)
+    })
+    await expect(page.locator('#upcoming .rx-livesched [data-tip-height="469067"]')).toBeVisible({
+      timeout: 15_000,
+    })
+    await expect
+      .poll(() => rowIds(page))
+      .toEqual([...before.slice(2), expect.any(String), expect.any(String)])
+    const classes = await rowClasses(page)
+    expect(classes).not.toContain('rx-leave')
+    expect(classes).not.toContain('rx-rise')
+  })
+
+  test('says updates are paused when Platform stops answering, and resumes on Try again @RA-62', async ({
+    page,
+  }) => {
+    await openLive(page)
+    await page.evaluate(() => {
+      ;(window as unknown as PlatformHooks).__radarFixtures.cutPlatform(true)
+    })
+    const strip = page.locator('#upcoming .rx-livesched')
+    await expect(strip).toHaveAttribute('data-live', 'paused', { timeout: 30_000 })
+    await expect(strip).toContainText(/Updates paused, last block \d+/)
+    await expect(bodyRows(page, 'upcoming'), 'the last order stays').toHaveCount(12)
+    await page.evaluate(() => {
+      ;(window as unknown as PlatformHooks).__radarFixtures.cutPlatform(false)
+    })
+    await strip.getByRole('button', { name: 'Try again' }).click()
+    await expect(strip).toHaveAttribute('data-live', 'live', { timeout: 15_000 })
   })
 })
 

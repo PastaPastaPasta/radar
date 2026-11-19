@@ -5,6 +5,7 @@ import { argsKey, decodeValue } from '../fixtures/sdk-codec'
 import { listSdkFixtures, loadSdkFixture } from '../fixtures/sdk-load'
 import { composeSdkAnswer, type SdkRecordings } from './sdk-compose'
 import { reportFixtureMiss } from './handlers/fixtures'
+import { advancedEpochAnswer, platformCut } from './platform-tip'
 
 /**
  * Serves recorded SDK answers (§10): the worker and the wasm are not involved, and no proof is checked again.
@@ -29,9 +30,13 @@ export class FixtureSdkTransport implements SdkTransport {
   ): Promise<WireResult<SdkMethods[M]['result']> | WireError> {
     const key = argsKey(args)
     this.calls.push({ net, method, key })
+    if (platformCut())
+      return { ok: false, error: { kind: 'network', message: 'The fixture Platform was cut' } }
     const fixture = await loadSdkFixture(net, method, key)
-    if (fixture)
-      return decodeValue(fixture.result) as WireResult<SdkMethods[M]['result']> | WireError
+    if (fixture) {
+      const answer = decodeValue(fixture.result) as WireResult<SdkMethods[M]['result']> | WireError
+      return method === 'epoch.current' ? advancedEpochAnswer(answer) : answer
+    }
     const composed = await composeSdkAnswer(
       this.recordings ?? ((m) => listSdkFixtures(net, m)),
       method,
