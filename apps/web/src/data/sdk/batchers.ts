@@ -207,10 +207,12 @@ const nameOf = (doc: DocumentDto): string | undefined => {
  * four in flight; one that fails is unresolved while the names the query found stay.
  */
 async function dpnsNames(net: NetworkId, identityIds: string[]): Promise<Answer<string, string>> {
+  // The batch's order follows render timing; sorted, the same identities always make the same query.
+  const sorted = [...new Set(identityIds)].sort()
   const docs = await sdk.call(net, 'documents.query', {
     contractId: DPNS_CONTRACT,
     type: 'domain',
-    where: [['records.identity', 'in', identityIds]],
+    where: [['records.identity', 'in', sorted]],
     orderBy: [['records.identity', 'asc']],
     limit: DRIVE_MAX,
   })

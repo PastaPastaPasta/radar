@@ -205,6 +205,21 @@ describe('SDK batchers', () => {
       })
     })
 
+    it('asks for the same identities in the same order however the batch was filled', async () => {
+      call.mockResolvedValue(sourced([]))
+      const asked = [id(3), id(1), id(2), id(1)]
+      const names = asked.map((i) => dpnsName.fetch('mainnet', i))
+      await vi.advanceTimersByTimeAsync(15)
+      await Promise.all(names)
+      expect(call).toHaveBeenCalledWith(
+        'mainnet',
+        'documents.query',
+        expect.objectContaining({
+          where: [['records.identity', 'in', [id(1), id(2), id(3)].sort()]],
+        }),
+      )
+    })
+
     it('asks dpns.usernames, four at a time, for the identities a full page may have cut off', async () => {
       const ids = Array.from({ length: 6 }, (_, i) => id(i + 30))
       const full = Array.from({ length: 100 }, (_, i) => domain(`n${i}`, id(30), i))
