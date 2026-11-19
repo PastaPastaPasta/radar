@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
-import { pinClockToFixtures } from '../helpers/clock'
+import { pinClockToEpoch, pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { expectProved, expectReports, sourceLineOf } from '../helpers/sources'
@@ -19,8 +19,13 @@ async function audit(page: Page): Promise<void> {
   await expectAccessible(page)
 }
 
-async function open(page: Page, url: string, h1: string | RegExp): Promise<void> {
-  await pinClockToFixtures(page)
+async function open(
+  page: Page,
+  url: string,
+  h1: string | RegExp,
+  pin: (page: Page) => Promise<Date> = pinClockToFixtures,
+): Promise<void> {
+  await pin(page)
   await page.goto(url)
   await expect(page.getByRole('heading', { level: 1, name: h1 })).toBeVisible()
   await settled(page)
@@ -33,7 +38,8 @@ test.describe('Epochs', () => {
   test('shows where the current epoch stands: clock, start, estimated end, first block and fee multiplier @RA-60 @NX-50', async ({
     page,
   }) => {
-    await open(page, '/epochs', H1.epochs)
+    // epoch 88 must still be running, so the clock is the epoch recording's own, not the newest recording's
+    await open(page, '/epochs', H1.epochs, pinClockToEpoch)
     const current = card(page, 'current-epoch')
     await expect(current.getByRole('meter')).toBeVisible()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^Epoch 88 is \d+% through$/)
