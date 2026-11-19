@@ -8,6 +8,7 @@ import { CLAIM } from '../routes/claims'
 const isPhone = (info: TestInfo) => info.project.name.startsWith('phone')
 const MAINNET = netIds('mainnet')
 const REGULAR = MAINNET.id('mn_regular', '0'.repeat(64))
+const BANNED = 'a8355582b280be9452f939d34637ab82226ba2c97e1aac15eaf6db878fec0130'
 
 const h1 = (page: Page) => page.getByRole('heading', { level: 1 })
 const cities = (page: Page) => page.getByRole('list', { name: 'Cities, largest first' })
@@ -112,13 +113,31 @@ test.describe('The map', () => {
     await expect(page.getByRole('searchbox')).toHaveCount(0)
   })
 
-  test('turns an old map link into the filter it meant @RA-52', async ({ page }) => {
+  test('keeps what an old map link hid hidden, and shows it as a filter @RA-52', async ({
+    page,
+  }) => {
     await page.goto('/map?color=reach&hide=unreachable,unchecked&country=DE')
-    await expect(page).toHaveURL(/reach=reachable/)
+    const chip = page.getByRole('button', {
+      name: 'Remove the filter Left out by an old map link: Did not answer the crawl, Not checked',
+    })
+    await expect(chip).toBeVisible({ timeout: 30_000 })
+    await expect(page).toHaveURL(/hide=/)
+    await expect(h1(page)).toHaveText(/these \d+ masternodes/)
+    await chip.click()
     await expect(page).not.toHaveURL(/hide=|color=/)
-    await expect(
-      page.getByRole('button', { name: 'Remove the filter Answered the crawl' }),
-    ).toBeVisible()
+  })
+
+  test('says a PoSe-banned masternode in the address is not counted and rings its own spot @RA-52', async ({
+    page,
+  }) => {
+    await openMap(page, `?protx=${BANNED}`)
+    const panel = page.locator('[data-map-node]')
+    await expect(panel).toHaveAttribute('data-standing', 'banned')
+    await expect(panel).toContainText('It is PoSe-banned, so it is not counted here.')
+    await expect(page.locator('[data-marked]')).toHaveAttribute('data-marked', 'spot')
+    await panel.getByRole('button', { name: 'Count PoSe-banned masternodes too' }).click()
+    await expect(page).toHaveURL(/status=enabled%2Cpose-banned|status=enabled,pose-banned/)
+    await expect(panel).toHaveAttribute('data-standing', 'counted')
   })
 
   test('opens the masternode in the address, rings its city and leaves the map on Back @RA-52', async ({

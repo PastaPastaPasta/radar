@@ -10,7 +10,8 @@ export interface PlaceListProps {
   /** The rule's words: "Half of the masternodes run in the cities above". */
   halfLine: string
   selected: string | undefined
-  onSelect: (id: string) => void
+  /** Picks a city, or unpicks it when it is the picked one. */
+  onSelect: (id: string | undefined) => void
   name: (p: Place) => ReactNode
   share: (n: number) => string
   /** How many rows show before "Show all". */
@@ -43,10 +44,12 @@ export function PlaceList({
               className="rx-places__btn"
               aria-pressed={p.id === selected}
               onClick={() => {
-                onSelect(p.id)
+                onSelect(p.id === selected ? undefined : p.id)
               }}
             >
-              <span className="rx-places__rank">{formatInt(i + 1)}</span>
+              <span className="rx-places__rank" aria-hidden="true">
+                {formatInt(i + 1)}
+              </span>
               <span className="rx-places__name">{name(p)}</span>
               <span className="rx-places__n">{formatInt(p.n)}</span>
               <span className="rx-places__pct">{share(p.n)}</span>

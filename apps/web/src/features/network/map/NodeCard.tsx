@@ -4,30 +4,13 @@ import type { MnRow } from '@/data/masternodes/rows'
 import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Badge } from '@/ui'
+import { placeText } from './place-text'
 
 const DASH = '—'
 
-export function countryName(code: string | null | undefined, locale: string): string | undefined {
-  if (!code) return undefined
-  try {
-    return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code
-  } catch {
-    return code
-  }
-}
-
-export function useWhere() {
-  const { i18n } = useLingui()
-  return (c: { city?: string | null; country?: string | null } | null | undefined): string => {
-    const name = countryName(c?.country, i18n.locale)
-    return [c?.city, name].filter(Boolean).join(', ')
-  }
-}
-
-/** One masternode's facts, in the map's popup on wide screens and in the sheet on phones. */
+/** One masternode's facts: the card the map shows for the masternode in its address. */
 export function NodeCard({ row, tip }: { row: MnRow; tip: number | undefined }) {
   const { t } = useLingui()
-  const where = useWhere()
   const c = row.crawl
   const paid = !c?.last_paid_height
     ? t`never`
@@ -37,7 +20,7 @@ export function NodeCard({ row, tip }: { row: MnRow; tip: number | undefined }) 
   const facts: [string, string][] = [
     [t`Address`, row.service ?? DASH],
     [t`Version`, c?.version ?? DASH],
-    [t`Location`, where(c) || DASH],
+    [t`Location`, (c ? placeText(c) : '') || DASH],
     [t`Hosting`, c?.as_org ?? DASH],
     [t`Uptime, 7 days`, c?.uptime_7d != null ? formatPercent(c.uptime_7d, 1) : DASH],
     [t`Last paid`, paid],

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterMnRows } from '@/data/masternodes/filter'
-import { legacyFilter, legacyKey, topVersions } from './legacy-url'
+import { legacyHidden, legacyKey, topVersions } from './legacy-url'
 import { row } from './test-rows'
 
 const rows = [
@@ -10,6 +9,11 @@ const rows = [
   row('d', { type: 'evo' }, { reachable: true, version: '24.0.0', country: 'US' }),
   row('e', {}, { reachable: true, version: '22.0.0' }),
 ]
+
+const kept = (mode: Parameters<typeof legacyHidden>[0], hide: string[], list = rows) => {
+  const hidden = legacyHidden(mode, list, hide)
+  return list.filter((r) => !hidden?.(r)).map((r) => r.protx)
+}
 
 describe('links from the old map', () => {
   it('knows the category each row had under each old colouring @RA-52', () => {
@@ -34,26 +38,20 @@ describe('links from the old map', () => {
     expect(legacyKey('version', many)(row('x', {}, { version: '6.0' }))).toBe('other')
   })
 
-  it('turns hidden categories into the filter they meant @RA-52', () => {
-    expect(legacyFilter(rows, { q: 'x' }, 'reach', ['unreachable', 'unchecked'])).toEqual({
-      q: 'x',
-      reach: 'reachable',
-    })
-    expect(legacyFilter(rows, {}, 'pose', ['enabled'])).toEqual({ status: ['pose-banned'] })
-    expect(legacyFilter(rows, {}, 'type', ['regular'])).toEqual({ type: ['evo'] })
-    const version = legacyFilter(rows, { country: ['DE'] }, 'version', [
-      '23.1.8',
-      '22.0.0',
-      'unknown',
-    ])
-    expect(version).toEqual({ country: ['DE'], version: ['24.0.0'] })
-    expect(filterMnRows(rows, version).map((r) => r.protx)).toEqual(['a'])
+  it('leaves out exactly what the link hid @RA-52', () => {
+    expect(kept('reach', ['unreachable', 'unchecked'])).toEqual(['a', 'd', 'e'])
+    expect(kept('pose', ['enabled'])).toEqual(['c'])
+    expect(kept('type', ['regular'])).toEqual(['d'])
+    expect(legacyHidden('reach', rows, [])).toBeUndefined()
   })
 
-  it('keeps the filter as it is when nothing was hidden, or nothing can say it @RA-52', () => {
-    expect(legacyFilter(rows, { reach: 'unreachable' }, 'version', [])).toEqual({
-      reach: 'unreachable',
-    })
-    expect(legacyFilter(rows, {}, 'reach', ['unchecked'])).toEqual({})
+  it('stays empty when the link hid every row @RA-52', () => {
+    const regular = rows.filter((r) => r.type === 'regular')
+    expect(kept('type', ['regular'], regular)).toEqual([])
+  })
+
+  it('keeps unknown versions unless the link hid them @RA-52', () => {
+    expect(kept('version', ['23.1.8'])).toEqual(['a', 'c', 'd', 'e'])
+    expect(kept('version', ['23.1.8', 'unknown'])).toEqual(['a', 'd', 'e'])
   })
 })

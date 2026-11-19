@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import {
   baseCity,
+  discPx,
+  discRadius,
+  halfForm,
+  MIN_DISC_PX,
+  shownFraction,
+  smallestToScale,
+  standingOf,
   concentration,
   concentrationsOfNodes,
   concentrationsOfRows,
@@ -36,6 +43,42 @@ describe('the map model', () => {
     expect(isNarrowed({ type: ['evo'], status: ['enabled'] })).toBe(false)
     expect(isNarrowed({ country: ['DE'] })).toBe(true)
     expect(isNarrowed({ status: ['enabled', 'pose-banned'] })).toBe(true)
+    // both types is every masternode, not "regular only"
+    expect(isNarrowed({ type: ['evo', 'regular'] })).toBe(false)
+    expect(isNarrowed({ type: ['regular'] })).toBe(true)
+  })
+
+  it('says why the masternode in the address is or is not counted @RA-52', () => {
+    const banned = row(
+      'b',
+      { status: 'pose-banned' },
+      { city: 'Santa Clara', country: 'US', lat: 37.35, lon: -121.95 },
+    )
+    const regular = row('r', {}, { city: 'Santa Clara', country: 'US', lat: 37.35, lon: -121.95 })
+    const evo = row(
+      'e',
+      { type: 'evo' },
+      { city: 'Santa Clara', country: 'US', lat: 37.35, lon: -121.95 },
+    )
+    const nowhere = row('n', {}, { lat: null, lon: null })
+    const counted = [regular, evo]
+    const places = placesOfRows(counted)
+    // a banned node in a city with counted ones is not one of them
+    expect(standingOf(banned, counted, places, {})).toEqual({ kind: 'banned' })
+    expect(standingOf(regular, counted, places, {})).toEqual({ kind: 'counted', place: places[0] })
+    expect(standingOf(regular, [evo], placesOfRows([evo]), { type: ['evo'] })).toEqual({
+      kind: 'type',
+      type: 'regular',
+    })
+    expect(standingOf(regular, [], [], { country: ['DE'] })).toEqual({ kind: 'filtered' })
+    expect(standingOf(nowhere, counted, places, {})).toEqual({ kind: 'unplaced' })
+    // once PoSe-banned nodes are counted, the banned one is in its city
+    const all = [banned, regular, evo]
+    const withBanned = placesOfRows(all)
+    expect(standingOf(banned, all, withBanned, { status: ['enabled', 'pose-banned'] })).toEqual({
+      kind: 'counted',
+      place: withBanned[0],
+    })
   })
 
   it('folds districts into their city and places it where most of its nodes are @RA-50', () => {
@@ -66,6 +109,39 @@ describe('the map model', () => {
     expect(places[0]).toMatchObject({ evo: 1, answering: 2 })
     expect(placeOfRow(places, rows[4]!)?.id).toBe(fra.id)
     expect(placeOfRow(places, rows[6]!)).toBeUndefined()
+  })
+
+  it('draws disc areas in proportion to the count, with a stated smallest size @RA-50', () => {
+    expect(discRadius(400) / discRadius(100)).toBeCloseTo(2)
+    expect(discRadius(0)).toBe(0)
+    // 1 map unit per pixel at the world's scale: 400 nodes is a 19 px disc, 1 node is held at the minimum
+    expect(discPx(400, 1, 1)).toBeCloseTo(19)
+    expect(discPx(1, 1, 1)).toBe(MIN_DISC_PX)
+    // on a phone (2.8 units a pixel) the same disc is smaller, and so is its key
+    expect(discPx(400, 2.8, 1)).toBeCloseTo(19 / 2.8)
+    expect(smallestToScale(1, 1)).toBe(7)
+    expect(smallestToScale(2.8, 1)).toBeGreaterThan(smallestToScale(1, 1))
+  })
+
+  it('never rounds a part up to the whole @RA-50', () => {
+    expect(shownFraction(199, 200, 0)).toBe(0.99)
+    expect(shownFraction(9999, 10000, 1)).toBe(0.999)
+    expect(shownFraction(200, 200, 0)).toBe(1)
+    expect(shownFraction(1, 3, 0)).toBeCloseTo(1 / 3)
+    expect(shownFraction(1, 0, 0)).toBe(0)
+  })
+
+  it('names one group only when it alone holds more than half @RA-50', () => {
+    const c = (...ns: number[]) =>
+      concentration(
+        ns.map((n, i) => ({ key: `g${String(i)}`, n })),
+        0,
+      )
+    expect(halfForm(c(6, 4))).toMatchObject({ kind: 'one', total: 10 })
+    // an exact half in a tie is half in one group, unnamed
+    expect(halfForm(c(2, 2))).toEqual({ kind: 'half', k: 1 })
+    expect(halfForm(c(3, 2, 2))).toEqual({ kind: 'half', k: 2 })
+    expect(halfForm(concentration([{ key: 'a', n: 1 }], 5))).toEqual({ kind: 'none' })
   })
 
   it('finds how few groups hold half, counting the unknown in the whole @RA-50', () => {

@@ -1,9 +1,11 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it } from 'vitest'
 import { App } from '@/app'
 import { writeSourceMode } from '@/lib/source-mode'
+import { server } from '@/test/server'
 
 let history: ReturnType<typeof createMemoryHistory>
 
@@ -21,6 +23,58 @@ afterEach(() => {
   writeSourceMode('all')
 })
 
+const BANNED = 'a8355582b280be9452f939d34637ab82226ba2c97e1aac15eaf6db878fec0130'
+const protxOf = (i: number) => i.toString(16).padStart(64, '0')
+
+/** One of Radar's masternode records, enabled and answering in Falkenstein unless told otherwise. */
+function mn(i: number, over: Record<string, unknown> = {}) {
+  return {
+    protx: protxOf(i),
+    type: 'Regular',
+    status: 'enabled',
+    service: `10.0.0.${String(i % 250)}:9999`,
+    payout_address: 'XpayoutAddressXXXXXXXXXXXXXXXXXXX',
+    registered_height: 1,
+    last_paid_height: 1,
+    pose_penalty: 0,
+    pose_ban_height: -1,
+    operator_reward: 0,
+    platform_node_id: null,
+    reachable: true,
+    version: '24.0.0',
+    user_agent: '/Dash Core:24.0.0/',
+    protocol: 70238,
+    latency_ms: 10,
+    start_height: 1,
+    uptime_7d: 1,
+    uptime_30d: 1,
+    last_seen: 1_795_000_000,
+    last_error: null,
+    network: 'ipv4',
+    country: 'DE',
+    continent: 'EU',
+    city: 'Falkenstein',
+    lat: 50.48,
+    lon: 12.37,
+    asn: 24940,
+    as_org: 'Hetzner Online GmbH',
+    dkg_readiness: null,
+    platform: null,
+    ...over,
+  }
+}
+
+/** Radar answers with this crawl for mainnet's masternodes. */
+function crawlOf(masternodes: ReturnType<typeof mn>[]) {
+  server.use(
+    http.get('*/mainnet/masternodes', () =>
+      HttpResponse.json({ crawl_id: 1, tip: 100, masternodes }),
+    ),
+  )
+}
+
+const MESA = { city: 'Mesa', country: 'US', lat: 33.42, lon: -111.83, as_org: 'Amazon', asn: 16509 }
+
 describe('the Map page', () => {
   it('claims how few cities hold half of the enabled masternodes, and says the rest by country and provider @RA-50', async () => {
     renderAt('/map')
@@ -36,7 +90,7 @@ describe('the Map page', () => {
     expect(screen.getByText(/20 PoSe-banned masternodes are not counted/)).toBeInTheDocument()
     expect(document.querySelector('[data-map-figure] svg')).toHaveAttribute(
       'aria-label',
-      expect.stringMatching(/Map of the world with a disc for each city/),
+      expect.stringMatching(/^World\. Map with a disc for each city/),
     )
   })
 
@@ -93,20 +147,48 @@ describe('the Map page', () => {
     await waitFor(() => expect(h1()).toHaveTextContent(/reachable nodes run in/))
     expect(search().has('type')).toBe(false)
     expect(
-      screen.getByText(/reachable nodes are on Tor or I2P and have no place/),
+      screen.getByText(/reachable nodes have no place, most of them on Tor or I2P/),
     ).toBeInTheDocument()
     expect(screen.queryByRole('searchbox')).toBeNull()
   })
 
-  it('turns an old map link into the filter it meant @RA-52', async () => {
+  it('keeps what an old map link hid hidden, and says so @RA-52', async () => {
     renderAt('/map?color=pose&hide=enabled')
-    await waitFor(() => expect(search().get('status')).toBe('pose-banned'))
-    expect(search().has('hide')).toBe(false)
+    await waitFor(() => expect(h1()).toHaveTextContent(/these 0|these \d+ masternodes|Map/))
+    expect(search().get('hide')).toBe('enabled')
+    // hiding "Enabled" under the default population leaves nothing to count
+    await waitFor(() =>
+      expect(screen.getByText('No masternode matches these filters.')).toBeInTheDocument(),
+    )
+    const chip = screen.getByRole('button', {
+      name: 'Remove the filter Left out by an old map link: Enabled',
+    })
+    await userEvent.setup().click(chip)
+    await waitFor(() => expect(search().has('hide')).toBe(false))
     expect(search().has('color')).toBe(false)
-    await waitFor(() => expect(h1()).toHaveTextContent(/these 20 masternodes/))
+    await waitFor(() =>
+      expect(h1()).toHaveTextContent('Half of the 130 masternodes run in 2 cities'),
+    )
   })
 
-  it('opens a masternode from the address and says how many share its city @RA-52', async () => {
+  it('stays empty when an old link hid every row, and keeps unknown versions it did not hide @RA-52', async () => {
+    crawlOf([mn(1), mn(2), mn(3, { version: null, reachable: null })])
+    renderAt('/map?color=type&hide=regular')
+    await waitFor(() =>
+      expect(screen.getByText('No masternode matches these filters.')).toBeInTheDocument(),
+    )
+    expect(search().get('hide')).toBe('regular')
+  })
+
+  it('drops an old colouring that hid nothing @RA-52', async () => {
+    renderAt('/map?color=version')
+    await waitFor(() => expect(search().has('color')).toBe(false))
+    await waitFor(() =>
+      expect(h1()).toHaveTextContent('Half of the 130 masternodes run in 2 cities'),
+    )
+  })
+
+  it('opens a counted masternode from the address and says how many share its city @RA-52', async () => {
     const protx = '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32'
     renderAt(`/map?protx=${protx}`)
     const card = await waitFor(() => {
@@ -118,8 +200,214 @@ describe('the Map page', () => {
       'href',
       `/mn/${protx}`,
     )
+    const panel = document.querySelector('[data-map-node]')!
+    expect(panel).toHaveAttribute('data-standing', 'counted')
+    expect(panel).toHaveTextContent('It shares Wołów, Poland with 17 other counted masternodes')
+    expect(document.querySelector('[data-marked]')).toHaveAttribute('data-marked', 'place')
+  })
+
+  it('says a PoSe-banned masternode in the address is not counted, rings its own spot and offers to count it @RA-52', async () => {
+    const user = userEvent.setup()
+    renderAt(`/map?protx=${BANNED}`)
+    const panel = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-map-node]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(panel).toHaveAttribute('data-standing', 'banned')
+    expect(panel).toHaveTextContent('It is PoSe-banned, so it is not counted here.')
+    expect(panel).not.toHaveTextContent('It shares')
+    expect(document.querySelector('[data-marked]')).toHaveAttribute('data-marked', 'spot')
+    await user.click(
+      within(panel).getByRole('button', { name: 'Count PoSe-banned masternodes too' }),
+    )
+    await waitFor(() => expect(search().get('status')).toBe('enabled,pose-banned'))
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-node]')).toHaveAttribute('data-standing', 'counted'),
+    )
+    expect(document.querySelector('[data-map-node]')).toHaveTextContent('It shares Santa Clara')
+  })
+
+  it('says a regular masternode is not counted in the evonode view @RA-52', async () => {
+    renderAt('/map?type=evo&protx=219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32')
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-node]')).toHaveAttribute('data-standing', 'type'),
+    )
     expect(document.querySelector('[data-map-node]')).toHaveTextContent(
-      /It shares|It is the only|not among/,
+      'It is a regular masternode, and this view counts evonodes.',
+    )
+  })
+
+  it('shows the masternode in the address even when nothing is counted @RA-52', async () => {
+    crawlOf([mn(1, { status: 'pose_banned', reachable: false })])
+    renderAt(`/map?protx=${protxOf(1)}`)
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-node]')).toHaveAttribute('data-standing', 'banned'),
+    )
+    expect(screen.getByText('The crawl lists no enabled masternode.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear the filters' })).toBeNull()
+  })
+
+  it('says the counts plainly for one masternode, a tie and a near-whole share @RA-50', async () => {
+    crawlOf([mn(1, MESA)])
+    renderAt('/map')
+    await waitFor(() =>
+      expect(h1()).toHaveTextContent('The only masternode counted runs in Mesa, United States'),
+    )
+  })
+
+  it('pins an exact half on no city in a tie @RA-50', async () => {
+    crawlOf([mn(1), mn(2), mn(3, MESA), mn(4, MESA)])
+    renderAt('/map')
+    await waitFor(() => expect(h1()).toHaveTextContent('Half of the 4 masternodes run in 1 city'))
+  })
+
+  it('never calls part of the masternodes all of them @RA-50', async () => {
+    crawlOf([...Array.from({ length: 199 }, (_, i) => mn(i + 1)), mn(500, MESA)])
+    renderAt('/map')
+    await waitFor(() =>
+      expect(h1()).toHaveTextContent(
+        '99% of the 200 masternodes run in one city, Falkenstein, Germany',
+      ),
+    )
+  })
+
+  it('treats both types as every masternode @RA-51', async () => {
+    renderAt('/map?type=evo,regular')
+    await waitFor(() =>
+      expect(h1()).toHaveTextContent('Half of the 130 masternodes run in 2 cities'),
+    )
+    expect(screen.queryByText('Regular masternodes only')).toBeNull()
+  })
+
+  it('keeps the visitor’s search in the city’s list link @RA-51', async () => {
+    renderAt('/map?q=Hetzner&place=DE:Falkenstein')
+    const link = await waitFor(() => {
+      const el = document.querySelector('[data-place-list]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const href = new URL(link.getAttribute('href')!, 'http://x')
+    expect(href.searchParams.get('q')).toBe('Hetzner Falkenstein')
+    expect(href.searchParams.get('country')).toBe('DE')
+  })
+
+  it('unpicks a picked city when its row is pressed again @RA-50', async () => {
+    const user = userEvent.setup()
+    renderAt('/map?place=DE:Falkenstein')
+    await waitFor(() => expect(rows()[0]).toHaveAttribute('aria-pressed', 'true'))
+    await user.click(rows()[0]!)
+    await waitFor(() => expect(search().has('place')).toBe(false))
+  })
+
+  it('names the region in the map’s label @RA-50', async () => {
+    const user = userEvent.setup()
+    renderAt('/map')
+    await waitFor(() => expect(rows().length).toBeGreaterThan(3))
+    await user.click(screen.getByRole('button', { name: 'Europe' }))
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-figure] svg')).toHaveAttribute(
+        'aria-label',
+        expect.stringMatching(/^Europe\. Map with a disc for each city/),
+      ),
+    )
+  })
+
+  it('keeps every reachable node’s city map when the summary fails, with its own retry @RA-50', async () => {
+    server.use(http.get('*/mainnet/summary', () => new HttpResponse(null, { status: 500 })))
+    renderAt('/map?layer=nodes')
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable nodes run in/))
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-bars]')).toHaveAttribute('data-map-bars', 'error'),
+    )
+    expect(rows().length).toBeGreaterThan(3)
+    expect(
+      within(document.querySelector<HTMLElement>('[data-map-bars]')!).getByRole('button', {
+        name: /Retry|Try again/,
+      }),
+    ).toBeInTheDocument()
+  })
+
+  it('says the masternode filters are off while every reachable node is counted @RA-51', async () => {
+    renderAt('/map?layer=nodes&country=DE&q=hetzner')
+    await waitFor(() => expect(document.querySelector('[data-filters-off]')).not.toBeNull())
+    expect(document.querySelector('[data-filters-off]')).toHaveTextContent('Country: Germany')
+    expect(document.querySelector('[data-filters-off]')).toHaveTextContent('Search: hetzner')
+    expect(screen.queryByRole('list', { name: 'Filters' })).toBeNull()
+  })
+
+  it('says the crawl placed nothing, without offering to clear filters, when no reachable node has a place @RA-50', async () => {
+    server.use(
+      http.get('*/mainnet/geo', () => HttpResponse.json({ crawl_id: 1, points: [], unlocated: 0 })),
+    )
+    renderAt('/map?layer=nodes')
+    await waitFor(() =>
+      expect(screen.getByText('The latest crawl placed no reachable node.')).toBeInTheDocument(),
+    )
+    expect(screen.queryByRole('button', { name: 'Clear the filters' })).toBeNull()
+  })
+
+  it('takes each share in the lede from its own ranking @RA-50', async () => {
+    server.use(
+      http.get('*/mainnet/geo', () =>
+        HttpResponse.json({
+          crawl_id: 1,
+          unlocated: 0,
+          points: [
+            {
+              lat: 50.48,
+              lon: 12.37,
+              city: 'Falkenstein',
+              country: 'DE',
+              nodes: 60,
+              masternodes: 60,
+            },
+            { lat: 33.42, lon: -111.83, city: 'Mesa', country: 'US', nodes: 40, masternodes: 40 },
+          ],
+        }),
+      ),
+    )
+    server.use(
+      http.get('*/mainnet/summary', () =>
+        HttpResponse.json({
+          crawl: {
+            id: 1,
+            started: 1_795_000_000,
+            finished: 1_795_000_100,
+            tip_height: 100,
+            tried: 100,
+            discovered: 100,
+            reachable: 80,
+            mn_total: 80,
+            mn_reachable: 80,
+          },
+          dists: {
+            all: {
+              country: [
+                ['DE', 50],
+                ['US', 30],
+              ],
+              asn: [
+                ['AS24940 Hetzner Online GmbH', 50],
+                ['AS16509 Amazon', 30],
+              ],
+            },
+          },
+          networks: [],
+        }),
+      ),
+    )
+    renderAt('/map?layer=nodes')
+    // the summary counts 80 nodes and the geo document 100: Germany's 50 is 63% of its own ranking, not 50%
+    await waitFor(() =>
+      expect(document.querySelector('.rx-page__lede')).toHaveTextContent(
+        '63% of them run in one country, Germany. 63% run with one hosting provider, Hetzner Online GmbH.',
+      ),
+    )
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-bars] .rx-sharebar__pct')).toHaveTextContent(
+        '62.5%',
+      ),
     )
   })
 

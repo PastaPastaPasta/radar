@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ReactNode } from 'react'
 import { formatInt } from '@/lib/format'
@@ -25,7 +26,11 @@ export function ShareBar({ title, c, name, plain, share, unknown, onPick, picked
   const parts = segments(c)
   const others = c.ranked.length - Math.min(5, c.ranked.length)
   const label = (p: (typeof parts)[number]): string =>
-    p.share ? plain(p.share) : p.kind === 'rest' ? t`${formatInt(others)} others` : unknown
+    p.share
+      ? plain(p.share)
+      : p.kind === 'rest'
+        ? plural(others, { one: '# other', other: '# others' })
+        : unknown
   return (
     <div className="rx-sharebar" data-sharebar>
       <h3 className="rx-sharebar__title">{title}</h3>

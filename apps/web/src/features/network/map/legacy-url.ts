@@ -1,10 +1,8 @@
-import { filterMnRows, type MnFilter } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
 
 /**
  * The map used to colour its points by reachability, PoSe status, version or type (`color=`) and hide categories of
- * that colouring (`hide=`). Links made then still arrive. This turns such a link into the filter it meant, so the
- * page counts the same masternodes the old map drew.
+ * that colouring (`hide=`). Links made then still arrive, and the page counts the masternodes the old map drew.
  */
 export const COLOR_MODES = ['reach', 'pose', 'version', 'type'] as const
 export type ColorMode = (typeof COLOR_MODES)[number]
@@ -45,41 +43,17 @@ export function legacyKey(mode: ColorMode, rows: readonly MnRow[]): (r: MnRow) =
 }
 
 /**
- * The filter an old `color` + `hide` link meant: the link's own filter, narrowed to the categories it left shown
- * wherever the filter can say so (one reachability, one PoSe status, the types, or the versions still drawn).
- * Without `hide` the colouring changed nothing about which masternodes were drawn.
+ * What an old `color` + `hide` link left out, as a test on a row. The page keeps the link's words in its address and
+ * applies this test as it is, so a link that hid every row stays empty and one that kept unknown versions keeps them:
+ * no list filter could say either.
  */
-export function legacyFilter(
-  rows: readonly MnRow[],
-  filter: MnFilter,
+export function legacyHidden(
   mode: ColorMode,
+  rows: readonly MnRow[],
   hide: readonly string[],
-): MnFilter {
-  if (hide.length === 0) return filter
+): ((r: MnRow) => boolean) | undefined {
+  if (hide.length === 0) return undefined
   const hidden = new Set(hide)
   const keyOf = legacyKey(mode, rows)
-  const shown = filterMnRows(rows, filter).filter((r) => !hidden.has(keyOf(r)))
-  const kept = [...new Set(shown.map(keyOf))].sort()
-  const out: MnFilter = { ...filter }
-  switch (mode) {
-    case 'reach': {
-      const reach = kept.filter((k) => k !== 'unchecked')
-      if (reach.length === 1 && (reach[0] === 'reachable' || reach[0] === 'unreachable'))
-        out.reach = reach[0]
-      break
-    }
-    case 'pose':
-      if (kept.length === 1) out.status = kept[0] === 'banned' ? ['pose-banned'] : ['enabled']
-      break
-    case 'type':
-      if (kept.length > 0)
-        out.type = kept.filter((k): k is 'regular' | 'evo' => k === 'regular' || k === 'evo')
-      break
-    case 'version': {
-      const versions = new Set(shown.flatMap((r) => r.crawl?.version ?? []))
-      if (versions.size > 0) out.version = [...versions].sort()
-      break
-    }
-  }
-  return out
+  return (r) => hidden.has(keyOf(r))
 }

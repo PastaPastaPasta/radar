@@ -42,8 +42,77 @@ export function isNarrowed(filter: MnFilter): boolean {
     filter.version !== undefined ||
     filter.host !== undefined ||
     filter.dkg !== undefined ||
-    (filter.type !== undefined && !(filter.type.length === 1 && filter.type[0] === 'evo'))
+    (filter.type?.length === 1 && filter.type[0] === 'regular')
   )
+}
+
+/** Why the masternode in the address is, or is not, among the ones the page counts. */
+export type Standing =
+  | { kind: 'counted'; place: Place }
+  | { kind: 'unplaced' }
+  | { kind: 'banned' }
+  | { kind: 'type'; type: 'regular' | 'evo' }
+  | { kind: 'filtered' }
+
+export function standingOf(
+  row: MnRow,
+  members: readonly MnRow[],
+  places: readonly Place[],
+  filter: MnFilter,
+): Standing {
+  if (row.crawl?.lat == null || row.crawl.lon == null) return { kind: 'unplaced' }
+  if (members.includes(row)) {
+    const place = placeOfRow(places, row)
+    if (place) return { kind: 'counted', place }
+  }
+  const status = populationFilter(filter).status
+  if (status && !status.includes(row.status)) return { kind: 'banned' }
+  if (filter.type && !filter.type.includes(row.type)) return { kind: 'type', type: row.type }
+  return { kind: 'filtered' }
+}
+
+// ---- sizes and shares ----
+
+/** A disc's radius in map units at the world's scale. Its area is proportional to the count. */
+export const DISC_K = 0.95
+export const discRadius = (n: number): number => DISC_K * Math.sqrt(n)
+/** The smallest disc drawn, in screen pixels: a city with a few nodes stays visible and clickable. */
+export const MIN_DISC_PX = 2.5
+
+/**
+ * A disc's radius on screen, in pixels, given the map's units per pixel and the view's scale. The map and its size
+ * key both draw from this, so the key always matches the discs.
+ */
+export const discPx = (n: number, unitsPerPx: number, scale: number): number =>
+  Math.max((discRadius(n) * scale) / unitsPerPx, MIN_DISC_PX)
+
+/** The count below which a disc is drawn at the smallest size rather than to scale. */
+export const smallestToScale = (unitsPerPx: number, scale: number): number =>
+  Math.ceil(((MIN_DISC_PX * unitsPerPx) / (DISC_K * scale)) ** 2)
+
+/**
+ * A share as the fraction to print with `digits` decimals of a percent, never rounded up to the whole when part of
+ * it is missing: 199 of 200 prints as 99%, not 100%.
+ */
+export function shownFraction(n: number, total: number, digits: number): number {
+  if (total <= 0) return 0
+  const f = n / total
+  const step = 10 ** (digits + 2)
+  return f < 1 && Math.round(f * step) >= step ? Math.floor(f * step) / step : f
+}
+
+/**
+ * How a ranking's half is said: one group named when it alone holds more than half, "half in k groups" otherwise,
+ * and nothing when no number of groups holds half. An exact half is never pinned on one group of a tie.
+ */
+export type HalfForm =
+  { kind: 'one'; share: Share; total: number } | { kind: 'half'; k: number } | { kind: 'none' }
+
+export function halfForm(c: Concentration): HalfForm {
+  const top = c.ranked[0]
+  if (!top || c.toHalf === undefined || c.total === 0) return { kind: 'none' }
+  if (c.toHalf === 1 && top.n * 2 > c.total) return { kind: 'one', share: top, total: c.total }
+  return { kind: 'half', k: c.toHalf }
 }
 
 // ---- places ----
