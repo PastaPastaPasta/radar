@@ -56,16 +56,23 @@ export interface Departure {
   height: number | null
   /** Milliseconds. */
   at: number | null
+  /**
+   * True once DAPI's list has answered without it. Radar's own `removed` can be wrong for a while: its crawler marks
+   * a masternode removed when one list fetch comes back short, and logs it as returned on the next.
+   */
+  confirmed: boolean
   service: string | null
 }
 
 /**
  * Radar's record of a masternode that has left the list, or null while it is on it. An entry in DAPI's list means it
- * is listed, whatever Radar's last crawl says.
+ * is listed, whatever Radar's last crawl says; the departure is a fact only once DAPI's list has answered without it
+ * (`dapiAnswered`), and Radar's claim until then.
  */
 export function departureOf(
   d: Pick<RadarMasternodeDetail, 'removed' | 'changes'> | null,
   f: DapiFacts | null,
+  dapiAnswered: boolean,
 ): Departure | null {
   if (!d || f || d.removed === null || d.removed === undefined || d.removed === false) return null
   const left = d.changes
@@ -78,6 +85,7 @@ export function departureOf(
     height: left?.height ?? null,
     at: left?.ts ?? (typeof d.removed === 'number' ? d.removed * 1000 : null),
     service: typeof left?.old === 'string' ? left.old : null,
+    confirmed: dapiAnswered,
   }
 }
 

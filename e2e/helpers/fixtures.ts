@@ -27,6 +27,6 @@ export async function answerAsLeftList(page: Page, protx: string): Promise<void>
   await page.addInitScript((id) => {
     const key = 'radar.fixture.mn-left'
     const known = JSON.parse(sessionStorage.getItem(key) ?? '[]') as string[]
-    sessionStorage.setItem(key, JSON.stringify([...known, id]))
+    if (!known.includes(id)) sessionStorage.setItem(key, JSON.stringify([...known, id]))
   }, protx)
 }

@@ -203,16 +203,25 @@ function RegistrationCard({ ctx }: { ctx: MnContext }) {
     }
   }
   if (!f && ctx.left) {
-    const { height } = ctx.left
+    const { height, confirmed } = ctx.left
+    const block =
+      height === null ? null : <Entity kind="block" id={String(height)} label={formatInt(height)} />
     items.push({
       label: t`On the list`,
-      value: t`No, it left the list`,
-      hint:
-        height === null ? undefined : (
+      value: confirmed ? t`No, it left the list` : t`Not confirmed`,
+      hint: confirmed ? (
+        block && (
           <>
-            {t`At block`} <Entity kind="block" id={String(height)} label={formatInt(height)} />
+            {t`At block`} {block}
           </>
-        ),
+        )
+      ) : block ? (
+        <>
+          {t`Radar’s last record says it left at block`} {block}
+        </>
+      ) : (
+        t`Radar’s last record says it left the list`
+      ),
     })
   }
   if (d) {

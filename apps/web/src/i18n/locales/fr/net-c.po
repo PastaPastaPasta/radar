@@ -352,6 +352,9 @@ msgstr "État de santé par jour"
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "La liste de DAPI ne l’inclut pas. Il peut être nouveau, supprimé ou mal saisi."
 
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "La liste de DAPI n’a pas répondu, ce n’est donc pas confirmé : il peut encore y figurer."
+
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "La liste de DAPI prévaut là où le dernier crawl de Radar diffère."
 
@@ -768,6 +771,9 @@ msgstr "Pas encore vérifié"
 msgid "not compared: Radar’s record is not in use"
 msgstr "non comparé : l’enregistrement de Radar n’est pas utilisé"
 
+msgid "Not confirmed"
+msgstr "Non confirmé"
+
 msgid "Not in a validator set"
 msgstr "Hors d’un ensemble de validateurs"
 
@@ -1062,6 +1068,23 @@ msgstr "Numéros d’époque de Radar"
 
 msgid "Radar’s last crawl differs"
 msgstr "Le dernier crawl de Radar diffère"
+
+msgid "Radar’s last record says it left at block"
+msgstr "D’après le dernier relevé de Radar, il est parti au bloc"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "D’après le dernier relevé de Radar, il est parti au bloc {0}"
+
+msgid "Radar’s last record says it left the list"
+msgstr "D’après le dernier relevé de Radar, il a quitté la liste"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "D’après le dernier relevé de Radar, ce masternode a quitté la liste au bloc {0}."
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "D’après le dernier relevé de Radar, ce masternode a quitté la liste."
 
 msgid "Radar’s node hasn’t said yet."
 msgstr "Le nœud de Radar ne s’est pas encore prononcé."

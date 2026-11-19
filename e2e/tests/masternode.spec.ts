@@ -250,7 +250,7 @@ test.describe('masternode page', () => {
     expect(first).toBeGreaterThan(5)
     await expect(page.locator('[data-payments-pager]')).toContainText('25 of 454 shown')
     await expect(page.locator('#payments')).toContainText(
-      /454 payments, 545\.8656\sDASH in total; indexed blocks 1,047,200 to 2,569,999/,
+      /454 payments, 545\.86555754\sDASH in total; indexed blocks 1,047,200 to 2,569,999/,
     )
 
     await page.getByRole('button', { name: 'Show more' }).click()
@@ -421,6 +421,7 @@ test.describe('masternode page', () => {
     await page.goto(`/mn/${LEFT}`)
     const header = page.locator('[data-masternode-header]')
     await expect(header.locator('[data-left-list]')).toHaveText('Left the list at block 2,574,457')
+    await expect(header.locator('[data-left-list]')).toHaveAttribute('data-left-list', 'confirmed')
     await settled(page)
     await expect(header).not.toContainText('Enabled')
     await expect(header).not.toContainText('Not checked yet')
@@ -432,6 +433,18 @@ test.describe('masternode page', () => {
     await expect(registration).toContainText('No, it left the list')
     await expect(registration).toContainText(/Operator reward\s*15%/)
     await expectAccessible(page)
+  })
+
+  test('keeps a departure Radar’s claim, with the vote link, while DAPI’s list is down @RA-30', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => sessionStorage.setItem('radar.fixture.down', '["dapi"]'))
+    await page.goto(`/mn/${LEFT}`)
+    const chip = page.locator('[data-masternode-header] [data-left-list]')
+    await expect(chip).toHaveAttribute('data-left-list', 'unconfirmed')
+    await expect(chip).toHaveText('Radar’s last record says it left at block 2,574,457')
+    await expect(page.getByRole('link', { name: /Vote in Governance/ })).toBeVisible()
+    await expect(page.locator('[data-left-notice]')).toContainText('that isn’t confirmed')
   })
 
   test('takes a testnet ProTx opened on mainnet to testnet @RA-41', async ({ page }) => {

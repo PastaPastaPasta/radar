@@ -23,6 +23,7 @@ export function paymentsSummary(summary: PaymentsSummary, units: UnitsValue): st
   const total = formatAmountText(summary.total_duffs, 'duffs', {
     unit: units.unit === 'DASH' ? undefined : units.unit,
     testnet: units.testnet,
+    density: 'table',
   })
   const from = formatInt(summary.indexed.from)
   const to = formatInt(summary.indexed.to)

@@ -195,7 +195,7 @@ describe('Masternode page', () => {
     expect(kpis).not.toHaveTextContent('Uptime for 13 days')
   })
 
-  it('reads as removed everywhere once the masternode has left the list, with no vote link', async () => {
+  const leftRecord = async () => {
     const body = await fixtureBody<Record<string, unknown>>(
       'radar',
       'mainnet',
@@ -219,6 +219,16 @@ describe('Masternode page', () => {
         }),
       ),
     )
+  }
+  const leftChip = () =>
+    waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-left-list]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+
+  it('reads as removed everywhere once DAPI’s list has answered without it, with no vote link', async () => {
+    await leftRecord()
     vi.spyOn(core, 'masternodeList').mockResolvedValue({
       data: new Map(),
       source: 'dapi',
@@ -227,11 +237,8 @@ describe('Masternode page', () => {
       proved: false,
     } as unknown as Awaited<ReturnType<typeof core.masternodeList>>)
     renderAt(`/mn/${MAINNET.regular}`)
-    const status = await waitFor(() => {
-      const el = document.querySelector<HTMLElement>('[data-left-list]')
-      expect(el).not.toBeNull()
-      return el!
-    })
+    const status = await leftChip()
+    await waitFor(() => expect(status).toHaveAttribute('data-left-list', 'confirmed'))
     expect(status).toHaveTextContent('Left the list at block 2,574,457')
     const header = document.querySelector<HTMLElement>('[data-masternode-header]')!
     expect(header).not.toHaveTextContent('Enabled')
@@ -242,6 +249,38 @@ describe('Masternode page', () => {
     )
     expect(document.getElementById('registration')).toHaveTextContent('No, it left the list')
   })
+
+  it.each([
+    [
+      'fails',
+      () =>
+        vi
+          .spyOn(core, 'masternodeList')
+          .mockRejectedValue(
+            new SourceError({ source: 'dapi', kind: 'network', message: 'No node answered' }),
+          ),
+    ],
+    [
+      'has not answered yet',
+      () => vi.spyOn(core, 'masternodeList').mockReturnValue(new Promise(() => undefined)),
+    ],
+  ])(
+    'keeps a departure Radar’s claim, with the vote link, while DAPI’s list %s',
+    async (_case, dapi) => {
+      await leftRecord()
+      dapi()
+      renderAt(`/mn/${MAINNET.regular}`)
+      const status = await leftChip()
+      expect(status).toHaveAttribute('data-left-list', 'unconfirmed')
+      expect(status).toHaveTextContent('Radar’s last record says it left at block 2,574,457')
+      expect(document.querySelector('[data-left-notice]')).toHaveTextContent(
+        'DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed.',
+      )
+      expect(await screen.findByRole('link', { name: /Vote in Governance/ })).toBeInTheDocument()
+      expect(document.getElementById('registration')).toHaveTextContent('Not confirmed')
+      expect(document.getElementById('registration')).not.toHaveTextContent('No, it left the list')
+    },
+  )
 
   it('shows the operator reward as the percentage the operator takes @RA-31', async () => {
     renderAt(`/mn/${TESTNET.regular}?network=testnet`)

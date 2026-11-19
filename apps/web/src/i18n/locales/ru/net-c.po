@@ -352,6 +352,9 @@ msgstr "Состояние по дням"
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "В списке DAPI её нет. Возможно, она новая, удалена или в адресе опечатка."
 
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "Список DAPI не ответил, поэтому это не подтверждено: она может всё ещё быть в списке."
+
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Список DAPI главнее там, где последний обход Radar расходится с ним."
 
@@ -768,6 +771,9 @@ msgstr "Ещё не проверялось"
 msgid "not compared: Radar’s record is not in use"
 msgstr "не сравнивается: запись Radar не используется"
 
+msgid "Not confirmed"
+msgstr "Не подтверждено"
+
 msgid "Not in a validator set"
 msgstr "Не в наборе валидаторов"
 
@@ -1062,6 +1068,23 @@ msgstr "Номера эпох Radar"
 
 msgid "Radar’s last crawl differs"
 msgstr "Последний обход Radar расходится"
+
+msgid "Radar’s last record says it left at block"
+msgstr "По последней записи Radar, вышла в блоке"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "По последней записи Radar, вышла в блоке {0}"
+
+msgid "Radar’s last record says it left the list"
+msgstr "По последней записи Radar, вышла из списка"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "По последней записи Radar, эта мастернода вышла из списка в блоке {0}."
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "По последней записи Radar, эта мастернода вышла из списка."
 
 msgid "Radar’s node hasn’t said yet."
 msgstr "Узел Radar пока не сообщил."

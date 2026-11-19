@@ -352,6 +352,9 @@ msgstr "Günlük sağlık durumu"
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "DAPI’nin listesinde yok. Yeni, kaldırılmış ya da yanlış yazılmış olabilir."
 
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "DAPI’nin listesi yanıt vermedi, bu yüzden bu doğrulanmadı: hâlâ listede olabilir."
+
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Radar’ın son taramasıyla farklı olduğunda DAPI’nin listesi geçerlidir."
 
@@ -768,6 +771,9 @@ msgstr "Henüz kontrol edilmedi"
 msgid "not compared: Radar’s record is not in use"
 msgstr "karşılaştırılmadı: Radar’ın kaydı kullanımda değil"
 
+msgid "Not confirmed"
+msgstr "Doğrulanmadı"
+
 msgid "Not in a validator set"
 msgstr "Bir doğrulayıcı kümesinde değil"
 
@@ -1062,6 +1068,23 @@ msgstr "Radar’ın epoch sayıları"
 
 msgid "Radar’s last crawl differs"
 msgstr "Radar’ın son taraması farklı"
+
+msgid "Radar’s last record says it left at block"
+msgstr "Radar’ın son kaydına göre çıktığı blok:"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Radar’ın son kaydına göre {0} numaralı blokta çıktı"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Radar’ın son kaydına göre listeden çıktı"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Radar’ın son kaydına göre bu masternode {0} numaralı blokta listeden çıktı."
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Radar’ın son kaydına göre bu masternode listeden çıktı."
 
 msgid "Radar’s node hasn’t said yet."
 msgstr "Radar’ın düğümü henüz bir şey söylemedi."

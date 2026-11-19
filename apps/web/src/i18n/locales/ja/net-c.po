@@ -352,6 +352,9 @@ msgstr "日ごとの稼働状況"
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "DAPI の一覧にありません。新しい、削除された、または入力ミスの可能性があります。"
 
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "DAPI の一覧が応答していないため、これは確認されていません。まだ一覧に載っている可能性があります。"
+
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Radar の直近のクロールと異なる場合は DAPI の一覧が優先されます。"
 
@@ -768,6 +771,9 @@ msgstr "未確認"
 msgid "not compared: Radar’s record is not in use"
 msgstr "比較なし: Radar の記録は使用されていません"
 
+msgid "Not confirmed"
+msgstr "未確認"
+
 msgid "Not in a validator set"
 msgstr "バリデーターセットに未所属"
 
@@ -1062,6 +1068,23 @@ msgstr "Radar のエポック番号"
 
 msgid "Radar’s last crawl differs"
 msgstr "Radar の直近のクロールと異なる"
+
+msgid "Radar’s last record says it left at block"
+msgstr "Radar の最後の記録では、離脱したブロック："
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Radar の最後の記録ではブロック {0} で離脱"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Radar の最後の記録ではリストから外れた"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Radar の最後の記録では、このマスターノードはブロック {0} でリストから外れました。"
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Radar の最後の記録では、このマスターノードはリストから外れました。"
 
 msgid "Radar’s node hasn’t said yet."
 msgstr "Radar のノードはまだ報告していません。"

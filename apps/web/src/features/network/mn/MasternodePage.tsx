@@ -172,7 +172,7 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
     f,
     dapi: dapi.data ? stampOf(dapi.data) : null,
     evo,
-    left: departureOf(d, f),
+    left: departureOf(d, f, dapi.isSuccess),
     off,
   }
   const current: MnTab = tab === 'platform' && !evo ? 'overview' : (tab ?? 'overview')
@@ -310,8 +310,18 @@ function LeftNotice({ ctx }: { ctx: MnContext }) {
   const left = ctx.left
   if (!left) return null
   const service = left.service ?? ctx.d?.service ?? null
+  if (!left.confirmed) {
+    return (
+      <p role="status" data-left-notice="unconfirmed" className="rx-note rounded border p-3">
+        {left.height === null
+          ? t`Radar’s last record says this masternode left the list.`
+          : t`Radar’s last record says this masternode left the list at block ${formatInt(left.height)}.`}{' '}
+        {t`DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed.`}
+      </p>
+    )
+  }
   return (
-    <p role="status" data-left-notice className="rx-note rounded border p-3">
+    <p role="status" data-left-notice="confirmed" className="rx-note rounded border p-3">
       {left.at === null ? (
         t`This masternode is no longer on the masternode list, so it isn’t paid and can’t vote.`
       ) : (
@@ -361,7 +371,7 @@ function Header({ ctx }: { ctx: MnContext }) {
         )}
       </h1>
       <div className="rx-rec__actions">
-        {left ? null : (
+        {left?.confirmed ? null : (
           <LinkOut to={{ app: 'gov', action: 'masternodes', net }}>{t`Vote in Governance`}</LinkOut>
         )}
         <CopyLinkButton />
@@ -371,11 +381,17 @@ function Header({ ctx }: { ctx: MnContext }) {
         <Hash value={protx} display="full" />
       </div>
       <div className="rx-rec__meta" data-status>
-        {left ? (
-          <span className="rx-st rx-st--bad" data-left-list>
+        {left?.confirmed ? (
+          <span className="rx-st rx-st--bad" data-left-list="confirmed">
             {left.height === null
               ? t`Left the list`
               : t`Left the list at block ${formatInt(left.height)}`}
+          </span>
+        ) : left ? (
+          <span className="rx-st rx-st--warn" data-left-list="unconfirmed">
+            {left.height === null
+              ? t`Radar’s last record says it left the list`
+              : t`Radar’s last record says it left at block ${formatInt(left.height)}`}
           </span>
         ) : null}
         {d && !left ? (

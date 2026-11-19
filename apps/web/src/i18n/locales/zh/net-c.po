@@ -352,6 +352,9 @@ msgstr "每日健康状况"
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "DAPI 的列表中没有它。它可能是新节点、已被移除，或输入有误。"
 
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "DAPI 的列表尚未应答，因此这一点未经确认：它可能仍在列表中。"
+
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Radar 上次抓取的结果与之不同时，以 DAPI 的列表为准。"
 
@@ -768,6 +771,9 @@ msgstr "尚未检查"
 msgid "not compared: Radar’s record is not in use"
 msgstr "未比较：未使用 Radar 的记录"
 
+msgid "Not confirmed"
+msgstr "未确认"
+
 msgid "Not in a validator set"
 msgstr "不在验证者集合中"
 
@@ -1062,6 +1068,23 @@ msgstr "Radar 的纪元数据"
 
 msgid "Radar’s last crawl differs"
 msgstr "Radar 上次抓取的结果不同"
+
+msgid "Radar’s last record says it left at block"
+msgstr "Radar 的最后记录显示其离开于区块"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Radar 的最后记录显示其在区块 {0} 离开"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Radar 的最后记录显示其已离开列表"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Radar 的最后记录显示，此主节点在区块 {0} 离开了列表。"
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Radar 的最后记录显示，此主节点已离开列表。"
 
 msgid "Radar’s node hasn’t said yet."
 msgstr "Radar 的节点尚未给出结果。"

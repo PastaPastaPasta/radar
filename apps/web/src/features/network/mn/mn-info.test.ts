@@ -92,11 +92,16 @@ describe('departureOf', () => {
   } as unknown as Pick<RadarMasternodeDetail, 'removed' | 'changes'>
 
   it('says when and where a masternode left the list', () => {
-    expect(departureOf(removed, null)).toEqual({
+    expect(departureOf(removed, null, true)).toEqual({
       height: 2_574_457,
       at: 1_795_024_928_000,
       service: '85.209.241.49:9999',
+      confirmed: true,
     })
+  })
+
+  it('leaves it Radar’s claim, not a fact, while DAPI’s list has not answered', () => {
+    expect(departureOf(removed, null, false)).toMatchObject({ height: 2_574_457, confirmed: false })
   })
 
   it('takes the record’s own time when no change says when', () => {
@@ -104,7 +109,12 @@ describe('departureOf', () => {
       RadarMasternodeDetail,
       'removed' | 'changes'
     >
-    expect(departureOf(bare, null)).toEqual({ height: null, at: 1_795_024_928_000, service: null })
+    expect(departureOf(bare, null, true)).toEqual({
+      height: null,
+      at: 1_795_024_928_000,
+      service: null,
+      confirmed: true,
+    })
   })
 
   it('is null while the masternode is listed, by Radar or by DAPI', () => {
@@ -112,8 +122,8 @@ describe('departureOf', () => {
       RadarMasternodeDetail,
       'removed' | 'changes'
     >
-    expect(departureOf(listed, null)).toBeNull()
-    expect(departureOf(null, null)).toBeNull()
+    expect(departureOf(listed, null, true)).toBeNull()
+    expect(departureOf(null, null, true)).toBeNull()
     const f = dapiFacts({
       proRegTxHash: PROTX,
       confirmedHash: '',
@@ -123,6 +133,6 @@ describe('departureOf', () => {
       isValid: true,
       type: 0,
     })
-    expect(departureOf(removed, f)).toBeNull()
+    expect(departureOf(removed, f, true)).toBeNull()
   })
 })
