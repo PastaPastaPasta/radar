@@ -592,7 +592,7 @@ export function DataTable<Row>({
               rowLink && 'rx-table--link',
               rowLink && 'rx-table--nav',
             )}
-            aria-busy={state === 'loading' || undefined}
+            aria-busy={state === 'loading' || (state === 'ready' && pendingRows > 0) || undefined}
             onBlur={(e) => {
               if (!e.currentTarget.contains(e.relatedTarget)) setFocusId(undefined)
             }}
@@ -613,6 +613,11 @@ export function DataTable<Row>({
           </span>
         ) : null}
       </div>
+      {state === 'ready' && pendingRows > 0 && modelRows.length > 0 ? (
+        <p className="rx-note rx-dim" aria-live="polite" data-pending-note>
+          {t`Showing ${formatInt(modelRows.length)} of ${formatInt(modelRows.length + pendingRows)} rows. The rest are on their way…`}
+        </p>
+      ) : null}
       {showFoot ? (
         <div className="rx-tfoot">
           {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}

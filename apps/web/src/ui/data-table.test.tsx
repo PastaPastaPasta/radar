@@ -156,6 +156,15 @@ describe('DataTable states', () => {
     expect(document.querySelectorAll('.rx-skelrow')).toHaveLength(8)
   })
 
+  it('marks a page whose remaining rows are still on their way as busy, and says how many are shown', async () => {
+    await renderInRouter(<Harness pendingRows={17} />)
+    expect(screen.getByRole('table')).toHaveAttribute('aria-busy', 'true')
+    expect(document.querySelectorAll('[data-pending-row]')).toHaveLength(17)
+    expect(document.querySelector('[data-pending-note]')).toHaveTextContent(
+      'Showing 3 of 20 rows. The rest are on their way…',
+    )
+  })
+
   it('shows the empty state for no rows', async () => {
     await renderInRouter(<DataTable {...base} state="ready" />)
     expect(screen.getByText('Nothing to show yet')).toBeInTheDocument()
