@@ -165,6 +165,9 @@ export function decodeCurrentQuorums(
       throw new QuorumsDecodeError(`The answer is for chain ${meta.chainId}, not ${expect.net}`)
     if (!sets.some((s) => s.quorumHash === current))
       throw new QuorumsDecodeError('The current validator set is not among the sets')
+    // Drive lists every set it knows in the rotation, the active one included: without it, no turn can be placed.
+    if (!order.includes(current))
+      throw new QuorumsDecodeError('The current validator set is not in the rotation')
     return { order, current, sets, lastProposer, meta }
   } catch (e) {
     if (e instanceof QuorumsDecodeError) throw e

@@ -73,6 +73,12 @@ describe('what the decoder refuses', () => {
     expect(() => decode(encodeCurrentQuorums(q, { height: 2n ** 60n }))).toThrow(/block height/)
   })
 
+  it('an answer whose active set is not in the rotation, which would start the turns from the wrong set', async () => {
+    const q = await good()
+    const order = q.order.filter((h) => h !== q.current)
+    expect(() => decode(encodeCurrentQuorums({ ...q, order }))).toThrow(/not in the rotation/)
+  })
+
   it('an answer with no rotation: a broken read, not an order that ran out', async () => {
     const q = await good()
     expect(() => decode(encodeCurrentQuorums({ ...q, order: [] }))).toThrow(/rotation/)
@@ -146,9 +152,10 @@ describe('platformDapi.currentQuorums', () => {
 })
 
 describe('platformDapiQueries.currentQuorums', () => {
-  it('reads only when the schedule asks: never on focus, and never again by itself after a refusal', () => {
+  it('reads only when the schedule asks: never on focus or reconnect, and never again by itself after a refusal', () => {
     const options = platformDapiQueries.currentQuorums('mainnet')
     expect(options.refetchOnWindowFocus).toBe(false)
+    expect(options.refetchOnReconnect).toBe(false)
     expect(options.retry).toBe(false)
   })
 })

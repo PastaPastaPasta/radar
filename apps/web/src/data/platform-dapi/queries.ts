@@ -9,9 +9,10 @@ export const platformDapiQueries = {
       queryKey: dapiKeys(net, 'current-quorums'),
       queryFn: ({ signal }) => platformDapi.currentQuorums(net, signal),
       ...dataClass('live'),
-      // Rereads are paced by the schedule (`nextSetsReadAt`): no read on focus, and a refused answer was already tried
+      // Rereads are paced by the schedule (`nextSetsReadAt`): no read on focus or reconnect, and a refused answer was already tried
       // on a second node inside the client.
       refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       retry: false,
     }),
 }
