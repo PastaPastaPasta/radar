@@ -79,15 +79,28 @@ describe('adaptPendingTx', () => {
 
 describe('insightTxType', () => {
   it('names special transactions the way Hyphen does, and a coinbase input as a coinbase', () => {
-    expect(insightTxType({ type: 8, vin: [] })).toBe('asset_lock')
-    expect(insightTxType({ type: 9, vin: [] })).toBe('asset_unlock')
-    expect(insightTxType({ type: 5, vin: [] })).toBe('coinbase')
-    expect(insightTxType({ type: 6, vin: [] })).toBe('quorum_commitment')
-    expect(insightTxType({ type: 7, vin: [] })).toBe('mnhf_signal')
-    expect(insightTxType({ type: 1, vin: [] })).toBe('provider_register')
-    expect(insightTxType({ vin: [{ coinbase: '03' }] })).toBe('coinbase')
-    expect(insightTxType({ type: 0, vin: [{ addr: A }] })).toBe('normal')
-    expect(insightTxType({ type: 99, vin: [] })).toBe('normal')
+    expect(insightTxType({ type: 8, vin: [], vout: [] })).toBe('asset_lock')
+    expect(insightTxType({ type: 9, vin: [], vout: [] })).toBe('asset_unlock')
+    expect(insightTxType({ type: 5, vin: [], vout: [] })).toBe('coinbase')
+    expect(insightTxType({ type: 6, vin: [], vout: [] })).toBe('quorum_commitment')
+    expect(insightTxType({ type: 7, vin: [], vout: [] })).toBe('mnhf_signal')
+    expect(insightTxType({ type: 1, vin: [], vout: [] })).toBe('provider_register')
+    expect(insightTxType({ vin: [{ coinbase: '03' }], vout: [] })).toBe('coinbase')
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [] })).toBe('normal')
+    expect(insightTxType({ type: 99, vin: [], vout: [] })).toBe('normal')
+  })
+
+  it('calls a transaction whose every output is OP_RETURN data, as Hyphen does', () => {
+    const out = (hex: string) => ({ n: 0, value: 0n, scriptPubKey: { hex } })
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a')] })).toBe('data')
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a0401020304')] })).toBe('data')
+    expect(
+      insightTxType({
+        type: 0,
+        vin: [{ addr: A }],
+        vout: [out('6a'), out('76a914' + '00'.repeat(20) + '88ac')],
+      }),
+    ).toBe('normal')
   })
 })
 

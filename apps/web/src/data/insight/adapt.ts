@@ -22,9 +22,13 @@ const TX_TYPES: Record<number, string> = {
   9: 'asset_unlock',
 }
 
-export function insightTxType(tx: Pick<InsTx, 'type' | 'vin'>): string {
+export function insightTxType(tx: Pick<InsTx, 'type' | 'vin' | 'vout'>): string {
   if (tx.vin.some((i) => i.coinbase != null)) return 'coinbase'
-  return TX_TYPES[tx.type ?? 0] ?? 'normal'
+  const special = TX_TYPES[tx.type ?? 0]
+  if (special) return special
+  const dataOnly =
+    tx.vout.length > 0 && tx.vout.every((o) => o.scriptPubKey.hex.toLowerCase().startsWith('6a'))
+  return dataOnly ? 'data' : 'normal'
 }
 
 /** The chain tip an answer about a confirmed transaction was read at: its height plus its confirmations, less one. */

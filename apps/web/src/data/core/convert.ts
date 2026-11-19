@@ -24,11 +24,20 @@ const TX_TYPES: Partial<Record<Wasm.TxTypeName, CoreTxType>> = {
 }
 
 /**
- * The badge type of a transaction. A classic coinbase is `coinbase` too. Types Dash Core does not have yet
- * (DIP-26 shared-masternode transactions) have no badge and read as `transfer`; their `payload.kind` is the exact type.
+ * The badge type of a transaction. A classic coinbase is `coinbase` too, and a classic transaction whose every output
+ * is OP_RETURN pays no one, so it is `data`. Types Dash Core does not have yet (DIP-26 shared-masternode transactions)
+ * have no badge and read as `transfer`; their `payload.kind` is the exact type.
  */
-export function coreTxType(tx: Pick<Wasm.DecodedTx, 'txTypeName' | 'isCoinbase'>): CoreTxType {
+export function coreTxType(
+  tx: Pick<Wasm.DecodedTx, 'txTypeName' | 'isCoinbase' | 'outputs'>,
+): CoreTxType {
   if (tx.isCoinbase) return 'coinbase'
+  if (
+    tx.txTypeName === 'classic' &&
+    tx.outputs.length > 0 &&
+    tx.outputs.every((o) => o.scriptType === 'nulldata')
+  )
+    return 'data'
   return TX_TYPES[tx.txTypeName] ?? 'transfer'
 }
 

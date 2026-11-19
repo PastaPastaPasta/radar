@@ -2,6 +2,7 @@ import type { CoreTxType } from '@/lib/tx-types'
 
 const KNOWN: Record<string, CoreTxType> = {
   normal: 'transfer',
+  data: 'data',
   coinbase: 'coinbase',
   provider_register: 'pro-reg',
   provider_update_service: 'pro-up-serv',

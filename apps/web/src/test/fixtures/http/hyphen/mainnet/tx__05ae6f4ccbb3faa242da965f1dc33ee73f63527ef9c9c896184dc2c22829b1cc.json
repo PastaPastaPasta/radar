@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/x/hy/mainnet/tx/05ae6f4ccbb3faa242da965f1dc33ee73f63527ef9c9c896184dc2c22829b1cc"
+  },
+  "recordedAt": "2026-11-19T16:58:43.102Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": null,
+    "txHash": "05ae6f4ccbb3faa242da965f1dc33ee73f63527ef9c9c896184dc2c22829b1cc",
+    "txVersion": 2,
+    "txType": "data",
+    "lockTime": 0,
+    "txSize": 167,
+    "valueOut": 0,
+    "inputCount": 1,
+    "outputCount": 1,
+    "fee": 19551,
+    "tags": { "mined": false, "coinbase": false },
+    "live": { "tags": { "mempool": true, "islock": true } },
+    "vin": [
+      {
+        "n": 0,
+        "scriptSig": {
+          "hex": "47304402202d6cc6d543ba12832d3acc74e0d512220fca1fd62d70a415009711ff9758566d02203384eab96f949cd9622d06798133d0f41e03b893df684ec847612b616dc412a7012102d7907f0b660cc7597adc31e8a3ac0271cf2d559eb589056e6ec806edf590dd6a"
+        },
+        "sequence": 4294967295,
+        "address": "XsiMjMud166Zh6aZDtGYXdWTncF8WP9eBP",
+        "value": 19551,
+        "txHash": "bb4f4bf8eefe5518b0b4b99b4c07dfae772298be3a85110b32ea6811cb9cb601",
+        "vout": 0
+      }
+    ],
+    "vout": [{ "n": 0, "value": 0, "scriptPubKey": { "hex": "6a" }, "spent": false }]
+  }
+}
