@@ -3,16 +3,26 @@ import { decodeCurrentQuorums, type CurrentQuorums } from '@/data/platform-dapi/
 import { hexToBytes } from '@/lib/hex'
 import type { NetworkId } from '@/lib/network'
 import { proposerTurns } from '@/lib/proposer-order'
+import { reportFixtureMiss } from './handlers/fixtures'
 
 /**
  * The fixture chain's Platform tip, moved on by specs: `advance` blocks past the recordings, each `blockMs` apart, with
  * every turn taken; `down` makes the epoch read and the validator-set read fail as an unreachable node would.
  */
-const tip = { advance: 0, blockMs: 135_000, down: false }
+const tip = { advance: 0, elapsedMs: 0, down: false }
+const BLOCK_MS = 135_000
 
-export function advancePlatformTip(blocks: number, blockMs = tip.blockMs): void {
+/** Moves the fixture tip on `blocks` blocks, each `blockMs` after the one before; earlier calls keep their spacing. */
+export function advancePlatformTip(blocks: number, blockMs = BLOCK_MS): void {
   tip.advance += blocks
-  tip.blockMs = blockMs
+  tip.elapsedMs += blocks * blockMs
+}
+
+/** Back to the recordings, for tests that move the tip. */
+export function resetPlatformTip(): void {
+  tip.advance = 0
+  tip.elapsedMs = 0
+  tip.down = false
 }
 
 export function cutPlatform(down: boolean): void {
@@ -35,7 +45,7 @@ export function advancedEpochAnswer<R>(result: R): R {
     meta: {
       ...r.meta,
       height: r.meta.height + tip.advance,
-      timeMs: r.meta.timeMs + tip.advance * tip.blockMs,
+      timeMs: r.meta.timeMs + tip.elapsedMs,
     },
   } as R
 }
@@ -78,19 +88,28 @@ export function encodeCurrentQuorums(
   return new BinaryWriter().tag(1, 2).bytes(v0.finish()).finish()
 }
 
-/** A recorded validator-set answer as it reads `advance` blocks later: each turn taken, so the proposer is the one due. */
+/**
+ * A recorded validator-set answer as it reads `advance` blocks later: each turn taken, so the proposer is the one due,
+ * and the active set is the one that turn is taken in. An advance the recording cannot place (past its turns, or onto
+ * a repeated turn) is a fixture miss, never the recorded answer at the wrong height.
+ */
 export function advancedQuorumsAnswer(bytes: Uint8Array, net: NetworkId): Uint8Array {
   if (tip.advance === 0) return bytes
   const q = decodeCurrentQuorums(bytes, { net, now: Number.MAX_SAFE_INTEGER })
   const due = proposerTurns(q).find((t) => t.slot === tip.advance)
-  if (!due) return bytes
+  if (!due) {
+    const what = `the validator sets ${String(tip.advance)} blocks past the ${net} recording`
+    reportFixtureMiss(what)
+    throw new Error(`No recorded turn places ${what}`)
+  }
   return encodeCurrentQuorums({
     ...q,
+    current: due.quorumHash,
     lastProposer: due.proTxHash,
     meta: {
       ...q.meta,
       height: q.meta.height + tip.advance,
-      timeMs: q.meta.timeMs + tip.advance * tip.blockMs,
+      timeMs: q.meta.timeMs + tip.elapsedMs,
     },
   })
 }

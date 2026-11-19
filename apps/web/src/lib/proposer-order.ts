@@ -24,6 +24,8 @@ export interface ValidatorSets {
 export interface ProposerTurn {
   proTxHash: string
   slot: number
+  /** The validator set the turn is taken in. */
+  quorumHash: string
 }
 
 /**
@@ -48,18 +50,18 @@ export function proposerTurns(q: ValidatorSets): ProposerTurn[] {
   if (order.length === 0) return out
   const seen = new Set<string>()
   let slot = 0
-  const turn = (m: ValidatorMember) => {
+  const turn = (m: ValidatorMember, set: ValidatorSet) => {
     slot++
     if (!seen.has(m.proTxHash)) {
       seen.add(m.proTxHash)
-      out.push({ proTxHash: m.proTxHash, slot })
+      out.push({ proTxHash: m.proTxHash, slot, quorumHash: set.quorumHash })
     }
   }
   const walk = (set: ValidatorSet, after?: string) => {
     for (const m of set.members)
-      if (!m.banned && (after === undefined || m.proTxHash > after)) turn(m)
+      if (!m.banned && (after === undefined || m.proTxHash > after)) turn(m, set)
     const first = set.members.find((m) => !m.banned)
-    if (first && set.members.at(-1)?.banned) turn(first)
+    if (first && set.members.at(-1)?.banned) turn(first, set)
   }
   const found = order.indexOf(q.current)
   const current = found < 0 ? 0 : found
