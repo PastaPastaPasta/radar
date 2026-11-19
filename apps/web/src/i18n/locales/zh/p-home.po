@@ -47,10 +47,6 @@ msgstr "{0} / {1}"
 msgid "{0} s"
 msgstr "{0} 秒"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} 个有效"
-
 msgid "{behind} blocks behind the tip"
 msgstr "落后链顶 {behind} 个区块"
 
@@ -136,6 +132,9 @@ msgstr "落后于区块链：{behind}。"
 msgid "Best ChainLock"
 msgstr "最新 ChainLock"
 
+msgid "Block"
+msgstr "区块"
+
 msgid "blocks"
 msgstr "区块"
 
@@ -145,26 +144,26 @@ msgstr "区块"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "区块正常产生，且 Platform 已锁定到 Core。"
 
+msgid "Busiest contracts"
+msgstr "最繁忙的合约"
+
 msgid "Busiest identities"
 msgstr "最活跃的身份"
 
 msgid "By credit balance"
 msgstr "按积分余额"
 
-msgid "By recent token transitions"
-msgstr "按近期代币状态转换"
+msgid "By document and token actions in the last 30 days"
+msgstr "按过去 30 天的文档和代币操作"
 
-msgid "By recent transitions"
-msgstr "按近期状态转换"
+msgid "By token actions in the last 30 days"
+msgstr "按过去 30 天的代币操作"
 
 msgid "By transition count"
 msgstr "按状态转换数量"
 
-msgid "By transitions"
-msgstr "按状态转换"
-
-msgid "By transitions sent"
-msgstr "按已发送状态转换"
+msgid "By transitions sent in the last 30 days"
+msgstr "按过去 30 天已发送的状态转换"
 
 msgid "Catching up"
 msgstr "正在追赶"
@@ -203,9 +202,6 @@ msgstr "Core 链顶、区块和交易，直接来自 evonode"
 
 msgid "Credits"
 msgstr "积分"
-
-msgid "Current"
-msgstr "当前"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +381,6 @@ msgstr "落后"
 msgid "Last block"
 msgstr "最新区块"
 
-msgid "Last block proposed by"
-msgstr "最近区块的提议者"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -430,9 +423,6 @@ msgstr "每月收益中位数"
 msgid "Median yield"
 msgstr "收益率中位数"
 
-msgid "Most active contracts"
-msgstr "最活跃的合约"
-
 msgid "Most active identities"
 msgstr "最活跃的身份"
 
@@ -441,6 +431,9 @@ msgstr "网络内部信息：对等节点、内存池压力、版本和历史"
 
 msgid "Newest blocks"
 msgstr "最新区块"
+
+msgid "Newest indexed block"
+msgstr "最新已索引区块"
 
 msgid "Newest Platform blocks"
 msgstr "最新 Platform 区块"
@@ -453,6 +446,9 @@ msgstr "最新状态转换"
 
 msgid "No active quorums"
 msgstr "没有活跃的 Quorum"
+
+msgid "No activity in the last 30 days."
+msgstr "过去 30 天内没有活动。"
 
 msgid "No crawl has finished yet."
 msgstr "尚无已完成的抓取。"
@@ -469,9 +465,6 @@ msgstr "此范围内没有身份历史"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} 内没有新的 Platform 区块。"
-
-msgid "No quorums listed"
-msgstr "Quorum 列表为空"
 
 msgid "No transitions in this range"
 msgstr "此范围内没有状态转换"
@@ -515,9 +508,6 @@ msgstr "暂无排名"
 msgid "Nothing shielded in this range"
 msgstr "此范围内没有隐私保护的内容"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "暂无可排名内容:{quietNames}。"
-
 msgid "Off in this mode"
 msgstr "此模式下已关闭"
 
@@ -550,6 +540,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer 不索引开发网"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer 尚未索引任何区块。"
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "Platform Explorer 的索引可能落后于已验证的链头。"
+
 msgid "Platform height"
 msgstr "Platform 高度"
 
@@ -579,6 +575,9 @@ msgstr "已在 Platform 区块 {block}（第 {epoch} 个纪元）通过证明验
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "已通过证明验证的 Platform 状态，在此浏览器中验证"
+
+msgid "Proposed by"
+msgstr "提议者"
 
 msgid "Protocol"
 msgstr "协议"
@@ -645,6 +644,9 @@ msgstr "隐私保护与未隐私保护，以 DASH 计"
 
 msgid "Shielded pool"
 msgstr "隐私池"
+
+msgid "Signed by quorum"
+msgstr "签名仲裁组"
 
 msgid "Software"
 msgstr "软件"
@@ -748,9 +750,6 @@ msgstr "提议者排行"
 
 msgid "Top proposers this epoch"
 msgstr "本纪元提议者排行"
-
-msgid "Top-rated contracts"
-msgstr "评分最高的合约"
 
 msgid "Total"
 msgstr "总计"

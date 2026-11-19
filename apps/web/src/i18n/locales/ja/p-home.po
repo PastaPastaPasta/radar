@@ -47,10 +47,6 @@ msgstr "{0} / {1}"
 msgid "{0} s"
 msgstr "{0} 秒"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} 件が有効"
-
 msgid "{behind} blocks behind the tip"
 msgstr "先頭から {behind} ブロック遅れ"
 
@@ -136,6 +132,9 @@ msgstr "チェーンより遅れています: {behind}。"
 msgid "Best ChainLock"
 msgstr "最新の ChainLock"
 
+msgid "Block"
+msgstr "ブロック"
+
 msgid "blocks"
 msgstr "ブロック"
 
@@ -145,26 +144,26 @@ msgstr "ブロック"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "ブロックは到着しており、Platform は Core に固定されています。"
 
+msgid "Busiest contracts"
+msgstr "最も利用されたコントラクト"
+
 msgid "Busiest identities"
 msgstr "最も利用されているアイデンティティ"
 
 msgid "By credit balance"
 msgstr "クレジット残高順"
 
-msgid "By recent token transitions"
-msgstr "最近のトークントランジション数順"
+msgid "By document and token actions in the last 30 days"
+msgstr "過去30日間のドキュメントとトークンの操作数順"
 
-msgid "By recent transitions"
-msgstr "最近のトランジション数順"
+msgid "By token actions in the last 30 days"
+msgstr "過去30日間のトークン操作数順"
 
 msgid "By transition count"
 msgstr "トランジション数順"
 
-msgid "By transitions"
-msgstr "トランジション順"
-
-msgid "By transitions sent"
-msgstr "送信したトランジション数順"
+msgid "By transitions sent in the last 30 days"
+msgstr "過去30日間に送信したトランジション数順"
 
 msgid "Catching up"
 msgstr "追いついています"
@@ -203,9 +202,6 @@ msgstr "Core の先頭、ブロック、トランザクションを evonode か�
 
 msgid "Credits"
 msgstr "クレジット"
-
-msgid "Current"
-msgstr "現在"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +381,6 @@ msgstr "遅延中"
 msgid "Last block"
 msgstr "最新ブロック"
 
-msgid "Last block proposed by"
-msgstr "最新ブロックの提案者"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -430,9 +423,6 @@ msgstr "月間収益の中央値"
 msgid "Median yield"
 msgstr "利回りの中央値"
 
-msgid "Most active contracts"
-msgstr "最もアクティブなコントラクト"
-
 msgid "Most active identities"
 msgstr "最もアクティブなアイデンティティ"
 
@@ -441,6 +431,9 @@ msgstr "ネットワークの内部情報：ピア、メモリプールの負荷
 
 msgid "Newest blocks"
 msgstr "最新のブロック"
+
+msgid "Newest indexed block"
+msgstr "最新のインデックス済みブロック"
 
 msgid "Newest Platform blocks"
 msgstr "最新の Platform ブロック"
@@ -453,6 +446,9 @@ msgstr "最新のトランジション"
 
 msgid "No active quorums"
 msgstr "アクティブなクォーラムはありません"
+
+msgid "No activity in the last 30 days."
+msgstr "過去30日間に動きはありません。"
 
 msgid "No crawl has finished yet."
 msgstr "完了したクロールはまだありません。"
@@ -469,9 +465,6 @@ msgstr "この範囲にアイデンティティの履歴はありません"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} の間、新しい Platform ブロックはありません。"
-
-msgid "No quorums listed"
-msgstr "一覧にクォーラムはありません"
 
 msgid "No transitions in this range"
 msgstr "この範囲にトランジションはありません"
@@ -515,9 +508,6 @@ msgstr "まだランキングはありません"
 msgid "Nothing shielded in this range"
 msgstr "この範囲にシールドされたものはありません"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "まだ順位付けするものがありません: {quietNames}。"
-
 msgid "Off in this mode"
 msgstr "このモードではオフ"
 
@@ -550,6 +540,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer は devnet をインデックスしません"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer はまだブロックをインデックスしていません。"
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "Platform Explorer のインデックスは検証済みの先端より遅れることがあります。"
+
 msgid "Platform height"
 msgstr "Platform の高さ"
 
@@ -579,6 +575,9 @@ msgstr "Platform ブロック {block}（エポック {epoch}）で証明によ�
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "証明で検証済みの Platform の状態（このブラウザで検証）"
+
+msgid "Proposed by"
+msgstr "提案者"
 
 msgid "Protocol"
 msgstr "プロトコル"
@@ -645,6 +644,9 @@ msgstr "シールドとアンシールド（DASH 建て）"
 
 msgid "Shielded pool"
 msgstr "シールドプール"
+
+msgid "Signed by quorum"
+msgstr "署名したクォーラム"
 
 msgid "Software"
 msgstr "ソフトウェア"
@@ -748,9 +750,6 @@ msgstr "上位プロポーザー"
 
 msgid "Top proposers this epoch"
 msgstr "今エポックの上位プロポーザー"
-
-msgid "Top-rated contracts"
-msgstr "高評価のコントラクト"
 
 msgid "Total"
 msgstr "合計"

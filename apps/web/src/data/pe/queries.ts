@@ -154,18 +154,6 @@ export const peQueries = {
       queryFn: ({ signal }) => pe.validatorRewardStats(net, proTxHash, timeframe, signal),
       ...dataClass('index'),
     }),
-  quorums: (net: NetworkId) =>
-    queryOptions({
-      queryKey: peKeys(net, 'quorums'),
-      queryFn: ({ signal }) => pe.quorums(net, signal),
-      ...dataClass('index'),
-    }),
-  currentQuorum: (net: NetworkId) =>
-    queryOptions({
-      queryKey: peKeys(net, 'quorum-current'),
-      queryFn: ({ signal }) => pe.currentQuorum(net, signal),
-      ...dataClass('index'),
-    }),
   dataContracts: list('data-contracts', (n, q, sig) => pe.dataContracts(n, q, sig)),
   dataContract: (net: NetworkId, id: string) =>
     queryOptions({
@@ -179,7 +167,6 @@ export const peQueries = {
   dataContractDocuments: child('data-contract-documents', (n, id, q, sig) =>
     pe.dataContractDocuments(n, id, q, sig),
   ),
-  contractRating: list('data-contracts-rating', (n, q, sig) => pe.contractRating(n, q, sig)),
   contractActivity: list('data-contracts-active', (n, q, sig) => pe.contractActivity(n, q, sig)),
   document: (
     net: NetworkId,

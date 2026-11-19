@@ -46,10 +46,6 @@ msgstr "{0} of {1}"
 msgid "{0} s"
 msgstr "{0} s"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} valid"
-
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocks behind the tip"
 
@@ -135,6 +131,9 @@ msgstr "Behind the chain: {behind}."
 msgid "Best ChainLock"
 msgstr "Best ChainLock"
 
+msgid "Block"
+msgstr "Block"
+
 msgid "blocks"
 msgstr "blocks"
 
@@ -144,26 +143,26 @@ msgstr "Blocks"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Blocks are arriving and Platform is locked to Core."
 
+msgid "Busiest contracts"
+msgstr "Busiest contracts"
+
 msgid "Busiest identities"
 msgstr "Busiest identities"
 
 msgid "By credit balance"
 msgstr "By credit balance"
 
-msgid "By recent token transitions"
-msgstr "By recent token transitions"
+msgid "By document and token actions in the last 30 days"
+msgstr "By document and token actions in the last 30 days"
 
-msgid "By recent transitions"
-msgstr "By recent transitions"
+msgid "By token actions in the last 30 days"
+msgstr "By token actions in the last 30 days"
 
 msgid "By transition count"
 msgstr "By transition count"
 
-msgid "By transitions"
-msgstr "By transitions"
-
-msgid "By transitions sent"
-msgstr "By transitions sent"
+msgid "By transitions sent in the last 30 days"
+msgstr "By transitions sent in the last 30 days"
 
 msgid "Catching up"
 msgstr "Catching up"
@@ -202,9 +201,6 @@ msgstr "Core tip, blocks and transactions, straight from evonodes"
 
 msgid "Credits"
 msgstr "Credits"
-
-msgid "Current"
-msgstr "Current"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -384,9 +380,6 @@ msgstr "Lagging"
 msgid "Last block"
 msgstr "Last block"
 
-msgid "Last block proposed by"
-msgstr "Last block proposed by"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -429,9 +422,6 @@ msgstr "Median monthly earnings"
 msgid "Median yield"
 msgstr "Median yield"
 
-msgid "Most active contracts"
-msgstr "Most active contracts"
-
 msgid "Most active identities"
 msgstr "Most active identities"
 
@@ -440,6 +430,9 @@ msgstr "Network internals: peers, mempool pressure, versions and history"
 
 msgid "Newest blocks"
 msgstr "Newest blocks"
+
+msgid "Newest indexed block"
+msgstr "Newest indexed block"
 
 msgid "Newest Platform blocks"
 msgstr "Newest Platform blocks"
@@ -452,6 +445,9 @@ msgstr "Newest transitions"
 
 msgid "No active quorums"
 msgstr "No active quorums"
+
+msgid "No activity in the last 30 days."
+msgstr "No activity in the last 30 days."
 
 msgid "No crawl has finished yet."
 msgstr "No crawl has finished yet."
@@ -468,9 +464,6 @@ msgstr "No identity history in this range"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "No new Platform block for {0}."
-
-msgid "No quorums listed"
-msgstr "No quorums listed"
 
 msgid "No transitions in this range"
 msgstr "No transitions in this range"
@@ -514,9 +507,6 @@ msgstr "Nothing ranked yet"
 msgid "Nothing shielded in this range"
 msgstr "Nothing shielded in this range"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Nothing to rank yet: {quietNames}."
-
 msgid "Off in this mode"
 msgstr "Off in this mode"
 
@@ -549,6 +539,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer doesn't index devnets"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer has indexed no block yet."
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "Platform Explorer’s index can trail the proved tip."
+
 msgid "Platform height"
 msgstr "Platform height"
 
@@ -578,6 +574,9 @@ msgstr "Proof-checked at Platform block {block}, epoch {epoch}. That block is {a
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Proof-checked Platform state, verified in this browser"
+
+msgid "Proposed by"
+msgstr "Proposed by"
 
 msgid "Protocol"
 msgstr "Protocol"
@@ -644,6 +643,9 @@ msgstr "Shielded and unshielded, in DASH"
 
 msgid "Shielded pool"
 msgstr "Shielded pool"
+
+msgid "Signed by quorum"
+msgstr "Signed by quorum"
 
 msgid "Software"
 msgstr "Software"
@@ -747,9 +749,6 @@ msgstr "Top proposers"
 
 msgid "Top proposers this epoch"
 msgstr "Top proposers this epoch"
-
-msgid "Top-rated contracts"
-msgstr "Top-rated contracts"
 
 msgid "Total"
 msgstr "Total"

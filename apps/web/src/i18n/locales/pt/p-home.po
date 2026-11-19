@@ -47,10 +47,6 @@ msgstr "{0} de {1}"
 msgid "{0} s"
 msgstr "{0} s"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} válidos"
-
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocos atrás da ponta"
 
@@ -136,6 +132,9 @@ msgstr "Atrasado em relação à cadeia: {behind}."
 msgid "Best ChainLock"
 msgstr "Melhor ChainLock"
 
+msgid "Block"
+msgstr "Bloco"
+
 msgid "blocks"
 msgstr "blocos"
 
@@ -145,26 +144,26 @@ msgstr "Blocos"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Os blocos estão a chegar e a Platform está fixa ao Core."
 
+msgid "Busiest contracts"
+msgstr "Contratos mais movimentados"
+
 msgid "Busiest identities"
 msgstr "Identidades mais movimentadas"
 
 msgid "By credit balance"
 msgstr "Por saldo de créditos"
 
-msgid "By recent token transitions"
-msgstr "Por transições de tokens recentes"
+msgid "By document and token actions in the last 30 days"
+msgstr "Por ações de documentos e tokens nos últimos 30 dias"
 
-msgid "By recent transitions"
-msgstr "Por transições recentes"
+msgid "By token actions in the last 30 days"
+msgstr "Por ações de tokens nos últimos 30 dias"
 
 msgid "By transition count"
 msgstr "Por número de transições"
 
-msgid "By transitions"
-msgstr "Por transições"
-
-msgid "By transitions sent"
-msgstr "Por transições enviadas"
+msgid "By transitions sent in the last 30 days"
+msgstr "Por transições enviadas nos últimos 30 dias"
 
 msgid "Catching up"
 msgstr "Atualizando"
@@ -203,9 +202,6 @@ msgstr "Ponta do Core, blocos e transações, diretamente dos evonodes"
 
 msgid "Credits"
 msgstr "Créditos"
-
-msgid "Current"
-msgstr "Atual"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +381,6 @@ msgstr "Atrasado"
 msgid "Last block"
 msgstr "Último bloco"
 
-msgid "Last block proposed by"
-msgstr "Último bloco proposto por"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -430,9 +423,6 @@ msgstr "Ganhos mensais medianos"
 msgid "Median yield"
 msgstr "Rendimento mediano"
 
-msgid "Most active contracts"
-msgstr "Contratos mais ativos"
-
 msgid "Most active identities"
 msgstr "Identidades mais ativas"
 
@@ -441,6 +431,9 @@ msgstr "Funcionamento interno da rede: pares, pressão do mempool, versões e hi
 
 msgid "Newest blocks"
 msgstr "Blocos mais recentes"
+
+msgid "Newest indexed block"
+msgstr "Último bloco indexado"
 
 msgid "Newest Platform blocks"
 msgstr "Blocos Platform mais recentes"
@@ -453,6 +446,9 @@ msgstr "Transições mais recentes"
 
 msgid "No active quorums"
 msgstr "Sem quóruns ativos"
+
+msgid "No activity in the last 30 days."
+msgstr "Nenhuma atividade nos últimos 30 dias."
 
 msgid "No crawl has finished yet."
 msgstr "Ainda não terminou nenhum rastreio."
@@ -469,9 +465,6 @@ msgstr "Sem histórico de identidades neste intervalo"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "Nenhum bloco novo da Platform há {0}."
-
-msgid "No quorums listed"
-msgstr "Nenhum quórum listado"
 
 msgid "No transitions in this range"
 msgstr "Sem transições neste intervalo"
@@ -515,9 +508,6 @@ msgstr "Ainda nada classificado"
 msgid "Nothing shielded in this range"
 msgstr "Nada blindado neste intervalo"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Ainda nada para classificar: {quietNames}."
-
 msgid "Off in this mode"
 msgstr "Desativado neste modo"
 
@@ -550,6 +540,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "O Platform Explorer não indexa devnets"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "O Platform Explorer ainda não indexou nenhum bloco."
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "O índice do Platform Explorer pode ficar atrás da ponta verificada."
+
 msgid "Platform height"
 msgstr "Altura da Platform"
 
@@ -579,6 +575,9 @@ msgstr "Verificado com provas no bloco {block} da Platform, época {epoch}. Esse
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Estado da Platform verificado com provas, confirmado neste navegador"
+
+msgid "Proposed by"
+msgstr "Proposto por"
 
 msgid "Protocol"
 msgstr "Protocolo"
@@ -645,6 +644,9 @@ msgstr "Blindados e desblindados, em DASH"
 
 msgid "Shielded pool"
 msgstr "Pool blindado"
+
+msgid "Signed by quorum"
+msgstr "Assinado pelo quórum"
 
 msgid "Software"
 msgstr "Software"
@@ -748,9 +750,6 @@ msgstr "Principais proponentes"
 
 msgid "Top proposers this epoch"
 msgstr "Principais proponentes desta época"
-
-msgid "Top-rated contracts"
-msgstr "Contratos mais bem avaliados"
 
 msgid "Total"
 msgstr "Total"

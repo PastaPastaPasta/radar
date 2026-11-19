@@ -47,10 +47,6 @@ msgstr "{0} / {1}"
 msgid "{0} s"
 msgstr "{0} sn"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} geçerli"
-
 msgid "{behind} blocks behind the tip"
 msgstr "Uçtan {behind} blok geride"
 
@@ -136,6 +132,9 @@ msgstr "Zincirin gerisinde: {behind}."
 msgid "Best ChainLock"
 msgstr "En iyi ChainLock"
 
+msgid "Block"
+msgstr "Blok"
+
 msgid "blocks"
 msgstr "bloklar"
 
@@ -145,26 +144,26 @@ msgstr "Bloklar"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Bloklar geliyor ve Platform, Core’a kilitli."
 
+msgid "Busiest contracts"
+msgstr "En yoğun sözleşmeler"
+
 msgid "Busiest identities"
 msgstr "En yoğun kimlikler"
 
 msgid "By credit balance"
 msgstr "Kredi bakiyesine göre"
 
-msgid "By recent token transitions"
-msgstr "Son token geçişlerine göre"
+msgid "By document and token actions in the last 30 days"
+msgstr "Son 30 gündeki belge ve token işlemlerine göre"
 
-msgid "By recent transitions"
-msgstr "Son geçişlere göre"
+msgid "By token actions in the last 30 days"
+msgstr "Son 30 gündeki token işlemlerine göre"
 
 msgid "By transition count"
 msgstr "Geçiş sayısına göre"
 
-msgid "By transitions"
-msgstr "Geçişlere göre"
-
-msgid "By transitions sent"
-msgstr "Gönderilen geçişlere göre"
+msgid "By transitions sent in the last 30 days"
+msgstr "Son 30 günde gönderilen geçişlere göre"
 
 msgid "Catching up"
 msgstr "Yetişiyor"
@@ -203,9 +202,6 @@ msgstr "Core ucu, bloklar ve işlemler, doğrudan evonode’lardan"
 
 msgid "Credits"
 msgstr "Krediler"
-
-msgid "Current"
-msgstr "Güncel"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +381,6 @@ msgstr "Geride"
 msgid "Last block"
 msgstr "Son blok"
 
-msgid "Last block proposed by"
-msgstr "Son bloğu öneren"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -430,9 +423,6 @@ msgstr "Medyan aylık kazanç"
 msgid "Median yield"
 msgstr "Medyan getiri"
 
-msgid "Most active contracts"
-msgstr "En aktif sözleşmeler"
-
 msgid "Most active identities"
 msgstr "En aktif kimlikler"
 
@@ -441,6 +431,9 @@ msgstr "Ağın iç işleyişi: eşler, mempool baskısı, sürümler ve geçmiş
 
 msgid "Newest blocks"
 msgstr "En yeni bloklar"
+
+msgid "Newest indexed block"
+msgstr "Dizine eklenen en yeni blok"
 
 msgid "Newest Platform blocks"
 msgstr "En yeni Platform blokları"
@@ -453,6 +446,9 @@ msgstr "En yeni geçişler"
 
 msgid "No active quorums"
 msgstr "Etkin quorum yok"
+
+msgid "No activity in the last 30 days."
+msgstr "Son 30 günde etkinlik yok."
 
 msgid "No crawl has finished yet."
 msgstr "Henüz tamamlanmış bir tarama yok."
@@ -469,9 +465,6 @@ msgstr "Bu aralıkta kimlik geçmişi yok"
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "{0} boyunca yeni Platform bloğu yok."
-
-msgid "No quorums listed"
-msgstr "Listelenen quorum yok"
 
 msgid "No transitions in this range"
 msgstr "Bu aralıkta geçiş yok"
@@ -515,9 +508,6 @@ msgstr "Henüz sıralanan yok"
 msgid "Nothing shielded in this range"
 msgstr "Bu aralıkta gizlenen bir şey yok"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Henüz sıralanacak bir şey yok: {quietNames}."
-
 msgid "Off in this mode"
 msgstr "Bu modda kapalı"
 
@@ -550,6 +540,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer devnet’leri dizinlemez"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer henüz hiç blok dizine eklemedi."
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "Platform Explorer dizini kanıtlanmış ucun gerisinde kalabilir."
+
 msgid "Platform height"
 msgstr "Platform yüksekliği"
 
@@ -579,6 +575,9 @@ msgstr "Platform’un {block} numaralı bloğunda, {epoch}. dönemde kanıtla do
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Kanıtla doğrulanmış Platform durumu, bu tarayıcıda doğrulandı"
+
+msgid "Proposed by"
+msgstr "Öneren"
 
 msgid "Protocol"
 msgstr "Protokol"
@@ -645,6 +644,9 @@ msgstr "Gizlenmiş ve gizlenmemiş, DASH cinsinden"
 
 msgid "Shielded pool"
 msgstr "Gizli havuz"
+
+msgid "Signed by quorum"
+msgstr "İmzalayan kuorum"
 
 msgid "Software"
 msgstr "Yazılım"
@@ -748,9 +750,6 @@ msgstr "En iyi önericiler"
 
 msgid "Top proposers this epoch"
 msgstr "Bu epoch’un en iyi önericileri"
-
-msgid "Top-rated contracts"
-msgstr "En yüksek puanlı sözleşmeler"
 
 msgid "Total"
 msgstr "Toplam"

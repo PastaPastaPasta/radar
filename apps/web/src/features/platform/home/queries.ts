@@ -51,6 +51,18 @@ function combined(parts: readonly SourceStamp[]): SourceStamp {
   }
 }
 
+/**
+ * Placeholder data for a read whose key moves with the clock: the last answer is kept while the next is fetched, but
+ * only on the same network, so another network's rows never stand in, shown as ready and linked as its own.
+ */
+export const keepWithinNetwork =
+  (net: NetworkId) =>
+  <T>(
+    previous: T | undefined,
+    query: { queryKey: readonly unknown[] } | undefined,
+  ): T | undefined =>
+    query?.queryKey[0] === net ? previous : undefined
+
 const byBlocks = (a: Proposer, b: Proposer): number =>
   a.blocks === b.blocks ? (a.proTxHash < b.proTxHash ? -1 : 1) : a.blocks > b.blocks ? -1 : 1
 

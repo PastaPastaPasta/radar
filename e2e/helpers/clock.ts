@@ -50,6 +50,20 @@ export async function pinClockToFixtures(page: Page): Promise<Date> {
   return time
 }
 
+/**
+ * Starts the page's clock at the time of Radar's recorded mainnet proposer schedule, inside the epoch the epoch
+ * fixtures record, as the unit tests do. A test that needs that epoch to be in progress pins here: the newest
+ * recording of all moves on whenever any fixture is recorded again.
+ */
+export async function pinClockToEpoch(page: Page): Promise<Date> {
+  const platform = JSON.parse(
+    readFileSync(path.join(FIXTURES, 'radar', 'mainnet', 'platform.json'), 'utf8'),
+  ) as { body: { schedule: { ts: number } } }
+  const time = new Date(platform.body.schedule.ts * 1000)
+  await page.clock.install({ time })
+  return time
+}
+
 /** Starts the page's clock `afterMs` past Radar's last recorded mainnet crawl, the oldest reading the home page shows. */
 export async function pinClockAfterCrawl(page: Page, afterMs: number): Promise<void> {
   const summary = JSON.parse(

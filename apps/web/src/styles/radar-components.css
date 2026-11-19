@@ -2895,12 +2895,133 @@ html[data-scroll-gutter] {
   }
 }
 
-/* a phone shows the top five of each leaderboard; the card's link leads to the rest.
-   Top proposers show all ten. !important: the rows carry a display utility, and the utilities layer comes after this one. */
+/* Leaderboards. Boards with enough rows pair up and end on one line; an odd one out takes the row and lays its list
+   out in two columns, as does any board that has the row to itself between phone and desktop. Boards with a few rows
+   or none follow, paired the same way, so no column runs empty beside a long one. The boards keep their DOM order and
+   take their places by `order`, so none is remounted as answers arrive. */
+.rx-boards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 32px 48px;
+}
+.rx-boards__cell {
+  min-width: 0;
+}
+@media (min-width: 1024px) {
+  .rx-boards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .rx-boards__cell[data-span='2'] {
+    grid-column: 1 / -1;
+  }
+}
+/* the head is two lines in every board: title and control, then what it ranks by */
+.rx-board > .rx-card__head,
+.rx-netcard > .rx-card__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(34px, auto) auto;
+  align-items: center;
+}
+.rx-board > .rx-card__head > .rx-card__sub,
+.rx-netcard > .rx-card__head > .rx-card__sub {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.rx-board > .rx-card__head > .rx-card__aside,
+.rx-netcard > .rx-card__head > .rx-card__aside {
+  grid-column: 2;
+  grid-row: 1;
+}
+.rx-board__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-board__row,
+.rx-board__none {
+  box-sizing: border-box;
+  min-height: 38px;
+  border-top: 1px solid var(--dh-line);
+}
+.rx-board__row {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.rx-board__rank {
+  color: var(--dh-ink-2);
+  text-align: right;
+  white-space: nowrap;
+}
+/* a long name shortens inside its column; the copy control keeps its place beside it */
+.rx-board__who {
+  display: flex;
+  min-width: 0;
+}
+/* a chip beside its copy control is a 24 px target, as the control is */
+.rx-board__who .rx-chip {
+  min-height: 24px;
+}
+.rx-board__fig {
+  white-space: nowrap;
+  text-align: right;
+}
+.rx-board__none {
+  margin: 0;
+  padding: 9px 0;
+  color: var(--dh-ink-2);
+}
+@media (min-width: 641px) {
+  .rx-board__list[data-layout='wide'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows), auto);
+    grid-auto-flow: column;
+  }
+}
+@media (min-width: 641px) and (max-width: 1023px) {
+  .rx-board__list[data-layout='half'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows), auto);
+    grid-auto-flow: column;
+  }
+}
+/* copy controls on a board wait for the row to be pointed at or focused; touch screens keep them */
+@media (hover: hover) and (pointer: fine) {
+  .rx-board__row .rx-copy:not(:focus-visible) {
+    opacity: 0;
+  }
+  .rx-board__row:is(:hover, :focus-within) .rx-copy {
+    opacity: 1;
+  }
+}
+/* a phone shows the top five of each leaderboard; the card's link leads to the rest. Top proposers show all ten. */
 @media (max-width: 640px) {
   [data-leaderboards] [data-board] > li:nth-child(n + 6) {
-    display: none !important;
+    display: none;
   }
+}
+
+/* Validators: the four counts are two by two beside the block card, and in one line when the card has the row to
+   itself (tablet). An unavailable count is a dash with its reason in its title. */
+.rx-stats[data-counts] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+@media (min-width: 641px) and (max-width: 1023px) {
+  .rx-stats[data-counts] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+[data-unavailable-figure] {
+  color: var(--dh-ink-2);
+  text-decoration: none;
+  cursor: help;
 }
 
 /* Top proposers share a half column. The four columns use that width; the hash gives way before the table scrolls. */

@@ -47,10 +47,6 @@ msgstr "{0} з {1}"
 msgid "{0} s"
 msgstr "{0} с"
 
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} дійсних"
-
 msgid "{behind} blocks behind the tip"
 msgstr "Відставання від вершини: {behind} блоків"
 
@@ -136,6 +132,9 @@ msgstr "Відстає від ланцюга: {behind}."
 msgid "Best ChainLock"
 msgstr "Найкращий ChainLock"
 
+msgid "Block"
+msgstr "Блок"
+
 msgid "blocks"
 msgstr "блоків"
 
@@ -145,26 +144,26 @@ msgstr "Блоки"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Блоки надходять, Platform прив’язаний до Core."
 
+msgid "Busiest contracts"
+msgstr "Найзавантаженіші контракти"
+
 msgid "Busiest identities"
 msgstr "Найактивніші ідентичності"
 
 msgid "By credit balance"
 msgstr "За балансом кредитів"
 
-msgid "By recent token transitions"
-msgstr "За нещодавніми переходами токенів"
+msgid "By document and token actions in the last 30 days"
+msgstr "За діями з документами й токенами за останні 30 днів"
 
-msgid "By recent transitions"
-msgstr "За нещодавніми переходами"
+msgid "By token actions in the last 30 days"
+msgstr "За діями з токенами за останні 30 днів"
 
 msgid "By transition count"
 msgstr "За кількістю переходів"
 
-msgid "By transitions"
-msgstr "За переходами"
-
-msgid "By transitions sent"
-msgstr "За надісланими переходами"
+msgid "By transitions sent in the last 30 days"
+msgstr "За надісланими переходами за останні 30 днів"
 
 msgid "Catching up"
 msgstr "Наздоганяє"
@@ -203,9 +202,6 @@ msgstr "Вершина Core, блоки й транзакції — безпос
 
 msgid "Credits"
 msgstr "Кредити"
-
-msgid "Current"
-msgstr "Поточний"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +381,6 @@ msgstr "Відстає"
 msgid "Last block"
 msgstr "Останній блок"
 
-msgid "Last block proposed by"
-msgstr "Останній блок запропонував"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -430,9 +423,6 @@ msgstr "Медіанний місячний дохід"
 msgid "Median yield"
 msgstr "Медіанна дохідність"
 
-msgid "Most active contracts"
-msgstr "Найактивніші контракти"
-
 msgid "Most active identities"
 msgstr "Найактивніші ідентичності"
 
@@ -441,6 +431,9 @@ msgstr "Внутрішня будова мережі: піри, навантаж
 
 msgid "Newest blocks"
 msgstr "Найновіші блоки"
+
+msgid "Newest indexed block"
+msgstr "Останній проіндексований блок"
 
 msgid "Newest Platform blocks"
 msgstr "Найновіші блоки Platform"
@@ -453,6 +446,9 @@ msgstr "Найновіші переходи"
 
 msgid "No active quorums"
 msgstr "Немає активних кворумів"
+
+msgid "No activity in the last 30 days."
+msgstr "За останні 30 днів активності не було."
 
 msgid "No crawl has finished yet."
 msgstr "Жодне опитування ще не завершилося."
@@ -469,9 +465,6 @@ msgstr "У цьому діапазоні немає історії іденти�
 #. placeholder {0}: formatDuration(reason.ageMs)
 msgid "No new Platform block for {0}."
 msgstr "Нового блока Platform немає вже {0}."
-
-msgid "No quorums listed"
-msgstr "Список кворумів порожній"
 
 msgid "No transitions in this range"
 msgstr "У цьому діапазоні немає переходів"
@@ -515,9 +508,6 @@ msgstr "Рейтингу поки немає"
 msgid "Nothing shielded in this range"
 msgstr "У цьому діапазоні нічого не захищено"
 
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Поки що нічого ранжувати: {quietNames}."
-
 msgid "Off in this mode"
 msgstr "У цьому режимі вимкнено"
 
@@ -550,6 +540,12 @@ msgstr "Platform Explorer"
 msgid "Platform Explorer doesn't index devnets"
 msgstr "Platform Explorer не індексує devnet"
 
+msgid "Platform Explorer has indexed no block yet."
+msgstr "Platform Explorer ще не проіндексував жодного блоку."
+
+msgid "Platform Explorer’s index can trail the proved tip."
+msgstr "Індекс Platform Explorer може відставати від перевіреної вершини."
+
 msgid "Platform height"
 msgstr "Висота Platform"
 
@@ -579,6 +575,9 @@ msgstr "Підтверджено доказом на блоці Platform {block}
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Стан Platform, підтверджений доказом і перевірений у цьому браузері"
+
+msgid "Proposed by"
+msgstr "Запропонував"
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -645,6 +644,9 @@ msgstr "Захищені та незахищені, у DASH"
 
 msgid "Shielded pool"
 msgstr "Захищений пул"
+
+msgid "Signed by quorum"
+msgstr "Підписано кворумом"
 
 msgid "Software"
 msgstr "Програмне забезпечення"
@@ -748,9 +750,6 @@ msgstr "Топ пропонувачів"
 
 msgid "Top proposers this epoch"
 msgstr "Топ пропонувачів у цій епосі"
-
-msgid "Top-rated contracts"
-msgstr "Контракти з найвищим рейтингом"
 
 msgid "Total"
 msgstr "Усього"

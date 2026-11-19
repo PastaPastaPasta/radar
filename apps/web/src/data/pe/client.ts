@@ -1,5 +1,5 @@
 import { t } from '@lingui/core/macro'
-import { z } from 'zod'
+import type { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
 import { formatBlock } from '../health-lag'
@@ -24,7 +24,6 @@ import {
   PeIdentityHistoryPointSchema,
   PeIdentitySchema,
   PePlatformAddressSchema,
-  PeQuorumSchema,
   PeRewardPointSchema,
   PeSearchSchema,
   PeShieldHistoryPointSchema,
@@ -57,7 +56,6 @@ import {
   type PeEpochDetail,
   type PeIdentity,
   type PePlatformAddress,
-  type PeQuorum,
   type PeSearch,
   type PeShieldedPool,
   type PeShieldedStatistic,
@@ -360,14 +358,6 @@ export const pe = {
     )
   },
 
-  quorums(net: NetworkId, signal?: AbortSignal): Promise<Sourced<PeQuorum[]>> {
-    return get(net, '/quorums', z.array(PeQuorumSchema), signal)
-  },
-
-  currentQuorum(net: NetworkId, signal?: AbortSignal): Promise<Sourced<PeQuorum>> {
-    return get(net, '/quorums/current', PeQuorumSchema, signal)
-  },
-
   dataContracts(
     net: NetworkId,
     q: PeQuery = {},
@@ -410,14 +400,6 @@ export const pe = {
       peList(PeDocumentSchema),
       signal,
     )
-  },
-
-  contractRating(
-    net: NetworkId,
-    q: PeQuery = {},
-    signal?: AbortSignal,
-  ): Promise<Sourced<Page<PeContractActivity>>> {
-    return get(net, `/dataContracts/rating${search(q)}`, peList(PeContractActivitySchema), signal)
   },
 
   contractActivity(
