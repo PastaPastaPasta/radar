@@ -82,7 +82,7 @@ export function Validators({ active }: { active: boolean }) {
         className="rx-netcard"
         layer="platform"
         title={t`Newest indexed block`}
-        subtitle={t`The newest block in Platform Explorer’s index. The proved tip can be ahead of it.`}
+        subtitle={t`Platform Explorer’s index can trail the proved tip.`}
         {...queryView(latest)}
         source={stampsOf(latest.data)}
         actions={

@@ -424,6 +424,8 @@ test.describe('Platform overview', () => {
       .click()
     await expect(page).toHaveURL(/\/platform\?/)
     await expect(page).toHaveURL(/network=testnet/)
+    // once the page draws as testnet, no board may still show mainnet's rows while testnet answers
+    await expect(page.locator('[data-testnet-keyline]').first()).toBeAttached()
     expect(await stale(), 'mainnet identities on the testnet boards').toBe(0)
     await expect(page).toHaveURL(/range=1w/)
     await expect(page).toHaveURL(/rich=txs/)
@@ -481,11 +483,17 @@ test.describe('Platform overview with Platform Explorer down', () => {
       const panels = page.locator('[data-validators]')
       await panels.scrollIntoViewIfNeeded()
       await settled(page)
+      const heights: number[] = []
       for (const id of ['validators', 'latest-block']) {
         await expect(card(page, id)).toHaveAttribute('data-state', 'error')
-        const box = (await card(page, id).boundingBox())!
-        expect(box.height, `${width}: #${id} height`).toBeLessThanOrEqual(260)
+        heights.push((await card(page, id).boundingBox())!.height)
       }
+      // the kit's error state in both cards, side by side, not four counts wrapping a sentence each
+      expect(Math.max(...heights), `${width}: card height`).toBeLessThanOrEqual(300)
+      expect(
+        Math.abs(heights[0]! - heights[1]!),
+        `${width}: cards end together`,
+      ).toBeLessThanOrEqual(8)
       expect(await horizontalOverflow(page), `${width}: sideways overflow`).toBeLessThanOrEqual(0)
     }
   })

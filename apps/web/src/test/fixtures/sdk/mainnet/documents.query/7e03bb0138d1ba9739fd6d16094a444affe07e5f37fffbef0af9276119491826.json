@@ -1,0 +1,3113 @@
+{
+  "method": "documents.query",
+  "args": {
+    "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+    "type": "domain",
+    "where": [
+      [
+        "records.identity",
+        "in",
+        [
+          "7P3ZsJHh61jhvVwaxh1xyNx7wkCqiDdkhw2EpCfTn9J",
+          "5MZKyzqe2HHLyESLNDjmwDbGry8GJyd6ZtKNeJp2qBRQ",
+          "GRMHDRfmf6cv3xksmheL4gzCnYA3kWsAhvw9BF7XpBpN",
+          "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+          "472Woya3gciwuGUYoTzWGn3r36u1968Ahhoj752kskPB",
+          "8pibH7Zg2NQZgsR58w7BgMWp4vEPsW73qpWw7EGVSzzM",
+          "9EE86CjhNjZ9cpAg6CATUhzuvi9EPcTS1TzmCLhHc7N1",
+          "BYYwqdmCwdFrmFykREGVTLqfbpbibihZQ1KSQHP9hjr4",
+          "CX4MxWHKqdP553hyzj2grJ9MFxJ66mJqFhB2ciG7mkSS",
+          "CvTr4P3vk2AaGkcubAUFwqX8Avbr55gKdpkqJhwdQfoD",
+          "EWNwtGEC1qAbgNgo2UgadmQhB9DaZtB942x8bXgJrPNS",
+          "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+          "HBGPH6fBC8gJtpYaMH4FcQmPUF6i54JBLKU3PK32iUPW",
+          "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+          "4zuMFy1y3trAUTzw82fkcEtafDoL4UMDgyp45F2zz9SY",
+          "3bCTavPFvzgtTFrfKbRg3PkL6kztpKvFxYYxXHo65kU4",
+          "RpcTDPtPup9Zj8aMLaYCJtS92kLRezoD29wYogCnoqX",
+          "FhueBVu8GxuHGsmKkbT3n8aUzy2SwmgyzFCheZXRFwyd",
+          "HAiRAKyEx5hqm2vkPjWSMRo92PA5QGyPmuYfXj6RdJUf"
+        ]
+      ]
+    ],
+    "orderBy": [["records.identity", "asc"]],
+    "limit": 100
+  },
+  "recordedAt": "2026-11-19T02:00:45.938Z",
+  "result": {
+    "ok": true,
+    "data": [
+      {
+        "id": "2j2Ngy5NWjzNNdqM2CothuG28tbas9LAgmCkLFPH41EJ",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958412891,
+        "updatedAt": 1793745940806,
+        "transferredAt": 1792958412891,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Exchange-24",
+          "normalizedLabel": "exchange-24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "3umXmNqPNi2DAFM1w3F8uVVxN7ojgUKEeruaxAhSMAho",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958773267,
+        "updatedAt": 1793745931909,
+        "transferredAt": 1792958773267,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Shop24",
+          "normalizedLabel": "sh0p24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "3yaoygQ1n8BWdp7ec6u5h8TPg3S3fv5NQYCoLKAgUmHs",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792959066900,
+        "updatedAt": 1793745921009,
+        "transferredAt": 1792959066900,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "24Wallet",
+          "normalizedLabel": "24wa11et",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "5KwAeqtRPZBiQKY4q1CiVTesx3D3byyazdMwj2LuAJ9p",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1792958921858,
+        "updatedAt": 1792958921858,
+        "transferredAt": 1792958921858,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "24Dash",
+          "normalizedLabel": "24dash",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "5vpDE72ooL1avJX5m5vMhV8KWBGiXViyrHn7UzkJi3hZ",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958519513,
+        "updatedAt": 1793745959985,
+        "transferredAt": 1792958519513,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Exchange24-7",
+          "normalizedLabel": "exchange24-7",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "76ahWCsftPuEa2C7L3UmZe2qfodx5FcFq71ckjGtGQQm",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958863989,
+        "updatedAt": 1793745977744,
+        "transferredAt": 1792958863989,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "24USDT",
+          "normalizedLabel": "24usdt",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "8J3k83f2USmm81ZzP4DYASDvcFvhygv9hauN9gnnGMTh",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792959115801,
+        "updatedAt": 1793745894661,
+        "transferredAt": 1792959115801,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Wallet1234",
+          "normalizedLabel": "wa11et1234",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "8riCxYEDFUQpMFWc8fALVW3SCnCW3pJmwyrFPQuDKX2k",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958850918,
+        "updatedAt": 1793745885112,
+        "transferredAt": 1792958850918,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "24Swap",
+          "normalizedLabel": "24swap",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "95QGzUeRmeH2r7xvsnUxAy55d84B5rJ21d5wpeQxMZE9",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958613705,
+        "updatedAt": 1793745875549,
+        "transferredAt": 1792958613705,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "DASH24",
+          "normalizedLabel": "dash24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "DswJXq7RvSHcvWUvS2YMPv9MmcsSnNWQUV6bx86VPuQn",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958668300,
+        "updatedAt": 1793745865242,
+        "transferredAt": 1792958668300,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Crypto-24",
+          "normalizedLabel": "crypt0-24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "EbuK3hdzTeWr5D3wQY3uQnfr1hg9dyHmuVpaZUqDdEg6",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958838092,
+        "updatedAt": 1793745855200,
+        "transferredAt": 1792958838092,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "24Exchange",
+          "normalizedLabel": "24exchange",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "EyW9yrhrVdAGtJQJGQm8XEf5gSXZ7yxZTJ5oYYGUYxSf",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792888781838,
+        "updatedAt": 1792958153669,
+        "transferredAt": 1792888781838,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "DASH-123",
+          "normalizedLabel": "dash-123",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "FGbFUVHG7kdXufYmNKQFKjgg2cFmu1nhgEXJaPYbatxB",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958818987,
+        "updatedAt": 1793745845969,
+        "transferredAt": 1792958818987,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "24crypto",
+          "normalizedLabel": "24crypt0",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "GBr7LJZFVaVAVWeLxKdLa8ZfeNbSv3C28xwiWGitLEBA",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792959102241,
+        "updatedAt": 1793745837071,
+        "transferredAt": 1792959102241,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Wallet123",
+          "normalizedLabel": "wa11et123",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "HsqoNtv6FfAYAy5EzVRJRp44fYzwFbpTN5UebShB2tEt",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958735271,
+        "updatedAt": 1793745826289,
+        "transferredAt": 1792958735271,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "Swap24",
+          "normalizedLabel": "swap24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "J6rdLhonc3F7V5CPUjnDVj8dhYz1G7XzihL9YwkpghZA",
+        "ownerId": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "2"
+        },
+        "createdAt": 1792958549442,
+        "updatedAt": 1793745815800,
+        "transferredAt": 1792958549442,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "$price": {
+            "$bigint": "5000000000000"
+          },
+          "label": "USDT24",
+          "normalizedLabel": "usdt24",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "B64oBhBVqUfhzF8PXE3RWQECo5vSZtX93jMNFMVVP3h1"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "3oF37C9SJmTsVfRm2TeZeAwEckyE5ududRSkQiTu3UA6",
+        "ownerId": "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1729546202791,
+        "updatedAt": 1729546202791,
+        "transferredAt": 1729546202791,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "thedesertlynx",
+          "normalizedLabel": "thedesert1ynx",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "BC6nzq4iDzknwaUQEei3HSNfVQ9FQgFRDGvUPRCyGEfA"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "1z77493QfD8TWbjApnDVXD5qisHWJKUHHW9J8dBSoWN",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768683284444,
+        "updatedAt": 1768683284444,
+        "transferredAt": 1768683284444,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "028",
+          "normalizedLabel": "028",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "12LiCShRABYc78GTTucSzWzEBZVwBFpys6ViEEfRCXMd",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194714311,
+        "updatedAt": 1769194714311,
+        "transferredAt": 1769194714311,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "854",
+          "normalizedLabel": "854",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "13M6rTpqPBmtnFd6gU5jHyX4x1Pxw4DQ4rrXFKg25gM5",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126511951,
+        "updatedAt": 1769126511951,
+        "transferredAt": 1769126511951,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "804",
+          "normalizedLabel": "804",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "145EXN5mxFVdiFwqSmeatQPMzvWxg5F28JnvSTN6BtPu",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768678913990,
+        "updatedAt": 1768678913990,
+        "transferredAt": 1768678913990,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "152",
+          "normalizedLabel": "152",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "5hDuPDAH5xUoX8SunrMLNK59mDDRR1reBJRtDoMncJv",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194913831,
+        "updatedAt": 1769194913831,
+        "transferredAt": 1769194913831,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "821",
+          "normalizedLabel": "821",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "5hzLM1aGb6iWvEMTiLGLoKPq4QKF6dTH4VfcXqYMhAi",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113923467,
+        "updatedAt": 1769113923467,
+        "transferredAt": 1769113923467,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "613",
+          "normalizedLabel": "613",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "6UF3btFhCKaUDT4PZdy9VHyFWcPxioq2PjDm1qC7V6G",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769124018761,
+        "updatedAt": 1769124018761,
+        "transferredAt": 1769124018761,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "685",
+          "normalizedLabel": "685",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "7AbxvJu7nghrPreXKqh2AV9YS2MErTKAfUWtxUkgGZh",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195976344,
+        "updatedAt": 1769195976344,
+        "transferredAt": 1769195976344,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "939",
+          "normalizedLabel": "939",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "7DbLnS3VJiH7KQXX6o7fGVvmvfwRRD8SLyt9XuSAuTd",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769196289325,
+        "updatedAt": 1769196289325,
+        "transferredAt": 1769196289325,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "973",
+          "normalizedLabel": "973",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "853sw4719HoPpSvmpTVUg9KV9pTXziqv73LU97F5uD4",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195683955,
+        "updatedAt": 1769195683955,
+        "transferredAt": 1769195683955,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "908",
+          "normalizedLabel": "908",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "9TyHwbcC7jzaHzLFt6CZZoK3c3mSAbHnGdCkLr3YATk",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195675993,
+        "updatedAt": 1769195675993,
+        "transferredAt": 1769195675993,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "907",
+          "normalizedLabel": "907",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "9jQ9mZcyTxir2Xwyqx1ubyuUGhry3LfeXTQmeAGnryA",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769196263124,
+        "updatedAt": 1769196263124,
+        "transferredAt": 1769196263124,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "968",
+          "normalizedLabel": "968",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "BM6KahZx815BekkCoUdEtLo5xqjPzYoUHsucWKWoxrt",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113982508,
+        "updatedAt": 1769113982508,
+        "transferredAt": 1769113982508,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "619",
+          "normalizedLabel": "619",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "CtkgTDATH4DCQ6y8X96V2wtGyhJqEkTCa1rHFZhemHb",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195987685,
+        "updatedAt": 1769195987685,
+        "transferredAt": 1769195987685,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "940",
+          "normalizedLabel": "940",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "DbEXtrG72j7Ne35GzERYBnBeQP2xFoUjvm7PLThYby9",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125033720,
+        "updatedAt": 1769125033720,
+        "transferredAt": 1769125033720,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "716",
+          "normalizedLabel": "716",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "FF9gFQsLkUCGqH7bh3JucQo5Fo6v4ShDdgRTZKxFbLt",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769114642306,
+        "updatedAt": 1769114642306,
+        "transferredAt": 1769114642306,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "657",
+          "normalizedLabel": "657",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "FFErymLhVUbCknYbzbaJyNQsnwmH4Ec2EVhJwK86ZFs",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768682616136,
+        "updatedAt": 1768682616136,
+        "transferredAt": 1768682616136,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "179",
+          "normalizedLabel": "179",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "H8e4icYSaDCGfCeWGM9rVGAypbtp2mYYGKgRhNWzy3u",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769071593205,
+        "updatedAt": 1769071593205,
+        "transferredAt": 1769071593205,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "374",
+          "normalizedLabel": "374",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "JWiYFTqdcL5srYZzNmuh6yfd4mD1Ls7VKWYc85kBJj8",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125227286,
+        "updatedAt": 1769125227286,
+        "transferredAt": 1769125227286,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "739",
+          "normalizedLabel": "739",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "L5W97LyQCq6osbwvqCsCBMyeGDpSSQtCjQUqSjNTPgD",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769200268694,
+        "updatedAt": 1769200268694,
+        "transferredAt": 1769200268694,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "0x3",
+          "normalizedLabel": "0x3",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "L75dJKePvBp9LrkfL2ufEaYtybLAbhFUPNU86GrQhkU",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768680630684,
+        "updatedAt": 1768680630684,
+        "transferredAt": 1768680630684,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "173",
+          "normalizedLabel": "173",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "NyfZ1bFyvGpyYuoEeLv5hgWzVXXog37pFCTWnf8HePq",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195716072,
+        "updatedAt": 1769195716072,
+        "transferredAt": 1769195716072,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "913",
+          "normalizedLabel": "913",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "PBAKy7t8BE5S1yKUPcd8zpuZhaMPZrhMY18ujN5SVYM",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195774909,
+        "updatedAt": 1769195774909,
+        "transferredAt": 1769195774909,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "921",
+          "normalizedLabel": "921",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "WMTNRuhWcCdrwmY4eV2KW2YBDfAypxC5LAYW6FSjxEv",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769077217302,
+        "updatedAt": 1769077217302,
+        "transferredAt": 1769077217302,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "460",
+          "normalizedLabel": "460",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "co8n8EHU5Ruxu4kSjhwBUNyWHYCgjGWRUDnd5rKPtif",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194757300,
+        "updatedAt": 1769194757300,
+        "transferredAt": 1769194757300,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "860",
+          "normalizedLabel": "860",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "dRsWyk9TBnSp9jiUJRpbrG1wKkuTmU2zUbc2Vn2pkrE",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768683621899,
+        "updatedAt": 1768683621899,
+        "transferredAt": 1768683621899,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "046",
+          "normalizedLabel": "046",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "dxKBDdBo2m4ss3YFwbX4i57mfxiTqHQmZgYYMMKRAWb",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769124907033,
+        "updatedAt": 1769124907033,
+        "transferredAt": 1769124907033,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "702",
+          "normalizedLabel": "702",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "gUJLGsazbWoPTfyy6aSYDc8nYVGNFc3yzkCfvnXrEj6",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684172981,
+        "updatedAt": 1768684172981,
+        "transferredAt": 1768684172981,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "063",
+          "normalizedLabel": "063",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "gVZ1QAYRn2aX6iCik8f7VAo7i13JYHsYjSpgHfPSUys",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113326231,
+        "updatedAt": 1769113326231,
+        "transferredAt": 1769113326231,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "587",
+          "normalizedLabel": "587",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "hviEcArH6Lxu7K23De97Rw9eSAJY3t8xCS77V7J6Z4j",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768685779808,
+        "updatedAt": 1768685779808,
+        "transferredAt": 1768685779808,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "263",
+          "normalizedLabel": "263",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "jD9vCUQVc46pWkAqYsCEaHy2QWrpN6FNDdyNbGq1Lq3",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769071283592,
+        "updatedAt": 1769071283592,
+        "transferredAt": 1769071283592,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "354",
+          "normalizedLabel": "354",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "k3WFGN6wGXikXHGb4zMkKudRpNvHZXqm4hLvdp9v2uC",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768678670439,
+        "updatedAt": 1768678670439,
+        "transferredAt": 1768678670439,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "140",
+          "normalizedLabel": "140",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "kF7KretUmDtmCvAd6D8KFwdBTzapR82jwNawrrKJgLD",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684182411,
+        "updatedAt": 1768684182411,
+        "transferredAt": 1768684182411,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "064",
+          "normalizedLabel": "064",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "kQXRWEfHCSN6BK4KqcrufAPUJN7bSK7aycjZSkQtJvV",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768682637900,
+        "updatedAt": 1768682637900,
+        "transferredAt": 1768682637900,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "183",
+          "normalizedLabel": "183",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "nH6RfTXtCz7rHEu4X3RHiTBLxrL5tHSVVhV8YyqWXgE",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684275449,
+        "updatedAt": 1768684275449,
+        "transferredAt": 1768684275449,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "078",
+          "normalizedLabel": "078",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "pXzphh4LDg7uwyP4efBHauQkL37Ut9xZhumuN6aMap1",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769124944880,
+        "updatedAt": 1769124944880,
+        "transferredAt": 1769124944880,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "705",
+          "normalizedLabel": "705",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "pu8UKEBCAHDGUHMUopZ51du1iVnCuQjsTa94ju1FS51",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684980509,
+        "updatedAt": 1768684980509,
+        "transferredAt": 1768684980509,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "217",
+          "normalizedLabel": "217",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "tNbZS554ZCeTQtUbvSJ7H9cEqsuNUjEUvJp5pyo9hBz",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769199723866,
+        "updatedAt": 1769199723866,
+        "transferredAt": 1769199723866,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "972",
+          "normalizedLabel": "972",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "u5ugEumB1qEMn1vnZSemsYv3FvDeA7v8jYjqE9nhE8s",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769078822225,
+        "updatedAt": 1769078822225,
+        "transferredAt": 1769078822225,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "525",
+          "normalizedLabel": "525",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "uNFjpjFWnTFqy3QckodjZFkYkXTjjD2eWX5LgMmRtzT",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769072257690,
+        "updatedAt": 1769072257690,
+        "transferredAt": 1769072257690,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "412",
+          "normalizedLabel": "412",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "ut8hwUb6rP83CQdGvb9fHCqi2ugAZjmoojgR8xUysjC",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684991219,
+        "updatedAt": 1768684991219,
+        "transferredAt": 1768684991219,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "218",
+          "normalizedLabel": "218",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "weiCUQJxhB9zKr3wxAWvLAkDoTP9aftc7rLLCaxaKGj",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768680742662,
+        "updatedAt": 1768680742662,
+        "transferredAt": 1768680742662,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "176",
+          "normalizedLabel": "176",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "yupUjevjuy4w9mmGdo4F3WXSG2keqRajuvoFnZMX5hC",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769078242996,
+        "updatedAt": 1769078242996,
+        "transferredAt": 1769078242996,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "493",
+          "normalizedLabel": "493",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "za8G61QND1uQFS7yiNQg9wbWnxksbXAFvCfLbZqme8n",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769114669956,
+        "updatedAt": 1769114669956,
+        "transferredAt": 1769114669956,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "659",
+          "normalizedLabel": "659",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "23xBGmvSYkoBni4BkVxwcWKuciCaRwXL128qUuvv4SfZ",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769071456779,
+        "updatedAt": 1769071456779,
+        "transferredAt": 1769071456779,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "367",
+          "normalizedLabel": "367",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "24zNCYPK4fyqDuMhVkVSuUSQDnWLCa5HavqiF4SGaH1C",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768850670671,
+        "updatedAt": 1768850670671,
+        "transferredAt": 1768850670671,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "320",
+          "normalizedLabel": "320",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "25VXwwn9RZQfnPxJspGXxxaoboN9eQ8z2BuRVETMk8mc",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113859046,
+        "updatedAt": 1769113859046,
+        "transferredAt": 1769113859046,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "607",
+          "normalizedLabel": "607",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "26WgrbQo3T5RvyYxBsq1wBQLULVmM7ZTurhKgbrzsPLP",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126441489,
+        "updatedAt": 1769126441489,
+        "transferredAt": 1769126441489,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "792",
+          "normalizedLabel": "792",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "27LoRUqYnEGxmofXBoDcMv6GBdTk9MxUSeqtRH2ZhAHe",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195851466,
+        "updatedAt": 1769195851466,
+        "transferredAt": 1769195851466,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "932",
+          "normalizedLabel": "932",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "297oH66ExSGnVoPVmUSY4UFYwFy24dax1HjadLk5ENkA",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768683584650,
+        "updatedAt": 1768683584650,
+        "transferredAt": 1768683584650,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "041",
+          "normalizedLabel": "041",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "29HDV1ZVJBE32iNwTsfw9VUTMpt4mY9UZeZCQa3j1yf1",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195583336,
+        "updatedAt": 1769195583336,
+        "transferredAt": 1769195583336,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "893",
+          "normalizedLabel": "893",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "29dGkqbWcVXXrcfVecp2uCZYFPwVhQnoiMrSshoz4qjS",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113203237,
+        "updatedAt": 1769113203237,
+        "transferredAt": 1769113203237,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "573",
+          "normalizedLabel": "573",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2AFCTd1oK1rPJ7dH6mjERdspbQrtTTRDRVyrqNHapbXU",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684908152,
+        "updatedAt": 1768684908152,
+        "transferredAt": 1768684908152,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "208",
+          "normalizedLabel": "208",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2ATFxHCmLeMBd7zqsAJ4MphAh61pSBMsHgbYJC3UnzFv",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769077411503,
+        "updatedAt": 1769077411503,
+        "transferredAt": 1769077411503,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "467",
+          "normalizedLabel": "467",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2CGg1msbbebPzUApmKBf6JeuajFZwFRx291cRRYTywEy",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769077629991,
+        "updatedAt": 1769077629991,
+        "transferredAt": 1769077629991,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "478",
+          "normalizedLabel": "478",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2CXteeNiU7at3Z6TtTQ6ApD3FABkFioyttLcZjn57ekK",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113814686,
+        "updatedAt": 1769113814686,
+        "transferredAt": 1769113814686,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "602",
+          "normalizedLabel": "602",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2D35gPpkNJyT7XCFEvtk1TQJTKY7uNXdin2dTGwzYymT",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195729931,
+        "updatedAt": 1769195729931,
+        "transferredAt": 1769195729931,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "914",
+          "normalizedLabel": "914",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2EertBSyBcFF7ivhXupE61FzVgQXvheVyNZiDu3MqVdJ",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194652065,
+        "updatedAt": 1769194652065,
+        "transferredAt": 1769194652065,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "849",
+          "normalizedLabel": "849",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2HBWawNszRrrprzLLZu7vJVqqRqC7tRwVaY4gzmynesQ",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769196425915,
+        "updatedAt": 1769196425915,
+        "transferredAt": 1769196425915,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "987",
+          "normalizedLabel": "987",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2JM4rKrCdndi9BxEwHsv556jPTLPokHmenB4WCmQxsWs",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769113399775,
+        "updatedAt": 1769113399775,
+        "transferredAt": 1769113399775,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "598",
+          "normalizedLabel": "598",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2JYYFVa3rwgTwYC4rVfbeZUzwWYUs7iFSs58cigBnp9o",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195695322,
+        "updatedAt": 1769195695322,
+        "transferredAt": 1769195695322,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "910",
+          "normalizedLabel": "910",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2MXZHkk2BDpTH7fMNWyFUvzP4MapyDXzN1FaXJWujcam",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769071298400,
+        "updatedAt": 1769071298400,
+        "transferredAt": 1769071298400,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "356",
+          "normalizedLabel": "356",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2PAyCv7zLf1avnWEeWieHaFLxj3uSAMPhL8crQ1gKPTG",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769078269006,
+        "updatedAt": 1769078269006,
+        "transferredAt": 1769078269006,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "497",
+          "normalizedLabel": "497",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2Tca7FKJifYGNfDXsEzxSWa7z6vT9XmC9v3W24A96rXd",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125107505,
+        "updatedAt": 1769125107505,
+        "transferredAt": 1769125107505,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "725",
+          "normalizedLabel": "725",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2WMzpKPG6dNyA12czoxgiL7jvduxHHGhxfg5wiEca3RG",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194618719,
+        "updatedAt": 1769194618719,
+        "transferredAt": 1769194618719,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "846",
+          "normalizedLabel": "846",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2ak6rwPMetGMcRqJftZgcj8bBoDB91qZMMNBeY5MdJ6e",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126449224,
+        "updatedAt": 1769126449224,
+        "transferredAt": 1769126449224,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "793",
+          "normalizedLabel": "793",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2bdrfMB95WaExL4Z3HmPW6rPtuRMBa7LTqQ2KVKaTHxT",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125143826,
+        "updatedAt": 1769125143826,
+        "transferredAt": 1769125143826,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "729",
+          "normalizedLabel": "729",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2cD6MFkHfsbaDPAVEuzswcEwASBqVfLEeHdB6QDPQrQK",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769194680331,
+        "updatedAt": 1769194680331,
+        "transferredAt": 1769194680331,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "851",
+          "normalizedLabel": "851",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2fN6rMN4vbfn3vRfSzcVqFNsh84XYNT5EXZiHdBNrak1",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769124931313,
+        "updatedAt": 1769124931313,
+        "transferredAt": 1769124931313,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "704",
+          "normalizedLabel": "704",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2g8AiPMJfu8ySRRR5JXXyxSpgyttiY3L4KrfBBKq6LQz",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126620931,
+        "updatedAt": 1769126620931,
+        "transferredAt": 1769126620931,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "810",
+          "normalizedLabel": "810",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2gCSaFR7N8qDfVQkBfmLGdo8Bky2SZXyCRfHpnW7R9Rf",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768685279669,
+        "updatedAt": 1768685279669,
+        "transferredAt": 1768685279669,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "248",
+          "normalizedLabel": "248",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2gzuZ2z3xnN5fHkeUjJLLquRm57nfhy8T15UQoVfEi1e",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125324476,
+        "updatedAt": 1769125324476,
+        "transferredAt": 1769125324476,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "750",
+          "normalizedLabel": "750",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2i9hPJtLBMx6owibtzFKKia6MnULq7hW4WNimYxYcBvF",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126592321,
+        "updatedAt": 1769126592321,
+        "transferredAt": 1769126592321,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "806",
+          "normalizedLabel": "806",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2kQyUJg1J7X1MNBRMjFaS5AabVxehDw9PnNkmyLzBtcB",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684502032,
+        "updatedAt": 1768684502032,
+        "transferredAt": 1768684502032,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "086",
+          "normalizedLabel": "086",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2r1BQKP45BDV73CcifeCQ1GykehwdGebVQ9MMuWW6sz1",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126248976,
+        "updatedAt": 1769126248976,
+        "transferredAt": 1769126248976,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "759",
+          "normalizedLabel": "759",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2t29pEcTWJZnuDWkgoGjJEHyhcd9jSy14iifpfqiq9zn",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769195754828,
+        "updatedAt": 1769195754828,
+        "transferredAt": 1769195754828,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "917",
+          "normalizedLabel": "917",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2t4zPjK1UbtQZhm771EjXAa46iEKqMmMfCK5XPHihGg5",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768680751838,
+        "updatedAt": 1768680751838,
+        "transferredAt": 1768680751838,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "178",
+          "normalizedLabel": "178",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2urrjKafvkg9NWtNnSFDUjEWS7pZANWU8P5iGotxCC71",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769125162917,
+        "updatedAt": 1769125162917,
+        "transferredAt": 1769125162917,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "732",
+          "normalizedLabel": "732",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2vyHoNy8Rd8uJ4waH3eTL6GnkrWGydyYsbGZ7kVyipgn",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768678695756,
+        "updatedAt": 1768678695756,
+        "transferredAt": 1768678695756,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "145",
+          "normalizedLabel": "145",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "2wo3szRq6K1ijeWxr45tHSCnueMtnYB9GMc2fvjuqCrE",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684511493,
+        "updatedAt": 1768684511493,
+        "transferredAt": 1768684511493,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "087",
+          "normalizedLabel": "087",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "31ZWYhDVcAp6yCRyqCwKPDZoG2rDir7L7Q9VHJXw1P9a",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769077652520,
+        "updatedAt": 1769077652520,
+        "transferredAt": 1769077652520,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "480",
+          "normalizedLabel": "480",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "31vBTAyEjzmGb6EoBrMTXwuxDu6aQsbkucP6hbWdpyPn",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1768684546647,
+        "updatedAt": 1768684546647,
+        "transferredAt": 1768684546647,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "093",
+          "normalizedLabel": "093",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      },
+      {
+        "id": "31w6Gga9t1wmuhgwGBcFyYTvYBVuFDX9YnizxS5uTRyx",
+        "ownerId": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX",
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "revision": {
+          "$bigint": "1"
+        },
+        "createdAt": 1769126362155,
+        "updatedAt": 1769126362155,
+        "transferredAt": 1769126362155,
+        "createdAtBlockHeight": null,
+        "updatedAtBlockHeight": null,
+        "transferredAtBlockHeight": null,
+        "createdAtCoreBlockHeight": null,
+        "updatedAtCoreBlockHeight": null,
+        "transferredAtCoreBlockHeight": null,
+        "data": {
+          "label": "782",
+          "normalizedLabel": "782",
+          "normalizedParentDomainName": "dash",
+          "parentDomainName": "dash",
+          "records": {
+            "identity": "CFfgyqMohQ7eJqqwXcbSgwp35AaodNBcF3kHg1qUc6xX"
+          },
+          "subdomainRules": {
+            "allowSubdomains": false
+          }
+        }
+      }
+    ],
+    "proved": true,
+    "meta": {
+      "height": 475029,
+      "coreChainLockedHeight": 2574644,
+      "epoch": 89,
+      "timeMs": 1795053567111,
+      "protocolVersion": 14,
+      "chainId": "evo1"
+    },
+    "proof": {
+      "grovedbProof": {
+        "$u8": "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"
+      },
+      "quorumHash": {
+        "$u8": "AAAAAAAAAAlGS3H4lpJjAootz5ygji7rTaYhByhiIg0="
+      },
+      "signature": {
+        "$u8": "sQ8etphe5l29BEutujAqWZQzANFoPbB3jFtJ0P+8RqP7JDAdRjvM5aLDU2ZIrcF6B+ZSloVtpvcayTmqQ9YlzjOm79myj2kyPYgACAtRUQR0PmH2xLfnClV2hnVkbfZo"
+      },
+      "round": 0,
+      "blockIdHash": {
+        "$u8": "4OMh+Hij417Mhol6Zusy8RPzcCaXUB4e6FQGEgIvLKg="
+      },
+      "quorumType": 4
+    },
+    "tookMs": 115.79967299999998
+  }
+}
