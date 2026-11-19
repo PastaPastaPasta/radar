@@ -52,7 +52,6 @@ before(async () => {
       },
     ],
     compatibilityDate: '2026-08-01',
-    bindings: { NATIVE_HOSTS: 'explorer.dashhq.org' },
     assets: {
       directory: path.join(root, 'test/site'),
       binding: 'ASSETS',
@@ -95,6 +94,16 @@ describe('security headers', () => {
       /require-trusted-types-for 'script'/,
     )
     assert.match(res.headers.get('permissions-policy'), /camera=\(self\)/)
+  })
+
+  it('marks documents no-transform so the edge injects no analytics beacon the CSP would refuse', async () => {
+    for (const p of ['/', '/settings', '/identity/ABC']) {
+      const res = await get(p)
+      assert.match(res.headers.get('content-type'), /^text\/html/, p)
+      assert.match(res.headers.get('cache-control') ?? '', /(^|, )no-transform$/, p)
+    }
+    const sw = await get('/sw.js')
+    assert.doesNotMatch(sw.headers.get('cache-control'), /no-transform/)
   })
 
   it('also sets them on assets and error responses', async () => {
@@ -422,59 +431,56 @@ describe('redirects', () => {
     }
   }
 
-  it('maps the native explorer paths and defaults to testnet there', async () => {
+  it('maps the native explorer paths and keeps mainnet when a link names no network', async () => {
     const h = 'explorer.dashhq.org'
-    await check(h, '/identity/?id=ABC&tab=keys', '/identity/ABC?tab=keys&network=testnet')
+    await check(h, '/identity/?id=ABC&tab=keys', '/identity/ABC?tab=keys')
     await check(h, '/identity/?id=ABC&network=mainnet', '/identity/ABC')
     await check(
       h,
       '/identity/lookup/?pkh=ff&network=testnet',
       '/identity/lookup?pkh=ff&network=testnet',
     )
-    await check(h, '/contract/?id=C1', '/contract/C1?network=testnet')
+    await check(h, '/contract/?id=C1', '/contract/C1')
     await check(
       h,
       '/contract/documents/?id=C1&type=note&limit=10',
-      '/contract/C1/documents/note?limit=10&network=testnet',
+      '/contract/C1/documents/note?limit=10',
     )
-    await check(
-      h,
-      '/contract/document/?id=C1&type=note&docId=D1',
-      '/document/C1/note/D1?network=testnet',
-    )
+    await check(h, '/contract/document/?id=C1&type=note&docId=D1', '/document/C1/note/D1')
     await check(h, '/token/?id=T1&network=mainnet', '/token/T1')
-    await check(h, '/token/holders/?id=T1', '/token/T1/holders?network=testnet')
-    await check(h, '/dpns/?name=alice.dash', '/name/alice?network=testnet')
+    await check(h, '/token/holders/?id=T1', '/token/T1/holders')
+    await check(h, '/dpns/?name=alice.dash', '/name/alice')
     await check(h, '/evonode/?proTxHash=ab12&network=mainnet', '/mn/ab12?tab=platform')
-    await check(h, '/epoch/detail/?index=5', '/epoch/5?network=testnet')
+    await check(h, '/epoch/detail/?index=5', '/epoch/5')
     await check(h, '/network/status/?network=mainnet', '/status')
-    await check(h, '/address/?addr=dash1x', '/platform-address/dash1x?network=testnet')
-    await check(h, '/state-transition/?hash=AB', '/platform/tx/AB?network=testnet')
-    await check(h, '/tools/?tool=state-transition', '/tools/transition?network=testnet')
-    await check(h, '/tools/?tool=proof', '/tools/proof?network=testnet')
-    await check(h, '/tools/?tool=path-elements', '/tools/path?network=testnet')
+    await check(h, '/address/?addr=dash1x', '/platform-address/dash1x')
+    await check(h, '/state-transition/?hash=AB', '/platform/tx/AB')
+    await check(h, '/tools/?tool=state-transition', '/tools/transition')
+    await check(h, '/tools/?tool=proof', '/tools/proof')
+    await check(h, '/tools/?tool=path-elements', '/tools/path')
     await check(
       h,
       '/governance/contested/detail/?contract=C1&docType=domain&indexName=parentNameAndLabel&indexValues=%5B%22dash%22%2C%22al1ce%22%5D',
-      '/contest/al1ce?network=testnet',
+      '/contest/al1ce',
     )
-    await check(h, '/governance/contested/detail/?indexValues=nope', '/contests?network=testnet')
+    await check(h, '/governance/contested/detail/?indexValues=nope', '/contests')
     await check(
       h,
       '/governance/contested/detail/?contract=X&docType=foo&indexName=bar&indexValues=%5B%22a%22%2C%22b%22%5D',
-      '/contests?network=testnet',
+      '/contests',
     )
     await check(
       h,
       '/governance/contested/detail/?docType=domain&indexName=parentNameAndLabel&indexValues=%255B%2522dash%2522%252C%2522al1ce%2522%255D',
-      '/contest/al1ce?network=testnet',
+      '/contest/al1ce',
     )
-    await check(h, '/tools/?tool=constructor', '/tools/transition?network=testnet')
-    await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3?network=testnet')
-    await check(h, '/groups/?contractId=C1', '/groups/C1?network=testnet')
-    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?tab=tokens&network=testnet')
+    await check(h, '/tools/?tool=constructor', '/tools/transition')
+    await check(h, '/groups/detail/?contractId=C1&position=3', '/group/C1/3')
+    await check(h, '/groups/?contractId=C1', '/groups/C1')
+    await check(h, '/contract/token/?id=C1&position=0', '/contract/C1?tab=tokens')
     await check(h, '/governance/polls/?network=mainnet', '/polls?range=upcoming')
     await check(h, '/search/?q=alice', '/search?q=alice')
+    await check(h, '/identity/?id=ABC&network=testnet', '/identity/ABC?network=testnet')
   })
 
   it('renames the native explorer tabs and keeps only the tabs the pages have', async () => {
@@ -535,8 +541,8 @@ describe('redirects', () => {
   it('sends write paths to the entity page and drops signing parameters', async () => {
     const h = 'explorer.dashhq.org'
     await check(h, '/broadcast/?op=transfer&identity=ID1&network=mainnet', '/identity/ID1')
-    await check(h, '/broadcast/?op=mint&token=T9', '/token/T9?network=testnet')
-    await check(h, '/wallet/', '/about?network=testnet')
+    await check(h, '/broadcast/?op=mint&token=T9', '/token/T9')
+    await check(h, '/wallet/', '/about')
   })
 
   it('does not bounce same-path native pages to testnet, and keeps mainnet reachable', async () => {
@@ -548,8 +554,8 @@ describe('redirects', () => {
     const moved = await mf.dispatchFetch('http://explorer.dashhq.org/identity/?id=A', {
       redirect: 'manual',
     })
-    assert.equal(moved.status, 302)
-    assert.equal(moved.headers.get('cache-control'), 'no-store')
+    assert.equal(moved.status, 301)
+    assert.equal(moved.headers.get('location'), '/identity/A')
     const legacy = await mf.dispatchFetch('http://radar.localhost/block-index/5', {
       redirect: 'manual',
     })
@@ -956,6 +962,7 @@ describe('per-entity title and OG', () => {
       )
       const html = await (await get(`/mn/${protx}`, { headers: { 'user-agent': agent } })).text()
       assert.equal(upstreamCalls.length, 1, agent)
+      assert.match(upstreamCalls[0].headers.get('user-agent'), /^Radar\//, agent)
       assert.match(html, /<title>Evonode eeeeeeee…eeeeee · Radar<\/title>/, agent)
     }
   })

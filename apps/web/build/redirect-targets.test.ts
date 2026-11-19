@@ -75,9 +75,7 @@ const LEGACY_SAMPLES = [
 
 function target(path: string, query: URLSearchParams, host: string) {
   const qs = query.size ? `?${query.toString()}` : ''
-  const hit = redirectFor(new URL(`https://${host}${path}${qs}`), {
-    nativeHosts: ['explorer.dashhq.org'],
-  })
+  const hit = redirectFor(new URL(`https://${host}${path}${qs}`))
   return hit ? new URL(hit.location, 'https://radar.invalid') : null
 }
 
@@ -168,6 +166,96 @@ describe('redirect targets', () => {
   describe('the native explorer pages', () => {
     const at = (path: string, q: Record<string, string>, host = 'explorer.dashhq.org') =>
       target(path, new URLSearchParams(q), host)!
+
+    // Every page the Native Platform Explorer exported at 542395e (src/app/**/page.tsx), the build explorer.dashhq.org served before the cutover.
+    const NATIVE_PAGES = [
+      '/about',
+      '/address',
+      '/broadcast',
+      '/contract',
+      '/contract/document',
+      '/contract/documents',
+      '/contract/token',
+      '/dpns',
+      '/dpns/search',
+      '/epoch',
+      '/epoch/detail',
+      '/epoch/history',
+      '/evonode',
+      '/governance/contested',
+      '/governance/contested/detail',
+      '/governance/polls',
+      '/groups',
+      '/groups/detail',
+      '/identity',
+      '/identity/lookup',
+      '/network/credits',
+      '/network/protocol',
+      '/network/quorums',
+      '/network/shielded',
+      '/network/status',
+      '/offline',
+      '/query',
+      '/saved',
+      '/sdk-reference',
+      '/search',
+      '/settings',
+      '/state-transition',
+      '/token',
+      '/token/holders',
+      '/tools',
+      '/wallet',
+    ]
+
+    it.each(NATIVE_PAGES)('maps the exported page %s', (page) => {
+      expect(NATIVE_PATHS).toContain(page)
+    })
+
+    it.each(
+      NATIVE_PAGES.flatMap((p) => [[p, FULL_QUERY] as const, [p, new URLSearchParams()] as const]),
+    )('sends %s/ (the exported address, with its trailing slash) where %s goes', (page, query) => {
+      const stay = new URL(
+        `${page}${query.size ? `?${query.toString()}` : ''}`,
+        'https://radar.invalid',
+      )
+      const slashed = target(`${page}/`, query, 'explorer.dashhq.org') ?? stay
+      const bare = target(page, query, 'explorer.dashhq.org') ?? stay
+      expect(slashed.href).toBe(bare.href)
+      expect(isRoute(slashed.pathname), `${page}/ → ${slashed.pathname}`).toBe(true)
+    })
+
+    it('keeps the home page on the same address', () => {
+      expect(target('/', new URLSearchParams(), 'explorer.dashhq.org')).toBeNull()
+      expect(
+        target('/', new URLSearchParams({ network: 'testnet' }), 'explorer.dashhq.org'),
+      ).toBeNull()
+      expect(isRoute('/')).toBe(true)
+    })
+
+    it.each([
+      ['/identity/', { id: ID }],
+      ['/contract/', { id: ID }],
+      ['/contract/document/', { id: ID, type: 'note', docId: ID }],
+      ['/token/', { id: ID }],
+      ['/epoch/detail/', { index: '7' }],
+      ['/evonode/', { proTxHash: HASH }],
+      ['/state-transition/', { hash: HASH }],
+      ['/dpns/search/', { q: 'al' }],
+      ['/wallet/', {}],
+    ] as const)('keeps the network a deep link %s carries', (path, query) => {
+      for (const network of ['testnet', 'mainnet'] as const) {
+        const hit = at(path, { ...query, network })
+        expect(hit.searchParams.get('network'), `${path} ${network}`).toBe(
+          network === 'testnet' ? 'testnet' : null,
+        )
+        expect(isRoute(hit.pathname)).toBe(true)
+      }
+    })
+
+    it('sends the wallet, a write page Radar does not have, to About, which links to Bridge', () => {
+      expect(at('/wallet/', { network: 'mainnet' }).pathname).toBe('/about')
+      expect(at('/broadcast/', { op: 'transfer', identity: ID }).pathname).toBe(`/identity/${ID}`)
+    })
 
     it.each([
       ['/identity', { id: ID, tab: 'dpns' }, `/identity/${ID}`, { tab: 'names' }],

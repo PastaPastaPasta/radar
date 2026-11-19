@@ -1,11 +1,12 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
 import { App } from '@/app'
 import { http, HttpResponse } from 'msw'
 import { writeSourceMode } from '@/lib/source-mode'
+import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -60,6 +61,11 @@ describe('Platform overview', () => {
   })
 
   it('opens with how far the epoch is, then its pool and what a block pays @NX-01 @RA-60', async () => {
+    const doc = await fixtureBody<{ schedule: { ts: number } }>('radar', 'mainnet', 'platform')
+    vi.useFakeTimers({ toFake: ['Date'], now: doc.schedule.ts * 1000 })
+    onTestFinished(() => {
+      vi.useRealTimers()
+    })
     renderAt('/platform')
     expect(await screen.findByRole('heading', { level: 1, name: 'Platform' })).toBeInTheDocument()
     const h1 = await screen.findByRole('heading', { level: 1, name: /^Epoch 88 is \d+% through$/ })

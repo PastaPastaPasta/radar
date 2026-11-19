@@ -1,8 +1,6 @@
-import { resolveHyphenRequest } from './hyphen-path'
+import { resolveHyphenRequest, UPSTREAM_USER_AGENT } from './hyphen-path'
 
 const FORWARD_REQUEST = ['accept', 'if-none-match']
-// Hyphen answers 520 to requests without a User-Agent, and Workers send none by default.
-const UPSTREAM_USER_AGENT = 'Radar/1 (+https://explorer.dashhq.org)'
 const KEEP_RESPONSE = ['etag', 'last-modified', 'content-language', 'vary']
 const LIST_TTL_SECONDS = 15
 const UPSTREAM_TIMEOUT_MS = 10_000
