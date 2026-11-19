@@ -26,9 +26,9 @@ export function insightTxType(tx: Pick<InsTx, 'type' | 'vin' | 'vout'>): string 
   if (tx.vin.some((i) => i.coinbase != null)) return 'coinbase'
   const special = TX_TYPES[tx.type ?? 0]
   if (special) return special
-  const dataOnly =
-    tx.vout.length > 0 && tx.vout.every((o) => o.scriptPubKey.hex.toLowerCase().startsWith('6a'))
-  return dataOnly ? 'data' : 'normal'
+  // Hyphen's meaning: `data` when any output is OP_RETURN (`coreTxType` in `hy-shared/tx-type.ts` reads it).
+  const carriesData = tx.vout.some((o) => o.scriptPubKey.hex.toLowerCase().startsWith('6a'))
+  return carriesData ? 'data' : 'normal'
 }
 
 /** The chain tip an answer about a confirmed transaction was read at: its height plus its confirmations, less one. */

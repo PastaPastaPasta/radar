@@ -90,7 +90,7 @@ describe('insightTxType', () => {
     expect(insightTxType({ type: 99, vin: [], vout: [] })).toBe('normal')
   })
 
-  it('calls a transaction whose every output is OP_RETURN data, as Hyphen does', () => {
+  it('calls a transaction with any OP_RETURN output data, in Hyphen’s sense of the word', () => {
     const out = (hex: string) => ({ n: 0, value: 0n, scriptPubKey: { hex } })
     expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a')] })).toBe('data')
     expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a0401020304')] })).toBe('data')
@@ -99,6 +99,13 @@ describe('insightTxType', () => {
         type: 0,
         vin: [{ addr: A }],
         vout: [out('6a'), out('76a914' + '00'.repeat(20) + '88ac')],
+      }),
+    ).toBe('data')
+    expect(
+      insightTxType({
+        type: 0,
+        vin: [{ addr: A }],
+        vout: [out('76a914' + '00'.repeat(20) + '88ac')],
       }),
     ).toBe('normal')
   })
