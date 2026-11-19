@@ -39,7 +39,13 @@ export function RadarZone() {
   const query = useQuery({ ...radarQueries.platform(net), enabled: crawlOn })
   return (
     <Section id="radar-zone" layer="network" title={t`Rewards and schedule`}>
-      <LiveZone key={net} net={net} query={query} off={off} devnet={devnet} />
+      <LiveZone
+        key={`${net}:${off ? 'decentralized' : 'all'}`}
+        net={net}
+        query={query}
+        off={off}
+        devnet={devnet}
+      />
     </Section>
   )
 }
@@ -117,12 +123,16 @@ function Rewards({
   devnet: boolean
 }) {
   const { t } = useLingui()
-  const doc = query.data?.data
-  const crawlStamp = query.data ? stampOf(query.data) : undefined
+  const crawlOn = !off && !devnet
+  // A disabled query keeps what it cached: nothing of the crawl is shown while its source is off.
+  const crawl = crawlOn ? query.data : undefined
+  const doc = crawl?.data
+  const crawlStamp = crawl ? stampOf(crawl) : undefined
   const last = doc?.epochs.at(-1)
   const pool = livePool(live)
-  const crawlOn = !off && !devnet
   const waiting = crawlOn && !doc && !query.isError
+  // Placeholders only while the first read is under way: once the live read has failed, a missing figure is a dash.
+  const connecting = live.kind === 'connecting'
   const poolValue = pool?.pool ?? doc?.now.pool_so_far
   const crawlPerBlock =
     doc && doc.now.blocks > 0 ? doc.now.pool_so_far / BigInt(doc.now.blocks) : undefined
@@ -156,7 +166,7 @@ function Rewards({
                 : undefined
           }
           source={pool?.stamp ?? crawlStamp}
-          loading={poolValue === undefined && (waiting || !live.epoch)}
+          loading={poolValue === undefined && (waiting || (connecting && !live.epoch))}
           layer="network"
         />
         <Stat
@@ -178,7 +188,7 @@ function Rewards({
                 : undefined
           }
           source={pool?.stamp ?? crawlStamp}
-          loading={perBlock === undefined && (waiting || !live.epoch)}
+          loading={perBlock === undefined && (waiting || (connecting && !live.epoch))}
           layer="network"
         />
         {crawlOn

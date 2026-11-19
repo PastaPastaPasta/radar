@@ -1,5 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
@@ -236,6 +236,50 @@ describe('Epochs', () => {
       expect(document.getElementById('rx-announcer')).toHaveTextContent('Platform updates paused'),
     )
   }, 20_000)
+
+  it('drops everything of the crawl when Decentralized only mode is switched on, and shows a dash once Platform is not answering @RA-60 @RA-62', async () => {
+    setDapiTransport(noDapi)
+    const original = sdk.call.bind(sdk)
+    const spy = vi
+      .spyOn(sdk, 'call')
+      .mockImplementation((net, method, args, signal) =>
+        method === 'epoch.current'
+          ? Promise.reject(Object.assign(new Error('down'), { source: 'sdk', kind: 'network' }))
+          : original(net, method, args, signal),
+      )
+    onTestFinished(() => {
+      spy.mockRestore()
+    })
+    renderAt('/epochs')
+    const rewards = await card('rewards')
+    const upcoming = await card('upcoming')
+    // Only the crawl answers: its pool and its order stand in.
+    await waitFor(() => expect(rewards).toHaveTextContent('From Radar’s crawl; fees not counted'))
+    await waitFor(() =>
+      expect(upcoming).toHaveTextContent('From Radar’s last look at the validator sets'),
+    )
+    act(() => {
+      writeSourceMode('decentralized')
+    })
+    await waitFor(() =>
+      expect(document.querySelectorAll('[data-unavailable="mode"]')).toHaveLength(1),
+    )
+    const zone = document.getElementById('radar-zone')!
+    // The section starts over in the new mode; once its first read has failed, nothing is loading any more and the
+    // figures with no source say so with a dash.
+    await waitFor(
+      () => {
+        expect(zone.querySelector('.rx-livesched')).toHaveAttribute('data-live', 'paused')
+        const after = document.getElementById('rewards')!
+        expect(after.querySelector('[data-skeleton]')).toBeNull()
+        expect(after).toHaveTextContent(/Pool so far\s*—/)
+      },
+      { timeout: 15_000 },
+    )
+    expect(document.getElementById('rewards')).not.toHaveTextContent('Radar’s crawl;')
+    expect(document.getElementById('upcoming')).not.toHaveTextContent('Radar’s last look')
+    expect(zone.querySelector('[data-source="radar"]')).toBeNull()
+  }, 30_000)
 
   it('starts over on the other network when the network switches @RA-62', async () => {
     const history = renderAt('/epochs')
