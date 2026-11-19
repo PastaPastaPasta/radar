@@ -4,7 +4,7 @@ import { H1 } from './claims'
 
 /**
  * The map draws the land with no request and says once that the crawl is unavailable; the changes list is the
- * crawl's alone; the API reference is static.
+ * crawl's alone; the API reference is static. `color` is an old map link's, which the page drops.
  */
 export const netD: RouteCase[] = [
   { path: '/map', h1: H1.map, decentralized: 'partial' },

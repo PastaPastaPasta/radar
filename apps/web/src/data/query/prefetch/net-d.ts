@@ -26,15 +26,20 @@ export interface MapSearch extends RouteSearch {
   host?: string[] | undefined
   dkg?: string[] | undefined
   layer: 'mn' | 'nodes'
-  color: 'reach' | 'pose' | 'version' | 'type'
-  hide?: string[] | undefined
+  place?: string | undefined
+  region?: 'europe' | 'americas' | 'asia' | undefined
   protx?: string | undefined
+  color?: 'reach' | 'pose' | 'version' | 'type' | undefined
+  hide?: string[] | undefined
 }
 
-export const mapPrefetch: Prefetch<NoParams, MapSearch> = (net) =>
+/** The masternodes' map reads Radar's list; every reachable node's, the geo document and the summary. */
+export const mapPrefetch: Prefetch<NoParams, MapSearch> = (net, _params, search) =>
   isDevnet(net)
     ? []
-    : [
-        prefetchItem('http', radarQueries.masternodes(net), { wait: true }),
-        prefetchItem('http', radarQueries.geo(net)),
-      ]
+    : search.layer === 'nodes'
+      ? [
+          prefetchItem('http', radarQueries.geo(net), { wait: true }),
+          prefetchItem('http', radarQueries.summary(net)),
+        ]
+      : [prefetchItem('http', radarQueries.masternodes(net), { wait: true })]

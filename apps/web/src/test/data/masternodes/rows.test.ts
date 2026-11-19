@@ -240,6 +240,13 @@ describe('filterMnRows and mnFilterFacets', () => {
     expect(ids(filterMnRows(dkgRows, { dkg: ['relay', 'unknown'] }))).toEqual([3, 4])
   })
 
+  it('takes the search as words that a row must all hold, in any field', () => {
+    expect(ids(filterMnRows(rows, { q: 'amazon' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: 'Amazon US' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: '  amazon   23.1.0 ' }))).toEqual([2])
+    expect(ids(filterMnRows(rows, { q: 'amazon DE' }))).toEqual([])
+  })
+
   it('passes everything when the filter sets nothing', () => {
     expect(filterMnRows(rows, {})).toHaveLength(4)
   })

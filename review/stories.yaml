@@ -298,7 +298,7 @@ stories:
     group: 'Radar (RA): compare with radar.dashhq.org'
     shard: S1
     story: As a visitor I want to see the network on a map
-    acceptance: Full-width map with masternode clusters coloured by reachability, PoSe, version or type; clicking a cluster zooms or lists it; a node popup opens the masternode
+    acceptance: The claim says how few cities hold half of the enabled masternodes and the lede the same by country and hosting provider; a map of city discs sized by count with the largest labelled, beside every city ranked with its share and a rule at half; picking a city or a disc shows its count, providers and a link to those masternodes; a ProTx in the address opens that masternode's card
     radar_start: /map
     prod:
       - https://radar.dashhq.org/map
@@ -307,7 +307,7 @@ stories:
     group: 'Radar (RA): compare with radar.dashhq.org'
     shard: S1
     story: As a visitor I want to filter the map
-    acceptance: Search, masternodes vs all nodes, colour-by, category chips with counts, type/version/country/hosting/DKG filters; a headline with counts and "open these as a list"
+    acceptance: Masternodes, evonodes or every reachable node; country and hosting-provider share bars whose items narrow the page; a text filter; filters from the list (type, status, reach, country, version, host, DKG) shown as removable chips, with the claim following them
     radar_start: /map
     prod:
       - https://radar.dashhq.org/map
@@ -316,7 +316,7 @@ stories:
     group: 'Radar (RA): compare with radar.dashhq.org'
     shard: S1
     story: As a visitor I want to share a map view and use it on a phone
-    acceptance: Map state (filters, layer, colour, hidden categories, focused ProTx) is in the URL; on a phone the controls live in a bottom sheet that drags and closes with Esc
+    acceptance: Map state (scope, filters, picked city, region, focused ProTx) is in the URL and old map links (colour, hidden categories) still open the view they meant; on a phone the page is one column with no sideways scroll
     radar_start: /map
     prod:
       - https://radar.dashhq.org/map

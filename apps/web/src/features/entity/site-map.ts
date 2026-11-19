@@ -227,10 +227,10 @@ export const SITE_MAP: SitePage[] = [
     title: msg`Map`,
     section: 'network',
     layer: 'network',
-    summary: msg`Masternodes and other nodes on a world map, coloured by reachability, version or type.`,
+    summary: msg`Where the masternodes run and how concentrated they are: by city on a world map, by country and by hosting provider.`,
     sources: ['radar'],
     nav: true,
-    keywords: ['world', 'geography'],
+    keywords: ['world', 'geography', 'concentration', 'hosting', 'decentralization'],
   }),
   page({
     path: '/epochs',

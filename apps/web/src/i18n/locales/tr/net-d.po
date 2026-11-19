@@ -13,61 +13,52 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: placed.countries
-msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
-msgstr "{0, plural, one {# ülkede {onMap}} other {# ülkede {onMap}}}"
+msgid ", so the figures below may be out of date."
+msgstr ", bu yüzden aşağıdaki rakamlar güncel olmayabilir."
 
-#. placeholder {0}: stats.missing
-msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
-msgstr "{0, plural, one {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.} other {# masternode haritada yok: kayıtlı adres yok veya henüz taranmadı.}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned evonode is not counted: it serves nothing until it is revived.} other {# PoSe-banned evonodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, one {PoSe tarafından yasaklı # Evonode sayılmıyor: yeniden canlandırılana kadar hizmet vermez.} other {PoSe tarafından yasaklı # Evonode sayılmıyor: yeniden canlandırılana kadar hizmet vermezler.}}"
 
-#. placeholder {0}: totals.unlocated
-msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
-msgstr "{0, plural, one {Tor veya I2P üzerindeki # erişilebilir düğümün konumu yok, bu yüzden çizilmiyor.} other {Tor veya I2P üzerindeki # erişilebilir düğümün konumu yok, bu yüzden çizilmiyor.}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned masternode is not counted: it serves nothing until it is revived.} other {# PoSe-banned masternodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, one {PoSe tarafından yasaklı # masternode sayılmıyor: yeniden canlandırılana kadar hizmet vermez.} other {PoSe tarafından yasaklı # masternode sayılmıyor: yeniden canlandırılana kadar hizmet vermezler.}}"
 
 #. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
 msgid "{0} blocks ago"
 msgstr "{0} blok önce"
 
-#. placeholder {0}: nodeCount(totals.nodes)
-#. placeholder {1}: formatInt(totals.places)
-#. placeholder {2}: formatInt(totals.masternodes)
-msgid "{0} in {1} places; {2} are masternodes."
-msgstr "{1} yerde {0}; {2} tanesi masternode."
+#. placeholder {0}: share(place.n)
+msgid "{0} of the total"
+msgstr "toplamın {0}"
 
-#. placeholder {0}: formatInt(places.size)
-msgid "{0} places nearby"
-msgstr "Yakında {0} yer"
+#. placeholder {0}: pct(cf)
+#. placeholder {1}: countryName(cf.share.key)
+msgid "{0} of them run in one country, {1}."
+msgstr "{0} kadarı tek bir ülkede çalışıyor: {1}."
 
-#. placeholder {0}: formatInt(nodes)
-#. placeholder {1}: formatInt(masternodes)
-#. placeholder {2}: formatInt(nodes - masternodes)
-msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
-msgstr "{0} erişilebilir düğüm: {1} masternode ve {2} diğer tam düğüm."
+#. placeholder {0}: pct(pf)
+#. placeholder {1}: pf.share.key.replace(/\.$/, '')
+msgid "{0} run with one hosting provider, {1}."
+msgstr "{0} kadarı tek bir barındırma sağlayıcısında çalışıyor: {1}."
 
-#. placeholder {0}: chosen.length
-msgid "{0} selected"
-msgstr "{0} seçildi"
+msgid "{claimCities, plural, one {# city} other {# cities}}"
+msgstr "{claimCities, plural, one {# şehirde} other {# şehirde}}"
 
-#. placeholder {0}: nodeCount(nodes)
-#. placeholder {1}: formatInt(masternodes)
-msgid "{0}, {1} of them masternodes"
-msgstr "{0}, bunların {1} tanesi masternode"
+msgid "{claimTotal, plural, one {# evonode} other {# evonodes}}"
+msgstr "{claimTotal, plural, one {# Evonode} other {# Evonode}}"
 
-#. placeholder {0}: mnCount(rows.length)
-#. placeholder {1}: formatInt(reachable)
-msgid "{0}, {1} reachable."
-msgstr "{0}, {1} tanesi erişilebilir."
+msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
+msgstr "{claimTotal, plural, one {# masternode} other {# masternode}}"
 
-#. placeholder {0}: mnCount(total)
-msgid "{0}: {list}"
-msgstr "{0}: {list}"
+msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{claimTotal, plural, one {# erişilebilir düğüm} other {# erişilebilir düğüm}}"
 
-msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
-msgstr "Son taramada {total} düğümden {answered} tanesi yanıt verdi: etkin {enabled} düğümün {enabledAnswered} tanesi ve PoSe tarafından yasaklı {banned} düğümün {bannedAnswered} tanesi."
+msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
+msgstr "{j, plural, one {Yarısı # barındırma sağlayıcısında çalışıyor.} other {Yarısı # barındırma sağlayıcısında çalışıyor.}}"
 
-msgid "{answered} of {total} answered the latest crawl."
-msgstr "Son taramada {total} düğümden {answered} tanesi yanıt verdi."
+msgid "{k, plural, one {Half of them run in # country.} other {Half of them run in # countries.}}"
+msgstr "{k, plural, one {Yarısı # ülkede çalışıyor.} other {Yarısı # ülkede çalışıyor.}}"
 
 #. placeholder {0}: value(c.old)
 msgid "{label} (was at {0})"
@@ -80,14 +71,35 @@ msgstr "{label}, konum: {0}"
 msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
 msgstr "{lastDay, plural, one {Son 24 saatte masternode listesinde # değişiklik} other {Son 24 saatte masternode listesinde # değişiklik}}"
 
+msgid "{n, plural, one {# evonode} other {# evonodes}}"
+msgstr "{n, plural, one {# Evonode} other {# Evonode}}"
+
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternode}}"
 
 msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
 msgstr "{n, plural, one {# erişilebilir düğüm} other {# erişilebilir düğüm}}"
 
-msgid "← Back to the list"
-msgstr "← Listeye dön"
+msgid "{others, plural, one {# other} other {# others}}"
+msgstr "{others, plural, one {# diğer} other {# diğer}}"
+
+msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
+msgstr "{others, plural, one {{city} şehrini # sayılan masternode ile paylaşıyor: toplamın {part} kadarı orada çalışıyor.} other {{city} şehrini # sayılan masternode ile paylaşıyor: toplamın {part} kadarı orada çalışıyor.}}"
+
+msgid "{pct} of the {tot} run in one city, {where}"
+msgstr "{tot} içinden {pct} tek bir şehirde çalışıyor: {where}"
+
+msgid "{pct} of these {tot} run in one city, {where}"
+msgstr "Bu {tot} içinden {pct} tek bir şehirde çalışıyor: {where}"
+
+msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {Taramanın konum bulamadığı # düğüm var; paylarda bilinmeyen olarak sayılıyor.} other {Taramanın konum bulamadığı # düğüm var; paylarda bilinmeyen olarak sayılıyorlar.}}"
+
+msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# erişilebilir düğümün konumu yok, büyük olasılıkla Tor veya I2P üzerinde; paylarda bilinmeyen olarak sayılıyor.} other {# erişilebilir düğümün konumu yok, çoğu Tor veya I2P üzerinde; paylarda bilinmeyen olarak sayılıyorlar.}}"
+
+msgid "<0.1%"
+msgstr "<%0,1"
 
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "Her ağın verisi güncel ve kayıtlıyken 200, aksi halde sorunu belirten 503 döner. Çalışma süresi kontrolleri için."
@@ -107,26 +119,28 @@ msgstr "Adres değişiklikleri"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Masternode olmayan düğümlerin adresleri hiçbir zaman yayımlanmaz, yalnızca sayılır."
 
-msgid "All nodes"
-msgstr "Tüm düğümler"
+msgid "All reachable nodes"
+msgstr "Tüm erişilebilir düğümler"
 
-msgid "All nodes (soon)"
-msgstr "Tüm düğümler (yakında)"
+msgid "Americas"
+msgstr "Amerika"
 
-msgid "Any country"
-msgstr "Herhangi bir ülke"
+#. placeholder {0}: formatInt(more)
+msgid "and {0} more"
+msgstr "ve {0} tane daha"
 
-msgid "Any DKG readiness"
-msgstr "Herhangi bir DKG hazırlığı"
+msgid "Answered the crawl"
+msgstr "Taramaya yanıt verdi"
 
-msgid "Any hosting"
-msgstr "Herhangi bir barındırma"
+msgid "Answered the last crawl"
+msgstr "Son taramaya yanıt verdi"
 
-msgid "Any type"
-msgstr "Herhangi bir tür"
+msgid "Asia and Oceania"
+msgstr "Asya ve Okyanusya"
 
-msgid "Any version"
-msgstr "Herhangi bir sürüm"
+#. placeholder {0}: formatInt(smallest)
+msgid "At this size, cities with fewer than {0} are drawn at the smallest size."
+msgstr "Bu boyutta {0} altındaki şehirler en küçük boyutta çizilir."
 
 msgid "Back in the list"
 msgstr "Listeye geri döndü"
@@ -154,14 +168,23 @@ msgstr "Değişiklikler"
 msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
 msgstr "Bir masternode’u kayıtlı adresine yapılan P2P el sıkışmasıyla hemen kontrol eder. İstemci başına dakikada beş kontrol; bir dakikadan yeni sonuç yeniden döndürülür."
 
+msgid "Cities"
+msgstr "Şehirler"
+
+msgid "Cities, largest first"
+msgstr "Şehirler, en büyükten başlayarak"
+
+msgid "Clear all"
+msgstr "Tümünü temizle"
+
+msgid "Clear the filters"
+msgstr "Filtreleri temizle"
+
+msgid "Clear them"
+msgstr "Temizle"
+
 msgid "Close"
 msgstr "Kapat"
-
-msgid "Colour"
-msgstr "Renk"
-
-msgid "Colour by"
-msgstr "Renklendirme ölçütü"
 
 msgid "Copy command"
 msgstr "Komutu kopyala"
@@ -178,23 +201,42 @@ msgstr "Core P2P adresi"
 msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
 msgstr "Core’un version-bits dağıtımları (Dash Core 24 ve evo_shares): durumları, pencereleri, sinyalleri ve görünümü."
 
-msgid "Couldn't load the masternode list."
-msgstr "Masternode listesi yüklenemedi."
+msgid "Count enabled masternodes too"
+msgstr "Etkin masternode’ları da say"
 
-msgid "Country"
-msgstr "Ülke"
+msgid "Count every masternode"
+msgstr "Tüm masternode’ları say"
 
-msgid "Counts follow the filters and the shown categories."
-msgstr "Sayılar filtreleri ve gösterilen kategorileri izler."
+msgid "Count PoSe-banned masternodes too"
+msgstr "PoSe tarafından yasaklı masternode’ları da say"
+
+msgid "Count them too"
+msgstr "Onları da say"
+
+msgid "Countries"
+msgstr "Ülkeler"
+
+msgid "Countries and hosting providers"
+msgstr "Ülkeler ve barındırma sağlayıcıları"
+
+#. placeholder {0}: countryName(c)
+msgid "Country: {0}"
+msgstr "Ülke: {0}"
 
 msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
 msgstr "Dash Core’un GitHub’daki yayımlanmış sürümleri, en yeniden eskiye, saatlik yenilenir."
 
-msgid "DKG readiness"
-msgstr "DKG hazırlığı"
+msgid "Did not answer the crawl"
+msgstr "Taramaya yanıt vermedi"
+
+msgid "DKG: {d}"
+msgstr "DKG: {d}"
 
 msgid "Enabled"
 msgstr "Etkin"
+
+msgid "Europe"
+msgstr "Avrupa"
 
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Tarayıcı her 15 dakikada bir, kayıtlı her masternode’un adresine, geçen hafta yanıt veren her düğüme ve Dash düğümümüzden ve diğer düğümlerden öğrendiği yeni adreslere bir P2P bağlantısı açar. Sürüm el sıkışmasını tamamlar ve bağlantıyı keser. İşlemleri aktarmaz ve yalnızca düğümün duyurduğu bilgiyi saklar."
@@ -220,21 +262,63 @@ msgstr "Evonode’ların kredi cinsinden Platform ödülleri: mevcut dönem, pro
 msgid "Examples"
 msgstr "Örnekler"
 
+msgid "Filter masternodes"
+msgstr "Masternode’ları filtrele"
+
 msgid "Filters"
 msgstr "Filtreler"
 
-#. placeholder {0}: label(k)
-msgid "Hide {0}"
-msgstr "{0} öğesini gizle"
+msgid "Half of the {tot} run in {cities}"
+msgstr "{tot} içinden yarısı {cities} çalışıyor"
+
+msgid "Half of the evonodes run in the cities above."
+msgstr "Evonode’ların yarısı yukarıdaki şehirlerde çalışıyor."
+
+msgid "Half of the masternodes run in the cities above."
+msgstr "Masternode’ların yarısı yukarıdaki şehirlerde çalışıyor."
+
+msgid "Half of the reachable nodes run in the cities above."
+msgstr "Erişilebilir düğümlerin yarısı yukarıdaki şehirlerde çalışıyor."
+
+msgid "Half of these {tot} run in {cities}"
+msgstr "Bu {tot} içinden yarısı {cities} çalışıyor"
+
+msgid "Half of these evonodes run in the cities above."
+msgstr "Bu Evonode’ların yarısı yukarıdaki şehirlerde çalışıyor."
+
+msgid "Half of these masternodes run in the cities above."
+msgstr "Bu masternode’ların yarısı yukarıdaki şehirlerde çalışıyor."
 
 msgid "Hosting"
 msgstr "Barındırma"
+
+msgid "Hosting providers"
+msgstr "Barındırma sağlayıcıları"
+
+#. placeholder {0}: hosts[h] ?? `AS${h}`
+msgid "Hosting: {0}"
+msgstr "Barındırma: {0}"
 
 msgid "How the data is collected"
 msgstr "Veriler nasıl toplanır"
 
 msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
 msgstr "Yollarda {NET}, mainnet veya testnet’tir. Tutarlar duff cinsindendir (1 DASH = 100.000.000 duff); yalnızca Platform tutarları kredi cinsindendir (1 DASH = 100.000.000.000 kredi). Zamanlar unix saniyesidir."
+
+msgid "It is a regular masternode, and this view counts evonodes. The ring marks where it is."
+msgstr "Bu normal bir masternode ve bu görünüm Evonode’ları sayıyor. Halka nerede olduğunu gösterir."
+
+msgid "It is an evonode, and this view counts regular masternodes. The ring marks where it is."
+msgstr "Bu bir Evonode ve bu görünüm normal masternode’ları sayıyor. Halka nerede olduğunu gösterir."
+
+msgid "It is enabled, and this view counts PoSe-banned masternodes only. The ring marks where it is."
+msgstr "Etkin durumda ve bu görünüm yalnızca PoSe tarafından yasaklı masternode’ları sayıyor. Halka nerede olduğunu gösterir."
+
+msgid "It is PoSe-banned, so it is not counted here. The ring marks where it is."
+msgstr "PoSe tarafından yasaklı, bu yüzden burada sayılmıyor. Halka nerede olduğunu gösterir."
+
+msgid "It is the only counted masternode in {city}."
+msgstr "{city} içinde sayılan tek masternode bu."
 
 msgid "Kind of change"
 msgstr "Değişiklik türü"
@@ -245,32 +329,39 @@ msgstr "Son ödeme"
 msgid "Latest masternode list changes"
 msgstr "Masternode listesindeki son değişiklikler"
 
+msgid "Left out by an old map link: {names}"
+msgstr "Eski bir harita bağlantısıyla dışarıda bırakılan: {names}"
+
 msgid "Left the list"
 msgstr "Listeden çıktı"
 
 msgid "Link copied"
 msgstr "Bağlantı kopyalandı"
 
-msgid "Loading the network…"
-msgstr "Ağ yükleniyor…"
-
 msgid "Location"
 msgstr "Konum"
+
+msgid "Locations: DB-IP (CC BY 4.0). Land: Natural Earth."
+msgstr "Konumlar: DB-IP (CC BY 4.0). Kara: Natural Earth."
 
 msgid "Map"
 msgstr "Harita"
 
-msgid "Map attribution"
-msgstr "Harita atfı"
+msgid "Map of the land. No city is drawn."
+msgstr "Kara haritası. Hiçbir şehir çizilmedi."
 
-msgid "Map controls"
-msgstr "Harita denetimleri"
+msgid "Map of the world. Radar's crawl places the nodes on it, and it is not read in this mode."
+msgstr "Dünya haritası. Düğümleri Radar’ın taraması yerleştirir ve bu modda okunmaz."
 
-msgid "Map of the network's nodes"
-msgstr "Ağ düğümlerinin haritası"
+msgid "Map with a disc for each city, sized by how many nodes run there: {all}. Largest: {largest}."
+msgstr "Her şehir için orada çalışan düğüm sayısına göre bir daire bulunan harita: {all}. En büyükler: {largest}."
 
 msgid "Masternode"
 msgstr "Masternode"
+
+#. placeholder {0}: chips .map((c) => c.label) .join('; ')
+msgid "Masternode filters are off while every reachable node is counted: {0}."
+msgstr "Tüm erişilebilir düğümler sayılırken masternode filtreleri kapalıdır: {0}."
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "Masternode listesi değişiklikleri, Radar’ın mainnet ve testnet taramasından gelir."
@@ -299,11 +390,32 @@ msgstr "Henüz kaydedilmiş değişiklik yok."
 msgid "No changes to the masternode list in the last 24 hours"
 msgstr "Son 24 saatte masternode listesinde değişiklik yok"
 
+msgid "No evonode matches these filters."
+msgstr "Bu filtrelere uyan Evonode yok."
+
+msgid "No location"
+msgstr "Konum yok"
+
+msgid "No location (mostly Tor and I2P)"
+msgstr "Konum yok (çoğu Tor ve I2P)"
+
+msgid "No masternode matches these filters."
+msgstr "Bu filtrelere uyan masternode yok."
+
+msgid "No provider on record"
+msgstr "Kayıtlı sağlayıcı yok"
+
+msgid "No provider on record (mostly Tor and I2P)"
+msgstr "Kayıtlı sağlayıcı yok (çoğu Tor ve I2P)"
+
 msgid "Not checked"
 msgstr "Kontrol edilmedi"
 
 msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
 msgstr "Bir masternode’un eski ödemeleri, en yeniden eskiye. Sayfalamak için before değerini aldığınız son yüksekliğe ayarlayın."
+
+msgid "One disc per city; its area is the count. A city is where the node's IP address is registered, so it marks a data centre's region, not a building."
+msgstr "Her şehir için bir daire; alanı sayıyı gösterir. Şehir, düğümün IP adresinin kayıtlı olduğu yerdir; yani bir binayı değil, bir veri merkezinin bölgesini gösterir."
 
 msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
 msgstr "Tek bir masternode: liste girdisi, teminat, anahtarlar, adresler, sürüm geçmişi, çalışma süresi, ödemeler, getiriler, değişiklikler ve Evonode ise Platform ödülleri."
@@ -314,8 +426,8 @@ msgstr "Bir masternode’un her gözlem noktasından hız testi çalıştırmala
 msgid "Open masternode"
 msgstr "Masternode’u aç"
 
-msgid "Open these as a list"
-msgstr "Liste olarak aç"
+msgid "Open them in the masternode list"
+msgstr "Masternode listesinde aç"
 
 msgid "Operator key"
 msgstr "Operatör anahtarı"
@@ -325,9 +437,6 @@ msgstr "Operatör ödeme adresi"
 
 msgid "Operator reward"
 msgstr "Operatör ödülü"
-
-msgid "Other full nodes"
-msgstr "Diğer tam düğümler"
 
 msgid "Other versions"
 msgstr "Diğer sürümler"
@@ -344,9 +453,6 @@ msgstr "Ödeme ve anahtar değişiklikleri"
 msgid "Per network"
 msgstr "Ağ başına"
 
-msgid "Places on the map"
-msgstr "Haritadaki yerler"
-
 msgid "Platform HTTPS address"
 msgstr "Platform HTTPS adresi"
 
@@ -355,9 +461,6 @@ msgstr "Platform düğüm kimliği"
 
 msgid "Platform P2P address"
 msgstr "Platform P2P adresi"
-
-msgid "PoSe"
-msgstr "PoSe"
 
 msgid "PoSe bans and revivals"
 msgstr "PoSe yasakları ve geri dönüşler"
@@ -368,14 +471,23 @@ msgstr "PoSe durumu"
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
 
+msgid "PoSe-banned counted too"
+msgstr "PoSe tarafından yasaklılar da sayıldı"
+
+msgid "PoSe-banned only"
+msgstr "Yalnızca PoSe tarafından yasaklılar"
+
+msgid "ProTx, IP, city or provider"
+msgstr "ProTx, IP, şehir veya sağlayıcı"
+
 msgid "Radar API"
 msgstr "Radar API"
 
 msgid "Radar doesn't crawl devnets."
 msgstr "Radar devnet’leri taramaz."
 
-msgid "Reachability"
-msgstr "Erişilebilirlik"
+msgid "Radar's last crawl finished"
+msgstr "Radar’ın son taraması tamamlandı"
 
 msgid "Reachable"
 msgstr "Erişilebilir"
@@ -383,30 +495,39 @@ msgstr "Erişilebilir"
 msgid "Reachable nodes counted per city, never by address, and how many have no location."
 msgstr "Erişilebilir düğümler şehir başına sayılır, asla adrese göre değil; ayrıca kaç tanesinin konumu olmadığı."
 
+msgid "Region"
+msgstr "Bölge"
+
 msgid "Registered"
 msgstr "Kaydedildi"
 
 msgid "Registrations and removals"
 msgstr "Kayıtlar ve kaldırmalar"
 
-msgid "Same location"
-msgstr "Aynı konum"
+msgid "Regular masternodes"
+msgstr "Normal masternode’lar"
 
-msgid "Search masternodes"
-msgstr "Masternode ara"
+msgid "Regular masternodes only"
+msgstr "Yalnızca normal masternode’lar"
 
-msgid "Search ProTx, IP, city, hosting"
-msgstr "ProTx, IP, şehir, barındırma ara"
+#. placeholder {0}: c.label
+msgid "Remove the filter {0}"
+msgstr "{0} filtresini kaldır"
 
-msgid "Show"
-msgstr "Göster"
+#. placeholder {0}: filter.q
+msgid "Search: {0}"
+msgstr "Arama: {0}"
 
-#. placeholder {0}: label(k)
-msgid "Show {0}"
-msgstr "{0} öğesini göster"
+#. placeholder {0}: formatInt(places.length)
+msgid "Show all {0} cities"
+msgstr "{0} şehrin tümünü göster"
 
-msgid "Show or hide categories"
-msgstr "Kategorileri göster veya gizle"
+msgid "Show fewer"
+msgstr "Daha az göster"
+
+#. placeholder {0}: formatInt(s.n)
+msgid "Show only these: {0}"
+msgstr "Yalnızca bunları göster: {0}"
 
 msgid "The 300 latest masternode list changes, newest first, and when recording started."
 msgstr "Masternode listesindeki son 300 değişiklik, en yeniden eskiye, ve kaydın ne zaman başladığı."
@@ -420,21 +541,32 @@ msgstr "API URL’leri değişmedi: https://radar.dashhq.org/api/v1/* eskisiyle 
 msgid "The block hashes the speed tests use."
 msgstr "Hız testlerinin kullandığı blok özetleri."
 
+msgid "The crawl found no location for it, so it is not on the map."
+msgstr "Tarama konumunu bulamadı, bu yüzden haritada yok."
+
+msgid "The crawl is stale."
+msgstr "Tarama güncel değil."
+
+msgid "The crawl lists no enabled evonode."
+msgstr "Taramada etkin Evonode yok."
+
+msgid "The crawl lists no enabled masternode."
+msgstr "Taramada etkin masternode yok."
+
 msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
 msgstr "Her ağ için tarayıcının ve zincirin durumu: son tarama, Dash düğümümüzün eşitlenmesi ve ödeme dizini aralığı."
+
+msgid "The filters leave it out, so it is not counted here. The ring marks where it is."
+msgstr "Filtreler onu dışarıda bırakıyor, bu yüzden burada sayılmıyor. Halka nerede olduğunu gösterir."
 
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "Masternode kayıtlarındaki son değişiklikler, en yeniden eskiye: yeni ve kaldırılan masternode’lar, PoSe yasakları ve geri dönüşler, değişen adresler ve anahtarlar."
 
+msgid "The latest crawl placed no reachable node."
+msgstr "Son tarama hiçbir erişilebilir düğümü konumlandırmadı."
+
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "Son tamamlanan tarama, bir gün öncekisi ve her dağılım (dists[scope][dim]); getiriler, Platform sağlığı ve DKG hazırlığıyla birlikte."
-
-#. placeholder {0}: formatInt(target.extra)
-msgid "The list also shows {0} hidden here ({names}); it can't leave them out."
-msgstr "Liste ayrıca burada gizlenen {0} düğümü de gösterir ({names}); bunları dışarıda bırakamaz."
-
-msgid "The map could not start in this browser. The filters and the list still work."
-msgstr "Harita bu tarayıcıda başlatılamadı. Filtreler ve liste yine de çalışıyor."
 
 msgid "The map is drawn from Radar's crawl of mainnet and testnet."
 msgstr "Harita, Radar’ın mainnet ve testnet taramasından çizilir."
@@ -442,17 +574,32 @@ msgstr "Harita, Radar’ın mainnet ve testnet taramasından çizilir."
 msgid "The map needs Radar's crawl"
 msgstr "Harita için Radar’ın taraması gerekir"
 
+msgid "The masternode in the address is not in Radar's list: it may have left the network."
+msgstr "Adresteki masternode Radar’ın listesinde yok: ağdan ayrılmış olabilir."
+
+msgid "The only evonode counted runs in {where}"
+msgstr "Sayılan tek Evonode {where} içinde çalışıyor"
+
+msgid "The only masternode counted runs in {where}"
+msgstr "Sayılan tek masternode {where} içinde çalışıyor"
+
+msgid "The only reachable node runs in {where}"
+msgstr "Tek erişilebilir düğüm {where} içinde çalışıyor"
+
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "Site ve API, tarayıcının her taramadan sonra yayımladığı belgelerden sunulur; bu yüzden tarayıcı çalışmasa bile erişilebilir kalır."
 
-msgid "This area"
-msgstr "Bu alan"
+msgid "The tick marks half of every reachable node."
+msgstr "Çizgi, tüm erişilebilir düğümlerin yarısını gösterir."
+
+msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
+msgstr "Çizgi yarıyı gösterir. Masternode’larının nerede olduğunu görmek için bir ülke veya sağlayıcı seçin."
+
+msgid "This masternode"
+msgstr "Bu masternode"
 
 msgid "Tools"
 msgstr "Araçlar"
-
-msgid "Type"
-msgstr "Tür"
 
 msgid "Unknown version"
 msgstr "Bilinmeyen sürüm"
@@ -466,17 +613,20 @@ msgstr "Çalışma süresi, 7 gün"
 msgid "Version"
 msgstr "Sürüm"
 
+msgid "Version: {v}"
+msgstr "Sürüm: {v}"
+
 msgid "Voting address"
 msgstr "Oylama adresi"
+
+msgid "What to count"
+msgstr "Neyin sayılacağı"
 
 msgid "When"
 msgstr "Ne zaman"
 
-msgid "Where the masternodes run, coloured by reachability, version or type."
-msgstr "Masternode’ların nerede çalıştığı; erişilebilirliğe, sürüme veya türe göre renklendirilir."
+msgid "Where the network runs, by city, country and hosting provider, from Radar's latest crawl."
+msgstr "Ağın nerede çalıştığı: Radar’ın son taramasına göre şehir, ülke ve barındırma sağlayıcısı."
 
-msgid "Zoom in"
-msgstr "Yakınlaştır"
-
-msgid "Zoom out"
-msgstr "Uzaklaştır"
+msgid "World"
+msgstr "Dünya"

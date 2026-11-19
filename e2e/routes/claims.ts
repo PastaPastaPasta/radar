@@ -9,7 +9,7 @@ export const CLAIM = {
     /^[\d,]+ of [\d,]+ (enabled masternodes? answered the last crawl|masternodes? (is|are) enabled)$/,
   platform: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
   epochs: /^Epoch [\d,]+ is (\d+% through|running past its expected end)$/,
-  map: /^[\d,]+ masternodes? in \d+ countr(y|ies)$/,
+  map: /^(Half of (the|these) [\d,]+ (masternodes|evonodes|reachable nodes) run in [\d,]+ cit(y|ies)|\d+% of (the|these) [\d,]+ (masternodes|evonodes|reachable nodes) run in one city, .+)$/,
   changes: /^([\d,]+ changes?|No changes) to the masternode list in the last 24 hours$/,
   v24: /^(Core 24 is |Miners are signalling for Core 24$|Core 24 did not activate$)/,
   blocks: /^The latest block was mined .+$/,

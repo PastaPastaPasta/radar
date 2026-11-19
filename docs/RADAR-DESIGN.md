@@ -14,11 +14,11 @@ An instrument, not a document. A visitor should see the network moving within a 
 
 Five ideas carry that:
 
-1. **Three layers, three hues.** Core is Dash blue, Platform is teal, the masternode network is plate navy. Every page, badge, keyline, chart series and map ping says which layer it belongs to by colour before the words do.
+1. **Three layers, three hues.** Core is Dash blue, Platform is teal, the masternode network is plate navy. Every page, badge, keyline, chart series and map disc says which layer it belongs to by colour before the words do.
 2. **The plate.** Network pages open on a deep navy ground with a faint dot grid: a dark island in both themes. It is Radar's signature surface for the masternode network. The home page does not use it: it opens on the page ground (§1.1), so the first thing a visitor meets is one calm statement, not an instrument panel.
 3. **Entities have faces.** Identities get identicons, masternodes get nodeprints, blocks and transactions get layer tiles. Chips carry them everywhere, with copy and a hover card.
 4. **Sources are said once, where they apply.** Every figure's source and age can be found, but a page does not repeat them. A section says where its figures came from in **one source line** (`SourceLine`: Proof-checked, Served by DAPI, Indexed by Platform Explorer or Hyphen, Crawled by Radar, plus age) that names every source the section uses. A single figure's own source and age appear when it is hovered or focused, and a proved figure's mark opens the proof inspector. A source mark looks like an alarm only when something is wrong (§6.9).
-5. **Live means visibly live.** New blocks slide in, rows flash once, pings ripple on the map, the freshness dot pulses on update. Every live feed can be paused. Reduced motion keeps the information and drops the movement.
+5. **Live means visibly live.** New blocks slide in, rows flash once, the freshness dot pulses on update. Every live feed can be paused. Reduced motion keeps the information and drops the movement.
 
 ### 1.1 Home: one claim, then the layers in sequence
 
@@ -300,7 +300,7 @@ A **section head** is the family ruled head: 4 px rounded keyline in the layer l
 | `/nodes` | Nodes | 2,581 Dash nodes answered the last crawl |
 | `/masternodes` | Masternodes | 2,845 of 2,990 enabled masternodes answered the last crawl (Decentralized only: 2,990 of 3,012 masternodes are enabled) |
 | `/platform`, `/epochs` | Platform, Epochs | Epoch 88 is 59% through |
-| `/map` | Map | 2,958 masternodes in 44 countries |
+| `/map` | Map | Half of the 2,091 masternodes run in 3 cities |
 | `/changes` | Changes | 14 changes to the masternode list in the last 24 hours |
 | `/v24` | Core 24 activation | the phase as a sentence ("Miners are signalling for Core 24") |
 | `/blocks` | Blocks | The latest block was mined 2 min ago |
@@ -597,26 +597,17 @@ Rules:
 
 ---
 
-## 8. Map (MapLibre)
+## 8. Map (`/map`)
 
-The full map (`/map`, "View on map", "Open the map") keeps Radar's existing MapLibre basemap: self-hosted Natural Earth GeoJSON (`world-low.json` below zoom 3.2, `world-high.json` with lakes and state lines above), self-hosted Noto Sans glyphs, `places.json` labels, no tile server. Radar restyles it onto the plate. The map page always uses the plate colours, in both themes; the home map (§1.1) is the static dot-matrix on the page ground.
+`/map` answers "where does the network run, and how concentrated is it?" (the critique and design are in the map redesign notes, 18 Nov 2026). The locations are city centroids from DB-IP, so the page draws cities, not a zoomable street map: no MapLibre, no basemap, no tiles.
 
-| Style token | Value (light and dark) |
-|---|---|
-| ocean (background) | `--rx-plate` `#0A2A3D` (dark `#0D3149`) |
-| land | `--rx-plate-3` `#16435F` |
-| border-line | `rgba(166,216,247,.28)`, 0.7 px → 1.4 px by zoom 8 |
-| state-line | `rgba(166,216,247,.14)`, 0.6 px |
-| label / halo | `#9BBDD2` / land colour, halo 1.2 px, opacity .85 (countries), .7 (cities) |
-| masternode point | `#A6D8F7` (`--rx-net` dark value), stroke plate 1 px |
-| evonode point | `#25B8A6`, stroke plate 1 px |
-| selected | 2 px ring `#E4F3FC` + 8 px halo at 25% |
-| clusters | DOM donuts, 28–56 px, ring split by the active colour mode, count in 12 px weight 650 |
-| ping | three expanding rings in the layer colour, 2.4 s, once per event |
+- **Claim:** how few cities hold half of what the page counts ("Half of the 2,091 masternodes run in 3 cities"), or, when one city holds more than half, its share and name ("74% of the 109 masternodes run in one city, Mesa, United States"). The lede says the same by country and by hosting provider.
+- **Map:** the home page's dot-matrix Equal Earth land (§1.1) on `--dh-surface` in a 1 px `--dh-line` box with an 8 px radius; one disc per city in `--dh-brand` at 38% with a 1 px brand stroke, its area in proportion to the count (no constant added), down to a smallest disc of 2.5 px that the key names ("at this size, cities with fewer than 12 are drawn at the smallest size"); the key's sample discs are drawn at the map's current scale; the eight largest labelled ("Falkenstein 685", 12.5 px, weight 560, count in `--dh-ink-2`, a surface-coloured halo), placed beside their disc so no label touches another or covers another city's disc. A picked city gets a 2 px `--dh-ink` ring; the masternode in the address an amber ring, on its city's disc when it is counted and on its own spot when it is not (PoSe-banned, the other type, or filtered out), with a sentence saying why and a link to count it. Region crops (World, Europe, Americas, Asia and Oceania) are view boxes of the same SVG. Under it a key: three size samples, one sentence on what a place is, the DB-IP and Natural Earth credits.
+- **Cities:** a 340 px column beside the map (under it from 1023 px down): rank, flag, city, country in `--dh-ink-2`, count, share and a 3 px share bar; a dashed rule with "Half of … run in the cities above" after the row that reaches half.
+- **Countries and hosting providers:** a ruled section with two stacked share bars (14 px, the five largest in `--rx-s1…5`, the rest `--dh-line-2`, the unknown hatched), a 2 px `--dh-ink` tick at half, and a legend that is the bar's text and its filter buttons.
+- **Scopes:** Masternodes (enabled), Evonodes, All reachable nodes, as a segmented control; filters show as removable chips.
 
-Colour modes (segmented control top-left, on plate-2): Type (masternode / evonode), Status (good / warn / bad plate values), Version (blue ramp), Hosting (top 5 in the blue ramp + other). The legend always shows counts. Controls: zoom +/− and reset in a plate-2 pill bottom-right; filter sheet bottom on phone.
-
-The **home map and minimaps** don't load MapLibre: they are static SVG dot-matrix projections (Equal Earth) drawn from the same node clusters, cheap enough to render on first paint. The record minimap ("Where it is" on `/mn/*`) crops to the node's region, draws the node as a focus ring, and links to `/map?protx=…`.
+The **home map and minimaps** are the same land and projection (`ui/world-map.ts`), drawn from Radar's geo document. The record minimap ("Where it is" on `/mn/*`) crops to the node's region, draws the node as a focus ring, and links to `/map?protx=…`.
 
 ---
 
@@ -628,7 +619,6 @@ Motion shows that something changed or arrived. It never decorates.
 |---|---|---|
 | New row in a live table | slide down 8 px + fade, then layer flash fading out | 240 ms `--rx-ease-out` (`cubic-bezier(.16,1,.3,1)`), flash 1200 ms ease-out |
 | New block in the two-lane chain | enters from the right 24 px, the oldest leaves; tie line draws in | 520 ms `--rx-ease-out`; tie 400 ms |
-| Map event | ping: three rings scale .2 → 3.2 and fade | 2400 ms `--rx-ease-out`, once |
 | Stat value change | digits roll down .45 em | 240 ms |
 | Freshness dot on data landing | one ring pulse | 900 ms |
 | Hover card | fade + 4 px rise | 160 ms `--dh-ease` |
@@ -641,7 +631,7 @@ Rules:
 - Nothing loops forever except skeleton shimmer while loading and the pending settlement step.
 - Live feeds pause on hover/focus of the list and offer Live/Pause (§6.9). Paused feeds count what arrived.
 - A tab that is hidden stops animating and catches up silently on return.
-- **Reduced motion** (`prefers-reduced-motion: reduce`, also the family `--dh-dur-*: 0ms`): no slides, rolls, pings or shimmer. New rows appear in place with a static layer-flash background that clears on the next update. Map events show as a static ring until the next event. The live region still announces ("New Core block 2,569,993").
+- **Reduced motion** (`prefers-reduced-motion: reduce`, also the family `--dh-dur-*: 0ms`): no slides, rolls, pings or shimmer. New rows appear in place with a static layer-flash background that clears on the next update. The live region still announces ("New Core block 2,569,993").
 
 ---
 

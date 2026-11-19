@@ -13,61 +13,52 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: placed.countries
-msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
-msgstr "{0, plural, other {# か国に{onMap}}}"
+msgid ", so the figures below may be out of date."
+msgstr "。そのため、以下の数値は古い可能性があります。"
 
-#. placeholder {0}: stats.missing
-msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
-msgstr "{0, plural, other {マスターノード #件はマップに表示されていません。アドレスが未登録か、まだクロールされていません。}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned evonode is not counted: it serves nothing until it is revived.} other {# PoSe-banned evonodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, other {PoSe で停止中の Evonode # 台は数えていません。復帰するまで何も提供しないためです。}}"
 
-#. placeholder {0}: totals.unlocated
-msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
-msgstr "{0, plural, other {Tor または I2P 上の到達可能なノード #件は位置情報がないため、描画されません。}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned masternode is not counted: it serves nothing until it is revived.} other {# PoSe-banned masternodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, other {PoSe で停止中のマスターノード # 台は数えていません。復帰するまで何も提供しないためです。}}"
 
 #. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
 msgid "{0} blocks ago"
 msgstr "{0} ブロック前"
 
-#. placeholder {0}: nodeCount(totals.nodes)
-#. placeholder {1}: formatInt(totals.places)
-#. placeholder {2}: formatInt(totals.masternodes)
-msgid "{0} in {1} places; {2} are masternodes."
-msgstr "{1} か所に {0}。うち {2} はマスターノードです。"
+#. placeholder {0}: share(place.n)
+msgid "{0} of the total"
+msgstr "全体の {0}"
 
-#. placeholder {0}: formatInt(places.size)
-msgid "{0} places nearby"
-msgstr "近くの {0} か所"
+#. placeholder {0}: pct(cf)
+#. placeholder {1}: countryName(cf.share.key)
+msgid "{0} of them run in one country, {1}."
+msgstr "そのうち {0} が 1 か国（{1}）で稼働しています。"
 
-#. placeholder {0}: formatInt(nodes)
-#. placeholder {1}: formatInt(masternodes)
-#. placeholder {2}: formatInt(nodes - masternodes)
-msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
-msgstr "{0} 個の到達可能なノード：マスターノード {1}、その他のフルノード {2}。"
+#. placeholder {0}: pct(pf)
+#. placeholder {1}: pf.share.key.replace(/\.$/, '')
+msgid "{0} run with one hosting provider, {1}."
+msgstr "{0} が 1 社のホスティングプロバイダー（{1}）で稼働しています。"
 
-#. placeholder {0}: chosen.length
-msgid "{0} selected"
-msgstr "{0} を選択中"
+msgid "{claimCities, plural, one {# city} other {# cities}}"
+msgstr "{claimCities, plural, other {# 都市}}"
 
-#. placeholder {0}: nodeCount(nodes)
-#. placeholder {1}: formatInt(masternodes)
-msgid "{0}, {1} of them masternodes"
-msgstr "{0}（うちマスターノード {1}）"
+msgid "{claimTotal, plural, one {# evonode} other {# evonodes}}"
+msgstr "{claimTotal, plural, other {# 台の Evonode}}"
 
-#. placeholder {0}: mnCount(rows.length)
-#. placeholder {1}: formatInt(reachable)
-msgid "{0}, {1} reachable."
-msgstr "{0}（到達可能 {1}）。"
+msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
+msgstr "{claimTotal, plural, other {# 台のマスターノード}}"
 
-#. placeholder {0}: mnCount(total)
-msgid "{0}: {list}"
-msgstr "{0}：{list}"
+msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{claimTotal, plural, other {# 台の到達可能なノード}}"
 
-msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
-msgstr "直近のクロールでは {total} 件中 {answered} 件が応答しました（有効 {enabled} 件中 {enabledAnswered} 件、PoSe で停止 {banned} 件中 {bannedAnswered} 件）。"
+msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
+msgstr "{j, plural, other {半数が # 社のホスティングプロバイダーで稼働しています。}}"
 
-msgid "{answered} of {total} answered the latest crawl."
-msgstr "直近のクロールでは {total} 件中 {answered} 件が応答しました。"
+msgid "{k, plural, one {Half of them run in # country.} other {Half of them run in # countries.}}"
+msgstr "{k, plural, other {半数が # か国で稼働しています。}}"
 
 #. placeholder {0}: value(c.old)
 msgid "{label} (was at {0})"
@@ -80,14 +71,35 @@ msgstr "{label}（{0}）"
 msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
 msgstr "{lastDay, plural, other {過去 24 時間のマスターノードリストの変更は # 件}}"
 
+msgid "{n, plural, one {# evonode} other {# evonodes}}"
+msgstr "{n, plural, other {Evonode #台}}"
+
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, other {マスターノード #件}}"
 
 msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
 msgstr "{n, plural, other {到達可能なノード #件}}"
 
-msgid "← Back to the list"
-msgstr "← リストに戻る"
+msgid "{others, plural, one {# other} other {# others}}"
+msgstr "{others, plural, other {その他 #}}"
+
+msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
+msgstr "{others, plural, other {{city} にはほかに # 台の集計対象マスターノードがあり、全体の {part} がそこで稼働しています。}}"
+
+msgid "{pct} of the {tot} run in one city, {where}"
+msgstr "{tot}のうち {pct} が 1 つの都市（{where}）で稼働"
+
+msgid "{pct} of these {tot} run in one city, {where}"
+msgstr "これら{tot}のうち {pct} が 1 つの都市（{where}）で稼働"
+
+msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, other {# 台はクロールで場所が見つかりませんでした。割合では不明として数えます。}}"
+
+msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, other {到達可能なノード # 台には場所がありません（多くは Tor または I2P）。割合では不明として数えます。}}"
+
+msgid "<0.1%"
+msgstr "<0.1%"
 
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "すべてのネットワークのデータが新しく保存されている間は 200、そうでなければ問題点を添えた 503 を返します。稼働監視用です。"
@@ -107,26 +119,28 @@ msgstr "アドレスの変更"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "マスターノード以外のノードのアドレスは公開されず、数だけが集計されます。"
 
-msgid "All nodes"
-msgstr "すべてのノード"
+msgid "All reachable nodes"
+msgstr "到達可能なすべてのノード"
 
-msgid "All nodes (soon)"
-msgstr "すべてのノード（近日対応）"
+msgid "Americas"
+msgstr "南北アメリカ"
 
-msgid "Any country"
-msgstr "すべての国"
+#. placeholder {0}: formatInt(more)
+msgid "and {0} more"
+msgstr "ほか {0} 社"
 
-msgid "Any DKG readiness"
-msgstr "すべての DKG 準備状況"
+msgid "Answered the crawl"
+msgstr "クロールに応答"
 
-msgid "Any hosting"
-msgstr "すべてのホスティング"
+msgid "Answered the last crawl"
+msgstr "前回のクロールに応答"
 
-msgid "Any type"
-msgstr "すべての種類"
+msgid "Asia and Oceania"
+msgstr "アジア・オセアニア"
 
-msgid "Any version"
-msgstr "すべてのバージョン"
+#. placeholder {0}: formatInt(smallest)
+msgid "At this size, cities with fewer than {0} are drawn at the smallest size."
+msgstr "この縮尺では、{0} 未満の都市は最小サイズで描かれます。"
 
 msgid "Back in the list"
 msgstr "リストに復帰"
@@ -154,14 +168,23 @@ msgstr "変更"
 msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
 msgstr "登録アドレスへの P2P ハンドシェイクで、マスターノードをその場で確認します。1 クライアントにつき毎分 5 回まで。1 分以内の結果はそのまま再利用されます。"
 
+msgid "Cities"
+msgstr "都市"
+
+msgid "Cities, largest first"
+msgstr "都市（多い順）"
+
+msgid "Clear all"
+msgstr "すべて解除"
+
+msgid "Clear the filters"
+msgstr "フィルターを解除"
+
+msgid "Clear them"
+msgstr "解除する"
+
 msgid "Close"
 msgstr "閉じる"
-
-msgid "Colour"
-msgstr "色"
-
-msgid "Colour by"
-msgstr "色分けの基準"
 
 msgid "Copy command"
 msgstr "コマンドをコピー"
@@ -178,23 +201,42 @@ msgstr "Core P2P アドレス"
 msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
 msgstr "Core の version-bits デプロイ（Dash Core 24 と evo_shares）：状態、ウィンドウ、シグナル、見通し。"
 
-msgid "Couldn't load the masternode list."
-msgstr "マスターノードのリストを読み込めませんでした。"
+msgid "Count enabled masternodes too"
+msgstr "有効なマスターノードも数える"
 
-msgid "Country"
+msgid "Count every masternode"
+msgstr "すべてのマスターノードを数える"
+
+msgid "Count PoSe-banned masternodes too"
+msgstr "PoSe で停止中のマスターノードも数える"
+
+msgid "Count them too"
+msgstr "それらも数える"
+
+msgid "Countries"
 msgstr "国"
 
-msgid "Counts follow the filters and the shown categories."
-msgstr "件数はフィルターと表示中のカテゴリーに連動します。"
+msgid "Countries and hosting providers"
+msgstr "国とホスティングプロバイダー"
+
+#. placeholder {0}: countryName(c)
+msgid "Country: {0}"
+msgstr "国: {0}"
 
 msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
 msgstr "GitHub で公開されている Dash Core のリリースを新しい順に、1 時間ごとに更新して返します。"
 
-msgid "DKG readiness"
-msgstr "DKG の準備状況"
+msgid "Did not answer the crawl"
+msgstr "クロールに応答なし"
+
+msgid "DKG: {d}"
+msgstr "DKG: {d}"
 
 msgid "Enabled"
 msgstr "有効"
+
+msgid "Europe"
+msgstr "ヨーロッパ"
 
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "クローラーは 15 分ごとに、登録済みの全マスターノードのアドレス、過去 1 週間に応答した全ノード、当社の Dash ノードや他のノードから知った新しいアドレスへ P2P 接続を開き、バージョンのハンドシェイクを完了して切断します。トランザクションは中継せず、ノードが通知する内容だけを保持します。"
@@ -220,21 +262,63 @@ msgstr "Evonode の Platform 報酬（クレジット単位）：現在のエポ
 msgid "Examples"
 msgstr "例"
 
+msgid "Filter masternodes"
+msgstr "マスターノードを絞り込む"
+
 msgid "Filters"
 msgstr "フィルター"
 
-#. placeholder {0}: label(k)
-msgid "Hide {0}"
-msgstr "{0} を非表示"
+msgid "Half of the {tot} run in {cities}"
+msgstr "{tot}の半数が{cities}で稼働"
+
+msgid "Half of the evonodes run in the cities above."
+msgstr "Evonode の半数が上の都市で稼働しています。"
+
+msgid "Half of the masternodes run in the cities above."
+msgstr "マスターノードの半数が上の都市で稼働しています。"
+
+msgid "Half of the reachable nodes run in the cities above."
+msgstr "到達可能なノードの半数が上の都市で稼働しています。"
+
+msgid "Half of these {tot} run in {cities}"
+msgstr "これら{tot}の半数が{cities}で稼働"
+
+msgid "Half of these evonodes run in the cities above."
+msgstr "これらの Evonode の半数が上の都市で稼働しています。"
+
+msgid "Half of these masternodes run in the cities above."
+msgstr "これらのマスターノードの半数が上の都市で稼働しています。"
 
 msgid "Hosting"
 msgstr "ホスティング"
+
+msgid "Hosting providers"
+msgstr "ホスティングプロバイダー"
+
+#. placeholder {0}: hosts[h] ?? `AS${h}`
+msgid "Hosting: {0}"
+msgstr "ホスティング: {0}"
 
 msgid "How the data is collected"
 msgstr "データの収集方法"
 
 msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
 msgstr "パス中の {NET} は mainnet または testnet です。金額は duff 単位（1 DASH = 100,000,000 duff）で、Platform の金額のみクレジット単位（1 DASH = 100,000,000,000 クレジット）です。時刻は Unix 秒です。"
+
+msgid "It is a regular masternode, and this view counts evonodes. The ring marks where it is."
+msgstr "通常のマスターノードで、この表示は Evonode を数えています。リングがその場所を示します。"
+
+msgid "It is an evonode, and this view counts regular masternodes. The ring marks where it is."
+msgstr "Evonode で、この表示は通常のマスターノードを数えています。リングがその場所を示します。"
+
+msgid "It is enabled, and this view counts PoSe-banned masternodes only. The ring marks where it is."
+msgstr "有効なノードで、この表示は PoSe で停止中のマスターノードだけを数えています。リングがその場所を示します。"
+
+msgid "It is PoSe-banned, so it is not counted here. The ring marks where it is."
+msgstr "PoSe で停止中のため、ここでは数えていません。リングがその場所を示します。"
+
+msgid "It is the only counted masternode in {city}."
+msgstr "{city} で数えているマスターノードはこれだけです。"
 
 msgid "Kind of change"
 msgstr "変更の種類"
@@ -245,32 +329,39 @@ msgstr "最終支払い"
 msgid "Latest masternode list changes"
 msgstr "マスターノードリストの最新の変更"
 
+msgid "Left out by an old map link: {names}"
+msgstr "古い地図リンクで除外: {names}"
+
 msgid "Left the list"
 msgstr "リストから外れた"
 
 msgid "Link copied"
 msgstr "リンクをコピーしました"
 
-msgid "Loading the network…"
-msgstr "ネットワークを読み込み中…"
-
 msgid "Location"
 msgstr "所在地"
+
+msgid "Locations: DB-IP (CC BY 4.0). Land: Natural Earth."
+msgstr "位置: DB-IP (CC BY 4.0)。陸地: Natural Earth。"
 
 msgid "Map"
 msgstr "マップ"
 
-msgid "Map attribution"
-msgstr "マップのクレジット"
+msgid "Map of the land. No city is drawn."
+msgstr "陸地の地図。都市は描かれていません。"
 
-msgid "Map controls"
-msgstr "マップ操作"
+msgid "Map of the world. Radar's crawl places the nodes on it, and it is not read in this mode."
+msgstr "世界地図。ノードの配置は Radar のクロールによるもので、このモードでは読み込みません。"
 
-msgid "Map of the network's nodes"
-msgstr "ネットワークのノードのマップ"
+msgid "Map with a disc for each city, sized by how many nodes run there: {all}. Largest: {largest}."
+msgstr "都市ごとに、そこで稼働するノード数に応じた円を置いた地図: {all}。最大: {largest}。"
 
 msgid "Masternode"
 msgstr "マスターノード"
+
+#. placeholder {0}: chips .map((c) => c.label) .join('; ')
+msgid "Masternode filters are off while every reachable node is counted: {0}."
+msgstr "到達可能なすべてのノードを数えている間、マスターノードのフィルターは無効です: {0}。"
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "マスターノードリストの変更は、Radar によるメインネットとテストネットのクロールから取得しています。"
@@ -299,11 +390,32 @@ msgstr "まだ変更は記録されていません。"
 msgid "No changes to the masternode list in the last 24 hours"
 msgstr "過去 24 時間、マスターノードリストに変更はありません"
 
+msgid "No evonode matches these filters."
+msgstr "このフィルターに一致する Evonode はありません。"
+
+msgid "No location"
+msgstr "位置なし"
+
+msgid "No location (mostly Tor and I2P)"
+msgstr "位置なし（主に Tor と I2P）"
+
+msgid "No masternode matches these filters."
+msgstr "このフィルターに一致するマスターノードはありません。"
+
+msgid "No provider on record"
+msgstr "プロバイダーの記録なし"
+
+msgid "No provider on record (mostly Tor and I2P)"
+msgstr "プロバイダーの記録なし（主に Tor と I2P）"
+
 msgid "Not checked"
 msgstr "未確認"
 
 msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
 msgstr "あるマスターノードの過去の支払いを新しい順に返します。最後に受け取った高さを before に指定してページを送ります。"
+
+msgid "One disc per city; its area is the count. A city is where the node's IP address is registered, so it marks a data centre's region, not a building."
+msgstr "都市ごとに 1 つの円で、面積が台数を表します。都市はノードの IP アドレスの登録地なので、建物ではなくデータセンターの地域を示します。"
 
 msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
 msgstr "1 つのマスターノードについて、リストのエントリ、担保、キー、アドレス、バージョン履歴、稼働率、支払い、利回り、変更、Evonode の場合は Platform 報酬を返します。"
@@ -314,8 +426,8 @@ msgstr "1 つのマスターノードの、各観測拠点からの速度テス�
 msgid "Open masternode"
 msgstr "マスターノードを開く"
 
-msgid "Open these as a list"
-msgstr "リストとして開く"
+msgid "Open them in the masternode list"
+msgstr "マスターノード一覧で開く"
 
 msgid "Operator key"
 msgstr "オペレーター鍵"
@@ -325,9 +437,6 @@ msgstr "オペレーターへの支払先アドレス"
 
 msgid "Operator reward"
 msgstr "オペレーター報酬"
-
-msgid "Other full nodes"
-msgstr "その他のフルノード"
 
 msgid "Other versions"
 msgstr "その他のバージョン"
@@ -344,9 +453,6 @@ msgstr "支払いとキーの変更"
 msgid "Per network"
 msgstr "ネットワークごと"
 
-msgid "Places on the map"
-msgstr "マップ上の場所"
-
 msgid "Platform HTTPS address"
 msgstr "Platform HTTPS アドレス"
 
@@ -355,9 +461,6 @@ msgstr "Platform ノード ID"
 
 msgid "Platform P2P address"
 msgstr "Platform P2P アドレス"
-
-msgid "PoSe"
-msgstr "PoSe"
 
 msgid "PoSe bans and revivals"
 msgstr "PoSe による停止と復活"
@@ -368,14 +471,23 @@ msgstr "PoSe ステータス"
 msgid "PoSe-banned"
 msgstr "PoSe で停止"
 
+msgid "PoSe-banned counted too"
+msgstr "PoSe で停止中も含む"
+
+msgid "PoSe-banned only"
+msgstr "PoSe で停止中のみ"
+
+msgid "ProTx, IP, city or provider"
+msgstr "ProTx、IP、都市、プロバイダー"
+
 msgid "Radar API"
 msgstr "Radar API"
 
 msgid "Radar doesn't crawl devnets."
 msgstr "Radar は devnet をクロールしません。"
 
-msgid "Reachability"
-msgstr "到達性"
+msgid "Radar's last crawl finished"
+msgstr "Radar の直近のクロール完了"
 
 msgid "Reachable"
 msgstr "到達可能"
@@ -383,30 +495,39 @@ msgstr "到達可能"
 msgid "Reachable nodes counted per city, never by address, and how many have no location."
 msgstr "到達可能なノードを市区町村ごとに集計します（アドレス単位では集計しません）。位置情報のないノード数も含みます。"
 
+msgid "Region"
+msgstr "地域"
+
 msgid "Registered"
 msgstr "登録"
 
 msgid "Registrations and removals"
 msgstr "登録と削除"
 
-msgid "Same location"
-msgstr "同じ場所"
+msgid "Regular masternodes"
+msgstr "通常のマスターノード"
 
-msgid "Search masternodes"
-msgstr "マスターノードを検索"
+msgid "Regular masternodes only"
+msgstr "通常のマスターノードのみ"
 
-msgid "Search ProTx, IP, city, hosting"
-msgstr "ProTx、IP、都市、ホスティングを検索"
+#. placeholder {0}: c.label
+msgid "Remove the filter {0}"
+msgstr "フィルター {0} を解除"
 
-msgid "Show"
-msgstr "表示"
+#. placeholder {0}: filter.q
+msgid "Search: {0}"
+msgstr "検索: {0}"
 
-#. placeholder {0}: label(k)
-msgid "Show {0}"
-msgstr "{0} を表示"
+#. placeholder {0}: formatInt(places.length)
+msgid "Show all {0} cities"
+msgstr "{0} 都市をすべて表示"
 
-msgid "Show or hide categories"
-msgstr "カテゴリーの表示/非表示"
+msgid "Show fewer"
+msgstr "表示を減らす"
+
+#. placeholder {0}: formatInt(s.n)
+msgid "Show only these: {0}"
+msgstr "これだけを表示: {0}"
 
 msgid "The 300 latest masternode list changes, newest first, and when recording started."
 msgstr "マスターノードリストの直近 300 件の変更を新しい順に返し、記録の開始時刻も含みます。"
@@ -420,21 +541,32 @@ msgstr "API の URL は変わりません。https://radar.dashhq.org/api/v1/* �
 msgid "The block hashes the speed tests use."
 msgstr "速度テストで使用するブロックハッシュです。"
 
+msgid "The crawl found no location for it, so it is not on the map."
+msgstr "クロールで場所が見つからなかったため、地図にはありません。"
+
+msgid "The crawl is stale."
+msgstr "クロールが古くなっています。"
+
+msgid "The crawl lists no enabled evonode."
+msgstr "クロールに有効な Evonode はありません。"
+
+msgid "The crawl lists no enabled masternode."
+msgstr "クロールに有効なマスターノードはありません。"
+
 msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
 msgstr "ネットワークごとのクローラーとチェーンの状態：最新のクロール、当社 Dash ノードの同期状況、支払いインデックスの範囲。"
+
+msgid "The filters leave it out, so it is not counted here. The ring marks where it is."
+msgstr "フィルターで除外されているため、ここでは数えていません。リングがその場所を示します。"
 
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "マスターノード登録の最新の変更を新しい順に返します：新規・削除されたマスターノード、PoSe による停止と復活、変更されたアドレスやキー。"
 
+msgid "The latest crawl placed no reachable node."
+msgstr "最新のクロールでは到達可能なノードを配置できませんでした。"
+
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "直近に完了したクロールとその 1 日前のクロール、および全ての分布（dists[scope][dim]）を、利回り、Platform の状態、DKG の準備状況とともに返します。"
-
-#. placeholder {0}: formatInt(target.extra)
-msgid "The list also shows {0} hidden here ({names}); it can't leave them out."
-msgstr "リストには、ここで非表示の {0}（{names}）も含まれます。除外することはできません。"
-
-msgid "The map could not start in this browser. The filters and the list still work."
-msgstr "このブラウザーではマップを起動できませんでした。フィルターとリストは引き続き使えます。"
 
 msgid "The map is drawn from Radar's crawl of mainnet and testnet."
 msgstr "マップは、Radar によるメインネットとテストネットのクロールをもとに描画されます。"
@@ -442,17 +574,32 @@ msgstr "マップは、Radar によるメインネットとテストネットの
 msgid "The map needs Radar's crawl"
 msgstr "マップには Radar のクロールが必要です"
 
+msgid "The masternode in the address is not in Radar's list: it may have left the network."
+msgstr "アドレスのマスターノードは Radar の一覧にありません。ネットワークを離れた可能性があります。"
+
+msgid "The only evonode counted runs in {where}"
+msgstr "数えている Evonode は 1 台だけで、{where} で稼働"
+
+msgid "The only masternode counted runs in {where}"
+msgstr "数えているマスターノードは 1 台だけで、{where} で稼働"
+
+msgid "The only reachable node runs in {where}"
+msgstr "到達可能なノードは 1 台だけで、{where} で稼働"
+
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "サイトと API は、クローラーが各クロール後に公開するドキュメントから配信されるため、クローラーが停止していても稼働し続けます。"
 
-msgid "This area"
-msgstr "このエリア"
+msgid "The tick marks half of every reachable node."
+msgstr "目盛りは到達可能な全ノードの半分を示します。"
+
+msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
+msgstr "目盛りは半分を示します。国かプロバイダーを選ぶと、そのマスターノードの場所が分かります。"
+
+msgid "This masternode"
+msgstr "このマスターノード"
 
 msgid "Tools"
 msgstr "ツール"
-
-msgid "Type"
-msgstr "種類"
 
 msgid "Unknown version"
 msgstr "不明なバージョン"
@@ -466,17 +613,20 @@ msgstr "稼働率（7 日間）"
 msgid "Version"
 msgstr "バージョン"
 
+msgid "Version: {v}"
+msgstr "バージョン: {v}"
+
 msgid "Voting address"
 msgstr "投票アドレス"
+
+msgid "What to count"
+msgstr "数える対象"
 
 msgid "When"
 msgstr "日時"
 
-msgid "Where the masternodes run, coloured by reachability, version or type."
-msgstr "マスターノードが稼働している場所を、到達性・バージョン・種類で色分けして表示します。"
+msgid "Where the network runs, by city, country and hosting provider, from Radar's latest crawl."
+msgstr "Radar の最新のクロールによる、都市・国・ホスティングプロバイダー別のネットワークの所在。"
 
-msgid "Zoom in"
-msgstr "ズームイン"
-
-msgid "Zoom out"
-msgstr "ズームアウト"
+msgid "World"
+msgstr "世界"

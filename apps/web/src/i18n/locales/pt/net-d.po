@@ -13,61 +13,52 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. placeholder {0}: placed.countries
-msgid "{0, plural, one {{onMap} in # country} other {{onMap} in # countries}}"
-msgstr "{0, plural, one {{onMap} em # país} other {{onMap} em # países}}"
+msgid ", so the figures below may be out of date."
+msgstr ", pelo que os valores abaixo podem estar desatualizados."
 
-#. placeholder {0}: stats.missing
-msgid "{0, plural, one {# masternode is not on the map: no address registered, or not crawled yet.} other {# masternodes are not on the map: no address registered, or not crawled yet.}}"
-msgstr "{0, plural, one {# masternode não está no mapa: sem endereço registrado ou ainda não rastreado.} other {# masternodes não estão no mapa: sem endereço registrado ou ainda não rastreados.}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned evonode is not counted: it serves nothing until it is revived.} other {# PoSe-banned evonodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, one {# evonode banido pelo PoSe não é contado: não serve nada até ser reativado.} other {# evonodes banidos pelo PoSe não são contados: não servem nada até serem reativados.}}"
 
-#. placeholder {0}: totals.unlocated
-msgid "{0, plural, one {# reachable node on Tor or I2P has no location, so it is not drawn.} other {# reachable nodes on Tor or I2P have no location, so they are not drawn.}}"
-msgstr "{0, plural, one {# nó acessível no Tor ou I2P não tem localização, por isso não é desenhado.} other {# nós acessíveis no Tor ou I2P não têm localização, por isso não são desenhados.}}"
+#. placeholder {0}: b.bannedOut
+msgid "{0, plural, one {# PoSe-banned masternode is not counted: it serves nothing until it is revived.} other {# PoSe-banned masternodes are not counted: they serve nothing until they are revived.}}"
+msgstr "{0, plural, one {# masternode banido pelo PoSe não é contado: não serve nada até ser reativado.} other {# masternodes banidos pelo PoSe não são contados: não servem nada até serem reativados.}}"
 
 #. placeholder {0}: formatInt(Math.max(0, tip - c.last_paid_height))
 msgid "{0} blocks ago"
 msgstr "há {0} blocos"
 
-#. placeholder {0}: nodeCount(totals.nodes)
-#. placeholder {1}: formatInt(totals.places)
-#. placeholder {2}: formatInt(totals.masternodes)
-msgid "{0} in {1} places; {2} are masternodes."
-msgstr "{0} em {1} lugares; {2} são masternodes."
+#. placeholder {0}: share(place.n)
+msgid "{0} of the total"
+msgstr "{0} do total"
 
-#. placeholder {0}: formatInt(places.size)
-msgid "{0} places nearby"
-msgstr "{0} lugares próximos"
+#. placeholder {0}: pct(cf)
+#. placeholder {1}: countryName(cf.share.key)
+msgid "{0} of them run in one country, {1}."
+msgstr "{0} funcionam num só país: {1}."
 
-#. placeholder {0}: formatInt(nodes)
-#. placeholder {1}: formatInt(masternodes)
-#. placeholder {2}: formatInt(nodes - masternodes)
-msgid "{0} reachable nodes: {1} masternodes and {2} other full nodes."
-msgstr "{0} nós acessíveis: {1} masternodes e {2} outros nós completos."
+#. placeholder {0}: pct(pf)
+#. placeholder {1}: pf.share.key.replace(/\.$/, '')
+msgid "{0} run with one hosting provider, {1}."
+msgstr "{0} funcionam num só fornecedor de alojamento: {1}."
 
-#. placeholder {0}: chosen.length
-msgid "{0} selected"
-msgstr "{0} selecionado"
+msgid "{claimCities, plural, one {# city} other {# cities}}"
+msgstr "{claimCities, plural, one {# cidade} other {# cidades}}"
 
-#. placeholder {0}: nodeCount(nodes)
-#. placeholder {1}: formatInt(masternodes)
-msgid "{0}, {1} of them masternodes"
-msgstr "{0}, {1} deles masternodes"
+msgid "{claimTotal, plural, one {# evonode} other {# evonodes}}"
+msgstr "{claimTotal, plural, one {# evonode} other {# evonodes}}"
 
-#. placeholder {0}: mnCount(rows.length)
-#. placeholder {1}: formatInt(reachable)
-msgid "{0}, {1} reachable."
-msgstr "{0}, {1} acessíveis."
+msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
+msgstr "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 
-#. placeholder {0}: mnCount(total)
-msgid "{0}: {list}"
-msgstr "{0}: {list}"
+msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
+msgstr "{claimTotal, plural, one {# nó acessível} other {# nós acessíveis}}"
 
-msgid "{answered} of {total} answered the latest crawl: {enabledAnswered} of {enabled} enabled and {bannedAnswered} of {banned} PoSe-banned."
-msgstr "{answered} de {total} responderam ao último rastreamento: {enabledAnswered} de {enabled} ativados e {bannedAnswered} de {banned} banidos pelo PoSe."
+msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
+msgstr "{j, plural, one {Metade funciona em # fornecedor de alojamento.} other {Metade funciona em # fornecedores de alojamento.}}"
 
-msgid "{answered} of {total} answered the latest crawl."
-msgstr "{answered} de {total} responderam ao último rastreamento."
+msgid "{k, plural, one {Half of them run in # country.} other {Half of them run in # countries.}}"
+msgstr "{k, plural, one {Metade funciona em # país.} other {Metade funciona em # países.}}"
 
 #. placeholder {0}: value(c.old)
 msgid "{label} (was at {0})"
@@ -80,14 +71,35 @@ msgstr "{label} em {0}"
 msgid "{lastDay, plural, one {# change to the masternode list in the last 24 hours} other {# changes to the masternode list in the last 24 hours}}"
 msgstr "{lastDay, plural, one {# mudança na lista de masternodes nas últimas 24 horas} other {# mudanças na lista de masternodes nas últimas 24 horas}}"
 
+msgid "{n, plural, one {# evonode} other {# evonodes}}"
+msgstr "{n, plural, one {# evonode} other {# evonodes}}"
+
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternodes}}"
 
 msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
 msgstr "{n, plural, one {# nó acessível} other {# nós acessíveis}}"
 
-msgid "← Back to the list"
-msgstr "← Voltar à lista"
+msgid "{others, plural, one {# other} other {# others}}"
+msgstr "{others, plural, one {# outro} other {# outros}}"
+
+msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
+msgstr "{others, plural, one {Partilha {city} com # outro masternode contado: {part} do total funcionam lá.} other {Partilha {city} com # outros masternodes contados: {part} do total funcionam lá.}}"
+
+msgid "{pct} of the {tot} run in one city, {where}"
+msgstr "{pct} dos {tot} funcionam numa só cidade: {where}"
+
+msgid "{pct} of these {tot} run in one city, {where}"
+msgstr "{pct} destes {tot} funcionam numa só cidade: {where}"
+
+msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# não tem localização que o rastreio encontrasse; as quotas contam-no como desconhecido.} other {# não têm localização que o rastreio encontrasse; as quotas contam-nos como desconhecidos.}}"
+
+msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# nó acessível não tem lugar, provavelmente em Tor ou I2P; as quotas contam-no como desconhecido.} other {# nós acessíveis não têm lugar, a maioria em Tor ou I2P; as quotas contam-nos como desconhecidos.}}"
+
+msgid "<0.1%"
+msgstr "<0,1%"
 
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "200 enquanto os dados de cada rede estiverem atualizados e salvos; caso contrário, 503 com o que está errado. Para verificações de disponibilidade."
@@ -107,26 +119,28 @@ msgstr "Mudanças de endereço"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Os endereços de nós que não são masternodes nunca são publicados, apenas contados."
 
-msgid "All nodes"
-msgstr "Todos os nós"
+msgid "All reachable nodes"
+msgstr "Todos os nós acessíveis"
 
-msgid "All nodes (soon)"
-msgstr "Todos os nós (em breve)"
+msgid "Americas"
+msgstr "Américas"
 
-msgid "Any country"
-msgstr "Qualquer país"
+#. placeholder {0}: formatInt(more)
+msgid "and {0} more"
+msgstr "e mais {0}"
 
-msgid "Any DKG readiness"
-msgstr "Qualquer prontidão DKG"
+msgid "Answered the crawl"
+msgstr "Respondeu ao rastreio"
 
-msgid "Any hosting"
-msgstr "Qualquer hospedagem"
+msgid "Answered the last crawl"
+msgstr "Responderam ao último rastreio"
 
-msgid "Any type"
-msgstr "Qualquer tipo"
+msgid "Asia and Oceania"
+msgstr "Ásia e Oceânia"
 
-msgid "Any version"
-msgstr "Qualquer versão"
+#. placeholder {0}: formatInt(smallest)
+msgid "At this size, cities with fewer than {0} are drawn at the smallest size."
+msgstr "Neste tamanho, as cidades com menos de {0} são desenhadas no tamanho mínimo."
 
 msgid "Back in the list"
 msgstr "De volta à lista"
@@ -154,14 +168,23 @@ msgstr "Mudanças"
 msgid "Checks a masternode now with a P2P handshake to its registered address. Five checks a minute per client; a result under a minute old is returned again."
 msgstr "Verifica um masternode agora com um handshake P2P para o endereço registrado. Cinco verificações por minuto por cliente; um resultado com menos de um minuto é devolvido novamente."
 
+msgid "Cities"
+msgstr "Cidades"
+
+msgid "Cities, largest first"
+msgstr "Cidades, da maior para a menor"
+
+msgid "Clear all"
+msgstr "Limpar tudo"
+
+msgid "Clear the filters"
+msgstr "Limpar os filtros"
+
+msgid "Clear them"
+msgstr "Limpá-los"
+
 msgid "Close"
 msgstr "Fechar"
-
-msgid "Colour"
-msgstr "Cor"
-
-msgid "Colour by"
-msgstr "Colorir por"
 
 msgid "Copy command"
 msgstr "Copiar comando"
@@ -178,23 +201,42 @@ msgstr "Endereço P2P do Core"
 msgid "Core's version-bits deployments (Dash Core 24 and evo_shares): their state, windows, signalling and outlook."
 msgstr "As implantações version-bits do Core (Dash Core 24 e evo_shares): estado, janelas, sinalização e perspectiva."
 
-msgid "Couldn't load the masternode list."
-msgstr "Não foi possível carregar a lista de masternodes."
+msgid "Count enabled masternodes too"
+msgstr "Contar também os masternodes ativos"
 
-msgid "Country"
-msgstr "País"
+msgid "Count every masternode"
+msgstr "Contar todos os masternodes"
 
-msgid "Counts follow the filters and the shown categories."
-msgstr "As contagens seguem os filtros e as categorias exibidas."
+msgid "Count PoSe-banned masternodes too"
+msgstr "Contar também os masternodes banidos pelo PoSe"
+
+msgid "Count them too"
+msgstr "Contá-los também"
+
+msgid "Countries"
+msgstr "Países"
+
+msgid "Countries and hosting providers"
+msgstr "Países e fornecedores de alojamento"
+
+#. placeholder {0}: countryName(c)
+msgid "Country: {0}"
+msgstr "País: {0}"
 
 msgid "Dash Core's published releases from GitHub, newest first, refreshed hourly."
 msgstr "As versões publicadas do Dash Core no GitHub, das mais recentes às mais antigas, atualizadas a cada hora."
 
-msgid "DKG readiness"
-msgstr "Prontidão DKG"
+msgid "Did not answer the crawl"
+msgstr "Não respondeu ao rastreio"
+
+msgid "DKG: {d}"
+msgstr "DKG: {d}"
 
 msgid "Enabled"
 msgstr "Ativado"
+
+msgid "Europe"
+msgstr "Europa"
 
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "A cada 15 minutos o rastreador abre uma conexão P2P com o endereço de cada masternode registrado, com cada nó que respondeu na última semana e com novos endereços que descobre pelo nosso nó Dash e por outros nós. Conclui o handshake de versão e se desconecta. Não retransmite transações e guarda apenas o que o nó anuncia."
@@ -220,21 +262,63 @@ msgstr "As recompensas da Platform dos evonodes em créditos: a época atual, a 
 msgid "Examples"
 msgstr "Exemplos"
 
+msgid "Filter masternodes"
+msgstr "Filtrar masternodes"
+
 msgid "Filters"
 msgstr "Filtros"
 
-#. placeholder {0}: label(k)
-msgid "Hide {0}"
-msgstr "Ocultar {0}"
+msgid "Half of the {tot} run in {cities}"
+msgstr "Metade dos {tot} funciona em {cities}"
+
+msgid "Half of the evonodes run in the cities above."
+msgstr "Metade dos evonodes funciona nas cidades acima."
+
+msgid "Half of the masternodes run in the cities above."
+msgstr "Metade dos masternodes funciona nas cidades acima."
+
+msgid "Half of the reachable nodes run in the cities above."
+msgstr "Metade dos nós acessíveis funciona nas cidades acima."
+
+msgid "Half of these {tot} run in {cities}"
+msgstr "Metade destes {tot} funciona em {cities}"
+
+msgid "Half of these evonodes run in the cities above."
+msgstr "Metade destes evonodes funciona nas cidades acima."
+
+msgid "Half of these masternodes run in the cities above."
+msgstr "Metade destes masternodes funciona nas cidades acima."
 
 msgid "Hosting"
 msgstr "Hospedagem"
+
+msgid "Hosting providers"
+msgstr "Fornecedores de alojamento"
+
+#. placeholder {0}: hosts[h] ?? `AS${h}`
+msgid "Hosting: {0}"
+msgstr "Alojamento: {0}"
 
 msgid "How the data is collected"
 msgstr "Como os dados são coletados"
 
 msgid "In the paths, {NET} is mainnet or testnet. Amounts are in duffs (1 DASH = 100,000,000 duffs) except Platform amounts, which are in credits (1 DASH = 100,000,000,000 credits). Times are unix seconds."
 msgstr "Nos caminhos, {NET} é mainnet ou testnet. Os valores estão em duffs (1 DASH = 100.000.000 duffs), exceto os da Platform, que estão em créditos (1 DASH = 100.000.000.000 créditos). Os horários são segundos unix."
+
+msgid "It is a regular masternode, and this view counts evonodes. The ring marks where it is."
+msgstr "É um masternode normal, e esta vista conta evonodes. O anel marca onde está."
+
+msgid "It is an evonode, and this view counts regular masternodes. The ring marks where it is."
+msgstr "É um evonode, e esta vista conta masternodes normais. O anel marca onde está."
+
+msgid "It is enabled, and this view counts PoSe-banned masternodes only. The ring marks where it is."
+msgstr "Está ativo, e esta vista conta só masternodes banidos pelo PoSe. O anel marca onde está."
+
+msgid "It is PoSe-banned, so it is not counted here. The ring marks where it is."
+msgstr "Está banido pelo PoSe, por isso não é contado aqui. O anel marca onde está."
+
+msgid "It is the only counted masternode in {city}."
+msgstr "É o único masternode contado em {city}."
 
 msgid "Kind of change"
 msgstr "Tipo de mudança"
@@ -245,32 +329,39 @@ msgstr "Último pagamento"
 msgid "Latest masternode list changes"
 msgstr "Últimas mudanças da lista de masternodes"
 
+msgid "Left out by an old map link: {names}"
+msgstr "Excluídos por uma ligação antiga do mapa: {names}"
+
 msgid "Left the list"
 msgstr "Saiu da lista"
 
 msgid "Link copied"
 msgstr "Link copiado"
 
-msgid "Loading the network…"
-msgstr "Carregando a rede…"
-
 msgid "Location"
 msgstr "Localização"
+
+msgid "Locations: DB-IP (CC BY 4.0). Land: Natural Earth."
+msgstr "Localizações: DB-IP (CC BY 4.0). Terra: Natural Earth."
 
 msgid "Map"
 msgstr "Mapa"
 
-msgid "Map attribution"
-msgstr "Atribuição do mapa"
+msgid "Map of the land. No city is drawn."
+msgstr "Mapa das terras. Nenhuma cidade está desenhada."
 
-msgid "Map controls"
-msgstr "Controles do mapa"
+msgid "Map of the world. Radar's crawl places the nodes on it, and it is not read in this mode."
+msgstr "Mapa do mundo. O rastreio do Radar coloca os nós nele, e não é lido neste modo."
 
-msgid "Map of the network's nodes"
-msgstr "Mapa dos nós da rede"
+msgid "Map with a disc for each city, sized by how many nodes run there: {all}. Largest: {largest}."
+msgstr "Mapa com um disco por cidade, consoante quantos nós funcionam lá: {all}. As maiores: {largest}."
 
 msgid "Masternode"
 msgstr "Masternode"
+
+#. placeholder {0}: chips .map((c) => c.label) .join('; ')
+msgid "Masternode filters are off while every reachable node is counted: {0}."
+msgstr "Os filtros de masternodes estão desligados enquanto se contam todos os nós acessíveis: {0}."
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "As mudanças da lista de masternodes vêm do rastreamento do Radar na mainnet e na testnet."
@@ -299,11 +390,32 @@ msgstr "Ainda não há mudanças registradas."
 msgid "No changes to the masternode list in the last 24 hours"
 msgstr "Sem mudanças na lista de masternodes nas últimas 24 horas"
 
+msgid "No evonode matches these filters."
+msgstr "Nenhum evonode corresponde a estes filtros."
+
+msgid "No location"
+msgstr "Sem localização"
+
+msgid "No location (mostly Tor and I2P)"
+msgstr "Sem localização (sobretudo Tor e I2P)"
+
+msgid "No masternode matches these filters."
+msgstr "Nenhum masternode corresponde a estes filtros."
+
+msgid "No provider on record"
+msgstr "Sem fornecedor registado"
+
+msgid "No provider on record (mostly Tor and I2P)"
+msgstr "Sem fornecedor registado (sobretudo Tor e I2P)"
+
 msgid "Not checked"
 msgstr "Não verificado"
 
 msgid "Older payments of one masternode, newest first. Page with before set to the last height you got."
 msgstr "Pagamentos mais antigos de um masternode, dos mais recentes aos mais antigos. Pagine com before definido como a última altura recebida."
+
+msgid "One disc per city; its area is the count. A city is where the node's IP address is registered, so it marks a data centre's region, not a building."
+msgstr "Um disco por cidade; a área é a contagem. Uma cidade é onde o endereço IP do nó está registado, por isso marca a região de um centro de dados, não um edifício."
 
 msgid "One masternode: its list entry, collateral, keys, addresses, version history, uptime, payments, returns, changes and, for an evonode, Platform rewards."
 msgstr "Um masternode: sua entrada na lista, colateral, chaves, endereços, histórico de versões, disponibilidade, pagamentos, retornos, mudanças e, para um evonode, recompensas da Platform."
@@ -314,8 +426,8 @@ msgstr "Os testes de velocidade de um masternode de cada ponto de medição, com
 msgid "Open masternode"
 msgstr "Abrir masternode"
 
-msgid "Open these as a list"
-msgstr "Abrir como lista"
+msgid "Open them in the masternode list"
+msgstr "Abri-los na lista de masternodes"
 
 msgid "Operator key"
 msgstr "Chave do operador"
@@ -325,9 +437,6 @@ msgstr "Endereço de pagamento do operador"
 
 msgid "Operator reward"
 msgstr "Recompensa do operador"
-
-msgid "Other full nodes"
-msgstr "Outros nós completos"
 
 msgid "Other versions"
 msgstr "Outras versões"
@@ -344,9 +453,6 @@ msgstr "Mudanças de pagamento e de chaves"
 msgid "Per network"
 msgstr "Por rede"
 
-msgid "Places on the map"
-msgstr "Lugares no mapa"
-
 msgid "Platform HTTPS address"
 msgstr "Endereço HTTPS da Platform"
 
@@ -355,9 +461,6 @@ msgstr "ID do nó da Platform"
 
 msgid "Platform P2P address"
 msgstr "Endereço P2P da Platform"
-
-msgid "PoSe"
-msgstr "PoSe"
 
 msgid "PoSe bans and revivals"
 msgstr "Banimentos e reativações do PoSe"
@@ -368,14 +471,23 @@ msgstr "Estado PoSe"
 msgid "PoSe-banned"
 msgstr "Banido pelo PoSe"
 
+msgid "PoSe-banned counted too"
+msgstr "Banidos pelo PoSe incluídos"
+
+msgid "PoSe-banned only"
+msgstr "Só banidos pelo PoSe"
+
+msgid "ProTx, IP, city or provider"
+msgstr "ProTx, IP, cidade ou fornecedor"
+
 msgid "Radar API"
 msgstr "API do Radar"
 
 msgid "Radar doesn't crawl devnets."
 msgstr "O Radar não rastreia devnets."
 
-msgid "Reachability"
-msgstr "Acessibilidade"
+msgid "Radar's last crawl finished"
+msgstr "O último rastreio do Radar terminou"
 
 msgid "Reachable"
 msgstr "Alcançável"
@@ -383,30 +495,39 @@ msgstr "Alcançável"
 msgid "Reachable nodes counted per city, never by address, and how many have no location."
 msgstr "Nós acessíveis contados por cidade, nunca por endereço, e quantos não têm localização."
 
+msgid "Region"
+msgstr "Região"
+
 msgid "Registered"
 msgstr "Registrado"
 
 msgid "Registrations and removals"
 msgstr "Registros e remoções"
 
-msgid "Same location"
-msgstr "Mesma localização"
+msgid "Regular masternodes"
+msgstr "Masternodes regulares"
 
-msgid "Search masternodes"
-msgstr "Pesquisar masternodes"
+msgid "Regular masternodes only"
+msgstr "Só masternodes normais"
 
-msgid "Search ProTx, IP, city, hosting"
-msgstr "Pesquisar ProTx, IP, cidade, hospedagem"
+#. placeholder {0}: c.label
+msgid "Remove the filter {0}"
+msgstr "Remover o filtro {0}"
 
-msgid "Show"
-msgstr "Mostrar"
+#. placeholder {0}: filter.q
+msgid "Search: {0}"
+msgstr "Pesquisa: {0}"
 
-#. placeholder {0}: label(k)
-msgid "Show {0}"
-msgstr "Mostrar {0}"
+#. placeholder {0}: formatInt(places.length)
+msgid "Show all {0} cities"
+msgstr "Mostrar as {0} cidades"
 
-msgid "Show or hide categories"
-msgstr "Mostrar ou ocultar categorias"
+msgid "Show fewer"
+msgstr "Mostrar menos"
+
+#. placeholder {0}: formatInt(s.n)
+msgid "Show only these: {0}"
+msgstr "Mostrar só estes: {0}"
 
 msgid "The 300 latest masternode list changes, newest first, and when recording started."
 msgstr "As 300 últimas mudanças da lista de masternodes, das mais recentes às mais antigas, e quando o registro começou."
@@ -420,21 +541,32 @@ msgstr "Os URLs da API não mudaram: https://radar.dashhq.org/api/v1/* retorna o
 msgid "The block hashes the speed tests use."
 msgstr "Os hashes de bloco que os testes de velocidade usam."
 
+msgid "The crawl found no location for it, so it is not on the map."
+msgstr "O rastreio não encontrou a localização dele, por isso não está no mapa."
+
+msgid "The crawl is stale."
+msgstr "O rastreio está desatualizado."
+
+msgid "The crawl lists no enabled evonode."
+msgstr "O rastreio não lista nenhum evonode ativo."
+
+msgid "The crawl lists no enabled masternode."
+msgstr "O rastreio não lista nenhum masternode ativo."
+
 msgid "The crawler's and the chain's state for each network: the latest crawl, our Dash node's sync and the payment index range."
 msgstr "O estado do rastreador e da cadeia de cada rede: o último rastreamento, a sincronização do nosso nó Dash e o intervalo do índice de pagamentos."
+
+msgid "The filters leave it out, so it is not counted here. The ring marks where it is."
+msgstr "Os filtros excluem-no, por isso não é contado aqui. O anel marca onde está."
 
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "As últimas mudanças nos registros de masternodes, das mais recentes às mais antigas: masternodes novos e removidos, banimentos e reativações do PoSe, endereços e chaves alterados."
 
+msgid "The latest crawl placed no reachable node."
+msgstr "O último rastreio não localizou nenhum nó acessível."
+
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "O último rastreamento concluído, o de um dia antes e cada distribuição (dists[scope][dim]), com retornos, saúde da Platform e prontidão DKG."
-
-#. placeholder {0}: formatInt(target.extra)
-msgid "The list also shows {0} hidden here ({names}); it can't leave them out."
-msgstr "A lista também mostra {0} ocultos aqui ({names}); ela não pode deixá-los de fora."
-
-msgid "The map could not start in this browser. The filters and the list still work."
-msgstr "O mapa não pôde ser iniciado neste navegador. Os filtros e a lista continuam funcionando."
 
 msgid "The map is drawn from Radar's crawl of mainnet and testnet."
 msgstr "O mapa é desenhado a partir do rastreamento do Radar na mainnet e na testnet."
@@ -442,17 +574,32 @@ msgstr "O mapa é desenhado a partir do rastreamento do Radar na mainnet e na te
 msgid "The map needs Radar's crawl"
 msgstr "O mapa precisa do rastreamento do Radar"
 
+msgid "The masternode in the address is not in Radar's list: it may have left the network."
+msgstr "O masternode do endereço não está na lista do Radar: pode ter saído da rede."
+
+msgid "The only evonode counted runs in {where}"
+msgstr "O único evonode contado funciona em {where}"
+
+msgid "The only masternode counted runs in {where}"
+msgstr "O único masternode contado funciona em {where}"
+
+msgid "The only reachable node runs in {where}"
+msgstr "O único nó acessível funciona em {where}"
+
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "O site e a API são servidos a partir de documentos que o rastreador publica após cada rastreamento, então continuam no ar mesmo quando o rastreador não está."
 
-msgid "This area"
-msgstr "Esta área"
+msgid "The tick marks half of every reachable node."
+msgstr "O traço marca metade de todos os nós acessíveis."
+
+msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
+msgstr "O traço marca metade. Escolha um país ou um fornecedor para ver onde estão os seus masternodes."
+
+msgid "This masternode"
+msgstr "Este masternode"
 
 msgid "Tools"
 msgstr "Ferramentas"
-
-msgid "Type"
-msgstr "Tipo"
 
 msgid "Unknown version"
 msgstr "Versão desconhecida"
@@ -466,17 +613,20 @@ msgstr "Disponibilidade, 7 dias"
 msgid "Version"
 msgstr "Versão"
 
+msgid "Version: {v}"
+msgstr "Versão: {v}"
+
 msgid "Voting address"
 msgstr "Endereço de voto"
+
+msgid "What to count"
+msgstr "O que contar"
 
 msgid "When"
 msgstr "Quando"
 
-msgid "Where the masternodes run, coloured by reachability, version or type."
-msgstr "Onde os masternodes rodam, coloridos por acessibilidade, versão ou tipo."
+msgid "Where the network runs, by city, country and hosting provider, from Radar's latest crawl."
+msgstr "Onde a rede funciona, por cidade, país e fornecedor de alojamento, a partir do último rastreio do Radar."
 
-msgid "Zoom in"
-msgstr "Ampliar"
-
-msgid "Zoom out"
-msgstr "Reduzir"
+msgid "World"
+msgstr "Mundo"
