@@ -76,6 +76,39 @@ describe('TypePanel', () => {
     expect(container.querySelector('[data-entity="token"][data-id="TOK1"]')).not.toBeNull()
   })
 
+  it('shows a token amount in whole tokens, by the token’s decimals', async () => {
+    const SANS = 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB'
+    const { container } = await renderInApp(
+      <TypePanel
+        net="mainnet"
+        decoded={dto(1, {
+          ownerId: ID,
+          transitions: [
+            {
+              $transition: 'token',
+              $action: 'transfer',
+              $tokenId: SANS,
+              $dataContractId: 'ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR',
+              $amount: 100_000_000_000,
+              recipientId: OTHER,
+            },
+            {
+              $transition: 'token',
+              $action: 'burn',
+              $tokenId: SANS,
+              $dataContractId: 'ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR',
+              burnAmount: 250_000_000,
+            },
+          ],
+        })}
+      />,
+    )
+    const actions = container.querySelectorAll('[data-batch-entry]')
+    expect(actions[0]).toHaveTextContent(/Amount1,000\s*SANS/)
+    expect(actions[0]).not.toHaveTextContent('100,000,000,000')
+    expect(actions[1]).toHaveTextContent(/Amount2\.5\s*SANS/)
+  })
+
   it('names the evonode, the poll and the choice of a masternode vote', async () => {
     const proTx = '001cb9381b08d784f4c1e1e220906874ea9e88f7124ebdf8baf0782007afad4f'
     const { base58Encode } = await import('@/lib/base58')

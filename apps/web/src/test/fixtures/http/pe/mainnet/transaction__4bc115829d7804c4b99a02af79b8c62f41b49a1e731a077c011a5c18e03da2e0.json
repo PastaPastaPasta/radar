@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.pe.dashhq.org/transaction/4bc115829d7804c4b99a02af79b8c62f41b49a1e731a077c011a5c18e03da2e0"
+  },
+  "recordedAt": "2026-11-19T16:17:45.653Z",
+  "status": 200,
+  "headers": { "content-type": "application/json; charset=utf-8" },
+  "body": {
+    "hash": "4BC115829D7804C4B99A02AF79B8C62F41B49A1E731A077C011A5C18E03DA2E0",
+    "index": 0,
+    "blockHash": "4F7C12717EECB311B8DF19DA6826A5012812349F9AD296F3160F0A05D45BFB4A",
+    "blockHeight": 472395,
+    "type": "BATCH",
+    "batchType": 8,
+    "data": "AgENlP1eWhbrtLmEvLygrn3IZw/eGr3I1m/e6O/rh/qfsAEBAgAAogDGl7sAyh4wdZhmA3bGq83PluW8nyNh7sIyhwohP3TlNJPa6ubffPQ6PL3McMsxhKfM76boJ6jT/yfHQhufpCoiAP0AAAAXSHboAL5tBTo11gVbh3kL3I3BV1KkBMvfPjDdZL+EJzqrpohUAAAAAANBHxWJPHROzOkPVPsKjNTy/Zchn18RMEUC9wcGdUvF4lS1BXa8GnPDG+/YZlPS38sjHCfwsDosvtPkZavj0H9hXjc=",
+    "timestamp": "2026-11-16T02:20:26.128Z",
+    "gasUsed": 1213200,
+    "status": "FAIL",
+    "error": "Token transfer recipient identity DpLt5xyRoACYkXjbVa95nzzG7ZtpiEcTGWR5W6es4xmh doesn't exist",
+    "owner": {
+      "identifier": "v24uWwdXJ1fJx7YccBmVB48zXPVT5uRYv7vKr5LS5B5",
+      "aliases": [
+        {
+          "alias": "BetaTesterExtraordinaire.dash",
+          "status": "ok",
+          "timestamp": "2025-08-31T18:18:34.079Z",
+          "documentId": "ERPoJr42W8D3onY9KymHcG7uiEDWWZ3xhLT5bKxJwtzU",
+          "contested": false
+        }
+      ]
+    },
+    "incoming": null,
+    "amount": null,
+    "base58Address": null,
+    "bech32mAddress": null,
+    "shielded": null
+  }
+}

@@ -21,6 +21,10 @@ const PROPOSER = '2632413E35C56B1B0E5181B3D266550B5A4CCB6A7E4B7212BC2C7D2BE3D374
 const OWNER = '5AqJsC1a1VwgpQBnXJaAwVfyAd7PN1miSQg1gEkMKhRt'
 const FAILED = 'ab8b7cbb2c2c85d6e7140c54ce184abe8c5eabce24f9b8bbc65dad3f300a33db'
 const WITH_DUPLICATES = '6963a9535dbd3d47229bbe419dfc2e3011dc786d958f72a4b7beee3f24fbe097'
+/** A failed transfer of 100,000,000,000 SANS base units; the token has 8 decimals (Platform Explorer's token page). */
+const SANS_TRANSFER = '4bc115829d7804c4b99a02af79b8c62f41b49a1e731a077c011a5c18e03da2e0'
+/** A mint of 3,000,000,000 DUSD base units; the token has 6 decimals. */
+const DUSD_MINT = '71be6d6681760930021e06a14da924ae78ffea315303fc38985794824253a1e2'
 const UNKNOWN = 'deadbeef'.repeat(8)
 
 /** On a phone the filters sit behind a "Filters" button. */
@@ -336,6 +340,18 @@ test.describe('State transition', () => {
         await settled(page)
       })
     }
+  })
+
+  test('shows a token amount in whole tokens, by the token’s decimals @PE-13', async ({ page }) => {
+    await page.goto(`/platform/tx/${SANS_TRANSFER}`)
+    const transfer = page.locator('[data-batch-entry="0"]')
+    await expect(transfer).toContainText(/Amount\s*1,000\s*SANS/)
+    await expect(transfer).not.toContainText('100,000,000,000')
+    await settled(page)
+
+    await page.goto(`/platform/tx/${DUSD_MINT}`)
+    await expect(page.locator('[data-batch-entry="0"]')).toContainText(/Amount\s*3,000\s*DUSD/)
+    await settled(page)
   })
 
   test('works on testnet @PE-13', async ({ page }) => {

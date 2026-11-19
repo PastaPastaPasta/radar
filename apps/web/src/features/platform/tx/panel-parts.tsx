@@ -6,7 +6,8 @@ import { useMemo, type ReactNode } from 'react'
 import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
-import { Amount, Badge, DataTable, Hash, JsonView, KeyValue } from '@/ui'
+import { Amount, Badge, DataTable, Hash, JsonView, KeyValue, Skeleton } from '@/ui'
+import { tokenAmountKind, useToken } from '../token/use-token'
 import {
   bigintOf,
   fundingOf,
@@ -31,6 +32,19 @@ export function Facts({ items }: { items: Fact[] }) {
 export const Credits = ({ value }: { value: unknown }) => {
   const v = bigintOf(value)
   return v === undefined ? <>—</> : <Amount value={v} kind="credits" />
+}
+
+/** A token amount in whole tokens, once the token's decimals are known; until then, or without them, its base units. */
+export function TokenUnits({ tokenId, value }: { tokenId: string; value: unknown }) {
+  const { t } = useLingui()
+  const token = useToken(tokenId)
+  const kind = tokenAmountKind(token)
+  const v = bigintOf(value)
+  if (v === undefined) return <>—</>
+  if (kind) return <Amount value={v} kind={kind} />
+  const looking = token.info.isPending || (token.origin !== undefined && token.contract.isPending)
+  if (looking) return <Skeleton shape="line" width="8ch" />
+  return <span className="rx-num">{t`${formatInt(v)} base units`}</span>
 }
 
 export const Who = ({ id }: { id: unknown }) => {
