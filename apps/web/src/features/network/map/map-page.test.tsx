@@ -171,6 +171,18 @@ describe('the Map page', () => {
     )
   })
 
+  it('names what an old link hid in the old legend’s order @RA-52', async () => {
+    renderAt('/map?color=reach&hide=unreachable,unchecked')
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', {
+          name: 'Remove the filter Left out by an old map link: Did not answer the crawl, Not checked',
+        }),
+      ).toBeInTheDocument(),
+    )
+    await waitFor(() => expect(h1()).toHaveTextContent(/these 1\d\d masternodes/))
+  })
+
   it('stays empty when an old link hid every row, and keeps unknown versions it did not hide @RA-52', async () => {
     crawlOf([mn(1), mn(2), mn(3, { version: null, reachable: null })])
     renderAt('/map?color=type&hide=regular')

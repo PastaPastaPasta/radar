@@ -552,6 +552,19 @@ const LEGACY_LABEL: Record<string, MessageDescriptor> = {
   unknown: msg`Unknown version`,
 }
 
+/** The old legends' order; versions sit between `evo` and `other`. */
+const LEGACY_ORDER = [
+  'reachable',
+  'unreachable',
+  'unchecked',
+  'enabled',
+  'banned',
+  'regular',
+  'evo',
+  'other',
+  'unknown',
+]
+
 interface Chip {
   key: keyof MnFilter | 'hide'
   label: string
@@ -582,7 +595,13 @@ function useChips(b: Board, filter: MnFilter): Chip[] {
   if (filter.type?.length === 1 && filter.type[0] === 'regular')
     chips.push({ key: 'type', label: t`Regular masternodes only` })
   if (b.legacy) {
-    const names = b.legacy.hide
+    // The address sorts its lists; the old map's legend order reads better.
+    const rank = (k: string) => {
+      const i = LEGACY_ORDER.indexOf(k)
+      return i < 0 ? LEGACY_ORDER.length : i
+    }
+    const names = [...b.legacy.hide]
+      .sort((x, y) => rank(x) - rank(y))
       .map((k) => {
         const d = LEGACY_LABEL[k]
         return d ? i18n._(d) : k
