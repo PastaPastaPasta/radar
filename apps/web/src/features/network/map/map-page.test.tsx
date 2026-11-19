@@ -322,6 +322,33 @@ describe('the Map page', () => {
     expect(href.searchParams.get('country')).toBe('DE')
   })
 
+  it('keeps an old link’s exclusion in the city’s list link, in the list’s own filters @RA-52', async () => {
+    crawlOf([
+      mn(1),
+      mn(2, { status: 'pose_banned', pose_ban_height: 5 }),
+      mn(3, { status: 'pose_banned', pose_ban_height: 5 }),
+    ])
+    renderAt('/map?color=pose&hide=enabled&place=DE:Falkenstein')
+    const link = await waitFor(() => {
+      const el = document.querySelector('[data-place-list]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const href = new URL(link.getAttribute('href')!, 'http://x')
+    expect(href.searchParams.get('status')).toBe('pose-banned')
+    expect(href.searchParams.get('country')).toBe('DE')
+    expect(href.searchParams.get('q')).toBe('Falkenstein')
+  })
+
+  it('offers no list link for an old exclusion the list’s filters can’t say @RA-52', async () => {
+    crawlOf([mn(1), mn(2, { reachable: false }), mn(3, { reachable: null })])
+    renderAt('/map?color=reach&hide=unchecked&place=DE:Falkenstein')
+    await waitFor(() =>
+      expect(document.querySelector('[data-place-list-unavailable]')).not.toBeNull(),
+    )
+    expect(document.querySelector('[data-place-list]')).toBeNull()
+  })
+
   it('unpicks a picked city when its row is pressed again @RA-50', async () => {
     const user = userEvent.setup()
     renderAt('/map?place=DE:Falkenstein')

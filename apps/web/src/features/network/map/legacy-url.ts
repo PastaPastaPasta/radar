@@ -1,3 +1,4 @@
+import { facetValues, type MnFilter } from '@/data/masternodes/filter'
 import type { MnRow } from '@/data/masternodes/rows'
 
 /**
@@ -56,4 +57,36 @@ export function legacyHidden(
   const hidden = new Set(hide)
   const keyOf = legacyKey(mode, rows)
   return (r) => hidden.has(keyOf(r))
+}
+
+/** The list facet each old colouring split the rows by. */
+const LIST_FACET = { reach: 'reach', pose: 'status', type: 'type', version: 'version' } as const
+
+/**
+ * What an old link left out, said in the masternode list's own filters, or `undefined` when they cannot say exactly
+ * the same thing: a kept row with no value for the facet (an unknown version, a node the crawl has not checked), a
+ * value shared by kept and hidden rows, or two reachability states, which the list's `reach` cannot hold together.
+ */
+export function legacyListFilter(
+  mode: ColorMode,
+  rows: readonly MnRow[],
+  hide: readonly string[],
+): MnFilter | undefined {
+  const hidden = legacyHidden(mode, rows, hide)
+  if (!hidden || !rows.some(hidden)) return {}
+  const facet = LIST_FACET[mode]
+  const valueOf: (r: MnRow) => string | undefined = facetValues[facet]
+  const kept = new Set<string>()
+  for (const r of rows) {
+    if (hidden(r)) continue
+    const v = valueOf(r)
+    if (v === undefined) return undefined
+    kept.add(v)
+  }
+  if (kept.size === 0 || rows.some((r) => hidden(r) && kept.has(valueOf(r) ?? ''))) return undefined
+  const values = [...kept].sort()
+  if (facet === 'reach') {
+    return values.length === 1 ? { reach: values[0] as 'reachable' | 'unreachable' } : undefined
+  }
+  return { [facet]: values }
 }
