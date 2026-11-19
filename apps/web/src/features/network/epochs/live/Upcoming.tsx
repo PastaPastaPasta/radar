@@ -158,6 +158,14 @@ function LiveStrip({ live }: { live: LiveSchedule }) {
   )
 }
 
+/** What a screen reader hears when the section's state changes: never each block, only paused, resumed and quiet. */
+function stateChange(from: LiveKind, to: LiveKind): 'paused' | 'quiet' | 'resumed' | undefined {
+  if (to === 'paused') return 'paused'
+  if (to === 'quiet') return 'quiet'
+  if (to === 'live' && (from === 'paused' || from === 'quiet')) return 'resumed'
+  return undefined
+}
+
 function Eta({ ms, now }: { ms: number; now: number }) {
   const { t } = useLingui()
   return ms - now < MINUTE ? <>{t`any moment`}</> : <Time ms={ms} mode="both" live />
@@ -202,14 +210,25 @@ export function Upcoming({
   const { state, now, blockMs } = live
   const motion = useRowMotion(live.rows, state.rev, state.passed, reduced)
   const from = state.tip?.timeMs ?? state.seed?.timeMs ?? now
-  const height = state.tip?.height
+  const kind = live.kind
+  const [change, setChange] = useState<{ from: LiveKind; to: LiveKind; n: number }>({
+    from: 'connecting',
+    to: 'connecting',
+    n: 0,
+  })
+  if (kind !== 'connecting' && change.to !== kind)
+    setChange({ from: change.to, to: kind, n: change.n + 1 })
   useEffect(() => {
-    if (state.rev > 0 && height !== undefined)
-      announce(t`New Platform block ${formatInt(height)}`, {
-        key: 'platform-block',
-        throttleMs: 10_000,
-      })
-  }, [state.rev, height, t])
+    if (change.n === 0) return
+    const what = stateChange(change.from, change.to)
+    if (!what) return
+    const words = {
+      paused: t`Platform updates paused`,
+      quiet: t`No new Platform block for a while`,
+      resumed: t`Platform updates resumed`,
+    }
+    announce(words[what], { key: `platform-${what}`, throttleMs: 5_000 })
+  }, [change, t])
   const columns = useMemo<ColumnDef<ScheduleRow>[]>(
     () => [
       {

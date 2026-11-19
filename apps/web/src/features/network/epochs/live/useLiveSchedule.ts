@@ -16,7 +16,14 @@ import type { EpochDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { NetworkId } from '@/lib/network'
 import { useAfterIdle } from '@/ui'
-import { liveKind, nextSetsReadAt, PAUSED_POLL_MS, POLL_MS, type LiveKind } from './connection'
+import {
+  liveKind,
+  nextSetsReadAt,
+  PAUSED_POLL_MS,
+  POLL_MS,
+  scheduleSetsRead,
+  type LiveKind,
+} from './connection'
 import {
   blockInterval,
   initialSchedule,
@@ -40,11 +47,35 @@ function subscribeOnline(cb: () => void): () => void {
 }
 const isOnline = () => (typeof navigator === 'undefined' ? true : navigator.onLine !== false)
 
+let visibleAt = Date.now()
 function subscribeVisible(cb: () => void): () => void {
-  document.addEventListener('visibilitychange', cb)
-  return () => document.removeEventListener('visibilitychange', cb)
+  const on = () => {
+    if (document.visibilityState !== 'hidden') visibleAt = Date.now()
+    cb()
+  }
+  document.addEventListener('visibilitychange', on)
+  return () => document.removeEventListener('visibilitychange', on)
 }
 const isVisible = () => typeof document === 'undefined' || document.visibilityState !== 'hidden'
+/** When the page last became visible: a page hidden for a while has not been reading, so its silence starts over. */
+const visibleSinceSnapshot = () => visibleAt
+
+/**
+ * The newest proof-checked epoch answer, by Platform height: an answer from a node a block behind, landing after a
+ * newer one, never moves the figures back.
+ */
+export function useNewestAnswer(
+  answer: Sourced<EpochDto> | undefined,
+): Sourced<EpochDto> | undefined {
+  const [newest, setNewest] = useState(answer)
+  const height = (a: Sourced<EpochDto> | undefined) => a?.height ?? -1
+  if (answer && answer !== newest && height(answer) > height(newest)) setNewest(answer)
+  return newest && height(newest) >= height(answer) ? newest : answer
+}
+
+/** A Platform block time the page can show: a positive safe integer, not past the browser's clock by more than a minute. */
+const plausibleTime = (ms: number, now: number) =>
+  Number.isSafeInteger(ms) && ms > 0 && ms <= now + 60_000
 
 /** A clock that ticks every second while the page is visible, for the countdown and the ages beside it. */
 function useSecondClock(visible: boolean): number {
@@ -83,6 +114,7 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
   const online = useSyncExternalStore(subscribeOnline, isOnline, () => true)
   const visible = useSyncExternalStore(subscribeVisible, isVisible, () => true)
   const now = useSecondClock(visible)
+  const visibleSince = useSyncExternalStore(subscribeVisible, visibleSinceSnapshot, () => 0)
   const [startedAt] = useState(() => Date.now())
   const [state, dispatch] = useReducer(reduceSchedule, initialSchedule)
 
@@ -94,9 +126,10 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
   })
   const sets = useQuery({ ...platformDapiQueries.currentQuorums(net), enabled: ready })
 
-  const answer = tip.data
+  const answer = useNewestAnswer(tip.data)
   useEffect(() => {
-    if (answer?.height === undefined || answer.asOfFetched) return
+    if (answer?.height === undefined || answer.asOfFetched || !answer.proved) return
+    if (!Number.isSafeInteger(answer.height) || !plausibleTime(answer.asOf, Date.now())) return
     dispatch({ type: 'tip', height: answer.height, timeMs: answer.asOf })
   }, [answer])
 
@@ -105,7 +138,11 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
     if (!setsAnswer) return
     dispatch({
       type: 'seed',
-      seed: seedFromValidatorSets(setsAnswer.data, setsAnswer.data.meta, stampOf(setsAnswer)),
+      seed: seedFromValidatorSets(
+        setsAnswer.data,
+        { height: setsAnswer.data.meta.height, timeMs: setsAnswer.asOf },
+        stampOf(setsAnswer),
+      ),
     })
   }, [setsAnswer])
 
@@ -128,6 +165,7 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
     failing,
     online,
     visible,
+    visibleSince,
     tipTimeMs: state.tip?.timeMs,
     blockMs,
   })
@@ -135,7 +173,7 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
   // Read the validator sets again once a block lands that the order was not read at.
   const tries = useRef({ height: -1, n: 0 })
   const tipHeight = state.tip?.height
-  const setsHeight = setsAnswer?.height
+  const setsHeight = state.dapi?.height
   const lastReadAt = Math.max(sets.dataUpdatedAt, sets.errorUpdatedAt) || undefined
   const refetchSets = sets.refetch
   const fetchingSets = sets.isFetching
@@ -152,16 +190,13 @@ export function useLiveSchedule(net: NetworkId, crawl?: Sourced<RadarPlatform>):
       paused,
     })
     if (at === undefined) return
-    const id = window.setTimeout(
-      () => {
-        // A crowded DAPI pool leaves the order to move on by itself rather than queue a large read.
-        if (budget.snapshot(net).pressure !== 'ok') return
+    return scheduleSetsRead(at, Date.now(), {
+      canRead: () => budget.snapshot(net).pressure === 'ok',
+      read: () => {
         tries.current = { height: tipHeight, n: tries.current.n + 1 }
         void refetchSets()
       },
-      Math.max(0, at - Date.now()),
-    )
-    return () => window.clearTimeout(id)
+    })
   }, [ready, fetchingSets, visible, tipHeight, setsHeight, lastReadAt, paused, net, refetchSets])
 
   const refetchTip = tip.refetch

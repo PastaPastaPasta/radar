@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   CONNECT_GRACE_MS,
   liveKind,
   nextSetsReadAt,
   QUIET_MIN_MS,
+  scheduleSetsRead,
   SETS_MIN_GAP_MS,
   SETS_TRIES_PER_BLOCK,
   SILENT_AFTER_MS,
@@ -43,6 +44,12 @@ describe('liveKind', () => {
     const silent = { ...base, lastOkAt: NOW - SILENT_AFTER_MS - 1 }
     expect(liveKind(silent)).toBe('paused')
     expect(liveKind({ ...silent, visible: false })).toBe('live')
+  })
+
+  it('counts the silence from when a hidden page came back, so it does not flash paused', () => {
+    const back = { ...base, lastOkAt: NOW - 5 * 60_000, visibleSince: NOW - 1_000 }
+    expect(liveKind(back)).toBe('live')
+    expect(liveKind({ ...back, visibleSince: NOW - SILENT_AFTER_MS - 1 })).toBe('paused')
   })
 
   it('pauses while the browser is offline, whatever the reads said last', () => {
@@ -90,5 +97,53 @@ describe('nextSetsReadAt', () => {
 
   it('reads the first time with no order yet', () => {
     expect(nextSetsReadAt({ ...at, setsHeight: undefined, lastReadAt: undefined })).toBe(NOW)
+  })
+})
+
+describe('scheduleSetsRead', () => {
+  it('sends the read when it is due', () => {
+    vi.useFakeTimers()
+    try {
+      const read = vi.fn()
+      scheduleSetsRead(5_000, 0, { canRead: () => true, read })
+      vi.advanceTimersByTime(4_999)
+      expect(read).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(1)
+      expect(read).toHaveBeenCalledOnce()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('waits out a crowded DAPI pool and reads once it has room, instead of dropping the read', () => {
+    vi.useFakeTimers()
+    try {
+      const read = vi.fn()
+      let room = false
+      scheduleSetsRead(0, 0, { canRead: () => room, read })
+      vi.advanceTimersByTime(3 * SETS_MIN_GAP_MS)
+      expect(read).not.toHaveBeenCalled()
+      room = true
+      vi.advanceTimersByTime(SETS_MIN_GAP_MS)
+      expect(read).toHaveBeenCalledOnce()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('sends nothing once cancelled, also while waiting for room', () => {
+    vi.useFakeTimers()
+    try {
+      const read = vi.fn()
+      let room = false
+      const cancel = scheduleSetsRead(0, 0, { canRead: () => room, read })
+      vi.advanceTimersByTime(SETS_MIN_GAP_MS)
+      cancel()
+      room = true
+      vi.advanceTimersByTime(5 * SETS_MIN_GAP_MS)
+      expect(read).not.toHaveBeenCalled()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

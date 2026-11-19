@@ -48,10 +48,16 @@ const tip = (height: number, timeMs = height * 1000): ScheduleEvent => ({
 const seed = (s: ReturnType<typeof dapiSeed>): ScheduleEvent => ({ type: 'seed', seed: s })
 
 describe('the live schedule', () => {
-  it('counts the next twelve from the block the order was read at', () => {
+  it('counts the next twelve from the block the order was read at, before any proved block', () => {
     const s = run(seed(dapiSeed(100, 5)))
     expect(shown(s)).toEqual(Array.from({ length: 12 }, (_, i) => [6 + i, i + 1]))
-    expect(s.tip).toEqual({ height: 100, timeMs: 100_000, proposer: id(5) })
+    // An unproved answer never sets the latest block.
+    expect(s.tip).toBeUndefined()
+    expect(run(seed(dapiSeed(100, 5)), tip(100)).tip).toEqual({
+      height: 100,
+      timeMs: 100_000,
+      proposer: id(5),
+    })
   })
 
   it('drops the proposer whose block landed, moves the rest up and adds a twelfth', () => {
@@ -92,13 +98,51 @@ describe('the live schedule', () => {
     expect(movedOn(next)).toBe(0)
   })
 
-  it('moves the list on when a reading arrives ahead of the newest block seen', () => {
+  it('places the turns from a reading a block or two ahead, but leaves the list where the proved block is', () => {
     const s = run(seed(dapiSeed(100, 5)), tip(100))
     const next = reduceSchedule(s, seed(dapiSeed(102, 7)))
-    expect(next.tip?.height).toBe(102)
-    expect(next.tip?.proposer).toBe(id(7))
-    expect(next.passed).toEqual([id(6), id(7)])
-    expect(next.rev).toBe(s.rev + 1)
+    expect(next.tip).toEqual(s.tip)
+    expect(next.rev).toBe(s.rev)
+    expect(shown(next)[0]).toEqual([8, 3])
+    // Its proposer waits for a proof-checked read of block 102.
+    const proved = reduceSchedule(next, tip(102))
+    expect(proved.tip?.proposer).toBe(id(7))
+    // 6 and 7 were never shown once the reading placed them before block 103: the rows just count down.
+    expect(proved.passed).toEqual([])
+    expect(shown(proved)[0]).toEqual([8, 1])
+  })
+
+  it('refuses a reading far ahead of the proved block and keeps following the chain', () => {
+    const s = run(seed(dapiSeed(100, 5)), tip(100))
+    expect(reduceSchedule(s, seed(dapiSeed(1_000_000_000, 5)))).toBe(s)
+    expect(reduceSchedule(s, seed(dapiSeed(150, 5)))).toBe(s)
+    const next = run(
+      seed(dapiSeed(100, 5)),
+      tip(100),
+      seed(dapiSeed(1_000_000_000, 5)),
+      tip(101),
+      seed(dapiSeed(101, 6)),
+    )
+    expect(next.tip).toEqual({ height: 101, timeMs: 101_000, proposer: id(6) })
+    expect(shown(next)[0]).toEqual([7, 1])
+  })
+
+  it('drops an order read far ahead once the first proved block arrives, and takes an honest one', () => {
+    const crawl = seedFromCrawl(
+      {
+        height: 100,
+        ts: 50,
+        next: Array.from({ length: 30 }, (_, i) => ({ protx: id(i + 1), slots: i + 1 })),
+      },
+      stamp('radar'),
+    )
+    const s = run({ type: 'seed', seed: crawl }, seed(dapiSeed(1_000_000_000, 5)), tip(104))
+    expect(s.dapi).toBeUndefined()
+    expect(s.seed?.origin).toBe('radar')
+    expect(shown(s)[0]).toEqual([5, 1])
+    const honest = reduceSchedule(s, seed(dapiSeed(104, 9)))
+    expect(honest.seed?.origin).toBe('dapi')
+    expect(honest.tip?.proposer).toBe(id(9))
   })
 
   it('names the proposer of a block when the reading for that very block comes after it', () => {

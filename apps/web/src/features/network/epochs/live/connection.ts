@@ -18,6 +18,8 @@ export interface LiveInputs {
   online: boolean
   /** The page is visible: a hidden page does not read, so its silence is not a failure. */
   visible: boolean
+  /** When the page last became visible: the silence is counted from then at the earliest. */
+  visibleSince?: number
   /** The newest block's time. */
   tipTimeMs?: number
   /** The time a block takes on this chain. */
@@ -40,7 +42,8 @@ export function liveKind(i: LiveInputs): LiveKind {
       : 'connecting'
   }
   if (i.failing) return 'paused'
-  if (i.visible && i.now - i.lastOkAt > SILENT_AFTER_MS) return 'paused'
+  if (i.visible && i.now - Math.max(i.lastOkAt, i.visibleSince ?? -Infinity) > SILENT_AFTER_MS)
+    return 'paused'
   if (
     i.tipTimeMs !== undefined &&
     i.now - i.tipTimeMs > Math.max(QUIET_BLOCKS * i.blockMs, QUIET_MIN_MS)
@@ -77,4 +80,25 @@ export function nextSetsReadAt(i: {
   if (i.setsHeight !== undefined && i.setsHeight >= i.tipHeight) return undefined
   if (i.triesForTip >= SETS_TRIES_PER_BLOCK) return undefined
   return Math.max(i.now, (i.lastReadAt ?? -Infinity) + SETS_MIN_GAP_MS)
+}
+
+/**
+ * Sends the validator-set read at `at`. While the DAPI pool is under pressure the order moves on by itself and the read
+ * waits another `SETS_MIN_GAP_MS`, as many times as it takes, rather than queue a large read or be dropped. Returns
+ * the cancel.
+ */
+export function scheduleSetsRead(
+  at: number,
+  now: number,
+  opts: { canRead: () => boolean; read: () => void },
+): () => void {
+  const attempt = () => {
+    if (!opts.canRead()) {
+      id = setTimeout(attempt, SETS_MIN_GAP_MS)
+      return
+    }
+    opts.read()
+  }
+  let id = setTimeout(attempt, Math.max(0, at - now))
+  return () => clearTimeout(id)
 }

@@ -9,6 +9,7 @@ import { sdk } from '@/data/sdk/client'
 import { writeSourceMode } from '@/lib/source-mode'
 import { fixtureBody } from '@/test/fixtures/load'
 import { FixtureDapiTransport } from '@/test/msw/dapi-transport'
+import { resetAnnouncer } from '@/ui/announce'
 import { server } from '@/test/server'
 
 vi.mock('@/ui/chart-view', () => ({ default: () => null }))
@@ -37,6 +38,7 @@ const rows = (el: HTMLElement) => within(el).getAllByRole('row').slice(1)
 const noDapi = getDapiTransport()
 beforeEach(() => {
   setDapiTransport(new FixtureDapiTransport())
+  resetAnnouncer()
 })
 afterEach(() => {
   server.events.removeAllListeners()
@@ -206,6 +208,9 @@ describe('Epochs', () => {
     await waitFor(() => expect(ids()).toEqual([...before.slice(1), expect.any(String)]))
     expect(ids().at(-1)).not.toBe(before.at(-1))
     expect(upcoming).toHaveTextContent('Moved on 1 block since, assuming no missed turn.')
+    expect(document.getElementById('rx-announcer')?.textContent ?? '').not.toMatch(
+      /New Platform block/,
+    )
   }, 20_000)
 
   it('says updates are paused when Platform stops answering, and offers to try again @RA-62', async () => {
@@ -226,6 +231,10 @@ describe('Epochs', () => {
     await waitFor(() => expect(strip).toHaveAttribute('data-live', 'paused'), { timeout: 12_000 })
     expect(strip).toHaveTextContent('Updates paused')
     expect(within(upcoming).getByRole('button', { name: 'Try again' })).toBeVisible()
+    // The change of state is announced once; blocks never are.
+    await waitFor(() =>
+      expect(document.getElementById('rx-announcer')).toHaveTextContent('Platform updates paused'),
+    )
   }, 20_000)
 
   it('starts over on the other network when the network switches @RA-62', async () => {
