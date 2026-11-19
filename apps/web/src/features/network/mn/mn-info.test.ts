@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { crawlDiffers, dapiFacts, dkgRules, dkgRuleUrl, protxToBase58 } from './mn-info'
+import {
+  crawlDiffers,
+  dapiFacts,
+  departureOf,
+  dkgRules,
+  dkgRuleUrl,
+  operatorRewardText,
+  protxToBase58,
+} from './mn-info'
 import type { RadarMasternodeDetail } from '@/data/radar/schemas'
 
 const PROTX = 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff'
@@ -56,5 +64,65 @@ describe('dkgRules', () => {
     expect(dkgRuleUrl(rules)).toBe(
       'https://github.com/dashpay/dash/blob/v24.0.0/src/active/dkgsession.cpp',
     )
+  })
+})
+
+describe('operatorRewardText', () => {
+  it('reads Radar’s operator_reward as a percentage, as Dash Core’s protx info gives it', () => {
+    expect(operatorRewardText(8)).toBe('8%')
+    expect(operatorRewardText(15)).toBe('15%')
+    expect(operatorRewardText(0.5)).toBe('0.5%')
+    expect(operatorRewardText(12.34)).toBe('12.34%')
+  })
+})
+
+describe('departureOf', () => {
+  const removed = {
+    removed: 1_795_024_928,
+    changes: [
+      { field: 'service', height: 2_500_000, ts: 1_790_000_000_000, old: 'a', new: 'b' },
+      {
+        field: 'removed',
+        height: 2_574_457,
+        ts: 1_795_024_928_000,
+        old: '85.209.241.49:9999',
+        new: null,
+      },
+    ],
+  } as unknown as Pick<RadarMasternodeDetail, 'removed' | 'changes'>
+
+  it('says when and where a masternode left the list', () => {
+    expect(departureOf(removed, null)).toEqual({
+      height: 2_574_457,
+      at: 1_795_024_928_000,
+      service: '85.209.241.49:9999',
+    })
+  })
+
+  it('takes the record’s own time when no change says when', () => {
+    const bare = { removed: 1_795_024_928, changes: [] } as unknown as Pick<
+      RadarMasternodeDetail,
+      'removed' | 'changes'
+    >
+    expect(departureOf(bare, null)).toEqual({ height: null, at: 1_795_024_928_000, service: null })
+  })
+
+  it('is null while the masternode is listed, by Radar or by DAPI', () => {
+    const listed = { removed: null, changes: [] } as unknown as Pick<
+      RadarMasternodeDetail,
+      'removed' | 'changes'
+    >
+    expect(departureOf(listed, null)).toBeNull()
+    expect(departureOf(null, null)).toBeNull()
+    const f = dapiFacts({
+      proRegTxHash: PROTX,
+      confirmedHash: '',
+      service: '1.2.3.4:9999',
+      pubKeyOperator: 'ab',
+      votingAddress: 'Xa',
+      isValid: true,
+      type: 0,
+    })
+    expect(departureOf(removed, f)).toBeNull()
   })
 })

@@ -32,6 +32,10 @@ msgstr "{0, plural, one {# блок} few {# блоки} many {# блоків} ot
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "{0, plural, one {виплачено # епоху} few {виплачено # епохи} many {виплачено # епох} other {виплачено # епохи}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, one {# платіж, усього {total}; проіндексовано блоки з {from} по {to}} few {# платежі, усього {total}; проіндексовано блоки з {from} по {to}} many {# платежів, усього {total}; проіндексовано блоки з {from} по {to}} other {# платежу, усього {total}; проіндексовано блоки з {from} по {to}}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "{0, plural, one {# спеціальна транзакція у записі Hyphen} few {# спеціальні транзакції у записі Hyphen} many {# спеціальних транзакцій у записі Hyphen} other {# спеціальної транзакції у записі Hyphen}}"
@@ -110,13 +114,6 @@ msgstr "{0} зі 100"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "Усього проіндексовано виплат: {0}"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "Виплат: {0}, усього {1} DASH; проіндексовані блоки від {2} до {3}"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "Відповідає"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "У блоці"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -590,6 +590,10 @@ msgstr "Остання перевірка порту"
 msgid "Left the list"
 msgstr "Вибув зі списку"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "Вибула зі списку в блоці {0}"
+
 msgid "Listed by DAPI"
 msgstr "У списку DAPI"
 
@@ -736,6 +740,9 @@ msgstr "Версій ще не записано."
 
 msgid "No vote seen"
 msgstr "Голосу не помічено"
+
+msgid "No, it left the list"
+msgstr "Ні, вибула зі списку"
 
 msgid "none"
 msgstr "немає"
@@ -1268,8 +1275,14 @@ msgstr "Ця епоха, блоки"
 msgid "This evonode"
 msgstr "Ця евонода"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "Цієї мастерноди більше немає у списку мастернод, тож вона не отримує виплат і не може голосувати."
+
 msgid "This masternode is on {otherName}."
 msgstr "Ця мастернода перебуває в мережі {otherName}."
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "Ця мастернода вибула зі списку мастернод <0/>, тож вона не отримує виплат і не може голосувати."
 
 msgid "Time (UTC)"
 msgstr "Час (UTC)"
@@ -1364,6 +1377,12 @@ msgstr "Адреса для голосування"
 
 msgid "week"
 msgstr "тиждень"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "Далі — останній запис Radar про неї, за адресою {service}."
+
+msgid "What follows is Radar’s last record of it."
+msgstr "Далі — останній запис Radar про неї."
 
 msgid "What the node announced, newest first"
 msgstr "Що оголосив вузол, спочатку новіші"

@@ -32,6 +32,10 @@ msgstr "{0, plural, other {# ブロック}}、エボノード {2} 件中 {1} 位
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "{0, plural, other {# エポック分を支払い}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, other {支払い # 件、合計 {total}。インデックス済みのブロック {from}〜{to}}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "{0, plural, other {Hyphen の記録に特殊トランザクション # 件}}"
@@ -110,13 +114,6 @@ msgstr "100 点中 {0} 点"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "合計 {0} 件の支払いを索引済み"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "支払い {0} 件、合計 {1} DASH、インデックス済みブロック {2}～{3}"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "応答あり"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "ブロック"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -590,6 +590,10 @@ msgstr "直近のポート確認"
 msgid "Left the list"
 msgstr "リストから外れた"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "ブロック {0} でリストから外れた"
+
 msgid "Listed by DAPI"
 msgstr "DAPI の一覧に掲載"
 
@@ -736,6 +740,9 @@ msgstr "記録されたバージョンはまだありません。"
 
 msgid "No vote seen"
 msgstr "投票を確認できず"
+
+msgid "No, it left the list"
+msgstr "いいえ、リストから外れました"
 
 msgid "none"
 msgstr "なし"
@@ -1268,8 +1275,14 @@ msgstr "このエポック、ブロック"
 msgid "This evonode"
 msgstr "この evonode"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "このマスターノードはもうマスターノードリストにないため、支払いを受けず、投票もできません。"
+
 msgid "This masternode is on {otherName}."
 msgstr "このマスターノードは {otherName} にあります。"
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "このマスターノードは <0/> にマスターノードリストから外れたため、支払いを受けず、投票もできません。"
 
 msgid "Time (UTC)"
 msgstr "時刻 (UTC)"
@@ -1364,6 +1377,12 @@ msgstr "投票アドレス"
 
 msgid "week"
 msgstr "週"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "以下は Radar による最後の記録です（{service}）。"
+
+msgid "What follows is Radar’s last record of it."
+msgstr "以下は Radar による最後の記録です。"
 
 msgid "What the node announced, newest first"
 msgstr "ノードが通知した内容（新しい順）"

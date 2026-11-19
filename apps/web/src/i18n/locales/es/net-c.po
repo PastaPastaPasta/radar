@@ -32,6 +32,10 @@ msgstr "{0, plural, one {# bloque} other {# bloques}}, {1} de {2} evonodes"
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "{0, plural, one {# época pagada} other {# épocas pagadas}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, one {# pago, {total} en total; bloques indexados del {from} al {to}} other {# pagos, {total} en total; bloques indexados del {from} al {to}}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "{0, plural, one {# transacción especial en el registro de Hyphen} other {# transacciones especiales en el registro de Hyphen}}"
@@ -110,13 +114,6 @@ msgstr "{0} sobre 100"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "{0} pagos indexados en total"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "{0} pagos, {1} DASH en total; bloques indexados del {2} al {3}"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "Responde"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "En el bloque"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -590,6 +590,10 @@ msgstr "Última comprobación de puertos"
 msgid "Left the list"
 msgstr "Salió de la lista"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "Salió de la lista en el bloque {0}"
+
 msgid "Listed by DAPI"
 msgstr "En la lista de DAPI"
 
@@ -736,6 +740,9 @@ msgstr "Aún no hay versiones registradas."
 
 msgid "No vote seen"
 msgstr "No se vio ningún voto"
+
+msgid "No, it left the list"
+msgstr "No, salió de la lista"
 
 msgid "none"
 msgstr "ninguno"
@@ -1268,8 +1275,14 @@ msgstr "Esta época, bloques"
 msgid "This evonode"
 msgstr "Este evonode"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "Este masternode ya no está en la lista de masternodes, así que no cobra ni puede votar."
+
 msgid "This masternode is on {otherName}."
 msgstr "Este masternode está en {otherName}."
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "Este masternode salió de la lista de masternodes el <0/>, así que no cobra ni puede votar."
 
 msgid "Time (UTC)"
 msgstr "Hora (UTC)"
@@ -1364,6 +1377,12 @@ msgstr "Dirección de voto"
 
 msgid "week"
 msgstr "semana"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "Lo que sigue es el último registro de Radar sobre él, en {service}."
+
+msgid "What follows is Radar’s last record of it."
+msgstr "Lo que sigue es el último registro de Radar sobre él."
 
 msgid "What the node announced, newest first"
 msgstr "Lo que el nodo anunció, de más reciente a más antiguo"

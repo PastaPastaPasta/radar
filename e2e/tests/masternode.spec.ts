@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { expectAccessible } from '../helpers/a11y'
 import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
+import { answerAsLeftList } from '../helpers/fixtures'
 import { expect, test } from '../helpers/test'
 import { expectReports, sourceLineOf } from '../helpers/sources'
 
@@ -20,6 +21,8 @@ const TESTNET = {
   listedEvo: '5c6542766615387183715d958a925552472f93335fa1612880423e4bbdaef436',
 }
 const MISSING = '0'.repeat(64)
+/** Left the masternode list at block 2,574,457, after DAPI's list was recorded. */
+const LEFT = '2322cc76493494830b9f4e9b5190205dc3d6a59657a30ca8cb13226bc0e179ad'
 
 const MODE = 'sources=decentralized'
 
@@ -246,6 +249,9 @@ test.describe('masternode page', () => {
     const first = await table.getByRole('row').count()
     expect(first).toBeGreaterThan(5)
     await expect(page.locator('[data-payments-pager]')).toContainText('25 of 454 shown')
+    await expect(page.locator('#payments')).toContainText(
+      /454 payments, 545\.8656\sDASH in total; indexed blocks 1,047,200 to 2,569,999/,
+    )
 
     await page.getByRole('button', { name: 'Show more' }).click()
 
@@ -403,6 +409,29 @@ test.describe('masternode page', () => {
       'href',
       'https://gov.dashhq.org/masternodes?network=testnet',
     )
+    // Radar's crawl gives operator_reward 10: a percentage, as Dash Core's protx info does.
+    await expect(page.locator('#registration')).toContainText(/Operator reward\s*10%/)
+  })
+
+  test('says a masternode that left the list has left it, everywhere, and offers no vote @RA-30 @RA-31', async ({
+    page,
+  }) => {
+    // Left at block 2,574,457 (Radar's changes); its ProRegTx sets a 15.00% operator reward.
+    await answerAsLeftList(page, LEFT)
+    await page.goto(`/mn/${LEFT}`)
+    const header = page.locator('[data-masternode-header]')
+    await expect(header.locator('[data-left-list]')).toHaveText('Left the list at block 2,574,457')
+    await settled(page)
+    await expect(header).not.toContainText('Enabled')
+    await expect(header).not.toContainText('Not checked yet')
+    await expect(page.getByRole('link', { name: /Vote in Governance/ })).toHaveCount(0)
+    await expect(page.locator('[data-left-notice]')).toContainText(
+      'so it isn’t paid and can’t vote. What follows is Radar’s last record of it, at 85.209.241.49:9999.',
+    )
+    const registration = page.locator('#registration')
+    await expect(registration).toContainText('No, it left the list')
+    await expect(registration).toContainText(/Operator reward\s*15%/)
+    await expectAccessible(page)
   })
 
   test('takes a testnet ProTx opened on mainnet to testnet @RA-41', async ({ page }) => {

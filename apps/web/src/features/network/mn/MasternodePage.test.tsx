@@ -195,6 +195,65 @@ describe('Masternode page', () => {
     expect(kpis).not.toHaveTextContent('Uptime for 13 days')
   })
 
+  it('reads as removed everywhere once the masternode has left the list, with no vote link', async () => {
+    const body = await fixtureBody<Record<string, unknown>>(
+      'radar',
+      'mainnet',
+      `masternodes__${MAINNET.regular}`,
+    )
+    server.use(
+      http.get(`*/masternodes/${MAINNET.regular}`, () =>
+        HttpResponse.json({
+          ...body,
+          reachable: null,
+          removed: 1_795_024_928,
+          changes: [
+            {
+              field: 'removed',
+              height: 2_574_457,
+              ts: 1_795_024_928,
+              old: '85.209.241.228:9999',
+              new: null,
+            },
+          ],
+        }),
+      ),
+    )
+    vi.spyOn(core, 'masternodeList').mockResolvedValue({
+      data: new Map(),
+      source: 'dapi',
+      asOf: Date.now(),
+      fetchedAt: Date.now(),
+      proved: false,
+    } as unknown as Awaited<ReturnType<typeof core.masternodeList>>)
+    renderAt(`/mn/${MAINNET.regular}`)
+    const status = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-left-list]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(status).toHaveTextContent('Left the list at block 2,574,457')
+    const header = document.querySelector<HTMLElement>('[data-masternode-header]')!
+    expect(header).not.toHaveTextContent('Enabled')
+    expect(header).not.toHaveTextContent('Not checked yet')
+    expect(screen.queryByRole('link', { name: /Vote in Governance/ })).toBeNull()
+    expect(document.querySelector('[data-left-notice]')).toHaveTextContent(
+      /left the masternode list on .+, so it isn’t paid and can’t vote\. What follows is Radar’s last record of it, at 85\.209\.241\.228:9999\./,
+    )
+    expect(document.getElementById('registration')).toHaveTextContent('No, it left the list')
+  })
+
+  it('shows the operator reward as the percentage the operator takes @RA-31', async () => {
+    renderAt(`/mn/${TESTNET.regular}?network=testnet`)
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#registration')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(card).toHaveTextContent('Operator reward10%')
+    expect(card).not.toHaveTextContent('0.10%')
+  })
+
   it('names Hyphen’s special transactions as the kit does, not by their raw ids @HY-11', async () => {
     renderAt(`/mn/${MAINNET.listed}?tab=history`)
     const special = await waitFor(() => {

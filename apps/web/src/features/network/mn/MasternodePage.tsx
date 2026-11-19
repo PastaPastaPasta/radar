@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { LinkProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
@@ -8,6 +8,7 @@ import { isNotInBuild } from '@/data/errors'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import { CopyLinkButton, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
+import { formatInt } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import {
   Empty,
@@ -19,12 +20,14 @@ import {
   Skeleton,
   SourceSection,
   Tabs,
+  Time,
   Unavailable,
 } from '@/ui'
 import { HistoryTab } from './HistoryTab'
 import type { MnContext } from './mn-context'
 import { useDapiFacts, useRadarRecord } from './mn-data'
 import {
+  departureOf,
   isEvonode,
   otherNetwork,
   placeOf,
@@ -169,12 +172,14 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
     f,
     dapi: dapi.data ? stampOf(dapi.data) : null,
     evo,
+    left: departureOf(d, f),
     off,
   }
   const current: MnTab = tab === 'platform' && !evo ? 'overview' : (tab ?? 'overview')
   return (
     <SourceSection source={[d ? ctx.radar : null, f ? ctx.dapi : null].filter((x) => x !== null)}>
       <Header ctx={ctx} />
+      {ctx.left ? <LeftNotice ctx={ctx} /> : null}
       <PageTabs protx={protx} evo={evo} value={current} />
       {!off && !d && radar.isError ? (
         <ErrorState
@@ -299,9 +304,32 @@ function Unknown({
   )
 }
 
+/** A masternode that has left the list keeps its page, which says so before anything else. */
+function LeftNotice({ ctx }: { ctx: MnContext }) {
+  const { t } = useLingui()
+  const left = ctx.left
+  if (!left) return null
+  const service = left.service ?? ctx.d?.service ?? null
+  return (
+    <p role="status" data-left-notice className="rx-note rounded border p-3">
+      {left.at === null ? (
+        t`This masternode is no longer on the masternode list, so it isn’t paid and can’t vote.`
+      ) : (
+        <Trans>
+          This masternode left the masternode list on <Time ms={left.at} mode="absolute" />, so it
+          isn’t paid and can’t vote.
+        </Trans>
+      )}{' '}
+      {service
+        ? t`What follows is Radar’s last record of it, at ${service}.`
+        : t`What follows is Radar’s last record of it.`}
+    </p>
+  )
+}
+
 function Header({ ctx }: { ctx: MnContext }) {
   const { t } = useLingui()
-  const { d, f, evo, net, protx } = ctx
+  const { d, f, evo, net, protx, left } = ctx
   const serviceText = f?.service ?? d?.service ?? null
   const service = serviceText ? splitService(serviceText) : null
   const banned = f ? !f.valid : d ? poseState(d) === 'banned' : false
@@ -333,7 +361,9 @@ function Header({ ctx }: { ctx: MnContext }) {
         )}
       </h1>
       <div className="rx-rec__actions">
-        <LinkOut to={{ app: 'gov', action: 'masternodes', net }}>{t`Vote in Governance`}</LinkOut>
+        {left ? null : (
+          <LinkOut to={{ app: 'gov', action: 'masternodes', net }}>{t`Vote in Governance`}</LinkOut>
+        )}
         <CopyLinkButton />
       </div>
       <div className="rx-rec__meta">
@@ -341,7 +371,14 @@ function Header({ ctx }: { ctx: MnContext }) {
         <Hash value={protx} display="full" />
       </div>
       <div className="rx-rec__meta" data-status>
-        {d ? (
+        {left ? (
+          <span className="rx-st rx-st--bad" data-left-list>
+            {left.height === null
+              ? t`Left the list`
+              : t`Left the list at block ${formatInt(left.height)}`}
+          </span>
+        ) : null}
+        {d && !left ? (
           <span
             className={`rx-st ${d.reachable ? 'rx-st--good' : d.reachable === false ? 'rx-st--bad' : ''}`}
           >
@@ -352,17 +389,19 @@ function Header({ ctx }: { ctx: MnContext }) {
                 : t`Not checked yet`}
           </span>
         ) : null}
-        <span
-          className={`rx-st ${banned ? 'rx-st--bad' : penalised ? 'rx-st--warn' : 'rx-st--good'}`}
-        >
-          {banned
-            ? t`PoSe banned`
-            : d
-              ? penalised
-                ? t`Enabled, PoSe penalty ${d.pose_penalty}`
-                : t`Enabled, no PoSe penalty`
-              : t`Valid on DAPI’s list`}
-        </span>
+        {left ? null : (
+          <span
+            className={`rx-st ${banned ? 'rx-st--bad' : penalised ? 'rx-st--warn' : 'rx-st--good'}`}
+          >
+            {banned
+              ? t`PoSe banned`
+              : d
+                ? penalised
+                  ? t`Enabled, PoSe penalty ${d.pose_penalty}`
+                  : t`Enabled, no PoSe penalty`
+                : t`Valid on DAPI’s list`}
+          </span>
+        )}
         {d?.version ? <span className="rx-ver">{d.version}</span> : null}
       </div>
       <SectionSources className="rx-rec__src" />

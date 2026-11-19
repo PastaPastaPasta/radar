@@ -12,6 +12,7 @@ import {
   crawlDiffers,
   heightOrNull,
   isEvonode,
+  operatorRewardText,
   parseOutpoint,
   poseState,
   uptimeSummary,
@@ -201,6 +202,19 @@ function RegistrationCard({ ctx }: { ctx: MnContext }) {
       }
     }
   }
+  if (!f && ctx.left) {
+    const { height } = ctx.left
+    items.push({
+      label: t`On the list`,
+      value: t`No, it left the list`,
+      hint:
+        height === null ? undefined : (
+          <>
+            {t`At block`} <Entity kind="block" id={String(height)} label={formatInt(height)} />
+          </>
+        ),
+    })
+  }
   if (d) {
     const collateral = parseOutpoint(d.collateral)
     items.push(
@@ -223,7 +237,7 @@ function RegistrationCard({ ctx }: { ctx: MnContext }) {
     if (d.operator_reward > 0) {
       items.push({
         label: t`Operator reward`,
-        value: formatPercent(d.operator_reward / 10000, 2),
+        value: operatorRewardText(d.operator_reward),
       })
     }
     if (d.operator_payout_address) {

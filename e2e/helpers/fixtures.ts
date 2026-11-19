@@ -18,3 +18,15 @@ export async function answerAsUnmined(
     [txid, opts] as const,
   )
 }
+
+/**
+ * From the next page load on, DAPI's masternode list leaves `protx` out, as for a masternode that has left the list
+ * since the recording (`FIXTURE_LEFT_KEY` in `apps/web/src/test/msw/browser.ts`).
+ */
+export async function answerAsLeftList(page: Page, protx: string): Promise<void> {
+  await page.addInitScript((id) => {
+    const key = 'radar.fixture.mn-left'
+    const known = JSON.parse(sessionStorage.getItem(key) ?? '[]') as string[]
+    sessionStorage.setItem(key, JSON.stringify([...known, id]))
+  }, protx)
+}
