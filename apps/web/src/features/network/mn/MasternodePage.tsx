@@ -4,7 +4,7 @@ import type { LinkProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf, type SourceStamp } from '@/data/envelope'
-import { isSourceError } from '@/data/errors'
+import { isNotInBuild } from '@/data/errors'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import { CopyLinkButton, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
@@ -142,7 +142,7 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
         />,
       )
     }
-    if (off && dapi.isError && isSourceError(dapi.error) && dapi.error.kind === 'unavailable') {
+    if (off && dapi.isError && isNotInBuild(dapi.error)) {
       return plain(<Unavailable title={t`Masternode records need an indexer`} />)
     }
     if (off && dapi.isError) {

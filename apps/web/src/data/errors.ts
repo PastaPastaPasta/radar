@@ -42,6 +42,31 @@ export class SourceError extends Error {
   }
 }
 
+/** A source this build has no client for (the unit-test build's DAPI): `unavailable`, but never an outage. */
+export class NotInBuildError extends SourceError {
+  constructor(source: SourceId, message: string) {
+    super({ source, kind: 'unavailable', message })
+    this.name = 'NotInBuildError'
+  }
+}
+
+export const isNotInBuild = (e: unknown): e is NotInBuildError => e instanceof NotInBuildError
+
+/** Failures that say the source can't answer right now, as opposed to an answer Radar must not set aside. */
+export function isOutage(e: unknown): boolean {
+  if (!isSourceError(e)) return false
+  switch (e.kind) {
+    case 'network':
+    case 'timeout':
+    case 'http':
+    case 'unavailable':
+    case 'rate-limited':
+      return true
+    default:
+      return false
+  }
+}
+
 export function isSourceError(e: unknown): e is SourceError {
   return e instanceof SourceError
 }

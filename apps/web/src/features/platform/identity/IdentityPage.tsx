@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, type ReactNode } from 'react'
+import { isOutage } from '@/data/errors'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import { sdkQueries } from '@/data/sdk/queries'
@@ -82,18 +83,17 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
   const net = useNetwork()
   const name = useIdentityName(id)
   const exists = useQuery(sdkQueries['identities.balanceAndRevision'](net, { id }))
-  const sdkDown = exists.isError && exists.data === undefined
+  const sdkFailed = exists.isError && exists.data === undefined
   const decentralized = useDecentralizedOnly()
-  const indexed = useQuery({
-    ...peQueries.identity(net, id),
-    enabled: sdkDown && !decentralized,
-  })
+  // Only an outage turns to the index: a proof that failed, or an answer Radar couldn't read, is shown as it is (§2.3).
+  const askIndex = sdkFailed && isOutage(exists.error) && !decentralized
+  const indexed = useQuery({ ...peQueries.identity(net, id), enabled: askIndex })
   useEffect(() => {
     recordViewedIdentity(net, id)
   }, [net, id])
 
   const missing = exists.data?.data === null
-  const unindexed = sdkDown && !decentralized && indexed.data?.data === null
+  const unindexed = askIndex && indexed.data?.data === null
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
   const found = exists.data?.data
   const stamp = exists.data ? stampOf(exists.data) : undefined
@@ -186,7 +186,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
               }
             />
           </div>
-          {sdkDown ? (
+          {sdkFailed ? (
             <ErrorState error={exists.error} source="sdk" onRetry={() => void exists.refetch()} />
           ) : null}
           <TabBody id={id} search={search} />

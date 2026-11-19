@@ -1,14 +1,10 @@
 import type { Budget } from './budget'
-import { SourceError } from '../errors'
+import { NotInBuildError } from '../errors'
 import type { CoreCache } from './cache'
 import type { DapiTransport } from './transport'
 
 function unavailable(): never {
-  throw new SourceError({
-    source: 'dapi',
-    kind: 'unavailable',
-    message: 'The DAPI client is not available in this build',
-  })
+  throw new NotInBuildError('dapi', 'The DAPI client is not available in this build')
 }
 
 /** Reports no headroom, so list views serve from Hyphen until a real transport is installed. */
