@@ -432,7 +432,8 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
               )}
             </div>
           </div>
-          {total > 0 ? <Bars board={b} controls={controls} /> : null}
+          {/* Every reachable node's countries come from the summary: its loading and failure show even when no city is placed. */}
+          {total > 0 || b.scope === 'nodes' ? <Bars board={b} controls={controls} /> : null}
         </>
       )}
     </div>

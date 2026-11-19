@@ -340,6 +340,25 @@ describe('the Map page', () => {
     ).toBeInTheDocument()
   })
 
+  it('shows the summary’s failure and retry even when no reachable node has a place @RA-50', async () => {
+    server.use(
+      http.get('*/mainnet/geo', () => HttpResponse.json({ crawl_id: 1, points: [], unlocated: 0 })),
+      http.get('*/mainnet/summary', () => new HttpResponse(null, { status: 500 })),
+    )
+    renderAt('/map?layer=nodes')
+    await waitFor(() =>
+      expect(screen.getByText('The latest crawl placed no reachable node.')).toBeInTheDocument(),
+    )
+    await waitFor(() =>
+      expect(document.querySelector('[data-map-bars]')).toHaveAttribute('data-map-bars', 'error'),
+    )
+    expect(
+      within(document.querySelector<HTMLElement>('[data-map-bars]')!).getByRole('button', {
+        name: /Retry|Try again/,
+      }),
+    ).toBeInTheDocument()
+  })
+
   it('says the masternode filters are off while every reachable node is counted @RA-51', async () => {
     renderAt('/map?layer=nodes&country=DE&q=hetzner')
     await waitFor(() => expect(document.querySelector('[data-filters-off]')).not.toBeNull())
