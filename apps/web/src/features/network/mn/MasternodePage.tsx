@@ -3,7 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { LinkProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { coreQueries } from '@/data/core/queries'
-import { stampOf } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
+import { isSourceError } from '@/data/errors'
 import { useDecentralizedOnly } from '@/data/health'
 import { radarQueries } from '@/data/radar/queries'
 import { CopyLinkButton, PageLink, useDocumentTitle, useNetwork } from '@/features/entity'
@@ -141,10 +142,22 @@ function Record({ net, protx, off, tab, epoch, before }: RecordProps) {
         />,
       )
     }
-    if (off && dapi.isError) {
+    if (off && dapi.isError && isSourceError(dapi.error) && dapi.error.kind === 'unavailable') {
       return plain(<Unavailable title={t`Masternode records need an indexer`} />)
     }
-    return plain(<Unknown net={net} protx={protx} off={off} />)
+    if (off && dapi.isError) {
+      return plain(
+        <ErrorState
+          error={dapi.error}
+          source="dapi"
+          onRetry={() => {
+            void dapi.refetch()
+          }}
+        />,
+      )
+    }
+    const answer = off ? dapi.data && stampOf(dapi.data) : radar.data && stampOf(radar.data)
+    return plain(<Unknown net={net} protx={protx} off={off} source={answer} />)
   }
 
   const evo = f ? f.type === 'Evo' : d ? isEvonode(d) : false
@@ -214,7 +227,17 @@ function PageTabs({ protx, evo, value }: { protx: string; evo: boolean; value: M
 }
 
 /** A ProTx Radar doesn't know here may be registered on the other network. */
-function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: boolean }) {
+function Unknown({
+  net,
+  protx,
+  off,
+  source,
+}: {
+  net: NetworkId
+  protx: string
+  off: boolean
+  source: SourceStamp | undefined
+}) {
   const { t } = useLingui()
   const client = useQueryClient()
   const other = otherNetwork(net)
@@ -232,6 +255,7 @@ function Unknown({ net, protx, off }: { net: NetworkId; protx: string; off: bool
   const empty = (
     <Empty
       kind="not-found"
+      source={source}
       title={
         found
           ? t`This masternode is on ${otherName}.`

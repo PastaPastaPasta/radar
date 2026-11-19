@@ -93,6 +93,7 @@ export function DocumentPage({ contract, type, id, search }: DocumentPageProps) 
             <Empty
               kind="not-found"
               title={t`No document with this ID in this type.`}
+              source={doc.data ? stampOf(doc.data) : undefined}
               body={
                 <Link to="/contract/$id/documents/$type" params={{ id: contract, type }}>
                   {t`Browse the documents of this type`}

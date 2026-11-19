@@ -74,6 +74,7 @@ function Record({ id, blockRef }: { id: string; blockRef: BlockRef }) {
         kind="not-found"
         title={t`Platform Explorer has no block ${id.length > 12 ? `${id.slice(0, 8)}…` : id}`}
         body={t`It may be newer than the index, or the height or hash may be mistyped.`}
+        source={state.missingStamp}
         action={<BlockLookup />}
       />
     )

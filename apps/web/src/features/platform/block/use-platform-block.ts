@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { stampOf } from '@/data/envelope'
 import { heightLookup, type BlockRef } from '@/data/pe/blocks-query'
 import { peQueries } from '@/data/pe/queries'
 import type { NetworkId } from '@/lib/network'
@@ -18,13 +19,18 @@ export function usePlatformBlock(net: NetworkId, ref: BlockRef) {
     ...peQueries.block(net, hash ?? ''),
     enabled: hash !== undefined,
   })
-  const missing =
-    (byHeight !== undefined && lookup.isSuccess && lookup.data.data.items.length === 0) ||
-    (block.isSuccess && block.data.data === null)
+  const missingHeight =
+    byHeight !== undefined && lookup.isSuccess && lookup.data.data.items.length === 0
+  const missingHash = block.isSuccess && block.data.data === null
   return {
     block,
     lookup,
-    missing,
+    missing: missingHeight || missingHash,
+    missingStamp: missingHeight
+      ? stampOf(lookup.data)
+      : missingHash
+        ? stampOf(block.data)
+        : undefined,
     error: lookup.error ?? block.error,
     refetch: () => {
       void lookup.refetch()

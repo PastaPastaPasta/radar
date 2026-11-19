@@ -160,6 +160,11 @@ test.describe('Identity page', () => {
     await page.goto(identityUrl(ABSENT))
     await expect(page.getByText('No identity with this ID on mainnet.')).toBeVisible()
     await settled(page)
+    await expect(
+      page.locator('[data-empty="not-found"] [data-source="sdk"][data-proved="true"]'),
+      'the proved absence carries its proof mark',
+    ).toBeVisible()
+    await expect(page.getByRole('alert')).toHaveCount(0)
     const other = page.getByRole('link', { name: 'Search on testnet' })
     await expect(other).toHaveAttribute(
       'href',
@@ -721,5 +726,35 @@ test.describe('Decentralized only mode', () => {
     await page.getByLabel('Identity ID or name').fill(M)
     await page.getByRole('button', { name: 'Open', exact: true }).click()
     await expect(page).toHaveURL(new RegExp(`/identity/${M}`))
+  })
+})
+
+test.describe('Identity page while DAPI is down', () => {
+  test.use({ allowFixtureMisses: true })
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem('radar.fixture.down', '["sdk"]'))
+  })
+
+  test('says Platform Explorer has no such identity instead of showing only an outage @NX-10 @X-09', async ({
+    page,
+  }) => {
+    await page.goto(identityUrl(ABSENT))
+    await expect(
+      page.getByText('Platform Explorer has no identity with this ID on mainnet.'),
+    ).toBeVisible()
+    await settled(page)
+    const empty = page.locator('[data-empty="not-found"]')
+    await expect(empty).toContainText('Radar couldn’t confirm it with a proof')
+    await expect(empty.locator('[data-source="pe"]')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Check with DAPI again' })).toBeVisible()
+    await expect(page.getByText(/isn't available here/)).toHaveCount(0)
+  })
+
+  test('still shows the outage for an identity that exists @NX-10 @X-09', async ({ page }) => {
+    await page.goto(identityUrl(M))
+    await expect(
+      page.getByRole('alert').filter({ hasText: "DAPI isn't answering" }).first(),
+    ).toBeVisible()
+    await expect(page.getByText(/has no identity with this ID/)).toHaveCount(0)
   })
 })

@@ -1,6 +1,7 @@
 import { cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { SourceError } from '@/data/errors'
 import { sdk } from '@/data/sdk'
 import type { IdentityVoteDto } from '@/data/sdk/methods/p-id'
 import { renderAt } from './test-utils'
@@ -148,6 +149,47 @@ describe('Identity page', () => {
     expect(await screen.findByText('No identity with this ID on mainnet.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Search on testnet' })).toBeInTheDocument()
     expect(document.querySelector('.rx-tabs')).toBeNull()
+  })
+
+  it('shows the proof of an absent identity on its not-found state @NX-10', async () => {
+    renderAt(`/identity/${ABSENT}`)
+    await screen.findByText('No identity with this ID on mainnet.')
+    const empty = document.querySelector('[data-empty="not-found"]')!
+    expect(empty.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('says Platform Explorer has no such identity when DAPI cannot connect, not that DAPI is unavailable @NX-10', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
+      if (method !== 'identities.balanceAndRevision') return real(net, method, args, signal)
+      return Promise.reject(
+        new SourceError({ source: 'sdk', kind: 'unavailable', message: 'no SDK' }),
+      )
+    })
+    renderAt(`/identity/${ABSENT}`)
+    expect(
+      await screen.findByText('Platform Explorer has no identity with this ID on mainnet.'),
+    ).toBeInTheDocument()
+    const empty = document.querySelector('[data-empty="not-found"]')!
+    expect(empty.querySelector('[data-source="pe"]')).not.toBeNull()
+    expect(empty).toHaveTextContent('Radar couldn’t confirm it with a proof')
+    expect(screen.getByRole('button', { name: 'Check with DAPI again' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Search on testnet' })).toBeInTheDocument()
+    expect(document.querySelector('.rx-tabs')).toBeNull()
+  })
+
+  it('still shows an outage for an identity Platform Explorer knows when DAPI cannot connect @NX-10', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
+      if (method !== 'identities.balanceAndRevision') return real(net, method, args, signal)
+      return Promise.reject(
+        new SourceError({ source: 'sdk', kind: 'network', message: 'Failed to fetch' }),
+      )
+    })
+    renderAt(`/identity/${M}`)
+    expect((await screen.findAllByRole('alert'))[0]).toHaveTextContent("DAPI isn't answering")
+    expect(screen.queryByText(/has no identity with this ID/)).toBeNull()
   })
 
   it('shows the not-found state without a way to search another network on a devnet-less testnet link @NX-10', async () => {

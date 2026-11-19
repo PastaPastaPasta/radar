@@ -286,6 +286,10 @@ describe('Transaction page', () => {
   it('says a transaction is not there, and offers the other network @IN-05 @IN-16', async () => {
     renderAt(`/tx/${NO_SUCH}`)
     expect(await screen.findByText('Not found on Mainnet')).toBeInTheDocument()
+    expect(
+      document.querySelector('[data-empty="not-found"] .rx-sources [data-source]'),
+      'the answer that found nothing is named',
+    ).not.toBeNull()
     expect(screen.getByRole('link', { name: /Search Testnet/ })).toHaveAttribute(
       'href',
       expect.stringContaining('network=testnet'),

@@ -152,6 +152,7 @@ export function NotFound({
   what,
   path,
   net,
+  source,
 }: {
   /** The page's own name, as its heading. */
   title: string
@@ -159,6 +160,8 @@ export function NotFound({
   /** Path of this record, for the other network's link. */
   path: string
   net: NetworkId
+  /** The answer that found nothing. */
+  source?: SourceStamp | undefined
 }) {
   const { t } = useLingui()
   const other = net === 'mainnet' || net === 'testnet' ? OTHER[net] : undefined
@@ -169,6 +172,7 @@ export function NotFound({
         kind="not-found"
         title={t`Not found on ${networkName(net)}`}
         body={what}
+        source={source}
         action={
           other ? (
             <PageLink to={path} search={{ network: other }} className="dh-btn">

@@ -4,6 +4,8 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, type ReactNode } from 'react'
+import { useDecentralizedOnly } from '@/data/health'
+import { peQueries } from '@/data/pe/queries'
 import { sdkQueries } from '@/data/sdk/queries'
 import {
   PageFrame,
@@ -80,14 +82,26 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
   const net = useNetwork()
   const name = useIdentityName(id)
   const exists = useQuery(sdkQueries['identities.balanceAndRevision'](net, { id }))
+  const sdkDown = exists.isError && exists.data === undefined
+  const decentralized = useDecentralizedOnly()
+  const indexed = useQuery({
+    ...peQueries.identity(net, id),
+    enabled: sdkDown && !decentralized,
+  })
   useEffect(() => {
     recordViewedIdentity(net, id)
   }, [net, id])
 
   const missing = exists.data?.data === null
+  const unindexed = sdkDown && !decentralized && indexed.data?.data === null
   const other = net === 'mainnet' ? 'testnet' : 'mainnet'
   const found = exists.data?.data
   const stamp = exists.data ? stampOf(exists.data) : undefined
+  const otherNetLink = isDevnet(net) ? undefined : (
+    <PageLink to={`/identity/${encodeURIComponent(id)}`} search={{ network: other }}>
+      {t`Search on ${other}`}
+    </PageLink>
+  )
 
   return (
     <PageFrame
@@ -130,12 +144,26 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
           kind="not-found"
           title={t`No identity with this ID on ${net}.`}
           body={t`Platform has no identity with this ID on this network.`}
+          source={stamp}
+          action={otherNetLink}
+        />
+      ) : unindexed ? (
+        <Empty
+          kind="not-found"
+          title={t`Platform Explorer has no identity with this ID on ${net}.`}
+          body={t`DAPI isn’t answering, so Radar couldn’t confirm it with a proof. The ID may be new, mistyped, or on another network.`}
+          source={indexed.data ? stampOf(indexed.data) : undefined}
           action={
-            isDevnet(net) ? undefined : (
-              <PageLink to={`/identity/${encodeURIComponent(id)}`} search={{ network: other }}>
-                {t`Search on ${other}`}
-              </PageLink>
-            )
+            <div className="grid justify-items-center gap-3">
+              <button
+                type="button"
+                className="dh-btn dh-btn--sm"
+                onClick={() => void exists.refetch()}
+              >
+                {t`Check with DAPI again`}
+              </button>
+              {otherNetLink}
+            </div>
           }
         />
       ) : (
@@ -158,7 +186,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
               }
             />
           </div>
-          {exists.isError && exists.data === undefined ? (
+          {sdkDown ? (
             <ErrorState error={exists.error} source="sdk" onRetry={() => void exists.refetch()} />
           ) : null}
           <TabBody id={id} search={search} />

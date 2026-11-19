@@ -4,6 +4,7 @@ import type { WireError, WireResult } from '@/data/sdk/methods'
 import { createProofStore } from '@/data/sdk/proof-store'
 import { platformTipOf, platformTipQuery, sdkQueries } from '@/data/sdk/queries'
 import { SourceError } from '@/data/errors'
+import { retryDelay, retryable } from '@/data/query/defaults'
 import { queryLog } from '@/data/query-log'
 import { takeFixtureMisses } from '../../msw/handlers'
 import { FixtureSdkTransport } from '../../msw/sdk-transport'
@@ -197,6 +198,7 @@ describe('SdkClient state', () => {
   })
 
   it('marks the network failed when it cannot connect, and tries again after 5 s', async () => {
+    vi.setSystemTime(0)
     let attempts = 0
     const { client } = setup(
       connectOnly({
@@ -218,9 +220,17 @@ describe('SdkClient state', () => {
       kind: 'network',
     })
     expect(client.state('mainnet')).toBe('failed')
-    await expect(client.call('mainnet', 'epoch.current', {})).rejects.toMatchObject({
-      kind: 'unavailable',
+    await vi.advanceTimersByTimeAsync(1_000)
+    // The pause keeps the failure's own kind, so it reads as an outage and the query retries once the pause is over.
+    const paused = await client.call('mainnet', 'epoch.current', {}).catch((e: unknown) => e)
+    expect(paused).toMatchObject({
+      source: 'sdk',
+      kind: 'network',
+      retryAfterMs: 4_000,
+      message: 'The Platform SDK could not connect a moment ago: Failed to prefetch quorums',
     })
+    expect(retryable(paused)).toBe(true)
+    expect(retryDelay(0, paused)).toBe(4_000)
     expect(attempts).toBe(1)
     await vi.advanceTimersByTimeAsync(5_001)
     await client.call('mainnet', 'epoch.current', {}).catch(() => undefined)

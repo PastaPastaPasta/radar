@@ -73,6 +73,17 @@ describe('Masternode page', () => {
     )
   })
 
+  it('shows DAPI’s outage, not “needs an indexer”, when its list fails in Decentralized only mode @X-09', async () => {
+    vi.spyOn(core, 'masternodeList').mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'network', message: 'No node answered' }),
+    )
+    renderAt(`/mn/${MAINNET.regular}?sources=decentralized`)
+    expect(await screen.findByRole('alert', {}, { timeout: 10_000 })).toHaveTextContent(
+      /DAPI isn.t answering/,
+    )
+    expect(screen.queryByText('Masternode records need an indexer')).toBeNull()
+  })
+
   it('shows type, status, PoSe, version, uptime, last paid and earnings for a regular masternode @RA-30', async () => {
     renderAt(`/mn/${MAINNET.regular}`)
     const header = await waitFor(() => {
@@ -356,6 +367,9 @@ describe('Masternode page', () => {
   it('offers search for a ProTx nobody lists @RA-41', async () => {
     renderAt(`/mn/${MISSING}`)
     expect(await screen.findByText('No masternode with this ProTx on mainnet.')).toBeInTheDocument()
+    expect(
+      document.querySelector('[data-empty="not-found"] .rx-sources [data-source="radar"]'),
+    ).not.toBeNull()
     const offer = await waitFor(() => {
       const el = document.querySelector('[data-search-offer]')
       expect(el).not.toBeNull()
