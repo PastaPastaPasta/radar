@@ -21,6 +21,7 @@ import { bytesToHex } from '@/lib/hex'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { loadDapiFixture, loadDapiManifest, type DapiFixture } from '../fixtures/dapi-load'
 import { reportFixtureMiss } from './handlers/fixtures'
+import { advancedQuorumsAnswer, platformCut } from './platform-tip'
 
 function fromBase64(b64: string): Uint8Array {
   const bin = atob(b64)
@@ -203,7 +204,8 @@ export class FixtureDapiTransport implements DapiTransport {
     opts?: DapiCallOptions,
   ): Promise<DapiUnaryReply> {
     if (opts?.signal?.aborted) throw abortError()
-    if (this.broken) throw this.lostError(method)
+    if (this.broken || (platformCut() && method === 'getCurrentQuorumsInfo'))
+      throw this.lostError(method)
     const fixture = await this.find(net, method, request)
     if (fixture.error) throw recordedError(fixture)
     if (fixture.response === undefined) {
@@ -213,7 +215,9 @@ export class FixtureDapiTransport implements DapiTransport {
         message: `The ${method} fixture holds no response`,
       })
     }
-    const response = fromBase64(fixture.response)
+    const recorded = fromBase64(fixture.response)
+    const response =
+      method === 'getCurrentQuorumsInfo' ? advancedQuorumsAnswer(recorded, net) : recorded
     return {
       response:
         method === 'getTransaction' && this.unmined.size > 0

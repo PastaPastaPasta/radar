@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
-msgid ": a missed turn, or a new set, shifts it."
-msgstr ": пропущенный ход или новый набор сдвигает его."
-
 msgid "(estimated)"
 msgstr "(оценка)"
 
@@ -62,8 +59,17 @@ msgstr "Нужно {0} из {1} эвонод"
 msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 msgstr "Кворумов на высоте Platform {1}: {0}. Не подтверждено доказательством: у SDK нет доказательства для этого списка."
 
+msgid "{m} min {s} s"
+msgstr "{m} мин {s} с"
+
+msgid "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+msgstr "{moved, plural, one {С тех пор сдвинуто на # блок, если никто не пропустил ход.} few {С тех пор сдвинуто на # блока, если никто не пропустил ход.} many {С тех пор сдвинуто на # блоков, если никто не пропустил ход.} other {С тех пор сдвинуто на # блока, если никто не пропустил ход.}}"
+
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Собрано из # ответа, проверенного по доказательству.} few {Собрано из # ответов, проверенных по доказательствам.} many {Собрано из # ответов, проверенных по доказательствам.} other {Собрано из # ответа, проверенного по доказательствам.}}"
+
+msgid "{s} s"
+msgstr "{s} с"
 
 msgid "1 m"
 msgstr "1 мес"
@@ -146,6 +152,9 @@ msgstr "Блоки записей"
 msgid "Commitment"
 msgstr "Обязательство"
 
+msgid "Connecting to Platform…"
+msgstr "Подключение к Platform…"
+
 msgid "Copy encrypted note"
 msgstr "Копировать зашифрованную запись"
 
@@ -154,6 +163,10 @@ msgstr "Копировать ID"
 
 msgid "Core block rewards"
 msgstr "Награды за блоки Core"
+
+#. placeholder {0}: formatInt(pool.cl)
+msgid "Core block rewards to Core block {0}; fees not counted"
+msgstr "Награды за блоки Core до блока Core {0}; комиссии не учтены"
 
 msgid "Credits"
 msgstr "Кредиты"
@@ -283,6 +296,15 @@ msgstr "Первый блок"
 msgid "From epoch"
 msgstr "С эпохи"
 
+msgid "From Radar’s crawl; fees not counted"
+msgstr "По данным обхода Radar; комиссии не учтены"
+
+msgid "From Radar’s crawl: an estimate until the epoch ends"
+msgstr "По данным обхода Radar: оценка до конца эпохи"
+
+msgid "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+msgstr "По последнему просмотру наборов валидаторов в Radar, на блоке {at}, пока DAPI не отвечает. Пропущенный ход или новый набор сдвигает порядок."
+
 msgid "Hash prefix"
 msgstr "Префикс хеша"
 
@@ -316,6 +338,15 @@ msgstr "Прошлый пул"
 msgid "Latest {0}"
 msgstr "Последние {0}"
 
+msgid "Latest block"
+msgstr "Последний блок"
+
+msgid "Latest Platform block"
+msgstr "Последний блок Platform"
+
+msgid "Live"
+msgstr "Онлайн"
+
 msgid "Look up"
 msgstr "Найти"
 
@@ -339,6 +370,13 @@ msgstr "Соседние эпохи"
 
 msgid "Network"
 msgstr "Сеть"
+
+msgid "Next block due now (about every {pace})"
+msgstr "Следующий блок ожидается сейчас (примерно раз в {pace})"
+
+#. placeholder {0}: countdown(next)
+msgid "Next block expected in about {0}"
+msgstr "Следующий блок ожидается примерно через {0}"
 
 msgid "Next chunk"
 msgstr "Следующий блок"
@@ -365,8 +403,17 @@ msgstr "Ни одна эвонода не голосовала."
 msgid "No evonode proposed a block in this epoch."
 msgstr "В эту эпоху ни одна эвонода не предложила блок."
 
+msgid "No new block for {ago}, where one usually comes about every {pace}"
+msgstr "Нет нового блока уже {ago}, хотя обычно он приходит примерно раз в {pace}"
+
+msgid "No new Platform block for a while"
+msgstr "Новых блоков Platform давно нет"
+
 msgid "No prefunded balance"
 msgstr "Нет предоплаченного баланса"
+
+msgid "No proposer order yet."
+msgstr "Порядка предлагающих пока нет."
 
 msgid "No quorum matches this filter."
 msgstr "Ни один кворум не подходит под этот фильтр."
@@ -438,6 +485,12 @@ msgstr "Platform хранит итоги только завершённых э�
 msgid "Platform reports no credits."
 msgstr "Platform не сообщает о кредитах."
 
+msgid "Platform updates paused"
+msgstr "Обновления Platform приостановлены"
+
+msgid "Platform updates resumed"
+msgstr "Обновления Platform возобновлены"
+
 msgid "Platform’s flag"
 msgstr "Отметка Platform"
 
@@ -465,6 +518,9 @@ msgstr "Назад: эпоха {0}"
 
 msgid "Processing fees"
 msgstr "Комиссии за обработку"
+
+msgid "proposed by"
+msgstr "предложил"
 
 msgid "Proposers"
 msgstr "Предлагающие"
@@ -496,11 +552,11 @@ msgstr "Кворумы"
 msgid "Radar doesn’t crawl devnets"
 msgstr "Radar не обходит devnet"
 
+msgid "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+msgstr "Radar не обходит devnet: нет прошлого пула, заработка, доходности и истории"
+
 msgid "Radar has no epoch history yet."
 msgstr "У Radar пока нет истории эпох."
-
-msgid "Radar has no proposer schedule right now."
-msgstr "У Radar сейчас нет расписания предлагающих."
 
 msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
 msgstr "Точный порог, фаза и подсчёт по кандидатам от Radar требуют данных обхода Radar"
@@ -571,6 +627,9 @@ msgstr "Созданные комиссии за хранение"
 msgid "Storage fees distributed"
 msgstr "Распределённые комиссии за хранение"
 
+msgid "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+msgstr "Порядок ходов Tenderdash по наборам валидаторов, о которых эвонода сообщила на блоке {at}. Не проверено доказательством: пропущенный ход или новый набор сдвигает его."
+
 msgid "That is not a nullifier"
 msgstr "Это не нуллификатор"
 
@@ -587,14 +646,17 @@ msgstr "Кредиты, хранящиеся в Platform, и поиск пред
 msgid "The current epoch is {0}."
 msgstr "Текущая эпоха — {0}."
 
-msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-msgstr "Пул, доход, доходность, расписание предлагающих и история эпохи требуют данных обхода Radar"
-
 msgid "The evonodes that proposed the most blocks this epoch."
 msgstr "Эвоноды, предложившие больше всего блоков в этой эпохе."
 
 msgid "The history of shielding and unshielding needs Platform Explorer’s index"
 msgstr "История защиты и снятия защиты требует индекса Platform Explorer"
+
+msgid "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+msgstr "Прошлый пул, заработок, доходность и история эпох требуют данных обхода Radar"
+
+msgid "The last proposer order has run out. A fresh one is on its way."
+msgstr "Последний порядок предлагающих закончился. Новый уже в пути."
 
 #. placeholder {0}: formatInt(DEFAULT_COUNT)
 msgid "The latest {0} epochs."
@@ -603,8 +665,8 @@ msgstr "Последние эпохи ({0})."
 msgid "The next proposers"
 msgstr "Следующие предлагающие"
 
-msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
-msgstr "Следующие двенадцать предлагающих, у каждого — число блоков до его хода. Оценка при примерно {pace} с на блок по наборам валидаторов"
+msgid "The next twelve proposers, each with the blocks until its turn."
+msgstr "Следующие двенадцать предлагающих, у каждого — блоки до его хода."
 
 msgid "The node reported no quorums."
 msgstr "Узел не сообщил ни об одном кворуме."
@@ -641,6 +703,10 @@ msgstr "Пул защищённых кредитов: его баланс, пр�
 msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 msgstr "Пул отдаёт записи блоками по {0}. Показаны первые {NOTES_SHOWN} из блока, начинающегося с записи {1}."
 
+#. placeholder {0}: formatInt(pool.blocks)
+msgid "The pool so far over {0} blocks: an estimate until the epoch ends"
+msgstr "Пул на данный момент на {0} блоков: оценка до конца эпохи"
+
 msgid "The protocol version each evonode votes for"
 msgstr "Версия протокола, за которую голосует каждая эвонода"
 
@@ -675,11 +741,20 @@ msgstr "Всего кредитов"
 msgid "Totals"
 msgstr "Итоги"
 
+msgid "Try again"
+msgstr "Повторить"
+
 msgid "Type"
 msgstr "Тип"
 
 msgid "Unshielded"
 msgstr "Незащищённая"
+
+msgid "Updates paused, last block {ago} ago"
+msgstr "Обновления приостановлены, последний блок {ago} назад"
+
+msgid "Updates paused: Platform isn’t answering"
+msgstr "Обновления приостановлены: Platform не отвечает"
 
 msgid "Upgrade vote"
 msgstr "Голос за обновление"

@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
-msgid ": a missed turn, or a new set, shifts it."
-msgstr ": kaçırılan bir sıra ya da yeni bir küme onu kaydırır."
-
 msgid "(estimated)"
 msgstr "(tahmini)"
 
@@ -62,8 +59,17 @@ msgstr "{1} evonode’dan {0} tanesi gerekli"
 msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform yüksekliği {1}’de {0} quorum. Kanıtla doğrulanmadı: SDK’nın bu liste için kanıtı yok."
 
+msgid "{m} min {s} s"
+msgstr "{m} dk {s} sn"
+
+msgid "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+msgstr "{moved, plural, one {O zamandan beri # blok ilerletildi; kaçırılan sıra olmadığı varsayılıyor.} other {O zamandan beri # blok ilerletildi; kaçırılan sıra olmadığı varsayılıyor.}}"
+
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Kanıtla doğrulanan # yanıttan birleştirildi.} other {Kanıtla doğrulanan # yanıttan birleştirildi.}}"
+
+msgid "{s} s"
+msgstr "{s} sn"
 
 msgid "1 m"
 msgstr "1 ay"
@@ -146,6 +152,9 @@ msgstr "Not parçaları"
 msgid "Commitment"
 msgstr "Taahhüt"
 
+msgid "Connecting to Platform…"
+msgstr "Platform’a bağlanılıyor…"
+
 msgid "Copy encrypted note"
 msgstr "Şifreli notu kopyala"
 
@@ -154,6 +163,10 @@ msgstr "Kimliği kopyala"
 
 msgid "Core block rewards"
 msgstr "Core blok ödülleri"
+
+#. placeholder {0}: formatInt(pool.cl)
+msgid "Core block rewards to Core block {0}; fees not counted"
+msgstr "Core blok {0} kadar Core blok ödülleri; ücretler sayılmadı"
 
 msgid "Credits"
 msgstr "Krediler"
@@ -283,6 +296,15 @@ msgstr "İlk blok"
 msgid "From epoch"
 msgstr "Başlangıç epoch’u"
 
+msgid "From Radar’s crawl; fees not counted"
+msgstr "Radar’ın taramasından; ücretler sayılmadı"
+
+msgid "From Radar’s crawl: an estimate until the epoch ends"
+msgstr "Radar’ın taramasından: dönem bitene kadar bir tahmin"
+
+msgid "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+msgstr "DAPI yanıt vermediği sürece, Radar’ın blok {at} anındaki doğrulayıcı kümelerine son bakışından. Kaçırılan bir sıra veya yeni bir küme bunu kaydırır."
+
 msgid "Hash prefix"
 msgstr "Hash öneki"
 
@@ -316,6 +338,15 @@ msgstr "Önceki havuz"
 msgid "Latest {0}"
 msgstr "Son {0}"
 
+msgid "Latest block"
+msgstr "Son blok"
+
+msgid "Latest Platform block"
+msgstr "Son Platform bloğu"
+
+msgid "Live"
+msgstr "Canlı"
+
 msgid "Look up"
 msgstr "Ara"
 
@@ -339,6 +370,13 @@ msgstr "Komşu epoch’lar"
 
 msgid "Network"
 msgstr "Ağ"
+
+msgid "Next block due now (about every {pace})"
+msgstr "Sonraki blok şimdi bekleniyor (yaklaşık her {pace})"
+
+#. placeholder {0}: countdown(next)
+msgid "Next block expected in about {0}"
+msgstr "Sonraki blok yaklaşık {0} içinde bekleniyor"
 
 msgid "Next chunk"
 msgstr "Sonraki parça"
@@ -365,8 +403,17 @@ msgstr "Hiçbir evonode oy vermedi."
 msgid "No evonode proposed a block in this epoch."
 msgstr "Bu epoch’ta hiçbir evonode blok önermedi."
 
+msgid "No new block for {ago}, where one usually comes about every {pace}"
+msgstr "{ago} süredir yeni blok yok; normalde yaklaşık her {pace} bir blok gelir"
+
+msgid "No new Platform block for a while"
+msgstr "Bir süredir yeni Platform bloğu yok"
+
 msgid "No prefunded balance"
 msgstr "Ön finanse edilmiş bakiye yok"
+
+msgid "No proposer order yet."
+msgstr "Henüz önerici sırası yok."
 
 msgid "No quorum matches this filter."
 msgstr "Bu filtreyle eşleşen quorum yok."
@@ -438,6 +485,12 @@ msgstr "Platform yalnızca kesinleşmiş epoch’ların toplamlarını tutar ve 
 msgid "Platform reports no credits."
 msgstr "Platform hiç kredi bildirmiyor."
 
+msgid "Platform updates paused"
+msgstr "Platform güncellemeleri duraklatıldı"
+
+msgid "Platform updates resumed"
+msgstr "Platform güncellemeleri sürüyor"
+
 msgid "Platform’s flag"
 msgstr "Platform’un işareti"
 
@@ -465,6 +518,9 @@ msgstr "Önceki: epoch {0}"
 
 msgid "Processing fees"
 msgstr "İşlem ücretleri"
+
+msgid "proposed by"
+msgstr "önereni"
 
 msgid "Proposers"
 msgstr "Önericiler"
@@ -496,11 +552,11 @@ msgstr "Quorum’lar"
 msgid "Radar doesn’t crawl devnets"
 msgstr "Radar devnet’leri taramaz"
 
+msgid "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+msgstr "Radar devnet’leri taramaz: son havuz, kazanç, getiri veya geçmiş yok"
+
 msgid "Radar has no epoch history yet."
 msgstr "Radar’ın henüz epoch geçmişi yok."
-
-msgid "Radar has no proposer schedule right now."
-msgstr "Radar’ın şu anda önerici takvimi yok."
 
 msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
 msgstr "Radar’ın kesin eşiği, aşaması ve aday başına sayıları için Radar’ın taraması gerekir"
@@ -571,6 +627,9 @@ msgstr "Oluşturulan depolama ücretleri"
 msgid "Storage fees distributed"
 msgstr "Dağıtılan depolama ücretleri"
 
+msgid "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+msgstr "Bir evonode’un blok {at} anında bildirdiği doğrulayıcı kümelerinden Tenderdash’in sıra düzeni. Kanıtla doğrulanmadı: kaçırılan bir sıra veya yeni bir küme bunu kaydırır."
+
 msgid "That is not a nullifier"
 msgstr "Bu bir nullifier değil"
 
@@ -587,14 +646,17 @@ msgstr "Platform’da tutulan krediler ve ID ile ön finanse edilmiş özel baki
 msgid "The current epoch is {0}."
 msgstr "Geçerli epoch {0}."
 
-msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-msgstr "Epoch’un havuzu, kazancı, getirisi, önerici takvimi ve geçmişi için Radar’ın taraması gerekir"
-
 msgid "The evonodes that proposed the most blocks this epoch."
 msgstr "Bu epoch’ta en çok blok öneren evonode’lar."
 
 msgid "The history of shielding and unshielding needs Platform Explorer’s index"
 msgstr "Gizleme ve gizlilikten çıkarma geçmişi için Platform Explorer’ın dizini gerekir"
+
+msgid "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+msgstr "Son havuz, kazanç, getiri ve dönem geçmişi için Radar’ın taraması gerekir"
+
+msgid "The last proposer order has run out. A fresh one is on its way."
+msgstr "Son önerici sırası tükendi. Yenisi geliyor."
 
 #. placeholder {0}: formatInt(DEFAULT_COUNT)
 msgid "The latest {0} epochs."
@@ -603,8 +665,8 @@ msgstr "Son {0} epoch."
 msgid "The next proposers"
 msgstr "Sıradaki önericiler"
 
-msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
-msgstr "Sonraki on iki önerici, her biri sırasına kadar kalan blokla. Doğrulayıcı kümelerinden, blok başına yaklaşık {pace} saniye varsayımıyla bir tahmin"
+msgid "The next twelve proposers, each with the blocks until its turn."
+msgstr "Sıradaki on iki önerici, her biri sırasına kalan bloklarla."
 
 msgid "The node reported no quorums."
 msgstr "Düğüm hiç quorum bildirmedi."
@@ -641,6 +703,10 @@ msgstr "Gizlenmiş kredilerin havuzu: bakiyesi, kabul ettiği çıpalar, şifrel
 msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 msgstr "Havuz notlarını {0}’lık parçalar hâlinde sunar. {1}. nottan başlayan parçanın ilk {NOTES_SHOWN} notu gösteriliyor."
 
+#. placeholder {0}: formatInt(pool.blocks)
+msgid "The pool so far over {0} blocks: an estimate until the epoch ends"
+msgstr "{0} bloğa bölünen şu ana kadarki havuz: dönem bitene kadar bir tahmin"
+
 msgid "The protocol version each evonode votes for"
 msgstr "Her evonode’un oy verdiği protokol sürümü"
 
@@ -675,11 +741,20 @@ msgstr "Toplam kredi"
 msgid "Totals"
 msgstr "Toplamlar"
 
+msgid "Try again"
+msgstr "Tekrar dene"
+
 msgid "Type"
 msgstr "Tür"
 
 msgid "Unshielded"
 msgstr "Gizlenmemiş"
+
+msgid "Updates paused, last block {ago} ago"
+msgstr "Güncellemeler duraklatıldı, son blok {ago} önce"
+
+msgid "Updates paused: Platform isn’t answering"
+msgstr "Güncellemeler duraklatıldı: Platform yanıt vermiyor"
 
 msgid "Upgrade vote"
 msgstr "Yükseltme oyu"

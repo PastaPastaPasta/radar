@@ -82,7 +82,14 @@ export { registerProofInspector } from './proof'
 export { openDiagnosticsDrawer, registerDiagnosticsOpener } from './diagnostics'
 export { UnitsProvider, AmountDensity, useUnits } from './units-context'
 export type { UnitsValue } from './units-context'
-export { useNow, useMediaQuery, useReducedMotion, useThemeSignal, usePausedFeed } from './hooks'
+export {
+  useNow,
+  useMediaQuery,
+  useReducedMotion,
+  useThemeSignal,
+  usePausedFeed,
+  useChanged,
+} from './hooks'
 export { radarChartTheme, readChartTokens, withChartMotion, CHART_HEIGHT } from './chart-theme'
 export type { ChartTokens } from './chart-theme'
 export type {

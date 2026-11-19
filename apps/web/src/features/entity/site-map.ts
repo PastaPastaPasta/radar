@@ -238,7 +238,7 @@ export const SITE_MAP: SitePage[] = [
     section: 'network',
     layer: 'network',
     summary: msg`The current Platform epoch, who proposes next and what evonodes earned in past epochs.`,
-    sources: ['sdk', 'radar'],
+    sources: ['sdk', 'dapi', 'radar'],
     nav: true,
     keywords: ['rewards', 'proposers'],
   }),

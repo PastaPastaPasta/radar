@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: @lingui/cli\n"
 
-msgid ": a missed turn, or a new set, shifts it."
-msgstr ": ターンを逃すか新しいセットになると、ずれます。"
-
 msgid "(estimated)"
 msgstr "（推定）"
 
@@ -62,8 +59,17 @@ msgstr "{1} 件中 {0} 件のエボノードが必要"
 msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 msgstr "Platform の高さ {1} で {0} 件のクォーラム。証明では未検証：この一覧には SDK の証明がありません。"
 
+msgid "{m} min {s} s"
+msgstr "{m}分{s}秒"
+
+msgid "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+msgstr "{moved, plural, other {それ以降 # ブロック進めています（順番の見送りがないと仮定）。}}"
+
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, other {証明で検証済みの回答 # 件を統合しています。}}"
+
+msgid "{s} s"
+msgstr "{s}秒"
 
 msgid "1 m"
 msgstr "1か月"
@@ -146,6 +152,9 @@ msgstr "ノートのまとまり"
 msgid "Commitment"
 msgstr "コミットメント"
 
+msgid "Connecting to Platform…"
+msgstr "Platform に接続中…"
+
 msgid "Copy encrypted note"
 msgstr "暗号化ノートをコピー"
 
@@ -154,6 +163,10 @@ msgstr "ID をコピー"
 
 msgid "Core block rewards"
 msgstr "Core のブロック報酬"
+
+#. placeholder {0}: formatInt(pool.cl)
+msgid "Core block rewards to Core block {0}; fees not counted"
+msgstr "Core ブロック {0} までの Core ブロック報酬（手数料は含まない）"
 
 msgid "Credits"
 msgstr "クレジット"
@@ -283,6 +296,15 @@ msgstr "最初のブロック"
 msgid "From epoch"
 msgstr "開始エポック"
 
+msgid "From Radar’s crawl; fees not counted"
+msgstr "Radar のクロールから（手数料は含まない）"
+
+msgid "From Radar’s crawl: an estimate until the epoch ends"
+msgstr "Radar のクロールから：エポック終了までは推定値"
+
+msgid "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+msgstr "DAPI が応答しない間は、ブロック {at} 時点で Radar が最後に確認したバリデーターセットから。順番の見送りや新しいセットでずれます。"
+
 msgid "Hash prefix"
 msgstr "ハッシュの先頭部分"
 
@@ -316,6 +338,15 @@ msgstr "前回のプール"
 msgid "Latest {0}"
 msgstr "直近 {0}"
 
+msgid "Latest block"
+msgstr "最新ブロック"
+
+msgid "Latest Platform block"
+msgstr "最新の Platform ブロック"
+
+msgid "Live"
+msgstr "ライブ"
+
 msgid "Look up"
 msgstr "検索"
 
@@ -339,6 +370,13 @@ msgstr "前後のエポック"
 
 msgid "Network"
 msgstr "ネットワーク"
+
+msgid "Next block due now (about every {pace})"
+msgstr "次のブロックはまもなく（約 {pace} ごと）"
+
+#. placeholder {0}: countdown(next)
+msgid "Next block expected in about {0}"
+msgstr "次のブロックは約 {0} 後の見込み"
 
 msgid "Next chunk"
 msgstr "次のまとまり"
@@ -365,8 +403,17 @@ msgstr "投票したエボノードはありません。"
 msgid "No evonode proposed a block in this epoch."
 msgstr "このエポックでブロックを提案したエボノードはありません。"
 
+msgid "No new block for {ago}, where one usually comes about every {pace}"
+msgstr "{ago} の間新しいブロックがありません（通常は約 {pace} ごと）"
+
+msgid "No new Platform block for a while"
+msgstr "しばらく新しい Platform ブロックがありません"
+
 msgid "No prefunded balance"
 msgstr "事前積立残高なし"
+
+msgid "No proposer order yet."
+msgstr "提案者の順番はまだありません。"
 
 msgid "No quorum matches this filter."
 msgstr "このフィルターに一致するクォーラムはありません。"
@@ -438,6 +485,12 @@ msgstr "Platform は確定済みのエポックの合計のみを保持してお
 msgid "Platform reports no credits."
 msgstr "Platform はクレジットを報告していません。"
 
+msgid "Platform updates paused"
+msgstr "Platform の更新を一時停止中"
+
+msgid "Platform updates resumed"
+msgstr "Platform の更新を再開しました"
+
 msgid "Platform’s flag"
 msgstr "Platform のフラグ"
 
@@ -465,6 +518,9 @@ msgstr "前: エポック {0}"
 
 msgid "Processing fees"
 msgstr "処理手数料"
+
+msgid "proposed by"
+msgstr "提案者"
 
 msgid "Proposers"
 msgstr "プロポーザー"
@@ -496,11 +552,11 @@ msgstr "クォーラム"
 msgid "Radar doesn’t crawl devnets"
 msgstr "Radar は devnet をクロールしません"
 
+msgid "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+msgstr "Radar は devnet をクロールしません：前回のプール、収益、利回り、履歴はありません"
+
 msgid "Radar has no epoch history yet."
 msgstr "Radar にはまだエポックの履歴がありません。"
-
-msgid "Radar has no proposer schedule right now."
-msgstr "Radar には現在プロポーザーのスケジュールがありません。"
 
 msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
 msgstr "Radar の正確なしきい値、フェーズ、候補ごとの件数には Radar のクロールが必要です"
@@ -571,6 +627,9 @@ msgstr "発生したストレージ手数料"
 msgid "Storage fees distributed"
 msgstr "分配されたストレージ手数料"
 
+msgid "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+msgstr "ブロック {at} でエボノードが報告したバリデーターセットに基づく Tenderdash の順番。証明では検証されていません：順番の見送りや新しいセットでずれます。"
+
 msgid "That is not a nullifier"
 msgstr "ヌリファイアではありません"
 
@@ -587,14 +646,17 @@ msgstr "Platform が保有するクレジットと、ID による事前積立さ
 msgid "The current epoch is {0}."
 msgstr "現在のエポックは {0} です。"
 
-msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-msgstr "エポックのプール、収益、利回り、プロポーザーのスケジュール、履歴には Radar のクロールが必要です"
-
 msgid "The evonodes that proposed the most blocks this epoch."
 msgstr "このエポックで最も多くのブロックを提案した Evonode。"
 
 msgid "The history of shielding and unshielding needs Platform Explorer’s index"
 msgstr "シールドとアンシールドの履歴には Platform Explorer のインデックスが必要です"
+
+msgid "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+msgstr "前回のプール、収益、利回り、エポック履歴には Radar のクロールが必要です"
+
+msgid "The last proposer order has run out. A fresh one is on its way."
+msgstr "前回の提案者の順番を使い切りました。新しい順番を取得中です。"
 
 #. placeholder {0}: formatInt(DEFAULT_COUNT)
 msgid "The latest {0} epochs."
@@ -603,8 +665,8 @@ msgstr "直近 {0} エポック。"
 msgid "The next proposers"
 msgstr "次のプロポーザー"
 
-msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
-msgstr "次の 12 のプロポーザーと、それぞれの順番までのブロック数。バリデーターセットから、1 ブロックあたり約 {pace} 秒として見積もった値です"
+msgid "The next twelve proposers, each with the blocks until its turn."
+msgstr "次の 12 の提案者と、それぞれの順番までのブロック数。"
 
 msgid "The node reported no quorums."
 msgstr "ノードはクォーラムを報告しませんでした。"
@@ -641,6 +703,10 @@ msgstr "シールドされたクレジットのプール：残高、受け付け
 msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 msgstr "プールはノートを {0} 件ずつのまとまりで提供します。ノート {1} から始まるまとまりの先頭 {NOTES_SHOWN} 件を表示しています。"
 
+#. placeholder {0}: formatInt(pool.blocks)
+msgid "The pool so far over {0} blocks: an estimate until the epoch ends"
+msgstr "ここまでのプールを {0} ブロックで割った値：エポック終了までは推定値"
+
 msgid "The protocol version each evonode votes for"
 msgstr "各エボノードが投票しているプロトコルバージョン"
 
@@ -675,11 +741,20 @@ msgstr "クレジット合計"
 msgid "Totals"
 msgstr "合計"
 
+msgid "Try again"
+msgstr "再試行"
+
 msgid "Type"
 msgstr "種類"
 
 msgid "Unshielded"
 msgstr "アンシールド"
+
+msgid "Updates paused, last block {ago} ago"
+msgstr "更新を一時停止中、最後のブロックは {ago} 前"
+
+msgid "Updates paused: Platform isn’t answering"
+msgstr "更新を一時停止中：Platform が応答しません"
 
 msgid "Upgrade vote"
 msgstr "アップグレード投票"
