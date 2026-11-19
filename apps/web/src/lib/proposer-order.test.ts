@@ -109,4 +109,42 @@ describe('proposerTurns', () => {
     }
     expect(order(q)).toEqual([[4, 1]])
   })
+
+  it('walks a set that has just become active from its first member: the last proposer was the old set’s', () => {
+    const q = {
+      order: [a, b, c].map((s) => s.quorumHash),
+      current: b.quorumHash,
+      sets: [a, b, c],
+      lastProposer: id(4),
+    }
+    expect(order(q)).toEqual([
+      [5, 1],
+      [6, 2],
+      [7, 3],
+      [8, 4],
+      [9, 5],
+      [1, 6],
+      [2, 7],
+      [3, 8],
+      [4, 9],
+    ])
+  })
+
+  it('gives a set whose last member is banned one wrap-around turn before the rotation moves on', () => {
+    const tail = set(1, [1, 2, 3, 4], [4])
+    const q = {
+      order: [tail.quorumHash, b.quorumHash],
+      current: tail.quorumHash,
+      sets: [tail, b],
+      lastProposer: id(2),
+    }
+    // 3, then Tenderdash wraps to 1 (the banned 4 never proposes), and Drive rotates on that earlier member.
+    expect(order(q)).toEqual([
+      [3, 1],
+      [1, 2],
+      [5, 3],
+      [6, 4],
+      [7, 5],
+    ])
+  })
 })
