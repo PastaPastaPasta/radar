@@ -33,7 +33,7 @@ import { filterFields } from '../masternodes/filter-fields'
 import { countryName, flag } from '../nodes/census-format'
 import { isTiny } from '../nodes/census-math'
 import { Notice } from '../nodes/parts'
-import { legacyHidden, legacyKey, legacyListFilter } from './legacy-url'
+import { legacyHidden, legacyKey, legacyListFilter, listFilterWith } from './legacy-url'
 import {
   concentrationsOfNodes,
   concentrationsOfRows,
@@ -744,23 +744,6 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
       ) : null}
     </div>
   )
-}
-
-/** The page's filter narrowed by an old link's exclusion in the list's terms; `undefined` when the list can't say it. */
-function listFilterWith(base: MnFilter, legacy: MnFilter | undefined): MnFilter | undefined {
-  if (!legacy) return undefined
-  const out: MnFilter = { ...base }
-  for (const [key, value] of Object.entries(legacy) as [keyof MnFilter, string | string[]][]) {
-    const had = base[key]
-    if (had === undefined) {
-      Object.assign(out, { [key]: value })
-    } else if (Array.isArray(had) && Array.isArray(value)) {
-      Object.assign(out, { [key]: had.filter((v) => value.includes(v)) })
-    } else if (had !== value) {
-      return undefined
-    }
-  }
-  return out
 }
 
 function PlaceCard({

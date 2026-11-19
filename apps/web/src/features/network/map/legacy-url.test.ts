@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { legacyHidden, legacyKey, legacyListFilter, topVersions } from './legacy-url'
+import {
+  legacyHidden,
+  legacyKey,
+  legacyListFilter,
+  listFilterWith,
+  topVersions,
+} from './legacy-url'
 import { row } from './test-rows'
 
 const rows = [
@@ -72,5 +78,18 @@ describe('links from the old map', () => {
     expect(legacyListFilter('reach', rows, ['unchecked'])).toBeUndefined()
     expect(legacyListFilter('reach', rows, ['reachable'])).toBeUndefined()
     expect(legacyListFilter('pose', rows, ['enabled', 'banned'])).toBeUndefined()
+  })
+
+  it('narrows the page’s own filter by the exclusion, and says nothing when they share no row @RA-52', () => {
+    expect(
+      listFilterWith(
+        { status: ['enabled', 'pose-banned'], country: ['DE'] },
+        { status: ['pose-banned'] },
+      ),
+    ).toEqual({ status: ['pose-banned'], country: ['DE'] })
+    // an empty status list would read as no filter at all
+    expect(listFilterWith({ status: ['enabled'] }, { status: ['pose-banned'] })).toBeUndefined()
+    expect(listFilterWith({ reach: 'reachable' }, { reach: 'unreachable' })).toBeUndefined()
+    expect(listFilterWith({ status: ['enabled'] }, undefined)).toBeUndefined()
   })
 })

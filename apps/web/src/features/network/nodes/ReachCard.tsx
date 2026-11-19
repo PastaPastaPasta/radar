@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { formatInt } from '@/lib/format'
 import { Card, Chart, Empty, Skeleton, stampsOf } from '@/ui'
 import { sizeOption, type Series } from './census-charts'
@@ -21,6 +21,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
   const dist = data?.dists[radarScope(scope)] ?? {}
   const reach = reachShare(dist.reachable)
   const noun = i18n._(SCOPE_NOUN[scope])
+  const networksNote = useId()
   const parts = [
     { key: 'yes', name: t`Answered`, n: reach.yes, color: colors.good },
     { key: 'no', name: t`Didn't answer`, n: reach.no, color: colors.bad },
@@ -70,16 +71,8 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
         </div>
         {data && data.networks.length > 0 ? (
           <ScrollRegion label={t`Address networks`} data-address-networks>
-            <table className="dh-table dh-table--compact">
-              <caption className="text-left font-semibold">
-                {t`Address networks`}
-                <span
-                  className="block text-sm font-normal text-[var(--dh-ink-2)]"
-                  data-networks-note
-                >
-                  {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
-                </span>
-              </caption>
+            <table className="dh-table dh-table--compact" aria-describedby={networksNote}>
+              <caption className="text-left font-semibold">{t`Address networks`}</caption>
               <thead>
                 <tr>
                   <th scope="col">{t`Network`}</th>
@@ -116,6 +109,11 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
               </tbody>
             </table>
           </ScrollRegion>
+        ) : null}
+        {data && data.networks.length > 0 ? (
+          <p id={networksNote} className="-mt-4 text-sm text-[var(--dh-ink-2)]" data-networks-note>
+            {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
+          </p>
         ) : null}
         <SizeChart census={census} />
       </div>

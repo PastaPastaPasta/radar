@@ -46,4 +46,19 @@ describe('the home map @RA-01', () => {
     )
     expect(document.querySelector('[data-map-scope]')).toHaveTextContent('PoSe-banned included')
   })
+
+  it('names no scope in the map’s label while there is nothing on it', async () => {
+    server.use(http.get('*/mainnet/geo', () => HttpResponse.json({ points: [], unlocated: 0 })))
+    await renderInRouter(
+      <QueryClientProvider client={new QueryClient()}>
+        <I18nProvider i18n={i18n}>
+          <HomeMap />
+        </I18nProvider>
+      </QueryClientProvider>,
+    )
+    const map = await screen.findByRole('img')
+    await waitFor(() => expect(map.closest('[data-map]')).toHaveAttribute('data-map', 'land'))
+    expect(map.getAttribute('aria-label')).not.toContain('PoSe-banned')
+    expect(map.getAttribute('aria-label')).toContain('The node map')
+  })
 })

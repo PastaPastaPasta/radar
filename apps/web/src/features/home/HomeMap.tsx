@@ -57,7 +57,11 @@ export function HomeMap() {
         className="rx-map"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         role="img"
-        aria-label={t`Map of the world with a disc for each place Radar found masternodes. ${summary}, ${scope}.`}
+        aria-label={
+          points.length > 0
+            ? t`Map of the world with a disc for each place Radar found masternodes. ${summary}, ${scope}.`
+            : t`Map of the world with a disc for each place Radar found masternodes. ${summary}.`
+        }
       >
         {land ? <path className="land" d={land} /> : null}
         <g>

@@ -231,7 +231,7 @@ async function dpnsNames(net: NetworkId, identityIds: string[]): Promise<Answer<
     identityIds.map((id) => [id, names.get(id)?.name ?? null]),
   )
   if (docs.data.length >= DRIVE_MAX) {
-    const cut = identityIds.filter((id) => !names.has(id))
+    const cut = sorted.filter((id) => !names.has(id))
     const outcomes = await settledLimited(cut, (identityId) =>
       sdk.call(net, 'dpns.usernames', { identityId, limit: 1 }),
     )

@@ -286,7 +286,13 @@ test.describe('Network census', () => {
     await expect(
       networks.getByRole('columnheader', { name: 'Masternodes answering' }),
     ).toBeVisible()
-    await expect(networks.locator('[data-networks-note]')).toContainText('PoSe-banned included')
+    const note = reach.locator('[data-networks-note]')
+    await expect(note).toContainText('PoSe-banned included')
+    await expect(networks.locator('caption')).toHaveText('Address networks')
+    await expect(networks.locator('table')).toHaveAttribute(
+      'aria-describedby',
+      (await note.getAttribute('id'))!,
+    )
 
     const size = reach.locator('[data-size-chart]')
     await expect(size.getByRole('img', { name: 'Network size over time' })).toBeVisible()

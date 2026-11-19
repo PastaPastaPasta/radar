@@ -90,3 +90,23 @@ export function legacyListFilter(
   }
   return { [facet]: values }
 }
+
+/** The page's filter narrowed by an old link's exclusion in the list's terms; `undefined` when the list can't say it. */
+export function listFilterWith(base: MnFilter, legacy: MnFilter | undefined): MnFilter | undefined {
+  if (!legacy) return undefined
+  const out: MnFilter = { ...base }
+  for (const [key, value] of Object.entries(legacy) as [keyof MnFilter, string | string[]][]) {
+    const had = base[key]
+    if (had === undefined) {
+      Object.assign(out, { [key]: value })
+    } else if (Array.isArray(had) && Array.isArray(value)) {
+      // An empty list would read as no filter at all, so no row in common means the list can't say it.
+      const both = had.filter((v) => value.includes(v))
+      if (both.length === 0) return undefined
+      Object.assign(out, { [key]: both })
+    } else if (had !== value) {
+      return undefined
+    }
+  }
+  return out
+}

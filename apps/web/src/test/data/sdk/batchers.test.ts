@@ -220,6 +220,22 @@ describe('SDK batchers', () => {
       )
     })
 
+    it('asks dpns.usernames once per identity a full page cut off, however often it was asked for', async () => {
+      const full = Array.from({ length: 100 }, (_, i) => domain(`n${i}`, id(40), i))
+      const asked: string[] = []
+      call.mockImplementation((_net, method, args) => {
+        if (method === 'documents.query') return Promise.resolve(sourced(full))
+        asked.push((args as { identityId: string }).identityId)
+        return Promise.resolve(sourced(['late.dash']))
+      })
+      const names = [id(41), id(41), id(40), id(42), id(41)].map((i) =>
+        dpnsName.fetch('mainnet', i),
+      )
+      await vi.advanceTimersByTimeAsync(40)
+      await Promise.all(names)
+      expect(asked.sort()).toEqual([id(41), id(42)].sort())
+    })
+
     it('asks dpns.usernames, four at a time, for the identities a full page may have cut off', async () => {
       const ids = Array.from({ length: 6 }, (_, i) => id(i + 30))
       const full = Array.from({ length: 100 }, (_, i) => domain(`n${i}`, id(30), i))

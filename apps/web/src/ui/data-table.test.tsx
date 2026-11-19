@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
@@ -163,6 +163,34 @@ describe('DataTable states', () => {
     expect(document.querySelector('[data-pending-note]')).toHaveTextContent(
       'Showing 3 of 20 rows. The rest are on their way…',
     )
+  })
+
+  it('keeps one live region mounted, and says when a part-filled page is whole', async () => {
+    function Stepper() {
+      const [pending, setPending] = useState(0)
+      return (
+        <>
+          <button type="button" onClick={() => setPending(17)}>
+            fill
+          </button>
+          <button type="button" onClick={() => setPending(0)}>
+            done
+          </button>
+          <Harness pendingRows={pending} />
+        </>
+      )
+    }
+    await renderInRouter(<Stepper />)
+    const press = (name: string) => act(() => screen.getByRole('button', { name }).click())
+    const region = () => document.querySelector('[aria-live="polite"].rx-note')
+    expect(region()).not.toBeNull()
+    expect(region()).toBeEmptyDOMElement()
+    press('fill')
+    expect(region()).toHaveTextContent('Showing 3 of 20 rows. The rest are on their way…')
+    press('done')
+    expect(region()).toHaveTextContent('All 3 rows shown.')
+    expect(region()).toHaveAttribute('data-filled-note')
+    expect(document.querySelector('[data-pending-note]')).toBeNull()
   })
 
   it('shows the empty state for no rows', async () => {
