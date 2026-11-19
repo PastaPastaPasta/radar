@@ -248,14 +248,10 @@ describe('Platform overview', () => {
     const richest = await ready('board-richest')
     expect(richest).toHaveTextContent('Busiest identities')
     expect(richest.querySelectorAll('[data-board] li').length).toBeGreaterThan(0)
-    for (const id of [
-      'board-active-identities',
-      'board-tokens',
-      'board-contracts-rated',
-      'board-contracts-active',
-    ]) {
+    for (const id of ['board-active-identities', 'board-tokens', 'board-contracts']) {
       await card(id)
     }
+    expect(document.getElementById('board-contracts-rated')).toBeNull()
   })
 
   it('ranks each board by the figure it shows, whatever order PE answers in @NX-01 @PE-05', async () => {
@@ -266,41 +262,55 @@ describe('Platform overview', () => {
         pagination: { page: 1, limit: 50, total: items.length },
         resultSet: items,
       })
+    const windows: string[] = []
     server.use(
-      http.get(`${PE}/dataContracts/rating`, () =>
-        page([0, 0, 31, 271, 105].map((n, i) => ({ identifier: id(i), transitionsCount: n }))),
-      ),
+      http.get(`${PE}/dataContracts/active`, ({ request }) => {
+        windows.push(new URL(request.url).searchParams.get('timestamp_start') ?? '')
+        // PE's mainnet index answers each system contract twice, once with its count and once with none.
+        return page(
+          [
+            [0, 0],
+            [1, 31],
+            [2, 271],
+            [3, 105],
+            [2, 0],
+            [1, 4],
+          ].map(([i, n]) => ({
+            identifier: id(i!),
+            transitionsCount: n,
+          })),
+        )
+      }),
       http.get(`${PE}/identities/active`, () =>
-        page([1, 1, 4, 1, 2].map((n, i) => ({ identifier: id(i), transactionsCount: n }))),
+        page([1, 1, 4, 1, 2, 0].map((n, i) => ({ identifier: id(i), transactionsCount: n }))),
       ),
     )
     renderAt('/platform')
-    const figures = (board: string) =>
+    const rows = (board: string) =>
       Array.from(document.querySelectorAll(`[data-board="${board}"] li`)).map((li) => ({
-        rank: li.querySelector('.rx-num')?.textContent,
-        figure: li.querySelector('span.rx-num:last-child')?.textContent,
+        rank: li.querySelector('.rx-board__rank')?.textContent,
+        figure: li.querySelector('.rx-board__fig')?.textContent,
       }))
     await waitFor(() =>
-      expect(figures('board-contracts-rated').map((r) => r.figure)).toEqual([
-        '271',
-        '105',
-        '31',
-        '0',
-        '0',
+      expect(rows('board-contracts')).toEqual([
+        { rank: '1', figure: '271' },
+        { rank: '2', figure: '105' },
+        { rank: '3', figure: '35' },
       ]),
     )
+    expect(Date.now() - Date.parse(windows[0]!)).toBeGreaterThan(29 * 86_400_000)
     await waitFor(() =>
-      expect(figures('board-active-identities')).toEqual([
+      expect(rows('board-active-identities')).toEqual([
         { rank: '1', figure: '4' },
         { rank: '2', figure: '2' },
-        { rank: '3', figure: '1' },
-        { rank: '3', figure: '1' },
-        { rank: '3', figure: '1' },
+        { rank: '=3, tied', figure: '1' },
+        { rank: '=3, tied', figure: '1' },
+        { rank: '=3, tied', figure: '1' },
       ]),
     )
   })
 
-  it('folds a board with nothing above zero into one line, and keeps the switch with its board @NX-01', async () => {
+  it('puts a board with nothing above zero in the short row and says so in its card @NX-01', async () => {
     const PE = 'https://api.pe.dashhq.org'
     server.use(
       http.get(`${PE}/tokens/rating`, () =>
@@ -316,12 +326,13 @@ describe('Platform overview', () => {
     renderAt('/platform')
     const richest = await ready('board-richest')
     expect(within(richest).getByRole('button', { name: 'Transitions' })).toBeInTheDocument()
-    await waitFor(() =>
-      expect(document.querySelector('[data-quiet-boards]')).toHaveTextContent(
-        'Nothing to rank yet: Trending tokens.',
-      ),
+    const tokens = await ready('board-tokens')
+    expect(tokens.closest('[data-short-boards]')).not.toBeNull()
+    expect(tokens.querySelector('[data-board-none]')).toHaveTextContent(
+      'No transitions in the last 30 days.',
     )
-    expect(document.getElementById('board-tokens')).toBeNull()
+    expect(tokens.querySelectorAll('li')).toHaveLength(0)
+    expect(document.querySelector('[data-quiet-boards]')).toBeNull()
   })
 
   it('counts validators and lists quorums, linking to the platform masternode view @PE-06', async () => {
@@ -341,6 +352,22 @@ describe('Platform overview', () => {
     await waitFor(() =>
       expect(validators.querySelector('[data-last-proposer]')).toHaveTextContent(/[0-9a-f]{6}/i),
     )
+  })
+
+  it('lists the quorums DAPI knows, the one that signed the newest block first @PE-06', async () => {
+    renderAt('/platform')
+    const quorums = await ready('quorum-list')
+    expect(quorums).toHaveTextContent('24 quorums at Platform height 470,554.')
+    // The newest block comes from a second read that can land after the list.
+    await waitFor(() => expect(quorums.querySelector('li')).toHaveAttribute('data-signing', 'true'))
+    const rows = quorums.querySelectorAll('li')
+    expect(rows).toHaveLength(4)
+    expect(rows[0]).toHaveTextContent('Signed the latest block')
+    expect(rows[0]!.querySelector('[data-entity="quorum"]')).toHaveAttribute(
+      'data-id',
+      '0000000000000016d05699f6ddf7ede9e7ce3a0949df14d4df8d5a881e683dce',
+    )
+    expect(quorums.querySelector('[data-board-none]')).toBeNull()
   })
 
   it('keeps SDK zones, shows one notice and asks no hosted source in Decentralized only mode @NX-01 @NX-02 @NX-04 @PE-01', async () => {

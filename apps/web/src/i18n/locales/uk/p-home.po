@@ -33,7 +33,9 @@ msgstr "{0, plural, one {Оновлення до v{next}: наразі # гол�
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
+#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "Учасників: {0}, для підпису потрібно {1}"
@@ -43,13 +45,14 @@ msgstr "Учасників: {0}, для підпису потрібно {1}"
 msgid "{0} of {1}"
 msgstr "{0} з {1}"
 
+#. placeholder {0}: formatInt(listed.quorums.length)
+#. placeholder {1}: formatInt(listed.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "Кворумів на висоті Platform {1}: {0}. Не підтверджено доказом: у SDK немає доказу для цього списку."
+
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
 msgstr "{0} с"
-
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} дійсних"
 
 msgid "{behind} blocks behind the tip"
 msgstr "Відставання від вершини: {behind} блоків"
@@ -145,26 +148,26 @@ msgstr "Блоки"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Блоки надходять, Platform прив’язаний до Core."
 
+msgid "Busiest contracts"
+msgstr "Найзавантаженіші контракти"
+
 msgid "Busiest identities"
 msgstr "Найактивніші ідентичності"
 
 msgid "By credit balance"
 msgstr "За балансом кредитів"
 
-msgid "By recent token transitions"
-msgstr "За нещодавніми переходами токенів"
-
-msgid "By recent transitions"
-msgstr "За нещодавніми переходами"
+msgid "By token transitions in the last 30 days"
+msgstr "За переходами токенів за останні 30 днів"
 
 msgid "By transition count"
 msgstr "За кількістю переходів"
 
-msgid "By transitions"
-msgstr "За переходами"
+msgid "By transitions in the last 30 days"
+msgstr "За переходами за останні 30 днів"
 
-msgid "By transitions sent"
-msgstr "За надісланими переходами"
+msgid "By transitions sent in the last 30 days"
+msgstr "За надісланими переходами за останні 30 днів"
 
 msgid "Catching up"
 msgstr "Наздоганяє"
@@ -203,9 +206,6 @@ msgstr "Вершина Core, блоки й транзакції — безпос
 
 msgid "Credits"
 msgstr "Кредити"
-
-msgid "Current"
-msgstr "Поточний"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +385,6 @@ msgstr "Відстає"
 msgid "Last block"
 msgstr "Останній блок"
 
-msgid "Last block proposed by"
-msgstr "Останній блок запропонував"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -402,6 +399,9 @@ msgstr "Минулий пул"
 
 msgid "Later ones may be missing."
 msgstr "Пізніші можуть бути відсутні."
+
+msgid "Latest block"
+msgstr "Останній блок"
 
 msgid "Latest block hash"
 msgstr "Хеш останнього блока"
@@ -429,9 +429,6 @@ msgstr "Медіанний місячний дохід"
 
 msgid "Median yield"
 msgstr "Медіанна дохідність"
-
-msgid "Most active contracts"
-msgstr "Найактивніші контракти"
 
 msgid "Most active identities"
 msgstr "Найактивніші ідентичності"
@@ -470,8 +467,8 @@ msgstr "У цьому діапазоні немає історії іденти�
 msgid "No new Platform block for {0}."
 msgstr "Нового блока Platform немає вже {0}."
 
-msgid "No quorums listed"
-msgstr "Список кворумів порожній"
+msgid "No transitions in the last 30 days."
+msgstr "За останні 30 днів переходів не було."
 
 msgid "No transitions in this range"
 msgstr "У цьому діапазоні немає переходів"
@@ -503,6 +500,9 @@ msgstr "Не пропонується"
 msgid "Not proof-checked"
 msgstr "Не підтверджено доказом"
 
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Не підтверджено доказом: у SDK немає доказу для цього списку."
+
 msgid "Nothing has asked it yet on this network."
 msgstr "У цій мережі до нього ще ніхто не звертався."
 
@@ -514,9 +514,6 @@ msgstr "Рейтингу поки немає"
 
 msgid "Nothing shielded in this range"
 msgstr "У цьому діапазоні нічого не захищено"
-
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Поки що нічого ранжувати: {quietNames}."
 
 msgid "Off in this mode"
 msgstr "У цьому режимі вимкнено"
@@ -579,6 +576,9 @@ msgstr "Підтверджено доказом на блоці Platform {block}
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Стан Platform, підтверджений доказом і перевірений у цьому браузері"
+
+msgid "Proposed by"
+msgstr "Запропонував"
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -645,6 +645,9 @@ msgstr "Захищені та незахищені, у DASH"
 
 msgid "Shielded pool"
 msgstr "Захищений пул"
+
+msgid "Signed the latest block"
+msgstr "Підписав останній блок"
 
 msgid "Software"
 msgstr "Програмне забезпечення"
@@ -713,6 +716,9 @@ msgstr "У вузла немає пірів."
 msgid "The node is still catching up with the chain."
 msgstr "Вузол ще наздоганяє ланцюг."
 
+msgid "The node that answered listed no quorums."
+msgstr "Вузол, що відповів, не перелічив жодного кворуму."
+
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Кворуми, якими Platform підписує зараз. Не підтверджено доказом: SDK не має доказу для цього списку."
 
@@ -748,9 +754,6 @@ msgstr "Топ пропонувачів"
 
 msgid "Top proposers this epoch"
 msgstr "Топ пропонувачів у цій епосі"
-
-msgid "Top-rated contracts"
-msgstr "Контракти з найвищим рейтингом"
 
 msgid "Total"
 msgstr "Усього"

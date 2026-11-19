@@ -301,6 +301,91 @@ test.describe('Platform overview', () => {
     await expect(page).toHaveURL(/\/masternodes\?.*view=platform/)
   })
 
+  test('lists the quorums DAPI knows, the one that signed the newest block first @PE-06', async ({
+    page,
+  }) => {
+    await open(page)
+    const quorums = card(page, 'quorum-list')
+    await quorums.scrollIntoViewIfNeeded()
+    await expect(quorums).toHaveAttribute('data-state', 'ready')
+    await expect(quorums.locator('li')).toHaveCount(4)
+    await expect(quorums.locator('li').first()).toHaveAttribute('data-signing', 'true')
+    await expect(quorums.locator('li').first()).toContainText('Signed the latest block')
+    await expect(quorums.locator('[data-board-none]')).toHaveCount(0)
+  })
+
+  for (const net of ['mainnet', 'testnet'] as const) {
+    test(`the leaderboards and network panels leave no column empty at 390, 768, 1024 and 1440 px on ${net} @PE-05 @PE-06`, async ({
+      page,
+    }) => {
+      test.skip(isPhone(page), 'walks the widths from the desktop project')
+      await open(page, net === 'mainnet' ? '/platform' : '/platform?network=testnet')
+      const boards = page.locator('[data-leaderboards]')
+      for (const width of [1440, 1024, 768, 390]) {
+        await page.setViewportSize({ width, height: 900 })
+        await boards.scrollIntoViewIfNeeded()
+        await page.locator('[data-validators]').scrollIntoViewIfNeeded()
+        await settled(page)
+        await expect(boards.locator('[aria-busy="true"]')).toHaveCount(0)
+        const shape = await page.evaluate(() => {
+          const rect = (el: Element) => el.getBoundingClientRect()
+          const full = [...document.querySelectorAll('.rx-boards__full > .rx-board')]
+          const wide = document.querySelector('[data-board][data-layout="wide"]')
+          const lefts = (list: Element | null) =>
+            new Set([...(list?.children ?? [])].map((li) => Math.round(rect(li).left))).size
+          const keys = [...document.querySelectorAll('[data-board] li [data-id]')].map(
+            (el) =>
+              `${el.closest('[data-board]')!.getAttribute('data-board')}/${el.getAttribute('data-id')}`,
+          )
+          const stats = [...document.querySelectorAll('#validators .rx-stat')].map((el) =>
+            Math.round(rect(el).top),
+          )
+          return {
+            pairBottoms: full.map((el) => Math.round(rect(el).bottom)),
+            pairTops: full.map((el) => Math.round(rect(el).top)),
+            wideColumns: lefts(wide),
+            figures: [...document.querySelectorAll('.rx-board__fig')].map((el) => el.textContent),
+            duplicates: keys.length - new Set(keys).size,
+            statRows: new Set(stats).size,
+          }
+        })
+        expect(shape.duplicates, `${width}: a row twice`).toBe(0)
+        expect(shape.figures, `${width}: a row at zero`).not.toContain('0')
+        if (width >= 1024) {
+          for (let i = 0; i + 1 < shape.pairTops.length; i += 2) {
+            expect(shape.pairTops[i + 1], `${width}: pair ${i / 2} starts together`).toBe(
+              shape.pairTops[i],
+            )
+            expect(
+              Math.abs(shape.pairBottoms[i + 1]! - shape.pairBottoms[i]!),
+              `${width}: pair ${i / 2} ends together`,
+            ).toBeLessThanOrEqual(2)
+          }
+        }
+        if (width > 640 && shape.wideColumns > 0) expect(shape.wideColumns).toBe(2)
+        expect(shape.statRows, `${width}: validator counts`).toBe(width <= 640 ? 2 : 1)
+        expect(await horizontalOverflow(page), `${width}: sideways overflow`).toBeLessThanOrEqual(0)
+      }
+    })
+  }
+
+  test('on mainnet the two moving tokens share the short row and every contract is named once @PE-05', async ({
+    page,
+  }) => {
+    await open(page)
+    const boards = page.locator('[data-leaderboards]')
+    await boards.scrollIntoViewIfNeeded()
+    await settled(page)
+    await expect(page.locator('[data-short-boards] #board-tokens')).toBeVisible()
+    await expect(page.locator('#board-tokens li')).toHaveCount(2)
+    await expect(page.locator('[data-board="board-contracts"]')).toHaveAttribute(
+      'data-layout',
+      'wide',
+    )
+    await expect(page.locator('#board-contracts-rated, [data-quiet-boards]')).toHaveCount(0)
+    await expectAccessible(page)
+  })
+
   test('switching network keeps /platform with its range and rich, and shows no stale data @PE-36', async ({
     page,
   }) => {

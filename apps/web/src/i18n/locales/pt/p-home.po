@@ -33,7 +33,9 @@ msgstr "{0, plural, one {Atualização para v{next}: # voto até agora} many {At
 msgid "{0} DASH"
 msgstr "{0} DASH"
 
+#. placeholder {0}: formatInt(q.memberCount)
 #. placeholder {0}: formatInt(s.members)
+#. placeholder {1}: formatInt(q.threshold)
 #. placeholder {1}: formatInt(s.threshold)
 msgid "{0} members, {1} to sign"
 msgstr "{0} membros, {1} para assinar"
@@ -43,13 +45,14 @@ msgstr "{0} membros, {1} para assinar"
 msgid "{0} of {1}"
 msgstr "{0} de {1}"
 
+#. placeholder {0}: formatInt(listed.quorums.length)
+#. placeholder {1}: formatInt(listed.height)
+msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
+msgstr "{0} quóruns na altura {1} da Platform. Não verificado com provas: o SDK não tem prova para esta lista."
+
 #. placeholder {0}: formatNumber(avg / 1000, { maximumFractionDigits: 1 })
 msgid "{0} s"
 msgstr "{0} s"
-
-#. placeholder {0}: formatInt(q.numValidMembers)
-msgid "{0} valid"
-msgstr "{0} válidos"
 
 msgid "{behind} blocks behind the tip"
 msgstr "{behind} blocos atrás da ponta"
@@ -145,26 +148,26 @@ msgstr "Blocos"
 msgid "Blocks are arriving and Platform is locked to Core."
 msgstr "Os blocos estão a chegar e a Platform está fixa ao Core."
 
+msgid "Busiest contracts"
+msgstr "Contratos mais movimentados"
+
 msgid "Busiest identities"
 msgstr "Identidades mais movimentadas"
 
 msgid "By credit balance"
 msgstr "Por saldo de créditos"
 
-msgid "By recent token transitions"
-msgstr "Por transições de tokens recentes"
-
-msgid "By recent transitions"
-msgstr "Por transições recentes"
+msgid "By token transitions in the last 30 days"
+msgstr "Por transições de tokens nos últimos 30 dias"
 
 msgid "By transition count"
 msgstr "Por número de transições"
 
-msgid "By transitions"
-msgstr "Por transições"
+msgid "By transitions in the last 30 days"
+msgstr "Por transições nos últimos 30 dias"
 
-msgid "By transitions sent"
-msgstr "Por transições enviadas"
+msgid "By transitions sent in the last 30 days"
+msgstr "Por transições enviadas nos últimos 30 dias"
 
 msgid "Catching up"
 msgstr "Atualizando"
@@ -203,9 +206,6 @@ msgstr "Ponta do Core, blocos e transações, diretamente dos evonodes"
 
 msgid "Credits"
 msgstr "Créditos"
-
-msgid "Current"
-msgstr "Atual"
 
 msgid "DAPI"
 msgstr "DAPI"
@@ -385,9 +385,6 @@ msgstr "Atrasado"
 msgid "Last block"
 msgstr "Último bloco"
 
-msgid "Last block proposed by"
-msgstr "Último bloco proposto por"
-
 #. placeholder {0}: formatRelative(clampSkew(finished, now), now)
 #. placeholder {1}: formatInt(status.chain.blocks)
 msgid "Last crawl finished {0}. Its Core node is at block {1}."
@@ -402,6 +399,9 @@ msgstr "Último pool"
 
 msgid "Later ones may be missing."
 msgstr "Os posteriores podem estar em falta."
+
+msgid "Latest block"
+msgstr "Último bloco"
 
 msgid "Latest block hash"
 msgstr "Hash do bloco mais recente"
@@ -429,9 +429,6 @@ msgstr "Ganhos mensais medianos"
 
 msgid "Median yield"
 msgstr "Rendimento mediano"
-
-msgid "Most active contracts"
-msgstr "Contratos mais ativos"
 
 msgid "Most active identities"
 msgstr "Identidades mais ativas"
@@ -470,8 +467,8 @@ msgstr "Sem histórico de identidades neste intervalo"
 msgid "No new Platform block for {0}."
 msgstr "Nenhum bloco novo da Platform há {0}."
 
-msgid "No quorums listed"
-msgstr "Nenhum quórum listado"
+msgid "No transitions in the last 30 days."
+msgstr "Nenhuma transição nos últimos 30 dias."
 
 msgid "No transitions in this range"
 msgstr "Sem transições neste intervalo"
@@ -503,6 +500,9 @@ msgstr "Não oferecido"
 msgid "Not proof-checked"
 msgstr "Não verificado com provas"
 
+msgid "Not proof-checked: the SDK has no proof for this list."
+msgstr "Não verificado com provas: o SDK não tem prova para esta lista."
+
 msgid "Nothing has asked it yet on this network."
 msgstr "Ninguém lhe perguntou ainda nesta rede."
 
@@ -514,9 +514,6 @@ msgstr "Ainda nada classificado"
 
 msgid "Nothing shielded in this range"
 msgstr "Nada blindado neste intervalo"
-
-msgid "Nothing to rank yet: {quietNames}."
-msgstr "Ainda nada para classificar: {quietNames}."
 
 msgid "Off in this mode"
 msgstr "Desativado neste modo"
@@ -579,6 +576,9 @@ msgstr "Verificado com provas no bloco {block} da Platform, época {epoch}. Esse
 
 msgid "Proof-checked Platform state, verified in this browser"
 msgstr "Estado da Platform verificado com provas, confirmado neste navegador"
+
+msgid "Proposed by"
+msgstr "Proposto por"
 
 msgid "Protocol"
 msgstr "Protocolo"
@@ -645,6 +645,9 @@ msgstr "Blindados e desblindados, em DASH"
 
 msgid "Shielded pool"
 msgstr "Pool blindado"
+
+msgid "Signed the latest block"
+msgstr "Assinou o último bloco"
 
 msgid "Software"
 msgstr "Software"
@@ -713,6 +716,9 @@ msgstr "O nó não tem pares."
 msgid "The node is still catching up with the chain."
 msgstr "O nó ainda está a atualizar-se com a cadeia."
 
+msgid "The node that answered listed no quorums."
+msgstr "O nó que respondeu não listou nenhum quórum."
+
 msgid "The quorums Platform signs with now. Not proof-checked: the SDK has no proof for this list."
 msgstr "Os quóruns com que a Platform assina agora. Não verificado com provas: o SDK não tem prova para esta lista."
 
@@ -748,9 +754,6 @@ msgstr "Principais proponentes"
 
 msgid "Top proposers this epoch"
 msgstr "Principais proponentes desta época"
-
-msgid "Top-rated contracts"
-msgstr "Contratos mais bem avaliados"
 
 msgid "Total"
 msgstr "Total"
