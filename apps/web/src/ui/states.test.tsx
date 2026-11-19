@@ -224,6 +224,18 @@ describe('Empty, ErrorState, Skeleton', () => {
     },
   )
 
+  it('names the answer behind an empty state, such as a proved absence', () => {
+    const { container, rerender } = render(
+      <Empty kind="not-found" title="None" source={stamp({ source: 'sdk', proved: true })} />,
+    )
+    expect(container.querySelector('.rx-empty [data-source="sdk"]')).toHaveAttribute(
+      'data-proved',
+      'true',
+    )
+    rerender(<Empty kind="not-found" title="None" />)
+    expect(container.querySelector('.rx-sources')).toBeNull()
+  })
+
   it('maps error kinds to plain sentences that say the rest still works', () => {
     const { rerender } = render(<ErrorState error={{ kind: 'rate-limited' }} source="dapi" />)
     expect(screen.getByRole('alert')).toHaveTextContent('DAPI is busy')

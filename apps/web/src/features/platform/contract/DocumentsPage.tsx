@@ -85,11 +85,13 @@ export function DocumentsPage({ id, type, search }: DocumentsPageProps) {
               kind="not-found"
               title={t`No contract has this ID on this network.`}
               body={<Hash value={id} display="wrap" />}
+              source={contract.data ? stampOf(contract.data) : undefined}
             />
           ) : !schema ? (
             <Empty
               kind="not-found"
               title={t`This contract has no document type “${type}”.`}
+              source={contract.data ? stampOf(contract.data) : undefined}
               body={
                 <Link to="/contract/$id" params={{ id }} search={{ tab: 'types' } as never}>
                   {t`See its document types`}

@@ -43,9 +43,12 @@ export function HomeMap() {
     [points],
   )
   const masternodes = places.reduce((n, p) => n + p.masternodes, 0)
+  // Radar's geo counts every registered masternode's address that answered, PoSe-banned ones too, so it is more than
+  // the enabled masternodes the hero and /map count.
+  const scope = t`PoSe-banned included`
   const summary =
     points.length > 0
-      ? t`${formatInt(masternodes)} masternodes in ${formatInt(places.length)} places`
+      ? t`${formatInt(masternodes)} answering masternodes in ${formatInt(places.length)} places`
       : t`The node map`
 
   return (
@@ -54,7 +57,11 @@ export function HomeMap() {
         className="rx-map"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         role="img"
-        aria-label={t`Map of the world with a disc for each place Radar found masternodes. ${summary}.`}
+        aria-label={
+          points.length > 0
+            ? t`Map of the world with a disc for each place Radar found masternodes. ${summary}, ${scope}.`
+            : t`Map of the world with a disc for each place Radar found masternodes. ${summary}.`
+        }
       >
         {land ? <path className="land" d={land} /> : null}
         <g>
@@ -90,6 +97,9 @@ export function HomeMap() {
             <span className="rx-maplegend__key">
               <i className="d" aria-hidden="true" />
               <span className="rx-maplegend__sum">{summary}</span>
+            </span>
+            <span className="rx-maplegend__scope" data-map-scope>
+              {scope}
             </span>
             <span className="rx-maplegend__key rx-maplegend__key--other">
               <i className="d d--all" aria-hidden="true" />

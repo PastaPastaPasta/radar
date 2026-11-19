@@ -41,6 +41,11 @@ msgstr "{0} a year"
 msgid "{0} alone has {1}."
 msgstr "{0} alone has {1}."
 
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(places.length)
+msgid "{0} answering masternodes in {1} places"
+msgstr "{0} answering masternodes in {1} places"
+
 #. placeholder {0}: formatInt(c.fail)
 msgid "{0} fail"
 msgstr "{0} fail"
@@ -62,11 +67,6 @@ msgstr "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(places.length)
-msgid "{0} masternodes in {1} places"
-msgstr "{0} masternodes in {1} places"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -471,6 +471,10 @@ msgstr "Each Platform block is locked to a Core block."
 msgid "Earliest activation"
 msgstr "Earliest activation"
 
+msgctxt "evonodes counted"
+msgid "enabled"
+msgstr "enabled"
+
 msgid "Enabled"
 msgstr "Enabled"
 
@@ -615,6 +619,9 @@ msgstr "Locked in"
 msgid "Locked to Core block"
 msgstr "Locked to Core block"
 
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
+msgstr "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
+
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "Map of the world with a disc for each place Radar found masternodes. {summary}."
 
@@ -632,6 +639,9 @@ msgstr "Masternodes"
 
 msgid "Masternodes answering"
 msgstr "Masternodes answering"
+
+msgid "Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both."
+msgstr "Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both."
 
 msgid "Masternodes reachable"
 msgstr "Masternodes reachable"
@@ -880,6 +890,9 @@ msgstr "Platform's latest transitions and blocks need Platform Explorer"
 
 msgid "PoSe-banned"
 msgstr "PoSe-banned"
+
+msgid "PoSe-banned included"
+msgstr "PoSe-banned included"
 
 msgid "Protocol"
 msgstr "Protocol"

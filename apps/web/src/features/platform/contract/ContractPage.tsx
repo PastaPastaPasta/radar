@@ -90,6 +90,7 @@ export function ContractPage({ id, search }: ContractPageProps) {
               kind="not-found"
               title={t`No contract has this ID on this network.`}
               body={<Hash value={id} display="wrap" />}
+              source={contract.data ? stampOf(contract.data) : undefined}
             />
           ) : (
             <Loaded

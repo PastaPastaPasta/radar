@@ -42,6 +42,11 @@ msgstr "每年 {0}"
 msgid "{0} alone has {1}."
 msgstr "仅 {0} 就占 {1}。"
 
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(places.length)
+msgid "{0} answering masternodes in {1} places"
+msgstr "{1} 个地点的 {0} 个响应中的主节点"
+
 #. placeholder {0}: formatInt(c.fail)
 msgid "{0} fail"
 msgstr "{0} 个未通过"
@@ -63,11 +68,6 @@ msgstr "{0} 托管了{noun}的 {1}，前三大提供商共托管 {2}。"
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} 个主节点"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(places.length)
-msgid "{0} masternodes in {1} places"
-msgstr "{1} 个地点共 {0} 个主节点"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -472,6 +472,10 @@ msgstr "每个 Platform 区块都与一个 Core 区块绑定。"
 msgid "Earliest activation"
 msgstr "最早激活"
 
+msgctxt "evonodes counted"
+msgid "enabled"
+msgstr "已启用"
+
 msgid "Enabled"
 msgstr "已启用"
 
@@ -616,6 +620,9 @@ msgstr "已锁定"
 msgid "Locked to Core block"
 msgstr "锁定至 Core 区块"
 
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
+msgstr "世界地图，Radar 发现主节点的每个地点各有一个圆。{summary}，{scope}。"
+
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
 msgstr "世界地图，Radar 发现主节点的每个地点用一个圆点表示。{summary}。"
 
@@ -633,6 +640,9 @@ msgstr "主节点"
 
 msgid "Masternodes answering"
 msgstr "响应中的主节点"
+
+msgid "Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both."
+msgstr "“响应中的主节点”统计在该网络的地址上作出响应的已注册主节点，包括被 PoSe 封禁的；在两个网络上响应的主节点在两处都计入。"
 
 msgid "Masternodes reachable"
 msgstr "可达的主节点"
@@ -881,6 +891,9 @@ msgstr "Platform 的最新转换和区块需要 Platform Explorer"
 
 msgid "PoSe-banned"
 msgstr "已被 PoSe 封禁"
+
+msgid "PoSe-banned included"
+msgstr "包括被 PoSe 封禁的"
 
 msgid "Protocol"
 msgstr "协议"

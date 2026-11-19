@@ -220,11 +220,15 @@ describe('Block page', () => {
   it('says a block past the tip is not there @IN-03', async () => {
     renderAt('/block/2670085')
     expect(await screen.findByText('Not found on Mainnet')).toBeInTheDocument()
+    expect(
+      document.querySelector('[data-empty="not-found"] .rx-sources [data-source]'),
+    ).not.toBeNull()
   })
 
   it('does not look up text that is neither a height nor a hash @IN-03', async () => {
     renderAt('/block/hello')
     expect(await screen.findByText('Not found on Mainnet')).toBeInTheDocument()
+    expect(document.querySelector('[data-empty="not-found"] .rx-sources')).toBeNull()
   })
 
   it('works on testnet @IN-16 @HY-19', async () => {

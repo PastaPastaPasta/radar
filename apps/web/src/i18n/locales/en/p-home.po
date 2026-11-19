@@ -250,8 +250,8 @@ msgstr "Epoch {0}"
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
-msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
-msgstr "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
+msgid "Epoch {0}. Evonodes that proposed a block: {1}. Blocks proposed: {2}."
+msgstr "Epoch {0}. Evonodes that proposed a block: {1}. Blocks proposed: {2}."
 
 #. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
 msgid "Epoch {number} is {0} through"
@@ -262,6 +262,10 @@ msgstr "Epoch {number} is running past its expected end"
 
 msgid "Epochs"
 msgstr "Epochs"
+
+msgctxt "validators, removed ones included"
+msgid "Ever seen"
+msgstr "Ever seen"
 
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Every evonode Platform Explorer has seen validate."
@@ -749,9 +753,6 @@ msgstr "Top proposers"
 
 msgid "Top proposers this epoch"
 msgstr "Top proposers this epoch"
-
-msgid "Total"
-msgstr "Total"
 
 msgid "Total credits"
 msgstr "Total credits"

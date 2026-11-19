@@ -1131,6 +1131,35 @@
         "contestantId": "395bEYpa6wtfAzCBsbqUzdSAjjdbfPwpzWF3whG8RfgB",
         "limit": 26
       }
+    ],
+    [
+      "documents.query",
+      {
+        "contractId": "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec",
+        "type": "domain",
+        "where": [
+          [
+            "records.identity",
+            "in",
+            [
+              "29fT9b71acANAmECGPtSYidaNAprd567t9YWzPthoGW4",
+              "3Bp155RaegqWJR2iKRX4J6m4ftGjH1D76kUndX1R7auS",
+              "44Whzu1kDB6NSNDdP7Z5HTB5RPBgT6mrciaDhtBqUHf4",
+              "6Ud6u3hMYR1GLRw8ochnjy9KHeuzGGVgBXLhRdVoBRxy",
+              "9nsD9vUuN5a67vCv2CBTY8Yx8a7nTwcnVWiRAWqc8NN1",
+              "AoQR7aL5TiiJELakgeFtLNJDk1UKS8J4o77SiJhPtZsP",
+              "B4ZLcFGqKeuGPLKuHum8VMjnQCSDLJ32QHGxV3v3WDuE",
+              "BZjCv7ztgERwdoT42PaSvLrYWC9ouZ44r4goCtozKoh4",
+              "Ca6PbJVUf1pGG8Jev9i2UkJ7iGTzRxnvUsAoc47Z12Ca",
+              "DqKecx66bUgswqjQgoXdPDEHe5jWfpPVNPv11Bb8wwaz",
+              "GnfBeZgoAKmccZA1cmq397y8PCzaWGBfcUQWzdpek46J",
+              "HQU9pQPmDRVmGqhHEoucD93DXZwARJdfHMY2EhmU8HeK"
+            ]
+          ]
+        ],
+        "orderBy": [["records.identity", "asc"]],
+        "limit": 100
+      }
     ]
   ],
   "testnet": [

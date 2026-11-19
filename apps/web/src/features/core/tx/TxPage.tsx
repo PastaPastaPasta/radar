@@ -83,6 +83,7 @@ export function TxPage({ txid }: { txid: string }) {
         net={net}
         path={`/tx/${txid}`}
         what={t`There is no transaction with this ID on this network. It may be too new, or on another network.`}
+        source={tx.data ? stampOf(tx.data) : undefined}
       />
     )
   }

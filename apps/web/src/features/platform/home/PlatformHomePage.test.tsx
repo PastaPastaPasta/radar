@@ -125,6 +125,7 @@ describe('Platform overview', () => {
     await waitFor(() => expect(within(proposers).getAllByRole('row')).toHaveLength(11))
     const rows = within(proposers).getAllByRole('row')
     expect(proposers).toHaveTextContent('Combined from 4 proof-checked answers')
+    expect(proposers).toHaveTextContent(/Evonodes that proposed a block: \d/)
     const links = within(proposers)
       .getAllByRole('link')
       .filter((a) => /^\/mn\/[0-9a-f]{64}/.test(a.getAttribute('href') ?? ''))
@@ -339,6 +340,8 @@ describe('Platform overview', () => {
     renderAt('/platform')
     const validators = await card('validators')
     await waitFor(() => expect(validators).toHaveTextContent('681'))
+    // Platform Explorer's total is every evonode it has seen, removed ones too, so it is not the list's count.
+    expect(validators).toHaveTextContent('Ever seen')
     // The status breakdown comes from a second read that can land after the total.
     await waitFor(() => {
       expect(validators).toHaveTextContent('99')

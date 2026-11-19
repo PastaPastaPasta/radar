@@ -26,6 +26,51 @@ test.describe('Blocks list', () => {
     await expect(page.getByRole('link', { name: 'Newer' })).toBeVisible()
   })
 
+  test('never shows a part-filled page as a whole one: it stays busy and says how many rows are still coming @HY-04 @IN-02', async ({
+    page,
+  }) => {
+    // Holds every block-row read after the first until the test releases them, so the page sits part-filled.
+    await page.addInitScript(() => {
+      const w = window as unknown as {
+        __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
+        __releaseRows: () => void
+      }
+      let release!: () => void
+      const gate = new Promise<void>((resolve) => (release = resolve))
+      w.__releaseRows = release
+      let core: typeof w.__radarCore
+      let reads = 0
+      Object.defineProperty(w, '__radarCore', {
+        configurable: true,
+        get: () => core,
+        set(value: typeof core) {
+          core = value
+          const original = value?.blockRows
+          if (!value || !original) return
+          value.blockRows = async (...args) => {
+            if (reads++ > 0) await gate
+            return original.apply(value, args)
+          }
+        },
+      })
+    })
+    await page.goto('/blocks')
+    const table = page.locator('#blocks table')
+    const rows = table.locator('tbody tr:not(.rx-skelrow):not(.rx-pad)')
+    await expect(rows).toHaveCount(4)
+    await expect(table).toHaveAttribute('aria-busy', 'true')
+    await expect(page.locator('[data-pending-note]')).toHaveText(
+      'Showing 4 of 20 rows. The rest are on their way…',
+    )
+    await expect(page.locator('#blocks .rx-sec__desc')).toHaveCount(0)
+
+    await page.evaluate(() => (window as unknown as { __releaseRows: () => void }).__releaseRows())
+    await expect(rows).toHaveCount(20)
+    await expect(table).not.toHaveAttribute('aria-busy', 'true')
+    await expect(page.locator('[data-pending-note]')).toHaveCount(0)
+    await expect(page.locator('#blocks .rx-sec__desc')).toContainText(/^Heights /)
+  })
+
   test('writes the unit after each block’s transaction count on a phone @HY-04', async ({
     page,
   }) => {

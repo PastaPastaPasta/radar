@@ -560,6 +560,13 @@ export function DataTable<Row>({
     )
   }
 
+  // The live region stays mounted so its first message is read out, and says so once a part-filled page is whole.
+  const filling = state === 'ready' && pendingRows > 0 && modelRows.length > 0
+  const [wasFilling, setWasFilling] = useState(false)
+  if (filling && !wasFilling) setWasFilling(true)
+  if (state !== 'ready' && wasFilling) setWasFilling(false)
+  const filled = wasFilling && !filling && state === 'ready'
+
   const all = stampsOfInput(source)
   const inSection = useSectionSource(all, caption)
   const stamps = inSection ? [] : all
@@ -592,7 +599,7 @@ export function DataTable<Row>({
               rowLink && 'rx-table--link',
               rowLink && 'rx-table--nav',
             )}
-            aria-busy={state === 'loading' || undefined}
+            aria-busy={state === 'loading' || (state === 'ready' && pendingRows > 0) || undefined}
             onBlur={(e) => {
               if (!e.currentTarget.contains(e.relatedTarget)) setFocusId(undefined)
             }}
@@ -613,6 +620,18 @@ export function DataTable<Row>({
           </span>
         ) : null}
       </div>
+      <p
+        className={cx('rx-note rx-dim', !filling && 'dh-sr')}
+        aria-live="polite"
+        data-pending-note={filling || undefined}
+        data-filled-note={filled || undefined}
+      >
+        {filling
+          ? t`Showing ${formatInt(modelRows.length)} of ${formatInt(modelRows.length + pendingRows)} rows. The rest are on their way…`
+          : filled
+            ? t`All ${formatInt(modelRows.length)} rows shown.`
+            : null}
+      </p>
       {showFoot ? (
         <div className="rx-tfoot">
           {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}

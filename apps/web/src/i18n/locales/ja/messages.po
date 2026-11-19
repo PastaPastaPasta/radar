@@ -298,6 +298,10 @@ msgstr "残高のあるアドレス"
 msgid "All"
 msgstr "すべて"
 
+#. placeholder {0}: formatInt(modelRows.length)
+msgid "All {0} rows shown."
+msgstr "{0} 行すべてを表示しました。"
+
 msgid "All proposals"
 msgstr "すべての提案"
 
@@ -1382,6 +1386,11 @@ msgstr "もっと見る"
 
 msgid "Show QR code"
 msgstr "QRコードを表示"
+
+#. placeholder {0}: formatInt(modelRows.length)
+#. placeholder {1}: formatInt(modelRows.length + pendingRows)
+msgid "Showing {0} of {1} rows. The rest are on their way…"
+msgstr "{1} 行のうち {0} 行を表示中。残りは読み込み中です…"
 
 msgid "Since you opened this page"
 msgstr "このページを開いてから"

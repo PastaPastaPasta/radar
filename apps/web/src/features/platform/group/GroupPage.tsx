@@ -73,6 +73,7 @@ export function GroupPage({ contract, pos, search }: GroupPageProps) {
             <Empty
               kind="not-found"
               title={t`This contract has no group at position ${pos}.`}
+              source={info.data ? stampOf(info.data) : undefined}
               body={
                 <Link to="/groups/$contract" params={{ contract }}>
                   {t`See the groups of this contract`}

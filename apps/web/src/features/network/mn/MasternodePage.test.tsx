@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/app'
 import { core } from '@/data/core/client'
-import { SourceError } from '@/data/errors'
+import { NotInBuildError, SourceError } from '@/data/errors'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 
@@ -71,6 +71,43 @@ describe('Masternode page', () => {
     expect(document.querySelector('[data-masternode-header]')).toHaveTextContent(
       'Enabled, no PoSe penalty',
     )
+  })
+
+  it('shows DAPI’s outage, not “needs an indexer”, when its list fails in Decentralized only mode @X-09', async () => {
+    vi.spyOn(core, 'masternodeList').mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'network', message: 'No node answered' }),
+    )
+    renderAt(`/mn/${MAINNET.regular}?sources=decentralized`)
+    expect(await screen.findByRole('alert', {}, { timeout: 10_000 })).toHaveTextContent(
+      /DAPI isn.t answering/,
+    )
+    expect(screen.queryByText('Masternode records need an indexer')).toBeNull()
+  })
+
+  it.each([
+    [
+      'the list stream closed without a list',
+      'The node closed the masternode list stream without sending a list',
+    ],
+    ['no DAPI node is known', 'No DAPI node is known for this network'],
+  ])('shows DAPI’s outage when %s in Decentralized only mode @X-09', async (_case, message) => {
+    vi.spyOn(core, 'masternodeList').mockRejectedValue(
+      new SourceError({ source: 'dapi', kind: 'unavailable', message }),
+    )
+    renderAt(`/mn/${MAINNET.regular}?sources=decentralized`)
+    expect(await screen.findByRole('alert', {}, { timeout: 10_000 })).toHaveTextContent(/DAPI/)
+    expect(screen.queryByText('Masternode records need an indexer')).toBeNull()
+  })
+
+  it('says masternode records need an indexer when this build has no DAPI client @X-05', async () => {
+    vi.spyOn(core, 'masternodeList').mockRejectedValue(
+      new NotInBuildError('dapi', 'The DAPI client is not available in this build'),
+    )
+    renderAt(`/mn/${MAINNET.regular}?sources=decentralized`)
+    expect(
+      await screen.findByText('Masternode records need an indexer', {}, { timeout: 10_000 }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).toBeNull()
   })
 
   it('shows type, status, PoSe, version, uptime, last paid and earnings for a regular masternode @RA-30', async () => {
@@ -356,6 +393,9 @@ describe('Masternode page', () => {
   it('offers search for a ProTx nobody lists @RA-41', async () => {
     renderAt(`/mn/${MISSING}`)
     expect(await screen.findByText('No masternode with this ProTx on mainnet.')).toBeInTheDocument()
+    expect(
+      document.querySelector('[data-empty="not-found"] .rx-sources [data-source="radar"]'),
+    ).not.toBeNull()
     const offer = await waitFor(() => {
       const el = document.querySelector('[data-search-offer]')
       expect(el).not.toBeNull()

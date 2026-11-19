@@ -1,9 +1,24 @@
 import { cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { SourceError } from '@/data/errors'
 import { sdk } from '@/data/sdk'
 import type { IdentityVoteDto } from '@/data/sdk/methods/p-id'
+import { server } from '@/test/server'
 import { renderAt } from './test-utils'
+
+/** Counts Platform Explorer's reads of one identity, answering each with its recorded 404. */
+function countIndexReads(id: string): { count: number } {
+  const reads = { count: 0 }
+  server.use(
+    http.get(`*/identity/${id}`, () => {
+      reads.count += 1
+      return HttpResponse.json({ message: 'not found' }, { status: 404 })
+    }),
+  )
+  return reads
+}
 
 const M = 'BjixEUbqeUZK7BRdqtLgjzwFBovx4BRwS2iwhMriiYqp'
 const ABSENT = '7fTiLgNCANR7Wf4D7ZuHBje9nrbrgnZpTDXuRdVdv5Ds'
@@ -148,6 +163,108 @@ describe('Identity page', () => {
     expect(await screen.findByText('No identity with this ID on mainnet.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Search on testnet' })).toBeInTheDocument()
     expect(document.querySelector('.rx-tabs')).toBeNull()
+  })
+
+  it('shows the proof of an absent identity on its not-found state @NX-10', async () => {
+    renderAt(`/identity/${ABSENT}`)
+    await screen.findByText('No identity with this ID on mainnet.')
+    const empty = document.querySelector('[data-empty="not-found"]')!
+    expect(empty.querySelector('[data-source="sdk"][data-proved="true"]')).not.toBeNull()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('says Platform Explorer has no such identity when DAPI cannot connect, not that DAPI is unavailable @NX-10', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
+      if (method !== 'identities.balanceAndRevision') return real(net, method, args, signal)
+      return Promise.reject(
+        new SourceError({
+          source: 'sdk',
+          kind: 'network',
+          message: 'The Platform SDK could not connect a moment ago: Failed to fetch',
+        }),
+      )
+    })
+    renderAt(`/identity/${ABSENT}`)
+    expect(
+      await screen.findByText('Platform Explorer has no identity with this ID on mainnet.'),
+    ).toBeInTheDocument()
+    const empty = document.querySelector('[data-empty="not-found"]')!
+    expect(empty.querySelector('[data-source="pe"]')).not.toBeNull()
+    expect(empty).toHaveTextContent('Radar couldn’t confirm it with a proof')
+    expect(screen.getByRole('button', { name: 'Check with DAPI again' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Search on testnet' })).toBeInTheDocument()
+    expect(document.querySelector('.rx-tabs')).toBeNull()
+  })
+
+  it.each([
+    ['proof-failed', "A proof didn't verify"],
+    ['invalid-response', "DAPI sent something Radar couldn't read"],
+  ] as const)(
+    'shows a %s answer as it is, without asking Platform Explorer instead @NX-10',
+    async (kind, alert) => {
+      vi.spyOn(sdk, 'call').mockRejectedValue(
+        new SourceError({ source: 'sdk', kind, message: kind }),
+      )
+      // The Keys tab reads nothing from Platform Explorer itself (the Overview's funding row does), so any request
+      // for the identity would be the page turning to the index.
+      const indexed = countIndexReads(ABSENT)
+      renderAt(`/identity/${ABSENT}?tab=keys`)
+      await waitFor(() =>
+        expect(screen.getAllByRole('alert').some((a) => a.textContent?.includes(alert))).toBe(true),
+      )
+      expect(indexed.count).toBe(0)
+      expect(screen.queryByText(/has no identity with this ID/)).toBeNull()
+      expect(document.querySelector('[data-empty="not-found"]')).toBeNull()
+    },
+  )
+
+  it('keeps a failed proof on screen even when Platform Explorer has no record of the identity @NX-10', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
+      if (method !== 'identities.balanceAndRevision') return real(net, method, args, signal)
+      return Promise.reject(
+        new SourceError({ source: 'sdk', kind: 'proof-failed', message: 'invalid proof' }),
+      )
+    })
+    const indexed = countIndexReads(ABSENT)
+    renderAt(`/identity/${ABSENT}`)
+    // the Overview's funding row reads Platform Explorer, which has nothing for this ID
+    await waitFor(() => expect(indexed.count).toBeGreaterThan(0))
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('alert').some((a) => a.textContent?.includes("A proof didn't verify")),
+      ).toBe(true),
+    )
+    expect(screen.queryByText(/has no identity with this ID/)).toBeNull()
+  })
+
+  it('shows the outage in Decentralized only mode, without asking Platform Explorer @NX-10 @X-05', async () => {
+    vi.spyOn(sdk, 'call').mockRejectedValue(
+      new SourceError({ source: 'sdk', kind: 'network', message: 'Failed to fetch' }),
+    )
+    const indexed = countIndexReads(ABSENT)
+    renderAt(`/identity/${ABSENT}?tab=keys&sources=decentralized`)
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('alert').some((a) => a.textContent?.includes("DAPI isn't answering")),
+      ).toBe(true),
+    )
+    expect(indexed.count).toBe(0)
+    expect(screen.queryByText(/has no identity with this ID/)).toBeNull()
+  })
+
+  it('still shows an outage for an identity Platform Explorer knows when DAPI cannot connect @NX-10', async () => {
+    const real = sdk.call.bind(sdk)
+    vi.spyOn(sdk, 'call').mockImplementation((net, method, args, signal) => {
+      if (method !== 'identities.balanceAndRevision') return real(net, method, args, signal)
+      return Promise.reject(
+        new SourceError({ source: 'sdk', kind: 'network', message: 'Failed to fetch' }),
+      )
+    })
+    renderAt(`/identity/${M}`)
+    expect((await screen.findAllByRole('alert'))[0]).toHaveTextContent("DAPI isn't answering")
+    expect(screen.queryByText(/has no identity with this ID/)).toBeNull()
   })
 
   it('shows the not-found state without a way to search another network on a devnet-less testnet link @NX-10', async () => {

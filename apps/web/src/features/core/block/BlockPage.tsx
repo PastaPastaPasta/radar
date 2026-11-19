@@ -60,6 +60,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
         net={net}
         path={`/block/${id}`}
         what={t`There is no block with this height or hash on this network.`}
+        source={block.data ? stampOf(block.data) : undefined}
       />
     )
   }

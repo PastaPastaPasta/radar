@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { legacyHidden, legacyKey, topVersions } from './legacy-url'
+import {
+  legacyHidden,
+  legacyKey,
+  legacyListFilter,
+  listFilterWith,
+  topVersions,
+} from './legacy-url'
 import { row } from './test-rows'
 
 const rows = [
@@ -53,5 +59,37 @@ describe('links from the old map', () => {
   it('keeps unknown versions unless the link hid them @RA-52', () => {
     expect(kept('version', ['23.1.8'])).toEqual(['a', 'c', 'd', 'e'])
     expect(kept('version', ['23.1.8', 'unknown'])).toEqual(['a', 'd', 'e'])
+  })
+
+  it('says an exclusion in the list’s filters only when they mean exactly the same rows @RA-52', () => {
+    expect(legacyListFilter('pose', rows, ['enabled'])).toEqual({ status: ['pose-banned'] })
+    expect(legacyListFilter('pose', rows, ['banned'])).toEqual({ status: ['enabled'] })
+    expect(legacyListFilter('type', rows, ['regular'])).toEqual({ type: ['evo'] })
+    expect(legacyListFilter('reach', rows, ['unreachable', 'unchecked'])).toEqual({
+      reach: 'reachable',
+    })
+    expect(legacyListFilter('version', rows, ['23.1.8', 'unknown'])).toEqual({
+      version: ['22.0.0', '24.0.0'],
+    })
+    expect(legacyListFilter('pose', rows, [])).toEqual({})
+    expect(legacyListFilter('pose', rows, ['nothing-of-the-sort'])).toEqual({})
+    // a kept row with no value, two reachability states, or nothing left: the list can't say it
+    expect(legacyListFilter('version', rows, ['23.1.8'])).toBeUndefined()
+    expect(legacyListFilter('reach', rows, ['unchecked'])).toBeUndefined()
+    expect(legacyListFilter('reach', rows, ['reachable'])).toBeUndefined()
+    expect(legacyListFilter('pose', rows, ['enabled', 'banned'])).toBeUndefined()
+  })
+
+  it('narrows the page’s own filter by the exclusion, and says nothing when they share no row @RA-52', () => {
+    expect(
+      listFilterWith(
+        { status: ['enabled', 'pose-banned'], country: ['DE'] },
+        { status: ['pose-banned'] },
+      ),
+    ).toEqual({ status: ['pose-banned'], country: ['DE'] })
+    // an empty status list would read as no filter at all
+    expect(listFilterWith({ status: ['enabled'] }, { status: ['pose-banned'] })).toBeUndefined()
+    expect(listFilterWith({ reach: 'reachable' }, { reach: 'unreachable' })).toBeUndefined()
+    expect(listFilterWith({ status: ['enabled'] }, undefined)).toBeUndefined()
   })
 })

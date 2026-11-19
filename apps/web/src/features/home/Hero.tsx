@@ -314,12 +314,17 @@ export function Hero() {
               <>
                 <Figure
                   label={
-                    <PageLink className="rx-fig__link" to="/masternodes" search={{ type: 'evo' }}>
+                    <PageLink
+                      className="rx-fig__link"
+                      to="/masternodes"
+                      search={{ type: 'evo', status: 'enabled' }}
+                    >
                       {t`Evonodes`}
                     </PageLink>
                   }
                   loading={!crawl}
                   value={formatInt(countOf(mn?.type, 'Evo'))}
+                  note={t({ message: 'enabled', context: 'evonodes counted' })}
                   source={crawled}
                 />
                 <Figure

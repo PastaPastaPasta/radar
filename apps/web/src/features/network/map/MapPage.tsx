@@ -33,7 +33,7 @@ import { filterFields } from '../masternodes/filter-fields'
 import { countryName, flag } from '../nodes/census-format'
 import { isTiny } from '../nodes/census-math'
 import { Notice } from '../nodes/parts'
-import { legacyHidden, legacyKey } from './legacy-url'
+import { legacyHidden, legacyKey, legacyListFilter, listFilterWith } from './legacy-url'
 import {
   concentrationsOfNodes,
   concentrationsOfRows,
@@ -86,8 +86,11 @@ interface Board {
   summary: UseQueryResult<Sourced<unknown>> | undefined
   loading: boolean
   tip: number | undefined
-  /** An old map link's hidden categories, applied as they were. */
-  legacy: { keyOf: (r: MnRow) => string; hide: string[] } | undefined
+  /**
+   * An old map link's hidden categories, applied as they were, and the same in the list's filters (`undefined` when
+   * the list's filters can't say it).
+   */
+  legacy: { keyOf: (r: MnRow) => string; hide: string[]; list: MnFilter | undefined } | undefined
 }
 
 /** The noun the page counts in: an evonode view says evonodes, whatever else narrows it. */
@@ -157,7 +160,11 @@ function useBoard(net: NetworkId, controls: MapSearchControls, enabled: boolean)
     tip: mnQ.data?.height,
     legacy:
       hiddenBy && search.hide
-        ? { keyOf: legacyKey(search.color ?? 'reach', rows), hide: search.hide }
+        ? {
+            keyOf: legacyKey(search.color ?? 'reach', rows),
+            hide: search.hide,
+            list: legacyListFilter(search.color ?? 'reach', rows, search.hide),
+          }
         : undefined,
   }
 }
@@ -759,8 +766,9 @@ function PlaceCard({
   const more = place.providers.length - providers.length
   // The list's search is words a row must all hold: the visitor's own search, then the city.
   const q = [filter.q?.trim(), place.city].filter(Boolean).join(' ')
-  const listSearch = {
-    ...filterFields(populationFilter(filter, b.legacy !== undefined)),
+  const listed = b.legacy ? listFilterWith(populationFilter(filter, true), b.legacy.list) : filter
+  const listSearch = listed && {
+    ...filterFields(b.legacy ? listed : populationFilter(filter)),
     ...(place.country ? { country: [place.country] } : {}),
     ...(q ? { q } : {}),
   }
@@ -806,10 +814,14 @@ function PlaceCard({
           </div>
         </dl>
       )}
-      {b.scope === 'nodes' ? null : (
+      {b.scope === 'nodes' ? null : listSearch ? (
         <Link className="rx-maplink" to="/masternodes" search={listSearch as never} data-place-list>
           {t`Open them in the masternode list`}
         </Link>
+      ) : (
+        <p className="rx-note rx-dim" data-place-list-unavailable>
+          {t`The masternode list’s filters can’t leave out what the old map link hid. Remove that filter to open these in the list.`}
+        </p>
       )}
     </section>
   )

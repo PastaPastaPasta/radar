@@ -133,6 +133,7 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
     state: SdkState
     ready?: Promise<SdkTransport>
     failedAt?: number
+    failure?: SourceError
     info?: SdkInfo
   }
   const entries = new Map<NetworkId, Entry>()
@@ -178,16 +179,17 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
   function ensure(net: NetworkId): Promise<SdkTransport> {
     const e = entry(net)
     if (e.ready) return e.ready
-    if (
-      e.state === 'failed' &&
-      e.failedAt !== undefined &&
-      deps.now() - e.failedAt < RETRY_CONNECT_AFTER_MS
-    ) {
+    const since = e.failedAt === undefined ? Infinity : deps.now() - e.failedAt
+    if (e.state === 'failed' && since < RETRY_CONNECT_AFTER_MS) {
+      // The last failure's kind, not "unavailable": a connection that just failed is an outage, and is retried once the pause ends.
+      const last = e.failure
       return Promise.reject(
         new SourceError({
           source: 'sdk',
-          kind: 'unavailable',
-          message: 'The Platform SDK could not connect a moment ago',
+          kind: last?.kind ?? 'network',
+          message: `The Platform SDK could not connect a moment ago${last ? `: ${last.message}` : ''}`,
+          retryAfterMs: RETRY_CONNECT_AFTER_MS - since,
+          cause: last,
         }),
       )
     }
@@ -239,6 +241,7 @@ export function createSdkClient(deps: SdkClientDeps): SdkClient {
               message: 'The Platform SDK failed to load',
               cause,
             })
+      e.failure = error
       deps.health.report(net, 'sdk', { ok: false, kind: error.kind, message: error.message })
       throw error
     })

@@ -252,6 +252,8 @@ export interface EmptyProps {
   title: ReactNode
   body?: ReactNode
   action?: ReactNode
+  /** The answer that established the state, such as a proved absence: shown as its source mark. */
+  source?: SourceStamp | SourceStamp[] | undefined
 }
 
 const EMPTY_ICON: Record<EmptyProps['kind'], IconName> = {
@@ -262,7 +264,7 @@ const EMPTY_ICON: Record<EmptyProps['kind'], IconName> = {
   blocked: 'alert',
 }
 
-export function Empty({ kind, title, body, action }: EmptyProps) {
+export function Empty({ kind, title, body, action, source }: EmptyProps) {
   return (
     <div className="rx-empty" data-empty={kind}>
       <span className={cx('rx-empty__tile', kind === 'blocked' && 'rx-empty__tile--warn')}>
@@ -270,6 +272,7 @@ export function Empty({ kind, title, body, action }: EmptyProps) {
       </span>
       <p className="rx-empty__t">{title}</p>
       {body ? <p className="rx-empty__b">{body}</p> : null}
+      {source ? <SourceLine stamp={source} compact /> : null}
       {action}
     </div>
   )

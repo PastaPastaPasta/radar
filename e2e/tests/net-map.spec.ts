@@ -127,6 +127,29 @@ test.describe('The map', () => {
     await expect(page).not.toHaveURL(/hide=|color=/)
   })
 
+  test('keeps an old link’s exclusion when a city card opens the masternode list @RA-52', async ({
+    page,
+  }) => {
+    await page.goto('/map?color=pose&hide=enabled')
+    await expect(
+      page.getByRole('button', { name: 'Remove the filter Left out by an old map link: Enabled' }),
+    ).toBeVisible({ timeout: 30_000 })
+    await cities(page).getByRole('button').nth(0).click()
+    const card = page.locator('[data-place-card]')
+    const n = Number(
+      (/[\d,]+/.exec(await card.locator('.rx-mapcard__lead b').innerText())?.[0] ?? '').replaceAll(
+        ',',
+        '',
+      ),
+    )
+    const list = card.getByRole('link', { name: 'Open them in the masternode list' })
+    await expect(list).toHaveAttribute('href', /[?&]status=pose-banned(&|$)/)
+    await list.click()
+    await expect(page).toHaveURL(/\/masternodes\?.*status=pose-banned/)
+    await expect(h1(page)).toBeVisible()
+    expect(n).toBeGreaterThan(0)
+  })
+
   test('says a PoSe-banned masternode in the address is not counted and rings its own spot @RA-52', async ({
     page,
   }) => {

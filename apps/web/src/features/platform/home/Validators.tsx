@@ -63,7 +63,11 @@ export function Validators({ active }: { active: boolean }) {
         }
       >
         <Stats data-counts>
-          <Stat label={t`Total`} value={count(all, total.isError)} layer="platform" />
+          <Stat
+            label={t({ message: 'Ever seen', context: 'validators, removed ones included' })}
+            value={count(all, total.isError)}
+            layer="platform"
+          />
           <Stat
             label={t({ message: 'Active', context: 'count of active validators' })}
             value={count(up, live.isError)}

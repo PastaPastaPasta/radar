@@ -251,8 +251,8 @@ msgstr "Época {0}"
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
-msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
-msgstr "Época {0}. Evonodes: {1}. Bloques propuestos: {2}."
+msgid "Epoch {0}. Evonodes that proposed a block: {1}. Blocks proposed: {2}."
+msgstr "Época {0}. Evonodes que propusieron un bloque: {1}. Bloques propuestos: {2}."
 
 #. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
 msgid "Epoch {number} is {0} through"
@@ -263,6 +263,10 @@ msgstr "La época {number} se prolonga más allá de su final previsto"
 
 msgid "Epochs"
 msgstr "Épocas"
+
+msgctxt "validators, removed ones included"
+msgid "Ever seen"
+msgstr "Vistos alguna vez"
 
 msgid "Every evonode Platform Explorer has seen validate."
 msgstr "Todos los evonodes que Platform Explorer ha visto validar."
@@ -750,9 +754,6 @@ msgstr "Principales proponentes"
 
 msgid "Top proposers this epoch"
 msgstr "Principales proponentes de esta época"
-
-msgid "Total"
-msgstr "Total"
 
 msgid "Total credits"
 msgstr "Créditos totales"

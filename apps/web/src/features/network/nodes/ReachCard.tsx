@@ -1,13 +1,13 @@
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { formatInt } from '@/lib/format'
 import { Card, Chart, Empty, Skeleton, stampsOf } from '@/ui'
 import { sizeOption, type Series } from './census-charts'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { unreachableLink } from './census-links'
-import { dayMonth, dayMonthTime } from './census-format'
+import { dayMonthTime } from './census-format'
 import { radarScope, reachShare, total } from './census-math'
 import { ScrollRegion, ShareBar, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
@@ -21,6 +21,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
   const dist = data?.dists[radarScope(scope)] ?? {}
   const reach = reachShare(dist.reachable)
   const noun = i18n._(SCOPE_NOUN[scope])
+  const networksNote = useId()
   const parts = [
     { key: 'yes', name: t`Answered`, n: reach.yes, color: colors.good },
     { key: 'no', name: t`Didn't answer`, n: reach.no, color: colors.bad },
@@ -70,7 +71,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
         </div>
         {data && data.networks.length > 0 ? (
           <ScrollRegion label={t`Address networks`} data-address-networks>
-            <table className="dh-table dh-table--compact">
+            <table className="dh-table dh-table--compact" aria-describedby={networksNote}>
               <caption className="text-left font-semibold">{t`Address networks`}</caption>
               <thead>
                 <tr>
@@ -82,7 +83,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
                     {t`Reachable now`}
                   </th>
                   <th scope="col" className="text-right">
-                    {t`Masternodes`}
+                    {t`Masternodes answering`}
                   </th>
                 </tr>
               </thead>
@@ -108,6 +109,11 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
               </tbody>
             </table>
           </ScrollRegion>
+        ) : null}
+        {data && data.networks.length > 0 ? (
+          <p id={networksNote} className="-mt-4 text-sm text-[var(--dh-ink-2)]" data-networks-note>
+            {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
+          </p>
         ) : null}
         <SizeChart census={census} />
       </div>
@@ -153,7 +159,7 @@ function SizeChart({ census }: { census: Census }) {
         height={220}
         label={t`Network size over time`}
         table={{
-          columns: [t`Series`, dayMonth(doc.t[0]!), dayMonth(doc.t[count - 1]!)],
+          columns: [t`Series`, dayMonthTime(doc.t[0]!), dayMonthTime(doc.t[count - 1]!)],
           rows: series.map((s) => [
             s.name,
             formatInt(Math.round(s.values[0] ?? 0)),

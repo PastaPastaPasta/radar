@@ -82,7 +82,7 @@ export function Proposers({ active }: { active: boolean }) {
   )
   const pages = answer?.pages ?? 0
   const base = (a: EpochProposers) =>
-    t`Epoch ${formatInt(a.epoch)}. Evonodes: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
+    t`Epoch ${formatInt(a.epoch)}. Evonodes that proposed a block: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
   return (
     <Card
       id="proposers"

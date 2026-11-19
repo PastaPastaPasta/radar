@@ -270,6 +270,19 @@ describe('Home page', () => {
     expect(lineMarks('.rx-hero', 'radar')).toHaveLength(1)
   })
 
+  it('says which evonodes and which nodes the hero counts, and links to the same rows @IN-01', async () => {
+    renderAt('/')
+    const evo = await screen.findByRole('link', { name: 'Evonodes' })
+    expect(evo.getAttribute('href')).toMatch(/[?&]type=evo/)
+    expect(evo.getAttribute('href')).toMatch(/[?&]status=enabled/)
+    const figure = evo.closest<HTMLElement>('.rx-fig')!
+    await waitFor(() => expect(figure.querySelector('.rx-fig__note')).toHaveTextContent('enabled'))
+    const countries = screen
+      .getByRole('link', { name: 'Countries' })
+      .closest<HTMLElement>('.rx-fig')!
+    expect(countries.querySelector('.rx-fig__note')).toHaveTextContent('all nodes')
+  })
+
   it('links to the Core 24 tracker while it is pending @RA-11', async () => {
     renderAt('/')
     const link = await waitFor(() => {

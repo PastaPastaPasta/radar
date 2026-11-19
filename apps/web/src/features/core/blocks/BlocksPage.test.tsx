@@ -124,6 +124,11 @@ describe('Blocks list', () => {
     await waitFor(() => expect(rows()).toBe(FIRST_CHUNK))
     expect(within(table()).getByRole('link', { name: /2,566,380/ })).toBeInTheDocument()
     expect(pending()).toBe(20 - FIRST_CHUNK)
+    // A part-filled page never passes for a whole one: the table is busy and says how much of it is still coming.
+    expect(table()).toHaveAttribute('aria-busy', 'true')
+    expect(document.querySelector('[data-pending-note]')).toHaveTextContent(
+      `Showing ${FIRST_CHUNK} of 20 rows. The rest are on their way…`,
+    )
 
     await waitFor(() => expect(gates).toHaveLength(1))
     gates[0]!()
@@ -134,6 +139,8 @@ describe('Blocks list', () => {
     gates[1]!()
     await waitFor(() => expect(rows()).toBe(20))
     expect(pending()).toBe(0)
+    expect(table()).not.toHaveAttribute('aria-busy')
+    expect(document.querySelector('[data-pending-note]')).toBeNull()
     expect(counts).toEqual([FIRST_CHUNK, NEXT_CHUNK, 20 - FIRST_CHUNK - NEXT_CHUNK])
   })
 
